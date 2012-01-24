@@ -1,0 +1,192 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - 2D Geometry Rotation - Angle</title>
+<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+#ui {
+    width: 200px;
+}
+#rotation>canvas {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+}
+</style>
+<script type="text/javascript" src="resources/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="resources/jquery.gman.ui.js"></script>
+<script type="text/javascript" src="resources/webgl-utils.js"></script>
+<script>
+$(function(){
+  main();
+});
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas");
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    return;
+  }
+
+  // setup GLSL program
+  vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
+  fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
+  program = createProgram(gl, [vertexShader, fragmentShader]);
+  gl.useProgram(program);
+
+  // look up where the vertex data needs to go.
+  var positionLocation = gl.getAttribLocation(program, "a_position");
+
+  // lookup uniforms
+  var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+  var colorLocation = gl.getUniformLocation(program, "u_color");
+  var translationLocation = gl.getUniformLocation(program, "u_translation");
+  var rotationLocation = gl.getUniformLocation(program, "u_rotation");
+
+  // set the resolution
+  gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+
+  // Create a buffer.
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(positionLocation);
+  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+  // Set Geometry.
+  setGeometry(gl);
+
+  // Set a random color.
+  gl.uniform4f(colorLocation, Math.random(), Math.random(), Math.random(), 1);
+
+  var translation = [100, 150];
+  var rotation = [0, 1];
+
+  drawScene();
+
+  // Setup a ui.
+  $("#x").gmanSlider({value: translation[0], slide: updatePosition(0), max: canvas.width });
+  $("#y").gmanSlider({value: translation[1], slide: updatePosition(1), max: canvas.height});
+  $("#angle").gmanSlider({slide: updateAngle, max: 360});
+
+  function updatePosition(index) {
+    return function(event, ui) {
+      translation[index] = ui.value;
+      drawScene();
+    }
+  }
+
+  function updateAngle(event, ui) {
+    var angleInDegrees = 360 - ui.value;
+    var angleInRadians = angleInDegrees * Math.PI / 180;
+    rotation[0] = Math.sin(angleInRadians);
+    rotation[1] = Math.cos(angleInRadians);
+    drawScene();
+  }
+
+  // Draw the scene.
+  function drawScene() {
+    // Clear the canvas.
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // Set the translation.
+    gl.uniform2fv(translationLocation, translation);
+
+    // Set the rotation.
+    gl.uniform2fv(rotationLocation, rotation);
+
+    // Draw the geometry.
+    gl.drawArrays(gl.TRIANGLES, 0, 18);
+  }
+}
+
+// Fill the buffer with the values that define a letter 'F'.
+function setGeometry(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+          // left column
+          0, 0,
+          30, 0,
+          0, 150,
+          0, 150,
+          30, 0,
+          30, 150,
+
+          // top rung
+          30, 0,
+          100, 0,
+          30, 30,
+          30, 30,
+          100, 0,
+          100, 30,
+
+          // middle rung
+          30, 60,
+          67, 60,
+          30, 90,
+          30, 90,
+          67, 60,
+          67, 90]),
+      gl.STATIC_DRAW);
+}
+
+</script>
+<!-- vertex shader -->
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+attribute vec2 a_position;
+
+uniform vec2 u_resolution;
+uniform vec2 u_translation;
+uniform vec2 u_rotation;
+
+void main() {
+  // Rotate the position
+  vec2 rotatedPosition = vec2(
+     a_position.x * u_rotation.y + a_position.y * u_rotation.x,
+     a_position.y * u_rotation.y - a_position.x * u_rotation.x);
+
+  // Add in the translation.
+  vec2 position = rotatedPosition + u_translation;
+
+  // convert the position from pixels to 0.0 to 1.0
+  vec2 zeroToOne = position / u_resolution;
+
+  // convert from 0->1 to 0->2
+  vec2 zeroToTwo = zeroToOne * 2.0;
+
+  // convert from 0->2 to -1->+1 (clipspace)
+  vec2 clipSpace = zeroToTwo - 1.0;
+
+  gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+}
+</script></script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform vec4 u_color;
+
+void main() {
+   gl_FragColor = u_color;
+}
+</script>
+</head>
+<body>
+<div class="description">
+Drag sliders to translate & rotate.
+</div>
+<canvas id="canvas" width="400" height="300"></canvas>
+<div id="uiContainer">
+  <div id="ui">
+    <div id="x"></div>
+    <div id="y"></div>
+    <div id="angle"></div>
+  </div>
+</div>
+</body>
+</html>
+
+

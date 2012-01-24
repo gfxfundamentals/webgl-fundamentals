@@ -1,0 +1,308 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - 2D image 3x3 convolution</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<script type="text/javascript" src="resources/webgl-utils.js"></script>
+<script>
+window.onload = main;
+
+function main() {
+  var image = new Image();
+  image.src = "resources/leaves.jpg";  // MUST BE SAME DOMAIN!!!
+  image.onload = function() {
+    render(image);
+  }
+}
+
+function render(image) {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas");
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    return;
+  }
+
+  // setup GLSL program
+  vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
+  fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
+  program = createProgram(gl, [vertexShader, fragmentShader]);
+  gl.useProgram(program);
+
+  // look up where the vertex data needs to go.
+  var positionLocation = gl.getAttribLocation(program, "a_position");
+  var texCoordLocation = gl.getAttribLocation(program, "a_texCoord");
+
+  // provide texture coordinates for the rectangle.
+  var texCoordBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+      0.0,  0.0,
+      1.0,  0.0,
+      0.0,  1.0,
+      0.0,  1.0,
+      1.0,  0.0,
+      1.0,  1.0]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(texCoordLocation);
+  gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+  var texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+  // lookup uniforms
+  var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+  var textureSizeLocation = gl.getUniformLocation(program, "u_textureSize");
+  var kernelLocation = gl.getUniformLocation(program, "u_kernel[0]");
+
+  // set the resolution
+  gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+
+  // set the size of the image
+  gl.uniform2f(textureSizeLocation, image.width, image.height);
+
+  // Define several convolution kernels
+  var kernels = {
+    normal: [
+      0, 0, 0,
+      0, 1, 0,
+      0, 0, 0
+    ],
+    gaussianBlur: [
+      0.045, 0.122, 0.045,
+      0.122, 0.332, 0.122,
+      0.045, 0.122, 0.045
+    ],
+    gaussianBlur2: [
+      1, 2, 1,
+      2, 4, 2,
+      1, 2, 1
+    ],
+    gaussianBlur3: [
+      0, 1, 0,
+      1, 1, 1,
+      0, 1, 0
+    ],
+    unsharpen: [
+      -1, -1, -1,
+      -1,  9, -1,
+      -1, -1, -1
+    ],
+    sharpness: [
+       0,-1, 0,
+      -1, 5,-1,
+       0,-1, 0
+    ],
+    sharpen: [
+       -1, -1, -1,
+       -1, 16, -1,
+       -1, -1, -1
+    ],
+    edgeDetect: [
+       -0.125, -0.125, -0.125,
+       -0.125,  1,     -0.125,
+       -0.125, -0.125, -0.125
+    ],
+    edgeDetect2: [
+       -1, -1, -1,
+       -1,  8, -1,
+       -1, -1, -1
+    ],
+    edgeDetect3: [
+       -5, 0, 0,
+        0, 0, 0,
+        0, 0, 5
+    ],
+    edgeDetect4: [
+       -1, -1, -1,
+        0,  0,  0,
+        1,  1,  1
+    ],
+    edgeDetect5: [
+       -1, -1, -1,
+        2,  2,  2,
+       -1, -1, -1
+    ],
+    edgeDetect6: [
+       -5, -5, -5,
+       -5, 39, -5,
+       -5, -5, -5
+    ],
+    sobelHorizontal: [
+        1,  2,  1,
+        0,  0,  0,
+       -1, -2, -1
+    ],
+    sobelVertical: [
+        1,  0, -1,
+        2,  0, -2,
+        1,  0, -1
+    ],
+    previtHorizontal: [
+        1,  1,  1,
+        0,  0,  0,
+       -1, -1, -1
+    ],
+    previtVertical: [
+        1,  0, -1,
+        1,  0, -1,
+        1,  0, -1
+    ],
+    boxBlur: [
+        0.111, 0.111, 0.111,
+        0.111, 0.111, 0.111,
+        0.111, 0.111, 0.111
+    ],
+    triangleBlur: [
+        0.0625, 0.125, 0.0625,
+        0.125,  0.25,  0.125,
+        0.0625, 0.125, 0.0625
+    ],
+    emboss: [
+       -2, -1,  0,
+       -1,  1,  1,
+        0,  1,  2
+    ]
+  };
+  var initialSelection = 'edgeDetect2';
+
+  // Setup UI to pick kernels.
+  var ui = document.getElementById("ui");
+  var select = document.createElement("select")
+  for (var name in kernels) {
+    var option = document.createElement("option");
+    option.value = name;
+    if (name == initialSelection) {
+      option.selected = true;
+    }
+    option.appendChild(document.createTextNode(name));
+    select.appendChild(option);
+  }
+  select.onchange = function(event) {
+    drawWithKernel(this.options[this.selectedIndex].value);
+  };
+  ui.appendChild(select);
+
+  // Create a buffer for the position of the rectangle corners.
+  var positionBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  gl.enableVertexAttribArray(positionLocation);
+  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+  // Set a rectangle the same size as the image.
+  setRectangle( gl, 0, 0, image.width, image.height);
+
+  drawWithKernel(initialSelection);
+
+  function drawWithKernel(name) {
+    // set the kernel
+    gl.uniform1fv(kernelLocation, kernels[name]);
+
+    // Draw the rectangle.
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+}
+
+function randomInt(range) {
+  return Math.floor(Math.random() * range);
+}
+
+function setRectangle(gl, x, y, width, height) {
+  var x1 = x;
+  var x2 = x + width;
+  var y1 = y;
+  var y2 = y + height;
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+     x1, y1,
+     x2, y1,
+     x1, y2,
+     x1, y2,
+     x2, y1,
+     x2, y2]), gl.STATIC_DRAW);
+}
+
+</script>
+<!-- vertex shader -->
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+attribute vec2 a_position;
+attribute vec2 a_texCoord;
+
+uniform vec2 u_resolution;
+
+varying vec2 v_texCoord;
+
+void main() {
+   // convert the rectangle from pixels to 0.0 to 1.0
+   vec2 zeroToOne = a_position / u_resolution;
+
+   // convert from 0->1 to 0->2
+   vec2 zeroToTwo = zeroToOne * 2.0;
+
+   // convert from 0->2 to -1->+1 (clipspace)
+   vec2 clipSpace = zeroToTwo - 1.0;
+
+   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+
+   // pass the texCoord to the fragment shader
+   // The GPU will interpolate this value between points.
+   v_texCoord = a_texCoord;
+}
+</script></script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// our texture
+uniform sampler2D u_image;
+uniform vec2 u_textureSize;
+uniform float u_kernel[9];
+
+// the texCoords passed in from the vertex shader.
+varying vec2 v_texCoord;
+
+void main() {
+   vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
+   vec4 colorSum =
+       texture2D(u_image, v_texCoord + onePixel * vec2(-1, -1)) * u_kernel[0] +
+       texture2D(u_image, v_texCoord + onePixel * vec2( 0, -1)) * u_kernel[1] +
+       texture2D(u_image, v_texCoord + onePixel * vec2( 1, -1)) * u_kernel[2] +
+       texture2D(u_image, v_texCoord + onePixel * vec2(-1,  0)) * u_kernel[3] +
+       texture2D(u_image, v_texCoord + onePixel * vec2( 0,  0)) * u_kernel[4] +
+       texture2D(u_image, v_texCoord + onePixel * vec2( 1,  0)) * u_kernel[5] +
+       texture2D(u_image, v_texCoord + onePixel * vec2(-1,  1)) * u_kernel[6] +
+       texture2D(u_image, v_texCoord + onePixel * vec2( 0,  1)) * u_kernel[7] +
+       texture2D(u_image, v_texCoord + onePixel * vec2( 1,  1)) * u_kernel[8] ;
+   float kernelWeight =
+       u_kernel[0] +
+       u_kernel[1] +
+       u_kernel[2] +
+       u_kernel[3] +
+       u_kernel[4] +
+       u_kernel[5] +
+       u_kernel[6] +
+       u_kernel[7] +
+       u_kernel[8] ;
+
+   if (kernelWeight <= 0.0) {
+     kernelWeight = 1.0;
+   }
+
+   gl_FragColor = vec4((colorSum / kernelWeight).rgb, 1);
+}
+</script>
+</head>
+<body>
+<canvas id="canvas" width="400" height="300"></canvas>
+<div id="uiContainer">
+  <div id="ui"></div>
+</div>
+</body>
+</html>
+
+
