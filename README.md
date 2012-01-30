@@ -1,7 +1,7 @@
 WebGL Fundamentals
 ==================
 
-This is a series of lessons or tutorials about WebGL. 
+This is [a series of lessons or tutorials about WebGL](http://greggman.github.com/webgl-fundamentals/).
 
 Unlike most WebGL lessons these are not based off of OpenGL. 
 OpenGL is 20 years old. The lessons of OpenGL don't match well with WebGL.
