@@ -12,180 +12,217 @@
 </head>
 <body>
 <div id="contentwrap">
-  <div id="content"><p>This article is a continuation of <a href="webgl-image-processing.html">WebGL Image Processing</a>. If you haven't read that I suggest <a href="webgl-image-processing.html">you start there</a>.</p>
-<p>The next most obvious question for image processing is how do apply multiple effects?
+  <div id="content"><p>Image processing is easy in WebGL. How easy? Read below.
 <!--more-->
-Well, you could try to generate shaders on the fly. Provide a UI that lets the user select the effects he wants to use then generate a shader that does all of the effects. That might not always be possible though that technique is often used to <a href="http://www.youtube.com/watch?v=cQUn0Zeh-0Q">create effects for real time graphics</a>.</p>
-<p>A more flexible way is to use 2 more textures and render to each texture in turn, ping ponging back and forth and applying the next effect each time.</p>
-<blockquote><pre>Original Image -&gt; [Blur]        -&gt; Texture 1
-Texture 1      -&gt; [Sharpen]     -&gt; Texture 2
-Texture 2      -&gt; [Edge Detect] -&gt; Texture 1
-Texture 1      -&gt; [Blur]        -&gt; Texture 2
-Texture 2      -&gt; [Normal]      -&gt; Canvas</pre></blockquote>
-
-<p>To do this we need to create framebuffers. In WebGL and OpenGL, a Framebuffer is actually a poor name. A WebGL/OpenGL Framebuffer is really just a collection of state and not actually a buffer of any kind. But, by attaching a texture to a framebuffer we can render into that texture. </p>
-<p>First let's turn <a href="webgl-image-processing.html">the old texture creation code</a> into a function</p>
+This is a continuation from <a href="webgl-fundamentals.html">WebGL Fundamentals</a>. If you haven't read that I'd suggest <a href="webgl-fundamentals.html">going there first</a>.</p>
+<p>To draw images in WebGL we need to use textures. Similarly to the way WebGL expects clipspace coordinates when rendering instead of pixels, WebGL expects texture coordinates when reading a texture. Texture coordinates go from 0.0 to 1.0 no matter the dimensions of the texture.</p>
+<p>Since we are only drawing a single rectangle (well, 2 triangles) we need to tell WebGL which place in the texture each point in the rectangle corresponds to. We'll pass this information from the vertex shader to the fragment shader using a special kind of variable called a 'varying'. It's called a varying because it varies. WebGL will interpolate the values we provide in the vertex shader as it draws each pixel using the fragment shader.</p>
+<p>Using <a href="webgl-fundamentals.html">the vertex shader from the end of previous post</a> we need to add an attribute to pass in texture coordinates and then pass those on to the fragment shader.</p>
 <pre class="prettyprint">
-  function createAndSetupTexture(gl) {
-    var texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-
-    // Set up texture so we can render any size image and so we are
-    // working with pixels.
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-
-    return texture;
-  }
-
-  // Create a texture and put the image in it.
-  var originalImageTexture = createAndSetupTexture(gl);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-</pre>
-
-<p>And now let's use that function to make 2 more textures and attach them to 2 framebuffers.</p>
-<pre class="prettyprint">
-  // create 2 textures and attach them to framebuffers.
-  var textures = [];
-  var framebuffers = [];
-  for (var ii = 0; ii < 2; ++ii) {
-    var texture = createAndSetupTexture(gl);
-    textures.push(texture);
-
-    // make the texture the same size as the image
-    gl.texImage2D(
-        gl.TEXTURE_2D, 0, gl.RGBA, image.width, image.height, 0,
-        gl.RGBA, gl.UNSIGNED_BYTE, null);
-
-    // Create a framebuffer
-    var fbo = gl.createFramebuffer();
-    framebuffers.push(fbo);
-    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-
-    // Attach a texture to it.
-    gl.framebufferTexture2D(
-        gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-  }
-</pre>
-
-<p>Now let's make a set of kernels and then a list of them to apply.</p>
-<pre class="prettyprint">
-  // Define several convolution kernels
-  var kernels = {
-    normal: [
-      0, 0, 0,
-      0, 1, 0,
-      0, 0, 0
-    ],
-    gaussianBlur: [
-      0.045, 0.122, 0.045,
-      0.122, 0.332, 0.122,
-      0.045, 0.122, 0.045
-    ],
-    unsharpen: [
-      -1, -1, -1,
-      -1,  9, -1,
-      -1, -1, -1
-    ],
-    emboss: [
-       -2, -1,  0,
-       -1,  1,  1,
-        0,  1,  2
-    ]
-  };
-
-  // List of effects to apply.
-  var effectsToApply = [
-    "gaussianBlur",
-    "emboss",
-    "gaussianBlur",
-    "unsharpen"
-  ];
-</pre>
-
-<p>And finally let's apply each one, ping ponging which texture we are rendering too</p>
-<pre class="prettyprint">
-  // start with the original image
-  gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
-
-  // don't y flip images while drawing to the textures
-  gl.uniform1f(flipYLocation, 1);
-
-  // loop through each effect we want to apply.
-  for (var ii = 0; ii < effectsToApply.length; ++ii) {
-    // Setup to draw into one of the framebuffers.
-    setFramebuffer(framebuffers[ii % 2], image.width, image.height);
-
-    drawWithKernel(effectsToApply[ii]);
-
-    // for the next draw, use the texture we just rendered to.
-    gl.bindTexture(gl.TEXTURE_2D, textures[ii % 2]);
-  }
-
-  // finally draw the result to the canvas.
-  gl.uniform1f(flipYLocation, -1);  // need to y flip for canvas
-  setFramebuffer(null, canvas.width, canvas.height);
-  drawWithKernel("normal");
-
-  function setFramebuffer(fbo, width, height) {
-    // make this the framebuffer we are rendering to.
-    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-
-    // Tell the shader the resolution of the framebuffer.
-    gl.uniform2f(resolutionLocation, width, height);
-
-    // Tell webgl the viewport setting needed for framebuffer.
-    gl.viewport(0, 0, width, height);
-  }
-
-  function drawWithKernel(name) {
-    // set the kernel
-    gl.uniform1fv(kernelLocation, kernels[name]);
-
-    // Draw the rectangle.
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-  }
-</pre>
-
-<p>Here's a working version with a slightly more flexible UI. Check the effects to turn them on. Drag the effects to reorder how they are applied.</p>
-<iframe class="webgl_example" width="400" height="340" src="../webgl/webgl-2d-image-processing.html"></iframe>
-
-<p><a class="webgl_center" href="../webgl/webgl-2d-image-processing.html" target="_blank">click here to open in a separate window</a></p>
-<p>Some things I should go over.<br />
-</p>
-<p>Calling <code>gl.bindFramebuffer</code> with <code>null</code> tells WebGL you want to render to the canvas instead of to one of your framebuffers.</p>
-<p>WebGL has to convert from <a href="webgl-fundamentals.html">clipspace</a> back into pixels. It does this based on the settings of <code>gl.viewport</code>. The settings of <code>gl.viewport</code> default to the size of the canvas when we initialize WebGL. Since the framebuffers we are rendering into are a different size then the canvas we need to set the viewport appropriately.</p>
-<p>Finally in the <a href="webgl-fundamentals.html">original example</a> we flipped the Y coordinate when rendering because WebGL displays the canvas with 0,0 being the bottom left corner instead of the more traditional for 2D top left. That's not needed when rendering to a framebuffer. Because the framebuffer is never displayed, which part is top and bottom is irrelevant. All that matters is that pixel 0,0 in the framebuffer corresponds to 0,0 in our calculations. To deal with this I made it possible to set whether to flip or not by adding one more input into the shader.</p>
-<pre class="prettyprint">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+attribute vec2 a_texCoord;
 ...
-uniform float u_flipY;
-...
+varying vec2 v_texCoord;
 
 void main() {
    ...
-   gl_Position = vec4(clipSpace * vec2(1, u_flipY), 0, 1);
-   ...
+   // pass the texCoord to the fragment shader
+   // The GPU will interpolate this value between points
+   v_texCoord = a_texCoord;
+}
+</pre>
+
+<p>Then we supply a fragment shader to look up colors from the texture.</p>
+<pre class="prettyprint">
+&lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
+precision float mediump;
+
+// our texture
+uniform sampler2D u_image;
+
+// the texCoords passed in from the vertex shader.
+varying vec2 v_texCoord;
+
+void main() {
+   // Look up a color from the texture.
+   gl_FragColor = texture2D(u_image, v_texCoord);
 }
 &lt;/script&gt;
 </pre>
 
-<p>And then we can set it when we render with</p>
+<p>Finally we need to load an image, create a texture and copy the image into the texture. Because we are in a browser images load asynchronously so we have to re-arrange our code a little to wait for the texture to load. Once it loads we'll draw it.</p>
 <pre class="prettyprint">
+function main() {
+  var image = new Image();
+  image.src = "http://someimage/on/our/server";  // MUST BE SAME DOMAIN!!!
+  image.onload = function() {
+    render(image);
+  }
+}
+
+function render(image) {
   ...
-  var flipYLocation = gl.getUniformLocation(program, "u_flipY");
+  // all the code we had before.
   ...
-  // don't flip
-  gl.uniform1f(flipYLocation, 1);
+  // look up where the texture coordinates need to go.
+  var texCoordLocation = gl.getAttribLocation(program, "a_texCoord");
+
+  // provide texture coordinates for the rectangle.
+  var texCoordBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+      0.0,  0.0,
+      1.0,  0.0,
+      0.0,  1.0,
+      0.0,  1.0,
+      1.0,  0.0,
+      1.0,  1.0]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(texCoordLocation);
+  gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+  // Create a texture.
+  var texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+
+  // Set the parameters so we can render any size image.
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+  // Upload the image into the texture.
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
   ...
-  // flip
-  gl.uniform1f(flipYLocation, -1);
+}
 </pre>
 
-<p>I kept this example simple by using single GLSL program that can achieve multiple effects. If you wanted to do full on image processing you'd probably need many GLSL programs. A program for hue, saturation and luminance adjustment. Another for brightness and contrast. One for inverting, another for adjusting levels, etc. You'd need to change the code to switch GLSL programs and update the parameters for that particular program. I'd considered writing that example but it's an exercise best left to the reader because multiple GLSL programs each with their own parameter needs probably means some major refactoring to keep it all from becoming a big mess of spaghetti. </p>
-<p>I hope this and the preceding examplse have made WebGL seem a little more approachable and I hope starting with 2D helps make WebGL a little easier to understand. If I find the time I'll try to write <a href="webgl-2d-translation.html">a few more articles</a> about how to do 3D as well as more details on what WebGL is really doing under the hood.</p></div>
+<p>And here's the image rendered in WebGL.</p>
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-image.html"></iframe>
+
+<p><a class="webgl_center" href="../webgl/webgl-2d-image.html" target="_blank">click here to open in a separate window</a></p>
+<p>Not too exciting so let's manipulate that image. How about just swapping red and blue?</p>
+<pre class="prettyprint">
+   ...
+   gl_FragColor = texture2D(u_image, v_texCoord).bgra;
+   ...
+</pre>
+
+<p>And now red and blue are swapped.</p>
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-image-red2blue.html"></iframe>
+
+<p><a class="webgl_center" href="../webgl/webgl-2d-image-red2blue.html" target="_blank">click here to open in a separate window</a></p>
+<p>What if we want to do image processing that actually looks at other pixels? Since WebGL references textures in texture coordinates which go from 0.0 to 1.0 then we can calculate how much to move for 1 pixel with the simple math <code>onePixel = 1.0 / textureSize</code>.</p>
+<p>Here's a fragment shader that averages the left and right pixels of each pixel in the texture.</p>
+<pre class="prettyprint">
+&lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
+precision mediump float;
+
+// our texture
+uniform sampler2D u_image;
+uniform vec2 u_textureSize;
+
+// the texCoords passed in from the vertex shader.
+varying vec2 v_texCoord;
+
+void main() {
+   // compute 1 pixel in texture coordinates.
+   vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
+
+   // average the left, middle, and right pixels.
+   gl_FragColor = (
+       texture2D(u_image, v_texCoord) +
+       texture2D(u_image, v_texCoord + vec2(onePixel.x, 0.0)) +
+       texture2D(u_image, v_texCoord + vec2(-onePixel.x, 0.0))) / 3.0;
+}
+&lt;/script&gt;
+</pre>
+
+<p>We then need to pass in the size of the texture from JavaScript.</p>
+<pre class="prettyprint">
+  ...
+  var textureSizeLocation = gl.getUniformLocation(program, "u_textureSize");
+  ...
+  // set the size of the image
+  gl.uniform2f(textureSizeLocation, image.width, image.height);
+  ...
+</pre>
+
+<p>Compare to the un-blurred image above.</p>
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-image-blend.html"></iframe>
+
+<p><a class="webgl_center" href="../webgl/webgl-2d-image-blend.html" target="_blank">click here to open in a separate window</a></p>
+<p>Now that we know how to reference other pixels let's use a convolution kernel to do a bunch of common image processing. In this case we'll use a 3x3 kernel. A convolution kernel is just a 3x3 matrix where each entry in the matrix represents how much to multiply the 8 pixels around the pixel we are rendering. We then divide the result by the weight of the kernel (the sum of all values in the kernel) or 1.0, which ever is greater. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Here's a pretty good article on it</a>. And <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">here's another article showing some actual code if you were to write this by hand in C++</a>.</p>
+<p>In our case we're going to do that work in the shader so here's the new fragment shader.</p>
+<pre class="prettyprint">
+&lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
+precision mediump float;
+
+// our texture
+uniform sampler2D u_image;
+uniform vec2 u_textureSize;
+uniform float u_kernel[9];
+
+// the texCoords passed in from the vertex shader.
+varying vec2 v_texCoord;
+
+void main() {
+   vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
+   vec4 colorSum =
+     texture2D(u_image, v_texCoord + onePixel * vec2(-1, -1)) * u_kernel[0] +
+     texture2D(u_image, v_texCoord + onePixel * vec2( 0, -1)) * u_kernel[1] +
+     texture2D(u_image, v_texCoord + onePixel * vec2( 1, -1)) * u_kernel[2] +
+     texture2D(u_image, v_texCoord + onePixel * vec2(-1,  0)) * u_kernel[3] +
+     texture2D(u_image, v_texCoord + onePixel * vec2( 0,  0)) * u_kernel[4] +
+     texture2D(u_image, v_texCoord + onePixel * vec2( 1,  0)) * u_kernel[5] +
+     texture2D(u_image, v_texCoord + onePixel * vec2(-1,  1)) * u_kernel[6] +
+     texture2D(u_image, v_texCoord + onePixel * vec2( 0,  1)) * u_kernel[7] +
+     texture2D(u_image, v_texCoord + onePixel * vec2( 1,  1)) * u_kernel[8] ;
+   float kernelWeight =
+     u_kernel[0] +
+     u_kernel[1] +
+     u_kernel[2] +
+     u_kernel[3] +
+     u_kernel[4] +
+     u_kernel[5] +
+     u_kernel[6] +
+     u_kernel[7] +
+     u_kernel[8] ;
+
+   if (kernelWeight <= 0.0) {
+     kernelWeight = 1.0;
+   }
+
+   // Divide the sum by the weight but just use rgb
+   // we'll set alpha to 1.0
+   gl_FragColor = vec4((colorSum / kernelWeight).rgb, 1.0);
+}
+&lt;/script&gt;
+</pre>
+
+<p>In JavaScript we need to supply a convolution kernel.</p>
+<pre class="prettyprint">
+  ...
+  var kernelLocation = gl.getUniformLocation(program, "u_kernel[0]");
+  ...
+  var edgeDetectKernel = [
+      -1, -1, -1,
+      -1,  8, -1,
+      -1, -1, -1
+  ];
+  gl.uniform1fv(kernelLocation, edgeDetectKernel);
+  ...
+</pre>
+
+<p>And voila... Use the drop down list to select different kernels.</p>
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-image-3x3-convolution.html"></iframe>
+
+<p><a class="webgl_center" href="../webgl/webgl-2d-image-3x3-convolution.html" target="_blank">click here to open in a separate window</a></p>
+<p>I hope this article has convinced you image processing in WebGL is pretty simple. Next up I'll go over  <a href="webgl-image-processing-continued.html">how to apply more than one effect to the image</a>.</p>
+<div class="webgl_bottombar">
+<h3>What's with the a_, u_, and v_ prefixes in from of variables in GLSL?</h3>
+<p>
+That's just a naming convention. a_ for attributes which is the data provided by buffers. u_ for uniforms which are inputs to the shaders, v_ for varyings which are values passed from a vertex shader to a fragment shader and interpolated (or varied) between the vertices for each pixel drawn.
+</p>
+</div></div>
 </div>
 </body>
 
