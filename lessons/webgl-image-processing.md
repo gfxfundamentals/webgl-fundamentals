@@ -1,3 +1,5 @@
+Title: WebGL Image Processing
+
 Image processing is easy in WebGL. How easy? Read below.
 <!--more-->
 This is a continuation from <a href="webgl-fundamentals.html">WebGL Fundamentals</a>. If you haven't read that I'd suggest <a href="webgl-fundamentals.html">going there first</a>.

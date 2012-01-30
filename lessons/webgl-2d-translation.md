@@ -1,3 +1,5 @@
+Title: WebGL 2D Translation
+
 Before we move on to 3D let's stick with 2D for a little while longer. Bear with me please. This article might seem exceedingly obvious to some but I'll build up to a point in a few articles.
 
 This article is a continuation of a series starting with <a href="webgl-fundamentals.html">WebGL Fundamentals</a>. If you haven't read them I suggest you read at least the first one then come back here.

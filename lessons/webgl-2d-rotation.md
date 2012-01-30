@@ -1,4 +1,6 @@
-﻿This post is a continuation of a series of posts about WebGL. The first <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was <a href="webgl-2d-translation.html">about translating geometry</a>.
+﻿Title: WebGL 2D Rotation
+
+This post is a continuation of a series of posts about WebGL. The first <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was <a href="webgl-2d-translation.html">about translating geometry</a>.
 
 I'm going to admit right up front I have no idea if how I explain this will make sense but what the heck, might as well try.
 <!--more-->

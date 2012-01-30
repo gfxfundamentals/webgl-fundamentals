@@ -1,4 +1,6 @@
-﻿This post is a continuation of a series of posts about WebGL. The first <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was <a href="webgl-2d-rotation.html">about rotating geometry</a>.
+﻿Title: WebGL 2D Scale
+
+This post is a continuation of a series of posts about WebGL. The first <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was <a href="webgl-2d-rotation.html">about rotating geometry</a>.
 
 Scaling is just as <a href="webgl-2d-translation.html">easy as translation</a>.
 <!--more-->
