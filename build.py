@@ -50,6 +50,7 @@ def main (argv):
 
   (options, args) = parser.parse_args(args=argv)
   ApplyTemplateToFiles("templates/lesson.template", "lessons/*.md")
+  ApplyTemplateToFile("templates/lesson.template", "index.md", "index.html")
 
 
 if __name__ == '__main__':
