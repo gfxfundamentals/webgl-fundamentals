@@ -1,3 +1,5 @@
+Title: WebGL and Alpha
+
 I've noticed some OpenGL developers having issues with how WebGL treats alpha in the backbuffer (ie, the canvas), so I thought it might be good to go over some of the differences between WebGL and OpenGL related to alpha.
 <!--more-->
 The biggest difference between OpenGL and WebGL is that OpenGL renders to a backbuffer that is not composited with anything so, or effectively not composited with anything by the OS's window manager, so it doesn't matter what your alpha is.

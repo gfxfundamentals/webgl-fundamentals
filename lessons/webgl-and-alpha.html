@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>fill this in</title>
+<title>WebGL and Alpha</title>
 <link rel="stylesheet" href="resources/base.css" type="text/css" />
 <link rel="stylesheet" href="resources/lesson.css" type="text/css" />
 <script type="text/javascript" src="../webgl/resources/jquery-1.7.1.min.js"></script>
@@ -12,7 +12,9 @@
 </head>
 <body>
 <div id="contentwrap">
-  <div id="content"><p>I've noticed some OpenGL developers having issues with how WebGL treats alpha in the backbuffer (ie, the canvas), so I thought it might be good to go over some of the differences between WebGL and OpenGL related to alpha.
+  <div id="content">
+    <h1>WebGL and Alpha</h1>
+    <p>I've noticed some OpenGL developers having issues with how WebGL treats alpha in the backbuffer (ie, the canvas), so I thought it might be good to go over some of the differences between WebGL and OpenGL related to alpha.
 <!--more-->
 The biggest difference between OpenGL and WebGL is that OpenGL renders to a backbuffer that is not composited with anything so, or effectively not composited with anything by the OS's window manager, so it doesn't matter what your alpha is.</p>
 <p>WebGL is composited by the browser with the web page and the default is to use pre-multiplied alpha the same as .png &lt;img&gt; tags with transparency and 2d canvas tags.</p>
@@ -88,7 +90,8 @@ gl = canvas.getContext("experimental-webgl", { alpha: false }};
    gl.blendFunc(gl.ONE, gl_ONE_MINUS_SRC_ALPHA);
 </pre>
 
-<p>Those are the methods I'm aware of. If you know of more please post them below.</p></div>
+<p>Those are the methods I'm aware of. If you know of more please post them below.</p>
+  </div>
 </div>
 </body>
 

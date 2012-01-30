@@ -1,3 +1,5 @@
+Title: WebGL Image Processing Continued
+
 This article is a continuation of <a href="webgl-image-processing.html">WebGL Image Processing</a>. If you haven't read that I suggest <a href="webgl-image-processing.html">you start there</a>.
 
 The next most obvious question for image processing is how do apply multiple effects?

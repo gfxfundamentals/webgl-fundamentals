@@ -1,3 +1,5 @@
+Title: WebGL Boilerplate
+
 WebGL sometimes appears complicated to learn because most lessons go over everything all at once. I'll try to avoid that where possible and break it down into smaller pieces. 
 
 One of things that makes WebGL seem complicated is that you have these 2 tiny functions, a vertex shader and a fragment shader. Those two functions usually run on your GPU which is where all the speed comes from. That's also why they are written in a custom language, a language that matches what a GPU can do. Those 2 functions need to be compiled and linked. That process is, 99% of the time, the same in every WebGL program.
