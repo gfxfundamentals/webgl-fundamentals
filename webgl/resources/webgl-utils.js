@@ -273,7 +273,7 @@ var createShaderFromScript = function(
       opt_errorCallback);
 };
 
-var defaultshaderType = [
+var defaultShaderType = [
   "VERTEX_SHADER",
   "FRAGMENT_SHADER"
 ];
