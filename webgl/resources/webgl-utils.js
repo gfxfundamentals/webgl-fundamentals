@@ -153,7 +153,7 @@ var updateCSSIfInIFrame = function() {
  * Gets a WebGL context.
  * makes its backing store the size it is displayed.
  */
-var getWebGLContext = function(canvas) {
+var getWebGLContext = function(canvas, opt_attribs) {
   if (isInIFrame()) {
     updateCSSIfInIFrame();
 
@@ -167,7 +167,7 @@ var getWebGLContext = function(canvas) {
     document.body.insertBefore(h1, document.body.children[0]);
   }
 
-  var gl = setupWebGL(canvas);
+  var gl = setupWebGL(canvas, opt_attribs);
   return gl;
 };
 
