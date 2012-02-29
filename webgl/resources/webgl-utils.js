@@ -273,21 +273,27 @@ var createShaderFromScript = function(
       opt_errorCallback);
 };
 
+var defaultshaderType = [
+  "VERTEX_SHADER",
+  "FRAGMENT_SHADER"
+];
+
 /**
  * Creates a program from 2 script tags.
  *
  * @param {!WebGLContext} gl The WebGLContext to use.
- * @param {string} vertexShaderScriptId The id of the script tag
- *        for the vertexShader.
- * @param {string} fragmentShaderScriptId The id of the script
- *        tag for the fragmentShader.
+ * @param {!Array.<string>} shaderScriptIds Array of ids of the
+ *        script tags for the shaders. The first is assumed to
+ *        be the vertex shader, the second the fragment shader.
  * @param {function(string): void) opt_errorCallback callback for errors.
  * @return {!WebGLProgram} The created program.
  */
-var createProgramFromScripts = function(gl, vertexShaderScriptId, fragmentShaderScriptId, opt_errorCallback) {
-  var vertexShader = createShaderFromScript(gl, vertexShaderScriptId, gl.VERTEX_SHADER, opt_errorCallback);
-  var fragmentShader = createShaderFromScript(gl, fragmentShaderScriptId, gl.FRAGMENT_SHADER, opt_errorCallback);
-  return loadProgram(gl, [vertexShader, fragmentShader]);
+var createProgramFromScripts = function(gl, shaderScriptIds, opt_errorCallback) {
+  var shaders = [];
+  for (var ii = 0; ii < shaderScriptIds.length; ++ii) {
+    shaders.push(createShaderFromScript(gl, shaderScriptIds[ii], gl[defaultShaderType[ii]], opt_errorCallback));
+  }
+  return loadProgram(gl, shaders);
 };
 
 
