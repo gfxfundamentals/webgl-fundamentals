@@ -160,9 +160,9 @@ function setColors(gl) {
         [ r1, b1, g1, 1,
           r1, b1, g1, 1,
           r1, b1, g1, 1,
-          r2, b2, g2, 2,
-          r2, b2, g2, 2,
-          r2, b2, g2, 2]),
+          r2, b2, g2, 1,
+          r2, b2, g2, 1,
+          r2, b2, g2, 1]),
       gl.STATIC_DRAW);
 }
 </pre>
@@ -171,13 +171,39 @@ function setColors(gl) {
 <iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-2-colors.html"></iframe>
 
 <p><a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-2-colors.html" target="_blank">click here to open in a separate window</a></p>
+<p>Notice that we have 2 solid color triangles. Yet we're passing the values in a <em>varying</em>
+so they are being varied or interpolated across the triangle. It's just that we used
+the same color on each of the 3 vertices of each triangle. If we make each color different
+we'll see the interpolation.</p>
+<pre class="prettyprint">
+// Fill the buffer with colors for the 2 triangles
+// that make the rectangle.
+function setColors(gl) {
+  // Make every vertex a different color.
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(
+        [ Math.random(), Math.random(), Math.random(), 1,
+          Math.random(), Math.random(), Math.random(), 1,
+          Math.random(), Math.random(), Math.random(), 1,
+          Math.random(), Math.random(), Math.random(), 1,
+          Math.random(), Math.random(), Math.random(), 1,
+          Math.random(), Math.random(), Math.random(), 1]),
+      gl.STATIC_DRAW);
+}
+</pre>
+
+<p>And now we see the interpolated <em>varying</em>.</p>
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-random-colors.html"></iframe>
+
+<p><a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-random-colors.html" target="_blank">click here to open in a separate window</a></p>
 <p>Not very exciting I suppose but it does demonstrate using more than one attribute
 and passing data from a vertex shader to a fragment shader. If you check out
 <a href="webgl-image-processing.html">the image processing examples</a> you'll see
 they also use an extra attribute to pass in texture coordinates.</p>
 <p>Before we move on just one more thing.</p>
 <h2>What do these buffer and attibute commands do?</h2>
-<p>Buffers are the way of getting vertex and other data onto the GPU.
+<p>Buffers are the way of getting vertex and other per vertex data onto the GPU.
 <code>gl.createBuffer</code> creates a buffer.
 <code>gl.bindBuffer</code> sets that buffer as the buffer to be worked on
 <code>gl.bufferData</code> copies data into the buffer.</p>

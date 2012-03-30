@@ -167,9 +167,9 @@ function setColors(gl) {
         [ r1, b1, g1, 1,
           r1, b1, g1, 1,
           r1, b1, g1, 1,
-          r2, b2, g2, 2,
-          r2, b2, g2, 2,
-          r2, b2, g2, 2]),
+          r2, b2, g2, 1,
+          r2, b2, g2, 1,
+          r2, b2, g2, 1]),
       gl.STATIC_DRAW);
 }
 </pre>
@@ -178,6 +178,34 @@ And here's the result.
 
 <iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-2-colors.html"></iframe>
 <a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-2-colors.html" target="_blank">click here to open in a separate window</a>
+
+Notice that we have 2 solid color triangles. Yet we're passing the values in a *varying*
+so they are being varied or interpolated across the triangle. It's just that we used
+the same color on each of the 3 vertices of each triangle. If we make each color different
+we'll see the interpolation.
+
+<pre class="prettyprint">
+// Fill the buffer with colors for the 2 triangles
+// that make the rectangle.
+function setColors(gl) {
+  // Make every vertex a different color.
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(
+        [ Math.random(), Math.random(), Math.random(), 1,
+          Math.random(), Math.random(), Math.random(), 1,
+          Math.random(), Math.random(), Math.random(), 1,
+          Math.random(), Math.random(), Math.random(), 1,
+          Math.random(), Math.random(), Math.random(), 1,
+          Math.random(), Math.random(), Math.random(), 1]),
+      gl.STATIC_DRAW);
+}
+</pre>
+
+And now we see the interpolated *varying*.
+
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-random-colors.html"></iframe>
+<a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-random-colors.html" target="_blank">click here to open in a separate window</a>
 
 Not very exciting I suppose but it does demonstrate using more than one attribute
 and passing data from a vertex shader to a fragment shader. If you check out
@@ -189,7 +217,7 @@ Before we move on just one more thing.
 What do these buffer and attibute commands do?
 ----------------------------------------------
 
-Buffers are the way of getting vertex and other data onto the GPU.
+Buffers are the way of getting vertex and other per vertex data onto the GPU.
 <code>gl.createBuffer</code> creates a buffer.
 <code>gl.bindBuffer</code> sets that buffer as the buffer to be worked on
 <code>gl.bufferData</code> copies data into the buffer.
@@ -260,7 +288,7 @@ use 16 bytes per vertex per color. If you have complicated geometry that can add
 to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs where 0 represnets
 0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color per vertex, a 75% savings.
 </p>
-<p>We can change our code in fact to do this. When we well WebGL how to extract our colors we'd use</p>
+<p>We can change our code in fact to do this. When we tell WebGL how to extract our colors we'd use</p>
 <pre class="prettyprint">
   gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 </pre>
