@@ -60,6 +60,7 @@ class Builder(object):
     meta_data['content'] = html
     meta_data['src_file_name'] = content_file_name
     meta_data['dst_file_name'] = out_file_name
+    meta_data['basedir'] = ""
     output = template % meta_data
     self.WriteFile(out_file_name, output)
     self.articles.append(meta_data)
