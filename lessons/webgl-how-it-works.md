@@ -1,0 +1,302 @@
+﻿Title: WebGL How It Works
+
+Before we can move on to 3D I think we need to discuss at a basic level
+what WebGL and your GPU actually do. There are basically 2 parts to this
+GPU thing. The first part processes vertices (or streams of data) into
+clipspace vertices. The second part draws pixels based on the first part.
+
+When you call
+
+<pre class="prettyprint">
+    gl.drawArrays(gl.TRIANGLE, 0, 9)
+</pre>
+
+The 9 there means "process 9 vertices" so here are 9 vertices being
+processed.
+
+<img src="resources/vertex-shader-anim.gif" class="webgl_center" />
+
+On the left is the data you provide. The vertex shader is a function you write.
+It gets called once for each vertex. You do some math and set the special variable
+“gl_Position” and the GPU takes your result and stores it internally.
+
+Assuming you're drawing TRIANGLES, every time this first part generates 3 vertices
+the GPU uses them to make a triangle. It figures out which pixels the 3 points of the
+triangle correspond to, and then rasterizes the triangle which is a fancy word for
+“draws it with pixels”. For each pixel it will call your fragment shader asking
+you what color to make that pixel.
+
+<img src="resources/fragment-shader-anim.gif" class="webgl_center" />
+
+That’s all very interesting but as you can see in our examples to up this point the
+fragment shader has very little info per pixel. Fortunately we can pass it more info.
+We define “varyings” for each value we want to pass from the vertex shader to the fragment shader.
+
+As a simple example, lets just pass the clipspace coordinates we computed directly
+from the vertex shader to the fragment shader.
+
+We'll draw with a simple rectangle.
+Continuing from our <a href="webgl-2d-matrices.html">previous example</a> let's
+change our F to a rectangle.
+
+<pre class="prettyprint">
+// Fill the buffer with the values that define a rectangle.
+function setGeometry(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+          -150, -100,
+           150, -100,
+          -150,  100,
+           150, -100,
+          -150,  100,
+           150,  100]),
+      gl.STATIC_DRAW);
+}
+</pre>
+
+And we have to only draw 6 vertices.
+
+<pre class="prettyprint">
+  // Draw the scene.
+  function drawScene() {
+    ...
+    // Draw the geometry.
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+</pre>
+
+Then in our vertex shader we declare a *varying* to pass data to the fragment
+shader.
+
+<pre class="prettyprint">
+varying vec4 v_color;
+...
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+
+  // Convert from clipspace to colorspace.
+  // Clipspace goes -1.0 to +1.0
+  // Colorspace goes from 0.0 to 1.0
+  v_color = gl_Position * 0.5 + 0.5;
+}
+</pre>
+
+And then we declare the same *varying* in the fragment shader.
+
+<pre class="prettyprint">
+precision mediump float;
+
+varying vec4 v_color;
+
+void main() {
+  gl_FragColor = v_color;
+}
+</pre>
+
+WebGL will connect the varying in the vertex shader to the varying of the same
+name and type in the fragment shader.
+
+Here's the working version.
+
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-position-for-color.html"></iframe>
+<a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a>
+
+Move, scale and rotate the rectangle. Notice that since the colors are computed
+from clipspace they don't move with the rectangle. They are relative to the background.
+
+Now think about it. We only compute 6 vertices. Our vertex shader only gets called 6 times therefore
+it's only computing 6 colors yet our rectangle is many colors. This is why it's called a *varying*.
+
+WebGL takes the 6 values we computed for each vertex, 3 for each triangle, and as it rasterizes
+the triangle it interpolates between the values we computed for the vertices. For each pixel it calls our fragment
+shader with the interpolated value for that pixel.
+
+<img src="resources/varying-diagram.gif" class="webgl_center" />
+
+We can also pass in more data to the vertex shader which we can then pass on to
+the fragment shader. So for example lets draw the rectangle in 2 colors. To do this
+we'll add another attribute to the vertex shader so we can pass it more data and
+we'll pass that data directly to the fragment shader.
+
+<pre class="prettyprint">
+attribute vec2 a_position;
+attribute vec4 a_color;
+...
+varying vec4 v_color;
+
+void main() {
+   ...
+  // Copy the color from the attribute to the varying.
+  v_color = a_color;
+}
+</pre>
+
+We now have to supply colors for WebGL to use.
+
+<pre class="prettyprint">
+  // look up where the vertex data needs to go.
+  var positionLocation = gl.getAttribLocation(program, "a_position");
+  var colorLocation = gl.getAttribLocation(program, "a_color");
+  ...
+  // Create a buffer for the colors.
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(colorLocation);
+  gl.vertexAttribPointer(colorLocation, 4, gl.FLOAT, false, 0, 0);
+
+  // Set the colors.
+  setColors(gl);
+  ...
+
+// Fill the buffer with colors for the 2 triangles
+// that make the rectangle.
+function setColors(gl) {
+  // Pick 2 random colors.
+  var r1 = Math.random();
+  var b1 = Math.random();
+  var g1 = Math.random();
+  var r2 = Math.random();
+  var b2 = Math.random();
+  var g2 = Math.random();
+
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(
+        [ r1, b1, g1, 1,
+          r1, b1, g1, 1,
+          r1, b1, g1, 1,
+          r2, b2, g2, 2,
+          r2, b2, g2, 2,
+          r2, b2, g2, 2]),
+      gl.STATIC_DRAW);
+}
+</pre>
+
+And here's the result.
+
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-2-colors.html"></iframe>
+<a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-2-colors.html" target="_blank">click here to open in a separate window</a>
+
+Not very exciting I suppose but it does demonstrate using more than one attribute
+and passing data from a vertex shader to a fragment shader. If you check out
+<a href="webgl-image-processing.html">the image processing examples</a> you'll see
+they also use an extra attribute to pass in texture coordinates.
+
+Before we move on just one more thing.
+
+What do these buffer and attibute commands do?
+----------------------------------------------
+
+Buffers are the way of getting vertex and other data onto the GPU.
+<code>gl.createBuffer</code> creates a buffer.
+<code>gl.bindBuffer</code> sets that buffer as the buffer to be worked on
+<code>gl.bufferData</code> copies data into the buffer.
+
+Once the data is in the buffer we need to tell WebGL how to
+get data out of it and provide it to the vertex shader's attributes.
+
+To do this, first we ask WebGL what locations it assigned to the
+attributes. For example in the code above we have
+
+<pre class="prettyprint">
+  // look up where the vertex data needs to go.
+  var positionLocation = gl.getAttribLocation(program, "a_position");
+  var colorLocation = gl.getAttribLocation(program, "a_color");
+</pre>
+
+Once we know the location of the attribute we then issue 2 commands.
+
+<pre class="prettyprint">
+    gl.enableVertexAttribArray(location);
+</pre>
+
+This command tells WebGL we want to supply data from a buffer.
+
+<pre class="prettyprint">
+    gl.vertexAttribPointer(
+        location,
+        numComponents,
+        typeOfData,
+        normalizeFlag,
+        strideToNextPieceOfData,
+        offsetIntoBuffer);
+</pre>
+
+And this command tells WebGL to get data from the buffer that's
+currently bound, how many components per vertex (1 - 4), what
+the type of data is (BYTE, FLOAT, INT, UNSIGNED_SHORT), the stride or how many bytes
+to skip to get to the next vertex, and an offset for how far into
+the buffer our data is.
+
+Number of components is always 1 to 4.
+
+If you are using 1 buffer per type of data then both stride and offset
+can always be 0. Setting them to values other than 0 is more complicated
+and though it has some benefits in terms of performance it's not
+worth the complication unless you are trying to push WebGL to its
+absolute limits.
+
+Now that we've gone over how the GPU really works and how to draw with more than 1
+color using attributes and varyings we're ready to move on to 3D.
+
+<div class="webgl_bottombar">
+<h3>What's normalizeFlag for in vertexAttribPointer?</h3>
+<p>
+The normalize flag is for all the non floating point types. Basically
+if you pass in false then values will be interpreted as the type they
+are. BYTE goes from -128 to 127, UNSIGNED_BYTE goes from 0 to 255,
+SHORT goes from -32768 to 32776 etc...
+</p>
+<p>
+If you set the normalize flag to true then the values of a BYTE (-128 to 127)
+represent the values -1.0 to +1.0, UNSIGNED_BYTE (0 to 255) become 0.0 to +1.0,
+A normalized SHORT also goes from -1.0 to +1.0 it just has more resolution that a
+BYTE.</p>
+<p>The most common use for normalized data is for colors. Most of the time colors
+only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha would
+use 16 bytes per vertex per color. If you have complicated geometry that can add up
+to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs where 0 represnets
+0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color per vertex, a 75% savings.
+</p>
+<p>We can change our code in fact to do this. When we well WebGL how to extract our colors we'd use</p>
+<pre class="prettyprint">
+  gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
+</pre>
+<p>And when we fill out our buffer with colors we'd use</p>
+<pre class="prettyprint">
+// Fill the buffer with colors for the 2 triangles
+// that make the rectangle.
+function setColors(gl) {
+  // Pick 2 random colors.
+  var r1 = Math.random() * 256; // 0 to 255.99999
+  var b1 = Math.random() * 256; // these values
+  var g1 = Math.random() * 256; // will be truncated
+  var r2 = Math.random() * 256; // when stored in the
+  var b2 = Math.random() * 256; // Uint8Array
+  var g2 = Math.random() * 256;
+
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Uint8Array(   // Uint8Array
+        [ r1, b1, g1, 255,
+          r1, b1, g1, 255,
+          r1, b1, g1, 255,
+          r2, b2, g2, 255,
+          r2, b2, g2, 255,
+          r2, b2, g2, 255]),
+      gl.STATIC_DRAW);
+}
+</pre>
+<p>
+Here's that sample.
+</p>
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-2-byte-colors.html"></iframe>
+<a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-2-byte-colors.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+
+
+
+
