@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+html, body {
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+  overflow: none;
+}
+canvas {
+  width: 100%;
+  height: 100%;
+}
+</style>
+<script type="text/javascript" src="../../webgl/resources/webgl-utils.js"></script>
+<script>
+window.onload = main
+
+function main() {
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  var pixelSize = 24;
+
+  var triangle = [
+    { pos: [4, 0], color: [255,0,0] },
+    { pos: [8, 4], color: [0,255,0] },
+    { pos: [0, 7], color: [0,0,255] }
+  ];
+
+  function render() {
+    resizeCanvasToDisplaySize(canvas);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawTriangle(triangle);
+
+//    requestAnimFrame(render, canvas);
+  }
+
+  function drawTriangle(triangle) {
+    ctx.strokeStyle = "black";
+
+    // find the highest and lowest points.
+    var highNdx = 0;
+    var lowNdx = 0;
+    for (var ii = 1; ii < 3; ++ii) {
+      if (triangle[ii].pos[1] < triangle[highNdx].pos[1]) {
+        highNdx = ii;
+      }
+      if (triangle[ii].pos[1] > triangle[lowNdx].pos[1]) {
+        lowNdx = ii;
+      }
+    }
+
+    // deduce the mid point.
+    var midNdx = 3 - (highNdx + lowNdx);
+
+    function computeDelta(val0, val1) {
+      var delta = [];
+      for (var ii = 0; ii < val0.length; ++ii) {
+        delta.push(val0[ii] - val1[ii]);
+      }
+      return delta;
+    }
+
+    function computeStep(val, steps) {
+      var step = [];
+      for (var ii = 0; ii < val.length; ++ii) {
+        step.push(steps ? val[ii] / steps : 0);
+      }
+      return step;
+    }
+
+    function add(val, add) {
+      for (var ii = 0; ii < val.length; ++ii) {
+        val[ii] += add[ii];
+      }
+    }
+
+    var delta0 = computeDelta(triangle[lowNdx].pos, triangle[highNdx].pos);
+    var delta1 = computeDelta(triangle[midNdx].pos, triangle[highNdx].pos);
+    var delta2 = computeDelta(triangle[lowNdx].pos, triangle[midNdx].pos);
+
+    var x0 = triangle[highNdx].pos[0];
+    var x1 = triangle[highNdx].pos[0];
+    var y  = triangle[highNdx].pos[1];
+
+    var varyingA = triangle[highNdx].color.slice(0);
+    var varyingB = triangle[highNdx].color.slice(0);
+    var vdelta0 = computeDelta(triangle[lowNdx].color, triangle[highNdx].color);
+    var vdelta1 = computeDelta(triangle[midNdx].color, triangle[highNdx].color);
+    var vdelta2 = computeDelta(triangle[lowNdx].color, triangle[midNdx].color);
+
+    var midY = triangle[midNdx].pos[1];
+    var lowY = triangle[lowNdx].pos[1];
+
+    var slope0 = delta0[0] / delta0[1];
+    var slope1 = delta1[0] / delta1[1];
+    var slope2 = delta2[0] / delta2[1];
+
+    var vstepA = computeStep(vdelta0, (lowY - y));
+    var vstepB = computeStep(vdelta1, (midY - y));
+    var vstepC = computeStep(vdelta2, (lowY - midY));
+
+    var endY = midY;
+    for (var ii = 0; ii < 2; ++ii) {
+      do {
+        drawSpan(x0, x1, y, varyingA, varyingB);
+        x0 += slope0;
+        x1 += slope1;
+        ++y;
+        add(varyingA, vstepA);
+        add(varyingB, vstepB);
+      } while (y < endY);
+      endY = lowY;
+      slope1 = slope2;
+      vstepB = vstepC;
+    }
+
+    function drawSpan(x0, x1, y, colorA, colorB) {
+      x0 = Math.floor(x0);
+      x1 = Math.floor(x1);
+      if (x0 > x1) {
+        var t = x0;
+        var x0 = x1;
+        var x1 = t;
+        t = colorA;
+        colorA = colorB;
+        colorB = t;
+      }
+
+      var delta = computeDelta(colorB, colorA);
+      var step = computeStep(delta, (x1 - x0));
+      var color = colorA.slice(0);
+      for (var x = x0; x <= x1; ++x) {
+        drawPixel(x, y, color);
+        add(color, step);
+      }
+    }
+
+    function drawPixel(x, y, color) {
+      x *= pixelSize;
+      y *= pixelSize;
+      ctx.fillStyle = "rgb(" + Math.floor(color[0]) + "," + Math.floor(color[1]) + "," + Math.floor(color[2]) + ")";
+      ctx.fillRect(x, y, pixelSize, pixelSize);
+      ctx.strokeRect(x, y, pixelSize, pixelSize);
+    }
+
+  }
+
+  render();
+}
+</script>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+</body>
+</html>

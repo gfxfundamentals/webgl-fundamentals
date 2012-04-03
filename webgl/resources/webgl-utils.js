@@ -324,6 +324,18 @@ var getExtensionWithKnownPrefixes = function(gl, name) {
 };
 
 
+/**
+ * Resize a canvas to match the size it's displayed.
+ * @param {!Canvas} canvas The canvas to resize.
+ */
+var resizeCanvasToDisplaySize = function(canvas) {
+  if (canvas.width != canvas.clientWidth ||
+      canvas.height != canvas.clientHeight) {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+  }
+}
+
 /* export functions */
 this.createProgram = loadProgram;
 this.createProgramFromScripts = createProgramFromScripts;
@@ -331,6 +343,7 @@ this.createShaderFromScriptElement = createShaderFromScript;
 this.getWebGLContext = getWebGLContext;
 this.updateCSSIfInIFrame = updateCSSIfInIFrame;
 this.getExtensionWithKnownPrefixes = getExtensionWithKnownPrefixes;
+this.resizeCanvasToDisplaySize = resizeCanvasToDisplaySize;
 
 /**
  * Provides requestAnimationFrame in a cross browser way.
