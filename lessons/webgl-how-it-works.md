@@ -314,7 +314,7 @@ SHORT goes from -32768 to 32776 etc...
 <p>
 If you set the normalize flag to true then the values of a BYTE (-128 to 127)
 represent the values -1.0 to +1.0, UNSIGNED_BYTE (0 to 255) become 0.0 to +1.0,
-A normalized SHORT also goes from -1.0 to +1.0 it just has more resolution that a
+A normalized SHORT also goes from -1.0 to +1.0 it just has more resolution than a
 BYTE.</p>
 <p>The most common use for normalized data is for colors. Most of the time colors
 only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha would
