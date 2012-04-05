@@ -293,7 +293,9 @@ the buffer our data is.
 Number of components is always 1 to 4.
 
 If you are using 1 buffer per type of data then both stride and offset
-can always be 0. Setting them to values other than 0 is more complicated
+can always be 0. 0 for stride means "use a stride that matches the type and size".
+0 for offset means start at the beginning of the buffer.
+Setting them to values other than 0 is more complicated
 and though it has some benefits in terms of performance it's not
 worth the complication unless you are trying to push WebGL to its
 absolute limits.
