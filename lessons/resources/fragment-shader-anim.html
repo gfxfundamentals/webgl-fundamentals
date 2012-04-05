@@ -1,45 +1,129 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Fragment Shader Anim</title>
 <meta charset="utf-8">
-<style>
-html, body {
-  padding: 0px;
-  margin: 0px;
-  width: 100%;
-  height: 100%;
-  overflow: none;
-}
-canvas {
-  width: 100%;
-  height: 100%;
-}
-</style>
-<script type="text/javascript" src="../../webgl/resources/webgl-utils.js"></script>
+<link type="text/css" href="webgl-lessons.css" rel="stylesheet" />
+<script type="text/javascript" src="lesson-utils.js"></script>
 <script>
 window.onload = main
 
+function getTime() {
+  return (new Date()).getTime() * 0.001;
+}
+
 function main() {
   var canvas = document.getElementById("canvas");
-  var ctx = canvas.getContext("2d");
-  var pixelSize = 24;
+  var ctx = get2DContext(canvas);
+  ctx.lineWidth = 1;
+  var pixelSize = 6;
+  var lineHeight = 14;
 
   var triangle = [
-    { pos: [4, 0], color: [255,0,0] },
-    { pos: [8, 4], color: [0,255,0] },
-    { pos: [0, 7], color: [0,0,255] }
+    { pos: [25,  0], color: [0.5   , 0.75 , 0.5], textOffset: [-2, -0.5] },
+    { pos: [50, 35], color: [0.875 , 0.085, 0.5], textOffset: [-10.5, 3] },
+    { pos: [0,  30], color: [0.0625, 0.17 , 0.5], textOffset: [-2, 5] }
   ];
 
+  var numPixelsToDraw = 0;
+  var triangleInfo = {
+    numPixels: 0
+  }
+  var frameRate = 1 / 60;
+  var then = getTime();
+  var delay = 0;
+  var dirty = false;
+  var resetTimer = 0;
+
   function render() {
-    resizeCanvasToDisplaySize(canvas);
+    var now = getTime();
+    var elapsedTime = now - then;
+    then = now;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawTriangle(triangle);
+    delay -= elapsedTime;
+    if (delay <= 0) {
+      delay = frameRate;
+      dirty = true;
+    }
 
-//    requestAnimFrame(render, canvas);
+    if (dirty) {
+      dirty = false;
+      resizeCanvasToDisplaySize(canvas);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.font = "8pt monospace";
+
+      ctx.save();
+      ctx.translate(15, 55);
+      triangleInfo = drawTriangle(triangle, numPixelsToDraw);
+      ++numPixelsToDraw;
+
+      ctx.fillStyle = "black";
+      for (var ii = 0; ii < triangle.length; ++ii) {
+        var tri = triangle[ii];
+        ctx.fillText(
+            "v" + ii + ": " + makeColorString(tri.color),
+            (tri.pos[0] + tri.textOffset[0]) * pixelSize,
+            (tri.pos[1] + tri.textOffset[1]) * pixelSize);
+
+      }
+
+      if (numPixelsToDraw == triangleInfo.numPixels) {
+        delay = 3.0;
+        numPixelsToDraw = 0;
+      } else {
+        drawArrow(20, -20, triangleInfo.x + pixelSize * 0.5, triangleInfo.y + pixelSize * 0.5, 5, 2, 4);
+      }
+
+      ctx.restore();
+
+      function makeColorString(color) {
+        return color[0].toFixed(2) + "," +
+               color[1].toFixed(2) + "," +
+               color[2].toFixed(2);
+      }
+
+      ctx.fillStyle = "black";
+      ctx.fillText("v_color = " + makeColorString(triangleInfo.color),
+                   10, lineHeight * 1);
+      ctx.fillText("gl_FragColor = v_color",
+                   10, lineHeight * 2);
+    }
+
+    requestAnimFrame(render, canvas);
   }
 
-  function drawTriangle(triangle) {
+  function drawArrow(x1, y1, x2, y2, width, stem, tip) {
+    var dy = y1 - y2;
+    var dx = x1 - x2;
+    var len = Math.sqrt(dx * dx + dy * dy);
+    ctx.save();
+    ctx.fillStyle = "#ff40ff";
+    ctx.lineStyle = "black";
+    ctx.translate(x1, y1);
+    ctx.rotate(Math.atan2(dy, dx) + Math.PI / 2);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    var h = width * 0.5;
+    var b = len - (width * tip);
+    ctx.lineTo(h, 0);
+    ctx.lineTo(h, b);
+    var o = width * stem;
+    ctx.lineTo(o, b);
+    ctx.lineTo(0, len);
+    ctx.lineTo(-o, b);
+    ctx.lineTo(-h, b);
+    ctx.lineTo(-h, 0);
+    ctx.lineTo(0, 0);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawTriangle(triangle, numPixelsToDraw) {
+    var results = { };
+    var numPixelsDrawn = 0;
     ctx.strokeStyle = "black";
 
     // find the highest and lowest points.
@@ -119,6 +203,9 @@ function main() {
       vstepB = vstepC;
     }
 
+    results.numPixels = numPixelsDrawn;
+    return results;
+
     function drawSpan(x0, x1, y, colorA, colorB) {
       x0 = Math.floor(x0);
       x1 = Math.floor(x1);
@@ -141,11 +228,20 @@ function main() {
     }
 
     function drawPixel(x, y, color) {
+      if (numPixelsDrawn > numPixelsToDraw) {
+        color = [1, 1, 1];
+      }
       x *= pixelSize;
       y *= pixelSize;
-      ctx.fillStyle = "rgb(" + Math.floor(color[0]) + "," + Math.floor(color[1]) + "," + Math.floor(color[2]) + ")";
+      if (numPixelsDrawn == numPixelsToDraw) {
+        results.x = x;
+        results.y = y;
+        results.color = color.slice(0);
+      }
+      ctx.fillStyle = "rgb(" + Math.floor(color[0] * 255) + "," + Math.floor(color[1] * 255) + "," + Math.floor(color[2] * 255) + ")";
       ctx.fillRect(x, y, pixelSize, pixelSize);
       ctx.strokeRect(x, y, pixelSize, pixelSize);
+      ++numPixelsDrawn;
     }
 
   }
@@ -155,6 +251,6 @@ function main() {
 </script>
 </head>
 <body>
-<canvas id="canvas"></canvas>
+<canvas width="400" height="300" id="canvas"></canvas>
 </body>
 </html>

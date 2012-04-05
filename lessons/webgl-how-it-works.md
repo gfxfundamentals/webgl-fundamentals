@@ -26,8 +26,6 @@ triangle correspond to, and then rasterizes the triangle which is a fancy word f
 “draws it with pixels”. For each pixel it will call your fragment shader asking
 you what color to make that pixel.
 
-<img src="resources/fragment-shader-anim.gif" class="webgl_center" />
-
 That’s all very interesting but as you can see in our examples to up this point the
 fragment shader has very little info per pixel. Fortunately we can pass it more info.
 We define “varyings” for each value we want to pass from the vertex shader to the fragment shader.
@@ -35,9 +33,9 @@ We define “varyings” for each value we want to pass from the vertex shader t
 As a simple example, lets just pass the clipspace coordinates we computed directly
 from the vertex shader to the fragment shader.
 
-We'll draw with a simple rectangle.
+We'll draw with a simple triangle.
 Continuing from our <a href="webgl-2d-matrices.html">previous example</a> let's
-change our F to a rectangle.
+change our F to a triangle.
 
 <pre class="prettyprint">
 // Fill the buffer with the values that define a rectangle.
@@ -45,24 +43,21 @@ function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
       new Float32Array([
-          -150, -100,
-           150, -100,
-          -150,  100,
-           150, -100,
-          -150,  100,
-           150,  100]),
+             0, -100,
+           150,  125,
+          -175,  100]),
       gl.STATIC_DRAW);
 }
 </pre>
 
-And we have to only draw 6 vertices.
+And we have to only draw 3 vertices.
 
 <pre class="prettyprint">
   // Draw the scene.
   function drawScene() {
     ...
     // Draw the geometry.
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 </pre>
 
@@ -100,20 +95,57 @@ name and type in the fragment shader.
 
 Here's the working version.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-position-for-color.html"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-triangle-with-position-for-color.html"></iframe>
+<a class="webgl_center" href="../webgl/webgl-2d-triangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a>
 
 Move, scale and rotate the rectangle. Notice that since the colors are computed
 from clipspace they don't move with the rectangle. They are relative to the background.
 
-Now think about it. We only compute 6 vertices. Our vertex shader only gets called 6 times therefore
-it's only computing 6 colors yet our rectangle is many colors. This is why it's called a *varying*.
+Now think about it. We only compute 3 vertices. Our vertex shader only gets called 3 times therefore
+it's only computing 3 colors yet our rectangle is many colors. This is why it's called a *varying*.
 
-WebGL takes the 6 values we computed for each vertex, 3 for each triangle, and as it rasterizes
+WebGL takes the 3 values we computed for each vertex and as it rasterizes
 the triangle it interpolates between the values we computed for the vertices. For each pixel it calls our fragment
 shader with the interpolated value for that pixel.
 
-<img src="resources/varying-diagram.gif" class="webgl_center" />
+In the example above we start out with the 3 vertices
+
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="2">Vertices</td></tr>
+<tr><td>0</td><td>-100</td></tr>
+<tr><td>150</td><td>125</td></tr>
+<tr><td>-175</td><td>100</td></tr>
+</table>
+</div>
+
+Our vertex shader applies a matrix to translate, rotate, scale and convert to clipspace. The defaults for translation, rotation and scale are translation = 200, 150, rotation = 0, scale = 1,1 so that's really only translation.
+Given our backbuffer is 400x300 our vertex shader applies the matrix and then computes the following 3 clipspace vertices.
+
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="3">values written to gl_Position</td></tr>
+<tr><td>0.000</td><td>0.660</td></tr>
+<tr><td>0.750</td><td>-0.830</td></tr>
+<tr><td>-0.875</td><td>-0.660</td></tr>
+</table>
+</div>
+
+It also converts those to colorspace and writes them to the *varying* v_color that we declared.
+
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="3">values written to v_color</td></tr>
+<tr><td>0.5000</td><td>0.750</td><td>0.5</td></tr>
+<tr><td>0.8750</td><td>0.915</td><td>0.5</td></tr>
+<tr><td>0.0625</td><td>0.170</td><td>0.5</td></tr>
+</table>
+</div>
+
+Those 3 values written to v_color are then interpolated and passed to the fragment shader for each pixel.
+
+<iframe class="webgl_example" width="400" height="300" src="resources/fragment-shader-anim.html"></iframe>
+<div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
 
 We can also pass in more data to the vertex shader which we can then pass on to
 the fragment shader. So for example lets draw the rectangle in 2 colors. To do this

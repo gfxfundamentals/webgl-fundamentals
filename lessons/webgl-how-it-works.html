@@ -34,38 +34,34 @@ the GPU uses them to make a triangle. It figures out which pixels the 3 points o
 triangle correspond to, and then rasterizes the triangle which is a fancy word for
 “draws it with pixels”. For each pixel it will call your fragment shader asking
 you what color to make that pixel.</p>
-<p><img src="resources/fragment-shader-anim.gif" class="webgl_center" /></p>
 <p>That’s all very interesting but as you can see in our examples to up this point the
 fragment shader has very little info per pixel. Fortunately we can pass it more info.
 We define “varyings” for each value we want to pass from the vertex shader to the fragment shader.</p>
 <p>As a simple example, lets just pass the clipspace coordinates we computed directly
 from the vertex shader to the fragment shader.</p>
-<p>We'll draw with a simple rectangle.
+<p>We'll draw with a simple triangle.
 Continuing from our <a href="webgl-2d-matrices.html">previous example</a> let's
-change our F to a rectangle.</p>
+change our F to a triangle.</p>
 <pre class="prettyprint">
 // Fill the buffer with the values that define a rectangle.
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
       new Float32Array([
-          -150, -100,
-           150, -100,
-          -150,  100,
-           150, -100,
-          -150,  100,
-           150,  100]),
+             0, -100,
+           150,  125,
+          -175,  100]),
       gl.STATIC_DRAW);
 }
 </pre>
 
-<p>And we have to only draw 6 vertices.</p>
+<p>And we have to only draw 3 vertices.</p>
 <pre class="prettyprint">
   // Draw the scene.
   function drawScene() {
     ...
     // Draw the geometry.
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 </pre>
 
@@ -99,17 +95,52 @@ void main() {
 <p>WebGL will connect the varying in the vertex shader to the varying of the same
 name and type in the fragment shader.</p>
 <p>Here's the working version.</p>
-<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-position-for-color.html"></iframe>
+<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-triangle-with-position-for-color.html"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl/webgl-2d-triangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a></p>
 <p>Move, scale and rotate the rectangle. Notice that since the colors are computed
 from clipspace they don't move with the rectangle. They are relative to the background.</p>
-<p>Now think about it. We only compute 6 vertices. Our vertex shader only gets called 6 times therefore
-it's only computing 6 colors yet our rectangle is many colors. This is why it's called a <em>varying</em>.</p>
-<p>WebGL takes the 6 values we computed for each vertex, 3 for each triangle, and as it rasterizes
+<p>Now think about it. We only compute 3 vertices. Our vertex shader only gets called 3 times therefore
+it's only computing 3 colors yet our rectangle is many colors. This is why it's called a <em>varying</em>.</p>
+<p>WebGL takes the 3 values we computed for each vertex and as it rasterizes
 the triangle it interpolates between the values we computed for the vertices. For each pixel it calls our fragment
 shader with the interpolated value for that pixel.</p>
-<p><img src="resources/varying-diagram.gif" class="webgl_center" /></p>
+<p>In the example above we start out with the 3 vertices</p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="2">Vertices</td></tr>
+<tr><td>0</td><td>-100</td></tr>
+<tr><td>150</td><td>125</td></tr>
+<tr><td>-175</td><td>100</td></tr>
+</table>
+</div>
+
+<p>Our vertex shader applies a matrix to translate, rotate, scale and convert to clipspace. The defaults for translation, rotation and scale are translation = 200, 150, rotation = 0, scale = 1,1 so that's really only translation.
+Given our backbuffer is 400x300 our vertex shader applies the matrix and then computes the following 3 clipspace vertices.</p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="3">values written to gl_Position</td></tr>
+<tr><td>0.000</td><td>0.660</td></tr>
+<tr><td>0.750</td><td>-0.830</td></tr>
+<tr><td>-0.875</td><td>-0.660</td></tr>
+</table>
+</div>
+
+<p>It also converts those to colorspace and writes them to the <em>varying</em> v_color that we declared.</p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="3">values written to v_color</td></tr>
+<tr><td>0.5000</td><td>0.750</td><td>0.5</td></tr>
+<tr><td>0.8750</td><td>0.915</td><td>0.5</td></tr>
+<tr><td>0.0625</td><td>0.170</td><td>0.5</td></tr>
+</table>
+</div>
+
+<p>Those 3 values written to v_color are then interpolated and passed to the fragment shader for each pixel.</p>
+<iframe class="webgl_example" width="400" height="300" src="resources/fragment-shader-anim.html"></iframe>
+
+<div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
+
 <p>We can also pass in more data to the vertex shader which we can then pass on to
 the fragment shader. So for example lets draw the rectangle in 2 colors. To do this
 we'll add another attribute to the vertex shader so we can pass it more data and
@@ -265,7 +296,7 @@ use 16 bytes per vertex per color. If you have complicated geometry that can add
 to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs where 0 represnets
 0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color per vertex, a 75% savings.
 </p>
-<p>We can change our code in fact to do this. When we well WebGL how to extract our colors we'd use</p>
+<p>We can change our code in fact to do this. When we tell WebGL how to extract our colors we'd use</p>
 <pre class="prettyprint">
   gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 </pre>
