@@ -7,14 +7,16 @@
 <style>
 body, html {
     background-color: #fff;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 .container {
   background-color: #fff;
   width: 100%;
   height: 140px;
-  perspective: 300px;
-  -moz-perspective: 300px;
-  -webkit-perspective: 300px;
+  perspective: 200px;
+  -moz-perspective: 200px;
+  -webkit-perspective: 200px;
   -moz-perspective-origin: 50%;
   -webkit-perspective-origin: 50%;
   perspective-origin: 50%;
@@ -28,6 +30,35 @@ body, html {
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   transform-style: preserve-3d;
+}
+img {
+  width: 128px;
+  height: 128px;
+}
+.axis {
+  position: relative;
+  top: 0px;
+  margin: 0 auto;
+  height: 60px;
+  width: 60px;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.xaxis-rotation {
+  -webkit-transform: translateY(-34px) translateZ(-34px) translateX(-80px) rotateY(-90deg);
+  -moz-transform: translateY(-34px) translateZ(-34px) translateX(-80px) rotateY(-90deg);
+  transform: translateY(-34px) translateZ(-34px) translateX(-80px) rotateY(-90deg);
+}
+.yaxis-rotation {
+  -webkit-transform: translateX(-34px) translateY(40px) rotateX(90deg);
+  -moz-transform: translateX(-34px) translateY(40px) rotateX(90deg);
+  transform: translateX(-34px) translateY(40px) rotateX(90deg);
+}
+.zaxis-rotation {
+  -webkit-transform: translateX(-18px) translateY(-36px) translateZ(90px) rotateX(180deg) scale(0.5);
+  -moz-transform: translateX(-18px) translateY(-36px) translateZ(90px) rotateX(180deg) scale(0.5);
+  transform: translateX(-18px) translateY(-36px) translateZ(90px) rotateX(180deg) scale(0.5);
 }
 .shapeX, .shapeY, .shapeZ {
   position: relative;
@@ -56,6 +87,32 @@ body, html {
   font-size: 8px;
 }
 
+.tiltX, .tiltY, .tiltZ {
+  position: relative;
+  top: -60px;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+.tiltX {
+  -webkit-transform: rotateY(45deg);
+  -moz-transform: rotateY(45deg);
+  transform: rotateY(45deg);
+}
+
+.tiltY {
+  -webkit-transform: translateX(24px) rotateZ(45deg);
+  -moz-transform: rotateZ(45deg);
+  transform: rotateZ(45deg);
+}
+
+.tiltZ {
+  -webkit-transform: translateY(16px) rotateX(45deg) rotateY(45deg);
+  -moz-transform: translateY(16px) rotateX(45deg) rotateY(45deg);
+  transform: translateY(16px) rotateX(45deg) rotateY(45deg);
+}
+
 .shapeX {
   -webkit-animation: spinX 8s infinite linear;
   -moz-animation: spinX 8s infinite linear;
@@ -63,16 +120,16 @@ body, html {
 }
 
 @-webkit-keyframes spinX {
-  from { -webkit-transform: rotateX(   0deg) rotateY(45deg); }
-  to   { -webkit-transform: rotateX(-360deg) rotateY(45deg); }
+  from { -webkit-transform: rotateX(   0deg); }
+  to   { -webkit-transform: rotateX(-360deg); }
 }
 @-moz-keyframes spinX {
-  from { -moz-transform: rotateX(   0deg) rotateY(45deg); }
-  to   { -moz-transform: rotateX(-360deg) rotateY(45deg); }
+  from { -moz-transform: rotateX(   0deg); }
+  to   { -moz-transform: rotateX(-360deg); }
 }
 @keyframes spinX {
-  from { transform: rotateX(   0deg) rotateY(45deg); }
-  to   { transform: rotateX(-360deg) rotateY(45deg); }
+  from { transform: rotateX(   0deg); }
+  to   { transform: rotateX(-360deg); }
 }
 
 .shapeY {
@@ -81,16 +138,16 @@ body, html {
   -animation: spinY 8s infinite linear;
 }
 @-webkit-keyframes spinY {
-  from { -webkit-transform: rotateY(   0deg) rotateZ(45deg); }
-  to   { -webkit-transform: rotateY(-360deg) rotateZ(45deg); }
+  from { -webkit-transform: rotateY(   0deg); }
+  to   { -webkit-transform: rotateY(-360deg); }
 }
 @-moz-keyframes spinY {
-  from { -moz-transform: rotateY(   0deg) rotateZ(45deg); }
-  to   { -moz-transform: rotateY(-360deg) rotateZ(45deg); }
+  from { -moz-transform: rotateY(   0deg); }
+  to   { -moz-transform: rotateY(-360deg); }
 }
 @keyframes spinY {
-  from { transform: rotateY(   0deg) rotateZ(45deg); }
-  to   { transform: rotateY(-360deg) rotateZ(45deg); }
+  from { transform: rotateY(   0deg); }
+  to   { transform: rotateY(-360deg); }
 }
 
 .shapeZ {
@@ -99,16 +156,16 @@ body, html {
   -animation: spinZ 8s infinite linear;
 }
 @-webkit-keyframes spinZ {
-  from { -webkit-transform: rotateZ(   0deg) rotateX(45deg) rotateY(45deg); }
-  to   { -webkit-transform: rotateZ(-360deg) rotateX(45deg) rotateY(45deg); }
+  from { -webkit-transform: rotateZ(   0deg); }
+  to   { -webkit-transform: rotateZ(-360deg); }
 }
 @-moz-keyframes spinZ {
-  from { -moz-transform: rotateZ(   0deg) rotateX(45deg) rotateY(45deg); }
-  to   { -moz-transform: rotateZ(-360deg) rotateX(45deg) rotateY(45deg); }
+  from { -moz-transform: rotateZ(   0deg); }
+  to   { -moz-transform: rotateZ(-360deg); }
 }
 @keyframes spinZ {
-  from { transform: rotateZ(   0deg) rotateX(45deg) rotateY(45deg); }
-  to   { transform: rotateZ(-360deg) rotateX(45deg) rotateY(45deg); }
+  from { transform: rotateZ(   0deg); }
+  to   { transform: rotateZ(-360deg); }
 }
 
 .shape.backfaces .plane {
@@ -178,23 +235,28 @@ td {
       <div class="container">
         <div class="stage">
           <div class="shapeX" class="cube backfaces">
-            <div class="plane gelem1">
-              <div class="elem1"></div>
+            <div class="axis">
+              <div class="xaxis-rotation"><img src="rotation-arrow.png"/></div>
             </div>
-            <div class="plane gelem2">
-              <div class="elem2"></div>
-            </div>
-            <div class="plane gelem3">
-              <div class="elem3"></div>
-            </div>
-            <div class="plane gelem4">
-              <div class="elem4"></div>
-            </div>
-            <div class="plane gelem5">
-              <div class="elem5"></div>
-            </div>
-            <div class="plane gelem6">
-              <div class="elem6"></div>
+            <div class="tiltX">
+              <div class="plane">
+                <div class="elem1"></div>
+              </div>
+              <div class="plane">
+                <div class="elem2"></div>
+              </div>
+              <div class="plane">
+                <div class="elem3"></div>
+              </div>
+              <div class="plane">
+                <div class="elem4"></div>
+              </div>
+              <div class="plane">
+                <div class="elem5"></div>
+              </div>
+              <div class="plane">
+                <div class="elem6"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -204,23 +266,28 @@ td {
       <div class="container">
         <div class="stage">
           <div class="shapeY" class="cube backfaces">
-            <div class="plane gelem1">
-              <div class="elem1"></div>
+            <div class="axis">
+              <div class="yaxis-rotation"><img src="rotation-arrow.png"/></div>
             </div>
-            <div class="plane gelem2">
-              <div class="elem2"></div>
-            </div>
-            <div class="plane gelem3">
-              <div class="elem3"></div>
-            </div>
-            <div class="plane gelem4">
-              <div class="elem4"></div>
-            </div>
-            <div class="plane gelem5">
-              <div class="elem5"></div>
-            </div>
-            <div class="plane gelem6">
-              <div class="elem6"></div>
+            <div class="tiltY">
+              <div class="plane">
+                <div class="elem1"></div>
+              </div>
+              <div class="plane">
+                <div class="elem2"></div>
+              </div>
+              <div class="plane">
+                <div class="elem3"></div>
+              </div>
+              <div class="plane">
+                <div class="elem4"></div>
+              </div>
+              <div class="plane">
+                <div class="elem5"></div>
+              </div>
+              <div class="plane">
+                <div class="elem6"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -230,23 +297,28 @@ td {
       <div class="container">
         <div class="stage">
           <div class="shapeZ" class="cube backfaces">
-            <div class="plane gelem1">
-              <div class="elem1"></div>
+            <div class="axis">
+              <div class="zaxis-rotation"><img src="rotation-arrow.png"/></div>
             </div>
-            <div class="plane gelem2">
-              <div class="elem2"></div>
-            </div>
-            <div class="plane gelem3">
-              <div class="elem3"></div>
-            </div>
-            <div class="plane gelem4">
-              <div class="elem4"></div>
-            </div>
-            <div class="plane gelem5">
-              <div class="elem5"></div>
-            </div>
-            <div class="plane gelem6">
-              <div class="elem6"></div>
+            <div class="tiltZ">
+              <div class="plane">
+                <div class="elem1"></div>
+              </div>
+              <div class="plane">
+                <div class="elem2"></div>
+              </div>
+              <div class="plane">
+                <div class="elem3"></div>
+              </div>
+              <div class="plane">
+                <div class="elem4"></div>
+              </div>
+              <div class="plane">
+                <div class="elem5"></div>
+              </div>
+              <div class="plane">
+                <div class="elem6"></div>
+              </div>
             </div>
           </div>
         </div>

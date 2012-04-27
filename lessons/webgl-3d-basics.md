@@ -198,7 +198,7 @@ X rotation
 
 which gives you these rotations.
 
-<iframe class="webgl_example" src="resources/axis-diagram.html" width="400" height="180"></iframe>
+<iframe class="external_diagram" src="resources/axis-diagram.html" width="540" height="240"></iframe>
 
 We also need to update the projection function. Here's the old one
 

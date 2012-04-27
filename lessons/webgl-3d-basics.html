@@ -15,11 +15,14 @@
   <div id="content">
     <h1>WebGL 3D Basics</h1>
     <p>This post is a continuation of a series of posts about WebGL.
-The first <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was about 2d matrices<a href="webgl-2d-matrices.html">about 2D matrices</a>. If you haven't read those please view them first.</p>
-<p>In the last post we went over how 2d matrices worked. We talked about translation, rotation, scaling, and even projecting from pixels into clip space can all be done by 1 matrix and some magic matrix math. To do 3D
-is only a small step.
-<!--more-->
-In our previous 2D examples we have 2D points (x, y) that we multiplied by a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.</p>
+The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
+the previous was about 2d matrices <a href="webgl-2d-matrices.html">about 2D matrices</a>.
+If you haven't read those please view them first.</p>
+<p>In the last post we went over how 2d matrices worked. We talked
+about translation, rotation, scaling, and even projecting from
+pixels into clip space can all be done by 1 matrix and some magic
+matrix math. To do 3D is only a small step.</p>
+<p>In our previous 2D examples we have 2D points (x, y) that we multiplied by a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.</p>
 <p>Lets take our last example and change it to 3D. We'll use an F again but this time a 3D.</p>
 <p>The first thing we need to do is change the vertex shader to handle 3D. Here's the old shader.</p>
 <pre class="prettyprint">
@@ -193,7 +196,7 @@ you'd see them simplify just like before</p>
 </div>
 
 <p>which gives you these rotations.</p>
-<iframe class="webgl_example" src="resources/axis-diagram.html" width="400" height="180"></iframe>
+<iframe class="external_diagram" src="resources/axis-diagram.html" width="540" height="240"></iframe>
 
 <p>We also need to update the projection function. Here's the old one</p>
 <pre class="prettyprint">
@@ -254,7 +257,7 @@ depth so our space will be 0 to width pixels wide, 0 to height pixels tall, but 
 <p>The first problem we have is that our geometry is a flat F which makes it hard to see any 3D. To fix that
 let's expand the geometry to 3D. Are current F is made of 3 rectangles. To make a 3D will require a total of 16
 rectangles. That's quite a few to list out here. 16 rectangles * 6 vertices per rectangle is 96 vertices.
-If you want to see all view source on the sample.</p>
+If you want to see all of them view source on the sample.</p>
 <p>We have to draw more vertices so</p>
 <pre class="prettyprint">
     // Draw the geometry.
