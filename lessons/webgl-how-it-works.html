@@ -271,7 +271,9 @@ to skip to get to the next vertex, and an offset for how far into
 the buffer our data is.</p>
 <p>Number of components is always 1 to 4.</p>
 <p>If you are using 1 buffer per type of data then both stride and offset
-can always be 0. Setting them to values other than 0 is more complicated
+can always be 0. 0 for stride means "use a stride that matches the type and size".
+0 for offset means start at the beginning of the buffer.
+Setting them to values other than 0 is more complicated
 and though it has some benefits in terms of performance it's not
 worth the complication unless you are trying to push WebGL to its
 absolute limits.</p>
@@ -288,7 +290,7 @@ SHORT goes from -32768 to 32776 etc...
 <p>
 If you set the normalize flag to true then the values of a BYTE (-128 to 127)
 represent the values -1.0 to +1.0, UNSIGNED_BYTE (0 to 255) become 0.0 to +1.0,
-A normalized SHORT also goes from -1.0 to +1.0 it just has more resolution that a
+A normalized SHORT also goes from -1.0 to +1.0 it just has more resolution than a
 BYTE.</p>
 <p>The most common use for normalized data is for colors. Most of the time colors
 only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha would
