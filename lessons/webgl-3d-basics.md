@@ -8,11 +8,11 @@ If you haven't read those please view them first.
 In the last post we went over how 2d matrices worked. We talked
 about translation, rotation, scaling, and even projecting from
 pixels into clip space can all be done by 1 matrix and some magic
-matrix math. To do 3D is only a small step.
+matrix math. To do 3D is only a small step from there.
 
-In our previous 2D examples we have 2D points (x, y) that we multiplied by a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.
+In our previous 2D examples we had 2D points (x, y) that we multiplied by a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.
 
-Lets take our last example and change it to 3D. We'll use an F again but this time a 3D.
+Let's take our last example and change it to 3D. We'll use an F again but this time a 3D 'F'.
 
 The first thing we need to do is change the vertex shader to handle 3D. Here's the old shader.
 
@@ -83,7 +83,7 @@ function setGeometry(gl) {
 
 Next we need to change all the matrix functions from 2D to 3D
 
-Here's the before versions of makeTranslation, makeRotation and makeScale
+Here's the 2D (before) versions of makeTranslation, makeRotation and makeScale
 
 <pre class="prettyprint">
 function makeTranslation(tx, ty) {
@@ -113,7 +113,7 @@ function makeScale(sx, sy) {
 }
 </pre>
 
-And here's the updated versions.
+And here's the updated 3D versions.
 
 <pre class="prettyprint">
 function makeTranslation(tx, ty, tz) {
@@ -121,7 +121,7 @@ function makeTranslation(tx, ty, tz) {
      1,  0,  0,  0,
      0,  1,  0,  0,
      0,  0,  1,  0,
-    tx, ty, tz,  1
+     tx, ty, tz, 1
   ];
 }
 
@@ -262,8 +262,8 @@ And here's that sample.
 <a class="webgl_center" href="../webgl/webgl-3d-step1.html" target="_blank">click here to open in a separate window</a>
 
 The first problem we have is that our geometry is a flat F which makes it hard to see any 3D. To fix that
-let's expand the geometry to 3D. Are current F is made of 3 rectangles. To make a 3D will require a total of 16
-rectangles. That's quite a few to list out here. 16 rectangles * 6 vertices per rectangle is 96 vertices.
+let's expand the geometry to 3D. Our current F is made of 3 rectangles, 2 triangles each. To make it 3D will require a total of 16
+rectangles. That's quite a few to list out here. 16 rectangles * 2 triangles per rectangle * 3 vertices per triangle is 96 vertices.
 If you want to see all of them view source on the sample.
 
 We have to draw more vertices so
@@ -355,7 +355,8 @@ function setColors(gl) {
           // top rung front
         200,  70, 120,
         200,  70, 120,
-	...
+        ...
+        ...
       gl.STATIC_DRAW);
 }
 </pre>
@@ -372,7 +373,7 @@ Triangles in WebGL have the concept of front facing and back facing. A front fac
 vertices go in a clockwise direction. A back facing triangle has its vertices go in a counter clockwise
 direction
 
-<img src="../webgl/resources/triangle-winding.svg" class="webgl_center" width="400" />
+<img src="resources/triangle-winding.svg" class="webgl_center" width="400" />
 
 WebGL has the ability to draw only forward facing or back facing triangles. We can turn that feature
 on with
@@ -384,12 +385,14 @@ on with
 which we do just once, right at the start of our program. With that feature turned on, WebGL defaults
 to "culling" back facing triangles. "Culling" in this case is a fancy word for "not drawing".
 
-Note that as far as WebGL is consider, whether or not a triangle is consider to be going clockwise or
+Note that as far as WebGL is conserned, whether or not a triangle is considered to be going clockwise or
 counter clockwise depends on the vertices of that triangle in clipspace. In other words, WebGL
-figures out whether a triangle is front or back faster AFTER you've applied math to the vertices
+figures out whether a triangle is front or back AFTER you've applied math to the vertices
 in the vertex shader. That means for example a clockwise triangle that is scaled in X by -1 becomes
-a counter clockwise triangle. That's a good thing though since as your turn something around in 3D
-you want which ever side is triangles are facing you to be considered front facing.
+a counter clockwise triangle. Because we had CULL_FACE disabled we can see both sides of each
+triangle. Now that we've turned it on, any time a front facing triangle flips around either because
+of scaling or rotation or for whatever reason, WebGL won't draw it. That's a good thing since as your turn something around in 3D
+you generally want which ever side the triangles are facing you to be considered front facing.
 
 With CULL_FACE turned on this is what we get
 
@@ -418,21 +421,21 @@ Going through and fixing all the backward triangles gets us to this
 <iframe class="webgl_example" src="../webgl/webgl-3d-step5.html" width="400" height="300"></iframe>
 <a class="webgl_center" href="../webgl/webgl-3d-step5.html" target="_blank">click here to open in a separate window</a>
 
-Closer but there's still one more problem. Even with all the triangles facing in the correct direction and
+That's closer but there's still one more problem. Even with all the triangles facing in the correct direction and
 with the back facing ones being culled we still have places where triangles that should be in back
-are being drawn in front of triangles that should be in front.
+are being drawn in over triangles that should be in front.
 
 Enter the DEPTH BUFFER.
 
 A Depth buffer, sometimes called a Z-Buffer, is a rectangle of *depth* pixels, one depth pixel for each
 color pixel used to make the image. As WebGL draws each color pixel it can also draw a depth pixel.
 It does this based on the values we return from the vertex shader for Z. Just like we had to convert
-to clipspace for x and y, so to Z is in clip space or (-1 to +1). That value is then converted into
+to clip space for X and Y, so to Z is in clip space or (-1 to +1). That value is then converted into
 a depth space value (0 to +1). Before WebGL draws a color pixel it will check the corresponding
 depth pixel. If the depth value for the pixel it's about to draw is greater than the value of the
 corresponding depth pixel then WebGL does not draw the new color pixel. Otherwise it draws both
 the new color pixel with the color from your fragment shader AND it draws the depth pixel with
-the new depth value.
+the new depth value. This means, pixels that are behind other pixels won't get drawn.
 
 We can turn on this feature nearly as simply as we turned on culling with
 
@@ -457,8 +460,7 @@ And now we get
 
 which is 3D!
 
-Up to this point our 3D has been what's called "orthographic" which is another way of saying it has
-no perspective. In the next post I'll go over how to make it have perspective.
+In the next post I'll go over how to make it have perspective.
 
 ---Why is the attribute vec4 but glVertexAttribPointer size 3?---
 
