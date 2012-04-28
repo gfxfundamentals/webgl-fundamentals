@@ -405,8 +405,9 @@ With CULL_FACE turned on this is what we get
 <iframe class="webgl_example" src="../webgl/webgl-3d-step4.html" width="400" height="300"></iframe>
 <a class="webgl_center" href="../webgl/webgl-3d-step4.html" target="_blank">click here to open in a separate window</a>
 
-Hey! Where did all the triangles go? It turns out, many of them are facing the wrong way. That's easy to fix,
-we just look at which ones are backward and exchange 2 of their vertices. For example if one backward triangle is
+Hey! Where did all the triangles go? It turns out, many of them are facing the wrong way. Rotate it and you'll
+see them appear when you look at the other side. Fortunately it's easy to fix. We just look at which ones are
+backward and exchange 2 of their vertices. For example if one backward triangle is
 
 <pre class="prettyprint">
            0,   0,   0,
