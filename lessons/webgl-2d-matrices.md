@@ -25,7 +25,7 @@ in this case our result would be
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/>
-<tr><td class="glocal-right">newX = </td><td>x * </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x * </td><td class="glocal-border">2.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x * </td><td class="glocal-border">3.0</td><td> +</td></tr>
+<tr><td class="glocal-right">newX&nbsp;= </td><td>x * </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x * </td><td class="glocal-border">2.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x * </td><td class="glocal-border">3.0</td><td> +</td></tr>
 <tr><td></td><td>y * </td><td class="glocal-border">4.0</td><td class="glocal-left"> +</td><td></td><td>y * </td><td class="glocal-border">5.0</td><td class="glocal-left"> + </td><td></td><td>y * </td><td class="glocal-border">6.0</td><td> +<td></tr>
 <tr><td></td><td>1 * </td><td>7.0</td><td> </td><td></td><td>1 * </td><td>8.0</td><td>  </td><td></td><td>1 * </td><td>9.0</td><td> <td></tr></table></div>
 
@@ -37,32 +37,32 @@ And now check it out
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX = </td><td>x</td><td> * </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr><tr><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +<td></tr>
+<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr><tr><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +<td></tr>
 <tr><td></td><td>1</td><td> * </td><td>tx</td><td> </td><td></td><td>1</td><td> * </td><td>ty</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> <td></tr></table></div>
 
 If you remember your algebra, we can delete any place that multiplies by zero. Multiplying by 1 effectively does nothing so let's simplify to see what's happening
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX = </td><td>x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">+</td><td class="glocal-right">extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td>newX&nbsp;= </td><td>x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">+</td><td class="glocal-right">extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
 <tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left"> +</td><td></td><td>y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +<td></tr>
 <tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td>tx</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td>ty</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> <td></tr></table></div>
 
 or more succinctly
 
-<div class="webgl_center">
+<pre class="webgl_center">
 newX = x + tx;
 newY = y + ty;
-</div>
+</pre>
 
 And extra we don't really care about. That looks surprisingly like <a href="webgl-2d-translation.html">the translation code from our translation example</a>.
 
 Similarly let's do rotation. Like we pointed out in the rotation post we just need the sine and cosine of the angle at which we want to rotate so.
 
-<div class="webgl_center">
+<pre class="webgl_center">
 s = Math.sin(angleToRotateInRadians);
 c = Math.cos(angleToRotateInRadians);
-</div>
+</pre>
 
 And we build a matrix like this
 
@@ -72,7 +72,7 @@ Applying the matrix we get this
  
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX = </td><td>x</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">-s</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
+<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">-s</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
 <tr><td></td><td>y</td><td> * </td><td class="glocal-border">s</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +<td></tr>
 <tr><td></td><td>1</td><td> * </td><td>0.0</td><td> </td><td></td><td>1</td><td> * </td><td>0.0</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> <td></tr></table></div>
 
@@ -80,16 +80,16 @@ Blacking out all multiply by 0s and 1s we get
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX = </td><td>x</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">-s</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">-s</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
 <tr><td></td><td>y</td><td> * </td><td class="glocal-border">s</td><td class="glocal-left glocal-blk"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left glocal-blk"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +<td></tr>
 <tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> <td></tr></table></div>
 
 And simplifying we get
 
-<div class="webgl_center">
+<pre class="webgl_center">
 newX = x *  c + y * s;
 newY = x * -s + y * c;
-</div>
+</pre>
 
 Which is exactly what we had in our <a href="webgl-2d-rotation.html">rotation sample</a>.
 
@@ -103,7 +103,7 @@ Applying the matrix we get this
  
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX = </td><td>x</td><td> * </td><td class="glocal-border">sx</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
+<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">sx</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
 <tr><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">sy</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +<td></tr>
 <tr><td></td><td>1</td><td> * </td><td>0.0</td><td> </td><td></td><td>1</td><td> * </td><td>0.0</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> <td></tr></table></div>
 
@@ -111,16 +111,16 @@ which is really
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX = </td><td>x</td><td> * </td><td class="glocal-border">sx</td><td class="glocal-left glocal-blk"> +</td><td>newY = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk">+</td><td>extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">sx</td><td class="glocal-left glocal-blk"> +</td><td>newY = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk">+</td><td>extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
 <tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">sy</td><td class="glocal-left glocal-blk"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +<td></tr>
 <tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> <td></tr></table></div>
 
 which simplified is
 
-<div class="webgl_center">
+<pre class="webgl_center">
 newX = x * sx;
 newY = y * sy;
-</div>
+</pre>
 
 Which is the same as our <a href="webgl-2d-scale.html">scaling sample</a>.
 

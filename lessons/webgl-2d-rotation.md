@@ -78,10 +78,10 @@ Let's stay you have a rectangle and you want to rotate it. Before you start rota
 
 The position on the circle there is 0.50 and 0.87
 
-<code class="webgl_center">
+<pre class="webgl_center">
    3.0 * 0.87 + 9.0 * 0.50 = 7.1
    9.0 * 0.87 - 3.0 * 0.50 = 6.3
-</code>
+</pre>
 
 That's exactly where we need it to be
 
@@ -93,10 +93,10 @@ The same for 60 degrees clockwise
 
 The position on the circle there is 0.87 and 0.50
 
-<code class="webgl_center">
+<pre class="webgl_center">
    3.0 * 0.50 + 9.0 * 0.87 = 9.3
    9.0 * 0.50 - 3.0 * 0.87 = 1.9
-</code>
+</pre>
 
 You can see that as we rotate that point clockwise to the right the X value gets bigger and the Y gets smaller. If kept going past 90 degrees X would start getting smaller again and Y would start getting bigger. That pattern gives us rotation.
 
