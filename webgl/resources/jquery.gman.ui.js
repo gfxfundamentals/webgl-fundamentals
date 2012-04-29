@@ -2,10 +2,10 @@
   $.widget("gman.gmanSlider", {
     // the default options.
     options: {
-      min: 0,
-      step: 1,
-      value: 0,
-      precision: 0
+      min: 0,         // min value
+      step: 1,        // lets you set a smaller increment. For example 0.001 would let you adjust by 1000ths
+      value: 0,       // starting value
+      precision: 0,   // decimal precision to display
     },
 
     // Setup

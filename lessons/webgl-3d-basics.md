@@ -32,7 +32,7 @@ void main() {
 And here's the new one
 
 <pre class="prettyprint">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+&lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec4 a_position;
 
 uniform mat4 u_matrix;
@@ -291,7 +291,7 @@ shader.
 Here's the new vertex shader
 
 <pre class="prettyprint">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+&lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec4 a_position;
 attribute vec4 a_color;
 
@@ -312,7 +312,7 @@ void main() {
 And we need use that color in the fragment shader
 
 <pre class="prettyprint">
-&lt;script id="2d-vertex-shader" type="x-shader/x-fragment"&gt;
+&lt;script id="3d-vertex-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
 // Passed in from the vertex shader.
