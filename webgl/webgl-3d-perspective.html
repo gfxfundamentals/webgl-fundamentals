@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>WebGL - 3D Step 5 - Fix Backward Triangles</title>
+<title>WebGL - 3D Perspective</title>
 <link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
@@ -32,6 +32,7 @@ function main() {
   }
 
   gl.enable(gl.CULL_FACE);
+  gl.enable(gl.DEPTH_TEST);
 
   // setup GLSL program
   vertexShader = createShaderFromScriptElement(gl, "3d-vertex-shader");
@@ -45,6 +46,7 @@ function main() {
 
   // lookup uniforms
   var matrixLocation = gl.getUniformLocation(program, "u_matrix");
+  var fudgeLocation = gl.getUniformLocation(program, "u_fudgeFactor");
 
   // Create a buffer.
   var buffer = gl.createBuffer();
@@ -77,10 +79,12 @@ function main() {
   var translation = [45, 150, 0];
   var rotation = [degToRad(40), degToRad(25), degToRad(325)];
   var scale = [1, 1, 1];
+  var fudgeFactor = 1;
 
   drawScene();
 
   // Setup a ui.
+  $("#fudgeFactor").gmanSlider({value: fudgeFactor, slide: updateFudgeFactor, max: 2, step: 0.001, precision: 3 });
   $("#x").gmanSlider({value: translation[0], slide: updatePosition(0), max: canvas.width });
   $("#y").gmanSlider({value: translation[1], slide: updatePosition(1), max: canvas.height});
   $("#z").gmanSlider({value: translation[2], slide: updatePosition(2), max: canvas.height});
@@ -90,6 +94,11 @@ function main() {
   $("#scaleX").gmanSlider({value: scale[0], slide: updateScale(0), min: -5, max: 5, step: 0.01, precision: 2});
   $("#scaleY").gmanSlider({value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
   $("#scaleZ").gmanSlider({value: scale[2], slide: updateScale(2), min: -5, max: 5, step: 0.01, precision: 2});
+
+  function updateFudgeFactor(event, ui) {
+    fudgeFactor = ui.value;
+    drawScene();
+  }
 
   function updatePosition(index) {
     return function(event, ui) {
@@ -116,8 +125,8 @@ function main() {
 
   // Draw the scene.
   function drawScene() {
-    // Clear the canvas.
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    // Clear the canvas AND the depth buffer.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Compute the matrices
     var projectionMatrix =
@@ -138,6 +147,9 @@ function main() {
 
     // Set the matrix.
     gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+    // Set the fudgeFactor
+    gl.uniform1f(fudgeLocation, fudgeFactor);
 
     // Draw the geometry.
     gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
@@ -535,12 +547,19 @@ attribute vec4 a_position;
 attribute vec4 a_color;
 
 uniform mat4 u_matrix;
+uniform float u_fudgeFactor;
 
 varying vec4 v_color;
 
 void main() {
   // Multiply the position by the matrix.
-  gl_Position = u_matrix * a_position;
+  vec4 position = u_matrix * a_position;
+
+  // Adjust the z to divide by
+  float zToDivideBy = 1.0 + position.z * u_fudgeFactor;
+
+  // Divide x and y by z.
+  gl_Position = vec4(position.xy / zToDivideBy, position.zw);
 
   // Pass the color to the fragment shader.
   v_color = a_color;
@@ -565,15 +584,13 @@ Drag sliders to translate, rotate, and scale.
 <canvas id="canvas" width="400" height="300"></canvas>
 <div id="uiContainer">
   <div id="ui">
+    <div id="fudgeFactor"></div>
     <div id="x"></div>
     <div id="y"></div>
     <div id="z"></div>
     <div id="angleX"></div>
     <div id="angleY"></div>
     <div id="angleZ"></div>
-    <div id="scaleX"></div>
-    <div id="scaleY"></div>
-    <div id="scaleZ"></div>
   </div>
 </div>
 </body>

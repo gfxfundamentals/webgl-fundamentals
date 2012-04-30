@@ -32,8 +32,8 @@ function main() {
   }
 
   // setup GLSL program
-  vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
-  fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
+  vertexShader = createShaderFromScriptElement(gl, "3d-vertex-shader");
+  fragmentShader = createShaderFromScriptElement(gl, "3d-fragment-shader");
   program = createProgram(gl, [vertexShader, fragmentShader]);
   gl.useProgram(program);
 
@@ -385,7 +385,7 @@ function setGeometry(gl) {
 
 </script>
 <!-- vertex shader -->
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
 attribute vec4 a_position;
 
 uniform mat4 u_matrix;
@@ -396,7 +396,7 @@ void main() {
 }
 </script>
 <!-- fragment shader -->
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 uniform vec4 u_color;
