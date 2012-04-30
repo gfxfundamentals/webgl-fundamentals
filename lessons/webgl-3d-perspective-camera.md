@@ -49,12 +49,6 @@ It got even simpler!
 Then we need to provide 3D data.
 
 <pre class="prettyprint">
-  ...
-
-  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
-
-  ...
-
 // Fill the buffer with the values that define a letter 'F'.
 function setGeometry(gl) {
   gl.bufferData(
@@ -467,30 +461,8 @@ And now we get
 
 which is 3D!
 
-In the next post I'll go over <a href="webgl-3d-perspective-camera.html">how to make it have perspective</a>.
+In the next post I'll go over how to make it have perspective.
 
-<div class="webgl_bottombar">
-<h3>Why is the attribute vec4 but glVertexAttribPointer size 3</h3>
-<p>
-For those of you who are detail oriented you might have noticed we defined our 2 attributes as
-</p>
-<pre class="prettyprint">
-attribute vec4 a_position;
-attribute vec4 a_color;
-</pre>
-<p>both of which are 'vec4' but when we tell WebGL how to take data out of our buffers we used</p>
-<pre class="prettyprint">
-  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
-  gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
-</pre>
-<p>
-That '3' in each of those says only to pull out 3 values per attribute. This works because WebGL
-supplies defaults for those you don't supply. The defaults are 0, 0, 0, 1 where x = 0, y = 0, z = 0
-and w = 1. This is why in our old 2D vertex shader we had to explicitly supply the 1. We were passing
-in x and y and we needed a 1 for z but because the default for z is 0 we had to explicitly supply
-a 1. For 3D though, even though we don't supply a 'w' it defaults to 1 which is what we need for
-the matrix math to work.
-</p>
-</div>
+---Why is the attribute vec4 but glVertexAttribPointer size 3?---
 
 
