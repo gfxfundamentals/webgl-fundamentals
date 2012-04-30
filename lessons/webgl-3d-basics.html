@@ -40,7 +40,7 @@ void main() {
 
 <p>And here's the new one</p>
 <pre class="prettyprint">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+&lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec4 a_position;
 
 uniform mat4 u_matrix;
@@ -279,7 +279,7 @@ To do this we will add another attribute to our vertex shader and a varying to p
 shader.</p>
 <p>Here's the new vertex shader</p>
 <pre class="prettyprint">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+&lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec4 a_position;
 attribute vec4 a_color;
 
@@ -299,7 +299,7 @@ void main() {
 
 <p>And we need use that color in the fragment shader</p>
 <pre class="prettyprint">
-&lt;script id="2d-vertex-shader" type="x-shader/x-fragment"&gt;
+&lt;script id="3d-vertex-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
 // Passed in from the vertex shader.
@@ -383,8 +383,9 @@ you generally want which ever side the triangles are facing you to be considered
 <iframe class="webgl_example" src="../webgl/webgl-3d-step4.html" width="400" height="300"></iframe>
 
 <p><a class="webgl_center" href="../webgl/webgl-3d-step4.html" target="_blank">click here to open in a separate window</a></p>
-<p>Hey! Where did all the triangles go? It turns out, many of them are facing the wrong way. That's easy to fix,
-we just look at which ones are backward and exchange 2 of their vertices. For example if one backward triangle is</p>
+<p>Hey! Where did all the triangles go? It turns out, many of them are facing the wrong way. Rotate it and you'll
+see them appear when you look at the other side. Fortunately it's easy to fix. We just look at which ones are
+backward and exchange 2 of their vertices. For example if one backward triangle is</p>
 <pre class="prettyprint">
            0,   0,   0,
           30,   0,   0,
@@ -434,7 +435,7 @@ the new depth value. This means, pixels that are behind other pixels won't get d
 
 <p><a class="webgl_center" href="../webgl/webgl-3d-step6.html" target="_blank">click here to open in a separate window</a></p>
 <p>which is 3D!</p>
-<p>In the next post I'll go over how to make it have perspective.</p>
+<p>In the next post I'll go over <a href="webgl-3d-perspective-camera.html">how to make it have perspective</a>.</p>
 <div class="webgl_bottombar">
 <h3>Why is the attribute vec4 but glVertexAttribPointer size 3</h3>
 <p>
