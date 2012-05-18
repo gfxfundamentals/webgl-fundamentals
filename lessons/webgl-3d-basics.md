@@ -470,7 +470,7 @@ which is 3D!
 In the next post I'll go over <a href="webgl-3d-perspective-camera.html">how to make it have perspective</a>.
 
 <div class="webgl_bottombar">
-<h3>Why is the attribute vec4 but glVertexAttribPointer size 3</h3>
+<h3>Why is the attribute vec4 but gl.vertexAttribPointer size 3</h3>
 <p>
 For those of you who are detail oriented you might have noticed we defined our 2 attributes as
 </p>
