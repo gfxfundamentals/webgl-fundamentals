@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>WebGL - 3D Perspective</title>
+<title>WebGL - 3D Perspective Field Of View</title>
 <link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
@@ -79,15 +79,15 @@ function main() {
   var translation = [45, 150, 0];
   var rotation = [degToRad(40), degToRad(25), degToRad(325)];
   var scale = [1, 1, 1];
-  var fudgeFactor = 1;
+  var fieldOfView = 45;
 
   drawScene();
 
   // Setup a ui.
-  $("#fudgeFactor").gmanSlider({value: fudgeFactor, slide: updateFudgeFactor, max: 2, step: 0.001, precision: 3 });
+  $("#fieldOfView").gmanSlider({value: fieldOfView, slide: updateFieldOfView, max: 180});
   $("#x").gmanSlider({value: translation[0], slide: updatePosition(0), max: canvas.width });
   $("#y").gmanSlider({value: translation[1], slide: updatePosition(1), max: canvas.height});
-  $("#z").gmanSlider({value: translation[2], slide: updatePosition(2), max: canvas.height, min: -canvas.height});
+  $("#z").gmanSlider({value: translation[2], slide: updatePosition(2), max: canvas.height});
   $("#angleX").gmanSlider({value: radToDeg(rotation[0]), slide: updateRotation(0), max: 360});
   $("#angleY").gmanSlider({value: radToDeg(rotation[1]), slide: updateRotation(1), max: 360});
   $("#angleZ").gmanSlider({value: radToDeg(rotation[2]), slide: updateRotation(2), max: 360});
@@ -95,8 +95,8 @@ function main() {
   $("#scaleY").gmanSlider({value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
   $("#scaleZ").gmanSlider({value: scale[2], slide: updateScale(2), min: -5, max: 5, step: 0.01, precision: 2});
 
-  function updateFudgeFactor(event, ui) {
-    fudgeFactor = ui.value;
+  function updateFieldOfView(event, ui) {
+    fieldOfView = ui.value;
     drawScene();
   }
 
@@ -148,7 +148,9 @@ function main() {
     // Set the matrix.
     gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-    // Set the fudgeFactor
+    // Set the fudgeFactor based on the field of view
+    var fieldOfViewInRadians = degToRad(fieldOfView);
+    var fudgeFactor = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
     gl.uniform1f(fudgeLocation, fudgeFactor);
 
     // Draw the geometry.
@@ -584,7 +586,7 @@ Drag sliders to translate, rotate, and scale.
 <canvas id="canvas" width="400" height="300"></canvas>
 <div id="uiContainer">
   <div id="ui">
-    <div id="fudgeFactor"></div>
+    <div id="fieldOfView"></div>
     <div id="x"></div>
     <div id="y"></div>
     <div id="z"></div>

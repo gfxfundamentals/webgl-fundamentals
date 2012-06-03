@@ -1,4 +1,4 @@
-Title: WebGL 3D Basics
+Title: WebGL 3D Perspective and Camera
 
 This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
@@ -24,23 +24,23 @@ If you have a line from (10, 15) to (20,15) it's 10 units long.
 In our current sample it would be drawn 10 pixels long. But if we
 divide by Z then for example if Z is 1
 
-10 / 1 = 10
-20 / 1 = 20
-abs(10-20) = 10
+    10 / 1 = 10
+    20 / 1 = 20
+    abs(10-20) = 10
 
 it would be 10 pixels long, If Z is 2 it would be
 
-10 / 2 = 5
-20 / 2 = 10
-abs(5 - 10) = 5
+    10 / 2 = 5
+    20 / 2 = 10
+    abs(5 - 10) = 5
 
 5 pixels long.  At Z = 3 it would be
 
-10 / 3 = 3.333
-20 / 3 = 6.666
-abs(3.333 - 6.666) = 3.333
+    10 / 3 = 3.333
+    20 / 3 = 6.666
+    abs(3.333 - 6.666) = 3.333
 
-You can see that as Z increase, as it gets further away, we'll end up drawing it smaller.
+You can see that as Z increases, as it gets further away, we'll end up drawing it smaller.
 Halfing the size just one pixel away more away is probably a little too much so maybe we
 should try dividing by Z multiplied by some amount like 0.001 to get a result a little
 closer to reality.
@@ -89,13 +89,43 @@ We also need to update the code to let us set the fudgeFactor.
 
 And here's the result.
 
-<iframe class="webgl_example" src="../webgl/webgl-3d-perspective.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-3d-perspective.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-3d-perspective.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-perspective.html" target="_blank">click here to open in a separate window</a>
 
 If it's not clear drag the "fudgeFactor" slider from 1.0 to 0.0 to see what things used to look like before
 we added our divide by Z code.
 
 <img class="webgl_center" src="resources/orthographc-vs-perspective.png" />
 
-bla
+There are 2 issues
+So that worked but generally we don't want just a 'fudgeFactor' to decide how much to divide by Z. Instead
+we want to decide on the "field of view". We can compute a fudgeFactor from an angle like this
+
+    fudgeFactor = -Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians
+
+Let's try it.
+
+<iframe class="webgl_example" src="../webgl-3d-perspective-fov.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-perspective-fov.html" target="_blank">click here to open in a separate window</a>
+
+x = x * f +
+    y * 0
+    z * 0
+    w * 0;
+
+y = x * 0 +
+    y * f +
+    z * 0 +
+    w * 0;
+
+z = x * 0 +
+    y * 0 +
+    z * (near + far) * rangeInv
+    w * (near * far * rangeInv * 2)
+
+w = x * 0 +
+    y * 0 +
+    z * -1 +
+    w * 0
+
 

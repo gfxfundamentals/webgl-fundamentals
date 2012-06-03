@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from lessons/webgl-3d-basics.md. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/webgl-3d-basics.md. Do not edited directly -->
 <html>
 <head>
 <meta charset="utf-8">
 <title>WebGL 3D Basics</title>
 <link rel="stylesheet" href="resources/base.css" type="text/css" />
 <link rel="stylesheet" href="resources/lesson.css" type="text/css" />
-<script type="text/javascript" src="../webgl/resources/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../resources/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="resources/prettify.js"></script>
 <script type="text/javascript" src="resources/lesson.js"></script>
 </head>
@@ -257,9 +257,9 @@ depth so our space will be 0 to width pixels wide, 0 to height pixels tall, but 
 </pre>
 
 <p>And here's that sample.</p>
-<iframe class="webgl_example" src="../webgl/webgl-3d-step1.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-3d-step1.html" width="400" height="300"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-3d-step1.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-3d-step1.html" target="_blank">click here to open in a separate window</a></p>
 <p>The first problem we have is that our geometry is a flat F which makes it hard to see any 3D. To fix that
 let's expand the geometry to 3D. Our current F is made of 3 rectangles, 2 triangles each. To make it 3D will require a total of 16
 rectangles. That's quite a few to list out here. 16 rectangles * 2 triangles per rectangle * 3 vertices per triangle is 96 vertices.
@@ -271,9 +271,9 @@ If you want to see all of them view source on the sample.</p>
 </pre>
 
 <p>And here's that version</p>
-<iframe class="webgl_example" src="../webgl/webgl-3d-step2.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-3d-step2.html" width="400" height="300"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-3d-step2.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-3d-step2.html" target="_blank">click here to open in a separate window</a></p>
 <p>Moving the sliders it's pretty hard to tell that it's 3D. Let's try coloring each rectangle a different color.
 To do this we will add another attribute to our vertex shader and a varying to pass it to the fragment
 shader.</p>
@@ -354,9 +354,9 @@ function setColors(gl) {
 </pre>
 
 <p>Now we get this.</p>
-<iframe class="webgl_example" src="../webgl/webgl-3d-step3.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-3d-step3.html" width="400" height="300"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-3d-step3.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-3d-step3.html" target="_blank">click here to open in a separate window</a></p>
 <p>Uh oh, what's that's mess? Well, it turns out all the various parts of that 3D 'F', front, back, sides, etc
 get drawn in the order they appear in our geometry. That doesn't give us quite the desired results.</p>
 <p>Triangles in WebGL have the concept of front facing and back facing. A front facing triangle has its
@@ -380,9 +380,9 @@ triangle. Now that we've turned it on, any time a front facing triangle flips ar
 of scaling or rotation or for whatever reason, WebGL won't draw it. That's a good thing since as your turn something around in 3D
 you generally want which ever side the triangles are facing you to be considered front facing.</p>
 <p>With CULL_FACE turned on this is what we get</p>
-<iframe class="webgl_example" src="../webgl/webgl-3d-step4.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-3d-step4.html" width="400" height="300"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-3d-step4.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-3d-step4.html" target="_blank">click here to open in a separate window</a></p>
 <p>Hey! Where did all the triangles go? It turns out, many of them are facing the wrong way. Rotate it and you'll
 see them appear when you look at the other side. Fortunately it's easy to fix. We just look at which ones are
 backward and exchange 2 of their vertices. For example if one backward triangle is</p>
@@ -400,9 +400,9 @@ backward and exchange 2 of their vertices. For example if one backward triangle 
 </pre>
 
 <p>Going through and fixing all the backward triangles gets us to this</p>
-<iframe class="webgl_example" src="../webgl/webgl-3d-step5.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-3d-step5.html" width="400" height="300"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-3d-step5.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-3d-step5.html" target="_blank">click here to open in a separate window</a></p>
 <p>That's closer but there's still one more problem. Even with all the triangles facing in the correct direction and
 with the back facing ones being culled we still have places where triangles that should be in back
 are being drawn in over triangles that should be in front.</p>
@@ -431,13 +431,13 @@ the new depth value. This means, pixels that are behind other pixels won't get d
 </pre>
 
 <p>And now we get</p>
-<iframe class="webgl_example" src="../webgl/webgl-3d-step6.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-3d-step6.html" width="400" height="300"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-3d-step6.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-3d-step6.html" target="_blank">click here to open in a separate window</a></p>
 <p>which is 3D!</p>
 <p>In the next post I'll go over <a href="webgl-3d-perspective-camera.html">how to make it have perspective</a>.</p>
 <div class="webgl_bottombar">
-<h3>Why is the attribute vec4 but glVertexAttribPointer size 3</h3>
+<h3>Why is the attribute vec4 but gl.vertexAttribPointer size 3</h3>
 <p>
 For those of you who are detail oriented you might have noticed we defined our 2 attributes as
 </p>

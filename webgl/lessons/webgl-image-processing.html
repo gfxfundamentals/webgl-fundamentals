@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from lessons/webgl-image-processing.md. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/webgl-image-processing.md. Do not edited directly -->
 <html>
 <head>
 <meta charset="utf-8">
 <title>WebGL Image Processing</title>
 <link rel="stylesheet" href="resources/base.css" type="text/css" />
 <link rel="stylesheet" href="resources/lesson.css" type="text/css" />
-<script type="text/javascript" src="../webgl/resources/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../resources/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="resources/prettify.js"></script>
 <script type="text/javascript" src="resources/lesson.js"></script>
 </head>
@@ -98,9 +98,9 @@ function render(image) {
 </pre>
 
 <p>And here's the image rendered in WebGL.</p>
-<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-image.html"></iframe>
+<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-image.html"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-2d-image.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-2d-image.html" target="_blank">click here to open in a separate window</a></p>
 <p>Not too exciting so let's manipulate that image. How about just swapping red and blue?</p>
 <pre class="prettyprint">
    ...
@@ -109,9 +109,9 @@ function render(image) {
 </pre>
 
 <p>And now red and blue are swapped.</p>
-<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-image-red2blue.html"></iframe>
+<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-image-red2blue.html"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-2d-image-red2blue.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-2d-image-red2blue.html" target="_blank">click here to open in a separate window</a></p>
 <p>What if we want to do image processing that actually looks at other pixels? Since WebGL references textures in texture coordinates which go from 0.0 to 1.0 then we can calculate how much to move for 1 pixel with the simple math <code>onePixel = 1.0 / textureSize</code>.</p>
 <p>Here's a fragment shader that averages the left and right pixels of each pixel in the texture.</p>
 <pre class="prettyprint">
@@ -149,9 +149,9 @@ void main() {
 </pre>
 
 <p>Compare to the un-blurred image above.</p>
-<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-image-blend.html"></iframe>
+<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-image-blend.html"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-2d-image-blend.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-2d-image-blend.html" target="_blank">click here to open in a separate window</a></p>
 <p>Now that we know how to reference other pixels let's use a convolution kernel to do a bunch of common image processing. In this case we'll use a 3x3 kernel. A convolution kernel is just a 3x3 matrix where each entry in the matrix represents how much to multiply the 8 pixels around the pixel we are rendering. We then divide the result by the weight of the kernel (the sum of all values in the kernel) or 1.0, which ever is greater. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Here's a pretty good article on it</a>. And <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">here's another article showing some actual code if you were to write this by hand in C++</a>.</p>
 <p>In our case we're going to do that work in the shader so here's the new fragment shader.</p>
 <pre class="prettyprint">
@@ -215,9 +215,9 @@ void main() {
 </pre>
 
 <p>And voila... Use the drop down list to select different kernels.</p>
-<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-image-3x3-convolution.html"></iframe>
+<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-image-3x3-convolution.html"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-2d-image-3x3-convolution.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-2d-image-3x3-convolution.html" target="_blank">click here to open in a separate window</a></p>
 <p>I hope this article has convinced you image processing in WebGL is pretty simple. Next up I'll go over  <a href="webgl-image-processing-continued.html">how to apply more than one effect to the image</a>.</p>
 <div class="webgl_bottombar">
 <h3>What's with the a_, u_, and v_ prefixes in from of variables in GLSL?</h3>

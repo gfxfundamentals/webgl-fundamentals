@@ -264,8 +264,8 @@ Finally we need to to update the code that computes the matrix.
 
 And here's that sample.
 
-<iframe class="webgl_example" src="../webgl/webgl-3d-step1.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-3d-step1.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-3d-step1.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-step1.html" target="_blank">click here to open in a separate window</a>
 
 The first problem we have is that our geometry is a flat F which makes it hard to see any 3D. To fix that
 let's expand the geometry to 3D. Our current F is made of 3 rectangles, 2 triangles each. To make it 3D will require a total of 16
@@ -281,8 +281,8 @@ We have to draw more vertices so
 
 And here's that version
 
-<iframe class="webgl_example" src="../webgl/webgl-3d-step2.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-3d-step2.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-3d-step2.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-step2.html" target="_blank">click here to open in a separate window</a>
 
 Moving the sliders it's pretty hard to tell that it's 3D. Let's try coloring each rectangle a different color.
 To do this we will add another attribute to our vertex shader and a varying to pass it to the fragment
@@ -369,8 +369,8 @@ function setColors(gl) {
 
 Now we get this.
 
-<iframe class="webgl_example" src="../webgl/webgl-3d-step3.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-3d-step3.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-3d-step3.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-step3.html" target="_blank">click here to open in a separate window</a>
 
 Uh oh, what's that's mess? Well, it turns out all the various parts of that 3D 'F', front, back, sides, etc
 get drawn in the order they appear in our geometry. That doesn't give us quite the desired results.
@@ -402,8 +402,8 @@ you generally want which ever side the triangles are facing you to be considered
 
 With CULL_FACE turned on this is what we get
 
-<iframe class="webgl_example" src="../webgl/webgl-3d-step4.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-3d-step4.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-3d-step4.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-step4.html" target="_blank">click here to open in a separate window</a>
 
 Hey! Where did all the triangles go? It turns out, many of them are facing the wrong way. Rotate it and you'll
 see them appear when you look at the other side. Fortunately it's easy to fix. We just look at which ones are
@@ -425,8 +425,8 @@ we just flip the last 2 vertices to make it forward.
 
 Going through and fixing all the backward triangles gets us to this
 
-<iframe class="webgl_example" src="../webgl/webgl-3d-step5.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-3d-step5.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-3d-step5.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-step5.html" target="_blank">click here to open in a separate window</a>
 
 That's closer but there's still one more problem. Even with all the triangles facing in the correct direction and
 with the back facing ones being culled we still have places where triangles that should be in back
@@ -462,8 +462,8 @@ We also need to clear the depth buffer back to 1.0 before we start drawing.
 
 And now we get
 
-<iframe class="webgl_example" src="../webgl/webgl-3d-step6.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-3d-step6.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-3d-step6.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-step6.html" target="_blank">click here to open in a separate window</a>
 
 which is 3D!
 

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from lessons/webgl-fundamentals.md. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/webgl-fundamentals.md. Do not edited directly -->
 <html>
 <head>
 <meta charset="utf-8">
 <title>WebGL Fundamentals</title>
 <link rel="stylesheet" href="resources/base.css" type="text/css" />
 <link rel="stylesheet" href="resources/lesson.css" type="text/css" />
-<script type="text/javascript" src="../webgl/resources/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../resources/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="resources/prettify.js"></script>
 <script type="text/javascript" src="resources/lesson.js"></script>
 </head>
@@ -71,9 +71,9 @@ void main() {
 </pre>
 
 <p>This will draw a green rectangle the entire size of the canvas. Here it is</p>
-<iframe class="webgl_example" src="../webgl/webgl-fundamentals.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-fundamentals.html" width="400" height="300"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-fundamentals.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-fundamentals.html" target="_blank">click here to open in a separate window</a></p>
 <p>Not very exciting :-p</p>
 <p>Again, clipspace coordinates always go from -1 to +1 regardless of the size of the canvas. In the case above you can see we are doing nothing but passing on our position data directly. Since the position data is already in clipspace there is no work to do. <strong>If you want 3D it's up to you to supply shaders that convert from 3D to 2D because WebGL IS A 2D API!!!</strong></p>
 <p>For 2D stuff you would probably rather work in pixels than clipspace so let's change the shader so we can supply rectangles in pixels and have it convert to clipspace for us. Here's the new vertex shader</p>
@@ -115,18 +115,18 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 </pre>
 
 <p>And here it is</p>
-<iframe class="webgl_example" src="../webgl/webgl-2d-rectangle.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-2d-rectangle.html" width="400" height="300"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-2d-rectangle.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-2d-rectangle.html" target="_blank">click here to open in a separate window</a></p>
 <p>You might notice the rectangle is near the bottom of that area. WebGL considers the bottom left corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs we just flip the y coordinate.</p>
 <pre class="prettyprint">
    gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </pre>
 
 <p>And now our rectangle is where we expect it.</p>
-<iframe class="webgl_example" src="../webgl/webgl-2d-rectangle-top-left.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-2d-rectangle-top-left.html" width="400" height="300"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-2d-rectangle-top-left.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-2d-rectangle-top-left.html" target="_blank">click here to open in a separate window</a></p>
 <p>Let's make the code that defines a rectangle into a function so we can call it for different sized rectangles. While we're at it we'll make the color settable.</p>
 <p>First we make the fragment shader take a color uniform input.</p>
 <pre class="prettyprint">
@@ -187,9 +187,9 @@ function setRectangle(gl, x, y, width, height) {
 </pre>
 
 <p>And here's the rectangles.</p>
-<iframe class="webgl_example" src="../webgl/webgl-2d-rectangles.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-2d-rectangles.html" width="400" height="300"></iframe>
 
-<p><a class="webgl_center" href="../webgl/webgl-2d-rectangles.html" target="_blank">click here to open in a separate window</a></p>
+<p><a class="webgl_center" href="../webgl-2d-rectangles.html" target="_blank">click here to open in a separate window</a></p>
 <p>I hope you can see that WebGL is actually a pretty simple API. While it can get more complicated to do 3D that complication is added by you, the programmer, in the form of more complex shaders. The WebGL API itself is 2D and fairly simple.</p>
 <p>From here you can go in 2 direction. If you are interested in image procesing I'll show you <a href="webgl-image-processing.html">how to do some 2D image processing</a>. If you are interesting in learning about translation, rotation and scale then <a href="webgl-2d-translation.html">start here</a>.</p>
 <div class="webgl_bottombar">

@@ -95,8 +95,8 @@ name and type in the fragment shader.
 
 Here's the working version.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-triangle-with-position-for-color.html"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-triangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-triangle-with-position-for-color.html"></iframe>
+<a class="webgl_center" href="../webgl-2d-triangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a>
 
 Move, scale and rotate the rectangle. Notice that since the colors are computed
 from clipspace they don't move with the rectangle. They are relative to the background.
@@ -208,8 +208,8 @@ function setColors(gl) {
 
 And here's the result.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-2-colors.html"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-2-colors.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-2-colors.html"></iframe>
+<a class="webgl_center" href="../webgl-2d-rectangle-with-2-colors.html" target="_blank">click here to open in a separate window</a>
 
 Notice that we have 2 solid color triangles. Yet we're passing the values in a *varying*
 so they are being varied or interpolated across the triangle. It's just that we used
@@ -236,8 +236,8 @@ function setColors(gl) {
 
 And now we see the interpolated *varying*.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-random-colors.html"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-random-colors.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-random-colors.html"></iframe>
+<a class="webgl_center" href="../webgl-2d-rectangle-with-random-colors.html" target="_blank">click here to open in a separate window</a>
 
 Not very exciting I suppose but it does demonstrate using more than one attribute
 and passing data from a vertex shader to a fragment shader. If you check out
@@ -354,8 +354,8 @@ function setColors(gl) {
 <p>
 Here's that sample.
 </p>
-<iframe class="webgl_example" width="400" height="300" src="../webgl/webgl-2d-rectangle-with-2-byte-colors.html"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-rectangle-with-2-byte-colors.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-2-byte-colors.html"></iframe>
+<a class="webgl_center" href="../webgl-2d-rectangle-with-2-byte-colors.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 

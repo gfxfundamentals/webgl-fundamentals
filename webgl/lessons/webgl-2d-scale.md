@@ -57,8 +57,8 @@ and we add the JavaScript needed to set the scale when we draw.
 
 And now we have scale. Drag the sliders.
 
-<iframe class="webgl_example" src="../webgl/webgl-2d-geometry-scale.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-geometry-scale.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-2d-geometry-scale.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-scale.html" target="_blank">click here to open in a separate window</a>
 
 One thing to notice is that scaling by a negative value flips our geometry.
 
@@ -69,7 +69,7 @@ I hope these last 3 posts were helpful in understanding <a href="webgl-2d-transl
 <p>
 The first time I saw someone use a 'F' was on a texture. The 'F' itself is not important. What is important is that you can tell its orientation from any direction. If we used a heart ? or a triangle △ for example we couldn't tell if it was flipped horizontally. A circle ○ would be even worse. A colored rectangle would arguably work with different colors on each corner but then you'd have to remember which corner was which. An F's orientation is instantly recognizable. 
 </p>
-<img src="../webgl/resources/f-orientation.svg" class="webgl_center"/>
+<img src="../resources/f-orientation.svg" class="webgl_center"/>
 <p>
 Any shape that you can tell the orientation of would work, I've just used 'F' ever since I was 'F'irst introduced to the idea.
 </p>

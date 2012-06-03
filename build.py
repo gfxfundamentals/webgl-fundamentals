@@ -75,7 +75,7 @@ class Builder(object):
 
 
   def Process(self):
-    self.ApplyTemplateToFiles("templates/lesson.template", "lessons/*.md")
+    self.ApplyTemplateToFiles("templates/lesson.template", "webgl/lessons/*.md")
 
 
     toc = ['<li><a href="%s">%s</a></li>' % (a["dst_file_name"], a["title"]) for a in self.articles]

@@ -6,11 +6,11 @@ In the last 3 posts we went over how to <a href="webgl-2d-translation.html">tran
 <!--more-->
 For example here is a scale of 2, 1, rotation of 30%, and translation of 100, 0.
 
-<img src="../webgl/resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
+<img src="../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
 
 And here is a translation of 100,0, rotation of 30% and scale of 2, 1
 
-<img src="../webgl/resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
+<img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
 
 The results are completely different. Even worse, if we needed the second example we'd have to write a different shader that applied the translation, rotation, and scale in our new desired order.
 
@@ -225,8 +225,8 @@ And here's how we use it
 
 Here's a sample using our new code. The sliders are the same, translation, rotation and scale. But the way they get used in the shader is much simpler. 
 
-<iframe class="webgl_example" src="../webgl/webgl-2d-geometry-matrix-transform.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-geometry-matrix-transform.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform.html" target="_blank">click here to open in a separate window</a>
 
 Still, you might be asking, so what? That doesn't seem like much of a benefit . But, now if we want to change the order we don't have to write a new shader. We can just change the math.
 
@@ -240,8 +240,8 @@ Still, you might be asking, so what? That doesn't seem like much of a benefit . 
 
 Here's that version.
 
-<iframe class="webgl_example" src="../webgl/webgl-2d-geometry-matrix-transform-trs.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-geometry-matrix-transform-trs.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-trs.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-trs.html" target="_blank">click here to open in a separate window</a>
 
 Being able to apply matrices like this is especially important for hierarchical animation like arms on a body, moons on a planet around a sun, or branches on a tree. For a simple example of hierarchical animation lets draw draw our 'F' 5 times but each time lets start with the matrix from the previous 'F'.
 
@@ -296,8 +296,8 @@ function makeIdentity() {
 
 Here's the 5 Fs.
 
-<iframe class="webgl_example" src="../webgl/webgl-2d-geometry-matrix-transform-hierarchical.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-geometry-matrix-transform-hierarchical.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-hierarchical.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-hierarchical.html" target="_blank">click here to open in a separate window</a>
 
 One more example, In every sample so far our 'F' rotates around its top left corner. This is because the math we are using always rotates around the origin and the top left corner of our 'F' is at the origin, (0, 0)
 
@@ -316,8 +316,8 @@ But now, because we can do matrix math and we can choose the order that transfor
 
 Here's that sample. Notice the F rotates and scales around the center.
 
-<iframe class="webgl_example" src="../webgl/webgl-2d-geometry-matrix-transform-center-f.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-geometry-matrix-transform-center-f.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-center-f.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-center-f.html" target="_blank">click here to open in a separate window</a>
 
 Using that technique you can rotate or scale from any point. Now you know how Photoshop or Flash let you move the rotation point.
 
@@ -385,8 +385,8 @@ And in JavaScript we need to multiply by the projection matrix
 
 We also removed the code that set the resolution. With this last step we've gone from a rather complicated shader with 6-7 steps to a very simple shader with only 1 step all do to the magic of matrix math.
 
-<iframe class="webgl_example" src="../webgl/webgl-2d-geometry-matrix-transform-with-projection.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-geometry-matrix-transform-with-projection.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-with-projection.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-with-projection.html" target="_blank">click here to open in a separate window</a>
 
 I hope these posts have helped demystified matrix math. I'll move on to 3D next. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.
 

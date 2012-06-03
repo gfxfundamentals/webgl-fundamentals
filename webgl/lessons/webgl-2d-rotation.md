@@ -8,7 +8,7 @@ First I want to introduce you to what's called a "unit circle". If you remember 
 
 Here's a unit circle.
 
-<iframe class="webgl_example" width="300" height="300" src="../webgl/unit-circle.html"></iframe>
+<iframe class="webgl_example" width="300" height="300" src="../unit-circle.html"></iframe>
 
 Notice as you drag the blue handle around the circle the X and Y positions change. Those represent the position of that point on the circle. At the top Y is 1 and X is 0. On the right X is 1 and Y is 0.
 
@@ -62,8 +62,8 @@ And we update the JavaScript so that we can pass those 2 values in.
 
 And here's the result. Drag the handle on the circle to rotate or the sliders to translate.
 
-<iframe class="webgl_example" src="../webgl/webgl-2d-geometry-rotation.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-geometry-rotation.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-2d-geometry-rotation.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-rotation.html" target="_blank">click here to open in a separate window</a>
 
 Why does it work? Well, look at the math. 
 
@@ -74,7 +74,7 @@ rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 
 Let's stay you have a rectangle and you want to rotate it. Before you start rotating it the top right corner is at 3.0, 9.0. Let's pick a point on the unit circle 30 degrees clockwise from 12 o'clock.
 
-<img src="../webgl/resources/rotate-30.png" class="webgl_center" />
+<img src="../resources/rotate-30.png" class="webgl_center" />
 
 The position on the circle there is 0.50 and 0.87
 
@@ -85,11 +85,11 @@ The position on the circle there is 0.50 and 0.87
 
 That's exactly where we need it to be
 
-<img src="../webgl/resources/rotation-drawing.svg" width="500" class="webgl_center"/>
+<img src="../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
 
 The same for 60 degrees clockwise
 
-<img src="../webgl/resources/rotate-60.png" class="webgl_center" />
+<img src="../resources/rotate-60.png" class="webgl_center" />
 
 The position on the circle there is 0.87 and 0.50
 
@@ -124,8 +124,8 @@ If you put it all together you can rotate your geometry to any angle you desire.
 
 Here's a version that just has an angle setting. Drag the sliders to translate or rotate.
 
-<iframe class="webgl_example" src="../webgl/webgl-2d-geometry-rotation-angle.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl/webgl-2d-geometry-rotation-angle.html" target="_blank">click here to open in a separate window</a>
+<iframe class="webgl_example" src="../webgl-2d-geometry-rotation-angle.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-rotation-angle.html" target="_blank">click here to open in a separate window</a>
 
 I hope that made some sense. <a href="webgl-2d-scale.html">Next up a simpler one. Scale</a>.
 
