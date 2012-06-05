@@ -1,0 +1,591 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - 3D Perspective matrix</title>
+<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+#ui {
+    width: 200px;
+}
+#rotation>canvas {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+}
+</style>
+<script type="text/javascript" src="resources/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="resources/jquery.gman.ui.js"></script>
+<script type="text/javascript" src="resources/webgl-utils.js"></script>
+<script>
+$(function(){
+  main();
+});
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas");
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    return;
+  }
+
+  gl.enable(gl.CULL_FACE);
+  gl.enable(gl.DEPTH_TEST);
+
+  // setup GLSL program
+  vertexShader = createShaderFromScriptElement(gl, "3d-vertex-shader");
+  fragmentShader = createShaderFromScriptElement(gl, "3d-fragment-shader");
+  program = createProgram(gl, [vertexShader, fragmentShader]);
+  gl.useProgram(program);
+
+  // look up where the vertex data needs to go.
+  var positionLocation = gl.getAttribLocation(program, "a_position");
+  var colorLocation = gl.getAttribLocation(program, "a_color");
+
+  // lookup uniforms
+  var matrixLocation = gl.getUniformLocation(program, "u_matrix");
+
+  // Create a buffer.
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(positionLocation);
+  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
+
+  // Set Geometry.
+  setGeometry(gl);
+
+  // Create a buffer for colors.
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(colorLocation);
+
+  // We'll supply RGB as bytes.
+  gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
+
+  // Set Colors.
+  setColors(gl);
+
+  function radToDeg(r) {
+    return r * 180 / Math.PI;
+  }
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+  var translation = [45, 150, 0];
+  var rotation = [degToRad(40), degToRad(25), degToRad(325)];
+  var scale = [1, 1, 1];
+  var fieldOfViewRadians = degToRad(45);
+
+  drawScene();
+
+  // Setup a ui.
+  $("#fieldOfView").gmanSlider({value: radToDeg(fieldOfViewRadians), slide: updateFieldOfView, min: 1, max:180 });
+  $("#x").gmanSlider({value: translation[0], slide: updatePosition(0), max: canvas.width });
+  $("#y").gmanSlider({value: translation[1], slide: updatePosition(1), max: canvas.height});
+  $("#z").gmanSlider({value: translation[2], slide: updatePosition(2), max: canvas.height, min: -1000});
+  $("#angleX").gmanSlider({value: radToDeg(rotation[0]), slide: updateRotation(0), max: 360});
+  $("#angleY").gmanSlider({value: radToDeg(rotation[1]), slide: updateRotation(1), max: 360});
+  $("#angleZ").gmanSlider({value: radToDeg(rotation[2]), slide: updateRotation(2), max: 360});
+  $("#scaleX").gmanSlider({value: scale[0], slide: updateScale(0), min: -5, max: 5, step: 0.01, precision: 2});
+  $("#scaleY").gmanSlider({value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
+  $("#scaleZ").gmanSlider({value: scale[2], slide: updateScale(2), min: -5, max: 5, step: 0.01, precision: 2});
+
+  function updateFieldOfView(event, ui) {
+    fieldOfViewRadians = degToRad(ui.value);
+    drawScene();
+  }
+
+  function updatePosition(index) {
+    return function(event, ui) {
+      translation[index] = ui.value;
+      drawScene();
+    }
+  }
+
+  function updateRotation(index) {
+    return function(event, ui) {
+      var angleInDegrees = ui.value;
+      var angleInRadians = angleInDegrees * Math.PI / 180;
+      rotation[index] = angleInRadians;
+      drawScene();
+    }
+  }
+
+  function updateScale(index) {
+    return function(event, ui) {
+      scale[index] = ui.value;
+      drawScene();
+    }
+  }
+
+  // Draw the scene.
+  function drawScene() {
+    // Clear the canvas AND the depth buffer.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Compute the matrices
+    var aspect = canvas.width / canvas.height;
+    var projectionMatrix =
+        makePerspective(fieldOfViewRadians, aspect, 0.001, 1000);
+    var translationMatrix =
+        makeTranslation(translation[0], translation[1], translation[2]);
+    var rotationXMatrix = makeXRotation(rotation[0]);
+    var rotationYMatrix = makeYRotation(rotation[1]);
+    var rotationZMatrix = makeZRotation(rotation[2]);
+    var scaleMatrix = makeScale(scale[0], scale[1], scale[2]);
+
+    // Multiply the matrices.
+    var matrix = matrixMultiply(scaleMatrix, rotationZMatrix);
+    matrix = matrixMultiply(matrix, rotationYMatrix);
+    matrix = matrixMultiply(matrix, rotationXMatrix);
+    matrix = matrixMultiply(matrix, translationMatrix);
+    matrix = matrixMultiply(matrix, projectionMatrix);
+
+    // Set the matrix.
+    gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+    // Draw the geometry.
+    gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
+  }
+}
+
+function makePerspective(angleInRadians, aspect, near, far) {
+  var f = Math.tan(Math.PI * 0.5 - 0.5 * angleInRadians);
+  var rangeInv = 1.0 / (near - far);
+
+  return [
+    f / aspect, 0, 0, 0,
+    0, f, 0, 0,
+    0, 0, (near + far) * rangeInv, -1,
+    0, 0, near * far * rangeInv * 2, 0
+  ];
+};
+
+function makeTranslation(tx, ty, tz) {
+  return [
+     1,  0,  0,  0,
+     0,  1,  0,  0,
+     0,  0,  1,  0,
+    tx, ty, tz,  1
+  ];
+}
+
+function makeXRotation(angleInRadians) {
+  var c = Math.cos(angleInRadians);
+  var s = Math.sin(angleInRadians);
+
+  return [
+    1, 0, 0, 0,
+    0, c, s, 0,
+    0, -s, c, 0,
+    0, 0, 0, 1
+  ];
+};
+
+function makeYRotation(angleInRadians) {
+  var c = Math.cos(angleInRadians);
+  var s = Math.sin(angleInRadians);
+
+  return [
+    c, 0, -s, 0,
+    0, 1, 0, 0,
+    s, 0, c, 0,
+    0, 0, 0, 1
+  ];
+};
+
+function makeZRotation(angleInRadians) {
+  var c = Math.cos(angleInRadians);
+  var s = Math.sin(angleInRadians);
+  return [
+     c, s, 0, 0,
+    -s, c, 0, 0,
+     0, 0, 1, 0,
+     0, 0, 0, 1,
+  ];
+}
+
+function makeScale(sx, sy, sz) {
+  return [
+    sx, 0,  0,  0,
+    0, sy,  0,  0,
+    0,  0, sz,  0,
+    0,  0,  0,  1,
+  ];
+}
+
+function matrixMultiply(a, b) {
+  var a00 = a[0*4+0];
+  var a01 = a[0*4+1];
+  var a02 = a[0*4+2];
+  var a03 = a[0*4+3];
+  var a10 = a[1*4+0];
+  var a11 = a[1*4+1];
+  var a12 = a[1*4+2];
+  var a13 = a[1*4+3];
+  var a20 = a[2*4+0];
+  var a21 = a[2*4+1];
+  var a22 = a[2*4+2];
+  var a23 = a[2*4+3];
+  var a30 = a[3*4+0];
+  var a31 = a[3*4+1];
+  var a32 = a[3*4+2];
+  var a33 = a[3*4+3];
+  var b00 = b[0*4+0];
+  var b01 = b[0*4+1];
+  var b02 = b[0*4+2];
+  var b03 = b[0*4+3];
+  var b10 = b[1*4+0];
+  var b11 = b[1*4+1];
+  var b12 = b[1*4+2];
+  var b13 = b[1*4+3];
+  var b20 = b[2*4+0];
+  var b21 = b[2*4+1];
+  var b22 = b[2*4+2];
+  var b23 = b[2*4+3];
+  var b30 = b[3*4+0];
+  var b31 = b[3*4+1];
+  var b32 = b[3*4+2];
+  var b33 = b[3*4+3];
+  return [a00 * b00 + a01 * b10 + a02 * b20 + a03 * b30,
+          a00 * b01 + a01 * b11 + a02 * b21 + a03 * b31,
+          a00 * b02 + a01 * b12 + a02 * b22 + a03 * b32,
+          a00 * b03 + a01 * b13 + a02 * b23 + a03 * b33,
+          a10 * b00 + a11 * b10 + a12 * b20 + a13 * b30,
+          a10 * b01 + a11 * b11 + a12 * b21 + a13 * b31,
+          a10 * b02 + a11 * b12 + a12 * b22 + a13 * b32,
+          a10 * b03 + a11 * b13 + a12 * b23 + a13 * b33,
+          a20 * b00 + a21 * b10 + a22 * b20 + a23 * b30,
+          a20 * b01 + a21 * b11 + a22 * b21 + a23 * b31,
+          a20 * b02 + a21 * b12 + a22 * b22 + a23 * b32,
+          a20 * b03 + a21 * b13 + a22 * b23 + a23 * b33,
+          a30 * b00 + a31 * b10 + a32 * b20 + a33 * b30,
+          a30 * b01 + a31 * b11 + a32 * b21 + a33 * b31,
+          a30 * b02 + a31 * b12 + a32 * b22 + a33 * b32,
+          a30 * b03 + a31 * b13 + a32 * b23 + a33 * b33];
+}
+
+// Fill the buffer with the values that define a letter 'F'.
+function setGeometry(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+          // left column front
+          0,   0,  0,
+          0, 150,  0,
+          30,   0,  0,
+          0, 150,  0,
+          30, 150,  0,
+          30,   0,  0,
+
+          // top rung front
+          30,   0,  0,
+          30,  30,  0,
+          100,   0,  0,
+          30,  30,  0,
+          100,  30,  0,
+          100,   0,  0,
+
+          // middle rung front
+          30,  60,  0,
+          30,  90,  0,
+          67,  60,  0,
+          30,  90,  0,
+          67,  90,  0,
+          67,  60,  0,
+
+          // left column back
+            0,   0,  30,
+           30,   0,  30,
+            0, 150,  30,
+            0, 150,  30,
+           30,   0,  30,
+           30, 150,  30,
+
+          // top rung back
+           30,   0,  30,
+          100,   0,  30,
+           30,  30,  30,
+           30,  30,  30,
+          100,   0,  30,
+          100,  30,  30,
+
+          // middle rung back
+           30,  60,  30,
+           67,  60,  30,
+           30,  90,  30,
+           30,  90,  30,
+           67,  60,  30,
+           67,  90,  30,
+
+          // top
+            0,   0,   0,
+          100,   0,   0,
+          100,   0,  30,
+            0,   0,   0,
+          100,   0,  30,
+            0,   0,  30,
+
+          // top rung front
+          100,   0,   0,
+          100,  30,   0,
+          100,  30,  30,
+          100,   0,   0,
+          100,  30,  30,
+          100,   0,  30,
+
+          // under top rung
+          30,   30,   0,
+          30,   30,  30,
+          100,  30,  30,
+          30,   30,   0,
+          100,  30,  30,
+          100,  30,   0,
+
+          // between top rung and middle
+          30,   30,   0,
+          30,   60,  30,
+          30,   30,  30,
+          30,   30,   0,
+          30,   60,   0,
+          30,   60,  30,
+
+          // top of middle rung
+          30,   60,   0,
+          67,   60,  30,
+          30,   60,  30,
+          30,   60,   0,
+          67,   60,   0,
+          67,   60,  30,
+
+          // front of middle rung
+          67,   60,   0,
+          67,   90,  30,
+          67,   60,  30,
+          67,   60,   0,
+          67,   90,   0,
+          67,   90,  30,
+
+          // bottom of middle rung.
+          30,   90,   0,
+          30,   90,  30,
+          67,   90,  30,
+          30,   90,   0,
+          67,   90,  30,
+          67,   90,   0,
+
+          // front of bottom
+          30,   90,   0,
+          30,  150,  30,
+          30,   90,  30,
+          30,   90,   0,
+          30,  150,   0,
+          30,  150,  30,
+
+          // bottom
+          0,   150,   0,
+          0,   150,  30,
+          30,  150,  30,
+          0,   150,   0,
+          30,  150,  30,
+          30,  150,   0,
+
+          // left side
+          0,   0,   0,
+          0,   0,  30,
+          0, 150,  30,
+          0,   0,   0,
+          0, 150,  30,
+          0, 150,   0]),
+      gl.STATIC_DRAW);
+}
+
+// Fill the buffer with colors for the 'F'.
+function setColors(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Uint8Array([
+          // left column front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // top rung front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // middle rung front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // left column back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // top rung back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // middle rung back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // top
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+
+          // top rung front
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+
+          // under top rung
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+
+          // between top rung and middle
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+
+          // top of middle rung
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+
+          // front of middle rung
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+
+          // bottom of middle rung.
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+
+          // front of bottom
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+
+          // bottom
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+
+          // left side
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220]),
+      gl.STATIC_DRAW);
+}
+
+</script>
+<!-- vertex shader -->
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec4 a_color;
+
+uniform mat4 u_matrix;
+
+varying vec4 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the color to the fragment shader.
+  v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec4 v_color;
+
+void main() {
+   gl_FragColor = v_color;
+}
+</script>
+</head>
+<body>
+<div class="description">
+Drag sliders to translate, rotate, and scale.
+</div>
+<canvas id="canvas" width="400" height="300"></canvas>
+<div id="uiContainer">
+  <div id="ui">
+    <div id="fieldOfView"></div>
+    <div id="x"></div>
+    <div id="y"></div>
+    <div id="z"></div>
+    <div id="angleX"></div>
+    <div id="angleY"></div>
+    <div id="angleZ"></div>
+  </div>
+</div>
+</body>
+</html>
+
+
