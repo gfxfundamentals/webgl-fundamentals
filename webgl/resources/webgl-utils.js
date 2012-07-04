@@ -209,8 +209,11 @@ var loadShader = function(gl, shaderSource, shaderType, opt_errorCallback) {
  * @param {!Array.<!WebGLShader>} shaders The shaders to attach
  * @param {!Array.<string>} opt_attribs The attribs names.
  * @param {!Array.<number>} opt_locations The locations for the attribs.
+ * @param {function(string): void) opt_errorCallback callback for errors.
  */
-var loadProgram = function(gl, shaders, opt_attribs, opt_locations) {
+var loadProgram = function(
+    gl, shaders, opt_attribs, opt_locations, opt_errorCallback) {
+  var errFn = opt_errorCallback || error;
   var program = gl.createProgram();
   for (var ii = 0; ii < shaders.length; ++ii) {
     gl.attachShader(program, shaders[ii]);
@@ -230,7 +233,7 @@ var loadProgram = function(gl, shaders, opt_attribs, opt_locations) {
   if (!linked) {
       // something went wrong with the link
       lastError = gl.getProgramInfoLog (program);
-      error("Error in program linking:" + lastError);
+      errFn("Error in program linking:" + lastError);
 
       gl.deleteProgram(program);
       return null;
@@ -285,15 +288,19 @@ var defaultShaderType = [
  * @param {!Array.<string>} shaderScriptIds Array of ids of the
  *        script tags for the shaders. The first is assumed to
  *        be the vertex shader, the second the fragment shader.
+ * @param {!Array.<string>} opt_attribs The attribs names.
+ * @param {!Array.<number>} opt_locations The locations for the attribs.
  * @param {function(string): void) opt_errorCallback callback for errors.
  * @return {!WebGLProgram} The created program.
  */
-var createProgramFromScripts = function(gl, shaderScriptIds, opt_errorCallback) {
+var createProgramFromScripts = function(
+    gl, shaderScriptIds, opt_attribs, opt_locations, opt_errorCallback) {
   var shaders = [];
   for (var ii = 0; ii < shaderScriptIds.length; ++ii) {
-    shaders.push(createShaderFromScript(gl, shaderScriptIds[ii], gl[defaultShaderType[ii]], opt_errorCallback));
+    shaders.push(createShaderFromScript(
+        gl, shaderScriptIds[ii], gl[defaultShaderType[ii]], opt_errorCallback));
   }
-  return loadProgram(gl, shaders);
+  return loadProgram(gl, shaders, opt_attribs, opt_locations, opt_errorCallback);
 };
 
 
