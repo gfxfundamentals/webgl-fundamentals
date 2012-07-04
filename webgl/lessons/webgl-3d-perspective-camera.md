@@ -18,7 +18,7 @@ smaller.
 Looking at the example above we see that things further away
 are drawn smaller. Given our current sample one easy way to
 make it so that things that are further away appear smaller
-would be to divide by Z. Think of it this way.
+would be to divide the clipspace X and Y by Z. Think of it this way.
 
 If you have a line from (10, 15) to (20,15) it's 10 units long.
 In our current sample it would be drawn 10 pixels long. But if we
@@ -47,9 +47,9 @@ abs(3.333 - 6.666) = 3.333
 </pre>
 
 You can see that as Z increases, as it gets further away, we'll end up drawing it smaller.
-Halfing the size just one pixel away more away is probably a little too much so maybe we
-should try dividing by Z multiplied by some amount like 0.001 to get a result a little
-closer to reality.
+If we divide in clipspace we might get better results because Z will a smaller number (-1 to +1).
+If we add a fudgeFactor to multiply Z before we divide we can adjust how much smaller things
+get for a given distance.
 
 Let's try it. First let's change the vertex shader to divide by Z after we've
 multiplied it by our "fudgeFactor".
@@ -72,8 +72,7 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-Note, I added 1.0 because if Z is 0 we'd divide by 0 and that would not give us the results we want
-since we know our 'F' starts at 0.
+Note, because Z in clipspace goes from -1 to +1 I added 1 to get `zToDivideBy` to go from 0 to +2 * fudgeFactor
 
 We also need to update the code to let us set the fudgeFactor.
 
@@ -134,6 +133,35 @@ see how it's pretty much the same.
 
 <iframe class="webgl_example" src="../webgl-3d-perspective-w.html" width="400" height="300"></iframe>
 <a class="webgl_center" href="../webgl-3d-perspective-w.html" target="_blank">click here to open in a separate window</a>
+
+We've still got a least 1 problem. On the sample above use the slider and set Z to something
+like -156. You should see something like this
+
+<img class="webgl_center" src="resources/webgl-perspective-negative-156.png" />
+
+What's going on? What's happening is our geometry is getting transformed into negative space.
+The Z values are becoming negative but only some of them and so parts of the our geometry is
+getting put on the opposite side of the screen. If you follow the math, the points of our geometry
+that are on the left will get transformed to the right and visa versa when they become negative.
+
+We can fix this by moving our Z clipspace. Right now it represents pixel units from -400 to +400.
+If you remember from the last article our projection math looks like this:
+
+<pre>
+function make2DProjection(width, height, depth) {
+  // Note: This matrix flips the Y axis so 0 is at the top.
+  return [
+     2 / width, 0, 0, 0,
+     0, -2 / height, 0, 0,
+     0, 0, 2 / depth, 0,
+    -1, 1, 0, 1,
+  ];
+}
+</pre>
+
+We can change it to be say 50 to +400 by changing it to this
+
+
 
 Next up we'd like to be able to choose the clipping range for Z. Right now were multiplying
 Z in pixel units by some number to get it to clipspace, then we're dividing it again by
