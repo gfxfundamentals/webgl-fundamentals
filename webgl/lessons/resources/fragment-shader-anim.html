@@ -12,6 +12,12 @@ function getTime() {
   return (new Date()).getTime() * 0.001;
 }
 
+function makeColorString(color) {
+  return color[0].toFixed(2) + "," +
+         color[1].toFixed(2) + "," +
+         color[2].toFixed(2);
+}
+
 function main() {
   var canvas = document.getElementById("canvas");
   var ctx = get2DContext(canvas);
@@ -77,12 +83,6 @@ function main() {
       }
 
       ctx.restore();
-
-      function makeColorString(color) {
-        return color[0].toFixed(2) + "," +
-               color[1].toFixed(2) + "," +
-               color[2].toFixed(2);
-      }
 
       ctx.fillStyle = "black";
       ctx.fillText("v_color = " + makeColorString(triangleInfo.color),
