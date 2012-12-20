@@ -19,8 +19,8 @@ The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
 the previous was about <a href="webgl-3d-basics.html">3d basics.</a>.
 If you haven't read those please view them first.</p>
 <p>In the last post we went over how to do 3D but that 3D didn't have any perspective.
-It was using what's called an "orthographic" view which has it's uses but it's
-generally not what people want when they want 3D.</p>
+It was using what's called an "orthographic" view which has its uses but it's
+generally not what people want when they say "3D".</p>
 <p>Instead we need to add perspective. Just what is perspective?
 It's basically the feature that things that are further away appear
 smaller.</p>
@@ -28,10 +28,10 @@ smaller.</p>
 <p>Looking at the example above we see that things further away
 are drawn smaller. Given our current sample one easy way to
 make it so that things that are further away appear smaller
-would be to divide the clipspace X and Y by Z. Think of it this way.</p>
-<p>If you have a line from (10, 15) to (20,15) it's 10 units long.
-In our current sample it would be drawn 10 pixels long. But if we
-divide by Z then for example if Z is 1</p>
+would be to divide the clipspace X and Y by Z.</p>
+<p>Think of it this way: If you have a line from (10, 15) to (20,15)
+it's 10 units long. In our current sample it would be drawn 10 pixels
+long. But if we divide by Z then for example if Z is 1</p>
 <pre class="webgl_center">
 10 / 1 = 10
 20 / 1 = 20
@@ -105,8 +105,9 @@ we added our divide by Z code.</p>
 <p>I'll be honest, I'm having a hard time thinking how to explain the next few
 steps so here goes.</p>
 <p>It turns out WebGL takes the x,y,z,w value we assign to gl_Position in our vertex
-shader and divides it by w</p>
-<p>We can prove this very easily by changing the shader</p>
+shader and divides it by w automatically.</p>
+<p>We can prove this very easily by changing the shader and instead of doing the
+division ourselves, put <code>zToDivideBy</code> in gl_Position.w.</p>
 <pre class="prettyprint">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 ...
@@ -125,7 +126,7 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-<p>see how it's pretty much the same.</p>
+<p>and see how it's pretty much the same.</p>
 <iframe class="webgl_example" src="../webgl-3d-perspective-w.html" width="400" height="300"></iframe>
 
 <p><a class="webgl_center" href="../webgl-3d-perspective-w.html" target="_blank">click here to open in a separate window</a></p>
@@ -134,9 +135,10 @@ like -156. You should see something like this</p>
 <p><img class="webgl_center" src="resources/webgl-perspective-negative-156.png" /></p>
 <p>What's going on? What's happening is our geometry is getting transformed into negative space.
 The Z values are becoming negative but only some of them and so parts of the our geometry is
-getting put on the other side of the screen, etc...</p>
+getting put on the opposite side of the screen. If you follow the math, the points of our geometry
+that are on the left will get transformed to the right and visa versa when they become negative.</p>
 <p>We can fix this by moving our Z clipspace. Right now it represents pixel units from -400 to +400.
-If you remember from the last article our projection math looks like this:
+If you remember from the last article our projection math looks like this:</p>
 <pre>
 function make2DProjection(width, height, depth) {
   // Note: This matrix flips the Y axis so 0 is at the top.
@@ -147,7 +149,8 @@ function make2DProjection(width, height, depth) {
     -1, 1, 0, 1,
   ];
 }
-</pre></p>
+</pre>
+
 <p>We can change it to be say 50 to +400 by changing it to this</p>
 <p>Next up we'd like to be able to choose the clipping range for Z. Right now were multiplying
 Z in pixel units by some number to get it to clipspace, then we're dividing it again by

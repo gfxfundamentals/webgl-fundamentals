@@ -155,8 +155,7 @@ Texture 2      -&gt; [Normal]      -&gt; Canvas</pre></blockquote>
 <iframe class="webgl_example" width="400" height="340" src="../webgl-2d-image-processing.html"></iframe>
 
 <p><a class="webgl_center" href="../webgl-2d-image-processing.html" target="_blank">click here to open in a separate window</a></p>
-<p>Some things I should go over.<br />
-</p>
+<p>Some things I should go over.  </p>
 <p>Calling <code>gl.bindFramebuffer</code> with <code>null</code> tells WebGL you want to render to the canvas instead of to one of your framebuffers.</p>
 <p>WebGL has to convert from <a href="webgl-fundamentals.html">clipspace</a> back into pixels. It does this based on the settings of <code>gl.viewport</code>. The settings of <code>gl.viewport</code> default to the size of the canvas when we initialize WebGL. Since the framebuffers we are rendering into are a different size then the canvas we need to set the viewport appropriately.</p>
 <p>Finally in the <a href="webgl-fundamentals.html">original example</a> we flipped the Y coordinate when rendering because WebGL displays the canvas with 0,0 being the bottom left corner instead of the more traditional for 2D top left. That's not needed when rendering to a framebuffer. Because the framebuffer is never displayed, which part is top and bottom is irrelevant. All that matters is that pixel 0,0 in the framebuffer corresponds to 0,0 in our calculations. To deal with this I made it possible to set whether to flip or not by adding one more input into the shader.</p>
