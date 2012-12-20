@@ -6,8 +6,8 @@ the previous was about <a href="webgl-3d-basics.html">3d basics.</a>.
 If you haven't read those please view them first.
 
 In the last post we went over how to do 3D but that 3D didn't have any perspective.
-It was using what's called an "orthographic" view which has it's uses but it's
-generally not what people want when they want 3D.
+It was using what's called an "orthographic" view which has its uses but it's
+generally not what people want when they say "3D".
 
 Instead we need to add perspective. Just what is perspective?
 It's basically the feature that things that are further away appear
@@ -18,11 +18,11 @@ smaller.
 Looking at the example above we see that things further away
 are drawn smaller. Given our current sample one easy way to
 make it so that things that are further away appear smaller
-would be to divide the clipspace X and Y by Z. Think of it this way.
+would be to divide the clipspace X and Y by Z.
 
-If you have a line from (10, 15) to (20,15) it's 10 units long.
-In our current sample it would be drawn 10 pixels long. But if we
-divide by Z then for example if Z is 1
+Think of it this way: If you have a line from (10, 15) to (20,15)
+it's 10 units long. In our current sample it would be drawn 10 pixels
+long. But if we divide by Z then for example if Z is 1
 
 <pre class="webgl_center">
 10 / 1 = 10
@@ -107,9 +107,10 @@ I'll be honest, I'm having a hard time thinking how to explain the next few
 steps so here goes.
 
 It turns out WebGL takes the x,y,z,w value we assign to gl_Position in our vertex
-shader and divides it by w
+shader and divides it by w automatically.
 
-We can prove this very easily by changing the shader
+We can prove this very easily by changing the shader and instead of doing the
+division ourselves, put `zToDivideBy` in gl_Position.w.
 
 <pre class="prettyprint">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
@@ -129,7 +130,7 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-see how it's pretty much the same.
+and see how it's pretty much the same.
 
 <iframe class="webgl_example" src="../webgl-3d-perspective-w.html" width="400" height="300"></iframe>
 <a class="webgl_center" href="../webgl-3d-perspective-w.html" target="_blank">click here to open in a separate window</a>
