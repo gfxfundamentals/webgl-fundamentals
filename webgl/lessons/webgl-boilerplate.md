@@ -1,8 +1,17 @@
 Title: WebGL Boilerplate
 
-WebGL sometimes appears complicated to learn because most lessons go over everything all at once. I'll try to avoid that where possible and break it down into smaller pieces. 
+This is a continuation from <a href="webgl-fundamentals.html">WebGL Fundamentals</a>.
+WebGL sometimes appears complicated to learn because most lessons
+go over everything all at once. I'll try to avoid that where possible
+and break it down into smaller pieces.
 
-One of things that makes WebGL seem complicated is that you have these 2 tiny functions, a vertex shader and a fragment shader. Those two functions usually run on your GPU which is where all the speed comes from. That's also why they are written in a custom language, a language that matches what a GPU can do. Those 2 functions need to be compiled and linked. That process is, 99% of the time, the same in every WebGL program.
+One of things that makes WebGL seem complicated is that you have these 2
+tiny functions, a vertex shader and a fragment shader.  Those two
+functions usually run on your GPU which is where all the speed comes from.
+That's also why they are written in a custom language, a language that
+matches what a GPU can do.  Those 2 functions need to be compiled and
+linked.  That process is, 99% of the time, the same in every WebGL
+program.
 
 Here's the boilerplate code for compiling a shader.
 
@@ -70,9 +79,12 @@ function createProgram(gl, vertexShader, fragmentShader) {
 };
 </pre>
 
-Of course how you decide to handle errors might be different. Throwing exceptions might not be the best way to handle things. Still, those few lines of code are the pretty much the same in nearly every WebGL program.
+Of course how you decide to handle errors might be different.  Throwing
+exceptions might not be the best way to handle things.  Still, those few
+lines of code are the pretty much the same in nearly every WebGL program.
 
-I like store my shaders in non javascript &lt;script&gt; tags. It makes them easy to edit so I use code like this.
+I like store my shaders in non javascript &lt;script&gt; tags.  It makes
+them easy to edit so I use code like this.
 
 <pre class="prettyprint">
 /**
@@ -111,13 +123,14 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
 };
 </pre>
 
-Now to compile a shader I can just do 
+Now to compile a shader I can just do
 
-<pre>
+<pre class="prettyprint">
 var shader = compileShaderFromScriptTag(gl, "someScriptTagId");
 </pre>
 
-I'll usually go one step further and make a function to compile to shaders from script tags, attach them to a program and link them.
+I'll usually go one step further and make a function to compile to shaders
+from script tags, attach them to a program and link them.
 
 <pre class="prettyprint">
 /**
@@ -136,10 +149,31 @@ function createProgramFromScriptTags(
 }
 </pre>
 
-That's most of my minmum set of WebGL boilerplate code.
+There's a couple of other pieces I've needed in most WebGL samples.
 
-The rest of what appears to be the complexity of WebGL is <a href="webgl-vertex-shaders.html"setting up the various inputs to the shaders</a>.
+One is <a href="http://paulirish.com/2011/requestanimationframe-for-smart-animating/">Paul
+Irish's requestAnimationFrame polyfill</a>.  The other is some code to
+initialize WebGL.  At the time of this writing WebGL requires the asking
+for an "experimental-webgl" context where as in the near future you can
+just ask for "webgl".  I could write this in every WebGL program
 
+<pre class="prettyprint">
+   ...
+   var gl = canvas.getContext("experimental-webgl");
+   if (!gl) {
+     gl = canvas.getContext("webgl");
+   }
+   ...
+</pre>
+
+But I prefer to use some function I've written before.
+
+That's most of my minmum set of WebGL boilerplate code.  <a
+href="http://github.com/greggman/webgl-fundamentals/">You can find that
+code here</a>.
+
+The rest of what makes WebGL look complicated is setting up all the inputs
+to your shaders.  See <a href="webgl-how-it-works.html">how it works</>.
 
 
 
