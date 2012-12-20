@@ -1,4 +1,4 @@
-Title: WebGL 3D Perspective and Camera
+Title: WebGL 3D Perspective
 
 This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
