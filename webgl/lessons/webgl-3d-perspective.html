@@ -102,8 +102,6 @@ void main() {
 we added our divide by Z code.</p>
 <p><img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
 <div class="webgl_center">orthographic vs perspective</div></p>
-<p>I'll be honest, I'm having a hard time thinking how to explain the next few
-steps so here goes.</p>
 <p>It turns out WebGL takes the x,y,z,w value we assign to gl_Position in our vertex
 shader and divides it by w automatically.</p>
 <p>We can prove this very easily by changing the shader and instead of doing the
@@ -126,11 +124,143 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-<p>and see how it's pretty much the same.</p>
+<p>and see how it's exactly the same.</p>
 <iframe class="webgl_example" src="../webgl-3d-perspective-w.html" width="400" height="300"></iframe>
 
 <p><a class="webgl_center" href="../webgl-3d-perspective-w.html" target="_blank">click here to open in a separate window</a></p>
-<p>We've still got a least 1 problem. On the sample above use the slider and set Z to something
+<p>Why is that useful? Because now, using more matrix magic, we can just use
+yet another matrix to copy z to w. A Matrix like this</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, 1,
+0, 0, 0, 0,
+</pre></div>
+
+<p>will copy z to w. You can look at each of those columns as</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+x_out = x_in * 1 +
+        y_in * 0 +
+        z_in * 0 +
+        w_in * 0 ;
+
+y_out = x_in * 0 +
+        y_in * 1 +
+        z_in * 0 +
+        w_in * 0 ;
+
+z_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 0 ;
+
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 0 ;
+</pre></div>
+
+<p>which when simplified is</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+x_out = x_in;
+y_out = y_in;
+z_out = z_in;
+w_out = z_in;
+</pre></div>
+
+<p>We can add the plus 1 we had before with this matrix since we know <code>w_in</code> is always 1.0.</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, 1,
+0, 0, 0, 1,
+</pre></div>
+
+<p>that will change the W calculation to</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 1 ;
+</pre></div>
+
+<p>and since we know <code>w_in</code> = 1.0 then that's really</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = z_in + 1;
+</pre></div>
+
+<p>Finally we can work our fudgeFactor back in if the matrix is this</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, fudgeFactor,
+0, 0, 0, 1,
+</pre></div>
+
+<p>which means</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * fudgeFactor +
+        w_in * 1 ;
+</pre></div>
+
+<p>and simplified that's</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = z_in * fudgeFactor + 1;
+</pre></div>
+
+<p>So, let's modify the program again to just use matrices.</p>
+<p>First let's put the vertex shader back. It's simple again</p>
+<pre class="prettyprint">
+&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+uniform mat4 u_matrix;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+  ...
+}
+&lt;/script&gt;
+</pre>
+
+<p>Next let's make a function to make our Z -&gt; W matrix.</p>
+<pre class="prettyprint">
+function makeZToWMatrix(fudgeFactor) {
+  return [
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, fudgeFactor,
+    0, 0, 0, 1,
+  ];
+}
+</pre>
+
+<p>and we'll change the code to use it.</p>
+<pre class="prettyprint">
+    ...
+    // Compute the matrices
+    var zToWMatrix =
+        makeZToWMatrix(fudgeFactor);
+
+    ...
+
+    // Multiply the matrices.
+    var matrix = matrixMultiply(scaleMatrix, rotationZMatrix);
+    matrix = matrixMultiply(matrix, rotationYMatrix);
+    matrix = matrixMultiply(matrix, rotationXMatrix);
+    matrix = matrixMultiply(matrix, translationMatrix);
+    matrix = matrixMultiply(matrix, projectionMatrix);
+    matrix = matrixMultiply(matrix, zToWMatrix);
+
+    ...
+</pre>
+
+<p>and note, again, it's exactly the same.</p>
+<iframe class="webgl_example" src="../webgl-3d-perspective-w-matrix.html" width="400" height="300"></iframe>
+
+<p><a class="webgl_center" href="../webgl-3d-perspective-w-matrix.html" target="_blank">click here to open in a separate window</a></p>
+<p>But ... there's a problem. On the sample above use the slider and set Z to something
 like -156. You should see something like this</p>
 <p><img class="webgl_center" src="resources/webgl-perspective-negative-156.png" /></p>
 <p>What's going on? What's happening is our geometry is getting transformed into negative space.

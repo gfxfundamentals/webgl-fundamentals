@@ -103,9 +103,6 @@ we added our divide by Z code.
 <img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
 <div class="webgl_center">orthographic vs perspective</div>
 
-I'll be honest, I'm having a hard time thinking how to explain the next few
-steps so here goes.
-
 It turns out WebGL takes the x,y,z,w value we assign to gl_Position in our vertex
 shader and divides it by w automatically.
 
@@ -130,12 +127,160 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-and see how it's pretty much the same.
+and see how it's exactly the same.
 
 <iframe class="webgl_example" src="../webgl-3d-perspective-w.html" width="400" height="300"></iframe>
 <a class="webgl_center" href="../webgl-3d-perspective-w.html" target="_blank">click here to open in a separate window</a>
 
-We've still got a least 1 problem. On the sample above use the slider and set Z to something
+Why is the fact that WebGL automatically divides by W useful? Because now, using
+more matrix magic, we can just use yet another matrix to copy z to w.
+
+A Matrix like this
+
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, 1,
+0, 0, 0, 0,
+</pre></div>
+
+will copy z to w. You can look at each of those columns as
+
+<div class="webgl_math_center"><pre class="webgl_math">
+x_out = x_in * 1 +
+        y_in * 0 +
+        z_in * 0 +
+        w_in * 0 ;
+
+y_out = x_in * 0 +
+        y_in * 1 +
+        z_in * 0 +
+        w_in * 0 ;
+
+z_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 0 ;
+
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 0 ;
+</pre></div>
+
+which when simplified is
+
+<div class="webgl_math_center"><pre class="webgl_math">
+x_out = x_in;
+y_out = y_in;
+z_out = z_in;
+w_out = z_in;
+</pre></div>
+
+We can add the plus 1 we had before with this matrix since we know <code>w_in</code> is always 1.0.
+
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, 1,
+0, 0, 0, 1,
+</pre></div>
+
+that will change the W calculation to
+
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 1 ;
+</pre></div>
+
+and since we know <code>w_in</code> = 1.0 then that's really
+
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = z_in + 1;
+</pre></div>
+
+Finally we can work our fudgeFactor back in if the matrix is this
+
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, fudgeFactor,
+0, 0, 0, 1,
+</pre></div>
+
+which means
+
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * fudgeFactor +
+        w_in * 1 ;
+</pre></div>
+
+and simplified that's
+
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = z_in * fudgeFactor + 1;
+</pre></div>
+
+So, let's modify the program again to just use matrices.
+
+First let's put the vertex shader back. It's simple again
+
+<pre class="prettyprint">
+&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+uniform mat4 u_matrix;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+  ...
+}
+&lt;/script&gt;
+</pre>
+
+Next let's make a function to make our Z -&gt; W matrix.
+
+<pre class="prettyprint">
+function makeZToWMatrix(fudgeFactor) {
+  return [
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, fudgeFactor,
+    0, 0, 0, 1,
+  ];
+}
+</pre>
+
+and we'll change the code to use it.
+
+<pre class="prettyprint">
+    ...
+    // Compute the matrices
+    var zToWMatrix =
+        makeZToWMatrix(fudgeFactor);
+
+    ...
+
+    // Multiply the matrices.
+    var matrix = matrixMultiply(scaleMatrix, rotationZMatrix);
+    matrix = matrixMultiply(matrix, rotationYMatrix);
+    matrix = matrixMultiply(matrix, rotationXMatrix);
+    matrix = matrixMultiply(matrix, translationMatrix);
+    matrix = matrixMultiply(matrix, projectionMatrix);
+    matrix = matrixMultiply(matrix, zToWMatrix);
+
+    ...
+</pre>
+
+and note, again, it's exactly the same.
+
+<iframe class="webgl_example" src="../webgl-3d-perspective-w-matrix.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-perspective-w-matrix.html" target="_blank">click here to open in a separate window</a>
+
+But ... there's a problem. On the sample above use the slider and set Z to something
 like -156. You should see something like this
 
 <img class="webgl_center" src="resources/webgl-perspective-negative-156.png" />
