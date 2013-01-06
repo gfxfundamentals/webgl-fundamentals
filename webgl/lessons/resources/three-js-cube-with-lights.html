@@ -3,10 +3,11 @@
 <head>
 <title>three.js webgl - cube</title>
 <meta charset="utf-8">
-<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 #c { border: 1px solid black;}
 </style>
+<script src="../../resources/webgl-utils.js"></script>
 <script src="three.min.js"></script>
 </head>
 <body>
@@ -23,6 +24,7 @@ animate();
 
 function init() {
   // Setup
+  updateCSSIfInIFrame();
   var c = document.getElementById("c");
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(c.clientWidth, c.clientHeight);

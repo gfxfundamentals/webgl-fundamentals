@@ -97,10 +97,30 @@ on the library to handle it for you. This was true the original
 OpenGL. It's true of other 3D libraries like three.js. It is
 NOT true of OpenGL ES 2.0+ or WebGL.
 
+We can even take it one step further. Here's drawing 3D wireframe
+cube in Canvas.
+
+<iframe class="webgl_example" src="resources/3d-in-canvas.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="resources/3d-in-canvas.html" target="_blank">click here to open in a separate window</a>
+
+And here is drawing a wireframe cube in WebGL.
+
+<iframe class="webgl_example" src="resources/3d-in-webgl.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="resources/3d-in-webgl.html" target="_blank">click here to open in a separate window</a>
+
+If you expect the code you'll see there's not a whole lot of difference in terms
+of the amount of knowledge or for that matter even the code. Ultimately
+the Canvas version loops over the vertices, does the math WE SUPPLIED and
+draws some lines in 2D. The WebGL version does the same thing except the math
+WE SUPPLIED is in GLSL and executed by the GPU.
+
+The point of this last demostration is to show that effectively WebGL is
+just a 2D rasteration engine. Sure it has features that help 3D but
+it can't do 3D itself. It requires you to supply all the 3D knowledge.
+
 It seems misleading to call WebGL a 3D library. A user coming
 to WebGL will think "oh, 3D library. Cool. This will do 3D
 for me" and then find out the hard way that no, that's not the
 case at all.
-
 
 
