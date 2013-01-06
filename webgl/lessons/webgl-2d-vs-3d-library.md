@@ -195,3 +195,10 @@ handle the 3D for you. OpenGL did. Three.js does. OpenGL ES 2.0 and WebGL
 do not. Therefore they argubly don't belong in the same broad category of
 "3D libraries".
 
+The point of all of this is to give a developer that is new to WebGL
+an understanding of WebGL at its core. Knowing that WebGL is not a
+3D library and that they have to provide all the knowledge themselves
+lets them know what's next for them and whether they want to persue
+that 3D math knowledge or instead choose a 3D library to handle it
+for them. It also removes much of the mystery of how it works.
+
