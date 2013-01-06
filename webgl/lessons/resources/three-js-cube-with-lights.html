@@ -14,7 +14,7 @@
 <div class="description">
 Three.js cube example.
 </div>
-<div id="c" style="width: 400px; height: 300px;"></div>
+<div id="divcanvas"></div>
 <script>
 var camera, scene, renderer;
 var mesh;
@@ -23,15 +23,18 @@ init();
 animate();
 
 function init() {
-  // Setup
   updateCSSIfInIFrame();
+  var width = 400;
+  var height = 300;
+
+  // Setup
   var c = document.getElementById("c");
   renderer = new THREE.WebGLRenderer();
-  renderer.setSize(c.clientWidth, c.clientHeight);
+  renderer.setSize(width, height);
   c.appendChild(renderer.domElement);
 
   // Make and setup a camera.
-  camera = new THREE.PerspectiveCamera(70, c.clientWidth / c.clientHeight, 1, 1000);
+  camera = new THREE.PerspectiveCamera(70, width / height, 1, 1000);
   camera.position.z = 400;
   camera.updateProjectionMatrix();
 
