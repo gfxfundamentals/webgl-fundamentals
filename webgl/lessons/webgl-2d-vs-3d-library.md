@@ -79,8 +79,7 @@ and here it is displayed.
 <iframe class="webgl_example" src="resources/three-js-cube-with-lights.html" width="400" height="300"></iframe>
 <a class="webgl_center" href="resources/three-js-cube-with-lights.html" target="_blank">click here to open in a separate window</a>
 
-Here's the code in OpenGL (not ES) to display a sphere with 2 lights
-in OpenGL
+Here's similar code in OpenGL (not ES) to display a cube with 2 lights.
 
 <pre class="prettyprint">
   // Setup
