@@ -156,10 +156,10 @@ function CreateApp() {
   var world = new Float32Array(16);
   var scaleMat = new Float32Array(16);
   var viewProjection = new Float32Array(16);
-  eyePosition = new Float32Array([30, 20, 15]);
+  eyePosition = new Float32Array([31, 17, 15]);
   var worldViewProjection = new Float32Array(16);
   var exampleWorldViewProjection = new Float32Array(16);
-  target = new Float32Array([22, 16, 0]);
+  target = new Float32Array([23, 16, 0]);
   var up = new Float32Array([0,1,0]);
   var v3t0 = new Float32Array(3);
   var v3t1 = new Float32Array(3);
@@ -190,6 +190,7 @@ function CreateApp() {
   var frustumCubeUniforms = {
     u_color: new Float32Array([1,1,1,0.4]),
     u_worldViewProjection: worldViewProjection,
+    u_exampleWorldViewProjection: zeroMat,
   };
 
   var cubeRaysUniforms = {
@@ -207,11 +208,13 @@ function CreateApp() {
   var zNear = 10;
   var zFar = 50;
   var fieldOfView = 30;
+  var zPosition = -25;
 
   // Setup a ui.
-  $("#fieldOfView").gmanSlider({value: fieldOfView, slide: updateFieldOfView, max: 180});
+  $("#fieldOfView").gmanSlider({value: fieldOfView, slide: updateFieldOfView, max: 179});
   $("#zNear").gmanSlider({value: zNear, slide: updateZNear, min: 1, max: 50});
   $("#zFar").gmanSlider({value: zFar, slide: updateZFar, min: 1, max: 50});
+  $("#zPosition").gmanSlider({value: zPosition, slide: updateZPosition, min: -60, max: 0});
 
   function updateFieldOfView(event, ui) {
     fieldOfView = ui.value;
@@ -223,6 +226,10 @@ function CreateApp() {
 
   function updateZFar(event, ui) {
     zFar = ui.value;
+  }
+
+  function updateZPosition(event, ui) {
+    zPosition = ui.value;
   }
 
   var clock = 0;
@@ -271,7 +278,7 @@ function CreateApp() {
         m4.mul(world, world, m4t0);
         m4.rotationY(m4t0, clock + ii * Math.PI / 6);
         m4.mul(world, world, m4t0);
-        m4.translation(m4t0, [ii * 10, 0, -25]);
+        m4.translation(m4t0, [ii * 10, 0, zPosition]);
         m4.mul(world, world, m4t0);
         m4.mul(worldViewProjection, world, viewProjection);
 
@@ -454,7 +461,7 @@ void main() {
   bool blend = (v_position.x < -1.0 || v_position.x > 1.0 ||
                 v_position.y < -1.0 || v_position.y > 1.0 ||
                 v_position.z < -1.0 || v_position.z > 1.0);
-  vec4 blendColor = blend ? vec4(0.5, 0.5, 0.5, 1.0) : vec4(1, 1, 1, 1);
+  vec4 blendColor = blend ? vec4(0.35, 0.35, 0.35, 1.0) : vec4(1, 1, 1, 1);
   gl_FragColor = v_color * u_color * blendColor;
 }
 </script>
@@ -464,11 +471,12 @@ void main() {
 Drag sliders to change the frustum.
 </div>
 <canvas id="canvas" width="400" height="600"></canvas>
-<div id="uiContainer">
+<div id="uiContainerLeft">
   <div id="ui">
     <div id="fieldOfView"></div>
     <div id="zNear"></div>
     <div id="zFar"></div>
+    <div id="zPosition"></div>
   </div>
 </div>
 </body>
