@@ -14,12 +14,14 @@
     background-color: rgba(255, 255, 255, 0.6) !important;
 }
 </style>
+<script type="text/javascript" src="resources/webgl-utils.js"></script>
 <script type="text/javascript" src="resources/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="resources/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="resources/jquery.gman.ui.js"></script>
 <script type="text/javascript" src="resources/tdl/base.js"></script>
 <script>
 tdl.require('tdl.buffers');
+tdl.require('tdl.clock');
 tdl.require('tdl.fast');
 tdl.require('tdl.log');
 tdl.require('tdl.math');
@@ -28,6 +30,9 @@ tdl.require('tdl.primitives');
 tdl.require('tdl.programs');
 tdl.require('tdl.textures');
 tdl.require('tdl.webgl');
+
+var eyePosition;
+var target;
 
 // globals
 var gl;                   // the gl context.
@@ -126,12 +131,12 @@ function CreateApp() {
   delete cubeArrays.normal;
   delete cubeArrays.texCoord;
   var faceColors = [
-    [ 1, 0, 0, 0.421, ],
-    [ 0, 1, 0, 0.421, ],
-    [ 1, 1, 0, 0.421, ],
-    [ 0, 0, 1, 0.421, ],
-    [ 1, 0, 1, 0.421, ],
-    [ 0, 1, 1, 0.421, ],
+    [ 1, 0, 0, 1, ],
+    [ 0, 1, 0, 1, ],
+    [ 1, 1, 0, 1, ],
+    [ 0, 0, 1, 1, ],
+    [ 1, 0, 1, 1, ],
+    [ 0, 1, 1, 1, ],
   ];
   var colorVerts = new tdl.primitives.AttribBuffer(4, 6 * 4);
   for (var f = 0; f < 6; ++f) {
@@ -141,8 +146,6 @@ function CreateApp() {
   }
   cubeArrays.a_color = colorVerts;
   var cubeModel = new tdl.models.Model(colorProgram, cubeArrays, textures);
-console.log(cubeArrays);
-console.log(cubeModel);
 
   // pre-allocate a bunch of arrays
   var projection = new Float32Array(16);
@@ -153,9 +156,10 @@ console.log(cubeModel);
   var world = new Float32Array(16);
   var scaleMat = new Float32Array(16);
   var viewProjection = new Float32Array(16);
-  var eyePosition = new Float32Array(3);
+  eyePosition = new Float32Array([30, 20, 15]);
   var worldViewProjection = new Float32Array(16);
-  var target = new Float32Array(3);
+  var exampleWorldViewProjection = new Float32Array(16);
+  target = new Float32Array([22, 16, 0]);
   var up = new Float32Array([0,1,0]);
   var v3t0 = new Float32Array(3);
   var v3t1 = new Float32Array(3);
@@ -165,19 +169,35 @@ console.log(cubeModel);
   var m4t1 = new Float32Array(16);
   var m4t2 = new Float32Array(16);
   var m4t3 = new Float32Array(16);
+  var zeroMat = new Float32Array(16);
   var zero4 = new Float32Array(4);
   var one4 = new Float32Array([1,1,1,1]);
   var red = new Float32Array([1,0,0,1]);
   var black = new Float32Array([0,0,0,1]);
   var blue = new Float32Array([0,0,1,1]);
   var white = new Float32Array([1,1,1,1]);
-  var cubeColor = new Float32Array([0.5,0.5,1,0.13]);
 
   // uniforms.
   var sharedUniforms = {
   };
 
-  var localUniforms = {
+  var sceneCubeUniforms = {
+    u_color: new Float32Array([1,1,1,1]),
+    u_worldViewProjection: worldViewProjection,
+    u_exampleWorldViewProjection: exampleWorldViewProjection,
+  };
+
+  var frustumCubeUniforms = {
+    u_color: new Float32Array([1,1,1,0.4]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var cubeRaysUniforms = {
+    u_color: new Float32Array([1,1,1,1]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var wireFrustumUniforms = {
     u_color: new Float32Array([1,0,0,1]),
     u_worldViewProjection: worldViewProjection,
   };
@@ -190,51 +210,44 @@ console.log(cubeModel);
 
   // Setup a ui.
   $("#fieldOfView").gmanSlider({value: fieldOfView, slide: updateFieldOfView, max: 180});
-  $("#zNear").gmanSlider({value: zNear, slide: updateZNear, min: 1, max: 500});
-  $("#zFar").gmanSlider({value: zFar, slide: updateZFar, min: 1, max: 500});
+  $("#zNear").gmanSlider({value: zNear, slide: updateZNear, min: 1, max: 50});
+  $("#zFar").gmanSlider({value: zFar, slide: updateZFar, min: 1, max: 50});
 
   function updateFieldOfView(event, ui) {
     fieldOfView = ui.value;
-    drawScene();
   }
 
   function updateZNear(event, ui) {
     zNear = ui.value;
-    drawScene();
   }
 
   function updateZFar(event, ui) {
     zFar = ui.value;
-    drawScene();
   }
 
-  function drawScene() {
-  }
-
-  function render() {
+  var clock = 0;
+  function render(elapsedTime) {
+    clock += elapsedTime;
     var m4 = fast.matrix4;
-    clock += 0.01;
 
     // clear the screen.
+    gl.disable(gl.SCISSOR_TEST);
     gl.colorMask(true, true, true, true);
     gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    gl.viewport(0, 300, 400, 300);
+
+    gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-    var g_eyeSpeed = 1;
-    var g_eyeRadius = 30;
-    var g_eyeHeight = 2;
-
-    eyePosition[0] = Math.sin(clock * g_eyeSpeed) * g_eyeRadius;
-    eyePosition[1] = g_eyeHeight;
-    eyePosition[2] = Math.cos(clock * g_eyeSpeed) * g_eyeRadius;
+    var aspect = canvas.clientWidth / (canvas.clientHeight / 2);
 
     m4.perspective(
         projection,
         math.degToRad(60),
-        canvas.clientWidth / canvas.clientHeight,
+        aspect,
         1,
         5000);
     m4.lookAt(
@@ -244,38 +257,69 @@ console.log(cubeModel);
         up);
     m4.mul(viewProjection, view, projection);
 
-    var scale = 0.25;
+    var scale = 1;
 
-    // Draw Frustum Cube
-    localUniforms.u_color = cubeColor;
-    m4.perspective(
-        exampleProjection,
-        math.degToRad(fieldOfView),
-        canvas.clientWidth / canvas.clientHeight,
-        zNear,
-        zFar);
-    m4.inverse(exampleInverseProjection, exampleProjection);
+    // Draw scene
+    function drawScene(viewProjection, exampleProjection) {
+      cubeModel.drawPrep(sharedUniforms);
+      var cubeScale = scale * 3;
+      for (var ii = -1; ii <= 1; ++ii) {
+        m4.scaling(world,[cubeScale, cubeScale, cubeScale]);
+        m4.rotationZ(m4t0, Math.PI/4);
+        m4.mul(world, world, m4t0);
+        m4.rotationX(m4t0, Math.PI/4);
+        m4.mul(world, world, m4t0);
+        m4.rotationY(m4t0, clock + ii * Math.PI / 6);
+        m4.mul(world, world, m4t0);
+        m4.translation(m4t0, [ii * 10, 0, -25]);
+        m4.mul(world, world, m4t0);
+        m4.mul(worldViewProjection, world, viewProjection);
 
-    m4.translation(world, [0, 0, 0]);
-    m4.mul(world, world, exampleInverseProjection);
-    m4.scaling(scaleMat, [scale, scale, scale]);
-    m4.mul(world, world, scaleMat);
-    m4.mul(worldViewProjection, world, viewProjection);
+        m4.mul(exampleWorldViewProjection, world, exampleProjection);
 
-    cubeModel.drawPrep(sharedUniforms);
-    cubeModel.draw(localUniforms);
+        cubeModel.draw(sceneCubeUniforms);
+      }
+    }
+    drawScene(viewProjection, exampleProjection);
 
+    // Draw Frustum Cube behind
+    function drawFrustumCube() {
+      m4.perspective(
+          exampleProjection,
+          math.degToRad(fieldOfView),
+          aspect,
+          zNear,
+          zFar);
+      m4.inverse(exampleInverseProjection, exampleProjection);
+
+      m4.translation(world, [0, 0, 0]);
+      m4.mul(world, world, exampleInverseProjection);
+      m4.scaling(scaleMat, [scale, scale, scale]);
+      m4.mul(world, world, scaleMat);
+      m4.mul(worldViewProjection, world, viewProjection);
+
+      cubeModel.drawPrep(sharedUniforms);
+      cubeModel.draw(frustumCubeUniforms);
+    }
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
+    drawFrustumCube();
+    gl.disable(gl.CULL_FACE);
+
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.FRONT);
+//    drawFrustumCube();
+    gl.disable(gl.CULL_FACE);
 
     // Draw view cone.
     m4.perspective(
         exampleProjection,
         math.degToRad(fieldOfView),
-        canvas.clientWidth / canvas.clientHeight,
+        aspect,
         1,
         5000);
     m4.inverse(exampleInverseProjection, exampleProjection);
 
-    localUniforms.u_color = white;
     m4.translation(world, [0, 0, 0]);
     m4.mul(world, world, exampleInverseProjection);
     m4.scaling(scaleMat, [scale, scale, scale]);
@@ -283,14 +327,13 @@ console.log(cubeModel);
     m4.mul(worldViewProjection, world, viewProjection);
 
     cubeRaysModel.drawPrep(sharedUniforms);
-    cubeRaysModel.draw(localUniforms);
-
+    cubeRaysModel.draw(cubeRaysUniforms);
 
     // Draw Frustum Wire
     m4.perspective(
         exampleProjection,
         math.degToRad(fieldOfView),
-        canvas.clientWidth / canvas.clientHeight,
+        aspect,
         zNear,
         zFar);
     m4.inverse(exampleInverseProjection, exampleProjection);
@@ -301,9 +344,23 @@ console.log(cubeModel);
     m4.mul(world, world, scaleMat);
     m4.mul(worldViewProjection, world, viewProjection);
 
-    localUniforms.u_color = red;
     wireCubeModel.drawPrep(sharedUniforms);
-    wireCubeModel.draw(localUniforms);
+    wireCubeModel.draw(wireFrustumUniforms);
+
+    // Draw 3D view
+    gl.enable(gl.SCISSOR_TEST);
+    gl.viewport(0, 0, 400, 300);
+    gl.scissor(0, 0, 400, 300);
+    gl.clearColor(0.5, 0.5, 0.5, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    m4.perspective(
+        projection,
+        math.degToRad(fieldOfView),
+        aspect,
+        zNear,
+        zFar);
+    drawScene(exampleProjection, zeroMat);
   }
 
   return {
@@ -320,12 +377,14 @@ function resizeCanvas() {
     gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
   }
 }
-
+var app;
 function main() {
+  updateCSSIfInIFrame();
   math = tdl.math;
   fast = tdl.fast;
   window.requestAnimFrame = tdl.webgl.requestAnimationFrame;
   canvas = document.getElementById("canvas");
+  var clock = tdl.clock.createClock();
 
   gl = tdl.webgl.setupWebGL(canvas, {alpha: true, preMultipliedAlpha: false});
   if (!gl) {
@@ -334,10 +393,14 @@ function main() {
 
   resizeCanvas();
 
-  var app = CreateApp();
+  app = CreateApp();
 
+  var then = clock.getTime();
   function render() {
-    app.render();
+    var now = clock.getTime();
+    var elapsedTime = now - then;
+    then = now;
+    app.render(elapsedTime);
     requestAnimFrame(render);
   }
   render();
@@ -371,9 +434,13 @@ void main() {
 attribute vec4 position;
 attribute vec4 a_color;
 uniform mat4 u_worldViewProjection;
+uniform mat4 u_exampleWorldViewProjection;
 varying vec4 v_color;
+varying vec4 v_position;
 void main() {
   gl_Position = u_worldViewProjection * position;
+  v_position = u_exampleWorldViewProjection * position;
+  v_position = v_position / v_position.w;
   v_color = a_color;
 }
 
@@ -381,16 +448,22 @@ void main() {
 <script id="colorFragmentShader" type="text/something-not-javascript">
 precision mediump float;
 varying vec4 v_color;
+varying vec4 v_position;
+uniform vec4 u_color;
 void main() {
-  gl_FragColor = v_color;
+  bool blend = (v_position.x < -1.0 || v_position.x > 1.0 ||
+                v_position.y < -1.0 || v_position.y > 1.0 ||
+                v_position.z < -1.0 || v_position.z > 1.0);
+  vec4 blendColor = blend ? vec4(0.5, 0.5, 0.5, 1.0) : vec4(1, 1, 1, 1);
+  gl_FragColor = v_color * u_color * blendColor;
 }
 </script>
 </head>
 <body>
 <div class="description">
-Drag sliders to translate, rotate, and scale.
+Drag sliders to change the frustum.
 </div>
-<canvas id="canvas" width="400" height="300"></canvas>
+<canvas id="canvas" width="400" height="600"></canvas>
 <div id="uiContainer">
   <div id="ui">
     <div id="fieldOfView"></div>

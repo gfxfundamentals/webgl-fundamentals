@@ -404,3 +404,6 @@ w = x * 0 +
 </span>
 </div>
 
+<iframe class="webgl_example" src="../frustum-diagram.html" width="400" height="600"></iframe>
+<a class="webgl_center" href="../frustum-diagram.html" target="_blank">click here to open in a separate window</a>
+
