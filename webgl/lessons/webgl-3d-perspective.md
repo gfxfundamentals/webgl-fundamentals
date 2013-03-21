@@ -2,7 +2,7 @@ Title: WebGL 3D Perspective
 
 This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
-the previous was about <a href="webgl-3d-basics.html">3D Basics</a>.
+the previous was about <a href="webgl-3d-orthographic.html">3D Basics</a>.
 If you haven't read those please view them first.
 
 In the last post we went over how to do 3D but that 3D didn't have any perspective.
@@ -364,7 +364,7 @@ We're back to just a matrix multiply and we're getting both a field of view and 
 We're not done but this article is getting too long. Next up, <a href="webgl-3d-cameras.html">cameras</a>.
 
 <div class="webgl_bottombar">
-<h3>Why did we have to move the F so far in Z (-360)?</h3>
+<h3>Why did we move the F so far in Z (-360)?</h3>
 <p>
 In the other samples we had the F at (45, 150, 0) but the last sample it's been moved to (-150, 0, -360).
 Why did it need to be moved so far away? </p>
