@@ -2,7 +2,7 @@ Title: WebGL 3D Perspective
 
 This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
-the previous was about <a href="webgl-3d-basics.html">3d basics.</a>.
+the previous was about <a href="webgl-3d-basics.html">3D Basics</a>.
 If you haven't read those please view them first.
 
 In the last post we went over how to do 3D but that 3D didn't have any perspective.
@@ -103,11 +103,11 @@ we added our divide by Z code.
 <img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
 <div class="webgl_center">orthographic vs perspective</div>
 
-It turns out WebGL takes the x,y,z,w value we assign to gl_Position in our vertex
+It turns out WebGL takes the x,y,z,w value we assign to `gl_Position` in our vertex
 shader and divides it by w automatically.
 
 We can prove this very easily by changing the shader and instead of doing the
-division ourselves, put `zToDivideBy` in gl_Position.w.
+division ourselves, put `zToDivideBy` in `gl_Position.w`.
 
 <pre class="prettyprint">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
@@ -280,49 +280,29 @@ and note, again, it's exactly the same.
 <iframe class="webgl_example" src="../webgl-3d-perspective-w-matrix.html" width="400" height="300"></iframe>
 <a class="webgl_center" href="../webgl-3d-perspective-w-matrix.html" target="_blank">click here to open in a separate window</a>
 
-But ... there's a problem. On the sample above use the slider and set Z to something
-like -156. You should see something like this
+All that was basically to show you that dividing by Z gives us perspective
+and that WebGL conveniently does this divide by Z for us.
 
-<img class="webgl_center" src="resources/webgl-perspective-negative-156.png" />
+But there's still some problems. For example if you set Z to around -100 you'll see something like
+the animation below
 
-What's going on? What's happening is our geometry is getting transformed into negative space.
-The Z values are becoming negative but only some of them and so parts of the our geometry is
-getting put on the opposite side of the screen. If you follow the math, the points of our geometry
-that are on the left will get transformed to the right and visa versa when they become negative.
+<img class="webgl_center" src="resources/z-clipping.gif" style="border: 1px solid black;" />
 
-We can fix this by moving our Z clipspace. Right now it represents pixel units from -400 to +400.
-If you remember from the last article our projection math looks like this:
+What's going on? Why is the F disappearing early? Just like WebGL clips X and Y or +1 to -1 it also
+clips Z. What were's seeing here is where Z < -1.
 
-<pre>
-function make2DProjection(width, height, depth) {
-  // Note: This matrix flips the Y axis so 0 is at the top.
-  return [
-     2 / width, 0, 0, 0,
-     0, -2 / height, 0, 0,
-     0, 0, 2 / depth, 0,
-    -1, 1, 0, 1,
-  ];
-}
-</pre>
+I could go into detail about how the math to fix it but you can derive it the same way
+we did 2D projection. We need to take Z, add some amount and scale some amount and we can make any range we want
+get remapped to the -1 to +1.
 
-We can change it to be say 50 to +400 by changing it to this
+The cool thing is all of these steps can be done in 1 matrix. Even better, rather than a `fudgeFactor`
+we'll decide on a `fieldOfView` and compute the right values to make that happen.
 
-
-
-Next up we'd like to be able to choose the clipping range for Z. Right now were multiplying
-Z in pixel units by some number to get it to clipspace, then we're dividing it again by
-some number called zToDivideBy. I have no idea what that range really works out to.
-
-Finally instead of of using "fudgeFactor" to decide how much perspective there is we'd like to
-use some "field of view" angle which would be much more intuitive.
-
-Well, like everything else up to this point we can do this with more matrix math magic.
-
-Here's a function to build the matrix
+Here's a function to build the matrix.
 
 <pre class="prettyprint">
-function makePerspective(angleInRadians, aspect, near, far) {
-  var f = Math.tan(Math.PI * 0.5 - 0.5 * angleInRadians);
+function makePerspective(fieldOfViewInRadians, aspect, near, far) {
+  var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
   var rangeInv = 1.0 / (near - far);
 
   return [
@@ -336,15 +316,37 @@ function makePerspective(angleInRadians, aspect, near, far) {
 
 This matrix will do all our conversions for us. It will adjust the units so they are
 in clipspace, it will do the math so that we can choose a field of view by angle
-and it will let us choose our z-clipping space.
+and it will let us choose our z-clipping space. It assumes there's an `eye` or `camera` at the
+origin (0, 0, 0) and given a `zNear` and a `fieldOfView` it computes what it would take so that
+stuff at `zNear` ends up at z=-1 and stuff at `zNear` that is half of `fieldOfView` above or below the center
+ends up with y=-1 and y=1 respectively. It computes what to use for X by just multipling by the `aspect` passed in.
+We'd normally set this to the `width / height` of the display area.
+Finally, it figures out how much to scale things in Z so that stuff at zFar ends up at Z = 1.
 
-To use it we just need to replace our old call to make2DProjection with a call to
+Here's a diagram of the matrix in action.
+
+<iframe class="webgl_example" src="../frustum-diagram.html" width="400" height="600"></iframe>
+<a class="webgl_center" href="../frustum-diagram.html" target="_blank">click here to open in a separate window</a>
+
+That shape that looks like 4 sided cone the cubes are spining in is called a frustum".
+The matrix takes the space inside the frustum and converts that to clipspace. `zNear` defines where
+tihngs will get clipped in front and zFar defines where things get clipped in back. Set `zNear` to 23 and
+you'll see the front of the spinning cubes get clipped. Set `zFar` to 24 and you'll see the back of the cubes
+get clipped.
+
+There's just one problem left. This matrix assumes there's a viewer at 0,0,0 and it assumes it's looking
+in the negative Z direction and that positive Y is up. Our matrices up to this point have done things
+in a different way. To make this work we need to put our objects in front of the view.
+
+We could do that by moving our F. We were drawing at (45, 150, 0). Let's move it to (-150, 0, -360)
+
+Now, to use it we just need to replace our old call to make2DProjection with a call to
 makePerspective
 
 <pre class="prettyprint">
     var aspect = canvas.width / canvas.height;
     var projectionMatrix =
-        makePerspective(fieldOfViewRadians, aspect, 0.001, 2000);
+        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
     var translationMatrix =
         makeTranslation(translation[0], translation[1], translation[2]);
     var rotationXMatrix = makeXRotation(rotation[0]);
@@ -353,57 +355,27 @@ makePerspective
     var scaleMatrix = makeScale(scale[0], scale[1], scale[2]);
 </pre>
 
-We can set our shader back to being very simple
+And here it is.
 
-<pre class="prettyprint">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
-...
-void main() {
-  // Multiply the position by the matrix.
-  gl_Position = u_matrix * a_position;
-  ...
-}
-&lt;/script&gt;
-</pre>
+<iframe class="webgl_example" src="../webgl-3d-perspective-matrix.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-perspective-matrix.html" target="_blank">click here to open in a separate window</a>
 
+We're back to just a matrix multiply and we're getting both a field of view and we're able to choose our z space.
+We're not done but this article is getting too long. Next up, <a href="webgl-3d-cameras.html">cameras</a>.
 
-There are 2 issues
-So that worked but generally we don't want just a 'fudgeFactor' to decide how much to divide by Z. Instead
-we want to decide on the "field of view". We can compute a fudgeFactor from an angle like this
-
-    fudgeFactor = -Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians
-
-Let's try it.
-
-<iframe class="webgl_example" src="../webgl-3d-perspective-fov.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl-3d-perspective-fov.html" target="_blank">click here to open in a separate window</a>
-
-<div class="webgl_center">
-<span style="display: inline-block;">
-<pre style="text-align: left;">
-x = x * f +
-    y * 0
-    z * 0
-    w * 0;
-
-y = x * 0 +
-    y * f +
-    z * 0 +
-    w * 0;
-
-z = x * 0 +
-    y * 0 +
-    z * (near + far) * rangeInv
-    w * (near * far * rangeInv * 2)
-
-w = x * 0 +
-    y * 0 +
-    z * -1 +
-    w * 0
-</pre>
-</span>
+<div class="webgl_bottombar">
+<h3>Why did we have to move the F so far in Z (-360)?</h3>
+<p>
+In the other samples we had the F at (45, 150, 0) but the last sample it's been moved to (-150, 0, -360).
+Why did it need to be moved so far away? </p>
+<p>The reason is up until this last sample our `make2DProjection` function has made a projection from
+pixels to clipspace. That means the area we were displaying represented 400x300 pixels. Using 'pixels'
+really doesn't make sense in 3D. The new projection makes a frustum that makes it so the area represented
+at `zNear` is 2 units tall and 2 * aspect units wide. Since our 'F' is 150 units big and the view can only
+see 2 units when it's at zNear we need to move it pretty far away from the origin to see it all.</p>
+<p>Similarly we moved 'X' from 45 to -150. Again, the view used to represent 0 to 400 units across.
+Now it represents -1 to +1 units across.
+</p>
 </div>
 
-<iframe class="webgl_example" src="../frustum-diagram.html" width="400" height="600"></iframe>
-<a class="webgl_center" href="../frustum-diagram.html" target="_blank">click here to open in a separate window</a>
 

@@ -1,4 +1,4 @@
-Title: WebGL - Part 1, Orthographic 3D
+Title: WebGL - Orthographic 3D
 
 This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
@@ -489,7 +489,7 @@ And now we get
 
 which is 3D!
 
-In the next post I'll go over <a href="webgl-3d-perspective-camera.html">how to make it have perspective</a>.
+In the next post I'll go over <a href="webgl-3d-perspective.html">how to make it have perspective</a>.
 
 <div class="webgl_bottombar">
 <h3>Why is the attribute vec4 but gl.vertexAttribPointer size 3</h3>

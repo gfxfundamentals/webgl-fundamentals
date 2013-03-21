@@ -33,6 +33,7 @@ tdl.require('tdl.webgl');
 
 var eyePosition;
 var target;
+var et = 1/30;
 
 // globals
 var gl;                   // the gl context.
@@ -177,6 +178,9 @@ function CreateApp() {
   var blue = new Float32Array([0,0,1,1]);
   var white = new Float32Array([1,1,1,1]);
 
+  var targetToEye = new Float32Array(3);
+  fast.subVector(targetToEye, eyePosition, target);
+
   // uniforms.
   var sharedUniforms = {
   };
@@ -257,9 +261,17 @@ function CreateApp() {
         aspect,
         1,
         5000);
+
+    var f = Math.max(30, fieldOfView) - 30;
+    f = f / (179-30);
+    f = f * f * f * f;
+    f = math.lerpScalar(1, 179 * 0.9, f);
+    f = 1;
+    fast.mulVectorScalar(v3t0, targetToEye, f);
+    fast.addVector(v3t0, v3t0, target);
     m4.lookAt(
         view,
-        eyePosition,
+        v3t0, //eyePosition,
         target,
         up);
     m4.mul(viewProjection, view, projection);
@@ -470,7 +482,10 @@ void main() {
 <div class="description">
 Drag sliders to change the frustum.
 </div>
-<canvas id="canvas" width="400" height="600"></canvas>
+<div style="position:absolute;">
+  <canvas id="canvas" width="400" height="600"></canvas>
+  <img src="resources/eye-icon.png" style="position: absolute; z-index:2; left: 10px; top: 275px; width: 32px; height: auto;"/>
+</div>
 <div id="uiContainerLeft">
   <div id="ui">
     <div id="fieldOfView"></div>

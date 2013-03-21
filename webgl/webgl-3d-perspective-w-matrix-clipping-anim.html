@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>WebGL - 3D Perspective matrix</title>
+<title>WebGL - 3D Perspective using divide by W in a Matrix Clipping Anim</title>
 <link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
@@ -75,62 +75,30 @@ function main() {
     return d * Math.PI / 180;
   }
 
-  var translation = [-150, 0, -360];
-  var rotation = [degToRad(190), degToRad(40), degToRad(320)];
+  var translation = [45, 150, 0];
+  var rotation = [degToRad(40), degToRad(25), degToRad(325)];
   var scale = [1, 1, 1];
-  var fieldOfViewRadians = degToRad(60);
+  var fudgeFactor = 1;
 
   drawScene();
 
-  // Setup a ui.
-  $("#fieldOfView").gmanSlider({value: radToDeg(fieldOfViewRadians), slide: updateFieldOfView, min: 1, max:179 });
-  $("#x").gmanSlider({value: translation[0], slide: updatePosition(0), min: -200, max: 200 });
-  $("#y").gmanSlider({value: translation[1], slide: updatePosition(1), min: -200, max: 200});
-  $("#z").gmanSlider({value: translation[2], slide: updatePosition(2), min: -1000, max: 0});
-  $("#angleX").gmanSlider({value: radToDeg(rotation[0]), slide: updateRotation(0), max: 360});
-  $("#angleY").gmanSlider({value: radToDeg(rotation[1]), slide: updateRotation(1), max: 360});
-  $("#angleZ").gmanSlider({value: radToDeg(rotation[2]), slide: updateRotation(2), max: 360});
-  $("#scaleX").gmanSlider({value: scale[0], slide: updateScale(0), min: -5, max: 5, step: 0.01, precision: 2});
-  $("#scaleY").gmanSlider({value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
-  $("#scaleZ").gmanSlider({value: scale[2], slide: updateScale(2), min: -5, max: 5, step: 0.01, precision: 2});
-
-  function updateFieldOfView(event, ui) {
-    fieldOfViewRadians = degToRad(ui.value);
-    drawScene();
-  }
-
-  function updatePosition(index) {
-    return function(event, ui) {
-      translation[index] = ui.value;
-      drawScene();
-    }
-  }
-
-  function updateRotation(index) {
-    return function(event, ui) {
-      var angleInDegrees = ui.value;
-      var angleInRadians = angleInDegrees * Math.PI / 180;
-      rotation[index] = angleInRadians;
-      drawScene();
-    }
-  }
-
-  function updateScale(index) {
-    return function(event, ui) {
-      scale[index] = ui.value;
-      drawScene();
-    }
-  }
+  var clock = 0;
+  var zElem = document.getElementById("z");
 
   // Draw the scene.
-  function drawScene() {
+  function drawScene(elapsedTime) {
+    clock += elapsedTime;
+    translation[2] = -130 + (-30 - -130) * (Math.sin((clock % 2) / 2 * Math.PI * 2) * 0.5 + 0.5);
+    z.innerHTML = translation[2].toFixed(0);
+
     // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Compute the matrices
-    var aspect = canvas.width / canvas.height;
+    var zToWMatrix =
+        makeZToWMatrix(fudgeFactor);
     var projectionMatrix =
-        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+        make2DProjection(canvas.width, canvas.height, canvas.width);
     var translationMatrix =
         makeTranslation(translation[0], translation[1], translation[2]);
     var rotationXMatrix = makeXRotation(rotation[0]);
@@ -144,6 +112,7 @@ function main() {
     matrix = matrixMultiply(matrix, rotationXMatrix);
     matrix = matrixMultiply(matrix, translationMatrix);
     matrix = matrixMultiply(matrix, projectionMatrix);
+    matrix = matrixMultiply(matrix, zToWMatrix);
 
     // Set the matrix.
     gl.uniformMatrix4fv(matrixLocation, false, matrix);
@@ -151,19 +120,35 @@ function main() {
     // Draw the geometry.
     gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
   }
+
+  var then = (new Date()).getTime() * 0.001;
+  function render() {
+    var now = (new Date()).getTime() * 0.001;
+    drawScene(now - then);
+    then = now;
+    requestAnimFrame(render);
+  }
+  render();
 }
 
-function makePerspective(fieldOfViewInRadians, aspect, near, far) {
-  var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
-  var rangeInv = 1.0 / (near - far);
-
+function makeZToWMatrix(fudgeFactor) {
   return [
-    f / aspect, 0, 0, 0,
-    0, f, 0, 0,
-    0, 0, (near + far) * rangeInv, -1,
-    0, 0, near * far * rangeInv * 2, 0
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, fudgeFactor,
+    0, 0, 0, 1,
   ];
-};
+}
+
+function make2DProjection(width, height, depth) {
+  // Note: This matrix flips the Y axis so 0 is at the top.
+  return [
+     2 / width, 0, 0, 0,
+     0, -2 / height, 0, 0,
+     0, 0, 2 / depth, 0,
+    -1, 1, 0, 1,
+  ];
+}
 
 function makeTranslation(tx, ty, tz) {
   return [
@@ -571,18 +556,12 @@ void main() {
 </head>
 <body>
 <div class="description">
-Drag sliders to translate, rotate, and scale.
+Clipping Issue
 </div>
 <canvas id="canvas" width="400" height="300"></canvas>
 <div id="uiContainer">
   <div id="ui">
-    <div id="fieldOfView"></div>
-    <div id="x"></div>
-    <div id="y"></div>
-    <div id="z"></div>
-    <div id="angleX"></div>
-    <div id="angleY"></div>
-    <div id="angleZ"></div>
+    <div>z: <span id="z">123</span></div>
   </div>
 </div>
 </body>
