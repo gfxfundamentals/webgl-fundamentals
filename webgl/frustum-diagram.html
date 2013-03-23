@@ -40,6 +40,7 @@ var gl;                   // the gl context.
 var canvas;               // the canvas
 var math;                 // the math lib.
 var fast;                 // the fast math lib.
+var devicePixelRatio = window.devicePixelRatio || 1;
 
 function CreateApp() {
   // Create Geometry.
@@ -247,7 +248,7 @@ function CreateApp() {
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    gl.viewport(0, 300, 400, 300);
+    gl.viewport(0, 300 * devicePixelRatio, 400 * devicePixelRatio, 300 * devicePixelRatio);
 
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
@@ -368,8 +369,8 @@ function CreateApp() {
 
     // Draw 3D view
     gl.enable(gl.SCISSOR_TEST);
-    gl.viewport(0, 0, 400, 300);
-    gl.scissor(0, 0, 400, 300);
+    gl.viewport(0, 0, 400 * devicePixelRatio, 300 * devicePixelRatio);
+    gl.scissor(0, 0, 400 * devicePixelRatio, 300 * devicePixelRatio);
     gl.clearColor(0.5, 0.5, 0.5, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -388,10 +389,13 @@ function CreateApp() {
 }
 
 function resizeCanvas() {
-  if (canvas.width != canvas.clientWidth ||
-      canvas.height != canvas.clientHeight) {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+  var displayWidth  = canvas.clientWidth * devicePixelRatio;
+  var displayHeight = canvas.clientHeight * devicePixelRatio;
+  if (canvas.width != displayWidth ||
+      canvas.height != displayHeight) {
+
+    canvas.width = displayWidth;
+    canvas.height = displayHeight;
     console.log("resized canvas: " + canvas.width + ", " + canvas.height);
     gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
   }
@@ -483,7 +487,7 @@ void main() {
 Drag sliders to change the frustum.
 </div>
 <div style="position:absolute;">
-  <canvas id="canvas" width="400" height="600"></canvas>
+  <canvas id="canvas" width="400" height="600" style="width: 400px; height: 600px"></canvas>
   <img src="resources/eye-icon.png" style="position: absolute; z-index:2; left: 10px; top: 275px; width: 32px; height: auto;"/>
 </div>
 <div id="uiContainerLeft">
