@@ -1,0 +1,764 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - Frustum Diagram</title>
+<link type="text/css" href="../../resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+#ui {
+    width: 200px;
+}
+#rotation>canvas {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+}
+</style>
+<script type="text/javascript" src="../../resources/webgl-utils.js"></script>
+<script type="text/javascript" src="../../resources/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../../resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="../../resources/jquery.gman.ui.js"></script>
+<script type="text/javascript" src="../../resources/tdl/base.js"></script>
+<script>
+tdl.require('tdl.buffers');
+tdl.require('tdl.clock');
+tdl.require('tdl.fast');
+tdl.require('tdl.log');
+tdl.require('tdl.math');
+tdl.require('tdl.models');
+tdl.require('tdl.primitives');
+tdl.require('tdl.programs');
+tdl.require('tdl.textures');
+tdl.require('tdl.webgl');
+
+var fPosition;
+var cameraPosition;
+var eyePosition;
+var target;
+var gridScale = 400;
+var et = 1/30;
+
+// globals
+var gl;                   // the gl context.
+var canvas;               // the canvas
+var math;                 // the math lib.
+var fast;                 // the fast math lib.
+var devicePixelRatio = window.devicePixelRatio || 1;
+
+var createGrid = function(size, subdivisions) {
+  var numLines = subdivisions;
+  var numVertices = numLines * 4;
+  var positions = new tdl.primitives.AttribBuffer(3, numVertices);
+  var colors = new tdl.primitives.AttribBuffer(4, numVertices);
+
+  //  ..|..|..|..
+  //  <-  size ->
+  var black = [0, 0, 0, 1];
+  var gray = [0.75, 0.75, 0.75, 1];
+
+  var gridSize = size / (subdivisions + 2);
+  for (var ii = 0; ii < numLines; ++ii) {
+    var jj = ii - ((numLines - 1) / 2);
+    var p = jj * gridSize;
+    positions.push([p, 0, -size / 2]);
+    positions.push([p, 0,  size / 2]);
+    positions.push([-size / 2, 0, p]);
+    positions.push([ size / 2, 0, p]);
+    var color = jj ? gray : black;
+    colors.push(color);
+    colors.push(color);
+    colors.push(color);
+    colors.push(color);
+  }
+
+  return {
+    position: positions,
+    color: colors,
+  };
+};
+
+function CreateApp() {
+  // Create Geometry.
+  var wireCubeArrays = {
+    position: new tdl.primitives.AttribBuffer(3,
+      [
+        -1,  1, -1,
+         1,  1, -1,
+         1, -1, -1,
+        -1, -1, -1,
+
+        -1,  1,  1,
+         1,  1,  1,
+         1, -1,  1,
+        -1, -1,  1,
+      ]),
+    color: new tdl.primitives.AttribBuffer(
+      4,
+      [
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+      ]),
+    indices: new tdl.primitives.AttribBuffer(
+      2,
+      [
+        0, 1, 1, 2, 2, 3, 3, 0,
+        4, 5, 5, 6, 6, 7, 7, 4,
+        0, 4, 1, 5, 2, 6, 3, 7,
+      ],
+      'Uint16Array'),
+  };
+  // Load textures
+  var textures = {
+  };
+
+  // Create Shader Program
+  var vertexColorProgram = tdl.programs.loadProgramFromScriptTags(
+      'vertexColorVertexShader',
+      'vertexColorFragmentShader');
+  var wireCubeModel = new tdl.models.Model(vertexColorProgram, wireCubeArrays, undefined, gl.LINES);
+
+  var cubeRaysArrays = {
+    position: wireCubeArrays.position,
+    color: new tdl.primitives.AttribBuffer(
+      4,
+      [
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+
+        0, 0, 0, 1,
+        0, 0, 0, 1,
+        0, 0, 0, 1,
+        0, 0, 0, 1,
+      ]),
+    indices: new tdl.primitives.AttribBuffer(
+      2,
+      [
+        0, 4, 1, 5, 2, 6, 3, 7,
+      ],
+      'Uint16Array'),
+    color: new tdl.primitives.AttribBuffer(
+      4,
+      [
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+
+        0, 0, 0, 1,
+        0, 0, 0, 1,
+        0, 0, 0, 1,
+        0, 0, 0, 1,
+      ]),
+  };
+  var cubeRaysModel = new tdl.models.Model(vertexColorProgram, cubeRaysArrays, undefined, gl.LINES);
+
+  var colorProgram = tdl.programs.loadProgramFromScriptTags(
+      'vertexColorVertexShader',
+      'vertexColorFragmentShader');
+  var cubeArrays = tdl.primitives.createCube(20.0);
+  delete cubeArrays.normal;
+  delete cubeArrays.texCoord;
+  var faceColors = [
+    [ 1, 0, 0, 1, ],
+    [ 0, 1, 0, 1, ],
+    [ 1, 1, 0, 1, ],
+    [ 0, 0, 1, 1, ],
+    [ 1, 0, 1, 1, ],
+    [ 0, 1, 1, 1, ],
+  ];
+  var colorVerts = new tdl.primitives.AttribBuffer(4, 6 * 4);
+  for (var f = 0; f < 6; ++f) {
+    for (var v = 0; v < 4; ++v) {
+      colorVerts.push(faceColors[f]);
+    }
+  }
+  cubeArrays.a_color = colorVerts;
+  var cubeModel = new tdl.models.Model(colorProgram, cubeArrays);
+
+  var gridArrays = createGrid(13, 21);
+  var gridModel = new tdl.models.Model(vertexColorProgram, gridArrays, undefined, gl.LINES);
+
+  var stemArrays = tdl.primitives.createCylinder(5, 100, 24, 1);
+  tdl.primitives.reorient(stemArrays, math.matrix4.translation([0, 50, 0]));
+  var tipArrays = tdl.primitives.createTruncatedCone(15, 0, 20, 24, 2);
+  tdl.primitives.reorient(tipArrays, math.matrix4.translation([0, 100, 0]));
+  var axisArrays = tdl.primitives.concat([stemArrays, tipArrays]);
+  var numVerts = axisArrays.position.numElements;
+  axisArrays.color = new tdl.primitives.AttribBuffer(3, numVerts);
+  for (var ii = 0; ii < numVerts; ++ii) {
+    axisArrays.color.push([1,1,1]);
+  }
+  //tdl.primitives.reorient(axisArrays, math.matrix4.rotationX(Math.PI));
+  var axisModel = new tdl.models.Model(vertexColorProgram, axisArrays);
+
+  var fArrays = {
+    position: new tdl.primitives.AttribBuffer(
+      3,
+      [
+        // left column front
+        0,   0,  0,
+          0, 150,  0,
+          30,   0,  0,
+          0, 150,  0,
+          30, 150,  0,
+          30,   0,  0,
+
+          // top rung front
+          30,   0,  0,
+          30,  30,  0,
+          100,   0,  0,
+          30,  30,  0,
+          100,  30,  0,
+          100,   0,  0,
+
+          // middle rung front
+          30,  60,  0,
+          30,  90,  0,
+          67,  60,  0,
+          30,  90,  0,
+          67,  90,  0,
+          67,  60,  0,
+
+          // left column back
+            0,   0,  30,
+           30,   0,  30,
+            0, 150,  30,
+            0, 150,  30,
+           30,   0,  30,
+           30, 150,  30,
+
+          // top rung back
+           30,   0,  30,
+          100,   0,  30,
+           30,  30,  30,
+           30,  30,  30,
+          100,   0,  30,
+          100,  30,  30,
+
+          // middle rung back
+           30,  60,  30,
+           67,  60,  30,
+           30,  90,  30,
+           30,  90,  30,
+           67,  60,  30,
+           67,  90,  30,
+
+          // top
+            0,   0,   0,
+          100,   0,   0,
+          100,   0,  30,
+            0,   0,   0,
+          100,   0,  30,
+            0,   0,  30,
+
+          // top rung front
+          100,   0,   0,
+          100,  30,   0,
+          100,  30,  30,
+          100,   0,   0,
+          100,  30,  30,
+          100,   0,  30,
+
+          // under top rung
+          30,   30,   0,
+          30,   30,  30,
+          100,  30,  30,
+          30,   30,   0,
+          100,  30,  30,
+          100,  30,   0,
+
+          // between top rung and middle
+          30,   30,   0,
+          30,   60,  30,
+          30,   30,  30,
+          30,   30,   0,
+          30,   60,   0,
+          30,   60,  30,
+
+          // top of middle rung
+          30,   60,   0,
+          67,   60,  30,
+          30,   60,  30,
+          30,   60,   0,
+          67,   60,   0,
+          67,   60,  30,
+
+          // front of middle rung
+          67,   60,   0,
+          67,   90,  30,
+          67,   60,  30,
+          67,   60,   0,
+          67,   90,   0,
+          67,   90,  30,
+
+          // bottom of middle rung.
+          30,   90,   0,
+          30,   90,  30,
+          67,   90,  30,
+          30,   90,   0,
+          67,   90,  30,
+          67,   90,   0,
+
+          // front of bottom
+          30,   90,   0,
+          30,  150,  30,
+          30,   90,  30,
+          30,   90,   0,
+          30,  150,   0,
+          30,  150,  30,
+
+          // bottom
+          0,   150,   0,
+          0,   150,  30,
+          30,  150,  30,
+          0,   150,   0,
+          30,  150,  30,
+          30,  150,   0,
+
+          // left side
+          0,   0,   0,
+          0,   0,  30,
+          0, 150,  30,
+          0,   0,   0,
+          0, 150,  30,
+          0, 150,   0]),
+    color: new tdl.primitives.AttribBuffer(
+        3,
+        [
+          // left column front
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+
+              // top rung front
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+
+              // middle rung front
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+            200,  70, 120,
+
+              // left column back
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+
+              // top rung back
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+
+              // middle rung back
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+            80, 70, 200,
+
+              // top
+            70, 200, 210,
+            70, 200, 210,
+            70, 200, 210,
+            70, 200, 210,
+            70, 200, 210,
+            70, 200, 210,
+
+              // top rung front
+            200, 200, 70,
+            200, 200, 70,
+            200, 200, 70,
+            200, 200, 70,
+            200, 200, 70,
+            200, 200, 70,
+
+              // under top rung
+            210, 100, 70,
+            210, 100, 70,
+            210, 100, 70,
+            210, 100, 70,
+            210, 100, 70,
+            210, 100, 70,
+
+              // between top rung and middle
+            210, 160, 70,
+            210, 160, 70,
+            210, 160, 70,
+            210, 160, 70,
+            210, 160, 70,
+            210, 160, 70,
+
+              // top of middle rung
+            70, 180, 210,
+            70, 180, 210,
+            70, 180, 210,
+            70, 180, 210,
+            70, 180, 210,
+            70, 180, 210,
+
+              // front of middle rung
+            100, 70, 210,
+            100, 70, 210,
+            100, 70, 210,
+            100, 70, 210,
+            100, 70, 210,
+            100, 70, 210,
+
+              // bottom of middle rung.
+            76, 210, 100,
+            76, 210, 100,
+            76, 210, 100,
+            76, 210, 100,
+            76, 210, 100,
+            76, 210, 100,
+
+              // front of bottom
+            140, 210, 80,
+            140, 210, 80,
+            140, 210, 80,
+            140, 210, 80,
+            140, 210, 80,
+            140, 210, 80,
+
+              // bottom
+            90, 130, 110,
+            90, 130, 110,
+            90, 130, 110,
+            90, 130, 110,
+            90, 130, 110,
+            90, 130, 110,
+
+              // left side
+            160, 160, 220,
+            160, 160, 220,
+            160, 160, 220,
+            160, 160, 220,
+            160, 160, 220,
+            160, 160, 220],
+        'Uint8Array'),
+  };
+  tdl.primitives.reorient(
+    fArrays,
+    math.matrix4.mul(math.matrix4.translation([-50, -75, -15]),
+                     math.matrix4.rotationX(Math.PI)));
+  var fModel = new tdl.models.Model(vertexColorProgram, fArrays);
+
+
+  // pre-allocate a bunch of arrays
+  var projection = new Float32Array(16);
+  var inverseProjection = new Float32Array(16);
+  var exampleProjection = new Float32Array(16);
+  var exampleInverseProjection = new Float32Array(16);
+  var view = new Float32Array(16);
+  var world = new Float32Array(16);
+  var scaleMat = new Float32Array(16);
+  var viewProjection = new Float32Array(16);
+  var worldViewProjection = new Float32Array(16);
+  var exampleWorldViewProjection = new Float32Array(16);
+  fPosition = new Float32Array([0, 0, 0]);
+  eyePosition = new Float32Array([610, 570, 550]);
+  target = new Float32Array([100, 0, 300]);
+  cameraPosition = new Float32Array([350, 250, 500]);
+  var up = new Float32Array([0,1,0]);
+  var v3t0 = new Float32Array(3);
+  var v3t1 = new Float32Array(3);
+  var v3t2 = new Float32Array(3);
+  var v3t3 = new Float32Array(3);
+  var m4t0 = new Float32Array(16);
+  var m4t1 = new Float32Array(16);
+  var m4t2 = new Float32Array(16);
+  var m4t3 = new Float32Array(16);
+  var zeroMat = new Float32Array(16);
+  var zero4 = new Float32Array(4);
+  var one4 = new Float32Array([1,1,1,1]);
+  var red = new Float32Array([1,0,0,1]);
+  var black = new Float32Array([0,0,0,1]);
+  var blue = new Float32Array([0,0,1,1]);
+  var white = new Float32Array([1,1,1,1]);
+
+  var targetToEye = new Float32Array(3);
+  fast.subVector(targetToEye, eyePosition, target);
+
+  // uniforms.
+  var sharedUniforms = {
+  };
+
+  var sceneCubeUniforms = {
+    u_color: new Float32Array([1,1,1,1]),
+    u_worldViewProjection: worldViewProjection,
+    u_exampleWorldViewProjection: exampleWorldViewProjection,
+  };
+
+  var frustumCubeUniforms = {
+    u_color: new Float32Array([1,1,1,0.4]),
+    u_worldViewProjection: worldViewProjection,
+    u_exampleWorldViewProjection: zeroMat,
+  };
+
+  var cubeUniforms = {
+    u_color: new Float32Array([1,1,1,1]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var gridUniforms = {
+    u_color: new Float32Array([1,1,1,1]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var fUniforms = {
+    u_color: new Float32Array([1,1,1,1]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var zAxisUniforms = {
+    u_color: new Float32Array([0.5,0.5,1,1]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var yAxisUniforms = {
+    u_color: new Float32Array([0.5,1,0.5,1]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var xAxisUniforms = {
+    u_color: new Float32Array([1,0.5,0.5,1]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var upAxisUniforms = {
+    u_color: new Float32Array([0.5,0.5,0.5,1]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var clock = 0;
+
+  var zNear = 10;
+  var zFar = 50;
+  var fieldOfView = 30;
+  var zPosition = -25;
+
+  // Setup a ui.
+  $("#fieldOfView").gmanSlider({value: fieldOfView, slide: updateFieldOfView, max: 179});
+  $("#zNear").gmanSlider({value: zNear, slide: updateZNear, min: 1, max: 50});
+  $("#zFar").gmanSlider({value: zFar, slide: updateZFar, min: 1, max: 50});
+  $("#zPosition").gmanSlider({value: zPosition, slide: updateZPosition, min: -60, max: 0});
+
+  function updateFieldOfView(event, ui) {
+    fieldOfView = ui.value;
+  }
+
+  function updateZNear(event, ui) {
+    zNear = ui.value;
+  }
+
+  function updateZFar(event, ui) {
+    zFar = ui.value;
+  }
+
+  function updateZPosition(event, ui) {
+    zPosition = ui.value;
+  }
+
+  function drawModel(model, uniforms, world) {
+    var m4 = fast.matrix4;
+    m4.mul(worldViewProjection, world, viewProjection);
+    model.drawPrep(sharedUniforms);
+    model.draw(uniforms);
+  }
+
+  var clock = 0;
+  function render(elapsedTime) {
+    clock += elapsedTime;
+    var m4 = fast.matrix4;
+
+    // clear the screen.
+    gl.enable(gl.DEPTH_TEST);
+    gl.colorMask(true, true, true, true);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    var aspect = canvas.clientWidth / canvas.clientHeight;
+    m4.perspective(
+        projection,
+        math.degToRad(60),
+        aspect,
+        1,
+        5000);
+
+    m4.lookAt(
+        view,
+        eyePosition,
+        target,
+        up);
+    m4.mul(viewProjection, view, projection);
+
+    m4.scaling(world, [gridScale, gridScale, gridScale]);
+    drawModel(gridModel, gridUniforms, world);
+
+    m4.translation(world, fPosition);
+    drawModel(fModel, fUniforms, world);
+
+    m4.cameraLookAt(
+        m4t0,
+        cameraPosition,
+        fPosition,
+        up);
+    drawModel(cubeModel, cubeUniforms, m4t0);
+    drawModel(axisModel, yAxisUniforms, m4t0);
+    m4.rotationZ(m4t1, Math.PI / 2);
+    m4.mul(world, m4t1, m4t0);
+    drawModel(axisModel, xAxisUniforms, world);
+    m4.rotationX(m4t1, Math.PI / 2);
+    m4.mul(world, m4t1, m4t0);
+    drawModel(axisModel, zAxisUniforms, world);
+    m4.translation(world, cameraPosition);
+    drawModel(axisModel, upAxisUniforms, world);
+  }
+
+  return {
+    render: render
+  };
+}
+
+function resizeCanvas() {
+  var displayWidth  = canvas.clientWidth * devicePixelRatio;
+  var displayHeight = canvas.clientHeight * devicePixelRatio;
+  if (canvas.width != displayWidth ||
+      canvas.height != displayHeight) {
+
+    canvas.width = displayWidth;
+    canvas.height = displayHeight;
+    console.log("resized canvas: " + canvas.width + ", " + canvas.height);
+    gl.viewport(0, 0, displayWidth, displayHeight);
+  }
+}
+
+var app;
+function main() {
+  updateCSSIfInIFrame();
+  math = tdl.math;
+  fast = tdl.fast;
+  window.requestAnimFrame = tdl.webgl.requestAnimationFrame;
+  canvas = document.getElementById("canvas");
+  var clock = tdl.clock.createClock();
+
+  gl = tdl.webgl.setupWebGL(canvas, {alpha: true, preMultipliedAlpha: false});
+  if (!gl) {
+    return false;
+  }
+
+  resizeCanvas();
+
+  app = CreateApp();
+
+  var then = clock.getTime();
+  function render() {
+    var now = clock.getTime();
+    var elapsedTime = now - then;
+    then = now;
+    app.render(elapsedTime);
+    requestAnimFrame(render);
+  }
+  render();
+}
+
+$(function(){
+  main();
+});
+
+</script>
+<script id="vertexColorVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 color;
+uniform mat4 u_worldViewProjection;
+varying vec4 v_color;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_color = color;
+}
+
+</script>
+<script id="vertexColorFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+uniform vec4 u_color;
+varying vec4 v_color;
+void main() {
+  gl_FragColor = u_color * v_color;
+}
+</script>
+<script id="baseVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 a_color;
+uniform mat4 u_worldViewProjection;
+uniform mat4 u_exampleWorldViewProjection;
+varying vec4 v_color;
+varying vec4 v_position;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_position = u_exampleWorldViewProjection * position;
+  v_position = v_position / v_position.w;
+  v_color = a_color;
+}
+
+</script>
+<script id="colorFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+varying vec4 v_color;
+varying vec4 v_position;
+uniform vec4 u_color;
+void main() {
+  bool blend = (v_position.x < -1.0 || v_position.x > 1.0 ||
+                v_position.y < -1.0 || v_position.y > 1.0 ||
+                v_position.z < -1.0 || v_position.z > 1.0);
+  vec4 blendColor = blend ? vec4(0.35, 0.35, 0.35, 1.0) : vec4(1, 1, 1, 1);
+  gl_FragColor = v_color * u_color * blendColor;
+}
+</script>
+</head>
+<body>
+<div class="description">
+Drag sliders to change the frustum.
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas" width="400" height="300" style="width: 400px; height: 300px;"></canvas>
+</div>
+<div id="uiContainerLeft">
+  <div id="ui">
+    <div id="fieldOfView"></div>
+    <div id="zNear"></div>
+    <div id="zFar"></div>
+    <div id="zPosition"></div>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+
