@@ -4,7 +4,7 @@
 <title>3D in canvas</title>
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
-canvas { border: 1px solid black; }
+canvas { g-border: 1px solid black; }
 </style>
 <!-- this is included only for iframe and requestAnimationFrame support -->
 <script src="../../resources/webgl-utils.js"></script>
@@ -91,8 +91,8 @@ function main() {
           .attr('fillColor', c);
     }
     var text = [
-      { text: "-x", x: -areaWidth  / 2 + 2,           y: 2 },
-      { text: "+x", x:  areaWidth  / 2 - gridSpacing, y: 2 },
+      { text: "-x", x: -areaWidth  / 2 + 2,           y: 2 + yoff },
+      { text: "+x", x:  areaWidth  / 2 - gridSpacing, y: 2 + yoff },
       { text: "-z", y: -areaHeight / 2 + 2,           x: 2 },
       { text: "+z", y:  areaHeight / 2 - gridSpacing, x: 2 },
     ];
@@ -135,8 +135,8 @@ function main() {
       var f = createF();
       var a = ii * Math.PI * 2 / numF
       f.addTo(world)
-       .attr('x', Math.sin(a) * fRadius)
-       .attr('y', Math.cos(a) * fRadius);
+       .attr('x', Math.cos(a) * fRadius)
+       .attr('y', Math.sin(a) * fRadius);
     }
 
     var cam = createCamera();
@@ -146,12 +146,12 @@ function main() {
 
     if (mode == 2) {
       var frustum = new Path()
-          .moveTo(-20, -20)
-          .lineTo(-90, -130)
-          .lineTo( 90, -130)
-          .lineTo( 20, -20)
+          .moveTo( -20,  -20)
+          .lineTo(-170, -210)
+          .lineTo( 170, -210)
+          .lineTo(  20,  -20)
           .closePath()
-          .fill("#C080FF80")
+          .fill("#80FF4080")
           .addTo(base);
     }
 
