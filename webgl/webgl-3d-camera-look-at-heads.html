@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>WebGL - 3D Camera</title>
+<title>WebGL - 3D Camera Look At Heads</title>
 <link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
@@ -18,6 +18,7 @@
 <script type="text/javascript" src="resources/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="resources/jquery.gman.ui.js"></script>
 <script type="text/javascript" src="resources/webgl-utils.js"></script>
+<script type="text/javascript" src="resources/headdata.js"></script>
 <script>
 $(function(){
   main();
@@ -54,7 +55,7 @@ function main() {
   gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
 
   // Set Geometry.
-  setGeometry(gl);
+  var numElements = setGeometry(gl);
 
   // Create a buffer for colors.
   var buffer = gl.createBuffer();
@@ -65,7 +66,7 @@ function main() {
   gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
 
   // Set Colors.
-  setColors(gl);
+  setColors(gl, numElements);
 
   function radToDeg(r) {
     return r * 180 / Math.PI;
@@ -77,11 +78,13 @@ function main() {
 
   var cameraAngleRadians = degToRad(0);
   var fieldOfViewRadians = degToRad(60);
+  var cameraHeight = 50;
 
   drawScene();
 
   // Setup a ui.
   $("#cameraAngle").gmanSlider({value: radToDeg(cameraAngleRadians), slide: updateCameraAngle, min: -360, max: 360});
+  $("#cameraHeight").gmanSlider({value: cameraHeight, slide: updateCameraHeight, min: -200, max: 200});
 
   function updateFieldOfView(event, ui) {
     fieldOfViewRadians = degToRad(ui.value);
@@ -90,6 +93,11 @@ function main() {
 
   function updateCameraAngle(event, ui) {
     cameraAngleRadians = degToRad(ui.value);
+    drawScene();
+  }
+
+  function updateCameraHeight(event, ui) {
+    cameraHeight = ui.value;
     drawScene();
   }
 
@@ -107,10 +115,24 @@ function main() {
     var projectionMatrix =
         makePerspective(fieldOfViewRadians, aspect, 1, 2000);
 
-    // Compute the camera's matrix
-    var cameraMatrix = makeTranslation(0, 0, radius * 1.5);
+    // Compute the position of the first F
+    var fPosition = [radius, 0, 0];
+
+    // Use matrix math to compute a position on the circle.
+    var cameraMatrix = makeTranslation(0, cameraHeight, radius * 2);
     cameraMatrix = matrixMultiply(
         cameraMatrix, makeYRotation(cameraAngleRadians));
+
+    // Get the camera's postion from the matrix we computed
+    cameraPosition = [
+        cameraMatrix[12],
+        cameraMatrix[13],
+        cameraMatrix[14]];
+
+    var up = [0, 1, 0];
+
+    // Compute the camera's matrix using look at.
+    var cameraMatrix = makeLookAt(cameraPosition, fPosition, up);
 
     // Make a view matrix from the camera matrix.
     var viewMatrix = makeInverse(cameraMatrix);
@@ -121,10 +143,9 @@ function main() {
 
       var x = Math.cos(angle) * radius;
       var z = Math.sin(angle) * radius;
-      var translationMatrix = makeTranslation(x, 0, z);
+      var matrix = makeLookAt([x, 0, z], cameraPosition, up);
 
       // Multiply the matrices.
-      var matrix = translationMatrix;
       matrix = matrixMultiply(matrix, viewMatrix);
       matrix = matrixMultiply(matrix, projectionMatrix);
 
@@ -132,9 +153,45 @@ function main() {
       gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
       // Draw the geometry.
-      gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
+      gl.drawArrays(gl.TRIANGLES, 0, numElements);
     }
   }
+}
+
+function makeLookAt(cameraPosition, target, up) {
+  var zAxis = normalize(
+      subtractVectors(cameraPosition, target));
+  var xAxis = cross(up, zAxis);
+  var yAxis = cross(zAxis, xAxis);
+
+  return [
+     xAxis[0], xAxis[1], xAxis[2], 0,
+     yAxis[0], yAxis[1], yAxis[2], 0,
+     zAxis[0], zAxis[1], zAxis[2], 0,
+     cameraPosition[0],
+     cameraPosition[1],
+     cameraPosition[2],
+     1];
+}
+
+function subtractVectors(a, b) {
+  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+}
+
+function normalize(v) {
+  var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  // make sure we don't divide by 0.
+  if (length > 0.00001) {
+    return [v[0] / length, v[1] / length, v[2] / length];
+  } else {
+    return [0, 0, 0];
+  }
+}
+
+function cross(a, b) {
+  return [a[1] * b[2] - a[2] * b[1],
+          a[2] * b[0] - a[0] * b[2],
+          a[0] * b[1] - a[1] * b[0]];
 }
 
 function makePerspective(fieldOfViewInRadians, aspect, near, far) {
@@ -350,145 +407,8 @@ function matrixVectorMultiply(v, m) {
 
 // Fill the buffer with the values that define a letter 'F'.
 function setGeometry(gl) {
-  var positions = new Float32Array([
-          // left column front
-          0,   0,  0,
-          0, 150,  0,
-          30,   0,  0,
-          0, 150,  0,
-          30, 150,  0,
-          30,   0,  0,
-
-          // top rung front
-          30,   0,  0,
-          30,  30,  0,
-          100,   0,  0,
-          30,  30,  0,
-          100,  30,  0,
-          100,   0,  0,
-
-          // middle rung front
-          30,  60,  0,
-          30,  90,  0,
-          67,  60,  0,
-          30,  90,  0,
-          67,  90,  0,
-          67,  60,  0,
-
-          // left column back
-            0,   0,  30,
-           30,   0,  30,
-            0, 150,  30,
-            0, 150,  30,
-           30,   0,  30,
-           30, 150,  30,
-
-          // top rung back
-           30,   0,  30,
-          100,   0,  30,
-           30,  30,  30,
-           30,  30,  30,
-          100,   0,  30,
-          100,  30,  30,
-
-          // middle rung back
-           30,  60,  30,
-           67,  60,  30,
-           30,  90,  30,
-           30,  90,  30,
-           67,  60,  30,
-           67,  90,  30,
-
-          // top
-            0,   0,   0,
-          100,   0,   0,
-          100,   0,  30,
-            0,   0,   0,
-          100,   0,  30,
-            0,   0,  30,
-
-          // top rung front
-          100,   0,   0,
-          100,  30,   0,
-          100,  30,  30,
-          100,   0,   0,
-          100,  30,  30,
-          100,   0,  30,
-
-          // under top rung
-          30,   30,   0,
-          30,   30,  30,
-          100,  30,  30,
-          30,   30,   0,
-          100,  30,  30,
-          100,  30,   0,
-
-          // between top rung and middle
-          30,   30,   0,
-          30,   60,  30,
-          30,   30,  30,
-          30,   30,   0,
-          30,   60,   0,
-          30,   60,  30,
-
-          // top of middle rung
-          30,   60,   0,
-          67,   60,  30,
-          30,   60,  30,
-          30,   60,   0,
-          67,   60,   0,
-          67,   60,  30,
-
-          // front of middle rung
-          67,   60,   0,
-          67,   90,  30,
-          67,   60,  30,
-          67,   60,   0,
-          67,   90,   0,
-          67,   90,  30,
-
-          // bottom of middle rung.
-          30,   90,   0,
-          30,   90,  30,
-          67,   90,  30,
-          30,   90,   0,
-          67,   90,  30,
-          67,   90,   0,
-
-          // front of bottom
-          30,   90,   0,
-          30,  150,  30,
-          30,   90,  30,
-          30,   90,   0,
-          30,  150,   0,
-          30,  150,  30,
-
-          // bottom
-          0,   150,   0,
-          0,   150,  30,
-          30,  150,  30,
-          0,   150,   0,
-          30,  150,  30,
-          30,  150,   0,
-
-          // left side
-          0,   0,   0,
-          0,   0,  30,
-          0, 150,  30,
-          0,   0,   0,
-          0, 150,  30,
-          0, 150,   0]);
-
-  // Center the F around the origin and Flip it around. We do this because
-  // we're in 3D now with and +Y is up where as before when we started with 2D
-  // we had +Y as down.
-
-  // We could do by changing all the values above but I'm lazy.
-  // We could also do it with a matrix at draw time but you should
-  // never do stuff at draw time if you can do it at init time.
-  var matrix = makeTranslation(-50, -75, -15);
-  matrix = matrixMultiply(matrix, makeXRotation(Math.PI));
-
+  var positions = new Float32Array(HeadData.positions);
+  var matrix = matrixMultiply(makeYRotation(Math.PI), makeScale(6, 6, 6));
   for (var ii = 0; ii < positions.length; ii += 3) {
     var vector = matrixVectorMultiply([positions[ii + 0], positions[ii + 1], positions[ii + 2], 1], matrix);
     positions[ii + 0] = vector[0];
@@ -497,141 +417,26 @@ function setGeometry(gl) {
   }
 
   gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+  return positions.length / 3;
+}
+
+function rand(v) {
+  return Math.floor(Math.random() * v);
 }
 
 // Fill the buffer with colors for the 'F'.
-function setColors(gl) {
+function setColors(gl, numElements) {
+  var normals = HeadData.normals;
+  var colors = new Uint8Array(normals.length);
+  var offset = 0;
+  for (var ii = 0; ii < colors.length; ii += 3) {
+    for (var jj = 0; jj < 3; ++jj) {
+      colors[offset] = (normals[offset] * 0.5 + 0.5) * 255;
+      ++offset;
+    }
+  }
   gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Uint8Array([
-          // left column front
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-
-          // top rung front
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-
-          // middle rung front
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-
-          // left column back
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-
-          // top rung back
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-
-          // middle rung back
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-        80, 70, 200,
-
-          // top
-        70, 200, 210,
-        70, 200, 210,
-        70, 200, 210,
-        70, 200, 210,
-        70, 200, 210,
-        70, 200, 210,
-
-          // top rung front
-        200, 200, 70,
-        200, 200, 70,
-        200, 200, 70,
-        200, 200, 70,
-        200, 200, 70,
-        200, 200, 70,
-
-          // under top rung
-        210, 100, 70,
-        210, 100, 70,
-        210, 100, 70,
-        210, 100, 70,
-        210, 100, 70,
-        210, 100, 70,
-
-          // between top rung and middle
-        210, 160, 70,
-        210, 160, 70,
-        210, 160, 70,
-        210, 160, 70,
-        210, 160, 70,
-        210, 160, 70,
-
-          // top of middle rung
-        70, 180, 210,
-        70, 180, 210,
-        70, 180, 210,
-        70, 180, 210,
-        70, 180, 210,
-        70, 180, 210,
-
-          // front of middle rung
-        100, 70, 210,
-        100, 70, 210,
-        100, 70, 210,
-        100, 70, 210,
-        100, 70, 210,
-        100, 70, 210,
-
-          // bottom of middle rung.
-        76, 210, 100,
-        76, 210, 100,
-        76, 210, 100,
-        76, 210, 100,
-        76, 210, 100,
-        76, 210, 100,
-
-          // front of bottom
-        140, 210, 80,
-        140, 210, 80,
-        140, 210, 80,
-        140, 210, 80,
-        140, 210, 80,
-        140, 210, 80,
-
-          // bottom
-        90, 130, 110,
-        90, 130, 110,
-        90, 130, 110,
-        90, 130, 110,
-        90, 130, 110,
-        90, 130, 110,
-
-          // left side
-        160, 160, 220,
-        160, 160, 220,
-        160, 160, 220,
-        160, 160, 220,
-        160, 160, 220,
-        160, 160, 220]),
-      gl.STATIC_DRAW);
+      gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
 }
 
 </script>
@@ -672,6 +477,7 @@ Drag slider to move camera.
 <div id="uiContainer">
   <div id="ui">
     <div id="cameraAngle"></div>
+    <div id="cameraHeight"></div>
   </div>
 </div>
 </body>
