@@ -37,6 +37,7 @@ var eyePosition;
 var target;
 var gridScale = 400;
 var et = 1/30;
+var mode;
 
 // globals
 var gl;                   // the gl context.
@@ -78,6 +79,38 @@ var createGrid = function(size, subdivisions) {
 };
 
 function CreateApp() {
+  var getURLOptions = function(s, obj) {
+    var q = s.indexOf("?");
+    var e = s.indexOf("#");
+    if (e < 0) {
+      e = s.length;
+    }
+    var query = s.substring(q + 1, e);
+    var pairs = query.split("&");
+    for (var ii = 0; ii < pairs.length; ++ii) {
+      var keyValue = pairs[ii].split("=");
+      var key = keyValue[0];
+      var value = decodeURIComponent(keyValue[1]);
+      obj[key] = value;
+    }
+  };
+
+  var options = {
+    mode: "0",
+  };
+  getURLOptions(window.location.href, options);
+
+  mode = parseInt(options.mode);
+
+  var addVColors = function(arrays) {
+    var numVerts = arrays.position.numElements;
+    arrays.color = new tdl.primitives.AttribBuffer(3, numVerts);
+    for (var ii = 0; ii < numVerts; ++ii) {
+      arrays.color.push([1,1,1]);
+    }
+  };
+
+
   // Create Geometry.
   var wireCubeArrays = {
     position: new tdl.primitives.AttribBuffer(3,
@@ -164,41 +197,32 @@ function CreateApp() {
   var colorProgram = tdl.programs.loadProgramFromScriptTags(
       'vertexColorVertexShader',
       'vertexColorFragmentShader');
-  var cubeArrays = tdl.primitives.createCube(20.0);
-  delete cubeArrays.normal;
-  delete cubeArrays.texCoord;
-  var faceColors = [
-    [ 1, 0, 0, 1, ],
-    [ 0, 1, 0, 1, ],
-    [ 1, 1, 0, 1, ],
-    [ 0, 0, 1, 1, ],
-    [ 1, 0, 1, 1, ],
-    [ 0, 1, 1, 1, ],
-  ];
-  var colorVerts = new tdl.primitives.AttribBuffer(4, 6 * 4);
-  for (var f = 0; f < 6; ++f) {
-    for (var v = 0; v < 4; ++v) {
-      colorVerts.push(faceColors[f]);
-    }
-  }
-  cubeArrays.a_color = colorVerts;
-  var cubeModel = new tdl.models.Model(colorProgram, cubeArrays);
-
   var gridArrays = createGrid(13, 21);
   var gridModel = new tdl.models.Model(vertexColorProgram, gridArrays, undefined, gl.LINES);
 
+  var axisProgram = tdl.programs.loadProgramFromScriptTags(
+      'vertexColorFakeLightVertexShader',
+      'vertexColorFakeLightFragmentShader');
+
+  var cubeArrays = tdl.primitives.createCube(40.0);
+  tdl.primitives.reorient(cubeArrays, math.matrix4.translation([0, 0, 20]));
+  var coneArrays = tdl.primitives.createTruncatedCone(30, 10, 30, 24, 2, false, false);
+  tdl.primitives.reorient(
+    coneArrays,
+    math.matrix4.mul(math.matrix4.rotationX(Math.PI/2),
+                     math.matrix4.translation([0, 0, -15])));
+  var cameraArrays = tdl.primitives.concat([cubeArrays, coneArrays]);
+  addVColors(cameraArrays);
+  var cameraModel = new tdl.models.Model(axisProgram, cameraArrays);
+
   var stemArrays = tdl.primitives.createCylinder(5, 100, 24, 1);
   tdl.primitives.reorient(stemArrays, math.matrix4.translation([0, 50, 0]));
-  var tipArrays = tdl.primitives.createTruncatedCone(15, 0, 20, 24, 2);
+  var tipArrays = tdl.primitives.createTruncatedCone(10, 0, 20, 24, 2);
   tdl.primitives.reorient(tipArrays, math.matrix4.translation([0, 100, 0]));
   var axisArrays = tdl.primitives.concat([stemArrays, tipArrays]);
-  var numVerts = axisArrays.position.numElements;
-  axisArrays.color = new tdl.primitives.AttribBuffer(3, numVerts);
-  for (var ii = 0; ii < numVerts; ++ii) {
-    axisArrays.color.push([1,1,1]);
-  }
+  addVColors(axisArrays);
   //tdl.primitives.reorient(axisArrays, math.matrix4.rotationX(Math.PI));
-  var axisModel = new tdl.models.Model(vertexColorProgram, axisArrays);
+  var axisModel = new tdl.models.Model(axisProgram, axisArrays);
 
   var fArrays = {
     position: new tdl.primitives.AttribBuffer(
@@ -477,14 +501,15 @@ function CreateApp() {
   var exampleInverseProjection = new Float32Array(16);
   var view = new Float32Array(16);
   var world = new Float32Array(16);
+  var worldInverseTranspose = new Float32Array(16);
   var scaleMat = new Float32Array(16);
   var viewProjection = new Float32Array(16);
   var worldViewProjection = new Float32Array(16);
   var exampleWorldViewProjection = new Float32Array(16);
-  fPosition = new Float32Array([0, 0, 0]);
-  eyePosition = new Float32Array([610, 570, 550]);
-  target = new Float32Array([100, 0, 300]);
-  cameraPosition = new Float32Array([350, 250, 500]);
+  fPosition = new Float32Array([-50, 50, -150]);
+  eyePosition = new Float32Array([250, 500, 200]);
+  target = new Float32Array([0, 100, 0]);
+  cameraPosition = new Float32Array([50, 200, 100]);
   var up = new Float32Array([0,1,0]);
   var v3t0 = new Float32Array(3);
   var v3t1 = new Float32Array(3);
@@ -497,13 +522,15 @@ function CreateApp() {
   var zeroMat = new Float32Array(16);
   var zero4 = new Float32Array(4);
   var one4 = new Float32Array([1,1,1,1]);
-  var red = new Float32Array([1,0,0,1]);
   var black = new Float32Array([0,0,0,1]);
+  var red = new Float32Array([1,0,0,1]);
+  var green = new Float32Array([0,1,0,1]);
   var blue = new Float32Array([0,0,1,1]);
+  var ltRed = new Float32Array([1,0.5,0.5,1]);
+  var ltGreen = new Float32Array([0.5,1,0.5,1]);
+  var ltBlue = new Float32Array([0.5,0.5,1,1]);
   var white = new Float32Array([1,1,1,1]);
-
-  var targetToEye = new Float32Array(3);
-  fast.subVector(targetToEye, eyePosition, target);
+  var flashColor = new Float32Array([1,0,0,0.75]);
 
   // uniforms.
   var sharedUniforms = {
@@ -521,11 +548,6 @@ function CreateApp() {
     u_exampleWorldViewProjection: zeroMat,
   };
 
-  var cubeUniforms = {
-    u_color: new Float32Array([1,1,1,1]),
-    u_worldViewProjection: worldViewProjection,
-  };
-
   var gridUniforms = {
     u_color: new Float32Array([1,1,1,1]),
     u_worldViewProjection: worldViewProjection,
@@ -536,24 +558,34 @@ function CreateApp() {
     u_worldViewProjection: worldViewProjection,
   };
 
+  var cameraUniforms = {
+    u_color: new Float32Array([0.2,0.2,1,1]),
+    u_worldViewProjection: worldViewProjection,
+    u_worldInverseTranspose: worldInverseTranspose,
+  };
+
   var zAxisUniforms = {
     u_color: new Float32Array([0.5,0.5,1,1]),
     u_worldViewProjection: worldViewProjection,
+    u_worldInverseTranspose: worldInverseTranspose,
   };
 
   var yAxisUniforms = {
     u_color: new Float32Array([0.5,1,0.5,1]),
     u_worldViewProjection: worldViewProjection,
+    u_worldInverseTranspose: worldInverseTranspose,
   };
 
   var xAxisUniforms = {
     u_color: new Float32Array([1,0.5,0.5,1]),
     u_worldViewProjection: worldViewProjection,
+    u_worldInverseTranspose: worldInverseTranspose,
   };
 
   var upAxisUniforms = {
     u_color: new Float32Array([0.5,0.5,0.5,1]),
     u_worldViewProjection: worldViewProjection,
+    u_worldInverseTranspose: worldInverseTranspose,
   };
 
   var clock = 0;
@@ -588,6 +620,10 @@ function CreateApp() {
   function drawModel(model, uniforms, world) {
     var m4 = fast.matrix4;
     m4.mul(worldViewProjection, world, viewProjection);
+    if (uniforms.u_worldInverseTranspose) {
+      m4.inverse(uniforms.u_worldInverseTranspose, world);
+      m4.transpose(uniforms.u_worldInverseTranspose, uniforms.u_worldInverseTranspose);
+    }
     model.drawPrep(sharedUniforms);
     model.draw(uniforms);
   }
@@ -606,14 +642,19 @@ function CreateApp() {
     var aspect = canvas.clientWidth / canvas.clientHeight;
     m4.perspective(
         projection,
-        math.degToRad(60),
+        math.degToRad(40),
         aspect,
         1,
         5000);
 
+    var dist = math.distance(target, eyePosition);
+    var a = clock / 8;
+    v3t0[0] = Math.cos(a) * dist + target[0];
+    v3t0[1] = eyePosition[1];
+    v3t0[2] = Math.sin(a) * dist + target[2];
     m4.lookAt(
         view,
-        eyePosition,
+        v3t0,
         target,
         up);
     m4.mul(viewProjection, view, projection);
@@ -629,16 +670,30 @@ function CreateApp() {
         cameraPosition,
         fPosition,
         up);
-    drawModel(cubeModel, cubeUniforms, m4t0);
-    drawModel(axisModel, yAxisUniforms, m4t0);
+    var flash = Math.floor(clock * 2) % 2;
+    drawModel(cameraModel, cameraUniforms, m4t0);
+    if (mode == 2) {
+      yAxisUniforms.u_color = flash ? ltGreen : flashColor;
+      drawModel(axisModel, yAxisUniforms, m4t0);
+    }
     m4.rotationZ(m4t1, Math.PI / 2);
     m4.mul(world, m4t1, m4t0);
-    drawModel(axisModel, xAxisUniforms, world);
+    if (mode == 1) {
+      xAxisUniforms.u_color = flash ? ltRed : flashColor;
+    }
+    if (mode > 0) {
+      drawModel(axisModel, xAxisUniforms, world);
+    }
     m4.rotationX(m4t1, Math.PI / 2);
     m4.mul(world, m4t1, m4t0);
+    if (mode == 0) {
+      zAxisUniforms.u_color = flash ? ltBlue : flashColor;
+    }
     drawModel(axisModel, zAxisUniforms, world);
-    m4.translation(world, cameraPosition);
-    drawModel(axisModel, upAxisUniforms, world);
+    if (mode == 1) {
+      m4.translation(world, cameraPosition);
+      drawModel(axisModel, upAxisUniforms, world);
+    }
   }
 
   return {
@@ -710,6 +765,33 @@ uniform vec4 u_color;
 varying vec4 v_color;
 void main() {
   gl_FragColor = u_color * v_color;
+}
+</script>
+<script id="vertexColorFakeLightVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 color;
+attribute vec3 normal;
+uniform mat4 u_worldViewProjection;
+uniform mat4 u_worldInverseTranspose;
+varying vec4 v_color;
+varying vec3 v_normal;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_color = color;
+  v_normal = (u_worldInverseTranspose * vec4(normal, 0)).xyz;
+}
+
+</script>
+<script id="vertexColorFakeLightFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+uniform vec4 u_color;
+varying vec4 v_color;
+varying vec3 v_normal;
+void main() {
+  vec3 normal = normalize(v_normal);
+  vec3 lightDir = normalize(vec3(0.5, 0.7, 1));
+  float d = dot(normal, lightDir) * 0.5 + 0.5;
+  gl_FragColor = u_color * v_color * vec4(d, d, d, 1);
 }
 </script>
 <script id="baseVertexShader" type="text/something-not-javascript">

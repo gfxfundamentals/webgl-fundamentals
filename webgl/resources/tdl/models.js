@@ -163,7 +163,7 @@ tdl.models.Model.prototype.drawPrep = function() {
  */
 tdl.models.Model.prototype.draw = function() {
   var buffers = this.buffers;
-  var totalComponents = buffers.indices.totalComponents();
+  var totalComponents = buffers.indices ? buffers.indices.totalComponents() : buffers.position.numElements();
   var startOffset = 0;
   for (var ii = 0; ii < arguments.length; ++ii) {
     var arg = arguments[ii];
