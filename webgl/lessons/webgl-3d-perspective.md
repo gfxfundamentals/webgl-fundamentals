@@ -361,7 +361,7 @@ And here it is.
 <a class="webgl_center" href="../webgl-3d-perspective-matrix.html" target="_blank">click here to open in a separate window</a>
 
 We're back to just a matrix multiply and we're getting both a field of view and we're able to choose our z space.
-We're not done but this article is getting too long. Next up, <a href="webgl-3d-cameras.html">cameras</a>.
+We're not done but this article is getting too long. Next up, <a href="webgl-3d-camera.html">cameras</a>.
 
 <div class="webgl_bottombar">
 <h3>Why did we move the F so far in Z (-360)?</h3>
