@@ -210,7 +210,7 @@ We could have done this
 
 <pre class="prettyprint">
   for (var ii = 0; ii < 2; ++ii) {
-    gl.activeTexture(gl.TEXTURE0 ++ii);
+    gl.activeTexture(gl.TEXTURE0 + ii);
     gl.bindTexture(gl.TEXTURE_2D, textures[ii]);
   }
 </pre>
