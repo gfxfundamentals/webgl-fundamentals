@@ -249,6 +249,39 @@ void main() {
 
 <p><a class="webgl_center" href="../webgl-2d-image-3x3-convolution.html" target="_blank">click here to open in a separate window</a></p>
 <p>I hope this article has convinced you image processing in WebGL is pretty simple. Next up I'll go over  <a href="webgl-image-processing-continued.html">how to apply more than one effect to the image</a>.</p>
+<div class="webgl_bottombar">'u_image' is never set. How does that work?
+
+Uniforms default to 0 so u_image defaults to using texture unit 0. Texture unit 0 is also the default active texture so calling bindTexture will bind the texture to texture unit 0
+
+WebGL has an array of texture units. Which texture unit each sampler uniform references is set by looking up the location of that sampler uniform and then setting the index of the texture unit you want it to reference.
+
+For example:
+<pre class="prettyprint">
+var textureUnitIndex = 6; // use texture unit 6.
+var u_imageLoc = gl.getUniformLocation(
+    program, "u_image");
+gl.uniform1i(u_imageLoc, textureUnitIndex);
+</pre>
+
+To set textures on different units you call gl.activeTexture and then bind the texture you want on that unit. Example
+
+<pre class="prettyprint">
+// Bind someTexture to texture unit 6.
+gl.activeTexture(gl.TEXTURE6);
+gl.bindTexture(gl.TEXTURE_2D, someTexture);
+</pre>
+
+This works too
+
+<pre class="prettyprint">
+var textureUnitIndex = 6; // use texture unit 6.
+// Bind someTexture to texture unit 6.
+gl.activeTexture(gl.TEXTURE0 + textureUnitIndex);
+gl.bindTexture(gl.TEXTURE_2D, someTexture);
+</pre>
+
+</div>
+
 <div class="webgl_bottombar">
 <h3>What's with the a_, u_, and v_ prefixes in from of variables in GLSL?</h3>
 <p>
