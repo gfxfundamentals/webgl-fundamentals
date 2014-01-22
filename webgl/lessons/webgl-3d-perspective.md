@@ -54,7 +54,7 @@ get for a given distance.
 Let's try it. First let's change the vertex shader to divide by Z after we've
 multiplied it by our "fudgeFactor".
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 ...
 uniform float u_fudgeFactor;
@@ -76,7 +76,7 @@ Note, because Z in clipspace goes from -1 to +1 I added 1 to get `zToDivideBy` t
 
 We also need to update the code to let us set the fudgeFactor.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var fudgeLocation = gl.getUniformLocation(program, "u_fudgeFactor");
 
@@ -109,7 +109,7 @@ shader and divides it by w automatically.
 We can prove this very easily by changing the shader and instead of doing the
 division ourselves, put `zToDivideBy` in `gl_Position.w`.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 ...
 uniform float u_fudgeFactor;
@@ -229,7 +229,7 @@ So, let's modify the program again to just use matrices.
 
 First let's put the vertex shader back. It's simple again
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 uniform mat4 u_matrix;
 
@@ -243,7 +243,7 @@ void main() {
 
 Next let's make a function to make our Z -&gt; W matrix.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makeZToWMatrix(fudgeFactor) {
   return [
     1, 0, 0, 0,
@@ -256,7 +256,7 @@ function makeZToWMatrix(fudgeFactor) {
 
 and we'll change the code to use it.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     ...
     // Compute the matrices
     var zToWMatrix =
@@ -300,7 +300,7 @@ we'll decide on a `fieldOfView` and compute the right values to make that happen
 
 Here's a function to build the matrix.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makePerspective(fieldOfViewInRadians, aspect, near, far) {
   var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
   var rangeInv = 1.0 / (near - far);
@@ -343,7 +343,7 @@ We could do that by moving our F. We were drawing at (45, 150, 0). Let's move it
 Now, to use it we just need to replace our old call to make2DProjection with a call to
 makePerspective
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     var aspect = canvas.width / canvas.height;
     var projectionMatrix =
         makePerspective(fieldOfViewRadians, aspect, 1, 2000);

@@ -18,7 +18,7 @@ We're going to take that X and Y value from any point on the unit circle and we'
 
 Here's are the updates to our shader.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -38,7 +38,7 @@ void main() {
 
 And we update the JavaScript so that we can pass those 2 values in. 
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var rotationLocation = gl.getUniformLocation(program, "u_rotation");
   ...
@@ -67,7 +67,7 @@ And here's the result. Drag the handle on the circle to rotate or the sliders to
 
 Why does it work? Well, look at the math. 
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </pre>
@@ -102,7 +102,7 @@ You can see that as we rotate that point clockwise to the right the X value gets
 
 There's another name for the points on a unit circle. They're call the sine and cosine. So for any given angle we can just look up the sine and cosine like this.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function printSineAndCosineForAnAngle(angleInDegrees) {
   var angleInRadians = angleInDegrees * Math.PI / 180;
   var s = Math.sin(angleInRadians);
@@ -115,7 +115,7 @@ If you copy and paste the code into your JavaScript console and type <code>print
 
 If you put it all together you can rotate your geometry to any angle you desire. Just set the rotation to the sine and cosine of the angle you want to rotate to.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var angleInRadians = angleInDegrees * Math.PI / 180;
   rotation[0] = Math.sin(angleInRadians);

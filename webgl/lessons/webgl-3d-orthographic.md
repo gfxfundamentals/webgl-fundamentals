@@ -17,7 +17,7 @@ Let's take our last example and change it to 3D. We'll use an F again but this t
 
 The first thing we need to do is change the vertex shader to handle 3D. Here's the old shader.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -32,7 +32,7 @@ void main() {
 
 And here's the new one
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec4 a_position;
 
@@ -49,7 +49,7 @@ It got even simpler!
 
 Then we need to provide 3D data.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
 
   gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
@@ -92,7 +92,7 @@ Next we need to change all the matrix functions from 2D to 3D
 
 Here's the 2D (before) versions of makeTranslation, makeRotation and makeScale
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty) {
   return [
     1, 0, 0,
@@ -122,7 +122,7 @@ function makeScale(sx, sy) {
 
 And here's the updated 3D versions.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty, tz) {
   return [
      1,  0,  0,  0,
@@ -210,7 +210,7 @@ which gives you these rotations.
 
 We also need to update the projection function. Here's the old one
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function make2DProjection(width, height) {
   // Note: This matrix flips the Y axis so 0 is at the top.
   return [
@@ -223,7 +223,7 @@ function make2DProjection(width, height) {
 
 which converted from pixels to clip space. For our first attempt at expanding it to 3D let's try
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function make2DProjection(width, height, depth) {
   // Note: This matrix flips the Y axis so 0 is at the top.
   return [
@@ -243,7 +243,7 @@ for depth it will be -depth / 2 to +depth / 2.
 
 Finally we need to to update the code that computes the matrix.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Compute the matrices
   var projectionMatrix =
       make2DProjection(canvas.width, canvas.height, canvas.width);
@@ -279,7 +279,7 @@ vertices.  If you want to see all of them view source on the sample.
 
 We have to draw more vertices so
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     // Draw the geometry.
     gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
 </pre>
@@ -296,7 +296,7 @@ shader to the fragment shader.
 
 Here's the new vertex shader
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec4 a_position;
 attribute vec4 a_color;
@@ -317,7 +317,7 @@ void main() {
 
 And we need to use that color in the fragment shader
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="3d-vertex-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
@@ -333,7 +333,7 @@ void main() {
 We need to lookup the location to supply the colors, then setup another
 buffer and attribute to give it the colors.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var colorLocation = gl.getAttribLocation(program, "a_color");
 
@@ -392,7 +392,7 @@ back facing triangle has its vertices go in a counter clockwise direction
 WebGL has the ability to draw only forward facing or back facing
 triangles.  We can turn that feature on with
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   gl.enable(gl.CULL_FACE);
 </pre>
 
@@ -426,7 +426,7 @@ at the other side.  Fortunately it's easy to fix.  We just look at which
 ones are backward and exchange 2 of their vertices.  For example if one
 backward triangle is
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
            1,   2,   3,
           40,  50,  60,
          700, 800, 900,
@@ -434,7 +434,7 @@ backward triangle is
 
 we just flip the last 2 vertices to make it forward.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
            1,   2,   3,
          700, 800, 900,
           40,  50,  60,
@@ -468,13 +468,13 @@ drawn.
 
 We can turn on this feature nearly as simply as we turned on culling with
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   gl.enable(gl.DEPTH_TEST);
 </pre>
 
 We also need to clear the depth buffer back to 1.0 before we start drawing.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Draw the scene.
   function drawScene() {
     // Clear the canvas AND the depth buffer.
@@ -496,12 +496,12 @@ In the next post I'll go over <a href="webgl-3d-perspective.html">how to make it
 <p>
 For those of you who are detail oriented you might have noticed we defined our 2 attributes as
 </p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 attribute vec4 a_position;
 attribute vec4 a_color;
 </pre>
 <p>both of which are 'vec4' but when we tell WebGL how to take data out of our buffers we used</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
   gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
 </pre>

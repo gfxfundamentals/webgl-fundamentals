@@ -6,7 +6,7 @@ Scaling is just as <a href="webgl-2d-translation.html">easy as translation</a>.
 <!--more-->
 We multiply the position by our desired scale. Here's are the changes from our <a href="webgl-2d-rotation.html">previous sample</a>.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -30,7 +30,7 @@ void main() {
 
 and we add the JavaScript needed to set the scale when we draw.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var scaleLocation = gl.getUniformLocation(program, "u_scale");
   ...

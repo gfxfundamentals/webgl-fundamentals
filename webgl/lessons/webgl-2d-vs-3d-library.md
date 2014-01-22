@@ -32,7 +32,7 @@ with lights.
 
 Here's the code in three.js to display this
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Setup WebGL.
   var c = document.getElementById("c");
   renderer = new THREE.WebGLRenderer();
@@ -81,7 +81,7 @@ and here it is displayed.
 
 Here's similar code in OpenGL (not ES) to display a cube with 2 lights.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Setup
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);

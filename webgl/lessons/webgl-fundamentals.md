@@ -6,7 +6,7 @@ WebGL only cares about 2 things. Clipspace coordinates in 2D and colors. Your jo
 
 Clipspace coordinates always go from -1 to +1 no matter what size your canvas is. Here is a simple WebGL example that shows WebGL in its simplest form.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 // Get A WebGL context
 var canvas = document.getElementById("canvas");
 var gl = canvas.getContext("experimental-webgl");
@@ -43,7 +43,7 @@ gl.drawArrays(gl.TRIANGLES, 0, 6);
 
 Here's the 2 shaders
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -70,7 +70,7 @@ Again, clipspace coordinates always go from -1 to +1 regardless of the size of t
 
 For 2D stuff you would probably rather work in pixels than clipspace so let's change the shader so we can supply rectangles in pixels and have it convert to clipspace for us. Here's the new vertex shader
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -93,7 +93,7 @@ void main() {
 
 Now we can change our data from clipspace to pixels
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 // set the resolution
 var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
 gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
@@ -115,7 +115,7 @@ And here it is
 
 You might notice the rectangle is near the bottom of that area. WebGL considers the bottom left corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs we just flip the y coordinate.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
    gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </pre>
 
@@ -128,7 +128,7 @@ Let's make the code that defines a rectangle into a function so we can call it f
 
 First we make the fragment shader take a color uniform input.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
@@ -142,7 +142,7 @@ void main() {
 
 And here's the new code that draws 50 rectangles in random places and random colors.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   var colorLocation = gl.getUniformLocation(program, "u_color");
   ...
   // Create a buffer

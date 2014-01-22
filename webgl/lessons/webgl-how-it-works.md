@@ -9,7 +9,7 @@ first part.
 
 When you call
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     gl.drawArrays(gl.TRIANGLE, 0, 9);
 </pre>
 
@@ -41,7 +41,7 @@ We'll draw with a simple triangle.  Continuing from our <a
 href="webgl-2d-matrices.html">previous example</a> let's change our F to a
 triangle.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 // Fill the buffer with the values that define a rectangle.
 function setGeometry(gl) {
   gl.bufferData(
@@ -56,7 +56,7 @@ function setGeometry(gl) {
 
 And we have to only draw 3 vertices.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Draw the scene.
   function drawScene() {
     ...
@@ -68,7 +68,7 @@ And we have to only draw 3 vertices.
 Then in our vertex shader we declare a *varying* to pass data to the
 fragment shader.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 varying vec4 v_color;
 ...
 void main() {
@@ -84,7 +84,7 @@ void main() {
 
 And then we declare the same *varying* in the fragment shader.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 precision mediump float;
 
 varying vec4 v_color;
@@ -186,7 +186,7 @@ consists of 2 triangles, in 2 colors.  To do this we'll add another
 attribute to the vertex shader so we can pass it more data and we'll pass
 that data directly to the fragment shader.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 attribute vec2 a_position;
 attribute vec4 a_color;
 ...
@@ -201,7 +201,7 @@ void main() {
 
 We now have to supply colors for WebGL to use.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // look up where the vertex data needs to go.
   var positionLocation = gl.getAttribLocation(program, "a_position");
   var colorLocation = gl.getAttribLocation(program, "a_color");
@@ -252,7 +252,7 @@ triangle.  It's just that we used the same color on each of the 3 vertices
 of each triangle.  If we make each color different we'll see the
 interpolation.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 // Fill the buffer with colors for the 2 triangles
 // that make the rectangle.
 function setColors(gl) {
@@ -296,7 +296,7 @@ of it and provide it to the vertex shader's attributes.
 To do this, first we ask WebGL what locations it assigned to the
 attributes.  For example in the code above we have
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // look up where the vertex data needs to go.
   var positionLocation = gl.getAttribLocation(program, "a_position");
   var colorLocation = gl.getAttribLocation(program, "a_color");
@@ -304,13 +304,13 @@ attributes.  For example in the code above we have
 
 Once we know the location of the attribute we then issue 2 commands.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     gl.enableVertexAttribArray(location);
 </pre>
 
 This command tells WebGL we want to supply data from a buffer.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     gl.vertexAttribPointer(
         location,
         numComponents,
@@ -346,11 +346,11 @@ If you set the normalize flag to true then the values of a BYTE (-128 to 127) re
 <p>The most common use for normalized data is for colors. Most of the time colors only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha would use 16 bytes per vertex per color. If you have complicated geometry that can add up to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs where 0 represnets 0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color per vertex, a 75% savings.
 </p>
 <p>Let's change our code to do this. When we tell WebGL how to extract our colors we'd use</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 </pre>
 <p>And when we fill out our buffer with colors we'd use</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 // Fill the buffer with colors for the 2 triangles
 // that make the rectangle.
 function setColors(gl) {

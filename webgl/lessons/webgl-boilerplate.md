@@ -15,7 +15,7 @@ program.
 
 Here's the boilerplate code for compiling a shader.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 /**
  * Creates and compiles a shader.
  *
@@ -48,7 +48,7 @@ function compileShader(gl, shaderSource, shaderType) {
 
 And the boilerplate code for linking 2 shaders into a program
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 /**
  * Creates a program from 2 shaders.
  *
@@ -86,7 +86,7 @@ lines of code are the pretty much the same in nearly every WebGL program.
 I like store my shaders in non javascript &lt;script&gt; tags.  It makes
 them easy to edit so I use code like this.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 /**
  * Creates a shader from the content of a script tag.
  *
@@ -125,14 +125,14 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
 
 Now to compile a shader I can just do
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 var shader = compileShaderFromScriptTag(gl, "someScriptTagId");
 </pre>
 
 I'll usually go one step further and make a function to compile to shaders
 from script tags, attach them to a program and link them.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 /**
  * Creates a program from 2 script tags.
  *
@@ -157,7 +157,7 @@ initialize WebGL.  At the time of this writing WebGL requires the asking
 for an "experimental-webgl" context where as in the near future you can
 just ask for "webgl".  I could write this in every WebGL program
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
    ...
    var gl = canvas.getContext("experimental-webgl");
    if (!gl) {

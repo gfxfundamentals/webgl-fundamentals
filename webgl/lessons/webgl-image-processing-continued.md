@@ -17,7 +17,7 @@ To do this we need to create framebuffers. In WebGL and OpenGL, a Framebuffer is
 
 First let's turn <a href="webgl-image-processing.html">the old texture creation code</a> into a function
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -39,7 +39,7 @@ First let's turn <a href="webgl-image-processing.html">the old texture creation 
 
 And now let's use that function to make 2 more textures and attach them to 2 framebuffers.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // create 2 textures and attach them to framebuffers.
   var textures = [];
   var framebuffers = [];
@@ -65,7 +65,7 @@ And now let's use that function to make 2 more textures and attach them to 2 fra
 
 Now let's make a set of kernels and then a list of them to apply.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Define several convolution kernels
   var kernels = {
     normal: [
@@ -101,7 +101,7 @@ Now let's make a set of kernels and then a list of them to apply.
 
 And finally let's apply each one, ping ponging which texture we are rendering too
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // start with the original image
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
@@ -157,7 +157,7 @@ WebGL has to convert from <a href="webgl-fundamentals.html">clipspace</a> back i
 
 Finally in the <a href="webgl-fundamentals.html">original example</a> we flipped the Y coordinate when rendering because WebGL displays the canvas with 0,0 being the bottom left corner instead of the more traditional for 2D top left. That's not needed when rendering to a framebuffer. Because the framebuffer is never displayed, which part is top and bottom is irrelevant. All that matters is that pixel 0,0 in the framebuffer corresponds to 0,0 in our calculations. To deal with this I made it possible to set whether to flip or not by adding one more input into the shader.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 ...
 uniform float u_flipY;
@@ -173,7 +173,7 @@ void main() {
 
 And then we can set it when we render with
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var flipYLocation = gl.getUniformLocation(program, "u_flipY");
   ...

@@ -6,7 +6,7 @@ This article is a continuation of a series starting with <a href="webgl-fundamen
 
 Translation is some fancy math name that basically means "to move" something. I suppose moving a sentence from English to Japanese fits as well but in this case we're talking about moving geometry. Using the sample code we ended up with in <a href="webgl-fundamentals.html">the first post</a> you could easily translate our rectangle just by changing the values passed to setRectangle right? Here's a sample based on our <a href="webgl-fundamentals.html">previous sample</a>.
 <!--more-->
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // First lets make some variables 
   // to hold the translation of the rectangle
   var translation = [0, 0];
@@ -41,7 +41,7 @@ Let's say we wanted to draw an 'F' that consists of 6 triangles like this.
 
 Well, following are current code we'd have to change setRectangle to something more like this.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 // Fill the buffer with the values that define a letter 'F'.
 function setGeometry(gl, x, y) {
   var width = 100;
@@ -83,7 +83,7 @@ There's a simpler way. Just upload the geometry and do the translation in the sh
 
 Here's the new shader
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -101,7 +101,7 @@ void main() {
 
 and we'll restructure the code a little. For one we only need to set the geometry once. 
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 // Fill the buffer with the values that define a letter 'F'.
 function setGeometry(gl) {
   gl.bufferData(
@@ -136,7 +136,7 @@ function setGeometry(gl) {
 
 Then we just need to update <code>u_translation</code> before we draw with the translation that we desire.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var translationLocation = gl.getUniformLocation(
              program, "u_translation");

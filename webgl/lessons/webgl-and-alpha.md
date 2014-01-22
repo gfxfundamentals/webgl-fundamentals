@@ -10,7 +10,7 @@ WebGL has several ways to make this more like OpenGL.
 
 <h3>#1) Tell WebGL you want it composited with non-premultiplied alpha</h3>
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 gl = canvas.getContext(
         "experimental-webgl", 
         {  
@@ -25,7 +25,7 @@ Of course the result will still be composited over page with whatever background
 
 I really good way to find if you have any alpha problems is to set the canvas's background to a bright color like red. You'll immediately see what is happening.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;canvas style="background: red;"&gt; &lt;/canvas&gt;
 </pre>
 
@@ -33,7 +33,7 @@ You could also set it to black which will hide any alpha issues you have.
 
 <h3>#2) Tell WebGL you don't want alpha in the backbuffer</h3>
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 gl = canvas.getContext("experimental-webgl", { alpha: false }};
 </pre>
 
@@ -41,7 +41,7 @@ This will make it act more like OpenGL since the backbuffer will only have RGB. 
 
 <h3>#3) Clear alpha at the end of your rendering</h3>
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ..
   renderScene();
   ..
@@ -55,7 +55,7 @@ Clearing is generally very fast as there is a special case for it in most hardwa
 
 <h3>#4) Clear the alpha once then don't render to it anymore</h3>
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // At init time. Clear the back buffer.
   gl.clearColor(1,1,1,1);
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -70,7 +70,7 @@ Of course if you are rendering to your own framebuffers you may need to turn ren
 
 Also, if you are loading PNG files with alpha into textures, the default is that their alpha is pre-multiplied which is generally NOT the way most games do things. If you want to prevent that behavior you need to tell WebGL with
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
 </pre>
 
@@ -78,7 +78,7 @@ Also, if you are loading PNG files with alpha into textures, the default is that
 
 Almost all OpenGL apps I've writing or worked on use
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
    gl.blendFunc(gl.SRC_ALPHA, gl_ONE_MINUS_SRC_ALPHA);
 </pre>
 
@@ -86,7 +86,7 @@ That works for non pre-multiplied alpha textures.
 
 If you actually want to work with pre-multiplied alpha textures then you probably want
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
    gl.blendFunc(gl.ONE, gl_ONE_MINUS_SRC_ALPHA);
 </pre>
 

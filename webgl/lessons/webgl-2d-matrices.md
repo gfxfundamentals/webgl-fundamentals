@@ -130,7 +130,7 @@ This is where the magic comes in. It turns out we can multiply matrices together
 
 To make things clearer let's make functions to build matrices for translation, rotation and scale.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty) {
   return [
     1, 0, 0,
@@ -160,7 +160,7 @@ function makeScale(sx, sy) {
 
 Now let's change our shader. The old shader looked like this
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -185,7 +185,7 @@ void main() {
 
 Our new shader will be much simpler.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -200,7 +200,7 @@ void main() {
 
 And here's how we use it
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Draw the scene.
   function drawScene() {
     // Clear the canvas.
@@ -230,7 +230,7 @@ Here's a sample using our new code. The sliders are the same, translation, rotat
 
 Still, you might be asking, so what? That doesn't seem like much of a benefit . But, now if we want to change the order we don't have to write a new shader. We can just change the math.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     ...
     // Multiply the matrices.
     var matrix = matrixMultiply(translationMatrix, rotationMatrix);
@@ -245,7 +245,7 @@ Here's that version.
 
 Being able to apply matrices like this is especially important for hierarchical animation like arms on a body, moons on a planet around a sun, or branches on a tree. For a simple example of hierarchical animation lets draw draw our 'F' 5 times but each time lets start with the matrix from the previous 'F'.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Draw the scene.
   function drawScene() {
     // Clear the canvas.
@@ -284,7 +284,7 @@ so too
 
 Here's the code to make an identity matrix.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makeIdentity() {
   return [
     1, 0, 0,
@@ -303,7 +303,7 @@ One more example, In every sample so far our 'F' rotates around its top left cor
 
 But now, because we can do matrix math and we can choose the order that transforms are applied we can move the origin before the rest of the transforms are applied.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     // make a matrix that will move the origin of the 'F' to its center.
     var moveOriginMatrix = makeTranslation(-50, -75);
     ...
@@ -323,7 +323,7 @@ Using that technique you can rotate or scale from any point. Now you know how Ph
 
 Let's go even more crazy. If you go back to the first article on <a href="webgl-fundamentals.html">WebGL fundamentals</a> you might remember we have code in the shader to convert from pixels to clipspace that looks like this.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   // convert the rectangle from pixels to 0.0 to 1.0
   vec2 zeroToOne = position / u_resolution;
@@ -339,7 +339,7 @@ Let's go even more crazy. If you go back to the first article on <a href="webgl-
 
 If you look at each of those steps in turn, the first step, "convert from pixels to 0.0 to 1.0", is really a scale operation. The second is also a scale operation. The next is a translation and the very last scales Y by -1. We can actually do that all in the matrix we pass into the shader. We could make 2 scale matrices, one to scale by 1.0/resolution, another to scale by 2.0, a 3rd to translate by -1.0,-1.0 and a 4th to scale Y by -1 then multiply them all together but instead, because the math is simple, we'll just make a function that makes a 'projection' matrix for a given resolution directly.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function make2DProjection(width, height) {
   // Note: This matrix flips the Y axis so that 0 is at the top.
   return [
@@ -352,7 +352,7 @@ function make2DProjection(width, height) {
 
 Now we can simplify the shader even more. Here's the entire new vertex shader.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -367,7 +367,7 @@ void main() {
 
 And in JavaScript we need to multiply by the projection matrix
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Draw the scene.
   function drawScene() {
     ...

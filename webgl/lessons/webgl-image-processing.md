@@ -10,7 +10,7 @@ Since we are only drawing a single rectangle (well, 2 triangles) we need to tell
 
 Using <a href="webgl-fundamentals.html">the vertex shader from the end of previous post</a> we need to add an attribute to pass in texture coordinates and then pass those on to the fragment shader.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 attribute vec2 a_texCoord;
 ...
 varying vec2 v_texCoord;
@@ -25,7 +25,7 @@ void main() {
 
 Then we supply a fragment shader to look up colors from the texture.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
@@ -44,7 +44,7 @@ void main() {
 
 Finally we need to load an image, create a texture and copy the image into the texture. Because we are in a browser images load asynchronously so we have to re-arrange our code a little to wait for the texture to load. Once it loads we'll draw it.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function main() {
   var image = new Image();
   image.src = "http://someimage/on/our/server";  // MUST BE SAME DOMAIN!!!
@@ -96,7 +96,7 @@ And here's the image rendered in WebGL.
 
 Not too exciting so let's manipulate that image. How about just swapping red and blue?
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
    ...
    gl_FragColor = texture2D(u_image, v_texCoord).bgra;
    ...
@@ -111,7 +111,7 @@ What if we want to do image processing that actually looks at other pixels? Sinc
 
 Here's a fragment shader that averages the left and right pixels of each pixel in the texture.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
@@ -137,7 +137,7 @@ void main() {
 
 We then need to pass in the size of the texture from JavaScript.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var textureSizeLocation = gl.getUniformLocation(program, "u_textureSize");
   ...
@@ -155,7 +155,7 @@ Now that we know how to reference other pixels let's use a convolution kernel to
 
 In our case we're going to do that work in the shader so here's the new fragment shader.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
@@ -203,7 +203,7 @@ void main() {
 
 In JavaScript we need to supply a convolution kernel.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var kernelLocation = gl.getUniformLocation(program, "u_kernel[0]");
   ...
@@ -230,7 +230,7 @@ Uniforms default to 0 so u_image defaults to using texture unit 0. Texture unit 
 WebGL has an array of texture units. Which texture unit each sampler uniform references is set by looking up the location of that sampler uniform and then setting the index of the texture unit you want it to reference.
 
 For example:
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 var textureUnitIndex = 6; // use texture unit 6.
 var u_imageLoc = gl.getUniformLocation(
     program, "u_image");
@@ -239,7 +239,7 @@ gl.uniform1i(u_imageLoc, textureUnitIndex);
 
 To set textures on different units you call gl.activeTexture and then bind the texture you want on that unit. Example
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 // Bind someTexture to texture unit 6.
 gl.activeTexture(gl.TEXTURE6);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
@@ -247,7 +247,7 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 
 This works too
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 var textureUnitIndex = 6; // use texture unit 6.
 // Bind someTexture to texture unit 6.
 gl.activeTexture(gl.TEXTURE0 + textureUnitIndex);

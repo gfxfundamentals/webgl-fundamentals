@@ -52,7 +52,7 @@ Let's make a 3D scene with a circle of 'F's like the diagrams above.
 
 Here's the code.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   var numFs = 5;
   var radius = 200;
 
@@ -84,7 +84,7 @@ Here's the code.
 Just after we compute our projection matrix let's compute a camera that
 goes around the 'F's like in the diagram above.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Compute the camera's matrix
   var cameraMatrix = makeTranslation(0, 0, radius * 1.5);
   cameraMatrix = matrixMultiply(
@@ -96,14 +96,14 @@ is the matrix that moves everything the opposite of the camera effectively
 making everything relative to the camera as though the camera was at the
 origin (0,0,0)
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Make a view matrix from the camera matrix.
   var viewMatrix = makeInverse(cameraMatrix);
 </pre>
 
 Finally we need to apply the view matrix when we compute the matrix for each 'F'
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     // Multiply the matrices.
     var matrix = translationMatrix;
     matrix = matrixMultiply(matrix, viewMatrix);  // <=-- added
@@ -201,7 +201,7 @@ matrix that will orient something that points at the `target` from the
 
 Here's the code to compute the cross product of 2 vectors.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function cross(a, b) {
   return [a[1] * b[2] - a[2] * b[1],
           a[2] * b[0] - a[0] * b[2],
@@ -211,7 +211,7 @@ function cross(a, b) {
 
 Here's the code to subtract two vectors.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function subtractVectors(a, b) {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
@@ -219,7 +219,7 @@ function subtractVectors(a, b) {
 
 Here's the code to normalize a vector (make it into a unit vector).
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function normalize(v) {
   var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   // make sure we don't divide by 0.
@@ -233,7 +233,7 @@ function normalize(v) {
 
 Here's the code to compute a "lookAt" matrix.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makeLookAt(cameraPosition, target, up) {
   var zAxis = normalize(
       subtractVectors(cameraPosition, target));
@@ -254,7 +254,7 @@ function makeLookAt(cameraPosition, target, up) {
 
 And here is how we might use it to make the camera point at a specific 'F' as we move it.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
 
   // Compute the position of the first F

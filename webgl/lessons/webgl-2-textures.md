@@ -21,7 +21,7 @@ First let's change the code that loads an image into a function. It's pretty str
 forward. It creates a new image object, sets the URL to load, and sets a callback to
 be called when the image finishes loading.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function loadImage(url, callback) {
   var image = new Image();
   image.src = url;
@@ -35,7 +35,7 @@ First we set `imagesToLoad` to the number of images we're going to load. Then we
 the callback we pass to `loadImage` decrement `imagesToLoad`. When `imagesToLoad` goes
 to 0 all the images have been loaded and we pass the array of images to a callback.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function loadImages(urls, callback) {
   var images = [];
   var imagesToLoad = urls.length;
@@ -59,7 +59,7 @@ function loadImages(urls, callback) {
 
 Now we call loadImages like this
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function main() {
   loadImages([
     "resources/leaves.jpg",
@@ -70,7 +70,7 @@ function main() {
 
 Next we change the shader to use 2 textures. In this case we'll multiply 1 texture by the other.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
@@ -91,7 +91,7 @@ void main() {
 
 We need to create 2 WebGL texture objects.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // create 2 textures
   var textures = [];
   for (var ii = 0; ii < 2; ++ii) {
@@ -115,7 +115,7 @@ We need to create 2 WebGL texture objects.
 WebGL has something called "texture units". You can think of it as an array of references
 to textures. You tell the shader which texture unit to use for each sampler.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // lookup the sampler locations.
   var u_image0Location = gl.getUniformLocation(program, "u_image0");
   var u_image1Location = gl.getUniformLocation(program, "u_image1");
@@ -129,7 +129,7 @@ to textures. You tell the shader which texture unit to use for each sampler.
 
 Then we have to bind a texture to each of those texture units.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Set each texture unit to use a particular texture.
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
@@ -156,7 +156,7 @@ The TEXTURE_2D target and the TEXTURE_CUBE_MAP target. Every texture function wo
 target on the current active texture unit. If you were to implement
 WebGL in JavaScript it would look something like this
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 var getContext = function() {
   var textureUnits = [];
   var activeTextureUnit = 0;
@@ -190,7 +190,7 @@ var getContext = function() {
 
 The shaders take indices into the texture units. Hopefully that makes these 2 lines clearer.
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   gl.uniform1i(u_image0Location, 0);  // texture unit 0
   gl.uniform1i(u_image1Location, 1);  // texture unit 1
 </pre>
@@ -199,7 +199,7 @@ One thing that to be aware of, when setting the uniforms you use indices for the
 but when calling gl.activeTexture you have to pass in special constants gl.TEXTURE0, gl.TEXTURE1 etc.
 Fortunately the constants are consecutive so instead of this
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
@@ -208,7 +208,7 @@ Fortunately the constants are consecutive so instead of this
 
 We could have done this
 
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   for (var ii = 0; ii < 2; ++ii) {
     gl.activeTexture(gl.TEXTURE0 + ii);
     gl.bindTexture(gl.TEXTURE_2D, textures[ii]);
