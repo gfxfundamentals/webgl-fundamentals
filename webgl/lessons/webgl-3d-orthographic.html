@@ -56,7 +56,7 @@ matrix math. To do 3D is only a small step from there.</p>
 a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.</p>
 <p>Let's take our last example and change it to 3D. We'll use an F again but this time a 3D 'F'.</p>
 <p>The first thing we need to do is change the vertex shader to handle 3D. Here's the old shader.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -70,7 +70,7 @@ void main() {
 </pre>
 
 <p>And here's the new one</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec4 a_position;
 
@@ -85,7 +85,7 @@ void main() {
 
 <p>It got even simpler!</p>
 <p>Then we need to provide 3D data.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
 
   gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
@@ -126,7 +126,7 @@ function setGeometry(gl) {
 
 <p>Next we need to change all the matrix functions from 2D to 3D</p>
 <p>Here's the 2D (before) versions of makeTranslation, makeRotation and makeScale</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty) {
   return [
     1, 0, 0,
@@ -155,7 +155,7 @@ function makeScale(sx, sy) {
 </pre>
 
 <p>And here's the updated 3D versions.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty, tz) {
   return [
      1,  0,  0,  0,
@@ -237,7 +237,7 @@ work them out you'd see them simplify just like before</p>
 <iframe class="external_diagram" src="resources/axis-diagram.html" width="540" height="240"></iframe>
 
 <p>We also need to update the projection function. Here's the old one</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function make2DProjection(width, height) {
   // Note: This matrix flips the Y axis so 0 is at the top.
   return [
@@ -249,7 +249,7 @@ function make2DProjection(width, height) {
 </pre>
 
 <p>which converted from pixels to clip space. For our first attempt at expanding it to 3D let's try</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function make2DProjection(width, height, depth) {
   // Note: This matrix flips the Y axis so 0 is at the top.
   return [
@@ -267,7 +267,7 @@ units as well.  I'll pass in some value similar to <em>width</em> for the depth
 so our space will be 0 to width pixels wide, 0 to height pixels tall, but
 for depth it will be -depth / 2 to +depth / 2.</p>
 <p>Finally we need to to update the code that computes the matrix.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Compute the matrices
   var projectionMatrix =
       make2DProjection(canvas.width, canvas.height, canvas.width);
@@ -300,7 +300,7 @@ require a total of 16 rectangles.  That's quite a few to list out here.
 16 rectangles * 2 triangles per rectangle * 3 vertices per triangle is 96
 vertices.  If you want to see all of them view source on the sample.</p>
 <p>We have to draw more vertices so</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     // Draw the geometry.
     gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
 </pre>
@@ -314,7 +314,7 @@ coloring each rectangle a different color.  To do this we will add another
 attribute to our vertex shader and a varying to pass it from the vertex
 shader to the fragment shader.</p>
 <p>Here's the new vertex shader</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec4 a_position;
 attribute vec4 a_color;
@@ -334,7 +334,7 @@ void main() {
 </pre>
 
 <p>And we need to use that color in the fragment shader</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="3d-vertex-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
@@ -349,7 +349,7 @@ void main() {
 
 <p>We need to lookup the location to supply the colors, then setup another
 buffer and attribute to give it the colors.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var colorLocation = gl.getAttribLocation(program, "a_color");
 
@@ -403,7 +403,7 @@ back facing triangle has its vertices go in a counter clockwise direction</p>
 <p><img src="resources/triangle-winding.svg" class="webgl_center" width="400" /></p>
 <p>WebGL has the ability to draw only forward facing or back facing
 triangles.  We can turn that feature on with</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   gl.enable(gl.CULL_FACE);
 </pre>
 
@@ -433,14 +433,14 @@ facing the wrong way.  Rotate it and you'll see them appear when you look
 at the other side.  Fortunately it's easy to fix.  We just look at which
 ones are backward and exchange 2 of their vertices.  For example if one
 backward triangle is</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
            1,   2,   3,
           40,  50,  60,
          700, 800, 900,
 </pre>
 
 <p>we just flip the last 2 vertices to make it forward.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
            1,   2,   3,
          700, 800, 900,
           40,  50,  60,
@@ -469,12 +469,12 @@ color from your fragment shader AND it draws the depth pixel with the new
 depth value.  This means, pixels that are behind other pixels won't get
 drawn.</p>
 <p>We can turn on this feature nearly as simply as we turned on culling with</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   gl.enable(gl.DEPTH_TEST);
 </pre>
 
 <p>We also need to clear the depth buffer back to 1.0 before we start drawing.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   // Draw the scene.
   function drawScene() {
     // Clear the canvas AND the depth buffer.
@@ -493,12 +493,12 @@ drawn.</p>
 <p>
 For those of you who are detail oriented you might have noticed we defined our 2 attributes as
 </p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 attribute vec4 a_position;
 attribute vec4 a_color;
 </pre>
 <p>both of which are 'vec4' but when we tell WebGL how to take data out of our buffers we used</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
   gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
 </pre>

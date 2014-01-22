@@ -56,7 +56,7 @@ matches what a GPU can do.  Those 2 functions need to be compiled and
 linked.  That process is, 99% of the time, the same in every WebGL
 program.</p>
 <p>Here's the boilerplate code for compiling a shader.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 /**
  * Creates and compiles a shader.
  *
@@ -88,7 +88,7 @@ function compileShader(gl, shaderSource, shaderType) {
 </pre>
 
 <p>And the boilerplate code for linking 2 shaders into a program</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 /**
  * Creates a program from 2 shaders.
  *
@@ -124,7 +124,7 @@ exceptions might not be the best way to handle things.  Still, those few
 lines of code are the pretty much the same in nearly every WebGL program.</p>
 <p>I like store my shaders in non javascript &lt;script&gt; tags.  It makes
 them easy to edit so I use code like this.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 /**
  * Creates a shader from the content of a script tag.
  *
@@ -162,13 +162,13 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
 </pre>
 
 <p>Now to compile a shader I can just do</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 var shader = compileShaderFromScriptTag(gl, "someScriptTagId");
 </pre>
 
 <p>I'll usually go one step further and make a function to compile to shaders
 from script tags, attach them to a program and link them.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 /**
  * Creates a program from 2 script tags.
  *
@@ -191,7 +191,7 @@ Irish's requestAnimationFrame polyfill</a>.  The other is some code to
 initialize WebGL.  At the time of this writing WebGL requires the asking
 for an "experimental-webgl" context where as in the near future you can
 just ask for "webgl".  I could write this in every WebGL program</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
    ...
    var gl = canvas.getContext("experimental-webgl");
    if (!gl) {

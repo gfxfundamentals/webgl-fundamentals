@@ -88,7 +88,7 @@ If we add a fudgeFactor to multiply Z before we divide we can adjust how much sm
 get for a given distance.</p>
 <p>Let's try it. First let's change the vertex shader to divide by Z after we've
 multiplied it by our "fudgeFactor".</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 ...
 uniform float u_fudgeFactor;
@@ -108,7 +108,7 @@ void main() {
 
 <p>Note, because Z in clipspace goes from -1 to +1 I added 1 to get <code>zToDivideBy</code> to go from 0 to +2 * fudgeFactor</p>
 <p>We also need to update the code to let us set the fudgeFactor.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   ...
   var fudgeLocation = gl.getUniformLocation(program, "u_fudgeFactor");
 
@@ -136,7 +136,7 @@ we added our divide by Z code.</p>
 shader and divides it by w automatically.</p>
 <p>We can prove this very easily by changing the shader and instead of doing the
 division ourselves, put <code>zToDivideBy</code> in <code>gl_Position.w</code>.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 ...
 uniform float u_fudgeFactor;
@@ -243,7 +243,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>So, let's modify the program again to just use matrices.</p>
 <p>First let's put the vertex shader back. It's simple again</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 uniform mat4 u_matrix;
 
@@ -256,7 +256,7 @@ void main() {
 </pre>
 
 <p>Next let's make a function to make our Z -&gt; W matrix.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makeZToWMatrix(fudgeFactor) {
   return [
     1, 0, 0, 0,
@@ -268,7 +268,7 @@ function makeZToWMatrix(fudgeFactor) {
 </pre>
 
 <p>and we'll change the code to use it.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     ...
     // Compute the matrices
     var zToWMatrix =
@@ -304,7 +304,7 @@ get remapped to the -1 to +1.</p>
 <p>The cool thing is all of these steps can be done in 1 matrix. Even better, rather than a <code>fudgeFactor</code>
 we'll decide on a <code>fieldOfView</code> and compute the right values to make that happen.</p>
 <p>Here's a function to build the matrix.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 function makePerspective(fieldOfViewInRadians, aspect, near, far) {
   var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
   var rangeInv = 1.0 / (near - far);
@@ -341,7 +341,7 @@ in a different way. To make this work we need to put our objects in front of the
 <p>We could do that by moving our F. We were drawing at (45, 150, 0). Let's move it to (-150, 0, -360)</p>
 <p>Now, to use it we just need to replace our old call to make2DProjection with a call to
 makePerspective</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
     var aspect = canvas.width / canvas.height;
     var projectionMatrix =
         makePerspective(fieldOfViewRadians, aspect, 1, 2000);

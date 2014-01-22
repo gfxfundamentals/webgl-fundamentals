@@ -48,7 +48,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <!--more-->
 WebGL only cares about 2 things. Clipspace coordinates in 2D and colors. Your job as a programmer using WebGL is to provide WebGL with those 2 things. You provide 2 "shaders" to do this. A Vertex shader which provides the clipspace coordinates and a fragment shader that provides the color.</p>
 <p>Clipspace coordinates always go from -1 to +1 no matter what size your canvas is. Here is a simple WebGL example that shows WebGL in its simplest form.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 // Get A WebGL context
 var canvas = document.getElementById("canvas");
 var gl = canvas.getContext("experimental-webgl");
@@ -84,7 +84,7 @@ gl.drawArrays(gl.TRIANGLES, 0, 6);
 </pre>
 
 <p>Here's the 2 shaders</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -107,7 +107,7 @@ void main() {
 <p>Not very exciting :-p</p>
 <p>Again, clipspace coordinates always go from -1 to +1 regardless of the size of the canvas. In the case above you can see we are doing nothing but passing on our position data directly. Since the position data is already in clipspace there is no work to do. <strong>If you want 3D it's up to you to supply shaders that convert from 3D to 2D because WebGL IS A 2D API!!!</strong></p>
 <p>For 2D stuff you would probably rather work in pixels than clipspace so let's change the shader so we can supply rectangles in pixels and have it convert to clipspace for us. Here's the new vertex shader</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -129,7 +129,7 @@ void main() {
 </pre>
 
 <p>Now we can change our data from clipspace to pixels</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 // set the resolution
 var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
 gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
@@ -149,7 +149,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 
 <p><a class="webgl_center" href="../webgl-2d-rectangle.html" target="_blank">click here to open in a separate window</a></p>
 <p>You might notice the rectangle is near the bottom of that area. WebGL considers the bottom left corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs we just flip the y coordinate.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
    gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </pre>
 
@@ -159,7 +159,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 <p><a class="webgl_center" href="../webgl-2d-rectangle-top-left.html" target="_blank">click here to open in a separate window</a></p>
 <p>Let's make the code that defines a rectangle into a function so we can call it for different sized rectangles. While we're at it we'll make the color settable.</p>
 <p>First we make the fragment shader take a color uniform input.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
 &lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
@@ -172,7 +172,7 @@ void main() {
 </pre>
 
 <p>And here's the new code that draws 50 rectangles in random places and random colors.</p>
-<pre class="prettyprint">
+<pre class="prettyprint showlinemods">
   var colorLocation = gl.getUniformLocation(program, "u_color");
   ...
   // Create a buffer

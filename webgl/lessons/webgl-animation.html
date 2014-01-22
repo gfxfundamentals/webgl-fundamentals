@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/webgl-animation.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of Gregg Tavares. nor the names of his
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - Animation</title>
+<link rel="stylesheet" href="resources/base.css" type="text/css" />
+<link rel="stylesheet" href="resources/lesson.css" type="text/css" />
+<script type="text/javascript" src="../resources/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="resources/prettify.js"></script>
+<script type="text/javascript" src="resources/lesson.js"></script>
+</head>
+<body>
+<div id="contentwrap">
+  <div id="content">
+    <h1>WebGL - Animation</h1>
+    <p>This post is a continuation of a series of posts about WebGL.
+The first <a href="webgl-fundamentals.html">started with fundamentals</a>.
+and the previous was about <a href="webgl-3d-camera.html">3D cameras</a>.
+If you haven't read those please view them first.</p>
+<p>How do we animate something in WebGL?</p>
+<p>Actually this isn't specific to WebGL but generally if you want
+to animate something in JavaScript you need to change something
+over time and draw again.</p>
+<p>We can take one of our previous samples and animate it as follows.</p>
+<pre class="prettyprint showlinemods">
+*var fieldOfViewRadians = degToRad(60);
+*var rotationSpeed = 1.2;
+
+drawScene();
+
+// Draw the scene.
+function drawScene() {
+*  // Every frame increase the rotation a little.
+*  rotation[1] += rotationSpeed / 60.0;
+
+  ...
+*  // Call drawScene again next frame
+*  requestAnimationFrame(drawScene);
+}
+</pre>
+
+<p>And here it is</p>
+<iframe class="webgl_example" src="../webgl-animation-not-frame-rate-independent.html" width="400" height="300"></iframe>
+
+<p><a class="webgl_center" href="../webgl-animation-not-frame-rate-independent.html" target="_blank">click here to open in a separate window</a></p>
+<p>There's a subtle problem though. The code above has a
+<code>rotationSpeed / 60.0</code>. We divided by 60.0 because we assumed the browser
+will respond to requestAnimationFrame 60 times a second which is pretty common.</p>
+<p>That's not actually a valid assumption though. Maybe the user is on a low-powered
+device like an old smartphone. Or maybe the user is running some heavy program in
+the background. There are all kinds of reasons the browser might not be displaying
+frames at 60 frames a second. Maybe it's the year 2020 and all machines run at 240
+frames a second now. Maybe the user is a gamer and has a CRT monitor running at 90
+frame a second.</p>
+<p>You can see the problem in this example</p>
+<iframe class="webgl_example" src="../webgl-animation-frame-rate-issues.html" width="400" height="300"></iframe>
+
+<p>In the example above the we want to rotate all of the 'F's at the same speed.
+The 'F' in the middle is running full speed and is frame rate independent. The one
+on the left and the right are simulating if the browser was only running at 1/8th
+max speed for the current machine. The one on the left is <strong>NOT</strong> frame rate
+independent. The one on the right <strong>IS</strong> frame rate independent.</p>
+<p>Notice because the one on the left is not taking into account that the frame rate
+might be slow it's not keeping up. The one on the right though, even though it's
+running at 1/8 the frame rate it is keeping up with the middle one running at full
+speed.</p>
+<p>The way to make animation frame rate independent is to compute how much time it took
+between frames and use that to calcuate how much to animate this frame.</p>
+<p>First off we need to get the time. I find it easist if we get the time in seconds
+but since the browser returns time in milliseconds (1000s of a second) we need
+to multiply by 0.001 to get seconds.</p>
+<pre class="prettyprint showlinemods">
+*function getTimeInSeconds() {
+*  return Date.now() * 0.001;
+*}
+</pre>
+
+<p>We can then compute the delta time like this</p>
+<pre class="prettyprint showlinemods">
+*// Get the starting time.
+*var then = getTimeInSeconds();
+
+drawScene();
+
+// Draw the scene.
+function drawScene() {
+*  // Get the current time
+*  var now = getTimeInSeconds();
+*  // Subtract the previous time from the current time
+*  var deltaTime = now - then;
+*  // Remember the current time for the next frame.
+*  then = now;
+
+   ...
+</pre>
+
+<p>Once we have the deltaTime in second then all our calucations can be in how
+many units per second. In this case since <code>rotationSpeed</code> is 1.2
+that means we want to rotate 1.2 radians per second, about a 1/3 of a turn.</p>
+<pre class="prettyprint showlinemods">
+*    rotation[1] += rotationSpeed * deltaTime;
+</pre>
+
+<p>Here's that one working.</p>
+<iframe class="webgl_example" src="../webgl-animation.html" width="400" height="300"></iframe>
+
+<p><a class="webgl_center" href="../webgl-animation.html" target="_blank">click here to open in a separate window</a></p>
+<p>You aren't likely to see a difference from the one
+at the top of this page unless you are on a slow machine but if you don't
+make your animations frame rate independent you'll likely have some users
+that are getting a very different experience than you planned.</p>
+<div class="webgl_bottombar">
+<h3>Don't use setInterval or setTimeout!</h3>
+<p>If you've been programming animation in JavaScript in the past
+you might have used either <code>setInterval</code> or <code>setTimeout</code> to get your
+drawing function to be called.
+</p><p>
+The problems with using <code>setInterval</code> or <code>setTimeout</code> to do animation
+are two fold. First off both <code>setInterval</code> and <code>setTimeout</code> have no relation
+to the browser displaying anything. They aren't sync to when the browser is
+going to draw a new frame and so can be out of sync with the user's machine.
+If you use  <code>setInterval</code> or <code>setTimeout</code> and assume 60 frames a second and
+the user's machine is actually running some other frame rate you'll be out
+of sync with their machine.
+</p><p>
+The other problem is the browser has no idea why you're using  <code>setInterval</code> or
+<code>setTimeout</code> so even when your page is not visible, for example when it's not
+the front tab, the browser still has to execute your code. Maybe you're using
+<code>setTimeout</code> or <code>setInterval</code> to check for new mail or tweets. There's no way for
+the browser to know. That's find if your just checking every few seconds for new
+messages but it's not fine if your drawing to draw 1000 objects in WebGL. You'll
+be effectively DOSing the user's machine with your invisible tab.
+</p><p>
+<code>requestAnimationFrame</code> solves both of these issues. It calls you at just the
+right time to sync your animation with the screen and it also does not call you
+if the tab is not visible.
+</p>
+</div>
+  </div>
+</div>
+</body>
+
+
+
