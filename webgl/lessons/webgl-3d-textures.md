@@ -218,7 +218,7 @@ You might have noticed a call to `gl.generateMipmap` back when we loaded the tex
 
 Imagine we had this 16x16 pixel texture.
 
-<img class="webgl_center" src="resources/mip-low-res-enlarged.png" style="border: 2px solid black;"/>
+<img class="webgl_center" src="resources/mip-low-res-enlarged.png" style="border: 2px solid black;" />
 
 Now imagine we tried to draw that texture on a polygon 2x2 pixels big on the screen. What colors should
 we make those 4 pixels? There are 256 pixels to choose from. In Photoshop if you scaled a 16x16 pixel image
@@ -253,7 +253,7 @@ You can choose what WebGL does by setting the texture filtering for each texture
 You can see the importance of mips in these 2 examples. The first one shows that if you use `NEAREST`
 or `LINEAR` and only pick from the largest image then you'll get a lot of flickering because as things
 move, for each pixel it draws it has to pick a single pixel from the largest image. That changes depending
-on where the size and position and so times it will pick one pixel, other times a different one and so it
+on the size and position and so sometimes it will pick one pixel, other times a different one and so it
 flickers.
 
 <iframe class="webgl_example" src="../webgl-3d-textures-mips.html" width="400" height="300"></iframe>
@@ -282,7 +282,7 @@ them. If you look close you can see how it's still blocky, especially in the hor
 The bottom right is using `LINEAR_MIPMAP_LINEAR` which is picking the best 2 mips, picking 4 pixels from each,
 and blends all 8 pixels.
 
-<img class="webgl_center" src="resources/different-colored-mips.png"/>
+<img class="webgl_center" src="resources/different-colored-mips.png" />
 <div class="webgl_center">different colored mips</div>
 
 You might be thinking why would you ever pick anything other than `LINEAR_MIPMAP_LINEAR` which is arguably
@@ -309,7 +309,7 @@ To set filtering you call `gl.texParameter` like this
 
 Let's say we wanted to apply this texture.
 
-<img class="webgl_center" src="../resources/keyboard.jpg">
+<img class="webgl_center" src="../resources/keyboard.jpg" />
 
 Here it is.
 
@@ -319,7 +319,8 @@ Here it is.
 Why doesn't the keyboard texture show up? That's beacuse WebGL has a kind of severe restriction on textures that
 are not a power of 2 in both dimensions. Powers of 2 are 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, etc.
 The 'F' texture was 256x256. 256 is a power of 2. The keyboard texture is 320x240. Neither of those are a power
-of 2 so trying to display the texture fails. When a texture is not setup correctly WebGL will use color (0, 0, 0, 0)
+of 2 so trying to display the texture fails. In the shader when `texture2D` is called and when the texture
+referenced is not setup correctly WebGL will use color (0, 0, 0, 0)
 or as we sometimes call it, "transparent black". If you open up the JavaScript console or Web Console, depending
 on the browser you might see errors pointing out the problem.
 
@@ -359,24 +360,24 @@ image.addEventListener('load', function() {
 }
 </pre>
 
-A common question is "Who do I apply a different image to each size of a cube?". For example let's say we
+A common question is "Who do I apply a different image to each face of a cube?". For example let's say we
 had these 6 images.
 
 <div class="webgl_table_div_center">
 <table class="webgl_table_center">
-<tr><td><img src="resources/noodles-01.jpg"></td><td><img src="resources/noodles-02.jpg"></td><td><img src="resources/noodles-03.jpg"></td></tr>
-<tr><td><img src="resources/noodles-04.jpg"></td><td><img src="resources/noodles-05.jpg"></td><td><img src="resources/noodles-06.jpg"></td></tr>
+<tr><td><img src="resources/noodles-01.jpg" /></td><td><img src="resources/noodles-02.jpg" /></td><td><img src="resources/noodles-03.jpg" /></td></tr>
+<tr><td><img src="resources/noodles-04.jpg" /></td><td><img src="resources/noodles-05.jpg" /></td><td><img src="resources/noodles-06.jpg" /></td></tr>
 </table>
 </div>
 
-3 anwsers come to mind
+3 answers come to mind
 
 1) make a complicated shader that references 6 textures and pass in some extra per vertex info into
 the vertex shader that gets passed to the fragment shader to decide which texture to use. DON'T DO THIS!
 A little thought would make it clear that you'd end up having to write tons of different shaders if you
 wanted to do the same thing for different shapes with more sides etc.
 
-2) draw 6 plans instead of a cube. This is a common solution. It's not bad but it also only really works
+2) draw 6 planes instead of a cube. This is a common solution. It's not bad but it also only really works
 for small shapes like a cube. If you had a sphere with 1000 quads and you wanted to put a different texture
 on each quad you'd have to draw 1000 planes and that would be slow.
 
@@ -385,7 +386,7 @@ to map a different part of the texture to each face of the cube. This is the tec
 all high performance apps (read *games*) use. So for example we'd put all the images in one texture possibly
 like this
 
-<img class="webgl_center" src="../resources/noodles.jpg">
+<img class="webgl_center" src="../resources/noodles.jpg" />
 
 and then map use a different set of texture coordinates for each face of the cube.
 
