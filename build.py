@@ -51,10 +51,15 @@ class Builder(object):
     return content
 
 
-  def WriteFile(self, file_name, content):
+  def WriteFileIfChanged(self, file_name, content):
+    if os.path.exists(file_name):
+      old = self.ReadFile(file_name)
+      if content == old:
+        return
     f = open(file_name, "wb")
     f.write(content.encode('utf8'))
     f.close()
+    print "Wrote: ", file_name
 
 
   def ExtractHeader(self, content):
@@ -76,10 +81,10 @@ class Builder(object):
 
 
   def ApplyTemplateToFile(self, template_path, content_file_name, out_file_name, extra = {}):
-    print "processing: ", template_path, content_file_name, out_file_name
+    print "processing: ", content_file_name
     template = self.ReadFile(template_path)
     (md_content, meta_data) = self.LoadMD(content_file_name)
-    print meta_data
+    #print meta_data
     md_content = md_content.replace('%(', '__STRING_SUB__')
     md_content = md_content.replace('%', '__PERCENT__')
     md_content = md_content.replace('__STRING_SUB__', '%(')
@@ -91,7 +96,7 @@ class Builder(object):
     meta_data['dst_file_name'] = out_file_name
     meta_data['basedir'] = ""
     output = template % meta_data
-    self.WriteFile(out_file_name, output)
+    self.WriteFileIfChanged(out_file_name, output)
     self.articles.append(meta_data)
 
 
