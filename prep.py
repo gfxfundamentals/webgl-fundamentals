@@ -49,11 +49,14 @@ class MyHTMLParser(HTMLParser):
     self.depth = 0
     self.text = []
     self.tags = []
+    self.depthPrefix = ""
 
   def data(self):
     return "".join(self.text)
 
   def handle_starttag(self, tag, in_attrs):
+    self.depthPrefix = self.depthPrefix + "  "
+    #print ("%s%s" % (self.depthPrefix, tag))
     attrs = dict(in_attrs)
     self.tags.append(tag)
     self.text.append("<")
@@ -72,11 +75,13 @@ class MyHTMLParser(HTMLParser):
     self.text.append(">")
 
   def handle_endtag(self, tag):
+    #print ("%s%s" % (self.depthPrefix, tag))
     if self.tags.pop() != tag:
-      raise Exception("bad closing tag")
+      raise Exception("bad closing tag: " + tag)
     self.text.append("</")
     self.text.append(tag)
     self.text.append(">")
+    self.depthPrefix = self.depthPrefix[2:]
 
   def handle_data(self, data):
     if len(self.tags) == 0 or self.tags[-1] == "p":
