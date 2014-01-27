@@ -360,6 +360,11 @@ image.addEventListener('load', function() {
 }
 </pre>
 
+And here's that
+
+<iframe class="webgl_example" src="../webgl-3d-textures-good-npot.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-textures-good-npot.html" target="_blank">click here to open in a separate window</a>
+
 A common question is "Who do I apply a different image to each face of a cube?". For example let's say we
 had these 6 images.
 
