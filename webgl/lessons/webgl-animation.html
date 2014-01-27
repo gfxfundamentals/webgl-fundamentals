@@ -125,9 +125,11 @@ function drawScene() {
    ...
 </pre>
 
-<p>Once we have the deltaTime in second then all our calucations can be in how
-many units per second. In this case since <code>rotationSpeed</code> is 1.2
-that means we want to rotate 1.2 radians per second, about a 1/3 of a turn.</p>
+<p>Once we have the <code>deltaTime</code> in seconds then all our calcuations can be in how
+many units per second we want something to happen. In this case since
+<code>rotationSpeed</code> is 1.2 which means we want to rotate 1.2 radians per second.
+That's about a 1/5 of a turn or in other words it will take about 5 seconds to
+turn around completely regardless of the frame rate.</p>
 <pre class="prettyprint showlinemods">
 *    rotation[1] += rotationSpeed * deltaTime;
 </pre>
@@ -148,23 +150,24 @@ drawing function to be called.
 </p><p>
 The problems with using <code>setInterval</code> or <code>setTimeout</code> to do animation
 are two fold. First off both <code>setInterval</code> and <code>setTimeout</code> have no relation
-to the browser displaying anything. They aren't sync to when the browser is
+to the browser displaying anything. They aren't synced to when the browser is
 going to draw a new frame and so can be out of sync with the user's machine.
-If you use  <code>setInterval</code> or <code>setTimeout</code> and assume 60 frames a second and
-the user's machine is actually running some other frame rate you'll be out
-of sync with their machine.
+If you use <code>setInterval</code> or <code>setTimeout</code> and assume 60 frames
+a second and the user's machine is actually running some other frame rate you'll
+be out of sync with their machine.
 </p><p>
-The other problem is the browser has no idea why you're using  <code>setInterval</code> or
-<code>setTimeout</code> so even when your page is not visible, for example when it's not
-the front tab, the browser still has to execute your code. Maybe you're using
-<code>setTimeout</code> or <code>setInterval</code> to check for new mail or tweets. There's no way for
-the browser to know. That's find if your just checking every few seconds for new
-messages but it's not fine if your drawing to draw 1000 objects in WebGL. You'll
-be effectively DOSing the user's machine with your invisible tab.
+The other problem is the browser has no idea why you're using <code>setInterval</code> or
+<code>setTimeout</code>. So for example, even when your page is not visible,
+like when it's not the front tab, the browser still has to execute your code.
+Maybe you're using <code>setTimeout</code> or <code>setInterval</code> to check
+for new mail or tweets. There's no way for the browser to know. That's fine if
+you're just checking every few seconds for new messages but it's not fine if
+you're trying to draw 1000 objects in WebGL. You'll be effectively DOSing the
+user's machine with your invisible tab drawing stuff they can't even see.
 </p><p>
 <code>requestAnimationFrame</code> solves both of these issues. It calls you at just the
-right time to sync your animation with the screen and it also does not call you
-if the tab is not visible.
+right time to sync your animation with the screen and it also only calls you if
+your tab is visible.
 </p>
 </div>
   </div>
