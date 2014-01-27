@@ -114,6 +114,8 @@ at the top of this page unless you are on a slow machine but if you don't
 make your animations frame rate independent you'll likely have some users
 that are getting a very different experience than you planned.
 
+Next up <a href="webgl-3d-textures.html">how to apply textures</a>.
+
 <div class="webgl_bottombar">
 <h3>Don't use setInterval or setTimeout!</h3>
 <p>If you've been programming animation in JavaScript in the past
