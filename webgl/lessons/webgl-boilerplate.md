@@ -143,8 +143,8 @@ from script tags, attach them to a program and link them.
  */
 function createProgramFromScriptTags(
     gl, vertexShaderId, fragmentShaderId) {
-  var vertexShader = createShaderFromScriptTag(vertexShaderId);
-  var fragmentShader = createShaderFromScriptTag(fragmentShaderId);
+  var vertexShader = createShaderFromScriptTag(gl, vertexShaderId);
+  var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId);
   return createProgram(gl, vertexShader, fragmentShader);
 }
 </pre>
