@@ -2,7 +2,7 @@ Title: WebGL Using 2 or More Textures
 
 This article is a continuation of <a href="webgl-image-processing.html">WebGL Image Processing</a>. If you haven't read that I suggest <a href="webgl-image-processing.html">you start there</a>.
 
-Now might be a good time to answer the question, "How do I use 2 more more textures?"
+Now might be a good time to answer the question, "How do I use 2 or more textures?"
 <!--more-->
 It's pretty simple. Let's <a href="webgl-image-processing.html">go back a few lessons to our
 first shader that draw a single image</a> and update it for 2 images.
