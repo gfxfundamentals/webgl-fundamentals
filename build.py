@@ -132,7 +132,7 @@ class Builder(object):
     toc = ['<li><a href="%s">%s</a></li>' % (a["dst_file_name"], a["title"]) for a in self.articles]
 
 
-    self.ApplyTemplateToFile("templates/lesson.template", "index.md", "index.html", {
+    self.ApplyTemplateToFile("templates/index.template", "index.md", "index.html", {
         "table_of_contents": "<ul>" + "\n".join(toc) + "</ul>",
       })
 
