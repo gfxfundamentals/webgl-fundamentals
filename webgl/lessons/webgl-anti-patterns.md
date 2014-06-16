@@ -129,7 +129,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     normal box-sizing mode a 400x300 pixel element with 15pixel border has a 400x300pixel content space surrounded by a 15 pixel border making its total size
     430x330 pixels. In box-sizing: border-box mode the border goes on the inside so that same element would stay 400x300 pixels, the content would end up
     being 370x270. This is yet another reason why using `clientWidth` and `clientHeight` is so important. If you set the border to say `1em` you'd have no
-    way of knowing what size your canvas will turn out. It would be different with different fonts on different machines.
+    way of knowing what size your canvas will turn out. It would be different with different fonts on different machines or different browsers.
 
     <a href="../webgl--same-code-container-fullscreen.html" target="_blank">A page with nothing but a container using CSS to make it fullscreen into which the code will insert a canvas</a>
 
@@ -232,7 +232,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     checkRender();
     </pre>
 
-    This would only draw if the canvas has be resized or if `needToRender` is true.
+    This would only draw if the canvas has been resized or if `needToRender` is true.
     This would handle the resize case for apps that don't render the scene every frame.
     Just set `needToRender` any time you've changed something in the scene and you want
     the scene to be rendered incorporating your changes.

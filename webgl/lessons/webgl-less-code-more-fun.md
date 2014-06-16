@@ -152,7 +152,7 @@ gl.drawArrays(...);
 
 That's a lot of typing.
 
-There's lots of ways to simplify this. One suggestion is to ask WebGL to tell use all
+There's lots of ways to simplify this. One suggestion is to ask WebGL to tell us all
 the uniforms and locations and then setup functions to set them for us. We can then pass in
 JavaScript objects to set our settings much easier. If that's clear as mud well,
 Our code would look something like this
@@ -336,7 +336,7 @@ void main() {
                 u_specular * litR.z * u_specularFactor)).rgb,
       diffuseColor.a);
   gl_FragColor = outColor;
-*  gl_FragColor = vec4(0,1,0,1);  // <!--- just green
+*  gl_FragColor = vec4(0,1,0,1);  // &lt;!--- just green
 }
 </pre>
 <p>Notice I just added a line that sets <code>gl_FragColor</code> to a constant color.

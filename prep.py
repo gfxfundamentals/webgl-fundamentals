@@ -103,6 +103,8 @@ class MyHTMLParser(HTMLParser):
     data = data.replace("<", "&lt;")
     data = data.replace(">", "&gt;")
     data = re.sub(r'`(.*?)`', r'<code>\1</code>', data)
+    data = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', data)
+    data = re.sub(r'\*(.*?)\*', r'<i>\1</i>', data)
     self.text.append(data)
 
   def handle_entityref(self, name):
