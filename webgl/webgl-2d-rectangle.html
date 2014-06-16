@@ -5,8 +5,10 @@
 <meta charset="utf-8">
 <title>WebGL - 2D Rectangle</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
-<script type="text/javascript" src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-utils.js"></script>
 <script>
+"use strict";
+
 window.onload = main;
 
 function main() {
@@ -18,9 +20,7 @@ function main() {
   }
 
   // setup GLSL program
-  vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
-  fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
-  program = createProgram(gl, [vertexShader, fragmentShader]);
+  var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
   gl.useProgram(program);
 
   // look up where the vertex data needs to go.

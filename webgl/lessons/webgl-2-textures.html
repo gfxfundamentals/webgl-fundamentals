@@ -44,19 +44,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <div id="contentwrap">
   <div id="content">
     <h1>WebGL Using 2 or More Textures</h1>
-    <p>This article is a continuation of <a href="webgl-image-processing.html">WebGL Image Processing</a>. If you haven't read that I suggest <a href="webgl-image-processing.html">you start there</a>.</p>
-<p>Now might be a good time to answer the question, "How do I use 2 more more textures?"
+    <p>This article is a continuation of <a href="webgl-image-processing.html">WebGL Image Processing</a>. If you haven&#39;t read that I suggest <a href="webgl-image-processing.html">you start there</a>.</p>
+<p>Now might be a good time to answer the question, &quot;How do I use 2 or more textures?&quot;
 <!--more-->
-It's pretty simple. Let's <a href="webgl-image-processing.html">go back a few lessons to our
+It&#39;s pretty simple. Let&#39;s <a href="webgl-image-processing.html">go back a few lessons to our
 first shader that draw a single image</a> and update it for 2 images.</p>
 <p>The first thing we need to do is change our code so we can load 2 images. This is not
-really a WebGL thing, it's a HTML5 JavaScript thing, but we might as well tackle it.
+really a WebGL thing, it&#39;s a HTML5 JavaScript thing, but we might as well tackle it.
 Images are loaded asynchronously which can take a little getting used to.</p>
 <p>There are basically 2 ways we could handle it. We could try to structure our code
 so that it runs with no textures and as the textures are loaded the program updates.
-We'll save that method for a latter article.</p>
-<p>In this case we'll wait for all the images to load before we draw anything.</p>
-<p>First let's change the code that loads an image into a function. It's pretty straight
+We&#39;ll save that method for a latter article.</p>
+<p>In this case we&#39;ll wait for all the images to load before we draw anything.</p>
+<p>First let&#39;s change the code that loads an image into a function. It&#39;s pretty straight
 forward. It creates a new image object, sets the URL to load, and sets a callback to
 be called when the image finishes loading.</p>
 <pre class="prettyprint showlinemods">
@@ -68,8 +68,8 @@ function loadImage(url, callback) {
 }
 </pre>
 
-<p>Now let's make a function that loads an array of urls and generates an array of images.
-First we set <code>imagesToLoad</code> to the number of images we're going to load. Then we make
+<p>Now let&#39;s make a function that loads an array of urls and generates an array of images.
+First we set <code>imagesToLoad</code> to the number of images we&#39;re going to load. Then we make
 the callback we pass to <code>loadImage</code> decrement <code>imagesToLoad</code>. When <code>imagesToLoad</code> goes
 to 0 all the images have been loaded and we pass the array of images to a callback.</p>
 <pre class="prettyprint showlinemods">
@@ -104,7 +104,7 @@ function main() {
 }
 </pre>
 
-<p>Next we change the shader to use 2 textures. In this case we'll multiply 1 texture by the other.</p>
+<p>Next we change the shader to use 2 textures. In this case we&#39;ll multiply 1 texture by the other.</p>
 <pre class="prettyprint showlinemods">
 &lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
@@ -146,7 +146,7 @@ void main() {
   }
 </pre>
 
-<p>WebGL has something called "texture units". You can think of it as an array of references
+<p>WebGL has something called &quot;texture units&quot;. You can think of it as an array of references
 to textures. You tell the shader which texture unit to use for each sampler.</p>
 <pre class="prettyprint showlinemods">
   // lookup the sampler locations.
@@ -169,19 +169,17 @@ to textures. You tell the shader which texture unit to use for each sampler.</p>
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </pre>
 
-<p>The 2 images we're loading look like this</p>
-<style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; }</style>
+<p>The 2 images we&#39;re loading look like this</p>
+<p><style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; }</style></p>
+<div class="glocal-center"><table class="glocal-center-content"><tr><td><img src="../resources/leaves.jpg" /> <img src="../resources/star.jpg" /></td></tr></table></div>
 
-<div class="glocal-center"><table class="glocal-center-content"><tr><td><img src="../resources/leaves.jpg"> <img src="../resources/star.jpg" /></td></tr></table></div>
-
-<p>And here's the result if we multiply them together using WebGL.</p>
-<iframe class="webgl_example" width="400" height="340" src="../webgl-2-textures.html"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2-textures.html" target="_blank">click here to open in a separate window</a></p>
+<p>And here&#39;s the result if we multiply them together using WebGL.</p>
+<p><iframe class="webgl_example" width="400" height="340" src="../webgl-2-textures.html"></iframe>
+<a class="webgl_center" href="../webgl-2-textures.html" target="_blank">click here to open in a separate window</a></p>
 <p>Some things I should go over.  </p>
 <p>The simple way to think of texture units is something like this: All of the texture functions
-work on the "active texture unit". The "active texture unit" is just a global variable
-that's the index of the texture unit you want to work with. Each texture unit has 2 targets.
+work on the &quot;active texture unit&quot;. The &quot;active texture unit&quot; is just a global variable
+that&#39;s the index of the texture unit you want to work with. Each texture unit has 2 targets.
 The TEXTURE_2D target and the TEXTURE_CUBE_MAP target. Every texture function works with specified
 target on the current active texture unit. If you were to implement
 WebGL in JavaScript it would look something like this</p>
@@ -242,6 +240,8 @@ Fortunately the constants are consecutive so instead of this</p>
 </pre>
 
 <p>Hopefully this small step helps explain how to use mutliple textures in a single draw call in WebGL.</p>
+
+
   </div>
 </div>
 </body>

@@ -44,37 +44,39 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <div id="contentwrap">
   <div id="content">
     <h1>WebGL 2D Translation</h1>
-    <p>Before we move on to 3D let's stick with 2D for a little while longer. Bear with me please. This article might seem exceedingly obvious to some but I'll build up to a point in a few articles.</p>
-<p>This article is a continuation of a series starting with <a href="webgl-fundamentals.html">WebGL Fundamentals</a>. If you haven't read them I suggest you read at least the first one then come back here.</p>
-<p>Translation is some fancy math name that basically means "to move" something. I suppose moving a sentence from English to Japanese fits as well but in this case we're talking about moving geometry. Using the sample code we ended up with in <a href="webgl-fundamentals.html">the first post</a> you could easily translate our rectangle just by changing the values passed to setRectangle right? Here's a sample based on our <a href="webgl-fundamentals.html">previous sample</a>.
-<!--more-->
+    <p>Before we move on to 3D let&#39;s stick with 2D for a little while longer. Bear with me please. This article might seem exceedingly obvious to some but I&#39;ll build up to a point in a few articles.</p>
+<p>This article is a continuation of a series starting with <a href="webgl-fundamentals.html">WebGL Fundamentals</a>. If you haven&#39;t read them I suggest you read at least the first one then come back here.</p>
+<p>Translation is some fancy math name that basically means &quot;to move&quot; something. I suppose moving a sentence from English to Japanese fits as well but in this case we&#39;re talking about moving geometry. Using the sample code we ended up with in <a href="webgl-fundamentals.html">the first post</a> you could easily translate our rectangle just by changing the values passed to setRectangle right? Here&#39;s a sample based on our <a href="webgl-fundamentals.html">previous sample</a>.
+<!--more--></p>
 <pre class="prettyprint showlinemods">
   // First lets make some variables 
   // to hold the translation of the rectangle
-  var translation = [0, 0];</p>
-<p>// then let's make a function to
+  var translation = [0, 0];
+
+  // then let's make a function to
   // re-draw everything. We can call this
-  // function after we update the translation.</p>
-<p>// Draw a the scene.
+  // function after we update the translation.
+
+  // Draw a the scene.
   function drawScene() {
     // Clear the canvas.
-    gl.clear(gl.COLOR_BUFFER_BIT);</p>
-<pre><code>// Setup a rectangle
-setRectangle(gl, translation[0], translation[1], width, height);
+    gl.clear(gl.COLOR_BUFFER_BIT);
 
-// Draw the rectangle.
-gl.drawArrays(gl.TRIANGLES, 0, 6);
-</code></pre>
-<p>}
-</pre></p>
-<p>In the example below I've attached a couple of sliders that will update translation[0] and translation[1] and call drawScene anytime they change. Drag the sliders to translate the rectangle.</p>
-<iframe class="webgl_example" src="../webgl-2d-rectangle-translate.html" width="400" height="300"></iframe>
+    // Setup a rectangle
+    setRectangle(gl, translation[0], translation[1], width, height);
 
-<p><a class="webgl_center" href="../webgl-2d-rectangle-translate.html" target="_blank">click here to open in a separate window</a></p>
+    // Draw the rectangle.
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+</pre>
+
+<p>In the example below I&#39;ve attached a couple of sliders that will update translation[0] and translation[1] and call drawScene anytime they change. Drag the sliders to translate the rectangle.</p>
+<p><iframe class="webgl_example" src="../webgl-2d-rectangle-translate.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-rectangle-translate.html" target="_blank">click here to open in a separate window</a></p>
 <p>So far so good. But now imagine we wanted to do the same thing with a more complicated shape.</p>
-<p>Let's say we wanted to draw an 'F' that consists of 6 triangles like this.</p>
+<p>Let&#39;s say we wanted to draw an &#39;F&#39; that consists of 6 triangles like this.</p>
 <p><img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
-<p>Well, following are current code we'd have to change setRectangle to something more like this.</p>
+<p>Well, following are current code we&#39;d have to change setRectangle to something more like this.</p>
 <pre class="prettyprint showlinemods">
 // Fill the buffer with the values that define a letter 'F'.
 function setGeometry(gl, x, y) {
@@ -111,9 +113,9 @@ function setGeometry(gl, x, y) {
 }
 </pre>
 
-<p>You can hopefully see that's not going to scale well. If we want to draw some very complex geometry with hundreds or thousands of lines we'd have to write some pretty complex code. On top of that, every time we draw JavaScript has to update all the points.</p>
-<p>There's a simpler way. Just upload the geometry and do the translation in the shader.</p>
-<p>Here's the new shader</p>
+<p>You can hopefully see that&#39;s not going to scale well. If we want to draw some very complex geometry with hundreds or thousands of lines we&#39;d have to write some pretty complex code. On top of that, every time we draw JavaScript has to update all the points.</p>
+<p>There&#39;s a simpler way. Just upload the geometry and do the translation in the shader.</p>
+<p>Here&#39;s the new shader</p>
 <pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
@@ -130,7 +132,7 @@ void main() {
    ...
 </pre>
 
-<p>and we'll restructure the code a little. For one we only need to set the geometry once. </p>
+<p>and we&#39;ll restructure the code a little. For one we only need to set the geometry once. </p>
 <pre class="prettyprint showlinemods">
 // Fill the buffer with the values that define a letter 'F'.
 function setGeometry(gl) {
@@ -187,13 +189,14 @@ function setGeometry(gl) {
 </pre>
 
 <p>Notice <code>setGeometry</code> is called only once. It is no longer inside drawScene.</p>
-<p>And here's that example. Again, Drag the sliders to update the translation.</p>
-<iframe class="webgl_example" src="../webgl-2d-geometry-translate-better.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-geometry-translate-better.html" target="_blank">click here to open in a separate window</a></p>
+<p>And here&#39;s that example. Again, Drag the sliders to update the translation.</p>
+<p><iframe class="webgl_example" src="../webgl-2d-geometry-translate-better.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-translate-better.html" target="_blank">click here to open in a separate window</a></p>
 <p>Now when we draw WebGL is doing practically everything. All we are doing is setting a translation and asking it to draw. Even if our geometry had tens of thousands of points the main code would stay the same.</p>
 <p>If you want you can compare <a href="../webgl-2d-geometry-translate.html" target="_blank">the version that uses the complex JavaScript above to update all the points</a>.</p>
-<p>I hope this example was not too obvious. In the <a href="webgl-2d-rotation.html">next article we'll move on to rotation</a>.</p>
+<p>I hope this example was not too obvious. In the <a href="webgl-2d-rotation.html">next article we&#39;ll move on to rotation</a>.</p>
+
+
   </div>
 </div>
 </body>

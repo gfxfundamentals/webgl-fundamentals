@@ -6,9 +6,9 @@
 <title>WebGL - Part 2, Cameras</title>
 <link rel="stylesheet" href="resources/base.css" type="text/css" />
 <link rel="stylesheet" href="resources/lesson.css" type="text/css" />
-<script type="text/javascript" src="../resources/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="resources/prettify.js"></script>
-<script type="text/javascript" src="resources/lesson.js"></script>
+<script src="../resources/jquery-1.7.1.min.js"></script>
+<script src="resources/prettify.js"></script>
+<script src="resources/lesson.js"></script>
 </head>
 <body>
 <div id="contentwrap">
@@ -40,7 +40,7 @@ and height of the canvas but we can pass in anything. If want to see
 800 units of virtual we just call with that value</p>
 <pre class="prettyprint"
    var projectionMatrix =
-        make2DProjection(canvas.width, 800, ...);
+        make2DProjection(canvas.clientWidth, 800, ...);
 </pre>
 
 <p>Here's what happens.</p>
@@ -71,7 +71,7 @@ how many units we can see across the canvas.</p>
 <p>And here's how we call it.</p>
 <pre class="prettyprint">
   var unitsDown = 800;
-  var aspectRatioOfCanvas = canvas.width / canvas.height;
+  var aspectRatioOfCanvas = canvas.clientWidth / canvas.clientHeight;
   var projectionMatrix = makeOrthographicProjection(
       unitsDown,
       aspectRatioOfCanvas,
@@ -333,7 +333,7 @@ for depth it will be -depth / 2 to +depth / 2.</p>
 <pre class="prettyprint">
   // Compute the matrices
   var projectionMatrix =
-      make2DProjection(canvas.width, canvas.height, canvas.width);
+      make2DProjection(canvas.clientWidth, canvas.clientHeight, 400);
   var translationMatrix =
       makeTranslation(translation[0], translation[1], translation[2]);
   var rotationXMatrix = makeXRotation(rotation[0]);

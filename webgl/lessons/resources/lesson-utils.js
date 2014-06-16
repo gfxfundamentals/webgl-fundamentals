@@ -61,8 +61,10 @@ var get2DContext = function(canvas, opt_attribs) {
     updateCSSIfInIFrame();
 
     // make the canvas backing store the size it's displayed.
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    var width = canvas.clientWidth;
+    var height = canvas.clientHeight;
+    canvas.width = width;
+    canvas.height = height;
   } else {
     var title = document.title;
     var h1 = document.createElement("h1");

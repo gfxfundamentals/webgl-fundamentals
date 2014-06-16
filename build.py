@@ -33,8 +33,19 @@ import glob
 import os
 import re
 import sys
+import subprocess
 from optparse import OptionParser
+from prep import Convert
 
+def Execute(cmd, args, file=subprocess.PIPE):
+  return subprocess.Popen([cmd] + args, stdout=file).communicate()[0]
+
+def ExecuteWithStdin(cmd, args, input_str, file=subprocess.PIPE):
+  output = subprocess.Popen([cmd] + args, stdin=subprocess.PIPE, stdout=file).communicate(input=input_str.encode("utf-8"))[0]
+  return unicode(output, "utf-8")
+
+def markdownme(src):
+  return ExecuteWithStdin("node", ["node_modules/marked/bin/marked"], src)
 
 class Builder(object):
 
@@ -85,13 +96,18 @@ class Builder(object):
     print "processing: ", content_file_name
     template = self.ReadFile(template_path)
     (md_content, meta_data) = self.LoadMD(content_file_name)
+    # Call prep's Content which parses the HTML. This helps us find missing tags
+    # should probably call something else.
+    Convert(md_content)
     #print meta_data
     md_content = md_content.replace('%(', '__STRING_SUB__')
     md_content = md_content.replace('%', '__PERCENT__')
     md_content = md_content.replace('__STRING_SUB__', '%(')
     md_content = md_content % extra
     md_content = md_content.replace('__PERCENT__', '%')
-    html = markdown.markdown(md_content)
+    #html = markdown.markdown(md_content)
+    #html = markdown2.markdown2.markdown(md_content)
+    html = markdownme(md_content)
     meta_data['content'] = html
     meta_data['src_file_name'] = content_file_name
     meta_data['dst_file_name'] = out_file_name

@@ -140,7 +140,7 @@ Then we have to bind a texture to each of those texture units.
 The 2 images we're loading look like this
 
 <style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; }</style>
-<div class="glocal-center"><table class="glocal-center-content"><tr><td><img src="../resources/leaves.jpg"> <img src="../resources/star.jpg" /></td></tr></table></div>
+<div class="glocal-center"><table class="glocal-center-content"><tr><td><img src="../resources/leaves.jpg" /> <img src="../resources/star.jpg" /></td></tr></table></div>
 
 And here's the result if we multiply them together using WebGL.
 

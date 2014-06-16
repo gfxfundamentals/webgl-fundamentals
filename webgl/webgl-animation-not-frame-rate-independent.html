@@ -14,12 +14,14 @@
     background-color: rgba(255, 255, 255, 0.6) !important;
 }
 </style>
-<script type="text/javascript" src="resources/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script type="text/javascript" src="resources/jquery.gman.ui.js"></script>
-<script type="text/javascript" src="resources/webgl-utils.js"></script>
-<script type="text/javascript" src="resources/webgl-3d-math.js"></script>
+<script src="resources/jquery-1.7.1.min.js"></script>
+<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="resources/jquery.gman.ui.js"></script>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-3d-math.js"></script>
 <script>
+"use strict";
+
 $(function(){
   main();
 });
@@ -36,9 +38,7 @@ function main() {
   gl.enable(gl.DEPTH_TEST);
 
   // setup GLSL program
-  vertexShader = createShaderFromScriptElement(gl, "3d-vertex-shader");
-  fragmentShader = createShaderFromScriptElement(gl, "3d-fragment-shader");
-  program = createProgram(gl, [vertexShader, fragmentShader]);
+  var program = createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
   gl.useProgram(program);
 
   // look up where the vertex data needs to go.
@@ -93,7 +93,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Compute the matrices
-    var aspect = canvas.width / canvas.height;
+    var aspect = canvas.clientWidth / canvas.clientHeight;
     var projectionMatrix =
         makePerspective(fieldOfViewRadians, aspect, 1, 2000);
     var translationMatrix =

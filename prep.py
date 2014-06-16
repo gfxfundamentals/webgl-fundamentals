@@ -41,22 +41,30 @@ def ReadFile(filename):
   f.close()
   return data
 
+class data:
+  def __init__(self, **kwargs):
+    self.__dict__.update(kwargs)
+
 class MyHTMLParser(HTMLParser):
   p_marker = "---paragraph---"
 
-  def __init__(self):
+  def __init__(self, options = None):
     HTMLParser.__init__(self)
     self.depth = 0
     self.text = []
     self.tags = []
     self.depthPrefix = ""
+    if options == None:
+      options = data(debug=False)
+    self.options = options
 
   def data(self):
     return "".join(self.text)
 
   def handle_starttag(self, tag, in_attrs):
     self.depthPrefix = self.depthPrefix + "  "
-    #print ("%s%s" % (self.depthPrefix, tag))
+    if self.options.debug:
+      print ("%s<%s" % (self.depthPrefix, tag))
     attrs = dict(in_attrs)
     self.tags.append(tag)
     self.text.append("<")
@@ -75,7 +83,8 @@ class MyHTMLParser(HTMLParser):
     self.text.append(">")
 
   def handle_endtag(self, tag):
-    #print ("%s%s" % (self.depthPrefix, tag))
+    if self.options.debug:
+      print ("%s%s>" % (self.depthPrefix, tag))
     if self.tags.pop() != tag:
       raise Exception("bad closing tag: " + tag)
     self.text.append("</")
@@ -100,8 +109,8 @@ class MyHTMLParser(HTMLParser):
     self.text.append("&" + name + ";")
 
 
-def Convert(data):
-  parser = MyHTMLParser()
+def Convert(data, options = None):
+  parser = MyHTMLParser(options)
   parser.feed(data)
   return parser.data()
 
@@ -120,7 +129,7 @@ def main (argv):
   data = ReadFile(args[0])
   data = data[data.find("\n") + 1:]  # removes title
   data = data[data.find("\n") + 1:]  # removes blank line after title
-  data = Convert(data)
+  data = Convert(data, options)
 
   print data
 

@@ -14,12 +14,14 @@
     background-color: rgba(255, 255, 255, 0.6) !important;
 }
 </style>
-<script type="text/javascript" src="resources/webgl-utils.js"></script>
-<script type="text/javascript" src="resources/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script type="text/javascript" src="resources/jquery.gman.ui.js"></script>
-<script type="text/javascript" src="resources/tdl/base.js"></script>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/jquery-1.7.1.min.js"></script>
+<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="resources/jquery.gman.ui.js"></script>
+<script src="resources/tdl/base.js"></script>
 <script>
+"use strict";
+
 tdl.require('tdl.buffers');
 tdl.require('tdl.clock');
 tdl.require('tdl.fast');
@@ -110,19 +112,6 @@ function CreateApp() {
         0, 4, 1, 5, 2, 6, 3, 7,
       ],
       'Uint16Array'),
-    color: new tdl.primitives.AttribBuffer(
-      4,
-      [
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-
-        0, 0, 0, 1,
-        0, 0, 0, 1,
-        0, 0, 0, 1,
-        0, 0, 0, 1,
-      ]),
   };
   var cubeRaysModel = new tdl.models.Model(vertexColorProgram, cubeRaysArrays, textures, gl.LINES);
 

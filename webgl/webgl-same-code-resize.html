@@ -1,0 +1,80 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - Same Code - Resize</title>
+<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+<style>
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+html, body {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Helvetica, Arial, Sans-Serif;
+}
+#editor td {
+    padding: 0px;
+}
+#editor {
+    border-spacing: 0px;
+    width: 100%;
+    height: 100%;
+}
+#canvas {
+    width: 100%;
+    height: 100%;
+}
+#viewContainer {
+    width: 70%
+}
+#controlContainer {
+    width: 30%;
+}
+#controls {
+    border-left: 5px solid black;
+    background-color:#666;
+    color: white;
+    padding: 0px 0.5em 0px 0.5em;
+    width: 100%;
+    height: 100%;
+    font-size: large;
+}
+</style>
+<script src="resources/jquery-1.7.1.min.js"></script>
+<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="resources/colResizable-1.3.min.js"></script>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/primitives.js"></script>
+<script src="resources/same-code.js"></script>
+</head>
+<body>
+<table id="editor">
+  <tr>
+    <td id="viewContainer">
+       <canvas id="canvas"></canvas>
+    </td>
+    <td id="controlContainer">
+      <div id="controls">Controls<br/>for<br/>an<br/>Editor<br/>would<br/>go<br/>here<br/><br/>&lt;=- Drag this black bar</div>
+    </td>
+  </tr>
+</table>
+<script>
+$(function() {
+  $("#editor").colResizable({
+    liveDrag: true,
+    gripInnerHtml: "<div class='grip'></div>",
+    draggingClass: "dragging",
+  });
+});
+</script>
+</body>
+</html>
+
+

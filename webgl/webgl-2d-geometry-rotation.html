@@ -14,13 +14,15 @@
     background-color: rgba(255, 255, 255, 0.6) !important;
 }
 </style>
-<script type="text/javascript" src="resources/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script type="text/javascript" src="resources/jquery.mousecapture.js"></script>
-<script type="text/javascript" src="resources/jquery.gman.ui.js"></script>
-<script type="text/javascript" src="resources/jquery-gman-circle.js"></script>
-<script type="text/javascript" src="resources/webgl-utils.js"></script>
+<script src="resources/jquery-1.7.1.min.js"></script>
+<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="resources/jquery.mousecapture.js"></script>
+<script src="resources/jquery.gman.ui.js"></script>
+<script src="resources/jquery-gman-circle.js"></script>
+<script src="resources/webgl-utils.js"></script>
 <script>
+"use strict";
+
 $(function(){
   main();
 });
@@ -34,9 +36,7 @@ function main() {
   }
 
   // setup GLSL program
-  vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
-  fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
-  program = createProgram(gl, [vertexShader, fragmentShader]);
+  var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
   gl.useProgram(program);
 
   // look up where the vertex data needs to go.

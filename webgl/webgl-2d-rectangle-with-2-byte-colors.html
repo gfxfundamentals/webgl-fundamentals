@@ -14,12 +14,14 @@
     background-color: rgba(255, 255, 255, 0.6) !important;
 }
 </style>
-<script type="text/javascript" src="resources/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script type="text/javascript" src="resources/jquery.gman.ui.js"></script>
-<script type="text/javascript" src="resources/webgl-utils.js"></script>
-<script type="text/javascript" src="resources/webgl-2d-math.js"></script>
+<script src="resources/jquery-1.7.1.min.js"></script>
+<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="resources/jquery.gman.ui.js"></script>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-2d-math.js"></script>
 <script>
+"use strict";
+
 $(function(){
   main();
 });
@@ -33,9 +35,7 @@ function main() {
   }
 
   // setup GLSL program
-  vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
-  fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
-  program = createProgram(gl, [vertexShader, fragmentShader]);
+  var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
   gl.useProgram(program);
 
   // look up where the vertex data needs to go.
@@ -102,7 +102,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Compute the matrices
-    var projectionMatrix = make2DProjection(canvas.width, canvas.height);
+    var projectionMatrix = make2DProjection(canvas.clientWidth, canvas.clientHeight);
     var translationMatrix = makeTranslation(translation[0], translation[1]);
     var rotationMatrix = makeRotation(angleInRadians);
     var scaleMatrix = makeScale(scale[0], scale[1]);

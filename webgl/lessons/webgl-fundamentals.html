@@ -44,9 +44,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <div id="contentwrap">
   <div id="content">
     <h1>WebGL Fundamentals</h1>
-    <p>WebGL makes it possible to display amazing realtime 3D graphics in your browser but what many people don't know is that WebGL is actually a 2D API, not a 3D API. Let me explain.
+    <p>WebGL makes it possible to display amazing realtime 3D graphics in your browser but what many people don&#39;t know is that WebGL is actually a 2D API, not a 3D API. Let me explain.
 <!--more-->
-WebGL only cares about 2 things. Clipspace coordinates in 2D and colors. Your job as a programmer using WebGL is to provide WebGL with those 2 things. You provide 2 "shaders" to do this. A Vertex shader which provides the clipspace coordinates and a fragment shader that provides the color.</p>
+WebGL only cares about 2 things. Clipspace coordinates in 2D and colors. Your job as a programmer using WebGL is to provide WebGL with those 2 things. You provide 2 &quot;shaders&quot; to do this. A Vertex shader which provides the clipspace coordinates and a fragment shader that provides the color.</p>
 <p>Clipspace coordinates always go from -1 to +1 no matter what size your canvas is. Here is a simple WebGL example that shows WebGL in its simplest form.</p>
 <pre class="prettyprint showlinemods">
 // Get A WebGL context
@@ -83,7 +83,7 @@ gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 gl.drawArrays(gl.TRIANGLES, 0, 6);
 </pre>
 
-<p>Here's the 2 shaders</p>
+<p>Here&#39;s the 2 shaders</p>
 <pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
@@ -101,12 +101,11 @@ void main() {
 </pre>
 
 <p>This will draw a green rectangle the entire size of the canvas. Here it is</p>
-<iframe class="webgl_example" src="../webgl-fundamentals.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-fundamentals.html" target="_blank">click here to open in a separate window</a></p>
+<p><iframe class="webgl_example" src="../webgl-fundamentals.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-fundamentals.html" target="_blank">click here to open in a separate window</a></p>
 <p>Not very exciting :-p</p>
-<p>Again, clipspace coordinates always go from -1 to +1 regardless of the size of the canvas. In the case above you can see we are doing nothing but passing on our position data directly. Since the position data is already in clipspace there is no work to do. <strong>If you want 3D it's up to you to supply shaders that convert from 3D to 2D because WebGL IS A 2D API!!!</strong></p>
-<p>For 2D stuff you would probably rather work in pixels than clipspace so let's change the shader so we can supply rectangles in pixels and have it convert to clipspace for us. Here's the new vertex shader</p>
+<p>Again, clipspace coordinates always go from -1 to +1 regardless of the size of the canvas. In the case above you can see we are doing nothing but passing on our position data directly. Since the position data is already in clipspace there is no work to do. <strong>If you want 3D it&#39;s up to you to supply shaders that convert from 3D to 2D because WebGL IS A 2D API!!!</strong></p>
+<p>For 2D stuff you would probably rather work in pixels than clipspace so let&#39;s change the shader so we can supply rectangles in pixels and have it convert to clipspace for us. Here&#39;s the new vertex shader</p>
 <pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
@@ -145,19 +144,17 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 </pre>
 
 <p>And here it is</p>
-<iframe class="webgl_example" src="../webgl-2d-rectangle.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-rectangle.html" target="_blank">click here to open in a separate window</a></p>
+<p><iframe class="webgl_example" src="../webgl-2d-rectangle.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-rectangle.html" target="_blank">click here to open in a separate window</a></p>
 <p>You might notice the rectangle is near the bottom of that area. WebGL considers the bottom left corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs we just flip the y coordinate.</p>
 <pre class="prettyprint showlinemods">
    gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </pre>
 
 <p>And now our rectangle is where we expect it.</p>
-<iframe class="webgl_example" src="../webgl-2d-rectangle-top-left.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-rectangle-top-left.html" target="_blank">click here to open in a separate window</a></p>
-<p>Let's make the code that defines a rectangle into a function so we can call it for different sized rectangles. While we're at it we'll make the color settable.</p>
+<p><iframe class="webgl_example" src="../webgl-2d-rectangle-top-left.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-rectangle-top-left.html" target="_blank">click here to open in a separate window</a></p>
+<p>Let&#39;s make the code that defines a rectangle into a function so we can call it for different sized rectangles. While we&#39;re at it we&#39;ll make the color settable.</p>
 <p>First we make the fragment shader take a color uniform input.</p>
 <pre class="prettyprint showlinemods">
 &lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
@@ -171,7 +168,7 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-<p>And here's the new code that draws 50 rectangles in random places and random colors.</p>
+<p>And here&#39;s the new code that draws 50 rectangles in random places and random colors.</p>
 <pre class="prettyprint showlinemods">
   var colorLocation = gl.getUniformLocation(program, "u_color");
   ...
@@ -216,16 +213,15 @@ function setRectangle(gl, x, y, width, height) {
 }
 </pre>
 
-<p>And here's the rectangles.</p>
-<iframe class="webgl_example" src="../webgl-2d-rectangles.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-rectangles.html" target="_blank">click here to open in a separate window</a></p>
+<p>And here&#39;s the rectangles.</p>
+<p><iframe class="webgl_example" src="../webgl-2d-rectangles.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-rectangles.html" target="_blank">click here to open in a separate window</a></p>
 <p>I hope you can see that WebGL is actually a pretty simple API. While it can get more complicated to do 3D that complication is added by you, the programmer, in the form of more complex shaders. The WebGL API itself is 2D and fairly simple.</p>
-<p>From here you can go in 2 direction. If you are interested in image procesing I'll show you <a href="webgl-image-processing.html">how to do some 2D image processing</a>. If you are interesting in learning about translation, rotation and scale then <a href="webgl-2d-translation.html">start here</a>.</p>
+<p>From here you can go in 2 direction. If you are interested in image procesing I&#39;ll show you <a href="webgl-image-processing.html">how to do some 2D image processing</a>. If you are interesting in learning about translation, rotation and scale then <a href="webgl-2d-translation.html">start here</a>.</p>
 <div class="webgl_bottombar">
-<h3>What do type="x-shader/x-vertex" and type="x-shader/x-fragment" mean?</h3>
+<h3>What do type=&quot;x-shader/x-vertex&quot; and type=&quot;x-shader/x-fragment&quot; mean?</h3>
 <p>
-<code>&lt;script&gt;</code> tags default to having JavaScript in them. You can put no type or you can put <code>type="javascript"</code> or <code>type="text/javascript"</code> and the browser will interpret the contents as JavaScript. If you put anything else the browser ignores the contents of the script tag.
+<code>&lt;script&gt;</code> tags default to having JavaScript in them. You can put no type or you can put <code>type=&quot;javascript&quot;</code> or <code>type=&quot;text/javascript&quot;</code> and the browser will interpret the contents as JavaScript. If you put anything else the browser ignores the contents of the script tag.
 </p>
 <p>
 We can use this feature to store shaders in script tags. Even better, we can make up our own type and in our javascript look for that to decide whether to compile the shader as a vertex shader or a fragment shader.
@@ -234,6 +230,7 @@ We can use this feature to store shaders in script tags. Even better, we can mak
 In this case the function <code>createShaderFromScriptElement</code> looks for a script with specified <code>id</code> and then looks at the <code>type</code> to decide what type of shader to create.
 </p>
 </div>
+
   </div>
 </div>
 </body>

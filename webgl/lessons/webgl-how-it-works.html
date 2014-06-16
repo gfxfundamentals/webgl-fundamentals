@@ -55,13 +55,13 @@ first part.</p>
     gl.drawArrays(gl.TRIANGLE, 0, 9);
 </pre>
 
-<p>The 9 there means "process 9 vertices" so here are 9 vertices being processed.</p>
+<p>The 9 there means &quot;process 9 vertices&quot; so here are 9 vertices being processed.</p>
 <p><img src="resources/vertex-shader-anim.gif" class="webgl_center" /></p>
 <p>On the left is the data you provide.  The vertex shader is a function you
 write.  It gets called once for each vertex.  You do some math and set the
 special variable “gl_Position” and the GPU takes your result and
 stores it internally.</p>
-<p>Assuming you're drawing TRIANGLES, every time this first part generates 3
+<p>Assuming you&#39;re drawing TRIANGLES, every time this first part generates 3
 vertices the GPU uses them to make a triangle.  It figures out which
 pixels the 3 points of the triangle correspond to, and then rasterizes the
 triangle which is a fancy word for “draws it with pixels”.  For each
@@ -73,8 +73,8 @@ Fortunately we can pass it more info.  We define “varyings” for each
 value we want to pass from the vertex shader to the fragment shader.</p>
 <p>As a simple example, lets just pass the clipspace coordinates we computed
 directly from the vertex shader to the fragment shader.</p>
-<p>We'll draw with a simple triangle.  Continuing from our <a
-href="webgl-2d-matrices.html">previous example</a> let's change our F to a
+<p>We&#39;ll draw with a simple triangle.  Continuing from our <a
+href="webgl-2d-matrices.html">previous example</a> let&#39;s change our F to a
 triangle.</p>
 <pre class="prettyprint showlinemods">
 // Fill the buffer with the values that define a rectangle.
@@ -128,46 +128,42 @@ void main() {
 
 <p>WebGL will connect the varying in the vertex shader to the varying of the
 same name and type in the fragment shader.</p>
-<p>Here's the working version.</p>
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-triangle-with-position-for-color.html"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-triangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a></p>
+<p>Here&#39;s the working version.</p>
+<p><iframe class="webgl_example" width="400" height="300" src="../webgl-2d-triangle-with-position-for-color.html"></iframe>
+<a class="webgl_center" href="../webgl-2d-triangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a></p>
 <p>Move, scale and rotate the rectangle.  Notice that since the colors are
-computed from clipspace they don't move with the rectangle.  They are
+computed from clipspace they don&#39;t move with the rectangle.  They are
 relative to the background.</p>
 <p>Now think about it.  We only compute 3 vertices.  Our vertex shader only
-gets called 3 times therefore it's only computing 3 colors yet our
-triangle is many colors.  This is why it's called a <em>varying</em>.</p>
+gets called 3 times therefore it&#39;s only computing 3 colors yet our
+triangle is many colors.  This is why it&#39;s called a <em>varying</em>.</p>
 <p>WebGL takes the 3 values we computed for each vertex and as it rasterizes
 the triangle it interpolates between the values we computed for the
 vertices.  For each pixel it calls our fragment shader with the
 interpolated value for that pixel.</p>
 <p>In the example above we start out with the 3 vertices</p>
-<style>
+<p><style>
 table.vertex_table {
   border: 1px solid black;
   border-collapse: collapse;
   font-family: monospace;
   font-size: small;
-}
-
-table.vertex_table th {
+}</p>
+<p>table.vertex_table th {
   background-color: #88ccff;
   padding-right: 1em;
   padding-left: 1em;
-}
-
-table.vertex_table td {
+}</p>
+<p>table.vertex_table td {
   border: 1px solid black;
   text-align: right;
   padding-right: 1em;
   padding-left: 1em;
 }
-</style>
-
+</style></p>
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="2">Vertices</td></tr>
+<tr><th colspan="2">Vertices</th></tr>
 <tr><td>0</td><td>-100</td></tr>
 <tr><td>150</td><td>125</td></tr>
 <tr><td>-175</td><td>100</td></tr>
@@ -176,12 +172,12 @@ table.vertex_table td {
 
 <p>Our vertex shader applies a matrix to translate, rotate, scale and convert
 to clipspace.  The defaults for translation, rotation and scale are
-translation = 200, 150, rotation = 0, scale = 1,1 so that's really only
+translation = 200, 150, rotation = 0, scale = 1,1 so that&#39;s really only
 translation.  Given our backbuffer is 400x300 our vertex shader applies
 the matrix and then computes the following 3 clipspace vertices.</p>
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="3">values written to gl_Position</td></tr>
+<tr><th colspan="3">values written to gl_Position</th></tr>
 <tr><td>0.000</td><td>0.660</td></tr>
 <tr><td>0.750</td><td>-0.830</td></tr>
 <tr><td>-0.875</td><td>-0.660</td></tr>
@@ -192,7 +188,7 @@ the matrix and then computes the following 3 clipspace vertices.</p>
 v_color that we declared.</p>
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="3">values written to v_color</td></tr>
+<tr><th colspan="3">values written to v_color</th></tr>
 <tr><td>0.5000</td><td>0.750</td><td>0.5</td></tr>
 <tr><td>0.8750</td><td>0.915</td><td>0.5</td></tr>
 <tr><td>0.0625</td><td>0.170</td><td>0.5</td></tr>
@@ -201,14 +197,13 @@ v_color that we declared.</p>
 
 <p>Those 3 values written to v_color are then interpolated and passed to the
 fragment shader for each pixel.</p>
-<iframe class="webgl_example" width="400" height="300" src="resources/fragment-shader-anim.html"></iframe>
-
+<p><iframe class="webgl_example" width="400" height="300" src="resources/fragment-shader-anim.html"></iframe></p>
 <div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
 
 <p>We can also pass in more data to the vertex shader which we can then pass
 on to the fragment shader.  So for example lets draw a rectangle, that
-consists of 2 triangles, in 2 colors.  To do this we'll add another
-attribute to the vertex shader so we can pass it more data and we'll pass
+consists of 2 triangles, in 2 colors.  To do this we&#39;ll add another
+attribute to the vertex shader so we can pass it more data and we&#39;ll pass
 that data directly to the fragment shader.</p>
 <pre class="prettyprint showlinemods">
 attribute vec2 a_position;
@@ -264,14 +259,13 @@ function setColors(gl) {
 }
 </pre>
 
-<p>And here's the result.</p>
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-2-colors.html"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-rectangle-with-2-colors.html" target="_blank">click here to open in a separate window</a></p>
-<p>Notice that we have 2 solid color triangles.  Yet we're passing the values
+<p>And here&#39;s the result.</p>
+<p><iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-2-colors.html"></iframe>
+<a class="webgl_center" href="../webgl-2d-rectangle-with-2-colors.html" target="_blank">click here to open in a separate window</a></p>
+<p>Notice that we have 2 solid color triangles.  Yet we&#39;re passing the values
 in a <em>varying</em> so they are being varied or interpolated across the
-triangle.  It's just that we used the same color on each of the 3 vertices
-of each triangle.  If we make each color different we'll see the
+triangle.  It&#39;s just that we used the same color on each of the 3 vertices
+of each triangle.  If we make each color different we&#39;ll see the
 interpolation.</p>
 <pre class="prettyprint showlinemods">
 // Fill the buffer with colors for the 2 triangles
@@ -292,13 +286,12 @@ function setColors(gl) {
 </pre>
 
 <p>And now we see the interpolated <em>varying</em>.</p>
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-random-colors.html"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-rectangle-with-random-colors.html" target="_blank">click here to open in a separate window</a></p>
+<p><iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-random-colors.html"></iframe>
+<a class="webgl_center" href="../webgl-2d-rectangle-with-random-colors.html" target="_blank">click here to open in a separate window</a></p>
 <p>Not very exciting I suppose but it does demonstrate using more than one
 attribute and passing data from a vertex shader to a fragment shader.  If
 you check out <a href="webgl-image-processing.html">the image processing
-examples</a> you'll see they also use an extra attribute to pass in
+examples</a> you&#39;ll see they also use an extra attribute to pass in
 texture coordinates.</p>
 <p>Before we move on just one more thing.</p>
 <h2>What do these buffer and attibute commands do?</h2>
@@ -308,7 +301,7 @@ GPU.  <code>gl.createBuffer</code> creates a buffer.
 <code>gl.bindBuffer</code> sets that buffer as the buffer to be worked on.
 <code>gl.bufferData</code> copies data into the buffer.</p>
 <p>Once the data is in the buffer we need to tell WebGL how to get data out
-of it and provide it to the vertex shader's attributes.</p>
+of it and provide it to the vertex shader&#39;s attributes.</p>
 <p>To do this, first we ask WebGL what locations it assigned to the
 attributes.  For example in the code above we have</p>
 <pre class="prettyprint showlinemods">
@@ -333,43 +326,43 @@ attributes.  For example in the code above we have</p>
         offsetIntoBuffer);
 </pre>
 
-<p>And this command tells WebGL to get data from the buffer that's was last
+<p>And this command tells WebGL to get data from the buffer that&#39;s was last
 bound with gl.bindBuffer, how many components per vertex (1 - 4), what the
 type of data is (BYTE, FLOAT, INT, UNSIGNED_SHORT, etc...), the stride
 which means how many bytes to skip to get from one piece of data to the
 next piece of data, and an offset for how far into the buffer our data is.</p>
 <p>Number of components is always 1 to 4.</p>
 <p>If you are using 1 buffer per type of data then both stride and offset can
-always be 0.  0 for stride means "use a stride that matches the type and
-size".  0 for offset means start at the beginning of the buffer.  Setting
+always be 0.  0 for stride means &quot;use a stride that matches the type and
+size&quot;.  0 for offset means start at the beginning of the buffer.  Setting
 them to values other than 0 is more complicated and though it has some
-benefits in terms of performance it's not worth the complication unless
+benefits in terms of performance it&#39;s not worth the complication unless
 you are trying to push WebGL to its absolute limits.</p>
 <p>I hope that clears up buffers and attributes.</p>
-<div class="webgl_bottombar"><h3>What's normalizeFlag for in vertexAttribPointer?</h3>
+<div class="webgl_bottombar"><h3>What&#39;s normalizeFlag for in vertexAttribPointer?</h3>
 <p>
 The normalize flag is for all the non floating point types. If you pass in false then values will be interpreted as the type they are. BYTE goes from -128 to 127, UNSIGNED_BYTE goes from 0 to 255, SHORT goes from -32768 to 32776 etc...
 </p>
 <p>
 If you set the normalize flag to true then the values of a BYTE (-128 to 127) represent the values -1.0 to +1.0, UNSIGNED_BYTE (0 to 255) become 0.0 to +1.0, A normalized SHORT also goes from -1.0 to +1.0 it just has more resolution than a BYTE.</p>
-<p>The most common use for normalized data is for colors. Most of the time colors only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha would use 16 bytes per vertex per color. If you have complicated geometry that can add up to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs where 0 represnets 0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color per vertex, a 75% savings.
+<p>The most common use for normalized data is for colors. Most of the time colors only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha would use 16 bytes per vertex per color. If you have complicated geometry that can add up to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs where 0 represnets 0.0 and 255 represents 1.0. Now you&#39;d only need 4 bytes per color per vertex, a 75% savings.
 </p>
-<p>Let's change our code to do this. When we tell WebGL how to extract our colors we'd use</p>
+<p>Let&#39;s change our code to do this. When we tell WebGL how to extract our colors we&#39;d use</p>
 <pre class="prettyprint showlinemods">
   gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 </pre>
-<p>And when we fill out our buffer with colors we'd use</p>
+<p>And when we fill out our buffer with colors we&#39;d use</p>
 <pre class="prettyprint showlinemods">
 // Fill the buffer with colors for the 2 triangles
 // that make the rectangle.
 function setColors(gl) {
   // Pick 2 random colors.
-  var r1 = Math.random() * 256; // 0 to 255.99999
-  var b1 = Math.random() * 256; // these values
-  var g1 = Math.random() * 256; // will be truncated
-  var r2 = Math.random() * 256; // when stored in the
-  var b2 = Math.random() * 256; // Uint8Array
-  var g2 = Math.random() * 256;
+  var r1 = Math.random() <em> 256; // 0 to 255.99999
+  var b1 = Math.random() </em> 256; // these values
+  var g1 = Math.random() <em> 256; // will be truncated
+  var r2 = Math.random() </em> 256; // when stored in the
+  var b2 = Math.random() <em> 256; // Uint8Array
+  var g2 = Math.random() </em> 256;
 
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -384,11 +377,14 @@ function setColors(gl) {
 }
 </pre>
 <p>
-Here's that sample.
+Here&#39;s that sample.
 </p>
 <iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-2-byte-colors.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-rectangle-with-2-byte-colors.html" target="_blank">click here to open in a separate window</a>
 </div>
+
+
+
   </div>
 </div>
 </body>

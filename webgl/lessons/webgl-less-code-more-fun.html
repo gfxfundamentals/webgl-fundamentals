@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/webgl-less-code-more-fun.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of Gregg Tavares. nor the names of his
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - Less Code, More Fun</title>
+<link rel="stylesheet" href="resources/base.css" type="text/css" />
+<link rel="stylesheet" href="resources/lesson.css" type="text/css" />
+<script type="text/javascript" src="../resources/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="resources/prettify.js"></script>
+<script type="text/javascript" src="resources/lesson.js"></script>
+</head>
+<body>
+<div id="contentwrap">
+  <div id="content">
+    <h1>WebGL - Less Code, More Fun</h1>
+    <p>This post is a continuation of a series of posts about WebGL.
+The first <a href="webgl-fundamentals.html">started with fundamentals</a>.
+If you haven&#39;t read those please view them first.</p>
+<p>WebGL programs require that you write shader programs which you have to compile and link and then
+you have to look up the locations of the inputs to those shader programs. These inputs are called
+uniforms and attributes and the code required to look up their locations can be wordy and tedious.</p>
+<p>Assume we&#39;ve got the <a href="webgl-boilerplate.html">typical boilerplate WebGL code for
+compiling and linking shader programs</a>. Given a set of shaders like this.</p>
+<p>vertex shader:</p>
+<pre class="prettyprint">
+uniform mat4 u_worldViewProjection;
+uniform vec3 u_lightWorldPos;
+uniform mat4 u_world;
+uniform mat4 u_viewInverse;
+uniform mat4 u_worldInverseTranspose;
+
+attribute vec4 a_position;
+attribute vec3 a_normal;
+attribute vec2 a_texcoord;
+
+varying vec4 v_position;
+varying vec2 v_texCoord;
+varying vec3 v_normal;
+varying vec3 v_surfaceToLight;
+varying vec3 v_surfaceToView;
+
+void main() {
+  v_texCoord = a_texcoord;
+  v_position = (u_worldViewProjection * a_position);
+  v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
+  v_surfaceToLight = u_lightWorldPos - (u_world * a_position).xyz;
+  v_surfaceToView = (u_viewInverse[3] - (u_world * a_position)).xyz;
+  gl_Position = v_position;
+}
+</pre>
+
+<p>fragment shader:</p>
+<pre class="prettyprint">
+precision mediump float;
+
+varying vec4 v_position;
+varying vec2 v_texCoord;
+varying vec3 v_normal;
+varying vec3 v_surfaceToLight;
+varying vec3 v_surfaceToView;
+
+uniform vec4 u_lightColor;
+uniform vec4 u_ambient;
+uniform sampler2D u_diffuse;
+uniform vec4 u_specular;
+uniform float u_shininess;
+uniform float u_specularFactor;
+
+vec4 lit(float l ,float h, float m) {
+  return vec4(1.0,
+              max(l, 0.0),
+              (l > 0.0) ? pow(max(0.0, h), m) : 0.0,
+              1.0);
+}
+
+void main() {
+  vec4 diffuseColor = texture2D(u_diffuse, v_texCoord);
+  vec3 a_normal = normalize(v_normal);
+  vec3 surfaceToLight = normalize(v_surfaceToLight);
+  vec3 surfaceToView = normalize(v_surfaceToView);
+  vec3 halfVector = normalize(surfaceToLight + surfaceToView);
+  vec4 litR = lit(dot(a_normal, surfaceToLight),
+                    dot(a_normal, halfVector), u_shininess);
+  vec4 outColor = vec4((
+  u_lightColor * (diffuseColor * litR.y + diffuseColor * u_ambient +
+                u_specular * litR.z * u_specularFactor)).rgb,
+      diffuseColor.a);
+  gl_FragColor = outColor;
+}
+</pre>
+
+<p>You&#39;d end up having to write code like this to look up and set all the various values to draw.</p>
+<pre class="prettyprint">
+// At initialization time
+var u_worldViewProjectionLoc   = gl.getUniformLocation(program, "u_worldViewProjection");
+var u_lightWorldPosLoc         = gl.getUniformLocation(program, "u_lightWorldPos");
+var u_worldLoc                 = gl.getUniformLocation(program, "u_world");
+var u_viewInverseLoc           = gl.getUniformLocation(program, "u_viewInverse");
+var u_worldInverseTransposeLoc = gl.getUniformLocation(program, "u_worldInverseTranspose");
+var u_lightColorLoc            = gl.getUniformLocation(program, "u_lightColor");
+var u_ambientLoc               = gl.getUniformLocation(program, "u_ambient");
+var u_diffuseLoc               = gl.getUniformLocation(program, "u_diffuse");
+var u_specularLoc              = gl.getUniformLocation(program, "u_specular");
+var u_shininessLoc             = gl.getUniformLocation(program, "u_shininess");
+var u_specularFactorLoc        = gl.getUniformLocation(program, "u_specularFactor");
+
+var a_positionLoc              = gl.getAttribLocation(program, "a_position");
+var a_normalLoc                = gl.getAttribLocation(program, "a_normal");
+var a_texCoordLoc              = gl.getAttribLocation(program, "a_texcoord");
+
+
+// At init or draw time depending on use.
+var someWorldViewProjectionMat = computeWorldViewProjectionMatrix();
+var lightWorldPos              = [100, 200, 300];
+var worldMat                   = computeWorldMatrix();
+var viewInverseMat             = computeInverseViewMatrix();
+var worldInverseTransposeMat   = computeWorldInverseTransposeMatrix();
+var lightColor                 = [1, 1, 1, 1];
+var ambientColor               = [0.1, 0.1, 0.1, 1];
+var diffuseTextureUnit         = 0;
+var specularColor              = [1, 1, 1, 1];
+var shininess                  = 60;
+var specularFactor             = 1;
+
+
+// At draw time
+gl.useProgram(program);
+
+// Setup all the buffers and attributes
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.enableVertexAttribArray(a_positionLoc);
+gl.vertexAttribPointer(a_positionLoc, positionNumComponents, gl.FLOAT, false, 0, 0);
+gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+gl.enableVertexAttribArray(a_normalLoc);
+gl.vertexAttribPointer(a_normalLoc, normalNumComponents, gl.FLOAT, false, 0, 0);
+gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+gl.enableVertexAttribArray(a_texcoordLoc);
+gl.vertexAttribPointer(a_texcoordLoc, texcoordNumComponents, gl.FLOAT, 0, 0);
+
+// Setup the textures used
+gl.activeTexture(gl.TEXTURE0 + diffuseTextureUnit);
+gl.bindTexture(gl.TEXTURE_2D, diffuseTexture);
+
+// Set all the uniforms.
+gl.uniformMatrix4fv(u_worldViewProjectionLoc, false, someWorldViewProjectionMat);
+gl.uniform3fv(u_lightWorldPosLoc, lightWorldPos);
+gl.uniformMatrix4fv(u_worldLoc, worldMat);
+gl.uniformMatrix4fv(u_viewInverseLoc, viewInverseMat);
+gl.uniformMatrix4fv(u_worldInverseTransposeLoc, worldInverseTransposeMat);
+gl.uniform4fv(u_lightColorLoc, lightColor);
+gl.uniform4fv(u_ambientLoc, ambientColor);
+gl.uniform1i(u_diffuseLoc, diffuseTextureUnit);
+gl.uniform4fv(u_specularLoc, specularColor);
+gl.uniform1f(u_shininessLoc, shininess);
+gl.uniform1f(u_specularFactorLoc, specularFactor);
+
+gl.drawArrays(...);
+</pre>
+
+<p>That&#39;s a lot of typing.</p>
+<p>There&#39;s lots of ways to simplify this. One suggestion is to ask WebGL to tell use all
+the uniforms and locations and then setup functions to set them for us. We can then pass in
+JavaScript objects to set our settings much easier. If that&#39;s clear as mud well,
+Our code would look something like this</p>
+<pre class="prettyprint">
+// At initialiation time
+var uniformSetters = createUniformSetters(gl, program);
+var attribSetters  = createAttributeSetters(gl, program);
+
+var attribs = {
+  a_position: { buffer: positionBuffer, numComponents: 3, },
+  a_normal:   { buffer: normalBuffer,   numComponents: 3, },
+  a_texcoord: { buffer: texcoordBuffer, numComponents: 2, },
+};
+
+// At init time or draw time depending on use.
+var uniforms = {
+  u_worldViewProjection:   computeWorldViewProjectionMatrix(...),
+  u_lightWorldPos:         [100, 200, 300],
+  u_world:                 computeWorldMatrix(),
+  u_viewInverse:           computeInverseViewMatrix(),
+  u_worldInverseTranspose: computeWorldInverseTransposeMatrix(),
+  u_lightColor:            [1, 1, 1, 1],
+  u_ambient:               [0.1, 0.1, 0.1, 1],
+  u_diffuse:               diffuseTexture,
+  u_specular:              [1, 1, 1, 1],
+  u_shininess:             60,
+  u_specularFactor:        1,
+};
+
+// At draw time
+gl.useProgram(program);
+
+// Setup all the buffers and attributes
+setAttributes(attribSetters, attribs);
+
+// Set all the uniforms and textures used.
+setUniforms(uniformSetters, uniforms);
+
+gl.drawArrays(...);
+</pre>
+
+<p>That seems a heck of a lot smaller, easier, and less code to me.</p>
+<p>You can even use multiple JavaScript objects if it suits you. For example</p>
+<pre class="prettyprint">
+// At initialiation time
+var uniformSetters = createUniformSetters(gl, program);
+var attribSetters  = createAttributeSetters(gl, program);
+
+var attribs = {
+  a_position: { buffer: positionBuffer, numComponents: 3, },
+  a_normal:   { buffer: normalBuffer,   numComponents: 3, },
+  a_texcoord: { buffer: texcoordBuffer, numComponents: 2, },
+};
+
+// At init time or draw time depending
+var uniformsThatAreTheSameForAllObjects = {
+  u_lightWorldPos:         [100, 200, 300],
+  u_viewInverse:           computeInverseViewMatrix(),
+  u_lightColor:            [1, 1, 1, 1],
+};
+
+var uniformsThatAreComputedForEachObject = {
+  u_worldViewProjection:   perspective(...),
+  u_world:                 computeWorldMatrix(),
+  u_worldInverseTranspose: computeWorldInverseTransposeMatrix(),
+};
+
+var objects = [
+  { translation: [10, 50, 100],
+    materialUniforms: {
+      u_ambient:               [0.1, 0.1, 0.1, 1],
+      u_diffuse:               diffuseTexture,
+      u_specular:              [1, 1, 1, 1],
+      u_shininess:             60,
+      u_specularFactor:        1,
+    },
+  },
+  { translation: [-120, 20, 44],
+    materialUniforms: {
+      u_ambient:               [0.1, 0.2, 0.1, 1],
+      u_diffuse:               someOtherDiffuseTexture,
+      u_specular:              [1, 1, 0, 1],
+      u_shininess:             30,
+      u_specularFactor:        0.5,
+    },
+  },
+  { translation: [200, -23, -78],
+    materialUniforms: {
+      u_ambient:               [0.2, 0.2, 0.1, 1],
+      u_diffuse:               yetAnotherDiffuseTexture,
+      u_specular:              [1, 0, 0, 1],
+      u_shininess:             45,
+      u_specularFactor:        0.7,
+    },
+  },
+];
+
+// At draw time
+gl.useProgram(program);
+
+// Setup the parts that are common for all objects
+setAttributes(attribSetters, attribs);
+setUniforms(uniformSetters, uniformThatAreTheSameForAllObjects);
+
+objects.forEach(function(object) {
+  computeMatricesForObject(object, uniformsThatAreComputedForEachObject);
+  setUniforms(uniformSetters, uniformThatAreComputedForEachObject);
+  setUniforms(unifromSetters, objects.materialUniforms);
+  gl.drawArrays(...);
+});
+</pre>
+
+<p>Here&#39;s an example using these helper functions</p>
+<p><iframe class="webgl_example" src="../webgl-less-code-more-fun.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-less-code-more-fun.html" target="_blank">click here to open in a separate window</a></p>
+<p>This is the style I try to write my own WebGL programs.
+For the lessons on these tutorials though I&#39;ve felt like I have to use the standard <strong>verbose</strong>
+ways so people don&#39;t get confused about what is WebGL and what is my own style.</p>
+<p>Feel free to use this style in your own code. The functions <code>createUniformSetters</code>, <code>createAttributeSetters</code>,
+<code>setUniforms</code>, and <code>setAttributes</code> are included in the <a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code>webgl-utils.js</code></a>
+file used by all the samples.</p>
+<div class="webgl_bottombar">
+<h3>Can we use the setters directly?</h3>
+<p>
+For those of you familar with JavaScript you might be wondering if you can use the setters
+directly like this.
+</p>
+<pre class="prettyprint">
+// At initialiation time
+var uniformSetters = createUniformSetters(program);
+
+// At draw time
+uniformSetters.u_ambient([1, 0, 0, 1]); // set the ambient color to red.
+</pre>
+<p>The reason this is not a good idea is because when you&#39;re working with GLSL you might
+modify the shaders from time to time, often to debug. Let&#39;s say we were not seeing
+anything on the screen in our program. One of the first things I do when nothing
+is appearing is to simplify my shaders. For example I might change the fragment shader
+to the simplest thing possible</p>
+<pre class="prettyprint showlinemods">
+// fragment shader
+precision mediump float;
+
+varying vec4 v_position;
+varying vec2 v_texCoord;
+varying vec3 v_normal;
+varying vec3 v_surfaceToLight;
+varying vec3 v_surfaceToView;
+
+uniform vec4 u_lightColor;
+uniform vec4 u_ambient;
+uniform sampler2D u_diffuse;
+uniform vec4 u_specular;
+uniform float u_shininess;
+uniform float u_specularFactor;
+
+vec4 lit(float l ,float h, float m) {
+  return vec4(1.0,
+              max(l, 0.0),
+              (l &gt; 0.0) ? pow(max(0.0, h), m) : 0.0,
+              1.0);
+}
+
+void main() {
+  vec4 diffuseColor = texture2D(u_diffuse, v_texCoord);
+  vec3 a_normal = normalize(v_normal);
+  vec3 surfaceToLight = normalize(v_surfaceToLight);
+  vec3 surfaceToView = normalize(v_surfaceToView);
+  vec3 halfVector = normalize(surfaceToLight + surfaceToView);
+  vec4 litR = lit(dot(a_normal, surfaceToLight),
+                    dot(a_normal, halfVector), u_shininess);
+  vec4 outColor = vec4((
+  u_lightColor <em> (diffuseColor </em> litR.y + diffuseColor <em> u_ambient +
+                u_specular </em> litR.z <em> u_specularFactor)).rgb,
+      diffuseColor.a);
+  gl_FragColor = outColor;
+</em>  gl_FragColor = vec4(0,1,0,1);  // &lt;!--- just green
+}
+</pre>
+<p>Notice I just added a line that sets <code>gl_FragColor</code> to a constant color.
+Most drivers will see that none of the previous lines in the file actually contribute
+to the result. As such they&#39;ll optimize out all of our uniforms. The next time we run the program
+when we call <code>createUniformSetters</code> it won&#39;t create a setter for <code>u_ambient</code> so the
+code above that calls <code>uniformSetters.u_ambient()</code> directly will fail with</p>
+<pre class="prettyprint">
+TypeError: undefined is not a function
+</pre>
+<p><code>setUniforms</code> solves that issue. It only sets those uniforms that actually exist</p>
+</div>
+
+
+  </div>
+</div>
+</body>
+
+
+

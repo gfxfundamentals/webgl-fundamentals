@@ -328,9 +328,9 @@ Here's a diagram of the matrix in action.
 <iframe class="webgl_example" src="../frustum-diagram.html" width="400" height="600"></iframe>
 <a class="webgl_center" href="../frustum-diagram.html" target="_blank">click here to open in a separate window</a>
 
-That shape that looks like 4 sided cone the cubes are spining in is called a frustum".
+That shape that looks like 4 sided cone the cubes are spinning in is called a frustum".
 The matrix takes the space inside the frustum and converts that to clipspace. `zNear` defines where
-tihngs will get clipped in front and zFar defines where things get clipped in back. Set `zNear` to 23 and
+things will get clipped in front and zFar defines where things get clipped in back. Set `zNear` to 23 and
 you'll see the front of the spinning cubes get clipped. Set `zFar` to 24 and you'll see the back of the cubes
 get clipped.
 
@@ -344,7 +344,7 @@ Now, to use it we just need to replace our old call to make2DProjection with a c
 makePerspective
 
 <pre class="prettyprint showlinemods">
-    var aspect = canvas.width / canvas.height;
+    var aspect = canvas.clientWidth / canvas.clientHeight;
     var projectionMatrix =
         makePerspective(fieldOfViewRadians, aspect, 1, 2000);
     var translationMatrix =

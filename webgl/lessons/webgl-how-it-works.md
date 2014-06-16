@@ -140,7 +140,7 @@ table.vertex_table td {
 </style>
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="2">Vertices</td></tr>
+<tr><th colspan="2">Vertices</th></tr>
 <tr><td>0</td><td>-100</td></tr>
 <tr><td>150</td><td>125</td></tr>
 <tr><td>-175</td><td>100</td></tr>
@@ -155,7 +155,7 @@ the matrix and then computes the following 3 clipspace vertices.
 
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="3">values written to gl_Position</td></tr>
+<tr><th colspan="3">values written to gl_Position</th></tr>
 <tr><td>0.000</td><td>0.660</td></tr>
 <tr><td>0.750</td><td>-0.830</td></tr>
 <tr><td>-0.875</td><td>-0.660</td></tr>
@@ -167,7 +167,7 @@ v_color that we declared.
 
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="3">values written to v_color</td></tr>
+<tr><th colspan="3">values written to v_color</th></tr>
 <tr><td>0.5000</td><td>0.750</td><td>0.5</td></tr>
 <tr><td>0.8750</td><td>0.915</td><td>0.5</td></tr>
 <tr><td>0.0625</td><td>0.170</td><td>0.5</td></tr>

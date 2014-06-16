@@ -46,13 +46,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <h1>WebGL - 2D vs 3D libraries</h1>
     <p>This post is a kind of side topic on a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a></p>
-<p>I'm writing this because my claim that WebGL is a 2D API and not a 3D API
-touches a nerve with some people.  I'm not sure why they feel threatened
+<p>I&#39;m writing this because my claim that WebGL is a 2D API and not a 3D API
+touches a nerve with some people.  I&#39;m not sure why they feel threatened
 or whatever it is that makes them so upset I called WebGL a 2D API.</p>
 <p>Arguably everything is a matter of perspective.  I might say a knife is an
 eating utensil, someone else might say a knife is a tool and yet another
 person might say a knife is a weapon.</p>
-<p>In the case of WebGL though there's a reason I think it's important to
+<p>In the case of WebGL though there&#39;s a reason I think it&#39;s important to
 call WebGL a 2D API and that is specifically because of the amount of 3D
 math knowledge you need to know to use WebGL to draw anything in 3D.</p>
 <p>I would argue that anything that calls itself a 3D library should do the
@@ -60,14 +60,14 @@ math knowledge you need to know to use WebGL to draw anything in 3D.</p>
 some material parameters, some lights and it should draw 3D for you.
 WebGL (and OpenGL ES 2.0+) are both used to draw 3D but neither fits this
 description.</p>
-<p>To give an anology, C++ does not "process words" out of the box.  We
-don't call C++ a "word processor" even though word processors can be
+<p>To give an anology, C++ does not &quot;process words&quot; out of the box.  We
+don&#39;t call C++ a &quot;word processor&quot; even though word processors can be
 written in C++.  Similarly WebGL does not draw 3D graphics out of the box.
 You can write library that will draw 3D graphics with WebGL but by itself
-it doesn't not do 3D graphics.</p>
+it doesn&#39;t not do 3D graphics.</p>
 <p>To give a further example, assume we want to draw a cube in 3d
 with lights.</p>
-<p>Here's the code in three.js to display this</p>
+<p>Here&#39;s the code in three.js to display this</p>
 <pre class="prettyprint showlinemods">
   // Setup WebGL.
   var c = document.getElementById("c");
@@ -111,10 +111,9 @@ with lights.</p>
 </pre>
 
 <p>and here it is displayed.</p>
-<iframe class="webgl_example" src="resources/three-js-cube-with-lights.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="resources/three-js-cube-with-lights.html" target="_blank">click here to open in a separate window</a></p>
-<p>Here's similar code in OpenGL (not ES) to display a cube with 2 lights.</p>
+<p><iframe class="webgl_example" src="resources/three-js-cube-with-lights.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="resources/three-js-cube-with-lights.html" target="_blank">click here to open in a separate window</a></p>
+<p>Here&#39;s similar code in OpenGL (not ES) to display a cube with 2 lights.</p>
 <pre class="prettyprint showlinemods">
   // Setup
   glViewport(0, 0, width, height);
@@ -171,9 +170,9 @@ with lights.</p>
 </pre>
 
 <p>Notice how we need almost no knowledge of 3D math for either of those
-examples.  Compare that to WebGL.  I'm not going to write the code
-required for WebGL.  The code is not that much larger.  It's not
-about the amount of lines required.  It's about the amount of <strong>knowledge</strong>
+examples.  Compare that to WebGL.  I&#39;m not going to write the code
+required for WebGL.  The code is not that much larger.  It&#39;s not
+about the amount of lines required.  It&#39;s about the amount of <strong>knowledge</strong>
 required.  In the two 3D libraries they take care of the 3D. You give them
 a camera position and field of view, a couple of lights and, a cube.  They
 deal with all the rest.  In other words. They are 3D libraries.</p>
@@ -181,24 +180,22 @@ deal with all the rest.  In other words. They are 3D libraries.</p>
 coordinates, frustums, cross products, dot products, varying interpolation, lighting
 specular calculations and all kinds of other stuff that often take months
 or years to fully understand.</p>
-<p>A 3D library's entire point is to have that knowledge built in so you
-don't need that knowledge yourself, you can just rely on the library to
+<p>A 3D library&#39;s entire point is to have that knowledge built in so you
+don&#39;t need that knowledge yourself, you can just rely on the library to
 handle it for you.  This was true the original OpenGL as shown above.
-It's true of other 3D libraries like three.js.  It is NOT true of OpenGL
+It&#39;s true of other 3D libraries like three.js.  It is NOT true of OpenGL
 ES 2.0+ or WebGL.</p>
 <p>It seems misleading to call WebGL a 3D library.  A user coming to WebGL
-will think "oh, 3D library.  Cool.  This will do 3D for me" and then find
-out the hard way that no, that's not the case at all.</p>
-<p>We can even take it one step further. Here's drawing 3D wireframe
+will think &quot;oh, 3D library.  Cool.  This will do 3D for me&quot; and then find
+out the hard way that no, that&#39;s not the case at all.</p>
+<p>We can even take it one step further. Here&#39;s drawing 3D wireframe
 cube in Canvas.</p>
-<iframe class="webgl_example" src="resources/3d-in-canvas.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="resources/3d-in-canvas.html" target="_blank">click here to open in a separate window</a></p>
+<p><iframe class="webgl_example" src="resources/3d-in-canvas.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="resources/3d-in-canvas.html" target="_blank">click here to open in a separate window</a></p>
 <p>And here is drawing a wireframe cube in WebGL.</p>
-<iframe class="webgl_example" src="resources/3d-in-webgl.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="resources/3d-in-webgl.html" target="_blank">click here to open in a separate window</a></p>
-<p>If you inspect the code you'll see there's not a whole lot of difference in terms
+<p><iframe class="webgl_example" src="resources/3d-in-webgl.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="resources/3d-in-webgl.html" target="_blank">click here to open in a separate window</a></p>
+<p>If you inspect the code you&#39;ll see there&#39;s not a whole lot of difference in terms
 of the amount of knowledge or for that matter even the code. Ultimately
 the Canvas version loops over the vertices, does the math WE SUPPLIED and
 draws some lines in 2D. The WebGL version does the same thing except the math
@@ -208,24 +205,26 @@ just a 2D rasteration engine, similar to Canvas 2d. Sure
 WebGL does have features that help you implement 3D.  WebGL has a depth
 buffer which makes depth sorting far easier than a system without.  WebGL
 also has various math functions built in that are very useful for doing 3D
-math although there is argubly nothing that makes them 3D.  They're a math
+math although there is argubly nothing that makes them 3D.  They&#39;re a math
 library.  You use them for math whether or not that math is 1d, 2d, 3d,
 whatever. But ultimately, WebGL only draws in 2D. You have to provide it
 with clipspace 2D coordinates that represent what you want drawn. Sure
-you provide a x,y,z,w and it divides by W before rendering but that's
+you provide a x,y,z,w and it divides by W before rendering but that&#39;s
 hardly enough to qualify WebGL as a 3D library. In the 3D librares you
 supply 3D data, the libraries take care of calculating 2D points from 3D.</p>
-<p>I hope you at least understand where I'm coming from when I say WebGL is
-not a 3D library. I hope you'll also realize that a 3D library should
+<p>I hope you at least understand where I&#39;m coming from when I say WebGL is
+not a 3D library. I hope you&#39;ll also realize that a 3D library should
 handle the 3D for you. OpenGL did. Three.js does. OpenGL ES 2.0 and WebGL
-do not. Therefore they argubly don't belong in the same broad category of
-"3D libraries".</p>
+do not. Therefore they argubly don&#39;t belong in the same broad category of
+&quot;3D libraries&quot;.</p>
 <p>The point of all of this is to give a developer that is new to WebGL
 an understanding of WebGL at its core. Knowing that WebGL is not a
 3D library and that they have to provide all the knowledge themselves
-lets them know what's next for them and whether they want to pursue
+lets them know what&#39;s next for them and whether they want to pursue
 that 3D math knowledge or instead choose a 3D library to handle it
 for them. It also removes much of the mystery of how it works.</p>
+
+
   </div>
 </div>
 </body>

@@ -47,12 +47,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <p>This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
 the previous was about <a href="webgl-3d-orthographic.html">3D Basics</a>.
-If you haven't read those please view them first.</p>
-<p>In the last post we went over how to do 3D but that 3D didn't have any perspective.
-It was using what's called an "orthographic" view which has its uses but it's
-generally not what people want when they say "3D".</p>
+If you haven&#39;t read those please view them first.</p>
+<p>In the last post we went over how to do 3D but that 3D didn&#39;t have any perspective.
+It was using what&#39;s called an &quot;orthographic&quot; view which has its uses but it&#39;s
+generally not what people want when they say &quot;3D&quot;.</p>
 <p>Instead we need to add perspective. Just what is perspective?
-It's basically the feature that things that are further away appear
+It&#39;s basically the feature that things that are further away appear
 smaller.</p>
 <p><img class="webgl_center" width="500" src="resources/perspective-example.svg" /></p>
 <p>Looking at the example above we see that things further away
@@ -60,7 +60,7 @@ are drawn smaller. Given our current sample one easy way to
 make it so that things that are further away appear smaller
 would be to divide the clipspace X and Y by Z.</p>
 <p>Think of it this way: If you have a line from (10, 15) to (20,15)
-it's 10 units long. In our current sample it would be drawn 10 pixels
+it&#39;s 10 units long. In our current sample it would be drawn 10 pixels
 long. But if we divide by Z then for example if Z is 1</p>
 <pre class="webgl_center">
 10 / 1 = 10
@@ -82,12 +82,12 @@ abs(5 - 10) = 5
 abs(3.333 - 6.666) = 3.333
 </pre>
 
-<p>You can see that as Z increases, as it gets further away, we'll end up drawing it smaller.
+<p>You can see that as Z increases, as it gets further away, we&#39;ll end up drawing it smaller.
 If we divide in clipspace we might get better results because Z will a smaller number (-1 to +1).
 If we add a fudgeFactor to multiply Z before we divide we can adjust how much smaller things
 get for a given distance.</p>
-<p>Let's try it. First let's change the vertex shader to divide by Z after we've
-multiplied it by our "fudgeFactor".</p>
+<p>Let&#39;s try it. First let&#39;s change the vertex shader to divide by Z after we&#39;ve
+multiplied it by our &quot;fudgeFactor&quot;.</p>
 <pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 ...
@@ -124,14 +124,14 @@ void main() {
     gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
 </pre>
 
-<p>And here's the result.</p>
-<iframe class="webgl_example" src="../webgl-3d-perspective.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-3d-perspective.html" target="_blank">click here to open in a separate window</a></p>
-<p>If it's not clear drag the "fudgeFactor" slider from 1.0 to 0.0 to see what things used to look like before
+<p>And here&#39;s the result.</p>
+<p><iframe class="webgl_example" src="../webgl-3d-perspective.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-perspective.html" target="_blank">click here to open in a separate window</a></p>
+<p>If it&#39;s not clear drag the &quot;fudgeFactor&quot; slider from 1.0 to 0.0 to see what things used to look like before
 we added our divide by Z code.</p>
-<p><img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
-<div class="webgl_center">orthographic vs perspective</div></p>
+<p><img class="webgl_center" src="resources/orthographic-vs-perspective.png" /></p>
+<div class="webgl_center">orthographic vs perspective</div>
+
 <p>It turns out WebGL takes the x,y,z,w value we assign to <code>gl_Position</code> in our vertex
 shader and divides it by w automatically.</p>
 <p>We can prove this very easily by changing the shader and instead of doing the
@@ -154,10 +154,9 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-<p>and see how it's exactly the same.</p>
-<iframe class="webgl_example" src="../webgl-3d-perspective-w.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-3d-perspective-w.html" target="_blank">click here to open in a separate window</a></p>
+<p>and see how it&#39;s exactly the same.</p>
+<p><iframe class="webgl_example" src="../webgl-3d-perspective-w.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-perspective-w.html" target="_blank">click here to open in a separate window</a></p>
 <p>Why is the fact that WebGL automatically divides by W useful? Because now, using
 more matrix magic, we can just use yet another matrix to copy z to w.</p>
 <p>A Matrix like this</p>
@@ -170,25 +169,25 @@ more matrix magic, we can just use yet another matrix to copy z to w.</p>
 
 <p>will copy z to w. You can look at each of those columns as</p>
 <div class="webgl_math_center"><pre class="webgl_math">
-x_out = x_in * 1 +
-        y_in * 0 +
-        z_in * 0 +
-        w_in * 0 ;
+x_out = x_in <em> 1 +
+        y_in </em> 0 +
+        z_in <em> 0 +
+        w_in </em> 0 ;
 
-y_out = x_in * 0 +
-        y_in * 1 +
-        z_in * 0 +
-        w_in * 0 ;
+y_out = x_in <em> 0 +
+        y_in </em> 1 +
+        z_in <em> 0 +
+        w_in </em> 0 ;
 
-z_out = x_in * 0 +
-        y_in * 0 +
-        z_in * 1 +
-        w_in * 0 ;
+z_out = x_in <em> 0 +
+        y_in </em> 0 +
+        z_in <em> 1 +
+        w_in </em> 0 ;
 
-w_out = x_in * 0 +
-        y_in * 0 +
-        z_in * 1 +
-        w_in * 0 ;
+w_out = x_in <em> 0 +
+        y_in </em> 0 +
+        z_in <em> 1 +
+        w_in </em> 0 ;
 </pre></div>
 
 <p>which when simplified is</p>
@@ -209,13 +208,13 @@ w_out = z_in;
 
 <p>that will change the W calculation to</p>
 <div class="webgl_math_center"><pre class="webgl_math">
-w_out = x_in * 0 +
-        y_in * 0 +
-        z_in * 1 +
-        w_in * 1 ;
+w_out = x_in <em> 0 +
+        y_in </em> 0 +
+        z_in <em> 1 +
+        w_in </em> 1 ;
 </pre></div>
 
-<p>and since we know <code>w_in</code> = 1.0 then that's really</p>
+<p>and since we know <code>w_in</code> = 1.0 then that&#39;s really</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in + 1;
 </pre></div>
@@ -230,19 +229,19 @@ w_out = z_in + 1;
 
 <p>which means</p>
 <div class="webgl_math_center"><pre class="webgl_math">
-w_out = x_in * 0 +
-        y_in * 0 +
-        z_in * fudgeFactor +
-        w_in * 1 ;
+w_out = x_in <em> 0 +
+        y_in </em> 0 +
+        z_in <em> fudgeFactor +
+        w_in </em> 1 ;
 </pre></div>
 
-<p>and simplified that's</p>
+<p>and simplified that&#39;s</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in * fudgeFactor + 1;
 </pre></div>
 
-<p>So, let's modify the program again to just use matrices.</p>
-<p>First let's put the vertex shader back. It's simple again</p>
+<p>So, let&#39;s modify the program again to just use matrices.</p>
+<p>First let&#39;s put the vertex shader back. It&#39;s simple again</p>
 <pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 uniform mat4 u_matrix;
@@ -255,7 +254,7 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-<p>Next let's make a function to make our Z -&gt; W matrix.</p>
+<p>Next let&#39;s make a function to make our Z -&gt; W matrix.</p>
 <pre class="prettyprint showlinemods">
 function makeZToWMatrix(fudgeFactor) {
   return [
@@ -267,7 +266,7 @@ function makeZToWMatrix(fudgeFactor) {
 }
 </pre>
 
-<p>and we'll change the code to use it.</p>
+<p>and we&#39;ll change the code to use it.</p>
 <pre class="prettyprint showlinemods">
     ...
     // Compute the matrices
@@ -287,23 +286,22 @@ function makeZToWMatrix(fudgeFactor) {
     ...
 </pre>
 
-<p>and note, again, it's exactly the same.</p>
-<iframe class="webgl_example" src="../webgl-3d-perspective-w-matrix.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-3d-perspective-w-matrix.html" target="_blank">click here to open in a separate window</a></p>
+<p>and note, again, it&#39;s exactly the same.</p>
+<p><iframe class="webgl_example" src="../webgl-3d-perspective-w-matrix.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-perspective-w-matrix.html" target="_blank">click here to open in a separate window</a></p>
 <p>All that was basically to show you that dividing by Z gives us perspective
 and that WebGL conveniently does this divide by Z for us.</p>
-<p>But there's still some problems. For example if you set Z to around -100 you'll see something like
+<p>But there&#39;s still some problems. For example if you set Z to around -100 you&#39;ll see something like
 the animation below</p>
 <p><img class="webgl_center" src="resources/z-clipping.gif" style="border: 1px solid black;" /></p>
-<p>What's going on? Why is the F disappearing early? Just like WebGL clips X and Y or +1 to -1 it also
-clips Z. What were's seeing here is where Z &lt; -1.</p>
+<p>What&#39;s going on? Why is the F disappearing early? Just like WebGL clips X and Y or +1 to -1 it also
+clips Z. What were&#39;s seeing here is where Z &lt; -1.</p>
 <p>I could go into detail about how the math to fix it but you can derive it the same way
 we did 2D projection. We need to take Z, add some amount and scale some amount and we can make any range we want
 get remapped to the -1 to +1.</p>
 <p>The cool thing is all of these steps can be done in 1 matrix. Even better, rather than a <code>fudgeFactor</code>
-we'll decide on a <code>fieldOfView</code> and compute the right values to make that happen.</p>
-<p>Here's a function to build the matrix.</p>
+we&#39;ll decide on a <code>fieldOfView</code> and compute the right values to make that happen.</p>
+<p>Here&#39;s a function to build the matrix.</p>
 <pre class="prettyprint showlinemods">
 function makePerspective(fieldOfViewInRadians, aspect, near, far) {
   var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
@@ -320,29 +318,28 @@ function makePerspective(fieldOfViewInRadians, aspect, near, far) {
 
 <p>This matrix will do all our conversions for us. It will adjust the units so they are
 in clipspace, it will do the math so that we can choose a field of view by angle
-and it will let us choose our z-clipping space. It assumes there's an <code>eye</code> or <code>camera</code> at the
+and it will let us choose our z-clipping space. It assumes there&#39;s an <code>eye</code> or <code>camera</code> at the
 origin (0, 0, 0) and given a <code>zNear</code> and a <code>fieldOfView</code> it computes what it would take so that
 stuff at <code>zNear</code> ends up at z=-1 and stuff at <code>zNear</code> that is half of <code>fieldOfView</code> above or below the center
 ends up with y=-1 and y=1 respectively. It computes what to use for X by just multipling by the <code>aspect</code> passed in.
-We'd normally set this to the <code>width / height</code> of the display area.
+We&#39;d normally set this to the <code>width / height</code> of the display area.
 Finally, it figures out how much to scale things in Z so that stuff at zFar ends up at Z = 1.</p>
-<p>Here's a diagram of the matrix in action.</p>
-<iframe class="webgl_example" src="../frustum-diagram.html" width="400" height="600"></iframe>
-
-<p><a class="webgl_center" href="../frustum-diagram.html" target="_blank">click here to open in a separate window</a></p>
-<p>That shape that looks like 4 sided cone the cubes are spining in is called a frustum".
+<p>Here&#39;s a diagram of the matrix in action.</p>
+<p><iframe class="webgl_example" src="../frustum-diagram.html" width="400" height="600"></iframe>
+<a class="webgl_center" href="../frustum-diagram.html" target="_blank">click here to open in a separate window</a></p>
+<p>That shape that looks like 4 sided cone the cubes are spinning in is called a frustum&quot;.
 The matrix takes the space inside the frustum and converts that to clipspace. <code>zNear</code> defines where
-tihngs will get clipped in front and zFar defines where things get clipped in back. Set <code>zNear</code> to 23 and
-you'll see the front of the spinning cubes get clipped. Set <code>zFar</code> to 24 and you'll see the back of the cubes
+things will get clipped in front and zFar defines where things get clipped in back. Set <code>zNear</code> to 23 and
+you&#39;ll see the front of the spinning cubes get clipped. Set <code>zFar</code> to 24 and you&#39;ll see the back of the cubes
 get clipped.</p>
-<p>There's just one problem left. This matrix assumes there's a viewer at 0,0,0 and it assumes it's looking
+<p>There&#39;s just one problem left. This matrix assumes there&#39;s a viewer at 0,0,0 and it assumes it&#39;s looking
 in the negative Z direction and that positive Y is up. Our matrices up to this point have done things
 in a different way. To make this work we need to put our objects in front of the view.</p>
-<p>We could do that by moving our F. We were drawing at (45, 150, 0). Let's move it to (-150, 0, -360)</p>
+<p>We could do that by moving our F. We were drawing at (45, 150, 0). Let&#39;s move it to (-150, 0, -360)</p>
 <p>Now, to use it we just need to replace our old call to make2DProjection with a call to
 makePerspective</p>
 <pre class="prettyprint showlinemods">
-    var aspect = canvas.width / canvas.height;
+    var aspect = canvas.clientWidth / canvas.clientHeight;
     var projectionMatrix =
         makePerspective(fieldOfViewRadians, aspect, 1, 2000);
     var translationMatrix =
@@ -354,25 +351,27 @@ makePerspective</p>
 </pre>
 
 <p>And here it is.</p>
-<iframe class="webgl_example" src="../webgl-3d-perspective-matrix.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-3d-perspective-matrix.html" target="_blank">click here to open in a separate window</a></p>
-<p>We're back to just a matrix multiply and we're getting both a field of view and we're able to choose our z space.
-We're not done but this article is getting too long. Next up, <a href="webgl-3d-camera.html">cameras</a>.</p>
+<p><iframe class="webgl_example" src="../webgl-3d-perspective-matrix.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-3d-perspective-matrix.html" target="_blank">click here to open in a separate window</a></p>
+<p>We&#39;re back to just a matrix multiply and we&#39;re getting both a field of view and we&#39;re able to choose our z space.
+We&#39;re not done but this article is getting too long. Next up, <a href="webgl-3d-camera.html">cameras</a>.</p>
 <div class="webgl_bottombar">
 <h3>Why did we move the F so far in Z (-360)?</h3>
 <p>
-In the other samples we had the F at (45, 150, 0) but the last sample it's been moved to (-150, 0, -360).
+In the other samples we had the F at (45, 150, 0) but the last sample it&#39;s been moved to (-150, 0, -360).
 Why did it need to be moved so far away? </p>
-<p>The reason is up until this last sample our `make2DProjection` function has made a projection from
-pixels to clipspace. That means the area we were displaying represented 400x300 pixels. Using 'pixels'
-really doesn't make sense in 3D. The new projection makes a frustum that makes it so the area represented
-at `zNear` is 2 units tall and 2 * aspect units wide. Since our 'F' is 150 units big and the view can only
-see 2 units when it's at zNear we need to move it pretty far away from the origin to see it all.</p>
-<p>Similarly we moved 'X' from 45 to -150. Again, the view used to represent 0 to 400 units across.
+<p>The reason is up until this last sample our <code>make2DProjection</code> function has made a projection from
+pixels to clipspace. That means the area we were displaying represented 400x300 pixels. Using &#39;pixels&#39;
+really doesn&#39;t make sense in 3D. The new projection makes a frustum that makes it so the area represented
+at <code>zNear</code> is 2 units tall and 2 * aspect units wide. Since our &#39;F&#39; is 150 units big and the view can only
+see 2 units when it&#39;s at zNear we need to move it pretty far away from the origin to see it all.</p>
+<p>Similarly we moved &#39;X&#39; from 45 to -150. Again, the view used to represent 0 to 400 units across.
 Now it represents -1 to +1 units across.
 </p>
 </div>
+
+
+
   </div>
 </div>
 </body>

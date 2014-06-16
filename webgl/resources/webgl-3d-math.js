@@ -28,126 +28,257 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-function makeLookAt(cameraPosition, target, up) {
+"use strict";
+
+function makeLookAt(cameraPosition, target, up, dst) {
+  dst = dst || new Float32Array(16);
   var zAxis = normalize(
       subtractVectors(cameraPosition, target));
   var xAxis = cross(up, zAxis);
   var yAxis = cross(zAxis, xAxis);
 
-  return [
-     xAxis[0], xAxis[1], xAxis[2], 0,
-     yAxis[0], yAxis[1], yAxis[2], 0,
-     zAxis[0], zAxis[1], zAxis[2], 0,
-     cameraPosition[0],
-     cameraPosition[1],
-     cameraPosition[2],
-     1];
+  dst[ 0] = xAxis[0];
+  dst[ 1] = xAxis[1];
+  dst[ 2] = xAxis[2];
+  dst[ 3] = 0;
+  dst[ 4] = yAxis[0];
+  dst[ 5] = yAxis[1];
+  dst[ 6] = yAxis[2];
+  dst[ 7] = 0;
+  dst[ 8] = zAxis[0];
+  dst[ 9] = zAxis[1];
+  dst[10] = zAxis[2];
+  dst[11] = 0;
+  dst[12] = cameraPosition[0];
+  dst[13] = cameraPosition[1];
+  dst[14] = cameraPosition[2];
+  dst[15] = 1;
+
+  return dst;
 }
 
-function subtractVectors(a, b) {
-  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+function subtractVectors(a, b, dst) {
+  dst = dst || new Float32Array(3);
+  dst[0] = a[0] - b[0];
+  dst[1] = a[1] - b[1];
+  dst[2] = a[2] - b[2];
+  return dst;
 }
 
-function normalize(v) {
+function normalize(v, dst) {
+  dst = dst || new Float32Array(3);
   var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   // make sure we don't divide by 0.
   if (length > 0.00001) {
-    return [v[0] / length, v[1] / length, v[2] / length];
-  } else {
-    return [0, 0, 0];
+    dst[0] = v[0] / length;
+    dst[1] = v[1] / length;
+    dst[2] = v[2] / length;
   }
+  return dst;
 }
 
-function cross(a, b) {
-  return [a[1] * b[2] - a[2] * b[1],
-          a[2] * b[0] - a[0] * b[2],
-          a[0] * b[1] - a[1] * b[0]];
+function cross(a, b, dst) {
+  dst = dst || new Float32Array(3);
+  dst[0] = a[1] * b[2] - a[2] * b[1];
+  dst[1] = a[2] * b[0] - a[0] * b[2];
+  dst[2] = a[0] * b[1] - a[1] * b[0];
+  return dst;
 }
 
-function makeIdentity() {
-  return [
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 1, 0,
-    0, 0, 0, 1,
-  ];
+function makeIdentity(dst) {
+  dst = dst || new Float32Array(16);
+
+  dst[ 0] = 1;
+  dst[ 1] = 0;
+  dst[ 2] = 0;
+  dst[ 3] = 0;
+  dst[ 4] = 0;
+  dst[ 5] = 1;
+  dst[ 6] = 0;
+  dst[ 7] = 0;
+  dst[ 8] = 0;
+  dst[ 9] = 0;
+  dst[10] = 1;
+  dst[11] = 0;
+  dst[12] = 0;
+  dst[13] = 0;
+  dst[14] = 0;
+  dst[15] = 1;
+
+  return dst;
 }
 
-function makeTranspose(m) {
-  return [
-    m[0], m[4], m[8], m[12],
-    m[1], m[5], m[9], m[13],
-    m[2], m[6], m[10], m[14],
-    m[3], m[7], m[11], m[15],
-  ];
+function makeTranspose(m, dst) {
+  dst = dst || new Float32Array(16);
+
+  dst[ 0] = m[0];
+  dst[ 1] = m[4];
+  dst[ 2] = m[8];
+  dst[ 3] = m[12];
+  dst[ 4] = m[1];
+  dst[ 5] = m[5];
+  dst[ 6] = m[9];
+  dst[ 7] = m[13];
+  dst[ 8] = m[2];
+  dst[ 9] = m[6];
+  dst[10] = m[10];
+  dst[11] = m[14];
+  dst[12] = m[3];
+  dst[13] = m[7];
+  dst[14] = m[11];
+  dst[15] = m[15];
+
+  return dst;
 }
 
-function makePerspective(fieldOfViewInRadians, aspect, near, far) {
+function makePerspective(fieldOfViewInRadians, aspect, near, far, dst) {
+  dst = dst || new Float32Array(16);
   var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
   var rangeInv = 1.0 / (near - far);
 
-  return [
-    f / aspect, 0, 0, 0,
-    0, f, 0, 0,
-    0, 0, (near + far) * rangeInv, -1,
-    0, 0, near * far * rangeInv * 2, 0
-  ];
+  dst[ 0] = f / aspect;
+  dst[ 1] = 0;
+  dst[ 2] = 0;
+  dst[ 3] = 0;
+  dst[ 4] = 0;
+  dst[ 5] = f;
+  dst[ 6] = 0;
+  dst[ 7] = 0;
+  dst[ 8] = 0;
+  dst[ 9] = 0;
+  dst[10] = (near + far) * rangeInv;
+  dst[11] = -1;
+  dst[12] = 0;
+  dst[13] = 0;
+  dst[14] = near * far * rangeInv * 2;
+  dst[15] = 0;
+
+  return dst;
 };
 
-function makeTranslation(tx, ty, tz) {
-  return [
-     1,  0,  0,  0,
-     0,  1,  0,  0,
-     0,  0,  1,  0,
-    tx, ty, tz,  1
-  ];
+function makeTranslation(tx, ty, tz, dst) {
+  dst = dst || new Float32Array(16);
+
+  dst[ 0] = 1;
+  dst[ 1] = 0;
+  dst[ 2] = 0;
+  dst[ 3] = 0;
+  dst[ 4] = 0;
+  dst[ 5] = 1;
+  dst[ 6] = 0;
+  dst[ 7] = 0;
+  dst[ 8] = 0;
+  dst[ 9] = 0;
+  dst[10] = 1;
+  dst[11] = 0;
+  dst[12] = tx;
+  dst[13] = ty;
+  dst[14] = tz;
+  dst[15] = 1;
+
+  return dst;
 }
 
-function makeXRotation(angleInRadians) {
+function makeXRotation(angleInRadians, dst) {
+  dst = dst || new Float32Array(16);
   var c = Math.cos(angleInRadians);
   var s = Math.sin(angleInRadians);
 
-  return [
-    1, 0, 0, 0,
-    0, c, s, 0,
-    0, -s, c, 0,
-    0, 0, 0, 1
-  ];
+  dst[ 0] = 1;
+  dst[ 1] = 0;
+  dst[ 2] = 0;
+  dst[ 3] = 0;
+  dst[ 4] = 0;
+  dst[ 5] = c;
+  dst[ 6] = s;
+  dst[ 7] = 0;
+  dst[ 8] = 0;
+  dst[ 9] = -s;
+  dst[10] = c;
+  dst[11] = 0;
+  dst[12] = 0;
+  dst[13] = 0;
+  dst[14] = 0;
+  dst[15] = 1;
+
+  return dst;
 };
 
-function makeYRotation(angleInRadians) {
+function makeYRotation(angleInRadians, dst) {
+  dst = dst || new Float32Array(16);
   var c = Math.cos(angleInRadians);
   var s = Math.sin(angleInRadians);
 
-  return [
-    c, 0, -s, 0,
-    0, 1, 0, 0,
-    s, 0, c, 0,
-    0, 0, 0, 1
-  ];
+  dst[ 0] = c;
+  dst[ 1] = 0;
+  dst[ 2] = -s;
+  dst[ 3] = 0;
+  dst[ 4] = 0;
+  dst[ 5] = 1;
+  dst[ 6] = 0;
+  dst[ 7] = 0;
+  dst[ 8] = s;
+  dst[ 9] = 0;
+  dst[10] = c;
+  dst[11] = 0;
+  dst[12] = 0;
+  dst[13] = 0;
+  dst[14] = 0;
+  dst[15] = 1;
+
+  return dst;
 };
 
-function makeZRotation(angleInRadians) {
+function makeZRotation(angleInRadians, dst) {
+  dst = dst || new Float32Array(16);
   var c = Math.cos(angleInRadians);
   var s = Math.sin(angleInRadians);
-  return [
-     c, s, 0, 0,
-    -s, c, 0, 0,
-     0, 0, 1, 0,
-     0, 0, 0, 1,
-  ];
+
+  dst[ 0] = c;
+  dst[ 1] = s;
+  dst[ 2] = 0;
+  dst[ 3] = 0;
+  dst[ 4] = -s;
+  dst[ 5] = c;
+  dst[ 6] = 0;
+  dst[ 7] = 0;
+  dst[ 8] = 0;
+  dst[ 9] = 0;
+  dst[10] = 1;
+  dst[11] = 0;
+  dst[12] = 0;
+  dst[13] = 0;
+  dst[14] = 0;
+  dst[15] = 1;
+
+  return dst;
 }
 
-function makeScale(sx, sy, sz) {
-  return [
-    sx, 0,  0,  0,
-    0, sy,  0,  0,
-    0,  0, sz,  0,
-    0,  0,  0,  1,
-  ];
+function makeScale(sx, sy, sz, dst) {
+  dst = dst || new Float32Array(16);
+
+  dst[ 0] = sx;
+  dst[ 1] = 0;
+  dst[ 2] = 0;
+  dst[ 3] = 0;
+  dst[ 4] = 0;
+  dst[ 5] = sy;
+  dst[ 6] = 0;
+  dst[ 7] = 0;
+  dst[ 8] = 0;
+  dst[ 9] = 0;
+  dst[10] = sz;
+  dst[11] = 0;
+  dst[12] = 0;
+  dst[13] = 0;
+  dst[14] = 0;
+  dst[15] = 1;
+
+  return dst;
 }
 
-function matrixMultiply(a, b) {
+function matrixMultiply(a, b, dst) {
+  dst = dst || new Float32Array(16);
   var a00 = a[0*4+0];
   var a01 = a[0*4+1];
   var a02 = a[0*4+2];
@@ -180,25 +311,27 @@ function matrixMultiply(a, b) {
   var b31 = b[3*4+1];
   var b32 = b[3*4+2];
   var b33 = b[3*4+3];
-  return [a00 * b00 + a01 * b10 + a02 * b20 + a03 * b30,
-          a00 * b01 + a01 * b11 + a02 * b21 + a03 * b31,
-          a00 * b02 + a01 * b12 + a02 * b22 + a03 * b32,
-          a00 * b03 + a01 * b13 + a02 * b23 + a03 * b33,
-          a10 * b00 + a11 * b10 + a12 * b20 + a13 * b30,
-          a10 * b01 + a11 * b11 + a12 * b21 + a13 * b31,
-          a10 * b02 + a11 * b12 + a12 * b22 + a13 * b32,
-          a10 * b03 + a11 * b13 + a12 * b23 + a13 * b33,
-          a20 * b00 + a21 * b10 + a22 * b20 + a23 * b30,
-          a20 * b01 + a21 * b11 + a22 * b21 + a23 * b31,
-          a20 * b02 + a21 * b12 + a22 * b22 + a23 * b32,
-          a20 * b03 + a21 * b13 + a22 * b23 + a23 * b33,
-          a30 * b00 + a31 * b10 + a32 * b20 + a33 * b30,
-          a30 * b01 + a31 * b11 + a32 * b21 + a33 * b31,
-          a30 * b02 + a31 * b12 + a32 * b22 + a33 * b32,
-          a30 * b03 + a31 * b13 + a32 * b23 + a33 * b33];
+  dst[ 0] = a00 * b00 + a01 * b10 + a02 * b20 + a03 * b30;
+  dst[ 1] = a00 * b01 + a01 * b11 + a02 * b21 + a03 * b31;
+  dst[ 2] = a00 * b02 + a01 * b12 + a02 * b22 + a03 * b32;
+  dst[ 3] = a00 * b03 + a01 * b13 + a02 * b23 + a03 * b33;
+  dst[ 4] = a10 * b00 + a11 * b10 + a12 * b20 + a13 * b30;
+  dst[ 5] = a10 * b01 + a11 * b11 + a12 * b21 + a13 * b31;
+  dst[ 6] = a10 * b02 + a11 * b12 + a12 * b22 + a13 * b32;
+  dst[ 7] = a10 * b03 + a11 * b13 + a12 * b23 + a13 * b33;
+  dst[ 8] = a20 * b00 + a21 * b10 + a22 * b20 + a23 * b30;
+  dst[ 9] = a20 * b01 + a21 * b11 + a22 * b21 + a23 * b31;
+  dst[10] = a20 * b02 + a21 * b12 + a22 * b22 + a23 * b32;
+  dst[11] = a20 * b03 + a21 * b13 + a22 * b23 + a23 * b33;
+  dst[12] = a30 * b00 + a31 * b10 + a32 * b20 + a33 * b30;
+  dst[13] = a30 * b01 + a31 * b11 + a32 * b21 + a33 * b31;
+  dst[14] = a30 * b02 + a31 * b12 + a32 * b22 + a33 * b32;
+  dst[15] = a30 * b03 + a31 * b13 + a32 * b23 + a33 * b33;
+  return dst;
 }
 
-function makeInverse(m) {
+function makeInverse(m, dst) {
+  dst = dst || new Float32Array(16);
   var m00 = m[0 * 4 + 0];
   var m01 = m[0 * 4 + 1];
   var m02 = m[0 * 4 + 2];
@@ -251,40 +384,40 @@ function makeInverse(m) {
 
   var d = 1.0 / (m00 * t0 + m10 * t1 + m20 * t2 + m30 * t3);
 
-  return [
-    d * t0,
-    d * t1,
-    d * t2,
-    d * t3,
-    d * ((tmp_1 * m10 + tmp_2 * m20 + tmp_5 * m30) -
-          (tmp_0 * m10 + tmp_3 * m20 + tmp_4 * m30)),
-    d * ((tmp_0 * m00 + tmp_7 * m20 + tmp_8 * m30) -
-          (tmp_1 * m00 + tmp_6 * m20 + tmp_9 * m30)),
-    d * ((tmp_3 * m00 + tmp_6 * m10 + tmp_11 * m30) -
-          (tmp_2 * m00 + tmp_7 * m10 + tmp_10 * m30)),
-    d * ((tmp_4 * m00 + tmp_9 * m10 + tmp_10 * m20) -
-          (tmp_5 * m00 + tmp_8 * m10 + tmp_11 * m20)),
-    d * ((tmp_12 * m13 + tmp_15 * m23 + tmp_16 * m33) -
-          (tmp_13 * m13 + tmp_14 * m23 + tmp_17 * m33)),
-    d * ((tmp_13 * m03 + tmp_18 * m23 + tmp_21 * m33) -
-          (tmp_12 * m03 + tmp_19 * m23 + tmp_20 * m33)),
-    d * ((tmp_14 * m03 + tmp_19 * m13 + tmp_22 * m33) -
-          (tmp_15 * m03 + tmp_18 * m13 + tmp_23 * m33)),
-    d * ((tmp_17 * m03 + tmp_20 * m13 + tmp_23 * m23) -
-          (tmp_16 * m03 + tmp_21 * m13 + tmp_22 * m23)),
-    d * ((tmp_14 * m22 + tmp_17 * m32 + tmp_13 * m12) -
-          (tmp_16 * m32 + tmp_12 * m12 + tmp_15 * m22)),
-    d * ((tmp_20 * m32 + tmp_12 * m02 + tmp_19 * m22) -
-          (tmp_18 * m22 + tmp_21 * m32 + tmp_13 * m02)),
-    d * ((tmp_18 * m12 + tmp_23 * m32 + tmp_15 * m02) -
-          (tmp_22 * m32 + tmp_14 * m02 + tmp_19 * m12)),
-    d * ((tmp_22 * m22 + tmp_16 * m02 + tmp_21 * m12) -
-          (tmp_20 * m12 + tmp_23 * m22 + tmp_17 * m02))
-  ];
+  dst[0] = d * t0,
+  dst[1] = d * t1,
+  dst[2] = d * t2,
+  dst[3] = d * t3,
+  dst[4] = d * ((tmp_1 * m10 + tmp_2 * m20 + tmp_5 * m30) -
+        (tmp_0 * m10 + tmp_3 * m20 + tmp_4 * m30));
+  dst[5] = d * ((tmp_0 * m00 + tmp_7 * m20 + tmp_8 * m30) -
+        (tmp_1 * m00 + tmp_6 * m20 + tmp_9 * m30));
+  dst[6] = d * ((tmp_3 * m00 + tmp_6 * m10 + tmp_11 * m30) -
+        (tmp_2 * m00 + tmp_7 * m10 + tmp_10 * m30));
+  dst[7] = d * ((tmp_4 * m00 + tmp_9 * m10 + tmp_10 * m20) -
+        (tmp_5 * m00 + tmp_8 * m10 + tmp_11 * m20));
+  dst[8] = d * ((tmp_12 * m13 + tmp_15 * m23 + tmp_16 * m33) -
+        (tmp_13 * m13 + tmp_14 * m23 + tmp_17 * m33));
+  dst[9] = d * ((tmp_13 * m03 + tmp_18 * m23 + tmp_21 * m33) -
+        (tmp_12 * m03 + tmp_19 * m23 + tmp_20 * m33));
+  dst[10] = d * ((tmp_14 * m03 + tmp_19 * m13 + tmp_22 * m33) -
+        (tmp_15 * m03 + tmp_18 * m13 + tmp_23 * m33));
+  dst[11] = d * ((tmp_17 * m03 + tmp_20 * m13 + tmp_23 * m23) -
+        (tmp_16 * m03 + tmp_21 * m13 + tmp_22 * m23));
+  dst[12] = d * ((tmp_14 * m22 + tmp_17 * m32 + tmp_13 * m12) -
+        (tmp_16 * m32 + tmp_12 * m12 + tmp_15 * m22));
+  dst[13] = d * ((tmp_20 * m32 + tmp_12 * m02 + tmp_19 * m22) -
+        (tmp_18 * m22 + tmp_21 * m32 + tmp_13 * m02));
+  dst[14] = d * ((tmp_18 * m12 + tmp_23 * m32 + tmp_15 * m02) -
+        (tmp_22 * m32 + tmp_14 * m02 + tmp_19 * m12));
+  dst[15] = d * ((tmp_22 * m22 + tmp_16 * m02 + tmp_21 * m12) -
+        (tmp_20 * m12 + tmp_23 * m22 + tmp_17 * m02));
+
+  return dst;
 }
 
-function matrixVectorMultiply(v, m) {
-  var dst = [];
+function matrixVectorMultiply(v, m, dst) {
+  dst = dst || new Float32Array(4);
   for (var i = 0; i < 4; ++i) {
     dst[i] = 0.0;
     for (var j = 0; j < 4; ++j)

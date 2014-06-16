@@ -26,8 +26,8 @@ in this case our result would be
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/>
 <tr><td class="glocal-right">newX&nbsp;= </td><td>x * </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x * </td><td class="glocal-border">2.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x * </td><td class="glocal-border">3.0</td><td> +</td></tr>
-<tr><td></td><td>y * </td><td class="glocal-border">4.0</td><td class="glocal-left"> +</td><td></td><td>y * </td><td class="glocal-border">5.0</td><td class="glocal-left"> + </td><td></td><td>y * </td><td class="glocal-border">6.0</td><td> +<td></tr>
-<tr><td></td><td>1 * </td><td>7.0</td><td> </td><td></td><td>1 * </td><td>8.0</td><td>  </td><td></td><td>1 * </td><td>9.0</td><td> <td></tr></table></div>
+<tr><td></td><td>y * </td><td class="glocal-border">4.0</td><td class="glocal-left"> +</td><td></td><td>y * </td><td class="glocal-border">5.0</td><td class="glocal-left"> + </td><td></td><td>y * </td><td class="glocal-border">6.0</td><td> +</td></tr>
+<tr><td></td><td>1 * </td><td>7.0</td><td> </td><td></td><td>1 * </td><td>8.0</td><td>  </td><td></td><td>1 * </td><td>9.0</td><td> </td></tr></table></div>
 
 You're probably looking at that and thinking "WHAT'S THE POINT". Well, Let's assume we have a translation. We'll call the amount we want to translate tx and ty. Let's make a matrix like this
 
@@ -37,16 +37,16 @@ And now check it out
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr><tr><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +<td></tr>
-<tr><td></td><td>1</td><td> * </td><td>tx</td><td> </td><td></td><td>1</td><td> * </td><td>ty</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> <td></tr></table></div>
+<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr><tr><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
+<tr><td></td><td>1</td><td> * </td><td>tx</td><td> </td><td></td><td>1</td><td> * </td><td>ty</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> </td></tr></table></div>
 
 If you remember your algebra, we can delete any place that multiplies by zero. Multiplying by 1 effectively does nothing so let's simplify to see what's happening
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
 <tr><td>newX&nbsp;= </td><td>x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">+</td><td class="glocal-right">extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
-<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left"> +</td><td></td><td>y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +<td></tr>
-<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td>tx</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td>ty</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> <td></tr></table></div>
+<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left"> +</td><td></td><td>y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td>tx</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td>ty</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> </td></tr></table></div>
 
 or more succinctly
 
@@ -69,20 +69,20 @@ And we build a matrix like this
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>c</td><td>-s</td><td>0.0</td></tr><tr><td>s</td><td>c</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
 
 Applying the matrix we get this
- 
+
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
 <tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">-s</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
-<tr><td></td><td>y</td><td> * </td><td class="glocal-border">s</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +<td></tr>
-<tr><td></td><td>1</td><td> * </td><td>0.0</td><td> </td><td></td><td>1</td><td> * </td><td>0.0</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> <td></tr></table></div>
+<tr><td></td><td>y</td><td> * </td><td class="glocal-border">s</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
+<tr><td></td><td>1</td><td> * </td><td>0.0</td><td> </td><td></td><td>1</td><td> * </td><td>0.0</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> </td></tr></table></div>
 
 Blacking out all multiply by 0s and 1s we get
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
 <tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">-s</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
-<tr><td></td><td>y</td><td> * </td><td class="glocal-border">s</td><td class="glocal-left glocal-blk"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left glocal-blk"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +<td></tr>
-<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> <td></tr></table></div>
+<tr><td></td><td>y</td><td> * </td><td class="glocal-border">s</td><td class="glocal-left glocal-blk"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left glocal-blk"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> </td></tr></table></div>
 
 And simplifying we get
 
@@ -100,20 +100,20 @@ And we build a matrix like this
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>sx</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>sy</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
 
 Applying the matrix we get this
- 
+
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
 <tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">sx</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
-<tr><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">sy</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +<td></tr>
-<tr><td></td><td>1</td><td> * </td><td>0.0</td><td> </td><td></td><td>1</td><td> * </td><td>0.0</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> <td></tr></table></div>
+<tr><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">sy</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
+<tr><td></td><td>1</td><td> * </td><td>0.0</td><td> </td><td></td><td>1</td><td> * </td><td>0.0</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> </td></tr></table></div>
 
 which is really
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
 <tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">sx</td><td class="glocal-left glocal-blk"> +</td><td>newY = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk">+</td><td>extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
-<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">sy</td><td class="glocal-left glocal-blk"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +<td></tr>
-<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> <td></tr></table></div>
+<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">sy</td><td class="glocal-left glocal-blk"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> </td></tr></table></div>
 
 which simplified is
 
@@ -126,7 +126,7 @@ Which is the same as our <a href="webgl-2d-scale.html">scaling sample</a>.
 
 Now I'm sure you might still be thinking. So what? What's the point. That seems like a lot of work just to do the same thing we were already doing?
 
-This is where the magic comes in. It turns out we can multiply matrices together and apply all the transformations at once. Let's assume we have function, <code>matrixMultiply</code>, that takes two matrices, multiplies them and returns the result.</a>
+This is where the magic comes in. It turns out we can multiply matrices together and apply all the transformations at once. Let's assume we have function, <code>matrixMultiply</code>, that takes two matrices, multiplies them and returns the result.
 
 To make things clearer let's make functions to build matrices for translation, rotation and scale.
 
@@ -372,7 +372,8 @@ And in JavaScript we need to multiply by the projection matrix
   function drawScene() {
     ...
     // Compute the matrices
-    var projectionMatrix = make2DProjection(canvas.width, canvas.height);
+    var projectionMatrix = make2DProjection(
+        canvas.clientWidth, canvas.clientHeight);
     ...
 
     // Multiply the matrices.
@@ -390,4 +391,52 @@ We also removed the code that set the resolution. With this last step we've gone
 
 I hope these posts have helped demystified matrix math. I'll move on to 3D next. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.
 
+<div class="webgl_bottombar">
+<h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
+<p>Up until this point whenever I referred to the canvas's dimensions I used <code>canvas.width</code> and <code>canvas.height</code>
+but above when I called <code>make2DProjection</code> I instead used <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Why?</p>
+<p>Projection matrixes are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
+to pixels. But, in the browser, there are 2 types of pixels we are dealing with. One is the number of pixels in
+the canvas itself. So for example a canvas defined like this.</p>
+<pre class="prettyprint">
+  &lt;canvas width="400" height="300"&gt;&lt;/canvas&gt;
+</pre>
+<p>or one defined like this</p>
+<pre class="prettyprint">
+  var canvas = document.createElement("canvas");
+  canvas.width = 400;
+  canvas.height = 300;
+</pre>
+<p>both contain an image 400 pixels wide by 300 pixels tall. But, that size is separate from what size
+the browser actually displays that 400x300 pixel canvas. CSS defines what size the canvas is displayed.
+For example if we made a canvas like this.</p>
+<pre class="prettyprint"><!>
+  &lt;style&gt;
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+  &lt;/style&gt;
+  ...
+  &lt;canvas width="400" height="300">&lt;/canvas&gt;
+</pre>
+<p>The canvas will be displayed whatever size its container is. That's likely not 400x300.</p>
+<p>Here's two examples that set the canvas's CSS display size to 100% so the canvas stretched
+out to fill the page. The first one uses <code>canvas.width</code> and <code>canvas.height</code>. Open it in a new
+window and resize the window. Notice how the 'F' doesn't have the correct aspect. It gets
+distorted.</p>
+<iframe class="webgl_example" src="../webgl-canvas-width-height.html" width="500" height="150"></iframe>
+<a class="webgl_center" href="../webgl-canvas-width-height.html" target="_blank">click here to open in a separate window</a>
+<p>In this second example we use <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> report
+the size the canvas is actually being displayed by the browser so in this case, even though the canvas still only has 400x300 pixels
+since we're defining our aspect ratio based on the size the canvas is being displayed the <code>F</code> always looks correct.</p>
+<iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" width="500" height="150"></iframe>
+<a class="webgl_center" href="../webgl-canvas-clientwidth-clientheight.html" target="_blank">click here to open in a separate window</a>
+<p>Most apps that allow their canvases to be resized try to make the <code>canvas.width</code> and <code>canvas.height</code> match
+the <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> because they want there to be
+one pixel in the canvas for each pixel displayed by the browser. But, as we've seen above, that's not
+the only option. That means, in almost all cases, it's more technically correct to compute a
+projection matrix's aspect ration using <code>canvas.clientHeight</code> and <code>canvas.clientWidth</code>.
+</p>
+</div>
 

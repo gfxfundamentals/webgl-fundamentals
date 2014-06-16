@@ -6,7 +6,7 @@ the previous was about <a href="webgl-3d-perspective.html">3D perspective projec
 If you haven't read those please view them first.
 
 In the last post we had to move the F in front of the frustum because the `makePerspective`
-fucntion expects it sits at the origin (0, 0, 0) and that objects in the frustum are -zNear
+function expects it sits at the origin (0, 0, 0) and that objects in the frustum are -zNear
 to -zFar in front of it.
 
 Moving stuff in front of the view doesn't seem the right way to go does it? In the real world
@@ -57,7 +57,7 @@ Here's the code.
   var radius = 200;
 
   // Compute the projection matrix
-  var aspect = canvas.width / canvas.height;
+  var aspect = canvas.clientWidth / canvas.clientHeight;
   var projectionMatrix =
       makePerspective(fieldOfViewRadians, aspect, 1, 2000);
 

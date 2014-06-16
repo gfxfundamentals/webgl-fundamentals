@@ -14,12 +14,12 @@ Some articles on WebGL
     <li><a href="webgl/lessons/webgl-2d-translation.html">WebGL 2D Translation</a></li>
     <li><a href="webgl/lessons/webgl-2d-rotation.html">WebGL 2D Rotation</a></li>
     <li><a href="webgl/lessons/webgl-2d-scale.html">WebGL 2D Scale</a></li>
-	<li><a href="webgl/lessons/webgl-2d-matrices.html">WebGL 2D Matrices</a></li>
+    <li><a href="webgl/lessons/webgl-2d-matrices.html">WebGL 2D Matrices</a></li>
   </ul>
   <li>3D</li>
   <ul>
     <li><a href="webgl/lessons/webgl-3d-orthographic.html">WebGL - Orthographic 3D</a></li>
-	<li><a href="webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
+    <li><a href="webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
   </ul>
   <li>Misc</li>
@@ -30,7 +30,9 @@ Some articles on WebGL
     <li><a href="webgl/lessons/webgl-3d-textures.html">WebGL 3D - Textures</a></li>
     <li><a href="webgl/lessons/webgl-2-textures.html">WebGL Using 2 or More Textures</a></li>
     <li><a href="webgl/lessons/webgl-and-alpha.html">WebGL and Alpha</a></li>
-	<li><a href="webgl/lessons/webgl-2d-vs-3d-library.html">WebGL - 2D vs 3D libraries</a></li>
+    <li><a href="webgl/lessons/webgl-2d-vs-3d-library.html">WebGL - 2D vs 3D libraries</a></li>
+    <li><a href="webgl/lessons/webgl-less-code-more-fun.html">WebGL - Less Code, More Fun</a></li>
+    <li><a href="webgl/lessons/webgl-anti-patterns.html">WebGL - Anti-Patterns</a></li>
   </ul>
 </ul>
 

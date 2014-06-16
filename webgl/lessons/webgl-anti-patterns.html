@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/webgl-anti-patterns.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of Gregg Tavares. nor the names of his
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL Anti-Patterns</title>
+<link rel="stylesheet" href="resources/base.css" type="text/css" />
+<link rel="stylesheet" href="resources/lesson.css" type="text/css" />
+<script type="text/javascript" src="../resources/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="resources/prettify.js"></script>
+<script type="text/javascript" src="resources/lesson.js"></script>
+</head>
+<body>
+<div id="contentwrap">
+  <div id="content">
+    <h1>WebGL Anti-Patterns</h1>
+    <p>This is a list of anti patterns for WebGL. Anti patterns are things you should avoid doing</p>
+<ol>
+<li><p>Putting <code>viewportWidth</code> and <code>viewportHeight</code> on the <code>WebGLRenderingContext</code></p>
+<p>Some code adds properties for their viewport width and height
+and sticks them on the <code>WebGLRenderingContext</code> something like this</p>
+<pre class="prettyprint">
+gl = canvas.getContext("webgl");
+gl.viewportWidth = canvas.width;    // BAD!!!
+gl.viewportHeight = canvas.height;  // BAD!!!
+</pre>
+
+<p>Then later they might do something like this</p>
+<pre class="prettyprint">
+gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+</pre>
+
+<p><strong>Why it&#39;s Bad:</strong></p>
+<p>It&#39;s objectively bad because you now have 2 properties that need to be updated
+anytime you change the size of the canvas. For example if you change the size
+of the canvas when the user resizes the window <code>gl.viewportWidth</code> &amp; <code>gl.viewportHeight</code>
+will be wrong unless you set them again.</p>
+<p>It&#39;s subjectively bad because any new WebGL programmer will glance at your code
+and likely think <code>gl.viewportWidth</code> and <code>gl.viewportHeight</code> are part of the WebGL
+spec, confusing them for months.</p>
+<p><strong>What to do instead:</strong></p>
+<p>Why make more work for yourself? Just use the canvas width and canvas height directly.
+You don&#39;t even have to pass the canvas around because the <code>WebGLRenderingContext</code> already
+has a reference to the canvas.</p>
+<pre class="prettyprint">
+// When you need to set the viewport to match the size of the canvas
+// this will always be correct
+gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+</pre>
+</li>
+<li><p>Using <code>canvas.width</code> and <code>canvas.height</code> for aspect ratio</p>
+<p>Often code uses <code>canvas.width</code> and <code>canvas.height</code> for aspect ratio like this</p>
+<pre class="prettyprint">
+var aspect = canvas.width / canvas.height;
+perspective(fieldOfView, aspect, zNear, zFar);
+</pre>
+
+<p><strong>Why it&#39;s Bad:</strong></p>
+<p>The width and height of the canvas have nothing to do with the size the canvas is
+displayed. CSS controls the size the canvas is displayed.</p>
+<p><strong>What to do instead:</strong></p>
+<p>Use <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Those values tell you what
+size your canvas is actually being displayed on the screen. Using those values
+you&#39;ll always get the correct aspect ratio regardless of your CSS settings.</p>
+<pre class="prettyprint">
+var aspect = canvas.clientWidth / canvas.clientHeight;
+perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+</pre>
+
+<p>Here&#39;s examples of a canvas that&#39;s the same size (<code>width=&quot;400&quot; height=&quot;300&quot;</code>)
+but using CSS we&#39;ve told the browser to display the canvas a different size.
+Notice the samples all display the &#39;F&#39; in the correct aspect ratio.</p>
+<iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" width="150" height="200"></iframe>
+
+<iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" width="400" height="150"></iframe>
+
+<p>If we had used <code>canvas.width</code> and <code>canvas.height</code> that would not be true.</p>
+<iframe class="webgl_example" src="../webgl-canvas-width-height.html" width="150" height="200"></iframe>
+
+<iframe class="webgl_example" src="../webgl-canvas-width-height.html" width="400" height="150"></iframe>
+</li>
+<li><p>Using <code>window.innerWidth</code> and <code>window.innerHeight</code> to compute anything</p>
+<p>Many WebGL programs use <code>window.innerWidth</code> and <code>window.innerHeight</code> in many places.
+For example:</p>
+<pre class="prettyprint">
+canvas.width = window.innerWidth;                    // BAD!!
+canvas.height = window.hinnerHeight;                 // BAD!!
+</pre>
+
+<p><strong>Why it&#39;s Bad:</strong></p>
+<p>It&#39;s not portable. Yes, it can work for WebGL pages where you want to make the canvas
+fill the screen. The problem comes when you don&#39;t. Maybe you decide to make an article
+like these tutorials where your canvas is just some small diagram in a larger page.
+Or maybe you need some property editor on the side or a score for a game. Sure you can fix your code
+to handle those cases but why not just write it so it works in those cases in the first place?
+Then you won&#39;t have to go change any code when you copy it to a new project or use an old
+project in a new way.</p>
+<p><strong>What to do instead:</strong></p>
+<p>Instead of fighting the Web platform, use the Web platform as it was designed to be used.
+Use CSS and <code>clientWidth</code> and <code>clientHeight</code>.</p>
+<pre class="prettyprint">
+var width = gl.canvas.clientWidth;
+var height = gl.canvas.clientHeight;
+
+gl.canvas.width = width;
+gl.canvas.height = height;
+</pre>
+
+<p>Here are 9 cases. They all use exactly the same code. Notice that none of them
+reference <code>window.innerWidth</code> nor <code>window.innerHeight</code>.</p>
+<p><a href="../webgl--same-code-canvas-fullscreen.html" target="_blank">A page with nothing but a canvas using CSS to make it fullscreen</a></p>
+<p><a href="../webgl--same-code-canvas-partscreen.html" target="_blank">A page with a canvas set to using 70% width so there is room for editor controls</a></p>
+<p><a href="../webgl--same-code-canvas-partscreen.html" target="_blank">A page with a canvas embedded in a paragraph</a></p>
+<p><a href="../webgl--same-code-canvas-partscreen.html" target="_blank">A page with a canvas embedded in a paragraph using <code>box-sizing: border-box;</code></a></p>
+<p><code>box-sizing: border-box;</code> makes borders and padding use take space from the element they&#39;re defined on rather than outside it. In other words, in
+normal box-sizing mode a 400x300 pixel element with 15pixel border has a 400x300pixel content space surrounded by a 15 pixel border making its total size
+430x330 pixels. In box-sizing: border-box mode the border goes on the inside so that same element would stay 400x300 pixels, the content would end up
+being 370x270. This is yet another reason why using <code>clientWidth</code> and <code>clientHeight</code> is so important. If you set the border to say <code>1em</code> you&#39;d have no
+way of knowing what size your canvas will turn out. It would be different with different fonts on different machines.</p>
+<p><a href="../webgl--same-code-container-fullscreen.html" target="_blank">A page with nothing but a container using CSS to make it fullscreen into which the code will insert a canvas</a></p>
+<p><a href="../webgl--same-code-container-partscreen.html" target="_blank">A page with a container set to using 70% width so there is room for editor controls into which the code will insert a canvas</a></p>
+<p><a href="../webgl--same-code-container-partscreen.html" target="_blank">A page with a container embedded in a paragraph into which the code will insert a canvas</a></p>
+<p><a href="../webgl--same-code-container-partscreen.html" target="_blank">A page with a container embedded in a paragraph using <code>box-sizing: border-box;</code> into which the code will insert a canvas</a></p>
+<p><a href="../webgl--same-code-body-only.html" target="_blank">A page with no elements with CSS setup to make it fullscreen into which the code will insert a canvas</a></p>
+<p>Again, the point is, if you embrace the web and write your code using the techniques above you won&#39;t have to change any code when you run into different use cases.</p>
+</li>
+<li><p>Using the <code>&#39;resize&#39;</code> event to change the size of your canvas.</p>
+<p>Some apps check for the window <code>&#39;resize&#39;</code> event like this to resize their canvas.</p>
+<pre class="prettyprint">
+window.addEventListener('resize', resizeTheCanvas);
+</pre>
+
+<p>or this</p>
+<pre class="prettyprint">
+window.onresize = resizeTheCanvas;
+</pre>
+
+<p><strong>Why it&#39;s Bad:</strong></p>
+<p>It&#39;s not bad per se, rather, for <em>most</em> WebGL programs it fits less use cases.
+Specifically <code>&#39;resize&#39;</code> only works when the window is resized. It doesn&#39;t work
+if the canvas is resized for some other reason. For example let&#39;s say you&#39;re making
+a 3d editor. You have your canvas on the left and your settings on the right. You&#39;ve
+made it so there&#39;s a draggable bar separating the 2 parts and you can drag that bar
+to make the settings area larger or smaller. In this case you won&#39;t get any <code>&#39;resize&#39;</code>
+events. Similarly you&#39;ve got a page where other content gets added or removed and
+the canvas changes size as the browser re-laysout the page you won&#39;t get a resize
+event.</p>
+<p><strong>What to do instead:</strong></p>
+<p>Like many of the solutions to anti-patterns above there&#39;s a way to write your code
+so it just works for most cases. For WebGL apps that constantly draw every frame
+the solution is to check if you need to resize every time you draw like this</p>
+<pre class="prettyprint">
+function resize() {
+  var width = gl.canvas.clientWidth;
+  var height = gl.canvas.clientHeight;
+  if (gl.canvas.width != width ||
+      gl.canvas.height != height) {
+     gl.canvas.width = width;
+     gl.canvas.height = height;
+  }
+}
+
+function render() {
+   resize();
+   drawStuff();
+   requestAnimationFrame(render);
+}
+render();
+</pre>
+
+<p>Now in any of those cases your canvas will scale to the right size. No need to
+change any code for different cases. For example using the same code from #3 above
+here&#39;s an editor with a sizable editing area.</p>
+<p><iframe class="webgl_example" src="../webgl-same-code-resize.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-same-code-resize.html" target="_blank">click here to open in a separate window</a></p>
+<p>There would be no resize events for this case nor any other where the canvas gets resized
+based on the size of other dynamic elements on the page.</p>
+<p>For WebGL apps that don&#39;t re-draw every frame the code above is still correct, you&#39;ll just need
+to trigger a re-draw in every case where the canvas can possibly get resized. One easy way to do
+that would be to setup a requestAnimationFrame loop like this.</p>
+<pre class="prettyprint">
+function resize() {
+  var width = gl.canvas.clientWidth;
+  var height = gl.canvas.clientHeight;
+  if (gl.canvas.width != width ||
+      gl.canvas.height != height) {
+     gl.canvas.width = width;
+     gl.canvas.height = height;
+     return true;
+  }
+  return false;
+}
+
+var needToRender = true;  // draw at least once
+function checkRender() {
+   if (resize() || needToRender) {
+     needToRender = false;
+     drawStuff();
+   }
+   requestAnimationFrame(checkRender);
+}
+checkRender();
+</pre>
+
+<p>This would only draw if the canvas has be resized or if <code>needToRender</code> is true.
+This would handle the resize case for apps that don&#39;t render the scene every frame.
+Just set <code>needToRender</code> any time you&#39;ve changed something in the scene and you want
+the scene to be rendered incorporating your changes.</p>
+</li>
+</ol>
+<p>Those are a few of what I consider WebGL Anti-Patterns in code I&#39;ve seen around the net.
+Hopefully I&#39;ve made the case why to avoid them and given solutions that are easy and useful.</p>
+
+
+  </div>
+</div>
+</body>
+
+
+

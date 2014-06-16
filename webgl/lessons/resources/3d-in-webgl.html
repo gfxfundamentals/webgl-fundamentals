@@ -9,6 +9,8 @@ canvas { border: 1px solid black; }
 <script src="../../resources/webgl-utils.js"></script>
 <script src="3d-math.js"></script>
 <script>
+"use strict";
+
 var m = ThreeDMath;
 window.onload = main;
 
@@ -77,7 +79,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     var fieldOfView = Math.PI * 0.25;
-    var aspect = canvas.width / canvas.height;
+    var aspect = canvas.clientWidth / canvas.clientHeight;
     var projection = m.perspective(fieldOfView, aspect, 0.0001, 500);
     var radius = 5;
     var eye = [

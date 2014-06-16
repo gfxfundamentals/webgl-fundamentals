@@ -45,41 +45,40 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div id="content">
     <h1>WebGL 2D Matrices</h1>
     <p>This post is a continuation of a series of posts about WebGL. The first <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was <a href="webgl-2d-scale.html">about scaling 2D geometry</a>.</p>
-<p>In the last 3 posts we went over how to <a href="webgl-2d-translation.html">translate geometry</a>, <a href="webgl-2d-rotation.html">rotate geometry</a>, and <a href="webgl-2d-scale.html">scale geometry</a>. Translation, rotation and scale are each considered a type of 'transformation'. Each of these transformations required changes to the shader and each of the 3 transformations was order dependent. In <a href="webgl-2d-scale.html">our previous example</a> we scaled, then rotated, the translated. If we applied those in a different order we'd get a different result.
+<p>In the last 3 posts we went over how to <a href="webgl-2d-translation.html">translate geometry</a>, <a href="webgl-2d-rotation.html">rotate geometry</a>, and <a href="webgl-2d-scale.html">scale geometry</a>. Translation, rotation and scale are each considered a type of &#39;transformation&#39;. Each of these transformations required changes to the shader and each of the 3 transformations was order dependent. In <a href="webgl-2d-scale.html">our previous example</a> we scaled, then rotated, the translated. If we applied those in a different order we&#39;d get a different result.
 <!--more-->
 For example here is a scale of 2, 1, rotation of 30%, and translation of 100, 0.</p>
 <p><img src="../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" /></p>
 <p>And here is a translation of 100,0, rotation of 30% and scale of 2, 1</p>
 <p><img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" /></p>
-<p>The results are completely different. Even worse, if we needed the second example we'd have to write a different shader that applied the translation, rotation, and scale in our new desired order.</p>
+<p>The results are completely different. Even worse, if we needed the second example we&#39;d have to write a different shader that applied the translation, rotation, and scale in our new desired order.</p>
 <p>Well, some people way smarter than me, figured out that you can do all the same stuff with matrix math. For 2d we use a 3x3 matrix. A 3x3 matrix is like grid with 9 boxes. </p>
-<style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style>
-
+<p><style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style></p>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
-<p>To do the math we multiply the position down the columns of the matrix and add up the results. Our positions only have 2 values, x and y but to do this math we need 3 values so we'll use 1 for the third value.</p>
+<p>To do the math we multiply the position down the columns of the matrix and add up the results. Our positions only have 2 values, x and y but to do this math we need 3 values so we&#39;ll use 1 for the third value.</p>
 <p>in this case our result would be</p>
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/>
-<tr><td class="glocal-right">newX&nbsp;= </td><td>x * </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x * </td><td class="glocal-border">2.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x * </td><td class="glocal-border">3.0</td><td> +</td></tr>
-<tr><td></td><td>y * </td><td class="glocal-border">4.0</td><td class="glocal-left"> +</td><td></td><td>y * </td><td class="glocal-border">5.0</td><td class="glocal-left"> + </td><td></td><td>y * </td><td class="glocal-border">6.0</td><td> +<td></tr>
-<tr><td></td><td>1 * </td><td>7.0</td><td> </td><td></td><td>1 * </td><td>8.0</td><td>  </td><td></td><td>1 * </td><td>9.0</td><td> <td></tr></table></div>
+<tr><td class="glocal-right">newX&nbsp;= </td><td>x <em> </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x </em> </td><td class="glocal-border">2.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x <em> </td><td class="glocal-border">3.0</td><td> +</td></tr>
+<tr><td></td><td>y </em> </td><td class="glocal-border">4.0</td><td class="glocal-left"> +</td><td></td><td>y <em> </td><td class="glocal-border">5.0</td><td class="glocal-left"> + </td><td></td><td>y </em> </td><td class="glocal-border">6.0</td><td> +</td></tr>
+<tr><td></td><td>1 <em> </td><td>7.0</td><td> </td><td></td><td>1 </em> </td><td>8.0</td><td>  </td><td></td><td>1 * </td><td>9.0</td><td> </td></tr></table></div>
 
-<p>You're probably looking at that and thinking "WHAT'S THE POINT". Well, Let's assume we have a translation. We'll call the amount we want to translate tx and ty. Let's make a matrix like this</p>
+<p>You&#39;re probably looking at that and thinking &quot;WHAT&#39;S THE POINT&quot;. Well, Let&#39;s assume we have a translation. We&#39;ll call the amount we want to translate tx and ty. Let&#39;s make a matrix like this</p>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>1.0</td><td>0.0</td></tr><tr><td>tx</td><td>ty</td><td>1.0</td></tr></table></div>
 
 <p>And now check it out</p>
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr><tr><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +<td></tr>
-<tr><td></td><td>1</td><td> * </td><td>tx</td><td> </td><td></td><td>1</td><td> * </td><td>ty</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> <td></tr></table></div>
+<tr><td>newX&nbsp;= </td><td>x</td><td> <em> </td><td class="glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> </em> </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> <em> </td><td class="glocal-border">0.0</td><td> +</td></tr><tr><td></td><td>y</td><td> </em> </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> <em> </td><td class="glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td>y</td><td> </em> </td><td class="glocal-border">0.0</td><td> +</td></tr>
+<tr><td></td><td>1</td><td> <em> </td><td>tx</td><td> </td><td></td><td>1</td><td> </em> </td><td>ty</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> </td></tr></table></div>
 
-<p>If you remember your algebra, we can delete any place that multiplies by zero. Multiplying by 1 effectively does nothing so let's simplify to see what's happening</p>
+<p>If you remember your algebra, we can delete any place that multiplies by zero. Multiplying by 1 effectively does nothing so let&#39;s simplify to see what&#39;s happening</p>
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX&nbsp;= </td><td>x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">+</td><td class="glocal-right">extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
-<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left"> +</td><td></td><td>y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +<td></tr>
-<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td>tx</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td>ty</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> <td></tr></table></div>
+<tr><td>newX&nbsp;= </td><td>x</td><td class="glocal-blk"> <em> </td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td class="glocal-blk">x</td><td class="glocal-blk"> </em> </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">+</td><td class="glocal-right">extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> <em> </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> </em> </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left"> +</td><td></td><td>y</td><td class="glocal-blk"> <em> </td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> </em> </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> <em> </td><td>tx</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> </em> </td><td>ty</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> </td></tr></table></div>
 
 <p>or more succinctly</p>
 <pre class="webgl_center">
@@ -87,8 +86,8 @@ newX = x + tx;
 newY = y + ty;
 </pre>
 
-<p>And extra we don't really care about. That looks surprisingly like <a href="webgl-2d-translation.html">the translation code from our translation example</a>.</p>
-<p>Similarly let's do rotation. Like we pointed out in the rotation post we just need the sine and cosine of the angle at which we want to rotate so.</p>
+<p>And extra we don&#39;t really care about. That looks surprisingly like <a href="webgl-2d-translation.html">the translation code from our translation example</a>.</p>
+<p>Similarly let&#39;s do rotation. Like we pointed out in the rotation post we just need the sine and cosine of the angle at which we want to rotate so.</p>
 <pre class="webgl_center">
 s = Math.sin(angleToRotateInRadians);
 c = Math.cos(angleToRotateInRadians);
@@ -100,16 +99,16 @@ c = Math.cos(angleToRotateInRadians);
 <p>Applying the matrix we get this</p>
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">-s</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
-<tr><td></td><td>y</td><td> * </td><td class="glocal-border">s</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +<td></tr>
-<tr><td></td><td>1</td><td> * </td><td>0.0</td><td> </td><td></td><td>1</td><td> * </td><td>0.0</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> <td></tr></table></div>
+<tr><td>newX&nbsp;= </td><td>x</td><td> <em> </td><td class="glocal-border">c</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> </em> </td><td class="glocal-border">-s</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> <em> </td><td class="glocal-border">0.0</td><td> +</td></tr>
+<tr><td></td><td>y</td><td> </em> </td><td class="glocal-border">s</td><td class="glocal-left"> +</td><td></td><td>y</td><td> <em> </td><td class="glocal-border">c</td><td class="glocal-left"> + </td><td></td><td>y</td><td> </em> </td><td class="glocal-border">0.0</td><td> +</td></tr>
+<tr><td></td><td>1</td><td> <em> </td><td>0.0</td><td> </td><td></td><td>1</td><td> </em> </td><td>0.0</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> </td></tr></table></div>
 
 <p>Blacking out all multiply by 0s and 1s we get</p>
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">-s</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
-<tr><td></td><td>y</td><td> * </td><td class="glocal-border">s</td><td class="glocal-left glocal-blk"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">c</td><td class="glocal-left glocal-blk"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +<td></tr>
-<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> <td></tr></table></div>
+<tr><td>newX&nbsp;= </td><td>x</td><td> <em> </td><td class="glocal-border">c</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> </em> </td><td class="glocal-border">-s</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> <em> </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td></td><td>y</td><td> </em> </td><td class="glocal-border">s</td><td class="glocal-left glocal-blk"> +</td><td></td><td>y</td><td> <em> </td><td class="glocal-border">c</td><td class="glocal-left glocal-blk"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> </em> </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> <em> </td><td class="glocal-blk">0.0</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> </em> </td><td class="glocal-blk">0.0</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> </td></tr></table></div>
 
 <p>And simplifying we get</p>
 <pre class="webgl_center">
@@ -118,23 +117,23 @@ newY = x * -s + y * c;
 </pre>
 
 <p>Which is exactly what we had in our <a href="webgl-2d-rotation.html">rotation sample</a>.</p>
-<p>And lastly scale. We'll call our 2 scale factors sx and sy</p>
+<p>And lastly scale. We&#39;ll call our 2 scale factors sx and sy</p>
 <p>And we build a matrix like this</p>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>sx</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>sy</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
 
 <p>Applying the matrix we get this</p>
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">sx</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> * </td><td class="glocal-border">0.0</td><td> +</td></tr>
-<tr><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">sy</td><td class="glocal-left"> + </td><td></td><td>y</td><td> * </td><td class="glocal-border">0.0</td><td> +<td></tr>
-<tr><td></td><td>1</td><td> * </td><td>0.0</td><td> </td><td></td><td>1</td><td> * </td><td>0.0</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> <td></tr></table></div>
+<tr><td>newX&nbsp;= </td><td>x</td><td> <em> </td><td class="glocal-border">sx</td><td class="glocal-left"> +</td><td class="glocal-right">newY = </td><td>x</td><td> </em> </td><td class="glocal-border">0.0</td><td class="glocal-left">+</td><td class="glocal-right">extra = </td><td>x</td><td> <em> </td><td class="glocal-border">0.0</td><td> +</td></tr>
+<tr><td></td><td>y</td><td> </em> </td><td class="glocal-border">0.0</td><td class="glocal-left"> +</td><td></td><td>y</td><td> <em> </td><td class="glocal-border">sy</td><td class="glocal-left"> + </td><td></td><td>y</td><td> </em> </td><td class="glocal-border">0.0</td><td> +</td></tr>
+<tr><td></td><td>1</td><td> <em> </td><td>0.0</td><td> </td><td></td><td>1</td><td> </em> </td><td>0.0</td><td>  </td><td></td><td>1</td><td> * </td><td>1.0</td><td> </td></tr></table></div>
 
 <p>which is really</p>
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
-<tr><td>newX&nbsp;= </td><td>x</td><td> * </td><td class="glocal-border">sx</td><td class="glocal-left glocal-blk"> +</td><td>newY = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk">+</td><td>extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
-<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk"> +</td><td></td><td>y</td><td> * </td><td class="glocal-border">sy</td><td class="glocal-left glocal-blk"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> * </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +<td></tr>
-<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> * </td><td class="glocal-blk">0.0</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> <td></tr></table></div>
+<tr><td>newX&nbsp;= </td><td>x</td><td> <em> </td><td class="glocal-border">sx</td><td class="glocal-left glocal-blk"> +</td><td>newY = </td><td class="glocal-blk">x</td><td class="glocal-blk"> </em> </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk">+</td><td>extra = </td><td class="glocal-blk">x</td><td class="glocal-blk"> <em> </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> </em> </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk"> +</td><td></td><td>y</td><td> <em> </td><td class="glocal-border">sy</td><td class="glocal-left glocal-blk"> + </td><td></td><td class="glocal-blk">y</td><td class="glocal-blk"> </em> </td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk"> +</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> <em> </td><td class="glocal-blk">0.0</td><td> </td><td></td><td class="glocal-blk">1</td><td class="glocal-blk"> </em> </td><td class="glocal-blk">0.0</td><td>  </td><td></td><td>1</td><td class="glocal-blk"> * </td><td class="glocal-blk">1.0</td><td> </td></tr></table></div>
 
 <p>which simplified is</p>
 <pre class="webgl_center">
@@ -143,9 +142,9 @@ newY = y * sy;
 </pre>
 
 <p>Which is the same as our <a href="webgl-2d-scale.html">scaling sample</a>.</p>
-<p>Now I'm sure you might still be thinking. So what? What's the point. That seems like a lot of work just to do the same thing we were already doing?</p>
-<p>This is where the magic comes in. It turns out we can multiply matrices together and apply all the transformations at once. Let's assume we have function, <code>matrixMultiply</code>, that takes two matrices, multiplies them and returns the result.</a></p>
-<p>To make things clearer let's make functions to build matrices for translation, rotation and scale.</p>
+<p>Now I&#39;m sure you might still be thinking. So what? What&#39;s the point. That seems like a lot of work just to do the same thing we were already doing?</p>
+<p>This is where the magic comes in. It turns out we can multiply matrices together and apply all the transformations at once. Let&#39;s assume we have function, <code>matrixMultiply</code>, that takes two matrices, multiplies them and returns the result.</p>
+<p>To make things clearer let&#39;s make functions to build matrices for translation, rotation and scale.</p>
 <pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty) {
   return [
@@ -174,7 +173,7 @@ function makeScale(sx, sy) {
 }
 </pre>
 
-<p>Now let's change our shader. The old shader looked like this</p>
+<p>Now let&#39;s change our shader. The old shader looked like this</p>
 <pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
@@ -212,7 +211,7 @@ void main() {
   ...
 </pre>
 
-<p>And here's how we use it</p>
+<p>And here&#39;s how we use it</p>
 <pre class="prettyprint showlinemods">
   // Draw the scene.
   function drawScene() {
@@ -236,11 +235,10 @@ void main() {
   }
 </pre>
 
-<p>Here's a sample using our new code. The sliders are the same, translation, rotation and scale. But the way they get used in the shader is much simpler. </p>
-<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-geometry-matrix-transform.html" target="_blank">click here to open in a separate window</a></p>
-<p>Still, you might be asking, so what? That doesn't seem like much of a benefit . But, now if we want to change the order we don't have to write a new shader. We can just change the math.</p>
+<p>Here&#39;s a sample using our new code. The sliders are the same, translation, rotation and scale. But the way they get used in the shader is much simpler. </p>
+<p><iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform.html" target="_blank">click here to open in a separate window</a></p>
+<p>Still, you might be asking, so what? That doesn&#39;t seem like much of a benefit . But, now if we want to change the order we don&#39;t have to write a new shader. We can just change the math.</p>
 <pre class="prettyprint showlinemods">
     ...
     // Multiply the matrices.
@@ -249,11 +247,10 @@ void main() {
     ...
 </pre>
 
-<p>Here's that version.</p>
-<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-trs.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-trs.html" target="_blank">click here to open in a separate window</a></p>
-<p>Being able to apply matrices like this is especially important for hierarchical animation like arms on a body, moons on a planet around a sun, or branches on a tree. For a simple example of hierarchical animation lets draw draw our 'F' 5 times but each time lets start with the matrix from the previous 'F'.</p>
+<p>Here&#39;s that version.</p>
+<p><iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-trs.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-trs.html" target="_blank">click here to open in a separate window</a></p>
+<p>Being able to apply matrices like this is especially important for hierarchical animation like arms on a body, moons on a planet around a sun, or branches on a tree. For a simple example of hierarchical animation lets draw draw our &#39;F&#39; 5 times but each time lets start with the matrix from the previous &#39;F&#39;.</p>
 <pre class="prettyprint showlinemods">
   // Draw the scene.
   function drawScene() {
@@ -284,12 +281,12 @@ void main() {
 </pre>
 
 <p>To do this we had introduce the function, <code>makeIdentity</code>, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like </p>
-<div class="webgl_center">X * 1 = X</div>
+<div class="webgl_center">X * 1 = X</div> 
 
 <p>so too </p>
 <div class="webgl_center">matrixX * identity = matrixX</div>
 
-<p>Here's the code to make an identity matrix.</p>
+<p>Here&#39;s the code to make an identity matrix.</p>
 <pre class="prettyprint showlinemods">
 function makeIdentity() {
   return [
@@ -300,11 +297,10 @@ function makeIdentity() {
 }
 </pre>
 
-<p>Here's the 5 Fs.</p>
-<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-hierarchical.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-hierarchical.html" target="_blank">click here to open in a separate window</a></p>
-<p>One more example, In every sample so far our 'F' rotates around its top left corner. This is because the math we are using always rotates around the origin and the top left corner of our 'F' is at the origin, (0, 0)</p>
+<p>Here&#39;s the 5 Fs.</p>
+<p><iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-hierarchical.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-hierarchical.html" target="_blank">click here to open in a separate window</a></p>
+<p>One more example, In every sample so far our &#39;F&#39; rotates around its top left corner. This is because the math we are using always rotates around the origin and the top left corner of our &#39;F&#39; is at the origin, (0, 0)</p>
 <p>But now, because we can do matrix math and we can choose the order that transforms are applied we can move the origin before the rest of the transforms are applied.</p>
 <pre class="prettyprint showlinemods">
     // make a matrix that will move the origin of the 'F' to its center.
@@ -317,12 +313,11 @@ function makeIdentity() {
     matrix = matrixMultiply(matrix, translationMatrix);
 </pre>
 
-<p>Here's that sample. Notice the F rotates and scales around the center.</p>
-<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-center-f.html" width="400" height="300"></iframe>
-
-<p><a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-center-f.html" target="_blank">click here to open in a separate window</a></p>
+<p>Here&#39;s that sample. Notice the F rotates and scales around the center.</p>
+<p><iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-center-f.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-center-f.html" target="_blank">click here to open in a separate window</a></p>
 <p>Using that technique you can rotate or scale from any point. Now you know how Photoshop or Flash let you move the rotation point.</p>
-<p>Let's go even more crazy. If you go back to the first article on <a href="webgl-fundamentals.html">WebGL fundamentals</a> you might remember we have code in the shader to convert from pixels to clipspace that looks like this.</p>
+<p>Let&#39;s go even more crazy. If you go back to the first article on <a href="webgl-fundamentals.html">WebGL fundamentals</a> you might remember we have code in the shader to convert from pixels to clipspace that looks like this.</p>
 <pre class="prettyprint showlinemods">
   ...
   // convert the rectangle from pixels to 0.0 to 1.0
@@ -337,7 +332,7 @@ function makeIdentity() {
   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </pre>
 
-<p>If you look at each of those steps in turn, the first step, "convert from pixels to 0.0 to 1.0", is really a scale operation. The second is also a scale operation. The next is a translation and the very last scales Y by -1. We can actually do that all in the matrix we pass into the shader. We could make 2 scale matrices, one to scale by 1.0/resolution, another to scale by 2.0, a 3rd to translate by -1.0,-1.0 and a 4th to scale Y by -1 then multiply them all together but instead, because the math is simple, we'll just make a function that makes a 'projection' matrix for a given resolution directly.</p>
+<p>If you look at each of those steps in turn, the first step, &quot;convert from pixels to 0.0 to 1.0&quot;, is really a scale operation. The second is also a scale operation. The next is a translation and the very last scales Y by -1. We can actually do that all in the matrix we pass into the shader. We could make 2 scale matrices, one to scale by 1.0/resolution, another to scale by 2.0, a 3rd to translate by -1.0,-1.0 and a 4th to scale Y by -1 then multiply them all together but instead, because the math is simple, we&#39;ll just make a function that makes a &#39;projection&#39; matrix for a given resolution directly.</p>
 <pre class="prettyprint showlinemods">
 function make2DProjection(width, height) {
   // Note: This matrix flips the Y axis so that 0 is at the top.
@@ -349,7 +344,7 @@ function make2DProjection(width, height) {
 }
 </pre>
 
-<p>Now we can simplify the shader even more. Here's the entire new vertex shader.</p>
+<p>Now we can simplify the shader even more. Here&#39;s the entire new vertex shader.</p>
 <pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
@@ -369,7 +364,8 @@ void main() {
   function drawScene() {
     ...
     // Compute the matrices
-    var projectionMatrix = make2DProjection(canvas.width, canvas.height);
+    var projectionMatrix = make2DProjection(
+        canvas.clientWidth, canvas.clientHeight);
     ...
 
     // Multiply the matrices.
@@ -380,11 +376,60 @@ void main() {
   }
 </pre>
 
-<p>We also removed the code that set the resolution. With this last step we've gone from a rather complicated shader with 6-7 steps to a very simple shader with only 1 step all do to the magic of matrix math.</p>
-<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-with-projection.html" width="400" height="300"></iframe>
+<p>We also removed the code that set the resolution. With this last step we&#39;ve gone from a rather complicated shader with 6-7 steps to a very simple shader with only 1 step all do to the magic of matrix math.</p>
+<p><iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-with-projection.html" width="400" height="300"></iframe>
+<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-with-projection.html" target="_blank">click here to open in a separate window</a></p>
+<p>I hope these posts have helped demystified matrix math. I&#39;ll move on to 3D next. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.</p>
+<div class="webgl_bottombar">
+<h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
+<p>Up until this point whenever I referred to the canvas&#39;s dimensions I used <code>canvas.width</code> and <code>canvas.height</code>
+but above when I called <code>make2DProjection</code> I instead used <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Why?</p>
+<p>Projection matrixes are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
+to pixels. But, in the browser, there are 2 types of pixels we are dealing with. One is the number of pixels in
+the canvas itself. So for example a canvas defined like this.</p>
+<pre class="prettyprint">
+  &lt;canvas width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+</pre>
+<p>or one defined like this</p>
+<pre class="prettyprint">
+  var canvas = document.createElement(&quot;canvas&quot;);
+  canvas.width = 400;
+  canvas.height = 300;
+</pre>
+<p>both contain an image 400 pixels wide by 300 pixels tall. But, that size is separate from what size
+the browser actually displays that 400x300 pixel canvas. CSS defines what size the canvas is displayed.
+For example if we made a canvas like this.</p>
+<pre class="prettyprint">&lt;!&gt;
+  &lt;style&gt;
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+  &lt;/style&gt;
+  ...
+  &lt;canvas width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+</pre>
+<p>The canvas will be displayed whatever size its container is. That&#39;s likely not 400x300.</p>
+<p>Here&#39;s two examples that set the canvas&#39;s CSS display size to 100% so the canvas stretched
+out to fill the page. The first one uses <code>canvas.width</code> and <code>canvas.height</code>. Open it in a new
+window and resize the window. Notice how the &#39;F&#39; doesn&#39;t have the correct aspect. It gets
+distorted.</p>
+<iframe class="webgl_example" src="../webgl-canvas-width-height.html" width="500" height="150"></iframe>
+<a class="webgl_center" href="../webgl-canvas-width-height.html" target="_blank">click here to open in a separate window</a>
+<p>In this second example we use <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> report
+the size the canvas is actually being displayed by the browser so in this case, even though the canvas still only has 400x300 pixels
+since we&#39;re defining our aspect ratio based on the size the canvas is being displayed the <code>F</code> always looks correct.</p>
+<iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" width="500" height="150"></iframe>
+<a class="webgl_center" href="../webgl-canvas-clientwidth-clientheight.html" target="_blank">click here to open in a separate window</a>
+<p>Most apps that allow their canvases to be resized try to make the <code>canvas.width</code> and <code>canvas.height</code> match
+the <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> because they want there to be
+one pixel in the canvas for each pixel displayed by the browser. But, as we&#39;ve seen above, that&#39;s not
+the only option. That means, in almost all cases, it&#39;s more technically correct to compute a
+projection matrix&#39;s aspect ration using <code>canvas.clientHeight</code> and <code>canvas.clientWidth</code>.
+</p>
+</div>
 
-<p><a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-with-projection.html" target="_blank">click here to open in a separate window</a></p>
-<p>I hope these posts have helped demystified matrix math. I'll move on to 3D next. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.</p>
+
   </div>
 </div>
 </body>

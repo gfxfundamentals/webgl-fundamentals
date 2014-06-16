@@ -27,10 +27,12 @@ td {
   margin: 0px;
 }
 </style>
-<script type="text/javascript" src="resources/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="resources/jquery.tablednd_0_5.js"></script>
-<script type="text/javascript" src="resources/webgl-utils.js"></script>
+<script src="resources/jquery-1.7.1.min.js"></script>
+<script src="resources/jquery.tablednd_0_5.js"></script>
+<script src="resources/webgl-utils.js"></script>
 <script>
+"use strict";
+
 
 $(function(){
   main();
@@ -53,9 +55,7 @@ function render(image) {
   }
 
   // setup GLSL program
-  vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
-  fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
-  program = createProgram(gl, [vertexShader, fragmentShader]);
+  var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
   gl.useProgram(program);
 
   // look up where the vertex data needs to go.

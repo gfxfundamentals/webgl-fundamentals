@@ -246,7 +246,7 @@ Finally we need to to update the code that computes the matrix.
 <pre class="prettyprint showlinemods">
   // Compute the matrices
   var projectionMatrix =
-      make2DProjection(canvas.width, canvas.height, canvas.width);
+      make2DProjection(canvas.clientWidth, canvas.clientHeight, 400);
   var translationMatrix =
       makeTranslation(translation[0], translation[1], translation[2]);
   var rotationXMatrix = makeXRotation(rotation[0]);

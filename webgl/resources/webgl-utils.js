@@ -28,6 +28,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+"use strict";
 
 // These funcitions are meant solely to help unclutter the tutorials.
 // They are not meant as production type functions.
@@ -77,7 +78,7 @@ var isInIFrame = function() {
 
 /**
  * Converts a WebGL enum to a string
- * @param {!WebGLContext} gl The WebGLContext to use.
+ * @param {WebGLRenderingContext} gl The WebGLRenderingContext to use.
  * @param {number} value The enum value.
  * @return {string} The enum as a string.
  */
@@ -126,8 +127,8 @@ var OTHER_PROBLEM = '' +
  * Creates a webgl context. If creation fails it will
  * change the contents of the container of the <canvas>
  * tag to an error message with the correct links for WebGL.
- * @param {Element} canvas. The canvas element to create a
- *     context from.
+ * @param {HTMLCanvasElement} canvas. The canvas element to
+ *     create a context from.
  * @param {WebGLContextCreationAttirbutes} opt_attribs Any
  *     creation attributes you want to pass in.
  * @return {WebGLRenderingContext} The created context.
@@ -154,9 +155,10 @@ var setupWebGL = function(canvas, opt_attribs) {
 
 /**
  * Creates a webgl context.
- * @param {!Canvas} canvas The canvas tag to get context
- *     from. If one is not passed in one will be created.
- * @return {!WebGLContext} The created context.
+ * @param {HTMLCanvasElement} canvas The canvas tag to get
+ *     context from. If one is not passed in one will be
+ *     created.
+ * @return {WebGLRenderingContext} The created context.
  */
 var create3DContext = function(canvas, opt_attribs) {
   var names = ["webgl", "experimental-webgl"];
@@ -182,13 +184,19 @@ var updateCSSIfInIFrame = function() {
  * Gets a WebGL context.
  * makes its backing store the size it is displayed.
  */
-var getWebGLContext = function(canvas, opt_attribs) {
+var getWebGLContext = function(canvas, opt_attribs, opt_options) {
+  var options = opt_options || {}
+
   if (isInIFrame()) {
     updateCSSIfInIFrame();
 
     // make the canvas backing store the size it's displayed.
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    if (!options.dontResize) {
+      var width = canvas.clientWidth;
+      var height = canvas.clientHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
   } else {
     var title = document.title;
     var h1 = document.createElement("h1");
@@ -202,11 +210,11 @@ var getWebGLContext = function(canvas, opt_attribs) {
 
 /**
  * Loads a shader.
- * @param {!WebGLContext} gl The WebGLContext to use.
+ * @param {WebGLRenderingContext} gl The WebGLRenderingContext to use.
  * @param {string} shaderSource The shader source.
  * @param {number} shaderType The type of shader.
  * @param {function(string): void) opt_errorCallback callback for errors.
- * @return {!WebGLShader} The created shader.
+ * @return {WebGLShader} The created shader.
  */
 var loadShader = function(gl, shaderSource, shaderType, opt_errorCallback) {
   var errFn = opt_errorCallback || error;
@@ -235,9 +243,10 @@ var loadShader = function(gl, shaderSource, shaderType, opt_errorCallback) {
 /**
  * Creates a program, attaches shaders, binds attrib locations, links the
  * program and calls useProgram.
- * @param {!Array.<!WebGLShader>} shaders The shaders to attach
- * @param {!Array.<string>} opt_attribs The attribs names.
- * @param {!Array.<number>} opt_locations The locations for the attribs.
+ * @param {WebGLShader[]} shaders The shaders to attach
+ * @param {string[]?} opt_attribs The attribs names.
+ * @param {number[]?} opt_locations The locations for the
+ *        attribs.
  * @param {function(string): void) opt_errorCallback callback for errors.
  */
 var loadProgram = function(
@@ -272,12 +281,12 @@ var loadProgram = function(
 
 /**
  * Loads a shader from a script tag.
- * @param {!WebGLContext} gl The WebGLContext to use.
+ * @param {WebGLRenderingContext} gl The WebGLRenderingContext to use.
  * @param {string} scriptId The id of the script tag.
  * @param {number} opt_shaderType The type of shader. If not passed in it will
  *     be derived from the type of the script tag.
  * @param {function(string): void) opt_errorCallback callback for errors.
- * @return {!WebGLShader} The created shader.
+ * @return {WebGLShader} The created shader.
  */
 var createShaderFromScript = function(
     gl, scriptId, opt_shaderType, opt_errorCallback) {
@@ -313,14 +322,16 @@ var defaultShaderType = [
 /**
  * Creates a program from 2 script tags.
  *
- * @param {!WebGLContext} gl The WebGLContext to use.
- * @param {!Array.<string>} shaderScriptIds Array of ids of the
- *        script tags for the shaders. The first is assumed to
- *        be the vertex shader, the second the fragment shader.
- * @param {!Array.<string>} opt_attribs The attribs names.
- * @param {!Array.<number>} opt_locations The locations for the attribs.
+ * @param {WebGLRenderingContext} gl The WebGLRenderingContext
+ *        to use.
+ * @param {string[]} shaderScriptIds Array of ids of the script
+ *        tags for the shaders. The first is assumed to be the
+ *        vertex shader, the second the fragment shader.
+ * @param {string[]?} opt_attribs The attribs names.
+ * @param {number[]?} opt_locations The locations for the
+ *        attribs.
  * @param {function(string): void) opt_errorCallback callback for errors.
- * @return {!WebGLProgram} The created program.
+ * @return {WebGLProgram} The created program.
  */
 var createProgramFromScripts = function(
     gl, shaderScriptIds, opt_attribs, opt_locations, opt_errorCallback) {
@@ -332,6 +343,204 @@ var createProgramFromScripts = function(
   return loadProgram(gl, shaders, opt_attribs, opt_locations, opt_errorCallback);
 };
 
+/**
+ * Creates a program from 2 sources.
+ *
+ * @param {WebGLRenderingContext} gl The WebGLRenderingContext
+ *        to use.
+ * @param {string[]} shaderSourcess Array of sources for the
+ *        shaders. The first is assumed to be the vertex shader,
+ *        the second the fragment shader.
+ * @param {string[]?} opt_attribs The attribs names.
+ * @param {number[]?} opt_locations The locations for the
+ *        attribs.
+ * @param {function(string): void) opt_errorCallback callback for errors.
+ * @return {WebGLProgram} The created program.
+ */
+var createProgramFromSources = function(
+    gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback) {
+  var shaders = [];
+  for (var ii = 0; ii < shaderSources.length; ++ii) {
+    shaders.push(loadShader(
+        gl, shaderSources[ii], gl[defaultShaderType[ii]], opt_errorCallback));
+  }
+  return loadProgram(gl, shaders, opt_attribs, opt_locations, opt_errorCallback);
+};
+
+/**
+ * Returns the corresponding bind point for a given sampler type
+ */
+var getBindPointForSamplerType = function(gl, type) {
+  if (type == gl.SAMPLER_2D)   return gl.TEXTURE_2D;
+  if (type == gl.SAMPLER_CUBE) return gl.TEXTURE_CUBE_MAP;
+};
+
+/**
+ * @typedef {Object.<string, function>} Setters
+ */
+
+/**
+ * Creates setter functions for all uniforms of a shader program
+ * @param {WebGLProgram} program the program to create setters
+ *        for.
+ * @returns {Setters} an object with a setter for each uniform
+ *        by name.
+ */
+var createUniformSetters = function(gl, program) {
+  var textureUnit = 0;
+
+  /**
+   * Creates a setter for a uniform of the given program with it's
+   * location embedded in the setter.
+   * @param {WebGLProgram} program
+   * @param {WebGLUniformInfo} uniformInfo
+   * @returns {function} the created setter.
+   */
+  var createUniformSetter = function(program, uniformInfo) {
+    var location = gl.getUniformLocation(program, uniformInfo.name);
+    var type = uniformInfo.type;
+    // Check if this uniform is an array
+    var isArray = (uniformInfo.size > 1 && uniformInfo.name.substr(-3) == "[0]");
+    if (type == gl.FLOAT && isArray)
+      return function(v) { gl.uniform1fv(location, v); };
+    if (type == gl.FLOAT)
+      return function(v) { gl.uniform1f(location, v); };
+    if (type == gl.FLOAT_VEC2)
+      return function(v) { gl.uniform2fv(location, v); };
+    if (type == gl.FLOAT_VEC3)
+      return function(v) { gl.uniform3fv(location, v); };
+    if (type == gl.FLOAT_VEC4)
+      return function(v) { gl.uniform4fv(location, v); };
+    if (type == gl.INT && isArray)
+      return function(v) { gl.uniform1iv(location, v); };
+    if (type == gl.INT)
+      return function(v) { gl.uniform1i(location, v); };
+    if (type == gl.INT_VEC2)
+      return function(v) { gl.uniform2iv(location, v); };
+    if (type == gl.INT_VEC3)
+      return function(v) { gl.uniform3iv(location, v); };
+    if (type == gl.INT_VEC4)
+      return function(v) { gl.uniform4iv(location, v); };
+    if (type == gl.BOOL)
+      return function(v) { gl.uniform1iv(location, v); };
+    if (type == gl.BOOL_VEC2)
+      return function(v) { gl.uniform2iv(location, v); };
+    if (type == gl.BOOL_VEC3)
+      return function(v) { gl.uniform3iv(location, v); };
+    if (type == gl.BOOL_VEC4)
+      return function(v) { gl.uniform4iv(location, v); };
+    if (type == gl.FLOAT_MAT2)
+      return function(v) { gl.uniformMatrix2fv(location, false, v); };
+    if (type == gl.FLOAT_MAT3)
+      return function(v) { gl.uniformMatrix3fv(location, false, v); };
+    if (type == gl.FLOAT_MAT4)
+      return function(v) { gl.uniformMatrix4fv(location, false, v); };
+    if ((type == gl.SAMPLER_2D || type == gl.SAMPLER_CUBE) && isArray) {
+      var units = [];
+      for (var ii = 0; ii < info.size; ++ii) {
+        units.push(textureUnit++);
+      }
+      return function(bindPoint, units) {
+        return function(textures) {
+          gl.uniform1iv(location, units);
+          textures.forEach(function(texture, index) {
+            gl.activeTexture(gl.TEXTURE0 + units[index]);
+            gl.bindTexture(bindPoint, tetxure);
+          });
+        }
+      }(getBindPointForSamplerType(gl, type), units);
+    }
+    if (type == gl.SAMPLER_2D || type == gl.SAMPLER_CUBE)
+      return function(bindPoint, unit) {
+        return function(texture) {
+          gl.uniform1i(location, unit);
+          gl.activeTexture(gl.TEXTURE0 + unit);
+          gl.bindTexture(bindPoint, texture);
+        };
+      }(getBindPointForSamplerType(gl, type), textureUnit++);
+    throw ("unknown type: 0x" + type.toString(16)); // we should never get here.
+  };
+
+  var uniformSetters = { };
+  var numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+
+  for (var ii = 0; ii < numUniforms; ++ii) {
+    var uniformInfo = gl.getActiveUniform(program, ii);
+    if (!uniformInfo) {
+      break;
+    }
+    var name = uniformInfo.name;
+    // remove the array suffix.
+    if (name.substr(-3) == "[0]") {
+      name = name.substr(0, name.length - 3);
+    }
+    var setter = createUniformSetter(program, uniformInfo);
+    uniformSetters[name] = setter;
+  }
+  return uniformSetters;
+};
+
+/**
+ * Set uniforms and binds related textures.
+ * @param {Setters} setters the setters returned from
+ *        createUniformSettersForProgram
+ * @param {Object.<string, value>} an object with values for the
+ *        uniforms.
+ */
+var setUniforms = function(setters, values) {
+  Object.keys(values).forEach(function(name) {
+    var setter = setters[name];
+    if (setter) {
+      setter(values[name]);
+    }
+  });
+};
+
+/**
+ * Creates setter functions for all attributes of a shader
+ * program
+ * @param {WebGLProgram} program the program to create setters
+ *        for.
+ * @returns {Setters} an object with a setter for each uniform
+ *        by name.
+ */
+var createAttributeSetters = function(gl, program) {
+  var attribSetters = {
+  };
+
+  function createAttribSetter(index) {
+    return function(b) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, b.buffer);
+        gl.enableVertexAttribArray(index);
+        gl.vertexAttribPointer(
+            index, b.numComponents, b.type || gl.FLOAT, b.normalize || false, b.stride || 0, b.offset || 0);
+      };
+  }
+
+  var numAttribs = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
+  for (var ii = 0; ii < numAttribs; ++ii) {
+    var attribInfo = gl.getActiveAttrib(program, ii);
+    if (!attribInfo) {
+      break;
+    }
+    var index = gl.getAttribLocation(program, attribInfo.name);
+    attribSetters[attribInfo.name] = createAttribSetter(index);
+  }
+
+  return attribSetters;
+};
+
+/**
+ * Sets attributes and binds buffers.
+ */
+var setAttributes = function(setters, buffers) {
+  Object.keys(buffers).forEach(function(name) {
+    var setter = setters[name];
+    if (setter) {
+      setter(buffers[name]);
+    }
+  });
+};
 
 // Add your prefix here.
 var browserPrefixes = [
@@ -362,52 +571,39 @@ var getExtensionWithKnownPrefixes = function(gl, name) {
 
 /**
  * Resize a canvas to match the size it's displayed.
- * @param {!Canvas} canvas The canvas to resize.
+ * @param {HTMLCanvasElement} canvas The canvas to resize.
+ * @param {boolean} true if the canvas was resized.
  */
 var resizeCanvasToDisplaySize = function(canvas) {
-  if (canvas.width != canvas.clientWidth ||
-      canvas.height != canvas.clientHeight) {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+  var width = canvas.clientWidth;
+  var height = canvas.clientHeight;
+  if (canvas.width != width ||
+      canvas.height != height) {
+    canvas.width = width;
+    canvas.height = height;
+    return true;
   }
+  return false;
 }
 
 /* export functions */
-this.createProgram = loadProgram;
-this.createProgramFromScripts = createProgramFromScripts;
-this.createShaderFromScriptElement = createShaderFromScript;
-this.getWebGLContext = getWebGLContext;
-this.updateCSSIfInIFrame = updateCSSIfInIFrame;
-this.getExtensionWithKnownPrefixes = getExtensionWithKnownPrefixes;
-this.resizeCanvasToDisplaySize = resizeCanvasToDisplaySize;
+window.createAttributeSetters = createAttributeSetters;
+window.createProgram = loadProgram;
+window.createProgramFromScripts = createProgramFromScripts;
+window.createProgramFromSources = createProgramFromSources;
+window.createShaderFromScriptElement = createShaderFromScript;
+window.createUniformSetters = createUniformSetters;
+window.getWebGLContext = getWebGLContext;
+window.updateCSSIfInIFrame = updateCSSIfInIFrame;
+window.getExtensionWithKnownPrefixes = getExtensionWithKnownPrefixes;
+window.resizeCanvasToDisplaySize = resizeCanvasToDisplaySize;
+window.setAttributes = setAttributes;
+window.setUniforms = setUniforms;
+window.setupWebGL = setupWebGL;
 
-/**
- * Provides requestAnimationFrame in a cross browser way.
- */
-this.requestAnimFrame = (function() {
-  return window.requestAnimationFrame ||
-         window.webkitRequestAnimationFrame ||
-         window.mozRequestAnimationFrame ||
-         window.oRequestAnimationFrame ||
-         window.msRequestAnimationFrame ||
-         function(/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
-           return window.setTimeout(callback, 1000/60);
-         };
-})();
-
-/**
- * Provides cancelRequestAnimationFrame in a cross browser way.
- */
-this.cancelRequestAnimFrame = (function() {
-  return window.cancelCancelRequestAnimationFrame ||
-         window.webkitCancelRequestAnimationFrame ||
-         window.mozCancelRequestAnimationFrame ||
-         window.oCancelRequestAnimationFrame ||
-         window.msCancelRequestAnimationFrame ||
-         window.clearTimeout;
-})();
-
-
+// All browsers that support WebGL support requestAnimationFrame
+window.requestAnimFrame = window.requestAnimationFrame;       // just to stay backward compatible.
+window.cancelRequestAnimFrame = window.cancelAnimationFrame;  // just to stay backward compatible.
 
 }());
 
