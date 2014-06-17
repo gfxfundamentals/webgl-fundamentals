@@ -237,9 +237,64 @@ This would handle the resize case for apps that don&#39;t render the scene every
 Just set <code>needToRender</code> any time you&#39;ve changed something in the scene and you want
 the scene to be rendered incorporating your changes.</p>
 </li>
+<li><p>Adding adding properties to <code>WebGLObject</code>s</p>
+<p><code>WebGLObject</code>s are the various types of resources in WebGL like a <code>WebGLBuffer</code>
+or <code>WebGLTexture</code>. Some apps add properties to those objects. For example code like this:</p>
+<pre class="prettyprint">
+var buffer = gl.createBuffer();
+buffer.itemSize = 3;        // BAD!!
+buffer.numComponents = 75;  // BAD!!
+
+var program = gl.createProgram();
+...
+program.u_matrixLoc = gl.getUniformLocation(program, "u_matrix");  // BAD!!
+</pre>
+
+<p><strong>Why it&#39;s Bad:</strong></p>
+<p>The reason this is bad is that WebGL can &quot;lose the context&quot;. This can happen for any
+reason but the most common reason is if the browser decides too many GPU resources are being used
+it might intentionally lose the context on some <code>WebGLRenderingContext</code>s to free up space.
+WebGL programs that want to always work have to handle this. Google Maps handles this for example.</p>
+<p>The problem with the code above is that when the context is lost the WebGL creations functions like
+<code>gl.createBuffer()</code> above will return <code>null</code>. That effectively makes the code this</p>
+<pre class="prettyprint">
+var buffer = null;
+buffer.itemSize = 3;        // ERROR!
+buffer.numComponents = 75;  // ERROR!
+</pre>
+
+<p>That will likely kill your app with an error like</p>
+<pre class="prettyprint">
+TypeError: Cannot set property 'itemSize' of null
+</pre>
+
+<p>While many apps don&#39;t care if they die when the context it lost it seems like a bad idea
+to write code that will have to be fixed later if the developers ever decide to update their
+app to handle context lost events.</p>
+<p><strong>What to do instead:</strong></p>
+<p>If you want to keep <code>WebGLObjects</code> and some info about them together one way would be
+to use JavaScript objects. For example:</p>
+<pre class="prettyprint">
+var bufferInfo = {
+  id: gl.createBuffer(),
+  itemSize: 3,
+  numComponents: 75,
+};
+
+var programInfo = {
+  id: program,
+  u_matrixLoc: gl.getUniformLocation(program, "u_matrix"),
+};
+</pre>
+
+<p>Personally I&#39;d suggest <a href="webgl-less-code-more-fun.html">using a few simple helpers that make writing WebGL
+much simpler</a>.</p>
+</li>
 </ol>
 <p>Those are a few of what I consider WebGL Anti-Patterns in code I&#39;ve seen around the net.
 Hopefully I&#39;ve made the case why to avoid them and given solutions that are easy and useful.</p>
+<p></pre>
+</div></p>
 
   </div>
 </div>

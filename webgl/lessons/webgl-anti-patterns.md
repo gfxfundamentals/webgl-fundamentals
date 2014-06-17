@@ -237,9 +237,73 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     Just set `needToRender` any time you've changed something in the scene and you want
     the scene to be rendered incorporating your changes.
 
+5.  Adding adding properties to `WebGLObject`s
+
+    `WebGLObject`s are the various types of resources in WebGL like a `WebGLBuffer`
+    or `WebGLTexture`. Some apps add properties to those objects. For example code like this:
+
+    <pre class="prettyprint">
+    var buffer = gl.createBuffer();
+    buffer.itemSize = 3;        // BAD!!
+    buffer.numComponents = 75;  // BAD!!
+
+    var program = gl.createProgram();
+    ...
+    program.u_matrixLoc = gl.getUniformLocation(program, "u_matrix");  // BAD!!
+    </pre>
+
+    **Why it's Bad:**
+
+    The reason this is bad is that WebGL can "lose the context". This can happen for any
+    reason but the most common reason is if the browser decides too many GPU resources are being used
+    it might intentionally lose the context on some `WebGLRenderingContext`s to free up space.
+    WebGL programs that want to always work have to handle this. Google Maps handles this for example.
+
+    The problem with the code above is that when the context is lost the WebGL creations functions like
+    `gl.createBuffer()` above will return `null`. That effectively makes the code this
+
+    <pre class="prettyprint">
+    var buffer = null;
+    buffer.itemSize = 3;        // ERROR!
+    buffer.numComponents = 75;  // ERROR!
+    </pre>
+
+    That will likely kill your app with an error like
+
+    <pre class="prettyprint">
+    TypeError: Cannot set property 'itemSize' of null
+    </pre>
+
+    While many apps don't care if they die when the context it lost it seems like a bad idea
+    to write code that will have to be fixed later if the developers ever decide to update their
+    app to handle context lost events.
+
+    **What to do instead:**
+
+    If you want to keep `WebGLObjects` and some info about them together one way would be
+    to use JavaScript objects. For example:
+
+    <pre class="prettyprint">
+    var bufferInfo = {
+      id: gl.createBuffer(),
+      itemSize: 3,
+      numComponents: 75,
+    };
+
+    var programInfo = {
+      id: program,
+      u_matrixLoc: gl.getUniformLocation(program, "u_matrix"),
+    };
+    </pre>
+
+    Personally I'd suggest <a href="webgl-less-code-more-fun.html">using a few simple helpers that make writing WebGL
+    much simpler</a>.
+
 Those are a few of what I consider WebGL Anti-Patterns in code I've seen around the net.
 Hopefully I've made the case why to avoid them and given solutions that are easy and useful.
 
+</pre>
+</div>
 
 
 

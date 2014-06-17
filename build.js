@@ -69,6 +69,7 @@ var Builder = function() {
       }
     }
     fs.writeFileSync(fileName, content);
+    console.log("Wrote: " + fileName);
   };
 
   var extractHeader = (function() {
