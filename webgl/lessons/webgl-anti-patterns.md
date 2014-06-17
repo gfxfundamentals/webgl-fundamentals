@@ -302,8 +302,6 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
 Those are a few of what I consider WebGL Anti-Patterns in code I've seen around the net.
 Hopefully I've made the case why to avoid them and given solutions that are easy and useful.
 
-</pre>
-</div>
 
 
 
