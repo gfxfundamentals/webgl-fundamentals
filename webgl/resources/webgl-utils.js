@@ -380,7 +380,11 @@ var getBindPointForSamplerType = function(gl, type) {
  */
 
 /**
- * Creates setter functions for all uniforms of a shader program
+ * Creates setter functions for all uniforms of a shader
+ * program.
+ *
+ * @see setUniforms for example
+ *
  * @param {WebGLProgram} program the program to create setters
  *        for.
  * @returns {Setters} an object with a setter for each uniform
@@ -482,6 +486,39 @@ var createUniformSetters = function(gl, program) {
 
 /**
  * Set uniforms and binds related textures.
+ *
+ * @example
+ *
+ *    var program = createProgramFromScripts(
+ *        gl, ["some-vs", "some-fs");
+ *
+ *    var uniformSetters = createUniformSetters(program);
+ *
+ *    var tex1 = gl.createTexture();
+ *    var tex2 = gl.createTexture();
+ *
+ *    ... assume we setup the textures with data ...
+ *
+ *    var uniforms = {
+ *      u_someSampler: tex1,
+ *      u_someOtherSampler: tex2,
+ *      u_someColor: [1,0,0,1],
+ *      u_somePosition: [0,1,1],
+ *      u_someMatrix: [
+ *        1,0,0,0,
+ *        0,1,0,0,
+ *        0,0,1,0,
+ *        0,0,0,0,
+ *      ],
+ *    }
+ *
+ *    gl.useProgram(program);
+ *
+ *  This will automatically bind the textures AND set the
+ *  uniforms.
+ *
+ *    setUniforms(uniformSetters, uniforms);
+ *
  * @param {Setters} setters the setters returned from
  *        createUniformSettersForProgram
  * @param {Object.<string, value>} an object with values for the
@@ -499,6 +536,9 @@ var setUniforms = function(setters, values) {
 /**
  * Creates setter functions for all attributes of a shader
  * program
+ *
+ * @see setAttributes for example
+ *
  * @param {WebGLProgram} program the program to create setters
  *        for.
  * @returns {Setters} an object with a setter for each uniform
@@ -513,7 +553,7 @@ var createAttributeSetters = function(gl, program) {
         gl.bindBuffer(gl.ARRAY_BUFFER, b.buffer);
         gl.enableVertexAttribArray(index);
         gl.vertexAttribPointer(
-            index, b.numComponents, b.type || gl.FLOAT, b.normalize || false, b.stride || 0, b.offset || 0);
+            index, b.numComponent || b.size, b.type || gl.FLOAT, b.normalize || false, b.stride || 0, b.offset || 0);
       };
   }
 
@@ -532,6 +572,53 @@ var createAttributeSetters = function(gl, program) {
 
 /**
  * Sets attributes and binds buffers.
+ *
+ * @example
+ *
+ *    var program = createProgramFromScripts(
+ *        gl, ["some-vs", "some-fs");
+ *
+ *    var attribSetters = createAttributeSetters(program);
+ *
+ *    var positionBuffer = gl.createBuffer();
+ *    var texcoordBuffer = gl.createBuffer();
+ *
+ *    var attribs = {
+ *      a_position: {buffer: positionBuffer, numComponents: 3},
+ *      a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
+ *    };
+ *
+ *    gl.useProgram(program);
+ *
+ *  This will automatically bind the buffers AND set the
+ *  attributes.
+ *
+ *    setAttributes(attribSetters, attribs);
+ *
+ *  Properties of attribs. For each attrib you can add
+ *  properties:
+ *
+ *    type: the type of data in the buffer. Default = gl.FLOAT
+ *    normalize: whether or not to normalize the data. Default =
+ *       false
+ *    stride: the stride. Default = 0
+ *    offset: offset into the buffer. Default = 0
+ *
+ *  For example if you had 3 value float positions, 2 value
+ *  float texcoord and 4 value uint8 colors you'd setup your
+ *  attribs like this
+ *
+ *    var attribs = {
+ *      a_position: {buffer: positionBuffer, numComponents: 3},
+ *      a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
+ *      a_color: {
+ *        buffer: colorBuffer,
+ *        numComponents: 4,
+ *        type: gl.UNSIGNED_BYTE,
+ *        normalize: true,
+ *      },
+ *    };
+ *
  */
 var setAttributes = function(setters, buffers) {
   Object.keys(buffers).forEach(function(name) {
