@@ -30,10 +30,11 @@
  */
 "use strict";
 
+/** @module webgl-utils */
 // These funcitions are meant solely to help unclutter the tutorials.
 // They are not meant as production type functions.
 
-(function() {
+//(function() {
 
 /**
  * Wrapped logging function.
@@ -553,7 +554,7 @@ var createAttributeSetters = function(gl, program) {
         gl.bindBuffer(gl.ARRAY_BUFFER, b.buffer);
         gl.enableVertexAttribArray(index);
         gl.vertexAttribPointer(
-            index, b.numComponent || b.size, b.type || gl.FLOAT, b.normalize || false, b.stride || 0, b.offset || 0);
+            index, b.numComponents || b.size, b.type || gl.FLOAT, b.normalize || false, b.stride || 0, b.offset || 0);
       };
   }
 
@@ -692,5 +693,5 @@ window.setupWebGL = setupWebGL;
 window.requestAnimFrame = window.requestAnimationFrame;       // just to stay backward compatible.
 window.cancelRequestAnimFrame = window.cancelAnimationFrame;  // just to stay backward compatible.
 
-}());
+//}());
 
