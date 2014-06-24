@@ -269,7 +269,7 @@ because it's using the 2nd to the smallest mip.
 The second example shows polygons that go deep into the screen.
 
 <iframe class="webgl_example" src="../webgl-3d-textures-mips-tri-linear.html" width="400" height="300"></iframe>
-<a class="webgl_center" href="../webgl-3d-textures-mips-trilinear.html" target="_blank">click here to open in a separate window</a>
+<a class="webgl_center" href="../webgl-3d-textures-mips-tri-linear.html" target="_blank">click here to open in a separate window</a>
 
 The 6 beams going into the screen are using the 6 filtering modes listed above. The top left beam is using `NEAREST`
 and you can see it's clearly very blocky. The top middle is using `LINEAR` and it's not much better.
