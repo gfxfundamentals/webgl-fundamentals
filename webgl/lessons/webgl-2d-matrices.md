@@ -389,7 +389,7 @@ We also removed the code that set the resolution. With this last step we've gone
 <iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-with-projection.html" width="400" height="300"></iframe>
 <a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-with-projection.html" target="_blank">click here to open in a separate window</a>
 
-I hope these posts have helped demystified matrix math. I'll move on to 3D next. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.
+I hope these posts have helped demystified matrix math. <a href="webgl-3d-orthographic.html">I'll move on to 3D next</a>. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.
 
 <div class="webgl_bottombar">
 <h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
