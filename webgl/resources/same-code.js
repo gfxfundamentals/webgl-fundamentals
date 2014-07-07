@@ -244,8 +244,8 @@ function main() {
 }
 
 // Check if we're running in jQuery
-if ($) {
-  $(function(){
+if (window.$) {
+  window.$(function(){
     main();
   });
 } else {

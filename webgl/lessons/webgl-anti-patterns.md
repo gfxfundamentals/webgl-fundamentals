@@ -117,13 +117,13 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     Here are 9 cases. They all use exactly the same code. Notice that none of them
     reference `window.innerWidth` nor `window.innerHeight`.
 
-    <a href="../webgl--same-code-canvas-fullscreen.html" target="_blank">A page with nothing but a canvas using CSS to make it fullscreen</a>
+    <a href="../webgl-same-code-canvas-fullscreen.html" target="_blank">A page with nothing but a canvas using CSS to make it fullscreen</a>
 
-    <a href="../webgl--same-code-canvas-partscreen.html" target="_blank">A page with a canvas set to using 70% width so there is room for editor controls</a>
+    <a href="../webgl-same-code-canvas-partscreen.html" target="_blank">A page with a canvas set to using 70% width so there is room for editor controls</a>
 
-    <a href="../webgl--same-code-canvas-partscreen.html" target="_blank">A page with a canvas embedded in a paragraph</a>
+    <a href="../webgl-same-code-canvas-embedded.html" target="_blank">A page with a canvas embedded in a paragraph</a>
 
-    <a href="../webgl--same-code-canvas-partscreen.html" target="_blank">A page with a canvas embedded in a paragraph using <code>box-sizing: border-box;</code></a>
+    <a href="../webgl-same-code-canvas-embedded-border-box.html" target="_blank">A page with a canvas embedded in a paragraph using <code>box-sizing: border-box;</code></a>
 
     <code>box-sizing: border-box;</code> makes borders and padding use take space from the element they're defined on rather than outside it. In other words, in
     normal box-sizing mode a 400x300 pixel element with 15pixel border has a 400x300pixel content space surrounded by a 15 pixel border making its total size
@@ -131,15 +131,15 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     being 370x270. This is yet another reason why using `clientWidth` and `clientHeight` is so important. If you set the border to say `1em` you'd have no
     way of knowing what size your canvas will turn out. It would be different with different fonts on different machines or different browsers.
 
-    <a href="../webgl--same-code-container-fullscreen.html" target="_blank">A page with nothing but a container using CSS to make it fullscreen into which the code will insert a canvas</a>
+    <a href="../webgl-same-code-container-fullscreen.html" target="_blank">A page with nothing but a container using CSS to make it fullscreen into which the code will insert a canvas</a>
 
-    <a href="../webgl--same-code-container-partscreen.html" target="_blank">A page with a container set to using 70% width so there is room for editor controls into which the code will insert a canvas</a>
+    <a href="../webgl-same-code-container-partscreen.html" target="_blank">A page with a container set to using 70% width so there is room for editor controls into which the code will insert a canvas</a>
 
-    <a href="../webgl--same-code-container-partscreen.html" target="_blank">A page with a container embedded in a paragraph into which the code will insert a canvas</a>
+    <a href="../webgl-same-code-container-embedded.html" target="_blank">A page with a container embedded in a paragraph into which the code will insert a canvas</a>
 
-    <a href="../webgl--same-code-container-partscreen.html" target="_blank">A page with a container embedded in a paragraph using <code>box-sizing: border-box;</code> into which the code will insert a canvas</a>
+    <a href="../webgl-same-code-container-embedded-border-box.html" target="_blank">A page with a container embedded in a paragraph using <code>box-sizing: border-box;</code> into which the code will insert a canvas</a>
 
-    <a href="../webgl--same-code-body-only.html" target="_blank">A page with no elements with CSS setup to make it fullscreen into which the code will insert a canvas</a>
+    <a href="../webgl-same-code-body-only-fullscreen.html" target="_blank">A page with no elements with CSS setup to make it fullscreen into which the code will insert a canvas</a>
 
     Again, the point is, if you embrace the web and write your code using the techniques above you won't have to change any code when you run into different use cases.
 
