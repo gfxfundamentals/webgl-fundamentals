@@ -67,6 +67,41 @@ var fragmentShaderSource = [
   "}",
 ].join("\n");
 
+
+/**
+ * Converts an HSV color value to RGB. Conversion formula
+ * adapted from http://en.wikipedia.org/wiki/HSV_color_space.
+ * Assumes h, s, and v are contained in the set [0, 1] and
+ * returns r, g, and b in the set [0, 255].
+ *
+ * @param {number} h The hue
+ * @param {number} s The saturation
+ * @param {number} v The value
+ * @return {number[]} The RGB representation
+ */
+var hsvToRgb = function(h, s, v) {
+  var r;
+  var g;
+  var b;
+
+  var i = Math.floor(h * 6);
+  var f = h * 6 - i;
+  var p = v * (1 - s);
+  var q = v * (1 - f * s);
+  var t = v * (1 - (1 - f) * s);
+
+  switch(i % 6) {
+    case 0: r = v, g = t, b = p; break;
+    case 1: r = q, g = v, b = p; break;
+    case 2: r = p, g = v, b = t; break;
+    case 3: r = p, g = q, b = v; break;
+    case 4: r = t, g = p, b = v; break;
+    case 5: r = v, g = p, b = q; break;
+  }
+
+  return [r, g, b, 1];
+};
+
 function main() {
   // Get A WebGL context
 
@@ -89,7 +124,7 @@ function main() {
   gl.enable(gl.CULL_FACE);
   gl.enable(gl.DEPTH_TEST);
 
-  var buffers = window.primitives.createSphereBuffers(gl, 10, 48, 24);
+  var buffers = window.primitives.createSphereBuffers(gl, 5, 48, 24);
 
   // setup GLSL program
   var program = createProgramFromSources(gl, [vertexShaderSource, fragmentShaderSource]);
@@ -163,15 +198,17 @@ function main() {
   var numObjects = 300;
   for (var ii = 0; ii < numObjects; ++ii) {
     objects.push({
-      radius: rand(150),
-      xRotation: rand(Math.PI * 2),
-      yRotation: rand(Math.PI),
+      speed: 0.25,
+      radius: 60,
+      radius2: 10,
+      xRotation: ii / (numObjects / 40) * Math.PI * 2,
+      yRotation: ii / (numObjects / 1) * Math.PI * 2,
       materialUniforms: {
-        u_ambient:               [rand(0.2), rand(0.2), rand(0.2), 1],
-        u_diffuse:               textures[randInt(textures.length)],
+        u_ambient:               hsvToRgb(ii / numObjects, 1, 1),
+        u_diffuse:               textures[ii % textures.length],
         u_specular:              [1, 1, 1, 1],
-        u_shininess:             rand(500),
-        u_specularFactor:        rand(1),
+        u_shininess:             10 + ii / (numObjects / 4) * 200,
+        u_specularFactor:        1,
       },
     });
   }
@@ -213,14 +250,16 @@ function main() {
     setUniforms(uniformSetters, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
-    var time = Date.now() * 0.0001;
+    var time = Date.now() * 0.001;
     objects.forEach(function(object) {
 
       // Compute a position for this object based on the time.
-      var xRotationMatrix = makeXRotation(object.xRotation * time);
-      var yRotationMatrix = makeYRotation(object.yRotation * time);
+      var xRotationMatrix = makeXRotation(object.xRotation + object.speed * time);
+      var yRotationMatrix = makeYRotation(object.yRotation + object.speed * time);
       var translationMatrix = makeTranslation(0, 0, object.radius);
-      var matrix = matrixMultiply(xRotationMatrix, yRotationMatrix);
+      var translation2Matrix = makeTranslation(0, 0, object.radius2);
+      var matrix = matrixMultiply(translation2Matrix, xRotationMatrix);
+      matrix = matrixMultiply(yRotationMatrix, matrix);
       var worldMatrix = matrixMultiply(translationMatrix, matrix,
           uniformsThatAreComputedForEachObject.u_world);
 
