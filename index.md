@@ -1,4 +1,4 @@
-Title: WebGL Articles
+Title: WebGL Fundamentals
 
 Some articles on WebGL
 
