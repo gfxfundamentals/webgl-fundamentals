@@ -173,7 +173,7 @@ var Builder = function() {
         title:          'WebGL Fundamentals',
         description:    'Learn WebGL from the ground up. No magic',
         link:           'http://webglfundamentals.org/',
-        image:          'http://webglfundamentals.org/webglfundamentals.png',
+        image:          'http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg',
         updated:        articles[0].date,
         author: {
           name:       'Greggman',

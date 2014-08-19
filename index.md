@@ -1,6 +1,6 @@
 Title: WebGL Fundamentals
 
-Some articles on WebGL
+WebGL from the ground up. No magic
 
 <ul>
   <li><a href="webgl/lessons/webgl-fundamentals.html">WebGL Fundamentals</a></li>
