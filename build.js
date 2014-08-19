@@ -3,14 +3,19 @@
 
 "use strict";
 
-var path = require('path');
-var fs = require('fs');
-var args = require('minimist')(process.argv.slice(2));
-var glob = require('glob');
-var cache = new (require('inmemfilecache'));
-var marked = require('marked');
+var path    = require('path');
+var fs      = require('fs');
+var args    = require('minimist')(process.argv.slice(2));
+var glob    = require('glob');
+var cache   = new (require('inmemfilecache'));
+var marked  = require('marked');
+var Feed    = require('feed');
+var Promise = require('Promise');
+var utils   = require('./utils');
 
 process.title = "build";
+
+var executeP = Promise.denodeify(utils.execute);
 
 /**
  * Replace %(id)s in strings with values in objects(s)
@@ -143,8 +148,73 @@ var Builder = function() {
       toc.push('<li><a href="' + article.dst_file_name + '">' + article.title + '</a></li>');
     });
 
-    applyTemplateToFile("templates/index.template", "index.md", "index.html", {
-      table_of_contents: "<ul>" + toc.join("\n") + "</ul>",
+    var promises = g_articles.map(function(article, ndx) {
+      return executeP('git', [
+        'log',
+        '--format="%ci"',
+        '--name-only',
+        '--diff-filter=A',
+        article.src_file_name,
+      ]).then(function(result) {
+        var dateStr = result.stdout.split("\n")[0];
+        article.date = new Date(Date.parse(dateStr));
+      });
+    });
+
+    Promise.all(promises).then(function() {
+      var articles = g_articles.filter(function(article) {
+        return article.date != undefined;
+      });
+      articles = articles.sort(function(a, b) {
+        return a.date > b.date ? -1 : (a.date < b.date ? 1 : 0);
+      });
+
+      var feed = new Feed({
+        title:          'WebGL Fundamentals',
+        description:    'Learn WebGL from the ground up. No magic',
+        link:           'http://webglfundamentals.org/',
+        image:          'http://webglfundamentals.org/webglfundamentals.png',
+        updated:        articles[0].date,
+        author: {
+          name:       'Greggman',
+          link:       'http://games.greggman.com/',
+        },
+      });
+
+      articles.forEach(function(article) {
+        feed.addItem({
+          title:          article.title,
+          link:           "http://webglfundamentals.org/" + article.dst_file_name,
+          description:    "",
+          author: [
+            {
+              name:       'Greggman',
+              link:       'http://games.greggman.com/',
+            },
+          ],
+          // contributor: [
+          // ],
+          date:           article.date,
+          // image:          posts[key].image
+        });
+      });
+      try {
+        writeFileIfChanged("atom.xml", feed.render('atom-1.0'));
+      } catch (err) {
+        return Promise.reject(err);
+      }
+      return Promise.resolve();
+    }).then(function() {
+      applyTemplateToFile("templates/index.template", "index.md", "index.html", {
+        table_of_contents: "<ul>" + toc.join("\n") + "</ul>",
+      });
+      process.exit(0);  //
+    }, function(err) {
+      console.error("ERROR!:");
+      console.error(err);
+      if (err.stack) {
+        console.error(err.stack);
+      }
     });
   };
 

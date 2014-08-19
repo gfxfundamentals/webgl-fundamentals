@@ -34,7 +34,7 @@
 // These funcitions are meant solely to help unclutter the tutorials.
 // They are not meant as production type functions.
 
-//(function() {
+(function() {
 
 /**
  * Wrapped logging function.
@@ -693,5 +693,5 @@ window.setupWebGL = setupWebGL;
 window.requestAnimFrame = window.requestAnimationFrame;       // just to stay backward compatible.
 window.cancelRequestAnimFrame = window.cancelAnimationFrame;  // just to stay backward compatible.
 
-//}());
+}());
 
