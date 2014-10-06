@@ -11,6 +11,7 @@ var cache   = new (require('inmemfilecache'));
 var marked  = require('marked');
 var Feed    = require('feed');
 var Promise = require('Promise');
+var sitemap = require('sitemap');
 var utils   = require('./utils');
 
 process.title = "build";
@@ -181,6 +182,11 @@ var Builder = function() {
         },
       });
 
+      var sm = sitemap.createSitemap ({
+        hostname: 'http://webglfundamentals.org',
+        cacheTime: 600000,
+      });
+
       articles.forEach(function(article) {
         feed.addItem({
           title:          article.title,
@@ -197,9 +203,14 @@ var Builder = function() {
           date:           article.date,
           // image:          posts[key].image
         });
+        sm.add({
+          url: "http://webglfundamentals.org/" + article.dst_file_name,
+          changefreq: 'monthly',
+        });
       });
       try {
         writeFileIfChanged("atom.xml", feed.render('atom-1.0'));
+        writeFileIfChanged("sitemap.xml", sm.toString());
       } catch (err) {
         return Promise.reject(err);
       }
