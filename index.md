@@ -31,6 +31,7 @@ to a full understanding of what WebGL really is and how it really works.
   <ul>
     <li><a href="webgl/lessons/webgl-boilerplate.html">WebGL Boilerplate</a></li>
     <li><a href="webgl/lessons/webgl-how-it-works.html">WebGL How It Works</a></li>
+    <li><a href="webgl/lessons/webgl-resizing-the-canvas.html">WebGL Resizing the Canvas</a></li>
     <li><a href="webgl/lessons/webgl-animation.html">WebGL - Animation</a></li>
     <li><a href="webgl/lessons/webgl-3d-textures.html">WebGL 3D - Textures</a></li>
     <li><a href="webgl/lessons/webgl-2-textures.html">WebGL Using 2 or More Textures</a></li>

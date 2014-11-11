@@ -40,6 +40,11 @@ $(document).ready(function($){
   $('img[src$="-sm.jpg"]').wrap(linkSmallImgs(".jpg"));
   $('img[src$="-sm.gif"]').wrap(linkSmallImgs(".gif"));
   $('img[src$="-sm.png"]').wrap(linkSmallImgs(".png"));
+  $('pre>code')
+     .unwrap()
+     .replaceWith(function() {
+       return $('<pre class="prettyprint showlinemods">' + this.innerHTML + '</pre>')
+     });
   prettyPrint();
 });
 }(jQuery));

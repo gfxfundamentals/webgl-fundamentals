@@ -198,7 +198,7 @@ var getWebGLContext = function(canvas, opt_attribs, opt_options) {
       canvas.width = width;
       canvas.height = height;
     }
-  } else {
+  } else if (!options.noTitle) {
     var title = document.title;
     var h1 = document.createElement("h1");
     h1.innerText = title;

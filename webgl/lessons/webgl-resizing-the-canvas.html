@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/webgl-resizing-the-canvas.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of Gregg Tavares. nor the names of his
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=yes">
+<meta property="og:title" content="WebGL Resizing the Canvas." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="Articles that explain WebGL from the ground up. Learn the fundamentals and understand" />
+<title>WebGL Resizing the Canvas.</title>
+<link rel="stylesheet" href="resources/base.css" type="text/css" />
+<link rel="stylesheet" href="resources/lesson.css" type="text/css" />
+<script src="../resources/jquery-1.7.1.min.js"></script>
+<script src="resources/prettify.js"></script>
+<script src="resources/lesson.js"></script>
+</head>
+<body>
+<div id="contentwrap">
+  <div id="content">
+    <h1>WebGL Resizing the Canvas.</h1>
+    <p>How do you resize the canvas? All the samples so far have used a fixed size canvas meaning the
+canvas started at one size and stays the same size forever. Here&#39;s what you need to know to
+change the size of the canvas.</p>
+<p>Every canvas has 2 sizes. The size of its drawingbuffer. This is how many pixels are in the canvas.
+The second size is the size the canvas is displayed. CSS determines this size.</p>
+<p>You can set the size of the canvas&#39;s backbuffer in 2 ways. One using HTML</p>
+<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+</code></pre><p>The other using JavaScript</p>
+<pre><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
+</code></pre><p>JavaScript</p>
+<pre><code>var canvas = document.getElementById(&quot;c&quot;);
+canvas.width = 400;
+canvas.height = 300;
+</code></pre><p>As for setting a canvas&#39;s display size if you don&#39;t have any CSS that affects the canvas&#39;s display size
+the display size will be the same size as its backbuffer. So the 2 examples above the canvas&#39;s backbuffer is 400x300
+and its display size is also 400x300.</p>
+<p>Here&#39;s an example of a canvas who&#39;s backbuffer is 10x15 pixels that is displayed 400x300 pixels on the page</p>
+<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
+</code></pre><p>or for example like this</p>
+<pre><code>&lt;style&gt;
+#c {
+width: 400px;
+height: 300px;
+}
+&lt;/style&gt;
+&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot;&gt;&lt;/canvas&gt;
+</code></pre><p>If we draw a single pixel wide rotating line into that canvas we&#39;ll see something like this</p>
+<p><iframe class="webgl_example" width="400" height="300" src="../webgl-10x15-canvas-400x300-css.html"></iframe>
+<a class="webgl_center" href="../webgl-10x15-canvas-400x300-css.html" target="_blank">click here to open in a separate window</a></p>
+<p>Why is it so blurry? Because the browser takes our 10x15 pixel canvas and stretches it to 400x300 pixels and
+generally it filters it when it stretches it.</p>
+<p>So, what do we do if, for example, we want the canvas to fill the window? Well, first we can get
+the browser to stretch the canvas to fill the window with CSS. Example</p>
+<pre><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      /* make the body fill the window */
+      html, body {
+        margin: 0px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      /* make any canvas fill its container */
+      canvas {
+        width: 100%;
+        height: 100%;
+      }
+    &lt;style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>Now we just need to make the backbuffer match whatever size the browser has stretched the canvas. We can
+do that using <code>clientWidth</code> and <code>clientHeight</code> which are properties every element in HTML has that let
+JavaScript check what size that element is being displayed.</p>
+<pre><code>function resize(canvas) {
+  // Lookup the size the browser is displaying the canvas.
+  var displayWidth  = canvas.clientWidth;
+  var displayHeight = canvas.clientHeight;
+
+  // Check if the canvas is not the same size.
+  if (canvas.width  != displayWidth ||
+      canvas.height != displayHeight) {
+
+    // Make the canvas the same size
+    canvas.width  = displayWidth;
+    canvas.height = displayHeight;
+  }
+}
+</code></pre><p>Most WebGL apps <a href="webgl-animation.html">are animated</a> so lets call this function just before we render
+so it will always adjust the canvas to our desired size just before drawing.</p>
+<pre><code>function drawScene() {
+   resize(canvas);
+
+   ...
+</code></pre><p>And here&#39;s that</p>
+<p><iframe class="webgl_example" width="400" height="300" src="../webgl-resize-canvas.html"></iframe>
+<a class="webgl_center" href="../webgl-resize-canvas.html" target="_blank">click here to open in a separate window</a></p>
+<p>Hey, something is wrong? Why is the line not covering the entire area?</p>
+<p>The reason is when we resize the canvas we also need to call <code>gl.viewport</code> to set the viewport.
+<code>gl.viewport</code> tells WebGL how to convert from clipspace (-1 to +1) back to pixels and where to do
+it within the canvas. When you first create the canvas WebGL will set the viewport to match the size
+of the canvas but after that it&#39;s up to you to set it. If you change the size of the canvas
+you need to tell WebGL a new viewport setting.  Let&#39;s change resize to handle this.
+On top of that, since the WebGL context has a reference to the canvas let&#39;s pass that
+into resize.</p>
+<pre><code>function resize(gl) {
+  // Lookup the size the browser is displaying the canvas.
+  var displayWidth  = gl.canvas.clientWidth;
+  var displayHeight = gl.canvas.clientHeight;
+
+  // Check if the canvas is not the same size.
+  if (gl.canvas.width  != displayWidth ||
+      gl.canvas.height != displayHeight) {
+
+    // Make the canvas the same size
+    gl.canvas.width  = displayWidth;
+    gl.canvas.height = displayHeight;
+
+    // Set the viewport to match
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  }
+}
+</code></pre><p><iframe class="webgl_example" width="400" height="300" src="../webgl-resize-canvas-viewport.html"></iframe>
+<a class="webgl_center" href="../webgl-resize-canvas-viewport.html" target="_blank">click here to open in a separate window</a></p>
+<p>If you look at many WebGL programs they handle resizing or setting the size of the canvas in many different ways.
+If you&#39;re curious <a href="webgl-anti-patterns.html">here are some of the reasons I think the way described above is preferable</a>.</p>
+<div class="webgl_bottombar">
+<h3>How do I handle Retina or HD-DPI displays?</h3>
+<p>
+When you specify a size in CSS or Canvas by pixels those are called CSS pixels which may or may not be actual pixels.
+Most current smartphones have what&#39;s called a high-definition DPI display (HD-DPI) or as Apple calls it a &quot;Retina Display&quot;.
+For text and most CSS styling the browser can automatically render HD-DPI graphics but for WebGL, since you&#39;re drawing the
+graphics it&#39;s up to you to renderer at a higher resolution if you want your graphics to be &quot;HD-DPI&quot; quality.
+</p>
+<p>To do that we can look at the <code>window.devicePixelRatio</code> value. This value tells us how many real pixels
+equals 1 CSS pixel. We can change our resize function to handle that like this.</p>
+<pre class="prettyprint">
+function resize(gl) {
+  var realToCSSPixels = window.devicePixelRatio || 1;
+
+  // Lookup the size the browser is displaying the canvas.
+  var displayWidth  = gl.canvas.clientWidth  <em> realToCSSPixels;
+  var displayHeight = gl.canvas.clientHeight </em> realToCSSPixels;
+
+  // Check if the canvas is not the same size.
+  if (gl.canvas.width  != displayWidth ||
+      gl.canvas.height != displayHeight) {
+
+    // Make the canvas the same size
+    gl.canvas.width  = displayWidth;
+    gl.canvas.height = displayHeight;
+
+    // Set the viewport to match
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  }
+}
+</pre>
+<p>If you have an HD-DPI display, for example if you view this page on your smartphone
+you should notice the line below is thinner than the one above which didn&#39;t adjust for
+HD-DPI displays</p>
+<iframe class="webgl_example" width="400" height="300" src="../webgl-resize-canvas-hd-dpi.html"></iframe>
+<a class="webgl_center" href="../webgl-resize-canvas-hd-dpi.html" target="_blank">click here to open in a separate window</a>
+<p>Whether you really want to adjust for HD-DPI is up to you. On iPhone4 or iPhone5 <code>window.devicePixelRatio</code> is <code>2</code> which
+means you&#39;ll be drawing 4 times as many pixels. I believe on an iPhone6Plus that value is <code>3</code> which means you&#39;d be drawing
+9 times as many pixels. That can really slow down your program. In fact it&#39;s a common optimization in games to actually render
+less pixels than are displayed and let the GPU scale them up. It really depends on what your needs are. If you&#39;re drawing
+a graph for printing you might want to support HD-DPI. If you&#39;re making game you might not or you might want to give the
+user the option to turn support on or off if their system is not fast enough to draw so many pixels.</p>
+</div>
+
+
+
+    <hr/>
+    <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+        var disqus_identifier = 'WebGL Resizing the Canvas.';
+        var disqus_title = 'WebGL Resizing the Canvas.';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  </div>
+</div>
+</body>
+
+
+
