@@ -79,7 +79,7 @@ Also, if you are loading PNG files with alpha into textures, the default is that
 Almost all OpenGL apps I've writing or worked on use
 
 <pre class="prettyprint showlinemods">
-   gl.blendFunc(gl.SRC_ALPHA, gl_ONE_MINUS_SRC_ALPHA);
+   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 </pre>
 
 That works for non pre-multiplied alpha textures.
@@ -87,7 +87,7 @@ That works for non pre-multiplied alpha textures.
 If you actually want to work with pre-multiplied alpha textures then you probably want
 
 <pre class="prettyprint showlinemods">
-   gl.blendFunc(gl.ONE, gl_ONE_MINUS_SRC_ALPHA);
+   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 </pre>
 
 Those are the methods I'm aware of. If you know of more please post them below.
