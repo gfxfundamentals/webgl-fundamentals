@@ -108,14 +108,17 @@ Hey, something is wrong? Why is the line not covering the entire area?
 
 The reason is when we resize the canvas we also need to call `gl.viewport` to set the viewport.
 `gl.viewport` tells WebGL how to convert from clipspace (-1 to +1) back to pixels and where to do
-it within the canvas. When you first create the canvas WebGL will set the viewport to match the size
+it within the canvas. When you first create the WebGL context WebGL will set the viewport to match the size
 of the canvas but after that it's up to you to set it. If you change the size of the canvas
-you need to tell WebGL a new viewport setting.  Let's change resize to handle this.
-On top of that, since the WebGL context has a reference to the canvas let's pass that
-into resize.
+you need to tell WebGL a new viewport setting.
+
+Let's change resize to handle this. On top of that, since the WebGL context has a
+reference to the canvas let's pass that into resize.
 
     function resize(gl) {
+      // Get the canvas from the WebGL context
       var canvas = gl.canvas;
+
       // Lookup the size the browser is displaying the canvas.
       var displayWidth  = canvas.clientWidth;
       var displayHeight = canvas.clientHeight;
@@ -138,7 +141,9 @@ Now it's working.
 <iframe class="webgl_example" width="400" height="300" src="../webgl-resize-canvas-viewport.html"></iframe>
 <a class="webgl_center" href="../webgl-resize-canvas-viewport.html" target="_blank">click here to open in a separate window</a>
 
-I can here you asking, why doesn't WebGL set the viewport for us automatically when we change the size of
+Open that in a separate window, size the window, notice it always fills the window.
+
+I can hear you asking, why doesn't WebGL set the viewport for us automatically when we change the size of
 the canvas? The reason is it doesn't know how or why you are using the viewport. You could be rendering to
 a framebuffer or doing something else that requires a different viewport size. WebGL has no way of knowing
 your intent so it can't automatically set the viewport for you.
@@ -160,9 +165,11 @@ equals 1 CSS pixel. We can change our resize function to handle that like this.<
 function resize(gl) {
   var realToCSSPixels = window.devicePixelRatio || 1;
 
-  // Lookup the size the browser is displaying the canvas.
-  var displayWidth  = gl.canvas.clientWidth  * realToCSSPixels;
-  var displayHeight = gl.canvas.clientHeight * realToCSSPixels;
+  // Lookup the size the browser is displaying the canvas in CSS pixels
+  // and compute a size needed to make our drawingbuffer match it in
+  // device pixels.
+  var displayWidth  = Math.floor(gl.canvas.clientWidth  * realToCSSPixels);
+  var displayHeight = Math.floor(gl.canvas.clientHeight * realToCSSPixels);
 
   // Check if the canvas is not the same size.
   if (gl.canvas.width  != displayWidth ||

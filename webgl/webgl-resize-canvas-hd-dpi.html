@@ -104,9 +104,11 @@ function main() {
     var realToCSSPixels = window.devicePixelRatio || 1;
     var canvas = gl.canvas;
 
-    // Lookup the size the browser is displaying the canvas.
-    var displayWidth  = canvas.clientWidth  * realToCSSPixels;
-    var displayHeight = canvas.clientHeight * realToCSSPixels;
+    // Lookup the size the browser is displaying the canvas in CSS pixels
+    // and compute a size needed to make our drawingbuffer match it in
+    // device pixels.
+    var displayWidth  = Math.floor(canvas.clientWidth  * realToCSSPixels);
+    var displayHeight = Math.floor(canvas.clientHeight * realToCSSPixels);
 
     // Check if the canvas is not the same size.
     if (canvas.width  != displayWidth ||
