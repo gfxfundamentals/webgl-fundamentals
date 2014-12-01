@@ -222,20 +222,20 @@ can see from looking at them they are all very similar.  If we were to
 work them out you&#39;d see them simplify just like before</p>
 <p>Z rotation</p>
 <div class="webgl_center">
-<div>newX = x <em>  c + y </em> s;</div>
-<div>newY = x <em> -s + y </em> c;</div>
+<div>newX = x *  c + y * s;</div>
+<div>newY = x * -s + y * c;</div>
 </div>
 
 <p>Y rotation</p>
 <div class="webgl_center">
-<div>newX = x <em>  c + z </em> s;</div>
-<div>newZ = x <em> -s + z </em> c;</div>
+<div>newX = x *  c + z * s;</div>
+<div>newZ = x * -s + z * c;</div>
 </div>
 
 <p>X rotation</p>
 <div class="webgl_center">
-<div>newY = y <em>  c + z </em> s;</div>
-<div>newZ = y <em> -s + z </em> c;</div>
+<div>newY = y *  c + z * s;</div>
+<div>newZ = y * -s + z * c;</div>
 </div>
 
 <p>which gives you these rotations.</p>
@@ -496,19 +496,19 @@ For those of you who are detail oriented you might have noticed we defined our 2
 attribute vec4 a_position;
 attribute vec4 a_color;
 </pre>
-<p>both of which are &#39;vec4&#39; but when we tell WebGL how to take data out of our buffers we used</p>
+<p>both of which are 'vec4' but when we tell WebGL how to take data out of our buffers we used</p>
 <pre class="prettyprint showlinemods">
   gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
   gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
 </pre>
 <p>
-That &#39;3&#39; in each of those says only to pull out 3 values per attribute.
+That '3' in each of those says only to pull out 3 values per attribute.
 This works because in the vertex shader WebGL provides defaults for those
-you don&#39;t supply.  The defaults are 0, 0, 0, 1 where x = 0, y = 0, z = 0
+you don't supply.  The defaults are 0, 0, 0, 1 where x = 0, y = 0, z = 0
 and w = 1.  This is why in our old 2D vertex shader we had to explicitly
 supply the 1.  We were passing in x and y and we needed a 1 for z but
 because the default for z is 0 we had to explicitly supply a 1.  For 3D
-though, even though we don&#39;t supply a &#39;w&#39; it defaults to 1 which is what
+though, even though we don't supply a 'w' it defaults to 1 which is what
 we need for the matrix math to work.
 </p>
 </div>

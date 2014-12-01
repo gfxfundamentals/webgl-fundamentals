@@ -250,7 +250,7 @@ void main() {
 <p><iframe class="webgl_example" width="400" height="300" src="../webgl-2d-image-3x3-convolution.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-image-3x3-convolution.html" target="_blank">click here to open in a separate window</a></p>
 <p>I hope this article has convinced you image processing in WebGL is pretty simple. Next up I&#39;ll go over  <a href="webgl-image-processing-continued.html">how to apply more than one effect to the image</a>.</p>
-<div class="webgl_bottombar">&#39;u_image&#39; is never set. How does that work?
+<div class="webgl_bottombar">'u_image' is never set. How does that work?
 
 Uniforms default to 0 so u_image defaults to using texture unit 0. Texture unit 0 is also the default active texture so calling bindTexture will bind the texture to texture unit 0
 
@@ -260,7 +260,7 @@ For example:
 <pre class="prettyprint showlinemods">
 var textureUnitIndex = 6; // use texture unit 6.
 var u_imageLoc = gl.getUniformLocation(
-    program, &quot;u_image&quot;);
+    program, "u_image");
 gl.uniform1i(u_imageLoc, textureUnitIndex);
 </pre>
 
@@ -284,9 +284,9 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </div>
 
 <div class="webgl_bottombar">
-<h3>What&#39;s with the a<em>, u</em>, and v<em> prefixes in from of variables in GLSL?</h3>
+<h3>What's with the a_, u_, and v_ prefixes in from of variables in GLSL?</h3>
 <p>
-That&#39;s just a naming convention. a</em> for attributes which is the data provided by buffers. u<em> for uniforms which are inputs to the shaders, v</em> for varyings which are values passed from a vertex shader to a fragment shader and interpolated (or varied) between the vertices for each pixel drawn.
+That's just a naming convention. a_ for attributes which is the data provided by buffers. u_ for uniforms which are inputs to the shaders, v_ for varyings which are values passed from a vertex shader to a fragment shader and interpolated (or varied) between the vertices for each pixel drawn.
 </p>
 </div>
 

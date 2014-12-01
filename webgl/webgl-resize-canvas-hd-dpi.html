@@ -102,21 +102,22 @@ function main() {
 
   function resize(gl) {
     var realToCSSPixels = window.devicePixelRatio || 1;
+    var canvas = gl.canvas;
 
     // Lookup the size the browser is displaying the canvas.
-    var displayWidth  = gl.canvas.clientWidth  * realToCSSPixels;
-    var displayHeight = gl.canvas.clientHeight * realToCSSPixels;
+    var displayWidth  = canvas.clientWidth  * realToCSSPixels;
+    var displayHeight = canvas.clientHeight * realToCSSPixels;
 
     // Check if the canvas is not the same size.
-    if (gl.canvas.width  != displayWidth ||
-        gl.canvas.height != displayHeight) {
+    if (canvas.width  != displayWidth ||
+        canvas.height != displayHeight) {
 
       // Make the canvas the same size
-      gl.canvas.width  = displayWidth;
-      gl.canvas.height = displayHeight;
+      canvas.width  = displayWidth;
+      canvas.height = displayHeight;
 
       // Set the viewport to match
-      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      gl.viewport(0, 0, canvas.width, canvas.height);
     }
   }
 

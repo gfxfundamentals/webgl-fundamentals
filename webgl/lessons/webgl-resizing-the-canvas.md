@@ -7,7 +7,7 @@ change the size of the canvas.
 Every canvas has 2 sizes. The size of its drawingbuffer. This is how many pixels are in the canvas.
 The second size is the size the canvas is displayed. CSS determines this size.
 
-You can set the size of the canvas's backbuffer in 2 ways. One using HTML
+You can set the size of the canvas's drawingbuffer in 2 ways. One using HTML
 
     <canvas id="c" width="400" height="300"></canvas>
 
@@ -22,10 +22,10 @@ JavaScript
     canvas.height = 300;
 
 As for setting a canvas's display size if you don't have any CSS that affects the canvas's display size
-the display size will be the same size as its backbuffer. So the 2 examples above the canvas's backbuffer is 400x300
+the display size will be the same size as its drawingbuffer. So the 2 examples above the canvas's drawingbuffer is 400x300
 and its display size is also 400x300.
 
-Here's an example of a canvas who's backbuffer is 10x15 pixels that is displayed 400x300 pixels on the page
+Here's an example of a canvas who's drawingbuffer is 10x15 pixels that is displayed 400x300 pixels on the page
 
     <canvas id="c" width="10" height="15" style="width: 400px; height: 300px;"></canvas>
 
@@ -33,8 +33,8 @@ or for example like this
 
     <style>
     #c {
-    width: 400px;
-    height: 300px;
+      width: 400px;
+      height: 300px;
     }
     </style>
     <canvas id="c" width="10" height="15"></canvas>
@@ -72,7 +72,7 @@ the browser to stretch the canvas to fill the window with CSS. Example
       </body>
     </html>
 
-Now we just need to make the backbuffer match whatever size the browser has stretched the canvas. We can
+Now we just need to make the drawingbuffer match whatever size the browser has stretched the canvas. We can
 do that using `clientWidth` and `clientHeight` which are properties every element in HTML has that let
 JavaScript check what size that element is being displayed.
 
@@ -115,25 +115,33 @@ On top of that, since the WebGL context has a reference to the canvas let's pass
 into resize.
 
     function resize(gl) {
+      var canvas = gl.canvas;
       // Lookup the size the browser is displaying the canvas.
-      var displayWidth  = gl.canvas.clientWidth;
-      var displayHeight = gl.canvas.clientHeight;
+      var displayWidth  = canvas.clientWidth;
+      var displayHeight = canvas.clientHeight;
 
       // Check if the canvas is not the same size.
-      if (gl.canvas.width  != displayWidth ||
-          gl.canvas.height != displayHeight) {
+      if (canvas.width  != displayWidth ||
+          canvas.height != displayHeight) {
 
         // Make the canvas the same size
-        gl.canvas.width  = displayWidth;
-        gl.canvas.height = displayHeight;
+        canvas.width  = displayWidth;
+        canvas.height = displayHeight;
 
         // Set the viewport to match
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        gl.viewport(0, 0, canvas.width, canvas.height);
       }
     }
 
+Now it's working.
+
 <iframe class="webgl_example" width="400" height="300" src="../webgl-resize-canvas-viewport.html"></iframe>
 <a class="webgl_center" href="../webgl-resize-canvas-viewport.html" target="_blank">click here to open in a separate window</a>
+
+I can here you asking, why doesn't WebGL set the viewport for us automatically when we change the size of
+the canvas? The reason is it doesn't know how or why you are using the viewport. You could be rendering to
+a framebuffer or doing something else that requires a different viewport size. WebGL has no way of knowing
+your intent so it can't automatically set the viewport for you.
 
 If you look at many WebGL programs they handle resizing or setting the size of the canvas in many different ways.
 If you're curious <a href="webgl-anti-patterns.html">here are some of the reasons I think the way described above is preferable</a>.

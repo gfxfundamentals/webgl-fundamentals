@@ -344,30 +344,30 @@ them to values other than 0 is more complicated and though it has some
 benefits in terms of performance it&#39;s not worth the complication unless
 you are trying to push WebGL to its absolute limits.</p>
 <p>I hope that clears up buffers and attributes.</p>
-<div class="webgl_bottombar"><h3>What&#39;s normalizeFlag for in vertexAttribPointer?</h3>
+<div class="webgl_bottombar"><h3>What's normalizeFlag for in vertexAttribPointer?</h3>
 <p>
 The normalize flag is for all the non floating point types. If you pass in false then values will be interpreted as the type they are. BYTE goes from -128 to 127, UNSIGNED_BYTE goes from 0 to 255, SHORT goes from -32768 to 32776 etc...
 </p>
 <p>
 If you set the normalize flag to true then the values of a BYTE (-128 to 127) represent the values -1.0 to +1.0, UNSIGNED_BYTE (0 to 255) become 0.0 to +1.0, A normalized SHORT also goes from -1.0 to +1.0 it just has more resolution than a BYTE.</p>
-<p>The most common use for normalized data is for colors. Most of the time colors only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha would use 16 bytes per vertex per color. If you have complicated geometry that can add up to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs where 0 represnets 0.0 and 255 represents 1.0. Now you&#39;d only need 4 bytes per color per vertex, a 75% savings.
+<p>The most common use for normalized data is for colors. Most of the time colors only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha would use 16 bytes per vertex per color. If you have complicated geometry that can add up to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs where 0 represnets 0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color per vertex, a 75% savings.
 </p>
-<p>Let&#39;s change our code to do this. When we tell WebGL how to extract our colors we&#39;d use</p>
+<p>Let's change our code to do this. When we tell WebGL how to extract our colors we'd use</p>
 <pre class="prettyprint showlinemods">
   gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 </pre>
-<p>And when we fill out our buffer with colors we&#39;d use</p>
+<p>And when we fill out our buffer with colors we'd use</p>
 <pre class="prettyprint showlinemods">
 // Fill the buffer with colors for the 2 triangles
 // that make the rectangle.
 function setColors(gl) {
   // Pick 2 random colors.
-  var r1 = Math.random() <em> 256; // 0 to 255.99999
-  var b1 = Math.random() </em> 256; // these values
-  var g1 = Math.random() <em> 256; // will be truncated
-  var r2 = Math.random() </em> 256; // when stored in the
-  var b2 = Math.random() <em> 256; // Uint8Array
-  var g2 = Math.random() </em> 256;
+  var r1 = Math.random() * 256; // 0 to 255.99999
+  var b1 = Math.random() * 256; // these values
+  var g1 = Math.random() * 256; // will be truncated
+  var r2 = Math.random() * 256; // when stored in the
+  var b2 = Math.random() * 256; // Uint8Array
+  var g2 = Math.random() * 256;
 
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -382,7 +382,7 @@ function setColors(gl) {
 }
 </pre>
 <p>
-Here&#39;s that sample.
+Here's that sample.
 </p>
 <iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-2-byte-colors.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-rectangle-with-2-byte-colors.html" target="_blank">click here to open in a separate window</a>
