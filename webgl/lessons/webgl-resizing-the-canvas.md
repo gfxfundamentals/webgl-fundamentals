@@ -189,8 +189,8 @@ you should notice the line below is thinner than the one above which didn't adju
 HD-DPI displays</p>
 <iframe class="webgl_example" width="400" height="300" src="../webgl-resize-canvas-hd-dpi.html"></iframe>
 <a class="webgl_center" href="../webgl-resize-canvas-hd-dpi.html" target="_blank">click here to open in a separate window</a>
-<p>Whether you really want to adjust for HD-DPI is up to you. On iPhone4 or iPhone5 `window.devicePixelRatio` is `2` which
-means you'll be drawing 4 times as many pixels. I believe on an iPhone6Plus that value is `3` which means you'd be drawing
+<p>Whether you really want to adjust for HD-DPI is up to you. On iPhone4 or iPhone5 <code>window.devicePixelRatio</code> is <code>2</code> which
+means you'll be drawing 4 times as many pixels. I believe on an iPhone6Plus that value is <code>3</code> which means you'd be drawing
 9 times as many pixels. That can really slow down your program. In fact it's a common optimization in games to actually render
 less pixels than are displayed and let the GPU scale them up. It really depends on what your needs are. If you're drawing
 a graph for printing you might want to support HD-DPI. If you're making game you might not or you might want to give the
