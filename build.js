@@ -18,11 +18,9 @@ process.title = "build";
 
 var executeP = Promise.denodeify(utils.execute);
 
-//marked.setOptions({
-//  highlight: function(code, lang) {
-//    console.log("lang: " + lang);
-//  },
-//});
+marked.setOptions({
+  rawHtml: true,
+});
 
 /**
  * Replace %(id)s in strings with values in objects(s)
