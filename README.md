@@ -1,7 +1,7 @@
 WebGL Fundamentals
 ==================
 
-This is [a series of lessons or tutorials about WebGL](http://greggman.github.com/webgl-fundamentals/).
+This is [a series of lessons or tutorials about WebGL](http://webglfundamentals.org/).
 
 Unlike most WebGL lessons these are not based off of OpenGL. 
 OpenGL is 20 years old. The lessons of OpenGL don't match well with WebGL.
@@ -19,5 +19,43 @@ understanding the complexity that other programmers pile on
 top of simple WebGL.
 
 This is work in progress. Feel free to contribute.
+
+## Contributing
+
+Of course bug fixes are always welcome.
+
+If you'd like to write a new article please try to always take
+one step at a time. Don't do 2 or more things in a single step.
+Explain any new math in the simplest terms possible. Ideally
+with diagrams where possible.
+
+## TO DO
+
+A list of articles I'd like to write or see written
+
+*   lighting
+    *   directional lighting
+    *   point lighting
+    *   spot lighting
+    *   normal maps
+    *   shadow maps
+*   text
+    *   pre-made glyph texture atlus
+    *   glyph cache
+    *   HTML matching position
+*   post processing
+    *   how to render to a texture (scene on cube)
+    *   DOF
+    *   glow
+    *   light rays
+    *   RGB glitch, CRT distortion, scanlines
+*   code organization
+    *   drawing more than one thing
+    *   using a library like [less code more fun](http://webglfundamentals.org/webgl/lessons/webgl-less-code-more-fun.html)
+    *   scene graph
+        *   putting objects in scene graph
+        *   putting lights and camera in scene graph
+*   Physically based rendering
+*   WebGL 2.0
 
 
