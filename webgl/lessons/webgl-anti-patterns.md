@@ -32,15 +32,17 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
 
     **What to do instead:**
 
-    Why make more work for yourself? Just use the canvas width and canvas height directly.
-    You don't even have to pass the canvas around because the `WebGLRenderingContext` already
-    has a reference to the canvas.
+    Why make more work for yourself? The WebGL context has its width and height
+    directly on it. Just use that.
 
     <pre class="prettyprint">
-    // When you need to set the viewport to match the size of the canvas
-    // this will always be correct
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    // When you need to set the viewport to match the size of the canvas's
+    // drawingBuffer this will always be correct
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     </pre>
+
+    Even better it will handle extreme cases where as using `gl.canvas.width`
+    and `gl.canvas.height` will not. [As for why see here](#drawingbuffer).
 
 2.  Using `canvas.width` and `canvas.height` for aspect ratio
 
@@ -259,7 +261,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     it might intentionally lose the context on some `WebGLRenderingContext`s to free up space.
     WebGL programs that want to always work have to handle this. Google Maps handles this for example.
 
-    The problem with the code above is that when the context is lost the WebGL creations functions like
+    The problem with the code above is that when the context is lost the WebGL creation functions like
     `gl.createBuffer()` above will return `null`. That effectively makes the code this
 
     <pre class="prettyprint">
@@ -301,6 +303,55 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
 
 Those are a few of what I consider WebGL Anti-Patterns in code I've seen around the net.
 Hopefully I've made the case why to avoid them and given solutions that are easy and useful.
+
+<div class="webgl_bottombar"><a id="drawingbuffer"/><h3>What is drawingBufferWidth and drawingBufferHeight?</h3>
+<p>
+GPUs have a limit on how big a rectangle of pixels (texture, renderbuffer) they can support. Often this
+size is the next power of 2 larger than whatever a common monitor resolution was at the time the GPU was
+made. For example if the GPU was designed to support 1280x1024 screens it might have a size limit of 2048.
+If it was designed for 2560x1600 screens it might have a limit of 4096.
+</p><p>
+That seems reasonable but what happens if you have multiple monitors? Let's say I have a GPU with a limit
+of 2048 but I have two 1920x1080 monitors. The user opens a browser window with a WebGL page, they then
+stretch that window across both monitors. Your code tries to set the <code>canvas.width</code> to
+<code>canvas.clientWidth</code> which in this case is 3840. What should happen?
+<p>Off the top of my head there are only 3 options</p>
+<ol>
+<li>
+ <p>Throw an exception.</p>
+ <p>That seems bad. Most web apps won't be checking for it and the app wil crash.
+ If the app had user data in it the user just lost their data</p>
+</li>
+<li>
+ <p>Limit the size of the canvas to the GPUs limit</p>
+ <p>The problem with this solution is it will also
+ likely lead to a crash or possibly a messed up webpage because the code expects the canvas to be the size
+ they requested and they expect other parts of the UI and elements on the page to be in the proper places.</p>
+</li>
+<li>
+ <p>Let the canvas be the size the user requested but make its drawingbuffer the limit</p>
+ <p>This is the
+ solution WebGL uses. If your code is written correctly the only thing the user might notice is the image in
+ the canvas is being scaled slightly. Otherwise it just works. In the worst case most WebGL programs that
+ don't do the right thing will just have a slightly off display but if user sizes the window back down
+ things will return to normal.</p>
+</li>
+</ol>
+<p>Most people don't have multiple monitors so this issue rarely comes up. Or at least it used to.
+Chrome and Safari, at least as of January 2015, had a hardcoded limit on canvas size of 4096. Apple's
+5k iMac is past that limit. Lots of WebGL apps were having strange displays because of this.
+Similarly many people have started using WebGL with multiple monitors for installation work and have
+been hitting this limit</p>
+<p>
+So, if you want to handle these cases use <code>gl.drawingBufferWidth</code> and <code>gl.drawingBufferHeight</code> as
+shown in #1 above. For most apps if you follow the best practices above things will just work. Be aware
+though if you are doing calcuations that need to know the actual size of the drawingbuffer you need
+to take that into account. Examples off the top of my head, picking, in other words converting from
+mouse coordinates into into canvas pixel coordinates. Another would be any kind of post processing
+effects that want to know the actual size of the drawingbuffer.
+</p>
+</div>
+
 
 
 
