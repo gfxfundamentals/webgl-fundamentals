@@ -73,15 +73,15 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     but using CSS we've told the browser to display the canvas a different size.
     Notice the samples all display the 'F' in the correct aspect ratio.
 
-    <iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" width="150" height="200"></iframe>
-
-    <iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" width="400" height="150"></iframe>
+    <iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" style="width: 150px; height: 200px;"></iframe>
+    <p></p>
+    <iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" style="width: 400px; height: 150px;"></iframe>
 
     If we had used `canvas.width` and `canvas.height` that would not be true.
 
-    <iframe class="webgl_example" src="../webgl-canvas-width-height.html" width="150" height="200"></iframe>
-
-    <iframe class="webgl_example" src="../webgl-canvas-width-height.html" width="400" height="150"></iframe>
+    <iframe class="webgl_example" src="../webgl-canvas-width-height.html" style="width: 150px; height: 200px;"></iframe>
+    <p></p>
+    <iframe class="webgl_example" src="../webgl-canvas-width-height.html" style="width: 400px; height: 150px;"></iframe>
 
 3.  Using `window.innerWidth` and `window.innerHeight` to compute anything
 
