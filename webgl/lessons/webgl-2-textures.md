@@ -144,7 +144,7 @@ The 2 images we're loading look like this
 
 And here's the result if we multiply them together using WebGL.
 
-<iframe class="webgl_example" width="400" height="340" src="../webgl-2-textures.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2-textures.html"></iframe>
 <a class="webgl_center" href="../webgl-2-textures.html" target="_blank">click here to open in a separate window</a>
 
 Some things I should go over.  

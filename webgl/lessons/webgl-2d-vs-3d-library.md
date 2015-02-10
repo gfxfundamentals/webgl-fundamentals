@@ -76,7 +76,7 @@ Here's the code in three.js to display this
 
 and here it is displayed.
 
-<iframe class="webgl_example" src="resources/three-js-cube-with-lights.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="resources/three-js-cube-with-lights.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="resources/three-js-cube-with-lights.html" target="_blank">click here to open in a separate window</a>
 
 Here's similar code in OpenGL (not ES) to display a cube with 2 lights.
@@ -162,12 +162,12 @@ out the hard way that no, that's not the case at all.
 We can even take it one step further. Here's drawing 3D wireframe
 cube in Canvas.
 
-<iframe class="webgl_example" src="resources/3d-in-canvas.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="resources/3d-in-canvas.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="resources/3d-in-canvas.html" target="_blank">click here to open in a separate window</a>
 
 And here is drawing a wireframe cube in WebGL.
 
-<iframe class="webgl_example" src="resources/3d-in-webgl.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="resources/3d-in-webgl.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="resources/3d-in-webgl.html" target="_blank">click here to open in a separate window</a>
 
 If you inspect the code you'll see there's not a whole lot of difference in terms

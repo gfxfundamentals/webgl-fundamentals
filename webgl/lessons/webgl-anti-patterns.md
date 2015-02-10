@@ -200,7 +200,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     change any code for different cases. For example using the same code from #3 above
     here's an editor with a sizable editing area.
 
-    <iframe class="webgl_example" src="../webgl-same-code-resize.html" width="400" height="300"></iframe>
+    <iframe class="webgl_example" src="../webgl-same-code-resize.html" style="width: 400px; height: 300px;"></iframe>
     <a class="webgl_center" href="../webgl-same-code-resize.html" target="_blank">click here to open in a separate window</a>
 
     There would be no resize events for this case nor any other where the canvas gets resized

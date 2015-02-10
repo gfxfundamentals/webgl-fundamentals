@@ -99,7 +99,7 @@ same name and type in the fragment shader.
 
 Here's the working version.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-triangle-with-position-for-color.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-triangle-with-position-for-color.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-triangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a>
 
 Move, scale and rotate the rectangle.  Notice that since the colors are
@@ -177,7 +177,7 @@ v_color that we declared.
 Those 3 values written to v_color are then interpolated and passed to the
 fragment shader for each pixel.
 
-<iframe class="webgl_example" width="400" height="300" src="resources/fragment-shader-anim.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/fragment-shader-anim.html"></iframe>
 <div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
 
 We can also pass in more data to the vertex shader which we can then pass
@@ -243,7 +243,7 @@ function setColors(gl) {
 
 And here's the result.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-2-colors.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-rectangle-with-2-colors.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-rectangle-with-2-colors.html" target="_blank">click here to open in a separate window</a>
 
 Notice that we have 2 solid color triangles.  Yet we're passing the values
@@ -272,7 +272,7 @@ function setColors(gl) {
 
 And now we see the interpolated *varying*.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-random-colors.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-rectangle-with-random-colors.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-rectangle-with-random-colors.html" target="_blank">click here to open in a separate window</a>
 
 Not very exciting I suppose but it does demonstrate using more than one
@@ -377,7 +377,7 @@ function setColors(gl) {
 <p>
 Here's that sample.
 </p>
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-rectangle-with-2-byte-colors.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-rectangle-with-2-byte-colors.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-rectangle-with-2-byte-colors.html" target="_blank">click here to open in a separate window</a>
 </div>
 

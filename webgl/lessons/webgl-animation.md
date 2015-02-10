@@ -32,7 +32,7 @@ function drawScene() {
 
 And here it is
 
-<iframe class="webgl_example" src="../webgl-animation-not-frame-rate-independent.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-animation-not-frame-rate-independent.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="../webgl-animation-not-frame-rate-independent.html" target="_blank">click here to open in a separate window</a>
 
 There's a subtle problem though. The code above has a
@@ -48,7 +48,7 @@ frame a second.
 
 You can see the problem in this example
 
-<iframe class="webgl_example" src="../webgl-animation-frame-rate-issues.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-animation-frame-rate-issues.html" style="width: 400px; height: 300px;"></iframe>
 
 In the example above the we want to rotate all of the 'F's at the same speed.
 The 'F' in the middle is running full speed and is frame rate independent. The one
@@ -106,7 +106,7 @@ turn around completely regardless of the frame rate.
 
 Here's that one working.
 
-<iframe class="webgl_example" src="../webgl-animation.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-animation.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="../webgl-animation.html" target="_blank">click here to open in a separate window</a>
 
 You aren't likely to see a difference from the one

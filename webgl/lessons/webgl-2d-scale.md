@@ -57,7 +57,7 @@ and we add the JavaScript needed to set the scale when we draw.
 
 And now we have scale. Drag the sliders.
 
-<iframe class="webgl_example" src="../webgl-2d-geometry-scale.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-2d-geometry-scale.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="../webgl-2d-geometry-scale.html" target="_blank">click here to open in a separate window</a>
 
 One thing to notice is that scaling by a negative value flips our geometry.

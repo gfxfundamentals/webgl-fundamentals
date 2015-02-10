@@ -146,7 +146,7 @@ And finally let's apply each one, ping ponging which texture we are rendering to
 
 Here's a working version with a slightly more flexible UI. Check the effects to turn them on. Drag the effects to reorder how they are applied.
 
-<iframe class="webgl_example" width="400" height="340" src="../webgl-2d-image-processing.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 340px;" src="../webgl-2d-image-processing.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-image-processing.html" target="_blank">click here to open in a separate window</a>
 
 Some things I should go over.  

@@ -12,12 +12,12 @@ to -zFar in front of it.
 Moving stuff in front of the view doesn't seem the right way to go does it? In the real world
 you usually move your camera to take a picture of a building.
 
-<iframe class="webgl_example" src="resources/camera-move-camera.html?mode=0" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="resources/camera-move-camera.html?mode=0" style="width: 400px; height: 300px;"></iframe>
 <div class="webgl_center">moving the camera to the objects</div>
 
 You don't usually move the buildings to be in front of the camera.
 
-<iframe class="webgl_example" src="resources/camera-move-camera.html?mode=1" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="resources/camera-move-camera.html?mode=1" style="width: 400px; height: 300px;"></iframe>
 <div class="webgl_center">moving the objects to the camera</div>
 
 But in our last post we came up with projection that requires things to be
@@ -25,7 +25,7 @@ in front of the origin on the -Z axis.  To achieve this what we want to do
 is move the camera to the origin and move everything else the right amount
 so it's still in the same place *relative to the camera*.
 
-<iframe class="webgl_example" src="resources/camera-move-camera.html?mode=2" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="resources/camera-move-camera.html?mode=2" style="width: 400px; height: 300px;"></iframe>
 <div class="webgl_center">moving the objects to the view</div>
 
 We need to effectively move the world in front of the camera.  The easiest
@@ -113,7 +113,7 @@ Finally we need to apply the view matrix when we compute the matrix for each 'F'
 And wahlah! A camera that goes around the circle of 'F's. Drag the `cameraAngle` slider
 to move the camera around.
 
-<iframe class="webgl_example" src="../webgl-3d-camera.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-3d-camera.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="../webgl-3d-camera.html" target="_blank">click here to open in a separate window</a>
 
 That's all fine but using rotate and translate to move a camera where you want it and point toward
@@ -151,7 +151,7 @@ the camera.  Normalizing a vector means making it a vector that represents
 circles and how thosehelped with 2D rotation, in 3D we need unit spheres
 and a normalized vector represents a point on a unit sphere.
 
-<iframe class="webgl_example" src="resources/cross-product-diagram.html?mode=0" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="resources/cross-product-diagram.html?mode=0" style="width: 400px; height: 300px;"></iframe>
 <div class="webgl_center">the <span style="color:blue;">z axis</span></div>
 
 That's not enough info though.  Just a single vector gives us a point on a
@@ -175,13 +175,13 @@ you'll get the opposite answer.
 In any case if we compute the cross product of our <span style="color: blue;">`zAxis`</span> and
 <span style="color: gray;">`up`</span> we'll get the <span style="color:red;">xAxis</span> for the camera.
 
-<iframe class="webgl_example" src="resources/cross-product-diagram.html?mode=1" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="resources/cross-product-diagram.html?mode=1" style="width: 400px; height: 300px;"></iframe>
 <div class="webgl_center"><span style="color:blue;">zAxis</span> cross <span style="color:gray;">up</span> = <span style="color:red;">xAxis</span></div>
 
 And now that we have the <span style="color:red;">`xAxis`</span> we can cross the <span style="color:blue;">`zAxis`</span> and the <span style="color:red;">`xAxis`</span>
 which will give us the camera's <span style="color:green;">`yAxis`</span>
 
-<iframe class="webgl_example" src="resources/cross-product-diagram.html?mode=2" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="resources/cross-product-diagram.html?mode=2" style="width: 400px; height: 300px;"></iframe>
 
 Now all we have to do is plug in the 3 axes into a matrix. That gives as a
 matrix that will orient something that points at the `target` from the
@@ -284,7 +284,7 @@ And here is how we might use it to make the camera point at a specific 'F' as we
 
 And here's the result.
 
-<iframe class="webgl_example" src="../webgl-3d-camera-look-at.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-3d-camera-look-at.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="../webgl-3d-camera-look-at.html" target="_blank">click here to open in a separate window</a>
 
 Drag the slider and notice the camera tracks a single 'F'.
@@ -309,7 +309,7 @@ to make some character's head follow another character or some turret aim
 at its target it's much more useful if lookAt returns a matrix that orients
 and positions an object in world space in my opinion.
 </p>
-<iframe class="webgl_example" src="../webgl-3d-camera-look-at-heads.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-3d-camera-look-at-heads.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="../webgl-3d-camera-look-at-heads.html" target="_blank">click here to open in a separate window</a>
 </div>
 

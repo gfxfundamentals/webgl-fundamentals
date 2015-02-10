@@ -270,7 +270,7 @@ objects.forEach(function(object) {
 
 Here's an example using these helper functions
 
-<iframe class="webgl_example" src="../webgl-less-code-more-fun.html" width="400" height="300"></iframe>
+<iframe class="webgl_example" src="../webgl-less-code-more-fun.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="../webgl-less-code-more-fun.html" target="_blank">click here to open in a separate window</a>
 
 This is the style I try to write my own WebGL programs.

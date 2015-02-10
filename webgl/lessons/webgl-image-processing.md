@@ -91,7 +91,7 @@ function render(image) {
 
 And here's the image rendered in WebGL.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-image.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-image.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-image.html" target="_blank">click here to open in a separate window</a>
 
 Not too exciting so let's manipulate that image. How about just swapping red and blue?
@@ -104,7 +104,7 @@ Not too exciting so let's manipulate that image. How about just swapping red and
 
 And now red and blue are swapped.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-image-red2blue.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-image-red2blue.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-image-red2blue.html" target="_blank">click here to open in a separate window</a>
 
 What if we want to do image processing that actually looks at other pixels? Since WebGL references textures in texture coordinates which go from 0.0 to 1.0 then we can calculate how much to move for 1 pixel with the simple math <code>onePixel = 1.0 / textureSize</code>.
@@ -148,7 +148,7 @@ We then need to pass in the size of the texture from JavaScript.
 
 Compare to the un-blurred image above.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-image-blend.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-image-blend.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-image-blend.html" target="_blank">click here to open in a separate window</a>
 
 Now that we know how to reference other pixels let's use a convolution kernel to do a bunch of common image processing. In this case we'll use a 3x3 kernel. A convolution kernel is just a 3x3 matrix where each entry in the matrix represents how much to multiply the 8 pixels around the pixel we are rendering. We then divide the result by the weight of the kernel (the sum of all values in the kernel) or 1.0, which ever is greater. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Here's a pretty good article on it</a>. And <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">here's another article showing some actual code if you were to write this by hand in C++</a>.
@@ -218,7 +218,7 @@ In JavaScript we need to supply a convolution kernel.
 
 And voila... Use the drop down list to select different kernels.
 
-<iframe class="webgl_example" width="400" height="300" src="../webgl-2d-image-3x3-convolution.html"></iframe>
+<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-image-3x3-convolution.html"></iframe>
 <a class="webgl_center" href="../webgl-2d-image-3x3-convolution.html" target="_blank">click here to open in a separate window</a>
 
 I hope this article has convinced you image processing in WebGL is pretty simple. Next up I'll go over  <a href="webgl-image-processing-continued.html">how to apply more than one effect to the image</a>.
