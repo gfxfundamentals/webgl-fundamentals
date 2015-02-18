@@ -116,7 +116,7 @@ function main() {
   var uniformsThatAreTheSameForAllObjects = {
     u_lightWorldPos:         [-50, 30, 100],
     u_viewInverse:           makeIdentity(),
-    u_lightColor:            [1, 1, 1, 1],
+    u_lightColor:            [3, 3, 3, 3],
     u_fogColor:              [1, 1, 1, 1],
     u_fogNear:               zNear + (zFar - zNear) * 0.33,
     u_fogFar:                zFar,
@@ -132,7 +132,7 @@ function main() {
     u_ambient:               [0, 0, 0, 0],
     u_diffuse:               [0, 0, 0, 1],
     u_specular:              [1, 1, 1, 1],
-    u_shininess:             100,
+    u_shininess:             400,
     u_specularFactor:        1,
   };
 
