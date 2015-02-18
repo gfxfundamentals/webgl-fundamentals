@@ -44,7 +44,7 @@ function init() {
   scene = new THREE.Scene();
 
   // Make a cube.
-  var geometry = new THREE.CubeGeometry(200, 200, 200);
+  var geometry = new THREE.BoxGeometry(200, 200, 200);
 
   // Make a material
   var material = new THREE.MeshPhongMaterial({
@@ -60,23 +60,22 @@ function init() {
   scene.add(mesh);
 
   // Add 2 lights.
-  light1 = new THREE.PointLight(0xff0040, 2, 0);
+  var light1 = new THREE.PointLight(0xff0040, 2, 0);
   light1.position.set(200, 100, 300);
   scene.add(light1);
 
-  light2 = new THREE.PointLight(0x0040ff, 2, 0);
+  var light2 = new THREE.PointLight(0x0040ff, 2, 0);
   light2.position.set(-200, 100, 300);
   scene.add(light2);
 
 }
 
 function animate() {
-  requestAnimationFrame(animate);
-
   mesh.rotation.x += 0.005;
   mesh.rotation.y += 0.01;
 
   renderer.render(scene, camera);
+  requestAnimationFrame(animate);
 }
 
 </script>

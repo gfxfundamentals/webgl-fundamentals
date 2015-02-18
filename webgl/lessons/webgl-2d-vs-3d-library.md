@@ -49,7 +49,7 @@ Here's the code in three.js to display this
   scene = new THREE.Scene();
 
   // Make a cube.
-  var geometry = new THREE.CubeGeometry(200, 200, 200);
+  var geometry = new THREE.BoxGeometry(200, 200, 200);
 
   // Make a material
   var material = new THREE.MeshPhongMaterial({
