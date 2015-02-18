@@ -83,6 +83,24 @@ var createBuffersFromTypedArrays = function(gl, arrays) {
   return buffers;
 };
 
+/**
+ * Creates sphere vertices.
+ * The created sphere has position, normal and uv streams.
+ *
+ * @param {number} radius radius of the sphere.
+ * @param {number} subdivisionsAxis number of steps around the sphere.
+ * @param {number} subdivisionsHeight number of vertically on the sphere.
+ * @param {number} opt_startLatitudeInRadians where to start the
+ *     top of the sphere. Default = 0.
+ * @param {number} opt_endLatitudeInRadians Where to end the
+ *     bottom of the sphere. Default = Math.PI.
+ * @param {number} opt_startLongitudeInRadians where to start
+ *     wrapping the sphere. Default = 0.
+ * @param {number} opt_endLongitudeInRadians where to end
+ *     wrapping the sphere. Default = 2 * Math.PI.
+ * @return {Object.<string, TypedArray>} The
+ *         created plane vertices.
+ */
 var createSphereVertices = function(
     radius,
     subdivisionsAxis,
@@ -163,11 +181,103 @@ var createSphereBuffers = function(gl) {
   return createBuffersFromTypedArrays(gl, arrays);
 };
 
+/**
+ * Array of the indices of corners of each face of a cube.
+ * @type {number[][]}
+ */
+var CUBE_FACE_INDICES = [
+  [3, 7, 5, 1], // right
+  [6, 2, 0, 4], // left
+  [6, 7, 3, 2], // ??
+  [0, 1, 5, 4], // ??
+  [7, 6, 4, 5], // front
+  [2, 3, 1, 0]  // back
+];
+
+/**
+ * Creates the vertices and indices for a cube. The
+ * cube will be created around the origin. (-size / 2, size / 2)
+ *
+ * @param {number} size Width, height and depth of the cube.
+ * @return {Object.<string, TypedArray>} The
+ *         created plane vertices.
+ */
+var createCubeVertices = function(size) {
+  var k = size / 2;
+
+  var cornerVertices = [
+    [-k, -k, -k],
+    [+k, -k, -k],
+    [-k, +k, -k],
+    [+k, +k, -k],
+    [-k, -k, +k],
+    [+k, -k, +k],
+    [-k, +k, +k],
+    [+k, +k, +k],
+  ];
+
+  var faceNormals = [
+    [+1, +0, +0],
+    [-1, +0, +0],
+    [+0, +1, +0],
+    [+0, -1, +0],
+    [+0, +0, +1],
+    [+0, +0, -1],
+  ];
+
+  var uvCoords = [
+    [1, 0],
+    [0, 0],
+    [0, 1],
+    [1, 1]
+  ];
+
+  var numVertices = 6 * 4;
+  var positions = createAugmentedTypedArray(Float32Array, 3 * numVertices);
+  var normals = createAugmentedTypedArray(Float32Array, 3 * numVertices);
+  var texCoords = createAugmentedTypedArray(Float32Array, 2 * numVertices);
+  var indices = createAugmentedTypedArray(Uint16Array, 3 * 6 * 2);
+
+  for (var f = 0; f < 6; ++f) {
+    var faceIndices = CUBE_FACE_INDICES[f];
+    for (var v = 0; v < 4; ++v) {
+      var position = cornerVertices[faceIndices[v]];
+      var normal = faceNormals[f];
+      var uv = uvCoords[v];
+
+      // Each face needs all four vertices because the normals and texture
+      // coordinates are not all the same.
+      positions.push(position);
+      normals.push(normal);
+      texCoords.push(uv);
+
+    }
+    // Two triangles make a square face.
+    var offset = 4 * f;
+    indices.push(offset + 0, offset + 1, offset + 2);
+    indices.push(offset + 0, offset + 2, offset + 3);
+  }
+
+  return {
+    position: positions,
+    normal: normals,
+    texcoord: texCoords,
+    indices: indices,
+  };
+};
+
+var createCubeBuffers = function(gl) {
+  var arrays = createCubeVertices.apply(this, Array.prototype.slice.call(arguments, 1));
+  return createBuffersFromTypedArrays(gl, arrays);
+};
+
 window.primitives = {
   createAugmentedTypedArray: createAugmentedTypedArray,
   createBuffersFromTypedArrays: createBuffersFromTypedArrays,
-  createSphereVertices: createSphereVertices,
+  createCubeBuffers: createCubeBuffers,
+  createCubeVertices: createCubeVertices,
   createSphereBuffers: createSphereBuffers,
+  createSphereVertices: createSphereVertices,
 };
 
 }());
