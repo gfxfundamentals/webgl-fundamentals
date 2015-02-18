@@ -291,7 +291,7 @@ the animation below
 What's going on? Why is the F disappearing early? Just like WebGL clips X and Y or +1 to -1 it also
 clips Z. What were's seeing here is where Z < -1.
 
-I could go into detail about how the math to fix it but you can derive it the same way
+I could go into detail about how the math to fix it but [you can derive it](http://stackoverflow.com/a/28301213/128511) the same way
 we did 2D projection. We need to take Z, add some amount and scale some amount and we can make any range we want
 get remapped to the -1 to +1.
 
