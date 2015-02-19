@@ -3,16 +3,17 @@
 
 "use strict";
 
-var path    = require('path');
-var fs      = require('fs');
 var args    = require('minimist')(process.argv.slice(2));
-var glob    = require('glob');
 var cache   = new (require('inmemfilecache'));
-var marked  = require('marked');
 var Feed    = require('feed');
+var fs      = require('fs');
+var glob    = require('glob');
+var hanson  = require('hanson');
+var marked  = require('marked');
+var path    = require('path');
 var Promise = require('Promise');
 var sitemap = require('sitemap');
-var utils   = require('./utils');
+var utils   = require('./lib/utils');
 
 process.title = "build";
 
@@ -22,10 +23,15 @@ marked.setOptions({
   rawHtml: true,
 });
 
+var replaceHandlers = {};
+function registerReplaceHandler(keyword, handler) {
+  replaceHandlers[keyword] = handler;
+}
+
 /**
  * Replace %(id)s in strings with values in objects(s)
  *
- * Given a string like `"Hello %(name)s from $(user.country)s"`
+ * Given a string like `"Hello %(name)s from %(user.country)s"`
  * and an object like `{name:"Joe",user:{country:"USA"}}` would
  * return `"Hello Joe from USA"`.
  *
@@ -42,18 +48,35 @@ var replaceParams = (function() {
     }
 
     return str.replace(replaceParamsRE, function(match, key) {
-      var keys = key.split('.');
-      for (var ii = 0; ii < params.length; ++ii) {
-        var obj = params[ii];
-        for (var jj = 0; jj < keys.length; ++jj) {
-          var key = keys[jj];
-          obj = obj[key];
-          if (obj === undefined) {
-            break;
+      var colonNdx = key.indexOf(":");
+      if (colonNdx >= 0) {
+        try {
+          var args = hanson.parse("{" + key + "}");
+          var handlerName = Object.keys(args)[0];
+          var handler = replaceHandlers[handlerName];
+          if (handler) {
+            return handler(args[handlerName]);
           }
+          console.error("unknown substition handler: " + handlerName);
+        } catch (e) {
+          console.error(e);
+          console.error("bad substitution: %(" + key + ")s");
         }
-        if (obj !== undefined) {
-          return obj;
+      } else {
+        // handle normal substitutions.
+        var keys = key.split('.');
+        for (var ii = 0; ii < params.length; ++ii) {
+          var obj = params[ii];
+          for (var jj = 0; jj < keys.length; ++jj) {
+            var key = keys[jj];
+            obj = obj[key];
+            if (obj === undefined) {
+              break;
+            }
+          }
+          if (obj !== undefined) {
+            return obj;
+          }
         }
       }
       console.error("unknown key: " + key);
@@ -61,6 +84,10 @@ var replaceParams = (function() {
     });
   };
 }());
+
+registerReplaceHandler('include', function(filename) {
+  return cache.readFileSync(filename, {encoding: "utf-8"});
+});
 
 
 var Builder = function() {
