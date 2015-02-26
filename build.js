@@ -89,14 +89,21 @@ registerReplaceHandler('include', function(filename) {
   return cache.readFileSync(filename, {encoding: "utf-8"});
 });
 
+registerReplaceHandler('example', function(options) {
+
+  options.width = options.width || "400";
+  options.height = options.height || "300";
+
+  return replaceParams(readFile("templates/example.template"), options);
+});
+
+var readFile = function(fileName) {
+  return cache.readFileSync(fileName, "utf-8");
+};
 
 var Builder = function() {
 
   var g_articles = [];
-
-  var readFile = function(fileName) {
-    return cache.readFileSync(fileName, "utf-8");
-  };
 
   var writeFileIfChanged = function(fileName, content) {
     if (fs.existsSync(fileName)) {
