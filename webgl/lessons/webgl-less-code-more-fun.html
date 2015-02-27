@@ -313,13 +313,111 @@ objects.forEach(function(object) {
 </pre>
 
 <p>Here&#39;s an example using these helper functions</p>
-<p><iframe class="webgl_example" src="../webgl-less-code-more-fun.html" style="width: 400px; height: 300px;"></iframe>
+<p><iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-less-code-more-fun.html"></iframe>
 <a class="webgl_center" href="../webgl-less-code-more-fun.html" target="_blank">click here to open in a separate window</a></p>
-<p>This is the style I try to write my own WebGL programs.
+<p>Let&#39;s take it a tiny step further. In the code above we setup a variable <code>attribs</code> with the buffers we created.
+Not shown is the code to setup those buffers. For example if you want to make positions, normals and texture
+coordinates you might need code like this</p>
+<pre><code>// a single triangle
+var positions = [0, -10, 0, 10, 10, 0, -10, 10, 0];
+var texcoords = [0.5, 0, 1, 1, 0, 1];
+var normals   = [0, 0, 1, 0, 0, 1, 0, 0, 1];
+
+var positionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+var texcoordBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, texcoordsBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
+
+var normalBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+</code></pre><p>Looks like a pattern we can simplify as well.</p>
+<pre><code>// a single triangle
+var arrays = {
+   position: { numComponents: 3, data: [0, -10, 0, 10, 10, 0, -10, 10, 0], },
+   texcoord: { numComponents: 2, data: [0.5, 0, 1, 1, 0, 1],               },
+   normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1],        },
+};
+
+var bufferInfo = createBufferInfoFromArrays(gl, arrays);
+</code></pre><p>Much shorter! Now we can do this at render time</p>
+<pre><code>// Setup all the needed buffers and attributes.
+setBuffersAndAttributes(gl, attribSetters, bufferInfo);
+
+...
+
+// Draw the geometry.
+gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
+</code></pre><p>Here&#39;s that</p>
+<p><iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-less-code-more-fun-triangle.html"></iframe>
+<a class="webgl_center" href="../webgl-less-code-more-fun-triangle.html" target="_blank">click here to open in a separate window</a></p>
+<p>This will even work if we have indices. setAttribsAndBuffers will set all the attributes
+and setup the <code>ELEMENT_ARRAY_BUFFER</code> with your <code>indices</code> so you can call <code>gl.drawElements</code>.</p>
+<pre><code>// an indexed quad
+var arrays = {
+   position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+   texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+   normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
+   indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
+};
+
+var bufferInfo = createBufferInfoFromTypedArray(gl, arrays);
+</code></pre><p>and at render time we can call <code>gl.drawElements</code> instead of <code>gl.drawArrays</code>.</p>
+<pre><code>// Setup all the needed buffers and attributes.
+setBuffersAndAttributes(gl, attribSetters, bufferInfo);
+
+...
+
+// Draw the geometry.
+gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+</code></pre><p>Here&#39;s that</p>
+<p><iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-less-code-more-fun-quad.html"></iframe>
+<a class="webgl_center" href="../webgl-less-code-more-fun-quad.html" target="_blank">click here to open in a separate window</a></p>
+<p><code>createBufferInfoFromArrays</code> basically makes an object that looks like this</p>
+<pre><code> bufferInfo = {
+   numElements: 4,        // or whatever the number of elements is
+   indices: WebGLBuffer,  // this property will not exist if there are no indices
+   attribs: {
+     a_position: { buffer: WebGLBuffer, numComponents: 3, },
+     a_normal:   { buffer: WebGLBuffer, numComponents: 3, },
+     a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
+   },
+ };
+</code></pre><p>And <code>setBuffersAndAttributes</code> uses that object to set all the buffers and attributes.</p>
+<p>Finally we can go what I consider possibly too far. Given <code>position</code> almost always has 3 components (x, y, z)
+and <code>texcoords</code> almost always 2, indices 3, and normals 3, we can just let the system guess the number
+of components.</p>
+<pre><code>// an indexed quad
+var arrays = {
+   position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
+   texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
+   normal:   [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+   indices:  [0, 1, 2, 1, 2, 3],
+};
+</code></pre><p>And that version</p>
+<p><iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-less-code-more-fun-quad-guess.html"></iframe>
+<a class="webgl_center" href="../webgl-less-code-more-fun-quad-guess.html" target="_blank">click here to open in a separate window</a></p>
+<p>I&#39;m not sure I personally like that style. Guessing bugs me because it can guess wrong. For example
+I might choose to stick an extra set of texture coordinates in my texcoord attribute and it will
+guess 2 and be wrong. Of course if it guesses wrong you can just specify it like the example above.
+I guess I worry if the guessing code changes people&#39;s stuff might break. It&#39;s up to you. Some people
+like things to be what they consider as simple as possible.</p>
+<p>Why don&#39;t we look at the attributes on the shader program to figure out the number of components?
+That&#39;s because it&#39;s common to supply 3 components (x, y, z) from a buffer but use a <code>vec4</code> in
+the shader. For attibutes WebGL will set <code>w = 1</code> automatically. But that means we can&#39;t easily
+know the user&#39;s intent since what they declared in their shader might not match the number of
+components they provide.</p>
+<p>Anyway, this is the style I try to write my own WebGL programs.
 For the lessons on these tutorials though I&#39;ve felt like I have to use the standard <strong>verbose</strong>
-ways so people don&#39;t get confused about what is WebGL and what is my own style.</p>
+ways so people don&#39;t get confused about what is WebGL and what is my own style. At some point
+though showing all the steps gets in the way of the point so going forward some lessons will
+be using this style.</p>
 <p>Feel free to use this style in your own code. The functions <code>createUniformSetters</code>, <code>createAttributeSetters</code>,
-<code>setUniforms</code>, and <code>setAttributes</code> are included in the <a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code>webgl-utils.js</code></a>
+<code>createBufferInfoFromArrays</code>, <code>setUniforms</code>, and <code>setBuffersAndAttributes</code> are included in the
+<a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code>webgl-utils.js</code></a>
 file used by all the samples.</p>
 <div class="webgl_bottombar">
 <h3>Can we use the setters directly?</h3>
@@ -435,6 +533,18 @@ TypeError: undefined is not a function
     <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
   </ul>
+  <li>Structure and Organization</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">WebGL - Less Code, More Fun</a></li>
+    <li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">WebGL - Drawing Multiple Things</a></li>
+  </ul>
+  <li>Text</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
+    <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
+    <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
+    <li><a href="/webgl/lessons/webgl-text-glpyh-texture.html">WebGL Text - Using a Glyph Texture</a>
+  </ul>
   <li>Misc</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-boilerplate.html">WebGL Boilerplate</a></li>
@@ -445,7 +555,6 @@ TypeError: undefined is not a function
     <li><a href="/webgl/lessons/webgl-2-textures.html">WebGL Using 2 or More Textures</a></li>
     <li><a href="/webgl/lessons/webgl-and-alpha.html">WebGL and Alpha</a></li>
     <li><a href="/webgl/lessons/webgl-2d-vs-3d-library.html">WebGL - 2D vs 3D libraries</a></li>
-    <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">WebGL - Less Code, More Fun</a></li>
     <li><a href="/webgl/lessons/webgl-anti-patterns.html">WebGL - Anti-Patterns</a></li>
   </ul>
 </ul>

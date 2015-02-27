@@ -71,10 +71,12 @@ var loggingOff = function() {
 
 /**
  * Check if the page is embedded.
+ * @param {Window?) w window to check
  * @return {boolean} True of we are in an iframe
  */
-var isInIFrame = function() {
-  return window != window.top;
+var isInIFrame = function(w) {
+  w = w || window;
+  return w != w.top;
 };
 
 /**
@@ -369,6 +371,47 @@ var createProgramFromSources = function(
 };
 
 /**
+ * Creates a ProgramInfo from 2 sources.
+ *
+ * A ProgramInfo contains
+ *
+ *    {
+ *       program: WebGLProgram,
+ *       uniformSetters: object of setters as returned from createUniformSetters,
+ *       attribSetters: object of setters as returned from createAttribSetters,
+ *    }
+ *
+ * @param {WebGLRenderingContext} gl The WebGLRenderingContext
+ *        to use.
+ * @param {string[]} shaderSourcess Array of sources for the
+ *        shaders or ids. The first is assumed to be the vertex shader,
+ *        the second the fragment shader.
+ * @param {string[]?} opt_attribs The attribs names.
+ * @param {number[]?} opt_locations The locations for the
+ *        attribs.
+ * @param {function(string): void) opt_errorCallback callback for errors.
+ * @return {ProgramInfo} The created program.
+ */
+var createProgramInfo = function(
+    gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback) {
+  var shaderSources = shaderSources.map(function(source) {
+    var script = document.getElementById(source);
+    return script ? script.text : source;
+  });
+  var program = createProgramFromSources(gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback);
+  if (!program) {
+    return;
+  }
+  var uniformSetters = createUniformSetters(gl, program);
+  var attribSetters = createAttributeSetters(gl, program);
+  return {
+    program: program,
+    uniformSetters: uniformSetters,
+    attribSetters: attribSetters,
+  }
+};
+
+/**
  * Returns the corresponding bind point for a given sampler type
  */
 var getBindPointForSamplerType = function(gl, type) {
@@ -630,6 +673,13 @@ var setAttributes = function(setters, buffers) {
   });
 };
 
+var setBuffersAndAttributes = function(gl, setters, buffers) {
+  setAttributes(setters, buffers.attribs);
+  if (buffers.indices) {
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+  }
+};
+
 // Add your prefix here.
 var browserPrefixes = [
   "",
@@ -672,26 +722,468 @@ var resizeCanvasToDisplaySize = function(canvas) {
     return true;
   }
   return false;
+};
+
+/**
+ * Get's the iframe in the parent document
+ * that is displaying the specified window .
+ * @param {Window} window window to check.
+ * @return {HTMLIFrameElement?) the iframe element if window is in an iframe
+ */
+function getIFrameForWindow(window) {
+  if (!isInIFrame(window)) {
+    return;
+  }
+  var iframes = window.parent.document.getElementsByTagName("iframe");
+  for (var ii = 0; ii < iframes.length; ++ii) {
+    var iframe = iframes[ii];
+    if (iframe.contentDocument === window.document) {
+      return iframe;
+    }
+  }
 }
 
+/**
+ * Returns true if window is on screen. The main window is
+ * always on screen windows in iframes might not be.
+ * @param {Window} window the window to check.
+ * @return {boolean} true if window is on screen.
+ */
+function isFrameVisible(window) {
+  var iframe = getIFrameForWindow(window);
+  if (!iframe) {
+    return true;
+  }
+
+  var bounds = iframe.getBoundingClientRect();
+  var isVisible = bounds.top < window.parent.innerHeight && bounds.bottom >= 0 &&
+                  bounds.left < window.parent.innerWidth && bounds.right >= 0;
+
+  return isVisible && isFrameVisible(window.parent);
+};
+
+/**
+ * Returns true if element is on screen.
+ * @param {HTMLElement} element the element to check.
+ * @return {boolean} true if element is on screen.
+ */
+function isOnScreen(element) {
+  var isVisible = true;
+
+  if (element) {
+    var bounds = element.getBoundingClientRect();
+    isVisible = bounds.top < window.innerHeight && bounds.bottom >= 0;
+  }
+
+  return isVisible && isFrameVisible(window);
+};
+
+
+
+// Add `push` to a typed array. It just keeps a 'cursor'
+// and allows use to `push` values into the array so we
+// don't have to manually compute offsets
+var augmentTypedArray = function(typedArray, numComponents) {
+  var cursor = 0;
+  typedArray.push = function() {
+    for (var ii = 0; ii < arguments.length; ++ii) {
+      var value = arguments[ii];
+      if (value instanceof Array || (value.buffer && value.buffer instanceof ArrayBuffer)) {
+        for (var jj = 0; jj < value.length; ++jj) {
+          typedArray[cursor++] = value[jj];
+        }
+      } else {
+        typedArray[cursor++] = value;
+      }
+    }
+  };
+  typedArray.reset = function(opt_index) {
+    cursor = opt_index || 0;
+  };
+  typedArray.numComponents = numComponents;
+  Object.defineProperty(typedArray, 'numElements', {
+    get: function() {
+      return this.length / this.numComponents | 0;
+    },
+  });
+  return typedArray;
+};
+
+var createAugmentedTypedArray = function(numComponents, numElements, opt_type) {
+  var type = opt_type || Float32Array;
+  return augmentTypedArray(new type(numComponents * numElements), numComponents);
+};
+
+var createBufferFromTypedArray = function(gl, array, type, drawType) {
+  type = type || gl.ARRAY_BUFFER;
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(type, buffer);
+  gl.bufferData(type, array, drawType || gl.STATIC_DRAW);
+// HACK!!
+buffer.array = array;
+  return buffer;
+};
+
+var allButIndices = function(name) {
+  return name !== "indices";
+};
+
+var createMapping = function(obj) {
+  var mapping = {};
+  Object.keys(obj).filter(allButIndices).forEach(function(key) {
+    mapping["a_" + key] = key;
+  });
+  return mapping;
+};
+
+var getGLTypeForTypedArray = function(gl, typedArray) {
+  if (typedArray instanceof Int8Array)    { return gl.BYTE; }
+  if (typedArray instanceof Uint8Array)   { return gl.UNSIGNED_BYTE; }
+  if (typedArray instanceof Int16Array)   { return gl.SHORT; }
+  if (typedArray instanceof Uint16Array)  { return gl.UNSIGNED_SHORT; }
+  if (typedArray instanceof Int32Array)   { return gl.INT; }
+  if (typedArray instanceof Uint32Array)  { return gl.UNSIGNED_INT; }
+  if (typedArray instanceof Float32Array) { return gl.FLOAT; }
+  throw "unsupported typed array type";
+};
+
+// This is really just a guess. Though I can't really imagine using
+// anything else? Maybe for some compression?
+var getNormalizationForTypedArray = function(typedArray) {
+  if (typedArray instanceof Int8Array)    { return true; }
+  if (typedArray instanceof Uint8Array)   { return true; }
+  return false;
+};
+
+var isArrayBuffer = function(a) {
+  return a.buffer && a.buffer instanceof ArrayBuffer;
+};
+
+var guessNumComponentsFromName = function(name, length) {
+  var numComponents;
+  if (name.indexOf("coord") >= 0) {
+    numComponents = 2;
+  } else if (name.indexOf("color") >= 0) {
+    numComponents = 4;
+  } else {
+    numComponents = 3;  // position, normals, indices ...
+  }
+
+  if (length % numComponents > 0) {
+    throw "can not guess numComponents. You should specify it.";
+  }
+
+  return numComponents;
+};
+
+var makeTypedArray = function(array, name) {
+  if (isArrayBuffer(array)) {
+    return array;
+  }
+
+  if (Array.isArray(array)) {
+    array = {
+      data: array,
+    };
+  }
+
+  if (!array.numComponents) {
+    array.numComponents = guessNumComponentsFromName(name, array.length);
+  }
+
+  var type = array.type;
+  if (!type) {
+    if (name === "indices") {
+      type = Uint16Array;
+    }
+  }
+  var typedArray = createAugmentedTypedArray(array.numComponents, array.data.length / array.numComponents | 0, type);
+  typedArray.push(array.data);
+  return typedArray;
+};
+
+/**
+ * Creates a set of attribute data from set of arrays
+ *
+ * Given
+ *
+ *      var arrays = {
+ *        position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+ *        texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+ *        normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
+ *        color:    { numComponents: 4, data: [255, 255, 255, 255, 255, 0, 0, 255, 0, 0, 255, 255], type: Uint8Array, },
+ *        indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
+ *      };
+ *
+ * returns something like
+ *
+ *      var attribs = {
+ *        a_position: { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
+ *        a_texcoord: { numComponents: 2, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
+ *        a_normal:   { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
+ *        a_color:    { numComponents: 4, type: gl.UNSIGNED_BYTE, normalize: true,  buffer: WebGLBuffer, },
+ *      };
+ *
+ * @param {WebGLRenderingContext) gl The webgl rendering context.
+ * @param {Object.<string, array|typedarray>} arrays
+ * @param {Object.<string, string>?} opt_mapping mapping from attribute name to array name.
+ *     if not specified defaults to "a_name" -> "name".
+ */
+var createAttribsFromArrays = function(gl, arrays, opt_mapping) {
+  var mapping = opt_mapping || createMapping(arrays);
+  var attribs = {};
+  Object.keys(mapping).forEach(function(attribName) {
+    var bufferName = mapping[attribName];
+    var array = makeTypedArray(arrays[bufferName], bufferName);
+    attribs[attribName] = {
+      buffer:        createBufferFromTypedArray(gl, array),
+      numComponents: array.numComponents || guessNumComponentsFromName(bufferName),
+      type:          getGLTypeForTypedArray(gl, array),
+      normalize:     getNormalizationForTypedArray(array),
+    };
+  });
+  return attribs;
+};
+
+/**
+ * tries to get the number of elements from a set of arrays.
+ */
+var getNumElementsFromNonIndexedArrays = function(arrays) {
+  var key = Object.keys(arrays)[0];
+  var array = arrays[key];
+  if (isArrayBuffer(array)) {
+    return array.numElements;
+  } else {
+    return array.data.length / array.numComponents;
+  }
+};
+
+/**
+ * Creates a BufferInfo from an object of arrays.
+ *
+ * Given an object like
+ *
+ *     var arrays = {
+ *       position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+ *       texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+ *       normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
+ *       indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
+ *     };
+ *
+ *  Creates an BufferInfo like this
+ *
+ *     bufferInfo = {
+ *       numElements: 4,        // or whatever the number of elements is
+ *       indices: WebGLBuffer,  // this property will not exist if there are no indices
+ *       attribs: {
+ *         a_position: { buffer: WebGLBuffer, numComponents: 3, },
+ *         a_normal:   { buffer: WebGLBuffer, numComponents: 3, },
+ *         a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
+ *       },
+ *     };
+ *
+ *  The properties of arrays can be JavaScript arrays in which case the number of components
+ *  will be guessed.
+ *
+ *     var arrays = {
+ *        position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
+ *        texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
+ *        normal:   [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+ *        indices:  [0, 1, 2, 1, 2, 3],
+ *     };
+ *
+ *  They can also by TypedArrays
+ *
+ *     var arrays = {
+ *        position: new Float32Array([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]),
+ *        texcoord: new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]),
+ *        normal:   new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]),
+ *        indices:  new Uint16Array([0, 1, 2, 1, 2, 3]),
+ *     };
+ *
+ *  Or augmentedTypedArrays
+ *
+ *     var positions = createAugmentedTypedArray(3, 4);
+ *     var texcoords = createAugmentedTypedArray(2, 4);
+ *     var normals   = createAugmentedTypedArray(3, 4);
+ *     var indices   = createAugmentedTypedArray(3, 2, Uint16Array);
+ *
+ *     positions.push([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]);
+ *     texcoords.push([0, 0, 0, 1, 1, 0, 1, 1]);
+ *     normals.push([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]);
+ *     indices.push([0, 1, 2, 1, 2, 3]);
+ *
+ *     var arrays = {
+ *        position: positions,
+ *        texcoord: texcoords,
+ *        normal:   normals,
+ *        indices:  indices,
+ *     };
+ *
+ * @param {WebGLRenderingContext) gl A WebGLRenderingContext
+ * @param {Object.<string, array|object|typedarray> arrays Your data
+ * @param {Object.<string, string>?} an optional mapping of attribute to array name.
+ *    If not passed in it's assumed the array names will be mapped to an attibute
+ *    of the same name with "a_" prefixed to it. An other words.
+ *
+ *        var arrays = {
+ *           position: ...,
+ *           texcoord: ...,
+ *           normal:   ...,
+ *           indices:  ...,
+ *        };
+ *
+ *        bufferInfo = createBufferInfoFromArrays(gl, arrays);
+ *
+ *    Is the same as
+ *
+ *        var arrays = {
+ *           position: ...,
+ *           texcoord: ...,
+ *           normal:   ...,
+ *           indices:  ...,
+ *        };
+ *
+ *        var mapping = {
+ *          a_position: "position",
+ *          a_texcoord: "texcoord",
+ *          a_normal:   "normal",
+ *        };
+ *
+ *        bufferInfo = createBufferInfoFromArrays(gl, arrays, mapping);
+ *
+ *
+ */
+var createBufferInfoFromArrays = function(gl, arrays, opt_mapping) {
+  var bufferInfo = {
+    attribs: createAttribsFromArrays(gl, arrays, opt_mapping),
+  };
+  var indices = arrays.indices;
+  if (indices) {
+    indices = makeTypedArray(indices, "indices");
+    bufferInfo.indices = createBufferFromTypedArray(gl, indices, gl.ELEMENT_ARRAY_BUFFER);
+    bufferInfo.numElements = indices.length;
+  } else {
+    bufferInfo.numElements = getNumElementsFromNonIndexedArrays(arrays);
+  }
+
+  return bufferInfo;
+};
+
+/**
+ * Creates buffers from typed arrays
+ *
+ * Given something like this
+ *
+ *     var arrays = {
+ *        positions: [1, 2, 3],
+ *        normals: [0, 0, 1],
+ *     }
+ *
+ * returns something like
+ *
+ *     buffers = {
+ *       positions: WebGLBuffer,
+ *       normals: WebGLBuffer,
+ *     }
+ *
+ * If the buffer is named 'indices' it will be made an ELEMENT_ARRAY_BUFFER.
+ *
+ * @param {WebGLRenderingContext) gl A WebGLRenderingContext.
+ * @param {Object<string, array|typedarray>} arrays
+ * @return {Object<string, WebGLBuffer>} returns an object with one WebGLBuffer per array
+ */
+var createBuffersFromArrays = function(gl, arrays) {
+  var buffers = { };
+  Object.keys(arrays).forEach(function(key) {
+    var type = key == "indices" ? gl.ELEMENT_ARRAY_BUFFER : gl.ARRAY_BUFFER;
+    var array = makeTypedArray(arrays[key], name);
+    buffers[key] = createBufferFromTypedArray(gl, array, type);
+  });
+
+  // hrm
+  if (arrays.indices) {
+    buffers.numElements = arrays.indices.length;
+  } else if (arrays.position) {
+    buffers.numElements = arrays.position.length / 3;
+  }
+
+  return buffers;
+};
+
+/**
+ * Calls `gl.drawElements` or `gl.drawArrays`, whichever is appropriate
+ *
+ * normally you'd call `gl.drawElements` or `gl.drawArrays` yourself
+ * but calling this means if you switch from indexed data to non-indexed
+ * data you don't have to remember to update your draw call.
+ *
+ * @param {WebGLRenderingContext} gl A WebGLRenderingContext
+ * @param {enum} type eg (gl.TRIANGLES, gl.LINES, gl.POINTS, gl.TRIANGLE_STRIP, ...)
+ * @param {BufferInfo} bufferInfo as returned from createBufferInfoFromArrays
+ * @param {number?} count An optional count. Defaults to bufferInfo.numElements
+ * @param {number?} offset An optional offset. Defaults to 0.
+ */
+var drawBufferInfo = function(gl, type, bufferInfo, count, offset) {
+  var indices = bufferInfo.indices;
+  var numElements = count === undefined ? bufferInfo.numElements : count;
+  offset = offset === undefined ? offset : 0;
+  if (indices) {
+    gl.drawElements(type, numElements, gl.UNSIGNED_SHORT, offset);
+  } else {
+    gl.drawArrays(type, offset, numElements);
+  }
+};
+
+// Replace requestAnimationFrame.
+window.requestAnimationFrame = (function(oldRAF) {
+
+  return function(callback, element) {
+    var handler = function() {
+      if (isOnScreen(element)) {
+        oldRAF(callback, element);
+      } else {
+        oldRAF(handler, element);
+      }
+    };
+    handler();
+  };
+
+}(window.requestAnimationFrame));
+
+// Is AMD?
+var isAMD = (window.define && typeof window.define === "function");
+
+var exportObj = isAMD ? {} : window;
+
 /* export functions */
-window.createAttributeSetters = createAttributeSetters;
-window.createProgram = loadProgram;
-window.createProgramFromScripts = createProgramFromScripts;
-window.createProgramFromSources = createProgramFromSources;
-window.createShaderFromScriptElement = createShaderFromScript;
-window.createUniformSetters = createUniformSetters;
-window.getWebGLContext = getWebGLContext;
-window.updateCSSIfInIFrame = updateCSSIfInIFrame;
-window.getExtensionWithKnownPrefixes = getExtensionWithKnownPrefixes;
-window.resizeCanvasToDisplaySize = resizeCanvasToDisplaySize;
-window.setAttributes = setAttributes;
-window.setUniforms = setUniforms;
-window.setupWebGL = setupWebGL;
+exportObj.createAugmentedTypedArray = createAugmentedTypedArray;
+exportObj.createAttribsFromArrays = createAttribsFromArrays;
+exportObj.createBuffersFromArrays = createBuffersFromArrays;
+exportObj.createBufferInfoFromArrays = createBufferInfoFromArrays;
+
+exportObj.createAttributeSetters = createAttributeSetters;
+exportObj.createProgram = loadProgram;
+exportObj.createProgramFromScripts = createProgramFromScripts;
+exportObj.createProgramFromSources = createProgramFromSources;
+exportObj.createProgramInfo = createProgramInfo;
+exportObj.createUniformSetters = createUniformSetters;
+exportObj.getWebGLContext = getWebGLContext;
+exportObj.updateCSSIfInIFrame = updateCSSIfInIFrame;
+exportObj.getExtensionWithKnownPrefixes = getExtensionWithKnownPrefixes;
+exportObj.resizeCanvasToDisplaySize = resizeCanvasToDisplaySize;
+exportObj.setAttributes = setAttributes;
+exportObj.setBuffersAndAttributes = setBuffersAndAttributes;
+exportObj.setUniforms = setUniforms;
+exportObj.setupWebGL = setupWebGL;
 
 // All browsers that support WebGL support requestAnimationFrame
 window.requestAnimFrame = window.requestAnimationFrame;       // just to stay backward compatible.
 window.cancelRequestAnimFrame = window.cancelAnimationFrame;  // just to stay backward compatible.
+
+if (isAMD) {
+  define([], function() { return exportObj; });
+}
 
 }());
 

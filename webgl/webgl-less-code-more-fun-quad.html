@@ -21,21 +21,22 @@ function main() {
     return;
   }
 
-  gl.enable(gl.CULL_FACE);
   gl.enable(gl.DEPTH_TEST);
 
-  var buffers = window.primitives.createSphereBuffers(gl, 10, 48, 24);
+  // an indexed quad
+  var arrays = {
+     position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+     texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+     normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
+     indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
+  };
+
+  var bufferInfo = createBufferInfoFromArrays(gl, arrays);
 
   // setup GLSL program
   var program = createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
   var uniformSetters = createUniformSetters(gl, program);
   var attribSetters  = createAttributeSetters(gl, program);
-
-  var attribs = {
-    a_position: { buffer: buffers.position, numComponents: 3, },
-    a_normal:   { buffer: buffers.normal,   numComponents: 3, },
-    a_texcoord: { buffer: buffers.texcoord, numComponents: 2, },
-  };
 
   function degToRad(d) {
     return d * Math.PI / 180;
@@ -116,11 +117,9 @@ function main() {
     var viewMatrix = makeInverse(cameraMatrix);
 
     gl.useProgram(program);
-    // Setup all the needed attributes.
-    setAttributes(attribSetters, attribs);
 
-    // Bind the indices.
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+    // Setup all the needed buffers and attributes.
+    setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
     // Set the uniforms that are the same for all objects.
     setUniforms(uniformSetters, uniformsThatAreTheSameForAllObjects);
@@ -149,7 +148,7 @@ function main() {
       setUniforms(uniformSetters, object.materialUniforms);
 
       // Draw the geometry.
-      gl.drawElements(gl.TRIANGLES, buffers.numElements, gl.UNSIGNED_SHORT, 0);
+      gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
     });
 
     requestAnimationFrame(drawScene);

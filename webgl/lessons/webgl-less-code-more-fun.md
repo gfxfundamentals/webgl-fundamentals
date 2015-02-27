@@ -270,15 +270,132 @@ objects.forEach(function(object) {
 
 Here's an example using these helper functions
 
-<iframe class="webgl_example" src="../webgl-less-code-more-fun.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-less-code-more-fun.html" target="_blank">click here to open in a separate window</a>
+%(example: { url: "../webgl-less-code-more-fun.html" })s
 
-This is the style I try to write my own WebGL programs.
+Let's take it a tiny step further. In the code above we setup a variable `attribs` with the buffers we created.
+Not shown is the code to setup those buffers. For example if you want to make positions, normals and texture
+coordinates you might need code like this
+
+    // a single triangle
+    var positions = [0, -10, 0, 10, 10, 0, -10, 10, 0];
+    var texcoords = [0.5, 0, 1, 1, 0, 1];
+    var normals   = [0, 0, 1, 0, 0, 1, 0, 0, 1];
+
+    var positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+    var texcoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, texcoordsBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
+
+    var normalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+
+Looks like a pattern we can simplify as well.
+
+    // a single triangle
+    var arrays = {
+       position: { numComponents: 3, data: [0, -10, 0, 10, 10, 0, -10, 10, 0], },
+       texcoord: { numComponents: 2, data: [0.5, 0, 1, 1, 0, 1],               },
+       normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1],        },
+    };
+
+    var bufferInfo = createBufferInfoFromArrays(gl, arrays);
+
+Much shorter! Now we can do this at render time
+
+    // Setup all the needed buffers and attributes.
+    setBuffersAndAttributes(gl, attribSetters, bufferInfo);
+
+    ...
+
+    // Draw the geometry.
+    gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
+
+Here's that
+
+%(example: { url: "../webgl-less-code-more-fun-triangle.html" })s
+
+This will even work if we have indices. setAttribsAndBuffers will set all the attributes
+and setup the `ELEMENT_ARRAY_BUFFER` with your `indices` so you can call `gl.drawElements`.
+
+    // an indexed quad
+    var arrays = {
+       position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+       texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+       normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
+       indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
+    };
+
+    var bufferInfo = createBufferInfoFromTypedArray(gl, arrays);
+
+and at render time we can call `gl.drawElements` instead of `gl.drawArrays`.
+
+    // Setup all the needed buffers and attributes.
+    setBuffersAndAttributes(gl, attribSetters, bufferInfo);
+
+    ...
+
+    // Draw the geometry.
+    gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+
+Here's that
+
+%(example: { url: "../webgl-less-code-more-fun-quad.html" })s
+
+`createBufferInfoFromArrays` basically makes an object that looks like this
+
+     bufferInfo = {
+       numElements: 4,        // or whatever the number of elements is
+       indices: WebGLBuffer,  // this property will not exist if there are no indices
+       attribs: {
+         a_position: { buffer: WebGLBuffer, numComponents: 3, },
+         a_normal:   { buffer: WebGLBuffer, numComponents: 3, },
+         a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
+       },
+     };
+
+And `setBuffersAndAttributes` uses that object to set all the buffers and attributes.
+
+Finally we can go what I consider possibly too far. Given `position` almost always has 3 components (x, y, z)
+and `texcoords` almost always 2, indices 3, and normals 3, we can just let the system guess the number
+of components.
+
+    // an indexed quad
+    var arrays = {
+       position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
+       texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
+       normal:   [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+       indices:  [0, 1, 2, 1, 2, 3],
+    };
+
+And that version
+
+%(example: { url: "../webgl-less-code-more-fun-quad-guess.html" })s
+
+I'm not sure I personally like that style. Guessing bugs me because it can guess wrong. For example
+I might choose to stick an extra set of texture coordinates in my texcoord attribute and it will
+guess 2 and be wrong. Of course if it guesses wrong you can just specify it like the example above.
+I guess I worry if the guessing code changes people's stuff might break. It's up to you. Some people
+like things to be what they consider as simple as possible.
+
+Why don't we look at the attributes on the shader program to figure out the number of components?
+That's because it's common to supply 3 components (x, y, z) from a buffer but use a `vec4` in
+the shader. For attibutes WebGL will set `w = 1` automatically. But that means we can't easily
+know the user's intent since what they declared in their shader might not match the number of
+components they provide.
+
+Anyway, this is the style I try to write my own WebGL programs.
 For the lessons on these tutorials though I've felt like I have to use the standard **verbose**
-ways so people don't get confused about what is WebGL and what is my own style.
+ways so people don't get confused about what is WebGL and what is my own style. At some point
+though showing all the steps gets in the way of the point so going forward some lessons will
+be using this style.
 
 Feel free to use this style in your own code. The functions `createUniformSetters`, `createAttributeSetters`,
-`setUniforms`, and `setAttributes` are included in the [`webgl-utils.js`](https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js)
+`createBufferInfoFromArrays`, `setUniforms`, and `setBuffersAndAttributes` are included in the
+[`webgl-utils.js`](https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js)
 file used by all the samples.
 
 <div class="webgl_bottombar">

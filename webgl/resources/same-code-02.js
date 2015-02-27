@@ -91,17 +91,10 @@ function main() {
   gl.enable(gl.CULL_FACE);
   gl.enable(gl.DEPTH_TEST);
 
-  var buffers = window.primitives.createCubeBuffers(gl, 5);
+  var bufferInfo = window.primitives.createCubeBufferInfo(gl, 5);
 
   // setup GLSL program
-  var program = createProgramFromSources(gl, [vertexShaderSource, fragmentShaderSource]);
-  var uniformSetters = createUniformSetters(gl, program);
-  var attribSetters  = createAttributeSetters(gl, program);
-
-  var attribs = {
-    a_position: { buffer: buffers.position, numComponents: 3, },
-    a_normal:   { buffer: buffers.normal,   numComponents: 3, },
-  };
+  var programInfo = createProgramInfo(gl, [vertexShaderSource, fragmentShaderSource]);
 
   function degToRad(d) {
     return d * Math.PI / 180;
@@ -167,15 +160,13 @@ function main() {
     // Make a view matrix from the camera matrix.
     var viewMatrix = makeInverse(cameraMatrix);
 
-    gl.useProgram(program);
-    // Setup all the needed attributes.
-    setAttributes(attribSetters, attribs);
+    gl.useProgram(programInfo.program);
 
-    // Bind the indices.
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+    // Setup all the needed attributes.
+    setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
 
     // Set the uniforms that are the same for all objects.
-    setUniforms(uniformSetters, uniformsThatAreTheSameForAllObjects);
+    setUniforms(programInfo.uniformSetters, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
     var num = 6;
@@ -191,7 +182,7 @@ function main() {
           makeTranspose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
 
           // Set the uniforms we just computed
-          setUniforms(uniformSetters, uniformsThatAreComputedForEachObject);
+          setUniforms(programInfo.uniformSetters, uniformsThatAreComputedForEachObject);
 
           // Set a color for this object.
           materialUniforms.u_diffuse[0] = xx / num * 0.5 + 0.5;
@@ -199,10 +190,10 @@ function main() {
           materialUniforms.u_diffuse[2] = zz / num * 0.5 + 0.5;
 
           // Set the uniforms that are specific to the this object.
-          setUniforms(uniformSetters, materialUniforms);
+          setUniforms(programInfo.uniformSetters, materialUniforms);
 
           // Draw the geometry.
-          gl.drawElements(gl.TRIANGLES, buffers.numElements, gl.UNSIGNED_SHORT, 0);
+          gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
         }
       }
     }
