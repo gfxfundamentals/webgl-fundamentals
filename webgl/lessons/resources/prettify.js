@@ -991,7 +991,11 @@ var prettyPrint;
   function numberLines(node, opt_startLineNum, isPreformatted, opt_numberLines, opt_calloutModifiedLines) {
     var nocode = /(?:^|\s)nocode(?:\s|$)/;
     var lineBreak = /\r\n?|\n/;
-    var modPrefix = "*";
+    var prefixes = [
+      { prefix: "*", className: "linemodified", },
+      { prefix: "-", className: "linedeleted", },
+      { prefix: "+", className: "lineadded", },
+    ];
     opt_numberLines = (opt_numberLines == undefined) ? true : opt_numberLines;
 
     var startsWith = function(str, prefix) {
@@ -1138,17 +1142,20 @@ var prettyPrint;
           } else if (type == 3 || type == 4) {
             var text = node.nodeValue;
             if (text.length > 0) {
-              var result = startsWith(text, modPrefix);
-              if (result) {
-                node.nodeValue = text.substring(modPrefix.length);
+              for (var pp = 0; pp < prefixes.length; ++pp) {
+                var prefixInfo = prefixes[pp];
+                if (startsWith(text, prefixInfo.prefix)) {
+                  node.nodeValue = text.substring(prefixInfo.prefix.length);
+                  return prefixInfo.className;
+                }
               }
-              return result;
+              return false;
             }
           }
         }
-        var foundModPrefix = findTextWithPrefix(li);
-        if (foundModPrefix) {
-          classNames.push("linemodified");
+        var foundPrefix = findTextWithPrefix(li);
+        if (foundPrefix) {
+          classNames.push(foundPrefix);
         }
       }
       li.className = classNames.join(" ");
