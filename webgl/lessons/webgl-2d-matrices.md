@@ -436,7 +436,7 @@ since we're defining our aspect ratio based on the size the canvas is being disp
 the <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> because they want there to be
 one pixel in the canvas for each pixel displayed by the browser. But, as we've seen above, that's not
 the only option. That means, in almost all cases, it's more technically correct to compute a
-projection matrix's aspect ration using <code>canvas.clientHeight</code> and <code>canvas.clientWidth</code>.
+projection matrix's aspect ratio using <code>canvas.clientHeight</code> and <code>canvas.clientWidth</code>.
 </p>
 </div>
 
