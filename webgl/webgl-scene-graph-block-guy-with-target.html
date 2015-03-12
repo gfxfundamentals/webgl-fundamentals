@@ -1,0 +1,478 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - Scene Graph - Block Guy</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<div class="description">
+A human hierarchy using a scene graph
+</div>
+<canvas id="canvas" width="400" height="300"></canvas>
+</body>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/primitives.js"></script>
+<!-- vertex shader -->
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec4 a_color;
+
+uniform mat4 u_matrix;
+
+varying vec4 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the color to the fragment shader.
+  v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec4 v_color;
+
+uniform vec4 u_colorMult;
+uniform vec4 u_colorOffset;
+
+void main() {
+   gl_FragColor = v_color * u_colorMult + u_colorOffset;
+}
+</script>
+<script>
+"use strict";
+
+   var TRS = function() {
+     this.translation = [0, 0, 0];
+     this.rotation = [0, 0, 0];
+     this.scale = [1, 1, 1];
+   };
+
+   TRS.prototype.getMatrix = function(dst) {
+     dst = dst || new Float32Array(16);
+     var t = this.translation;
+     var r = this.rotation;
+     var s = this.scale;
+     makeTranslation(t[0], t[1], t[2], dst);
+     matrixMultiply(makeXRotation(r[0]), dst, dst);
+     matrixMultiply(makeYRotation(r[1]), dst, dst);
+     matrixMultiply(makeZRotation(r[2]), dst, dst);
+     matrixMultiply(makeScale(s[0], s[1], s[2]), dst, dst);
+     return dst;
+   };
+
+   function getPositionFromMatrix(mat) {
+     return [mat[12], mat[13], mat[14]];
+   }
+
+   var Targeter = function(node, target) {
+     this.node   = node;
+     this.target = target;
+   };
+
+   Targeter.prototype.getMatrix = function(dst) {
+     dst = dst || new Float32Array(16);
+
+     // get the world position of the target. In our case
+     // it might be a frame late. We could manually compute
+     // it but a frame late is probably fine for our needs.
+     var targetWorldPosition = getPositionFromMatrix(this.target.worldMatrix);
+
+     // get the world matrix of ourselves. In our case
+     // it might be a frame late. We could manually compute
+     // it but a frame late is probably fine for our needs.
+     var selfWorldPosition = getPositionFromMatrix(this.node.worldMatrix);
+
+     // make a look at world matrix
+     var up = [0, 1, 0];
+     var lookAtMatrix = makeLookAt(
+         selfWorldPosition,
+         targetWorldPosition,
+         up);
+
+     copyMatrix(lookAtMatrix, dst);
+     dst[12] = 0;
+     dst[13] = 0;
+     dst[14] = 0;
+
+     // remove the world matrix of our parent to
+     // get a local matrix.
+//     var inv = makeInverse(this.node.parent.worldMatrix);
+//     matrixMultiply(lookAtMatrix, inv, dst);
+
+     return dst;
+   };
+
+   var Node = function(source) {
+     this.children = [];
+     this.localMatrix = makeIdentity();
+     this.worldMatrix = makeIdentity();
+     this.source = source;
+   };
+
+   Node.prototype.setParent = function(parent) {
+     // remove us from our parent
+     if (this.parent) {
+       var ndx = this.parent.children.indexOf(this);
+       if (ndx >= 0) {
+         this.parent.children.splice(ndx, 1);
+       }
+     }
+
+     // Add us to our new parent
+     if (parent) {
+       parent.children.push(this);
+     }
+     this.parent = parent;
+   };
+
+   Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
+
+     var source = this.source;
+     if (source) {
+       source.getMatrix(this.localMatrix);
+     }
+
+     if (parentWorldMatrix) {
+       // a matrix was passed in so do the math
+       matrixMultiply(this.localMatrix, parentWorldMatrix, this.worldMatrix);
+     } else {
+       // no matrix was passed in so just copy.
+       copyMatrix(this.localMatrix, this.worldMatrix);
+     }
+
+     // now process all the children
+     var worldMatrix = this.worldMatrix
+     this.children.forEach(function(child) {
+       child.updateWorldMatrix(worldMatrix);
+     });
+   };
+
+
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas");
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    return;
+  }
+
+  var createFlattenedVertices = function(gl, vertices) {
+    var last;
+    return createBufferInfoFromArrays(
+        gl,
+        primitives.makeRandomVertexColors(
+            primitives.deindexVertices(vertices),
+            {
+              vertsPerColor: 1,
+              rand: function(ndx, channel) {
+                if (channel == 0) {
+                  last = 128 + Math.random() * 128 | 0;
+                }
+                return channel < 3 ? last : 255;
+              }
+            })
+      );
+  };
+
+  var cubeBufferInfo = createFlattenedVertices(gl, primitives.createCubeVertices(1));
+
+  // setup GLSL program
+  var programInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function emod(x, n) {
+    return x >= 0 ? (x % n) : ((n - (-x % n)) % n);
+  };
+
+
+  var cameraAngleRadians = degToRad(0);
+  var fieldOfViewRadians = degToRad(60);
+  var cameraHeight = 50;
+
+  var objectsToDraw = [];
+  var objects = [];
+  var nodeInfosByName = {};
+
+  // Let's make all the nodes
+  var blockGuyNodeDescriptions =
+    {
+      name: "point between feet",
+      draw: false,
+      children: [
+        {
+           name: "waist",
+           translation: [0, 3, 0],
+           children: [
+             {
+               name: "torso",
+               translation: [0, 2, 0],
+               children: [
+                 {
+                   name: "neck",
+                   translation: [0, 1, 0],
+                   children: [
+                     {
+                       name: "head-spot",
+                       draw: false,
+                       translation: [0, 1, 0],
+                       children: [
+                         {
+                            name: "head",
+                            target: "ball",
+                         },
+                       ],
+                     },
+                   ],
+                 },
+                 {
+                   name: "left-arm",
+                   translation: [-1, 0, 0],
+                   children: [
+                     {
+                       name: "left-forearm",
+                       translation: [-1, 0, 0],
+                       children: [
+                         {
+                           name: "left-hand",
+                           translation: [-1, 0, 0],
+                         },
+                       ],
+                     },
+                   ],
+                 },
+                 {
+                   name: "right-arm",
+                   translation: [1, 0, 0],
+                   children: [
+                     {
+                       name: "right-forearm",
+                       translation: [1, 0, 0],
+                       children: [
+                         {
+                           name: "right-hand",
+                           translation: [1, 0, 0],
+                         },
+                       ],
+                     },
+                   ],
+                 },
+               ],
+             },
+             {
+               name: "left-leg",
+               translation: [-1, -1, 0],
+               children: [
+                 {
+                   name: "left-calf",
+                   translation: [0, -1, 0],
+                   children: [
+                     {
+                       name: "left-foot",
+                       translation: [0, -1, 0],
+                     },
+                   ],
+                 }
+               ],
+             },
+             {
+               name: "right-leg",
+               translation: [1, -1, 0],
+               children: [
+                 {
+                   name: "right-calf",
+                   translation: [0, -1, 0],
+                   children: [
+                     {
+                       name: "right-foot",
+                       translation: [0, -1, 0],
+                     },
+                   ],
+                 }
+               ],
+             },
+           ],
+        },
+        {
+          name: "ball",
+          translation: [0, 5, 5],
+          colorOffset: [0.6, 0, 0, 0],
+        },
+      ],
+    };
+
+  function makeNode(nodeDescription) {
+    var trs;
+    if (!nodeDescription.target) {
+      trs  = new TRS();
+      trs.translation = nodeDescription.translation || trs.translation;
+    }
+    var node = new Node(trs);
+    nodeInfosByName[nodeDescription.name] = {
+      trs: trs,
+      node: node,
+    };
+    if (nodeDescription.draw !== false) {
+      node.drawInfo = {
+        uniforms: {
+          u_colorOffset: nodeDescription.colorOffset || [0, 0, 0.6, 0],
+          u_colorMult: [0.4, 0.4, 0.4, 1],
+        },
+        programInfo: programInfo,
+        bufferInfo: cubeBufferInfo,
+      };
+      objectsToDraw.push(node.drawInfo);
+      objects.push(node);
+    }
+    makeNodes(nodeDescription.children).forEach(function(child) {
+      child.setParent(node);
+    });
+    return node;
+  }
+
+  function makeNodes(nodeDescriptions) {
+    return nodeDescriptions ? nodeDescriptions.map(makeNode) : [];
+  }
+
+  var scene = makeNode(blockGuyNodeDescriptions);
+
+  function setTarget(nodeDescription) {
+    if (nodeDescription.target) {
+      var node = nodeInfosByName[nodeDescription.name].node;
+      var targetNode = nodeInfosByName[nodeDescription.target].node;
+      var src = new Targeter(node, targetNode);
+      node.source = src;
+    }
+    if (nodeDescription.children) {
+      nodeDescription.children.forEach(setTarget);
+    }
+  }
+
+  setTarget(blockGuyNodeDescriptions);
+
+  var clock = 0;
+
+  drawScene();
+
+  // Draw the scene.
+  function drawScene() {
+
+    gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
+
+    // Clear the canvas AND the depth buffer.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Compute the projection matrix
+    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var projectionMatrix =
+        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+
+    // Compute the camera's matrix using look at.
+    var cameraPosition = [4, 3.5, 10];
+    var target = [0, 3.5, 0];
+    var up = [0, 1, 0];
+    var cameraMatrix = makeLookAt(cameraPosition, target, up);
+
+    // Make a view matrix from the camera matrix.
+    var viewMatrix = makeInverse(cameraMatrix);
+
+    var viewProjectionMatrix = matrixMultiply(viewMatrix, projectionMatrix);
+
+    // Draw objects
+    clock += 0.01;
+
+    // update the local matrices for each object.
+    //nodesByName["left-arm"]
+
+    // Update all world matrices in the scene graph
+    scene.updateWorldMatrix();
+
+    var adjust;
+    var speed = 4;
+    var c = clock * speed;
+    adjust = Math.abs(Math.sin(c));
+    nodeInfosByName["point between feet"].trs.translation[1] = adjust;
+    adjust = Math.sin(c);
+    nodeInfosByName["left-leg" ].trs.rotation[0] =  adjust;
+    nodeInfosByName["right-leg"].trs.rotation[0] = -adjust;
+    adjust = Math.sin(c + 0.1) * 0.4;
+    nodeInfosByName["left-calf" ].trs.rotation[0] = -adjust;
+    nodeInfosByName["right-calf"].trs.rotation[0] =  adjust;
+    adjust = Math.sin(c + 0.1) * 0.4;
+    nodeInfosByName["left-foot" ].trs.rotation[0] = -adjust;
+    nodeInfosByName["right-foot"].trs.rotation[0] =  adjust;
+
+    adjust = Math.sin(c) * 0.4;
+    nodeInfosByName["left-arm" ].trs.rotation[2] =  adjust;
+    nodeInfosByName["right-arm"].trs.rotation[2] =  adjust;
+    adjust = Math.sin(c + 0.1) * 0.4;
+    nodeInfosByName["left-forearm" ].trs.rotation[2] =  adjust;
+    nodeInfosByName["right-forearm"].trs.rotation[2] =  adjust;
+    adjust = Math.sin(c - 0.1) * 0.4;
+    nodeInfosByName["left-hand" ].trs.rotation[2] =  adjust;
+    nodeInfosByName["right-hand"].trs.rotation[2] =  adjust;
+
+    adjust = Math.sin(c) * 0.4;
+    nodeInfosByName["waist"].trs.rotation[1] =  adjust;
+    adjust = Math.sin(c) * 0.4;
+    nodeInfosByName["torso"].trs.rotation[1] =  adjust;
+    adjust = Math.sin(c + 0.25) * 0.4;
+    nodeInfosByName["neck"].trs.rotation[1] =  adjust;
+
+    // Compute all the matrices for rendering
+    objects.forEach(function(object) {
+      object.drawInfo.uniforms.u_matrix = matrixMultiply(object.worldMatrix, viewProjectionMatrix);
+    });
+
+    // ------ Draw the objects --------
+
+    var lastUsedProgramInfo = null;
+    var lastUsedBufferInfo = null;
+
+    objectsToDraw.forEach(function(object) {
+      var programInfo = object.programInfo;
+      var bufferInfo = object.bufferInfo;
+
+      if (programInfo !== lastUsedProgramInfo) {
+        lastUsedProgramInfo = programInfo;
+        gl.useProgram(programInfo.program);
+      }
+
+      // Setup all the needed attributes.
+      if (bufferInfo != lastUsedBufferInfo) {
+        lastUsedBufferInfo = bufferInfo;
+        setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
+      }
+
+      // Set the uniforms.
+      setUniforms(programInfo.uniformSetters, object.uniforms);
+
+      // Draw
+      gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
+    });
+
+    requestAnimationFrame(drawScene);
+  }
+}
+
+main();
+</script>
+</html>
+
+
