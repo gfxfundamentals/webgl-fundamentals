@@ -1,0 +1,140 @@
+<html>
+<head>
+<meta charset="utf8">
+<title>planet diagram</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+canvas { border: 1px solid black; }
+</style>
+</head>
+<body>
+<p><canvas id="c" width="400" height="400"></canvas></p>
+</body>
+<script src="/3rdparty/hand-1.3.7.js"></script>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="transform.js"></script>
+<script src="canvas-wrapper.js"></script>
+<script src="2d-scene-graph-diagram.js"></script>
+<script>
+"use strict";
+
+function main() {
+  var blockGuyNodeDescriptions =
+    {
+      name: "point between feet",
+      draw: false,
+      translation: [0, -7.5, 0],
+      children: [
+        {
+           name: "waist",
+           translation: [0, 3, 0],
+           children: [
+             {
+               name: "torso",
+               translation: [0, 2, 0],
+               children: [
+                 {
+                   name: "neck",
+                   translation: [0, 1, 0],
+                   children: [
+                     {
+                       name: "head",
+                       translation: [0, 1, 0],
+                       children: [
+                       ],
+                     },
+                   ],
+                 },
+                 {
+                   name: "left-arm",
+                   translation: [-1, 0, 0],
+                   children: [
+                     {
+                       name: "left-forearm",
+                       translation: [-1, 0, 0],
+                       children: [
+                         {
+                           name: "left-hand",
+                           translation: [-1, 0, 0],
+                           children: [
+                           ],
+                         },
+                       ],
+                     },
+                   ],
+                 },
+                 {
+                   name: "right-arm",
+                   translation: [1, 0, 0],
+                   children: [
+                     {
+                       name: "right-forearm",
+                       translation: [1, 0, 0],
+                       children: [
+                         {
+                           name: "right-hand",
+                           translation: [1, 0, 0],
+                           children: [
+                           ],
+                         },
+                       ],
+                     },
+                   ],
+                 },
+               ],
+             },
+             {
+               name: "left-leg",
+               translation: [-1, -1, 0],
+               children: [
+                 {
+                   name: "left-calf",
+                   translation: [0, -1, 0],
+                   children: [
+                     {
+                       name: "left-foot",
+                       translation: [0, -1, 0],
+                       children: [
+                       ],
+                     },
+                   ],
+                 }
+               ],
+             },
+             {
+               name: "right-leg",
+               translation: [1, -1, 0],
+               children: [
+                 {
+                   name: "right-calf",
+                   translation: [0, -1, 0],
+                   children: [
+                     {
+                       name: "right-foot",
+                       translation: [0, -1, 0],
+                       children: [
+                       ],
+                     },
+                   ],
+                 }
+               ],
+             },
+           ],
+        },
+      ],
+    };
+  var xSpread = 40;
+  var ySpread = -40;
+  function updateTranslation(node) {
+    node.translation[0] *= xSpread;
+    node.translation[1] *= ySpread;
+    node.rotation = 0;
+    node.children.forEach(updateTranslation);
+  }
+  updateTranslation(blockGuyNodeDescriptions);
+  renderSceneGraph(blockGuyNodeDescriptions);
+}
+main();
+</script>
+</html>
+

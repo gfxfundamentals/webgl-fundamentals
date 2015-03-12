@@ -1,0 +1,109 @@
+<html>
+<head>
+<meta charset="utf8">
+<title>planet diagram</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+canvas { border: 1px solid black; }
+</style>
+</head>
+<body>
+<p><canvas id="c" width="400" height="500"></canvas></p>
+</body>
+<script src="/3rdparty/hand-1.3.7.js"></script>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="transform.js"></script>
+<script src="canvas-wrapper.js"></script>
+<script src="2d-scene-graph-diagram.js"></script>
+<script>
+"use strict";
+
+function main() {
+  var root = {
+    name: "center of universe",
+    translation: [0, 0],
+    children: [
+      {
+        name: "andromeda galaxy",
+        translation: [-5, 1],
+        children: [
+        ],
+      },
+      {
+        name: "milky way galaxy",
+        translation: [5, 1],
+        children: [
+          {
+            name: "betelgeuse",
+            translation: [-10, 1],
+            children: [
+            ],
+          },
+          {
+            name: "sun",
+            translation: [-4, 1],
+            children: [
+              {
+                name: "earth",
+                translation: [-5, 1],
+                children: [
+                  {
+                    name: "moon",
+                    translation: [-1, 1],
+                    children: [
+                    ],
+                  },
+                ],
+              },
+              {
+                name: "venus",
+                translation: [0, 1],
+                children: [
+                ],
+              },
+              {
+                name: "mars",
+                translation: [5, 1],
+                children: [
+                  {
+                    name: "phobos",
+                    translation: [-3, 1],
+                    children: [
+                    ],
+                  },
+                  {
+                    name: "deimos",
+                    translation: [3, 1],
+                    children: [
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "alpha centari",
+            translation: [3, 1],
+            children: [
+            ],
+          },
+        ],
+      },
+    ],
+  };
+
+  var xSpread = 16;
+  var ySpread = 100;
+  function updateTranslation(node) {
+    node.translation[0] *= xSpread;
+    node.translation[1] *= ySpread;
+    node.rotation = 0;
+    node.children.forEach(updateTranslation);
+  }
+  updateTranslation(root);
+  renderSceneGraph(root);
+}
+main();
+</script>
+</html>
+
