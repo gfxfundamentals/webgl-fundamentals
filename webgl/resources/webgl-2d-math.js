@@ -28,6 +28,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+/**
+ * Various 2d math functions.
+ *
+ * @module webgl-2d-math
+ */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
@@ -113,7 +119,6 @@
     makeRotation: makeRotation,
     makeScale: makeScale,
     matrixMultiply: matrixMultiply,
-    make2DProjection: make2DProjection,
   };
 
 }));

@@ -29,6 +29,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * Various functions to make simple primitives
+ *
+ * @module primitives
+ */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
@@ -45,22 +50,94 @@
   math3d = math3d || this;
 
   /**
+   * Creates XZ plane vertices.
+   * The created plane has position, normal and uv streams.
+   *
+   * @param {number?} width Width of the plane. Default = 1
+   * @param {number?} depth Depth of the plane. Default = 1
+   * @param {number?} subdivisionsWidth Number of steps across the plane. Default = 1
+   * @param {number?} subdivisionsDepth Number of steps down the plane. Default = 1
+   * @param {Matrix4?} matrix A matrix by which to multiply all the vertices.
+   * @return {Object.<string, TypedArray>} The
+   *         created plane vertices.
+   * @memberOf module:primitives
+   */
+  function createPlaneVertices(
+      width,
+      depth,
+      subdivisionsWidth,
+      subdivisionsDepth,
+      matrix) {
+    width = width || 1;
+    depth = depth || 1;
+    subdivisionsWidth = subdivisionsWidth || 1;
+    subdivisionsDepth = subdivisionsDepth || 1;
+    matrix = matrix || math3d.makeIdentity();
+
+    var numVertices = (subdivisionsWidth + 1) * (subdivisionsDepth + 1);
+    var positions = webglUtils.createAugmentedTypedArray(3, numVertices);
+    var normals = webglUtils.createAugmentedTypedArray(3, numVertices);
+    var texcoords = webglUtils.createAugmentedTypedArray(2, numVertices);
+
+    for (var z = 0; z <= subdivisionsDepth; z++) {
+      for (var x = 0; x <= subdivisionsWidth; x++) {
+        var u = x / subdivisionsWidth;
+        var v = z / subdivisionsDepth;
+        positions.push(
+            width * u - width * 0.5,
+            0,
+            depth * v - depth * 0.5);
+        normals.push(0, 1, 0);
+        texcoords.push(u, v);
+      }
+    }
+
+    var numVertsAcross = subdivisionsWidth + 1;
+    var indices = webglUtils.createAugmentedTypedArray(
+        3, subdivisionsWidth * subdivisionsDepth * 2, Uint16Array);
+
+    for (var z = 0; z < subdivisionsDepth; z++) {
+      for (var x = 0; x < subdivisionsWidth; x++) {
+        // Make triangle 1 of quad.
+        indices.push(
+            (z + 0) * numVertsAcross + x,
+            (z + 1) * numVertsAcross + x,
+            (z + 0) * numVertsAcross + x + 1);
+
+        // Make triangle 2 of quad.
+        indices.push(
+            (z + 1) * numVertsAcross + x,
+            (z + 1) * numVertsAcross + x + 1,
+            (z + 0) * numVertsAcross + x + 1);
+      }
+    }
+
+    return reorientVertices({
+      position: positions,
+      normal: normals,
+      texcoord: texcoords,
+      indices: indices,
+    }, matrix);
+  };
+
+  /**
    * Creates sphere vertices.
    * The created sphere has position, normal and uv streams.
    *
    * @param {number} radius radius of the sphere.
    * @param {number} subdivisionsAxis number of steps around the sphere.
    * @param {number} subdivisionsHeight number of vertically on the sphere.
-   * @param {number} opt_startLatitudeInRadians where to start the
+   * @param {number?} opt_startLatitudeInRadians where to start the
    *     top of the sphere. Default = 0.
-   * @param {number} opt_endLatitudeInRadians Where to end the
+   * @param {number?} opt_endLatitudeInRadians Where to end the
    *     bottom of the sphere. Default = Math.PI.
-   * @param {number} opt_startLongitudeInRadians where to start
+   * @param {number?} opt_startLongitudeInRadians where to start
    *     wrapping the sphere. Default = 0.
-   * @param {number} opt_endLongitudeInRadians where to end
+   * @param {number?} opt_endLongitudeInRadians where to end
    *     wrapping the sphere. Default = 2 * Math.PI.
    * @return {Object.<string, TypedArray>} The
    *         created plane vertices.
+   * @memberOf module:primitives
    */
   function createSphereVertices(
       radius,
@@ -139,7 +216,7 @@
 
   /**
    * Array of the indices of corners of each face of a cube.
-   * @type {number[][]}
+   * @type {Array.<number[]>}
    */
   var CUBE_FACE_INDICES = [
     [3, 7, 5, 1], // right
@@ -157,6 +234,7 @@
    * @param {number} size Width, height and depth of the cube.
    * @return {Object.<string, TypedArray>} The
    *         created plane vertices.
+   * @memberOf module:primitives
    */
   function createCubeVertices(size) {
     var k = size / 2;
@@ -242,6 +320,7 @@
    *        true.
    * @return {Object.<string, TypedArray>} The
    *         created plane vertices.
+   * @memberOf module:primitives
    */
   function createTruncatedConeVertices(
       bottomRadius,
@@ -332,7 +411,36 @@
     };
   };
 
-  var create3DFVertices = function() {
+  /**
+   * Expands RLE data
+   * @param {number[]} rleData data in format of run-length, x, y, z, run-length, x, y, z
+   * @param {number[]?} padding value to add each entry with.
+   * @return {number[]} the expanded rleData
+   */
+  function expandRLEData(rleData, padding) {
+    padding = padding || [];
+    var data = [];
+    for (var ii = 0; ii < rleData.length; ii += 4) {
+      var runLength = rleData[ii];
+      var element = rleData.slice(ii + 1, ii + 4);
+      element.push.apply(element, padding);
+      for (var jj = 0; jj < runLength; ++jj) {
+        data.push.apply(data, element);
+      }
+    }
+    return data;
+  }
+
+  /**
+   * Creates 3D 'F' vertices.
+   * An 'F' is useful because you can easily tell which way it is oriented.
+   * The created 'F' has position, normal and uv streams.
+   *
+   * @return {Object.<string, TypedArray>} The
+   *         created plane vertices.
+   * @memberOf module:primitives
+   */
+  function create3DFVertices() {
 
     var positions = [
       // left column front
@@ -594,134 +702,89 @@
       1, 0,
     ];
 
-    var normals = [
+    var normals = expandRLEData([
       // left column front
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-
       // top rung front
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-
       // middle rung front
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
+      18, 0, 0, 1,
 
       // left column back
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-
       // top rung back
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-
       // middle rung back
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
+      18, 0, 0, -1,
 
       // top
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
+      6, 0, 1, 0,
 
       // top rung front
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
+      6, 1, 0, 0,
 
       // under top rung
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
+      6, 0, -1, 0,
 
       // between top rung and middle
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
+      6, 1, 0, 0,
 
       // top of middle rung
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
+      6, 0, 1, 0,
 
       // front of middle rung
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
+      6, 1, 0, 0,
 
       // bottom of middle rung.
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
+      6, 0, -1, 0,
 
       // front of bottom
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
+      6, 1, 0, 0,
 
       // bottom
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
+      6, 0, -1, 0,
 
       // left side
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
-    ];
+      6, -1, 0, 0,
+    ]);
+
+    var colors = expandRLEData([
+          // left column front
+          // top rung front
+          // middle rung front
+        18, 200,  70, 120,
+
+          // left column back
+          // top rung back
+          // middle rung back
+        18, 80, 70, 200,
+
+          // top
+        6, 70, 200, 210,
+
+          // top rung front
+        6, 200, 200, 70,
+
+          // under top rung
+        6, 210, 100, 70,
+
+          // between top rung and middle
+        6, 210, 160, 70,
+
+          // top of middle rung
+        6, 70, 180, 210,
+
+          // front of middle rung
+        6, 100, 70, 210,
+
+          // bottom of middle rung.
+        6, 76, 210, 100,
+
+          // front of bottom
+        6, 140, 210, 80,
+
+          // bottom
+        6, 90, 130, 110,
+
+          // left side
+        6, 160, 160, 220,
+    ], [255]);
 
     var numVerts = positions.length / 3;
 
@@ -729,12 +792,14 @@
       position: webglUtils.createAugmentedTypedArray(3, numVerts),
       texcoord: webglUtils.createAugmentedTypedArray(2,  numVerts),
       normal: webglUtils.createAugmentedTypedArray(3, numVerts),
-      indices: webglUtils.createAugmentedTypedArray(3, numVerts / 3),
+      color: webglUtils.createAugmentedTypedArray(4, numVerts, Uint8Array),
+      indices: webglUtils.createAugmentedTypedArray(3, numVerts / 3, Uint16Array),
     };
 
     arrays.position.push(positions);
     arrays.texcoord.push(texcoords);
     arrays.normal.push(normals);
+    arrays.color.push(colors);
 
     for (var ii = 0; ii < numVerts; ++ii) {
       arrays.indices.push(ii);
@@ -751,6 +816,7 @@
    * Given indexed vertices creates a new set of vertices unindexed by expanding the indexed vertices.
    * @param {Object.<string, TypedArray>} vertices The indexed vertices to deindex
    * @return {Object.<string, TypedArray>} The deindexed vertices
+   * @memberOf module:primitives
    */
   function deindexVertices(vertices) {
     var indices = vertices.indices;
@@ -780,6 +846,7 @@
    * flattens the normals of deindexed vertices in place.
    * @param {Object.<string, TypedArray>} vertices The deindexed vertices who's normals to flatten
    * @return {Object.<string, TypedArray>} The flattened vertices (same as was passed in)
+   * @memberOf module:primitives
    */
   function flattenNormals(vertices) {
     if (vertices.indices) {
@@ -855,18 +922,54 @@
     return dst;
   };
 
+  /**
+   * Reorients directions by the given matrix..
+   * @param {number[]|TypedArray} array The array. Assumes value floats per element.
+   * @param {Matrix} matrix A matrix to multiply by.
+   * @return {number[]|TypedArray} the same array that was passed in
+   * @memberOf module:primitives
+   */
   function reorientDirections(array, matrix) {
     applyFuncToV3Array(array, matrix, math3d.transformDirection);
+    return array;
   };
 
+  /**
+   * Reorients normals by the inverse-transpose of the given
+   * matrix..
+   * @param {number[]|TypedArray} array The array. Assumes value floats per element.
+   * @param {Matrix} matrix A matrix to multiply by.
+   * @return {number[]|TypedArray} the same array that was passed in
+   * @memberOf module:primitives
+   */
   function reorientNormals(array, matrix) {
     applyFuncToV3Array(array, makeInverse(matrix), transformNormal);
+    return array;
   };
 
+  /**
+   * Reorients positions by the given matrix. In other words, it
+   * multiplies each vertex by the given matrix.
+   * @param {number[]|TypedArray} array The array. Assumes value floats per element.
+   * @param {Matrix} matrix A matrix to multiply by.
+   * @return {number[]|TypedArray} the same array that was passed in
+   * @memberOf module:primitives
+   */
   function reorientPositions(array, matrix) {
     applyFuncToV3Array(array, matrix, math3d.transformPoint);
+    return array;
   };
 
+  /**
+   * Reorients arrays by the given matrix. Assumes arrays have
+   * names that contains 'pos' could be reoriented as positions,
+   * 'binorm' or 'tan' as directions, and 'norm' as normals.
+   *
+   * @param {Object.<string, (number[]|TypedArray)>} arrays The vertices to reorient
+   * @param {Matrix} matrix matrix to reorient by.
+   * @return {Object.<string, (number[]|TypedArray)>} same arrays that were passed in.
+   * @memberOf module:primitives
+   */
   function reorientVertices(arrays, matrix) {
     Object.keys(arrays).forEach(function(name) {
       var array = arrays[name];
@@ -891,10 +994,30 @@
   };
 
   /**
+   * Used to supply random colors
+   * @callback RandomColorFunc
+   * @param {number} ndx index of triangle/quad if unindexed or index of vertex if indexed
+   * @param {number} channel 0 = red, 1 = green, 2 = blue, 3 = alpha
+   * @return {number} a number from 0 to 255
+   * @memberOf module:primitives
+   */
+
+  /**
+   * @typedef {Object} RandomVerticesOptions
+   * @property {number?} vertsPerColor Defaults to 3 for non-indexed vertices
+   * @property {module:primitives.RandomColorFunc?} rand A function to generate random numbers
+   * @memberOf module:primitives
+   */
+
+  /**
    * Creates an augmentedTypedArray of random vertex colors.
    * If the vertices are indexed (have an indices array) then will
    * just make random colors. Otherwise assumes they are triangless
    * and makes one random color for every 3 vertices.
+   * @param {Object.<string, augmentedTypedArray>} vertices Vertices as returned from one of the createXXXVertices functions.
+   * @param {module:primitives.RandomVerticesOptions?} options options.
+   * @return {Object.<string, augmentedTypedArray>} same vertices as passed in with `color` added.
+   * @memberOf module:primitives
    */
   function makeRandomVertexColors(vertices, options) {
     options = options || {};
@@ -952,6 +1075,9 @@
     createCubeBufferInfo: createBufferInfoFunc(createCubeVertices),
     createCubeBuffers: createBufferFunc(createCubeVertices),
     createCubeVertices: createCubeVertices,
+    createPlaneBufferInfo: createBufferInfoFunc(createPlaneVertices),
+    createPlaneBuffers: createBufferFunc(createPlaneVertices),
+    createPlaneVertices: createPlaneVertices,
     createSphereBufferInfo: createBufferInfoFunc(createSphereVertices),
     createSphereBuffers: createBufferFunc(createSphereVertices),
     createSphereVertices: createSphereVertices,

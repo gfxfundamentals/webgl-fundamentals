@@ -43,19 +43,17 @@
 }(this, function () {
   "use strict";
 
-  window = this;
+  var topWindow = this;
 
   /** @module webgl-utils */
-  // These funcitions are meant solely to help unclutter the tutorials.
-  // They are not meant as production type functions.
 
   /**
    * Wrapped logging function.
    * @param {string} msg The message to log.
    */
   function log(msg) {
-    if (window.console && window.console.log) {
-      window.console.log(msg);
+    if (topWindow.console && topWindow.console.log) {
+      topWindow.console.log(msg);
     }
   };
 
@@ -64,12 +62,12 @@
    * @param {string} msg The message to log.
    */
   function error(msg) {
-    if (window.console) {
-      if (window.console.error) {
-        window.console.error(msg);
+    if (topWindow.console) {
+      if (topWindow.console.error) {
+        topWindow.console.error(msg);
       }
-      else if (window.console.log) {
-        window.console.log(msg);
+      else if (topWindow.console.log) {
+        topWindow.console.log(msg);
       }
     }
   };
@@ -88,7 +86,7 @@
    * @return {boolean} True of we are in an iframe
    */
   function isInIFrame(w) {
-    w = w || window;
+    w = w || topWindow;
     return w != w.top;
   };
 
@@ -158,7 +156,7 @@
       }
     };
 
-    if (!window.WebGLRenderingContext) {
+    if (!topWindow.WebGLRenderingContext) {
       showLink(GET_A_WEBGL_BROWSER);
       return null;
     }
@@ -219,13 +217,13 @@
       updateCSSIfInIFrame();
 
       // make the canvas backing store the size it's displayed.
-      if (!options.dontResize) {
+      if (!options.dontResize && options.resize !== false) {
         var width = canvas.clientWidth;
         var height = canvas.clientHeight;
         canvas.width = width;
         canvas.height = height;
       }
-    } else if (!options.noTitle) {
+    } else if (!options.noTitle && options.title !== false) {
       var title = document.title;
       var h1 = document.createElement("h1");
       h1.innerText = title;
@@ -237,11 +235,19 @@
   };
 
   /**
+   * Error Callback
+   * @callback ErrorCallback
+   * @param {string} msg error message.
+   * @memberOf module:webgl-utils
+   */
+
+
+  /**
    * Loads a shader.
    * @param {WebGLRenderingContext} gl The WebGLRenderingContext to use.
    * @param {string} shaderSource The shader source.
    * @param {number} shaderType The type of shader.
-   * @param {function(string): void) opt_errorCallback callback for errors.
+   * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors.
    * @return {WebGLShader} The created shader.
    */
   function loadShader(gl, shaderSource, shaderType, opt_errorCallback) {
@@ -272,10 +278,10 @@
    * Creates a program, attaches shaders, binds attrib locations, links the
    * program and calls useProgram.
    * @param {WebGLShader[]} shaders The shaders to attach
-   * @param {string[]?} opt_attribs The attribs names.
-   * @param {number[]?} opt_locations The locations for the
-   *        attribs.
-   * @param {function(string): void) opt_errorCallback callback for errors.
+   * @param {string[]?} opt_attribs An array of attribs names. Locations will be assigned by index if not passed in
+   * @param {number[]?} opt_locations The locations for the. A parallel array to opt_attribs letting you assign locations.
+   * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
+   *        on error. If you want something else pass an callback. It's passed an error message.
    * @memberOf module:webgl-utils
    */
   function createProgram(
@@ -314,7 +320,7 @@
    * @param {string} scriptId The id of the script tag.
    * @param {number} opt_shaderType The type of shader. If not passed in it will
    *     be derived from the type of the script tag.
-   * @param {function(string): void) opt_errorCallback callback for errors.
+   * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors.
    * @return {WebGLShader} The created shader.
    */
   function createShaderFromScript(
@@ -356,10 +362,10 @@
    * @param {string[]} shaderScriptIds Array of ids of the script
    *        tags for the shaders. The first is assumed to be the
    *        vertex shader, the second the fragment shader.
-   * @param {string[]?} opt_attribs The attribs names.
-   * @param {number[]?} opt_locations The locations for the
-   *        attribs.
-   * @param {function(string): void) opt_errorCallback callback for errors.
+   * @param {string[]?} opt_attribs An array of attribs names. Locations will be assigned by index if not passed in
+   * @param {number[]?} opt_locations The locations for the. A parallel array to opt_attribs letting you assign locations.
+   * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
+   *        on error. If you want something else pass an callback. It's passed an error message.
    * @return {WebGLProgram} The created program.
    * @memberOf module:webgl-utils
    */
@@ -381,10 +387,10 @@
    * @param {string[]} shaderSourcess Array of sources for the
    *        shaders. The first is assumed to be the vertex shader,
    *        the second the fragment shader.
-   * @param {string[]?} opt_attribs The attribs names.
-   * @param {number[]?} opt_locations The locations for the
-   *        attribs.
-   * @param {function(string): void) opt_errorCallback callback for errors.
+   * @param {string[]?} opt_attribs An array of attribs names. Locations will be assigned by index if not passed in
+   * @param {number[]?} opt_locations The locations for the. A parallel array to opt_attribs letting you assign locations.
+   * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
+   *        on error. If you want something else pass an callback. It's passed an error message.
    * @return {WebGLProgram} The created program.
    * @memberOf module:webgl-utils
    */
@@ -422,10 +428,10 @@
    * @param {string[]} shaderSourcess Array of sources for the
    *        shaders or ids. The first is assumed to be the vertex shader,
    *        the second the fragment shader.
-   * @param {string[]?} opt_attribs The attribs names.
-   * @param {number[]?} opt_locations The locations for the
-   *        attribs.
-   * @param {function(string): void) opt_errorCallback callback for errors.
+   * @param {string[]?} opt_attribs An array of attribs names. Locations will be assigned by index if not passed in
+   * @param {number[]?} opt_locations The locations for the. A parallel array to opt_attribs letting you assign locations.
+   * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
+   *        on error. If you want something else pass an callback. It's passed an error message.
    * @return {module:webgl-utils.ProgramInfo} The created program.
    * @memberOf module:webgl-utils
    */
@@ -819,10 +825,10 @@
 
     if (element) {
       var bounds = element.getBoundingClientRect();
-      isVisible = bounds.top < window.innerHeight && bounds.bottom >= 0;
+      isVisible = bounds.top < topWindow.innerHeight && bounds.bottom >= 0;
     }
 
-    return isVisible && isFrameVisible(window);
+    return isVisible && isFrameVisible(topWindow);
   };
 
 
@@ -1261,8 +1267,8 @@
   }
 
   // Replace requestAnimationFrame.
-  if (window.requestAnimationFrame) {
-    window.requestAnimationFrame = (function(oldRAF) {
+  if (topWindow.requestAnimationFrame) {
+    topWindow.requestAnimationFrame = (function(oldRAF) {
 
       return function(callback, element) {
         var handler = function() {
@@ -1275,12 +1281,12 @@
         handler();
       };
 
-    }(window.requestAnimationFrame));
+    }(topWindow.requestAnimationFrame));
   }
 
   // All browsers that support WebGL support requestAnimationFrame
-  window.requestAnimFrame = window.requestAnimationFrame;       // just to stay backward compatible.
-  window.cancelRequestAnimFrame = window.cancelAnimationFrame;  // just to stay backward compatible.
+  topWindow.requestAnimFrame = topWindow.requestAnimationFrame;       // just to stay backward compatible.
+  topWindow.cancelRequestAnimFrame = topWindow.cancelAnimationFrame;  // just to stay backward compatible.
 
   return {
     createAugmentedTypedArray: createAugmentedTypedArray,
