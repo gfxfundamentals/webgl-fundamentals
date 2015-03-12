@@ -1,0 +1,217 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - Multiple Objects - Manual</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<div class="description">
+Draw multiple objects manually
+</div>
+<canvas id="canvas" width="400" height="300"></canvas>
+</body>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/primitives.js"></script>
+<!-- vertex shader -->
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec4 a_color;
+
+uniform mat4 u_matrix;
+
+varying vec4 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the color to the fragment shader.
+  v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec4 v_color;
+
+uniform vec4 u_colorMult;
+
+void main() {
+   gl_FragColor = v_color * u_colorMult;
+}
+</script>
+<script>
+"use strict";
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas");
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    return;
+  }
+
+  var createFlattenedVertices = function(gl, vertices) {
+    return createBufferInfoFromArrays(
+        gl,
+        primitives.makeRandomVertexColors(
+            primitives.deindexVertices(vertices),
+            {
+              vertsPerColor: 6,
+              rand: function(ndx, channel) {
+                return channel < 3 ? ((128 + Math.random() * 128) | 0) : 255;
+              }
+            })
+      );
+  };
+
+  var sphereBufferInfo = createFlattenedVertices(gl, primitives.createSphereVertices(10, 12, 6));
+  var cubeBufferInfo   = createFlattenedVertices(gl, primitives.createCubeVertices(20));
+  var coneBufferInfo   = createFlattenedVertices(gl, primitives.createTruncatedConeVertices(10, 0, 20, 12, 1, true, false));
+
+  // setup GLSL program
+  var programInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+  var cameraAngleRadians = degToRad(0);
+  var fieldOfViewRadians = degToRad(60);
+  var cameraHeight = 50;
+
+  // Uniforms for each object.
+  var sphereUniforms = {
+    u_colorMult: [0.5, 1, 0.5, 1],
+    u_matrix: makeIdentity(),
+  };
+  var cubeUniforms = {
+    u_colorMult: [1, 0.5, 0.5, 1],
+    u_matrix: makeIdentity(),
+  };
+  var coneUniforms = {
+    u_colorMult: [0.5, 0.5, 1, 1],
+    u_matrix: makeIdentity(),
+  };
+  var sphereTranslation = [  0, 0, 0];
+  var cubeTranslation   = [-40, 0, 0];
+  var coneTranslation   = [ 40, 0, 0];
+
+  drawScene();
+
+  function computeMatrix(viewMatrix, projectionMatrix, translation, xRotation, yRotation) {
+    var xRotationMatrix = makeXRotation(xRotation);
+    var yRotationMatrix = makeYRotation(yRotation);
+    var translationMatrix = makeTranslation(
+        translation[0],
+        translation[1],
+        translation[2]);
+    var matrix = makeIdentity();
+    matrix = matrixMultiply(matrix, xRotationMatrix);
+    matrix = matrixMultiply(matrix, yRotationMatrix);
+    var worldMatrix = matrixMultiply(matrix, translationMatrix);
+    matrix = matrixMultiply(worldMatrix, viewMatrix);
+    return matrixMultiply(matrix, projectionMatrix);
+  }
+
+  // Draw the scene.
+  function drawScene() {
+
+    gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
+
+    // Clear the canvas AND the depth buffer.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Compute the projection matrix
+    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var projectionMatrix =
+        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+
+    // Compute the camera's matrix using look at.
+    var cameraPosition = [0, 0, 100];
+    var target = [0, 0, 0];
+    var up = [0, 1, 0];
+    var cameraMatrix = makeLookAt(cameraPosition, target, up);
+
+    // Make a view matrix from the camera matrix.
+    var viewMatrix = makeInverse(cameraMatrix);
+
+    // Draw objects
+    var time = Date.now() * 0.0005;
+
+    var sphereXRotation =  time;
+    var sphereYRotation =  time;
+    var cubeXRotation   = -time;
+    var cubeYRotation   =  time;
+    var coneXRotation   =  time;
+    var coneYRotation   = -time;
+
+    // ------ Draw the sphere --------
+
+    gl.useProgram(programInfo.program);
+
+    // Setup all the needed attributes.
+    setBuffersAndAttributes(gl, programInfo.attribSetters, sphereBufferInfo);
+
+    sphereUniforms.u_matrix = computeMatrix(
+        viewMatrix,
+        projectionMatrix,
+        sphereTranslation,
+        sphereXRotation,
+        sphereYRotation);
+
+    // Set the uniforms we just computed
+    setUniforms(programInfo.uniformSetters, sphereUniforms);
+
+    gl.drawArrays(gl.TRIANGLES, 0, sphereBufferInfo.numElements);
+
+    // ------ Draw the cube --------
+
+    // Setup all the needed attributes.
+    setBuffersAndAttributes(gl, programInfo.attribSetters, cubeBufferInfo);
+
+    cubeUniforms.u_matrix = computeMatrix(
+        viewMatrix,
+        projectionMatrix,
+        cubeTranslation,
+        cubeXRotation,
+        cubeYRotation);
+
+    // Set the uniforms we just computed
+    setUniforms(programInfo.uniformSetters, cubeUniforms);
+
+    gl.drawArrays(gl.TRIANGLES, 0, cubeBufferInfo.numElements);
+
+    // ------ Draw the cone --------
+
+    // Setup all the needed attributes.
+    setBuffersAndAttributes(gl, programInfo.attribSetters, coneBufferInfo);
+
+    coneUniforms.u_matrix = computeMatrix(
+        viewMatrix,
+        projectionMatrix,
+        coneTranslation,
+        coneXRotation,
+        coneYRotation);
+
+    // Set the uniforms we just computed
+    setUniforms(programInfo.uniformSetters, coneUniforms);
+
+    gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
+
+    requestAnimationFrame(drawScene);
+  }
+}
+
+window.addEventListener('load', main);
+</script>
+</html>
+
+
+

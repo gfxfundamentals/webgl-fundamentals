@@ -1,0 +1,171 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - Multiple Objects</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<div class="description">
+Uses a few utility functions so there's much less code.
+</div>
+<canvas id="canvas" width="400" height="300"></canvas>
+</body>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/primitives.js"></script>
+<!-- vertex shader -->
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec4 a_color;
+
+uniform mat4 u_matrix;
+
+varying vec4 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the color to the fragment shader.
+  v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec4 v_color;
+
+void main() {
+   gl_FragColor = v_color;
+}
+</script>
+<script>
+"use strict";
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas");
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    return;
+  }
+
+  var createFlattenedVertices = function(gl, vertices) {
+    return createBufferInfoFromArrays(gl, primitives.makeRandomVertexColors(primitives.deindexVertices(vertices), { vertsPerColor: 6 }));
+  };
+
+  var sphereBufferInfo = createFlattenedVertices(gl, primitives.createSphereVertices(10, 12, 6));
+  var cubeBufferInfo   = createFlattenedVertices(gl, primitives.createCubeVertices(20));
+  var coneBufferInfo   = createFlattenedVertices(gl, primitives.createTruncatedConeVertices(10, 0, 20, 12, 1, true, false));
+
+  // setup GLSL program
+  var program = createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  var uniformSetters = createUniformSetters(gl, program);
+  var attribSetters  = createAttributeSetters(gl, program);
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+  var cameraAngleRadians = degToRad(0);
+  var fieldOfViewRadians = degToRad(60);
+  var cameraHeight = 50;
+
+  drawScene();
+
+  function computeMatrix(viewMatrix, projectionMatrix, translation, xRotation, yRotation) {
+    var xRotationMatrix = makeXRotation(xRotation);
+    var yRotationMatrix = makeYRotation(yRotation);
+    var translationMatrix = makeTranslation(
+        translation[0],
+        translation[1],
+        translation[2]);
+    var matrix = makeIdentity();
+    matrix = matrixMultiply(matrix, xRotationMatrix);
+    matrix = matrixMultiply(matrix, yRotationMatrix);
+    var worldMatrix = matrixMultiply(matrix, translationMatrix);
+    matrix = matrixMultiply(worldMatrix, viewMatrix);
+    return matrixMultiply(matrix, projectionMatrix);
+  }
+
+  // Draw the scene.
+  function drawScene() {
+
+    gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
+
+    // Clear the canvas AND the depth buffer.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Compute the projection matrix
+    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var projectionMatrix =
+        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+
+    // Compute the camera's matrix using look at.
+    var cameraPosition = [0, 0, 100];
+    var target = [0, 0, 0];
+    var up = [0, 1, 0];
+    var cameraMatrix = makeLookAt(cameraPosition, target, up);
+
+    // Make a view matrix from the camera matrix.
+    var viewMatrix = makeInverse(cameraMatrix);
+
+    // Draw objects
+    var time = Date.now() * 0.0005;
+
+    // Our uniforms. In this case we only have one, "u_matrix" which we'll see below
+    var uniforms = {
+    };
+
+    // ------ Draw the sphere --------
+
+    gl.useProgram(program);
+
+    // Setup all the needed attributes.
+    setBuffersAndAttributes(gl, attribSetters, sphereBufferInfo);
+
+    uniforms.u_matrix = computeMatrix(viewMatrix, projectionMatrix, [0, 0, 0], time, time);
+
+    // Set the uniforms we just computed
+    setUniforms(uniformSetters, uniforms);
+
+    gl.drawArrays(gl.TRIANGLES, 0, sphereBufferInfo.numElements);
+
+    // ------ Draw the cube --------
+
+    // Setup all the needed attributes.
+    setBuffersAndAttributes(gl, attribSetters, cubeBufferInfo);
+
+    uniforms.u_matrix = computeMatrix(viewMatrix, projectionMatrix, [-40, 0, 0], time, -time);
+
+    // Set the uniforms we just computed
+    setUniforms(uniformSetters, uniforms);
+
+    gl.drawArrays(gl.TRIANGLES, 0, cubeBufferInfo.numElements);
+
+    // ------ Draw the cone --------
+
+    // Setup all the needed attributes.
+    setBuffersAndAttributes(gl, attribSetters, coneBufferInfo);
+
+    uniforms.u_matrix = computeMatrix(viewMatrix, projectionMatrix, [40, 0, 0], -time, time);
+
+    // Set the uniforms we just computed
+    setUniforms(uniformSetters, uniforms);
+
+    gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
+
+    requestAnimationFrame(drawScene);
+  }
+}
+
+window.addEventListener('load', main);
+</script>
+</html>
+
+
