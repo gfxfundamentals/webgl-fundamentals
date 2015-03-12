@@ -5,7 +5,12 @@ module.exports = function(grunt) {
   grunt.initConfig({
     jsdoc: {
       docs: {
-        src: ['webgl/resources/webgl-utils.js'],
+        src: [
+          'webgl/resources/primitives.js',
+          'webgl/resources/webgl-2d-math.js',
+          'webgl/resources/webgl-3d-math.js',
+          'webgl/resources/webgl-utils.js',
+        ],
         options: {
           destination: 'docs',
           configure: 'jsdoc.conf.json',
