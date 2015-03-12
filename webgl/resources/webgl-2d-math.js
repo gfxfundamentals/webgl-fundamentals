@@ -48,6 +48,19 @@
 }(this, function () {
   "use strict";
 
+  /**
+   * An array or typed array with 9 values.
+   * @typedef {number[]|TypedArray} Matrix3
+   * @memberOf module:webgl-2d-math
+   */
+
+  /**
+   * Creates a 2D projection matrix
+   * @param {number} width width in pixels
+   * @param {number} height height in pixels
+   * @return {module:webgl-2d-math.Matrix3} a projection matrix that converts from pixels to clipspace with Y = 0 at the top.
+   * @memberOf module:webgl-2d-math
+   */
   function make2DProjection(width, height) {
     // Note: This matrix flips the Y axis so 0 is at the top.
     return [
@@ -57,6 +70,13 @@
     ];
   }
 
+  /**
+   * Creates a 2D translation matrix
+   * @param {number} tx amount to translate in x
+   * @param {number} ty amount to translate in y
+   * @return {module:webgl-2d-math.Matrix3} a translation matrix that translates by tx and ty.
+   * @memberOf module:webgl-2d-math
+   */
   function makeTranslation(tx, ty) {
     return [
       1, 0, 0,
@@ -65,6 +85,12 @@
     ];
   }
 
+  /**
+   * Creates a 2D rotation matrix
+   * @param {number} angleInRadians amount to rotate in radians
+   * @return {module:webgl-2d-math.Matrix3} a rotation matrix that rotates by angleInRadians
+   * @memberOf module:webgl-2d-math
+   */
   function makeRotation(angleInRadians) {
     var c = Math.cos(angleInRadians);
     var s = Math.sin(angleInRadians);
@@ -75,6 +101,13 @@
     ];
   }
 
+  /**
+   * Creates a 2D scaling matrix
+   * @param {number} sx amount to scale in x
+   * @param {number} sy amount to scale in y
+   * @return {module:webgl-2d-math.Matrix3} a scale matrix that scales by sx and sy.
+   * @memberOf module:webgl-2d-math
+   */
   function makeScale(sx, sy) {
     return [
       sx, 0, 0,
@@ -83,6 +116,14 @@
     ];
   }
 
+  /**
+   * Takes twoMatrix3s, a and b, and computes the product in the order
+   * that pre-composes b with a.  In other words, the matrix returned will
+   * @param {module:webgl-2d-math.Matrix3} a A matrix.
+   * @param {module:webgl-2d-math.Matrix3} b A matrix.
+   * @return {module:webgl-2d-math.Matrix3} the result.
+  * @memberOf module:webgl-2d-math
+   */
   function matrixMultiply(a, b) {
     var a00 = a[0*3+0];
     var a01 = a[0*3+1];
