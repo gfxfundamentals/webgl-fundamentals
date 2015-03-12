@@ -450,6 +450,8 @@ there's just 1 texture to load, the shader stays simple as it only has to refere
 requires 1 draw call to draw the shape instead of 1 draw call per texture as it might if we split it into
 planes.
 
+Next up [lets start simplifying with less code more fun](webgl-less-code-more-fun.html).
+
 <div class="webgl_bottombar">
 <h3>UVs vs. Texture Coordinates</h3>
 <p>Texture coordinates are often shortened to texture coords, texcoords or UVs

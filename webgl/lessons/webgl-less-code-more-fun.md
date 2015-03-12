@@ -387,6 +387,29 @@ the shader. For attibutes WebGL will set `w = 1` automatically. But that means w
 know the user's intent since what they declared in their shader might not match the number of
 components they provide.
 
+Looking for more patterns there's this
+
+    var program = createProgramFromScripts(gl, ["vertexshader", "fragmentshader"]);
+    var uniformSetters = createUniformSetters(gl, program);
+    var attribSetters  = createAttributeSetters(gl, program);
+
+Let's simplify that too into just
+
+    var programInfo = createProgramInfo(gl, ["vertexshader", "fragmentshader"]);
+
+Which returns something like
+
+    programInfo = {
+       program: WebGLProgram,  // program we just compiled
+       uniformSetters: ...,    // setters as returned from createUniformSetters,
+       attribSetters: ...,     // setters as returned from createAttribSetters,
+    }
+
+And that's yet one more minor simplification. This will come in handy once we start using
+multiple programs since it automatically keeps the setters with the program they are associated with.
+
+%(example: { url: "../webgl-less-code-more-fun-quad-programinfo.html" })s
+
 Anyway, this is the style I try to write my own WebGL programs.
 For the lessons on these tutorials though I've felt like I have to use the standard **verbose**
 ways so people don't get confused about what is WebGL and what is my own style. At some point
@@ -397,6 +420,8 @@ Feel free to use this style in your own code. The functions `createUniformSetter
 `createBufferInfoFromArrays`, `setUniforms`, and `setBuffersAndAttributes` are included in the
 [`webgl-utils.js`](https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js)
 file used by all the samples.
+
+Next up, [drawing multiple objects](webgl-multiple-objects.html).
 
 <div class="webgl_bottombar">
 <h3>Can we use the setters directly?</h3>
