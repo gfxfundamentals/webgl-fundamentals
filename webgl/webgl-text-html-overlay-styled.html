@@ -1,0 +1,493 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL Text - HTML Overlay</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+#ui {
+    width: 200px;
+}
+#rotation>canvas {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+}
+.container {
+    position: relative;
+}
+#overlay {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-family: monospace;
+    padding: 1em;
+    border-radius: 1em;
+    border: 2px solid #f00;
+    text-shadow: 0px 0px 5px white;
+}
+</style>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-3d-math.js"></script>
+</head>
+<body>
+<div class="description">
+HTML Text Overlay
+</div>
+<div class="container">
+  <canvas id="canvas" width="400" height="300"></canvas>
+  <div id="overlay">
+    <div>Time: <span id="time"></span></div>
+    <div>Angle: <span id="angle"></span></div>
+  </div>
+</div>
+</body>
+<!-- vertex shader -->
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec4 a_color;
+
+uniform mat4 u_matrix;
+
+varying vec4 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the color to the fragment shader.
+  v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec4 v_color;
+
+void main() {
+   gl_FragColor = v_color;
+}
+</script>
+<script>
+"use strict";
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas");
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    return;
+  }
+
+  // look up the elements we want to affect
+  var timeElement = document.getElementById("time");
+  var angleElement = document.getElementById("angle");
+
+  // Create text nodes to save some time for the browser.
+  var timeNode = document.createTextNode("");
+  var angleNode = document.createTextNode("");
+
+  // Add those text nodes where they need to go
+  timeElement.appendChild(timeNode);
+  angleElement.appendChild(angleNode);
+
+  gl.enable(gl.CULL_FACE);
+  gl.enable(gl.DEPTH_TEST);
+
+  // setup GLSL program
+  var program = createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  gl.useProgram(program);
+
+  // look up where the vertex data needs to go.
+  var positionLocation = gl.getAttribLocation(program, "a_position");
+  var colorLocation = gl.getAttribLocation(program, "a_color");
+
+  // lookup uniforms
+  var matrixLocation = gl.getUniformLocation(program, "u_matrix");
+
+  // Create a buffer.
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(positionLocation);
+  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
+
+  // Set Geometry.
+  setGeometry(gl);
+
+  // Create a buffer for colors.
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(colorLocation);
+
+  // We'll supply RGB as bytes.
+  gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
+
+  // Set Colors.
+  setColors(gl);
+
+  function radToDeg(r) {
+    return r * 180 / Math.PI;
+  }
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+  var translation = [0, 30, -360];
+  var rotation = [degToRad(190), degToRad(0), degToRad(0)];
+  var scale = [1, 1, 1];
+  var fieldOfViewRadians = degToRad(60);
+  var rotationSpeed = 1.2;
+
+  // Get the starting time.
+  var then = getTimeInSeconds();
+  var clock = 0;
+
+  drawScene();
+
+  // Draw the scene.
+  function drawScene() {
+    // Get the current time
+    var now = getTimeInSeconds();
+    // Subtract the previous time from the current time
+    var deltaTime = now - then;
+    // Remember the current time for the next frame.
+    then = now;
+
+    clock += deltaTime;
+
+    // Every frame increase the rotation a little.
+    rotation[1] += rotationSpeed * deltaTime;
+
+    // convert rotation from radians to degrees
+    var angle = radToDeg(rotation[1]);
+
+    // only report 0 - 360
+    angle = angle % 360;
+
+    // set the nodes
+    angleNode.nodeValue = angle.toFixed(0);  // no decimal place
+    timeNode.nodeValue = clock.toFixed(2);   // 2 decimal places
+
+    // Clear the canvas AND the depth buffer.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Compute the matrices
+    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var projectionMatrix =
+        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+
+    var spread = 170;
+    for (var yy = -1; yy <= 1; ++yy) {
+      for (var xx = -2; xx <= 2; ++xx) {
+        var translationMatrix =
+            makeTranslation(translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
+        var rotationXMatrix = makeXRotation(rotation[0]);
+        var rotationYMatrix = makeYRotation(rotation[1] + yy * xx * 0.2);
+        var rotationZMatrix = makeZRotation(rotation[2]);
+        var scaleMatrix = makeScale(scale[0], scale[1], scale[2]);
+
+        // Multiply the matrices.
+
+        var matrix = makeIdentity();
+        matrix = matrixMultiply(matrix, scaleMatrix);
+        matrix = matrixMultiply(matrix, rotationZMatrix);
+        matrix = matrixMultiply(matrix, rotationYMatrix);
+        matrix = matrixMultiply(matrix, rotationXMatrix);
+        matrix = matrixMultiply(matrix, translationMatrix);
+        matrix = matrixMultiply(matrix, projectionMatrix);
+
+        // Set the matrix.
+        gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+        // Draw the geometry.
+        gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
+      }
+    }
+
+    requestAnimationFrame(drawScene);
+  }
+}
+
+function getTimeInSeconds() {
+  return Date.now() * 0.001;
+}
+
+// Fill the buffer with the values that define a letter 'F'.
+function setGeometry(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+          // left column front
+          0,   0,  0,
+          0, 150,  0,
+          30,   0,  0,
+          0, 150,  0,
+          30, 150,  0,
+          30,   0,  0,
+
+          // top rung front
+          30,   0,  0,
+          30,  30,  0,
+          100,   0,  0,
+          30,  30,  0,
+          100,  30,  0,
+          100,   0,  0,
+
+          // middle rung front
+          30,  60,  0,
+          30,  90,  0,
+          67,  60,  0,
+          30,  90,  0,
+          67,  90,  0,
+          67,  60,  0,
+
+          // left column back
+            0,   0,  30,
+           30,   0,  30,
+            0, 150,  30,
+            0, 150,  30,
+           30,   0,  30,
+           30, 150,  30,
+
+          // top rung back
+           30,   0,  30,
+          100,   0,  30,
+           30,  30,  30,
+           30,  30,  30,
+          100,   0,  30,
+          100,  30,  30,
+
+          // middle rung back
+           30,  60,  30,
+           67,  60,  30,
+           30,  90,  30,
+           30,  90,  30,
+           67,  60,  30,
+           67,  90,  30,
+
+          // top
+            0,   0,   0,
+          100,   0,   0,
+          100,   0,  30,
+            0,   0,   0,
+          100,   0,  30,
+            0,   0,  30,
+
+          // top rung front
+          100,   0,   0,
+          100,  30,   0,
+          100,  30,  30,
+          100,   0,   0,
+          100,  30,  30,
+          100,   0,  30,
+
+          // under top rung
+          30,   30,   0,
+          30,   30,  30,
+          100,  30,  30,
+          30,   30,   0,
+          100,  30,  30,
+          100,  30,   0,
+
+          // between top rung and middle
+          30,   30,   0,
+          30,   60,  30,
+          30,   30,  30,
+          30,   30,   0,
+          30,   60,   0,
+          30,   60,  30,
+
+          // top of middle rung
+          30,   60,   0,
+          67,   60,  30,
+          30,   60,  30,
+          30,   60,   0,
+          67,   60,   0,
+          67,   60,  30,
+
+          // front of middle rung
+          67,   60,   0,
+          67,   90,  30,
+          67,   60,  30,
+          67,   60,   0,
+          67,   90,   0,
+          67,   90,  30,
+
+          // bottom of middle rung.
+          30,   90,   0,
+          30,   90,  30,
+          67,   90,  30,
+          30,   90,   0,
+          67,   90,  30,
+          67,   90,   0,
+
+          // front of bottom
+          30,   90,   0,
+          30,  150,  30,
+          30,   90,  30,
+          30,   90,   0,
+          30,  150,   0,
+          30,  150,  30,
+
+          // bottom
+          0,   150,   0,
+          0,   150,  30,
+          30,  150,  30,
+          0,   150,   0,
+          30,  150,  30,
+          30,  150,   0,
+
+          // left side
+          0,   0,   0,
+          0,   0,  30,
+          0, 150,  30,
+          0,   0,   0,
+          0, 150,  30,
+          0, 150,   0]),
+      gl.STATIC_DRAW);
+}
+
+// Fill the buffer with colors for the 'F'.
+function setColors(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Uint8Array([
+          // left column front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // top rung front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // middle rung front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // left column back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // top rung back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // middle rung back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // top
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+
+          // top rung front
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+
+          // under top rung
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+
+          // between top rung and middle
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+
+          // top of middle rung
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+
+          // front of middle rung
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+
+          // bottom of middle rung.
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+
+          // front of bottom
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+
+          // bottom
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+
+          // left side
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220]),
+      gl.STATIC_DRAW);
+}
+
+main();
+</script>
+</html>
+
+

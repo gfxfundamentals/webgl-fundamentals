@@ -1,0 +1,800 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL Text - HTML Divs</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+* {
+  box-sizing: border-box;
+}
+#ui {
+    width: 200px;
+}
+#rotation>canvas {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+}
+.container {
+    position: relative;
+    overflow: none;
+}
+
+#divcontainer {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 400px;
+    height: 300px;
+    z-index: 10;
+    overflow: hidden;
+
+}
+
+.floating-div {
+    position: absolute;
+}
+</style>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-3d-math.js"></script>
+</head>
+<body>
+<div class="description">
+HTML Text Divs
+</div>
+<div class="container">
+  <canvas id="canvas" width="400" height="300"></canvas>
+  <div id="divcontainer"></div>
+</div>
+</body>
+<!-- vertex shader -->
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec4 a_color;
+
+uniform mat4 u_matrix;
+
+varying vec4 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the color to the fragment shader.
+  v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec4 v_color;
+
+void main() {
+   gl_FragColor = v_color;
+}
+</script>
+<script>
+"use strict";
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas");
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    return;
+  }
+
+  // look up the divcontainer
+  var divContainerElement = document.getElementById("divcontainer");
+
+  // make the div
+  var div = document.createElement("div");
+
+  // assign it a CSS class
+  div.className = "floating-div";
+
+  // make a text node for its content
+  var textNode = document.createTextNode("");
+  div.appendChild(textNode);
+
+  // add it to the divcontainer
+  divContainerElement.appendChild(div);
+
+  gl.enable(gl.CULL_FACE);
+  gl.enable(gl.DEPTH_TEST);
+
+  // setup GLSL program
+  var program = createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  gl.useProgram(program);
+
+  // look up where the vertex data needs to go.
+  var positionLocation = gl.getAttribLocation(program, "a_position");
+  var colorLocation = gl.getAttribLocation(program, "a_color");
+
+  // lookup uniforms
+  var matrixLocation = gl.getUniformLocation(program, "u_matrix");
+
+  // Create a buffer.
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(positionLocation);
+  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
+
+  // Set Geometry.
+  setGeometry(gl);
+
+  // Create a buffer for colors.
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(colorLocation);
+
+  // We'll supply RGB as bytes.
+  gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
+
+  // Set Colors.
+  setColors(gl);
+
+  function radToDeg(r) {
+    return r * 180 / Math.PI;
+  }
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+  var translation = [0, 30, -360];
+  var rotation = [degToRad(190), degToRad(0), degToRad(0)];
+  var scale = [1, 1, 1];
+  var fieldOfViewRadians = degToRad(60);
+  var rotationSpeed = 1.2;
+
+  var x = 0;
+  var y = 0;
+  var dx = 4;
+  var dy = 4;
+
+  // Get the starting time.
+  var then = getTimeInSeconds();
+  var clock = 0;
+
+  drawScene();
+
+  // Draw the scene.
+  function drawScene() {
+    // Get the current time
+    var now = getTimeInSeconds();
+    // Subtract the previous time from the current time
+    var deltaTime = now - then;
+    // Remember the current time for the next frame.
+    then = now;
+
+    clock += deltaTime;
+
+    // Every frame increase the rotation a little.
+    rotation[1] += rotationSpeed * deltaTime;
+
+    // Clear the canvas AND the depth buffer.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Compute the matrices
+    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var projectionMatrix =
+        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+
+    var preTranslationMatrix =
+        makeTranslation(-50, -75, 0);
+    var translationMatrix =
+        makeTranslation(translation[0], translation[1], translation[2]);
+    var rotationXMatrix = makeXRotation(rotation[0]);
+    var rotationYMatrix = makeYRotation(rotation[1]);
+    var rotationZMatrix = makeZRotation(rotation[2] + clock);
+    var scaleMatrix = makeScale(scale[0], scale[1], scale[2 ]);
+
+    // Multiply the matrices.
+
+    var matrix = makeIdentity();
+    matrix = matrixMultiply(matrix, preTranslationMatrix);
+    matrix = matrixMultiply(matrix, scaleMatrix);
+    matrix = matrixMultiply(matrix, rotationZMatrix);
+    matrix = matrixMultiply(matrix, rotationYMatrix);
+    matrix = matrixMultiply(matrix, rotationXMatrix);
+    matrix = matrixMultiply(matrix, translationMatrix);
+    matrix = matrixMultiply(matrix, projectionMatrix);
+
+    // Set the matrix.
+    gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+    // Draw the geometry.
+    gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
+
+    // choose a point in the local space of the 'F'.
+    var point = [100, 0, 0, 1];  // this is the front top right corner
+
+    // compute a clipspace position
+    // using the matrix we computed for the F
+    var clipspace = matrixVectorMultiply([100, 0, 0, 1], matrix);
+
+    // divide X and Y by W just like the GPU does.
+    clipspace[0] /= clipspace[3];
+    clipspace[1] /= clipspace[3];
+
+    // convert from clipspace to pixels
+    var pixelX = (clipspace[0] *  0.5 + 0.5) * gl.canvas.width;
+    var pixelY = (clipspace[1] * -0.5 + 0.5) * gl.canvas.height;
+
+    // position the div
+    div.style.left = Math.floor(pixelX) + "px";
+    div.style.top  = Math.floor(pixelY) + "px";
+    textNode.nodeValue = clock.toFixed(2);
+
+    requestAnimationFrame(drawScene);
+  }
+}
+
+function getTimeInSeconds() {
+  return Date.now() * 0.001;
+}
+
+// Fill the buffer with the values that define a letter 'F'.
+function setGeometry(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+          // left column front
+          0,   0,  0,
+          0, 150,  0,
+          30,   0,  0,
+          0, 150,  0,
+          30, 150,  0,
+          30,   0,  0,
+
+          // top rung front
+          30,   0,  0,
+          30,  30,  0,
+          100,   0,  0,
+          30,  30,  0,
+          100,  30,  0,
+          100,   0,  0,
+
+          // middle rung front
+          30,  60,  0,
+          30,  90,  0,
+          67,  60,  0,
+          30,  90,  0,
+          67,  90,  0,
+          67,  60,  0,
+
+          // left column back
+            0,   0,  30,
+           30,   0,  30,
+            0, 150,  30,
+            0, 150,  30,
+           30,   0,  30,
+           30, 150,  30,
+
+          // top rung back
+           30,   0,  30,
+          100,   0,  30,
+           30,  30,  30,
+           30,  30,  30,
+          100,   0,  30,
+          100,  30,  30,
+
+          // middle rung back
+           30,  60,  30,
+           67,  60,  30,
+           30,  90,  30,
+           30,  90,  30,
+           67,  60,  30,
+           67,  90,  30,
+
+          // top
+            0,   0,   0,
+          100,   0,   0,
+          100,   0,  30,
+            0,   0,   0,
+          100,   0,  30,
+            0,   0,  30,
+
+          // top rung front
+          100,   0,   0,
+          100,  30,   0,
+          100,  30,  30,
+          100,   0,   0,
+          100,  30,  30,
+          100,   0,  30,
+
+          // under top rung
+          30,   30,   0,
+          30,   30,  30,
+          100,  30,  30,
+          30,   30,   0,
+          100,  30,  30,
+          100,  30,   0,
+
+          // between top rung and middle
+          30,   30,   0,
+          30,   60,  30,
+          30,   30,  30,
+          30,   30,   0,
+          30,   60,   0,
+          30,   60,  30,
+
+          // top of middle rung
+          30,   60,   0,
+          67,   60,  30,
+          30,   60,  30,
+          30,   60,   0,
+          67,   60,   0,
+          67,   60,  30,
+
+          // front of middle rung
+          67,   60,   0,
+          67,   90,  30,
+          67,   60,  30,
+          67,   60,   0,
+          67,   90,   0,
+          67,   90,  30,
+
+          // bottom of middle rung.
+          30,   90,   0,
+          30,   90,  30,
+          67,   90,  30,
+          30,   90,   0,
+          67,   90,  30,
+          67,   90,   0,
+
+          // front of bottom
+          30,   90,   0,
+          30,  150,  30,
+          30,   90,  30,
+          30,   90,   0,
+          30,  150,   0,
+          30,  150,  30,
+
+          // bottom
+          0,   150,   0,
+          0,   150,  30,
+          30,  150,  30,
+          0,   150,   0,
+          30,  150,  30,
+          30,  150,   0,
+
+          // left side
+          0,   0,   0,
+          0,   0,  30,
+          0, 150,  30,
+          0,   0,   0,
+          0, 150,  30,
+          0, 150,   0]),
+      gl.STATIC_DRAW);
+}
+
+// Fill the buffer with colors for the 'F'.
+function setColors(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Uint8Array([
+          // left column front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // top rung front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // middle rung front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // left column back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // top rung back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // middle rung back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // top
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+
+          // top rung front
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+
+          // under top rung
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+
+          // between top rung and middle
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+
+          // top of middle rung
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+
+          // front of middle rung
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+
+          // bottom of middle rung.
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+
+          // front of bottom
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+
+          // bottom
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+
+          // left side
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220]),
+      gl.STATIC_DRAW);
+}
+
+main();
+</script>
+</html>
+
+
+      }
+    }
+
+    requestAnimationFrame(drawScene);
+  }
+}
+
+function getTimeInSeconds() {
+  return Date.now() * 0.001;
+}
+
+// Fill the buffer with the values that define a letter 'F'.
+function setGeometry(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+          // left column front
+          0,   0,  0,
+          0, 150,  0,
+          30,   0,  0,
+          0, 150,  0,
+          30, 150,  0,
+          30,   0,  0,
+
+          // top rung front
+          30,   0,  0,
+          30,  30,  0,
+          100,   0,  0,
+          30,  30,  0,
+          100,  30,  0,
+          100,   0,  0,
+
+          // middle rung front
+          30,  60,  0,
+          30,  90,  0,
+          67,  60,  0,
+          30,  90,  0,
+          67,  90,  0,
+          67,  60,  0,
+
+          // left column back
+            0,   0,  30,
+           30,   0,  30,
+            0, 150,  30,
+            0, 150,  30,
+           30,   0,  30,
+           30, 150,  30,
+
+          // top rung back
+           30,   0,  30,
+          100,   0,  30,
+           30,  30,  30,
+           30,  30,  30,
+          100,   0,  30,
+          100,  30,  30,
+
+          // middle rung back
+           30,  60,  30,
+           67,  60,  30,
+           30,  90,  30,
+           30,  90,  30,
+           67,  60,  30,
+           67,  90,  30,
+
+          // top
+            0,   0,   0,
+          100,   0,   0,
+          100,   0,  30,
+            0,   0,   0,
+          100,   0,  30,
+            0,   0,  30,
+
+          // top rung front
+          100,   0,   0,
+          100,  30,   0,
+          100,  30,  30,
+          100,   0,   0,
+          100,  30,  30,
+          100,   0,  30,
+
+          // under top rung
+          30,   30,   0,
+          30,   30,  30,
+          100,  30,  30,
+          30,   30,   0,
+          100,  30,  30,
+          100,  30,   0,
+
+          // between top rung and middle
+          30,   30,   0,
+          30,   60,  30,
+          30,   30,  30,
+          30,   30,   0,
+          30,   60,   0,
+          30,   60,  30,
+
+          // top of middle rung
+          30,   60,   0,
+          67,   60,  30,
+          30,   60,  30,
+          30,   60,   0,
+          67,   60,   0,
+          67,   60,  30,
+
+          // front of middle rung
+          67,   60,   0,
+          67,   90,  30,
+          67,   60,  30,
+          67,   60,   0,
+          67,   90,   0,
+          67,   90,  30,
+
+          // bottom of middle rung.
+          30,   90,   0,
+          30,   90,  30,
+          67,   90,  30,
+          30,   90,   0,
+          67,   90,  30,
+          67,   90,   0,
+
+          // front of bottom
+          30,   90,   0,
+          30,  150,  30,
+          30,   90,  30,
+          30,   90,   0,
+          30,  150,   0,
+          30,  150,  30,
+
+          // bottom
+          0,   150,   0,
+          0,   150,  30,
+          30,  150,  30,
+          0,   150,   0,
+          30,  150,  30,
+          30,  150,   0,
+
+          // left side
+          0,   0,   0,
+          0,   0,  30,
+          0, 150,  30,
+          0,   0,   0,
+          0, 150,  30,
+          0, 150,   0]),
+      gl.STATIC_DRAW);
+}
+
+// Fill the buffer with colors for the 'F'.
+function setColors(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Uint8Array([
+          // left column front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // top rung front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // middle rung front
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+          // left column back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // top rung back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // middle rung back
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+        80, 70, 200,
+
+          // top
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+        70, 200, 210,
+
+          // top rung front
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+        200, 200, 70,
+
+          // under top rung
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+        210, 100, 70,
+
+          // between top rung and middle
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+        210, 160, 70,
+
+          // top of middle rung
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+        70, 180, 210,
+
+          // front of middle rung
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+        100, 70, 210,
+
+          // bottom of middle rung.
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+        76, 210, 100,
+
+          // front of bottom
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+        140, 210, 80,
+
+          // bottom
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+        90, 130, 110,
+
+          // left side
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220,
+        160, 160, 220]),
+      gl.STATIC_DRAW);
+}
+
+main();
+</script>
+</html>
+
+

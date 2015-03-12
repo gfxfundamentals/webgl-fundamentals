@@ -1,0 +1,263 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL Text - Textures with blending enabled</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+* {
+  box-sizing: border-box;
+}
+#ui {
+    width: 200px;
+}
+</style>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/primitives.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="400" height="300"></canvas>
+</body>
+<!-- vertex shader -->
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec4 a_color;
+
+uniform mat4 u_matrix;
+
+varying vec4 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the color to the fragment shader.
+  v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec4 v_color;
+
+void main() {
+   gl_FragColor = v_color;
+}
+</script>
+<script id="text-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec2 a_texcoord;
+
+uniform mat4 u_matrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the texcoord to the fragment shader.
+  v_texcoord = a_texcoord;
+}
+</script>
+<!-- fragment shader -->
+<script id="text-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec2 v_texcoord;
+
+uniform sampler2D u_texture;
+
+void main() {
+   gl_FragColor = texture2D(u_texture, v_texcoord);// + vec4(1,0,0,1);
+}
+</script>
+<script>
+"use strict";
+
+var textCtx = document.createElement("canvas").getContext("2d");
+
+// Puts text in center of canvas.
+function makeTextCanvas(text, width, height) {
+  textCtx.canvas.width  = width;
+  textCtx.canvas.height = height;
+  textCtx.font = "20px monospace";
+  textCtx.textAlign = "center";
+  textCtx.textBaseline = "middle";
+  textCtx.fillStyle = "black";
+  textCtx.clearRect(0, 0, textCtx.canvas.width, textCtx.canvas.height);
+  textCtx.fillText(text, width / 2, height / 2);
+  return textCtx.canvas;
+}
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas");
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    return;
+  }
+
+  // Create data for 'F'
+  var fBufferInfo = primitives.create3DFBufferInfo(gl);
+  // Create a unit quad for the 'text'
+  var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, makeXRotation(Math.PI / 2));
+
+  // setup GLSL programs
+  var fProgramInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  var textProgramInfo = createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
+
+  // create text texture.
+  var textCanvas = makeTextCanvas("Hello World!", 150, 26);
+  var textWidth  = textCanvas.width;
+  var textHeight = textCanvas.height;
+  var textTex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, textTex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
+  // make sure we can render it even if it's not a power of 2
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+  var fUniforms = {
+    u_matrix: makeIdentity(),
+  };
+
+  var textUniforms = {
+    u_matrix: makeIdentity(),
+    u_texture: textTex,
+  };
+
+  function radToDeg(r) {
+    return r * 180 / Math.PI;
+  }
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+  var translation = [0, 30, 0];
+  var rotation = [degToRad(190), degToRad(0), degToRad(0)];
+  var scale = [1, 1, 1];
+  var fieldOfViewRadians = degToRad(60);
+  var rotationSpeed = 1.2;
+
+  // Get the starting time.
+  var then = getTimeInSeconds();
+
+  var clock = 0;
+
+  drawScene();
+
+  // Draw the scene.
+  function drawScene() {
+    // Get the current time
+    var now = getTimeInSeconds();
+    // Subtract the previous time from the current time
+    var deltaTime = now - then;
+    // Remember the current time for the next frame.
+    then = now;
+
+    clock += deltaTime;
+
+    // Every frame increase the rotation a little.
+    rotation[1] += rotationSpeed * deltaTime;
+
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    // Clear the canvas AND the depth buffer.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Compute the matrices used for all objects
+    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var projectionMatrix =
+        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+
+    // Compute the camera's matrix using look at.
+    var cameraRadius = 360;
+    var cameraPosition = [Math.cos(clock) * cameraRadius, 0, Math.sin(clock) * cameraRadius];
+    var target = [0, 0, 0];
+    var up = [0, 1, 0];
+    var cameraMatrix = makeLookAt(cameraPosition, target, up);
+    var viewMatrix = makeInverse(cameraMatrix);
+    var viewProjectionMatrix = matrixMultiply(viewMatrix, projectionMatrix);
+
+    var spread = 170;
+    for (var yy = -1; yy <= 1; ++yy) {
+      for (var xx = -2; xx <= 2; ++xx) {
+        var preTranslationMatrix =
+            makeTranslation(-50, -75, 0);
+        var translationMatrix =
+            makeTranslation(translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
+        var rotationXMatrix = makeXRotation(rotation[0]);
+        var rotationYMatrix = makeYRotation(rotation[1] + yy * xx * 0.2);
+        var rotationZMatrix = makeZRotation(rotation[2] + clock + (yy * 3 + xx) * 0.1);
+        var scaleMatrix = makeScale(scale[0], scale[1], scale[2]);
+
+        // Multiply the matrices.
+
+        var matrix = makeIdentity();
+        matrix = matrixMultiply(matrix, preTranslationMatrix);
+        matrix = matrixMultiply(matrix, scaleMatrix);
+        matrix = matrixMultiply(matrix, rotationZMatrix);
+        matrix = matrixMultiply(matrix, rotationYMatrix);
+        matrix = matrixMultiply(matrix, rotationXMatrix);
+        matrix = matrixMultiply(matrix, translationMatrix);
+        matrix = matrixMultiply(matrix, viewMatrix);
+        var fViewMatrix = copyMatrix(matrix);  // remember the view matrix for the text
+        matrix = matrixMultiply(matrix, projectionMatrix);
+
+        // setup to draw the 'F'
+        gl.useProgram(fProgramInfo.program);
+
+        setBuffersAndAttributes(gl, fProgramInfo.attribSetters, fBufferInfo);
+
+        copyMatrix(matrix, fUniforms.u_matrix);
+        setUniforms(fProgramInfo.uniformSetters, fUniforms);
+
+        // Draw the geometry.
+        gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+
+        // scale the F to the size we need it.
+        // use just the position of the 'F' for the text
+        var textMatrix = makeIdentity();
+        textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
+        textMatrix = matrixMultiply(
+            textMatrix,
+            makeTranslation(fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]));
+        textMatrix = matrixMultiply(textMatrix, projectionMatrix);
+
+        // setup to draw the text.
+        gl.useProgram(textProgramInfo.program);
+
+        setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
+
+        copyMatrix(textMatrix, textUniforms.u_matrix);
+        setUniforms(textProgramInfo.uniformSetters, textUniforms);
+
+        // Draw the text.
+        gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+      }
+    }
+
+    requestAnimationFrame(drawScene);
+  }
+}
+
+function getTimeInSeconds() {
+  return Date.now() * 0.001;
+}
+
+main();
+</script>
+</html>
+
+
