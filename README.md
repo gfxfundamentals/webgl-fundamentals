@@ -49,6 +49,11 @@ A list of articles I'd like to write or see written
     *   glow
     *   light rays
     *   RGB glitch, CRT distortion, scanlines
+    *   color mapping
+*   Creative coding
+    *   color palettes
+    *   indexed everything
+    *   tilemaps
 *   code organization
     *   drawing more than one thing
     *   using a library like [less code more fun](http://webglfundamentals.org/webgl/lessons/webgl-less-code-more-fun.html)
