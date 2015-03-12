@@ -197,20 +197,24 @@ var Builder = function() {
       toc.push('<li><a href="' + article.dst_file_name + '">' + article.title + '</a></li>');
     });
 
-    var promises = g_articles.map(function(article, ndx) {
-      return executeP('git', [
-        'log',
-        '--format="%ci"',
-        '--name-only',
-        '--diff-filter=A',
-        article.src_file_name,
-      ]).then(function(result) {
-        var dateStr = result.stdout.split("\n")[0];
-        article.date = new Date(Date.parse(dateStr));
-      });
+    var tasks = g_articles.map(function(article, ndx) {
+      return function() {
+        return executeP('git', [
+          'log',
+          '--format="%ci"',
+          '--name-only',
+          '--diff-filter=A',
+          article.src_file_name,
+        ]).then(function(result) {
+          var dateStr = result.stdout.split("\n")[0];
+          article.date = new Date(Date.parse(dateStr));
+        });
+      };
     });
 
-    Promise.all(promises).then(function() {
+    tasks.reduce(function(cur, next){
+        return cur.then(next);
+    }, Promise.resolve()).then(function() {
       var articles = g_articles.filter(function(article) {
         return article.date != undefined;
       });
@@ -235,7 +239,7 @@ var Builder = function() {
         cacheTime: 600000,
       });
 
-      articles.forEach(function(article) {
+      articles.forEach(function(article, ndx) {
         feed.addItem({
           title:          article.title,
           link:           "http://webglfundamentals.org/" + article.dst_file_name,
