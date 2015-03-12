@@ -94,13 +94,13 @@ create GLSL shader programs. Calls read attribute and uniform locations. Calls
 to create textures, bind textures to texture units, bind buffers to attributes,
 and set uniforms.</p>
 <p>At some point this complexity makes it hard to concentrate on the topic at hand
-and so helper functions can <a href="/webgl/lessons/webgl-less-code-more-fun.html">reduce these issue from many lines of code to
+and so helper functions can <a href="/webgl/lessons/webgl-less-code-more-fun.html">reduce the number of lines need to
 a smaller few</a>.</p>
 <p><a href="/docs/module-webgl-utils.html">Functions for reducting the amount of code can be found here</a>.</p>
 <p>If you're using WebGL to do 2D or 3D you'll likely need many math helper functions
 in JavaScript as well.</p>
 <p><a href="/docs/module-webgl-2d-math.html">Functions for 2D math are here</a>.</p>
-<p><a href="/docs/module-webgl-2d-math.html">Functions for 3D math are here</a>.</p>
+<p><a href="/docs/module-webgl-3d-math.html">Functions for 3D math are here</a>.</p>
 <p>Finally WebGL requires vertices to operate on. <a href="/docs/module-primitives.html">Functions to generate veritces
 for common shapes like spheres, cubes, planes, cones, etc can be found here</a>.</p>
 <h1>JSDoc3 Plea</h1>
@@ -206,42 +206,6 @@ or <a href="https://github.com/greggman/webgl-fundamentals/issues">file an issue
 
 
 	<!--Navigation and Symbol Display-->
-	
-	<script>
-		$( function () {
-			$( '#main' ).localScroll( {
-				offset : { top : 60 } //offset by the height of your header (give or take a few px, see what works for you)
-			} );
-			$( "dt.name" ).each( function () {
-				var $this = $( this ).find("h4");
-				var icon = $( "<i/>" ).addClass( "icon-plus-sign" ).addClass( "pull-right" ).addClass( "icon-white" );
-				var dt = $(this);
-				var children = dt.next( "dd" );
-
-				dt.prepend( icon ).css( {cursor : "pointer"} );
-				dt.addClass( "member-collapsed" ).addClass( "member" );
-
-
-				children.hide();
-
-				dt.children().on( "click", function () {
-					children = dt.next( "dd" );
-					console.debug(dt, children)
-					children.slideToggle( "fast", function () {
-
-						if ( children.is( ":visible" ) ) {
-							icon.addClass( "icon-minus-sign" ).removeClass( "icon-plus-sign" ).removeClass( "icon-white" );
-							dt.addClass( "member-open" ).animate( "member-collapsed" );
-						} else {
-							icon.addClass( "icon-plus-sign" ).removeClass( "icon-minus-sign" ).addClass( "icon-white" );
-							dt.addClass( "member-collapsed" ).removeClass( "member-open" );
-						}
-					} );
-				} );
-
-			} );
-		} );
-	</script>
 	
 
 
