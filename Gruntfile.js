@@ -10,6 +10,7 @@ module.exports = function(grunt) {
           'webgl/resources/webgl-2d-math.js',
           'webgl/resources/webgl-3d-math.js',
           'webgl/resources/webgl-utils.js',
+          'docs.md',
         ],
         options: {
           destination: 'docs',

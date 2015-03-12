@@ -470,7 +470,7 @@
    * Creates setter functions for all uniforms of a shader
    * program.
    *
-   * @see module:webgl-utils.setUniforms
+   * @see {@link module:webgl-utils.setUniforms}
    *
    * @param {WebGLProgram} program the program to create setters for.
    * @returns {Object.<string, function>} an object with a setter by name for each uniform
@@ -573,37 +573,74 @@
   /**
    * Set uniforms and binds related textures.
    *
-   * @example
+   * example:
    *
-   *    var program = createProgramFromScripts(
-   *        gl, ["some-vs", "some-fs");
+   *     var programInfo = createProgramInfo(
+   *         gl, ["some-vs", "some-fs");
    *
-   *    var uniformSetters = createUniformSetters(program);
+   *     var tex1 = gl.createTexture();
+   *     var tex2 = gl.createTexture();
    *
-   *    var tex1 = gl.createTexture();
-   *    var tex2 = gl.createTexture();
+   *     ... assume we setup the textures with data ...
    *
-   *    ... assume we setup the textures with data ...
+   *     var uniforms = {
+   *       u_someSampler: tex1,
+   *       u_someOtherSampler: tex2,
+   *       u_someColor: [1,0,0,1],
+   *       u_somePosition: [0,1,1],
+   *       u_someMatrix: [
+   *         1,0,0,0,
+   *         0,1,0,0,
+   *         0,0,1,0,
+   *         0,0,0,0,
+   *       ],
+   *     };
    *
-   *    var uniforms = {
-   *      u_someSampler: tex1,
-   *      u_someOtherSampler: tex2,
-   *      u_someColor: [1,0,0,1],
-   *      u_somePosition: [0,1,1],
-   *      u_someMatrix: [
-   *        1,0,0,0,
-   *        0,1,0,0,
-   *        0,0,1,0,
-   *        0,0,0,0,
-   *      ],
-   *    }
+   *     gl.useProgram(program);
    *
-   *    gl.useProgram(program);
+   * This will automatically bind the textures AND set the
+   * uniforms.
    *
-   *  This will automatically bind the textures AND set the
-   *  uniforms.
+   *     setUniforms(programInfo.uniformSetters, uniforms);
    *
-   *    setUniforms(uniformSetters, uniforms);
+   * For the example above it is equivalent to
+   *
+   *     var texUnit = 0;
+   *     gl.activeTexture(gl.TEXTURE0 + texUnit);
+   *     gl.bindTexture(gl.TEXTURE_2D, tex1);
+   *     gl.uniform1i(u_someSamplerLocation, texUnit++);
+   *     gl.activeTexture(gl.TEXTURE0 + texUnit);
+   *     gl.bindTexture(gl.TEXTURE_2D, tex2);
+   *     gl.uniform1i(u_someSamplerLocation, texUnit++);
+   *     gl.uniform4fv(u_someColorLocation, [1, 0, 0, 1]);
+   *     gl.uniform3fv(u_somePositionLocation, [0, 1, 1]);
+   *     gl.uniformMatrix4fv(u_someMatrix, false, [
+   *         1,0,0,0,
+   *         0,1,0,0,
+   *         0,0,1,0,
+   *         0,0,0,0,
+   *       ]);
+   *
+   * Note it is perfectly reasonable to call `setUniforms` multiple times. For example
+   *
+   *     var uniforms = {
+   *       u_someSampler: tex1,
+   *       u_someOtherSampler: tex2,
+   *     };
+   *
+   *     var moreUniforms {
+   *       u_someColor: [1,0,0,1],
+   *       u_somePosition: [0,1,1],
+   *       u_someMatrix: [
+   *         1,0,0,0,
+   *         0,1,0,0,
+   *         0,0,1,0,
+   *         0,0,0,0,
+   *       ],
+   *     };
+   *
+   *     setUniforms(programInfo.uniformSetters, uniforms);
+   *     setUniforms(programInfo.uniformSetters, moreUniforms);
    *
    * @param {Object.<string, fucntion>} setters the setters returned from
    *        `createUniformSetters`.
@@ -622,9 +659,9 @@
 
   /**
    * Creates setter functions for all attributes of a shader
-   * program
+   * program. You can pass this to {@link module:webgl-utils.setBuffersAndAttributes} to set all your buffers and attributes.
    *
-   * @see module:webgl-utils.setAttributes for example
+   * @see {@link module:webgl-utils.setAttributes} for example
    * @param {WebGLProgram} program the program to create setters for.
    * @return {Object.<string, function>} an object with a setter for each attribute by name.
    * @memberOf module:webgl-utils
@@ -656,7 +693,7 @@
   };
 
   /**
-   * Sets attributes and binds buffers (deprecated... use setBuffersAndAttributes)
+   * Sets attributes and binds buffers (deprecated... use {@link module:webgl-utils.setBuffersAndAttributes})
    *
    * Example:
    *
@@ -706,6 +743,7 @@
    * @param {Object.<string, function>} setters Attribute setters as returned from createAttributeSetters
    * @param {Object.<string, module:webgl-utils.AttribInfo>} buffers AttribInfos mapped by attribute name.
    * @memberOf module:webgl-utils
+   * @deprecated use {@link module:webgl-utils.setBuffersAndAttributes}
    */
   function setAttributes(setters, buffers) {
     Object.keys(buffers).forEach(function(name) {
@@ -717,7 +755,35 @@
   };
 
   /**
-   * Sets attributes and buffers include the `ELEMENT_ARRAY_BUFFER` if appropriate
+   * Sets attributes and buffers including the `ELEMENT_ARRAY_BUFFER` if appropriate
+   *
+   * Example:
+   *
+   *     var programInfo = createProgramInfo(
+   *         gl, ["some-vs", "some-fs");
+   *
+   *     var arrays = {
+   *       position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+   *       texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+   *     };
+   *
+   *     var bufferInfo = createBufferInfoFromArrays(gl, arrays);
+   *
+   *     gl.useProgram(programInfo.program);
+   *
+   * This will automatically bind the buffers AND set the
+   * attributes.
+   *
+   *     setBuffersAndAttributes(programInfo.attribSetters, bufferInfo);
+   *
+   * For the example above it is equivilent to
+   *
+   *     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+   *     gl.enableVertexAttribArray(a_positionLocation);
+   *     gl.vertexAttribPointer(a_positionLocation, 3, gl.FLOAT, false, 0, 0);
+   *     gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+   *     gl.enableVertexAttribArray(a_texcoordLocation);
+   *     gl.vertexAttribPointer(a_texcoordLocation, 4, gl.FLOAT, false, 0, 0);
    *
    * @param {WebGLRenderingContext} gl A WebGLRenderingContext.
    * @param {Object.<string, function>} setters Attribute setters as returned from `createAttributeSetters`
@@ -863,11 +929,20 @@
   };
 
   /**
-   * creates a typed array with a `push` fucntion attached.
+   * creates a typed array with a `push` fucntion attached
    * so that you can easily *push* values.
    *
    * `push` can take multiple arguments. If an argument is an array each element
    * of the array will be added to the typed array.
+   *
+   * Example:
+   *
+   *     var array = createAugmentedTypedArray(3, 2);  // creates a Float32Array with 6 values
+   *     array.push(1, 2, 3);
+   *     array.push([4, 5, 6]);
+   *     // array now contains [1, 2, 3, 4, 5, 6]
+   *
+   * Also has `numComponents` and `numElements` properties.
    *
    * @param {number} numComponents number of components
    * @param {number} numElements number of elements. The total size of the array will be `numComponents * numElements`.
@@ -980,7 +1055,7 @@
 
 
   /**
-   * Creates a set of attribute data from set of arrays
+   * Creates a set of attribute data and WebGLBuffers from set of arrays
    *
    * Given
    *
@@ -1002,7 +1077,7 @@
    *      };
    *
    * @param {WebGLRenderingContext} gl The webgl rendering context.
-   * @param {Object.<string, array|typedarray>} arrays
+   * @param {Object.<string, array|typedarray>} arrays The arrays
    * @param {Object.<string, string>?} opt_mapping mapping from attribute name to array name.
    *     if not specified defaults to "a_name" -> "name".
    * @return {Object.<string, module:webgl-utils.AttribInfo>} the attribs
@@ -1048,6 +1123,9 @@
 
   /**
    * Creates a BufferInfo from an object of arrays.
+   *
+   * This can be passed to {@link module:webgl-utils.setBuffersAndAttributes} and to
+   * {@link module:webgl-utils:drawBufferInfo}.
    *
    * Given an object like
    *
@@ -1107,6 +1185,27 @@
    *        normal:   normals,
    *        indices:  indices,
    *     };
+   *
+   * For the last example it is equivalent to
+   *
+   *     var bufferInfo = {
+   *       attribs: {
+   *         a_position: { numComponents: 3, buffer: gl.createBuffer(), },
+   *         a_texcoods: { numComponents: 2, buffer: gl.createBuffer(), },
+   *         a_normals: { numComponents: 3, buffer: gl.createBuffer(), },
+   *       },
+   *       indices: gl.createBuffer(),
+   *       numElements: 6,
+   *     };
+   *
+   *     gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.attribs.a_position.buffer);
+   *     gl.bufferData(gl.ARRAY_BUFFER, arrays.position, gl.STATIC_DRAW);
+   *     gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.attribs.a_texcoord.buffer);
+   *     gl.bufferData(gl.ARRAY_BUFFER, arrays.texcoord, gl.STATIC_DRAW);
+   *     gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.attribs.a_normal.buffer);
+   *     gl.bufferData(gl.ARRAY_BUFFER, arrays.normal, gl.STATIC_DRAW);
+   *     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, bufferInfo.indices);
+   *     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);
    *
    * @param {WebGLRenderingContext} gl A WebGLRenderingContext
    * @param {Object.<string, array|object|typedarray>} arrays Your data
