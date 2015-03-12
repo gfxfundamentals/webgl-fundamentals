@@ -21,6 +21,7 @@ var executeP = Promise.denodeify(utils.execute);
 
 marked.setOptions({
   rawHtml: true,
+  //pedantic: true,
 });
 
 var replaceHandlers = {};
@@ -95,6 +96,14 @@ registerReplaceHandler('example', function(options) {
   options.height = options.height || "300";
 
   return replaceParams(readFile("templates/example.template"), options);
+});
+
+registerReplaceHandler('diagram', function(options) {
+
+  options.width = options.width || "400";
+  options.height = options.height || "300";
+
+  return replaceParams(readFile("templates/diagram.template"), options);
 });
 
 var readFile = function(fileName) {
@@ -179,8 +188,9 @@ var Builder = function() {
 
   };
 
-  this.process = function() {
-    applyTemplateToFiles("templates/lesson.template", "webgl/lessons/*.md")
+  this.process = function(filespec) {
+    filespec = filespec || "*.md";
+    applyTemplateToFiles("templates/lesson.template", "webgl/lessons/" + filespec)
 
     var toc = [];
     g_articles.forEach(function(article) {
@@ -270,7 +280,7 @@ var Builder = function() {
 };
 
 var b = new Builder();
-b.process();
+b.process(process.argv[2]);
 cache.clear();
 
 }());
