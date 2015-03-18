@@ -113,10 +113,12 @@ matrixes as it walks</p>
 }
 </code></pre><p>This brings up some terminalogy which is pretty common to 3d scene graphs.</p>
 <ul>
-<li><p><code>localMatrix</code>: The local matrix for the current node. It transforms it and its children in local space.</p>
+<li><p><code>localMatrix</code>: The local matrix for the current node. It transforms it and its children in local space with
+itself at the origin.</p>
 </li>
 <li><p><code>worldMatrix</code>: For a given node it takes stuff in the local space of that node
-and transforms it to the space of the root node of the scene graph.</p>
+and transforms it to the space of the root node of the scene graph. Or in other words it places it
+in the world. If we compute the worldMatrix for the moon we&#39;ll get that funky orbit you see above.</p>
 </li>
 </ul>
 <p>A scene graph is pretty easy to make. Let&#39;s define a simple <code>Node</code> object.
@@ -143,6 +145,7 @@ to help manage nodes. First we&#39;ll make a node class</p>
     var ndx = this.parent.children.indexOf(this);
     if (ndx &gt;= 0) {
       this.parent.children.splice(ndx, 1);
+    }
   }
 
   // Add us to our new parent
@@ -275,7 +278,7 @@ is to add more nodes to our scene graph. Instead of just</p>
   moonOrbit
       |
      moon
-</code></pre><p>This will let the earth rotate around <code>scene</code> but we can separately rotate and scale the sun and it won&#39;t
+</code></pre><p>This will let the earth rotate around the solarSystem but we can separately rotate and scale the sun and it won&#39;t
 effect the earth. Similarly the earth can rotate separately from the moon. Let&#39;s make more nodes for
 <code>solarSystem</code>, <code>earthOrbit</code> and <code>moonOrbit</code>.</p>
 <pre><code>var solarSystemNode = new Node();

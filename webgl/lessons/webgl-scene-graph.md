@@ -63,10 +63,12 @@ We can do this very simply with a recursive function which is effectively
 
 This brings up some terminalogy which is pretty common to 3d scene graphs.
 
-*   `localMatrix`: The local matrix for the current node. It transforms it and its children in local space.
+*   `localMatrix`: The local matrix for the current node. It transforms it and its children in local space with
+    itself at the origin.
 
 *    `worldMatrix`: For a given node it takes stuff in the local space of that node
-     and transforms it to the space of the root node of the scene graph.
+     and transforms it to the space of the root node of the scene graph. Or in other words it places it
+     in the world. If we compute the worldMatrix for the moon we'll get that funky orbit you see above.
 
 A scene graph is pretty easy to make. Let's define a simple `Node` object.
 There's a zillion ways to organize a scene graph and I'm not sure which
@@ -97,6 +99,7 @@ Let's give it a way to set the parent of a node.
         var ndx = this.parent.children.indexOf(this);
         if (ndx >= 0) {
           this.parent.children.splice(ndx, 1);
+        }
       }
 
       // Add us to our new parent
@@ -241,7 +244,7 @@ We'll change it to
           |
          moon
 
-This will let the earth rotate around `scene` but we can separately rotate and scale the sun and it won't
+This will let the earth rotate around the solarSystem but we can separately rotate and scale the sun and it won't
 effect the earth. Similarly the earth can rotate separately from the moon. Let's make more nodes for
 `solarSystem`, `earthOrbit` and `moonOrbit`.
 
