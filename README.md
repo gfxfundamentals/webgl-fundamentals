@@ -42,7 +42,6 @@ A list of articles I'd like to write or see written
 *   text
     *   pre-made glyph texture atlus
     *   glyph cache
-    *   HTML matching position
 *   post processing
     *   how to render to a texture (scene on cube)
     *   DOF
@@ -55,10 +54,7 @@ A list of articles I'd like to write or see written
     *   indexed everything
     *   tilemaps
 *   code organization
-    *   drawing more than one thing
-    *   using a library like [less code more fun](http://webglfundamentals.org/webgl/lessons/webgl-less-code-more-fun.html)
     *   scene graph
-        *   putting objects in scene graph
         *   putting lights and camera in scene graph
 *   Physically based rendering
 *   WebGL 2.0
