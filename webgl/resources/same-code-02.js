@@ -91,7 +91,7 @@ function main() {
   gl.enable(gl.CULL_FACE);
   gl.enable(gl.DEPTH_TEST);
 
-  var bufferInfo = window.primitives.createCubeBufferInfo(gl, 5);
+  var bufferInfo = window.primitives.createCubeBufferInfo(gl, 8);
 
   // setup GLSL program
   var programInfo = createProgramInfo(gl, [vertexShaderSource, fragmentShaderSource]);
@@ -169,8 +169,8 @@ function main() {
     setUniforms(programInfo.uniformSetters, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
-    var num = 6;
-    var spread = 15;
+    var num = 4;
+    var spread = 20;
     for (var zz = -num; zz <= num; ++zz) {
       for (var yy = -num; yy <= num; ++yy) {
         for (var xx = -num; xx <= num; ++xx) {
