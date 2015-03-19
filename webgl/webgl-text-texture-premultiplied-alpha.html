@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>WebGL Text - Textures different textures</title>
+<title>WebGL Text - Textures separate oqaque from transparent</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 * {
@@ -74,7 +74,7 @@ varying vec2 v_texcoord;
 uniform sampler2D u_texture;
 
 void main() {
-   gl_FragColor = texture2D(u_texture, v_texcoord);
+   gl_FragColor = texture2D(u_texture, v_texcoord);// + vec4(1,0,0,1);
 }
 </script>
 <script>
@@ -112,42 +112,18 @@ function main() {
   var fProgramInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
   var textProgramInfo = createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
 
-  // create text textures, one for each F
-  var textTextures = [
-    "anna",   // 0
-    "colin",  // 1
-    "james",  // 2
-    "danny",  // 3
-    "kalin",  // 4
-    "hiro",   // 5
-    "eddie",  // 6
-    "shu",    // 7
-    "brian",  // 8
-    "tami",   // 9
-    "rick",   // 10
-    "gene",   // 11
-    "natalie",// 12,
-    "evan",   // 13,
-    "sakura", // 14,
-    "kai",    // 15,
-  ].map(function(name) {
-    var textCanvas = makeTextCanvas(name, 100, 26);
-    var textWidth  = textCanvas.width;
-    var textHeight = textCanvas.height;
-    var textTex = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, textTex);
-    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
-    // make sure we can render it even if it's not a power of 2
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    return {
-      texture: textTex,
-      width: textWidth,
-      height: textHeight,
-    };
-  });
+  // create text texture.
+  var textCanvas = makeTextCanvas("Hello World!", 150, 26);
+  var textWidth  = textCanvas.width;
+  var textHeight = textCanvas.height;
+  var textTex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, textTex);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
+  // make sure we can render it even if it's not a power of 2
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
   var fUniforms = {
     u_matrix: makeIdentity(),
@@ -155,7 +131,7 @@ function main() {
 
   var textUniforms = {
     u_matrix: makeIdentity(),
-    u_texture: null,  // we'll set it at render time
+    u_texture: textTex,
   };
 
   function radToDeg(r) {
@@ -260,16 +236,12 @@ function main() {
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.depthMask(false);
 
-    // draw the text
-    textPositions.forEach(function(pos, ndx) {
-
-      // select a texture
-      var tex = textTextures[ndx];
-
+    textPositions.forEach(function(pos) {
+      // draw the text
       // scale the F to the size we need it.
       // use just the position of the 'F' for the text
       var textMatrix = makeIdentity();
-      textMatrix = matrixMultiply(textMatrix, makeScale(tex.width, tex.height, 1));
+      textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
       // because pos is in view space that means it's a vector from the eye to
       // some position. So translate along that vector back toward the eye some distance
       var fromEye = normalize(pos);
@@ -285,8 +257,6 @@ function main() {
 
       setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
 
-      // set texture uniform
-      textUniforms.u_texture = tex.texture;
       copyMatrix(textMatrix, textUniforms.u_matrix);
       setUniforms(textProgramInfo.uniformSetters, textUniforms);
 

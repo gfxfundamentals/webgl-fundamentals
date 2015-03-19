@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>WebGL Text - Textures different textures</title>
+<title>WebGL Text - Textures - different colors</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 * {
@@ -72,9 +72,10 @@ precision mediump float;
 varying vec2 v_texcoord;
 
 uniform sampler2D u_texture;
+uniform vec4 u_color;
 
 void main() {
-   gl_FragColor = texture2D(u_texture, v_texcoord);
+   gl_FragColor = texture2D(u_texture, v_texcoord) * u_color;
 }
 </script>
 <script>
@@ -89,7 +90,7 @@ function makeTextCanvas(text, width, height) {
   textCtx.font = "20px monospace";
   textCtx.textAlign = "center";
   textCtx.textBaseline = "middle";
-  textCtx.fillStyle = "black";
+  textCtx.fillStyle = "white";
   textCtx.clearRect(0, 0, textCtx.canvas.width, textCtx.canvas.height);
   textCtx.fillText(text, width / 2, height / 2);
   return textCtx.canvas;
@@ -111,6 +112,26 @@ function main() {
   // setup GLSL programs
   var fProgramInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
   var textProgramInfo = createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
+
+  // colors, 1 for each F
+  var colors = [
+    [0.0, 0.0, 0.0, 1], // 0
+    [1.0, 0.0, 0.0, 1], // 1
+    [0.0, 1.0, 0.0, 1], // 2
+    [1.0, 1.0, 0.0, 1], // 3
+    [0.0, 0.0, 1.0, 1], // 4
+    [1.0, 0.0, 1.0, 1], // 5
+    [0.0, 1.0, 1.0, 1], // 6
+    [0.5, 0.5, 0.5, 1], // 7
+    [0.5, 0.0, 0.0, 1], // 8
+    [0.0, 0.0, 0.0, 1], // 9
+    [0.5, 5.0, 0.0, 1], // 10
+    [0.0, 5.0, 0.0, 1], // 11
+    [0.5, 0.0, 5.0, 1], // 12,
+    [0.0, 0.0, 5.0, 1], // 13,
+    [0.5, 5.0, 5.0, 1], // 14,
+    [0.0, 5.0, 5.0, 1], // 15,
+  ];
 
   // create text textures, one for each F
   var textTextures = [
@@ -156,6 +177,7 @@ function main() {
   var textUniforms = {
     u_matrix: makeIdentity(),
     u_texture: null,  // we'll set it at render time
+    u_color: [0, 0, 0, 1],  // black
   };
 
   function radToDeg(r) {
@@ -284,6 +306,9 @@ function main() {
       gl.useProgram(textProgramInfo.program);
 
       setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
+
+      // set color uniform
+      textUniforms.u_color = colors[ndx];
 
       // set texture uniform
       textUniforms.u_texture = tex.texture;

@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>WebGL Text - Textures different textures</title>
+<meta charset="utf8">
+<title>WebGL Text - Glyphs</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 * {
@@ -72,28 +72,146 @@ precision mediump float;
 varying vec2 v_texcoord;
 
 uniform sampler2D u_texture;
+uniform vec4 u_color;
 
 void main() {
-   gl_FragColor = texture2D(u_texture, v_texcoord);
+   gl_FragColor = texture2D(u_texture, v_texcoord) * u_color;
 }
 </script>
 <script>
 "use strict";
 
-var textCtx = document.createElement("canvas").getContext("2d");
-
-// Puts text in center of canvas.
-function makeTextCanvas(text, width, height) {
-  textCtx.canvas.width  = width;
-  textCtx.canvas.height = height;
-  textCtx.font = "20px monospace";
-  textCtx.textAlign = "center";
-  textCtx.textBaseline = "middle";
-  textCtx.fillStyle = "black";
-  textCtx.clearRect(0, 0, textCtx.canvas.width, textCtx.canvas.height);
-  textCtx.fillText(text, width / 2, height / 2);
-  return textCtx.canvas;
+function saveProperties(obj) {
+  var props = {};
+  Object.keys(obj).forEach(function(key) {
+    var desc = Object.getOwnPropertyDescriptor(obj, key);
+    // only save writable properties
+    if (desc.writable) {
+      props[key] = obj[key];
+    }
+  });
+  return props;
 }
+
+function restoreProperties(props, obj) {
+  Object.keys(props).forEach(function(key) {
+    obj[key] = props[key];
+  });
+}
+
+function makeGlyphCanvas(ctx, maxWidthOfTexture, heightOfLetters, baseLine, padding, letters) {
+  var rows = 1;      // number of rows of glyphs
+  var x = 0;         // x position in texture to draw next glyph
+  var y = 0;         // y position in texture to draw next glyph
+  var glyphInfos = { // info for each glyph
+  };
+
+  // Go through each letter, measure it, remember its width and position
+  for (var ii = 0; ii < letters.length; ++ii) {
+    var letter = letters[ii];
+    var t = ctx.measureText(letter);
+    // Will this letter fit on this row?
+    if (x + t.width + padding > maxWidthOfTexture) {
+       // so move to the start of the next row
+       x = 0;
+       y += heightOfLetters;
+       ++rows;
+    }
+    // Remember the data for this letter
+    glyphInfos[letter] = {
+      x: x,
+      y: y,
+      width: t.width,
+    };
+    // advance to space for next letter.
+    x += t.width + padding;
+  }
+
+  // Now that we know the size we need set the size of the canvas
+  // We have to save the canvas settings because changing the size
+  // of a canvas resets all the settings
+  var settings = saveProperties(ctx);
+  ctx.canvas.width = (rows == 1) ? x : maxWidthOfTexture;
+  ctx.canvas.height = rows * heightOfLetters;
+  restoreProperties(settings, ctx);
+
+  // Draw the letters into the canvas
+  for (var ii = 0; ii < letters.length; ++ii) {
+    var letter = letters[ii];
+    var glyphInfo = glyphInfos[letter];
+    var t = ctx.fillText(letter, glyphInfo.x, glyphInfo.y + baseLine);
+  }
+
+  return glyphInfos;
+}
+
+function makeVerticesForString(fontInfo, s) {
+  var len = s.length;
+  var numVertices = len * 6;
+  var positions = new Float32Array(numVertices * 2);
+  var texcoords = new Float32Array(numVertices * 2);
+  var offset = 0;
+  var x = 0;
+  for (var ii = 0; ii < len; ++ii) {
+    var letter = s[ii];
+    var glyphInfo = fontInfo.glyphInfos[letter];
+    if (glyphInfo) {
+      var x2 = x + glyphInfo.width;
+      var u1 = glyphInfo.x / fontInfo.textureWidth;
+      var v1 = (glyphInfo.y + fontInfo.letterHeight) / fontInfo.textureHeight;
+      var u2 = (glyphInfo.x + glyphInfo.width) / fontInfo.textureWidth;
+      var v2 = glyphInfo.y / fontInfo.textureHeight;
+
+      // 6 vertices per letter
+      positions[offset + 0] = x;
+      positions[offset + 1] = 0;
+      texcoords[offset + 0] = u1;
+      texcoords[offset + 1] = v1;
+
+      positions[offset + 2] = x2;
+      positions[offset + 3] = 0;
+      texcoords[offset + 2] = u2;
+      texcoords[offset + 3] = v1;
+
+      positions[offset + 4] = x;
+      positions[offset + 5] = fontInfo.letterHeight;
+      texcoords[offset + 4] = u1;
+      texcoords[offset + 5] = v2;
+
+      positions[offset + 6] = x;
+      positions[offset + 7] = fontInfo.letterHeight;
+      texcoords[offset + 6] = u1;
+      texcoords[offset + 7] = v2;
+
+      positions[offset + 8] = x2;
+      positions[offset + 9] = 0;
+      texcoords[offset + 8] = u2;
+      texcoords[offset + 9] = v1;
+
+      positions[offset + 10] = x2;
+      positions[offset + 11] = fontInfo.letterHeight;
+      texcoords[offset + 10] = u2;
+      texcoords[offset + 11] = v2;
+
+      x += glyphInfo.width;
+      offset += 12;
+    } else {
+      // we don't have this character so just advance
+      x += fontInfo.spaceWidth;
+    }
+  }
+
+  // return ArrayBufferViews for the portion of the TypedArrays
+  // that were actually used.
+  return {
+    arrays: {
+      position: new Float32Array(positions.buffer, 0, offset),
+      texcoord: new Float32Array(texcoords.buffer, 0, offset),
+    },
+    numVertices: offset / 2,
+  };
+}
+
 
 function main() {
   // Get A WebGL context
@@ -105,15 +223,55 @@ function main() {
 
   // Create data for 'F'
   var fBufferInfo = primitives.create3DFBufferInfo(gl);
-  // Create a unit quad for the 'text'
-  var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, makeXRotation(Math.PI / 2));
+  // Maunally create a bufferInfo
+  var textBufferInfo = {
+    attribs: {
+      a_position: { buffer: gl.createBuffer(), numComponents: 2, },
+      a_texcoord: { buffer: gl.createBuffer(), numComponents: 2, },
+    },
+    numElements: 0,
+  };
 
   // setup GLSL programs
   var fProgramInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
   var textProgramInfo = createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
 
-  // create text textures, one for each F
-  var textTextures = [
+  var ctx = document.createElement("canvas").getContext("2d");
+  //document.body.insertBefore(ctx.canvas, document.body.firstChild);
+  //ctx.canvas.style.backgroundColor = "red";
+  ctx.font = "20px sans-serif";
+  ctx.fillStyle = "white";
+  var maxTextureWidth = 256;
+  var letterHeight = 22;
+  var baseline = 16;
+  var padding = 1;
+  var letters = "0123456789.,abcdefghijklmnopqrstuvwxyz";
+  var glyphInfos = makeGlyphCanvas(
+      ctx,
+      maxTextureWidth,
+      letterHeight,
+      baseline,
+      padding,
+      letters);
+  var fontInfo = {
+    glyphInfos: glyphInfos,
+    letterHeight: letterHeight,
+    baseline: baseline,
+    spaceWidth: 5,
+    textureWidth: ctx.canvas.width,
+    textureHeight: ctx.canvas.height,
+  };
+  // create the glyph texture atlas
+  var glyphTex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, glyphTex);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, ctx.canvas);
+  // make sure we can render it even if it's not a power of 2
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+  var names = [
     "anna",   // 0
     "colin",  // 1
     "james",  // 2
@@ -130,24 +288,7 @@ function main() {
     "evan",   // 13,
     "sakura", // 14,
     "kai",    // 15,
-  ].map(function(name) {
-    var textCanvas = makeTextCanvas(name, 100, 26);
-    var textWidth  = textCanvas.width;
-    var textHeight = textCanvas.height;
-    var textTex = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, textTex);
-    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
-    // make sure we can render it even if it's not a power of 2
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    return {
-      texture: textTex,
-      width: textWidth,
-      height: textHeight,
-    };
-  });
+  ];
 
   var fUniforms = {
     u_matrix: makeIdentity(),
@@ -155,7 +296,8 @@ function main() {
 
   var textUniforms = {
     u_matrix: makeIdentity(),
-    u_texture: null,  // we'll set it at render time
+    u_texture: glyphTex,
+    u_color: [0, 0, 0, 1],  // black
   };
 
   function radToDeg(r) {
@@ -261,15 +403,29 @@ function main() {
     gl.depthMask(false);
 
     // draw the text
+
+    // setup to draw the text.
+    // Because every letter uses the same attributes and the same progarm
+    // we only need to do this once.
+    gl.useProgram(textProgramInfo.program);
+
     textPositions.forEach(function(pos, ndx) {
 
-      // select a texture
-      var tex = textTextures[ndx];
+      var name = names[ndx];
+      var s = name + ":" + pos[0].toFixed(0) + "," + pos[1].toFixed(0) + "," + pos[2].toFixed(0);
+      var vertices = makeVerticesForString(fontInfo, s);
 
-      // scale the F to the size we need it.
+      // update the buffers
+      textBufferInfo.attribs.a_position.numComponents = 2;
+      gl.bindBuffer(gl.ARRAY_BUFFER, textBufferInfo.attribs.a_position.buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, vertices.arrays.position, gl.DYNAMIC_DRAW);
+      gl.bindBuffer(gl.ARRAY_BUFFER, textBufferInfo.attribs.a_texcoord.buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, vertices.arrays.texcoord, gl.DYNAMIC_DRAW);
+
+      setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
+
       // use just the position of the 'F' for the text
       var textMatrix = makeIdentity();
-      textMatrix = matrixMultiply(textMatrix, makeScale(tex.width, tex.height, 1));
       // because pos is in view space that means it's a vector from the eye to
       // some position. So translate along that vector back toward the eye some distance
       var fromEye = normalize(pos);
@@ -280,18 +436,12 @@ function main() {
           pos[2] - fromEye[2] * amountToMoveTowardEye));
       textMatrix = matrixMultiply(textMatrix, projectionMatrix);
 
-      // setup to draw the text.
-      gl.useProgram(textProgramInfo.program);
-
-      setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
-
       // set texture uniform
-      textUniforms.u_texture = tex.texture;
       copyMatrix(textMatrix, textUniforms.u_matrix);
       setUniforms(textProgramInfo.uniformSetters, textUniforms);
 
       // Draw the text.
-      gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+      gl.drawArrays(gl.TRIANGLES, 0, vertices.numVertices);
     });
 
     requestAnimationFrame(drawScene);

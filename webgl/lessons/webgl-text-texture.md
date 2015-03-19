@@ -5,7 +5,7 @@ was about [using Canvas2D for rendering text over a WebGL canvas](webgl-text-can
 If you haven't read it you might want to check that out before continuing.
 
 In the last article we went over [how to use a 2d canvas to draw text over your WebGL
-scene](webgl-text-canvas2.html). That techinque works and is easy to do but it has
+scene](webgl-text-canvas2d.html). That techinque works and is easy to do but it has
 a limitation that the text can not be obscured by other 3d objects. To do that we
 actually need to draw the text in WebGL.
 
@@ -254,7 +254,7 @@ Notice we didn't sort like I mentioned above. In this case since we're drawing m
 there's probably going to be no noticable difference if we sort so I'll save that for some
 other article.
 
-There's still one issue though which is the text is intersecting its own 'F'. There really
+Another issue is the text is intersecting its own 'F'. There really
 isn't a specific solution for that. If you were making an MMO and wanted the text of each
 player to always appear you might try to make the text appear above the head. Just translate
 it +Y some number of units, enough to make sure it was always above the player.
@@ -280,7 +280,36 @@ Here's that.
 
 %(example: { url: "../webgl-text-texture-moved-toward-view.html" })s
 
-Of you want to draw different text at each F you should make a new texture for each
+You still might notice an issue with the edges of the letters.
+
+<img class="webgl_center" src="resources/text-gray-outline.png" />
+
+The issue here is the Canvas2D api produces only premultiplied alpha values.
+When we upload the contents of the to a texture WebGL tries to unpremultiply
+the values but it can't do this perfectly because premultiplied alpha is lossy.
+
+To fix that lets well WebGL not to unpremultiply
+
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+
+This tells WebGL to supply premultiplied alpha values to `gl.texImage2D` and `gl.texSubImage2D`.
+If the data passed to `gl.texImage2D` is already premultiplied as it is for canvas2d data then
+WebGL can just pass it through.
+
+We also need to change the blending function
+
+    -gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    +gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+The old one multipled the src color by its alpha. That's what `SRC_ALPHA` means. But
+now our texture's data has already been multiplied by its alpha. That's what premultipled means.
+So we don't need to GPU to do the multiplication. Setting it ot `ONE` means multiply by 1.
+
+%(example: { url: "../webgl-text-texture-premultiplied-alpha.html" })s
+
+The edges are gone now.
+
+If you want to draw different text at each F you should make a new texture for each
 F and just update the text uniforms for that F.
 
     // create text textures, one for each F
@@ -337,6 +366,57 @@ and set the uniform for the texture before drawing
 
 %(example: { url: "../webgl-text-texture-different-text.html" })s
 
+We've been using black to draw the text into the canvas.
+It would be more useful if we rendered the text in white. Then we could multiply
+the text by a color and make it any color we want.
+
+First we'll change the text shader to multiply by a color
+
+    varying vec2 v_texcoord;
+
+    uniform sampler2D u_texture;
+    +uniform vec4 u_color;
+
+    void main() {
+    *   gl_FragColor = texture2D(u_texture, v_texcoord) * u_color;
+    }
+
+
+And when we draw the text into the canvas use white
+
+    textCtx.fillStyle = "white";
+
+Then we'll make some colors
+
+    // colors, 1 for each F
+    var colors = [
+      [0.0, 0.0, 0.0, 1], // 0
+      [1.0, 0.0, 0.0, 1], // 1
+      [0.0, 1.0, 0.0, 1], // 2
+      [1.0, 1.0, 0.0, 1], // 3
+      [0.0, 0.0, 1.0, 1], // 4
+      [1.0, 0.0, 1.0, 1], // 5
+      [0.0, 1.0, 1.0, 1], // 6
+      [0.5, 0.5, 0.5, 1], // 7
+      [0.5, 0.0, 0.0, 1], // 8
+      [0.0, 0.0, 0.0, 1], // 9
+      [0.5, 5.0, 0.0, 1], // 10
+      [0.0, 5.0, 0.0, 1], // 11
+      [0.5, 0.0, 5.0, 1], // 12,
+      [0.0, 0.0, 5.0, 1], // 13,
+      [0.5, 5.0, 5.0, 1], // 14,
+      [0.0, 5.0, 5.0, 1], // 15,
+    ];
+
+At draw time we select a color
+
+    // set color uniform
+    textUniforms.u_color = colors[ndx];
+
+Colors
+
+%(example: { url: "../webgl-text-texture-different-colors.html" })s
+
 This techinque is actually the technique most browsers use when they are GPU accelerated.
 They generate textures with your HTML content and all the various styles you've applied
 and as long as that content doesn't change they can just render the texture
@@ -344,8 +424,8 @@ again when you scroll etc.. Of course if you're updating things all the time the
 this techinque might get a little bit slow because re-generating the textures and re-uploading
 it to the GPU is a relatively slow operation.
 
-In the next article we'll go over a techinque that is probably better for cases where
-things update often.
+In [the next article we'll go over a techinque that is probably better for cases where
+things update often](webgl-text-glyphs.html).
 
 
 

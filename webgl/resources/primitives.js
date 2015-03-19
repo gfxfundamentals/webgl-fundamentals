@@ -112,12 +112,13 @@
       }
     }
 
-    return reorientVertices({
+    var arrays = reorientVertices({
       position: positions,
       normal: normals,
       texcoord: texcoords,
       indices: indices,
     }, matrix);
+    return arrays;
   };
 
   /**

@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>WebGL Text - Textures different textures</title>
+<title>WebGL Text - Glyphs</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 * {
@@ -72,9 +72,10 @@ precision mediump float;
 varying vec2 v_texcoord;
 
 uniform sampler2D u_texture;
+uniform vec4 u_color;
 
 void main() {
-   gl_FragColor = texture2D(u_texture, v_texcoord);
+   gl_FragColor = texture2D(u_texture, v_texcoord) * u_color;
 }
 </script>
 <script>
@@ -89,7 +90,7 @@ function makeTextCanvas(text, width, height) {
   textCtx.font = "20px monospace";
   textCtx.textAlign = "center";
   textCtx.textBaseline = "middle";
-  textCtx.fillStyle = "black";
+  textCtx.fillStyle = "white";
   textCtx.clearRect(0, 0, textCtx.canvas.width, textCtx.canvas.height);
   textCtx.fillText(text, width / 2, height / 2);
   return textCtx.canvas;
@@ -112,8 +113,7 @@ function main() {
   var fProgramInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
   var textProgramInfo = createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
 
-  // create text textures, one for each F
-  var textTextures = [
+  var names = [
     "anna",   // 0
     "colin",  // 1
     "james",  // 2
@@ -130,8 +130,38 @@ function main() {
     "evan",   // 13,
     "sakura", // 14,
     "kai",    // 15,
+  ];
+
+  // create text textures, one for each letter
+  var textTextures = [
+    "a",    // 0
+    "b",    // 1
+    "c",    // 2
+    "d",    // 3
+    "e",    // 4
+    "f",    // 5
+    "g",    // 6
+    "h",    // 7
+    "i",    // 8
+    "j",    // 9
+    "k",    // 10
+    "l",    // 11
+    "m",    // 12,
+    "n",    // 13,
+    "o",    // 14,
+    "p",    // 14,
+    "q",    // 14,
+    "r",    // 14,
+    "s",    // 14,
+    "t",    // 14,
+    "u",    // 14,
+    "v",    // 14,
+    "w",    // 14,
+    "x",    // 14,
+    "y",    // 14,
+    "z",    // 14,
   ].map(function(name) {
-    var textCanvas = makeTextCanvas(name, 100, 26);
+    var textCanvas = makeTextCanvas(name, 10, 26);
     var textWidth  = textCanvas.width;
     var textHeight = textCanvas.height;
     var textTex = gl.createTexture();
@@ -156,6 +186,7 @@ function main() {
   var textUniforms = {
     u_matrix: makeIdentity(),
     u_texture: null,  // we'll set it at render time
+    u_color: [0, 0, 0, 1],  // black
   };
 
   function radToDeg(r) {
@@ -261,37 +292,48 @@ function main() {
     gl.depthMask(false);
 
     // draw the text
+
+    // setup to draw the text.
+    // Because every letter uses the same attributes and the same progarm
+    // we only need to do this once.
+    gl.useProgram(textProgramInfo.program);
+    setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
+
     textPositions.forEach(function(pos, ndx) {
 
-      // select a texture
-      var tex = textTextures[ndx];
+      var name = names[ndx];
 
-      // scale the F to the size we need it.
-      // use just the position of the 'F' for the text
-      var textMatrix = makeIdentity();
-      textMatrix = matrixMultiply(textMatrix, makeScale(tex.width, tex.height, 1));
-      // because pos is in view space that means it's a vector from the eye to
-      // some position. So translate along that vector back toward the eye some distance
-      var fromEye = normalize(pos);
-      var amountToMoveTowardEye = 150;  // because the F is 150 units long
-      textMatrix = matrixMultiply(textMatrix, makeTranslation(
-          pos[0] - fromEye[0] * amountToMoveTowardEye,
-          pos[1] - fromEye[1] * amountToMoveTowardEye,
-          pos[2] - fromEye[2] * amountToMoveTowardEye));
-      textMatrix = matrixMultiply(textMatrix, projectionMatrix);
+      // for each leter
+      for (var ii = 0; ii < name.length; ++ii) {
+        var letter = name.charCodeAt(ii);
+        var letterNdx = letter - "a".charCodeAt(0);
 
-      // setup to draw the text.
-      gl.useProgram(textProgramInfo.program);
+        // select a letter texture
+        var tex = textTextures[letterNdx];
 
-      setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
+        // scale the F to the size we need it.
+        // use just the position of the 'F' for the text
+        var textMatrix = makeIdentity();
+        textMatrix = matrixMultiply(textMatrix, makeTranslation(ii, 0, 0));
+        textMatrix = matrixMultiply(textMatrix, makeScale(tex.width, tex.height, 1));
+        // because pos is in view space that means it's a vector from the eye to
+        // some position. So translate along that vector back toward the eye some distance
+        var fromEye = normalize(pos);
+        var amountToMoveTowardEye = 150;  // because the F is 150 units long
+        textMatrix = matrixMultiply(textMatrix, makeTranslation(
+            pos[0] - fromEye[0] * amountToMoveTowardEye,
+            pos[1] - fromEye[1] * amountToMoveTowardEye,
+            pos[2] - fromEye[2] * amountToMoveTowardEye));
+        textMatrix = matrixMultiply(textMatrix, projectionMatrix);
 
-      // set texture uniform
-      textUniforms.u_texture = tex.texture;
-      copyMatrix(textMatrix, textUniforms.u_matrix);
-      setUniforms(textProgramInfo.uniformSetters, textUniforms);
+        // set texture uniform
+        textUniforms.u_texture = tex.texture;
+        copyMatrix(textMatrix, textUniforms.u_matrix);
+        setUniforms(textProgramInfo.uniformSetters, textUniforms);
 
-      // Draw the text.
-      gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+        // Draw the text.
+        gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+      }
     });
 
     requestAnimationFrame(drawScene);
