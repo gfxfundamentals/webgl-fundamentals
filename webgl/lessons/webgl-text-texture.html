@@ -278,16 +278,17 @@ it +Y some number of units, enough to make sure it was always above the player.<
 Because &#39;pos&#39; is in view space that means it&#39;s relative to the eye (which is at 0,0,0 in view space).
 So if we normalize it we get a unit vector pointing from the eye to that point which we can then
 multiply by some amount to move the text a specific number of units toward or away from the eye.</p>
-<pre><code>var textMatrix = makeIdentity();
-textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
-// because pos is in view space that means it&#39;s a vector from the eye to
+<pre><code>// because pos is in view space that means it&#39;s a vector from the eye to
 // some position. So translate along that vector back toward the eye some distance
-var fromEye = normalize(pos);
-var amountToMoveTowardEye = 150;  // because the F is 150 units long
-textMatrix = matrixMultiply(textMatrix, makeTranslation(
-    pos[0] - fromEye[0] * amountToMoveTowardEye,
-    pos[1] - fromEye[1] * amountToMoveTowardEye,
-    pos[2] - fromEye[2] * amountToMoveTowardEye));
++var fromEye = normalize(pos);
++var amountToMoveTowardEye = 150;  // because the F is 150 units long
++var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
++var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
++var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
+
+var textMatrix = makeIdentity();
+textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
+*textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
 textMatrix = matrixMultiply(textMatrix, projectionMatrix);
 </code></pre><p>Here&#39;s that.</p>
 <div>
@@ -321,6 +322,33 @@ So we don&#39;t need to GPU to do the multiplication. Setting it ot <code>ONE</c
 
 
 <p>The edges are gone now.</p>
+<p>What if you want to keep the text a fixed size but still sort correctly? Well, if you remember
+from <a href="webgl-3d-perspective.html">the perspective article</a> our perspective matrix is going
+to scale our object by <code>-Z</code> to make it get smaller in the distance. So, we can just scale
+by <code>-Z</code> times some desired-scale to compensate.</p>
+<pre><code>...
+// because pos is in view space that means it&#39;s a vector from the eye to
+// some position. So translate along that vector back toward the eye some distance
+var fromEye = normalize(pos);
+var amountToMoveTowardEye = 150;  // because the F is 150 units long
+var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
+var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
+var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
++var desiredTextScale = -1 / gl.canvas.height;  // 1x1 pixels
++var scale = viewZ * desiredTextScale;
+
+var textMatrix = makeIdentity();
+*textMatrix = matrixMultiply(textMatrix, makeScale(textWidth * scale, textHeight * scale, 1));
+textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
+textMatrix = matrixMultiply(textMatrix, projectionMatrix);
+...
+</code></pre><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-texture-consistent-scale.html"></iframe>
+  <a class="webgl_center" href="../webgl-text-texture-consistent-scale.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+
+
 <p>If you want to draw different text at each F you should make a new texture for each
 F and just update the text uniforms for that F.</p>
 <pre><code>// create text textures, one for each F

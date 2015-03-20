@@ -84,19 +84,22 @@ letter in each name.
     +    // select a letter texture
     +    var tex = textTextures[letterNdx];
 
-        // scale the F to the size we need it.
         // use just the position of the 'F' for the text
-        var textMatrix = makeIdentity();
-    +    textMatrix = matrixMultiply(textMatrix, makeTranslation(ii, 0, 0));
-        textMatrix = matrixMultiply(textMatrix, makeScale(tex.width, tex.height, 1));
+
         // because pos is in view space that means it's a vector from the eye to
         // some position. So translate along that vector back toward the eye some distance
         var fromEye = normalize(pos);
         var amountToMoveTowardEye = 150;  // because the F is 150 units long
-        textMatrix = matrixMultiply(textMatrix, makeTranslation(
-            pos[0] - fromEye[0] * amountToMoveTowardEye,
-            pos[1] - fromEye[1] * amountToMoveTowardEye,
-            pos[2] - fromEye[2] * amountToMoveTowardEye));
+        var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
+        var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
+        var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
+        var desiredTextScale = -1 / gl.canvas.height;  // 1x1 pixels
+        var scale = viewZ * desiredTextScale;
+
+        var textMatrix = makeIdentity();
+    +    textMatrix = matrixMultiply(textMatrix, makeTranslation(ii, 0, 0));
+        textMatrix = matrixMultiply(textMatrix, makeScale(tex.width * scale, tex.height * scale, 1));
+        textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
         textMatrix = matrixMultiply(textMatrix, projectionMatrix);
 
         // set texture uniform
