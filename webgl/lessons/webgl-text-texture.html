@@ -458,6 +458,37 @@ this techinque might get a little bit slow because re-generating the textures an
 it to the GPU is a relatively slow operation.</p>
 <p>In <a href="webgl-text-glyphs.html">the next article we&#39;ll go over a techinque that is probably better for cases where
 things update often</a>.</p>
+<div class="webgl_bottombar">
+<h3>Scaling Text without pixelation</h3>
+<p>
+You might notice the examples before we started using a constitent size the
+text gets very pixelated as it gets close the the camera. How do we fix that?
+</p>
+<p>
+Well, honestly it's not very common to scale 2d text in 3d. Look at most games
+or 3D editors and you'll see the text is almost always on consistent size
+regardless of how far or close to the camera it is. In fact often that text
+migth be drawn in 2d instead of 3d so that even of someone or something is
+behind something else like a teammate behind a wall you can still read the text.
+</p>
+<p>If you do happen to want to scale 2d text in 3d I don't know of any easy options.
+A few off the top of my head</p>
+<ul>
+<li>Make different sizes textures with fonts at different resolutions. You then
+use the higher resolution textures as the text gets larger. This is called
+LODing (using different Levels of Detail).</li>
+<li>Another would be to render the textures with the exact correct size of
+text every frame. That would likely be really slow.</li>
+<li>Yet another would be to make 2d text out of geometry. In other words instead
+of drawing text into a texture make text from lots and lots of triangles. That
+works but it has other issues in that small text will not render well and large
+text you'll start to see the triangles.</li>
+<li>One more is to <a href="http://research.microsoft.com/en-us/um/people/cloop/loopblinn05.pdf">use very special shaders that render curves</a>. That's very cool
+but way beyond what I can explain here.</li>
+</div>
+
+
+
 
       <hr/>
       <div>
