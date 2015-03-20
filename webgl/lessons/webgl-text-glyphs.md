@@ -375,7 +375,7 @@ those in textures. There just isn't enough room.
 
 The way the OS and browsers handle this when they're GPU accelerated is by using a glyph texture cache. Like
 above they might put textures in a texture atlas but they probably make the area
-for each glpyh fixed size. They keep the most recently used glyphs in the texture.
+for each glpyh a fixed size. They keep the most recently used glyphs in the texture.
 If they need to draw a glyph that's not in the texture they replace the least
 recently used one with the new one they need. Of course if that glyph they are
 about to replace is still being refereneced by a quad yet to be drawn then they need
@@ -395,7 +395,7 @@ I hope that's covered text in WebGL.
 <div class="webgl_bottombar">
 <h3>Issues with making glyphs using the Canvas2D api</h3>
 <p>
-How did I decide on a `baseline` of 16 and a `letterHeight` of 22 when making
+How did I decide on a <code>baseline</code> of 16 and a <code>letterHeight</code> of 22 when making
 the glyphs? This is actually one place that's a little problematic as far as I can tell. The
 issue is HTML5 and the Canvas API give us no way to know any of those things. There's no
 way to tell how tall the tallest glyph of a font will be without just trying every letter.
