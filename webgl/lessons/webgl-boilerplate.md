@@ -126,7 +126,7 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
 Now to compile a shader I can just do
 
 <pre class="prettyprint showlinemods">
-var shader = compileShaderFromScriptTag(gl, "someScriptTagId");
+var shader = compileShaderFromScript(gl, "someScriptTagId");
 </pre>
 
 I'll usually go one step further and make a function to compile to shaders
@@ -141,7 +141,7 @@ from script tags, attach them to a program and link them.
  * @param {string} fragmentShaderId The id of the fragment shader script tag.
  * @return {!WebGLProgram} A program
  */
-function createProgramFromScriptTags(
+function createProgramFromScripts(
     gl, vertexShaderId, fragmentShaderId) {
   var vertexShader = createShaderFromScriptTag(gl, vertexShaderId);
   var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId);
@@ -151,9 +151,7 @@ function createProgramFromScriptTags(
 
 There's a couple of other pieces I've needed in most WebGL samples.
 
-One is <a href="http://paulirish.com/2011/requestanimationframe-for-smart-animating/">Paul
-Irish's requestAnimationFrame polyfill</a>.  The other is some code to
-initialize WebGL.  At the time of this writing WebGL requires the asking
+At the time of this writing WebGL requires the asking
 for an "experimental-webgl" context where as in the near future you can
 just ask for "webgl".  I could write this in every WebGL program
 

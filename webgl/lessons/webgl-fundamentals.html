@@ -64,9 +64,7 @@ var canvas = document.getElementById("canvas");
 var gl = canvas.getContext("experimental-webgl");
 
 // setup a GLSL program
-var vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
-var fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
-var program = createProgram(gl, [vertexShader, fragmentShader]);
+var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
 gl.useProgram(program);
 
 // look up where the vertex data needs to go.
@@ -226,18 +224,36 @@ function setRectangle(gl, x, y, width, height) {
 <p>And here&#39;s the rectangles.</p>
 <p><iframe class="webgl_example" src="../webgl-2d-rectangles.html" style="width: 400px; height: 300px;"></iframe>
 <a class="webgl_center" href="../webgl-2d-rectangles.html" target="_blank">click here to open in a separate window</a></p>
-<p>I hope you can see that WebGL is actually a pretty simple API. While it can get more complicated to do 3D that complication is added by you, the programmer, in the form of more complex shaders. The WebGL API itself is 2D and fairly simple.</p>
-<p>From here you can go in 2 direction. If you are interested in image procesing I&#39;ll show you <a href="webgl-image-processing.html">how to do some 2D image processing</a>. If you are interesting in learning about translation, rotation and scale then <a href="webgl-2d-translation.html">start here</a>.</p>
+<p>I hope you can see that WebGL is actually a pretty simple API.
+While it can get more complicated to do 3D that complication is
+added by you, the programmer, in the form of more complex shaders.
+The WebGL API itself is 2D and fairly simple.</p>
+<p>From here you can go in 2 direction. If you are interested in image procesing
+I&#39;ll show you <a href="webgl-image-processing.html">how to do some 2D image processing</a>.
+If you are interesting in learning about translation,
+rotation and scale then <a href="webgl-2d-translation.html">start here</a>.</p>
 <div class="webgl_bottombar">
 <h3>What do type="x-shader/x-vertex" and type="x-shader/x-fragment" mean?</h3>
 <p>
-<code>&lt;script&gt;</code> tags default to having JavaScript in them. You can put no type or you can put <code>type="javascript"</code> or <code>type="text/javascript"</code> and the browser will interpret the contents as JavaScript. If you put anything else the browser ignores the contents of the script tag.
+<code>&lt;script&gt;</code> tags default to having JavaScript in them.
+You can put no type or you can put <code>type="javascript"</code> or
+<code>type="text/javascript"</code> and the browser will interpret the
+contents as JavaScript. If you put anything else the browser ignores the
+contents of the script tag.
 </p>
 <p>
-We can use this feature to store shaders in script tags. Even better, we can make up our own type and in our javascript look for that to decide whether to compile the shader as a vertex shader or a fragment shader.
+We can use this feature to store shaders in script tags. Even better, we
+can make up our own type and in our javascript look for that to decide
+whether to compile the shader as a vertex shader or a fragment shader.
 </p>
 <p>
-In this case the function <code>createShaderFromScriptElement</code> looks for a script with specified <code>id</code> and then looks at the <code>type</code> to decide what type of shader to create.
+In this case the function <code>createProgramFromScripts</code> looks for
+scripts with specified ids and then looks at the <code>type</code> to
+decide what type of shader to create.
+</p>
+<p>
+<code>createProgramFromScripts</code> is part of some <a href="webgl-boilerplate.html">boilerplate like code</a>
+that almost every WebGL program needs.
 </p>
 </div>
 

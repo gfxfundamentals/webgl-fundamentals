@@ -53,9 +53,7 @@ function render(images) {
   }
 
   // setup GLSL program
-  var vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
-  var fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
-  var program = createProgram(gl, [vertexShader, fragmentShader]);
+  var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
   gl.useProgram(program);
 
   // look up where the vertex data needs to go.
