@@ -869,16 +869,20 @@
    * @return {boolean} true if window is on screen.
    */
   function isFrameVisible(window) {
-    var iframe = getIFrameForWindow(window);
-    if (!iframe) {
-      return true;
+    try {
+      var iframe = getIFrameForWindow(window);
+      if (!iframe) {
+        return true;
+      }
+
+      var bounds = iframe.getBoundingClientRect();
+      var isVisible = bounds.top < window.parent.innerHeight && bounds.bottom >= 0 &&
+                      bounds.left < window.parent.innerWidth && bounds.right >= 0;
+
+      return isVisible && isFrameVisible(window.parent);
+    } catch (e) {
+      return true;  // We got a security error?
     }
-
-    var bounds = iframe.getBoundingClientRect();
-    var isVisible = bounds.top < window.parent.innerHeight && bounds.bottom >= 0 &&
-                    bounds.left < window.parent.innerWidth && bounds.right >= 0;
-
-    return isVisible && isFrameVisible(window.parent);
   };
 
   /**
