@@ -87,7 +87,7 @@ var replaceParams = (function() {
 }());
 
 registerReplaceHandler('include', function(filename) {
-  return cache.readFileSync(filename, {encoding: "utf-8"});
+  return readFile(filename, {encoding: "utf-8"});
 });
 
 registerReplaceHandler('example', function(options) {
