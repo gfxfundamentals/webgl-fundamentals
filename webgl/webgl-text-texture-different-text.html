@@ -281,7 +281,7 @@ function main() {
       var scale = viewZ * desiredTextScale;
 
       var textMatrix = makeIdentity();
-      textMatrix = matrixMultiply(textMatrix, makeScale(textWidth * scale, textHeight * scale, 1));
+      textMatrix = matrixMultiply(textMatrix, makeScale(tex.width * scale, tex.height * scale, 1));
       textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
       textMatrix = matrixMultiply(textMatrix, projectionMatrix);
 
