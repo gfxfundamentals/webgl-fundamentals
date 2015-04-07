@@ -1339,24 +1339,27 @@
 
   /**
    * Draws a list of objects
+   * @param {WebGLRenderingContext} gl A WebGLRenderingContext
    * @param {DrawObject[]} objectsToDraw an array of objects to draw.
    * @memberOf module:webgl-utils
    */
-  function drawObjectList(objectsToDraw) {
+  function drawObjectList(gl, objectsToDraw) {
     var lastUsedProgramInfo = null;
     var lastUsedBufferInfo = null;
 
     objectsToDraw.forEach(function(object) {
       var programInfo = object.programInfo;
       var bufferInfo = object.bufferInfo;
+      var bindBuffers = false;
 
       if (programInfo !== lastUsedProgramInfo) {
         lastUsedProgramInfo = programInfo;
         gl.useProgram(programInfo.program);
+        bindBuffers = true;
       }
 
       // Setup all the needed attributes.
-      if (bufferInfo != lastUsedBufferInfo) {
+      if (bindBuffers || bufferInfo != lastUsedBufferInfo) {
         lastUsedBufferInfo = bufferInfo;
         setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
       }
