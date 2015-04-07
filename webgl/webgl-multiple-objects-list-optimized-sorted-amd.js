@@ -129,14 +129,21 @@ require([
     objectsToDraw.forEach(function(object) {
       var programInfo = object.programInfo;
       var bufferInfo = object.bufferInfo;
+      var bindBuffers = false;
 
       if (programInfo !== lastUsedProgramInfo) {
         lastUsedProgramInfo = programInfo;
         gl.useProgram(programInfo.program);
+
+        // We have to rebind buffers when changing programs because we
+        // only bind buffers the program uses. So if 2 programs use the same
+        // bufferInfo but the 1st one uses only positions the when the
+        // we switch to the 2nd one some of the attributes will not be on.
+        bindBuffers = true;
       }
 
       // Setup all the needed attributes.
-      if (bufferInfo != lastUsedBufferInfo) {
+      if (bindBuffers || bufferInfo !== lastUsedBufferInfo) {
         lastUsedBufferInfo = bufferInfo;
         webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
       }
