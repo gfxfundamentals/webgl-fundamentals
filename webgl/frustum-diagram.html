@@ -42,7 +42,7 @@ var gl;                   // the gl context.
 var canvas;               // the canvas
 var math;                 // the math lib.
 var fast;                 // the fast math lib.
-var devicePixelRatio = window.devicePixelRatio || 1;
+var pixelRatio = window.devicePixelRatio || 1;
 
 function CreateApp() {
   // Create Geometry.
@@ -237,7 +237,7 @@ function CreateApp() {
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    gl.viewport(0, 300 * devicePixelRatio, 400 * devicePixelRatio, 300 * devicePixelRatio);
+    gl.viewport(0, 300 * pixelRatio, 400 * pixelRatio, 300 * pixelRatio);
 
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
@@ -358,8 +358,8 @@ function CreateApp() {
 
     // Draw 3D view
     gl.enable(gl.SCISSOR_TEST);
-    gl.viewport(0, 0, 400 * devicePixelRatio, 300 * devicePixelRatio);
-    gl.scissor(0, 0, 400 * devicePixelRatio, 300 * devicePixelRatio);
+    gl.viewport(0, 0, 400 * pixelRatio, 300 * pixelRatio);
+    gl.scissor(0, 0, 400 * pixelRatio, 300 * pixelRatio);
     gl.clearColor(0.5, 0.5, 0.5, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -378,8 +378,8 @@ function CreateApp() {
 }
 
 function resizeCanvas() {
-  var displayWidth  = canvas.clientWidth * devicePixelRatio;
-  var displayHeight = canvas.clientHeight * devicePixelRatio;
+  var displayWidth  = canvas.clientWidth * pixelRatio;
+  var displayHeight = canvas.clientHeight * pixelRatio;
   if (canvas.width != displayWidth ||
       canvas.height != displayHeight) {
 
