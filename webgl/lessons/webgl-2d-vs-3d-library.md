@@ -3,16 +3,16 @@ Title: WebGL - 2D vs 3D libraries
 This post is a kind of side topic on a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a>
 
-I'm writing this because my claim that WebGL is a 2D API and not a 3D API
+I'm writing this because my claim that WebGL is a Rasterization API and not a 3D API
 touches a nerve with some people.  I'm not sure why they feel threatened
-or whatever it is that makes them so upset I called WebGL a 2D API.
+or whatever it is that makes them so upset I called WebGL a Rasterization API.
 
 Arguably everything is a matter of perspective.  I might say a knife is an
 eating utensil, someone else might say a knife is a tool and yet another
 person might say a knife is a weapon.
 
 In the case of WebGL though there's a reason I think it's important to
-call WebGL a 2D API and that is specifically because of the amount of 3D
+call WebGL a rasterization API and that is specifically because of the amount of 3D
 math knowledge you need to know to use WebGL to draw anything in 3D.
 
 I would argue that anything that calls itself a 3D library should do the
@@ -177,17 +177,17 @@ draws some lines in 2D. The WebGL version does the same thing except the math
 WE SUPPLIED is in GLSL and executed by the GPU.
 
 The point of this last demostration is to show that effectively WebGL is
-just a 2D rasteration engine, similar to Canvas 2d. Sure
+just a rasteration engine, similar to Canvas 2d. Sure
 WebGL does have features that help you implement 3D.  WebGL has a depth
 buffer which makes depth sorting far easier than a system without.  WebGL
 also has various math functions built in that are very useful for doing 3D
 math although there is argubly nothing that makes them 3D.  They're a math
 library.  You use them for math whether or not that math is 1d, 2d, 3d,
-whatever. But ultimately, WebGL only draws in 2D. You have to provide it
-with clipspace 2D coordinates that represent what you want drawn. Sure
+whatever. But ultimately, WebGL only rasterizes. You have to provide it
+with clipspace coordinates that represent what you want drawn. Sure
 you provide a x,y,z,w and it divides by W before rendering but that's
 hardly enough to qualify WebGL as a 3D library. In the 3D librares you
-supply 3D data, the libraries take care of calculating 2D points from 3D.
+supply 3D data, the libraries take care of calculating clippoints points from 3D.
 
 I hope you at least understand where I'm coming from when I say WebGL is
 not a 3D library. I hope you'll also realize that a 3D library should
