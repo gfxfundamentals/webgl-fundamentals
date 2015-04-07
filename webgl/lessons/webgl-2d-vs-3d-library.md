@@ -25,7 +25,7 @@ To give an anology, C++ does not "process words" out of the box.  We
 don't call C++ a "word processor" even though word processors can be
 written in C++.  Similarly WebGL does not draw 3D graphics out of the box.
 You can write library that will draw 3D graphics with WebGL but by itself
-it doesn't not do 3D graphics.
+it does not do 3D graphics.
 
 To give a further example, assume we want to draw a cube in 3d
 with lights.
