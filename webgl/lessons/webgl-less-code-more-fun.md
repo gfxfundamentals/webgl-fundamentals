@@ -421,7 +421,7 @@ Feel free to use this style in your own code. The functions `createUniformSetter
 [`webgl-utils.js`](https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js)
 file used by all the samples.
 
-Next up, [drawing multiple objects](webgl-multiple-objects.html).
+Next up, [drawing multiple things](webgl-drawing-multiple-things.html).
 
 <div class="webgl_bottombar">
 <h3>Can we use the setters directly?</h3>
