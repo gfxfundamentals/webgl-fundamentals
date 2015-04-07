@@ -47,7 +47,7 @@ abs(3.333 - 6.666) = 3.333
 </pre>
 
 You can see that as Z increases, as it gets further away, we'll end up drawing it smaller.
-If we divide in clipspace we might get better results because Z will a smaller number (-1 to +1).
+If we divide in clipspace we might get better results because Z will be a smaller number (-1 to +1).
 If we add a fudgeFactor to multiply Z before we divide we can adjust how much smaller things
 get for a given distance.
 
