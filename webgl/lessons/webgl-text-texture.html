@@ -109,7 +109,7 @@ var textTex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, textTex);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
 // make sure we can render it even if it&#39;s not a power of 2
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>Setup uniforms for both the &#39;F&#39; and text</p>
@@ -377,7 +377,7 @@ var textTextures = [
   gl.bindTexture(gl.TEXTURE_2D, textTex);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
   // make sure we can render it even if it&#39;s not a power of 2
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   return {
@@ -565,6 +565,7 @@ but way beyond what I can explain here.</li>
 </ul>
 <ul>
   <li><a href="/docs/">Helper API Docs</a></li>
+  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
 </ul>
 
     </div>
