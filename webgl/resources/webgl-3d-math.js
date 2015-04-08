@@ -28,6 +28,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+"use strict";
 
 /**
  * Various 3d math functions.
@@ -46,7 +47,6 @@
     });
   }
 }(this, function () {
-  "use strict";
 
   /**
    * An array or typed array with 3 values.
@@ -65,45 +65,6 @@
    * @typedef {number[]|TypedArray} Matrix4
    * @memberOf module:webgl-3d-math
    */
-
-  /**
-   * Creates a lookAt matrix.
-   * This is a world matrix for a camera. In other words it will transform
-   * from the origin to a place and orientation in the world. For a view
-   * matrix take the inverse of this.
-   * @param {Vector3} cameraPosition position of the camera
-   * @param {Vector3} target position of the target
-   * @param {Vector3} up direction
-   * @param {Matrix4?} dst optional matrix to store result
-   * @return {Matrix4} dst or a new matrix of none provided
-   * @memberOf module:webgl-3d-math
-   */
-  function makeLookAt(cameraPosition, target, up, dst) {
-    dst = dst || new Float32Array(16);
-    var zAxis = normalize(
-        subtractVectors(cameraPosition, target));
-    var xAxis = cross(up, zAxis);
-    var yAxis = cross(zAxis, xAxis);
-
-    dst[ 0] = xAxis[0];
-    dst[ 1] = xAxis[1];
-    dst[ 2] = xAxis[2];
-    dst[ 3] = 0;
-    dst[ 4] = yAxis[0];
-    dst[ 5] = yAxis[1];
-    dst[ 6] = yAxis[2];
-    dst[ 7] = 0;
-    dst[ 8] = zAxis[0];
-    dst[ 9] = zAxis[1];
-    dst[10] = zAxis[2];
-    dst[11] = 0;
-    dst[12] = cameraPosition[0];
-    dst[13] = cameraPosition[1];
-    dst[14] = cameraPosition[2];
-    dst[15] = 1;
-
-    return dst;
-  }
 
   /**
    * subtracts 2 vectors3s
@@ -216,6 +177,45 @@
   }
 
   /**
+   * Creates a lookAt matrix.
+   * This is a world matrix for a camera. In other words it will transform
+   * from the origin to a place and orientation in the world. For a view
+   * matrix take the inverse of this.
+   * @param {Vector3} cameraPosition position of the camera
+   * @param {Vector3} target position of the target
+   * @param {Vector3} up direction
+   * @param {Matrix4?} dst optional matrix to store result
+   * @return {Matrix4} dst or a new matrix of none provided
+   * @memberOf module:webgl-3d-math
+   */
+  function makeLookAt(cameraPosition, target, up, dst) {
+    dst = dst || new Float32Array(16);
+    var zAxis = normalize(
+        subtractVectors(cameraPosition, target));
+    var xAxis = normalize(cross(up, zAxis));
+    var yAxis = normalize(cross(zAxis, xAxis));
+
+    dst[ 0] = xAxis[0];
+    dst[ 1] = xAxis[1];
+    dst[ 2] = xAxis[2];
+    dst[ 3] = 0;
+    dst[ 4] = yAxis[0];
+    dst[ 5] = yAxis[1];
+    dst[ 6] = yAxis[2];
+    dst[ 7] = 0;
+    dst[ 8] = zAxis[0];
+    dst[ 9] = zAxis[1];
+    dst[10] = zAxis[2];
+    dst[11] = 0;
+    dst[12] = cameraPosition[0];
+    dst[13] = cameraPosition[1];
+    dst[14] = cameraPosition[2];
+    dst[15] = 1;
+
+    return dst;
+  }
+
+  /**
    * Computes a 4-by-4 perspective transformation matrix given the angular height
    * of the frustum, the aspect ratio, and the near and far clipping planes.  The
    * arguments define a frustum extending in the negative z direction.  The given
@@ -257,7 +257,7 @@
     dst[15] = 0;
 
     return dst;
-  };
+  }
 
   /**
    * Computes a 4-by-4 orthographic projection matrix given the coordinates of the
@@ -298,7 +298,7 @@
     dst[15] = 1;
 
     return dst;
-  };
+  }
 
   /**
    * Computes a 4-by-4 perspective transformation matrix given the left, right,
@@ -342,7 +342,7 @@
     dst[15] = 0;
 
     return dst;
-  };
+  }
 
   /**
    * Makes a translation matrix
@@ -406,7 +406,7 @@
     dst[15] = 1;
 
     return dst;
-  };
+  }
 
   /**
    * Makes an y rotation matrix
@@ -438,7 +438,7 @@
     dst[15] = 1;
 
     return dst;
-  };
+  }
 
   /**
    * Makes an z rotation matrix
@@ -515,7 +515,7 @@
     dst[15] = 1;
 
     return dst;
-  };
+  }
 
   /**
    * Makes a scale matrix
@@ -562,38 +562,38 @@
    */
   function matrixMultiply(a, b, dst) {
     dst = dst || new Float32Array(16);
-    var a00 = a[0*4+0];
-    var a01 = a[0*4+1];
-    var a02 = a[0*4+2];
-    var a03 = a[0*4+3];
-    var a10 = a[1*4+0];
-    var a11 = a[1*4+1];
-    var a12 = a[1*4+2];
-    var a13 = a[1*4+3];
-    var a20 = a[2*4+0];
-    var a21 = a[2*4+1];
-    var a22 = a[2*4+2];
-    var a23 = a[2*4+3];
-    var a30 = a[3*4+0];
-    var a31 = a[3*4+1];
-    var a32 = a[3*4+2];
-    var a33 = a[3*4+3];
-    var b00 = b[0*4+0];
-    var b01 = b[0*4+1];
-    var b02 = b[0*4+2];
-    var b03 = b[0*4+3];
-    var b10 = b[1*4+0];
-    var b11 = b[1*4+1];
-    var b12 = b[1*4+2];
-    var b13 = b[1*4+3];
-    var b20 = b[2*4+0];
-    var b21 = b[2*4+1];
-    var b22 = b[2*4+2];
-    var b23 = b[2*4+3];
-    var b30 = b[3*4+0];
-    var b31 = b[3*4+1];
-    var b32 = b[3*4+2];
-    var b33 = b[3*4+3];
+    var a00 = a[0 * 4 + 0];
+    var a01 = a[0 * 4 + 1];
+    var a02 = a[0 * 4 + 2];
+    var a03 = a[0 * 4 + 3];
+    var a10 = a[1 * 4 + 0];
+    var a11 = a[1 * 4 + 1];
+    var a12 = a[1 * 4 + 2];
+    var a13 = a[1 * 4 + 3];
+    var a20 = a[2 * 4 + 0];
+    var a21 = a[2 * 4 + 1];
+    var a22 = a[2 * 4 + 2];
+    var a23 = a[2 * 4 + 3];
+    var a30 = a[3 * 4 + 0];
+    var a31 = a[3 * 4 + 1];
+    var a32 = a[3 * 4 + 2];
+    var a33 = a[3 * 4 + 3];
+    var b00 = b[0 * 4 + 0];
+    var b01 = b[0 * 4 + 1];
+    var b02 = b[0 * 4 + 2];
+    var b03 = b[0 * 4 + 3];
+    var b10 = b[1 * 4 + 0];
+    var b11 = b[1 * 4 + 1];
+    var b12 = b[1 * 4 + 2];
+    var b13 = b[1 * 4 + 3];
+    var b20 = b[2 * 4 + 0];
+    var b21 = b[2 * 4 + 1];
+    var b22 = b[2 * 4 + 2];
+    var b23 = b[2 * 4 + 3];
+    var b30 = b[3 * 4 + 0];
+    var b31 = b[3 * 4 + 1];
+    var b32 = b[3 * 4 + 2];
+    var b33 = b[3 * 4 + 3];
     dst[ 0] = a00 * b00 + a01 * b10 + a02 * b20 + a03 * b30;
     dst[ 1] = a00 * b01 + a01 * b11 + a02 * b21 + a03 * b31;
     dst[ 2] = a00 * b02 + a01 * b12 + a02 * b22 + a03 * b32;
@@ -674,10 +674,10 @@
 
     var d = 1.0 / (m00 * t0 + m10 * t1 + m20 * t2 + m30 * t3);
 
-    dst[0] = d * t0,
-    dst[1] = d * t1,
-    dst[2] = d * t2,
-    dst[3] = d * t3,
+    dst[0] = d * t0;
+    dst[1] = d * t1;
+    dst[2] = d * t2;
+    dst[3] = d * t3;
     dst[4] = d * ((tmp_1 * m10 + tmp_2 * m20 + tmp_5 * m30) -
           (tmp_0 * m10 + tmp_3 * m20 + tmp_4 * m30));
     dst[5] = d * ((tmp_0 * m00 + tmp_7 * m20 + tmp_8 * m30) -
@@ -719,11 +719,12 @@
     dst = dst || new Float32Array(4);
     for (var i = 0; i < 4; ++i) {
       dst[i] = 0.0;
-      for (var j = 0; j < 4; ++j)
+      for (var j = 0; j < 4; ++j) {
         dst[i] += v[j] * m[j * 4 + i];
+      }
     }
     return dst;
-  };
+  }
 
   /**
    * Takes a 4-by-4 matrix and a vector with 3 entries,
@@ -740,14 +741,14 @@
     var v0 = v[0];
     var v1 = v[1];
     var v2 = v[2];
-    var d = v0 * m[0*4+3] + v1 * m[1*4+3] + v2 * m[2*4+3] + m[3*4+3];
+    var d = v0 * m[0 * 4 + 3] + v1 * m[1 * 4 + 3] + v2 * m[2 * 4 + 3] + m[3 * 4 + 3];
 
-    dst[0] = (v0 * m[0*4+0] + v1 * m[1*4+0] + v2 * m[2*4+0] + m[3*4+0]) / d;
-    dst[1] = (v0 * m[0*4+1] + v1 * m[1*4+1] + v2 * m[2*4+1] + m[3*4+1]) / d;
-    dst[2] = (v0 * m[0*4+2] + v1 * m[1*4+2] + v2 * m[2*4+2] + m[3*4+2]) / d;
+    dst[0] = (v0 * m[0 * 4 + 0] + v1 * m[1 * 4 + 0] + v2 * m[2 * 4 + 0] + m[3 * 4 + 0]) / d;
+    dst[1] = (v0 * m[0 * 4 + 1] + v1 * m[1 * 4 + 1] + v2 * m[2 * 4 + 1] + m[3 * 4 + 1]) / d;
+    dst[2] = (v0 * m[0 * 4 + 2] + v1 * m[1 * 4 + 2] + v2 * m[2 * 4 + 2] + m[3 * 4 + 2]) / d;
 
     return dst;
-  };
+  }
 
   /**
    * Takes a 4-by-4 matrix and a vector with 3 entries, interprets the vector as a
@@ -769,12 +770,12 @@
     var v1 = v[1];
     var v2 = v[2];
 
-    dst[0] = v0 * m[0*4+0] + v1 * m[1*4+0] + v2 * m[2*4+0];
-    dst[1] = v0 * m[0*4+1] + v1 * m[1*4+1] + v2 * m[2*4+1];
-    dst[2] = v0 * m[0*4+2] + v1 * m[1*4+2] + v2 * m[2*4+2];
+    dst[0] = v0 * m[0 * 4 + 0] + v1 * m[1 * 4 + 0] + v2 * m[2 * 4 + 0];
+    dst[1] = v0 * m[0 * 4 + 1] + v1 * m[1 * 4 + 1] + v2 * m[2 * 4 + 1];
+    dst[2] = v0 * m[0 * 4 + 2] + v1 * m[1 * 4 + 2] + v2 * m[2 * 4 + 2];
 
     return dst;
-  };
+  }
 
   /**
    * Takes a 4-by-4 matrix m and a vector v with 3 entries, interprets the vector
@@ -798,12 +799,12 @@
     var v1 = v[1];
     var v2 = v[2];
 
-    dst[0] = v0 * mi[0*4+0] + v1 * mi[0*4+1] + v2 * mi[0*4+2];
-    dst[1] = v0 * mi[1*4+0] + v1 * mi[1*4+1] + v2 * mi[1*4+2];
-    dst[2] = v0 * mi[2*4+0] + v1 * mi[2*4+1] + v2 * mi[2*4+2];
+    dst[0] = v0 * mi[0 * 4 + 0] + v1 * mi[0 * 4 + 1] + v2 * mi[0 * 4 + 2];
+    dst[1] = v0 * mi[1 * 4 + 0] + v1 * mi[1 * 4 + 1] + v2 * mi[1 * 4 + 2];
+    dst[2] = v0 * mi[2 * 4 + 0] + v1 * mi[2 * 4 + 1] + v2 * mi[2 * 4 + 2];
 
     return dst;
-  };
+  }
 
   function copyMatrix(src, dst) {
     dst = dst || new Float32Array(16);
