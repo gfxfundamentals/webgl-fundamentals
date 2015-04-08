@@ -28,6 +28,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+"use strict";
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -41,7 +42,6 @@
     });
   }
 }(this, function () {
-  "use strict";
 
   var topWindow = this;
 
@@ -51,34 +51,15 @@
    * Wrapped logging function.
    * @param {string} msg The message to log.
    */
-  function log(msg) {
-    if (topWindow.console && topWindow.console.log) {
-      topWindow.console.log(msg);
-    }
-  };
-
-  /**
-   * Wrapped logging function.
-   * @param {string} msg The message to log.
-   */
   function error(msg) {
     if (topWindow.console) {
       if (topWindow.console.error) {
         topWindow.console.error(msg);
-      }
-      else if (topWindow.console.log) {
+      } else if (topWindow.console.log) {
         topWindow.console.log(msg);
       }
     }
-  };
-
-  /**
-   * Turn off all logging.
-   */
-  function loggingOff() {
-    log = function() {};
-    error = function() {};
-  };
+  }
 
   /**
    * Check if the page is embedded.
@@ -87,23 +68,8 @@
    */
   function isInIFrame(w) {
     w = w || topWindow;
-    return w != w.top;
-  };
-
-  /**
-   * Converts a WebGL enum to a string
-   * @param {WebGLRenderingContext} gl The WebGLRenderingContext to use.
-   * @param {number} value The enum value.
-   * @return {string} The enum as a string.
-   */
-  function glEnumToString(gl, value) {
-    for (var p in gl) {
-      if (gl[p] == value) {
-        return p;
-      }
-    }
-    return "0x" + value.toString(16);
-  };
+    return w !== w.top;
+  }
 
   /**
    * Creates the HTLM for a failure message
@@ -119,7 +85,7 @@
       '<div style="">' + msg + '</div>' +
       '</div>' +
       '</td></tr></table>';
-  };
+  }
 
   /**
    * Mesasge for getting a webgl browser
@@ -138,6 +104,27 @@
     '<a href="http://get.webgl.org/troubleshooting/">Click here for more information.</a>';
 
   /**
+   * Creates a webgl context.
+   * @param {HTMLCanvasElement} canvas The canvas tag to get
+   *     context from. If one is not passed in one will be
+   *     created.
+   * @return {WebGLRenderingContext} The created context.
+   */
+  function create3DContext(canvas, opt_attribs) {
+    var names = ["webgl", "experimental-webgl"];
+    var context = null;
+    for (var ii = 0; ii < names.length; ++ii) {
+      try {
+        context = canvas.getContext(names[ii], opt_attribs);
+      } catch(e) {}  // eslint-disable-line
+      if (context) {
+        break;
+      }
+    }
+    return context;
+  }
+
+  /**
    * Creates a webgl context. If creation fails it will
    * change the contents of the container of the <canvas>
    * tag to an error message with the correct links for WebGL.
@@ -154,7 +141,7 @@
       if (container) {
         container.innerHTML = makeFailHTML(str);
       }
-    };
+    }
 
     if (!topWindow.WebGLRenderingContext) {
       showLink(GET_A_WEBGL_BROWSER);
@@ -166,34 +153,13 @@
       showLink(OTHER_PROBLEM);
     }
     return context;
-  };
-
-  /**
-   * Creates a webgl context.
-   * @param {HTMLCanvasElement} canvas The canvas tag to get
-   *     context from. If one is not passed in one will be
-   *     created.
-   * @return {WebGLRenderingContext} The created context.
-   */
-  var create3DContext = function(canvas, opt_attribs) {
-    var names = ["webgl", "experimental-webgl"];
-    var context = null;
-    for (var ii = 0; ii < names.length; ++ii) {
-      try {
-        context = canvas.getContext(names[ii], opt_attribs);
-      } catch(e) {}
-      if (context) {
-        break;
-      }
-    }
-    return context;
   }
 
   function updateCSSIfInIFrame() {
     if (isInIFrame()) {
       document.body.className = "iframe";
     }
-  };
+  }
 
   /**
    * @typedef {Object} GetWebGLContextOptions
@@ -211,7 +177,7 @@
    * @memberOf module:webgl-utils
    */
   function getWebGLContext(canvas, opt_attribs, opt_options) {
-    var options = opt_options || {}
+    var options = opt_options || {};
 
     if (isInIFrame()) {
       updateCSSIfInIFrame();
@@ -232,7 +198,7 @@
 
     var gl = setupWebGL(canvas, opt_attribs);
     return gl;
-  };
+  }
 
   /**
    * Error Callback
@@ -288,16 +254,16 @@
       gl, shaders, opt_attribs, opt_locations, opt_errorCallback) {
     var errFn = opt_errorCallback || error;
     var program = gl.createProgram();
-    for (var ii = 0; ii < shaders.length; ++ii) {
-      gl.attachShader(program, shaders[ii]);
-    }
+    shaders.forEach(function(shader) {
+      gl.attachShader(program, shader);
+    });
     if (opt_attribs) {
-      for (var ii = 0; ii < opt_attribs.length; ++ii) {
+      obj_attrib.forEach(function(attrib, ndx) {
         gl.bindAttribLocation(
             program,
-            opt_locations ? opt_locations[ii] : ii,
-            opt_attribs[ii]);
-      }
+            opt_locations ? opt_locations[ndx] : ndx,
+            attrib);
+      });
     }
     gl.linkProgram(program);
 
@@ -305,14 +271,14 @@
     var linked = gl.getProgramParameter(program, gl.LINK_STATUS);
     if (!linked) {
         // something went wrong with the link
-        var lastError = gl.getProgramInfoLog (program);
+        var lastError = gl.getProgramInfoLog(program);
         errFn("Error in program linking:" + lastError);
 
         gl.deleteProgram(program);
         return null;
     }
     return program;
-  };
+  }
 
   /**
    * Loads a shader from a script tag.
@@ -329,29 +295,28 @@
     var shaderType;
     var shaderScript = document.getElementById(scriptId);
     if (!shaderScript) {
-      throw("*** Error: unknown script element" + scriptId);
+      throw ("*** Error: unknown script element" + scriptId);
     }
     shaderSource = shaderScript.text;
 
     if (!opt_shaderType) {
-      if (shaderScript.type == "x-shader/x-vertex") {
+      if (shaderScript.type === "x-shader/x-vertex") {
         shaderType = gl.VERTEX_SHADER;
-      } else if (shaderScript.type == "x-shader/x-fragment") {
+      } else if (shaderScript.type === "x-shader/x-fragment") {
         shaderType = gl.FRAGMENT_SHADER;
-      } else if (shaderType != gl.VERTEX_SHADER && shaderType != gl.FRAGMENT_SHADER) {
-        throw("*** Error: unknown shader type");
-        return null;
+      } else if (shaderType !== gl.VERTEX_SHADER && shaderType !== gl.FRAGMENT_SHADER) {
+        throw ("*** Error: unknown shader type");
       }
     }
 
     return loadShader(
         gl, shaderSource, opt_shaderType ? opt_shaderType : shaderType,
         opt_errorCallback);
-  };
+  }
 
   var defaultShaderType = [
     "VERTEX_SHADER",
-    "FRAGMENT_SHADER"
+    "FRAGMENT_SHADER",
   ];
 
   /**
@@ -377,7 +342,7 @@
           gl, shaderScriptIds[ii], gl[defaultShaderType[ii]], opt_errorCallback));
     }
     return createProgram(gl, shaders, opt_attribs, opt_locations, opt_errorCallback);
-  };
+  }
 
   /**
    * Creates a program from 2 sources.
@@ -402,65 +367,15 @@
           gl, shaderSources[ii], gl[defaultShaderType[ii]], opt_errorCallback));
     }
     return createProgram(gl, shaders, opt_attribs, opt_locations, opt_errorCallback);
-  };
-
-  /**
-   * @typedef {Object} ProgramInfo
-   * @property {WebGLProgram} program A shader program
-   * @property {Object<string, function>} uniformSetters: object of setters as returned from createUniformSetters,
-   * @property {Object<string, function>} attribSetters: object of setters as returned from createAttribSetters,
-   * @memberOf module:webgl-utils
-   */
-
-  /**
-   * Creates a ProgramInfo from 2 sources.
-   *
-   * A ProgramInfo contains
-   *
-   *     programInfo = {
-   *        program: WebGLProgram,
-   *        uniformSetters: object of setters as returned from createUniformSetters,
-   *        attribSetters: object of setters as returned from createAttribSetters,
-   *     }
-   *
-   * @param {WebGLRenderingContext} gl The WebGLRenderingContext
-   *        to use.
-   * @param {string[]} shaderSourcess Array of sources for the
-   *        shaders or ids. The first is assumed to be the vertex shader,
-   *        the second the fragment shader.
-   * @param {string[]?} opt_attribs An array of attribs names. Locations will be assigned by index if not passed in
-   * @param {number[]?} opt_locations The locations for the. A parallel array to opt_attribs letting you assign locations.
-   * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
-   *        on error. If you want something else pass an callback. It's passed an error message.
-   * @return {module:webgl-utils.ProgramInfo} The created program.
-   * @memberOf module:webgl-utils
-   */
-  function createProgramInfo(
-      gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback) {
-    var shaderSources = shaderSources.map(function(source) {
-      var script = document.getElementById(source);
-      return script ? script.text : source;
-    });
-    var program = createProgramFromSources(gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback);
-    if (!program) {
-      return;
-    }
-    var uniformSetters = createUniformSetters(gl, program);
-    var attribSetters = createAttributeSetters(gl, program);
-    return {
-      program: program,
-      uniformSetters: uniformSetters,
-      attribSetters: attribSetters,
-    }
-  };
+  }
 
   /**
    * Returns the corresponding bind point for a given sampler type
    */
   function getBindPointForSamplerType(gl, type) {
-    if (type == gl.SAMPLER_2D)   return gl.TEXTURE_2D;
-    if (type == gl.SAMPLER_CUBE) return gl.TEXTURE_CUBE_MAP;
-  };
+    if (type === gl.SAMPLER_2D)   return gl.TEXTURE_2D;        // eslint-disable-line
+    if (type === gl.SAMPLER_CUBE) return gl.TEXTURE_CUBE_MAP;  // eslint-disable-line
+  }
 
   /**
    * @typedef {Object.<string, function>} Setters
@@ -490,42 +405,93 @@
       var location = gl.getUniformLocation(program, uniformInfo.name);
       var type = uniformInfo.type;
       // Check if this uniform is an array
-      var isArray = (uniformInfo.size > 1 && uniformInfo.name.substr(-3) == "[0]");
-      if (type == gl.FLOAT && isArray)
-        return function(v) { gl.uniform1fv(location, v); };
-      if (type == gl.FLOAT)
-        return function(v) { gl.uniform1f(location, v); };
-      if (type == gl.FLOAT_VEC2)
-        return function(v) { gl.uniform2fv(location, v); };
-      if (type == gl.FLOAT_VEC3)
-        return function(v) { gl.uniform3fv(location, v); };
-      if (type == gl.FLOAT_VEC4)
-        return function(v) { gl.uniform4fv(location, v); };
-      if (type == gl.INT && isArray)
-        return function(v) { gl.uniform1iv(location, v); };
-      if (type == gl.INT)
-        return function(v) { gl.uniform1i(location, v); };
-      if (type == gl.INT_VEC2)
-        return function(v) { gl.uniform2iv(location, v); };
-      if (type == gl.INT_VEC3)
-        return function(v) { gl.uniform3iv(location, v); };
-      if (type == gl.INT_VEC4)
-        return function(v) { gl.uniform4iv(location, v); };
-      if (type == gl.BOOL)
-        return function(v) { gl.uniform1iv(location, v); };
-      if (type == gl.BOOL_VEC2)
-        return function(v) { gl.uniform2iv(location, v); };
-      if (type == gl.BOOL_VEC3)
-        return function(v) { gl.uniform3iv(location, v); };
-      if (type == gl.BOOL_VEC4)
-        return function(v) { gl.uniform4iv(location, v); };
-      if (type == gl.FLOAT_MAT2)
-        return function(v) { gl.uniformMatrix2fv(location, false, v); };
-      if (type == gl.FLOAT_MAT3)
-        return function(v) { gl.uniformMatrix3fv(location, false, v); };
-      if (type == gl.FLOAT_MAT4)
-        return function(v) { gl.uniformMatrix4fv(location, false, v); };
-      if ((type == gl.SAMPLER_2D || type == gl.SAMPLER_CUBE) && isArray) {
+      var isArray = (uniformInfo.size > 1 && uniformInfo.name.substr(-3) === "[0]");
+      if (type === gl.FLOAT && isArray) {
+        return function(v) {
+          gl.uniform1fv(location, v);
+        };
+      }
+      if (type === gl.FLOAT) {
+        return function(v) {
+          gl.uniform1f(location, v);
+        };
+      }
+      if (type === gl.FLOAT_VEC2) {
+        return function(v) {
+          gl.uniform2fv(location, v);
+        };
+      }
+      if (type === gl.FLOAT_VEC3) {
+        return function(v) {
+          gl.uniform3fv(location, v);
+        };
+      }
+      if (type === gl.FLOAT_VEC4) {
+        return function(v) {
+          gl.uniform4fv(location, v);
+        };
+      }
+      if (type === gl.INT && isArray) {
+        return function(v) {
+          gl.uniform1iv(location, v);
+        };
+      }
+      if (type === gl.INT) {
+        return function(v) {
+          gl.uniform1i(location, v);
+        };
+      }
+      if (type === gl.INT_VEC2) {
+        return function(v) {
+          gl.uniform2iv(location, v);
+        };
+      }
+      if (type === gl.INT_VEC3) {
+        return function(v) {
+          gl.uniform3iv(location, v);
+        };
+      }
+      if (type === gl.INT_VEC4) {
+        return function(v) {
+          gl.uniform4iv(location, v);
+        };
+      }
+      if (type === gl.BOOL) {
+        return function(v) {
+          gl.uniform1iv(location, v);
+        };
+      }
+      if (type === gl.BOOL_VEC2) {
+        return function(v) {
+          gl.uniform2iv(location, v);
+        };
+      }
+      if (type === gl.BOOL_VEC3) {
+        return function(v) {
+          gl.uniform3iv(location, v);
+        };
+      }
+      if (type === gl.BOOL_VEC4) {
+        return function(v) {
+          gl.uniform4iv(location, v); }
+        ;
+      }
+      if (type === gl.FLOAT_MAT2) {
+        return function(v) {
+          gl.uniformMatrix2fv(location, false, v);
+        };
+      }
+      if (type === gl.FLOAT_MAT3) {
+        return function(v) {
+          gl.uniformMatrix3fv(location, false, v);
+        };
+      }
+      if (type === gl.FLOAT_MAT4) {
+        return function(v) {
+          gl.uniformMatrix4fv(location, false, v);
+        };
+      }
+      if ((type === gl.SAMPLER_2D || type === gl.SAMPLER_CUBE) && isArray) {
         var units = [];
         for (var ii = 0; ii < info.size; ++ii) {
           units.push(textureUnit++);
@@ -537,10 +503,10 @@
               gl.activeTexture(gl.TEXTURE0 + units[index]);
               gl.bindTexture(bindPoint, tetxure);
             });
-          }
+          };
         }(getBindPointForSamplerType(gl, type), units);
       }
-      if (type == gl.SAMPLER_2D || type == gl.SAMPLER_CUBE)
+      if (type === gl.SAMPLER_2D || type === gl.SAMPLER_CUBE) {
         return function(bindPoint, unit) {
           return function(texture) {
             gl.uniform1i(location, unit);
@@ -548,8 +514,9 @@
             gl.bindTexture(bindPoint, texture);
           };
         }(getBindPointForSamplerType(gl, type), textureUnit++);
+      }
       throw ("unknown type: 0x" + type.toString(16)); // we should never get here.
-    };
+    }
 
     var uniformSetters = { };
     var numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
@@ -561,14 +528,14 @@
       }
       var name = uniformInfo.name;
       // remove the array suffix.
-      if (name.substr(-3) == "[0]") {
+      if (name.substr(-3) === "[0]") {
         name = name.substr(0, name.length - 3);
       }
       var setter = createUniformSetter(program, uniformInfo);
       uniformSetters[name] = setter;
     }
     return uniformSetters;
-  };
+  }
 
   /**
    * Set uniforms and binds related textures.
@@ -655,7 +622,7 @@
         setter(values[name]);
       }
     });
-  };
+  }
 
   /**
    * Creates setter functions for all attributes of a shader
@@ -690,7 +657,7 @@
     }
 
     return attribSetters;
-  };
+  }
 
   /**
    * Sets attributes and binds buffers (deprecated... use {@link module:webgl-utils.setBuffersAndAttributes})
@@ -752,7 +719,57 @@
         setter(buffers[name]);
       }
     });
-  };
+  }
+
+  /**
+   * @typedef {Object} ProgramInfo
+   * @property {WebGLProgram} program A shader program
+   * @property {Object<string, function>} uniformSetters: object of setters as returned from createUniformSetters,
+   * @property {Object<string, function>} attribSetters: object of setters as returned from createAttribSetters,
+   * @memberOf module:webgl-utils
+   */
+
+  /**
+   * Creates a ProgramInfo from 2 sources.
+   *
+   * A ProgramInfo contains
+   *
+   *     programInfo = {
+   *        program: WebGLProgram,
+   *        uniformSetters: object of setters as returned from createUniformSetters,
+   *        attribSetters: object of setters as returned from createAttribSetters,
+   *     }
+   *
+   * @param {WebGLRenderingContext} gl The WebGLRenderingContext
+   *        to use.
+   * @param {string[]} shaderSourcess Array of sources for the
+   *        shaders or ids. The first is assumed to be the vertex shader,
+   *        the second the fragment shader.
+   * @param {string[]?} opt_attribs An array of attribs names. Locations will be assigned by index if not passed in
+   * @param {number[]?} opt_locations The locations for the. A parallel array to opt_attribs letting you assign locations.
+   * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
+   *        on error. If you want something else pass an callback. It's passed an error message.
+   * @return {module:webgl-utils.ProgramInfo} The created program.
+   * @memberOf module:webgl-utils
+   */
+  function createProgramInfo(
+      gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback) {
+    shaderSources = shaderSources.map(function(source) {
+      var script = document.getElementById(source);
+      return script ? script.text : source;
+    });
+    var program = createProgramFromSources(gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback);
+    if (!program) {
+      return null;
+    }
+    var uniformSetters = createUniformSetters(gl, program);
+    var attribSetters = createAttributeSetters(gl, program);
+    return {
+      program: program,
+      uniformSetters: uniformSetters,
+      attribSetters: attribSetters,
+    };
+  }
 
   /**
    * Sets attributes and buffers including the `ELEMENT_ARRAY_BUFFER` if appropriate
@@ -795,14 +812,14 @@
     if (buffers.indices) {
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
     }
-  };
+  }
 
   // Add your prefix here.
   var browserPrefixes = [
     "",
     "MOZ_",
     "OP_",
-    "WEBKIT_"
+    "WEBKIT_",
   ];
 
   /**
@@ -822,8 +839,7 @@
         return ext;
       }
     }
-  };
-
+  }
 
   /**
    * Resize a canvas to match the size its displayed.
@@ -834,14 +850,14 @@
   function resizeCanvasToDisplaySize(canvas) {
     var width = canvas.clientWidth;
     var height = canvas.clientHeight;
-    if (canvas.width != width ||
-        canvas.height != height) {
+    if (canvas.width !== width ||
+        canvas.height !== height) {
       canvas.width = width;
       canvas.height = height;
       return true;
     }
     return false;
-  };
+  }
 
   /**
    * Get's the iframe in the parent document
@@ -857,7 +873,7 @@
     for (var ii = 0; ii < iframes.length; ++ii) {
       var iframe = iframes[ii];
       if (iframe.contentDocument === window.document) {
-        return iframe;
+        return iframe;  // eslint-disable-line
       }
     }
   }
@@ -883,7 +899,7 @@
     } catch (e) {
       return true;  // We got a security error?
     }
-  };
+  }
 
   /**
    * Returns true if element is on screen.
@@ -899,7 +915,7 @@
     }
 
     return isVisible && isFrameVisible(topWindow);
-  };
+  }
 
 
 
@@ -930,7 +946,7 @@
       },
     });
     return typedArray;
-  };
+  }
 
   /**
    * creates a typed array with a `push` fucntion attached
@@ -955,9 +971,9 @@
    * @memberOf module:webgl-utils
    */
   function createAugmentedTypedArray(numComponents, numElements, opt_type) {
-    var type = opt_type || Float32Array;
-    return augmentTypedArray(new type(numComponents * numElements), numComponents);
-  };
+    var Type = opt_type || Float32Array;
+    return augmentTypedArray(new Type(numComponents * numElements), numComponents);
+  }
 
   function createBufferFromTypedArray(gl, array, type, drawType) {
     type = type || gl.ARRAY_BUFFER;
@@ -965,11 +981,11 @@
     gl.bindBuffer(type, buffer);
     gl.bufferData(type, array, drawType || gl.STATIC_DRAW);
     return buffer;
-  };
+  }
 
   function allButIndices(name) {
     return name !== "indices";
-  };
+  }
 
   function createMapping(obj) {
     var mapping = {};
@@ -977,30 +993,30 @@
       mapping["a_" + key] = key;
     });
     return mapping;
-  };
+  }
 
   function getGLTypeForTypedArray(gl, typedArray) {
-    if (typedArray instanceof Int8Array)    { return gl.BYTE; }
-    if (typedArray instanceof Uint8Array)   { return gl.UNSIGNED_BYTE; }
-    if (typedArray instanceof Int16Array)   { return gl.SHORT; }
-    if (typedArray instanceof Uint16Array)  { return gl.UNSIGNED_SHORT; }
-    if (typedArray instanceof Int32Array)   { return gl.INT; }
-    if (typedArray instanceof Uint32Array)  { return gl.UNSIGNED_INT; }
-    if (typedArray instanceof Float32Array) { return gl.FLOAT; }
+    if (typedArray instanceof Int8Array)    { return gl.BYTE; }            // eslint-disable-line
+    if (typedArray instanceof Uint8Array)   { return gl.UNSIGNED_BYTE; }   // eslint-disable-line
+    if (typedArray instanceof Int16Array)   { return gl.SHORT; }           // eslint-disable-line
+    if (typedArray instanceof Uint16Array)  { return gl.UNSIGNED_SHORT; }  // eslint-disable-line
+    if (typedArray instanceof Int32Array)   { return gl.INT; }             // eslint-disable-line
+    if (typedArray instanceof Uint32Array)  { return gl.UNSIGNED_INT; }    // eslint-disable-line
+    if (typedArray instanceof Float32Array) { return gl.FLOAT; }           // eslint-disable-line
     throw "unsupported typed array type";
-  };
+  }
 
   // This is really just a guess. Though I can't really imagine using
   // anything else? Maybe for some compression?
   function getNormalizationForTypedArray(typedArray) {
-    if (typedArray instanceof Int8Array)    { return true; }
-    if (typedArray instanceof Uint8Array)   { return true; }
+    if (typedArray instanceof Int8Array)    { return true; }  // eslint-disable-line
+    if (typedArray instanceof Uint8Array)   { return true; }  // eslint-disable-line
     return false;
-  };
+  }
 
   function isArrayBuffer(a) {
     return a.buffer && a.buffer instanceof ArrayBuffer;
-  };
+  }
 
   function guessNumComponentsFromName(name, length) {
     var numComponents;
@@ -1017,7 +1033,7 @@
     }
 
     return numComponents;
-  };
+  }
 
   function makeTypedArray(array, name) {
     if (isArrayBuffer(array)) {
@@ -1043,7 +1059,7 @@
     var typedArray = createAugmentedTypedArray(array.numComponents, array.data.length / array.numComponents | 0, type);
     typedArray.push(array.data);
     return typedArray;
-  };
+  }
 
   /**
    * @typedef {Object} AttribInfo
@@ -1101,7 +1117,7 @@
       };
     });
     return attribs;
-  };
+  }
 
   /**
    * tries to get the number of elements from a set of arrays.
@@ -1114,7 +1130,7 @@
     } else {
       return array.data.length / array.numComponents;
     }
-  };
+  }
 
   /**
    * @typedef {Object} BufferInfo
@@ -1260,7 +1276,7 @@
     }
 
     return bufferInfo;
-  };
+  }
 
   /**
    * Creates buffers from typed arrays
@@ -1289,7 +1305,7 @@
   function createBuffersFromArrays(gl, arrays) {
     var buffers = { };
     Object.keys(arrays).forEach(function(key) {
-      var type = key == "indices" ? gl.ELEMENT_ARRAY_BUFFER : gl.ARRAY_BUFFER;
+      var type = key === "indices" ? gl.ELEMENT_ARRAY_BUFFER : gl.ARRAY_BUFFER;
       var array = makeTypedArray(arrays[key], name);
       buffers[key] = createBufferFromTypedArray(gl, array, type);
     });
@@ -1302,7 +1318,7 @@
     }
 
     return buffers;
-  };
+  }
 
   /**
    * Calls `gl.drawElements` or `gl.drawArrays`, whichever is appropriate
@@ -1327,7 +1343,7 @@
     } else {
       gl.drawArrays(type, offset, numElements);
     }
-  };
+  }
 
   /**
    * @typedef {Object} DrawObject
@@ -1359,7 +1375,7 @@
       }
 
       // Setup all the needed attributes.
-      if (bindBuffers || bufferInfo != lastUsedBufferInfo) {
+      if (bindBuffers || bufferInfo !== lastUsedBufferInfo) {
         lastUsedBufferInfo = bufferInfo;
         setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
       }
