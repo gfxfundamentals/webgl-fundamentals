@@ -45,6 +45,6 @@ module.exports = function(grunt) {
     buildStuff();
   });
 
-  grunt.registerTask('default', ['clean', 'jsdoc']);
+  grunt.registerTask('default', ['eslint', 'build', 'clean', 'jsdoc']);
 };
 
