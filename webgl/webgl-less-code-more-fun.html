@@ -93,10 +93,11 @@ function main() {
     });
   }
 
-  drawScene();
+  requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene() {
+  function drawScene(time) {
+    time *= 0.0001;
 
     // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -126,7 +127,6 @@ function main() {
     setUniforms(uniformSetters, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
-    var time = Date.now() * 0.0001;
     objects.forEach(function(object) {
 
       // Compute a position for this object based on the time.

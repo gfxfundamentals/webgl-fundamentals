@@ -60,15 +60,13 @@ function main() {
   gl.uniform4fv(colorLocation, [1, 0, 0, 1]);
 
 
-  drawScene();
+  requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene() {
+  function drawScene(now) {
+    now *= 0.001; // convert to seconds
 
     resize(gl);
-
-    // Get the current time
-    var now = getTimeInSeconds();
 
     // Clear the canvas.
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -95,10 +93,6 @@ function main() {
     requestAnimationFrame(drawScene);
   }
 }
-
-  function getTimeInSeconds() {
-    return Date.now() * 0.001;
-  }
 
   function resize(gl) {
     var realToCSSPixels = window.devicePixelRatio || 1;

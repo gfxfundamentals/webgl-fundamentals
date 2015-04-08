@@ -166,8 +166,6 @@ function main() {
 
   var sortedObjectsToDraw = objectsToDraw.slice().sort(sortByBufferInfoThenProgramInfo);
 
-  drawScene();
-
   function computeMatrix(viewMatrix, projectionMatrix, translation, xRotation, yRotation) {
     var xRotationMatrix = makeXRotation(xRotation);
     var yRotationMatrix = makeYRotation(yRotation);
@@ -217,8 +215,11 @@ function main() {
     });
   }
 
+  requestAnimationFrame(drawScene);
+
   // Draw the scene.
-  function drawScene() {
+  function drawScene(time) {
+    time *= 0.0005;
 
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
@@ -239,9 +240,6 @@ function main() {
 
     // Make a view matrix from the camera matrix.
     var viewMatrix = makeInverse(cameraMatrix);
-
-    // Draw objects
-    var time = Date.now() * 0.0005;
 
     // Compute the matrices for each object.
     objects.forEach(function(object) {

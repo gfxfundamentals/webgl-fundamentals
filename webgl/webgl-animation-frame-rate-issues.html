@@ -84,13 +84,13 @@ function main() {
   var modelRotations = [0, 0, 0];
   var rotationSpeed = 1.2;
 
-  var time = getTimeInSeconds();
-  var thens = [time, time, time];
+  var thens = [0, 0, 0];
 
-  drawScene();
+  requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene() {
+  function drawScene(now) {
+    now *= 0.001;  // convert to seconds
     ++frameCount;
 
     // Clear the canvas AND the depth buffer.
@@ -104,7 +104,6 @@ function main() {
       var rotationToAdd = 0;
       if (advance) {
 
-        var now = getTimeInSeconds();
         var deltaTime = now - thens[x];
         thens[x] = now;
 
@@ -149,10 +148,6 @@ function main() {
     // call this function again next frame.
     requestAnimationFrame(drawScene);
   }
-}
-
-function getTimeInSeconds() {
-  return Date.now() * 0.001;
 }
 
 // Fill the buffer with the values that define a letter 'F'.

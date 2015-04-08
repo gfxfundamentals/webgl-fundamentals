@@ -13,27 +13,24 @@ over time and draw again.
 
 We can take one of our previous samples and animate it as follows.
 
-<pre class="prettyprint showlinemods">
-*var fieldOfViewRadians = degToRad(60);
-*var rotationSpeed = 1.2;
+    *var fieldOfViewRadians = degToRad(60);
+    *var rotationSpeed = 1.2;
 
-drawScene();
+    *requestAnimationFrame(drawScene);
 
-// Draw the scene.
-function drawScene() {
-*  // Every frame increase the rotation a little.
-*  rotation[1] += rotationSpeed / 60.0;
+    // Draw the scene.
+    function drawScene() {
+    *  // Every frame increase the rotation a little.
+    *  rotation[1] += rotationSpeed / 60.0;
 
-  ...
-*  // Call drawScene again next frame
-*  requestAnimationFrame(drawScene);
-}
-</pre>
+      ...
+    *  // Call drawScene again next frame
+    *  requestAnimationFrame(drawScene);
+    }
 
 And here it is
 
-<iframe class="webgl_example" src="../webgl-animation-not-frame-rate-independent.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-animation-not-frame-rate-independent.html" target="_blank">click here to open in a separate window</a>
+%(example: { url: "../webgl-animation-not-frame-rate-independent.html" })s
 
 There's a subtle problem though. The code above has a
 `rotationSpeed / 60.0`. We divided by 60.0 because we assumed the browser
@@ -48,7 +45,7 @@ frame a second.
 
 You can see the problem in this example
 
-<iframe class="webgl_example" src="../webgl-animation-frame-rate-issues.html" style="width: 400px; height: 300px;"></iframe>
+%(diagram: { url: "../webgl-animation-frame-rate-issues.html" })s
 
 In the example above the we want to rotate all of the 'F's at the same speed.
 The 'F' in the middle is running full speed and is frame rate independent. The one
@@ -64,35 +61,29 @@ speed.
 The way to make animation frame rate independent is to compute how much time it took
 between frames and use that to calcuate how much to animate this frame.
 
-First off we need to get the time. I find it easist if we get the time in seconds
-but since the browser returns time in milliseconds (1000s of a second) we need
-to multiply by 0.001 to get seconds.
+First off we need to get the time. Fortunately `requestAnimationFrame` passes
+us the time since the page was loaded when it calls us.
 
-<pre class="prettyprint showlinemods">
-*function getTimeInSeconds() {
-*  return Date.now() * 0.001;
-*}
-</pre>
+I find it easist if we get the time in seconds but since the `requestAnimationFrame`
+passes us the time in milliseconds (1000s of a second) we need to multiply by 0.001
+to get seconds.
 
-We can then compute the delta time like this
+So, we can then compute the delta time like this
 
-<pre class="prettyprint showlinemods">
-*// Get the starting time.
-*var then = getTimeInSeconds();
+    *var then = 0;
 
-drawScene();
+    requestAnimationFrame(drawScene);
 
-// Draw the scene.
-function drawScene() {
-*  // Get the current time
-*  var now = getTimeInSeconds();
-*  // Subtract the previous time from the current time
-*  var deltaTime = now - then;
-*  // Remember the current time for the next frame.
-*  then = now;
+    // Draw the scene.
+    *function drawScene(now) {
+    *  // Convert the time to seconds
+    *  now *= 0.001;
+    *  // Subtract the previous time from the current time
+    *  var deltaTime = now - then;
+    *  // Remember the current time for the next frame.
+    *  then = now;
 
-   ...
-</pre>
+       ...
 
 Once we have the `deltaTime` in seconds then all our calcuations can be in how
 many units per second we want something to happen. In this case since
@@ -100,14 +91,11 @@ many units per second we want something to happen. In this case since
 That's about a 1/5 of a turn or in other words it will take about 5 seconds to
 turn around completely regardless of the frame rate.
 
-<pre class="prettyprint showlinemods">
-*    rotation[1] += rotationSpeed * deltaTime;
-</pre>
+    *    rotation[1] += rotationSpeed * deltaTime;
 
 Here's that one working.
 
-<iframe class="webgl_example" src="../webgl-animation.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-animation.html" target="_blank">click here to open in a separate window</a>
+%(example: { url: "../webgl-animation.html" })s
 
 You aren't likely to see a difference from the one
 at the top of this page unless you are on a slow machine but if you don't

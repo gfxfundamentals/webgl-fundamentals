@@ -191,10 +191,11 @@ function main() {
     moonNode.drawInfo,
   ];
 
-  drawScene();
+  requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene() {
+  function drawScene(time) {
+    time *= 0.0005;
 
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
@@ -218,9 +219,6 @@ function main() {
     var viewMatrix = makeInverse(cameraMatrix);
 
     var viewProjectionMatrix = matrixMultiply(viewMatrix, projectionMatrix);
-
-    // Draw objects
-    var time = Date.now() * 0.0005;
 
     // update the local matrices for each object.
     matrixMultiply(sunNode.localMatrix, makeYRotation(0.01), sunNode.localMatrix);

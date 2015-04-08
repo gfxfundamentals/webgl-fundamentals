@@ -85,7 +85,6 @@ function main() {
   var canvas = document.getElementById("c");
   var gl = getWebGLContext(c, {preserveDrawingBuffer: true});
   var clock = 0;
-  var then = Date.now() * 0.001;
 
   var program = createProgramFromScripts(
       gl, ["2d-vertex-shader", "2d-fragment-shader"]);
@@ -131,10 +130,9 @@ function main() {
 
   gl.enable(gl.DEPTH_TEST);
 
-  function render() {
-    var now = Date.now() * 0.001;
-    clock += now - then;
-    then = now;
+  function render(time) {
+    time *= 0.001;
+    clock = time;
 
     gl.clear(gl.DEPTH_BUFFER_BIT);
 
@@ -160,9 +158,9 @@ function main() {
     gl.uniform4f(colorMultLoc, 0, 0, 0, 1);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, lineIndicesBuffer);
     gl.drawElements(gl.LINES, lineIndices.length, gl.UNSIGNED_SHORT, 0);
-    requestAnimFrame(render);
+    requestAnimationFrame(render);
   }
-  render();
+  requestAnimationFrame(render);
 }
 </script>
 <!-- vertex shader -->

@@ -15,69 +15,65 @@ program.
 
 Here's the boilerplate code for compiling a shader.
 
-<pre class="prettyprint showlinemods">
-/**
- * Creates and compiles a shader.
- *
- * @param {!WebGLRenderingContext} gl The WebGL Context.
- * @param {string} shaderSource The GLSL source code for the shader.
- * @param {number} shaderType The type of shader, VERTEX_SHADER or
- *     FRAGMENT_SHADER.
- * @return {!WebGLShader} The shader.
- */
-function compileShader(gl, shaderSource, shaderType) {
-  // Create the shader object
-  var shader = gl.createShader(shaderType);
+    /**
+     * Creates and compiles a shader.
+     *
+     * @param {!WebGLRenderingContext} gl The WebGL Context.
+     * @param {string} shaderSource The GLSL source code for the shader.
+     * @param {number} shaderType The type of shader, VERTEX_SHADER or
+     *     FRAGMENT_SHADER.
+     * @return {!WebGLShader} The shader.
+     */
+    function compileShader(gl, shaderSource, shaderType) {
+      // Create the shader object
+      var shader = gl.createShader(shaderType);
 
-  // Set the shader source code.
-  gl.shaderSource(shader, shaderSource);
+      // Set the shader source code.
+      gl.shaderSource(shader, shaderSource);
 
-  // Compile the shader
-  gl.compileShader(shader);
+      // Compile the shader
+      gl.compileShader(shader);
 
-  // Check if it compiled
-  var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
-  if (!success) {
-    // Something went wrong during compilation; get the error
-    throw "could not compile shader:" + gl.getShaderInfoLog(shader);
-  }
+      // Check if it compiled
+      var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+      if (!success) {
+        // Something went wrong during compilation; get the error
+        throw "could not compile shader:" + gl.getShaderInfoLog(shader);
+      }
 
-  return shader;
-}
-</pre>
+      return shader;
+    }
 
 And the boilerplate code for linking 2 shaders into a program
 
-<pre class="prettyprint showlinemods">
-/**
- * Creates a program from 2 shaders.
- *
- * @param {!WebGLRenderingContext) gl The WebGL context.
- * @param {!WebGLShader} vertexShader A vertex shader.
- * @param {!WebGLShader} fragmentShader A fragment shader.
- * @return {!WebGLProgram} A program.
- */
-function createProgram(gl, vertexShader, fragmentShader) {
-  // create a program.
-  var program = gl.createProgram();
+    /**
+     * Creates a program from 2 shaders.
+     *
+     * @param {!WebGLRenderingContext) gl The WebGL context.
+     * @param {!WebGLShader} vertexShader A vertex shader.
+     * @param {!WebGLShader} fragmentShader A fragment shader.
+     * @return {!WebGLProgram} A program.
+     */
+    function createProgram(gl, vertexShader, fragmentShader) {
+      // create a program.
+      var program = gl.createProgram();
 
-  // attach the shaders.
-  gl.attachShader(program, vertexShader);
-  gl.attachShader(program, fragmentShader);
+      // attach the shaders.
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
 
-  // link the program.
-  gl.linkProgram(program);
+      // link the program.
+      gl.linkProgram(program);
 
-  // Check if it linked.
-  var success = gl.getProgramParameter(program, gl.LINK_STATUS);
-  if (!success) {
-      // something went wrong with the link
-      throw ("program filed to link:" + gl.getProgramInfoLog (program));
-  }
+      // Check if it linked.
+      var success = gl.getProgramParameter(program, gl.LINK_STATUS);
+      if (!success) {
+          // something went wrong with the link
+          throw ("program filed to link:" + gl.getProgramInfoLog (program));
+      }
 
-  return program;
-};
-</pre>
+      return program;
+    };
 
 Of course how you decide to handle errors might be different.  Throwing
 exceptions might not be the best way to handle things.  Still, those few
@@ -86,68 +82,62 @@ lines of code are the pretty much the same in nearly every WebGL program.
 I like store my shaders in non javascript &lt;script&gt; tags.  It makes
 them easy to edit so I use code like this.
 
-<pre class="prettyprint showlinemods">
-/**
- * Creates a shader from the content of a script tag.
- *
- * @param {!WebGLRenderingContext} gl The WebGL Context.
- * @param {string} scriptId The id of the script tag.
- * @param {string} opt_shaderType. The type of shader to create.
- *     If not passed in will use the type attribute from the
- *     script tag.
- * @return {!WebGLShader} A shader.
- */
-function createShaderFromScript(gl, scriptId, opt_shaderType) {
-  // look up the script tag by id.
-  var shaderScript = document.getElementById(scriptId);
-  if (!shaderScript) {
-    throw("*** Error: unknown script element" + scriptId);
-  }
+    /**
+     * Creates a shader from the content of a script tag.
+     *
+     * @param {!WebGLRenderingContext} gl The WebGL Context.
+     * @param {string} scriptId The id of the script tag.
+     * @param {string} opt_shaderType. The type of shader to create.
+     *     If not passed in will use the type attribute from the
+     *     script tag.
+     * @return {!WebGLShader} A shader.
+     */
+    function createShaderFromScript(gl, scriptId, opt_shaderType) {
+      // look up the script tag by id.
+      var shaderScript = document.getElementById(scriptId);
+      if (!shaderScript) {
+        throw("*** Error: unknown script element" + scriptId);
+      }
 
-  // extract the contents of the script tag.
-  var shaderSource = shaderScript.text;
+      // extract the contents of the script tag.
+      var shaderSource = shaderScript.text;
 
-  // If we didn't pass in a type, use the 'type' from
-  // the script tag.
-  if (!opt_shaderType) {
-    if (shaderScript.type == "x-shader/x-vertex") {
-      opt_shaderType = gl.VERTEX_SHADER;
-    } else if (shaderScript.type == "x-shader/x-fragment") {
-      opt_shaderType = gl.FRAGMENT_SHADER;
-    } else if (!opt_shaderType) {
-      throw("*** Error: shader type not set");
-    }
-  }
+      // If we didn't pass in a type, use the 'type' from
+      // the script tag.
+      if (!opt_shaderType) {
+        if (shaderScript.type == "x-shader/x-vertex") {
+          opt_shaderType = gl.VERTEX_SHADER;
+        } else if (shaderScript.type == "x-shader/x-fragment") {
+          opt_shaderType = gl.FRAGMENT_SHADER;
+        } else if (!opt_shaderType) {
+          throw("*** Error: shader type not set");
+        }
+      }
 
-  return compileShader(gl, shaderSource, opt_shaderType);
-};
-</pre>
+      return compileShader(gl, shaderSource, opt_shaderType);
+    };
 
 Now to compile a shader I can just do
 
-<pre class="prettyprint showlinemods">
-var shader = compileShaderFromScript(gl, "someScriptTagId");
-</pre>
+    var shader = compileShaderFromScript(gl, "someScriptTagId");
 
 I'll usually go one step further and make a function to compile to shaders
 from script tags, attach them to a program and link them.
 
-<pre class="prettyprint showlinemods">
-/**
- * Creates a program from 2 script tags.
- *
- * @param {!WebGLRenderingContext} gl The WebGL Context.
- * @param {string} vertexShaderId The id of the vertex shader script tag.
- * @param {string} fragmentShaderId The id of the fragment shader script tag.
- * @return {!WebGLProgram} A program
- */
-function createProgramFromScripts(
-    gl, vertexShaderId, fragmentShaderId) {
-  var vertexShader = createShaderFromScriptTag(gl, vertexShaderId);
-  var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId);
-  return createProgram(gl, vertexShader, fragmentShader);
-}
-</pre>
+    /**
+     * Creates a program from 2 script tags.
+     *
+     * @param {!WebGLRenderingContext} gl The WebGL Context.
+     * @param {string} vertexShaderId The id of the vertex shader script tag.
+     * @param {string} fragmentShaderId The id of the fragment shader script tag.
+     * @return {!WebGLProgram} A program
+     */
+    function createProgramFromScripts(
+        gl, vertexShaderId, fragmentShaderId) {
+      var vertexShader = createShaderFromScriptTag(gl, vertexShaderId);
+      var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId);
+      return createProgram(gl, vertexShader, fragmentShader);
+    }
 
 There's a couple of other pieces I've needed in most WebGL samples.
 
@@ -155,14 +145,12 @@ At the time of this writing WebGL requires the asking
 for an "experimental-webgl" context where as in the near future you can
 just ask for "webgl".  I could write this in every WebGL program
 
-<pre class="prettyprint showlinemods">
-   ...
-   var gl = canvas.getContext("experimental-webgl");
-   if (!gl) {
-     gl = canvas.getContext("webgl");
-   }
-   ...
-</pre>
+    ...
+    var gl = canvas.getContext("experimental-webgl");
+    if (!gl) {
+      gl = canvas.getContext("webgl");
+    }
+    ...
 
 But I prefer to use some function I've written before.
 
@@ -172,5 +160,6 @@ That's most of my minmum set of WebGL boilerplate code.
 The rest of what makes WebGL look complicated is setting up all the inputs
 to your shaders.  See <a href="webgl-how-it-works.html">how it works</a>.
 
+I'd also suggest you read up on [less code more fun](webgl-less-code-more-fun.html) and check out [TWGL](http://twgljs.org).
 
 

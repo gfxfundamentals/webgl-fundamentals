@@ -155,22 +155,18 @@ function main() {
   var dx = 4;
   var dy = 4;
 
-  // Get the starting time.
-  var then = getTimeInSeconds();
-  var clock = 0;
+  var then = 0;
 
-  drawScene();
+  requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene() {
-    // Get the current time
-    var now = getTimeInSeconds();
+  function drawScene(clock) {
+    // Convert to seconds
+    clock *= 0.001;
     // Subtract the previous time from the current time
-    var deltaTime = now - then;
+    var deltaTime = clock - then;
     // Remember the current time for the next frame.
-    then = now;
-
-    clock += deltaTime;
+    then = clock;
 
     x += dx;
     y += dy;
@@ -236,10 +232,6 @@ function main() {
 
     requestAnimationFrame(drawScene);
   }
-}
-
-function getTimeInSeconds() {
-  return Date.now() * 0.001;
 }
 
 // Fill the buffer with the values that define a letter 'F'.

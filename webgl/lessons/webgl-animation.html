@@ -63,11 +63,10 @@ If you haven&#39;t read those please view them first.</p>
 to animate something in JavaScript you need to change something
 over time and draw again.</p>
 <p>We can take one of our previous samples and animate it as follows.</p>
-<pre class="prettyprint showlinemods">
-*var fieldOfViewRadians = degToRad(60);
+<pre><code>*var fieldOfViewRadians = degToRad(60);
 *var rotationSpeed = 1.2;
 
-drawScene();
+*requestAnimationFrame(drawScene);
 
 // Draw the scene.
 function drawScene() {
@@ -78,26 +77,29 @@ function drawScene() {
 *  // Call drawScene again next frame
 *  requestAnimationFrame(drawScene);
 }
-</pre>
+</code></pre><p>And here it is</p>
+<div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-animation-not-frame-rate-independent.html"></iframe>
+  <a class="webgl_center" href="../webgl-animation-not-frame-rate-independent.html" target="_blank">click here to open in a separate window</a>
+</div>
 
-<p>And here it is</p>
-<iframe class="webgl_example" src="../webgl-animation-not-frame-rate-independent.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-animation-not-frame-rate-independent.html" target="_blank">click here to open in a separate window</a>
 
-There's a subtle problem though. The code above has a
-`rotationSpeed / 60.0`. We divided by 60.0 because we assumed the browser
-will respond to requestAnimationFrame 60 times a second which is pretty common.
 
-That's not actually a valid assumption though. Maybe the user is on a low-powered
+<p>There&#39;s a subtle problem though. The code above has a
+<code>rotationSpeed / 60.0</code>. We divided by 60.0 because we assumed the browser
+will respond to requestAnimationFrame 60 times a second which is pretty common.</p>
+<p>That&#39;s not actually a valid assumption though. Maybe the user is on a low-powered
 device like an old smartphone. Or maybe the user is running some heavy program in
 the background. There are all kinds of reasons the browser might not be displaying
-frames at 60 frames a second. Maybe it's the year 2020 and all machines run at 240
+frames at 60 frames a second. Maybe it&#39;s the year 2020 and all machines run at 240
 frames a second now. Maybe the user is a gamer and has a CRT monitor running at 90
-frame a second.
+frame a second.</p>
+<p>You can see the problem in this example</p>
+<div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-animation-frame-rate-issues.html"></iframe>
+</div>
 
-You can see the problem in this example
 
-<iframe class="webgl_example" src="../webgl-animation-frame-rate-issues.html" style="width: 400px; height: 300px;"></iframe>
 
 <p>In the example above the we want to rotate all of the &#39;F&#39;s at the same speed.
 The &#39;F&#39; in the middle is running full speed and is frame rate independent. The one
@@ -110,46 +112,40 @@ running at 1/8 the frame rate it is keeping up with the middle one running at fu
 speed.</p>
 <p>The way to make animation frame rate independent is to compute how much time it took
 between frames and use that to calcuate how much to animate this frame.</p>
-<p>First off we need to get the time. I find it easist if we get the time in seconds
-but since the browser returns time in milliseconds (1000s of a second) we need
-to multiply by 0.001 to get seconds.</p>
-<pre class="prettyprint showlinemods">
-*function getTimeInSeconds() {
-*  return Date.now() * 0.001;
-*}
-</pre>
+<p>First off we need to get the time. Fortunately <code>requestAnimationFrame</code> passes
+us the time since the page was loaded when it calls us.</p>
+<p>I find it easist if we get the time in seconds but since the <code>requestAnimationFrame</code>
+passes us the time in milliseconds (1000s of a second) we need to multiply by 0.001
+to get seconds.</p>
+<p>So, we can then compute the delta time like this</p>
+<pre><code>*var then = 0;
 
-<p>We can then compute the delta time like this</p>
-<pre class="prettyprint showlinemods">
-*// Get the starting time.
-*var then = getTimeInSeconds();
-
-drawScene();
+requestAnimationFrame(drawScene);
 
 // Draw the scene.
-function drawScene() {
-*  // Get the current time
-*  var now = getTimeInSeconds();
+*function drawScene(now) {
+*  // Convert the time to seconds
+*  now *= 0.001;
 *  // Subtract the previous time from the current time
 *  var deltaTime = now - then;
 *  // Remember the current time for the next frame.
 *  then = now;
 
    ...
-</pre>
-
-<p>Once we have the <code>deltaTime</code> in seconds then all our calcuations can be in how
+</code></pre><p>Once we have the <code>deltaTime</code> in seconds then all our calcuations can be in how
 many units per second we want something to happen. In this case since
 <code>rotationSpeed</code> is 1.2 which means we want to rotate 1.2 radians per second.
 That&#39;s about a 1/5 of a turn or in other words it will take about 5 seconds to
 turn around completely regardless of the frame rate.</p>
-<pre class="prettyprint showlinemods">
-*    rotation[1] += rotationSpeed * deltaTime;
-</pre>
+<pre><code>*    rotation[1] += rotationSpeed * deltaTime;
+</code></pre><p>Here&#39;s that one working.</p>
+<div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-animation.html"></iframe>
+  <a class="webgl_center" href="../webgl-animation.html" target="_blank">click here to open in a separate window</a>
+</div>
 
-<p>Here&#39;s that one working.</p>
-<p><iframe class="webgl_example" src="../webgl-animation.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-animation.html" target="_blank">click here to open in a separate window</a></p>
+
+
 <p>You aren&#39;t likely to see a difference from the one
 at the top of this page unless you are on a slow machine but if you don&#39;t
 make your animations frame rate independent you&#39;ll likely have some users

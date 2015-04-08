@@ -205,10 +205,12 @@ function main() {
     });
   }
 
-  drawScene();
+  requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene() {
+  function drawScene(time) {
+    time *= 0.001;  // convert to seconds
+
     resizeCanvasToDisplaySize(canvas);
 
     // Set the viewport to match the canvas
@@ -240,7 +242,6 @@ function main() {
     setUniforms(programInfo.uniformSetters, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
-    var time = Date.now() * 0.001;
     objects.forEach(function(object) {
 
       // Compute a position for this object based on the time.

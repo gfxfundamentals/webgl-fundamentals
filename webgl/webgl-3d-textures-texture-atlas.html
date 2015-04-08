@@ -92,7 +92,6 @@ function main() {
        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     }
-    drawScene();
   });
 
   function isPowerOf2(value) {
@@ -112,21 +111,18 @@ function main() {
   var modelYRotationRadians = degToRad(0);
 
   // Get the starting time.
-  var then = getTimeInSeconds();
-  var time = 0;
+  var then = 0;
 
-  drawScene();
+  requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene() {
-    // Get the current time
-    var now = getTimeInSeconds();
+  function drawScene(time) {
+    // convert to seconds
+    time *= 0.001;
     // Subtract the previous time from the current time
-    var deltaTime = now - then;
+    var deltaTime = time - then;
     // Remember the current time for the next frame.
-    then = now;
-
-    time += deltaTime;
+    then = time;
 
     // Animate the rotation
     modelYRotationRadians += -0.7 * deltaTime;
@@ -171,10 +167,6 @@ function main() {
 
     requestAnimationFrame(drawScene);
   }
-}
-
-function getTimeInSeconds() {
-  return Date.now() * 0.001;
 }
 
 // Fill the buffer with the values that define a cube.

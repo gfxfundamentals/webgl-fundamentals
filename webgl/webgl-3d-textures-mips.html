@@ -131,26 +131,11 @@ function main() {
   var modelXRotationRadians = degToRad(0);
   var modelYRotationRadians = degToRad(0);
 
-  // Get the starting time.
-  var then = getTimeInSeconds();
-  var time = 0;
-
-  drawScene();
+  requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene() {
-    // Get the current time
-    var now = getTimeInSeconds();
-    // Subtract the previous time from the current time
-    var deltaTime = now - then;
-    // Remember the current time for the next frame.
-    then = now;
-
-    time += deltaTime;
-
-    // Animate the rotation
-//    modelYRotationRadians += -0.7 * deltaTime;
-//    modelXRotationRadians += -0.4 * deltaTime;
+  function drawScene(time) {
+    time *= 0.001;  // convert to seconds
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
     gl.viewport(0, 0, framebufferWidth, framebufferHeight);
@@ -234,10 +219,6 @@ function main() {
 
     requestAnimationFrame(drawScene);
   }
-}
-
-function getTimeInSeconds() {
-  return Date.now() * 0.001;
 }
 
 // Fill the buffer with the values that define a plane.

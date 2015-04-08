@@ -44,13 +44,10 @@ function main() {
 
   var canvas = document.getElementById("c");
   var ctx = canvas.getContext("2d");
-  var clock = 0;
-  var then = Date.now() * 0.001;
+  var then = 0;
 
-  function render() {
-    var now = Date.now() * 0.001;
-    clock += now - then;
-    then = now;
+  function render(clock) {
+    clock *= 0.001;
 
     var scale = 2;
 
@@ -79,7 +76,7 @@ function main() {
     ctx.restore();
     requestAnimFrame(render);
   }
-  render();
+  requestAnimationFrame(render);
 
   function drawLines(cubeVertices, indices, worldViewProjection) {
     ctx.beginPath();

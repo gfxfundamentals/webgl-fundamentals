@@ -120,19 +120,15 @@ function main() {
     ctx.restore();
   }
 
-  var then = Date.now() * 0.001;
-  function render() {
-    var now = Date.now() * 0.001;
-    var elapsed = Math.min(now - then, 1 / 20);
-    then = now;
-
-    clock += elapsed * 0.25;
+  function render(time) {
+    time *= 0.001;  // convert to seconds
+    clock = time * 0.25;
 
     drawScene();
 
     requestAnimationFrame(render, canvas);
   }
-  render();
+  requestAnimationFrame(render, canvas);
 }
 
 main();

@@ -129,13 +129,13 @@ function main() {
     u_specularFactor:        1,
   };
 
-  drawScene();
+  requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene() {
+  function drawScene(time) {
     resizeCanvasToDisplaySize(canvas);
 
-    var time = Date.now() * 0.001;
+    time *= 0.001;  // convert to seconds
 
     // Set the viewport to match the canvas
     gl.viewport(0, 0, canvas.width, canvas.height);
