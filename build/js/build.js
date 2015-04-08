@@ -1,5 +1,5 @@
-#!/usr/bin/env node
-;(function () { // wrapper in case we're in module_context mode
+
+module.exports = function () { // wrapper in case we're in module_context mode
 
 "use strict";
 
@@ -13,9 +13,9 @@ var marked  = require('marked');
 var path    = require('path');
 var Promise = require('Promise');
 var sitemap = require('sitemap');
-var utils   = require('./lib/utils');
+var utils   = require('./utils');
 
-process.title = "build";
+//process.title = "build";
 
 var executeP = Promise.denodeify(utils.execute);
 
@@ -284,8 +284,8 @@ var Builder = function() {
 };
 
 var b = new Builder();
-b.process(process.argv[2]);
+b.process();
 cache.clear();
 
-}());
+};
 

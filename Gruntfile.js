@@ -3,6 +3,15 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
+    eslint: {
+      target: [
+        'webgl/resources/webgl-utils.js',
+      ],
+      options: {
+        config: 'build/conf/eslint.json',
+        //rulesdir: ['build/rules'],
+      },
+    },
     jsdoc: {
       docs: {
         src: [
@@ -25,7 +34,13 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-jsdoc');
+
+  grunt.registerTask('build', function() {
+    var buildStuff = require('./build/js/build');
+    buildStuff();
+  });
 
   grunt.registerTask('default', ['clean', 'jsdoc']);
 };
