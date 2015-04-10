@@ -1,4 +1,5 @@
 Title: WebGL - Drawing Multiple Things
+Description: How to draw multiple different kinds of things in WebGL
 
 This article is a continuation of [previous WebGL articles](webgl-fundamentals.html).
 If you haven't read them I suggest you start there.

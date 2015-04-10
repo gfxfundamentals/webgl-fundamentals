@@ -1,4 +1,5 @@
 ﻿Title: WebGL How It Works
+Description: What WebGL is really doing under the hood
 
 This is a continuation from <a href="webgl-fundamentals.html">WebGL
 Fundamentals</a>.  Before we continue I think we need to discuss at a

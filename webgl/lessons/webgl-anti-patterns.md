@@ -1,4 +1,5 @@
 Title: WebGL Anti-Patterns
+Description: What not to do in WebGL, why not to do it, and what to do instead
 
 This is a list of anti patterns for WebGL. Anti patterns are things you should avoid doing
 

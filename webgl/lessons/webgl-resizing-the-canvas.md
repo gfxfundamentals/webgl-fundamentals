@@ -1,4 +1,5 @@
 Title: WebGL Resizing the Canvas.
+Description: How to resize a WebGL canvas and the issues involved
 
 How do you resize the canvas? All the samples so far have used a fixed size canvas meaning the
 canvas started at one size and stays the same size forever. Here's what you need to know to

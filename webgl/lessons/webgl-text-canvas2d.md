@@ -1,4 +1,5 @@
 Title: WebGL Text - Canvas2D
+Description: How to display text using a 2D canvas that is in sync with WebGL
 
 This article is a continuation of [previous WebGL articles about drawing text](webgl-text-html.html).
 If you haven't read them I suggest you start there and work your way back.

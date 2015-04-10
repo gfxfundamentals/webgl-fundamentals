@@ -1,4 +1,5 @@
 Title: WebGL and Alpha
+Description: How alpha in WebGL is different than alpha in OpenGL
 
 I've noticed some OpenGL developers having issues with how WebGL treats alpha in the backbuffer (ie, the canvas), so I thought it might be good to go over some of the differences between WebGL and OpenGL related to alpha.
 <!--more-->

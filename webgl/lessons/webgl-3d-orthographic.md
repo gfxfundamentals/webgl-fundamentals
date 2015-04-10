@@ -1,4 +1,5 @@
 Title: WebGL - Orthographic 3D
+Description: How to do 3D in WebGL starting with an Orthographic projection.
 
 This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and

@@ -1,4 +1,5 @@
 Title: WebGL Fundamentals
+Description: Your first WebGL lesson starting with the fundamentals
 
 WebGL makes it possible to display amazing realtime 3D graphics in your
 browser but what many people don't know is that

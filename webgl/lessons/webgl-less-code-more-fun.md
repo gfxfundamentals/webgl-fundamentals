@@ -1,4 +1,5 @@
 Title: WebGL - Less Code, More Fun
+Description: Ways to make programming WebGL less verbose
 
 This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a>.

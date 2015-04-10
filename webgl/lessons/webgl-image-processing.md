@@ -1,4 +1,5 @@
 Title: WebGL Image Processing
+Description: How to image process in WebGL
 
 Image processing is easy in WebGL. How easy? Read below.
 <!--more-->

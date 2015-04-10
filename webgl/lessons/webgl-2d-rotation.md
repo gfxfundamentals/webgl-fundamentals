@@ -1,4 +1,5 @@
 ﻿Title: WebGL 2D Rotation
+Description: How to rotate in 2D
 
 This post is a continuation of a series of posts about WebGL. The first <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was <a href="webgl-2d-translation.html">about translating geometry</a>.
 

@@ -171,7 +171,9 @@ var Builder = function() {
     metaData['content'] = html;
     metaData['src_file_name'] = contentFileName;
     metaData['dst_file_name'] = outFileName;
-    metaData['basedir'] = ""
+    metaData['basedir'] = "";
+    metaData['url'] = "http://webglfundamentals.org/" + outFileName;
+
     var output = replaceParams(template,  metaData);
     writeFileIfChanged(outFileName, output)
     g_articles.push(metaData);

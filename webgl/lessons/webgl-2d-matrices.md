@@ -1,4 +1,5 @@
 Title: WebGL 2D Matrices
+Description: How matrix math works explained in simple easy to follow directions.
 
 This post is a continuation of a series of posts about WebGL. The first <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was <a href="webgl-2d-scale.html">about scaling 2D geometry</a>.
 

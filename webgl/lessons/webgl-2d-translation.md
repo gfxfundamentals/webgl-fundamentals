@@ -1,4 +1,5 @@
 Title: WebGL 2D Translation
+Description: How to translate in 2D
 
 Before we move on to 3D let's stick with 2D for a little while longer. Bear with me please. This article might seem exceedingly obvious to some but I'll build up to a point in a few articles.
 
