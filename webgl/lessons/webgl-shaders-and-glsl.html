@@ -163,7 +163,7 @@ gl.uniform1i (samplerCubeUniformLoc,   v);         // for samplerCube (textures)
 gl.uniform1iv(samplerCubeUniformLoc, [v]);         // for samplerCube or samplerCube array
 </code></pre><p>There&#39;s also types <code>bool</code>, <code>bvec2</code>, <code>bvec3</code>, and <code>bvec4</code>. They use either the <code>gl.uniform?f?</code> or <code>gl.uniform?i?</code>
 functions.</p>
-<p>Note that for an array you can see all the uniforms of the array at once. For example</p>
+<p>Note that for an array you can set all the uniforms of the array at once. For example</p>
 <pre><code>// in shader
 uniform vec2 u_someVec2[3];
 
@@ -193,7 +193,7 @@ uniform SomeStruct u_someThing;
 <pre><code>var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
 var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
 </code></pre><h3 id="textures-in-vertex-shaders">Textures in Vertex Shaders</h3>
-<p>See <a href="#textures-in-fragment-shaders">Textures in Uniform Shaders</a>.</p>
+<p>See <a href="#textures-in-fragment-shaders">Textures in Fragment Shaders</a>.</p>
 <h2 id="fragment-shader">Fragment Shader</h2>
 <p>A Fragment Shader&#39;s job is to provide a color for the current pixel being rasterized.
 It always takes the form</p>
@@ -237,6 +237,7 @@ gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIG
 </code></pre><p>WebGL then requires you to bind it to a texture unit</p>
 <pre><code>var unit = 5;  // Pick some texture unit
 gl.activeTexture(gl.TEXTURE0 + unit);
+gl.bindTexture(gl.TEXTURE_2D, tex);
 </code></pre><p>And tell the shader which unit you bound the texture to</p>
 <pre><code>gl.uniform1i(someSamplerLoc, unit);
 </code></pre><h3 id="varyings">Varyings</h3>
@@ -254,18 +255,18 @@ uniform vec4 u_offset;
 +varying vec4 v_positionWithOffset;
 
 void main() {
-   gl_Position = a_position + u_offset;
-   v_positionWithOffset = a_position + u_offset;
+  gl_Position = a_position + u_offset;
++  v_positionWithOffset = a_position + u_offset;
 }
 </code></pre><p>Fragment shader</p>
 <pre><code>precision mediump float;
 
-varying vec4 v_positionWithOffset;
++varying vec4 v_positionWithOffset;
 
 void main() {
-   // convert from clipsapce (-1 &lt;-&gt; +1) to color space (0 -&gt; 1).
-   vec4 color = v_positionWithOffset * 0.5 + 0.5
-   gl_FragColor = color;
++  // convert from clipsapce (-1 &lt;-&gt; +1) to color space (0 -&gt; 1).
++  vec4 color = v_positionWithOffset * 0.5 + 0.5
++  gl_FragColor = color;
 }
 </code></pre><p>The example above is a mostly nonsense example. It doesn&#39;t generally make sense to
 directly copy the clipsapce values the fragment shader and use them as colors. Never the less
@@ -304,10 +305,10 @@ vec4 y = c * v;
 <pre><code>v.bgra
 </code></pre><p>is the same as</p>
 <pre><code>vec4(v.b, v.g, v.r, v.a)
-</code></pre><p>when constructing a vec or a mat you can supply multiple parts at ones. So for example</p>
-<pre><code>vec4(v.r, v.g, v.b, 1)
-</code></pre><p>Is the same as</p>
+</code></pre><p>when constructing a vec or a mat you can supply multiple parts at once. So for example</p>
 <pre><code>vec4(v.rgb, 1)
+</code></pre><p>Is the same as</p>
+<pre><code>vec4(v.r, v.g, v.b, 1)
 </code></pre><p>One thing you&#39;ll likely get caught up on is that GLSL is very type strict.</p>
 <pre><code>float f = 1;  // ERROR 1 is an int. You can&#39;t assign an int to a float
 </code></pre><p>The correct way is one of these</p>
