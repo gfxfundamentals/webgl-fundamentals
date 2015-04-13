@@ -128,7 +128,7 @@ Uniforms can be many types. For each type you have to call the corresponding fun
 There's also types `bool`, `bvec2`, `bvec3`, and `bvec4`. They use either the `gl.uniform?f?` or `gl.uniform?i?`
 functions.
 
-Note that for an array you can see all the uniforms of the array at once. For example
+Note that for an array you can set all the uniforms of the array at once. For example
 
     // in shader
     uniform vec2 u_someVec2[3];
@@ -226,6 +226,7 @@ WebGL then requires you to bind it to a texture unit
 
     var unit = 5;  // Pick some texture unit
     gl.activeTexture(gl.TEXTURE0 + unit);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
 
 And tell the shader which unit you bound the texture to
 
