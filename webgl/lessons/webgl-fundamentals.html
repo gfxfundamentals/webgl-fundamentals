@@ -133,7 +133,8 @@ void main() {
 size of the canvas. In the case above you can see we are doing nothing
 but passing on our position data directly. Since the position data is
 already in clipspace there is no work to do. <em>If you want 3D it&#39;s up to you
-to supply shaders that convert from 3D to clipspace because WebGL is a rasterization API</em>.</p>
+to supply shaders that convert from 3D to clipspace because WebGL is only
+a rasterization API</em>.</p>
 <p>For 2D stuff you would probably rather work in pixels than clipspace so
 let&#39;s change the shader so we can supply rectangles in pixels and have
 it convert to clipspace for us. Here&#39;s the new vertex shader</p>
@@ -255,7 +256,9 @@ function setRectangle(gl, x, y, width, height) {
 While it can get more complicated to do 3D that complication is
 added by you, the programmer, in the form of more complex shaders.
 The WebGL API itself is 2D and fairly simple.</p>
-<p>From here you can go in 2 direction. If you are interested in image procesing
+<p>If you&#39;re 100% new to WebGL and have no idea what GLSL is or shaders or what the GPU does
+then checkout <a href="webgl-how-it-works.html">the basics of how WebGL really works</a>.</p>
+<p>Otherwise from here you can go in 2 directions. If you are interested in image procesing
 I&#39;ll show you <a href="webgl-image-processing.html">how to do some 2D image processing</a>.
 If you are interesting in learning about translation,
 rotation and scale then <a href="webgl-2d-translation.html">start here</a>.</p>
@@ -312,7 +315,12 @@ that almost every WebGL program needs.
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <ul>
-  <ul><li><a href="/webgl/lessons/webgl-fundamentals.html">WebGL Fundamentals</a></li></ul>
+  <li>Fundamentals</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-fundamentals.html">WebGL Fundamentals</a></li>
+    <li><a href="/webgl/lessons/webgl-how-it-works.html">WebGL How It Works</a></li>
+    <li><a href="/webgl/lessons/webgl-shaders-and-glsl.html">WebGL Shaders and GLSL</a></li>
+  </ul>
   <li>Image Processing</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-image-processing.html">WebGL Image Processing</a></li>
@@ -347,7 +355,6 @@ that almost every WebGL program needs.
   <li>Misc</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-boilerplate.html">WebGL Boilerplate</a></li>
-    <li><a href="/webgl/lessons/webgl-how-it-works.html">WebGL How It Works</a></li>
     <li><a href="/webgl/lessons/webgl-resizing-the-canvas.html">WebGL Resizing the Canvas</a></li>
     <li><a href="/webgl/lessons/webgl-animation.html">WebGL - Animation</a></li>
     <li><a href="/webgl/lessons/webgl-3d-textures.html">WebGL 3D - Textures</a></li>

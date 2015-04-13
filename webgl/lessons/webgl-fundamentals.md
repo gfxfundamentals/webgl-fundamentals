@@ -72,7 +72,8 @@ Again, clipspace coordinates always go from -1 to +1 regardless of the
 size of the canvas. In the case above you can see we are doing nothing
 but passing on our position data directly. Since the position data is
 already in clipspace there is no work to do. *If you want 3D it's up to you
-to supply shaders that convert from 3D to clipspace because WebGL is a rasterization API*.
+to supply shaders that convert from 3D to clipspace because WebGL is only
+a rasterization API*.
 
 For 2D stuff you would probably rather work in pixels than clipspace so
 let's change the shader so we can supply rectangles in pixels and have
@@ -195,8 +196,11 @@ While it can get more complicated to do 3D that complication is
 added by you, the programmer, in the form of more complex shaders.
 The WebGL API itself is 2D and fairly simple.
 
-From here you can go in 2 direction. If you are interested in image procesing
-I'll show you <a href="webgl-image-processing.html">how to do some 2D image processing</a>.
+If you're 100% new to WebGL and have no idea what GLSL is or shaders or what the GPU does
+then checkout [the basics of how WebGL really works](webgl-how-it-works.html).
+
+Otherwise from here you can go in 2 directions. If you are interested in image procesing
+I'll show you [how to do some 2D image processing](webgl-image-processing.html).
 If you are interesting in learning about translation,
 rotation and scale then [start here](webgl-2d-translation.html).
 
