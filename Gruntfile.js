@@ -26,13 +26,13 @@ module.exports = function(grunt) {
         ],
         options: {
           destination: 'docs',
-          configure: 'jsdoc.conf.json',
-          template: 'node_modules/ink-docstrap/template',
+          configure: 'build/conf/jsdoc.conf.json',
+          template: 'build/jsdoc-template/template',
         },
       },
     },
     clean: [
-        'docs',
+      'docs',
     ],
   });
 
