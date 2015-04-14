@@ -420,7 +420,7 @@ be using this style.
 Feel free to use this style in your own code. The functions `createUniformSetters`, `createAttributeSetters`,
 `createBufferInfoFromArrays`, `setUniforms`, and `setBuffersAndAttributes` are included in the
 [`webgl-utils.js`](https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js)
-file used by all the samples.
+file used by all the samples. If you want something slightly more organized check out [TWGL.js](http://twgljs.org).
 
 Next up, [drawing multiple things](webgl-drawing-multiple-things.html).
 

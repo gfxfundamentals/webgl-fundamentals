@@ -157,6 +157,7 @@ But I prefer to use some function I've written before.
 
 That's most of my minmum set of WebGL boilerplate code.
 <a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js">You can find that code here</a>.
+If you want something slightly more organized check out [TWGL.js](http://twgljs.org).
 
 The rest of what makes WebGL look complicated is setting up all the inputs
 to your shaders.  See <a href="webgl-how-it-works.html">how it works</a>.
