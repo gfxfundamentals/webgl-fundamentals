@@ -1,4 +1,6 @@
-@import url(//fonts.googleapis.com/css?family=Telex);
+/* The entire fucking browser blocks on this line on a slow connection */
+/* @import url(//fonts.googleapis.com/css?family=Telex); */
+
 /*!
  * Bootstrap v2.3.2
  *
@@ -547,7 +549,7 @@ a:focus {
   clear: both;
 }
 p {
-  margin: 0 0 10px;
+  margin: 0 0 0.5em;
 }
 .lead {
   margin-bottom: 20px;
@@ -830,7 +832,7 @@ pre {
   padding: 9.5px;
   margin: 0 0 10px;
   font-size: 13px;
-  line-height: 20px;
+  line-height: 1.1em;
   word-break: break-all;
   word-wrap: break-word;
   white-space: pre;
@@ -1720,7 +1722,7 @@ table {
 .table th,
 .table td {
   padding: 8px;
-  line-height: 20px;
+  line-height: 1.2em;
   text-align: left;
   vertical-align: top;
   border-top: 1px solid #dddddd;
@@ -3473,8 +3475,8 @@ input[type="submit"].btn.btn-mini {
   cursor: default;
 }
 .nav-pills > li > a {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
   margin-top: 2px;
   margin-bottom: 2px;
   -webkit-border-radius: 5px;
@@ -5604,6 +5606,20 @@ i[class^="icon-"] {
   background-color: #022c55;
   color: #ffffff;
 }
+.toc-params {
+    color: #666;
+}
+#toc a,
+#toc a:hover,
+#toc a:visited {
+    color: #317eac;
+}
+.toc-h1,
+.toc-h2,
+.toc-h3,
+.toc-h4 {
+    white-space: pre;
+}
 .toc-h1 {
   margin-left: 2px;
   margin-right: 2px;
@@ -5643,7 +5659,6 @@ i[class^="icon-"] {
   display: block;
 }
 footer {
-  border-top: 1px solid #04498c;
   padding-top: 15px;
 }
 code {
@@ -5699,3 +5714,98 @@ code {
   line-height: 15px;
   padding: 12px 4px !important;
 }
+
+span.param-type {
+  display: block;
+}
+.params p {
+    margin: 0px;
+}
+.signature {
+    color: #777;
+    padding-left: 0.5em;
+}
+
+div#pronouce {
+  font-size: 8pt;
+  position: relative;
+  top: -2em;
+}
+
+/* --- Prettify --- */
+pre.prettyprint .nocode { background-color: none; color: #000 }
+pre.prettyprint .str { color: #080 } /* string          */
+pre.prettyprint .kwd { color: #008 } /* keyword         */
+pre.prettyprint .com { color: #800 } /* comment         */
+pre.prettyprint .typ { color: #606 } /* type            */
+pre.prettyprint .lit { color: #066 } /* literal         */
+pre.prettyprint .pun { color: #660 } /* punctuation     */
+pre.prettyprint .pln { color: #000 } /* plaintext       */
+pre.prettyprint .tag { color: #008 } /* html/xml tag    */
+pre.prettyprint .atn { color: #606 } /* attribute name  */
+pre.prettyprint .atv { color: #080 } /* attribute value */
+pre.prettyprint .dec { color: #606 } /* decimal         */
+pre.prettyprint .var { color: #606 } /* variable name   */
+pre.prettyprint .fun { color: #F00 } /* function name   */
+
+pre.prettyprint ul.modifiedlines {
+    list-style-type: none;
+    padding-left: 0;
+}
+pre.prettyprint ul.modifiedlines li.linemodified {
+    list-style-type: none;
+    background-color: #A1EAF6;
+}
+pre.prettyprint ul.modifiedlines li.linedeleted {
+    list-style-type: none;
+    background-color: #F0B9B9;
+    text-decoration: line-through;
+}
+
+pre.prettyprint ul.modifiedlines li.lineadded {
+    list-style-type: none;
+    background-color: #A2EDC9;
+}
+
+
+pre.prettyprint, code.prettyprint {
+    color: #000;
+    background: #eee;
+    border: 1px solid #AAA;
+    font-size: 8pt;
+    font-family: "Lucida Console", Monaco, monospace;
+    width: 95%;
+    padding: 1em;
+    text-align: left;           /* override justify on body */
+    overflow-x: auto;             /* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
+    white-space: pre;        /* was nowrap, prevent line wrapping */
+    line-height: 10pt;
+    word-break: normal;
+    word-wrap: normal;
+}
+@media print{
+    pre.prettyprint .str, code.prettyprint .str{color:#060}
+    pre.prettyprint .kwd, code.prettyprint .kwd{color:#006;font-weight:bold}
+    pre.prettyprint .com, code.prettyprint .com{color:#600;font-style:italic}
+    pre.prettyprint .typ, code.prettyprint .typ{color:#404;font-weight:bold}
+    pre.prettyprint .lit, code.prettyprint .lit{color:#044}
+    pre.prettyprint .pun, code.prettyprint .pun{color:#440}
+    pre.prettyprint .pln, code.prettyprint .pln{color:#000}
+    pre.prettyprint .tag, code.prettyprint .tag{color:#006;font-weight:bold}
+    pre.prettyprint .atn, code.prettyprint .atn{color:#404}
+    pre.prettyprint .atv, code.prettyprint .atv{color:#060}
+pre.prettyprint, code.prettyprint {
+    color: #000;
+    background: #EEE;
+    font-size: 8pt;
+    font-family: "Lucida Console", Monaco, monospace;
+    width: 95%;
+    margin: auto;
+    padding: 6px 3px 13px 3px;  /* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
+    text-align: left;           /* override justify on body */
+    goverflow: auto;             /* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
+    white-space: pre;        /* was nowrap, prevent line wrapping */
+    line-height: 10pt;
+}
+}
+
