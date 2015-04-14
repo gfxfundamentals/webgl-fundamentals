@@ -173,6 +173,14 @@ var Builder = function() {
     metaData['dst_file_name'] = outFileName;
     metaData['basedir'] = "";
     metaData['url'] = "http://webglfundamentals.org/" + outFileName;
+    metaData['screenshot'] = "http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg";
+    var basename = path.basename(contentFileName, ".md");
+    [".jpg", ".png"].forEach(function(ext) {
+      var filename = path.join("webgl", "lessons", "screenshots", basename + ext);
+      if (fs.existsSync(filename)) {
+        metaData['screenshot'] = "http://webglfundamentals.org/webgl/lessons/screenshots/" + basename + ext;
+      }
+    });
 
     var output = replaceParams(template,  metaData);
     writeFileIfChanged(outFileName, output)
