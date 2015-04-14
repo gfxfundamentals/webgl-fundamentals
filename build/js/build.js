@@ -95,7 +95,7 @@ registerReplaceHandler('example', function(options) {
   options.width = options.width || "400";
   options.height = options.height || "300";
 
-  return replaceParams(readFile("templates/example.template"), options);
+  return replaceParams(readFile("build/templates/example.template"), options);
 });
 
 registerReplaceHandler('diagram', function(options) {
@@ -103,7 +103,7 @@ registerReplaceHandler('diagram', function(options) {
   options.width = options.width || "400";
   options.height = options.height || "300";
 
-  return replaceParams(readFile("templates/diagram.template"), options);
+  return replaceParams(readFile("build/templates/diagram.template"), options);
 });
 
 var readFile = function(fileName) {
@@ -192,7 +192,7 @@ var Builder = function() {
 
   this.process = function(filespec) {
     filespec = filespec || "*.md";
-    applyTemplateToFiles("templates/lesson.template", "webgl/lessons/" + filespec)
+    applyTemplateToFiles("build/templates/lesson.template", "webgl/lessons/" + filespec)
 
     var toc = [];
     g_articles.forEach(function(article) {
@@ -270,7 +270,7 @@ var Builder = function() {
       }
       return Promise.resolve();
     }).then(function() {
-      applyTemplateToFile("templates/index.template", "index.md", "index.html", {
+      applyTemplateToFile("build/templates/index.template", "index.md", "index.html", {
         table_of_contents: "<ul>" + toc.join("\n") + "</ul>",
       });
       process.exit(0);  //
