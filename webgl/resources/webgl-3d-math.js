@@ -119,7 +119,7 @@
 
   /**
    * Makes an identity matrix.
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -149,7 +149,7 @@
   /**
    * Transposes a matrix.
    * @param {Matrix4} m matrix to transpose.
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -184,7 +184,7 @@
    * @param {Vector3} cameraPosition position of the camera
    * @param {Vector3} target position of the target
    * @param {Vector3} up direction
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -230,7 +230,7 @@
    * @param {number} aspect aspect of viewport (width / height)
    * @param {number} near near Z clipping plane
    * @param {number} far far Z clipping plane
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -273,7 +273,7 @@
    * @param {number} top The y coordinate of the right plane of the box.
    * @param {number} near The negative z coordinate of the near plane of the box.
    * @param {number} far The negative z coordinate of the far plane of the box.
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -315,7 +315,7 @@
    * @param {number} top The y coordinate of the right plane of the box.
    * @param {number} near The negative z coordinate of the near plane of the box.
    * @param {number} far The negative z coordinate of the far plane of the box.
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -349,7 +349,7 @@
    * @param {number} tx x translation.
    * @param {number} ty y translation.
    * @param {number} tz z translation.
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -379,7 +379,7 @@
   /**
    * Makes an x rotation matrix
    * @param {number} angleInRadians amount to rotate
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -411,7 +411,7 @@
   /**
    * Makes an y rotation matrix
    * @param {number} angleInRadians amount to rotate
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -443,7 +443,7 @@
   /**
    * Makes an z rotation matrix
    * @param {number} angleInRadians amount to rotate
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -476,7 +476,7 @@
    * Makes an rotation matrix around an arbitrary axis
    * @param {Vector3} axis axis to rotate around
    * @param {number} angleInRadians amount to rotate
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -522,7 +522,7 @@
    * @param {number} sx x scale.
    * @param {number} sy y scale.
    * @param {number} sz z scale.
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -557,7 +557,7 @@
    * the same object in both row-major and column-major mode.
    * @param {Matrix4} a A matrix.
    * @param {Matrix4} b A matrix.
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    */
   function matrixMultiply(a, b, dst) {
@@ -616,7 +616,7 @@
   /**
    * Computes the inverse of a matrix.
    * @param {Matrix4} m matrix to compute inverse of
-   * @param {Matrix4?} dst optional matrix to store result
+   * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix of none provided
    * @memberOf module:webgl-3d-math
    */
@@ -788,7 +788,7 @@
    * entries.
    * @param {Matrix4} m The matrix.
    * @param {Vector3} v The normal.
-   * @param {Vector3?} dst The direction.
+   * @param {Vector3} [dst] The direction.
    * @return {Vector3} The transformed direction.
    * @memberOf module:webgl-3d-math
    */

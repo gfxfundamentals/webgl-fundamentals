@@ -163,8 +163,8 @@
 
   /**
    * @typedef {Object} GetWebGLContextOptions
-   * @property {boolean?} dontResize by default `getWebGLContext` will resize the canvas to match the size it's displayed.
-   * @property {boolean?} noTitle by default inserts a copy of the `<title>` content into the page
+   * @property {boolean} [dontResize] by default `getWebGLContext` will resize the canvas to match the size it's displayed.
+   * @property {boolean} [noTitle] by default inserts a copy of the `<title>` content into the page
    * @memberOf module:webgl-utils
    */
 
@@ -172,8 +172,8 @@
    * Gets a WebGL context.
    * makes its backing store the size it is displayed.
    * @param {HTMLCanvasElement} canvas a canvas element.
-   * @param {WebGLContextCreationAttirbutes?} opt_attribs optional webgl context creation attributes
-   * @param {module:webgl-utils.GetWebGLContextOptions?} opt_options options
+   * @param {WebGLContextCreationAttirbutes} [opt_attribs] optional webgl context creation attributes
+   * @param {module:webgl-utils.GetWebGLContextOptions} [opt_options] options
    * @memberOf module:webgl-utils
    */
   function getWebGLContext(canvas, opt_attribs, opt_options) {
@@ -244,8 +244,8 @@
    * Creates a program, attaches shaders, binds attrib locations, links the
    * program and calls useProgram.
    * @param {WebGLShader[]} shaders The shaders to attach
-   * @param {string[]?} opt_attribs An array of attribs names. Locations will be assigned by index if not passed in
-   * @param {number[]?} opt_locations The locations for the. A parallel array to opt_attribs letting you assign locations.
+   * @param {string[]} [opt_attribs] An array of attribs names. Locations will be assigned by index if not passed in
+   * @param {number[]} [opt_locations] The locations for the. A parallel array to opt_attribs letting you assign locations.
    * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
    *        on error. If you want something else pass an callback. It's passed an error message.
    * @memberOf module:webgl-utils
@@ -327,8 +327,8 @@
    * @param {string[]} shaderScriptIds Array of ids of the script
    *        tags for the shaders. The first is assumed to be the
    *        vertex shader, the second the fragment shader.
-   * @param {string[]?} opt_attribs An array of attribs names. Locations will be assigned by index if not passed in
-   * @param {number[]?} opt_locations The locations for the. A parallel array to opt_attribs letting you assign locations.
+   * @param {string[]} [opt_attribs] An array of attribs names. Locations will be assigned by index if not passed in
+   * @param {number[]} [opt_locations] The locations for the. A parallel array to opt_attribs letting you assign locations.
    * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
    *        on error. If you want something else pass an callback. It's passed an error message.
    * @return {WebGLProgram} The created program.
@@ -352,8 +352,8 @@
    * @param {string[]} shaderSourcess Array of sources for the
    *        shaders. The first is assumed to be the vertex shader,
    *        the second the fragment shader.
-   * @param {string[]?} opt_attribs An array of attribs names. Locations will be assigned by index if not passed in
-   * @param {number[]?} opt_locations The locations for the. A parallel array to opt_attribs letting you assign locations.
+   * @param {string[]} [opt_attribs] An array of attribs names. Locations will be assigned by index if not passed in
+   * @param {number[]} [opt_locations] The locations for the. A parallel array to opt_attribs letting you assign locations.
    * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
    *        on error. If you want something else pass an callback. It's passed an error message.
    * @return {WebGLProgram} The created program.
@@ -745,8 +745,8 @@
    * @param {string[]} shaderSourcess Array of sources for the
    *        shaders or ids. The first is assumed to be the vertex shader,
    *        the second the fragment shader.
-   * @param {string[]?} opt_attribs An array of attribs names. Locations will be assigned by index if not passed in
-   * @param {number[]?} opt_locations The locations for the. A parallel array to opt_attribs letting you assign locations.
+   * @param {string[]} [opt_attribs] An array of attribs names. Locations will be assigned by index if not passed in
+   * @param {number[]} [opt_locations] The locations for the. A parallel array to opt_attribs letting you assign locations.
    * @param {module:webgl-utils.ErrorCallback} opt_errorCallback callback for errors. By default it just prints an error to the console
    *        on error. If you want something else pass an callback. It's passed an error message.
    * @return {module:webgl-utils.ProgramInfo} The created program.
@@ -1063,12 +1063,12 @@
 
   /**
    * @typedef {Object} AttribInfo
-   * @property {number?} numComponents the number of components for this attribute.
-   * @property {number?} size the number of components for this attribute.
-   * @property {number?} type the type of the attribute (eg. `gl.FLOAT`, `gl.UNSIGNED_BYTE`, etc...) Default = `gl.FLOAT`
-   * @property {boolean?} normalized whether or not to normalize the data. Default = false
-   * @property {number?} offset offset into buffer in bytes. Default = 0
-   * @property {number?} stride the stride in bytes per element. Default = 0
+   * @property {number} [numComponents] the number of components for this attribute.
+   * @property {number} [size] the number of components for this attribute.
+   * @property {number} [type] the type of the attribute (eg. `gl.FLOAT`, `gl.UNSIGNED_BYTE`, etc...) Default = `gl.FLOAT`
+   * @property {boolean} [normalized] whether or not to normalize the data. Default = false
+   * @property {number} [offset] offset into buffer in bytes. Default = 0
+   * @property {number} [stride] the stride in bytes per element. Default = 0
    * @property {WebGLBuffer} buffer the buffer that contains the data for this attribute
    * @memberOf module:webgl-utils
    */
@@ -1098,7 +1098,7 @@
    *
    * @param {WebGLRenderingContext} gl The webgl rendering context.
    * @param {Object.<string, array|typedarray>} arrays The arrays
-   * @param {Object.<string, string>?} opt_mapping mapping from attribute name to array name.
+   * @param {Object.<string, string>} [opt_mapping] mapping from attribute name to array name.
    *     if not specified defaults to "a_name" -> "name".
    * @return {Object.<string, module:webgl-utils.AttribInfo>} the attribs
    * @memberOf module:webgl-utils
@@ -1135,7 +1135,7 @@
   /**
    * @typedef {Object} BufferInfo
    * @property {number} numElements The number of elements to pass to `gl.drawArrays` or `gl.drawElements`.
-   * @property {WebGLBuffer?} indices The indices `ELEMENT_ARRAY_BUFFER` if any indices exist.
+   * @property {WebGLBuffer} [indices] The indices `ELEMENT_ARRAY_BUFFER` if any indices exist.
    * @property {Object.<string, module:webgl-utils.AttribInfo>} attribs The attribs approriate to call `setAttributes`
    * @memberOf module:webgl-utils
    */
@@ -1229,7 +1229,7 @@
    *
    * @param {WebGLRenderingContext} gl A WebGLRenderingContext
    * @param {Object.<string, array|object|typedarray>} arrays Your data
-   * @param {Object.<string, string>?} opt_mapping an optional mapping of attribute to array name.
+   * @param {Object.<string, string>} [opt_mapping] an optional mapping of attribute to array name.
    *    If not passed in it's assumed the array names will be mapped to an attibute
    *    of the same name with "a_" prefixed to it. An other words.
    *
@@ -1330,8 +1330,8 @@
    * @param {WebGLRenderingContext} gl A WebGLRenderingContext
    * @param {enum} type eg (gl.TRIANGLES, gl.LINES, gl.POINTS, gl.TRIANGLE_STRIP, ...)
    * @param {module:webgl-utils.BufferInfo} bufferInfo as returned from createBufferInfoFromArrays
-   * @param {number?} count An optional count. Defaults to bufferInfo.numElements
-   * @param {number?} offset An optional offset. Defaults to 0.
+   * @param {number} [count] An optional count. Defaults to bufferInfo.numElements
+   * @param {number} [offset] An optional offset. Defaults to 0.
    * @memberOf module:webgl-utils
    */
   function drawBufferInfo(gl, type, bufferInfo, count, offset) {

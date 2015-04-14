@@ -244,8 +244,8 @@
 
   /**
    * @typedef {Object} RandomVerticesOptions
-   * @property {number?} vertsPerColor Defaults to 3 for non-indexed vertices
-   * @property {module:primitives.RandomColorFunc?} rand A function to generate random numbers
+   * @property {number} [vertsPerColor] Defaults to 3 for non-indexed vertices
+   * @property {module:primitives.RandomColorFunc} [rand] A function to generate random numbers
    * @memberOf module:primitives
    */
 
@@ -255,7 +255,7 @@
    * just make random colors. Otherwise assumes they are triangless
    * and makes one random color for every 3 vertices.
    * @param {Object.<string, augmentedTypedArray>} vertices Vertices as returned from one of the createXXXVertices functions.
-   * @param {module:primitives.RandomVerticesOptions?} options options.
+   * @param {module:primitives.RandomVerticesOptions} [options] options.
    * @return {Object.<string, augmentedTypedArray>} same vertices as passed in with `color` added.
    * @memberOf module:primitives
    */
@@ -313,11 +313,11 @@
    * Creates XZ plane vertices.
    * The created plane has position, normal and uv streams.
    *
-   * @param {number?} width Width of the plane. Default = 1
-   * @param {number?} depth Depth of the plane. Default = 1
-   * @param {number?} subdivisionsWidth Number of steps across the plane. Default = 1
-   * @param {number?} subdivisionsDepth Number of steps down the plane. Default = 1
-   * @param {Matrix4?} matrix A matrix by which to multiply all the vertices.
+   * @param {number} [width] Width of the plane. Default = 1
+   * @param {number} [depth] Depth of the plane. Default = 1
+   * @param {number} [subdivisionsWidth] Number of steps across the plane. Default = 1
+   * @param {number} [subdivisionsDepth] Number of steps down the plane. Default = 1
+   * @param {Matrix4} [matrix] A matrix by which to multiply all the vertices.
    * @return {Object.<string, TypedArray>} The
    *         created plane vertices.
    * @memberOf module:primitives
@@ -388,13 +388,13 @@
    * @param {number} radius radius of the sphere.
    * @param {number} subdivisionsAxis number of steps around the sphere.
    * @param {number} subdivisionsHeight number of vertically on the sphere.
-   * @param {number?} opt_startLatitudeInRadians where to start the
+   * @param {number} [opt_startLatitudeInRadians] where to start the
    *     top of the sphere. Default = 0.
-   * @param {number?} opt_endLatitudeInRadians Where to end the
+   * @param {number} [opt_endLatitudeInRadians] Where to end the
    *     bottom of the sphere. Default = Math.PI.
-   * @param {number?} opt_startLongitudeInRadians where to start
+   * @param {number} [opt_startLongitudeInRadians] where to start
    *     wrapping the sphere. Default = 0.
-   * @param {number?} opt_endLongitudeInRadians where to end
+   * @param {number} [opt_endLongitudeInRadians] where to end
    *     wrapping the sphere. Default = 2 * Math.PI.
    * @return {Object.<string, TypedArray>} The
    *         created plane vertices.
@@ -576,8 +576,8 @@
    *     truncated cone.
    * @param {number} verticalSubdivisions The number of subdivisions down the
    *     truncated cone.
-   * @param {boolean?} opt_topCap Create top cap. Default = true.
-   * @param {boolean?} opt_bottomCap Create bottom cap. Default =
+   * @param {boolean} [opt_topCap] Create top cap. Default = true.
+   * @param {boolean} [opt_bottomCap] Create bottom cap. Default =
    *        true.
    * @return {Object.<string, TypedArray>} The
    *         created plane vertices.
@@ -675,7 +675,7 @@
   /**
    * Expands RLE data
    * @param {number[]} rleData data in format of run-length, x, y, z, run-length, x, y, z
-   * @param {number[]?} padding value to add each entry with.
+   * @param {number[]} [padding] value to add each entry with.
    * @return {number[]} the expanded rleData
    */
   function expandRLEData(rleData, padding) {
