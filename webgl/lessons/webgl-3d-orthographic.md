@@ -268,8 +268,7 @@ Finally we need to to update the code that computes the matrix.
 
 And here's that sample.
 
-<iframe class="webgl_example" src="../webgl-3d-step1.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step1.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-step1.html" }}}
 
 The first problem we have is that our geometry is a flat F which makes it
 hard to see any 3D.  To fix that let's expand the geometry to 3D.  Our
@@ -287,8 +286,7 @@ We have to draw more vertices so
 
 And here's that version
 
-<iframe class="webgl_example" src="../webgl-3d-step2.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step2.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-step2.html" }}}
 
 Moving the sliders it's pretty hard to tell that it's 3D.  Let's try
 coloring each rectangle a different color.  To do this we will add another
@@ -376,8 +374,7 @@ function setColors(gl) {
 
 Now we get this.
 
-<iframe class="webgl_example" src="../webgl-3d-step3.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step3.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-step3.html" }}}
 
 Uh oh, what's that's mess?  Well, it turns out all the various parts of
 that 3D 'F', front, back, sides, etc get drawn in the order they appear in
@@ -418,8 +415,7 @@ facing.
 
 With CULL_FACE turned on this is what we get
 
-<iframe class="webgl_example" src="../webgl-3d-step4.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step4.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-step4.html" }}}
 
 Hey!  Where did all the triangles go?  It turns out, many of them are
 facing the wrong way.  Rotate it and you'll see them appear when you look
@@ -443,8 +439,7 @@ we just flip the last 2 vertices to make it forward.
 
 Going through and fixing all the backward triangles gets us to this
 
-<iframe class="webgl_example" src="../webgl-3d-step5.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step5.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-step5.html" }}}
 
 That's closer but there's still one more problem.  Even with all the
 triangles facing in the correct direction and with the back facing ones
@@ -485,8 +480,7 @@ We also need to clear the depth buffer back to 1.0 before we start drawing.
 
 And now we get
 
-<iframe class="webgl_example" src="../webgl-3d-step6.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step6.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-step6.html" }}}
 
 which is 3D!
 

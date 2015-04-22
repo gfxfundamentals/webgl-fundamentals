@@ -74,15 +74,15 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     but using CSS we've told the browser to display the canvas a different size.
     Notice the samples all display the 'F' in the correct aspect ratio.
 
-    <iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" style="width: 150px; height: 200px;"></iframe>
+    {{{diagram url="../webgl-canvas-clientwidth-clientheight.html" width="150" height="200" }}}
     <p></p>
-    <iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" style="width: 400px; height: 150px;"></iframe>
+    {{{diagram url="../webgl-canvas-clientwidth-clientheight.html" width="400" height="150" }}}
 
     If we had used `canvas.width` and `canvas.height` that would not be true.
 
-    <iframe class="webgl_example" src="../webgl-canvas-width-height.html" style="width: 150px; height: 200px;"></iframe>
+    {{{diagram url="../webgl-canvas-width-height.html" width="150" height="200" }}}
     <p></p>
-    <iframe class="webgl_example" src="../webgl-canvas-width-height.html" style="width: 400px; height: 150px;"></iframe>
+    {{{diagram url="../webgl-canvas-width-height.html" width="400" height="150" }}}
 
 3.  Using `window.innerWidth` and `window.innerHeight` to compute anything
 
@@ -201,8 +201,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     change any code for different cases. For example using the same code from #3 above
     here's an editor with a sizable editing area.
 
-    <iframe class="webgl_example" src="../webgl-same-code-resize.html" style="width: 400px; height: 300px;"></iframe>
-    <a class="webgl_center" href="../webgl-same-code-resize.html" target="_blank">click here to open in a separate window</a>
+    {{{example url="../webgl-same-code-resize.html" }}}
 
     There would be no resize events for this case nor any other where the canvas gets resized
     based on the size of other dynamic elements on the page.

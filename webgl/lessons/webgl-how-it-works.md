@@ -168,8 +168,7 @@ v_color that we declared.
 Those 3 values written to v_color are then interpolated and passed to the
 fragment shader for each pixel.
 
-<iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/fragment-shader-anim.html"></iframe>
-<div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
+{{{diagram url="resources/fragment-shader-anim.html" caption="v_color is interpolated between v0, v1 and v2" }}}
 
 We can also pass in more data to the vertex shader which we can then pass
 on to the fragment shader.  So for example lets draw a rectangle, that

@@ -78,12 +78,11 @@ useful.</p>
 graph. The engine then walks the scene graph and figures out a list of things to draw.
 Scene graphs are hierarchical so for example if you wanted to make a universe simulation
 you might have a graph that looks like this</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 500px;" src="resources/planet-diagram.html"></iframe>
 </div>
 
-
-
+</p>
 <p>What&#39;s the point of a scene graph? The #1 feature of a scene graph is it provides a parent
 child relationship for matrices as <a href="webgl-2d-matrices.html">we discussed in 2d matrix math</a>.
 So for example in a simple (but unrealistic) universe simualtion the stars (children), move along with their
@@ -100,12 +99,11 @@ way to state the same thing is that the moon only has to care about orbiting the
 It does not have to care about orbiting the sun. Without this scene graph structure
 you&#39;d have to do much more complex math to compute how to get the moon to orbit the sun
 because it&#39;s orbit around the sun looks something like this</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/moon-orbit.html"></iframe>
 </div>
 
-
-
+</p>
 <p>With a scene graph you just make the moon a child of the earth and then orbit
 the earth which is simple. The scene graph takes care of the fact that the earth
 is oribiting the sun. It does this by walking the nodes and multiplying the
@@ -254,24 +252,22 @@ objects.forEach(function(object) {
   object.drawInfo.uniforms.u_matrix = matrixMultiply(object.worldMatrix, viewProjectionMatrix);
 });
 </code></pre><p>Rendering is <a href="webgl-drawing-multiple-things.html">the same loop we saw in our last article</a>.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-scene-graph-solar-system.html"></iframe>
   <a class="webgl_center" href="../webgl-scene-graph-solar-system.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>You&#39;ll notice all of the planets are the same size. Let&#39;s try to make the earth larger</p>
 <pre><code>earthNode.localMatrix = matrixMultiply(
     makeScale(2, 2, 2),           // make the earth twice as large
     makeTranslation(100, 0, 0));  // earth 100 units from the sun
-</code></pre><div>
+</code></pre><p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-scene-graph-solar-system-larger-earth.html"></iframe>
   <a class="webgl_center" href="../webgl-scene-graph-solar-system-larger-earth.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>Oops. The moon got larger too. To fix this we could manually shrink the moon. A better solution though
 is to add more nodes to our scene graph. Instead of just</p>
 <pre><code>  sun
@@ -327,13 +323,12 @@ moonNode.setParent(moonOrbitNode);
 -sunNode.updateWorldMatrix();
 +solarSystemNode.updateWorldMatrix();
 </code></pre><p>And now you can see the earth is double size, the moon is not.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-scene-graph-solar-system-larger-earth-fixed.html"></iframe>
   <a class="webgl_center" href="../webgl-scene-graph-solar-system-larger-earth-fixed.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>You might also notice the sun and the earth are no longer rotating in place. That is now independent.</p>
 <p>Let&#39;s adjust a few more things.</p>
 <pre><code>-sunNode.localMatrix = makeTranslation(0, 0, 0);  // sun at the center
@@ -353,13 +348,12 @@ matrixMultiply(sunNode.localMatrix, makeYRotation(0.005), sunNode.localMatrix);
 +matrixMultiply(earthNode.localMatrix, makeYRotation(0.05), earthNode.localMatrix);
 +// spin the moon
 +matrixMultiply(monNode.localMatrix, makeYRotation(-0.01), moonNode.localMatrix);
-</code></pre><div>
+</code></pre><p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-scene-graph-solar-system-adjusted.html"></iframe>
   <a class="webgl_center" href="../webgl-scene-graph-solar-system-adjusted.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>Currently we have a <code>localMatrix</code> and we&#39;re modifying it each frame. There&#39;s a problem though
 in that every frame our math will collect a little bit of error. There are ways to fix the math
 which is called <em>ortho normalizing a matrix</em> but even that won&#39;t always work. For example let&#39;s
@@ -430,12 +424,11 @@ someTRS.rotation[2] += elapsedTime;
 </code></pre><p>Now there&#39;s no issue because we are recreating the matrix each time.</p>
 <p>You might be thinking, I&#39;m not making a solar system so what&#39;s the point? Well, If you wanted to
 animate a human you might have a scene graph that looks like this</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 400px;" src="resources/person-diagram.html"></iframe>
 </div>
 
-
-
+</p>
 <p>How many joints you add for fingers and toes is up to you. The more joints you have
 the more power it takes to compute the animations and the more animation data it takes
 to provide info for all the joints. Old games like Virtua Fighter had around 15 joints.
@@ -445,13 +438,12 @@ to animate hands animate the thumb as one and the 4 fingers as one large finger 
 on time (both CPU/GPU and artist time) and memory.</p>
 <p>In any case here&#39;s a block guy I hacked together. It&#39;s using the <code>TRS</code> source for each
 node mentioned above. Programmer art and programmer animation FTW! :P</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-scene-graph-block-guy.html"></iframe>
   <a class="webgl_center" href="../webgl-scene-graph-block-guy.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>If you look at pretty much any 3d library you&#39;ll find a scene graph similar to this.</p>
 <div class="webgl_bottombar">
 <h3>SetParent vs AddChild / RemoveChild</h3>

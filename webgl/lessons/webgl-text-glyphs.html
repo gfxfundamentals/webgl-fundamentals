@@ -174,13 +174,12 @@ textPositions.forEach(function(pos, ndx) {
   }
 });
 </code></pre><p>And you can see it works</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-glyphs.html"></iframe>
   <a class="webgl_center" href="../webgl-text-glyphs.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>Unfortunately it&#39;s SLOW. The example below doesn&#39;t show it but we&#39;re individually
 drawing 73 quads. We&#39;re computing 73 matrices and 292 matrix multplies. A typical
 UI might easily have 1000 letters showing. That&#39;s way way too much work to get
@@ -251,13 +250,12 @@ var glyphInfos = makeGlyphCanvas(
     padding,
     letters);
 </code></pre><p>Here&#39;s the result</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 258px; height: 46px;" src="../glyph-texture-atlas-maker.html"></iframe>
   <a class="webgl_center" href="../glyph-texture-atlas-maker.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>Now that we have a texture with glyphs in it we need to use it. To do that we&#39;ll
 build quad vertices on the fly for each glyph. Those vertices will use texture coordinates
 to select a particlar glyph</p>
@@ -397,13 +395,12 @@ var fontInfo = {
   gl.drawArrays(gl.TRIANGLES, 0, vertices.numVertices);
 });
 </code></pre><p>And here&#39;s that</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-glyphs-texture-atlas.html"></iframe>
   <a class="webgl_center" href="../webgl-text-glyphs-texture-atlas.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>That&#39;s the basic technique of using a texture atlas of glyphs. There&#39;s a few
 obvious things to add or ways to improve it.</p>
 <ul>

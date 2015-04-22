@@ -122,13 +122,12 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>This will draw a green rectangle the entire size of the canvas. Here it is</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-fundamentals.html"></iframe>
   <a class="webgl_center" href="../webgl-fundamentals.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>Not very exciting :-p</p>
 <p>Again, clipspace coordinates always go from -1 to +1 regardless of the
 size of the canvas. In the case above you can see we are doing nothing
@@ -171,25 +170,23 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
     80, 20,
     80, 30]), gl.STATIC_DRAW);
 </code></pre><p>And here it is</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-rectangle.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-rectangle.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>You might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
 corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs
 we just flip the y coordinate.</p>
 <pre><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>And now our rectangle is where we expect it.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-rectangle-top-left.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-rectangle-top-left.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>Let&#39;s make the code that defines a rectangle into a function so
 we can call it for different sized rectangles. While we&#39;re at it
 we&#39;ll make the color settable.</p>
@@ -246,13 +243,12 @@ function setRectangle(gl, x, y, width, height) {
      x2, y2]), gl.STATIC_DRAW);
 }
 </code></pre><p>And here&#39;s the rectangles.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-rectangles.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-rectangles.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>I hope you can see that WebGL is actually a pretty simple API.
 While it can get more complicated to do 3D that complication is
 added by you, the programmer, in the form of more complex shaders.

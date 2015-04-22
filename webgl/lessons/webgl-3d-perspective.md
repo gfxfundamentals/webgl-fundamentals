@@ -95,8 +95,7 @@ We also need to update the code to let us set the fudgeFactor.
 
 And here's the result.
 
-<iframe class="webgl_example" src="../webgl-3d-perspective.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-perspective.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-perspective.html" }}}
 
 If it's not clear drag the "fudgeFactor" slider from 1.0 to 0.0 to see what things used to look like before
 we added our divide by Z code.
@@ -130,8 +129,7 @@ void main() {
 
 and see how it's exactly the same.
 
-<iframe class="webgl_example" src="../webgl-3d-perspective-w.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-perspective-w.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-perspective-w.html" }}}
 
 Why is the fact that WebGL automatically divides by W useful? Because now, using
 more matrix magic, we can just use yet another matrix to copy z to w.
@@ -278,8 +276,7 @@ and we'll change the code to use it.
 
 and note, again, it's exactly the same.
 
-<iframe class="webgl_example" src="../webgl-3d-perspective-w-matrix.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-perspective-w-matrix.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-perspective-w-matrix.html" }}}
 
 All that was basically to show you that dividing by Z gives us perspective
 and that WebGL conveniently does this divide by Z for us.
@@ -326,8 +323,7 @@ Finally, it figures out how much to scale things in Z so that stuff at zFar ends
 
 Here's a diagram of the matrix in action.
 
-<iframe class="webgl_example" src="../frustum-diagram.html" style="width: 400px; height: 600px;"></iframe>
-<a class="webgl_center" href="../frustum-diagram.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../frustum-diagram.html" width="400" height="600" }}}
 
 That shape that looks like 4 sided cone the cubes are spinning in is called a frustum".
 The matrix takes the space inside the frustum and converts that to clipspace. `zNear` defines where
@@ -358,8 +354,7 @@ makePerspective
 
 And here it is.
 
-<iframe class="webgl_example" src="../webgl-3d-perspective-matrix.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-perspective-matrix.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-perspective-matrix.html" }}}
 
 We're back to just a matrix multiply and we're getting both a field of view and we're able to choose our z space.
 We're not done but this article is getting too long. Next up, <a href="webgl-3d-camera.html">cameras</a>.

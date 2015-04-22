@@ -226,13 +226,12 @@ setUniforms(programInfo.uniformSetters, coneUniforms);
 
 gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 </code></pre><p>And here&#39;s that</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-multiple-objects-manual.html"></iframe>
   <a class="webgl_center" href="../webgl-multiple-objects-manual.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>One thing to notice is since we only have a single shader program we only called <code>gl.useProgram</code>
 once. If we had different shader programs you&#39;d need to call <code>gl.useProgram</code> before um...
 using each program.</p>
@@ -310,13 +309,12 @@ objectsToDraw.forEach(function(object) {
 });
 </code></pre><p>And this is arguably the main rendering loop of most 3D engines in existence. Somewhere
 some code or codes decide what goes into the list of <code>objectsToDraw</code> but that&#39;s basically it.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-multiple-objects-list.html"></iframe>
   <a class="webgl_center" href="../webgl-multiple-objects-list.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>There are a few basic optimizations. If the program we&#39;re about the draw with is the same
 as the previous program we drew with then there&#39;s no need to call <code>gl.useProgram</code>. Similarly
 if we&#39;re drawing with the same shape/geometry/vertices we previously drew with there&#39;s no
@@ -402,13 +400,12 @@ objects.forEach(function(object) {
       object.yRotationSpeed * time);
 });
 </code></pre><p>Then draw the objects using the loop above.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-multiple-objects-list-optimized.html"></iframe>
   <a class="webgl_center" href="../webgl-multiple-objects-list-optimized.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>You could also sort the list by <code>programInfo</code> and/or <code>bufferInfo</code> so that the optimization
 kicks in more often. Most game engines do this. Unfortunately it&#39;s not that simple.
 If everything you&#39;re drawing is opaque and then you can just sort. But, as soon you need to

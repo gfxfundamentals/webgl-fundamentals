@@ -42,8 +42,7 @@ or for example like this
 
 If we draw a single pixel wide rotating line into that canvas we'll see something like this
 
-<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-10x15-canvas-400x300-css.html"></iframe>
-<a class="webgl_center" href="../webgl-10x15-canvas-400x300-css.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-10x15-canvas-400x300-css.html" }}}
 
 Why is it so blurry? Because the browser takes our 10x15 pixel canvas and stretches it to 400x300 pixels and
 generally it filters it when it stretches it.
@@ -102,8 +101,7 @@ so it will always adjust the canvas to our desired size just before drawing.
 
 And here's that
 
-<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-resize-canvas.html"></iframe>
-<a class="webgl_center" href="../webgl-resize-canvas.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-resize-canvas.html" }}}
 
 Hey, something is wrong? Why is the line not covering the entire area?
 
@@ -139,8 +137,7 @@ reference to the canvas let's pass that into resize.
 
 Now it's working.
 
-<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-resize-canvas-viewport.html"></iframe>
-<a class="webgl_center" href="../webgl-resize-canvas-viewport.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-resize-canvas-viewport.html" }}}
 
 Open that in a separate window, size the window, notice it always fills the window.
 
@@ -188,8 +185,7 @@ function resize(gl) {
 <p>If you have an HD-DPI display, for example if you view this page on your smartphone
 you should notice the line below is thinner than the one above which didn't adjust for
 HD-DPI displays</p>
-<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-resize-canvas-hd-dpi.html"></iframe>
-<a class="webgl_center" href="../webgl-resize-canvas-hd-dpi.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-resize-canvas-hd-dpi.html" }}}
 <p>Whether you really want to adjust for HD-DPI is up to you. On iPhone4 or iPhone5 <code>window.devicePixelRatio</code> is <code>2</code> which
 means you'll be drawing 4 times as many pixels. I believe on an iPhone6Plus that value is <code>3</code> which means you'd be drawing
 9 times as many pixels. That can really slow down your program. In fact it's a common optimization in games to actually render

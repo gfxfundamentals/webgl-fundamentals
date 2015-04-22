@@ -226,8 +226,7 @@ And here's how we use it
 
 Here's a sample using our new code. The sliders are the same, translation, rotation and scale. But the way they get used in the shader is much simpler. 
 
-<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-2d-geometry-matrix-transform.html" }}}
 
 Still, you might be asking, so what? That doesn't seem like much of a benefit . But, now if we want to change the order we don't have to write a new shader. We can just change the math.
 
@@ -241,8 +240,7 @@ Still, you might be asking, so what? That doesn't seem like much of a benefit . 
 
 Here's that version.
 
-<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-trs.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-trs.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-2d-geometry-matrix-transform-trs.html" }}}
 
 Being able to apply matrices like this is especially important for hierarchical animation like arms on a body, moons on a planet around a sun, or branches on a tree. For a simple example of hierarchical animation lets draw draw our 'F' 5 times but each time lets start with the matrix from the previous 'F'.
 
@@ -297,8 +295,7 @@ function makeIdentity() {
 
 Here's the 5 Fs.
 
-<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-hierarchical.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-hierarchical.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-2d-geometry-matrix-transform-hierarchical.html" }}}
 
 One more example, In every sample so far our 'F' rotates around its top left corner. This is because the math we are using always rotates around the origin and the top left corner of our 'F' is at the origin, (0, 0)
 
@@ -317,8 +314,7 @@ But now, because we can do matrix math and we can choose the order that transfor
 
 Here's that sample. Notice the F rotates and scales around the center.
 
-<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-center-f.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-center-f.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-2d-geometry-matrix-transform-center-f.html" }}}
 
 Using that technique you can rotate or scale from any point. Now you know how Photoshop or Flash let you move the rotation point.
 
@@ -387,8 +383,7 @@ And in JavaScript we need to multiply by the projection matrix
 
 We also removed the code that set the resolution. With this last step we've gone from a rather complicated shader with 6-7 steps to a very simple shader with only 1 step all do to the magic of matrix math.
 
-<iframe class="webgl_example" src="../webgl-2d-geometry-matrix-transform-with-projection.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-with-projection.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-2d-geometry-matrix-transform-with-projection.html" }}}
 
 I hope these posts have helped demystified matrix math. <a href="webgl-3d-orthographic.html">I'll move on to 3D next</a>. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.
 
@@ -426,13 +421,11 @@ For example if we made a canvas like this.</p>
 out to fill the page. The first one uses <code>canvas.width</code> and <code>canvas.height</code>. Open it in a new
 window and resize the window. Notice how the 'F' doesn't have the correct aspect. It gets
 distorted.</p>
-<iframe class="webgl_example" src="../webgl-canvas-width-height.html" style="width: 500px; height: 150px;"></iframe>
-<a class="webgl_center" href="../webgl-canvas-width-height.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-canvas-width-height.html" width="500" height="150" }}}
 <p>In this second example we use <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> report
 the size the canvas is actually being displayed by the browser so in this case, even though the canvas still only has 400x300 pixels
 since we're defining our aspect ratio based on the size the canvas is being displayed the <code>F</code> always looks correct.</p>
-<iframe class="webgl_example" src="../webgl-canvas-clientwidth-clientheight.html" style="width: 500px; height: 150px;"></iframe>
-<a class="webgl_center" href="../webgl-canvas-clientwidth-clientheight.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-canvas-clientwidth-clientheight.html" width="500" height="150" }}}
 <p>Most apps that allow their canvases to be resized try to make the <code>canvas.width</code> and <code>canvas.height</code> match
 the <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> because they want there to be
 one pixel in the canvas for each pixel displayed by the browser. But, as we've seen above, that's not

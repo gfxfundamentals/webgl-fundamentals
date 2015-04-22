@@ -122,13 +122,12 @@ angleElement.appendChild(angleNode);
     angleNode.nodeValue = angle.toFixed(0);  // no decimal place
     timeNode.nodeValue = clock.toFixed(2);   // 2 decimal places
 </code></pre><p>And here&#39;s that example</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-html-overlay.html"></iframe>
   <a class="webgl_center" href="../webgl-text-html-overlay.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>Notice how I put spans inside the divs specifically for the parts I wanted to change. I&#39;m making the
 assumption here that that&#39;s faster than just using the divs with no spans and saying something like</p>
 <pre><code>timeNode.value = &quot;Time &quot; + clock.toFixed(2);
@@ -143,13 +142,12 @@ has tons of features. Use them. This has lots of benefits. For example you can u
 easily give that overlay an interesting style.</p>
 <p>For example here&#39;s the same example but adding some style. The background is rounded, the letters have
 a glow around them. There&#39;s a red border. You get all that essencially for free by using HTML.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-html-overlay-styled.html"></iframe>
   <a class="webgl_center" href="../webgl-text-html-overlay-styled.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>The next most common thing to want to do is position some text relative to something you&#39;re rendering.
 We can do that in HTML as well.</p>
 <p>In this case we&#39;ll make again make a container with the canvas and another container for our moving HTML</p>
@@ -204,13 +202,12 @@ divContainerElement.appendChild(div);
 div.style.top  = Math.floor(y) + &quot;px&quot;;
 textNode.nodeValue = clock.toFixed(2);
 </code></pre><p>Here&#39;s an example where we&#39;re just bounding the div around.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-html-bouncing-div.html"></iframe>
   <a class="webgl_center" href="../webgl-text-html-bouncing-div.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>So the next step is we want to place it relative to something in the 3D scene.
 How do we do that? We do it exactly how we asked the GPU to do it when we
 <a href="webgl-3d-perspective.html">covered perspective projection</a>.</p>
@@ -247,21 +244,19 @@ div.style.top  = Math.floor(pixelY) + &quot;px&quot;;
 textNode.nodeValue = clock.toFixed(2);
 </code></pre><p>And wahlah, the top left corner of the our div is perfectly aligned
 with the top right front corner of the F.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-html-div.html"></iframe>
   <a class="webgl_center" href="../webgl-text-html-div.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>Of course if you want more text make more divs.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-html-divs.html"></iframe>
   <a class="webgl_center" href="../webgl-text-html-divs.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>You can look at the source of that last example to see the
 details. One important point is I&#39;m just guessing that
 creating, appending and removing HTML elements from the DOM

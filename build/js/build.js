@@ -78,8 +78,9 @@ Handlebars.registerHelper('include', function(filename, options) {
 
 Handlebars.registerHelper('example', function(options) {
 
-  options.hash.width  = options.hash.width || "400";
-  options.hash.height = options.hash.height || "300";
+  options.hash.width   = options.hash.width || "400";
+  options.hash.height  = options.hash.height || "300";
+  options.hash.caption = options.hash.caption || "click here to open in a separate window";
 
   return templateManager.apply("build/templates/example.template", options.hash);
 });
@@ -134,6 +135,45 @@ var Builder = function() {
     return extractHeader(content);
   };
 
+  function extractHandlebars(content) {
+    var tripleRE = /\{\{\{.*?\}\}\}/g;
+    var doubleRE = /\{\{\{.*?\}\}\}/g;
+
+    var numExtractions = 0;
+    var extractions = {
+    };
+
+    function saveHandlebar(match) {
+      var id = "==HANDLEBARS_ID_" + (++numExtractions) + "==";
+      extractions[id] = match;
+      return id;
+    }
+
+    content = content.replace(tripleRE, saveHandlebar);
+    content = content.replace(doubleRE, saveHandlebar);
+
+    return {
+      content: content,
+      extractions: extractions,
+    };
+  }
+
+  function insertHandlebars(info, content) {
+    var handlebarRE = /==HANDLEBARS_ID_\d+==/g;
+
+    function restoreHandlebar(match) {
+      var value = info.extractions[match];
+      if (value === undefined) {
+        throw new Error("no match restoring handlebar for: " + match);
+      }
+      return value;
+    }
+
+    content = content.replace(handlebarRE, restoreHandlebar);
+
+    return content;
+  }
+
   var applyTemplateToFile = function(templatePath, contentFileName, outFileName, opt_extra) {
     console.log("processing: ", contentFileName);
     opt_extra = opt_extra || {};
@@ -144,12 +184,10 @@ var Builder = function() {
     var metaData = data.headers;
     var content = data.content;
     //console.log(JSON.stringify(metaData, undefined, "  "));
-    content = content.replace(/%\(/g, '__STRING_SUB__');
-    content = content.replace(/%/g, '__PERCENT__');
-    content = content.replace(/__STRING_SUB__/g, '%(');
-    content = replaceParams(content, opt_extra);
-    content = content.replace(/__PERCENT__/g, '%');
-    var html = marked(content);
+    var info = extractHandlebars(content);
+    var html = marked(info.content);
+    html = insertHandlebars(info, html);
+    html = replaceParams(html, opt_extra);
     metaData['content'] = html;
     metaData['src_file_name'] = contentFileName;
     metaData['dst_file_name'] = outFileName;

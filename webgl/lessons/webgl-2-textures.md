@@ -145,8 +145,7 @@ The 2 images we're loading look like this
 
 And here's the result if we multiply them together using WebGL.
 
-<iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2-textures.html"></iframe>
-<a class="webgl_center" href="../webgl-2-textures.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-2-textures.html" }}}
 
 Some things I should go over.  
 

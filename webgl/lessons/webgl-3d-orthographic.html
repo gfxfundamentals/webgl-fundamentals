@@ -313,8 +313,12 @@ for depth it will be -depth / 2 to +depth / 2.</p>
 </pre>
 
 <p>And here&#39;s that sample.</p>
-<p><iframe class="webgl_example" src="../webgl-3d-step1.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step1.html" target="_blank">click here to open in a separate window</a></p>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-step1.html"></iframe>
+  <a class="webgl_center" href="../webgl-3d-step1.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
 <p>The first problem we have is that our geometry is a flat F which makes it
 hard to see any 3D.  To fix that let&#39;s expand the geometry to 3D.  Our
 current F is made of 3 rectangles, 2 triangles each.  To make it 3D will
@@ -328,8 +332,12 @@ vertices.  If you want to see all of them view source on the sample.</p>
 </pre>
 
 <p>And here&#39;s that version</p>
-<p><iframe class="webgl_example" src="../webgl-3d-step2.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step2.html" target="_blank">click here to open in a separate window</a></p>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-step2.html"></iframe>
+  <a class="webgl_center" href="../webgl-3d-step2.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
 <p>Moving the sliders it&#39;s pretty hard to tell that it&#39;s 3D.  Let&#39;s try
 coloring each rectangle a different color.  To do this we will add another
 attribute to our vertex shader and a varying to pass it from the vertex
@@ -411,8 +419,12 @@ function setColors(gl) {
 </pre>
 
 <p>Now we get this.</p>
-<p><iframe class="webgl_example" src="../webgl-3d-step3.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step3.html" target="_blank">click here to open in a separate window</a></p>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-step3.html"></iframe>
+  <a class="webgl_center" href="../webgl-3d-step3.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
 <p>Uh oh, what&#39;s that&#39;s mess?  Well, it turns out all the various parts of
 that 3D &#39;F&#39;, front, back, sides, etc get drawn in the order they appear in
 our geometry.  That doesn&#39;t give us quite the desired results as sometimes
@@ -445,8 +457,12 @@ That&#39;s a good thing since as your turn something around in 3D you
 generally want which ever triangles are facing you to be considered front
 facing.</p>
 <p>With CULL_FACE turned on this is what we get</p>
-<p><iframe class="webgl_example" src="../webgl-3d-step4.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step4.html" target="_blank">click here to open in a separate window</a></p>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-step4.html"></iframe>
+  <a class="webgl_center" href="../webgl-3d-step4.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
 <p>Hey!  Where did all the triangles go?  It turns out, many of them are
 facing the wrong way.  Rotate it and you&#39;ll see them appear when you look
 at the other side.  Fortunately it&#39;s easy to fix.  We just look at which
@@ -466,8 +482,12 @@ backward triangle is</p>
 </pre>
 
 <p>Going through and fixing all the backward triangles gets us to this</p>
-<p><iframe class="webgl_example" src="../webgl-3d-step5.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step5.html" target="_blank">click here to open in a separate window</a></p>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-step5.html"></iframe>
+  <a class="webgl_center" href="../webgl-3d-step5.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
 <p>That&#39;s closer but there&#39;s still one more problem.  Even with all the
 triangles facing in the correct direction and with the back facing ones
 being culled we still have places where triangles that should be in back
@@ -501,8 +521,12 @@ drawn.</p>
 </pre>
 
 <p>And now we get</p>
-<p><iframe class="webgl_example" src="../webgl-3d-step6.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-step6.html" target="_blank">click here to open in a separate window</a></p>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-step6.html"></iframe>
+  <a class="webgl_center" href="../webgl-3d-step6.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
 <p>which is 3D!</p>
 <p>In the next post I&#39;ll go over <a href="webgl-3d-perspective.html">how to make it have perspective</a>.</p>
 <div class="webgl_bottombar">

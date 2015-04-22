@@ -178,13 +178,12 @@ setUniforms(textProgramInfo.uniformSetters, textUniforms);
 // Draw the text.
 gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 </code></pre><p>So here it is</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-texture.html"></iframe>
   <a class="webgl_center" href="../webgl-text-texture.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>You&#39;ll notice that sometimes parts of our text cover up parts of our Fs. That&#39;s because
 we&#39;re drawing a quad. The default color of the canvas is transparent black (0,0,0,0) and
 we&#39;re drawing that color in the quad. We could instead blend our pixels.</p>
@@ -217,13 +216,12 @@ result = dst * 1 + src * 0
 // which is the same as
 result = dst
 </code></pre><p>Here&#39;s the result with blending enabled.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-texture-enable-blend.html"></iframe>
   <a class="webgl_center" href="../webgl-text-texture-enable-blend.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>You can see it&#39;s better but it&#39;s still not perfect. If you look
 close you&#39;ll sometimes see this issue</p>
 <p><img class="webgl_center" src="resources/text-zbuffer-issue.png" /></p>
@@ -273,13 +271,12 @@ gl.depthMask(false);
   gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 });
 </code></pre><p>And now it mostly works</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-texture-separate-opaque-from-transparent.html"></iframe>
   <a class="webgl_center" href="../webgl-text-texture-separate-opaque-from-transparent.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>Notice we didn&#39;t sort like I mentioned above. In this case since we&#39;re drawing mostly opaque text
 there&#39;s probably going to be no noticable difference if we sort so I&#39;ll save that for some
 other article.</p>
@@ -304,13 +301,12 @@ textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
 *textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
 textMatrix = matrixMultiply(textMatrix, projectionMatrix);
 </code></pre><p>Here&#39;s that.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-texture-moved-toward-view.html"></iframe>
   <a class="webgl_center" href="../webgl-text-texture-moved-toward-view.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>You still might notice an issue with the edges of the letters.</p>
 <p><img class="webgl_center" src="resources/text-gray-outline.png" /></p>
 <p>The issue here is the Canvas2D api produces only premultiplied alpha values.
@@ -327,13 +323,12 @@ WebGL can just pass it through.</p>
 </code></pre><p>The old one multipled the src color by its alpha. That&#39;s what <code>SRC_ALPHA</code> means. But
 now our texture&#39;s data has already been multiplied by its alpha. That&#39;s what premultipled means.
 So we don&#39;t need to GPU to do the multiplication. Setting it ot <code>ONE</code> means multiply by 1.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-texture-premultiplied-alpha.html"></iframe>
   <a class="webgl_center" href="../webgl-text-texture-premultiplied-alpha.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>The edges are gone now.</p>
 <p>What if you want to keep the text a fixed size but still sort correctly? Well, if you remember
 from <a href="webgl-3d-perspective.html">the perspective article</a> our perspective matrix is going
@@ -355,13 +350,12 @@ var textMatrix = makeIdentity();
 textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
 textMatrix = matrixMultiply(textMatrix, projectionMatrix);
 ...
-</code></pre><div>
+</code></pre><p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-texture-consistent-scale.html"></iframe>
   <a class="webgl_center" href="../webgl-text-texture-consistent-scale.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>If you want to draw different text at each F you should make a new texture for each
 F and just update the text uniforms for that F.</p>
 <pre><code>// create text textures, one for each F
@@ -411,13 +405,12 @@ var textTextures = [
   *textMatrix = matrixMultiply(textMatrix, makeScale(tex.width, tex.height, 1));
 </code></pre><p>and set the uniform for the texture before drawing</p>
 <pre><code>  textUniforms.u_texture = tex.texture;
-</code></pre><div>
+</code></pre><p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-texture-different-text.html"></iframe>
   <a class="webgl_center" href="../webgl-text-texture-different-text.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>We&#39;ve been using black to draw the text into the canvas.
 It would be more useful if we rendered the text in white. Then we could multiply
 the text by a color and make it any color we want.</p>
@@ -456,13 +449,12 @@ var colors = [
 <pre><code>// set color uniform
 textUniforms.u_color = colors[ndx];
 </code></pre><p>Colors</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-texture-different-colors.html"></iframe>
   <a class="webgl_center" href="../webgl-text-texture-different-colors.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>This techinque is actually the technique most browsers use when they are GPU accelerated.
 They generate textures with your HTML content and all the various styles you&#39;ve applied
 and as long as that content doesn&#39;t change they can just render the texture

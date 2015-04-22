@@ -138,13 +138,12 @@ void main() {
 </code></pre><p>WebGL will connect the varying in the vertex shader to the varying of the
 same name and type in the fragment shader.</p>
 <p>Here&#39;s the working version.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-triangle-with-position-for-color.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-triangle-with-position-for-color.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>Move, scale and rotate the rectangle.  Notice that since the colors are
 computed from clipspace they don&#39;t move with the rectangle.  They are
 relative to the background.</p>
@@ -211,9 +210,12 @@ v_color that we declared.</p>
 
 <p>Those 3 values written to v_color are then interpolated and passed to the
 fragment shader for each pixel.</p>
-<p><iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/fragment-shader-anim.html"></iframe></p>
-<div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/fragment-shader-anim.html"></iframe>
+  <div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
+</div>
 
+</p>
 <p>We can also pass in more data to the vertex shader which we can then pass
 on to the fragment shader.  So for example lets draw a rectangle, that
 consists of 2 triangles, in 2 colors.  To do this we&#39;ll add another
@@ -268,12 +270,12 @@ void main() {
 +      gl.STATIC_DRAW);
 +}
 </code></pre><p>And here&#39;s the result.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-rectangle-with-2-colors.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-rectangle-with-2-colors.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-<p>;</p>
+;</p>
 <p>Notice that we have 2 solid color triangles.  Yet we&#39;re passing the values
 in a <em>varying</em> so they are being varied or interpolated across the
 triangle.  It&#39;s just that we used the same color on each of the 3 vertices
@@ -295,12 +297,12 @@ function setColors(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>And now we see the interpolated <em>varying</em>.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-rectangle-with-random-colors.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-rectangle-with-random-colors.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-<p>;</p>
+;</p>
 <p>Not very exciting I suppose but it does demonstrate using more than one
 attribute and passing data from a vertex shader to a fragment shader.  If
 you check out <a href="webgl-image-processing.html">the image processing examples</a>
@@ -399,7 +401,9 @@ Here's that sample.
 </div>
 
 
-<p></div></p>
+</div>
+
+
 
       <hr/>
       <div>

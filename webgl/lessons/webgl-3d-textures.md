@@ -136,8 +136,7 @@ the image has been downloaded we copy the image to the texture. We'll use that m
 
 And here it is
 
-<iframe class="webgl_example" src="../webgl-3d-textures.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-textures.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-textures.html" }}}
 
 What if we wanted to just use a part of the texture across the front of the 'F'? Textures are referenced
 with "texture coordinates" and texure coordinates go from 0.0 to 1.0 from left to
@@ -179,8 +178,7 @@ Here's the texture coordinates for the front.
 
 And here it is.
 
-<iframe class="webgl_example" src="../webgl-3d-textures-texture-coords-mapped.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-textures-texture-coords-mapped.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-textures-texture-coords-mapped.html" }}}
 
 Not a very exciting display but hopefully it demonstrates how to use texture coordinates. If you're making
 geometry in code (cubes, spheres, etc) it's usually pretty easy to compute whatever texture coordinates you
@@ -202,8 +200,7 @@ another copy. Let's display a plane using these texture coordinates.
 
 and here it is
 
-<iframe class="webgl_example" src="../webgl-3d-textures-repeat-clamp.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-textures-repeat-clamp.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-textures-repeat-clamp.html" }}}
 
 You can tell WebGL to not repeat the texture in a certain direction by using `CLAMP_TO_EDGE`. For example
 
@@ -256,8 +253,7 @@ move, for each pixel it draws it has to pick a single pixel from the largest ima
 on the size and position and so sometimes it will pick one pixel, other times a different one and so it
 flickers.
 
-<iframe class="webgl_example" src="../webgl-3d-textures-mips.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-textures-mips.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-textures-mips.html" }}}
 
 Notice how much the ones on the left and middle flicker where as the ones on the right flicker less.
 The ones on the right also have blended colors since they are using the mips. The smaller you draw the texture the further apart WebGL is
@@ -268,8 +264,7 @@ because it's using the 2nd to the smallest mip.
 
 The second example shows polygons that go deep into the screen.
 
-<iframe class="webgl_example" src="../webgl-3d-textures-mips-tri-linear.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-textures-mips-tri-linear.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-textures-mips-tri-linear.html" }}}
 
 The 6 beams going into the screen are using the 6 filtering modes listed above. The top left beam is using `NEAREST`
 and you can see it's clearly very blocky. The top middle is using `LINEAR` and it's not much better.
@@ -313,8 +308,7 @@ Let's say we wanted to apply this texture.
 
 Here it is.
 
-<iframe class="webgl_example" src="../webgl-3d-textures-bad-npot.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-textures-bad-npot.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-textures-bad-npot.html" }}}
 
 Why doesn't the keyboard texture show up? That's beacuse WebGL has a kind of severe restriction on textures that
 are not a power of 2 in both dimensions. Powers of 2 are 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, etc.
@@ -362,8 +356,7 @@ image.addEventListener('load', function() {
 
 And here's that
 
-<iframe class="webgl_example" src="../webgl-3d-textures-good-npot.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-textures-good-npot.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-textures-good-npot.html" }}}
 
 A common question is "Who do I apply a different image to each face of a cube?". For example let's say we
 had these 6 images.
@@ -442,8 +435,7 @@ and then map use a different set of texture coordinates for each face of the cub
 
 And we get
 
-<iframe class="webgl_example" src="../webgl-3d-textures-texture-atlas.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-3d-textures-texture-atlas.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-3d-textures-texture-atlas.html" }}}
 
 This style of applying multiple images using 1 texture is often called a *texture atlas*. It's best because
 there's just 1 texture to load, the shader stays simple as it only has to reference 1 texture, and it only

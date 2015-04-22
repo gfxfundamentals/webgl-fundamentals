@@ -91,13 +91,12 @@ function drawScene() {
 *  requestAnimationFrame(drawScene);
 }
 </code></pre><p>And here it is</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-animation-not-frame-rate-independent.html"></iframe>
   <a class="webgl_center" href="../webgl-animation-not-frame-rate-independent.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>There&#39;s a subtle problem though. The code above has a
 <code>rotationSpeed / 60.0</code>. We divided by 60.0 because we assumed the browser
 will respond to requestAnimationFrame 60 times a second which is pretty common.</p>
@@ -108,12 +107,11 @@ frames at 60 frames a second. Maybe it&#39;s the year 2020 and all machines run 
 frames a second now. Maybe the user is a gamer and has a CRT monitor running at 90
 frame a second.</p>
 <p>You can see the problem in this example</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-animation-frame-rate-issues.html"></iframe>
 </div>
 
-
-
+</p>
 <p>In the example above the we want to rotate all of the &#39;F&#39;s at the same speed.
 The &#39;F&#39; in the middle is running full speed and is frame rate independent. The one
 on the left and the right are simulating if the browser was only running at 1/8th
@@ -152,13 +150,12 @@ That&#39;s about a 1/5 of a turn or in other words it will take about 5 seconds 
 turn around completely regardless of the frame rate.</p>
 <pre><code>*    rotation[1] += rotationSpeed * deltaTime;
 </code></pre><p>Here&#39;s that one working.</p>
-<div>
+<p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-animation.html"></iframe>
   <a class="webgl_center" href="../webgl-animation.html" target="_blank">click here to open in a separate window</a>
 </div>
 
-
-
+</p>
 <p>You aren&#39;t likely to see a difference from the one
 at the top of this page unless you are on a slow machine but if you don&#39;t
 make your animations frame rate independent you&#39;ll likely have some users

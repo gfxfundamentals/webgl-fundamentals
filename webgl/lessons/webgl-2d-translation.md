@@ -31,8 +31,7 @@ Translation is some fancy math name that basically means "to move" something. I 
 
 In the example below I've attached a couple of sliders that will update translation[0] and translation[1] and call drawScene anytime they change. Drag the sliders to translate the rectangle.
 
-<iframe class="webgl_example" src="../webgl-2d-rectangle-translate.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-2d-rectangle-translate.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-2d-rectangle-translate.html" }}}
 
 So far so good. But now imagine we wanted to do the same thing with a more complicated shape.
 
@@ -162,8 +161,7 @@ Notice <code>setGeometry</code> is called only once. It is no longer inside draw
 
 And here's that example. Again, Drag the sliders to update the translation.
 
-<iframe class="webgl_example" src="../webgl-2d-geometry-translate-better.html" style="width: 400px; height: 300px;"></iframe>
-<a class="webgl_center" href="../webgl-2d-geometry-translate-better.html" target="_blank">click here to open in a separate window</a>
+{{{example url="../webgl-2d-geometry-translate-better.html" }}}
 
 Now when we draw WebGL is doing practically everything. All we are doing is setting a translation and asking it to draw. Even if our geometry had tens of thousands of points the main code would stay the same.
 
