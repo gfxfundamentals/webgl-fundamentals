@@ -164,7 +164,7 @@ var Builder = function() {
       }
     });
 
-    var output = templateManager.apply(templatePath,  metaData);
+    var output = templateManager.apply(templatePath, metaData);
     writeFileIfChanged(outFileName, output)
     g_articles.push(metaData);
   };
