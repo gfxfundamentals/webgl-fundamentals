@@ -31,7 +31,7 @@ We can take one of our previous samples and animate it as follows.
 
 And here it is
 
-%(example: { url: "../webgl-animation-not-frame-rate-independent.html" })s
+{{{example url="../webgl-animation-not-frame-rate-independent.html" }}}
 
 There's a subtle problem though. The code above has a
 `rotationSpeed / 60.0`. We divided by 60.0 because we assumed the browser
@@ -46,7 +46,7 @@ frame a second.
 
 You can see the problem in this example
 
-%(diagram: { url: "../webgl-animation-frame-rate-issues.html" })s
+{{{diagram url="../webgl-animation-frame-rate-issues.html" }}}
 
 In the example above the we want to rotate all of the 'F's at the same speed.
 The 'F' in the middle is running full speed and is frame rate independent. The one
@@ -96,7 +96,7 @@ turn around completely regardless of the frame rate.
 
 Here's that one working.
 
-%(example: { url: "../webgl-animation.html" })s
+{{{example url="../webgl-animation.html" }}}
 
 You aren't likely to see a difference from the one
 at the top of this page unless you are on a slow machine but if you don't

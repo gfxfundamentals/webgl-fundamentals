@@ -3,17 +3,17 @@ module.exports = function () { // wrapper in case we're in module_context mode
 
 "use strict";
 
-var args    = require('minimist')(process.argv.slice(2));
-var cache   = new (require('inmemfilecache'));
-var Feed    = require('feed');
-var fs      = require('fs');
-var glob    = require('glob');
-var hanson  = require('hanson');
-var marked  = require('marked');
-var path    = require('path');
-var Promise = require('Promise');
-var sitemap = require('sitemap');
-var utils   = require('./utils');
+var args       = require('minimist')(process.argv.slice(2));
+var cache      = new (require('inmemfilecache'));
+var Feed       = require('feed');
+var fs         = require('fs');
+var glob       = require('glob');
+var Handlebars = require('handlebars');
+var marked     = require('marked');
+var path       = require('path');
+var Promise    = require('Promise');
+var sitemap    = require('sitemap');
+var utils      = require('./utils');
 
 //process.title = "build";
 
@@ -24,91 +24,73 @@ marked.setOptions({
   //pedantic: true,
 });
 
-var replaceHandlers = {};
-function registerReplaceHandler(keyword, handler) {
-  replaceHandlers[keyword] = handler;
+function applyObject(src, dst) {
+  Object.keys(src).forEach(function(key) {
+    dst[key] = src[key];
+  });
+  return dst;
 }
 
-/**
- * Replace %(id)s in strings with values in objects(s)
- *
- * Given a string like `"Hello %(name)s from %(user.country)s"`
- * and an object like `{name:"Joe",user:{country:"USA"}}` would
- * return `"Hello Joe from USA"`.
- *
- * @param {string} str string to do replacements in
- * @param {Object|Object[]} params one or more objects.
- * @returns {string} string with replaced parts
- */
-var replaceParams = (function() {
-  var replaceParamsRE = /%\(([^\)]+)\)s/g;
+function mergeObjects() {
+  var merged = {};
+  Array.prototype.slice.call(arguments).forEach(function(src) {
+    applyObject(src, merged);
+  });
+  return merged;
+}
 
-  return function(str, params) {
-    if (!params.length) {
-      params = [params];
+function readFile(fileName) {
+  return cache.readFileSync(fileName, "utf-8");
+}
+
+function replaceParams(str, params) {
+  var template = Handlebars.compile(str);
+  if (Array.isArray(params)) {
+    params = mergeObjects.apply(null, params.slice.reverse());
+  }
+
+  return template(params);
+}
+
+function TemplateManager() {
+  var templates = {};
+
+  this.apply = function(filename, params) {
+    var template = templates[filename];
+    if (!template) {
+      var template = Handlebars.compile(readFile(filename));
+      templates[filename] = template;
     }
 
-    return str.replace(replaceParamsRE, function(match, key) {
-      var colonNdx = key.indexOf(":");
-      if (colonNdx >= 0) {
-        try {
-          var args = hanson.parse("{" + key + "}");
-          var handlerName = Object.keys(args)[0];
-          var handler = replaceHandlers[handlerName];
-          if (handler) {
-            return handler(args[handlerName]);
-          }
-          console.error("unknown substition handler: " + handlerName);
-        } catch (e) {
-          console.error(e);
-          console.error("bad substitution: %(" + key + ")s");
-        }
-      } else {
-        // handle normal substitutions.
-        var keys = key.split('.');
-        for (var ii = 0; ii < params.length; ++ii) {
-          var obj = params[ii];
-          for (var jj = 0; jj < keys.length; ++jj) {
-            var key = keys[jj];
-            obj = obj[key];
-            if (obj === undefined) {
-              break;
-            }
-          }
-          if (obj !== undefined) {
-            return obj;
-          }
-        }
-      }
-      console.error("unknown key: " + key);
-      return "%(" + key + ")s";
-    });
+    if (Array.isArray(params)) {
+      params = mergeObjects.apply(null, params.slice.reverse());
+    }
+
+    return template(params);
   };
-}());
+}
 
-registerReplaceHandler('include', function(filename) {
-  return readFile(filename, {encoding: "utf-8"});
+var templateManager = new TemplateManager();
+
+Handlebars.registerHelper('include', function(filename, options) {
+  return templateManager.apply(filename, options.data.root);
 });
 
-registerReplaceHandler('example', function(options) {
+Handlebars.registerHelper('example', function(options) {
 
-  options.width = options.width || "400";
-  options.height = options.height || "300";
+  options.hash.width  = options.hash.width || "400";
+  options.hash.height = options.hash.height || "300";
 
-  return replaceParams(readFile("build/templates/example.template"), options);
+  return templateManager.apply("build/templates/example.template", options.hash);
 });
 
-registerReplaceHandler('diagram', function(options) {
+Handlebars.registerHelper('diagram', function(options) {
 
-  options.width = options.width || "400";
-  options.height = options.height || "300";
+  options.hash.width  = options.hash.width || "400";
+  options.hash.height = options.hash.height || "300";
 
-  return replaceParams(readFile("build/templates/diagram.template"), options);
+  return templateManager.apply("build/templates/diagram.template", options.hash);
 });
-
-var readFile = function(fileName) {
-  return cache.readFileSync(fileName, "utf-8");
-};
 
 var Builder = function() {
 
@@ -154,7 +136,7 @@ var Builder = function() {
 
   var applyTemplateToFile = function(templatePath, contentFileName, outFileName, opt_extra) {
     console.log("processing: ", contentFileName);
-    var template = readFile(templatePath);
+    opt_extra = opt_extra || {};
     var data = loadMD(contentFileName);
     // Call prep's Content which parses the HTML. This helps us find missing tags
     // should probably call something else.
@@ -165,7 +147,7 @@ var Builder = function() {
     content = content.replace(/%\(/g, '__STRING_SUB__');
     content = content.replace(/%/g, '__PERCENT__');
     content = content.replace(/__STRING_SUB__/g, '%(');
-    content = replaceParams(content, opt_extra || {});
+    content = replaceParams(content, opt_extra);
     content = content.replace(/__PERCENT__/g, '%');
     var html = marked(content);
     metaData['content'] = html;
@@ -182,7 +164,7 @@ var Builder = function() {
       }
     });
 
-    var output = replaceParams(template,  metaData);
+    var output = templateManager.apply(templatePath,  metaData);
     writeFileIfChanged(outFileName, output)
     g_articles.push(metaData);
   };

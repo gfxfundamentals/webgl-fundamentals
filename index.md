@@ -7,12 +7,12 @@ They are NOT old rehashed out of date OpenGL articles like many others on the ne
 They are entirely new, discarding the old out of date ideas and bringing you
 to a full understanding of what WebGL really is and how it really works.
 
-%(include: "toc.html")s
+{{{include "toc.html"}}}
 
 
 <!--
 
-%(table_of_contents)s
+{{{table_of_contents}}}
 
 -->
 

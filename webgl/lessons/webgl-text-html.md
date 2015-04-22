@@ -69,7 +69,7 @@ Finally update the node's when rendering
 
 And here's that example
 
-%(example: { url: "../webgl-text-html-overlay.html" })s
+{{{example url="../webgl-text-html-overlay.html" }}}
 
 Notice how I put spans inside the divs specifically for the parts I wanted to change. I'm making the
 assumption here that that's faster than just using the divs with no spans and saying something like
@@ -90,7 +90,7 @@ easily give that overlay an interesting style.
 For example here's the same example but adding some style. The background is rounded, the letters have
 a glow around them. There's a red border. You get all that essencially for free by using HTML.
 
-%(example: { url: "../webgl-text-html-overlay-styled.html" })s
+{{{example url="../webgl-text-html-overlay-styled.html" }}}
 
 The next most common thing to want to do is position some text relative to something you're rendering.
 We can do that in HTML as well.
@@ -160,7 +160,7 @@ Now we can position the div by setting its style.
 
 Here's an example where we're just bounding the div around.
 
-%(example: { url: "../webgl-text-html-bouncing-div.html" })s
+{{{example url="../webgl-text-html-bouncing-div.html" }}}
 
 So the next step is we want to place it relative to something in the 3D scene.
 How do we do that? We do it exactly how we asked the GPU to do it when we
@@ -202,11 +202,11 @@ that it position the div.
 And wahlah, the top left corner of the our div is perfectly aligned
 with the top right front corner of the F.
 
-%(example: { url: "../webgl-text-html-div.html" })s
+{{{example url="../webgl-text-html-div.html" }}}
 
 Of course if you want more text make more divs.
 
-%(example: { url: "../webgl-text-html-divs.html" })s
+{{{example url="../webgl-text-html-divs.html" }}}
 
 You can look at the source of that last example to see the
 details. One important point is I'm just guessing that

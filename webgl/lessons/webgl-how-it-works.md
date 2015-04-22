@@ -91,7 +91,7 @@ same name and type in the fragment shader.
 
 Here's the working version.
 
-%(example: { url: "../webgl-2d-triangle-with-position-for-color.html" })s
+{{{example url="../webgl-2d-triangle-with-position-for-color.html" }}}
 
 Move, scale and rotate the rectangle.  Notice that since the colors are
 computed from clipspace they don't move with the rectangle.  They are
@@ -230,7 +230,7 @@ We now have to supply colors for WebGL to use.
 
 And here's the result.
 
-%(example: { url: "../webgl-2d-rectangle-with-2-colors.html" })s;
+{{{example url="../webgl-2d-rectangle-with-2-colors.html" }}};
 
 Notice that we have 2 solid color triangles.  Yet we're passing the values
 in a *varying* so they are being varied or interpolated across the
@@ -256,7 +256,7 @@ interpolation.
 
 And now we see the interpolated *varying*.
 
-%(example: { url: "../webgl-2d-rectangle-with-random-colors.html" })s;
+{{{example url="../webgl-2d-rectangle-with-random-colors.html" }}};
 
 Not very exciting I suppose but it does demonstrate using more than one
 attribute and passing data from a vertex shader to a fragment shader.  If
@@ -365,7 +365,7 @@ function setColors(gl) {
 Here's that sample.
 </p>
 
-%(example: { url: "../webgl-2d-rectangle-with-2-byte-colors.html" })s
+{{{example url="../webgl-2d-rectangle-with-2-byte-colors.html" }}}
 </div>
 
 

@@ -115,7 +115,7 @@ letter in each name.
 
 And you can see it works
 
-%(example: { url: "../webgl-text-glyphs.html" })s
+{{{example url="../webgl-text-glyphs.html" }}}
 
 Unfortunately it's SLOW. The example below doesn't show it but we're individually
 drawing 73 quads. We're computing 73 matrices and 292 matrix multplies. A typical
@@ -194,7 +194,7 @@ And let's use it
 
 Here's the result
 
-%(example: { url: "../glyph-texture-atlas-maker.html", width: 258, height: 46 })s
+{{{example url="../glyph-texture-atlas-maker.html" width="258" height="46" }}}
 
 Now that we have a texture with glyphs in it we need to use it. To do that we'll
 build quad vertices on the fly for each glyph. Those vertices will use texture coordinates
@@ -345,7 +345,7 @@ And then to render text we'll update the buffers. We'll also make the text dynam
 
 And here's that
 
-%(example: { url: "../webgl-text-glyphs-texture-atlas.html" })s
+{{{example url="../webgl-text-glyphs-texture-atlas.html" }}}
 
 That's the basic technique of using a texture atlas of glyphs. There's a few
 obvious things to add or ways to improve it.

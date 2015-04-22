@@ -139,7 +139,7 @@ And then render the text
 
 So here it is
 
-%(example: { url: "../webgl-text-texture.html" })s
+{{{example url="../webgl-text-texture.html" }}}
 
 You'll notice that sometimes parts of our text cover up parts of our Fs. That's because
 we're drawing a quad. The default color of the canvas is transparent black (0,0,0,0) and
@@ -182,7 +182,7 @@ For the parts of the texture with transparent black `0,0,0,0`
 
 Here's the result with blending enabled.
 
-%(example: { url: "../webgl-text-texture-enable-blend.html" })s
+{{{example url="../webgl-text-texture-enable-blend.html" }}}
 
 You can see it's better but it's still not perfect. If you look
 close you'll sometimes see this issue
@@ -249,7 +249,7 @@ And then draw text at all the positions we saved
 
 And now it mostly works
 
-%(example: { url: "../webgl-text-texture-separate-opaque-from-transparent.html" })s
+{{{example url="../webgl-text-texture-separate-opaque-from-transparent.html" }}}
 
 Notice we didn't sort like I mentioned above. In this case since we're drawing mostly opaque text
 there's probably going to be no noticable difference if we sort so I'll save that for some
@@ -280,7 +280,7 @@ multiply by some amount to move the text a specific number of units toward or aw
 
 Here's that.
 
-%(example: { url: "../webgl-text-texture-moved-toward-view.html" })s
+{{{example url="../webgl-text-texture-moved-toward-view.html" }}}
 
 You still might notice an issue with the edges of the letters.
 
@@ -307,7 +307,7 @@ The old one multipled the src color by its alpha. That's what `SRC_ALPHA` means.
 now our texture's data has already been multiplied by its alpha. That's what premultipled means.
 So we don't need to GPU to do the multiplication. Setting it ot `ONE` means multiply by 1.
 
-%(example: { url: "../webgl-text-texture-premultiplied-alpha.html" })s
+{{{example url="../webgl-text-texture-premultiplied-alpha.html" }}}
 
 The edges are gone now.
 
@@ -333,7 +333,7 @@ by `-Z` times some desired-scale to compensate.
     textMatrix = matrixMultiply(textMatrix, projectionMatrix);
     ...
 
-%(example: { url: "../webgl-text-texture-consistent-scale.html" })s
+{{{example url="../webgl-text-texture-consistent-scale.html" }}}
 
 If you want to draw different text at each F you should make a new texture for each
 F and just update the text uniforms for that F.
@@ -390,7 +390,7 @@ and set the uniform for the texture before drawing
 
       textUniforms.u_texture = tex.texture;
 
-%(example: { url: "../webgl-text-texture-different-text.html" })s
+{{{example url="../webgl-text-texture-different-text.html" }}}
 
 We've been using black to draw the text into the canvas.
 It would be more useful if we rendered the text in white. Then we could multiply
@@ -441,7 +441,7 @@ At draw time we select a color
 
 Colors
 
-%(example: { url: "../webgl-text-texture-different-colors.html" })s
+{{{example url="../webgl-text-texture-different-colors.html" }}}
 
 This techinque is actually the technique most browsers use when they are GPU accelerated.
 They generate textures with your HTML content and all the various styles you've applied

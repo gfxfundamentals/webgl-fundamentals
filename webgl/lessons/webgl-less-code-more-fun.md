@@ -271,7 +271,7 @@ objects.forEach(function(object) {
 
 Here's an example using these helper functions
 
-%(example: { url: "../webgl-less-code-more-fun.html" })s
+{{{example url="../webgl-less-code-more-fun.html" }}}
 
 Let's take it a tiny step further. In the code above we setup a variable `attribs` with the buffers we created.
 Not shown is the code to setup those buffers. For example if you want to make positions, normals and texture
@@ -317,7 +317,7 @@ Much shorter! Now we can do this at render time
 
 Here's that
 
-%(example: { url: "../webgl-less-code-more-fun-triangle.html" })s
+{{{example url="../webgl-less-code-more-fun-triangle.html" }}}
 
 This will even work if we have indices. setAttribsAndBuffers will set all the attributes
 and setup the `ELEMENT_ARRAY_BUFFER` with your `indices` so you can call `gl.drawElements`.
@@ -344,7 +344,7 @@ and at render time we can call `gl.drawElements` instead of `gl.drawArrays`.
 
 Here's that
 
-%(example: { url: "../webgl-less-code-more-fun-quad.html" })s
+{{{example url="../webgl-less-code-more-fun-quad.html" }}}
 
 `createBufferInfoFromArrays` basically makes an object that looks like this
 
@@ -374,7 +374,7 @@ of components.
 
 And that version
 
-%(example: { url: "../webgl-less-code-more-fun-quad-guess.html" })s
+{{{example url="../webgl-less-code-more-fun-quad-guess.html" }}}
 
 I'm not sure I personally like that style. Guessing bugs me because it can guess wrong. For example
 I might choose to stick an extra set of texture coordinates in my texcoord attribute and it will
@@ -409,7 +409,7 @@ Which returns something like
 And that's yet one more minor simplification. This will come in handy once we start using
 multiple programs since it automatically keeps the setters with the program they are associated with.
 
-%(example: { url: "../webgl-less-code-more-fun-quad-programinfo.html" })s
+{{{example url="../webgl-less-code-more-fun-quad-programinfo.html" }}}
 
 Anyway, this is the style I try to write my own WebGL programs.
 For the lessons on these tutorials though I've felt like I have to use the standard **verbose**

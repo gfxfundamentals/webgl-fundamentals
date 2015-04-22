@@ -15,7 +15,7 @@ graph. The engine then walks the scene graph and figures out a list of things to
 Scene graphs are hierarchical so for example if you wanted to make a universe simulation
 you might have a graph that looks like this
 
-%(diagram: { url: "resources/planet-diagram.html", height: 500 })s
+{{{diagram url="resources/planet-diagram.html" height="500" }}}
 
 What's the point of a scene graph? The #1 feature of a scene graph is it provides a parent
 child relationship for matrices as [we discussed in 2d matrix math](webgl-2d-matrices.html).
@@ -36,7 +36,7 @@ It does not have to care about orbiting the sun. Without this scene graph struct
 you'd have to do much more complex math to compute how to get the moon to orbit the sun
 because it's orbit around the sun looks something like this
 
-%(diagram: { url: "resources/moon-orbit.html" })s
+{{{diagram url="resources/moon-orbit.html" }}}
 
 With a scene graph you just make the moon a child of the earth and then orbit
 the earth which is simple. The scene graph takes care of the fact that the earth
@@ -212,7 +212,7 @@ matrix](webgl-3d-perspective.html) for each object.
 
 Rendering is [the same loop we saw in our last article](webgl-drawing-multiple-things.html).
 
-%(example: { url: "../webgl-scene-graph-solar-system.html" })s
+{{{example url="../webgl-scene-graph-solar-system.html" }}}
 
 You'll notice all of the planets are the same size. Let's try to make the earth larger
 
@@ -220,7 +220,7 @@ You'll notice all of the planets are the same size. Let's try to make the earth 
         makeScale(2, 2, 2),           // make the earth twice as large
         makeTranslation(100, 0, 0));  // earth 100 units from the sun
 
-%(example: { url: "../webgl-scene-graph-solar-system-larger-earth.html" })s
+{{{example url="../webgl-scene-graph-solar-system-larger-earth.html" }}}
 
 Oops. The moon got larger too. To fix this we could manually shrink the moon. A better solution though
 is to add more nodes to our scene graph. Instead of just
@@ -290,7 +290,7 @@ And we only need to update the orbits
 
 And now you can see the earth is double size, the moon is not.
 
-%(example: { url: "../webgl-scene-graph-solar-system-larger-earth-fixed.html" })s
+{{{example url="../webgl-scene-graph-solar-system-larger-earth-fixed.html" }}}
 
 You might also notice the sun and the earth are no longer rotating in place. That is now independent.
 
@@ -314,7 +314,7 @@ Let's adjust a few more things.
     +// spin the moon
     +matrixMultiply(monNode.localMatrix, makeYRotation(-0.01), moonNode.localMatrix);
 
-%(example: { url: "../webgl-scene-graph-solar-system-adjusted.html" })s
+{{{example url="../webgl-scene-graph-solar-system-adjusted.html" }}}
 
 Currently we have a `localMatrix` and we're modifying it each frame. There's a problem though
 in that every frame our math will collect a little bit of error. There are ways to fix the math
@@ -396,7 +396,7 @@ Now there's no issue because we are recreating the matrix each time.
 You might be thinking, I'm not making a solar system so what's the point? Well, If you wanted to
 animate a human you might have a scene graph that looks like this
 
-%(diagram: { url: "resources/person-diagram.html", height: 400 })s
+{{{diagram url="resources/person-diagram.html" height="400" }}}
 
 How many joints you add for fingers and toes is up to you. The more joints you have
 the more power it takes to compute the animations and the more animation data it takes
@@ -409,7 +409,7 @@ on time (both CPU/GPU and artist time) and memory.
 In any case here's a block guy I hacked together. It's using the `TRS` source for each
 node mentioned above. Programmer art and programmer animation FTW! :P
 
-%(example: { url: "../webgl-scene-graph-block-guy.html" })s
+{{{example url="../webgl-scene-graph-block-guy.html" }}}
 
 If you look at pretty much any 3d library you'll find a scene graph similar to this.
 

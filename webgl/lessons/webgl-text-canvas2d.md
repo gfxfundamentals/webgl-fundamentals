@@ -52,7 +52,7 @@ And then we just call `fillText` to draw text
 
 And here's that example
 
-%(example: { url: "../webgl-text-html-canvas2d.html" })s
+{{{example url="../webgl-text-html-canvas2d.html" }}}
 
 Why is the text smaller? Because that's the default size for canvas2d.
 If you want other sizes [check out the canvas2d api](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_text).
@@ -88,7 +88,7 @@ Here we're taking advantage of the canvas2d translate function so we don't have 
 math when drawing our arrow. We just pretend to draw at the origin and translate takes care
 of moving that origin to the corner of our F.
 
-%(example: { url: "../webgl-text-html-canvas2d-arrows.html" })s
+{{{example url="../webgl-text-html-canvas2d-arrows.html" }}}
 
 I think that covers using canvas 2D. [Check out the canvas2d API](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
 for more ideas. [Next we'll actually render text in WebGL](webgl-text-texture.html).

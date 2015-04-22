@@ -174,7 +174,7 @@ At draw time
 
 And here's that
 
-%(example: { url: "../webgl-multiple-objects-manual.html" })s
+{{{example url="../webgl-multiple-objects-manual.html" }}}
 
 One thing to notice is since we only have a single shader program we only called `gl.useProgram`
 once. If we had different shader programs you'd need to call `gl.useProgram` before um...
@@ -262,7 +262,7 @@ But the drawing code is now just a simple loop
 And this is arguably the main rendering loop of most 3D engines in existence. Somewhere
 some code or codes decide what goes into the list of `objectsToDraw` but that's basically it.
 
-%(example: { url: "../webgl-multiple-objects-list.html" })s
+{{{example url="../webgl-multiple-objects-list.html" }}}
 
 There are a few basic optimizations. If the program we're about the draw with is the same
 as the previous program we drew with then there's no need to call `gl.useProgram`. Similarly
@@ -357,7 +357,7 @@ At render time
 
 Then draw the objects using the loop above.
 
-%(example: { url: "../webgl-multiple-objects-list-optimized.html" })s
+{{{example url="../webgl-multiple-objects-list-optimized.html" }}}
 
 You could also sort the list by `programInfo` and/or `bufferInfo` so that the optimization
 kicks in more often. Most game engines do this. Unfortunately it's not that simple.
