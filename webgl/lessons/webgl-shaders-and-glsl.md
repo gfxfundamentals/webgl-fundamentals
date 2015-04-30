@@ -40,7 +40,7 @@ attributes. You create buffers,
 put data in those buffers
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.buffeData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 
 Then, given a shader program you made you look up the location of its attributes,
 
