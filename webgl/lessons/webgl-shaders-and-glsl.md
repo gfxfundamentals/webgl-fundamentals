@@ -239,7 +239,7 @@ covered in [how it works](webgl-how-it-works.html).
 
 To use a varying we need to declare matching varyings in both a vertex and fragment shaders.
 We set the varying in the vertex shader with some value per vertex. When WebGL draws pixels
-it will interopolate between those values and pass them to the corresponding varying in
+it will interpolate between those values and pass them to the corresponding varying in
 the fragment shaders
 
 Vertex shader
