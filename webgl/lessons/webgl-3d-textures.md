@@ -13,89 +13,80 @@ The first thing we need to do is adjust our shaders to use textures. Here's the
 changes to the vertex shader. We need to pass in texture coordinates. In this
 case we just pass them straight through to the fragment shader.
 
-<pre class="prettyprint showlinemods">
-attribute vec4 a_position;
-*attribute vec2 a_texcoord;
+    attribute vec4 a_position;
+    *attribute vec2 a_texcoord;
 
-uniform mat4 u_matrix;
+    uniform mat4 u_matrix;
 
-*varying vec2 v_texcoord;
+    *varying vec2 v_texcoord;
 
-void main() {
-  // Multiply the position by the matrix.
-  gl_Position = u_matrix * a_position;
+    void main() {
+      // Multiply the position by the matrix.
+      gl_Position = u_matrix * a_position;
 
-*  // Pass the texcoord to the fragment shader.
-*  v_texcoord = a_texcoord;
-}
-</pre>
+    *  // Pass the texcoord to the fragment shader.
+    *  v_texcoord = a_texcoord;
+    }
 
 In the fragment shader we declare a uniform sampler2D which lets us reference
 a texture. We use the texture coordinates passed from the vertex shader
 and we call `texture2D` to look up a color from that texture.
 
-<pre class="prettyprint showlinemods">
-precision mediump float;
+    precision mediump float;
 
-// Passed in from the vertex shader.
-*varying vec2 v_texcoord;
+    // Passed in from the vertex shader.
+    *varying vec2 v_texcoord;
 
-*// The texture.
-*uniform sampler2D u_texture;
+    *// The texture.
+    *uniform sampler2D u_texture;
 
-void main() {
-*   gl_FragColor = texture2D(u_texture, v_texcoord);
-}
-</pre>
+    void main() {
+    *   gl_FragColor = texture2D(u_texture, v_texcoord);
+    }
 
 We need to setup the texture coordinates
 
-<pre class="prettyprint showlinemods">
-// look up where the vertex data needs to go.
-var positionLocation = gl.getAttribLocation(program, "a_position");
-*var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
+    // look up where the vertex data needs to go.
+    var positionLocation = gl.getAttribLocation(program, "a_position");
+    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
 
-...
+    ...
 
-*// Create a buffer for texcoords.
-var buffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-*gl.enableVertexAttribArray(texcoordLocation);
-*
-*// We'll supply texcoords as floats.
-*gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
-*
-*// Set Texcoords.
-*setTexcoords(gl);
-
-</pre>
+    *// Create a buffer for texcoords.
+    var buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    *gl.enableVertexAttribArray(texcoordLocation);
+    *
+    *// We'll supply texcoords as floats.
+    *gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+    *
+    *// Set Texcoords.
+    *setTexcoords(gl);
 
 And you can see the coordinates we're using which is mapping the entire
 texture to each quad on our 'F'.
 
-<pre class="prettyprint showlinemods">
-*// Fill the buffer with texture coordinates for the F.
-*function setTexcoords(gl) {
-*  gl.bufferData(
-*      gl.ARRAY_BUFFER,
-*      new Float32Array([
-*        // left column front
-*        0, 0,
-*        0, 1,
-*        1, 0,
-*        0, 1,
-*        1, 1,
-*        1, 0,
-*
-*        // top rung front
-*        0, 0,
-*        0, 1,
-*        1, 0,
-*        0, 1,
-*        1, 1,
-*        1, 0,
-* ...
-</pre>
+    *// Fill the buffer with texture coordinates for the F.
+    *function setTexcoords(gl) {
+    *  gl.bufferData(
+    *      gl.ARRAY_BUFFER,
+    *      new Float32Array([
+    *        // left column front
+    *        0, 0,
+    *        0, 1,
+    *        1, 0,
+    *        0, 1,
+    *        1, 1,
+    *        1, 0,
+    *
+    *        // top rung front
+    *        0, 0,
+    *        0, 1,
+    *        1, 0,
+    *        0, 1,
+    *        1, 1,
+    *        1, 0,
+    * ...
 
 We also need a texture. We could make one from scratch but in this case let's
 load an image since that's probably the most common way.
@@ -114,25 +105,23 @@ and only then start drawing. The other solution is to make up some texture to us
 until the image is downloaded. That way we can start rendering immediate. Then, once
 the image has been downloaded we copy the image to the texture. We'll use that method below.
 
-<pre class="prettyprint showlinemods">
-*// Create a texture.
-*var texture = gl.createTexture();
-*gl.bindTexture(gl.TEXTURE_2D, texture);
-*
-*// Fill the texture with a 1x1 blue pixel.
-*gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-*              new Uint8Array([0, 0, 255, 255]));
-*
-*// Asynchronously load an image
-*var image = new Image();
-*image.src = "resources/f-texture.png";
-*image.addEventLisenter('load', function() {
-*  // Now that the image has loaded make copy it to the texture.
-*  gl.bindTexture(gl.TEXTURE_2D, texture);
-*  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
-*  gl.generateMips(gl.TEXTURE_2D);
-*});
-</pre>
+    *// Create a texture.
+    *var texture = gl.createTexture();
+    *gl.bindTexture(gl.TEXTURE_2D, texture);
+    *
+    *// Fill the texture with a 1x1 blue pixel.
+    *gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+    *              new Uint8Array([0, 0, 255, 255]));
+    *
+    *// Asynchronously load an image
+    *var image = new Image();
+    *image.src = "resources/f-texture.png";
+    *image.addEventLisenter('load', function() {
+    *  // Now that the image has loaded make copy it to the texture.
+    *  gl.bindTexture(gl.TEXTURE_2D, texture);
+    *  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+    *  gl.generateMips(gl.TEXTURE_2D);
+    *});
 
 And here it is
 
@@ -150,7 +139,6 @@ So if we match up our vertices to the texture we can figure out what texture coo
 
 Here's the texture coordinates for the front.
 
-<pre class="prettyprint showlinemods">
         // left column front
         0.22, 0.19,
         0.22, 0.79,
@@ -174,7 +162,6 @@ Here's the texture coordinates for the front.
         0.34, 0.55,
         0.49, 0.55,
         0.49, 0.43,
-</pre>
 
 And here it is.
 
@@ -189,14 +176,12 @@ So what happens if we use texture coordinates outside the 0.0 to 1.0 range. By d
 the texture. 0.0 to 1.0 is one 'copy' of the texture. 1.0 to 2.0 is another copy. even -4.0 to -3.0 is yet
 another copy. Let's display a plane using these texture coordinates.
 
-<pre class="prettyprint showlinemods">
     -3, -1,
      2, -1,
     -3,  4,
     -3,  4,
      2, -1,
      2,  4,
-</pre>
 
 and here it is
 
@@ -204,10 +189,8 @@ and here it is
 
 You can tell WebGL to not repeat the texture in a certain direction by using `CLAMP_TO_EDGE`. For example
 
-<pre class="prettyprint showlinemods">
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-</pre>
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
 Click the buttons in the sample above to see the difference.
 
@@ -293,10 +276,8 @@ or `LINEAR` as they only ever use the first mip.
 
 To set filtering you call `gl.texParameter` like this
 
-<pre class="prettyprint showlinemods">
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-</pre>
 
 `TEXTURE_MIN_FILTER` is the setting used when the size you are drawing is smaller than the largest mip.
 `TEXTURE_MAG_FILTER` is the setting used when the size you are drawing is larger that the largest mip. For
@@ -314,9 +295,15 @@ Why doesn't the keyboard texture show up? That's beacuse WebGL has a kind of sev
 are not a power of 2 in both dimensions. Powers of 2 are 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, etc.
 The 'F' texture was 256x256. 256 is a power of 2. The keyboard texture is 320x240. Neither of those are a power
 of 2 so trying to display the texture fails. In the shader when `texture2D` is called and when the texture
-referenced is not setup correctly WebGL will use color (0, 0, 0, 0)
-or as we sometimes call it, "transparent black". If you open up the JavaScript console or Web Console, depending
-on the browser you might see errors pointing out the problem.
+referenced is not setup correctly WebGL will use color (0, 0, 0, 1) which is black. If you open up the JavaScript console
+or Web Console, depending on the browser you might see errors pointing out the problem like this
+
+
+    WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
+       or not all the same size
+    WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
+       It maybe non-power-of-2 and have incompatible texture filtering or
+       is not 'texture complete'.
 
 To fix it we need to set the wrap mode to `CLAMP_TO_EDGE` and turn off mip mapping by setting filtering
 to `LINEAR` or `NEAREST`.
@@ -324,35 +311,31 @@ to `LINEAR` or `NEAREST`.
 Let's update our image loading code to handle this. First we need a function that will tell us if a value is
 a power of 2.
 
-<pre class="prettyprint showlinemods">
-function isPowerOf2(value) {
-  return (value & (value - 1)) == 0;
-}
-</pre>
+    function isPowerOf2(value) {
+      return (value & (value - 1)) == 0;
+    }
 
 I'm not going to go into the binary math on why this works. Since it does work though, we can use it as follows.
 
-<pre class="prettyprint showlinemods">
-// Asynchronously load an image
-var image = new Image();
-image.src = "resources/keyboard.jpg";
-image.addEventListener('load', function() {
-  // Now that the image has loaded make copy it to the texture.
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+    // Asynchronously load an image
+    var image = new Image();
+    image.src = "resources/keyboard.jpg";
+    image.addEventListener('load', function() {
+      // Now that the image has loaded make copy it to the texture.
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
 
-*  // Check if the image is a power of 2 in both dimensions.
-*  if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-*     // Yes, it's a power of 2. Generate mips.
-     gl.generateMipmap(gl.TEXTURE_2D);
-*  } else {
-*     // No, it's not a power of 2. Turn of mips and set wrapping to clamp to edge
-*     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-*     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-*     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-*  }
-}
-</pre>
+    *  // Check if the image is a power of 2 in both dimensions.
+    *  if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+    *     // Yes, it's a power of 2. Generate mips.
+         gl.generateMipmap(gl.TEXTURE_2D);
+    *  } else {
+    *     // No, it's not a power of 2. Turn of mips and set wrapping to clamp to edge
+    *     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    *     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    *     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    *  }
+    }
 
 And here's that
 
@@ -388,7 +371,6 @@ like this
 
 and then map use a different set of texture coordinates for each face of the cube.
 
-<pre class="prettyprint showlinemods">
         // select the bottom left image
         0   , 0  ,
         0   , 0.5,
@@ -431,7 +413,6 @@ and then map use a different set of texture coordinates for each face of the cub
         0.5 , 1  ,
         0.75, 0.5,
         0.75, 1  ,
-</pre>
 
 And we get
 

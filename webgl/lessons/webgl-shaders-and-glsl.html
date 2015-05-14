@@ -95,7 +95,7 @@ attributes. You create buffers,</p>
 <pre><code>var buf = gl.createBuffer();
 </code></pre><p>put data in those buffers</p>
 <pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-gl.buffeData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
+gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 </code></pre><p>Then, given a shader program you made you look up the location of its attributes,</p>
 <pre><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
 </code></pre><p>then tell WebGL how to pull data out of those buffers and into the attribute</p>
@@ -246,7 +246,7 @@ gl.bindTexture(gl.TEXTURE_2D, tex);
 covered in <a href="webgl-how-it-works.html">how it works</a>.</p>
 <p>To use a varying we need to declare matching varyings in both a vertex and fragment shaders.
 We set the varying in the vertex shader with some value per vertex. When WebGL draws pixels
-it will interopolate between those values and pass them to the corresponding varying in
+it will interpolate between those values and pass them to the corresponding varying in
 the fragment shaders</p>
 <p>Vertex shader</p>
 <pre><code>attribute vec4 a_position;

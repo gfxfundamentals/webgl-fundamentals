@@ -76,8 +76,7 @@ but it will probably be easier to understand if we go over it in more detail.</p
 <p>The first thing we need to do is adjust our shaders to use textures. Here&#39;s the
 changes to the vertex shader. We need to pass in texture coordinates. In this
 case we just pass them straight through to the fragment shader.</p>
-<pre class="prettyprint showlinemods">
-attribute vec4 a_position;
+<pre><code>attribute vec4 a_position;
 *attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -91,13 +90,10 @@ void main() {
 *  // Pass the texcoord to the fragment shader.
 *  v_texcoord = a_texcoord;
 }
-</pre>
-
-<p>In the fragment shader we declare a uniform sampler2D which lets us reference
+</code></pre><p>In the fragment shader we declare a uniform sampler2D which lets us reference
 a texture. We use the texture coordinates passed from the vertex shader
 and we call <code>texture2D</code> to look up a color from that texture.</p>
-<pre class="prettyprint showlinemods">
-precision mediump float;
+<pre><code>precision mediump float;
 
 // Passed in from the vertex shader.
 *varying vec2 v_texcoord;
@@ -108,13 +104,10 @@ precision mediump float;
 void main() {
 *   gl_FragColor = texture2D(u_texture, v_texcoord);
 }
-</pre>
-
-<p>We need to setup the texture coordinates</p>
-<pre class="prettyprint showlinemods">
-// look up where the vertex data needs to go.
-var positionLocation = gl.getAttribLocation(program, "a_position");
-*var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
+</code></pre><p>We need to setup the texture coordinates</p>
+<pre><code>// look up where the vertex data needs to go.
+var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
+*var texcoordLocation = gl.getAttribLocation(program, &quot;a_texcoords&quot;);
 
 ...
 
@@ -123,18 +116,14 @@ var buffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 *gl.enableVertexAttribArray(texcoordLocation);
 *
-*// We'll supply texcoords as floats.
+*// We&#39;ll supply texcoords as floats.
 *gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 *
 *// Set Texcoords.
 *setTexcoords(gl);
-
-</pre>
-
-<p>And you can see the coordinates we&#39;re using which is mapping the entire
+</code></pre><p>And you can see the coordinates we&#39;re using which is mapping the entire
 texture to each quad on our &#39;F&#39;.</p>
-<pre class="prettyprint showlinemods">
-*// Fill the buffer with texture coordinates for the F.
+<pre><code>*// Fill the buffer with texture coordinates for the F.
 *function setTexcoords(gl) {
 *  gl.bufferData(
 *      gl.ARRAY_BUFFER,
@@ -155,9 +144,7 @@ texture to each quad on our &#39;F&#39;.</p>
 *        1, 1,
 *        1, 0,
 * ...
-</pre>
-
-<p>We also need a texture. We could make one from scratch but in this case let&#39;s
+</code></pre><p>We also need a texture. We could make one from scratch but in this case let&#39;s
 load an image since that&#39;s probably the most common way.</p>
 <p>Here&#39;s the image we&#39;re going to use</p>
 <p><img class="webgl_center" src="../resources/f-texture.png" /></p>
@@ -169,8 +156,7 @@ to be loaded but it takes a while for the browser to download it. There are gene
 and only then start drawing. The other solution is to make up some texture to use
 until the image is downloaded. That way we can start rendering immediate. Then, once
 the image has been downloaded we copy the image to the texture. We&#39;ll use that method below.</p>
-<pre class="prettyprint showlinemods">
-*// Create a texture.
+<pre><code>*// Create a texture.
 *var texture = gl.createTexture();
 *gl.bindTexture(gl.TEXTURE_2D, texture);
 *
@@ -180,16 +166,14 @@ the image has been downloaded we copy the image to the texture. We&#39;ll use th
 *
 *// Asynchronously load an image
 *var image = new Image();
-*image.src = "resources/f-texture.png";
-*image.addEventLisenter('load', function() {
+*image.src = &quot;resources/f-texture.png&quot;;
+*image.addEventLisenter(&#39;load&#39;, function() {
 *  // Now that the image has loaded make copy it to the texture.
 *  gl.bindTexture(gl.TEXTURE_2D, texture);
 *  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
 *  gl.generateMips(gl.TEXTURE_2D);
 *});
-</pre>
-
-<p>And here it is</p>
+</code></pre><p>And here it is</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-textures.html"></iframe>
   <a class="webgl_center" href="../webgl-3d-textures.html" target="_blank">click here to open in a separate window</a>
@@ -203,33 +187,30 @@ right across the texture and 0.0 to 1.0 from bottom to top up the texture.</p>
 <p>So if we match up our vertices to the texture we can figure out what texture coordinates to use.</p>
 <p><img class="webgl_center" width="405" src="resources/f-texture-coordinates-diagram.svg" /></p>
 <p>Here&#39;s the texture coordinates for the front.</p>
-<pre class="prettyprint showlinemods">
-        // left column front
-        0.22, 0.19,
-        0.22, 0.79,
-        0.34, 0.19,
-        0.22, 0.79,
-        0.34, 0.79,
-        0.34, 0.19,
+<pre><code>    // left column front
+    0.22, 0.19,
+    0.22, 0.79,
+    0.34, 0.19,
+    0.22, 0.79,
+    0.34, 0.79,
+    0.34, 0.19,
 
-        // top rung front
-        0.34, 0.19,
-        0.34, 0.31,
-        0.62, 0.19,
-        0.34, 0.31,
-        0.62, 0.31,
-        0.62, 0.19,
+    // top rung front
+    0.34, 0.19,
+    0.34, 0.31,
+    0.62, 0.19,
+    0.34, 0.31,
+    0.62, 0.31,
+    0.62, 0.19,
 
-        // middle rung front
-        0.34, 0.43,
-        0.34, 0.55,
-        0.49, 0.43,
-        0.34, 0.55,
-        0.49, 0.55,
-        0.49, 0.43,
-</pre>
-
-<p>And here it is.</p>
+    // middle rung front
+    0.34, 0.43,
+    0.34, 0.55,
+    0.49, 0.43,
+    0.34, 0.55,
+    0.49, 0.55,
+    0.49, 0.43,
+</code></pre><p>And here it is.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-textures-texture-coords-mapped.html"></iframe>
   <a class="webgl_center" href="../webgl-3d-textures-texture-coords-mapped.html" target="_blank">click here to open in a separate window</a>
@@ -243,16 +224,13 @@ your artists (or you) will adjust texture coordinates in those packages.</p>
 <p>So what happens if we use texture coordinates outside the 0.0 to 1.0 range. By default WebGL repeats
 the texture. 0.0 to 1.0 is one &#39;copy&#39; of the texture. 1.0 to 2.0 is another copy. even -4.0 to -3.0 is yet
 another copy. Let&#39;s display a plane using these texture coordinates.</p>
-<pre class="prettyprint showlinemods">
-    -3, -1,
-     2, -1,
-    -3,  4,
-    -3,  4,
-     2, -1,
-     2,  4,
-</pre>
-
-<p>and here it is</p>
+<pre><code>-3, -1,
+ 2, -1,
+-3,  4,
+-3,  4,
+ 2, -1,
+ 2,  4,
+</code></pre><p>and here it is</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-textures-repeat-clamp.html"></iframe>
   <a class="webgl_center" href="../webgl-3d-textures-repeat-clamp.html" target="_blank">click here to open in a separate window</a>
@@ -260,12 +238,9 @@ another copy. Let&#39;s display a plane using these texture coordinates.</p>
 
 </p>
 <p>You can tell WebGL to not repeat the texture in a certain direction by using <code>CLAMP_TO_EDGE</code>. For example</p>
-<pre class="prettyprint showlinemods">
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-</pre>
-
-<p>Click the buttons in the sample above to see the difference.</p>
+<pre><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+</code></pre><p>Click the buttons in the sample above to see the difference.</p>
 <p>You might have noticed a call to <code>gl.generateMipmap</code> back when we loaded the texture. What is that for?</p>
 <p>Imagine we had this 16x16 pixel texture.</p>
 <p><img class="webgl_center" src="resources/mip-low-res-enlarged.png" style="border: 2px solid black;" /></p>
@@ -342,12 +317,9 @@ especially for a very large texture like you might use on a title screen of a ga
 to draw something smaller than the largest mip why waste memory for those mips. Instead just use <code>NEAREST</code>
 or <code>LINEAR</code> as they only ever use the first mip.</p>
 <p>To set filtering you call <code>gl.texParameter</code> like this</p>
-<pre class="prettyprint showlinemods">
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-</pre>
-
-<p><code>TEXTURE_MIN_FILTER</code> is the setting used when the size you are drawing is smaller than the largest mip.
+<pre><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+</code></pre><p><code>TEXTURE_MIN_FILTER</code> is the setting used when the size you are drawing is smaller than the largest mip.
 <code>TEXTURE_MAG_FILTER</code> is the setting used when the size you are drawing is larger that the largest mip. For
 <code>TEXTURE_MAG_FILTER</code> only <code>NEAREST</code> and <code>LINEAR</code> are valid settings.</p>
 <p>Let&#39;s say we wanted to apply this texture.</p>
@@ -363,43 +335,41 @@ or <code>LINEAR</code> as they only ever use the first mip.</p>
 are not a power of 2 in both dimensions. Powers of 2 are 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, etc.
 The &#39;F&#39; texture was 256x256. 256 is a power of 2. The keyboard texture is 320x240. Neither of those are a power
 of 2 so trying to display the texture fails. In the shader when <code>texture2D</code> is called and when the texture
-referenced is not setup correctly WebGL will use color (0, 0, 0, 0)
-or as we sometimes call it, &quot;transparent black&quot;. If you open up the JavaScript console or Web Console, depending
-on the browser you might see errors pointing out the problem.</p>
-<p>To fix it we need to set the wrap mode to <code>CLAMP_TO_EDGE</code> and turn off mip mapping by setting filtering
+referenced is not setup correctly WebGL will use color (0, 0, 0, 1) which is black. If you open up the JavaScript console
+or Web Console, depending on the browser you might see errors pointing out the problem like this</p>
+<pre><code>WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
+   or not all the same size
+WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
+   It maybe non-power-of-2 and have incompatible texture filtering or
+   is not &#39;texture complete&#39;.
+</code></pre><p>To fix it we need to set the wrap mode to <code>CLAMP_TO_EDGE</code> and turn off mip mapping by setting filtering
 to <code>LINEAR</code> or <code>NEAREST</code>.</p>
 <p>Let&#39;s update our image loading code to handle this. First we need a function that will tell us if a value is
 a power of 2.</p>
-<pre class="prettyprint showlinemods">
-function isPowerOf2(value) {
-  return (value & (value - 1)) == 0;
+<pre><code>function isPowerOf2(value) {
+  return (value &amp; (value - 1)) == 0;
 }
-</pre>
-
-<p>I&#39;m not going to go into the binary math on why this works. Since it does work though, we can use it as follows.</p>
-<pre class="prettyprint showlinemods">
-// Asynchronously load an image
+</code></pre><p>I&#39;m not going to go into the binary math on why this works. Since it does work though, we can use it as follows.</p>
+<pre><code>// Asynchronously load an image
 var image = new Image();
-image.src = "resources/keyboard.jpg";
-image.addEventListener('load', function() {
+image.src = &quot;resources/keyboard.jpg&quot;;
+image.addEventListener(&#39;load&#39;, function() {
   // Now that the image has loaded make copy it to the texture.
   gl.bindTexture(gl.TEXTURE_2D, texture);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
 
 *  // Check if the image is a power of 2 in both dimensions.
-*  if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-*     // Yes, it's a power of 2. Generate mips.
+*  if (isPowerOf2(image.width) &amp;&amp; isPowerOf2(image.height)) {
+*     // Yes, it&#39;s a power of 2. Generate mips.
      gl.generateMipmap(gl.TEXTURE_2D);
 *  } else {
-*     // No, it's not a power of 2. Turn of mips and set wrapping to clamp to edge
+*     // No, it&#39;s not a power of 2. Turn of mips and set wrapping to clamp to edge
 *     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 *     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 *     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 *  }
 }
-</pre>
-
-<p>And here&#39;s that</p>
+</code></pre><p>And here&#39;s that</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-textures-good-npot.html"></iframe>
   <a class="webgl_center" href="../webgl-3d-textures-good-npot.html" target="_blank">click here to open in a separate window</a>
@@ -429,52 +399,49 @@ all high performance apps (read <em>games</em>) use. So for example we&#39;d put
 like this</p>
 <p><img class="webgl_center" src="../resources/noodles.jpg" /></p>
 <p>and then map use a different set of texture coordinates for each face of the cube.</p>
-<pre class="prettyprint showlinemods">
-        // select the bottom left image
-        0   , 0  ,
-        0   , 0.5,
-        0.25, 0  ,
-        0   , 0.5,
-        0.25, 0.5,
-        0.25, 0  ,
-        // select the bottom middle image
-        0.25, 0  ,
-        0.5 , 0  ,
-        0.25, 0.5,
-        0.25, 0.5,
-        0.5 , 0  ,
-        0.5 , 0.5,
-        // select to bottom right image
-        0.5 , 0  ,
-        0.5 , 0.5,
-        0.75, 0  ,
-        0.5 , 0.5,
-        0.75, 0.5,
-        0.75, 0  ,
-        // select the top left image
-        0   , 0.5,
-        0.25, 0.5,
-        0   , 1  ,
-        0   , 1  ,
-        0.25, 0.5,
-        0.25, 1  ,
-        // select the top middle image
-        0.25, 0.5,
-        0.25, 1  ,
-        0.5 , 0.5,
-        0.25, 1  ,
-        0.5 , 1  ,
-        0.5 , 0.5,
-        // select the top right image
-        0.5 , 0.5,
-        0.75, 0.5,
-        0.5 , 1  ,
-        0.5 , 1  ,
-        0.75, 0.5,
-        0.75, 1  ,
-</pre>
-
-<p>And we get</p>
+<pre><code>    // select the bottom left image
+    0   , 0  ,
+    0   , 0.5,
+    0.25, 0  ,
+    0   , 0.5,
+    0.25, 0.5,
+    0.25, 0  ,
+    // select the bottom middle image
+    0.25, 0  ,
+    0.5 , 0  ,
+    0.25, 0.5,
+    0.25, 0.5,
+    0.5 , 0  ,
+    0.5 , 0.5,
+    // select to bottom right image
+    0.5 , 0  ,
+    0.5 , 0.5,
+    0.75, 0  ,
+    0.5 , 0.5,
+    0.75, 0.5,
+    0.75, 0  ,
+    // select the top left image
+    0   , 0.5,
+    0.25, 0.5,
+    0   , 1  ,
+    0   , 1  ,
+    0.25, 0.5,
+    0.25, 1  ,
+    // select the top middle image
+    0.25, 0.5,
+    0.25, 1  ,
+    0.5 , 0.5,
+    0.25, 1  ,
+    0.5 , 1  ,
+    0.5 , 0.5,
+    // select the top right image
+    0.5 , 0.5,
+    0.75, 0.5,
+    0.5 , 1  ,
+    0.5 , 1  ,
+    0.75, 0.5,
+    0.75, 1  ,
+</code></pre><p>And we get</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-textures-texture-atlas.html"></iframe>
   <a class="webgl_center" href="../webgl-3d-textures-texture-atlas.html" target="_blank">click here to open in a separate window</a>
