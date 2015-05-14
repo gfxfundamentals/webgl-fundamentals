@@ -176,12 +176,12 @@ So what happens if we use texture coordinates outside the 0.0 to 1.0 range. By d
 the texture. 0.0 to 1.0 is one 'copy' of the texture. 1.0 to 2.0 is another copy. even -4.0 to -3.0 is yet
 another copy. Let's display a plane using these texture coordinates.
 
-    -3, -1,
-     2, -1,
-    -3,  4,
-    -3,  4,
-     2, -1,
-     2,  4,
+     -3, -1,
+      2, -1,
+     -3,  4,
+     -3,  4,
+      2, -1,
+      2,  4,
 
 and here it is
 
