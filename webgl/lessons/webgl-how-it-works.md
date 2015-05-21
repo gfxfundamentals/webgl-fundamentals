@@ -41,7 +41,7 @@ We'll draw with a simple triangle.  Continuing from our
 [previous example](webgl-2d-matrices.html) let's change our F to a
 triangle.
 
-    // Fill the buffer with the values that define a rectangle.
+    // Fill the buffer with the values that define a triangle.
     function setGeometry(gl) {
       gl.bufferData(
           gl.ARRAY_BUFFER,
@@ -229,7 +229,7 @@ We now have to supply colors for WebGL to use.
 
 And here's the result.
 
-{{{example url="../webgl-2d-rectangle-with-2-colors.html" }}};
+{{{example url="../webgl-2d-rectangle-with-2-colors.html" }}}
 
 Notice that we have 2 solid color triangles.  Yet we're passing the values
 in a *varying* so they are being varied or interpolated across the
