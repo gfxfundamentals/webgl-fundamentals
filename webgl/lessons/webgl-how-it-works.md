@@ -255,7 +255,7 @@ interpolation.
 
 And now we see the interpolated *varying*.
 
-{{{example url="../webgl-2d-rectangle-with-random-colors.html" }}};
+{{{example url="../webgl-2d-rectangle-with-random-colors.html" }}}
 
 Not very exciting I suppose but it does demonstrate using more than one
 attribute and passing data from a vertex shader to a fragment shader.  If
