@@ -316,7 +316,7 @@ Next let's go over [shaders and GLSL](webgl-shaders-and-glsl.html).
 <p>
 The normalize flag is for all the non floating point types. If you pass
 in false then values will be interpreted as the type they are. BYTE goes
-from -128 to 127, UNSIGNED_BYTE goes from 0 to 255, SHORT goes from -32768 to 32776 etc...
+from -128 to 127, UNSIGNED_BYTE goes from 0 to 255, SHORT goes from -32768 to 32767 etc...
 </p>
 <p>
 If you set the normalize flag to true then the values of a BYTE (-128 to 127)
