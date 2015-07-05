@@ -609,7 +609,7 @@
    *     setUniforms(programInfo.uniformSetters, uniforms);
    *     setUniforms(programInfo.uniformSetters, moreUniforms);
    *
-   * @param {Object.<string, fucntion>} setters the setters returned from
+   * @param {Object.<string, function>} setters the setters returned from
    *        `createUniformSetters`.
    * @param {Object.<string, value>} an object with values for the
    *        uniforms.
@@ -949,7 +949,7 @@
   }
 
   /**
-   * creates a typed array with a `push` fucntion attached
+   * creates a typed array with a `push` function attached
    * so that you can easily *push* values.
    *
    * `push` can take multiple arguments. If an argument is an array each element
