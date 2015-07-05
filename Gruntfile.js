@@ -42,7 +42,10 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', function() {
     var buildStuff = require('./build/js/build');
-    buildStuff();
+    var finish = this.async();
+    buildStuff().then(function() {
+        finish();
+    }).done();
   });
 
   grunt.registerTask('default', ['eslint', 'build', 'clean', 'jsdoc']);

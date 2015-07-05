@@ -43,6 +43,21 @@ function readFile(fileName) {
   return cache.readFileSync(fileName, "utf-8");
 }
 
+function writeFileIfChanged(fileName, content) {
+  if (fs.existsSync(fileName)) {
+    var old = readFile(fileName);
+    if (content == old) {
+      return;
+    }
+  }
+  fs.writeFileSync(fileName, content);
+  console.log("Wrote: " + fileName);
+};
+
+function copyFile(src, dst) {
+  writeFileIfChanged(dst, readFile(src));
+}
+
 function replaceParams(str, params) {
   var template = Handlebars.compile(str);
   if (Array.isArray(params)) {
@@ -73,14 +88,22 @@ function TemplateManager() {
 var templateManager = new TemplateManager();
 
 Handlebars.registerHelper('include', function(filename, options) {
-  return templateManager.apply(filename, options.data.root);
+  var context;
+  if (options && options.hash && options.hash.filename) {
+    var varName = options.hash.filename;
+    filename = options.data.root[varName];
+    context = options.hash;
+  } else {
+    context = options.data.root;
+  }
+  return templateManager.apply(filename, context);
 });
 
 Handlebars.registerHelper('example', function(options) {
-
   options.hash.width   = options.hash.width || "400";
   options.hash.height  = options.hash.height || "300";
   options.hash.caption = options.hash.caption || "click here to open in a separate window";
+  options.hash.examplePath = options.data.root.examplePath;
 
   return templateManager.apply("build/templates/example.template", options.hash);
 });
@@ -89,24 +112,15 @@ Handlebars.registerHelper('diagram', function(options) {
 
   options.hash.width  = options.hash.width || "400";
   options.hash.height = options.hash.height || "300";
+  options.hash.examplePath = options.data.root.examplePath;
 
   return templateManager.apply("build/templates/diagram.template", options.hash);
 });
 
 var Builder = function() {
 
+  var g_articlesByLang = {};
   var g_articles = [];
-
-  var writeFileIfChanged = function(fileName, content) {
-    if (fs.existsSync(fileName)) {
-      var old = readFile(fileName);
-      if (content == old) {
-        return;
-      }
-    }
-    fs.writeFileSync(fileName, content);
-    console.log("Wrote: " + fileName);
-  };
 
   var extractHeader = (function() {
     var headerRE = /([A-Z0-9_-]+): (.*?)$/i;
@@ -192,6 +206,8 @@ var Builder = function() {
     metaData['src_file_name'] = contentFileName;
     metaData['dst_file_name'] = outFileName;
     metaData['basedir'] = "";
+    metaData['toc'] = opt_extra.toc;
+    metaData['templateOptions'] = opt_extra.templateOptions;
     metaData['url'] = "http://webglfundamentals.org/" + outFileName;
     metaData['screenshot'] = "http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg";
     var basename = path.basename(contentFileName, ".md");
@@ -207,20 +223,38 @@ var Builder = function() {
     g_articles.push(metaData);
   };
 
-  var applyTemplateToFiles = function(templatePath, filesSpec) {
+  var applyTemplateToFiles = function(templatePath, filesSpec, extra) {
     var files = glob.sync(filesSpec);
     files.forEach(function(fileName) {
       var ext = path.extname(fileName);
       var baseName = fileName.substr(0, fileName.length - ext.length);
       var outFileName = baseName + ".html";
-      applyTemplateToFile(templatePath, fileName, outFileName);
+      applyTemplateToFile(templatePath, fileName, outFileName, extra);
     });
 
   };
 
-  this.process = function(filespec) {
-    filespec = filespec || "*.md";
-    applyTemplateToFiles("build/templates/lesson.template", "webgl/lessons/" + filespec)
+  var addArticleByLang = function(article, lang) {
+    var filename = path.basename(article.dst_file_name);
+    var articleInfo = g_articlesByLang[filename];
+    var url = "http://webglfundamentals.org/" + article.dst_file_name;
+    if (!articleInfo) {
+      articleInfo = {
+        url: url,
+        changefreq: 'monthly',
+        links: [],
+      };
+      g_articlesByLang[filename] = articleInfo;
+    }
+    articleInfo.links.push({
+      url: url,
+      lang: lang,
+    });
+  };
+
+  this.process = function(options) {
+    g_articles = [];
+    applyTemplateToFiles(options.template, path.join(options.lessons, "webgl*.md"), options);
 
     var toc = [];
     g_articles.forEach(function(article) {
@@ -242,7 +276,7 @@ var Builder = function() {
       };
     });
 
-    tasks.reduce(function(cur, next){
+    return tasks.reduce(function(cur, next){
         return cur.then(next);
     }, Promise.resolve()).then(function() {
       var articles = g_articles.filter(function(article) {
@@ -253,20 +287,15 @@ var Builder = function() {
       });
 
       var feed = new Feed({
-        title:          'WebGL Fundamentals',
-        description:    'Learn WebGL from the ground up. No magic',
-        link:           'http://webglfundamentals.org/',
+        title:          options.title,
+        description:    options.description,
+        link:           options.link,
         image:          'http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg',
         updated:        articles[0].date,
         author: {
           name:       'Greggman',
           link:       'http://games.greggman.com/',
         },
-      });
-
-      var sm = sitemap.createSitemap ({
-        hostname: 'http://webglfundamentals.org',
-        cacheTime: 600000,
       });
 
       articles.forEach(function(article, ndx) {
@@ -285,23 +314,22 @@ var Builder = function() {
           date:           article.date,
           // image:          posts[key].image
         });
-        sm.add({
-          url: "http://webglfundamentals.org/" + article.dst_file_name,
-          changefreq: 'monthly',
-        });
+
+        addArticleByLang(article, options.lang);
       });
+
       try {
-        writeFileIfChanged("atom.xml", feed.render('atom-1.0'));
-        writeFileIfChanged("sitemap.xml", sm.toString());
+        writeFileIfChanged(path.join(options.lessons, "atom.xml"), feed.render('atom-1.0'));
       } catch (err) {
         return Promise.reject(err);
       }
       return Promise.resolve();
     }).then(function() {
-      applyTemplateToFile("build/templates/index.template", "index.md", "index.html", {
+      applyTemplateToFile("build/templates/index.template", path.join(options.lessons, "index.md"), path.join(options.lessons, "index.html"), {
         table_of_contents: "<ul>" + toc.join("\n") + "</ul>",
+        templateOptions: options,
       });
-      process.exit(0);  //
+      return Promise.resolve();
     }, function(err) {
       console.error("ERROR!:");
       console.error(err);
@@ -309,13 +337,62 @@ var Builder = function() {
         console.error(err.stack);
       }
     });
+  }
+
+  this.writeGlobalFiles = function() {
+    var sm = sitemap.createSitemap ({
+      hostname: 'http://webglfundamentals.org',
+      cacheTime: 600000,
+    });
+
+    Object.keys(g_articlesByLang).forEach(function(filename) {
+      var article = g_articlesByLang[filename];
+      sm.add(article);
+    });
+    writeFileIfChanged("sitemap.xml", sm.toString());
+    copyFile("webgl/lessons/atom.xml",  "atom.xml");
+    copyFile("webgl/lessons/index.html",  "index.html");
   };
+
 
 };
 
 var b = new Builder();
-b.process();
-cache.clear();
+var langs = [
+  {
+    template: "build/templates/lesson.template",
+    lessons: "webgl/lessons",
+    title: 'WebGL Fundamentals',
+    description: 'Learn WebGL from the ground up. No magic',
+    link: 'http://webglfundamentals.org/',
+    lang: 'en',
+    toc: 'webgl/lessons/toc.html',
+    examplePath: '',
+  },
+  {
+    template: "build/templates/lesson.template",
+    lessons: "webgl/lessons/pl",
+    title: 'WebGL Fundamentals',
+    description: 'Dowiedz się WebGL od podstaw . Żadna magia',
+    link: 'http://webglfundamentals.org/webgl/lessons/pl',
+    lang: 'pl',
+    toc: 'webgl/lessons/pl/toc.html',
+    examplePath: '../',
+  },
+];
+var tasks = langs.map(function(lang) {
+  return function() {
+    return b.process(lang);
+  };
+});
+
+return tasks.reduce(function(cur, next) {
+  return cur.then(next);
+}, Promise.resolve()).then(function() {
+  b.writeGlobalFiles();
+  cache.clear();
+  return Promise.resolve();
+});
 
 };
 
