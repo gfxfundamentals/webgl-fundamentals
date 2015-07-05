@@ -196,7 +196,7 @@ See [Uniforms in Vertex Shaders](#uniforms).
 ### Textures in Fragment Shaders
 
 Getting a value from a texture in a shader we create a `sampler2D` uniform and use the GLSL
-fucntion `texture2D` to extract a value from it.
+function `texture2D` to extract a value from it.
 
     precision mediump float;
 
