@@ -304,8 +304,8 @@ var Builder = function() {
         image:          'http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg',
         updated:        articles[0].date,
         author: {
-          name:       'Greggman',
-          link:       'http://games.greggman.com/',
+          name:       'WebGLFundamenals Contributors',
+          link:       'http://webglfundamentals.org/contributors.html',
         },
       });
 
@@ -316,8 +316,8 @@ var Builder = function() {
           description:    "",
           author: [
             {
-              name:       'Greggman',
-              link:       'http://games.greggman.com/',
+              name:       'WebGLFundamenals Contributors',
+              link:       'http://webglfundamentals.org/contributors.html',
             },
           ],
           // contributor: [
@@ -363,6 +363,11 @@ var Builder = function() {
     writeFileIfChanged("sitemap.xml", sm.toString());
     copyFile("webgl/lessons/atom.xml",  "atom.xml");
     copyFile("webgl/lessons/index.html",  "index.html");
+
+    applyTemplateToFile("build/templates/index.template", "contributors.md", "contributors.html", {
+      table_of_contents: "",
+      templateOptions: "",
+    });
   };
 
 
