@@ -367,6 +367,34 @@ var Builder = function() {
 };
 
 var b = new Builder();
+
+var readdirs = function(dirpath) {
+  var dirsOnly = function(filename) {
+    var stat = fs.statSync(filename);
+    return stat.isDirectory();
+  };
+
+  var addPath = function(filename) {
+    return path.join(dirpath, filename);
+  };
+
+  return fs.readdirSync("webgl/lessons")
+      .map(addPath)
+      .filter(dirsOnly);
+};
+
+var isLangFolder = function(dirname) {
+  var filename = path.join(dirname, "langinfo.hanson");
+  return fs.existsSync(filename);
+};
+
+
+var pathToLang = function(filename) {
+  return {
+    lang: path.basename(filename),
+  };
+};
+
 var langs = [
   // English is special (sorry it's where I started)
   {
@@ -376,8 +404,12 @@ var langs = [
     toc: 'webgl/lessons/toc.html',
     examplePath: '',
   },
-  { lang: 'pl', },
 ];
+
+langs = langs.concat(readdirs("webgl/lessons")
+    .filter(isLangFolder)
+    .map(pathToLang));
+
 var tasks = langs.map(function(lang) {
   return function() {
     return b.process(lang);
