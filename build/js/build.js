@@ -210,6 +210,7 @@ var Builder = function() {
     metaData['basedir'] = "";
     metaData['toc'] = opt_extra.toc;
     metaData['templateOptions'] = opt_extra.templateOptions;
+    metaData['langInfo'] = g_langInfo;
     metaData['url'] = "http://webglfundamentals.org/" + outFileName;
     metaData['screenshot'] = "http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg";
     var basename = path.basename(contentFileName, ".md");
