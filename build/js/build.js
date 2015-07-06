@@ -9,6 +9,7 @@ var Feed       = require('feed');
 var fs         = require('fs');
 var glob       = require('glob');
 var Handlebars = require('handlebars');
+var hanson     = require('hanson');
 var marked     = require('marked');
 var path       = require('path');
 var Promise    = require('promise');
@@ -61,7 +62,7 @@ function copyFile(src, dst) {
 function replaceParams(str, params) {
   var template = Handlebars.compile(str);
   if (Array.isArray(params)) {
-    params = mergeObjects.apply(null, params.slice.reverse());
+    params = mergeObjects.apply(null, params.slice().reverse());
   }
 
   return template(params);
@@ -78,7 +79,7 @@ function TemplateManager() {
     }
 
     if (Array.isArray(params)) {
-      params = mergeObjects.apply(null, params.slice.reverse());
+      params = mergeObjects.apply(null, params.slice().reverse());
     }
 
     return template(params);
@@ -102,7 +103,7 @@ Handlebars.registerHelper('include', function(filename, options) {
 Handlebars.registerHelper('example', function(options) {
   options.hash.width   = options.hash.width || "400";
   options.hash.height  = options.hash.height || "300";
-  options.hash.caption = options.hash.caption || "click here to open in a separate window";
+  options.hash.caption = options.hash.caption || options.data.root.defaultExampleCaption;
   options.hash.examplePath = options.data.root.examplePath;
 
   return templateManager.apply("build/templates/example.template", options.hash);
@@ -121,6 +122,7 @@ var Builder = function() {
 
   var g_articlesByLang = {};
   var g_articles = [];
+  var g_langInfo;
 
   var extractHeader = (function() {
     var headerRE = /([A-Z0-9_-]+): (.*?)$/i;
@@ -201,7 +203,7 @@ var Builder = function() {
     var info = extractHandlebars(content);
     var html = marked(info.content);
     html = insertHandlebars(info, html);
-    html = replaceParams(html, opt_extra);
+    html = replaceParams(html, [opt_extra, g_langInfo]);
     metaData['content'] = html;
     metaData['src_file_name'] = contentFileName;
     metaData['dst_file_name'] = outFileName;
@@ -254,6 +256,8 @@ var Builder = function() {
 
   this.process = function(options) {
     g_articles = [];
+    g_langInfo = hanson.parse(fs.readFileSync(path.join(options.lessons, "langinfo.hanson"), {encoding: "utf8"}));
+
     applyTemplateToFiles(options.template, path.join(options.lessons, "webgl*.md"), options);
 
     var toc = [];
@@ -287,9 +291,9 @@ var Builder = function() {
       });
 
       var feed = new Feed({
-        title:          options.title,
-        description:    options.description,
-        link:           options.link,
+        title:          g_langInfo.title,
+        description:    g_langInfo.description,
+        link:           g_langInfo.link,
         image:          'http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg',
         updated:        articles[0].date,
         author: {
@@ -327,7 +331,7 @@ var Builder = function() {
     }).then(function() {
       applyTemplateToFile("build/templates/index.template", path.join(options.lessons, "index.md"), path.join(options.lessons, "index.html"), {
         table_of_contents: "<ul>" + toc.join("\n") + "</ul>",
-        templateOptions: options,
+        templateOptions: g_langInfo,
       });
       return Promise.resolve();
     }, function(err) {
@@ -362,9 +366,6 @@ var langs = [
   {
     template: "build/templates/lesson.template",
     lessons: "webgl/lessons",
-    title: 'WebGL Fundamentals',
-    description: 'Learn WebGL from the ground up. No magic',
-    link: 'http://webglfundamentals.org/',
     lang: 'en',
     toc: 'webgl/lessons/toc.html',
     examplePath: '',
@@ -372,9 +373,6 @@ var langs = [
   {
     template: "build/templates/lesson.template",
     lessons: "webgl/lessons/pl",
-    title: 'WebGL Fundamentals',
-    description: 'Dowiedz się WebGL od podstaw . Żadna magia',
-    link: 'http://webglfundamentals.org/webgl/lessons/pl',
     lang: 'pl',
     toc: 'webgl/lessons/pl/toc.html',
     examplePath: '../',
