@@ -255,6 +255,7 @@ var Builder = function() {
   };
 
   this.process = function(options) {
+    console.log("Processing Lang: " + options.lang);
     options.lessons     = options.lessons     || ("webgl/lessons/" + options.lang);
     options.toc         = options.toc         || ("webgl/lessons/" + options.lang + "/toc.html");
     options.template    = options.template    || "build/templates/lesson.template";
