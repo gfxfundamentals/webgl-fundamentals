@@ -255,6 +255,11 @@ var Builder = function() {
   };
 
   this.process = function(options) {
+    options.lessons     = options.lessons     || ("webgl/lessons/" + options.lang);
+    options.toc         = options.toc         || ("webgl/lessons/" + options.lang + "/toc.html");
+    options.template    = options.template    || "build/templates/lesson.template";
+    options.examplePath = options.examplePath === undefined ? "../" : options.examplePath;
+
     g_articles = [];
     g_langInfo = hanson.parse(fs.readFileSync(path.join(options.lessons, "langinfo.hanson"), {encoding: "utf8"}));
 
@@ -363,6 +368,7 @@ var Builder = function() {
 
 var b = new Builder();
 var langs = [
+  // English is special (sorry it's where I started)
   {
     template: "build/templates/lesson.template",
     lessons: "webgl/lessons",
@@ -370,13 +376,7 @@ var langs = [
     toc: 'webgl/lessons/toc.html',
     examplePath: '',
   },
-  {
-    template: "build/templates/lesson.template",
-    lessons: "webgl/lessons/pl",
-    lang: 'pl',
-    toc: 'webgl/lessons/pl/toc.html',
-    examplePath: '../',
-  },
+  { lang: 'pl', },
 ];
 var tasks = langs.map(function(lang) {
   return function() {
