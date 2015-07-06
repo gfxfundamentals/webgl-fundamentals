@@ -11,7 +11,7 @@ var glob       = require('glob');
 var Handlebars = require('handlebars');
 var marked     = require('marked');
 var path       = require('path');
-var Promise    = require('Promise');
+var Promise    = require('promise');
 var sitemap    = require('sitemap');
 var utils      = require('./utils');
 
