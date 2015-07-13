@@ -82,7 +82,7 @@ jest Twoje płótno. Poniżej jest prosty przykład pokazujący WebGL w jego naj
 var canvas = document.getElementById(&quot;canvas&quot;);
 var gl = canvas.getContext(&quot;experimental-webgl&quot;);
 
-// stwórz program GLSL
+// skonfiguruj program GLSL
 var program = createProgramFromScripts(gl, [&quot;2d-vertex-shader&quot;, &quot;2d-fragment-shader&quot;]);
 gl.useProgram(program);
 
@@ -119,7 +119,7 @@ void main() {
 
 &lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 void main() {
-  gl_FragColor = vec4(0, 1, 0, 1);  // green
+  gl_FragColor = vec4(0, 1, 0, 1);  // zielony
 }
 &lt;/script&gt;
 </code></pre><p>To narysuje zielony prostokąt o rozmiarach cełego płótna.  Wynik jest tutaj</p>
@@ -158,7 +158,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Teraz możemy zmienić nasze dane z przestrzeni obcinania na piksele</p>
-<pre><code>// ustaw rozdzielczości
+<pre><code>// ustaw rozdzielczość
 var resolutionLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
 
@@ -226,7 +226,7 @@ void main() {
   }
 }
 
-// Zwraca losową liczbę całkowitą z przedziału od 0 do range -1
+// Zwraca losową liczbę całkowitą z przedziału od 0 do range -1.
 function randomInt(range) {
   return Math.floor(Math.random() * range);
 }

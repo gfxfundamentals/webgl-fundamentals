@@ -20,7 +20,7 @@ jest Twoje płótno. Poniżej jest prosty przykład pokazujący WebGL w jego naj
     var canvas = document.getElementById("canvas");
     var gl = canvas.getContext("experimental-webgl");
 
-    // stwórz program GLSL
+    // skonfiguruj program GLSL
     var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
     gl.useProgram(program);
 
@@ -59,7 +59,7 @@ Poniżej są oba cieniowania
 
     <script id="2d-fragment-shader" type="x-shader/x-fragment">
     void main() {
-      gl_FragColor = vec4(0, 1, 0, 1);  // green
+      gl_FragColor = vec4(0, 1, 0, 1);  // zielony
     }
     </script>
 
@@ -101,7 +101,7 @@ zapewnioną ich konwersję do przestrzeni obcinania.  Poniżej jest nowe cieniow
 
 Teraz możemy zmienić nasze dane z przestrzeni obcinania na piksele
 
-    // ustaw rozdzielczości
+    // ustaw rozdzielczość
     var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
     gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
 
@@ -170,7 +170,7 @@ A poniżej jest nowy kod rysujący 50 prostokątów w losowych miejscach i losow
       }
     }
 
-    // Zwraca losową liczbę całkowitą z przedziału od 0 do range -1
+    // Zwraca losową liczbę całkowitą z przedziału od 0 do range -1.
     function randomInt(range) {
       return Math.floor(Math.random() * range);
     }
