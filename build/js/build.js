@@ -123,6 +123,7 @@ var Builder = function() {
   var g_articlesByLang = {};
   var g_articles = [];
   var g_langInfo;
+  var g_langs;
 
   var extractHeader = (function() {
     var headerRE = /([A-Z0-9_-]+): (.*?)$/i;
@@ -205,6 +206,7 @@ var Builder = function() {
     html = insertHandlebars(info, html);
     html = replaceParams(html, [opt_extra, g_langInfo]);
     metaData['content'] = html;
+    metaData['langs'] = g_langs;
     metaData['src_file_name'] = contentFileName;
     metaData['dst_file_name'] = outFileName;
     metaData['basedir'] = "";
@@ -253,6 +255,17 @@ var Builder = function() {
       url: url,
       lang: lang,
     });
+  };
+
+  var getLanguageSelection = function(lang) {
+    var lessons = lang.lessons || ("webgl/lessons/" + lang.lang);
+    var langInfo = hanson.parse(fs.readFileSync(path.join(lessons, "langinfo.hanson"), {encoding: "utf8"}));
+    return templateManager.apply("build/templates/lang-select.template", [lang, langInfo]);
+  };
+
+  this.preProcess = function(langs) {
+     var langs = langs.map(getLanguageSelection).join("\n");
+     g_langs = templateManager.apply("build/templates/languages.template", {languages: langs});
   };
 
   this.process = function(options) {
@@ -416,6 +429,8 @@ var langs = [
 langs = langs.concat(readdirs("webgl/lessons")
     .filter(isLangFolder)
     .map(pathToLang));
+
+b.preProcess(langs);
 
 var tasks = langs.map(function(lang) {
   return function() {
