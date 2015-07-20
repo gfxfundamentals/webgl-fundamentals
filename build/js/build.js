@@ -124,6 +124,7 @@ var Builder = function() {
   var g_articles = [];
   var g_langInfo;
   var g_langs;
+  var g_langDB = {};
 
   var extractHeader = (function() {
     var headerRE = /([A-Z0-9_-]+): (.*?)$/i;
@@ -260,6 +261,10 @@ var Builder = function() {
   var getLanguageSelection = function(lang) {
     var lessons = lang.lessons || ("webgl/lessons/" + lang.lang);
     var langInfo = hanson.parse(fs.readFileSync(path.join(lessons, "langinfo.hanson"), {encoding: "utf8"}));
+    g_langDB[lang.lang] = {
+      lang: lang.lang,
+      language: langInfo.language,
+    };
     return templateManager.apply("build/templates/lang-select.template", [lang, langInfo]);
   };
 
@@ -368,11 +373,22 @@ var Builder = function() {
       hostname: 'http://webglfundamentals.org',
       cacheTime: 600000,
     });
-
+    var articleLangs = { };
     Object.keys(g_articlesByLang).forEach(function(filename) {
       var article = g_articlesByLang[filename];
+      var langs = {};
+      article.links.forEach(function(link) {
+        langs[link.lang] = true;
+      });
+      articleLangs[filename] = langs;
       sm.add(article);
     });
+    var langInfo = {
+      articles: articleLangs,
+      langs: g_langDB,
+    };
+    var langJS = "window.langDB = " + JSON.stringify(langInfo, null, 2);
+    writeFileIfChanged("langdb.js", langJS);
     writeFileIfChanged("sitemap.xml", sm.toString());
     copyFile("webgl/lessons/atom.xml",  "atom.xml");
     copyFile("webgl/lessons/index.html",  "index.html");
