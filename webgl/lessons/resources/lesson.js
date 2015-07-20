@@ -46,6 +46,19 @@ $(document).ready(function($){
        return $('<pre class="prettyprint showlinemods">' + this.innerHTML + '</pre>')
      });
   prettyPrint();
+  var m = /webgl\/lessons\/(.*?)\//.exec(window.location.pathname);
+  var lang = "en";
+  if (m) {
+    lang = m[1];
+  }
+  $('#language').val(lang);
+  $('#language').on('change', function() {
+    var lang = this.value;
+    lang = lang === "en" ? "" : ("/" + lang);
+    var lastSlash = window.location.pathname.lastIndexOf("/");
+    var theRest = window.location.pathname.substr(lastSlash);
+    window.location.href = "/webgl/lessons" + lang + theRest + window.location.search + window.location.hash;
+  });
 });
 }(jQuery));
 
