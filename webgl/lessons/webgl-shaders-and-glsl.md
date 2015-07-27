@@ -148,9 +148,9 @@ each element individually.
     var someVec2Element2Loc = gl.getUniformLocation(someProgram, "u_someVec2[2]");
 
     // at render time
-    gl.uniform2fv(someVec2ElementLoc, [1, 2]);  // set element 0
-    gl.uniform2fv(someVec2ElementLoc, [3, 4]);  // set element 1
-    gl.uniform2fv(someVec2ElementLoc, [5, 6]);  // set element 2
+    gl.uniform2fv(someVec2Element0Loc, [1, 2]);  // set element 0
+    gl.uniform2fv(someVec2Element1Loc, [3, 4]);  // set element 1
+    gl.uniform2fv(someVec2Element2Loc, [5, 6]);  // set element 2
 
 Similarly if you create a struct
 
