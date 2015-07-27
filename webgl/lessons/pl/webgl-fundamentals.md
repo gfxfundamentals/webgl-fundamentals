@@ -1,7 +1,7 @@
 Title: Podstawy WebGL
 Description: Twoja pierwsza lekcja WebGL - podstawy
 
-WebGL umożliwa wyświetlanie w czasie rzeczywistym grafiki 3D w Twojej
+WebGL umożliwia wyświetlanie w czasie rzeczywistym grafiki 3D w Twojej
 przeglądarce, chociaż wiele osób nie zdaje sobie sprawy, że
 [WebGL aktulanie udostępnia API rasteryzacyjne, a nie API 3D](webgl-2d-vs-3d-library.html).
 
