@@ -60,6 +60,7 @@ function render(image) {
   var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
   var textureSizeLocation = gl.getUniformLocation(program, "u_textureSize");
   var convolutionLocation = gl.getUniformLocation(program, "u_convolution[0]");
+  var convolutionLocation = gl.getUniformLocation(program, "u_kernelWeight");
 
   // set the resolution
   gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
@@ -124,9 +125,17 @@ function render(image) {
 
   drawWithKernel('edgeDetect');
 
+  function computeKernelWeight(kernel) {
+    var weight = kernel.reduce(function(prev, curr) {
+        return prev + curr;
+    });
+    return weight;
+  }
+
   function drawWithKernel(name) {
-    // set the convolution
+    // set the kernel and it's weight
     gl.uniform1fv(convolutionLocation, kernels[name]);
+    gl.uniform1f(kernelWeightLocation, computeKernelWeight(kernels[name]));
 
     // Draw the rectangle.
     gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -186,22 +195,13 @@ precision mediump float;
 uniform sampler2D u_image;
 uniform vec2 u_textureSize;
 uniform float u_convolution[9];
+uniform float u_kernelWeight;
 
 // the texCoords passed in from the vertex shader.
 varying vec2 v_texCoord;
 
 void main() {
    vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
-//   vec4 colorSum = vec4(0.0 ,0.0, 0.0, 0.0);
-//   float kernelWeight = 0.0;
-//   for (int y = 0; y < 2; ++y) {
-//     for (int x = 0; x < 2; ++x) {
-//       float mult = u_convolution[y * 3 + x];
-//       vec2 offset = vec2(float(x - 1), float(y - 1));
-//       colorSum += texture2D(u_image, v_texCoord + onePixel * offset) * mult;
-//       kernelWeight += mult;
-//     }
-//   }
    vec4 colorSum =
        texture2D(u_image, v_texCoord + onePixel * vec2(-1, -1)) * u_convolution[0] +
        texture2D(u_image, v_texCoord + onePixel * vec2( 0, -1)) * u_convolution[1] +
@@ -212,22 +212,8 @@ void main() {
        texture2D(u_image, v_texCoord + onePixel * vec2(-1,  1)) * u_convolution[6] +
        texture2D(u_image, v_texCoord + onePixel * vec2( 0,  1)) * u_convolution[7] +
        texture2D(u_image, v_texCoord + onePixel * vec2( 1,  1)) * u_convolution[8] ;
-   float kernelWeight =
-       u_convolution[0] +
-       u_convolution[1] +
-       u_convolution[2] +
-       u_convolution[3] +
-       u_convolution[4] +
-       u_convolution[5] +
-       u_convolution[6] +
-       u_convolution[7] +
-       u_convolution[8] ;
 
-   if (kernelWeight <= 0.0) {
-     kernelWeight = 1.0;
-   }
-
-   gl_FragColor = vec4((colorSum / kernelWeight).rgb, 1);
+   gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1);
 }
 </script>
 </head>

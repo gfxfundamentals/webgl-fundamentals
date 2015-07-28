@@ -224,6 +224,7 @@ precision mediump float;
 uniform sampler2D u_image;
 uniform vec2 u_textureSize;
 uniform float u_kernel[9];
+uniform float u_kernelWeight;
 
 // the texCoords passed in from the vertex shader.
 varying vec2 v_texCoord;
@@ -240,24 +241,10 @@ void main() {
      texture2D(u_image, v_texCoord + onePixel * vec2(-1,  1)) * u_kernel[6] +
      texture2D(u_image, v_texCoord + onePixel * vec2( 0,  1)) * u_kernel[7] +
      texture2D(u_image, v_texCoord + onePixel * vec2( 1,  1)) * u_kernel[8] ;
-   float kernelWeight =
-     u_kernel[0] +
-     u_kernel[1] +
-     u_kernel[2] +
-     u_kernel[3] +
-     u_kernel[4] +
-     u_kernel[5] +
-     u_kernel[6] +
-     u_kernel[7] +
-     u_kernel[8] ;
-
-   if (kernelWeight <= 0.0) {
-     kernelWeight = 1.0;
-   }
 
    // Divide the sum by the weight but just use rgb
    // we'll set alpha to 1.0
-   gl_FragColor = vec4((colorSum / kernelWeight).rgb, 1.0);
+   gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1.0);
 }
 &lt;/script&gt;
 </pre>
@@ -266,6 +253,7 @@ void main() {
 <pre class="prettyprint showlinemods">
   ...
   var kernelLocation = gl.getUniformLocation(program, "u_kernel[0]");
+  var kernelWeightLocation = gl.getUniformLocation(program, "u_kernelWeight");
   ...
   var edgeDetectKernel = [
       -1, -1, -1,
@@ -273,6 +261,7 @@ void main() {
       -1, -1, -1
   ];
   gl.uniform1fv(kernelLocation, edgeDetectKernel);
+  gl.uniform1f(kernelWeightLocation, computeKernelWeight(edgeDetectKernel));
   ...
 </pre>
 

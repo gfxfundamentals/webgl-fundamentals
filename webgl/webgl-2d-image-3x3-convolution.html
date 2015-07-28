@@ -60,6 +60,7 @@ function render(image) {
   var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
   var textureSizeLocation = gl.getUniformLocation(program, "u_textureSize");
   var kernelLocation = gl.getUniformLocation(program, "u_kernel[0]");
+  var kernelWeightLocation = gl.getUniformLocation(program, "u_kernelWeight");
 
   // set the resolution
   gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
@@ -200,9 +201,17 @@ function render(image) {
 
   drawWithKernel(initialSelection);
 
+  function computeKernelWeight(kernel) {
+    var weight = kernel.reduce(function(prev, curr) {
+        return prev + curr;
+    });
+    return weight <= 0 ? 1 : weight;
+  }
+
   function drawWithKernel(name) {
-    // set the kernel
+    // set the kernel and it's weight
     gl.uniform1fv(kernelLocation, kernels[name]);
+    gl.uniform1f(kernelWeightLocation, computeKernelWeight(kernels[name]));
 
     // Draw the rectangle.
     gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -262,6 +271,7 @@ precision mediump float;
 uniform sampler2D u_image;
 uniform vec2 u_textureSize;
 uniform float u_kernel[9];
+uniform float u_kernelWeight;
 
 // the texCoords passed in from the vertex shader.
 varying vec2 v_texCoord;
@@ -278,22 +288,8 @@ void main() {
        texture2D(u_image, v_texCoord + onePixel * vec2(-1,  1)) * u_kernel[6] +
        texture2D(u_image, v_texCoord + onePixel * vec2( 0,  1)) * u_kernel[7] +
        texture2D(u_image, v_texCoord + onePixel * vec2( 1,  1)) * u_kernel[8] ;
-   float kernelWeight =
-       u_kernel[0] +
-       u_kernel[1] +
-       u_kernel[2] +
-       u_kernel[3] +
-       u_kernel[4] +
-       u_kernel[5] +
-       u_kernel[6] +
-       u_kernel[7] +
-       u_kernel[8] ;
 
-   if (kernelWeight <= 0.0) {
-     kernelWeight = 1.0;
-   }
-
-   gl_FragColor = vec4((colorSum / kernelWeight).rgb, 1);
+   gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1);
 }
 </script>
 </head>
