@@ -129,7 +129,7 @@ function render(image) {
     var weight = kernel.reduce(function(prev, curr) {
         return prev + curr;
     });
-    return weight;
+    return weight <= 0 ? 1 : weight;
   }
 
   function drawWithKernel(name) {
