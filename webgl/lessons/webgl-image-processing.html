@@ -73,8 +73,7 @@ This is a continuation from <a href="webgl-fundamentals.html">WebGL Fundamentals
 <p>To draw images in WebGL we need to use textures. Similarly to the way WebGL expects clipspace coordinates when rendering instead of pixels, WebGL expects texture coordinates when reading a texture. Texture coordinates go from 0.0 to 1.0 no matter the dimensions of the texture.</p>
 <p>Since we are only drawing a single rectangle (well, 2 triangles) we need to tell WebGL which place in the texture each point in the rectangle corresponds to. We&#39;ll pass this information from the vertex shader to the fragment shader using a special kind of variable called a &#39;varying&#39;. It&#39;s called a varying because it varies. WebGL will interpolate the values we provide in the vertex shader as it draws each pixel using the fragment shader.</p>
 <p>Using <a href="webgl-fundamentals.html">the vertex shader from the end of previous post</a> we need to add an attribute to pass in texture coordinates and then pass those on to the fragment shader.</p>
-<pre class="prettyprint showlinemods">
-attribute vec2 a_texCoord;
+<pre><code>attribute vec2 a_texCoord;
 ...
 varying vec2 v_texCoord;
 
@@ -84,11 +83,8 @@ void main() {
    // The GPU will interpolate this value between points
    v_texCoord = a_texCoord;
 }
-</pre>
-
-<p>Then we supply a fragment shader to look up colors from the texture.</p>
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
+</code></pre><p>Then we supply a fragment shader to look up colors from the texture.</p>
+<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // our texture
@@ -102,13 +98,10 @@ void main() {
    gl_FragColor = texture2D(u_image, v_texCoord);
 }
 &lt;/script&gt;
-</pre>
-
-<p>Finally we need to load an image, create a texture and copy the image into the texture. Because we are in a browser images load asynchronously so we have to re-arrange our code a little to wait for the texture to load. Once it loads we&#39;ll draw it.</p>
-<pre class="prettyprint showlinemods">
-function main() {
+</code></pre><p>Finally we need to load an image, create a texture and copy the image into the texture. Because we are in a browser images load asynchronously so we have to re-arrange our code a little to wait for the texture to load. Once it loads we&#39;ll draw it.</p>
+<pre><code>function main() {
   var image = new Image();
-  image.src = "http://someimage/on/our/server";  // MUST BE SAME DOMAIN!!!
+  image.src = &quot;http://someimage/on/our/server&quot;;  // MUST BE SAME DOMAIN!!!
   image.onload = function() {
     render(image);
   }
@@ -119,7 +112,7 @@ function render(image) {
   // all the code we had before.
   ...
   // look up where the texture coordinates need to go.
-  var texCoordLocation = gl.getAttribLocation(program, "a_texCoord");
+  var texCoordLocation = gl.getAttribLocation(program, &quot;a_texCoord&quot;);
 
   // provide texture coordinates for the rectangle.
   var texCoordBuffer = gl.createBuffer();
@@ -148,9 +141,7 @@ function render(image) {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
   ...
 }
-</pre>
-
-<p>And here&#39;s the image rendered in WebGL.</p>
+</code></pre><p>And here&#39;s the image rendered in WebGL.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-image.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-image.html" target="_blank">click here to open in a separate window</a>
@@ -158,13 +149,10 @@ function render(image) {
 
 </p>
 <p>Not too exciting so let&#39;s manipulate that image. How about just swapping red and blue?</p>
-<pre class="prettyprint showlinemods">
-   ...
-   gl_FragColor = texture2D(u_image, v_texCoord).bgra;
-   ...
-</pre>
-
-<p>And now red and blue are swapped.</p>
+<pre><code>...
+gl_FragColor = texture2D(u_image, v_texCoord).bgra;
+...
+</code></pre><p>And now red and blue are swapped.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-image-red2blue.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-image-red2blue.html" target="_blank">click here to open in a separate window</a>
@@ -173,8 +161,7 @@ function render(image) {
 </p>
 <p>What if we want to do image processing that actually looks at other pixels? Since WebGL references textures in texture coordinates which go from 0.0 to 1.0 then we can calculate how much to move for 1 pixel with the simple math <code>onePixel = 1.0 / textureSize</code>.</p>
 <p>Here&#39;s a fragment shader that averages the left and right pixels of each pixel in the texture.</p>
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
+<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // our texture
@@ -195,19 +182,14 @@ void main() {
        texture2D(u_image, v_texCoord + vec2(-onePixel.x, 0.0))) / 3.0;
 }
 &lt;/script&gt;
-</pre>
-
-<p>We then need to pass in the size of the texture from JavaScript.</p>
-<pre class="prettyprint showlinemods">
-  ...
-  var textureSizeLocation = gl.getUniformLocation(program, "u_textureSize");
-  ...
-  // set the size of the image
-  gl.uniform2f(textureSizeLocation, image.width, image.height);
-  ...
-</pre>
-
-<p>Compare to the un-blurred image above.</p>
+</code></pre><p>We then need to pass in the size of the texture from JavaScript.</p>
+<pre><code>...
+var textureSizeLocation = gl.getUniformLocation(program, &quot;u_textureSize&quot;);
+...
+// set the size of the image
+gl.uniform2f(textureSizeLocation, image.width, image.height);
+...
+</code></pre><p>Compare to the un-blurred image above.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-image-blend.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-image-blend.html" target="_blank">click here to open in a separate window</a>
@@ -216,8 +198,7 @@ void main() {
 </p>
 <p>Now that we know how to reference other pixels let&#39;s use a convolution kernel to do a bunch of common image processing. In this case we&#39;ll use a 3x3 kernel. A convolution kernel is just a 3x3 matrix where each entry in the matrix represents how much to multiply the 8 pixels around the pixel we are rendering. We then divide the result by the weight of the kernel (the sum of all values in the kernel) or 1.0, which ever is greater. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Here&#39;s a pretty good article on it</a>. And <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">here&#39;s another article showing some actual code if you were to write this by hand in C++</a>.</p>
 <p>In our case we&#39;re going to do that work in the shader so here&#39;s the new fragment shader.</p>
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
+<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // our texture
@@ -243,29 +224,31 @@ void main() {
      texture2D(u_image, v_texCoord + onePixel * vec2( 1,  1)) * u_kernel[8] ;
 
    // Divide the sum by the weight but just use rgb
-   // we'll set alpha to 1.0
+   // we&#39;ll set alpha to 1.0
    gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1.0);
 }
 &lt;/script&gt;
-</pre>
+</code></pre><p>In JavaScript we need to supply a convolution kernel and it&#39;s weight</p>
+<pre><code> function computeKernelWeight(kernel) {
+   var weight = kernel.reduce(function(prev, curr) {
+       return prev + curr;
+   });
+   return weight &lt;= 0 ? 1 : weight;
+ }
 
-<p>In JavaScript we need to supply a convolution kernel.</p>
-<pre class="prettyprint showlinemods">
-  ...
-  var kernelLocation = gl.getUniformLocation(program, "u_kernel[0]");
-  var kernelWeightLocation = gl.getUniformLocation(program, "u_kernelWeight");
-  ...
-  var edgeDetectKernel = [
-      -1, -1, -1,
-      -1,  8, -1,
-      -1, -1, -1
-  ];
-  gl.uniform1fv(kernelLocation, edgeDetectKernel);
-  gl.uniform1f(kernelWeightLocation, computeKernelWeight(edgeDetectKernel));
-  ...
-</pre>
-
-<p>And voila... Use the drop down list to select different kernels.</p>
+ ...
+ var kernelLocation = gl.getUniformLocation(program, &quot;u_kernel[0]&quot;);
+ var kernelWeightLocation = gl.getUniformLocation(program, &quot;u_kernelWeight&quot;);
+ ...
+ var edgeDetectKernel = [
+     -1, -1, -1,
+     -1,  8, -1,
+     -1, -1, -1
+ ];
+ gl.uniform1fv(kernelLocation, edgeDetectKernel);
+ gl.uniform1f(kernelWeightLocation, computeKernelWeight(edgeDetectKernel));
+ ...
+</code></pre><p>And voila... Use the drop down list to select different kernels.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-image-3x3-convolution.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-image-3x3-convolution.html" target="_blank">click here to open in a separate window</a>
@@ -309,7 +292,9 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 <div class="webgl_bottombar">
 <h3>What's with the a_, u_, and v_ prefixes in from of variables in GLSL?</h3>
 <p>
-That's just a naming convention. a_ for attributes which is the data provided by buffers. u_ for uniforms which are inputs to the shaders, v_ for varyings which are values passed from a vertex shader to a fragment shader and interpolated (or varied) between the vertices for each pixel drawn.
+That's just a naming convention. They are not required but for me it makes it easier to see at a glance
+where the values are coming from. a_ for attributes which is the data provided by buffers. u_ for uniforms which are inputs to the shaders, v_ for varyings which are values passed from a vertex shader to a fragment shader and interpolated (or varied) between the vertices for each pixel drawn.
+See <a href="webgl-how-to-works.html">How it works</a> for more details.
 </p>
 </div>
 
