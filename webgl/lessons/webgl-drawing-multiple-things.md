@@ -77,7 +77,7 @@ assume we have functions to create them and they return [bufferInfo objects as d
 the previous article](webgl-less-code-more-fun.html).
 
 So here's the code. Our shader is the same one simple shader from our [perspective example](webgl-3d-perspective.html)
-except we've added a `u_colorMult` to multiple the vertex colors by.
+except we've added a `u_colorMult` to multiply the vertex colors by.
 
     // Passed in from the vertex shader.
     varying vec4 v_color;
