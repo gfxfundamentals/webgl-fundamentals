@@ -136,7 +136,7 @@ Poniżej jest odpowiedni kod oparty o OpenGL (nie ES) wyświetlający kostkę i 
   glEnd();
 </pre>
 
-Zauważ jak bardzo nie potrzebujemy więszkości wiedzy o matematyce trójwymiarowaej w każdym z tych
+Zauważ jak bardzo nie potrzebujemy większości wiedzy o matematyce trójwymiarowej w każdym z tych
 przykładów. Porównaj to do WebGL.  Nie zamierzam pisać kodu
 wymaganego przez WebGL.  Nie chodzi nawet o to, że byłby on wiele większy.  Nie chodzi
 o ilość wymaganych linii. Chodzi o ilość wymaganej **wiedzy**.
@@ -146,7 +146,7 @@ zajmują się całą resztą. Innymi słowy są to właśnie biblioteki 3D.
 
 W WebGL jest inaczej - musisz znać algebrę macierzy, normalizację
 współrzędnych, obcinanie, iloczyny wektorowe i skalarne, interpolację, obliczanie lustrzanych
-odbić i wiele innych zagadnień, których pełne zrozozumienie często wymaga miesięcy
+odbić i wiele innych zagadnień, których pełne zrozumienie często wymaga miesięcy
 lub lat.
 
 Kluczową cechą, jaką musi posiadać biblioteka 3D, jest właśnie wbudowanie w nią tej wiedzy dzięki czemu Ty sam
@@ -156,7 +156,7 @@ Jest to prawdą o innych bibliotekach 3D podobnych to three.js.  Jednak NIE jest
 ES 2.0+ ani o WebGL.
 
 Nazywanie WebGL biblioteką 3D wydaje się mylące.  Użytkownik słysząc tą błędną opinię
-pomyśli "O, bibliteka 3D.  Świetnie.  Załatwi dla mnie kwestie 3D" i wtedy odkryje
+pomyśli "O, biblioteka 3D.  Świetnie.  Załatwi dla mnie kwestie 3D" i wtedy odkryje
 twardą prawdę, że to nie jest to czego szukał.
 
 Możemy nawet wykonać jeden krok dalej.  Poniżej jest program rysujący szkielet kostki 3D
