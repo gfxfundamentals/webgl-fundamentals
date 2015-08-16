@@ -108,7 +108,7 @@ Uniforms can be many types. For each type you have to call the corresponding fun
 
     gl.uniformMatrix2fv(mat2UniformLoc, false, [  4x element array ])  // for mat2 or mat2 array
     gl.uniformMatrix3fv(mat3UniformLoc, false, [  9x element array ])  // for mat3 or mat3 array
-    gl.uniformMatrix4fv(mat4UniformLoc, false, [ 17x element array ])  // for mat4 or mat4 array
+    gl.uniformMatrix4fv(mat4UniformLoc, false, [ 16x element array ])  // for mat4 or mat4 array
 
     gl.uniform1i (intUniformLoc,   v);                 // for int
     gl.uniform1iv(intUniformLoc, [v]);                 // for int or int array
