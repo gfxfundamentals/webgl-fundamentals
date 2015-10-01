@@ -9,8 +9,10 @@ Translation is some fancy math name that basically means "to move" something. I 
 <!--more-->
 <pre class="prettyprint showlinemods">
   // First lets make some variables 
-  // to hold the translation of the rectangle
+  // to hold the translation, width and height of the rectangle
   var translation = [0, 0];
+  var width = 100;
+  var height = 30;
 
   // then let's make a function to
   // re-draw everything. We can call this
