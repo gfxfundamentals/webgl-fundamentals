@@ -131,98 +131,90 @@ This is where the magic comes in. It turns out we can multiply matrices together
 
 To make things clearer let's make functions to build matrices for translation, rotation and scale.
 
-<pre class="prettyprint showlinemods">
-function makeTranslation(tx, ty) {
-  return [
-    1, 0, 0,
-    0, 1, 0,
-    tx, ty, 1
-  ];
-}
+    function makeTranslation(tx, ty) {
+      return [
+        1, 0, 0,
+        0, 1, 0,
+        tx, ty, 1
+      ];
+    }
 
-function makeRotation(angleInRadians) {
-  var c = Math.cos(angleInRadians);
-  var s = Math.sin(angleInRadians);
-  return [
-    c,-s, 0,
-    s, c, 0,
-    0, 0, 1
-  ];
-}
+    function makeRotation(angleInRadians) {
+      var c = Math.cos(angleInRadians);
+      var s = Math.sin(angleInRadians);
+      return [
+        c,-s, 0,
+        s, c, 0,
+        0, 0, 1
+      ];
+    }
 
-function makeScale(sx, sy) {
-  return [
-    sx, 0, 0,
-    0, sy, 0,
-    0, 0, 1
-  ];
-}
-</pre>
+    function makeScale(sx, sy) {
+      return [
+        sx, 0, 0,
+        0, sy, 0,
+        0, 0, 1
+      ];
+    }
 
 Now let's change our shader. The old shader looked like this
 
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
-attribute vec2 a_position;
+    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    attribute vec2 a_position;
 
-uniform vec2 u_resolution;
-uniform vec2 u_translation;
-uniform vec2 u_rotation;
-uniform vec2 u_scale;
+    uniform vec2 u_resolution;
+    uniform vec2 u_translation;
+    uniform vec2 u_rotation;
+    uniform vec2 u_scale;
 
-void main() {
-  // Scale the positon
-  vec2 scaledPosition = a_position * u_scale;
+    void main() {
+      // Scale the positon
+      vec2 scaledPosition = a_position * u_scale;
 
-  // Rotate the position
-  vec2 rotatedPosition = vec2(
-     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
-     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
+      // Rotate the position
+      vec2 rotatedPosition = vec2(
+         scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
+         scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
 
-  // Add in the translation.
-  vec2 position = rotatedPosition + u_translation;
-  ...
-</pre>
+      // Add in the translation.
+      vec2 position = rotatedPosition + u_translation;
+      ...
 
 Our new shader will be much simpler.
 
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
-attribute vec2 a_position;
+    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    attribute vec2 a_position;
 
-uniform vec2 u_resolution;
-uniform mat3 u_matrix;
+    uniform vec2 u_resolution;
+    uniform mat3 u_matrix;
 
-void main() {
-  // Multiply the position by the matrix.
-  vec2 position = (u_matrix * vec3(a_position, 1)).xy;
-  ...
-</pre>
+    void main() {
+      // Multiply the position by the matrix.
+      vec2 position = (u_matrix * vec3(a_position, 1)).xy;
+      ...
 
 And here's how we use it
 
-<pre class="prettyprint showlinemods">
-  // Draw the scene.
-  function drawScene() {
-    // Clear the canvas.
-    gl.clear(gl.COLOR_BUFFER_BIT);
+      // Draw the scene.
+      function drawScene() {
+        // Clear the canvas.
+        gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Compute the matrices
-    var translationMatrix = makeTranslation(translation[0], translation[1]);
-    var rotationMatrix = makeRotation(angleInRadians);
-    var scaleMatrix = makeScale(scale[0], scale[1]);
+        // Compute the matrices
+        var translationMatrix = makeTranslation(translation[0], translation[1]);
+        var rotationMatrix = makeRotation(angleInRadians);
+        var scaleMatrix = makeScale(scale[0], scale[1]);
 
-    // Multiply the matrices.
-    var matrix = matrixMultiply(scaleMatrix, rotationMatrix);
-    matrix = matrixMultiply(matrix, translationMatrix);
+        // Multiply the matrices.
+        var matrix = matrixMultiply(scaleMatrix, rotationMatrix);
+        matrix = matrixMultiply(matrix, translationMatrix);
 
-    // Set the matrix.
-    gl.uniformMatrix3fv(matrixLocation, false, matrix);
+        // Set the matrix.
+        gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
-    // Draw the rectangle.
-    gl.drawArrays(gl.TRIANGLES, 0, 18);
-  }
-</pre>
+        // Draw the rectangle.
+        gl.drawArrays(gl.TRIANGLES, 0, 18);
+      }
 
 Here's a sample using our new code. The sliders are the same, translation, rotation and scale. But the way they get used in the shader is much simpler. 
 
@@ -230,13 +222,11 @@ Here's a sample using our new code. The sliders are the same, translation, rotat
 
 Still, you might be asking, so what? That doesn't seem like much of a benefit . But, now if we want to change the order we don't have to write a new shader. We can just change the math.
 
-<pre class="prettyprint showlinemods">
-    ...
-    // Multiply the matrices.
-    var matrix = matrixMultiply(translationMatrix, rotationMatrix);
-    matrix = matrixMultiply(matrix, scaleMatrix);
-    ...
-</pre>
+        ...
+        // Multiply the matrices.
+        var matrix = matrixMultiply(translationMatrix, rotationMatrix);
+        matrix = matrixMultiply(matrix, scaleMatrix);
+        ...
 
 Here's that version.
 
@@ -244,34 +234,32 @@ Here's that version.
 
 Being able to apply matrices like this is especially important for hierarchical animation like arms on a body, moons on a planet around a sun, or branches on a tree. For a simple example of hierarchical animation lets draw draw our 'F' 5 times but each time lets start with the matrix from the previous 'F'.
 
-<pre class="prettyprint showlinemods">
-  // Draw the scene.
-  function drawScene() {
-    // Clear the canvas.
-    gl.clear(gl.COLOR_BUFFER_BIT);
+      // Draw the scene.
+      function drawScene() {
+        // Clear the canvas.
+        gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Compute the matrices
-    var translationMatrix = makeTranslation(translation[0], translation[1]);
-    var rotationMatrix = makeRotation(angleInRadians);
-    var scaleMatrix = makeScale(scale[0], scale[1]);
+        // Compute the matrices
+        var translationMatrix = makeTranslation(translation[0], translation[1]);
+        var rotationMatrix = makeRotation(angleInRadians);
+        var scaleMatrix = makeScale(scale[0], scale[1]);
 
-    // Starting Matrix.
-    var matrix = makeIdentity();
+        // Starting Matrix.
+        var matrix = makeIdentity();
 
-    for (var i = 0; i < 5; ++i) {
-      // Multiply the matrices.
-      matrix = matrixMultiply(matrix, scaleMatrix);
-      matrix = matrixMultiply(matrix, rotationMatrix);
-      matrix = matrixMultiply(matrix, translationMatrix);
+        for (var i = 0; i < 5; ++i) {
+          // Multiply the matrices.
+          matrix = matrixMultiply(matrix, scaleMatrix);
+          matrix = matrixMultiply(matrix, rotationMatrix);
+          matrix = matrixMultiply(matrix, translationMatrix);
 
-      // Set the matrix.
-      gl.uniformMatrix3fv(matrixLocation, false, matrix);
+          // Set the matrix.
+          gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
-      // Draw the geometry.
-      gl.drawArrays(gl.TRIANGLES, 0, 18);
-    }
-  }
-</pre>
+          // Draw the geometry.
+          gl.drawArrays(gl.TRIANGLES, 0, 18);
+        }
+      }
 
 To do this we had introduce the function, <code>makeIdentity</code>, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like 
 
@@ -283,15 +271,13 @@ so too
 
 Here's the code to make an identity matrix.
 
-<pre class="prettyprint showlinemods">
-function makeIdentity() {
-  return [
-    1, 0, 0,
-    0, 1, 0,
-    0, 0, 1
-  ];
-}
-</pre>
+    function makeIdentity() {
+      return [
+        1, 0, 0,
+        0, 1, 0,
+        0, 0, 1
+      ];
+    }
 
 Here's the 5 Fs.
 
@@ -301,16 +287,14 @@ One more example, In every sample so far our 'F' rotates around its top left cor
 
 But now, because we can do matrix math and we can choose the order that transforms are applied we can move the origin before the rest of the transforms are applied.
 
-<pre class="prettyprint showlinemods">
-    // make a matrix that will move the origin of the 'F' to its center.
-    var moveOriginMatrix = makeTranslation(-50, -75);
-    ...
+        // make a matrix that will move the origin of the 'F' to its center.
+        var moveOriginMatrix = makeTranslation(-50, -75);
+        ...
 
-    // Multiply the matrices.
-    var matrix = matrixMultiply(moveOriginMatrix, scaleMatrix);
-    matrix = matrixMultiply(matrix, rotationMatrix);
-    matrix = matrixMultiply(matrix, translationMatrix);
-</pre>
+        // Multiply the matrices.
+        var matrix = matrixMultiply(moveOriginMatrix, scaleMatrix);
+        matrix = matrixMultiply(matrix, rotationMatrix);
+        matrix = matrixMultiply(matrix, translationMatrix);
 
 Here's that sample. Notice the F rotates and scales around the center.
 
@@ -320,66 +304,58 @@ Using that technique you can rotate or scale from any point. Now you know how Ph
 
 Let's go even more crazy. If you go back to the first article on <a href="webgl-fundamentals.html">WebGL fundamentals</a> you might remember we have code in the shader to convert from pixels to clipspace that looks like this.
 
-<pre class="prettyprint showlinemods">
-  ...
-  // convert the rectangle from pixels to 0.0 to 1.0
-  vec2 zeroToOne = position / u_resolution;
+      ...
+      // convert the rectangle from pixels to 0.0 to 1.0
+      vec2 zeroToOne = position / u_resolution;
 
-  // convert from 0->1 to 0->2
-  vec2 zeroToTwo = zeroToOne * 2.0;
+      // convert from 0->1 to 0->2
+      vec2 zeroToTwo = zeroToOne * 2.0;
 
-  // convert from 0->2 to -1->+1 (clipspace)
-  vec2 clipSpace = zeroToTwo - 1.0;
-  
-  gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
-</pre>
+      // convert from 0->2 to -1->+1 (clipspace)
+      vec2 clipSpace = zeroToTwo - 1.0;
+
+      gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
 If you look at each of those steps in turn, the first step, "convert from pixels to 0.0 to 1.0", is really a scale operation. The second is also a scale operation. The next is a translation and the very last scales Y by -1. We can actually do that all in the matrix we pass into the shader. We could make 2 scale matrices, one to scale by 1.0/resolution, another to scale by 2.0, a 3rd to translate by -1.0,-1.0 and a 4th to scale Y by -1 then multiply them all together but instead, because the math is simple, we'll just make a function that makes a 'projection' matrix for a given resolution directly.
 
-<pre class="prettyprint showlinemods">
-function make2DProjection(width, height) {
-  // Note: This matrix flips the Y axis so that 0 is at the top.
-  return [
-    2 / width, 0, 0,
-    0, -2 / height, 0,
-    -1, 1, 1
-  ];
-}
-</pre>
+    function make2DProjection(width, height) {
+      // Note: This matrix flips the Y axis so that 0 is at the top.
+      return [
+        2 / width, 0, 0,
+        0, -2 / height, 0,
+        -1, 1, 1
+      ];
+    }
 
 Now we can simplify the shader even more. Here's the entire new vertex shader.
 
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
-attribute vec2 a_position;
+    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    attribute vec2 a_position;
 
-uniform mat3 u_matrix;
+    uniform mat3 u_matrix;
 
-void main() {
-  // Multiply the position by the matrix.
-  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
-}
-&lt;/script&gt;
-</pre>
+    void main() {
+      // Multiply the position by the matrix.
+      gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+    }
+    </script>
 
 And in JavaScript we need to multiply by the projection matrix
 
-<pre class="prettyprint showlinemods">
-  // Draw the scene.
-  function drawScene() {
-    ...
-    // Compute the matrices
-    var projectionMatrix = make2DProjection(
-        canvas.clientWidth, canvas.clientHeight);
-    ...
+      // Draw the scene.
+      function drawScene() {
+        ...
+        // Compute the matrices
+        var projectionMatrix = make2DProjection(
+            canvas.clientWidth, canvas.clientHeight);
+        ...
 
-    // Multiply the matrices.
-    var matrix = matrixMultiply(scaleMatrix, rotationMatrix);
-    matrix = matrixMultiply(matrix, translationMatrix);
-    matrix = matrixMultiply(matrix, projectionMatrix);
-    ...
-  }
-</pre>
+        // Multiply the matrices.
+        var matrix = matrixMultiply(scaleMatrix, rotationMatrix);
+        matrix = matrixMultiply(matrix, translationMatrix);
+        matrix = matrixMultiply(matrix, projectionMatrix);
+        ...
+      }
 
 We also removed the code that set the resolution. With this last step we've gone from a rather complicated shader with 6-7 steps to a very simple shader with only 1 step all do to the magic of matrix math.
 

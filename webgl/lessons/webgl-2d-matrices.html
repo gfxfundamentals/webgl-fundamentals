@@ -168,8 +168,7 @@ newY = y * sy;
 <p>Now I&#39;m sure you might still be thinking. So what? What&#39;s the point. That seems like a lot of work just to do the same thing we were already doing?</p>
 <p>This is where the magic comes in. It turns out we can multiply matrices together and apply all the transformations at once. Let&#39;s assume we have function, <code>matrixMultiply</code>, that takes two matrices, multiplies them and returns the result.</p>
 <p>To make things clearer let&#39;s make functions to build matrices for translation, rotation and scale.</p>
-<pre class="prettyprint showlinemods">
-function makeTranslation(tx, ty) {
+<pre><code>function makeTranslation(tx, ty) {
   return [
     1, 0, 0,
     0, 1, 0,
@@ -194,11 +193,8 @@ function makeScale(sx, sy) {
     0, 0, 1
   ];
 }
-</pre>
-
-<p>Now let&#39;s change our shader. The old shader looked like this</p>
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+</code></pre><p>Now let&#39;s change our shader. The old shader looked like this</p>
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -218,11 +214,8 @@ void main() {
   // Add in the translation.
   vec2 position = rotatedPosition + u_translation;
   ...
-</pre>
-
-<p>Our new shader will be much simpler.</p>
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+</code></pre><p>Our new shader will be much simpler.</p>
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -232,11 +225,8 @@ void main() {
   // Multiply the position by the matrix.
   vec2 position = (u_matrix * vec3(a_position, 1)).xy;
   ...
-</pre>
-
-<p>And here&#39;s how we use it</p>
-<pre class="prettyprint showlinemods">
-  // Draw the scene.
+</code></pre><p>And here&#39;s how we use it</p>
+<pre><code>  // Draw the scene.
   function drawScene() {
     // Clear the canvas.
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -256,9 +246,7 @@ void main() {
     // Draw the rectangle.
     gl.drawArrays(gl.TRIANGLES, 0, 18);
   }
-</pre>
-
-<p>Here&#39;s a sample using our new code. The sliders are the same, translation, rotation and scale. But the way they get used in the shader is much simpler. </p>
+</code></pre><p>Here&#39;s a sample using our new code. The sliders are the same, translation, rotation and scale. But the way they get used in the shader is much simpler. </p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-geometry-matrix-transform.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-geometry-matrix-transform.html" target="_blank">click here to open in a separate window</a>
@@ -266,15 +254,12 @@ void main() {
 
 </p>
 <p>Still, you might be asking, so what? That doesn&#39;t seem like much of a benefit . But, now if we want to change the order we don&#39;t have to write a new shader. We can just change the math.</p>
-<pre class="prettyprint showlinemods">
-    ...
+<pre><code>    ...
     // Multiply the matrices.
     var matrix = matrixMultiply(translationMatrix, rotationMatrix);
     matrix = matrixMultiply(matrix, scaleMatrix);
     ...
-</pre>
-
-<p>Here&#39;s that version.</p>
+</code></pre><p>Here&#39;s that version.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-geometry-matrix-transform-trs.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-trs.html" target="_blank">click here to open in a separate window</a>
@@ -282,8 +267,7 @@ void main() {
 
 </p>
 <p>Being able to apply matrices like this is especially important for hierarchical animation like arms on a body, moons on a planet around a sun, or branches on a tree. For a simple example of hierarchical animation lets draw draw our &#39;F&#39; 5 times but each time lets start with the matrix from the previous &#39;F&#39;.</p>
-<pre class="prettyprint showlinemods">
-  // Draw the scene.
+<pre><code>  // Draw the scene.
   function drawScene() {
     // Clear the canvas.
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -296,7 +280,7 @@ void main() {
     // Starting Matrix.
     var matrix = makeIdentity();
 
-    for (var i = 0; i < 5; ++i) {
+    for (var i = 0; i &lt; 5; ++i) {
       // Multiply the matrices.
       matrix = matrixMultiply(matrix, scaleMatrix);
       matrix = matrixMultiply(matrix, rotationMatrix);
@@ -309,26 +293,21 @@ void main() {
       gl.drawArrays(gl.TRIANGLES, 0, 18);
     }
   }
-</pre>
-
-<p>To do this we had introduce the function, <code>makeIdentity</code>, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like </p>
+</code></pre><p>To do this we had introduce the function, <code>makeIdentity</code>, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like </p>
 <div class="webgl_center">X * 1 = X</div> 
 
 <p>so too </p>
 <div class="webgl_center">matrixX * identity = matrixX</div>
 
 <p>Here&#39;s the code to make an identity matrix.</p>
-<pre class="prettyprint showlinemods">
-function makeIdentity() {
+<pre><code>function makeIdentity() {
   return [
     1, 0, 0,
     0, 1, 0,
     0, 0, 1
   ];
 }
-</pre>
-
-<p>Here&#39;s the 5 Fs.</p>
+</code></pre><p>Here&#39;s the 5 Fs.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-geometry-matrix-transform-hierarchical.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-hierarchical.html" target="_blank">click here to open in a separate window</a>
@@ -337,8 +316,7 @@ function makeIdentity() {
 </p>
 <p>One more example, In every sample so far our &#39;F&#39; rotates around its top left corner. This is because the math we are using always rotates around the origin and the top left corner of our &#39;F&#39; is at the origin, (0, 0)</p>
 <p>But now, because we can do matrix math and we can choose the order that transforms are applied we can move the origin before the rest of the transforms are applied.</p>
-<pre class="prettyprint showlinemods">
-    // make a matrix that will move the origin of the 'F' to its center.
+<pre><code>    // make a matrix that will move the origin of the &#39;F&#39; to its center.
     var moveOriginMatrix = makeTranslation(-50, -75);
     ...
 
@@ -346,9 +324,7 @@ function makeIdentity() {
     var matrix = matrixMultiply(moveOriginMatrix, scaleMatrix);
     matrix = matrixMultiply(matrix, rotationMatrix);
     matrix = matrixMultiply(matrix, translationMatrix);
-</pre>
-
-<p>Here&#39;s that sample. Notice the F rotates and scales around the center.</p>
+</code></pre><p>Here&#39;s that sample. Notice the F rotates and scales around the center.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-geometry-matrix-transform-center-f.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-center-f.html" target="_blank">click here to open in a separate window</a>
@@ -357,23 +333,19 @@ function makeIdentity() {
 </p>
 <p>Using that technique you can rotate or scale from any point. Now you know how Photoshop or Flash let you move the rotation point.</p>
 <p>Let&#39;s go even more crazy. If you go back to the first article on <a href="webgl-fundamentals.html">WebGL fundamentals</a> you might remember we have code in the shader to convert from pixels to clipspace that looks like this.</p>
-<pre class="prettyprint showlinemods">
-  ...
+<pre><code>  ...
   // convert the rectangle from pixels to 0.0 to 1.0
   vec2 zeroToOne = position / u_resolution;
 
-  // convert from 0->1 to 0->2
+  // convert from 0-&gt;1 to 0-&gt;2
   vec2 zeroToTwo = zeroToOne * 2.0;
 
-  // convert from 0->2 to -1->+1 (clipspace)
+  // convert from 0-&gt;2 to -1-&gt;+1 (clipspace)
   vec2 clipSpace = zeroToTwo - 1.0;
 
   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
-</pre>
-
-<p>If you look at each of those steps in turn, the first step, &quot;convert from pixels to 0.0 to 1.0&quot;, is really a scale operation. The second is also a scale operation. The next is a translation and the very last scales Y by -1. We can actually do that all in the matrix we pass into the shader. We could make 2 scale matrices, one to scale by 1.0/resolution, another to scale by 2.0, a 3rd to translate by -1.0,-1.0 and a 4th to scale Y by -1 then multiply them all together but instead, because the math is simple, we&#39;ll just make a function that makes a &#39;projection&#39; matrix for a given resolution directly.</p>
-<pre class="prettyprint showlinemods">
-function make2DProjection(width, height) {
+</code></pre><p>If you look at each of those steps in turn, the first step, &quot;convert from pixels to 0.0 to 1.0&quot;, is really a scale operation. The second is also a scale operation. The next is a translation and the very last scales Y by -1. We can actually do that all in the matrix we pass into the shader. We could make 2 scale matrices, one to scale by 1.0/resolution, another to scale by 2.0, a 3rd to translate by -1.0,-1.0 and a 4th to scale Y by -1 then multiply them all together but instead, because the math is simple, we&#39;ll just make a function that makes a &#39;projection&#39; matrix for a given resolution directly.</p>
+<pre><code>function make2DProjection(width, height) {
   // Note: This matrix flips the Y axis so that 0 is at the top.
   return [
     2 / width, 0, 0,
@@ -381,11 +353,8 @@ function make2DProjection(width, height) {
     -1, 1, 1
   ];
 }
-</pre>
-
-<p>Now we can simplify the shader even more. Here&#39;s the entire new vertex shader.</p>
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+</code></pre><p>Now we can simplify the shader even more. Here&#39;s the entire new vertex shader.</p>
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -395,11 +364,8 @@ void main() {
   gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 }
 &lt;/script&gt;
-</pre>
-
-<p>And in JavaScript we need to multiply by the projection matrix</p>
-<pre class="prettyprint showlinemods">
-  // Draw the scene.
+</code></pre><p>And in JavaScript we need to multiply by the projection matrix</p>
+<pre><code>  // Draw the scene.
   function drawScene() {
     ...
     // Compute the matrices
@@ -413,9 +379,7 @@ void main() {
     matrix = matrixMultiply(matrix, projectionMatrix);
     ...
   }
-</pre>
-
-<p>We also removed the code that set the resolution. With this last step we&#39;ve gone from a rather complicated shader with 6-7 steps to a very simple shader with only 1 step all do to the magic of matrix math.</p>
+</code></pre><p>We also removed the code that set the resolution. With this last step we&#39;ve gone from a rather complicated shader with 6-7 steps to a very simple shader with only 1 step all do to the magic of matrix math.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-geometry-matrix-transform-with-projection.html"></iframe>
   <a class="webgl_center" href="../webgl-2d-geometry-matrix-transform-with-projection.html" target="_blank">click here to open in a separate window</a>
