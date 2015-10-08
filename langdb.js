@@ -72,7 +72,8 @@ window.langDB = {
       "en": true
     },
     "webgl-2d-translation.html": {
-      "en": true
+      "en": true,
+      "pl": true
     },
     "webgl-2d-scale.html": {
       "en": true
