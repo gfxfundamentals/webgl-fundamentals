@@ -239,7 +239,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     Just set `needToRender` any time you've changed something in the scene and you want
     the scene to be rendered incorporating your changes.
 
-5.  Adding adding properties to `WebGLObject`s
+5.  Adding properties to `WebGLObject`s
 
     `WebGLObject`s are the various types of resources in WebGL like a `WebGLBuffer`
     or `WebGLTexture`. Some apps add properties to those objects. For example code like this:
