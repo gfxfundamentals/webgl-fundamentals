@@ -7,7 +7,7 @@ If you haven't read them I suggest you start there.
 One of the most common questions after first getting something up in WebGL is how
 do I draw mulitple things.
 
-The first thing to realize is that with few exceptions, WebGL is like having function
+The first thing to realize is that with few exceptions, WebGL is like having a function
 someone wrote where instead of passing lots of parameters to the function you instead
 have a single function that draws stuff and 70+ functions that set up the state for
 that one function. So for example imagine you had a function that draws a circle. You
@@ -264,7 +264,7 @@ some code or codes decide what goes into the list of `objectsToDraw` but that's 
 
 {{{example url="../webgl-multiple-objects-list.html" }}}
 
-There are a few basic optimizations. If the program we're about the draw with is the same
+There are a few basic optimizations. If the program we're about to draw with is the same
 as the previous program we drew with then there's no need to call `gl.useProgram`. Similarly
 if we're drawing with the same shape/geometry/vertices we previously drew with there's no
 need to set those up again.
@@ -285,7 +285,7 @@ So, a very simple optimization might look like this
 
         // We have to rebind buffers when changing programs because we
         // only bind buffers the program uses. So if 2 programs use the same
-        // bufferInfo but the 1st one uses only positions the when the
+        // bufferInfo but the 1st one uses only positions then when
         // we switch to the 2nd one some of the attributes will not be on.
         bindBuffers = true;
       }
@@ -379,7 +379,7 @@ normals. Similarly a shader that requires textures will not work without texture
 
 This is one of the many reasons it's great to choose a 3D Library like [Three.js](http://threejs.org)
 because it handles all of this for you. You create some geometry, you tell three.js how you want it
-rendered and it generates shaders at runtime to handle the things you need. Pretty much all 3d engines
+rendered and it generates shaders at runtime to handle the things you need. Pretty much all 3D engines
 do this from Unity3D to Unreal to Source to Crytek. Some generate them offline but the important
 thing to realize is they *generate* shaders.
 
@@ -389,8 +389,8 @@ That's great and it's fun to write everything yourself. It's just important to b
 so there's a ton of work for you to do if you want to do it yourself and that often includes
 writing a shader generator since different features often require different shaders.
 
-You'll noticed I didn't put `computeMatrix` inside the loop. That's because rendering should
-aruably be separated from computing matrices. It's common to compute matrices from a
+You'll notice I didn't put `computeMatrix` inside the loop. That's because rendering should
+arguably be separated from computing matrices. It's common to compute matrices from a
 [scene graph and we'll go over that in another article](webgl-scene-graph.html).
 
 Now that we have a framework for drawing multiple objects [lets draw some text](webgl-text-html.html).

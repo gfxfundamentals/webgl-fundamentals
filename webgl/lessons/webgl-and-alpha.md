@@ -7,31 +7,31 @@ treats alpha in the backbuffer (ie, the canvas), so I thought it
  and OpenGL related to alpha.
 
 The biggest difference between OpenGL and WebGL is that OpenGL
-renders to a backbuffer that is not composited with anything so,
+renders to a backbuffer that is not composited with anything,
 or effectively not composited with anything by the OS's window
 manager, so it doesn't matter what your alpha is.
 
 WebGL is composited by the browser with the web page and the
 default is to use pre-multiplied alpha the same as .png `<img>`
-tags with transparency and 2d canvas tags.
+tags with transparency and 2D canvas tags.
 
 WebGL has several ways to make this more like OpenGL.
 
 ### #1) Tell WebGL you want it composited with non-premultiplied alpha
 
     gl = canvas.getContext("webgl", {
-      premultipliedAlpha: false  // Ask non-premultiplied alpha
+      premultipliedAlpha: false  // Ask for non-premultiplied alpha
     });
 
 The default is true.
 
-Of course the result will still be composited over page with whatever
+Of course the result will still be composited over the page with whatever
 background color ends up being under the canvas (the canvas's background
 color, the canvas's container background color, the page's background
 color, the stuff behind the canvas if the canvas has a z-index > 0, etc....)
 in other words, the color CSS defines for that area of the webpage.
 
-I really good way to find if you have any alpha problems is to set the
+A really good way to find if you have any alpha problems is to set the
 canvas's background to a bright color like red. You'll immediately see
 what is happening.
 
@@ -83,14 +83,14 @@ rendering to the canvas.
 
 ### #5) Handling Images
 
-My default if you are loading images with alpha into WebGL WebGL will
+My default if you are loading images with alpha into WebGL. WebGL will
 provide the values as they are in the PNG file with color values not
 premultiplied. This is generally what I'm used to for OpenGL programs
-because it's lossess where as pre-multiplied is lossy.
+because it's lossless whereas pre-multiplied is lossy.
 
     1, 0.5, 0.5, 0  // RGBA
 
-Is a possible value un-premultiplied where as pre-multiplied it's an
+Is a possible value un-premultiplied whereas pre-multiplied it's an
 impossible value because `a = 0` which means `r`, `g`, and `b` have
 to be zero.
 
@@ -101,7 +101,7 @@ by setting `UNPACK_PREMULTIPLY_ALPHA_WEBGL` to true like this
 
 The default is un-premultiplied.
 
-Be aware that most if not all Canvas2D implementations work with
+Be aware that most if not all Canvas 2D implementations work with
 pre-multiplied alpha. That means when you transfer them to WebGL and
 `UNPACK_PREMULTIPLY_ALPHA_WEBGL` is false WebGL will convert them
 back to un-premultipiled.

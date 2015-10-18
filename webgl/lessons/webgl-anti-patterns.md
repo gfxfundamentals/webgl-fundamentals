@@ -42,7 +42,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     </pre>
 
-    Even better it will handle extreme cases where as using `gl.canvas.width`
+    Even better it will handle extreme cases whereas using `gl.canvas.width`
     and `gl.canvas.height` will not. [As for why see here](#drawingbuffer).
 
 2.  Using `canvas.width` and `canvas.height` for aspect ratio
@@ -70,7 +70,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
     </pre>
 
-    Here's examples of a canvas that's the same size (`width="400" height="300"`)
+    Here are examples of a canvas that's the same size (`width="400" height="300"`)
     but using CSS we've told the browser to display the canvas a different size.
     Notice the samples all display the 'F' in the correct aspect ratio.
 
@@ -128,8 +128,8 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
 
     <a href="../webgl-same-code-canvas-embedded-border-box.html" target="_blank">A page with a canvas embedded in a paragraph using <code>box-sizing: border-box;</code></a>
 
-    <code>box-sizing: border-box;</code> makes borders and padding use take space from the element they're defined on rather than outside it. In other words, in
-    normal box-sizing mode a 400x300 pixel element with 15pixel border has a 400x300pixel content space surrounded by a 15 pixel border making its total size
+    <code>box-sizing: border-box;</code> makes borders and padding take space from the element they're defined on rather than outside it. In other words, in
+    normal box-sizing mode a 400x300 pixel element with 15 pixel border has a 400x300 pixel content space surrounded by a 15 pixel border making its total size
     430x330 pixels. In box-sizing: border-box mode the border goes on the inside so that same element would stay 400x300 pixels, the content would end up
     being 370x270. This is yet another reason why using `clientWidth` and `clientHeight` is so important. If you set the border to say `1em` you'd have no
     way of knowing what size your canvas will turn out. It would be different with different fonts on different machines or different browsers.
@@ -165,11 +165,11 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     It's not bad per se, rather, for *most* WebGL programs it fits less use cases.
     Specifically `'resize'` only works when the window is resized. It doesn't work
     if the canvas is resized for some other reason. For example let's say you're making
-    a 3d editor. You have your canvas on the left and your settings on the right. You've
+    a 3D editor. You have your canvas on the left and your settings on the right. You've
     made it so there's a draggable bar separating the 2 parts and you can drag that bar
     to make the settings area larger or smaller. In this case you won't get any `'resize'`
-    events. Similarly you've got a page where other content gets added or removed and
-    the canvas changes size as the browser re-laysout the page you won't get a resize
+    events. Similarly if you've got a page where other content gets added or removed and
+    the canvas changes size as the browser re-lays out the page you won't get a resize
     event.
 
     **What to do instead:**
@@ -276,7 +276,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     TypeError: Cannot set property 'itemSize' of null
     </pre>
 
-    While many apps don't care if they die when the context it lost it seems like a bad idea
+    While many apps don't care if they die when the context is lost it seems like a bad idea
     to write code that will have to be fixed later if the developers ever decide to update their
     app to handle context lost events.
 
@@ -333,7 +333,7 @@ stretch that window across both monitors. Your code tries to set the <code>canva
  <p>This is the
  solution WebGL uses. If your code is written correctly the only thing the user might notice is the image in
  the canvas is being scaled slightly. Otherwise it just works. In the worst case most WebGL programs that
- don't do the right thing will just have a slightly off display but if user sizes the window back down
+ don't do the right thing will just have a slightly off display but if the user sizes the window back down
  things will return to normal.</p>
 </li>
 </ol>
@@ -341,13 +341,13 @@ stretch that window across both monitors. Your code tries to set the <code>canva
 Chrome and Safari, at least as of January 2015, had a hardcoded limit on canvas size of 4096. Apple's
 5k iMac is past that limit. Lots of WebGL apps were having strange displays because of this.
 Similarly many people have started using WebGL with multiple monitors for installation work and have
-been hitting this limit</p>
+been hitting this limit.</p>
 <p>
 So, if you want to handle these cases use <code>gl.drawingBufferWidth</code> and <code>gl.drawingBufferHeight</code> as
 shown in #1 above. For most apps if you follow the best practices above things will just work. Be aware
-though if you are doing calcuations that need to know the actual size of the drawingbuffer you need
+though if you are doing calculations that need to know the actual size of the drawingbuffer you need
 to take that into account. Examples off the top of my head, picking, in other words converting from
-mouse coordinates into into canvas pixel coordinates. Another would be any kind of post processing
+mouse coordinates into canvas pixel coordinates. Another would be any kind of post processing
 effects that want to know the actual size of the drawingbuffer.
 </p>
 </div>

@@ -153,10 +153,10 @@ gl.drawArrays(...);
 
 That's a lot of typing.
 
-There's lots of ways to simplify this. One suggestion is to ask WebGL to tell us all
+There are lots of ways to simplify this. One suggestion is to ask WebGL to tell us all
 the uniforms and locations and then setup functions to set them for us. We can then pass in
-JavaScript objects to set our settings much easier. If that's clear as mud well,
-Our code would look something like this
+JavaScript objects to set our settings much more easily. If that's clear as mud well,
+our code would look something like this
 
 <pre class="prettyprint">
 // At initialiation time

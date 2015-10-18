@@ -3,7 +3,7 @@ Description: How to apply multiple image processing techniques to images in WebG
 
 This article is a continuation of <a href="webgl-image-processing.html">WebGL Image Processing</a>. If you haven't read that I suggest <a href="webgl-image-processing.html">you start there</a>.
 
-The next most obvious question for image processing is how do apply multiple effects?
+The next most obvious question for image processing is how to apply multiple effects?
 <!--more-->
 Well, you could try to generate shaders on the fly. Provide a UI that lets the user select the effects he wants to use then generate a shader that does all of the effects. That might not always be possible though that technique is often used to <a href="http://www.youtube.com/watch?v=cQUn0Zeh-0Q">create effects for real time graphics</a>.
 
@@ -153,7 +153,7 @@ Some things I should go over.
 
 Calling <code>gl.bindFramebuffer</code> with <code>null</code> tells WebGL you want to render to the canvas instead of to one of your framebuffers.
 
-WebGL has to convert from <a href="webgl-fundamentals.html">clipspace</a> back into pixels. It does this based on the settings of <code>gl.viewport</code>. The settings of <code>gl.viewport</code> default to the size of the canvas when we initialize WebGL. Since the framebuffers we are rendering into are a different size then the canvas we need to set the viewport appropriately.
+WebGL has to convert from <a href="webgl-fundamentals.html">clipspace</a> back into pixels. It does this based on the settings of <code>gl.viewport</code>. The settings of <code>gl.viewport</code> default to the size of the canvas when we initialize WebGL. Since the framebuffers we are rendering into are a different size than the canvas we need to set the viewport appropriately.
 
 Finally in the <a href="webgl-fundamentals.html">original example</a> we flipped the Y coordinate when rendering because WebGL displays the canvas with 0,0 being the bottom left corner instead of the more traditional for 2D top left. That's not needed when rendering to a framebuffer. Because the framebuffer is never displayed, which part is top and bottom is irrelevant. All that matters is that pixel 0,0 in the framebuffer corresponds to 0,0 in our calculations. To deal with this I made it possible to set whether to flip or not by adding one more input into the shader.
 
@@ -184,9 +184,9 @@ And then we can set it when we render with
   gl.uniform1f(flipYLocation, -1);
 </pre>
 
-I kept this example simple by using single GLSL program that can achieve multiple effects. If you wanted to do full on image processing you'd probably need many GLSL programs. A program for hue, saturation and luminance adjustment. Another for brightness and contrast. One for inverting, another for adjusting levels, etc. You'd need to change the code to switch GLSL programs and update the parameters for that particular program. I'd considered writing that example but it's an exercise best left to the reader because multiple GLSL programs each with their own parameter needs probably means some major refactoring to keep it all from becoming a big mess of spaghetti. 
+I kept this example simple by using a single GLSL program that can achieve multiple effects. If you wanted to do full on image processing you'd probably need many GLSL programs. A program for hue, saturation and luminance adjustment. Another for brightness and contrast. One for inverting, another for adjusting levels, etc. You'd need to change the code to switch GLSL programs and update the parameters for that particular program. I'd considered writing that example but it's an exercise best left to the reader because multiple GLSL programs each with their own parameter needs probably means some major refactoring to keep it all from becoming a big mess of spaghetti. 
 
-I hope this and the preceding examplea have made WebGL seem a little more approachable and I hope starting with 2D helps make WebGL a little easier to understand. If I find the time I'll try to write <a href="webgl-2d-translation.html">a few more articles</a> about how to do 3D as well as more details on what WebGL is really doing under the hood.
+I hope this and the preceding examples have made WebGL seem a little more approachable and I hope starting with 2D helps make WebGL a little easier to understand. If I find the time I'll try to write <a href="webgl-2d-translation.html">a few more articles</a> about how to do 3D as well as more details on what WebGL is really doing under the hood.
 For a next step consider learning <a href="webgl-2-textures.html">how to use 2 or more textures</a>.
 
 

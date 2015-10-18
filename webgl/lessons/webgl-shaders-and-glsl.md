@@ -7,7 +7,7 @@ If you haven't read about how WebGL works you might want to [read this first](we
 We've talked about shaders and GLSL but haven't really given them any specific details.
 I think I was hoping it would be clear by example but let's try to make it clearer just in case.
 
-As mentioned in [how it works](webgl-how-it-works.html) WebGL requires 2 shaders everytime you
+As mentioned in [how it works](webgl-how-it-works.html) WebGL requires 2 shaders every time you
 draw something. A *vertex shader* and a *fragment shader*. Each shader is a *function*. A vertex
 shader and fragment shader are linked together into a shader program (or just program). A typical
 WebGL app will have many shader programs.
@@ -60,7 +60,7 @@ then tell WebGL how to pull data out of those buffers and into the attribute
 
     gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 
-In [webgl fundamentals](webgl-fundamentals.html) we showed that we can do no math
+In [WebGL fundamentals](webgl-fundamentals.html) we showed that we can do no math
 in the shader and just pass the data directly through.
 
     attribute vec4 a_position;
@@ -69,7 +69,7 @@ in the shader and just pass the data directly through.
        gl_Position = a_position;
     }
 
-If we put clipsapce vertices into our buffers it will work.
+If we put clipspace vertices into our buffers it will work.
 
 Attributes can use `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, and `mat4` as types.
 
@@ -180,7 +180,7 @@ It always takes the form
        gl_FragColor = doMathToMakeAColor;
     }
 
-Your fragment shader is called one per pixel. Each time it's called you are required
+Your fragment shader is called once per pixel. Each time it's called you are required
 to set the special global variable, `gl_FragColor` to some color.
 
 Fragment shaders need data. They can get data in 3 ways
@@ -237,10 +237,10 @@ And tell the shader which unit you bound the texture to
 A varying is a way to pass a value from a vertex shader to a fragment shader which we
 covered in [how it works](webgl-how-it-works.html).
 
-To use a varying we need to declare matching varyings in both a vertex and fragment shaders.
+To use a varying we need to declare matching varyings in both a vertex and fragment shader.
 We set the varying in the vertex shader with some value per vertex. When WebGL draws pixels
 it will interpolate between those values and pass them to the corresponding varying in
-the fragment shaders
+the fragment shader
 
 Vertex shader
 
@@ -268,7 +268,7 @@ Fragment shader
     }
 
 The example above is a mostly nonsense example. It doesn't generally make sense to
-directly copy the clipsapce values the fragment shader and use them as colors. Never the less
+directly copy the clipspace values to the fragment shader and use them as colors. Nevertheless
 it will work and produce colors.
 
 ## GLSL
@@ -339,13 +339,13 @@ The correct way is one of these
 The example above of `vec4(v.rgb, 1)` doesn't complain about the `1` because `vec4` is
 casting the things inside just like `float(1)`.
 
-GLSL as a bunch of built in functions. Many of them operate on multiple components at once.
+GLSL has a bunch of built in functions. Many of them operate on multiple components at once.
 So for example
 
     T sin(T angle)
 
 Means T can be `float`, `vec2`, `vec3` or `vec4`. If you pass in `vec4` you get `vec4` back
-which the sine of each of the components. In other words given if `v` is a `vec4` then
+which the sine of each of the components. In other words if `v` is a `vec4` then
 
     vec4 s = sin(v);
 
@@ -366,7 +366,7 @@ is the same as
       mix(v1.z, v2.z, f),
       mix(v1.w, v2.w, f));
 
-You can see list of all the GLSL functions on the last page of [the WebGL
+You can see a list of all the GLSL functions on the last page of [the WebGL
 Reference Card](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf).
 If you like really dry and verbose stuff you can try
 [the GLSL spec](https://www.khronos.org/files/opengles_shading_language.pdf).

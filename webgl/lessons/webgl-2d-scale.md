@@ -5,7 +5,7 @@ This post is a continuation of a series of posts about WebGL. The first <a href=
 
 Scaling is just as <a href="webgl-2d-translation.html">easy as translation</a>.
 <!--more-->
-We multiply the position by our desired scale. Here's are the changes from our <a href="webgl-2d-rotation.html">previous sample</a>.
+We multiply the position by our desired scale. Here are the changes from our <a href="webgl-2d-rotation.html">previous sample</a>.
 
 <pre class="prettyprint showlinemods">
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
@@ -67,7 +67,7 @@ I hope these last 3 posts were helpful in understanding <a href="webgl-2d-transl
 <div class="webgl_bottombar">
 <h3>Why an 'F'?</h3>
 <p>
-The first time I saw someone use a 'F' was on a texture. The 'F' itself is not important. What is important is that you can tell its orientation from any direction. If we used a heart ? or a triangle △ for example we couldn't tell if it was flipped horizontally. A circle ○ would be even worse. A colored rectangle would arguably work with different colors on each corner but then you'd have to remember which corner was which. An F's orientation is instantly recognizable. 
+The first time I saw someone use an 'F' was on a texture. The 'F' itself is not important. What is important is that you can tell its orientation from any direction. If we used a heart ? or a triangle △ for example we couldn't tell if it was flipped horizontally. A circle ○ would be even worse. A colored rectangle would arguably work with different colors on each corner but then you'd have to remember which corner was which. An F's orientation is instantly recognizable. 
 </p>
 <img src="../resources/f-orientation.svg" class="webgl_center"/>
 <p>

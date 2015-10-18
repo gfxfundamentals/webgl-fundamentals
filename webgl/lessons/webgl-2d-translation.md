@@ -41,7 +41,7 @@ Let's say we wanted to draw an 'F' that consists of 6 triangles like this.
 
 <img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
 
-Well, following are current code we'd have to change setRectangle to something more like this.
+Well, following our current code we'd have to change setRectangle to something more like this.
 
 <pre class="prettyprint showlinemods">
 // Fill the buffer with the values that define a letter 'F'.
@@ -161,7 +161,7 @@ Then we just need to update <code>u_translation</code> before we draw with the t
 
 Notice <code>setGeometry</code> is called only once. It is no longer inside drawScene.
 
-And here's that example. Again, Drag the sliders to update the translation.
+And here's that example. Again, drag the sliders to update the translation.
 
 {{{example url="../webgl-2d-geometry-translate-better.html" }}}
 
