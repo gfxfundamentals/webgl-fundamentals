@@ -68,21 +68,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="row">
     <div class="col-sm-8 lesson-main">
       <p>This post is a continuation of many articles about WebGL. The last one
-was about <a href="webgl-text-canvas2d.html">using Canvas2D for rendering text over a WebGL canvas</a>.
+was about <a href="webgl-text-canvas2d.html">using Canvas 2D for rendering text over a WebGL canvas</a>.
 If you haven&#39;t read it you might want to check that out before continuing.</p>
-<p>In the last article we went over <a href="webgl-text-canvas2d.html">how to use a 2d canvas to draw text over your WebGL
-scene</a>. That techinque works and is easy to do but it has
+<p>In the last article we went over <a href="webgl-text-canvas2d.html">how to use a 2D canvas to draw text over your WebGL
+scene</a>. That technique works and is easy to do but it has
 a limitation that the text can not be obscured by other 3d objects. To do that we
 actually need to draw the text in WebGL.</p>
 <p>The simplest way to do that is to make textures with text in them. You could for example
-go into photoshop or some other paint program and draw an image with some text in it.</p>
+go into Photoshop or some other paint program and draw an image with some text in it.</p>
 <p><img class="webgl_center" src="resources/my-awesme-text.png" /></p>
 <p>Then make some plane geometry and display it. This is actually how some games I&#39;ve
 worked on did all their text. For example Locoroco only had about 270 strings. It was
 localized into 17 languages. We had an Excel sheet with all the languages and a script
 that would launch Photoshop and generate a texture, one for each message in each language.</p>
 <p>Of course you can also generate the textures at runtime. Since WebGL is in the browser
-again we can rely on the Canvas 2D api to help generate our textures.</p>
+again we can rely on the Canvas 2D API to help generate our textures.</p>
 <p>Starting with the examples from the <a href="webgl-text-canvas2d.html">previous article</a>
 let&#39;s add a function to fill a 2D canvas with some text</p>
 <pre><code>var textCtx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
@@ -134,7 +134,7 @@ var textUniforms = {
   u_matrix: makeIdentity(),
   u_texture: textTex,
 };
-</code></pre><p>Now when we compute the matrixes for the F we save off the F&#39;s view matrix</p>
+</code></pre><p>Now when we compute the matrices for the F we save off the F&#39;s view matrix</p>
 <pre><code>var matrix = makeIdentity();
 matrix = matrixMultiply(matrix, preTranslationMatrix);
 matrix = matrixMultiply(matrix, scaleMatrix);
@@ -155,8 +155,8 @@ setUniforms(fProgramInfo.uniformSetters, fUniforms);
 
 // Draw the geometry.
 gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
-</code></pre><p>for the text we just need the position of the origin of the F. We also need to scale our
-unit quad to match the dimensions of the texture. Finally we need to multply by the projection
+</code></pre><p>For the text we just need the position of the origin of the F. We also need to scale our
+unit quad to match the dimensions of the texture. Finally we need to multiply by the projection
 matrix.</p>
 <pre><code>// scale the F to the size we need it.
 // use just the view position of the &#39;F&#39; for the text
@@ -189,7 +189,7 @@ we&#39;re drawing a quad. The default color of the canvas is transparent black (
 we&#39;re drawing that color in the quad. We could instead blend our pixels.</p>
 <pre><code>gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-</code></pre><p>This makes it take the source pixel (the color from our fragement shader) and combined it
+</code></pre><p>This makes it take the source pixel (the color from our fragment shader) and combine it
 with the dest pixel (the color in the canvas) according to the blend function. We&#39;ve set the
 blend function to <code>SRC_ALPHA</code> for source  and <code>ONE_MINUS_SRC_ALPHA</code> for dest.</p>
 <pre><code>result = dest * (1 - src_alpha) + src * src_alpha
@@ -225,10 +225,10 @@ result = dst
 <p>You can see it&#39;s better but it&#39;s still not perfect. If you look
 close you&#39;ll sometimes see this issue</p>
 <p><img class="webgl_center" src="resources/text-zbuffer-issue.png" /></p>
-<p>What&#39;s happening? We&#39;re currently drawing an F then its text, the the next F
-then it&#39;s text repeated. We still have a <a href="webgl-3d-orthographic.html">depth buffer</a> so when we draw the
-text for a F, even though blending made some pixels stay the background color
-the depth buffer was still updated. When we draw the next F if that parts of that F are
+<p>What&#39;s happening? We&#39;re currently drawing an F then its text, then the next F
+then its text repeated. We still have a <a href="webgl-3d-orthographic.html">depth buffer</a> so when we draw the
+text for an F, even though blending made some pixels stay the background color
+the depth buffer was still updated. When we draw the next F if parts of that F are
 behind those pixels from some previously drawn text they won&#39;t be drawn.</p>
 <p>We&#39;ve just run into one of the most difficult issues of rendering 3D on a GPU.
 <strong>Transparency has issues</strong>.</p>
@@ -309,20 +309,20 @@ textMatrix = matrixMultiply(textMatrix, projectionMatrix);
 </p>
 <p>You still might notice an issue with the edges of the letters.</p>
 <p><img class="webgl_center" src="resources/text-gray-outline.png" /></p>
-<p>The issue here is the Canvas2D api produces only premultiplied alpha values.
-When we upload the contents of the to a texture WebGL tries to unpremultiply
+<p>The issue here is the Canvas 2D API produces only premultiplied alpha values.
+When we upload the contents of the canvas to a texture WebGL tries to unpremultiply
 the values but it can&#39;t do this perfectly because premultiplied alpha is lossy.</p>
-<p>To fix that lets well WebGL not to unpremultiply</p>
+<p>To fix that let&#39;s tell WebGL not to unpremultiply</p>
 <pre><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 </code></pre><p>This tells WebGL to supply premultiplied alpha values to <code>gl.texImage2D</code> and <code>gl.texSubImage2D</code>.
-If the data passed to <code>gl.texImage2D</code> is already premultiplied as it is for canvas2d data then
+If the data passed to <code>gl.texImage2D</code> is already premultiplied as it is for Canvas 2D data then
 WebGL can just pass it through.</p>
 <p>We also need to change the blending function</p>
 <pre><code>-gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 +gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-</code></pre><p>The old one multipled the src color by its alpha. That&#39;s what <code>SRC_ALPHA</code> means. But
-now our texture&#39;s data has already been multiplied by its alpha. That&#39;s what premultipled means.
-So we don&#39;t need to GPU to do the multiplication. Setting it ot <code>ONE</code> means multiply by 1.</p>
+</code></pre><p>The old one multiplied the src color by its alpha. That&#39;s what <code>SRC_ALPHA</code> means. But
+now our texture&#39;s data has already been multiplied by its alpha. That&#39;s what premultiplied means.
+So we don&#39;t need the GPU to do the multiplication. Setting it to <code>ONE</code> means multiply by 1.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-texture-premultiplied-alpha.html"></iframe>
   <a class="webgl_center" href="../webgl-text-texture-premultiplied-alpha.html" target="_blank">click here to open in a separate window</a>
@@ -455,36 +455,36 @@ textUniforms.u_color = colors[ndx];
 </div>
 
 </p>
-<p>This techinque is actually the technique most browsers use when they are GPU accelerated.
+<p>This technique is actually the technique most browsers use when they are GPU accelerated.
 They generate textures with your HTML content and all the various styles you&#39;ve applied
 and as long as that content doesn&#39;t change they can just render the texture
 again when you scroll etc.. Of course if you&#39;re updating things all the time then
 this techinque might get a little bit slow because re-generating the textures and re-uploading
-it to the GPU is a relatively slow operation.</p>
+them to the GPU is a relatively slow operation.</p>
 <p>In <a href="webgl-text-glyphs.html">the next article we&#39;ll go over a techinque that is probably better for cases where
 things update often</a>.</p>
 <div class="webgl_bottombar">
 <h3>Scaling Text without pixelation</h3>
 <p>
-You might notice the examples before we started using a constitent size the
-text gets very pixelated as it gets close the the camera. How do we fix that?
+You might notice in the examples before we started using a consistent size the
+text gets very pixelated as it gets close to the camera. How do we fix that?
 </p>
 <p>
-Well, honestly it's not very common to scale 2d text in 3d. Look at most games
-or 3D editors and you'll see the text is almost always on consistent size
+Well, honestly it's not very common to scale 2D text in 3D. Look at most games
+or 3D editors and you'll see the text is almost always one consistent size
 regardless of how far or close to the camera it is. In fact often that text
-migth be drawn in 2d instead of 3d so that even of someone or something is
+might be drawn in 2D instead of 3D so that even if someone or something is
 behind something else like a teammate behind a wall you can still read the text.
 </p>
-<p>If you do happen to want to scale 2d text in 3d I don't know of any easy options.
+<p>If you do happen to want to scale 2D text in 3D I don't know of any easy options.
 A few off the top of my head</p>
 <ul>
-<li>Make different sizes textures with fonts at different resolutions. You then
+<li>Make different sizes of textures with fonts at different resolutions. You then
 use the higher resolution textures as the text gets larger. This is called
 LODing (using different Levels of Detail).</li>
 <li>Another would be to render the textures with the exact correct size of
 text every frame. That would likely be really slow.</li>
-<li>Yet another would be to make 2d text out of geometry. In other words instead
+<li>Yet another would be to make 2D text out of geometry. In other words instead
 of drawing text into a texture make text from lots and lots of triangles. That
 works but it has other issues in that small text will not render well and large
 text you'll start to see the triangles.</li>

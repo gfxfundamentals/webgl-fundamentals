@@ -71,7 +71,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 was about <a href="webgl-text-texture.html">using textures for rendering text in WebGL</a>.
 If you haven&#39;t read it you might want to check that out before continuing.</p>
 <p>In the last article we went over <a href="webgl-text-texture.html">how to use a texture to draw text in your WebGL
-scene</a>. That techinque is very common and it&#39;s great
+scene</a>. That technique is very common and it&#39;s great
 for things like in multi-player games where you want to put a name over an avatar.
 As that name rarely changes it&#39;s perfect.</p>
 <p>Let&#39;s say you want to render a lot of text that changes often like a UI. Given
@@ -181,11 +181,11 @@ textPositions.forEach(function(pos, ndx) {
 
 </p>
 <p>Unfortunately it&#39;s SLOW. The example below doesn&#39;t show it but we&#39;re individually
-drawing 73 quads. We&#39;re computing 73 matrices and 292 matrix multplies. A typical
+drawing 73 quads. We&#39;re computing 73 matrices and 292 matrix multiplies. A typical
 UI might easily have 1000 letters showing. That&#39;s way way too much work to get
 a reasonable framerate.</p>
 <p>So to fix that the way this is usually done is to make a texture atlas that contains all
-the letters. We went over what a texture atlas when we talked about <a href="webgl-3d-textures.html">texturing the 6
+the letters. We went over what a texture atlas is when we talked about <a href="webgl-3d-textures.html">texturing the 6
 faces of a cube</a>.</p>
 <p>Let&#39;s make some code to make a texture atlas of glyphs.</p>
 <pre><code>function makeGlyphCanvas(ctx, maxWidthOfTexture, heightOfLetters, baseLine, padding, letters) {
@@ -259,7 +259,7 @@ var glyphInfos = makeGlyphCanvas(
 <p>Now that we have a texture with glyphs in it we need to use it. To do that we&#39;ll
 build quad vertices on the fly for each glyph. Those vertices will use texture coordinates
 to select a particlar glyph</p>
-<p>Given a string lets build the vertices</p>
+<p>Given a string let&#39;s build the vertices</p>
 <pre><code>function makeVerticesForString(fontInfo, s) {
   var len = s.length;
   var numVertices = len * 6;
@@ -401,7 +401,7 @@ var fontInfo = {
 </div>
 
 </p>
-<p>That&#39;s the basic technique of using a texture atlas of glyphs. There&#39;s a few
+<p>That&#39;s the basic technique of using a texture atlas of glyphs. There are a few
 obvious things to add or ways to improve it.</p>
 <ul>
 <li><p>Reuse the same arrays.</p>
@@ -423,7 +423,7 @@ to decide how to specify when to change colors.</p>
 </li>
 </ul>
 <p>The other big issue which I&#39;m not going to cover is that textures have a limited
-size but fonts are effectively unlimited. If you want to support all of unicode
+size but fonts are effectively unlimited. If you want to support all of Unicode
 so that you can handle Chinese and Japanese and Arabic and all the other languages,
 well, as of 2015 there are over 110,000 glyphs in Unicode! You can&#39;t fit all of
 those in textures. There just isn&#39;t enough room.</p>
@@ -432,18 +432,18 @@ above they might put textures in a texture atlas but they probably make the area
 for each glpyh a fixed size. They keep the most recently used glyphs in the texture.
 If they need to draw a glyph that&#39;s not in the texture they replace the least
 recently used one with the new one they need. Of course if that glyph they are
-about to replace is still being refereneced by a quad yet to be drawn then they need
+about to replace is still being referenced by a quad yet to be drawn then they need
 to draw with what they have before replacing the glyph.</p>
 <p>Another thing you can do, though I&#39;m not recommending it, is combine this
 technique with <a href="webgl-text-texture.html">the previous technique</a>. You can
-render glyphs directly into another texture. Of course a GPU acclerated
+render glyphs directly into another texture. Of course a GPU accelerated
 canvas already does that for you so there&#39;s probably no reason to do it yourself.</p>
 <p>Yet one more way to draw text in WebGL is to actually use 3D text. The &#39;F&#39; in
 all the samples above is a 3D letter. You&#39;d make one for each letter. 3D letters
 are common for titles and movie logos but not much else.</p>
 <p>I hope that&#39;s covered text in WebGL.</p>
 <div class="webgl_bottombar">
-<h3>Issues with making glyphs using the Canvas2D api</h3>
+<h3>Issues with making glyphs using the Canvas 2D API</h3>
 <p>
 How did I decide on a <code>baseline</code> of 16 and a <code>letterHeight</code> of 22 when making
 the glyphs? This is actually one place that's a little problematic as far as I can tell. The

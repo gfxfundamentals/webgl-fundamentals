@@ -112,7 +112,7 @@ frame a second.</p>
 </div>
 
 </p>
-<p>In the example above the we want to rotate all of the &#39;F&#39;s at the same speed.
+<p>In the example above we want to rotate all of the &#39;F&#39;s at the same speed.
 The &#39;F&#39; in the middle is running full speed and is frame rate independent. The one
 on the left and the right are simulating if the browser was only running at 1/8th
 max speed for the current machine. The one on the left is <strong>NOT</strong> frame rate
@@ -125,8 +125,8 @@ speed.</p>
 between frames and use that to calcuate how much to animate this frame.</p>
 <p>First off we need to get the time. Fortunately <code>requestAnimationFrame</code> passes
 us the time since the page was loaded when it calls us.</p>
-<p>I find it easist if we get the time in seconds but since the <code>requestAnimationFrame</code>
-passes us the time in milliseconds (1000s of a second) we need to multiply by 0.001
+<p>I find it easiest if we get the time in seconds but since the <code>requestAnimationFrame</code>
+passes us the time in milliseconds (1000ths of a second) we need to multiply by 0.001
 to get seconds.</p>
 <p>So, we can then compute the delta time like this</p>
 <pre><code>*var then = 0;
@@ -143,10 +143,10 @@ requestAnimationFrame(drawScene);
 *  then = now;
 
    ...
-</code></pre><p>Once we have the <code>deltaTime</code> in seconds then all our calcuations can be in how
-many units per second we want something to happen. In this case since
+</code></pre><p>Once we have the <code>deltaTime</code> in seconds then all our calculations can be in how
+many units per second we want something to happen. In this case
 <code>rotationSpeed</code> is 1.2 which means we want to rotate 1.2 radians per second.
-That&#39;s about a 1/5 of a turn or in other words it will take about 5 seconds to
+That&#39;s about 1/5 of a turn or in other words it will take about 5 seconds to
 turn around completely regardless of the frame rate.</p>
 <pre><code>*    rotation[1] += rotationSpeed * deltaTime;
 </code></pre><p>Here&#39;s that one working.</p>

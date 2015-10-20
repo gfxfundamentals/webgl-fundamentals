@@ -70,7 +70,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>This article is a continuation of <a href="webgl-fundamentals.html">previous WebGL articles</a>.
 The previous article was about <a href="webgl-drawing-multiple-things.html">drawing multiple things</a>.
 If you haven&#39;t read them I suggest you start there.</p>
-<p>I&#39;m sure some CS guru or graphics guru is going to give me a ear full but ...
+<p>I&#39;m sure some CS guru or graphics guru is going to give me an ear full but ...
 A scene graph is usually a tree structure where each node in the tree generates
 a matrix... hmmm, that&#39;s not a very useful definition. Maybe some examples would be
 useful.</p>
@@ -84,13 +84,13 @@ you might have a graph that looks like this</p>
 
 </p>
 <p>What&#39;s the point of a scene graph? The #1 feature of a scene graph is it provides a parent
-child relationship for matrices as <a href="webgl-2d-matrices.html">we discussed in 2d matrix math</a>.
-So for example in a simple (but unrealistic) universe simualtion the stars (children), move along with their
-galaxy (parent). Similary a moon (child) moves along with its planet (parent)
+child relationship for matrices as <a href="webgl-2d-matrices.html">we discussed in 2D matrix math</a>.
+So for example in a simple (but unrealistic) universe simulation the stars (children), move along with their
+galaxy (parent). Similary a moon (child) moves along with its planet (parent).
 If you move the earth the moon will move with it. If you move a galaxy
 all the stars inside will move with it. Drag the names in the diagram above
 and hopefully you can see their relationships.</p>
-<p>If you go back to the <a href="webgl-2d-matrices.html">2d matrix math</a> you might remember we
+<p>If you go back to the <a href="webgl-2d-matrices.html">2D matrix math</a> you might remember we
 multiply lots of matrices in order to translate, rotate, and scale objects. A
 scene graph provides a structure to help decide what matrix math to apply to an object.</p>
 <p>Typically each <code>Node</code> in a scene graph represents a <em>local space</em>. Given the correct
@@ -98,7 +98,7 @@ matrix math anything in that <em>local space</em> can ignore everything above it
 way to state the same thing is that the moon only has to care about orbiting the earth.
 It does not have to care about orbiting the sun. Without this scene graph structure
 you&#39;d have to do much more complex math to compute how to get the moon to orbit the sun
-because it&#39;s orbit around the sun looks something like this</p>
+because its orbit around the sun looks something like this</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/moon-orbit.html"></iframe>
 </div>
@@ -106,10 +106,10 @@ because it&#39;s orbit around the sun looks something like this</p>
 </p>
 <p>With a scene graph you just make the moon a child of the earth and then orbit
 the earth which is simple. The scene graph takes care of the fact that the earth
-is oribiting the sun. It does this by walking the nodes and multiplying the
-matrixes as it walks</p>
+is orbiting the sun. It does this by walking the nodes and multiplying the
+matrices as it walks</p>
 <pre><code>worldMatrix = greatGrandParent * grandParent * parent * self(localMatrix)
-</code></pre><p>In concrete terms our universe simualtion that would be</p>
+</code></pre><p>In concrete terms our universe simulation that would be</p>
 <pre><code>worldMatrixForMoon = galaxyMatrix * starMatrix * planetMatrix * moonMatrix;
 </code></pre><p>We can do this very simply with a recursive function which is effectively</p>
 <pre><code>function computeWorldMatrix(currentNode, parentWorldMatrix) {
@@ -122,7 +122,7 @@ matrixes as it walks</p>
         computeWorldMatrix(child, worldMatrix);
     });
 }
-</code></pre><p>This brings up some terminalogy which is pretty common to 3d scene graphs.</p>
+</code></pre><p>This brings up some terminology which is pretty common to 3D scene graphs.</p>
 <ul>
 <li><p><code>localMatrix</code>: The local matrix for the current node. It transforms it and its children in local space with
 itself at the origin.</p>
@@ -165,7 +165,7 @@ to help manage nodes. First we&#39;ll make a node class</p>
   }
   this.parent = parent;
 };
-</code></pre><p>And here&#39;s the code to compute world matrices from local matrixes based on their parent-child
+</code></pre><p>And here&#39;s the code to compute world matrices from local matrices based on their parent-child
 relationships. If we start at the parent and recursively visit the children we can compute
 their world matrices. If you don&#39;t understand matrix math
 <a href="webgl-2d-matrices.html">check out this article on them</a>.</p>
@@ -222,8 +222,8 @@ moonNode.drawInfo = {
   programInfo: programInfo,
   bufferInfo: sphereBufferInfo,
 };
-</code></pre><p>Now that we&#39;ve made the nodes lets connect them.</p>
-<pre><code>// connect the celetial objects
+</code></pre><p>Now that we&#39;ve made the nodes let&#39;s connect them.</p>
+<pre><code>// connect the celestial objects
 moonNode.setParent(earthNode);
 earthNode.setParent(sunNode);
 </code></pre><p>We&#39;ll again make a list of objects and a list of objects to draw.</p>
@@ -288,7 +288,7 @@ is to add more nodes to our scene graph. Instead of just</p>
       |
      moon
 </code></pre><p>This will let the earth rotate around the solarSystem but we can separately rotate and scale the sun and it won&#39;t
-effect the earth. Similarly the earth can rotate separately from the moon. Let&#39;s make more nodes for
+affect the earth. Similarly the earth can rotate separately from the moon. Let&#39;s make more nodes for
 <code>solarSystem</code>, <code>earthOrbit</code> and <code>moonOrbit</code>.</p>
 <pre><code>var solarSystemNode = new Node();
 var earthOrbitNode = new Node();
@@ -355,7 +355,7 @@ matrixMultiply(sunNode.localMatrix, makeYRotation(0.005), sunNode.localMatrix);
 
 </p>
 <p>Currently we have a <code>localMatrix</code> and we&#39;re modifying it each frame. There&#39;s a problem though
-in that every frame our math will collect a little bit of error. There are ways to fix the math
+in that every frame our math will collect a little bit of error. There is a way to fix the math
 which is called <em>ortho normalizing a matrix</em> but even that won&#39;t always work. For example let&#39;s
 imagine we scaled down zero and back. Let&#39;s just do that for one value <code>x</code></p>
 <pre><code>x = 246;       // frame #0, x = 246
@@ -444,11 +444,11 @@ node mentioned above. Programmer art and programmer animation FTW! :P</p>
 </div>
 
 </p>
-<p>If you look at pretty much any 3d library you&#39;ll find a scene graph similar to this.</p>
+<p>If you look at pretty much any 3D library you&#39;ll find a scene graph similar to this.</p>
 <div class="webgl_bottombar">
 <h3>SetParent vs AddChild / RemoveChild</h3>
 <p>Many scene graphs have a <code>node.addChild</code> function and a <code>node.removeChild</code>
-function were as above I made a <code>node.setParent</code> function. Which way is better
+function whereas above I made a <code>node.setParent</code> function. Which way is better
 is arguably a matter of style but I'd argue one objectively better reason
 <code>setParent</code> is better than <code>addChild</code> is because it makes code like
 this impossible.</p>

@@ -138,8 +138,8 @@ function createProgram(gl, vertexShader, fragmentShader) {
 };
 </code></pre><p>Of course how you decide to handle errors might be different.  Throwing
 exceptions might not be the best way to handle things.  Still, those few
-lines of code are the pretty much the same in nearly every WebGL program.</p>
-<p>I like store my shaders in non javascript &lt;script&gt; tags.  It makes
+lines of code are pretty much the same in nearly every WebGL program.</p>
+<p>I like to store my shaders in non javascript &lt;script&gt; tags.  It makes
 them easy to edit so I use code like this.</p>
 <pre><code>/**
  * Creates a shader from the content of a script tag.
@@ -177,7 +177,7 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
 };
 </code></pre><p>Now to compile a shader I can just do</p>
 <pre><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
-</code></pre><p>I&#39;ll usually go one step further and make a function to compile to shaders
+</code></pre><p>I&#39;ll usually go one step further and make a function to compile two shaders
 from script tags, attach them to a program and link them.</p>
 <pre><code>/**
  * Creates a program from 2 script tags.
@@ -193,9 +193,9 @@ function createProgramFromScripts(
   var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId);
   return createProgram(gl, vertexShader, fragmentShader);
 }
-</code></pre><p>There&#39;s a couple of other pieces I&#39;ve needed in most WebGL samples.</p>
+</code></pre><p>There are a couple of other pieces I&#39;ve needed in most WebGL samples.</p>
 <p>At the time of this writing WebGL requires the asking
-for an &quot;experimental-webgl&quot; context where as in the near future you can
+for an &quot;experimental-webgl&quot; context whereas in the near future you can
 just ask for &quot;webgl&quot;.  I could write this in every WebGL program</p>
 <pre><code>...
 var gl = canvas.getContext(&quot;experimental-webgl&quot;);
@@ -204,7 +204,7 @@ if (!gl) {
 }
 ...
 </code></pre><p>But I prefer to use some function I&#39;ve written before.</p>
-<p>That&#39;s most of my minmum set of WebGL boilerplate code.
+<p>That&#39;s most of my minimum set of WebGL boilerplate code.
 <a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js">You can find that code here</a>.
 If you want something slightly more organized check out <a href="http://twgljs.org">TWGL.js</a>.</p>
 <p>The rest of what makes WebGL look complicated is setting up all the inputs

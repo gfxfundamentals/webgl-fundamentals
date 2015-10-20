@@ -72,7 +72,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 This is a continuation from <a href="webgl-fundamentals.html">WebGL Fundamentals</a>. If you haven&#39;t read that I&#39;d suggest <a href="webgl-fundamentals.html">going there first</a>.</p>
 <p>To draw images in WebGL we need to use textures. Similarly to the way WebGL expects clipspace coordinates when rendering instead of pixels, WebGL expects texture coordinates when reading a texture. Texture coordinates go from 0.0 to 1.0 no matter the dimensions of the texture.</p>
 <p>Since we are only drawing a single rectangle (well, 2 triangles) we need to tell WebGL which place in the texture each point in the rectangle corresponds to. We&#39;ll pass this information from the vertex shader to the fragment shader using a special kind of variable called a &#39;varying&#39;. It&#39;s called a varying because it varies. WebGL will interpolate the values we provide in the vertex shader as it draws each pixel using the fragment shader.</p>
-<p>Using <a href="webgl-fundamentals.html">the vertex shader from the end of previous post</a> we need to add an attribute to pass in texture coordinates and then pass those on to the fragment shader.</p>
+<p>Using <a href="webgl-fundamentals.html">the vertex shader from the end of the previous post</a> we need to add an attribute to pass in texture coordinates and then pass those on to the fragment shader.</p>
 <pre><code>attribute vec2 a_texCoord;
 ...
 varying vec2 v_texCoord;
@@ -196,7 +196,7 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 </div>
 
 </p>
-<p>Now that we know how to reference other pixels let&#39;s use a convolution kernel to do a bunch of common image processing. In this case we&#39;ll use a 3x3 kernel. A convolution kernel is just a 3x3 matrix where each entry in the matrix represents how much to multiply the 8 pixels around the pixel we are rendering. We then divide the result by the weight of the kernel (the sum of all values in the kernel) or 1.0, which ever is greater. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Here&#39;s a pretty good article on it</a>. And <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">here&#39;s another article showing some actual code if you were to write this by hand in C++</a>.</p>
+<p>Now that we know how to reference other pixels let&#39;s use a convolution kernel to do a bunch of common image processing. In this case we&#39;ll use a 3x3 kernel. A convolution kernel is just a 3x3 matrix where each entry in the matrix represents how much to multiply the 8 pixels around the pixel we are rendering. We then divide the result by the weight of the kernel (the sum of all values in the kernel) or 1.0, whichever is greater. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Here&#39;s a pretty good article on it</a>. And <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">here&#39;s another article showing some actual code if you were to write this by hand in C++</a>.</p>
 <p>In our case we&#39;re going to do that work in the shader so here&#39;s the new fragment shader.</p>
 <pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
@@ -228,7 +228,7 @@ void main() {
    gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1.0);
 }
 &lt;/script&gt;
-</code></pre><p>In JavaScript we need to supply a convolution kernel and it&#39;s weight</p>
+</code></pre><p>In JavaScript we need to supply a convolution kernel and its weight</p>
 <pre><code> function computeKernelWeight(kernel) {
    var weight = kernel.reduce(function(prev, curr) {
        return prev + curr;
@@ -258,7 +258,7 @@ void main() {
 <p>I hope this article has convinced you image processing in WebGL is pretty simple. Next up I&#39;ll go over  <a href="webgl-image-processing-continued.html">how to apply more than one effect to the image</a>.</p>
 <div class="webgl_bottombar">'u_image' is never set. How does that work?
 
-Uniforms default to 0 so u_image defaults to using texture unit 0. Texture unit 0 is also the default active texture so calling bindTexture will bind the texture to texture unit 0
+Uniforms default to 0 so u_image defaults to using texture unit 0. Texture unit 0 is also the default active texture so calling bindTexture will bind the texture to texture unit 0.
 
 WebGL has an array of texture units. Which texture unit each sampler uniform references is set by looking up the location of that sampler uniform and then setting the index of the texture unit you want it to reference.
 

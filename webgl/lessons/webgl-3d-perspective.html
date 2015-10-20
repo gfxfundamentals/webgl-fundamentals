@@ -326,12 +326,12 @@ function makeZToWMatrix(fudgeFactor) {
 </p>
 <p>All that was basically to show you that dividing by Z gives us perspective
 and that WebGL conveniently does this divide by Z for us.</p>
-<p>But there&#39;s still some problems. For example if you set Z to around -100 you&#39;ll see something like
+<p>But there are still some problems. For example if you set Z to around -100 you&#39;ll see something like
 the animation below</p>
 <p><img class="webgl_center" src="resources/z-clipping.gif" style="border: 1px solid black;" /></p>
 <p>What&#39;s going on? Why is the F disappearing early? Just like WebGL clips X and Y or +1 to -1 it also
 clips Z. What were&#39;s seeing here is where Z &lt; -1.</p>
-<p>I could go into detail about how the math to fix it but <a href="http://stackoverflow.com/a/28301213/128511">you can derive it</a> the same way
+<p>I could go into detail about the math to fix it but <a href="http://stackoverflow.com/a/28301213/128511">you can derive it</a> the same way
 we did 2D projection. We need to take Z, add some amount and scale some amount and we can make any range we want
 get remapped to the -1 to +1.</p>
 <p>The cool thing is all of these steps can be done in 1 matrix. Even better, rather than a <code>fudgeFactor</code>
@@ -356,7 +356,7 @@ in clipspace, it will do the math so that we can choose a field of view by angle
 and it will let us choose our z-clipping space. It assumes there&#39;s an <code>eye</code> or <code>camera</code> at the
 origin (0, 0, 0) and given a <code>zNear</code> and a <code>fieldOfView</code> it computes what it would take so that
 stuff at <code>zNear</code> ends up at z=-1 and stuff at <code>zNear</code> that is half of <code>fieldOfView</code> above or below the center
-ends up with y=-1 and y=1 respectively. It computes what to use for X by just multipling by the <code>aspect</code> passed in.
+ends up with y=-1 and y=1 respectively. It computes what to use for X by just multiplying by the <code>aspect</code> passed in.
 We&#39;d normally set this to the <code>width / height</code> of the display area.
 Finally, it figures out how much to scale things in Z so that stuff at zFar ends up at Z = 1.</p>
 <p>Here&#39;s a diagram of the matrix in action.</p>
@@ -366,7 +366,7 @@ Finally, it figures out how much to scale things in Z so that stuff at zFar ends
 </div>
 
 </p>
-<p>That shape that looks like 4 sided cone the cubes are spinning in is called a frustum&quot;.
+<p>That shape that looks like 4 sided cone the cubes are spinning in is called a &quot;frustum&quot;.
 The matrix takes the space inside the frustum and converts that to clipspace. <code>zNear</code> defines where
 things will get clipped in front and zFar defines where things get clipped in back. Set <code>zNear</code> to 23 and
 you&#39;ll see the front of the spinning cubes get clipped. Set <code>zFar</code> to 24 and you&#39;ll see the back of the cubes
@@ -401,7 +401,7 @@ We&#39;re not done but this article is getting too long. Next up, <a href="webgl
 <div class="webgl_bottombar">
 <h3>Why did we move the F so far in Z (-360)?</h3>
 <p>
-In the other samples we had the F at (45, 150, 0) but the last sample it's been moved to (-150, 0, -360).
+In the other samples we had the F at (45, 150, 0) but in the last sample it's been moved to (-150, 0, -360).
 Why did it need to be moved so far away? </p>
 <p>The reason is up until this last sample our `make2DProjection` function has made a projection from
 pixels to clipspace. That means the area we were displaying represented 400x300 pixels. Using 'pixels'
