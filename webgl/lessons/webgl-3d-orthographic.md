@@ -3,11 +3,11 @@ Description: How to do 3D in WebGL starting with an Orthographic projection.
 
 This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
-the previous was about 2d matrices <a href="webgl-2d-matrices.html">about 2D matrices</a>.
+the previous was <a href="webgl-2d-matrices.html">about 2D matrices</a>.
 If you haven't read those please view them first.
 
-In the last post we went over how 2d matrices worked. We talked
-about translation, rotation, scaling, and even projecting from
+In the last post we went over how 2D matrices worked. We talked
+about how translation, rotation, scaling, and even projecting from
 pixels into clip space can all be done by 1 matrix and some magic
 matrix math. To do 3D is only a small step from there.
 
@@ -91,7 +91,7 @@ function setGeometry(gl) {
 
 Next we need to change all the matrix functions from 2D to 3D
 
-Here's the 2D (before) versions of makeTranslation, makeRotation and makeScale
+Here are the 2D (before) versions of makeTranslation, makeRotation and makeScale
 
 <pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty) {
@@ -121,7 +121,7 @@ function makeScale(sx, sy) {
 }
 </pre>
 
-And here's the updated 3D versions.
+And here are the updated 3D versions.
 
 <pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty, tz) {
@@ -178,9 +178,9 @@ function makeScale(sx, sy, sz) {
 }
 </pre>
 
-Notice we now have 3 rotations functions.  We only needed one in 2D as we
+Notice we now have 3 rotation functions.  We only needed one in 2D as we
 were effectively only rotating around the Z axis.  Now though to do 3D we
-also want to be able to rotate around the x axis and y axis as well.  You
+also want to be able to rotate around the X axis and Y axis as well.  You
 can see from looking at them they are all very similar.  If we were to
 work them out you'd see them simplify just like before
 
@@ -376,7 +376,7 @@ Now we get this.
 
 {{{example url="../webgl-3d-step3.html" }}}
 
-Uh oh, what's that's mess?  Well, it turns out all the various parts of
+Uh oh, what's that mess?  Well, it turns out all the various parts of
 that 3D 'F', front, back, sides, etc get drawn in the order they appear in
 our geometry.  That doesn't give us quite the desired results as sometimes
 the ones in the back get drawn after the ones in the front.
@@ -398,7 +398,7 @@ which we do just once, right at the start of our program.  With that
 feature turned on, WebGL defaults to "culling" back facing triangles.
 "Culling" in this case is a fancy word for "not drawing".
 
-Note that as far as WebGL is conserned, whether or not a triangle is
+Note that as far as WebGL is concerned, whether or not a triangle is
 considered to be going clockwise or counter clockwise depends on the
 vertices of that triangle in clipspace.  In other words, WebGL figures out
 whether a triangle is front or back AFTER you've applied math to the
@@ -410,7 +410,7 @@ clockwise(front) and counter clockwise(back) triangles.  Now that we've
 turned it on, any time a front facing triangle flips around either because
 of scaling or rotation or for whatever reason, WebGL won't draw it.
 That's a good thing since as your turn something around in 3D you
-generally want which ever triangles are facing you to be considered front
+generally want whichever triangles are facing you to be considered front
 facing.
 
 With CULL_FACE turned on this is what we get
@@ -452,7 +452,7 @@ A Depth buffer, sometimes called a Z-Buffer, is a rectangle of *depth*
 pixels, one depth pixel for each color pixel used to make the image.  As
 WebGL draws each color pixel it can also draw a depth pixel.  It does this
 based on the values we return from the vertex shader for Z.  Just like we
-had to convert to clip space for X and Y, so to Z is in clip space or (-1
+had to convert to clip space for X and Y, so too Z is in clip space or (-1
 to +1).  That value is then converted into a depth space value (0 to +1).
 Before WebGL draws a color pixel it will check the corresponding depth
 pixel.  If the depth value for the pixel it's about to draw is greater

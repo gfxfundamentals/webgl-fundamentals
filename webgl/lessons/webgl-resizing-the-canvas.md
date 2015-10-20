@@ -23,10 +23,10 @@ JavaScript
     canvas.height = 300;
 
 As for setting a canvas's display size if you don't have any CSS that affects the canvas's display size
-the display size will be the same size as its drawingbuffer. So the 2 examples above the canvas's drawingbuffer is 400x300
+the display size will be the same size as its drawingbuffer. So in the 2 examples above the canvas's drawingbuffer is 400x300
 and its display size is also 400x300.
 
-Here's an example of a canvas who's drawingbuffer is 10x15 pixels that is displayed 400x300 pixels on the page
+Here's an example of a canvas whose drawingbuffer is 10x15 pixels that is displayed 400x300 pixels on the page
 
     <canvas id="c" width="10" height="15" style="width: 400px; height: 300px;"></canvas>
 
@@ -91,7 +91,7 @@ JavaScript check what size that element is being displayed.
       }
     }
 
-Most WebGL apps <a href="webgl-animation.html">are animated</a> so lets call this function just before we render
+Most WebGL apps <a href="webgl-animation.html">are animated</a> so let's call this function just before we render
 so it will always adjust the canvas to our desired size just before drawing.
 
     function drawScene() {
@@ -155,7 +155,7 @@ If you're curious <a href="webgl-anti-patterns.html">here are some of the reason
 When you specify a size in CSS or Canvas by pixels those are called CSS pixels which may or may not be actual pixels.
 Most current smartphones have what's called a high-definition DPI display (HD-DPI) or as Apple calls it a "Retina Display".
 For text and most CSS styling the browser can automatically render HD-DPI graphics but for WebGL, since you're drawing the
-graphics it's up to you to renderer at a higher resolution if you want your graphics to be "HD-DPI" quality.
+graphics it's up to you to render at a higher resolution if you want your graphics to be "HD-DPI" quality.
 </p>
 <p>To do that we can look at the <code>window.devicePixelRatio</code> value. This value tells us how many real pixels
 equals 1 CSS pixel. We can change our resize function to handle that like this.</p>
@@ -190,7 +190,7 @@ HD-DPI displays</p>
 means you'll be drawing 4 times as many pixels. I believe on an iPhone6Plus that value is <code>3</code> which means you'd be drawing
 9 times as many pixels. That can really slow down your program. In fact it's a common optimization in games to actually render
 less pixels than are displayed and let the GPU scale them up. It really depends on what your needs are. If you're drawing
-a graph for printing you might want to support HD-DPI. If you're making game you might not or you might want to give the
+a graph for printing you might want to support HD-DPI. If you're making a game you might not or you might want to give the
 user the option to turn support on or off if their system is not fast enough to draw so many pixels.</p>
 </div>
 

@@ -3,20 +3,20 @@ Description: How to use HTML to display text that is positioned to match WebGL
 
 This article is a continuation of previous WebGL articles.
 If you haven't read them I suggest <a href="webgl-3d-perspective.html">you start there</a>
-and work your way back..
+and work your way back.
 
 A common question is "how to I draw text in WebGL". The first thing to ask yourself
 is what's your purpose in drawing the text. You're in a browser, the browser
 displays text. So your first answer should be to use HTML to display text.
 
-Let's to the easiest example first: You just want to draw some text over
+Let's do the easiest example first: You just want to draw some text over
 your WebGL. We might call this a text overlay. Basically this is text that stays
 in the same position.
 
 The simple way is to make an HTML element or elements and use CSS to make them overlap.
 
 For example: First make a container and put both a canvas and some HTML to be
-overlayed inside the container.
+overlaid inside the container.
 
     <div class="container">
       <canvas id="canvas" width="400" height="300"></canvas>
@@ -26,7 +26,7 @@ overlayed inside the container.
       </div>
     </div>
 
-Next setup the CSS so the the canvas and the HTML overlap
+Next setup the CSS so that the canvas and the HTML overlap
 
     .container {
         position: relative;
@@ -52,7 +52,7 @@ change.
     timeElement.appendChild(timeNode);
     angleElement.appendChild(angleNode);
 
-Finally update the node's when rendering
+Finally update the nodes when rendering
 
     function drawScene() {
         ...
@@ -83,19 +83,19 @@ and destroy nodes each time you set it. Which is better is up to you.
 
 The important point to take way from the overlay technique is that WebGL runs in a browser. Remember to
 use the browser's features when appropriate. Lots of OpenGL programmers are used to having to render
-every part of their app 100% themselves from scratch but because WebGL runs it a browser it already
+every part of their app 100% themselves from scratch but because WebGL runs in a browser it already
 has tons of features. Use them. This has lots of benefits. For example you can use CSS styling to
 easily give that overlay an interesting style.
 
 For example here's the same example but adding some style. The background is rounded, the letters have
-a glow around them. There's a red border. You get all that essencially for free by using HTML.
+a glow around them. There's a red border. You get all that essentially for free by using HTML.
 
 {{{example url="../webgl-text-html-overlay-styled.html" }}}
 
 The next most common thing to want to do is position some text relative to something you're rendering.
 We can do that in HTML as well.
 
-In this case we'll make again make a container with the canvas and another container for our moving HTML
+In this case we'll again make a container with the canvas and another container for our moving HTML
 
     <div class="container">
       <canvas id="canvas" width="400" height="300"></canvas>
@@ -131,7 +131,7 @@ that's the container that both the canvas and the `#divcontainer` are in.
 The `left: 0px; top: 0px` makes the `#divcontainer` align with everything. The `z-index: 10` makes
 it float over the canvas. And the `overflow: hidden` makes its children get clipped.
 
-Finally `.floating-div` will use for the positionable div we create.
+Finally `.floating-div` will be used for the positionable div we create.
 
 So now we need to look up the divcontainer, create a div and append it.
 
@@ -171,7 +171,7 @@ and how to apply a projection matrix to convert them to clipspace. We pass all
 of that to our shader and it multiplies vertices in local space and converts
 them to clipspace. We can do all the math ourselves in JavaScript as well.
 Then  we can multiply clipspace (-1 to +1) into pixels and use
-that it position the div.
+that to position the div.
 
     gl.drawArrays(...);
 
@@ -199,7 +199,7 @@ that it position the div.
     div.style.top  = Math.floor(pixelY) + "px";
     textNode.nodeValue = clock.toFixed(2);
 
-And wahlah, the top left corner of the our div is perfectly aligned
+And voila, the top left corner of our div is perfectly aligned
 with the top right front corner of the F.
 
 {{{example url="../webgl-text-html-div.html" }}}
@@ -212,12 +212,12 @@ You can look at the source of that last example to see the
 details. One important point is I'm just guessing that
 creating, appending and removing HTML elements from the DOM
 is slow so the example above creates them and keeps them
-around. It hids any unused ones rather than removing them
+around. It hides any unused ones rather than removing them
 from the DOM. You'd have to profile to know if that's faster.
 That was just the method I chose.
 
 Hopefully it's clear how to use HTML for text. [Next we'll
-cover using Canvas2D for text](webgl-text-canvas2d.html).
+cover using Canvas 2D for text](webgl-text-canvas2d.html).
 
 
 

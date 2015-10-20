@@ -28,7 +28,7 @@ written in C++.  Similarly WebGL does not draw 3D graphics out of the box.
 You can write library that will draw 3D graphics with WebGL but by itself
 it does not do 3D graphics.
 
-To give a further example, assume we want to draw a cube in 3d
+To give a further example, assume we want to draw a cube in 3D
 with lights.
 
 Here's the code in three.js to display this
@@ -144,7 +144,7 @@ required.  In the two 3D libraries they take care of the 3D. You give them
 a camera position and field of view, a couple of lights and, a cube.  They
 deal with all the rest.  In other words. They are 3D libraries.
 
-In WebGL on the other and you need to know matrix math, normalied
+In WebGL on the other hand you need to know matrix math, normalized
 coordinates, frustums, cross products, dot products, varying interpolation, lighting
 specular calculations and all kinds of other stuff that often take months
 or years to fully understand.
@@ -175,17 +175,17 @@ draws some lines in 2D. The WebGL version does the same thing except the math
 WE SUPPLIED is in GLSL and executed by the GPU.
 
 The point of this last demostration is to show that effectively WebGL is
-just a rasteration engine, similar to Canvas 2d. Sure
+just a rasteration engine, similar to Canvas 2D. Sure
 WebGL does have features that help you implement 3D.  WebGL has a depth
 buffer which makes depth sorting far easier than a system without.  WebGL
 also has various math functions built in that are very useful for doing 3D
 math although there is argubly nothing that makes them 3D.  They're a math
-library.  You use them for math whether or not that math is 1d, 2d, 3d,
+library.  You use them for math whether or not that math is 1D, 2D, 3D,
 whatever. But ultimately, WebGL only rasterizes. You have to provide it
 with clipspace coordinates that represent what you want drawn. Sure
 you provide a x,y,z,w and it divides by W before rendering but that's
 hardly enough to qualify WebGL as a 3D library. In the 3D librares you
-supply 3D data, the libraries take care of calculating clippoints points from 3D.
+supply 3D data, the libraries take care of calculating clipspace points from 3D.
 
 I hope you at least understand where I'm coming from when I say WebGL is
 not a 3D library. I hope you'll also realize that a 3D library should
