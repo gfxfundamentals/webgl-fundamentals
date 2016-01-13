@@ -147,7 +147,7 @@ And here's the result if we multiply them together using WebGL.
 
 {{{example url="../webgl-2-textures.html" }}}
 
-Some things I should go over.  
+Some things I should go over.
 
 The simple way to think of texture units is something like this: All of the texture functions
 work on the "active texture unit". The "active texture unit" is just a global variable

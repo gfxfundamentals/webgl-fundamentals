@@ -12,9 +12,9 @@
  * the extent permitted by applicable law. You can redistribute it
  * and/or modify it under the terms of the Do What The Fuck You Want
  * To Public License, Version 2, as published by Sam Hocevar. See
- * http://sam.zoy.org/wtfpl/COPYING for more details.  
+ * http://sam.zoy.org/wtfpl/COPYING for more details.
  *
- * 
+ *
  * USAGE
  *
  * $( ... ).mousecapture({
@@ -40,7 +40,7 @@
  * A demo is available at:
  * http://benanne.net/misc/jquery-plugins/mousecapture/demo.html
  *
- * 
+ *
  * MORE INFORMATION
  *
  * Read http://benanne.net/code/?p=238 for more information.
@@ -58,7 +58,7 @@
  * v1.1
  * - added "return this" to the mousecapture method, so it conforms to the
  *   jQuery plugin authoring guidelines.
- * 
+ *
  * v1.0
  * - first version
  *
@@ -68,16 +68,16 @@
 
     $.fn.mousecapture = function(params) {
         var $doc = $(document);
-        
+
         this.each(function() {
             var $this = $(this);
             var sharedData = {};
-            
-            $this.mousedown(function(e) {                
+
+            $this.mousedown(function(e) {
                 // mousemove
-                
+
                 var moveHandler;
-                
+
                 var capture = true;
                 if (params.mouseCapture) {
                     capture = params.mouseCapture.call($this, e, sharedData);
@@ -87,19 +87,19 @@
                     moveHandler = function(e) {
                         params.move.call($this, e, sharedData);
                     };
-                    
+
                    $doc.mousemove(moveHandler);
                 }
-                
-                // mouseup                
-                                
+
+                // mouseup
+
                 var upHandler;
-                
+
                 var unbind = function() {
                     if (params.move) $doc.unbind("mousemove", moveHandler);
                     $doc.unbind("mouseup", upHandler);
                 };
-                
+
                 if (params.up) {
                     upHandler = function(e) {
                         unbind();
@@ -109,15 +109,15 @@
                 else {
                     upHandler = unbind;
                 }
-                
+
                 $doc.mouseup(upHandler);
-                
+
                 // mousedown
-                
+
                 return params.down.call($this, e, sharedData);
             });
         });
-        
+
         return this;
     };
 
