@@ -501,7 +501,7 @@
             gl.uniform1iv(location, units);
             textures.forEach(function(texture, index) {
               gl.activeTexture(gl.TEXTURE0 + units[index]);
-              gl.bindTexture(bindPoint, tetxure);
+              gl.bindTexture(bindPoint, texture);
             });
           };
         }(getBindPointForSamplerType(gl, type), units);
