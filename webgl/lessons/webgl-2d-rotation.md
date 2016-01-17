@@ -19,47 +19,43 @@ We're going to take that X and Y value from any point on the unit circle and we'
 
 Here's are the updates to our shader.
 
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
-attribute vec2 a_position;
+    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    attribute vec2 a_position;
 
-uniform vec2 u_resolution;
-uniform vec2 u_translation;
-uniform vec2 u_rotation;
+    uniform vec2 u_resolution;
+    uniform vec2 u_translation;
+    uniform vec2 u_rotation;
 
-void main() {
-  // Rotate the position
-  vec2 rotatedPosition = vec2(
-     a_position.x * u_rotation.y + a_position.y * u_rotation.x,
-     a_position.y * u_rotation.y - a_position.x * u_rotation.x);
+    void main() {
+      // Rotate the position
+      vec2 rotatedPosition = vec2(
+         a_position.x * u_rotation.y + a_position.y * u_rotation.x,
+         a_position.y * u_rotation.y - a_position.x * u_rotation.x);
 
-  // Add in the translation.
-  vec2 position = rotatedPosition + u_translation;
-</pre>
+      // Add in the translation.
+      vec2 position = rotatedPosition + u_translation;
 
 And we update the JavaScript so that we can pass those 2 values in. 
 
-<pre class="prettyprint showlinemods">
-  ...
-  var rotationLocation = gl.getUniformLocation(program, "u_rotation");
-  ...
-  var rotation = [0, 1];
-  ..
-  // Draw the scene.
-  function drawScene() {
-    // Clear the canvas.
-    gl.clear(gl.COLOR_BUFFER_BIT);
+      ...
+      var rotationLocation = gl.getUniformLocation(program, "u_rotation");
+      ...
+      var rotation = [0, 1];
+      ..
+      // Draw the scene.
+      function drawScene() {
+        // Clear the canvas.
+        gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Set the translation.
-    gl.uniform2fv(translationLocation, translation);
+        // Set the translation.
+        gl.uniform2fv(translationLocation, translation);
 
-    // Set the rotation.
-    gl.uniform2fv(rotationLocation, rotation);
+        // Set the rotation.
+        gl.uniform2fv(rotationLocation, rotation);
 
-    // Draw the rectangle.
-    gl.drawArrays(gl.TRIANGLES, 0, 18);
-  }
-</pre>
+        // Draw the rectangle.
+        gl.drawArrays(gl.TRIANGLES, 0, 18);
+      }
 
 And here's the result. Drag the handle on the circle to rotate or the sliders to translate.
 
@@ -67,10 +63,8 @@ And here's the result. Drag the handle on the circle to rotate or the sliders to
 
 Why does it work? Well, look at the math. 
 
-<pre class="prettyprint showlinemods">
-rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
-rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
-</pre>
+    rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
+    rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 
 Let's stay you have a rectangle and you want to rotate it. Before you start rotating it the top right corner is at 3.0, 9.0. Let's pick a point on the unit circle 30 degrees clockwise from 12 o'clock.
 
@@ -102,25 +96,21 @@ You can see that as we rotate that point clockwise to the right the X value gets
 
 There's another name for the points on a unit circle. They're call the sine and cosine. So for any given angle we can just look up the sine and cosine like this.
 
-<pre class="prettyprint showlinemods">
-function printSineAndCosineForAnAngle(angleInDegrees) {
-  var angleInRadians = angleInDegrees * Math.PI / 180;
-  var s = Math.sin(angleInRadians);
-  var c = Math.cos(angleInRadians);
-  console.log("s = " + s + " c = " + c);
-}
-</pre>
+    function printSineAndCosineForAnAngle(angleInDegrees) {
+      var angleInRadians = angleInDegrees * Math.PI / 180;
+      var s = Math.sin(angleInRadians);
+      var c = Math.cos(angleInRadians);
+      console.log("s = " + s + " c = " + c);
+    }
 
 If you copy and paste the code into your JavaScript console and type <code>printSineAndCosignForAngle(30)</code> you see it prints <code>s = 0.49 c= 0.87</code> (note: I rounded off the numbers.)
 
 If you put it all together you can rotate your geometry to any angle you desire. Just set the rotation to the sine and cosine of the angle you want to rotate to.
 
-<pre class="prettyprint showlinemods">
-  ...
-  var angleInRadians = angleInDegrees * Math.PI / 180;
-  rotation[0] = Math.sin(angleInRadians);
-  rotation[1] = Math.cos(angleInRadians);
-</pre>
+      ...
+      var angleInRadians = angleInDegrees * Math.PI / 180;
+      rotation[0] = Math.sin(angleInRadians);
+      rotation[1] = Math.cos(angleInRadians);
 
 Here's a version that just has an angle setting. Drag the sliders to translate or rotate.
 
@@ -130,7 +120,7 @@ I hope that made some sense. <a href="webgl-2d-scale.html">Next up a simpler one
 
 <div class="webgl_bottombar"><h3>What are radians?</h3>
 <p>
-Radians are a unit of measurement used with circles, rotation and angles. Just like we can measure distance in inches, yards, meters, etc we can measure angles in degrees or radians. 
+Radians are a unit of measurement used with circles, rotation and angles. Just like we can measure distance in inches, yards, meters, etc we can measure angles in degrees or radians.
 </p>
 <p>
 You're probably aware that math with metric measurements is easier than math with imperial measurements. To go from inches to feet we divide by 12. To go from inches to yards we divide by 36. I don't know about you but I can't divide by 36 in my head. With metric it's much easier. To go from millimeters to centimeters we divide by 10. To go from millimeters to meters we divide by 1000. I **can** divide by 1000 in my head.
