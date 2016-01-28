@@ -80,7 +80,7 @@ so that it runs with no textures and as the textures are loaded the program upda
 We&#39;ll save that method for a later article.</p>
 <p>In this case we&#39;ll wait for all the images to load before we draw anything.</p>
 <p>First let&#39;s change the code that loads an image into a function. It&#39;s pretty straightforward.
-It creates a new image object, sets the URL to load, and sets a callback to
+It creates a new <code>Image</code> object, sets the URL to load, and sets a callback to
 be called when the image finishes loading.</p>
 <pre class="prettyprint showlinemods">
 function loadImage(url, callback) {
@@ -100,8 +100,7 @@ function loadImages(urls, callback) {
   var images = [];
   var imagesToLoad = urls.length;
 
-  // Called each time an image finished
-  // loading.
+  // Called each time an image finished loading.
   var onImageLoad = function() {
     --imagesToLoad;
     // If all the images are loaded call the callback.
@@ -203,7 +202,7 @@ to textures. You tell the shader which texture unit to use for each sampler.</p>
 </div>
 
 </p>
-<p>Some things I should go over.  </p>
+<p>Some things I should go over.</p>
 <p>The simple way to think of texture units is something like this: All of the texture functions
 work on the &quot;active texture unit&quot;. The &quot;active texture unit&quot; is just a global variable
 that&#39;s the index of the texture unit you want to work with. Each texture unit has 2 targets.
