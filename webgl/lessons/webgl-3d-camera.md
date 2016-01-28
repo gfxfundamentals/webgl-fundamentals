@@ -293,14 +293,14 @@ Let's <a href="webgl-animation.html">learn about animation next</a>.
 
 <div class="webgl_bottombar">
 <h3>lookAt standards</h3>
-<p>Most 3D math libraries have a `lookAt` function. Often it is designed
+<p>Most 3D math libraries have a <code>lookAt</code> function. Often it is designed
 specifically to make a "view matrix" and not a "camera matrix". In other words,
 it makes a matrix that moves everything else in front of the camera rather
 than a matrix that moves the camera itself.</p>
 <p>I find that less useful. As pointed out, a lookAt function has many uses. It's
-easy to call `inverse` when you need a view matrix but if you are using `lookAt`
+easy to call <code>inverse</code> when you need a view matrix but if you are using <code>lookAt</code>
 to make some character's head follow another character or some turret aim
-at its target it's much more useful if `lookAt` returns a matrix that orients
+at its target it's much more useful if <code>lookAt</code> returns a matrix that orients
 and positions an object in world space in my opinion.
 </p>
 {{{example url="../webgl-3d-camera-look-at-heads.html" }}}

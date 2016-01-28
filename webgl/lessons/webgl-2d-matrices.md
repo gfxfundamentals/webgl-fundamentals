@@ -364,10 +364,10 @@ We also removed the code that set the resolution. With this last step we've gone
 I hope these posts have helped demystify matrix math. <a href="webgl-3d-orthographic.html">I'll move on to 3D next</a>. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.
 
 <div class="webgl_bottombar">
-<h3>What are `clientWidth` and `clientHeight`?</h3>
-<p>Up until this point whenever I referred to the canvas's dimensions I used `canvas.width` and `canvas.height`
-but above when I called `make2DProjection` I instead used `canvas.clientWidth` and `canvas.clientHeight`. Why?</p>
-<p>Projection matrices are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
+<h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
+<p>Up until this point whenever I referred to the canvas's dimensions I used <code>canvas.width</code> and <code>canvas.height</code>
+but above when I called <code>make2DProjection</code> I instead used <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Why?</p>
+<p>Projection matrixes are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
 to pixels. But, in the browser, there are 2 types of pixels we are dealing with. One is the number of pixels in
 the canvas itself. So for example a canvas defined like this.</p>
 <pre class="prettyprint">
@@ -394,19 +394,19 @@ For example if we made a canvas like this.</p>
 </pre>
 <p>The canvas will be displayed whatever size its container is. That's likely not 400x300.</p>
 <p>Here are two examples that set the canvas's CSS display size to 100% so the canvas is stretched
-out to fill the page. The first one uses `canvas.width` and `canvas.height`. Open it in a new
+out to fill the page. The first one uses <code>canvas.width</code> and <code>canvas.height</code>. Open it in a new
 window and resize the window. Notice how the 'F' doesn't have the correct aspect. It gets
 distorted.</p>
 {{{example url="../webgl-canvas-width-height.html" width="500" height="150" }}}
-<p>In this second example we use `canvas.clientWidth` and `canvas.clientHeight`. `canvas.clientWidth` and `canvas.clientHeight` report
+<p>In this second example we use <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> report
 the size the canvas is actually being displayed by the browser so in this case, even though the canvas still only has 400x300 pixels
-since we're defining our aspect ratio based on the size the canvas is being displayed the `F` always looks correct.</p>
+since we're defining our aspect ratio based on the size the canvas is being displayed the <code>F</code> always looks correct.</p>
 {{{example url="../webgl-canvas-clientwidth-clientheight.html" width="500" height="150" }}}
-<p>Most apps that allow their canvases to be resized try to make the `canvas.width` and `canvas.height` match
-the `canvas.clientWidth` and `canvas.clientHeight` because they want there to be
+<p>Most apps that allow their canvases to be resized try to make the <code>canvas.width</code> and <code>canvas.height</code> match
+the <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> because they want there to be
 one pixel in the canvas for each pixel displayed by the browser. But, as we've seen above, that's not
 the only option. That means, in almost all cases, it's more technically correct to compute a
-projection matrix's aspect ratio using `canvas.clientHeight` and `canvas.clientWidth`.
+projection matrix's aspect ratio using <code>canvas.clientHeight</code> and <code>canvas.clientWidth</code>.
 </p>
 </div>
 
