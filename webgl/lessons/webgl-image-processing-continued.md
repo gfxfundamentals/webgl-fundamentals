@@ -14,7 +14,7 @@ Texture 1      -&gt; [Sharpen]     -&gt; Texture 2
 Texture 2      -&gt; [Edge Detect] -&gt; Texture 1
 Texture 1      -&gt; [Blur]        -&gt; Texture 2
 Texture 2      -&gt; [Normal]      -&gt; Canvas</pre></blockquote>
-To do this we need to create framebuffers. In WebGL and OpenGL, a Framebuffer is actually a poor name. A WebGL/OpenGL Framebuffer is really just a collection of state and not actually a buffer of any kind. But, by attaching a texture to a framebuffer we can render into that texture. 
+To do this we need to create framebuffers. In WebGL and OpenGL, a Framebuffer is actually a poor name. A WebGL/OpenGL Framebuffer is really just a collection of state and not actually a buffer of any kind. But, by attaching a texture to a framebuffer we can render into that texture.
 
 First let's turn <a href="webgl-image-processing.html">the old texture creation code</a> into a function
 
@@ -149,7 +149,7 @@ Here's a working version with a slightly more flexible UI. Check the effects to 
 
 {{{example url="../webgl-2d-image-processing.html" width="400" height="340" }}}
 
-Some things I should go over.  
+Some things I should go over.
 
 Calling <code>gl.bindFramebuffer</code> with <code>null</code> tells WebGL you want to render to the canvas instead of to one of your framebuffers.
 
@@ -184,7 +184,7 @@ And then we can set it when we render with
   gl.uniform1f(flipYLocation, -1);
 </pre>
 
-I kept this example simple by using a single GLSL program that can achieve multiple effects. If you wanted to do full on image processing you'd probably need many GLSL programs. A program for hue, saturation and luminance adjustment. Another for brightness and contrast. One for inverting, another for adjusting levels, etc. You'd need to change the code to switch GLSL programs and update the parameters for that particular program. I'd considered writing that example but it's an exercise best left to the reader because multiple GLSL programs each with their own parameter needs probably means some major refactoring to keep it all from becoming a big mess of spaghetti. 
+I kept this example simple by using a single GLSL program that can achieve multiple effects. If you wanted to do full on image processing you'd probably need many GLSL programs. A program for hue, saturation and luminance adjustment. Another for brightness and contrast. One for inverting, another for adjusting levels, etc. You'd need to change the code to switch GLSL programs and update the parameters for that particular program. I'd considered writing that example but it's an exercise best left to the reader because multiple GLSL programs each with their own parameter needs probably means some major refactoring to keep it all from becoming a big mess of spaghetti.
 
 I hope this and the preceding examples have made WebGL seem a little more approachable and I hope starting with 2D helps make WebGL a little easier to understand. If I find the time I'll try to write <a href="webgl-2d-translation.html">a few more articles</a> about how to do 3D as well as more details on what WebGL is really doing under the hood.
 For a next step consider learning <a href="webgl-2-textures.html">how to use 2 or more textures</a>.

@@ -15,7 +15,7 @@ And here is a translation of 100,0, rotation of 30 degrees and scale of 2, 1
 
 The results are completely different. Even worse, if we needed the second example we'd have to write a different shader that applied the translation, rotation, and scale in our new desired order.
 
-Well, some people way smarter than me, figured out that you can do all the same stuff with matrix math. For 2d we use a 3x3 matrix. A 3x3 matrix is like a grid with 9 boxes. 
+Well, some people way smarter than me, figured out that you can do all the same stuff with matrix math. For 2d we use a 3x3 matrix. A 3x3 matrix is like a grid with 9 boxes.
 
 <style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
@@ -216,7 +216,7 @@ And here's how we use it
         gl.drawArrays(gl.TRIANGLES, 0, 18);
       }
 
-Here's a sample using our new code. The sliders are the same, translation, rotation and scale. But the way they get used in the shader is much simpler. 
+Here's a sample using our new code. The sliders are the same, translation, rotation and scale. But the way they get used in the shader is much simpler.
 
 {{{example url="../webgl-2d-geometry-matrix-transform.html" }}}
 
@@ -261,11 +261,11 @@ Being able to apply matrices like this is especially important for hierarchical 
         }
       }
 
-To do this we introduced the function, <code>makeIdentity</code>, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like 
+To do this we introduced the function, <code>makeIdentity</code>, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like
 
-<div class="webgl_center">X * 1 = X</div> 
+<div class="webgl_center">X * 1 = X</div>
 
-so too 
+so too
 
 <div class="webgl_center">matrixX * identity = matrixX</div>
 

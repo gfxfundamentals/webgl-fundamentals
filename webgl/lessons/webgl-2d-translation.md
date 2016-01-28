@@ -8,7 +8,7 @@ This article is a continuation of a series starting with <a href="webgl-fundamen
 Translation is some fancy math name that basically means "to move" something. I suppose moving a sentence from English to Japanese fits as well but in this case we're talking about moving geometry. Using the sample code we ended up with in <a href="webgl-fundamentals.html">the first post</a> you could easily translate our rectangle just by changing the values passed to setRectangle right? Here's a sample based on our <a href="webgl-fundamentals.html">previous sample</a>.
 <!--more-->
 <pre class="prettyprint showlinemods">
-  // First lets make some variables 
+  // First lets make some variables
   // to hold the translation, width and height of the rectangle
   var translation = [0, 0];
   var width = 100;
@@ -101,7 +101,7 @@ void main() {
    ...
 </pre>
 
-and we'll restructure the code a little. For one we only need to set the geometry once. 
+and we'll restructure the code a little. For one we only need to set the geometry once.
 
 <pre class="prettyprint showlinemods">
 // Fill the buffer with the values that define a letter 'F'.

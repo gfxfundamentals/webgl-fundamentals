@@ -35,7 +35,7 @@ Here's are the updates to our shader.
       // Add in the translation.
       vec2 position = rotatedPosition + u_translation;
 
-And we update the JavaScript so that we can pass those 2 values in. 
+And we update the JavaScript so that we can pass those 2 values in.
 
       ...
       var rotationLocation = gl.getUniformLocation(program, "u_rotation");
@@ -61,7 +61,7 @@ And here's the result. Drag the handle on the circle to rotate or the sliders to
 
 {{{example url="../webgl-2d-geometry-rotation.html" }}}
 
-Why does it work? Well, look at the math. 
+Why does it work? Well, look at the math.
 
     rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
     rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
