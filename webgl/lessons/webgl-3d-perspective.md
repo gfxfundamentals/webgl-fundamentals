@@ -19,7 +19,7 @@ smaller.
 Looking at the example above we see that things further away
 are drawn smaller. Given our current sample one easy way to
 make it so that things that are further away appear smaller
-would be to divide the clipspace X and Y by Z.
+would be to divide the clip space X and Y by Z.
 
 Think of it this way: If you have a line from (10, 15) to (20,15)
 it's 10 units long. In our current sample it would be drawn 10 pixels
@@ -48,7 +48,7 @@ abs(3.333 - 6.666) = 3.333
 </pre>
 
 You can see that as Z increases, as it gets further away, we'll end up drawing it smaller.
-If we divide in clipspace we might get better results because Z will be a smaller number (-1 to +1).
+If we divide in clip space we might get better results because Z will be a smaller number (-1 to +1).
 If we add a fudgeFactor to multiply Z before we divide we can adjust how much smaller things
 get for a given distance.
 
@@ -73,7 +73,7 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-Note, because Z in clipspace goes from -1 to +1 I added 1 to get `zToDivideBy` to go from 0 to +2 * fudgeFactor
+Note, because Z in clip space goes from -1 to +1 I added 1 to get `zToDivideBy` to go from 0 to +2 * fudgeFactor
 
 We also need to update the code to let us set the fudgeFactor.
 
@@ -176,7 +176,7 @@ z_out = z_in;
 w_out = z_in;
 </pre></div>
 
-We can add the plus 1 we had before with this matrix since we know <code>w_in</code> is always 1.0.
+We can add the plus 1 we had before with this matrix since we know `w_in` is always 1.0.
 
 <div class="webgl_math_center"><pre class="webgl_math">
 1, 0, 0, 0,
@@ -194,7 +194,7 @@ w_out = x_in * 0 +
         w_in * 1 ;
 </pre></div>
 
-and since we know <code>w_in</code> = 1.0 then that's really
+and since we know `w_in` = 1.0 then that's really
 
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in + 1;
@@ -240,7 +240,7 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-Next let's make a function to make our Z -&gt; W matrix.
+Next let's make a function to make our Z &rarr; W matrix.
 
 <pre class="prettyprint showlinemods">
 function makeZToWMatrix(fudgeFactor) {
@@ -278,7 +278,7 @@ and note, again, it's exactly the same.
 
 {{{example url="../webgl-3d-perspective-w-matrix.html" }}}
 
-All that was basically to show you that dividing by Z gives us perspective
+All that was basically just to show you that dividing by Z gives us perspective
 and that WebGL conveniently does this divide by Z for us.
 
 But there are still some problems. For example if you set Z to around -100 you'll see something like
@@ -287,7 +287,7 @@ the animation below
 <img class="webgl_center" src="resources/z-clipping.gif" style="border: 1px solid black;" />
 
 What's going on? Why is the F disappearing early? Just like WebGL clips X and Y or +1 to -1 it also
-clips Z. What were's seeing here is where Z < -1.
+clips Z. What we're seeing here is where Z < -1.
 
 I could go into detail about the math to fix it but [you can derive it](http://stackoverflow.com/a/28301213/128511) the same way
 we did 2D projection. We need to take Z, add some amount and scale some amount and we can make any range we want
@@ -313,21 +313,21 @@ function makePerspective(fieldOfViewInRadians, aspect, near, far) {
 </pre>
 
 This matrix will do all our conversions for us. It will adjust the units so they are
-in clipspace, it will do the math so that we can choose a field of view by angle
-and it will let us choose our z-clipping space. It assumes there's an `eye` or `camera` at the
+in clip space, it will do the math so that we can choose a field of view by angle
+and it will let us choose our Z-clipping space. It assumes there's an *eye* or *camera* at the
 origin (0, 0, 0) and given a `zNear` and a `fieldOfView` it computes what it would take so that
-stuff at `zNear` ends up at z=-1 and stuff at `zNear` that is half of `fieldOfView` above or below the center
-ends up with y=-1 and y=1 respectively. It computes what to use for X by just multiplying by the `aspect` passed in.
+stuff at `zNear` ends up at `Z=-1` and stuff at `zNear` that is half of `fieldOfView` above or below the center
+ends up with `Y=-1` and `Y=1` respectively. It computes what to use for X by just multiplying by the `aspect` passed in.
 We'd normally set this to the `width / height` of the display area.
-Finally, it figures out how much to scale things in Z so that stuff at zFar ends up at Z = 1.
+Finally, it figures out how much to scale things in Z so that stuff at zFar ends up at `Z=1`.
 
 Here's a diagram of the matrix in action.
 
 {{{example url="../frustum-diagram.html" width="400" height="600" }}}
 
-That shape that looks like 4 sided cone the cubes are spinning in is called a "frustum".
-The matrix takes the space inside the frustum and converts that to clipspace. `zNear` defines where
-things will get clipped in front and zFar defines where things get clipped in back. Set `zNear` to 23 and
+That shape that looks like a 4 sided cone the cubes are spinning in is called a "frustum".
+The matrix takes the space inside the frustum and converts that to clip space. `zNear` defines where
+things will get clipped in the front and `zFar` defines where things get clipped in the back. Set `zNear` to 23 and
 you'll see the front of the spinning cubes get clipped. Set `zFar` to 24 and you'll see the back of the cubes
 get clipped.
 
@@ -356,7 +356,7 @@ And here it is.
 
 {{{example url="../webgl-3d-perspective-matrix.html" }}}
 
-We're back to just a matrix multiply and we're getting both a field of view and we're able to choose our z space.
+We're back to just a matrix multiply and we're getting both a field of view and we're able to choose our Z space.
 We're not done but this article is getting too long. Next up, <a href="webgl-3d-camera.html">cameras</a>.
 
 <div class="webgl_bottombar">
@@ -365,7 +365,7 @@ We're not done but this article is getting too long. Next up, <a href="webgl-3d-
 In the other samples we had the F at (45, 150, 0) but in the last sample it's been moved to (-150, 0, -360).
 Why did it need to be moved so far away? </p>
 <p>The reason is up until this last sample our `make2DProjection` function has made a projection from
-pixels to clipspace. That means the area we were displaying represented 400x300 pixels. Using 'pixels'
+pixels to clip space. That means the area we were displaying represented 400x300 pixels. Using 'pixels'
 really doesn't make sense in 3D. The new projection makes a frustum that makes it so the area represented
 at `zNear` is 2 units tall and 2 * aspect units wide. Since our 'F' is 150 units big and the view can only
 see 2 units when it's at zNear we need to move it pretty far away from the origin to see it all.</p>

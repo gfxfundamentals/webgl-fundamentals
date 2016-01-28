@@ -72,8 +72,8 @@ The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
 the previous was about <a href="webgl-3d-perspective.html">3D perspective projection</a>.
 If you haven&#39;t read those please view them first.</p>
 <p>In the last post we had to move the F in front of the frustum because the <code>makePerspective</code>
-function expects it sits at the origin (0, 0, 0) and that objects in the frustum are -zNear
-to -zFar in front of it.</p>
+function expects it to sit at the origin (0, 0, 0) and that objects in the frustum are <code>-zNear</code>
+to <code>-zFar</code> in front of it.</p>
 <p>Moving stuff in front of the view doesn&#39;t seem the right way to go does it? In the real world
 you usually move your camera to take a picture of a building.</p>
 <p><div>
@@ -220,25 +220,25 @@ and a normalized vector represents a point on a unit sphere.</p>
 </p>
 <p>That&#39;s not enough info though.  Just a single vector gives us a point on a
 unit sphere but which orientation from that point to orient things?  We
-need to fill out the other parts of the matrix.  Specificaly the X axis
+need to fill out the other parts of the matrix.  Specifically the X axis
 and Y axis parts.  We know that in general these 3 parts are perpendicular to
 each other.  We also know that &quot;in general&quot; we don&#39;t point the camera
 straight up.  Given that, if we know which way is up, in this case (0,1,0),
-We can use that and something called a &quot;cross product&quot; to compute the X
-axis and Y axis for the matrix.</p>
+We can use that and something called a &quot;cross product&quot; to compute the X axis
+and Y axis for the matrix.</p>
 <p>I have no idea what a cross product means in mathematical terms.  What I do
 know is that if you have 2 unit vectors and you compute the cross product
 of them you&#39;ll get a vector that is perpendicular to those 2 vectors.  In
 other words, if you have a vector pointing south east, and a vector
-pointing up,and you compute the cross product you&#39;ll get a vector pointing
-either north west or north east since those are the 2 vectors that are perpendicular
-to south east and up.  Depending on which order you compute the cross product
+pointing up, and you compute the cross product you&#39;ll get a vector pointing
+either south west or north east since those are the 2 vectors that are perpendicular
+to south east and up.  Depending on which order you compute the cross product in,
 you&#39;ll get the opposite answer.</p>
 <p>In any case if we compute the cross product of our <span style="color: blue;"><code>zAxis</code></span> and
 <span style="color: gray;"><code>up</code></span> we&#39;ll get the <span style="color:red;">xAxis</span> for the camera.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/cross-product-diagram.html?mode=1"></iframe>
-  <div class="webgl_center"><span style='color:blue;'>zAxis</span> cross <span style='color:gray;'>up</span> = <span style='color:red;'>xAxis</span></div>
+  <div class="webgl_center"><span style='color:blue;'>zAxis</span> &times; <span style='color:gray;'>up</span> = <span style='color:red;'>xAxis</span></div>
 </div>
 
 </p>
@@ -349,23 +349,23 @@ function makeLookAt(cameraPosition, target, up) {
 </div>
 
 </p>
-<p>Drag the slider and notice the camera tracks a single &#39;F&#39;.</p>
+<p>Drag the slider and notice how the camera tracks a single &#39;F&#39;.</p>
 <p>Note that you can use &quot;lookAt&quot; math for more than just cameras. Common uses are making a character&#39;s
 head follow someone. Making a turret aim at a target. Making an object follow a path. You compute
 where on the path the target is. Then you compute where on the path the target would be a few moments
-in the future. Plug those 2 values into your lookAt function and you&#39;ll get a matrix that makes
+in the future. Plug those 2 values into your <code>lookAt</code> function and you&#39;ll get a matrix that makes
 your object follow the path and orient toward the path as well.</p>
 <p>Let&#39;s <a href="webgl-animation.html">learn about animation next</a>.</p>
 <div class="webgl_bottombar">
 <h3>lookAt standards</h3>
-<p>Most 3D math libraries have a lookAt function. Often it is designed
-specifically to make a "view matrix" and not a "camera matrix". In other words
+<p>Most 3D math libraries have a <code>lookAt</code> function. Often it is designed
+specifically to make a "view matrix" and not a "camera matrix". In other words,
 it makes a matrix that moves everything else in front of the camera rather
 than a matrix that moves the camera itself.</p>
 <p>I find that less useful. As pointed out, a lookAt function has many uses. It's
-easy to call inverse when you need a view matrix but if you are using lookAt
+easy to call <code>inverse</code> when you need a view matrix but if you are using <code>lookAt</code>
 to make some character's head follow another character or some turret aim
-at its target it's much more useful if lookAt returns a matrix that orients
+at its target it's much more useful if <code>lookAt</code> returns a matrix that orients
 and positions an object in world space in my opinion.
 </p>
 <div>

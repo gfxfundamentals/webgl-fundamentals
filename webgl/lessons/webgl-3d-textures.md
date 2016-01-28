@@ -2,7 +2,7 @@ Title: WebGL 3D - Textures
 Description: How textures work in WebGL
 
 This post is a continuation of a series of posts about WebGL.
-The first <a href="webgl-fundamentals.html">started with fundamentals</a>.
+The first <a href="webgl-fundamentals.html">started with fundamentals</a>
 and the previous was about <a href="webgl-animation.html">animation</a>.
 
 How do we apply textures in WebGL? You could probably derive how by
