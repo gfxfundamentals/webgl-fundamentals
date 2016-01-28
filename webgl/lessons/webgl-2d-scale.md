@@ -62,12 +62,12 @@ And now we have scale. Drag the sliders.
 
 One thing to notice is that scaling by a negative value flips our geometry.
 
-I hope these last 3 posts were helpful in understanding <a href="webgl-2d-translation.html">translation</a>, <a href="webgl-2d-rotation.html">rotation</a> and scale. Next we'll go over <a href="webgl-2d-matrices.html">the magic that is matrices</a> that combine all 3 of these into a much simpler and often more useful form.
+I hope these last 3 posts were helpful in understanding <a href="webgl-2d-translation.html">translation</a>, <a href="webgl-2d-rotation.html">rotation</a> and scale. Next we'll go over <a href="webgl-2d-matrices.html">the magic that is matrices</a> that combines all 3 of these into a much simpler and often more useful form.
 
 <div class="webgl_bottombar">
 <h3>Why an 'F'?</h3>
 <p>
-The first time I saw someone use an 'F' was on a texture. The 'F' itself is not important. What is important is that you can tell its orientation from any direction. If we used a heart ? or a triangle △ for example we couldn't tell if it was flipped horizontally. A circle ○ would be even worse. A colored rectangle would arguably work with different colors on each corner but then you'd have to remember which corner was which. An F's orientation is instantly recognizable.
+The first time I saw someone use an 'F' was on a texture. The 'F' itself is not important. What is important is that you can tell its orientation from any direction. If we used a heart &#x2665; or a triangle △ for example we couldn't tell if it was flipped horizontally. A circle ○ would be even worse. A colored rectangle would arguably work with different colors on each corner but then you'd have to remember which corner was which. An F's orientation is instantly recognizable.
 </p>
 <img src="../resources/f-orientation.svg" class="webgl_center"/>
 <p>

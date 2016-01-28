@@ -19,7 +19,7 @@ We'll save that method for a later article.
 In this case we'll wait for all the images to load before we draw anything.
 
 First let's change the code that loads an image into a function. It's pretty straightforward.
-It creates a new image object, sets the URL to load, and sets a callback to
+It creates a new `Image` object, sets the URL to load, and sets a callback to
 be called when the image finishes loading.
 
 <pre class="prettyprint showlinemods">
@@ -41,8 +41,7 @@ function loadImages(urls, callback) {
   var images = [];
   var imagesToLoad = urls.length;
 
-  // Called each time an image finished
-  // loading.
+  // Called each time an image finished loading.
   var onImageLoad = function() {
     --imagesToLoad;
     // If all the images are loaded call the callback.

@@ -25,7 +25,7 @@ description.
 To give an anology, C++ does not "process words" out of the box.  We
 don't call C++ a "word processor" even though word processors can be
 written in C++.  Similarly WebGL does not draw 3D graphics out of the box.
-You can write library that will draw 3D graphics with WebGL but by itself
+You can write a library that will draw 3D graphics with WebGL but by itself
 it does not do 3D graphics.
 
 To give a further example, assume we want to draw a cube in 3D
@@ -141,8 +141,8 @@ examples.  Compare that to WebGL.  I'm not going to write the code
 required for WebGL.  The code is not that much larger.  It's not
 about the amount of lines required.  It's about the amount of **knowledge**
 required.  In the two 3D libraries they take care of the 3D. You give them
-a camera position and field of view, a couple of lights and, a cube.  They
-deal with all the rest.  In other words. They are 3D libraries.
+a camera position and field of view, a couple of lights, and a cube.  They
+deal with all the rest.  In other words: They are 3D libraries.
 
 In WebGL on the other hand you need to know matrix math, normalized
 coordinates, frustums, cross products, dot products, varying interpolation, lighting
@@ -151,7 +151,7 @@ or years to fully understand.
 
 A 3D library's entire point is to have that knowledge built in so you
 don't need that knowledge yourself, you can just rely on the library to
-handle it for you.  This was true the original OpenGL as shown above.
+handle it for you.  This was true for the original OpenGL as shown above.
 It's true of other 3D libraries like three.js.  It is NOT true of OpenGL
 ES 2.0+ or WebGL.
 
@@ -175,7 +175,7 @@ draws some lines in 2D. The WebGL version does the same thing except the math
 WE SUPPLIED is in GLSL and executed by the GPU.
 
 The point of this last demostration is to show that effectively WebGL is
-just a rasteration engine, similar to Canvas 2D. Sure
+just a rasterization engine, similar to Canvas 2D. Sure
 WebGL does have features that help you implement 3D.  WebGL has a depth
 buffer which makes depth sorting far easier than a system without.  WebGL
 also has various math functions built in that are very useful for doing 3D

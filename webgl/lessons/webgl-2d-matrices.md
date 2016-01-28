@@ -15,14 +15,14 @@ And here is a translation of 100,0, rotation of 30 degrees and scale of 2, 1
 
 The results are completely different. Even worse, if we needed the second example we'd have to write a different shader that applied the translation, rotation, and scale in our new desired order.
 
-Well, some people way smarter than me, figured out that you can do all the same stuff with matrix math. For 2d we use a 3x3 matrix. A 3x3 matrix is like a grid with 9 boxes.
+Well, some people way smarter than me figured out that you can do all the same stuff with matrix math. For 2D we use a 3x3 matrix. A 3x3 matrix is like a grid with 9 boxes:
 
 <style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
-To do the math we multiply the position down the columns of the matrix and add up the results. Our positions only have 2 values, x and y but to do this math we need 3 values so we'll use 1 for the third value.
+To do the math we multiply the position down the columns of the matrix and add up the results. Our positions only have 2 values, x and y, but to do this math we need 3 values so we'll use 1 for the third value.
 
-in this case our result would be
+In this case our result would be
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/>
@@ -30,7 +30,7 @@ in this case our result would be
 <tr><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">4.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">5.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">6.0</td><td>&nbsp;+</td></tr>
 <tr><td></td><td>1&nbsp;*&nbsp;</td><td>7.0</td><td>&nbsp;</td><td></td><td>1&nbsp;*&nbsp;</td><td>8.0</td><td>&nbsp;&nbsp;</td><td></td><td>1&nbsp;*&nbsp;</td><td>9.0</td><td>&nbsp;</td></tr></table></div>
 
-You're probably looking at that and thinking "WHAT'S THE POINT". Well, let's assume we have a translation. We'll call the amount we want to translate tx and ty. Let's make a matrix like this
+You're probably looking at that and thinking "WHAT'S THE POINT?" Well, let's assume we have a translation. We'll call the amount we want to translate by tx and ty. Let's make a matrix like this
 
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>1.0</td><td>0.0</td></tr><tr><td>tx</td><td>ty</td><td>1.0</td></tr></table></div>
 
@@ -58,7 +58,7 @@ newY = y + ty;
 
 And extra we don't really care about. That looks surprisingly like <a href="webgl-2d-translation.html">the translation code from our translation example</a>.
 
-Similarly let's do rotation. Like we pointed out in the rotation post we just need the sine and cosine of the angle at which we want to rotate so.
+Similarly let's do rotation. Like we pointed out in the rotation post we just need the sine and cosine of the angle at which we want to rotate, so
 
 <pre class="webgl_center">
 s = Math.sin(angleToRotateInRadians);
@@ -125,9 +125,9 @@ newY = y * sy;
 
 Which is the same as our <a href="webgl-2d-scale.html">scaling sample</a>.
 
-Now I'm sure you might still be thinking. So what? What's the point. That seems like a lot of work just to do the same thing we were already doing?
+Now I'm sure you might still be thinking "So what? What's the point?" That seems like a lot of work just to do the same thing we were already doing.
 
-This is where the magic comes in. It turns out we can multiply matrices together and apply all the transformations at once. Let's assume we have a function, <code>matrixMultiply</code>, that takes two matrices, multiplies them and returns the result.
+This is where the magic comes in. It turns out we can multiply matrices together and apply all the transformations at once. Let's assume we have a function, `matrixMultiply`, that takes two matrices, multiplies them and returns the result.
 
 To make things clearer let's make functions to build matrices for translation, rotation and scale.
 
@@ -261,7 +261,7 @@ Being able to apply matrices like this is especially important for hierarchical 
         }
       }
 
-To do this we introduced the function, <code>makeIdentity</code>, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like
+To do this we introduced the function, `makeIdentity`, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like
 
 <div class="webgl_center">X * 1 = X</div>
 
@@ -283,7 +283,7 @@ Here's the 5 Fs.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-hierarchical.html" }}}
 
-One more example, in every sample so far our 'F' rotates around its top left corner. This is because the math we are using always rotates around the origin and the top left corner of our 'F' is at the origin, (0, 0)
+Let's see one more example. In every sample so far our 'F' rotates around its top left corner. This is because the math we are using always rotates around the origin and the top left corner of our 'F' is at the origin, (0, 0).
 
 But now, because we can do matrix math and we can choose the order that transforms are applied we can move the origin before the rest of the transforms are applied.
 
@@ -364,10 +364,10 @@ We also removed the code that set the resolution. With this last step we've gone
 I hope these posts have helped demystify matrix math. <a href="webgl-3d-orthographic.html">I'll move on to 3D next</a>. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.
 
 <div class="webgl_bottombar">
-<h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
-<p>Up until this point whenever I referred to the canvas's dimensions I used <code>canvas.width</code> and <code>canvas.height</code>
-but above when I called <code>make2DProjection</code> I instead used <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Why?</p>
-<p>Projection matrixes are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
+<h3>What are `clientWidth` and `clientHeight`?</h3>
+<p>Up until this point whenever I referred to the canvas's dimensions I used `canvas.width` and `canvas.height`
+but above when I called `make2DProjection` I instead used `canvas.clientWidth` and `canvas.clientHeight`. Why?</p>
+<p>Projection matrices are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
 to pixels. But, in the browser, there are 2 types of pixels we are dealing with. One is the number of pixels in
 the canvas itself. So for example a canvas defined like this.</p>
 <pre class="prettyprint">
@@ -394,19 +394,19 @@ For example if we made a canvas like this.</p>
 </pre>
 <p>The canvas will be displayed whatever size its container is. That's likely not 400x300.</p>
 <p>Here are two examples that set the canvas's CSS display size to 100% so the canvas is stretched
-out to fill the page. The first one uses <code>canvas.width</code> and <code>canvas.height</code>. Open it in a new
+out to fill the page. The first one uses `canvas.width` and `canvas.height`. Open it in a new
 window and resize the window. Notice how the 'F' doesn't have the correct aspect. It gets
 distorted.</p>
 {{{example url="../webgl-canvas-width-height.html" width="500" height="150" }}}
-<p>In this second example we use <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> report
+<p>In this second example we use `canvas.clientWidth` and `canvas.clientHeight`. `canvas.clientWidth` and `canvas.clientHeight` report
 the size the canvas is actually being displayed by the browser so in this case, even though the canvas still only has 400x300 pixels
-since we're defining our aspect ratio based on the size the canvas is being displayed the <code>F</code> always looks correct.</p>
+since we're defining our aspect ratio based on the size the canvas is being displayed the `F` always looks correct.</p>
 {{{example url="../webgl-canvas-clientwidth-clientheight.html" width="500" height="150" }}}
-<p>Most apps that allow their canvases to be resized try to make the <code>canvas.width</code> and <code>canvas.height</code> match
-the <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> because they want there to be
+<p>Most apps that allow their canvases to be resized try to make the `canvas.width` and `canvas.height` match
+the `canvas.clientWidth` and `canvas.clientHeight` because they want there to be
 one pixel in the canvas for each pixel displayed by the browser. But, as we've seen above, that's not
 the only option. That means, in almost all cases, it's more technically correct to compute a
-projection matrix's aspect ratio using <code>canvas.clientHeight</code> and <code>canvas.clientWidth</code>.
+projection matrix's aspect ratio using `canvas.clientHeight` and `canvas.clientWidth`.
 </p>
 </div>
 
