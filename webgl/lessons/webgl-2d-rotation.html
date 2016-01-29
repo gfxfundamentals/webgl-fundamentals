@@ -78,9 +78,9 @@ First I want to introduce you to what&#39;s called a &quot;unit circle&quot;. If
 
 </p>
 <p>Notice as you drag the blue handle around the circle the X and Y positions change. Those represent the position of that point on the circle. At the top Y is 1 and X is 0. On the right X is 1 and Y is 0.</p>
-<p>If you remember from basic 3rd grade math if you multiply something by 1 it stays the same. So 123 * 1 = 123. Pretty basic right? Well, a unit circle, a circle with a radius of 1.0 is also a form of 1. It&#39;s a rotating 1.  So you can multiply something by this unit circle and in a way it&#39;s kind of like multiplying by 1 except magic happens and things rotate.</p>
+<p>If you remember from basic 3rd grade math if you multiply something by 1 it stays the same. So 123 * 1 = 123. Pretty basic, right? Well, a unit circle, a circle with a radius of 1.0 is also a form of 1. It&#39;s a rotating 1.  So you can multiply something by this unit circle and in a way it&#39;s kind of like multiplying by 1 except magic happens and things rotate.</p>
 <p>We&#39;re going to take that X and Y value from any point on the unit circle and we&#39;ll multiply our geometry by them from <a href="webgl-2d-translation.html">our previous sample</a>.</p>
-<p>Here&#39;s are the updates to our shader.</p>
+<p>Here are the updates to our shader.</p>
 <pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
@@ -96,7 +96,7 @@ void main() {
 
   // Add in the translation.
   vec2 position = rotatedPosition + u_translation;
-</code></pre><p>And we update the JavaScript so that we can pass those 2 values in. </p>
+</code></pre><p>And we update the JavaScript so that we can pass those 2 values in.</p>
 <pre><code>  ...
   var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
   ...
@@ -123,10 +123,10 @@ void main() {
 </div>
 
 </p>
-<p>Why does it work? Well, look at the math. </p>
+<p>Why does it work? Well, look at the math.</p>
 <pre><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
-</code></pre><p>Let&#39;s stay you have a rectangle and you want to rotate it. Before you start rotating it the top right corner is at 3.0, 9.0. Let&#39;s pick a point on the unit circle 30 degrees clockwise from 12 o&#39;clock.</p>
+</code></pre><p>Let&#39;s say you have a rectangle and you want to rotate it. Before you start rotating it the top right corner is at 3.0, 9.0. Let&#39;s pick a point on the unit circle 30 degrees clockwise from 12 o&#39;clock.</p>
 <p><img src="../resources/rotate-30.png" class="webgl_center" /></p>
 <p>The position on the circle there is 0.50 and 0.87</p>
 <pre class="webgl_center">
@@ -145,14 +145,14 @@ rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </pre>
 
 <p>You can see that as we rotate that point clockwise to the right the X value gets bigger and the Y gets smaller. If we kept going past 90 degrees X would start getting smaller again and Y would start getting bigger. That pattern gives us rotation.</p>
-<p>There&#39;s another name for the points on a unit circle. They&#39;re call the sine and cosine. So for any given angle we can just look up the sine and cosine like this.</p>
+<p>There&#39;s another name for the points on a unit circle. They&#39;re called the sine and cosine. So for any given angle we can just look up the sine and cosine like this.</p>
 <pre><code>function printSineAndCosineForAnAngle(angleInDegrees) {
   var angleInRadians = angleInDegrees * Math.PI / 180;
   var s = Math.sin(angleInRadians);
   var c = Math.cos(angleInRadians);
   console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
 }
-</code></pre><p>If you copy and paste the code into your JavaScript console and type <code>printSineAndCosignForAngle(30)</code> you see it prints <code>s = 0.49 c= 0.87</code> (note: I rounded off the numbers.)</p>
+</code></pre><p>If you copy and paste the code into your JavaScript console and type <code>printSineAndCosignForAngle(30)</code> you see it prints <code>s = 0.49 c = 0.87</code> (note: I rounded off the numbers.)</p>
 <p>If you put it all together you can rotate your geometry to any angle you desire. Just set the rotation to the sine and cosine of the angle you want to rotate to.</p>
 <pre><code>  ...
   var angleInRadians = angleInDegrees * Math.PI / 180;
