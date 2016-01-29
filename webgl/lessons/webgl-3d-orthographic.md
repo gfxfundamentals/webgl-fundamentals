@@ -1,5 +1,5 @@
 Title: WebGL - Orthographic 3D
-Description: How to do 3D in WebGL starting with an Orthographic projection.
+Description: How to do 3D in WebGL starting with an orthographic projection.
 
 This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
@@ -160,6 +160,7 @@ function makeYRotation(angleInRadians) {
 function makeZRotation(angleInRadians) {
   var c = Math.cos(angleInRadians);
   var s = Math.sin(angleInRadians);
+
   return [
      c, s, 0, 0,
     -s, c, 0, 0,
@@ -236,11 +237,11 @@ function make2DProjection(width, height, depth) {
 }
 </pre>
 
-Just like we needed to convert from pixels to clipspace for x and y, for
-z we need to do the same thing.  In this case I'm making the Z space pixel
-units as well.  I'll pass in some value similar to *width* for the depth
-so our space will be 0 to width pixels wide, 0 to height pixels tall, but
-for depth it will be -depth / 2 to +depth / 2.
+Just like we needed to convert from pixels to clip space for X and Y, for
+Z we need to do the same thing.  In this case I'm making the Z axis pixel
+units as well.  I'll pass in some value similar to `width` for the `depth`
+so our space will be 0 to `width` pixels wide, 0 to `height` pixels tall, but
+for `depth` it will be `-depth / 2` to `+depth / 2`.
 
 Finally we need to to update the code that computes the matrix.
 
@@ -275,7 +276,7 @@ hard to see any 3D.  To fix that let's expand the geometry to 3D.  Our
 current F is made of 3 rectangles, 2 triangles each.  To make it 3D will
 require a total of 16 rectangles.  That's quite a few to list out here.
 16 rectangles * 2 triangles per rectangle * 3 vertices per triangle is 96
-vertices.  If you want to see all of them view source on the sample.
+vertices.  If you want to see all of them view the source of the sample.
 
 We have to draw more vertices so
 
@@ -377,7 +378,7 @@ Now we get this.
 {{{example url="../webgl-3d-step3.html" }}}
 
 Uh oh, what's that mess?  Well, it turns out all the various parts of
-that 3D 'F', front, back, sides, etc get drawn in the order they appear in
+that 3D 'F', front, back, sides, etc get drawn in the order they appear in in
 our geometry.  That doesn't give us quite the desired results as sometimes
 the ones in the back get drawn after the ones in the front.
 
@@ -400,7 +401,7 @@ feature turned on, WebGL defaults to "culling" back facing triangles.
 
 Note that as far as WebGL is concerned, whether or not a triangle is
 considered to be going clockwise or counter clockwise depends on the
-vertices of that triangle in clipspace.  In other words, WebGL figures out
+vertices of that triangle in clip space.  In other words, WebGL figures out
 whether a triangle is front or back AFTER you've applied math to the
 vertices in the vertex shader.  That means for example a clockwise
 triangle that is scaled in X by -1 becomes a counter clockwise triangle or
@@ -443,16 +444,16 @@ Going through and fixing all the backward triangles gets us to this
 
 That's closer but there's still one more problem.  Even with all the
 triangles facing in the correct direction and with the back facing ones
-being culled we still have places where triangles that should be in back
-are being drawn in over triangles that should be in front.
+being culled we still have places where triangles that should be in the back
+are being drawn over triangles that should be in front.
 
 Enter the DEPTH BUFFER.
 
-A Depth buffer, sometimes called a Z-Buffer, is a rectangle of *depth*
+A depth buffer, sometimes called a Z-Buffer, is a rectangle of *depth*
 pixels, one depth pixel for each color pixel used to make the image.  As
 WebGL draws each color pixel it can also draw a depth pixel.  It does this
 based on the values we return from the vertex shader for Z.  Just like we
-had to convert to clip space for X and Y, so too Z is in clip space or (-1
+had to convert to clip space for X and Y, Z is also in clip space or (-1
 to +1).  That value is then converted into a depth space value (0 to +1).
 Before WebGL draws a color pixel it will check the corresponding depth
 pixel.  If the depth value for the pixel it's about to draw is greater

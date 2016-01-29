@@ -13,11 +13,11 @@ Here's a unit circle.
 
 Notice as you drag the blue handle around the circle the X and Y positions change. Those represent the position of that point on the circle. At the top Y is 1 and X is 0. On the right X is 1 and Y is 0.
 
-If you remember from basic 3rd grade math if you multiply something by 1 it stays the same. So 123 * 1 = 123. Pretty basic right? Well, a unit circle, a circle with a radius of 1.0 is also a form of 1. It's a rotating 1.  So you can multiply something by this unit circle and in a way it's kind of like multiplying by 1 except magic happens and things rotate.
+If you remember from basic 3rd grade math if you multiply something by 1 it stays the same. So 123 * 1 = 123. Pretty basic, right? Well, a unit circle, a circle with a radius of 1.0 is also a form of 1. It's a rotating 1.  So you can multiply something by this unit circle and in a way it's kind of like multiplying by 1 except magic happens and things rotate.
 
 We're going to take that X and Y value from any point on the unit circle and we'll multiply our geometry by them from <a href="webgl-2d-translation.html">our previous sample</a>.
 
-Here's are the updates to our shader.
+Here are the updates to our shader.
 
     <script id="2d-vertex-shader" type="x-shader/x-vertex">
     attribute vec2 a_position;
@@ -66,7 +66,7 @@ Why does it work? Well, look at the math.
     rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
     rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 
-Let's stay you have a rectangle and you want to rotate it. Before you start rotating it the top right corner is at 3.0, 9.0. Let's pick a point on the unit circle 30 degrees clockwise from 12 o'clock.
+Let's say you have a rectangle and you want to rotate it. Before you start rotating it the top right corner is at 3.0, 9.0. Let's pick a point on the unit circle 30 degrees clockwise from 12 o'clock.
 
 <img src="../resources/rotate-30.png" class="webgl_center" />
 
@@ -94,7 +94,7 @@ The position on the circle there is 0.87 and 0.50
 
 You can see that as we rotate that point clockwise to the right the X value gets bigger and the Y gets smaller. If we kept going past 90 degrees X would start getting smaller again and Y would start getting bigger. That pattern gives us rotation.
 
-There's another name for the points on a unit circle. They're call the sine and cosine. So for any given angle we can just look up the sine and cosine like this.
+There's another name for the points on a unit circle. They're called the sine and cosine. So for any given angle we can just look up the sine and cosine like this.
 
     function printSineAndCosineForAnAngle(angleInDegrees) {
       var angleInRadians = angleInDegrees * Math.PI / 180;
@@ -103,7 +103,7 @@ There's another name for the points on a unit circle. They're call the sine and 
       console.log("s = " + s + " c = " + c);
     }
 
-If you copy and paste the code into your JavaScript console and type <code>printSineAndCosignForAngle(30)</code> you see it prints <code>s = 0.49 c= 0.87</code> (note: I rounded off the numbers.)
+If you copy and paste the code into your JavaScript console and type `printSineAndCosignForAngle(30)` you see it prints `s = 0.49 c = 0.87` (note: I rounded off the numbers.)
 
 If you put it all together you can rotate your geometry to any angle you desire. Just set the rotation to the sine and cosine of the angle you want to rotate to.
 
