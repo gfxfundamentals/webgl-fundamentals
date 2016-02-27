@@ -6,13 +6,13 @@ window.langDB = {
     "webgl-text-glyphs.html": {
       "en": true
     },
-    "webgl-scene-graph.html": {
+    "webgl-text-texture.html": {
       "en": true
     },
     "webgl-text-canvas2d.html": {
       "en": true
     },
-    "webgl-text-texture.html": {
+    "webgl-scene-graph.html": {
       "en": true
     },
     "webgl-text-html.html": {
@@ -42,6 +42,9 @@ window.langDB = {
     "webgl-2-textures.html": {
       "en": true
     },
+    "webgl-2d-drawimage.html": {
+      "en": true
+    },
     "webgl-2d-vs-3d-library.html": {
       "en": true,
       "pl": true
@@ -65,9 +68,6 @@ window.langDB = {
       "en": true,
       "pl": true
     },
-    "webgl-2d-matrices.html": {
-      "en": true
-    },
     "webgl-how-it-works.html": {
       "en": true
     },
@@ -79,6 +79,9 @@ window.langDB = {
       "en": true
     },
     "webgl-2d-rotation.html": {
+      "en": true
+    },
+    "webgl-2d-matrices.html": {
       "en": true
     },
     "webgl-boilerplate.html": {
