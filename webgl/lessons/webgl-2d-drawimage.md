@@ -422,7 +422,7 @@ or maybe you'd like to use a solid color when the texture coordinates are outsid
            v_texcoord.y < 0.0 ||
            v_texcoord.x > 1.0 ||
            v_texcoord.y > 1.0) {
-    *     gl_FragColor = vec4(0, 0, 0, 1);
+    *     gl_FragColor = vec4(0, 0, 1, 1); // blue
     +     return;
        }
        gl_FragColor = texture2D(texture, v_texcoord);
