@@ -1,24 +1,27 @@
 window.langDB = {
   "articles": {
+    "webgl-2d-drawimage.html": {
+      "en": true
+    },
     "webgl-shaders-and-glsl.html": {
       "en": true
     },
     "webgl-text-glyphs.html": {
       "en": true
     },
-    "webgl-text-texture.html": {
+    "webgl-text-canvas2d.html": {
       "en": true
     },
-    "webgl-text-canvas2d.html": {
+    "webgl-text-texture.html": {
       "en": true
     },
     "webgl-scene-graph.html": {
       "en": true
     },
-    "webgl-text-html.html": {
+    "webgl-drawing-multiple-things.html": {
       "en": true
     },
-    "webgl-drawing-multiple-things.html": {
+    "webgl-text-html.html": {
       "en": true
     },
     "webgl-resizing-the-canvas.html": {
@@ -40,9 +43,6 @@ window.langDB = {
       "en": true
     },
     "webgl-2-textures.html": {
-      "en": true
-    },
-    "webgl-2d-drawimage.html": {
       "en": true
     },
     "webgl-2d-vs-3d-library.html": {
