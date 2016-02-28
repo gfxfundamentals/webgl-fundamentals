@@ -432,6 +432,31 @@ or maybe you'd like to use a solid color when the texture coordinates are outsid
 
 The sky's really the limit. It's all up to your creative use of shaders.
 
+<div class="webgl_bottombar">
+<h3>A minor optimization</h3>
+<p>I'm not recommending this optimization. Rather I want to point out
+more creative thinking since WebGL is all about creative use the features
+it provides.</p>
+<p>You might have noticed we're using a unit quad for our positions and those positions of
+a unit quad exactly match our texture coordinates. As such we can use the positions
+as the texture coordinates.</p>
+<pre class="prettyprint showlinemods">
+attribute vec4 a_position;
+-attribute vec2 a_texcoord;
 
+uniform mat4 u_matrix;
+uniform mat4 u_textureMatrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+   gl_Position = u_matrix * a_position;
+*   v_texcoord = (u_textureMatrix * a_position).xy;
+}
+</pre>
+<p>We can now remove the code that setup the texture coordinates and it will
+work just the same as before.</p>
+{{{example url="../webgl-2d-drawimage-08.html" }}}
+</div>
 
 
