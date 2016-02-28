@@ -4,34 +4,96 @@
 <head>
 <meta charset="utf-8">
 <title>WebGL - Cross Product Diagram</title>
-<link type="text/css" href="../../resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
-<style>
-#ui {
-    width: 200px;
-}
-#rotation>canvas {
-    background-color: rgba(255, 255, 255, 0.6) !important;
-}
-</style>
 <script src="../../resources/webgl-utils.js"></script>
-<script src="../../resources/jquery-1.7.1.min.js"></script>
-<script src="../../resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="../../resources/jquery.gman.ui.js"></script>
-<script src="../../resources/tdl/base.js"></script>
+<script src="../../resources/twgl-full.min.js"></script>
+<script id="vertexColorVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 color;
+uniform mat4 u_worldViewProjection;
+varying vec4 v_color;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_color = color;
+}
+
+</script>
+<script id="vertexColorFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+uniform vec4 u_color;
+varying vec4 v_color;
+void main() {
+  gl_FragColor = u_color * v_color;
+}
+</script>
+<script id="vertexColorFakeLightVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 color;
+attribute vec3 normal;
+uniform mat4 u_worldViewProjection;
+uniform mat4 u_worldInverseTranspose;
+varying vec4 v_color;
+varying vec3 v_normal;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_color = color;
+  v_normal = (u_worldInverseTranspose * vec4(normal, 0)).xyz;
+}
+
+</script>
+<script id="vertexColorFakeLightFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+uniform vec4 u_color;
+varying vec4 v_color;
+varying vec3 v_normal;
+void main() {
+  vec3 normal = normalize(v_normal);
+  vec3 lightDir = normalize(vec3(0.5, 0.7, 1));
+  float d = dot(normal, lightDir) * 0.5 + 0.5;
+  gl_FragColor = u_color * v_color * vec4(d, d, d, 1);
+}
+</script>
+<script id="baseVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 a_color;
+uniform mat4 u_worldViewProjection;
+uniform mat4 u_exampleWorldViewProjection;
+varying vec4 v_color;
+varying vec4 v_position;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_position = u_exampleWorldViewProjection * position;
+  v_position = v_position / v_position.w;
+  v_color = a_color;
+}
+
+</script>
+<script id="colorFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+varying vec4 v_color;
+varying vec4 v_position;
+uniform vec4 u_color;
+void main() {
+  bool blend = (v_position.x < -1.0 || v_position.x > 1.0 ||
+                v_position.y < -1.0 || v_position.y > 1.0 ||
+                v_position.z < -1.0 || v_position.z > 1.0);
+  vec4 blendColor = blend ? vec4(0.35, 0.35, 0.35, 1.0) : vec4(1, 1, 1, 1);
+  gl_FragColor = v_color * u_color * blendColor;
+}
+</script>
+</head>
+<body>
+<div class="description">
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas" width="400" height="300" style="width: 400px; height: 300px;"></canvas>
+</div>
+</body>
+</html>
 <script>
 "use strict";
-
-tdl.require('tdl.buffers');
-tdl.require('tdl.clock');
-tdl.require('tdl.fast');
-tdl.require('tdl.log');
-tdl.require('tdl.math');
-tdl.require('tdl.models');
-tdl.require('tdl.primitives');
-tdl.require('tdl.programs');
-tdl.require('tdl.textures');
-tdl.require('tdl.webgl');
+var m4 = twgl.m4;
+var v3 = twgl.v3;
 
 var fPosition;
 var cameraPosition;
@@ -44,15 +106,13 @@ var mode;
 // globals
 var gl;                   // the gl context.
 var canvas;               // the canvas
-var math;                 // the math lib.
-var fast;                 // the fast math lib.
 var devicePixelRatio = window.devicePixelRatio || 1;
 
 var createGrid = function(size, subdivisions) {
   var numLines = subdivisions;
   var numVertices = numLines * 4;
-  var positions = new tdl.primitives.AttribBuffer(3, numVertices);
-  var colors = new tdl.primitives.AttribBuffer(4, numVertices);
+  var positions = twgl.primitives.createAugmentedTypedArray(3, numVertices);
+  var colors = twgl.primitives.createAugmentedTypedArray(4, numVertices);
 
   //  ..|..|..|..
   //  <-  size ->
@@ -80,7 +140,7 @@ var createGrid = function(size, subdivisions) {
   };
 };
 
-function CreateApp() {
+function CreateApp(gl) {
   var getURLOptions = function(s, obj) {
     var q = s.indexOf("?");
     var e = s.indexOf("#");
@@ -105,8 +165,8 @@ function CreateApp() {
   mode = parseInt(options.mode);
 
   var addVColors = function(arrays) {
-    var numVerts = arrays.position.numElements;
-    arrays.color = new tdl.primitives.AttribBuffer(3, numVerts);
+    var numVerts = arrays.position.length / 3;
+    arrays.color = new twgl.primitives.createAugmentedTypedArray(3, numVerts);
     for (var ii = 0; ii < numVerts; ++ii) {
       arrays.color.push([1,1,1]);
     }
@@ -115,372 +175,105 @@ function CreateApp() {
 
   // Create Geometry.
   var wireCubeArrays = {
-    position: new tdl.primitives.AttribBuffer(3,
-      [
-        -1,  1, -1,
-         1,  1, -1,
-         1, -1, -1,
-        -1, -1, -1,
+    position: [
+      -1,  1, -1,
+       1,  1, -1,
+       1, -1, -1,
+      -1, -1, -1,
 
-        -1,  1,  1,
-         1,  1,  1,
-         1, -1,  1,
-        -1, -1,  1,
-      ]),
-    color: new tdl.primitives.AttribBuffer(
-      4,
-      [
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
+      -1,  1,  1,
+       1,  1,  1,
+       1, -1,  1,
+      -1, -1,  1,
+    ],
+    color: [
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+      1, 1, 1, 1,
 
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-      ]),
-    indices: new tdl.primitives.AttribBuffer(
-      2,
-      [
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+    ],
+    indices: {
+      numComponents: 2,
+      data: [
         0, 1, 1, 2, 2, 3, 3, 0,
         4, 5, 5, 6, 6, 7, 7, 4,
         0, 4, 1, 5, 2, 6, 3, 7,
       ],
-      'Uint16Array'),
-  };
-  // Load textures
-  var textures = {
+    },
   };
 
   // Create Shader Program
-  var vertexColorProgram = tdl.programs.loadProgramFromScriptTags(
+  var vertexColorProgramInfo = twgl.createProgramInfo(gl, [
       'vertexColorVertexShader',
-      'vertexColorFragmentShader');
-  var wireCubeModel = new tdl.models.Model(vertexColorProgram, wireCubeArrays, undefined, gl.LINES);
+      'vertexColorFragmentShader',
+  ]);
+  var wireCubeBufferInfo = twgl.createBufferInfoFromArrays(gl, wireCubeArrays);
 
   var cubeRaysArrays = {
     position: wireCubeArrays.position,
-    color: new tdl.primitives.AttribBuffer(
-      4,
-      [
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
-        1, 1, 1, 1,
+    color: [
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+      1, 1, 1, 1,
 
-        0, 0, 0, 1,
-        0, 0, 0, 1,
-        0, 0, 0, 1,
-        0, 0, 0, 1,
-      ]),
-    indices: new tdl.primitives.AttribBuffer(
-      2,
-      [
+      0, 0, 0, 1,
+      0, 0, 0, 1,
+      0, 0, 0, 1,
+      0, 0, 0, 1,
+    ],
+    indices: {
+      numComponents: 2,
+      data: [
         0, 4, 1, 5, 2, 6, 3, 7,
       ],
-      'Uint16Array'),
+    },
   };
-  var cubeRaysModel = new tdl.models.Model(vertexColorProgram, cubeRaysArrays, undefined, gl.LINES);
+  var cubeRaysBufferInfo = twgl.createBufferInfoFromArrays(gl, cubeRaysArrays);
 
-  var colorProgram = tdl.programs.loadProgramFromScriptTags(
+  var colorProgramInfo = twgl.createProgramInfo(gl, [
       'vertexColorVertexShader',
-      'vertexColorFragmentShader');
+      'vertexColorFragmentShader',
+  ]);
   var gridArrays = createGrid(13, 21);
-  var gridModel = new tdl.models.Model(vertexColorProgram, gridArrays, undefined, gl.LINES);
+  var gridBufferInfo = twgl.createBufferInfoFromArrays(gl, gridArrays);
 
-  var axisProgram = tdl.programs.loadProgramFromScriptTags(
+  var axisProgramInfo = twgl.createProgramInfo(gl, [
       'vertexColorFakeLightVertexShader',
-      'vertexColorFakeLightFragmentShader');
+      'vertexColorFakeLightFragmentShader',
+  ]);
 
-  var cubeArrays = tdl.primitives.createCube(40.0);
-  tdl.primitives.reorient(cubeArrays, math.matrix4.translation([0, 0, 20]));
-  var coneArrays = tdl.primitives.createTruncatedCone(30, 10, 30, 24, 2, false, false);
-  tdl.primitives.reorient(
+  var cubeArrays = twgl.primitives.createCubeVertices(40.0);
+  twgl.primitives.reorientPositions(cubeArrays.position, m4.translation([0, 0, 20]));
+  var coneArrays = twgl.primitives.createTruncatedConeVertices(30, 10, 30, 24, 2, false, false);
+  twgl.primitives.reorientVertices(
     coneArrays,
-    math.matrix4.mul(math.matrix4.rotationX(Math.PI/2),
-                     math.matrix4.translation([0, 0, -15])));
-  var cameraArrays = tdl.primitives.concat([cubeArrays, coneArrays]);
+    m4.multiply(m4.rotationX(Math.PI/2),
+                     m4.translation([0, 0, -15])));
+  var cameraArrays = twgl.primitives.concatVertices([cubeArrays, coneArrays]);
   addVColors(cameraArrays);
-  var cameraModel = new tdl.models.Model(axisProgram, cameraArrays);
+  var cameraBufferInfo = twgl.createBufferInfoFromArrays(gl, cameraArrays);
 
-  var stemArrays = tdl.primitives.createCylinder(5, 100, 24, 1);
-  tdl.primitives.reorient(stemArrays, math.matrix4.translation([0, 50, 0]));
-  var tipArrays = tdl.primitives.createTruncatedCone(10, 0, 20, 24, 2);
-  tdl.primitives.reorient(tipArrays, math.matrix4.translation([0, 100, 0]));
-  var axisArrays = tdl.primitives.concat([stemArrays, tipArrays]);
+  var stemArrays = twgl.primitives.createCylinderVertices(5, 100, 24, 1);
+  twgl.primitives.reorientVertices(stemArrays, m4.translation([0, 50, 0]));
+  var tipArrays = twgl.primitives.createTruncatedConeVertices(10, 0, 20, 24, 2);
+  twgl.primitives.reorientVertices(tipArrays, m4.translation([0, 100, 0]));
+  var axisArrays = twgl.primitives.concatVertices([stemArrays, tipArrays]);
   addVColors(axisArrays);
   //tdl.primitives.reorient(axisArrays, math.matrix4.rotationX(Math.PI));
-  var axisModel = new tdl.models.Model(axisProgram, axisArrays);
+  var axisBufferInfo = twgl.createBufferInfoFromArrays(gl, axisArrays);
 
-  var fArrays = {
-    position: new tdl.primitives.AttribBuffer(
-      3,
-      [
-        // left column front
-        0,   0,  0,
-          0, 150,  0,
-          30,   0,  0,
-          0, 150,  0,
-          30, 150,  0,
-          30,   0,  0,
-
-          // top rung front
-          30,   0,  0,
-          30,  30,  0,
-          100,   0,  0,
-          30,  30,  0,
-          100,  30,  0,
-          100,   0,  0,
-
-          // middle rung front
-          30,  60,  0,
-          30,  90,  0,
-          67,  60,  0,
-          30,  90,  0,
-          67,  90,  0,
-          67,  60,  0,
-
-          // left column back
-            0,   0,  30,
-           30,   0,  30,
-            0, 150,  30,
-            0, 150,  30,
-           30,   0,  30,
-           30, 150,  30,
-
-          // top rung back
-           30,   0,  30,
-          100,   0,  30,
-           30,  30,  30,
-           30,  30,  30,
-          100,   0,  30,
-          100,  30,  30,
-
-          // middle rung back
-           30,  60,  30,
-           67,  60,  30,
-           30,  90,  30,
-           30,  90,  30,
-           67,  60,  30,
-           67,  90,  30,
-
-          // top
-            0,   0,   0,
-          100,   0,   0,
-          100,   0,  30,
-            0,   0,   0,
-          100,   0,  30,
-            0,   0,  30,
-
-          // top rung front
-          100,   0,   0,
-          100,  30,   0,
-          100,  30,  30,
-          100,   0,   0,
-          100,  30,  30,
-          100,   0,  30,
-
-          // under top rung
-          30,   30,   0,
-          30,   30,  30,
-          100,  30,  30,
-          30,   30,   0,
-          100,  30,  30,
-          100,  30,   0,
-
-          // between top rung and middle
-          30,   30,   0,
-          30,   60,  30,
-          30,   30,  30,
-          30,   30,   0,
-          30,   60,   0,
-          30,   60,  30,
-
-          // top of middle rung
-          30,   60,   0,
-          67,   60,  30,
-          30,   60,  30,
-          30,   60,   0,
-          67,   60,   0,
-          67,   60,  30,
-
-          // front of middle rung
-          67,   60,   0,
-          67,   90,  30,
-          67,   60,  30,
-          67,   60,   0,
-          67,   90,   0,
-          67,   90,  30,
-
-          // bottom of middle rung.
-          30,   90,   0,
-          30,   90,  30,
-          67,   90,  30,
-          30,   90,   0,
-          67,   90,  30,
-          67,   90,   0,
-
-          // front of bottom
-          30,   90,   0,
-          30,  150,  30,
-          30,   90,  30,
-          30,   90,   0,
-          30,  150,   0,
-          30,  150,  30,
-
-          // bottom
-          0,   150,   0,
-          0,   150,  30,
-          30,  150,  30,
-          0,   150,   0,
-          30,  150,  30,
-          30,  150,   0,
-
-          // left side
-          0,   0,   0,
-          0,   0,  30,
-          0, 150,  30,
-          0,   0,   0,
-          0, 150,  30,
-          0, 150,   0]),
-    color: new tdl.primitives.AttribBuffer(
-        3,
-        [
-          // left column front
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-
-              // top rung front
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-
-              // middle rung front
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-            200,  70, 120,
-
-              // left column back
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-
-              // top rung back
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-
-              // middle rung back
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-            80, 70, 200,
-
-              // top
-            70, 200, 210,
-            70, 200, 210,
-            70, 200, 210,
-            70, 200, 210,
-            70, 200, 210,
-            70, 200, 210,
-
-              // top rung front
-            200, 200, 70,
-            200, 200, 70,
-            200, 200, 70,
-            200, 200, 70,
-            200, 200, 70,
-            200, 200, 70,
-
-              // under top rung
-            210, 100, 70,
-            210, 100, 70,
-            210, 100, 70,
-            210, 100, 70,
-            210, 100, 70,
-            210, 100, 70,
-
-              // between top rung and middle
-            210, 160, 70,
-            210, 160, 70,
-            210, 160, 70,
-            210, 160, 70,
-            210, 160, 70,
-            210, 160, 70,
-
-              // top of middle rung
-            70, 180, 210,
-            70, 180, 210,
-            70, 180, 210,
-            70, 180, 210,
-            70, 180, 210,
-            70, 180, 210,
-
-              // front of middle rung
-            100, 70, 210,
-            100, 70, 210,
-            100, 70, 210,
-            100, 70, 210,
-            100, 70, 210,
-            100, 70, 210,
-
-              // bottom of middle rung.
-            76, 210, 100,
-            76, 210, 100,
-            76, 210, 100,
-            76, 210, 100,
-            76, 210, 100,
-            76, 210, 100,
-
-              // front of bottom
-            140, 210, 80,
-            140, 210, 80,
-            140, 210, 80,
-            140, 210, 80,
-            140, 210, 80,
-            140, 210, 80,
-
-              // bottom
-            90, 130, 110,
-            90, 130, 110,
-            90, 130, 110,
-            90, 130, 110,
-            90, 130, 110,
-            90, 130, 110,
-
-              // left side
-            160, 160, 220,
-            160, 160, 220,
-            160, 160, 220,
-            160, 160, 220,
-            160, 160, 220,
-            160, 160, 220],
-        'Uint8Array'),
-  };
-  tdl.primitives.reorient(
+  var fArrays = twgl.primitives.create3DFVertices();
+  twgl.primitives.reorientVertices(
     fArrays,
-    math.matrix4.mul(math.matrix4.translation([-50, -75, -15]),
-                     math.matrix4.rotationX(Math.PI)));
-  var fModel = new tdl.models.Model(vertexColorProgram, fArrays);
+    m4.multiply(m4.translation([-50, -75, -15]),
+                m4.rotationX(Math.PI)));
+  var fBufferInfo = twgl.createBufferInfoFromArrays(gl, fArrays);
 
 
   // pre-allocate a bunch of arrays
@@ -579,21 +372,25 @@ function CreateApp() {
 
   var clock = 0;
 
-  function drawModel(model, uniforms, world) {
-    var m4 = fast.matrix4;
-    m4.mul(worldViewProjection, world, viewProjection);
+  function drawModel(programInfo, bufferInfo, type, uniforms, world) {
+    m4.multiply(world, viewProjection, worldViewProjection);
     if (uniforms.u_worldInverseTranspose) {
-      m4.inverse(uniforms.u_worldInverseTranspose, world);
+      m4.inverse(world, uniforms.u_worldInverseTranspose);
       m4.transpose(uniforms.u_worldInverseTranspose, uniforms.u_worldInverseTranspose);
     }
-    model.drawPrep(sharedUniforms);
-    model.draw(uniforms);
+    gl.useProgram(programInfo.program);
+    twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+    twgl.setUniforms(programInfo, uniforms);
+    twgl.drawBufferInfo(gl, type, bufferInfo);
+  }
+
+  function degToRad(deg) {
+    return deg * Math.PI / 180;
   }
 
   var clock = 0;
   function render(elapsedTime) {
     clock += elapsedTime;
-    var m4 = fast.matrix4;
 
     // clear the screen.
     gl.enable(gl.DEPTH_TEST);
@@ -603,58 +400,59 @@ function CreateApp() {
 
     var aspect = canvas.clientWidth / canvas.clientHeight;
     m4.perspective(
-        projection,
-        math.degToRad(40),
+        degToRad(40),
         aspect,
         1,
-        5000);
+        5000,
+        projection);
 
-    var dist = math.distance(target, eyePosition);
+    var dist = v3.length(v3.subtract(target, eyePosition));
     var a = clock / 8;
     v3t0[0] = Math.cos(a) * dist + target[0];
     v3t0[1] = eyePosition[1];
     v3t0[2] = Math.sin(a) * dist + target[2];
     m4.lookAt(
-        view,
         v3t0,
         target,
-        up);
-    m4.mul(viewProjection, view, projection);
+        up,
+        view);
+    m4.inverse(view, view);
+    m4.multiply(view, projection, viewProjection);
 
-    m4.scaling(world, [gridScale, gridScale, gridScale]);
-    drawModel(gridModel, gridUniforms, world);
+    m4.scaling([gridScale, gridScale, gridScale], world);
+    drawModel(vertexColorProgramInfo, gridBufferInfo, gl.LINES, gridUniforms, world);
 
-    m4.translation(world, fPosition);
-    drawModel(fModel, fUniforms, world);
+    m4.translation(fPosition, world);
+    drawModel(vertexColorProgramInfo, fBufferInfo, gl.TRIANGLES, fUniforms, world);
 
-    m4.cameraLookAt(
-        m4t0,
+    m4.lookAt(
         cameraPosition,
         fPosition,
-        up);
+        up,
+        m4t0);
     var flash = Math.floor(clock * 2) % 2;
-    drawModel(cameraModel, cameraUniforms, m4t0);
+    drawModel(axisProgramInfo, cameraBufferInfo, gl.TRIANGLES, cameraUniforms, m4t0);
     if (mode == 2) {
       yAxisUniforms.u_color = flash ? ltGreen : flashColor;
-      drawModel(axisModel, yAxisUniforms, m4t0);
+      drawModel(axisProgramInfo, axisBufferInfo, gl.TRIANGLES, yAxisUniforms, m4t0);
     }
-    m4.rotationZ(m4t1, Math.PI / 2);
-    m4.mul(world, m4t1, m4t0);
+    m4.rotationZ(Math.PI / 2, m4t1);
+    m4.multiply(m4t1, m4t0, world);
     if (mode == 1) {
       xAxisUniforms.u_color = flash ? ltRed : flashColor;
     }
     if (mode > 0) {
-      drawModel(axisModel, xAxisUniforms, world);
+      drawModel(axisProgramInfo, axisBufferInfo, gl.TRIANGLES, xAxisUniforms, world);
     }
-    m4.rotationX(m4t1, Math.PI / 2);
-    m4.mul(world, m4t1, m4t0);
+    m4.rotationX(Math.PI / 2, m4t1);
+    m4.multiply(m4t1, m4t0, world);
     if (mode == 0) {
       zAxisUniforms.u_color = flash ? ltBlue : flashColor;
     }
-    drawModel(axisModel, zAxisUniforms, world);
+    drawModel(axisProgramInfo, axisBufferInfo, gl.TRIANGLES, zAxisUniforms, world);
     if (mode == 1) {
-      m4.translation(world, cameraPosition);
-      drawModel(axisModel, upAxisUniforms, world);
+      m4.translation(cameraPosition, world);
+      drawModel(axisProgramInfo, axisBufferInfo, gl.TRIANGLEs, upAxisUniforms, world);
     }
   }
 
@@ -663,140 +461,35 @@ function CreateApp() {
   };
 }
 
-function resizeCanvas() {
-  var displayWidth  = canvas.clientWidth * devicePixelRatio;
-  var displayHeight = canvas.clientHeight * devicePixelRatio;
-  if (canvas.width != displayWidth ||
-      canvas.height != displayHeight) {
-
-    canvas.width = displayWidth;
-    canvas.height = displayHeight;
-    console.log("resized canvas: " + canvas.width + ", " + canvas.height);
-    gl.viewport(0, 0, displayWidth, displayHeight);
-  }
-}
-
 var app;
 function main() {
   updateCSSIfInIFrame();
-  math = tdl.math;
-  fast = tdl.fast;
-  window.requestAnimFrame = tdl.webgl.requestAnimationFrame;
   canvas = document.getElementById("canvas");
-  var clock = tdl.clock.createClock();
 
-  gl = tdl.webgl.setupWebGL(canvas, {alpha: true, preMultipliedAlpha: false});
+  var gl = twgl.getWebGLContext(canvas, {alpha: true, preMultipliedAlpha: false});
   if (!gl) {
     return false;
   }
 
-  resizeCanvas();
+  app = CreateApp(gl);
 
-  app = CreateApp();
-
-  var then = clock.getTime();
-  function render() {
-    var now = clock.getTime();
+  var then = 0;
+  function render(time) {
+    var now = time * 0.001;
     var elapsedTime = now - then;
     then = now;
+
+    twgl.resizeCanvasToDisplaySize(gl.canvas, devicePixelRatio);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
     app.render(elapsedTime);
-    requestAnimFrame(render);
+    requestAnimationFrame(render);
   }
-  render();
+  requestAnimationFrame(render);
 }
 
-$(function(){
-  main();
-});
-
+main();
 </script>
-<script id="vertexColorVertexShader" type="text/something-not-javascript">
-attribute vec4 position;
-attribute vec4 color;
-uniform mat4 u_worldViewProjection;
-varying vec4 v_color;
-void main() {
-  gl_Position = u_worldViewProjection * position;
-  v_color = color;
-}
-
-</script>
-<script id="vertexColorFragmentShader" type="text/something-not-javascript">
-precision mediump float;
-uniform vec4 u_color;
-varying vec4 v_color;
-void main() {
-  gl_FragColor = u_color * v_color;
-}
-</script>
-<script id="vertexColorFakeLightVertexShader" type="text/something-not-javascript">
-attribute vec4 position;
-attribute vec4 color;
-attribute vec3 normal;
-uniform mat4 u_worldViewProjection;
-uniform mat4 u_worldInverseTranspose;
-varying vec4 v_color;
-varying vec3 v_normal;
-void main() {
-  gl_Position = u_worldViewProjection * position;
-  v_color = color;
-  v_normal = (u_worldInverseTranspose * vec4(normal, 0)).xyz;
-}
-
-</script>
-<script id="vertexColorFakeLightFragmentShader" type="text/something-not-javascript">
-precision mediump float;
-uniform vec4 u_color;
-varying vec4 v_color;
-varying vec3 v_normal;
-void main() {
-  vec3 normal = normalize(v_normal);
-  vec3 lightDir = normalize(vec3(0.5, 0.7, 1));
-  float d = dot(normal, lightDir) * 0.5 + 0.5;
-  gl_FragColor = u_color * v_color * vec4(d, d, d, 1);
-}
-</script>
-<script id="baseVertexShader" type="text/something-not-javascript">
-attribute vec4 position;
-attribute vec4 a_color;
-uniform mat4 u_worldViewProjection;
-uniform mat4 u_exampleWorldViewProjection;
-varying vec4 v_color;
-varying vec4 v_position;
-void main() {
-  gl_Position = u_worldViewProjection * position;
-  v_position = u_exampleWorldViewProjection * position;
-  v_position = v_position / v_position.w;
-  v_color = a_color;
-}
-
-</script>
-<script id="colorFragmentShader" type="text/something-not-javascript">
-precision mediump float;
-varying vec4 v_color;
-varying vec4 v_position;
-uniform vec4 u_color;
-void main() {
-  bool blend = (v_position.x < -1.0 || v_position.x > 1.0 ||
-                v_position.y < -1.0 || v_position.y > 1.0 ||
-                v_position.z < -1.0 || v_position.z > 1.0);
-  vec4 blendColor = blend ? vec4(0.35, 0.35, 0.35, 1.0) : vec4(1, 1, 1, 1);
-  gl_FragColor = v_color * u_color * blendColor;
-}
-</script>
-</head>
-<body>
-<div class="description">
-</div>
-<div style="position:absolute;">
-  <canvas id="canvas" width="400" height="300" style="width: 400px; height: 300px;"></canvas>
-</div>
-<div id="uiContainerLeft">
-  <div id="ui">
-  </div>
-</div>
-</body>
-</html>
 
 
 
