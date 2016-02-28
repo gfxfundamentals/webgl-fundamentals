@@ -387,7 +387,8 @@ And here's that.
 you can see one problem which is that because of the rotation someone we see past the
 edge of the texture. As its set to `CLAMP_TO_EDGE` the edge just gets repeated.
 
-We could fix that by discarding any pixels outside of the 0 to 1 range inside the shader
+We could fix that by discarding any pixels outside of the 0 to 1 range inside the shader.
+`discard` exits the shader immediately without writing a pixel.
 
     precision mediump float;
 
