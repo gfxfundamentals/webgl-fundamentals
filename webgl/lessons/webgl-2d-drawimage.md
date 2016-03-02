@@ -5,9 +5,9 @@ This article is a continuation of <a href="webgl-3d-orthographic.html">WebGL ort
 You should also be aware of how textures and texture coordinates work please read
 [WebGL 3D textures](webgl-3d-textures.html).
 
-To implement most games in 2D requires just a single function to draw in image. Sure some 2d games
+To implement most games in 2D requires just a single function to draw an image. Sure some 2d games
 do fancy thing with lines etc but if you only have a way to draw a 2D image on the screen
-you can pretty much make any game.
+you can pretty much make most 2d games.
 
 The Canvas 2D api has very flexible function for drawing image called `drawImage`. It has 3 versions
 
@@ -16,7 +16,7 @@ The Canvas 2D api has very flexible function for drawing image called `drawImage
     ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
                          dstX, dstY, dstWidth, dstHeight);
 
-Given everything you've learned so far how would you implement this in WebGL? You're first
+Given everything you've learned so far how would you implement this in WebGL? Your first
 solution might be to generate vertices like some of the first articles on this site did.
 Sending vertices to the GPU is generally a slow operation (although there are cases where it will be faster).
 
@@ -28,11 +28,11 @@ Let's start with the first version
     ctx.drawImage(image, x, y);
 
 It draws an image at location `x, y` the same size as the image.
-To make a similar funciton . We could upload vertices that for `x, y`, `x + width, y`, `x, y + height`,
+To make a similar WebGL based funciton we could upload vertices that for `x, y`, `x + width, y`, `x, y + height`,
 and `x + width, y + height` then as we draw different images at different locations
 we'd generate different sets of vertices.
 
-A far more common way though is just to use a unit quad. We upload single square 1 unit big. We
+A far more common way though is just to use a unit quad. We upload a single square 1 unit big. We
 then use [matrix math](webgl-2d-matrices.html) to scale and translate that unit quad so that
 it ends up being at the desired place.
 
@@ -248,7 +248,7 @@ In that article we manually created texture coordinates which is a very common w
 but we can also create them on the fly and just like we're manipulating our positions using
 a matrix we can similarly manipluate texture coordinates using another matrix.
 
-Let's add a texture matrix to the vertex shader and multiple the texture coordinates
+Let's add a texture matrix to the vertex shader and multiply the texture coordinates
 by this texture matrix.
 
     attribute vec4 a_position;
@@ -270,7 +270,7 @@ Now we need to look up the location of the texture matrix
     +var textureMatrixLocation = gl.getUniformLocation(program, "u_textureMatrix");
 
 And inside `drawImage` we need to set it so it will select the part of the texture we want.
-We know the texture coordinates are also a effectively a unit quad so it's very similar to
+We know the texture coordinates are also effectively a unit quad so it's very similar to
 what we've already done for the positions.
 
     *function drawImage(
@@ -336,10 +336,10 @@ I also updated the code to pick parts of the textures. Here's the result
 
 {{{example url="../webgl-2d-drawimage-03.html" }}}
 
-Unlike the canvas 2D api we our WebGL version handles cases the canvas 2D `drawImage` does not.
+Unlike the canvas 2D api our WebGL version handles cases the canvas 2D `drawImage` does not.
 
 For one we can pass in a negative width or height for either source or dest. A negative `srcWidth`
-well select pixels to the left of `srcX`. A negative `dstWidth` will draw to the left of `dstX`.
+will select pixels to the left of `srcX`. A negative `dstWidth` will draw to the left of `dstX`.
 In the canvas 2D api these are errors at best or undefined behavior at worst.
 
 {{{example url="../webgl-2d-drawimage-04.html" }}}
@@ -384,8 +384,8 @@ And here's that.
 
 {{{example url="../webgl-2d-drawimage-05.html" }}}
 
-you can see one problem which is that because of the rotation someone we see past the
-edge of the texture. As its set to `CLAMP_TO_EDGE` the edge just gets repeated.
+you can see one problem which is that because of the rotation sometimes we see past the
+edge of the texture. As it's set to `CLAMP_TO_EDGE` the edge just gets repeated.
 
 We could fix that by discarding any pixels outside of the 0 to 1 range inside the shader.
 `discard` exits the shader immediately without writing a pixel.
@@ -436,7 +436,7 @@ The sky's really the limit. It's all up to your creative use of shaders.
 <div class="webgl_bottombar">
 <h3>A minor optimization</h3>
 <p>I'm not recommending this optimization. Rather I want to point out
-more creative thinking since WebGL is all about creative use the features
+more creative thinking since WebGL is all about creative use of the features
 it provides.</p>
 <p>You might have noticed we're using a unit quad for our positions and those positions of
 a unit quad exactly match our texture coordinates. As such we can use the positions
