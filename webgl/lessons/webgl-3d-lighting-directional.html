@@ -68,14 +68,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="row">
     <div class="col-sm-8 lesson-main">
       <p>This article is a continuation of <a href="webgl-3d-camera.html">WebGL 3D Cameras</a>. If you haven&#39;t read that I suggest <a href="webgl-3d-cameras.html">you start there</a>.</p>
-<p>There are many way it implement lighting. Probably the simplest is <em>directional lighting</em>.</p>
+<p>There are many ways to implement lighting. Probably the simplest is <em>directional lighting</em>.</p>
 <p>Directional lighting assumes the light is coming uniformly from one direction. The sun
 on a clear day is often considered a directional light. It&#39;s so far way that its rays
 can be considered to be hitting the surface of an object all in parallel.</p>
 <p>Computing directional lighting is actually pretty simple. If we know what direction
 the light is traveling and we know what direction the surface of the object is facing
 we can take the <em>dot product</em> of the 2 directions and it will give us the cosine of
-the angle between the 2 angles.</p>
+the angle between the 2 directions.</p>
 <p>Here&#39;s an example</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/dot-product.html"></iframe>
@@ -85,7 +85,7 @@ the angle between the 2 angles.</p>
 </p>
 <p>Drag the points around, if you get them exactly opposite of each other you&#39;ll the dot product
 is -1. If they are at the same spot exactly the dot product is 1.</p>
-<p>How is that useful? Well if know what direction the surface of our 3d object is facing
+<p>How is that useful? Well if we know what direction the surface of our 3d object is facing
 and we know the direction the light is shining then we can just take the dot product
 of them and it will give us a number 1 of the light is pointing directly at the
 surface and -1 if they are pointing directly opposite.</p>
@@ -333,7 +333,7 @@ void main() {
 +
 +  // set the light direction.
 +  gl.uniform3fv(reverseLightDirectionLocation, normalize([0.5, 0.7, 1]));
-</code></pre><p><code>normalize</code> which we went over before will make whatever values we put in there
+</code></pre><p><code>normalize</code>, which we went over before, will make whatever values we put in there
 into a unit vector. The specific values in the sample are</p>
 <p><code>x = 0.5</code> which is positive <code>x</code> means the light is on the right pointing left.
 <code>y = 0.7</code> which is positive <code>y</code> means the light is above pointing down.
@@ -350,7 +350,8 @@ and poiting more down then right.</p>
 <p>If you rotate the F you might notice something. The F is rotating
 but the lighting isn&#39;t changing. As the F rotates we want whatever part
 is facing the direction of the light to be the brightest.</p>
-<p>To fix this we need to multiply the normals by some matrix. The most obvious
+<p>To fix this we need to re-orient the normals as the object is re-oriented.
+Like we did for positions we can multiply the normals by some matrix. The most obvious
 matrix would be the <code>world</code> matrix. As it is right now we&#39;re only passing in
 1 matrix called <code>u_matrix</code>. Let&#39;s change it to pass in 2 matrices. One called</p>
 <p><code>u_world</code> which will be the world matrix. Another called <code>u_worldViewProjection</code>
@@ -379,7 +380,7 @@ area of the matrix.</p>
 *  var worldViewProjetionLocation =
 *      gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 +  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
-</code></pre><p>Now we have to change the code the updates them</p>
+</code></pre><p>And we have to change the code the updates them</p>
 <pre><code>*// Set the matrices
 *gl.uniformMatrix4fv(
 *    worldViewProjectionLocation, false,
@@ -414,10 +415,12 @@ is scaled and the normals are being multiplied by the world matrix. You
 can see something is wrong. The <span style="color: #00F;">blue</span>
 sphere on the right is using the world inverse transpose matrix.</p>
 <p>Click the diagram to hide the normals. You should see the lighting
-on the 2 outer spheres is very different.</p>
-<p>To do this in our example let&#39;s change the code like this. First update
+on the 2 outer spheres is very different based on which matrix is used.
+It&#39;s hard to tell which is correct which is why this is a subtle issue.</p>
+<p>To implement this in our example let&#39;s change the code like this. First we&#39;ll update
 the shader. Techincally we could just update the value of <code>u_world</code>
-but it&#39;s best if we renamed things so they&#39;re named what they are.</p>
+but it&#39;s best if we rename things so they&#39;re named what they actually are
+otherwise it will get confusing.</p>
 <pre><code>attribute vec4 a_position;
 attribute vec3 a_normal;
 
