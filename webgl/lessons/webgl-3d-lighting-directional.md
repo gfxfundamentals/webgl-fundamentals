@@ -3,7 +3,7 @@ Description: How to implement directional lighting in WebGL
 
 This article is a continuation of <a href="webgl-3d-camera.html">WebGL 3D Cameras</a>. If you haven't read that I suggest <a href="webgl-3d-cameras.html">you start there</a>.
 
-There are many way it implement lighting. Probably the simplest is *directional lighting*.
+There are many ways to implement lighting. Probably the simplest is *directional lighting*.
 
 Directional lighting assumes the light is coming uniformly from one direction. The sun
 on a clear day is often considered a directional light. It's so far way that its rays
@@ -12,7 +12,7 @@ can be considered to be hitting the surface of an object all in parallel.
 Computing directional lighting is actually pretty simple. If we know what direction
 the light is traveling and we know what direction the surface of the object is facing
 we can take the *dot product* of the 2 directions and it will give us the cosine of
-the angle between the 2 angles.
+the angle between the 2 directions.
 
 Here's an example
 
@@ -21,7 +21,7 @@ Here's an example
 Drag the points around, if you get them exactly opposite of each other you'll the dot product
 is -1. If they are at the same spot exactly the dot product is 1.
 
-How is that useful? Well if know what direction the surface of our 3d object is facing
+How is that useful? Well if we know what direction the surface of our 3d object is facing
 and we know the direction the light is shining then we can just take the dot product
 of them and it will give us a number 1 of the light is pointing directly at the
 surface and -1 if they are pointing directly opposite.
@@ -297,7 +297,7 @@ and we need to set them
 +  gl.uniform3fv(reverseLightDirectionLocation, normalize([0.5, 0.7, 1]));
 ```
 
-`normalize` which we went over before will make whatever values we put in there
+`normalize`, which we went over before, will make whatever values we put in there
 into a unit vector. The specific values in the sample are
 
 `x = 0.5` which is positive `x` means the light is on the right pointing left.
@@ -314,7 +314,8 @@ If you rotate the F you might notice something. The F is rotating
 but the lighting isn't changing. As the F rotates we want whatever part
 is facing the direction of the light to be the brightest.
 
-To fix this we need to multiply the normals by some matrix. The most obvious
+To fix this we need to re-orient the normals as the object is re-oriented.
+Like we did for positions we can multiply the normals by some matrix. The most obvious
 matrix would be the `world` matrix. As it is right now we're only passing in
 1 matrix called `u_matrix`. Let's change it to pass in 2 matrices. One called
 
@@ -353,7 +354,7 @@ Now we have to look those uniforms up
 +  var worldLocation = gl.getUniformLocation(program, "u_world");
 ```
 
-Now we have to change the code the updates them
+And we have to change the code the updates them
 
 ```
 *// Set the matrices
@@ -389,11 +390,13 @@ can see something is wrong. The <span style="color: #00F;">blue</span>
 sphere on the right is using the world inverse transpose matrix.
 
 Click the diagram to hide the normals. You should see the lighting
-on the 2 outer spheres is very different.
+on the 2 outer spheres is very different based on which matrix is used.
+It's hard to tell which is correct which is why this is a subtle issue.
 
-To do this in our example let's change the code like this. First update
+To implement this in our example let's change the code like this. First we'll update
 the shader. Techincally we could just update the value of `u_world`
-but it's best if we renamed things so they're named what they are.
+but it's best if we rename things so they're named what they actually are
+otherwise it will get confusing.
 
 ```
 attribute vec4 a_position;
