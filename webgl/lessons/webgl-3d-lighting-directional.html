@@ -108,7 +108,7 @@ positive x being <span style="color: red;">red</span>, up being
 <span style="color: green;">green</span> and positive z being
 <span style="color: blue;">blue</span>.</p>
 <p>So, let&#39;s go add normals to our <code>F</code> from <a href="webgl-3d-cameras.html">our previous examples</a>
-so we can light it. Since the <code>F</code> is very boxy and it&#39;s faces are aligned
+so we can light it. Since the <code>F</code> is very boxy and its faces are aligned
 to the x, y, or z axis it will be pretty easy. Things that are facing forward
 have the normal <code>0, 0, 1</code>. Things that are facing away are <code>0, 0, -1</code>. Facing
 left is <code>-1, 0, 0</code>, Facing right is <code>1, 0, 0</code>. Up is <code>0, 1, 0</code> and down is <code>0, -1, 0</code>.</p>
@@ -271,7 +271,7 @@ gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 0, 0);
 
 // Set normals.
 setNormals(gl);
-</code></pre><p>Now we need to make our shader use them</p>
+</code></pre><p>Now we need to make our shaders use them</p>
 <p>First the vertex shader we just pass the normals through to
 the fragment shader</p>
 <pre><code>attribute vec4 a_position;
@@ -392,9 +392,11 @@ area of the matrix.</p>
 </div>
 
 </p>
+<p>Rotate the F and notice which ever side is facing the light direction gets lit.</p>
 <p>There is one problem which I don&#39;t know how to show directly so I&#39;m
 going to show it in a diagram. We&#39;re multiplying the <code>normal</code> by
-the <code>u_world</code> matrix.  What happens if we scale the world matrix?
+the <code>u_world</code> matrix or re-orient the normals.
+What happens if we scale the world matrix?
 It turns out we get the wrong normals.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/normals-scaled.html"></iframe>
@@ -411,7 +413,7 @@ is unscaled. The <span style="color: #F00;">red</span> sphere on the left
 is scaled and the normals are being multiplied by the world matrix. You
 can see something is wrong. The <span style="color: #00F;">blue</span>
 sphere on the right is using the world inverse transpose matrix.</p>
-<p>Click the diagram to high the normals. You should see the lighting
+<p>Click the diagram to hide the normals. You should see the lighting
 on the 2 outer spheres is very different.</p>
 <p>To do this in our example let&#39;s change the code like this. First update
 the shader. Techincally we could just update the value of <code>u_world</code>
@@ -459,14 +461,14 @@ gl.uniformMatrix4fv(
   ];
 }
 </code></pre><p>Because the effect is subtle and because we aren&#39;t scaling anything
-there&#39;s no noticble difference.</p>
+there&#39;s no noticble difference but at least now we&#39;re prepared.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-3d-lighting-directional-worldinversetranspose.html"></iframe>
   <a class="webgl_center" href="../webgl-3d-lighting-directional-worldinversetranspose.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
-<p>I hope this clear. More lighting coming soon</p>
+<p>I hope this first step into lighting was clear. More lighting coming soon.</p>
 <div class="webgl_bottombar">
 <h3>Alternatives to mat3(u_worldInverseTranspose) * a_normal</h3>
 <p>In our shader above there's a line like this</p>
@@ -477,8 +479,8 @@ v_normal = mat3(u_worldInverseTranspose) * a_normal;
 <pre class="prettyprint">
 v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
 </pre>
-<p>Because we set <code>w</code> to 0 before multiplying that would also
-end up multiplying the translation from the matrix by 0. I think that's
+<p>Because we set <code>w</code> to 0 before multiplying that would
+end up multiplying the translation from the matrix by 0 effectively removing it. I think that's
 the more common way to do it. The mat3 way looked cleaner to me but
 I've often done it this way too.</p>
 <p>Yet another solution would be to make <code>u_worldInverseTranspose</code> a <code>mat3</code>.
@@ -545,6 +547,10 @@ not do unless there was a more compelling reason.</p>
     <li><a href="/webgl/lessons/webgl-3d-orthographic.html">WebGL - Orthographic 3D</a></li>
     <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
+  </ul>
+  <li>Lighting</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">WebGL 3D - Directional Lighting</a></li>
   </ul>
   <li>Structure and Organization</li>
   <ul>

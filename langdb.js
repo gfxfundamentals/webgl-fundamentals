@@ -1,5 +1,8 @@
 window.langDB = {
   "articles": {
+    "webgl-3d-lighting-directional.html": {
+      "en": true
+    },
     "webgl-2d-drawimage.html": {
       "en": true
     },
@@ -9,10 +12,13 @@ window.langDB = {
     "webgl-text-glyphs.html": {
       "en": true
     },
-    "webgl-text-canvas2d.html": {
+    "webgl-text-texture.html": {
       "en": true
     },
-    "webgl-text-texture.html": {
+    "webgl-text-html.html": {
+      "en": true
+    },
+    "webgl-text-canvas2d.html": {
       "en": true
     },
     "webgl-scene-graph.html": {
@@ -21,16 +27,13 @@ window.langDB = {
     "webgl-drawing-multiple-things.html": {
       "en": true
     },
-    "webgl-text-html.html": {
-      "en": true
-    },
     "webgl-resizing-the-canvas.html": {
       "en": true
     },
-    "webgl-less-code-more-fun.html": {
+    "webgl-anti-patterns.html": {
       "en": true
     },
-    "webgl-anti-patterns.html": {
+    "webgl-less-code-more-fun.html": {
       "en": true
     },
     "webgl-3d-textures.html": {
@@ -58,7 +61,7 @@ window.langDB = {
     "webgl-image-processing-continued.html": {
       "en": true
     },
-    "webgl-image-processing.html": {
+    "webgl-boilerplate.html": {
       "en": true
     },
     "webgl-and-alpha.html": {
@@ -84,7 +87,7 @@ window.langDB = {
     "webgl-2d-matrices.html": {
       "en": true
     },
-    "webgl-boilerplate.html": {
+    "webgl-image-processing.html": {
       "en": true
     }
   },
