@@ -1,0 +1,159 @@
+<html>
+<body>
+<style>
+canvas {
+    border: 1px solid black;
+}
+</style>
+   <canvas></canvas>
+   <p>Click for new points</p>
+</body>
+<script>
+
+function cross(a, b) {
+  var dst = []
+
+  dst[0] = a[1] * b[2] - a[2] * b[1];
+  dst[1] = a[2] * b[0] - a[0] * b[2];
+  dst[2] = a[0] * b[1] - a[1] * b[0];
+
+  return dst;
+}
+
+function normalize(a) {
+  var dst = [];
+
+  var lenSq = a[0] * a[0] + a[1] * a[1] + a[2] * a[2];
+  var len = Math.sqrt(lenSq);
+  if (len > 0.00001) {
+    dst[0] = a[0] / len;
+    dst[1] = a[1] / len;
+    dst[2] = a[2] / len;
+  } else {
+    dst[0] = 0;
+    dst[1] = 0;
+    dst[2] = 0;
+  }
+
+  return dst;
+}
+
+function dot(a, b) {
+ return (a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]);
+}
+
+var canvas = document.querySelector("canvas");
+canvas.width = 500;
+canvas.height = 500;
+var ctx = canvas.getContext("2d");
+
+function remapRange(srcMin, srcMax, dstMin, dstMax, src) {
+  return (src - srcMin) / (srcMax - srcMin) * (dstMax - dstMin) + dstMin;
+}
+
+function rand(min, max) {
+  if (max === undefined) {
+    max = min;
+    min = 0;
+  }
+  return Math.random() * (max - min) + min;
+}
+
+var points = [
+  {
+    direction: [0,0,0],
+    color: "green",
+  },
+  {
+    direction: [0,0,0],
+    color: "red",
+  },
+];
+
+var expand = 1;
+var scale = ctx.canvas.width / 2 * 0.8;
+
+function pickPoints() {
+  points[0].direction = normalize([rand(-1, 1), rand(-1, 1), 0]);
+  points[1].direction = normalize([rand(-1, 1), rand(-1, 1), 0]);
+  //points[0].direction = normalize([1, 0, 0]);
+  //points[1].direction = normalize([1, 1, 0]);
+  var cosineOfAngleBetween = dot(points[0].direction, points[1].direction);
+  expand = Math.acos(cosineOfAngleBetween);
+  console.log("cosign:", cosineOfAngleBetween);
+  console.log("expand:", expand);
+  render();
+}
+pickPoints();
+
+function render() {
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.save();
+  ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+  ctx.scale(scale, scale);
+
+  ctx.lineWidth = 3 / scale;
+  points.forEach(function(point) {
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(point.direction[0], point.direction[1]);
+    ctx.strokeStyle = point.color;
+    ctx.stroke();
+  });
+
+  var zAxis = normalize(cross(points[0].direction, points[1].direction));
+  var xAxis = normalize(cross(zAxis, points[0].direction));
+  var yAxis = points[0].direction;
+console.log(zAxis);
+
+  ctx.setTransform(
+      xAxis[0] * scale, xAxis[1] * scale,
+      yAxis[0] * scale, yAxis[1] * scale,
+      ctx.canvas.width / 2, ctx.canvas.height / 2);
+
+  ctx.lineWidth = 1 / scale;
+
+  ctx.strokeStyle = "pink";
+  drawPatch(false);
+  ctx.strokeStyle = "blue";
+  drawPatch(true);
+
+  function drawPatch(curved) {
+    ctx.beginPath();
+    for (var y = 0; y < 20; ++y) {
+      var v0 = (y + 0) / 20;
+      var v1 = (y + 1) / 20;
+      for (var x = 0; x < 20; ++x) {
+        var u0 = (x + 0) / 20;
+        var u1 = (x + 1) / 20;
+        if (curved) {
+          var a0 = u0 * expand;
+          var x0 = Math.sin(a0) * v0;
+          var y0 = Math.cos(a0) * v0;
+          var a1 = u1 * expand;
+          var x1 = Math.sin(a1) * v0;
+          var y1 = Math.cos(a1) * v0;
+          var a2 = u0 * expand;
+          var x2 = Math.sin(a0) * v1;
+          var y2 = Math.cos(a0) * v1;
+          ctx.moveTo(x0, y0);
+          ctx.lineTo(x1, y1);
+          ctx.moveTo(x0, y0);
+          ctx.lineTo(x2, y2);
+        } else {
+          ctx.moveTo(u0, v0);
+          ctx.lineTo(u1, v0);
+          ctx.moveTo(u0, v0);
+          ctx.lineTo(u0, v1);
+        }
+      }
+    }
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+window.addEventListener('click', pickPoints);
+</script>
+</html>
