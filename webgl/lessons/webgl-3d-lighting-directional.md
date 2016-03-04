@@ -23,7 +23,7 @@ is -1. If they are at the same spot exactly the dot product is 1.
 
 How is that useful? Well if we know what direction the surface of our 3d object is facing
 and we know the direction the light is shining then we can just take the dot product
-of them and it will give us a number 1 of the light is pointing directly at the
+of them and it will give us a number 1 if the light is pointing directly at the
 surface and -1 if they are pointing directly opposite.
 
 We can multiply our color by that value and boom! Light!
