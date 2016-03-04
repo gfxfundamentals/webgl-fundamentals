@@ -18,7 +18,7 @@ Here's an example
 
 {{{diagram url="resources/dot-product.html" caption="drag the points"}}}
 
-Drag the points around, if you get them exactly opposite of each other you'll the dot product
+Drag the points around, if you get them exactly opposite of each other you'll see the dot product
 is -1. If they are at the same spot exactly the dot product is 1.
 
 How is that useful? Well if we know what direction the surface of our 3d object is facing
