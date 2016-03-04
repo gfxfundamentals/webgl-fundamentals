@@ -258,18 +258,18 @@ precision mediump float;
 +uniform vec4 u_color;
 
 void main() {
-   +// because v_normal is a varying it's interpolated
-   +// we it will not be a uint vector. Normalizing it
-   +// will make it a unit vector again
-   +vec3 normal = normalize(v_normal);
-   +
-   +float light = dot(v_normal, u_reverseLightDirection);
++   // because v_normal is a varying it's interpolated
++   // we it will not be a uint vector. Normalizing it
++   // will make it a unit vector again
++   vec3 normal = normalize(v_normal);
++
++   float light = dot(v_normal, u_reverseLightDirection);
 
-   *gl_FragColor = u_color;
+*   gl_FragColor = u_color;
 
-   +// Lets multiply just the color portion (not the alpha)
-   +// by the light
-   +gl_FragColor.rgb *= light;
++   // Lets multiply just the color portion (not the alpha)
++   // by the light
++   gl_FragColor.rgb *= light;
 }
 ```
 
