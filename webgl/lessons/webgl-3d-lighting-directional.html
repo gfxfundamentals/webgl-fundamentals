@@ -305,18 +305,18 @@ of the direction of the light and the normal</p>
 +uniform vec4 u_color;
 
 void main() {
-   +// because v_normal is a varying it&#39;s interpolated
-   +// we it will not be a uint vector. Normalizing it
-   +// will make it a unit vector again
-   +vec3 normal = normalize(v_normal);
-   +
-   +float light = dot(v_normal, u_reverseLightDirection);
++   // because v_normal is a varying it&#39;s interpolated
++   // we it will not be a uint vector. Normalizing it
++   // will make it a unit vector again
++   vec3 normal = normalize(v_normal);
++
++   float light = dot(v_normal, u_reverseLightDirection);
 
-   *gl_FragColor = u_color;
+*   gl_FragColor = u_color;
 
-   +// Lets multiply just the color portion (not the alpha)
-   +// by the light
-   +gl_FragColor.rgb *= light;
++   // Lets multiply just the color portion (not the alpha)
++   // by the light
++   gl_FragColor.rgb *= light;
 }
 </code></pre><p>Then we need to lookup the locations of <code>u_color</code> and <code>u_reverseLightDirection</code>.</p>
 <pre><code>  // lookup uniforms
