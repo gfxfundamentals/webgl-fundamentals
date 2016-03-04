@@ -299,7 +299,6 @@ and we need to set them
 
 `normalize`, which we went over before, will make whatever values we put in there
 into a unit vector. The specific values in the sample are
-
 `x = 0.5` which is positive `x` means the light is on the right pointing left.
 `y = 0.7` which is positive `y` means the light is above pointing down.
 `z = 1` which is positive `z` means the light is in front pointing into the scene.
@@ -318,7 +317,6 @@ To fix this we need to re-orient the normals as the object is re-oriented.
 Like we did for positions we can multiply the normals by some matrix. The most obvious
 matrix would be the `world` matrix. As it is right now we're only passing in
 1 matrix called `u_matrix`. Let's change it to pass in 2 matrices. One called
-
 `u_world` which will be the world matrix. Another called `u_worldViewProjection`
 which will be what we're currently passing in as `u_matrix`
 
@@ -354,7 +352,7 @@ Now we have to look those uniforms up
 +  var worldLocation = gl.getUniformLocation(program, "u_world");
 ```
 
-And we have to change the code the updates them
+And we have to change the code that updates them
 
 ```
 *// Set the matrices
@@ -372,7 +370,7 @@ Rotate the F and notice which ever side is facing the light direction gets lit.
 
 There is one problem which I don't know how to show directly so I'm
 going to show it in a diagram. We're multiplying the `normal` by
-the `u_world` matrix or re-orient the normals.
+the `u_world` matrix to re-orient the normals.
 What happens if we scale the world matrix?
 It turns out we get the wrong normals.
 

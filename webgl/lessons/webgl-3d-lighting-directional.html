@@ -334,8 +334,8 @@ void main() {
 +  // set the light direction.
 +  gl.uniform3fv(reverseLightDirectionLocation, normalize([0.5, 0.7, 1]));
 </code></pre><p><code>normalize</code>, which we went over before, will make whatever values we put in there
-into a unit vector. The specific values in the sample are</p>
-<p><code>x = 0.5</code> which is positive <code>x</code> means the light is on the right pointing left.
+into a unit vector. The specific values in the sample are
+<code>x = 0.5</code> which is positive <code>x</code> means the light is on the right pointing left.
 <code>y = 0.7</code> which is positive <code>y</code> means the light is above pointing down.
 <code>z = 1</code> which is positive <code>z</code> means the light is in front pointing into the scene.
 the relative values means the the direction is mostly pointing into the scene
@@ -353,8 +353,8 @@ is facing the direction of the light to be the brightest.</p>
 <p>To fix this we need to re-orient the normals as the object is re-oriented.
 Like we did for positions we can multiply the normals by some matrix. The most obvious
 matrix would be the <code>world</code> matrix. As it is right now we&#39;re only passing in
-1 matrix called <code>u_matrix</code>. Let&#39;s change it to pass in 2 matrices. One called</p>
-<p><code>u_world</code> which will be the world matrix. Another called <code>u_worldViewProjection</code>
+1 matrix called <code>u_matrix</code>. Let&#39;s change it to pass in 2 matrices. One called
+<code>u_world</code> which will be the world matrix. Another called <code>u_worldViewProjection</code>
 which will be what we&#39;re currently passing in as <code>u_matrix</code></p>
 <pre><code>attribute vec4 a_position;
 attribute vec3 a_normal;
@@ -380,7 +380,7 @@ area of the matrix.</p>
 *  var worldViewProjetionLocation =
 *      gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 +  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
-</code></pre><p>And we have to change the code the updates them</p>
+</code></pre><p>And we have to change the code that updates them</p>
 <pre><code>*// Set the matrices
 *gl.uniformMatrix4fv(
 *    worldViewProjectionLocation, false,
@@ -396,7 +396,7 @@ area of the matrix.</p>
 <p>Rotate the F and notice which ever side is facing the light direction gets lit.</p>
 <p>There is one problem which I don&#39;t know how to show directly so I&#39;m
 going to show it in a diagram. We&#39;re multiplying the <code>normal</code> by
-the <code>u_world</code> matrix or re-orient the normals.
+the <code>u_world</code> matrix to re-orient the normals.
 What happens if we scale the world matrix?
 It turns out we get the wrong normals.</p>
 <p><div>
