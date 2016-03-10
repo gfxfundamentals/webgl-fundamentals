@@ -847,12 +847,12 @@
    * @param {boolean} true if the canvas was resized.
    * @memberOf module:webgl-utils
    */
-  function resizeCanvasToDisplaySize(canvas) {
-    var width = canvas.clientWidth;
-    var height = canvas.clientHeight;
-    if (canvas.width !== width ||
-        canvas.height !== height) {
-      canvas.width = width;
+  function resizeCanvasToDisplaySize(canvas, multiplier) {
+    multiplier = multiplier || 1;
+    var width  = canvas.clientWidth  * multiplier;
+    var height = canvas.clientHeight * multiplier;
+    if (canvas.width !== width ||  canvas.height !== height) {
+      canvas.width  = width;
       canvas.height = height;
       return true;
     }
