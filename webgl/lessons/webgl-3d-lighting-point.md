@@ -14,7 +14,7 @@ That would give us a point light.
 
 If you rotate the surface above you'll see how each point on the surface has a different
 *surface to light* vector. Getting the dot product of the surface normal and each individual
-surfaec to light vector gives us a different value at each point on the surface.
+surface to light vector gives us a different value at each point on the surface.
 
 So, let's do that.
 
@@ -199,7 +199,8 @@ and pass it to the fragment shader.
 
 Next in the fragment shader we need to compute the `halfVector` between
 the surface to view and surface to light vectors. Then we can take the dot
-product the `halfVector` and the normal to find out of the light is reflecting.
+product the `halfVector` and the normal to find out if the light is reflecting
+into the view.
 
     // Passed in from the vertex shader.
     varying vec3 v_normal;
@@ -278,7 +279,7 @@ Let's call that `shininess` and add it to our shader.
     +    specular = pow(dot(normal, halfVector), u_shininess);
     +  }
 
-The dot product can go negative. If we take a negative number to a power it can go positive
+The dot product can go negative. If we take a negative number to a power is undefinedit can go positive
 which would be bad because then we'd see highlights when the light is facing the wrong way.
 So, if the dot product would possibly be negative then we just leave specular at 0.0.
 
@@ -329,7 +330,7 @@ and
     // set the specular color
     +  gl.uniform3fv(specularColorLocation, normalize([1, 0.6, 0.6]));  // red light
 
-{{{example url="../webgl-3d-lighting-point-specular-color.html" }}}
+{{{example url="../webgl-3d-lighting-point-color.html" }}}
 
 Coming up next ???
 
