@@ -78,7 +78,7 @@ we can take the <em>dot product</em> of the 2 directions and it will give us the
 the angle between the 2 directions.</p>
 <p>Here&#39;s an example</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/dot-product.html"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="resources/dot-product.html"></iframe>
   <div class="webgl_center">drag the points</div>
 </div>
 
@@ -89,14 +89,20 @@ is -1. If they are at the same spot exactly the dot product is 1.</p>
 and we know the direction the light is shining then we can just take the dot product
 of them and it will give us a number 1 if the light is pointing directly at the
 surface and -1 if they are pointing directly opposite.</p>
-<p>We can multiply our color by that value and boom! Light!</p>
+<p><div>
+  <iframe class="webgl_example " style="width: 500px; height: 400px;" src="resources/directional-lighting.html"></iframe>
+  <div class="webgl_center">rotate the direction</div>
+</div>
+
+</p>
+<p>We can multiply our color by that dot product value and boom! Light!</p>
 <p>One problem, how do we know which direction the surfaces of our 3d object are facing.</p>
 <h2 id="introducing-normals">Introducing Normals</h2>
 <p>I have no idea why they are called <em>normals</em> but at least in 3D graphics a normal
 is the word for a unit vector that describes the direction a surface is facing.</p>
 <p>Here are some normals for a cube and a sphere.</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/normals.html"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="resources/normals.html"></iframe>
 </div>
 
 </p>
@@ -310,7 +316,7 @@ void main() {
 +   // will make it a unit vector again
 +   vec3 normal = normalize(v_normal);
 +
-+   float light = dot(v_normal, u_reverseLightDirection);
++   float light = dot(normal, u_reverseLightDirection);
 
 *   gl_FragColor = u_color;
 
@@ -329,7 +335,7 @@ void main() {
   gl.uniformMatrix4fv(matrixLocation, false, worldViewProjectionMatrix);
 
 +  // Set the color to use
-+  gl.uniform4fv(colorLocation, [0, 1, 0, 1]); // green
++  gl.uniform4fv(colorLocation, [0.2, 1, 0.2, 1]); // green
 +
 +  // set the light direction.
 +  gl.uniform3fv(reverseLightDirectionLocation, normalize([0.5, 0.7, 1]));
@@ -400,7 +406,7 @@ the <code>u_world</code> matrix to re-orient the normals.
 What happens if we scale the world matrix?
 It turns out we get the wrong normals.</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/normals-scaled.html"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="resources/normals-scaled.html"></iframe>
   <div class="webgl_center">click to toggle normals</div>
 </div>
 
@@ -471,7 +477,7 @@ there&#39;s no noticble difference but at least now we&#39;re prepared.</p>
 </div>
 
 </p>
-<p>I hope this first step into lighting was clear. More lighting coming soon.</p>
+<p>I hope this first step into lighting was clear. Next up <a href="webgl-3d-lighting-point.html">point lighting</a>.</p>
 <div class="webgl_bottombar">
 <h3>Alternatives to mat3(u_worldInverseTranspose) * a_normal</h3>
 <p>In our shader above there's a line like this</p>
@@ -554,6 +560,7 @@ not do unless there was a more compelling reason.</p>
   <li>Lighting</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">WebGL 3D - Directional Lighting</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-point.html">WebGL 3D - Point Lighting</a></li>
   </ul>
   <li>Structure and Organization</li>
   <ul>

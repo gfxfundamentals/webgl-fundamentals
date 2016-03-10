@@ -211,17 +211,26 @@ rotation and scale then [start here](webgl-2d-translation.html).
 You can put no type or you can put <code>type="javascript"</code> or
 <code>type="text/javascript"</code> and the browser will interpret the
 contents as JavaScript. If you put anything else the browser ignores the
-contents of the script tag.
-</p>
+contents of the script tag. In other words <code>x-shader/x-vertex</code>
+and <code>x-shader/x-fragment</code> have no meaning as far as the browser
+is concerned.</p>
 <p>
-We can use this feature to store shaders in script tags. Even better, we
-can make up our own type and in our javascript look for that to decide
-whether to compile the shader as a vertex shader or a fragment shader.
-</p>
+We can use this feature to store shaders in script tags. This is convenient
+because if we couldn't do this we'd have to either write really ugly
+string concatinations like</p>
+<pre class="prettyprint>
+  var shaderSource =
+    "void main() {\n" +
+    "  gl_FragColor = vec4(1,0,0,1);\n" +
+    "}";
+</pre>
+<p>or we'd have to load shaders with ajax requests which is slow and async.</p>
+<p>Puting them in script tags means they are easy to edit and easy
+to access at runtime.</p>
 <p>
 In this case the function <code>createProgramFromScripts</code> looks for
-scripts with specified ids and then looks at the <code>type</code> to
-decide what type of shader to create.
+scripts with specified ids, pulls out their content. It compiles the first
+id as a vertex shader and the second id as a fragment shader.
 </p>
 <p>
 <code>createProgramFromScripts</code> is part of some <a href="webgl-boilerplate.html">boilerplate like code</a>

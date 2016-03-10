@@ -26,7 +26,9 @@ and we know the direction the light is shining then we can just take the dot pro
 of them and it will give us a number 1 if the light is pointing directly at the
 surface and -1 if they are pointing directly opposite.
 
-We can multiply our color by that value and boom! Light!
+{{{diagram url="resources/directional-lighting.html" caption="rotate the direction" width="500" height="400"}}}
+
+We can multiply our color by that dot product value and boom! Light!
 
 One problem, how do we know which direction the surfaces of our 3d object are facing.
 
@@ -263,7 +265,7 @@ void main() {
 +   // will make it a unit vector again
 +   vec3 normal = normalize(v_normal);
 +
-+   float light = dot(v_normal, u_reverseLightDirection);
++   float light = dot(normal, u_reverseLightDirection);
 
 *   gl_FragColor = u_color;
 
@@ -291,7 +293,7 @@ and we need to set them
   gl.uniformMatrix4fv(matrixLocation, false, worldViewProjectionMatrix);
 
 +  // Set the color to use
-+  gl.uniform4fv(colorLocation, [0, 1, 0, 1]); // green
++  gl.uniform4fv(colorLocation, [0.2, 1, 0.2, 1]); // green
 +
 +  // set the light direction.
 +  gl.uniform3fv(reverseLightDirectionLocation, normalize([0.5, 0.7, 1]));
@@ -458,7 +460,7 @@ there's no noticble difference but at least now we're prepared.
 
 {{{example url="../webgl-3d-lighting-directional-worldinversetranspose.html" }}}
 
-I hope this first step into lighting was clear. More lighting coming soon.
+I hope this first step into lighting was clear. Next up [point lighting](webgl-3d-lighting-point.html).
 
 <div class="webgl_bottombar">
 <h3>Alternatives to mat3(u_worldInverseTranspose) * a_normal</h3>

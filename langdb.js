@@ -1,5 +1,8 @@
 window.langDB = {
   "articles": {
+    "webgl-3d-lighting-point.html": {
+      "en": true
+    },
     "webgl-3d-lighting-directional.html": {
       "en": true
     },
@@ -12,19 +15,19 @@ window.langDB = {
     "webgl-text-glyphs.html": {
       "en": true
     },
-    "webgl-text-texture.html": {
+    "webgl-text-html.html": {
       "en": true
     },
-    "webgl-text-html.html": {
+    "webgl-drawing-multiple-things.html": {
       "en": true
     },
     "webgl-text-canvas2d.html": {
       "en": true
     },
-    "webgl-scene-graph.html": {
+    "webgl-text-texture.html": {
       "en": true
     },
-    "webgl-drawing-multiple-things.html": {
+    "webgl-scene-graph.html": {
       "en": true
     },
     "webgl-resizing-the-canvas.html": {
