@@ -34,8 +34,6 @@ with diagrams where possible.
 A list of articles I'd like to write or see written
 
 *   lighting
-    *   directional lighting
-    *   point lighting
     *   spot lighting
     *   normal maps
     *   shadow maps
