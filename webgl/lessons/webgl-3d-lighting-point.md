@@ -279,9 +279,8 @@ Let's call that `shininess` and add it to our shader.
     +    specular = pow(dot(normal, halfVector), u_shininess);
     +  }
 
-The dot product can go negative. If we take a negative number to a power is undefinedit can go positive
-which would be bad because then we'd see highlights when the light is facing the wrong way.
-So, if the dot product would possibly be negative then we just leave specular at 0.0.
+The dot product can go negative. Taking a negative number to a power is undefined
+which would be bad. So, if the dot product would possibly be negative then we just leave specular at 0.0.
 
 Of course we need to look up the location and set it
 
@@ -334,4 +333,29 @@ and
 
 Coming up next ???
 
+<div class="webgl_bottombar">
+<h3>Why is <code>pow(negative, power)</code> undefined?</h3>
+<p>What does this mean?</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(5, 2)</pre></div>
+<p>Well you can look at it as</p>
+<div class="webgl_center"><pre class="glocal-center-content">5 * 5 = 25</pre></div>
+<p>What about</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(5, 3)</pre></div>
+<p>Well you can look at that as</p>
+<div class="webgl_center"><pre class="glocal-center-content">5 * 5 * 5 = 125</pre></div>
+<p>Ok, how about</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2)</pre></div>
+<p>Well that could be</p>
+<div class="webgl_center"><pre class="glocal-center-content">-5 * -5 = 25</pre></div>
+<p>And</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(-5, 3)</pre></div>
+<p>Well you can look at as</p>
+<div class="webgl_center"><pre class="glocal-center-content">-5 * -5 * -5 = -125</pre></div>
+<p>As you know multiplying a negative by a negative makes a positive. Multplying by a negative
+again makes it negative.</p>
+<p>Well then what does this mean?</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2.5)</pre></div>
+<p>How do you decide which is the result of that positive or negative? I'm not a math guy really
+but it seems undecidable hence it's undefined.</p>.
+</div>
 
