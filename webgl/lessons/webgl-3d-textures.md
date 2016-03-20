@@ -116,7 +116,7 @@ the image has been downloaded we copy the image to the texture. We'll use that m
     *// Asynchronously load an image
     *var image = new Image();
     *image.src = "resources/f-texture.png";
-    *image.addEventLisenter('load', function() {
+    *image.addEventListener('load', function() {
     *  // Now that the image has loaded make copy it to the texture.
     *  gl.bindTexture(gl.TEXTURE_2D, texture);
     *  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
