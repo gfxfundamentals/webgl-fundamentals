@@ -259,7 +259,7 @@
       gl.attachShader(program, shader);
     });
     if (opt_attribs) {
-      obj_attrib.forEach(function(attrib, ndx) {
+      opt_attrib.forEach(function(attrib, ndx) {
         gl.bindAttribLocation(
             program,
             opt_locations ? opt_locations[ndx] : ndx,
