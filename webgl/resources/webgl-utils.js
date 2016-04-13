@@ -177,6 +177,7 @@
    * @memberOf module:webgl-utils
    */
   function getWebGLContext(canvas, opt_attribs, opt_options) {
+    var attribs = opt_attribs || {};
     var options = opt_options || {};
 
     if (isInIFrame()) {
@@ -196,7 +197,7 @@
       document.body.insertBefore(h1, document.body.children[0]);
     }
 
-    var gl = setupWebGL(canvas, opt_attribs);
+    var gl = setupWebGL(canvas, attribs);
     return gl;
   }
 
