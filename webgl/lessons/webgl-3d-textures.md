@@ -87,6 +87,8 @@ texture to each quad on our 'F'.
     *        1, 1,
     *        1, 0,
     * ...
+    *       ]),
+    *       gl.STATIC_DRAW);
 
 We also need a texture. We could make one from scratch but in this case let's
 load an image since that's probably the most common way.
