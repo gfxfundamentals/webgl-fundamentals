@@ -35,6 +35,7 @@ Drag cicle to rotate.
 <script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/jquery-gman-circle.js"></script>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script>
 "use strict";
 
@@ -45,7 +46,8 @@ $(function(){
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }

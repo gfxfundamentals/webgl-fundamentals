@@ -35,6 +35,7 @@ h1 {
 <div class="description">resize this window tall and thin or short and wide.<br/> Notice the F keeps the correct aspect</div>
 </body>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/webgl-2d-math.js"></script>
 <script>
 "use strict";
@@ -44,7 +45,8 @@ window.onload = main;
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas, {}, {dontResize:true});
+  setupLesson(canvas, {}, {dontResize:true});
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }

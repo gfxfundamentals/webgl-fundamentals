@@ -13,6 +13,7 @@
 </div>
 </body>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script>
 "use strict";
 
@@ -29,7 +30,8 @@ function main() {
 function render(image) {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
@@ -67,7 +69,7 @@ function render(image) {
   var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
   var textureSizeLocation = gl.getUniformLocation(program, "u_textureSize");
   var convolutionLocation = gl.getUniformLocation(program, "u_convolution[0]");
-  var convolutionLocation = gl.getUniformLocation(program, "u_kernelWeight");
+  var kernelWeightLocation = gl.getUniformLocation(program, "u_kernelWeight");
 
   // set the resolution
   gl.uniform2f(resolutionLocation, canvas.width, canvas.height);

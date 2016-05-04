@@ -6,7 +6,14 @@
 <style>
 canvas { border: 1px solid black; }
 </style>
+</head>
+<body>
+<h1 class="description">3D in WebGL</h1>
+<p><canvas id="c" width="400" height="300"></canvas></p>
+<p class="description"><a href="3d-in-canvas.html">compare to 3D in Canvas</a></p>
+</body>
 <script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script>
 <script src="3d-math.js"></script>
 <script>
 "use strict";
@@ -41,7 +48,7 @@ function main() {
   ];
 
   var canvas = document.getElementById("c");
-  var gl = getWebGLContext(c);
+  var gl = canvas.getContext("webgl");
 
   var program = createProgramFromScripts(
       gl, ["2d-vertex-shader", "2d-fragment-shader"]);
@@ -111,10 +118,4 @@ void main() {
    gl_FragColor = vec4(0,0,0,1);
 }
 </script>
-</head>
-<body>
-<h1 class="description">3D in WebGL</h1>
-<p><canvas id="c" width="400" height="300"></canvas></p>
-<p class="description"><a href="3d-in-canvas.html">compare to 3D in Canvas</a></p>
-</body>
 </html>

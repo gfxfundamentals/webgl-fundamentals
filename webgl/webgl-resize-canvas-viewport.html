@@ -27,6 +27,7 @@
 <script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/webgl-2d-math.js"></script>
 <script>
 "use strict";
@@ -38,7 +39,8 @@ $(function(){
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas, undefined, {dontResize: true, noTitle: true});
+  setupLesson(canvas, undefined, {dontResize: true, noTitle: true});
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }

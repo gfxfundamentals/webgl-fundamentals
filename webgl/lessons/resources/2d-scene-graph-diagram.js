@@ -1,8 +1,6 @@
 "use strict";
 
 function renderSceneGraph(root) {
-  updateCSSIfInIFrame();
-
   var canvas = document.getElementById("c");
   var ctx = wrapCanvasRenderingContext2D(canvas.getContext("2d"));
   var g_update = true;

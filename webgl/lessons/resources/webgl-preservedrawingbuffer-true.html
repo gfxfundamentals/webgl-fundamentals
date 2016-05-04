@@ -6,7 +6,32 @@
 <style>
 canvas { border: 1px solid black; }
 </style>
+</head>
+<body>
+<p><canvas id="c" width="400" height="300"></canvas></p>
+</body>
+<!-- vertex shader -->
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec4 a_color;
+uniform mat4 u_worldViewProjection;
+varying vec4 v_color;
+void main() {
+   gl_Position = u_worldViewProjection * a_position;
+   v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+varying vec4 v_color;
+uniform vec4 u_colorMult;
+void main() {
+   gl_FragColor = v_color * u_colorMult;
+}
+</script>
 <script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script>
 <script src="3d-math.js"></script>
 <script>
 "use strict";
@@ -83,7 +108,7 @@ function main() {
   ];
 
   var canvas = document.getElementById("c");
-  var gl = getWebGLContext(c, {preserveDrawingBuffer: true});
+  var gl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
   var clock = 0;
 
   var program = createProgramFromScripts(
@@ -163,28 +188,4 @@ function main() {
   requestAnimationFrame(render);
 }
 </script>
-<!-- vertex shader -->
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
-attribute vec4 a_position;
-attribute vec4 a_color;
-uniform mat4 u_worldViewProjection;
-varying vec4 v_color;
-void main() {
-   gl_Position = u_worldViewProjection * a_position;
-   v_color = a_color;
-}
-</script>
-<!-- fragment shader -->
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
-precision mediump float;
-varying vec4 v_color;
-uniform vec4 u_colorMult;
-void main() {
-   gl_FragColor = v_color * u_colorMult;
-}
-</script>
-</head>
-<body>
-<p><canvas id="c" width="400" height="300"></canvas></p>
-</body>
 </html>
