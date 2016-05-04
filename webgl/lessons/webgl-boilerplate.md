@@ -140,21 +140,6 @@ from script tags, attach them to a program and link them.
       return createProgram(gl, vertexShader, fragmentShader);
     }
 
-There are a couple of other pieces I've needed in most WebGL samples.
-
-At the time of this writing WebGL requires the asking
-for an "experimental-webgl" context whereas in the near future you can
-just ask for "webgl".  I could write this in every WebGL program
-
-    ...
-    var gl = canvas.getContext("experimental-webgl");
-    if (!gl) {
-      gl = canvas.getContext("webgl");
-    }
-    ...
-
-But I prefer to use some function I've written before.
-
 That's most of my minimum set of WebGL boilerplate code.
 <a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js">You can find that code here</a>.
 If you want something slightly more organized check out [TWGL.js](http://twgljs.org).
