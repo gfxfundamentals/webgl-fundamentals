@@ -38,6 +38,70 @@ body, document {
   position: relative;
 }
 </style>
+</head>
+<body>
+<div class="description">
+Show texture wrapping modes<br/>
+</div>
+<div id="container">
+  <canvas id="canvas" width="400" height="300"></canvas>
+  <div id="gridContainer">
+    <svg version="1.1"
+        id="grid"
+        viewBox="0 0 400 300"
+        fill="none"
+        stroke="none"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+      <g transform="matrix(2.15, 0, 0, 2.15, 114, 86)">
+         <g stroke-width="0.25" stroke="#000000">
+           <line x1="0"  y1="80" x2="0"  y2="85"/>
+           <line x1="16" y1="80" x2="16" y2="85"/>
+           <line x1="32" y1="80" x2="32" y2="85"/>
+           <line x1="48" y1="80" x2="48" y2="85"/>
+           <line x1="64" y1="80" x2="64" y2="85"/>
+           <line x1="80" y1="80" x2="80" y2="85"/>
+
+           <line y1="0"  x1="-5" y2="0"  x2="0" />
+           <line y1="16" x1="-5" y2="16" x2="0" />
+           <line y1="32" x1="-5" y2="32" x2="0" />
+           <line y1="48" x1="-5" y2="48" x2="0" />
+           <line y1="64" x1="-5" y2="64" x2="0" />
+           <line y1="80" x1="-5" y2="80" x2="0" />
+         </g>
+         <g fill="#000000" font-size="4" font-family="monospace" text-anchor="middle">
+           <text x="0"  y="90">-3</text>
+           <text x="16" y="90">-2</text>
+           <text x="32" y="90">-1</text>
+           <text x="48" y="90">0</text>
+           <text x="64" y="90">1</text>
+           <text x="80" y="90">2</text>
+           <text y="1"  x="-10">4</text>
+           <text y="17" x="-10">3</text>
+           <text y="33" x="-10">2</text>
+           <text y="49" x="-10">1</text>
+           <text y="65" x="-10">0</text>
+           <text y="81" x="-10">-1</text>
+         </g>
+      </g>
+    </svg>
+  </div>
+  <div id="uiContainer">
+    <div id="ui">
+      <div id="wrap_s">
+        <span>TEXTURE_WRAP_S: </span>
+        <input type="radio" id="wrap_s0" name="wrap_s" checked="true"/><label for="wrap_s0">REPEAT</label>
+        <input type="radio" id="wrap_s1" name="wrap_s" /><label for="wrap_s1">CLAMP_TO_EDGE</label>
+      </div>
+      <div id="wrap_t">
+        <span>TEXTURE_WRAP_T: </span>
+        <input type="radio" id="wrap_t0" name="wrap_t" checked="true"/><label for="wrap_t0">REPEAT</label>
+        <input type="radio" id="wrap_t1" name="wrap_t" /><label for="wrap_t1">CLAMP_TO_EDGE</label>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
 <script src="resources/jquery-1.7.1.min.js"></script>
 <script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="resources/jquery.gman.ui.js"></script>
@@ -260,70 +324,6 @@ void main() {
    gl_FragColor = texture2D(u_texture, v_texcoord);
 }
 </script>
-</head>
-<body>
-<div class="description">
-Show texture wrapping modes<br/>
-</div>
-<div id="container">
-  <canvas id="canvas" width="400" height="300"></canvas>
-  <div id="gridContainer">
-    <svg version="1.1"
-        id="grid"
-        viewBox="0 0 400 300"
-        fill="none"
-        stroke="none"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink">
-      <g transform="matrix(2.15, 0, 0, 2.15, 114, 86)">
-         <g stroke-width="0.25" stroke="#000000">
-           <line x1="0"  y1="80" x2="0"  y2="85"/>
-           <line x1="16" y1="80" x2="16" y2="85"/>
-           <line x1="32" y1="80" x2="32" y2="85"/>
-           <line x1="48" y1="80" x2="48" y2="85"/>
-           <line x1="64" y1="80" x2="64" y2="85"/>
-           <line x1="80" y1="80" x2="80" y2="85"/>
-
-           <line y1="0"  x1="-5" y2="0"  x2="0" />
-           <line y1="16" x1="-5" y2="16" x2="0" />
-           <line y1="32" x1="-5" y2="32" x2="0" />
-           <line y1="48" x1="-5" y2="48" x2="0" />
-           <line y1="64" x1="-5" y2="64" x2="0" />
-           <line y1="80" x1="-5" y2="80" x2="0" />
-         </g>
-         <g fill="#000000" font-size="4" font-family="monospace" text-anchor="middle">
-           <text x="0"  y="90">-3</text>
-           <text x="16" y="90">-2</text>
-           <text x="32" y="90">-1</text>
-           <text x="48" y="90">0</text>
-           <text x="64" y="90">1</text>
-           <text x="80" y="90">2</text>
-           <text y="1"  x="-10">4</text>
-           <text y="17" x="-10">3</text>
-           <text y="33" x="-10">2</text>
-           <text y="49" x="-10">1</text>
-           <text y="65" x="-10">0</text>
-           <text y="81" x="-10">-1</text>
-         </g>
-      </g>
-    </svg>
-  </div>
-  <div id="uiContainer">
-    <div id="ui">
-      <div id="wrap_s">
-        <span>TEXTURE_WRAP_S: </span>
-        <input type="radio" id="wrap_s0" name="wrap_s" checked="true"/><label for="wrap_s0">REPEAT</label>
-        <input type="radio" id="wrap_s1" name="wrap_s" /><label for="wrap_s1">CLAMP_TO_EDGE</label>
-      </div>
-      <div id="wrap_t">
-        <span>TEXTURE_WRAP_T: </span>
-        <input type="radio" id="wrap_t0" name="wrap_t" checked="true"/><label for="wrap_t0">REPEAT</label>
-        <input type="radio" id="wrap_t1" name="wrap_t" /><label for="wrap_t1">CLAMP_TO_EDGE</label>
-      </div>
-    </div>
-  </div>
-</div>
-</body>
 </html>
 
 
