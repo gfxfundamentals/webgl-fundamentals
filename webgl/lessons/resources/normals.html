@@ -5,12 +5,22 @@
 <meta charset="utf-8">
 <title>WebGL - Normals Diagram</title>
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
-<script src="../../resources/webgl-utils.js"></script>
-<script src="../../resources/twgl-full.min.js"></script>
 <style>
 canvas {
 }
 </style>
+</head>
+<body>
+<div class="description">
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas" width="400" height="300" style="width: 400px; height: 300px;"></canvas>
+</div>
+</body>
+</html>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script>
+<script src="../../resources/twgl-full.min.js"></script>
 <script id="vertexColorVertexShader" type="text/something-not-javascript">
 attribute vec4 position;
 attribute vec4 color;
@@ -74,15 +84,6 @@ void main() {
   gl_FragColor = vec4(u_color.rgb * litR.y + litR.z, u_color.a);
 }
 </script>
-</head>
-<body>
-<div class="description">
-</div>
-<div style="position:absolute;">
-  <canvas id="canvas" width="400" height="300" style="width: 400px; height: 300px;"></canvas>
-</div>
-</body>
-</html>
 <script>
 "use strict";
 var m4 = twgl.m4;
@@ -338,7 +339,6 @@ function CreateApp(gl) {
 
 var app;
 function main() {
-  updateCSSIfInIFrame();
   canvas = document.getElementById("canvas");
 
   var gl = twgl.getWebGLContext(canvas, {alpha: true, preMultipliedAlpha: false});

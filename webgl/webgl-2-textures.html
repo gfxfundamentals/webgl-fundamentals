@@ -10,6 +10,7 @@
 <canvas id="canvas" width="400" height="300"></canvas>
 </body>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script>
 "use strict";
 window.onload = main;
@@ -51,7 +52,8 @@ function main() {
 function render(images) {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }

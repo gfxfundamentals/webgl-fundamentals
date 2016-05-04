@@ -112,7 +112,7 @@ function main() {
   var container = document.getElementById("canvas") || document.body;
   var isCanvas = (container instanceof HTMLCanvasElement);
   var canvas = isCanvas ? container : document.createElement("canvas");
-  var gl = setupWebGL(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }

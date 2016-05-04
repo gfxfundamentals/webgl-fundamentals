@@ -6,8 +6,15 @@
 <style>
 canvas { border: 1px solid black; }
 </style>
+</head>
+<body>
+<h1 class="description">3D in canvas</h1>
+<p><canvas id="c" width="400" height="300"></canvas></p>
+<p class="description"><a href="3d-in-webgl.html">compare to 3D in WebGL</a></p>
+</body>
 <!-- this is included only for iframe and requestAnimationFrame support -->
 <script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script>
 <script src="3d-math.js"></script>
 <script>
 "use strict";
@@ -16,7 +23,6 @@ var m = ThreeDMath;
 window.onload = main;
 
 function main() {
-  updateCSSIfInIFrame();
   var cubeVertices = [
     -1, -1, -1,
      1, -1, -1,
@@ -74,7 +80,7 @@ function main() {
 
     drawLines(cubeVertices, indices, worldViewProjection);
     ctx.restore();
-    requestAnimFrame(render);
+    requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
 
@@ -97,10 +103,4 @@ function main() {
   }
 }
 </script>
-</head>
-<body>
-<h1 class="description">3D in canvas</h1>
-<p><canvas id="c" width="400" height="300"></canvas></p>
-<p class="description"><a href="3d-in-webgl.html">compare to 3D in WebGL</a></p>
-</body>
 </html>

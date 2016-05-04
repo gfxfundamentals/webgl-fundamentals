@@ -32,7 +32,55 @@ Drag sliders to change the frustum.
   </div>
 </div>
 </body>
+<script id="vertexColorVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 color;
+uniform mat4 u_worldViewProjection;
+varying vec4 v_color;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_color = color;
+}
+
+</script>
+<script id="vertexColorFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+uniform vec4 u_color;
+varying vec4 v_color;
+void main() {
+  gl_FragColor = u_color * v_color;
+}
+</script>
+<script id="baseVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 a_color;
+uniform mat4 u_worldViewProjection;
+uniform mat4 u_exampleWorldViewProjection;
+varying vec4 v_color;
+varying vec4 v_position;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_position = u_exampleWorldViewProjection * position;
+  v_position = v_position / v_position.w;
+  v_color = a_color;
+}
+
+</script>
+<script id="colorFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+varying vec4 v_color;
+varying vec4 v_position;
+uniform vec4 u_color;
+void main() {
+  bool blend = (v_position.x < -1.0 || v_position.x > 1.0 ||
+                v_position.y < -1.0 || v_position.y > 1.0 ||
+                v_position.z < -1.0 || v_position.z > 1.0);
+  vec4 blendColor = blend ? vec4(0.35, 0.35, 0.35, 1.0) : vec4(1, 1, 1, 1);
+  gl_FragColor = v_color * u_color * blendColor;
+}
+</script>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/jquery-1.7.1.min.js"></script>
 <script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="resources/jquery.gman.ui.js"></script>
@@ -409,7 +457,6 @@ function resizeCanvas() {
 }
 var app;
 function main() {
-  updateCSSIfInIFrame();
   math = tdl.math;
   fast = tdl.fast;
   window.requestAnimFrame = tdl.webgl.requestAnimationFrame;
@@ -440,53 +487,6 @@ $(function(){
   main();
 });
 
-</script>
-<script id="vertexColorVertexShader" type="text/something-not-javascript">
-attribute vec4 position;
-attribute vec4 color;
-uniform mat4 u_worldViewProjection;
-varying vec4 v_color;
-void main() {
-  gl_Position = u_worldViewProjection * position;
-  v_color = color;
-}
-
-</script>
-<script id="vertexColorFragmentShader" type="text/something-not-javascript">
-precision mediump float;
-uniform vec4 u_color;
-varying vec4 v_color;
-void main() {
-  gl_FragColor = u_color * v_color;
-}
-</script>
-<script id="baseVertexShader" type="text/something-not-javascript">
-attribute vec4 position;
-attribute vec4 a_color;
-uniform mat4 u_worldViewProjection;
-uniform mat4 u_exampleWorldViewProjection;
-varying vec4 v_color;
-varying vec4 v_position;
-void main() {
-  gl_Position = u_worldViewProjection * position;
-  v_position = u_exampleWorldViewProjection * position;
-  v_position = v_position / v_position.w;
-  v_color = a_color;
-}
-
-</script>
-<script id="colorFragmentShader" type="text/something-not-javascript">
-precision mediump float;
-varying vec4 v_color;
-varying vec4 v_position;
-uniform vec4 u_color;
-void main() {
-  bool blend = (v_position.x < -1.0 || v_position.x > 1.0 ||
-                v_position.y < -1.0 || v_position.y > 1.0 ||
-                v_position.z < -1.0 || v_position.z > 1.0);
-  vec4 blendColor = blend ? vec4(0.35, 0.35, 0.35, 1.0) : vec4(1, 1, 1, 1);
-  gl_FragColor = v_color * u_color * blendColor;
-}
 </script>
 </html>
 
