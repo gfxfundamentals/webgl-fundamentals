@@ -193,18 +193,7 @@ function createProgramFromScripts(
   var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId);
   return createProgram(gl, vertexShader, fragmentShader);
 }
-</code></pre><p>There are a couple of other pieces I&#39;ve needed in most WebGL samples.</p>
-<p>At the time of this writing WebGL requires the asking
-for an &quot;experimental-webgl&quot; context whereas in the near future you can
-just ask for &quot;webgl&quot;.  I could write this in every WebGL program</p>
-<pre><code>...
-var gl = canvas.getContext(&quot;experimental-webgl&quot;);
-if (!gl) {
-  gl = canvas.getContext(&quot;webgl&quot;);
-}
-...
-</code></pre><p>But I prefer to use some function I&#39;ve written before.</p>
-<p>That&#39;s most of my minimum set of WebGL boilerplate code.
+</code></pre><p>That&#39;s most of my minimum set of WebGL boilerplate code.
 <a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js">You can find that code here</a>.
 If you want something slightly more organized check out <a href="http://twgljs.org">TWGL.js</a>.</p>
 <p>The rest of what makes WebGL look complicated is setting up all the inputs
