@@ -72,13 +72,15 @@ window.langDB = {
       "en": true
     },
     "webgl-2d-translation.html": {
-      "en": true
+      "en": true,
+      "pl": true
     },
     "webgl-2d-scale.html": {
       "en": true
     },
     "webgl-2d-rotation.html": {
-      "en": true
+      "en": true,
+      "pl": true
     },
     "webgl-boilerplate.html": {
       "en": true
