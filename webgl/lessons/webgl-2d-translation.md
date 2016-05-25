@@ -3,18 +3,18 @@ Description: How to translate in 2D
 
 Before we move on to 3D let's stick with 2D for a little while longer. Bear with me please. This article might seem exceedingly obvious to some but I'll build up to a point in a few articles.
 
-This article is a continuation of a series starting with <a href="webgl-fundamentals.html">WebGL Fundamentals</a>. If you haven't read them I suggest you read at least the first one then come back here.
+This article is a continuation of a series starting with <a href="webgl-fundamentals.html">WebGL Fundamentals</a>. If you haven't read them I suggest you read at least the first one, then come back here.
 
 Translation is some fancy math name that basically means "to move" something. I suppose moving a sentence from English to Japanese fits as well but in this case we're talking about moving geometry. Using the sample code we ended up with in <a href="webgl-fundamentals.html">the first post</a> you could easily translate our rectangle just by changing the values passed to setRectangle right? Here's a sample based on our <a href="webgl-fundamentals.html">previous sample</a>.
 <!--more-->
 <pre class="prettyprint showlinemods">
-  // First lets make some variables 
+  // First let's make some variables
   // to hold the translation, width and height of the rectangle
   var translation = [0, 0];
   var width = 100;
   var height = 30;
 
-  // then let's make a function to
+  // Then let's make a function to
   // re-draw everything. We can call this
   // function after we update the translation.
 
@@ -31,7 +31,7 @@ Translation is some fancy math name that basically means "to move" something. I 
   }
 </pre>
 
-In the example below I've attached a couple of sliders that will update translation[0] and translation[1] and call drawScene anytime they change. Drag the sliders to translate the rectangle.
+In the example below I've attached a couple of sliders that will update `translation[0]` and `translation[1]` and call `drawScene` anytime they change. Drag the sliders to translate the rectangle.
 
 {{{example url="../webgl-2d-rectangle-translate.html" }}}
 
@@ -41,7 +41,7 @@ Let's say we wanted to draw an 'F' that consists of 6 triangles like this.
 
 <img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
 
-Well, following are current code we'd have to change setRectangle to something more like this.
+Well, following our current code we'd have to change `setRectangle` to something more like this.
 
 <pre class="prettyprint showlinemods">
 // Fill the buffer with the values that define a letter 'F'.
@@ -101,7 +101,7 @@ void main() {
    ...
 </pre>
 
-and we'll restructure the code a little. For one we only need to set the geometry once. 
+and we'll restructure the code a little. For one we only need to set the geometry once.
 
 <pre class="prettyprint showlinemods">
 // Fill the buffer with the values that define a letter 'F'.
@@ -136,7 +136,7 @@ function setGeometry(gl) {
 }
 </pre>
 
-Then we just need to update <code>u_translation</code> before we draw with the translation that we desire.
+Then we just need to update `u_translation` before we draw with the translation that we desire.
 
 <pre class="prettyprint showlinemods">
   ...
@@ -159,13 +159,13 @@ Then we just need to update <code>u_translation</code> before we draw with the t
   }
 </pre>
 
-Notice <code>setGeometry</code> is called only once. It is no longer inside drawScene.
+Notice `setGeometry` is called only once. It is no longer inside `drawScene`.
 
-And here's that example. Again, Drag the sliders to update the translation.
+And here's that example. Again, drag the sliders to update the translation.
 
 {{{example url="../webgl-2d-geometry-translate-better.html" }}}
 
-Now when we draw WebGL is doing practically everything. All we are doing is setting a translation and asking it to draw. Even if our geometry had tens of thousands of points the main code would stay the same.
+Now when we draw, WebGL is doing practically everything. All we are doing is setting a translation and asking it to draw. Even if our geometry had tens of thousands of points the main code would stay the same.
 
 If you want you can compare <a href="../webgl-2d-geometry-translate.html" target="_blank">the version that uses the complex JavaScript above to update all the points</a>.
 

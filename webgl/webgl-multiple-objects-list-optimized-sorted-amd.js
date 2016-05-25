@@ -8,7 +8,7 @@ require([
 
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = webglUtils.getWebGLContext(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }

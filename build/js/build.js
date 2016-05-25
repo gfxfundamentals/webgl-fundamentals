@@ -114,6 +114,7 @@ Handlebars.registerHelper('diagram', function(options) {
   options.hash.width  = options.hash.width || "400";
   options.hash.height = options.hash.height || "300";
   options.hash.examplePath = options.data.root.examplePath;
+  options.hash.className = options.hash.className || "";
 
   return templateManager.apply("build/templates/diagram.template", options.hash);
 });

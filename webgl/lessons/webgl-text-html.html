@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta property="og:title" content="WebGL Text - HTML" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
@@ -69,16 +69,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="col-sm-8 lesson-main">
       <p>This article is a continuation of previous WebGL articles.
 If you haven&#39;t read them I suggest <a href="webgl-3d-perspective.html">you start there</a>
-and work your way back..</p>
+and work your way back.</p>
 <p>A common question is &quot;how to I draw text in WebGL&quot;. The first thing to ask yourself
 is what&#39;s your purpose in drawing the text. You&#39;re in a browser, the browser
 displays text. So your first answer should be to use HTML to display text.</p>
-<p>Let&#39;s to the easiest example first: You just want to draw some text over
+<p>Let&#39;s do the easiest example first: You just want to draw some text over
 your WebGL. We might call this a text overlay. Basically this is text that stays
 in the same position.</p>
 <p>The simple way is to make an HTML element or elements and use CSS to make them overlap.</p>
 <p>For example: First make a container and put both a canvas and some HTML to be
-overlayed inside the container.</p>
+overlaid inside the container.</p>
 <pre><code>&lt;div class=&quot;container&quot;&gt;
   &lt;canvas id=&quot;canvas&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
   &lt;div id=&quot;overlay&quot;&gt;
@@ -86,7 +86,7 @@ overlayed inside the container.</p>
     &lt;div&gt;Angle: &lt;span id=&quot;angle&quot;&gt;&lt;/span&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
-</code></pre><p>Next setup the CSS so the the canvas and the HTML overlap</p>
+</code></pre><p>Next setup the CSS so that the canvas and the HTML overlap</p>
 <pre><code>.container {
     position: relative;
 }
@@ -108,7 +108,7 @@ var angleNode = document.createTextNode(&quot;&quot;);
 // Add those text nodes where they need to go
 timeElement.appendChild(timeNode);
 angleElement.appendChild(angleNode);
-</code></pre><p>Finally update the node&#39;s when rendering</p>
+</code></pre><p>Finally update the nodes when rendering</p>
 <pre><code>function drawScene() {
     ...
 
@@ -137,11 +137,11 @@ insert arbitrary HTML strings though it might be slightly slower since the brows
 and destroy nodes each time you set it. Which is better is up to you.</p>
 <p>The important point to take way from the overlay technique is that WebGL runs in a browser. Remember to
 use the browser&#39;s features when appropriate. Lots of OpenGL programmers are used to having to render
-every part of their app 100% themselves from scratch but because WebGL runs it a browser it already
+every part of their app 100% themselves from scratch but because WebGL runs in a browser it already
 has tons of features. Use them. This has lots of benefits. For example you can use CSS styling to
 easily give that overlay an interesting style.</p>
 <p>For example here&#39;s the same example but adding some style. The background is rounded, the letters have
-a glow around them. There&#39;s a red border. You get all that essencially for free by using HTML.</p>
+a glow around them. There&#39;s a red border. You get all that essentially for free by using HTML.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-html-overlay-styled.html"></iframe>
   <a class="webgl_center" href="../webgl-text-html-overlay-styled.html" target="_blank">click here to open in a separate window</a>
@@ -150,7 +150,7 @@ a glow around them. There&#39;s a red border. You get all that essencially for f
 </p>
 <p>The next most common thing to want to do is position some text relative to something you&#39;re rendering.
 We can do that in HTML as well.</p>
-<p>In this case we&#39;ll make again make a container with the canvas and another container for our moving HTML</p>
+<p>In this case we&#39;ll again make a container with the canvas and another container for our moving HTML</p>
 <pre><code>&lt;div class=&quot;container&quot;&gt;
   &lt;canvas id=&quot;canvas&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
   &lt;div id=&quot;divcontainer&quot;&gt;&lt;/div&gt;
@@ -180,7 +180,7 @@ to the first parent with another <code>position: relative</code> or <code>positi
 that&#39;s the container that both the canvas and the <code>#divcontainer</code> are in.</p>
 <p>The <code>left: 0px; top: 0px</code> makes the <code>#divcontainer</code> align with everything. The <code>z-index: 10</code> makes
 it float over the canvas. And the <code>overflow: hidden</code> makes its children get clipped.</p>
-<p>Finally <code>.floating-div</code> will use for the positionable div we create.</p>
+<p>Finally <code>.floating-div</code> will be used for the positionable div we create.</p>
 <p>So now we need to look up the divcontainer, create a div and append it.</p>
 <pre><code>// look up the divcontainer
 var divContainerElement = document.getElementById(&quot;divcontainer&quot;);
@@ -216,7 +216,7 @@ and how to apply a projection matrix to convert them to clipspace. We pass all
 of that to our shader and it multiplies vertices in local space and converts
 them to clipspace. We can do all the math ourselves in JavaScript as well.
 Then  we can multiply clipspace (-1 to +1) into pixels and use
-that it position the div.</p>
+that to position the div.</p>
 <pre><code>gl.drawArrays(...);
 
 // We just got through computing a matrix to draw our
@@ -242,7 +242,7 @@ var pixelY = (clipspace[1] * -0.5 + 0.5) * gl.canvas.height;
 div.style.left = Math.floor(pixelX) + &quot;px&quot;;
 div.style.top  = Math.floor(pixelY) + &quot;px&quot;;
 textNode.nodeValue = clock.toFixed(2);
-</code></pre><p>And wahlah, the top left corner of the our div is perfectly aligned
+</code></pre><p>And voila, the top left corner of our div is perfectly aligned
 with the top right front corner of the F.</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-text-html-div.html"></iframe>
@@ -261,11 +261,11 @@ with the top right front corner of the F.</p>
 details. One important point is I&#39;m just guessing that
 creating, appending and removing HTML elements from the DOM
 is slow so the example above creates them and keeps them
-around. It hids any unused ones rather than removing them
+around. It hides any unused ones rather than removing them
 from the DOM. You&#39;d have to profile to know if that&#39;s faster.
 That was just the method I chose.</p>
 <p>Hopefully it&#39;s clear how to use HTML for text. <a href="webgl-text-canvas2d.html">Next we&#39;ll
-cover using Canvas2D for text</a>.</p>
+cover using Canvas 2D for text</a>.</p>
 
       <hr/>
       <div>
@@ -322,18 +322,30 @@ cover using Canvas2D for text</a>.</p>
     <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
   </ul>
+  <li>Lighting</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">WebGL 3D - Directional Lighting</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-point.html">WebGL 3D - Point Lighting</a></li>
+  </ul>
   <li>Structure and Organization</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">WebGL - Less Code, More Fun</a></li>
     <li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">WebGL - Drawing Multiple Things</a></li>
     <li><a href="/webgl/lessons/webgl-scene-graph.html">WebGL - Scene Graphs</a></li>
   </ul>
-  <li>Text</li>
+  <li>Techniques</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
-    <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
-    <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
-    <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    <li>2D</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a>
+    </ul>
+    <li>Text</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
+      <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
+      <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
+      <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    </ul>
   </ul>
   <li>Misc</li>
   <ul>

@@ -2,14 +2,14 @@ Title: WebGL 3D - Textures
 Description: How textures work in WebGL
 
 This post is a continuation of a series of posts about WebGL.
-The first <a href="webgl-fundamentals.html">started with fundamentals</a>.
+The first <a href="webgl-fundamentals.html">started with fundamentals</a>
 and the previous was about <a href="webgl-animation.html">animation</a>.
 
 How do we apply textures in WebGL? You could probably derive how by
 reading <a href="webgl-image-processing.html">the articles on image processing</a>
 but it will probably be easier to understand if we go over it in more detail.
 
-The first thing we need to do is adjust our shaders to use textures. Here's the
+The first thing we need to do is adjust our shaders to use textures. Here are the
 changes to the vertex shader. We need to pass in texture coordinates. In this
 case we just pass them straight through to the fragment shader.
 
@@ -63,7 +63,7 @@ We need to setup the texture coordinates
     *// Set Texcoords.
     *setTexcoords(gl);
 
-And you can see the coordinates we're using which is mapping the entire
+And you can see the coordinates we're using which are mapping the entire
 texture to each quad on our 'F'.
 
     *// Fill the buffer with texture coordinates for the F.
@@ -87,6 +87,8 @@ texture to each quad on our 'F'.
     *        1, 1,
     *        1, 0,
     * ...
+    *       ]),
+    *       gl.STATIC_DRAW);
 
 We also need a texture. We could make one from scratch but in this case let's
 load an image since that's probably the most common way.
@@ -102,7 +104,7 @@ The thing about loading an image is it happens asynchronously. We request the im
 to be loaded but it takes a while for the browser to download it. There are generally
 2 solutions to this. We could make the code wait until the texture has downloaded
 and only then start drawing. The other solution is to make up some texture to use
-until the image is downloaded. That way we can start rendering immediate. Then, once
+until the image is downloaded. That way we can start rendering immediately. Then, once
 the image has been downloaded we copy the image to the texture. We'll use that method below.
 
     *// Create a texture.
@@ -116,11 +118,11 @@ the image has been downloaded we copy the image to the texture. We'll use that m
     *// Asynchronously load an image
     *var image = new Image();
     *image.src = "resources/f-texture.png";
-    *image.addEventLisenter('load', function() {
+    *image.addEventListener('load', function() {
     *  // Now that the image has loaded make copy it to the texture.
     *  gl.bindTexture(gl.TEXTURE_2D, texture);
     *  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
-    *  gl.generateMips(gl.TEXTURE_2D);
+    *  gl.generateMipmap(gl.TEXTURE_2D);
     *});
 
 And here it is
@@ -128,7 +130,7 @@ And here it is
 {{{example url="../webgl-3d-textures.html" }}}
 
 What if we wanted to just use a part of the texture across the front of the 'F'? Textures are referenced
-with "texture coordinates" and texure coordinates go from 0.0 to 1.0 from left to
+with "texture coordinates" and texture coordinates go from 0.0 to 1.0 from left to
 right across the texture and 0.0 to 1.0 from bottom to top up the texture.
 
 <img class="webgl_center" width="405" src="resources/texture-coordinates-diagram.svg" />
@@ -137,7 +139,7 @@ So if we match up our vertices to the texture we can figure out what texture coo
 
 <img class="webgl_center" width="405" src="resources/f-texture-coordinates-diagram.svg" />
 
-Here's the texture coordinates for the front.
+Here are the texture coordinates for the front.
 
         // left column front
         0.22, 0.19,
@@ -202,14 +204,14 @@ Imagine we had this 16x16 pixel texture.
 
 Now imagine we tried to draw that texture on a polygon 2x2 pixels big on the screen. What colors should
 we make those 4 pixels? There are 256 pixels to choose from. In Photoshop if you scaled a 16x16 pixel image
-to 2x2 it would average the 8x8 pixels in each corner to make of the 4 pixels in a 2x2 image. Unfortunately
+to 2x2 it would average the 8x8 pixels in each corner to make the 4 pixels in a 2x2 image. Unfortunately
 reading 64 pixels and averaging them all together would be way too slow for a GPU. In fact imagine if you
-had a 2048x2084 pixel texture and you tried to draw it 2x2 pixels. To do what photoshop does for each of the
+had a 2048x2084 pixel texture and you tried to draw it 2x2 pixels. To do what Photoshop does for each of the
 4 pixels in the 2x2 result it would have to average 1024x1024 pixel or 1 million pixels times 4. That's way
-way to much to do and still be fast.
+way too much to do and still be fast.
 
-So what the GPU does it it uses a mipmap. A mipmap is a collection of progressively smaller images,
-each one 1/4th size the previous one. The mipmap for the 16x16 texture above would look something like
+So what the GPU does is it uses a mipmap. A mipmap is a collection of progressively smaller images,
+each one 1/4th the size of the previous one. The mipmap for the 16x16 texture above would look something like
 this.
 
 <img class="webgl_center" src="resources/mipmap-low-res-enlarged.png" />
@@ -266,7 +268,7 @@ and blends all 8 pixels.
 You might be thinking why would you ever pick anything other than `LINEAR_MIPMAP_LINEAR` which is arguably
 the best one. There are many reasons. One is that `LINEAR_MIPMAP_LINEAR` is the slowest. Reading 8 pixels
 is slower than reading 1 pixel. On modern GPU hardware it's probably not an issue if you are only using 1
-texture at a time but modern games might use 2 to 4 textures at once. 4 textures * 8 pixels per texture =
+texture at a time but modern games might use 2 to 4 textures at once. 4 textures \* 8 pixels per texture =
 needing to read 32 pixels for every pixel drawn. That's going to be slow. Another reason is if you're trying
 to achieve a certain effect. For example if you want something to have that pixelated *retro* look maybe you
 want to use `NEAREST`.  Mips also take memory. In fact they take 33% more memory. That can be a lot of memory
@@ -280,7 +282,7 @@ To set filtering you call `gl.texParameter` like this
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
 `TEXTURE_MIN_FILTER` is the setting used when the size you are drawing is smaller than the largest mip.
-`TEXTURE_MAG_FILTER` is the setting used when the size you are drawing is larger that the largest mip. For
+`TEXTURE_MAG_FILTER` is the setting used when the size you are drawing is larger than the largest mip. For
 `TEXTURE_MAG_FILTER` only `NEAREST` and `LINEAR` are valid settings.
 
 Let's say we wanted to apply this texture.
@@ -341,7 +343,7 @@ And here's that
 
 {{{example url="../webgl-3d-textures-good-npot.html" }}}
 
-A common question is "Who do I apply a different image to each face of a cube?". For example let's say we
+A common question is "How do I apply a different image to each face of a cube?". For example let's say we
 had these 6 images.
 
 <div class="webgl_table_div_center">
@@ -369,7 +371,7 @@ like this
 
 <img class="webgl_center" src="../resources/noodles.jpg" />
 
-and then map use a different set of texture coordinates for each face of the cube.
+and then use a different set of texture coordinates for each face of the cube.
 
         // select the bottom left image
         0   , 0  ,

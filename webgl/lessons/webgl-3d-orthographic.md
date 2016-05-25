@@ -1,13 +1,13 @@
 Title: WebGL - Orthographic 3D
-Description: How to do 3D in WebGL starting with an Orthographic projection.
+Description: How to do 3D in WebGL starting with an orthographic projection.
 
 This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
-the previous was about 2d matrices <a href="webgl-2d-matrices.html">about 2D matrices</a>.
+the previous was <a href="webgl-2d-matrices.html">about 2D matrices</a>.
 If you haven't read those please view them first.
 
-In the last post we went over how 2d matrices worked. We talked
-about translation, rotation, scaling, and even projecting from
+In the last post we went over how 2D matrices worked. We talked
+about how translation, rotation, scaling, and even projecting from
 pixels into clip space can all be done by 1 matrix and some magic
 matrix math. To do 3D is only a small step from there.
 
@@ -91,7 +91,7 @@ function setGeometry(gl) {
 
 Next we need to change all the matrix functions from 2D to 3D
 
-Here's the 2D (before) versions of makeTranslation, makeRotation and makeScale
+Here are the 2D (before) versions of makeTranslation, makeRotation and makeScale
 
 <pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty) {
@@ -121,7 +121,7 @@ function makeScale(sx, sy) {
 }
 </pre>
 
-And here's the updated 3D versions.
+And here are the updated 3D versions.
 
 <pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty, tz) {
@@ -160,6 +160,7 @@ function makeYRotation(angleInRadians) {
 function makeZRotation(angleInRadians) {
   var c = Math.cos(angleInRadians);
   var s = Math.sin(angleInRadians);
+
   return [
      c, s, 0, 0,
     -s, c, 0, 0,
@@ -178,9 +179,9 @@ function makeScale(sx, sy, sz) {
 }
 </pre>
 
-Notice we now have 3 rotations functions.  We only needed one in 2D as we
+Notice we now have 3 rotation functions.  We only needed one in 2D as we
 were effectively only rotating around the Z axis.  Now though to do 3D we
-also want to be able to rotate around the x axis and y axis as well.  You
+also want to be able to rotate around the X axis and Y axis as well.  You
 can see from looking at them they are all very similar.  If we were to
 work them out you'd see them simplify just like before
 
@@ -236,11 +237,11 @@ function make2DProjection(width, height, depth) {
 }
 </pre>
 
-Just like we needed to convert from pixels to clipspace for x and y, for
-z we need to do the same thing.  In this case I'm making the Z space pixel
-units as well.  I'll pass in some value similar to *width* for the depth
-so our space will be 0 to width pixels wide, 0 to height pixels tall, but
-for depth it will be -depth / 2 to +depth / 2.
+Just like we needed to convert from pixels to clip space for X and Y, for
+Z we need to do the same thing.  In this case I'm making the Z axis pixel
+units as well.  I'll pass in some value similar to `width` for the `depth`
+so our space will be 0 to `width` pixels wide, 0 to `height` pixels tall, but
+for `depth` it will be `-depth / 2` to `+depth / 2`.
 
 Finally we need to to update the code that computes the matrix.
 
@@ -275,7 +276,7 @@ hard to see any 3D.  To fix that let's expand the geometry to 3D.  Our
 current F is made of 3 rectangles, 2 triangles each.  To make it 3D will
 require a total of 16 rectangles.  That's quite a few to list out here.
 16 rectangles * 2 triangles per rectangle * 3 vertices per triangle is 96
-vertices.  If you want to see all of them view source on the sample.
+vertices.  If you want to see all of them view the source of the sample.
 
 We have to draw more vertices so
 
@@ -376,8 +377,8 @@ Now we get this.
 
 {{{example url="../webgl-3d-step3.html" }}}
 
-Uh oh, what's that's mess?  Well, it turns out all the various parts of
-that 3D 'F', front, back, sides, etc get drawn in the order they appear in
+Uh oh, what's that mess?  Well, it turns out all the various parts of
+that 3D 'F', front, back, sides, etc get drawn in the order they appear in in
 our geometry.  That doesn't give us quite the desired results as sometimes
 the ones in the back get drawn after the ones in the front.
 
@@ -398,9 +399,9 @@ which we do just once, right at the start of our program.  With that
 feature turned on, WebGL defaults to "culling" back facing triangles.
 "Culling" in this case is a fancy word for "not drawing".
 
-Note that as far as WebGL is conserned, whether or not a triangle is
+Note that as far as WebGL is concerned, whether or not a triangle is
 considered to be going clockwise or counter clockwise depends on the
-vertices of that triangle in clipspace.  In other words, WebGL figures out
+vertices of that triangle in clip space.  In other words, WebGL figures out
 whether a triangle is front or back AFTER you've applied math to the
 vertices in the vertex shader.  That means for example a clockwise
 triangle that is scaled in X by -1 becomes a counter clockwise triangle or
@@ -410,7 +411,7 @@ clockwise(front) and counter clockwise(back) triangles.  Now that we've
 turned it on, any time a front facing triangle flips around either because
 of scaling or rotation or for whatever reason, WebGL won't draw it.
 That's a good thing since as your turn something around in 3D you
-generally want which ever triangles are facing you to be considered front
+generally want whichever triangles are facing you to be considered front
 facing.
 
 With CULL_FACE turned on this is what we get
@@ -443,16 +444,16 @@ Going through and fixing all the backward triangles gets us to this
 
 That's closer but there's still one more problem.  Even with all the
 triangles facing in the correct direction and with the back facing ones
-being culled we still have places where triangles that should be in back
-are being drawn in over triangles that should be in front.
+being culled we still have places where triangles that should be in the back
+are being drawn over triangles that should be in front.
 
 Enter the DEPTH BUFFER.
 
-A Depth buffer, sometimes called a Z-Buffer, is a rectangle of *depth*
+A depth buffer, sometimes called a Z-Buffer, is a rectangle of *depth*
 pixels, one depth pixel for each color pixel used to make the image.  As
 WebGL draws each color pixel it can also draw a depth pixel.  It does this
 based on the values we return from the vertex shader for Z.  Just like we
-had to convert to clip space for X and Y, so to Z is in clip space or (-1
+had to convert to clip space for X and Y, Z is also in clip space or (-1
 to +1).  That value is then converted into a depth space value (0 to +1).
 Before WebGL draws a color pixel it will check the corresponding depth
 pixel.  If the depth value for the pixel it's about to draw is greater

@@ -1,0 +1,124 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - Power graph</title>
+<link type="text/css" href="../../resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+#ui {
+    width: 200px;
+}
+#rotation>canvas {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+}
+</style>
+</head>
+<body>
+<div class="description">
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas" width="300" height="300" style="width: 300px; height: 300px;"></canvas>
+</div>
+<div id="uiContainer">
+  <div id="ui">
+    <div id="power"></div>
+  </div>
+</div>
+</body>
+</html>
+<script src="../../resources/jquery-1.7.1.min.js"></script>
+<script src="../../resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="../../resources/jquery.gman.ui.js"></script>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script>
+<script src="../../resources/webgl-2d-math.js"></script>
+<script src="diagram.js"></script>
+<script>
+"use strict";
+
+$(function(){
+  main();
+});
+
+function main() {
+  var ctx = document.getElementById("canvas").getContext("2d");
+  var power = 1;
+
+  $("#power").gmanSlider({value: power, step: 0.01, precision: 2, slide: updatePower, min: 0, max: 10 });
+
+  function updatePower(event, ui) {
+    power = ui.value;
+    render();
+  }
+
+  function render() {
+    resizeCanvasToDisplaySize(ctx.canvas);//, window.devicePixelRatio);
+    var width  = 300;
+    var height = 300;
+
+    var baseScale = Math.min(ctx.canvas.width / width,  ctx.canvas.height / height);
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
+    ctx.scale(baseScale, baseScale);
+    ctx.translate(50, 250);
+
+    ctx.font = "12px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    function addPowerTop() {
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      var numPoints = 50;
+      for (var ii = 0; ii <= numPoints; ++ii) {
+        var x = ii / numPoints;
+        var y = Math.pow(x, power);
+        ctx.lineTo(x * 200, y * -200);
+      }
+    }
+
+    addPowerTop();
+    ctx.lineTo(200, 0);
+    ctx.lineTo(0, 0);
+    ctx.closePath();
+    ctx.fillStyle = "#fCC";
+    ctx.fill();
+
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-1000, 0);
+    ctx.lineTo(1000, 0);
+    ctx.moveTo(0, -1000);
+    ctx.lineTo(0, 1000);
+    ctx.stroke();
+
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(-1000, -200);
+    ctx.lineTo( 1000, -200);
+    ctx.moveTo(200, -1000);
+    ctx.lineTo(200,  1000);
+    ctx.stroke();
+
+    ctx.fillStyle = "#000";
+    ctx.fillText("0,0", -15, 10);
+    ctx.fillText("1,1", 215, -190);
+
+    ctx.font = "18px sans-serif";
+    ctx.fillText("y = pow(x, " + power.toFixed(2) + ")", 100, 20);
+
+
+    addPowerTop();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    ctx.stroke();
+
+    ctx.restore();
+  }
+  render();
+}
+</script>
+

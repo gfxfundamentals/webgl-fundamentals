@@ -14,10 +14,19 @@
     background-color: rgba(255, 255, 255, 0.6) !important;
 }
 </style>
+</head>
+<body>
+<div class="description">
+Textured F with non power of 2 keyboard texture. <br/>
+The F will turn black because non power of 2 textures need special settings.
+</div>
+<canvas id="canvas" width="400" height="300"></canvas>
+</body>
 <script src="resources/jquery-1.7.1.min.js"></script>
 <script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/webgl-3d-math.js"></script>
 <script>
 "use strict";
@@ -29,7 +38,8 @@ $(function(){
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
@@ -211,7 +221,7 @@ function setGeometry(gl) {
           100,   0,  30,
             0,   0,  30,
 
-          // top rung front
+          // top rung right
           100,   0,   0,
           100,  30,   0,
           100,  30,  30,
@@ -243,7 +253,7 @@ function setGeometry(gl) {
           67,   60,   0,
           67,   60,  30,
 
-          // front of middle rung
+          // right of middle rung
           67,   60,   0,
           67,   90,  30,
           67,   60,  30,
@@ -259,7 +269,7 @@ function setGeometry(gl) {
           67,   90,  30,
           67,   90,   0,
 
-          // front of bottom
+          // right of bottom
           30,   90,   0,
           30,  150,  30,
           30,   90,  30,
@@ -364,7 +374,7 @@ function setTexcoords(gl) {
         1, 1,
         0, 1,
 
-        // top rung front
+        // top rung right
         0, 0,
         1, 0,
         1, 1,
@@ -396,7 +406,7 @@ function setTexcoords(gl) {
         1, 0,
         1, 1,
 
-        // front of middle rung
+        // right of middle rung
         0, 0,
         1, 1,
         0, 1,
@@ -412,7 +422,7 @@ function setTexcoords(gl) {
         1, 1,
         1, 0,
 
-        // front of bottom
+        // right of bottom
         0, 0,
         1, 1,
         0, 1,
@@ -471,14 +481,6 @@ void main() {
    gl_FragColor = texture2D(u_texture, v_texcoord);
 }
 </script>
-</head>
-<body>
-<div class="description">
-Textured F with non power of 2 keyboard texture. <br/>
-The F will turn black because non power of 2 textures need special settings.
-</div>
-<canvas id="canvas" width="400" height="300"></canvas>
-</body>
 </html>
 
 

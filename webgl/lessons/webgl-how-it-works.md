@@ -18,7 +18,7 @@ The 9 there means "process 9 vertices" so here are 9 vertices being processed.
 
 On the left is the data you provide.  The vertex shader is a function you
 write in [GLSL](webgl-shaders-and-glsl.html).  It gets called once for each vertex.
-You do some math and set the special variable `gl_Position` with a clipspace values
+You do some math and set the special variable `gl_Position` with a clipspace value
 for the current vertex. The GPU takes that value and stores it internally.
 
 Assuming you're drawing `TRIANGLES`, every time this first part generates 3
@@ -34,7 +34,7 @@ this point the fragment shader has very little info per pixel.
 Fortunately we can pass it more info.  We define “varyings” for each
 value we want to pass from the vertex shader to the fragment shader.
 
-As a simple example, lets just pass the clipspace coordinates we computed
+As a simple example, let's just pass the clipspace coordinates we computed
 directly from the vertex shader to the fragment shader.
 
 We'll draw with a simple triangle.  Continuing from our
@@ -171,7 +171,7 @@ fragment shader for each pixel.
 {{{diagram url="resources/fragment-shader-anim.html" caption="v_color is interpolated between v0, v1 and v2" }}}
 
 We can also pass in more data to the vertex shader which we can then pass
-on to the fragment shader.  So for example lets draw a rectangle, that
+on to the fragment shader.  So for example let's draw a rectangle, that
 consists of 2 triangles, in 2 colors.  To do this we'll add another
 attribute to the vertex shader so we can pass it more data and we'll pass
 that data directly to the fragment shader.
@@ -293,7 +293,7 @@ This command tells WebGL we want to supply data from a buffer.
         strideToNextPieceOfData,
         offsetIntoBuffer);
 
-And this command tells WebGL to get data from the buffer that's was last
+And this command tells WebGL to get data from the buffer that was last
 bound with gl.bindBuffer, how many components per vertex (1 - 4), what the
 type of data is (`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...), the stride
 which means how many bytes to skip to get from one piece of data to the
@@ -320,7 +320,7 @@ from -128 to 127, UNSIGNED_BYTE goes from 0 to 255, SHORT goes from -32768 to 32
 </p>
 <p>
 If you set the normalize flag to true then the values of a BYTE (-128 to 127)
-represent the values -1.0 to +1.0, UNSIGNED_BYTE (0 to 255) become 0.0 to +1.0,
+represent the values -1.0 to +1.0, UNSIGNED_BYTE (0 to 255) become 0.0 to +1.0.
 A normalized SHORT also goes from -1.0 to +1.0 it just has more resolution than a BYTE.
 </p>
 <p>
@@ -328,7 +328,7 @@ The most common use for normalized data is for colors. Most of the time colors
 only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha
 would use 16 bytes per vertex per color. If you have complicated geometry that
 can add up to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs
-where 0 represnets 0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color
+where 0 represents 0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color
 per vertex, a 75% savings.
 </p>
 <p>Let's change our code to do this. When we tell WebGL how to extract our colors we'd use</p>

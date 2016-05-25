@@ -14,6 +14,7 @@
 }
 </style>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/webgl-3d-math.js"></script>
 <script src="resources/primitives.js"></script>
 </head>
@@ -216,7 +217,8 @@ function makeVerticesForString(fontInfo, s) {
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }

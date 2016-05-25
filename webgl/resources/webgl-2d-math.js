@@ -156,12 +156,57 @@
     ];
   }
 
+  function dot(x1, y1, x2, y2) {
+    return x1 * x2 + y1 * y2;
+  }
+
+  function distance(x1, y1, x2, y2) {
+    var dx = x1 - x2;
+    var dy = y1 - y2;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  function normalize(x, y) {
+    var l = distance(0, 0, x, y);
+    if (l > 0.00001) {
+      return [x / l, y / l];
+    } else {
+      return [0, 0];
+    }
+  }
+
+  // i = incident
+  // n = normal
+  function reflect(ix, iy, nx, ny) {
+    // I - 2.0 * dot(N, I) * N.
+    var d = dot(nx, ny, ix, iy);
+    return [
+      ix - 2 * d * nx,
+      iy - 2 * d * ny,
+    ];
+  }
+
+  function radToDeg(r) {
+    return r * 180 / Math.PI;
+  }
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+
   return {
+    radToDeg: radToDeg,
+    degToRad: degToRad,
     make2DProjection: make2DProjection,
     makeTranslation: makeTranslation,
     makeRotation: makeRotation,
     makeScale: makeScale,
     matrixMultiply: matrixMultiply,
+    dot: dot,
+    normalize: normalize,
+    reflect: reflect,
+    distance: distance,
   };
 
 }));

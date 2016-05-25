@@ -48,7 +48,7 @@ You can see the problem in this example
 
 {{{diagram url="../webgl-animation-frame-rate-issues.html" }}}
 
-In the example above the we want to rotate all of the 'F's at the same speed.
+In the example above we want to rotate all of the 'F's at the same speed.
 The 'F' in the middle is running full speed and is frame rate independent. The one
 on the left and the right are simulating if the browser was only running at 1/8th
 max speed for the current machine. The one on the left is **NOT** frame rate
@@ -65,8 +65,8 @@ between frames and use that to calcuate how much to animate this frame.
 First off we need to get the time. Fortunately `requestAnimationFrame` passes
 us the time since the page was loaded when it calls us.
 
-I find it easist if we get the time in seconds but since the `requestAnimationFrame`
-passes us the time in milliseconds (1000s of a second) we need to multiply by 0.001
+I find it easiest if we get the time in seconds but since the `requestAnimationFrame`
+passes us the time in milliseconds (1000ths of a second) we need to multiply by 0.001
 to get seconds.
 
 So, we can then compute the delta time like this
@@ -86,10 +86,10 @@ So, we can then compute the delta time like this
 
        ...
 
-Once we have the `deltaTime` in seconds then all our calcuations can be in how
-many units per second we want something to happen. In this case since
+Once we have the `deltaTime` in seconds then all our calculations can be in how
+many units per second we want something to happen. In this case
 `rotationSpeed` is 1.2 which means we want to rotate 1.2 radians per second.
-That's about a 1/5 of a turn or in other words it will take about 5 seconds to
+That's about 1/5 of a turn or in other words it will take about 5 seconds to
 turn around completely regardless of the frame rate.
 
     *    rotation[1] += rotationSpeed * deltaTime;

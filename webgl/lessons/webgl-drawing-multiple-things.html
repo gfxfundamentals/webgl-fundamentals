@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta property="og:title" content="WebGL - Drawing Multiple Things" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
@@ -71,7 +71,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 If you haven&#39;t read them I suggest you start there.</p>
 <p>One of the most common questions after first getting something up in WebGL is how
 do I draw mulitple things.</p>
-<p>The first thing to realize is that with few exceptions, WebGL is like having function
+<p>The first thing to realize is that with few exceptions, WebGL is like having a function
 someone wrote where instead of passing lots of parameters to the function you instead
 have a single function that draws stuff and 70+ functions that set up the state for
 that one function. So for example imagine you had a function that draws a circle. You
@@ -315,7 +315,7 @@ some code or codes decide what goes into the list of <code>objectsToDraw</code> 
 </div>
 
 </p>
-<p>There are a few basic optimizations. If the program we&#39;re about the draw with is the same
+<p>There are a few basic optimizations. If the program we&#39;re about to draw with is the same
 as the previous program we drew with then there&#39;s no need to call <code>gl.useProgram</code>. Similarly
 if we&#39;re drawing with the same shape/geometry/vertices we previously drew with there&#39;s no
 need to set those up again.</p>
@@ -334,7 +334,7 @@ objectsToDraw.forEach(function(object) {
 
     // We have to rebind buffers when changing programs because we
     // only bind buffers the program uses. So if 2 programs use the same
-    // bufferInfo but the 1st one uses only positions the when the
+    // bufferInfo but the 1st one uses only positions then when
     // we switch to the 2nd one some of the attributes will not be on.
     bindBuffers = true;
   }
@@ -423,7 +423,7 @@ For example a shader that requires normals will not function with geometry that 
 normals. Similarly a shader that requires textures will not work without textures.</p>
 <p>This is one of the many reasons it&#39;s great to choose a 3D Library like <a href="http://threejs.org">Three.js</a>
 because it handles all of this for you. You create some geometry, you tell three.js how you want it
-rendered and it generates shaders at runtime to handle the things you need. Pretty much all 3d engines
+rendered and it generates shaders at runtime to handle the things you need. Pretty much all 3D engines
 do this from Unity3D to Unreal to Source to Crytek. Some generate them offline but the important
 thing to realize is they <em>generate</em> shaders.</p>
 <p>Of course the reason you&#39;re reading these articles is you want to know what&#39;s going on deep down.
@@ -431,8 +431,8 @@ That&#39;s great and it&#39;s fun to write everything yourself. It&#39;s just im
 <a href="webgl-2d-vs-3d-library.html">WebGL is super low level</a>
 so there&#39;s a ton of work for you to do if you want to do it yourself and that often includes
 writing a shader generator since different features often require different shaders.</p>
-<p>You&#39;ll noticed I didn&#39;t put <code>computeMatrix</code> inside the loop. That&#39;s because rendering should
-aruably be separated from computing matrices. It&#39;s common to compute matrices from a
+<p>You&#39;ll notice I didn&#39;t put <code>computeMatrix</code> inside the loop. That&#39;s because rendering should
+arguably be separated from computing matrices. It&#39;s common to compute matrices from a
 <a href="webgl-scene-graph.html">scene graph and we&#39;ll go over that in another article</a>.</p>
 <p>Now that we have a framework for drawing multiple objects <a href="webgl-text-html.html">lets draw some text</a>.</p>
 
@@ -491,18 +491,30 @@ aruably be separated from computing matrices. It&#39;s common to compute matrice
     <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
   </ul>
+  <li>Lighting</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">WebGL 3D - Directional Lighting</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-point.html">WebGL 3D - Point Lighting</a></li>
+  </ul>
   <li>Structure and Organization</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">WebGL - Less Code, More Fun</a></li>
     <li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">WebGL - Drawing Multiple Things</a></li>
     <li><a href="/webgl/lessons/webgl-scene-graph.html">WebGL - Scene Graphs</a></li>
   </ul>
-  <li>Text</li>
+  <li>Techniques</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
-    <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
-    <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
-    <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    <li>2D</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a>
+    </ul>
+    <li>Text</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
+      <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
+      <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
+      <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    </ul>
   </ul>
   <li>Misc</li>
   <ul>

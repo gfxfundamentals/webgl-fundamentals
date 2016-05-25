@@ -1,0 +1,452 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - 2D - DrawImage with src rotation and discarded pixels</title>
+<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+#ui {
+    width: 200px;
+}
+#rotation>canvas {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+}
+</style>
+</head>
+<body>
+<canvas id="canvas" width="400" height="300"></canvas>
+</body>
+<script src="resources/jquery-1.7.1.min.js"></script>
+<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="resources/jquery.gman.ui.js"></script>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
+<script>
+"use strict";
+
+$(function(){
+  main();
+});
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas");
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
+  if (!gl) {
+    return;
+  }
+
+  // setup GLSL program
+  var program = createProgramFromScripts(gl, ["drawImage-vertex-shader", "drawImage-fragment-shader"]);
+  gl.useProgram(program);
+
+  // look up where the vertex data needs to go.
+  var positionLocation = gl.getAttribLocation(program, "a_position");
+  var texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
+
+  // lookup uniforms
+  var matrixLocation = gl.getUniformLocation(program, "u_matrix");
+  var textureMatrixLocation = gl.getUniformLocation(program, "u_textureMatrix");
+
+  // Create a buffer.
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(positionLocation);
+  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+  // Put a unit quad in the buffer
+  var positions = [
+    0, 0,
+    0, 1,
+    1, 0,
+    1, 0,
+    0, 1,
+    1, 1,
+  ]
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+  // Create a buffer for texture coords
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(texcoordLocation);
+  gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+  // Put texcoords in the buffer
+  var texcoords = [
+    0, 0,
+    0, 1,
+    1, 0,
+    1, 0,
+    0, 1,
+    1, 1,
+  ]
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
+
+  // creates a texture info { width: w, height: h, texture: tex }
+  // The texture will start with 1x1 pixels and be updated
+  // when the image has loaded
+  function loadImageAndCreateTextureInfo(url) {
+    var tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    // Fill the texture with a 1x1 blue pixel.
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+                  new Uint8Array([0, 0, 255, 255]));
+
+    // let's assume all images are not a power of 2
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+    var textureInfo = {
+      width: 1,   // we don't know the size until it loads
+      height: 1,
+      texture: tex,
+    };
+    var img = new Image();
+    img.addEventListener('load', function() {
+      textureInfo.width = img.width;
+      textureInfo.height = img.height;
+
+      gl.bindTexture(gl.TEXTURE_2D, textureInfo.texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+    });
+    img.src = url;
+
+    return textureInfo;
+  }
+
+  var textureInfos = [
+    loadImageAndCreateTextureInfo('resources/star.jpg'),
+    loadImageAndCreateTextureInfo('resources/leaves.jpg'),
+    loadImageAndCreateTextureInfo('resources/keyboard.jpg'),
+  ];
+
+  var drawInfos = [];
+  var numToDraw = 9;
+  var speed = 60;
+  for (var ii = 0; ii < numToDraw; ++ii) {
+    var scale = Math.random() * 0.25 + 0.25;
+    var drawInfo = {
+      x: Math.random() * gl.canvas.width,
+      y: Math.random() * gl.canvas.height,
+      dx: Math.random() > 0.5 ? -1 : 1,
+      dy: Math.random() > 0.5 ? -1 : 1,
+      xScale: scale,
+      yScale: scale,
+      offX: 0,
+      offY: 0,
+      rotation: Math.random() * Math.PI * 2,
+      deltaRotation: (0.5 + Math.random() * 0.5) * (Math.random() > 0.5 ? -1 : 1),
+      width:  1,
+      height: 1,
+      textureInfo: textureInfos[Math.random() * textureInfos.length | 0],
+    };
+    drawInfos.push(drawInfo);
+  }
+
+  function update(deltaTime) {
+    drawInfos.forEach(function(drawInfo) {
+      drawInfo.x += drawInfo.dx * speed * deltaTime;
+      drawInfo.y += drawInfo.dy * speed * deltaTime;
+      if (drawInfo.x < 0) {
+        drawInfo.dx = 1;
+      }
+      if (drawInfo.x >= gl.canvas.width) {
+        drawInfo.dx = -1;
+      }
+      if (drawInfo.y < 0) {
+        drawInfo.dy = 1;
+      }
+      if (drawInfo.y >= gl.canvas.height) {
+        drawInfo.dy = -1;
+      }
+      drawInfo.rotation += drawInfo.deltaRotation * deltaTime;
+    });
+  }
+
+  function draw() {
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    drawInfos.forEach(function(drawInfo) {
+      var dstX      = drawInfo.x;
+      var dstY      = drawInfo.y;
+      var dstWidth  = drawInfo.textureInfo.width  * drawInfo.xScale;
+      var dstHeight = drawInfo.textureInfo.height * drawInfo.yScale;
+
+      var srcX      = drawInfo.textureInfo.width  * drawInfo.offX;
+      var srcY      = drawInfo.textureInfo.height * drawInfo.offY;
+      var srcWidth  = drawInfo.textureInfo.width  * drawInfo.width;
+      var srcHeight = drawInfo.textureInfo.height * drawInfo.height;
+
+      drawImage(
+        drawInfo.textureInfo.texture,
+        drawInfo.textureInfo.width,
+        drawInfo.textureInfo.height,
+        srcX, srcY, srcWidth, srcHeight,
+        dstX, dstY, dstWidth, dstHeight,
+        drawInfo.rotation);
+    });
+  }
+
+  var then = 0;
+  function render(time) {
+    var now = time * 0.001;
+    var deltaTime = Math.min(0.1, now - then);
+    then = now;
+
+    update(deltaTime);
+    draw();
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+
+  // Unlike images, textures do not have a width and height associated
+  // with them so we'll pass in the width and height of the texture
+  function drawImage(
+      tex, texWidth, texHeight,
+      srcX, srcY, srcWidth, srcHeight,
+      dstX, dstY, dstWidth, dstHeight,
+      srcRotation) {
+    if (dstX === undefined) {
+      dstX = srcX;
+    }
+    if (dstY === undefined) {
+      dstY = srcY;
+    }
+    if (srcWidth === undefined) {
+      srcWidth = texWidth;
+    }
+    if (srcHeight === undefined) {
+      srcHeight = texHeight;
+    }
+    if (dstWidth === undefined) {
+      dstWidth = srcWidth;
+    }
+    if (dstHeight === undefined) {
+      dstHeight = srcHeight;
+    }
+    if (srcRotation === undefined) {
+      srcRotation = 0;
+    }
+
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+
+    // this matirx will convert from pixels to clip space
+    var projectionMatrix = make2DProjection(canvas.width, canvas.height, 1);
+
+    // this matrix will scale our 1 unit quad
+    // from 1 unit to dstWidth, dstHeight units
+    var scaleMatrix = makeScale(dstWidth, dstHeight, 1);
+
+    // this matrix will translate our quad to dstX, dstY
+    var translationMatrix = makeTranslation(dstX, dstY, 0);
+
+    // multiply them all togehter
+    var matrix = matrixMultiply(scaleMatrix, translationMatrix);
+    matrix = matrixMultiply(matrix, projectionMatrix);
+
+    // Set the matrix.
+    gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+    // Because texture coordinates go from 0 to 1
+    // and because our texture coordinates are already a unit quad
+    // we can select an area of the texture by scaling the unit quad
+    // down
+
+    // just like a 2d projection matrix except in texture space (0 to 1)
+    // instead of clip space
+    var texProjectionMatrix = makeScale(1 / texWidth, 1 / texHeight, 1);
+
+    // because we're using a porjeciton matrix that converts to pixels
+    // the scale and translation are now in pixels
+    var texScaleMatrix = makeScale(srcWidth, srcHeight, 1);
+    var texTranslationMatrix = makeTranslation(srcX, srcY, 0);
+
+    // We need to pick a place to rotate around
+    // so the pre rotation matrix moves the texcoords
+    // so the center of the texture is at the origin
+    var texPreRotationMatrix = makeTranslation(texWidth * -0.5, texHeight * -0.5, 0);
+    var texRotationMatrix = makeZRotation(srcRotation);
+    // the post rotation matrix moves the points back
+    // over the texture after they've been rotated.
+    var texPostRotationMatrix = makeTranslation(texWidth * 0.5, texHeight * 0.5, 0);
+
+    // multiply them together
+    var texMatrix = makeIdentity();
+    texMatrix = matrixMultiply(texMatrix, texScaleMatrix);
+    texMatrix = matrixMultiply(texMatrix, texTranslationMatrix);
+    texMatrix = matrixMultiply(texMatrix, texPreRotationMatrix);
+    texMatrix = matrixMultiply(texMatrix, texRotationMatrix);
+    texMatrix = matrixMultiply(texMatrix, texPostRotationMatrix);
+    texMatrix = matrixMultiply(texMatrix, texProjectionMatrix);
+
+    // Set the texture matrix.
+    gl.uniformMatrix4fv(textureMatrixLocation, false, texMatrix);
+
+    // draw the quad (2 triangles, 6 vertices)
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+
+}
+
+function makeIdentity() {
+  return [
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1,
+  ];
+}
+function make2DProjection(width, height, depth) {
+  // Note: This matrix flips the Y axis so 0 is at the top.
+  return [
+     2 / width, 0, 0, 0,
+     0, -2 / height, 0, 0,
+     0, 0, 2 / depth, 0,
+    -1, 1, 0, 1,
+  ];
+}
+
+function makeTranslation(tx, ty, tz) {
+  return [
+     1,  0,  0,  0,
+     0,  1,  0,  0,
+     0,  0,  1,  0,
+    tx, ty, tz,  1
+  ];
+}
+
+function makeXRotation(angleInRadians) {
+  var c = Math.cos(angleInRadians);
+  var s = Math.sin(angleInRadians);
+
+  return [
+    1, 0, 0, 0,
+    0, c, s, 0,
+    0, -s, c, 0,
+    0, 0, 0, 1
+  ];
+};
+
+function makeYRotation(angleInRadians) {
+  var c = Math.cos(angleInRadians);
+  var s = Math.sin(angleInRadians);
+
+  return [
+    c, 0, -s, 0,
+    0, 1, 0, 0,
+    s, 0, c, 0,
+    0, 0, 0, 1
+  ];
+};
+
+function makeZRotation(angleInRadians) {
+  var c = Math.cos(angleInRadians);
+  var s = Math.sin(angleInRadians);
+  return [
+     c, s, 0, 0,
+    -s, c, 0, 0,
+     0, 0, 1, 0,
+     0, 0, 0, 1,
+  ];
+}
+
+function makeScale(sx, sy, sz) {
+  return [
+    sx, 0,  0,  0,
+    0, sy,  0,  0,
+    0,  0, sz,  0,
+    0,  0,  0,  1,
+  ];
+}
+
+function matrixMultiply(a, b) {
+  var a00 = a[0*4+0];
+  var a01 = a[0*4+1];
+  var a02 = a[0*4+2];
+  var a03 = a[0*4+3];
+  var a10 = a[1*4+0];
+  var a11 = a[1*4+1];
+  var a12 = a[1*4+2];
+  var a13 = a[1*4+3];
+  var a20 = a[2*4+0];
+  var a21 = a[2*4+1];
+  var a22 = a[2*4+2];
+  var a23 = a[2*4+3];
+  var a30 = a[3*4+0];
+  var a31 = a[3*4+1];
+  var a32 = a[3*4+2];
+  var a33 = a[3*4+3];
+  var b00 = b[0*4+0];
+  var b01 = b[0*4+1];
+  var b02 = b[0*4+2];
+  var b03 = b[0*4+3];
+  var b10 = b[1*4+0];
+  var b11 = b[1*4+1];
+  var b12 = b[1*4+2];
+  var b13 = b[1*4+3];
+  var b20 = b[2*4+0];
+  var b21 = b[2*4+1];
+  var b22 = b[2*4+2];
+  var b23 = b[2*4+3];
+  var b30 = b[3*4+0];
+  var b31 = b[3*4+1];
+  var b32 = b[3*4+2];
+  var b33 = b[3*4+3];
+  return [a00 * b00 + a01 * b10 + a02 * b20 + a03 * b30,
+          a00 * b01 + a01 * b11 + a02 * b21 + a03 * b31,
+          a00 * b02 + a01 * b12 + a02 * b22 + a03 * b32,
+          a00 * b03 + a01 * b13 + a02 * b23 + a03 * b33,
+          a10 * b00 + a11 * b10 + a12 * b20 + a13 * b30,
+          a10 * b01 + a11 * b11 + a12 * b21 + a13 * b31,
+          a10 * b02 + a11 * b12 + a12 * b22 + a13 * b32,
+          a10 * b03 + a11 * b13 + a12 * b23 + a13 * b33,
+          a20 * b00 + a21 * b10 + a22 * b20 + a23 * b30,
+          a20 * b01 + a21 * b11 + a22 * b21 + a23 * b31,
+          a20 * b02 + a21 * b12 + a22 * b22 + a23 * b32,
+          a20 * b03 + a21 * b13 + a22 * b23 + a23 * b33,
+          a30 * b00 + a31 * b10 + a32 * b20 + a33 * b30,
+          a30 * b01 + a31 * b11 + a32 * b21 + a33 * b31,
+          a30 * b02 + a31 * b12 + a32 * b22 + a33 * b32,
+          a30 * b03 + a31 * b13 + a32 * b23 + a33 * b33];
+}
+</script>
+<!-- vertex shader -->
+<script id="drawImage-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec2 a_texcoord;
+
+uniform mat4 u_matrix;
+uniform mat4 u_textureMatrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+   gl_Position = u_matrix * a_position;
+   v_texcoord = (u_textureMatrix * vec4(a_texcoord, 0, 1)).xy;
+}
+</script>
+<script id="drawImage-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+varying vec2 v_texcoord;
+
+uniform sampler2D texture;
+
+void main() {
+   if (v_texcoord.x < 0.0 ||
+       v_texcoord.y < 0.0 ||
+       v_texcoord.x > 1.0 ||
+       v_texcoord.y > 1.0) {
+     discard;
+   }
+   gl_FragColor = texture2D(texture, v_texcoord);
+}
+</script>
+</html>
+
+

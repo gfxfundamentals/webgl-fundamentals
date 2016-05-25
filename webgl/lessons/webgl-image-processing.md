@@ -9,7 +9,7 @@ To draw images in WebGL we need to use textures. Similarly to the way WebGL expe
 
 Since we are only drawing a single rectangle (well, 2 triangles) we need to tell WebGL which place in the texture each point in the rectangle corresponds to. We'll pass this information from the vertex shader to the fragment shader using a special kind of variable called a 'varying'. It's called a varying because it varies. WebGL will interpolate the values we provide in the vertex shader as it draws each pixel using the fragment shader.
 
-Using <a href="webgl-fundamentals.html">the vertex shader from the end of previous post</a> we need to add an attribute to pass in texture coordinates and then pass those on to the fragment shader.
+Using <a href="webgl-fundamentals.html">the vertex shader from the end of the previous post</a> we need to add an attribute to pass in texture coordinates and then pass those on to the fragment shader.
 
     attribute vec2 a_texCoord;
     ...
@@ -137,7 +137,7 @@ Compare to the un-blurred image above.
 
 {{{example url="../webgl-2d-image-blend.html" }}}
 
-Now that we know how to reference other pixels let's use a convolution kernel to do a bunch of common image processing. In this case we'll use a 3x3 kernel. A convolution kernel is just a 3x3 matrix where each entry in the matrix represents how much to multiply the 8 pixels around the pixel we are rendering. We then divide the result by the weight of the kernel (the sum of all values in the kernel) or 1.0, which ever is greater. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Here's a pretty good article on it</a>. And <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">here's another article showing some actual code if you were to write this by hand in C++</a>.
+Now that we know how to reference other pixels let's use a convolution kernel to do a bunch of common image processing. In this case we'll use a 3x3 kernel. A convolution kernel is just a 3x3 matrix where each entry in the matrix represents how much to multiply the 8 pixels around the pixel we are rendering. We then divide the result by the weight of the kernel (the sum of all values in the kernel) or 1.0, whichever is greater. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Here's a pretty good article on it</a>. And <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">here's another article showing some actual code if you were to write this by hand in C++</a>.
 
 In our case we're going to do that work in the shader so here's the new fragment shader.
 
@@ -172,7 +172,7 @@ In our case we're going to do that work in the shader so here's the new fragment
     }
     </script>
 
-In JavaScript we need to supply a convolution kernel and it's weight
+In JavaScript we need to supply a convolution kernel and its weight
 
      function computeKernelWeight(kernel) {
        var weight = kernel.reduce(function(prev, curr) {
@@ -202,7 +202,7 @@ I hope this article has convinced you image processing in WebGL is pretty simple
 
 <div class="webgl_bottombar">'u_image' is never set. How does that work?
 
-Uniforms default to 0 so u_image defaults to using texture unit 0. Texture unit 0 is also the default active texture so calling bindTexture will bind the texture to texture unit 0
+Uniforms default to 0 so u_image defaults to using texture unit 0. Texture unit 0 is also the default active texture so calling bindTexture will bind the texture to texture unit 0.
 
 WebGL has an array of texture units. Which texture unit each sampler uniform references is set by looking up the location of that sampler uniform and then setting the index of the texture unit you want it to reference.
 
@@ -238,7 +238,7 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 <p>
 That's just a naming convention. They are not required but for me it makes it easier to see at a glance
 where the values are coming from. a_ for attributes which is the data provided by buffers. u_ for uniforms which are inputs to the shaders, v_ for varyings which are values passed from a vertex shader to a fragment shader and interpolated (or varied) between the vertices for each pixel drawn.
-See <a href="webgl-how-to-works.html">How it works</a> for more details.
+See <a href="webgl-how-it-works.html">How it works</a> for more details.
 </p>
 </div>
 

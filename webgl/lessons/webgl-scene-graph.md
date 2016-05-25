@@ -5,7 +5,7 @@ This article is a continuation of [previous WebGL articles](webgl-fundamentals.h
 The previous article was about [drawing multiple things](webgl-drawing-multiple-things.html).
 If you haven't read them I suggest you start there.
 
-I'm sure some CS guru or graphics guru is going to give me a ear full but ...
+I'm sure some CS guru or graphics guru is going to give me an ear full but ...
 A scene graph is usually a tree structure where each node in the tree generates
 a matrix... hmmm, that's not a very useful definition. Maybe some examples would be
 useful.
@@ -18,14 +18,14 @@ you might have a graph that looks like this
 {{{diagram url="resources/planet-diagram.html" height="500" }}}
 
 What's the point of a scene graph? The #1 feature of a scene graph is it provides a parent
-child relationship for matrices as [we discussed in 2d matrix math](webgl-2d-matrices.html).
-So for example in a simple (but unrealistic) universe simualtion the stars (children), move along with their
-galaxy (parent). Similary a moon (child) moves along with its planet (parent)
+child relationship for matrices as [we discussed in 2D matrix math](webgl-2d-matrices.html).
+So for example in a simple (but unrealistic) universe simulation the stars (children), move along with their
+galaxy (parent). Similary a moon (child) moves along with its planet (parent).
 If you move the earth the moon will move with it. If you move a galaxy
 all the stars inside will move with it. Drag the names in the diagram above
 and hopefully you can see their relationships.
 
-If you go back to the [2d matrix math](webgl-2d-matrices.html) you might remember we
+If you go back to the [2D matrix math](webgl-2d-matrices.html) you might remember we
 multiply lots of matrices in order to translate, rotate, and scale objects. A
 scene graph provides a structure to help decide what matrix math to apply to an object.
 
@@ -34,18 +34,18 @@ matrix math anything in that *local space* can ignore everything above it. Anoth
 way to state the same thing is that the moon only has to care about orbiting the earth.
 It does not have to care about orbiting the sun. Without this scene graph structure
 you'd have to do much more complex math to compute how to get the moon to orbit the sun
-because it's orbit around the sun looks something like this
+because its orbit around the sun looks something like this
 
 {{{diagram url="resources/moon-orbit.html" }}}
 
 With a scene graph you just make the moon a child of the earth and then orbit
 the earth which is simple. The scene graph takes care of the fact that the earth
-is oribiting the sun. It does this by walking the nodes and multiplying the
-matrixes as it walks
+is orbiting the sun. It does this by walking the nodes and multiplying the
+matrices as it walks
 
     worldMatrix = greatGrandParent * grandParent * parent * self(localMatrix)
 
-In concrete terms our universe simualtion that would be
+In concrete terms our universe simulation that would be
 
     worldMatrixForMoon = galaxyMatrix * starMatrix * planetMatrix * moonMatrix;
 
@@ -62,7 +62,7 @@ We can do this very simply with a recursive function which is effectively
         });
     }
 
-This brings up some terminalogy which is pretty common to 3d scene graphs.
+This brings up some terminology which is pretty common to 3D scene graphs.
 
 *   `localMatrix`: The local matrix for the current node. It transforms it and its children in local space with
     itself at the origin.
@@ -110,7 +110,7 @@ Let's give it a way to set the parent of a node.
       this.parent = parent;
     };
 
-And here's the code to compute world matrices from local matrixes based on their parent-child
+And here's the code to compute world matrices from local matrices based on their parent-child
 relationships. If we start at the parent and recursively visit the children we can compute
 their world matrices. If you don't understand matrix math
 [check out this article on them](webgl-2d-matrices.html).
@@ -171,9 +171,9 @@ If `drawInfo`, `bufferInfo`, and `programInfo` are not familiar to you [see the 
       bufferInfo: sphereBufferInfo,
     };
 
-Now that we've made the nodes lets connect them.
+Now that we've made the nodes let's connect them.
 
-    // connect the celetial objects
+    // connect the celestial objects
     moonNode.setParent(earthNode);
     earthNode.setParent(sunNode);
 
@@ -246,7 +246,7 @@ We'll change it to
          moon
 
 This will let the earth rotate around the solarSystem but we can separately rotate and scale the sun and it won't
-effect the earth. Similarly the earth can rotate separately from the moon. Let's make more nodes for
+affect the earth. Similarly the earth can rotate separately from the moon. Let's make more nodes for
 `solarSystem`, `earthOrbit` and `moonOrbit`.
 
     var solarSystemNode = new Node();
@@ -317,7 +317,7 @@ Let's adjust a few more things.
 {{{example url="../webgl-scene-graph-solar-system-adjusted.html" }}}
 
 Currently we have a `localMatrix` and we're modifying it each frame. There's a problem though
-in that every frame our math will collect a little bit of error. There are ways to fix the math
+in that every frame our math will collect a little bit of error. There is a way to fix the math
 which is called *ortho normalizing a matrix* but even that won't always work. For example let's
 imagine we scaled down zero and back. Let's just do that for one value `x`
 
@@ -411,12 +411,12 @@ node mentioned above. Programmer art and programmer animation FTW! :P
 
 {{{example url="../webgl-scene-graph-block-guy.html" }}}
 
-If you look at pretty much any 3d library you'll find a scene graph similar to this.
+If you look at pretty much any 3D library you'll find a scene graph similar to this.
 
 <div class="webgl_bottombar">
 <h3>SetParent vs AddChild / RemoveChild</h3>
 <p>Many scene graphs have a <code>node.addChild</code> function and a <code>node.removeChild</code>
-function were as above I made a <code>node.setParent</code> function. Which way is better
+function whereas above I made a <code>node.setParent</code> function. Which way is better
 is arguably a matter of style but I'd argue one objectively better reason
 <code>setParent</code> is better than <code>addChild</code> is because it makes code like
 this impossible.</p>

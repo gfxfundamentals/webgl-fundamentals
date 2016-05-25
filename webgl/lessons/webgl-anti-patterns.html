@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta property="og:title" content="WebGL Anti-Patterns" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
@@ -100,7 +100,7 @@ directly on it. Just use that.</p>
 gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 </pre>
 
-<p>Even better it will handle extreme cases where as using <code>gl.canvas.width</code>
+<p>Even better it will handle extreme cases whereas using <code>gl.canvas.width</code>
 and <code>gl.canvas.height</code> will not. <a href="#drawingbuffer">As for why see here</a>.</p>
 </li>
 <li><p>Using <code>canvas.width</code> and <code>canvas.height</code> for aspect ratio</p>
@@ -122,29 +122,29 @@ var aspect = canvas.clientWidth / canvas.clientHeight;
 perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 </pre>
 
-<p>Here&#39;s examples of a canvas that&#39;s the same size (<code>width=&quot;400&quot; height=&quot;300&quot;</code>)
+<p>Here are examples of a canvas that&#39;s the same size (<code>width=&quot;400&quot; height=&quot;300&quot;</code>)
 but using CSS we&#39;ve told the browser to display the canvas a different size.
 Notice the samples all display the &#39;F&#39; in the correct aspect ratio.</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 150px; height: 200px;" src="../webgl-canvas-clientwidth-clientheight.html"></iframe>
+  <iframe class="webgl_example " style="width: 150px; height: 200px;" src="../webgl-canvas-clientwidth-clientheight.html"></iframe>
 </div>
 
 
 <p></p>
 <div>
-  <iframe class="webgl_example" style="width: 400px; height: 150px;" src="../webgl-canvas-clientwidth-clientheight.html"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 150px;" src="../webgl-canvas-clientwidth-clientheight.html"></iframe>
 </div>
 
 </p>
 <p>If we had used <code>canvas.width</code> and <code>canvas.height</code> that would not be true.</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 150px; height: 200px;" src="../webgl-canvas-width-height.html"></iframe>
+  <iframe class="webgl_example " style="width: 150px; height: 200px;" src="../webgl-canvas-width-height.html"></iframe>
 </div>
 
 
 <p></p>
 <div>
-  <iframe class="webgl_example" style="width: 400px; height: 150px;" src="../webgl-canvas-width-height.html"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 150px;" src="../webgl-canvas-width-height.html"></iframe>
 </div>
 
 </p>
@@ -182,8 +182,8 @@ reference <code>window.innerWidth</code> nor <code>window.innerHeight</code>.</p
 <p><a href="../webgl-same-code-canvas-partscreen.html" target="_blank">A page with a canvas set to using 70% width so there is room for editor controls</a></p>
 <p><a href="../webgl-same-code-canvas-embedded.html" target="_blank">A page with a canvas embedded in a paragraph</a></p>
 <p><a href="../webgl-same-code-canvas-embedded-border-box.html" target="_blank">A page with a canvas embedded in a paragraph using <code>box-sizing: border-box;</code></a></p>
-<p><code>box-sizing: border-box;</code> makes borders and padding use take space from the element they&#39;re defined on rather than outside it. In other words, in
-normal box-sizing mode a 400x300 pixel element with 15pixel border has a 400x300pixel content space surrounded by a 15 pixel border making its total size
+<p><code>box-sizing: border-box;</code> makes borders and padding take space from the element they&#39;re defined on rather than outside it. In other words, in
+normal box-sizing mode a 400x300 pixel element with 15 pixel border has a 400x300 pixel content space surrounded by a 15 pixel border making its total size
 430x330 pixels. In box-sizing: border-box mode the border goes on the inside so that same element would stay 400x300 pixels, the content would end up
 being 370x270. This is yet another reason why using <code>clientWidth</code> and <code>clientHeight</code> is so important. If you set the border to say <code>1em</code> you&#39;d have no
 way of knowing what size your canvas will turn out. It would be different with different fonts on different machines or different browsers.</p>
@@ -209,11 +209,11 @@ window.onresize = resizeTheCanvas;
 <p>It&#39;s not bad per se, rather, for <em>most</em> WebGL programs it fits less use cases.
 Specifically <code>&#39;resize&#39;</code> only works when the window is resized. It doesn&#39;t work
 if the canvas is resized for some other reason. For example let&#39;s say you&#39;re making
-a 3d editor. You have your canvas on the left and your settings on the right. You&#39;ve
+a 3D editor. You have your canvas on the left and your settings on the right. You&#39;ve
 made it so there&#39;s a draggable bar separating the 2 parts and you can drag that bar
 to make the settings area larger or smaller. In this case you won&#39;t get any <code>&#39;resize&#39;</code>
-events. Similarly you&#39;ve got a page where other content gets added or removed and
-the canvas changes size as the browser re-laysout the page you won&#39;t get a resize
+events. Similarly if you&#39;ve got a page where other content gets added or removed and
+the canvas changes size as the browser re-lays out the page you won&#39;t get a resize
 event.</p>
 <p><strong>What to do instead:</strong></p>
 <p>Like many of the solutions to anti-patterns above there&#39;s a way to write your code
@@ -281,7 +281,7 @@ This would handle the resize case for apps that don&#39;t render the scene every
 Just set <code>needToRender</code> any time you&#39;ve changed something in the scene and you want
 the scene to be rendered incorporating your changes.</p>
 </li>
-<li><p>Adding adding properties to <code>WebGLObject</code>s</p>
+<li><p>Adding properties to <code>WebGLObject</code>s</p>
 <p><code>WebGLObject</code>s are the various types of resources in WebGL like a <code>WebGLBuffer</code>
 or <code>WebGLTexture</code>. Some apps add properties to those objects. For example code like this:</p>
 <pre class="prettyprint">
@@ -312,7 +312,7 @@ buffer.numComponents = 75;  // ERROR!
 TypeError: Cannot set property 'itemSize' of null
 </pre>
 
-<p>While many apps don&#39;t care if they die when the context it lost it seems like a bad idea
+<p>While many apps don&#39;t care if they die when the context is lost it seems like a bad idea
 to write code that will have to be fixed later if the developers ever decide to update their
 app to handle context lost events.</p>
 <p><strong>What to do instead:</strong></p>
@@ -366,7 +366,7 @@ stretch that window across both monitors. Your code tries to set the <code>canva
  <p>This is the
  solution WebGL uses. If your code is written correctly the only thing the user might notice is the image in
  the canvas is being scaled slightly. Otherwise it just works. In the worst case most WebGL programs that
- don't do the right thing will just have a slightly off display but if user sizes the window back down
+ don't do the right thing will just have a slightly off display but if the user sizes the window back down
  things will return to normal.</p>
 </li>
 </ol>
@@ -374,13 +374,13 @@ stretch that window across both monitors. Your code tries to set the <code>canva
 Chrome and Safari, at least as of January 2015, had a hardcoded limit on canvas size of 4096. Apple's
 5k iMac is past that limit. Lots of WebGL apps were having strange displays because of this.
 Similarly many people have started using WebGL with multiple monitors for installation work and have
-been hitting this limit</p>
+been hitting this limit.</p>
 <p>
 So, if you want to handle these cases use <code>gl.drawingBufferWidth</code> and <code>gl.drawingBufferHeight</code> as
 shown in #1 above. For most apps if you follow the best practices above things will just work. Be aware
-though if you are doing calcuations that need to know the actual size of the drawingbuffer you need
+though if you are doing calculations that need to know the actual size of the drawingbuffer you need
 to take that into account. Examples off the top of my head, picking, in other words converting from
-mouse coordinates into into canvas pixel coordinates. Another would be any kind of post processing
+mouse coordinates into canvas pixel coordinates. Another would be any kind of post processing
 effects that want to know the actual size of the drawingbuffer.
 </p>
 </div>
@@ -446,18 +446,30 @@ effects that want to know the actual size of the drawingbuffer.
     <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
   </ul>
+  <li>Lighting</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">WebGL 3D - Directional Lighting</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-point.html">WebGL 3D - Point Lighting</a></li>
+  </ul>
   <li>Structure and Organization</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">WebGL - Less Code, More Fun</a></li>
     <li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">WebGL - Drawing Multiple Things</a></li>
     <li><a href="/webgl/lessons/webgl-scene-graph.html">WebGL - Scene Graphs</a></li>
   </ul>
-  <li>Text</li>
+  <li>Techniques</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
-    <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
-    <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
-    <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    <li>2D</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a>
+    </ul>
+    <li>Text</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
+      <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
+      <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
+      <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    </ul>
   </ul>
   <li>Misc</li>
   <ul>

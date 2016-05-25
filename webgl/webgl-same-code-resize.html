@@ -6,16 +6,16 @@
 <title>WebGL - Same Code - Resize</title>
 <link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <style>
-* {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
+html {
+  box-sizing: border-box;
+  height: 100%;
 }
-html, body {
-    padding: 0px;
-    margin: 0px;
-    width: 100%;
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
     height: 100%;
-    overflow: hidden;
+    margin: 0;
     font-family: Helvetica, Arial, Sans-Serif;
 }
 #editor td {
@@ -29,6 +29,7 @@ html, body {
 #canvas {
     width: 100%;
     height: 100%;
+    display: block;
 }
 #viewContainer {
     width: 70%
@@ -46,10 +47,12 @@ html, body {
     font-size: large;
 }
 </style>
+</body>
 <script src="resources/jquery-1.7.1.min.js"></script>
 <script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="resources/colResizable-1.3.min.js"></script>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/webgl-3d-math.js"></script>
 <script src="resources/primitives.js"></script>
 <script src="resources/same-code.js"></script>
@@ -74,7 +77,6 @@ $(function() {
   });
 });
 </script>
-</body>
 </html>
 
 

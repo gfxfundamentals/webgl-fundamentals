@@ -7,8 +7,8 @@ the previous was about <a href="webgl-3d-perspective.html">3D perspective projec
 If you haven't read those please view them first.
 
 In the last post we had to move the F in front of the frustum because the `makePerspective`
-function expects it sits at the origin (0, 0, 0) and that objects in the frustum are -zNear
-to -zFar in front of it.
+function expects it to sit at the origin (0, 0, 0) and that objects in the frustum are `-zNear`
+to `-zFar` in front of it.
 
 Moving stuff in front of the view doesn't seem the right way to go does it? In the real world
 you usually move your camera to take a picture of a building.
@@ -19,7 +19,7 @@ You don't usually move the buildings to be in front of the camera.
 
 {{{diagram url="resources/camera-move-camera.html?mode=1" caption="moving the objects to the camera" }}}
 
-But in our last post we came up with projection that requires things to be
+But in our last post we came up with a projection that requires things to be
 in front of the origin on the -Z axis.  To achieve this what we want to do
 is move the camera to the origin and move everything else the right amount
 so it's still in the same place *relative to the camera*.
@@ -108,7 +108,7 @@ Finally we need to apply the view matrix when we compute the matrix for each 'F'
     matrix = matrixMultiply(matrix, projectionMatrix);
 </pre>
 
-And wahlah! A camera that goes around the circle of 'F's. Drag the `cameraAngle` slider
+And voila! A camera that goes around the circle of 'F's. Drag the `cameraAngle` slider
 to move the camera around.
 
 {{{example url="../webgl-3d-camera.html" }}}
@@ -119,16 +119,16 @@ at a specific one of the 'F's it would take some pretty crazy math to compute ho
 camera to point at that 'F' while it goes around the circle of 'F's.
 
 Fortunately there's an easier way. We can just decide where we want the camera and what we want it to point at
-and then compute a matrix that will put the camera there. Based on how matrices work this is surpurisingly easy.
+and then compute a matrix that will put the camera there. Based on how matrices work this is surprisingly easy.
 
 First we need to know where we want the camera.  We'll call this the
 `cameraPosition`.  Then we need to know the positon of the thing we want
 to look at or aim at.  We'll call it the `target`.  If we subtract the
-`target`from the `cameraPosition` we'll have a vector that points in the
+`target` from the `cameraPosition` we'll have a vector that points in the
 direction we'd need to go from the camera to get to the target.  Let's
 call it `zAxis`.  Since we know the camera points in the -Z direction we
 can subtract the other way `cameraPosition - target`. We normalize the
-results and copy it directly into the `z` part matrix.
+results and copy it directly into the `z` part of a matrix.
 
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
@@ -145,27 +145,27 @@ results and copy it directly into the `z` part matrix.
 This part of a matrix represents the Z axis.  In this case the Z-axis of
 the camera.  Normalizing a vector means making it a vector that represents
 1.0.  If you go back to <a href="webgl-2d-rotation.html">the 2D rotation article</a> where we talked about unit
-circles and how thosehelped with 2D rotation, in 3D we need unit spheres
+circles and how those helped with 2D rotation. In 3D we need unit spheres
 and a normalized vector represents a point on a unit sphere.
 
 {{{diagram url="resources/cross-product-diagram.html?mode=0" caption="the <span style='color:blue;'>z axis</span>" }}}
 
 That's not enough info though.  Just a single vector gives us a point on a
 unit sphere but which orientation from that point to orient things?  We
-need to fill out the other parts of the matrix.  Specificaly the X axis
-and Y axis parts.  We know the in general these 3 parts are perpendicular to
+need to fill out the other parts of the matrix.  Specifically the X axis
+and Y axis parts.  We know that in general these 3 parts are perpendicular to
 each other.  We also know that "in general" we don't point the camera
 straight up.  Given that, if we know which way is up, in this case (0,1,0),
-We can use that and something called a "cross product" to compute the X
-axis and Y axis for the matrix.
+We can use that and something called a "cross product" to compute the X axis
+and Y axis for the matrix.
 
-I have no idea what a cross product means in mathmatical terms.  What I do
+I have no idea what a cross product means in mathematical terms.  What I do
 know is that if you have 2 unit vectors and you compute the cross product
 of them you'll get a vector that is perpendicular to those 2 vectors.  In
 other words, if you have a vector pointing south east, and a vector
-pointing up,and you compute the cross product you'll get a vector pointing
-either north west or north east since those are the 2 vectors that are purpendicular
-to south east and up.  Depending on which order you compute the cross product
+pointing up, and you compute the cross product you'll get a vector pointing
+either south west or north east since those are the 2 vectors that are perpendicular
+to south east and up.  Depending on which order you compute the cross product in,
 you'll get the opposite answer.
 
 In any case if we compute the cross product of our <span style="color: blue;">`zAxis`</span> and
@@ -176,9 +176,9 @@ In any case if we compute the cross product of our <span style="color: blue;">`z
 And now that we have the <span style="color:red;">`xAxis`</span> we can cross the <span style="color:blue;">`zAxis`</span> and the <span style="color:red;">`xAxis`</span>
 which will give us the camera's <span style="color:green;">`yAxis`</span>
 
-{{{diagram url="resources/cross-product-diagram.html?mode=2" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span style='color:blue;'>zAxis</span> cross <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span>"}}}
 
-Now all we have to do is plug in the 3 axes into a matrix. That gives as a
+Now all we have to do is plug the 3 axes into a matrix. That gives us a
 matrix that will orient something that points at the `target` from the
 `cameraPosition`. We just need to add in the `position`
 
@@ -281,26 +281,26 @@ And here's the result.
 
 {{{example url="../webgl-3d-camera-look-at.html" }}}
 
-Drag the slider and notice the camera tracks a single 'F'.
+Drag the slider and notice how the camera tracks a single 'F'.
 
 Note that you can use "lookAt" math for more than just cameras. Common uses are making a character's
 head follow someone. Making a turret aim at a target. Making an object follow a path. You compute
 where on the path the target is. Then you compute where on the path the target would be a few moments
-in the future. Plug those 2 values into your lookAt function and you'll get a matrix that makes
+in the future. Plug those 2 values into your `lookAt` function and you'll get a matrix that makes
 your object follow the path and orient toward the path as well.
 
 Let's <a href="webgl-animation.html">learn about animation next</a>.
 
 <div class="webgl_bottombar">
 <h3>lookAt standards</h3>
-<p>Most 3D math libraries have a lookAt function. Often it is designed
-specifically to make a "view matrix" and not a "camera matrix". Other words
+<p>Most 3D math libraries have a <code>lookAt</code> function. Often it is designed
+specifically to make a "view matrix" and not a "camera matrix". In other words,
 it makes a matrix that moves everything else in front of the camera rather
 than a matrix that moves the camera itself.</p>
 <p>I find that less useful. As pointed out, a lookAt function has many uses. It's
-easy to call inverse when you need a view matrix but if you are using lookAt
+easy to call <code>inverse</code> when you need a view matrix but if you are using <code>lookAt</code>
 to make some character's head follow another character or some turret aim
-at its target it's much more useful if lookAt returns a matrix that orients
+at its target it's much more useful if <code>lookAt</code> returns a matrix that orients
 and positions an object in world space in my opinion.
 </p>
 {{{example url="../webgl-3d-camera-look-at-heads.html" }}}

@@ -5,7 +5,12 @@
 <meta charset="utf-8">
 <title>WebGL - 2 Textures</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<canvas id="canvas" width="400" height="300"></canvas>
+</body>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script>
 "use strict";
 window.onload = main;
@@ -47,7 +52,8 @@ function main() {
 function render(images) {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
@@ -187,10 +193,6 @@ void main() {
    gl_FragColor = color0 * color1;
 }
 </script>
-</head>
-<body>
-<canvas id="canvas" width="400" height="300"></canvas>
-</body>
 </html>
 
 

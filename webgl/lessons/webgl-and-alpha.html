@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta property="og:title" content="WebGL and Alpha" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
@@ -72,24 +72,24 @@ treats alpha in the backbuffer (ie, the canvas), so I thought it
  might be good to go over some of the differences between WebGL
  and OpenGL related to alpha.</p>
 <p>The biggest difference between OpenGL and WebGL is that OpenGL
-renders to a backbuffer that is not composited with anything so,
+renders to a backbuffer that is not composited with anything,
 or effectively not composited with anything by the OS&#39;s window
 manager, so it doesn&#39;t matter what your alpha is.</p>
 <p>WebGL is composited by the browser with the web page and the
 default is to use pre-multiplied alpha the same as .png <code>&lt;img&gt;</code>
-tags with transparency and 2d canvas tags.</p>
+tags with transparency and 2D canvas tags.</p>
 <p>WebGL has several ways to make this more like OpenGL.</p>
 <h3 id="-1-tell-webgl-you-want-it-composited-with-non-premultiplied-alpha">#1) Tell WebGL you want it composited with non-premultiplied alpha</h3>
 <pre><code>gl = canvas.getContext(&quot;webgl&quot;, {
-  premultipliedAlpha: false  // Ask non-premultiplied alpha
+  premultipliedAlpha: false  // Ask for non-premultiplied alpha
 });
 </code></pre><p>The default is true.</p>
-<p>Of course the result will still be composited over page with whatever
+<p>Of course the result will still be composited over the page with whatever
 background color ends up being under the canvas (the canvas&#39;s background
 color, the canvas&#39;s container background color, the page&#39;s background
 color, the stuff behind the canvas if the canvas has a z-index &gt; 0, etc....)
 in other words, the color CSS defines for that area of the webpage.</p>
-<p>I really good way to find if you have any alpha problems is to set the
+<p>A really good way to find if you have any alpha problems is to set the
 canvas&#39;s background to a bright color like red. You&#39;ll immediately see
 what is happening.</p>
 <pre><code>&lt;canvas style=&quot;background: red;&quot;&gt;&lt;canvas&gt;
@@ -128,19 +128,19 @@ gl.colorMask(true, true, true, false);
 rendering to alpha back on and then turn it off again when you switch to
 rendering to the canvas.</p>
 <h3 id="-5-handling-images">#5) Handling Images</h3>
-<p>My default if you are loading images with alpha into WebGL WebGL will
+<p>My default if you are loading images with alpha into WebGL. WebGL will
 provide the values as they are in the PNG file with color values not
 premultiplied. This is generally what I&#39;m used to for OpenGL programs
-because it&#39;s lossess where as pre-multiplied is lossy.</p>
+because it&#39;s lossless whereas pre-multiplied is lossy.</p>
 <pre><code>1, 0.5, 0.5, 0  // RGBA
-</code></pre><p>Is a possible value un-premultiplied where as pre-multiplied it&#39;s an
+</code></pre><p>Is a possible value un-premultiplied whereas pre-multiplied it&#39;s an
 impossible value because <code>a = 0</code> which means <code>r</code>, <code>g</code>, and <code>b</code> have
 to be zero.</p>
 <p>You can have WebGL pre-multiply the alpha if you want. You do this
 by setting <code>UNPACK_PREMULTIPLY_ALPHA_WEBGL</code> to true like this</p>
 <pre><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 </code></pre><p>The default is un-premultiplied.</p>
-<p>Be aware that most if not all Canvas2D implementations work with
+<p>Be aware that most if not all Canvas 2D implementations work with
 pre-multiplied alpha. That means when you transfer them to WebGL and
 <code>UNPACK_PREMULTIPLY_ALPHA_WEBGL</code> is false WebGL will convert them
 back to un-premultipiled.</p>
@@ -208,18 +208,30 @@ probably want</p>
     <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
   </ul>
+  <li>Lighting</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">WebGL 3D - Directional Lighting</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-point.html">WebGL 3D - Point Lighting</a></li>
+  </ul>
   <li>Structure and Organization</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">WebGL - Less Code, More Fun</a></li>
     <li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">WebGL - Drawing Multiple Things</a></li>
     <li><a href="/webgl/lessons/webgl-scene-graph.html">WebGL - Scene Graphs</a></li>
   </ul>
-  <li>Text</li>
+  <li>Techniques</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
-    <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
-    <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
-    <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    <li>2D</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a>
+    </ul>
+    <li>Text</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
+      <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
+      <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
+      <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    </ul>
   </ul>
   <li>Misc</li>
   <ul>

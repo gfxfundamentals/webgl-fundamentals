@@ -1,4 +1,4 @@
-Title: WebGL Text - Canvas2D
+Title: WebGL Text - Canvas 2D
 Description: How to display text using a 2D canvas that is in sync with WebGL
 
 This article is a continuation of [previous WebGL articles about drawing text](webgl-text-html.html).
@@ -30,7 +30,7 @@ Next setup the CSS so the the canvas and the HTML overlap
         z-index: 10;
     }
 
-Now look up the text canvas at init time and create a 2d context for it.
+Now look up the text canvas at init time and create a 2D context for it.
 
     // look up the text canvas.
     var textCanvas = document.getElementById("text");
@@ -54,10 +54,10 @@ And here's that example
 
 {{{example url="../webgl-text-html-canvas2d.html" }}}
 
-Why is the text smaller? Because that's the default size for canvas2d.
-If you want other sizes [check out the canvas2d api](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_text).
+Why is the text smaller? Because that's the default size for Canvas 2D.
+If you want other sizes [check out the Canvas 2D API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_text).
 
-Another reason to use canvas2d is it's easy to draw other things. For example
+Another reason to use Canvas 2D is it's easy to draw other things. For example
 let's add an arrow
 
     // draw an arrow and text.
@@ -84,12 +84,12 @@ let's add an arrow
     // restore the canvas to its old settings.
     ctx.restore();
 
-Here we're taking advantage of the canvas2d translate function so we don't have to do any extra
+Here we're taking advantage of the Canvas 2D translate function so we don't have to do any extra
 math when drawing our arrow. We just pretend to draw at the origin and translate takes care
 of moving that origin to the corner of our F.
 
 {{{example url="../webgl-text-html-canvas2d-arrows.html" }}}
 
-I think that covers using canvas 2D. [Check out the canvas2d API](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+I think that covers using Canvas 2D. [Check out the Canvas 2D API](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
 for more ideas. [Next we'll actually render text in WebGL](webgl-text-texture.html).
 

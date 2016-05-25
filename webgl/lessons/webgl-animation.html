@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta property="og:title" content="WebGL - Animation" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
@@ -108,11 +108,11 @@ frames a second now. Maybe the user is a gamer and has a CRT monitor running at 
 frame a second.</p>
 <p>You can see the problem in this example</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-animation-frame-rate-issues.html"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="../webgl-animation-frame-rate-issues.html"></iframe>
 </div>
 
 </p>
-<p>In the example above the we want to rotate all of the &#39;F&#39;s at the same speed.
+<p>In the example above we want to rotate all of the &#39;F&#39;s at the same speed.
 The &#39;F&#39; in the middle is running full speed and is frame rate independent. The one
 on the left and the right are simulating if the browser was only running at 1/8th
 max speed for the current machine. The one on the left is <strong>NOT</strong> frame rate
@@ -125,8 +125,8 @@ speed.</p>
 between frames and use that to calcuate how much to animate this frame.</p>
 <p>First off we need to get the time. Fortunately <code>requestAnimationFrame</code> passes
 us the time since the page was loaded when it calls us.</p>
-<p>I find it easist if we get the time in seconds but since the <code>requestAnimationFrame</code>
-passes us the time in milliseconds (1000s of a second) we need to multiply by 0.001
+<p>I find it easiest if we get the time in seconds but since the <code>requestAnimationFrame</code>
+passes us the time in milliseconds (1000ths of a second) we need to multiply by 0.001
 to get seconds.</p>
 <p>So, we can then compute the delta time like this</p>
 <pre><code>*var then = 0;
@@ -143,10 +143,10 @@ requestAnimationFrame(drawScene);
 *  then = now;
 
    ...
-</code></pre><p>Once we have the <code>deltaTime</code> in seconds then all our calcuations can be in how
-many units per second we want something to happen. In this case since
+</code></pre><p>Once we have the <code>deltaTime</code> in seconds then all our calculations can be in how
+many units per second we want something to happen. In this case
 <code>rotationSpeed</code> is 1.2 which means we want to rotate 1.2 radians per second.
-That&#39;s about a 1/5 of a turn or in other words it will take about 5 seconds to
+That&#39;s about 1/5 of a turn or in other words it will take about 5 seconds to
 turn around completely regardless of the frame rate.</p>
 <pre><code>*    rotation[1] += rotationSpeed * deltaTime;
 </code></pre><p>Here&#39;s that one working.</p>
@@ -248,18 +248,30 @@ your tab is visible.
     <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
   </ul>
+  <li>Lighting</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">WebGL 3D - Directional Lighting</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-point.html">WebGL 3D - Point Lighting</a></li>
+  </ul>
   <li>Structure and Organization</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">WebGL - Less Code, More Fun</a></li>
     <li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">WebGL - Drawing Multiple Things</a></li>
     <li><a href="/webgl/lessons/webgl-scene-graph.html">WebGL - Scene Graphs</a></li>
   </ul>
-  <li>Text</li>
+  <li>Techniques</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
-    <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
-    <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
-    <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    <li>2D</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a>
+    </ul>
+    <li>Text</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
+      <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
+      <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
+      <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    </ul>
   </ul>
   <li>Misc</li>
   <ul>

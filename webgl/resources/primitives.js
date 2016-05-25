@@ -760,7 +760,7 @@
       100,   0,  30,
         0,   0,  30,
 
-      // top rung front
+      // top rung right
       100,   0,   0,
       100,  30,   0,
       100,  30,  30,
@@ -792,7 +792,7 @@
       67,   60,   0,
       67,   60,  30,
 
-      // front of middle rung
+      // right of middle rung
       67,   60,   0,
       67,   90,  30,
       67,   60,  30,
@@ -808,7 +808,7 @@
       67,   90,  30,
       67,   90,   0,
 
-      // front of bottom
+      // right of bottom
       30,   90,   0,
       30,  150,  30,
       30,   90,  30,
@@ -890,7 +890,7 @@
       1, 1,
       0, 1,
 
-      // top rung front
+      // top rung right
       0, 0,
       1, 0,
       1, 1,
@@ -922,7 +922,7 @@
       1, 0,
       1, 1,
 
-      // front of middle rung
+      // right of middle rung
       0, 0,
       1, 1,
       0, 1,
@@ -938,7 +938,7 @@
       1, 1,
       1, 0,
 
-      // front of bottom
+      // right of bottom
       0, 0,
       1, 1,
       0, 1,
@@ -977,7 +977,7 @@
       // top
       6, 0, 1, 0,
 
-      // top rung front
+      // top rung right
       6, 1, 0, 0,
 
       // under top rung
@@ -989,13 +989,13 @@
       // top of middle rung
       6, 0, 1, 0,
 
-      // front of middle rung
+      // right of middle rung
       6, 1, 0, 0,
 
       // bottom of middle rung.
       6, 0, -1, 0,
 
-      // front of bottom
+      // right of bottom
       6, 1, 0, 0,
 
       // bottom
@@ -1019,7 +1019,7 @@
           // top
         6, 70, 200, 210,
 
-          // top rung front
+          // top rung right
         6, 200, 200, 70,
 
           // under top rung
@@ -1031,13 +1031,13 @@
           // top of middle rung
         6, 70, 180, 210,
 
-          // front of middle rung
+          // right of middle rung
         6, 100, 70, 210,
 
           // bottom of middle rung.
         6, 76, 210, 100,
 
-          // front of bottom
+          // right of bottom
         6, 140, 210, 80,
 
           // bottom

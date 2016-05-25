@@ -28,12 +28,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-"use strict";
 
-(function (root, factory) {
+(function (root, factory) {  // eslint-disable-line
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define([], factory);
+    define([], function() {
+      return factory.call(root);
+    });
   } else {
     // Browser globals
     var lib = factory.call(root);
@@ -42,7 +43,7 @@
     });
   }
 }(this, function () {
-
+  "use strict";  // eslint-disable-line
   var topWindow = this;
 
   /** @module webgl-utils */
@@ -61,144 +62,6 @@
     }
   }
 
-  /**
-   * Check if the page is embedded.
-   * @param {Window?) w window to check
-   * @return {boolean} True of we are in an iframe
-   */
-  function isInIFrame(w) {
-    w = w || topWindow;
-    return w !== w.top;
-  }
-
-  /**
-   * Creates the HTLM for a failure message
-   * @param {string} canvasContainerId id of container of th
-   *        canvas.
-   * @return {string} The html.
-   */
-  function makeFailHTML(msg) {
-    return '' +
-      '<table style="background-color: #8CE; width: 100%; height: 100%;"><tr>' +
-      '<td align="center">' +
-      '<div style="display: table-cell; vertical-align: middle;">' +
-      '<div style="">' + msg + '</div>' +
-      '</div>' +
-      '</td></tr></table>';
-  }
-
-  /**
-   * Mesasge for getting a webgl browser
-   * @type {string}
-   */
-  var GET_A_WEBGL_BROWSER = '' +
-    'This page requires a browser that supports WebGL.<br/>' +
-    '<a href="http://get.webgl.org">Click here to upgrade your browser.</a>';
-
-  /**
-   * Mesasge for need better hardware
-   * @type {string}
-   */
-  var OTHER_PROBLEM = '' +
-    "It doesn't appear your computer can support WebGL.<br/>" +
-    '<a href="http://get.webgl.org/troubleshooting/">Click here for more information.</a>';
-
-  /**
-   * Creates a webgl context.
-   * @param {HTMLCanvasElement} canvas The canvas tag to get
-   *     context from. If one is not passed in one will be
-   *     created.
-   * @return {WebGLRenderingContext} The created context.
-   */
-  function create3DContext(canvas, opt_attribs) {
-    var names = ["webgl", "experimental-webgl"];
-    var context = null;
-    for (var ii = 0; ii < names.length; ++ii) {
-      try {
-        context = canvas.getContext(names[ii], opt_attribs);
-      } catch(e) {}  // eslint-disable-line
-      if (context) {
-        break;
-      }
-    }
-    return context;
-  }
-
-  /**
-   * Creates a webgl context. If creation fails it will
-   * change the contents of the container of the <canvas>
-   * tag to an error message with the correct links for WebGL.
-   * @param {HTMLCanvasElement} canvas. The canvas element to
-   *     create a context from.
-   * @param {WebGLContextCreationAttirbutes} opt_attribs Any
-   *     creation attributes you want to pass in.
-   * @return {WebGLRenderingContext} The created context.
-   * @memberOf module:webgl-utils
-   */
-  function setupWebGL(canvas, opt_attribs) {
-    function showLink(str) {
-      var container = canvas.parentNode;
-      if (container) {
-        container.innerHTML = makeFailHTML(str);
-      }
-    }
-
-    if (!topWindow.WebGLRenderingContext) {
-      showLink(GET_A_WEBGL_BROWSER);
-      return null;
-    }
-
-    var context = create3DContext(canvas, opt_attribs);
-    if (!context) {
-      showLink(OTHER_PROBLEM);
-    }
-    return context;
-  }
-
-  function updateCSSIfInIFrame() {
-    if (isInIFrame()) {
-      document.body.className = "iframe";
-    }
-  }
-
-  /**
-   * @typedef {Object} GetWebGLContextOptions
-   * @property {boolean} [dontResize] by default `getWebGLContext` will resize the canvas to match the size it's displayed.
-   * @property {boolean} [noTitle] by default inserts a copy of the `<title>` content into the page
-   * @memberOf module:webgl-utils
-   */
-
-  /**
-   * Gets a WebGL context.
-   * makes its backing store the size it is displayed.
-   * @param {HTMLCanvasElement} canvas a canvas element.
-   * @param {WebGLContextCreationAttirbutes} [opt_attribs] optional webgl context creation attributes
-   * @param {module:webgl-utils.GetWebGLContextOptions} [opt_options] options
-   * @memberOf module:webgl-utils
-   */
-  function getWebGLContext(canvas, opt_attribs, opt_options) {
-    var options = opt_options || {};
-
-    if (isInIFrame()) {
-      updateCSSIfInIFrame();
-
-      // make the canvas backing store the size it's displayed.
-      if (!options.dontResize && options.resize !== false) {
-        var width = canvas.clientWidth;
-        var height = canvas.clientHeight;
-        canvas.width = width;
-        canvas.height = height;
-      }
-    } else if (!options.noTitle && options.title !== false) {
-      var title = document.title;
-      var h1 = document.createElement("h1");
-      h1.innerText = title;
-      document.body.insertBefore(h1, document.body.children[0]);
-    }
-
-    var gl = setupWebGL(canvas, opt_attribs);
-    return gl;
-  }
 
   /**
    * Error Callback
@@ -258,7 +121,7 @@
       gl.attachShader(program, shader);
     });
     if (opt_attribs) {
-      obj_attrib.forEach(function(attrib, ndx) {
+      opt_attribs.forEach(function(attrib, ndx) {
         gl.bindAttribLocation(
             program,
             opt_locations ? opt_locations[ndx] : ndx,
@@ -501,7 +364,7 @@
             gl.uniform1iv(location, units);
             textures.forEach(function(texture, index) {
               gl.activeTexture(gl.TEXTURE0 + units[index]);
-              gl.bindTexture(bindPoint, tetxure);
+              gl.bindTexture(bindPoint, texture);
             });
           };
         }(getBindPointForSamplerType(gl, type), units);
@@ -847,77 +710,17 @@
    * @param {boolean} true if the canvas was resized.
    * @memberOf module:webgl-utils
    */
-  function resizeCanvasToDisplaySize(canvas) {
-    var width = canvas.clientWidth;
-    var height = canvas.clientHeight;
-    if (canvas.width !== width ||
-        canvas.height !== height) {
-      canvas.width = width;
+  function resizeCanvasToDisplaySize(canvas, multiplier) {
+    multiplier = multiplier || 1;
+    var width  = canvas.clientWidth  * multiplier;
+    var height = canvas.clientHeight * multiplier;
+    if (canvas.width !== width ||  canvas.height !== height) {
+      canvas.width  = width;
       canvas.height = height;
       return true;
     }
     return false;
   }
-
-  /**
-   * Get's the iframe in the parent document
-   * that is displaying the specified window .
-   * @param {Window} window window to check.
-   * @return {HTMLIFrameElement?) the iframe element if window is in an iframe
-   */
-  function getIFrameForWindow(window) {
-    if (!isInIFrame(window)) {
-      return;
-    }
-    var iframes = window.parent.document.getElementsByTagName("iframe");
-    for (var ii = 0; ii < iframes.length; ++ii) {
-      var iframe = iframes[ii];
-      if (iframe.contentDocument === window.document) {
-        return iframe;  // eslint-disable-line
-      }
-    }
-  }
-
-  /**
-   * Returns true if window is on screen. The main window is
-   * always on screen windows in iframes might not be.
-   * @param {Window} window the window to check.
-   * @return {boolean} true if window is on screen.
-   */
-  function isFrameVisible(window) {
-    try {
-      var iframe = getIFrameForWindow(window);
-      if (!iframe) {
-        return true;
-      }
-
-      var bounds = iframe.getBoundingClientRect();
-      var isVisible = bounds.top < window.parent.innerHeight && bounds.bottom >= 0 &&
-                      bounds.left < window.parent.innerWidth && bounds.right >= 0;
-
-      return isVisible && isFrameVisible(window.parent);
-    } catch (e) {
-      return true;  // We got a security error?
-    }
-  }
-
-  /**
-   * Returns true if element is on screen.
-   * @param {HTMLElement} element the element to check.
-   * @return {boolean} true if element is on screen.
-   */
-  function isOnScreen(element) {
-    var isVisible = true;
-
-    if (element) {
-      var bounds = element.getBoundingClientRect();
-      isVisible = bounds.top < topWindow.innerHeight && bounds.bottom >= 0;
-    }
-
-    return isVisible && isFrameVisible(topWindow);
-  }
-
-
 
   // Add `push` to a typed array. It just keeps a 'cursor'
   // and allows use to `push` values into the array so we
@@ -1388,28 +1191,6 @@
     });
   }
 
-  // Replace requestAnimationFrame.
-  if (topWindow.requestAnimationFrame) {
-    topWindow.requestAnimationFrame = (function(oldRAF) {
-
-      return function(callback, element) {
-        var handler = function() {
-          if (isOnScreen(element)) {
-            oldRAF(callback, element);
-          } else {
-            oldRAF(handler, element);
-          }
-        };
-        handler();
-      };
-
-    }(topWindow.requestAnimationFrame));
-  }
-
-  // All browsers that support WebGL support requestAnimationFrame
-  topWindow.requestAnimFrame = topWindow.requestAnimationFrame;       // just to stay backward compatible.
-  topWindow.cancelRequestAnimFrame = topWindow.cancelAnimationFrame;  // just to stay backward compatible.
-
   return {
     createAugmentedTypedArray: createAugmentedTypedArray,
     createAttribsFromArrays: createAttribsFromArrays,
@@ -1423,14 +1204,11 @@
     createUniformSetters: createUniformSetters,
     drawBufferInfo: drawBufferInfo,
     drawObjectList: drawObjectList,
-    getWebGLContext: getWebGLContext,
-    updateCSSIfInIFrame: updateCSSIfInIFrame,
     getExtensionWithKnownPrefixes: getExtensionWithKnownPrefixes,
     resizeCanvasToDisplaySize: resizeCanvasToDisplaySize,
     setAttributes: setAttributes,
     setBuffersAndAttributes: setBuffersAndAttributes,
     setUniforms: setUniforms,
-    setupWebGL: setupWebGL,
   };
 
 }));

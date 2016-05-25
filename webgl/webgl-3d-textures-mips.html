@@ -14,10 +14,18 @@
     background-color: rgba(255, 255, 255, 0.6) !important;
 }
 </style>
+</head>
+<body>
+<div class="description">
+Show how mips are important for stability and color<br/>
+</div>
+<canvas id="canvas" width="400" height="300"></canvas>
+</body>
 <script src="resources/jquery-1.7.1.min.js"></script>
 <script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/webgl-3d-math.js"></script>
 <script>
 "use strict";
@@ -36,7 +44,8 @@ function main() {
   canvas.style.height = canvas.height + "px";
   canvas.width = Math.floor(canvas.width * dpr);
   canvas.height = Math.floor(canvas.height * dpr);
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
@@ -285,13 +294,6 @@ void main() {
    gl_FragColor = texture2D(u_texture, v_texcoord);
 }
 </script>
-</head>
-<body>
-<div class="description">
-Show how mips are important for stability and color<br/>
-</div>
-<canvas id="canvas" width="400" height="300"></canvas>
-</body>
 </html>
 
 

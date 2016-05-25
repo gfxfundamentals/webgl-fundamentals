@@ -6,7 +6,7 @@ was about [using textures for rendering text in WebGL](webgl-text-texture.html).
 If you haven't read it you might want to check that out before continuing.
 
 In the last article we went over [how to use a texture to draw text in your WebGL
-scene](webgl-text-texture.html). That techinque is very common and it's great
+scene](webgl-text-texture.html). That technique is very common and it's great
 for things like in multi-player games where you want to put a name over an avatar.
 As that name rarely changes it's perfect.
 
@@ -118,12 +118,12 @@ And you can see it works
 {{{example url="../webgl-text-glyphs.html" }}}
 
 Unfortunately it's SLOW. The example below doesn't show it but we're individually
-drawing 73 quads. We're computing 73 matrices and 292 matrix multplies. A typical
+drawing 73 quads. We're computing 73 matrices and 292 matrix multiplies. A typical
 UI might easily have 1000 letters showing. That's way way too much work to get
 a reasonable framerate.
 
 So to fix that the way this is usually done is to make a texture atlas that contains all
-the letters. We went over what a texture atlas when we talked about [texturing the 6
+the letters. We went over what a texture atlas is when we talked about [texturing the 6
 faces of a cube](webgl-3d-textures.html).
 
 Let's make some code to make a texture atlas of glyphs.
@@ -200,7 +200,7 @@ Now that we have a texture with glyphs in it we need to use it. To do that we'll
 build quad vertices on the fly for each glyph. Those vertices will use texture coordinates
 to select a particlar glyph
 
-Given a string lets build the vertices
+Given a string let's build the vertices
 
     function makeVerticesForString(fontInfo, s) {
       var len = s.length;
@@ -347,7 +347,7 @@ And here's that
 
 {{{example url="../webgl-text-glyphs-texture-atlas.html" }}}
 
-That's the basic technique of using a texture atlas of glyphs. There's a few
+That's the basic technique of using a texture atlas of glyphs. There are a few
 obvious things to add or ways to improve it.
 
 *   Reuse the same arrays.
@@ -372,7 +372,7 @@ obvious things to add or ways to improve it.
     to decide how to specify when to change colors.
 
 The other big issue which I'm not going to cover is that textures have a limited
-size but fonts are effectively unlimited. If you want to support all of unicode
+size but fonts are effectively unlimited. If you want to support all of Unicode
 so that you can handle Chinese and Japanese and Arabic and all the other languages,
 well, as of 2015 there are over 110,000 glyphs in Unicode! You can't fit all of
 those in textures. There just isn't enough room.
@@ -382,12 +382,12 @@ above they might put textures in a texture atlas but they probably make the area
 for each glpyh a fixed size. They keep the most recently used glyphs in the texture.
 If they need to draw a glyph that's not in the texture they replace the least
 recently used one with the new one they need. Of course if that glyph they are
-about to replace is still being refereneced by a quad yet to be drawn then they need
+about to replace is still being referenced by a quad yet to be drawn then they need
 to draw with what they have before replacing the glyph.
 
 Another thing you can do, though I'm not recommending it, is combine this
 technique with [the previous technique](webgl-text-texture.html). You can
-render glyphs directly into another texture. Of course a GPU acclerated
+render glyphs directly into another texture. Of course a GPU accelerated
 canvas already does that for you so there's probably no reason to do it yourself.
 
 Yet one more way to draw text in WebGL is to actually use 3D text. The 'F' in
@@ -397,7 +397,7 @@ are common for titles and movie logos but not much else.
 I hope that's covered text in WebGL.
 
 <div class="webgl_bottombar">
-<h3>Issues with making glyphs using the Canvas2D api</h3>
+<h3>Issues with making glyphs using the Canvas 2D API</h3>
 <p>
 How did I decide on a <code>baseline</code> of 16 and a <code>letterHeight</code> of 22 when making
 the glyphs? This is actually one place that's a little problematic as far as I can tell. The

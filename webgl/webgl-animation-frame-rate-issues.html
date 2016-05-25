@@ -14,10 +14,21 @@
     background-color: rgba(255, 255, 255, 0.6) !important;
 }
 </style>
+</head>
+<body>
+<div class="description">
+The middle 'F' is running at full speed frame rate independent.<br/>
+The left 'F' is simulating a slow frame rate but not frame rate independent.<br/>
+The right 'F' is simulateing a slow frame rate but is frame rate independent.<br/>
+Notice how the right 'F's rotation matches the middle one even though it is rotating at a slow frame rate.
+</div>
+<canvas id="canvas" width="400" height="300"></canvas>
+</body>
 <script src="resources/jquery-1.7.1.min.js"></script>
 <script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/webgl-3d-math.js"></script>
 <script>
 "use strict";
@@ -29,7 +40,8 @@ $(function(){
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
@@ -211,7 +223,7 @@ function setGeometry(gl) {
           100,   0,  30,
             0,   0,  30,
 
-          // top rung front
+          // top rung right
           100,   0,   0,
           100,  30,   0,
           100,  30,  30,
@@ -243,7 +255,7 @@ function setGeometry(gl) {
           67,   60,   0,
           67,   60,  30,
 
-          // front of middle rung
+          // right of middle rung
           67,   60,   0,
           67,   90,  30,
           67,   60,  30,
@@ -259,7 +271,7 @@ function setGeometry(gl) {
           67,   90,  30,
           67,   90,   0,
 
-          // front of bottom
+          // right of bottom
           30,   90,   0,
           30,  150,  30,
           30,   90,  30,
@@ -346,7 +358,7 @@ function setColors(gl) {
         70, 200, 210,
         70, 200, 210,
 
-          // top rung front
+          // top rung right
         200, 200, 70,
         200, 200, 70,
         200, 200, 70,
@@ -378,7 +390,7 @@ function setColors(gl) {
         70, 180, 210,
         70, 180, 210,
 
-          // front of middle rung
+          // right of middle rung
         100, 70, 210,
         100, 70, 210,
         100, 70, 210,
@@ -394,7 +406,7 @@ function setColors(gl) {
         76, 210, 100,
         76, 210, 100,
 
-          // front of bottom
+          // right of bottom
         140, 210, 80,
         140, 210, 80,
         140, 210, 80,
@@ -449,16 +461,6 @@ void main() {
    gl_FragColor = v_color;
 }
 </script>
-</head>
-<body>
-<div class="description">
-The middle 'F' is running at full speed frame rate independent.<br/>
-The left 'F' is simulating a slow frame rate but not frame rate independent.<br/>
-The right 'F' is simulateing a slow frame rate but is frame rate independent.<br/>
-Notice how the right 'F's rotation matches the middle one even though it is rotating at a slow frame rate.
-</div>
-<canvas id="canvas" width="400" height="300"></canvas>
-</body>
 </html>
 
 

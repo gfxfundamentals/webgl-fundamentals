@@ -27,9 +27,21 @@ td {
   margin: 0px;
 }
 </style>
+</head>
+<body>
+<div class="description">
+Check effects to turn them on<br/>
+Drag effects to re-order
+</div>
+<canvas id="canvas" width="400" height="300"></canvas>
+<div id="uiContainer">
+<div id="ui"></div>
+</div>
+</body>
 <script src="resources/jquery-1.7.1.min.js"></script>
 <script src="resources/jquery.tablednd_0_5.js"></script>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script>
 "use strict";
 
@@ -49,7 +61,8 @@ function main() {
 function render(image) {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
@@ -421,17 +434,6 @@ void main() {
    gl_FragColor = vec4((colorSum / kernelWeight).rgb, 1);
 }
 </script>
-</head>
-<body>
-<div class="description">
-Check effects to turn them on<br/>
-Drag effects to re-order
-</div>
-<canvas id="canvas" width="400" height="300"></canvas>
-<div id="uiContainer">
-<div id="ui"></div>
-</div>
-</body>
 </html>
 
 

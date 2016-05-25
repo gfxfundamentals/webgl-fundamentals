@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta property="og:title" content="WebGL How It Works" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/screenshots/webgl-how-it-works.jpg" />
@@ -79,7 +79,7 @@ first part.</p>
 <p><img src="resources/vertex-shader-anim.gif" class="webgl_center" /></p>
 <p>On the left is the data you provide.  The vertex shader is a function you
 write in <a href="webgl-shaders-and-glsl.html">GLSL</a>.  It gets called once for each vertex.
-You do some math and set the special variable <code>gl_Position</code> with a clipspace values
+You do some math and set the special variable <code>gl_Position</code> with a clipspace value
 for the current vertex. The GPU takes that value and stores it internally.</p>
 <p>Assuming you&#39;re drawing <code>TRIANGLES</code>, every time this first part generates 3
 vertices the GPU uses them to make a triangle.  It figures out which
@@ -92,7 +92,7 @@ with the color it wants for that pixel.</p>
 this point the fragment shader has very little info per pixel.
 Fortunately we can pass it more info.  We define “varyings” for each
 value we want to pass from the vertex shader to the fragment shader.</p>
-<p>As a simple example, lets just pass the clipspace coordinates we computed
+<p>As a simple example, let&#39;s just pass the clipspace coordinates we computed
 directly from the vertex shader to the fragment shader.</p>
 <p>We&#39;ll draw with a simple triangle.  Continuing from our
 <a href="webgl-2d-matrices.html">previous example</a> let&#39;s change our F to a
@@ -211,13 +211,13 @@ v_color that we declared.</p>
 <p>Those 3 values written to v_color are then interpolated and passed to the
 fragment shader for each pixel.</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="resources/fragment-shader-anim.html"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="resources/fragment-shader-anim.html"></iframe>
   <div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
 </div>
 
 </p>
 <p>We can also pass in more data to the vertex shader which we can then pass
-on to the fragment shader.  So for example lets draw a rectangle, that
+on to the fragment shader.  So for example let&#39;s draw a rectangle, that
 consists of 2 triangles, in 2 colors.  To do this we&#39;ll add another
 attribute to the vertex shader so we can pass it more data and we&#39;ll pass
 that data directly to the fragment shader.</p>
@@ -329,7 +329,7 @@ var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
     normalizeFlag,
     strideToNextPieceOfData,
     offsetIntoBuffer);
-</code></pre><p>And this command tells WebGL to get data from the buffer that&#39;s was last
+</code></pre><p>And this command tells WebGL to get data from the buffer that was last
 bound with gl.bindBuffer, how many components per vertex (1 - 4), what the
 type of data is (<code>BYTE</code>, <code>FLOAT</code>, <code>INT</code>, <code>UNSIGNED_SHORT</code>, etc...), the stride
 which means how many bytes to skip to get from one piece of data to the
@@ -351,7 +351,7 @@ from -128 to 127, UNSIGNED_BYTE goes from 0 to 255, SHORT goes from -32768 to 32
 </p>
 <p>
 If you set the normalize flag to true then the values of a BYTE (-128 to 127)
-represent the values -1.0 to +1.0, UNSIGNED_BYTE (0 to 255) become 0.0 to +1.0,
+represent the values -1.0 to +1.0, UNSIGNED_BYTE (0 to 255) become 0.0 to +1.0.
 A normalized SHORT also goes from -1.0 to +1.0 it just has more resolution than a BYTE.
 </p>
 <p>
@@ -359,7 +359,7 @@ The most common use for normalized data is for colors. Most of the time colors
 only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha
 would use 16 bytes per vertex per color. If you have complicated geometry that
 can add up to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs
-where 0 represnets 0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color
+where 0 represents 0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color
 per vertex, a 75% savings.
 </p>
 <p>Let's change our code to do this. When we tell WebGL how to extract our colors we'd use</p>
@@ -460,18 +460,30 @@ Here's that sample.
     <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
   </ul>
+  <li>Lighting</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">WebGL 3D - Directional Lighting</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-point.html">WebGL 3D - Point Lighting</a></li>
+  </ul>
   <li>Structure and Organization</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">WebGL - Less Code, More Fun</a></li>
     <li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">WebGL - Drawing Multiple Things</a></li>
     <li><a href="/webgl/lessons/webgl-scene-graph.html">WebGL - Scene Graphs</a></li>
   </ul>
-  <li>Text</li>
+  <li>Techniques</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
-    <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
-    <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
-    <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    <li>2D</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a>
+    </ul>
+    <li>Text</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
+      <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
+      <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
+      <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    </ul>
   </ul>
   <li>Misc</li>
   <ul>

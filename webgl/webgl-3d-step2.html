@@ -14,10 +14,31 @@
     background-color: rgba(255, 255, 255, 0.6) !important;
 }
 </style>
+</head>
+<body>
+<div class="description">
+Drag sliders to translate, rotate, and scale.
+</div>
+<canvas id="canvas" width="400" height="300"></canvas>
+<div id="uiContainer">
+  <div id="ui">
+    <div id="x"></div>
+    <div id="y"></div>
+    <div id="z"></div>
+    <div id="angleX"></div>
+    <div id="angleY"></div>
+    <div id="angleZ"></div>
+    <div id="scaleX"></div>
+    <div id="scaleY"></div>
+    <div id="scaleZ"></div>
+  </div>
+</div>
+</body>
 <script src="resources/jquery-1.7.1.min.js"></script>
 <script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script>
 "use strict";
 
@@ -28,7 +49,8 @@ $(function(){
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
@@ -309,7 +331,7 @@ function setGeometry(gl) {
           100,   0,  30,
             0,   0,  30,
 
-          // top rung front
+          // top rung right
           100,   0,   0,
           100,  30,   0,
           100,  30,  30,
@@ -341,7 +363,7 @@ function setGeometry(gl) {
           67,   60,  30,
           67,   60,   0,
 
-          // front of middle rung
+          // right of middle rung
           67,   60,   0,
           67,   60,  30,
           67,   90,  30,
@@ -357,7 +379,7 @@ function setGeometry(gl) {
           67,   90,  30,
           67,   90,   0,
 
-          // front of bottom
+          // right of bottom
           30,   90,   0,
           30,   90,  30,
           30,  150,  30,
@@ -405,26 +427,6 @@ void main() {
    gl_FragColor = u_color;
 }
 </script>
-</head>
-<body>
-<div class="description">
-Drag sliders to translate, rotate, and scale.
-</div>
-<canvas id="canvas" width="400" height="300"></canvas>
-<div id="uiContainer">
-  <div id="ui">
-    <div id="x"></div>
-    <div id="y"></div>
-    <div id="z"></div>
-    <div id="angleX"></div>
-    <div id="angleY"></div>
-    <div id="angleZ"></div>
-    <div id="scaleX"></div>
-    <div id="scaleY"></div>
-    <div id="scaleZ"></div>
-  </div>
-</div>
-</body>
 </html>
 
 

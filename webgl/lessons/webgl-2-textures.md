@@ -6,7 +6,7 @@ This article is a continuation of <a href="webgl-image-processing.html">WebGL Im
 Now might be a good time to answer the question, "How do I use 2 or more textures?"
 <!--more-->
 It's pretty simple. Let's <a href="webgl-image-processing.html">go back a few lessons to our
-first shader that draw a single image</a> and update it for 2 images.
+first shader that draws a single image</a> and update it for 2 images.
 
 The first thing we need to do is change our code so we can load 2 images. This is not
 really a WebGL thing, it's a HTML5 JavaScript thing, but we might as well tackle it.
@@ -14,12 +14,12 @@ Images are loaded asynchronously which can take a little getting used to.
 
 There are basically 2 ways we could handle it. We could try to structure our code
 so that it runs with no textures and as the textures are loaded the program updates.
-We'll save that method for a latter article.
+We'll save that method for a later article.
 
 In this case we'll wait for all the images to load before we draw anything.
 
-First let's change the code that loads an image into a function. It's pretty straight
-forward. It creates a new image object, sets the URL to load, and sets a callback to
+First let's change the code that loads an image into a function. It's pretty straightforward.
+It creates a new `Image` object, sets the URL to load, and sets a callback to
 be called when the image finishes loading.
 
 <pre class="prettyprint showlinemods">
@@ -31,7 +31,7 @@ function loadImage(url, callback) {
 }
 </pre>
 
-Now let's make a function that loads an array of urls and generates an array of images.
+Now let's make a function that loads an array of URLs and generates an array of images.
 First we set `imagesToLoad` to the number of images we're going to load. Then we make
 the callback we pass to `loadImage` decrement `imagesToLoad`. When `imagesToLoad` goes
 to 0 all the images have been loaded and we pass the array of images to a callback.
@@ -41,8 +41,7 @@ function loadImages(urls, callback) {
   var images = [];
   var imagesToLoad = urls.length;
 
-  // Called each time an image finished
-  // loading.
+  // Called each time an image finished loading.
   var onImageLoad = function() {
     --imagesToLoad;
     // If all the images are loaded call the callback.
@@ -147,12 +146,12 @@ And here's the result if we multiply them together using WebGL.
 
 {{{example url="../webgl-2-textures.html" }}}
 
-Some things I should go over.  
+Some things I should go over.
 
 The simple way to think of texture units is something like this: All of the texture functions
 work on the "active texture unit". The "active texture unit" is just a global variable
 that's the index of the texture unit you want to work with. Each texture unit has 2 targets.
-The TEXTURE_2D target and the TEXTURE_CUBE_MAP target. Every texture function works with specified
+The TEXTURE_2D target and the TEXTURE_CUBE_MAP target. Every texture function works with the specified
 target on the current active texture unit. If you were to implement
 WebGL in JavaScript it would look something like this
 
@@ -179,7 +178,7 @@ var getContext = function() {
     texture.image2D(...args...);
   };
 
-  // return the WebGL api
+  // return the WebGL API
   return {
     activeTexture: activeTexture,
     bindTexture: bindTexture,
@@ -195,7 +194,7 @@ The shaders take indices into the texture units. Hopefully that makes these 2 li
   gl.uniform1i(u_image1Location, 1);  // texture unit 1
 </pre>
 
-One thing that to be aware of, when setting the uniforms you use indices for the texture units
+One thing to be aware of, when setting the uniforms you use indices for the texture units
 but when calling gl.activeTexture you have to pass in special constants gl.TEXTURE0, gl.TEXTURE1 etc.
 Fortunately the constants are consecutive so instead of this
 

@@ -78,9 +78,9 @@ And the boilerplate code for linking 2 shaders into a program
 
 Of course how you decide to handle errors might be different.  Throwing
 exceptions might not be the best way to handle things.  Still, those few
-lines of code are the pretty much the same in nearly every WebGL program.
+lines of code are pretty much the same in nearly every WebGL program.
 
-I like store my shaders in non javascript &lt;script&gt; tags.  It makes
+I like to store my shaders in non javascript &lt;script&gt; tags.  It makes
 them easy to edit so I use code like this.
 
     /**
@@ -122,7 +122,7 @@ Now to compile a shader I can just do
 
     var shader = compileShaderFromScript(gl, "someScriptTagId");
 
-I'll usually go one step further and make a function to compile to shaders
+I'll usually go one step further and make a function to compile two shaders
 from script tags, attach them to a program and link them.
 
     /**
@@ -140,22 +140,7 @@ from script tags, attach them to a program and link them.
       return createProgram(gl, vertexShader, fragmentShader);
     }
 
-There's a couple of other pieces I've needed in most WebGL samples.
-
-At the time of this writing WebGL requires the asking
-for an "experimental-webgl" context where as in the near future you can
-just ask for "webgl".  I could write this in every WebGL program
-
-    ...
-    var gl = canvas.getContext("experimental-webgl");
-    if (!gl) {
-      gl = canvas.getContext("webgl");
-    }
-    ...
-
-But I prefer to use some function I've written before.
-
-That's most of my minmum set of WebGL boilerplate code.
+That's most of my minimum set of WebGL boilerplate code.
 <a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js">You can find that code here</a>.
 If you want something slightly more organized check out [TWGL.js](http://twgljs.org).
 

@@ -1,0 +1,172 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL - Surface Reflection Diagram</title>
+<link type="text/css" href="../../resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+#ui {
+    width: 200px;
+}
+#rotation>canvas {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+}
+</style>
+</head>
+<body>
+<div class="description">
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas" width="500" height="400" style="width: 500px; height: 400px;"></canvas>
+</div>
+<div id="uiContainer">
+  <div id="ui">
+    <div id="rotation"></div>
+  </div>
+</div>
+</body>
+</html>
+<script src="../../resources/jquery-1.7.1.min.js"></script>
+<script src="../../resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="../../resources/jquery.gman.ui.js"></script>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script>
+<script src="../../resources/webgl-2d-math.js"></script>
+<script src="diagram.js"></script>
+<script>
+"use strict";
+
+$(function(){
+  main();
+});
+
+function main() {
+  var ctx = document.getElementById("canvas").getContext("2d");
+  var surfaceAngle = 0;
+
+  $("#rotation").gmanSlider({value: radToDeg(surfaceAngle), slide: updateSurfaceAngle, min: -40, max: 40 });
+
+  function updateSurfaceAngle(event, ui) {
+    surfaceAngle = degToRad(ui.value);
+    render();
+  }
+
+  function render() {
+    resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
+    var width  = 250;
+    var height = 200;
+
+    var baseScale = Math.min(ctx.canvas.width / width,  ctx.canvas.height / height);
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
+    ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+    ctx.scale(baseScale, baseScale);
+
+    ctx.font = "8px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    var ex = -width / 3;
+    var ey = -height / 4;
+
+    var sx = 0;
+    var sy = height / 6 + 10;
+
+    // draw ray and reflection
+    var lx = width / 3;
+    var ly = -height / 4;
+    ctx.fillStyle = "#000";
+    ctx.strokeStyle = "#000";
+    ctx.save();
+    ctx.translate(lx, ly);
+    ctx.rotate(-Math.atan2(lx - sx, ly - sy) + Math.PI);
+
+    diagram.arrow(ctx, 0, 0, 0, distance(lx, ly, sx, sy) * 0.95, false, true, 0.5);
+//    arrow(ctx, lx, ly, sx, sy, false, true, 0.5);
+    ctx.restore();
+    ctx.save();
+    ctx.translate(sx, sy);
+
+    var i = normalize(sx - lx, sy - ly);
+    var ix = i[0];
+    var iy = i[1];
+
+    var nx = Math.sin(surfaceAngle);
+    var ny = Math.cos(surfaceAngle);
+
+    var r = reflect(ix, iy, nx, ny);
+    var ra = -Math.atan2(r[1], r[0]);
+    ctx.rotate(ra);
+    var rl = distance(sx, sy, ex, ey) * 0.8;
+    diagram.arrow(ctx, 0, 0, 0, rl, false, true, 0.5);
+    ctx.translate(0, rl / 2);
+    ctx.rotate(Math.PI * -0.5);
+    ctx.translate(0, 7);
+    ctx.fillText("relfection", 0, 0);
+    ctx.restore();
+
+//    var h = normalize(-ix + r[0], -iy + r[1]);
+//    ctx.save();
+//    ctx.translate(sx, sy);
+//    ctx.rotate(-Math.atan2(h[1], h[0]));
+//    arrow(ctx, 0, 0, 0, rl, false, true, 0.7);
+//    ctx.restore();
+
+
+    ctx.fillStyle = "orange";
+    diagram.drawSun(ctx, lx, ly, width / 10);
+
+    // draw normal
+    ctx.save();
+    ctx.translate(sx, sy);
+    ctx.rotate(surfaceAngle);
+//    var nx = 0;
+//    var ny = -60;
+//    ctx.fillStyle = "#080";
+//    ctx.strokeStyle = "#080";
+//    arrow(ctx, 0, 0, nx, ny, false, true);
+//    ctx.fillText("surface", nx, ny - 22);
+//    ctx.fillText("normal", nx, ny - 14);
+
+
+    // draw surface
+    //ctx.fillRect(-width / 4, height / 6, width / 2, 20);
+    //return;
+    diagram.roundedRect(ctx, -width / 4, 0, width / 2, 20);
+
+    var sn = normalize(ex - sx, ey - sy);
+    var d  = dot(sn[0], sn[1], r[0], r[1]);
+    var gradient =  ctx.createRadialGradient(0, 0, 0, 0, 0, width / 2);
+    gradient.addColorStop(0, diagram.hsl(0, 1, d * 0.5 + 0.5));
+    gradient.addColorStop(1, diagram.hsl(0, 1, 0.5));
+    ctx.fillStyle = gradient; //diagram.rgb(1,0,0);
+//    ctx.fillStyle = diagram.hsl(0, 1, 0.5);
+    ctx.fill();
+    ctx.strokeStyle = diagram.rgb(0,0,0);
+    ctx.stroke();
+
+    ctx.restore();
+
+    // draw eye
+    ctx.fillStyle = "brown";
+    diagram.drawEye(ctx, ex, ey, width / 8, height / 5);
+
+
+  //  // draw normals
+  //  ctx.fillStyle = "#000";
+  //  for (var ii = 0; ii <= 12; ++ii) {
+  //    var a = ii / 12 * Math.PI;
+  //    var x = Math.cos(a) * 50;
+  //    var y = Math.sin(a) * 50;
+  //    arrow(ctx, -x, -y, x, y, true, true, 0.5);
+  //  }
+
+    ctx.restore();
+  }
+  render();
+}
+</script>
+

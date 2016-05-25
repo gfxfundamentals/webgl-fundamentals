@@ -33,11 +33,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta property="og:title" content="WebGL - Orthographic 3D" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to do 3D in WebGL starting with an Orthographic projection." />
+<meta property="og:description" content="How to do 3D in WebGL starting with an orthographic projection." />
 <meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/webgl-3d-orthographic.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
@@ -46,7 +46,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:domain" content="webglfundamentals.org" />
 <meta name="twitter:title" content="WebGL - Orthographic 3D" />
 <meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/webgl-3d-orthographic.html" />
-<meta name="twitter:description" content="How to do 3D in WebGL starting with an Orthographic projection." />
+<meta name="twitter:description" content="How to do 3D in WebGL starting with an orthographic projection." />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
@@ -69,10 +69,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="col-sm-8 lesson-main">
       <p>This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
-the previous was about 2d matrices <a href="webgl-2d-matrices.html">about 2D matrices</a>.
+the previous was <a href="webgl-2d-matrices.html">about 2D matrices</a>.
 If you haven&#39;t read those please view them first.</p>
-<p>In the last post we went over how 2d matrices worked. We talked
-about translation, rotation, scaling, and even projecting from
+<p>In the last post we went over how 2D matrices worked. We talked
+about how translation, rotation, scaling, and even projecting from
 pixels into clip space can all be done by 1 matrix and some magic
 matrix math. To do 3D is only a small step from there.</p>
 <p>In our previous 2D examples we had 2D points (x, y) that we multiplied by
@@ -148,7 +148,7 @@ function setGeometry(gl) {
 </pre>
 
 <p>Next we need to change all the matrix functions from 2D to 3D</p>
-<p>Here&#39;s the 2D (before) versions of makeTranslation, makeRotation and makeScale</p>
+<p>Here are the 2D (before) versions of makeTranslation, makeRotation and makeScale</p>
 <pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty) {
   return [
@@ -177,7 +177,7 @@ function makeScale(sx, sy) {
 }
 </pre>
 
-<p>And here&#39;s the updated 3D versions.</p>
+<p>And here are the updated 3D versions.</p>
 <pre class="prettyprint showlinemods">
 function makeTranslation(tx, ty, tz) {
   return [
@@ -215,6 +215,7 @@ function makeYRotation(angleInRadians) {
 function makeZRotation(angleInRadians) {
   var c = Math.cos(angleInRadians);
   var s = Math.sin(angleInRadians);
+
   return [
      c, s, 0, 0,
     -s, c, 0, 0,
@@ -233,9 +234,9 @@ function makeScale(sx, sy, sz) {
 }
 </pre>
 
-<p>Notice we now have 3 rotations functions.  We only needed one in 2D as we
+<p>Notice we now have 3 rotation functions.  We only needed one in 2D as we
 were effectively only rotating around the Z axis.  Now though to do 3D we
-also want to be able to rotate around the x axis and y axis as well.  You
+also want to be able to rotate around the X axis and Y axis as well.  You
 can see from looking at them they are all very similar.  If we were to
 work them out you&#39;d see them simplify just like before</p>
 <p>Z rotation</p>
@@ -284,11 +285,11 @@ function make2DProjection(width, height, depth) {
 }
 </pre>
 
-<p>Just like we needed to convert from pixels to clipspace for x and y, for
-z we need to do the same thing.  In this case I&#39;m making the Z space pixel
-units as well.  I&#39;ll pass in some value similar to <em>width</em> for the depth
-so our space will be 0 to width pixels wide, 0 to height pixels tall, but
-for depth it will be -depth / 2 to +depth / 2.</p>
+<p>Just like we needed to convert from pixels to clip space for X and Y, for
+Z we need to do the same thing.  In this case I&#39;m making the Z axis pixel
+units as well.  I&#39;ll pass in some value similar to <code>width</code> for the <code>depth</code>
+so our space will be 0 to <code>width</code> pixels wide, 0 to <code>height</code> pixels tall, but
+for <code>depth</code> it will be <code>-depth / 2</code> to <code>+depth / 2</code>.</p>
 <p>Finally we need to to update the code that computes the matrix.</p>
 <pre class="prettyprint showlinemods">
   // Compute the matrices
@@ -324,7 +325,7 @@ hard to see any 3D.  To fix that let&#39;s expand the geometry to 3D.  Our
 current F is made of 3 rectangles, 2 triangles each.  To make it 3D will
 require a total of 16 rectangles.  That&#39;s quite a few to list out here.
 16 rectangles <em> 2 triangles per rectangle </em> 3 vertices per triangle is 96
-vertices.  If you want to see all of them view source on the sample.</p>
+vertices.  If you want to see all of them view the source of the sample.</p>
 <p>We have to draw more vertices so</p>
 <pre class="prettyprint showlinemods">
     // Draw the geometry.
@@ -425,8 +426,8 @@ function setColors(gl) {
 </div>
 
 </p>
-<p>Uh oh, what&#39;s that&#39;s mess?  Well, it turns out all the various parts of
-that 3D &#39;F&#39;, front, back, sides, etc get drawn in the order they appear in
+<p>Uh oh, what&#39;s that mess?  Well, it turns out all the various parts of
+that 3D &#39;F&#39;, front, back, sides, etc get drawn in the order they appear in in
 our geometry.  That doesn&#39;t give us quite the desired results as sometimes
 the ones in the back get drawn after the ones in the front.</p>
 <p>Triangles in WebGL have the concept of front facing and back facing.  A
@@ -442,9 +443,9 @@ triangles.  We can turn that feature on with</p>
 <p>which we do just once, right at the start of our program.  With that
 feature turned on, WebGL defaults to &quot;culling&quot; back facing triangles.
 &quot;Culling&quot; in this case is a fancy word for &quot;not drawing&quot;.</p>
-<p>Note that as far as WebGL is conserned, whether or not a triangle is
+<p>Note that as far as WebGL is concerned, whether or not a triangle is
 considered to be going clockwise or counter clockwise depends on the
-vertices of that triangle in clipspace.  In other words, WebGL figures out
+vertices of that triangle in clip space.  In other words, WebGL figures out
 whether a triangle is front or back AFTER you&#39;ve applied math to the
 vertices in the vertex shader.  That means for example a clockwise
 triangle that is scaled in X by -1 becomes a counter clockwise triangle or
@@ -454,7 +455,7 @@ clockwise(front) and counter clockwise(back) triangles.  Now that we&#39;ve
 turned it on, any time a front facing triangle flips around either because
 of scaling or rotation or for whatever reason, WebGL won&#39;t draw it.
 That&#39;s a good thing since as your turn something around in 3D you
-generally want which ever triangles are facing you to be considered front
+generally want whichever triangles are facing you to be considered front
 facing.</p>
 <p>With CULL_FACE turned on this is what we get</p>
 <p><div>
@@ -490,14 +491,14 @@ backward triangle is</p>
 </p>
 <p>That&#39;s closer but there&#39;s still one more problem.  Even with all the
 triangles facing in the correct direction and with the back facing ones
-being culled we still have places where triangles that should be in back
-are being drawn in over triangles that should be in front.</p>
+being culled we still have places where triangles that should be in the back
+are being drawn over triangles that should be in front.</p>
 <p>Enter the DEPTH BUFFER.</p>
-<p>A Depth buffer, sometimes called a Z-Buffer, is a rectangle of <em>depth</em>
+<p>A depth buffer, sometimes called a Z-Buffer, is a rectangle of <em>depth</em>
 pixels, one depth pixel for each color pixel used to make the image.  As
 WebGL draws each color pixel it can also draw a depth pixel.  It does this
 based on the values we return from the vertex shader for Z.  Just like we
-had to convert to clip space for X and Y, so to Z is in clip space or (-1
+had to convert to clip space for X and Y, Z is also in clip space or (-1
 to +1).  That value is then converted into a depth space value (0 to +1).
 Before WebGL draws a color pixel it will check the corresponding depth
 pixel.  If the depth value for the pixel it&#39;s about to draw is greater
@@ -612,18 +613,30 @@ we need for the matrix math to work.
     <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
   </ul>
+  <li>Lighting</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">WebGL 3D - Directional Lighting</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-point.html">WebGL 3D - Point Lighting</a></li>
+  </ul>
   <li>Structure and Organization</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">WebGL - Less Code, More Fun</a></li>
     <li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">WebGL - Drawing Multiple Things</a></li>
     <li><a href="/webgl/lessons/webgl-scene-graph.html">WebGL - Scene Graphs</a></li>
   </ul>
-  <li>Text</li>
+  <li>Techniques</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
-    <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
-    <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
-    <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    <li>2D</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a>
+    </ul>
+    <li>Text</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Text - HTML</a>
+      <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Text - Canvas 2D</a>
+      <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Text - Using a Texture</a>
+      <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+    </ul>
   </ul>
   <li>Misc</li>
   <ul>

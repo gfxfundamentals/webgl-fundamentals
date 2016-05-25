@@ -5,7 +5,15 @@
 <meta charset="utf-8">
 <title>WebGL - 2D image 3x3 convolution</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<canvas id="canvas" width="400" height="300"></canvas>
+<div id="uiContainer">
+  <div id="ui"></div>
+</div>
+</body>
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
 <script>
 "use strict";
 
@@ -22,7 +30,8 @@ function main() {
 function render(image) {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  var gl = getWebGLContext(canvas);
+  setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
@@ -292,13 +301,6 @@ void main() {
    gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1);
 }
 </script>
-</head>
-<body>
-<canvas id="canvas" width="400" height="300"></canvas>
-<div id="uiContainer">
-  <div id="ui"></div>
-</div>
-</body>
 </html>
 
 
