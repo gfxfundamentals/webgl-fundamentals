@@ -126,7 +126,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="createAttribsFromArrays"><span class="type-signature"> </span>createAttribsFromArrays<span class="signature">(gl, arrays, <span class="optional">opt_mapping</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, <a href="module-webgl-utils.html#AttribInfo">module:webgl-utils.AttribInfo</a>>}</span></h4>
+    <h4 class="name" id=".createAttribsFromArrays"><span class="type-signature"> </span>createAttribsFromArrays<span class="signature">(gl, arrays, <span class="optional">opt_mapping</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, <a href="module-webgl-utils.html#.AttribInfo">module:webgl-utils.AttribInfo</a>>}</span></h4>
     
     
 </dt>
@@ -136,15 +136,14 @@
     <div class="description">
         <p>Creates a set of attribute data and WebGLBuffers from set of arrays</p>
 <p>Given</p>
-<pre><code> var arrays = {
+<pre class="prettyprint source"><code> var arrays = {
    position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
    normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
    color:    { numComponents: 4, data: [255, 255, 255, 255, 255, 0, 0, 255, 0, 0, 255, 255], type: Uint8Array, },
    indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
- };</code></pre>
-<p>returns something like</p>
-<pre><code> var attribs = {
+ };</code></pre><p>returns something like</p>
+<pre class="prettyprint source"><code> var attribs = {
    a_position: { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
    a_texcoord: { numComponents: 2, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
    a_normal:   { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
@@ -270,8 +269,7 @@
 
             
 
-            <td class="description last"><p>mapping from attribute name to array name.
-    if not specified defaults to &quot;a_name&quot; -&gt; &quot;name&quot;.</p></td>
+            <td class="description last"><p>mapping from attribute name to array name.<br>    if not specified defaults to &quot;a_name&quot; -&gt; &quot;name&quot;.</p></td>
         </tr>
 
 	
@@ -336,7 +334,7 @@
 	</dt>
 	<dd>
 		
-<span class="param-type">Object.&lt;string, <a href="module-webgl-utils.html#AttribInfo">module:webgl-utils.AttribInfo</a>></span>
+<span class="param-type">Object.&lt;string, <a href="module-webgl-utils.html#.AttribInfo">module:webgl-utils.AttribInfo</a>></span>
 
 	</dd>
 </dl>
@@ -350,7 +348,7 @@
         
             
 <dt>
-    <h4 class="name" id="createAttributeSetters"><span class="type-signature"> </span>createAttributeSetters<span class="signature">(program)</span><span class="type-signature"> &rarr; {Object.&lt;string, function()>}</span></h4>
+    <h4 class="name" id=".createAttributeSetters"><span class="type-signature"> </span>createAttributeSetters<span class="signature">(program)</span><span class="type-signature"> &rarr; {Object.&lt;string, function()>}</span></h4>
     
     
 </dt>
@@ -358,8 +356,7 @@
     
     
     <div class="description">
-        <p>Creates setter functions for all attributes of a shader
-program. You can pass this to <a href="module-webgl-utils.html#setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> to set all your buffers and attributes.</p>
+        <p>Creates setter functions for all attributes of a shader<br>program. You can pass this to <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> to set all your buffers and attributes.</p>
     </div>
     
 
@@ -447,7 +444,7 @@ program. You can pass this to <a href="module-webgl-utils.html#setBuffersAndAttr
 	<dt class="tag-see">See:</dt>
 	<dd class="tag-see">
 		<ul>
-			<li><a href="module-webgl-utils.html#setAttributes"><code>module:webgl-utils.setAttributes</code></a> for example</li>
+			<li><a href="module-webgl-utils.html#.setAttributes"><code>module:webgl-utils.setAttributes</code></a> for example</li>
 			</ul>
 	</dd>
 	
@@ -494,7 +491,7 @@ program. You can pass this to <a href="module-webgl-utils.html#setBuffersAndAttr
         
             
 <dt>
-    <h4 class="name" id="createAugmentedTypedArray"><span class="type-signature"> </span>createAugmentedTypedArray<span class="signature">(numComponents, numElements, opt_type)</span><span class="type-signature"> &rarr; {ArrayBuffer}</span></h4>
+    <h4 class="name" id=".createAugmentedTypedArray"><span class="type-signature"> </span>createAugmentedTypedArray<span class="signature">(numComponents, numElements, opt_type)</span><span class="type-signature"> &rarr; {ArrayBuffer}</span></h4>
     
     
 </dt>
@@ -502,16 +499,13 @@ program. You can pass this to <a href="module-webgl-utils.html#setBuffersAndAttr
     
     
     <div class="description">
-        <p>creates a typed array with a <code>push</code> function attached
-so that you can easily <em>push</em> values.</p>
-<p><code>push</code> can take multiple arguments. If an argument is an array each element
-of the array will be added to the typed array.</p>
+        <p>creates a typed array with a <code>push</code> function attached<br>so that you can easily <em>push</em> values.</p>
+<p><code>push</code> can take multiple arguments. If an argument is an array each element<br>of the array will be added to the typed array.</p>
 <p>Example:</p>
-<pre><code>var array = createAugmentedTypedArray(3, 2);  // creates a Float32Array with 6 values
+<pre class="prettyprint source"><code>var array = createAugmentedTypedArray(3, 2);  // creates a Float32Array with 6 values
 array.push(1, 2, 3);
 array.push([4, 5, 6]);
-// array now contains [1, 2, 3, 4, 5, 6]</code></pre>
-<p>Also has <code>numComponents</code> and <code>numElements</code> properties.</p>
+// array now contains [1, 2, 3, 4, 5, 6]</code></pre><p>Also has <code>numComponents</code> and <code>numElements</code> properties.</p>
     </div>
     
 
@@ -683,7 +677,7 @@ array.push([4, 5, 6]);
         
             
 <dt>
-    <h4 class="name" id="createBufferInfoFromArrays"><span class="type-signature"> </span>createBufferInfoFromArrays<span class="signature">(gl, arrays, <span class="optional">opt_mapping</span>)</span><span class="type-signature"> &rarr; {<a href="module-webgl-utils.html#BufferInfo">module:webgl-utils.BufferInfo</a>}</span></h4>
+    <h4 class="name" id=".createBufferInfoFromArrays"><span class="type-signature"> </span>createBufferInfoFromArrays<span class="signature">(gl, arrays, <span class="optional">opt_mapping</span>)</span><span class="type-signature"> &rarr; {<a href="module-webgl-utils.html#.BufferInfo">module:webgl-utils.BufferInfo</a>}</span></h4>
     
     
 </dt>
@@ -692,17 +686,15 @@ array.push([4, 5, 6]);
     
     <div class="description">
         <p>Creates a BufferInfo from an object of arrays.</p>
-<p>This can be passed to <a href="module-webgl-utils.html#setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> and to
-<code>module:webgl-utils:drawBufferInfo</code>.</p>
+<p>This can be passed to <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> and to<br><code>module:webgl-utils:drawBufferInfo</code>.</p>
 <p>Given an object like</p>
-<pre><code>var arrays = {
+<pre class="prettyprint source"><code>var arrays = {
   position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
   texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
   normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
   indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
-};</code></pre>
-<p> Creates an BufferInfo like this</p>
-<pre><code>bufferInfo = {
+};</code></pre><p> Creates an BufferInfo like this</p>
+<pre class="prettyprint source"><code>bufferInfo = {
   numElements: 4,        // or whatever the number of elements is
   indices: WebGLBuffer,  // this property will not exist if there are no indices
   attribs: {
@@ -710,24 +702,20 @@ array.push([4, 5, 6]);
     a_normal:   { buffer: WebGLBuffer, numComponents: 3, },
     a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
   },
-};</code></pre>
-<p> The properties of arrays can be JavaScript arrays in which case the number of components
- will be guessed.</p>
-<pre><code>var arrays = {
+};</code></pre><p> The properties of arrays can be JavaScript arrays in which case the number of components<br> will be guessed.</p>
+<pre class="prettyprint source"><code>var arrays = {
    position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
    texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
    normal:   [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
    indices:  [0, 1, 2, 1, 2, 3],
-};</code></pre>
-<p> They can also by TypedArrays</p>
-<pre><code>var arrays = {
+};</code></pre><p> They can also by TypedArrays</p>
+<pre class="prettyprint source"><code>var arrays = {
    position: new Float32Array([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]),
    texcoord: new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]),
    normal:   new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]),
    indices:  new Uint16Array([0, 1, 2, 1, 2, 3]),
-};</code></pre>
-<p> Or augmentedTypedArrays</p>
-<pre><code>var positions = createAugmentedTypedArray(3, 4);
+};</code></pre><p> Or augmentedTypedArrays</p>
+<pre class="prettyprint source"><code>var positions = createAugmentedTypedArray(3, 4);
 var texcoords = createAugmentedTypedArray(2, 4);
 var normals   = createAugmentedTypedArray(3, 4);
 var indices   = createAugmentedTypedArray(3, 2, Uint16Array);
@@ -742,9 +730,8 @@ var arrays = {
    texcoord: texcoords,
    normal:   normals,
    indices:  indices,
-};</code></pre>
-<p>For the last example it is equivalent to</p>
-<pre><code>var bufferInfo = {
+};</code></pre><p>For the last example it is equivalent to</p>
+<pre class="prettyprint source"><code>var bufferInfo = {
   attribs: {
     a_position: { numComponents: 3, buffer: gl.createBuffer(), },
     a_texcoods: { numComponents: 2, buffer: gl.createBuffer(), },
@@ -882,19 +869,16 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 
             
 
-            <td class="description last"><p>an optional mapping of attribute to array name.
-   If not passed in it's assumed the array names will be mapped to an attibute
-   of the same name with &quot;a_&quot; prefixed to it. An other words.</p>
-<pre><code>   var arrays = {
+            <td class="description last"><p>an optional mapping of attribute to array name.<br>   If not passed in it's assumed the array names will be mapped to an attibute<br>   of the same name with &quot;a_&quot; prefixed to it. An other words.</p>
+<pre class="prettyprint source"><code>   var arrays = {
       position: ...,
       texcoord: ...,
       normal:   ...,
       indices:  ...,
    };
 
-   bufferInfo = createBufferInfoFromArrays(gl, arrays);</code></pre>
-<p>   Is the same as</p>
-<pre><code>   var arrays = {
+   bufferInfo = createBufferInfoFromArrays(gl, arrays);</code></pre><p>   Is the same as</p>
+<pre class="prettyprint source"><code>   var arrays = {
       position: ...,
       texcoord: ...,
       normal:   ...,
@@ -972,7 +956,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="module-webgl-utils.html#BufferInfo">module:webgl-utils.BufferInfo</a></span>
+<span class="param-type"><a href="module-webgl-utils.html#.BufferInfo">module:webgl-utils.BufferInfo</a></span>
 
 	</dd>
 </dl>
@@ -986,7 +970,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
         
             
 <dt>
-    <h4 class="name" id="createBuffersFromArrays"><span class="type-signature"> </span>createBuffersFromArrays<span class="signature">({WebGLRenderingContext), arrays)</span><span class="type-signature"> &rarr; {Object.&lt;string, WebGLBuffer>}</span></h4>
+    <h4 class="name" id=".createBuffersFromArrays"><span class="type-signature"> </span>createBuffersFromArrays<span class="signature">({WebGLRenderingContext), arrays)</span><span class="type-signature"> &rarr; {Object.&lt;string, WebGLBuffer>}</span></h4>
     
     
 </dt>
@@ -996,16 +980,14 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
     <div class="description">
         <p>Creates buffers from typed arrays</p>
 <p>Given something like this</p>
-<pre><code>var arrays = {
+<pre class="prettyprint source"><code>var arrays = {
    positions: [1, 2, 3],
    normals: [0, 0, 1],
-}</code></pre>
-<p>returns something like</p>
-<pre><code>buffers = {
+}</code></pre><p>returns something like</p>
+<pre class="prettyprint source"><code>buffers = {
   positions: WebGLBuffer,
   normals: WebGLBuffer,
-}</code></pre>
-<p>If the buffer is named 'indices' it will be made an ELEMENT_ARRAY_BUFFER.</p>
+}</code></pre><p>If the buffer is named 'indices' it will be made an ELEMENT_ARRAY_BUFFER.</p>
     </div>
     
 
@@ -1151,7 +1133,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
         
             
 <dt>
-    <h4 class="name" id="createProgram"><span class="type-signature"> </span>createProgram<span class="signature">(shaders, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".createProgram"><span class="type-signature"> </span>createProgram<span class="signature">(shaders, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1159,8 +1141,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
     
     
     <div class="description">
-        <p>Creates a program, attaches shaders, binds attrib locations, links the
-program and calls useProgram.</p>
+        <p>Creates a program, attaches shaders, binds attrib locations, links the<br>program and calls useProgram.</p>
     </div>
     
 
@@ -1202,7 +1183,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">WebGLShader[]</span>
+<span class="param-type">Array.&lt;WebGLShader></span>
 
             
             </td>
@@ -1232,7 +1213,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">string[]</span>
+<span class="param-type">Array.&lt;string></span>
 
             
             </td>
@@ -1264,7 +1245,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">number[]</span>
+<span class="param-type">Array.&lt;number></span>
 
             
             </td>
@@ -1296,7 +1277,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type"><a href="module-webgl-utils.html#ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
+<span class="param-type"><a href="module-webgl-utils.html#.ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
 
             
             </td>
@@ -1313,8 +1294,7 @@ program and calls useProgram.</p>
 
             
 
-            <td class="description last"><p>callback for errors. By default it just prints an error to the console
-       on error. If you want something else pass an callback. It's passed an error message.</p></td>
+            <td class="description last"><p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p></td>
         </tr>
 
 	
@@ -1371,7 +1351,7 @@ program and calls useProgram.</p>
         
             
 <dt>
-    <h4 class="name" id="createProgramFromScripts"><span class="type-signature"> </span>createProgramFromScripts<span class="signature">(gl, shaderScriptIds, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"> &rarr; {WebGLProgram}</span></h4>
+    <h4 class="name" id=".createProgramFromScripts"><span class="type-signature"> </span>createProgramFromScripts<span class="signature">(gl, shaderScriptIds, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"> &rarr; {WebGLProgram}</span></h4>
     
     
 </dt>
@@ -1438,8 +1418,7 @@ program and calls useProgram.</p>
 
             
 
-            <td class="description last"><p>The WebGLRenderingContext
-       to use.</p></td>
+            <td class="description last"><p>The WebGLRenderingContext<br>       to use.</p></td>
         </tr>
 
 	
@@ -1452,7 +1431,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">string[]</span>
+<span class="param-type">Array.&lt;string></span>
 
             
             </td>
@@ -1469,9 +1448,7 @@ program and calls useProgram.</p>
 
             
 
-            <td class="description last"><p>Array of ids of the script
-       tags for the shaders. The first is assumed to be the
-       vertex shader, the second the fragment shader.</p></td>
+            <td class="description last"><p>Array of ids of the script<br>       tags for the shaders. The first is assumed to be the<br>       vertex shader, the second the fragment shader.</p></td>
         </tr>
 
 	
@@ -1484,7 +1461,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">string[]</span>
+<span class="param-type">Array.&lt;string></span>
 
             
             </td>
@@ -1516,7 +1493,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">number[]</span>
+<span class="param-type">Array.&lt;number></span>
 
             
             </td>
@@ -1548,7 +1525,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type"><a href="module-webgl-utils.html#ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
+<span class="param-type"><a href="module-webgl-utils.html#.ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
 
             
             </td>
@@ -1565,8 +1542,7 @@ program and calls useProgram.</p>
 
             
 
-            <td class="description last"><p>callback for errors. By default it just prints an error to the console
-       on error. If you want something else pass an callback. It's passed an error message.</p></td>
+            <td class="description last"><p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p></td>
         </tr>
 
 	
@@ -1645,7 +1621,7 @@ program and calls useProgram.</p>
         
             
 <dt>
-    <h4 class="name" id="createProgramFromSources"><span class="type-signature"> </span>createProgramFromSources<span class="signature">(gl, shaderSourcess, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"> &rarr; {WebGLProgram}</span></h4>
+    <h4 class="name" id=".createProgramFromSources"><span class="type-signature"> </span>createProgramFromSources<span class="signature">(gl, shaderSourcess, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"> &rarr; {WebGLProgram}</span></h4>
     
     
 </dt>
@@ -1712,8 +1688,7 @@ program and calls useProgram.</p>
 
             
 
-            <td class="description last"><p>The WebGLRenderingContext
-       to use.</p></td>
+            <td class="description last"><p>The WebGLRenderingContext<br>       to use.</p></td>
         </tr>
 
 	
@@ -1726,7 +1701,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">string[]</span>
+<span class="param-type">Array.&lt;string></span>
 
             
             </td>
@@ -1743,9 +1718,7 @@ program and calls useProgram.</p>
 
             
 
-            <td class="description last"><p>Array of sources for the
-       shaders. The first is assumed to be the vertex shader,
-       the second the fragment shader.</p></td>
+            <td class="description last"><p>Array of sources for the<br>       shaders. The first is assumed to be the vertex shader,<br>       the second the fragment shader.</p></td>
         </tr>
 
 	
@@ -1758,7 +1731,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">string[]</span>
+<span class="param-type">Array.&lt;string></span>
 
             
             </td>
@@ -1790,7 +1763,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">number[]</span>
+<span class="param-type">Array.&lt;number></span>
 
             
             </td>
@@ -1822,7 +1795,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type"><a href="module-webgl-utils.html#ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
+<span class="param-type"><a href="module-webgl-utils.html#.ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
 
             
             </td>
@@ -1839,8 +1812,7 @@ program and calls useProgram.</p>
 
             
 
-            <td class="description last"><p>callback for errors. By default it just prints an error to the console
-       on error. If you want something else pass an callback. It's passed an error message.</p></td>
+            <td class="description last"><p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p></td>
         </tr>
 
 	
@@ -1919,7 +1891,7 @@ program and calls useProgram.</p>
         
             
 <dt>
-    <h4 class="name" id="createProgramInfo"><span class="type-signature"> </span>createProgramInfo<span class="signature">(gl, shaderSourcess, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"> &rarr; {<a href="module-webgl-utils.html#ProgramInfo">module:webgl-utils.ProgramInfo</a>}</span></h4>
+    <h4 class="name" id=".createProgramInfo"><span class="type-signature"> </span>createProgramInfo<span class="signature">(gl, shaderSourcess, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"> &rarr; {<a href="module-webgl-utils.html#.ProgramInfo">module:webgl-utils.ProgramInfo</a>}</span></h4>
     
     
 </dt>
@@ -1929,7 +1901,7 @@ program and calls useProgram.</p>
     <div class="description">
         <p>Creates a ProgramInfo from 2 sources.</p>
 <p>A ProgramInfo contains</p>
-<pre><code>programInfo = {
+<pre class="prettyprint source"><code>programInfo = {
    program: WebGLProgram,
    uniformSetters: object of setters as returned from createUniformSetters,
    attribSetters: object of setters as returned from createAttribSetters,
@@ -1992,8 +1964,7 @@ program and calls useProgram.</p>
 
             
 
-            <td class="description last"><p>The WebGLRenderingContext
-       to use.</p></td>
+            <td class="description last"><p>The WebGLRenderingContext<br>       to use.</p></td>
         </tr>
 
 	
@@ -2006,7 +1977,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">string[]</span>
+<span class="param-type">Array.&lt;string></span>
 
             
             </td>
@@ -2023,9 +1994,7 @@ program and calls useProgram.</p>
 
             
 
-            <td class="description last"><p>Array of sources for the
-       shaders or ids. The first is assumed to be the vertex shader,
-       the second the fragment shader.</p></td>
+            <td class="description last"><p>Array of sources for the<br>       shaders or ids. The first is assumed to be the vertex shader,<br>       the second the fragment shader.</p></td>
         </tr>
 
 	
@@ -2038,7 +2007,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">string[]</span>
+<span class="param-type">Array.&lt;string></span>
 
             
             </td>
@@ -2070,7 +2039,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type">number[]</span>
+<span class="param-type">Array.&lt;number></span>
 
             
             </td>
@@ -2102,7 +2071,7 @@ program and calls useProgram.</p>
             <td class="type">
             
                 
-<span class="param-type"><a href="module-webgl-utils.html#ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
+<span class="param-type"><a href="module-webgl-utils.html#.ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
 
             
             </td>
@@ -2119,8 +2088,7 @@ program and calls useProgram.</p>
 
             
 
-            <td class="description last"><p>callback for errors. By default it just prints an error to the console
-       on error. If you want something else pass an callback. It's passed an error message.</p></td>
+            <td class="description last"><p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p></td>
         </tr>
 
 	
@@ -2185,7 +2153,7 @@ program and calls useProgram.</p>
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="module-webgl-utils.html#ProgramInfo">module:webgl-utils.ProgramInfo</a></span>
+<span class="param-type"><a href="module-webgl-utils.html#.ProgramInfo">module:webgl-utils.ProgramInfo</a></span>
 
 	</dd>
 </dl>
@@ -2199,7 +2167,7 @@ program and calls useProgram.</p>
         
             
 <dt>
-    <h4 class="name" id="createUniformSetters"><span class="type-signature"> </span>createUniformSetters<span class="signature">(program)</span><span class="type-signature"> &rarr; {Object.&lt;string, function()>}</span></h4>
+    <h4 class="name" id=".createUniformSetters"><span class="type-signature"> </span>createUniformSetters<span class="signature">(program)</span><span class="type-signature"> &rarr; {Object.&lt;string, function()>}</span></h4>
     
     
 </dt>
@@ -2207,8 +2175,7 @@ program and calls useProgram.</p>
     
     
     <div class="description">
-        <p>Creates setter functions for all uniforms of a shader
-program.</p>
+        <p>Creates setter functions for all uniforms of a shader<br>program.</p>
     </div>
     
 
@@ -2296,7 +2263,7 @@ program.</p>
 	<dt class="tag-see">See:</dt>
 	<dd class="tag-see">
 		<ul>
-			<li><a href="module-webgl-utils.html#setUniforms"><code>module:webgl-utils.setUniforms</code></a></li>
+			<li><a href="module-webgl-utils.html#.setUniforms"><code>module:webgl-utils.setUniforms</code></a></li>
 			</ul>
 	</dd>
 	
@@ -2343,7 +2310,7 @@ program.</p>
         
             
 <dt>
-    <h4 class="name" id="drawBufferInfo"><span class="type-signature"> </span>drawBufferInfo<span class="signature">(gl, type, bufferInfo, <span class="optional">count</span>, <span class="optional">offset</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".drawBufferInfo"><span class="type-signature"> </span>drawBufferInfo<span class="signature">(gl, type, bufferInfo, <span class="optional">count</span>, <span class="optional">offset</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2352,9 +2319,7 @@ program.</p>
     
     <div class="description">
         <p>Calls <code>gl.drawElements</code> or <code>gl.drawArrays</code>, whichever is appropriate</p>
-<p>normally you'd call <code>gl.drawElements</code> or <code>gl.drawArrays</code> yourself
-but calling this means if you switch from indexed data to non-indexed
-data you don't have to remember to update your draw call.</p>
+<p>normally you'd call <code>gl.drawElements</code> or <code>gl.drawArrays</code> yourself<br>but calling this means if you switch from indexed data to non-indexed<br>data you don't have to remember to update your draw call.</p>
     </div>
     
 
@@ -2456,7 +2421,7 @@ data you don't have to remember to update your draw call.</p>
             <td class="type">
             
                 
-<span class="param-type"><a href="module-webgl-utils.html#BufferInfo">module:webgl-utils.BufferInfo</a></span>
+<span class="param-type"><a href="module-webgl-utils.html#.BufferInfo">module:webgl-utils.BufferInfo</a></span>
 
             
             </td>
@@ -2594,7 +2559,7 @@ data you don't have to remember to update your draw call.</p>
         
             
 <dt>
-    <h4 class="name" id="drawObjectList"><span class="type-signature"> </span>drawObjectList<span class="signature">(gl, objectsToDraw)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".drawObjectList"><span class="type-signature"> </span>drawObjectList<span class="signature">(gl, objectsToDraw)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2664,7 +2629,7 @@ data you don't have to remember to update your draw call.</p>
             <td class="type">
             
                 
-<span class="param-type">DrawObject[]</span>
+<span class="param-type">Array.&lt;DrawObject></span>
 
             
             </td>
@@ -2730,7 +2695,7 @@ data you don't have to remember to update your draw call.</p>
         
             
 <dt>
-    <h4 class="name" id="getExtensionWithKnownPrefixes"><span class="type-signature"> </span>getExtensionWithKnownPrefixes<span class="signature">(name)</span><span class="type-signature"> &rarr; {WebGLExtension}</span></h4>
+    <h4 class="name" id=".getExtensionWithKnownPrefixes"><span class="type-signature"> </span>getExtensionWithKnownPrefixes<span class="signature">(name)</span><span class="type-signature"> &rarr; {WebGLExtension}</span></h4>
     
     
 </dt>
@@ -2738,9 +2703,7 @@ data you don't have to remember to update your draw call.</p>
     
     
     <div class="description">
-        <p>Given an extension name like WEBGL_compressed_texture_s3tc
-returns the supported version extension, like
-WEBKIT_WEBGL_compressed_teture_s3tc</p>
+        <p>Given an extension name like WEBGL_compressed_texture_s3tc<br>returns the supported version extension, like<br>WEBKIT_WEBGL_compressed_teture_s3tc</p>
     </div>
     
 
@@ -2843,8 +2806,7 @@ WEBKIT_WEBGL_compressed_teture_s3tc</p>
     
             
 <div class="param-desc">
-    <p>The extension or undefined if not
-    found.</p>
+    <p>The extension or undefined if not<br>    found.</p>
 </div>
 
 
@@ -2869,7 +2831,7 @@ WEBKIT_WEBGL_compressed_teture_s3tc</p>
         
             
 <dt>
-    <h4 class="name" id="resizeCanvasToDisplaySize"><span class="type-signature"> </span>resizeCanvasToDisplaySize<span class="signature">(canvas, true)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".resizeCanvasToDisplaySize"><span class="type-signature"> </span>resizeCanvasToDisplaySize<span class="signature">(canvas, true)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -3005,7 +2967,7 @@ WEBKIT_WEBGL_compressed_teture_s3tc</p>
         
             
 <dt>
-    <h4 class="name" id="setAttributes"><span class="type-signature"> </span>setAttributes<span class="signature">(setters, buffers)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".setAttributes"><span class="type-signature"> </span>setAttributes<span class="signature">(setters, buffers)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -3013,9 +2975,9 @@ WEBKIT_WEBGL_compressed_teture_s3tc</p>
     
     
     <div class="description">
-        <p>Sets attributes and binds buffers (deprecated... use <a href="module-webgl-utils.html#setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a>)</p>
+        <p>Sets attributes and binds buffers (deprecated... use <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a>)</p>
 <p>Example:</p>
-<pre><code>var program = createProgramFromScripts(
+<pre class="prettyprint source"><code>var program = createProgramFromScripts(
     gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
 
 var attribSetters = createAttributeSetters(program);
@@ -3028,22 +2990,16 @@ var attribs = {
   a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
 };
 
-gl.useProgram(program);</code></pre>
-<p>This will automatically bind the buffers AND set the
-attributes.</p>
-<pre><code>setAttributes(attribSetters, attribs);</code></pre>
-<p>Properties of attribs. For each attrib you can add
-properties:</p>
+gl.useProgram(program);</code></pre><p>This will automatically bind the buffers AND set the<br>attributes.</p>
+<pre class="prettyprint source"><code>setAttributes(attribSetters, attribs);</code></pre><p>Properties of attribs. For each attrib you can add<br>properties:</p>
 <ul>
 <li>type: the type of data in the buffer. Default = gl.FLOAT</li>
 <li>normalize: whether or not to normalize the data. Default = false</li>
 <li>stride: the stride. Default = 0</li>
 <li>offset: offset into the buffer. Default = 0</li>
 </ul>
-<p>For example if you had 3 value float positions, 2 value
-float texcoord and 4 value uint8 colors you'd setup your
-attribs like this</p>
-<pre><code>var attribs = {
+<p>For example if you had 3 value float positions, 2 value<br>float texcoord and 4 value uint8 colors you'd setup your<br>attribs like this</p>
+<pre class="prettyprint source"><code>var attribs = {
   a_position: {buffer: positionBuffer, numComponents: 3},
   a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
   a_color: {
@@ -3114,7 +3070,7 @@ attribs like this</p>
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;string, <a href="module-webgl-utils.html#AttribInfo">module:webgl-utils.AttribInfo</a>></span>
+<span class="param-type">Object.&lt;string, <a href="module-webgl-utils.html#.AttribInfo">module:webgl-utils.AttribInfo</a>></span>
 
             
             </td>
@@ -3147,7 +3103,7 @@ attribs like this</p>
 	
 	<dd>
 		<ul class="dummy">
-			<li>use <a href="module-webgl-utils.html#setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a></li>
+			<li>use <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a></li>
 		</ul>
 	</dd>
 	
@@ -3189,7 +3145,7 @@ attribs like this</p>
         
             
 <dt>
-    <h4 class="name" id="setBuffersAndAttributes"><span class="type-signature"> </span>setBuffersAndAttributes<span class="signature">(gl, setters, buffers)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".setBuffersAndAttributes"><span class="type-signature"> </span>setBuffersAndAttributes<span class="signature">(gl, setters, buffers)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -3199,7 +3155,7 @@ attribs like this</p>
     <div class="description">
         <p>Sets attributes and buffers including the <code>ELEMENT_ARRAY_BUFFER</code> if appropriate</p>
 <p>Example:</p>
-<pre><code>var programInfo = createProgramInfo(
+<pre class="prettyprint source"><code>var programInfo = createProgramInfo(
     gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
 
 var arrays = {
@@ -3209,12 +3165,9 @@ var arrays = {
 
 var bufferInfo = createBufferInfoFromArrays(gl, arrays);
 
-gl.useProgram(programInfo.program);</code></pre>
-<p>This will automatically bind the buffers AND set the
-attributes.</p>
-<pre><code>setBuffersAndAttributes(programInfo.attribSetters, bufferInfo);</code></pre>
-<p>For the example above it is equivilent to</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.useProgram(programInfo.program);</code></pre><p>This will automatically bind the buffers AND set the<br>attributes.</p>
+<pre class="prettyprint source"><code>setBuffersAndAttributes(programInfo.attribSetters, bufferInfo);</code></pre><p>For the example above it is equivilent to</p>
+<pre class="prettyprint source"><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 gl.enableVertexAttribArray(a_positionLocation);
 gl.vertexAttribPointer(a_positionLocation, 3, gl.FLOAT, false, 0, 0);
 gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
@@ -3303,7 +3256,7 @@ gl.vertexAttribPointer(a_texcoordLocation, 4, gl.FLOAT, false, 0, 0);</code></pr
             <td class="type">
             
                 
-<span class="param-type"><a href="module-webgl-utils.html#BufferInfo">module:webgl-utils.BufferInfo</a></span>
+<span class="param-type"><a href="module-webgl-utils.html#.BufferInfo">module:webgl-utils.BufferInfo</a></span>
 
             
             </td>
@@ -3369,7 +3322,7 @@ gl.vertexAttribPointer(a_texcoordLocation, 4, gl.FLOAT, false, 0, 0);</code></pr
         
             
 <dt>
-    <h4 class="name" id="setUniforms"><span class="type-signature"> </span>setUniforms<span class="signature">(setters, an)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".setUniforms"><span class="type-signature"> </span>setUniforms<span class="signature">(setters, an)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -3379,7 +3332,7 @@ gl.vertexAttribPointer(a_texcoordLocation, 4, gl.FLOAT, false, 0, 0);</code></pr
     <div class="description">
         <p>Set uniforms and binds related textures.</p>
 <p>example:</p>
-<pre><code>var programInfo = createProgramInfo(
+<pre class="prettyprint source"><code>var programInfo = createProgramInfo(
     gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
 
 var tex1 = gl.createTexture();
@@ -3400,12 +3353,9 @@ var uniforms = {
   ],
 };
 
-gl.useProgram(program);</code></pre>
-<p>This will automatically bind the textures AND set the
-uniforms.</p>
-<pre><code>setUniforms(programInfo.uniformSetters, uniforms);</code></pre>
-<p>For the example above it is equivalent to</p>
-<pre><code>var texUnit = 0;
+gl.useProgram(program);</code></pre><p>This will automatically bind the textures AND set the<br>uniforms.</p>
+<pre class="prettyprint source"><code>setUniforms(programInfo.uniformSetters, uniforms);</code></pre><p>For the example above it is equivalent to</p>
+<pre class="prettyprint source"><code>var texUnit = 0;
 gl.activeTexture(gl.TEXTURE0 + texUnit);
 gl.bindTexture(gl.TEXTURE_2D, tex1);
 gl.uniform1i(u_someSamplerLocation, texUnit++);
@@ -3419,9 +3369,8 @@ gl.uniformMatrix4fv(u_someMatrix, false, [
     0,1,0,0,
     0,0,1,0,
     0,0,0,0,
-  ]);</code></pre>
-<p>Note it is perfectly reasonable to call <code>setUniforms</code> multiple times. For example</p>
-<pre><code>var uniforms = {
+  ]);</code></pre><p>Note it is perfectly reasonable to call <code>setUniforms</code> multiple times. For example</p>
+<pre class="prettyprint source"><code>var uniforms = {
   u_someSampler: tex1,
   u_someOtherSampler: tex2,
 };
@@ -3487,8 +3436,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
 
             
 
-            <td class="description last"><p>the setters returned from
-       <code>createUniformSetters</code>.</p></td>
+            <td class="description last"><p>the setters returned from<br>       <code>createUniformSetters</code>.</p></td>
         </tr>
 
 	
@@ -3510,8 +3458,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
 
             
 
-            <td class="description last"><p>object with values for the
-       uniforms.</p></td>
+            <td class="description last"><p>object with values for the<br>       uniforms.</p></td>
         </tr>
 
 	
@@ -3573,7 +3520,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
 
         <dl>
                 
-<dt class="name" id="AttribInfo">
+<dt class="name" id=".AttribInfo">
     <h4>AttribInfo</h4>
 
     
@@ -3868,7 +3815,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
 
             
                 
-<dt class="name" id="BufferInfo">
+<dt class="name" id=".BufferInfo">
     <h4>BufferInfo</h4>
 
     
@@ -3983,7 +3930,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;string, <a href="module-webgl-utils.html#AttribInfo">module:webgl-utils.AttribInfo</a>></span>
+<span class="param-type">Object.&lt;string, <a href="module-webgl-utils.html#.AttribInfo">module:webgl-utils.AttribInfo</a>></span>
 
             
             </td>
@@ -4041,7 +3988,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
 
             
                 
-<dt class="name" id="DrawObject">
+<dt class="name" id=".DrawObject">
     <h4>DrawObject</h4>
 
     
@@ -4096,7 +4043,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
             <td class="type">
             
                 
-<span class="param-type"><a href="module-webgl-utils.html#ProgramInfo">module:webgl-utils.ProgramInfo</a></span>
+<span class="param-type"><a href="module-webgl-utils.html#.ProgramInfo">module:webgl-utils.ProgramInfo</a></span>
 
             
             </td>
@@ -4118,7 +4065,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
             <td class="type">
             
                 
-<span class="param-type"><a href="module-webgl-utils.html#BufferInfo">module:webgl-utils.BufferInfo</a></span>
+<span class="param-type"><a href="module-webgl-utils.html#.BufferInfo">module:webgl-utils.BufferInfo</a></span>
 
             
             </td>
@@ -4193,7 +4140,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
             
                 
 <dt>
-    <h4 class="name" id="ErrorCallback"><span class="type-signature"></span>ErrorCallback<span class="signature">(msg)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".ErrorCallback"><span class="type-signature"></span>ErrorCallback<span class="signature">(msg)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -4306,7 +4253,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
 
             
                 
-<dt class="name" id="ProgramInfo">
+<dt class="name" id=".ProgramInfo">
     <h4>ProgramInfo</h4>
 
     
@@ -4422,6 +4369,62 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
 </table>
 </dl>
 
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            
+                
+<dt class="name" id="~Setters">
+    <h4>Setters</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object.&lt;string, function()></span>
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
 	
 
 	
