@@ -1,16 +1,19 @@
 window.langDB = {
   "articles": {
     "webgl-3d-lighting-point.html": {
-      "en": true
+      "en": true,
+      "fr": true
     },
     "webgl-3d-lighting-directional.html": {
-      "en": true
+      "en": true,
+      "fr": true
     },
     "webgl-2d-drawimage.html": {
       "en": true
     },
     "webgl-shaders-and-glsl.html": {
-      "en": true
+      "en": true,
+      "fr": true
     },
     "webgl-text-glyphs.html": {
       "en": true
@@ -28,7 +31,8 @@ window.langDB = {
       "en": true
     },
     "webgl-scene-graph.html": {
-      "en": true
+      "en": true,
+      "fr": true
     },
     "webgl-resizing-the-canvas.html": {
       "en": true
@@ -46,7 +50,8 @@ window.langDB = {
       "en": true
     },
     "webgl-3d-camera.html": {
-      "en": true
+      "en": true,
+      "fr": true
     },
     "webgl-2-textures.html": {
       "en": true
@@ -56,10 +61,12 @@ window.langDB = {
       "pl": true
     },
     "webgl-3d-perspective.html": {
-      "en": true
+      "en": true,
+      "fr": true
     },
     "webgl-3d-orthographic.html": {
-      "en": true
+      "en": true,
+      "fr": true
     },
     "webgl-image-processing-continued.html": {
       "en": true
@@ -72,24 +79,30 @@ window.langDB = {
     },
     "webgl-fundamentals.html": {
       "en": true,
+      "fr": true,
       "pl": true
     },
     "webgl-how-it-works.html": {
-      "en": true
+      "en": true,
+      "fr": true
     },
     "webgl-2d-translation.html": {
       "en": true,
+      "fr": true,
       "pl": true
     },
     "webgl-2d-scale.html": {
-      "en": true
+      "en": true,
+      "fr": true
     },
     "webgl-2d-rotation.html": {
       "en": true,
+      "fr": true,
       "pl": true
     },
     "webgl-2d-matrices.html": {
-      "en": true
+      "en": true,
+      "fr": true
     },
     "webgl-image-processing.html": {
       "en": true
@@ -99,6 +112,10 @@ window.langDB = {
     "en": {
       "lang": "en",
       "language": "English"
+    },
+    "fr": {
+      "lang": "fr",
+      "language": "Français"
     },
     "pl": {
       "lang": "pl",
