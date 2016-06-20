@@ -1,6 +1,6 @@
-Title: Les fondamentaux de WebGL
+Title: Les fondamentaux en WebGL
 
-La base de WebGL. Sans magie.
+WebGL de zéro. Sans magie.
 
 Ce site présente des articles pour apprendre les principes de bases en WebGL.
 Ils ne sont PAS un mix de vieux articles pour OpenGL, contrairement à d'autres sur le web.
