@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/fr/webgl-how-it-works.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of Gregg Tavares. nor the names of his
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL Comment ça marche" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/screenshots/webgl-how-it-works.jpg" />
+<meta property="og:description" content="Ce que WebGL fait vraiment" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/fr/webgl-how-it-works.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL Comment ça marche" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/fr/webgl-how-it-works.html" />
+<meta name="twitter:description" content="Ce que WebGL fait vraiment" />
+<meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/screenshots/webgl-how-it-works.jpg" />
+
+
+<title>WebGL Comment ça marche</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_header">
+  <h1><a href="/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL Comment ça marche</h1>
+  </div>
+  <div class="row">
+    <div class="col-sm-8 lesson-main">
+      <p>Cet article est la suite de <a href="webgl-fundamentals.html">WebGL - les bases</a>.
+Avant de poursuivre je pense qu&#39;il faut discuter de ce que WebGL et la carte graphique
+font vraiment. Il y a en gros 2 parties dans le travail de la carte graphique.
+La première partie traite les vertices (du moins leurs données) et les convertit 
+en vertices dans l&#39;espace de coordonnées. La deuxième partie colore les pixels d&#39;après
+la première partie. </p>
+<p>Quand vous appelez</p>
+<pre><code>gl.drawArrays(gl.TRIANGLE, 0, 9);
+</code></pre><p>Le 9 ici signifie &quot;il y a 9 vertices à traiter&quot; donc voilà 9 vertices rendus.</p>
+<p><img src="resources/vertex-shader-anim.gif" class="webgl_center" /></p>
+<p>Sur la gauche il y a les données fournies. Le shader de vertex est une fonction que vous écrivez en 
+<a href="webgl-shaders-and-glsl.html">GLSL</a>. Il est appelé une fois pour chaque vertex.
+Vous écrivez quelques opérations et renseignez la variable <code>gl_Position</code> avec une valeur
+dans l&#39;espace de projection pour le vertex en cours. La carte graphique prend cette valeur et la met en mémoire.</p>
+<p>En supposant que vous faîtes des <code>TRIANGLES</code>, à chaque fois que cette première partie génère 
+3 points la carte graphique s&#39;en sert pour faire un triangle. Elle regarde quels pixels sont 
+concernés entre ces trois points, et pixélise le triangle. Pour chaque pixel elle va appeler
+notre shader de fragment pour nous demander quelle couleur nous voulons pour ce pixel. Le
+shader de fragment doit renseigner la variable <code>gl_FragColor</code> avec la couleur finale de chaque pixel.</p>
+<p>Tout ceci est passionnant mais comme vous voyez dans nos exemples jusqu&#39;à maintenant le 
+shader de fragment a très peu d&#39;information. Heureusement on peut lui en envoyer davantage. On 
+définit des “varyings” pour chaque valeur qu&#39;on veut transmettre du shader de vertex au shader 
+de fragment. </p>
+<p>Un exemple simple est d&#39;envoyer les coordonnées en espace de projection directement du shader 
+de vertex au shader de fragment. </p>
+<p>On va dessiner un simple triangle. Après notre <a href="webgl-2d-matrices.html">exemple précédent</a> changeons notre F en triangle.</p>
+<pre><code>// Remplit le tampon avec les valeurs qui définissent un triangle
+function creerGeometrie(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+             0, -100,
+           150,  125,
+          -175,  100]),
+      gl.STATIC_DRAW);
+}
+</code></pre><p>Et on n&#39;a qu&#39;à rendre 3 points.</p>
+<pre><code>// Rendu de la scène
+function rendreLaScene() {
+  ...
+  // Rendu de la géométrie.
+*  gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+</code></pre><p>Ensuite dans notre shader de vertex on déclare une <em>varying</em> pour passer des données au shader de fragment.</p>
+<pre><code>varying vec4 v_couleur;
+...
+void main() {
+  // Multiplie la position par la matrice
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+
+  // Convertit de l&#39;espace de projection en espace de couleur :
+  // L&#39;espace de projection va de -1.0 à +1.0
+  // L&#39;espace de couleur va de 0.0 à 1.0
+*  v_couleur = gl_Position * 0.5 + 0.5;
+}
+</code></pre><p>Et ensuite on déclare la même <em>varying</em> dans le shader de fragment.</p>
+<pre><code>precision mediump float;
+
+*varying vec4 v_couleur;
+
+void main() {
+*  gl_FragColor = v_couleur;
+}
+</code></pre><p>WebGL va faire le lien entre la varying du shader de vertex et celle qui a les mêmes type et nom dans le shader de fragment.</p>
+<p>Voici la version fonctionnelle.</p>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../../webgl-2d-triangle-with-position-for-color.html"></iframe>
+  <a class="webgl_center" href="../../webgl-2d-triangle-with-position-for-color.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p>Bougez, tournez et changez l&#39;échelle du triangle. Puisque les couleurs sont calculées 
+depuis l&#39;espace de projection elles ne changent pas avec les transformations.
+Elles sont relatives à l&#39;arrière-plan.</p>
+<p>Maintenant réfléchissons. On ne calcule que 3 points. Notre shader de vertex 
+n&#39;est appelé que 3 fois et donc il ne calcule que 3 couleurs. Pourtant notre 
+triangle en a davantage. C&#39;est pour cela qu&#39;on appelle ces variables transmises entre shaders, 
+des <em>varying</em>.</p>
+<p>WebGL prends les 3 valeurs qu&#39;on a calculées pour chaque point et 
+pixélise le triangle en interpolant entre les valeurs renseignées. 
+Pour chaque pixel le shader de fragment est appelé avec la valeur de 
+la varying interpolée pour ce pixel.</p>
+<p>Dans l&#39;exemple précédent on a commencé avec 3 vertices.</p>
+<p><style>
+table.vertex_table {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-family: monospace;
+  font-size: small;
+}</p>
+<p>table.vertex_table th {
+  background-color: #88ccff;
+  padding-right: 1em;
+  padding-left: 1em;
+}</p>
+<p>table.vertex_table td {
+  border: 1px solid black;
+  text-align: right;
+  padding-right: 1em;
+  padding-left: 1em;
+}
+</style></p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="2">Vertices</th></tr>
+<tr><td>0</td><td>-100</td></tr>
+<tr><td>150</td><td>125</td></tr>
+<tr><td>-175</td><td>100</td></tr>
+</table>
+</div>
+
+<p>Notre shader de vertex applique une matrice pour translater, tourner, 
+changer d&#39;échelle et convertir en espace de projection. Les valeurs 
+par défaut sont translation = 200, 150, rotation = 0, échelle = 1,1 
+donc on a en fait seulement une translation. Puisque la taille de notre 
+tampon est de 400x300 (taille du canvas) notre shader de vertex applique 
+la matrice et ensuite calcule les 3 vertices suivants dans l&#39;espace de projection.</p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="3">Valeurs renseignées à gl_Position</th></tr>
+<tr><td>0.000</td><td>0.660</td></tr>
+<tr><td>0.750</td><td>-0.830</td></tr>
+<tr><td>-0.875</td><td>-0.660</td></tr>
+</table>
+</div>
+
+<p>Il convertit aussi celle dans l&#39;espace de couleur et les renseigne dans les <em>varying</em>
+v_couleur qu&#39;on a déclarées.</p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="3">Valeurs renseignées à v_couleur</th></tr>
+<tr><td>0.5000</td><td>0.750</td><td>0.5</td></tr>
+<tr><td>0.8750</td><td>0.915</td><td>0.5</td></tr>
+<tr><td>0.0625</td><td>0.170</td><td>0.5</td></tr>
+</table>
+</div>
+
+<p>Ces 3 valeurs écrites dans v_couleur sont ensuite interpolées et passées au 
+shader de fragment pour chaque pixel.</p>
+<p><div>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="../resources/fragment-shader-anim.html"></iframe>
+  <div class="webgl_center">v_couleur est interpolé entre v0, v1 et v2</div>
+</div>
+
+</p>
+<p>On peut aussi envoyer plus de données au shader de vertex et les 
+transmettre ensuite au shader de fragment. Par exemple, dessinons un rectangle, 
+soit 2 triangles, en 2 couleurs. Pour cela on va indiquer un autre attribut 
+dans le shader de vertex pour lui envoyer cette nouvelle information, et on va la 
+transmettre directement au shader de fragment.</p>
+<pre><code>attribute vec2 a_position;
++attribute vec4 a_couleur;
+...
+varying vec4 v_couleur;
+
+void main() {
+   ...
+  // Copie la couleur de l&#39;attribut à la varying.
+*  v_couleur = a_couleur;
+}
+</code></pre><p>Maintenant il nous faut indiquer les couleurs dans nos géométries.</p>
+<pre><code>  // créé les pointeurs pour nos données de vertices
+  var emplacementPosition = gl.getAttribLocation(program, &quot;a_position&quot;);
++  var emplacementCouleur = gl.getAttribLocation(program, &quot;a_couleur&quot;);
+  ...
++  // Créé un tampon pour les couleurs
++  var tampon = gl.createBuffer();
++  gl.bindBuffer(gl.ARRAY_BUFFER, tampon);
++  gl.enableVertexAttribArray(emplacementCouleur);
++  gl.vertexAttribPointer(emplacementCouleur, 4, gl.FLOAT, false, 0, 0);
+
+  // Créé les valeurs des couleurs
++  creerCouleurs(gl);
+  ...
+
++// Remplit le tampon avec les couleurs pour les deux triangles
++// qui forment le rectangle.
++function creerCouleurs(gl) {
++  // Créé deux couleurs au hasard
++  var r1 = Math.random();
++  var b1 = Math.random();
++  var g1 = Math.random();
++
++  var r2 = Math.random();
++  var b2 = Math.random();
++  var g2 = Math.random();
++
++  gl.bufferData(
++      gl.ARRAY_BUFFER,
++      new Float32Array(
++        [ r1, b1, g1, 1,
++          r1, b1, g1, 1,
++          r1, b1, g1, 1,
++          r2, b2, g2, 1,
++          r2, b2, g2, 1,
++          r2, b2, g2, 1]),
++      gl.STATIC_DRAW);
++}
+</code></pre><p>Voici le résultat</p>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../../webgl-2d-rectangle-with-2-colors.html"></iframe>
+  <a class="webgl_center" href="../../webgl-2d-rectangle-with-2-colors.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p>Notons que nous avons deux couleurs homogènes dans les triangles. Pourtant on passe 
+bien les couleurs à nos <em>varying</em> et elles sont toujours interpolées pour chaque 
+pixel. Mais on a mis les mêmes couleurs aux sommets d&#39;un même 
+triangle, d&#39;où ce résultat. Si on indique des couleurs différentes l&#39;interpolation 
+redevient visible :</p>
+<pre><code>// Remplit le tampon avec les couleurs pour les deux triangles
+// qui forment le rectangle.
+function creerCouleurs(gl) {
+  // Créé une couleur différente par vertex
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(
+*        [ Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1]),
+      gl.STATIC_DRAW);
+}
+</code></pre><p>L&#39;interpolation de nos <em>varying</em> est visible.</p>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../../webgl-2d-rectangle-with-random-colors.html"></iframe>
+  <a class="webgl_center" href="../../webgl-2d-rectangle-with-random-colors.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p>Rien de très excitant je suppose mais ça démontre l&#39;utilisation de 
+plusieurs attributs et la transmission d&#39;information entre les deux shaders. 
+Si vous jetez un oeil aux <a href="webgl-image-processing.html">exemples de traitement d&#39;image</a>
+on verra qu&#39;ils utilisent aussi un attribut spécial pour transmettre les coordonnées de texture. </p>
+<h2 id="que-font-ces-tampons-et-ces-fonctions-pour-attributs-">Que font ces tampons et ces fonctions pour attributs ?</h2>
+<p>Les tampons (buffer) sont l&#39;espace mémoire dans la carte graphique dans lequel on place les informations 
+de géométrie. <code>gl.createBuffer</code> créé un tampon.
+<code>gl.bindBuffer</code> active le tampon pour une action à suivre.
+<code>gl.bufferData</code> place des données dans le tampon.</p>
+<p>Une fois que les données sont dans le tampon on doit indiquer au programme WebGL comment 
+lire ces données et où sont les attributs à envoyer à notre shader de vertex.</p>
+<p>Pour cela on demande d&#39;abord au programme WebGL l&#39;emplacement qu&#39;il a assigné aux attributs (le pointeur). 
+Par exemple dans le code précédent on a </p>
+<pre><code>// créé les pointeurs pour nos données de vertices
+var emplacementPosition = gl.getAttribLocation(programme, &quot;a_position&quot;);
+var emplacementCouleur = gl.getAttribLocation(programme, &quot;a_couleur&quot;);
+</code></pre><p>Une fois qu&#39;on connaît l&#39;emplacement d&#39;un attribut on soumet deux commandes.</p>
+<pre><code>gl.enableVertexAttribArray(emplacement);
+</code></pre><p>Cette commande dit à WebGL qu&#39;on veut fournir des données depuis un tampon</p>
+<pre><code>gl.vertexAttribPointer(
+    emplacement,
+    nombreDeComposantes,
+    typeDeDonnée,
+    donnéesNormaliséesOuNon,
+    tailleDeLaFenêtreDeLecture,
+    décalage);
+</code></pre><p>Et cette commande dit à WebGL d&#39;utiliser les données du dernier tampon activé gl.bindBuffer, 
+combient de composant il y a dans l&#39;attribut par vertex (1 - 4), de quel type de donnée il s&#39;agit 
+(<code>BYTE</code>, <code>FLOAT</code>, <code>INT</code>, <code>UNSIGNED_SHORT</code>, etc.), la taille (en byte) de la fenêtre de lecture, 
+et le décalage de départ de la première composante de l&#39;attribut.</p>
+<p>Le nombre de composantes est toujours entre 1 et 4.</p>
+<p>Si vous utilisez un tampon par type de données alors la fenêtre de lecture et le décalage de départ 
+peuvent être laissés à 0. 0 pour la fenêtre de lecture signifie &quot;utilise une fenêtre qui correspond 
+au type et à la la taille des données indiquées&quot;. 0 pour le décalage signifie que le démarrage de 
+la lecture commence à la première donnée du tampon. Mais indiquer d&#39;autres valeurs devient plus compliqué et 
+bien que ça ait des avantages en performance, ça ne vaut pas toujours le coup à moins que vous poussiez les limites 
+de votre carte graphique.</p>
+<p>J&#39;espère que ça éclaire les notions de tampon et d&#39;attribut.</p>
+<p>Rendez-vous ensuite à <a href="webgl-shaders-and-glsl.html">shaders et GLSL</a>.</p>
+<div class="webgl_bottombar"><h3>Qu'est-ce que le paramètre donnéesNormaliséesOuNon dans la métode vertexAttribPointer?</h3>
+<p>
+La normalisation concerne les valeurs à type non décimal (autre que FLOAT). 
+Si vous mettez false, ces valeurs seront interprétées avec le type qu'elles ont. 
+BYTE va de -128 à 127, UNSIGNED_BYTE va de 0 à 255, SHORT va de -32768 à 32767 etc...
+</p>
+<p>
+Si vous mettez true alors les valeurs d'un BYTE (-128 à 127)
+sont transformées en -1.0 à +1.0, UNSIGNED_BYTE (0 à 255) en 0.0 to +1.0.
+Les valeurs de type SHORT vont aussi de -1.0 to +1.0 mais ont plus de précision que BYTE.
+</p>
+<p>
+Le cas le plus courrant de données normalisées est pour les couleurs. La 
+plupart du temps les couleurs vont de 0.0 à 1.0. Utiliser un FLOAT complet pour chaque composante 
+rouge, verte, bleue et alpha demande 16 bytes par vertex et par couleur. Avec des grosses géométries 
+ça fait beaucoup de mémoire. En convertissant les couleurs en UNSIGNED_BYTE 0 vaudra 0.0 et 255 vaudra 1.0. 
+Et ça ne demandera que 4 bytes par couleur soit une économie de 75%. 
+</p>
+<p>Changeons notre code pour faire ça. Quand on dit au programme WebGL de prendre nos couleurs on utilisera </p>
+<pre class="prettyprint showlinemods">
+  gl.vertexAttribPointer(emplacementCouleur, 4, gl.UNSIGNED_BYTE, true, 0, 0);
+</pre>
+<p>Et quand on remplit notre tampon avec les couleurs :</p>
+<pre class="prettyprint showlinemods">
+// Remplit le tampon avec les couleurs pour les deux triangles
+// qui forment le rectangle.
+function creerCouleurs(gl) {
+  // Créé deux couleurs aléatoires
+  var r1 = Math.random() * 256; // 0 à 255.99999
+  var b1 = Math.random() * 256; // ces valeurs
+  var g1 = Math.random() * 256; // seront tronquées
+  var r2 = Math.random() * 256; // une fois placées dans un
+  var b2 = Math.random() * 256; // Uint8Array
+  var g2 = Math.random() * 256;
+
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Uint8Array(   // Uint8Array
+        [ r1, b1, g1, 255,
+          r1, b1, g1, 255,
+          r1, b1, g1, 255,
+          r2, b2, g2, 255,
+          r2, b2, g2, 255,
+          r2, b2, g2, 255]),
+      gl.STATIC_DRAW);
+}
+</pre>
+<p>
+Voilà le résultat
+</p>
+
+<div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../../webgl-2d-rectangle-with-2-byte-colors.html"></iframe>
+  <a class="webgl_center" href="../../webgl-2d-rectangle-with-2-byte-colors.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+
+</div>
+
+
+
+      <hr/>
+      <div>
+        <div>Une question ? <a href="http://stackoverflow.com/questions/tagged/webgl">Demander sur stackoverflow</a>.</div>
+        <div>Un problème ? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">Signaler sur github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL Comment ça marche';
+            var disqus_title = 'WebGL Comment ça marche';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
+        <select id="language">
+</select>
+
+        <ul>
+  <li>Les bases</li>
+  <ul>
+    <li><a href="/webgl/lessons/fr/webgl-fundamentals.html">WebGL - Les bases</a></li>
+    <li><a href="/webgl/lessons/fr/webgl-how-it-works.html">WebGL - Comment ça marche</a></li>
+    <li><a href="/webgl/lessons/fr/webgl-shaders-and-glsl.html">WebGL - Shaders et GLSL</a></li>
+  </ul>
+  <li>Traitement d'image</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-image-processing.html">WebGL - Traitement d'image (en)</a></li>
+    <li><a href="/webgl/lessons/webgl-image-processing-continued.html">WebGL - Traitement d'image suite (en)</a></li>
+  </ul>
+  <li>2D : translation, rotation, échelle, matrices</li>
+  <ul>
+    <li><a href="/webgl/lessons/fr/webgl-2d-translation.html">WebGL 2D - Translation</a></li>
+    <li><a href="/webgl/lessons/fr/webgl-2d-rotation.html">WebGL 2D - Rotation</a></li>
+    <li><a href="/webgl/lessons/fr/webgl-2d-scale.html">WebGL 2D - Echelle</a></li>
+    <li><a href="/webgl/lessons/fr/webgl-2d-matrices.html">WebGL 2D - Matrices</a></li>
+  </ul>
+  <li>3D</li>
+  <ul>
+    <li><a href="/webgl/lessons/fr/webgl-3d-orthographic.html">WebGL 3D - Projection orthographique</a></li>
+    <li><a href="/webgl/lessons/fr/webgl-3d-perspective.html">WebGL 3D - La perspective</a></li>
+    <li><a href="/webgl/lessons/fr/webgl-3d-camera.html">WebGL 3D - Les caméras</a></li>
+  </ul>
+  <li>Lumières</li>
+  <ul>
+    <li><a href="/webgl/lessons/fr/webgl-3d-lighting-directional.html">WebGL 3D - Lumière directionnelle</a></li>
+    <li><a href="/webgl/lessons/fr/webgl-3d-lighting-point.html">WebGL 3D - Lumière-point</a></li>
+  </ul>
+  <li>Structure et Organisation</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">WebGL - Moins de code, plus de fun (en)</a></li>
+    <li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">WebGL - Avoir plusieurs objets (en)</a></li>
+    <li><a href="/webgl/lessons/fr/webgl-scene-graph.html">WebGL - Graphes de scène</a></li>
+  </ul>
+  <li>Techniques</li>
+  <ul>
+    <li>2D</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-2d-drawimage.html">WebGL 2D - drawImage (en)</a>
+    </ul>
+    <li>Texte</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-text-html.html">WebGL Texte - HTML (en)</a>
+      <li><a href="/webgl/lessons/webgl-text-canvas2d.html">WebGL Texte - Canvas 2D (en)</a>
+      <li><a href="/webgl/lessons/webgl-text-texture.html">WebGL Texte - Utiliser des textures (en)</a>
+      <li><a href="/webgl/lessons/webgl-text-glyphs.html">WebGL Texte - Utiliser des textures glyphe (en)</a>
+    </ul>
+  </ul>
+  <li>Divers</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-boilerplate.html">WebGL Boilerplate (en)</a></li>
+    <li><a href="/webgl/lessons/webgl-resizing-the-canvas.html">WebGL - Redimensionnement du canvas (en)</a></li>
+    <li><a href="/webgl/lessons/webgl-animation.html">WebGL - Animation (en)</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-textures.html">WebGL 3D - Textures (en)</a></li>
+    <li><a href="/webgl/lessons/webgl-2-textures.html">WebGL - Utilisation de plusieurs textures (en)</a></li>
+    <li><a href="/webgl/lessons/webgl-and-alpha.html">WebGL et canal alpha (en)</a></li>
+    <li><a href="/webgl/lessons/webgl-2d-vs-3d-library.html">WebGL - Librairies 2D vs librairies 3D (en)</a></li>
+    <li><a href="/webgl/lessons/webgl-anti-patterns.html">WebGL - Bonnes pratiques (en)</a></li>
+  </ul>
+</ul>
+<ul>
+  <li><a href="/docs/">Aide pour la doc de l'API</a></li>
+  <li><a href="http://twgljs.org">TWGL, une librairie de base pour WebGL</a></li>
+  <li><a href="https://github.com/greggman/webgl-fundamentals">Github</a></li>
+</ul>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/langdb.js"></script>
+<script src="/webgl/lessons/resources/languages.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+
