@@ -26,8 +26,8 @@ Voici un simple exemple pour illustrer un code WebGL dans sa forme la plus simpl
     // Création d'un pointeur pour les données de vertex
     var emplacementPosition = gl.getAttribLocation(programme, "a_position");
 
-    // Créé un tampon et ajoute un rectangle avec des données en espace de projection déjà préparées
-    // (un rectangle = 2 triangle)
+    // Crée un tampon et ajoute un rectangle avec des données en espace de projection déjà préparées
+    // (un rectangle = 2 triangles)
     var tampon = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, tampon);
     gl.bufferData(
@@ -103,7 +103,7 @@ Maintenant on peut changer nos données en pixels
     var emplacementResolution = gl.getUniformLocation(program, "u_resolution");
     gl.uniform2f(emplacementResolution, canvas.width, canvas.height);
 
-    // créé un rectangle qui va de 10,20 à 80,30 en pixels
+    // crée un rectangle qui va de 10,20 à 80,30 en pixels
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
         10, 20,
         80, 20,
@@ -147,7 +147,7 @@ Et voici le nouveau code qui rend 50 rectangles disposés au hasard et avec des 
 
       var emplacementCouleur = gl.getUniformLocation(programme, "u_color");
       ...
-      // Créé un tampon
+      // Crée un tampon
       var tampon = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, tampon);
       gl.enableVertexAttribArray(positionLocation);
@@ -155,7 +155,7 @@ Et voici le nouveau code qui rend 50 rectangles disposés au hasard et avec des 
 
       // Rend 50 rectangles au hasard avec couleurs aléatoires.
       for (var ii = 0; ii < 50; ++ii) {
-        // Créé un rectangle au hasard
+        // Crée un rectangle au hasard
         creerRectangle(
             gl, entierAleatoir(300), entierAleatoir(300), entierAleatoir(300), entierAleatoir(300));
 

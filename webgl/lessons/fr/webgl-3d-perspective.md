@@ -13,7 +13,7 @@ veulent en général quand on dit "3D".
 Pour ça on a besoin de perspective. Qu'est-ce que la perspective ? C'est ce qui fait que ce qui est loin
  apparaît plus petit.
 
-<img class="webgl_center" width="500" src="resources/perspective-example.svg" />
+<img class="webgl_center" width="500" src="../../resources/perspective-example.svg" />
 
 En voyant cet exemple on voit que ce qui est à plus grande distance est dessiné en plus petit. Avec notre exemple 
 habituel, une façon simple d'implémenter ceci serait de diviser les composantes X et Y de l'espace de projection, par Z.
@@ -95,7 +95,7 @@ Résultat :
 
 Si ce n'est pas clair la valeur du "facteurDeFuite" peut être changée entre 1 et 0 sur le slider pour voir comment les choses étaient avant d'appliquer notre division par Z, c'est-à-dire en orthographique.
 
-<img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
+<img class="webgl_center" src="../../resources/orthographic-vs-perspective.png" />
 <div class="webgl_center">orthographique vs perspective</div>
 
 Il se trouve que WebGL prend les valeurs x, y, z, w assignées à gl_Position dans notre shader de vertex 
@@ -275,7 +275,7 @@ Tout ça pour montrer que diviser par Z donne la perspective et que WebGL fait �
 
 Mais il reste quelques soucis. Si on met Z à -100 on se retrouve avec quelque chose comme l'animation ci-dessous
 
-<img class="webgl_center" src="resources/z-clipping.gif" style="border: 1px solid black;" />
+<img class="webgl_center" src="../../resources/z-clipping.gif" style="border: 1px solid black;" />
 
 Quest-ce qu'il se passe ? Pourquoi le F disparaît ? Tout comme WebGL tronque le X et le Y au-delà de -1 et +1 il tronque aussi le Z. 
 Ce qu'on voit c'est le Z < -1. 

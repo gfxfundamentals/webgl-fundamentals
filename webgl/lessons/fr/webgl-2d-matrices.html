@@ -71,9 +71,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Dans les 3 derniers posts on a parlé des <a href="webgl-2d-translation.html">translations</a>, <a href="webgl-2d-rotation.html">rotations</a> et <a href="webgl-2d-scale.html">changement d&#39;échelle</a>. Translation, rotation et changement d&#39;échelle sont les 3 types de &#39;transformation&#39;. Chacune de ces transformations demande des changements dans le shader de vertex et on a vu que le résultat dépend de l&#39;ordre dans lequel elles sont appliquées : certaines sont non-commutatives. Dans le <a href="webgl-2d-scale.html">précédent exemple</a> on a changé l&#39;échelle, puis tourné et déplacé. Dans un autre ordre on aurait eu un résultat différent.
 <!--more-->
 Par exemple, voici la suite de transformations suivantes : échelle de (2,1), rotation de 30 degrés et translation de (100, 0) :</p>
-<p><img src="../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" /></p>
+<p><img src="../../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" /></p>
 <p>Et voici un déplacement de (100,0) suivi d&#39;une rotation de 30 degrés et un changement d&#39;échelle de (2,1) :</p>
-<p><img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" /></p>
+<p><img src="../../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" /></p>
 <p>Les résultats sont complètement différents. Pire, si on veut aboutir au second exemple il nous faut écrire un autre shader qui applique les transformations dans l&#39;ordre qu&#39;on souhaite.</p>
 <p>Eh bien, des personnes plus futées que moi ont réalisé qu&#39;on peut faire la même chose avec des matrices. Pour la 2D on utilise une matrice carrée d&#39;ordre 3 (3x3). Une matrice 3x3 est comme une grille de 9 cases :</p>
 <p><style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style></p>

@@ -128,7 +128,7 @@ Maintenant qu'on a notre lumière point on peut ajouter quelque chose qu'on appe
 
 Si on regarde un objet dans le vrai monde, s'il est vaguement brillant et qu'il reflète une lumière directement dans notre direction, ça fait comme un miroir
 
-<img class="webgl_center" src="resources/specular-highlights.jpg" />
+<img class="webgl_center" src="../../resources/specular-highlights.jpg" />
 
 On peut simuler cet effet en calculant si la lumière se reflète dans notre direction. Le *produit scalaire* va là aussi nous aider.
 

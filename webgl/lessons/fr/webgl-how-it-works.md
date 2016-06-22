@@ -14,7 +14,7 @@ Quand vous appelez
 
 Le 9 ici signifie "il y a 9 vertices à traiter" donc voilà 9 vertices rendus.
 
-<img src="resources/vertex-shader-anim.gif" class="webgl_center" />
+<img src="../../resources/vertex-shader-anim.gif" class="webgl_center" />
 
 Sur la gauche il y a les données fournies. Le shader de vertex est une fonction que vous écrivez en 
 [GLSL](webgl-shaders-and-glsl.html). Il est appelé une fois pour chaque vertex.
