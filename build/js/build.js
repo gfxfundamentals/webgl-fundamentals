@@ -209,13 +209,13 @@ var Builder = function() {
     html = replaceParams(html, [opt_extra, g_langInfo]);
     metaData['content'] = html;
     metaData['langs'] = g_langs;
-    metaData['src_file_name'] = contentFileName;
-    metaData['dst_file_name'] = outFileName;
+    metaData['src_file_name'] = contentFileName.replace(/\\/g, '/');
+    metaData['dst_file_name'] = outFileName.replace(/\\/g, '/');
     metaData['basedir'] = "";
     metaData['toc'] = opt_extra.toc;
     metaData['templateOptions'] = opt_extra.templateOptions;
     metaData['langInfo'] = g_langInfo;
-    metaData['url'] = "http://webglfundamentals.org/" + outFileName;
+    metaData['url'] = "http://webglfundamentals.org/" + outFileName.replace(/\\/g, '/');
     metaData['screenshot'] = "http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg";
     var basename = path.basename(contentFileName, ".md");
     [".jpg", ".png"].forEach(function(ext) {
