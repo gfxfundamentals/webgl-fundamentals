@@ -40,7 +40,7 @@ Génial. Maintenant imaginons qu'on veuille faire la même chose avec une forme 
 
 Disons qu'on veut dessiner un 'F' composé de 6 triangles comme ceci
 
-<img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
+<img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
 
 En suivant la même logique il nous faudrait changer `creerRectangle` pour quelque chose dans ce style :
 

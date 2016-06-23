@@ -206,7 +206,7 @@ rotation X
 
 Ce qui donne ces rotations.
 
-<iframe class="external_diagram" src="resources/axis-diagram.html" style="width: 540px; height: 240px;"></iframe>
+<iframe class="external_diagram" src="../../resources/axis-diagram.html" style="width: 540px; height: 240px;"></iframe>
 
 On doit aussi changer la fonction de projection. Voici l'ancienne :
 
@@ -381,7 +381,7 @@ Les triangles en WebGL ont un concept directionnel, on peut dire qu'on les regar
 par devant ou par derrière. Un triangle vu par devant a ses vertices qui vont dans le 
 sens des aiguilles d'une montre, le contraire vu par derrière.
 
-<img src="resources/triangle-winding.svg" class="webgl_center" width="400" />
+<img src="../../resources/triangle-winding.svg" class="webgl_center" width="400" />
 
 WebGL peut ne dessiner que les triangles vus par devant ou que ceux vus par derrière. 
 On peut activer cette possibilité avec 

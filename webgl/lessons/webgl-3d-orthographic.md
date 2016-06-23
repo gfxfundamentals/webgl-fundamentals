@@ -275,7 +275,7 @@ The first problem we have is that our geometry is a flat F which makes it
 hard to see any 3D.  To fix that let's expand the geometry to 3D.  Our
 current F is made of 3 rectangles, 2 triangles each.  To make it 3D will
 require a total of 16 rectangles.  That's quite a few to list out here.
-16 rectangles * 2 triangles per rectangle * 3 vertices per triangle is 96
+16 rectangles with 2 triangles per rectangle and 3 vertices per triangle is 96
 vertices.  If you want to see all of them view the source of the sample.
 
 We have to draw more vertices so

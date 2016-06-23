@@ -88,8 +88,8 @@ gl.useProgram(programme);
 // Création d&#39;un pointeur pour les données de vertex
 var emplacementPosition = gl.getAttribLocation(programme, &quot;a_position&quot;);
 
-// Créé un tampon et ajoute un rectangle avec des données en espace de projection déjà préparées
-// (un rectangle = 2 triangle)
+// Crée un tampon et ajoute un rectangle avec des données en espace de projection déjà préparées
+// (un rectangle = 2 triangles)
 var tampon = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, tampon);
 gl.bufferData(
@@ -160,7 +160,7 @@ void main() {
 var emplacementResolution = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 gl.uniform2f(emplacementResolution, canvas.width, canvas.height);
 
-// créé un rectangle qui va de 10,20 à 80,30 en pixels
+// crée un rectangle qui va de 10,20 à 80,30 en pixels
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
     10, 20,
     80, 20,
@@ -203,7 +203,7 @@ void main() {
 </code></pre><p>Et voici le nouveau code qui rend 50 rectangles disposés au hasard et avec des couleurs aléatoires.</p>
 <pre><code>  var emplacementCouleur = gl.getUniformLocation(programme, &quot;u_color&quot;);
   ...
-  // Créé un tampon
+  // Crée un tampon
   var tampon = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, tampon);
   gl.enableVertexAttribArray(positionLocation);
@@ -211,7 +211,7 @@ void main() {
 
   // Rend 50 rectangles au hasard avec couleurs aléatoires.
   for (var ii = 0; ii &lt; 50; ++ii) {
-    // Créé un rectangle au hasard
+    // Crée un rectangle au hasard
     creerRectangle(
         gl, entierAleatoir(300), entierAleatoir(300), entierAleatoir(300), entierAleatoir(300));
 

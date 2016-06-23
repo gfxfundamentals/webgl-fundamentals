@@ -7,11 +7,11 @@ Dans les 3 derniers posts on a parlé des <a href="webgl-2d-translation.html">tr
 <!--more-->
 Par exemple, voici la suite de transformations suivantes : échelle de (2,1), rotation de 30 degrés et translation de (100, 0) :
 
-<img src="../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
+<img src="../../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
 
 Et voici un déplacement de (100,0) suivi d'une rotation de 30 degrés et un changement d'échelle de (2,1) :
 
-<img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
+<img src="../../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
 
 Les résultats sont complètement différents. Pire, si on veut aboutir au second exemple il nous faut écrire un autre shader qui applique les transformations dans l'ordre qu'on souhaite.
 
