@@ -53,15 +53,15 @@ the browser to stretch the canvas to fill the window with CSS. Example
     <html>
       <head>
         <style>
-          /* make the document fill the window */
-          html, body {
-            height: 100%;
-            margin: 0px;
+          /* remove the border */
+          body {
+            border: 0;
+            background-color: white;
           }
-          /* make any canvas fill its container */
+          /* make the canvas the size of the viewport */
           canvas {
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             display: block;
           }
         <style>
