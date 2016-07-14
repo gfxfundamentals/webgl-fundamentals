@@ -1145,7 +1145,7 @@ var prettyPrint;
               for (var pp = 0; pp < prefixes.length; ++pp) {
                 var prefixInfo = prefixes[pp];
                 if (startsWith(text, prefixInfo.prefix)) {
-                  node.nodeValue = text.substring(prefixInfo.prefix.length);
+                  node.nodeValue = text.substring(prefixInfo.prefix.length) || ' ';
                   return prefixInfo.className;
                 }
               }
