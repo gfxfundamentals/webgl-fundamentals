@@ -433,6 +433,8 @@ or maybe you'd like to use a solid color when the texture coordinates are outsid
 
 The sky's really the limit. It's all up to your creative use of shaders.
 
+Next up [we'll implement canvas 2d's matrix stack](webgl-2d-matrix-stack.html).
+
 <div class="webgl_bottombar">
 <h3>A minor optimization</h3>
 <p>I'm not recommending this optimization. Rather I want to point out
