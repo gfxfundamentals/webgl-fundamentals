@@ -299,24 +299,33 @@ matrixStack.rotateZ(time);
 +
 +}
 +matrixStack.restore();
-</code></pre><p>If you think of the various matrix stack functions, <code>translate</code>, <code>rotateZ</code>, and <code>scale</code>
+</code></pre><p>And here&#39;s that</p>
+<p><div>
+  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-matrixstack-03.html"></iframe>
+  <a class="webgl_center" href="../webgl-2d-matrixstack-03.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>If you think of the various matrix stack functions, <code>translate</code>, <code>rotateZ</code>, and <code>scale</code>
 as moving the origin then the way I think of setting the center of rotation is
 <em>where would I have to move the origin so that when I call drawImage a certain part
 of the image is <strong>at</strong> the previous origin?</em></p>
 <p>In other words let&#39;s say on a 400x300 canvas I call <code>matrixStack.translate(220, 150)</code>.
-At that point origin relative to calling drawImage is here. If we call <code>drawImage</code>
-this is where the image will be drawn.</p>
+At that point the origin is at 220, 150 and all drawing will be relative that point.
+If we call <code>drawImage</code> with <code>0, 0</code> this is where the image will be drawn.</p>
 <p><img class="webgl_center" width="400" src="resources/matrixstack-before.svg" /></p>
 <p>Lets say we want the center of rotation to be the bottom right. In that case
-we where would be have to move the origin so that when we call <code>drawImage</code>
+where would be have to move the origin so that when we call <code>drawImage</code>
 the point we want to be the center of rotation is at the current origin?
-For the bottom right of the texture that would be <code>-textureWidth, -textureHeight</code>.</p>
+For the bottom right of the texture that would be <code>-textureWidth, -textureHeight</code>
+so now when we call <code>drawImage</code> with <code>0, 0</code> the texture would be drawn here
+and it&#39;s bottom right corner as at the previous origin.</p>
 <p><img class="webgl_center" width="400" src="resources/matrixstack-after.svg" /></p>
-<p>Whatever we did before that on the matrix stack it doesn&#39;t matter. We did a bunch
+<p>At any point whatever we did before that on the matrix stack it doesn&#39;t matter. We did a bunch
 of stuff to move or scale or rotate the origin but just before we call
-<code>drawImage</code>, wherever the origin happens to be at the moment is irrelavent.
+<code>drawImage</code> wherever the origin happens to be at the moment is irrelavent.
 It&#39;s the new origin so we just have to decide where to move that origin
-relative where the texture will be drawn if drawn at that origin.</p>
+relative where the texture would be drawn if we had nothing before it on the stack.</p>
 <p>You might notice a matrix stack is very similar to a <a href="webgl-scene-graph.html">scene graph that we
 covered before</a>. A scene graph had a tree of nodes
 and as we walked the tree we multiplied each node by its parent&#39;s node.

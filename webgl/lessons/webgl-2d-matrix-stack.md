@@ -277,29 +277,35 @@ matrixStack.rotateZ(time);
 +matrixStack.restore();
 ```
 
+And here's that
+
+{{{example url="../webgl-2d-matrixstack-03.html" }}}
+
 If you think of the various matrix stack functions, `translate`, `rotateZ`, and `scale`
 as moving the origin then the way I think of setting the center of rotation is
 *where would I have to move the origin so that when I call drawImage a certain part
 of the image is **at** the previous origin?*
 
 In other words let's say on a 400x300 canvas I call `matrixStack.translate(220, 150)`.
-At that point origin relative to calling drawImage is here. If we call `drawImage`
-this is where the image will be drawn.
+At that point the origin is at 220, 150 and all drawing will be relative that point.
+If we call `drawImage` with `0, 0` this is where the image will be drawn.
 
 <img class="webgl_center" width="400" src="resources/matrixstack-before.svg" />
 
 Lets say we want the center of rotation to be the bottom right. In that case
-we where would be have to move the origin so that when we call `drawImage`
+where would be have to move the origin so that when we call `drawImage`
 the point we want to be the center of rotation is at the current origin?
-For the bottom right of the texture that would be `-textureWidth, -textureHeight`.
+For the bottom right of the texture that would be `-textureWidth, -textureHeight`
+so now when we call `drawImage` with `0, 0` the texture would be drawn here
+and it's bottom right corner as at the previous origin.
 
 <img class="webgl_center" width="400" src="resources/matrixstack-after.svg" />
 
-Whatever we did before that on the matrix stack it doesn't matter. We did a bunch
+At any point whatever we did before that on the matrix stack it doesn't matter. We did a bunch
 of stuff to move or scale or rotate the origin but just before we call
-`drawImage`, wherever the origin happens to be at the moment is irrelavent.
+`drawImage` wherever the origin happens to be at the moment is irrelavent.
 It's the new origin so we just have to decide where to move that origin
-relative where the texture will be drawn if drawn at that origin.
+relative where the texture would be drawn if we had nothing before it on the stack.
 
 You might notice a matrix stack is very similar to a [scene graph that we
 covered before](webgl-scene-graph.html). A scene graph had a tree of nodes
