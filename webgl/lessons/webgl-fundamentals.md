@@ -216,7 +216,7 @@ And call it
 
 Now that we've created a GLSL program on the GPU we need to supply data to it.
 The majority of the WebGL API is about setting up state to supply data to our GLSL programs.
-In this case our only input to our GLSL program is `position` which is an attribute.
+In this case our only input to our GLSL program is `a_position` which is an attribute.
 The first thing we should do is look up the location of the attribute for the program
 we just created
 
@@ -279,10 +279,10 @@ The attribute will continue to use `positionBuffer`.
 
 note that from the point of view of our GLSL vertex shader the position attribute was a `vec4`
 
-    attribute vec4 position;
+    attribute vec4 a_position;
 
 `vec4` is a 4 float value. In JavaScript you could think of it something like
-`position = {x: 0, y: 0, z: 0, w: 0}`. Above we set `size = 2`. Attributes
+`a_position = {x: 0, y: 0, z: 0, w: 0}`. Above we set `size = 2`. Attributes
 default to `0, 0, 0, 1` so this attribute will get its first 2 values (x and y)
 from our buffer. The z, and w will be the default 0 and 1 respectively.
 
@@ -307,9 +307,9 @@ After all that we can finally ask WebGL to execute our GLSL program.
     var count = 3;
     gl.drawArrays(primitiveType, offset, count);
 
-Because the count is 3 this will execute our vertex shader 3 times. The first time `position.x` and `position.y`
+Because the count is 3 this will execute our vertex shader 3 times. The first time `a_position.x` and `a_position.y`
 in our vertex shader attribute will be set to the first 2 values from the positionBuffer.
-The 2nd time `position.xy` will be set to the 2nd two values. The last time it will be
+The 2nd time `a_position.xy` will be set to the 2nd two values. The last time it will be
 set to the last 2 values.
 
 Because we set `primitiveType` to `gl.TRIANGLES`, each time our vertex shader is run 3 times
