@@ -277,7 +277,7 @@ to the attribute. In other words now this attribute is bound to
 `positionBuffer`. That means we're free to bind something else to the `ARRAY_BUFFER` bind point.
 The attribute will continue to use `positionBuffer`.
 
-note that from the point of view of our GLSL vertex shader the position attribute was a `vec4`
+note that from the point of view of our GLSL vertex shader the `a_position` attribute was a `vec4`
 
     attribute vec4 a_position;
 
