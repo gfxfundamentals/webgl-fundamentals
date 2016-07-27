@@ -49,7 +49,7 @@ Knowing this a typical WebGL program basically follows this structure
 
 At Init time
 
-*   create all shaders and programs.
+*   create all shaders and programs and look up locations
 *   create buffers and upload vertex data
 *   create textures and upload texture data
 
