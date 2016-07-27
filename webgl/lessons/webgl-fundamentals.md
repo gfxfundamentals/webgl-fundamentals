@@ -360,7 +360,7 @@ it convert to clipspace for us. Here's the new vertex shader
     +  uniform vec2 u_resolution;
 
       void main() {
-    +    // convert the rectangle from pixels to 0.0 to 1.0
+    +    // convert the position from pixels to 0.0 to 1.0
     +    vec2 zeroToOne = a_position / u_resolution;
     +
     +    // convert from 0->1 to 0->2
