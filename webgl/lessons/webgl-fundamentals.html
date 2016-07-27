@@ -338,15 +338,18 @@ per channel canvas that means WebGL is going to write the values <code>[255, 0, 
 </div>
 
 </p>
-<p>Not very exciting :-p</p>
-<p>Again, clipspace coordinates always go from -1 to +1 regardless of the
-size of the canvas. In the case above you can see our vertex shader is doing nothing
+<p>In the case above you can see our vertex shader is doing nothing
 but passing on our position data directly. Since the position data is
 already in clipspace there is no work to do. <em>If you want 3D it&#39;s up to you
 to supply shaders that convert from 3D to clipspace because WebGL is only
 a rasterization API</em>.</p>
+<p>You might be wondering why does the triangle start in the middle and go to toward the top right.
+Clip space in <code>x</code> goes from -1 to +1. That means 0 is in the center and positive values will
+be to the right of that.</p>
+<p>As for why it&#39;s on the top, in clip space -1 is at the bottom and +1 is at the top. That means
+0 is in the center and so positive numbers will be above the center.</p>
 <p>For 2D stuff you would probably rather work in pixels than clipspace so
-let&#39;s change the shader so we can supply rectangles in pixels and have
+let&#39;s change the shader so we can supply the position in pixels and have
 it convert to clipspace for us. Here&#39;s the new vertex shader</p>
 <pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
@@ -369,14 +372,14 @@ it convert to clipspace for us. Here&#39;s the new vertex shader</p>
   }
 
 &lt;/script&gt;
-</code></pre><p>Some things to notice about the changes. I changed <code>a_position</code> to a <code>vec2</code> since we&#39;re
+</code></pre><p>Some things to notice about the changes. We changed <code>a_position</code> to a <code>vec2</code> since we&#39;re
 only using <code>x</code> and <code>y</code> anyway. A <code>vec2</code> is similar to a <code>vec4</code> but only has <code>x</code> and <code>y</code>.</p>
 <p>Next we added a <code>uniform</code> called <code>u_resolution</code>. To set that we need to look up its location.</p>
 <pre><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 </code></pre><p>The rest should be clear from the comments. By setting <code>u_resolution</code> to the resolution
 of our canvas the shader will now take the positions we put in <code>positionBuffer</code> supplied
 in pixels coordinates and convert them to clip space.</p>
-<p>Now we can change our data from clip space to pixels. This time we&#39;re going to draw a rectangle
+<p>Now we can change our position values from clip space to pixels. This time we&#39;re going to draw a rectangle
 made from 2 triangles, 3 points each.</p>
 <pre><code>var positions = [
 *  10, 20,
@@ -387,13 +390,15 @@ made from 2 triangles, 3 points each.</p>
 *  80, 30,
 ];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-</code></pre><p>And after we set which program to use we can set the value for the uniform we created</p>
+</code></pre><p>And after we set which program to use we can set the value for the uniform we created.
+Use program is like <code>gl.bindBuffer</code> above in that it sets the current program. After
+that all the <code>gl.uniformXXX</code> functions set uniforms on the current program.</p>
 <pre><code>gl.useProgram(program);
 
 // set the resolution
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 </code></pre><p>And of course to draw 2 triangles we need to have WebGL call our vertex shader 6 times
-so we need to change the count to 6.</p>
+so we need to change the <code>count</code> to <code>6</code>.</p>
 <pre><code>// draw
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
@@ -406,9 +411,9 @@ gl.drawArrays(primitiveType, offset, count);
 </div>
 
 </p>
-<p>You might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
+<p>Again you might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
 corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs
-we can just flip the y coordinate.</p>
+we can just flip the clip space y coordinate.</p>
 <pre><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>And now our rectangle is where we expect it.</p>
 <p><div>
