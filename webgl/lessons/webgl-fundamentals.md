@@ -532,4 +532,36 @@ I'll show you [how to do some 2D image processing](webgl-image-processing.html).
 If you are interesting in learning about translation,
 rotation and scale then [start here](webgl-2d-translation.html).
 
-
+<div class="webgl_bottombar">
+<h3>What does type="notjs" mean?</h3>
+<p>
+<code>&lt;script&gt;</code> tags default to having JavaScript in them.
+You can put no type or you can put <code>type="javascript"</code> or
+<code>type="text/javascript"</code> and the browser will interpret the
+contents as JavaScript. If you put anything for else for <code>type</code> the browser ignores the
+contents of the script tag. In other words <code>type="notjs"</code>
+or <code>type="foobar"</code> have no meaning as far as the browser
+is concerned.</p>
+<p>This makes the shaders easy to edit.
+Other alterntives include string concatenations like</p>
+<pre class="prettyprint">
+  var shaderSource =
+    "void main() {\n" +
+    "  gl_FragColor = vec4(1,0,0,1);\n" +
+    "}";
+</pre>
+<p>or we'd could load shaders with ajax requests but that is slow and asynchronous.</p>
+<p>A more modern alternative would be to use multiline template literals.</p>
+<pre class="prettyprint">
+  var shaderSource = `
+    void main() {
+      gl_FragColor = vec4(1,0,0,1);
+    }
+  `;
+</pre>
+<p>Multiline template literals work in all browsers that support WebGL.
+Unfortunately they don't work in really old browsers so if you care
+about supporting a fallback for those browsers you might not want to
+use mutliline template literals or you might want to use <a href="https://babeljs.io/">a transpiler</a>.
+</p>
+</div>
