@@ -67,61 +67,272 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>WebGL makes it possible to display amazing realtime 3D graphics in your
-browser but what many people don&#39;t know is that
-<a href="webgl-2d-vs-3d-library.html">WebGL is actually a rasterization API, not a 3D API</a>.</p>
-<p>Let me explain.</p>
+      <p>WebGL is often thought of as a 3D API. People think &quot;I&#39;ll use WebGL and <em>magic</em> I&#39;ll get cool 3d&quot;.
+In reality WebGL is just a rasterization engine. It draws points, lines, and triangles based
+on code you supply. Getting WebGL to do anything else is up to you to provide code to use points, lines,
+and triangles to accomplish your task.</p>
+<p>WebGL runs on the GPU on your computer. As such you need to provide the code that runs on that GPU.
+You provide that code in the form of pairs of functions. Those 2 functions are called a vertex shader
+and a fragment shader and they are each written in a very strictly typed C/C++ like language called
+GLSL. (GL Shader Language). Paired together they are called a <em>program</em>.</p>
+<p>A vertex shader&#39;s job is to compute vertex positions. Based on the positions the function outputs
+WebGL can then rasterize various kinds of primitives including points, lines, or triangles.
+When rasterizing these primitives it calls a second user supplied function called a fragment shader.
+A fragment shader&#39;s job is to compute a color for each pixel of the primitive currently being drawn.</p>
+<p>Nearly all of the entire WebGL API is about setting up state for these pairs of functions to run. You setup
+a bunch of state then execute a pair of functions by calling <code>gl.drawArrays</code> or <code>gl.drawElements</code> which
+executes your shaders on the GPU.</p>
+<p>Any data you want those functions to have accessed to must be provided to the GPU. There are 4 ways
+a shader can receive data.</p>
+<ol>
+<li><p>Attributes and Buffers</p>
+<p>Buffers are arrays of binary data you upload to the GPU. Attributes are used to specify how to
+pull data how of your buffers and provide them to your vertex shader.
+For example you might put positions in a buffer as three 32bit floats
+per position. You would tell a particular attribute which buffer to pull the data out of, what type
+of data it shoudl pull out (3 component 32 bit floating point numbers), what offset
+in the buffer the positions start, and how many bytes to get from one position to the next.</p>
+</li>
+<li><p>Uniforms</p>
+<p>Uniforms are effectively global variables you set before you execute your shader program.</p>
+</li>
+<li><p>Textures</p>
+<p>Textures are arrays of data you can randomly access in your shader program. The most
+common thing to put in a texture is image data but textures are just data and can just
+as easily contain something other than colors.</p>
+</li>
+<li><p>Varyings</p>
+<p>Varyings are a way for a vertex shader to pass data to a fragment shader. Depending
+on what is being rendered, points, lines, or triangles, the values set on a varying
+by a vertex shader will be iterpolated executing the fragment shader.</p>
+</li>
+</ol>
+<h2 id="webgl-hello-world">WebGL Hello World</h2>
 <p>WebGL only cares about 2 things. Clipspace coordinates and colors.
 Your job as a programmer using WebGL is to provide WebGL with those 2 things.
 You provide 2 &quot;shaders&quot; to do this. A Vertex shader which provides the
 clipspace coordinates and a fragment shader that provides the color.</p>
 <p>Clipspace coordinates always go from -1 to +1 no matter what size your
 canvas is. Here is a simple WebGL example that shows WebGL in its simplest form.</p>
-<pre><code>// Get A WebGL context
-var canvas = document.getElementById(&quot;canvas&quot;);
-var gl = canvas.getContext(&quot;experimental-webgl&quot;);
+<p>Let&#39;s start with a vertex shader</p>
+<pre><code>// an attribute will receive data from a buffer
+attribute vec4 a_position;
 
-// setup a GLSL program
-var program = createProgramFromScripts(gl, [&quot;2d-vertex-shader&quot;, &quot;2d-fragment-shader&quot;]);
-gl.useProgram(program);
+// all shaders have a main function
+void main() {
 
-// look up where the vertex data needs to go.
-var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
+  // gl_Position is a special variable a vertex shader
+  // is responsible for setting
+  gl_Position = a_position;
+}
+</code></pre><p>When executed, if the entire thing was written in JavaScript instead of GLSL
+you could imagine it would be used like this</p>
+<pre><code>// *** PSUEDO CODE!! ***
 
-// Create a buffer and put a single clipspace rectangle in
-// it (2 triangles)
-var buffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-gl.bufferData(
-    gl.ARRAY_BUFFER,
-    new Float32Array([
-        -1.0, -1.0,
-         1.0, -1.0,
-        -1.0,  1.0,
-        -1.0,  1.0,
-         1.0, -1.0,
-         1.0,  1.0]),
-    gl.STATIC_DRAW);
-gl.enableVertexAttribArray(positionLocation);
-gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+var positionBuffer = [
+  0, 0, 0, 0,
+  0, 0.5, 0, 0,
+  0.7, 0, 0, 0,
+];
+var attributes = {};
+var gl_Position;
 
-// draw
-gl.drawArrays(gl.TRIANGLES, 0, 6);
-</code></pre><p>Here&#39;s the 2 shaders</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
-attribute vec2 a_position;
+drawArrays(..., offset, count) {
+  var stride = 4;
+  var size = 4;
+  for (var i = 0; i &lt; count; ++i) {
+     // copy the next 4 values from positionBuffer to the a_position attribute
+     attributes.a_position = positionBuffer.slice((offset + i) * stide, size);
+     runVertexShader();
+     ...
+     doSomethingWith_gl_Position();
+}
+</code></pre><p>In reality it&#39;s not quite that simple because <code>positionBuffer</code> would need to be converted to binary
+data (see below) and so the actual computation for getting data out of the buffer
+would be a little different but hopefully this gives you an idea of how a vertex
+shader will be executed.</p>
+<p>Next we need a fragment shader</p>
+<pre><code>// fragment shaders don&#39;t have a default precision so we need
+// to pick one. mediump is a good default. It means &quot;medium precision&quot;
+precision mediump float;
 
 void main() {
-  gl_Position = vec4(a_position, 0, 1);
+  // gl_FragColor is a special variable a fragment shader
+  // is responsible for setting
+  gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
 }
+</code></pre><p>Above we&#39;re setting <code>gl_FragColor</code> to <code>1, 0, 0.5, 1</code> which is 1 for red, 0 for green,
+0.5 for blue, 1 for alpha. Colors in WebGL go from 0 to 1.</p>
+<p>Now that we have written the 2 shader functions lets get started with WebGL</p>
+<p>First we need an HTML canvas element</p>
+<pre><code> &lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+</code></pre><p>Then in JavaScript we can look that up</p>
+<pre><code> var canvas = document.getElementById(&quot;c&quot;);
+</code></pre><p>Now we can create a WebGLRenderingContext</p>
+<pre><code> var gl = canvas.getContext(&quot;webgl&quot;);
+ if (!gl) {
+    // no webgl for you!
+    ...
+</code></pre><p>Now we need to compile those shaders to put them on the GPU so first we need to get them into strings.
+You can create your GLSL strings any way you normally create strings in JavaScript. For example by concatenating,
+by using AJAX to download them, by using multiline template strings. or in thise case by
+putting them in non-JavaScript typed script tags.</p>
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+
+  // an attribute will receive data from a buffer
+  attribute vec4 a_position;
+
+  // all shaders have a main function
+  void main() {
+
+    // gl_Position is a special variable a vertex shader
+    // is responsible for setting
+    gl_Position = a_position;
+  }
+
 &lt;/script&gt;
 
-&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
-void main() {
-  gl_FragColor = vec4(0, 1, 0, 1);  // green
-}
+&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+
+  // fragment shaders don&#39;t have a default precision so we need
+  // to pick one. mediump is a good default
+  precision mediump float;
+
+  void main() {
+    // gl_FragColor is a special variable a fragment shader
+    // is responsible for setting
+    gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
+  }
+
 &lt;/script&gt;
-</code></pre><p>This will draw a green rectangle the entire size of the canvas. Here it is</p>
+</code></pre><p>In fact, most 3D engines generate GLSL shaders on the fly using various types of templates, concatenation, etc.
+For the samples on this site though none of them are complex enough to need to generate GLSL at runtime.</p>
+<p>Next we need a function that will create a shader, upload the GLSL source, and compile the shader.
+Note I haven&#39;t written any comments because it should be clear from the names of the functions
+what is happening.</p>
+<pre><code>function createShader(gl, type, source) {
+  var shader = gl.createShader(type);
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+  if (success) {
+    return shader;
+  }
+
+  console.log(gl.getShaderInfoLog(shader));
+  gl.deleteShader(shader);
+}
+</code></pre><p>We can now call that function to create the 2 shaders</p>
+<pre><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
+var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot;).text;
+
+var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+</code></pre><p>We then need to <em>link</em> those 2 shaders into a <em>program</em></p>
+<pre><code>function createProgram(gl, vertexShader, fragmentShader) {
+  var program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+  var sucesss = gl.getProgramParameter(program, gl.LINK_STATUS);
+  if (success) {
+    return program;
+  }
+
+  console.log(gl.getProgramInfoLog(program));
+  gl.deleteProgram(program);
+}
+</code></pre><p>And call it</p>
+<pre><code>var program = createProgram(gl, vertexShader, fragmentShader);
+</code></pre><p>Now that we&#39;ve created a GLSL program on the GPU we need to supply data to it.
+The majority of the WebGL API is about setting up state to supply data to our GLSL programs.
+In this case our only input to our GLSL program is <code>position</code> which is an attribute.
+The first thing we should do is look up the location of the attribute for the program
+we just created</p>
+<pre><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;position&quot;);
+</code></pre><p>Looking up attribute locations (and uniform locations) is something you should
+do during initialization, not in your render loop.</p>
+<p>Attributes get their data from buffers so we need to create a buffer</p>
+<pre><code>var positionBuffer = gl.createBuffer();
+</code></pre><p>WebGL lets us manipulate many WebGL resources on global bind points.
+You can think of bind points as internal global variables inside WebGL.
+First you bind a resource to a bind point. Then, all other functions
+refer to the resource through the bind point. So, let&#39;s bind the position buffer.</p>
+<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+</code></pre><p>Now we can put data in that buffer by referencing it through the bind point</p>
+<pre><code>// three 2d points
+var positions = [
+  0, 0,
+  0, 0.5,
+  0.7, 0,
+];
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+</code></pre><p>There&#39;s a lot going on here. The first thing is we have <code>positions</code> which is a
+JavaScript array. WebGL on other hand needs strongly typed data so the part
+<code>new Float32Array(positions)</code> creates a new array of 32bit floating point numbers
+and copies the values from <code>positions</code>. <code>gl.bufferData</code> then copies that data to
+the <code>positionBuffer</code> on the GPU. It&#39;s using the position buffer because we bound
+it to the <code>ARRAY_BUFFER</code> bind point above.</p>
+<p>The last argument, <code>gl.STATIC_DRAW</code> is a hint to WebGL about how we&#39;ll use the data.
+WebGL can try to use that hint to optimize certain things. <code>gl.STATIC_DRAW</code> tells WebGL
+we are not likely to change this data much.</p>
+<p>Now that we&#39;ve put data in the a buffer we need to tell the attribute how to get data
+out of it. First off we need to turn the attribute on</p>
+<pre><code>gl.enableVertexAttribArray(positionAttributeLocation);
+</code></pre><p>Then we need to specify how to pull the data out</p>
+<pre><code>var size = 2;          // 2 components per iteration
+var type = gl.FLOAT;   // the data is 32bit floats
+var normalize = false; // don&#39;t normalize the data
+var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+var offset = 0;        // start at the beginning of the buffer
+gl.vertexAttribPointer(
+    positionAttributeLocation, size, type, normalize, stride, offset)
+</code></pre><p>A hidden part of <code>gl.vertexAttribPointer</code> is that it binds the current <code>ARRAY_BUFFER</code>
+to the attribute. In other words now this attribute is bound to
+<code>positionBuffer</code>. That means we&#39;re free to bind something else to the <code>ARRAY_BUFFER</code> bind point.
+The attribute will continue to use <code>positionBuffer</code>.</p>
+<p>note that from the point of view of our GLSL vertex shader the position attribute was a <code>vec4</code></p>
+<pre><code>attribute vec4 position;
+</code></pre><p><code>vec4</code> is a 4 float value. In JavaScript you could think of it something like
+<code>position = {x: 0, y: 0, z: 0, w: 0}</code>. Above we set <code>size = 2</code>. Attributes
+default to <code>0, 0, 0, 1</code> so this attribute will get its first 2 values (x and y)
+from our buffer. The z, and w will be the default 0 and 1 respectively.</p>
+<p>We need tell WebGL how to convert from the clip space
+values we&#39;ll be setting <code>gl_Position</code> to back into pixels. To do this we call <code>gl.viewport</code></p>
+<pre><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+</code></pre><p>This tells WebGL the -1 +1 clip space maps to 0 -&gt; gl.canvas.width for x and 0 -&gt; gl.canvas.height
+for y. Note the viewport settings default to the <strong>initial</strong> size of our canvas. If we never
+change the size of the canvas we might not need to set the viewport.</p>
+<p>Finally we need to tell WebGL which shader program to execute.</p>
+<pre><code>gl.useProgram(program);
+</code></pre><p>After all that we can finally ask WebGL to execute our GLSL program.</p>
+<pre><code>var primitiveType = gl.TRIANGLES;
+var offset = 0;
+var count = 3;
+gl.drawArrays(primitiveType, offset, count);
+</code></pre><p>This will execute our vertex shader 3 times. The first time <code>position.x</code> and <code>position.y</code>
+in our vertex shader attribute will be set to the first 2 values from the positionBuffer.
+The 2nd time <code>position.xy</code> will be set to the 2nd two values. The last time it will be
+set to the last 2 values.</p>
+<p>Because we set <code>primitiveType</code> to <code>gl.TRIANGLES</code>, each time our vertex shader is run 3 times
+WebGL will draw a triangle based on the 3 values we set <code>gl_Position</code> to. No matter what size
+our canvas is those values are in clip space coordinates that go from -1 to 1 in each direction.</p>
+<p>Because our vertex shader is simply copying our positionBuffer values to <code>gl_Position</code> the
+triangle will be drawn at clip space coordinates</p>
+<pre><code>  0, 0,
+  0, 0.5,
+  0.7, 0,
+</code></pre><p>How those values translate to pixel depends on the <code>gl.viewport</code> setting. In the same our
+canvas size is 400x300
+<code>gl.viewport</code> defaults to the initial size of the canvas. Since we didn&#39;t set a size for our canvas it&#39;s the default size of 300x150. Converting from clip space to pixels (often called screen space in WebGL and OpenGL literature) WebGL is going to draw a triangle at</p>
+<pre><code> clip space      screen space
+   0, 0       -&gt;   200, 150
+   0, 0.5     -&gt;   200, 225
+ 0.7, 0       -&gt;   340, 150
+</code></pre><p>WebGL will now render that triangle. For every pixel it is about to draw WebGL will call our fragment shader.
+Our fragment shader just sets <code>gl_FragColor</code> to <code>1, 0, 0.5, 1</code>. Since the Canvas is an 8bit
+per channel canvas that means WebGL is going to write the values <code>[255, 0, 127, 255]</code> into the canvas.</p>
+<p>Here&#39;s a live version</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-fundamentals.html"></iframe>
   <a class="webgl_center" href="../webgl-fundamentals.html" target="_blank">click here to open in a separate window</a>
@@ -130,7 +341,7 @@ void main() {
 </p>
 <p>Not very exciting :-p</p>
 <p>Again, clipspace coordinates always go from -1 to +1 regardless of the
-size of the canvas. In the case above you can see we are doing nothing
+size of the canvas. In the case above you can see our vertex shader is doing nothing
 but passing on our position data directly. Since the position data is
 already in clipspace there is no work to do. <em>If you want 3D it&#39;s up to you
 to supply shaders that convert from 3D to clipspace because WebGL is only
@@ -138,37 +349,57 @@ a rasterization API</em>.</p>
 <p>For 2D stuff you would probably rather work in pixels than clipspace so
 let&#39;s change the shader so we can supply rectangles in pixels and have
 it convert to clipspace for us. Here&#39;s the new vertex shader</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
-attribute vec2 a_position;
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
-uniform vec2 u_resolution;
+-  attribute vec4 a_position;
+*  attribute vec2 a_position;
 
-void main() {
-   // convert the rectangle from pixels to 0.0 to 1.0
-   vec2 zeroToOne = a_position / u_resolution;
++  uniform vec2 u_resolution;
 
-   // convert from 0-&gt;1 to 0-&gt;2
-   vec2 zeroToTwo = zeroToOne * 2.0;
+  void main() {
++    // convert the rectangle from pixels to 0.0 to 1.0
++    vec2 zeroToOne = a_position / u_resolution;
++
++    // convert from 0-&gt;1 to 0-&gt;2
++    vec2 zeroToTwo = zeroToOne * 2.0;
++
++    // convert from 0-&gt;2 to -1-&gt;+1 (clipspace)
++    vec2 clipSpace = zeroToTwo - 1.0;
++
+*    gl_Position = vec4(clipSpace, 0, 1);
+  }
 
-   // convert from 0-&gt;2 to -1-&gt;+1 (clipspace)
-   vec2 clipSpace = zeroToTwo - 1.0;
-
-   gl_Position = vec4(clipSpace, 0, 1);
-}
 &lt;/script&gt;
-</code></pre><p>Now we can change our data from clipspace to pixels</p>
-<pre><code>// set the resolution
-var resolutionLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
-gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+</code></pre><p>Some things to notice about the changes. I changed <code>a_position</code> to a <code>vec2</code> since we&#39;re
+only using <code>x</code> and <code>y</code> anyway. A <code>vec2</code> is similar to a <code>vec4</code> but only has <code>x</code> and <code>y</code>.</p>
+<p>Next we added a <code>uniform</code> called <code>u_resolution</code>. To set that we need to look up its location.</p>
+<pre><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
+</code></pre><p>The rest should be clear from the comments. By setting <code>u_resolution</code> to the resolution
+of our canvas the shader will now take the positions we put in <code>positionBuffer</code> supplied
+in pixels coordinates and convert them to clip space.</p>
+<p>Now we can change our data from clip space to pixels. This time we&#39;re going to draw a rectangle
+made from 2 triangles, 3 points each.</p>
+<pre><code>var positions = [
+*  10, 20,
+*  80, 20,
+*  10, 30,
+*  10, 30,
+*  80, 20,
+*  80, 30,
+];
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+</code></pre><p>And after we set which program to use we can set the value for the uniform we created</p>
+<pre><code>gl.useProgram(program);
 
-// setup a rectangle from 10,20 to 80,30 in pixels
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    10, 20,
-    80, 20,
-    10, 30,
-    10, 30,
-    80, 20,
-    80, 30]), gl.STATIC_DRAW);
+// set the resolution
+gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
+</code></pre><p>And of course to draw 2 triangles we need to have WebGL call our vertex shader 6 times
+so we need to change the count to 6.</p>
+<pre><code>// draw
+var primitiveType = gl.TRIANGLES;
+var offset = 0;
+*var count = 6;
+gl.drawArrays(primitiveType, offset, count);
 </code></pre><p>And here it is</p>
 <p><div>
   <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-2d-rectangle.html"></iframe>
@@ -178,7 +409,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 </p>
 <p>You might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
 corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs
-we just flip the y coordinate.</p>
+we can just flip the y coordinate.</p>
 <pre><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>And now our rectangle is where we expect it.</p>
 <p><div>
@@ -191,23 +422,18 @@ we just flip the y coordinate.</p>
 we can call it for different sized rectangles. While we&#39;re at it
 we&#39;ll make the color settable.</p>
 <p>First we make the fragment shader take a color uniform input.</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
-precision mediump float;
+<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+  precision mediump float;
 
-+uniform vec4 u_color;
++  uniform vec4 u_color;
 
-void main() {
-*   gl_FragColor = u_color;
-}
+  void main() {
+*    gl_FragColor = u_color;
+  }
 &lt;/script&gt;
 </code></pre><p>And here&#39;s the new code that draws 50 rectangles in random places and random colors.</p>
 <pre><code>  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
   ...
-  // Create a buffer
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(positionLocation);
-  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
   // draw 50 random rectangles in random colors
   for (var ii = 0; ii &lt; 50; ++ii) {
@@ -229,11 +455,18 @@ function randomInt(range) {
 }
 
 // Fills the buffer with the values that define a rectangle.
+
 function setRectangle(gl, x, y, width, height) {
   var x1 = x;
   var x2 = x + width;
   var y1 = y;
   var y2 = y + height;
+
+  // NOTE: gl.bufferData(gl.ARRAY_BUFFER, ...) will affect
+  // whatever buffer is bound to the `ARRAY_BUFFER` bind point
+  // but so far we only have one buffer. If we had more than one
+  // buffer we&#39;d want to bind that buffer to `ARRAY_BUFFER` first.
+
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
      x1, y1,
      x2, y1,
@@ -250,48 +483,32 @@ function setRectangle(gl, x, y, width, height) {
 
 </p>
 <p>I hope you can see that WebGL is actually a pretty simple API.
+Okay, simple might be the wrong word. What it does is simple. It just
+executes 2 user supplied functions, a vertex shader and fragment shader and
+draws triangles, lines, or points.
 While it can get more complicated to do 3D that complication is
 added by you, the programmer, in the form of more complex shaders.
-The WebGL API itself is 2D and fairly simple.</p>
+The WebGL API itself is just a rasterizer and conceptually fairly simple.</p>
+<p>We covered a small example that showed how to supply data in an attribute and 2 uniforms.
+It&#39;s common to have multiple attributes and many uniforms. Near the top of this article
+we also mentioned <em>varyings</em> and <em>textures</em>. Those will show up in subsequent lessons.</p>
+<p>Before we move on I want to mention that for <em>most</em> applications updating
+the data in a buffer like we did in <code>setRectangle</code> is not common. I used that
+example because I thought it was easiest to explain since it shows pixel coordinates
+as input and demonstrates doing a small amount of math in GLSL. It&#39;s not wrong, there
+are plenty of cases where it&#39;s the right thing to do, but you should <a href="webgl-2d-translation.html">keep reading to find out
+the more common way to position, orient and scale things in WebGL</a>.</p>
 <p>If you&#39;re 100% new to WebGL and have no idea what GLSL is or shaders or what the GPU does
 then checkout <a href="webgl-how-it-works.html">the basics of how WebGL really works</a>.</p>
+<p>You should also, at least briefly read about <a href="webgl-boilerplate.html">the boilerplate code used here</a>
+that is used in most of the examples. You should also at least skim
+<a href="webgl-drawing-multiple-things.html">how to draw mulitple things</a> to give you some idea
+of how more typical WebGL apps are structured because unfortunately nearly all the examples
+only draw one thing and so do not show that structure.</p>
 <p>Otherwise from here you can go in 2 directions. If you are interested in image procesing
 I&#39;ll show you <a href="webgl-image-processing.html">how to do some 2D image processing</a>.
 If you are interesting in learning about translation,
 rotation and scale then <a href="webgl-2d-translation.html">start here</a>.</p>
-<div class="webgl_bottombar">
-<h3>What do type="x-shader/x-vertex" and type="x-shader/x-fragment" mean?</h3>
-<p>
-<code>&lt;script&gt;</code> tags default to having JavaScript in them.
-You can put no type or you can put <code>type="javascript"</code> or
-<code>type="text/javascript"</code> and the browser will interpret the
-contents as JavaScript. If you put anything else the browser ignores the
-contents of the script tag. In other words <code>x-shader/x-vertex</code>
-and <code>x-shader/x-fragment</code> have no meaning as far as the browser
-is concerned.</p>
-<p>
-We can use this feature to store shaders in script tags. This is convenient
-because if we couldn't do this we'd have to either write really ugly
-string concatenations like</p>
-<pre class="prettyprint">
-  var shaderSource =
-    "void main() {\n" +
-    "  gl_FragColor = vec4(1,0,0,1);\n" +
-    "}";
-</pre>
-<p>or we'd have to load shaders with ajax requests which is slow and async.</p>
-<p>Puting them in script tags means they are easy to edit and easy
-to access at runtime.</p>
-<p>
-In this case the function <code>createProgramFromScripts</code> looks for
-scripts with specified ids, pulls out their content. It compiles the first
-id as a vertex shader and the second id as a fragment shader.
-</p>
-<p>
-<code>createProgramFromScripts</code> is part of some <a href="webgl-boilerplate.html">boilerplate like code</a>
-that almost every WebGL program needs.
-</p>
-</div>
 
       <hr/>
       <div>
