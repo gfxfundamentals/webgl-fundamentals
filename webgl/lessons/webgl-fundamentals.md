@@ -220,7 +220,7 @@ In this case our only input to our GLSL program is `position` which is an attrib
 The first thing we should do is look up the location of the attribute for the program
 we just created
 
-    var positionAttributeLocation = gl.getAttribLocation(program, "position");
+    var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
 
 Looking up attribute locations (and uniform locations) is something you should
 do during initialization, not in your render loop.
