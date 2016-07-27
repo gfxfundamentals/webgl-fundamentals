@@ -46,7 +46,7 @@ a shader can receive data.
 
    Varyings are a way for a vertex shader to pass data to a fragment shader. Depending
    on what is being rendered, points, lines, or triangles, the values set on a varying
-   by a vertex shader will be iterpolated executing the fragment shader.
+   by a vertex shader will be interpolated while executing the fragment shader.
 
 ## WebGL Hello World
 
