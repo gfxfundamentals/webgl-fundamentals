@@ -338,17 +338,21 @@ Here's a live version
 
 {{{example url="../webgl-fundamentals.html" }}}
 
-Not very exciting :-p
-
-Again, clipspace coordinates always go from -1 to +1 regardless of the
-size of the canvas. In the case above you can see our vertex shader is doing nothing
+In the case above you can see our vertex shader is doing nothing
 but passing on our position data directly. Since the position data is
 already in clipspace there is no work to do. *If you want 3D it's up to you
 to supply shaders that convert from 3D to clipspace because WebGL is only
 a rasterization API*.
 
+You might be wondering why does the triangle start in the middle and go to toward the top right.
+Clip space in `x` goes from -1 to +1. That means 0 is in the center and positive values will
+be to the right of that.
+
+As for why it's on the top, in clip space -1 is at the bottom and +1 is at the top. That means
+0 is in the center and so positive numbers will be above the center.
+
 For 2D stuff you would probably rather work in pixels than clipspace so
-let's change the shader so we can supply rectangles in pixels and have
+let's change the shader so we can supply the position in pixels and have
 it convert to clipspace for us. Here's the new vertex shader
 
     <script id="2d-vertex-shader" type="notjs">
@@ -373,7 +377,7 @@ it convert to clipspace for us. Here's the new vertex shader
 
     </script>
 
-Some things to notice about the changes. I changed `a_position` to a `vec2` since we're
+Some things to notice about the changes. We changed `a_position` to a `vec2` since we're
 only using `x` and `y` anyway. A `vec2` is similar to a `vec4` but only has `x` and `y`.
 
 Next we added a `uniform` called `u_resolution`. To set that we need to look up its location.
@@ -384,7 +388,7 @@ The rest should be clear from the comments. By setting `u_resolution` to the res
 of our canvas the shader will now take the positions we put in `positionBuffer` supplied
 in pixels coordinates and convert them to clip space.
 
-Now we can change our data from clip space to pixels. This time we're going to draw a rectangle
+Now we can change our position values from clip space to pixels. This time we're going to draw a rectangle
 made from 2 triangles, 3 points each.
 
     var positions = [
@@ -397,7 +401,9 @@ made from 2 triangles, 3 points each.
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-And after we set which program to use we can set the value for the uniform we created
+And after we set which program to use we can set the value for the uniform we created.
+Use program is like `gl.bindBuffer` above in that it sets the current program. After
+that all the `gl.uniformXXX` functions set uniforms on the current program.
 
     gl.useProgram(program);
 
@@ -405,7 +411,7 @@ And after we set which program to use we can set the value for the uniform we cr
     gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
 And of course to draw 2 triangles we need to have WebGL call our vertex shader 6 times
-so we need to change the count to 6.
+so we need to change the `count` to `6`.
 
     // draw
     var primitiveType = gl.TRIANGLES;
@@ -417,9 +423,9 @@ And here it is
 
 {{{example url="../webgl-2d-rectangle.html" }}}
 
-You might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
+Again you might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
 corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs
-we can just flip the y coordinate.
+we can just flip the clip space y coordinate.
 
     *   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
