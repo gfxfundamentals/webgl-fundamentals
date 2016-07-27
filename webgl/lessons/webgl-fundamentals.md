@@ -287,11 +287,12 @@ default to `0, 0, 0, 1` so this attribute will get its first 2 values (x and y)
 from our buffer. The z, and w will be the default 0 and 1 respectively.
 
 We need tell WebGL how to convert from the clip space
-values we'll be setting `gl_Position` to back into pixels. To do this we call `gl.viewport`
+values we'll be setting `gl_Position` to back into pixels, often called screen space.
+To do this we call `gl.viewport`
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-This tells WebGL the -1 +1 clip space maps to 0 -> gl.canvas.width for x and 0 -> gl.canvas.height
+This tells WebGL the -1 +1 clip space maps to 0 -> `gl.canvas.width` for x and 0 -> `gl.canvas.height`
 for y. Note the viewport settings default to the **initial** size of our canvas. If we never
 change the size of the canvas we might not need to set the viewport.
 
@@ -306,7 +307,7 @@ After all that we can finally ask WebGL to execute our GLSL program.
     var count = 3;
     gl.drawArrays(primitiveType, offset, count);
 
-This will execute our vertex shader 3 times. The first time `position.x` and `position.y`
+Because the count is 3 this will execute our vertex shader 3 times. The first time `position.x` and `position.y`
 in our vertex shader attribute will be set to the first 2 values from the positionBuffer.
 The 2nd time `position.xy` will be set to the 2nd two values. The last time it will be
 set to the last 2 values.
@@ -322,9 +323,7 @@ triangle will be drawn at clip space coordinates
       0, 0.5,
       0.7, 0,
 
-How those values translate to pixel depends on the `gl.viewport` setting. In the same our
-canvas size is 400x300
-`gl.viewport` defaults to the initial size of the canvas. Since we didn't set a size for our canvas it's the default size of 300x150. Converting from clip space to pixels (often called screen space in WebGL and OpenGL literature) WebGL is going to draw a triangle at
+Converting from clip space to screen sapce WebGL is going to draw a triangle at
 
      clip space      screen space
        0, 0       ->   200, 150
