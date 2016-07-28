@@ -20,17 +20,25 @@ Nearly all of the entire WebGL API is about setting up state for these pairs of 
 a bunch of state then execute a pair of functions by calling `gl.drawArrays` or `gl.drawElements` which
 executes your shaders on the GPU.
 
-Any data you want those functions to have accessed to must be provided to the GPU. There are 4 ways
+Any data you want those functions to have accesse to must be provided to the GPU. There are 4 ways
 a shader can receive data.
 
 1. Attributes and Buffers
 
-   Buffers are arrays of binary data you upload to the GPU. Attributes are used to specify how to
+   Buffers are arrays of binary data you upload to the GPU. Usually buffers contain
+   things like positions, normals, texture coordinates, vertex colors, etc although
+   you're free to put anything you want in them.
+
+   Attributes are used to specify how to
    pull data how of your buffers and provide them to your vertex shader.
    For example you might put positions in a buffer as three 32bit floats
-   per position. You would tell a particular attribute which buffer to pull the data out of, what type
-   of data it shoudl pull out (3 component 32 bit floating point numbers), what offset
+   per position. You would tell a particular attribute which buffer to pull the positions out of, what type
+   of data it should pull out (3 component 32 bit floating point numbers), what offset
    in the buffer the positions start, and how many bytes to get from one position to the next.
+
+   Buffers are not random access. Instead a vertex shaders is executed a specified number
+   of times. Each time it's executed the next value from each specified buffers is pulled
+   out assigned to an attribute.
 
 2. Uniforms
 
@@ -52,7 +60,7 @@ a shader can receive data.
 
 WebGL only cares about 2 things. Clipspace coordinates and colors.
 Your job as a programmer using WebGL is to provide WebGL with those 2 things.
-You provide 2 "shaders" to do this. A Vertex shader which provides the
+You provide your 2 "shaders" to do this. A Vertex shader which provides the
 clipspace coordinates and a fragment shader that provides the color.
 
 Clipspace coordinates always go from -1 to +1 no matter what size your
