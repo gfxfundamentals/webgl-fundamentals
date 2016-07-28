@@ -82,16 +82,22 @@ A fragment shader&#39;s job is to compute a color for each pixel of the primitiv
 <p>Nearly all of the entire WebGL API is about setting up state for these pairs of functions to run. You setup
 a bunch of state then execute a pair of functions by calling <code>gl.drawArrays</code> or <code>gl.drawElements</code> which
 executes your shaders on the GPU.</p>
-<p>Any data you want those functions to have accessed to must be provided to the GPU. There are 4 ways
+<p>Any data you want those functions to have accesse to must be provided to the GPU. There are 4 ways
 a shader can receive data.</p>
 <ol>
 <li><p>Attributes and Buffers</p>
-<p>Buffers are arrays of binary data you upload to the GPU. Attributes are used to specify how to
+<p>Buffers are arrays of binary data you upload to the GPU. Usually buffers contain
+things like positions, normals, texture coordinates, vertex colors, etc although
+you&#39;re free to put anything you want in them.</p>
+<p>Attributes are used to specify how to
 pull data how of your buffers and provide them to your vertex shader.
 For example you might put positions in a buffer as three 32bit floats
-per position. You would tell a particular attribute which buffer to pull the data out of, what type
-of data it shoudl pull out (3 component 32 bit floating point numbers), what offset
+per position. You would tell a particular attribute which buffer to pull the positions out of, what type
+of data it should pull out (3 component 32 bit floating point numbers), what offset
 in the buffer the positions start, and how many bytes to get from one position to the next.</p>
+<p>Buffers are not random access. Instead a vertex shaders is executed a specified number
+of times. Each time it&#39;s executed the next value from each specified buffers is pulled
+out assigned to an attribute.</p>
 </li>
 <li><p>Uniforms</p>
 <p>Uniforms are effectively global variables you set before you execute your shader program.</p>
@@ -110,7 +116,7 @@ by a vertex shader will be interpolated while executing the fragment shader.</p>
 <h2 id="webgl-hello-world">WebGL Hello World</h2>
 <p>WebGL only cares about 2 things. Clipspace coordinates and colors.
 Your job as a programmer using WebGL is to provide WebGL with those 2 things.
-You provide 2 &quot;shaders&quot; to do this. A Vertex shader which provides the
+You provide your 2 &quot;shaders&quot; to do this. A Vertex shader which provides the
 clipspace coordinates and a fragment shader that provides the color.</p>
 <p>Clipspace coordinates always go from -1 to +1 no matter what size your
 canvas is. Here is a simple WebGL example that shows WebGL in its simplest form.</p>
