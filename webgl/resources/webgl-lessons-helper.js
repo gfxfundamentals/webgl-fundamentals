@@ -44,6 +44,7 @@
 
   function updateCSSIfInIFrame() {
     if (isInIFrame()) {
+      document.getElementsByTagName("html")[0].className = "iframe";
       document.body.className = "iframe";
     }
   }
