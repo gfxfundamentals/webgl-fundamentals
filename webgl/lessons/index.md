@@ -7,6 +7,8 @@ They are NOT old rehashed out of date OpenGL articles like many others on the ne
 They are entirely new, discarding the old out of date ideas and bringing you
 to a full understanding of what WebGL really is and how it really works.
 
+If you are interested in WebGL2 please see [webgl2fundamentals.org](http://webgl2fundamentals.org)
+
 {{{include "webgl/lessons/toc.html"}}}
 
 
