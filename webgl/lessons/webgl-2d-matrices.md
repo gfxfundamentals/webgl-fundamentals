@@ -361,7 +361,10 @@ We also removed the code that set the resolution. With this last step we've gone
 
 {{{example url="../webgl-2d-geometry-matrix-transform-with-projection.html" }}}
 
-I hope these posts have helped demystify matrix math. <a href="webgl-3d-orthographic.html">I'll move on to 3D next</a>. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.
+I hope these posts have helped demystify matrix math. If you really want to become an expert
+in matrix math [check out this amazing videos](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab).
+
+<a href="webgl-3d-orthographic.html">I'll move on to 3D next</a>. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.
 
 <div class="webgl_bottombar">
 <h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
