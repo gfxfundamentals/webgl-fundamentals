@@ -209,7 +209,7 @@ We then need to *link* those 2 shaders into a *program*
       gl.attachShader(program, vertexShader);
       gl.attachShader(program, fragmentShader);
       gl.linkProgram(program);
-      var sucesss = gl.getProgramParameter(program, gl.LINK_STATUS);
+      var success = gl.getProgramParameter(program, gl.LINK_STATUS);
       if (success) {
         return program;
       }
