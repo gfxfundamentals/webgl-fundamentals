@@ -86,14 +86,16 @@ function main() {
   gl.vertexAttribPointer(
       positionAttributeLocation, size, type, normalize, stride, offset)
 
+  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
   // Tell WebGL how to convert from clip space to pixels
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   // Tell it to use our program (pair of shaders)
   gl.useProgram(program);
 
-  // Set
-  gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
+  // set the resolution
+  gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
   // draw
   var primitiveType = gl.TRIANGLES;

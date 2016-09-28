@@ -72,8 +72,8 @@ function main() {
   drawScene();
 
   // Setup a ui.
-  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: canvas.width });
-  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: canvas.height});
+  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: gl.canvas.width });
+  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: gl.canvas.height});
   webglLessonsHelper.setupSlider("#angle", {slide: updateAngle, max: 360});
   webglLessonsHelper.setupSlider("#scaleX", {value: scale[0], slide: updateScale(0), min: -5, max: 5, step: 0.01, precision: 2});
   webglLessonsHelper.setupSlider("#scaleY", {value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
@@ -109,7 +109,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Compute the matrices
-    var projectionMatrix = make2DProjection(canvas.clientWidth, canvas.clientHeight);
+    var projectionMatrix = make2DProjection(gl.canvas.clientWidth, gl.canvas.clientHeight);
     var translationMatrix = makeTranslation(translation[0], translation[1]);
     var rotationMatrix = makeRotation(angleInRadians);
     var scaleMatrix = makeScale(scale[0], scale[1]);

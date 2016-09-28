@@ -3,6 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>WebGL - Textures - Wrap Modes</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
@@ -25,13 +26,18 @@ body, document {
     left: 1px;
     width: 400px;
     height: 300px;
+    g-background: rgba(255, 0, 0, 0.2);
+}
+#gridContainer>svg {
+    width: 100%;
+    height: 100%;
 }
 #uiContainer {
-    left: 5px;
-    top: 5px;
+    left: 15px;
+    top: 15px;
 }
-#rotation>canvas {
-    background-color: rgba(255, 255, 255, 0.6) !important;
+#ui>div {
+    margin-bottom: 1em;
 }
 #container {
   position: relative;
@@ -47,12 +53,12 @@ Show texture wrapping modes<br/>
   <div id="gridContainer">
     <svg version="1.1"
         id="grid"
-        viewBox="0 0 400 300"
+        viewBox="-50 -50 400 300"
         fill="none"
         stroke="none"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink">
-      <g transform="matrix(2.15, 0, 0, 2.15, 114, 86)">
+      <g transform="matrix(1, 0, 0, 1, 0, 0)">
          <g stroke-width="0.25" stroke="#000000">
            <line x1="0"  y1="80" x2="0"  y2="85"/>
            <line x1="16" y1="80" x2="16" y2="85"/>
@@ -61,26 +67,26 @@ Show texture wrapping modes<br/>
            <line x1="64" y1="80" x2="64" y2="85"/>
            <line x1="80" y1="80" x2="80" y2="85"/>
 
-           <line y1="0"  x1="-5" y2="0"  x2="0" />
-           <line y1="16" x1="-5" y2="16" x2="0" />
-           <line y1="32" x1="-5" y2="32" x2="0" />
-           <line y1="48" x1="-5" y2="48" x2="0" />
-           <line y1="64" x1="-5" y2="64" x2="0" />
-           <line y1="80" x1="-5" y2="80" x2="0" />
+           <line y1="0"  x1="85" y2="0"  x2="80" />
+           <line y1="16" x1="85" y2="16" x2="80" />
+           <line y1="32" x1="85" y2="32" x2="80" />
+           <line y1="48" x1="85" y2="48" x2="80" />
+           <line y1="64" x1="85" y2="64" x2="80" />
+           <line y1="80" x1="85" y2="80" x2="80" />
          </g>
-         <g fill="#000000" font-size="4" font-family="monospace" text-anchor="middle">
+         <g fill="#000000" font-size="5" font-family="monospace" text-anchor="middle">
            <text x="0"  y="90">-3</text>
            <text x="16" y="90">-2</text>
            <text x="32" y="90">-1</text>
            <text x="48" y="90">0</text>
            <text x="64" y="90">1</text>
            <text x="80" y="90">2</text>
-           <text y="1"  x="-10">4</text>
-           <text y="17" x="-10">3</text>
-           <text y="33" x="-10">2</text>
-           <text y="49" x="-10">1</text>
-           <text y="65" x="-10">0</text>
-           <text y="81" x="-10">-1</text>
+           <text y="1"  x="90">4</text>
+           <text y="17" x="90">3</text>
+           <text y="33" x="90">2</text>
+           <text y="49" x="90">1</text>
+           <text y="65" x="90">0</text>
+           <text y="81" x="90">-1</text>
          </g>
       </g>
     </svg>
@@ -88,14 +94,16 @@ Show texture wrapping modes<br/>
   <div id="uiContainer">
     <div id="ui">
       <div id="wrap_s">
-        <span>TEXTURE_WRAP_S: </span>
-        <input type="radio" id="wrap_s0" name="wrap_s" checked="true"/><label for="wrap_s0">REPEAT</label>
-        <input type="radio" id="wrap_s1" name="wrap_s" /><label for="wrap_s1">CLAMP_TO_EDGE</label>
+        <div>TEXTURE_WRAP_S: </div>
+        <div><input type="radio" id="wrap_s0" name="wrap_s" checked="true"/><label for="wrap_s0">REPEAT</label></div>
+        <div><input type="radio" id="wrap_s1" name="wrap_s" /><label for="wrap_s1">CLAMP_TO_EDGE</label></div>
+        <div><input type="radio" id="wrap_s2" name="wrap_s" /><label for="wrap_s2">MIRRORED_REPEAT</label></div>
       </div>
       <div id="wrap_t">
-        <span>TEXTURE_WRAP_T: </span>
-        <input type="radio" id="wrap_t0" name="wrap_t" checked="true"/><label for="wrap_t0">REPEAT</label>
-        <input type="radio" id="wrap_t1" name="wrap_t" /><label for="wrap_t1">CLAMP_TO_EDGE</label>
+        <div><span>TEXTURE_WRAP_T: </span></div>
+        <div><input type="radio" id="wrap_t0" name="wrap_t" checked="true"/><label for="wrap_t0">REPEAT</label></div>
+        <div><input type="radio" id="wrap_t1" name="wrap_t" /><label for="wrap_t1">CLAMP_TO_EDGE</label></div>
+        <div><input type="radio" id="wrap_t2" name="wrap_t" /><label for="wrap_t2">MIRRORED_REPEAT</label></div>
       </div>
     </div>
   </div>
@@ -112,21 +120,11 @@ var zDepth = 50;
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas", {antialias: false});
-  var dpr = window.devicePixelRatio || 1;
-  var originalCanvasWidth = canvas.width;
-  var originalCanvasHeight = canvas.height;
-  canvas.style.width = canvas.width + "px";
-  canvas.style.height = canvas.height + "px";
-  canvas.width = Math.floor(canvas.width * dpr);
-  canvas.height = Math.floor(canvas.height * dpr);
   webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
-
-  gl.enable(gl.CULL_FACE);
-  gl.enable(gl.DEPTH_TEST);
 
   // setup GLSL program
   var program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
@@ -167,7 +165,7 @@ function main() {
                 new Uint8Array([0, 0, 255, 255]));
   // Asynchronously load an image
   var image = new Image();
-  image.src = "resources/mip-low-res-example.png";
+  image.src = "resources/f-texture.png";
   image.addEventListener('load', function() {
     // Now that the image has loaded make copy it to the texture.
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -189,10 +187,12 @@ function main() {
   var wrapS = gl.REPEAT;
   var wrapT = gl.REPEAT;
 
-  $("#wrap_s0").click(function() { wrapS = gl.REPEAT;        drawScene(); });
-  $("#wrap_s1").click(function() { wrapS = gl.CLAMP_TO_EDGE; drawScene(); });
-  $("#wrap_t0").click(function() { wrapT = gl.REPEAT;        drawScene(); });
-  $("#wrap_t1").click(function() { wrapT = gl.CLAMP_TO_EDGE; drawScene(); });
+  document.querySelector("#wrap_s0").addEventListener('click', function() { wrapS = gl.REPEAT;          drawScene(); });  // eslint-disable-line
+  document.querySelector("#wrap_s1").addEventListener('click', function() { wrapS = gl.CLAMP_TO_EDGE;   drawScene(); });  // eslint-disable-line
+  document.querySelector("#wrap_s2").addEventListener('click', function() { wrapS = gl.MIRRORED_REPEAT; drawScene(); });  // eslint-disable-line
+  document.querySelector("#wrap_t0").addEventListener('click', function() { wrapT = gl.REPEAT;          drawScene(); });  // eslint-disable-line
+  document.querySelector("#wrap_t1").addEventListener('click', function() { wrapT = gl.CLAMP_TO_EDGE;   drawScene(); });  // eslint-disable-line
+  document.querySelector("#wrap_t2").addEventListener('click', function() { wrapT = gl.MIRRORED_REPEAT; drawScene(); });  // eslint-disable-line
 
   function isPowerOf2(value) {
     return (value & (value - 1)) == 0;
@@ -220,36 +220,32 @@ function main() {
     // Clear the framebuffer texture.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    // Compute the matrix
+    var scaleFactor = 2.5;
+    var size = 80 * scaleFactor;
+    var x = gl.canvas.clientWidth / 2 - size / 2;
+    var y = gl.canvas.clientHeight - size - 60;
+    gridContainer.style.left = (x - 50 * scaleFactor) + 'px';
+    gridContainer.style.top  = (y - 50 * scaleFactor) + 'px';
+    gridContainer.style.width  = (scaleFactor * 400) + 'px';
+    gridContainer.style.height = (scaleFactor * 300) + 'px';
+
     // Compute the projection matrix
-    var aspect = canvas.clientWidth / canvas.clientHeight;
-    var zNear  = 1;
-    var zFar   = 2000;
     var projectionMatrix =
-        makePerspective(fieldOfViewRadians, aspect, zNear, zFar);
-
-    var cameraPosition = [0, 0, 2];
-    var up = [0, 1, 0];
-    var target = [0, 0, 0];
-
-    // Compute the camera's matrix using look at.
-    var cameraMatrix = makeLookAt(cameraPosition, target, up);
-
-    // Make a view matrix from the camera matrix.
-    var viewMatrix = makeInverse(cameraMatrix);
+        makeOrthographic(0, gl.canvas.clientWidth, gl.canvas.clientHeight, 0, -1, 1);
 
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapS);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrapT);
-    var translationMatrix = makeTranslation(0, -0.125, 0);
-    var zRotationMatrix = makeZRotation(0);
-    var scaleMatrix = makeScale(1, 1, 1);
+    var translationMatrix = makeTranslation(x, y, 0);
+    var scaleMatrix = makeScale(size, size, 1);
+    var preTranslationMatrix = makeTranslation(0.5, 0.5, 0);
 
     // Multiply the matrices.
-    var matrix = scaleMatrix;
-    matrix = matrixMultiply(matrix, zRotationMatrix);
+    var matrix = preTranslationMatrix;
+    matrix = matrixMultiply(matrix, scaleMatrix);
     matrix = matrixMultiply(matrix, translationMatrix);
-    matrix = matrixMultiply(matrix, viewMatrix);
     matrix = matrixMultiply(matrix, projectionMatrix);
 
     // Set the matrix.
@@ -264,13 +260,12 @@ function main() {
 function setGeometry(gl) {
   var positions = new Float32Array(
     [
-    -0.5, -0.5,  0.5,
-     0.5, -0.5,  0.5,
-    -0.5,  0.5,  0.5,
-    -0.5,  0.5,  0.5,
-     0.5, -0.5,  0.5,
-     0.5,  0.5,  0.5,
-
+      -0.5, -0.5,  0.5,
+      -0.5,  0.5,  0.5,
+       0.5, -0.5,  0.5,
+      -0.5,  0.5,  0.5,
+       0.5,  0.5,  0.5,
+       0.5, -0.5,  0.5,
     ]);
   gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
 }
@@ -281,13 +276,13 @@ function setTexcoords(gl) {
       gl.ARRAY_BUFFER,
       new Float32Array(
         [
-        -3, -1,
-         2, -1,
-        -3,  4,
-        -3,  4,
-         2, -1,
-         2,  4,
-      ]),
+          -3, -1,
+          -3,  4,
+           2, -1,
+          -3,  4,
+           2,  4,
+           2, -1,
+        ]),
       gl.STATIC_DRAW);
 }
 

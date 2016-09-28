@@ -52,9 +52,6 @@ function main() {
   var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
   var colorLocation = gl.getUniformLocation(program, "u_color");
 
-  // set the resolution
-  gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-
   // Create a buffer.
   var buffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -71,8 +68,8 @@ function main() {
   drawScene();
 
   // Setup a ui.
-  webglLessonsHelper.setupSlider("#x", {slide: updatePosition(0), max: canvas.width });
-  webglLessonsHelper.setupSlider("#y", {slide: updatePosition(1), max: canvas.height});
+  webglLessonsHelper.setupSlider("#x", {slide: updatePosition(0), max: gl.canvas.width });
+  webglLessonsHelper.setupSlider("#y", {slide: updatePosition(1), max: gl.canvas.height});
 
   function updatePosition(index) {
     return function(event, ui) {
@@ -93,6 +90,9 @@ function main() {
 
     // Setup a rectangle
     setRectangle(gl, translation[0], translation[1], width, height);
+
+    // set the resolution
+    gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
 
     // Draw the rectangle.
     gl.drawArrays(gl.TRIANGLES, 0, 6);

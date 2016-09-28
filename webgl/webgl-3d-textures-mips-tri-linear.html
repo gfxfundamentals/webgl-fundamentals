@@ -3,6 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>WebGL - Textures - Mips - Depth</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
@@ -22,24 +23,16 @@ body, document {
     left: 10px;
     top: 130px;
 }
-#rotation>canvas {
-    background-color: rgba(255, 255, 255, 0.6) !important;
-}
-#container {
-  position: relative;
-}
 </style>
 </head>
 <body>
 <div class="description">
 Show how mips are important for depth<br/>
 </div>
-<div id="container">
-  <canvas id="canvas"></canvas>
-  <div id="uiContainer">
-    <div id="ui">
-      <div id="b">Click to switch texture</div>
-    </div>
+<canvas id="canvas"></canvas>
+<div id="uiContainer">
+  <div id="ui">
+    <div id="b">Click to switch texture</div>
   </div>
 </div>
 </body>
@@ -54,13 +47,6 @@ var zDepth = 50;
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas", {antialias: false});
-  var dpr = window.devicePixelRatio || 1;
-  var originalCanvasWidth = canvas.width;
-  var originalCanvasHeight = canvas.height;
-  canvas.style.width = canvas.width + "px";
-  canvas.style.height = canvas.height + "px";
-  canvas.width = Math.floor(canvas.width * dpr);
-  canvas.height = Math.floor(canvas.height * dpr);
   webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
@@ -161,7 +147,7 @@ function main() {
   ];
   var textureIndex = 0;
 
-  $("body").click(function() {
+  document.body.addEventListener('click', function() {
     textureIndex = (textureIndex + 1) % textures.length;
     drawScene();
   });
@@ -194,7 +180,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Compute the projection matrix
-    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var zNear  = 1;
     var zFar   = 2000;
     var projectionMatrix =

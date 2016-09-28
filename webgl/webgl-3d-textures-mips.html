@@ -21,13 +21,6 @@ Show how mips are important for stability and color<br/>
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas", {antialias: false});
-  var dpr = window.devicePixelRatio || 1;
-  var originalCanvasWidth = canvas.width;
-  var originalCanvasHeight = canvas.height;
-  canvas.style.width = canvas.width + "px";
-  canvas.style.height = canvas.height + "px";
-  canvas.width = Math.floor(canvas.width * dpr);
-  canvas.height = Math.floor(canvas.height * dpr);
   webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
@@ -131,8 +124,9 @@ function main() {
 
     if (webglUtils.resizeCanvasToDisplaySize(gl.canvas) || allocateFBTexture) {
       allocateFBTexture = false;
-      framebufferWidth = originalCanvasWidth / 4;
-      framebufferHeight = originalCanvasHeight / 4;
+      framebufferWidth = gl.canvas.clientWidth / 4;
+      framebufferHeight = gl.canvas.clientHeight / 4;
+      gl.bindTexture(gl.TEXTURE_2D, fbTexture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebufferWidth, framebufferHeight,
                     0, gl.RGBA, gl.UNSIGNED_BYTE, null);
     }
@@ -145,7 +139,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Compute the projection matrix
-    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var zNear  = 1;
     var zFar   = 2000;
     var projectionMatrix =

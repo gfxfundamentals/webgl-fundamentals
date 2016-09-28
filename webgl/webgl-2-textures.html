@@ -105,8 +105,12 @@ function render(images) {
   var u_image0Location = gl.getUniformLocation(program, "u_image0");
   var u_image1Location = gl.getUniformLocation(program, "u_image1");
 
+  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
   // set the resolution
-  gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+  gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
 
   // set which texture units to render with.
   gl.uniform1i(u_image0Location, 0);  // texture unit 0

@@ -47,7 +47,7 @@ function main() {
   var rotationLocation = gl.getUniformLocation(program, "u_rotation");
 
   // set the resolution
-  gl.uniform2f(resolutionLocation, canvas.clientWidth, canvas.clientHeight);
+  gl.uniform2f(resolutionLocation, gl.canvas.clientWidth, gl.canvas.clientHeight);
 
   // Create a buffer.
   var buffer = gl.createBuffer();
@@ -67,8 +67,8 @@ function main() {
   drawScene();
 
   // Setup a ui.
-  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: canvas.width });
-  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: canvas.height});
+  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: gl.canvas.width });
+  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: gl.canvas.height});
   webglLessonsHelper.setupSlider("#angle", {slide: updateAngle, max: 360});
 
   function updatePosition(index) {

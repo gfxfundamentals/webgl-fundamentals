@@ -61,24 +61,24 @@ function main() {
   function drawScene(now) {
     now *= 0.001; // convert to seconds
 
-    resize(canvas);
+    resize(gl.canvas);
 
     // Clear the canvas.
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Compute the matrices
-    var projectionMatrix = make2DProjection(canvas.width, canvas.height);
+    var projectionMatrix = make2DProjection(gl.canvas.width, gl.canvas.height);
 
     // Set the matrix.
     gl.uniformMatrix3fv(matrixLocation, false, projectionMatrix);
 
     // Set Geometry.
-    var radius = Math.sqrt(canvas.width * canvas.width + canvas.height * canvas.height) * 0.5;
+    var radius = Math.sqrt(gl.canvas.width * gl.canvas.width + gl.canvas.height * gl.canvas.height) * 0.5;
     var angle = now;
     var x = Math.cos(angle) * radius;
     var y = Math.sin(angle) * radius;
-    var centerX = canvas.width  / 2;
-    var centerY = canvas.height / 2;
+    var centerX = gl.canvas.width  / 2;
+    var centerY = gl.canvas.height / 2;
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     setGeometry(gl, centerX + x, centerY + y, centerX - x, centerY - y);
 

@@ -32,7 +32,7 @@ h1 {
 </style>
 </head>
 <body>
-<canvas id="canvas"></canvas>
+<canvas id="canvas" width="400" height="300"></canvas>
 <div class="description">resize this window tall and thin or short and wide.<br/>Notice the F does NOT keep the correct aspect</div>
 </body>
 <script src="resources/webgl-utils.js"></script>
@@ -83,8 +83,6 @@ function main() {
 
   // Draw the scene.
   function drawScene() {
-    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-
     // Tell WebGL how to convert from clip space to pixels
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
@@ -92,7 +90,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Compute the matrices
-    var projectionMatrix = make2DProjection(canvas.width, canvas.height);  // BAD!!
+    var projectionMatrix = make2DProjection(gl.canvas.width, gl.canvas.height);  // BAD!!
     var translationMatrix = makeTranslation(translation[0], translation[1]);
     var rotationMatrix = makeRotation(angleInRadians);
     var scaleMatrix = makeScale(scale[0], scale[1]);

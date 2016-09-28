@@ -47,9 +47,6 @@ function main() {
   var colorLocation = gl.getUniformLocation(program, "u_color");
   var matrixLocation = gl.getUniformLocation(program, "u_matrix");
 
-  // set the resolution
-  gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-
   // Create a buffer.
   var buffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -69,8 +66,8 @@ function main() {
   drawScene();
 
   // Setup a ui.
-  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: canvas.width });
-  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: canvas.height});
+  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: gl.canvas.width });
+  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: gl.canvas.height});
   webglLessonsHelper.setupSlider("#angle", {slide: updateAngle, max: 360});
   webglLessonsHelper.setupSlider("#scaleX", {value: scale[0], slide: updateScale(0), min: -5, max: 5, step: 0.01, precision: 2});
   webglLessonsHelper.setupSlider("#scaleY", {value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
@@ -104,6 +101,9 @@ function main() {
 
     // Clear the canvas.
     gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // set the resolution
+    gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
 
     // Compute the matrices
     var moveOriginMatrix = makeTranslation(-50, -75);

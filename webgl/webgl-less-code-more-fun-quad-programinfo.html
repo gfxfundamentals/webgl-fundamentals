@@ -116,7 +116,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Compute the projection matrix
-    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
         makePerspective(fieldOfViewRadians, aspect, 1, 2000);
 
@@ -132,10 +132,10 @@ function main() {
     gl.useProgram(programInfo.program);
 
     // Setup all the needed buffers and attributes.
-    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
 
     // Set the uniforms that are the same for all objects.
-    webglUtils.setUniforms(programInfo.uniformSetters, uniformsThatAreTheSameForAllObjects);
+    webglUtils.setUniforms(programInfo, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
     objects.forEach(function(object) {
@@ -154,10 +154,10 @@ function main() {
       makeTranspose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
 
       // Set the uniforms we just computed
-      webglUtils.setUniforms(programInfo.uniformSetters, uniformsThatAreComputedForEachObject);
+      webglUtils.setUniforms(programInfo, uniformsThatAreComputedForEachObject);
 
       // Set the uniforms that are specific to the this object.
-      webglUtils.setUniforms(programInfo.uniformSetters, object.materialUniforms);
+      webglUtils.setUniforms(programInfo, object.materialUniforms);
 
       // Draw the geometry.
       gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);

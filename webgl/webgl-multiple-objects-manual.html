@@ -137,7 +137,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Compute the projection matrix
-    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
         makePerspective(fieldOfViewRadians, aspect, 1, 2000);
 
@@ -162,7 +162,7 @@ function main() {
     gl.useProgram(programInfo.program);
 
     // Setup all the needed attributes.
-    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, sphereBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo, sphereBufferInfo);
 
     sphereUniforms.u_matrix = computeMatrix(
         viewMatrix,
@@ -172,14 +172,14 @@ function main() {
         sphereYRotation);
 
     // Set the uniforms we just computed
-    webglUtils.setUniforms(programInfo.uniformSetters, sphereUniforms);
+    webglUtils.setUniforms(programInfo, sphereUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, sphereBufferInfo.numElements);
 
     // ------ Draw the cube --------
 
     // Setup all the needed attributes.
-    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, cubeBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo, cubeBufferInfo);
 
     cubeUniforms.u_matrix = computeMatrix(
         viewMatrix,
@@ -189,14 +189,14 @@ function main() {
         cubeYRotation);
 
     // Set the uniforms we just computed
-    webglUtils.setUniforms(programInfo.uniformSetters, cubeUniforms);
+    webglUtils.setUniforms(programInfo, cubeUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, cubeBufferInfo.numElements);
 
     // ------ Draw the cone --------
 
     // Setup all the needed attributes.
-    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, coneBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo, coneBufferInfo);
 
     coneUniforms.u_matrix = computeMatrix(
         viewMatrix,
@@ -206,7 +206,7 @@ function main() {
         coneYRotation);
 
     // Set the uniforms we just computed
-    webglUtils.setUniforms(programInfo.uniformSetters, coneUniforms);
+    webglUtils.setUniforms(programInfo, coneUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 

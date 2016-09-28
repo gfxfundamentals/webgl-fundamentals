@@ -180,7 +180,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Compute the matrices used for all objects
-    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
         makePerspective(fieldOfViewRadians, aspect, 1, 2000);
 
@@ -224,10 +224,10 @@ function main() {
         // setup to draw the 'F'
         gl.useProgram(fProgramInfo.program);
 
-        webglUtils.setBuffersAndAttributes(gl, fProgramInfo.attribSetters, fBufferInfo);
+        webglUtils.setBuffersAndAttributes(gl, fProgramInfo, fBufferInfo);
 
         copyMatrix(matrix, fUniforms.u_matrix);
-        webglUtils.setUniforms(fProgramInfo.uniformSetters, fUniforms);
+        webglUtils.setUniforms(fProgramInfo, fUniforms);
 
         // Draw the geometry.
         gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
@@ -261,10 +261,10 @@ function main() {
       // setup to draw the text.
       gl.useProgram(textProgramInfo.program);
 
-      webglUtils.setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
+      webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
 
       copyMatrix(textMatrix, textUniforms.u_matrix);
-      webglUtils.setUniforms(textProgramInfo.uniformSetters, textUniforms);
+      webglUtils.setUniforms(textProgramInfo, textUniforms);
 
       // Draw the text.
       gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);

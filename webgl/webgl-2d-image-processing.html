@@ -291,6 +291,11 @@ function render(image) {
   drawEffects();
 
   function drawEffects() {
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
     // start with the original image
     gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
@@ -317,7 +322,7 @@ function render(image) {
 
     // finally draw the result to the canvas.
     gl.uniform1f(flipYLocation, -1);  // need to y flip for canvas
-    setFramebuffer(null, canvas.width, canvas.height);
+    setFramebuffer(null, gl.canvas.width, gl.canvas.height);
     drawWithKernel("normal");
   }
 

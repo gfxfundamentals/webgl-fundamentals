@@ -148,6 +148,11 @@ function main() {
   }
 
   function draw() {
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     drawInfos.forEach(function(drawInfo) {
@@ -211,7 +216,7 @@ function main() {
     gl.bindTexture(gl.TEXTURE_2D, tex);
 
     // this matirx will convert from pixels to clip space
-    var projectionMatrix = make2DProjection(canvas.width, canvas.height, 1);
+    var projectionMatrix = make2DProjection(gl.canvas.width, gl.canvas.height, 1);
 
     // this matrix will scale our 1 unit quad
     // from 1 unit to dstWidth, dstHeight units

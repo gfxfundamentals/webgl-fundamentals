@@ -89,9 +89,9 @@ function main() {
 
   // Setup a ui.
   webglLessonsHelper.setupSlider("#fieldOfView", {value: fieldOfView, slide: updateFieldOfView, max: 180});
-  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: canvas.width });
-  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: canvas.height});
-  webglLessonsHelper.setupSlider("#z", {value: translation[2], slide: updatePosition(2), max: canvas.height});
+  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: gl.canvas.width });
+  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: gl.canvas.height});
+  webglLessonsHelper.setupSlider("#z", {value: translation[2], slide: updatePosition(2), max: gl.canvas.height});
   webglLessonsHelper.setupSlider("#angleX", {value: radToDeg(rotation[0]), slide: updateRotation(0), max: 360});
   webglLessonsHelper.setupSlider("#angleY", {value: radToDeg(rotation[1]), slide: updateRotation(1), max: 360});
   webglLessonsHelper.setupSlider("#angleZ", {value: radToDeg(rotation[2]), slide: updateRotation(2), max: 360});
@@ -139,7 +139,7 @@ function main() {
 
     // Compute the matrices
     var projectionMatrix =
-        make2DProjection(canvas.clientWidth, canvas.clientHeight, 400);
+        make2DProjection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400);
     var translationMatrix =
         makeTranslation(translation[0], translation[1], translation[2]);
     var rotationXMatrix = makeXRotation(rotation[0]);
