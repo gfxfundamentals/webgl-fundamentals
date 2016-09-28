@@ -42,6 +42,7 @@
   } else {
     // Browser globals
     var lib = factory();
+    root.math3d = lib;
     Object.keys(lib).forEach(function(key) {
       root[key] = lib[key];
     });
