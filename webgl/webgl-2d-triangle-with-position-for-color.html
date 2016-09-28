@@ -4,7 +4,6 @@
 <head>
 <meta charset="utf-8">
 <title>WebGL - Triangle with position for color</title>
-<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 #ui {
@@ -30,9 +29,6 @@ Drag sliders to translate, rotate, and scale.
   </div>
 </div>
 </body>
-<script src="resources/jquery-1.7.1.min.js"></script>
-<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/webgl-2d-math.js"></script>
@@ -74,11 +70,11 @@ function main() {
   drawScene();
 
   // Setup a ui.
-  $("#x").gmanSlider({value: translation[0], slide: updatePosition(0), max: canvas.width });
-  $("#y").gmanSlider({value: translation[1], slide: updatePosition(1), max: canvas.height});
-  $("#angle").gmanSlider({slide: updateAngle, max: 360});
-  $("#scaleX").gmanSlider({value: scale[0], slide: updateScale(0), min: -5, max: 5, step: 0.01, precision: 2});
-  $("#scaleY").gmanSlider({value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
+  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: canvas.width });
+  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: canvas.height});
+  webglLessonsHelper.setupSlider("#angle", {slide: updateAngle, max: 360});
+  webglLessonsHelper.setupSlider("#scaleX", {value: scale[0], slide: updateScale(0), min: -5, max: 5, step: 0.01, precision: 2});
+  webglLessonsHelper.setupSlider("#scaleY", {value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
 
   function updatePosition(index) {
     return function(event, ui) {
@@ -135,9 +131,7 @@ function setGeometry(gl) {
       gl.STATIC_DRAW);
 }
 
-$(function(){
-  main();
-});
+window.addEventListener('load', main);
 </script>
 <!-- vertex shader -->
 <script id="2d-vertex-shader" type="x-shader/x-vertex">

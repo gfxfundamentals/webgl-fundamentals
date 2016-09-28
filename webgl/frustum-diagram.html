@@ -4,7 +4,6 @@
 <head>
 <meta charset="utf-8">
 <title>WebGL - Frustum Diagram</title>
-<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 #ui {
@@ -81,9 +80,6 @@ void main() {
 </script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/jquery-1.7.1.min.js"></script>
-<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/tdl/base.js"></script>
 <script>
 "use strict";
@@ -271,10 +267,10 @@ function CreateApp() {
   var zPosition = -25;
 
   // Setup a ui.
-  $("#fieldOfView").gmanSlider({value: fieldOfView, slide: updateFieldOfView, max: 179});
-  $("#zNear").gmanSlider({value: zNear, slide: updateZNear, min: 1, max: 50});
-  $("#zFar").gmanSlider({value: zFar, slide: updateZFar, min: 1, max: 50});
-  $("#zPosition").gmanSlider({value: zPosition, slide: updateZPosition, min: -60, max: 0});
+  webglLessonsHelper.setupSlider("#fieldOfView", {value: fieldOfView, slide: updateFieldOfView, max: 179});
+  webglLessonsHelper.setupSlider("#zNear", {value: zNear, slide: updateZNear, min: 1, max: 50});
+  webglLessonsHelper.setupSlider("#zFar", {value: zFar, slide: updateZFar, min: 1, max: 50});
+  webglLessonsHelper.setupSlider("#zPosition", {value: zPosition, slide: updateZPosition, min: -60, max: 0});
 
   function updateFieldOfView(event, ui) {
     fieldOfView = ui.value;
@@ -483,9 +479,7 @@ function main() {
   render();
 }
 
-$(function(){
-  main();
-});
+window.addEventListener('load', main);
 
 </script>
 </html>

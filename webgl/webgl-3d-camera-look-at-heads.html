@@ -4,7 +4,6 @@
 <head>
 <meta charset="utf-8">
 <title>WebGL - 3D Camera Look At Heads</title>
-<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 #ui {
@@ -27,9 +26,6 @@ Drag slider to move camera.
   </div>
 </div>
 </body>
-<script src="resources/jquery-1.7.1.min.js"></script>
-<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/headdata.js"></script>
@@ -94,8 +90,8 @@ function main() {
   drawScene();
 
   // Setup a ui.
-  $("#cameraAngle").gmanSlider({value: radToDeg(cameraAngleRadians), slide: updateCameraAngle, min: -360, max: 360});
-  $("#cameraHeight").gmanSlider({value: cameraHeight, slide: updateCameraHeight, min: -200, max: 200});
+  webglLessonsHelper.setupSlider("#cameraAngle", {value: radToDeg(cameraAngleRadians), slide: updateCameraAngle, min: -360, max: 360});
+  webglLessonsHelper.setupSlider("#cameraHeight", {value: cameraHeight, slide: updateCameraHeight, min: -200, max: 200});
 
   function updateFieldOfView(event, ui) {
     fieldOfViewRadians = degToRad(ui.value);
@@ -450,9 +446,7 @@ function setColors(gl, numElements) {
       gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
 }
 
-$(function(){
-  main();
-});
+window.addEventListener('load', main);
 </script>
 <!-- vertex shader -->
 <script id="3d-vertex-shader" type="x-shader/x-vertex">

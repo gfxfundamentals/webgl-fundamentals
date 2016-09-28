@@ -4,7 +4,6 @@
 <head>
 <meta charset="utf-8">
 <title>WebGL - 2D Geometry Rotation - Angle</title>
-<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 #ui {
@@ -28,9 +27,6 @@ Drag sliders to translate & rotate.
   </div>
 </div>
 </body>
-<script src="resources/jquery-1.7.1.min.js"></script>
-<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
 <script>
@@ -79,9 +75,9 @@ function main() {
   drawScene();
 
   // Setup a ui.
-  $("#x").gmanSlider({value: translation[0], slide: updatePosition(0), max: canvas.width });
-  $("#y").gmanSlider({value: translation[1], slide: updatePosition(1), max: canvas.height});
-  $("#angle").gmanSlider({slide: updateAngle, max: 360});
+  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: canvas.width });
+  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: canvas.height});
+  webglLessonsHelper.setupSlider("#angle", {slide: updateAngle, max: 360});
 
   function updatePosition(index) {
     return function(event, ui) {
@@ -145,9 +141,7 @@ function setGeometry(gl) {
       gl.STATIC_DRAW);
 }
 
-$(function(){
-  main();
-});
+window.addEventListener('load', main);
 </script>
 <!-- vertex shader -->
 <script id="2d-vertex-shader" type="x-shader/x-vertex">

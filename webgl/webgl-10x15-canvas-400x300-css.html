@@ -4,7 +4,6 @@
 <head>
 <meta charset="utf-8">
 <title>WebGL - 10x15 canvas 400x300 css</title>
-<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 #ui {
@@ -21,9 +20,6 @@ A 10x15 canvas displayed 400x300 pixels
 </div>
 <canvas id="canvas" width="10" height="15" style="width: 400px; height: 300px;"></canvas>
 </body>
-<script src="resources/jquery-1.7.1.min.js"></script>
-<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/webgl-2d-math.js"></script>
@@ -102,9 +98,7 @@ function setGeometry(gl, x1, y1, x2, y2) {
       gl.STATIC_DRAW);
 }
 
-$(function(){
-  main();
-});
+window.addEventListener('load', main);
 </script>
 <!-- vertex shader -->
 <script id="2d-vertex-shader" type="x-shader/x-vertex">

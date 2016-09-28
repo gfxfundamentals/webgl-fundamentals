@@ -47,17 +47,16 @@
       this._canvas = $('<canvas>');
       var canvas = this._canvas.get(0);
 
-      canvas.width = this.options.width;
-      canvas.height = this.options.height;
-      poop = this.element.get(0);
-      console.log(canvas.width);
-      console.log(canvas.height);
+      canvas.width = this.options.width * window.devicePixelRatio;
+      canvas.height = this.options.height * window.devicePixelRatio;
+      canvas.style.width = this.options.width + "px";
+      canvas.style.height = this.options.height + "px";
       canvas.onselectstart = function() { return false; }
 
       var ctx = canvas.getContext("2d");
 
-      var width = canvas.width;
-      var height = canvas.height;
+      var width = this.options.width;
+      var height = this.options.height;
       var halfWidth = width / 2;
       var halfHeight = height / 2;
       var gridSize = Math.floor(Math.min(halfWidth, halfHeight) * 0.8);
@@ -163,8 +162,9 @@
 
         computeCircleCenter();
 
-        ctx.clearRect(0, 0, width, height);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.save();
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
         ctx.translate(centerX, centerY);
         drawGrid();
         drawTriangle();

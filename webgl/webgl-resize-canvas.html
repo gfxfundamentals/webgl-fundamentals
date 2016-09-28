@@ -4,7 +4,6 @@
 <head>
 <meta charset="utf-8">
 <title>WebGL - Resize canvas to fill the screen</title>
-<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <style>
    body {
      margin: 0;
@@ -20,9 +19,6 @@
 <body>
 <canvas id="canvas"></canvas>
 </body>
-<script src="resources/jquery-1.7.1.min.js"></script>
-<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/webgl-2d-math.js"></script>
@@ -118,9 +114,7 @@ function setGeometry(gl, x1, y1, x2, y2) {
       gl.STATIC_DRAW);
 }
 
-$(function(){
-  main();
-});
+window.addEventListener('load', main);
 </script>
 <!-- vertex shader -->
 <script id="2d-vertex-shader" type="x-shader/x-vertex">

@@ -4,7 +4,6 @@
 <head>
 <meta charset="utf-8">
 <title>WebGL - 3D Perspective using divide by W</title>
-<link type="text/css" href="resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 #ui {
@@ -32,9 +31,6 @@ Drag sliders to translate, rotate, and scale.
   </div>
 </div>
 </body>
-<script src="resources/jquery-1.7.1.min.js"></script>
-<script src="resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="resources/jquery.gman.ui.js"></script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
 <script>
@@ -100,16 +96,16 @@ function main() {
   drawScene();
 
   // Setup a ui.
-  $("#fudgeFactor").gmanSlider({value: fudgeFactor, slide: updateFudgeFactor, max: 2, step: 0.001, precision: 3 });
-  $("#x").gmanSlider({value: translation[0], slide: updatePosition(0), max: canvas.width });
-  $("#y").gmanSlider({value: translation[1], slide: updatePosition(1), max: canvas.height});
-  $("#z").gmanSlider({value: translation[2], slide: updatePosition(2), max: canvas.height, min: -canvas.height});
-  $("#angleX").gmanSlider({value: radToDeg(rotation[0]), slide: updateRotation(0), max: 360});
-  $("#angleY").gmanSlider({value: radToDeg(rotation[1]), slide: updateRotation(1), max: 360});
-  $("#angleZ").gmanSlider({value: radToDeg(rotation[2]), slide: updateRotation(2), max: 360});
-  $("#scaleX").gmanSlider({value: scale[0], slide: updateScale(0), min: -5, max: 5, step: 0.01, precision: 2});
-  $("#scaleY").gmanSlider({value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
-  $("#scaleZ").gmanSlider({value: scale[2], slide: updateScale(2), min: -5, max: 5, step: 0.01, precision: 2});
+  webglLessonsHelper.setupSlider("#fudgeFactor", {value: fudgeFactor, slide: updateFudgeFactor, max: 2, step: 0.001, precision: 3 });
+  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: canvas.width });
+  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: canvas.height});
+  webglLessonsHelper.setupSlider("#z", {value: translation[2], slide: updatePosition(2), max: canvas.height, min: -canvas.height});
+  webglLessonsHelper.setupSlider("#angleX", {value: radToDeg(rotation[0]), slide: updateRotation(0), max: 360});
+  webglLessonsHelper.setupSlider("#angleY", {value: radToDeg(rotation[1]), slide: updateRotation(1), max: 360});
+  webglLessonsHelper.setupSlider("#angleZ", {value: radToDeg(rotation[2]), slide: updateRotation(2), max: 360});
+  webglLessonsHelper.setupSlider("#scaleX", {value: scale[0], slide: updateScale(0), min: -5, max: 5, step: 0.01, precision: 2});
+  webglLessonsHelper.setupSlider("#scaleY", {value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
+  webglLessonsHelper.setupSlider("#scaleZ", {value: scale[2], slide: updateScale(2), min: -5, max: 5, step: 0.01, precision: 2});
 
   function updateFudgeFactor(event, ui) {
     fudgeFactor = ui.value;
@@ -556,9 +552,7 @@ function setColors(gl) {
       gl.STATIC_DRAW);
 }
 
-$(function(){
-  main();
-});
+window.addEventListener('load', main);
 </script>
 <!-- vertex shader -->
 <script id="3d-vertex-shader" type="x-shader/x-vertex">

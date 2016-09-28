@@ -71,8 +71,8 @@ function main() {
   drawScene();
 
   // Setup a ui.
-  $("#x").gmanSlider({slide: updatePosition(0), max: canvas.width });
-  $("#y").gmanSlider({slide: updatePosition(1), max: canvas.height});
+  webglLessonsHelper.setupSlider("#x", {slide: updatePosition(0), max: canvas.width });
+  webglLessonsHelper.setupSlider("#y", {slide: updatePosition(1), max: canvas.height});
 
   function updatePosition(index) {
     return function(event, ui) {
