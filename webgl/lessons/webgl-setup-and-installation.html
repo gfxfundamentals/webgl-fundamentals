@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/webgl-2d-scale.md. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/webgl-setup-and-installation.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -34,23 +34,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 2D Scale" />
+<meta property="og:title" content="WebGL Setup and Installation" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to scale in 2D" />
-<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/webgl-2d-scale.html" />
+<meta property="og:description" content="How to do WebGL development" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/webgl-setup-and-installation.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 2D Scale" />
-<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/webgl-2d-scale.html" />
-<meta name="twitter:description" content="How to scale in 2D" />
+<meta name="twitter:title" content="WebGL Setup and Installation" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/webgl-setup-and-installation.html" />
+<meta name="twitter:description" content="How to do WebGL development" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 2D Scale</title>
+<title>WebGL Setup and Installation</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,85 +63,108 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 2D Scale</h1>
+    <h1>WebGL Setup and Installation</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>This post is a continuation of a series of posts about WebGL. The first <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was <a href="webgl-2d-rotation.html">about rotating geometry</a>.</p>
-<p>Scaling is just as <a href="webgl-2d-translation.html">easy as translation</a>.
-<!--more-->
-We multiply the position by our desired scale. Here are the changes from our <a href="webgl-2d-rotation.html">previous sample</a>.</p>
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
-attribute vec2 a_position;
-
-uniform vec2 u_resolution;
-uniform vec2 u_translation;
-uniform vec2 u_rotation;
-uniform vec2 u_scale;
-
-void main() {
-  // Scale the positon
-  vec2 scaledPosition = a_position * u_scale;
-
-  // Rotate the position
-  vec2 rotatedPosition = vec2(
-     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
-     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
-
-  // Add in the translation.
-  vec2 position = rotatedPosition + u_translation;
-</pre>
-
-<p>and we add the JavaScript needed to set the scale when we draw.</p>
-<pre class="prettyprint showlinemods">
-  ...
-  var scaleLocation = gl.getUniformLocation(program, "u_scale");
-  ...
-  var scale = [1, 1];
-  ...
-  // Draw the scene.
-  function drawScene() {
-    // Clear the canvas.
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
-    // Set the translation.
-    gl.uniform2fv(translationLocation, translation);
-
-    // Set the rotation.
-    gl.uniform2fv(rotationLocation, rotation);
-
-    // Set the scale.
-    gl.uniform2fv(scaleLocation, scale);
-
-    // Draw the rectangle.
-    gl.drawArrays(gl.TRIANGLES, 0, 18);
-  }
-</pre>
-
-<p>And now we have scale. Drag the sliders.</p>
-<p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-geometry-scale.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-scale.html" target="_blank">click here to open in a separate window</a>
+      <p>Techincally you don&#39;t need anything other than a web browser to do WebGL
+development. Go to <a href="https://jsfiddle.net/greggman/8djzyjL3/">jsfiddle.net</a> or <a href="http://jsbin.com">jsbin.com</a>
+or <a href="http://codepen.io/greggman/pen/YGQjVV">codepen.io</a> and just start applying the lessons here.</p>
+<p>On all of them you can reference external scripts by adding a <code>&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;</code>
+tag pair if you want to use external scripts.</p>
+<p>Still, there are limits. WebGL has stronger restrictions than Canvas2D for loading images
+which means you can&#39;t easily access images from around the web for your WebGL work.
+On top of that it&#39;s just faster to work with everything local.</p>
+<p>Let&#39;s assume you want to run and edit the samples on this site. The first thing you should
+do is download the site. <a href="https://github.com/greggman/webgl-fundamentals/">You can download it here</a>.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/download-webglfundamentals.gif">
+  <div class="webgl_center"></div>
 </div>
 
 </p>
-<p>One thing to notice is that scaling by a negative value flips our geometry.</p>
-<p>I hope these last 3 posts were helpful in understanding <a href="webgl-2d-translation.html">translation</a>, <a href="webgl-2d-rotation.html">rotation</a> and scale. Next we&#39;ll go over <a href="webgl-2d-matrices.html">the magic that is matrices</a> that combines all 3 of these into a much simpler and often more useful form.</p>
-<div class="webgl_bottombar">
-<h3>Why an 'F'?</h3>
-<p>
-The first time I saw someone use an 'F' was on a texture. The 'F' itself is not important. What is important is that you can tell its orientation from any direction. If we used a heart ❤ or a triangle △ for example we couldn't tell if it was flipped horizontally. A circle ○ would be even worse. A colored rectangle would arguably work with different colors on each corner but then you'd have to remember which corner was which. An F's orientation is instantly recognizable.
-</p>
-<img src="../resources/f-orientation.svg" class="webgl_center"/>
-<p>
-Any shape that you can tell the orientation of would work, I've just used 'F' ever since I was 'F'irst introduced to the idea.
-</p>
+<p>Unzip the files into some folder.</p>
+<h2 id="using-a-small-simple-easy-web-server">Using a small simple easy Web Server</h2>
+<p>Next up you should install a small web server. I know &quot;web server&quot; sounds scary but the truth is <a href="http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/">web
+servers are actually extremely simple</a>.</p>
+<p>If you&#39;re on Chrome here&#39;s a simple solution.
+<a href="https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=en">Here&#39;s a small chrome extension that&#39;s a web server</a></p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/chrome-webserver.png">
+  <div class="webgl_center"></div>
 </div>
 
+</p>
+<p>Just point it at the folder where you unzipped the files and click one of the web server URLs.</p>
+<p>If you&#39;re not on chrome or if you don&#39;t want to use the extension another way is to use <a href="https://nodejs.org">node.js</a>.
+Download it, install it, then open a command prompt / console / terminal window. If you&#39;re on Windows the installer
+will add a special &quot;Node Command Prompt&quot; so use that.</p>
+<p>Then install the <a href="https://github.com/indexzero/http-server"><code>http-server</code></a> by typing</p>
+<pre><code>npm -g install http-server
+</code></pre><p>If you&#39;re on OSX use</p>
+<pre><code>sudo npm -g install http-server
+</code></pre><p>Once you&#39;ve done that type</p>
+<pre><code>http-server path/to/folder/where/you/unzipped/files
+</code></pre><p>It should print something like</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/http-server-response.png">
+  <div class="webgl_center"></div>
+</div>
 
+</p>
+<p>Then in your browser go to <a href="http://localhost:8080"><code>http://localhost:8080</code></a>.</p>
+<p>If you don&#39;t specify a path then http-server will server the current folder.</p>
+<h2 id="using-your-browsers-developer-tools">Using your Browsers Developer Tools</h2>
+<p>Most browser have extensive developer tools built in.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/chrome-devtools.png">
+  <div class="webgl_center"></div>
+</div>
 
+</p>
+<p><a href="https://developers.google.com/web/tools/chrome-devtools/">Docs for Chrome&#39;s are here</a>,
+<a href="https://developer.mozilla.org/en-US/docs/Tools">Firefox&#39;s are here</a>.</p>
+<p>Learn how to use them. If nothing else always check the JavaScript console. If there is an issue it will often have
+an error message. Read the error message closely and you should get a clue where the issue is.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/javascript-console.gif">
+  <div class="webgl_center"></div>
+</div>
 
+</p>
+<h2 id="webgl-helpers">WebGL Helpers</h2>
+<p>There are various WebGL Inspectors / Helpers. <a href="https://benvanik.github.io/WebGL-Inspector/">Here&#39;s one for Chrome</a>.</p>
+<p><div class="webgl_image ">
+  <img class="" src="https://benvanik.github.io/WebGL-Inspector/images/screenshots/1-Trace.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>They may or may not be helpful. Most of them are designed for animated samples and will capture a frame
+and let you see all the WebGL calls that made that frame. That&#39;s great if you already have something
+working or if you had something working and it broke. But it&#39;s not so great if your issue is during
+initialization which they don&#39;t catch or if you&#39;re not using animation, as in drawing something every frame.
+Still they can be very useful. I&#39;ll often click on a draw call, and check the uniforms. If I see a
+bunch of <code>NaN</code> (NaN = Not a Number) then I can usually track down the code that set that uniform and
+find the bug.</p>
+<h2 id="inspect-the-code">Inspect the Code</h2>
+<p>Also always remember you can inspect the code. You can usually just pick view source</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/view-source.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>Even if you can&#39;t right click a page or if the source is in a separate file
+you can always view the source in the devtools</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/devtools-source.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<h2 id="get-started">Get Started</h2>
+<p>Hopefully that helps you get started. <a href="/">Now back to the lessons</a>.</p>
 
       <hr/>
       <div>
@@ -152,8 +175,8 @@ Any shape that you can tell the orientation of would work, I've just used 'F' ev
         <script type="text/javascript">
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 2D Scale';
-            var disqus_title = 'WebGL 2D Scale';
+            var disqus_identifier = 'WebGL Setup and Installation';
+            var disqus_title = 'WebGL Setup and Installation';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {
