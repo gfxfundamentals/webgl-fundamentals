@@ -218,8 +218,8 @@ JavaScript objects to set our settings much more easily. If that&#39;s clear as 
 our code would look something like this</p>
 <pre class="prettyprint">
 // At initialiation time
-var uniformSetters = createUniformSetters(gl, program);
-var attribSetters  = createAttributeSetters(gl, program);
+var uniformSetters = webglUtils.createUniformSetters(gl, program);
+var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
 var attribs = {
   a_position: { buffer: positionBuffer, numComponents: 3, },
@@ -246,10 +246,10 @@ var uniforms = {
 gl.useProgram(program);
 
 // Setup all the buffers and attributes
-setAttributes(attribSetters, attribs);
+webglUtils.setAttributes(attribSetters, attribs);
 
 // Set all the uniforms and textures used.
-setUniforms(uniformSetters, uniforms);
+webglUtils.setUniforms(uniformSetters, uniforms);
 
 gl.drawArrays(...);
 </pre>
@@ -258,8 +258,8 @@ gl.drawArrays(...);
 <p>You can even use multiple JavaScript objects if it suits you. For example</p>
 <pre class="prettyprint">
 // At initialiation time
-var uniformSetters = createUniformSetters(gl, program);
-var attribSetters  = createAttributeSetters(gl, program);
+var uniformSetters = webglUtils.createUniformSetters(gl, program);
+var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
 var attribs = {
   a_position: { buffer: positionBuffer, numComponents: 3, },
@@ -314,8 +314,8 @@ var objects = [
 gl.useProgram(program);
 
 // Setup the parts that are common for all objects
-setAttributes(attribSetters, attribs);
-setUniforms(uniformSetters, uniformThatAreTheSameForAllObjects);
+webglUtils.setAttributes(attribSetters, attribs);
+webglUtils.setUniforms(uniformSetters, uniformThatAreTheSameForAllObjects);
 
 objects.forEach(function(object) {
   computeMatricesForObject(object, uniformsThatAreComputedForEachObject);
@@ -327,8 +327,8 @@ objects.forEach(function(object) {
 
 <p>Here&#39;s an example using these helper functions</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-less-code-more-fun.html"></iframe>
-  <a class="webgl_center" href="../webgl-less-code-more-fun.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-less-code-more-fun.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-less-code-more-fun.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
@@ -362,7 +362,7 @@ var arrays = {
 var bufferInfo = createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>Much shorter! Now we can do this at render time</p>
 <pre><code>// Setup all the needed buffers and attributes.
-setBuffersAndAttributes(gl, attribSetters, bufferInfo);
+webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
 
@@ -370,8 +370,8 @@ setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 </code></pre><p>Here&#39;s that</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-less-code-more-fun-triangle.html"></iframe>
-  <a class="webgl_center" href="../webgl-less-code-more-fun-triangle.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-less-code-more-fun-triangle.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-less-code-more-fun-triangle.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
@@ -388,7 +388,7 @@ var arrays = {
 var bufferInfo = createBufferInfoFromTypedArray(gl, arrays);
 </code></pre><p>and at render time we can call <code>gl.drawElements</code> instead of <code>gl.drawArrays</code>.</p>
 <pre><code>// Setup all the needed buffers and attributes.
-setBuffersAndAttributes(gl, attribSetters, bufferInfo);
+webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
 
@@ -396,8 +396,8 @@ setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 </code></pre><p>Here&#39;s that</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-less-code-more-fun-quad.html"></iframe>
-  <a class="webgl_center" href="../webgl-less-code-more-fun-quad.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-less-code-more-fun-quad.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-less-code-more-fun-quad.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
@@ -424,8 +424,8 @@ var arrays = {
 };
 </code></pre><p>And that version</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-less-code-more-fun-quad-guess.html"></iframe>
-  <a class="webgl_center" href="../webgl-less-code-more-fun-quad-guess.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-less-code-more-fun-quad-guess.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-less-code-more-fun-quad-guess.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
@@ -440,22 +440,22 @@ the shader. For attibutes WebGL will set <code>w = 1</code> automatically. But t
 know the user&#39;s intent since what they declared in their shader might not match the number of
 components they provide.</p>
 <p>Looking for more patterns there&#39;s this</p>
-<pre><code>var program = createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
-var uniformSetters = createUniformSetters(gl, program);
-var attribSetters  = createAttributeSetters(gl, program);
+<pre><code>var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+var uniformSetters = webglUtils.createUniformSetters(gl, program);
+var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 </code></pre><p>Let&#39;s simplify that too into just</p>
 <pre><code>var programInfo = createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 </code></pre><p>Which returns something like</p>
 <pre><code>programInfo = {
    program: WebGLProgram,  // program we just compiled
-   uniformSetters: ...,    // setters as returned from createUniformSetters,
+   uniformSetters: ...,    // setters as returned from webglUtils.createUniformSetters,
    attribSetters: ...,     // setters as returned from createAttribSetters,
 }
 </code></pre><p>And that&#39;s yet one more minor simplification. This will come in handy once we start using
 multiple programs since it automatically keeps the setters with the program they are associated with.</p>
 <p><div>
-  <iframe class="webgl_example" style="width: 400px; height: 300px;" src="../webgl-less-code-more-fun-quad-programinfo.html"></iframe>
-  <a class="webgl_center" href="../webgl-less-code-more-fun-quad-programinfo.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-less-code-more-fun-quad-programinfo.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-less-code-more-fun-quad-programinfo.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
@@ -477,7 +477,7 @@ directly like this.
 </p>
 <pre class="prettyprint">
 // At initialiation time
-var uniformSetters = createUniformSetters(program);
+var uniformSetters = webglUtils.createUniformSetters(program);
 
 // At draw time
 uniformSetters.u_ambient([1, 0, 0, 1]); // set the ambient color to red.

@@ -2310,7 +2310,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
         
             
 <dt>
-    <h4 class="name" id=".drawBufferInfo"><span class="type-signature"> </span>drawBufferInfo<span class="signature">(gl, type, bufferInfo, <span class="optional">count</span>, <span class="optional">offset</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".drawBufferInfo"><span class="type-signature"> </span>drawBufferInfo<span class="signature">(gl, bufferInfo, <span class="optional">primitiveType</span>, <span class="optional">count</span>, <span class="optional">offset</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2385,36 +2385,6 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 
         <tr>
             
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">enum</span>
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>eg (gl.TRIANGLES, gl.LINES, gl.POINTS, gl.TRIANGLE_STRIP, ...)</p></td>
-        </tr>
-
-	
-
-        <tr>
-            
                 <td class="name"><code>bufferInfo</code></td>
             
 
@@ -2439,6 +2409,38 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last"><p>as returned from createBufferInfoFromArrays</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>primitiveType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">enum</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>eg (gl.TRIANGLES, gl.LINES, gl.POINTS, gl.TRIANGLE_STRIP, ...)</p></td>
         </tr>
 
 	
@@ -2831,7 +2833,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
         
             
 <dt>
-    <h4 class="name" id=".resizeCanvasToDisplaySize"><span class="type-signature"> </span>resizeCanvasToDisplaySize<span class="signature">(canvas, true)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".resizeCanvasToDisplaySize"><span class="type-signature"> </span>resizeCanvasToDisplaySize<span class="signature">(canvas, <span class="optional">multiplier</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
     
 </dt>
@@ -2861,6 +2863,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 		<th>Type</th>
 
 		
+		<th>Argument</th>
+		
 
 		
 
@@ -2885,6 +2889,14 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -2895,22 +2907,32 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 
         <tr>
             
-                <td class="name"><code>true</code></td>
+                <td class="name"><code>multiplier</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">number</span>
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>if the canvas was resized.</p></td>
+            <td class="description last"><p>amount to multiply by.<br>   Pass in window.devicePixelRatio for native pixels.</p></td>
         </tr>
 
 	
@@ -2960,6 +2982,28 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>true if the canvas was resized.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+	</dd>
+</dl>
+
+
+        
     
     
 </dd>
@@ -2967,7 +3011,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
         
             
 <dt>
-    <h4 class="name" id=".setAttributes"><span class="type-signature"> </span>setAttributes<span class="signature">(setters, buffers)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".setAttributes"><span class="type-signature"> </span>setAttributes<span class="signature">(setters, attribs)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -3064,7 +3108,7 @@ gl.useProgram(program);</code></pre><p>This will automatically bind the buffers 
 
         <tr>
             
-                <td class="name"><code>buffers</code></td>
+                <td class="name"><code>attribs</code></td>
             
 
             <td class="type">
@@ -3427,7 +3471,9 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;string, function()></span>
+<span class="param-type">Object.&lt;string, function()>|</span>
+
+<span class="param-type"><a href="module-webgl-utils.html#.ProgramInfo">module:webgl-utils.ProgramInfo</a></span>
 
             
             </td>
