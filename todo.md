@@ -1,7 +1,6 @@
 TO DO
 =====
 
-*   update reszing article
 *   switch matrixMultiply order
 *   switch to m4
 *   move gl.enable to render loop
