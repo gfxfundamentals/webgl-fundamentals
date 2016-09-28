@@ -1249,7 +1249,7 @@
           args[0] = "experimental-webgl";
         }
         return origFn.apply(this, args);
-      }
+      };
     }(HTMLCanvasElement.prototype.getContext);
   }
 
