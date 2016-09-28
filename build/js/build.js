@@ -101,11 +101,10 @@ Handlebars.registerHelper('include', function(filename, options) {
 });
 
 Handlebars.registerHelper('example', function(options) {
-  options.hash.width   = options.hash.width || "400";
-  options.hash.height  = options.hash.height || "300";
+  options.hash.width   = options.hash.width  ? "width:  " + options.hash.width  + "px;" : "";
+  options.hash.height  = options.hash.height ? "height: " + options.hash.height + "px;" : "";
   options.hash.caption = options.hash.caption || options.data.root.defaultExampleCaption;
   options.hash.examplePath = options.data.root.examplePath;
-
   return templateManager.apply("build/templates/example.template", options.hash);
 });
 
@@ -439,7 +438,7 @@ var langs = [
     lessons: "webgl/lessons",
     lang: 'en',
     toc: 'webgl/lessons/toc.html',
-    examplePath: '',
+    examplePath: '/webgl/lessons/',
   },
 ];
 
