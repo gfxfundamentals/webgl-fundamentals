@@ -319,8 +319,8 @@ webglUtils.setUniforms(uniformSetters, uniformThatAreTheSameForAllObjects);
 
 objects.forEach(function(object) {
   computeMatricesForObject(object, uniformsThatAreComputedForEachObject);
-  setUniforms(uniformSetters, uniformThatAreComputedForEachObject);
-  setUniforms(unifromSetters, objects.materialUniforms);
+  webglUtils.setUniforms(uniformSetters, uniformThatAreComputedForEachObject);
+  webglUtils.setUniforms(unifromSetters, objects.materialUniforms);
   gl.drawArrays(...);
 });
 </pre>
@@ -375,7 +375,7 @@ gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 </div>
 
 </p>
-<p>This will even work if we have indices. setAttribsAndBuffers will set all the attributes
+<p>This will even work if we have indices. <code>webglUtils.setAttribsAndBuffers</code> will set all the attributes
 and setup the <code>ELEMENT_ARRAY_BUFFER</code> with your <code>indices</code> so you can call <code>gl.drawElements</code>.</p>
 <pre><code>// an indexed quad
 var arrays = {
@@ -385,7 +385,7 @@ var arrays = {
    indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
 };
 
-var bufferInfo = createBufferInfoFromTypedArray(gl, arrays);
+var bufferInfo = webglUtils.createBufferInfoFromTypedArray(gl, arrays);
 </code></pre><p>and at render time we can call <code>gl.drawElements</code> instead of <code>gl.drawArrays</code>.</p>
 <pre><code>// Setup all the needed buffers and attributes.
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
@@ -411,7 +411,7 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
      a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
    },
  };
-</code></pre><p>And <code>setBuffersAndAttributes</code> uses that object to set all the buffers and attributes.</p>
+</code></pre><p>And <code>webglUtils.setBuffersAndAttributes</code> uses that object to set all the buffers and attributes.</p>
 <p>Finally we can go what I consider possibly too far. Given <code>position</code> almost always has 3 components (x, y, z)
 and <code>texcoords</code> almost always 2, indices 3, and normals 3, we can just let the system guess the number
 of components.</p>
@@ -444,7 +444,7 @@ components they provide.</p>
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 </code></pre><p>Let&#39;s simplify that too into just</p>
-<pre><code>var programInfo = createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre><code>var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 </code></pre><p>Which returns something like</p>
 <pre><code>programInfo = {
    program: WebGLProgram,  // program we just compiled
