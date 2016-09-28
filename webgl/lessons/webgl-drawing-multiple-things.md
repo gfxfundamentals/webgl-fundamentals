@@ -124,7 +124,7 @@ At draw time
     gl.useProgram(programInfo.program);
 
     // Setup all the needed attributes.
-    setBuffersAndAttributes(gl, programInfo.attribSetters, sphereBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo, sphereBufferInfo);
 
     sphereUniforms.u_matrix = computeMatrix(
         viewMatrix,
@@ -134,14 +134,14 @@ At draw time
         sphereYRotation);
 
     // Set the uniforms we just computed
-    setUniforms(programInfo.uniformSetters, sphereUniforms);
+    webglUtils.setUniforms(programInfo, sphereUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, sphereBufferInfo.numElements);
 
     // ------ Draw the cube --------
 
     // Setup all the needed attributes.
-    setBuffersAndAttributes(gl, programInfo.attribSetters, cubeBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo, cubeBufferInfo);
 
     cubeUniforms.u_matrix = computeMatrix(
         viewMatrix,
@@ -151,14 +151,14 @@ At draw time
         cubeYRotation);
 
     // Set the uniforms we just computed
-    setUniforms(programInfo.uniformSetters, cubeUniforms);
+    webglUtils.setUniforms(programInfo, cubeUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, cubeBufferInfo.numElements);
 
     // ------ Draw the cone --------
 
     // Setup all the needed attributes.
-    setBuffersAndAttributes(gl, programInfo.attribSetters, coneBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo, coneBufferInfo);
 
     coneUniforms.u_matrix = computeMatrix(
         viewMatrix,
@@ -168,7 +168,7 @@ At draw time
         coneYRotation);
 
     // Set the uniforms we just computed
-    setUniforms(programInfo.uniformSetters, coneUniforms);
+    webglUtils.setUniforms(programInfo, coneUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 
@@ -249,10 +249,10 @@ But the drawing code is now just a simple loop
       gl.useProgram(programInfo.program);
 
       // Setup all the needed attributes.
-      setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
+      webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
 
       // Set the uniforms.
-      setUniforms(programInfo.uniformSetters, object.uniforms);
+      webglUtils.setUniforms(programInfo, object.uniforms);
 
       // Draw
       gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
@@ -293,11 +293,11 @@ So, a very simple optimization might look like this
       // Setup all the needed attributes.
       if (bindBuffers || bufferInfo != lastUsedBufferInfo) {
         lastUsedBufferInfo = bufferInfo;
-        setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
+        webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
       }
 
       // Set the uniforms.
-      setUniforms(programInfo.uniformSetters, object.uniforms);
+      webglUtils.setUniforms(programInfo, object.uniforms);
 
       // Draw
       gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);

@@ -94,7 +94,7 @@ Most WebGL apps <a href="webgl-animation.html">are animated</a> so let's call th
 so it will always adjust the canvas to our desired size just before drawing.
 
     function drawScene() {
-       resize(canvas);
+       resize(gl.canvas);
 
        ...
 
@@ -110,29 +110,14 @@ it within the canvas. When you first create the WebGL context WebGL will set the
 of the canvas but after that it's up to you to set it. If you change the size of the canvas
 you need to tell WebGL a new viewport setting.
 
-Let's change resize to handle this. On top of that, since the WebGL context has a
+Let's change the code to handle this. On top of that, since the WebGL context has a
 reference to the canvas let's pass that into resize.
 
-    function resize(gl) {
-      // Get the canvas from the WebGL context
-      var canvas = gl.canvas;
+    function drawScene() {
+       resize(gl.canvas);
 
-      // Lookup the size the browser is displaying the canvas.
-      var displayWidth  = canvas.clientWidth;
-      var displayHeight = canvas.clientHeight;
-
-      // Check if the canvas is not the same size.
-      if (canvas.width  != displayWidth ||
-          canvas.height != displayHeight) {
-
-        // Make the canvas the same size
-        canvas.width  = displayWidth;
-        canvas.height = displayHeight;
-
-        // Set the viewport to match
-        gl.viewport(0, 0, canvas.width, canvas.height);
-      }
-    }
+    +   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+       ...
 
 Now it's working.
 
@@ -175,9 +160,6 @@ function resize(gl) {
     // Make the canvas the same size
     gl.canvas.width  = displayWidth;
     gl.canvas.height = displayHeight;
-
-    // Set the viewport to match
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   }
 }
 </pre>

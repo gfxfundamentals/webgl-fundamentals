@@ -147,7 +147,7 @@ And finally let's apply each one, ping ponging which texture we are rendering to
 
 Here's a working version with a slightly more flexible UI. Check the effects to turn them on. Drag the effects to reorder how they are applied.
 
-{{{example url="../webgl-2d-image-processing.html" width="400" height="340" }}}
+{{{example url="../webgl-2d-image-processing.html" }}}
 
 Some things I should go over.
 

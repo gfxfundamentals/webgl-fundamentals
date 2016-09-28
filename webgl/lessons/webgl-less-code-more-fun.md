@@ -263,8 +263,8 @@ webglUtils.setUniforms(uniformSetters, uniformThatAreTheSameForAllObjects);
 
 objects.forEach(function(object) {
   computeMatricesForObject(object, uniformsThatAreComputedForEachObject);
-  setUniforms(uniformSetters, uniformThatAreComputedForEachObject);
-  setUniforms(unifromSetters, objects.materialUniforms);
+  webglUtils.setUniforms(uniformSetters, uniformThatAreComputedForEachObject);
+  webglUtils.setUniforms(unifromSetters, objects.materialUniforms);
   gl.drawArrays(...);
 });
 </pre>
@@ -319,7 +319,7 @@ Here's that
 
 {{{example url="../webgl-less-code-more-fun-triangle.html" }}}
 
-This will even work if we have indices. setAttribsAndBuffers will set all the attributes
+This will even work if we have indices. `webglUtils.setAttribsAndBuffers` will set all the attributes
 and setup the `ELEMENT_ARRAY_BUFFER` with your `indices` so you can call `gl.drawElements`.
 
     // an indexed quad
@@ -330,7 +330,7 @@ and setup the `ELEMENT_ARRAY_BUFFER` with your `indices` so you can call `gl.dra
        indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
     };
 
-    var bufferInfo = createBufferInfoFromTypedArray(gl, arrays);
+    var bufferInfo = webglUtils.createBufferInfoFromTypedArray(gl, arrays);
 
 and at render time we can call `gl.drawElements` instead of `gl.drawArrays`.
 
@@ -358,7 +358,7 @@ Here's that
        },
      };
 
-And `setBuffersAndAttributes` uses that object to set all the buffers and attributes.
+And `webglUtils.setBuffersAndAttributes` uses that object to set all the buffers and attributes.
 
 Finally we can go what I consider possibly too far. Given `position` almost always has 3 components (x, y, z)
 and `texcoords` almost always 2, indices 3, and normals 3, we can just let the system guess the number
@@ -396,7 +396,7 @@ Looking for more patterns there's this
 
 Let's simplify that too into just
 
-    var programInfo = createProgramInfo(gl, ["vertexshader", "fragmentshader"]);
+    var programInfo = webglUtils.createProgramInfo(gl, ["vertexshader", "fragmentshader"]);
 
 Which returns something like
 
