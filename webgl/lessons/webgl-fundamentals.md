@@ -547,6 +547,9 @@ as input and demonstrates doing a small amount of math in GLSL. It's not wrong, 
 are plenty of cases where it's the right thing to do, but you should [keep reading to find out
 the more common way to position, orient and scale things in WebGL](webgl-2d-translation.html).
 
+If you're new to web development or even if you're not please check out [Setup and Installation](webgl-setup-and-installation)
+for some tips on how to do WebGL development.
+
 If you're 100% new to WebGL and have no idea what GLSL is or shaders or what the GPU does
 then checkout [the basics of how WebGL really works](webgl-how-it-works.html).
 
