@@ -1,3 +1,12 @@
+.fullscreen {
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 100;
+}
+
 .lesson-title {
     margin-top: 3em;
     margin-bottom: 2em;
@@ -18,7 +27,8 @@
 }
 .lesson-sidebar ul {
     list-style-type: none;
-    padding-left: 0.5em;
+    padding-left: 1em;
+    text-indent: -1em;
 }
 .container {
     gbackground-color: green;
@@ -101,6 +111,13 @@ table.vertex_table td {
   padding-left: 1em;
 }
 
+iframe {
+    display: block;
+}
+
+iframe.body {
+  height: 100vh;
+}
 iframe.webgl_example {
   border: 1px solid black;
   margin-left: auto;
@@ -185,7 +202,8 @@ pre.prettyprint, code.prettyprint {
     margin: auto;
     padding: 1em;
     text-align: left;           /* override justify on body */
-    goverflow: auto;             /* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
+    /* this was disabled until 2016-08-26 but I don't know why */
+    overflow: auto;             /* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
     white-space: pre;        /* was nowrap, prevent line wrapping */
     line-height: 10pt;
 }
@@ -209,10 +227,16 @@ pre.prettyprint, code.prettyprint {
     margin: auto;
     padding: 6px 3px 13px 3px;  /* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
     text-align: left;           /* override justify on body */
-    goverflow: auto;             /* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
+    overflow: visible;
     white-space: pre;        /* was nowrap, prevent line wrapping */
     line-height: 10pt;
 }
+}
+
+@media (max-width: 720px) {
+    iframe {
+      max-width: 400px !important;
+    }
 }
 
 @media (max-width: 420px) {
