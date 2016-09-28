@@ -43,7 +43,7 @@ body, document {
 Show texture wrapping modes<br/>
 </div>
 <div id="container">
-  <canvas id="canvas" width="400" height="300"></canvas>
+  <canvas id="canvas"></canvas>
   <div id="gridContainer">
     <svg version="1.1"
         id="grid"
@@ -212,6 +212,11 @@ function main() {
 
   // Draw the scene.
   function drawScene() {
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
     // Clear the framebuffer texture.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 

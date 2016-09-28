@@ -13,7 +13,7 @@ The left 'F' is simulating a slow frame rate but not frame rate independent.<br/
 The right 'F' is simulateing a slow frame rate but is frame rate independent.<br/>
 Notice how the right 'F's rotation matches the middle one even though it is rotating at a slow frame rate.
 </div>
-<canvas id="canvas" width="400" height="300"></canvas>
+<canvas id="canvas"></canvas>
 </body>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
@@ -88,6 +88,11 @@ function main() {
   function drawScene(now) {
     now *= 0.001;  // convert to seconds
     ++frameCount;
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

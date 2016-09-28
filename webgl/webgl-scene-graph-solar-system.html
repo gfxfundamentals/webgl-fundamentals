@@ -10,7 +10,7 @@
 <div class="description">
 Simulating a solar system using a scene graph.
 </div>
-<canvas id="canvas" width="400" height="300"></canvas>
+<canvas id="canvas"></canvas>
 </body>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
@@ -198,6 +198,11 @@ function main() {
   // Draw the scene.
   function drawScene(time) {
     time *= 0.0005;
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);

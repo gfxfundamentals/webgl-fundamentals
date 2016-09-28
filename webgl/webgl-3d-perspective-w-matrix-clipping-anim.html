@@ -10,7 +10,7 @@
 <div class="description">
 Clipping Issue
 </div>
-<canvas id="canvas" width="400" height="300"></canvas>
+<canvas id="canvas"></canvas>
 <div id="uiContainer">
   <div id="ui">
     <div>z: <span id="z">123</span></div>
@@ -88,6 +88,11 @@ function main() {
     clock += elapsedTime;
     translation[2] = -130 + (-30 - -130) * (Math.sin((clock % 2) / 2 * Math.PI * 2) * 0.5 + 0.5);
     z.innerHTML = translation[2].toFixed(0);
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

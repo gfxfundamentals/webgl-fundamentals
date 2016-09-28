@@ -19,7 +19,7 @@
 <script src="resources/primitives.js"></script>
 </head>
 <body>
-<canvas id="canvas" width="400" height="300"></canvas>
+<canvas id="canvas"></canvas>
 </body>
 <!-- vertex shader -->
 <script id="3d-vertex-shader" type="x-shader/x-vertex">
@@ -217,6 +217,11 @@ function main() {
     var deltaTime = clock - then;
     // Remember the current time for the next frame.
     then = clock;
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // Every frame increase the rotation a little.
     rotation[1] += rotationSpeed * deltaTime;

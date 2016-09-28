@@ -10,7 +10,7 @@
 <div class="description">
 Show how mips are important for stability and color<br/>
 </div>
-<canvas id="canvas" width="400" height="300"></canvas>
+<canvas id="canvas"></canvas>
 </body>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
@@ -68,13 +68,12 @@ function main() {
   // Set Texcoords.
   setTexcoords(gl);
 
+  var allocateFBTexture = true;
+  var framebufferWidth;   // set at render time
+  var framebufferHeight;  // set at render time
   var framebuffer = gl.createFramebuffer();
   var fbTexture = gl.createTexture();
-  var framebufferWidth = originalCanvasWidth / 4;
-  var framebufferHeight = originalCanvasHeight / 4;
   gl.bindTexture(gl.TEXTURE_2D, fbTexture);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebufferWidth, framebufferHeight,
-                0, gl.RGBA, gl.UNSIGNED_BYTE, null);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -129,6 +128,14 @@ function main() {
   // Draw the scene.
   function drawScene(time) {
     time *= 0.001;  // convert to seconds
+
+    if (webglUtils.resizeCanvasToDisplaySize(gl.canvas) || allocateFBTexture) {
+      allocateFBTexture = false;
+      framebufferWidth = originalCanvasWidth / 4;
+      framebufferHeight = originalCanvasHeight / 4;
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, framebufferWidth, framebufferHeight,
+                    0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    }
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
     gl.viewport(0, 0, framebufferWidth, framebufferHeight);

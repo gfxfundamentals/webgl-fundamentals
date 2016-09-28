@@ -38,7 +38,7 @@
 HTML Text Divs
 </div>
 <div class="container">
-  <canvas id="canvas" width="400" height="300"></canvas>
+  <canvas id="canvas"></canvas>
   <div id="divcontainer"></div>
 </div>
 </body>
@@ -163,6 +163,11 @@ function main() {
     var deltaTime = clock - then;
     // Remember the current time for the next frame.
     then = clock;
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     x += dx;
     y += dy;

@@ -16,7 +16,7 @@
 <div class="description">
 Drag sliders to translate.
 </div>
-<canvas id="canvas" width="400" height="300"></canvas>
+<canvas id="canvas"></canvas>
 <div id="uiContainer">
   <div id="ui">
     <div id="x"></div>
@@ -83,6 +83,11 @@ function main() {
 
   // Draw a the scene.
   function drawScene() {
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
     // Clear the canvas.
     gl.clear(gl.COLOR_BUFFER_BIT);
 

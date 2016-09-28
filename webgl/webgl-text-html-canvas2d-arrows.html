@@ -36,8 +36,8 @@
 HTML Text Canvas2D
 </div>
 <div class="container">
-  <canvas id="canvas" width="400" height="300"></canvas>
-  <canvas id="text" width="400" height="300"></canvas>
+  <canvas id="canvas"></canvas>
+  <canvas id="text"></canvas>
 </div>
 </body>
 <!-- vertex shader -->
@@ -148,6 +148,12 @@ function main() {
     then = clock;
 
     clock += deltaTime;
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // Every frame increase the rotation a little.
     rotation[1] += rotationSpeed * deltaTime;

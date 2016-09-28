@@ -10,7 +10,7 @@
 <div class="description">
 Textured F with non power of 2 keyboard texture. <br/>
 </div>
-<canvas id="canvas" width="400" height="300"></canvas>
+<canvas id="canvas"></canvas>
 </body>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
@@ -115,6 +115,11 @@ function main() {
     var deltaTime = now - then;
     // Remember the current time for the next frame.
     then = now;
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // Animate the rotation
     modelYRotationRadians += -0.7 * deltaTime;
