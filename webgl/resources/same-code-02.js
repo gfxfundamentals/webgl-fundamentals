@@ -133,19 +133,19 @@ function main() {
 
   // Draw the scene.
   function drawScene(time) {
-    resizeCanvasToDisplaySize(canvas);
+    webglUtils.resizeCanvasToDisplaySize(canvas);
 
     time *= 0.001;  // convert to seconds
 
     // Set the viewport to match the canvas
-    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // Clear the canvas AND the depth buffer.
     gl.clearColor( 1, 1, 1, 1 );
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Compute the projection matrix
-    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
         makePerspective(fieldOfViewRadians, aspect, 1, 150);
 
@@ -163,10 +163,10 @@ function main() {
     gl.useProgram(programInfo.program);
 
     // Setup all the needed attributes.
-    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
 
     // Set the uniforms that are the same for all objects.
-    webglUtils.setUniforms(programInfo.uniformSetters, uniformsThatAreTheSameForAllObjects);
+    webglUtils.setUniforms(programInfo, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
     var num = 4;
@@ -182,7 +182,7 @@ function main() {
           makeTranspose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
 
           // Set the uniforms we just computed
-          webglUtils.setUniforms(programInfo.uniformSetters, uniformsThatAreComputedForEachObject);
+          webglUtils.setUniforms(programInfo, uniformsThatAreComputedForEachObject);
 
           // Set a color for this object.
           materialUniforms.u_diffuse[0] = xx / num * 0.5 + 0.5;
@@ -190,7 +190,7 @@ function main() {
           materialUniforms.u_diffuse[2] = zz / num * 0.5 + 0.5;
 
           // Set the uniforms that are specific to the this object.
-          webglUtils.setUniforms(programInfo.uniformSetters, materialUniforms);
+          webglUtils.setUniforms(programInfo, materialUniforms);
 
           // Draw the geometry.
           gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
