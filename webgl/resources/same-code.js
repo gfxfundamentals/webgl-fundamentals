@@ -211,10 +211,10 @@ function main() {
   function drawScene(time) {
     time *= 0.001;  // convert to seconds
 
-    resizeCanvasToDisplaySize(canvas);
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
     // Set the viewport to match the canvas
-    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -236,10 +236,10 @@ function main() {
     gl.useProgram(programInfo.program);
 
     // Setup all the needed attributes.
-    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
 
     // Set the uniforms that are the same for all objects.
-    webglUtils.setUniforms(programInfo.uniformSetters, uniformsThatAreTheSameForAllObjects);
+    webglUtils.setUniforms(programInfo, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
     objects.forEach(function(object) {
@@ -260,10 +260,10 @@ function main() {
       makeTranspose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
 
       // Set the uniforms we just computed
-      webglUtils.setUniforms(programInfo.uniformSetters, uniformsThatAreComputedForEachObject);
+      webglUtils.setUniforms(programInfo, uniformsThatAreComputedForEachObject);
 
       // Set the uniforms that are specific to the this object.
-      webglUtils.setUniforms(programInfo.uniformSetters, object.materialUniforms);
+      webglUtils.setUniforms(programInfo, object.materialUniforms);
 
       // Draw the geometry.
       gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);

@@ -472,7 +472,7 @@
    *     setUniforms(programInfo.uniformSetters, moreUniforms);
    *
    * @param {Object.<string, function>|module:webgl-utils.ProgramInfo} setters the setters returned from
-   *        `createUniformSetters`.
+   *        `createUniformSetters` or a ProgramInfo from {@link module:webgl-utils.createProgramInfo}.
    * @param {Object.<string, value>} an object with values for the
    *        uniforms.
    * @memberOf module:webgl-utils
@@ -570,12 +570,13 @@
    *       },
    *     };
    *
-   * @param {Object.<string, function>} setters Attribute setters as returned from createAttributeSetters
+   * @param {Object.<string, function>|model:webgl-utils.ProgramInfo} setters Attribute setters as returned from createAttributeSetters or a ProgramInfo as returned {@link module:webgl-utils.createProgramInfo}
    * @param {Object.<string, module:webgl-utils.AttribInfo>} attribs AttribInfos mapped by attribute name.
    * @memberOf module:webgl-utils
    * @deprecated use {@link module:webgl-utils.setBuffersAndAttributes}
    */
   function setAttributes(setters, attribs) {
+    setters = setters.attribSetters || setters;
     Object.keys(attribs).forEach(function(name) {
       var setter = setters[name];
       if (setter) {

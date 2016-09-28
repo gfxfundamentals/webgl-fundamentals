@@ -4,17 +4,13 @@
 <title>three.js webgl - cube</title>
 <meta charset="utf-8">
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
-<style>
-#c { border: 1px solid black;}
-</style>
 </head>
 <body>
 <div class="description">
 Three.js cube example.
 </div>
-<div id="divcanvas"></div>
+<canvas id="canvas" width="400" height="300"></canvas>
 </body>
-<script src="../../resources/webgl-utils.js"></script>
 <script src="../../resources/webgl-lessons-helper.js"></script>
 <script src="three.min.js"></script>
 <script>
@@ -27,19 +23,13 @@ init();
 animate();
 
 function init() {
-  var width = 400;
-  var height = 300;
-
   // Setup
-  var c = document.getElementById("divcanvas");
-  renderer = new THREE.WebGLRenderer();
-  renderer.setSize(width, height);
-  c.appendChild(renderer.domElement);
+  webglLessonsHelper.setupLesson();
+  renderer = new THREE.WebGLRenderer({canvas: document.querySelector("#canvas")});
 
   // Make and setup a camera.
-  camera = new THREE.PerspectiveCamera(70, width / height, 1, 1000);
+  camera = new THREE.PerspectiveCamera(70, 1, 1, 1000);
   camera.position.z = 400;
-  camera.updateProjectionMatrix();
 
   // Make a scene
   scene = new THREE.Scene();
@@ -71,7 +61,18 @@ function init() {
 
 }
 
+function resize() {
+  var width = renderer.domElement.clientWidth;
+  var height = renderer.domElement.clientHeight;
+  if (renderer.domElement.width !== width || renderer.domElement.height !== height) {
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+  }
+}
+
 function animate() {
+  resize();
   mesh.rotation.x += 0.005;
   mesh.rotation.y += 0.01;
 

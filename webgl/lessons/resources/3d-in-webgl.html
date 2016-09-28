@@ -49,8 +49,12 @@ function main() {
 
   var canvas = document.getElementById("c");
   var gl = canvas.getContext("webgl");
+  if (!gl) {
+    webglLessonsHelper.showNeedWebGL(canvas);
+    return;
+  }
 
-  var program = createProgramFromScripts(
+  var program = webglUtils.createProgramFromScripts(
       gl, ["2d-vertex-shader", "2d-fragment-shader"]);
   gl.useProgram(program);
 
@@ -78,6 +82,10 @@ function main() {
     clock *= 0.001;
 
     var scale = 4;
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas, window.devicePixelRatio);
+
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     gl.clear(gl.COLOR_BUFFER_BIT);
 

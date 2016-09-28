@@ -113,6 +113,8 @@ function main() {
   }
 
   function drawScene() {
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas);
+    webglUtils.resizeCanvasToDisplaySize(orbitCtx.canvas);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
     ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
@@ -121,8 +123,7 @@ function main() {
   }
 
   function render(time) {
-    time *= 0.001;  // convert to seconds
-    clock = time * 0.25;
+    clock += 1/60 * 0.25;
 
     drawScene();
 
