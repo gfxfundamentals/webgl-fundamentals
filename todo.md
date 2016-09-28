@@ -1,11 +1,13 @@
 TO DO
 =====
 
-*   move scripts to bottom
-*   remove on window
-*   add `gl.viewport` to all samples?
-*   make all samples call getWebGLContext({resize: true});
+*   make all canvas. references gl.canvas.
+*   udpate fundamentals with resize
+*   update reszing article
+*   switch matrixMultiply order
+*   switch to m4
 *   move gl.enable to render loop
+*   move stuff normally in render loop to render loop (attributes)
 
 
 
