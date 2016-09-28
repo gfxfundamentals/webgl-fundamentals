@@ -1,12 +1,11 @@
 Title: WebGL Resizing the Canvas.
 Description: How to resize a WebGL canvas and the issues involved
 
-How do you resize the canvas? All the samples so far have used a fixed size canvas meaning the
-canvas started at one size and stays the same size forever. Here's what you need to know to
-change the size of the canvas.
+Here's what you need to know to change the size of the canvas.
 
 Every canvas has 2 sizes. The size of its drawingbuffer. This is how many pixels are in the canvas.
-The second size is the size the canvas is displayed. CSS determines this size.
+The second size is the size the canvas is displayed. CSS determines the size the canvas is
+displayed.
 
 You can set the size of the canvas's drawingbuffer in 2 ways. One using HTML
 
