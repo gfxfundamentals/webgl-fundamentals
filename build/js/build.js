@@ -118,6 +118,19 @@ Handlebars.registerHelper('diagram', function(options) {
   return templateManager.apply("build/templates/diagram.template", options.hash);
 });
 
+Handlebars.registerHelper('image', function(options) {
+
+  options.hash.examplePath = options.data.root.examplePath;
+  options.hash.className = options.hash.className || "";
+  options.hash.caption = options.hash.caption || "";
+
+  if (options.hash.url.substring(0, 4) === 'http') {
+    options.hash.examplePath = "";
+  }
+
+  return templateManager.apply("build/templates/image.template", options.hash);
+});
+
 var Builder = function() {
 
   var g_articlesByLang = {};
