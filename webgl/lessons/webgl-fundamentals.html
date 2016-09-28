@@ -79,9 +79,9 @@ and a fragment shader and they are each written in a very strictly typed C/C++ l
 WebGL can then rasterize various kinds of primitives including points, lines, or triangles.
 When rasterizing these primitives it calls a second user supplied function called a fragment shader.
 A fragment shader&#39;s job is to compute a color for each pixel of the primitive currently being drawn.</p>
-<p>Nearly all of the entire WebGL API is about setting up state for these pairs of functions to run. You setup
-a bunch of state then execute a pair of functions by calling <code>gl.drawArrays</code> or <code>gl.drawElements</code> which
-executes your shaders on the GPU.</p>
+<p>Nearly all of the entire WebGL API is about setting up state for these pairs of functions to run.
+For each thing you want to draw you setup a bunch of state then execute a pair of functions by calling
+<code>gl.drawArrays</code> or <code>gl.drawElements</code> which executes your shaders on the GPU.</p>
 <p>Any data you want those functions to have access to must be provided to the GPU. There are 4 ways
 a shader can receive data.</p>
 <ol>
@@ -171,7 +171,7 @@ void main() {
 0.5 for blue, 1 for alpha. Colors in WebGL go from 0 to 1.</p>
 <p>Now that we have written the 2 shader functions lets get started with WebGL</p>
 <p>First we need an HTML canvas element</p>
-<pre><code> &lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+<pre><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>Then in JavaScript we can look that up</p>
 <pre><code> var canvas = document.getElementById(&quot;c&quot;);
 </code></pre><p>Now we can create a WebGLRenderingContext</p>
@@ -303,15 +303,29 @@ The attribute will continue to use <code>positionBuffer</code>.</p>
 <code>a_position = {x: 0, y: 0, z: 0, w: 0}</code>. Above we set <code>size = 2</code>. Attributes
 default to <code>0, 0, 0, 1</code> so this attribute will get its first 2 values (x and y)
 from our buffer. The z, and w will be the default 0 and 1 respectively.</p>
-<p>We need tell WebGL how to convert from the clip space
+<p>Before we draw we should resize the canvas to match it&#39;s display size. Canvas&#39;s just like Images have 2 sizes.
+The number of pixels actually in them and separately the size they are displayed. CSS determines the size
+the canvas is displayed. <strong>You should always set the size you want a canvas with CSS</strong> since it is far far
+more flexible than any other method.</p>
+<p>To make the number of pixels in the canvas match the size it&#39;s displayed
+<a href="webgl-resizing-the-canvas.html">I&#39;m using a helper function you can read about here</a>.</p>
+<p>In nearly all of these samples the canvas size is 400x300 pixels if the sample is run in its own window
+but stretches to fill the available space if it&#39;s in side an iframe like it is on this page.
+By letting CSS determine the size and then adjusting to match we easily handle both of these cases.</p>
+<pre><code>webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+</code></pre><p>We need to tell WebGL how to convert from the clip space
 values we&#39;ll be setting <code>gl_Position</code> to back into pixels, often called screen space.
-To do this we call <code>gl.viewport</code></p>
+To do this we call <code>gl.viewport</code> and pass it the current size of the canvas.</p>
 <pre><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 </code></pre><p>This tells WebGL the -1 +1 clip space maps to 0 -&gt; <code>gl.canvas.width</code> for x and 0 -&gt; <code>gl.canvas.height</code>
-for y. Note the viewport settings default to the <strong>initial</strong> size of our canvas. If we never
-change the size of the canvas we might not need to set the viewport.</p>
-<p>Finally we need to tell WebGL which shader program to execute.</p>
-<pre><code>gl.useProgram(program);
+for y.</p>
+<p>We clear the canvas. <code>0, 0, 0, 0</code> are r, g, b, alpha so in this case we&#39;re making the canvas transparent.</p>
+<pre><code>// Clear the canvas
+gl.clearColor(0, 0, 0, 0);
+gl.clear(gl.COLOR_BUFFER_BIT);
+</code></pre><p>Finally we need to tell WebGL which shader program to execute.</p>
+<pre><code>// Tell it to use our program (pair of shaders)
+gl.useProgram(program);
 </code></pre><p>After all that we can finally ask WebGL to execute our GLSL program.</p>
 <pre><code>var primitiveType = gl.TRIANGLES;
 var offset = 0;
@@ -329,7 +343,8 @@ triangle will be drawn at clip space coordinates</p>
 <pre><code>  0, 0,
   0, 0.5,
   0.7, 0,
-</code></pre><p>Converting from clip space to screen sapce WebGL is going to draw a triangle at</p>
+</code></pre><p>Converting from clip space to screen space WebGL is going to draw a triangle at. If the canvas size
+happned to be 400x300 we&#39;d get something like this</p>
 <pre><code> clip space      screen space
    0, 0       -&gt;   200, 150
    0, 0.5     -&gt;   200, 225
