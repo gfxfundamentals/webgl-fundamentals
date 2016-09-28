@@ -84,7 +84,7 @@
    * @return {WebGLRenderingContext} The created context.
    * @memberOf module:webgl-utils
    */
-  function showNeedWebGL2(canvas) {
+  function showNeedWebGL(canvas) {
     var doc = canvas.ownerDocument;
     if (doc) {
       var div = doc.createElement("div");
@@ -103,8 +103,8 @@
            align-items: center;
         ">
           <div style="text-align: center;">
-             It doesn't appear your browser supports WebGL2.<br/>
-             <a href="http://webgl2fundamentals.org/webgl/lessons/webgl-getting-webgl2.html" target="_blank">Click here for more information.</a>
+             It doesn't appear your browser supports WebGL.<br/>
+             <a href="http://get.webgl.org" target="_blank">Click here for more information.</a>
           </div>
         </div>
       `;
@@ -965,7 +965,7 @@
 
   return {
     setupLesson: setupLesson,
-    showNeedWebGL2: showNeedWebGL2,
+    showNeedWebGL: showNeedWebGL,
     setupSlider: setupSlider,
     makeDebugContext: makeDebugContext,
     glFunctionArgsToString: glFunctionArgsToString,
