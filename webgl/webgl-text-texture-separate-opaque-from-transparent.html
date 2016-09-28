@@ -99,7 +99,7 @@ function makeTextCanvas(text, width, height) {
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  setupLesson(canvas);
+  webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
@@ -111,8 +111,8 @@ function main() {
   var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, makeXRotation(Math.PI / 2));
 
   // setup GLSL programs
-  var fProgramInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
-  var textProgramInfo = createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
+  var fProgramInfo = webglUtils.createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  var textProgramInfo = webglUtils.createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
 
   // create text texture.
   var textCanvas = makeTextCanvas("Hello World!", 150, 26);
@@ -218,10 +218,10 @@ function main() {
         // setup to draw the 'F'
         gl.useProgram(fProgramInfo.program);
 
-        setBuffersAndAttributes(gl, fProgramInfo.attribSetters, fBufferInfo);
+        webglUtils.setBuffersAndAttributes(gl, fProgramInfo.attribSetters, fBufferInfo);
 
         copyMatrix(matrix, fUniforms.u_matrix);
-        setUniforms(fProgramInfo.uniformSetters, fUniforms);
+        webglUtils.setUniforms(fProgramInfo.uniformSetters, fUniforms);
 
         // Draw the geometry.
         gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
@@ -245,10 +245,10 @@ function main() {
       // setup to draw the text.
       gl.useProgram(textProgramInfo.program);
 
-      setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
+      webglUtils.setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
 
       copyMatrix(textMatrix, textUniforms.u_matrix);
-      setUniforms(textProgramInfo.uniformSetters, textUniforms);
+      webglUtils.setUniforms(textProgramInfo.uniformSetters, textUniforms);
 
       // Draw the text.
       gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);

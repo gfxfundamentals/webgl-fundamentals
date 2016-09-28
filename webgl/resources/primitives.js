@@ -28,14 +28,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-"use strict";
 
 /**
  * Various functions to make simple primitives
  *
  * @module primitives
  */
-(function (root, factory) {
+(function(root, factory) {  // eslint-disable-line
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define(['./webgl-utils', './webgl-3d-math'], factory);
@@ -43,10 +42,11 @@
     // Browser globals
     root.primitives = factory.call(root);
   }
-}(this, function (webglUtils, math3d) {
+}(this, function(webglUtils, math3d) {
+  "use strict";
 
-  webglUtils = webglUtils || this;
-  math3d = math3d || this;
+  webglUtils = webglUtils || this.webglUtils;
+  math3d = math3d || this.math3d;
 
   function allButIndices(name) {
     return name !== "indices";
@@ -356,8 +356,8 @@
     var indices = webglUtils.createAugmentedTypedArray(
         3, subdivisionsWidth * subdivisionsDepth * 2, Uint16Array);
 
-    for (var z = 0; z < subdivisionsDepth; z++) {
-      for (var x = 0; x < subdivisionsWidth; x++) {
+    for (z = 0; z < subdivisionsDepth; z++) {
+      for (x = 0; x < subdivisionsWidth; x++) {
         // Make triangle 1 of quad.
         indices.push(
             (z + 0) * numVertsAcross + x,
@@ -379,6 +379,37 @@
       indices: indices,
     }, matrix);
     return arrays;
+  }
+
+  function createXYQuadVertices(size, xOffset, yOffset) {
+    size = size || 2;
+    xOffset = xOffset || 0;
+    yOffset = yOffset || 0;
+    size *= 0.5;
+    return {
+      position: {
+        numComponents: 2,
+        data: [
+          xOffset + -1 * size, yOffset + -1 * size,
+          xOffset +  1 * size, yOffset + -1 * size,
+          xOffset + -1 * size, yOffset +  1 * size,
+          xOffset +  1 * size, yOffset +  1 * size,
+        ],
+      },
+      normal: [
+        0, 0, 1,
+        0, 0, 1,
+        0, 0, 1,
+        0, 0, 1,
+      ],
+      texcoord: [
+        0, 0,
+        1, 0,
+        0, 1,
+        1, 1,
+      ],
+      indices: [ 0, 1, 2, 2, 1, 3 ],
+    };
   }
 
   /**
@@ -451,8 +482,8 @@
 
     var numVertsAround = subdivisionsAxis + 1;
     var indices = webglUtils.createAugmentedTypedArray(3, subdivisionsAxis * subdivisionsHeight * 2, Uint16Array);
-    for (var x = 0; x < subdivisionsAxis; x++) {
-      for (var y = 0; y < subdivisionsHeight; y++) {
+    for (x = 0; x < subdivisionsAxis; x++) {
+      for (y = 0; y < subdivisionsHeight; y++) {
         // Make triangle 1 of quad.
         indices.push(
             (y + 0) * numVertsAround + x,
@@ -653,8 +684,8 @@
       }
     }
 
-    for (var yy = 0; yy < verticalSubdivisions + extra; ++yy) {
-      for (var ii = 0; ii < radialSubdivisions; ++ii) {
+    for (yy = 0; yy < verticalSubdivisions + extra; ++yy) {
+      for (ii = 0; ii < radialSubdivisions; ++ii) {
         indices.push(vertsAroundEdge * (yy + 0) + 0 + ii,
                      vertsAroundEdge * (yy + 0) + 1 + ii,
                      vertsAroundEdge * (yy + 1) + 1 + ii);
@@ -1079,6 +1110,9 @@
     createPlaneBufferInfo: createBufferInfoFunc(createPlaneVertices),
     createPlaneBuffers: createBufferFunc(createPlaneVertices),
     createPlaneVertices: createPlaneVertices,
+    createXYQuadBufferInfo: createBufferInfoFunc(createXYQuadVertices),
+    createXYQuadBuffers: createBufferFunc(createXYQuadVertices),
+    createXYQuadVertices: createXYQuadVertices,
     createSphereBufferInfo: createBufferInfoFunc(createSphereVertices),
     createSphereBuffers: createBufferFunc(createSphereVertices),
     createSphereVertices: createSphereVertices,

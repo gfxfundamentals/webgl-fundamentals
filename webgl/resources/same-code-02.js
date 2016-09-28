@@ -94,7 +94,7 @@ function main() {
   var bufferInfo = window.primitives.createCubeBufferInfo(gl, 8);
 
   // setup GLSL program
-  var programInfo = createProgramInfo(gl, [vertexShaderSource, fragmentShaderSource]);
+  var programInfo = webglUtils.createProgramInfo(gl, [vertexShaderSource, fragmentShaderSource]);
 
   function degToRad(d) {
     return d * Math.PI / 180;
@@ -163,10 +163,10 @@ function main() {
     gl.useProgram(programInfo.program);
 
     // Setup all the needed attributes.
-    setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
 
     // Set the uniforms that are the same for all objects.
-    setUniforms(programInfo.uniformSetters, uniformsThatAreTheSameForAllObjects);
+    webglUtils.setUniforms(programInfo.uniformSetters, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
     var num = 4;
@@ -182,7 +182,7 @@ function main() {
           makeTranspose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
 
           // Set the uniforms we just computed
-          setUniforms(programInfo.uniformSetters, uniformsThatAreComputedForEachObject);
+          webglUtils.setUniforms(programInfo.uniformSetters, uniformsThatAreComputedForEachObject);
 
           // Set a color for this object.
           materialUniforms.u_diffuse[0] = xx / num * 0.5 + 0.5;
@@ -190,7 +190,7 @@ function main() {
           materialUniforms.u_diffuse[2] = zz / num * 0.5 + 0.5;
 
           // Set the uniforms that are specific to the this object.
-          setUniforms(programInfo.uniformSetters, materialUniforms);
+          webglUtils.setUniforms(programInfo.uniformSetters, materialUniforms);
 
           // Draw the geometry.
           gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);

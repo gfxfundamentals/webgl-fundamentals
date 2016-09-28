@@ -24,7 +24,7 @@ Uses a few utility functions so there's much less code.
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  setupLesson(canvas);
+  webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
@@ -40,12 +40,12 @@ function main() {
      indices:  [0, 1, 2, 1, 2, 3],
   };
 
-  var bufferInfo = createBufferInfoFromArrays(gl, arrays);
+  var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
 
   // setup GLSL program
-  var program = createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
-  var uniformSetters = createUniformSetters(gl, program);
-  var attribSetters  = createAttributeSetters(gl, program);
+  var program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  var uniformSetters = webglUtils.createUniformSetters(gl, program);
+  var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
   function degToRad(d) {
     return d * Math.PI / 180;
@@ -129,10 +129,10 @@ function main() {
     gl.useProgram(program);
 
     // Setup all the needed buffers and attributes.
-    setBuffersAndAttributes(gl, attribSetters, bufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
     // Set the uniforms that are the same for all objects.
-    setUniforms(uniformSetters, uniformsThatAreTheSameForAllObjects);
+    webglUtils.setUniforms(uniformSetters, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
     objects.forEach(function(object) {
@@ -151,10 +151,10 @@ function main() {
       makeTranspose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
 
       // Set the uniforms we just computed
-      setUniforms(uniformSetters, uniformsThatAreComputedForEachObject);
+      webglUtils.setUniforms(uniformSetters, uniformsThatAreComputedForEachObject);
 
       // Set the uniforms that are specific to the this object.
-      setUniforms(uniformSetters, object.materialUniforms);
+      webglUtils.setUniforms(uniformSetters, object.materialUniforms);
 
       // Draw the geometry.
       gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);

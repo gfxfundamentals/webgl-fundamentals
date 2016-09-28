@@ -160,8 +160,8 @@ our code would look something like this
 
 <pre class="prettyprint">
 // At initialiation time
-var uniformSetters = createUniformSetters(gl, program);
-var attribSetters  = createAttributeSetters(gl, program);
+var uniformSetters = webglUtils.createUniformSetters(gl, program);
+var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
 var attribs = {
   a_position: { buffer: positionBuffer, numComponents: 3, },
@@ -188,10 +188,10 @@ var uniforms = {
 gl.useProgram(program);
 
 // Setup all the buffers and attributes
-setAttributes(attribSetters, attribs);
+webglUtils.setAttributes(attribSetters, attribs);
 
 // Set all the uniforms and textures used.
-setUniforms(uniformSetters, uniforms);
+webglUtils.setUniforms(uniformSetters, uniforms);
 
 gl.drawArrays(...);
 </pre>
@@ -202,8 +202,8 @@ You can even use multiple JavaScript objects if it suits you. For example
 
 <pre class="prettyprint">
 // At initialiation time
-var uniformSetters = createUniformSetters(gl, program);
-var attribSetters  = createAttributeSetters(gl, program);
+var uniformSetters = webglUtils.createUniformSetters(gl, program);
+var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
 var attribs = {
   a_position: { buffer: positionBuffer, numComponents: 3, },
@@ -258,8 +258,8 @@ var objects = [
 gl.useProgram(program);
 
 // Setup the parts that are common for all objects
-setAttributes(attribSetters, attribs);
-setUniforms(uniformSetters, uniformThatAreTheSameForAllObjects);
+webglUtils.setAttributes(attribSetters, attribs);
+webglUtils.setUniforms(uniformSetters, uniformThatAreTheSameForAllObjects);
 
 objects.forEach(function(object) {
   computeMatricesForObject(object, uniformsThatAreComputedForEachObject);
@@ -308,7 +308,7 @@ Looks like a pattern we can simplify as well.
 Much shorter! Now we can do this at render time
 
     // Setup all the needed buffers and attributes.
-    setBuffersAndAttributes(gl, attribSetters, bufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
     ...
 
@@ -335,7 +335,7 @@ and setup the `ELEMENT_ARRAY_BUFFER` with your `indices` so you can call `gl.dra
 and at render time we can call `gl.drawElements` instead of `gl.drawArrays`.
 
     // Setup all the needed buffers and attributes.
-    setBuffersAndAttributes(gl, attribSetters, bufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
     ...
 
@@ -390,9 +390,9 @@ components they provide.
 
 Looking for more patterns there's this
 
-    var program = createProgramFromScripts(gl, ["vertexshader", "fragmentshader"]);
-    var uniformSetters = createUniformSetters(gl, program);
-    var attribSetters  = createAttributeSetters(gl, program);
+    var program = webglUtils.createProgramFromScripts(gl, ["vertexshader", "fragmentshader"]);
+    var uniformSetters = webglUtils.createUniformSetters(gl, program);
+    var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
 Let's simplify that too into just
 
@@ -402,7 +402,7 @@ Which returns something like
 
     programInfo = {
        program: WebGLProgram,  // program we just compiled
-       uniformSetters: ...,    // setters as returned from createUniformSetters,
+       uniformSetters: ...,    // setters as returned from webglUtils.createUniformSetters,
        attribSetters: ...,     // setters as returned from createAttribSetters,
     }
 
@@ -432,7 +432,7 @@ directly like this.
 </p>
 <pre class="prettyprint">
 // At initialiation time
-var uniformSetters = createUniformSetters(program);
+var uniformSetters = webglUtils.createUniformSetters(program);
 
 // At draw time
 uniformSetters.u_ambient([1, 0, 0, 1]); // set the ambient color to red.

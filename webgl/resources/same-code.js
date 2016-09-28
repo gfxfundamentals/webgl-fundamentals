@@ -127,7 +127,7 @@ function main() {
   var bufferInfo = window.primitives.createSphereBufferInfo(gl, 5, 48, 24);
 
   // setup GLSL program
-  var programInfo = createProgramInfo(gl, [vertexShaderSource, fragmentShaderSource]);
+  var programInfo = webglUtils.createProgramInfo(gl, [vertexShaderSource, fragmentShaderSource]);
 
   function degToRad(d) {
     return d * Math.PI / 180;
@@ -236,10 +236,10 @@ function main() {
     gl.useProgram(programInfo.program);
 
     // Setup all the needed attributes.
-    setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
 
     // Set the uniforms that are the same for all objects.
-    setUniforms(programInfo.uniformSetters, uniformsThatAreTheSameForAllObjects);
+    webglUtils.setUniforms(programInfo.uniformSetters, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
     objects.forEach(function(object) {
@@ -260,10 +260,10 @@ function main() {
       makeTranspose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
 
       // Set the uniforms we just computed
-      setUniforms(programInfo.uniformSetters, uniformsThatAreComputedForEachObject);
+      webglUtils.setUniforms(programInfo.uniformSetters, uniformsThatAreComputedForEachObject);
 
       // Set the uniforms that are specific to the this object.
-      setUniforms(programInfo.uniformSetters, object.materialUniforms);
+      webglUtils.setUniforms(programInfo.uniformSetters, object.materialUniforms);
 
       // Draw the geometry.
       gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);

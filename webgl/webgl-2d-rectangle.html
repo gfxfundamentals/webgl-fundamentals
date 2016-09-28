@@ -44,14 +44,14 @@
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("c");
-  setupLesson(canvas);
+  webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
 
   // Use our boilerplate utils to compile the shaders and link into a program
-  var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
+  var program = webglUtils.createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
 
   // look up where the vertex data needs to go.
   var positionAttributeLocation = gl.getAttribLocation(program, "a_position");

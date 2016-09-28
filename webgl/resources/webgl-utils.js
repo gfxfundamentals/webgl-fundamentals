@@ -29,7 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-(function (root, factory) {  // eslint-disable-line
+(function(root, factory) {  // eslint-disable-line
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define([], function() {
@@ -37,13 +37,11 @@
     });
   } else {
     // Browser globals
-    var lib = factory.call(root);
-    Object.keys(lib).forEach(function(key) {
-      root[key] = lib[key];
-    });
+    root.webglUtils = factory.call(root);
   }
-}(this, function () {
-  "use strict";  // eslint-disable-line
+}(this, function() {
+  "use strict";
+
   var topWindow = this;
 
   /** @module webgl-utils */
@@ -238,6 +236,7 @@
   function getBindPointForSamplerType(gl, type) {
     if (type === gl.SAMPLER_2D)   return gl.TEXTURE_2D;        // eslint-disable-line
     if (type === gl.SAMPLER_CUBE) return gl.TEXTURE_CUBE_MAP;  // eslint-disable-line
+    return undefined;
   }
 
   /**
@@ -336,8 +335,8 @@
       }
       if (type === gl.BOOL_VEC4) {
         return function(v) {
-          gl.uniform4iv(location, v); }
-        ;
+          gl.uniform4iv(location, v);
+        };
       }
       if (type === gl.FLOAT_MAT2) {
         return function(v) {
@@ -472,13 +471,14 @@
    *     setUniforms(programInfo.uniformSetters, uniforms);
    *     setUniforms(programInfo.uniformSetters, moreUniforms);
    *
-   * @param {Object.<string, function>} setters the setters returned from
+   * @param {Object.<string, function>|module:webgl-utils.ProgramInfo} setters the setters returned from
    *        `createUniformSetters`.
    * @param {Object.<string, value>} an object with values for the
    *        uniforms.
    * @memberOf module:webgl-utils
    */
   function setUniforms(setters, values) {
+    setters = setters.uniformSetters || setters;
     Object.keys(values).forEach(function(name) {
       var setter = setters[name];
       if (setter) {
@@ -571,17 +571,54 @@
    *     };
    *
    * @param {Object.<string, function>} setters Attribute setters as returned from createAttributeSetters
-   * @param {Object.<string, module:webgl-utils.AttribInfo>} buffers AttribInfos mapped by attribute name.
+   * @param {Object.<string, module:webgl-utils.AttribInfo>} attribs AttribInfos mapped by attribute name.
    * @memberOf module:webgl-utils
    * @deprecated use {@link module:webgl-utils.setBuffersAndAttributes}
    */
-  function setAttributes(setters, buffers) {
-    Object.keys(buffers).forEach(function(name) {
+  function setAttributes(setters, attribs) {
+    Object.keys(attribs).forEach(function(name) {
       var setter = setters[name];
       if (setter) {
-        setter(buffers[name]);
+        setter(attribs[name]);
       }
     });
+  }
+
+  /**
+   * Creates a vertex array object and then sets the attributes
+   * on it
+   *
+   * @param {WebGLRenderingContext} gl The WebGLRenderingContext
+   *        to use.
+   * @param {Object.<string, function>} setters Attribute setters as returned from createAttributeSetters
+   * @param {Object.<string, module:webgl-utils.AttribInfo>} attribs AttribInfos mapped by attribute name.
+   * @param {WebGLBuffer} [indices] an optional ELEMENT_ARRAY_BUFFER of indices
+   */
+  function createVAOAndSetAttributes(gl, setters, attribs, indices) {
+    var vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    setAttributes(setters, attribs);
+    if (indices) {
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices);
+    }
+    // We unbind this because otherwise any change to ELEMENT_ARRAY_BUFFER
+    // like when creating buffers for other stuff will mess up this VAO's binding
+    gl.bindVertexArray(null);
+    return vao;
+  }
+
+  /**
+   * Creates a vertex array object and then sets the attributes
+   * on it
+   *
+   * @param {WebGLRenderingContext} gl The WebGLRenderingContext
+   *        to use.
+   * @param {Object.<string, function>| module:webgl-utils.ProgramInfo} programInfo as returned from createProgramInfo or Attribute setters as returned from createAttributeSetters
+   * @param {module:webgl-utils:BufferInfo} bufferInfo BufferInfo as returned from createBufferInfoFromArrays etc...
+   * @param {WebGLBuffer} [indices] an optional ELEMENT_ARRAY_BUFFER of indices
+   */
+  function createVAOFromBufferInfo(gl, programInfo, bufferInfo) {
+    return createVAOAndSetAttributes(gl, programInfo.attribSetters || programInfo, bufferInfo.attribs, bufferInfo.indices);
   }
 
   /**
@@ -621,7 +658,7 @@
       var script = document.getElementById(source);
       return script ? script.text : source;
     });
-    var program = createProgramFromSources(gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback);
+    var program = webglUtils.createProgramFromSources(gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback);
     if (!program) {
       return null;
     }
@@ -702,18 +739,21 @@
         return ext;
       }
     }
+    return undefined;
   }
 
   /**
    * Resize a canvas to match the size its displayed.
    * @param {HTMLCanvasElement} canvas The canvas to resize.
-   * @param {boolean} true if the canvas was resized.
+   * @param {number} [multiplier] amount to multiply by.
+   *    Pass in window.devicePixelRatio for native pixels.
+   * @return {boolean} true if the canvas was resized.
    * @memberOf module:webgl-utils
    */
   function resizeCanvasToDisplaySize(canvas, multiplier) {
     multiplier = multiplier || 1;
-    var width  = canvas.clientWidth  * multiplier;
-    var height = canvas.clientHeight * multiplier;
+    var width  = canvas.clientWidth  * multiplier | 0;
+    var height = canvas.clientHeight * multiplier | 0;
     if (canvas.width !== width ||  canvas.height !== height) {
       canvas.width  = width;
       canvas.height = height;
@@ -1131,20 +1171,21 @@
    * data you don't have to remember to update your draw call.
    *
    * @param {WebGLRenderingContext} gl A WebGLRenderingContext
-   * @param {enum} type eg (gl.TRIANGLES, gl.LINES, gl.POINTS, gl.TRIANGLE_STRIP, ...)
    * @param {module:webgl-utils.BufferInfo} bufferInfo as returned from createBufferInfoFromArrays
+   * @param {enum} [primitiveType] eg (gl.TRIANGLES, gl.LINES, gl.POINTS, gl.TRIANGLE_STRIP, ...)
    * @param {number} [count] An optional count. Defaults to bufferInfo.numElements
    * @param {number} [offset] An optional offset. Defaults to 0.
    * @memberOf module:webgl-utils
    */
-  function drawBufferInfo(gl, type, bufferInfo, count, offset) {
+  function drawBufferInfo(gl, bufferInfo, primitiveType, count, offset) {
     var indices = bufferInfo.indices;
+    primitiveType = primitiveType === undefined ? gl.TRIANGLES : primitiveType;
     var numElements = count === undefined ? bufferInfo.numElements : count;
     offset = offset === undefined ? offset : 0;
     if (indices) {
-      gl.drawElements(type, numElements, gl.UNSIGNED_SHORT, offset);
+      gl.drawElements(primitiveType, numElements, gl.UNSIGNED_SHORT, offset);
     } else {
-      gl.drawArrays(type, offset, numElements);
+      gl.drawArrays(primitiveType, offset, numElements);
     }
   }
 
@@ -1187,7 +1228,7 @@
       setUniforms(programInfo.uniformSetters, object.uniforms);
 
       // Draw
-      drawBufferInfo(gl, gl.TRIANGLES, bufferInfo);
+      drawBufferInfo(gl, bufferInfo);
     });
   }
 
@@ -1202,6 +1243,8 @@
     createProgramFromSources: createProgramFromSources,
     createProgramInfo: createProgramInfo,
     createUniformSetters: createUniformSetters,
+    createVAOAndSetAttributes: createVAOAndSetAttributes,
+    createVAOFromBufferInfo: createVAOFromBufferInfo,
     drawBufferInfo: drawBufferInfo,
     drawObjectList: drawObjectList,
     getExtensionWithKnownPrefixes: getExtensionWithKnownPrefixes,

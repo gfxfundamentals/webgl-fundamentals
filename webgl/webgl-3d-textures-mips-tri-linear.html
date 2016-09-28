@@ -65,7 +65,7 @@ function main() {
   canvas.style.height = canvas.height + "px";
   canvas.width = Math.floor(canvas.width * dpr);
   canvas.height = Math.floor(canvas.height * dpr);
-  setupLesson(canvas);
+  webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
@@ -75,7 +75,7 @@ function main() {
   gl.enable(gl.DEPTH_TEST);
 
   // setup GLSL program
-  var program = createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  var program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
   gl.useProgram(program);
 
   // look up where the vertex data needs to go.

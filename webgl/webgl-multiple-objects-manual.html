@@ -52,14 +52,14 @@ void main() {
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  setupLesson(canvas);
+  webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
 
   var createFlattenedVertices = function(gl, vertices) {
-    return createBufferInfoFromArrays(
+    return webglUtils.createBufferInfoFromArrays(
         gl,
         primitives.makeRandomVertexColors(
             primitives.deindexVertices(vertices),
@@ -77,7 +77,7 @@ function main() {
   var coneBufferInfo   = createFlattenedVertices(gl, primitives.createTruncatedConeVertices(10, 0, 20, 12, 1, true, false));
 
   // setup GLSL program
-  var programInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  var programInfo = webglUtils.createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
 
   function degToRad(d) {
     return d * Math.PI / 180;
@@ -157,7 +157,7 @@ function main() {
     gl.useProgram(programInfo.program);
 
     // Setup all the needed attributes.
-    setBuffersAndAttributes(gl, programInfo.attribSetters, sphereBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, sphereBufferInfo);
 
     sphereUniforms.u_matrix = computeMatrix(
         viewMatrix,
@@ -167,14 +167,14 @@ function main() {
         sphereYRotation);
 
     // Set the uniforms we just computed
-    setUniforms(programInfo.uniformSetters, sphereUniforms);
+    webglUtils.setUniforms(programInfo.uniformSetters, sphereUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, sphereBufferInfo.numElements);
 
     // ------ Draw the cube --------
 
     // Setup all the needed attributes.
-    setBuffersAndAttributes(gl, programInfo.attribSetters, cubeBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, cubeBufferInfo);
 
     cubeUniforms.u_matrix = computeMatrix(
         viewMatrix,
@@ -184,14 +184,14 @@ function main() {
         cubeYRotation);
 
     // Set the uniforms we just computed
-    setUniforms(programInfo.uniformSetters, cubeUniforms);
+    webglUtils.setUniforms(programInfo.uniformSetters, cubeUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, cubeBufferInfo.numElements);
 
     // ------ Draw the cone --------
 
     // Setup all the needed attributes.
-    setBuffersAndAttributes(gl, programInfo.attribSetters, coneBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, coneBufferInfo);
 
     coneUniforms.u_matrix = computeMatrix(
         viewMatrix,
@@ -201,7 +201,7 @@ function main() {
         coneYRotation);
 
     // Set the uniforms we just computed
-    setUniforms(programInfo.uniformSetters, coneUniforms);
+    webglUtils.setUniforms(programInfo.uniformSetters, coneUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 

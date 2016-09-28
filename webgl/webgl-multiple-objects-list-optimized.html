@@ -53,14 +53,14 @@ void main() {
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  setupLesson(canvas);
+  webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
 
   var createFlattenedVertices = function(gl, vertices) {
-    return createBufferInfoFromArrays(
+    return webglUtils.createBufferInfoFromArrays(
         gl,
         primitives.makeRandomVertexColors(
             primitives.deindexVertices(vertices),
@@ -85,7 +85,7 @@ function main() {
 
 
   // setup GLSL program
-  var programInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  var programInfo = webglUtils.createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
 
   function degToRad(d) {
     return d * Math.PI / 180;
@@ -203,11 +203,11 @@ function main() {
       // Setup all the needed attributes.
       if (bindBuffers || bufferInfo !== lastUsedBufferInfo) {
         lastUsedBufferInfo = bufferInfo;
-        setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
+        webglUtils.setBuffersAndAttributes(gl, programInfo.attribSetters, bufferInfo);
       }
 
       // Set the uniforms.
-      setUniforms(programInfo.uniformSetters, object.uniforms);
+      webglUtils.setUniforms(programInfo.uniformSetters, object.uniforms);
 
       // Draw
       gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);

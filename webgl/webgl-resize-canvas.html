@@ -32,14 +32,14 @@
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  setupLesson(canvas, undefined, {dontResize: true, noTitle: true});
+  webglLessonsHelper.setupLesson(canvas, {title: false});
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
 
   // setup GLSL program
-  var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
+  var program = webglUtils.createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
   gl.useProgram(program);
 
   // look up where the vertex data needs to go.

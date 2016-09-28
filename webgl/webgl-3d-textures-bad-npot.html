@@ -34,7 +34,7 @@ The F will turn black because non power of 2 textures need special settings.
 function main() {
   // Get A WebGL context
   var canvas = document.getElementById("canvas");
-  setupLesson(canvas);
+  webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
@@ -44,7 +44,7 @@ function main() {
   gl.enable(gl.DEPTH_TEST);
 
   // setup GLSL program
-  var program = createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  var program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
   gl.useProgram(program);
 
   // look up where the vertex data needs to go.
