@@ -331,7 +331,8 @@ function start() {
   var query = getQuery();
   var parentQuery = getQuery(window.parent.location.search);
   var isSmallish = window.navigator.userAgent.match(/Android|iPhone|iPod|Windows Phone/i);
-  if (isSmallish || parentQuery.noEditor) {
+  var isEdge = window.navigator.userAgent.match(/Edge/i);
+  if (isEdge || isSmallish || parentQuery.editor === 'false') {
     var url = query.url;
     window.location.href = url;
   } else {
