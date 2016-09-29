@@ -840,6 +840,36 @@
     });
   }
 
+  // adapted from http://stackoverflow.com/a/2401861/128511
+  function getBrowser() {
+    var userAgent = navigator.userAgent;
+    var m = userAgent.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(m[1])) {
+      m = /\brv[ :]+(\d+)/g.exec(userAgent) || [];
+      return {
+        name: 'IE',
+        version: m[1],
+      };
+    }
+    if(m[1] === 'Chrome') {
+      var temp = userAgent.match(/\b(OPR|Edge)\/(\d+)/);
+      if (temp != null) {
+         return {
+           name: temp.slice(1).join(' ').replace('OPR', 'Opera'),
+         };
+      }
+    }
+    m = m[2] ? [m[1], m[2]] : [navigator.appName, navigator.appVersion, '-?'];
+    var version = userAgent.match(/version\/(\d+)/i);
+    if (version != null) {
+      m.splice(1, 1, version[1]);
+    }
+    return {
+      name: m[0].toLowerCase(),
+      version: m[1],
+    };
+  }
+
   function installWebGLDebugContextCreator() {
     // capture GL errors
     HTMLCanvasElement.prototype.getContext = (function(oldFn) {
@@ -861,23 +891,10 @@
                 return str;
               });
 
-              // Kinda from http://stackoverflow.com/a/9851769/128511
-              // Opera 8.0+
-              var isOpera = (!!window.opr) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-              // Firefox 1.0+
-              var isFirefox = typeof window.InstallTrigger !== 'undefined';
-              //// Safari <= 9 "[object HTMLElementConstructor]"
-              //var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-              //// Internet Explorer 6-11
-              //var isIE = /*@cc_on!@*/false || !!document.documentMode;
-              //// Edge 20+
-              //var isEdge = !isIE && !!window.StyleMedia;
-              // Chrome 1+
-              var isChrome = !!window.chrome && !!window.chrome.webstore;
-
+              var browser = getBrowser();
               var lineNdx;
               var matcher;
-              if (isOpera || isChrome) {
+              if (/chrome|opera/.test(browser.name)) {
                 lineNdx = 3;
                 matcher = function(line) {
                   var m = /at ([^(]+)*\(*(.*?):(\d+):(\d+)/.exec(line);
@@ -899,7 +916,7 @@
                   }
                   return undefined;
                 };
-              } else if (isFirefox) {
+              } else if (/firefox|safari/.test(browser.name)) {
                 lineNdx = 2;
                 matcher = function(line) {
                   var m = /@(.*?):(\d+):(\d+)/.exec(line);
@@ -917,7 +934,6 @@
                 };
               }
 
-  // TODO: stop checking after 100 drawCalls
               var lineInfo = '';
               if (matcher) {
                 try {
@@ -925,7 +941,7 @@
                   var lines = error.stack.split("\n");
                   // window.fooLines = lines;
                   // lines.forEach(function(line, ndx) {
-                  //   origConsole.error("#", ndx, line);
+                  //   origConsole.log("#", ndx, line);
                   // });
                   var info = matcher(lines[lineNdx]);
                   if (info) {
