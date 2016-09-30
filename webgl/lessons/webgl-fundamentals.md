@@ -294,7 +294,7 @@ note that from the point of view of our GLSL vertex shader the `a_position` attr
 default to `0, 0, 0, 1` so this attribute will get its first 2 values (x and y)
 from our buffer. The z, and w will be the default 0 and 1 respectively.
 
-Before we draw we should resize the canvas to match it's display size. Canvas's just like Images have 2 sizes.
+Before we draw we should resize the canvas to match it's display size. Canvases just like Images have 2 sizes.
 The number of pixels actually in them and separately the size they are displayed. CSS determines the size
 the canvas is displayed. **You should always set the size you want a canvas with CSS** since it is far far
 more flexible than any other method.
