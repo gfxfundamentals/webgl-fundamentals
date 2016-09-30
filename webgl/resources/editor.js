@@ -90,6 +90,8 @@ function parseHTML(url, html) {
   var bodyRE = /<body>([^]*?)<\/body>/i;
   var inlineScriptRE = /<script>([^]*?)<\/script>/i;
   var externalScriptRE = /<script\s*src\s*=\s*"(.*?)"\s*>\s*<\/script>/ig;
+  var hasCanvasInCSSRE = /canvas/;
+  var hasCanvasStyleInHTMLRE = /<canvas[^>]+?style[^>]+?>/;
 
   var obj = { html: html };
   htmlParts.css.source = getHTMLPart(styleRE, obj, '<style>${css}</style>');
@@ -105,6 +107,18 @@ function parseHTML(url, html) {
 
   htmlParts.html.source += scripts + '\n';
   g.html = html;
+
+  if (!hasCanvasInCSSRE.test(htmlParts.css.source) && !hasCanvasStyleInHTMLRE.test(htmlParts.html.source)) {
+    htmlParts.css.source = `body {
+  margin: 0;
+}
+canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+` + htmlParts.css.source;
+  }
 }
 
 function cantGetHTML(e) {
