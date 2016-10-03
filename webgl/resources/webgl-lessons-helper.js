@@ -844,28 +844,29 @@
   function getBrowser() {
     var userAgent = navigator.userAgent;
     var m = userAgent.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-    if(/trident/i.test(m[1])) {
+    if (/trident/i.test(m[1])) {
       m = /\brv[ :]+(\d+)/g.exec(userAgent) || [];
       return {
         name: 'IE',
         version: m[1],
       };
     }
-    if(m[1] === 'Chrome') {
+    if (m[1] === 'Chrome') {
       var temp = userAgent.match(/\b(OPR|Edge)\/(\d+)/);
-      if (temp != null) {
-         return {
-           name: temp.slice(1).join(' ').replace('OPR', 'Opera'),
-         };
+      if (temp) {
+        return {
+          name: temp[1].replace('OPR', 'Opera'),
+          version: temp[2],
+        };
       }
     }
     m = m[2] ? [m[1], m[2]] : [navigator.appName, navigator.appVersion, '-?'];
     var version = userAgent.match(/version\/(\d+)/i);
-    if (version != null) {
+    if (version) {
       m.splice(1, 1, version[1]);
     }
     return {
-      name: m[0].toLowerCase(),
+      name: m[0],
       version: m[1],
     };
   }
@@ -894,7 +895,7 @@
               var browser = getBrowser();
               var lineNdx;
               var matcher;
-              if (/chrome|opera/.test(browser.name)) {
+              if ((/chrome|opera/i).test(browser.name)) {
                 lineNdx = 3;
                 matcher = function(line) {
                   var m = /at ([^(]+)*\(*(.*?):(\d+):(\d+)/.exec(line);
@@ -916,7 +917,7 @@
                   }
                   return undefined;
                 };
-              } else if (/firefox|safari/.test(browser.name)) {
+              } else if ((/firefox|safari/i).test(browser.name)) {
                 lineNdx = 2;
                 matcher = function(line) {
                   var m = /@(.*?):(\d+):(\d+)/.exec(line);
