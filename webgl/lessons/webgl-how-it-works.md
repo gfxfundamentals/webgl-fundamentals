@@ -93,8 +93,8 @@ Here's the working version.
 
 {{{example url="../webgl-2d-triangle-with-position-for-color.html" }}}
 
-Move, scale and rotate the rectangle.  Notice that since the colors are
-computed from clipspace they don't move with the rectangle.  They are
+Move, scale and rotate the triangle.  Notice that since the colors are
+computed from clipspace they don't move with the triangle.  They are
 relative to the background.
 
 Now think about it.  We only compute 3 vertices.  Our vertex shader only
@@ -366,5 +366,3 @@ Here's that sample.
 
 {{{example url="../webgl-2d-rectangle-with-2-byte-colors.html" }}}
 </div>
-
-
