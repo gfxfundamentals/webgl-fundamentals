@@ -303,7 +303,7 @@ To make the number of pixels in the canvas match the size it's displayed
 [I'm using a helper function you can read about here](webgl-resizing-the-canvas.html).
 
 In nearly all of these samples the canvas size is 400x300 pixels if the sample is run in its own window
-but stretches to fill the available space if it's in side an iframe like it is on this page.
+but stretches to fill the available space if it's inside an iframe like it is on this page.
 By letting CSS determine the size and then adjusting to match we easily handle both of these cases.
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);

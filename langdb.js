@@ -19,7 +19,8 @@ window.langDB = {
     },
     "webgl-shaders-and-glsl.html": {
       "en": true,
-      "fr": true
+      "fr": true,
+      "ru": true
     },
     "webgl-text-glyphs.html": {
       "en": true
@@ -83,11 +84,13 @@ window.langDB = {
     "webgl-fundamentals.html": {
       "en": true,
       "fr": true,
-      "pl": true
+      "pl": true,
+      "ru": true
     },
     "webgl-how-it-works.html": {
       "en": true,
-      "fr": true
+      "fr": true,
+      "ru": true
     },
     "webgl-image-processing-continued.html": {
       "en": true
@@ -126,6 +129,10 @@ window.langDB = {
     "pl": {
       "lang": "pl",
       "language": "Polski"
+    },
+    "ru": {
+      "lang": "ru",
+      "language": "Русский"
     }
   }
 }
