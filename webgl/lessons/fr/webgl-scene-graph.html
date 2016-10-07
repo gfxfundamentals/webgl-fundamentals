@@ -71,7 +71,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Je suis sûr qu&#39;un expert en thoérie des graphes va me tirer les oreilles mais... un graphe de scène est un arbre où chaque noeud génère une matrice. Hmmm ce n&#39;est pas une définition très utile. Peut-être qu&#39;avec quelques exemples ce serait mieux.</p>
 <p>La plupart des moteurs 3D utilisent des graphes de scènes. On y met les objets qu&#39;on veut voir apparaître dans la scène. Ces moteurs 3D analysent le graphe et déduisent la liste des choses à dessiner. Les graphes de scènes sont hiérarchisés donc par exemple si vous voulez faire une simulation de l&#39;univers vous aurez peut-être un graphe qui ressemble à ça :</p>
 <p><div>
-  <iframe class="webgl_example " style="width: 400px; height: 500px;" src="../resources/planet-diagram.html"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 500px;" src="/webgl/lessons/resources/planet-diagram.html"></iframe>
 </div>
 
 </p>
@@ -79,7 +79,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Si on se rappelle des <a href="webgl-2d-matrices.html">matrices 2D</a> vous vous souvenez qu&#39;on multiplie plusieurs matrices pour déplacer, tourner et changer l&#39;échelle des géométries. Un graphe de scène fournit une structure pour aider à décider quelle matrice appliquer à un objet. </p>
 <p>Chaque <code>Noeud</code> dans un graphe de scène représente un <em>espace de coordonnées local</em>. Avec une matrice qui lui est propre dans ce système de coordonnées, l&#39;objet peut ignorer sa position par rapport à ce qui l&#39;entoure. Une autre façon de dire ça est de s&#39;imaginer que la Lune s&#39;occupe surtout de tourner autour de la Terre. Elle n&#39;a pas vraiment besoin de savoir quelle position elle a par rapport au Soleil. Sans le graphe de scène on aurait à écrire des algorithmes ultra compliqués pour trouver l&#39;orbite de la Lune dans le système de coordonnées du Soleil. Parce qu&#39;elle orbite un peu comme ça :</p>
 <p><div>
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="../resources/moon-orbit.html"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/moon-orbit.html"></iframe>
 </div>
 
 </p>
@@ -215,8 +215,8 @@ objects.forEach(function(objet) {
 });
 </code></pre><p>Le rendu est <a href="webgl-drawing-multiple-things.html">la boucle évoquée dans l&#39;article précedent</a>.</p>
 <p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-scene-graph-solar-system.html"></iframe>
-  <a class="webgl_center" href="../../webgl-scene-graph-solar-system.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-scene-graph-solar-system.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-scene-graph-solar-system.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>
@@ -225,8 +225,8 @@ objects.forEach(function(objet) {
     changerEchelle(2, 2, 2),           // Terre plus grosse
     deplacer(100, 0, 0));              // Terre à 100 unités du soleil
 </code></pre><p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-scene-graph-solar-system-larger-earth.html"></iframe>
-  <a class="webgl_center" href="../../webgl-scene-graph-solar-system-larger-earth.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-scene-graph-solar-system-larger-earth.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-scene-graph-solar-system-larger-earth.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>
@@ -283,8 +283,8 @@ noeudLune.definirParent(noeudOrbiteLune);
 +noeudSystemeSolaire.mettreAJourMatriceGlobale();
 </code></pre><p>Maintenant la Terre est plus grande, mais pas la Lune.</p>
 <p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-scene-graph-solar-system-larger-earth-fixed.html"></iframe>
-  <a class="webgl_center" href="../../webgl-scene-graph-solar-system-larger-earth-fixed.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-scene-graph-solar-system-larger-earth-fixed.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-scene-graph-solar-system-larger-earth-fixed.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>
@@ -308,8 +308,8 @@ multiplierMatrices(noeudSoleil.matriceLocale, tournerY(0.005), noeudSoleil.matri
 +// tourner la Lune
 +multiplierMatrices(noeudLune.matriceLocale, tournerY(-0.01), noeudLune.matriceLocale);
 </code></pre><p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-scene-graph-solar-system-adjusted.html"></iframe>
-  <a class="webgl_center" href="../../webgl-scene-graph-solar-system-adjusted.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-scene-graph-solar-system-adjusted.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-scene-graph-solar-system-adjusted.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>
@@ -377,15 +377,15 @@ mesTransformations.rotation[2] += tempsEcoule;
 </code></pre><p>Maintenant plus de souci : la matrice est recréée à chaque fois. </p>
 <p>Vous vous dites peut-être, ça sert à quoi si je ne fais pas le système solaire ? Hé bien, si vous voulez animer un personnage vous aurez peut-être un graphe de scène qui ressemble à ça</p>
 <p><div>
-  <iframe class="webgl_example " style="width: 400px; height: 400px;" src="../resources/person-diagram.html"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 400px;" src="/webgl/lessons/resources/person-diagram.html"></iframe>
 </div>
 
 </p>
 <p>À vous de voir combien de liens vous ajoutez pour les doigts aux mains et aux pieds. Plus vous en mettez plus ça demande de calculs au processeur et plus il y a d&#39;informations à transmettre. Des vieux jeux comme Virtua Fighter ont 15 liens. Au début des années 2000 les jeux avaient de 30 à 70 liens. Si vous faîtes chaque lien des articulations, il y en a au moins 20 pour chaque main donc 40 pour les deux... du coup de nombreux jeux qui animent les mains n&#39;animent que le pouce et assimilent les autres doigts à un deuxième gros doigt pour économiser de la mémoire et du temps (du temps pour le calcul sur CPU, sur GPU, et dans les têtes des artistes et des programmeurs).</p>
 <p>En tout cas voilà un personnage en cubes que j&#39;ai imbriqués ensemble. Il utilise une source <code>Transformations</code> pour chaque noeud mentionné au-dessus. L&#39;art de la programmation et de l&#39;animation à son sommet ! :P</p>
 <p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-scene-graph-block-guy.html"></iframe>
-  <a class="webgl_center" href="../../webgl-scene-graph-block-guy.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-scene-graph-block-guy.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-scene-graph-block-guy.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>

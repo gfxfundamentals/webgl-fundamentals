@@ -71,7 +71,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Dans le dernier article on a vu l&#39;éclairage directionnel, dans lequel la lumière vient de façon homogène d&#39;une même direction. On indique cette direction avant le rendu. </p>
 <p>Et si au lieu d&#39;une direction on choisissait un point dans l&#39;espace et qu&#39;on déduisait la direction de n&#39;importe quel endroit de la surface d&#39;un objet dans notre shader ? Ca nous donnerait une lumière-point.</p>
 <p><div>
-  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="../resources/point-lighting.html"></iframe>
+  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/point-lighting.html"></iframe>
 </div>
 
 </p>
@@ -167,8 +167,8 @@ void main() {
 +  gl.uniform3fv(emplacementPositionGlobaleLumiere, [20, 30, 50]);
 </code></pre><p>Voilà !</p>
 <p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-3d-lighting-point.html"></iframe>
-  <a class="webgl_center" href="../../webgl-3d-lighting-point.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-lighting-point.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>
@@ -178,13 +178,13 @@ void main() {
 <p>On peut simuler cet effet en calculant si la lumière se reflète dans notre direction. Le <em>produit scalaire</em> va là aussi nous aider.</p>
 <p>Que doit-on faire ? Réfléchissons. La lumière se réfléchit avec le même angle par lequel elle atteint la surface. Donc si la direction entre la surface et la lumière est la réflexion exacte de la direction de la surface à l&#39;observateur alors la réflexion est maximale.</p>
 <p><div>
-  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="../resources/surface-reflection.html"></iframe>
+  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/surface-reflection.html"></iframe>
 </div>
 
 </p>
 <p>Si on connaît la direction de la surface à la lumière (ce qu&#39;on vient de voir). Et si on connaît la direction de la surface à l&#39;observateur/camera, qu&#39;on peut calculer, alors on peut ajouter ces deux vecteurs et les normaliser pour avoir le <code>vecteurIntermediaire</code> qui est le vecteur entre les deux. Si le vecteurIntermediaire et la normale de la surface concordent alors la réflexion est maximale. Et comment dire de combien ils sont identiques ? Avec le <em>produit scalaire</em> comme on a fait avant. 1 = ce sont les mêmes, ils vont dans la même direction, 0 = ils sont perpendiculaires, -1 = ils sont opposés.</p>
 <p><div>
-  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="../resources/specular-lighting.html"></iframe>
+  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/specular-lighting.html"></iframe>
 </div>
 
 </p>
@@ -270,15 +270,15 @@ var matriceCamera = regarderVers(camera, cible, vertical);
 +gl.uniform3fv(emplacementPositionGlobaleVue, camera);
 </code></pre><p>Résultat</p>
 <p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-3d-lighting-point-specular.html"></iframe>
-  <a class="webgl_center" href="../../webgl-3d-lighting-point-specular.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-lighting-point-specular.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-specular.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>
 <p><strong>ET PAN CA BRILLE !</strong></p>
 <p>On peut jouer sur la brillance en ajoutant un exposant au produit scalaire. Ca changera l&#39;éclairage spéculaire d&#39;un aspect linéaire à un aspect exponentiel.</p>
 <p><div>
-  <iframe class="webgl_example noborder" style="width: 300px; height: 300px;" src="../resources/power-graph.html"></iframe>
+  <iframe class="webgl_example noborder" style="width: 300px; height: 300px;" src="/webgl/lessons/resources/power-graph.html"></iframe>
 </div>
 
 </p>
@@ -304,8 +304,8 @@ var matriceCamera = regarderVers(camera, cible, vertical);
 gl.uniform1f(emplacementBrillance, brillance);
 </code></pre><p>Résultat</p>
 <p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-3d-lighting-point-specular-power.html"></iframe>
-  <a class="webgl_center" href="../../webgl-3d-lighting-point-specular-power.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-lighting-point-specular-power.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-specular-power.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>
@@ -336,8 +336,8 @@ uniform float u_brillance;
 // Indique la couleur de l&#39;éclairage spéculaire au programme
 +  gl.uniform3fv(emplacementCouleurSpeculaire, normaliser([1, 0.6, 0.6]));  // lumiere rouge
 </code></pre><p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-3d-lighting-point-color.html"></iframe>
-  <a class="webgl_center" href="../../webgl-3d-lighting-point-color.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-lighting-point-color.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-color.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>

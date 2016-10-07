@@ -72,21 +72,21 @@ Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abo
 <p>Dans le dernier article on devait déplacer le F devant le frustum parce que la fonction <code>projeterPerspective</code> plaçait l&#39;observateur à l&#39;origine (0,0,0). On devait faire attention à ce que les objets soient plus loin que le plan limite proche <code>zNear</code> et moins loin que le plan limite lointain <code>zFar</code>. </p>
 <p>Déplacer les objets dans la vue de cette façon n&#39;a pas l&#39;air bien sage n&#39;est-ce pas ? Dans le vrai monde on va plutôt déplacer sa caméra pour filmer un immeuble</p>
 <p><div>
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="../resources/camera-move-camera.html?mode=0"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
   <div class="webgl_center">déplacer la caméra vers les objets</div>
 </div>
 
 </p>
 <p>Et pas déplacer l&#39;immeuble pour qu&#39;il soit dans le champ de la caméra.</p>
 <p><div>
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="../resources/camera-move-camera.html?mode=1"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=1"></iframe>
   <div class="webgl_center">déplacer les objets vers la caméra</div>
 </div>
 
 </p>
 <p>Mais dans l&#39;article précédent notre fonction on devait quand-même placer les objets devant l&#39;observateur sur l&#39;axe -Z. Pour résoudre ça, ce qu&#39;on veut en fait c&#39;est qu&#39;une caméra placée quelque part dans la scène subisse les transformations nécessaires pour qu&#39;elle se retrouve à l&#39;origine et regarde vers l&#39;axe -Z, puis faire subire aux objets les mêmes transformations, pour que finalement ils gardent la même position <em>relativement à la caméra</em>.</p>
 <p><div>
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="../resources/camera-move-camera.html?mode=2"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=2"></iframe>
   <div class="webgl_center">déplacer les objets dans la vue</div>
 </div>
 
@@ -147,8 +147,8 @@ Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abo
 
 <p>Et voilà ! Une caméra qui tourne autour du cercle de &#39;F&#39;s. Changez le slider <code>cameraAngle</code> pour bouger la caméra sur le cercle.</p>
 <p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-3d-camera.html"></iframe>
-  <a class="webgl_center" href="../../webgl-3d-camera.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-camera.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>
@@ -169,7 +169,7 @@ Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abo
 
 <p>Cette partie de la matrice représente l&#39;axe Z. Dans ce cas c&#39;est l&#39;axe Z de la caméra. Normaliser un vecteur signifie changer sa norme pour qu&#39;elle vale 1. Si vous vous souvenez de <a href="webgl-2d-rotation.html">l&#39;article sur les rotations 2D</a> on parlait du cercle trigonométrique (de rayon 1) et de comment il aide à faire les rotations 2D. En 3D on a besoin d&#39;une sphère de rayon 1 et d&#39;un vecteur normalisé qui représente un point sur cette sphère. </p>
 <p><div>
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="../resources/cross-product-diagram.html?mode=0"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=0"></iframe>
   <div class="webgl_center">L'<span style='color:blue;'>axe Z</span></div>
 </div>
 
@@ -179,7 +179,7 @@ Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abo
 <p>Dans tous les cas si on calule le produit vectoriel de notre <span style="color: blue;"><code>axeZ</code></span> avec
 <span style="color: gray;"><code>vertical</code></span> on aura l&#39;<span style="color:red;">axeX</span> de la caméra.</p>
 <p><div>
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="../resources/cross-product-diagram.html?mode=1"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
   <div class="webgl_center">Produit vectoriel de l'<span style='color:blue;'>axeZ</span> avec <span style='color:gray;'>vertical</span> = <span style='color:red;'>axeX</span></div>
 </div>
 
@@ -187,7 +187,7 @@ Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abo
 <p>Et maintenant qu&#39;on a l&#39;<span style="color:red;"><code>axeX</code></span> on peut faire le produit vectoriel entre l&#39;<span style="color:blue;"><code>axeZ</code></span> et l&#39;<span style="color:red;"><code>axeX</code></span>
 qui nous donne l&#39;<span style="color:green;"><code>axeY</code></span> de la caméra. </p>
 <p><div>
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="../resources/cross-product-diagram.html?mode=2"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
   <div class="webgl_center"><span style='color:blue;'>axeZ</span> cross <span style='color:red;'>axeX</span> = <span style='color:green;'>axeY</span></div>
 </div>
 
@@ -284,8 +284,8 @@ function regarderVers(positionCamera, cible, vertical) {
 
 <p>Voilà le résultat</p>
 <p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-3d-camera-look-at.html"></iframe>
-  <a class="webgl_center" href="../../webgl-3d-camera-look-at.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-camera-look-at.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 </p>
@@ -298,8 +298,8 @@ function regarderVers(positionCamera, cible, vertical) {
 <p>Je trouve ça moins efficace. Comme mentionné plus tôt, une fonction regarderVers a d'autres cas. C'est facile de faire une inversion de matrice quand on veut une matrice vue mais si on utilise <code>regarderVers</code> pour qu'un personnage en suive un autre ou qu'une tourelle suive sa cible c'est plus simple que regarderVers retourne une matrice qui positionne et oriente un objet dans les coordonnées globales à mon avis.
 </p>
 <div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=../../webgl-3d-camera-look-at-heads.html"></iframe>
-  <a class="webgl_center" href="../../webgl-3d-camera-look-at-heads.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-camera-look-at-heads.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at-heads.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 
