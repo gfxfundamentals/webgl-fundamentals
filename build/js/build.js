@@ -291,7 +291,7 @@ var Builder = function() {
     options.lessons     = options.lessons     || ("webgl/lessons/" + options.lang);
     options.toc         = options.toc         || ("webgl/lessons/" + options.lang + "/toc.html");
     options.template    = options.template    || "build/templates/lesson.template";
-    options.examplePath = options.examplePath === undefined ? "../" : options.examplePath;
+    options.examplePath = options.examplePath === undefined ? "/webgl/lessons/" : options.examplePath;
 
     g_articles = [];
     g_langInfo = hanson.parse(fs.readFileSync(path.join(options.lessons, "langinfo.hanson"), {encoding: "utf8"}));
