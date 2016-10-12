@@ -75,6 +75,9 @@ There are various WebGL Inspectors / Helpers. [Here's one for Chrome](https://be
 
 {{{image url="https://benvanik.github.io/WebGL-Inspector/images/screenshots/1-Trace.gif" }}}
 
+[Firefox also has a similar one](https://hacks.mozilla.org/2014/03/introducing-the-canvas-debugger-in-firefox-developer-tools/).
+It needs to be enabled in `about:flags` and might required the [Firefox Developer Edition](https://www.mozilla.org/en-US/firefox/developer/).
+
 They may or may not be helpful. Most of them are designed for animated samples and will capture a frame
 and let you see all the WebGL calls that made that frame. That's great if you already have something
 working or if you had something working and it broke. But it's not so great if your issue is during
