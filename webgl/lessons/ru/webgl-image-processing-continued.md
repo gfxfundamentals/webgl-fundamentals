@@ -1,0 +1,192 @@
+Title: Продолжаем обработку изображений в WebGL
+Description: Применяем несколько техник обработки изображений в WebGL
+
+Это продолжение статьи об <a href="webgl-image-processing.html">обработке изображений вWebGL</a>. Если вы её ещё не читали - предлагаю <a href="webgl-image-processing.html">ознакомиться сначала с ней</a>.
+
+Наиболее очевидный вопрос по обработке изображений - как применить несколько эффектов?
+<!--more-->
+Можно попробовать создавать шейдеры на лету. Создать интерфейс, который позволит пользователю выбрать требуемый эффект и затем создать шейдер, который создаст все эффекты. Такой подход не всегда возможен, однако он часто используется <a href="http://www.youtube.com/watch?v=cQUn0Zeh-0Q">для создания эффектов в графике в реальном времени</a>.
+
+Более гибкий способ - использовать 2 и более текстуры и отрисовывать по очереди каждый пиксель, переключаясь между текстурами туда и обратно и применяя каждый раз следующий эффект.
+
+
+<blockquote><pre>Оригинальное изображение    -&gt; [Blur]        -&gt; Текстура 1
+Текстура 1      -&gt; [Резкость]            -&gt; Текстура 2
+Текстура 2      -&gt; [Выделение границ]    -&gt; Текстура 1
+Текстура 1      -&gt; [Размытие]            -&gt; Текстура 2
+Текстура 2      -&gt; [Нормальное]          -&gt; Canvas</pre></blockquote>
+
+Для такой реализации нам понадобятся фреймбуферы. В WebGL и OpenGL фреймбуфер является не совсем тем, чем называется. Фреймбуфер WebGL/OpenGL - это просто набор состояний и на самом деле никакой не буфер. Но, прикрепив текстуру к фреймбуферу, мы можем провести рендеринг в эту текстуру.
+
+Сначала преобразуем <a href="webgl-image-processing.html">старый код создания текстуры</a> в функцию
+
+<pre class="prettyprint showlinemods">
+  function createAndSetupTexture(gl) {
+    var texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // настраиваем текстуру, чтобы можно было отобразить изображение любого
+    // размера и чтобы мы смогли работать с пикселями
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+    return texture;
+  }
+
+  // создаём текстуру и помещаем в неё изображение
+  var originalImageTexture = createAndSetupTexture(gl);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+</pre>
+
+А теперь используем эту функцию для создания ещё 2 текстур и прикрепления их к 2 фреймбуферам.
+
+<pre class="prettyprint showlinemods">
+  // создаём 2 текстуры и прикрепления их к фреймбуферам
+  var textures = [];
+  var framebuffers = [];
+  for (var ii = 0; ii < 2; ++ii) {
+    var texture = createAndSetupTexture(gl);
+    textures.push(texture);
+
+    // задаём размер текстуры равным размеру изображения
+    gl.texImage2D(
+        gl.TEXTURE_2D, 0, gl.RGBA, image.width, image.height, 0,
+        gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+    // создаём фреймбуфер
+    var fbo = gl.createFramebuffer();
+    framebuffers.push(fbo);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+
+    // и прикрепляем к нему текстуру
+    gl.framebufferTexture2D(
+        gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+  }
+</pre>
+
+Теперь создадим набор ядер и зададим порядок, в котором они будут применяться
+
+<pre class="prettyprint showlinemods">
+  // определяем несколько ядер свёртки
+  var kernels = {
+    normal: [
+      0, 0, 0,
+      0, 1, 0,
+      0, 0, 0
+    ],
+    gaussianBlur: [
+      0.045, 0.122, 0.045,
+      0.122, 0.332, 0.122,
+      0.045, 0.122, 0.045
+    ],
+    unsharpen: [
+      -1, -1, -1,
+      -1,  9, -1,
+      -1, -1, -1
+    ],
+    emboss: [
+       -2, -1,  0,
+       -1,  1,  1,
+        0,  1,  2
+    ]
+  };
+
+  // определяем порядок применения ядер
+  var effectsToApply = [
+    "gaussianBlur",
+    "emboss",
+    "gaussianBlur",
+    "unsharpen"
+  ];
+</pre>
+
+И, наконец, применим каждый эффект, меняя текстуру, в которую идёт отрисовка.
+
+<pre class="prettyprint showlinemods">
+  // начинаем с оригинального изображения
+  gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
+
+  // не переворачиваем изображение при отрисовке в текстуру
+  gl.uniform1f(flipYLocation, 1);
+
+  // цикл по каждому эффекту, который мы хотим применить
+  for (var ii = 0; ii < effectsToApply.length; ++ii) {
+    // устанавливаем отрисовку в один из фреймбуферов
+    setFramebuffer(framebuffers[ii % 2], image.width, image.height);
+
+    drawWithKernel(effectsToApply[ii]);
+
+    // для следующей отрисовки используем текстуру,
+    // куда только что происходил рендеринг
+    gl.bindTexture(gl.TEXTURE_2D, textures[ii % 2]);
+  }
+
+  // выводим конечный результат на canvas
+  gl.uniform1f(flipYLocation, -1);  // здесь уже нужно перевернуть y координату
+  setFramebuffer(null, canvas.width, canvas.height);
+  drawWithKernel("normal");
+
+  function setFramebuffer(fbo, width, height) {
+    // назначить активный фреймбуфер, куда идёт рендеринг
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+
+    // сообщаем шейдеру размеры фреймбуфера
+    gl.uniform2f(resolutionLocation, width, height);
+
+    // указываем настройки окна для фреймбуфера
+    gl.viewport(0, 0, width, height);
+  }
+
+  function drawWithKernel(name) {
+    // задаём ядро
+    gl.uniform1fv(kernelLocation, kernels[name]);
+
+    // отрисовываем прямоугольник
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+</pre>
+
+Вот рабочая версия с немного более гибким интерфейсом. Отметьте галочку возле эффекта, который хотите включить. Потяните эффект, чтобы изменить порядок, в котором они применяются.
+
+{{{example url="../webgl-2d-image-processing.html" }}}
+
+Теперь о некоторых вещах подробнее.
+
+Вызывая <code>gl.bindFramebuffer</code> со значением параметра <code>null</code>, мы говорим WebGL, что хотим отрисовать в канвас, а не в один из фреймбуферов.
+
+Для WebGL необходима конвертация из <a href="webgl-fundamentals.html">пространства отсечения</a> в пиксели. Это осуществляется через установку <code>gl.viewport</code>, значение по умолчанию которого равно размеру канваса, которое мы установили при инициализации WebGL. Так как размер фреймбуфера, в который происходит отрисовка, отличается от размера canvas, нам необходимо установить viewport соответствующим образом.
+
+Наконец, в <a href="webgl-fundamentals.html">исходном примере</a> мы переворачивали координату Y при отрисовке, потому что у WebGL координаты 0,0 находятся в нижнем левом углу canvas, а не в верхнем левом, что более привычно для 2D. Переворот не нужен при отрисовке во фреймбуфер. Так как фреймбуфер никогда не отображается, нам не важно, что является низом, а что верхом. Что имеет значение, так это то, что пиксель 0,0 во фреймбуфере соответствует значению 0,0 в наших вычислениях. Для того, чтобы управлять переворотом, я добавил ещё одну входную переменную в шейдер.
+
+<pre class="prettyprint showlinemods">
+&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+...
+uniform float u_flipY;
+...
+
+void main() {
+   ...
+   gl_Position = vec4(clipSpace * vec2(1, u_flipY), 0, 1);
+   ...
+}
+&lt;/script&gt;
+</pre>
+
+И теперь при рендеринге мы можем её устанавливать
+
+<pre class="prettyprint showlinemods">
+  ...
+  var flipYLocation = gl.getUniformLocation(program, "u_flipY");
+  ...
+  // не переворачиваем
+  gl.uniform1f(flipYLocation, 1);
+  ...
+  // переворачиваем
+  gl.uniform1f(flipYLocation, -1);
+</pre>
+
+Для простоты этого примера я использовал одну программу, чтобы добиться нескольких эффектов. Если вам нужна полноценная обработка изображений, вам, вероятно, понадобится множество программ GLSL. Одна программа для цветового тона, насыщенности и регулировки яркости. Другая для яркости и контраста. Ещё для инверсии, для настройки уровней и так далее. Также понадобилось бы изменить код для переключения между GLSL-программами и обновления параметров для той или иной программы. Я бы рассмотрел написание такого примера, но это упражнение больше подходит читателю, так как множество программ GLSL, каждая со своими параметрами, требуют серьёзного рефакторинга кода, чтобы он не превратился в спагетти.
+
+Надеюсь, что этот и предыдущий пример сделал WebGL немного ближе к вам, а также надеюсь, что разбор примеров в 2D-пространстве упрощает понимание WebGL. Если найду время, то подготовлю <a href="webgl-2d-translation.html">ещё несколько статей</a> о том, как сделать 3D и более детально рассмотрю, как на самом деле работает WebGL. А пока советую посмотреть, <a href="webgl-2-textures.html">как использовать 2 и более текстуры</a>.

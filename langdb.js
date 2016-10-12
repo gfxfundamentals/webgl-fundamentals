@@ -76,7 +76,8 @@ window.langDB = {
       "fr": true
     },
     "webgl-image-processing.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-and-alpha.html": {
       "en": true
@@ -93,7 +94,8 @@ window.langDB = {
       "ru": true
     },
     "webgl-image-processing-continued.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-2d-translation.html": {
       "en": true,
