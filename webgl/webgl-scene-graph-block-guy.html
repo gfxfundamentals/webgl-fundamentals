@@ -13,10 +13,6 @@ A human hierarchy using a scene graph
 </div>
 <canvas id="canvas"></canvas>
 </body>
-<script src="resources/webgl-utils.js"></script>
-<script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-3d-math.js"></script>
-<script src="resources/primitives.js"></script>
 <!-- vertex shader -->
 <script id="3d-vertex-shader" type="x-shader/x-vertex">
 attribute vec4 a_position;
@@ -48,6 +44,10 @@ void main() {
    gl_FragColor = v_color * u_colorMult + u_colorOffset;
 }
 </script>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
+<script src="resources/3d-math.js"></script>
+<script src="resources/primitives.js"></script>
 <script>
 "use strict";
 
@@ -62,18 +62,18 @@ void main() {
      var t = this.translation;
      var r = this.rotation;
      var s = this.scale;
-     makeTranslation(t[0], t[1], t[2], dst);
-     matrixMultiply(makeXRotation(r[0]), dst, dst);
-     matrixMultiply(makeYRotation(r[1]), dst, dst);
-     matrixMultiply(makeZRotation(r[2]), dst, dst);
-     matrixMultiply(makeScale(s[0], s[1], s[2]), dst, dst);
+     m4.translation(t[0], t[1], t[2], dst);
+     m4.xRotate(dst, r[0], dst);
+     m4.yRotate(dst, r[1], dst);
+     m4.zRotate(dst, r[2], dst);
+     m4.scale(dst, s[0], s[1], s[2], dst);
      return dst;
    };
 
    var Node = function(source) {
      this.children = [];
-     this.localMatrix = makeIdentity();
-     this.worldMatrix = makeIdentity();
+     this.localMatrix = m4.identity();
+     this.worldMatrix = m4.identity();
      this.source = source;
    };
 
@@ -93,19 +93,19 @@ void main() {
      this.parent = parent;
    };
 
-   Node.prototype.updateWorldMatrix = function(matrix) {
+   Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
 
      var source = this.source;
      if (source) {
        source.getMatrix(this.localMatrix);
      }
 
-     if (matrix) {
+     if (parentWorldMatrix) {
        // a matrix was passed in so do the math
-       matrixMultiply(this.localMatrix, matrix, this.worldMatrix);
+       m4.multiply(parentWorldMatrix, this.localMatrix, this.worldMatrix);
      } else {
-       // no matrix was passed in so just copy.
-       copyMatrix(this.localMatrix, this.worldMatrix);
+       // no matrix was passed in so just copy local to world
+       m4.copy(this.localMatrix, this.worldMatrix);
      }
 
      // now process all the children
@@ -298,12 +298,13 @@ function main() {
   }
 
   var scene = makeNode(blockGuyNodeDescriptions);
-  var clock = 0;
 
-  drawScene();
+  requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene() {
+  function drawScene(time) {
+    time *= 0.001;
+
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
     // Tell WebGL how to convert from clip space to pixels
@@ -318,31 +319,27 @@ function main() {
     // Compute the projection matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
-        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+        m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
     var cameraPosition = [4, 3.5, 10];
     var target = [0, 3.5, 0];
     var up = [0, 1, 0];
-    var cameraMatrix = makeLookAt(cameraPosition, target, up);
+    var cameraMatrix = m4.lookAt(cameraPosition, target, up);
 
     // Make a view matrix from the camera matrix.
-    var viewMatrix = makeInverse(cameraMatrix);
+    var viewMatrix = m4.inverse(cameraMatrix);
 
-    var viewProjectionMatrix = matrixMultiply(viewMatrix, projectionMatrix);
+    var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
     // Draw objects
-    clock += 0.01;
-
-    // update the local matrices for each object.
-    //nodesByName["left-arm"]
 
     // Update all world matrices in the scene graph
     scene.updateWorldMatrix();
 
     var adjust;
-    var speed = 4;
-    var c = clock * speed;
+    var speed = 3;
+    var c = time * speed;
     adjust = Math.abs(Math.sin(c));
     nodeInfosByName["point between feet"].trs.translation[1] = adjust;
     adjust = Math.sin(c);
@@ -378,7 +375,7 @@ function main() {
 
     // Compute all the matrices for rendering
     objects.forEach(function(object) {
-      object.drawInfo.uniforms.u_matrix = matrixMultiply(object.worldMatrix, viewProjectionMatrix);
+      object.drawInfo.uniforms.u_matrix = m4.multiply(viewProjectionMatrix, object.worldMatrix);
     });
 
     // ------ Draw the objects --------

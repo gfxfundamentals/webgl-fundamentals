@@ -5,16 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>WebGL - Surface Reflection Diagram</title>
-<link type="text/css" href="../../resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
-<style>
-#ui {
-    width: 200px;
-}
-#rotation>canvas {
-    background-color: rgba(255, 255, 255, 0.6) !important;
-}
-</style>
 </head>
 <body>
 <div class="description">
@@ -29,12 +20,9 @@
 </div>
 </body>
 </html>
-<script src="../../resources/jquery-1.7.1.min.js"></script>
-<script src="../../resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="../../resources/jquery.gman.ui.js"></script>
 <script src="../../resources/webgl-utils.js"></script>
 <script src="../../resources/webgl-lessons-helper.js"></script>
-<script src="../../resources/webgl-2d-math.js"></script>
+<script src="../../resources/2d-math.js"></script>
 <script src="diagram.js"></script>
 <script>
 "use strict";
@@ -43,7 +31,15 @@ function main() {
   var ctx = document.getElementById("canvas").getContext("2d");
   var surfaceAngle = 0;
 
-  $("#rotation").gmanSlider({value: radToDeg(surfaceAngle), slide: updateSurfaceAngle, min: -40, max: 40 });
+  function radToDeg(rad) {
+    return rad * 180 / Math.PI;
+  }
+
+  function degToRad(deg) {
+    return deg * Math.PI / 180;
+  }
+
+  webglLessonsHelper.setupSlider("#rotation", {value: radToDeg(surfaceAngle), slide: updateSurfaceAngle, min: -40, max: 40 });
 
   function updateSurfaceAngle(event, ui) {
     surfaceAngle = degToRad(ui.value);
@@ -81,23 +77,23 @@ function main() {
     ctx.translate(lx, ly);
     ctx.rotate(-Math.atan2(lx - sx, ly - sy) + Math.PI);
 
-    diagram.arrow(ctx, 0, 0, 0, distance(lx, ly, sx, sy) * 0.95, false, true, 0.5);
+    diagram.arrow(ctx, 0, 0, 0, m3.distance(lx, ly, sx, sy) * 0.95, false, true, 0.5);
 //    arrow(ctx, lx, ly, sx, sy, false, true, 0.5);
     ctx.restore();
     ctx.save();
     ctx.translate(sx, sy);
 
-    var i = normalize(sx - lx, sy - ly);
+    var i = m3.normalize(sx - lx, sy - ly);
     var ix = i[0];
     var iy = i[1];
 
     var nx = Math.sin(surfaceAngle);
     var ny = Math.cos(surfaceAngle);
 
-    var r = reflect(ix, iy, nx, ny);
+    var r = m3.reflect(ix, iy, nx, ny);
     var ra = -Math.atan2(r[1], r[0]);
     ctx.rotate(ra);
-    var rl = distance(sx, sy, ex, ey) * 0.8;
+    var rl = m3.distance(sx, sy, ex, ey) * 0.8;
     diagram.arrow(ctx, 0, 0, 0, rl, false, true, 0.5);
     ctx.translate(0, rl / 2);
     ctx.rotate(Math.PI * -0.5);
@@ -134,8 +130,8 @@ function main() {
     //return;
     diagram.roundedRect(ctx, -width / 4, 0, width / 2, 20);
 
-    var sn = normalize(ex - sx, ey - sy);
-    var d  = dot(sn[0], sn[1], r[0], r[1]);
+    var sn = m3.normalize(ex - sx, ey - sy);
+    var d  = m3.dot(sn[0], sn[1], r[0], r[1]);
     var gradient =  ctx.createRadialGradient(0, 0, 0, 0, 0, width / 2);
     gradient.addColorStop(0, diagram.hsl(0, 1, d * 0.5 + 0.5));
     gradient.addColorStop(1, diagram.hsl(0, 1, 0.5));
@@ -166,8 +162,6 @@ function main() {
   render();
 }
 
-$(function(){
-  main();
-});
+main();
 </script>
 

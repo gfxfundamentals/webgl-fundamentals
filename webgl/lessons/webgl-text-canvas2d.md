@@ -1,20 +1,22 @@
 Title: WebGL Text - Canvas 2D
 Description: How to display text using a 2D canvas that is in sync with WebGL
 
-This article is a continuation of [previous WebGL articles about drawing text](webgl-text-html.html).
-If you haven't read them I suggest you start there and work your way back.
+This article is a continuation of [previous WebGL articles about drawing
+text](webgl-text-html.html).  If you haven't read them I suggest you start
+there and work your way back.
 
-Instead of using HTML elements for text we can also use another canvas but with
-a 2D context. Without profiling it's just a guess that this would be faster
-than using the DOM. Of course it's also less flexible. You don't get all the
-fancy CSS styling. But, there's no HTML elements to create and keep track of.
+Instead of using HTML elements for text we can also use another canvas but
+with a 2D context.  Without profiling it's just a guess that this would be
+faster than using the DOM.  Of course it's also less flexible.  You don't
+get all the fancy CSS styling.  But, there's no HTML elements to create
+and keep track of.
 
 Similar to the other examples we make a container but this time we put
 2 canvases in it.
 
     <div class="container">
-      <canvas id="canvas" width="400" height="300"></canvas>
-      <canvas id="text" width="400" height="300"></canvas>
+      <canvas id="canvas"></canvas>
+      <canvas id="text"></canvas>
     </div>
 
 Next setup the CSS so the the canvas and the HTML overlap
@@ -57,8 +59,8 @@ And here's that example
 Why is the text smaller? Because that's the default size for Canvas 2D.
 If you want other sizes [check out the Canvas 2D API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_text).
 
-Another reason to use Canvas 2D is it's easy to draw other things. For example
-let's add an arrow
+Another reason to use Canvas 2D is it's easy to draw other things.  For
+example let's add an arrow
 
     // draw an arrow and text.
 
@@ -84,12 +86,16 @@ let's add an arrow
     // restore the canvas to its old settings.
     ctx.restore();
 
-Here we're taking advantage of the Canvas 2D translate function so we don't have to do any extra
-math when drawing our arrow. We just pretend to draw at the origin and translate takes care
-of moving that origin to the corner of our F.
+Here we're taking advantage of the Canvas 2D [matrix
+stack](webgl-2d-matrix-stack.html) translate function so we don't have to
+do any extra math when drawing our arrow.  We just pretend to draw at the
+origin and translate takes care of moving that origin to the corner of our
+F.
 
 {{{example url="../webgl-text-html-canvas2d-arrows.html" }}}
 
-I think that covers using Canvas 2D. [Check out the Canvas 2D API](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
-for more ideas. [Next we'll actually render text in WebGL](webgl-text-texture.html).
+I think that covers using Canvas 2D.  [Check out the Canvas 2D
+API](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+for more ideas.  [Next we'll actually render text in
+WebGL](webgl-text-texture.html).
 

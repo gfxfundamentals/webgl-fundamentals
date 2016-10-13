@@ -15,7 +15,7 @@ Uses a few utility functions so there's much less code.
 </body>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/3d-math.js"></script>
 <script src="resources/primitives.js"></script>
 <script>
 "use strict";
@@ -67,14 +67,14 @@ function main() {
 
   var uniformsThatAreTheSameForAllObjects = {
     u_lightWorldPos:         [-50, 30, 100],
-    u_viewInverse:           makeIdentity(),
+    u_viewInverse:           m4.identity(),
     u_lightColor:            [1, 1, 1, 1],
   };
 
   var uniformsThatAreComputedForEachObject = {
-    u_worldViewProjection:   makeIdentity(),
-    u_world:                 makeIdentity(),
-    u_worldInverseTranspose: makeIdentity(),
+    u_worldViewProjection:   m4.identity(),
+    u_world:                 m4.identity(),
+    u_worldInverseTranspose: m4.identity(),
   };
 
   var makeRandomTexture = function(gl, w, h) {
@@ -171,17 +171,17 @@ function main() {
     objects.forEach(function(object) {
 
       // Compute a position for this object based on the time.
-      var xRotationMatrix = makeXRotation(object.xRotation * time);
-      var yRotationMatrix = makeYRotation(object.yRotation * time);
-      var translationMatrix = makeTranslation(0, 0, object.radius);
-      var matrix = matrixMultiply(xRotationMatrix, yRotationMatrix);
-      var worldMatrix = matrixMultiply(translationMatrix, matrix,
-          uniformsThatAreComputedForEachObject.u_world);
+      var xRotationMatrix = m4.xRotation(object.xRotation * time);
+      var yRotationMatrix = m4.yRotation(object.yRotation * time);
+      var translationMatrix = m4.translation(0, 0, object.radius);
+      var matrix = m4.multiply(yRotationMatrix, xRotationMatrix);
+      var worldMatrix = m4.multiply(uniformsThatAreComputedForEachObject.u_world,
+          translationMatrix, matrix);
 
       // Multiply the matrices.
-      var matrix = matrixMultiply(worldMatrix, viewMatrix);
-      matrixMultiply(matrix, projectionMatrix, uniformsThatAreComputedForEachObject.u_worldViewProjection);
-      makeTranspose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
+      var matrix = m4.multiply(viewMatrix, worldMatrix);
+      m4.multiply(uniformsThatAreComputedForEachObject.u_worldViewProjection, matrix, projectionMatrix);
+      m4.transpose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
 
       // Set the uniforms we just computed
       webglUtils.setUniforms(uniformSetters, uniformsThatAreComputedForEachObject);
@@ -197,7 +197,7 @@ function main() {
   }
 }
 
-window.addEventListener('load', main);
+main();
 </script>
 <!-- vertex shader -->
 <script id="3d-vertex-shader" type="x-shader/x-vertex">

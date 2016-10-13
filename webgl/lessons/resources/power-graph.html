@@ -5,16 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>WebGL - Power graph</title>
-<link type="text/css" href="../../resources/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
-<style>
-#ui {
-    width: 200px;
-}
-#rotation>canvas {
-    background-color: rgba(255, 255, 255, 0.6) !important;
-}
-</style>
 </head>
 <body>
 <div class="description">
@@ -29,12 +20,9 @@
 </div>
 </body>
 </html>
-<script src="../../resources/jquery-1.7.1.min.js"></script>
-<script src="../../resources/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="../../resources/jquery.gman.ui.js"></script>
 <script src="../../resources/webgl-utils.js"></script>
 <script src="../../resources/webgl-lessons-helper.js"></script>
-<script src="../../resources/webgl-2d-math.js"></script>
+<script src="../../resources/2d-math.js"></script>
 <script src="diagram.js"></script>
 <script>
 "use strict";
@@ -43,7 +31,7 @@ function main() {
   var ctx = document.getElementById("canvas").getContext("2d");
   var power = 1;
 
-  $("#power").gmanSlider({value: power, step: 0.01, precision: 2, slide: updatePower, min: 0, max: 10 });
+  webglLessonsHelper.setupSlider("#power", {value: power, step: 0.01, precision: 2, slide: updatePower, min: 0, max: 10 });
 
   function updatePower(event, ui) {
     power = ui.value;
@@ -51,7 +39,7 @@ function main() {
   }
 
   function render() {
-    webglUtils.resizeCanvasToDisplaySize(ctx.canvas);//, window.devicePixelRatio);
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
     var width  = 300;
     var height = 300;
 
@@ -118,8 +106,6 @@ function main() {
   render();
 }
 
-$(function(){
-  main();
-});
+main();
 </script>
 

@@ -127,15 +127,15 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>Setup uniforms for both the &#39;F&#39; and text</p>
 <pre><code>var fUniforms = {
-  u_matrix: makeIdentity(),
+  u_matrix: m4.identity(),
 };
 
 var textUniforms = {
-  u_matrix: makeIdentity(),
+  u_matrix: m4.identity(),
   u_texture: textTex,
 };
 </code></pre><p>Now when we compute the matrices for the F we save off the F&#39;s view matrix</p>
-<pre><code>var matrix = makeIdentity();
+<pre><code>var matrix = m4.identity();
 matrix = matrixMultiply(matrix, preTranslationMatrix);
 matrix = matrixMultiply(matrix, scaleMatrix);
 matrix = matrixMultiply(matrix, rotationZMatrix);
@@ -160,7 +160,7 @@ unit quad to match the dimensions of the texture. Finally we need to multiply by
 matrix.</p>
 <pre><code>// scale the F to the size we need it.
 // use just the view position of the &#39;F&#39; for the text
-var textMatrix = makeIdentity();
+var textMatrix = m4.identity();
 textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
 textMatrix = matrixMultiply(
     textMatrix,
@@ -254,7 +254,7 @@ gl.depthMask(false);
   // draw the text
   // scale the F to the size we need it.
   // use just the position of the &#39;F&#39; for the text
-  var textMatrix = makeIdentity();
+  var textMatrix = m4.identity();
   textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
   textMatrix = matrixMultiply(textMatrix, makeTranslation(pos[0], pos[1], pos[2]));
   textMatrix = matrixMultiply(textMatrix, projectionMatrix);
@@ -296,7 +296,7 @@ multiply by some amount to move the text a specific number of units toward or aw
 +var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
 +var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
 
-var textMatrix = makeIdentity();
+var textMatrix = m4.identity();
 textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
 *textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
 textMatrix = matrixMultiply(textMatrix, projectionMatrix);
@@ -345,7 +345,7 @@ var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
 +var desiredTextScale = -1 / gl.canvas.height;  // 1x1 pixels
 +var scale = viewZ * desiredTextScale;
 
-var textMatrix = makeIdentity();
+var textMatrix = m4.identity();
 *textMatrix = matrixMultiply(textMatrix, makeScale(textWidth * scale, textHeight * scale, 1));
 textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
 textMatrix = matrixMultiply(textMatrix, projectionMatrix);
@@ -401,7 +401,7 @@ var textTextures = [
 
   // scale the F to the size we need it.
   // use just the position of the &#39;F&#39; for the text
-  var textMatrix = makeIdentity();
+  var textMatrix = m4.identity();
   *textMatrix = matrixMultiply(textMatrix, makeScale(tex.width, tex.height, 1));
 </code></pre><p>and set the uniform for the texture before drawing</p>
 <pre><code>  textUniforms.u_texture = tex.texture;

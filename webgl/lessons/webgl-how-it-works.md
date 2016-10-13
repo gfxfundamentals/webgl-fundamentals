@@ -10,7 +10,10 @@ first part.
 
 When you call
 
-    gl.drawArrays(gl.TRIANGLE, 0, 9);
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = 9;
+    gl.drawArrays(primitiveType, offset, count);
 
 The 9 there means "process 9 vertices" so here are 9 vertices being processed.
 
@@ -58,7 +61,10 @@ And we have to only draw 3 vertices.
     function drawScene() {
       ...
       // Draw the geometry.
-    *  gl.drawArrays(gl.TRIANGLES, 0, 3);
+      var primitiveType = gl.TRIANGLES;
+      var offset = 0;
+      var count = 3;
+      gl.drawArrays(primitiveType, offset, count);
     }
 
 Then in our vertex shader we declare a *varying* to pass data to the
@@ -194,12 +200,9 @@ We now have to supply colors for WebGL to use.
     +  var colorLocation = gl.getAttribLocation(program, "a_color");
       ...
     +  // Create a buffer for the colors.
-    +  var buffer = gl.createBuffer();
-    +  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    +  gl.enableVertexAttribArray(colorLocation);
-    +  gl.vertexAttribPointer(colorLocation, 4, gl.FLOAT, false, 0, 0);
-
-      // Set the colors.
+    +  var colorBuffer = gl.createBuffer();
+    +  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    +  // Set the colors.
     +  setColors(gl);
       ...
 
@@ -226,6 +229,31 @@ We now have to supply colors for WebGL to use.
     +          r2, b2, g2, 1]),
     +      gl.STATIC_DRAW);
     +}
+
+At render time setup the color attribute
+
+
+    +gl.enableVertexAttribArray(colorLocation);
+    +
+    +// Bind the color buffer.
+    +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    +
+    +// Tell the color attribute how to get data out of colorBuffer (ARRAY_BUFFER)
+    +var size = 4;          // 4 components per iteration
+    +var type = gl.FLOAT;   // the data is 32bit floats
+    +var normalize = false; // don't normalize the data
+    +var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    +var offset = 0;        // start at the beginning of the buffer
+    +gl.vertexAttribPointer(
+    +    colorLocation, size, type, normalize, stride, offset)
+
+And adjust the count to compute 6 vertices for 2 triangles
+
+    // Draw the geometry.
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    *var count = 6;
+    gl.drawArrays(primitiveType, offset, count);
 
 And here's the result.
 
@@ -267,7 +295,8 @@ you'll see they also use an extra attribute to pass in texture coordinates.
 Buffers are the way of getting vertex and other per vertex data onto the
 GPU.  `gl.createBuffer` creates a buffer.
 `gl.bindBuffer` sets that buffer as the buffer to be worked on.
-`gl.bufferData` copies data into the buffer.
+`gl.bufferData` copies data into the buffer. This is usually done at
+initialziation time.
 
 Once the data is in the buffer we need to tell WebGL how to get data out
 of it and provide it to the vertex shader's attributes.
@@ -279,11 +308,19 @@ attributes.  For example in the code above we have
     var positionLocation = gl.getAttribLocation(program, "a_position");
     var colorLocation = gl.getAttribLocation(program, "a_color");
 
-Once we know the location of the attribute we then issue 2 commands.
+This is also usually done at initialization time.
+
+Once we know the location of the attribute we then issue 3 commands just
+before drawing.
 
     gl.enableVertexAttribArray(location);
 
-This command tells WebGL we want to supply data from a buffer.
+That command tells WebGL we want to supply data from a buffer.
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
+
+That command binds a buffer to the ARRAY_BUFFER bind point. It's a global
+variable internal to WebGL
 
     gl.vertexAttribPointer(
         location,
@@ -293,10 +330,10 @@ This command tells WebGL we want to supply data from a buffer.
         strideToNextPieceOfData,
         offsetIntoBuffer);
 
-And this command tells WebGL to get data from the buffer that was last
-bound with gl.bindBuffer, how many components per vertex (1 - 4), what the
-type of data is (`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...), the stride
-which means how many bytes to skip to get from one piece of data to the
+And that command tells WebGL to get data from the buffer that is currently
+bound to the ARRAY_BUFFER bind point, how many components per vertex (1 - 4),
+what the type of data is (`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...),
+the stride which means how many bytes to skip to get from one piece of data to the
 next piece of data, and an offset for how far into the buffer our data is.
 
 Number of components is always 1 to 4.
@@ -333,7 +370,14 @@ per vertex, a 75% savings.
 </p>
 <p>Let's change our code to do this. When we tell WebGL how to extract our colors we'd use</p>
 <pre class="prettyprint showlinemods">
-  gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
+  // Tell the color attribute how to get data out of colorBuffer (ARRAY_BUFFER)
+  var size = 4;                 // 4 components per iteration
+*  var type = gl.UNSIGNED_BYTE;  // the data is 8bit unsigned bytes
+*  var normalize = true;         // normalize the data
+  var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
+  var offset = 0;               // start at the beginning of the buffer
+  gl.vertexAttribPointer(
+      colorLocation, size, type, normalize, stride, offset)
 </pre>
 <p>And when we fill out our buffer with colors we'd use</p>
 <pre class="prettyprint showlinemods">

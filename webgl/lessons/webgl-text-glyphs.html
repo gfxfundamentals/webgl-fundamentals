@@ -158,7 +158,7 @@ textPositions.forEach(function(pos, ndx) {
     var desiredTextScale = -1 / gl.canvas.height;  // 1x1 pixels
     var scale = viewZ * desiredTextScale;
 
-    var textMatrix = makeIdentity();
+    var textMatrix = m4.identity();
 +    textMatrix = matrixMultiply(textMatrix, makeTranslation(ii, 0, 0));
     textMatrix = matrixMultiply(textMatrix, makeScale(tex.width * scale, tex.height * scale, 1));
     textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
@@ -376,7 +376,7 @@ var fontInfo = {
   setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
 
   // use just the position of the &#39;F&#39; for the text
-  var textMatrix = makeIdentity();
+  var textMatrix = m4.identity();
   // because pos is in view space that means it&#39;s a vector from the eye to
   // some position. So translate along that vector back toward the eye some distance
   var fromEye = normalize(pos);

@@ -33,9 +33,8 @@ Draw multiple objects optimized by sorting
 </body>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/3d-math.js"></script>
 <script src="resources/primitives.js"></script>
-<script src="resources/stats.min.js"></script>
 <!-- vertex shader -->
 <script id="3d-vertex-shader" type="x-shader/x-vertex">
 attribute vec4 a_position;
@@ -85,11 +84,6 @@ function main() {
   sortElem.addEventListener('change', function(e) {
     useSorted = e.target.checked;
   });
-
-  var stats = new Stats();
-  stats.domElement.style.position = 'absolute';
-  stats.domElement.style.top = '0px';
-  document.getElementById("container").appendChild(stats.domElement);
 
   var createFlattenedVertices = function(gl, vertices) {
     return webglUtils.createBufferInfoFromArrays(
@@ -147,7 +141,7 @@ function main() {
     var object = {
       uniforms: {
         u_colorMult: [Math.random(), Math.random(), Math.random(), 1],
-        u_matrix: makeIdentity(),
+        u_matrix: m4.identity(),
       },
       translation: [rand(-100, 100), rand(-100, 100), rand(-150, -50)],
       xRotationSpeed: rand(0.8, 1.2),
@@ -171,19 +165,13 @@ function main() {
 
   var sortedObjectsToDraw = objectsToDraw.slice().sort(sortByBufferInfoThenProgramInfo);
 
-  function computeMatrix(viewMatrix, projectionMatrix, translation, xRotation, yRotation) {
-    var xRotationMatrix = makeXRotation(xRotation);
-    var yRotationMatrix = makeYRotation(yRotation);
-    var translationMatrix = makeTranslation(
+  function computeMatrix(viewProjectionMatrix, translation, xRotation, yRotation) {
+    var matrix = m4.translate(viewProjectionMatrix,
         translation[0],
         translation[1],
         translation[2]);
-    var matrix = makeIdentity();
-    matrix = matrixMultiply(matrix, xRotationMatrix);
-    matrix = matrixMultiply(matrix, yRotationMatrix);
-    var worldMatrix = matrixMultiply(matrix, translationMatrix);
-    matrix = matrixMultiply(worldMatrix, viewMatrix);
-    return matrixMultiply(matrix, projectionMatrix);
+    matrix = m4.xRotate(matrix, xRotation);
+    return m4.yRotate(matrix, yRotation);
   }
 
   function drawObjects(objectsToDraw) {
@@ -240,22 +228,23 @@ function main() {
     // Compute the projection matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
-        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+        m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
     var cameraPosition = [0, 0, 100];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
-    var cameraMatrix = makeLookAt(cameraPosition, target, up);
+    var cameraMatrix = m4.lookAt(cameraPosition, target, up);
 
     // Make a view matrix from the camera matrix.
-    var viewMatrix = makeInverse(cameraMatrix);
+    var viewMatrix = m4.inverse(cameraMatrix);
+
+    var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
     // Compute the matrices for each object.
     objects.forEach(function(object) {
       object.uniforms.u_matrix = computeMatrix(
-          viewMatrix,
-          projectionMatrix,
+          viewProjectionMatrix,
           object.translation,
           object.xRotationSpeed * time,
           object.yRotationSpeed * time);
@@ -263,8 +252,6 @@ function main() {
 
     // ------ Draw the objects --------
     drawObjects(useSorted ? sortedObjectsToDraw : objectsToDraw);
-
-    stats.update();
 
     requestAnimationFrame(drawScene);
   }

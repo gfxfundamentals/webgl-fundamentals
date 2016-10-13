@@ -15,12 +15,9 @@ canvas { border: 1px solid black; }
 <!-- this is included only for iframe and requestAnimationFrame support -->
 <script src="../../resources/webgl-utils.js"></script>
 <script src="../../resources/webgl-lessons-helper.js"></script>
-<script src="3d-math.js"></script>
+<script src="../../resources/3d-math.js"></script>
 <script>
 "use strict";
-
-var m = ThreeDMath;
-window.onload = main;
 
 function main() {
   var cubeVertices = [
@@ -57,7 +54,7 @@ function main() {
 
     var scale = 2;
 
-    webglUtils.resizeCanvasToDisplaySize(ctx.canvas);
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
@@ -67,17 +64,18 @@ function main() {
 
     var fieldOfView = Math.PI * 0.25;
     var aspect = canvas.clientWidth / canvas.clientHeight;
-    var projection = m.perspective(fieldOfView, aspect, 1, 500);
+    var projection = m4.perspective(fieldOfView, aspect, 1, 500);
     var radius = 5;
     var eye = [
         Math.sin(clock) * radius,
-        1,
+        -2,
         Math.cos(clock) * radius];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
-    var view = m.lookAt(eye, target, up);
+    var camera = m4.lookAt(eye, target, up);
+    var view = m4.inverse(camera);
 
-    var worldViewProjection = m.multiplyMatrix(view, projection);
+    var worldViewProjection = m4.multiply(projection, view);
 
     drawLines(cubeVertices, indices, worldViewProjection);
     ctx.restore();
@@ -90,7 +88,7 @@ function main() {
     // transform points
     var points = [];
     for (var ii = 0; ii < cubeVertices.length; ii += 3) {
-      points.push(m.transformPoint(
+      points.push(m4.transformPoint(
         worldViewProjection,
         [cubeVertices[ii + 0], cubeVertices[ii + 1], cubeVertices[ii + 2]]));
     }
@@ -103,5 +101,7 @@ function main() {
     ctx.stroke();
   }
 }
+
+main();
 </script>
 </html>

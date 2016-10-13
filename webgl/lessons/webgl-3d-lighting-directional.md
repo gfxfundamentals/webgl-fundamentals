@@ -1,41 +1,49 @@
 Title: WebGL 3D - Directional Lighting
 Description: How to implement directional lighting in WebGL
 
-This article is a continuation of <a href="webgl-3d-camera.html">WebGL 3D Cameras</a>. If you haven't read that I suggest <a href="webgl-3d-cameras.html">you start there</a>.
+This article is a continuation of [WebGL 3D
+Cameras](webgl-3d-camera.html).  If you haven't read that I suggest [you
+start there](webgl-3d-cameras.html).
 
-There are many ways to implement lighting. Probably the simplest is *directional lighting*.
+There are many ways to implement lighting.  Probably the simplest is
+*directional lighting*.
 
-Directional lighting assumes the light is coming uniformly from one direction. The sun
-on a clear day is often considered a directional light. It's so far way that its rays
-can be considered to be hitting the surface of an object all in parallel.
+Directional lighting assumes the light is coming uniformly from one
+direction.  The sun on a clear day is often considered a directional
+light.  It's so far way that its rays can be considered to be hitting the
+surface of an object all in parallel.
 
-Computing directional lighting is actually pretty simple. If we know what direction
-the light is traveling and we know what direction the surface of the object is facing
-we can take the *dot product* of the 2 directions and it will give us the cosine of
-the angle between the 2 directions.
+Computing directional lighting is actually pretty simple.  If we know what
+direction the light is traveling and we know what direction the surface of
+the object is facing we can take the *dot product* of the 2 directions and
+it will give us the cosine of the angle between the 2 directions.
 
 Here's an example
 
 {{{diagram url="resources/dot-product.html" caption="drag the points"}}}
 
-Drag the points around, if you get them exactly opposite of each other you'll see the dot product
-is -1. If they are at the same spot exactly the dot product is 1.
+Drag the points around, if you get them exactly opposite of each other
+you'll see the dot product is -1.  If they are at the same spot exactly
+the dot product is 1.
 
-How is that useful? Well if we know what direction the surface of our 3d object is facing
-and we know the direction the light is shining then we can just take the dot product
-of them and it will give us a number 1 if the light is pointing directly at the
-surface and -1 if they are pointing directly opposite.
+How is that useful?  Well if we know what direction the surface of our 3d
+object is facing and we know the direction the light is shining then we
+can just take the dot product of them and it will give us a number 1 if
+the light is pointing directly at the surface and -1 if they are pointing
+directly opposite.
 
 {{{diagram url="resources/directional-lighting.html" caption="rotate the direction" width="500" height="400"}}}
 
 We can multiply our color by that dot product value and boom! Light!
 
-One problem, how do we know which direction the surfaces of our 3d object are facing.
+One problem, how do we know which direction the surfaces of our 3d object
+are facing.
 
 ## Introducing Normals
 
-I have no idea why they are called *normals* but at least in 3D graphics a normal
-is the word for a unit vector that describes the direction a surface is facing.
+I have no idea why they are called *normals* but at least in 3D graphics a
+normal is the word for a unit vector that describes the direction a
+surface is facing.
 
 Here are some normals for a cube and a sphere.
 
@@ -43,19 +51,21 @@ Here are some normals for a cube and a sphere.
 
 The lines sticking out of the objects represent normals for each vertex.
 
-Notice the cube has 3 normals at each corner. That's because you need
-3 different normals to represent the way each face of the cube is um, .. facing.
+Notice the cube has 3 normals at each corner.  That's because you need 3
+different normals to represent the way each face of the cube is um, ..
+facing.
 
 The normals are also colored based on their direction with
 positive x being <span style="color: red;">red</span>, up being
 <span style="color: green;">green</span> and positive z being
 <span style="color: blue;">blue</span>.
 
-So, let's go add normals to our `F` from [our previous examples](webgl-3d-cameras.html)
-so we can light it. Since the `F` is very boxy and its faces are aligned
-to the x, y, or z axis it will be pretty easy. Things that are facing forward
-have the normal `0, 0, 1`. Things that are facing away are `0, 0, -1`. Facing
-left is `-1, 0, 0`, Facing right is `1, 0, 0`. Up is `0, 1, 0` and down is `0, -1, 0`.
+So, let's go add normals to our `F` from [our previous
+examples](webgl-3d-cameras.html) so we can light it.  Since the `F` is
+very boxy and its faces are aligned to the x, y, or z axis it will be
+pretty easy.  Things that are facing forward have the normal `0, 0, 1`.
+Things that are facing away are `0, 0, -1`.  Facing left is `-1, 0, 0`,
+Facing right is `1, 0, 0`.  Up is `0, 1, 0` and down is `0, -1, 0`.
 
 ```
 function setNormals(gl) {
@@ -201,25 +211,53 @@ so it's easier to see the lighting.
 
     ...
 
-    -// Create a buffer for colors.
-    -var buffer = gl.createBuffer();
-    -gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    -gl.enableVertexAttribArray(colorLocation);
-    -
-    -// We'll supply RGB as bytes.
-    -gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
-    -
-    -// Set Colors.
+    -// Create a buffer to put colors in
+    -var colorBuffer = gl.createBuffer();
+    -// Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = colorBuffer)
+    -gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    -// Put geometry data into buffer
     -setColors(gl);
 
-    // Create a buffer for normals.
-    var buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.enableVertexAttribArray(normalLocation);
-    gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 0, 0);
+    +// Create a buffer to put normals in
+    +var normalBuffer = gl.createBuffer();
+    +// Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = normalBuffer)
+    +gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+    +// Put normals data into buffer
+    +setNormals(gl);
 
-    // Set normals.
-    setNormals(gl);
+And at render time
+
+```
+-// Turn on the color attribute
+-gl.enableVertexAttribArray(colorLocation);
+-
+-// Bind the color buffer.
+-gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+-
+-// Tell the attribute how to get data out of colorBuffer (ARRAY_BUFFER)
+-var size = 3;                 // 3 components per iteration
+-var type = gl.UNSIGNED_BYTE;  // the data is 8bit unsigned values
+-var normalize = true;         // normalize the data (convert from 0-255 to 0-1)
+-var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
+-var offset = 0;               // start at the beginning of the buffer
+-gl.vertexAttribPointer(
+-    colorLocation, size, type, normalize, stride, offset)
+
++// Turn on the normal attribute
++gl.enableVertexAttribArray(normalLocation);
++
++// Bind the normal buffer.
++gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
++
++// Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
++var size = 3;          // 3 components per iteration
++var type = gl.FLOAT;   // the data is 32bit floating point values
++var normalize = false; // normalize the data (convert from 0-255 to 0-1)
++var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
++var offset = 0;        // start at the beginning of the buffer
++gl.vertexAttribPointer(
++    normalLocation, size, type, normalize, stride, offset)
+```
 
 Now we need to make our shaders use them
 
@@ -296,7 +334,7 @@ and we need to set them
 +  gl.uniform4fv(colorLocation, [0.2, 1, 0.2, 1]); // green
 +
 +  // set the light direction.
-+  gl.uniform3fv(reverseLightDirectionLocation, normalize([0.5, 0.7, 1]));
++  gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0.5, 0.7, 1]));
 ```
 
 `normalize`, which we went over before, will make whatever values we put in there
@@ -316,11 +354,12 @@ but the lighting isn't changing. As the F rotates we want whatever part
 is facing the direction of the light to be the brightest.
 
 To fix this we need to re-orient the normals as the object is re-oriented.
-Like we did for positions we can multiply the normals by some matrix. The most obvious
-matrix would be the `world` matrix. As it is right now we're only passing in
-1 matrix called `u_matrix`. Let's change it to pass in 2 matrices. One called
-`u_world` which will be the world matrix. Another called `u_worldViewProjection`
-which will be what we're currently passing in as `u_matrix`
+Like we did for positions we can multiply the normals by some matrix.  The
+most obvious matrix would be the `world` matrix.  As it is right now we're
+only passing in 1 matrix called `u_matrix`.  Let's change it to pass in 2
+matrices.  One called `u_world` which will be the world matrix.  Another
+called `u_worldViewProjection` which will be what we're currently passing
+in as `u_matrix`
 
 ```
 attribute vec4 a_position;
@@ -393,10 +432,10 @@ Click the diagram to hide the normals. You should see the lighting
 on the 2 outer spheres is very different based on which matrix is used.
 It's hard to tell which is correct which is why this is a subtle issue.
 
-To implement this in our example let's change the code like this. First we'll update
-the shader. Techincally we could just update the value of `u_world`
-but it's best if we rename things so they're named what they actually are
-otherwise it will get confusing.
+To implement this in our example let's change the code like this.  First
+we'll update the shader.  Techincally we could just update the value of
+`u_world` but it's best if we rename things so they're named what they
+actually are otherwise it will get confusing.
 
 ```
 attribute vec4 a_position;
@@ -427,10 +466,9 @@ Then we need to look that up
 And we need to compute and set it
 
 ```
-var worldViewMatrix = matrixMultiply(worldMatrix, viewMatrix);
-var worldViewProjectionMatrix = matrixMultiply(worldViewMatrix, projectionMatrix);
-+var worldInverseMatrix = makeInverse(worldMatrix);
-+var worldInverseTransposeMatrix = makeTranspose(worldInverseMatrix);
+var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
+var worldInverseMatrix = m4.inverse(worldMatrix);
+var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
 // Set the matrices
 gl.uniformMatrix4fv(
@@ -445,14 +483,17 @@ gl.uniformMatrix4fv(
 and here's the code to transpose a matrix
 
 ```
-function makeTranspose(m) {
-  return [
-    m[0], m[4], m[8], m[12],
-    m[1], m[5], m[9], m[13],
-    m[2], m[6], m[10], m[14],
-    m[3], m[7], m[11], m[15],
-  ];
-}
+var m4 = {
+  transpose: function(m) {
+    return [
+      m[0], m[4], m[8], m[12],
+      m[1], m[5], m[9], m[13],
+      m[2], m[6], m[10], m[14],
+      m[3], m[7], m[11], m[15],
+    ];
+  },
+
+  ...
 ```
 
 Because the effect is subtle and because we aren't scaling anything
@@ -460,7 +501,8 @@ there's no noticble difference but at least now we're prepared.
 
 {{{example url="../webgl-3d-lighting-directional-worldinversetranspose.html" }}}
 
-I hope this first step into lighting was clear. Next up [point lighting](webgl-3d-lighting-point.html).
+I hope this first step into lighting was clear.  Next up [point
+lighting](webgl-3d-lighting-point.html).
 
 <div class="webgl_bottombar">
 <h3>Alternatives to mat3(u_worldInverseTranspose) * a_normal</h3>

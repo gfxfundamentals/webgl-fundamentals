@@ -109,9 +109,40 @@ Show texture wrapping modes<br/>
   </div>
 </div>
 </body>
+<!-- vertex shader -->
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec2 a_texcoord;
+
+uniform mat4 u_matrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the texcoord to the fragment shader.
+  v_texcoord = a_texcoord;
+}
+</script>
+<!-- fragment shader -->
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec2 v_texcoord;
+
+// The texture.
+uniform sampler2D u_texture;
+
+void main() {
+   gl_FragColor = texture2D(u_texture, v_texcoord);
+}
+</script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/3d-math.js"></script>
 <script>
 "use strict";
 
@@ -129,7 +160,6 @@ function main() {
 
   // setup GLSL program
   var program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
-  gl.useProgram(program);
 
   // look up where the vertex data needs to go.
   var positionLocation = gl.getAttribLocation(program, "a_position");
@@ -137,24 +167,18 @@ function main() {
 
   // lookup uniforms
   var matrixLocation = gl.getUniformLocation(program, "u_matrix");
+  var textureLocation = gl.getUniformLocation(program, "u_texture");
 
-  // Create a buffer.
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(positionLocation);
-  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
-
-  // Set Geometry.
+  // Create a buffer for positions
+  var positionBuffer = gl.createBuffer();
+  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  // Put the positions in the buffer
   setGeometry(gl);
 
-  // Create a buffer for texcoords.
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(texcoordLocation);
-
-  // We'll supply texcoords as floats.
-  gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
-
+  // provide texture coordinates for the rectangle.
+  var texcoordBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
   // Set Texcoords.
   setTexcoords(gl);
 
@@ -221,36 +245,70 @@ function main() {
     // Clear the framebuffer texture.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
+
     // Compute the matrix
     var scaleFactor = 2.5;
-    var size = 80 * scaleFactor;
-    var x = gl.canvas.clientWidth / 2 - size / 2;
-    var y = gl.canvas.clientHeight - size - 60;
+    var tsize = 80 * scaleFactor;
+    var x = gl.canvas.clientWidth / 2 - tsize / 2;
+    var y = gl.canvas.clientHeight - tsize - 60;
     gridContainer.style.left = (x - 50 * scaleFactor) + 'px';
     gridContainer.style.top  = (y - 50 * scaleFactor) + 'px';
     gridContainer.style.width  = (scaleFactor * 400) + 'px';
     gridContainer.style.height = (scaleFactor * 300) + 'px';
 
+    // Tell it to use our program (pair of shaders)
+    gl.useProgram(program);
+
+    // Turn on the position attribute
+    gl.enableVertexAttribArray(positionLocation);
+
+    // Bind the position buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 3;          // 3 components per iteration
+    var type = gl.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        positionLocation, size, type, normalize, stride, offset)
+
+    // Turn on the teccord attribute
+    gl.enableVertexAttribArray(texcoordLocation);
+
+    // Bind the position buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+
+    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 2;          // 2 components per iteration
+    var type = gl.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        texcoordLocation, size, type, normalize, stride, offset)
+
     // Compute the projection matrix
     var projectionMatrix =
-        makeOrthographic(0, gl.canvas.clientWidth, gl.canvas.clientHeight, 0, -1, 1);
+        m4.orthographic(0, gl.canvas.clientWidth, gl.canvas.clientHeight, 0, -1, 1);
 
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapS);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrapT);
-    var translationMatrix = makeTranslation(x, y, 0);
-    var scaleMatrix = makeScale(size, size, 1);
-    var preTranslationMatrix = makeTranslation(0.5, 0.5, 0);
 
-    // Multiply the matrices.
-    var matrix = preTranslationMatrix;
-    matrix = matrixMultiply(matrix, scaleMatrix);
-    matrix = matrixMultiply(matrix, translationMatrix);
-    matrix = matrixMultiply(matrix, projectionMatrix);
+    var matrix = m4.translate(projectionMatrix, x, y, 0);
+    matrix = m4.scale(matrix, tsize, tsize, 1);
+    matrix = m4.translate(matrix, 0.5, 0.5, 0);
 
     // Set the matrix.
     gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+    // Tell the shader to use texture unit 0 for u_texture
+    gl.uniform1i(textureLocation, 0);
 
     // Draw the geometry.
     gl.drawArrays(gl.TRIANGLES, 0, 1 * 6);
@@ -287,38 +345,7 @@ function setTexcoords(gl) {
       gl.STATIC_DRAW);
 }
 
-window.addEventListener('load', main);
-</script>
-<!-- vertex shader -->
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
-attribute vec4 a_position;
-attribute vec2 a_texcoord;
-
-uniform mat4 u_matrix;
-
-varying vec2 v_texcoord;
-
-void main() {
-  // Multiply the position by the matrix.
-  gl_Position = u_matrix * a_position;
-
-  // Pass the texcoord to the fragment shader.
-  v_texcoord = a_texcoord;
-}
-</script>
-<!-- fragment shader -->
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
-precision mediump float;
-
-// Passed in from the vertex shader.
-varying vec2 v_texcoord;
-
-// The texture.
-uniform sampler2D u_texture;
-
-void main() {
-   gl_FragColor = texture2D(u_texture, v_texcoord);
-}
+main();
 </script>
 </html>
 

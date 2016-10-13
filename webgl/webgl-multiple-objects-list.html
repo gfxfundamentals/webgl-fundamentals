@@ -15,7 +15,7 @@ Draw multiple objects using a list
 </body>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/3d-math.js"></script>
 <script src="resources/primitives.js"></script>
 <!-- vertex shader -->
 <script id="3d-vertex-shader" type="x-shader/x-vertex">
@@ -93,15 +93,15 @@ function main() {
   // Uniforms for each object.
   var sphereUniforms = {
     u_colorMult: [0.5, 1, 0.5, 1],
-    u_matrix: makeIdentity(),
+    u_matrix: m4.identity(),
   };
   var cubeUniforms = {
     u_colorMult: [1, 0.5, 0.5, 1],
-    u_matrix: makeIdentity(),
+    u_matrix: m4.identity(),
   };
   var coneUniforms = {
     u_colorMult: [0.5, 0.5, 1, 1],
-    u_matrix: makeIdentity(),
+    u_matrix: m4.identity(),
   };
   var sphereTranslation = [  0, 0, 0];
   var cubeTranslation   = [-40, 0, 0];
@@ -125,19 +125,13 @@ function main() {
     },
   ];
 
-  function computeMatrix(viewMatrix, projectionMatrix, translation, xRotation, yRotation) {
-    var xRotationMatrix = makeXRotation(xRotation);
-    var yRotationMatrix = makeYRotation(yRotation);
-    var translationMatrix = makeTranslation(
+  function computeMatrix(viewProjectionMatrix, translation, xRotation, yRotation) {
+    var matrix = m4.translate(viewProjectionMatrix,
         translation[0],
         translation[1],
         translation[2]);
-    var matrix = makeIdentity();
-    matrix = matrixMultiply(matrix, xRotationMatrix);
-    matrix = matrixMultiply(matrix, yRotationMatrix);
-    var worldMatrix = matrixMultiply(matrix, translationMatrix);
-    matrix = matrixMultiply(worldMatrix, viewMatrix);
-    return matrixMultiply(matrix, projectionMatrix);
+    matrix = m4.xRotate(matrix, xRotation);
+    return m4.yRotate(matrix, yRotation);
   }
 
   requestAnimationFrame(drawScene);
@@ -160,16 +154,18 @@ function main() {
     // Compute the projection matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
-        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+        m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
     var cameraPosition = [0, 0, 100];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
-    var cameraMatrix = makeLookAt(cameraPosition, target, up);
+    var cameraMatrix = m4.lookAt(cameraPosition, target, up);
 
     // Make a view matrix from the camera matrix.
-    var viewMatrix = makeInverse(cameraMatrix);
+    var viewMatrix = m4.inverse(cameraMatrix);
+
+    var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
     var sphereXRotation =  time;
     var sphereYRotation =  time;
@@ -180,22 +176,19 @@ function main() {
 
     // Compute the matrices for each object.
     sphereUniforms.u_matrix = computeMatrix(
-        viewMatrix,
-        projectionMatrix,
+        viewProjectionMatrix,
         sphereTranslation,
         sphereXRotation,
         sphereYRotation);
 
     cubeUniforms.u_matrix = computeMatrix(
-        viewMatrix,
-        projectionMatrix,
+        viewProjectionMatrix,
         cubeTranslation,
         cubeXRotation,
         cubeYRotation);
 
     coneUniforms.u_matrix = computeMatrix(
-        viewMatrix,
-        projectionMatrix,
+        viewProjectionMatrix,
         coneTranslation,
         coneXRotation,
         coneYRotation);
@@ -222,7 +215,7 @@ function main() {
   }
 }
 
-window.addEventListener('load', main);
+main();
 </script>
 </html>
 

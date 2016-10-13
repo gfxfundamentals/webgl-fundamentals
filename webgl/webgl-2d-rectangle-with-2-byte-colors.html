@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>WebGL - Rectangle with 2 colors</title>
+<title>WebGL - Rectangle with 2 colors using bytes</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 </head>
 <body>
@@ -22,9 +22,36 @@ Drag sliders to translate, rotate, and scale.
   </div>
 </div>
 </body>
+<!-- vertex shader -->
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+attribute vec2 a_position;
+attribute vec4 a_color;
+
+uniform mat3 u_matrix;
+
+varying vec4 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+
+  // Copy the color from the attribute to the varying.
+  v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+varying vec4 v_color;
+
+void main() {
+  gl_FragColor = v_color;
+}
+</script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-2d-math.js"></script>
+<script src="resources/2d-math.js"></script>
 <script>
 "use strict";
 
@@ -41,7 +68,6 @@ function main() {
 
   // setup GLSL program
   var program = webglUtils.createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
-  gl.useProgram(program);
 
   // look up where the vertex data needs to go.
   var positionLocation = gl.getAttribLocation(program, "a_position");
@@ -51,20 +77,14 @@ function main() {
   var matrixLocation = gl.getUniformLocation(program, "u_matrix");
 
   // Create a buffer for the positons.
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(positionLocation);
-  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
+  var positionBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   // Set Geometry.
   setGeometry(gl);
 
   // Create a buffer for the colors.
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(colorLocation);
-  gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
-
+  var colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
   // Set the colors.
   setColors(gl);
 
@@ -111,27 +131,60 @@ function main() {
     // Clear the canvas.
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Compute the matrices
-    var projectionMatrix = make2DProjection(gl.canvas.clientWidth, gl.canvas.clientHeight);
-    var translationMatrix = makeTranslation(translation[0], translation[1]);
-    var rotationMatrix = makeRotation(angleInRadians);
-    var scaleMatrix = makeScale(scale[0], scale[1]);
+    // Tell it to use our program (pair of shaders)
+    gl.useProgram(program);
 
-    // Multiply the matrices.
-    var matrix = matrixMultiply(scaleMatrix, rotationMatrix);
-    matrix = matrixMultiply(matrix, translationMatrix);
-    matrix = matrixMultiply(matrix, projectionMatrix);
+    // Turn on the position attribute
+    gl.enableVertexAttribArray(positionLocation);
+
+    // Bind the position buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 2;          // 2 components per iteration
+    var type = gl.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        positionLocation, size, type, normalize, stride, offset)
+
+    // Turn on the color attribute
+    gl.enableVertexAttribArray(colorLocation);
+
+    // Bind the color buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+
+    // Tell the color attribute how to get data out of colorBuffer (ARRAY_BUFFER)
+    var size = 4;                 // 4 components per iteration
+    var type = gl.UNSIGNED_BYTE;  // the data is 8bit unsigned bytes
+    var normalize = true;         // normalize the data
+    var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;               // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        colorLocation, size, type, normalize, stride, offset)
+
+    // Compute the matrix
+    var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
+    matrix = m3.translate(matrix, translation[0], translation[1]);
+    matrix = m3.rotate(matrix, angleInRadians);
+    matrix = m3.scale(matrix, scale[0], scale[1]);
 
     // Set the matrix.
     gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
     // Draw the geometry.
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = 6;
+    gl.drawArrays(primitiveType, offset, count);
   }
 }
 
 
 // Fill the buffer with the values that define a rectangle.
+// Note, will put the values in whatever buffer is currently
+// bound to the ARRAY_BUFFER bind point
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -147,6 +200,8 @@ function setGeometry(gl) {
 
 // Fill the buffer with colors for the 2 triangles
 // that make the rectangle.
+// Note, will put the values in whatever buffer is currently
+// bound to the ARRAY_BUFFER bind point
 function setColors(gl) {
   // Pick 2 random colors.
   var r1 = Math.random() * 256; // 0 to 255.99999
@@ -168,35 +223,6 @@ function setColors(gl) {
       gl.STATIC_DRAW);
 }
 
-window.addEventListener('load', main);
-</script>
-<!-- vertex shader -->
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
-attribute vec2 a_position;
-attribute vec4 a_color;
-
-uniform mat3 u_matrix;
-
-varying vec4 v_color;
-
-void main() {
-  // Multiply the position by the matrix.
-  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
-
-  // Copy the color from the attribute to the varying.
-  v_color = a_color;
-}
-</script>
-<!-- fragment shader -->
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
-precision mediump float;
-
-varying vec4 v_color;
-
-void main() {
-  gl_FragColor = v_color;
-}
+main();
 </script>
 </html>
-
-

@@ -1,40 +1,48 @@
 Title: WebGL Implementing DrawImage
 Description: How to implement canvas 2d's drawImage function in WebGL
 
-This article is a continuation of <a href="webgl-3d-orthographic.html">WebGL orthographic 3D</a>. If you haven't read that I suggest <a href="webgl-3d-orthographic.html">you start there</a>.
-You should also be aware of how textures and texture coordinates work please read
-[WebGL 3D textures](webgl-3d-textures.html).
+This article is a continuation of [WebGL orthographic
+3D](webgl-3d-orthographic.html).  If you haven't read that I suggest [you
+start there](webgl-3d-orthographic.html).  You should also be aware of how
+textures and texture coordinates work please read [WebGL 3D
+textures](webgl-3d-textures.html).
 
-To implement most games in 2D requires just a single function to draw an image. Sure some 2d games
-do fancy thing with lines etc but if you only have a way to draw a 2D image on the screen
-you can pretty much make most 2d games.
+To implement most games in 2D requires just a single function to draw an
+image.  Sure some 2d games do fancy thing with lines etc but if you only
+have a way to draw a 2D image on the screen you can pretty much make most
+2d games.
 
-The Canvas 2D api has very flexible function for drawing image called `drawImage`. It has 3 versions
+The Canvas 2D api has very flexible function for drawing image called
+`drawImage`.  It has 3 versions
 
     ctx.drawImage(image, dstX, dstY);
     ctx.drawImage(image, dstX, dstY, dstWidth, dstHeight);
     ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
                          dstX, dstY, dstWidth, dstHeight);
 
-Given everything you've learned so far how would you implement this in WebGL? Your first
-solution might be to generate vertices like some of the first articles on this site did.
-Sending vertices to the GPU is generally a slow operation (although there are cases where it will be faster).
+Given everything you've learned so far how would you implement this in
+WebGL?  Your first solution might be to generate vertices like some of the
+first articles on this site did.  Sending vertices to the GPU is generally
+a slow operation (although there are cases where it will be faster).
 
-This is where the whole point of WebGL comes into play. It's all about creatively writing
-a shader and then creatively using that shader to solve your problem.
+This is where the whole point of WebGL comes into play.  It's all about
+creatively writing a shader and then creatively using that shader to solve
+your problem.
 
 Let's start with the first version
 
     ctx.drawImage(image, x, y);
 
-It draws an image at location `x, y` the same size as the image.
-To make a similar WebGL based funciton we could upload vertices that for `x, y`, `x + width, y`, `x, y + height`,
-and `x + width, y + height` then as we draw different images at different locations
-we'd generate different sets of vertices.
+It draws an image at location `x, y` the same size as the image.  To make
+a similar WebGL based funciton we could upload vertices that for `x, y`,
+`x + width, y`, `x, y + height`, and `x + width, y + height` then as we
+draw different images at different locations we'd generate different sets
+of vertices.
 
-A far more common way though is just to use a unit quad. We upload a single square 1 unit big. We
-then use [matrix math](webgl-2d-matrices.html) to scale and translate that unit quad so that
-it ends up being at the desired place.
+A far more common way though is just to use a unit quad.  We upload a
+single square 1 unit big.  We then use [matrix
+math](webgl-2d-matrices.html) to scale and translate that unit quad so
+that it ends up being at the desired place.
 
 Here's the code.
 
@@ -58,10 +66,10 @@ And a simple fragment shader
 
     varying vec2 v_texcoord;
 
-    uniform sampler2D texture;
+    uniform sampler2D u_texture;
 
     void main() {
-       gl_FragColor = texture2D(texture, v_texcoord);
+       gl_FragColor = texture2D(u_texture, v_texcoord);
     }
 
 And now the function
@@ -71,22 +79,32 @@ And now the function
     function drawImage(tex, texWidth, texHeight, dstX, dstY) {
       gl.bindTexture(gl.TEXTURE_2D, tex);
 
+      // Tell WebGL to use our shader program pair
+      gl.useProgram(program);
+
+      // Setup the attributes to pull data from our buffers
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.enableVertexAttribArray(positionLocation);
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+      gl.enableVertexAttribArray(texcoordLocation);
+      gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+
       // this matirx will convert from pixels to clip space
-      var projectionMatrix = make2DProjection(canvas.width, canvas.height, 1);
+      var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
+
+      // this matrix will translate our quad to dstX, dstY
+      matrix = m4.translate(matrix, dstX, dstY, 0);
 
       // this matrix will scale our 1 unit quad
       // from 1 unit to texWidth, texHeight units
-      var scaleMatrix = makeScale(texWidth, texHeight, 1);
-
-      // this matrix will translate our quad to dstX, dstY
-      var translationMatrix = makeTranslation(dstX, dstY, 0);
-
-      // multiply them all togehter
-      var matrix = matrixMultiply(scaleMatrix, translationMatrix);
-      matrix = matrixMultiply(matrix, projectionMatrix);
+      matrix = m4.scale(matrix, texWidth, texHeight, 1);
 
       // Set the matrix.
       gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+      // Tell the shader to get the texture from texture unit 0
+      gl.uniform1i(textureLocation, 0);
 
       // draw the quad (2 triangles, 6 vertices)
       gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -201,33 +219,40 @@ Handling version 2 of the original canvas `drawImage` function
 Is really no different. We just use `dstWidth` and `dstHeight` instead of
 `texWidth` and `texHeight`.
 
-    *function drawImage(tex, texWidth, texHeight, dstX, dstY, dstWidth, dstHeight) {
+    *function drawImage(
+    *    tex, texWidth, texHeight,
+    *    dstX, dstY, dstWidth, dstHeight) {
     +  if (dstWidth === undefined) {
     +    dstWidth = texWidth;
     +  }
-
+    +
     +  if (dstHeight === undefined) {
     +    dstHeight = texHeight;
     +  }
 
       gl.bindTexture(gl.TEXTURE_2D, tex);
 
+      ...
+
       // this matirx will convert from pixels to clip space
-      var projectionMatrix = make2DProjection(canvas.width, canvas.height, 1);
+      var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
       // this matrix will scale our 1 unit quad
     *  // from 1 unit to dstWidth, dstHeight units
-    *  var scaleMatrix = makeScale(dstWidth, dstHeight, 1);
+    *  var scaleMatrix = m4.scaling(dstWidth, dstHeight, 1);
 
       // this matrix will translate our quad to dstX, dstY
-      var translationMatrix = makeTranslation(dstX, dstY, 0);
+      var translationMatrix = m4.translation(dstX, dstY, 0);
 
       // multiply them all togehter
-      var matrix = matrixMultiply(scaleMatrix, translationMatrix);
-      matrix = matrixMultiply(matrix, projectionMatrix);
+      var matrix = m4.multiply(translationMatrix, scaleMatrix);
+      matrix = m4.multiply(projectionMatrix, matrix);
 
       // Set the matrix.
       gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+      // Tell the shader to get the texture from texture unit 0
+      gl.uniform1i(textureLocation, 0);
 
       // draw the quad (2 triangles, 6 vertices)
       gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -242,14 +267,16 @@ So that was easy. But what about the 3rd version of canvas `drawImage`?
     ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
                          dstX, dstY, dstWidth, dstHeight);
 
-In order to select part of the texture we need to manipulate the texure coordinates. How
-texture coordinates work was [covered in the article about textures](webgl-3d-textures.html).
-In that article we manually created texture coordinates which is a very common way to do this
-but we can also create them on the fly and just like we're manipulating our positions using
-a matrix we can similarly manipluate texture coordinates using another matrix.
+In order to select part of the texture we need to manipulate the texure
+coordinates.  How texture coordinates work was [covered in the article
+about textures](webgl-3d-textures.html).  In that article we manually
+created texture coordinates which is a very common way to do this but we
+can also create them on the fly and just like we're manipulating our
+positions using a matrix we can similarly manipluate texture coordinates
+using another matrix.
 
-Let's add a texture matrix to the vertex shader and multiply the texture coordinates
-by this texture matrix.
+Let's add a texture matrix to the vertex shader and multiply the texture
+coordinates by this texture matrix.
 
     attribute vec4 a_position;
     attribute vec2 a_texcoord;
@@ -298,19 +325,21 @@ what we've already done for the positions.
 
       gl.bindTexture(gl.TEXTURE_2D, tex);
 
+      ...
+
       // this matirx will convert from pixels to clip space
-      var projectionMatrix = make2DProjection(canvas.width, canvas.height, 1);
+      var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
       // this matrix will scale our 1 unit quad
       // from 1 unit to dstWidth, dstHeight units
-      var scaleMatrix = makeScale(dstWidth, dstHeight, 1);
+      var scaleMatrix = m4.scaling(dstWidth, dstHeight, 1);
 
       // this matrix will translate our quad to dstX, dstY
-      var translationMatrix = makeTranslation(dstX, dstY, 0);
+      var translationMatrix = m4.translation(dstX, dstY, 0);
 
       // multiply them all togehter
-      var matrix = matrixMultiply(scaleMatrix, translationMatrix);
-      matrix = matrixMultiply(matrix, projectionMatrix);
+      var matrix = m4.multiply(translationMatrix, scaleMatrix);
+      matrix = m4.multiply(projectionMatrix, matrix);
 
       // Set the matrix.
       gl.uniformMatrix4fv(matrixLocation, false, matrix);
@@ -319,14 +348,14 @@ what we've already done for the positions.
     +  // and because our texture coordinates are already a unit quad
     +  // we can select an area of the texture by scaling the unit quad
     +  // down
-    +  var texScaleMatrix = makeScale(srcWidth / texWidth, srcHeight / texHeight, 1);
-    +  var texTranslationMatrix = makeTranslation(srcX / texWidth, srcY / texHeight, 0);
-    +
-    +  // multiply them together
-    +  var texMatrix = matrixMultiply(texScaleMatrix, texTranslationMatrix);
+    +  var texMatrix = m4.translation(srcX / texWidth, srcY / texHeight, 0);
+    +  texMatrix = m4.scale(texMatrix, srcWidth / texWidth, srcHeight / texHeight, 1);
     +
     +  // Set the texture matrix.
     +  gl.uniformMatrix4fv(textureMatrixLocation, false, texMatrix);
+
+      // Tell the shader to get the texture from texture unit 0
+      gl.uniform1i(textureLocation, 0);
 
       // draw the quad (2 triangles, 6 vertices)
       gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -336,46 +365,38 @@ I also updated the code to pick parts of the textures. Here's the result
 
 {{{example url="../webgl-2d-drawimage-03.html" }}}
 
-Unlike the canvas 2D api our WebGL version handles cases the canvas 2D `drawImage` does not.
+Unlike the canvas 2D api our WebGL version handles cases the canvas 2D
+`drawImage` does not.
 
-For one we can pass in a negative width or height for either source or dest. A negative `srcWidth`
-will select pixels to the left of `srcX`. A negative `dstWidth` will draw to the left of `dstX`.
-In the canvas 2D api these are errors at best or undefined behavior at worst.
+For one we can pass in a negative width or height for either source or
+dest.  A negative `srcWidth` will select pixels to the left of `srcX`.  A
+negative `dstWidth` will draw to the left of `dstX`.  In the canvas 2D api
+these are errors at best or undefined behavior at worst.
 
 {{{example url="../webgl-2d-drawimage-04.html" }}}
 
-Another is since we're using a matrix we can do [any matrix math we want](webgl-2d-matrices.html).
+Another is since we're using a matrix we can do [any matrix math we
+want](webgl-2d-matrices.html).
 
-For example we could rotate the texture coordinates around the center of the texture.
+For example we could rotate the texture coordinates around the center of
+the texture.
 
 Changing the texture matrix code to this
 
     *  // just like a 2d projection matrix except in texture space (0 to 1)
-    *  // instead of clip space
-    *  var texProjectionMatrix = makeScale(1 / texWidth, 1 / texHeight, 1);
-    *
-    *  // because we're using a porjeciton matrix that converts to pixels
-    *  // the scale and translation are now in pixels
-    *  var texScaleMatrix = makeScale(srcWidth, srcHeight, 1);
-    *  var texTranslationMatrix = makeTranslation(srcX, srcY, 0);
+    *  // instead of clip space. This matrix puts us in pixel space.
+    *  var texMatrix = m4.scaling(1 / texWidth, 1 / texHeight, 1);
     *
     *  // We need to pick a place to rotate around
-    *  // so the pre rotation matrix moves the texcoords
-    *  // so the center of the texture is at the origin
-    *  var texPreRotationMatrix = makeTranslation(texWidth * -0.5, texHeight * -0.5, 0);
-    *  var texRotationMatrix = makeZRotation(srcRotation);
-    *  // the post rotation matrix moves the points back
-    *  // over the texture after they've been rotated.
-    *  var texPostRotationMatrix = makeTranslation(texWidth * 0.5, texHeight * 0.5, 0);
+    *  // We'll move to the middle, rotate, then move back
+    *  var texMatrix = m4.translate(texMatrix, texWidth * 0.5, texHeight * 0.5, 0);
+    *  var texMatrix = m4.zRotate(texMatrix, srcRotation);
+    *  var texMatrix = m4.translate(texMatrix, texWidth * -0.5, texHeight * -0.5, 0);
     *
-    *  // multiply them together
-    *  var texMatrix = makeIdentity();
-    *  texMatrix = matrixMultiply(texMatrix, texScaleMatrix);
-    *  texMatrix = matrixMultiply(texMatrix, texTranslationMatrix);
-    *  texMatrix = matrixMultiply(texMatrix, texPreRotationMatrix);
-    *  texMatrix = matrixMultiply(texMatrix, texRotationMatrix);
-    *  texMatrix = matrixMultiply(texMatrix, texPostRotationMatrix);
-    *  texMatrix = matrixMultiply(texMatrix, texProjectionMatrix);
+    *  // because were in pixel space
+    *  // the scale and translation are now in pixels
+    *  var texMatrix = m4.translate(texMatrix, srcX, srcY, 0);
+    *  var texMatrix = m4.scale(texMatrix, srcWidth, srcHeight, 1);
 
       // Set the texture matrix.
       gl.uniformMatrix4fv(textureMatrixLocation, false, texMatrix);

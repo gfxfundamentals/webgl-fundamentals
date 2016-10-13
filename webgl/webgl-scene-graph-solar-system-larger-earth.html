@@ -13,10 +13,6 @@ Simulating a solar system using a scene graph.
 </div>
 <canvas id="canvas"></canvas>
 </body>
-<script src="resources/webgl-utils.js"></script>
-<script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-3d-math.js"></script>
-<script src="resources/primitives.js"></script>
 <!-- vertex shader -->
 <script id="3d-vertex-shader" type="x-shader/x-vertex">
 attribute vec4 a_position;
@@ -48,13 +44,17 @@ void main() {
    gl_FragColor = v_color * u_colorMult + u_colorOffset;
 }
 </script>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
+<script src="resources/3d-math.js"></script>
+<script src="resources/primitives.js"></script>
 <script>
 "use strict";
 
    var Node = function() {
      this.children = [];
-     this.localMatrix = makeIdentity();
-     this.worldMatrix = makeIdentity();
+     this.localMatrix = m4.identity();
+     this.worldMatrix = m4.identity();
    };
 
    Node.prototype.setParent = function(parent) {
@@ -73,13 +73,13 @@ void main() {
      this.parent = parent;
    };
 
-   Node.prototype.updateWorldMatrix = function(matrix) {
-     if (matrix) {
+   Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
+     if (parentWorldMatrix) {
        // a matrix was passed in so do the math
-       matrixMultiply(this.localMatrix, matrix, this.worldMatrix);
+       m4.multiply(parentWorldMatrix, this.localMatrix, this.worldMatrix);
      } else {
-       // no matrix was passed in so just copy.
-       copyMatrix(this.localMatrix, this.worldMatrix);
+       // no matrix was passed in so just copy local to world
+       m4.copy(this.localMatrix, this.worldMatrix);
      }
 
      // now process all the children
@@ -147,7 +147,7 @@ function main() {
 
   // Let's make all the nodes
   var sunNode = new Node();
-  sunNode.localMatrix = makeTranslation(0, 0, 0);  // sun a the center
+  sunNode.localMatrix = m4.translation(0, 0, 0);  // sun a the center
   sunNode.drawInfo = {
     uniforms: {
       u_colorOffset: [0.6, 0.6, 0, 1], // yellow
@@ -158,9 +158,10 @@ function main() {
   };
 
   var earthNode = new Node();
-  earthNode.localMatrix = matrixMultiply(
-      makeScale(2, 2, 2),           // make the earth twice as large
-      makeTranslation(100, 0, 0));  // earth 100 units from the sun
+  // earth 100 units from the sun
+  earthNode.localMatrix = m4.translation(100, 0, 0);
+  // make the earth twice as large
+  earthNode.localMatrix = m4.scale(earthNode.localMatrix, 2, 2, 2);
   earthNode.drawInfo = {
     uniforms: {
       u_colorOffset: [0.2, 0.5, 0.8, 1],  // blue-green
@@ -171,7 +172,7 @@ function main() {
   };
 
   var moonNode = new Node();
-  moonNode.localMatrix = makeTranslation(20, 0, 0);  // moon 20 units from the earth
+  moonNode.localMatrix = m4.translation(20, 0, 0);  // moon 20 units from the earth
   moonNode.drawInfo = {
     uniforms: {
       u_colorOffset: [0.6, 0.6, 0.6, 1],  // gray
@@ -219,30 +220,30 @@ function main() {
     // Compute the projection matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
-        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+        m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
     var cameraPosition = [0, -200, 0];
     var target = [0, 0, 0];
     var up = [0, 0, 1];
-    var cameraMatrix = makeLookAt(cameraPosition, target, up);
+    var cameraMatrix = m4.lookAt(cameraPosition, target, up);
 
     // Make a view matrix from the camera matrix.
-    var viewMatrix = makeInverse(cameraMatrix);
+    var viewMatrix = m4.inverse(cameraMatrix);
 
-    var viewProjectionMatrix = matrixMultiply(viewMatrix, projectionMatrix);
+    var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
     // update the local matrices for each object.
-    matrixMultiply(sunNode.localMatrix, makeYRotation(0.01), sunNode.localMatrix);
-    matrixMultiply(earthNode.localMatrix, makeYRotation(0.01), earthNode.localMatrix);
-    matrixMultiply(moonNode.localMatrix, makeYRotation(0.01), moonNode.localMatrix);
+    m4.multiply(m4.yRotation(0.01), sunNode.localMatrix  , sunNode.localMatrix);
+    m4.multiply(m4.yRotation(0.01), earthNode.localMatrix, earthNode.localMatrix);
+    m4.multiply(m4.yRotation(0.01), moonNode.localMatrix , moonNode.localMatrix);
 
     // Update all world matrices in the scene graph
     sunNode.updateWorldMatrix();
 
     // Compute all the matrices for rendering
     objects.forEach(function(object) {
-      object.drawInfo.uniforms.u_matrix = matrixMultiply(object.worldMatrix, viewProjectionMatrix);
+      object.drawInfo.uniforms.u_matrix = m4.multiply(viewProjectionMatrix, object.worldMatrix);
     });
 
     // ------ Draw the objects --------

@@ -150,15 +150,15 @@ void main() {
 <pre><code>// Our uniforms for each thing we want to draw
 var sphereUniforms = {
   u_colorMult: [0.5, 1, 0.5, 1],
-  u_matrix: makeIdentity(),
+  u_matrix: m4.identity(),
 };
 var cubeUniforms = {
   u_colorMult: [1, 0.5, 0.5, 1],
-  u_matrix: makeIdentity(),
+  u_matrix: m4.identity(),
 };
 var coneUniforms = {
   u_colorMult: [0.5, 0.5, 1, 1],
-  u_matrix: makeIdentity(),
+  u_matrix: m4.identity(),
 };
 
 // The translation for each object.
@@ -374,7 +374,7 @@ for (var ii = 0; ii &lt; numObjects; ++ii) {
   var object = {
     uniforms: {
       u_colorMult: [rand(0, 1), rand(0, 1), rand(0, 1), 1],
-      u_matrix: makeIdentity(),
+      u_matrix: m4.identity(),
     },
     translation: [rand(-100, 100), rand(-100, 100), rand(-150, -50)],
     xRotationSpeed: rand(0.8, 1.2),

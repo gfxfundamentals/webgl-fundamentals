@@ -12,14 +12,26 @@ canvas { border: 1px solid black; }
 <p><canvas id="c"></canvas></p>
 <p class="description"><a href="3d-in-canvas.html">compare to 3D in Canvas</a></p>
 </body>
+<!-- vertex shader -->
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+uniform mat4 u_worldViewProjection;
+
+void main() {
+   gl_Position = u_worldViewProjection * a_position;
+}
+</script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+void main() {
+   gl_FragColor = vec4(0,0,0,1);
+}
+</script>
 <script src="../../resources/webgl-utils.js"></script>
 <script src="../../resources/webgl-lessons-helper.js"></script>
-<script src="3d-math.js"></script>
+<script src="../../resources/3d-math.js"></script>
 <script>
 "use strict";
-
-var m = ThreeDMath;
-window.onload = main;
 
 function main() {
   var cubeVertices = [
@@ -91,17 +103,18 @@ function main() {
 
     var fieldOfView = Math.PI * 0.25;
     var aspect = canvas.clientWidth / canvas.clientHeight;
-    var projection = m.perspective(fieldOfView, aspect, 0.0001, 500);
+    var projection = m4.perspective(fieldOfView, aspect, 0.0001, 500);
     var radius = 5;
     var eye = [
         Math.sin(clock) * radius,
-        1,
+        2,
         Math.cos(clock) * radius];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
-    var view = m.lookAt(eye, target, up);
+    var camera = m4.lookAt(eye, target, up);
+    var view = m4.inverse(camera);
 
-    var worldViewProjection = m.multiplyMatrix(view, projection);
+    var worldViewProjection = m4.multiply(projection, view);
     gl.uniformMatrix4fv(
         worldViewProjectionLoc, false, worldViewProjection);
 
@@ -110,20 +123,7 @@ function main() {
   }
   requestAnimationFrame(render);
 }
-</script>
-<!-- vertex shader -->
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
-attribute vec4 a_position;
-uniform mat4 u_worldViewProjection;
 
-void main() {
-   gl_Position = u_worldViewProjection * a_position;
-}
-</script>
-<!-- fragment shader -->
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
-void main() {
-   gl_FragColor = vec4(0,0,0,1);
-}
+main();
 </script>
 </html>

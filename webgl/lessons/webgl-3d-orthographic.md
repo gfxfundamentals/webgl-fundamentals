@@ -2,8 +2,8 @@ Title: WebGL - Orthographic 3D
 Description: How to do 3D in WebGL starting with an orthographic projection.
 
 This post is a continuation of a series of posts about WebGL.
-The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
-the previous was <a href="webgl-2d-matrices.html">about 2D matrices</a>.
+The first [started with fundamentals](webgl-fundamentals.html) and
+the previous was [about 2D matrices](webgl-2d-matrices.html).
 If you haven't read those please view them first.
 
 In the last post we went over how 2D matrices worked. We talked
@@ -14,11 +14,13 @@ matrix math. To do 3D is only a small step from there.
 In our previous 2D examples we had 2D points (x, y) that we multiplied by
 a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.
 
-Let's take our last example and change it to 3D. We'll use an F again but this time a 3D 'F'.
+Let's take our last example and change it to 3D.  We'll use an F again but
+this time a 3D 'F'.
 
-The first thing we need to do is change the vertex shader to handle 3D. Here's the old shader.
+The first thing we need to do is change the vertex shader to handle 3D.
+Here's the old shader.
 
-<pre class="prettyprint showlinemods">
+```
 &lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
@@ -29,34 +31,42 @@ void main() {
   gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 }
 &lt;/script&gt;
-</pre>
+```
 
 And here's the new one
 
-<pre class="prettyprint showlinemods">
+```
 &lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec4 a_position;
 
-uniform mat4 u_matrix;
+*uniform mat4 u_matrix;
 
 void main() {
   // Multiply the position by the matrix.
-  gl_Position = u_matrix * a_position;
+*  gl_Position = u_matrix * a_position;
 }
 &lt;/script&gt;
-</pre>
+```
 
 It got even simpler!
 
 Then we need to provide 3D data.
 
-<pre class="prettyprint showlinemods">
+```
   ...
 
-  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
+  // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+*  var size = 3;          // 3 components per iteration
+  var type = gl.FLOAT;   // the data is 32bit floats
+  var normalize = false; // don't normalize the data
+  var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+  var offset = 0;        // start at the beginning of the buffer
+  gl.vertexAttribPointer(
+      positionAttributeLocation, size, type, normalize, stride, offset);
 
   ...
 
+// Fill the current ARRAY_BUFFER buffer
 // Fill the buffer with the values that define a letter 'F'.
 function setGeometry(gl) {
   gl.bufferData(
@@ -87,97 +97,101 @@ function setGeometry(gl) {
            67,  90,  0]),
       gl.STATIC_DRAW);
 }
-</pre>
+```
 
 Next we need to change all the matrix functions from 2D to 3D
 
-Here are the 2D (before) versions of makeTranslation, makeRotation and makeScale
+Here are the 2D (before) versions of m3.translation, m3.rotation, and m3.scaling
 
-<pre class="prettyprint showlinemods">
-function makeTranslation(tx, ty) {
-  return [
-    1, 0, 0,
-    0, 1, 0,
-    tx, ty, 1
-  ];
-}
+```
+var m3 = {
+  translation: function translation(tx, ty) {
+    return [
+      1, 0, 0,
+      0, 1, 0,
+      tx, ty, 1
+    ];
+  },
 
-function makeRotation(angleInRadians) {
-  var c = Math.cos(angleInRadians);
-  var s = Math.sin(angleInRadians);
-  return [
-    c,-s, 0,
-    s, c, 0,
-    0, 0, 1
-  ];
-}
+  rotation: function rotation(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+    return [
+      c,-s, 0,
+      s, c, 0,
+      0, 0, 1
+    ];
+  },
 
-function makeScale(sx, sy) {
-  return [
-    sx, 0, 0,
-    0, sy, 0,
-    0, 0, 1
-  ];
-}
-</pre>
+  scaling: function scaling(sx, sy) {
+    return [
+      sx, 0, 0,
+      0, sy, 0,
+      0, 0, 1
+    ];
+  },
+};
+```
 
 And here are the updated 3D versions.
 
-<pre class="prettyprint showlinemods">
-function makeTranslation(tx, ty, tz) {
-  return [
-     1,  0,  0,  0,
-     0,  1,  0,  0,
-     0,  0,  1,  0,
-     tx, ty, tz, 1
-  ];
-}
+```
+var m4 = {
+  translation: function(tx, ty, tz) {
+    return [
+       1,  0,  0,  0,
+       0,  1,  0,  0,
+       0,  0,  1,  0,
+       tx, ty, tz, 1,
+    ];
+  },
 
-function makeXRotation(angleInRadians) {
-  var c = Math.cos(angleInRadians);
-  var s = Math.sin(angleInRadians);
+  xRotation: function(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
 
-  return [
-    1, 0, 0, 0,
-    0, c, s, 0,
-    0, -s, c, 0,
-    0, 0, 0, 1
-  ];
+    return [
+      1, 0, 0, 0,
+      0, c, s, 0,
+      0, -s, c, 0,
+      0, 0, 0, 1,
+    ];
+  },
+
+  yRotation: function(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+
+    return [
+      c, 0, -s, 0,
+      0, 1, 0, 0,
+      s, 0, c, 0,
+      0, 0, 0, 1,
+    ];
+  },
+
+  xRotation: function(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+
+    return [
+       c, s, 0, 0,
+      -s, c, 0, 0,
+       0, 0, 1, 0,
+       0, 0, 0, 1,
+    ];
+  },
+
+  scaling: function(sx, sy, sz) {
+    return [
+      sx, 0,  0,  0,
+      0, sy,  0,  0,
+      0,  0, sz,  0,
+      0,  0,  0,  1,
+    ];
+  },
 };
-
-function makeYRotation(angleInRadians) {
-  var c = Math.cos(angleInRadians);
-  var s = Math.sin(angleInRadians);
-
-  return [
-    c, 0, -s, 0,
-    0, 1, 0, 0,
-    s, 0, c, 0,
-    0, 0, 0, 1
-  ];
-};
-
-function makeZRotation(angleInRadians) {
-  var c = Math.cos(angleInRadians);
-  var s = Math.sin(angleInRadians);
-
-  return [
-     c, s, 0, 0,
-    -s, c, 0, 0,
-     0, 0, 1, 0,
-     0, 0, 0, 1,
-  ];
-}
-
-function makeScale(sx, sy, sz) {
-  return [
-    sx, 0,  0,  0,
-    0, sy,  0,  0,
-    0,  0, sz,  0,
-    0,  0,  0,  1,
-  ];
-}
-</pre>
+```
 
 Notice we now have 3 rotation functions.  We only needed one in 2D as we
 were effectively only rotating around the Z axis.  Now though to do 3D we
@@ -210,32 +224,58 @@ which gives you these rotations.
 
 <iframe class="external_diagram" src="resources/axis-diagram.html" style="width: 540px; height: 240px;"></iframe>
 
+Similarly we'll make our simplified functions
+
+```
+  translate: function(m, tx, ty, tz) {
+    return m4.multiply(b, m4.translation(tx, ty, tz));
+  },
+
+  xRotate: function(m, angleInRadians) {
+    return m4.multiply(m, m4.xRotation(angleInRadians));
+  },
+
+  yRotate: function(m, angleInRadians) {
+    return m4.multiply(m, m4.yRotation(angleInRadians));
+  },
+
+  zRotate: function(m, angleInRadians) {
+    return m4.multiply(m, m4.zRotation(angleInRadians));
+  },
+
+  scale: function(m, sx, sy, sz) {
+    return m4.multiply(m, m4.scaling(sx, sy, sz));
+  },
+```
+
 We also need to update the projection function. Here's the old one
 
-<pre class="prettyprint showlinemods">
-function make2DProjection(width, height) {
-  // Note: This matrix flips the Y axis so 0 is at the top.
-  return [
-    2 / width, 0, 0,
-    0, -2 / height, 0,
-    -1, 1, 1
-  ];
+```
+  projection: function (width, height) {
+    // Note: This matrix flips the Y axis so 0 is at the top.
+    return [
+      2 / width, 0, 0,
+      0, -2 / height, 0,
+      -1, 1, 1
+    ];
+  },
 }
-</pre>
+```
 
-which converted from pixels to clip space. For our first attempt at expanding it to 3D let's try
+which converted from pixels to clip space. For our first attempt at
+expanding it to 3D let's try
 
-<pre class="prettyprint showlinemods">
-function make2DProjection(width, height, depth) {
-  // Note: This matrix flips the Y axis so 0 is at the top.
-  return [
-     2 / width, 0, 0, 0,
-     0, -2 / height, 0, 0,
-     0, 0, 2 / depth, 0,
-    -1, 1, 0, 1,
-  ];
-}
-</pre>
+```
+  projection: function(width, height, depth) {
+    // Note: This matrix flips the Y axis so 0 is at the top.
+    return [
+       2 / width, 0, 0, 0,
+       0, -2 / height, 0, 0,
+       0, 0, 2 / depth, 0,
+      -1, 1, 0, 1,
+    ];
+  },
+```
 
 Just like we needed to convert from pixels to clip space for X and Y, for
 Z we need to do the same thing.  In this case I'm making the Z axis pixel
@@ -245,27 +285,18 @@ for `depth` it will be `-depth / 2` to `+depth / 2`.
 
 Finally we need to to update the code that computes the matrix.
 
-<pre class="prettyprint showlinemods">
-  // Compute the matrices
-  var projectionMatrix =
-      make2DProjection(canvas.clientWidth, canvas.clientHeight, 400);
-  var translationMatrix =
-      makeTranslation(translation[0], translation[1], translation[2]);
-  var rotationXMatrix = makeXRotation(rotation[0]);
-  var rotationYMatrix = makeYRotation(rotation[1]);
-  var rotationZMatrix = makeZRotation(rotation[2]);
-  var scaleMatrix = makeScale(scale[0], scale[1], scale[2]);
-
-  // Multiply the matrices.
-  var matrix = matrixMultiply(scaleMatrix, rotationZMatrix);
-  matrix = matrixMultiply(matrix, rotationYMatrix);
-  matrix = matrixMultiply(matrix, rotationXMatrix);
-  matrix = matrixMultiply(matrix, translationMatrix);
-  matrix = matrixMultiply(matrix, projectionMatrix);
+```
+  // Compute the matrix
+*  var matrix = m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400);
+*  matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
+*  matrix = m4.xRotate(matrix, rotation[0]);
+*  matrix = m4.yRotate(matrix, rotation[1]);
+*  matrix = m4.zRotate(matrix, rotation[2]);
+*  matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 
   // Set the matrix.
-  gl.uniformMatrix4fv(matrixLocation, false, matrix);
-</pre>
+*  gl.uniformMatrix4fv(matrixLocation, false, matrix);
+```
 
 And here's that sample.
 
@@ -274,16 +305,24 @@ And here's that sample.
 The first problem we have is that our geometry is a flat F which makes it
 hard to see any 3D.  To fix that let's expand the geometry to 3D.  Our
 current F is made of 3 rectangles, 2 triangles each.  To make it 3D will
-require a total of 16 rectangles.  That's quite a few to list out here.
+require a total of 16 rectangles.  the 3 rectangles on the front, 3 on the
+back, 1 on the left, 4 on the right, 3 on the bottoms
+
+<img class="webgl_center" width="300" src="resources/3df.svg" />
+
+That's quite a few to list out here.
 16 rectangles with 2 triangles per rectangle and 3 vertices per triangle is 96
 vertices.  If you want to see all of them view the source of the sample.
 
 We have to draw more vertices so
 
-<pre class="prettyprint showlinemods">
+```
     // Draw the geometry.
-    gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
-</pre>
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+*    var count = 16 * 6;
+    gl.drawArrays(primitiveType, offset, count);
+```
 
 And here's that version
 
@@ -296,58 +335,54 @@ shader to the fragment shader.
 
 Here's the new vertex shader
 
-<pre class="prettyprint showlinemods">
+```
 &lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
 attribute vec4 a_position;
-attribute vec4 a_color;
++attribute vec4 a_color;
 
 uniform mat4 u_matrix;
 
-varying vec4 v_color;
++varying vec4 v_color;
 
 void main() {
   // Multiply the position by the matrix.
   gl_Position = u_matrix * a_position;
 
-  // Pass the color to the fragment shader.
-  v_color = a_color;
++  // Pass the color to the fragment shader.
++  v_color = a_color;
 }
 &lt;/script&gt;
-</pre>
+```
 
 And we need to use that color in the fragment shader
 
-<pre class="prettyprint showlinemods">
+```
 &lt;script id="3d-vertex-shader" type="x-shader/x-fragment"&gt;
 precision mediump float;
 
-// Passed in from the vertex shader.
-varying vec4 v_color;
++// Passed in from the vertex shader.
++varying vec4 v_color;
 
 void main() {
-   gl_FragColor = v_color;
+*   gl_FragColor = v_color;
 }
 &lt;/script&gt;
-</pre>
+```
 
 We need to lookup the location to supply the colors, then setup another
-buffer and attribute to give it the colors.
+buffer and put the colors in it.
 
-<pre class="prettyprint showlinemods">
+```
   ...
   var colorLocation = gl.getAttribLocation(program, "a_color");
 
   ...
   // Create a buffer for colors.
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(colorLocation);
-
-  // We'll supply RGB as bytes.
-  gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
-
-  // Set Colors.
+  var colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  // Put the colors in the buffer.
   setColors(gl);
+
 
   ...
 // Fill the buffer with colors for the 'F'.
@@ -371,7 +406,28 @@ function setColors(gl) {
         ...
       gl.STATIC_DRAW);
 }
-</pre>
+```
+
+Then at render time we need to tell the color attribute how to get colors
+out of the color buffer
+
+```
+// Turn on the color attribute
+gl.enableVertexAttribArray(colorLocation);
+
+// Bind the color buffer.
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+
+// Tell the attribute how to get data out of colorBuffer (ARRAY_BUFFER)
+var size = 3;                 // 3 components per iteration
+var type = gl.UNSIGNED_BYTE;  // the data is 8bit unsigned values
+var normalize = true;         // normalize the data (convert from 0-255 to 0-1)
+var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
+var offset = 0;               // start at the beginning of the buffer
+gl.vertexAttribPointer(
+    colorLocation, size, type, normalize, stride, offset)
+
+```
 
 Now we get this.
 
@@ -391,11 +447,11 @@ back facing triangle has its vertices go in a counter clockwise direction
 WebGL has the ability to draw only forward facing or back facing
 triangles.  We can turn that feature on with
 
-<pre class="prettyprint showlinemods">
+```
   gl.enable(gl.CULL_FACE);
-</pre>
+```
 
-which we do just once, right at the start of our program.  With that
+Well put that in our `drawScene` function. With that
 feature turned on, WebGL defaults to "culling" back facing triangles.
 "Culling" in this case is a fancy word for "not drawing".
 
@@ -424,19 +480,19 @@ at the other side.  Fortunately it's easy to fix.  We just look at which
 ones are backward and exchange 2 of their vertices.  For example if one
 backward triangle is
 
-<pre class="prettyprint showlinemods">
+```
            1,   2,   3,
           40,  50,  60,
          700, 800, 900,
-</pre>
+```
 
 we just flip the last 2 vertices to make it forward.
 
-<pre class="prettyprint showlinemods">
+```
            1,   2,   3,
          700, 800, 900,
           40,  50,  60,
-</pre>
+```
 
 Going through and fixing all the backward triangles gets us to this
 
@@ -465,19 +521,22 @@ drawn.
 
 We can turn on this feature nearly as simply as we turned on culling with
 
-<pre class="prettyprint showlinemods">
+```
   gl.enable(gl.DEPTH_TEST);
-</pre>
+```
 
 We also need to clear the depth buffer back to 1.0 before we start drawing.
 
-<pre class="prettyprint showlinemods">
+```
   // Draw the scene.
   function drawScene() {
+    ...
+
     // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
     ...
-</pre>
+```
 
 And now we get
 
@@ -485,7 +544,38 @@ And now we get
 
 which is 3D!
 
-In the next post I'll go over <a href="webgl-3d-perspective.html">how to make it have perspective</a>.
+One minor thing. In most 3d math libraries this is no `projection` function to
+do our conversions from clip space to pixel space. Rather there's usually a function
+called `ortho` or `orthographic` that looks like this
+
+    var m4 = {
+      orthographic: function(left, right, bottom, top, near, far) {
+        return [
+          2 / (right - left), 0, 0, 0,
+          0, 2 / (top - bottom), 0, 0,
+          0, 0, 2 / (near - far), 0,
+
+          (left + right) / (left - right),
+          (bottom + top) / (bottom - top),
+          (near + far) / (near - far),
+          1,
+        ];
+      }
+
+Unlike our simplified `projection` function above which only had width, height, and depth
+parameters this more common othrographic projection function we can pass in left, right,
+bottom, top, near, and far which gives as more flexability. To use it the same as
+our original projection function we'd call it with
+
+    var left = 0;
+    var right = gl.canvas.clientWidth;
+    var bottom = gl.canvas.clientHeight;
+    var top = 0;
+    var near = -400;
+    var far = 400;
+    m4.orthographic(left, right, bottom, top, near, far);
+
+In the next post I'll go over [how to make it have perspective](webgl-3d-perspective.html).
 
 <div class="webgl_bottombar">
 <h3>Why is the attribute vec4 but gl.vertexAttribPointer size 3</h3>
@@ -498,13 +588,32 @@ attribute vec4 a_color;
 </pre>
 <p>both of which are 'vec4' but when we tell WebGL how to take data out of our buffers we used</p>
 <pre class="prettyprint showlinemods">
-  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
-  gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
+// Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+var size = 3;          // 3 components per iteration
+var type = gl.FLOAT;   // the data is 32bit floats
+var normalize = false; // don't normalize the data
+var stride = 0;        // 0 = move forward size * sizeof(type) each
+                       // iteration to get the next position
+var offset = 0;        // start at the beginning of the buffer
+gl.vertexAttribPointer(
+    positionAttributeLocation, size, type, normalize, stride, offset);
+
+...
+// Tell the attribute how to get data out of colorBuffer (ARRAY_BUFFER)
+var size = 3;          // 3 components per iteration
+var type = gl.UNSIGNED_BYTE;   // the data is 8bit unsigned bytes
+var normalize = true;  // convert from 0-255 to 0.0-1.0
+var stride = 0;        // 0 = move forward size * sizeof(type) each
+                       // iteration to get the next color
+var offset = 0;        // start at the beginning of the buffer
+gl.vertexAttribPointer(
+    colorAttributeLocation, size, type, normalize, stride, offset);
 </pre>
 <p>
-That '3' in each of those says only to pull out 3 values per attribute.
+That '3' in each of those says only to pull 3 values out of the buffer per attribute
+per iteration of the vertex shader.
 This works because in the vertex shader WebGL provides defaults for those
-you don't supply.  The defaults are 0, 0, 0, 1 where x = 0, y = 0, z = 0
+values you don't supply.  The defaults are 0, 0, 0, 1 where x = 0, y = 0, z = 0
 and w = 1.  This is why in our old 2D vertex shader we had to explicitly
 supply the 1.  We were passing in x and y and we needed a 1 for z but
 because the default for z is 0 we had to explicitly supply a 1.  For 3D

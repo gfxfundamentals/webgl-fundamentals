@@ -5,73 +5,68 @@ function renderSceneGraph(root) {
   var ctx = wrapCanvasRenderingContext2D(canvas.getContext("2d"));
   var g_update = true;
 
-  var getAbsolutePosition = function(element) {
-    var r = { x: element.offsetLeft, y: element.offsetTop };
-    if (element.offsetParent) {
-      var tmp = getAbsolutePosition(element.offsetParent);
-      r.x += tmp.x;
-      r.y += tmp.y;
+  function getRelativeMousePosition(event, target) {
+    target = target || event.target;
+    var rect = target.getBoundingClientRect();
+
+    return {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
     }
-    return r;
+  }
+
+  // assumes target or event.target is canvas and has no border/padding
+  function getNoBorderNoPaddingRelativeMousePosition(target, event) {
+    target = target || event.target;
+    var pos = getRelativeMousePosition(event, target);
+
+    pos.x = pos.x * target.width  / canvas.clientWidth;
+    pos.y = pos.y * target.height / canvas.clientHeight;
+
+    return pos;
+  }
+
+  var pointers = {
   };
 
-  /**
-   * Gets the relative coordinates for an event
-   * @func
-   * @param {HTMLElement} reference html elemetn to reference
-   * @param {Event} event from HTML mouse event
-   * @returns {module:Input.Coordinate} the relative position
-   * @memberOf module:Input
-   */
-  var getRelativeCoordinates = function(reference, event) {
-    // Use absolute coordinates
-    var pos = getAbsolutePosition(reference);
-    var x = event.pageX - pos.x;
-    var y = event.pageY - pos.y;
-    return { x: x, y: y };
+  var setPointer = function(id, pos, pressed) {
+    var pointer = pointers[id];
+    if (!pointer) {
+      pointer = { };
+      pointers[id] = pointer;
+    }
+    pointer.pos = pos;
+    if (pressed) {
+      pointer.pressed = true;
+    }
   };
 
-    var pointers = {
-    };
+  var clearPointer = function(id, pos) {
+    var pointer = pointers[id];
+    if (!pointer) {
+      pointer = { };
+      pointers[id] = pointer;
+    }
+    pointer.pos = pos;
+    pointer.pressed = false;
+  };
+  canvas.addEventListener('pointerdown', function(e) {
+    var pos = getNoBorderNoPaddingRelativeMousePosition(e.target, e);
+    setPointer(e.pointerId, pos, true);
+    g_update = true;
+  }, true);
 
-    var setPointer = function(id, pos, pressed) {
-      var pointer = pointers[id];
-      if (!pointer) {
-        pointer = { };
-        pointers[id] = pointer;
-      }
-      pointer.pos = pos;
-      if (pressed) {
-        pointer.pressed = true;
-      }
-    };
+  canvas.addEventListener('pointermove', function(e) {
+    var pos = getNoBorderNoPaddingRelativeMousePosition(e.target, e);
+    setPointer(e.pointerId, pos);
+    g_update = true;
+  }, false);
 
-    var clearPointer = function(id, pos) {
-      var pointer = pointers[id];
-      if (!pointer) {
-        pointer = { };
-        pointers[id] = pointer;
-      }
-      pointer.pos = pos;
-      pointer.pressed = false;
-    };
-    canvas.addEventListener('pointerdown', function(e) {
-      var pos = getRelativeCoordinates(e.target, e);
-      setPointer(e.pointerId, pos, true);
-      g_update = true;
-    }, true);
-
-    canvas.addEventListener('pointermove', function(e) {
-      var pos = getRelativeCoordinates(e.target, e);
-      setPointer(e.pointerId, pos);
-      g_update = true;
-    }, false);
-
-    canvas.addEventListener('pointerup', function(e) {
-      var pos = getRelativeCoordinates(e.target, e);
-      clearPointer(e.pointerId, pos);
-      g_update = true;
-    }, false);
+  canvas.addEventListener('pointerup', function(e) {
+    var pos = getNoBorderNoPaddingRelativeMousePosition(e.target, e);
+    clearPointer(e.pointerId, pos);
+    g_update = true;
+  }, false);
 
 
   var canvas = document.getElementById("c");
@@ -186,12 +181,15 @@ function renderSceneGraph(root) {
   }
 
   function drawScene() {
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
+    ctx.translate(ctx.canvas.width / 2, 40);
+//    var scale = window.devicePixelRatio * ctx.canvas.height / 500;
+//    ctx.scale(scale, scale);
     ctx.font = "12px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.translate(ctx.canvas.width / 2, 40);
     drawArrow(root);
     drawNode(root);
     ctx.restore();

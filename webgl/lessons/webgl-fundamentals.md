@@ -265,34 +265,11 @@ The last argument, `gl.STATIC_DRAW` is a hint to WebGL about how we'll use the d
 WebGL can try to use that hint to optimize certain things. `gl.STATIC_DRAW` tells WebGL
 we are not likely to change this data much.
 
-Now that we've put data in the a buffer we need to tell the attribute how to get data
-out of it. First off we need to turn the attribute on
+The code up to this point is *initialization code*. Code that gets run once when we
+load the page. The code below this point is *renderering code* or code that should
+get executed each time we want to render/draw.
 
-    gl.enableVertexAttribArray(positionAttributeLocation);
-
-Then we need to specify how to pull the data out
-
-    var size = 2;          // 2 components per iteration
-    var type = gl.FLOAT;   // the data is 32bit floats
-    var normalize = false; // don't normalize the data
-    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    var offset = 0;        // start at the beginning of the buffer
-    gl.vertexAttribPointer(
-        positionAttributeLocation, size, type, normalize, stride, offset)
-
-A hidden part of `gl.vertexAttribPointer` is that it binds the current `ARRAY_BUFFER`
-to the attribute. In other words now this attribute is bound to
-`positionBuffer`. That means we're free to bind something else to the `ARRAY_BUFFER` bind point.
-The attribute will continue to use `positionBuffer`.
-
-note that from the point of view of our GLSL vertex shader the `a_position` attribute was a `vec4`
-
-    attribute vec4 a_position;
-
-`vec4` is a 4 float value. In JavaScript you could think of it something like
-`a_position = {x: 0, y: 0, z: 0, w: 0}`. Above we set `size = 2`. Attributes
-default to `0, 0, 0, 1` so this attribute will get its first 2 values (x and y)
-from our buffer. The z, and w will be the default 0 and 1 respectively.
+## Rendering
 
 Before we draw we should resize the canvas to match it's display size. Canvases just like Images have 2 sizes.
 The number of pixels actually in them and separately the size they are displayed. CSS determines the size
@@ -323,10 +300,43 @@ We clear the canvas. `0, 0, 0, 0` are r, g, b, alpha so in this case we're makin
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-Finally we need to tell WebGL which shader program to execute.
+We tell WebGL which shader program to execute.
 
     // Tell it to use our program (pair of shaders)
     gl.useProgram(program);
+
+Next we need to tell WebGL how to take data from the buffer we setup above and supply it to the attribute
+in the shader. First off we need to turn the attribute on
+
+    gl.enableVertexAttribArray(positionAttributeLocation);
+
+Then we need to specify how to pull the data out
+
+    // Bind the position buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 2;          // 2 components per iteration
+    var type = gl.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        positionAttributeLocation, size, type, normalize, stride, offset)
+
+A hidden part of `gl.vertexAttribPointer` is that it binds the current `ARRAY_BUFFER`
+to the attribute. In other words now this attribute is bound to
+`positionBuffer`. That means we're free to bind something else to the `ARRAY_BUFFER` bind point.
+The attribute will continue to use `positionBuffer`.
+
+note that from the point of view of our GLSL vertex shader the `a_position` attribute was a `vec4`
+
+    attribute vec4 a_position;
+
+`vec4` is a 4 float value. In JavaScript you could think of it something like
+`a_position = {x: 0, y: 0, z: 0, w: 0}`. Above we set `size = 2`. Attributes
+default to `0, 0, 0, 1` so this attribute will get its first 2 values (x and y)
+from our buffer. The z, and w will be the default 0 and 1 respectively.
 
 After all that we can finally ask WebGL to execute our GLSL program.
 
@@ -436,6 +446,8 @@ that all the `gl.uniformXXX` functions set uniforms on the current program.
 
     gl.useProgram(program);
 
+    ...
+
     // set the resolution
     gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
@@ -480,17 +492,20 @@ First we make the fragment shader take a color uniform input.
 
 And here's the new code that draws 50 rectangles in random places and random colors.
 
-      var colorLocation = gl.getUniformLocation(program, "u_color");
+      var colorUniformLocation = gl.getUniformLocation(program, "u_color");
       ...
 
       // draw 50 random rectangles in random colors
       for (var ii = 0; ii < 50; ++ii) {
         // Setup a random rectangle
+        // This will write to positionBuffer because
+        // its the last thing we bound on the ARRAY_BUFFER
+        // bind point
         setRectangle(
             gl, randomInt(300), randomInt(300), randomInt(300), randomInt(300));
 
         // Set a random color.
-        gl.uniform4f(colorLocation, Math.random(), Math.random(), Math.random(), 1);
+        gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
 
         // Draw the rectangle.
         gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -561,8 +576,8 @@ only draw one thing and so do not show that structure.
 
 Otherwise from here you can go in 2 directions. If you are interested in image procesing
 I'll show you [how to do some 2D image processing](webgl-image-processing.html).
-If you are interesting in learning about translation,
-rotation and scale then [start here](webgl-2d-translation.html).
+If you are interested in learning about translation,
+rotation and scale and eventually 3D then [start here](webgl-2d-translation.html).
 
 <div class="webgl_bottombar">
 <h3>What does type="notjs" mean?</h3>

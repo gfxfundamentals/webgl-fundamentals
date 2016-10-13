@@ -1,30 +1,35 @@
 Title: WebGL Text - Textures
 Description: Display Text in WebGL using Textures
 
-This post is a continuation of many articles about WebGL. The last one
-was about [using Canvas 2D for rendering text over a WebGL canvas](webgl-text-canvas2d.html).
-If you haven't read it you might want to check that out before continuing.
+This post is a continuation of many articles about WebGL.  The last one
+was about [using Canvas 2D for rendering text over a WebGL
+canvas](webgl-text-canvas2d.html).  If you haven't read it you might want
+to check that out before continuing.
 
-In the last article we went over [how to use a 2D canvas to draw text over your WebGL
-scene](webgl-text-canvas2d.html). That technique works and is easy to do but it has
-a limitation that the text can not be obscured by other 3d objects. To do that we
-actually need to draw the text in WebGL.
+In the last article we went over [how to use a 2D canvas to draw text over
+your WebGL scene](webgl-text-canvas2d.html).  That technique works and is
+easy to do but it has a limitation that the text can not be obscured by
+other 3d objects.  To do that we actually need to draw the text in WebGL.
 
-The simplest way to do that is to make textures with text in them. You could for example
-go into Photoshop or some other paint program and draw an image with some text in it.
+The simplest way to do that is to make textures with text in them.  You
+could for example go into Photoshop or some other paint program and draw
+an image with some text in it.
 
 <img class="webgl_center" src="resources/my-awesme-text.png" />
 
-Then make some plane geometry and display it. This is actually how some games I've
-worked on did all their text. For example Locoroco only had about 270 strings. It was
-localized into 17 languages. We had an Excel sheet with all the languages and a script
-that would launch Photoshop and generate a texture, one for each message in each language.
+Then make some plane geometry and display it.  This is actually how some
+games I've worked on did all their text.  For example Locoroco only had
+about 270 strings.  It was localized into 17 languages.  We had an Excel
+sheet with all the languages and a script that would launch Photoshop and
+generate a texture, one for each message in each language.
 
-Of course you can also generate the textures at runtime. Since WebGL is in the browser
-again we can rely on the Canvas 2D API to help generate our textures.
+Of course you can also generate the textures at runtime.  Since WebGL is
+in the browser again we can rely on the Canvas 2D API to help generate our
+textures.
 
-Starting with the examples from the [previous article](webgl-text-canvas2d.html)
-let's add a function to fill a 2D canvas with some text
+Starting with the examples from the [previous
+article](webgl-text-canvas2d.html) let's add a function to fill a 2D
+canvas with some text
 
     var textCtx = document.createElement("canvas").getContext("2d");
 
@@ -41,19 +46,21 @@ let's add a function to fill a 2D canvas with some text
       return textCtx.canvas;
     }
 
-Now that we need to draw 2 different things in WebGL, the 'F' and our text, I'm going
-to switch over to [using some helper functions as described in a previous article](webgl-drawing-multiple-things.html).
-If it's not clear what `programInfo`, `bufferInfo`, etc are see that article.
+Now that we need to draw 2 different things in WebGL, the 'F' and our
+text, I'm going to switch over to [using some helper functions as
+described in a previous article](webgl-drawing-multiple-things.html).  If
+it's not clear what `programInfo`, `bufferInfo`, etc are see that article.
 
 So, let's create the 'F' and a unit quad.
 
     // Create data for 'F'
     var fBufferInfo = primitives.create3DFBufferInfo(gl);
     // Create a unit quad for the 'text'
-    var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, makeXRotation(Math.PI / 2));
+    var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, m4.xRotation(Math.PI / 2));
 
-A unit quad is a quad (square) that's 1 unit big. This one is centered over the origin. `createPlaneBufferInfo`
-creates a plane in the xz plane. We pass in a matrix to rotate it and give us an xy plane unit quad.
+A unit quad is a quad (square) that's 1 unit big.  This one is centered
+over the origin.  `createPlaneBufferInfo` creates a plane in the xz plane.
+We pass in a matrix to rotate it and give us an xy plane unit quad.
 
 Next create 2 shaders
 
@@ -78,61 +85,56 @@ And create our text texture
 Setup uniforms for both the 'F' and text
 
     var fUniforms = {
-      u_matrix: makeIdentity(),
+      u_matrix: m4.identity(),
     };
 
     var textUniforms = {
-      u_matrix: makeIdentity(),
+      u_matrix: m4.identity(),
       u_texture: textTex,
     };
 
 Now when we compute the matrices for the F we save off the F's view matrix
 
-    var matrix = makeIdentity();
-    matrix = matrixMultiply(matrix, preTranslationMatrix);
-    matrix = matrixMultiply(matrix, scaleMatrix);
-    matrix = matrixMultiply(matrix, rotationZMatrix);
-    matrix = matrixMultiply(matrix, rotationYMatrix);
-    matrix = matrixMultiply(matrix, rotationXMatrix);
-    matrix = matrixMultiply(matrix, translationMatrix);
-    matrix = matrixMultiply(matrix, viewMatrix);
-    var fViewMatrix = copyMatrix(matrix);  // remember the view matrix for the text
-    matrix = matrixMultiply(matrix, projectionMatrix);
+    var fViewMatrix = m4.translate(viewMatrix,
+        translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
+    fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
+    fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
+    fViewMatrix = m4.zRotate(fViewMatrix, rotation[2] + now + (yy * 3 + xx) * 0.1);
+    fViewMatrix = m4.scale(fViewMatrix, scale[0], scale[1], scale[2]);
+    fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
 
 Drawing the F looks like this
 
     gl.useProgram(fProgramInfo.program);
 
-    setBuffersAndAttributes(gl, fProgramInfo.attribSetters, fBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, fProgramInfo, fBufferInfo);
 
-    copyMatrix(matrix, fUniforms.u_matrix);
-    setUniforms(fProgramInfo.uniformSetters, fUniforms);
+    fUniforms.u_matrix = m4.multiply(projectionMatrix, fViewMatrix);
+
+    webglUtils.setUniforms(fProgramInfo, fUniforms);
 
     // Draw the geometry.
     gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 
-For the text we just need the position of the origin of the F. We also need to scale our
-unit quad to match the dimensions of the texture. Finally we need to multiply by the projection
-matrix.
+For the text we just need the position of the origin of the F.  We also
+need to scale our unit quad to match the dimensions of the texture.
+Finally we need to multiply by the projection matrix.
 
-    // scale the F to the size we need it.
     // use just the view position of the 'F' for the text
-    var textMatrix = makeIdentity();
-    textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
-    textMatrix = matrixMultiply(
-        textMatrix,
-        makeTranslation(fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]));
-    textMatrix = matrixMultiply(textMatrix, projectionMatrix);
+    var textMatrix = m4.translate(projectionMatrix,
+        fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]);
+    // scale the quad to the size we need it.
+    textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 
 And then render the text
 
     // setup to draw the text.
     gl.useProgram(textProgramInfo.program);
 
-    setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
+    webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
 
-    copyMatrix(textMatrix, textUniforms.u_matrix);
-    setUniforms(textProgramInfo.uniformSetters, textUniforms);
+    m4.copy(textMatrix, textUniforms.u_matrix);
+    webglUtils.setUniforms(textProgramInfo, textUniforms);
 
     // Draw the text.
     gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
@@ -141,20 +143,23 @@ So here it is
 
 {{{example url="../webgl-text-texture.html" }}}
 
-You'll notice that sometimes parts of our text cover up parts of our Fs. That's because
-we're drawing a quad. The default color of the canvas is transparent black (0,0,0,0) and
-we're drawing that color in the quad. We could instead blend our pixels.
+You'll notice that sometimes parts of our text cover up parts of our Fs.
+That's because we're drawing a quad.  The default color of the canvas is
+transparent black (0,0,0,0) and we're drawing that color in the quad.  We
+could instead blend our pixels.
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-This makes it take the source pixel (the color from our fragment shader) and combine it
-with the dest pixel (the color in the canvas) according to the blend function. We've set the
-blend function to `SRC_ALPHA` for source  and `ONE_MINUS_SRC_ALPHA` for dest.
+This makes it take the source pixel (the color from our fragment shader)
+and combine it with the dest pixel (the color in the canvas) according to
+the blend function.  We've set the blend function to `SRC_ALPHA` for
+source and `ONE_MINUS_SRC_ALPHA` for dest.
 
     result = dest * (1 - src_alpha) + src * src_alpha
 
-so for example if the dest is green `0,1,0,1` and the source is red `1,0,0,1` we'd have
+so for example if the dest is green `0,1,0,1` and the source is red
+`1,0,0,1` we'd have
 
     src = [1, 0, 0, 1]
     dst = [0, 1, 0, 1]
@@ -189,29 +194,38 @@ close you'll sometimes see this issue
 
 <img class="webgl_center" src="resources/text-zbuffer-issue.png" />
 
-What's happening? We're currently drawing an F then its text, then the next F
-then its text repeated. We still have a [depth buffer](webgl-3d-orthographic.html) so when we draw the
-text for an F, even though blending made some pixels stay the background color
-the depth buffer was still updated. When we draw the next F if parts of that F are
+What's happening?  We're currently drawing an F then its text, then the
+next F then its text repeated.  We still have a [depth
+buffer](webgl-3d-orthographic.html) so when we draw the text for an F,
+even though blending made some pixels stay the background color the depth
+buffer was still updated.  When we draw the next F if parts of that F are
 behind those pixels from some previously drawn text they won't be drawn.
 
-We've just run into one of the most difficult issues of rendering 3D on a GPU.
-**Transparency has issues**.
+We've just run into one of the most difficult issues of rendering 3D on a
+GPU.  **Transparency has issues**.
 
-The most common solution for pretty much all transparent
-rendering is to draw all the opaque stuff first, then after, draw all the transparent
-stuff sorted by z distance with the depth buffer testing on but depth buffer updating off.
+The most common solution for pretty much all transparent rendering is to
+draw all the opaque stuff first, then after, draw all the transparent
+stuff sorted by z distance with the depth buffer testing on but depth
+buffer updating off.
 
-Let's first separate drawing of the opaque stuff (the Fs) from the transparent stuff (the text).
-First we'll declare something to remember the text positions.
+Let's first separate drawing of the opaque stuff (the Fs) from the
+transparent stuff (the text).  First we'll declare something to remember
+the text positions.
 
     var textPositions = [];
 
 And in the loop for rendering the Fs we'll remember those positions
 
-    matrix = matrixMultiply(matrix, viewMatrix);
-    -var fViewMatrix = copyMatrix(matrix);  // remember the view matrix for the text
-    textPositions.push([matrix[12], matrix[13], matrix[14]]);  // remember the position for the text
+    var fViewMatrix = m4.translate(viewMatrix,
+        translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
+    fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
+    fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
+    fViewMatrix = m4.zRotate(fViewMatrix, rotation[2] + now + (yy * 3 + xx) * 0.1);
+    fViewMatrix = m4.scale(fViewMatrix, scale[0], scale[1], scale[2]);
+    fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
+    +// Save the f's view position
+    +textPositions.push([fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]]);
 
 Before we draw the 'F's we'll disable blending and turn on writing to the depth buffer
 
@@ -226,57 +240,63 @@ For drawing the text we'll turn on blending and turn off writing to the depth bu
 
 And then draw text at all the positions we saved
 
-    textPositions.forEach(function(pos) {
+    +// setup to draw the text.
+    +gl.useProgram(textProgramInfo.program);
+    +
+    +webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
+
+    +textPositions.forEach(function(pos) {
       // draw the text
+
+      // use just the view position of the 'F' for the text
+    *  var textMatrix = m4.translate(projectionMatrix, pos[0], pos[1], pos[2]);
       // scale the F to the size we need it.
-      // use just the position of the 'F' for the text
-      var textMatrix = makeIdentity();
-      textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
-      textMatrix = matrixMultiply(textMatrix, makeTranslation(pos[0], pos[1], pos[2]));
-      textMatrix = matrixMultiply(textMatrix, projectionMatrix);
+      textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 
-      // setup to draw the text.
-      gl.useProgram(textProgramInfo.program);
-
-      setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
-
-      copyMatrix(textMatrix, textUniforms.u_matrix);
-      setUniforms(textProgramInfo.uniformSetters, textUniforms);
+      m4.copy(textMatrix, textUniforms.u_matrix);
+      webglUtils.setUniforms(textProgramInfo, textUniforms);
 
       // Draw the text.
       gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
-    });
+    +});
+
+Note we moved setting the current program and the attributes outside the
+loop since we're drawing the same thing multiple times there's no reason
+to set those for each iteration.
 
 And now it mostly works
 
 {{{example url="../webgl-text-texture-separate-opaque-from-transparent.html" }}}
 
-Notice we didn't sort like I mentioned above. In this case since we're drawing mostly opaque text
-there's probably going to be no noticable difference if we sort so I'll save that for some
-other article.
+Notice we didn't sort like I mentioned above.  In this case since we're
+drawing mostly opaque text there's probably going to be no noticable
+difference if we sort so I'll save that for some other article.
 
-Another issue is the text is intersecting its own 'F'. There really
-isn't a specific solution for that. If you were making an MMO and wanted the text of each
-player to always appear you might try to make the text appear above the head. Just translate
-it +Y some number of units, enough to make sure it was always above the player.
+Another issue is the text is intersecting its own 'F'.  There really isn't
+a specific solution for that.  If you were making an MMO and wanted the
+text of each player to always appear you might try to make the text appear
+above the head.  Just translate it +Y some number of units, enough to make
+sure it was always above the player.
 
-You can also move it forward toward the cameara. Let's do that here just for the hell of it.
-Because 'pos' is in view space that means it's relative to the eye (which is at 0,0,0 in view space).
-So if we normalize it we get a unit vector pointing from the eye to that point which we can then
-multiply by some amount to move the text a specific number of units toward or away from the eye.
+You can also move it forward toward the cameara.  Let's do that here just
+for the hell of it.  Because 'pos' is in view space that means it's
+relative to the eye (which is at 0,0,0 in view space).  So if we normalize
+it we get a unit vector pointing from the eye to that point which we can
+then multiply by some amount to move the text a specific number of units
+toward or away from the eye.
 
-    // because pos is in view space that means it's a vector from the eye to
-    // some position. So translate along that vector back toward the eye some distance
-    +var fromEye = normalize(pos);
+    +// because pos is in view space that means it's a vector from the eye to
+    +// some position. So translate along that vector back toward the eye some distance
+    +var fromEye = m4.normalize(pos);
     +var amountToMoveTowardEye = 150;  // because the F is 150 units long
     +var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
     +var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
     +var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
+    +var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
 
-    var textMatrix = makeIdentity();
-    textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
-    *textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
-    textMatrix = matrixMultiply(textMatrix, projectionMatrix);
+    *var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+    // scale the F to the size we need it.
+    textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 
 Here's that.
 
@@ -286,35 +306,39 @@ You still might notice an issue with the edges of the letters.
 
 <img class="webgl_center" src="resources/text-gray-outline.png" />
 
-The issue here is the Canvas 2D API produces only premultiplied alpha values.
-When we upload the contents of the canvas to a texture WebGL tries to unpremultiply
-the values but it can't do this perfectly because premultiplied alpha is lossy.
+The issue here is the Canvas 2D API produces only premultiplied alpha
+values.  When we upload the contents of the canvas to a texture WebGL
+tries to unpremultiply the values but it can't do this perfectly because
+premultiplied alpha is lossy.
 
 To fix that let's tell WebGL not to unpremultiply
 
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 
-This tells WebGL to supply premultiplied alpha values to `gl.texImage2D` and `gl.texSubImage2D`.
-If the data passed to `gl.texImage2D` is already premultiplied as it is for Canvas 2D data then
-WebGL can just pass it through.
+This tells WebGL to supply premultiplied alpha values to `gl.texImage2D`
+and `gl.texSubImage2D`.  If the data passed to `gl.texImage2D` is already
+premultiplied as it is for Canvas 2D data then WebGL can just pass it
+through.
 
 We also need to change the blending function
 
     -gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     +gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
-The old one multiplied the src color by its alpha. That's what `SRC_ALPHA` means. But
-now our texture's data has already been multiplied by its alpha. That's what premultiplied means.
-So we don't need the GPU to do the multiplication. Setting it to `ONE` means multiply by 1.
+The old one multiplied the src color by its alpha.  That's what
+`SRC_ALPHA` means.  But now our texture's data has already been multiplied
+by its alpha.  That's what premultiplied means.  So we don't need the GPU
+to do the multiplication.  Setting it to `ONE` means multiply by 1.
 
 {{{example url="../webgl-text-texture-premultiplied-alpha.html" }}}
 
 The edges are gone now.
 
-What if you want to keep the text a fixed size but still sort correctly? Well, if you remember
-from [the perspective article](webgl-3d-perspective.html) our perspective matrix is going
-to scale our object by `-Z` to make it get smaller in the distance. So, we can just scale
-by `-Z` times some desired-scale to compensate.
+What if you want to keep the text a fixed size but still sort correctly?
+Well, if you remember from [the perspective
+article](webgl-3d-perspective.html) our perspective matrix is going to
+scale our object by `1 / -Z` to make it get smaller in the distance.  So, we
+can just scale by `-Z` times some desired-scale to compensate.
 
     ...
     // because pos is in view space that means it's a vector from the eye to
@@ -327,16 +351,15 @@ by `-Z` times some desired-scale to compensate.
     +var desiredTextScale = -1 / gl.canvas.height;  // 1x1 pixels
     +var scale = viewZ * desiredTextScale;
 
-    var textMatrix = makeIdentity();
-    *textMatrix = matrixMultiply(textMatrix, makeScale(textWidth * scale, textHeight * scale, 1));
-    textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
-    textMatrix = matrixMultiply(textMatrix, projectionMatrix);
+    var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+    // scale the F to the size we need it.
+    *textMatrix = m4.scale(textMatrix, textWidth * scale, textHeight * scale, 1);
     ...
 
 {{{example url="../webgl-text-texture-consistent-scale.html" }}}
 
-If you want to draw different text at each F you should make a new texture for each
-F and just update the text uniforms for that F.
+If you want to draw different text at each F you should make a new texture
+for each F and just update the text uniforms for that F.
 
     // create text textures, one for each F
     var textTextures = [
@@ -376,25 +399,25 @@ F and just update the text uniforms for that F.
 
 Then at render time select a texture
 
-    textPositions.forEach(function(pos, ndx) {
+    *textPositions.forEach(function(pos, ndx) {
 
       +// select a texture
       +var tex = textTextures[ndx];
 
       // scale the F to the size we need it.
-      // use just the position of the 'F' for the text
-      var textMatrix = makeIdentity();
-      *textMatrix = matrixMultiply(textMatrix, makeScale(tex.width, tex.height, 1));
+      var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+      // scale the F to the size we need it.
+      *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
 
 and set the uniform for the texture before drawing
 
-      textUniforms.u_texture = tex.texture;
+      *textUniforms.u_texture = tex.texture;
 
 {{{example url="../webgl-text-texture-different-text.html" }}}
 
-We've been using black to draw the text into the canvas.
-It would be more useful if we rendered the text in white. Then we could multiply
-the text by a color and make it any color we want.
+We've been using black to draw the text into the canvas.  It would be more
+useful if we rendered the text in white.  Then we could multiply the text
+by a color and make it any color we want.
 
 First we'll change the text shader to multiply by a color
 
@@ -443,15 +466,16 @@ Colors
 
 {{{example url="../webgl-text-texture-different-colors.html" }}}
 
-This technique is actually the technique most browsers use when they are GPU accelerated.
-They generate textures with your HTML content and all the various styles you've applied
-and as long as that content doesn't change they can just render the texture
-again when you scroll etc.. Of course if you're updating things all the time then
-this techinque might get a little bit slow because re-generating the textures and re-uploading
+This technique is actually the technique most browsers use when they are
+GPU accelerated.  They generate textures with your HTML content and all
+the various styles you've applied and as long as that content doesn't
+change they can just render the texture again when you scroll etc..  Of
+course if you're updating things all the time then this techinque might
+get a little bit slow because re-generating the textures and re-uploading
 them to the GPU is a relatively slow operation.
 
-In [the next article we'll go over a techinque that is probably better for cases where
-things update often](webgl-text-glyphs.html).
+In [the next article we'll go over a techinque that is probably better for
+cases where things update often](webgl-text-glyphs.html).
 
 <div class="webgl_bottombar">
 <h3>Scaling Text without pixelation</h3>

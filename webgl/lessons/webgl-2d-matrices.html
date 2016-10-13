@@ -278,7 +278,7 @@ void main() {
     var scaleMatrix = makeScale(scale[0], scale[1]);
 
     // Starting Matrix.
-    var matrix = makeIdentity();
+    var matrix = m4.identity();
 
     for (var i = 0; i &lt; 5; ++i) {
       // Multiply the matrices.
@@ -293,14 +293,14 @@ void main() {
       gl.drawArrays(gl.TRIANGLES, 0, 18);
     }
   }
-</code></pre><p>To do this we introduced the function, <code>makeIdentity</code>, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like</p>
+</code></pre><p>To do this we introduced the function, <code>m4.identity</code>, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like</p>
 <div class="webgl_center">X * 1 = X</div>
 
 <p>so too</p>
 <div class="webgl_center">matrixX * identity = matrixX</div>
 
 <p>Here&#39;s the code to make an identity matrix.</p>
-<pre><code>function makeIdentity() {
+<pre><code>function m4.identity() {
   return [
     1, 0, 0,
     0, 1, 0,

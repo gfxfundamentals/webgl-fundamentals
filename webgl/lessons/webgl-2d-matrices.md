@@ -1,11 +1,22 @@
 Title: WebGL 2D Matrices
 Description: How matrix math works explained in simple easy to follow directions.
 
-This post is a continuation of a series of posts about WebGL. The first <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was <a href="webgl-2d-scale.html">about scaling 2D geometry</a>.
+This post is a continuation of a series of posts about WebGL.  The first
+[started with fundamentals](webgl-fundamentals.html) and the previous was
+[about scaling 2D geometry](webgl-2d-scale.html).
 
-In the last 3 posts we went over how to <a href="webgl-2d-translation.html">translate geometry</a>, <a href="webgl-2d-rotation.html">rotate geometry</a>, and <a href="webgl-2d-scale.html">scale geometry</a>. Translation, rotation and scale are each considered a type of 'transformation'. Each of these transformations required changes to the shader and each of the 3 transformations was order dependent. In <a href="webgl-2d-scale.html">our previous example</a> we scaled, then rotated, then translated. If we applied those in a different order we'd get a different result.
-<!--more-->
-For example here is a scale of 2, 1, rotation of 30 degrees, and translation of 100, 0.
+In the last 3 posts we went over how to [translate
+geometry](webgl-2d-translation.html), [rotate
+geometry](webgl-2d-rotation.html), and [scale
+geometry](webgl-2d-scale.html).  Translation, rotation and scale are each
+considered a type of 'transformation'.  Each of these transformations
+required changes to the shader and each of the 3 transformations was order
+dependent.  In [our previous example](webgl-2d-scale.html) we scaled, then
+rotated, then translated.  If we applied those in a different order we'd
+get a different result.
+
+For example here is a scale of 2, 1, rotation of 30 degrees, and
+translation of 100, 0.
 
 <img src="../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
 
@@ -13,14 +24,20 @@ And here is a translation of 100,0, rotation of 30 degrees and scale of 2, 1
 
 <img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
 
-The results are completely different. Even worse, if we needed the second example we'd have to write a different shader that applied the translation, rotation, and scale in our new desired order.
+The results are completely different.  Even worse, if we needed the second
+example we'd have to write a different shader that applied the
+translation, rotation, and scale in our new desired order.
 
-Well, some people way smarter than me figured out that you can do all the same stuff with matrix math. For 2D we use a 3x3 matrix. A 3x3 matrix is like a grid with 9 boxes:
+Well, some people way smarter than me figured out that you can do all the
+same stuff with matrix math.  For 2D we use a 3x3 matrix.  A 3x3 matrix is
+like a grid with 9 boxes:
 
 <style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
-To do the math we multiply the position down the columns of the matrix and add up the results. Our positions only have 2 values, x and y, but to do this math we need 3 values so we'll use 1 for the third value.
+To do the math we multiply the position down the columns of the matrix and
+add up the results.  Our positions only have 2 values, x and y, but to do
+this math we need 3 values so we'll use 1 for the third value.
 
 In this case our result would be
 
@@ -30,7 +47,9 @@ In this case our result would be
 <tr><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">4.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">5.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">6.0</td><td>&nbsp;+</td></tr>
 <tr><td></td><td>1&nbsp;*&nbsp;</td><td>7.0</td><td>&nbsp;</td><td></td><td>1&nbsp;*&nbsp;</td><td>8.0</td><td>&nbsp;&nbsp;</td><td></td><td>1&nbsp;*&nbsp;</td><td>9.0</td><td>&nbsp;</td></tr></table></div>
 
-You're probably looking at that and thinking "WHAT'S THE POINT?" Well, let's assume we have a translation. We'll call the amount we want to translate by tx and ty. Let's make a matrix like this
+You're probably looking at that and thinking "WHAT'S THE POINT?" Well,
+let's assume we have a translation.  We'll call the amount we want to
+translate by tx and ty.  Let's make a matrix like this
 
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>1.0</td><td>0.0</td></tr><tr><td>tx</td><td>ty</td><td>1.0</td></tr></table></div>
 
@@ -41,7 +60,9 @@ And now check it out
 <tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">1.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr><tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">1.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
 <tr><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>tx</td><td>&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>ty</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>1.0</td><td>&nbsp;</td></tr></table></div>
 
-If you remember your algebra, we can delete any place that multiplies by zero. Multiplying by 1 effectively does nothing so let's simplify to see what's happening
+If you remember your algebra, we can delete any place that multiplies by
+zero.  Multiplying by 1 effectively does nothing so let's simplify to see
+what's happening
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
@@ -56,9 +77,11 @@ newX = x + tx;
 newY = y + ty;
 </pre>
 
-And extra we don't really care about. That looks surprisingly like <a href="webgl-2d-translation.html">the translation code from our translation example</a>.
+And extra we don't really care about.  That looks surprisingly like [the
+translation code from our translation example](webgl-2d-translation.html).
 
-Similarly let's do rotation. Like we pointed out in the rotation post we just need the sine and cosine of the angle at which we want to rotate, so
+Similarly let's do rotation.  Like we pointed out in the rotation post we
+just need the sine and cosine of the angle at which we want to rotate, so
 
 <pre class="webgl_center">
 s = Math.sin(angleToRotateInRadians);
@@ -92,7 +115,8 @@ newX = x *  c + y * s;
 newY = x * -s + y * c;
 </pre>
 
-Which is exactly what we had in our <a href="webgl-2d-rotation.html">rotation sample</a>.
+Which is exactly what we had in our [rotation
+sample](webgl-2d-rotation.html).
 
 And lastly scale. We'll call our 2 scale factors sx and sy
 
@@ -123,39 +147,47 @@ newX = x * sx;
 newY = y * sy;
 </pre>
 
-Which is the same as our <a href="webgl-2d-scale.html">scaling sample</a>.
+Which is the same as our [scaling sample](webgl-2d-scale.html).
 
-Now I'm sure you might still be thinking "So what? What's the point?" That seems like a lot of work just to do the same thing we were already doing.
+Now I'm sure you might still be thinking "So what?  What's the point?"
+That seems like a lot of work just to do the same thing we were already
+doing.
 
-This is where the magic comes in. It turns out we can multiply matrices together and apply all the transformations at once. Let's assume we have a function, `matrixMultiply`, that takes two matrices, multiplies them and returns the result.
+This is where the magic comes in.  It turns out we can multiply matrices
+together and apply all the transformations at once.  Let's assume we have
+a function, `m3.multiply`, that takes two matrices, multiplies them and
+returns the result.
 
-To make things clearer let's make functions to build matrices for translation, rotation and scale.
+To make things clearer let's make functions to build matrices for
+translation, rotation and scale.
 
-    function makeTranslation(tx, ty) {
+  var m3 = {
+    translation: function(tx, ty) {
       return [
         1, 0, 0,
         0, 1, 0,
-        tx, ty, 1
+        tx, ty, 1,
       ];
-    }
+    },
 
-    function makeRotation(angleInRadians) {
+    rotation: function(angleInRadians) {
       var c = Math.cos(angleInRadians);
       var s = Math.sin(angleInRadians);
       return [
         c,-s, 0,
         s, c, 0,
-        0, 0, 1
+        0, 0, 1,
       ];
-    }
+    },
 
-    function makeScale(sx, sy) {
+    scaling: function(sx, sy) {
       return [
         sx, 0, 0,
         0, sy, 0,
-        0, 0, 1
+        0, 0, 1,
       ];
-    }
+    },
+  };
 
 Now let's change our shader. The old shader looked like this
 
@@ -197,17 +229,17 @@ And here's how we use it
 
       // Draw the scene.
       function drawScene() {
-        // Clear the canvas.
-        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        ,,,
 
         // Compute the matrices
-        var translationMatrix = makeTranslation(translation[0], translation[1]);
-        var rotationMatrix = makeRotation(angleInRadians);
-        var scaleMatrix = makeScale(scale[0], scale[1]);
+        var translationMatrix = m3.translation(translation[0], translation[1]);
+        var rotationMatrix = m3.rotation(angleInRadians);
+        var scaleMatrix = m3.scaling(scale[0], scale[1]);
 
         // Multiply the matrices.
-        var matrix = matrixMultiply(scaleMatrix, rotationMatrix);
-        matrix = matrixMultiply(matrix, translationMatrix);
+        var matrix = m3.multiply(translationMatrix, rotationMatrix);
+        matrix = m3.multiply(matrix, scaleMatrix);
 
         // Set the matrix.
         gl.uniformMatrix3fv(matrixLocation, false, matrix);
@@ -216,23 +248,31 @@ And here's how we use it
         gl.drawArrays(gl.TRIANGLES, 0, 18);
       }
 
-Here's a sample using our new code. The sliders are the same, translation, rotation and scale. But the way they get used in the shader is much simpler.
+Here's a sample using our new code.  The sliders are the same,
+translation, rotation and scale.  But the way they get used in the shader
+is much simpler.
 
 {{{example url="../webgl-2d-geometry-matrix-transform.html" }}}
 
-Still, you might be asking, so what? That doesn't seem like much of a benefit. But, now if we want to change the order we don't have to write a new shader. We can just change the math.
+Still, you might be asking, so what?  That doesn't seem like much of a
+benefit.  But, now if we want to change the order we don't have to write a
+new shader.  We can just change the math.
 
         ...
         // Multiply the matrices.
-        var matrix = matrixMultiply(translationMatrix, rotationMatrix);
-        matrix = matrixMultiply(matrix, scaleMatrix);
+        var matrix = m3.multiply(scaleMatrix, rotationMatrix);
+        matrix = m3.multiply(matrix, translationMatrix);
         ...
 
 Here's that version.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-trs.html" }}}
 
-Being able to apply matrices like this is especially important for hierarchical animation like arms on a body, moons on a planet around a sun, or branches on a tree. For a simple example of hierarchical animation lets draw draw our 'F' 5 times but each time lets start with the matrix from the previous 'F'.
+Being able to apply matrices like this is especially important for
+hierarchical animation like arms on a body, moons on a planet around a
+sun, or branches on a tree.  For a simple example of hierarchical
+animation lets draw draw our 'F' 5 times but each time lets start with the
+matrix from the previous 'F'.
 
       // Draw the scene.
       function drawScene() {
@@ -240,18 +280,18 @@ Being able to apply matrices like this is especially important for hierarchical 
         gl.clear(gl.COLOR_BUFFER_BIT);
 
         // Compute the matrices
-        var translationMatrix = makeTranslation(translation[0], translation[1]);
-        var rotationMatrix = makeRotation(angleInRadians);
-        var scaleMatrix = makeScale(scale[0], scale[1]);
+        var translationMatrix = m3.translation(translation[0], translation[1]);
+        var rotationMatrix = m3.rotation(angleInRadians);
+        var scaleMatrix = m3.scaling(scale[0], scale[1]);
 
         // Starting Matrix.
-        var matrix = makeIdentity();
+        var matrix = m3.identity();
 
         for (var i = 0; i < 5; ++i) {
           // Multiply the matrices.
-          matrix = matrixMultiply(matrix, scaleMatrix);
-          matrix = matrixMultiply(matrix, rotationMatrix);
-          matrix = matrixMultiply(matrix, translationMatrix);
+          matrix = m3.multiply(scaleMatrix, matrix);
+          matrix = m3.multiply(rotationMatrix, matrix);
+          matrix = m3.multiply(translationMatrix, matrix);
 
           // Set the matrix.
           gl.uniformMatrix3fv(matrixLocation, false, matrix);
@@ -261,7 +301,10 @@ Being able to apply matrices like this is especially important for hierarchical 
         }
       }
 
-To do this we introduced the function, `makeIdentity`, that makes an identity matrix. An identity matrix is a matrix that effectively represents 1.0 so that if you multiply by the identity nothing happens. Just like
+To do this we introduced the function, `m3.identity`, that makes an
+identity matrix.  An identity matrix is a matrix that effectively
+represents 1.0 so that if you multiply by the identity nothing happens.
+Just like
 
 <div class="webgl_center">X * 1 = X</div>
 
@@ -271,38 +314,48 @@ so too
 
 Here's the code to make an identity matrix.
 
-    function makeIdentity() {
-      return [
-        1, 0, 0,
-        0, 1, 0,
-        0, 0, 1
-      ];
-    }
+    var m3 = {
+      identity function() {
+        return [
+          1, 0, 0,
+          0, 1, 0,
+          0, 0, 1,
+        ];
+      },
+
+      ...
 
 Here's the 5 Fs.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-hierarchical.html" }}}
 
-Let's see one more example. In every sample so far our 'F' rotates around its top left corner. This is because the math we are using always rotates around the origin and the top left corner of our 'F' is at the origin, (0, 0).
+Let's see one more example.  In every sample so far our 'F' rotates around
+its top left corner (well except for the example were we reversed the order above).
+This is because the math we are using always rotates around the origin and
+the top left corner of our 'F' is at the origin, (0, 0).
 
-But now, because we can do matrix math and we can choose the order that transforms are applied we can move the origin before the rest of the transforms are applied.
+But now, because we can do matrix math and we can choose the order that
+transforms are applied we can move the origin.
 
         // make a matrix that will move the origin of the 'F' to its center.
-        var moveOriginMatrix = makeTranslation(-50, -75);
+        var moveOriginMatrix = m3.translation(-50, -75);
         ...
 
         // Multiply the matrices.
-        var matrix = matrixMultiply(moveOriginMatrix, scaleMatrix);
-        matrix = matrixMultiply(matrix, rotationMatrix);
-        matrix = matrixMultiply(matrix, translationMatrix);
+        var matrix = m3.multiply(translationMatrix, rotationMatrix);
+        matrix = m3.multiply(matrix, scaleMatrix);
+        matrix = m3.multiply(matrix, moveOriginMatrix);
 
 Here's that sample. Notice the F rotates and scales around the center.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-center-f.html" }}}
 
-Using that technique you can rotate or scale from any point. Now you know how Photoshop or Flash let you move the rotation point.
+Using that technique you can rotate or scale from any point.  Now you know
+how Photoshop or Flash let you move the rotation point.
 
-Let's go even more crazy. If you go back to the first article on <a href="webgl-fundamentals.html">WebGL fundamentals</a> you might remember we have code in the shader to convert from pixels to clipspace that looks like this.
+Let's go even more crazy.  If you go back to the first article on [WebGL
+fundamentals](webgl-fundamentals.html) you might remember we have code in
+the shader to convert from pixels to clipspace that looks like this.
 
       ...
       // convert the rectangle from pixels to 0.0 to 1.0
@@ -316,18 +369,30 @@ Let's go even more crazy. If you go back to the first article on <a href="webgl-
 
       gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
-If you look at each of those steps in turn, the first step, "convert from pixels to 0.0 to 1.0", is really a scale operation. The second is also a scale operation. The next is a translation and the very last scales Y by -1. We can actually do that all in the matrix we pass into the shader. We could make 2 scale matrices, one to scale by 1.0/resolution, another to scale by 2.0, a 3rd to translate by -1.0,-1.0 and a 4th to scale Y by -1 then multiply them all together but instead, because the math is simple, we'll just make a function that makes a 'projection' matrix for a given resolution directly.
+If you look at each of those steps in turn, the first step, "convert from
+pixels to 0.0 to 1.0", is really a scale operation.  The second is also a
+scale operation.  The next is a translation and the very last scales Y by
+-1.  We can actually do that all in the matrix we pass into the shader.
+We could make 2 scale matrices, one to scale by 1.0/resolution, another to
+scale by 2.0, a 3rd to translate by -1.0,-1.0 and a 4th to scale Y by -1
+then multiply them all together but instead, because the math is simple,
+we'll just make a function that makes a 'projection' matrix for a given
+resolution directly.
 
-    function make2DProjection(width, height) {
-      // Note: This matrix flips the Y axis so that 0 is at the top.
-      return [
-        2 / width, 0, 0,
-        0, -2 / height, 0,
-        -1, 1, 1
-      ];
-    }
+    var m3 = {
+      projection: function(width, height) {
+        // Note: This matrix flips the Y axis so that 0 is at the top.
+        return [
+          2 / width, 0, 0,
+          0, -2 / height, 0,
+          -1, 1, 1
+        ];
+      },
 
-Now we can simplify the shader even more. Here's the entire new vertex shader.
+      ...
+
+Now we can simplify the shader even more.  Here's the entire new vertex
+shader.
 
     <script id="2d-vertex-shader" type="x-shader/x-vertex">
     attribute vec2 a_position;
@@ -345,31 +410,120 @@ And in JavaScript we need to multiply by the projection matrix
       // Draw the scene.
       function drawScene() {
         ...
+
         // Compute the matrices
-        var projectionMatrix = make2DProjection(
-            canvas.clientWidth, canvas.clientHeight);
+        var projectionMatrix = m3.projection(
+            gl.canvas.clientWidth, gl.canvas.clientHeight);
+
         ...
 
         // Multiply the matrices.
-        var matrix = matrixMultiply(scaleMatrix, rotationMatrix);
-        matrix = matrixMultiply(matrix, translationMatrix);
-        matrix = matrixMultiply(matrix, projectionMatrix);
+        var matrix = m3.multiply(projectionMatrix, translationMatrix);
+        matrix = m3.multiply(matrix, rotationMatrix);
+        matrix = m3.multiply(matrix, scaleMatrix);
+
         ...
       }
 
-We also removed the code that set the resolution. With this last step we've gone from a rather complicated shader with 6-7 steps to a very simple shader with only 1 step all due to the magic of matrix math.
+We also removed the code that set the resolution.  With this last step
+we've gone from a rather complicated shader with 6-7 steps to a very
+simple shader with only 1 step all due to the magic of matrix math.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-with-projection.html" }}}
 
-I hope these posts have helped demystify matrix math. If you really want to become an expert
-in matrix math [check out this amazing videos](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab).
+Before we move on let's simplifiy a little bit. While it's common to generate
+various matrices and separately multiply them together it's also common to just
+multiply them as we go. Effectively we could functions like this
 
-<a href="webgl-3d-orthographic.html">I'll move on to 3D next</a>. In 3D matrix math follows the same principles and usage. I started with 2D to hopefully keep it simple to understand.
+```
+var m3 = {
+
+  ...
+
+  translate: function(m, tx, ty) {
+    return m3.multiply(m, m3.translation(tx, ty));
+  },
+
+  rotate: function(m, angleInRadians) {
+    return m3.multiply(m, m3.rotation(angleInRadians));
+  },
+
+  scale: function(m, sx, sy) {
+    return m3.multiply(m, m3.scaling(sx, sy));
+  },
+
+  ...
+
+};
+```
+
+This would let us change 7 lines of matrix code above to just 4 lines like this
+
+```
+// Compute the matrix
+var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
+matrix = m3.translate(matrix, translation[0], translation[1]);
+matrix = m3.rotate(matrix, angleInRadians);
+matrix = m3.scale(matrix, scale[0], scale[1]);
+```
+
+And here's that
+
+{{{example url="../webgl-2d-geometry-matrix-transform-simpler-functions.html" }}}
+
+One last thing, we saw above order matters. In the first example we had
+
+    translation * rotation * scale
+
+and in the second we had
+
+    scale * rotation * translation
+
+And we saw how they are different.
+
+The general way to look at the matrices is you start with clipspace. Each matrix
+you apply transforms the space so
+
+Step 1:  no matrix (or the identiy matrix)
+
+> we're in clip space. Positions passed in need to be in clip space
+
+Step 2:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)`;
+
+> we're now in pixel space. Positions passed in need to be in pixel space
+
+Step 3:  `matrix = m3.translate(matrix, tx, ty);`
+
+> The origin is now at tx, ty (the space has moved)
+
+Step 4:  `matrix = m3.rotate(matrix, rotationInRadians);`
+
+> The space has been rotated around tx, ty
+
+Step 5:  `matrix = m3.scale(matrix, sx, sy);`
+
+> The previously rotated space with it's center at tx, ty has been scaled
+
+In the shader we then do `gl_Position = matrix * position;`
+
+the `position` values are effectively in that final space.
+
+I hope these posts have helped demystify matrix math. If you want
+to stick with 2D I'd suggest checking out [recreating canvas 2d's
+drawImage function](webgl-2d-drawimage.html) and following that
+into [recreating canvas 2d's matrix stack](webgl-2d-matrix-stack.html).
+
+Otherwise next [we'll move on to 3D](webgl-3d-orthographic.html).
+In 3D the matrix math follows the same principles and usage.
+I started with 2D to hopefully keep it simple to understand.
+
+Also, if you really want to become an expert
+in matrix math [check out this amazing videos](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab).
 
 <div class="webgl_bottombar">
 <h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
 <p>Up until this point whenever I referred to the canvas's dimensions I used <code>canvas.width</code> and <code>canvas.height</code>
-but above when I called <code>make2DProjection</code> I instead used <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Why?</p>
+but above when I called <code>m3.projection</code> I instead used <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Why?</p>
 <p>Projection matrixes are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
 to pixels. But, in the browser, there are 2 types of pixels we are dealing with. One is the number of pixels in
 the canvas itself. So for example a canvas defined like this.</p>
@@ -388,8 +542,8 @@ For example if we made a canvas like this.</p>
 <pre class="prettyprint"><!>
   &lt;style&gt;
   canvas {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
   }
   &lt;/style&gt;
   ...

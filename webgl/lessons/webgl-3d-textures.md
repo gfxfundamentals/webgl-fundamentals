@@ -2,16 +2,18 @@ Title: WebGL 3D - Textures
 Description: How textures work in WebGL
 
 This post is a continuation of a series of posts about WebGL.
-The first <a href="webgl-fundamentals.html">started with fundamentals</a>
-and the previous was about <a href="webgl-animation.html">animation</a>.
+The first [started with fundamentals](webgl-fundamentals.html)
+and the previous was about [animation](webgl-animation.html).
 
-How do we apply textures in WebGL? You could probably derive how by
-reading <a href="webgl-image-processing.html">the articles on image processing</a>
-but it will probably be easier to understand if we go over it in more detail.
+How do we apply textures in WebGL?  You could probably derive how by
+reading [the articles on image processing](webgl-image-processing.html)
+but it will probably be easier to understand if we go over it in more
+detail.
 
-The first thing we need to do is adjust our shaders to use textures. Here are the
-changes to the vertex shader. We need to pass in texture coordinates. In this
-case we just pass them straight through to the fragment shader.
+The first thing we need to do is adjust our shaders to use textures.  Here
+are the changes to the vertex shader.  We need to pass in texture
+coordinates.  In this case we just pass them straight through to the
+fragment shader.
 
     attribute vec4 a_position;
     *attribute vec2 a_texcoord;
@@ -28,9 +30,10 @@ case we just pass them straight through to the fragment shader.
     *  v_texcoord = a_texcoord;
     }
 
-In the fragment shader we declare a uniform sampler2D which lets us reference
-a texture. We use the texture coordinates passed from the vertex shader
-and we call `texture2D` to look up a color from that texture.
+In the fragment shader we declare a uniform sampler2D which lets us
+reference a texture.  We use the texture coordinates passed from the
+vertex shader and we call `texture2D` to look up a color from that
+texture.
 
     precision mediump float;
 
@@ -90,22 +93,25 @@ texture to each quad on our 'F'.
     *       ]),
     *       gl.STATIC_DRAW);
 
-We also need a texture. We could make one from scratch but in this case let's
-load an image since that's probably the most common way.
+We also need a texture.  We could make one from scratch but in this case
+let's load an image since that's probably the most common way.
 
 Here's the image we're going to use
 
 <img class="webgl_center" src="../resources/f-texture.png" />
 
-What an exciting image! Actually an image with an 'F' on it has a clear direction
-so it's easy to tell if it's turned or flipped etc when we use it as a texture.
+What an exciting image!  Actually an image with an 'F' on it has a clear
+direction so it's easy to tell if it's turned or flipped etc when we use
+it as a texture.
 
-The thing about loading an image is it happens asynchronously. We request the image
-to be loaded but it takes a while for the browser to download it. There are generally
-2 solutions to this. We could make the code wait until the texture has downloaded
-and only then start drawing. The other solution is to make up some texture to use
-until the image is downloaded. That way we can start rendering immediately. Then, once
-the image has been downloaded we copy the image to the texture. We'll use that method below.
+The thing about loading an image is it happens asynchronously.  We request
+the image to be loaded but it takes a while for the browser to download
+it.  There are generally 2 solutions to this.  We could make the code wait
+until the texture has downloaded and only then start drawing.  The other
+solution is to make up some texture to use until the image is downloaded.
+That way we can start rendering immediately.  Then, once the image has
+been downloaded we copy the image to the texture.  We'll use that method
+below.
 
     *// Create a texture.
     *var texture = gl.createTexture();
@@ -131,52 +137,64 @@ And here it is
 
 What if we wanted to just use a part of the texture across the front of the 'F'? Textures are referenced
 with "texture coordinates" and texture coordinates go from 0.0 to 1.0 from left to
-right across the texture and 0.0 to 1.0 from bottom to top up the texture.
+right across the texture and 0.0 to 1.0 from the first pixel on the first line to the last pixel on the last line.
+Notice I didn't stay top or bottom. Top and bottom make no sense in texture space
+because until you draw something and orient it there is no top and bottom. What matters is you
+supply texture data to WebGL. The start of that data starts at texture coordinate 0,0
+and the end of that data is at 1,1
 
 <img class="webgl_center" width="405" src="resources/texture-coordinates-diagram.svg" />
 
-So if we match up our vertices to the texture we can figure out what texture coordinates to use.
+I loaded the texture into photoshop and looked up the various coordinates in pixels.
 
-<img class="webgl_center" width="405" src="resources/f-texture-coordinates-diagram.svg" />
+<img class="webgl_center" width="256" height="256" src="../resources/f-texture-pixel-coords.png" />
+
+To convert from pixel coordinates to texture coordinates we can just use
+
+    texcoordX = pixelCoordX / (width  - 1)
+    texcoordY = pixelCoordY / (height - 1)
 
 Here are the texture coordinates for the front.
 
-        // left column front
-        0.22, 0.19,
-        0.22, 0.79,
-        0.34, 0.19,
-        0.22, 0.79,
-        0.34, 0.79,
-        0.34, 0.19,
+    // left column front
+     38 / 255,  44 / 255,
+     38 / 255, 223 / 255,
+    113 / 255,  44 / 255,
+     38 / 255, 223 / 255,
+    113 / 255, 223 / 255,
+    113 / 255,  44 / 255,
 
-        // top rung front
-        0.34, 0.19,
-        0.34, 0.31,
-        0.62, 0.19,
-        0.34, 0.31,
-        0.62, 0.31,
-        0.62, 0.19,
+    // top rung front
+    113 / 255, 44 / 255,
+    113 / 255, 85 / 255,
+    218 / 255, 44 / 255,
+    113 / 255, 85 / 255,
+    218 / 255, 85 / 255,
+    218 / 255, 44 / 255,
 
-        // middle rung front
-        0.34, 0.43,
-        0.34, 0.55,
-        0.49, 0.43,
-        0.34, 0.55,
-        0.49, 0.55,
-        0.49, 0.43,
+    // middle rung front
+    113 / 255, 112 / 255,
+    113 / 255, 151 / 255,
+    203 / 255, 112 / 255,
+    113 / 255, 151 / 255,
+    203 / 255, 151 / 255,
+    203 / 255, 112 / 255,
 
-And here it is.
+I also used similar texture coordinates for the back. And here it is.
 
 {{{example url="../webgl-3d-textures-texture-coords-mapped.html" }}}
 
-Not a very exciting display but hopefully it demonstrates how to use texture coordinates. If you're making
-geometry in code (cubes, spheres, etc) it's usually pretty easy to compute whatever texture coordinates you
-want. On the other hand if you're getting 3d models from 3d modeling software like Blender, Maya, 3D Studio Max, then
-your artists (or you) will adjust texture coordinates in those packages.
+Not a very exciting display but hopefully it demonstrates how to use
+texture coordinates.  If you're making geometry in code (cubes, spheres,
+etc) it's usually pretty easy to compute whatever texture coordinates you
+want.  On the other hand if you're getting 3d models from 3d modeling
+software like Blender, Maya, 3D Studio Max, then your artists (or you)
+will adjust texture coordinates in those packages.
 
-So what happens if we use texture coordinates outside the 0.0 to 1.0 range. By default WebGL repeats
-the texture. 0.0 to 1.0 is one 'copy' of the texture. 1.0 to 2.0 is another copy. even -4.0 to -3.0 is yet
-another copy. Let's display a plane using these texture coordinates.
+So what happens if we use texture coordinates outside the 0.0 to 1.0
+range.  By default WebGL repeats the texture.  0.0 to 1.0 is one 'copy' of
+the texture.  1.0 to 2.0 is another copy.  even -4.0 to -3.0 is yet
+another copy.  Let's display a plane using these texture coordinates.
 
      -3, -1,
       2, -1,
@@ -196,34 +214,41 @@ You can tell WebGL to not repeat the texture in a certain direction by using `CL
 
 Click the buttons in the sample above to see the difference.
 
-You might have noticed a call to `gl.generateMipmap` back when we loaded the texture. What is that for?
+You might have noticed a call to `gl.generateMipmap` back when we loaded
+the texture.  What is that for?
 
 Imagine we had this 16x16 pixel texture.
 
 <img class="webgl_center" src="resources/mip-low-res-enlarged.png" style="border: 2px solid black;" />
 
-Now imagine we tried to draw that texture on a polygon 2x2 pixels big on the screen. What colors should
-we make those 4 pixels? There are 256 pixels to choose from. In Photoshop if you scaled a 16x16 pixel image
-to 2x2 it would average the 8x8 pixels in each corner to make the 4 pixels in a 2x2 image. Unfortunately
-reading 64 pixels and averaging them all together would be way too slow for a GPU. In fact imagine if you
-had a 2048x2084 pixel texture and you tried to draw it 2x2 pixels. To do what Photoshop does for each of the
-4 pixels in the 2x2 result it would have to average 1024x1024 pixel or 1 million pixels times 4. That's way
-way too much to do and still be fast.
+Now imagine we tried to draw that texture on a polygon 2x2 pixels big on
+the screen.  What colors should we make those 4 pixels?  There are 256
+pixels to choose from.  In Photoshop if you scaled a 16x16 pixel image to
+2x2 it would average the 8x8 pixels in each corner to make the 4 pixels in
+a 2x2 image.  Unfortunately reading 64 pixels and averaging them all
+together would be way too slow for a GPU.  In fact imagine if you had a
+2048x2084 pixel texture and you tried to draw it 2x2 pixels.  To do what
+Photoshop does for each of the 4 pixels in the 2x2 result it would have to
+average 1024x1024 pixel or 1 million pixels times 4.  That's way way too
+much to do and still be fast.
 
-So what the GPU does is it uses a mipmap. A mipmap is a collection of progressively smaller images,
-each one 1/4th the size of the previous one. The mipmap for the 16x16 texture above would look something like
-this.
+So what the GPU does is it uses a mipmap.  A mipmap is a collection of
+progressively smaller images, each one 1/4th the size of the previous one.
+The mipmap for the 16x16 texture above would look something like this.
 
 <img class="webgl_center" src="resources/mipmap-low-res-enlarged.png" />
 
-Generally each smaller level is just a bilinear interpolation of the previous level and that's
-what `gl.generateMipmap` does. It looks at the biggest level and generates all the smaller levels for you.
-Of course you can supply the smaller levels yourself if you want.
+Generally each smaller level is just a bilinear interpolation of the
+previous level and that's what `gl.generateMipmap` does.  It looks at the
+biggest level and generates all the smaller levels for you.  Of course you
+can supply the smaller levels yourself if you want.
 
-Now if you try to draw that 16x16 pixel texture only 2x2 pixels on the screen WebGL can select the
-mip that's 2x2 which has already been averaged from the previous mips.
+Now if you try to draw that 16x16 pixel texture only 2x2 pixels on the
+screen WebGL can select the mip that's 2x2 which has already been averaged
+from the previous mips.
 
-You can choose what WebGL does by setting the texture filtering for each texture. There are 6 modes
+You can choose what WebGL does by setting the texture filtering for each
+texture.  There are 6 modes
 
 *   `NEAREST` = choose 1 pixel from the biggest mip
 *   `LINEAR` = choose 4 pixels from the biggest mip and blend them
@@ -232,11 +257,12 @@ You can choose what WebGL does by setting the texture filtering for each texture
 *   `NEAREST_MIPMAP_LINEAR` = choose the best 2 mips, choose 1 pixel from each, blend them
 *   `LINEAR_MIPMAP_LINEAR` = choose the best 2 mips. choose 4 pixels from each, blend them
 
-You can see the importance of mips in these 2 examples. The first one shows that if you use `NEAREST`
-or `LINEAR` and only pick from the largest image then you'll get a lot of flickering because as things
-move, for each pixel it draws it has to pick a single pixel from the largest image. That changes depending
-on the size and position and so sometimes it will pick one pixel, other times a different one and so it
-flickers.
+You can see the importance of mips in these 2 examples.  The first one
+shows that if you use `NEAREST` or `LINEAR` and only pick from the largest
+image then you'll get a lot of flickering because as things move, for each
+pixel it draws it has to pick a single pixel from the largest image.  That
+changes depending on the size and position and so sometimes it will pick
+one pixel, other times a different one and so it flickers.
 
 {{{example url="../webgl-3d-textures-mips.html" }}}
 
@@ -251,30 +277,39 @@ The second example shows polygons that go deep into the screen.
 
 {{{example url="../webgl-3d-textures-mips-tri-linear.html" }}}
 
-The 6 beams going into the screen are using the 6 filtering modes listed above. The top left beam is using `NEAREST`
-and you can see it's clearly very blocky. The top middle is using `LINEAR` and it's not much better.
-The top right is using `NEAREST_MIPMAP_NEAREST`. Click on the image to switch to a texture where every mip is
-a different color and you'll easily see where it chooses to use a specific mip. The bottom left is using
-`LINEAR_MIPMAP_NEAREST` meaning it picks the best mip and then blends 4 pixels within that mip. You can still see
-a clear area where it switches from one mip to the next mip. The bottom middle is using `NEAREST_MIPMAP_LINEAR`
-meaning picking the best 2 mips, picking one pixel from each and blending
-them. If you look close you can see how it's still blocky, especially in the horizontal direction.
-The bottom right is using `LINEAR_MIPMAP_LINEAR` which is picking the best 2 mips, picking 4 pixels from each,
-and blends all 8 pixels.
+The 6 beams going into the screen are using the 6 filtering modes listed
+above.  The top left beam is using `NEAREST` and you can see it's clearly
+very blocky.  The top middle is using `LINEAR` and it's not much better.
+The top right is using `NEAREST_MIPMAP_NEAREST`.  Click on the image to
+switch to a texture where every mip is a different color and you'll easily
+see where it chooses to use a specific mip.  The bottom left is using
+`LINEAR_MIPMAP_NEAREST` meaning it picks the best mip and then blends 4
+pixels within that mip.  You can still see a clear area where it switches
+from one mip to the next mip.  The bottom middle is using
+`NEAREST_MIPMAP_LINEAR` meaning picking the best 2 mips, picking one pixel
+from each and blending them.  If you look close you can see how it's still
+blocky, especially in the horizontal direction.  The bottom right is using
+`LINEAR_MIPMAP_LINEAR` which is picking the best 2 mips, picking 4 pixels
+from each, and blends all 8 pixels.
 
 <img class="webgl_center" src="resources/different-colored-mips.png" />
 <div class="webgl_center">different colored mips</div>
 
-You might be thinking why would you ever pick anything other than `LINEAR_MIPMAP_LINEAR` which is arguably
-the best one. There are many reasons. One is that `LINEAR_MIPMAP_LINEAR` is the slowest. Reading 8 pixels
-is slower than reading 1 pixel. On modern GPU hardware it's probably not an issue if you are only using 1
-texture at a time but modern games might use 2 to 4 textures at once. 4 textures \* 8 pixels per texture =
-needing to read 32 pixels for every pixel drawn. That's going to be slow. Another reason is if you're trying
-to achieve a certain effect. For example if you want something to have that pixelated *retro* look maybe you
-want to use `NEAREST`.  Mips also take memory. In fact they take 33% more memory. That can be a lot of memory
-especially for a very large texture like you might use on a title screen of a game.  If you are never going
-to draw something smaller than the largest mip why waste memory for those mips. Instead just use `NEAREST`
-or `LINEAR` as they only ever use the first mip.
+You might be thinking why would you ever pick anything other than
+`LINEAR_MIPMAP_LINEAR` which is arguably the best one.  There are many
+reasons.  One is that `LINEAR_MIPMAP_LINEAR` is the slowest.  Reading 8
+pixels is slower than reading 1 pixel.  On modern GPU hardware it's
+probably not an issue if you are only using 1 texture at a time but modern
+games might use 2 to 4 textures at once.  4 textures \* 8 pixels per
+texture = needing to read 32 pixels for every pixel drawn.  That's going
+to be slow.  Another reason is if you're trying to achieve a certain
+effect.  For example if you want something to have that pixelated *retro*
+look maybe you want to use `NEAREST`.  Mips also take memory.  In fact
+they take 33% more memory.  That can be a lot of memory especially for a
+very large texture like you might use on a title screen of a game.  If you
+are never going to draw something smaller than the largest mip why waste
+memory for those mips.  Instead just use `NEAREST` or `LINEAR` as they
+only ever use the first mip.
 
 To set filtering you call `gl.texParameter` like this
 
@@ -420,10 +455,11 @@ And we get
 
 {{{example url="../webgl-3d-textures-texture-atlas.html" }}}
 
-This style of applying multiple images using 1 texture is often called a *texture atlas*. It's best because
-there's just 1 texture to load, the shader stays simple as it only has to reference 1 texture, and it only
-requires 1 draw call to draw the shape instead of 1 draw call per texture as it might if we split it into
-planes.
+This style of applying multiple images using 1 texture is often called a
+*texture atlas*.  It's best because there's just 1 texture to load, the
+shader stays simple as it only has to reference 1 texture, and it only
+requires 1 draw call to draw the shape instead of 1 draw call per texture
+as it might if we split it into planes.
 
 Next up [lets start simplifying with less code more fun](webgl-less-code-more-fun.html).
 

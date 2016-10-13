@@ -42,17 +42,18 @@ put data in those buffers
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 
-Then, given a shader program you made you look up the location of its attributes,
+Then, given a shader program you made you look up the location of its attributes
+at initialization time
 
     var positionLoc = gl.getAttribLocation(someShaderProgram, "a_position");
 
-then tell WebGL how to pull data out of those buffers and into the attribute
+and at render time tell WebGL how to pull data out of those buffers and into the attribute
 
     // turn on getting data out of a buffer for this attribute
     gl.enableVertexAttribArray(positionLoc);
 
     var numComponents = 3;  // (x, y, z)
-    var type = gl.FLOAT;
+    var type = gl.FLOAT;    // 32bit floating point values
     var normalize = false;  // leave the values as they are
     var offset = 0;         // start at the beginning of the buffer
     var stride = 0;         // how many bytes to move to the next vertex
@@ -75,7 +76,7 @@ Attributes can use `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, and `mat4` a
 
 ### Uniforms
 
-For a vertex shader uniforms are values passed to the vertex shader that stay the same
+For a shader uniforms are values passed to the shader that stay the same
 for all vertices in a draw call. As a very simple example we could add an offset to
 the vertex shader above
 
@@ -87,13 +88,18 @@ the vertex shader above
     }
 
 And now we could offset every vertex by a certain amount. First we'd look up the
-location of the uniform
+location of the uniform at initialization time
 
     var offsetLoc = gl.getUniformLocation(someProgram, "u_offset");
 
 And then before drawing we'd set the uniform
 
     gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // offset it to the right half the screen
+
+Note that uniforms belong to individual shader programs. If you have multiple shader programs
+with uniforms of the same name both uniforms will have their own locations and hold their own
+values. When calling `gl.uniform???` you're only setting the uniform for the *current program*.
+The current program is the last program you passed to `gl.useProgram`.
 
 Uniforms can be many types. For each type you have to call the corresponding function to set it.
 
@@ -191,7 +197,7 @@ Fragment shaders need data. They can get data in 3 ways
 
 ### Uniforms in Fragment Shaders
 
-See [Uniforms in Vertex Shaders](#uniforms).
+See [Uniforms in Shaders](#uniforms).
 
 ### Textures in Fragment Shaders
 
@@ -215,14 +221,17 @@ At a minimum we need to create and put data in the texture, for example
     var level = 0;
     var width = 2;
     var height = 1;
-    var data = new Uint8Array([255, 0, 0, 255, 0, 255, 0, 255]);
+    var data = new Uint8Array([
+       255, 0, 0, 255,   // a red pixel
+       0, 255, 0, 255,   // a green pixel
+    ]);
     gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
 
-Then look up the uniform location in the shader program
+At initialization time look up the uniform location in the shader program
 
     var someSamplerLoc = gl.getUniformLocation(someProgram, "u_texture");
 
-WebGL then requires you to bind it to a texture unit
+At render time WebGL you to bind the texture to a texture unit
 
     var unit = 5;  // Pick some texture unit
     gl.activeTexture(gl.TEXTURE0 + unit);
@@ -327,6 +336,14 @@ Is the same as
 
     vec4(v.r, v.g, v.b, 1)
 
+Also
+
+    vec4(1)
+
+Is the same as
+
+    vec4(1, 1, 1, 1)
+
 One thing you'll likely get caught up on is that GLSL is very type strict.
 
     float f = 1;  // ERROR 1 is an int. You can't assign an int to a float
@@ -385,7 +402,7 @@ and link them into a shader program is covered here](webgl-boilerplate.html).
 If you're just starting from here you can go in 2 directions. If you are interested in image procesing
 I'll show you [how to do some 2D image processing](webgl-image-processing.html).
 If you are interesting in learning about translation,
-rotation and scale then [start here](webgl-2d-translation.html).
+rotation, scale and eventually 3D then [start here](webgl-2d-translation.html).
 
 
 

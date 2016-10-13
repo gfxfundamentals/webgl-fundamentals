@@ -3,13 +3,24 @@ Description: How to image process in WebGL
 
 Image processing is easy in WebGL. How easy? Read below.
 <!--more-->
-This is a continuation from <a href="webgl-fundamentals.html">WebGL Fundamentals</a>. If you haven't read that I'd suggest <a href="webgl-fundamentals.html">going there first</a>.
+This is a continuation from [WebGL Fundamentals](webgl-fundamentals.html).
+If you haven't read that I'd suggest [going there first](webgl-fundamentals.html).
 
-To draw images in WebGL we need to use textures. Similarly to the way WebGL expects clipspace coordinates when rendering instead of pixels, WebGL expects texture coordinates when reading a texture. Texture coordinates go from 0.0 to 1.0 no matter the dimensions of the texture.
+To draw images in WebGL we need to use textures. Similarly to the way WebGL
+expects clipspace coordinates when rendering instead of pixels, WebGL expects
+texture coordinates when reading a texture. Texture coordinates go from 0.0 to
+1.0 no matter the dimensions of the texture.
 
-Since we are only drawing a single rectangle (well, 2 triangles) we need to tell WebGL which place in the texture each point in the rectangle corresponds to. We'll pass this information from the vertex shader to the fragment shader using a special kind of variable called a 'varying'. It's called a varying because it varies. WebGL will interpolate the values we provide in the vertex shader as it draws each pixel using the fragment shader.
+Since we are only drawing a single rectangle (well, 2 triangles) we need to
+tell WebGL which place in the texture each point in the rectangle corresponds
+to. We'll pass this information from the vertex shader to the fragment shader
+using a special kind of variable called a 'varying'. It's called a varying
+because it varies. WebGL will interpolate the values we provide in the vertex
+shader as it draws each pixel using the fragment shader.
 
-Using <a href="webgl-fundamentals.html">the vertex shader from the end of the previous post</a> we need to add an attribute to pass in texture coordinates and then pass those on to the fragment shader.
+Using [the vertex shader from the end of the previous post](webgl-fundamentals.html)
+we need to add an attribute to pass in texture coordinates and then pass those
+on to the fragment shader.
 
     attribute vec2 a_texCoord;
     ...
@@ -39,7 +50,10 @@ Then we supply a fragment shader to look up colors from the texture.
     }
     </script>
 
-Finally we need to load an image, create a texture and copy the image into the texture. Because we are in a browser images load asynchronously so we have to re-arrange our code a little to wait for the texture to load. Once it loads we'll draw it.
+Finally we need to load an image, create a texture and copy the image into
+the texture. Because we are in a browser images load asynchronously so we
+have to re-arrange our code a little to wait for the texture to load. Once
+it loads we'll draw it.
 
     function main() {
       var image = new Image();
@@ -84,7 +98,9 @@ Finally we need to load an image, create a texture and copy the image into the t
       ...
     }
 
-And here's the image rendered in WebGL.
+And here's the image rendered in WebGL. NOTE: If you are running this locally you'll
+need a simple web server to allow WebGL to load the images. [See here for how to setup one
+up in couple of minutes](webgl-setup-and-installation.html).
 
 {{{example url="../webgl-2d-image.html" }}}
 
@@ -98,9 +114,13 @@ And now red and blue are swapped.
 
 {{{example url="../webgl-2d-image-red2blue.html" }}}
 
-What if we want to do image processing that actually looks at other pixels? Since WebGL references textures in texture coordinates which go from 0.0 to 1.0 then we can calculate how much to move for 1 pixel with the simple math <code>onePixel = 1.0 / textureSize</code>.
+What if we want to do image processing that actually looks at other pixels?
+Since WebGL references textures in texture coordinates which go from 0.0 to 1.0
+then we can calculate how much to move for 1 pixel with the simple math
+<code>onePixel = 1.0 / textureSize</code>.
 
-Here's a fragment shader that averages the left and right pixels of each pixel in the texture.
+Here's a fragment shader that averages the left and right pixels of each pixel
+in the texture.
 
     <script id="2d-fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
@@ -127,19 +147,31 @@ Here's a fragment shader that averages the left and right pixels of each pixel i
 We then need to pass in the size of the texture from JavaScript.
 
     ...
+
     var textureSizeLocation = gl.getUniformLocation(program, "u_textureSize");
+
     ...
+
     // set the size of the image
     gl.uniform2f(textureSizeLocation, image.width, image.height);
+
     ...
 
 Compare to the un-blurred image above.
 
 {{{example url="../webgl-2d-image-blend.html" }}}
 
-Now that we know how to reference other pixels let's use a convolution kernel to do a bunch of common image processing. In this case we'll use a 3x3 kernel. A convolution kernel is just a 3x3 matrix where each entry in the matrix represents how much to multiply the 8 pixels around the pixel we are rendering. We then divide the result by the weight of the kernel (the sum of all values in the kernel) or 1.0, whichever is greater. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Here's a pretty good article on it</a>. And <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">here's another article showing some actual code if you were to write this by hand in C++</a>.
+Now that we know how to reference other pixels let's use a convolution kernel
+to do a bunch of common image processing. In this case we'll use a 3x3 kernel.
+A convolution kernel is just a 3x3 matrix where each entry in the matrix represents
+how much to multiply the 8 pixels around the pixel we are rendering. We then divide
+the result by the weight of the kernel (the sum of all values in the kernel) or 1.0,
+whichever is greater. [Here's a pretty good article on it](http://docs.gimp.org/en/plug-in-convmatrix.html).
+And [here's another article showing some actual code if you were to write this by
+hand in C++](http://www.codeproject.com/KB/graphics/ImageConvolution.aspx).
 
-In our case we're going to do that work in the shader so here's the new fragment shader.
+In our case we're going to do that work in the shader so here's the new fragment
+shader.
 
     <script id="2d-fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
@@ -198,39 +230,48 @@ And voila... Use the drop down list to select different kernels.
 
 {{{example url="../webgl-2d-image-3x3-convolution.html" }}}
 
-I hope this article has convinced you image processing in WebGL is pretty simple. Next up I'll go over  <a href="webgl-image-processing-continued.html">how to apply more than one effect to the image</a>.
+I hope this article has convinced you image processing in WebGL is pretty simple.
+Next up I'll go over [how to apply more than one effect to the image](webgl-image-processing-continued.html).
 
-<div class="webgl_bottombar">'u_image' is never set. How does that work?
-
-Uniforms default to 0 so u_image defaults to using texture unit 0. Texture unit 0 is also the default active texture so calling bindTexture will bind the texture to texture unit 0.
-
-WebGL has an array of texture units. Which texture unit each sampler uniform references is set by looking up the location of that sampler uniform and then setting the index of the texture unit you want it to reference.
-
+<div class="webgl_bottombar">
+<h3><code>u_image</code> is never set. How does that work?</h3>
+<p>
+Uniforms default to 0 so u_image defaults to using texture unit 0.
+Texture unit 0 is also the default active texture so calling bindTexture
+will bind the texture to texture unit 0.
+</p>
+<p>
+WebGL has an array of texture units. Which texture unit each sampler uniform
+references is set by looking up the location of that sampler uniform and then
+setting the index of the texture unit you want it to reference.
+</p>
+<p>
 For example:
+</p>
 <pre class="prettyprint showlinemods">
 var textureUnitIndex = 6; // use texture unit 6.
 var u_imageLoc = gl.getUniformLocation(
     program, "u_image");
 gl.uniform1i(u_imageLoc, textureUnitIndex);
 </pre>
-
-To set textures on different units you call gl.activeTexture and then bind the texture you want on that unit. Example
-
+<p>
+To set textures on different units you call <code>gl.activeTexture</code> and then
+bind the texture you want on that unit. Example
+</p>
 <pre class="prettyprint showlinemods">
 // Bind someTexture to texture unit 6.
 gl.activeTexture(gl.TEXTURE6);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
-
+<p>
 This works too
-
+</p>
 <pre class="prettyprint showlinemods">
 var textureUnitIndex = 6; // use texture unit 6.
 // Bind someTexture to texture unit 6.
 gl.activeTexture(gl.TEXTURE0 + textureUnitIndex);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
-
 </div>
 
 <div class="webgl_bottombar">

@@ -24,7 +24,7 @@ Drag sliders to translate, rotate, and scale.
 </body>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-2d-math.js"></script>
+<script src="resources/2d-math.js"></script>
 <script>
 "use strict";
 
@@ -102,15 +102,15 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Compute the matrices
-    var projectionMatrix = make2DProjection(gl.canvas.clientWidth, gl.canvas.clientHeight);
-    var translationMatrix = makeTranslation(translation[0], translation[1]);
-    var rotationMatrix = makeRotation(angleInRadians);
-    var scaleMatrix = makeScale(scale[0], scale[1]);
+    var projectionMatrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
+    var translationMatrix = m4.translation(translation[0], translation[1]);
+    var rotationMatrix = m3.rotation(angleInRadians);
+    var scaleMatrix = m4.scaling(scale[0], scale[1]);
 
     // Multiply the matrices.
-    var matrix = matrixMultiply(scaleMatrix, rotationMatrix);
-    matrix = matrixMultiply(matrix, translationMatrix);
-    matrix = matrixMultiply(matrix, projectionMatrix);
+    var matrix = m4.multiply(rotationMatrix, scaleMatrix);
+    matrix = m4.multiply(translationMatrix, matrix);
+    matrix = m4.multiply(projectionMatrix, matrix);
 
     // Set the matrix.
     gl.uniformMatrix3fv(matrixLocation, false, matrix);
@@ -134,7 +134,7 @@ function setGeometry(gl) {
       gl.STATIC_DRAW);
 }
 
-window.addEventListener('load', main);
+main();
 </script>
 <!-- vertex shader -->
 <script id="2d-vertex-shader" type="x-shader/x-vertex">

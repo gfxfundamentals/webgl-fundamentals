@@ -1,71 +1,71 @@
 /* Licensed under a BSD license. See license.html for license */
 "use strict";
 
-var vertexShaderSource = [
-  "uniform mat4 u_worldViewProjection;",
-  "uniform vec3 u_lightWorldPos;",
-  "uniform mat4 u_world;",
-  "uniform mat4 u_viewInverse;",
-  "uniform mat4 u_worldInverseTranspose;",
-  "",
-  "attribute vec4 a_position;",
-  "attribute vec3 a_normal;",
-  "attribute vec2 a_texcoord;",
-  "",
-  "varying vec4 v_position;",
-  "varying vec2 v_texCoord;",
-  "varying vec3 v_normal;",
-  "varying vec3 v_surfaceToLight;",
-  "varying vec3 v_surfaceToView;",
-  "",
-  "void main() {",
-  "  v_texCoord = a_texcoord;",
-  "  v_position = (u_worldViewProjection * a_position);",
-  "  v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;",
-  "  v_surfaceToLight = u_lightWorldPos - (u_world * a_position).xyz;",
-  "  v_surfaceToView = (u_viewInverse[3] - (u_world * a_position)).xyz;",
-  "  gl_Position = v_position;",
-  "}",
-].join("\n");
+var vertexShaderSource = `
+  uniform mat4 u_worldViewProjection;
+  uniform vec3 u_lightWorldPos;
+  uniform mat4 u_world;
+  uniform mat4 u_viewInverse;
+  uniform mat4 u_worldInverseTranspose;
 
-var fragmentShaderSource = [
-  "precision mediump float;",
-  "",
-  "varying vec4 v_position;",
-  "varying vec2 v_texCoord;",
-  "varying vec3 v_normal;",
-  "varying vec3 v_surfaceToLight;",
-  "varying vec3 v_surfaceToView;",
-  "",
-  "uniform vec4 u_lightColor;",
-  "uniform vec4 u_ambient;",
-  "uniform sampler2D u_diffuse;",
-  "uniform vec4 u_specular;",
-  "uniform float u_shininess;",
-  "uniform float u_specularFactor;",
-  "",
-  "vec4 lit(float l ,float h, float m) {",
-  "  return vec4(1.0,",
-  "              max(l, 0.0),",
-  "              (l > 0.0) ? pow(max(0.0, h), m) : 0.0,",
-  "              1.0);",
-  "}",
-  "",
-  "void main() {",
-  "  vec4 diffuseColor = texture2D(u_diffuse, v_texCoord);",
-  "  vec3 a_normal = normalize(v_normal);",
-  "  vec3 surfaceToLight = normalize(v_surfaceToLight);",
-  "  vec3 surfaceToView = normalize(v_surfaceToView);",
-  "  vec3 halfVector = normalize(surfaceToLight + surfaceToView);",
-  "  vec4 litR = lit(dot(a_normal, surfaceToLight),",
-  "                    dot(a_normal, halfVector), u_shininess);",
-  "  vec4 outColor = vec4((",
-  "  u_lightColor * (diffuseColor * litR.y + diffuseColor * u_ambient +",
-  "                u_specular * litR.z * u_specularFactor)).rgb,",
-  "      diffuseColor.a);",
-  "  gl_FragColor = outColor;",
-  "}",
-].join("\n");
+  attribute vec4 a_position;
+  attribute vec3 a_normal;
+  attribute vec2 a_texcoord;
+
+  varying vec4 v_position;
+  varying vec2 v_texCoord;
+  varying vec3 v_normal;
+  varying vec3 v_surfaceToLight;
+  varying vec3 v_surfaceToView;
+
+  void main() {
+    v_texCoord = a_texcoord;
+    v_position = (u_worldViewProjection * a_position);
+    v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
+    v_surfaceToLight = u_lightWorldPos - (u_world * a_position).xyz;
+    v_surfaceToView = (u_viewInverse[3] - (u_world * a_position)).xyz;
+    gl_Position = v_position;
+  }
+`;
+
+var fragmentShaderSource = `
+  precision mediump float;
+
+  varying vec4 v_position;
+  varying vec2 v_texCoord;
+  varying vec3 v_normal;
+  varying vec3 v_surfaceToLight;
+  varying vec3 v_surfaceToView;
+
+  uniform vec4 u_lightColor;
+  uniform vec4 u_ambient;
+  uniform sampler2D u_diffuse;
+  uniform vec4 u_specular;
+  uniform float u_shininess;
+  uniform float u_specularFactor;
+
+  vec4 lit(float l ,float h, float m) {
+    return vec4(1.0,
+                max(l, 0.0),
+                (l > 0.0) ? pow(max(0.0, h), m) : 0.0,
+                1.0);
+  }
+
+  void main() {
+    vec4 diffuseColor = texture2D(u_diffuse, v_texCoord);
+    vec3 a_normal = normalize(v_normal);
+    vec3 surfaceToLight = normalize(v_surfaceToLight);
+    vec3 surfaceToView = normalize(v_surfaceToView);
+    vec3 halfVector = normalize(surfaceToLight + surfaceToView);
+    vec4 litR = lit(dot(a_normal, surfaceToLight),
+                      dot(a_normal, halfVector), u_shininess);
+    vec4 outColor = vec4((
+    u_lightColor * (diffuseColor * litR.y + diffuseColor * u_ambient +
+                  u_specular * litR.z * u_specularFactor)).rgb,
+        diffuseColor.a);
+    gl_FragColor = outColor;
+  }
+`;
 
 
 /**
@@ -139,14 +139,14 @@ function main() {
 
   var uniformsThatAreTheSameForAllObjects = {
     u_lightWorldPos:         [-50, 30, 100],
-    u_viewInverse:           makeIdentity(),
+    u_viewInverse:           m4.identity(),
     u_lightColor:            [1, 1, 1, 1],
   };
 
   var uniformsThatAreComputedForEachObject = {
-    u_worldViewProjection:   makeIdentity(),
-    u_world:                 makeIdentity(),
-    u_worldInverseTranspose: makeIdentity(),
+    u_worldViewProjection:   m4.identity(),
+    u_world:                 m4.identity(),
+    u_worldInverseTranspose: m4.identity(),
   };
 
   var makeRandomTexture = function(gl, w, h) {
@@ -222,16 +222,18 @@ function main() {
     // Compute the projection matrix
     var aspect = canvas.clientWidth / canvas.clientHeight;
     var projectionMatrix =
-        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+        m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
     var cameraPosition = [0, 0, 100];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
-    var cameraMatrix = makeLookAt(cameraPosition, target, up, uniformsThatAreTheSameForAllObjects.u_viewInverse);
+    var cameraMatrix = m4.lookAt(cameraPosition, target, up, uniformsThatAreTheSameForAllObjects.u_viewInverse);
 
     // Make a view matrix from the camera matrix.
-    var viewMatrix = makeInverse(cameraMatrix);
+    var viewMatrix = m4.inverse(cameraMatrix);
+
+    var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
     gl.useProgram(programInfo.program);
 
@@ -245,19 +247,15 @@ function main() {
     objects.forEach(function(object) {
 
       // Compute a position for this object based on the time.
-      var xRotationMatrix = makeXRotation(object.xRotation + object.speed * time);
-      var yRotationMatrix = makeYRotation(object.yRotation + object.speed * time);
-      var translationMatrix = makeTranslation(0, 0, object.radius);
-      var translation2Matrix = makeTranslation(0, 0, object.radius2);
-      var matrix = matrixMultiply(translation2Matrix, xRotationMatrix);
-      matrix = matrixMultiply(yRotationMatrix, matrix);
-      var worldMatrix = matrixMultiply(translationMatrix, matrix,
-          uniformsThatAreComputedForEachObject.u_world);
+      var matrix = m4.identity(uniformsThatAreComputedForEachObject.u_world)
+      matrix = m4.translate(matrix, 0, 0, object.radius2, matrix);
+      matrix = m4.xRotate(matrix, object.xRotation + object.speed * time, matrix);
+      matrix = m4.yRotate(matrix, object.yRotation + object.speed * time, matrix);
+      var worldMatrix = m4.translate(matrix, 0, 0, object.radius, matrix);
 
       // Multiply the matrices.
-      var matrix = matrixMultiply(worldMatrix, viewMatrix);
-      matrixMultiply(matrix, projectionMatrix, uniformsThatAreComputedForEachObject.u_worldViewProjection);
-      makeTranspose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
+      m4.multiply(viewProjectionMatrix, worldMatrix, uniformsThatAreComputedForEachObject.u_worldViewProjection);
+      m4.transpose(m4.inverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
 
       // Set the uniforms we just computed
       webglUtils.setUniforms(programInfo, uniformsThatAreComputedForEachObject);

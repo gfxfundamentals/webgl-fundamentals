@@ -2,7 +2,7 @@ Title: WebGL - Rasterization vs 3D libraries
 Description: Why WebGL is not a 3D library and why it matters.
 
 This post is a kind of side topic on a series of posts about WebGL.
-The first <a href="webgl-fundamentals.html">started with fundamentals</a>
+The first [started with fundamentals](webgl-fundamentals.html)
 
 I'm writing this because my claim that WebGL is a Rasterization API and not a 3D API
 touches a nerve with some people.  I'm not sure why they feel threatened

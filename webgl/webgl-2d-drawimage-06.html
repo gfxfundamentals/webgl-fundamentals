@@ -10,8 +10,41 @@
 <body>
 <canvas id="canvas"></canvas>
 </body>
+<!-- vertex shader -->
+<script id="drawImage-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec2 a_texcoord;
+
+uniform mat4 u_matrix;
+uniform mat4 u_textureMatrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+   gl_Position = u_matrix * a_position;
+   v_texcoord = (u_textureMatrix * vec4(a_texcoord, 0, 1)).xy;
+}
+</script>
+<script id="drawImage-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+varying vec2 v_texcoord;
+
+uniform sampler2D u_texture;
+
+void main() {
+  if (v_texcoord.x < 0.0 ||
+      v_texcoord.y < 0.0 ||
+      v_texcoord.x > 1.0 ||
+      v_texcoord.y > 1.0) {
+    discard;
+  }
+  gl_FragColor = texture2D(u_texture, v_texcoord);
+}
+</script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
+<script src="resources/3d-math.js"></script>
 <script>
 "use strict";
 
@@ -28,7 +61,6 @@ function main() {
 
   // setup GLSL program
   var program = webglUtils.createProgramFromScripts(gl, ["drawImage-vertex-shader", "drawImage-fragment-shader"]);
-  gl.useProgram(program);
 
   // look up where the vertex data needs to go.
   var positionLocation = gl.getAttribLocation(program, "a_position");
@@ -37,12 +69,11 @@ function main() {
   // lookup uniforms
   var matrixLocation = gl.getUniformLocation(program, "u_matrix");
   var textureMatrixLocation = gl.getUniformLocation(program, "u_textureMatrix");
+  var textureLocation = gl.getUniformLocation(program, "u_texture");
 
   // Create a buffer.
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(positionLocation);
-  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+  var positionBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   // Put a unit quad in the buffer
   var positions = [
@@ -56,10 +87,8 @@ function main() {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
   // Create a buffer for texture coords
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(texcoordLocation);
-  gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+  var texcoordBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
 
   // Put texcoords in the buffer
   var texcoords = [
@@ -115,14 +144,15 @@ function main() {
   var numToDraw = 9;
   var speed = 60;
   for (var ii = 0; ii < numToDraw; ++ii) {
-    var scale = Math.random() * 0.25 + 0.25;
     var drawInfo = {
       x: Math.random() * gl.canvas.width,
       y: Math.random() * gl.canvas.height,
       dx: Math.random() > 0.5 ? -1 : 1,
       dy: Math.random() > 0.5 ? -1 : 1,
-      xScale: scale,
-      yScale: scale,
+      xScale: Math.random() * 0.25 + 0.25,
+      yScale: Math.random() * 0.25 + 0.25,
+      offX: Math.random() * 0.75,
+      offY: Math.random() * 0.75,
       offX: 0,
       offY: 0,
       rotation: Math.random() * Math.PI * 2,
@@ -227,219 +257,57 @@ function main() {
 
     gl.bindTexture(gl.TEXTURE_2D, tex);
 
-    // this matirx will convert from pixels to clip space
-    var projectionMatrix = make2DProjection(gl.canvas.width, gl.canvas.height, 1);
+    // Tell WebGL to use our shader program pair
+    gl.useProgram(program);
 
-    // this matrix will scale our 1 unit quad
-    // from 1 unit to dstWidth, dstHeight units
-    var scaleMatrix = makeScale(dstWidth, dstHeight, 1);
+    // Setup the attributes to pull data from our buffers
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+    gl.enableVertexAttribArray(texcoordLocation);
+    gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+
+    // this matirx will convert from pixels to clip space
+    var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
     // this matrix will translate our quad to dstX, dstY
-    var translationMatrix = makeTranslation(dstX, dstY, 0);
+    matrix = m4.translate(matrix, dstX, dstY, 0);
 
-    // multiply them all togehter
-    var matrix = matrixMultiply(scaleMatrix, translationMatrix);
-    matrix = matrixMultiply(matrix, projectionMatrix);
+    // this matrix will scale our 1 unit quad
+    // from 1 unit to texWidth, texHeight units
+    matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 
     // Set the matrix.
     gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-    // Because texture coordinates go from 0 to 1
-    // and because our texture coordinates are already a unit quad
-    // we can select an area of the texture by scaling the unit quad
-    // down
-
     // just like a 2d projection matrix except in texture space (0 to 1)
-    // instead of clip space
-    var texProjectionMatrix = makeScale(1 / texWidth, 1 / texHeight, 1);
-
-    // because we're using a porjeciton matrix that converts to pixels
-    // the scale and translation are now in pixels
-    var texScaleMatrix = makeScale(srcWidth, srcHeight, 1);
-    var texTranslationMatrix = makeTranslation(srcX, srcY, 0);
+    // instead of clip space. This matrix puts us in pixel space.
+    var texMatrix = m4.scaling(1 / texWidth, 1 / texHeight, 1);
 
     // We need to pick a place to rotate around
-    // so the pre rotation matrix moves the texcoords
-    // so the center of the texture is at the origin
-    var texPreRotationMatrix = makeTranslation(texWidth * -0.5, texHeight * -0.5, 0);
-    var texRotationMatrix = makeZRotation(srcRotation);
-    // the post rotation matrix moves the points back
-    // over the texture after they've been rotated.
-    var texPostRotationMatrix = makeTranslation(texWidth * 0.5, texHeight * 0.5, 0);
+    // We'll move to the middle, rotate, then move back
+    var texMatrix = m4.translate(texMatrix, texWidth * 0.5, texHeight * 0.5, 0);
+    var texMatrix = m4.zRotate(texMatrix, srcRotation);
+    var texMatrix = m4.translate(texMatrix, texWidth * -0.5, texHeight * -0.5, 0);
 
-    // multiply them together
-    var texMatrix = makeIdentity();
-    texMatrix = matrixMultiply(texMatrix, texScaleMatrix);
-    texMatrix = matrixMultiply(texMatrix, texTranslationMatrix);
-    texMatrix = matrixMultiply(texMatrix, texPreRotationMatrix);
-    texMatrix = matrixMultiply(texMatrix, texRotationMatrix);
-    texMatrix = matrixMultiply(texMatrix, texPostRotationMatrix);
-    texMatrix = matrixMultiply(texMatrix, texProjectionMatrix);
+    // because were in pixel space
+    // the scale and translation are now in pixels
+    var texMatrix = m4.translate(texMatrix, srcX, srcY, 0);
+    var texMatrix = m4.scale(texMatrix, srcWidth, srcHeight, 1);
 
     // Set the texture matrix.
     gl.uniformMatrix4fv(textureMatrixLocation, false, texMatrix);
+
+    // Tell the shader to get the texture from texture unit 0
+    gl.uniform1i(textureLocation, 0);
 
     // draw the quad (2 triangles, 6 vertices)
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
 
 }
-
-function makeIdentity() {
-  return [
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 1, 0,
-    0, 0, 0, 1,
-  ];
-}
-function make2DProjection(width, height, depth) {
-  // Note: This matrix flips the Y axis so 0 is at the top.
-  return [
-     2 / width, 0, 0, 0,
-     0, -2 / height, 0, 0,
-     0, 0, 2 / depth, 0,
-    -1, 1, 0, 1,
-  ];
-}
-
-function makeTranslation(tx, ty, tz) {
-  return [
-     1,  0,  0,  0,
-     0,  1,  0,  0,
-     0,  0,  1,  0,
-    tx, ty, tz,  1
-  ];
-}
-
-function makeXRotation(angleInRadians) {
-  var c = Math.cos(angleInRadians);
-  var s = Math.sin(angleInRadians);
-
-  return [
-    1, 0, 0, 0,
-    0, c, s, 0,
-    0, -s, c, 0,
-    0, 0, 0, 1
-  ];
-};
-
-function makeYRotation(angleInRadians) {
-  var c = Math.cos(angleInRadians);
-  var s = Math.sin(angleInRadians);
-
-  return [
-    c, 0, -s, 0,
-    0, 1, 0, 0,
-    s, 0, c, 0,
-    0, 0, 0, 1
-  ];
-};
-
-function makeZRotation(angleInRadians) {
-  var c = Math.cos(angleInRadians);
-  var s = Math.sin(angleInRadians);
-  return [
-     c, s, 0, 0,
-    -s, c, 0, 0,
-     0, 0, 1, 0,
-     0, 0, 0, 1,
-  ];
-}
-
-function makeScale(sx, sy, sz) {
-  return [
-    sx, 0,  0,  0,
-    0, sy,  0,  0,
-    0,  0, sz,  0,
-    0,  0,  0,  1,
-  ];
-}
-
-function matrixMultiply(a, b) {
-  var a00 = a[0*4+0];
-  var a01 = a[0*4+1];
-  var a02 = a[0*4+2];
-  var a03 = a[0*4+3];
-  var a10 = a[1*4+0];
-  var a11 = a[1*4+1];
-  var a12 = a[1*4+2];
-  var a13 = a[1*4+3];
-  var a20 = a[2*4+0];
-  var a21 = a[2*4+1];
-  var a22 = a[2*4+2];
-  var a23 = a[2*4+3];
-  var a30 = a[3*4+0];
-  var a31 = a[3*4+1];
-  var a32 = a[3*4+2];
-  var a33 = a[3*4+3];
-  var b00 = b[0*4+0];
-  var b01 = b[0*4+1];
-  var b02 = b[0*4+2];
-  var b03 = b[0*4+3];
-  var b10 = b[1*4+0];
-  var b11 = b[1*4+1];
-  var b12 = b[1*4+2];
-  var b13 = b[1*4+3];
-  var b20 = b[2*4+0];
-  var b21 = b[2*4+1];
-  var b22 = b[2*4+2];
-  var b23 = b[2*4+3];
-  var b30 = b[3*4+0];
-  var b31 = b[3*4+1];
-  var b32 = b[3*4+2];
-  var b33 = b[3*4+3];
-  return [a00 * b00 + a01 * b10 + a02 * b20 + a03 * b30,
-          a00 * b01 + a01 * b11 + a02 * b21 + a03 * b31,
-          a00 * b02 + a01 * b12 + a02 * b22 + a03 * b32,
-          a00 * b03 + a01 * b13 + a02 * b23 + a03 * b33,
-          a10 * b00 + a11 * b10 + a12 * b20 + a13 * b30,
-          a10 * b01 + a11 * b11 + a12 * b21 + a13 * b31,
-          a10 * b02 + a11 * b12 + a12 * b22 + a13 * b32,
-          a10 * b03 + a11 * b13 + a12 * b23 + a13 * b33,
-          a20 * b00 + a21 * b10 + a22 * b20 + a23 * b30,
-          a20 * b01 + a21 * b11 + a22 * b21 + a23 * b31,
-          a20 * b02 + a21 * b12 + a22 * b22 + a23 * b32,
-          a20 * b03 + a21 * b13 + a22 * b23 + a23 * b33,
-          a30 * b00 + a31 * b10 + a32 * b20 + a33 * b30,
-          a30 * b01 + a31 * b11 + a32 * b21 + a33 * b31,
-          a30 * b02 + a31 * b12 + a32 * b22 + a33 * b32,
-          a30 * b03 + a31 * b13 + a32 * b23 + a33 * b33];
-}
-
-window.addEventListener('load', main);
-</script>
-<!-- vertex shader -->
-<script id="drawImage-vertex-shader" type="x-shader/x-vertex">
-attribute vec4 a_position;
-attribute vec2 a_texcoord;
-
-uniform mat4 u_matrix;
-uniform mat4 u_textureMatrix;
-
-varying vec2 v_texcoord;
-
-void main() {
-   gl_Position = u_matrix * a_position;
-   v_texcoord = (u_textureMatrix * vec4(a_texcoord, 0, 1)).xy;
-}
-</script>
-<script id="drawImage-fragment-shader" type="x-shader/x-fragment">
-precision mediump float;
-
-varying vec2 v_texcoord;
-
-uniform sampler2D texture;
-
-void main() {
-   if (v_texcoord.x < 0.0 ||
-       v_texcoord.y < 0.0 ||
-       v_texcoord.x > 1.0 ||
-       v_texcoord.y > 1.0) {
-     discard;
-   }
-   gl_FragColor = texture2D(texture, v_texcoord);
-}
+main();
 </script>
 </html>
 

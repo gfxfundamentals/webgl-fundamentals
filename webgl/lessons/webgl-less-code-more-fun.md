@@ -2,19 +2,21 @@ Title: WebGL - Less Code, More Fun
 Description: Ways to make programming WebGL less verbose
 
 This post is a continuation of a series of posts about WebGL.
-The first <a href="webgl-fundamentals.html">started with fundamentals</a>.
+The first [started with fundamentals](webgl-fundamentals.html).
 If you haven't read those please view them first.
 
-WebGL programs require that you write shader programs which you have to compile and link and then
-you have to look up the locations of the inputs to those shader programs. These inputs are called
-uniforms and attributes and the code required to look up their locations can be wordy and tedious.
+WebGL programs require that you write shader programs which you have to
+compile and link and then you have to look up the locations of the inputs
+to those shader programs.  These inputs are called uniforms and attributes
+and the code required to look up their locations can be wordy and tedious.
 
-Assume we've got the <a href="webgl-boilerplate.html">typical boilerplate WebGL code for
-compiling and linking shader programs</a>. Given a set of shaders like this.
+Assume we've got the [typical boilerplate WebGL code for compiling and
+linking shader programs](webgl-boilerplate.html).  Given a set of shaders
+like this.
 
 vertex shader:
 
-<pre class="prettyprint">
+```
 uniform mat4 u_worldViewProjection;
 uniform vec3 u_lightWorldPos;
 uniform mat4 u_world;
@@ -39,11 +41,11 @@ void main() {
   v_surfaceToView = (u_viewInverse[3] - (u_world * a_position)).xyz;
   gl_Position = v_position;
 }
-</pre>
+```
 
 fragment shader:
 
-<pre class="prettyprint">
+```
 precision mediump float;
 
 varying vec4 v_position;
@@ -80,11 +82,12 @@ void main() {
       diffuseColor.a);
   gl_FragColor = outColor;
 }
-</pre>
+```
 
-You'd end up having to write code like this to look up and set all the various values to draw.
+You'd end up having to write code like this to look up and set all the
+various values to draw.
 
-<pre class="prettyprint">
+```
 // At initialization time
 var u_worldViewProjectionLoc   = gl.getUniformLocation(program, "u_worldViewProjection");
 var u_lightWorldPosLoc         = gl.getUniformLocation(program, "u_lightWorldPos");
@@ -149,16 +152,17 @@ gl.uniform1f(u_shininessLoc, shininess);
 gl.uniform1f(u_specularFactorLoc, specularFactor);
 
 gl.drawArrays(...);
-</pre>
+```
 
 That's a lot of typing.
 
-There are lots of ways to simplify this. One suggestion is to ask WebGL to tell us all
-the uniforms and locations and then setup functions to set them for us. We can then pass in
-JavaScript objects to set our settings much more easily. If that's clear as mud well,
-our code would look something like this
+There are lots of ways to simpl ify this.  One suggestion is to ask WebGL
+to tell us all the uniforms and locations and then setup functions to set
+them for us.  We can then pass in JavaScript objects to set our settings
+much more easily.  If that's clear as mud well, our code would look
+something like this
 
-<pre class="prettyprint">
+```
 // At initialiation time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
@@ -194,13 +198,13 @@ webglUtils.setAttributes(attribSetters, attribs);
 webglUtils.setUniforms(uniformSetters, uniforms);
 
 gl.drawArrays(...);
-</pre>
+```
 
 That seems a heck of a lot smaller, easier, and less code to me.
 
 You can even use multiple JavaScript objects if it suits you. For example
 
-<pre class="prettyprint">
+```
 // At initialiation time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
@@ -267,7 +271,7 @@ objects.forEach(function(object) {
   webglUtils.setUniforms(unifromSetters, objects.materialUniforms);
   gl.drawArrays(...);
 });
-</pre>
+```
 
 Here's an example using these helper functions
 
@@ -358,11 +362,13 @@ Here's that
        },
      };
 
-And `webglUtils.setBuffersAndAttributes` uses that object to set all the buffers and attributes.
+And `webglUtils.setBuffersAndAttributes` uses that object to set all the
+buffers and attributes.
 
-Finally we can go what I consider possibly too far. Given `position` almost always has 3 components (x, y, z)
-and `texcoords` almost always 2, indices 3, and normals 3, we can just let the system guess the number
-of components.
+Finally we can go what I consider possibly too far.  Given `position`
+almost always has 3 components (x, y, z) and `texcoords` almost always 2,
+indices 3, and normals 3, we can just let the system guess the number of
+components.
 
     // an indexed quad
     var arrays = {
@@ -376,17 +382,20 @@ And that version
 
 {{{example url="../webgl-less-code-more-fun-quad-guess.html" }}}
 
-I'm not sure I personally like that style. Guessing bugs me because it can guess wrong. For example
-I might choose to stick an extra set of texture coordinates in my texcoord attribute and it will
-guess 2 and be wrong. Of course if it guesses wrong you can just specify it like the example above.
-I guess I worry if the guessing code changes people's stuff might break. It's up to you. Some people
-like things to be what they consider as simple as possible.
+I'm not sure I personally like that style.  Guessing bugs me because it
+can guess wrong.  For example I might choose to stick an extra set of
+texture coordinates in my texcoord attribute and it will guess 2 and be
+wrong.  Of course if it guesses wrong you can just specify it like the
+example above.  I guess I worry if the guessing code changes people's
+stuff might break.  It's up to you.  Some people like things to be what
+they consider as simple as possible.
 
-Why don't we look at the attributes on the shader program to figure out the number of components?
-That's because it's common to supply 3 components (x, y, z) from a buffer but use a `vec4` in
-the shader. For attibutes WebGL will set `w = 1` automatically. But that means we can't easily
-know the user's intent since what they declared in their shader might not match the number of
-components they provide.
+Why don't we look at the attributes on the shader program to figure out
+the number of components?  That's because it's common to supply 3
+components (x, y, z) from a buffer but use a `vec4` in the shader.  For
+attibutes WebGL will set `w = 1` automatically.  But that means we can't
+easily know the user's intent since what they declared in their shader
+might not match the number of components they provide.
 
 Looking for more patterns there's this
 
@@ -406,21 +415,26 @@ Which returns something like
        attribSetters: ...,     // setters as returned from createAttribSetters,
     }
 
-And that's yet one more minor simplification. This will come in handy once we start using
-multiple programs since it automatically keeps the setters with the program they are associated with.
+And that's yet one more minor simplification.  This will come in handy
+once we start using multiple programs since it automatically keeps the
+setters with the program they are associated with.
 
 {{{example url="../webgl-less-code-more-fun-quad-programinfo.html" }}}
 
-Anyway, this is the style I try to write my own WebGL programs.
-For the lessons on these tutorials though I've felt like I have to use the standard **verbose**
-ways so people don't get confused about what is WebGL and what is my own style. At some point
-though showing all the steps gets in the way of the point so going forward some lessons will
-be using this style.
+Anyway, this is the style I try to write my own WebGL programs.  For the
+lessons on these tutorials though I've felt like I have to use the
+standard **verbose** ways so people don't get confused about what is WebGL
+and what is my own style.  At some point though showing all the steps gets
+in the way of the point so going forward some lessons will be using this
+style.
 
-Feel free to use this style in your own code. The functions `createUniformSetters`, `createAttributeSetters`,
-`createBufferInfoFromArrays`, `setUniforms`, and `setBuffersAndAttributes` are included in the
+Feel free to use this style in your own code.  The functions
+`createUniformSetters`, `createAttributeSetters`,
+`createBufferInfoFromArrays`, `setUniforms`, and `setBuffersAndAttributes`
+are included in the
 [`webgl-utils.js`](https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js)
-file used by all the samples. If you want something slightly more organized check out [TWGL.js](http://twgljs.org).
+file used by all the samples.  If you want something slightly more
+organized check out [TWGL.js](http://twgljs.org).
 
 Next up, [drawing multiple things](webgl-drawing-multiple-things.html).
 

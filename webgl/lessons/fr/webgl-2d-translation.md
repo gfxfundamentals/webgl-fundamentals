@@ -132,7 +132,8 @@ function creerGeometrie(gl) {
           30, 90,
           30, 90,
           67, 60,
-          67, 90]),
+          67, 90,
+      ]),
       gl.STATIC_DRAW);
 }
 </pre>

@@ -81,7 +81,7 @@ require([
     var object = {
       uniforms: {
         u_colorMult: [Math.random(), Math.random(), Math.random(), 1],
-        u_matrix: math3d.makeIdentity(),
+        u_matrix: math3d.m4.identity(),
       },
       translation: [rand(-100, 100), rand(-100, 100), rand(-150, -50)],
       xRotationSpeed: rand(0.8, 1.2),
@@ -106,18 +106,18 @@ require([
   var sortedObjectsToDraw = objectsToDraw.slice().sort(sortByBufferInfoThenProgramInfo);
 
   function computeMatrix(viewMatrix, projectionMatrix, translation, xRotation, yRotation) {
-    var xRotationMatrix = math3d.makeXRotation(xRotation);
-    var yRotationMatrix = math3d.makeYRotation(yRotation);
-    var translationMatrix = math3d.makeTranslation(
+    var xRotationMatrix = math3d.m4.xRotation(xRotation);
+    var yRotationMatrix = math3d.m4.yRotation(yRotation);
+    var translationMatrix = math3d.m4.translation(
         translation[0],
         translation[1],
         translation[2]);
-    var matrix = math3d.makeIdentity();
-    matrix = math3d.matrixMultiply(matrix, xRotationMatrix);
-    matrix = math3d.matrixMultiply(matrix, yRotationMatrix);
-    var worldMatrix = math3d.matrixMultiply(matrix, translationMatrix);
-    matrix = math3d.matrixMultiply(worldMatrix, viewMatrix);
-    return math3d.matrixMultiply(matrix, projectionMatrix);
+    var matrix = math3d.m4.identity();
+    matrix = math3d.m4.multiply(xRotationMatrix, matrix);
+    matrix = math3d.m4.multiply(yRotationMatrix, matrix);
+    var worldMatrix = math3d.m4.multiply(translationMatrix, matrix);
+    matrix = math3d.m4.multiply(viewMatrix, worldMatrix);
+    return math3d.m4.multiply(projectionMatrix, matrix);
   }
 
   function drawObjects(objectsToDraw) {

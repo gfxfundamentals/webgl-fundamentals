@@ -1,8 +1,8 @@
 Title: Les bases
 Description: Première leçon pour WebGL en démarrant par les bases
 
-WebGL rend possible l'affichage d'incroyables rendus graphiques 3D en temps réel dans le navigateur, 
-mais ce que beaucoup de gens ignorent c'est que 
+WebGL rend possible l'affichage d'incroyables rendus graphiques 3D en temps réel dans le navigateur,
+mais ce que beaucoup de gens ignorent c'est que
 [WebGL est en fait une API de pixélisation, pas une API 3D](webgl-2d-vs-3d-library.html).
 
 Laissez-moi m'expliquer.
@@ -12,7 +12,7 @@ Votre travail de développeur WebGL est de fournir ces deux jeux de données.
 Pour cela vous définissez deux "shaders". Un shader de vertex, qui va fournir les coordonnées de l'espace
 de projection, et un shader de pixel (on dit aussi shader de fragment), qui va fournir les couleurs.
 
-Dans l'espace de projection, les coordonnées vont toujours de -1 à +1 quelle que soit la taille du canvas. 
+Dans l'espace de projection, les coordonnées vont toujours de -1 à +1 quelle que soit la taille du canvas.
 Voici un simple exemple pour illustrer un code WebGL dans sa forme la plus simple.
 
     // Création du contexte WebGL
@@ -68,14 +68,14 @@ Ce code va rendre un rectangle vert de la taille du canvas. Le voici
 
 Pas très excitant :-p
 
-À nouveau, l'espace de rendu va toujours de -1 à +1 quelle que soit la taille du canvas. 
-Dans le cas précédent on ne fait rien d'autre qu'envoyer nos données de position directement. 
-Puisque les coordonnées correspondent déjà à l'espace de projection il n'y a rien d'autre à faire. 
-*Si on veut de la 3D c'est à nous d'écrire des shaders qui convertissent la 3D en espace de projection, 
+À nouveau, l'espace de rendu va toujours de -1 à +1 quelle que soit la taille du canvas.
+Dans le cas précédent on ne fait rien d'autre qu'envoyer nos données de position directement.
+Puisque les coordonnées correspondent déjà à l'espace de projection il n'y a rien d'autre à faire.
+*Si on veut de la 3D c'est à nous d'écrire des shaders qui convertissent la 3D en espace de projection,
 parce que WebGL n'est qu'une interface de pixelisation*.
 
-Pour de la 2D on travaillera plutôt en pixels qu'en espace de projection, donc changeons le shader pour 
-pouvoir fournir des rectangles en pixels et les faire convertir en espace de projection à notre place. 
+Pour de la 2D on travaillera plutôt en pixels qu'en espace de projection, donc changeons le shader pour
+pouvoir fournir des rectangles en pixels et les faire convertir en espace de projection à notre place.
 Voici le nouveau shader de vertex
 
     <script id="2d-vertex-shader" type="x-shader/x-vertex">
@@ -116,7 +116,7 @@ Et le voilà
 
 {{{example url="../webgl-2d-rectangle.html" }}}
 
-À noter que le rectangle est proche du bas du canvas. WebGL considère que le coin 
+À noter que le rectangle est proche du bas du canvas. WebGL considère que le coin
 en bas à gauche est l'origine des coordonnées (0, 0). Si on veut se mettre dans le système
 de coordonnées traditionnel des APIs graphiques 2D, avec l'origine en haut à gauche, il
 suffit d'inverser la coordonnée y.
@@ -196,7 +196,7 @@ Bien que ça puisse devenir plus compliqué avec la 3D cette complication
 est apportée par le développeur, qui va exiger des shaders plus complexes.
 WebGL en lui-même est en 2D, et plutôt simple.
 
-Si vous êtes 100% nouveau sur WebGL et n'avez pas d'idée de ce que sont GLSL, 
+Si vous êtes 100% nouveau sur WebGL et n'avez pas d'idée de ce que sont GLSL,
 les shaders ou le fonctionnement d'une carte graphique, lisez [Comment ça marche](webgl-how-it-works.html).
 
 Autrement à ce stade vous avez deux choix. Si le traitement d'image vous intéresse
@@ -208,14 +208,14 @@ rotations, changement d'échelle, alors [c'est par ici](webgl-2d-translation.htm
 <h3>Qu'est-ce que type="x-shader/x-vertex" et type="x-shader/x-fragment" signifient ?</h3>
 <p>
 Les balises <code>&lt;script&gt;</code> sont par défaut supposées écrites en javascript.
-Vous pouvez n'ajouter aucun type ou bien ajouter <code>type="javascript"</code> ou 
-<code>type="text/javascript"</code> et le navigateur interpéte le contenu en javascript. 
+Vous pouvez n'ajouter aucun type ou bien ajouter <code>type="javascript"</code> ou
+<code>type="text/javascript"</code> et le navigateur interpéte le contenu en javascript.
 Si vous ajoutez n'importe quoi d'autre, le navigateur ignore le contenu de la balise.
 En d'autres termes <code>x-shader/x-vertex</code>
 et <code>x-shader/x-fragment</code> n'ont pas de sens pour le navigateur.</p>
 <p>
-On peut exploiter ce comportement pour externaliser les shaders dans des balises scripts. 
-C'est pratique parce qu'autrement on est obligé d'écrire de longues chaînes de caractères 
+On peut exploiter ce comportement pour externaliser les shaders dans des balises scripts.
+C'est pratique parce qu'autrement on est obligé d'écrire de longues chaînes de caractères
 comme</p>
 <pre class="prettyprint">
   var codeDuShader =

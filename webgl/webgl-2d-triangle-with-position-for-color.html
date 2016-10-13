@@ -22,9 +22,37 @@ Drag sliders to translate, rotate, and scale.
   </div>
 </div>
 </body>
+<!-- vertex shader -->
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+attribute vec2 a_position;
+
+uniform mat3 u_matrix;
+
+varying vec4 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+
+  // Convert from clipspace to colorspace.
+  // Clipspace goes -1.0 to +1.0
+  // Colorspace goes from 0.0 to 1.0
+  v_color = gl_Position * 0.5 + 0.5;
+}
+</script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+varying vec4 v_color;
+
+void main() {
+  gl_FragColor = v_color;
+}
+</script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-2d-math.js"></script>
+<script src="resources/2d-math.js"></script>
 <script>
 "use strict";
 
@@ -41,19 +69,16 @@ function main() {
 
   // setup GLSL program
   var program = webglUtils.createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
-  gl.useProgram(program);
 
   // look up where the vertex data needs to go.
-  var positionLocation = gl.getAttribLocation(program, "a_position");
+  var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
 
   // lookup uniforms
   var matrixLocation = gl.getUniformLocation(program, "u_matrix");
 
   // Create a buffer.
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(positionLocation);
-  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+  var positionBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   // Set Geometry.
   setGeometry(gl);
@@ -101,26 +126,44 @@ function main() {
     // Clear the canvas.
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Compute the matrices
-    var projectionMatrix = make2DProjection(gl.canvas.clientWidth, gl.canvas.clientHeight);
-    var translationMatrix = makeTranslation(translation[0], translation[1]);
-    var rotationMatrix = makeRotation(angleInRadians);
-    var scaleMatrix = makeScale(scale[0], scale[1]);
+    // Tell it to use our program (pair of shaders)
+    gl.useProgram(program);
 
-    // Multiply the matrices.
-    var matrix = matrixMultiply(scaleMatrix, rotationMatrix);
-    matrix = matrixMultiply(matrix, translationMatrix);
-    matrix = matrixMultiply(matrix, projectionMatrix);
+    // Turn on the attribute
+    gl.enableVertexAttribArray(positionAttributeLocation);
+
+    // Bind the position buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 2;          // 2 components per iteration
+    var type = gl.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        positionAttributeLocation, size, type, normalize, stride, offset)
+
+    // Compute the matrix
+    var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
+    matrix = m3.translate(matrix, translation[0], translation[1]);
+    matrix = m3.rotate(matrix, angleInRadians);
+    matrix = m3.scale(matrix, scale[0], scale[1]);
 
     // Set the matrix.
     gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
     // Draw the geometry.
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = 3;
+    gl.drawArrays(primitiveType, offset, count);
   }
 }
 
 // Fill the buffer with the values that define a triangle.
+// Note, will put the values in whatever buffer is currently
+// bound to the ARRAY_BUFFER bind point
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -131,35 +174,7 @@ function setGeometry(gl) {
       gl.STATIC_DRAW);
 }
 
-window.addEventListener('load', main);
-</script>
-<!-- vertex shader -->
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
-attribute vec2 a_position;
-
-uniform mat3 u_matrix;
-
-varying vec4 v_color;
-
-void main() {
-  // Multiply the position by the matrix.
-  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
-
-  // Convert from clipspace to colorspace.
-  // Clipspace goes -1.0 to +1.0
-  // Colorspace goes from 0.0 to 1.0
-  v_color = gl_Position * 0.5 + 0.5;
-}
-</script>
-<!-- fragment shader -->
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
-precision mediump float;
-
-varying vec4 v_color;
-
-void main() {
-  gl_FragColor = v_color;
-}
+main();
 </script>
 </html>
 

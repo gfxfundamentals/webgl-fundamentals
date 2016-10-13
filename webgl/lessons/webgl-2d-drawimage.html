@@ -122,7 +122,7 @@ function drawImage(tex, texWidth, texHeight, dstX, dstY) {
   gl.bindTexture(gl.TEXTURE_2D, tex);
 
   // this matirx will convert from pixels to clip space
-  var projectionMatrix = make2DProjection(canvas.width, canvas.height, 1);
+  var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
   // this matrix will scale our 1 unit quad
   // from 1 unit to texWidth, texHeight units
@@ -258,7 +258,7 @@ requestAnimationFrame(render);
   gl.bindTexture(gl.TEXTURE_2D, tex);
 
   // this matirx will convert from pixels to clip space
-  var projectionMatrix = make2DProjection(canvas.width, canvas.height, 1);
+  var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
   // this matrix will scale our 1 unit quad
 *  // from 1 unit to dstWidth, dstHeight units
@@ -338,7 +338,7 @@ what we&#39;ve already done for the positions.</p>
   gl.bindTexture(gl.TEXTURE_2D, tex);
 
   // this matirx will convert from pixels to clip space
-  var projectionMatrix = make2DProjection(canvas.width, canvas.height, 1);
+  var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
   // this matrix will scale our 1 unit quad
   // from 1 unit to dstWidth, dstHeight units
@@ -409,7 +409,7 @@ In the canvas 2D api these are errors at best or undefined behavior at worst.</p
 *  var texPostRotationMatrix = makeTranslation(texWidth * 0.5, texHeight * 0.5, 0);
 *
 *  // multiply them together
-*  var texMatrix = makeIdentity();
+*  var texMatrix = m4.identity();
 *  texMatrix = matrixMultiply(texMatrix, texScaleMatrix);
 *  texMatrix = matrixMultiply(texMatrix, texTranslationMatrix);
 *  texMatrix = matrixMultiply(texMatrix, texPreRotationMatrix);

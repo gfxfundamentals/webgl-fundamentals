@@ -450,7 +450,7 @@ void main() {
 <pre><code>var worldViewMatrix = matrixMultiply(worldMatrix, viewMatrix);
 var worldViewProjectionMatrix = matrixMultiply(worldViewMatrix, projectionMatrix);
 +var worldInverseMatrix = makeInverse(worldMatrix);
-+var worldInverseTransposeMatrix = makeTranspose(worldInverseMatrix);
++var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
 // Set the matrices
 gl.uniformMatrix4fv(
@@ -461,7 +461,7 @@ gl.uniformMatrix4fv(
 +    worldInverseTransposeLocation, false,
 +    worldInverseTransposeMatrix);
 </code></pre><p>and here&#39;s the code to transpose a matrix</p>
-<pre><code>function makeTranspose(m) {
+<pre><code>function m4.transpose(m) {
   return [
     m[0], m[4], m[8], m[12],
     m[1], m[5], m[9], m[13],

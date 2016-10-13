@@ -22,7 +22,7 @@
 </style>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/3d-math.js"></script>
 </head>
 <body>
 <div class="description">
@@ -90,12 +90,8 @@ function main() {
   timeElement.appendChild(timeNode);
   angleElement.appendChild(angleNode);
 
-  gl.enable(gl.CULL_FACE);
-  gl.enable(gl.DEPTH_TEST);
-
   // setup GLSL program
   var program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
-  gl.useProgram(program);
 
   // look up where the vertex data needs to go.
   var positionLocation = gl.getAttribLocation(program, "a_position");
@@ -104,24 +100,18 @@ function main() {
   // lookup uniforms
   var matrixLocation = gl.getUniformLocation(program, "u_matrix");
 
-  // Create a buffer.
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(positionLocation);
-  gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
-
-  // Set Geometry.
+  // Create a buffer to put positions in
+  var positionBuffer = gl.createBuffer();
+  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  // Put geometry data into buffer
   setGeometry(gl);
 
-  // Create a buffer for colors.
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.enableVertexAttribArray(colorLocation);
-
-  // We'll supply RGB as bytes.
-  gl.vertexAttribPointer(colorLocation, 3, gl.UNSIGNED_BYTE, true, 0, 0);
-
-  // Set Colors.
+  // Create a buffer to put colors in
+  var colorBuffer = gl.createBuffer();
+  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = colorBuffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  // Put geometry data into buffer
   setColors(gl);
 
   function radToDeg(r) {
@@ -134,7 +124,6 @@ function main() {
 
   var translation = [0, 30, -360];
   var rotation = [degToRad(190), degToRad(0), degToRad(0)];
-  var scale = [1, 1, 1];
   var fieldOfViewRadians = degToRad(60);
   var rotationSpeed = 1.2;
 
@@ -172,30 +161,59 @@ function main() {
     // Clear the canvas AND the depth buffer.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    // Turn on culling. By default backfacing triangles
+    // will be culled.
+    gl.enable(gl.CULL_FACE);
+
+    // Enable the depth buffer
+    gl.enable(gl.DEPTH_TEST);
+
+    // Tell it to use our program (pair of shaders)
+    gl.useProgram(program);
+
+    // Turn on the position attribute
+    gl.enableVertexAttribArray(positionLocation);
+
+    // Bind the position buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 3;          // 3 components per iteration
+    var type = gl.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        positionLocation, size, type, normalize, stride, offset)
+
+    // Turn on the color attribute
+    gl.enableVertexAttribArray(colorLocation);
+
+    // Bind the color buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+
+    // Tell the attribute how to get data out of colorBuffer (ARRAY_BUFFER)
+    var size = 3;                 // 3 components per iteration
+    var type = gl.UNSIGNED_BYTE;  // the data is 8bit unsigned values
+    var normalize = true;         // normalize the data (convert from 0-255 to 0-1)
+    var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;               // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        colorLocation, size, type, normalize, stride, offset)
+
     // Compute the matrices
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
-        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+        m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     var spread = 170;
     for (var yy = -1; yy <= 1; ++yy) {
       for (var xx = -2; xx <= 2; ++xx) {
-        var translationMatrix =
-            makeTranslation(translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
-        var rotationXMatrix = makeXRotation(rotation[0]);
-        var rotationYMatrix = makeYRotation(rotation[1] + yy * xx * 0.2);
-        var rotationZMatrix = makeZRotation(rotation[2]);
-        var scaleMatrix = makeScale(scale[0], scale[1], scale[2]);
-
-        // Multiply the matrices.
-
-        var matrix = makeIdentity();
-        matrix = matrixMultiply(matrix, scaleMatrix);
-        matrix = matrixMultiply(matrix, rotationZMatrix);
-        matrix = matrixMultiply(matrix, rotationYMatrix);
-        matrix = matrixMultiply(matrix, rotationXMatrix);
-        matrix = matrixMultiply(matrix, translationMatrix);
-        matrix = matrixMultiply(matrix, projectionMatrix);
+        var matrix =
+            m4.translate(projectionMatrix, translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
+        matrix = m4.xRotate(matrix, rotation[0]);
+        matrix = m4.yRotate(matrix, rotation[1] + yy * xx * 0.2);
+        matrix = m4.zRotate(matrix, rotation[2]);
 
         // Set the matrix.
         gl.uniformMatrix4fv(matrixLocation, false, matrix);

@@ -16,7 +16,7 @@
 </style>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
-<script src="resources/webgl-3d-math.js"></script>
+<script src="resources/3d-math.js"></script>
 <script src="resources/primitives.js"></script>
 </head>
 <body>
@@ -111,7 +111,7 @@ function main() {
   // Create data for 'F'
   var fBufferInfo = primitives.create3DFBufferInfo(gl);
   // Create a unit quad for the 'text'
-  var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, makeXRotation(Math.PI / 2));
+  var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, m4.xRotation(Math.PI / 2));
 
   // setup GLSL programs
   var fProgramInfo = webglUtils.createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
@@ -131,11 +131,11 @@ function main() {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
   var fUniforms = {
-    u_matrix: makeIdentity(),
+    u_matrix: m4.identity(),
   };
 
   var textUniforms = {
-    u_matrix: makeIdentity(),
+    u_matrix: m4.identity(),
     u_texture: textTex,
   };
 
@@ -158,13 +158,13 @@ function main() {
   requestAnimationFrame(drawScene);
 
   // Draw the scene.
-  function drawScene(clock) {
+  function drawScene(now) {
     // Convert to seconds
-    clock *= 0.001;
+    now *= 0.001;
     // Subtract the previous time from the current time
-    var deltaTime = clock - then;
+    var deltaTime = now - then;
     // Remember the current time for the next frame.
-    then = clock;
+    then = now;
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -185,55 +185,43 @@ function main() {
     // Compute the matrices used for all objects
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix =
-        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+        m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
     var cameraRadius = 360;
-    var cameraPosition = [Math.cos(clock) * cameraRadius, 0, Math.sin(clock) * cameraRadius];
+    var cameraPosition = [Math.cos(now) * cameraRadius, 0, Math.sin(now) * cameraRadius];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
-    var cameraMatrix = makeLookAt(cameraPosition, target, up);
-    var viewMatrix = makeInverse(cameraMatrix);
-    var viewProjectionMatrix = matrixMultiply(viewMatrix, projectionMatrix);
+    var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+    var viewMatrix = m4.inverse(cameraMatrix);
 
     var textPositions = [];
+
+    // setup to draw the 'F'
+    gl.useProgram(fProgramInfo.program);
+
+    webglUtils.setBuffersAndAttributes(gl, fProgramInfo, fBufferInfo);
 
     // draw the Fs.
     var spread = 170;
     for (var yy = -1; yy <= 1; ++yy) {
       for (var xx = -2; xx <= 2; ++xx) {
-        var preTranslationMatrix =
-            makeTranslation(-50, -75, 0);
-        var translationMatrix =
-            makeTranslation(translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
-        var rotationXMatrix = makeXRotation(rotation[0]);
-        var rotationYMatrix = makeYRotation(rotation[1] + yy * xx * 0.2);
-        var rotationZMatrix = makeZRotation(rotation[2] + clock + (yy * 3 + xx) * 0.1);
-        var scaleMatrix = makeScale(scale[0], scale[1], scale[2]);
+        var fViewMatrix = m4.translate(viewMatrix,
+            translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
+        fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
+        fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
+        fViewMatrix = m4.zRotate(fViewMatrix, rotation[2] + now + (yy * 3 + xx) * 0.1);
+        fViewMatrix = m4.scale(fViewMatrix, scale[0], scale[1], scale[2]);
+        fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
+        textPositions.push([fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]]);
 
-        // Multiply the matrices.
+        fUniforms.u_matrix = m4.multiply(projectionMatrix, fViewMatrix);
 
-        var matrix = makeIdentity();
-        matrix = matrixMultiply(matrix, preTranslationMatrix);
-        matrix = matrixMultiply(matrix, scaleMatrix);
-        matrix = matrixMultiply(matrix, rotationZMatrix);
-        matrix = matrixMultiply(matrix, rotationYMatrix);
-        matrix = matrixMultiply(matrix, rotationXMatrix);
-        matrix = matrixMultiply(matrix, translationMatrix);
-        matrix = matrixMultiply(matrix, viewMatrix);
-        textPositions.push([matrix[12], matrix[13], matrix[14]]);  // remember the position for the text
-        matrix = matrixMultiply(matrix, projectionMatrix);
-
-        // setup to draw the 'F'
-        gl.useProgram(fProgramInfo.program);
-
-        webglUtils.setBuffersAndAttributes(gl, fProgramInfo, fBufferInfo);
-
-        copyMatrix(matrix, fUniforms.u_matrix);
         webglUtils.setUniforms(fProgramInfo, fUniforms);
 
         // Draw the geometry.
         gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+
       }
     }
 
@@ -241,30 +229,28 @@ function main() {
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.depthMask(false);
 
+    // setup to draw the text.
+    gl.useProgram(textProgramInfo.program);
+
+    webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
+
     textPositions.forEach(function(pos) {
       // draw the text
 
-      // use just the position of the 'F' for the text
+      // use just the view position of the 'F' for the text
 
       // because pos is in view space that means it's a vector from the eye to
       // some position. So translate along that vector back toward the eye some distance
-      var fromEye = normalize(pos);
+      var fromEye = m4.normalize(pos);
       var amountToMoveTowardEye = 150;  // because the F is 150 units long
       var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
       var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
       var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
+      var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+      // scale the F to the size we need it.
+      textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 
-      var textMatrix = makeIdentity();
-      textMatrix = matrixMultiply(textMatrix, makeScale(textWidth, textHeight, 1));
-      textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
-      textMatrix = matrixMultiply(textMatrix, projectionMatrix);
-
-      // setup to draw the text.
-      gl.useProgram(textProgramInfo.program);
-
-      webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
-
-      copyMatrix(textMatrix, textUniforms.u_matrix);
+      m4.copy(textMatrix, textUniforms.u_matrix);
       webglUtils.setUniforms(textProgramInfo, textUniforms);
 
       // Draw the text.
@@ -278,5 +264,3 @@ function main() {
 main();
 </script>
 </html>
-
-

@@ -146,8 +146,8 @@ anything like that as it would clutter the example. First let&#39;s make a few f
 to help manage nodes. First we&#39;ll make a node class</p>
 <pre><code>var Node = function() {
   this.children = [];
-  this.localMatrix = makeIdentity();
-  this.worldMatrix = makeIdentity();
+  this.localMatrix = m4.identity();
+  this.worldMatrix = m4.identity();
 };
 </code></pre><p>Let&#39;s give it a way to set the parent of a node.</p>
 <pre><code>Node.prototype.setParent = function(parent) {
@@ -379,8 +379,8 @@ other values. Let&#39;s change the <code>Node</code> definition to have a <code>
 ask the <code>source</code> to give us a local matrix.</p>
 <pre><code>*var Node = function(source) {
   this.children = [];
-  this.localMatrix = makeIdentity();
-  this.worldMatrix = makeIdentity();
+  this.localMatrix = m4.identity();
+  this.worldMatrix = m4.identity();
 +  this.source = source;
 };
 
