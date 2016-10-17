@@ -830,6 +830,15 @@
     return dst;
   }
 
+  console.log([
+    "webgl-3d-math.js is deprecated. Please use 3d-math.js.",
+    "",
+    "Note: m4.multiply's multiplication order is reversed.",
+    "In other words m4.multiply(a, b) needs to be m4.multiply(b, a)",
+    "In math terms the old multiply multiplied the 2nd argument on the left of the first.",
+    "The new one multiplies the 2nd argument on the right of the the first.",
+  ].join("\n"));
+
   return {
     copyMatrix: copyMatrix,
     makeLookAt: makeLookAt,
