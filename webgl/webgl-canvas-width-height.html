@@ -36,14 +36,32 @@ h1 {
 <canvas id="canvas" width="400" height="300"></canvas>
 <div class="description">resize this window tall and thin or short and wide.<br/>Notice the F does NOT keep the correct aspect</div>
 </body>
+<!-- vertex shader -->
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+attribute vec2 a_position;
+
+uniform mat3 u_matrix;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+}
+</script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform vec4 u_color;
+
+void main() {
+   gl_FragColor = u_color;
+}
+</script>
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script>
 <script src="resources/2d-math.js"></script>
 <script>
 "use strict";
-
-window.onload = main;
-
 function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
@@ -159,27 +177,7 @@ function setGeometry(gl) {
       gl.STATIC_DRAW);
 }
 
-</script>
-<!-- vertex shader -->
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
-attribute vec2 a_position;
-
-uniform mat3 u_matrix;
-
-void main() {
-  // Multiply the position by the matrix.
-  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
-}
-</script>
-<!-- fragment shader -->
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
-precision mediump float;
-
-uniform vec4 u_color;
-
-void main() {
-   gl_FragColor = u_color;
-}
+main();
 </script>
 </html>
 

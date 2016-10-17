@@ -181,11 +181,11 @@ function renderSceneGraph(root) {
   }
 
   function drawScene() {
-    webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
     ctx.translate(ctx.canvas.width / 2, 40);
-//    var scale = window.devicePixelRatio * ctx.canvas.height / 500;
+//    var scale = window.devicePixelRatio * ctx.canvas.height / 1000;
 //    ctx.scale(scale, scale);
     ctx.font = "12px sans-serif";
     ctx.textAlign = "center";

@@ -54,11 +54,11 @@ And we update the JavaScript so that we can pass those 2 values in.
 
       ...
 
-      var rotationLocation = gl.getUniformLocation(program, "u_rotation");
+    +  var rotationLocation = gl.getUniformLocation(program, "u_rotation");
 
       ...
 
-      var rotation = [0, 1];
+    +  var rotation = [0, 1];
 
       ...
 
@@ -70,8 +70,8 @@ And we update the JavaScript so that we can pass those 2 values in.
         // Set the translation.
         gl.uniform2fv(translationLocation, translation);
 
-        // Set the rotation.
-        gl.uniform2fv(rotationLocation, rotation);
+    +    // Set the rotation.
+    +    gl.uniform2fv(rotationLocation, rotation);
 
         // Draw the geometry.
         var primitiveType = gl.TRIANGLES;

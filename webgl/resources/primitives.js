@@ -42,11 +42,11 @@
     // Browser globals
     root.primitives = factory.call(root);
   }
-}(this, function(webglUtils, math3d) {
+}(this, function(webglUtils, m4) {
   "use strict";
 
   var webglUtils = webglUtils || this.webglUtils;
-  var m4 = m4 || this.m4;
+  var m4 = m4 || this.m4 || math3d;
 
   function allButIndices(name) {
     return name !== "indices";

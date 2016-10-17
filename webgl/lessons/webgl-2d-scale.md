@@ -37,11 +37,11 @@ and we add the JavaScript needed to set the scale when we draw.
 ```
   ...
 
-  var scaleLocation = gl.getUniformLocation(program, "u_scale");
++  var scaleLocation = gl.getUniformLocation(program, "u_scale");
 
   ...
 
-  var scale = [1, 1];
++  var scale = [1, 1];
 
   ...
 
@@ -56,8 +56,8 @@ and we add the JavaScript needed to set the scale when we draw.
     // Set the rotation.
     gl.uniform2fv(rotationLocation, rotation);
 
-    // Set the scale.
-    gl.uniform2fv(scaleLocation, scale);
++    // Set the scale.
++    gl.uniform2fv(scaleLocation, scale);
 
     // Draw the geometry.
     var primitiveType = gl.TRIANGLES;
