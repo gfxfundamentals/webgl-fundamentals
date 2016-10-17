@@ -194,7 +194,7 @@
     return d * Math.PI / 180;
   }
 
-  console.log([
+  console.log([  // eslint-disable-line
     "webgl-2d-math.js is deprecated. Please use 2d-math.js.",
     "",
     "Note: m3.multiply's multiplication order is reversed.",

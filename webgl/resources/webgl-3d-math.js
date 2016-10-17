@@ -830,7 +830,7 @@
     return dst;
   }
 
-  console.log([
+  console.log([  // eslint-disable-line
     "webgl-3d-math.js is deprecated. Please use 3d-math.js.",
     "",
     "Note: m4.multiply's multiplication order is reversed.",
