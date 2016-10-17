@@ -67,47 +67,86 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>Before we move on to 3D let&#39;s stick with 2D for a little while longer. Bear with me please. This article might seem exceedingly obvious to some but I&#39;ll build up to a point in a few articles.</p>
-<p>This article is a continuation of a series starting with <a href="webgl-fundamentals.html">WebGL Fundamentals</a>. If you haven&#39;t read them I suggest you read at least the first one, then come back here.</p>
-<p>Translation is some fancy math name that basically means &quot;to move&quot; something. I suppose moving a sentence from English to Japanese fits as well but in this case we&#39;re talking about moving geometry. Using the sample code we ended up with in <a href="webgl-fundamentals.html">the first post</a> you could easily translate our rectangle just by changing the values passed to setRectangle right? Here&#39;s a sample based on our <a href="webgl-fundamentals.html">previous sample</a>.
-<!--more--></p>
-<pre class="prettyprint showlinemods">
-  // First let's make some variables
-  // to hold the translation, width and height of the rectangle
-  var translation = [0, 0];
+      <p>Before we move on to 3D let&#39;s stick with 2D for a little while longer.
+Bear with me please.  This article might seem exceedingly obvious to some
+but I&#39;ll build up to a point in a few articles.</p>
+<p>This article is a continuation of a series starting with <a href="webgl-fundamentals.html">WebGL
+Fundamentals</a>.  If you haven&#39;t read them I
+suggest you read at least the first one, then come back here.</p>
+<p>Translation is some fancy math name that basically means &quot;to move&quot;
+something.  I suppose moving a sentence from English to Japanese fits as
+well but in this case we&#39;re talking about moving geometry.  Using the
+sample code we ended up with in <a href="webgl-fundamentals.html">the first post</a>
+you could easily translate our rectangle just by changing the values
+passed to setRectangle right?  Here&#39;s a sample based on our <a href="webgl-fundamentals.html">previous
+sample</a>.</p>
+<p>First let&#39;s make some variables to hold the translation, width, height and
+color of the rectangle</p>
+<pre><code>  var translation = [0, 0];
   var width = 100;
   var height = 30;
-
-  // Then let's make a function to
-  // re-draw everything. We can call this
-  // function after we update the translation.
-
-  // Draw a the scene.
+  var color = [Math.random(), Math.random(), Math.random(), 1];
+</code></pre><p>Then let&#39;s make a function to re-draw everything.  We can call this
+function after we update the translation.</p>
+<pre><code>  // Draw a the scene.
   function drawScene() {
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
     // Clear the canvas.
     gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // Tell it to use our program (pair of shaders)
+    gl.useProgram(program);
+
+    // Turn on the attribute
+    gl.enableVertexAttribArray(positionLocation);
+
+    // Bind the position buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
     // Setup a rectangle
     setRectangle(gl, translation[0], translation[1], width, height);
 
-    // Draw the rectangle.
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-  }
-</pre>
+    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 2;          // 2 components per iteration
+    var type = gl.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don&#39;t normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        positionLocation, size, type, normalize, stride, offset)
 
-<p>In the example below I&#39;ve attached a couple of sliders that will update <code>translation[0]</code> and <code>translation[1]</code> and call <code>drawScene</code> anytime they change. Drag the sliders to translate the rectangle.</p>
+    // set the resolution
+    gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
+
+    // set the color
+    gl.uniform4fv(colorLocation, color);
+
+    // Draw the rectangle.
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = 6;
+    gl.drawArrays(primitiveType, offset, count);
+  }
+</code></pre><p>In the example below I&#39;ve attached a couple of sliders that will update
+<code>translation[0]</code> and <code>translation[1]</code> and call <code>drawScene</code> anytime they
+change.  Drag the sliders to translate the rectangle.</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-rectangle-translate.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-translate.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
-<p>So far so good. But now imagine we wanted to do the same thing with a more complicated shape.</p>
+<p>So far so good. But now imagine we wanted to do the same thing with a
+more complicated shape.</p>
 <p>Let&#39;s say we wanted to draw an &#39;F&#39; that consists of 6 triangles like this.</p>
 <p><img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
-<p>Well, following our current code we&#39;d have to change <code>setRectangle</code> to something more like this.</p>
-<pre class="prettyprint showlinemods">
-// Fill the buffer with the values that define a letter 'F'.
+<p>Well, following our current code we&#39;d have to change <code>setRectangle</code> to
+something more like this.</p>
+<pre><code>// Fill the buffer with the values that define a letter &#39;F&#39;.
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -137,33 +176,33 @@ function setGeometry(gl, x, y) {
           x + thickness, y + thickness * 3,
           x + thickness, y + thickness * 3,
           x + width * 2 / 3, y + thickness * 2,
-          x + width * 2 / 3, y + thickness * 3]),
+          x + width * 2 / 3, y + thickness * 3,
+      ]),
       gl.STATIC_DRAW);
 }
-</pre>
-
-<p>You can hopefully see that&#39;s not going to scale well. If we want to draw some very complex geometry with hundreds or thousands of lines we&#39;d have to write some pretty complex code. On top of that, every time we draw JavaScript has to update all the points.</p>
-<p>There&#39;s a simpler way. Just upload the geometry and do the translation in the shader.</p>
+</code></pre><p>You can hopefully see that&#39;s not going to scale well.  If we want to draw
+some very complex geometry with hundreds or thousands of lines we&#39;d have
+to write some pretty complex code.  On top of that, every time we draw
+JavaScript has to update all the points.</p>
+<p>There&#39;s a simpler way. Just upload the geometry and do the translation in
+the shader.</p>
 <p>Here&#39;s the new shader</p>
-<pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
-uniform vec2 u_translation;
++uniform vec2 u_translation;
 
 void main() {
-   // Add in the translation.
-   vec2 position = a_position + u_translation;
+*   // Add in the translation.
+*   vec2 position = a_position + u_translation;
 
    // convert the rectangle from pixels to 0.0 to 1.0
-   vec2 zeroToOne = position / u_resolution;
+*   vec2 zeroToOne = position / u_resolution;
    ...
-</pre>
-
-<p>and we&#39;ll restructure the code a little. For one we only need to set the geometry once.</p>
-<pre class="prettyprint showlinemods">
-// Fill the buffer with the values that define a letter 'F'.
+</code></pre><p>and we&#39;ll restructure the code a little.  For one we only need to set the
+geometry once.</p>
+<pre><code>// Fill the buffer with the values that define a letter &#39;F&#39;.
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -194,41 +233,56 @@ function setGeometry(gl) {
       ]),
       gl.STATIC_DRAW);
 }
-</pre>
+</code></pre><p>Then we just need to update <code>u_translation</code> before we draw with the
+translation that we desire.</p>
+<pre><code>  ...
 
-<p>Then we just need to update <code>u_translation</code> before we draw with the translation that we desire.</p>
-<pre class="prettyprint showlinemods">
-  ...
   var translationLocation = gl.getUniformLocation(
-             program, "u_translation");
+             program, &quot;u_translation&quot;);
   ...
-  // Set Geometry.
-  setGeometry(gl);
-  ..
+
+  // Create a buffer to put positions in
+  var positionBuffer = gl.createBuffer();
+  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
++  // Put geometry data into buffer
++  setGeometry(gl);
+
+  ...
+
   // Draw scene.
   function drawScene() {
-    // Clear the canvas.
-    gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Set the translation.
-    gl.uniform2fv(translationLocation, translation);
+    ...
+
++    // Set the translation.
++    gl.uniform2fv(translationLocation, translation);
 
     // Draw the rectangle.
-    gl.drawArrays(gl.TRIANGLES, 0, 18);
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+*    var count = 18;
+    gl.drawArrays(primitiveType, offset, count);
   }
-</pre>
-
-<p>Notice <code>setGeometry</code> is called only once. It is no longer inside <code>drawScene</code>.</p>
-<p>And here&#39;s that example. Again, drag the sliders to update the translation.</p>
+</code></pre><p>Notice <code>setGeometry</code> is called only once.  It is no longer inside
+<code>drawScene</code>.</p>
+<p>And here&#39;s that example.  Again, drag the sliders to update the
+translation.</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-geometry-translate-better.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-translate-better.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
-<p>Now when we draw, WebGL is doing practically everything. All we are doing is setting a translation and asking it to draw. Even if our geometry had tens of thousands of points the main code would stay the same.</p>
-<p>If you want you can compare <a href="../webgl-2d-geometry-translate.html" target="_blank">the version that uses the complex JavaScript above to update all the points</a>.</p>
-<p>I hope this example was not too obvious. In the <a href="webgl-2d-rotation.html">next article we&#39;ll move on to rotation</a>.</p>
+<p>Now when we draw, WebGL is doing practically everything.  All we are doing
+is setting a translation and asking it to draw.  Even if our geometry had
+tens of thousands of points the main code would stay the same.</p>
+<p>If you want you can compare <a href="../webgl-2d-geometry-translate.html&quot;
+target=&quot;_blank">the version that uses the complex JavaScript
+above to update all the points</a>.</p>
+<p>I hope this example was not too obvious. On the other hand please
+keep reading as we&#39;ll eventually get to a much better way to do this.
+In the <a href="webgl-2d-rotation.html">next article we&#39;ll move on to rotation</a>.</p>
 
       <hr/>
       <div>

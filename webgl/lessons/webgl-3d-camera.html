@@ -67,15 +67,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>This post is a continuation of a series of posts about WebGL.
-The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
-the previous was about <a href="webgl-3d-perspective.html">3D perspective projection</a>.
-If you haven&#39;t read those please view them first.</p>
-<p>In the last post we had to move the F in front of the frustum because the <code>makePerspective</code>
-function expects it to sit at the origin (0, 0, 0) and that objects in the frustum are <code>-zNear</code>
-to <code>-zFar</code> in front of it.</p>
-<p>Moving stuff in front of the view doesn&#39;t seem the right way to go does it? In the real world
-you usually move your camera to take a picture of a building.</p>
+      <p>This post is a continuation of a series of posts about WebGL.  The first
+<a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was
+about <a href="webgl-3d-perspective.html">3D perspective projection</a>.  If you
+haven&#39;t read those please view them first.</p>
+<p>In the last post we had to move the F in front of the frustum because the
+<code>m4.perspective</code> function expects it to sit at the origin (0, 0, 0) and
+that objects in the frustum are <code>-zNear</code> to <code>-zFar</code> in front of it.</p>
+<p>Moving stuff in front of the view doesn&#39;t seem the right way to go does
+it?  In the real world you usually move your camera to take a picture of a
+building.</p>
 <p><div>
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
   <div class="webgl_center">moving the camera to the objects</div>
@@ -89,10 +90,10 @@ you usually move your camera to take a picture of a building.</p>
 </div>
 
 </p>
-<p>But in our last post we came up with a projection that requires things to be
-in front of the origin on the -Z axis.  To achieve this what we want to do
-is move the camera to the origin and move everything else the right amount
-so it&#39;s still in the same place <em>relative to the camera</em>.</p>
+<p>But in our last post we came up with a projection that requires things to
+be in front of the origin on the -Z axis.  To achieve this what we want to
+do is move the camera to the origin and move everything else the right
+amount so it&#39;s still in the same place <em>relative to the camera</em>.</p>
 <p><div>
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=2"></iframe>
   <div class="webgl_center">moving the objects to the view</div>
@@ -117,76 +118,74 @@ and rotate everything else the opposite amount which will effectively make
 it so the camera is at (0, 0, 0) and we&#39;ve moved everything in front of
 it.</p>
 <p>Let&#39;s make a 3D scene with a circle of &#39;F&#39;s like the diagrams above.</p>
-<p>Here&#39;s the code.</p>
-<pre class="prettyprint showlinemods">
-  var numFs = 5;
-  var radius = 200;
+<p>First, because we are drawing 5 things and they all use the same
+projection matrix we&#39;ll compute that outside the loop</p>
+<pre><code>
+// Compute the projection matrix
+var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+var zNear = 1;
+var zFar = 2000;
+var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
+</code></pre><p>Next we&#39;ll compute a camera matrix. This matrix represents the
+position and orientation of the camera in the world.  The code
+below makes a matrix that rotates the camera around the origin
+radius * 1.5 distance out and looking at the origin.</p>
+<pre><code>var numFs = 5;
+var radius = 200;
 
-  // Compute the projection matrix
-  var aspect = canvas.clientWidth / canvas.clientHeight;
-  var projectionMatrix =
-      makePerspective(fieldOfViewRadians, aspect, 1, 2000);
-
-  // Draw 'F's in a circle
-  for (var ii = 0; ii < numFs; ++ii) {
-    var angle = ii * Math.PI * 2 / numFs;
-
-    var x = Math.cos(angle) * radius;
-    var z = Math.sin(angle) * radius;
-    var translationMatrix = makeTranslation(x, 0, z);
-
-    // Multiply the matrices.
-    var matrix = translationMatrix;
-    matrix = matrixMultiply(matrix, projectionMatrix);
-
-    // Set the matrix.
-    gl.uniformMatrix4fv(matrixLocation, false, matrix);
-
-    // Draw the geometry.
-    gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
-  }
-</pre>
-
-<p>Just after we compute our projection matrix let&#39;s compute a camera that
-goes around the &#39;F&#39;s like in the diagram above.</p>
-<pre class="prettyprint showlinemods">
-  // Compute the camera's matrix
-  var cameraMatrix = makeTranslation(0, 0, radius * 1.5);
-  cameraMatrix = matrixMultiply(
-      cameraMatrix, makeYRotation(cameraAngleRadians));
-</pre>
-
-<p>We then compute a &quot;view matrix&quot; from the camera matrix.  A &quot;view matrix&quot;
+// Compute a matrix for the camera
+var cameraMatrix = m4.yRotation(cameraAngleRadians);
+cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
+</code></pre><p>We then compute a &quot;view matrix&quot; from the camera matrix.  A &quot;view matrix&quot;
 is the matrix that moves everything the opposite of the camera effectively
 making everything relative to the camera as though the camera was at the
-origin (0,0,0)</p>
-<pre class="prettyprint showlinemods">
-  // Make a view matrix from the camera matrix.
-  var viewMatrix = makeInverse(cameraMatrix);
-</pre>
+origin (0,0,0). We can do this by using an <code>inverse</code> function that computes
+the inverse matrix (the matrix that does the exact opposite of the supplied matrix).
+In this case the supplied matrix would move the camera to some position
+and orientation relative to the origin. The inverse of that is a matrix
+that will move everything else such that the camera is at the origin.</p>
+<pre><code>// Make a view matrix from the camera matrix.
+var viewMatrix = m4.inverse(cameraMatrix);
+</code></pre><p>Now we combine the view and projection matrix into a view projection matrix.</p>
+<pre><code>// Compute a view projection matrix
+var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+</code></pre><p>Finally we draw a circle of Fs. For each F we start with the
+view projection matrix, then rotate and move out radius units.</p>
+<pre><code>for (var ii = 0; ii &lt; numFs; ++ii) {
+  var angle = ii * Math.PI * 2 / numFs;
+  var x = Math.cos(angle) * radius;
+  var y = Math.sin(angle) * radius
 
-<p>Finally we need to apply the view matrix when we compute the matrix for each &#39;F&#39;</p>
-<pre class="prettyprint showlinemods">
-    // Multiply the matrices.
-    var matrix = translationMatrix;
-    matrix = matrixMultiply(matrix, viewMatrix);  // <=-- added
-    matrix = matrixMultiply(matrix, projectionMatrix);
-</pre>
+  // starting with the view projection matrix
+  // compute a matrix for the F
+  var matrix = m4.translate(viewProjectionMatrix, x, 0, y);
 
-<p>And voila! A camera that goes around the circle of &#39;F&#39;s. Drag the <code>cameraAngle</code> slider
-to move the camera around.</p>
+  // Set the matrix.
+  gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+  // Draw the geometry.
+  var primitiveType = gl.TRIANGLES;
+  var offset = 0;
+  var count = 16 * 6;
+  gl.drawArrays(primitiveType, offset, count);
+}
+</code></pre><p>And voila!  A camera that goes around the circle of &#39;F&#39;s.  Drag the
+<code>cameraAngle</code> slider to move the camera around.</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-camera.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
-<p>That&#39;s all fine but using rotate and translate to move a camera where you want it and point toward
-what you want to see is not always easy. For example if we wanted the camera to always point
-at a specific one of the &#39;F&#39;s it would take some pretty crazy math to compute how to rotate the
+<p>That&#39;s all fine but using rotate and translate to move a camera where you
+want it and point toward what you want to see is not always easy.  For
+example if we wanted the camera to always point at a specific one of the
+&#39;F&#39;s it would take some pretty crazy math to compute how to rotate the
 camera to point at that &#39;F&#39; while it goes around the circle of &#39;F&#39;s.</p>
-<p>Fortunately there&#39;s an easier way. We can just decide where we want the camera and what we want it to point at
-and then compute a matrix that will put the camera there. Based on how matrices work this is surprisingly easy.</p>
+<p>Fortunately there&#39;s an easier way.  We can just decide where we want the
+camera and what we want it to point at and then compute a matrix that will
+put the camera there.  Based on how matrices work this is surprisingly
+easy.</p>
 <p>First we need to know where we want the camera.  We&#39;ll call this the
 <code>cameraPosition</code>.  Then we need to know the positon of the thing we want
 to look at or aim at.  We&#39;ll call it the <code>target</code>.  If we subtract the
@@ -209,9 +208,10 @@ results and copy it directly into the <code>z</code> part of a matrix.</p>
 
 <p>This part of a matrix represents the Z axis.  In this case the Z-axis of
 the camera.  Normalizing a vector means making it a vector that represents
-1.0.  If you go back to <a href="webgl-2d-rotation.html">the 2D rotation article</a> where we talked about unit
-circles and how those helped with 2D rotation. In 3D we need unit spheres
-and a normalized vector represents a point on a unit sphere.</p>
+1.0.  If you go back to <a href="webgl-2d-rotation.html">the 2D rotation article</a>
+where we talked about unit circles and how those helped with 2D rotation.
+In 3D we need unit spheres and a normalized vector represents a point on a
+unit sphere.</p>
 <p><div>
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=0"></iframe>
   <div class="webgl_center">the <span style='color:blue;'>z axis</span></div>
@@ -221,19 +221,19 @@ and a normalized vector represents a point on a unit sphere.</p>
 <p>That&#39;s not enough info though.  Just a single vector gives us a point on a
 unit sphere but which orientation from that point to orient things?  We
 need to fill out the other parts of the matrix.  Specifically the X axis
-and Y axis parts.  We know that in general these 3 parts are perpendicular to
-each other.  We also know that &quot;in general&quot; we don&#39;t point the camera
-straight up.  Given that, if we know which way is up, in this case (0,1,0),
-We can use that and something called a &quot;cross product&quot; to compute the X axis
-and Y axis for the matrix.</p>
-<p>I have no idea what a cross product means in mathematical terms.  What I do
-know is that if you have 2 unit vectors and you compute the cross product
-of them you&#39;ll get a vector that is perpendicular to those 2 vectors.  In
-other words, if you have a vector pointing south east, and a vector
-pointing up, and you compute the cross product you&#39;ll get a vector pointing
-either south west or north east since those are the 2 vectors that are perpendicular
-to south east and up.  Depending on which order you compute the cross product in,
-you&#39;ll get the opposite answer.</p>
+and Y axis parts.  We know that in general these 3 parts are perpendicular
+to each other.  We also know that &quot;in general&quot; we don&#39;t point the camera
+straight up.  Given that, if we know which way is up, in this case
+(0,1,0), We can use that and something called a &quot;cross product&quot; to compute
+the X axis and Y axis for the matrix.</p>
+<p>I have no idea what a cross product means in mathematical terms.  What I
+do know is that if you have 2 unit vectors and you compute the cross
+product of them you&#39;ll get a vector that is perpendicular to those 2
+vectors.  In other words, if you have a vector pointing south east, and a
+vector pointing up, and you compute the cross product you&#39;ll get a vector
+pointing either south west or north east since those are the 2 vectors
+that are perpendicular to south east and up.  Depending on which order you
+compute the cross product in, you&#39;ll get the opposite answer.</p>
 <p>In any case if we compute the cross product of our <span style="color: blue;"><code>zAxis</code></span> and
 <span style="color: gray;"><code>up</code></span> we&#39;ll get the <span style="color:red;">xAxis</span> for the camera.</p>
 <p><div>
@@ -266,84 +266,72 @@ matrix that will orient something that points at the <code>target</code> from th
 </pre></div>
 
 <p>Here&#39;s the code to compute the cross product of 2 vectors.</p>
-<pre class="prettyprint showlinemods">
-function cross(a, b) {
+<pre><code>function cross(a, b) {
   return [a[1] * b[2] - a[2] * b[1],
           a[2] * b[0] - a[0] * b[2],
           a[0] * b[1] - a[1] * b[0]];
 }
-</pre>
-
-<p>Here&#39;s the code to subtract two vectors.</p>
-<pre class="prettyprint showlinemods">
-function subtractVectors(a, b) {
+</code></pre><p>Here&#39;s the code to subtract two vectors.</p>
+<pre><code>function subtractVectors(a, b) {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
-</pre>
-
-<p>Here&#39;s the code to normalize a vector (make it into a unit vector).</p>
-<pre class="prettyprint showlinemods">
-function normalize(v) {
+</code></pre><p>Here&#39;s the code to normalize a vector (make it into a unit vector).</p>
+<pre><code>function normalize(v) {
   var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-  // make sure we don't divide by 0.
-  if (length > 0.00001) {
+  // make sure we don&#39;t divide by 0.
+  if (length &gt; 0.00001) {
     return [v[0] / length, v[1] / length, v[2] / length];
   } else {
     return [0, 0, 0];
   }
 }
-</pre>
+</code></pre><p>Here&#39;s the code to compute a &quot;lookAt&quot; matrix.</p>
+<pre><code>var m4 = {
+  lookAt: function(cameraPosition, target, up) {
+    var zAxis = normalize(
+        subtractVectors(cameraPosition, target));
+    var xAxis = cross(up, zAxis);
+    var yAxis = cross(zAxis, xAxis);
 
-<p>Here&#39;s the code to compute a &quot;lookAt&quot; matrix.</p>
-<pre class="prettyprint showlinemods">
-function makeLookAt(cameraPosition, target, up) {
-  var zAxis = normalize(
-      subtractVectors(cameraPosition, target));
-  var xAxis = cross(up, zAxis);
-  var yAxis = cross(zAxis, xAxis);
-
-  return [
-     xAxis[0], xAxis[1], xAxis[2], 0,
-     yAxis[0], yAxis[1], yAxis[2], 0,
-     zAxis[0], zAxis[1], zAxis[2], 0,
-     cameraPosition[0],
-     cameraPosition[1],
-     cameraPosition[2],
-     1];
-}
-</pre>
-
-
-<p>And here is how we might use it to make the camera point at a specific &#39;F&#39; as we move it.</p>
-<pre class="prettyprint showlinemods">
-  ...
+    return [
+       xAxis[0], xAxis[1], xAxis[2], 0,
+       yAxis[0], yAxis[1], yAxis[2], 0,
+       zAxis[0], zAxis[1], zAxis[2], 0,
+       cameraPosition[0],
+       cameraPosition[1],
+       cameraPosition[2],
+       1,
+    ];
+  }
+</code></pre><p>And here is how we might use it to make the camera point at a specific &#39;F&#39;
+as we move it.</p>
+<pre><code>  ...
 
   // Compute the position of the first F
   var fPosition = [radius, 0, 0];
 
-  // Use matrix math to compute a position on the circle.
-  var cameraMatrix = makeTranslation(0, 50, radius * 1.5);
-  cameraMatrix = matrixMultiply(
-      cameraMatrix, makeYRotation(cameraAngleRadians));
+  // Use matrix math to compute a position on a circle where
+  // the camera is
+  var cameraMatrix = m4.yRotation(cameraAngleRadians);
+  cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 
-  // Get the camera's postion from the matrix we computed
-  cameraPosition = [
-      cameraMatrix[12],
-      cameraMatrix[13],
-      cameraMatrix[14]];
+  // Get the camera&#39;s postion from the matrix we computed
+  var cameraPosition = [
+    cameraMatrix[12],
+    cameraMatrix[13],
+    cameraMatrix[14],
+  ];
 
   var up = [0, 1, 0];
 
-  // Compute the camera's matrix using look at.
-  var cameraMatrix = makeLookAt(cameraPosition, fPosition, up);
+  // Compute the camera&#39;s matrix using look at.
+  var cameraMatrix = m4.lookAt(cameraPosition, fPosition, up);
 
   // Make a view matrix from the camera matrix.
-  var viewMatrix = makeInverse(cameraMatrix);
+  var viewMatrix = m4.inverse(cameraMatrix);
 
   ...
-</pre>
-
-<p>And here&#39;s the result.</p>
+</code></pre><p>And here&#39;s the result.</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-camera-look-at.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at.html" target="_blank">click here to open in a separate window</a>
@@ -351,23 +339,33 @@ function makeLookAt(cameraPosition, target, up) {
 
 </p>
 <p>Drag the slider and notice how the camera tracks a single &#39;F&#39;.</p>
-<p>Note that you can use &quot;lookAt&quot; math for more than just cameras. Common uses are making a character&#39;s
-head follow someone. Making a turret aim at a target. Making an object follow a path. You compute
-where on the path the target is. Then you compute where on the path the target would be a few moments
-in the future. Plug those 2 values into your <code>lookAt</code> function and you&#39;ll get a matrix that makes
-your object follow the path and orient toward the path as well.</p>
+<p>Note that you can use &quot;lookAt&quot; math for more than just cameras.  Common
+uses are making a character&#39;s head follow someone.  Making a turret aim at
+a target.  Making an object follow a path.  You compute where on the path
+the target is.  Then you compute where on the path the target would be a
+few moments in the future.  Plug those 2 values into your <code>lookAt</code>
+function and you&#39;ll get a matrix that makes your object follow the path
+and orient toward the path as well.</p>
 <p>Let&#39;s <a href="webgl-animation.html">learn about animation next</a>.</p>
 <div class="webgl_bottombar">
 <h3>lookAt standards</h3>
-<p>Most 3D math libraries have a <code>lookAt</code> function. Often it is designed
-specifically to make a "view matrix" and not a "camera matrix". In other words,
-it makes a matrix that moves everything else in front of the camera rather
-than a matrix that moves the camera itself.</p>
-<p>I find that less useful. As pointed out, a lookAt function has many uses. It's
-easy to call <code>inverse</code> when you need a view matrix but if you are using <code>lookAt</code>
-to make some character's head follow another character or some turret aim
-at its target it's much more useful if <code>lookAt</code> returns a matrix that orients
-and positions an object in world space in my opinion.
+<p>
+
+Most 3D math libraries have a <code>lookAt</code> function.  Often it is
+designed specifically to make a "view matrix" and not a "camera matrix".
+In other words, it makes a matrix that moves everything else in front of
+the camera rather than a matrix that moves the camera itself.
+
+</p>
+<p>
+
+I find that less useful.  As pointed out, a lookAt function has many uses.
+It's easy to call <code>inverse</code> when you need a view matrix but if
+you are using <code>lookAt</code> to make some character's head follow
+another character or some turret aim at its target it's much more useful
+if <code>lookAt</code> returns a matrix that orients and positions an
+object in world space in my opinion.
+
 </p>
 <div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-camera-look-at-heads.html"></iframe>

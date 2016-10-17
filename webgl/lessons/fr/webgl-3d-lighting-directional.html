@@ -67,10 +67,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>Cet article est la suite d&#39;une série de posts consacrés à WebGL. Le chapitre précédent parlait des <a href="webgl-3d-camera.html">caméras</a>. Vous voulez peut-être y jeter un oeil avant. </p>
+      <p>Cet article est la suite d&#39;une série de posts consacrés à WebGL. Le chapitre précédent parlait des <a href="webgl-3d-camera.html">caméras</a>. Vous voulez peut-être y jeter un oeil avant.</p>
 <p>Il y a plusieurs façons d&#39;implémenter l&#39;éclairage. Le plus simple est probablement <em>l&#39;illumination directionnelle</em>.</p>
 <p>L&#39;illumination ou éclairage directionnel suppose que la lumière vient uniformément depuis une direction unique. Pendant une belle journée on peut considérer que le soleil est une source de lumière directionnelle : les ombres autour de nous ont l&#39;air d&#39;être projetées par des rayons parallèles.</p>
-<p>Calculer un éclairage directionnel est en fait assez simple. Si vous connaissez la direction d&#39;où vient la lumière et l&#39;orientation de votre objet on peut prendre le <em>produit scalaire</em> de ces deux directions et ça nous donnera le cosinus de l&#39;angle entre l&#39;objet et la source de lumière. </p>
+<p>Calculer un éclairage directionnel est en fait assez simple. Si vous connaissez la direction d&#39;où vient la lumière et l&#39;orientation de votre objet on peut prendre le <em>produit scalaire</em> de ces deux directions et ça nous donnera le cosinus de l&#39;angle entre l&#39;objet et la source de lumière.</p>
 <p>Voici un exemple</p>
 <p><div>
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/dot-product.html"></iframe>
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </div>
 
 </p>
-<p>Déplacez les points, s&#39;ils sont exactement à l&#39;opposé vous voyez que le produit scalaire vaut -1. Au même endroit le produit scalaire vaut 1. </p>
+<p>Déplacez les points, s&#39;ils sont exactement à l&#39;opposé vous voyez que le produit scalaire vaut -1. Au même endroit le produit scalaire vaut 1.</p>
 <p>En quoi c&#39;est utile ? Si on connaît la direction dans laquelle regarde notre objet et la direction de la source lumineuse on peut prendre ce produit scalaire et il nous donnera 1 si la lumière arrive droit sur la surface ou -1 si elle est dans la direction opposée.</p>
 <p><div>
   <iframe class="webgl_example " style="width: 500px; height: 400px;" src="/webgl/lessons/resources/directional-lighting.html"></iframe>
@@ -89,17 +89,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>On peut multiplier notre couleur par le produit scalaire et voilà ! Lumière !</p>
 <p>Problème, comment connaît-on la direction de notre objet ?</p>
 <h2 id="les-normales">Les normales</h2>
-<p>J&#39;ignore pourquoi on les appelle <em>normales</em> mais en tout cas en 3D, une normale est un vecteur normalisé qui dit dans quelle direction notre face regarde. </p>
+<p>J&#39;ignore pourquoi on les appelle <em>normales</em> mais en tout cas en 3D, une normale est un vecteur normalisé qui dit dans quelle direction notre face regarde.</p>
 <p>Voici quelques normales pour un cube et une sphère.</p>
 <p><div>
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/normals.html"></iframe>
 </div>
 
 </p>
-<p>Les lignes qui sortent des objets représentent les normales de chaque point. </p>
-<p>Notez que le cube a 3 normales à chaque coin. C&#39;est parce qu&#39;on a besoin de 3 normales différentes pour dire de quel côté les faces du cubes regardent. </p>
-<p>Les normales sont aussi colorées suivant leur direction, avec l&#39;axe +X en <span style="color: red;">rouge</span>, l&#39;axe +Y vertical en 
-<span style="color: green;">vert</span> et l&#39;axe +Z en 
+<p>Les lignes qui sortent des objets représentent les normales de chaque point.</p>
+<p>Notez que le cube a 3 normales à chaque coin. C&#39;est parce qu&#39;on a besoin de 3 normales différentes pour dire de quel côté les faces du cubes regardent.</p>
+<p>Les normales sont aussi colorées suivant leur direction, avec l&#39;axe +X en <span style="color: red;">rouge</span>, l&#39;axe +Y vertical en
+<span style="color: green;">vert</span> et l&#39;axe +Z en
 <span style="color: blue;">bleu</span>.</p>
 <p>C&#39;est parti, ajoutons les normales au <code>F</code> de nos <a href="webgl-3d-cameras.html">précédents exemples</a> comme ça on pourra l&#39;éclairer. Puisque le <code>F</code> est assez anguleux et que ses faces sont alignées avec les axes X, Y et Z ça sera plutôt facile à définir. Les vertices qui pointent en avant auront comme coordonnées normales (0,0,1). Ceux qui regardent en arrière auront comme coordonnées normales (0,0,-1). À gauche ce sera (-1,0,0), à droite (1,0,0). En haut (0,1,0) et en bas (0,-1,0).</p>
 <pre><code>function creerNormales(gl) {
@@ -233,7 +233,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           -1, 0, 0]);
   gl.bufferData(gl.ARRAY_BUFFER, normales, gl.STATIC_DRAW);
 }
-</code></pre><p>Tant qu&#39;on y est on va supprimer les couleurs pour mieux voir l&#39;éclairage. </p>
+</code></pre><p>Tant qu&#39;on y est on va supprimer les couleurs pour mieux voir l&#39;éclairage.</p>
 <pre><code>// Créer les pointeurs pour les attributs
 var emplacementPosition = gl.getAttribLocation(programme, &quot;a_position&quot;);
 -var emplacementCouleur = gl.getAttribLocation(programme, &quot;a_color&quot;);
@@ -320,10 +320,10 @@ void main() {
 +
 +  // Indique la direction de la lumière au programme actif
 +  gl.uniform3fv(emplacementDirectionInverseDeLaLumiere, normaliser([0.5, 0.7, 1]));
-</code></pre><p><code>normaliser</code>, qu&#39;on a déjà vu plus tôt, va transformer n&#39;importe quelle valeur qu&#39;on lui donne en vecteur unitaire. Les valeurs de notre exemple sont 
+</code></pre><p><code>normaliser</code>, qu&#39;on a déjà vu plus tôt, va transformer n&#39;importe quelle valeur qu&#39;on lui donne en vecteur unitaire. Les valeurs de notre exemple sont
 <code>x = 0.5</code> ce qui est positif <code>x</code> veut donc dire que la lumière sera sur la droite, en direction de la gauche</p>
 <p><code>y = 0.7</code> ce qui est positif <code>y</code> veut dire que la lumière est vers le haut, en direction du bas</p>
-<p><code>z = 1</code> ce qui est positif <code>z</code> veut dire que la lumière est devant la scène, en direction de l&#39;arrière-plan. </p>
+<p><code>z = 1</code> ce qui est positif <code>z</code> veut dire que la lumière est devant la scène, en direction de l&#39;arrière-plan.</p>
 <p>Ces valeurs veulent donc dire que la lumière regardent à peu près le centre de la scène, plutôt vers le bas et un peu sur la gauche.</p>
 <p>Et voilà</p>
 <p><div>
@@ -349,7 +349,7 @@ void main() {
 *  // Oriente les normales et transmet au shader de fragment
 *  v_normale = mat3(u_globale) * a_normale;
 }
-</code></pre><p>On multiplie <code>a_normale</code> par <code>mat3(u_globale)</code>. C&#39;est parce que les normales sont une direction, un vecteur, donc on n&#39;a pas besoin des valeurs de translation. Et la valeur d&#39;orientation d&#39;une matrice et dans la première partie 3x3. </p>
+</code></pre><p>On multiplie <code>a_normale</code> par <code>mat3(u_globale)</code>. C&#39;est parce que les normales sont une direction, un vecteur, donc on n&#39;a pas besoin des valeurs de translation. Et la valeur d&#39;orientation d&#39;une matrice et dans la première partie 3x3.</p>
 <p>Créons les pointeurs pour ces uniforms</p>
 <pre><code>  // Création des emplacements
 *  var emplacementProjectionGlobaleVue =
@@ -369,7 +369,7 @@ void main() {
 
 </p>
 <p>Tournez le F : quelle que soit son orientation, les faces qui sont vers la lumière sont éclairées.</p>
-<p>Il reste un problème et je ne sais pas bien comment le montrer simplement donc je vais faire un diagramme. On multiplie la <code>normale</code> par la matrice <code>u_globale</code> pour réorienter les normales. Que se passe-t-il si on change l&#39;échelle de la matrice globale ? On se retrouve avec de normales incorrectes. </p>
+<p>Il reste un problème et je ne sais pas bien comment le montrer simplement donc je vais faire un diagramme. On multiplie la <code>normale</code> par la matrice <code>u_globale</code> pour réorienter les normales. Que se passe-t-il si on change l&#39;échelle de la matrice globale ? On se retrouve avec de normales incorrectes.</p>
 <p><div>
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/normals-scaled.html"></iframe>
   <div class="webgl_center">click to toggle normals</div>
@@ -401,8 +401,8 @@ void main() {
 +  var emplacementGlobaleInverseTransposee =
 +      gl.getUniformLocation(programme, &quot;u_globaleInverseTransposee&quot;);
 </code></pre><p>On calcule les matrices</p>
-<pre><code>var matriceGlobaleVue = matrixMultiply(matriceGlobale, matriceVue);
-var matriceProjectionGlobaleVue = matrixMultiply(matriceGlobaleVue, matriceProjection);
+<pre><code>var matriceGlobaleVue = m4.multiply(matriceVue, matriceGlobale);
+var matriceProjectionGlobaleVue = m4.multiply(matriceProjection, matriceGlobaleVue);
 +var matriceGlobaleInverse = inverserMatrice(matriceGlobale);
 +var matriceGlobaleInverseTransposee = transposerMatrice(matriceGlobaleInverse);
 
@@ -441,10 +441,10 @@ v_normale = mat3(u_globaleInverseTransposee) * a_normale;
 <pre class="prettyprint">
 v_normale = (u_globaleInverseTransposee * vec4(a_normale, 0)).xyz;
 </pre>
-<p>Parce que mettre <code>w</code> à 0 avant de multiplier reviendrait à multiplier la partie translation de la matrice par 0 donc à la retirer aussi. 
+<p>Parce que mettre <code>w</code> à 0 avant de multiplier reviendrait à multiplier la partie translation de la matrice par 0 donc à la retirer aussi.
 Je crois que c'est la façon la plus répandue de le faire. L'écriture avec mat3 me paraît plus claire mais je l'ai fait quelque fois comme ça aussi.</p>
 <p>Une autre solution encore serait de faire de <code>u_globaleInverseTransposee</code> une <code>mat3</code>.
-Il y a deux raisons pour ne pas le faire. La première est qu'on pourrait avoir d'autres besoins pour la matrice 4x4 <code>u_globaleInverseTransposee</code> donc transmettre toute la 
+Il y a deux raisons pour ne pas le faire. La première est qu'on pourrait avoir d'autres besoins pour la matrice 4x4 <code>u_globaleInverseTransposee</code> donc transmettre toute la
 <code>mat4</code> permet de s'en servir pour d'autres usages. La deuxième raison est que nos fonctions javascript sont conçues pour les matrices d'ordre 4 et réécrire toutes les fonctions ou écrire une nouvelle fonction pour la traduire en matrice 3x3 est un travail qu'on peut s'éviter si ce n'est pas nécessaire.</p>
 </div>
 

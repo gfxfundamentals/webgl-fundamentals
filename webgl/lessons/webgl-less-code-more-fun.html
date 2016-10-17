@@ -70,14 +70,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a>.
 If you haven&#39;t read those please view them first.</p>
-<p>WebGL programs require that you write shader programs which you have to compile and link and then
-you have to look up the locations of the inputs to those shader programs. These inputs are called
-uniforms and attributes and the code required to look up their locations can be wordy and tedious.</p>
-<p>Assume we&#39;ve got the <a href="webgl-boilerplate.html">typical boilerplate WebGL code for
-compiling and linking shader programs</a>. Given a set of shaders like this.</p>
+<p>WebGL programs require that you write shader programs which you have to
+compile and link and then you have to look up the locations of the inputs
+to those shader programs.  These inputs are called uniforms and attributes
+and the code required to look up their locations can be wordy and tedious.</p>
+<p>Assume we&#39;ve got the <a href="webgl-boilerplate.html">typical boilerplate WebGL code for compiling and
+linking shader programs</a>.  Given a set of shaders
+like this.</p>
 <p>vertex shader:</p>
-<pre class="prettyprint">
-uniform mat4 u_worldViewProjection;
+<pre><code>uniform mat4 u_worldViewProjection;
 uniform vec3 u_lightWorldPos;
 uniform mat4 u_world;
 uniform mat4 u_viewInverse;
@@ -101,11 +102,8 @@ void main() {
   v_surfaceToView = (u_viewInverse[3] - (u_world * a_position)).xyz;
   gl_Position = v_position;
 }
-</pre>
-
-<p>fragment shader:</p>
-<pre class="prettyprint">
-precision mediump float;
+</code></pre><p>fragment shader:</p>
+<pre><code>precision mediump float;
 
 varying vec4 v_position;
 varying vec2 v_texCoord;
@@ -123,7 +121,7 @@ uniform float u_specularFactor;
 vec4 lit(float l ,float h, float m) {
   return vec4(1.0,
               max(l, 0.0),
-              (l > 0.0) ? pow(max(0.0, h), m) : 0.0,
+              (l &gt; 0.0) ? pow(max(0.0, h), m) : 0.0,
               1.0);
 }
 
@@ -141,26 +139,24 @@ void main() {
       diffuseColor.a);
   gl_FragColor = outColor;
 }
-</pre>
+</code></pre><p>You&#39;d end up having to write code like this to look up and set all the
+various values to draw.</p>
+<pre><code>// At initialization time
+var u_worldViewProjectionLoc   = gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
+var u_lightWorldPosLoc         = gl.getUniformLocation(program, &quot;u_lightWorldPos&quot;);
+var u_worldLoc                 = gl.getUniformLocation(program, &quot;u_world&quot;);
+var u_viewInverseLoc           = gl.getUniformLocation(program, &quot;u_viewInverse&quot;);
+var u_worldInverseTransposeLoc = gl.getUniformLocation(program, &quot;u_worldInverseTranspose&quot;);
+var u_lightColorLoc            = gl.getUniformLocation(program, &quot;u_lightColor&quot;);
+var u_ambientLoc               = gl.getUniformLocation(program, &quot;u_ambient&quot;);
+var u_diffuseLoc               = gl.getUniformLocation(program, &quot;u_diffuse&quot;);
+var u_specularLoc              = gl.getUniformLocation(program, &quot;u_specular&quot;);
+var u_shininessLoc             = gl.getUniformLocation(program, &quot;u_shininess&quot;);
+var u_specularFactorLoc        = gl.getUniformLocation(program, &quot;u_specularFactor&quot;);
 
-<p>You&#39;d end up having to write code like this to look up and set all the various values to draw.</p>
-<pre class="prettyprint">
-// At initialization time
-var u_worldViewProjectionLoc   = gl.getUniformLocation(program, "u_worldViewProjection");
-var u_lightWorldPosLoc         = gl.getUniformLocation(program, "u_lightWorldPos");
-var u_worldLoc                 = gl.getUniformLocation(program, "u_world");
-var u_viewInverseLoc           = gl.getUniformLocation(program, "u_viewInverse");
-var u_worldInverseTransposeLoc = gl.getUniformLocation(program, "u_worldInverseTranspose");
-var u_lightColorLoc            = gl.getUniformLocation(program, "u_lightColor");
-var u_ambientLoc               = gl.getUniformLocation(program, "u_ambient");
-var u_diffuseLoc               = gl.getUniformLocation(program, "u_diffuse");
-var u_specularLoc              = gl.getUniformLocation(program, "u_specular");
-var u_shininessLoc             = gl.getUniformLocation(program, "u_shininess");
-var u_specularFactorLoc        = gl.getUniformLocation(program, "u_specularFactor");
-
-var a_positionLoc              = gl.getAttribLocation(program, "a_position");
-var a_normalLoc                = gl.getAttribLocation(program, "a_normal");
-var a_texCoordLoc              = gl.getAttribLocation(program, "a_texcoord");
+var a_positionLoc              = gl.getAttribLocation(program, &quot;a_position&quot;);
+var a_normalLoc                = gl.getAttribLocation(program, &quot;a_normal&quot;);
+var a_texCoordLoc              = gl.getAttribLocation(program, &quot;a_texcoord&quot;);
 
 
 // At init or draw time depending on use.
@@ -209,15 +205,13 @@ gl.uniform1f(u_shininessLoc, shininess);
 gl.uniform1f(u_specularFactorLoc, specularFactor);
 
 gl.drawArrays(...);
-</pre>
-
-<p>That&#39;s a lot of typing.</p>
-<p>There are lots of ways to simplify this. One suggestion is to ask WebGL to tell us all
-the uniforms and locations and then setup functions to set them for us. We can then pass in
-JavaScript objects to set our settings much more easily. If that&#39;s clear as mud well,
-our code would look something like this</p>
-<pre class="prettyprint">
-// At initialiation time
+</code></pre><p>That&#39;s a lot of typing.</p>
+<p>There are lots of ways to simpl ify this.  One suggestion is to ask WebGL
+to tell us all the uniforms and locations and then setup functions to set
+them for us.  We can then pass in JavaScript objects to set our settings
+much more easily.  If that&#39;s clear as mud well, our code would look
+something like this</p>
+<pre><code>// At initialiation time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -252,12 +246,9 @@ webglUtils.setAttributes(attribSetters, attribs);
 webglUtils.setUniforms(uniformSetters, uniforms);
 
 gl.drawArrays(...);
-</pre>
-
-<p>That seems a heck of a lot smaller, easier, and less code to me.</p>
+</code></pre><p>That seems a heck of a lot smaller, easier, and less code to me.</p>
 <p>You can even use multiple JavaScript objects if it suits you. For example</p>
-<pre class="prettyprint">
-// At initialiation time
+<pre><code>// At initialiation time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -323,9 +314,7 @@ objects.forEach(function(object) {
   webglUtils.setUniforms(unifromSetters, objects.materialUniforms);
   gl.drawArrays(...);
 });
-</pre>
-
-<p>Here&#39;s an example using these helper functions</p>
+</code></pre><p>Here&#39;s an example using these helper functions</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-less-code-more-fun.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-less-code-more-fun.html" target="_blank">click here to open in a separate window</a>
@@ -411,10 +400,12 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
      a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
    },
  };
-</code></pre><p>And <code>webglUtils.setBuffersAndAttributes</code> uses that object to set all the buffers and attributes.</p>
-<p>Finally we can go what I consider possibly too far. Given <code>position</code> almost always has 3 components (x, y, z)
-and <code>texcoords</code> almost always 2, indices 3, and normals 3, we can just let the system guess the number
-of components.</p>
+</code></pre><p>And <code>webglUtils.setBuffersAndAttributes</code> uses that object to set all the
+buffers and attributes.</p>
+<p>Finally we can go what I consider possibly too far.  Given <code>position</code>
+almost always has 3 components (x, y, z) and <code>texcoords</code> almost always 2,
+indices 3, and normals 3, we can just let the system guess the number of
+components.</p>
 <pre><code>// an indexed quad
 var arrays = {
    position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
@@ -429,16 +420,19 @@ var arrays = {
 </div>
 
 </p>
-<p>I&#39;m not sure I personally like that style. Guessing bugs me because it can guess wrong. For example
-I might choose to stick an extra set of texture coordinates in my texcoord attribute and it will
-guess 2 and be wrong. Of course if it guesses wrong you can just specify it like the example above.
-I guess I worry if the guessing code changes people&#39;s stuff might break. It&#39;s up to you. Some people
-like things to be what they consider as simple as possible.</p>
-<p>Why don&#39;t we look at the attributes on the shader program to figure out the number of components?
-That&#39;s because it&#39;s common to supply 3 components (x, y, z) from a buffer but use a <code>vec4</code> in
-the shader. For attibutes WebGL will set <code>w = 1</code> automatically. But that means we can&#39;t easily
-know the user&#39;s intent since what they declared in their shader might not match the number of
-components they provide.</p>
+<p>I&#39;m not sure I personally like that style.  Guessing bugs me because it
+can guess wrong.  For example I might choose to stick an extra set of
+texture coordinates in my texcoord attribute and it will guess 2 and be
+wrong.  Of course if it guesses wrong you can just specify it like the
+example above.  I guess I worry if the guessing code changes people&#39;s
+stuff might break.  It&#39;s up to you.  Some people like things to be what
+they consider as simple as possible.</p>
+<p>Why don&#39;t we look at the attributes on the shader program to figure out
+the number of components?  That&#39;s because it&#39;s common to supply 3
+components (x, y, z) from a buffer but use a <code>vec4</code> in the shader.  For
+attibutes WebGL will set <code>w = 1</code> automatically.  But that means we can&#39;t
+easily know the user&#39;s intent since what they declared in their shader
+might not match the number of components they provide.</p>
 <p>Looking for more patterns there&#39;s this</p>
 <pre><code>var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
@@ -451,23 +445,28 @@ var attribSetters  = webglUtils.createAttributeSetters(gl, program);
    uniformSetters: ...,    // setters as returned from webglUtils.createUniformSetters,
    attribSetters: ...,     // setters as returned from createAttribSetters,
 }
-</code></pre><p>And that&#39;s yet one more minor simplification. This will come in handy once we start using
-multiple programs since it automatically keeps the setters with the program they are associated with.</p>
+</code></pre><p>And that&#39;s yet one more minor simplification.  This will come in handy
+once we start using multiple programs since it automatically keeps the
+setters with the program they are associated with.</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-less-code-more-fun-quad-programinfo.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-less-code-more-fun-quad-programinfo.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
-<p>Anyway, this is the style I try to write my own WebGL programs.
-For the lessons on these tutorials though I&#39;ve felt like I have to use the standard <strong>verbose</strong>
-ways so people don&#39;t get confused about what is WebGL and what is my own style. At some point
-though showing all the steps gets in the way of the point so going forward some lessons will
-be using this style.</p>
-<p>Feel free to use this style in your own code. The functions <code>createUniformSetters</code>, <code>createAttributeSetters</code>,
-<code>createBufferInfoFromArrays</code>, <code>setUniforms</code>, and <code>setBuffersAndAttributes</code> are included in the
+<p>Anyway, this is the style I try to write my own WebGL programs.  For the
+lessons on these tutorials though I&#39;ve felt like I have to use the
+standard <strong>verbose</strong> ways so people don&#39;t get confused about what is WebGL
+and what is my own style.  At some point though showing all the steps gets
+in the way of the point so going forward some lessons will be using this
+style.</p>
+<p>Feel free to use this style in your own code.  The functions
+<code>createUniformSetters</code>, <code>createAttributeSetters</code>,
+<code>createBufferInfoFromArrays</code>, <code>setUniforms</code>, and <code>setBuffersAndAttributes</code>
+are included in the
 <a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code>webgl-utils.js</code></a>
-file used by all the samples. If you want something slightly more organized check out <a href="http://twgljs.org">TWGL.js</a>.</p>
+file used by all the samples.  If you want something slightly more
+organized check out <a href="http://twgljs.org">TWGL.js</a>.</p>
 <p>Next up, <a href="webgl-drawing-multiple-things.html">drawing multiple things</a>.</p>
 <div class="webgl_bottombar">
 <h3>Can we use the setters directly?</h3>

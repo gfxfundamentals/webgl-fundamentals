@@ -96,14 +96,15 @@ attributes. You create buffers,</p>
 </code></pre><p>put data in those buffers</p>
 <pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
-</code></pre><p>Then, given a shader program you made you look up the location of its attributes,</p>
+</code></pre><p>Then, given a shader program you made you look up the location of its attributes
+at initialization time</p>
 <pre><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
-</code></pre><p>then tell WebGL how to pull data out of those buffers and into the attribute</p>
+</code></pre><p>and at render time tell WebGL how to pull data out of those buffers and into the attribute</p>
 <pre><code>// turn on getting data out of a buffer for this attribute
 gl.enableVertexAttribArray(positionLoc);
 
 var numComponents = 3;  // (x, y, z)
-var type = gl.FLOAT;
+var type = gl.FLOAT;    // 32bit floating point values
 var normalize = false;  // leave the values as they are
 var offset = 0;         // start at the beginning of the buffer
 var stride = 0;         // how many bytes to move to the next vertex
@@ -120,7 +121,7 @@ void main() {
 </code></pre><p>If we put clipspace vertices into our buffers it will work.</p>
 <p>Attributes can use <code>float</code>, <code>vec2</code>, <code>vec3</code>, <code>vec4</code>, <code>mat2</code>, <code>mat3</code>, and <code>mat4</code> as types.</p>
 <h3 id="uniforms">Uniforms</h3>
-<p>For a vertex shader uniforms are values passed to the vertex shader that stay the same
+<p>For a shader uniforms are values passed to the shader that stay the same
 for all vertices in a draw call. As a very simple example we could add an offset to
 the vertex shader above</p>
 <pre><code>attribute vec4 a_position;
@@ -130,11 +131,15 @@ void main() {
    gl_Position = a_position + u_offset;
 }
 </code></pre><p>And now we could offset every vertex by a certain amount. First we&#39;d look up the
-location of the uniform</p>
+location of the uniform at initialization time</p>
 <pre><code>var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
 </code></pre><p>And then before drawing we&#39;d set the uniform</p>
 <pre><code>gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // offset it to the right half the screen
-</code></pre><p>Uniforms can be many types. For each type you have to call the corresponding function to set it.</p>
+</code></pre><p>Note that uniforms belong to individual shader programs. If you have multiple shader programs
+with uniforms of the same name both uniforms will have their own locations and hold their own
+values. When calling <code>gl.uniform???</code> you&#39;re only setting the uniform for the <em>current program</em>.
+The current program is the last program you passed to <code>gl.useProgram</code>.</p>
+<p>Uniforms can be many types. For each type you have to call the corresponding function to set it.</p>
 <pre><code>gl.uniform1f (floatUniformLoc, v);                 // for float
 gl.uniform1fv(floatUniformLoc, [v]);               // for float or float array
 gl.uniform2f (vec2UniformLoc,  v0, v1);            // for vec2
@@ -212,7 +217,7 @@ to set the special global variable, <code>gl_FragColor</code> to some color.</p>
 <li><a href="#varyings">Varyings</a> (data passed from the vertex shader and interpolated)</li>
 </ol>
 <h3 id="uniforms-in-fragment-shaders">Uniforms in Fragment Shaders</h3>
-<p>See <a href="#uniforms">Uniforms in Vertex Shaders</a>.</p>
+<p>See <a href="#uniforms">Uniforms in Shaders</a>.</p>
 <h3 id="textures-in-fragment-shaders">Textures in Fragment Shaders</h3>
 <p>Getting a value from a texture in a shader we create a <code>sampler2D</code> uniform and use the GLSL
 function <code>texture2D</code> to extract a value from it.</p>
@@ -231,11 +236,14 @@ gl.bindTexture(gl.TEXTURE_2D, tex);
 var level = 0;
 var width = 2;
 var height = 1;
-var data = new Uint8Array([255, 0, 0, 255, 0, 255, 0, 255]);
+var data = new Uint8Array([
+   255, 0, 0, 255,   // a red pixel
+   0, 255, 0, 255,   // a green pixel
+]);
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
-</code></pre><p>Then look up the uniform location in the shader program</p>
+</code></pre><p>At initialization time look up the uniform location in the shader program</p>
 <pre><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
-</code></pre><p>WebGL then requires you to bind it to a texture unit</p>
+</code></pre><p>At render time WebGL you to bind the texture to a texture unit</p>
 <pre><code>var unit = 5;  // Pick some texture unit
 gl.activeTexture(gl.TEXTURE0 + unit);
 gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -310,6 +318,10 @@ vec4 y = c * v;
 <pre><code>vec4(v.rgb, 1)
 </code></pre><p>Is the same as</p>
 <pre><code>vec4(v.r, v.g, v.b, 1)
+</code></pre><p>Also</p>
+<pre><code>vec4(1)
+</code></pre><p>Is the same as</p>
+<pre><code>vec4(1, 1, 1, 1)
 </code></pre><p>One thing you&#39;ll likely get caught up on is that GLSL is very type strict.</p>
 <pre><code>float f = 1;  // ERROR 1 is an int. You can&#39;t assign an int to a float
 </code></pre><p>The correct way is one of these</p>
@@ -349,7 +361,7 @@ and link them into a shader program is covered here</a>.</p>
 <p>If you&#39;re just starting from here you can go in 2 directions. If you are interested in image procesing
 I&#39;ll show you <a href="webgl-image-processing.html">how to do some 2D image processing</a>.
 If you are interesting in learning about translation,
-rotation and scale then <a href="webgl-2d-translation.html">start here</a>.</p>
+rotation, scale and eventually 3D then <a href="webgl-2d-translation.html">start here</a>.</p>
 
       <hr/>
       <div>

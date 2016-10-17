@@ -192,7 +192,7 @@ graphics it's up to you to render at a higher resolution if you want your graphi
 equals 1 CSS pixel. We can change our resize function to handle that like this.</p>
 <pre class="prettyprint">
 function resize(gl) {
-  var realToCSSPixels = window.devicePixelRatio || 1;
+  var realToCSSPixels = window.devicePixelRatio;
 
   // Lookup the size the browser is displaying the canvas in CSS pixels
   // and compute a size needed to make our drawingbuffer match it in
@@ -201,8 +201,8 @@ function resize(gl) {
   var displayHeight = Math.floor(gl.canvas.clientHeight * realToCSSPixels);
 
   // Check if the canvas is not the same size.
-  if (gl.canvas.width  != displayWidth ||
-      gl.canvas.height != displayHeight) {
+  if (gl.canvas.width  !== displayWidth ||
+      gl.canvas.height !== displayHeight) {
 
     // Make the canvas the same size
     gl.canvas.width  = displayWidth;

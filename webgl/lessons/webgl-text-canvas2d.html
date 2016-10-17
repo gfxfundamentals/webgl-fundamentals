@@ -67,17 +67,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>This article is a continuation of <a href="webgl-text-html.html">previous WebGL articles about drawing text</a>.
-If you haven&#39;t read them I suggest you start there and work your way back.</p>
-<p>Instead of using HTML elements for text we can also use another canvas but with
-a 2D context. Without profiling it&#39;s just a guess that this would be faster
-than using the DOM. Of course it&#39;s also less flexible. You don&#39;t get all the
-fancy CSS styling. But, there&#39;s no HTML elements to create and keep track of.</p>
+      <p>This article is a continuation of <a href="webgl-text-html.html">previous WebGL articles about drawing
+text</a>.  If you haven&#39;t read them I suggest you start
+there and work your way back.</p>
+<p>Instead of using HTML elements for text we can also use another canvas but
+with a 2D context.  Without profiling it&#39;s just a guess that this would be
+faster than using the DOM.  Of course it&#39;s also less flexible.  You don&#39;t
+get all the fancy CSS styling.  But, there&#39;s no HTML elements to create
+and keep track of.</p>
 <p>Similar to the other examples we make a container but this time we put
 2 canvases in it.</p>
 <pre><code>&lt;div class=&quot;container&quot;&gt;
-  &lt;canvas id=&quot;canvas&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
-  &lt;canvas id=&quot;text&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+  &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
+  &lt;canvas id=&quot;text&quot;&gt;&lt;/canvas&gt;
 &lt;/div&gt;
 </code></pre><p>Next setup the CSS so the the canvas and the HTML overlap</p>
 <pre><code>.container {
@@ -113,8 +115,8 @@ var ctx = textCanvas.getContext(&quot;2d&quot;);
 </p>
 <p>Why is the text smaller? Because that&#39;s the default size for Canvas 2D.
 If you want other sizes <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_text">check out the Canvas 2D API</a>.</p>
-<p>Another reason to use Canvas 2D is it&#39;s easy to draw other things. For example
-let&#39;s add an arrow</p>
+<p>Another reason to use Canvas 2D is it&#39;s easy to draw other things.  For
+example let&#39;s add an arrow</p>
 <pre><code>// draw an arrow and text.
 
 // save all the canvas settings
@@ -138,17 +140,21 @@ ctx.fillText(someMessage, 20, 20);
 
 // restore the canvas to its old settings.
 ctx.restore();
-</code></pre><p>Here we&#39;re taking advantage of the Canvas 2D translate function so we don&#39;t have to do any extra
-math when drawing our arrow. We just pretend to draw at the origin and translate takes care
-of moving that origin to the corner of our F.</p>
+</code></pre><p>Here we&#39;re taking advantage of the Canvas 2D <a href="webgl-2d-matrix-stack.html">matrix
+stack</a> translate function so we don&#39;t have to
+do any extra math when drawing our arrow.  We just pretend to draw at the
+origin and translate takes care of moving that origin to the corner of our
+F.</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-text-html-canvas2d-arrows.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-text-html-canvas2d-arrows.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
-<p>I think that covers using Canvas 2D. <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">Check out the Canvas 2D API</a>
-for more ideas. <a href="webgl-text-texture.html">Next we&#39;ll actually render text in WebGL</a>.</p>
+<p>I think that covers using Canvas 2D.  <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">Check out the Canvas 2D
+API</a>
+for more ideas.  <a href="webgl-text-texture.html">Next we&#39;ll actually render text in
+WebGL</a>.</p>
 
       <hr/>
       <div>

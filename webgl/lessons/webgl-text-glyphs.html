@@ -67,17 +67,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>This post is a continuation of many articles about WebGL. The last one
-was about <a href="webgl-text-texture.html">using textures for rendering text in WebGL</a>.
-If you haven&#39;t read it you might want to check that out before continuing.</p>
-<p>In the last article we went over <a href="webgl-text-texture.html">how to use a texture to draw text in your WebGL
-scene</a>. That technique is very common and it&#39;s great
-for things like in multi-player games where you want to put a name over an avatar.
-As that name rarely changes it&#39;s perfect.</p>
-<p>Let&#39;s say you want to render a lot of text that changes often like a UI. Given
-the last example in <a href="webgl-text-texture.html">the previous article</a> an obvious
-solution is to make a texture for each letter. Let&#39;s change the last sample to do
-that.</p>
+      <p>This post is a continuation of many articles about WebGL.  The last one
+was about <a href="webgl-text-texture.html">using textures for rendering text in
+WebGL</a>.  If you haven&#39;t read it you might want to
+check that out before continuing.</p>
+<p>In the last article we went over <a href="webgl-text-texture.html">how to use a texture to draw text in
+your WebGL scene</a>.  That technique is very common
+and it&#39;s great for things like in multi-player games where you want to put
+a name over an avatar.  As that name rarely changes it&#39;s perfect.</p>
+<p>Let&#39;s say you want to render a lot of text that changes often like a UI.
+Given the last example in <a href="webgl-text-texture.html">the previous article</a>
+an obvious solution is to make a texture for each letter.  Let&#39;s change
+the last sample to do that.</p>
 <pre><code>+var names = [
 +  &quot;anna&quot;,   // 0
 +  &quot;colin&quot;,  // 1
@@ -150,7 +151,7 @@ textPositions.forEach(function(pos, ndx) {
 
     // because pos is in view space that means it&#39;s a vector from the eye to
     // some position. So translate along that vector back toward the eye some distance
-    var fromEye = normalize(pos);
+    var fromEye = m4.normalize(pos);
     var amountToMoveTowardEye = 150;  // because the F is 150 units long
     var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
     var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
@@ -158,16 +159,15 @@ textPositions.forEach(function(pos, ndx) {
     var desiredTextScale = -1 / gl.canvas.height;  // 1x1 pixels
     var scale = viewZ * desiredTextScale;
 
-    var textMatrix = m4.identity();
-+    textMatrix = matrixMultiply(textMatrix, makeTranslation(ii, 0, 0));
-    textMatrix = matrixMultiply(textMatrix, makeScale(tex.width * scale, tex.height * scale, 1));
-    textMatrix = matrixMultiply(textMatrix, makeTranslation(viewX, viewY, viewZ));
-    textMatrix = matrixMultiply(textMatrix, projectionMatrix);
+    var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+    // scale the F to the size we need it.
+    textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
+    +textMatrix = m4.translate(textMatrix, ii, 0, 0);
 
     // set texture uniform
+    m4.copy(textMatrix, textUniforms.u_matrix);
     textUniforms.u_texture = tex.texture;
-    copyMatrix(textMatrix, textUniforms.u_matrix);
-    setUniforms(textProgramInfo.uniformSetters, textUniforms);
+    webglUtils.setUniforms(textProgramInfo, textUniforms);
 
     // Draw the text.
     gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
@@ -180,83 +180,85 @@ textPositions.forEach(function(pos, ndx) {
 </div>
 
 </p>
-<p>Unfortunately it&#39;s SLOW. The example below doesn&#39;t show it but we&#39;re individually
-drawing 73 quads. We&#39;re computing 73 matrices and 292 matrix multiplies. A typical
-UI might easily have 1000 letters showing. That&#39;s way way too much work to get
-a reasonable framerate.</p>
-<p>So to fix that the way this is usually done is to make a texture atlas that contains all
-the letters. We went over what a texture atlas is when we talked about <a href="webgl-3d-textures.html">texturing the 6
-faces of a cube</a>.</p>
-<p>Let&#39;s make some code to make a texture atlas of glyphs.</p>
-<pre><code>function makeGlyphCanvas(ctx, maxWidthOfTexture, heightOfLetters, baseLine, padding, letters) {
-  var rows = 1;      // number of rows of glyphs
-  var x = 0;         // x position in texture to draw next glyph
-  var y = 0;         // y position in texture to draw next glyph
-  var glyphInfos = { // info for each glyph
-  };
-
-  // Go through each letter, measure it, remember its width and position
-  for (var ii = 0; ii &lt; letters.length; ++ii) {
-    var letter = letters[ii];
-    var t = ctx.measureText(letter);
-    // Will this letter fit on this row?
-    if (x + t.width + padding &gt; maxWidthOfTexture) {
-       // so move to the start of the next row
-       x = 0;
-       y += heightOfLetters;
-       ++rows;
-    }
-    // Remember the data for this letter
-    glyphInfos[letter] = {
-      x: x,
-      y: y,
-      width: t.width,
-    };
-    // advance to space for next letter.
-    x += t.width + padding;
-  }
-
-  // Now that we know the size we need set the size of the canvas
-  // We have to save the canvas settings because changing the size
-  // of a canvas resets all the settings
-  var settings = saveProperties(ctx);
-  ctx.canvas.width = (rows == 1) ? x : maxWidthOfTexture;
-  ctx.canvas.height = rows * heightOfLetters;
-  restoreProperties(settings, ctx);
-
-  // Draw the letters into the canvas
-  for (var ii = 0; ii &lt; letters.length; ++ii) {
-    var letter = letters[ii];
-    var glyphInfo = glyphInfos[letter];
-    var t = ctx.fillText(letter, glyphInfo.x, glyphInfo.y + baseLine);
-  }
-
-  return glyphInfos;
-}
-</code></pre><p>And let&#39;s use it</p>
-<pre><code>var ctx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
-ctx.font = &quot;20px sans-serif&quot;;
-ctx.fillStyle = &quot;white&quot;;
-var maxTextureWidth = 256;
-var letterHeight = 22;
-var baseline = 16;
-var padding = 1;
-var letters = &quot;0123456789.abcdefghijklmnopqrstuvwxyz&quot;;
-var glyphInfos = makeGlyphCanvas(
-    ctx,
-    maxTextureWidth,
-    letterHeight,
-    baseline,
-    padding,
-    letters);
-</code></pre><p>Here&#39;s the result</p>
-<p><div>
-  <iframe class="webgl_example" style="width:  258px; height: 46px;" src="/webgl/resources/editor.html?url=/webgl/lessons/../glyph-texture-atlas-maker.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../glyph-texture-atlas-maker.html" target="_blank">click here to open in a separate window</a>
-</div>
-
-</p>
-<p>Now that we have a texture with glyphs in it we need to use it. To do that we&#39;ll
+<p>Unfortunately it&#39;s SLOW.  The example below doesn&#39;t show it but we&#39;re
+individually drawing 73 quads.  We&#39;re computing 73 matrices and 292 matrix
+multiplies.  A typical UI might easily have 1000 letters showing.  That&#39;s
+way way too much work to get a reasonable framerate.</p>
+<p>So to fix that the way this is usually done is to make a texture atlas
+that contains all the letters.  We went over what a texture atlas is when
+we talked about <a href="webgl-3d-textures.html#texture-atlas">texturing the 6 faces of a cube</a>.</p>
+<p>Searching the web I found <a href="http://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta">this simple open source font texture atlas</a>
+<img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../resources/8x8-font.png" /></p>
+<pre><code>var fontInfo = {
+  letterHeight: 8,
+  spaceWidth: 8,
+  spacing: -1,
+  textureWidth: 64,
+  textureHeight: 40,
+  glyphInfos: {
+    &#39;a&#39;: { x:  0, y:  0, width: 8, },
+    &#39;b&#39;: { x:  8, y:  0, width: 8, },
+    &#39;c&#39;: { x: 16, y:  0, width: 8, },
+    &#39;d&#39;: { x: 24, y:  0, width: 8, },
+    &#39;e&#39;: { x: 32, y:  0, width: 8, },
+    &#39;f&#39;: { x: 40, y:  0, width: 8, },
+    &#39;g&#39;: { x: 48, y:  0, width: 8, },
+    &#39;h&#39;: { x: 56, y:  0, width: 8, },
+    &#39;i&#39;: { x:  0, y:  8, width: 8, },
+    &#39;j&#39;: { x:  8, y:  8, width: 8, },
+    &#39;k&#39;: { x: 16, y:  8, width: 8, },
+    &#39;l&#39;: { x: 24, y:  8, width: 8, },
+    &#39;m&#39;: { x: 32, y:  8, width: 8, },
+    &#39;n&#39;: { x: 40, y:  8, width: 8, },
+    &#39;o&#39;: { x: 48, y:  8, width: 8, },
+    &#39;p&#39;: { x: 56, y:  8, width: 8, },
+    &#39;q&#39;: { x:  0, y: 16, width: 8, },
+    &#39;r&#39;: { x:  8, y: 16, width: 8, },
+    &#39;s&#39;: { x: 16, y: 16, width: 8, },
+    &#39;t&#39;: { x: 24, y: 16, width: 8, },
+    &#39;u&#39;: { x: 32, y: 16, width: 8, },
+    &#39;v&#39;: { x: 40, y: 16, width: 8, },
+    &#39;w&#39;: { x: 48, y: 16, width: 8, },
+    &#39;x&#39;: { x: 56, y: 16, width: 8, },
+    &#39;y&#39;: { x:  0, y: 24, width: 8, },
+    &#39;z&#39;: { x:  8, y: 24, width: 8, },
+    &#39;0&#39;: { x: 16, y: 24, width: 8, },
+    &#39;1&#39;: { x: 24, y: 24, width: 8, },
+    &#39;2&#39;: { x: 32, y: 24, width: 8, },
+    &#39;3&#39;: { x: 40, y: 24, width: 8, },
+    &#39;4&#39;: { x: 48, y: 24, width: 8, },
+    &#39;5&#39;: { x: 56, y: 24, width: 8, },
+    &#39;6&#39;: { x:  0, y: 32, width: 8, },
+    &#39;7&#39;: { x:  8, y: 32, width: 8, },
+    &#39;8&#39;: { x: 16, y: 32, width: 8, },
+    &#39;9&#39;: { x: 24, y: 32, width: 8, },
+    &#39;-&#39;: { x: 32, y: 32, width: 8, },
+    &#39;*&#39;: { x: 40, y: 32, width: 8, },
+    &#39;!&#39;: { x: 48, y: 32, width: 8, },
+    &#39;?&#39;: { x: 56, y: 32, width: 8, },
+  },
+};
+</code></pre><p>And we&#39;ll <a href="webgl-3d-textures.html">load the image just like we loaded textures before</a></p>
+<pre><code>// Create a texture.
+var glyphTex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, glyphTex);
+// Fill the texture with a 1x1 blue pixel.
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([0, 0, 255, 255]));
+// Asynchronously load an image
+var image = new Image();
+image.src = &quot;resources/8x8-font.png&quot;;
+image.addEventListener(&#39;load&#39;, function() {
+  // Now that the image has loaded make copy it to the texture.
+  gl.bindTexture(gl.TEXTURE_2D, glyphTex);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+});
+</code></pre><p>Now that we have a texture with glyphs in it we need to use it. To do that we&#39;ll
 build quad vertices on the fly for each glyph. Those vertices will use texture coordinates
 to select a particlar glyph</p>
 <p>Given a string let&#39;s build the vertices</p>
@@ -267,15 +269,17 @@ to select a particlar glyph</p>
   var texcoords = new Float32Array(numVertices * 2);
   var offset = 0;
   var x = 0;
+  var maxX = fontInfo.textureWidth;
+  var maxY = fontInfo.textureHeight;
   for (var ii = 0; ii &lt; len; ++ii) {
     var letter = s[ii];
     var glyphInfo = fontInfo.glyphInfos[letter];
     if (glyphInfo) {
       var x2 = x + glyphInfo.width;
-      var u1 = glyphInfo.x / fontInfo.textureWidth;
-      var v1 = (glyphInfo.y + fontInfo.letterHeight) / fontInfo.textureHeight;
-      var u2 = (glyphInfo.x + glyphInfo.width) / fontInfo.textureWidth;
-      var v2 = glyphInfo.y / fontInfo.textureHeight;
+      var u1 = glyphInfo.x / maxX;
+      var v1 = (glyphInfo.y + fontInfo.letterHeight - 1) / maxY;
+      var u2 = (glyphInfo.x + glyphInfo.width - 1) / maxX;
+      var v2 = glyphInfo.y / maxY;
 
       // 6 vertices per letter
       positions[offset + 0] = x;
@@ -308,7 +312,7 @@ to select a particlar glyph</p>
       texcoords[offset + 10] = u2;
       texcoords[offset + 11] = v2;
 
-      x += glyphInfo.width;
+      x += glyphInfo.width + fontInfo.spacing;
       offset += 12;
     } else {
       // we don&#39;t have this character so just advance
@@ -335,61 +339,37 @@ var textBufferInfo = {
   },
   numElements: 0,
 };
-</code></pre><p>and a fontInfo and texture from the canvas with glyphs in it</p>
-<pre><code>var ctx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
-ctx.font = &quot;20px sans-serif&quot;;
-ctx.fillStyle = &quot;white&quot;;
-var maxTextureWidth = 256;
-var letterHeight = 22;
-var baseline = 16;
-var padding = 1;
-var letters = &quot;0123456789.,abcdefghijklmnopqrstuvwxyz&quot;;
-var glyphInfos = makeGlyphCanvas(
-    ctx,
-    maxTextureWidth,
-    letterHeight,
-    baseline,
-    padding,
-    letters);
-var fontInfo = {
-  glyphInfos: glyphInfos,
-  letterHeight: letterHeight,
-  baseline: baseline,
-  spaceWidth: 5,
-  textureWidth: ctx.canvas.width,
-  textureHeight: ctx.canvas.height,
-};
 </code></pre><p>And then to render text we&#39;ll update the buffers. We&#39;ll also make the text dynamic</p>
 <pre><code>textPositions.forEach(function(pos, ndx) {
 
   var name = names[ndx];
-  var s = name + &quot;:&quot; + pos[0].toFixed(0) + &quot;,&quot; + pos[1].toFixed(0) + &quot;,&quot; + pos[2].toFixed(0);
-  var vertices = makeVerticesForString(fontInfo, s);
++  var s = name + &quot;:&quot; + pos[0].toFixed(0) + &quot;,&quot; + pos[1].toFixed(0) + &quot;,&quot; + pos[2].toFixed(0);
++  var vertices = makeVerticesForString(fontInfo, s);
++
++  // update the buffers
++  textBufferInfo.attribs.a_position.numComponents = 2;
++  gl.bindBuffer(gl.ARRAY_BUFFER, textBufferInfo.attribs.a_position.buffer);
++  gl.bufferData(gl.ARRAY_BUFFER, vertices.arrays.position, gl.DYNAMIC_DRAW);
++  gl.bindBuffer(gl.ARRAY_BUFFER, textBufferInfo.attribs.a_texcoord.buffer);
++  gl.bufferData(gl.ARRAY_BUFFER, vertices.arrays.texcoord, gl.DYNAMIC_DRAW);
 
-  // update the buffers
-  textBufferInfo.attribs.a_position.numComponents = 2;
-  gl.bindBuffer(gl.ARRAY_BUFFER, textBufferInfo.attribs.a_position.buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, vertices.arrays.position, gl.DYNAMIC_DRAW);
-  gl.bindBuffer(gl.ARRAY_BUFFER, textBufferInfo.attribs.a_texcoord.buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, vertices.arrays.texcoord, gl.DYNAMIC_DRAW);
+  // use just the view position of the &#39;F&#39; for the text
 
-  setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
-
-  // use just the position of the &#39;F&#39; for the text
-  var textMatrix = m4.identity();
   // because pos is in view space that means it&#39;s a vector from the eye to
   // some position. So translate along that vector back toward the eye some distance
-  var fromEye = normalize(pos);
+  var fromEye = m4.normalize(pos);
   var amountToMoveTowardEye = 150;  // because the F is 150 units long
-  textMatrix = matrixMultiply(textMatrix, makeTranslation(
-      pos[0] - fromEye[0] * amountToMoveTowardEye,
-      pos[1] - fromEye[1] * amountToMoveTowardEye,
-      pos[2] - fromEye[2] * amountToMoveTowardEye));
-  textMatrix = matrixMultiply(textMatrix, projectionMatrix);
+  var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
+  var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
+  var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
+  var desiredTextScale = -1 / gl.canvas.height * 2;  // 1x1 pixels
+  var scale = viewZ * desiredTextScale;
 
-  // set texture uniform
-  copyMatrix(textMatrix, textUniforms.u_matrix);
-  setUniforms(textProgramInfo.uniformSetters, textUniforms);
+  var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+  textMatrix = m4.scale(textMatrix, scale, scale, 1);
+
+  m4.copy(textMatrix, textUniforms.u_matrix);
+  webglUtils.setUniforms(textProgramInfo, textUniforms);
 
   // Draw the text.
   gl.drawArrays(gl.TRIANGLES, 0, vertices.numVertices);
@@ -421,6 +401,8 @@ easy to make paragraphs of text.</p>
 <p>Then you could color the text different colors per letter. Of course you&#39;d have
 to decide how to specify when to change colors.</p>
 </li>
+<li><p>Consider generating the glyph texture atlas at runtime using a 2D canvas</p>
+</li>
 </ul>
 <p>The other big issue which I&#39;m not going to cover is that textures have a limited
 size but fonts are effectively unlimited. If you want to support all of Unicode
@@ -436,36 +418,11 @@ about to replace is still being referenced by a quad yet to be drawn then they n
 to draw with what they have before replacing the glyph.</p>
 <p>Another thing you can do, though I&#39;m not recommending it, is combine this
 technique with <a href="webgl-text-texture.html">the previous technique</a>. You can
-render glyphs directly into another texture. Of course a GPU accelerated
-canvas already does that for you so there&#39;s probably no reason to do it yourself.</p>
+render glyphs directly into another texture.</p>
 <p>Yet one more way to draw text in WebGL is to actually use 3D text. The &#39;F&#39; in
 all the samples above is a 3D letter. You&#39;d make one for each letter. 3D letters
 are common for titles and movie logos but not much else.</p>
 <p>I hope that&#39;s covered text in WebGL.</p>
-<div class="webgl_bottombar">
-<h3>Issues with making glyphs using the Canvas 2D API</h3>
-<p>
-How did I decide on a <code>baseline</code> of 16 and a <code>letterHeight</code> of 22 when making
-the glyphs? This is actually one place that's a little problematic as far as I can tell. The
-issue is HTML5 and the Canvas API give us no way to know any of those things. There's no
-way to tell how tall the tallest glyph of a font will be without just trying every letter.
-All 110,000+ of them.
-</p><p>
-There's also no way from HTML5 to find out the baseline of a font such that drawing every
-letter in that font will fit inside a certain rectangle.
-</p><p>
-Ideally you'd like to be able
-to know that if the baseline of the font is 16 that nothing will draw more than 16 pixels
-above that baseline and you'd also like to know how far below that baseline the longest
-descender is. Since there's no way to get that info in HTML5 we just have to try different
-values and see, or, we'd have to draw every letter one at a time into a canvas and scan the
-pixels to derive this info. Both of those are not great solutions.
-</p>
-<p>
-Hopefully the powers that be will add some new APIs to make this possible.
-</p>
-</div>
-
 
       <hr/>
       <div>
