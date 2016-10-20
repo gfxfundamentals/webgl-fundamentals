@@ -170,6 +170,18 @@
   function setupLesson(canvas, opt_options) {
     var options = opt_options || {};
 
+    if (canvas) {
+      canvas.addEventListener('webglcontextlost', function(e) {
+          // the default is to do nothing. Preventing the default
+          // means allowing context to be restored
+          e.preventDefault();
+      });
+      canvas.addEventListener('webglcontextrestored', function(e) {
+          // just reload the page. Easiest.
+          window.location.reload();
+      });
+    }
+
     if (isInIFrame()) {
       updateCSSIfInIFrame();
     } else if (!options.noTitle && options.title !== false) {
