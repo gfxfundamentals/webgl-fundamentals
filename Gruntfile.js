@@ -9,6 +9,8 @@ module.exports = function(grunt) {
         'webgl/resources/primitives.js',
         'webgl/resources/webgl-2d-math.js',
         'webgl/resources/webgl-3d-math.js',
+        'webgl/resources/2d-math.js',
+        'webgl/resources/3d-math.js',
       ],
       options: {
         config: 'build/conf/eslint.json',
