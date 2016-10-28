@@ -141,7 +141,9 @@ function render(image) {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
   ...
 }
-</code></pre><p>И пример отображения картинки в WebGL</p>
+</code></pre><p>И пример отображения картинки в WebGL. ВНИМАНИЕ: если вы запускаете этот пример на
+локальном компьютере, вам понадобится какой-нибудь веб-сервер, чтобы загружать изображения.
+<a href="webgl-setup-and-installation.html">Узнайте, как его можно установить за пару минут</a>.</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-image.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-image.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
@@ -185,10 +187,14 @@ void main() {
 &lt;/script&gt;
 </code></pre><p>Ещё нам нужно передать размер текстуры из JavaScript.</p>
 <pre><code>...
+
 var textureSizeLocation = gl.getUniformLocation(program, &quot;u_textureSize&quot;);
+
 ...
+
 // задаём размер изображения
 gl.uniform2f(textureSizeLocation, image.width, image.height);
+
 ...
 </code></pre><p>Сравните с оригинальным изображением выше.</p>
 <p><div>
@@ -197,7 +203,7 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 </div>
 
 </p>
-<p>Итак, теперь мы знаем, как брать значение других пикселей, теперь применим ядро свёртки, чтобы выполнить распространённые методы обработки изображений. Мы будем использовать ядро 3x3. Ядро свёртки - это просто матрица 3х3, где каждое значение в матрице означает, на сколько умножить 8 пикселей, находящихся вокруг пикселя, который мы отрисовываем. Затем мы делим результат на сумму всех значений ядра или на 1, смотря что больше. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Вот довольно неплохая статья на этот счёт.</a>. А <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">вот ещё одна статья</a>, показывающая, как написать код, задающий ядро свёртки на C++.</p>
+<p>Итак, теперь мы знаем, как брать значение других пикселей, теперь применим ядро свёртки, чтобы выполнить распространённые методы обработки изображений. Мы будем использовать ядро 3x3. Ядро свёртки - это просто матрица 3х3, где каждое значение в матрице означает, на сколько умножить 8 пикселей, находящихся вокруг пикселя, который мы отрисовываем. Затем мы делим результат на сумму всех значений ядра или на 1, смотря что больше. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Вот довольно неплохая статья на этот счёт</a>. А <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">вот ещё одна статья</a>, показывающая, как написать код, задающий ядро свёртки на C++.</p>
 <p>В нашем случае мы планируем выполнить ту же работу в шейдере, поэтому вот код фрагментного шейдера.</p>
 <pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
@@ -256,38 +262,41 @@ void main() {
 </div>
 
 </p>
-<p>Надеюсь, эта статья убедила вас, что обработка изображений в WebGL - это довольно просто. Дальше я рассмотрю, <a href="webgl-image-processing-continued.html">как применить к изображению более одного эффекта.</a>.</p>
-<div class="webgl_bottombar">'u_image' нигде не устанавливается. Как это работает?
-
+<p>Надеюсь, эта статья убедила вас, что обработка изображений в WebGL - это довольно просто. Дальше я рассмотрю, <a href="webgl-image-processing-continued.html">как применить к изображению более одного эффекта</a>.</p>
+<div class="webgl_bottombar">
+<h3><code>u_image</code> нигде не устанавливается. Как это работает?</h3>
+<p>
 Значение uniform-переменных по умолчанию равно 0, поэтому u_image использует текстурный блок 0. Текстурный блок 0 является также активной текстурой по умолчанию, поэтому вызов bindTexture привяжет текстуру к текстурному блоку 0.
-
+</p>
+<p>
 WebGL содержит массив текстурных блоков. Связь между uniform-переменной и текстурой настраивается через получение ссылки этой uniform-переменной и установку индекса текстурного блока, к которому вы хотите обратиться.
-
+</p>
+<p>
 Например:
+</p>
 <pre class="prettyprint showlinemods">
 var textureUnitIndex = 6; // используем текстурный блок 6.
 var u_imageLoc = gl.getUniformLocation(
     program, "u_image");
 gl.uniform1i(u_imageLoc, textureUnitIndex);
 </pre>
-
-Для установки текстур различным блокам вы вызываете gl.activeTexture, а затем привязываете нужную вам текстуру к этому блоку. Например:
-
+<p>
+Для установки текстур различным блокам вы вызываете <code>gl.activeTexture</code>, а затем привязываете нужную вам текстуру к этому блоку. Например:
+</p>
 <pre class="prettyprint showlinemods">
 // привязать someTexture текстурному блоку 6.
 gl.activeTexture(gl.TEXTURE6);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
-
+<p>
 Следующий код также работает:
-
+</p>
 <pre class="prettyprint showlinemods">
 var textureUnitIndex = 6; // использовать текстурный блок 6.
 // связываем someTexture с текстурным блоком 6.
 gl.activeTexture(gl.TEXTURE0 + textureUnitIndex);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
-
 </div>
 
 <div class="webgl_bottombar">
