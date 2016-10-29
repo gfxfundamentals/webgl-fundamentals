@@ -74,7 +74,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 (массива данных) и вершин пространства отсечения. Вторая задача - отрисовка
 пикселей на основе результатов первой задачи.</p>
 <p>Когда вы вызываете</p>
-<pre><code>gl.drawArrays(gl.TRIANGLE, 0, 9);
+<pre><code>var primitiveType = gl.TRIANGLES;
+var offset = 0;
+var count = 9;
+gl.drawArrays(primitiveType, offset, count);
 </code></pre><p>цифра 9 означает &quot;обработай 9 вершин&quot; и 9 вершин обрабатываются:</p>
 <p><img src="../resources/vertex-shader-anim.gif" class="webgl_center" /></p>
 <p>Слева отображены переданные вами данные. Вершинный шейдер - это функция,
@@ -112,7 +115,10 @@ function setGeometry(gl) {
 function drawScene() {
   ...
   // рисуем геометрию
-*  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  var primitiveType = gl.TRIANGLES;
+  var offset = 0;
+  var count = 3;
+  gl.drawArrays(primitiveType, offset, count);
 }
 </code></pre><p>Затем в нашем вершинном шейдере мы определяем <em>varying-переменную</em> для
 передачи данных во фрагментный шейдер.</p>
@@ -238,11 +244,8 @@ void main() {
 +  var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
   ...
 +  // создаём буфер для цветов
-+  var buffer = gl.createBuffer();
-+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-+  gl.enableVertexAttribArray(colorLocation);
-+  gl.vertexAttribPointer(colorLocation, 4, gl.FLOAT, false, 0, 0);
-
++  var colorBuffer = gl.createBuffer();
++  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
   // устанавливаем цвета
 +  setColors(gl);
   ...
@@ -270,6 +273,26 @@ void main() {
 +          r2, b2, g2, 1]),
 +      gl.STATIC_DRAW);
 +}
+</code></pre><p>Во время отрисовки настраиваем атрибут цвета</p>
+<pre><code>+gl.enableVertexAttribArray(colorLocation);
++
++// Привязываем буфер цветов.
++gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
++
++// Указываем атрибуту, как получать данные от colorBuffer (ARRAY_BUFFER)
++var size = 4;          // 4 компоненты на итерацию
++var type = gl.FLOAT;   // наши данные - 32-битные числа с плавающей точкой
++var normalize = false; // не нормализовать данные
++var stride = 0;        // 0 = перемещаться на size * sizeof(type) каждую итерацию для получения следующего положения
++var offset = 0;        // начинать с начала буфера
++gl.vertexAttribPointer(
++    colorLocation, size, type, normalize, stride, offset)
+</code></pre><p>И устанавливаем count для вычисления 6 вершин 2 треугольников</p>
+<pre><code>// Отрисовка геометрии.
+var primitiveType = gl.TRIANGLES;
+var offset = 0;
+*var count = 6;
+gl.drawArrays(primitiveType, offset, count);
 </code></pre><p>И вот результат:</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-rectangle-with-2-colors.html"></iframe>
@@ -312,7 +335,7 @@ function setColors(gl) {
 <p>Буферы - средство передачи вершин и вершинных данных на видеокарту.
 <code>gl.createBuffer</code> создаёт буфер.
 <code>gl.bindBuffer</code> устанавливает данный буфер как активный буфер, с которым будет происходить работа.
-<code>gl.bufferData</code> копирует данные в активный буфер.</p>
+<code>gl.bufferData</code> копирует данные в активный буфер. Обычно выполняется на этапе инициализации.</p>
 <p>Когда данные помещены в буфер, нам нужно подсказать WebGL, как извлечь
 эти данные и передать атрибуту вершинного шейдера.</p>
 <p>Чтобы это сделать, сначала получим у WebGL ссылку на атрибут.
@@ -320,9 +343,13 @@ function setColors(gl) {
 <pre><code>// получаем ссылки на атрибуты, куда запишутся данные
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
-</code></pre><p>Когда нам известна ссылка на атрибут, мы может выполнить 2 команды.</p>
+</code></pre><p>Тоже обычно выполняется на этапе инициализации. Когда нам известна ссылка на атрибут,
+мы можем выполнить 3 команды прямо перед отрисовкой.</p>
 <pre><code>gl.enableVertexAttribArray(location);
 </code></pre><p>Эта команда говорит WebGL, что мы хотим получать данные из буфера.</p>
+<p>gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);</p>
+<p>Здесь буфер привязывается к точке связи ARRAY_BUFFER. Это глобальная
+переменная внутри WebGL.</p>
 <pre><code>gl.vertexAttribPointer(
     location,
     numComponents,
@@ -330,8 +357,8 @@ var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
     normalizeFlag,
     strideToNextPieceOfData,
     offsetIntoBuffer);
-</code></pre><p>А эта команда говорит WebGL получить данные из буфера, который был привязан
-последним через gl.bindBuffer; сколько компонентов уходит на вершину (1 - 4);
+</code></pre><p>А эта команда говорит WebGL получить данные из буфера, который привязан к
+точке связи ARRAY_BUFFER; сколько компонентов уходит на вершину (1 - 4);
 какого типа данные (<code>BYTE</code>, <code>FLOAT</code>, <code>INT</code>, <code>UNSIGNED_SHORT</code>, и т.д.); шаг,
 который указывает, сколько байтов нужно пропустить, чтобы перейти от одной
 порции данных к следующей; отступ, чтобы указать, как далеко от начала буфера
@@ -370,7 +397,14 @@ WebGL на полную катушку.</p>
 <p>Давайте изменим код соответствующим образом. Когда мы говорим WebGL,
 как извлекать наши цвета, мы бы использовали</p>
 <pre class="prettyprint showlinemods">
-  gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
+  // Указываем атрибуту, как получать данные от colorBuffer (ARRAY_BUFFER)
+  var size = 4;                    // 4 компоненты на итерацию
+  *  var type = gl.UNSIGNED_BYTE;  // наши данные - 8-битные числа с плавающей точкой
+  *  var normalize = true;         // нормализовать данные
+  var stride = 0;                  // 0 = перемещаться на size * sizeof(type) каждую итерацию для получения следующего положения
+  var offset = 0;                  // начинать с начала буфера
+  gl.vertexAttribPointer(
+      colorLocation, size, type, normalize, stride, offset)
 </pre>
 <p>И при заполнении буфера цветом мы бы написали</p>
 <pre class="prettyprint showlinemods">
