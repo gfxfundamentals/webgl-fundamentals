@@ -100,20 +100,24 @@ window.langDB = {
     "webgl-2d-translation.html": {
       "en": true,
       "fr": true,
-      "pl": true
+      "pl": true,
+      "ru": true
     },
     "webgl-2d-scale.html": {
       "en": true,
-      "fr": true
+      "fr": true,
+      "ru": true
     },
     "webgl-2d-rotation.html": {
       "en": true,
       "fr": true,
-      "pl": true
+      "pl": true,
+      "ru": true
     },
     "webgl-2d-matrices.html": {
       "en": true,
-      "fr": true
+      "fr": true,
+      "ru": true
     },
     "webgl-boilerplate.html": {
       "en": true
