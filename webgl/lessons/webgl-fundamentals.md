@@ -30,7 +30,7 @@ a shader can receive data.
    you're free to put anything you want in them.
 
    Attributes are used to specify how to
-   pull data how of your buffers and provide them to your vertex shader.
+   pull data out of your buffers and provide them to your vertex shader.
    For example you might put positions in a buffer as three 32bit floats
    per position. You would tell a particular attribute which buffer to pull the positions out of, what type
    of data it should pull out (3 component 32 bit floating point numbers), what offset
@@ -58,7 +58,7 @@ a shader can receive data.
 
 ## WebGL Hello World
 
-WebGL only cares about 2 things. Clipspace coordinates and colors.
+WebGL only cares about 2 things: clipspace coordinates and colors.
 Your job as a programmer using WebGL is to provide WebGL with those 2 things.
 You provide your 2 "shaders" to do this. A Vertex shader which provides the
 clipspace coordinates and a fragment shader that provides the color.
@@ -141,8 +141,8 @@ Now we can create a WebGLRenderingContext
         ...
 
 Now we need to compile those shaders to put them on the GPU so first we need to get them into strings.
-You can create your GLSL strings any way you normally create strings in JavaScript. For example by concatenating,
-by using AJAX to download them, by using multiline template strings. or in thise case by
+You can create your GLSL strings any way you normally create strings in JavaScript: by concatenating,
+by using AJAX to download them, by using multiline template strings. Or in this case, by
 putting them in non-JavaScript typed script tags.
 
     <script id="2d-vertex-shader" type="notjs">
@@ -271,7 +271,7 @@ get executed each time we want to render/draw.
 
 ## Rendering
 
-Before we draw we should resize the canvas to match it's display size. Canvases just like Images have 2 sizes.
+Before we draw we should resize the canvas to match its display size. Canvases just like Images have 2 sizes.
 The number of pixels actually in them and separately the size they are displayed. CSS determines the size
 the canvas is displayed. **You should always set the size you want a canvas with CSS** since it is far far
 more flexible than any other method.
