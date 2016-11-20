@@ -58,7 +58,8 @@ window.langDB = {
     },
     "webgl-3d-camera.html": {
       "en": true,
-      "fr": true
+      "fr": true,
+      "ru": true
     },
     "webgl-2-textures.html": {
       "en": true
@@ -69,11 +70,13 @@ window.langDB = {
     },
     "webgl-3d-perspective.html": {
       "en": true,
-      "fr": true
+      "fr": true,
+      "ru": true
     },
     "webgl-3d-orthographic.html": {
       "en": true,
-      "fr": true
+      "fr": true,
+      "ru": true
     },
     "webgl-image-processing.html": {
       "en": true,
