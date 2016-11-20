@@ -30,7 +30,7 @@ a shader can receive data.
    you're free to put anything you want in them.
 
    Attributes are used to specify how to
-   pull data how of your buffers and provide them to your vertex shader.
+   pull data out of your buffers and provide them to your vertex shader.
    For example you might put positions in a buffer as three 32bit floats
    per position. You would tell a particular attribute which buffer to pull the positions out of, what type
    of data it should pull out (3 component 32 bit floating point numbers), what offset
