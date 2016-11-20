@@ -175,6 +175,13 @@
           // the default is to do nothing. Preventing the default
           // means allowing context to be restored
           e.preventDefault();
+          var div = document.createElement("div");
+          div.className = "contextlost";
+          div.innerHTML = '<div>Context Lost: Click To Reload</div>';
+          div.addEventListener('click', function() {
+              window.location.reload();
+          });
+          document.body.appendChild(div);
       });
       canvas.addEventListener('webglcontextrestored', function(e) {
           // just reload the page. Easiest.
