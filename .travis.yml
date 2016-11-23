@@ -1,7 +1,10 @@
 language: node_js
 node_js:
-  - "0.11"
+  - stable
 script:
-  - grunt eslint
+  - bash ./deploy.sh
+env:
+  global:
+    - ENCRYPTION_LABEL: "dd3896eec935"
+    - COMMIT_AUTHOR_EMAIL: "github@greggman.com"
 
-before_install: npm install -g grunt-cli
