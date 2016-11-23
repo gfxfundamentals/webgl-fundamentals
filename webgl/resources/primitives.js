@@ -45,8 +45,8 @@
 }(this, function(webglUtils, m4) {
   "use strict";
 
-  var webglUtils = webglUtils || this.webglUtils;
-  var m4 = m4 || this.m4 || math3d;
+  webglUtils = webglUtils || this.webglUtils;
+  m4 = m4 || this.m4 || math3d;
 
   function allButIndices(name) {
     return name !== "indices";

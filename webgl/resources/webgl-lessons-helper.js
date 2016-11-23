@@ -183,7 +183,7 @@
           });
           document.body.appendChild(div);
       });
-      canvas.addEventListener('webglcontextrestored', function(e) {
+      canvas.addEventListener('webglcontextrestored', function() {
           // just reload the page. Easiest.
           window.location.reload();
       });
