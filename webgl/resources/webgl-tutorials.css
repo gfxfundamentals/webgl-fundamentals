@@ -1,0 +1,154 @@
+/* Licensed under a BSD license. See ../license.html for license */
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  background-color: #aaa;
+  font-family: Sans-Serif;
+}
+
+canvas {
+  background-color: #fff;
+  border: 1px solid black;
+  /* NOTE: This size is changed if in iframe - see below '.iframe canvas' */
+  width: 400px;
+  height: 300px;
+  display: block;
+}
+
+#uiContainer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  font-family: monospace;
+
+  text-shadow:
+   -1px -1px 0 #FFF,
+    1px -1px 0 #FFF,
+    -1px 1px 0 #FFF,
+     1px 1px 0 #FFF;
+}
+#ui {
+  opacity: 0.8;
+}
+
+.gman-slider-label {
+  font-size: small;
+  min-width: 10em;
+  text-align: right;
+}
+.gman-slider-value {
+  float: right;
+  font-size: small;
+  order: 1;
+  min-width: 3em;
+}
+
+.gman-slider-upper {
+  height: 1.5em;
+}
+.gman-slider-outer {
+  float:right;
+  display: flex;
+  align-items: center;
+  height: 1.7em;
+}
+.gman-slider-slider {
+  opacity: 0.5;
+  font-size: large;
+  min-width: 120px;
+  margin-left: .3em;
+  margin-right: .3em;
+}
+
+/* styles to apply if in an iframe */
+
+html.iframe {
+    height: 100vh;
+}
+body.iframe {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.iframe>.description {
+  display: none;
+}
+.iframe .divcavnas {
+  width: 100vw;
+  height: 100vh;
+}
+.iframe canvas {
+  width: 100vw;
+  height: 100vh;
+  border: none;
+}
+
+.iframe>#example {
+  width: 100%;
+  height: 100%;
+}
+#ui #rotation>canvas {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+#ui {
+    width: 200px;
+}
+
+.console {
+    font-family: monospace;
+    max-height: 50%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: auto;
+    background: #DDD;
+}
+.console>div {
+    white-space: pre-wrap;
+    border-top: 1px solid black;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}
+.console>.error {
+    background: red;
+    color: white;
+}
+
+.contextlost {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 10000;
+}
+.contextlost>div {
+    padding: 1em;
+    border-radius: 0.5em;
+    background: red;
+    color: white;
+}
+
+@media (max-width: 390px) {
+  pre {
+    font-size: xx-small !important;
+    max-width: 300px !important;
+  }
+}
+
+

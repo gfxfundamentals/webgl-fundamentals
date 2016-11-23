@@ -1,0 +1,191 @@
+<html>
+<head>
+<meta charset="utf8">
+<title>WebGL preserveDrawingbuffer=true</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+canvas { border: 1px solid black; }
+</style>
+</head>
+<body>
+<p><canvas id="c"></canvas></p>
+</body>
+<!-- vertex shader -->
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec4 a_color;
+uniform mat4 u_worldViewProjection;
+varying vec4 v_color;
+void main() {
+   gl_Position = u_worldViewProjection * a_position;
+   v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+varying vec4 v_color;
+uniform vec4 u_colorMult;
+void main() {
+   gl_FragColor = v_color * u_colorMult;
+}
+</script>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script>
+<script src="3d-math.js"></script>
+<script>
+"use strict";
+
+var m = ThreeDMath;
+window.onload = main;
+
+function main() {
+  var cubeVertices = [
+    -1, -1, -1,
+     1, -1, -1,
+     1,  1, -1,
+    -1,  1, -1,
+    -1, -1,  1,
+     1, -1,  1,
+     1,  1,  1,
+    -1,  1,  1,
+  ];
+  var cubeColors = [
+     0, 0, 0,
+     1, 0, 0,
+     0, 1, 0,
+     1, 1, 0,
+     0, 0, 1,
+     1, 0, 1,
+     0, 1, 1,
+     1, 1, 1,
+  ];
+
+/*
+    3+-----+2
+    /|    /|
+   / |   / |
+ 7+-----+6 |
+  | 0+--|--+1
+  | /   | /
+  |/    |/
+ 4+-----+5
+*/
+
+  var indices = [
+    0, 1, 2,
+    0, 2, 3,
+
+    4, 5, 6,
+    4, 6, 7,
+
+    0, 1, 4,
+    4, 5, 1,
+
+    2, 3, 7,
+    7, 2, 6,
+
+    6, 2, 1,
+    6, 1, 5,
+
+    7, 3, 0,
+    7, 0, 4,
+  ];
+
+  var lineIndices = [
+    0, 1,
+    1, 2,
+    2, 3,
+    3, 0,
+    4, 5,
+    5, 6,
+    6, 7,
+    7, 4,
+    0, 4,
+    1, 5,
+    2, 6,
+    3, 7,
+  ];
+
+  var canvas = document.getElementById("c");
+  var gl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
+  var clock = 0;
+
+  var program = createProgramFromScripts(
+      gl, ["2d-vertex-shader", "2d-fragment-shader"]);
+  gl.useProgram(program);
+
+  var positionLoc = gl.getAttribLocation(program, "a_position");
+  var colorLoc = gl.getAttribLocation(program, "a_color");
+  var worldViewProjectionLoc =
+      gl.getUniformLocation(program, "u_worldViewProjection");
+  var colorMultLoc = gl.getUniformLocation(program, "u_colorMult");
+
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(cubeVertices),
+      gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(positionLoc);
+  gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
+
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(cubeColors),
+      gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(colorLoc);
+  gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
+
+  var triIndicesBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, triIndicesBuffer);
+  gl.bufferData(
+      gl.ELEMENT_ARRAY_BUFFER,
+      new Uint16Array(indices),
+      gl.STATIC_DRAW);
+
+  var lineIndicesBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, lineIndicesBuffer);
+  gl.bufferData(
+      gl.ELEMENT_ARRAY_BUFFER,
+      new Uint16Array(lineIndices),
+      gl.STATIC_DRAW);
+
+  gl.enable(gl.DEPTH_TEST);
+
+  function render(time) {
+    time *= 0.001;
+    clock = time;
+
+    gl.clear(gl.DEPTH_BUFFER_BIT);
+
+    var fieldOfView = Math.PI * 0.25;
+    var aspect = canvas.clientWidth / canvas.clientHeight;
+    var projection = m.perspective(fieldOfView, aspect, 0.0001, 500);
+    var radius = 15;
+    var eye = [
+        Math.sin(clock) * radius,
+        0,
+        Math.cos(clock) * radius];
+    var target = [Math.sin(clock) * 9, Math.cos(clock * 0.71) * 5, 0];
+    var up = [0, 1, 0];
+    var view = m.lookAt(eye, target, up);
+
+    var worldViewProjection = m.multiplyMatrix(view, projection);
+    gl.uniformMatrix4fv(
+        worldViewProjectionLoc, false, worldViewProjection);
+
+    gl.uniform4f(colorMultLoc, 1, 1, 1, 1);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, triIndicesBuffer);
+    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+    gl.uniform4f(colorMultLoc, 0, 0, 0, 1);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, lineIndicesBuffer);
+    gl.drawElements(gl.LINES, lineIndices.length, gl.UNSIGNED_SHORT, 0);
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+}
+</script>
+</html>

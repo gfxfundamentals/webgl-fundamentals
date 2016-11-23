@@ -1,0 +1,120 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - 2D Rectangle Top Left</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<canvas id="c"></canvas>
+</body>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
+<!-- vertex shader -->
+<script id="2d-vertex-shader" type="notjs">
+  attribute vec4 a_position;
+
+  uniform vec2 u_resolution;
+
+  void main() {
+     // convert the position from pixels to 0.0 to 1.0
+     vec2 zeroToOne = a_position.xy / u_resolution;
+
+     // convert from 0->1 to 0->2
+     vec2 zeroToTwo = zeroToOne * 2.0;
+
+     // convert from 0->2 to -1->+1 (clipspace)
+     vec2 clipSpace = zeroToTwo - 1.0;
+
+     gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+  }
+</script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader" type="notjs">
+  precision mediump float;
+
+  void main() {
+    gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
+  }
+</script>
+<script>
+"use strict";
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("c");
+  webglLessonsHelper.setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
+  if (!gl) {
+    webglLessonsHelper.showNeedWebGL(canvas);
+    return;
+  }
+
+  // Use our boilerplate utils to compile the shaders and link into a program
+  var program = webglUtils.createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
+
+  // look up where the vertex data needs to go.
+  var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+
+  // look up uniform locations
+  var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
+
+  // Create a buffer and put three 2d clip space points in it
+  var positionBuffer = gl.createBuffer();
+
+  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  var positions = [
+    10, 20,
+    80, 20,
+    10, 30,
+    10, 30,
+    80, 20,
+    80, 30,
+  ];
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+  // Tell WebGL how to convert from clip space to pixels
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+  // Clear the canvas
+  gl.clearColor(0, 0, 0, 0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  // Tell it to use our program (pair of shaders)
+  gl.useProgram(program);
+
+  // Turn on the attribute
+  gl.enableVertexAttribArray(positionAttributeLocation);
+
+  // Bind the position buffer.
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+  var size = 2;          // 2 components per iteration
+  var type = gl.FLOAT;   // the data is 32bit floats
+  var normalize = false; // don't normalize the data
+  var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+  var offset = 0;        // start at the beginning of the buffer
+  gl.vertexAttribPointer(
+      positionAttributeLocation, size, type, normalize, stride, offset)
+
+  // set the resolution
+  gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
+
+  // draw
+  var primitiveType = gl.TRIANGLES;
+  var offset = 0;
+  var count = 6;
+  gl.drawArrays(primitiveType, offset, count);
+}
+
+main();
+</script>
+</html>
+

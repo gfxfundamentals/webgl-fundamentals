@@ -1,0 +1,271 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Less Code More Fun</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<div class="description">
+Uses a few utility functions so there's much less code.
+</div>
+<canvas id="canvas"></canvas>
+</body>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
+<script src="resources/3d-math.js"></script>
+<script src="resources/primitives.js"></script>
+<script>
+"use strict";
+
+function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  var canvas = document.getElementById("canvas");
+  webglLessonsHelper.setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
+  if (!gl) {
+    webglLessonsHelper.showNeedWebGL(canvas);
+    return;
+  }
+
+  gl.enable(gl.DEPTH_TEST);
+
+  var positions = createAugmentedTypedArray(3, 4);
+  var texcoords = createAugmentedTypedArray(2, 4);
+  var normals   = createAugmentedTypedArray(3, 4);
+  var indices   = createAugmentedTypedArray(3, 2, Uint16Array);
+
+  positions.push([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]);
+  texcoords.push([0, 0, 0, 1, 1, 0, 1, 1]);
+  normals.push([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]);
+  indices.push([0, 1, 2, 1, 2, 3]);
+
+  var arrays = {
+     position: positions,
+     texcoord: texcoords,
+     normal:   normals,
+     indices:  indices,
+  };
+
+  var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
+
+  // setup GLSL program
+  var program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  var uniformSetters = webglUtils.createUniformSetters(gl, program);
+  var attribSetters  = webglUtils.createAttributeSetters(gl, program);
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+  var cameraAngleRadians = degToRad(0);
+  var fieldOfViewRadians = degToRad(60);
+  var cameraHeight = 50;
+
+  var uniformsThatAreTheSameForAllObjects = {
+    u_lightWorldPos:         [-50, 30, 100],
+    u_viewInverse:           m4.identity(),
+    u_lightColor:            [1, 1, 1, 1],
+  };
+
+  var uniformsThatAreComputedForEachObject = {
+    u_worldViewProjection:   m4.identity(),
+    u_world:                 m4.identity(),
+    u_worldInverseTranspose: m4.identity(),
+  };
+
+  var makeRandomTexture = function(gl, w, h) {
+    var numPixels = w * h;
+    var pixels = new Uint8Array(numPixels * 4);
+    var strong = 4;randInt(3);
+    for (var p = 0; p < numPixels; ++p) {
+      var off = p * 4;
+      pixels[off + 0] = rand(128, 256);
+      pixels[off + 1] = rand(128, 256);
+      pixels[off + 2] = rand(128, 256);
+      pixels[off + 3] = 255;
+    }
+    var texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    return texture;
+  };
+
+  var rand = function(min, max) {
+    if (max === undefined) {
+      max = min;
+      min = 0;
+    }
+    return min + Math.random() * (max - min);
+  };
+
+  var randInt = function(range) {
+    return Math.floor(Math.random() * range);
+  };
+
+  var textures = [];
+  var numTextures = 3;
+  for (var ii = 0; ii < numTextures; ++ii) {
+    var texture = makeRandomTexture(gl, 4, 4);
+    textures.push(texture);
+  }
+
+  var objects = [];
+  var numObjects = 300;
+  for (var ii = 0; ii < numObjects; ++ii) {
+    objects.push({
+      radius: rand(150),
+      xRotation: rand(Math.PI * 2),
+      yRotation: rand(Math.PI),
+      materialUniforms: {
+        u_ambient:               [rand(0.2), rand(0.2), rand(0.2), 1],
+        u_diffuse:               textures[randInt(textures.length)],
+        u_specular:              [1, 1, 1, 1],
+        u_shininess:             rand(500),
+        u_specularFactor:        rand(1),
+      },
+    });
+  }
+
+  requestAnimationFrame(drawScene);
+
+  // Draw the scene.
+  function drawScene(time) {
+    time *= 0.0001;
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    // Clear the canvas AND the depth buffer.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Compute the projection matrix
+    var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    var projectionMatrix =
+        makePerspective(fieldOfViewRadians, aspect, 1, 2000);
+
+    // Compute the camera's matrix using look at.
+    var cameraPosition = [0, 0, 100];
+    var target = [0, 0, 0];
+    var up = [0, 1, 0];
+    var cameraMatrix = makeLookAt(cameraPosition, target, up, uniformsThatAreTheSameForAllObjects.u_viewInverse);
+
+    // Make a view matrix from the camera matrix.
+    var viewMatrix = makeInverse(cameraMatrix);
+
+    gl.useProgram(program);
+
+    // Setup all the needed buffers and attributes.
+    webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
+
+    // Set the uniforms that are the same for all objects.
+    webglUtils.setUniforms(uniformSetters, uniformsThatAreTheSameForAllObjects);
+
+    // Draw objects
+    objects.forEach(function(object) {
+
+      // Compute a position for this object based on the time.
+      var xRotationMatrix = m4.xRotation(object.xRotation * time);
+      var yRotationMatrix = m4.yRotation(object.yRotation * time);
+      var translationMatrix = m4.translation(0, 0, object.radius);
+      var matrix = m4.multiply(yRotationMatrix, xRotationMatrix);
+      var worldMatrix = m4.multiply(uniformsThatAreComputedForEachObject.u_world,
+          translationMatrix, matrix);
+
+      // Multiply the matrices.
+      var matrix = m4.multiply(viewMatrix, worldMatrix);
+      m4.multiply(uniformsThatAreComputedForEachObject.u_worldViewProjection, matrix, projectionMatrix);
+      m4.transpose(makeInverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
+
+      // Set the uniforms we just computed
+      webglUtils.setUniforms(uniformSetters, uniformsThatAreComputedForEachObject);
+
+      // Set the uniforms that are specific to the this object.
+      webglUtils.setUniforms(uniformSetters, object.materialUniforms);
+
+      // Draw the geometry.
+      gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+    });
+
+    requestAnimationFrame(drawScene);
+  }
+}
+
+main();
+</script>
+<!-- vertex shader -->
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
+uniform mat4 u_worldViewProjection;
+uniform vec3 u_lightWorldPos;
+uniform mat4 u_world;
+uniform mat4 u_viewInverse;
+uniform mat4 u_worldInverseTranspose;
+
+attribute vec4 a_position;
+attribute vec3 a_normal;
+attribute vec2 a_texcoord;
+
+varying vec4 v_position;
+varying vec2 v_texCoord;
+varying vec3 v_normal;
+varying vec3 v_surfaceToLight;
+varying vec3 v_surfaceToView;
+
+void main() {
+  v_texCoord = a_texcoord;
+  v_position = (u_worldViewProjection * a_position);
+  v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
+  v_surfaceToLight = u_lightWorldPos - (u_world * a_position).xyz;
+  v_surfaceToView = (u_viewInverse[3] - (u_world * a_position)).xyz;
+  gl_Position = v_position;
+}
+</script>
+<!-- fragment shader -->
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+varying vec4 v_position;
+varying vec2 v_texCoord;
+varying vec3 v_normal;
+varying vec3 v_surfaceToLight;
+varying vec3 v_surfaceToView;
+
+uniform vec4 u_lightColor;
+uniform vec4 u_ambient;
+uniform sampler2D u_diffuse;
+uniform vec4 u_specular;
+uniform float u_shininess;
+uniform float u_specularFactor;
+
+vec4 lit(float l ,float h, float m) {
+  return vec4(1.0,
+              max(l, 0.0),
+              (l > 0.0) ? pow(max(0.0, h), m) : 0.0,
+              1.0);
+}
+
+void main() {
+  vec4 diffuseColor = texture2D(u_diffuse, v_texCoord);
+  vec3 a_normal = normalize(v_normal);
+  vec3 surfaceToLight = normalize(v_surfaceToLight);
+  vec3 surfaceToView = normalize(v_surfaceToView);
+  vec3 halfVector = normalize(surfaceToLight + surfaceToView);
+  vec4 litR = lit(dot(a_normal, surfaceToLight),
+                    dot(a_normal, halfVector), u_shininess);
+  vec4 outColor = vec4((
+  u_lightColor * (diffuseColor * litR.y + diffuseColor * u_ambient +
+                u_specular * litR.z * u_specularFactor)).rgb,
+      diffuseColor.a);
+  gl_FragColor = outColor;
+//  gl_FragColor = vec4(litR.yyy, 1);
+}
+</script>
+</html>
+
+

@@ -1,0 +1,123 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Directional Lighting Diagram</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<div class="description">
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas" width="500" height="400" style="width: 500px; height: 400px;"></canvas>
+</div>
+<div id="uiContainer">
+  <div id="ui">
+    <div id="rotation"></div>
+  </div>
+</div>
+</body>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script>
+<script src="../../resources/2d-math.js"></script>
+<script src="diagram.js"></script>
+<script>
+"use strict";
+
+function main() {
+  var ctx = document.getElementById("canvas").getContext("2d");
+  var direction = 0;
+
+  function radToDeg(rad) {
+    return rad * 180 / Math.PI;
+  }
+
+  function degToRad(deg) {
+    return deg * Math.PI / 180;
+  }
+
+  webglLessonsHelper.setupSlider("#rotation", {value: radToDeg(direction), slide: updateDirection, min: -180, max: 180 });
+
+  function updateDirection(event, ui) {
+    direction = degToRad(ui.value);
+    render();
+  }
+
+  function render() {
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
+    var width  = 250;
+    var height = 200;
+
+    var baseScale = Math.min(ctx.canvas.width / width,  ctx.canvas.height / height);
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
+    ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+    ctx.scale(baseScale, baseScale);
+
+    ctx.font = "8px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    var lx = 0;
+    var ly = -height / 5;
+
+    ctx.save();
+    ctx.translate(lx, ly);
+
+    ctx.fillStyle = "#000";
+    ctx.strokeSyole = "#000";
+    var numArrows = 5;
+    for (var ii = 0; ii <= numArrows; ++ii) {
+      var u = ii / numArrows;
+      var x = (u * 2 - 1) * 70;
+      ctx.save();
+      ctx.translate(x, 0);
+      ctx.rotate(direction);
+      diagram.arrow(ctx, 0, -20, 0, 20, false, true, 0.5);
+      ctx.restore();
+    }
+    ctx.fillText("light direction", 0, -30);
+
+    ctx.restore();
+
+    var sx = 0;
+    var sy = height / 6 + 10;
+
+    ctx.save();
+    ctx.translate(sx, sy);
+
+    // draw surface
+    diagram.roundedRect(ctx, -100, 0, 200, 20);
+    var d  = m3.dot(0, 1, Math.sin(direction), Math.cos(direction));
+    ctx.fillStyle = diagram.hsl(0, 1, d - 0.5);
+    ctx.fill();
+    ctx.strokeStyle = diagram.rgb(0,0,0);
+    ctx.stroke();
+
+    ctx.fillStyle = "#FFF";
+    ctx.fillText("dot(reverseLightDirection,surfaceDirection) = " + d.toFixed(2), 0, 10);
+
+    var nx = 0;
+    var ny = -20;
+    ctx.fillStyle = "#080";
+    ctx.strokeStyle = "#080";
+    diagram.arrow(ctx, 0, 0, nx, ny, false, true);
+    ctx.fillText("surface", nx, ny - 22);
+    ctx.fillText("direction", nx, ny - 14);
+
+    ctx.restore();
+
+    ctx.restore();
+  }
+  render();
+
+  window.addEventListener('resize', render);
+}
+
+main();
+</script>
+</html>
+

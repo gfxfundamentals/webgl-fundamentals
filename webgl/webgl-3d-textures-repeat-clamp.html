@@ -1,0 +1,353 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Textures - Wrap Modes</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+#ui {
+    width: 380px;
+    padding: 0.25em;
+    font-size: small;
+}
+body, document {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+}
+#gridContainer {
+    position: absolute;
+    z-index: 2;
+    top: 1px;
+    left: 1px;
+    width: 400px;
+    height: 300px;
+    g-background: rgba(255, 0, 0, 0.2);
+}
+#gridContainer>svg {
+    width: 100%;
+    height: 100%;
+}
+#uiContainer {
+    left: 15px;
+    top: 15px;
+}
+#ui>div {
+    margin-bottom: 1em;
+}
+#container {
+  position: relative;
+}
+</style>
+</head>
+<body>
+<div class="description">
+Show texture wrapping modes<br/>
+</div>
+<div id="container">
+  <canvas id="canvas"></canvas>
+  <div id="gridContainer">
+    <svg version="1.1"
+        id="grid"
+        viewBox="-50 -50 400 300"
+        fill="none"
+        stroke="none"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+      <g transform="matrix(1, 0, 0, 1, 0, 0)">
+         <g stroke-width="0.25" stroke="#000000">
+           <line x1="0"  y1="80" x2="0"  y2="85"/>
+           <line x1="16" y1="80" x2="16" y2="85"/>
+           <line x1="32" y1="80" x2="32" y2="85"/>
+           <line x1="48" y1="80" x2="48" y2="85"/>
+           <line x1="64" y1="80" x2="64" y2="85"/>
+           <line x1="80" y1="80" x2="80" y2="85"/>
+
+           <line y1="0"  x1="85" y2="0"  x2="80" />
+           <line y1="16" x1="85" y2="16" x2="80" />
+           <line y1="32" x1="85" y2="32" x2="80" />
+           <line y1="48" x1="85" y2="48" x2="80" />
+           <line y1="64" x1="85" y2="64" x2="80" />
+           <line y1="80" x1="85" y2="80" x2="80" />
+         </g>
+         <g fill="#000000" font-size="5" font-family="monospace" text-anchor="middle">
+           <text x="0"  y="90">-3</text>
+           <text x="16" y="90">-2</text>
+           <text x="32" y="90">-1</text>
+           <text x="48" y="90">0</text>
+           <text x="64" y="90">1</text>
+           <text x="80" y="90">2</text>
+           <text y="1"  x="90">4</text>
+           <text y="17" x="90">3</text>
+           <text y="33" x="90">2</text>
+           <text y="49" x="90">1</text>
+           <text y="65" x="90">0</text>
+           <text y="81" x="90">-1</text>
+         </g>
+      </g>
+    </svg>
+  </div>
+  <div id="uiContainer">
+    <div id="ui">
+      <div id="wrap_s">
+        <div>TEXTURE_WRAP_S: </div>
+        <div><input type="radio" id="wrap_s0" name="wrap_s" checked="true"/><label for="wrap_s0">REPEAT</label></div>
+        <div><input type="radio" id="wrap_s1" name="wrap_s" /><label for="wrap_s1">CLAMP_TO_EDGE</label></div>
+        <div><input type="radio" id="wrap_s2" name="wrap_s" /><label for="wrap_s2">MIRRORED_REPEAT</label></div>
+      </div>
+      <div id="wrap_t">
+        <div><span>TEXTURE_WRAP_T: </span></div>
+        <div><input type="radio" id="wrap_t0" name="wrap_t" checked="true"/><label for="wrap_t0">REPEAT</label></div>
+        <div><input type="radio" id="wrap_t1" name="wrap_t" /><label for="wrap_t1">CLAMP_TO_EDGE</label></div>
+        <div><input type="radio" id="wrap_t2" name="wrap_t" /><label for="wrap_t2">MIRRORED_REPEAT</label></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<!-- vertex shader -->
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec2 a_texcoord;
+
+uniform mat4 u_matrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the texcoord to the fragment shader.
+  v_texcoord = a_texcoord;
+}
+</script>
+<!-- fragment shader -->
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec2 v_texcoord;
+
+// The texture.
+uniform sampler2D u_texture;
+
+void main() {
+   gl_FragColor = texture2D(u_texture, v_texcoord);
+}
+</script>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
+<script src="resources/3d-math.js"></script>
+<script>
+"use strict";
+
+var zDepth = 50;
+
+function main() {
+  // Get A WebGL context
+  var canvas = document.getElementById("canvas", {antialias: false});
+  webglLessonsHelper.setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
+  if (!gl) {
+    webglLessonsHelper.showNeedWebGL(canvas);
+    return;
+  }
+
+  // setup GLSL program
+  var program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+
+  // look up where the vertex data needs to go.
+  var positionLocation = gl.getAttribLocation(program, "a_position");
+  var texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
+
+  // lookup uniforms
+  var matrixLocation = gl.getUniformLocation(program, "u_matrix");
+  var textureLocation = gl.getUniformLocation(program, "u_texture");
+
+  // Create a buffer for positions
+  var positionBuffer = gl.createBuffer();
+  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  // Put the positions in the buffer
+  setGeometry(gl);
+
+  // provide texture coordinates for the rectangle.
+  var texcoordBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+  // Set Texcoords.
+  setTexcoords(gl);
+
+  // Create a texture.
+  var texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  // Fill the texture with a 1x1 blue pixel.
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+                new Uint8Array([0, 0, 255, 255]));
+  // Asynchronously load an image
+  var image = new Image();
+  image.src = "resources/f-texture.png";
+  image.addEventListener('load', function() {
+    // Now that the image has loaded make copy it to the texture.
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+
+    // Check if the image is a power of 2 in both dimensions.
+    if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+       // Yes, it's a power of 2. Generate mips.
+       gl.generateMipmap(gl.TEXTURE_2D);
+    } else {
+       // No, it's not a power of 2. Turn of mips and set wrapping to clamp to edge
+       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    }
+    drawScene();
+  });
+
+  var wrapS = gl.REPEAT;
+  var wrapT = gl.REPEAT;
+
+  document.querySelector("#wrap_s0").addEventListener('click', function() { wrapS = gl.REPEAT;          drawScene(); });  // eslint-disable-line
+  document.querySelector("#wrap_s1").addEventListener('click', function() { wrapS = gl.CLAMP_TO_EDGE;   drawScene(); });  // eslint-disable-line
+  document.querySelector("#wrap_s2").addEventListener('click', function() { wrapS = gl.MIRRORED_REPEAT; drawScene(); });  // eslint-disable-line
+  document.querySelector("#wrap_t0").addEventListener('click', function() { wrapT = gl.REPEAT;          drawScene(); });  // eslint-disable-line
+  document.querySelector("#wrap_t1").addEventListener('click', function() { wrapT = gl.CLAMP_TO_EDGE;   drawScene(); });  // eslint-disable-line
+  document.querySelector("#wrap_t2").addEventListener('click', function() { wrapT = gl.MIRRORED_REPEAT; drawScene(); });  // eslint-disable-line
+
+  function isPowerOf2(value) {
+    return (value & (value - 1)) == 0;
+  }
+
+  function radToDeg(r) {
+    return r * 180 / Math.PI;
+  }
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+  var fieldOfViewRadians = degToRad(60);
+
+  drawScene();
+
+  // Draw the scene.
+  function drawScene() {
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    // Clear the framebuffer texture.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
+
+    // Compute the matrix
+    var scaleFactor = 2.5;
+    var tsize = 80 * scaleFactor;
+    var x = gl.canvas.clientWidth / 2 - tsize / 2;
+    var y = gl.canvas.clientHeight - tsize - 60;
+    gridContainer.style.left = (x - 50 * scaleFactor) + 'px';
+    gridContainer.style.top  = (y - 50 * scaleFactor) + 'px';
+    gridContainer.style.width  = (scaleFactor * 400) + 'px';
+    gridContainer.style.height = (scaleFactor * 300) + 'px';
+
+    // Tell it to use our program (pair of shaders)
+    gl.useProgram(program);
+
+    // Turn on the position attribute
+    gl.enableVertexAttribArray(positionLocation);
+
+    // Bind the position buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 3;          // 3 components per iteration
+    var type = gl.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        positionLocation, size, type, normalize, stride, offset)
+
+    // Turn on the teccord attribute
+    gl.enableVertexAttribArray(texcoordLocation);
+
+    // Bind the position buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+
+    // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 2;          // 2 components per iteration
+    var type = gl.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+        texcoordLocation, size, type, normalize, stride, offset)
+
+    // Compute the projection matrix
+    var projectionMatrix =
+        m4.orthographic(0, gl.canvas.clientWidth, gl.canvas.clientHeight, 0, -1, 1);
+
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapS);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrapT);
+
+    var matrix = m4.translate(projectionMatrix, x, y, 0);
+    matrix = m4.scale(matrix, tsize, tsize, 1);
+    matrix = m4.translate(matrix, 0.5, 0.5, 0);
+
+    // Set the matrix.
+    gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+    // Tell the shader to use texture unit 0 for u_texture
+    gl.uniform1i(textureLocation, 0);
+
+    // Draw the geometry.
+    gl.drawArrays(gl.TRIANGLES, 0, 1 * 6);
+  }
+}
+
+// Fill the buffer with the values that define a plane.
+function setGeometry(gl) {
+  var positions = new Float32Array(
+    [
+      -0.5, -0.5,  0.5,
+      -0.5,  0.5,  0.5,
+       0.5, -0.5,  0.5,
+      -0.5,  0.5,  0.5,
+       0.5,  0.5,  0.5,
+       0.5, -0.5,  0.5,
+    ]);
+  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+}
+
+// Fill the buffer with texture coordinates for a plane.
+function setTexcoords(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(
+        [
+          -3, -1,
+          -3,  4,
+           2, -1,
+          -3,  4,
+           2,  4,
+           2, -1,
+        ]),
+      gl.STATIC_DRAW);
+}
+
+main();
+</script>
+</html>
+
+
+

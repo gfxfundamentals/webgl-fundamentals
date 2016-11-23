@@ -1,0 +1,4630 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>WebGL Fundamentals Module: webgl-utils</title>
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
+
+</head>
+
+<body>
+<div class="container-fluid">
+	<div class="navbar navbar-fixed-top navbar-inverse">
+		<div class="navbar-inner">
+			<a class="brand" href="index.html">WebGL Fundamentals</a>
+			<ul class="nav">
+				
+				<li class="dropdown">
+					<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="module-primitives.html">primitives</a>
+						</li>
+						
+						<li>
+							<a href="module-webgl-2d-math.html">webgl-2d-math</a>
+						</li>
+						
+						<li>
+							<a href="module-webgl-3d-math.html">webgl-3d-math</a>
+						</li>
+						
+						<li>
+							<a href="module-webgl-utils.html">webgl-utils</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+
+		
+		<div class="span8">
+			
+				<div id="main">
+					
+
+
+	<h1 class="page-title">Module: webgl-utils</h1>
+<section>
+
+<header>
+    <h2>
+    webgl-utils
+    </h2>
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+
+    
+        
+
+        
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id=".createAttribsFromArrays"><span class="type-signature"> </span>createAttribsFromArrays<span class="signature">(gl, arrays, <span class="optional">opt_mapping</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, <a href="module-webgl-utils.html#.AttribInfo">module:webgl-utils.AttribInfo</a>>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a set of attribute data and WebGLBuffers from set of arrays</p>
+<p>Given</p>
+<pre class="prettyprint source"><code> var arrays = {
+   position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+   texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+   normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
+   color:    { numComponents: 4, data: [255, 255, 255, 255, 255, 0, 0, 255, 0, 0, 255, 255], type: Uint8Array, },
+   indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
+ };</code></pre><p>returns something like</p>
+<pre class="prettyprint source"><code> var attribs = {
+   a_position: { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
+   a_texcoord: { numComponents: 2, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
+   a_normal:   { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
+   a_color:    { numComponents: 4, type: gl.UNSIGNED_BYTE, normalize: true,  buffer: WebGLBuffer, },
+ };</code></pre>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>gl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLRenderingContext</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The webgl rendering context.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>arrays</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, (array|typedarray)></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The arrays</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_mapping</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, string></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>mapping from attribute name to array name.<br>    if not specified defaults to &quot;a_name&quot; -&gt; &quot;name&quot;.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>the attribs</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object.&lt;string, <a href="module-webgl-utils.html#.AttribInfo">module:webgl-utils.AttribInfo</a>></span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".createAttributeSetters"><span class="type-signature"> </span>createAttributeSetters<span class="signature">(program)</span><span class="type-signature"> &rarr; {Object.&lt;string, function()>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates setter functions for all attributes of a shader<br>program. You can pass this to <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> to set all your buffers and attributes.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>program</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLProgram</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the program to create setters for.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+	<dt class="tag-see">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="module-webgl-utils.html#.setAttributes"><code>module:webgl-utils.setAttributes</code></a> for example</li>
+			</ul>
+	</dd>
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>an object with a setter for each attribute by name.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object.&lt;string, function()></span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".createAugmentedTypedArray"><span class="type-signature"> </span>createAugmentedTypedArray<span class="signature">(numComponents, numElements, opt_type)</span><span class="type-signature"> &rarr; {ArrayBuffer}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>creates a typed array with a <code>push</code> function attached<br>so that you can easily <em>push</em> values.</p>
+<p><code>push</code> can take multiple arguments. If an argument is an array each element<br>of the array will be added to the typed array.</p>
+<p>Example:</p>
+<pre class="prettyprint source"><code>var array = createAugmentedTypedArray(3, 2);  // creates a Float32Array with 6 values
+array.push(1, 2, 3);
+array.push([4, 5, 6]);
+// array now contains [1, 2, 3, 4, 5, 6]</code></pre><p>Also has <code>numComponents</code> and <code>numElements</code> properties.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>numComponents</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>number of components</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>numElements</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>number of elements. The total size of the array will be <code>numComponents * numElements</code>.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">constructor</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A constructor for the type. Default = <code>Float32Array</code>.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>A typed array.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">ArrayBuffer</span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".createBufferInfoFromArrays"><span class="type-signature"> </span>createBufferInfoFromArrays<span class="signature">(gl, arrays, <span class="optional">opt_mapping</span>)</span><span class="type-signature"> &rarr; {<a href="module-webgl-utils.html#.BufferInfo">module:webgl-utils.BufferInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a BufferInfo from an object of arrays.</p>
+<p>This can be passed to <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> and to<br><code>module:webgl-utils:drawBufferInfo</code>.</p>
+<p>Given an object like</p>
+<pre class="prettyprint source"><code>var arrays = {
+  position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+  texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+  normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
+  indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
+};</code></pre><p> Creates an BufferInfo like this</p>
+<pre class="prettyprint source"><code>bufferInfo = {
+  numElements: 4,        // or whatever the number of elements is
+  indices: WebGLBuffer,  // this property will not exist if there are no indices
+  attribs: {
+    a_position: { buffer: WebGLBuffer, numComponents: 3, },
+    a_normal:   { buffer: WebGLBuffer, numComponents: 3, },
+    a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
+  },
+};</code></pre><p> The properties of arrays can be JavaScript arrays in which case the number of components<br> will be guessed.</p>
+<pre class="prettyprint source"><code>var arrays = {
+   position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
+   texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
+   normal:   [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+   indices:  [0, 1, 2, 1, 2, 3],
+};</code></pre><p> They can also by TypedArrays</p>
+<pre class="prettyprint source"><code>var arrays = {
+   position: new Float32Array([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]),
+   texcoord: new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]),
+   normal:   new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]),
+   indices:  new Uint16Array([0, 1, 2, 1, 2, 3]),
+};</code></pre><p> Or augmentedTypedArrays</p>
+<pre class="prettyprint source"><code>var positions = createAugmentedTypedArray(3, 4);
+var texcoords = createAugmentedTypedArray(2, 4);
+var normals   = createAugmentedTypedArray(3, 4);
+var indices   = createAugmentedTypedArray(3, 2, Uint16Array);
+
+positions.push([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]);
+texcoords.push([0, 0, 0, 1, 1, 0, 1, 1]);
+normals.push([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]);
+indices.push([0, 1, 2, 1, 2, 3]);
+
+var arrays = {
+   position: positions,
+   texcoord: texcoords,
+   normal:   normals,
+   indices:  indices,
+};</code></pre><p>For the last example it is equivalent to</p>
+<pre class="prettyprint source"><code>var bufferInfo = {
+  attribs: {
+    a_position: { numComponents: 3, buffer: gl.createBuffer(), },
+    a_texcoods: { numComponents: 2, buffer: gl.createBuffer(), },
+    a_normals: { numComponents: 3, buffer: gl.createBuffer(), },
+  },
+  indices: gl.createBuffer(),
+  numElements: 6,
+};
+
+gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.attribs.a_position.buffer);
+gl.bufferData(gl.ARRAY_BUFFER, arrays.position, gl.STATIC_DRAW);
+gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.attribs.a_texcoord.buffer);
+gl.bufferData(gl.ARRAY_BUFFER, arrays.texcoord, gl.STATIC_DRAW);
+gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.attribs.a_normal.buffer);
+gl.bufferData(gl.ARRAY_BUFFER, arrays.normal, gl.STATIC_DRAW);
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, bufferInfo.indices);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></pre>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>gl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLRenderingContext</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A WebGLRenderingContext</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>arrays</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, (array|object|typedarray)></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Your data</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_mapping</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, string></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>an optional mapping of attribute to array name.<br>   If not passed in it's assumed the array names will be mapped to an attibute<br>   of the same name with &quot;a_&quot; prefixed to it. An other words.</p>
+<pre class="prettyprint source"><code>   var arrays = {
+      position: ...,
+      texcoord: ...,
+      normal:   ...,
+      indices:  ...,
+   };
+
+   bufferInfo = createBufferInfoFromArrays(gl, arrays);</code></pre><p>   Is the same as</p>
+<pre class="prettyprint source"><code>   var arrays = {
+      position: ...,
+      texcoord: ...,
+      normal:   ...,
+      indices:  ...,
+   };
+
+   var mapping = {
+     a_position: &quot;position&quot;,
+     a_texcoord: &quot;texcoord&quot;,
+     a_normal:   &quot;normal&quot;,
+   };
+
+   bufferInfo = createBufferInfoFromArrays(gl, arrays, mapping);</code></pre></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>A BufferInfo</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="module-webgl-utils.html#.BufferInfo">module:webgl-utils.BufferInfo</a></span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".createBuffersFromArrays"><span class="type-signature"> </span>createBuffersFromArrays<span class="signature">({WebGLRenderingContext), arrays)</span><span class="type-signature"> &rarr; {Object.&lt;string, WebGLBuffer>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates buffers from typed arrays</p>
+<p>Given something like this</p>
+<pre class="prettyprint source"><code>var arrays = {
+   positions: [1, 2, 3],
+   normals: [0, 0, 1],
+}</code></pre><p>returns something like</p>
+<pre class="prettyprint source"><code>buffers = {
+  positions: WebGLBuffer,
+  normals: WebGLBuffer,
+}</code></pre><p>If the buffer is named 'indices' it will be made an ELEMENT_ARRAY_BUFFER.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>{WebGLRenderingContext)</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>gl A WebGLRenderingContext.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>arrays</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, (array|typedarray)></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>returns an object with one WebGLBuffer per array</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object.&lt;string, WebGLBuffer></span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".createProgram"><span class="type-signature"> </span>createProgram<span class="signature">(shaders, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a program, attaches shaders, binds attrib locations, links the<br>program and calls useProgram.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>shaders</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;WebGLShader></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The shaders to attach</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_attribs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An array of attribs names. Locations will be assigned by index if not passed in</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_locations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The locations for the. A parallel array to opt_attribs letting you assign locations.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_errorCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-webgl-utils.html#.ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".createProgramFromScripts"><span class="type-signature"> </span>createProgramFromScripts<span class="signature">(gl, shaderScriptIds, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"> &rarr; {WebGLProgram}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a program from 2 script tags.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>gl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLRenderingContext</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The WebGLRenderingContext<br>       to use.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>shaderScriptIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Array of ids of the script<br>       tags for the shaders. The first is assumed to be the<br>       vertex shader, the second the fragment shader.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_attribs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An array of attribs names. Locations will be assigned by index if not passed in</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_locations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The locations for the. A parallel array to opt_attribs letting you assign locations.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_errorCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-webgl-utils.html#.ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The created program.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">WebGLProgram</span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".createProgramFromSources"><span class="type-signature"> </span>createProgramFromSources<span class="signature">(gl, shaderSourcess, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"> &rarr; {WebGLProgram}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a program from 2 sources.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>gl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLRenderingContext</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The WebGLRenderingContext<br>       to use.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>shaderSourcess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Array of sources for the<br>       shaders. The first is assumed to be the vertex shader,<br>       the second the fragment shader.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_attribs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An array of attribs names. Locations will be assigned by index if not passed in</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_locations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The locations for the. A parallel array to opt_attribs letting you assign locations.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_errorCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-webgl-utils.html#.ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The created program.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">WebGLProgram</span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".createProgramInfo"><span class="type-signature"> </span>createProgramInfo<span class="signature">(gl, shaderSourcess, <span class="optional">opt_attribs</span>, <span class="optional">opt_locations</span>, opt_errorCallback)</span><span class="type-signature"> &rarr; {<a href="module-webgl-utils.html#.ProgramInfo">module:webgl-utils.ProgramInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a ProgramInfo from 2 sources.</p>
+<p>A ProgramInfo contains</p>
+<pre class="prettyprint source"><code>programInfo = {
+   program: WebGLProgram,
+   uniformSetters: object of setters as returned from createUniformSetters,
+   attribSetters: object of setters as returned from createAttribSetters,
+}</code></pre>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>gl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLRenderingContext</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The WebGLRenderingContext<br>       to use.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>shaderSourcess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Array of sources for the<br>       shaders or ids. The first is assumed to be the vertex shader,<br>       the second the fragment shader.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_attribs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An array of attribs names. Locations will be assigned by index if not passed in</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_locations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The locations for the. A parallel array to opt_attribs letting you assign locations.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>opt_errorCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-webgl-utils.html#.ErrorCallback">module:webgl-utils.ErrorCallback</a></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The created program.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="module-webgl-utils.html#.ProgramInfo">module:webgl-utils.ProgramInfo</a></span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".createUniformSetters"><span class="type-signature"> </span>createUniformSetters<span class="signature">(program)</span><span class="type-signature"> &rarr; {Object.&lt;string, function()>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates setter functions for all uniforms of a shader<br>program.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>program</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLProgram</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the program to create setters for.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+	<dt class="tag-see">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="module-webgl-utils.html#.setUniforms"><code>module:webgl-utils.setUniforms</code></a></li>
+			</ul>
+	</dd>
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>an object with a setter by name for each uniform</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object.&lt;string, function()></span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".drawBufferInfo"><span class="type-signature"> </span>drawBufferInfo<span class="signature">(gl, bufferInfo, <span class="optional">primitiveType</span>, <span class="optional">count</span>, <span class="optional">offset</span>)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Calls <code>gl.drawElements</code> or <code>gl.drawArrays</code>, whichever is appropriate</p>
+<p>normally you'd call <code>gl.drawElements</code> or <code>gl.drawArrays</code> yourself<br>but calling this means if you switch from indexed data to non-indexed<br>data you don't have to remember to update your draw call.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>gl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLRenderingContext</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A WebGLRenderingContext</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>bufferInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-webgl-utils.html#.BufferInfo">module:webgl-utils.BufferInfo</a></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>as returned from createBufferInfoFromArrays</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>primitiveType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">enum</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>eg (gl.TRIANGLES, gl.LINES, gl.POINTS, gl.TRIANGLE_STRIP, ...)</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>count</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An optional count. Defaults to bufferInfo.numElements</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An optional offset. Defaults to 0.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".drawObjectList"><span class="type-signature"> </span>drawObjectList<span class="signature">(gl, objectsToDraw)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Draws a list of objects</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>gl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLRenderingContext</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A WebGLRenderingContext</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>objectsToDraw</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;DrawObject></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of objects to draw.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".getExtensionWithKnownPrefixes"><span class="type-signature"> </span>getExtensionWithKnownPrefixes<span class="signature">(name)</span><span class="type-signature"> &rarr; {WebGLExtension}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Given an extension name like WEBGL_compressed_texture_s3tc<br>returns the supported version extension, like<br>WEBKIT_WEBGL_compressed_teture_s3tc</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Name of extension to look for</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The extension or undefined if not<br>    found.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">WebGLExtension</span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".resizeCanvasToDisplaySize"><span class="type-signature"> </span>resizeCanvasToDisplaySize<span class="signature">(canvas, <span class="optional">multiplier</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Resize a canvas to match the size its displayed.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>canvas</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLCanvasElement</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The canvas to resize.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>multiplier</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>amount to multiply by.<br>   Pass in window.devicePixelRatio for native pixels.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>true if the canvas was resized.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">boolean</span>
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".setAttributes"><span class="type-signature"> </span>setAttributes<span class="signature">(setters, attribs)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Sets attributes and binds buffers (deprecated... use <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a>)</p>
+<p>Example:</p>
+<pre class="prettyprint source"><code>var program = createProgramFromScripts(
+    gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
+
+var attribSetters = createAttributeSetters(program);
+
+var positionBuffer = gl.createBuffer();
+var texcoordBuffer = gl.createBuffer();
+
+var attribs = {
+  a_position: {buffer: positionBuffer, numComponents: 3},
+  a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
+};
+
+gl.useProgram(program);</code></pre><p>This will automatically bind the buffers AND set the<br>attributes.</p>
+<pre class="prettyprint source"><code>setAttributes(attribSetters, attribs);</code></pre><p>Properties of attribs. For each attrib you can add<br>properties:</p>
+<ul>
+<li>type: the type of data in the buffer. Default = gl.FLOAT</li>
+<li>normalize: whether or not to normalize the data. Default = false</li>
+<li>stride: the stride. Default = 0</li>
+<li>offset: offset into the buffer. Default = 0</li>
+</ul>
+<p>For example if you had 3 value float positions, 2 value<br>float texcoord and 4 value uint8 colors you'd setup your<br>attribs like this</p>
+<pre class="prettyprint source"><code>var attribs = {
+  a_position: {buffer: positionBuffer, numComponents: 3},
+  a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
+  a_color: {
+    buffer: colorBuffer,
+    numComponents: 4,
+    type: gl.UNSIGNED_BYTE,
+    normalize: true,
+  },
+};</code></pre>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>setters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, function()>|</span>
+
+<span class="param-type">model:webgl-utils.ProgramInfo</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Attribute setters as returned from createAttributeSetters or a ProgramInfo as returned <a href="module-webgl-utils.html#.createProgramInfo"><code>module:webgl-utils.createProgramInfo</code></a></p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>attribs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, <a href="module-webgl-utils.html#.AttribInfo">module:webgl-utils.AttribInfo</a>></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>AttribInfos mapped by attribute name.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+	<dt class="important tag-deprecated">Deprecated:</dt>
+	
+	<dd>
+		<ul class="dummy">
+			<li>use <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a></li>
+		</ul>
+	</dd>
+	
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".setBuffersAndAttributes"><span class="type-signature"> </span>setBuffersAndAttributes<span class="signature">(gl, setters, buffers)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Sets attributes and buffers including the <code>ELEMENT_ARRAY_BUFFER</code> if appropriate</p>
+<p>Example:</p>
+<pre class="prettyprint source"><code>var programInfo = createProgramInfo(
+    gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
+
+var arrays = {
+  position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
+  texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
+};
+
+var bufferInfo = createBufferInfoFromArrays(gl, arrays);
+
+gl.useProgram(programInfo.program);</code></pre><p>This will automatically bind the buffers AND set the<br>attributes.</p>
+<pre class="prettyprint source"><code>setBuffersAndAttributes(programInfo.attribSetters, bufferInfo);</code></pre><p>For the example above it is equivilent to</p>
+<pre class="prettyprint source"><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.enableVertexAttribArray(a_positionLocation);
+gl.vertexAttribPointer(a_positionLocation, 3, gl.FLOAT, false, 0, 0);
+gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+gl.enableVertexAttribArray(a_texcoordLocation);
+gl.vertexAttribPointer(a_texcoordLocation, 4, gl.FLOAT, false, 0, 0);</code></pre>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>gl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLRenderingContext</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A WebGLRenderingContext.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>setters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, function()></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Attribute setters as returned from <code>createAttributeSetters</code></p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>buffers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-webgl-utils.html#.BufferInfo">module:webgl-utils.BufferInfo</a></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a BufferInfo as returned from <code>createBufferInfoFromArrays</code>.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".setUniforms"><span class="type-signature"> </span>setUniforms<span class="signature">(setters, an)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Set uniforms and binds related textures.</p>
+<p>example:</p>
+<pre class="prettyprint source"><code>var programInfo = createProgramInfo(
+    gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
+
+var tex1 = gl.createTexture();
+var tex2 = gl.createTexture();
+
+... assume we setup the textures with data ...
+
+var uniforms = {
+  u_someSampler: tex1,
+  u_someOtherSampler: tex2,
+  u_someColor: [1,0,0,1],
+  u_somePosition: [0,1,1],
+  u_someMatrix: [
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    0,0,0,0,
+  ],
+};
+
+gl.useProgram(program);</code></pre><p>This will automatically bind the textures AND set the<br>uniforms.</p>
+<pre class="prettyprint source"><code>setUniforms(programInfo.uniformSetters, uniforms);</code></pre><p>For the example above it is equivalent to</p>
+<pre class="prettyprint source"><code>var texUnit = 0;
+gl.activeTexture(gl.TEXTURE0 + texUnit);
+gl.bindTexture(gl.TEXTURE_2D, tex1);
+gl.uniform1i(u_someSamplerLocation, texUnit++);
+gl.activeTexture(gl.TEXTURE0 + texUnit);
+gl.bindTexture(gl.TEXTURE_2D, tex2);
+gl.uniform1i(u_someSamplerLocation, texUnit++);
+gl.uniform4fv(u_someColorLocation, [1, 0, 0, 1]);
+gl.uniform3fv(u_somePositionLocation, [0, 1, 1]);
+gl.uniformMatrix4fv(u_someMatrix, false, [
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    0,0,0,0,
+  ]);</code></pre><p>Note it is perfectly reasonable to call <code>setUniforms</code> multiple times. For example</p>
+<pre class="prettyprint source"><code>var uniforms = {
+  u_someSampler: tex1,
+  u_someOtherSampler: tex2,
+};
+
+var moreUniforms {
+  u_someColor: [1,0,0,1],
+  u_somePosition: [0,1,1],
+  u_someMatrix: [
+    1,0,0,0,
+    0,1,0,0,
+    0,0,1,0,
+    0,0,0,0,
+  ],
+};
+
+setUniforms(programInfo.uniformSetters, uniforms);
+setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>setters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, function()>|</span>
+
+<span class="param-type"><a href="module-webgl-utils.html#.ProgramInfo">module:webgl-utils.ProgramInfo</a></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the setters returned from<br>       <code>createUniformSetters</code> or a ProgramInfo from <a href="module-webgl-utils.html#.createProgramInfo"><code>module:webgl-utils.createProgramInfo</code></a>.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>an</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, value></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>object with values for the<br>       uniforms.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        <dl>
+                
+<dt class="name" id=".AttribInfo">
+    <h4>AttribInfo</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	<h5 class="subsection-title">Properties:</h5>
+
+	<dl>
+
+<table class="props table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>numComponents</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the number of components for this attribute.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>size</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the number of components for this attribute.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the type of the attribute (eg. <code>gl.FLOAT</code>, <code>gl.UNSIGNED_BYTE</code>, etc...) Default = <code>gl.FLOAT</code></p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>normalized</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>whether or not to normalize the data. Default = false</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>offset into buffer in bytes. Default = 0</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>stride</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the stride in bytes per element. Default = 0</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>buffer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLBuffer</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the buffer that contains the data for this attribute</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+</dl>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            
+                
+<dt class="name" id=".BufferInfo">
+    <h4>BufferInfo</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	<h5 class="subsection-title">Properties:</h5>
+
+	<dl>
+
+<table class="props table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>numElements</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The number of elements to pass to <code>gl.drawArrays</code> or <code>gl.drawElements</code>.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>indices</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLBuffer</span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The indices <code>ELEMENT_ARRAY_BUFFER</code> if any indices exist.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>attribs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, <a href="module-webgl-utils.html#.AttribInfo">module:webgl-utils.AttribInfo</a>></span>
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The attribs approriate to call <code>setAttributes</code></p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+</dl>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            
+                
+<dt class="name" id=".DrawObject">
+    <h4>DrawObject</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	<h5 class="subsection-title">Properties:</h5>
+
+	<dl>
+
+<table class="props table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>programInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-webgl-utils.html#.ProgramInfo">module:webgl-utils.ProgramInfo</a></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A ProgramInfo as returned from createProgramInfo</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>bufferInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-webgl-utils.html#.BufferInfo">module:webgl-utils.BufferInfo</a></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A BufferInfo as returned from createBufferInfoFromArrays</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>uniforms</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, ?></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The values for the uniforms</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+</dl>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            
+                
+<dt>
+    <h4 class="name" id=".ErrorCallback"><span class="type-signature"></span>ErrorCallback<span class="signature">(msg)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Error Callback</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>error message.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            
+                
+<dt class="name" id=".ProgramInfo">
+    <h4>ProgramInfo</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	<h5 class="subsection-title">Properties:</h5>
+
+	<dl>
+
+<table class="props table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>program</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebGLProgram</span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A shader program</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>uniformSetters:</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, function()></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>object of setters as returned from createUniformSetters,</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>attribSetters:</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;string, function()></span>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>object of setters as returned from createAttribSetters,</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+</dl>
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            
+                
+<dt class="name" id="~Setters">
+    <h4>Setters</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object.&lt;string, function()></span>
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            </dl>
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+				</div>
+
+				<div class="clearfix"></div>
+				<footer>
+					
+					
+		<span class="copyright">
+		copyright Gregg Tavares
+		</span>
+					<br />
+					
+				</footer>
+			</div>
+
+			
+			<div class="span3">
+				<div id="toc"></div>
+			</div>
+			
+			<br clear="both">
+		</div>
+
+	</div>
+	<script src="scripts/prettify/prettify.js"></script>
+	<script src="scripts/docstrap.lib.js"></script>
+	<script src="scripts/bootstrap-dropdown.js"></script>
+	<script src="scripts/toc.js"></script>
+
+	<script>
+		$( function () {
+			$( "[id*='$']" ).each( function () {
+				var $this = $( this );
+
+				$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+			} );
+
+			$(".dropdown-menu a").each(function() {
+				var text = $(this).text();
+				$(this).text(text.replace(/\//g, '.'));
+			});
+
+			$( "#toc" ).toc( {
+				showAndHide : false,
+				scrollTo    : "100px"
+			} );
+
+			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
+			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+			$( '.dropdown-toggle' ).dropdown();
+
+			$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+				var $this = $( this );
+
+				var example = $this.find( "code" );
+				exampleText = example.html();
+				var lang = /{@lang (.*?)}/.exec( exampleText );
+				if ( lang && lang[1] ) {
+					exampleText = exampleText.replace( lang[0], "" );
+					example.html( exampleText );
+					lang = lang[1];
+				} else {
+					lang = "javascript";
+				}
+
+				if ( lang ) {
+
+					$this
+						.addClass( "prettyprint" )
+						.html( example.html() );
+
+				}
+			} );
+
+			$('pre>code')
+			   .unwrap()
+			   .replaceWith(function() {
+				 return $('<pre class="prettyprint showlinemods">' + this.innerHTML + '</pre>')
+			   });
+			prettyPrint();
+
+		} );
+	 </script>
+
+
+
+	<!--Navigation and Symbol Display-->
+	
+
+
+	<!--Google Analytics-->
+	
+	<script>
+		(function ( i, s, o, g, r, a, m ) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push( arguments )
+			}, i[r].l = 1 * new Date();
+			a = s.createElement( o ),
+				m = s.getElementsByTagName( o )[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore( a, m )
+		})( window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga' );
+
+		ga( 'create', 'UA-59804936-1', 'auto' );
+		ga( 'send', 'pageview' );
+	</script>
+	
+
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Rectangle with position for color</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<div class="description">
+Drag sliders to translate, rotate, and scale.
+</div>
+<canvas id="canvas"></canvas>
+<div id="uiContainer">
+  <div id="ui">
+    <div id="x"></div>
+    <div id="y"></div>
+    <div id="angle"></div>
+    <div id="scaleX"></div>
+    <div id="scaleY"></div>
+  </div>
+</div>
+</body>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
+<script src="resources/2d-math.js"></script>
+<script>
+"use strict";
+
+function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  var canvas = document.getElementById("canvas");
+  webglLessonsHelper.setupLesson(canvas);
+  var gl = canvas.getContext("webgl");
+  if (!gl) {
+    webglLessonsHelper.showNeedWebGL(canvas);
+    return;
+  }
+
+  // setup GLSL program
+  var program = webglUtils.createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
+  gl.useProgram(program);
+
+  // look up where the vertex data needs to go.
+  var positionLocation = gl.getAttribLocation(program, "a_position");
+
+  // lookup uniforms
+  var matrixLocation = gl.getUniformLocation(program, "u_matrix");
+
+  // Create a buffer.
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(positionLocation);
+  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+  // Set Geometry.
+  setGeometry(gl);
+
+  var translation = [200, 150];
+  var angleInRadians = 0;
+  var scale = [1, 1];
+
+  drawScene();
+
+  // Setup a ui.
+  webglLessonsHelper.setupSlider("#x", {value: translation[0], slide: updatePosition(0), max: gl.canvas.width });
+  webglLessonsHelper.setupSlider("#y", {value: translation[1], slide: updatePosition(1), max: gl.canvas.height});
+  webglLessonsHelper.setupSlider("#angle", {slide: updateAngle, max: 360});
+  webglLessonsHelper.setupSlider("#scaleX", {value: scale[0], slide: updateScale(0), min: -5, max: 5, step: 0.01, precision: 2});
+  webglLessonsHelper.setupSlider("#scaleY", {value: scale[1], slide: updateScale(1), min: -5, max: 5, step: 0.01, precision: 2});
+
+  function updatePosition(index) {
+    return function(event, ui) {
+      translation[index] = ui.value;
+      drawScene();
+    }
+  }
+
+  function updateAngle(event, ui) {
+    var angleInDegrees = 360 - ui.value;
+    angleInRadians = angleInDegrees * Math.PI / 180;
+    drawScene();
+  }
+
+  function updateScale(index) {
+    return function(event, ui) {
+      scale[index] = ui.value;
+      drawScene();
+    }
+  }
+
+  // Draw the scene.
+  function drawScene() {
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    // Clear the canvas.
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // Compute the matrices
+    var projectionMatrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
+    var translationMatrix = m4.translation(translation[0], translation[1]);
+    var rotationMatrix = m3.rotation(angleInRadians);
+    var scaleMatrix = m4.scaling(scale[0], scale[1]);
+
+    // Multiply the matrices.
+    var matrix = m4.multiply(rotationMatrix, scaleMatrix);
+    matrix = m4.multiply(translationMatrix, matrix);
+    matrix = m4.multiply(projectionMatrix, matrix);
+
+    // Set the matrix.
+    gl.uniformMatrix3fv(matrixLocation, false, matrix);
+
+    // Draw the geometry.
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+}
+
+// Fill the buffer with the values that define a rectangle.
+function setGeometry(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+          -150, -100,
+           150, -100,
+          -150,  100,
+           150, -100,
+          -150,  100,
+           150,  100]),
+      gl.STATIC_DRAW);
+}
+
+main();
+</script>
+<!-- vertex shader -->
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+attribute vec2 a_position;
+
+uniform mat3 u_matrix;
+
+varying vec4 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+
+  // Convert from clipspace to colorspace.
+  // Clipspace goes -1.0 to +1.0
+  // Colorspace goes from 0.0 to 1.0
+  v_color = gl_Position * 0.5 + 0.5;
+}
+</script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+varying vec4 v_color;
+
+void main() {
+  gl_FragColor = v_color;
+}
+</script>
+</html>
+
+

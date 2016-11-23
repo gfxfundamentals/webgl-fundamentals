@@ -1,0 +1,422 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Scaled Normals Diagram</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+canvas {
+}
+</style>
+<script id="vertexColorVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 color;
+uniform mat4 u_worldViewProjection;
+varying vec4 v_color;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_color = color;
+}
+
+</script>
+<script id="vertexColorFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+uniform vec4 u_color;
+varying vec4 v_color;
+void main() {
+  gl_FragColor = u_color * v_color;
+}
+</script>
+<script id="normalVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec3 normal;
+attribute vec4 color;
+uniform mat4 u_worldViewProjection;
+uniform mat4 u_worldInverseTranspose;
+uniform float u_normalScale;
+varying vec4 v_color;
+void main() {
+  vec3 n = normalize(mat3(u_worldInverseTranspose) * normal);
+  gl_Position = u_worldViewProjection * (position + vec4(n * color.a * u_normalScale, 0));
+  v_color = vec4(color.rgb, 1);
+}
+
+</script>
+<script id="normalFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+varying vec4 v_color;
+void main() {
+  gl_FragColor = v_color;
+}
+</script>
+<script id="vertexColorFakeLightVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec3 normal;
+uniform mat4 u_world;
+uniform mat4 u_worldViewProjection;
+uniform mat4 u_worldInverseTranspose;
+varying vec3 v_normal;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_normal = (u_worldInverseTranspose * vec4(normal, 0)).xyz;
+}
+
+</script>
+<script id="vertexColorFakeLightFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+uniform vec4 u_color;
+uniform vec3 u_reverseLightDirection;
+varying vec3 v_normal;
+
+vec4 lit(float l ,float h, float m) {
+  return vec4(1.0,
+              abs(l),//max(l, 0.0),
+              (l > 0.0) ? pow(max(0.0, h), m) : 0.0,
+              1.0);
+}
+
+void main() {
+  vec3 normal = normalize(v_normal);
+  float light = dot(normal, u_reverseLightDirection);
+  gl_FragColor = vec4(u_color.rgb * light, u_color.a);
+}
+</script>
+</head>
+<body>
+<div class="description">
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas" width="400" height="300" style="width: 400px; height: 300px;"></canvas>
+  <pre style="position: absolute; width: 400px; text-align: center; left: 0; bottom: 0; color: white;">       world                worldInverseTranspose</pre>
+  <pre style="position: absolute; width: 400px; text-align: center; left: 0; top: 0; color: white;">unscaled</pre>
+</div>
+</body>
+</html>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script>
+<script src="../../resources/twgl-full.min.js"></script>
+<script>
+"use strict";
+var m4 = twgl.m4;
+var v3 = twgl.v3;
+
+var fPosition;
+var cameraPosition;
+var eyePosition;
+var target;
+var gridScale = 400;
+var et = 1/30;
+var mode;
+
+// globals
+var canvas;               // the canvas
+var devicePixelRatio = window.devicePixelRatio || 1;
+
+function rand(min, max) {
+  if (max === undefined) {
+    max = min;
+    min = 0;
+  }
+  return Math.random() * (max - min) + min;
+}
+
+function createGrid(size, subdivisions) {
+  var numLines = subdivisions;
+  var numVertices = numLines * 4;
+  var positions = twgl.primitives.createAugmentedTypedArray(3, numVertices);
+  var colors = twgl.primitives.createAugmentedTypedArray(4, numVertices);
+
+  //  ..|..|..|..
+  //  <-  size ->
+  var black = [0, 0, 0, 1];
+  var gray = [0.75, 0.75, 0.75, 1];
+
+  var gridSize = size / (subdivisions + 2);
+  for (var ii = 0; ii < numLines; ++ii) {
+    var jj = ii - ((numLines - 1) / 2);
+    var p = jj * gridSize;
+    positions.push([p, 0, -size / 2]);
+    positions.push([p, 0,  size / 2]);
+    positions.push([-size / 2, 0, p]);
+    positions.push([ size / 2, 0, p]);
+    var color = jj ? gray : black;
+    colors.push(color);
+    colors.push(color);
+    colors.push(color);
+    colors.push(color);
+  }
+
+  return {
+    position: positions,
+    color: colors,
+  };
+};
+
+function createNormalLines(vertices) {
+  var positions = [];
+  var colors = [];
+  var normals = [];
+
+  var srcPositions = vertices.position;
+  var srcNormals = vertices.normal;
+  for (var ii = 0; ii < srcPositions.length; ii += 3) {
+    positions.push(
+        srcPositions[ii + 0],
+        srcPositions[ii + 1],
+        srcPositions[ii + 2]);
+    normals.push(
+        srcNormals[ii + 0],
+        srcNormals[ii + 1],
+        srcNormals[ii + 2]);
+    colors.push(
+        srcNormals[ii + 0] * 0.5 + 0.5,
+        srcNormals[ii + 1] * 0.5 + 0.5,
+        srcNormals[ii + 2] * 0.5 + 0.5,
+        0);
+    positions.push(
+        srcPositions[ii    ],
+        srcPositions[ii + 1],
+        srcPositions[ii + 2]);
+    normals.push(
+        srcNormals[ii + 0],
+        srcNormals[ii + 1],
+        srcNormals[ii + 2]);
+    colors.push(
+        srcNormals[ii + 0] * 0.5 + 0.5,
+        srcNormals[ii + 1] * 0.5 + 0.5,
+        srcNormals[ii + 2] * 0.5 + 0.5,
+        1);
+  }
+
+  return {
+    position: positions,
+    normal: normals,
+    color: colors,
+  };
+}
+
+function CreateApp(gl) {
+
+  // Create Shader Programs
+  var vertexColorProgramInfo = twgl.createProgramInfo(gl, [
+      'vertexColorVertexShader',
+      'vertexColorFragmentShader',
+  ]);
+  var litProgramInfo = twgl.createProgramInfo(gl, [
+      'vertexColorFakeLightVertexShader',
+      'vertexColorFakeLightFragmentShader',
+  ]);
+  var normalProgramInfo = twgl.createProgramInfo(gl, [
+      'normalVertexShader',
+      'normalFragmentShader',
+  ]);
+
+  var m = m4.identity();
+  m4.rotateX(m, Math.PI * 0.5, m);
+  m4.translate(m, [0.5, 0, -0.5], m);
+  var sphereVertices = twgl.primitives.createSphereVertices(50, 24, 12);
+  var sphereBufferInfo = twgl.createBufferInfoFromArrays(gl, sphereVertices);
+  var sphereNormalsBufferInfo = twgl.createBufferInfoFromArrays(gl, createNormalLines(sphereVertices));
+  // Create Geometry.
+  var gridArrays = createGrid(26, 42);
+  var gridBufferInfo = twgl.createBufferInfoFromArrays(gl, gridArrays);
+
+  // pre-allocate a bunch of arrays
+  var projection = m4.identity();
+  var inverseProjection = m4.identity();
+  var exampleProjection = m4.identity();
+  var exampleInverseProjection = m4.identity();
+  var view = m4.identity();
+  var viewInverse = m4.identity();
+  var world = m4.identity();
+  var worldInverseTranspose = m4.identity();
+  var scaleMat = m4.identity();
+  var viewProjection = m4.identity();
+  var inverseViewProjection = m4.identity();
+  var worldViewProjection = m4.identity();
+  var exampleWorldViewProjection = m4.identity();
+  fPosition = new Float32Array([-50, 50, -150]);
+  eyePosition = new Float32Array([150, 150, 150]);
+  target = new Float32Array([0, 0, 0]);
+  cameraPosition = new Float32Array([50, 200, 100]);
+  var up = new Float32Array([0,1,0]);
+  var v3t0 = new Float32Array(3);
+  var v3t1 = new Float32Array(3);
+  var v3t2 = new Float32Array(3);
+  var v3t3 = new Float32Array(3);
+  var m4t0 = m4.identity();
+  var m4t1 = m4.identity();
+  var m4t2 = m4.identity();
+  var m4t3 = m4.identity();
+  var zeroMat = m4.identity();
+  var zero4 = new Float32Array(4);
+  var one4 = new Float32Array([1,1,1,1]);
+  var black = new Float32Array([0,0,0,1]);
+  var red = new Float32Array([1,0,0,1]);
+  var green = new Float32Array([0,1,0,1]);
+  var blue = new Float32Array([0,0,1,1]);
+  var ltRed = new Float32Array([1,0.5,0.5,1]);
+  var ltGreen = new Float32Array([0.5,1,0.5,1]);
+  var ltBlue = new Float32Array([0.5,0.5,1,1]);
+  var white = new Float32Array([1,1,1,1]);
+  var flashColor = new Float32Array([1,1,1,0.75]);
+  var selectPoint = [0,0,0];
+
+  // uniforms.
+  var sharedUniforms = {
+    u_world: world,
+    u_worldViewProjection: worldViewProjection,
+    u_worldInverseTranspose: worldInverseTranspose,
+    u_reverseLightDirection: v3.normalize([0.25, 1, -0.37]),
+  };
+
+  var gridUniforms = {
+    u_color: [0.3,0.3,0.3,1],
+  };
+
+  var normalUniforms = {
+    u_color: [1, 1, 1, 1],
+    u_normalScale: 10,
+  };
+
+  var sphere0Uniforms = {
+    u_color: [1, 0, 0, 1],
+  };
+
+  var sphere1Uniforms = {
+    u_color: [0, 0, 1, 1],
+  };
+
+  var sphere2Uniforms = {
+    u_color: [1, 0, 1, 1],
+  };
+
+  var cubeUniforms = {
+    u_color: [0, 0, 1, 1],
+  };
+
+  function radToDeg(r) {
+    return r * 180 / Math.PI;
+  }
+
+  function drawModel(programInfo, bufferInfo, type, uniforms, world, useWorldForWorldInverseTranspose) {
+    m4.multiply(world, viewProjection, worldViewProjection);
+    if (useWorldForWorldInverseTranspose) {
+      m4.copy(world, worldInverseTranspose);
+    } else {
+      m4.inverse(world, worldInverseTranspose);
+      m4.transpose(worldInverseTranspose, worldInverseTranspose);
+    }
+    gl.useProgram(programInfo.program);
+    twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+    twgl.setUniforms(programInfo, sharedUniforms, uniforms);
+    twgl.drawBufferInfo(gl, type, bufferInfo);
+  }
+
+  function degToRad(deg) {
+    return deg * Math.PI / 180;
+  }
+
+  var showNormals = true;
+  function render(elapsedTime) {
+
+    // clear the screen.
+    gl.enable(gl.DEPTH_TEST);
+    gl.colorMask(true, true, true, true);
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    var aspect = canvas.clientWidth / canvas.clientHeight;
+    m4.perspective(
+        degToRad(40),
+        aspect,
+        1,
+        5000,
+        projection);
+    var size = 500;
+    m4.ortho(
+        -size, size, -size / aspect, size / aspect, 1, 5000,
+        projection);
+
+    m4.lookAt(
+        [0, 200, 0],
+        [0, 0, 0],
+        [0, 0, -1],
+        viewInverse);
+    m4.inverse(viewInverse, view);
+    m4.multiply(view, projection, viewProjection);
+    m4.inverse(viewProjection, inverseViewProjection);
+
+    m4.translation([-300, 0, 0], world);
+    m4.scale(world, [2, 2, 4], world);
+    drawModel(litProgramInfo, sphereBufferInfo, gl.TRIANGLES, showNormals ? sphere0Uniforms : sphere0Uniforms, world, true);
+
+    if (showNormals) {
+      drawModel(normalProgramInfo, sphereNormalsBufferInfo, gl.LINES, normalUniforms, world, true);
+    }
+
+    m4.translation([ 300, 0, 0], world);
+    m4.scale(world, [2, 2, 4], world);
+    drawModel(litProgramInfo, sphereBufferInfo, gl.TRIANGLES, showNormals ? sphere1Uniforms : sphere0Uniforms, world);
+
+    if (showNormals) {
+      drawModel(normalProgramInfo, sphereNormalsBufferInfo, gl.LINES, normalUniforms, world);
+    }
+
+    m4.translation([ 0, 0, 0], world);
+    m4.scale(world, [1, 1, 1], world);
+    drawModel(litProgramInfo, sphereBufferInfo, gl.TRIANGLES, showNormals ? sphere2Uniforms : sphere0Uniforms, world);
+
+    if (showNormals) {
+      drawModel(normalProgramInfo, sphereNormalsBufferInfo, gl.LINES, normalUniforms, world);
+    }
+
+    m4.translation([0, -100, 0], world);
+    m4.scale(world, [100, 100, 100], world);
+    drawModel(vertexColorProgramInfo, gridBufferInfo, gl.LINES, gridUniforms, world);
+  }
+
+  function toggleNormals(event) {
+    event.preventDefault();
+    showNormals = !showNormals;
+    render();
+  }
+
+  window.addEventListener('mousedown', function(event) {
+      event.preventDefault();
+  });
+  window.addEventListener('click', toggleNormals);
+  window.addEventListener('touchstart', toggleNormals);
+
+  return {
+    render: render
+  };
+}
+
+var app;
+function main() {
+  canvas = document.getElementById("canvas");
+
+  var gl = twgl.getWebGLContext(canvas, {alpha: true, preMultipliedAlpha: false});
+  if (!gl) {
+    return false;
+  }
+
+  twgl.resizeCanvasToDisplaySize(gl.canvas, window.devicePixelRatio);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  gl.lineWidth(2);
+
+  app = CreateApp(gl);
+
+  var then = 0;
+  app.render();
+}
+
+main();
+</script>
+
+
+
+

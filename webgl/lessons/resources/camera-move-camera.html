@@ -1,0 +1,191 @@
+<html>
+<head>
+<meta charset="utf8">
+<title>3D in canvas</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+canvas { g-border: 1px solid black; }
+</style>
+</head>
+<body>
+<h1 class="description">Moving the Camera</h1>
+<div id="movie"></div>
+</body>
+<!-- this is included only for iframe and requestAnimationFrame support -->
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script>
+<script src="bonsai-0.4.1.min.js"></script>
+<script>
+"use strict";
+window.onload = main;
+
+function main() {
+  var code = function() {
+
+    var getURLOptions = function(s, obj) {
+      var q = s.indexOf("?");
+      var e = s.indexOf("#");
+      if (e < 0) {
+        e = s.length;
+      }
+      var query = s.substring(q + 1, e);
+      var pairs = query.split("&");
+      for (var ii = 0; ii < pairs.length; ++ii) {
+        var keyValue = pairs[ii].split("=");
+        var key = keyValue[0];
+        var value = decodeURIComponent(keyValue[1]);
+        obj[key] = value;
+      }
+    };
+
+    var options = {
+      mode: "0",
+    };
+    getURLOptions(stage.options.initialData.url, options);
+
+    var mode = parseInt(options.mode);
+
+    var fRadius = 60;
+    var camRadius = 120;
+    var areaWidth = 400;
+    var areaHeight = 300;
+    var gridSpacing = 20;
+    var gridsAcross = Math.ceil(areaWidth / gridSpacing);
+    var gridsDown = Math.ceil(areaHeight / gridSpacing);
+    var gridLines = Math.max(gridsAcross, gridsDown);
+
+    stage.setBackgroundColor(color('white'));
+    stage.setFramerate(60);
+
+    var yoff = mode == 2 ? 90 : 0;
+
+    var grid = new Group()
+        .addTo(stage)
+        .attr({
+          x: areaWidth / 2,
+          y: areaHeight / 2 + yoff,
+        });
+
+    var world = new Group()
+        .addTo(stage)
+        .attr({
+          x: areaWidth / 2,
+          y: areaHeight / 2 - (mode > 1 ? camRadius : 0) + yoff,
+        });
+
+    var base = new Group()
+        .addTo(stage)
+        .attr({
+          x: areaWidth / 2,
+          y: areaHeight / 2 + yoff,
+        });
+
+    var axis = new Group()
+        .addTo(stage)
+        .attr({
+          x: areaWidth / 2,
+          y: areaHeight / 2,
+        });
+
+    for (var ii = -gridLines; ii < gridLines; ++ii) {
+      var c = ii ? '#CCC' : 'black';
+      new Rect(-areaWidth, ii * gridSpacing, areaWidth * 2, 0.5)
+          .addTo(grid)
+          .attr('fillColor', c);
+      new Rect(ii * gridSpacing, -areaHeight, 0.5, areaHeight * 2)
+          .addTo(grid)
+          .attr('fillColor', c);
+    }
+    var text = [
+      { text: "-x", x: -areaWidth  / 2 + 2,           y: 2 + yoff },
+      { text: "+x", x:  areaWidth  / 2 - gridSpacing, y: 2 + yoff },
+      { text: "-z", y: -areaHeight / 2 + 2,           x: 2 },
+      { text: "+z", y:  areaHeight / 2 - gridSpacing, x: 2 },
+    ];
+    text.forEach(function(t) {
+      new Text(t.text)
+          .addTo(axis)
+          .attr({
+            x: t.x,
+            y: t.y,
+          });
+    });
+
+    var createCamera = function() {
+      var c = new Path()
+          .moveTo(0, 0)
+          .lineTo(10, 0)
+          .lineTo(10, 20)
+          .lineTo(-10, 20)
+          .lineTo(-10, 0)
+          .lineTo(0, 0)
+          .lineTo(-10, -10)
+          .lineTo(10, -10)
+          .lineTo(0, 0)
+          .closePath()
+          .fill('blue');
+      return c;
+    };
+
+    var createF = function() {
+      var f = new Group();
+      new Rect(-15,  0 - 25, 30, 10).addTo(f).attr('fillColor', 'purple');
+      new Rect(-15, 10 - 25, 10, 10).addTo(f).attr('fillColor', 'purple');
+      new Rect(-15, 20 - 25, 20, 10).addTo(f).attr('fillColor', 'purple');
+      new Rect(-15, 30 - 25, 10, 20).addTo(f).attr('fillColor', 'purple');
+      return f;
+    };
+
+    var numF = 5;
+    for (var ii = 0; ii < numF; ++ii) {
+      var f = createF();
+      var a = ii * Math.PI * 2 / numF
+      f.addTo(world)
+       .attr('x', Math.cos(a) * fRadius)
+       .attr('y', Math.sin(a) * fRadius);
+    }
+
+    var cam = createCamera();
+    cam.addTo(base).attr({
+      y: mode == 2 ? 0 : camRadius,
+    });
+
+    if (mode == 2) {
+      var frustum = new Path()
+          .moveTo( -20,  -20)
+          .lineTo(-170, -210)
+          .lineTo( 170, -210)
+          .lineTo(  20,  -20)
+          .closePath()
+          .fill("#80FF4080")
+          .addTo(base);
+    }
+
+    switch (mode) {
+      case 1:
+      case 2:
+        world.animate(new KeyframeAnimation('8s', {
+          '0%':   { rotation: 0},
+          '100%': { rotation: Math.PI * 2 }
+        }, {repeat: 100000000}));
+        break;
+      default:
+        base.animate(new KeyframeAnimation('8s', {
+          '0%':   { rotation: 0},
+          '100%': { rotation: Math.PI * 2 }
+        }, {repeat: 100000000}));
+        break;
+    }
+  };
+
+  bonsai.run(document.getElementById('movie'), {
+    code: code,
+    width: 400,
+    height: 300,
+    initialData: {
+      url: window.location.href.toString(),
+    },
+  });
+}
+</script>
+</html>

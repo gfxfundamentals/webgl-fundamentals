@@ -1,0 +1,463 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>WebGL - Frustum Diagram</title>
+    <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<div class="description">
+Drag sliders to change the frustum.
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas" width="400" height="600" style="width: 400px; height: 600px"></canvas>
+  <img src="resources/eye-icon.png" style="position: absolute; z-index:2; left: 10px; top: 275px; width: 32px; height: auto;"/>
+</div>
+<div id="uiContainer">
+  <div id="ui">
+    <div id="fieldOfView"></div>
+    <div id="zNear"></div>
+    <div id="zFar"></div>
+    <div id="zPosition"></div>
+  </div>
+</div>
+</body>
+<script id="vertexColorVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 color;
+uniform mat4 u_worldViewProjection;
+varying vec4 v_color;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_color = color;
+}
+
+</script>
+<script id="vertexColorFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+uniform vec4 u_color;
+varying vec4 v_color;
+void main() {
+  gl_FragColor = u_color * v_color;
+}
+</script>
+<script id="baseVertexShader" type="text/something-not-javascript">
+attribute vec4 position;
+attribute vec4 a_color;
+uniform mat4 u_worldViewProjection;
+uniform mat4 u_exampleWorldViewProjection;
+varying vec4 v_color;
+varying vec4 v_position;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+  v_position = u_exampleWorldViewProjection * position;
+  v_position = v_position / v_position.w;
+  v_color = a_color;
+}
+
+</script>
+<script id="colorFragmentShader" type="text/something-not-javascript">
+precision mediump float;
+varying vec4 v_color;
+varying vec4 v_position;
+uniform vec4 u_color;
+void main() {
+  bool blend = (v_position.x < -1.0 || v_position.x > 1.0 ||
+                v_position.y < -1.0 || v_position.y > 1.0 ||
+                v_position.z < -1.0 || v_position.z > 1.0);
+  vec4 blendColor = blend ? vec4(0.35, 0.35, 0.35, 1.0) : vec4(1, 1, 1, 1);
+  gl_FragColor = v_color * u_color * blendColor;
+}
+</script>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
+<script src="resources/tdl/base.js"></script>
+<script>
+"use strict";
+
+tdl.require('tdl.buffers');
+tdl.require('tdl.clock');
+tdl.require('tdl.fast');
+tdl.require('tdl.log');
+tdl.require('tdl.math');
+tdl.require('tdl.models');
+tdl.require('tdl.primitives');
+tdl.require('tdl.programs');
+tdl.require('tdl.textures');
+tdl.require('tdl.webgl');
+
+var eyePosition;
+var target;
+
+// globals
+var gl;                   // the gl context.
+var canvas;               // the canvas
+var math;                 // the math lib.
+var fast;                 // the fast math lib.
+var pixelRatio = window.devicePixelRatio || 1;
+
+function createApp() {
+  // Create Geometry.
+  var wireCubeArrays = {
+    position: new tdl.primitives.AttribBuffer(3,
+      [
+        -1,  1, -1,
+         1,  1, -1,
+         1, -1, -1,
+        -1, -1, -1,
+
+        -1,  1,  1,
+         1,  1,  1,
+         1, -1,  1,
+        -1, -1,  1,
+      ]),
+    color: new tdl.primitives.AttribBuffer(
+      4,
+      [
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+      ]),
+    indices: new tdl.primitives.AttribBuffer(
+      2,
+      [
+        0, 1, 1, 2, 2, 3, 3, 0,
+        4, 5, 5, 6, 6, 7, 7, 4,
+        0, 4, 1, 5, 2, 6, 3, 7,
+      ],
+      'Uint16Array'),
+  };
+  // Load textures
+  var textures = {
+  };
+
+  // Create Shader Program
+  var vertexColorProgram = tdl.programs.loadProgramFromScriptTags(
+      'vertexColorVertexShader',
+      'vertexColorFragmentShader');
+  var wireCubeModel = new tdl.models.Model(vertexColorProgram, wireCubeArrays, textures, gl.LINES);
+
+  var cubeRaysArrays = {
+    position: wireCubeArrays.position,
+    color: new tdl.primitives.AttribBuffer(
+      4,
+      [
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+
+        0, 0, 0, 1,
+        0, 0, 0, 1,
+        0, 0, 0, 1,
+        0, 0, 0, 1,
+      ]),
+    indices: new tdl.primitives.AttribBuffer(
+      2,
+      [
+        0, 4, 1, 5, 2, 6, 3, 7,
+      ],
+      'Uint16Array'),
+  };
+  var cubeRaysModel = new tdl.models.Model(vertexColorProgram, cubeRaysArrays, textures, gl.LINES);
+
+  var colorProgram = tdl.programs.loadProgramFromScriptTags(
+      'baseVertexShader',
+      'colorFragmentShader');
+  var cubeArrays = tdl.primitives.createCube(2.0);
+  delete cubeArrays.normal;
+  delete cubeArrays.texCoord;
+  var faceColors = [
+    [ 1, 0, 0, 1, ],
+    [ 0, 1, 0, 1, ],
+    [ 1, 1, 0, 1, ],
+    [ 0, 0, 1, 1, ],
+    [ 1, 0, 1, 1, ],
+    [ 0, 1, 1, 1, ],
+  ];
+  var colorVerts = new tdl.primitives.AttribBuffer(4, 6 * 4);
+  for (var f = 0; f < 6; ++f) {
+    for (var v = 0; v < 4; ++v) {
+      colorVerts.push(faceColors[f]);
+    }
+  }
+  cubeArrays.a_color = colorVerts;
+  var cubeModel = new tdl.models.Model(colorProgram, cubeArrays, textures);
+
+  // pre-allocate a bunch of arrays
+  var projection = new Float32Array(16);
+  var exampleProjection = new Float32Array(16);
+  var exampleInverseProjection = new Float32Array(16);
+  var view = new Float32Array(16);
+  var world = new Float32Array(16);
+  var scaleMat = new Float32Array(16);
+  var viewProjection = new Float32Array(16);
+  eyePosition = new Float32Array([31, 17, 15]);
+  var worldViewProjection = new Float32Array(16);
+  var exampleWorldViewProjection = new Float32Array(16);
+  target = new Float32Array([23, 16, 0]);
+  var up = new Float32Array([0, 1, 0]);
+  var v3t0 = new Float32Array(3);
+  var m4t0 = new Float32Array(16);
+  var zeroMat = new Float32Array(16);
+
+  var targetToEye = new Float32Array(3);
+  fast.subVector(targetToEye, eyePosition, target);
+
+  // uniforms.
+  var sharedUniforms = {
+  };
+
+  var sceneCubeUniforms = {
+    u_color: new Float32Array([1, 1, 1, 1]),
+    u_worldViewProjection: worldViewProjection,
+    u_exampleWorldViewProjection: exampleWorldViewProjection,
+  };
+
+  var frustumCubeUniforms = {
+    u_color: new Float32Array([1, 1, 1, 0.4]),
+    u_worldViewProjection: worldViewProjection,
+    u_exampleWorldViewProjection: zeroMat,
+  };
+
+  var cubeRaysUniforms = {
+    u_color: new Float32Array([1, 1, 1, 1]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var wireFrustumUniforms = {
+    u_color: new Float32Array([1, 0, 0, 1]),
+    u_worldViewProjection: worldViewProjection,
+  };
+
+  var zNear = 10;
+  var zFar = 50;
+  var fieldOfView = 30;
+  var zPosition = -25;
+
+  // Setup a ui.
+  function updateFieldOfView(event, ui) {
+    fieldOfView = ui.value;
+  }
+
+  function updateZNear(event, ui) {
+    zNear = ui.value;
+  }
+
+  function updateZFar(event, ui) {
+    zFar = ui.value;
+  }
+
+  function updateZPosition(event, ui) {
+    zPosition = ui.value;
+  }
+
+  webglLessonsHelper.setupSlider("#fieldOfView", {value: fieldOfView, slide: updateFieldOfView, max: 179});
+  webglLessonsHelper.setupSlider("#zNear", {value: zNear, slide: updateZNear, min: 1, max: 50});
+  webglLessonsHelper.setupSlider("#zFar", {value: zFar, slide: updateZFar, min: 1, max: 50});
+  webglLessonsHelper.setupSlider("#zPosition", {value: zPosition, slide: updateZPosition, min: -60, max: 0});
+
+  var clock = 0;
+  function render(elapsedTime) {
+    clock += elapsedTime;
+    var m4 = fast.matrix4;
+
+    // clear the screen.
+    gl.disable(gl.SCISSOR_TEST);
+    gl.colorMask(true, true, true, true);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    gl.viewport(0, 300 * pixelRatio, 400 * pixelRatio, 300 * pixelRatio);
+
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    var aspect = gl.canvas.clientWidth / (gl.canvas.clientHeight / 2);
+
+    m4.perspective(
+        projection,
+        math.degToRad(60),
+        aspect,
+        1,
+        5000);
+
+    var f = Math.max(30, fieldOfView) - 30;
+    f = f / (179 - 30);
+    f = f * f * f * f;
+    f = math.lerpScalar(1, 179 * 0.9, f);
+    f = 1;
+    fast.mulVectorScalar(v3t0, targetToEye, f);
+    fast.addVector(v3t0, v3t0, target);
+    m4.lookAt(
+        view,
+        v3t0, //eyePosition,
+        target,
+        up);
+    m4.mul(viewProjection, view, projection);
+
+    var scale = 1;
+
+    // Draw scene
+    function drawScene(viewProjection, exampleProjection) {
+      cubeModel.drawPrep(sharedUniforms);
+      var cubeScale = scale * 3;
+      for (var ii = -1; ii <= 1; ++ii) {
+        m4.scaling(world, [cubeScale, cubeScale, cubeScale]);
+        m4.rotationZ(m4t0, Math.PI / 4);
+        m4.mul(world, world, m4t0);
+        m4.rotationX(m4t0, Math.PI / 4);
+        m4.mul(world, world, m4t0);
+        m4.rotationY(m4t0, clock + ii * Math.PI / 6);
+        m4.mul(world, world, m4t0);
+        m4.translation(m4t0, [ii * 10, 0, zPosition]);
+        m4.mul(world, world, m4t0);
+        m4.mul(worldViewProjection, world, viewProjection);
+
+        m4.mul(exampleWorldViewProjection, world, exampleProjection);
+
+        cubeModel.draw(sceneCubeUniforms);
+      }
+    }
+    drawScene(viewProjection, exampleProjection);
+
+    // Draw Frustum Cube behind
+    function drawFrustumCube() {
+      m4.perspective(
+          exampleProjection,
+          math.degToRad(fieldOfView),
+          aspect,
+          zNear,
+          zFar);
+      m4.inverse(exampleInverseProjection, exampleProjection);
+
+      m4.translation(world, [0, 0, 0]);
+      m4.mul(world, world, exampleInverseProjection);
+      m4.scaling(scaleMat, [scale, scale, scale]);
+      m4.mul(world, world, scaleMat);
+      m4.mul(worldViewProjection, world, viewProjection);
+
+      cubeModel.drawPrep(sharedUniforms);
+      cubeModel.draw(frustumCubeUniforms);
+    }
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
+    drawFrustumCube();
+    gl.disable(gl.CULL_FACE);
+
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.FRONT);
+//    drawFrustumCube();
+    gl.disable(gl.CULL_FACE);
+
+    // Draw view cone.
+    m4.perspective(
+        exampleProjection,
+        math.degToRad(fieldOfView),
+        aspect,
+        1,
+        5000);
+    m4.inverse(exampleInverseProjection, exampleProjection);
+
+    m4.translation(world, [0, 0, 0]);
+    m4.mul(world, world, exampleInverseProjection);
+    m4.scaling(scaleMat, [scale, scale, scale]);
+    m4.mul(world, world, scaleMat);
+    m4.mul(worldViewProjection, world, viewProjection);
+
+    cubeRaysModel.drawPrep(sharedUniforms);
+    cubeRaysModel.draw(cubeRaysUniforms);
+
+    // Draw Frustum Wire
+    m4.perspective(
+        exampleProjection,
+        math.degToRad(fieldOfView),
+        aspect,
+        zNear,
+        zFar);
+    m4.inverse(exampleInverseProjection, exampleProjection);
+
+    m4.translation(world, [0, 0, 0]);
+    m4.mul(world, world, exampleInverseProjection);
+    m4.scaling(scaleMat, [scale, scale, scale]);
+    m4.mul(world, world, scaleMat);
+    m4.mul(worldViewProjection, world, viewProjection);
+
+    wireCubeModel.drawPrep(sharedUniforms);
+    wireCubeModel.draw(wireFrustumUniforms);
+
+    // Draw 3D view
+    gl.enable(gl.SCISSOR_TEST);
+    gl.viewport(0, 0, 400 * pixelRatio, 300 * pixelRatio);
+    gl.scissor(0, 0, 400 * pixelRatio, 300 * pixelRatio);
+    gl.clearColor(0.5, 0.5, 0.5, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    m4.perspective(
+        projection,
+        math.degToRad(fieldOfView),
+        aspect,
+        zNear,
+        zFar);
+    drawScene(exampleProjection, zeroMat);
+  }
+
+  return {
+    render: render,
+  };
+}
+
+function resizeCanvas() {
+  var displayWidth  = canvas.clientWidth * pixelRatio;
+  var displayHeight = canvas.clientHeight * pixelRatio;
+  if (canvas.width !== displayWidth ||
+      canvas.height !== displayHeight) {
+
+    canvas.width = displayWidth;
+    canvas.height = displayHeight;
+    gl.viewport(0, 0, displayWidth, displayHeight);
+  }
+}
+var app;
+function main() {
+  math = tdl.math;
+  fast = tdl.fast;
+  canvas = document.getElementById("canvas");
+  var clock = tdl.clock.createClock();
+
+  gl = tdl.webgl.setupWebGL(canvas, {alpha: true, preMultipliedAlpha: false});
+  if (!gl) {
+    webglLessonsHelper.showNeedWebGL2(canvas);
+  }
+
+  resizeCanvas();
+
+  app = createApp();
+
+  var then = clock.getTime();
+  function render() {
+    var now = clock.getTime();
+    var elapsedTime = now - then;
+    then = now;
+    app.render(elapsedTime);
+    requestAnimationFrame(render);
+  }
+  render();
+}
+
+// Need this because of tdl's loader :(
+window.onload = main;
+</script>
+</html>
+
+
+

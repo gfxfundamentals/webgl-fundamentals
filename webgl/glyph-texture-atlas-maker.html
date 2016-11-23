@@ -1,0 +1,121 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+<title>Make Glyph Texture Atlas</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+* {
+  box-sizing: border-box;
+}
+#ui {
+    width: 200px;
+}
+</style>
+</head>
+<body>
+</body>
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script>
+<script>
+"use strict";
+
+function saveProperties(obj) {
+  var props = {};
+  Object.keys(obj).forEach(function(key) {
+    var desc = Object.getOwnPropertyDescriptor(obj, key);
+    // only save writable properties
+    if (desc.writable) {
+      props[key] = obj[key];
+    }
+  });
+  return props;
+}
+
+function restoreProperties(props, obj) {
+  Object.keys(props).forEach(function(key) {
+    obj[key] = props[key];
+  });
+}
+
+function makeGlyphCanvas(ctx, maxWidthOfTexture, heightOfLetters, baseLine, padding, letters) {
+  var rows = 1;      // number of rows of glyphs
+  var x = 0;         // x position in texture to draw next glyph
+  var y = 0;         // y position in texture to draw next glyph
+  var glyphInfos = { // info for each glyph
+  };
+
+  // Go through each letter, measure it, remember its width and position
+  for (var ii = 0; ii < letters.length; ++ii) {
+    var letter = letters[ii];
+    var t = ctx.measureText(letter);
+    // Will this letter fit on this row?
+    if (x + t.width + padding > maxWidthOfTexture) {
+       // so move to the start of the next row
+       x = 0;
+       y += heightOfLetters;
+       ++rows;
+    }
+    // Remember the data for this letter
+    glyphInfos[letter] = {
+      x: x,
+      y: y,
+      width: t.width,
+    };
+    // advance to space for next letter.
+    x += t.width + padding;
+  }
+
+  // Now that we know the size we need set the size of the canvas
+  // We have to save the canvas settings because changing the size
+  // of a canvas resets all the settings
+  var settings = saveProperties(ctx);
+  ctx.canvas.width = (rows == 1) ? x : maxWidthOfTexture;
+  ctx.canvas.height = rows * heightOfLetters;
+  restoreProperties(settings, ctx);
+
+  // Draw the letters into the canvas
+  for (var ii = 0; ii < letters.length; ++ii) {
+    var letter = letters[ii];
+    var glyphInfo = glyphInfos[letter];
+    var t = ctx.fillText(letter, glyphInfo.x, glyphInfo.y + baseLine);
+  }
+
+  return glyphInfos;
+}
+
+
+function main() {
+  var ctx = document.createElement("canvas").getContext("2d");
+  document.body.insertBefore(ctx.canvas, document.body.firstChild);
+  ctx.font = "20px sans-serif";
+  ctx.fillStyle = "white";
+  var maxTextureWidth = 256;
+  var letterHeight = 22;
+  var baseline = 16;
+  var padding = 1;
+  var letters = "0123456789.,abcdefghijklmnopqrstuvwxyz";
+  var glyphInfos = makeGlyphCanvas(
+      ctx,
+      maxTextureWidth,
+      letterHeight,
+      baseline,
+      padding,
+      letters);
+
+  // To make it clear lets draw a rect for each glyph
+  ctx.globalCompositeOperation = "destination-over";
+  Object.keys(glyphInfos).forEach(function(letter, ndx) {
+    var glyphInfo = glyphInfos[letter];
+    ctx.fillStyle = ndx % 2 ? "red" : "green";
+    ctx.fillRect(glyphInfo.x, glyphInfo.y, glyphInfo.width, letterHeight);
+  });
+}
+
+main();
+</script>
+</html>
+
+
+
