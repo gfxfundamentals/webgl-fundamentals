@@ -29,6 +29,19 @@ one step at a time. Don't do 2 or more things in a single step.
 Explain any new math in the simplest terms possible. Ideally
 with diagrams where possible.
 
+### To build
+
+The site is built into the `out` folder
+
+Steps
+
+    git clone https://github.com/greggman/webgl-fundamentals.git
+    npm install
+    npm run build
+    npm start
+
+now open your browser to `http://localhost:8080`
+
 ## TO DO
 
 A list of articles I'd like to write or see written
