@@ -259,7 +259,7 @@ var Builder = function(outBaseDir) {
   var addArticleByLang = function(article, lang) {
     var filename = path.basename(article.dst_file_name);
     var articleInfo = g_articlesByLang[filename];
-    var url = "http://webglfundamentals.org/" + article.dst_file_name;
+    var url = "http://webglfundamentals.org" + article.dst_file_name;
     if (!articleInfo) {
       articleInfo = {
         url: url,
@@ -294,7 +294,7 @@ var Builder = function(outBaseDir) {
     options.lessons     = options.lessons     || ("webgl/lessons/" + options.lang);
     options.toc         = options.toc         || ("webgl/lessons/" + options.lang + "/toc.html");
     options.template    = options.template    || "build/templates/lesson.template";
-    options.examplePath = options.examplePath === undefined ? "../" : options.examplePath;
+    options.examplePath = options.examplePath === undefined ? "/webgl/lessons/" : options.examplePath;
 
     g_articles = [];
     g_langInfo = hanson.parse(fs.readFileSync(path.join(options.lessons, "langinfo.hanson"), {encoding: "utf8"}));
@@ -364,7 +364,7 @@ var Builder = function(outBaseDir) {
       articles.forEach(function(article, ndx) {
         feed.addItem({
           title:          article.title,
-          link:           "http://webglfundamentals.org/" + article.dst_file_name,
+          link:           "http://webglfundamentals.org" + article.dst_file_name,
           description:    "",
           author: [
             {
