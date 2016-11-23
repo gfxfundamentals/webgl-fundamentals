@@ -3,18 +3,19 @@ module.exports = function () { // wrapper in case we're in module_context mode
 
 "use strict";
 
-var args       = require('minimist')(process.argv.slice(2));
-var cache      = new (require('inmemfilecache'));
-var Feed       = require('feed');
-var fs         = require('fs');
-var glob       = require('glob');
-var Handlebars = require('handlebars');
-var hanson     = require('hanson');
-var marked     = require('marked');
-var path       = require('path');
-var Promise    = require('promise');
-var sitemap    = require('sitemap');
-var utils      = require('./utils');
+const args       = require('minimist')(process.argv.slice(2));
+const cache      = new (require('inmemfilecache'));
+const Feed       = require('feed');
+const fs         = require('fs');
+const glob       = require('glob');
+const Handlebars = require('handlebars');
+const hanson     = require('hanson');
+const marked     = require('marked');
+const path       = require('path');
+const Promise    = require('promise');
+const sitemap    = require('sitemap');
+const utils      = require('./utils');
+const moment     = require('moment');
 
 //process.title = "build";
 
@@ -131,13 +132,14 @@ Handlebars.registerHelper('image', function(options) {
   return templateManager.apply("build/templates/image.template", options.hash);
 });
 
-var Builder = function() {
+var Builder = function(outBaseDir) {
 
   var g_articlesByLang = {};
   var g_articles = [];
   var g_langInfo;
   var g_langs;
   var g_langDB = {};
+  var g_outBaseDir = outBaseDir;
 
   var extractHeader = (function() {
     var headerRE = /([A-Z0-9_-]+): (.*?)$/i;
@@ -219,15 +221,16 @@ var Builder = function() {
     var html = marked(info.content);
     html = insertHandlebars(info, html);
     html = replaceParams(html, [opt_extra, g_langInfo]);
+    const relativeOutName = outFileName.replace(/\\/g, '/').substring(g_outBaseDir.length);
     metaData['content'] = html;
     metaData['langs'] = g_langs;
     metaData['src_file_name'] = contentFileName.replace(/\\/g, '/');
-    metaData['dst_file_name'] = outFileName.replace(/\\/g, '/');
+    metaData['dst_file_name'] = relativeOutName;
     metaData['basedir'] = "";
     metaData['toc'] = opt_extra.toc;
     metaData['templateOptions'] = opt_extra.templateOptions;
     metaData['langInfo'] = g_langInfo;
-    metaData['url'] = "http://webglfundamentals.org/" + outFileName.replace(/\\/g, '/');
+    metaData['url'] = "http://webglfundamentals.org/" + relativeOutName;
     metaData['screenshot'] = "http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg";
     var basename = path.basename(contentFileName, ".md");
     [".jpg", ".png"].forEach(function(ext) {
@@ -243,11 +246,11 @@ var Builder = function() {
   };
 
   var applyTemplateToFiles = function(templatePath, filesSpec, extra) {
-    var files = glob.sync(filesSpec);
+    var files = glob.sync(filesSpec).sort();
     files.forEach(function(fileName) {
       var ext = path.extname(fileName);
       var baseName = fileName.substr(0, fileName.length - ext.length);
-      var outFileName = baseName + ".html";
+      var outFileName = path.join(outBaseDir, baseName + ".html");
       applyTemplateToFile(templatePath, fileName, outFileName, extra);
     });
 
@@ -291,19 +294,24 @@ var Builder = function() {
     options.lessons     = options.lessons     || ("webgl/lessons/" + options.lang);
     options.toc         = options.toc         || ("webgl/lessons/" + options.lang + "/toc.html");
     options.template    = options.template    || "build/templates/lesson.template";
-    options.examplePath = options.examplePath === undefined ? "/webgl/lessons/" : options.examplePath;
+    options.examplePath = options.examplePath === undefined ? "../" : options.examplePath;
 
     g_articles = [];
     g_langInfo = hanson.parse(fs.readFileSync(path.join(options.lessons, "langinfo.hanson"), {encoding: "utf8"}));
 
     applyTemplateToFiles(options.template, path.join(options.lessons, "webgl*.md"), options);
 
-    var toc = [];
-    g_articles.forEach(function(article) {
-      toc.push('<li><a href="' + article.dst_file_name + '">' + article.title + '</a></li>');
-    });
+    function utcMomentFromGitLog(result) {
+      const dateStr = result.stdout.split("\n")[0].trim();
+      let utcDateStr = dateStr
+        .replace(/"/g, "")   // WTF to these quotes come from!??!
+        .replace(" ", "T")
+        .replace(" ", "")
+        .replace(/(\d\d)$/, ':$1');
+      return moment.utc(utcDateStr);
+    }
 
-    var tasks = g_articles.map(function(article, ndx) {
+    const tasks = g_articles.map((article, ndx) => {
       return function() {
         return executeP('git', [
           'log',
@@ -311,21 +319,32 @@ var Builder = function() {
           '--name-only',
           '--diff-filter=A',
           article.src_file_name,
-        ]).then(function(result) {
-          var dateStr = result.stdout.split("\n")[0];
-          article.date = new Date(Date.parse(dateStr));
+        ]).then((result) => {
+          article.dateAdded = utcMomentFromGitLog(result);
         });
       };
+    }).concat(g_articles.map((article, ndx) => {
+       return function() {
+         return executeP('git', [
+           'log',
+           '--format="%ci"',
+           '--name-only',
+           '--max-count=1',
+           article.src_file_name,
+         ]).then((result) => {
+           article.dateModified = utcMomentFromGitLog(result);
     });
+       };
+    }));
 
     return tasks.reduce(function(cur, next){
         return cur.then(next);
     }, Promise.resolve()).then(function() {
       var articles = g_articles.filter(function(article) {
-        return article.date != undefined;
+        return article.dateAdded != undefined;
       });
       articles = articles.sort(function(a, b) {
-        return a.date > b.date ? -1 : (a.date < b.date ? 1 : 0);
+        return b.dateAdded - a.dateAdded;
       });
 
       var feed = new Feed({
@@ -333,7 +352,9 @@ var Builder = function() {
         description:    g_langInfo.description,
         link:           g_langInfo.link,
         image:          'http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg',
-        updated:        articles[0].date,
+        date:           articles[0].dateModified.toDate(),
+        published:      articles[0].dateModified.toDate(),
+        updated:        articles[0].dateModified.toDate(),
         author: {
           name:       'WebGLFundamenals Contributors',
           link:       'http://webglfundamentals.org/contributors.html',
@@ -353,7 +374,8 @@ var Builder = function() {
           ],
           // contributor: [
           // ],
-          date:           article.date,
+          date:           article.dateModified.toDate(),
+          published:      article.dateAdded.toDate(),
           // image:          posts[key].image
         });
 
@@ -361,14 +383,16 @@ var Builder = function() {
       });
 
       try {
-        writeFileIfChanged(path.join(options.lessons, "atom.xml"), feed.render('atom-1.0'));
+        writeFileIfChanged(path.join(g_outBaseDir, options.lessons, "atom.xml"), feed.render('atom-1.0'));
       } catch (err) {
         return Promise.reject(err);
       }
       return Promise.resolve();
     }).then(function() {
-      applyTemplateToFile("build/templates/index.template", path.join(options.lessons, "index.md"), path.join(options.lessons, "index.html"), {
-        table_of_contents: "<ul>" + toc.join("\n") + "</ul>",
+      // this used to insert a table of contents
+      // but it was useless being auto-generated
+      applyTemplateToFile("build/templates/index.template", path.join(options.lessons, "index.md"), path.join(g_outBaseDir, options.lessons, "index.html"), {
+        table_of_contents: "",
         templateOptions: g_langInfo,
       });
       return Promise.resolve();
@@ -401,12 +425,12 @@ var Builder = function() {
       langs: g_langDB,
     };
     var langJS = "window.langDB = " + JSON.stringify(langInfo, null, 2);
-    writeFileIfChanged("langdb.js", langJS);
-    writeFileIfChanged("sitemap.xml", sm.toString());
-    copyFile("webgl/lessons/atom.xml",  "atom.xml");
-    copyFile("webgl/lessons/index.html",  "index.html");
+    writeFileIfChanged(path.join(g_outBaseDir, "langdb.js"), langJS);
+    writeFileIfChanged(path.join(g_outBaseDir, "sitemap.xml"), sm.toString());
+    copyFile(path.join(g_outBaseDir, "webgl/lessons/atom.xml"), path.join(g_outBaseDir, "atom.xml"));
+    copyFile(path.join(g_outBaseDir, "webgl/lessons/index.html"), path.join(g_outBaseDir, "index.html"));
 
-    applyTemplateToFile("build/templates/index.template", "contributors.md", "contributors.html", {
+    applyTemplateToFile("build/templates/index.template", "contributors.md", path.join(g_outBaseDir, "contributors.html"), {
       table_of_contents: "",
       templateOptions: "",
     });
@@ -415,7 +439,7 @@ var Builder = function() {
 
 };
 
-var b = new Builder();
+var b = new Builder("out");
 
 var readdirs = function(dirpath) {
   var dirsOnly = function(filename) {
