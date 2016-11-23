@@ -22,25 +22,25 @@ module.exports = function(grunt) {
     eslint: {
       lib: {
         src: [
-        'webgl/resources/webgl-utils.js',
+          'webgl/resources/webgl-utils.js',
           'webgl/resources/webgl-lessons-helper.js',
-        'webgl/resources/primitives.js',
-        'webgl/resources/2d-math.js',
-        'webgl/resources/3d-math.js',
-      ],
-      options: {
-        config: 'build/conf/eslint.json',
-        //rulesdir: ['build/rules'],
-      },
-    },
-      examples: {
-        src: [
-          'webgl/*.html',
+          'webgl/resources/primitives.js',
+          'webgl/resources/2d-math.js',
+          'webgl/resources/3d-math.js',
         ],
         options: {
-          configFile: 'build/conf/eslint-examples.json',
+          config: 'build/conf/eslint.json',
+          //rulesdir: ['build/rules'],
         },
       },
+      //examples: {
+      //  src: [
+      //    'webgl/*.html',
+      //  ],
+      //  options: {
+      //    configFile: 'build/conf/eslint-examples.json',
+      //  },
+      //},
     },
     jsdoc: {
       docs: {
