@@ -42,11 +42,13 @@ window.langDB = {
     },
     "webgl-3d-lighting-directional.html": {
       "en": true,
-      "fr": true
+      "fr": true,
+      "ru": true
     },
     "webgl-3d-lighting-point.html": {
       "en": true,
-      "fr": true
+      "fr": true,
+      "ru": true
     },
     "webgl-3d-orthographic.html": {
       "en": true,
