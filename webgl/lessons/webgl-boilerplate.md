@@ -135,10 +135,29 @@ from script tags, attach them to a program and link them.
      */
     function createProgramFromScripts(
         gl, vertexShaderId, fragmentShaderId) {
-      var vertexShader = createShaderFromScriptTag(gl, vertexShaderId);
-      var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId);
+      var vertexShader = createShaderFromScriptTag(gl, vertexShaderId, gl.VERTEX_SHADER);
+      var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId, gl.FRAGMENT_SHADER);
       return createProgram(gl, vertexShader, fragmentShader);
     }
+
+The other piece of code I use in almost every WebGL program is something to
+resize the canvas. You can see [how that function is implemented here](webgl-resizing-the-canvas.html).
+
+In the case of all the samples these 2 functions are included with
+
+    <script src="resources/webgl-utils.js"></script>
+
+and used like this
+
+    var program = webglUtils.createProgramFromScripts(
+      gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
+
+    ...
+
+    webglUtils.resizeCanvasToMatchDisplaySize(canvas);
+
+It seems best not to clutter all the samples with many lines of the same code
+as they just get in the way of what that specific example is about.
 
 That's most of my minimum set of WebGL boilerplate code.
 <a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js">You can find that code here</a>.
@@ -148,5 +167,30 @@ The rest of what makes WebGL look complicated is setting up all the inputs
 to your shaders.  See <a href="webgl-how-it-works.html">how it works</a>.
 
 I'd also suggest you read up on [less code more fun](webgl-less-code-more-fun.html) and check out [TWGL](http://twgljs.org).
+
+Note while we're add it there are several more scripts for similar reasons
+
+*   `webgl-lessons-ui.js`
+
+    This provides code to setup sliders that have a visible value that updates when you drag the slider.
+    Again I didn't want to clutter all the files with this code so it's in one place.
+
+*   `webgl-lessons-helper.js`
+
+    This script is not needed except on webglfundmentals.org. It helps print error messages to
+    the screen when used inside the live editor among other things.
+
+*   `2d-math.js`
+
+    This is a bunch of 2d math functions. They get created started with the first article about
+    matrix math and as they are created they are inline but eventually they're just too much clutter
+    so after few example they are used by including this script.
+
+*   `3d-math.js`
+
+    This is a bunch of 3d math functions. They get created started with the first article about 3d
+    and as they are created they are inline but eventually they're just too much clutter so after
+    the 2nd article on 3d they are used by including this script.
+
 
 
