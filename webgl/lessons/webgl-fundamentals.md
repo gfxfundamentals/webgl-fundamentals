@@ -462,11 +462,11 @@ so we need to change the `count` to `6`.
 
 And here it is
 
-{{{example url="../webgl-2d-rectangle.html" }}}
-
-Note: The example above an all following examples use [`webgl-utils.js`](/webgl/resources/webgl-utils.js)
+Note: This example and all following examples use [`webgl-utils.js`](/webgl/resources/webgl-utils.js)
 which contains functions to compile and link the shaders. No reason to clutter the examples
 with that [boilerplate](webgl-boilerplate.html) code.
+
+{{{example url="../webgl-2d-rectangle.html" }}}
 
 Again you might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
 corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs
