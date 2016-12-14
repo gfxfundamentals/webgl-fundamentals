@@ -71,8 +71,15 @@ void main() {
   gl_FragColor = v_color * u_color * blendColor;
 }
 </script>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+-->
 <script src="resources/webgl-utils.js"></script>
-<script src="resources/webgl-lessons-helper.js"></script>
+<script src="resources/webgl-lessons-ui.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
 <script src="resources/tdl/base.js"></script>
 <script>
 "use strict";
@@ -260,10 +267,10 @@ function createApp() {
     zPosition = ui.value;
   }
 
-  webglLessonsHelper.setupSlider("#fieldOfView", {value: fieldOfView, slide: updateFieldOfView, max: 179});
-  webglLessonsHelper.setupSlider("#zNear", {value: zNear, slide: updateZNear, min: 1, max: 50});
-  webglLessonsHelper.setupSlider("#zFar", {value: zFar, slide: updateZFar, min: 1, max: 50});
-  webglLessonsHelper.setupSlider("#zPosition", {value: zPosition, slide: updateZPosition, min: -60, max: 0});
+  webglLessonsUI.setupSlider("#fieldOfView", {value: fieldOfView, slide: updateFieldOfView, max: 179});
+  webglLessonsUI.setupSlider("#zNear", {value: zNear, slide: updateZNear, min: 1, max: 50});
+  webglLessonsUI.setupSlider("#zFar", {value: zFar, slide: updateZFar, min: 1, max: 50});
+  webglLessonsUI.setupSlider("#zPosition", {value: zPosition, slide: updateZPosition, min: -60, max: 0});
 
   var clock = 0;
   function render(elapsedTime) {

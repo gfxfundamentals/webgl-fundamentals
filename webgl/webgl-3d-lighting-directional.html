@@ -60,8 +60,15 @@ void main() {
   gl_FragColor.rgb *= light;
 }
 </script>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+-->
 <script src="resources/webgl-utils.js"></script>
-<script src="resources/webgl-lessons-helper.js"></script>
+<script src="resources/webgl-lessons-ui.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
 <script src="resources/3d-math.js"></script>
 <script>
 "use strict";
@@ -70,10 +77,8 @@ function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
   var canvas = document.getElementById("canvas");
-  webglLessonsHelper.setupLesson(canvas);
   var gl = canvas.getContext("webgl");
   if (!gl) {
-    webglLessonsHelper.showNeedWebGL(canvas);
     return;
   }
 
@@ -118,7 +123,7 @@ function main() {
   drawScene();
 
   // Setup a ui.
-  webglLessonsHelper.setupSlider("#fRotation", {value: radToDeg(fRotationRadians), slide: updateRotation, min: -360, max: 360});
+  webglLessonsUI.setupSlider("#fRotation", {value: radToDeg(fRotationRadians), slide: updateRotation, min: -360, max: 360});
 
   function updateRotation(event, ui) {
     fRotationRadians = degToRad(ui.value);

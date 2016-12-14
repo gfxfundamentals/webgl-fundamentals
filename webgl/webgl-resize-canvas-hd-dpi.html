@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>WebGL - Resize canvas to fill the screen</title>
+<title addtitletodoc="false">WebGL - Resize canvas to fill the screen</title>
 <style>
    body {
      margin: 0;
@@ -41,8 +41,14 @@ void main() {
    gl_FragColor = u_color;
 }
 </script>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+-->
 <script src="resources/webgl-utils.js"></script>
-<script src="resources/webgl-lessons-helper.js"></script>
+<script src="resources/webgl-lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
 <script src="resources/2d-math.js"></script>
 <script>
 "use strict";
@@ -51,10 +57,8 @@ function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
   var canvas = document.getElementById("canvas");
-  webglLessonsHelper.setupLesson(canvas, {title: false});
   var gl = canvas.getContext("webgl");
   if (!gl) {
-    webglLessonsHelper.showNeedWebGL(canvas);
     return;
   }
 
