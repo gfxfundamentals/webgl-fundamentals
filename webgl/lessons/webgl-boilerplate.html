@@ -189,16 +189,50 @@ from script tags, attach them to a program and link them.</p>
  */
 function createProgramFromScripts(
     gl, vertexShaderId, fragmentShaderId) {
-  var vertexShader = createShaderFromScriptTag(gl, vertexShaderId);
-  var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId);
+  var vertexShader = createShaderFromScriptTag(gl, vertexShaderId, gl.VERTEX_SHADER);
+  var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId, gl.FRAGMENT_SHADER);
   return createProgram(gl, vertexShader, fragmentShader);
 }
-</code></pre><p>That&#39;s most of my minimum set of WebGL boilerplate code.
-<a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js">You can find that code here</a>.
+</code></pre><p>The other piece of code I use in almost every WebGL program is something to
+resize the canvas. You can see <a href="webgl-resizing-the-canvas.html">how that function is implemented here</a>.</p>
+<p>In the case of all the samples these 2 functions are included with</p>
+<pre><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
+</code></pre><p>and used like this</p>
+<pre><code>var program = webglUtils.createProgramFromScripts(
+  gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
+
+...
+
+webglUtils.resizeCanvasToMatchDisplaySize(canvas);
+</code></pre><p>It seems best not to clutter all the samples with many lines of the same code
+as they just get in the way of what that specific example is about.</p>
+<p>That&#39;s most of my minimum set of WebGL boilerplate code.
+<a href="../resources/webgl-utils.js">You can find <code>webgl-utils.js</code> code here</a>.
 If you want something slightly more organized check out <a href="http://twgljs.org">TWGL.js</a>.</p>
 <p>The rest of what makes WebGL look complicated is setting up all the inputs
 to your shaders.  See <a href="webgl-how-it-works.html">how it works</a>.</p>
 <p>I&#39;d also suggest you read up on <a href="webgl-less-code-more-fun.html">less code more fun</a> and check out <a href="http://twgljs.org">TWGL</a>.</p>
+<p>Note while we&#39;re add it there are several more scripts for similar reasons</p>
+<ul>
+<li><p><a href="../resources/webgl-lessons-ui.js"><code>webgl-lessons-ui.js</code></a></p>
+<p>This provides code to setup sliders that have a visible value that updates when you drag the slider.
+Again I didn&#39;t want to clutter all the files with this code so it&#39;s in one place.</p>
+</li>
+<li><p><a href="../resources/webgl-lessons-helper.js"><code>webgl-lessons-helper.js</code></a></p>
+<p>This script is not needed except on webglfundmentals.org. It helps print error messages to
+the screen when used inside the live editor among other things.</p>
+</li>
+<li><p><a href="../resources/2d-math.js"><code>2d-math.js</code></a></p>
+<p>This is a bunch of 2d math functions. They get created started with the first article about
+matrix math and as they are created they are inline but eventually they&#39;re just too much clutter
+so after few example they are used by including this script.</p>
+</li>
+<li><p><a href="../resources/3d-math.js"><code>3d-math.js</code></a></p>
+<p>This is a bunch of 3d math functions. They get created started with the first article about 3d
+and as they are created they are inline but eventually they&#39;re just too much clutter so after
+the 2nd article on 3d they are used by including this script.</p>
+</li>
+</ul>
 
       <hr/>
       <div>
