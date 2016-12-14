@@ -160,7 +160,7 @@ It seems best not to clutter all the samples with many lines of the same code
 as they just get in the way of what that specific example is about.
 
 That's most of my minimum set of WebGL boilerplate code.
-<a href="https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js">You can find that code here</a>.
+[You can find `webgl-utils.js` code here](../resources/webgl-utils.js).
 If you want something slightly more organized check out [TWGL.js](http://twgljs.org).
 
 The rest of what makes WebGL look complicated is setting up all the inputs
@@ -170,23 +170,23 @@ I'd also suggest you read up on [less code more fun](webgl-less-code-more-fun.ht
 
 Note while we're add it there are several more scripts for similar reasons
 
-*   `webgl-lessons-ui.js`
+*   [`webgl-lessons-ui.js`](../resources/webgl-lessons-ui.js)
 
     This provides code to setup sliders that have a visible value that updates when you drag the slider.
     Again I didn't want to clutter all the files with this code so it's in one place.
 
-*   `webgl-lessons-helper.js`
+*   [`webgl-lessons-helper.js`](../resources/webgl-lessons-helper.js)
 
     This script is not needed except on webglfundmentals.org. It helps print error messages to
     the screen when used inside the live editor among other things.
 
-*   `2d-math.js`
+*   [`2d-math.js`](../resources/2d-math.js)
 
     This is a bunch of 2d math functions. They get created started with the first article about
     matrix math and as they are created they are inline but eventually they're just too much clutter
     so after few example they are used by including this script.
 
-*   `3d-math.js`
+*   [`3d-math.js`](../resources/3d-math.js)
 
     This is a bunch of 3d math functions. They get created started with the first article about 3d
     and as they are created they are inline but eventually they're just too much clutter so after
