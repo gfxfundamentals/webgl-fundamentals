@@ -428,9 +428,15 @@ is scaled and the normals are being multiplied by the world matrix. You
 can see something is wrong. The <span style="color: #00F;">blue</span>
 sphere on the right is using the world inverse transpose matrix.
 
-Click the diagram to hide the normals. You should see the lighting
+Click the diagram to cycle through different representation. You should
+notice when the scale is extreme it's very easy to see the normals
+on the left (world) are **not** staying perpendicular to the surface of the sphere
+where as the ones on the right (worldInverseTranspose) are staying perpendicular
+to the sphere. The last mode makes them all shaded red. You should see the lighting
 on the 2 outer spheres is very different based on which matrix is used.
-It's hard to tell which is correct which is why this is a subtle issue.
+It's hard to tell which is correct which is why this is a subtle issue but
+based on the other visualizations it's clear using the worldInverseTranspose
+is correct.
 
 To implement this in our example let's change the code like this.  First
 we'll update the shader.  Techincally we could just update the value of

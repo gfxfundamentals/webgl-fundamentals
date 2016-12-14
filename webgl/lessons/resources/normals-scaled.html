@@ -4,10 +4,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>WebGL - Scaled Normals Diagram</title>
+<title addtitletodoc="false">WebGL - Scaled Normals Diagram</title>
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
+body {
+    margin: 0;
+}
 canvas {
+    width: 100vw;
+    height: 100vh;
+    display: block;
 }
 </style>
 <script id="vertexColorVertexShader" type="text/something-not-javascript">
@@ -33,13 +39,14 @@ void main() {
 attribute vec4 position;
 attribute vec3 normal;
 attribute vec4 color;
-uniform mat4 u_worldViewProjection;
+uniform mat4 u_world;
+uniform mat4 u_viewProjection;
 uniform mat4 u_worldInverseTranspose;
 uniform float u_normalScale;
 varying vec4 v_color;
 void main() {
   vec3 n = normalize(mat3(u_worldInverseTranspose) * normal);
-  gl_Position = u_worldViewProjection * (position + vec4(n * color.a * u_normalScale, 0));
+  gl_Position = u_viewProjection * (u_world * position + vec4(n * color.a * u_normalScale, 0));
   v_color = vec4(color.rgb, 1);
 }
 
@@ -47,8 +54,10 @@ void main() {
 <script id="normalFragmentShader" type="text/something-not-javascript">
 precision mediump float;
 varying vec4 v_color;
+uniform vec4 u_color;
+uniform float u_light;
 void main() {
-  gl_FragColor = v_color;
+  gl_FragColor = mix(u_color, v_color, u_light);
 }
 </script>
 <script id="vertexColorFakeLightVertexShader" type="text/something-not-javascript">
@@ -68,6 +77,7 @@ void main() {
 precision mediump float;
 uniform vec4 u_color;
 uniform vec3 u_reverseLightDirection;
+uniform float u_light;
 varying vec3 v_normal;
 
 vec4 lit(float l ,float h, float m) {
@@ -79,19 +89,16 @@ vec4 lit(float l ,float h, float m) {
 
 void main() {
   vec3 normal = normalize(v_normal);
-  float light = dot(normal, u_reverseLightDirection);
+  float light = mix(1., dot(normal, u_reverseLightDirection), u_light);
   gl_FragColor = vec4(u_color.rgb * light, u_color.a);
 }
 </script>
 </head>
 <body>
-<div class="description">
-</div>
-<div style="position:absolute;">
-  <canvas id="canvas" width="400" height="300" style="width: 400px; height: 300px;"></canvas>
-  <pre style="position: absolute; width: 400px; text-align: center; left: 0; bottom: 0; color: white;">       world                worldInverseTranspose</pre>
-  <pre style="position: absolute; width: 400px; text-align: center; left: 0; top: 0; color: white;">unscaled</pre>
-</div>
+  <canvas id="canvas"></canvas>
+  <pre id="sp0" style="position: absolute; text-align: center; left: 20%; bottom: 0; color: white; transform: translateX(-50%);">world</pre>
+  <pre id="sp1" style="position: absolute; text-align: center; right: 20%; bottom: 0; color: white; transform: translateX(50%);">worldInverseTranspose</pre>
+  <pre id="sp2" style="position: absolute; text-align: center; left: 50%; top: 0; color: white; transform: translateX(-50%);">unscaled</pre>
 </body>
 </html>
 <!--
@@ -226,7 +233,7 @@ function CreateApp(gl) {
   var sphereBufferInfo = twgl.createBufferInfoFromArrays(gl, sphereVertices);
   var sphereNormalsBufferInfo = twgl.createBufferInfoFromArrays(gl, createNormalLines(sphereVertices));
   // Create Geometry.
-  var gridArrays = createGrid(26, 42);
+  var gridArrays = createGrid(36, 42);
   var gridBufferInfo = twgl.createBufferInfoFromArrays(gl, gridArrays);
 
   // pre-allocate a bunch of arrays
@@ -273,9 +280,11 @@ function CreateApp(gl) {
   // uniforms.
   var sharedUniforms = {
     u_world: world,
+    u_viewProjection: viewProjection,
     u_worldViewProjection: worldViewProjection,
     u_worldInverseTranspose: worldInverseTranspose,
     u_reverseLightDirection: v3.normalize([0.25, 1, -0.37]),
+    u_light: 1,
   };
 
   var gridUniforms = {
@@ -283,8 +292,8 @@ function CreateApp(gl) {
   };
 
   var normalUniforms = {
-    u_color: [1, 1, 1, 1],
-    u_normalScale: 10,
+    u_color: [0, 1, 0, 1],
+    u_normalScale: 50,
   };
 
   var sphere0Uniforms = {
@@ -297,6 +306,10 @@ function CreateApp(gl) {
 
   var sphere2Uniforms = {
     u_color: [1, 0, 1, 1],
+  };
+
+  var greenUniforms = {
+    u_color: [0, 1, 0, 1],
   };
 
   var cubeUniforms = {
@@ -325,26 +338,39 @@ function CreateApp(gl) {
     return deg * Math.PI / 180;
   }
 
-  var showNormals = true;
-  function render(elapsedTime) {
+  var sp0 = document.querySelector("#sp0");
+  var sp1 = document.querySelector("#sp1");
+  var sp2 = document.querySelector("#sp2");
+
+  var oldPosx;
+  var mode = 0;
+  function render(time) {
+    var showNormals = mode < 4;
+    var green = mode === 2 || mode === 3;
+    var line = mode === 3;
+    sharedUniforms.u_light = (mode >= 1 && mode <= 3) ? 0 : 1;
+
 
     // clear the screen.
     gl.enable(gl.DEPTH_TEST);
     gl.colorMask(true, true, true, true);
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.lineWidth(window.devicePixelRatio * 22);
 
     var aspect = canvas.clientWidth / canvas.clientHeight;
-    m4.perspective(
-        degToRad(40),
-        aspect,
-        1,
-        5000,
-        projection);
-    var size = 500;
+    var size = 700;
+    var halfWidth = size * aspect;
     m4.ortho(
-        -size, size, -size / aspect, size / aspect, 1, 5000,
+        -halfWidth, halfWidth, -size, size, 1, 5000,
         projection);
+
+    var posx = canvas.clientWidth / 2 - size / halfWidth * canvas.clientWidth / 2;
+    if (posx != oldPosx) {
+      oldPosx = posx;
+      sp0.style.left  = (posx | 0) + "px";
+      sp1.style.right = (posx | 0) + "px";
+    }
 
     m4.lookAt(
         [0, 200, 0],
@@ -355,25 +381,28 @@ function CreateApp(gl) {
     m4.multiply(view, projection, viewProjection);
     m4.inverse(viewProjection, inverseViewProjection);
 
-    m4.translation([-300, 0, 0], world);
-    m4.scale(world, [2, 2, 4], world);
-    drawModel(litProgramInfo, sphereBufferInfo, gl.TRIANGLES, showNormals ? sphere0Uniforms : sphere0Uniforms, world, true);
+    var scale = 6 + Math.sin(time * 0.0003) * 4;
+    var type = line ? gl.LINES : gl.TRIANGLES;
+
+    m4.translation([-size, 0, 0], world);
+    m4.scale(world, [2, 2, scale], world);
+    drawModel(litProgramInfo, sphereBufferInfo, type, green ? greenUniforms : showNormals ? sphere0Uniforms : sphere0Uniforms, world, true);
 
     if (showNormals) {
       drawModel(normalProgramInfo, sphereNormalsBufferInfo, gl.LINES, normalUniforms, world, true);
     }
 
-    m4.translation([ 300, 0, 0], world);
-    m4.scale(world, [2, 2, 4], world);
-    drawModel(litProgramInfo, sphereBufferInfo, gl.TRIANGLES, showNormals ? sphere1Uniforms : sphere0Uniforms, world);
+    m4.translation([ size, 0, 0], world);
+    m4.scale(world, [2, 2, scale], world);
+    drawModel(litProgramInfo, sphereBufferInfo, type, green ? greenUniforms : showNormals ? sphere1Uniforms : sphere0Uniforms, world);
 
     if (showNormals) {
       drawModel(normalProgramInfo, sphereNormalsBufferInfo, gl.LINES, normalUniforms, world);
     }
 
     m4.translation([ 0, 0, 0], world);
-    m4.scale(world, [1, 1, 1], world);
-    drawModel(litProgramInfo, sphereBufferInfo, gl.TRIANGLES, showNormals ? sphere2Uniforms : sphere0Uniforms, world);
+    m4.scale(world, [2, 2, 2], world);
+    drawModel(litProgramInfo, sphereBufferInfo, type, green ? greenUniforms : showNormals ? sphere2Uniforms : sphere0Uniforms, world);
 
     if (showNormals) {
       drawModel(normalProgramInfo, sphereNormalsBufferInfo, gl.LINES, normalUniforms, world);
@@ -386,8 +415,7 @@ function CreateApp(gl) {
 
   function toggleNormals(event) {
     event.preventDefault();
-    showNormals = !showNormals;
-    render();
+    mode = (mode + 1) % 5;
   }
 
   window.addEventListener('mousedown', function(event) {
@@ -412,12 +440,15 @@ function main() {
 
   twgl.resizeCanvasToDisplaySize(gl.canvas, window.devicePixelRatio);
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  gl.lineWidth(2);
 
   app = CreateApp(gl);
 
   var then = 0;
-  app.render();
+  function render(time) {
+    app.render(time);
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
 }
 
 main();
