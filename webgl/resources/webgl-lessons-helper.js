@@ -192,10 +192,13 @@
     if (isInIFrame()) {
       updateCSSIfInIFrame();
     } else if (!options.noTitle && options.title !== false) {
-      var title = document.title;
-      var h1 = document.createElement("h1");
-      h1.innerText = title;
-      document.body.insertBefore(h1, document.body.children[0]);
+      var titleElem = document.querySelector("title");
+      if (titleElem && titleElem.getAttribute("addtitletodoc") !== "false") {
+        var title = document.title;
+        var h1 = document.createElement("h1");
+        h1.innerText = title;
+        document.body.insertBefore(h1, document.body.children[0]);
+      }
     }
   }
 
@@ -276,48 +279,6 @@
   }
 
   updateCSSIfInIFrame();
-
-  function setupSlider(selector, options) {
-    var precision = options.precision || 0;
-    var min = options.min || 0;
-    var step = options.step || 1;
-    var value = options.value || 0;
-    var max = options.max || 1;
-    var fn = options.slide;
-
-    min /= step;
-    max /= step;
-    value /= step;
-
-    var parent = document.querySelector(selector);
-    if (!parent) {
-      return; // like jquery don't fail on a bad selector
-    }
-    parent.innerHTML = `
-      <div class="gman-slider-outer">
-        <div class="gman-slider-label">${selector.substring(1)}</div>
-        <div class="gman-slider-value"></div>
-        <input class="gman-slider-slider" type="range" min="${min}" max="${max}" value="${value}" />
-      </div>
-    `;
-    var valueElem = parent.querySelector(".gman-slider-value");
-    var sliderElem = parent.querySelector(".gman-slider-slider");
-
-    function updateValue(value) {
-      valueElem.textContent = (value * step).toFixed(precision);
-    }
-
-    updateValue(value);
-
-    function handleChange(event) {
-      var value = parseInt(event.target.value);
-      updateValue(value);
-      fn(event, { value: value * step });
-    }
-
-    sliderElem.addEventListener('input', handleChange);
-    sliderElem.addEventListener('change', handleChange);
-  }
 
   //------------ [ from https://github.com/KhronosGroup/WebGLDeveloperTools ]
 
@@ -890,6 +851,24 @@
     };
   }
 
+  var isWebGLRE = /^(webgl|webgl2|experimental-webgl)$/i;
+  function installWebGLLessonSetup() {
+    HTMLCanvasElement.prototype.getContext = (function(oldFn) {
+      return function() {
+        var type = arguments[0];
+        var isWebGL = isWebGLRE.test(type);
+        if (isWebGL) {
+          setupLesson(this);
+        }
+        var ctx = oldFn.apply(this, arguments);
+        if (!ctx && isWebGL) {
+          showNeedWebGL(this);
+        }
+        return ctx;
+      };
+    }(HTMLCanvasElement.prototype.getContext));
+  }
+
   function installWebGLDebugContextCreator() {
     // capture GL errors
     HTMLCanvasElement.prototype.getContext = (function(oldFn) {
@@ -991,6 +970,8 @@
     }(HTMLCanvasElement.prototype.getContext));
   }
 
+  installWebGLLessonSetup();
+
   if (isInEditor()) {
     setupConsole();
     captureJSErrors();
@@ -1002,7 +983,6 @@
   return {
     setupLesson: setupLesson,
     showNeedWebGL: showNeedWebGL,
-    setupSlider: setupSlider,
     makeDebugContext: makeDebugContext,
     glFunctionArgsToString: glFunctionArgsToString,
   };
