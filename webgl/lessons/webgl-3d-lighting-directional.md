@@ -415,7 +415,7 @@ the `u_world` matrix to re-orient the normals.
 What happens if we scale the world matrix?
 It turns out we get the wrong normals.
 
-{{{diagram url="resources/normals-scaled.html" caption="click to toggle normals" }}}
+{{{diagram url="resources/normals-scaled.html" caption="click to toggle normals" width="600" }}}
 
 I've never bothered to understand
 the solution but it turns out you can get the inverse of the world matrix,
@@ -428,7 +428,7 @@ is scaled and the normals are being multiplied by the world matrix. You
 can see something is wrong. The <span style="color: #00F;">blue</span>
 sphere on the right is using the world inverse transpose matrix.
 
-Click the diagram to cycle through different representation. You should
+Click the diagram to cycle through different representations. You should
 notice when the scale is extreme it's very easy to see the normals
 on the left (world) are **not** staying perpendicular to the surface of the sphere
 where as the ones on the right (worldInverseTranspose) are staying perpendicular
