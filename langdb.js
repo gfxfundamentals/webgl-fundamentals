@@ -1,9 +1,9 @@
 window.langDB = {
   "articles": {
-    "webgl-setup-and-installation.html": {
+    "webgl-anti-patterns.html": {
       "en": true
     },
-    "webgl-anti-patterns.html": {
+    "webgl-2-textures.html": {
       "en": true
     },
     "webgl-2d-matrices.html": {
@@ -107,7 +107,7 @@ window.langDB = {
       "en": true,
       "fr": true
     },
-    "webgl-2-textures.html": {
+    "webgl-setup-and-installation.html": {
       "en": true
     },
     "webgl-shaders-and-glsl.html": {
