@@ -156,7 +156,7 @@ gl.drawArrays(...);
 
 That's a lot of typing.
 
-There are lots of ways to simpl ify this.  One suggestion is to ask WebGL
+There are lots of ways to simplify this.  One suggestion is to ask WebGL
 to tell us all the uniforms and locations and then setup functions to set
 them for us.  We can then pass in JavaScript objects to set our settings
 much more easily.  If that's clear as mud well, our code would look
@@ -506,4 +506,3 @@ TypeError: undefined is not a function
 </pre>
 <p><code>setUniforms</code> solves that issue. It only sets those uniforms that actually exist</p>
 </div>
-
