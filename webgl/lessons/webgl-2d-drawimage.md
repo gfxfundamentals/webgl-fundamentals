@@ -306,9 +306,11 @@ what we've already done for the positions.
     *    dstX, dstY, dstWidth, dstHeight) {
     +  if (dstX === undefined) {
     +    dstX = srcX;
+    +    srcX = 0;
     +  }
     +  if (dstY === undefined) {
     +    dstY = srcY;
+    +    srcY = 0;
     +  }
     +  if (srcWidth === undefined) {
     +    srcWidth = texWidth;
@@ -318,9 +320,11 @@ what we've already done for the positions.
     +  }
       if (dstWidth === undefined) {
     *    dstWidth = srcWidth;
+    +    srcWidth = texWidth;
       }
       if (dstHeight === undefined) {
     *    dstHeight = srcHeight;
+    +    srcHeight = texHeight;
       }
 
       gl.bindTexture(gl.TEXTURE_2D, tex);
