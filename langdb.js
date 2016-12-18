@@ -76,7 +76,8 @@ window.langDB = {
       "en": true
     },
     "webgl-drawing-multiple-things.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-fundamentals.html": {
       "en": true,
@@ -98,14 +99,16 @@ window.langDB = {
       "ru": true
     },
     "webgl-less-code-more-fun.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-resizing-the-canvas.html": {
       "en": true
     },
     "webgl-scene-graph.html": {
       "en": true,
-      "fr": true
+      "fr": true,
+      "ru": true
     },
     "webgl-setup-and-installation.html": {
       "en": true
