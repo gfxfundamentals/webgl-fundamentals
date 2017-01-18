@@ -155,8 +155,8 @@ v_couleur qu'on a déclarées.
 <div class="hcenter">
 <table class="vertex_table">
 <tr><th colspan="3">Valeurs renseignées à v_couleur</th></tr>
-<tr><td>0.5000</td><td>0.750</td><td>0.5</td></tr>
-<tr><td>0.8750</td><td>0.915</td><td>0.5</td></tr>
+<tr><td>0.5000</td><td>0.830</td><td>0.5</td></tr>
+<tr><td>0.8750</td><td>0.086</td><td>0.5</td></tr>
 <tr><td>0.0625</td><td>0.170</td><td>0.5</td></tr>
 </table>
 </div>
