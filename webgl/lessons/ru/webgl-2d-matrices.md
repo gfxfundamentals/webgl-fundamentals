@@ -513,7 +513,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 Надеюсь, статья помогла снять завесу тайны с математики матриц.
 Если вы хотите продолжить тему 2D, советую ознакомиться с
 [WebGL 2D - DrawImage](webgl-2d-drawimage.html) и следующий за ним
-[WebGL 2D - Стэк матриц](webgl-2d-matrix-stack.html).
+[WebGL 2D - Стек матриц](webgl-2d-matrix-stack.html).
 
 В противном случае [следуйте за мной в 3D](webgl-3d-orthographic.html).
 В 3D используются те же принципы использования матриц. Я начал с 2D в
