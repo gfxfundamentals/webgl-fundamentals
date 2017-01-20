@@ -41,7 +41,7 @@ As a simple example, let's just pass the clipspace coordinates we computed
 directly from the vertex shader to the fragment shader.
 
 We'll draw with a simple triangle.  Continuing from our
-[previous example](webgl-2d-matrices.html) let's change our F to a
+[previous example](webgl-2d-matrices.html) let's change our rectangle to a
 triangle.
 
     // Fill the buffer with the values that define a triangle.
