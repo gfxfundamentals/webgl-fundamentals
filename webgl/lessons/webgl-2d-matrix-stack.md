@@ -246,7 +246,7 @@ matrixStack.rotateZ(time);
 +  matrixStack.translate(textureInfo.width / 2, textureInfo.height / -2);
 +  matrixStack.rotateZ(Math.sin(time * 2.3));
 +  matrixStack.scale(0.2, 0.2);
-+  // Now we want the bottom/right corner of the image we're about to draw
++  // Now we want the bottom/left corner of the image we're about to draw
 +  matrixStack.translate(0, -textureInfo.height);
 +
 +  drawImage(
@@ -333,5 +333,3 @@ You might notice a matrix stack is very similar to a [scene graph that we
 covered before](webgl-scene-graph.html).  A scene graph had a tree of
 nodes and as we walked the tree we multiplied each node by its parent's
 node.  A matrix stack is effectively antoher version that same process.
-
-
