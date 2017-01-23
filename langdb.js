@@ -1,18 +1,15 @@
 window.langDB = {
   "articles": {
-    "webgl-fundamentals.html": {
-      "en": true,
-      "fr": true,
-      "pl": true,
-      "ru": true
-    },
-    "webgl-how-it-works.html": {
-      "en": true,
-      "fr": true,
-      "ru": true
-    },
     "webgl-anti-patterns.html": {
       "en": true
+    },
+    "webgl-2-textures.html": {
+      "en": true
+    },
+    "webgl-2d-matrices.html": {
+      "en": true,
+      "fr": true,
+      "ru": true
     },
     "webgl-2d-matrix-stack.html": {
       "en": true,
@@ -84,10 +81,13 @@ window.langDB = {
       "en": true,
       "ru": true
     },
-    "webgl-2-textures.html": {
-      "en": true
+    "webgl-fundamentals.html": {
+      "en": true,
+      "fr": true,
+      "pl": true,
+      "ru": true
     },
-    "webgl-2d-matrices.html": {
+    "webgl-how-it-works.html": {
       "en": true,
       "fr": true,
       "ru": true
