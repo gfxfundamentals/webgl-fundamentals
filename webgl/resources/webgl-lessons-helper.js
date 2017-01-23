@@ -203,7 +203,7 @@
         document.body.insertBefore(h1, document.body.children[0]);
       }
     }
-  }
+  };
 
   /**
    * Get's the iframe in the parent document
