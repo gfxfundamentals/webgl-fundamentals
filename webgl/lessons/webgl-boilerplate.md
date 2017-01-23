@@ -180,13 +180,13 @@ Note while we're add it there are several more scripts for similar reasons
     This script is not needed except on webglfundmentals.org. It helps print error messages to
     the screen when used inside the live editor among other things.
 
-*   [`2d-math.js`](../resources/2d-math.js)
+*   [`m3.js`](../resources/m3.js)
 
     This is a bunch of 2d math functions. They get created started with the first article about
     matrix math and as they are created they are inline but eventually they're just too much clutter
     so after few example they are used by including this script.
 
-*   [`3d-math.js`](../resources/3d-math.js)
+*   [`m4.js`](../resources/m4.js)
 
     This is a bunch of 3d math functions. They get created started with the first article about 3d
     and as they are created they are inline but eventually they're just too much clutter so after

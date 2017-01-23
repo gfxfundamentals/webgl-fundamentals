@@ -195,7 +195,7 @@
   }
 
   console.log([  // eslint-disable-line
-    "webgl-2d-math.js is deprecated. Please use 2d-math.js.",
+    "webgl-2d-math.js is deprecated. Please use m3.js.",
     "",
     "Note: m3.multiply's multiplication order is reversed.",
     "In other words m3.multiply(a, b) needs to be m3.multiply(b, a)",
