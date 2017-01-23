@@ -167,7 +167,10 @@
    * @param {module:webgl-utils.GetWebGLContextOptions} [opt_options] options
    * @memberOf module:webgl-utils
    */
-  function setupLesson(canvas, opt_options) {
+  var setupLesson = function(canvas, opt_options) {
+    // only once
+    setupLesson = function() {};
+
     var options = opt_options || {};
 
     if (canvas) {
