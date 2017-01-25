@@ -248,7 +248,7 @@ function setupEditor() {
 
 function toggleFullscreen() {
   try {
-    toggleIFrameFullscreen(window.document);
+    toggleIFrameFullscreen(window);
     resize();
     run();
   } catch (e) {
@@ -310,21 +310,12 @@ const isSameDomain = (function() {
   }
 });
 
-function toggleIFrameFullscreen(childDocument) {
-  var iframes = window.parent.document.querySelectorAll("iframe");
-  [].forEach.call(iframes, function(iframe) {
-    // we can only access iframes that our ours (so for example we can't access
-    // the disqus iframe
-    try {
-      if (isSameDomain(iframe.src, window.location.href) && iframe.contentDocument === childDocument) {
-        toggleClass(iframe, "fullscreen");
-      }
-    } catch (e) {
-      console.warn("[You can probably ignore this]:", e);
-    }
-  });
-  window.parent.document.body.style.overflow =
-      toggleClass(childDocument.body, "fullscreen") ? "hidden" : "";
+function toggleIFrameFullscreen(childWindow) {
+  const frame = childWindow.frameElement;
+  if (frame) {
+    const isFullScreen = toggleClass(frame, "fullscreen");
+    frame.ownerDocument.body.style.overflow = isFullScreen ? "hidden" : "";
+  }
 }
 
 
