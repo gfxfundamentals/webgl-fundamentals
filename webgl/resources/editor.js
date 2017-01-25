@@ -287,19 +287,45 @@ function removeClass(elem, className) {
 }
 
 function toggleClass(elem, className) {
-  if (!removeClass(elem, className)) {
+  if (removeClass(elem, className)) {
+    return false;
+  } else {
     addClass(elem, className);
+    return true;
   }
 }
+
+const isSameDomain = (function() {
+  const a = document.createElement("a");
+  return function isSameDomain(d1, d2) {
+    try {
+      a.href = d1;
+      const d1Orig = a.href.origin;
+      a.href = d2;
+      const d2Org = a.href.origin;
+      return d1 === d2;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+});
 
 function toggleIFrameFullscreen(childDocument) {
   var iframes = window.parent.document.querySelectorAll("iframe");
   [].forEach.call(iframes, function(iframe) {
-    if (iframe.contentDocument === childDocument) {
-      toggleClass(iframe, "fullscreen");
+    // we can only access iframes that our ours (so for example we can't access
+    // the disqus iframe
+    try {
+      isSameDomain(iframe.src, window.location.href);
+      if (iframe.contentDocument === childDocument) {
+        toggleClass(iframe, "fullscreen");
+      }
+    } catch (e) {
+      console.warn("[You can probably ignore this]:", e);
     }
   });
-  toggleClass(childDocument.body, "fullscreen");
+  window.parent.document.body.style.overflow =
+      toggleClass(childDocument.body, "fullscreen") ? "hidden" : "";
 }
 
 
