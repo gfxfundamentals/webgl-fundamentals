@@ -1,5 +1,5 @@
 WebGL Fundamentals
-==================
+===================
 
 This is [a series of lessons or tutorials about WebGL](http://webglfundamentals.org/).
 
