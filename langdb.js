@@ -1,9 +1,12 @@
 window.langDB = {
   "articles": {
-    "webgl-anti-patterns.html": {
-      "en": true
+    "webgl-fundamentals.html": {
+      "en": true,
+      "fr": true,
+      "pl": true,
+      "ru": true
     },
-    "webgl-2-textures.html": {
+    "webgl-anti-patterns.html": {
       "en": true
     },
     "webgl-2d-matrices.html": {
@@ -81,11 +84,8 @@ window.langDB = {
       "en": true,
       "ru": true
     },
-    "webgl-fundamentals.html": {
-      "en": true,
-      "fr": true,
-      "pl": true,
-      "ru": true
+    "webgl-2-textures.html": {
+      "en": true
     },
     "webgl-how-it-works.html": {
       "en": true,
