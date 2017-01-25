@@ -316,8 +316,7 @@ function toggleIFrameFullscreen(childDocument) {
     // we can only access iframes that our ours (so for example we can't access
     // the disqus iframe
     try {
-      isSameDomain(iframe.src, window.location.href);
-      if (iframe.contentDocument === childDocument) {
+      if (isSameDomain(iframe.src, window.location.href) && iframe.contentDocument === childDocument) {
         toggleClass(iframe, "fullscreen");
       }
     } catch (e) {
