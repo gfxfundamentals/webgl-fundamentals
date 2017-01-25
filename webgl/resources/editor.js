@@ -287,8 +287,11 @@ function removeClass(elem, className) {
 }
 
 function toggleClass(elem, className) {
-  if (!removeClass(elem, className)) {
+  if (removeClass(elem, className)) {
+    return false;
+  } else {
     addClass(elem, className);
+    return true;
   }
 }
 
@@ -299,7 +302,8 @@ function toggleIFrameFullscreen(childDocument) {
       toggleClass(iframe, "fullscreen");
     }
   });
-  toggleClass(childDocument.body, "fullscreen");
+  window.parent.document.body.style.overflow =
+      toggleClass(childDocument.body, "fullscreen") ? "hidden" : "";
 }
 
 
