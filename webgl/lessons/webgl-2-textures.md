@@ -231,7 +231,7 @@ We could have done this
   }
 ```
 
-Hopefully this small step helps explain how to use mutliple textures in a single draw call in WebGL.
+Hopefully this small step helps explain how to use mutliple textures in a single draw call in WebGL
 
 
 
