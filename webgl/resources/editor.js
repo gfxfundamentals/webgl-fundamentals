@@ -295,21 +295,6 @@ function toggleClass(elem, className) {
   }
 }
 
-const isSameDomain = (function() {
-  const a = document.createElement("a");
-  return function isSameDomain(d1, d2) {
-    try {
-      a.href = d1;
-      const d1Orig = a.href.origin;
-      a.href = d2;
-      const d2Org = a.href.origin;
-      return d1 === d2;
-    } catch (e) {
-      console.error(e);
-    }
-  }
-});
-
 function toggleIFrameFullscreen(childWindow) {
   const frame = childWindow.frameElement;
   if (frame) {
