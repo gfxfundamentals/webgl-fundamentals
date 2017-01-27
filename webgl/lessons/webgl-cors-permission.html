@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/webgl-2d-scale.md. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/webgl-cors-permission.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -34,23 +34,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 2D Scale" />
+<meta property="og:title" content="WebGL - Cross Origin Images" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to scale in 2D" />
-<meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/webgl-2d-scale.html" />
+<meta property="og:description" content="Using images across domains" />
+<meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/webgl-cors-permission.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 2D Scale" />
-<meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/webgl-2d-scale.html" />
-<meta name="twitter:description" content="How to scale in 2D" />
+<meta name="twitter:title" content="WebGL - Cross Origin Images" />
+<meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/webgl-cors-permission.html" />
+<meta name="twitter:description" content="Using images across domains" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 2D Scale</title>
+<title>WebGL - Cross Origin Images</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,100 +63,129 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 2D Scale</h1>
+    <h1>WebGL - Cross Origin Images</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>This post is a continuation of a series of posts about WebGL.  The first
-<a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was
-<a href="webgl-2d-rotation.html">about rotating geometry</a>.</p>
-<p>Scaling is just as <a href="webgl-2d-translation.html">easy as translation</a>.</p>
-<p>We multiply the position by our desired scale.  Here are the changes from
-our <a href="webgl-2d-rotation.html">previous sample</a>.</p>
-<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
-attribute vec2 a_position;
+      <p>This article is one in a series of articles about WebGL. If you haven&#39;t read
+them I suggest you <a href="webgl-fundamentals.html">start with an earlier lesson</a>.</p>
+<p>In WebGL it&#39;s common to download images and then upload them to the GPU to be
+used as textures. There&#39;s been several samples here that do this. For
+example the article about <a href="webgl-image-processing.html">image processing</a>, the
+article about <a href="webgl-3d-textures.html">textures</a> and the article about
+<a href="webgl-2d-drawimage.html">implementing 2d drawImage</a>.</p>
+<p>Typically we download an image something like this</p>
+<pre><code>// creates a texture info { width: w, height: h, texture: tex }
+// The texture will start with 1x1 pixels and be updated
+// when the image has loaded
+function loadImageAndCreateTextureInfo(url) {
+  var tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  // Fill the texture with a 1x1 blue pixel.
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+                new Uint8Array([0, 0, 255, 255]));
 
-uniform vec2 u_resolution;
-uniform vec2 u_translation;
-uniform vec2 u_rotation;
-+uniform vec2 u_scale;
+  // let&#39;s assume all images are not a power of 2
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
-void main() {
-+  // Scale the positon
-+  vec2 scaledPosition = a_position * u_scale;
+  var textureInfo = {
+    width: 1,   // we don&#39;t know the size until it loads
+    height: 1,
+    texture: tex,
+  };
+  var img = new Image();
+  img.addEventListener(&#39;load&#39;, function() {
+    textureInfo.width = img.width;
+    textureInfo.height = img.height;
 
-  // Rotate the position
-  vec2 rotatedPosition = vec2(
-*     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
-*     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
+    gl.bindTexture(gl.TEXTURE_2D, textureInfo.texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+  });
+  img.src = url;
 
-  // Add in the translation.
-  vec2 position = rotatedPosition + u_translation;
-</code></pre><p>and we add the JavaScript needed to set the scale when we draw.</p>
-<pre><code>  ...
-
-+  var scaleLocation = gl.getUniformLocation(program, &quot;u_scale&quot;);
-
-  ...
-
-+  var scale = [1, 1];
-
-  ...
-
-  // Draw the scene.
-  function drawScene() {
-
-    ...
-
-    // Set the translation.
-    gl.uniform2fv(translationLocation, translation);
-
-    // Set the rotation.
-    gl.uniform2fv(rotationLocation, rotation);
-
-+    // Set the scale.
-+    gl.uniform2fv(scaleLocation, scale);
-
-    // Draw the geometry.
-    var primitiveType = gl.TRIANGLES;
-    var offset = 0;
-    var count = 18;  // 6 triangles in the &#39;F&#39;, 3 points per triangle
-    gl.drawArrays(primitiveType, offset, count);
-  }
-</code></pre><p>And now we have scale. Drag the sliders.</p>
+  return textureInfo;
+}
+</code></pre><p>The problem is images might have private data in them (for example a captcha, a signature, a naked picture, ...).
+A webpage often has ads and other things not in direct cotnrol of the page and so the browser needs to prevent
+those things from looking at the contents of these private images.</p>
+<p>Just using <code>&lt;img src=&quot;private.jpg&quot;&gt;</code> is not a problem because although the image will get displayed by
+the browser a script can not see the data inside the image. <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">The Canvas2D API</a>
+has a way to see inside the image. First you draw the image into the canvas</p>
+<pre><code>ctx.drawImage(someImg, 0, 0);
+</code></pre><p>Then you get the data</p>
+<pre><code>var data = ctx.getImageData(0, 0, width, heigh);
+</code></pre><p>But, if the image you drew came from a different domain the browser will mark the canvas as <em>tainted</em> and
+you&#39;ll get a security error when you call <code>ctx.getImageData</code></p>
+<p>WebGL has to take it even one step further. In WebGL <code>gl.readPixels</code> is the equivilent call to <code>ctx.getImageData</code>
+so you&#39;d think maybe just blocking that would be enough but it turns out even if you can&#39;t read the pixels
+directly you can make shaders that take longer to run based on the colors in the image. Using that information
+you can use timing to effectively look inside the image indirectly and find out its contents.</p>
+<p>So, WebGL just bans all images that are not from the same domain. For example here&#39;s a short sample
+that draws a rotating rectangle with a texture from another domain.
+Notice the texture never loads and we get an error</p>
 <p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-geometry-scale.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-scale.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-cors-permission-bad.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-cors-permission-bad.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
-<p>One thing to notice is that scaling by a negative value flips our
-geometry.</p>
-<p>I hope these last 3 posts were helpful in understanding
-<a href="webgl-2d-translation.html">translation</a>,
-<a href="webgl-2d-rotation.html">rotation</a> and scale.  Next we&#39;ll go over <a href="webgl-2d-matrices.html">the
-magic that is matrices</a> that combines all 3 of
-these into a much simpler and often more useful form.</p>
+<p>How do we work around this?</p>
+<h2 id="enter-cors">Enter CORS</h2>
+<p>CORS = Cross Origin Resource Sharing. It&#39;s a way for the webpage to ask the image server for permission
+to use the image.</p>
+<p>To do this we set the <code>crossOrigin</code> attribute to something and then when the browser tries to get the
+image from the server, if it&#39;s not the same domain, the browser will ask for CORS permission.</p>
+<pre><code>...
+    img.src = url;
++    img.crossOrigin = &quot;&quot;;   // ask for CORS permission
+</code></pre><p>The string you set <code>crossOrigin</code> to is sent to the server. The server can look at that string and decide
+whether or not to give you permission. Most servers that support CORS don&#39;t look at the string, they just
+give permission to everyone. This is why setting it to the empty string works. All it means in this case
+is &quot;ask permission&quot; vs say <code>img.crossOrigin = &quot;bob&quot;</code> would mean &quot;ask permission for &#39;bob&#39;.</p>
+<p>Why don&#39;t we just always see that permission? Because asking for permission takes 2 HTTP requests so it&#39;s
+slower than not asking. If we know we&#39;re on the same domain or we know we won&#39;t use the image for anything
+except img tags and or canvas2d then we don&#39;t want to set <code>crossDomain</code> because it
+will make things slower.</p>
+<p>We can make a function that checks if the image we&#39;re trying to load is on the same origin and if
+so sets the <code>crossOrigin</code> attribute.</p>
+<pre><code>function requestCORSIfNotSameOrigin(img) {
+  if ((new URL(img.src)).origin !== window.location.origin) {
+    img.crossOrigin = &quot;&quot;;
+  }
+}
+</code></pre><p>And we can use it like this</p>
+<pre><code>// Make an image tag
+var img = new Image();
+img.onload = function() {
+    // now that the image has downloaded, upload it to WebGL
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    // fill the texture with a 1x1 pixel texture is it is immediately renderable
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+};
+img.src = url;
+requestCORSIfNotSameOrigin(img);
+</code></pre><p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-cors-permission-good.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-cors-permission-good.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>It&#39;s important to note asking for permission does NOT mean you&#39;ll be granted permission.
+That is up to the server. Github pages give permission, flickr.com gives permission,
+imgur.com gives permssion, but most websites do not.</p>
 <div class="webgl_bottombar">
-<h3>Why an 'F'?</h3>
+<h3>Making Apache grant CORS permission</h3>
+<p>If you're running a website with apache and you have the mod_rewrite plugin installed
+you can grant blanket CORS support by putting</p>
+<pre class="prettyprint">
+    Header set Access-Control-Allow-Origin "*"
+</pre>
 <p>
-The first time I saw someone use an 'F' was on a texture.  The 'F' itself
-is not important.  What is important is that you can tell its orientation
-from any direction.  If we used a heart ❤ or a triangle △ for example we
-couldn't tell if it was flipped horizontally.  A circle ○ would be even
-worse.  A colored rectangle would arguably work with different colors on
-each corner but then you'd have to remember which corner was which.  An
-F's orientation is instantly recognizable.
-</p>
-<img src="../resources/f-orientation.svg" class="webgl_center"/>
-<p>
-Any shape that you can tell the orientation of would work, I've just used
-'F' ever since I was 'F'irst introduced to the idea.
+In the appropriate <code>.htaccess</code> file.
 </p>
 </div>
-
-
-
 
 
       <hr/>
@@ -168,8 +197,8 @@ Any shape that you can tell the orientation of would work, I've just used
         <script type="text/javascript">
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 2D Scale';
-            var disqus_title = 'WebGL 2D Scale';
+            var disqus_identifier = 'WebGL - Cross Origin Images';
+            var disqus_title = 'WebGL - Cross Origin Images';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {
