@@ -35,21 +35,30 @@ function getHTML(url, callback) {
 }
 
 function fixSourceLinks(url, source) {
-  var srcRE = /src="/g;
-  var linkRE = /href="/g
-  var imageSrcRE = /image\.src = "/g;
+  var srcRE = /(src=)"(.*?)"/g;
+  var linkRE = /(href=)"(.*?")/g
+  var imageSrcRE = /((?:image|img)\.src = )"(.*?)"/g;
+  var loadImageRE = /(loadImageAndCreateTextureInfo)\(('|")(.*?)('|")/g;
   var loadImagesRE = /loadImages(\s*)\((\s*)\[([^]*?)\](\s*),/g;
-  var loadImageRE = /(loadImageAndCreateTextureInfo)\(('|")/g;
   var quoteRE = /"(.*?)"/g;
 
   var u = new URL(window.location.origin + url);
   var prefix = u.origin + dirname(u.pathname);
-  source = source.replace(srcRE, 'src="' + prefix);
-  source = source.replace(linkRE, 'href="' + prefix);
-  source = source.replace(imageSrcRE, 'image.src = "' + prefix);
-  source = source.replace(loadImageRE, '$1($2' + prefix);
+
+  function addPrefix(url) {
+    return url.indexOf("://") < 0 ? (prefix + url) : url;
+  }
+  function makeLinkFQed(match, p1, url) {
+    return p1 + '"' + addPrefix(url) + '"'
+  }
+  source = source.replace(srcRE, makeLinkFQed);
+  source = source.replace(linkRE, makeLinkFQed);
+  source = source.replace(imageSrcRE, makeLinkFQed);
+  source = source.replace(loadImageRE, function(match, fn, q1, url, q2) {
+    return fn + '(' + q1 + addPrefix(url) + q2;
+  });
   source = source.replace(loadImagesRE, function(match, p1, p2, p3, p4) {
-      p3 = p3.replace(quoteRE, '"' + prefix + '$1"');
+      p3 = p3.replace(quoteRE, '"' + addPrefix(p3) + '"');
       return `loadImages${p1}(${p2}[${p3}]${p4},`;
   });
 
