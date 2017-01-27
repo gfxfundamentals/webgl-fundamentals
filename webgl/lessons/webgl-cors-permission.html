@@ -138,8 +138,8 @@ to use the image.</p>
 <p>To do this we set the <code>crossOrigin</code> attribute to something and then when the browser tries to get the
 image from the server, if it&#39;s not the same domain, the browser will ask for CORS permission.</p>
 <pre><code>...
-    img.src = url;
 +    img.crossOrigin = &quot;&quot;;   // ask for CORS permission
+    img.src = url;
 </code></pre><p>The string you set <code>crossOrigin</code> to is sent to the server. The server can look at that string and decide
 whether or not to give you permission. Most servers that support CORS don&#39;t look at the string, they just
 give permission to everyone. This is why setting it to the empty string works. All it means in this case
