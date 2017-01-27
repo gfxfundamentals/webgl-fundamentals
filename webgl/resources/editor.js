@@ -177,7 +177,7 @@ function cantGetHTML(e) {
 
 function main() {
   var query = getQuery();
-  g.url = getFQUrl(g.url);
+  g.url = getFQUrl(query.url);
   getHTML(query.url, function(err, html) {
     if (err) {
       console.log(err);
