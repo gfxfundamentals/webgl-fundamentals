@@ -85,8 +85,8 @@ image from the server, if it's not the same domain, the browser will ask for COR
 
 
     ...
-        img.src = url;
     +    img.crossOrigin = "";   // ask for CORS permission
+        img.src = url;
 
 The string you set `crossOrigin` to is sent to the server. The server can look at that string and decide
 whether or not to give you permission. Most servers that support CORS don't look at the string, they just
