@@ -235,12 +235,12 @@ function addCORSSupport(js) {
   }
 
   let found = false;
-  js = js.replace(/^( +)(img|image)(\.src =.*?)$/mg, function(p0, p1, p2, p3) {
+  js = js.replace(/^( +)(img|image)(\.src = )(.*?);.*?$/mg, function(match, indent, variable, code, url) {
     found = true;
-    return p1 + p2 + p3 + "\n" + p1 + "requestCORSIfNotSameOrigin(" + p2 + ");";
+    return indent + "requestCORSIfNotSameOrigin(" + variable + ", " + url + ")\n" +
+           indent + variable + code + url + ";"
   });
   if (found) {
-    js = js.replace(/\/\/ MUST BE SAME DOMAIN!!!/g, '');
     js += `
 
 // This is needed if the images are not on the same domain
@@ -248,8 +248,8 @@ function addCORSSupport(js) {
 // in order to be able to use the image with WebGL. Most sites
 // do NOT give permission.
 // See: http://webglfundamentals.org/webgl/lessons/webgl-cors-permission.html
-function requestCORSIfNotSameOrigin(img) {
-  if ((new URL(img.src)).origin !== window.location.origin) {
+function requestCORSIfNotSameOrigin(img, url) {
+  if ((new URL(url)).origin !== window.location.origin) {
     img.crossOrigin = "";
   }
 }

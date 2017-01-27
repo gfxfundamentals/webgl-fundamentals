@@ -101,24 +101,17 @@ will make things slower.
 We can make a function that checks if the image we're trying to load is on the same origin and if
 so sets the `crossOrigin` attribute.
 
-    function requestCORSIfNotSameOrigin(img) {
-      if ((new URL(img.src)).origin !== window.location.origin) {
+    function requestCORSIfNotSameOrigin(img, url) {
+      if ((new URL(url)).origin !== window.location.origin) {
         img.crossOrigin = "";
       }
     }
 
 And we can use it like this
 
-    // Make an image tag
-    var img = new Image();
-    img.onload = function() {
-        // now that the image has downloaded, upload it to WebGL
-        gl.bindTexture(gl.TEXTURE_2D, tex);
-        // fill the texture with a 1x1 pixel texture is it is immediately renderable
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-    };
+    ...
+    +requestCORSIfNotSameOrigin(img, url);
     img.src = url;
-    requestCORSIfNotSameOrigin(img);
 
 
 {{{example url="../webgl-cors-permission-good.html" }}}
