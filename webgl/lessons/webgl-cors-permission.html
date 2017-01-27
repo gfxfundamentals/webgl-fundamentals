@@ -150,22 +150,15 @@ except img tags and or canvas2d then we don&#39;t want to set <code>crossDomain<
 will make things slower.</p>
 <p>We can make a function that checks if the image we&#39;re trying to load is on the same origin and if
 so sets the <code>crossOrigin</code> attribute.</p>
-<pre><code>function requestCORSIfNotSameOrigin(img) {
-  if ((new URL(img.src)).origin !== window.location.origin) {
+<pre><code>function requestCORSIfNotSameOrigin(img, url) {
+  if ((new URL(url)).origin !== window.location.origin) {
     img.crossOrigin = &quot;&quot;;
   }
 }
 </code></pre><p>And we can use it like this</p>
-<pre><code>// Make an image tag
-var img = new Image();
-img.onload = function() {
-    // now that the image has downloaded, upload it to WebGL
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    // fill the texture with a 1x1 pixel texture is it is immediately renderable
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-};
+<pre><code>...
++requestCORSIfNotSameOrigin(img, url);
 img.src = url;
-requestCORSIfNotSameOrigin(img);
 </code></pre><p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-cors-permission-good.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-cors-permission-good.html" target="_blank">click here to open in a separate window</a>

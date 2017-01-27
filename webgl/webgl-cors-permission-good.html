@@ -98,8 +98,8 @@ function main() {
   ]
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
 
-  function requestCORSIfNotSameOrigin(img) {
-    if ((new URL(img.src)).origin !== window.location.origin) {
+  function requestCORSIfNotSameOrigin(img, url) {
+    if ((new URL(url)).origin !== window.location.origin) {
       img.crossOrigin = "";
     }
   }
@@ -132,8 +132,8 @@ function main() {
       gl.bindTexture(gl.TEXTURE_2D, textureInfo.texture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
     });
+    requestCORSIfNotSameOrigin(img, url);
     img.src = url;
-    requestCORSIfNotSameOrigin(img);
 
     return textureInfo;
   }
