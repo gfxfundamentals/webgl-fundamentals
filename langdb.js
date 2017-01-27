@@ -81,8 +81,11 @@ window.langDB = {
       "en": true,
       "ru": true
     },
-    "webgl-text-html.html": {
-      "en": true
+    "webgl-fundamentals.html": {
+      "en": true,
+      "fr": true,
+      "pl": true,
+      "ru": true
     },
     "webgl-how-it-works.html": {
       "en": true,
@@ -123,14 +126,11 @@ window.langDB = {
     "webgl-text-glyphs.html": {
       "en": true
     },
-    "webgl-text-texture.html": {
+    "webgl-text-html.html": {
       "en": true
     },
-    "webgl-fundamentals.html": {
-      "en": true,
-      "fr": true,
-      "pl": true,
-      "ru": true
+    "webgl-text-texture.html": {
+      "en": true
     }
   },
   "langs": {
