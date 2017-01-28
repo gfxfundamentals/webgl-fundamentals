@@ -111,7 +111,7 @@ function parseHTML(url, html) {
   var dataScriptRE = /(<!--(?:(?!-->)[\s\S])*?-->\n){0,1}<script (.*?)>([^]*?)<\/script>/ig;
   var hasCanvasInCSSRE = /canvas/;
   var hasCanvasStyleInHTMLRE = /<canvas[^>]+?style[^>]+?>/;
-  var cssLinkRE = /<link ([^>]+?)>/;
+  var cssLinkRE = /<link ([^>]+?)>/g;
   var isCSSLinkRE = /type="text\/css"|rel="stylesheet"/;
   var hrefRE = /href="([^"]+)"/;
 
