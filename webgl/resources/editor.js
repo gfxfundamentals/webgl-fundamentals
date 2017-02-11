@@ -58,7 +58,9 @@ function fixSourceLinks(url, source) {
     return fn + '(' + q1 + addPrefix(url) + q2;
   });
   source = source.replace(loadImagesRE, function(match, p1, p2, p3, p4) {
-      p3 = p3.replace(quoteRE, '"' + addPrefix(p3) + '"');
+      p3 = p3.replace(quoteRE, function(match, p1) {
+          return '"' + addPrefix(p1) + '"';
+      });
       return `loadImages${p1}(${p2}[${p3}]${p4},`;
   });
 
