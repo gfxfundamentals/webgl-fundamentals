@@ -198,8 +198,8 @@ translation that we desire.
 ```
   ...
 
-  var translationLocation = gl.getUniformLocation(
-             program, "u_translation");
++  var translationLocation = gl.getUniformLocation(
++             program, "u_translation");
   ...
 
   // Create a buffer to put positions in
