@@ -461,6 +461,10 @@ shader stays simple as it only has to reference 1 texture, and it only
 requires 1 draw call to draw the shape instead of 1 draw call per texture
 as it might if we split it into planes.
 
+A few other very importanting things you might want to know about textures.
+One is [how to use 2 or more textures at once](webgl-2-texutres.html). The other
+is [how to use images from other domains](webgl-cors-permission.html).
+
 Next up [lets start simplifying with less code more fun](webgl-less-code-more-fun.html).
 
 <div class="webgl_bottombar">
