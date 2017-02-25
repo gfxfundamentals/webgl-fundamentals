@@ -197,8 +197,8 @@ function setGeometry(gl) {
 ```
   ...
 
-  var translationLocation = gl.getUniformLocation(
-             program, "u_translation");
++ var translationLocation = gl.getUniformLocation(
++            program, "u_translation");
   ...
 
   // Создаём буфер для хранения положений
