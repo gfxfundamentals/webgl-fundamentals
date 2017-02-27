@@ -124,16 +124,20 @@ window.langDB = {
       "ru": true
     },
     "webgl-text-canvas2d.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-text-glyphs.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-text-html.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-text-texture.html": {
-      "en": true
+      "en": true,
+      "ru": true
     }
   },
   "langs": {
