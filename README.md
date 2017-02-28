@@ -50,6 +50,9 @@ A list of articles I'd like to write or see written
     *   spot lighting
     *   normal maps
     *   shadow maps
+*   animation
+    *   blendshapes
+    *   skinning
 *   text
     *   pre-made glyph texture atlus
     *   glyph cache
@@ -59,15 +62,18 @@ A list of articles I'd like to write or see written
     *   glow
     *   light rays
     *   RGB glitch, CRT distortion, scanlines
-    *   color mapping
+    *   color mapping/tone mapping
 *   Creative coding
     *   color palettes
     *   indexed everything
     *   tilemaps
+    *   generated geometry
+    *   histogram
+    *   particles
+    *   toon/ramp shading
 *   code organization
     *   scene graph
         *   putting lights and camera in scene graph
 *   Physically based rendering
-*   WebGL 2.0
 
 
