@@ -1,7 +1,8 @@
 window.langDB = {
   "articles": {
     "webgl-cors-permission.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-anti-patterns.html": {
       "en": true
@@ -62,7 +63,8 @@ window.langDB = {
       "ru": true
     },
     "webgl-3d-textures.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-and-alpha.html": {
       "en": true
@@ -78,7 +80,8 @@ window.langDB = {
       "en": true
     },
     "webgl-2-textures.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-drawing-multiple-things.html": {
       "en": true,
