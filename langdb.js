@@ -5,7 +5,8 @@ window.langDB = {
       "ru": true
     },
     "webgl-anti-patterns.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-2d-matrices.html": {
       "en": true,
@@ -35,7 +36,8 @@ window.langDB = {
     },
     "webgl-2d-vs-3d-library.html": {
       "en": true,
-      "pl": true
+      "pl": true,
+      "ru": true
     },
     "webgl-3d-camera.html": {
       "en": true,
@@ -67,17 +69,20 @@ window.langDB = {
       "ru": true
     },
     "webgl-and-alpha.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-animation.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-2d-drawimage.html": {
       "en": true,
       "ru": true
     },
     "webgl-boilerplate.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-2-textures.html": {
       "en": true,
@@ -111,7 +116,8 @@ window.langDB = {
       "ru": true
     },
     "webgl-resizing-the-canvas.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-scene-graph.html": {
       "en": true,
@@ -119,7 +125,8 @@ window.langDB = {
       "ru": true
     },
     "webgl-setup-and-installation.html": {
-      "en": true
+      "en": true,
+      "ru": true
     },
     "webgl-shaders-and-glsl.html": {
       "en": true,

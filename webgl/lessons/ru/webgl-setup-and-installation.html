@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ru/webgl-2d-scale.md. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ru/webgl-setup-and-installation.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -34,23 +34,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="2D-масштабирование в WebGL" />
+<meta property="og:title" content="WebGL Установка и настройка" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="Как выполнить масштабирование в 2D" />
-<meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/ru/webgl-2d-scale.html" />
+<meta property="og:description" content="Как начать разрабатывать на WebGL" />
+<meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/ru/webgl-setup-and-installation.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="2D-масштабирование в WebGL" />
-<meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/ru/webgl-2d-scale.html" />
-<meta name="twitter:description" content="Как выполнить масштабирование в 2D" />
+<meta name="twitter:title" content="WebGL Установка и настройка" />
+<meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/ru/webgl-setup-and-installation.html" />
+<meta name="twitter:description" content="Как начать разрабатывать на WebGL" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>2D-масштабирование в WebGL</title>
+<title>WebGL Установка и настройка</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,96 +63,111 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>2D-масштабирование в WebGL</h1>
+    <h1>WebGL Установка и настройка</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>Эта статья из серии, которая начинается с <a href="webgl-fundamentals.html">Основ WebGL</a>,
-является продолжением предыдущей <a href="webgl-2d-rotation.html">статьи о повороте геометрии</a>.</p>
-<p>Масштабирование не сложнее <a href="webgl-2d-translation.html">переноса</a>.</p>
-<p>Мы умножаем координату на заданный масштаб. Взглянем на изменения по
-сравнению с <a href="webgl-2d-rotation.html">предыдущей статьёй</a>.</p>
-<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
-attribute vec2 a_position;
-
-uniform vec2 u_resolution;
-uniform vec2 u_translation;
-uniform vec2 u_rotation;
-+uniform vec2 u_scale;
-
-void main() {
-+  // Масштабирование
-+  vec2 scaledPosition = a_position * u_scale;
-
-  // Поворот
-  vec2 rotatedPosition = vec2(
-*     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
-*     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
-
-  // Перенос
-  vec2 position = rotatedPosition + u_translation;
-</code></pre><p>Ещё нам нужно добавить код JavaScript для установки масштаба при отрисовке.</p>
-<pre><code>  ...
-
-+  var scaleLocation = gl.getUniformLocation(program, &quot;u_scale&quot;);
-
-  ...
-
-+  var scale = [1, 1];
-
-  ...
-
-  // Отрисовка сцены
-  function drawScene() {
-
-    ...
-
-    // Задаём перенос
-    gl.uniform2fv(translationLocation, translation);
-
-    // Задаём вращение
-    gl.uniform2fv(rotationLocation, rotation);
-
-+    // Задаём масштаб
-+    gl.uniform2fv(scaleLocation, scale);
-
-    // Отрисовываем геометрию
-    var primitiveType = gl.TRIANGLES;
-    var offset = 0;
-    var count = 18;  // буква &#39;F&#39; из 6 треугольников, 3 точки на треугольник
-    gl.drawArrays(primitiveType, offset, count);
-  }
-</code></pre><p>Теперь у нас есть масштабирование. Потяните за слайдеры.</p>
-<p><div>
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-geometry-scale.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-scale.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+      <p>Технически, вам не нужно ничего, кроме браузера, чтобы начать разработку на WebGL.
+Зайдите на <a href="https://jsfiddle.net/greggman/8djzyjL3/">jsfiddle.net</a>, <a href="http://jsbin.com">jsbin.com</a>
+или <a href="http://codepen.io/greggman/pen/YGQjVV">codepen.io</a> и просто начните выполнять уроки.</p>
+<p>На всех указанных ресурсах при желании можно добавлять внешние скрипты через
+пару тегов <code>&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;</code>.</p>
+<p>Но здесь не без ограничений. WebGL имеет более строгие ограничения по сравнению с Canvas2D
+при загрузке изображений - вы не сможете запросто использовать изображения по всему
+интернету. Кроме того, работа будет идти быстрее, когда всё находится на локальной машине.</p>
+<p>Предположим, что вы хотите запускать и редактировать примеры с этого сайта. Для начала
+нужно скачать сам сайт <a href="https://github.com/greggman/webgl-fundamentals/">по этой ссылке</a>.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/download-webglfundamentals.gif">
+  <div class="webgl_center"></div>
 </div>
 
 </p>
-<p>Обратите внимание, что масштабирование на отрицательное значение
-переворачивает геометрию.</p>
-<p>Надеюсь, что последние 3 статьи помогли в понимании магии
-<a href="webgl-2d-translation.html">переноса</a>,
-<a href="webgl-2d-rotation.html">поворота</a> и масштабирования. Далее мы рассмотрим,
-как <a href="webgl-2d-matrices.html">выполнить всю эту магию с помощью матриц</a>,
-где объединим все три трансформации в более практичную и распространённую форму.</p>
-<div class="webgl_bottombar">
-<h3>Почему мы используем букву 'F'?</h3>
-<p>
-Первый раз я увидел применение 'F' на текстуре. Сама по себе 'F' не является
-чем-то особенным. Особенным является то, что вы всегда можете увидеть, куда
-она направлена. При использовании сердец ❤ или треугольников △ для наших
-примеров мы бы не смогли понять, перевёрнуты они по горизонтали или нет.
-С окружностью всё ещё хуже. Цветной прямоугольник с разными цветами для разных
-вершин отображал бы все модификации, но пришлось бы запоминать, какой цвет за
-какой угол отвечает. В случае с буквой F всё сразу же понятно.
-</p>
-<img src="../../resources/f-orientation.svg" class="webgl_center"/>
-<p>
-Подойдёт любой объект, по которому легко можно сказать его ориентацию. Просто
-'F' - первое, что пришло мне в голову, когда я задумался о фигуре для трансформаций.
-</p>
+<p>Распакуйте архив в какую-нибудь директорию.</p>
+<h2 id="-">Используем небольшой и простой веб-сервер</h2>
+<p>Далее необходимо установить небольшой веб-сервер. Знаю, что &quot;веб-сервер&quot; звучит пугающе, но на самом деле
+<a href="http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/">веб-сервер необыкновенно прост</a>.</p>
+<p>Если вы используете браузер Chrome, есть ещё более простое решение.
+<a href="https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=ru">Вот небольшое расширение для chrome, которое выполняет роль веб-сервера</a></p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/chrome-webserver.png">
+  <div class="webgl_center"></div>
 </div>
+
+</p>
+<p>Просто укажите ему директорию с распакованными файлами и кликните на один из URL-адресов веб-сервера.</p>
+<p>Если вы не используете chrome или просто не хотите использовать расширение, то можно использовать <a href="https://nodejs.org">node.js</a>.
+Скачайте и установите его, затем откройте командную строку / консоль / терминал. На Windows установщик добавит
+&quot;Командную строку Node&quot;, которую и нужно использовать.</p>
+<p>Затем установите <a href="https://github.com/indexzero/http-server"><code>http-server</code></a> командой</p>
+<pre><code>npm -g install http-server
+</code></pre><p>Для OSX используйте</p>
+<pre><code>sudo npm -g install http-server
+</code></pre><p>А после установки запустите</p>
+<pre><code>http-server путь/к/распакованным/файлам
+</code></pre><p>На экране должно показаться что-то вроде</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/http-server-response.png">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>Теперь можно в браузере перейти по адресу <a href="http://localhost:8080"><code>http://localhost:8080</code></a>.</p>
+<p>Без указания пути http-server будет использовать текущую папку.</p>
+<h2 id="-">Использование инструментов разработки браузера</h2>
+<p>Большинство браузеров имеют встроенные инструменты разработки.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/chrome-devtools.png">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>Документация для Chrome <a href="https://developers.google.com/web/tools/chrome-devtools/">находится здесь</a>,
+Для Firefox - <a href="https://developer.mozilla.org/ru/docs/Tools">здесь</a>.</p>
+<p>Посмотрите, как их можно использовать. В худшем случае всегда можно глянуть в консоль
+JavaScript. Если существует какая-то проблема, то скорей всего будет и сообщение об
+ошибке. Посмотрите внимательно на это сообщение, оно даст подсказку, где искать проблему.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/javascript-console.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<h2 id="-webgl">Помощники WebGL</h2>
+<p>Также существуют разнообразные помощники / инспекторы для WebGL. <a href="https://benvanik.github.io/WebGL-Inspector/">Вот один из них для Chrome</a>.</p>
+<p><div class="webgl_image ">
+  <img class="" src="https://benvanik.github.io/WebGL-Inspector/images/screenshots/1-Trace.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p><a href="https://hacks.mozilla.org/2014/03/introducing-the-canvas-debugger-in-firefox-developer-tools/">В Firefox тоже есть похожий</a>.
+Его нужно активировать в <code>about:flags</code>, также может потребоваться <a href="https://www.mozilla.org/ru/firefox/developer/">Firefox Developer Edition</a>.</p>
+<p>Они могут стать полезными, а могут и не стать. Большинство из них предназначены для анимированных сэмплов,
+они могут захватывать кадр и показывают все вызовы WebGL, которые формируют этот кадр. Они отлично подойдут,
+если уже что-то работает или если что-то работало и внезапно сломалось. Но от них мало проку, если у вас
+проблемы при инициализации, или если вы не используете анимацию, где нужно отрисовывать каждый кадр.
+Всё же они могут быть очень полезными. Я часто проверяю uniform-переменные при вызове отрисовки. Если я
+вижу кучу <code>NaN</code> (NaN = Not a Number, то есть Не число), я проверяю код, отвечающий за установку этих
+переменных, и нахожу ошибку.</p>
+<h2 id="-">Инспектор кода</h2>
+<p>Также помните про инспектор кода. Мы можете запросто просмотреть исходный код.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/view-source.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>Даже когда вы не можете кликнуть правой кнопкой на странице, или если код находится
+в отдельном файле, можно всегда просмотреть код через инструменты разработчика.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/devtools-source.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<h2 id="-">Приступаем к работе</h2>
+<p>Надеюсь, это поможет вам начать работу. <a href="./">Теперь обратно к урокам</a>.</p>
 
       <hr/>
       <div>
@@ -163,8 +178,8 @@ void main() {
         <script type="text/javascript">
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = '2D-масштабирование в WebGL';
-            var disqus_title = '2D-масштабирование в WebGL';
+            var disqus_identifier = 'WebGL Установка и настройка';
+            var disqus_title = 'WebGL Установка и настройка';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {
