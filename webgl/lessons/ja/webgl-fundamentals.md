@@ -194,7 +194,7 @@ GLSLのstringをする方法はいくつかある。文字列の連結とか、A
       gl.deleteShader(shader);
     }
 
-出来ただ、その関数でシェーダー２つを作成出来る
+出来たら、その関数でシェーダー２つを作成出来る
 
     var vertexShaderSource = document.getElementById("2d-vertex-shader").text;
     var fragmentShaderSource = document.getElementById("2d-fragment-shader").text;
@@ -238,20 +238,20 @@ WebGL APIの役割のほとんどはGLSLプログラムにデータを与える�
 
 属性のローケーションを調べるのは描画する時ではなく、プログラムを最初に起動する時に行った方がいい。
 
-Attributes get their data from buffers so we need to create a buffer
+属性はバッファーからデータを取るので、バッファーを作成しなければならない。
 
     var positionBuffer = gl.createBuffer();
 
-WebGL lets us manipulate many WebGL resources on global bind points.
-You can think of bind points as internal global variables inside WebGL.
-First you bind a resource to a bind point. Then, all other functions
-refer to the resource through the bind point. So, let's bind the position buffer.
+WebGLのレソース（資源）を操るためグローバル結び点（bind point)に結び付けることが必要である。
+結び点はWebGLの中のグローバル変数のようなものである。リソースを結び点に結びつけたら、その後
+結び点でリソースを操る。さて、positionBufferを結びつけよう。
 
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
+そして、ARRAY_BUFFERという結び点を参照して、データをバッファーに入れる。
 Now we can put data in that buffer by referencing it through the bind point
 
-    // three 2d points
+    // 三点の二次元頂点
     var positions = [
       0, 0,
       0, 0.5,
@@ -259,161 +259,149 @@ Now we can put data in that buffer by referencing it through the bind point
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-There's a lot going on here. The first thing is we have `positions` which is a
-JavaScript array. WebGL on other hand needs strongly typed data so the part
-`new Float32Array(positions)` creates a new array of 32bit floating point numbers
-and copies the values from `positions`. `gl.bufferData` then copies that data to
-the `positionBuffer` on the GPU. It's using the position buffer because we bound
-it to the `ARRAY_BUFFER` bind point above.
+ここで色々なことを行われている。まずpositionsというJavaScriptの配列がある。WebGLは強く
+定型化されたデータが要るので、 new Float32Array(positions)の部分は32ビット数値配列を
+作成して、それにpositionsの内容をコピーする。それでgl.bufferData はそのデータをGPUに
+あるpositionBufferにアップロードする。positionBufferがARRAY_BUFFERに結び付いている
+のでpositionBufferはコピーの目標になっている。
 
-The last argument, `gl.STATIC_DRAW` is a hint to WebGL about how we'll use the data.
-WebGL can try to use that hint to optimize certain things. `gl.STATIC_DRAW` tells WebGL
-we are not likely to change this data much.
+gl.bufferDataの最後の引数、gl.STATIC_DRAWはWebGLにそのデータがどのように使うのかという
+ヒントである。gl.STATIC_DRAWの意味はこのデータは更新しないヒントである。
 
-The code up to this point is *initialization code*. Code that gets run once when we
-load the page. The code below this point is *renderering code* or code that should
-get executed each time we want to render/draw.
+今までのコードが初期化のコードである。ウエブページをロードしてから起動させる。
+下記のコードは描画するコードである。描画してほしい時に呼び出すゴードである。
 
-## Rendering
+## 描画
 
-Before we draw we should resize the canvas to match its display size. Canvases just like Images have 2 sizes.
-The number of pixels actually in them and separately the size they are displayed. CSS determines the size
-the canvas is displayed. **You should always set the size you want a canvas with CSS** since it is far far
-more flexible than any other method.
+描画する前にキャンバスを表示されているサイズと同じサイズにした方がいい。キャンバスは
+2つのサイズがある。一つは内容の解像度で、それがキャンバスサイズである。それに表示のサイズもあり、
+これはCSSで決定されている。他の方法より柔軟なのでキャンバスのサイズをCSSで設定した方がいい。
 
-To make the number of pixels in the canvas match the size it's displayed
-[I'm using a helper function you can read about here](webgl-resizing-the-canvas.html).
+キャンバスの解像度を表示されているサイズと同じにするため
+[ここで説明しれているヘルパー関数を利用している](webgl-resizing-the-canvas.html)。
 
-In nearly all of these samples the canvas size is 400x300 pixels if the sample is run in its own window
-but stretches to fill the available space if it's inside an iframe like it is on this page.
-By letting CSS determine the size and then adjusting to match we easily handle both of these cases.
+ここにあるサンプルでは自分のウインドウで起動する場合、キャンバスのサイズは400x300になるが、
+iframeの中で起動する場合iframeのサイズに合わせられる。CSSで決定しているのでどちらにも対処出来る。
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-We need to tell WebGL how to convert from the clip space
-values we'll be setting `gl_Position` to back into pixels, often called screen space.
-To do this we call `gl.viewport` and pass it the current size of the canvas.
+どうやってgl_Positionに割り当たっているクリプ空間頂点からピクセル（画面空間）に変換の設定する必要がある。
+そのためキャンバスのサイズをgl.viewportに渡す。
+
+？？？クリプ空間頂点を割り当たってられたgl_Positionはピクセル（顔面空間）に変換の決定する必要である。
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-This tells WebGL the -1 +1 clip space maps to 0 -> `gl.canvas.width` for x and 0 -> `gl.canvas.height`
-for y.
+これは−1〜+１のクリプ空間からｘ軸のために0〜gl.canvas.widthとy軸のために0〜gl.canvas.heightをWebGLに設定するものである。
 
-We clear the canvas. `0, 0, 0, 0` are r, g, b, alpha so in this case we're making the canvas transparent.
+キャンバスをキリアする。0,0,0,0は赤、緑、青、あるファ（透明さ）なので今回
+キャンバスを透明にキリアする。
 
-    // Clear the canvas
+    // キャンバスをクリアする
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-We tell WebGL which shader program to execute.
+WebGLにどのシェーダー・プログラムを起動してほしいが教える。
 
-    // Tell it to use our program (pair of shaders)
+    // 作成したプログラム（シェーダー2つ）を設定する
     gl.useProgram(program);
 
-Next we need to tell WebGL how to take data from the buffer we setup above and supply it to the attribute
-in the shader. First off we need to turn the attribute on
+次にWebGLにどうやってデータを上記で作ったバッファーからシェーダーの属性に読み込むかを教えることが必要である。
+まず属性オンにする。
 
     gl.enableVertexAttribArray(positionAttributeLocation);
 
-Then we need to specify how to pull the data out
+そしてデータの取り方を設定する。
 
-    // Bind the position buffer.
+    // positionBufferをARRAY_BUFFERに結び付ける
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    var size = 2;          // 2 components per iteration
-    var type = gl.FLOAT;   // the data is 32bit floats
-    var normalize = false; // don't normalize the data
-    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    var offset = 0;        // start at the beginning of the buffer
+    // 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取りか。
+    var size = 2;          // 呼び出すごとに2つの数値
+    var type = gl.FLOAT;   // データは32ビットの数値
+    var normalize = false; // データをnormalizeしない
+    var stride = 0;        // シェーダーを呼び出すごとに進む距離
+                           // 0 = size * sizeof(type)
+    var offset = 0;        // バッファーの頭から取り始める
     gl.vertexAttribPointer(
         positionAttributeLocation, size, type, normalize, stride, offset)
 
-A hidden part of `gl.vertexAttribPointer` is that it binds the current `ARRAY_BUFFER`
-to the attribute. In other words now this attribute is bound to
-`positionBuffer`. That means we're free to bind something else to the `ARRAY_BUFFER` bind point.
-The attribute will continue to use `positionBuffer`.
+gl.vertexAttribPointerの隠れている点がAARRAY_BUFFERに結び付いているバッファーを属性にも
+むす付ける。つまりpositionBufferはこの属性に結び付く。ARRAY_BUFFERに他のバッファーを
+結び付けても、属性はまだpositionBufferに結び付いている。
 
-note that from the point of view of our GLSL vertex shader the `a_position` attribute was a `vec4`
+GLSLの頂点シェーダーの立場からa_positionはvec4である。
 
     attribute vec4 a_position;
 
-`vec4` is a 4 float value. In JavaScript you could think of it something like
-`a_position = {x: 0, y: 0, z: 0, w: 0}`. Above we set `size = 2`. Attributes
-default to `0, 0, 0, 1` so this attribute will get its first 2 values (x and y)
-from our buffer. The z, and w will be the default 0 and 1 respectively.
+`vec4`は４つの値がある。JavaScriptで`a_position = {x: 0, y: 0, z: 0, w: 0}`に近い形になる。
+上記で`size = 2`のした。属性の規定値は0,0,0,1なので、この属性の最初の2つの値（xとy）はバッファーから取る。
+zとwは既定値の0、1になる。
 
-After all that we can finally ask WebGL to execute our GLSL program.
+上記の全ての後やっとWebGLにシェーダーを起動することを頼める。
 
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     var count = 3;
     gl.drawArrays(primitiveType, offset, count);
 
-Because the count is 3 this will execute our vertex shader 3 times. The first time `a_position.x` and `a_position.y`
-in our vertex shader attribute will be set to the first 2 values from the positionBuffer.
-The 2nd time `a_position.xy` will be set to the 2nd two values. The last time it will be
-set to the last 2 values.
+countは３になっているので頂点シェーダーは三回呼び出される。初回頂点シェーダーの属性の
+a_position.xとa_position.yはpositionBufferの最初の2つの値になる。二回目、a_position.xyは
+二番目の2つの値になる。最後は三回目の2つの値になる。
 
-Because we set `primitiveType` to `gl.TRIANGLES`, each time our vertex shader is run 3 times
-WebGL will draw a triangle based on the 3 values we set `gl_Position` to. No matter what size
-our canvas is those values are in clip space coordinates that go from -1 to 1 in each direction.
+primitiveTypeは`gl.TRIANGLES`にしたので,頂点シェーダーは三回ごとに呼び出されたら、
+WebGLはgl_Positionに割り当てられた３つの値で三角形を描画する。キャンバスがどんなサイズに
+なってもその値は-1~+1クリプ空間座標である。
 
-Because our vertex shader is simply copying our positionBuffer values to `gl_Position` the
-triangle will be drawn at clip space coordinates
+この頂点シェーダーは、ただpositionBufferの値をgl_Positionにコピーしているので、このクリプ空間座標に三角形を描画する。
 
       0, 0,
       0, 0.5,
       0.7, 0,
 
-Converting from clip space to screen space WebGL is going to draw a triangle at. If the canvas size
-happned to be 400x300 we'd get something like this
+キャンバスのサイズが400x300のピクセルならWebGLはこのように頂点のクリプ空間から画面空間に変化する。
 
-     clip space      screen space
+     クリプ空間          画面空間
        0, 0       ->   200, 150
        0, 0.5     ->   200, 225
      0.7, 0       ->   340, 150
 
-WebGL will now render that triangle. For every pixel it is about to draw WebGL will call our fragment shader.
-Our fragment shader just sets `gl_FragColor` to `1, 0, 0.5, 1`. Since the Canvas is an 8bit
-per channel canvas that means WebGL is going to write the values `[255, 0, 127, 255]` into the canvas.
+その座標でWebGLは三角形を描画する。ピクセルごとにピクセルシェーダーを呼び出す。
+ピクセルシェーダーはだた`gl_FragColor`を`1, 0, 0.5, 1`とする。キャンバスの色の部分ごとに
+8ビットなので、WebGLは255,0,127,255をキャンバスに書き込む。
 
-Here's a live version
+これはライブサンプルである。
 
 {{{example url="../webgl-fundamentals.html" }}}
 
-In the case above you can see our vertex shader is doing nothing
-but passing on our position data directly. Since the position data is
-already in clipspace there is no work to do. *If you want 3D it's up to you
-to supply shaders that convert from 3D to clipspace because WebGL is only
-a rasterization API*.
+上の場合にはこの頂点シェーダーは頂点の位置データ直接渡すでけである。その位置はもう
+クリプ空間になっているので、何もしていない。*三次元の絵を描画してければ自分自身で
+三次元データからクリプ空間に変化するシェーダーを作成しなければならない。WebGLはただの描画するAPIだから*。
 
-You might be wondering why does the triangle start in the middle and go to toward the top right.
-Clip space in `x` goes from -1 to +1. That means 0 is in the center and positive values will
-be to the right of that.
+三角形がなぜ真ん中から右上に位置するのかな〜人もいると思うので、説明しよう。クリプ空間
+でX軸は-1〜+1である。だから０は真ん中で正の値はその右になる。
+上の方に位置する理由はクリプ空間のY軸が-1＝底で、+1＝頂なので、0＝真ん中で正の値は
+その上になるからである。
 
-As for why it's on the top, in clip space -1 is at the bottom and +1 is at the top. That means
-0 is in the center and so positive numbers will be above the center.
-
-For 2D stuff you would probably rather work in pixels than clipspace so
-let's change the shader so we can supply the position in pixels and have
-it convert to clipspace for us. Here's the new vertex shader
+2次元のものならクリプ空間よりよく使われているピクセル空間の方が楽なので、positionの座標を
+ピクセルで与える為に、シェーダーの計算し方をピクセル座標からクリプ空間に変更しよう。
+これは変更されたシェーダー：
 
     <script id="2d-vertex-shader" type="notjs">
 
     -  attribute vec4 a_position;
     *  attribute vec2 a_position;
 
-    +  uniform vec2 u_resolution;
+    +  uniform vec2 u_resolution;  // キャンバスの解像度
 
       void main() {
-    +    // convert the position from pixels to 0.0 to 1.0
+    +    // positionはピクセルから0〜1に
     +    vec2 zeroToOne = a_position / u_resolution;
     +
-    +    // convert from 0->1 to 0->2
+    +    // 0〜1から0〜2に
     +    vec2 zeroToTwo = zeroToOne * 2.0;
     +
-    +    // convert from 0->2 to -1->+1 (clipspace)
+    +    // 0〜2から-1〜+1に(クリプ空間）
     +    vec2 clipSpace = zeroToTwo - 1.0;
     +
     *    gl_Position = vec4(clipSpace, 0, 1);
@@ -421,19 +409,18 @@ it convert to clipspace for us. Here's the new vertex shader
 
     </script>
 
-Some things to notice about the changes. We changed `a_position` to a `vec2` since we're
-only using `x` and `y` anyway. A `vec2` is similar to a `vec4` but only has `x` and `y`.
+この変更に関して留意したい点：
 
-Next we added a `uniform` called `u_resolution`. To set that we need to look up its location.
+*   `x`と`y`しか使ってないので`a_position`を`vec2`にした。 `vec2`は`vec4`に似てるがxとyしかない。
 
-    var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
+*   `u_resolution`というユニフォームを追加した。ユニフォームを設定するためにその位置を調べることが必要である。
 
-The rest should be clear from the comments. By setting `u_resolution` to the resolution
-of our canvas the shader will now take the positions we put in `positionBuffer` supplied
-in pixels coordinates and convert them to clip space.
+        var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
 
-Now we can change our position values from clip space to pixels. This time we're going to draw a rectangle
-made from 2 triangles, 3 points each.
+それ以外は上記のコメントでこ理解頂けるだろう。`u_resolution`をキャンバスの解像度に設定すれてば、
+この頂点シェーダーが`positionBuffer`に入っているピクセル座標をクリプ空間に計算する。
+
+それだこの座標はクリプ空間からピクセルに変更出来る。今回3つの頂点で出来ている三角形2つで四角形を描画する。
 
     var positions = [
     *  10, 20,
@@ -445,49 +432,48 @@ made from 2 triangles, 3 points each.
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-And after we set which program to use we can set the value for the uniform we created.
-Use program is like `gl.bindBuffer` above in that it sets the current program. After
-that all the `gl.uniformXXX` functions set uniforms on the current program.
+
+どこプログラムを利用するかを定義してから、ユニフォームの値を設定出来る。`gl.useProgram`は上記の`gl.bindBuffer`
+と同じように、どのシェーダー・プログラムを使うかを定義する。その後`gl.uniform〜`の関数の全ては現行のプログラムの
+ユニフォームを設定出来る。
 
     gl.useProgram(program);
 
     ...
 
-    // set the resolution
+    // resolutionを設定する
     gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
-And of course to draw 2 triangles we need to have WebGL call our vertex shader 6 times
-so we need to change the `count` to `6`.
+そして勿論２つの三角形を描画するため、先ほど頂点シェーダーを6回呼び出すことが必要なので`count`は
+`6`にする。
 
-    // draw
+    // 描画する
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     *var count = 6;
     gl.drawArrays(primitiveType, offset, count);
 
-And here it is
-
-Note: This example and all following examples use [`webgl-utils.js`](/webgl/resources/webgl-utils.js)
-which contains functions to compile and link the shaders. No reason to clutter the examples
-with that [boilerplate](webgl-boilerplate.html) code.
+そしてこのようになる。
 
 {{{example url="../webgl-2d-rectangle.html" }}}
 
-Again you might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
-corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs
-we can just flip the clip space y coordinate.
+Note: このサンプルとその後の全てのサンプルは、シェーダーのコンパイルとリンクの為の関数を
+含んでいる[`webgl-utils.js`](/webgl/resources/webgl-utils.js)というライブラリを使っている。
+サンプルを混乱させたくないので、［ポイラプレート・コード・ライブラリ](webgl-boilerplate.html)にした。
+
+また目立つのはこの四角形は下の方に位置していることだろう。WebGLは0,0を左下とみなしている。
+2次元APIの0,0は一般的な左下にしたければクリプ空間のｙ座標を弾く
 
     *   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
-And now our rectangle is where we expect it.
+それで四角形は期待通りになる。
 
 {{{example url="../webgl-2d-rectangle-top-left.html" }}}
 
-Let's make the code that defines a rectangle into a function so
-we can call it for different sized rectangles. While we're at it
-we'll make the color settable.
+四角形を定義している部分をサイズが設定出来る関数にしよう。更に、描く色も設定出来る
+ようにする。
 
-First we make the fragment shader take a color uniform input.
+まずピクセルシェーダーを、色ユニフォームが使えるようにする。
 
     <script id="2d-fragment-shader" type="notjs">
       precision mediump float;
@@ -499,34 +485,36 @@ First we make the fragment shader take a color uniform input.
       }
     </script>
 
-And here's the new code that draws 50 rectangles in random places and random colors.
+そして、次にあるのは50個の四角形をランダムなサイズとランダムな色で描画するコードである。
 
       var colorUniformLocation = gl.getUniformLocation(program, "u_color");
       ...
 
-      // draw 50 random rectangles in random colors
+      // 50個のランダム四角形のランダム色で描画する
       for (var ii = 0; ii < 50; ++ii) {
-        // Setup a random rectangle
-        // This will write to positionBuffer because
-        // its the last thing we bound on the ARRAY_BUFFER
-        // bind point
+        // ランダム四角形の設定する
+        // 最後にARRAY_BUFFERの結び点に結び付いたバッファーはpositionBufferだから
+        // positionBufferにアップロードすることになる。
         setRectangle(
             gl, randomInt(300), randomInt(300), randomInt(300), randomInt(300));
 
-        // Set a random color.
+        // ランダムな色を設定する
         gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
 
-        // Draw the rectangle.
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        // 四角形をっ描画する
+        var primitiveType = gl.TRIANGLES;
+        var offset = 0;
+        var count = 6;
+        gl.drawArrays(primitiveType, offset, count);
       }
     }
 
-    // Returns a random integer from 0 to range - 1.
+    // 0〜(range - 1)を作成
     function randomInt(range) {
       return Math.floor(Math.random() * range);
     }
 
-    // Fills the buffer with the values that define a rectangle.
+    // バッファーに四角形の頂点を入れる
 
     function setRectangle(gl, x, y, width, height) {
       var x1 = x;
@@ -534,10 +522,10 @@ And here's the new code that draws 50 rectangles in random places and random col
       var y1 = y;
       var y2 = y + height;
 
-      // NOTE: gl.bufferData(gl.ARRAY_BUFFER, ...) will affect
-      // whatever buffer is bound to the `ARRAY_BUFFER` bind point
-      // but so far we only have one buffer. If we had more than one
-      // buffer we'd want to bind that buffer to `ARRAY_BUFFER` first.
+      // NOTE: gl.bufferData(gl.ARRAY_BUFFER, ...)は`ARRAY_BUFFER`の結び点に
+      // 結び付いているバッファーにアップロードする。今まで一つのバッファーしかないけど、
+      // 2つ以上あればgl.bufferDataを呼び出す前に変更したいバッファーをARRAY_BUFFERに
+      // 結び付けることが必要である。
 
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
          x1, y1,
@@ -548,66 +536,44 @@ And here's the new code that draws 50 rectangles in random places and random col
          x2, y2]), gl.STATIC_DRAW);
     }
 
-And here's the rectangles.
+それでこれは50個の四角形である。
 
 {{{example url="../webgl-2d-rectangles.html" }}}
 
-I hope you can see that WebGL is actually a pretty simple API.
-Okay, simple might be the wrong word. What it does is simple. It just
-executes 2 user supplied functions, a vertex shader and fragment shader and
-draws triangles, lines, or points.
-While it can get more complicated to do 3D that complication is
-added by you, the programmer, in the form of more complex shaders.
-The WebGL API itself is just a rasterizer and conceptually fairly simple.
+気が付いて欲しい点はWebGLは結構単純なAPIである。ま、「単純」は合ってないけれど、WebGLはやっていることは単純なことである。ただ2つのプログラマーが書いた関数（頂点シェーダーとピクセルシェーダー）で三角形、線、点を描画する。三次元の為に複雑になるかもしれないが、その複雑なシェーダーはプログラマーに追加される。WebGLはただ単純なの描画するAPIである。
 
-We covered a small example that showed how to supply data in an attribute and 2 uniforms.
-It's common to have multiple attributes and many uniforms. Near the top of this article
-we also mentioned *varyings* and *textures*. Those will show up in subsequent lessons.
+今回のサンプルで1つの属性と2つのユニフォームでデータを提供した。普通の場合は複数の属性と多くのユニフォームを使う。この記事の上の方に*ヴァリイング*と*テクスチャー*を言及した。それはこれからに記事で現れる。
 
-Before we move on I want to mention that for *most* applications updating
-the data in a buffer like we did in `setRectangle` is not common. I used that
-example because I thought it was easiest to explain since it shows pixel coordinates
-as input and demonstrates doing a small amount of math in GLSL. It's not wrong, there
-are plenty of cases where it's the right thing to do, but you should [keep reading to find out
-the more common way to position, orient and scale things in WebGL](webgl-2d-translation.html).
+次に行く前に言った方がいい点はこのサンプルの`setRectangle`のようにバッファーのデータを更新することは普通ではない。、GLSLでちょっとだけ数学を使うことと、データはピクセル座標で提供することで、簡単に説明出来ると思った。それは駄目の方法でわない、あるケースでそのようなことは正しいが、[日常な方法で位置、方位、サイズを計算することをこれかまた読んで下さい](webgl-2d-translation.html)。
 
-If you're new to web development or even if you're not please check out [Setup and Installation](webgl-setup-and-installation)
-for some tips on how to do WebGL development.
+ウェブページの制作経験があまりなければ（あっても）[インストールをセット・アップの記事](webgl-setup-and-installation)をチェックして、WebGLの開発秘訣を参照して下さい。
 
-If you're 100% new to WebGL and have no idea what GLSL is or shaders or what the GPU does
-then checkout [the basics of how WebGL really works](webgl-how-it-works.html).
+WebGLを完全知識がなくて、GLSLとかシェーダーとか、GPUが何をするものなどか知らなければ[WebGLの基本適な動き方](webgl-how-it-works.html)をチェックしてください。
 
-You should also, at least briefly read about [the boilerplate code used here](webgl-boilerplate.html)
-that is used in most of the examples. You should also at least skim
-[how to draw mulitple things](webgl-drawing-multiple-things.html) to give you some idea
-of how more typical WebGL apps are structured because unfortunately nearly all the examples
-only draw one thing and so do not show that structure.
+サンプルが使っている[ボイラプレート・コード・ライブラリについて]](webgl-boilerplate.html)をざっと読んだ方がいい。このサイトに載せてあるサンプルはほんとん一つの形状しか描画してないから、普段のWebGLアプリの構造を分かる為に[複数ものを描画する方法の記事](webgl-drawing-multiple-things.html)も流し読んだ方がいい。
 
-Otherwise from here you can go in 2 directions. If you are interested in image procesing
-I'll show you [how to do some 2D image processing](webgl-image-processing.html).
-If you are interested in learning about translation,
-rotation and scale and eventually 3D then [start here](webgl-2d-translation.html).
+Otherwise,ここから2つの方向がある。画像処理に興味があれば[二次元画像処理し方](webgl-image-processing.html)を教えてあげる。移動、回転、拡大／縮小、そして3次元のことに興味があれば[ここに始める](webgl-2d-translation.html)。
 
 <div class="webgl_bottombar">
-<h3>What does type="notjs" mean?</h3>
+<h3>type=”notjs”はどいう意味？</h3>
 <p>
-<code>&lt;script&gt;</code> tags default to having JavaScript in them.
-You can put no type or you can put <code>type="javascript"</code> or
-<code>type="text/javascript"</code> and the browser will interpret the
-contents as JavaScript. If you put anything for else for <code>type</code> the browser ignores the
-contents of the script tag. In other words <code>type="notjs"</code>
-or <code>type="foobar"</code> have no meaning as far as the browser
-is concerned.</p>
-<p>This makes the shaders easy to edit.
-Other alterntives include string concatenations like</p>
+<code>&lt;script&gt;</code>タグの内容は普段JavaScriptである。<code>type</code>は無しとか、<code>type=”javascript”</code>とか、<code>type=”text/javascript”<code>にしたら、ブラウザがタグ内容をJavaScriptとして解析する。それ以外にしたらブラウザがタグの内容を無視する。つまり<code>type=”notjs”</code>とか、<code>type=”foobar”</code>などはブラウザに意味がない。だからシェーダーのコードscriptタグに入れて簡単編集出来るようになる。
+</p>
+<p>
+他の方法はストリングを連結するとか
+</p>
 <pre class="prettyprint">
   var shaderSource =
     "void main() {\n" +
     "  gl_FragColor = vec4(1,0,0,1);\n" +
     "}";
 </pre>
-<p>or we'd could load shaders with ajax requests but that is slow and asynchronous.</p>
-<p>A more modern alternative would be to use multiline template literals.</p>
+<p>
+それともAJAXでダウンロードするとか、でもそれは遅くて非同期になる。
+</p>
+<p>
+最近新たな方法は複数行のテンプレートを使うごと
+</p>
 <pre class="prettyprint">
   var shaderSource = `
     void main() {
@@ -615,9 +581,7 @@ Other alterntives include string concatenations like</p>
     }
   `;
 </pre>
-<p>Multiline template literals work in all browsers that support WebGL.
-Unfortunately they don't work in really old browsers so if you care
-about supporting a fallback for those browsers you might not want to
-use mutliline template literals or you might want to use <a href="https://babeljs.io/">a transpiler</a>.
+<p>
+複数行のテンプレートはWebGLを対応しているブラウザの全てオッケーである。古いブラウザが対応してないのでそれに応援したければ複数行テンプレートを利用しないことか、それとも<a href="https://babeljs.io/">トランズパイラー</a>を使うことにしたらいい。
 </p>
 </div>
