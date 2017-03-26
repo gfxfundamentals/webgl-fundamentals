@@ -4,13 +4,12 @@ window.langDB = {
       "en": true,
       "ru": true
     },
-    "webgl-anti-patterns.html": {
+    "webgl-less-code-more-fun.html": {
       "en": true,
       "ru": true
     },
-    "webgl-2d-matrices.html": {
+    "webgl-anti-patterns.html": {
       "en": true,
-      "fr": true,
       "ru": true
     },
     "webgl-2d-matrix-stack.html": {
@@ -111,8 +110,9 @@ window.langDB = {
       "en": true,
       "ru": true
     },
-    "webgl-less-code-more-fun.html": {
+    "webgl-2d-matrices.html": {
       "en": true,
+      "fr": true,
       "ru": true
     },
     "webgl-resizing-the-canvas.html": {
