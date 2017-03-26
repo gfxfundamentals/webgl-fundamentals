@@ -441,7 +441,7 @@ made from 2 triangles, 3 points each.
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 And after we set which program to use we can set the value for the uniform we created.
-Use program is like `gl.bindBuffer` above in that it sets the current program. After
+`gl.useProgram` is like `gl.bindBuffer` above in that it sets the current program. After
 that all the `gl.uniformXXX` functions set uniforms on the current program.
 
     gl.useProgram(program);
