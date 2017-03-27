@@ -6,7 +6,10 @@
     height: 100vh !important;
     z-index: 100;
 }
-
+.lesson-main>blockquote {
+    background-color: #DEF;
+    padding: 1em;
+}
 .lesson-title {
     margin-top: 3em;
     margin-bottom: 2em;
@@ -159,20 +162,20 @@ code {
 }
 
 /* --- Prettify --- */
-pre.prettyprint .nocode { background-color: none; color: #000 }
-pre.prettyprint .str { color: #080 } /* string          */
-pre.prettyprint .kwd { color: #008 } /* keyword         */
-pre.prettyprint .com { color: #800 } /* comment         */
-pre.prettyprint .typ { color: #606 } /* type            */
-pre.prettyprint .lit { color: #066 } /* literal         */
-pre.prettyprint .pun { color: #660 } /* punctuation     */
-pre.prettyprint .pln { color: #000 } /* plaintext       */
-pre.prettyprint .tag { color: #008 } /* html/xml tag    */
-pre.prettyprint .atn { color: #606 } /* attribute name  */
-pre.prettyprint .atv { color: #080 } /* attribute value */
-pre.prettyprint .dec { color: #606 } /* decimal         */
-pre.prettyprint .var { color: #606 } /* variable name   */
-pre.prettyprint .fun { color: #F00 } /* function name   */
+pre.prettyprint .nocode { background-color: none; color: #FFF }
+pre.prettyprint .str { color: #b9ca4a } /* string          */
+pre.prettyprint .kwd { color: #c397d8 } /* keyword         */
+pre.prettyprint .com { color: #f3efb2 } /* comment         */
+pre.prettyprint .typ { color: #7aa6da } /* type            */
+pre.prettyprint .lit { color: #45e7a6 } /* literal         */
+pre.prettyprint .pun { color: #7ecce0 } /* punctuation     */
+pre.prettyprint .pln { color: #eaeaea } /* plaintext       */
+pre.prettyprint .tag { color: #d54e53 } /* html/xml tag    */
+pre.prettyprint .atn { color: #e78c45 } /* attribute name  */
+pre.prettyprint .atv { color: #70c0b1 } /* attribute value */
+pre.prettyprint .dec { color: #e78c45 } /* decimal         */
+pre.prettyprint .var { color: #d54e53 } /* variable name   */
+pre.prettyprint .fun { color: #7aa6da } /* function name   */
 
 pre.prettyprint ul.modifiedlines {
     list-style-type: none;
@@ -180,26 +183,26 @@ pre.prettyprint ul.modifiedlines {
 }
 pre.prettyprint ul.modifiedlines li.linemodified {
     list-style-type: none;
-    background-color: #A1EAF6;
+    background-color: #324840;
 }
 pre.prettyprint ul.modifiedlines li.linedeleted {
     list-style-type: none;
-    background-color: #F0B9B9;
+    background-color: #4c1414;
     text-decoration: line-through;
 }
 
 pre.prettyprint ul.modifiedlines li.lineadded {
     list-style-type: none;
-    background-color: #A2EDC9;
+    background-color: #3f4463;
 }
 
 
 pre.prettyprint, code.prettyprint {
-    color: #000;
-    background: #eee;
+    color: #FFF;
+    background: #222;
     border: 1px solid #000;
-    box-shadow: 3px 3px 10px #ccc;
-    font-size: 8pt;
+    box-shadow: 10px 10px 0px #ccc;
+    font-size: 9pt;
     font-family: "Lucida Console", Monaco, monospace;
     width: 95%;
     margin: auto;
@@ -208,9 +211,10 @@ pre.prettyprint, code.prettyprint {
     /* this was disabled until 2016-08-26 but I don't know why */
     overflow: auto;             /* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
     white-space: pre;        /* was nowrap, prevent line wrapping */
-    line-height: 10pt;
+    line-height: 1.5em;
 }
-@media print{
+
+@media print {
     pre.prettyprint .str, code.prettyprint .str{color:#060}
     pre.prettyprint .kwd, code.prettyprint .kwd{color:#006;font-weight:bold}
     pre.prettyprint .com, code.prettyprint .com{color:#600;font-style:italic}
@@ -221,19 +225,24 @@ pre.prettyprint, code.prettyprint {
     pre.prettyprint .tag, code.prettyprint .tag{color:#006;font-weight:bold}
     pre.prettyprint .atn, code.prettyprint .atn{color:#404}
     pre.prettyprint .atv, code.prettyprint .atv{color:#060}
-pre.prettyprint, code.prettyprint {
-    color: #000;
-    background: #EEE;
-    font-size: 8pt;
-    font-family: "Lucida Console", Monaco, monospace;
-    width: 95%;
-    margin: auto;
-    padding: 6px 3px 13px 3px;  /* padding-bottom solves hor. scrollbar hiding single line of code in IE6 but causes vert. scrollbar... */
-    text-align: left;           /* override justify on body */
-    overflow: visible;
-    white-space: pre;        /* was nowrap, prevent line wrapping */
-    line-height: 10pt;
-}
+    pre.prettyprint, code.prettyprint {
+        color: #000;
+        background: #EEE;
+        font-size: 8pt;
+        font-family: "Lucida Console", Monaco, monospace;
+        width: 95%;
+        margin: auto;
+        padding: 1em;
+        text-align: left;           /* override justify on body */
+        overflow: visible;
+        white-space: pre;        /* was nowrap, prevent line wrapping */
+        line-height: 1.5;
+    }
+    .lesson-comment-sep,
+    .lesson-sidebar,
+    .lesson-comments {
+        display: none;
+    }
 }
 
 @media (max-width: 720px) {
