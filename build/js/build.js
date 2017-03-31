@@ -324,7 +324,7 @@ var Builder = function(outBaseDir, options) {
       const data = Object.assign({}, loadMD(path.join(g_origPath, name)));
       data.content = g_langInfo.missing;
       const extra = {
-        origLink: path.join(g_origPath, baseName + ".html").replace(/\\/g, '/'),
+        origLink: '/' + path.join(g_origPath, baseName + ".html").replace(/\\/g, '/'),
         toc: options.toc,
       };
       console.log("  generating missing:", outFileName);
