@@ -132,7 +132,7 @@ Handlebars.registerHelper('image', function(options) {
   return templateManager.apply("build/templates/image.template", options.hash);
 });
 
-var Builder = function(outBaseDir) {
+var Builder = function(outBaseDir, options) {
 
   var g_articlesByLang = {};
   var g_articles = [];
@@ -140,6 +140,10 @@ var Builder = function(outBaseDir) {
   var g_langs;
   var g_langDB = {};
   var g_outBaseDir = outBaseDir;
+  var g_origPath = options.origPath;
+
+  // This are the english articles.
+  var g_origArticles = glob.sync(path.join(g_origPath, "*.md")).map(a => path.basename(a)).filter(a => a !== 'index.md');
 
   var extractHeader = (function() {
     var headerRE = /([A-Z0-9_-]+): (.*?)$/i;
@@ -163,9 +167,13 @@ var Builder = function(outBaseDir) {
     };
   }());
 
+  var parseMD = function(content) {
+    return extractHeader(content);
+  };
+
   var loadMD = function(contentFileName) {
     var content = cache.readFileSync(contentFileName, "utf-8");
-    return extractHeader(content);
+    return parseMD(content);
   };
 
   function extractHandlebars(content) {
@@ -207,10 +215,7 @@ var Builder = function(outBaseDir) {
     return content;
   }
 
-  var applyTemplateToFile = function(templatePath, contentFileName, outFileName, opt_extra) {
-    console.log("processing: ", contentFileName);
-    opt_extra = opt_extra || {};
-    var data = loadMD(contentFileName);
+  var applyTemplateToContent = function(templatePath, contentFileName, outFileName, opt_extra, data) {
     // Call prep's Content which parses the HTML. This helps us find missing tags
     // should probably call something else.
     //Convert(md_content)
@@ -239,9 +244,17 @@ var Builder = function(outBaseDir) {
         metaData['screenshot'] = "http://webglfundamentals.org/webgl/lessons/screenshots/" + basename + ext;
       }
     });
-
     var output = templateManager.apply(templatePath, metaData);
-    writeFileIfChanged(outFileName, output)
+    writeFileIfChanged(outFileName, output);
+
+    return metaData;
+  };
+
+  var applyTemplateToFile = function(templatePath, contentFileName, outFileName, opt_extra) {
+    console.log("processing: ", contentFileName);
+    opt_extra = opt_extra || {};
+    var data = loadMD(contentFileName);
+    var metaData= applyTemplateToContent(templatePath, contentFileName, outFileName, opt_extra, data);
     g_articles.push(metaData);
   };
 
@@ -300,6 +313,23 @@ var Builder = function(outBaseDir) {
     g_langInfo = hanson.parse(fs.readFileSync(path.join(options.lessons, "langinfo.hanson"), {encoding: "utf8"}));
 
     applyTemplateToFiles(options.template, path.join(options.lessons, "webgl*.md"), options);
+
+    // generate place holders for non-translated files
+    var articlesFilenames = g_articles.map(a => path.basename(a.src_file_name));
+    var missing = g_origArticles.filter(name => articlesFilenames.indexOf(name) < 0);
+    missing.forEach(name => {
+      const ext = path.extname(name);
+      const baseName = name.substr(0, name.length - ext.length);
+      const outFileName = path.join(outBaseDir, options.lessons, baseName + ".html");
+      const data = Object.assign({}, loadMD(path.join(g_origPath, name)));
+      data.content = g_langInfo.missing;
+      const extra = {
+        origLink: path.join(g_origPath, baseName + ".html").replace(/\\/g, '/'),
+        toc: options.toc,
+      };
+      console.log("  generating missing:", outFileName);
+      applyTemplateToContent("build/templates/missing.template", path.join(options.lessons, "langinfo.hanson"), outFileName, extra, data);
+    });
 
     function utcMomentFromGitLog(result) {
       const dateStr = result.stdout.split("\n")[0].trim();
@@ -439,7 +469,9 @@ var Builder = function(outBaseDir) {
 
 };
 
-var b = new Builder("out");
+var b = new Builder("out", {
+  origPath: "webgl/lessons",  // english articles
+});
 
 var readdirs = function(dirpath) {
   var dirsOnly = function(filename) {
