@@ -388,7 +388,7 @@ Reference Card](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf
 If you like really dry and verbose stuff you can try
 [the GLSL spec](https://www.khronos.org/files/opengles_shading_language.pdf).
 
-## Putting it all togehter
+## Putting it all together
 
 That's the point of this entire series of posts. WebGL is all about creating various shaders, supplying
 the data to those shaders and then calling `gl.drawArrays` or `gl.drawElements` to have WebGL process
@@ -396,7 +396,7 @@ the vertices by calling the current vertex shader for each vertex and then rende
 the current fragment shader for each pixel.
 
 Actually creating the shaders requires several lines of code. Since those lines are the same in
-most WebGL programs and since once written you can pretty much ignore them [how to compile GLSL shaders
+most WebGL programs and since once written you can pretty much ignore them. [How to compile GLSL shaders
 and link them into a shader program is covered here](webgl-boilerplate.html).
 
 If you're just starting from here you can go in 2 directions. If you are interested in image procesing
