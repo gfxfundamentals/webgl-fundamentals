@@ -296,7 +296,7 @@ Buffers are the way of getting vertex and other per vertex data onto the
 GPU.  `gl.createBuffer` creates a buffer.
 `gl.bindBuffer` sets that buffer as the buffer to be worked on.
 `gl.bufferData` copies data into the buffer. This is usually done at
-initialziation time.
+initialization time.
 
 Once the data is in the buffer we need to tell WebGL how to get data out
 of it and provide it to the vertex shader's attributes.
