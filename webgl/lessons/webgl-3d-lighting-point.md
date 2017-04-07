@@ -140,7 +140,7 @@ And here it is
 
 {{{example url="../webgl-3d-lighting-point.html" }}}
 
-Now that we have a point we can add something called specualar
+Now that we have a point we can add something called specular
 highlighting.
 
 If you look at on object in the real world, if it's remotely shiny then if
