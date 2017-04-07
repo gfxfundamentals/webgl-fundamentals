@@ -544,7 +544,7 @@ And now we get
 
 which is 3D!
 
-One minor thing. In most 3d math libraries this is no `projection` function to
+One minor thing. In most 3d math libraries there is no `projection` function to
 do our conversions from clip space to pixel space. Rather there's usually a function
 called `ortho` or `orthographic` that looks like this
 
