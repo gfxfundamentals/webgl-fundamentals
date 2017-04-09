@@ -4,15 +4,42 @@ window.langDB = {
       "en": true,
       "ru": true
     },
-    "webgl-setup-and-installation.html": {
+    "webgl-anti-patterns.html": {
       "en": true,
+      "ru": true
+    },
+    "webgl-2d-matrices.html": {
+      "en": true,
+      "fr": true,
       "ru": true
     },
     "webgl-2d-matrix-stack.html": {
       "en": true,
       "ru": true
     },
-    "webgl-3d-lighting-point.html": {
+    "webgl-2d-rotation.html": {
+      "en": true,
+      "fr": true,
+      "pl": true,
+      "ru": true
+    },
+    "webgl-2d-scale.html": {
+      "en": true,
+      "fr": true,
+      "ru": true
+    },
+    "webgl-2d-translation.html": {
+      "en": true,
+      "fr": true,
+      "pl": true,
+      "ru": true
+    },
+    "webgl-2d-vs-3d-library.html": {
+      "en": true,
+      "pl": true,
+      "ru": true
+    },
+    "webgl-3d-camera.html": {
       "en": true,
       "fr": true,
       "ru": true
@@ -22,75 +49,7 @@ window.langDB = {
       "fr": true,
       "ru": true
     },
-    "webgl-2d-drawimage.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-shaders-and-glsl.html": {
-      "en": true,
-      "fr": true,
-      "ru": true
-    },
-    "webgl-text-glyphs.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-text-texture.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-text-canvas2d.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-text-html.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-drawing-multiple-things.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-scene-graph.html": {
-      "en": true,
-      "fr": true,
-      "ru": true
-    },
-    "webgl-resizing-the-canvas.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-less-code-more-fun.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-anti-patterns.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-3d-textures.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-animation.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-3d-camera.html": {
-      "en": true,
-      "fr": true,
-      "ru": true
-    },
-    "webgl-2-textures.html": {
-      "en": true,
-      "ru": true
-    },
-    "webgl-2d-vs-3d-library.html": {
-      "en": true,
-      "pl": true,
-      "ru": true
-    },
-    "webgl-3d-perspective.html": {
+    "webgl-3d-lighting-point.html": {
       "en": true,
       "fr": true,
       "ru": true
@@ -100,11 +59,36 @@ window.langDB = {
       "fr": true,
       "ru": true
     },
-    "webgl-image-processing.html": {
+    "webgl-3d-perspective.html": {
+      "en": true,
+      "fr": true,
+      "ru": true
+    },
+    "webgl-3d-textures.html": {
+      "en": true,
+      "ru": true
+    },
+    "webgl-and-alpha.html": {
+      "en": true,
+      "ru": true
+    },
+    "webgl-animation.html": {
+      "en": true,
+      "ru": true
+    },
+    "webgl-2d-drawimage.html": {
       "en": true,
       "ru": true
     },
     "webgl-boilerplate.html": {
+      "en": true,
+      "ru": true
+    },
+    "webgl-2-textures.html": {
+      "en": true,
+      "ru": true
+    },
+    "webgl-drawing-multiple-things.html": {
       "en": true,
       "ru": true
     },
@@ -124,29 +108,45 @@ window.langDB = {
       "en": true,
       "ru": true
     },
-    "webgl-2d-translation.html": {
+    "webgl-image-processing.html": {
       "en": true,
-      "fr": true,
-      "pl": true,
       "ru": true
     },
-    "webgl-2d-scale.html": {
+    "webgl-less-code-more-fun.html": {
       "en": true,
-      "fr": true,
       "ru": true
     },
-    "webgl-2d-rotation.html": {
+    "webgl-resizing-the-canvas.html": {
       "en": true,
-      "fr": true,
-      "pl": true,
       "ru": true
     },
-    "webgl-2d-matrices.html": {
+    "webgl-scene-graph.html": {
       "en": true,
       "fr": true,
       "ru": true
     },
-    "webgl-and-alpha.html": {
+    "webgl-setup-and-installation.html": {
+      "en": true,
+      "ru": true
+    },
+    "webgl-shaders-and-glsl.html": {
+      "en": true,
+      "fr": true,
+      "ru": true
+    },
+    "webgl-text-canvas2d.html": {
+      "en": true,
+      "ru": true
+    },
+    "webgl-text-glyphs.html": {
+      "en": true,
+      "ru": true
+    },
+    "webgl-text-html.html": {
+      "en": true,
+      "ru": true
+    },
+    "webgl-text-texture.html": {
       "en": true,
       "ru": true
     }
