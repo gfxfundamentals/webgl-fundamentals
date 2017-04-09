@@ -288,9 +288,9 @@ newY = y * sy;
 
         for (var i = 0; i < 5; ++i) {
           // Умножаем матрицы
-          matrix = m3.multiply(scaleMatrix, matrix);
-          matrix = m3.multiply(rotationMatrix, matrix);
-          matrix = m3.multiply(translationMatrix, matrix);
+          matrix = m3.multiply(matrix, translationMatrix);
+          matrix = m3.multiply(matrix, rotationMatrix);
+          matrix = m3.multiply(matrix, scaleMatrix);
 
           // Передаём матрицу в шейдер
           gl.uniformMatrix3fv(matrixLocation, false, matrix);

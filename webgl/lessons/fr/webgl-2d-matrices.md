@@ -247,9 +247,9 @@ Pouvoir multiplier par des matrices comme ça est particulièrement important da
 
         for (var i = 0; i < 5; ++i) {
           // Multiplie les matrices
-          matrice = multiplierMatrices(matrice, matriceEchelle);
-          matrice = multiplierMatrices(matrice, matriceRotation);
           matrice = multiplierMatrices(matrice, matriceDeplacement);
+          matrice = multiplierMatrices(matrice, matriceRotation);
+          matrice = multiplierMatrices(matrice, matriceEchelle);
 
           // Transmet la valeur au programme
           gl.uniformMatrix3fv(emplacementMatrice, false, matrice);

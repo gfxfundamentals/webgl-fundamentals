@@ -289,9 +289,9 @@ matrix from the previous 'F'.
 
         for (var i = 0; i < 5; ++i) {
           // Multiply the matrices.
-          matrix = m3.multiply(scaleMatrix, matrix);
-          matrix = m3.multiply(rotationMatrix, matrix);
-          matrix = m3.multiply(translationMatrix, matrix);
+          matrix = m3.multiply(matrix, translationMatrix);
+          matrix = m3.multiply(matrix, rotationMatrix);
+          matrix = m3.multiply(matrix, scaleMatrix);
 
           // Set the matrix.
           gl.uniformMatrix3fv(matrixLocation, false, matrix);
