@@ -10,6 +10,19 @@ var log = function(msg) {
   }
 };
 
+function getQueryParams() {
+  var params = {};
+  if (window.location.search) {
+    window.location.search.substring(1).split("&").forEach(function(pair) {
+      var keyValue = pair.split("=").map(function (kv) {
+        return decodeURIComponent(kv);
+      });
+      params[keyValue[0]] = keyValue[1];
+    });
+  }
+  return params;
+}
+
 $(document).ready(function($){
   var g_imgs = { };
   var linkImgs = function(bigHref) {
@@ -46,6 +59,11 @@ $(document).ready(function($){
        return $('<pre class="prettyprint showlinemods">' + this.innerHTML + '</pre>')
      });
   prettyPrint();
+
+  var params = getQueryParams();
+  if (params.doubleSpace || params.doublespace) {
+    document.body.className = document.body.className + " doubleSpace";
+  }
 });
 }(jQuery));
 
