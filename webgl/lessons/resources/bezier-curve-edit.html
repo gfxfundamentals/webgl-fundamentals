@@ -1,0 +1,259 @@
+<html>
+<head>
+<meta charset="utf8">
+<title>two bezier curves edit</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<h1 class="description">Two Bezier Curve Edit</h1>
+<canvas></canvas>
+<div id="uiContainer">
+  <div id="ui">
+    <div>
+      <label for="lock">lock P3 & P5</label><input type="checkbox" id="lock" checked />
+    </div>
+  </div>
+</div>
+</body>
+<!-- this is included only for iframe and requestAnimationFrame support -->
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="../../resources/webgl-lessons-ui.js"></script>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
+<script>
+"use strict";
+
+function main() {
+  const opt = getQueryParams();
+  const ctx = document.querySelector("canvas").getContext("2d");
+
+  const maxDepth = opt.maxDepth ? parseInt(opt.maxDepth) : 4;
+  const dotRadius = 5;
+  const selectRadius = dotRadius * 2;
+  const selectRadiusSq = selectRadius * selectRadius;
+  let locked = true;
+
+  const colors = [
+    "#00F",
+    "#888",
+    "#000",
+    "#00F",
+    "#000",
+    "#888",
+    "#00F",
+  ];
+
+  let points = [
+    [-130,  90],
+    [ -55, -90],
+    [ -25, -60],
+    [   0,   0],
+    [  35,  60],
+    [  65,  90],
+    [ 130, -90],
+  ];
+
+  function render() {
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
+    ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+    ctx.strokeStyle = "#AAA";
+    ctx.beginPath();
+    points.forEach((p, ndx) => {
+      ctx[ndx ? 'lineTo' : 'moveTo'](...p);
+    });
+    ctx.stroke();
+
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#FAA";
+    ctx.beginPath();
+    ctx.moveTo(...points[0]);
+    ctx.bezierCurveTo(...points[1], ...points[2], ...points[3]);
+    ctx.stroke();
+    ctx.strokeStyle = "#FA4";
+    ctx.beginPath();
+    ctx.moveTo(...points[3]);
+    ctx.bezierCurveTo(...points[4], ...points[5], ...points[6]);
+    ctx.stroke();
+    ctx.lineWidth = 1;
+
+    points.forEach((p, ndx) => {
+      ctx.fillStyle = colors[ndx];
+      drawDot(ctx, ...p, dotRadius, true);
+      ctx.fillText('P' + (ndx + 1), p[0] - 15, p[1] - 7);
+    });
+
+    ctx.restore();
+  }
+  render();
+
+  let moveNdx = -1;
+  let moveLastPos;
+  ctx.canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    onStart(e.touches[0]);
+  });
+  ctx.canvas.addEventListener('touchmove', e => {
+    onMove(e.touches[0]);
+  });
+  ctx.canvas.addEventListener('touchend', e => {
+    onEnd(e.touches[0]);
+  });
+  ctx.canvas.addEventListener('mousedown', onStart);
+  ctx.canvas.addEventListener('mouseup', onEnd);
+  ctx.canvas.addEventListener('mousemove', onMove);
+
+  function onStart(e) {
+    moveLastPos = getRelativeMousePosition(ctx.canvas, e);
+    const ndx = getClosestPoint(points, moveLastPos);
+    const distSq = v2.distanceSq(points[ndx], moveLastPos);
+    moveNdx = (distSq <= selectRadiusSq) ? ndx : -1;
+  }
+
+  function onEnd(e) {
+    moveNdx = -1;
+  }
+
+  function onMove(e) {
+    if (moveNdx >= 0) {
+      const pos = getRelativeMousePosition(ctx.canvas, e);
+      const delta = v2.sub(pos, moveLastPos);
+      points[moveNdx] = v2.add(points[moveNdx], delta);
+      moveLastPos = pos;
+
+      if ((moveNdx === 2 || moveNdx === 4) && locked) {
+        const otherNdx = moveNdx == 2 ? 4 : 2;
+        points[otherNdx] = v2.add(points[3], v2.sub(points[3], points[moveNdx]));
+      } else if (moveNdx === 3) {
+        points[2] = v2.add(points[2], delta);
+        points[4] = v2.add(points[4], delta);
+      }
+
+      render();
+    }
+  }
+
+  document.querySelector("#lock").addEventListener('change', (e) => {
+    locked = e.target.checked;
+  });
+
+  window.addEventListener('resize', render);
+
+  function drawDot(ctx, x, y, radius, outline) {
+    ctx.globalAlpha = outline ? 0.2 : 0.5;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    if (outline) {
+      ctx.strokeStyle = ctx.fillStyle;
+      ctx.stroke();
+    }
+  }
+
+  function getClosestPoint(points, pos) {
+    let ndx = 0;
+    let closestDistSq = v2.distanceSq(points[0], pos);
+    for (let i = 1; i < points.length; ++i) {
+      const distSq = v2.distanceSq(points[i], pos);
+      if (distSq < closestDistSq) {
+        closestDistSq = distSq;
+        ndx = i;
+      }
+    }
+    return ndx;
+  }
+
+  function clamp(v, min, max) {
+    return Math.max(Math.min(v, max), min);
+  }
+
+  function getQueryParams() {
+    var params = {};
+    if (window.location.search) {
+      window.location.search.substring(1).split("&").forEach(function(pair) {
+        var keyValue = pair.split("=").map(function (kv) {
+          return decodeURIComponent(kv);
+        });
+        params[keyValue[0]] = keyValue[1];
+      });
+    }
+    return params;
+  }
+
+  function getRelativeMousePosition(canvas, e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / (rect.right  - rect.left) * canvas.width;
+    const y = (e.clientY - rect.top ) / (rect.bottom - rect.top ) * canvas.height;
+    return [
+      (x - canvas.width  / 2) / window.devicePixelRatio,
+      (y - canvas.height / 2) / window.devicePixelRatio,
+    ];
+  }
+
+}
+
+const v2 = (function() {
+  // adds 1 or more v2s
+  function add(a, ...args) {
+    const n = a.slice();
+    [...args].forEach(p => {
+      n[0] += p[0];
+      n[1] += p[1];
+    });
+    return n;
+  }
+
+  function sub(a, ...args) {
+    const n = a.slice();
+    [...args].forEach(p => {
+      n[0] -= p[0];
+      n[1] -= p[1];
+    });
+    return n;
+  }
+
+  function mult(a, s) {
+    if (Array.isArray(s)) {
+      let t = s;
+      s = a;
+      a = t;
+    }
+    return [a[0] * s, a[1] * s];
+  }
+
+  function lerp(a, b, t) {
+    return [
+      a[0] + (b[0] - a[0]) * t,
+      a[1] + (b[1] - a[1]) * t,
+    ];
+  }
+
+  function distanceSq(a, b) {
+    const dx = a[0] - b[0];
+    const dy = a[1] - b[1];
+    return dx * dx + dy * dy;
+  }
+
+  return {
+    add: add,
+    sub: sub,
+    mult: mult,
+    lerp: lerp,
+    distanceSq: distanceSq,
+  };
+}());
+
+main();
+</script>
+</html>
