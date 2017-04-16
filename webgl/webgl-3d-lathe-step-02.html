@@ -89,6 +89,7 @@ function main() {
     const arrays = lathePoints(points, data.startAngle, data.endAngle, data.divisions, data.capStart, data.capEnd);
     const extents = getExtents(arrays.position);
     if (!bufferInfo) {
+      // calls gl.createBuffer, gl.bindBuffer, and gl.bufferData for each array
       bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
     } else {
       gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.attribs.a_position.buffer);
@@ -106,6 +107,7 @@ function main() {
   }
 
   // setup GLSL program
+  // compiles shaders, links program and looks up locations
   const programInfo = webglUtils.createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
 
   const texInfo = loadImageAndCreateTextureInfo("resources/uv-grid.png", render);
@@ -157,14 +159,17 @@ function main() {
     gl.useProgram(programInfo.program);
 
     // Setup all the needed attributes.
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer for each attribute
     webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
 
     // Set the uniforms
+    // calls gl.uniformXXX, gl.activeTexture, gl.bindTexture
     webglUtils.setUniforms(programInfo, {
       u_matrix: m4.multiply(viewProjectionMatrix, worldMatrix),
       u_texture: texInfo.texture,
     });
 
+    // calls gl.drawArrays or gl.drawElements.
     webglUtils.drawBufferInfo(gl, bufferInfo, data.triangles ? gl.TRIANGLE : gl.LINES);
   }
 

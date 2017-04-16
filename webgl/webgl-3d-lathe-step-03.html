@@ -181,6 +181,7 @@ function main() {
     const arrays = generateNormals(tempArrays, data.maxAngle);
     const extents = getExtents(arrays.position);
     if (!bufferInfo) {
+      // calls gl.createBuffer, gl.bindBuffer, and gl.bufferData for each array
       bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
     } else {
       gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.attribs.a_position.buffer);
@@ -204,6 +205,7 @@ function main() {
   const attributes = [ 'a_position', 'a_texcoord', 'a_normal' ];
   // setup GLSL program
   const programInfos = [
+    // compiles shaders, links program and looks up locations
     webglUtils.createProgramInfo(gl, ["simple-vertex-shader", "normal-shader"], attributes),
     webglUtils.createProgramInfo(gl, ["specular-vertex-shader", "specular-shader"], attributes),
     webglUtils.createProgramInfo(gl, ["simple-vertex-shader", "texture-shader"], attributes),
@@ -259,11 +261,13 @@ function main() {
     gl.useProgram(programInfo.program);
 
     // Setup all the needed attributes.
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer for each attribute
     webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
 
     const worldViewProjection = m4.multiply(viewProjectionMatrix, worldMatrix);
 
     // Set the uniforms
+    // calls gl.uniformXXX, gl.activeTexture, gl.bindTexture
     webglUtils.setUniforms(programInfo, {
       u_matrix: worldViewProjection,
       u_worldViewProjection: worldViewProjection,
@@ -276,6 +280,7 @@ function main() {
       u_texture: texInfo.texture,
     });
 
+    // calls gl.drawArrays or gl.drawElements.
     webglUtils.drawBufferInfo(gl, bufferInfo, data.triangles ? gl.TRIANGLE : gl.LINES);
   }
 
