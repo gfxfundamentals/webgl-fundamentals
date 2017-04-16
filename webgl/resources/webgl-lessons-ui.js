@@ -43,33 +43,43 @@
 }(this, function() {
 
   function setupSlider(selector, options) {
+    var parent = document.querySelector(selector);
+    if (!parent) {
+      return; // like jquery don't fail on a bad selector
+    }
+    if (!options.name) {
+      options.name = selector.substring(1);
+    }
+    return createSlider(parent, options);
+  }
+
+  function createSlider(parent, options) {
     var precision = options.precision || 0;
     var min = options.min || 0;
     var step = options.step || 1;
     var value = options.value || 0;
     var max = options.max || 1;
     var fn = options.slide;
+    var name = options.name;
+    var uiPrecision = options.uiPrecision === undefined ? precision : options.uiPrecision;
+    var uiMult = options.uiMult || 1;
 
     min /= step;
     max /= step;
     value /= step;
 
-    var parent = document.querySelector(selector);
-    if (!parent) {
-      return; // like jquery don't fail on a bad selector
-    }
     parent.innerHTML = `
-      <div class="gman-slider-outer">
-        <div class="gman-slider-label">${selector.substring(1)}</div>
-        <div class="gman-slider-value"></div>
-        <input class="gman-slider-slider" type="range" min="${min}" max="${max}" value="${value}" />
+      <div class="gman-widget-outer">
+        <div class="gman-widget-label">${name}</div>
+        <div class="gman-widget-value"></div>
+        <input class="gman-widget-slider" type="range" min="${min}" max="${max}" value="${value}" />
       </div>
     `;
-    var valueElem = parent.querySelector(".gman-slider-value");
-    var sliderElem = parent.querySelector(".gman-slider-slider");
+    var valueElem = parent.querySelector(".gman-widget-value");
+    var sliderElem = parent.querySelector(".gman-widget-slider");
 
     function updateValue(value) {
-      valueElem.textContent = (value * step).toFixed(precision);
+      valueElem.textContent = (value * step * uiMult).toFixed(uiPrecision);
     }
 
     updateValue(value);
@@ -82,10 +92,154 @@
 
     sliderElem.addEventListener('input', handleChange);
     sliderElem.addEventListener('change', handleChange);
+
+    return {
+      elem: parent,
+      updateValue: (v) => {
+        v /= step;
+        sliderElem.value = v;
+        updateValue(v);
+      },
+    };
+  }
+
+  function makeSlider(options) {
+    const div = document.createElement("div");
+    return createSlider(div, options);
+  }
+
+  var widgetId = 0;
+  function getWidgetId() {
+    return "__widget_" + widgetId++;
+  }
+
+  function makeCheckbox(options) {
+    const div = document.createElement("div");
+    div.className = "gman-widget-outer";
+    const label = document.createElement("label");
+    const id = getWidgetId();
+    label.setAttribute('for', id);
+    label.textContent = options.name;
+    label.className = "gman-widget-label";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = options.value;
+    input.id = id;
+    input.className = "gman-widget-checkbox";
+    div.appendChild(label);
+    div.appendChild(input);
+    input.addEventListener('change', function(e) {
+       options.change(e, {
+         value: e.target.checked,
+       });
+    });
+
+    return {
+      elem: div,
+      updateValue: function(v) {
+        input.checked = !!v;
+      },
+    };
+  }
+
+  function makeOption(options) {
+    const div = document.createElement("div");
+    div.className = "gman-widget-outer";
+    const label = document.createElement("label");
+    const id = getWidgetId();
+    label.setAttribute('for', id);
+    label.textContent = options.name;
+    label.className = "gman-widget-label";
+    const selectElem = document.createElement("select");
+    options.options.forEach((name, ndx) => {
+      const opt = document.createElement("option");
+      opt.textContent = name;
+      opt.value = ndx;
+      opt.selected = ndx === options.value
+      selectElem.appendChild(opt);
+    });
+    selectElem.className = "gman-widget-select";
+    div.appendChild(label);
+    div.appendChild(selectElem);
+    selectElem.addEventListener('change', function(e) {
+       options.change(e, {
+         value: selectElem.selectedIndex,
+       });
+    });
+
+    return {
+      elem: div,
+      updateValue: function(v) {
+        selectedElem.selectedIndex = v;
+      },
+    };
+  }
+
+  function noop() {
+  }
+
+  function genSlider(object, ui) {
+    const changeFn = ui.change || noop;
+    ui.name = ui.name || ui.key;
+    ui.value = object[ui.key];
+    ui.slide = ui.slide || function(event, uiInfo) {
+      object[ui.key] = uiInfo.value;
+      changeFn();
+    };
+    return makeSlider(ui);
+  }
+
+  function genCheckbox(object, ui) {
+    const changeFn = ui.change || noop;
+    ui.value = object[ui.key];
+    ui.name = ui.name || ui.key;
+    ui.change = function(event, uiInfo) {
+      object[ui.key] = uiInfo.value;
+      changeFn();
+    };
+    return makeCheckbox(ui);
+  }
+
+  function genOption(object, ui) {
+    const changeFn = ui.change || noop;
+    ui.value = object[ui.key];
+    ui.name = ui.name || ui.key;
+    ui.change = function(event, uiInfo) {
+      object[ui.key] = uiInfo.value;
+      changeFn();
+    };
+    return makeOption(ui);
+  }
+
+  const uiFuncs = {
+    slider: genSlider,
+    checkbox: genCheckbox,
+    option: genOption,
+  };
+
+  function setupUI(parent, object, uiInfos) {
+    const widgets = {};
+    uiInfos.forEach(function(ui) {
+      const widget = uiFuncs[ui.type](object, ui);
+      parent.appendChild(widget.elem);
+      widgets[ui.key] = widget;
+    });
+    return widgets;
+  }
+
+  function updateUI(widgets, data) {
+    Object.keys(widgets).forEach(key => {
+      const widget = widgets[key];
+      widget.updateValue(data[key]);
+    });
   }
 
   return {
+    setupUI: setupUI,
+    updateUI: updateUI,
     setupSlider: setupSlider,
+    makeSlider: makeSlider,
+    makeCheckbox: makeCheckbox,
   };
 
 }));
