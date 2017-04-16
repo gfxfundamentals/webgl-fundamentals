@@ -781,17 +781,19 @@
     }
 
     // Override the getError function with one that returns our saved results.
-    wrapper.getError = function() {
-      for (var err in glErrorShadow) {
-        if (glErrorShadow.hasOwnProperty(err)) {
-          if (glErrorShadow[err]) {
-            glErrorShadow[err] = false;
-            return err;
+    if (wrapper.getError) {
+      wrapper.getError = function() {
+        for (var err in glErrorShadow) {
+          if (glErrorShadow.hasOwnProperty(err)) {
+            if (glErrorShadow[err]) {
+              glErrorShadow[err] = false;
+              return err;
+            }
           }
         }
-      }
-      return ctx.NO_ERROR;
-    };
+        return ctx.NO_ERROR;
+      };
+    }
 
     if (wrapper.bindBuffer) {
       sharedState.wrappers["webgl"] = { wrapper: wrapper, orig: ctx };
