@@ -268,7 +268,7 @@ point and again from the furthest point to the end point.
 
 `v2.distanceToSegmentSq` is a function that computes the distance squared from a point
 to a line segment. We use the distance squared because it's faster to compute than
-the actual distance. Since we only care which point is furthers the distance squared
+the actual distance. Since we only care which point is furthest the distance squared
 will work just as well as the actual distance.
 
 Here's that in action. Adjust the distance to see more points added or removed.
