@@ -99,7 +99,7 @@ vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 </code></pre><p>And we can compute a vector from the surface to the light which is simular
 to the direction we had before expect this time we&#39;re computing it for
 every position on the surface to a point.</p>
-<pre><code>v_surfaceToLight = u_lightPosition - surfaceWorldPosition;
+<pre><code>v_surfaceToLight = normalize(u_lightPosition - surfaceWorldPosition);
 </code></pre><p>Here&#39;s all that in context</p>
 <pre><code>attribute vec4 a_position;
 attribute vec3 a_normal;
@@ -126,7 +126,7 @@ void main() {
 +
 +  // compute the vector of the surface to the light
 +  // and pass it to the fragment shader
-+  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
++  v_surfaceToLight = normalize(u_lightWorldPosition - surfaceWorldPosition);
 }
 </code></pre><p>Now in the fragment shader we need to normalize the surface to light
 vector since it&#39;s a not a unit vector.  Note that we could normalize in
@@ -247,11 +247,11 @@ void main() {
 
   // compute the vector of the surface to the light
   // and pass it to the fragment shader
-  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+  v_surfaceToLight = normalize(u_lightWorldPosition - surfaceWorldPosition);
 
 +  // compute the vector of the surface to the view/camera
 +  // and pass it to the fragment shader
-+  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
++  v_surfaceToView = normalize(u_viewWorldPosition - surfaceWorldPosition);
 }
 </code></pre><p>Next in the fragment shader we need to compute the <code>halfVector</code> between
 the surface to view and surface to light vectors.  Then we can take the

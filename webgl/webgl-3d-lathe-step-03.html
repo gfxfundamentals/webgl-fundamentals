@@ -1,6 +1,7 @@
 <html>
 <head>
 <meta charset="utf8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>WebGL 3D Lathe Compute Normals</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 </head>
@@ -58,11 +59,11 @@ void main() {
 
   // compute the vector of the surface to the light
   // and pass it to the fragment shader
-  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+  v_surfaceToLight = normalize(u_lightWorldPosition - surfaceWorldPosition);
 
   // compute the vector of the surface to the view/camera
   // and pass it to the fragment shader
-  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
+  v_surfaceToView = normalize(u_viewWorldPosition - surfaceWorldPosition);
 }
 </script>
 <!-- fragment shader -->
@@ -108,7 +109,6 @@ void main() {
   // we it will not be a uint vector. Normalizing it
   // will make it a unit vector again
   vec3 normal = normalize(v_normal);
-
   vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
   vec3 surfaceToViewDirection = normalize(v_surfaceToView);
   vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);

@@ -27,6 +27,7 @@ canvas {
   right: 10px;
   z-index: 3;
   font-family: monospace;
+  pointer-events: none;
 
   text-shadow:
    -1px -1px 0 #FFF,
@@ -37,6 +38,10 @@ canvas {
 #ui {
   opacity: 0.8;
 }
+#ui>div {
+  pointer-events: auto;
+}
+
 
 .gman-slider-label, .gman-widget-label {
   font-size: small;
@@ -155,6 +160,21 @@ body.iframe {
     font-size: xx-small !important;
     max-width: 300px !important;
   }
+  canvas {
+    width: 100vw;
+  }
+  .iframe canvas {
+    width: 100vw;
+    height: 100vh;
+    border: none;
+  }
+  #uiContainer {
+    top: 120px;
+  }
+  .iframe #uiContainer {
+      top: 10px;
+  }
 }
+
 
 
