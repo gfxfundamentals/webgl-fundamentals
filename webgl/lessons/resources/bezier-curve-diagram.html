@@ -1,0 +1,557 @@
+<html>
+<head>
+<meta charset="utf8">
+<title>bezier curve diagram</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<h1 class="description">Bezier Curve Diagram</h1>
+<canvas></canvas>
+<div id="uiContainer">
+  <div id="ui">
+  </div>
+</div>
+</body>
+<!-- this is included only for iframe and requestAnimationFrame support -->
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="../../resources/webgl-lessons-ui.js"></script>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
+<script>
+"use strict";
+
+function main() {
+  const opt = getQueryParams();
+  const ctx = document.querySelector("canvas").getContext("2d");
+
+  const maxDepth = opt.maxDepth ? parseInt(opt.maxDepth) : 4;
+  const dotRadius = 5;
+  const selectRadius = dotRadius * 2;
+  const selectRadiusSq = selectRadius * selectRadius;
+  let show2Curves = opt.show2Curves;
+  let showCurve = (maxDepth >= 4 || opt.showCurve) && !opt.show2Curves;
+  let showPoints = false;
+
+  const colors = [
+    "",
+    "",
+    "#00F",
+    "#0A0",
+  ];
+
+  const names = ['P', 'Q', 'R', 'S'];
+
+  const data = {
+    points: [
+      [-130,  90],
+      [ -55, -90],
+      [  75, -60],
+      [ 100,  80],
+    ],
+    t: .25,
+    tolerance: 0.15,
+    numPoints: 10,
+    distance: 5,
+  };
+  try {
+    const d = JSON.parse(localStorage.getItem('data'));
+    const p = d.points;
+    if (Array.isArray(p) && p.length == 4 &&
+        d.t >= 0 && d.t <= 1 &&
+        d.numPoints > 2 && d.numPoints <= 100 &&
+        d.tolerance > 0.001 && d.tolerance < 100) {
+      Object.assign(data, d);
+    }
+  } catch (e) {
+    // do nothing
+  }
+
+  function render() {
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
+    ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+    const points = data.points;
+
+
+    if (showCurve) {
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#FAA";
+      ctx.beginPath();
+      ctx.moveTo(...points[0]);
+      ctx.bezierCurveTo(...points[1], ...points[2], ...points[3]);
+      ctx.stroke();
+      ctx.lineWidth = 1;
+    }
+
+    if (show2Curves) {
+      const t = data.t;
+      const p1 = points[0];
+      const p2 = points[1];
+      const p3 = points[2];
+      const p4 = points[3];
+
+      const q1 = v2.lerp(p1, p2, t);
+      const q2 = v2.lerp(p2, p3, t);
+      const q3 = v2.lerp(p3, p4, t);
+
+      const r1 = v2.lerp(q1, q2, t);
+      const r2 = v2.lerp(q2, q3, t);
+
+      const red = v2.lerp(r1, r2, t);
+
+      ctx.lineWidth = 2;
+
+      ctx.strokeStyle = "#0AA";
+      ctx.beginPath();
+      ctx.moveTo(...p1);
+      ctx.bezierCurveTo(...q1, ...r1, ...red);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#F0F";
+      ctx.beginPath();
+      ctx.moveTo(...red);
+      ctx.bezierCurveTo(...r2, ...q3, ...p4);
+      ctx.stroke();
+
+      ctx.lineWidth = 1;
+    }
+
+    draw(ctx, data.t, points, maxDepth);
+
+    if (opt.showPoints) {
+      ctx.fillStyle = "#00f";
+      getPointsOnBezierCurve(points, 0, data.numPoints).forEach(p => {
+        drawDot(ctx, ...p, 3, false);
+      });
+    }
+
+    if (opt.showTolerance) {
+      ctx.fillStyle = "#00f";
+      getPointsOnBezierCurveWithSplitting(points, 0, 16 * Math.pow(data.tolerance, 2)).forEach(p => {
+        drawDot(ctx, ...p, 3, false);
+      });
+    }
+
+    if (opt.showDistance) {
+      ctx.fillStyle = "#00f";
+      const npoints = getPointsOnBezierCurveWithSplitting(points, 0, 0.2);
+      const spoints = simplifyPoints(npoints, 0, npoints.length, data.distance);
+
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#00F";
+      ctx.beginPath();
+      spoints.forEach((p, ndx) => {
+        ctx[ndx ? "lineTo" : "moveTo"](...p);
+      });
+      ctx.stroke();
+
+      if (showPoints) {
+        spoints.forEach(p => {
+          drawDot(ctx, ...p, 2, false);
+        });
+      }
+    }
+
+    ctx.restore();
+  }
+  render();
+
+  function getPointOnBezierCurve(points, offset, t) {
+    const invT = (1 - t);
+    return v2.add(v2.mult(points[offset + 0], invT * invT * invT),
+                  v2.mult(points[offset + 1], 3 * t * invT * invT),
+                  v2.mult(points[offset + 2], 3 * invT * t * t),
+                  v2.mult(points[offset + 3], t * t  *t));
+  }
+
+  function getPointsOnBezierCurve(points, offset, numPoints) {
+    const cpoints = [];
+    for (let i = 0; i < numPoints; ++i) {
+      const t = i / (numPoints - 1);
+      cpoints.push(getPointOnBezierCurve(points, offset, t));
+    }
+    return cpoints;
+  }
+
+  function flatness(points, offset) {
+    const p1 = points[offset + 0];
+    const p2 = points[offset + 1];
+    const p3 = points[offset + 2];
+    const p4 = points[offset + 3];
+
+    let ux = 3 * p2[0] - 2 * p1[0] - p4[0]; ux *= ux;
+    let uy = 3 * p2[1] - 2 * p1[1] - p4[1]; uy *= uy;
+    let vx = 3 * p3[0] - 2 * p4[0] - p1[0]; vx *= vx;
+    let vy = 3 * p3[1] - 2 * p4[1] - p1[1]; vy *= vy;
+
+    if (ux < vx) {
+      ux = vx;
+    }
+
+    if (uy < vy) {
+      uy = vy;
+    }
+
+    return ux + uy;
+  }
+
+  function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
+    const outPoints = newPoints || [];
+    if (flatness(points, offset) < tolerance) {
+
+      // just add the end points of this curve
+      outPoints.push(points[offset + 0]);
+      outPoints.push(points[offset + 3]);
+
+    } else {
+
+      // subdivide
+      const t = .5;
+      const p1 = points[offset + 0];
+      const p2 = points[offset + 1];
+      const p3 = points[offset + 2];
+      const p4 = points[offset + 3];
+
+      const q1 = v2.lerp(p1, p2, t);
+      const q2 = v2.lerp(p2, p3, t);
+      const q3 = v2.lerp(p3, p4, t);
+
+      const r1 = v2.lerp(q1, q2, t);
+      const r2 = v2.lerp(q2, q3, t);
+
+      const red = v2.lerp(r1, r2, t);
+
+      // do 1st half
+      getPointsOnBezierCurveWithSplitting([p1, q1, r1, red], 0, tolerance, outPoints);
+      // do 2nd half
+      getPointsOnBezierCurveWithSplitting([red, r2, q3, p4], 0, tolerance, outPoints);
+
+    }
+    return outPoints;
+  }
+
+  function simplifyPoints(points, start, end, epsilon, newPoints) {
+    const outPoints = newPoints || [];
+
+    // find the most distance point from the endpoints
+    const s = points[start];
+    const e = points[end - 1];
+    let maxDistSq = 0;
+    let maxNdx = 1;
+    for (let i = start + 1; i < end - 1; ++i) {
+      const distSq = v2.distanceToSegmentSq(points[i], s, e);
+      if (distSq > maxDistSq) {
+        maxDistSq = distSq;
+        maxNdx = i;
+      }
+    }
+
+    // if that point is too far
+    if (Math.sqrt(maxDistSq) > epsilon) {
+
+      // split
+      simplifyPoints(points, start, maxNdx + 1, epsilon, outPoints);
+      simplifyPoints(points, maxNdx, end, epsilon, outPoints);
+
+    } else {
+
+      // add the 2 end points
+      outPoints.push(s, e);
+    }
+
+    return outPoints;
+  }
+
+  let moveNdx = -1;
+  let moveLastPos;
+  ctx.canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    onStart(e.touches[0]);
+  });
+  ctx.canvas.addEventListener('touchmove', e => {
+    onMove(e.touches[0]);
+  });
+  ctx.canvas.addEventListener('touchend', e => {
+    onEnd(e.touches[0]);
+  });
+  ctx.canvas.addEventListener('mousedown', onStart);
+  ctx.canvas.addEventListener('mouseup', onEnd);
+  ctx.canvas.addEventListener('mousemove', onMove);
+
+  function onStart(e) {
+    moveLastPos = getRelativeMousePosition(ctx.canvas, e);
+    const ndx = getClosestPoint(data.points, moveLastPos);
+    const distSq = v2.distanceSq(data.points[ndx], moveLastPos);
+    moveNdx = (distSq <= selectRadiusSq) ? ndx : -1;
+  }
+
+  function onEnd(e) {
+    moveNdx = -1;
+  }
+
+  function onMove(e) {
+    if (moveNdx >= 0) {
+      const pos = getRelativeMousePosition(ctx.canvas, e);
+      data.points[moveNdx] = v2.add(data.points[moveNdx], v2.sub(pos, moveLastPos));
+      moveLastPos = pos;
+      sendToOtherWindows();
+      render();
+    }
+  }
+
+  function sendToOtherWindows() {
+    localStorage.setItem('data', JSON.stringify(data));
+  }
+
+  function update() {
+    sendToOtherWindows();
+    render();
+  }
+
+  const uiSpec = [];
+  if (maxDepth !== 0) {
+    uiSpec.push({ type: "slider", key: "t",         change: update, min: 0, max: 1,   precision: 3, step: 0.001, });
+  }
+  if (opt.showPoints) {
+    uiSpec.push({ type: "slider", key: "numPoints", change: update, min: 2, max: 100, });
+  }
+  if (opt.showTolerance) {
+    uiSpec.push({ type: "slider", key: "tolerance", change: update, min: 0.001, max: 1, precision: 3, step: 0.001, });
+  }
+  if (opt.showDistance) {
+    uiSpec.push({ type: "slider",   key: "distance",  change: update, min: 0.001, max: 3, precision: 3, step: 0.001, });
+  }
+  const uiElem = document.querySelector("#ui");
+  const widgets = webglLessonsUI.setupUI(uiElem, data, uiSpec);
+  if (opt.showDistance) {
+    const widget = webglLessonsUI.makeCheckbox({name: "showPoints", value: false, change: (event, uiInfo) => {
+      showPoints = uiInfo.value;
+      render();
+    }});
+    uiElem.appendChild(widget.elem);
+  }
+
+  window.addEventListener('storage', (e) => {
+    const v = JSON.parse(e.newValue);
+    switch (e.key) {
+      case 'data':
+        Object.assign(data, v);
+        webglLessonsUI.updateUI(widgets, data);
+        break;
+    }
+    render();
+  });
+
+  window.addEventListener('resize', render);
+
+  function draw(ctx, t, points, depth) {
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#AAA";
+    ctx.beginPath();
+    ctx.moveTo(...points[0]);
+    for (let i = 1; i < points.length; ++i) {
+      ctx.lineTo(...points[i]);
+    }
+    ctx.stroke();
+
+    compute(ctx, 0, t, points, 4, depth);
+  }
+
+  function compute(ctx, ndx, t, points, numPoints, depth) {
+    const p = [];
+    for (let i = 0; i < numPoints; ++i) {
+      const pt = getPoint(points, ndx + i);
+      p.push(pt);
+
+      if (show2Curves) {
+        if (i == 0) {
+          ctx.fillStyle = "#0AA";
+        } else if (i == (numPoints - 1)) {
+          ctx.fillStyle = "#F0F";
+        } else {
+          ctx.fillStyle = "#AAA";
+        }
+      }
+
+      drawDot(ctx, ...pt, dotRadius, numPoints === 4);
+      ctx.fillText(names[4 - numPoints] + (i + 1), pt[0] - 15, pt[1] - 7);
+    }
+    const np = [];
+    for (let i = 0; i < numPoints - 1; ++i) {
+      np.push(v2.lerp(p[i], p[i + 1], t));
+    }
+
+    if (depth <= 0) {
+      return;
+    }
+
+    ctx.strokeStyle = show2Curves ? "#AAA" : colors[numPoints - 1];
+    ctx.fillStyle = ctx.strokeStyle;
+
+    if (np.length > 1) {
+      ctx.beginPath();
+      ctx.moveTo(...np[0]);
+      for (let i = 1; i < np.length; ++i) {
+        ctx.lineTo(...np[i]);
+      }
+      ctx.stroke();
+      if (depth > 0) {
+        compute(ctx, 0, t, np, np.length, depth - 1);
+      }
+    } else {
+      ctx.fillStyle = "#f00";
+      drawDot(ctx, ...np[0], 5);
+    }
+  }
+
+  function drawDot(ctx, x, y, radius, outline, start, end) {
+    start = start === undefined ? 0: start;
+    end = end === undefined ? Math.PI * 2: end;
+    ctx.globalAlpha = outline ? 0.2 : 0.5;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, start, end, false);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    if (outline) {
+      ctx.strokeStyle = ctx.fillStyle;
+      ctx.stroke();
+    }
+  }
+
+  function getPoint(points, ndx) {
+    return points[clamp(ndx, 0, points.length - 1)];
+  }
+
+  function getClosestPoint(points, pos) {
+    let ndx = 0;
+    let closestDistSq = v2.distanceSq(points[0], pos);
+    for (let i = 1; i < points.length; ++i) {
+      const distSq = v2.distanceSq(points[i], pos);
+      if (distSq < closestDistSq) {
+        closestDistSq = distSq;
+        ndx = i;
+      }
+    }
+    return ndx;
+  }
+
+  function clamp(v, min, max) {
+    return Math.max(Math.min(v, max), min);
+  }
+
+  function getQueryParams() {
+    var params = {};
+    if (window.location.search) {
+      window.location.search.substring(1).split("&").forEach(function(pair) {
+        var keyValue = pair.split("=").map(function (kv) {
+          return decodeURIComponent(kv);
+        });
+        params[keyValue[0]] = keyValue[1];
+      });
+    }
+    return params;
+  }
+
+  function getRelativeMousePosition(canvas, e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / (rect.right  - rect.left) * canvas.width;
+    const y = (e.clientY - rect.top ) / (rect.bottom - rect.top ) * canvas.height;
+    return [
+      (x - canvas.width  / 2) / window.devicePixelRatio,
+      (y - canvas.height / 2) / window.devicePixelRatio,
+    ];
+  }
+
+}
+
+const v2 = (function() {
+  // adds 1 or more v2s
+  function add(a, ...args) {
+    const n = a.slice();
+    [...args].forEach(p => {
+      n[0] += p[0];
+      n[1] += p[1];
+    });
+    return n;
+  }
+
+  function sub(a, ...args) {
+    const n = a.slice();
+    [...args].forEach(p => {
+      n[0] -= p[0];
+      n[1] -= p[1];
+    });
+    return n;
+  }
+
+  function mult(a, s) {
+    if (Array.isArray(s)) {
+      let t = s;
+      s = a;
+      a = t;
+    }
+    return [a[0] * s, a[1] * s];
+  }
+
+  function lerp(a, b, t) {
+    return [
+      a[0] + (b[0] - a[0]) * t,
+      a[1] + (b[1] - a[1]) * t,
+    ];
+  }
+
+  // compute the distance squared between a and b
+  function distanceSq(a, b) {
+    const dx = a[0] - b[0];
+    const dy = a[1] - b[1];
+    return dx * dx + dy * dy;
+  }
+
+  // compute the distance between a and b
+  function distance(a, b) {
+    return Math.sqrt(distanceSq(a, b));
+  }
+
+  // compute the distance squared from p to the line segment
+  // formed by v and w
+  function distanceToSegmentSq(p, v, w) {
+    const l2 = distanceSq(v, w);
+    if (l2 == 0) {
+      return distanceSq(p, v);
+    }
+    let t = ((p[0] - v[0]) * (w[0] - v[0]) + (p[1] - v[1]) * (w[1] - v[1])) / l2;
+    t = Math.max(0, Math.min(1, t));
+    return distanceSq(p, lerp(v, w, t));
+  }
+
+  // compute the distance from p to the line segment
+  // formed by v and w
+  function distanceToSegment(p, v, w) {
+    return Math.sqrt(distanceToSegmentSq(p, v, w));
+  }
+
+  return {
+    add: add,
+    sub: sub,
+    mult: mult,
+    lerp: lerp,
+    distance: distance,
+    distanceSq: distanceSq,
+    distanceToSegment: distanceToSegment,
+    distanceToSegmentSq: distanceToSegmentSq,
+  };
+}());
+
+main();
+</script>
+</html>
