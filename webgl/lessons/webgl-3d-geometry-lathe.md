@@ -434,7 +434,7 @@ for `v`.
       const texcoords = [];
       const indices = [];
 
-      const vOffset = capStart ? 1: 0;
+      const vOffset = capStart ? 1 : 0;
       const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
       const quadsDown = pointsPerColumn - 1;
 
@@ -738,7 +738,7 @@ to `lit` to see what the object would look like with lighting, the reason we nee
 
 ## So, what did we learn?
 
-We learned if you want to make 3D data **USE A 3D MODELING PACKAGE!!!*** 😝
+We learned if you want to make 3D data **USE A 3D MODELING PACKAGE!!!** 😝
 
 To do anything really useful you'd likely need a real [UV editor](https://www.google.com/search?q=uv+editor).
 Dealing the the caps as well is something a 3D editor would help with. Instead of using

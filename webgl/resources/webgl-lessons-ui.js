@@ -120,7 +120,7 @@
     const id = getWidgetId();
     label.setAttribute('for', id);
     label.textContent = options.name;
-    label.className = "gman-widget-label";
+    label.className = "gman-checkbox-label";
     const input = document.createElement("input");
     input.type = "checkbox";
     input.checked = options.value;
