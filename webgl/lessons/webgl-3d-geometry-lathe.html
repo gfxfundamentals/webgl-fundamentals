@@ -389,14 +389,14 @@ function lathePoints(points,
   const texcoords = [];
   const indices = [];
 
-  const vOffset = capStart ? 1: 0;
+  const vOffset = capStart ? 1 : 0;
   const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
   const quadsDown = pointsPerColumn - 1;
 
   // generate points
   for (let division = 0; division &lt;= numDivisions; ++division) {
     const u = division / numDivisions;
-    const angle = lerp(startAngle, endAngle, u);
+    const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
     const mat = m4.yRotation(angle);
     if (capStart) {
       // add point on Y access at start
@@ -407,7 +407,7 @@ function lathePoints(points,
       const tp = m4.transformPoint(mat, [...p, 0]);
       positions.push(tp[0], tp[1], tp[2]);
       const v = (ndx + vOffset) / quadsDown;
-      texcoords.push(u, v); // v?
+      texcoords.push(u, v); 
     });
     if (capEnd) {
       // add point on Y access at end
@@ -498,7 +498,7 @@ function lathePoints(points,
   // generate points
   for (let division = 0; division &lt;= numDivisions; ++division) {
     const u = division / numDivisions;
-    const angle = lerp(startAngle, endAngle, u);
+    const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
     const mat = m4.yRotation(angle);
     if (capStart) {
       // add point on Y access at start
@@ -683,7 +683,6 @@ a vertex is greater than that maximum angle then they generate a new vertex.</p>
   const maxAngleCos = Math.cos(maxAngle);
   // for each face
   for (let i = 0; i &lt; numFaces; ++i) {
-    const thisFaceVertexNormals = [];
     // get the normal for this face
     const thisFaceNormal = faceNormals[i];
     // for each vertex on the face
@@ -777,6 +776,131 @@ a limited set up options when lathing you&#39;d use other features of the editor
 to add caps and generate easier UVs for the caps.</p>
 <h2 id="references">References</h2>
 <p>I wanted to mention I couldn&#39;t have done this without <a href="https://pomax.github.io/bezierinfo/">this awesome page about bezier curves</a>.</p>
+<div class="webgl_bottombar">
+<h3>What's this modulo operator doing here?</h3>
+<p>If you look closely at the <code>lathePoints</code> function you'll see this modulo
+when computing the angle.</p>
+<pre class="prettyprint showlinemods">
+for (let division = 0; division <= numDivisions; ++division) {
+  const u = division / numDivisions;
+*  const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
+</pre>
+<p>Why is that there?</p>
+<p>When we rotate the points all the way around a circle we really want the first
+and last points to match. <code>Math.sin(0)</code> and <code>Math.sin(Math.PI * 2)</code>
+should match but floating point math on a computer is not perfect and while they are close enough
+in general they are not actually 100% equal.</p>
+<p>That matters when we try to compute normals. We want to know all the faces a vertex
+uses. We compute that by comparing vertices. If 2 vertices are equal we assume they are the
+same vertex. Unfortunately, because <code>Math.sin(0)</code> and <code>Math.sin(Math.PI * 2)</code>
+are not equal they will not be considered the same vertex. That means when computing the normals
+they won't take into consideration all the faces and their normals will come out wrong.</p>
+<p>Here's the result when that happens</p>
+<img class="webgl_center" src="resources/lathe-normal-seam.png" width="50%" />
+<p>As you can see there is a seam where the vertices are not considered shared
+because they are not a 100% match</p>
+<p>My first thought was that I should change my solution so that when I check for matching
+vertices I check if they are within some distance. If they are then they're the same vertex.
+Something like this.
+<pre class="prettyprint">
+const epsilon = 0.0001;
+const tempVerts = [];
+function getVertIndex(position) {
+  if (tempVerts.length) {
+    // find the closest existing vertex
+    let closestNdx = 0;
+    let closestDistSq = v2.distanceSq(position, tempVerts[0]);
+    for (let i = 1; i < tempVerts.length; ++i) {
+      let distSq = v2.distanceSq(position, tempVerts[i]);
+      if (distSq < closestDistSq) {
+        closestDistSq = distSq;
+        closestNdx = i;
+      }
+    }
+    // was the closest vertex close enough?
+    if (closestDistSq < epsilon) {
+      // yes, so just return that vertex's index.
+      return closestNdx;
+    }
+  }
+  // no match, add the vertex as a new vertex and return its index.
+  tempVerts.push(position);
+  return tempVerts.length - 1;
+}
+</pre>
+<p>It worked! It got rid of the seam. Unfortunately it took several seconds to run and
+made the interface unusable. This is because it's a O^2 solution. If you slide the sliders
+for the most vertices you can generate ~20000 vertices. For an O^2 that's up to 300 million iterations
+that have to happen.
+</p>
+<p>I searched the net for a easy solution. I didn't find one. I thought about putting all the points
+in an <a href="https://en.wikipedia.org/wiki/Octree">octtree</a> to make finding matching points
+faster but that seems like a way too much for this article.
+</p>
+<p>It was then I realized if the only issue is the end points maybe I could add a modulo
+to the math so that the points were actually the same. The original code was like this
+</p>
+<pre class="prettyprint">
+  const angle = lerp(startAngle, endAngle, u);
+</pre>
+And the new code like this
+<pre class="prettyprint">
+  const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
+</pre>
+<p>Because of the module the `angle` when `endAngle` is `Math.PI * 2` becomes 0
+and so it's the same as the start. The seam went away. Problem solved!</p>
+<p>Still, even with the change if you set `distance` to 0.001
+and `divisions` to 60 it takes nearly a second on my machine to recompute the mesh. While
+there might be ways to optimize that I think the point is realizing that generating complex
+meshes is a generally slow operation. This just one example of why a 3d game can run at 60fps
+but a 3d modeling package often chugs at very slow frame rates.
+</p>
+</div>
+
+<div class="webgl_bottombar">
+<h3>Is matrix math is overkill here?</h3>
+<p>When we lathe the points there is this code to rotate with.</p>
+<pre class="prettyprint">
+const mat = m4.yRotation(angle);
+...
+points.forEach((p, ndx) => {
+  const tp = m4.transformPoint(mat, [...p, 0]);
+  ...
+</pre>
+<p>Transforming an arbitrary 3d point by a 4x4 matrix requires 16 multiplies, 12 adds, and 3 divides.
+We could simplifiy by just using [unit circle style rotation math](webgl-2d-rotation.html).
+</p>
+<pre class="prettyprint">
+const s = Math.sin(angle);
+const c = Math.cos(angle);
+...
+points.forEach((p, ndx) => {
+  const x = p[0];
+  const y = p[1];
+  const z = p[2];
+  const tp = [
+    x * c - z * s,
+    y,
+    x * s + z * c,
+  ];
+  ...
+</pre>
+<p>
+That's only 4 multiplies and 2 adds and no function call which is probably at least 6x faster.
+</p>
+<p>
+Is that optimization worth it? Well, for this particular example I don't think we're doing enough
+for it to matter. My thinking was that you might want to let the user decide which axis
+to spin around. Using a matrix would make that easy to let the user pass an axis in
+and use something like
+</p>
+<pre class="prettyprint">
+   const mat = m4.axisRotation(userSuppliedAxis, angle);
+</pre>
+<p>Which way is best is really up to you and your needs. I think I'd choose flexible first
+and only later optimize if something was too slow for whatever I was doing.</p>
+</div>
+
 
       <hr class="lesson-comment-sep" />
       <div class="lesson-comments">
