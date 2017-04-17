@@ -59,7 +59,7 @@ void main() {
 
   // compute the vector of the surface to the light
   // and pass it to the fragment shader
-  v_surfaceToLight = normalize(u_lightWorldPosition - surfaceWorldPosition);
+  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 
   // compute the vector of the surface to the view/camera
   // and pass it to the fragment shader
@@ -793,7 +793,7 @@ function main() {
     { type: "slider",   key: "divisions",  change: update, min: 1    , max: 60,                                        },
     { type: "slider",   key: "startAngle", change: update, min: 0    , max: Math.PI * 2,    precision: 3, step: 0.001, uiMult: 180 / Math.PI, uiPrecision: 0 },
     { type: "slider",   key: "endAngle",   change: update, min: 0    , max: Math.PI * 2,    precision: 3, step: 0.001, uiMult: 180 / Math.PI, uiPrecision: 0 },
-    { type: "slider",   key: "maxAngle",   change: update, min: 0.001, max: Math.PI * 1.99, precision: 3, step: 0.001, uiMult: 180 / Math.PI, uiPrecision: 1 },
+    { type: "slider",   key: "maxAngle",   change: update, min: 0.001, max: Math.PI,        precision: 3, step: 0.001, uiMult: 180 / Math.PI, uiPrecision: 1 },
     { type: "checkbox", key: "capStart",   change: update },
     { type: "checkbox", key: "capEnd",     change: update },
     { type: "checkbox", key: "triangles",  change: render },
