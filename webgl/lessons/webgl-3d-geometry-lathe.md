@@ -40,7 +40,7 @@ a bezier curve. If you've ever edited a curve in
 [Affinity Designer](https://affinity.serif.com/en-us/designer/)
 or similar programs that's a bezier curve.
 
-A bezier curve or rather a cubic bezier curve is formed by 4 points
+A bezier curve or rather a cubic bezier curve is formed by 4 points.
 2 points are the end points. 2 points are the "control points".
 
 Here's 4 points
@@ -738,12 +738,14 @@ to `lit` to see what the object would look like with lighting, the reason we nee
 
 ## So, what did we learn?
 
-We learned if you wanto make 3D data **USE A 3D MODELING PACKAGE!!!*** 😝
+We learned if you want to make 3D data **USE A 3D MODELING PACKAGE!!!*** 😝
 
 To do anything really useful you'd likely need a real [UV editor](https://www.google.com/search?q=uv+editor).
 Dealing the the caps as well is something a 3D editor would help with. Instead of using
 a limited set up options when lathing you'd use other features of the editor
-to add caps and generate easier UVs for the caps.
+to add caps and generate easier UVs for the caps. 3d editors also support [extruding faces](https://www.google.com/search?q=extruding+model)
+and [extruding along a path](https://www.google.com/search?q=extruding+along+a+path) which if you take
+a look it should be pretty obvious how they work based on the lathe example above.
 
 ## References
 
