@@ -112,7 +112,6 @@ A list of articles I'd like to write or see written
     *   blendshapes
     *   skinning
 *   text
-    *   pre-made glyph texture atlus
     *   glyph cache
 *   post processing
     *   how to render to a texture (scene on cube)
