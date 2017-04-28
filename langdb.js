@@ -3,12 +3,13 @@ window.langDB = {
     "webgl-3d-geometry-lathe.html": {
       "en": true
     },
-    "webgl-cors-permission.html": {
+    "webgl-anti-patterns.html": {
       "en": true,
       "ru": true
     },
-    "webgl-anti-patterns.html": {
+    "webgl-2d-matrices.html": {
       "en": true,
+      "fr": true,
       "ru": true
     },
     "webgl-2d-matrix-stack.html": {
@@ -88,9 +89,8 @@ window.langDB = {
       "en": true,
       "ru": true
     },
-    "webgl-2d-matrices.html": {
+    "webgl-cors-permission.html": {
       "en": true,
-      "fr": true,
       "ru": true
     },
     "webgl-drawing-multiple-things.html": {
