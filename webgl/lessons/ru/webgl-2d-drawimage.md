@@ -83,7 +83,7 @@ Description: Реализация функции drawImage в canvas 2D сред
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
       gl.enableVertexAttribArray(positionLocation);
       gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+      gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
       gl.enableVertexAttribArray(texcoordLocation);
       gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 

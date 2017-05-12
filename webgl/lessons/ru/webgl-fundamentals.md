@@ -445,7 +445,7 @@ WebGL отрисует треугольник. Если размер canvas бу
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 После того как мы установили, какую программу использовать, мы можем устанавливать значение
-созданной uniform-переменной. Выбор текущей программы похож на использование `gl.bindBuffer`.
+созданной uniform-переменной. `gl.useProgram` похоже на использование `gl.bindBuffer`.
 После выбора программы все функции `gl.uniformXXX` задают значения uniform-переменных текущей программы.
 
     gl.useProgram(program);
