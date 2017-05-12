@@ -244,6 +244,11 @@ Fortunately the constants are consecutive so instead of this</p>
   gl.activeTexture(gl.TEXTURE1);
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </code></pre><p>We could have done this</p>
+<pre><code>  gl.activeTexture(gl.TEXTURE0 + 0);
+  gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+  gl.activeTexture(gl.TEXTURE0 + 1);
+  gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+</code></pre><p>or this</p>
 <pre><code>  for (var ii = 0; ii &lt; 2; ++ii) {
     gl.activeTexture(gl.TEXTURE0 + ii);
     gl.bindTexture(gl.TEXTURE_2D, textures[ii]);
