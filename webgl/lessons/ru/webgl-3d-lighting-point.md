@@ -202,7 +202,7 @@ Description: Реализация точечного освещения в WebGL
 
     +  // вычисляем вектор от поверхности к наблюдателю
     +  // и передаём его во фрагментный шейдер
-    +  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
+    +  v_surfaceToView = normalize(u_viewWorldPosition - surfaceWorldPosition);
     }
 
 Затем во фрагментном шейдере вычисляем `halfVector` между вектором
