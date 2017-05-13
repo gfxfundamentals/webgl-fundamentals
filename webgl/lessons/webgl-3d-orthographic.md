@@ -228,7 +228,7 @@ Similarly we'll make our simplified functions
 
 ```
   translate: function(m, tx, ty, tz) {
-    return m4.multiply(b, m4.translation(tx, ty, tz));
+    return m4.multiply(m, m4.translation(tx, ty, tz));
   },
 
   xRotate: function(m, angleInRadians) {
