@@ -456,7 +456,7 @@ WebGL отрисует треугольник. Если размер canvas бу
     gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
 И конечно же для отрисовки 2 треугольников нам нужно, чтобы WebGL вызывал наш вершинный шейдер
-6 раз, поэтому нужно изменить значение`count` на `6`.
+6 раз, поэтому нужно изменить значение `count` на `6`.
 
     // отрисовка
     var primitiveType = gl.TRIANGLES;
