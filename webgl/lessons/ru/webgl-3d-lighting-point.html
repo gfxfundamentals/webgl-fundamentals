@@ -249,7 +249,7 @@ void main() {
 
 +  // вычисляем вектор от поверхности к наблюдателю
 +  // и передаём его во фрагментный шейдер
-+  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
++  v_surfaceToView = normalize(u_viewWorldPosition - surfaceWorldPosition);
 }
 </code></pre><p>Затем во фрагментном шейдере вычисляем <code>halfVector</code> между вектором
 от поверхности до наблюдателя и вектором от поверхности до источника
@@ -473,6 +473,10 @@ uniform float u_shininess;
     <li><a href="/webgl/lessons/ru/webgl-less-code-more-fun.html">WebGL - Меньше кода, больше веселья</a></li>
     <li><a href="/webgl/lessons/ru/webgl-drawing-multiple-things.html">WebGL - Отрисовка нескольких объектов</a></li>
     <li><a href="/webgl/lessons/ru/webgl-scene-graph.html">WebGL - Графы сцены</a></li>
+  </ul>
+  <li>Геометрия</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели (en)</a></li>
   </ul>
   <li>Текстуры</li>
   <ul>

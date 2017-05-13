@@ -245,6 +245,11 @@ void main() {
   gl.activeTexture(gl.TEXTURE1);
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </code></pre><p>мы можем записать следующим образом:</p>
+<pre><code>  gl.activeTexture(gl.TEXTURE0 + 0);
+  gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+  gl.activeTexture(gl.TEXTURE0 + 1);
+  gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+</code></pre><p>или же так:</p>
 <pre><code>  for (var ii = 0; ii &lt; 2; ++ii) {
     gl.activeTexture(gl.TEXTURE0 + ii);
     gl.bindTexture(gl.TEXTURE_2D, textures[ii]);
@@ -317,6 +322,10 @@ void main() {
     <li><a href="/webgl/lessons/ru/webgl-less-code-more-fun.html">WebGL - Меньше кода, больше веселья</a></li>
     <li><a href="/webgl/lessons/ru/webgl-drawing-multiple-things.html">WebGL - Отрисовка нескольких объектов</a></li>
     <li><a href="/webgl/lessons/ru/webgl-scene-graph.html">WebGL - Графы сцены</a></li>
+  </ul>
+  <li>Геометрия</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели (en)</a></li>
   </ul>
   <li>Текстуры</li>
   <ul>

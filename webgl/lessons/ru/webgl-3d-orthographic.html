@@ -82,7 +82,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 по-прежнему будем использовать &#39;F&#39;, но на этот раз это будет &#39;F&#39; в 3D.</p>
 <p>Первым делом нам нужно поменять вершинный шейдер для работы в 3D.
 Вот старый шейдер:</p>
-<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -91,9 +91,9 @@ void main() {
   // Умножаем координату на матрицу
   gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>А вот новый:</p>
-<pre><code>&amp;lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -102,7 +102,7 @@ void main() {
   // Умножаем координату на матрицу
 *  gl_Position = u_matrix * a_position;
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>Он стал даже проще!</p>
 <p>Теперь нам нужно передать 3D-данные.</p>
 <pre><code>  ...
@@ -665,6 +665,10 @@ x и y, а ещё нужно было установить 1 для z, так к
     <li><a href="/webgl/lessons/ru/webgl-less-code-more-fun.html">WebGL - Меньше кода, больше веселья</a></li>
     <li><a href="/webgl/lessons/ru/webgl-drawing-multiple-things.html">WebGL - Отрисовка нескольких объектов</a></li>
     <li><a href="/webgl/lessons/ru/webgl-scene-graph.html">WebGL - Графы сцены</a></li>
+  </ul>
+  <li>Геометрия</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели (en)</a></li>
   </ul>
   <li>Текстуры</li>
   <ul>

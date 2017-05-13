@@ -423,7 +423,7 @@ WebGL отрисует треугольник. Если размер canvas бу
 ];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 </code></pre><p>После того как мы установили, какую программу использовать, мы можем устанавливать значение
-созданной uniform-переменной. Выбор текущей программы похож на использование <code>gl.bindBuffer</code>.
+созданной uniform-переменной. <code>gl.useProgram</code> похоже на использование <code>gl.bindBuffer</code>.
 После выбора программы все функции <code>gl.uniformXXX</code> задают значения uniform-переменных текущей программы.</p>
 <pre><code>gl.useProgram(program);
 
@@ -432,7 +432,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 // установка разрешения
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 </code></pre><p>И конечно же для отрисовки 2 треугольников нам нужно, чтобы WebGL вызывал наш вершинный шейдер
-6 раз, поэтому нужно изменить значение<code>count</code> на <code>6</code>.</p>
+6 раз, поэтому нужно изменить значение <code>count</code> на <code>6</code>.</p>
 <pre><code>// отрисовка
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
@@ -654,6 +654,10 @@ uniform-переменным. Обычно используется нескол
     <li><a href="/webgl/lessons/ru/webgl-less-code-more-fun.html">WebGL - Меньше кода, больше веселья</a></li>
     <li><a href="/webgl/lessons/ru/webgl-drawing-multiple-things.html">WebGL - Отрисовка нескольких объектов</a></li>
     <li><a href="/webgl/lessons/ru/webgl-scene-graph.html">WebGL - Графы сцены</a></li>
+  </ul>
+  <li>Геометрия</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели (en)</a></li>
   </ul>
   <li>Текстуры</li>
   <ul>

@@ -81,7 +81,7 @@ a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.</p>
 this time a 3D &#39;F&#39;.</p>
 <p>The first thing we need to do is change the vertex shader to handle 3D.
 Here&#39;s the old shader.</p>
-<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -90,9 +90,9 @@ void main() {
   // Multiply the position by the matrix.
   gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>And here&#39;s the new one</p>
-<pre><code>&amp;lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -101,7 +101,7 @@ void main() {
   // Multiply the position by the matrix.
 *  gl_Position = u_matrix * a_position;
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>It got even simpler!</p>
 <p>Then we need to provide 3D data.</p>
 <pre><code>  ...
