@@ -22,7 +22,7 @@ Description: Знакомимся с 3D в WebGL, начиная с ортогр
 Вот старый шейдер:
 
 ```
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -31,13 +31,13 @@ void main() {
   // Умножаем координату на матрицу
   gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 }
-&lt;/script&gt;
+</script>
 ```
 
 А вот новый:
 
 ```
-&lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
 attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -46,7 +46,7 @@ void main() {
   // Умножаем координату на матрицу
 *  gl_Position = u_matrix * a_position;
 }
-&lt;/script&gt;
+</script>
 ```
 
 Он стал даже проще!
