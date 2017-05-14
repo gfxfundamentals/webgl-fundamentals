@@ -336,7 +336,7 @@ shader to the fragment shader.
 Here's the new vertex shader
 
 ```
-&lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -351,13 +351,13 @@ void main() {
 +  // Pass the color to the fragment shader.
 +  v_color = a_color;
 }
-&lt;/script&gt;
+</script>
 ```
 
 And we need to use that color in the fragment shader
 
 ```
-&lt;script id="3d-vertex-shader" type="x-shader/x-fragment"&gt;
+<script id="3d-vertex-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 +// Passed in from the vertex shader.
@@ -366,7 +366,7 @@ precision mediump float;
 void main() {
 *   gl_FragColor = v_color;
 }
-&lt;/script&gt;
+</script>
 ```
 
 We need to lookup the location to supply the colors, then setup another
