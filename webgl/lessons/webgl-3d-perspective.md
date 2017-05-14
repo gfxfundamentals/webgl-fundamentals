@@ -57,7 +57,7 @@ Let's try it.  First let's change the vertex shader to divide by Z after
 we've multiplied it by our "fudgeFactor".
 
 ```
-&lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -71,7 +71,7 @@ void main() {
 *  // Divide x and y by z.
 *  gl_Position = vec4(position.xy / zToDivideBy, position.zw);
 }
-&lt;/script&gt;
+</script>
 ```
 
 Note, because Z in clip space goes from -1 to +1 I added 1 to get
@@ -115,7 +115,7 @@ We can prove this very easily by changing the shader and instead of doing
 the division ourselves, put `zToDivideBy` in `gl_Position.w`.
 
 ```
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
 ...
 uniform float u_fudgeFactor;
 ...
@@ -132,7 +132,7 @@ void main() {
   // Pass the color to the fragment shader.
   v_color = a_color;
 }
-&lt;/script&gt;
+</script>
 ```
 
 and see how it's exactly the same.
@@ -238,7 +238,7 @@ So, let's modify the program again to just use matrices.
 First let's put the vertex shader back. It's simple again
 
 ```
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
 uniform mat4 u_matrix;
 
 void main() {
@@ -246,7 +246,7 @@ void main() {
   gl_Position = u_matrix * a_position;
   ...
 }
-&lt;/script&gt;
+</script>
 ```
 
 Next let's make a function to make our Z &rarr; W matrix.
