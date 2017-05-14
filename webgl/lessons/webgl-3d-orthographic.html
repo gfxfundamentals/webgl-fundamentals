@@ -350,7 +350,7 @@ coloring each rectangle a different color.  To do this we will add another
 attribute to our vertex shader and a varying to pass it from the vertex
 shader to the fragment shader.</p>
 <p>Here&#39;s the new vertex shader</p>
-<pre><code>&amp;lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -365,9 +365,9 @@ void main() {
 +  // Pass the color to the fragment shader.
 +  v_color = a_color;
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>And we need to use that color in the fragment shader</p>
-<pre><code>&amp;lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-fragment&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +// Passed in from the vertex shader.
@@ -376,7 +376,7 @@ precision mediump float;
 void main() {
 *   gl_FragColor = v_color;
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>We need to lookup the location to supply the colors, then setup another
 buffer and put the colors in it.</p>
 <pre><code>  ...
