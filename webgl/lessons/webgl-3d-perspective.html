@@ -112,7 +112,7 @@ fudgeFactor to multiply Z before we divide we can adjust how much smaller
 things get for a given distance.</p>
 <p>Let&#39;s try it.  First let&#39;s change the vertex shader to divide by Z after
 we&#39;ve multiplied it by our &quot;fudgeFactor&quot;.</p>
-<pre><code>&amp;lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -126,7 +126,7 @@ void main() {
 *  // Divide x and y by z.
 *  gl_Position = vec4(position.xy / zToDivideBy, position.zw);
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>Note, because Z in clip space goes from -1 to +1 I added 1 to get
 <code>zToDivideBy</code> to go from 0 to +2 * fudgeFactor</p>
 <p>We also need to update the code to let us set the fudgeFactor.</p>
@@ -162,7 +162,7 @@ what things used to look like before we added our divide by Z code.</p>
 our vertex shader and divides it by w automatically.</p>
 <p>We can prove this very easily by changing the shader and instead of doing
 the division ourselves, put <code>zToDivideBy</code> in <code>gl_Position.w</code>.</p>
-<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -179,7 +179,7 @@ void main() {
   // Pass the color to the fragment shader.
   v_color = a_color;
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>and see how it&#39;s exactly the same.</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-perspective-w.html"></iframe>
@@ -273,7 +273,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>So, let&#39;s modify the program again to just use matrices.</p>
 <p>First let&#39;s put the vertex shader back. It&#39;s simple again</p>
-<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -281,7 +281,7 @@ void main() {
   gl_Position = u_matrix * a_position;
   ...
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>Next let&#39;s make a function to make our Z &rarr; W matrix.</p>
 <pre><code>function makeZToWMatrix(fudgeFactor) {
   return [
