@@ -40,7 +40,7 @@ And we can compute a vector from the surface to the light which is simular
 to the direction we had before expect this time we're computing it for
 every position on the surface to a point.
 
-    v_surfaceToLight = u_lightPosition - surfaceWorldPosition;
+    v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 
 Here's all that in context
 
