@@ -495,7 +495,7 @@ Step 2:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=1" caption="from clip space to pixel space" }}}
 >
-> We're now in pixel space. X = 0 to 400, Y = 0 to 300 with 0,0 at the top right.
+> We're now in pixel space. X = 0 to 400, Y = 0 to 300 with 0,0 at the top left.
 > Positions passed using this matrix in need to be in pixel space. The flash you see
 > is when the space flips from positive Y = up to positive Y = down.
 
