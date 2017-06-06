@@ -94,7 +94,11 @@ void main() {
 }
 </script>
 <script id="specular-shader" type="notjs">
-precision mediump float;
+#if GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+#else
+  precision mediump float;
+#endif
 
 // Passed in from the vertex shader.
 varying vec3 v_normal;

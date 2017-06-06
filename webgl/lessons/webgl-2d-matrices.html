@@ -499,26 +499,57 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 you apply transforms the space so</p>
 <p>Step 1:  no matrix (or the identiy matrix)</p>
 <blockquote>
-<p>we&#39;re in clip space. Positions passed in need to be in clip space</p>
+<p><div>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=0"></iframe>
+  <div class="webgl_center">clip space</div>
+</div>
+
+</p>
+<p>The white area is the canvas. Blue is outside the canvas. We&#39;re in clip space.
+Positions passed in need to be in clip space</p>
 </blockquote>
 <p>Step 2:  <code>matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)</code>;</p>
 <blockquote>
-<p>we&#39;re now in pixel space. Positions passed in need to be in pixel space</p>
+<p><div>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=1"></iframe>
+  <div class="webgl_center">from clip space to pixel space</div>
+</div>
+
+</p>
+<p>We&#39;re now in pixel space. X = 0 to 400, Y = 0 to 300 with 0,0 at the top left.
+Positions passed using this matrix in need to be in pixel space. The flash you see
+is when the space flips from positive Y = up to positive Y = down.</p>
 </blockquote>
 <p>Step 3:  <code>matrix = m3.translate(matrix, tx, ty);</code></p>
 <blockquote>
-<p>The origin is now at tx, ty (the space has moved)</p>
+<p><div>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=2"></iframe>
+  <div class="webgl_center">move origin to tx, ty</div>
+</div>
+
+</p>
+<p>The origin has now been moved to tx, ty (150, 100). The space has moved.</p>
 </blockquote>
 <p>Step 4:  <code>matrix = m3.rotate(matrix, rotationInRadians);</code></p>
 <blockquote>
+<p><div>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=3"></iframe>
+  <div class="webgl_center">rotate 33 degrees</div>
+</div>
+
+</p>
 <p>The space has been rotated around tx, ty</p>
 </blockquote>
 <p>Step 5:  <code>matrix = m3.scale(matrix, sx, sy);</code></p>
 <blockquote>
-<p>The previously rotated space with it&#39;s center at tx, ty has been scaled</p>
+<p><div>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=4"></iframe>
+</div>
+
+</p>
+<p>The previously rotated space with its center at tx, ty has been scaled 2 in x, 1.5 in y</p>
 </blockquote>
-<p>In the shader we then do <code>gl_Position = matrix * position;</code></p>
-<p>the <code>position</code> values are effectively in that final space.</p>
+<p>In the shader we then do <code>gl_Position = matrix * position;</code>. The <code>position</code> values are effectively in this final space.</p>
 <p>I hope these posts have helped demystify matrix math. If you want
 to stick with 2D I&#39;d suggest checking out <a href="webgl-2d-drawimage.html">recreating canvas 2d&#39;s
 drawImage function</a> and following that
