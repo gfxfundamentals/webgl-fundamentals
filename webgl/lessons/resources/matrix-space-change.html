@@ -12,9 +12,6 @@
 </div>
 <div style="position:absolute;">
   <canvas id="canvas"></canvas>
-  <pre id="debug">
-
-  </pre>
 </div>
 </body>
 </html>
@@ -35,6 +32,32 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 function main() {
   const opt = getQueryParams();
   const ctx = document.getElementById("canvas").getContext("2d");
+
+  const fpoints = [
+    // left column
+    [ 0, 0, ],
+    [ 30, 0, ],
+    [ 0, 150, ],
+    [ 0, 150, ],
+    [ 30, 0, ],
+    [ 30, 150, ],
+
+    // top rung
+    [ 30, 0, ],
+    [ 100, 0, ],
+    [ 30, 30, ],
+    [ 30, 30, ],
+    [ 100, 0, ],
+    [ 100, 30, ],
+
+    // middle rung
+    [ 30, 60, ],
+    [ 67, 60, ],
+    [ 30, 90, ],
+    [ 30, 90, ],
+    [ 67, 60, ],
+    [ 67, 90, ],
+  ];
 
   function render(time) {
     time *= 0.001; // seconds
@@ -82,6 +105,24 @@ function main() {
     matrix = m3.multiply(matrix, lerpMatrix(m3.identity(), rotation, stageAmount(3, stage, t)));
     matrix = m3.multiply(matrix, lerpMatrix(m3.identity(), scale, stageAmount(4, stage, t)));
 
+    // draw f
+    ctx.fillStyle = hsla(.33, 1, .5, .3);
+    ctx.strokeStyle = hsla(.33, 1, .3, 1);
+
+    for (let i = 0; i < fpoints.length; i += 3) {
+      const p0 = m3.transformPoint(matrix, fpoints[i + 0]);
+      const p1 = m3.transformPoint(matrix, fpoints[i + 1]);
+      const p2 = m3.transformPoint(matrix, fpoints[i + 2]);
+
+      ctx.beginPath();
+      ctx.moveTo(...p0);
+      ctx.lineTo(...p1);
+      ctx.lineTo(...p2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+
     function stageAmount(stage, actualStage, t) {
       if (actualStage < stage) {
         return 0;
@@ -95,9 +136,6 @@ function main() {
     const minDimension = Math.min(width, height);
     const maxDimension = Math.max(width, height);
     const dimension = [width, height];
-
-    const debug = document.querySelector("#debug");
-    debug.textContent = "";
 
     {
       ctx.lineWidth = 1;
@@ -125,25 +163,18 @@ function main() {
     {
       ctx.fillStyle = hsla(0, 0, 0, 1);
       ctx.lineWidth = 4;
-      ctx.strokeStyle = hsla(0, 1, 1, 1);
+      ctx.strokeStyle = hsla(0, 1, .5, 1);
 
       for (let axis = 0; axis < 2; ++axis) {
         const p0 = m3.transformPoint(matrix, [0, 0]);
         const p1 = m3.transformPoint(matrix, makeAxisPoint(.002, 0, axis));
         const d = m3.distance(...p0, ...p1);
-//        const step = Math.pow(10, -Math.trunc(Math.log10(d)));
         const step = Math.pow(10, -Math.trunc(getBaseLog(10, d)));
         const p2 = m3.transformPoint(matrix, makeAxisPoint(step, 0, axis));
         const gridDist = m3.distance(...p0, ...p2);
         const div = Math.pow(2, Math.floor(Math.log2(gridDist / 50)));
         const alpha = rangeLerp(0, 1, 50, 70, gridDist);
-debug.textContent += `${axis} d: ${d.toFixed(5)}, step: ${step}, gridDist: ${gridDist.toFixed(2)}, div: ${div}, alpha: ${alpha.toFixed(2)}\n`;
-//        ctx.strokeStyle = hsla(0, 0, 0, alpha);
         drawCoordsAxis(ctx, matrix, step * -1000, step * 1000, step / div, axis, alpha);
-        //if (alpha < 1) {
-        //  ctx.strokeStyle = hsla(0, 0, 0, 1);
-        //  drawCoordsAxis(ctx, matrix, step * -10000, step * 10000, step * 10, axis);
-        //}
       }
     }
 
@@ -171,7 +202,7 @@ function lerpMatrix(a, b, l) {
 
 function rangeLerp(a, b, min, max, l) {
   const range = max - min;
-  return lerp(a, b, (l - min) / range);
+  return clamp(a, b, lerp(a, b, (l - min) / range));
 }
 
 function drawAxis(ctx, matrix, min, max) {
@@ -205,12 +236,12 @@ function drawCoordsAxis(ctx, matrix, min, max, step, axis, alpha) {
     const p = m3.transformPoint(matrix, i);
     const a = count % 2 ? alpha : 1;
     if (a > 0 &&
-        p[0] > -50 && p[0] < ctx.canvas.width + 50 &&
+        p[0] > -50 && p[0] < ctx.canvas.width  + 50 &&
         p[1] > -50 && p[1] < ctx.canvas.height + 50) {
       ctx.save();
       ctx.translate(...p);
       ctx.fillStyle = hsla(0, 0, 0, a);
-      ctx.strokeStyle = hsla(0, 1, 1, a);
+      ctx.strokeStyle = hsla(0, 1, 1, a * .5);
       ctx.rotate(Math.atan2(matrix[1], matrix[0]));
       drawOutlineText(ctx, `${i[0]},${i[1]}`, 0, 0);
       ctx.restore();
