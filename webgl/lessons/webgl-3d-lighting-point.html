@@ -251,7 +251,7 @@ void main() {
 
 +  // compute the vector of the surface to the view/camera
 +  // and pass it to the fragment shader
-+  v_surfaceToView = normalize(u_viewWorldPosition - surfaceWorldPosition);
++  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
 }
 </code></pre><p>Next in the fragment shader we need to compute the <code>halfVector</code> between
 the surface to view and surface to light vectors.  Then we can take the

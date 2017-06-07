@@ -249,7 +249,7 @@ void main() {
 
 +  // вычисляем вектор от поверхности к наблюдателю
 +  // и передаём его во фрагментный шейдер
-+  v_surfaceToView = normalize(u_viewWorldPosition - surfaceWorldPosition);
++  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
 }
 </code></pre><p>Затем во фрагментном шейдере вычисляем <code>halfVector</code> между вектором
 от поверхности до наблюдателя и вектором от поверхности до источника

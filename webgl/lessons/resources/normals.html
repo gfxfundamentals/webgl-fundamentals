@@ -63,7 +63,7 @@ void main() {
   gl_Position = u_worldViewProjection * position;
   v_normal = (u_worldInverseTranspose * vec4(normal, 0)).xyz;
   v_surfaceToLight = u_lightPosition - (u_world * position).xyz;
-  v_surfaceToView = normalize((u_viewInverse[3] - (u_world * position)).xyz);
+  v_surfaceToView = (u_viewInverse[3] - (u_world * position)).xyz;
 }
 
 </script>
