@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ja/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ja/webgl-2d-scale.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -34,23 +34,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 2D Scale" />
+<meta property="og:title" content="WebGL二次元拡大と縮小" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to scale in 2D" />
+<meta property="og:description" content="WebGLの二次元拡大と縮小し方" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/ja/webgl-2d-scale.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 2D Scale" />
+<meta name="twitter:title" content="WebGL二次元拡大と縮小" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/ja/webgl-2d-scale.html" />
-<meta name="twitter:description" content="How to scale in 2D" />
+<meta name="twitter:description" content="WebGLの二次元拡大と縮小し方" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 2D Scale</title>
+<title>WebGL二次元拡大と縮小</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,13 +63,120 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 2D Scale</h1>
+    <h1>WebGL二次元拡大と縮小</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>ごめん！この記事はまだ翻訳されていない。<a href="https://github.com/greggman/webgl-fundamentals">翻訳してくれれば？</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-2d-scale.html">ここに英語版がある</a>.</p>
+      <p>本記事もWebGLのシリーズの一つである。
+最初の記事は<a href="webgl-fundamentals.html">WebGLの基本</a>で、そして前回の記事は<a href="webgl-2d-translation.html">二次元で図形を回転すること</a>についての記事である.</p>
+<p>拡大と縮小することは<a href="webgl-2d-translation.html">移動することと同じように</a>簡単である。
+<code>position</code>を倍率に掛けることだけである.</p>
+<p><a href="webgl-2d-rotation.html">前回のサンプル</a>の更新はこれである。</p>
+<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+attribute vec2 a_position;
 
+uniform vec2 u_resolution;
+uniform vec2 u_translation;
+uniform vec2 u_rotation;
++uniform vec2 u_scale;
+
+void main() {
++  // 位置を拡大する
++  vec2 scaledPosition = a_position * u_scale;
+
+  // 位置を回転する
+  vec2 rotatedPosition = vec2(
+*     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
+*     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
+
+  // 移動距離を足す
+  vec2 position = rotatedPosition + u_translation;
+</code></pre><p>そしてJavaScriptで倍率を設定する。</p>
+<pre><code>  ...
+
++  var scaleLocation = gl.getUniformLocation(program, &quot;u_scale&quot;);
+
+  ...
+
++  var scale = [1, 1];
+
+  ...
+
+  // シーンを描画する。
+  function drawScene() {
+
+    ...
+
+    // 移動距離を設定する。
+    gl.uniform2fv(translationLocation, translation);
+
+    // 回転差を設定する。
+    gl.uniform2fv(rotationLocation, rotation);
+
++    // 倍率を設定する。
++    gl.uniform2fv(scaleLocation, scale);
+
+    // 図形を描画する。
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = 18;  // ６三角形、三角形ごとに３頂点
+    gl.drawArrays(primitiveType, offset, count);
+  }
+</code></pre><p>これで拡大機能が出来た！スライダを操作してみよう。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-geometry-scale.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-scale.html" target="_blank">ここクリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>マイナス倍率にすると図形が逆に描画されることを気づいただろう。</p>
+<p>この三つの記事で図形を<a href="webgl-2d-translation.html">移動</a>、
+<a href="webgl-2d-rotation.html">回転</a>、拡大、縮小することを分かるために便利になったら嬉しいである。次は<a href="webgl-2d-matrices.html">魔法のような行列数学</a>についての記事である。それは
+この３つのことを組み合わせて、もっと簡単で便利な方法である。</p>
+<div class="webgl_bottombar">
+<h3>どうして「F」の図形?</h3>
+<p>
+私は最初に「F」の図形が使われたことを見たことはテクスチャーである。
+「F」の図形は大事じゃない。大事なのは向きを簡単に分かられることである。
+例えば心マーク❤とか三角形△を使うと水平に繰り返しているから向きが分かれない。円形○なら
+もっと分かり辛くなる。色が付いている四角形なら区別出来るかも知れないが,
+どんな角はどの色を忘れたら困る。「F」なら識別し安くなる。
+</p>
+<img src="../../resources/f-orientation.svg" class="webgl_center"/>
+<p>
+どの識別安い図形でもいいけど「F」に紹介してからずっと使った。
+</p>
+</div>
+
+
+
+
+
+      <hr class="lesson-comment-sep" />
+      <div class="lesson-comments">
+        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで(英語)</a>.</div>
+        <div>問題/バッグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL二次元拡大と縮小';
+            var disqus_title = 'WebGL二次元拡大と縮小';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <select id="language">
@@ -89,10 +196,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </ul>
   <li>2D translation, rotation, scale, matrix math</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-2d-translation.html">WebGL 2D Translation(英語)</a></li>
-    <li><a href="/webgl/lessons/webgl-2d-rotation.html">WebGL 2D Rotation(英語)</a></li>
-    <li><a href="/webgl/lessons/webgl-2d-scale.html">WebGL 2D Scale(英語)</a></li>
-    <li><a href="/webgl/lessons/webgl-2d-matrices.html">WebGL 2D Matrices(英語)</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-translation.html">WebGL 2D Translation</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-rotation.html">WebGL 2D Rotation</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-scale.html">WebGL 2D Scale</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-matrices.html">WebGL 2D Matrices</a></li>
   </ul>
   <li>3D</li>
   <ul>

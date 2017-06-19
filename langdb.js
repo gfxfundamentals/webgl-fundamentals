@@ -10,6 +10,7 @@ window.langDB = {
     "webgl-2d-matrices.html": {
       "en": true,
       "fr": true,
+      "ja": true,
       "ru": true
     },
     "webgl-2d-matrix-stack.html": {
@@ -26,6 +27,7 @@ window.langDB = {
     "webgl-2d-scale.html": {
       "en": true,
       "fr": true,
+      "ja": true,
       "ru": true
     },
     "webgl-2d-translation.html": {
@@ -62,6 +64,7 @@ window.langDB = {
     "webgl-3d-orthographic.html": {
       "en": true,
       "fr": true,
+      "ja": true,
       "ru": true
     },
     "webgl-3d-perspective.html": {
