@@ -438,6 +438,14 @@ that 3D 'F', front, back, sides, etc get drawn in the order they appear in in
 our geometry.  That doesn't give us quite the desired results as sometimes
 the ones in the back get drawn after the ones in the front.
 
+<img class="webgl_center" width="163" height="190" src="resources/polygon-drawing-order.gif" />
+
+The <span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">redish part</span> is
+the **front** of the 'F'  but because it's the first part of our data
+it is drawn first and then the other triangles behind it get drawn
+after covering it up. For example the  <span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">purple part</span>
+is actually the back of the 'F'. It gets drawn 2nd because it comes 2nd in our data.
+
 Triangles in WebGL have the concept of front facing and back facing.  A
 front facing triangle has its vertices go in a clockwise direction.  A
 back facing triangle has its vertices go in a counter clockwise direction
