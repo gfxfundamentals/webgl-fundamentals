@@ -395,7 +395,7 @@ function setColors(gl) {
 }
 ```
 
-図形を描画する時、色の属性をどういうふうに色のバァッファーからデータ取得するかの設定をする。
+図形を描画する時、色の属性をどういうふうに色のバァッファーからデータ取得するかの設定をする必要がある。
 
 ```
 // 色の属性オンにする。
@@ -421,7 +421,7 @@ gl.vertexAttribPointer(
 {{{example url="../webgl-3d-step3.html" }}}
 
 このメチャクチャな絵は何だ？実は「F」の図形の三角形は定義された順番に描画される。
-場合によるその順番で前面の三角形が書かれた後裏面の三角形が描画される。
+その順番によると前面の三角形が書かれた後裏面の三角形が描画される。
 
 WebGLで三角形は前向きと裏向きのコンセプトがある。前向き三角形はその三角形の頂点が
 時計回りになっている三角形である。裏向き三角形はその三角形の頂点が反時計回りになっている三角形である。
@@ -436,30 +436,21 @@ WebGLで前向きか裏向きの三角形しか描画しない機能がある。
 
 `drawScene`の関数に入れる。その機能のデフォルトは裏向きの三角形を描画しないことである。
 
-Note that as far as WebGL is concerned, whether or not a triangle is
-considered to be going clockwise or counter clockwise depends on the
-vertices of that triangle in clip space.  In other words, WebGL figures out
-whether a triangle is front or back AFTER you've applied math to the
-vertices in the vertex shader.  That means for example a clockwise
-triangle that is scaled in X by -1 becomes a counter clockwise triangle or
-a clockwise triangle rotated 180 degrees becomes a couter clockwise
-triangle.  Because we had CULL_FACE disabled we can see both
-clockwise(front) and counter clockwise(back) triangles.  Now that we've
-turned it on, any time a front facing triangle flips around either because
-of scaling or rotation or for whatever reason, WebGL won't draw it.
-That's a good thing since as your turn something around in 3D you
-generally want whichever triangles are facing you to be considered front
-facing.
+三角形が時計回りか反時計回りかクリップ空間で判断される。つまり、頂点シェーだーを適用した後
+前向きか裏向きか判断する。時計回りの三角形が−1にスケールされたら反時計回りになる。あるいは、
+時計回りの三角形がY軸で180度回転されたら反時計回りになる。
 
-With CULL_FACE turned on this is what we get
+`CULL_FACE`の機能がオフになっているので時計回り（前向き）と反時計回り（裏向き）の三角形
+が両方見える。オンにすると前向きの三角形は、回転でも、スケールでも、どの理由でも裏向きになった場合
+WebGLに描画されない。それはいいことでしょう。三次元なら自分に向いている三角形は前向きだとWebGLに認識して欲しい。
+
+`CULL_FACE`をオンにするとこうなる。
 
 {{{example url="../webgl-3d-step4.html" }}}
 
-Hey!  Where did all the triangles go?  It turns out, many of them are
-facing the wrong way.  Rotate it and you'll see them appear when you look
-at the other side.  Fortunately it's easy to fix.  We just look at which
-ones are backward and exchange 2 of their vertices.  For example if one
-backward triangle is
+やばい！三角形が消えた！実は多くの三角形の向きが間違えている。反対向きになるまで回転してみれば
+現れてくる。簡単に直せる。逆になっている三角形の頂点を2つ交換だけでいい。例えば裏向きの
+三角形の頂点はこうなら。
 
 ```
            1,   2,   3,
@@ -467,7 +458,7 @@ backward triangle is
          700, 800, 900,
 ```
 
-we just flip the last 2 vertices to make it forward.
+最後の2つの頂点を交換すれば前向きになる。
 
 ```
            1,   2,   3,
@@ -475,38 +466,30 @@ we just flip the last 2 vertices to make it forward.
           40,  50,  60,
 ```
 
-Going through and fixing all the backward triangles gets us to this
+間違えている三角形を全て直したらこうなる。
 
 {{{example url="../webgl-3d-step5.html" }}}
 
-That's closer but there's still one more problem.  Even with all the
-triangles facing in the correct direction and with the back facing ones
-being culled we still have places where triangles that should be in the back
-are being drawn over triangles that should be in front.
+これはもっと正しく描画しているがまだ一つの問題が残っている。三角形は完全に正しい向きになって、
+裏向きの三角形が描画されないのに、後ろの三角形が前の三角形の上に描画されている状態が残っている。
 
-Enter the DEPTH BUFFER.
+デプスバッファ登場
 
-A depth buffer, sometimes called a Z-Buffer, is a rectangle of *depth*
-pixels, one depth pixel for each color pixel used to make the image.  As
-WebGL draws each color pixel it can also draw a depth pixel.  It does this
-based on the values we return from the vertex shader for Z.  Just like we
-had to convert to clip space for X and Y, Z is also in clip space or (-1
-to +1).  That value is then converted into a depth space value (0 to +1).
-Before WebGL draws a color pixel it will check the corresponding depth
-pixel.  If the depth value for the pixel it's about to draw is greater
-than the value of the corresponding depth pixel then WebGL does not draw
-the new color pixel.  Otherwise it draws both the new color pixel with the
-color from your fragment shader AND it draws the depth pixel with the new
-depth value.  This means, pixels that are behind other pixels won't get
-drawn.
+デプスバッファ（またZバッファ）はピクセルごとにデプス・ピクセルの長方形である。デプス・ピクセルはそのピクセルの奥行きの距離である。
+WebGLは色のピクセルを描くとともにデプス・ピクセルも描ける。頂点シェーダーに返したZで描画する。
+XとYはクリップ空間に変更しなければいけないのと同じように、Zもクリップ空間に返さなければいけない。
+その値はデプス空間（0〜+1）にされる。WebGLは色ピクセルを描く前に、その色ピクセルのデプス・ピクセルをチェックする。
+描こうとしている色のピクセルのデプス値がデプス・ピクセルより大きい場合色ピクセルを描かない。
+さもなければ、ピクセルシェーダーに与えられた色で色ピクセルを描いて、デプスの値をデプス・ピクセルにも描く。
+つまり、前のピクセルの上に後ろのピクセルを描かないということである。
 
-We can turn on this feature nearly as simply as we turned on culling with
+この機能は裏向きの三角形を描画しないのと同じように簡単にオンに出来る。
 
 ```
   gl.enable(gl.DEPTH_TEST);
 ```
 
-We also need to clear the depth buffer back to 1.0 before we start drawing.
+描画する前にデプス・バッファを1.0にクリアしなきゃ。
 
 ```
   // Draw the scene.
@@ -514,20 +497,19 @@ We also need to clear the depth buffer back to 1.0 before we start drawing.
     ...
 
     // Clear the canvas AND the depth buffer.
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+*    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     ...
 ```
 
-And now we get
+それでこうなった。
 
 {{{example url="../webgl-3d-step6.html" }}}
 
-which is 3D!
+それは三次元である！
 
-One minor thing. In most 3d math libraries there is no `projection` function to
-do our conversions from clip space to pixel space. Rather there's usually a function
-called `ortho` or `orthographic` that looks like this
+もう一つの小さいこと、一般的な三次元数学ライブラリにクリップ空間からピクセル空間に「projection」という関数がないことである。
+その変わりに`ortho`とか`orthographic`という関数がある。普段このようになっている。
 
     var m4 = {
       orthographic: function(left, right, bottom, top, near, far) {
@@ -543,10 +525,9 @@ called `ortho` or `orthographic` that looks like this
         ];
       }
 
-Unlike our simplified `projection` function above which only had width, height, and depth
-parameters this more common othrographic projection function we can pass in left, right,
-bottom, top, near, and far which gives as more flexability. To use it the same as
-our original projection function we'd call it with
+上記に横、縦、奥行きしか使ってない単純な`projection`関数と違って、
+この一般的なもっとフレキシブルな正投影の関数は右、左、上、下、間口、奥行を使っている。
+`projection`の関数と同じように使いたければこのように呼び出せばいい。
 
     var left = 0;
     var right = gl.canvas.clientWidth;
@@ -554,52 +535,47 @@ our original projection function we'd call it with
     var top = 0;
     var near = -400;
     var far = 400;
-    m4.orthographic(left, right, bottom, top, near, far);
+    var projection = m4.orthographic(left, right, bottom, top, near, far);
 
-In the next post I'll go over [how to make it have perspective](webgl-3d-perspective.html).
+次の記事は[透視投影についての記事である](webgl-3d-perspective.html)。
 
 <div class="webgl_bottombar">
-<h3>Why is the attribute vec4 but gl.vertexAttribPointer size 3</h3>
+<h3>なせ属性が<code>vec4</code>なのに<code>gl.vertexAttribPointer</code>の<code>size</code>は<code>3</code>である？</h3>
 <p>
-For those of you who are detail oriented you might have noticed we defined our 2 attributes as
+細かいところまで見ている型は属性がこのように<code>vec4</code>定義したが、
 </p>
 <pre class="prettyprint showlinemods">
 attribute vec4 a_position;
 attribute vec4 a_color;
 </pre>
-<p>both of which are 'vec4' but when we tell WebGL how to take data out of our buffers we used</p>
+<p>バッファからダータを取り方を設定したところに<code>size</code>を３にしたことを気づいただろう。</p>
 <pre class="prettyprint showlinemods">
-// Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-var size = 3;          // 3 components per iteration
-var type = gl.FLOAT;   // the data is 32bit floats
-var normalize = false; // don't normalize the data
-var stride = 0;        // 0 = move forward size * sizeof(type) each
-                       // iteration to get the next position
-var offset = 0;        // start at the beginning of the buffer
+// 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取りか。
+var size = 3;          // 呼び出すごとに3つの数値
+var type = gl.FLOAT;   // データは32ビットの数値
+var normalize = false; // データをnormalizeしない
+var stride = 0;        // シェーダーを呼び出すごとに進む距離
+                        // 0 = size * sizeof(type)
+var offset = 0;        // バッファーの頭から取り始める
 gl.vertexAttribPointer(
     positionAttributeLocation, size, type, normalize, stride, offset);
 
 ...
-// Tell the attribute how to get data out of colorBuffer (ARRAY_BUFFER)
-var size = 3;          // 3 components per iteration
-var type = gl.UNSIGNED_BYTE;   // the data is 8bit unsigned bytes
-var normalize = true;  // convert from 0-255 to 0.0-1.0
-var stride = 0;        // 0 = move forward size * sizeof(type) each
-                       // iteration to get the next color
-var offset = 0;        // start at the beginning of the buffer
+// 属性にどうやってcolorBuffer（ARRAY_BUFFER)からデータを取りか。
+var size = 3;                  // 呼び出すごとに3つの数値
+var type = gl.UNSIGNED_BYTE;   // データは8ビット符号なし整数
+var normalize = false;         // データをnormalizeする（０〜２５５から０−１に）
+var stride = 0;                // シェーダーを呼び出すごとに進む距離
+                               // 0 = size * sizeof(type)
+var offset = 0;                // バッファーの頭から取り始める
 gl.vertexAttribPointer(
-    colorAttributeLocation, size, type, normalize, stride, offset);
+    colorLocation, size, type, normalize, stride, offset)
 </pre>
 <p>
-That '3' in each of those says only to pull 3 values out of the buffer per attribute
-per iteration of the vertex shader.
-This works because in the vertex shader WebGL provides defaults for those
-values you don't supply.  The defaults are 0, 0, 0, 1 where x = 0, y = 0, z = 0
-and w = 1.  This is why in our old 2D vertex shader we had to explicitly
-supply the 1.  We were passing in x and y and we needed a 1 for z but
-because the default for z is 0 we had to explicitly supply a 1.  For 3D
-though, even though we don't supply a 'w' it defaults to 1 which is what
-we need for the matrix math to work.
+その「`size = 3`」の'3'の意味は頂点シェーダーが呼び出されるごとにバッファから３値を取ることである。
+属性のデフォルトは0,0,0,1でX=0,Y=0,Z=0,W=1である。だから属性に３値しか適用しないとWは１になる。
+その理由で二次元頂点シェーダーの場合Z=1にはっきりと割り与えなればいけなかった。Zのデフォルトは０だから。
+３次元の場合三次元数学の為にW=1が必要で、W=1はデフォルトだから明示的にWを１に割与えなくていい。
 </p>
 </div>
 
