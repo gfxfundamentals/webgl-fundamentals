@@ -306,7 +306,7 @@ The first problem we have is that our geometry is a flat F which makes it
 hard to see any 3D.  To fix that let's expand the geometry to 3D.  Our
 current F is made of 3 rectangles, 2 triangles each.  To make it 3D will
 require a total of 16 rectangles.  the 3 rectangles on the front, 3 on the
-back, 1 on the left, 4 on the right, 3 on the bottoms
+back, 1 on the left, 4 on the right, 2 on the tops, 3 on the bottoms.
 
 <img class="webgl_center" width="300" src="resources/3df.svg" />
 
