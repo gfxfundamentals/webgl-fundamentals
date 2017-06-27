@@ -34,7 +34,7 @@ void main() {
 
 ```
 <script id="3d-vertex-shader" type="x-shader/x-vertex">
-attribute vec4 a_position;
+*attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
 
@@ -423,6 +423,8 @@ gl.vertexAttribPointer(
 このメチャクチャな絵は何だ？実は「F」の図形の三角形は定義された順番に描画される。
 その順番によると前面の三角形が書かれた後裏面の三角形が描画される。
 
+<img class="webgl_center" width="163" height="190" src="../resources/polygon-drawing-order.gif" />
+
 WebGLで三角形は前向きと裏向きのコンセプトがある。前向き三角形はその三角形の頂点が
 時計回りになっている三角形である。裏向き三角形はその三角形の頂点が反時計回りになっている三角形である。
 
@@ -508,8 +510,10 @@ XとYはクリップ空間に変更しなければいけないのと同じよう
 
 それは三次元である！
 
-もう一つの小さいこと、一般的な三次元数学ライブラリにクリップ空間からピクセル空間に「projection」という関数がないことである。
-その変わりに`ortho`とか`orthographic`という関数がある。普段このようになっている。
+もう一つ小さい点だが、一般的な三次元数学ライブラリに、
+クリップ空間からピクセル空間に変換する「projection」という関数がない。
+その代わりに`ortho`とか`orthographic`という関数がある。
+通常このようになっている。
 
     var m4 = {
       orthographic: function(left, right, bottom, top, near, far) {
@@ -525,8 +529,8 @@ XとYはクリップ空間に変更しなければいけないのと同じよう
         ];
       }
 
-上記に横、縦、奥行きしか使ってない単純な`projection`関数と違って、
-この一般的なもっとフレキシブルな正投影の関数は右、左、上、下、間口、奥行を使っている。
+先説明した横、縦、奥行きしか使ってない単純な`projection`関数と違って、
+この一般的なもっとフレキシブルな正投影の関数は右、左、上、下、全面、裏面を使っている。
 `projection`の関数と同じように使いたければこのように呼び出せばいい。
 
     var left = 0;
@@ -540,18 +544,18 @@ XとYはクリップ空間に変更しなければいけないのと同じよう
 次の記事は[透視投影についての記事である](webgl-3d-perspective.html)。
 
 <div class="webgl_bottombar">
-<h3>なぜ属性が<code>vec4</code>なのに<code>gl.vertexAttribPointer</code>の<code>size</code>は<code>3</code>なのか？</h3>
+<h3>なせ属性が<code>vec4</code>なのに<code>gl.vertexAttribPointer</code>の<code>size</code>は<code>3</code>なのか？</h3>
 <p>
-細かいところまで見ている方は、属性がこのように<code>vec4</code>として定義したが、
+細かいところまで見ている方は、属性がこのように<code>vec4</code>に定義され、
 </p>
 <pre class="prettyprint showlinemods">
 attribute vec4 a_position;
 attribute vec4 a_color;
 </pre>
-<p>バッファからデータを取り出すときには<code>size</code>を３に設定したことを気づいただろう。</p>
+<p>バッファからデータの取り方を設定したところで<code>size</code>を３にしたことに気づいただろう。</p>
 <pre class="prettyprint showlinemods">
-// 属性にどうやってpositionBuffer（ARRAY_BUFFER）からデータを取り出すか。
-var size = 3;          // 呼び出すごとに3つの数値
+// 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取りか。
+*var size = 3;          // 呼び出すごとに3つの数値
 var type = gl.FLOAT;   // データは32ビットの数値
 var normalize = false; // データをnormalizeしない
 var stride = 0;        // シェーダーを呼び出すごとに進む距離
@@ -561,8 +565,8 @@ gl.vertexAttribPointer(
     positionAttributeLocation, size, type, normalize, stride, offset);
 
 ...
-// 属性にどうやってcolorBuffer（ARRAY_BUFFER）からデータを取り出すか。
-var size = 3;                  // 呼び出すごとに3つの数値
+// 属性にどうやってcolorBuffer（ARRAY_BUFFER)からデータを取りか。
+*var size = 3;                  // 呼び出すごとに3つの数値
 var type = gl.UNSIGNED_BYTE;   // データは8ビット符号なし整数
 var normalize = false;         // データをnormalizeする（０〜２５５から０−１に）
 var stride = 0;                // シェーダーを呼び出すごとに進む距離
@@ -572,10 +576,10 @@ gl.vertexAttribPointer(
     colorLocation, size, type, normalize, stride, offset)
 </pre>
 <p>
-その「<code>size = 3</code>」の'3'の意味は頂点シェーダーが呼び出されるごとにバッファから３値を取ることである。
-属性のデフォルトは0,0,0,1でX=0,Y=0,Z=0,W=1である。だから属性に３値しか適用しないとWは１になる。
+その「`size = 3`」の'3'の意味は頂点シェーダーが呼び出されるごとにバッファから３値を取ることである。
+属性のデフォルトは0,0,0,1でX=0,Y=0,Z=0,W=1である。だから属性三つの値しか適用しないとWは１になる。
 その理由で二次元頂点シェーダーの場合Z=1にはっきりと割り当てなればいけなかった。Zのデフォルトは０だから。
-３次元の場合三次元数学の為にW=1が必要で、W=1はデフォルトだから明示的にWを１に割り当てなくていい。
+３次元の場合三次元数学の為にW=1が必要で、W=1はデフォルトだから手動でWに１を割り当てなくていい。
 </p>
 </div>
 
