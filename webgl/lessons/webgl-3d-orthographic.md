@@ -37,7 +37,7 @@ And here's the new one
 
 ```
 <script id="3d-vertex-shader" type="x-shader/x-vertex">
-attribute vec4 a_position;
+*attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
 
