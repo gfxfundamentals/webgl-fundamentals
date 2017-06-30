@@ -261,7 +261,7 @@ X軸で回転
 
 ```
   projection: function(width, height, depth) {
-    // Note: Y軸で０は上の方にするためYをひっくり返す行列
+    // Note: Y軸で０を上の方にするためYをひっくり返す行列
     return [
        2 / width, 0, 0, 0,
        0, -2 / height, 0, 0,
