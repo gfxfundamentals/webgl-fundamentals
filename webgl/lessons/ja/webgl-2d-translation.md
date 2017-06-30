@@ -27,7 +27,7 @@ Description: 二次元で移動し方
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-    // クリプ空間からピクセル空間にWebGLの設定
+    // クリップ空間からピクセル空間にWebGLの設定
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // キャンバスをクリアする
