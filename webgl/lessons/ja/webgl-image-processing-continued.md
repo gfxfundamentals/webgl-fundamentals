@@ -210,32 +210,31 @@ void main() {
 
   ...
 
-  // don't flip
+  // ひっくり返さない
   gl.uniform1f(flipYLocation, 1);
 
   ...
 
-  // flip
+  // ひっくり返す
   gl.uniform1f(flipYLocation, -1);
 
 ```
+今回はプログラムを単純にするため、GLSLプログラムを１つだけ使って、
+複数のエフェクトを実現してみました。本格的に画像処理をやろうとする場合は、
+GLSLプログラムを複数用意することになると思います。色相、彩度、輝度を
+調整するエフェクト用プログラム、明度、コントラストのエフェクト用プログラム、
+逆転させたり、量を調整したりするエフェクト用プログラム、といった具合です。
+GLSLプログラムを切り替えたり、パラメータを更新したりするため、
+コードを書き換える必要があるでしょう。実際にそういうサンプルプログラムを
+書くことも考えたのですが、そういったことは読者の練習のために残しておくことに
+しました。複数のGLSLプログラムやそのパラメータを扱うのは、なかなか大変で、
+プログラムが混沌とするのを抑えるためのリファクタリング作業は大掛かりなもの
+になると思います。
 
-I kept this example simple by using a single GLSL program that can achieve
-multiple effects.  If you wanted to do full on image processing you'd
-probably need many GLSL programs.  A program for hue, saturation and
-luminance adjustment.  Another for brightness and contrast.  One for
-inverting, another for adjusting levels, etc.  You'd need to change the
-code to switch GLSL programs and update the parameters for that particular
-program.  I'd considered writing that example but it's an exercise best
-left to the reader because multiple GLSL programs each with their own
-parameter needs probably means some major refactoring to keep it all from
-becoming a big mess of spaghetti.
-
-I hope this and the preceding examples have made WebGL seem a little more
-approachable and I hope starting with 2D helps make WebGL a little easier
-to understand.  If I find the time I'll try to write [a few more
-articles](webgl-2d-translation.html) about how to do 3D as well as more
-details on what WebGL is really doing under the hood.  For a next step
-consider learning [how to use 2 or more textures](webgl-2-textures.html).
-
-
+このプログラムや、この後登場するプログラムが、読者にとってとっつきやすい
+ものであれば、と思います。二次元処理から始めることが、WebGLの理解の助けに
+なればと思います。時間ができたら、三次元表示のやり方や、その裏でWebGLが
+本当は何をやっているのかといった詳細について、
+[新しい記事](webgl-2d-translation.html)を書いてみようと思います。
+次の記事は[２つ以上のテクスチャを使う方法](webgl-2-textures.html)の記事に
+なる予定です。
