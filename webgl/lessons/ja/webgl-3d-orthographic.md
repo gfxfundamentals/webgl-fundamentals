@@ -52,7 +52,7 @@ void main() {
 ```
   ...
 
-    // 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取りか。
+    // 属性にどうやってpositionBuffer（ARRAY_BUFFER）からデータを取り出すか。
 *    var size = 3;          // 呼び出すごとに3つの数値
     var type = gl.FLOAT;   // データは32ビットの数値
     var normalize = false; // データをnormalizeしない
@@ -247,7 +247,7 @@ X軸で回転
 
 ```
   projection: function (width, height) {
-    // Note: Y軸で０は上の方にするためYを弾く行列
+    // Note: Y軸で０を上の方にするためYをひっくり返す行列
     return [
       2 / width, 0, 0,
       0, -2 / height, 0,
@@ -261,7 +261,7 @@ X軸で回転
 
 ```
   projection: function(width, height, depth) {
-    // Note: Y軸で０は上の方にするためYを弾く行列
+    // Note: Y軸で０は上の方にするためYをひっくり返す行列
     return [
        2 / width, 0, 0, 0,
        0, -2 / height, 0, 0,
@@ -540,17 +540,17 @@ XとYはクリップ空間に変更しなければいけないのと同じよう
 次の記事は[透視投影についての記事である](webgl-3d-perspective.html)。
 
 <div class="webgl_bottombar">
-<h3>なせ属性が<code>vec4</code>なのに<code>gl.vertexAttribPointer</code>の<code>size</code>は<code>3</code>である？</h3>
+<h3>なぜ属性が<code>vec4</code>なのに<code>gl.vertexAttribPointer</code>の<code>size</code>は<code>3</code>なのか？</h3>
 <p>
-細かいところまで見ている型は属性がこのように<code>vec4</code>定義したが、
+細かいところまで見ている方は、属性がこのように<code>vec4</code>として定義したが、
 </p>
 <pre class="prettyprint showlinemods">
 attribute vec4 a_position;
 attribute vec4 a_color;
 </pre>
-<p>バッファからダータを取り方を設定したところに<code>size</code>を３にしたことを気づいただろう。</p>
+<p>バッファからデータを取り出すときには<code>size</code>を３に設定したことを気づいただろう。</p>
 <pre class="prettyprint showlinemods">
-// 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取りか。
+// 属性にどうやってpositionBuffer（ARRAY_BUFFER）からデータを取り出すか。
 var size = 3;          // 呼び出すごとに3つの数値
 var type = gl.FLOAT;   // データは32ビットの数値
 var normalize = false; // データをnormalizeしない
@@ -561,7 +561,7 @@ gl.vertexAttribPointer(
     positionAttributeLocation, size, type, normalize, stride, offset);
 
 ...
-// 属性にどうやってcolorBuffer（ARRAY_BUFFER)からデータを取りか。
+// 属性にどうやってcolorBuffer（ARRAY_BUFFER）からデータを取り出すか。
 var size = 3;                  // 呼び出すごとに3つの数値
 var type = gl.UNSIGNED_BYTE;   // データは8ビット符号なし整数
 var normalize = false;         // データをnormalizeする（０〜２５５から０−１に）
@@ -572,10 +572,10 @@ gl.vertexAttribPointer(
     colorLocation, size, type, normalize, stride, offset)
 </pre>
 <p>
-その「`size = 3`」の'3'の意味は頂点シェーダーが呼び出されるごとにバッファから３値を取ることである。
+その「<code>size = 3</code>」の'3'の意味は頂点シェーダーが呼び出されるごとにバッファから３値を取ることである。
 属性のデフォルトは0,0,0,1でX=0,Y=0,Z=0,W=1である。だから属性に３値しか適用しないとWは１になる。
-その理由で二次元頂点シェーダーの場合Z=1にはっきりと割り与えなればいけなかった。Zのデフォルトは０だから。
-３次元の場合三次元数学の為にW=1が必要で、W=1はデフォルトだから明示的にWを１に割与えなくていい。
+その理由で二次元頂点シェーダーの場合Z=1にはっきりと割り当てなればいけなかった。Zのデフォルトは０だから。
+３次元の場合三次元数学の為にW=1が必要で、W=1はデフォルトだから明示的にWを１に割り当てなくていい。
 </p>
 </div>
 
