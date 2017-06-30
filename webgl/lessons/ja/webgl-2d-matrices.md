@@ -349,7 +349,7 @@ newY = y * sy;
   // 0〜1から0〜2に
   vec2 zeroToTwo = zeroToOne * 2.0;
 
-  // 0〜2から-1〜+1に(クリプ空間）
+  // 0〜2から-1〜+1に(クリップ空間）
   vec2 clipSpace = zeroToTwo - 1.0;
 
   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
