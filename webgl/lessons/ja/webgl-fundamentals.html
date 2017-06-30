@@ -37,7 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta property="og:title" content="WebGLの基本" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="基本から最初のWebGLのレッソン" />
+<meta property="og:description" content="基本から最初のWebGLのレッスン" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/ja/webgl-fundamentals.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
@@ -46,7 +46,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:domain" content="webglfundamentals.org" />
 <meta name="twitter:title" content="WebGLの基本" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/ja/webgl-fundamentals.html" />
-<meta name="twitter:description" content="基本から最初のWebGLのレッソン" />
+<meta name="twitter:description" content="基本から最初のWebGLのレッスン" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
@@ -67,15 +67,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>WebGLの基本</p>
-<p>WebGLは三次元APIとして思われることも多い。
-「WebGLを使えば簡単に三次元の映像を表示出来るでだろう」っと思ってしまう人も多い。
-実はWebGLはただのピクセルを書くエンジンである。WebGLで自分の作成したコートで点、線、
-三角形を使って色々なタスクを熟すことが出来る。
-それ以上描きたければ点と線と三角形を使って自分のコードでWebGLを使うことが人用がある。</p>
+      <p>WebGLは三次元APIとして思われることも多い。
+「WebGLを使えば<em>魔法のように</em>簡単に三次元の映像を表示出来るだろう」と思ってしまう人も多い。
+実はWebGLはただのピクセルを書くエンジンである。WebGLで自分の作成したコードで点、線、
+三角形を使って色々なタスクを記述することが出来る。
+それ以上描きたければ点と線と三角形を使って自分のコードでWebGLを使うことが必要である。</p>
 <p>WebGLはコンピュータのGPUで動く。だからGPUで起動出来るコードを提供しなければいけない。
-そのために２つの関数を提供必要がある。その関数は「頂点シェーダー」と「フラグメントシェーダー」と呼ばれ、
-両方厳密なC/C++のような「GLSL」という言語で作成するものだ。その２つの組み合わせを「プログラム」という。</p>
+そのために２つの関数を提供する必要がある。その関数は「頂点シェーダー」と「フラグメントシェーダー」と呼ばれ、
+両方厳密なC/C++のような「<a href="webgl-shaders-and-glsl.html">GLSL</a>」という言語で作成するものだ。その２つの組み合わせを「<em>プログラム</em>」という。</p>
 <p>頂点シェーダーの役割は頂点の位置を計算すること。
 その関数の導き出した頂点位置でWebGLは点と線と三角形を描く。
 描いている最中フラグメントシェーダーを呼び出す。
@@ -86,16 +85,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>そのシェーダーの関数に提供したいデータはGPUにアップロードしなければいけない。
 それは４つの方法がある。</p>
 <ol>
-<li><p>属性とバッファー</p>
+<li><p>属性(attribute)とバッファー</p>
 <p>バッファーはGPUにあるバイナリデータの配列。中身は頂点の位置や、法線や、色や、
 テクスチャーの座標などだが、好きなデータを入れること出来る。</p>
 <p>属性はバッファーからデータを取ってシェーダーに提供する設定である。
-例えばバッファーに位置ごとに三つの３２ビット数字が入ている。
+例えばバッファーに位置ごとに三つの３２ビット数字が入っている。
 ある属性の設定でどのバッファーから位置を取るかと、どのようなデータを取るか
 （三つの３２ビット数字）とか、バッファーにそのデータは何処から始まるかとか、
-一つの位置から次の位置になんバイト飛ぶかとかである。</p>
+一つの位置から次の位置に何バイト飛ぶかとかである。</p>
 <p>バッファーは自由にデータを取ることが出来ない。
-代わりに頂点シェーダーを呼び出す回数が設定して、
+代わりに頂点シェーダーを呼び出す回数を設定して、
 呼び出すごとに次のデータをバッファーから読んで属性にそのデータが入る。</p>
 </li>
 <li><p>ユニフォーム(uniform)</p>
@@ -117,9 +116,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 プログラマーの役目はその２つのことをWebGLに与えることである。
 そのため２つのシェーダーを与える。頂点シェーダーでクリップ空間の頂点座標を与えて、
 そしてフラグメントシェーダーで色を与える。</p>
-<p>クリップ空間座標はキャンバスの要素（canvas)のサイズに関係がなく、いつも−１から＋１になる。
+<p>クリップ空間座標はキャンバスの要素（canvas）のサイズに関係がなく、いつも−１から＋１になる。
 以下は一番単純なWebGLの例である。</p>
-<p>まず頂点シェーダーで始まる。</p>
+<p>まず頂点シェーダーから始めよう。</p>
 <pre><code>// バッファーからデータを取る属性
 attribute vec4 a_position;
 
@@ -129,7 +128,8 @@ void main() {
   // 特別の変数「gl_Position」を割り当てることは頂点シェーダーの役割である
   gl_Position = a_position;
 }
-</code></pre><p>GLSLの代わりにJavaScriptで書かれて起動したらことように動く</p>
+</code></pre><p>このコードを起動したらどのように動くか、
+GLSLの代わりにJavaScriptで書かれていたとしたら以下のように動く、と想像してみるとよいだろう。</p>
 <pre><code>// *** 擬似コード!! ***
 
 var positionBuffer = [
@@ -151,10 +151,10 @@ drawArrays(..., offset, count) {
      ...
      doSomethingWith_gl_Position();
 }
-</code></pre><p>実際GLSLのシェーダーでのデータは本物<code>positionBuffer</code>がバイナリに更新しなければならないので、
+</code></pre><p>実際にはGLSLのシェーダーでのデータ<code>positionBuffer</code>はバイナリに変換しなければならないので、
 バッファーがらデータを取り込む際の計算方法は異なる。
-でも、頂点シェーダーはこのような動くことと想像出来ると思う。</p>
-<p>次はフラグメントシェーダーが必要</p>
+でも、頂点シェーダーはこのように動くと考えてよい。</p>
+<p>次はフラグメントシェーダーが必要だ。</p>
 <pre><code>// フラグメントシェーダーは既定の精度がないので選択することが必要である。
 // 「mediump」は一般的な既定の設定である。それは「中間の精度」の意味である。
 precision mediump float;
@@ -164,8 +164,8 @@ void main() {
   // フラグメントシェーダーの役割である
   gl_FragColor = vec4(1, 0, 0.5, 1); // 赤紫
 }
-</code></pre><p>上記で<code>gl_FragColor</code>に<code>1,0,0,5,1</code>に割り当てる。それは赤＝１，緑＝０、青＝０．５、透明さ（アルファ）＝１。
-WebGLの色は０〜１である。</p>
+</code></pre><p>上記では<code>gl_FragColor</code>に<code>1, 0, 0.5, 1</code>に割り当てている。それは赤＝１，緑＝０、青＝０．５、透明度（アルファ）＝１。
+WebGLでは、色は０〜１で指定する。</p>
 <p>２つのシェーダーを書いたのでWebGLを始めよう！</p>
 <p>まずHTMLのCanvas要素が必要である</p>
 <pre><code>&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
@@ -177,8 +177,8 @@ WebGLの色は０〜１である。</p>
     // no webgl for you!
     ...
 </code></pre><p>そして先のシェーダーをコンパイルしてGPUにアップロードすることが必要なのでstringに入れることが必要である。
-GLSLのstringをする方法はいくつかある。文字列の連結とか、AJAXでダウンロードすることとか、複数行テンプレートstringとか。
-今回JavaScriptではない型付けされたscript要素に入れる方法をとる。</p>
+GLSLのstringをする方法はいくつかある。文字列の連結とか、AJAXでダウンロードすることとか、複数行テンプレートstring(multiline template strings)とか。
+今回は、typeがJavaScriptではないscript要素に入れる方法をとる。</p>
 <pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
   // バッファーからデータを取る属性
@@ -206,9 +206,9 @@ GLSLのstringをする方法はいくつかある。文字列の連結とか、A
   }
 
 &lt;/script&gt;
-</code></pre><p>本格的な三次元のエンジンは色々な方法で動きながらコードを組み合わせてGLSLシェーダーを作成する。
-しかし、このサイトであまり複雑なシェーダーを使わないので、動きながらシェーダー・コードを組み合わせて作成するのが必要ではない。</p>
-<p>次にシェーダーを作成し、GLSLのコードをアップロードし、シェーダーをコンパイルする関数が必要である。</p>
+</code></pre><p>本格的な三次元のエンジンは色々な方法で動的にコードを組み合わせてGLSLシェーダーを生成する。
+しかし、このサイトであまり複雑なシェーダーを使わないので、シェーダー・コードを動的に組み合わせて生成する必要はない。</p>
+<p>次に、シェーダーを作成し、GLSLのコードをアップロードし、シェーダーをコンパイルする関数が必要である。</p>
 <pre><code>function createShader(gl, type, source) {
   // シェーダーを作成
   var shader = gl.createShader(type);
@@ -233,7 +233,7 @@ var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot
 
 var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-</code></pre><p>それでその２つのシェーダーをプログラムにリンクする</p>
+</code></pre><p>それでその２つのシェーダーをプログラム(<em>program</em>)にリンク(<em>link</em>)する</p>
 <pre><code>function createProgram(gl, vertexShader, fragmentShader) {
   // プログラムを作成
   var program = gl.createProgram();
@@ -261,10 +261,10 @@ WebGL APIの役割のほとんどはGLSLプログラムにデータを与える�
 今回のGLSLプログラムのインプットは<code>a_position</code>の属性しかない。
 作成したプログラムに最初するべきことは属性のローケーションを調べることである</p>
 <pre><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
-</code></pre><p>属性のローケーションを調べるのは描画する時ではなく、プログラムを最初に起動する時に行った方がいい。</p>
+</code></pre><p>属性のローケーションを調べるのは描画する時ではなく、プログラムの初期化の時に行った方がいい。</p>
 <p>属性はバッファーからデータを取るので、バッファーを作成しなければならない。</p>
 <pre><code>var positionBuffer = gl.createBuffer();
-</code></pre><p>WebGLのレソース（資源）を操るためグローバル結び点（bind point)に結び付けることが必要である。
+</code></pre><p>WebGLのリソース（資源）を操るためグローバル結び点（bind point)に結び付けることが必要である。
 結び点はWebGLの中のグローバル変数のようなものである。リソースを結び点に結びつけたら、その後
 結び点でリソースを操る。さて、<code>positionBuffer</code>を結びつけよう。</p>
 <pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -276,34 +276,33 @@ var positions = [
   0.7, 0,
 ];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-</code></pre><p>ここで色々なことを行われている。まず<code>positions</code>というJavaScriptの配列がある。WebGLは強く
+</code></pre><p>ここでは色々なことが行われている。まず<code>positions</code>というJavaScriptの配列がある。WebGLは強く
 定型化されたデータが要るので、 <code>new Float32Array(positions)</code>の部分は32ビット数値配列を
 作成して、それに<code>positions</code>の内容をコピーする。それで<code>gl.bufferData</code>はそのデータをGPUに
 ある<code>positionBuffer</code>にアップロードする。<code>positionBuffer</code>が<code>ARRAY_BUFFER</code>に結び付いている
 ので<code>positionBuffer</code>はコピーの目標になっている。</p>
-<p><code>gl.bufferData</code>の最後の引数、<code>gl.STATIC_DRAW</code>はWebGLにそのデータがどのように使うのかという
-ヒントである。<code>gl.STATIC_DRAW</code>の意味はこのデータは更新しないヒントである。</p>
-<p>今までのコードが初期化のコードである。ウエブページをロードしてから起動させる。
-下記のコードは描画するコードである。描画してほしい時に呼び出すゴードである。</p>
+<p><code>gl.bufferData</code>の最後の引数、<code>gl.STATIC_DRAW</code>は、そのデータをどのように使うのかという、WebGLに対する
+ヒントである。<code>gl.STATIC_DRAW</code>は、「このデータはあまり更新しない」という意味である。</p>
+<p>今までのコードが<em>初期化のコード</em>である。ウェブページをロードした時、一回だけ実行される。
+下記のコードは<em>描画するコード</em>である。描画してほしい時に都度呼び出すコードである。</p>
 <h2 id="-">描画</h2>
-<p>描画する前にキャンバスを表示されているサイズと同じサイズにした方がいい。キャンバスは
+<p>描画する前にキャンバスを表示されているサイズと同じサイズにした方がいい。キャンバスには
 2つのサイズがある。一つは内容の解像度で、それがキャンバスサイズである。それに表示のサイズもあり、
-これはCSSで決定されている。他の方法より柔軟なのでキャンバスのサイズをCSSで設定した方がいい。</p>
+これはCSSで決定されている。他の方法より柔軟なので<strong>キャンバスのサイズをCSSで設定した方がいい</strong>。</p>
 <p>キャンバスの解像度を表示されているサイズと同じにするため
-<a href="webgl-resizing-the-canvas.html">ここで説明しれているヘルパー関数を利用している</a>。</p>
+<a href="webgl-resizing-the-canvas.html">ここで説明しているヘルパー関数</a>を利用している。</p>
 <p>ここにあるサンプルでは自分のウインドウで起動する場合、キャンバスのサイズは400x300になるが、
 iframeの中で起動する場合iframeのサイズに合わせられる。CSSで決定しているのでどちらにも対処出来る。</p>
 <pre><code>webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-</code></pre><p>クリプ空間頂点を割り当たってられた<code>gl_Position</code>はピクセル（顔面空間）に変換の決定する必要である。
+</code></pre><p>クリップ空間上の値である<code>gl_Position</code>を、画面空間上のピクセルにどうやって変換するのかWebGLに教える必要がある。
 そのためキャンバスのサイズを<code>gl.viewport</code>に渡す。</p>
 <pre><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-</code></pre><p>これは−1〜+１のクリプ空間からｘ軸のために0〜<code>gl.canvas.width</code>とy軸のために0〜<code>gl.canvas.height</code>をWebGLに設定するものである。</p>
-<p>キャンバスをキリアする。<code>0,0,0,0</code>は赤、緑、青、あるファ（透明さ）なので今回
-キャンバスを透明にキリアする。</p>
+</code></pre><p>これは−1〜+１のクリップ空間から、ｘ軸は「0〜<code>gl.canvas.width</code>」に、y軸は「0〜<code>gl.canvas.height</code>」に変換するように、WebGLに設定するものである。</p>
+<p>キャンバスをクリアする。<code>0, 0, 0, 0</code>は赤、緑、青、アルファ（透明度）なので、今回はキャンバスを透明にクリアする。</p>
 <pre><code>// キャンバスをクリアする
 gl.clearColor(0, 0, 0, 0);
 gl.clear(gl.COLOR_BUFFER_BIT);
-</code></pre><p>WebGLにどのシェーダー・プログラムを起動してほしいが教える。</p>
+</code></pre><p>WebGLにどのシェーダー・プログラムを起動してほしいか教える。</p>
 <pre><code>// 作成したプログラム（シェーダー2つ）を設定する
 gl.useProgram(program);
 </code></pre><p>次にWebGLにどうやってデータを上記で作ったバッファーからシェーダーの属性に読み込むかを教えることが必要である。
@@ -313,7 +312,7 @@ gl.useProgram(program);
 <pre><code>// positionBufferをARRAY_BUFFERに結び付ける
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-// 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取りか。
+// 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取り込むか。
 var size = 2;          // 呼び出すごとに2つの数値
 var type = gl.FLOAT;   // データは32ビットの数値
 var normalize = false; // データをnormalizeしない
@@ -323,12 +322,12 @@ var offset = 0;        // バッファーの頭から取り始める
 gl.vertexAttribPointer(
     positionAttributeLocation, size, type, normalize, stride, offset)
 </code></pre><p><code>gl.vertexAttribPointer</code>の隠れている点が<code>ARRAY_BUFFER</code>に結び付いているバッファーを属性にも
-むす付ける。つまり<code>positionBuffer</code>はこの属性に結び付く。<code>ARRAY_BUFFER</code>に他のバッファーを
+結び付ける。つまり<code>positionBuffer</code>はこの属性に結び付く。<code>ARRAY_BUFFER</code>に他のバッファーを
 結び付けても、属性はまだ<code>positionBuffer</code>に結び付いている。</p>
 <p>GLSLの頂点シェーダーの立場から<code>a_position</code>は<code>vec4</code>である。</p>
 <pre><code>attribute vec4 a_position;
-</code></pre><p><code>vec4</code>は４つの値がある。JavaScriptで<code>a_position = {x: 0, y: 0, z: 0, w: 0}</code>に近い形になる。
-上記で<code>size = 2</code>のした。属性の規定値は<code>0,0,0,1</code>なので、この属性の最初の2つの値（xとy）はバッファーから取る。
+</code></pre><p><code>vec4</code>は４つの値がある。JavaScriptで表現するなら<code>a_position = {x: 0, y: 0, z: 0, w: 0}</code>に近い形になる。
+上記では<code>size = 2</code>とした。属性の規定値は<code>0, 0, 0, 1</code>なので、この属性の最初の2つの値（xとy）はバッファーから取る。
 zとwは既定値の0、1になる。</p>
 <p>上記の全ての後やっとWebGLにシェーダーを起動することを頼める。</p>
 <pre><code>var primitiveType = gl.TRIANGLES;
@@ -337,38 +336,38 @@ var count = 3;
 gl.drawArrays(primitiveType, offset, count);
 </code></pre><p><code>count</code>は３になっているので頂点シェーダーは三回呼び出される。初回頂点シェーダーの属性の
 <code>a_position.x</code>と<code>a_position.y</code>は<code>positionBuffer</code>の最初の2つの値になる。二回目、<code>a_position.xy</code>は
-二番目の2つの値になる。最後は三回目の2つの値になる。</p>
-<p><code>primitiveType</code>は<code>gl.TRIANGLES</code>にしたので,頂点シェーダーは三回ごとに呼び出されたら、
-WebGLは<code>gl_Position</code>に割り当てられた３つの値で三角形を描画する。キャンバスがどんなサイズに
-なってもその値は-1~+1クリプ空間座標である。</p>
-<p>この頂点シェーダーは、ただ<code>positionBuffer</code>の値を<code>gl_Position</code>にコピーしているので、このクリプ空間座標に三角形を描画する。</p>
+二番目の2つの値になる。三回目は最後の2つの値になる。</p>
+<p><code>primitiveType</code>は<code>gl.TRIANGLES</code>にしたので、頂点シェーダーは三回呼び出されるごとに、
+WebGLは<code>gl_Position</code>に割り当てられた３つの値で三角形を描画する。キャンバスがどんなサイズで
+あってもその値は-1~+1クリップ空間座標である。</p>
+<p>この頂点シェーダーは、ただ<code>positionBuffer</code>の値を<code>gl_Position</code>にコピーしているので、三角形はこのクリップ空間座標に描画される。</p>
 <pre><code>  0, 0,
   0, 0.5,
   0.7, 0,
-</code></pre><p>キャンバスのサイズが400x300のピクセルならWebGLはこのように頂点のクリプ空間から画面空間に変化する。</p>
-<pre><code> クリプ空間          画面空間
+</code></pre><p>キャンバスのサイズが400x300のピクセルならWebGLはこのように頂点のクリップ空間から画面空間に変化する。</p>
+<pre><code> クリップ空間          画面空間
    0, 0       -&gt;   200, 150
    0, 0.5     -&gt;   200, 225
  0.7, 0       -&gt;   340, 150
 </code></pre><p>その座標でWebGLは三角形を描画する。ピクセルごとにフラグメントシェーダーを呼び出す。
-フラグメントシェーダーはだた<code>gl_FragColor</code>を<code>1, 0, 0.5, 1</code>とする。キャンバスの色の部分ごとに
-8ビットなので、WebGLは<code>255,0,127,255</code>をキャンバスに書き込む。</p>
+フラグメントシェーダーはただ<code>gl_FragColor</code>を<code>1, 0, 0.5, 1</code>とする。キャンバスの色はRGBの各チャンネルにつき
+8ビットなので、WebGLは<code>[255, 0, 127, 255]</code>をキャンバスに書き込む。</p>
 <p>これはライブサンプルである。</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-fundamentals.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-fundamentals.html" target="_blank">ここクリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-fundamentals.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
-<p>上の場合にはこの頂点シェーダーは頂点の位置データ直接渡すでけである。その位置はもう
-クリプ空間になっているので、何もしていない。<em>三次元の絵を描画してければ自分自身で
-三次元データからクリプ空間に変化するシェーダーを作成しなければならない。WebGLはただの描画するAPIだから</em>。</p>
-<p>三角形がなぜ真ん中から右上に位置するのかな〜人もいると思うので、説明しよう。クリプ空間
+<p>上の場合にはこの頂点シェーダーは頂点の位置データを直接渡すだけである。その位置はもう
+クリップ空間になっているので、何もしていない。<em>三次元の絵を描画したければ自分自身で
+三次元データからクリップ空間に変換するシェーダーを作成しなければならない。WebGLはただの描画するAPIだから</em>。</p>
+<p>三角形がなぜ真ん中から右上に位置するのかな〜という人もいると思うので、説明しよう。クリップ空間
 でX軸は-1〜+1である。だから０は真ん中で正の値はその右になる。
-上の方に位置する理由はクリプ空間のY軸が-1＝底で、+1＝頂なので、0＝真ん中で正の値は
+上の方に位置する理由はクリップ空間のY軸が-1＝下端で、+1＝上端なので、0＝真ん中で正の値は
 その上になるからである。</p>
-<p>2次元のものならクリプ空間よりよく使われているピクセル空間の方が楽なので、<code>position</code>の座標を
-ピクセルで与える為に、シェーダーの計算し方をピクセル座標からクリプ空間に変更しよう。
+<p>2次元のものならクリップ空間よりよく使われているピクセル空間の方が楽なので、<code>position</code>の座標を
+ピクセルで与えて、ピクセル座標からクリップ空間に自動で変換するように、シェーダーの計算の仕方を変更しよう。
 これは変更されたシェーダー：</p>
 <pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
@@ -378,13 +377,13 @@ WebGLは<code>gl_Position</code>に割り当てられた３つの値で三角形
 +  uniform vec2 u_resolution;  // キャンバスの解像度
 
   void main() {
-+    // positionはピクセルから0〜1に
++    // positionはピクセルから0〜1に変換
 +    vec2 zeroToOne = a_position / u_resolution;
 +
-+    // 0〜1から0〜2に
++    // 0〜1から0〜2に変換
 +    vec2 zeroToTwo = zeroToOne * 2.0;
 +
-+    // 0〜2から-1〜+1に(クリプ空間）
++    // 0〜2から-1〜+1（クリップ空間）に変換
 +    vec2 clipSpace = zeroToTwo - 1.0;
 +
 *    gl_Position = vec4(clipSpace, 0, 1);
@@ -395,13 +394,13 @@ WebGLは<code>gl_Position</code>に割り当てられた３つの値で三角形
 <ul>
 <li><p><code>x</code>と<code>y</code>しか使ってないので<code>a_position</code>を<code>vec2</code>にした。 <code>vec2</code>は<code>vec4</code>に似てるがxとyしかない。</p>
 </li>
-<li><p><code>u_resolution</code>というユニフォームを追加した。ユニフォームを設定するためにその位置を調べることが必要である。</p>
+<li><p><code>u_resolution</code>というユニフォームを追加した。ユニフォームを設定するためにそのロケーションを調べることが必要である。</p>
 <pre><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 </code></pre></li>
 </ul>
-<p>それ以外は上記のコメントでこ理解頂けるだろう。<code>u_resolution</code>をキャンバスの解像度に設定すれてば、
-この頂点シェーダーが<code>positionBuffer</code>に入っているピクセル座標をクリプ空間に計算する。</p>
-<p>それだこの座標はクリプ空間からピクセルに変更出来る。今回3つの頂点で出来ている三角形2つで四角形を描画する。</p>
+<p>それ以外は上記のコメントでご理解頂けるだろう。<code>u_resolution</code>をキャンバスの解像度に設定すれば、
+この頂点シェーダーが計算して<code>positionBuffer</code>に入っているピクセル座標をクリップ空間に変換する。</p>
+<p>これで頂点座標をクリップ空間からピクセルに変更出来る。今回3つの頂点で出来ている三角形2つで四角形を描画する。</p>
 <pre><code>var positions = [
 *  10, 20,
 *  80, 20,
@@ -411,7 +410,7 @@ WebGLは<code>gl_Position</code>に割り当てられた３つの値で三角形
 *  80, 30,
 ];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-</code></pre><p>どこプログラムを利用するかを定義してから、ユニフォームの値を設定出来る。<code>gl.useProgram</code>は上記の<code>gl.bindBuffer</code>
+</code></pre><p>どのプログラムを利用するかを定義してから、ユニフォームの値を設定出来る。<code>gl.useProgram</code>は、上記の<code>gl.bindBuffer</code>
 と同じように、どのシェーダー・プログラムを使うかを定義する。その後<code>gl.uniform〜</code>の関数の全ては現行のプログラムの
 ユニフォームを設定出来る。</p>
 <pre><code>gl.useProgram(program);
@@ -430,24 +429,24 @@ gl.drawArrays(primitiveType, offset, count);
 </code></pre><p>そしてこのようになる。</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-rectangle.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle.html" target="_blank">ここクリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
 <p>Note: このサンプルとその後の全てのサンプルは、シェーダーのコンパイルとリンクの為の関数を
-含んでいる<a href="webgl-boilerplate.html"><code>webgl-utils.js</code>](/webgl/resources/webgl-utils.js)というライブラリを使っている。
-サンプルを混乱させたくないので、［ポイラプレート・コード・ライブラリ</a>にした。</p>
-<p>また目立つのはこの四角形は下の方に位置していることだろう。WebGLは0,0を左下とみなしている。
-2次元APIの0,0は一般的な左下にしたければクリプ空間のｙ座標を弾く</p>
+含んでいる<a href="/webgl/resources/webgl-utils.js"><code>webgl-utils.js</code></a>というライブラリを使っている。
+サンプルを煩雑にさせたくないので、<a href="webgl-boilerplate.html">ボイラプレート・コード・ライブラリ</a>にした。</p>
+<p>前回と同じく、目立つのはこの四角形は下の方に位置していることだろう。WebGLは0,0を左下とみなしている。
+2次元APIで一般的なように左上を0,0にしたければクリップ空間のｙ座標をひっくり返す。</p>
 <pre><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>それで四角形は期待通りになる。</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-rectangle-top-left.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-top-left.html" target="_blank">ここクリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-top-left.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
-<p>四角形を定義している部分をサイズが設定出来る関数にしよう。更に、描く色も設定出来る
+<p>四角形を定義している部分を関数にして、呼び出すときにサイズが設定出来るようにしよう。更に、描く色も設定出来る
 ようにする。</p>
 <p>まずフラグメントシェーダーを、色ユニフォームが使えるようにする。</p>
 <pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
@@ -463,7 +462,7 @@ gl.drawArrays(primitiveType, offset, count);
 <pre><code>  var colorUniformLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
   ...
 
-  // 50個のランダム四角形のランダム色で描画する
+  // 50個のランダム四角形をランダム色で描画する
   for (var ii = 0; ii &lt; 50; ++ii) {
     // ランダム四角形の設定する
     // 最後にARRAY_BUFFERの結び点に結び付いたバッファーはpositionBufferだから
@@ -474,7 +473,7 @@ gl.drawArrays(primitiveType, offset, count);
     // ランダムな色を設定する
     gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
 
-    // 四角形をっ描画する
+    // 四角形を描画する
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     var count = 6;
@@ -482,7 +481,7 @@ gl.drawArrays(primitiveType, offset, count);
   }
 }
 
-// 0〜(range - 1)を作成
+// 0〜(range - 1)の整数を作成して返す
 function randomInt(range) {
   return Math.floor(Math.random() * range);
 }
@@ -511,28 +510,28 @@ function setRectangle(gl, x, y, width, height) {
 </code></pre><p>それでこれは50個の四角形である。</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-rectangles.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangles.html" target="_blank">ここクリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangles.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
 <p>気が付いて欲しい点はWebGLが結構単純なAPIということである。
 まあ、ここまでの流れは「単純」とは言えないが、WebGLがやっていること自体は単純なことである。
 ただプログラマーが書いた２つの関数（頂点シェーダーとフラグメントシェーダー）で三角形、線、
-点を描画する。三次元の為に複雑になるかもしれないが、その場合複雑なシェーダーはプログラマーに追加される。
+点を描画する。三次元する為にはもっと複雑になるかもしれないが、その複雑さは、あなた、つまりプログラマーの手で、「より複雑なシェーダー」として追加される。
 WebGLはただ単純な描画をするAPIである。</p>
 <p>今回のサンプルでは1つの属性と2つのユニフォームでデータを提供した。
 一般的には複数の属性と多くのユニフォームを使う。この記事の上の方で<em>ヴァリイング</em>と<em>テクスチャー</em>を紹介した。
 それらについていずれ説明しよう。</p>
-<p>次に行く前に言っていおいた方がいい点は、このサンプルの<code>setRectangle</code>のようにバッファーのデータを更新することは一般的ではない。
+<p>次に行く前に言っていおきたいのだが、<em>ほとんどの</em>アプリケーションでは、このサンプルの<code>setRectangle</code>のようにバッファーのデータを更新することは一般的ではない。
 しかし、GLSLならちょっとだけ数学を使えば出来ることと、データはピクセル座標で提供することで、
-簡単に説明出来ると思った。それは駄目な方法ではない。あるケースでこの方法が適切であるからだか、
-<a href="webgl-2d-translation.html">ズカの形状を移動、回転、拡大、縮小、一般適な方法はこちらを御覧ください</a>。</p>
+簡単に説明出来ると思った。それは駄目な方法ではない。この方法が適切であるあるケースはいくつもあるのだが、
+<a href="webgl-2d-translation.html">WebGLで形状を移動、回転、拡大縮小する、より一般的な方法</a>についても一読しておくことをお勧めする。</p>
 <p>ウェブページの制作経験があまりなければ（あっても）<a href="webgl-setup-and-installation">インストールとセット・アップの記事</a>をチェックして、WebGLの開発の秘訣を参照して下さい。</p>
 <p>WebGLの知識が全くなくて、GLSLとかシェーダーとか、GPUが何をするものなどか知らなければ<a href="webgl-how-it-works.html">WebGLの基本的な動き方</a>をチェックしてください。</p>
-<p>サンプルが使っている<a href="webgl-boilerplate.html">ボイラプレート・コード・ライブラリについて]</a>をざっと読んだ方がいい。
+<p>サンプルが使っている<a href="webgl-boilerplate.html">ボイラプレート・コード・ライブラリについて</a>をざっと読んだ方がいい。
 このサイトに載せてあるサンプルはほとんど一つの形状しか描画してないから、通常のWebGLアプリの構造を理解する為に<a href="webgl-drawing-multiple-things.html">複数のものを描画する方法の記事</a>
-もざっと目を透した方がいい。</p>
-<p>いずれにしても,ここから2つの方向がある。画像処理に興味があれば<a href="webgl-image-processing.html">二次元画像処理のし方</a>を見て下さい。移動、回転、拡大／縮小、そして3次元のことに興味があれば<a href="webgl-2d-translation.html">ここで始めよう</a>。</p>
+もざっと目を通した方がいい。</p>
+<p>いずれにしても、ここから2つの方向がある。画像処理に興味があれば<a href="webgl-image-processing.html">二次元画像処理の仕方</a>を見て下さい。移動、回転、拡大／縮小、そして3次元のことに興味があれば<a href="webgl-2d-translation.html">ここから始めよう</a>。</p>
 <div class="webgl_bottombar">
 <h3>type=”notjs”はどいう意味？</h3>
 <p>
@@ -562,14 +561,14 @@ AJAXでダウンロードする方法もあるが、これは遅くて非同期�
 </pre>
 <p>
 複数行のテンプレートはWebGLに対応しているブラウザなら全てオッケーである。古いブラウザでは対応してないのでそれにサポートしたければ、
-複数行テンプレートを利用しないことにするか、それとも<a href="https://babeljs.io/">トランズパイラー</a>を使うことにしたらいい。
+複数行テンプレートを利用しないことにするか、それとも<a href="https://babeljs.io/">トランスパイラー</a>を使うことにしたらいい。
 </p>
 </div>
 
       <hr class="lesson-comment-sep" />
       <div class="lesson-comments">
-        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで(英語)</a>.</div>
-        <div>問題/バッグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
 
         <div id="disqus_thread"></div>
         <script type="text/javascript">
@@ -605,21 +604,21 @@ AJAXでダウンロードする方法もあるが、これは遅くて非同期�
   </ul>
   <li>Image Processing</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-image-processing.html">WebGL Image Processing(英語)</a></li>
-    <li><a href="/webgl/lessons/webgl-image-processing-continued.html">WebGL Image Processing Continued(英語)</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-image-processing.html">WebGLにおける画像処理</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-image-processing-continued.html">WebGLにおける画像処理。続き</a></li>
   </ul>
   <li>2D translation, rotation, scale, matrix math</li>
   <ul>
-    <li><a href="/webgl/lessons/ja/webgl-2d-translation.html">WebGL二次元で移動</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-2d-rotation.html">WebGL二次元で回転</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-2d-scale.html">WebGL二次元で拡大縮小</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-2d-matrices.html">WebGL二次元の行列数学</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-translation.html">WebGL - 二次元での移動</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-rotation.html">WebGL - 二次元での回転</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-scale.html">WebGL - 二次元での拡大縮小</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-matrices.html">WebGL - 二次元での行列数学</a></li>
   </ul>
   <li>3D</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-3d-orthographic.html">WebGL - 三次元の正投影</a></li>
-    <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective(英語)</a></li>
-    <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras(英語)</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-3d-orthographic.html">WebGLでの三次元処理 - 平行投影</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGLでの三次元処理 - 透視投影(英語)</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGLでの三次元処理 - カメラ(英語)</a></li>
   </ul>
   <li>Lighting</li>
   <ul>

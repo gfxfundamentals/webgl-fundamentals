@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ja/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ja/webgl-image-processing-continued.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -34,23 +34,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Image Processing Continued" />
+<meta property="og:title" content="WebGLにおける画像処理。続き" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to apply multiple image processing techniques to images in WebGL" />
+<meta property="og:description" content="WebGLで複数の画像加工処理をするには" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/ja/webgl-image-processing-continued.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Image Processing Continued" />
+<meta name="twitter:title" content="WebGLにおける画像処理。続き" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/ja/webgl-image-processing-continued.html" />
-<meta name="twitter:description" content="How to apply multiple image processing techniques to images in WebGL" />
+<meta name="twitter:description" content="WebGLで複数の画像加工処理をするには" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL Image Processing Continued</title>
+<title>WebGLにおける画像処理。続き</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,13 +63,244 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Image Processing Continued</h1>
+    <h1>WebGLにおける画像処理。続き</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>ごめん！この記事はまだ翻訳されていない。<a href="https://github.com/greggman/webgl-fundamentals">翻訳してくれれば？</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-image-processing-continued.html">ここに英語版がある</a>.</p>
+      <p>この記事は、「<a href="webgl-image-processing.html">WebGLにおける画像処理</a>」の続きです。
+「<a href="webgl-image-processing.html">WebGLにおける画像処理</a>」から読み始めることをお勧めします。</p>
+<p>画像処理の次の問題は「複数の画像処理を行うにはどうしたら良いか？」です。</p>
+<p>さて、画像処理をするシェーダーを毎回生成することはできます。
+専用のUI画面を用意して、
+使いたい画像処理エフェクトをユーザーが選択すると、必要な処理を行う
+カスタムメードのシェーダーがそのたびに生成される、といった仕組みです。
+すべてが解決、というわけではありませんが、この方法は
+<a href="http://www.youtube.com/watch?v=cQUn0Zeh-0Q">リアルタイムグラフィクスのためのエフェクト作成で実際に使われていた例</a>
+もあります。</p>
+<p>より柔軟なのやり方は、２枚のテクスチャを交互に使って、次々に別のエフェクトを
+かけていく方法です。</p>
+<blockquote><pre>
+元画像         -&gt; [ぼかし(Blur)]          -&gt; Texture 1
+Texture 1      -&gt; [シャープ(Sharpen)]     -&gt; Texture 2
+Texture 2      -&gt; [輪郭検出(Edge Detect)] -&gt; Texture 1
+Texture 1      -&gt; [ぼかし(Blur)]          -&gt; Texture 2
+Texture 2      -&gt; [Normal]                -&gt; Canvas</pre></blockquote>
 
+<p>これを実現するためには「フレームバッファ」を使う必要があります。
+WebGLやOpenGLのフレームバッファは、フレームバッファという呼び名が
+付けられていますが、実際にはバッファではなくステータスの集合(＝添付データのリスト)
+に過ぎません。呼び名の良し悪しはともかく、フレームバッファにテクスチャを
+添付することで、そのテクスチャに対して描画することが可能になります。</p>
+<p>では最初に、<a href="webgl-image-processing.html">以前書いたテクスチャ生成コード</a>を
+関数として再定義しましょう。</p>
+<pre><code>  function createAndSetupTexture(gl) {
+    var texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // どんなサイズの画像でもレンダリングできるように設定して、
+    // ピクセル単位で操作できるようにする。
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+    return texture;
+  }
+
+  // テクスチャを生成し、画像を入れる。
+  var originalImageTexture = createAndSetupTexture(gl);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+</code></pre><p>この関数を使って２つのテクスチャを作成、２つのフレームバッファにアタッチ(添付)します。</p>
+<pre><code>  // テクスチャを２つ生成して、フレームバッファにアタッチする。
+  var textures = [];
+  var framebuffers = [];
+  for (var ii = 0; ii &lt; 2; ++ii) {
+    var texture = createAndSetupTexture(gl);
+    textures.push(texture);
+
+    // 画像と同じサイズでテクスチャを生成する
+    gl.texImage2D(
+        gl.TEXTURE_2D, 0, gl.RGBA, image.width, image.height, 0,
+        gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+    // フレームバッファを生成する
+    var fbo = gl.createFramebuffer();
+    framebuffers.push(fbo);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+
+    // そこにテクスチャをアタッチする。
+    gl.framebufferTexture2D(
+        gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+  }
+</code></pre><p>様々なエフェクトを「畳み込み行列」として定義して、適用するエフェクトのリストを用意します。</p>
+<pre><code>  // 「畳み込み行列(convolution kernels)」を定義する
+  var kernels = {
+    normal: [
+      0, 0, 0,
+      0, 1, 0,
+      0, 0, 0
+    ],
+    gaussianBlur: [
+      0.045, 0.122, 0.045,
+      0.122, 0.332, 0.122,
+      0.045, 0.122, 0.045
+    ],
+    unsharpen: [
+      -1, -1, -1,
+      -1,  9, -1,
+      -1, -1, -1
+    ],
+    emboss: [
+       -2, -1,  0,
+       -1,  1,  1,
+        0,  1,  2
+    ]
+  };
+
+  // 適用するエフェクトのリスト。
+  var effectsToApply = [
+    &quot;gaussianBlur&quot;,
+    &quot;emboss&quot;,
+    &quot;gaussianBlur&quot;,
+    &quot;unsharpen&quot;
+  ];
+</code></pre><p>最後に、２つのテクスチャを交互に使って各エフェクトを次々にかけていきます。</p>
+<pre><code>  // 元画像から開始
+  gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
+
+  // テクスチャに書き込む時点では画像の上下をひっくり返さない
+  gl.uniform1f(flipYLocation, 1);
+
+  // このループでエフェクトをかけて行く。
+  for (var ii = 0; ii &lt; effectsToApply.length; ++ii) {
+    // フレームバッファのひとつを書き込み先として設定する。
+    setFramebuffer(framebuffers[ii % 2], image.width, image.height);
+
+    drawWithKernel(effectsToApply[ii]);
+
+    // 次の書き込みの際は、いま書き込んだテクスチャを使う。
+    gl.bindTexture(gl.TEXTURE_2D, textures[ii % 2]);
+  }
+
+  // 最終的結果をcanvasへ書き込む。
+  gl.uniform1f(flipYLocation, -1);  // 座標系の上下はここでひっくり返す
+  setFramebuffer(null, canvas.width, canvas.height);
+  drawWithKernel(&quot;normal&quot;);
+
+  function setFramebuffer(fbo, width, height) {
+    // このfboを書き込み先フレームバッファとして設定する。
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+
+    // シェーダーにフレームバッファの解像度の情報を伝える。
+    gl.uniform2f(resolutionLocation, width, height);
+
+    // フレームバッファで必要となるため、WebGLにビューポートの設定を伝える。
+    gl.viewport(0, 0, width, height);
+  }
+
+  function drawWithKernel(name) {
+    // 今回適用するエフェクトの畳み込み行列をセット
+    gl.uniform1fv(kernelLocation, kernels[name]);
+
+    // 長方形を描画する
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+</code></pre><p>下の画面は、少々改造して柔軟なUIを付け足したバージョンです。
+適用したいエフェクトにはチェックを入れます。
+エフェクトの適用順はドラッグで変更できます。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-image-processing.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-image-processing.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>まだ説明していないことがいくつかあります。</p>
+<p><code>gl.bindFramebuffer</code>メソッドを引数<code>null</code>で呼びだして
+いるのは、フレームバッファではなくcanvasに書き込む、という意味です。</p>
+<p>この時、WebGLは<a href="webgl-fundamentals.html">クリッピング空間</a>からピクセルに変換
+しなくてはなりません。この時WebGLが基準とするのが<code>gl.viewport</code>です。
+レンダリングに使っているフレームバッファはcanvasとは異なるサイズなので、
+フレームバッファのテクスチャにレンダリングする時点で適切なビューポートを
+セットしておいて、canvasにレンダリングするタイミングで改めて設定する必要があります。</p>
+<p>最後に、<a href="webgl-fundamentals.html">元のサンプル</a>では、Y座標を
+ひっくり返していました。これは、WebGLでは座標0,0がcanvasの左下隅となっていて、
+左上隅を基準とする従来の座標系とは違うためでした。
+この操作は、フレームバッファに書き込む時点では不要です。フレームバッファは
+表示されることがないため、どちらが上か下かといった話とは無関係だからです。
+フレームバッファの中でピクセル0,0が、エフェクトの計算上の0,0と一致している
+ことだけ意識していればよいのです。このため、上下をひっくり返すかどうかは、
+シェーダーの入力の一つ(u_flipY)を使って決められるようにしています。</p>
+<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+...
+uniform float u_flipY;
+...
+
+void main() {
+   ...
+
+   gl_Position = vec4(clipSpace * vec2(1, u_flipY), 0, 1);
+
+   ...
+}
+&amp;lt;/script&amp;gt;
+</code></pre><p>そして、これをレンダリングの時点でセットしています。</p>
+<pre><code>  ...
+
+  var flipYLocation = gl.getUniformLocation(program, &quot;u_flipY&quot;);
+
+  ...
+
+  // ひっくり返さない
+  gl.uniform1f(flipYLocation, 1);
+
+  ...
+
+  // ひっくり返す
+  gl.uniform1f(flipYLocation, -1);
+</code></pre><p>今回はプログラムを単純にするため、GLSLプログラムを１つだけ使って、
+複数のエフェクトを実現してみました。本格的に画像処理をやろうとする場合は、
+GLSLプログラムを複数用意することになると思います。色相、彩度、輝度を
+調整するエフェクト用プログラム、明度、コントラストのエフェクト用プログラム、
+逆転させたり、量を調整したりするエフェクト用プログラム、といった具合です。
+GLSLプログラムを切り替えたり、パラメータを更新したりするため、
+コードを書き換える必要があるでしょう。実際にそういうサンプルプログラムを
+書くことも考えたのですが、そういったことは読者の練習のために残しておくことに
+しました。複数のGLSLプログラムやそのパラメータを扱うのは、なかなか大変で、
+プログラムが混沌とするのを抑えるためのリファクタリング作業は大掛かりなもの
+になると思います。</p>
+<p>このプログラムや、この後登場するプログラムが、読者にとってとっつきやすい
+ものであれば、と思います。二次元処理から始めることが、WebGLの理解の助けに
+なればと思います。時間ができたら、三次元表示のやり方や、その裏でWebGLが
+本当は何をやっているのかといった詳細について、
+<a href="webgl-2d-translation.html">新しい記事</a>を書いてみようと思います。
+次の記事は<a href="webgl-2-textures.html">２つ以上のテクスチャを使う方法</a>の記事に
+なる予定です。</p>
+
+      <hr class="lesson-comment-sep" />
+      <div class="lesson-comments">
+        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGLにおける画像処理。続き';
+            var disqus_title = 'WebGLにおける画像処理。続き';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <select id="language">
@@ -84,21 +315,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </ul>
   <li>Image Processing</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-image-processing.html">WebGL Image Processing(英語)</a></li>
-    <li><a href="/webgl/lessons/webgl-image-processing-continued.html">WebGL Image Processing Continued(英語)</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-image-processing.html">WebGLにおける画像処理</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-image-processing-continued.html">WebGLにおける画像処理。続き</a></li>
   </ul>
   <li>2D translation, rotation, scale, matrix math</li>
   <ul>
-    <li><a href="/webgl/lessons/ja/webgl-2d-translation.html">WebGL二次元で移動</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-2d-rotation.html">WebGL二次元で回転</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-2d-scale.html">WebGL二次元で拡大縮小</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-2d-matrices.html">WebGL二次元の行列数学</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-translation.html">WebGL - 二次元での移動</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-rotation.html">WebGL - 二次元での回転</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-scale.html">WebGL - 二次元での拡大縮小</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-matrices.html">WebGL - 二次元での行列数学</a></li>
   </ul>
   <li>3D</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-3d-orthographic.html">WebGL - 三次元の正投影</a></li>
-    <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective(英語)</a></li>
-    <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras(英語)</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-3d-orthographic.html">WebGLでの三次元処理 - 平行投影</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGLでの三次元処理 - 透視投影(英語)</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGLでの三次元処理 - カメラ(英語)</a></li>
   </ul>
   <li>Lighting</li>
   <ul>

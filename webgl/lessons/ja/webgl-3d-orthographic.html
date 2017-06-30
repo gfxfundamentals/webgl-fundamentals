@@ -103,7 +103,7 @@ void main() {
 <p>そして、三次元データを与えなければいけない。</p>
 <pre><code>  ...
 
-    // 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取りか。
+    // 属性にどうやってpositionBuffer（ARRAY_BUFFER）からデータを取り出すか。
 *    var size = 3;          // 呼び出すごとに3つの数値
     var type = gl.FLOAT;   // データは32ビットの数値
     var normalize = false; // データをnormalizeしない
@@ -276,7 +276,7 @@ function setGeometry(gl) {
   },
 </code></pre><p>投影関数も更新しなきゃ。これは前の関数。</p>
 <pre><code>  projection: function (width, height) {
-    // Note: Y軸で０は上の方にするためYを弾く行列
+    // Note: Y軸で０を上の方にするためYをひっくり返す行列
     return [
       2 / width, 0, 0,
       0, -2 / height, 0,
@@ -286,7 +286,7 @@ function setGeometry(gl) {
 }
 </code></pre><p>これはピクセル空間からクリップ空間の変換である。三次元のため、初めからこうにしてみよう。</p>
 <pre><code>  projection: function(width, height, depth) {
-    // Note: Y軸で０は上の方にするためYを弾く行列
+    // Note: Y軸で０を上の方にするためYをひっくり返す行列
     return [
        2 / width, 0, 0, 0,
        0, -2 / height, 0, 0,
@@ -310,7 +310,7 @@ Zもピクセル単位で計算する。<code>width</code>のような値を<cod
 </code></pre><p>さあ、出来たサンプルはこれである。</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-step1.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step1.html" target="_blank">ここクリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step1.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
@@ -330,7 +330,7 @@ Zもピクセル単位で計算する。<code>width</code>のような値を<cod
 </code></pre><p>これはこのサンプルである。</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-step2.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step2.html" target="_blank">ここクリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step2.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
@@ -418,7 +418,7 @@ gl.vertexAttribPointer(
 </code></pre><p>これになった。</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-step3.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step3.html" target="_blank">ここクリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step3.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
@@ -439,7 +439,7 @@ WebGLに描画されない。それはいいことでしょう。三次元なら
 <p><code>CULL_FACE</code>をオンにするとこうなる。</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-step4.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step4.html" target="_blank">ここクリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step4.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
@@ -456,7 +456,7 @@ WebGLに描画されない。それはいいことでしょう。三次元なら
 </code></pre><p>間違えている三角形を全て直したらこうなる。</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-step5.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step5.html" target="_blank">ここクリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step5.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
@@ -484,7 +484,7 @@ XとYはクリップ空間に変更しなければいけないのと同じよう
 </code></pre><p>それでこうなった。</p>
 <p><div>
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-3d-step6.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step6.html" target="_blank">ここクリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step6.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
@@ -516,17 +516,17 @@ var far = 400;
 var projection = m4.orthographic(left, right, bottom, top, near, far);
 </code></pre><p>次の記事は<a href="webgl-3d-perspective.html">透視投影についての記事である</a>。</p>
 <div class="webgl_bottombar">
-<h3>なせ属性が<code>vec4</code>なのに<code>gl.vertexAttribPointer</code>の<code>size</code>は<code>3</code>である？</h3>
+<h3>なぜ属性が<code>vec4</code>なのに<code>gl.vertexAttribPointer</code>の<code>size</code>は<code>3</code>なのか？</h3>
 <p>
-細かいところまで見ている型は属性がこのように<code>vec4</code>定義したが、
+細かいところまで見ている方は、属性がこのように<code>vec4</code>として定義したが、
 </p>
 <pre class="prettyprint showlinemods">
 attribute vec4 a_position;
 attribute vec4 a_color;
 </pre>
-<p>バッファからダータを取り方を設定したところに<code>size</code>を３にしたことを気づいただろう。</p>
+<p>バッファからデータを取り出すときには<code>size</code>を３に設定したことを気づいただろう。</p>
 <pre class="prettyprint showlinemods">
-// 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取りか。
+// 属性にどうやってpositionBuffer（ARRAY_BUFFER）からデータを取り出すか。
 var size = 3;          // 呼び出すごとに3つの数値
 var type = gl.FLOAT;   // データは32ビットの数値
 var normalize = false; // データをnormalizeしない
@@ -537,7 +537,7 @@ gl.vertexAttribPointer(
     positionAttributeLocation, size, type, normalize, stride, offset);
 
 ...
-// 属性にどうやってcolorBuffer（ARRAY_BUFFER)からデータを取りか。
+// 属性にどうやってcolorBuffer（ARRAY_BUFFER）からデータを取り出すか。
 var size = 3;                  // 呼び出すごとに3つの数値
 var type = gl.UNSIGNED_BYTE;   // データは8ビット符号なし整数
 var normalize = false;         // データをnormalizeする（０〜２５５から０−１に）
@@ -548,10 +548,10 @@ gl.vertexAttribPointer(
     colorLocation, size, type, normalize, stride, offset)
 </pre>
 <p>
-その「`size = 3`」の'3'の意味は頂点シェーダーが呼び出されるごとにバッファから３値を取ることである。
+その「<code>size = 3</code>」の'3'の意味は頂点シェーダーが呼び出されるごとにバッファから３値を取ることである。
 属性のデフォルトは0,0,0,1でX=0,Y=0,Z=0,W=1である。だから属性に３値しか適用しないとWは１になる。
-その理由で二次元頂点シェーダーの場合Z=1にはっきりと割り与えなればいけなかった。Zのデフォルトは０だから。
-３次元の場合三次元数学の為にW=1が必要で、W=1はデフォルトだから明示的にWを１に割与えなくていい。
+その理由で二次元頂点シェーダーの場合Z=1にはっきりと割り当てなればいけなかった。Zのデフォルトは０だから。
+３次元の場合三次元数学の為にW=1が必要で、W=1はデフォルトだから明示的にWを１に割り当てなくていい。
 </p>
 </div>
 
@@ -559,8 +559,8 @@ gl.vertexAttribPointer(
 
       <hr class="lesson-comment-sep" />
       <div class="lesson-comments">
-        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで(英語)</a>.</div>
-        <div>問題/バッグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
 
         <div id="disqus_thread"></div>
         <script type="text/javascript">
@@ -596,21 +596,21 @@ gl.vertexAttribPointer(
   </ul>
   <li>Image Processing</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-image-processing.html">WebGL Image Processing(英語)</a></li>
-    <li><a href="/webgl/lessons/webgl-image-processing-continued.html">WebGL Image Processing Continued(英語)</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-image-processing.html">WebGLにおける画像処理</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-image-processing-continued.html">WebGLにおける画像処理。続き</a></li>
   </ul>
   <li>2D translation, rotation, scale, matrix math</li>
   <ul>
-    <li><a href="/webgl/lessons/ja/webgl-2d-translation.html">WebGL二次元で移動</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-2d-rotation.html">WebGL二次元で回転</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-2d-scale.html">WebGL二次元で拡大縮小</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-2d-matrices.html">WebGL二次元の行列数学</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-translation.html">WebGL - 二次元での移動</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-rotation.html">WebGL - 二次元での回転</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-scale.html">WebGL - 二次元での拡大縮小</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-2d-matrices.html">WebGL - 二次元での行列数学</a></li>
   </ul>
   <li>3D</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-3d-orthographic.html">WebGL - 三次元の正投影</a></li>
-    <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective(英語)</a></li>
-    <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras(英語)</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-3d-orthographic.html">WebGLでの三次元処理 - 平行投影</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGLでの三次元処理 - 透視投影(英語)</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGLでの三次元処理 - カメラ(英語)</a></li>
   </ul>
   <li>Lighting</li>
   <ul>

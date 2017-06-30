@@ -114,10 +114,12 @@ window.langDB = {
     },
     "webgl-image-processing-continued.html": {
       "en": true,
+      "ja": true,
       "ru": true
     },
     "webgl-image-processing.html": {
       "en": true,
+      "ja": true,
       "ru": true
     },
     "webgl-less-code-more-fun.html": {
