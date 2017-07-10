@@ -108,9 +108,44 @@ A list of articles I'd like to write or see written
     *   spot lighting
     *   normal maps
     *   shadow maps
+*   geometry
+    *   plane, cube, sphere, cone, disc, torus
+        *   lines vs triangles
+        *   indexed vs non
+        *   vertex colors
+    *   .obj
+    *   other
+    *   pre-process (don't load .obj, .dae, .fbx etc at runtime)
+    *   pre-optimize (texture atlas, sizes, combine meshes, etc...)
 *   animation
     *   blendshapes
+    *   hierarchical animation
     *   skinning
+*   debugging
+    *   debugging JS WebGL
+        *   example (https://goo.gl/8U5whT)
+        *   CHECK THE GAWD DAMN CONSOLE!
+            *   actually read the error message
+            *   understand it.
+                *   INVALID_ENUM means one of your gl.XXX values is not valid period
+                *   INVALID_VALUE means one of the int or float values is probably off
+                *   INVALID_OPERATION means something you tried to do won't work for the given state
+                *   texture not renderable
+                *   attribute out of range
+                *   check your framebuffers
+                *   check your extensions
+        *   make shorter samples (MCVE) See https://meta.stackoverflow.com/a/349790/128511
+            *   remove any code you don't need
+            *   get rid of CSS
+            *   get rid of HTML
+            *   consider using a POINT (no attributes needed)
+            *   don't use images if they are not relevant. Use a canvas or a single and double pixel texture
+            *   While creating this MCVE you'll often find the bug
+    *   debugging a shader
+        *   set fragment shader to solid color.
+        *   render normals
+        *   render texcoords
+        *   render cube/sphere/plane
 *   text
     *   glyph cache
 *   post processing
@@ -128,9 +163,22 @@ A list of articles I'd like to write or see written
     *   histogram
     *   particles
     *   toon/ramp shading
+    *   procedural textures
+    *   vsa
+    *   screen shaders (shadertoy)
+        *   https://stackoverflow.com/questions/4638317/how-to-implement-this-rotating-spiral-in-webgl?rq=1
 *   code organization
     *   scene graph
         *   putting lights and camera in scene graph
+*   Engine Creation
+    *   culling
+        *   frustum culling
+        *   grid culling
+        *   quad tree / oct tree
+        *   portals (is this still a thing?)
+        *   PVS
+    *   materials
+    *   lighting DB
 *   Physically based rendering
 
 
