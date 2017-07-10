@@ -175,7 +175,7 @@ A list of articles I'd like to write or see written
     *   procedural textures
     *   vsa
     *   screen shaders (shadertoy)
-        *   https://stackoverflow.com/questions/4638317/how-to-implement-this-rotating-spiral-in-webgl?rq=1
+        *   https://stackoverflow.com/questions/4638317/how-to-implement-this-rotating-spiral-in-webgl
 *   code organization
     *   scene graph
         *   putting lights and camera in scene graph
