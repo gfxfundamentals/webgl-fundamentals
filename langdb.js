@@ -181,6 +181,10 @@ window.langDB = {
     "ru": {
       "lang": "ru",
       "language": "Русский"
+    },
+    "zh_cn": {
+      "lang": "zh_cn",
+      "language": "简体中文"
     }
   }
 }
