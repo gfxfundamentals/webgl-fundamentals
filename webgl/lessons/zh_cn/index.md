@@ -7,7 +7,7 @@ Title: WebGL 理论基础
 它们去旧迎新，丢弃一些过时的思想，让你彻底了解WebGL到底是怎样运作的。
 
 
-如果你对WebGL2感兴趣可以到这里看看 [webgl2fundamentals.org](http://webgl2fundamentals.org)
+如果你对WebGL2感兴趣可以到这里看看 [webgl2fundamentals.org](http://webgl2fundamentals.org)。
 
 {{{include "webgl/lessons/zh_cn/toc.html"}}}
 
