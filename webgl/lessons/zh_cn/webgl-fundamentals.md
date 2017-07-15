@@ -1,88 +1,77 @@
 Title: WebGL 基础概念
 Description: 第一节WebGL教程就从基础概念开始吧！
 
-WebGL is often thought of as a 3D API. People think "I'll use WebGL and *magic* I'll get cool 3d".
-In reality WebGL is just a rasterization engine. It draws points, lines, and triangles based
-on code you supply. Getting WebGL to do anything else is up to you to provide code to use points, lines,
-and triangles to accomplish your task.
+WebGL经常被当成3D API，人们总想“我可以使用WebGL和**一些神奇的东西**做出炫酷的3D作品”。
+事实上WebGL仅仅是一个光栅化引擎，它可以根据你的代码绘制出点，线和三角形。
+想要利用WebGL完成更复杂任务，取决于你能否提供合适的代码，组合使用点，线和三角形代替实现。
 
-WebGL runs on the GPU on your computer. As such you need to provide the code that runs on that GPU.
-You provide that code in the form of pairs of functions. Those 2 functions are called a vertex shader
-and a fragment shader and they are each written in a very strictly typed C/C++ like language called
-[GLSL](webgl-shaders-and-glsl.html). (GL Shader Language). Paired together they are called a *program*.
+WebGL在电脑的GPU中运行。因此你需要使用能够在GPU上运行的代码。
+这样的代码需要提供成对的方法。每对方法中一个叫顶点着色器，
+另一个叫片段着色器，并且使用一种和C或C++类似的强类型的语言
+[GLSL](webgl-shaders-and-glsl.html)。 (GL着色语言)。
+每一对组合起来称作一个 *program*（着色程序）。
 
-A vertex shader's job is to compute vertex positions. Based on the positions the function outputs
-WebGL can then rasterize various kinds of primitives including points, lines, or triangles.
-When rasterizing these primitives it calls a second user supplied function called a fragment shader.
-A fragment shader's job is to compute a color for each pixel of the primitive currently being drawn.
+顶点着色器的作用是计算顶点的位置。根据计算出的一系列顶点位置，WebGL可以对点，
+线和三角形在内的一些图元进行光栅化处理。当对这些图元进行光栅化处理时需要使用片断着色器方法。
+片断着色器的作用是计算出当前绘制图元中每个像素的颜色值。
 
-Nearly all of the entire WebGL API is about setting up state for these pairs of functions to run.
-For each thing you want to draw you setup a bunch of state then execute a pair of functions by calling
-`gl.drawArrays` or `gl.drawElements` which executes your shaders on the GPU.
+几乎整个WebGL API都是关于如何设置这些成对方法的状态值以及运行它们。
+对于想要绘制的每一个对象，都需要先设置一系列状态值，然后通过调用
+`gl.drawArrays` 或 `gl.drawElements` 运行一个着色方法对，使得你的着色器对能够在GPU上运行。
 
-Any data you want those functions to have access to must be provided to the GPU. There are 4 ways
-a shader can receive data.
+这些方法对所需的任何数据都需要发送到GPU，这里有着色器获取数据的4种方法。
 
-1. Attributes and Buffers
+1. 属性（Attributes）和缓冲
 
-   Buffers are arrays of binary data you upload to the GPU. Usually buffers contain
-   things like positions, normals, texture coordinates, vertex colors, etc although
-   you're free to put anything you want in them.
+   缓冲是发送到GPU的一些二进制数据序列，通常情况下缓冲数据包括位置，法向量，纹理坐标，顶点颜色值等。
+   你可以存储任何数据。
 
-   Attributes are used to specify how to
-   pull data out of your buffers and provide them to your vertex shader.
-   For example you might put positions in a buffer as three 32bit floats
-   per position. You would tell a particular attribute which buffer to pull the positions out of, what type
-   of data it should pull out (3 component 32 bit floating point numbers), what offset
-   in the buffer the positions start, and how many bytes to get from one position to the next.
+   属性用来指明怎么从缓冲中获取所需数据并将它提供给顶点着色器。
+   例如你可能在缓冲中用三个32位的浮点型数据存储一个位置值。
+   对于一个确切的属性你需要告诉它从哪个缓冲中获取数据，获取什么类型的数据（三个32位的浮点数据），
+   起始偏移值是多少，到下一个位置的字节数是多少。
 
-   Buffers are not random access. Instead a vertex shaders is executed a specified number
-   of times. Each time it's executed the next value from each specified buffers is pulled
-   out assigned to an attribute.
+   缓冲不是随意读取的。事实上顶点着色器运行的次数是一个指定的确切数字，
+   每一次运行属性会从指定的缓冲中按照指定规则依次获取下一个值。
 
-2. Uniforms
+2. 全局变量（Uniforms）
 
-   Uniforms are effectively global variables you set before you execute your shader program.
+   全局变量在着色程序运行前赋值，在运行过程中全局有效。
 
-3. Textures
+3. 纹理（Textures）
 
-   Textures are arrays of data you can randomly access in your shader program. The most
-   common thing to put in a texture is image data but textures are just data and can just
-   as easily contain something other than colors.
+   纹理是一个数据序列，可以在着色程序运行中随意读取其中的数据。
+   大多数情况存放的是图像数据，但是纹理仅仅是数据序列，
+   你也可以随意存放除了颜色数据以外的其它数据。
 
-4. Varyings
+4. 可变量（Varyings）
 
-   Varyings are a way for a vertex shader to pass data to a fragment shader. Depending
-   on what is being rendered, points, lines, or triangles, the values set on a varying
-   by a vertex shader will be interpolated while executing the fragment shader.
+   可变量是一种顶点着色器给片断着色器传值的方式，依照渲染的图元是点，
+   线还是三角形，顶点着色器中设置的可变量会在片段着色器运行中获取不同的插值。
 
 ## WebGL Hello World
 
-WebGL only cares about 2 things: clipspace coordinates and colors.
-Your job as a programmer using WebGL is to provide WebGL with those 2 things.
-You provide your 2 "shaders" to do this. A Vertex shader which provides the
-clipspace coordinates and a fragment shader that provides the color.
+WebGL只关心两件事：剪辑空间中的坐标值和颜色值。使用WebGL只需要给它提供这两个东西。
+你需要提供两个着色器来做这两件事，一个顶点着色器提供剪辑空间坐标值，一个片断着色器提供颜色值。
 
-Clipspace coordinates always go from -1 to +1 no matter what size your
-canvas is. Here is a simple WebGL example that shows WebGL in its simplest form.
+无论你的画布有多大，剪辑空间的坐标范围永远是 -1 到 1 。
+这里有一个简单的WebGL例子展示WebGL的简单用法。
 
-Let's start with a vertex shader
+让我们从顶点着色器开始
 
-    // an attribute will receive data from a buffer
+    // 一个属性值，将会从缓冲中获取数据
     attribute vec4 a_position;
 
-    // all shaders have a main function
+    // 所有着色器都有一个main方法
     void main() {
 
-      // gl_Position is a special variable a vertex shader
-      // is responsible for setting
+      // gl_Position 是一个顶点着色器主要设置的变量
       gl_Position = a_position;
     }
 
-When executed, if the entire thing was written in JavaScript instead of GLSL
-you could imagine it would be used like this
+如果用JavaScript代替GLSL，当它运行的时候，你可以想象它做了类似以下的事情
 
-    // *** PSUEDO CODE!! ***
+    // *** 伪代码!! ***
 
     var positionBuffer = [
       0, 0, 0, 0,
@@ -96,65 +85,60 @@ you could imagine it would be used like this
       var stride = 4;
       var size = 4;
       for (var i = 0; i < count; ++i) {
-         // copy the next 4 values from positionBuffer to the a_position attribute
+         // 从positionBuffer复制接下来4个值给a_position属性
          attributes.a_position = positionBuffer.slice((offset + i) * stride, size);
-         runVertexShader();
+         runVertexShader();// 运行顶点着色器
          ...
          doSomethingWith_gl_Position();
     }
 
-In reality it's not quite that simple because `positionBuffer` would need to be converted to binary
-data (see below) and so the actual computation for getting data out of the buffer
-would be a little different but hopefully this gives you an idea of how a vertex
-shader will be executed.
+实际情况没有那么简单，因为 `positionBuffer` 将会被转换成二进制数据（见下文），
+所以真实情况下从缓冲中读取数据有些麻烦，但是希望这个例子能够让你想象出顶点着色器是怎么执行的。
 
-Next we need a fragment shader
+接下来我们需要一个片段着色器
 
-    // fragment shaders don't have a default precision so we need
-    // to pick one. mediump is a good default. It means "medium precision"
+    // 片断着色器没有默认精度，所以我们需要设置一个精度
+    // mediump是一个不错的默认值，代表“medium precision”（中等精度）
     precision mediump float;
 
     void main() {
-      // gl_FragColor is a special variable a fragment shader
-      // is responsible for setting
-      gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
+      // gl_FragColor是一个片段着色器主要设置的变量
+      gl_FragColor = vec4(1, 0, 0.5, 1); // 返回“瑞迪施紫色”
     }
 
-Above we're setting `gl_FragColor` to `1, 0, 0.5, 1` which is 1 for red, 0 for green,
-0.5 for blue, 1 for alpha. Colors in WebGL go from 0 to 1.
+上方我们设置 `gl_FragColor` 为 `1, 0, 0.5, 1`，其中1代表红色值，0代表绿色值，
+0.5代表蓝色值，最后一个1表示阿尔法通道值。WebGL中的颜色值范围从 0 到 1 。
 
-Now that we have written the 2 shader functions lets get started with WebGL
+现在我们有了两个着色器方法，让我们开始使用WebGL吧
 
-First we need an HTML canvas element
+首先我们需要一个HTML中的canvas（画布）对象
 
      <canvas id="c"></canvas>
 
-Then in JavaScript we can look that up
+然后可以用JavaScript获取它
 
      var canvas = document.getElementById("c");
 
-Now we can create a WebGLRenderingContext
+现在我们创建一个WebGL渲染上下文（WebGLRenderingContext）
 
      var gl = canvas.getContext("webgl");
      if (!gl) {
-        // no webgl for you!
+        // 你不能使用WebGL！
         ...
 
-Now we need to compile those shaders to put them on the GPU so first we need to get them into strings.
-You can create your GLSL strings any way you normally create strings in JavaScript: by concatenating,
-by using AJAX to download them, by using multiline template strings. Or in this case, by
-putting them in non-JavaScript typed script tags.
+现在我们需要编译着色器对然后提交到GPU，先让我们通过字符串获取它们。
+你可以利用JavaScript中创建字符串的方式创建GLSL字符串：用串联的方式（concatenating），
+用AJAX下载，用多行模板数据。或者在这个例子里，将它们放在非JavaScript类型的标签中。
 
     <script id="2d-vertex-shader" type="notjs">
 
-      // an attribute will receive data from a buffer
+      // 一个属性变量，将会从缓冲中获取数据
       attribute vec4 a_position;
 
-      // all shaders have a main function
+      // 所有着色器都有一个main方法
       void main() {
 
-        // gl_Position is a special variable a vertex shader
-        // is responsible for setting
+        // gl_Position 是一个顶点着色器主要设置的变量
         gl_Position = a_position;
       }
 
@@ -162,29 +146,29 @@ putting them in non-JavaScript typed script tags.
 
     <script id="2d-fragment-shader" type="notjs">
 
-      // fragment shaders don't have a default precision so we need
-      // to pick one. mediump is a good default
+      // 片断着色器没有默认精度，所以我们需要设置一个精度
+      // mediump是一个不错的默认值，代表“medium precision”（中等精度）
       precision mediump float;
 
       void main() {
-        // gl_FragColor is a special variable a fragment shader
-        // is responsible for setting
-        gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
+        // gl_FragColor是一个片段着色器主要设置的变量
+        gl_FragColor = vec4(1, 0, 0.5, 1); // 返回“瑞迪施紫色”
       }
 
     </script>
 
-In fact, most 3D engines generate GLSL shaders on the fly using various types of templates, concatenation, etc.
-For the samples on this site though none of them are complex enough to need to generate GLSL at runtime.
+事实上，大多数三维引擎在运行时利用模板，串联等方式创建GLSL。
+对于这个网站上的例子来说，没有复杂到要在运行时创建GLSL的程度。
 
-Next we need a function that will create a shader, upload the GLSL source, and compile the shader.
-Note I haven't written any comments because it should be clear from the names of the functions
-what is happening.
+接下来我们使用的方法将会创建一个着色器，只需要上传GLSL数据，然后编译成着色器。
+你可能注意到这段代码没有任何注释，因为可以从方法名很清楚的了解方法的作用
+（这里作为翻译版本我还是稍微注释一下）。
 
+    // 创建着色器方法，输入参数：渲染上下文，着色器类型，数据源
     function createShader(gl, type, source) {
-      var shader = gl.createShader(type);
-      gl.shaderSource(shader, source);
-      gl.compileShader(shader);
+      var shader = gl.createShader(type); // 创建着色器对象
+      gl.shaderSource(shader, source); // 提供数据源
+      gl.compileShader(shader); // 编译 -> 生成着色器
       var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
       if (success) {
         return shader;
@@ -194,7 +178,7 @@ what is happening.
       gl.deleteShader(shader);
     }
 
-We can now call that function to create the 2 shaders
+现在我们可以使用以上方法创建两个着色器
 
     var vertexShaderSource = document.getElementById("2d-vertex-shader").text;
     var fragmentShaderSource = document.getElementById("2d-fragment-shader").text;
@@ -202,7 +186,7 @@ We can now call that function to create the 2 shaders
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 
-We then need to *link* those 2 shaders into a *program*
+然后我们将这两个着色器 *link*（链接）到一个 *program*（着色程序）
 
     function createProgram(gl, vertexShader, fragmentShader) {
       var program = gl.createProgram();
@@ -218,35 +202,32 @@ We then need to *link* those 2 shaders into a *program*
       gl.deleteProgram(program);
     }
 
-And call it
+然后调用它
 
     var program = createProgram(gl, vertexShader, fragmentShader);
 
-Now that we've created a GLSL program on the GPU we need to supply data to it.
-The majority of the WebGL API is about setting up state to supply data to our GLSL programs.
-In this case our only input to our GLSL program is `a_position` which is an attribute.
-The first thing we should do is look up the location of the attribute for the program
-we just created
+现在我们已经在GPU上创建了一个GLSL着色程序，我们还需要给它提供数据。
+WebGL的主要任务就是设置好状态并为GLSL着色程序提供数据。
+在这个例子中GLSL着色程序的唯一输入是一个属性值`a_position`。
+我们要做的第一件事就是从刚才创建的GLSL着色程序中找到这个属性值所在的位置。
 
     var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
 
-Looking up attribute locations (and uniform locations) is something you should
-do during initialization, not in your render loop.
+寻找属性值位置（和全局属性位置）应该在初始化的时候完成，而不是在渲染循环中。
 
-Attributes get their data from buffers so we need to create a buffer
+属性值从缓冲中获取数据，所以我们创建一个缓冲
 
     var positionBuffer = gl.createBuffer();
 
-WebGL lets us manipulate many WebGL resources on global bind points.
-You can think of bind points as internal global variables inside WebGL.
-First you bind a resource to a bind point. Then, all other functions
-refer to the resource through the bind point. So, let's bind the position buffer.
+WebGL可以通过绑定点操控全局范围内的许多数据，你可以把绑定点想象成一个WebGL内部的全局变量。
+首先绑定一个数据源到绑定点，然后可以引用绑定点指向该数据源。
+所以让我们来绑定位置信息缓冲（下面的绑定点就是`ARRAY_BUFFER`）。
 
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-Now we can put data in that buffer by referencing it through the bind point
+现在我们需要通过绑定点向缓冲中存放数据
 
-    // three 2d points
+    // 三个二维点坐标
     var positions = [
       0, 0,
       0, 0.5,
@@ -254,145 +235,138 @@ Now we can put data in that buffer by referencing it through the bind point
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-There's a lot going on here. The first thing is we have `positions` which is a
-JavaScript array. WebGL on other hand needs strongly typed data so the part
-`new Float32Array(positions)` creates a new array of 32bit floating point numbers
-and copies the values from `positions`. `gl.bufferData` then copies that data to
-the `positionBuffer` on the GPU. It's using the position buffer because we bound
-it to the `ARRAY_BUFFER` bind point above.
+这里完成了一系列事情，第一件事是我们有了一个JavaScript序列`positions` 。
+然而WebGL需要强类型数据，所以`new Float32Array(positions)`创建了32位浮点型数据序列，
+并从`positions`中复制数据到序列中，然后`gl.bufferData`复制这些数据到GPU的`positionBuffer`对象上。
+它最终传递到`positionBuffer`上是因为在前一步中我们我们将它绑定到了`ARRAY_BUFFER`（也就是绑定点）上。
 
-The last argument, `gl.STATIC_DRAW` is a hint to WebGL about how we'll use the data.
-WebGL can try to use that hint to optimize certain things. `gl.STATIC_DRAW` tells WebGL
-we are not likely to change this data much.
+最后一个参数`gl.STATIC_DRAW`是提示WebGL我们将怎么使用这些数据。WebGL会根据提示做出一些优化。
+`gl.STATIC_DRAW`提示WebGL我们不会经常改变这些数据。
 
-The code up to this point is *initialization code*. Code that gets run once when we
-load the page. The code below this point is *renderering code* or code that should
-get executed each time we want to render/draw.
+在此之上的代码是 **初始化代码**。这些代码在页面加载时只会运行一次。
+接下来的代码是**渲染代码**，而这些代码将在我们每次要渲染或者绘制时执行。
 
-## Rendering
+## 渲染
 
-Before we draw we should resize the canvas to match its display size. Canvases just like Images have 2 sizes.
-The number of pixels actually in them and separately the size they are displayed. CSS determines the size
-the canvas is displayed. **You should always set the size you want a canvas with CSS** since it is far far
-more flexible than any other method.
+在绘制之前我们应该调整画布（canvas）的尺寸以匹配它的显示尺寸。画布就像图片一样有两个尺寸。
+一个是它拥有的实际像素个数，另一个是它显示的大小。CSS决定画布显示的大小。
+**你应该尽可能用CSS设置所需画布大小** ，因为它比其它方式灵活的多。
 
-To make the number of pixels in the canvas match the size it's displayed
-[I'm using a helper function you can read about here](webgl-resizing-the-canvas.html).
+为了使画布的像素数和显示大小匹配，
+[我这里使用了一个辅助方法，你可以在这里获取更多相关信息](webgl-resizing-the-canvas.html)。
 
-In nearly all of these samples the canvas size is 400x300 pixels if the sample is run in its own window
-but stretches to fill the available space if it's inside an iframe like it is on this page.
-By letting CSS determine the size and then adjusting to match we easily handle both of these cases.
+这里的例子中，有独立窗口显示的示例大多使用400x300像素大小的画布。
+但是如果像稍后展示的示例那样嵌在页面中，它就会被拉伸以填满可用空间
+（你也可以点击示例下方的“点此在新窗口中浏览”在独立窗口中查看示例）。
+通过使用CSS调整画布尺寸可以轻松处理这些情况。
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-We need to tell WebGL how to convert from the clip space
-values we'll be setting `gl_Position` to back into pixels, often called screen space.
-To do this we call `gl.viewport` and pass it the current size of the canvas.
+我们需要告诉WebGL怎样把提供的`gl_Position`剪辑空间坐标对应到画布像素坐标，
+通常我们也把画布像素坐标叫做屏幕空间。为了实现这个目的，我们只需要调用`gl.viewport`
+方法并传递画布的当前尺寸。
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-This tells WebGL the -1 +1 clip space maps to 0 -> `gl.canvas.width` for x and 0 -> `gl.canvas.height`
-for y.
+这样就告诉WebGL剪辑空间的 -1 -> +1  分别对应到x轴的 0 -> `gl.canvas.width`
+和y轴的 0 -> `gl.canvas.height`。
 
-We clear the canvas. `0, 0, 0, 0` are r, g, b, alpha so in this case we're making the canvas transparent.
+我们用`0, 0, 0, 0`清空画布，分别对应 r, g, b, alpha （红，绿，蓝，阿尔法）值，
+所以在这个例子中我们让画布变透明了。
 
-    // Clear the canvas
+    // 清空画布
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-We tell WebGL which shader program to execute.
+我们需要告诉WebGL运行哪个着色程序
 
-    // Tell it to use our program (pair of shaders)
+    // 告诉它用我们之前写好的着色程序（一个着色器对）
     gl.useProgram(program);
 
-Next we need to tell WebGL how to take data from the buffer we setup above and supply it to the attribute
-in the shader. First off we need to turn the attribute on
+接下来我们需要告诉WebGL怎么从我们之前准备的缓冲中获取数据给着色器中的属性。
+首先我们需要启用对应属性
 
     gl.enableVertexAttribArray(positionAttributeLocation);
 
-Then we need to specify how to pull the data out
+然后指定从缓冲中读取数据的方式
 
-    // Bind the position buffer.
+    // 将绑定点绑定到缓冲数据（positionBuffer）
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    var size = 2;          // 2 components per iteration
-    var type = gl.FLOAT;   // the data is 32bit floats
-    var normalize = false; // don't normalize the data
-    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    var offset = 0;        // start at the beginning of the buffer
+    // 告诉属性怎么从positionBuffer中读取数据 (ARRAY_BUFFER)
+    var size = 2;          // 每次迭代运行提取两个单位数据
+    var type = gl.FLOAT;   // 每个单位的数据类型是32位浮点型
+    var normalize = false; // 不需要归一化数据
+    var stride = 0;        // 0 = 移动单位数量 * 每个单位占用内存（sizeof(type)）
+                           // 每次迭代运行运动多少内存到下一个数据开始点
+    var offset = 0;        // 从缓冲起始位置开始读取
     gl.vertexAttribPointer(
         positionAttributeLocation, size, type, normalize, stride, offset)
 
-A hidden part of `gl.vertexAttribPointer` is that it binds the current `ARRAY_BUFFER`
-to the attribute. In other words now this attribute is bound to
-`positionBuffer`. That means we're free to bind something else to the `ARRAY_BUFFER` bind point.
-The attribute will continue to use `positionBuffer`.
+一个隐藏信息是`gl.vertexAttribPointer`是将属性绑定到当前的`ARRAY_BUFFER`。
+换句话说就是属性绑定到了`positionBuffer`上。这也意味着现在利用绑定点随意将
+`ARRAY_BUFFER`绑定到其它数据上后，该属性依然从`positionBuffer`上读取数据。
 
-note that from the point of view of our GLSL vertex shader the `a_position` attribute was a `vec4`
+从GLSL的顶点着色器中注意到`a_position`属性的数据类型是`vec4`
 
     attribute vec4 a_position;
 
-`vec4` is a 4 float value. In JavaScript you could think of it something like
-`a_position = {x: 0, y: 0, z: 0, w: 0}`. Above we set `size = 2`. Attributes
-default to `0, 0, 0, 1` so this attribute will get its first 2 values (x and y)
-from our buffer. The z, and w will be the default 0 and 1 respectively.
+`vec4`是一个有四个浮点数据的数据类型。在JavaScript中你可以把它想象成
+`a_position = {x: 0, y: 0, z: 0, w: 0}`。之前我们设置的`size = 2`，
+属性默认值是`0, 0, 0, 1`，然后属性将会从缓冲中获取前两个值（ x 和 y ）。
+z和w还是默认值 0 和 1 。
 
-After all that we can finally ask WebGL to execute our GLSL program.
+我们终于可以让WebGL运行我们的GLSL着色程序了。
 
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     var count = 3;
     gl.drawArrays(primitiveType, offset, count);
 
-Because the count is 3 this will execute our vertex shader 3 times. The first time `a_position.x` and `a_position.y`
-in our vertex shader attribute will be set to the first 2 values from the positionBuffer.
-The 2nd time `a_position.xy` will be set to the 2nd two values. The last time it will be
-set to the last 2 values.
+因为`count = 3`，所以顶点着色器将运行三次。
+第一次运行将会从位置缓冲中读取前两个值赋给属性值`a_position.x`和`a_position.y`。
+第二次运行`a_position.xy`将会被赋予后两个值，最后一次运行将被赋予最后两个值。
 
-Because we set `primitiveType` to `gl.TRIANGLES`, each time our vertex shader is run 3 times
-WebGL will draw a triangle based on the 3 values we set `gl_Position` to. No matter what size
-our canvas is those values are in clip space coordinates that go from -1 to 1 in each direction.
+因为我们设置`primitiveType`（图元类型）为 `gl.TRIANGLES`（三角形），
+顶点着色器每运行三次WebGL将会根据三个`gl_Position`值绘制一个三角形，
+不论我们的画布大小是多少，在剪辑空间中每个方向的坐标范围都是 -1 到 1 。
 
-Because our vertex shader is simply copying our positionBuffer values to `gl_Position` the
-triangle will be drawn at clip space coordinates
+由于我们的顶点着色器仅仅是传递位置缓冲中的值给`gl_Position`，
+所以三角形在剪辑空间中的坐标如下
 
       0, 0,
       0, 0.5,
       0.7, 0,
 
-Converting from clip space to screen space WebGL is going to draw a triangle at. If the canvas size
-happned to be 400x300 we'd get something like this
+WebGL将会把它们从剪辑空间转换到屏幕空间并在屏幕空间绘制一个三角形，
+如果画布大小是400×300我们会得到类似以下的转换
 
-     clip space      screen space
+     剪辑空间            屏幕空间
        0, 0       ->   200, 150
        0, 0.5     ->   200, 225
      0.7, 0       ->   340, 150
 
-WebGL will now render that triangle. For every pixel it is about to draw WebGL will call our fragment shader.
-Our fragment shader just sets `gl_FragColor` to `1, 0, 0.5, 1`. Since the Canvas is an 8bit
-per channel canvas that means WebGL is going to write the values `[255, 0, 127, 255]` into the canvas.
+现在WebGL将渲染出这个三角形。绘制每个像素时WebGL都将调用我们的片段着色器。
+我们的片断着色器只是简单设置`gl_FragColor`为`1, 0, 0.5, 1`，
+由于画布的每个通道宽度为8位，这表示WebGL最终在画布上绘制`[255, 0, 127, 255]`。
 
-Here's a live version
+这里有一个在线示例
 
 {{{example url="../webgl-fundamentals.html" }}}
 
-In the case above you can see our vertex shader is doing nothing
-but passing on our position data directly. Since the position data is
-already in clipspace there is no work to do. *If you want 3D it's up to you
-to supply shaders that convert from 3D to clipspace because WebGL is only
-a rasterization API*.
+在上例中可以发现顶点着色器只是简单的传递了位置信息。
+由于位置数据坐标就是剪辑空间中的坐标，所以顶点着色器没有做什么特别的事。
+**如果你想做三维渲染，你需要提供合适的着色器将三维坐标转换到剪辑空间坐标，因为WebGL只是一个光栅化API**。
 
-You might be wondering why does the triangle start in the middle and go to toward the top right.
-Clip space in `x` goes from -1 to +1. That means 0 is in the center and positive values will
-be to the right of that.
+你可能会好奇为什么这个三角形从中间开始然后朝向右上方。剪辑空间的`x`坐标范围是 -1 到 +1.
+这就意味着0在中间并且正值在它右边。
 
-As for why it's on the top, in clip space -1 is at the bottom and +1 is at the top. That means
-0 is in the center and so positive numbers will be above the center.
+至于它为什么在上方，是因为剪辑空间中 -1 是最底端 +1 是最顶端，
+这也意味值0在中间，正值在上方。
 
-For 2D stuff you would probably rather work in pixels than clipspace so
-let's change the shader so we can supply the position in pixels and have
-it convert to clipspace for us. Here's the new vertex shader
+对于描述二维空间中的物体，比起剪辑空间坐标你可能更希望使用屏幕像素坐标。
+所以我们来改造一下顶点着色器，让我们提供给它像素坐标而不是剪辑空间坐标。
+这是我们新的顶点着色器
 
     <script id="2d-vertex-shader" type="notjs">
 
@@ -402,13 +376,13 @@ it convert to clipspace for us. Here's the new vertex shader
     +  uniform vec2 u_resolution;
 
       void main() {
-    +    // convert the position from pixels to 0.0 to 1.0
+    +    // 从像素坐标转换到 0.0 到 1.0
     +    vec2 zeroToOne = a_position / u_resolution;
     +
-    +    // convert from 0->1 to 0->2
+    +    // 再把 0->1 转换 0->2
     +    vec2 zeroToTwo = zeroToOne * 2.0;
     +
-    +    // convert from 0->2 to -1->+1 (clipspace)
+    +    // 把 0->2 转换到 -1->+1 (剪辑空间)
     +    vec2 clipSpace = zeroToTwo - 1.0;
     +
     *    gl_Position = vec4(clipSpace, 0, 1);
@@ -416,19 +390,18 @@ it convert to clipspace for us. Here's the new vertex shader
 
     </script>
 
-Some things to notice about the changes. We changed `a_position` to a `vec2` since we're
-only using `x` and `y` anyway. A `vec2` is similar to a `vec4` but only has `x` and `y`.
+这里有些变化需要注意，我们将`a_position`改成`vec2`类型是因为我们只需要用`x`和`y`值。
+`vec2`和`vec4`有些类似但是仅有`x`和`y`值。
 
-Next we added a `uniform` called `u_resolution`. To set that we need to look up its location.
+接着我们添加了一个`uniform`（全局变量）叫做`u_resolution`，为了设置它的值我们需要找到它的位置。
 
     var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
 
-The rest should be clear from the comments. By setting `u_resolution` to the resolution
-of our canvas the shader will now take the positions we put in `positionBuffer` supplied
-in pixels coordinates and convert them to clip space.
+其余变化的应该能从注释中理解。通过设置`u_resolution`为画布的分辨率，
+着色器将会从`positionBuffer`中获取像素坐标将之转换为对应的剪辑空间坐标。
 
-Now we can change our position values from clip space to pixels. This time we're going to draw a rectangle
-made from 2 triangles, 3 points each.
+现在我们可以将位置信息转换为像素坐标。这次我们将通过绘制两个三角形来绘制一个矩形，
+每个三角形有三个点。
 
     var positions = [
     *  10, 20,
@@ -440,49 +413,46 @@ made from 2 triangles, 3 points each.
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-And after we set which program to use we can set the value for the uniform we created.
-`gl.useProgram` is like `gl.bindBuffer` above in that it sets the current program. After
-that all the `gl.uniformXXX` functions set uniforms on the current program.
+在我们设置好使用这个着色程序后，可以设置刚才创建的全局变量的值。
+`gl.useProgram`就与之前讲到的`gl.bindBuffer`相似，设置当前使用的着色程序。
+之后所有类似`gl.uniformXXX`格式的方法都是设置当前着色程序的全局变量。
 
     gl.useProgram(program);
 
     ...
 
-    // set the resolution
+    // 设置全局变量 分辨率
     gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
-And of course to draw 2 triangles we need to have WebGL call our vertex shader 6 times
-so we need to change the `count` to `6`.
+显然我们需要告诉WebGL要运行六次顶点着色器来画两个三角形。
+所以我们将`count`改成`6`。
 
-    // draw
+    // 绘制
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     *var count = 6;
     gl.drawArrays(primitiveType, offset, count);
 
-And here it is
+这里是结果
 
-Note: This example and all following examples use [`webgl-utils.js`](/webgl/resources/webgl-utils.js)
-which contains functions to compile and link the shaders. No reason to clutter the examples
-with that [boilerplate](webgl-boilerplate.html) code.
+注意: 这个和以后的例子都将使用[`webgl-utils.js`](/webgl/resources/webgl-utils.js)，
+它包含了编译和链接着色器的方法。没有必要让一些[样板代码](webgl-boilerplate.html)干扰示例代码。
 
 {{{example url="../webgl-2d-rectangle.html" }}}
 
-Again you might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
-corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs
-we can just flip the clip space y coordinate.
+你可能注意到矩形在区域左下角，WebGL认为左下角是 0，0 。
+想要像传统二维API那样起点在左上角，我们只需翻转y轴即可。
 
     *   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
-And now our rectangle is where we expect it.
+现在矩形在我们期望的位置了
 
 {{{example url="../webgl-2d-rectangle-top-left.html" }}}
 
-Let's make the code that defines a rectangle into a function so
-we can call it for different sized rectangles. While we're at it
-we'll make the color settable.
+让我们来定义一个可以生成矩形的方法，这样我们就可以调用它定义形状不一的多个矩形。
+同时我们需要矩形的颜色是可设置的。
 
-First we make the fragment shader take a color uniform input.
+首先我们定义一个片断着色器，可以通过全局变量接收自定义颜色。
 
     <script id="2d-fragment-shader" type="notjs">
       precision mediump float;
@@ -494,34 +464,34 @@ First we make the fragment shader take a color uniform input.
       }
     </script>
 
-And here's the new code that draws 50 rectangles in random places and random colors.
+这里是一段新代码，可以随机绘制50个随机位置，随机大小，随机颜色的矩形。
 
       var colorUniformLocation = gl.getUniformLocation(program, "u_color");
       ...
 
-      // draw 50 random rectangles in random colors
+      // 绘制50个随机颜色矩形
       for (var ii = 0; ii < 50; ++ii) {
-        // Setup a random rectangle
-        // This will write to positionBuffer because
-        // its the last thing we bound on the ARRAY_BUFFER
-        // bind point
+        // 创建一个随机矩形
+        // 并将写入位置缓冲
+        // 因为位置缓冲是我们绑定在
+        // `ARRAY_BUFFER`绑定点上的最后一个缓冲
         setRectangle(
             gl, randomInt(300), randomInt(300), randomInt(300), randomInt(300));
 
-        // Set a random color.
+        // 设置一个随机颜色
         gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
 
-        // Draw the rectangle.
+        // 绘制矩形
         gl.drawArrays(gl.TRIANGLES, 0, 6);
       }
     }
 
-    // Returns a random integer from 0 to range - 1.
+    // 返回 0 到 range 范围内的随机整数
     function randomInt(range) {
       return Math.floor(Math.random() * range);
     }
 
-    // Fills the buffer with the values that define a rectangle.
+    // 用参数生成矩形顶点并写进缓冲
 
     function setRectangle(gl, x, y, width, height) {
       var x1 = x;
@@ -529,10 +499,10 @@ And here's the new code that draws 50 rectangles in random places and random col
       var y1 = y;
       var y2 = y + height;
 
-      // NOTE: gl.bufferData(gl.ARRAY_BUFFER, ...) will affect
-      // whatever buffer is bound to the `ARRAY_BUFFER` bind point
-      // but so far we only have one buffer. If we had more than one
-      // buffer we'd want to bind that buffer to `ARRAY_BUFFER` first.
+      // 注意: gl.bufferData(gl.ARRAY_BUFFER, ...) 将会影响到
+      // 当前绑定点`ARRAY_BUFFER`的绑定缓冲
+      // 目前我们只有一个缓冲，如果我们有多个缓冲
+      // 我们需要先将所需缓冲绑定到`ARRAY_BUFFER`
 
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
          x1, y1,
@@ -543,66 +513,56 @@ And here's the new code that draws 50 rectangles in random places and random col
          x2, y2]), gl.STATIC_DRAW);
     }
 
-And here's the rectangles.
+这里是50个矩形。
 
 {{{example url="../webgl-2d-rectangles.html" }}}
 
-I hope you can see that WebGL is actually a pretty simple API.
-Okay, simple might be the wrong word. What it does is simple. It just
-executes 2 user supplied functions, a vertex shader and fragment shader and
-draws triangles, lines, or points.
-While it can get more complicated to do 3D that complication is
-added by you, the programmer, in the form of more complex shaders.
-The WebGL API itself is just a rasterizer and conceptually fairly simple.
+我希望你能体会到WebGL其实是一个非常简单的API。好吧，“简单”可能是一个不恰当的描述。
+它做的是一件简单的事，它仅仅运行用户提供的两个方法，一个顶点着色器和一个片断着色器，
+去绘制点，线和三角形。虽然做三维可以变得很复杂，但是这种复杂只是作为程序员的你，
+是一种复杂形式的“着色器”。WebGL API只做光栅化处理并且在概念上十分容易理解。
 
-We covered a small example that showed how to supply data in an attribute and 2 uniforms.
-It's common to have multiple attributes and many uniforms. Near the top of this article
-we also mentioned *varyings* and *textures*. Those will show up in subsequent lessons.
+我们简单的示例向你展示了怎么给属性和两个全局变量提供数据。它和多个属性以及多个全局变量的原理一致。
+在这篇文章的开始部分，我们还提到了*varyings*（可变量）和*textures*（纹理），这些将会在随后的课程中出现。
 
-Before we move on I want to mention that for *most* applications updating
-the data in a buffer like we did in `setRectangle` is not common. I used that
-example because I thought it was easiest to explain since it shows pixel coordinates
-as input and demonstrates doing a small amount of math in GLSL. It's not wrong, there
-are plenty of cases where it's the right thing to do, but you should [keep reading to find out
-the more common way to position, orient and scale things in WebGL](webgl-2d-translation.html).
+在我们继续之前我想提醒你们，上例中用`setRectangle`更新缓冲数据的方式在**大多数**程序中并不常见。
+我这么用只是因为在这个例子中，为了解释GLSL接收像素坐标并通过少量数学运算得到期望结果，
+这可能是最简单的方式。这不是常规做法，这里有一些常用的例子，你可以
+[继续阅读并发现在WebGL中移动，旋转，缩放物体的通用方式](webgl-2d-translation.html)。
 
-If you're new to web development or even if you're not please check out [Setup and Installation](webgl-setup-and-installation)
-for some tips on how to do WebGL development.
+无路你是不是web开发新手都请查看[设置和安装](webgl-setup-and-installation)，
+获取一些WebGL开发的小技巧。
 
-If you're 100% new to WebGL and have no idea what GLSL is or shaders or what the GPU does
-then checkout [the basics of how WebGL really works](webgl-how-it-works.html).
+如果你是100%的WebGL新手甚至不知道GLSL或者着色器是什么，或者GPU是做什么的，查看
+[关于WebGL工作原理的基础知识](webgl-how-it-works.html).
 
-You should also, at least briefly read about [the boilerplate code used here](webgl-boilerplate.html)
-that is used in most of the examples. You should also at least skim
-[how to draw mulitple things](webgl-drawing-multiple-things.html) to give you some idea
-of how more typical WebGL apps are structured because unfortunately nearly all the examples
-only draw one thing and so do not show that structure.
+你至少应简短浏览一下示例中用到最多的[模板代码](webgl-boilerplate.html)。
+你也可以快速浏览一下[怎样绘制多个物体](webgl-drawing-multiple-things.html)，
+以便了解WebGL应用程序的典型结构，不幸的是在此之前几乎所有的例子都只绘制一个物体，
+所以没有展示那个结构。
 
-Otherwise from here you can go in 2 directions. If you are interested in image procesing
-I'll show you [how to do some 2D image processing](webgl-image-processing.html).
-If you are interested in learning about translation,
-rotation and scale and eventually 3D then [start here](webgl-2d-translation.html).
+除此以外这里有两个方向，如果你对图像处理改兴趣，我会向你展示
+[怎样做一些图像处理](webgl-image-processing.html)。
+如果你想学习平移，旋转和缩放最终到三维那就[从这里开始](webgl-2d-translation.html)。
 
 <div class="webgl_bottombar">
-<h3>What does type="notjs" mean?</h3>
+<h3>type="notjs" 是什么意思?</h3>
 <p>
-<code>&lt;script&gt;</code> tags default to having JavaScript in them.
-You can put no type or you can put <code>type="javascript"</code> or
-<code>type="text/javascript"</code> and the browser will interpret the
-contents as JavaScript. If you put anything for else for <code>type</code> the browser ignores the
-contents of the script tag. In other words <code>type="notjs"</code>
-or <code>type="foobar"</code> have no meaning as far as the browser
-is concerned.</p>
-<p>This makes the shaders easy to edit.
-Other alternatives include string concatenations like</p>
+<code>&lt;script&gt;</code> 标签内默认放置的是JavaScript代码。
+你可以不定义type或者定义 <code>type="javascript"</code> 或者
+<code>type="text/javascript"</code> ，浏览器则会将内容翻译成JavaScript。
+如果你对 <code>type</code> 有其它任何定义。浏览器会忽略script标签的内容。
+换句话说，对浏览器而言 <code>type="notjs"</code> 或者 <code>type="foobar"</code>
+都是没有意义的。</p>
+<p>这样就可以很方便的编辑着色器。另一个选择是像下方那样串联字符串</p>
 <pre class="prettyprint">
   var shaderSource =
     "void main() {\n" +
     "  gl_FragColor = vec4(1,0,0,1);\n" +
     "}";
 </pre>
-<p>or we could load shaders with ajax requests but that is slow and asynchronous.</p>
-<p>A more modern alternative would be to use multiline template literals.</p>
+<p>或者我们可以使用AJAX请求，但是那样会比较慢并且是异步的。</p>
+<p>另一个如今常用的做法是多行模板文字。</p>
 <pre class="prettyprint">
   var shaderSource = `
     void main() {
@@ -610,9 +570,8 @@ Other alternatives include string concatenations like</p>
     }
   `;
 </pre>
-<p>Multiline template literals work in all browsers that support WebGL.
-Unfortunately they don't work in really old browsers so if you care
-about supporting a fallback for those browsers you might not want to
-use multiline template literals or you might want to use <a href="https://babeljs.io/">a transpiler</a>.
+<p>多行模板文字可在支持WebGL的所有浏览器中使用。
+不过它不能在较早版本的浏览器中运行，所以如果你很在意浏览器的后向支持，
+你也许可以考虑使用<a href="https://babeljs.io/">一个转换器</a>代替多行模板文字。
 </p>
 </div>
