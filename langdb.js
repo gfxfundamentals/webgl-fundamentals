@@ -105,7 +105,8 @@ window.langDB = {
       "fr": true,
       "ja": true,
       "pl": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-how-it-works.html": {
       "en": true,
