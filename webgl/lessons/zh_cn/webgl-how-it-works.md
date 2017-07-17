@@ -3,7 +3,7 @@ Description: WebGL究竟做了什么？！！
 
 此文上接[WebGL 基础概念](webgl-fundamentals.html)。
 在继续学习之前，我们需要探讨一下WebGL在GPU上究竟做了什么。
-WebGL在GPU上的工作基本上分为两部分，第一部分是将顶点（或数据流）转换到剪辑空间坐标，
+WebGL在GPU上的工作基本上分为两部分，第一部分是将顶点（或数据流）转换到裁剪空间坐标，
 第二部分是基于第一部分的结果绘制像素点。
 
 当你调用
@@ -19,20 +19,20 @@ WebGL在GPU上的工作基本上分为两部分，第一部分是将顶点（或
 
 左侧是你提供的数据。顶点着色器（Vertex Shader）是你写进[GLSL](webgl-shaders-and-glsl.html)
 中的一个方法，每个顶点调用一次，在这个方法中做一些数学运算后设置了一个特殊的`gl_Position`变量，
-这个变量就是该顶点转换到剪辑空间中的坐标值，GPU接收该值并将其保存起来。
+这个变量就是该顶点转换到裁剪空间中的坐标值，GPU接收该值并将其保存起来。
 
-假设你正在画三角形，第一部分每完成三次顶点处理就会用这三个顶点画一个三角形。
+假设你正在画三角形，顶点着色器每完成三次顶点处理，WebGL就会用这三个顶点画一个三角形。
 它计算出这三个顶点对应的像素后，就会光栅化这个三角形，“光栅化”其实就是“用像素画出来”
 的花哨叫法。对于每一个像素，它会调用你的片断着色器询问你使用什么颜色。
-你通过给片断着色器的一个特殊变量`gl_FragColor`设置一个颜色值，来实现自定义像素颜色。
+你通过给片断着色器的一个特殊变量`gl_FragColor`设置一个颜色值，实现自定义像素颜色。
 
-使用它们做出非常有趣的东西，但如你所见，到目前为止的例子中，
+使用它们可以做出非常有趣的东西，但如你所见，到目前为止的例子中，
 处理每个像素时片断着色器可用信息很少，幸运的是我们可以给它传递更多信息。
 想要从顶点着色器传值到片断着色器，我们可以定义“可变量（varyings）”。
 
-做一个简单的例子，让我们将顶点着色器计算出的剪辑空间坐标从顶点着色器传递到片段着色器。
+一个简单的例子，将顶点着色器计算出的裁剪空间坐标从顶点着色器传递到片段着色器。
 
-我们来画一个简单的三角形，从[上一个例子](webgl-2d-matrices.html)继续，让我们把矩形改成三角形。
+我们来画一个简单的三角形，从[之前的例子](webgl-2d-matrices.html)继续，让我们把矩形改成三角形。
 
     // 定义一个三角形填充到缓冲里
     function setGeometry(gl) {
@@ -57,17 +57,17 @@ WebGL在GPU上的工作基本上分为两部分，第一部分是将顶点（或
       gl.drawArrays(primitiveType, offset, count);
     }
 
-然后在我们的顶点着色器中定义一个*varying*（可变量）用来传值给片断着色器。
+然后在我们的顶点着色器中定义一个*varying*（可变量）用来给片断着色器传值。
 
     varying vec4 v_color;
     ...
     void main() {
-      // Multiply the position by the matrix.
+      // 将位置和矩阵相乘
       gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 
-      // Convert from clipspace to colorspace.
-      // Clipspace goes -1.0 to +1.0
-      // Colorspace goes from 0.0 to 1.0
+      // 从裁减空间转换到颜色空间
+      // 裁减空间范围 -1.0 到 +1.0
+      // 颜色空间范围 0.0 到 1.0
     *  v_color = gl_Position * 0.5 + 0.5;
     }
 
@@ -87,20 +87,15 @@ WebGL会将同名的可变量从顶点着色器输入到片断着色器中。
 
 {{{example url="../webgl-2d-triangle-with-position-for-color.html" }}}
 
-Move, scale and rotate the triangle.  Notice that since the colors are
-computed from clipspace they don't move with the triangle.  They are
-relative to the background.
+当你移动，缩放，旋转三角形时，发现颜色随位置变化，不跟着三角形移动。
 
-Now think about it.  We only compute 3 vertices.  Our vertex shader only
-gets called 3 times therefore it's only computing 3 colors yet our
-triangle is many colors.  This is why it's called a *varying*.
+回想一下，我们只计算了三个顶点，调用了三次顶点着色器，所以也只计算出了三个颜色值，
+但是我们的三角形却有很多颜色，这就是称之为可变量的*varying*的原因啦！
 
-WebGL takes the 3 values we computed for each vertex and as it rasterizes
-the triangle it interpolates between the values we computed for the
-vertices.  For each pixel it calls our fragment shader with the
-interpolated value for that pixel.
+WebGL先获得顶点着色器中计算的三个颜色值，在光栅化三角形时将会根据这三个值进行插值。
+每一个像素在调用片断着色器时，可变量的值是与之对应的插值。
 
-In the example above we start out with the 3 vertices
+让我们从上例的三个顶点开始分析
 
 <style>
 table.vertex_table {
@@ -125,50 +120,44 @@ table.vertex_table td {
 </style>
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="2">Vertices</th></tr>
+<tr><th colspan="2">顶点</th></tr>
 <tr><td>0</td><td>-100</td></tr>
 <tr><td>150</td><td>125</td></tr>
 <tr><td>-175</td><td>100</td></tr>
 </table>
 </div>
 
-Our vertex shader applies a matrix to translate, rotate, scale and convert
-to clipspace.  The defaults for translation, rotation and scale are
-translation = 200, 150, rotation = 0, scale = 1,1 so that's really only
-translation.  Given our backbuffer is 400x300 our vertex shader applies
-the matrix and then computes the following 3 clipspace vertices.
+我们的给顶点着色器施加了一个包含平移，旋转和缩放的的矩阵，并将结果转换到裁剪空间。
+默认平移，旋转和缩放值为：平移 = 200, 150，旋转 = 0，缩放 = 1，所以这里只进行了平移。
+画布大小（背景缓冲）为 400×300，所以三个顶点在裁剪空间中为以下坐标值。
 
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="3">values written to gl_Position</th></tr>
+<tr><th colspan="3">写入 gl_Position 的值</th></tr>
 <tr><td>0.000</td><td>0.660</td></tr>
 <tr><td>0.750</td><td>-0.830</td></tr>
 <tr><td>-0.875</td><td>-0.660</td></tr>
 </table>
 </div>
 
-It also converts those to colorspace and writes them to the *varying*
-v_color that we declared.
+同时将这些值转换到颜色空间中赋给我们定义的**可变量**`v_color`。
 
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="3">values written to v_color</th></tr>
+<tr><th colspan="3">写入 v_color 的值</th></tr>
 <tr><td>0.5000</td><td>0.830</td><td>0.5</td></tr>
 <tr><td>0.8750</td><td>0.086</td><td>0.5</td></tr>
 <tr><td>0.0625</td><td>0.170</td><td>0.5</td></tr>
 </table>
 </div>
 
-Those 3 values written to v_color are then interpolated and passed to the
-fragment shader for each pixel.
+利用这三个值进行插值后传进每个像素运行的片断着色器中。
 
 {{{diagram url="resources/fragment-shader-anim.html" caption="v_color is interpolated between v0, v1 and v2" }}}
 
-We can also pass in more data to the vertex shader which we can then pass
-on to the fragment shader.  So for example let's draw a rectangle, that
-consists of 2 triangles, in 2 colors.  To do this we'll add another
-attribute to the vertex shader so we can pass it more data and we'll pass
-that data directly to the fragment shader.
+想要给片断着色器传值，我们可以先把值传递给顶点着色器然后再传给片断着色器。
+让我们来画一个由两个不同颜色三角形组成的矩形。我们需要给顶点着色器添加一个属性值，
+把值通过属性传递给它后它再直接传递给片断着色器。
 
     attribute vec2 a_position;
     +attribute vec4 a_color;
@@ -177,27 +166,27 @@ that data directly to the fragment shader.
 
     void main() {
        ...
-      // Copy the color from the attribute to the varying.
+      // 直接把属性值中的数据赋给可变量
     *  v_color = a_color;
     }
 
-We now have to supply colors for WebGL to use.
+现在要给WebGL提供要用的颜色。
 
-      // look up where the vertex data needs to go.
+      // 寻找顶点着色器中需要的数据
       var positionLocation = gl.getAttribLocation(program, "a_position");
     +  var colorLocation = gl.getAttribLocation(program, "a_color");
       ...
-    +  // Create a buffer for the colors.
+    +  // 给颜色数据创建一个缓冲
     +  var colorBuffer = gl.createBuffer();
     +  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    +  // Set the colors.
+    +  // 设置颜色
     +  setColors(gl);
       ...
 
-    +// Fill the buffer with colors for the 2 triangles
-    +// that make the rectangle.
+    +// 给矩形的两个三角形
+    +// 设置颜色值并发到缓冲
     +function setColors(gl) {
-    +  // Pick 2 random colors.
+    +  // 生成两个随机颜色
     +  var r1 = Math.random();
     +  var b1 = Math.random();
     +  var g1 = Math.random();
@@ -218,45 +207,42 @@ We now have to supply colors for WebGL to use.
     +      gl.STATIC_DRAW);
     +}
 
-At render time setup the color attribute
-
+在渲染的时候设置颜色属性
 
     +gl.enableVertexAttribArray(colorLocation);
     +
-    +// Bind the color buffer.
+    +// 绑定颜色缓冲
     +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     +
-    +// Tell the color attribute how to get data out of colorBuffer (ARRAY_BUFFER)
-    +var size = 4;          // 4 components per iteration
-    +var type = gl.FLOAT;   // the data is 32bit floats
-    +var normalize = false; // don't normalize the data
-    +var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    +var offset = 0;        // start at the beginning of the buffer
+    +// 告诉颜色属性怎么从 colorBuffer (ARRAY_BUFFER) 中读取颜色值
+    +var size = 4;          // 每次迭代使用4个单位的数据
+    +var type = gl.FLOAT;   // 单位数据类型是32位的浮点型
+    +var normalize = false; // 不需要归一化数据
+    +var stride = 0;        // 0 = 移动距离 * 单位距离长度sizeof(type) 
+                           // 每次迭代跳多少距离到下一个数据
+    +var offset = 0;        // 从绑定缓冲的起始处开始
     +gl.vertexAttribPointer(
     +    colorLocation, size, type, normalize, stride, offset)
 
-And adjust the count to compute 6 vertices for 2 triangles
+调整顶点的数量为6用来画两个三角形
 
-    // Draw the geometry.
+    // 画几何体
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     *var count = 6;
     gl.drawArrays(primitiveType, offset, count);
 
-And here's the result.
+这里是结果。
 
 {{{example url="../webgl-2d-rectangle-with-2-colors.html" }}}
 
-Notice that we have 2 solid color triangles.  Yet we're passing the values
-in a *varying* so they are being varied or interpolated across the
-triangle.  It's just that we used the same color on each of the 3 vertices
-of each triangle.  If we make each color different we'll see the
-interpolation.
+你可能注意到这两个三角形是纯色的。我们传递给每个三角形的顶点的颜色值是相同的，
+所以我们传递的*varying*会被插值成相同的颜色，如果我们传递不同的颜色，就会看到插值的颜色。
 
-    // Fill the buffer with colors for the 2 triangles
-    // that make the rectangle.
+    // 给矩形的两个三角形
+    // 设置颜色值并发到缓冲
     function setColors(gl) {
-      // Make every vertex a different color.
+      // 给每个顶点定义不同的颜色
       gl.bufferData(
           gl.ARRAY_BUFFER,
           new Float32Array(
@@ -269,46 +255,39 @@ interpolation.
           gl.STATIC_DRAW);
     }
 
-And now we see the interpolated *varying*.
+现在看到的是插值的*varying*。
 
 {{{example url="../webgl-2d-rectangle-with-random-colors.html" }}}
 
-Not very exciting I suppose but it does demonstrate using more than one
-attribute and passing data from a vertex shader to a fragment shader.  If
-you check out [the image processing examples](webgl-image-processing.html)
-you'll see they also use an extra attribute to pass in texture coordinates.
+可能不值一提的是上例还演示了使用多个属性并且通过顶点着色器向片断着色器传值。
+如果你看了[处理图片的例子](webgl-image-processing.html)，
+那里面还用了另外一个属性传递纹理坐标。
 
-##What do these buffer and attibute commands do?
+##关于buffer和attribute的代码是干什么的？
 
-Buffers are the way of getting vertex and other per vertex data onto the
-GPU.  `gl.createBuffer` creates a buffer.
-`gl.bindBuffer` sets that buffer as the buffer to be worked on.
-`gl.bufferData` copies data into the buffer. This is usually done at
-initialization time.
+缓冲操作是在GPU上获取顶点和其他顶点数据的一种方式。
+`gl.createBuffer`创建一个缓冲；`gl.bindBuffer`是设置缓冲为当前使用缓冲；
+`gl.bufferData`将数据拷贝到缓冲，这个操作一般在初始化完成。
 
-Once the data is in the buffer we need to tell WebGL how to get data out
-of it and provide it to the vertex shader's attributes.
+一旦数据存到缓冲中，还需要告诉WebGL怎么从缓冲中提取数据传给顶点着色器的属性。
 
-To do this, first we ask WebGL what locations it assigned to the
-attributes.  For example in the code above we have
+要做这些，首先需要获取WebGL给属性分配的地址，如下方代码所示
 
-    // look up where the vertex data needs to go.
+    // 询问顶点数据应该放在哪里
     var positionLocation = gl.getAttribLocation(program, "a_position");
     var colorLocation = gl.getAttribLocation(program, "a_color");
 
-This is also usually done at initialization time.
+这一步一般也是在初始化部分完成。
 
-Once we know the location of the attribute we then issue 3 commands just
-before drawing.
+一旦知道了属性的地址，在绘制前还需要发出三个命令。
 
     gl.enableVertexAttribArray(location);
 
-That command tells WebGL we want to supply data from a buffer.
+这个命令是告诉WebGL我们想从缓冲中提供数据。
 
     gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
 
-That command binds a buffer to the ARRAY_BUFFER bind point. It's a global
-variable internal to WebGL
+这个命令是将缓冲绑定到 ARRAY_BUFFER 绑定点，它是WebGL内部的一个全局变量。
 
     gl.vertexAttribPointer(
         location,
@@ -318,66 +297,62 @@ variable internal to WebGL
         strideToNextPieceOfData,
         offsetIntoBuffer);
 
-And that command tells WebGL to get data from the buffer that is currently
-bound to the ARRAY_BUFFER bind point, how many components per vertex (1 - 4),
-what the type of data is (`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...),
-the stride which means how many bytes to skip to get from one piece of data to the
-next piece of data, and an offset for how far into the buffer our data is.
+这个命令告诉WebGL从 ARRAY_BUFFER 绑定点当前绑定的缓冲获取数据。
+每个顶点有几个单位的数据(1 - 4)，单位数据类型是什么(`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, 等等...)，
+stride 是从一个数据到下一个数据要跳过多少位，最后是数据在缓冲的什么位置。
 
-Number of components is always 1 to 4.
+单位个数永远是 1 到 4 之间。
 
-If you are using 1 buffer per type of data then both stride and offset can
-always be 0.  0 for stride means "use a stride that matches the type and
-size".  0 for offset means start at the beginning of the buffer.  Setting
-them to values other than 0 is more complicated and though it has some
-benefits in terms of performance it's not worth the complication unless
-you are trying to push WebGL to its absolute limits.
+如果每个类型的数据都用一个缓冲存储，stride 和 offset 都是 0 。
+对 stride 来说 0 表示 “用符合单位类型和单位个数的大小”。
+对 offset 来说 0 表示从缓冲起始位置开始读取。
+它们使用 0 以外的值时会复杂得多，虽然这样会取得一些性能能上的优势，
+但是一般情况下并不值得，除非你想充分压榨WebGL的性能。
 
-I hope that clears up buffers and attributes.
+希望这些关于缓冲和属性的内容对你来说讲的足够清楚。
 
-Next let's go over [shaders and GLSL](webgl-shaders-and-glsl.html).
+接下来我们来看看[着色器和 GLSL](webgl-shaders-and-glsl.html)。
 
-<div class="webgl_bottombar"><h3>What's normalizeFlag for in vertexAttribPointer?</h3>
+<div class="webgl_bottombar"><h3>vertexAttribPointer 中的 normalizeFlag 参数是什么意思？</h3>
 <p>
-The normalize flag is for all the non floating point types. If you pass
-in false then values will be interpreted as the type they are. BYTE goes
-from -128 to 127, UNSIGNED_BYTE goes from 0 to 255, SHORT goes from -32768 to 32767 etc...
+标准化标记（normalizeFlag）适用于所有非浮点型数据。如果传递false就解读原数据类型。
+BYTE 类型的范围是从 -128 到 127，UNSIGNED_BYTE 类型的范围是从 0 到 255，
+SHORT 类型的范围是从 -32768 到 32767，等等...
 </p>
 <p>
-If you set the normalize flag to true then the values of a BYTE (-128 to 127)
-represent the values -1.0 to +1.0, UNSIGNED_BYTE (0 to 255) become 0.0 to +1.0.
-A normalized SHORT also goes from -1.0 to +1.0 it just has more resolution than a BYTE.
+如果标准化标记设为true，BYTE 数据的值(-128 to 127)将会转换到 -1.0 到 +1.0 之间，
+UNSIGNED_BYTE (0 to 255) 变为 0.0 到 +1.0 之间，SHORT 也是转换到 -1.0 到 +1.0 之间，
+但比 BYTE 精确度高。
 </p>
 <p>
-The most common use for normalized data is for colors. Most of the time colors
-only go from 0.0 to 1.0. Using a full float each for red, green, blue and alpha
-would use 16 bytes per vertex per color. If you have complicated geometry that
-can add up to a lot of bytes. Instead you could convert your colors to UNSIGNED_BYTEs
-where 0 represents 0.0 and 255 represents 1.0. Now you'd only need 4 bytes per color
-per vertex, a 75% savings.
+最常用的是标准化颜色数据。大多数情况颜色值范围为 0.0 到 +1.0。
+使用4个浮点型数据存储红，绿，蓝和阿尔法通道数据时，每个顶点的颜色将会占用16字节空间，
+如果你有复杂的几何体将会占用很多内存。代替的做法是将颜色数据转换为四个 UNSIGNED_BYTE ，
+其中 0 表示 0.0，255 表示 1.0。现在每个顶点只需要四个字节存储颜色值，省了 75% 空间。
 </p>
-<p>Let's change our code to do this. When we tell WebGL how to extract our colors we'd use</p>
+<p>我们来修改之前代码实现。当我们告诉WebGL如何获取颜色数据时将这样</p>
 <pre class="prettyprint showlinemods">
-  // Tell the color attribute how to get data out of colorBuffer (ARRAY_BUFFER)
-  var size = 4;                 // 4 components per iteration
-*  var type = gl.UNSIGNED_BYTE;  // the data is 8bit unsigned bytes
-*  var normalize = true;         // normalize the data
-  var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
-  var offset = 0;               // start at the beginning of the buffer
+  // 告诉颜色属性如何从colorBuffer中提取数据 (ARRAY_BUFFER)
+  var size = 4;                 // 每次迭代使用四个单位数据
+*  var type = gl.UNSIGNED_BYTE;  // 数据类型是8位的 UNSIGNED_BYTE 类型。
+*  var normalize = true;         // 标准化数据
+  var stride = 0;               // 0 = 移动距离 * 单位距离长度sizeof(type) 
+                                // 每次迭代跳多少距离到下一个数据
+  var offset = 0;               // 从缓冲的起始处开始
   gl.vertexAttribPointer(
       colorLocation, size, type, normalize, stride, offset)
 </pre>
-<p>And when we fill out our buffer with colors we'd use</p>
+<p>如下向缓冲添加数据</p>
 <pre class="prettyprint showlinemods">
-// Fill the buffer with colors for the 2 triangles
-// that make the rectangle.
+// 给矩形的两个三角形
+// 设置颜色值并发到缓冲
 function setColors(gl) {
-  // Pick 2 random colors.
-  var r1 = Math.random() * 256; // 0 to 255.99999
-  var b1 = Math.random() * 256; // these values
-  var g1 = Math.random() * 256; // will be truncated
-  var r2 = Math.random() * 256; // when stored in the
-  var b2 = Math.random() * 256; // Uint8Array
+  // 设置两个随机颜色
+  var r1 = Math.random() * 256; // 0 到 255.99999 之间
+  var b1 = Math.random() * 256; // 这些数据
+  var g1 = Math.random() * 256; // 在存入缓冲时
+  var r2 = Math.random() * 256; // 将被截取成
+  var b2 = Math.random() * 256; // Uint8Array 类型
   var g2 = Math.random() * 256;
 
   gl.bufferData(
@@ -393,7 +368,7 @@ function setColors(gl) {
 }
 </pre>
 <p>
-Here's that sample.
+这里是结果。
 </p>
 
 {{{example url="../webgl-2d-rectangle-with-2-byte-colors.html" }}}
