@@ -1,9 +1,10 @@
 window.langDB = {
   "articles": {
-    "webgl-3d-geometry-lathe.html": {
-      "en": true
-    },
     "webgl-anti-patterns.html": {
+      "en": true,
+      "ru": true
+    },
+    "webgl-2-textures.html": {
       "en": true,
       "ru": true
     },
@@ -47,9 +48,8 @@ window.langDB = {
       "fr": true,
       "ru": true
     },
-    "webgl-2-textures.html": {
-      "en": true,
-      "ru": true
+    "webgl-3d-geometry-lathe.html": {
+      "en": true
     },
     "webgl-3d-lighting-directional.html": {
       "en": true,
@@ -111,7 +111,8 @@ window.langDB = {
     "webgl-how-it-works.html": {
       "en": true,
       "fr": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-image-processing-continued.html": {
       "en": true,
