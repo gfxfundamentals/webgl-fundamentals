@@ -150,7 +150,8 @@ window.langDB = {
     "webgl-shaders-and-glsl.html": {
       "en": true,
       "fr": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-text-canvas2d.html": {
       "en": true,
