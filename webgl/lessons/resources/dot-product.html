@@ -477,7 +477,7 @@ function CreateApp(gl) {
   pickPoints();
 
   function drawModel(programInfo, bufferInfo, type, uniforms, world) {
-    m4.multiply(world, viewProjection, worldViewProjection);
+    m4.multiply(viewProjection, world, worldViewProjection);
     if (uniforms.u_worldInverseTranspose) {
       m4.inverse(world, uniforms.u_worldInverseTranspose);
       m4.transpose(uniforms.u_worldInverseTranspose, uniforms.u_worldInverseTranspose);
@@ -485,7 +485,7 @@ function CreateApp(gl) {
     gl.useProgram(programInfo.program);
     twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
     twgl.setUniforms(programInfo, sharedUniforms, uniforms);
-    twgl.drawBufferInfo(gl, type, bufferInfo);
+    twgl.drawBufferInfo(gl, bufferInfo, type);
   }
 
   function degToRad(deg) {
@@ -523,7 +523,7 @@ function CreateApp(gl) {
         up,
         viewInverse);
     m4.inverse(viewInverse, view);
-    m4.multiply(view, projection, viewProjection);
+    m4.multiply(projection, view, viewProjection);
     m4.inverse(viewProjection, inverseViewProjection);
 
     m4.scaling([gridScale, gridScale, gridScale], world);
