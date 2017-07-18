@@ -243,7 +243,7 @@ var data = new Uint8Array([
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
 </code></pre><p>At initialization time look up the uniform location in the shader program</p>
 <pre><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
-</code></pre><p>At render time WebGL ask you to bind the texture to a texture unit</p>
+</code></pre><p>At render time bind the texture to a texture unit</p>
 <pre><code>var unit = 5;  // Pick some texture unit
 gl.activeTexture(gl.TEXTURE0 + unit);
 gl.bindTexture(gl.TEXTURE_2D, tex);
