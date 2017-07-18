@@ -231,7 +231,7 @@ At initialization time look up the uniform location in the shader program
 
     var someSamplerLoc = gl.getUniformLocation(someProgram, "u_texture");
 
-At render time WebGL ask you to bind the texture to a texture unit
+At render time bind the texture to a texture unit
 
     var unit = 5;  // Pick some texture unit
     gl.activeTexture(gl.TEXTURE0 + unit);
