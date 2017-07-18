@@ -28,7 +28,7 @@ Description: 着色器和GLSL分别是什么
 1.  [Attributes 属性](#attributes-) (从缓冲中获取的数据)
 2.  [Uniforms 全局变量](#uniforms-) (在一次绘制中对所有顶点保持一致值)
 3.  [Textures 纹理](#textures-) (从像素或纹理元素中获取的数据)
- 
+
 ### Attributes 属性
 
 最常用的方法是缓冲和**属性**，在[工作原理](webgl-how-it-works.html)
@@ -268,19 +268,17 @@ Description: 着色器和GLSL分别是什么
 
 ## GLSL
 
-GLSL stands for Graphics Library Shader Language. It's the language shaders are written
-in. It has some special semi unique features that are certainly not common in JavaScript.
-It's designed to do the math that is commonly needed to compute things for rasterizing
-graphics. So for example it has built in types like `vec2`, `vec3`, and `vec4` which
-represent 2 values, 3 values, and 4 values respectively. Similarly it has `mat2`, `mat3`
-and `mat4` which represent 2x2, 3x3, and 4x4 matrices. You can do things like multiply
-a `vec` by a scalar.
+GLSL全称是 Graphics Library Shader Language （图形库着色器语言），是着色器使用的语言。
+它有一些不同于JavaScript的特性，主要目的是为栅格化图形提供常用的计算功能。
+所以它内建的数据类型例如`vec2`, `vec3`和 `vec4`分别代表两个值，三个值和四个值，
+类似的还有`mat2`, `mat3` 和 `mat4` 分别代表 2x2, 3x3 和 4x4 矩阵。
+你可以做一些运算例如常量和矢量的乘法。
 
     vec4 a = vec4(1, 2, 3, 4);
     vec4 b = a * 2.0;
-    // b is now vec4(2, 4, 6, 8);
+    // b 现在是 vec4(2, 4, 6, 8);
 
-Similarly it can do matrix multiplication and vector to matrix multiplication
+它同样可以做矩阵乘法以及矢量和矩阵的乘法
 
     mat4 a = ???
     mat4 b = ???
@@ -289,79 +287,87 @@ Similarly it can do matrix multiplication and vector to matrix multiplication
     vec4 v = ???
     vec4 y = c * v;
 
-It also has various selectors for the parts of a vec. For a vec4
+他还为矢量数据提供多种分量选择器，例如 vec4
 
     vec4 v;
 
-*   `v.x` is the same as `v.s` and `v.r` and `v[0]`.
-*   `v.y` is the same as `v.t` and `v.g` and `v[1]`.
-*   `v.z` is the same as `v.p` and `v.b` and `v[2]`.
-*   `v.w` is the same as `v.q` and `v.a` and `v[3]`.
+*   `v.x` 和 `v.s` 以及 `v.r` ， `v[0]` 表达的是同一个分量。
+*   `v.y` 和 `v.t` 以及 `v.g` ， `v[1]` 表达的是同一个分量。
+*   `v.z` 和 `v.p` 以及 `v.b` ， `v[2]` 表达的是同一个分量。
+*   `v.w` 和 `v.q` 以及 `v.a` ， `v[3]` 表达的是同一个分量。
 
-It it able to *swizzle* vec components which means you can swap or repeat components.
+它还支持矢量**调制**，意味者你可以交换或重复分量。
 
     v.yyyy
 
-is the same as
+和
 
     vec4(v.y, v.y, v.y, v.y)
 
-Similarly
+是一样的
+
+同样的
 
     v.bgra
 
-is the same as
+和
 
     vec4(v.b, v.g, v.r, v.a)
 
-when constructing a vec or a mat you can supply multiple parts at once. So for example
+等价
+
+当构造一个矢量或矩阵时可以一次提供多个分量，例如
 
     vec4(v.rgb, 1)
 
-Is the same as
+和
 
     vec4(v.r, v.g, v.b, 1)
 
-Also
+是一样的
+
+同样
 
     vec4(1)
 
-Is the same as
+和
 
     vec4(1, 1, 1, 1)
 
-One thing you'll likely get caught up on is that GLSL is very type strict.
+相同
 
-    float f = 1;  // ERROR 1 is an int. You can't assign an int to a float
+值得注意的是GLSL是一个强类型的语言。
 
-The correct way is one of these
+    float f = 1;  // 错误，1是int类型，不能将int型赋值给float
 
-    float f = 1.0;      // use float
-    float f = float(1)  // cast the integer to a float
+正确的方式是
 
-The example above of `vec4(v.rgb, 1)` doesn't complain about the `1` because `vec4` is
-casting the things inside just like `float(1)`.
+    float f = 1.0;      // 使用float
+    float f = float(1)  // 转换integer为float
 
-GLSL has a bunch of built in functions. Many of them operate on multiple components at once.
-So for example
+上例中 `vec4(v.rgb, 1)` 不会因为 `1` 报错，因为 `vec4` 内部进行了转换类似 `float(1)` 。
+
+GLSL有一系列内置方法，其中大多数运算支持多种数据类型，并且一次可以运算多个分量，例如
 
     T sin(T angle)
 
-Means T can be `float`, `vec2`, `vec3` or `vec4`. If you pass in `vec4` you get `vec4` back
-which the sine of each of the components. In other words if `v` is a `vec4` then
+T可以是 `float`, `vec2`, `vec3` 或 `vec4` 。如果你传的是 `vec4` 返回的也是 `vec4`,
+返回结果对应每个分量的正弦值。换句话说如果 `v` 是 `vec4` 类型。那么
 
     vec4 s = sin(v);
 
-is the same as
+和
 
     vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 
-Sometimes one argument is a float and the rest is `T`. That means that float will be applied
-to all the components. For example if `v1` and `v2` are `vec4` and `f` is a float then
+是一样的
+
+有时一个参数是浮点型而剩下的都是 `T` ，意思是那个浮点数据会作为所有其他参数的一个新分量。
+例如如果 `v1` 和 `v2` 是 `vec4` 同时 `f` 是浮点型，那么
 
     vec4 m = mix(v1, v2, f);
 
-is the same as
+和
 
     vec4 m = vec4(
       mix(v1.x, v2.x, f),
@@ -369,26 +375,23 @@ is the same as
       mix(v1.z, v2.z, f),
       mix(v1.w, v2.w, f));
 
-You can see a list of all the GLSL functions on the last page of [the WebGL
-Reference Card](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf).
-If you like really dry and verbose stuff you can try
-[the GLSL spec](https://www.khronos.org/files/opengles_shading_language.pdf).
+等价
 
-## Putting it all together
+你可以在[WebGL 引用表](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf)
+最后一页看到所有GLSL方法的列表。如果你喜欢干货以更详细的东西你可以看看
+[GLSL 规范](https://www.khronos.org/files/opengles_shading_language.pdf)。
 
-That's the point of this entire series of posts. WebGL is all about creating various shaders, supplying
-the data to those shaders and then calling `gl.drawArrays` or `gl.drawElements` to have WebGL process
-the vertices by calling the current vertex shader for each vertex and then render pixels by calling the
-the current fragment shader for each pixel.
+## 总结
 
-Actually creating the shaders requires several lines of code. Since those lines are the same in
-most WebGL programs and since once written you can pretty much ignore them. [How to compile GLSL shaders
-and link them into a shader program is covered here](webgl-boilerplate.html).
+这是当前系列文章的重点。WebGL的全部内容就是创建不同的着色器，向着色器提供数据然后调用`gl.drawArrays`
+ 或 `gl.drawElements` 让WebGL调用当前顶点着色器处理每个顶点，调用当前片断着色器渲染每个像素。
 
-If you're just starting from here you can go in 2 directions. If you are interested in image procesing
-I'll show you [how to do some 2D image processing](webgl-image-processing.html).
-If you are interesting in learning about translation,
-rotation, scale and eventually 3D then [start here](webgl-2d-translation.html).
+实际上创建着色器需要为数不多的几行代码，并且在大多数WebGL应用程序中都相似，
+因此一旦写完几乎可以不再关心它们了。[在这里介绍如何编译GLSL并链接到着色程序](webgl-boilerplate.html)。
+
+如果你才开始学习WebGL，这里有两个方向可以选择。如果你对图像处理感兴趣我可以向你展示
+[如何实现二维图像处理](webgl-image-processing.html)。如果你对平移，旋转，缩放以及3D感兴趣，
+那就[从这里开始吧](webgl-2d-translation.html)。
 
 
 
