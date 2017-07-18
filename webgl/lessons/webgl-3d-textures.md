@@ -465,7 +465,8 @@ A few other very importanting things you might want to know about textures.
 One is [how to use 2 or more textures at once](webgl-2-texutres.html). The other
 is [how to use images from other domains](webgl-cors-permission.html).
 
-Next up [lets start simplifying with less code more fun](webgl-less-code-more-fun.html).
+Next up [supplying data to a texture from JavaScript](webgl-data-textures.html).
+Or, you could also check out [simplifying WebGL with less code more fun](webgl-less-code-more-fun.html).
 
 <div class="webgl_bottombar">
 <h3>UVs vs. Texture Coordinates</h3>
