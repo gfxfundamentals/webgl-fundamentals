@@ -1,17 +1,13 @@
 window.langDB = {
   "articles": {
-    "webgl-anti-patterns.html": {
-      "en": true,
-      "ru": true
+    "webgl-data-textures.html": {
+      "en": true
     },
-    "webgl-2-textures.html": {
-      "en": true,
-      "ru": true
+    "webgl-render-to-texture.html": {
+      "en": true
     },
-    "webgl-2d-matrices.html": {
+    "webgl-boilerplate.html": {
       "en": true,
-      "fr": true,
-      "ja": true,
       "ru": true
     },
     "webgl-2d-matrix-stack.html": {
@@ -84,15 +80,19 @@ window.langDB = {
       "en": true,
       "ru": true
     },
+    "webgl-anti-patterns.html": {
+      "en": true,
+      "ru": true
+    },
     "webgl-2d-drawimage.html": {
       "en": true,
       "ru": true
     },
-    "webgl-boilerplate.html": {
+    "webgl-cors-permission.html": {
       "en": true,
       "ru": true
     },
-    "webgl-cors-permission.html": {
+    "webgl-2-textures.html": {
       "en": true,
       "ru": true
     },
@@ -126,6 +126,12 @@ window.langDB = {
     },
     "webgl-less-code-more-fun.html": {
       "en": true,
+      "ru": true
+    },
+    "webgl-2d-matrices.html": {
+      "en": true,
+      "fr": true,
+      "ja": true,
       "ru": true
     },
     "webgl-resizing-the-canvas.html": {
