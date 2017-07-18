@@ -117,14 +117,6 @@ function main() {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-  function isPowerOf2(value) {
-    return (value & (value - 1)) == 0;
-  }
-
-  function radToDeg(r) {
-    return r * 180 / Math.PI;
-  }
-
   function degToRad(d) {
     return d * Math.PI / 180;
   }
@@ -178,7 +170,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset)
+        positionLocation, size, type, normalize, stride, offset);
 
     // Turn on the teccord attribute
     gl.enableVertexAttribArray(texcoordLocation);
@@ -193,7 +185,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        texcoordLocation, size, type, normalize, stride, offset)
+        texcoordLocation, size, type, normalize, stride, offset);
 
     // Compute the projection matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;

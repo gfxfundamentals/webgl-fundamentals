@@ -92,8 +92,6 @@ var eyePosition;
 var target;
 
 // globals
-var gl;                   // the gl context.
-var canvas;               // the canvas
 var pixelRatio = window.devicePixelRatio || 1;
 var scale = 1;
 
@@ -456,7 +454,6 @@ function main() {
   var exampleInverseProjection = new Float32Array(16);
   var view = new Float32Array(16);
   var world = new Float32Array(16);
-  var scaleMat = new Float32Array(16);
   var viewProjection = new Float32Array(16);
   eyePosition = new Float32Array([31, 17, 15]);
   var worldViewProjection = new Float32Array(16);
@@ -464,7 +461,6 @@ function main() {
   target = new Float32Array([23, 16, 0]);
   var up = new Float32Array([0, 1, 0]);
   var v3t0 = new Float32Array(3);
-  var m4t0 = new Float32Array(16);
   var zeroMat = new Float32Array(16);
 
   var targetToEye = new Float32Array(3);
@@ -615,7 +611,7 @@ function main() {
 
       twgl.setUniforms(colorProgramInfo, sharedUniforms);
       twgl.setUniforms(colorProgramInfo, frustumCubeUniforms);
-      twgl.drawBufferInfo(gl, cubeBufferInfo)
+      twgl.drawBufferInfo(gl, cubeBufferInfo);
     }
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
