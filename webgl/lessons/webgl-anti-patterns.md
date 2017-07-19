@@ -107,14 +107,13 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     **What to do instead:**
 
     Instead of fighting the Web platform, use the Web platform as it was designed to be used.
-    Use CSS and `clientWidth` and `clientHeight`.
+    Use CSS and `getBoundingClientRect()`.
 
     <pre class="prettyprint">
-    var width = gl.canvas.clientWidth;
-    var height = gl.canvas.clientHeight;
+    var bounds = gl.canvas.getBoundingClientRect();
 
-    gl.canvas.width = width;
-    gl.canvas.height = height;
+    gl.canvas.width = Math.round(bounds.width);
+    gl.canvas.height = Math.round(bounds.height);
     </pre>
 
     Here are 9 cases. They all use exactly the same code. Notice that none of them
@@ -180,8 +179,9 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
 
     <pre class="prettyprint">
     function resize() {
-      var width = gl.canvas.clientWidth;
-      var height = gl.canvas.clientHeight;
+      var bounds = gl.canvas.getBoundingClientRect();
+      var width = Math.round(bounds.width);
+      var height = Math.round(bounds.height);
       if (gl.canvas.width != width ||
           gl.canvas.height != height) {
          gl.canvas.width = width;
@@ -212,8 +212,9 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
 
     <pre class="prettyprint">
     function resize() {
-      var width = gl.canvas.clientWidth;
-      var height = gl.canvas.clientHeight;
+      var bounds = gl.canvas.getBoundingClientRect();
+      var width = Math.round(bounds.width);
+      var height = Math.round(bounds.height);
       if (gl.canvas.width != width ||
           gl.canvas.height != height) {
          gl.canvas.width = width;
@@ -314,7 +315,7 @@ If it was designed for 2560x1600 screens it might have a limit of 4096.
 That seems reasonable but what happens if you have multiple monitors? Let's say I have a GPU with a limit
 of 2048 but I have two 1920x1080 monitors. The user opens a browser window with a WebGL page, they then
 stretch that window across both monitors. Your code tries to set the <code>canvas.width</code> to
-<code>canvas.clientWidth</code> which in this case is 3840. What should happen?
+<code>canvas.getBoundingClientRect().width</code> which in this case is 3840. What should happen?
 <p>Off the top of my head there are only 3 options</p>
 <ol>
 <li>
