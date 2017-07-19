@@ -495,6 +495,7 @@ function runEditor(parent, source, language) {
     disableTranslate3d: true,
  //   model: null,
     scrollBeyondLastLine: false,
+    minimap: { enabled: false },
   });
 }
 

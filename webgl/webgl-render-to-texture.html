@@ -152,14 +152,6 @@ function main() {
   const level = 0;
   gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 
-  function isPowerOf2(value) {
-    return (value & (value - 1)) == 0;
-  }
-
-  function radToDeg(r) {
-    return r * 180 / Math.PI;
-  }
-
   function degToRad(d) {
     return d * Math.PI / 180;
   }
@@ -190,7 +182,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset)
+        positionLocation, size, type, normalize, stride, offset);
 
     // Turn on the teccord attribute
     gl.enableVertexAttribArray(texcoordLocation);
@@ -205,7 +197,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        texcoordLocation, size, type, normalize, stride, offset)
+        texcoordLocation, size, type, normalize, stride, offset);
 
     // Compute the projection matrix
     var projectionMatrix =
@@ -269,7 +261,7 @@ function main() {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
       const aspect = targetTextureWidth / targetTextureHeight;
-      drawCube(aspect)
+      drawCube(aspect);
     }
 
     {
@@ -288,7 +280,7 @@ function main() {
 
 
       const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-      drawCube(aspect)
+      drawCube(aspect);
     }
 
     requestAnimationFrame(drawScene);
