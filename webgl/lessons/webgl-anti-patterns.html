@@ -167,12 +167,13 @@ Then you won&#39;t have to go change any code when you copy it to a new project 
 project in a new way.</p>
 <p><strong>What to do instead:</strong></p>
 <p>Instead of fighting the Web platform, use the Web platform as it was designed to be used.
-Use CSS and <code>getBoundingClientRect()</code>.</p>
+Use CSS and <code>clientWidth</code> and <code>clientHeight</code>.</p>
 <pre class="prettyprint">
-var bounds = gl.canvas.getBoundingClientRect();
+var width = gl.canvas.clientWidth;
+var height = gl.canvas.clientHeight;
 
-gl.canvas.width = Math.round(bounds.width);
-gl.canvas.height = Math.round(bounds.height);
+gl.canvas.width = width;
+gl.canvas.height = height;
 </pre>
 
 <p>Here are 9 cases. They all use exactly the same code. Notice that none of them
@@ -220,9 +221,8 @@ so it just works for most cases. For WebGL apps that constantly draw every frame
 the solution is to check if you need to resize every time you draw like this</p>
 <pre class="prettyprint">
 function resize() {
-  var bounds = gl.canvas.getBoundingClientRect();
-  var width = Math.round(bounds.width);
-  var height = Math.round(bounds.height);
+  var width = gl.canvas.clientWidth;
+  var height = gl.canvas.clientHeight;
   if (gl.canvas.width != width ||
       gl.canvas.height != height) {
      gl.canvas.width = width;
@@ -254,9 +254,8 @@ to trigger a re-draw in every case where the canvas can possibly get resized. On
 that would be to setup a requestAnimationFrame loop like this.</p>
 <pre class="prettyprint">
 function resize() {
-  var bounds = gl.canvas.getBoundingClientRect();
-  var width = Math.round(bounds.width);
-  var height = Math.round(bounds.height);
+  var width = gl.canvas.clientWidth;
+  var height = gl.canvas.clientHeight;
   if (gl.canvas.width != width ||
       gl.canvas.height != height) {
      gl.canvas.width = width;
@@ -348,7 +347,7 @@ If it was designed for 2560x1600 screens it might have a limit of 4096.
 That seems reasonable but what happens if you have multiple monitors? Let's say I have a GPU with a limit
 of 2048 but I have two 1920x1080 monitors. The user opens a browser window with a WebGL page, they then
 stretch that window across both monitors. Your code tries to set the <code>canvas.width</code> to
-<code>canvas.getBoundingClientRect().width</code> which in this case is 3840. What should happen?
+<code>canvas.clientWidth</code> which in this case is 3840. What should happen?
 <p>Off the top of my head there are only 3 options</p>
 <ol>
 <li>

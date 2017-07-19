@@ -144,9 +144,8 @@ function main() {
     // Lookup the size the browser is displaying the canvas in CSS pixels
     // and compute a size needed to make our drawingbuffer match it in
     // device pixels.
-    var bounds = canvas.getBoundingClientRect();
-    var displayWidth  = Math.round(bounds.width  * realToCSSPixels);
-    var displayHeight = Math.round(bounds.height * realToCSSPixels);
+    var displayWidth  = Math.floor(canvas.clientWidth  * realToCSSPixels);
+    var displayHeight = Math.floor(canvas.clientHeight * realToCSSPixels);
 
     // Check if the canvas is not the same size.
     if (canvas.width  !== displayWidth ||
