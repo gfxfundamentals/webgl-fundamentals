@@ -193,7 +193,7 @@ rendering to the texture so we set the viewport to cover the texture. The 2nd
 time we're rendering to the canvas so we set the viewport to cover the canvas.
 
 Similarly when we compute a projection matrix
-we need to the correct aspect for thing we're rendering to. I have lost countless
+we need to use the correct aspect for thing we're rendering to. I have lost countless
 hours of debugging wondering why something is rendering funny or not rendering
 at all only to finally discover that I forgot one or both calling `gl.viewport`
 and computing the correct aspect. It's so easy to forget that I now try to never call
@@ -215,11 +215,11 @@ This means there is no depth testing and 3D won't work. If we draw 3 cubes we ca
 If you look at the center cube you'll see the 3 vertical cubes draw on it one is in back, one is in the middle
 and another is in front but we're drawing all 3 at the same depth. Looking that the 3 horizontal cubes
 draw on the canvas you'll notice they correctly intersect each other. That's because our framebuffer
-has no depth buffer.
+has no depth buffer but our canvas does.
 
 <img class="webgl_center" src="resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" />
 
-To add a depth buffer we need to create one and attach it to our framebuffer.
+To add a depth buffer we need to create a one and attach it to our framebuffer.
 
 ```
 // create a depth renderbuffer
