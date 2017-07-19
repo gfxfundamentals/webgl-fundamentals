@@ -76,9 +76,8 @@ JavaScript check what size that element is being displayed.
 
     function resize(canvas) {
       // Lookup the size the browser is displaying the canvas.
-      var bounds = canvas.getBoundingClientRect();
-      var displayWidth  = Math.round(bounds.width);
-      var displayHeight = Math.round(bounds.height);
+      var displayWidth  = canvas.clientWidth;
+      var displayHeight = canvas.clientHeight;
 
       // Check if the canvas is not the same size.
       if (canvas.width  != displayWidth ||
@@ -146,22 +145,20 @@ equals 1 CSS pixel. We can change our resize function to handle that like this.<
 <pre class="prettyprint">
 function resize(gl) {
   var realToCSSPixels = window.devicePixelRatio;
-  var canvas = gl.canvas;
 
   // Lookup the size the browser is displaying the canvas in CSS pixels
   // and compute a size needed to make our drawingbuffer match it in
   // device pixels.
-  var bounds = canvas.getBoundingClientRect();
-  var displayWidth  = Math.round(bounds.width  * realToCSSPixels);
-  var displayHeight = Math.round(bounds.height * realToCSSPixels);
+  var displayWidth  = Math.floor(gl.canvas.clientWidth  * realToCSSPixels);
+  var displayHeight = Math.floor(gl.canvas.clientHeight * realToCSSPixels);
 
   // Check if the canvas is not the same size.
-  if (canvas.width  !== displayWidth ||
-      canvas.height !== displayHeight) {
+  if (gl.canvas.width  !== displayWidth ||
+      gl.canvas.height !== displayHeight) {
 
     // Make the canvas the same size
-    canvas.width  = displayWidth;
-    canvas.height = displayHeight;
+    gl.canvas.width  = displayWidth;
+    gl.canvas.height = displayHeight;
   }
 }
 </pre>
