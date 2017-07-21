@@ -187,7 +187,7 @@ possible to set whether to flip or not by adding one more input into the
 shader.
 
 ```
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
 ...
 uniform float u_flipY;
 ...
@@ -199,7 +199,7 @@ void main() {
 
    ...
 }
-&lt;/script&gt;
+</script>
 ```
 
 And then we can set it when we render with
