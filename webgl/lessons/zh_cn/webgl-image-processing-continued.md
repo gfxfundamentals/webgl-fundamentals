@@ -2,7 +2,7 @@ Title: WebGL 进一步处理图像
 Description: 怎么用WebGL叠加多种图像处理模式
 
 此文上接[WebGL 图像处理](webgl-image-processing.html)，
-如果还没有读过我建议你[从那开始](webgl-image-processing.html)。
+如果还没有读过我建议你[从那里开始](webgl-image-processing.html)。
 
 图像处理的下一个问题是如何同时施加多种效果？
 
@@ -14,14 +14,15 @@ Description: 怎么用WebGL叠加多种图像处理模式
 一个更灵活的方式是使用2个或以上的纹理，然后交替渲染它们，
 像乒乓球一样每次渲染一种效果，传给另一个渲染下一个效果，如下所示。
 
-<blockquote><pre>原始图像 -&gt; [模糊]        -&gt; 纹理纹理 1
+<blockquote><pre>原始图像    -&gt; [模糊]     -&gt; 纹理纹理 1
 纹理 1      -&gt; [锐化]     -&gt; 纹理 2
 纹理 2      -&gt; [边缘检测] -&gt; 纹理 1
-纹理 1      -&gt; [模糊]        -&gt; 纹理 2
-纹理 2      -&gt; [平滑]      -&gt; 画布</pre></blockquote>
+纹理 1      -&gt; [模糊]     -&gt; 纹理 2
+纹理 2      -&gt; [平滑]     -&gt; 画布</pre></blockquote>
 
-需要使用帧缓冲来实现这个操作。在WebGL和OpenGL中，帧缓冲是一个事实上是一个糟糕的名字。
-WebGL/OpenGL 中的帧缓冲不是任何形式的缓冲。但是当我们给帧缓冲绑定一个纹理后，
+这个操作需要使用帧缓冲来实现。在WebGL和OpenGL中，帧缓冲是一个事实上是一个糟糕的名字。
+WebGL/OpenGL 中的帧缓冲只是一系列状态（一列附加物）不是任何形式的缓冲。
+但是当我们给帧缓冲绑定一个纹理后，
 可以将渲染结果写入那个纹理。
 
 首先让我们把[以前创建纹理的代码](webgl-image-processing.html)写到一个方法里
@@ -45,38 +46,36 @@ WebGL/OpenGL 中的帧缓冲不是任何形式的缓冲。但是当我们给帧�
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 ```
 
-现在让哦我们使用
-And now let's use that function to make 2 more textures and attach them to
-2 framebuffers.
+现在让我们用这个方法生成两个纹理并绑定到两个帧缓冲。
 
 ```
-  // create 2 textures and attach them to framebuffers.
+  // 创建两个纹理绑定到帧缓冲
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii < 2; ++ii) {
     var texture = createAndSetupTexture(gl);
     textures.push(texture);
 
-    // make the texture the same size as the image
+    // 设置纹理大小和图像大小一致
     gl.texImage2D(
         gl.TEXTURE_2D, 0, gl.RGBA, image.width, image.height, 0,
         gl.RGBA, gl.UNSIGNED_BYTE, null);
 
-    // Create a framebuffer
+    // 创建一个帧缓冲
     var fbo = gl.createFramebuffer();
     framebuffers.push(fbo);
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
-    // Attach a texture to it.
+    // 绑定纹理到帧缓冲
     gl.framebufferTexture2D(
         gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
   }
 ```
 
-Now let's make a set of kernels and then a list of them to apply.
+现在让我们做一些卷积核并按使用顺序存入列表中
 
 ```
-  // Define several convolution kernels
+  // 定义一些卷积核
   var kernels = {
     normal: [
       0, 0, 0,
@@ -100,7 +99,7 @@ Now let's make a set of kernels and then a list of them to apply.
     ]
   };
 
-  // List of effects to apply.
+  // 将要使用的效果列表
   var effectsToApply = [
     "gaussianBlur",
     "emboss",
@@ -109,80 +108,72 @@ Now let's make a set of kernels and then a list of them to apply.
   ];
 ```
 
-And finally let's apply each one, ping ponging which texture we are rendering too
+最后让我们使用所有渲染效果，像乒乓一样来回渲染
 
 ```
-  // start with the original image
+  // 从原始图像开始
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
-  // don't y flip images while drawing to the textures
+  // 在渲染效果时不翻转y轴
   gl.uniform1f(flipYLocation, 1);
 
-  // loop through each effect we want to apply.
+  // 循环施加每一种渲染效果
   for (var ii = 0; ii < effectsToApply.length; ++ii) {
-    // Setup to draw into one of the framebuffers.
+    // 使用两个帧缓冲中的一个
     setFramebuffer(framebuffers[ii % 2], image.width, image.height);
 
     drawWithKernel(effectsToApply[ii]);
 
-    // for the next draw, use the texture we just rendered to.
+    // 下次绘制时使用刚才的渲染结果
     gl.bindTexture(gl.TEXTURE_2D, textures[ii % 2]);
   }
 
-  // finally draw the result to the canvas.
-  gl.uniform1f(flipYLocation, -1);  // need to y flip for canvas
+  // 最后将结果绘制到画布
+  gl.uniform1f(flipYLocation, -1);  // 需要绕y轴翻转
   setFramebuffer(null, canvas.width, canvas.height);
   drawWithKernel("normal");
 
   function setFramebuffer(fbo, width, height) {
-    // make this the framebuffer we are rendering to.
+    // 设定当前使用帧缓冲
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
-    // Tell the shader the resolution of the framebuffer.
+    // 告诉着色器分辨率是多少
     gl.uniform2f(resolutionLocation, width, height);
 
-    // Tell webgl the viewport setting needed for framebuffer.
+    // 告诉WebGL帧缓冲需要的视图大小
     gl.viewport(0, 0, width, height);
   }
 
   function drawWithKernel(name) {
-    // set the kernel
+    // 设置卷积核
     gl.uniform1fv(kernelLocation, kernels[name]);
 
-    // Draw the rectangle.
+    // 画出矩形
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
 ```
 
-Here's a working version with a slightly more flexible UI.  Check the
-effects to turn them on.  Drag the effects to reorder how they are
-applied.
+下面是一个可交互示例，用了稍微灵活一点的用户交互。勾选表示开启对应效果，
+拖拽改变渲染顺序。
 
 {{{example url="../webgl-2d-image-processing.html" }}}
 
-Some things I should go over.
+有些东西需要回顾一下。
 
-Calling <code>gl.bindFramebuffer</code> with <code>null</code> tells WebGL
-you want to render to the canvas instead of to one of your framebuffers.
+调用 <code>gl.bindFramebuffer</code> 设置为 <code>null</code>是告诉WebGL
+你想在画布上绘制，而不是在帧缓冲上。
 
-WebGL has to convert from [clipspace](webgl-fundamentals.html) back into
-pixels.  It does this based on the settings of <code>gl.viewport</code>.
-Since the framebuffers we are rendering into are a different size than the
-canvas we need to set the viewport appropriately when rendering to the
-framebuffer textures and then again when finally rendering to the canvas.
+WebGL需要从[裁剪空间](webgl-fundamentals.html)对应到屏幕像素，
+设置<code>gl.viewport</code>就是为了实现这个。因为我们的帧缓冲的大小和画布的大小不同，
+所以我们需要给帧缓冲设置一个合适的视图大小让它渲染到对应的纹理上，最后再渲染到画布上。
 
-Finally in the [original example](webgl-fundamentals.html) we flipped the
-Y coordinate when rendering because WebGL displays the canvas with 0,0
-being the bottom left corner instead of the more traditional for 2D top
-left.  That's not needed when rendering to a framebuffer.  Because the
-framebuffer is never displayed, which part is top and bottom is
-irrelevant.  All that matters is that pixel 0,0 in the framebuffer
-corresponds to 0,0 in our calculations.  To deal with this I made it
-possible to set whether to flip or not by adding one more input into the
-shader.
+[原例](webgl-fundamentals.html)中，我们在渲染时绕 y 轴翻转是因为WebGL
+的 0, 0 点在左下角而不是常见二维屏幕坐标的左上角。而在帧缓冲中绘制的时候不需要翻转，
+因为帧缓冲不用显示，谁上谁下无所谓，最重要的是我们计算中的 0, 0 也对应帧缓冲中的 0, 0
+像素。为了解决这个问题，通过在着色器中添加一个输入来决定是否翻转。
 
 ```
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
 ...
 uniform float u_flipY;
 ...
@@ -194,10 +185,10 @@ void main() {
 
    ...
 }
-&lt;/script&gt;
+</script>
 ```
 
-And then we can set it when we render with
+然后在渲染的时候可以这样设置
 
 ```
   ...
@@ -206,32 +197,25 @@ And then we can set it when we render with
 
   ...
 
-  // don't flip
+  // 不翻转
   gl.uniform1f(flipYLocation, 1);
 
   ...
 
-  // flip
+  // 翻转
   gl.uniform1f(flipYLocation, -1);
 
 ```
 
-I kept this example simple by using a single GLSL program that can achieve
-multiple effects.  If you wanted to do full on image processing you'd
-probably need many GLSL programs.  A program for hue, saturation and
-luminance adjustment.  Another for brightness and contrast.  One for
-inverting, another for adjusting levels, etc.  You'd need to change the
-code to switch GLSL programs and update the parameters for that particular
-program.  I'd considered writing that example but it's an exercise best
-left to the reader because multiple GLSL programs each with their own
-parameter needs probably means some major refactoring to keep it all from
-becoming a big mess of spaghetti.
+为了让这个例子简单化，我只用了一个GLSL实现了多种渲染效果。
+如果专做图像处理可能需要多个GLSL程序，一个调节色彩,饱和度和明度，
+一个调节亮度和对比度，一个做反色，一个做色彩平衡，等等。
+你需要用代码更换GLSL程序，并更新程序对应的参数。我想过写一个类似的例子，
+但最好留给读者自己实现，因为多个GLSL程序和参数需要良好的重构，
+不然代码会一团糟，所以它是一个很好的练习机会。
 
-I hope this and the preceding examples have made WebGL seem a little more
-approachable and I hope starting with 2D helps make WebGL a little easier
-to understand.  If I find the time I'll try to write [a few more
-articles](webgl-2d-translation.html) about how to do 3D as well as more
-details on what WebGL is really doing under the hood.  For a next step
-consider learning [how to use 2 or more textures](webgl-2-textures.html).
+希望这个和之前的例子让你更了解WebGL，从二维开始讲解是希望你更有利于对WebGL的理解。
+如果有时间我会试着写一些关于如何实现三维效果的[文章](webgl-2d-translation.html)，
+讲一些一些关于WebGL的底层原理和细节。接下来可以考虑学习[如何使用多个纹理](webgl-2-textures.html)。
 
 
