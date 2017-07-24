@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-2d-rotation.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -34,23 +34,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 2D Rotation" />
+<meta property="og:title" content="WebGL 二维旋转" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to rotate in 2D" />
+<meta property="og:description" content="如何在二维中旋转" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-2d-rotation.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 2D Rotation" />
+<meta name="twitter:title" content="WebGL 二维旋转" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-2d-rotation.html" />
-<meta name="twitter:description" content="How to rotate in 2D" />
+<meta name="twitter:description" content="如何在二维中旋转" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 2D Rotation</title>
+<title>WebGL 二维旋转</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,13 +63,170 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 2D Rotation</h1>
+    <h1>WebGL 二维旋转</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-2d-rotation.html">英文原版地址</a></p>
+      <p>此文上接一系列文章，先<a href="webgl-fundamentals.html">从基础概念开始</a>，上一篇是
+<a href="webgl-2d-translation.html">物体平移</a>。</p>
+<p>我承认我不知道怎么解释比较好，但是管它呢！先试试吧。</p>
+<p>首先我想向你介绍一个叫做“单位圆”的东西。如果你还记得初中数学的话（别睡着了啊~喂！），
+一个圆有一个半径，圆的半径是圆心到圆边缘的距离。单位圆是半径为 1.0 的圆。</p>
+<p>这里有个单位圆。</p>
+<p><div>
+  <iframe class="webgl_example " style="width: 300px; height: 300px;" src="/webgl/lessons/../unit-circle.html"></iframe>
+</div>
 
+</p>
+<p>当你拖拽蓝色圆点的时候 X 和 Y 会改变，它们是那一点在圆上的坐标，
+在最上方时 Y 是 1 并且 X 是 0 ，在最右边的时候 X 是 1 并且 Y 是 0 。</p>
+<p>如果你还记得三年级的数学知识，数字和 1 相乘结果不变。
+例如 123 * 1 = 123 。非常基础，对吧？那么，单位圆，半径为 1.0 
+的圆也是 1 的一种形式，它是旋转的 1 。所以你可以把一些东西和单位圆相乘，
+除了发生一些魔法和旋转之外，某种程度上和乘以 1 相似。</p>
+<p>我们将从单位元上任取一点，并将该点的 X 和 Y 与<a href="webgl-2d-translation.html">之前例子</a>
+中的几何体相乘。</p>
+<p>这是新的着色器。</p>
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
+
+uniform vec2 u_resolution;
+uniform vec2 u_translation;
++uniform vec2 u_rotation;
+
+void main() {
++  // 旋转位置
++  vec2 rotatedPosition = vec2(
++     a_position.x * u_rotation.y + a_position.y * u_rotation.x,
++     a_position.y * u_rotation.y - a_position.x * u_rotation.x);
+
+  // 加上平移
+*  vec2 position = rotatedPosition + u_translation;
+</code></pre><p>更新JavaScript，传递两个值进去。</p>
+<pre><code>  ...
+
++  var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
+
+  ...
+
++  var rotation = [0, 1];
+
+  ...
+
+  // 绘制场景
+  function drawScene() {
+
+    ...
+
+    // 设置平移
+    gl.uniform2fv(translationLocation, translation);
+
++    // 设置旋转
++    gl.uniform2fv(rotationLocation, rotation);
+
+    // 绘制几何体
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = 18;  // 6 个三角形组成 &#39;F&#39;, 每个三角形 3 个点
+    gl.drawArrays(primitiveType, offset, count);
+  }
+</code></pre><p>这是结果，拖动圆形手柄来旋转或拖动滑块来平移。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-geometry-rotation.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-rotation.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>为什么会这样？来看看数学公式。</p>
+<pre><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
+rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
+</code></pre><p>假如你想旋转一个矩形，在开始旋转之前矩形右上角坐标是 3.0, 9.0 ，
+让我们在单位圆上以十二点方向为起点顺时针旋转30度后取一个点。</p>
+<p><img src="../../resources/rotate-30.png" class="webgl_center" /></p>
+<p>圆上该点的位置是 0.50 和 0.87</p>
+<pre class="webgl_center">
+   3.0 * 0.87 + 9.0 * 0.50 = 7.1
+   9.0 * 0.87 - 3.0 * 0.50 = 6.3
+</pre>
+
+<p>这个结果正好是我们需要的结果</p>
+<p><img src="../../resources/rotation-drawing.svg" width="500" class="webgl_center"/></p>
+<p>顺时针60度也一样</p>
+<p><img src="../../resources/rotate-60.png" class="webgl_center" /></p>
+<p>圆上该点的位置是 0.87 和 0.50 。</p>
+<pre class="webgl_center">
+   3.0 * 0.50 + 9.0 * 0.87 = 9.3
+   9.0 * 0.50 - 3.0 * 0.87 = 1.9
+</pre>
+
+<p>你会发现在我们顺时针旋转到右边的过程中，X 变大 Y 变小。如果我们继续旋转超过90
+度后，X 变小 Y 变大，这种形式形成了旋转。</p>
+<p>单位圆上的点还有一个名字，叫做正弦和余弦。所以对于任意给定角，
+我们只需要求出正弦和余弦，像这样</p>
+<pre><code>function printSineAndCosineForAnAngle(angleInDegrees) {
+  var angleInRadians = angleInDegrees * Math.PI / 180;
+  var s = Math.sin(angleInRadians);
+  var c = Math.cos(angleInRadians);
+  console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
+}
+</code></pre><p>如果你吧代码复制到JavaScript控制台，然后输入 <code>printSineAndCosignForAngle(30)</code> ，
+会打印出 <code>s = 0.49 c = 0.87</code> (注意：我对结果四舍五入了)。</p>
+<p>如果你把这些组合起来，就可以对几何体旋转任意角度，使用时只需要设置旋转的角度。</p>
+<pre><code>  ...
+  var angleInRadians = angleInDegrees * Math.PI / 180;
+  rotation[0] = Math.sin(angleInRadians);
+  rotation[1] = Math.cos(angleInRadians);
+</code></pre><p>这里有一个设置角度的版本，拖动滑块来旋转或平移。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/../webgl-2d-geometry-rotation-angle.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-rotation-angle.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>希望我解释的还过得去，这并不是旋转常用的方式，请继续阅读，
+我们将会在2篇文章后讲旋转的通用方式，<a href="webgl-2d-scale.html">下一篇比较简单，缩放</a>。</p>
+<div class="webgl_bottombar"><h3>弧度是什么?</h3>
+<p>
+弧度是圈，旋转和角度的一个单位。就像可以用英尺，米，码等单位来表示距离一样，我们可以用角度或弧度来量测角。
+</p>
+<p>
+你可能会发现国际测量单位比皇家测量单位更好用。从英寸到英尺要乘以12，从英寸到码要乘以36，我不知道你怎么样但是我无法心算乘以36。但是国际单位就好用多了，从千米到百米需要乘以10，从千米到米需要乘以1000。我<strong>可以</strong>心算乘以1000。
+</p>
+<p>
+弧度和角度的对比是相似的，角度不易计算，弧度简单一些。一圈有360度但是只有 2π 弧度。所以一半是 1π 弧度，90度是 1/2π 弧度。如果想旋转90度只需要使用<code>Math.PI * 0.5</code>，45度只需要使用<code>Math.PI * 0.25</code>，以此类推。
+</p>
+<p>
+涉及角度，圈或旋转的计算用弧度去思考一般会简单一些。试一试吧，使用弧度代替角度，尤其在有用户交互的地方。
+</p>
+</div>
+
+
+
+      <hr class="lesson-comment-sep" />
+      <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 二维旋转';
+            var disqus_title = 'WebGL 二维旋转';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <select id="language">
@@ -90,7 +247,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li>二维平移，旋转，缩放和矩阵运算</li>
   <ul>
     <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
-    <li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 2D Rotation</a></li>
+    <li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 2D Scale</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 2D Matrices</a></li>
   </ul>

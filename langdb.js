@@ -19,7 +19,8 @@ window.langDB = {
       "fr": true,
       "ja": true,
       "pl": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-2d-scale.html": {
       "en": true,
