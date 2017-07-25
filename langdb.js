@@ -26,7 +26,8 @@ window.langDB = {
       "en": true,
       "fr": true,
       "ja": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-2d-translation.html": {
       "en": true,

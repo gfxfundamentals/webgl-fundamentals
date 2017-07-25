@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-2d-scale.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -34,23 +34,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 2D Scale" />
+<meta property="og:title" content="WebGL 二维缩放" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to scale in 2D" />
+<meta property="og:description" content="如何在二维中缩放物体" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-2d-scale.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 2D Scale" />
+<meta name="twitter:title" content="WebGL 二维缩放" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-2d-scale.html" />
-<meta name="twitter:description" content="How to scale in 2D" />
+<meta name="twitter:description" content="如何在二维中缩放物体" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 2D Scale</title>
+<title>WebGL 二维缩放</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,13 +63,116 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 2D Scale</h1>
+    <h1>WebGL 二维缩放</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-2d-scale.html">英文原版地址</a></p>
+      <p>此文上接一系列文章，先<a href="webgl-fundamentals.html">从基础概念开始</a>，上一篇是
+<a href="webgl-2d-rotation.html">物体旋转</a>。</p>
+<p>缩放和<a href="webgl-2d-translation.html">平移</a>一样简单。</p>
+<p>让我们将位置乘以期望的缩放值，这是<a href="webgl-2d-rotation.html">前例</a>中的变化部分。</p>
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
 
+uniform vec2 u_resolution;
+uniform vec2 u_translation;
+uniform vec2 u_rotation;
++uniform vec2 u_scale;
+
+void main() {
++  // 缩放
++  vec2 scaledPosition = a_position * u_scale;
+
+  // 旋转
+  vec2 rotatedPosition = vec2(
+*     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
+*     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
+
+  // 平移
+  vec2 position = rotatedPosition + u_translation;
+</code></pre><p>然后需要在JavaScript中绘制的地方设置缩放量。</p>
+<pre><code>  ...
+
++  var scaleLocation = gl.getUniformLocation(program, &quot;u_scale&quot;);
+
+  ...
+
++  var scale = [1, 1];
+
+  ...
+
+  // 绘制场景
+  function drawScene() {
+
+    ...
+
+    // 设置平移
+    gl.uniform2fv(translationLocation, translation);
+
+    // 设置旋转
+    gl.uniform2fv(rotationLocation, rotation);
+
++    // 设置缩放
++    gl.uniform2fv(scaleLocation, scale);
+
+    // 绘制几何体
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = 18;  // 6 个三角形组成 &#39;F&#39;, 每个三角形 3 个点
+    gl.drawArrays(primitiveType, offset, count);
+  }
+</code></pre><p>现在我们有了缩放，拖动滑块试试。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-scale.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/..%2Fwebgl-2d-geometry-scale.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>值得一提的是，缩放值为负数的时候会翻转几何体。</p>
+<p>希望之前的3篇文章能够帮助你理解<a href="webgl-2d-translation.html">平移</a>，
+<a href="webgl-2d-rotation.html">旋转</a> 和缩放。接下来我们将复习
+<a href="webgl-2d-matrices.html">神奇的矩阵</a>，这三种操作将包含在一个矩阵中，
+并表现为一种常用形式。</p>
+<div class="webgl_bottombar">
+<h3>为什么使用'F'做示例?</h3>
+<p>
+起初我看到有人在纹理上使用'F'，'F'本身并不重要，重要的是你可以从任何角度辨别出它的方向。如果我们使用心形❤或者三角形△，就无法判断出在水平方向是否翻转，一个圆形○就更糟糕了。理论上使用一个四个角有不同颜色的矩形也可以，但这样你就要记住每个角是什么颜色，F的方向可以立即判断出来。
+</p>
+<img src="../../resources/f-orientation.svg" class="webgl_center"/>
+<p>
+可以分辨方向的任何形状都是可以的，自从我知道了这些后就一直用的'F'。
+</p>
+</div>
+
+
+
+
+
+      <hr class="lesson-comment-sep" />
+      <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 二维缩放';
+            var disqus_title = 'WebGL 二维缩放';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <select id="language">
@@ -91,7 +194,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <ul>
     <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
-    <li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 2D Scale</a></li>
+    <li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 2D Matrices</a></li>
   </ul>
   <li>3D</li>
