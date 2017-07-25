@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>WebGL - Directional Lighting Diagram</title>
+<title>WebGL - Point Lighting Diagram</title>
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
 </head>
 <body>
@@ -36,6 +36,11 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 "use strict";
 
 function main() {
+  const opt = getQueryParams();
+  const lang = {
+    dot: opt.dot || "dot(surfaceToLight,surfaceNormal)",
+    surfaceNormal: opt.surfaceNormal || "surface normal",
+  };
   var ctx = document.getElementById("canvas").getContext("2d");
   var direction = 0;
 
@@ -128,7 +133,7 @@ function main() {
     ctx.stroke();
 
     ctx.fillStyle = "#000";
-    ctx.fillText("dot(surfaceToLight,surfaceNormal)", 0, 14);
+    ctx.fillText(lang.dot, 0, 14);
 
     dots.forEach(function(dot, ndx) {
         var r = dot.r;
@@ -153,13 +158,26 @@ function main() {
     ctx.lineWidth = 2;
     ctx.fillStyle = "#080";
     ctx.strokeStyle = "#FFF";
-    diagram.outlineText(ctx, "surface normal", nx, -8);
+    diagram.outlineText(ctx, lang.surfaceNormal, nx, -8);
 
     ctx.restore();
 
     ctx.restore();
   }
   render();
+}
+
+function getQueryParams() {
+  var params = {};
+  if (window.location.search) {
+    window.location.search.substring(1).split("&").forEach(function(pair) {
+      var keyValue = pair.split("=").map(function (kv) {
+        return decodeURIComponent(kv);
+      });
+      params[keyValue[0]] = keyValue[1];
+    });
+  }
+  return params;
 }
 
 main();

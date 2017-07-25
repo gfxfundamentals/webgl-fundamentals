@@ -36,6 +36,15 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 "use strict";
 
 function main() {
+  const opt = getQueryParams();
+  const lang = {
+    surface: opt.surface || "surface",
+    normal: opt.normal || "normal",
+    dot: opt.dot || "dot(halfVector,surfaceNormal) = ",
+    surface2View: opt.surface2View || "surface2view",
+    surface2Light: opt.surface2Light || "surface2light",
+    halfVector: opt.halfVector || "halfVector",
+  };
   var ctx = document.getElementById("canvas").getContext("2d");
   var surfaceAngle = 0;
 
@@ -89,8 +98,8 @@ function main() {
     ctx.fillStyle = "#080";
     ctx.strokeStyle = "#080";
     diagram.arrow(ctx, 0, 0, nx, ny, false, true);
-    ctx.fillText("surface", nx, ny - 22);
-    ctx.fillText("normal", nx, ny - 14);
+    ctx.fillText(lang.surface, nx, ny - 22);
+    ctx.fillText(lang.normal, nx, ny - 14);
 
 
     var en = m3.normalize(ex - sx, ey - sy);
@@ -113,7 +122,7 @@ function main() {
     ctx.strokeStyle = diagram.rgb(0,0,0);
     ctx.stroke();
     ctx.fillStyle = "#000"
-    ctx.fillText("dot(halfVector,surfaceNormal) = " + d.toFixed(2), 0, 10);
+    ctx.fillText(lang.dot + d.toFixed(2), 0, 10);
 
     ctx.restore();
 
@@ -131,7 +140,7 @@ function main() {
     ctx.translate(0, ed / 2);
     ctx.rotate(Math.PI * -0.5);
     ctx.translate(0, 5);
-    ctx.fillText("surface2view", 0, 0);
+    ctx.fillText(lang.surface2View, 0, 0);
     ctx.restore();
 
 
@@ -144,7 +153,7 @@ function main() {
     ctx.translate(0, sd / 2);
     ctx.rotate(Math.PI * 0.5);
     ctx.translate(0, 5);
-    ctx.fillText("surface2light", 0, 0);
+    ctx.fillText(lang.surface2Light, 0, 0);
     ctx.restore();
 
 
@@ -179,7 +188,7 @@ function main() {
     ctx.rotate(-Math.atan2(h[0], h[1]));
     diagram.arrow(ctx, 0, 0, 0, 60, false, true, 0.7);
     ctx.rotate(Math.PI);
-    ctx.fillText("halfVector", 0, -70);
+    ctx.fillText(lang.halfVector, 0, -70);
     ctx.restore();
 
 
@@ -205,6 +214,19 @@ function main() {
     ctx.restore();
   }
   render();
+}
+
+function getQueryParams() {
+  var params = {};
+  if (window.location.search) {
+    window.location.search.substring(1).split("&").forEach(function(pair) {
+      var keyValue = pair.split("=").map(function (kv) {
+        return decodeURIComponent(kv);
+      });
+      params[keyValue[0]] = keyValue[1];
+    });
+  }
+  return params;
 }
 
 main();
