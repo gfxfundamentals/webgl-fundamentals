@@ -24,7 +24,6 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 <script src="bonsai-0.4.1.min.js"></script>
 <script>
 "use strict";
-window.onload = main;
 
 function main() {
   var code = function() {
@@ -53,7 +52,7 @@ function main() {
     var mode = parseInt(options.mode);
 
     var fRadius = 60;
-    var camRadius = 120;
+    var camRadius = (mode === 3) ? fRadius * 1.5 : 120;
     var areaWidth = 400;
     var areaHeight = 300;
     var gridSpacing = 20;
@@ -64,7 +63,7 @@ function main() {
     stage.setBackgroundColor(color('white'));
     stage.setFramerate(60);
 
-    var yoff = mode == 2 ? 90 : 0;
+    var yoff = (mode === 2) ? 90 : 0;
 
     var grid = new Group()
         .addTo(stage)
@@ -77,9 +76,26 @@ function main() {
         .addTo(stage)
         .attr({
           x: areaWidth / 2,
-          y: areaHeight / 2 - (mode > 1 ? camRadius : 0) + yoff,
+          y: areaHeight / 2 - (mode === 2 ? camRadius : 0) + yoff,
         });
 
+    if (mode === 3) {
+      new Circle(0, 0, fRadius)
+         .addTo(world)
+         .attr({
+           fillColor: "transparent",
+           strokeColor: "#888",
+           strokeWidth: 1,
+         });
+
+      new Circle(0, 0, camRadius)
+         .addTo(world)
+         .attr({
+           fillColor: "transparent",
+           strokeColor: "#F00",
+           strokeWidth: 1,
+         });
+    }
     var base = new Group()
         .addTo(stage)
         .attr({
@@ -118,6 +134,59 @@ function main() {
           });
     });
 
+
+    function degToRad(d) {
+      return d * Math.PI / 180;
+    }
+
+    if (mode === 3) {
+      const ip = new Group()
+         .addTo(world)
+         .attr({
+           rotation: degToRad(-35),
+         });
+      new Path()
+        .addTo(ip)
+        .moveTo(0, 0)
+        .lineTo(fRadius, 0)
+        .attr({
+          fillColor: "transparent",
+          strokeColor: "#888",
+          strokeWidth: 1,
+        });
+      new Text("radius")
+        .addTo(ip)
+        .attr({
+          textFillColor: "#888",
+          x: fRadius * .1,
+          y: -10,
+          fontSize: 12,
+        });
+      const cp = new Group()
+         .addTo(base)
+         .attr({
+           rotation: degToRad(90),
+         });
+      new Path()
+        .addTo(cp)
+        .moveTo(0, 0)
+        .lineTo(camRadius, 0)
+        .attr({
+          fillColor: "transparent",
+          strokeColor: "#F00",
+          strokeWidth: 1,
+        });
+      new Text("radius*1.5")
+        .addTo(cp)
+        .attr({
+          textFillColor: "#F00",
+          x: camRadius * 0.05,
+          y: -12,
+          fontSize: 12,
+        });
+
+    }
+
     var createCamera = function() {
       var c = new Path()
           .moveTo(0, 0)
@@ -140,6 +209,7 @@ function main() {
       new Rect(-15, 10 - 25, 10, 10).addTo(f).attr('fillColor', 'purple');
       new Rect(-15, 20 - 25, 20, 10).addTo(f).attr('fillColor', 'purple');
       new Rect(-15, 30 - 25, 10, 20).addTo(f).attr('fillColor', 'purple');
+      f.attr({scale: mode === 3 ? .5 : 1});
       return f;
     };
 
@@ -154,10 +224,10 @@ function main() {
 
     var cam = createCamera();
     cam.addTo(base).attr({
-      y: mode == 2 ? 0 : camRadius,
+      y: mode === 2 ? 0 : camRadius,
     });
 
-    if (mode == 2) {
+    if (mode === 2) {
       var frustum = new Path()
           .moveTo( -20,  -20)
           .lineTo(-170, -210)
@@ -176,6 +246,7 @@ function main() {
           '100%': { rotation: Math.PI * 2 }
         }, {repeat: 100000000}));
         break;
+      case 3:
       default:
         base.animate(new KeyframeAnimation('8s', {
           '0%':   { rotation: 0},
@@ -194,5 +265,7 @@ function main() {
     },
   });
 }
+
+main();
 </script>
 </html>

@@ -35,6 +35,13 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 "use strict";
 
 function main() {
+  const opt = getQueryParams();
+  const lang = {
+    lightDir: opt.lightDir || "light direction",
+    dot: opt.dot || "dot(reverseLightDirection,surfaceDirection) = ",
+    surface1: opt.surface1 || "surface",
+    surface2: opt.surface2 || "direction",
+  };
   var ctx = document.getElementById("canvas").getContext("2d");
   var direction = 0;
 
@@ -87,7 +94,7 @@ function main() {
       diagram.arrow(ctx, 0, -20, 0, 20, false, true, 0.5);
       ctx.restore();
     }
-    ctx.fillText("light direction", 0, -30);
+    ctx.fillText(lang.lightDir, 0, -30);
 
     ctx.restore();
 
@@ -106,15 +113,15 @@ function main() {
     ctx.stroke();
 
     ctx.fillStyle = "#FFF";
-    ctx.fillText("dot(reverseLightDirection,surfaceDirection) = " + d.toFixed(2), 0, 10);
+    ctx.fillText(lang.dot + d.toFixed(2), 0, 10);
 
     var nx = 0;
     var ny = -20;
     ctx.fillStyle = "#080";
     ctx.strokeStyle = "#080";
     diagram.arrow(ctx, 0, 0, nx, ny, false, true);
-    ctx.fillText("surface", nx, ny - 22);
-    ctx.fillText("direction", nx, ny - 14);
+    ctx.fillText(lang.surface1, nx, ny - 22);
+    ctx.fillText(lang.surface2, nx, ny - 14);
 
     ctx.restore();
 
@@ -123,6 +130,19 @@ function main() {
   render();
 
   window.addEventListener('resize', render);
+}
+
+function getQueryParams() {
+  var params = {};
+  if (window.location.search) {
+    window.location.search.substring(1).split("&").forEach(function(pair) {
+      var keyValue = pair.split("=").map(function (kv) {
+        return decodeURIComponent(kv);
+      });
+      params[keyValue[0]] = keyValue[1];
+    });
+  }
+  return params;
 }
 
 main();
