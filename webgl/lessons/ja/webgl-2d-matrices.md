@@ -241,7 +241,7 @@ newY = y * sy;
 移動、回転、拡大のスライダは前回と同じである。
 だが、シェーダーで使われている方法はもっと簡単になった。
 
-{{{example url="../webgl-2d-geometry-matrix-transform.html" }}}
+{{{example url="../webgl-2d-geometry-matrix-transform.html?ui-angle=角度&ui-scaleX=xのスケール&ui-scaleY=yのスケール" }}}
 
 まだ「で？それは便利か？」と思っているだろう？でも、順番を変更したければシェーダーを更新しなくていい。
 だだ計算式だけ更新したらいい。
@@ -254,7 +254,7 @@ newY = y * sy;
 
 これはそのバージョンである。
 
-{{{example url="../webgl-2d-geometry-matrix-transform-trs.html" }}}
+{{{example url="../webgl-2d-geometry-matrix-transform-trs.html?ui-angle=角度&ui-scaleX=xのスケール&ui-scaleY=yのスケール" }}}
 
 人体の腕とか、太陽の周りを回っている惑星を回っている月とか、木の枝などの階層的なアニメーション
 のためにこのように行列を適用することは特に重要である。例えば、階層的なアニメーションの例として、
@@ -314,7 +314,7 @@ newY = y * sy;
 
 ５つの「F」はこれである。
 
-{{{example url="../webgl-2d-geometry-matrix-transform-hierarchical.html" }}}
+{{{example url="../webgl-2d-geometry-matrix-transform-hierarchical.html?ui-angle=角度&ui-scaleX=xのスケール&ui-scaleY=yのスケール" }}}
 
 もう一つのサンプルを見よう。
 今までのサンプルは全て、「F」の左上角を軸として回転している（上にある順番を変えたサンプル以外）。
@@ -333,7 +333,7 @@ newY = y * sy;
 
 これは「F」の中心で回転と拡大するサンプルである。
 
-{{{example url="../webgl-2d-geometry-matrix-transform-center-f.html" }}}
+{{{example url="../webgl-2d-geometry-matrix-transform-center-f.html?ui-angle=角度&ui-scaleX=xのスケール&ui-scaleY=yのスケール" }}}
 
 この方法を使うとどの位置からでも回転と拡大縮小が出来る。
 フォトショップがどういうふうに好きな点で回転する機能を作ったか分かるようになって来た！
@@ -411,7 +411,7 @@ newY = y * sy;
 解像度「resolution」を指定するコードも消した。この最後の更新で、６〜７ステップもあるシェーダーから、
 たった一つのステップのシェーダーに辿り着いた。行列数学のお陰で凄くシンプルになった。
 
-{{{example url="../webgl-2d-geometry-matrix-transform-with-projection.html" }}}
+{{{example url="../webgl-2d-geometry-matrix-transform-with-projection.html?ui-angle=角度&ui-scaleX=xのスケール&ui-scaleY=yのスケール" }}}
 
 次の記事へ行く前にもちょっと単純化しよう。複数行列を作成して、その後お互いに掛けることは珍しくないけど、
 作成しながら掛けることも通常の方法である。このような関数を作ろう。
@@ -450,7 +450,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
 これはそのバージョンである。
 
-{{{example url="../webgl-2d-geometry-matrix-transform-simpler-functions.html" }}}
+{{{example url="../webgl-2d-geometry-matrix-transform-simpler-functions.html?ui-angle=角度&ui-scaleX=xのスケール&ui-scaleY=yのスケール" }}}
 
 もう一つのこと、。。。上記の頭で話したように順番が大事だ。最初のサンプルで
 
@@ -492,7 +492,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
 ステップ5:  `matrix = m3.scale(matrix, sx, sy);`
 
-> {{{diagram url="resources/matrix-space-change.html?stage=4" capture="空間を拡大" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=4" caption="空間を拡大" }}}
 >
 > 「tx, ty」を中心に回転された空間は拡大された。
 

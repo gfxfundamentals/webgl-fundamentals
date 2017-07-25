@@ -137,7 +137,7 @@ Xが小さくなって、Yが大きくなって行く。そのパターンで回
 
 これは角度しかない版である。移動と回転するためにスライダを操作してみよう。
 
-{{{example url="../webgl-2d-geometry-rotation-angle.html" }}}
+{{{example url="../webgl-2d-geometry-rotation-angle.html?ui-angle=角度" }}}
 
 ここまで良い説明だったかな〜。。。
 これは一般的な回転する方法じゃないのでまだ読み続けて下さい。

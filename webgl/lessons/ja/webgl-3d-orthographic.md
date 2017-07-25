@@ -291,7 +291,7 @@ Zもピクセル単位で計算する。`width`のような値を`depth`に与�
 
 さあ、出来たサンプルはこれである。
 
-{{{example url="../webgl-3d-step1.html" }}}
+{{{example url="../webgl-3d-step1.html?ui-angleX=X角度&ui-angleY=Y角度&ui-angleZ=Z角度&ui-scaleX=xのスケール&ui-scaleY=yのスケール&ui-scaleZ=zのスケール" }}}
 
 第一の問題は「F」の図形が平らで三次元にあまり見えないことである。
 それを立体にしよう。今の「F」の図形は2つの三角形で出来ている三つの四角形で作られている。
@@ -418,7 +418,7 @@ gl.vertexAttribPointer(
 
 これになった。
 
-{{{example url="../webgl-3d-step3.html" }}}
+{{{example url="../webgl-3d-step3.html?ui-angleX=X角度&ui-angleY=Y角度&ui-angleZ=Z角度&ui-scaleX=xのスケール&ui-scaleY=yのスケール&ui-scaleZ=zのスケール" }}}
 
 このメチャクチャな絵は何だ？実は「F」の図形の三角形は定義された順番に描画される。
 その順番によると前面の三角形が書かれた後裏面の三角形が描画される。
@@ -448,7 +448,7 @@ WebGLに描画されない。それはいいことでしょう。三次元なら
 
 `CULL_FACE`をオンにするとこうなる。
 
-{{{example url="../webgl-3d-step4.html" }}}
+{{{example url="../webgl-3d-step4.html?ui-angleX=X角度&ui-angleY=Y角度&ui-angleZ=Z角度&ui-scaleX=xのスケール&ui-scaleY=yのスケール&ui-scaleZ=zのスケール" }}}
 
 やばい！三角形が消えた！実は多くの三角形の向きが間違えている。反対向きになるまで回転してみれば
 現れてくる。簡単に直せる。逆になっている三角形の頂点を2つ交換だけでいい。例えば裏向きの
@@ -506,7 +506,7 @@ XとYはクリップ空間に変更しなければいけないのと同じよう
 
 それでこうなった。
 
-{{{example url="../webgl-3d-step6.html" }}}
+{{{example url="../webgl-3d-step6.html?ui-angleX=X角度&ui-angleY=Y角度&ui-angleZ=Z角度&ui-scaleX=xのスケール&ui-scaleY=yのスケール&ui-scaleZ=zのスケール" }}}
 
 それは三次元である！
 

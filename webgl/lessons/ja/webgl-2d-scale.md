@@ -68,7 +68,7 @@ void main() {
 
 これで拡大機能が出来た！スライダを操作してみよう。
 
-{{{example url="../webgl-2d-geometry-scale.html" }}}
+{{{example url="../webgl-2d-geometry-scale.html?ui-angle=角度&ui-scaleX==xのスケール&ui-scaleY==yのスケール" }}}
 
 マイナス倍率にすると図形が逆に描画されることを気づいただろう。
 
