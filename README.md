@@ -91,10 +91,34 @@ articles.
 
 ### UI localization
 
-Some of the diagrams allow passing translations for the UI. For example if there is a slider named "rotation"
+Some of the diagrams allow passing translations for the UI and other text.
+
+For example if there is a slider named "rotation"
 you can add "?ui-rotation=girar" at the end of the URL for the diagram. For 2 or more translations
 separate them with a `&`. Certain characters are disallowed in URLs like `=`, `#`, `&` etc. For those
 use their uri encoding.
+
+For diagram labels you'll have to look inside the code. For example for the
+directional lighting diagram near the start of the code it looks like this
+
+```
+const lang = {
+  lightDir: opt.lightDir || "light direction",
+  dot: opt.dot || "dot(reverseLightDirection,surfaceDirection) = ",
+  surface1: opt.surface1 || "surface",
+  surface2: opt.surface2 || "direction",
+};
+```
+
+Which means you can localize the labels like this
+
+```
+{{{diagram url="resources/directional-lighting.html?lightDir=光線方向&surface1=オブジェクト&surface2=表面方向&dot=dot(光線反対方向,表面方向)%20%3D%20&ui-rotation=角度" caption="方向を回転してみて" width="500" height="400"}}}
+```
+
+For testing reference the sample directly in your browser. For example
+
+[`http://localhost:8080/webgl/lessons/resources/directional-lighting.html?lightDir=光線方向&surface1=オブジェクト&surface2=表面方向&dot=dot(光線反対方向,表面方向)%20%3D%20&ui-rotation=角度`](http://webglfundamentals.org/webgl/lessons/resources/directional-lighting.html?lightDir=光線方向&surface1=オブジェクト&surface2=表面方向&dot=dot(光線反対方向,表面方向)%20%3D%20&ui-rotation=角度)
 
 ### To build
 
