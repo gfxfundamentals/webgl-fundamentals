@@ -42,6 +42,8 @@
   }
 }(this, function() {
 
+  const gopt = getQueryParams();
+
   function setupSlider(selector, options) {
     var parent = document.querySelector(selector);
     if (!parent) {
@@ -60,7 +62,7 @@
     var value = options.value || 0;
     var max = options.max || 1;
     var fn = options.slide;
-    var name = options.name;
+    var name = gopt["ui-" + options.name] || options.name;
     var uiPrecision = options.uiPrecision === undefined ? precision : options.uiPrecision;
     var uiMult = options.uiMult || 1;
 
@@ -119,7 +121,7 @@
     const label = document.createElement("label");
     const id = getWidgetId();
     label.setAttribute('for', id);
-    label.textContent = options.name;
+    label.textContent = gopt["ui-" + options.name] || options.name;
     label.className = "gman-checkbox-label";
     const input = document.createElement("input");
     input.type = "checkbox";
@@ -148,12 +150,12 @@
     const label = document.createElement("label");
     const id = getWidgetId();
     label.setAttribute('for', id);
-    label.textContent = options.name;
+    label.textContent = gopt["ui-" + options.name] || options.name;
     label.className = "gman-widget-label";
     const selectElem = document.createElement("select");
     options.options.forEach((name, ndx) => {
       const opt = document.createElement("option");
-      opt.textContent = name;
+      opt.textContent = gopt["ui-" + name] || name;
       opt.value = ndx;
       opt.selected = ndx === options.value
       selectElem.appendChild(opt);
@@ -232,6 +234,24 @@
       const widget = widgets[key];
       widget.updateValue(data[key]);
     });
+  }
+
+  function getQueryParams() {
+    var params = {};
+    if (window.hackedParams) {
+      Object.keys(window.hackedParams).forEach(function(key) {
+        params[key] = window.hackedParams[key];
+      });
+    }
+    if (window.location.search) {
+      window.location.search.substring(1).split("&").forEach(function(pair) {
+        var keyValue = pair.split("=").map(function (kv) {
+          return decodeURIComponent(kv);
+        });
+        params[keyValue[0]] = keyValue[1];
+      });
+    }
+    return params;
   }
 
   return {

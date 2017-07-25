@@ -76,7 +76,9 @@ This is the template for the main page for each language
 #### `toc.html`
 
 This is the table of contents for the language. It is included on both the index
-and on each article. It's up to if you want to link to English articles for non-translated articles or not
+and on each article. It's up to if you want to link to English articles for non-translated articles.
+The build system will create a placeholder for every English article for which there is no
+corresponding article in that langauge. It will be filled the `missing` message from above.
 
 #### Translation notes
 
@@ -86,6 +88,13 @@ links in one article that links to another article but that other article has no
 This way you don't have to go back and fix already translated articles. Just translate one article
 at a time and leave the links as is. They'll link to placeholders until someone translates the missing
 articles.
+
+### UI localization
+
+Some of the diagrams allow passing translations for the UI. For example if there is a slider named "rotation"
+you can add "?ui-rotation=girar" at the end of the URL for the diagram. For 2 or more translations
+separate them with a `&`. Certain characters are disallowed in URLs like `=`, `#`, `&` etc. For those
+use their uri encoding.
 
 ### To build
 
