@@ -124,7 +124,8 @@ Handlebars.registerHelper('example', function(options) {
   options.hash.height  = options.hash.height ? "height: " + options.hash.height + "px;" : "";
   options.hash.caption = options.hash.caption || options.data.root.defaultExampleCaption;
   options.hash.examplePath = options.data.root.examplePath;
-  options.hash.url = encodeURIComponent(encodeUrl(options.hash.url));
+  options.hash.encodedUrl = encodeURIComponent(encodeUrl(options.hash.url));
+  options.hash.url = encodeUrl(options.hash.url);
   return templateManager.apply("build/templates/example.template", options.hash);
 });
 
