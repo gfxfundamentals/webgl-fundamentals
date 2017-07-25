@@ -384,7 +384,7 @@ var Builder = function(outBaseDir, options) {
            article.src_file_name,
          ]).then((result) => {
            article.dateModified = utcMomentFromGitLog(result);
-    });
+         });
        };
     }));
 
