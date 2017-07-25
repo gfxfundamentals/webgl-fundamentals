@@ -266,7 +266,7 @@ WebGL can try to use that hint to optimize certain things. `gl.STATIC_DRAW` tell
 we are not likely to change this data much.
 
 The code up to this point is *initialization code*. Code that gets run once when we
-load the page. The code below this point is *renderering code* or code that should
+load the page. The code below this point is *rendering code* or code that should
 get executed each time we want to render/draw.
 
 ## Rendering
