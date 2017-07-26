@@ -481,8 +481,34 @@ and in the second we had
 
 And we saw how they are different.
 
-The general way to look at the matrices is you start with clipspace. Each matrix
-you apply transforms the space so
+The are 2 ways to look at matrices. Given the expression
+
+    projectionMat * translationMat * rotationMat * scaleMat * position
+
+The first way which many people find natural is to start on the right and work
+to the left
+
+First we mutiply the positon by the scale matrix to get a scaled postion
+
+    scaledPosition = scaleMat * position
+
+Then we multiply the scaledPostion by the rotation matrix to get a rotatedScaledPosition
+
+    rotatedScaledPosition = rotationMat * scaledPosition
+
+Then we multiply the rotatedScaledPositon by the translation matrix to get a
+translatedRotatedScaledPosition
+
+    translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
+
+And finally we multiple that by the projection matrix to get clipspace positions
+
+    clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
+
+The 2nd way to look at matrices is reading from left to right. In that case
+each matrix changes the *space" respesented by the canvas. The canvas starts
+with representing clipspace (-1 to +1) in each direction. Each matrix applied
+from left to right changes the space represented by the canvas.
 
 Step 1:  no matrix (or the identiy matrix)
 
@@ -518,6 +544,8 @@ Step 5:  `matrix = m3.scale(matrix, sx, sy);`
 > The previously rotated space with its center at tx, ty has been scaled 2 in x, 1.5 in y
 
 In the shader we then do `gl_Position = matrix * position;`. The `position` values are effectively in this final space.
+
+Use which ever way you feel is easier to understand.
 
 I hope these posts have helped demystify matrix math. If you want
 to stick with 2D I'd suggest checking out [recreating canvas 2d's
