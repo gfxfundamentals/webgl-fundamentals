@@ -495,8 +495,23 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 </code></pre><p>and in the second we had</p>
 <pre><code>scale * rotation * translation
 </code></pre><p>And we saw how they are different.</p>
-<p>The general way to look at the matrices is you start with clipspace. Each matrix
-you apply transforms the space so</p>
+<p>The are 2 ways to look at matrices. Given the expression</p>
+<pre><code>projectionMat * translationMat * rotationMat * scaleMat * position
+</code></pre><p>The first way which many people find natural is to start on the right and work
+to the left</p>
+<p>First we mutiply the positon by the scale matrix to get a scaled postion</p>
+<pre><code>scaledPosition = scaleMat * position
+</code></pre><p>Then we multiply the scaledPostion by the rotation matrix to get a rotatedScaledPosition</p>
+<pre><code>rotatedScaledPosition = rotationMat * scaledPosition
+</code></pre><p>Then we multiply the rotatedScaledPositon by the translation matrix to get a
+translatedRotatedScaledPosition</p>
+<pre><code>translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
+</code></pre><p>And finally we multiple that by the projection matrix to get clipspace positions</p>
+<pre><code>clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
+</code></pre><p>The 2nd way to look at matrices is reading from left to right. In that case
+each matrix changes the *space&quot; respesented by the canvas. The canvas starts
+with representing clipspace (-1 to +1) in each direction. Each matrix applied
+from left to right changes the space represented by the canvas.</p>
 <p>Step 1:  no matrix (or the identiy matrix)</p>
 <blockquote>
 <p><div>
@@ -550,6 +565,7 @@ is when the space flips from positive Y = up to positive Y = down.</p>
 <p>The previously rotated space with its center at tx, ty has been scaled 2 in x, 1.5 in y</p>
 </blockquote>
 <p>In the shader we then do <code>gl_Position = matrix * position;</code>. The <code>position</code> values are effectively in this final space.</p>
+<p>Use which ever way you feel is easier to understand.</p>
 <p>I hope these posts have helped demystify matrix math. If you want
 to stick with 2D I&#39;d suggest checking out <a href="webgl-2d-drawimage.html">recreating canvas 2d&#39;s
 drawImage function</a> and following that
