@@ -28,7 +28,7 @@ The results are completely different.  Even worse, if we needed the second
 example we'd have to write a different shader that applied the
 translation, rotation, and scale in our new desired order.
 
-Well, some people way smarter than me figured out that you can do all the
+Well, some people may smarter than me figured out that you can do all the
 same stuff with matrix math.  For 2D we use a 3x3 matrix.  A 3x3 matrix is
 like a grid with 9 boxes:
 
@@ -149,7 +149,7 @@ newY = y * sy;
 
 Which is the same as our [scaling sample](webgl-2d-scale.html).
 
-Now I'm sure you might still be thinking "So what?  What's the point?"
+Now I'm sure you might still be thinking "So what?  What's the point?".
 That seems like a lot of work just to do the same thing we were already
 doing.
 
