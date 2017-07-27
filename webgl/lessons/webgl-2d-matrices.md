@@ -506,7 +506,7 @@ And finally we multiple that by the projection matrix to get clipspace positions
     clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 
 The 2nd way to look at matrices is reading from left to right. In that case
-each matrix changes the *space" respesented by the canvas. The canvas starts
+each matrix changes the *space* respesented by the canvas. The canvas starts
 with representing clipspace (-1 to +1) in each direction. Each matrix applied
 from left to right changes the space represented by the canvas.
 
@@ -517,7 +517,7 @@ Step 1:  no matrix (or the identiy matrix)
 > The white area is the canvas. Blue is outside the canvas. We're in clip space.
 > Positions passed in need to be in clip space
 
-Step 2:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)`;
+Step 2:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=1" caption="from clip space to pixel space" }}}
 >
