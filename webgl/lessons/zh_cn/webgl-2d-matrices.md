@@ -248,51 +248,49 @@ newY = y * sy;
 
 {{{example url="../webgl-2d-geometry-matrix-transform-trs.html" }}}
 
-Being able to apply matrices like this is especially important for
-hierarchical animation like arms on a body, moons on a planet around a
-sun, or branches on a tree.  For a simple example of hierarchical
-animation lets draw draw our 'F' 5 times but each time lets start with the
-matrix from the previous 'F'.
+像这样的矩阵相乘对层级变换至关重要，比如身体的手臂部分运动，
+月球属于绕太阳转动的地球的一部分，或者树上的树枝。
+写一个简单的层级运动的例子，我们来画5个 'F' ，并且每个 'F' 
+都以前一个的矩阵为基础。
 
-      // Draw the scene.
+      // 绘制场景
       function drawScene() {
-        // Clear the canvas.
+        // 清空画布
         gl.clear(gl.COLOR_BUFFER_BIT);
 
-        // Compute the matrices
+        // 计算矩阵
         var translationMatrix = m3.translation(translation[0], translation[1]);
         var rotationMatrix = m3.rotation(angleInRadians);
         var scaleMatrix = m3.scaling(scale[0], scale[1]);
 
-        // Starting Matrix.
+        // 初始矩阵
         var matrix = m3.identity();
 
         for (var i = 0; i < 5; ++i) {
-          // Multiply the matrices.
+          // 矩阵相乘
           matrix = m3.multiply(matrix, translationMatrix);
           matrix = m3.multiply(matrix, rotationMatrix);
           matrix = m3.multiply(matrix, scaleMatrix);
 
-          // Set the matrix.
+          // 设置矩阵
           gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
-          // Draw the geometry.
+          // 绘制图形
           gl.drawArrays(gl.TRIANGLES, 0, 18);
         }
       }
 
-To do this we introduced the function, `m3.identity`, that makes an
-identity matrix.  An identity matrix is a matrix that effectively
-represents 1.0 so that if you multiply by the identity nothing happens.
-Just like
+在这个例子中用到了一个新方法， `m3.identity`，
+这个方法创建一个单位矩阵。单位矩阵就像 1.0 一样，
+和它相乘的矩阵不会变化，就像
 
 <div class="webgl_center">X * 1 = X</div>
 
-so too
+同样的
 
 <div class="webgl_center">matrixX * identity = matrixX</div>
 
-Here's the code to make an identity matrix.
+这是创建单位矩阵的代码。
 
     var m3 = {
       identity function() {
@@ -305,59 +303,54 @@ Here's the code to make an identity matrix.
 
       ...
 
-Here's the 5 Fs.
+这是5个 F 。
 
 {{{example url="../webgl-2d-geometry-matrix-transform-hierarchical.html" }}}
 
-Let's see one more example.  In every sample so far our 'F' rotates around
-its top left corner (well except for the example were we reversed the order above).
-This is because the math we are using always rotates around the origin and
-the top left corner of our 'F' is at the origin, (0, 0).
+再看一个例子，之前的每个例子中 'F' 都是绕着它的左上角旋转
+（当然，改变转换顺序的那个例子除外）。
+这是因为我们总是绕原点旋转，而 'F' 的原点就是左上角，也就是 (0, 0) 。
 
-But now, because we can do matrix math and we can choose the order that
-transforms are applied we can move the origin.
+现在我们可以使用矩阵运算，并且自定义转换的顺序。所以让我们改变旋转的中心
 
-        // make a matrix that will move the origin of the 'F' to its center.
+        // 创建一个矩阵，可以将原点移动到 'F' 的中心
         var moveOriginMatrix = m3.translation(-50, -75);
         ...
 
-        // Multiply the matrices.
+        // 矩阵相乘
         var matrix = m3.multiply(translationMatrix, rotationMatrix);
         matrix = m3.multiply(matrix, scaleMatrix);
         matrix = m3.multiply(matrix, moveOriginMatrix);
 
-Here's that sample. Notice the F rotates and scales around the center.
+这是结果，注意到 F 现在绕中心旋转和缩放了。
 
 {{{example url="../webgl-2d-geometry-matrix-transform-center-f.html" }}}
 
-Using that technique you can rotate or scale from any point.  Now you know
-how Photoshop or Flash let you move the rotation point.
+通过这种方式你可以绕任意点旋转和缩放，
+所以现在你可能明白了为什么PhotoShop或Flash可以让你移动旋转中心。
 
-Let's go even more crazy.  If you go back to the first article on [WebGL
-fundamentals](webgl-fundamentals.html) you might remember we have code in
-the shader to convert from pixels to clipspace that looks like this.
+来做一些更有趣的事情，如果你回想第一篇文章[WebGL 基础概念](webgl-fundamentals.html)，
+可能会记得在着色器中我们将像素坐标转换到裁剪空间，这是当时的代码
 
       ...
-      // convert the rectangle from pixels to 0.0 to 1.0
+      // 从像素坐标转换到 0.0 到 1.0
       vec2 zeroToOne = position / u_resolution;
 
-      // convert from 0->1 to 0->2
+      // 再把 0->1 转换 0->2
       vec2 zeroToTwo = zeroToOne * 2.0;
 
-      // convert from 0->2 to -1->+1 (clipspace)
+      // 把 0->2 转换到 -1->+1 (裁剪空间)
       vec2 clipSpace = zeroToTwo - 1.0;
 
       gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
-If you look at each of those steps in turn, the first step, "convert from
-pixels to 0.0 to 1.0", is really a scale operation.  The second is also a
-scale operation.  The next is a translation and the very last scales Y by
--1.  We can actually do that all in the matrix we pass into the shader.
-We could make 2 scale matrices, one to scale by 1.0/resolution, another to
-scale by 2.0, a 3rd to translate by -1.0,-1.0 and a 4th to scale Y by -1
-then multiply them all together but instead, because the math is simple,
-we'll just make a function that makes a 'projection' matrix for a given
-resolution directly.
+逐步观察，首先，“从像素坐标转换到 0.0 到 1.0”，
+事实上是一个缩放变换，第二步也是缩放变换，接着是一个平移和一个 Y 
+为 -1 的缩放。我们可以将这些操作放入一个矩阵传给着色器，
+创建两个缩放矩阵，一个缩放 1.0/分辨率，另一个缩放 2.0 ，
+第三个平移  -1.0,-1.0 然后第四个将 Y 缩放 -1。
+然后将他们乘在一起，由于运算很简单，所以我们就直接定义一个'projection'
+方法，根据分辨率直接生成矩阵。
 
     var m3 = {
       projection: function(width, height) {
