@@ -236,7 +236,7 @@ newY = y * sy;
 {{{example url="../webgl-2d-geometry-matrix-transform.html" }}}
 
 可能你还会问，那又怎样？看起来没什么特别好的地方。
-但是，现在如果我们想改变转换顺序不再需要重写一个着色器，只需要改变一下数学运算。
+但是，如果现在我们想改变转换顺序的话，就不需要重写一个着色器了，只需要改变一下数学运算。
 
         ...
         // 矩阵相乘
@@ -327,9 +327,9 @@ newY = y * sy;
 {{{example url="../webgl-2d-geometry-matrix-transform-center-f.html" }}}
 
 通过这种方式你可以绕任意点旋转和缩放，
-所以现在你可能明白了为什么PhotoShop或Flash可以让你移动旋转中心。
+所以现在你可能知道为什么PhotoShop或Flash可以让你移动旋转中心。
 
-来做一些更有趣的事情，如果你回想第一篇文章[WebGL 基础概念](webgl-fundamentals.html)，
+还可以做更有趣的事情，如果你回想第一篇文章[WebGL 基础概念](webgl-fundamentals.html)，
 可能会记得在着色器中我们将像素坐标转换到裁剪空间，这是当时的代码
 
       ...
@@ -349,12 +349,12 @@ newY = y * sy;
 为 -1 的缩放。我们可以将这些操作放入一个矩阵传给着色器，
 创建两个缩放矩阵，一个缩放 1.0/分辨率，另一个缩放 2.0 ，
 第三个平移  -1.0,-1.0 然后第四个将 Y 缩放 -1。
-然后将他们乘在一起，由于运算很简单，所以我们就直接定义一个'projection'
+然后将他们乘在一起，由于运算很简单，所以我们就直接定义一个 `projection`
 方法，根据分辨率直接生成矩阵。
 
     var m3 = {
       projection: function(width, height) {
-        // Note: This matrix flips the Y axis so that 0 is at the top.
+        // 注意：这个矩阵翻转了 Y 轴，所以 0 在上方
         return [
           2 / width, 0, 0,
           0, -2 / height, 0,
@@ -364,8 +364,7 @@ newY = y * sy;
 
       ...
 
-Now we can simplify the shader even more.  Here's the entire new vertex
-shader.
+现在可以简化着色器，这是新的着色器。
 
     <script id="2d-vertex-shader" type="x-shader/x-vertex">
     attribute vec2 a_position;
@@ -373,24 +372,24 @@ shader.
     uniform mat3 u_matrix;
 
     void main() {
-      // Multiply the position by the matrix.
+      // 使位置和矩阵相乘
       gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
     }
     </script>
 
-And in JavaScript we need to multiply by the projection matrix
+在JavaScript中需要乘上投影矩阵
 
-      // Draw the scene.
+      // 绘制场景
       function drawScene() {
         ...
 
-        // Compute the matrices
+        // 计算矩阵
         var projectionMatrix = m3.projection(
             gl.canvas.clientWidth, gl.canvas.clientHeight);
 
         ...
 
-        // Multiply the matrices.
+        // 矩阵相乘
         var matrix = m3.multiply(projectionMatrix, translationMatrix);
         matrix = m3.multiply(matrix, rotationMatrix);
         matrix = m3.multiply(matrix, scaleMatrix);
@@ -398,15 +397,13 @@ And in JavaScript we need to multiply by the projection matrix
         ...
       }
 
-We also removed the code that set the resolution.  With this last step
-we've gone from a rather complicated shader with 6-7 steps to a very
-simple shader with only 1 step all due to the magic of matrix math.
+这里还去除了设置分辨率的代码，通过使用矩阵，
+我们就把着色器中 6-7 步的操作在一步中完成。
 
 {{{example url="../webgl-2d-geometry-matrix-transform-with-projection.html" }}}
 
-Before we move on let's simplifiy a little bit. While it's common to generate
-various matrices and separately multiply them together it's also common to just
-multiply them as we go. Effectively we could functions like this
+在继续之前我们可以先简化一下操作，虽然先创建一些矩阵再将它们相乘很常见，
+但是按照我们的顺序依次操作矩阵也比较常见，比较高效的做法是创建这样的方法
 
 ```
 var m3 = {
@@ -430,127 +427,114 @@ var m3 = {
 };
 ```
 
-This would let us change 7 lines of matrix code above to just 4 lines like this
+这能够让我们将 7 行的矩阵代码转换成 4 行
 
 ```
-// Compute the matrix
+// 计算矩阵
 var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
 matrix = m3.translate(matrix, translation[0], translation[1]);
 matrix = m3.rotate(matrix, angleInRadians);
 matrix = m3.scale(matrix, scale[0], scale[1]);
 ```
 
-And here's that
+这是结果
 
 {{{example url="../webgl-2d-geometry-matrix-transform-simpler-functions.html" }}}
 
-One last thing, we saw above order matters. In the first example we had
+最后一件事，我们之前使用了多种矩阵顺序。第一例中使用
 
-    translation * rotation * scale
+    translation * rotation * scale // 平移 * 旋转 * 缩放
 
-and in the second we had
+第二例中使用
 
-    scale * rotation * translation
+    scale * rotation * translation // 缩放 * 旋转 * 平移
 
-And we saw how they are different.
+然后观察了它们的区别。
 
-The are 2 ways to look at matrices. Given the expression
+这有两种方式解读矩阵运算，给定这样一个表达式
 
     projectionMat * translationMat * rotationMat * scaleMat * position
 
-The first way which many people find natural is to start on the right and work
-to the left
+第一种可能是多数人觉得比较自然的方式，从右向左解释
 
-First we mutiply the positon by the scale matrix to get a scaled postion
+首先将位置乘以缩放矩阵获得缩放后的位置
 
     scaledPosition = scaleMat * position
 
-Then we multiply the scaledPostion by the rotation matrix to get a rotatedScaledPosition
+然后将缩放后的位置和旋转矩阵相乘得到缩放旋转位置
 
     rotatedScaledPosition = rotationMat * scaledPosition
 
-Then we multiply the rotatedScaledPositon by the translation matrix to get a
-translatedRotatedScaledPosition
+然后将缩放旋转位置和平移矩阵相乘得到缩放旋转平移位置
 
     translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
 
-And finally we multiple that by the projection matrix to get clipspace positions
+最后和投影矩阵相乘得到裁剪空间中的坐标
 
     clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 
-The 2nd way to look at matrices is reading from left to right. In that case
-each matrix changes the *space" respesented by the canvas. The canvas starts
-with representing clipspace (-1 to +1) in each direction. Each matrix applied
-from left to right changes the space represented by the canvas.
+第二种方式是从左往右解释，在这个例子中每一个矩阵改变的都是画布的**坐标空间**，
+画布的起始空间是裁剪空间的范围(-1 到 +1)，矩阵从左到右改变着画布所在的空间。
 
-Step 1:  no matrix (or the identiy matrix)
+第一步：没有矩阵（或者单位矩阵）
 
-> {{{diagram url="resources/matrix-space-change.html?stage=0" caption="clip space" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=0" caption="裁剪空间" }}}
 >
-> The white area is the canvas. Blue is outside the canvas. We're in clip space.
-> Positions passed in need to be in clip space
+> 白色区域是画布，蓝色是画布以外，我们正在裁剪空间中。
+> 传递到这里的点需要在裁剪空间内。
 
-Step 2:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)`;
+第二步：`matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=1" caption="from clip space to pixel space" }}}
 >
-> We're now in pixel space. X = 0 to 400, Y = 0 to 300 with 0,0 at the top left.
-> Positions passed using this matrix in need to be in pixel space. The flash you see
-> is when the space flips from positive Y = up to positive Y = down.
+> 现在我们在像素空间，X 范围是 0 到 400 ，Y 范围是 0 到 300，0,0 点在左上角。
+> 传递到这里的点需要在像素空间内，你看到的闪烁是 Y 轴上下颠倒的原因。
 
-Step 3:  `matrix = m3.translate(matrix, tx, ty);`
+第三步：`matrix = m3.translate(matrix, tx, ty);`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=2" caption="move origin to tx, ty" }}}
 >
-> The origin has now been moved to tx, ty (150, 100). The space has moved.
+> 原点被移动到了 tx, ty (150, 100)，所以空间移动了。
 
-Step 4:  `matrix = m3.rotate(matrix, rotationInRadians);`
+第四步：`matrix = m3.rotate(matrix, rotationInRadians);`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=3" caption="rotate 33 degrees" }}}
 >
-> The space has been rotated around tx, ty
+> 空间绕 tx, ty 旋转
 
-Step 5:  `matrix = m3.scale(matrix, sx, sy);`
+第五步：`matrix = m3.scale(matrix, sx, sy);`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=4" capture="scale the space" }}}
 >
-> The previously rotated space with its center at tx, ty has been scaled 2 in x, 1.5 in y
+> 之前的旋转空间中心在 tx, ty ，x 方向缩放 2 ，y 方向缩放 1.5
 
-In the shader we then do `gl_Position = matrix * position;`. The `position` values are effectively in this final space.
+在着色器中执行`gl_Position = matrix * position;`，`position`被直接转换到这个空间。
 
-Use which ever way you feel is easier to understand.
+选一个你容易接受的方式去理解吧。
 
-I hope these posts have helped demystify matrix math. If you want
-to stick with 2D I'd suggest checking out [recreating canvas 2d's
-drawImage function](webgl-2d-drawimage.html) and following that
-into [recreating canvas 2d's matrix stack](webgl-2d-matrix-stack.html).
+希望此系列文章向你揭秘了矩阵运算，如果你还想深入学习二维我建议你看看
+[响应式画布绘制二维图片](webgl-2d-drawimage.html)，然后接着阅读
+[响应式画布的二维矩阵堆](webgl-2d-matrix-stack.html)。
 
-Otherwise next [we'll move on to 3D](webgl-3d-orthographic.html).
-In 3D the matrix math follows the same principles and usage.
-I started with 2D to hopefully keep it simple to understand.
+否则接下来[我们将进入三维部分](webgl-3d-orthographic.html)。
+三维矩阵运算遵循相似的原则和用法，从二维讲起是为了便于理解。
 
-Also, if you really want to become an expert
-in matrix math [check out this amazing videos](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab).
+另外，如果你想精通矩阵运算[就看看这个神奇的视频](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)吧！
 
 <div class="webgl_bottombar">
-<h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
-<p>Up until this point whenever I referred to the canvas's dimensions I used <code>canvas.width</code> and <code>canvas.height</code>
-but above when I called <code>m3.projection</code> I instead used <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Why?</p>
-<p>Projection matrixes are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
-to pixels. But, in the browser, there are 2 types of pixels we are dealing with. One is the number of pixels in
-the canvas itself. So for example a canvas defined like this.</p>
+<h3><code>clientWidth</code> 和 <code>clientHeight</code>是什么？</h3>
+<p>在此之前每当我使用画布的大小时都用的<code>canvas.width</code>和<code>canvas.height</code>，但是这篇文章中使用<code>m3.projection</code>时却用了<code>canvas.clientWidth</code> 和 <code>canvas.clientHeight</code>，为什么？</p>
+<p>投影矩阵是将坐标在裁剪空间(各方向单位为 -1 到 +1 )和像素空间之间进行转换。但是在浏览器中，有两种类型的像素空间，一种是画布本身的表现的像素个数，所以例子中画布是这样定义的。</p>
 <pre class="prettyprint">
   &lt;canvas width="400" height="300"&gt;&lt;/canvas&gt;
 </pre>
-<p>or one defined like this</p>
+<p>或者像这样定义</p>
 <pre class="prettyprint">
   var canvas = document.createElement("canvas");
   canvas.width = 400;
   canvas.height = 300;
 </pre>
-<p>both contain an image 400 pixels wide by 300 pixels tall. But, that size is separate from what size
-the browser actually displays that 400x300 pixel canvas. CSS defines what size the canvas is displayed.
-For example if we made a canvas like this.</p>
+<p>两种都包含一个400像素宽300像素高的图像，但是这个大小和浏览器显示的 400×300 像素的画布是有区别的，CSS决定画布在浏览器中占用的实际像素个数。例如我们定义一个这样的画布。</p>
 <pre class="prettyprint"><!>
   &lt;style&gt;
   canvas {
@@ -561,21 +545,12 @@ For example if we made a canvas like this.</p>
   ...
   &lt;canvas width="400" height="300">&lt;/canvas&gt;
 </pre>
-<p>The canvas will be displayed whatever size its container is. That's likely not 400x300.</p>
-<p>Here are two examples that set the canvas's CSS display size to 100% so the canvas is stretched
-out to fill the page. The first one uses <code>canvas.width</code> and <code>canvas.height</code>. Open it in a new
-window and resize the window. Notice how the 'F' doesn't have the correct aspect. It gets
-distorted.</p>
+<p>画布的大小将会和他所在的容器一样大，很可能不是 400×300 。</p>
+<p>这有两个例子，都设置画布大小为 100%，所以画布会被拉伸到页面大小。第一个例子使用<code>canvas.width</code> 和 <code>canvas.height</code>，在新窗口中打开，然后改变窗口大小，会发现 'F' 的比例失调，变得扭曲了。</p>
 {{{example url="../webgl-canvas-width-height.html" width="500" height="150" }}}
-<p>In this second example we use <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> report
-the size the canvas is actually being displayed by the browser so in this case, even though the canvas still only has 400x300 pixels
-since we're defining our aspect ratio based on the size the canvas is being displayed the <code>F</code> always looks correct.</p>
+<p>第二个例子使用<code>canvas.clientWidth</code> 和 <code>canvas.clientHeight</code>，<code>canvas.clientWidth</code> 和 <code>canvas.clientHeight</code>返回的是画布在浏览器中实际显示的大小，所以在这个例子中，即使画布还是 400x300 像素，但是长宽比是按照画布实际大小设置的，最终<code>F</code>看起来始终正常。</p>
 {{{example url="../webgl-canvas-clientwidth-clientheight.html" width="500" height="150" }}}
-<p>Most apps that allow their canvases to be resized try to make the <code>canvas.width</code> and <code>canvas.height</code> match
-the <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> because they want there to be
-one pixel in the canvas for each pixel displayed by the browser. But, as we've seen above, that's not
-the only option. That means, in almost all cases, it's more technically correct to compute a
-projection matrix's aspect ratio using <code>canvas.clientHeight</code> and <code>canvas.clientWidth</code>.
-</p>
+<p>大多数程序在画布大小改变时都会保持<code>canvas.width</code> 和 <code>canvas.height</code> 与
+<code>canvas.clientWidth</code> 和 <code>canvas.clientHeight</code> 一致，因为他们希望屏幕一像素对应绘制一像素。但是我们之前看到，那并不是唯一的选择，也就是说在大多数情况下正确的做法是用<code>canvas.clientHeight</code> 和 <code>canvas.clientWidth</code>来计算长宽比。</p>
 </div>
 
