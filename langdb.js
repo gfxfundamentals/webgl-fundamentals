@@ -137,7 +137,8 @@ window.langDB = {
       "en": true,
       "fr": true,
       "ja": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-resizing-the-canvas.html": {
       "en": true,
