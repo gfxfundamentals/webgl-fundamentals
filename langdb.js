@@ -152,7 +152,8 @@ window.langDB = {
     },
     "webgl-setup-and-installation.html": {
       "en": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-shaders-and-glsl.html": {
       "en": true,
