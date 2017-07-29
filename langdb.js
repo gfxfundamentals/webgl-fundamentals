@@ -64,7 +64,8 @@ window.langDB = {
       "en": true,
       "fr": true,
       "ja": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-3d-perspective.html": {
       "en": true,
