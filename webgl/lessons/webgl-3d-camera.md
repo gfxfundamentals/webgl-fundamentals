@@ -67,6 +67,8 @@ position and orientation of the camera in the world.  The code
 below makes a matrix that rotates the camera around the origin
 radius * 1.5 distance out and looking at the origin.
 
+{{{diagram url="resources/camera-move-camera.html?mode=3" caption="camera movement" }}}
+
 ```
 var numFs = 5;
 var radius = 200;
