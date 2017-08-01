@@ -222,23 +222,23 @@ w_out = x_in * 0 +
 w_out = z_in * fudgeFactor + 1;
 </pre></div>
 
-So, let's modify the program again to just use matrices.
+我们来修改代码，使用这个矩阵。
 
-First let's put the vertex shader back. It's simple again
+首先将顶点着色器还原，又变成简单的样子
 
 ```
 <script id="2d-vertex-shader" type="x-shader/x-vertex">
 uniform mat4 u_matrix;
 
 void main() {
-  // Multiply the position by the matrix.
+  // 位置和矩阵相乘
   gl_Position = u_matrix * a_position;
   ...
 }
 </script>
 ```
 
-Next let's make a function to make our Z &rarr; W matrix.
+接下来定义一个方法实现 Z &rarr; W 的矩阵
 
 ```
 function makeZToWMatrix(fudgeFactor) {
@@ -251,11 +251,11 @@ function makeZToWMatrix(fudgeFactor) {
 }
 ```
 
-and we'll change the code to use it.
+然后使用它。
 
 ```
     ...
-    // Compute the matrices
+    // 计算矩阵
 *    var matrix = makeZToWMatrix(fudgeFactor);
 *    matrix = m4.multiply(matrix, m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400));
     matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
@@ -267,32 +267,29 @@ and we'll change the code to use it.
     ...
 ```
 
-and note, again, it's exactly the same.
+和之前的很像。
 
 {{{example url="../webgl-3d-perspective-w-matrix.html" }}}
 
-All that was basically just to show you that dividing by Z gives us
-perspective and that WebGL conveniently does this divide by Z for us.
+这只是展示了除以 Z 值获可以实现透视投影，以及在WebGL中简单实现。
 
-But there are still some problems.  For example if you set Z to around
--100 you'll see something like the animation below
+但还有一些问题需要解决，比如将 Z 值设置为 -100 左右的时候会遇到下面的情形
 
-<img class="webgl_center" src="resources/z-clipping.gif" style="border: 1px solid black;" />
+<img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" />
 
-What's going on?  Why is the F disappearing early?  Just like WebGL clips
-X and Y or +1 to -1 it also clips Z.  What we're seeing here is where Z <
--1.
+为什么会这样？为什么 F 提前消失了？WebGL裁剪空间中的 X 和 Y 会被 +1
+和 -1 裁剪， Z也一样。我们看到的是 Z < -1 的情况。
 
-I could go into detail about the math to fix it but [you can derive
-it](http://stackoverflow.com/a/28301213/128511) the same way we did 2D
-projection.  We need to take Z, add some amount and scale some amount and
-we can make any range we want get remapped to the -1 to +1.
+我可以从数学方法深入探讨并寻找解决办法，但是你可以
+[联想](http://stackoverflow.com/a/28301213/128511)
+二维中的的解决方法。我们需要获取 Z 值，然后加上一些量，
+缩放一些量，就可以将任意范围映射到 -1 到 +1 的范围内。
 
-The cool thing is all of these steps can be done in 1 matrix.  Even
-better, rather than a `fudgeFactor` we'll decide on a `fieldOfView` and
-compute the right values to make that happen.
+最有意思的是这件事可以在一个矩阵中完成，更方便的是，
+我们可以定义一个 `fieldOfView` 代替 `fudgeFactor` ，
+计算出更合适的值。
 
-Here's a function to build the matrix.
+这是创建矩阵的方法。
 
 ```
 var m4 = {
@@ -311,41 +308,30 @@ var m4 = {
   ...
 ```
 
-This matrix will do all our conversions for us.  It will adjust the units
-so they are in clip space, it will do the math so that we can choose a
-field of view by angle and it will let us choose our Z-clipping space.  It
-assumes there's an *eye* or *camera* at the origin (0, 0, 0) and given a
-`zNear` and a `fieldOfView` it computes what it would take so that stuff
-at `zNear` ends up at `Z = -1` and stuff at `zNear` that is half of
-`fieldOfView` above or below the center ends up with `Y = -1` and `Y = 1`
-respectively.  It computes what to use for X by just multiplying by the
-`aspect` passed in.  We'd normally set this to the `width / height` of the
-display area.  Finally, it figures out how much to scale things in Z so
-that stuff at zFar ends up at `Z = 1`.
+这个矩阵会为我们完成所有转换。它可以调整单位以适应裁剪空间，
+它可以自定义视场角，选择 Z-裁剪面。假设有一个**眼睛**或者**摄像机**
+在原点(0, 0, 0)，根据 `zNear` 和 `fieldOfView` 可以将 `zNear` 
+对应到 `Z = -1` ，在 `zNear` 平面上一半的 `fieldOfView` 长度
+对应画布中心到 `Y = -1` 或 `Y = 1` 的距离，X 的值通过乘以
+`aspect` 获取，最后通过设置 zFar 对应 `Z = 1` ，控制缩放的程度。
 
-Here's a diagram of the matrix in action.
+这是矩阵的图解。
 
 {{{example url="../frustum-diagram.html" width="400" height="600" }}}
 
-That shape that looks like a 4 sided cone the cubes are spinning in is
-called a "frustum".  The matrix takes the space inside the frustum and
-converts that to clip space.  `zNear` defines where things will get
-clipped in the front and `zFar` defines where things get clipped in the
-back.  Set `zNear` to 23 and you'll see the front of the spinning cubes
-get clipped.  Set `zFar` to 24 and you'll see the back of the cubes get
-clipped.
+正方体所在的有四个侧面的椎体叫做“视锥”，矩阵将视锥中的空间转换到裁剪空间中，
+`zNear` 决定了被正面切割的位置，`zFar` 决定被背面切割的位置。
+将 `zNear` 设置为 23 就会看到正方体正面被切割，
+将 `zFar` 设置为 24 就会看到正方体背面被切割。
 
-There's just one problem left.  This matrix assumes there's a viewer at
-0,0,0 and it assumes it's looking in the negative Z direction and that
-positive Y is up.  Our matrices up to this point have done things in a
-different way.  To make this work we need to put our objects in front of
-the view.
+还有一个问题，矩阵假定观察位置为 0,0,0 并且看向 Z 轴负方向，
+Y 轴为上方向。这和我们目前为止做法不同，
+为了解决这个问题我们需要将物体放到视图范围内。
 
-We could do that by moving our F.  We were drawing at (45, 150, 0).  Let's
-move it to (-150, 0, -360)
+我们在 (45, 150, 0) 绘制的 F，可以将它移动到 (-150, 0, -360)
 
-Now, to use it we just need to replace our old call to `m4.projection`
-with a call to `m4.perspective`
+使用 `m4.projection` 方法代替之前的投影方法，可以调用
+`m4.perspective`
 
 ```
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
@@ -359,38 +345,35 @@ matrix = m4.zRotate(matrix, rotation[2]);
 matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 ```
 
-And here it is.
+结果在这里。
 
 {{{example url="../webgl-3d-perspective-matrix.html" }}}
 
-We're back to just a matrix multiply and we're getting both a field of
-view and we're able to choose our Z space.  We're not done but this
-article is getting too long.  Next up, [cameras](webgl-3d-camera.html).
+我们讲了矩阵乘法，视角和自定义 Z 范围。还有很多没讲完，
+但这篇文章已经很长了，所以接下来继续讲[相机](webgl-3d-camera.html)。
 
 <div class="webgl_bottombar">
-<h3>Why did we move the F so far in Z (-360)?</h3>
+<h3>为什么将 F 移动到那么远的距离(Z = -360)?</h3>
 <p>
 
-In the other samples we had the F at (45, 150, 0) but in the last sample
-it's been moved to (-150, 0, -360).  Why did it need to be moved so far
-away?
+在其他的例子中 F 都在  (45, 150, 0) ，但在最后一个例子中它被移动到了
+ (-150, 0, -360)。为什么它被移动到那么远的地方？
 
 </p>
 <p>
 
-The reason is up until this last sample our <code>m4.projection</code> function
-has made a projection from pixels to clip space.  That means the area we
-were displaying represented 400x300 pixels.  Using 'pixels' really doesn't
-make sense in 3D.  The new projection makes a frustum that makes it so the
-area represented at <code>zNear</code> is 2 units tall and 2 * aspect units wide.
-Since our 'F' is 150 units big and the view can only see 2 units when it's
-at zNear we need to move it pretty far away from the origin to see it all.
+原因是在最后一个例子中用 <code>m4.projection</code> 方法将
+像素移动到裁减空间，我们的显示范围是 400x300 像素，
+“像素”在三维中无法解释。所以新投影创建了一个视锥，它在 <code>zNear</code> 
+的距离时是 2 个单位高和 2 * aspect 个单位宽。由于 'F' 的大小是 150 个单位，
+在近平面的时候只能看到 2 个单位的高度，
+所以我们将它移到足够远的地方才能看到完整的它。
 
 </p>
 <p>
 
-Similarly we moved 'X' from 45 to -150.  Again, the view used to represent
-0 to 400 units across.  Now it represents -1 to +1 units across.
+同样的将 'X' 从 45 移动到 -150 。过去视图表示的范围是 0 到 400 个单位，
+现在它表示的 -1 到 +1 个单位。
 
 </p>
 </div>
