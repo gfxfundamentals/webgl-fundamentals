@@ -311,6 +311,7 @@ var Builder = function(outBaseDir, options) {
   var getLanguageSelection = function(lang) {
     var lessons = lang.lessons || ("webgl/lessons/" + lang.lang);
     var langInfo = hanson.parse(fs.readFileSync(path.join(lessons, "langinfo.hanson"), {encoding: "utf8"}));
+    langInfo.langCode = langInfo.langCode || lang.lang;
     g_langDB[lang.lang] = {
       lang: lang.lang,
       language: langInfo.language,
