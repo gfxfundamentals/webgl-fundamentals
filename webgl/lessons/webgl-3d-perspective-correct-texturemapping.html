@@ -248,7 +248,19 @@ the exact same result right?</p>
 proves <code>X * MULT / MULT(W)</code> is still just <code>X</code> and same for <code>Y</code>. But, the
 colors are different. What&#39;s going on?</p>
 <p>It turns out WebGL uses <code>W</code> to implement perspective correct
-texturemapping.</p>
+texturemapping or rather to do perspective correct interpolation
+of varyings.</p>
+<p>In fact to make it easier to see let&#39;s hack the fragment shader to this</p>
+<pre><code>gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // reds
+</code></pre><p>multplying <code>v_brightness</code> by 10 will make the value go from 0 to 10. <code>fract</code> will
+just keep the fractional part so it will go 0 to 1, 0 to 1, 0 to 1, 10 times</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying-non-1-w-repeat.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles-with-varying-non-1-w-repeat.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>Now it should be easy to see the perspective.</p>
 <p>A linear interpolation from one value to another would be this
 formula</p>
 <pre><code> result = (1 - t) * a + t * b
@@ -298,9 +310,11 @@ WebGL do the division for us. Well here are the results.</p>
 </p>
 <p>We still get a 3D cube but the textures are getting warped. This 
 is because by not passing <code>W</code> as it was before WebGL is not able to do
-perspective correct texture mapping. If you recall <code>W</code> was our
-<code>Z</code> value from our <a href="webgl-3d-perspective.html">perspective matrix</a>).
-With <code>W</code> just being <code>1</code> WebGL just ends up doing a linear interpolation. In fact if you take the equation above</p>
+perspective correct texture mapping. Or more correctly, WebGL is not
+able to do perspective correct interpolation of varyings.</p>
+<p>If you recall <code>W</code> was our <code>Z</code> value from our <a href="webgl-3d-perspective.html">perspective matrix</a>).
+With <code>W</code> just being <code>1</code> WebGL just ends up doing a linear interpolation.
+In fact if you take the equation above</p>
 <pre><code> result = (1 - t) * a / aW + t * b / bW
           -----------------------------
              (1 - t) / aW + t / bW
