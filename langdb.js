@@ -49,7 +49,8 @@ window.langDB = {
     "webgl-3d-camera.html": {
       "en": true,
       "fr": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-3d-geometry-lathe.html": {
       "en": true
