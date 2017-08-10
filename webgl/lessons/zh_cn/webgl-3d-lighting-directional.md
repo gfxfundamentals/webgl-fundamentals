@@ -288,10 +288,10 @@ void main() {
 }
 ```
 
-Then we need to lookup the locations of `u_color` and `u_reverseLightDirection`.
+然后找到 `u_color` 和 `u_reverseLightDirection` 的位置。
 
 ```
-  // lookup uniforms
+  // 寻找全局变量
   var matrixLocation = gl.getUniformLocation(program, "u_matrix");
 +  var colorLocation = gl.getUniformLocation(program, "u_color");
 +  var reverseLightDirectionLocation =
@@ -299,42 +299,35 @@ Then we need to lookup the locations of `u_color` and `u_reverseLightDirection`.
 
 ```
 
-and we need to set them
+为它们赋值
 
 ```
-  // Set the matrix.
+  // 设置矩阵
   gl.uniformMatrix4fv(matrixLocation, false, worldViewProjectionMatrix);
 
-+  // Set the color to use
++  // 设置使用的颜色
 +  gl.uniform4fv(colorLocation, [0.2, 1, 0.2, 1]); // green
 +
-+  // set the light direction.
++  // 设置光线方向
 +  gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0.5, 0.7, 1]));
 ```
 
-`normalize`, which we went over before, will make whatever values we put in there
-into a unit vector. The specific values in the sample are
-`x = 0.5` which is positive `x` means the light is on the right pointing left.
-`y = 0.7` which is positive `y` means the light is above pointing down.
-`z = 1` which is positive `z` means the light is in front pointing into the scene.
-the relative values means the the direction is mostly pointing into the scene
-and poiting more down then right.
+我们之前用到的 `normalize` 会将原向量转换为单位向量。
+例子中的 `x = 0.5` 说明光线是从右往左照，`y = 0.7` 说明光线从上方往下照，
+`z = 1` 说明光线从在场景前方。对应的值表示光源大多指向场景，在靠右方和上方一点的位置。
 
-And here it is
+这是结果
 
 {{{example url="../webgl-3d-lighting-directional.html" }}}
 
-If you rotate the F you might notice something. The F is rotating
-but the lighting isn't changing. As the F rotates we want whatever part
-is facing the direction of the light to be the brightest.
+如果你旋转了 F 就会发现，F 虽然旋转了但是光照没变，
+我们希望随着 F 的旋转正面总是被照亮的。
 
-To fix this we need to re-orient the normals as the object is re-oriented.
-Like we did for positions we can multiply the normals by some matrix.  The
-most obvious matrix would be the `world` matrix.  As it is right now we're
-only passing in 1 matrix called `u_matrix`.  Let's change it to pass in 2
-matrices.  One called `u_world` which will be the world matrix.  Another
-called `u_worldViewProjection` which will be what we're currently passing
-in as `u_matrix`
+为了解决这个问题就需要在物体重定向时重定向法向量，
+和位置一样我们也可以将向量和矩阵相乘，这个矩阵显然是 `world` 矩阵，
+现在我们只传了一个矩阵 `u_matrix`，所以先来改成传递两个矩阵，
+一个叫做 `u_world` 的世界矩阵，另一个叫做 `u_worldViewProjection`
+也就是我们现在的 `u_matrix`。
 
 ```
 attribute vec4 a_position;
@@ -346,77 +339,64 @@ attribute vec3 a_normal;
 varying vec3 v_normal;
 
 void main() {
-  // Multiply the position by the matrix.
+  // 将位置和矩阵相乘
 *  gl_Position = u_worldViewProjection * a_position;
 
-*  // orient the normals and pass to the fragment shader
+*  // 重定向法向量并传递给片断着色器
 *  v_normal = mat3(u_world) * a_normal;
 }
 ```
 
-Notice we are multiplying `a_normal` by `mat3(u_world)`. That's
-because normals are a direction so we don't care about translation.
-The orientation portion of the matrix is only in the top 3x3
-area of the matrix.
+注意到我们将 `a_normal` 与 `mat3(u_world)` 相乘，
+那是因为法向量是方向所以不用关心位移，
+矩阵的左上 3x3 部分才是控制姿态的。
 
-Now we have to look those uniforms up
+找到全局变量
 
 ```
-  // lookup uniforms
+  // 寻找全局变量
 *  var worldViewProjetionLocation =
 *      gl.getUniformLocation(program, "u_worldViewProjection");
 +  var worldLocation = gl.getUniformLocation(program, "u_world");
 ```
 
-And we have to change the code that updates them
+然后更新它们
 
 ```
-*// Set the matrices
+*// 设置矩阵
 *gl.uniformMatrix4fv(
 *    worldViewProjectionLocation, false,
 *    worldViewProjectionMatrix);
 *gl.uniformMatrix4fv(worldLocation, false, worldMatrix);
 ```
 
-and here's that
+结果
 
 {{{example url="../webgl-3d-lighting-directional-world.html" }}}
 
-Rotate the F and notice which ever side is facing the light direction gets lit.
+旋转后就会发现面对 F 的面总是被照亮的。
 
-There is one problem which I don't know how to show directly so I'm
-going to show it in a diagram. We're multiplying the `normal` by
-the `u_world` matrix to re-orient the normals.
-What happens if we scale the world matrix?
-It turns out we get the wrong normals.
+这里有一个问题我不知道如何表述所以就用图解展示。
+我们用 `normal` 和 `u_world` 相乘去重定向法向量，
+如果世界矩阵被缩放了怎么办？事实是会得到错误的法向量。
 
 {{{diagram url="resources/normals-scaled.html" caption="click to toggle normals" width="600" }}}
 
-I've never bothered to understand
-the solution but it turns out you can get the inverse of the world matrix,
-transpose it, which means swap the columns for rows, and use that instead
-and you'll get the right answer.
+我从没想弄清为什么，但解决办法就是对世界矩阵求逆并转置，
+用这个矩阵就会得到正确的结果。
 
-In the diagram above the <span style="color: #F0F;">purple</span> sphere
-is unscaled. The <span style="color: #F00;">red</span> sphere on the left
-is scaled and the normals are being multiplied by the world matrix. You
-can see something is wrong. The <span style="color: #00F;">blue</span>
-sphere on the right is using the world inverse transpose matrix.
+在图解里中间的 <span style="color: #F0F;">紫色</span>球体是未缩放的，
+左边的<span style="color: #F00;">红色</span>球体用的世界矩阵并缩放了，
+你可以看出有些不太对劲。右边<span style="color: #00F;">蓝色</span>
+的球体用的是世界矩阵求逆并转置后的矩阵。
 
-Click the diagram to cycle through different representations. You should
-notice when the scale is extreme it's very easy to see the normals
-on the left (world) are **not** staying perpendicular to the surface of the sphere
-where as the ones on the right (worldInverseTranspose) are staying perpendicular
-to the sphere. The last mode makes them all shaded red. You should see the lighting
-on the 2 outer spheres is very different based on which matrix is used.
-It's hard to tell which is correct which is why this is a subtle issue but
-based on the other visualizations it's clear using the worldInverseTranspose
-is correct.
+点击图解循环观察不同的表示形式，你会发现在缩放严重时左边的（世界矩阵）
+法向量和表面**没有**保持垂直关系，而右边的（世界矩阵求逆并转置）
+一直保持垂直。最后一种模式是将它们渲染成红色，你会发现两个球体的光照结果相差非常大，
+基于可视化的结果可以得出使用世界矩阵求逆转置是对的。
 
-To implement this in our example let's change the code like this.  First
-we'll update the shader.  Techincally we could just update the value of
-`u_world` but it's best if we rename things so they're named what they
-actually are otherwise it will get confusing.
+修改代码让示例使用这种矩阵，首先更新着色器，理论上我们可以直接更新 `u_world`
+的值，但是最好将它重命名以表示它真正的含义，防止混淆。
 
 ```
 attribute vec4 a_position;
@@ -428,15 +408,15 @@ uniform mat4 u_worldViewProjection;
 varying vec3 v_normal;
 
 void main() {
-  // Multiply the position by the matrix.
+  // 将位置和矩阵相乘
   gl_Position = u_worldViewProjection * a_position;
 
-  // orient the normals and pass to the fragment shader
+  // 重定向法向量并传递给片段着色器
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 ```
 
-Then we need to look that up
+然后找到它
 
 ```
 -  var worldLocation = gl.getUniformLocation(program, "u_world");
@@ -444,14 +424,14 @@ Then we need to look that up
 +      gl.getUniformLocation(program, "u_worldInverseTranspose");
 ```
 
-And we need to compute and set it
+更新它
 
 ```
 var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
 var worldInverseMatrix = m4.inverse(worldMatrix);
 var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
-// Set the matrices
+// 设置矩阵
 gl.uniformMatrix4fv(
     worldViewProjectionLocation, false,
     worldViewProjectionMatrix);
@@ -461,7 +441,7 @@ gl.uniformMatrix4fv(
 +    worldInverseTransposeMatrix);
 ```
 
-and here's the code to transpose a matrix
+这是转置的代码
 
 ```
 var m4 = {
@@ -477,34 +457,25 @@ var m4 = {
   ...
 ```
 
-Because the effect is subtle and because we aren't scaling anything
-there's no noticble difference but at least now we're prepared.
+由于我们并没有进行缩放，所以没有明显的变化，但防患于未然。
 
 {{{example url="../webgl-3d-lighting-directional-worldinversetranspose.html" }}}
 
-I hope this first step into lighting was clear.  Next up [point
-lighting](webgl-3d-lighting-point.html).
+希望这光照的第一课解释的足够清楚，接下来是[点光源](webgl-3d-lighting-point.html)。
 
 <div class="webgl_bottombar">
-<h3>Alternatives to mat3(u_worldInverseTranspose) * a_normal</h3>
-<p>In our shader above there's a line like this</p>
+<h3>mat3(u_worldInverseTranspose) * a_normal 的可选方案</h3>
+<p>之前的着色器中出现了这样的代码</p>
 <pre class="prettyprint">
 v_normal = mat3(u_worldInverseTranspose) * a_normal;
 </pre>
-<p>We could have done this</p>
+<p>我们也可以这样做</p>
 <pre class="prettyprint">
 v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
 </pre>
-<p>Because we set <code>w</code> to 0 before multiplying that would
-end up multiplying the translation from the matrix by 0 effectively removing it. I think that's
-the more common way to do it. The mat3 way looked cleaner to me but
-I've often done it this way too.</p>
-<p>Yet another solution would be to make <code>u_worldInverseTranspose</code> a <code>mat3</code>.
-There are 2 reasons not to do that. One is we might have
-other needs for the full <code>u_worldInverseTranspose</code> so passing the entire
-<code>mat4</code> means we can use with for those other needs.
-Another is that all of our matrix functions in JavaScript
-make 4x4 matrices. Making a whole other set for 3x3 matrices
-or even converting from 4x4 to 3x3 is work we'd rather
-not do unless there was a more compelling reason.</p>
+<p>由于 <code>w</code> 在相乘前被赋值为 0，所以在相乘后负责平移的部分与 0 相乘被移除了。
+我认为这可能是更常用的方式，mat3 的做法只是对我来说更简洁但我经常用前一种方法。</p>
+<p>第二种解决方案会将<code>u_worldInverseTranspose</code>转换成<code>mat3</code>。
+这有两个不能这么做的理由，第一个是我们可能需要一个完整的 <code>u_worldInverseTranspose</code>
+对象传递一个<code>mat4</code>给还要给其他地方使用，另一个是我们在JavaScript中的所有矩阵方法都是针对 4x4 的矩阵，由于编译的原因没有必要在 4x4 和 3x3 进行多于转换。</p>
 </div>
