@@ -4,69 +4,53 @@ Description: 如何在WebGL中实现方向光源
 此文上接[WebGL 三维相机](webgl-3d-camera.html)，
 如果没读建议[从那里开始](webgl-3d-camera.html)。
 
-实施光照的方式有很多种，最简单的可能就是**方向光源**。
+实施光照的方式有很多种，最简单的可能就是**方向光源**了。
 
-方向光假设光照均匀地来自某一个方向，晴朗天气下的太阳经常被当作方向光源，
+方向光是指光照均匀地来自某一个方向，晴朗天气下的太阳经常被当作方向光源，
 它距离太远所以光线被看作是平行的照到地面上。
 
-Computing directional lighting is actually pretty simple.  If we know what
-direction the light is traveling and we know what direction the surface of
-the object is facing we can take the *dot product* of the 2 directions and
-it will give us the cosine of the angle between the 2 directions.
+计算方向光非常简单，将方向光的方向和面的朝向**点乘**就可以得到两个方向的余弦值。
 
-Here's an example
+这有个例子
 
 {{{diagram url="resources/dot-product.html" caption="drag the points"}}}
 
-Drag the points around, if you get them exactly opposite of each other
-you'll see the dot product is -1.  If they are at the same spot exactly
-the dot product is 1.
+随意拖动其中的点，如果两点方向刚好相反，点乘结果则为 -1。
+如果方向相同结果为 1。
 
-How is that useful?  Well if we know what direction the surface of our 3d
-object is facing and we know the direction the light is shining then we
-can just take the dot product of them and it will give us a number 1 if
-the light is pointing directly at the surface and -1 if they are pointing
-directly opposite.
+这有什么用呢？如果将三维物体的朝向和光的方向点乘，
+结果为 1 则物体朝向和光照方向相同，为 -1 则物体朝向和光照方向相反。
 
 {{{diagram url="resources/directional-lighting.html" caption="rotate the direction" width="500" height="400"}}}
 
-We can multiply our color by that dot product value and boom! Light!
+我们可以将颜色值和点乘结果相乘，BOOM！有光了！
 
-One problem, how do we know which direction the surfaces of our 3d object
-are facing.
+还有一个问题，我们如何知道三维物体的朝向？
 
-## Introducing Normals
+## 法向量
 
-I have no idea why they are called *normals* but at least in 3D graphics a
-normal is the word for a unit vector that describes the direction a
-surface is facing.
+我不知道为什么叫**法向量**，但是在三维图形学中法向量就是描述面的朝向的单位向量。
 
-Here are some normals for a cube and a sphere.
+这是正方体和球体的一些法向量。
 
 {{{diagram url="resources/normals.html"}}}
 
-The lines sticking out of the objects represent normals for each vertex.
+这些插在物体上的线就是对应顶点的法向量。
 
-Notice the cube has 3 normals at each corner.  That's because you need 3
-different normals to represent the way each face of the cube is um, ..
-facing.
+注意到正方体在每个顶角有 3 个法向量。 这是因为需要 3 个法向量去描述相邻的每个面的朝向。
 
-The normals are also colored based on their direction with
-positive x being <span style="color: red;">red</span>, up being
-<span style="color: green;">green</span> and positive z being
-<span style="color: blue;">blue</span>.
+这里的法向量是基于他们的方向着色的，正 x 方向为<span style="color: red;">红色</span>，
+上方向为<span style="color: green;">绿色</span>，正 z 方向为<span style="color: blue;">蓝色</span>。
 
-So, let's go add normals to our `F` from [our previous
-examples](webgl-3d-cameras.html) so we can light it.  Since the `F` is
-very boxy and its faces are aligned to the x, y, or z axis it will be
-pretty easy.  Things that are facing forward have the normal `0, 0, 1`.
-Things that are facing away are `0, 0, -1`.  Facing left is `-1, 0, 0`,
-Facing right is `1, 0, 0`.  Up is `0, 1, 0` and down is `0, -1, 0`.
+让我们来给[上节](webgl-3d-camera.html)中的 `F` 添加法向量。
+由于 `F` 非常规则并且朝向都是 x, y, z轴，所以非常简单。正面的的部分法向量为 `0, 0, 1`，
+背面的部分法向量为 `0, 0, -1`，左面为 `-1, 0, 0`，右面为 `1, 0, 0`，上面为 `0, 1, 0`，
+然后底面为 `0, -1, 0`。
 
 ```
 function setNormals(gl) {
   var normals = new Float32Array([
-          // left column front
+          // 正面左竖
           0, 0, 1,
           0, 0, 1,
           0, 0, 1,
@@ -74,7 +58,7 @@ function setNormals(gl) {
           0, 0, 1,
           0, 0, 1,
 
-          // top rung front
+          // 正面上横
           0, 0, 1,
           0, 0, 1,
           0, 0, 1,
@@ -82,7 +66,7 @@ function setNormals(gl) {
           0, 0, 1,
           0, 0, 1,
 
-          // middle rung front
+          // 正面中横
           0, 0, 1,
           0, 0, 1,
           0, 0, 1,
@@ -90,7 +74,7 @@ function setNormals(gl) {
           0, 0, 1,
           0, 0, 1,
 
-          // left column back
+          // 背面左竖
           0, 0, -1,
           0, 0, -1,
           0, 0, -1,
@@ -98,7 +82,7 @@ function setNormals(gl) {
           0, 0, -1,
           0, 0, -1,
 
-          // top rung back
+          // 背面上横
           0, 0, -1,
           0, 0, -1,
           0, 0, -1,
@@ -106,7 +90,7 @@ function setNormals(gl) {
           0, 0, -1,
           0, 0, -1,
 
-          // middle rung back
+          // 背面中横
           0, 0, -1,
           0, 0, -1,
           0, 0, -1,
@@ -114,7 +98,7 @@ function setNormals(gl) {
           0, 0, -1,
           0, 0, -1,
 
-          // top
+          // 顶部
           0, 1, 0,
           0, 1, 0,
           0, 1, 0,
@@ -122,7 +106,7 @@ function setNormals(gl) {
           0, 1, 0,
           0, 1, 0,
 
-          // top rung right
+          // 上横右面
           1, 0, 0,
           1, 0, 0,
           1, 0, 0,
@@ -130,7 +114,7 @@ function setNormals(gl) {
           1, 0, 0,
           1, 0, 0,
 
-          // under top rung
+          // 上横下面
           0, -1, 0,
           0, -1, 0,
           0, -1, 0,
@@ -138,7 +122,7 @@ function setNormals(gl) {
           0, -1, 0,
           0, -1, 0,
 
-          // between top rung and middle
+          // 上横和中横之间
           1, 0, 0,
           1, 0, 0,
           1, 0, 0,
@@ -146,7 +130,7 @@ function setNormals(gl) {
           1, 0, 0,
           1, 0, 0,
 
-          // top of middle rung
+          // 中横上面
           0, 1, 0,
           0, 1, 0,
           0, 1, 0,
@@ -154,7 +138,7 @@ function setNormals(gl) {
           0, 1, 0,
           0, 1, 0,
 
-          // right of middle rung
+          // 中横右面
           1, 0, 0,
           1, 0, 0,
           1, 0, 0,
@@ -162,7 +146,7 @@ function setNormals(gl) {
           1, 0, 0,
           1, 0, 0,
 
-          // bottom of middle rung.
+          // 中横底面
           0, -1, 0,
           0, -1, 0,
           0, -1, 0,
@@ -170,7 +154,7 @@ function setNormals(gl) {
           0, -1, 0,
           0, -1, 0,
 
-          // right of bottom
+          // 底部右侧
           1, 0, 0,
           1, 0, 0,
           1, 0, 0,
@@ -178,7 +162,7 @@ function setNormals(gl) {
           1, 0, 0,
           1, 0, 0,
 
-          // bottom
+          // 底面
           0, -1, 0,
           0, -1, 0,
           0, -1, 0,
@@ -186,7 +170,7 @@ function setNormals(gl) {
           0, -1, 0,
           0, -1, 0,
 
-          // left side
+          // 左面
           -1, 0, 0,
           -1, 0, 0,
           -1, 0, 0,
@@ -197,68 +181,66 @@ function setNormals(gl) {
 }
 ```
 
-and set them up. While we're at it let's remove the vertex colors
-so it's easier to see the lighting.
+在代码中使用它们，先移除顶点颜色以便观察光照效果。
 
-    // look up where the vertex data needs to go.
+    // 找顶点着色器中的属性
     var positionLocation = gl.getAttribLocation(program, "a_position");
     -var colorLocation = gl.getAttribLocation(program, "a_color");
     +var normalLocation = gl.getAttribLocation(program, "a_normal");
 
     ...
 
-    -// Create a buffer to put colors in
+    -// 创建一个缓冲存储颜色
     -var colorBuffer = gl.createBuffer();
-    -// Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = colorBuffer)
+    -// 绑定到 ARRAY_BUFFER
     -gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    -// Put geometry data into buffer
+    -// 将几何数据放入缓冲
     -setColors(gl);
 
-    +// Create a buffer to put normals in
+    +// 创建缓冲存储法向量
     +var normalBuffer = gl.createBuffer();
-    +// Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = normalBuffer)
+    +// 绑定到 ARRAY_BUFFER (可以看作 ARRAY_BUFFER = normalBuffer)
     +gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-    +// Put normals data into buffer
+    +// 将法向量存入缓冲
     +setNormals(gl);
 
-And at render time
+在渲染的时候
 
 ```
--// Turn on the color attribute
+-// 启用颜色属性
 -gl.enableVertexAttribArray(colorLocation);
 -
--// Bind the color buffer.
+-// 绑定颜色缓冲
 -gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 -
--// Tell the attribute how to get data out of colorBuffer (ARRAY_BUFFER)
--var size = 3;                 // 3 components per iteration
--var type = gl.UNSIGNED_BYTE;  // the data is 8bit unsigned values
--var normalize = true;         // normalize the data (convert from 0-255 to 0-1)
--var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
--var offset = 0;               // start at the beginning of the buffer
+-// 告诉颜色属性怎么从 colorBuffer (ARRAY_BUFFER) 中读取颜色值
+-var size = 3;                 // 每次迭代使用3个单位的数据
+-var type = gl.UNSIGNED_BYTE;  // 单位数据类型是无符号 8 位整数
+-var normalize = true;         // 标准化数据 (从 0-255 转换到 0.0-1.0)
+-var stride = 0;               // 0 = 移动距离 * 单位距离长度sizeof(type)  每次迭代跳多少距离到下一个数据
+-var offset = 0;               // 从绑定缓冲的起始处开始
 -gl.vertexAttribPointer(
 -    colorLocation, size, type, normalize, stride, offset)
 
-+// Turn on the normal attribute
++// 启用法向量属性
 +gl.enableVertexAttribArray(normalLocation);
 +
-+// Bind the normal buffer.
++// 绑定法向量缓冲
 +gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 +
-+// Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
-+var size = 3;          // 3 components per iteration
-+var type = gl.FLOAT;   // the data is 32bit floating point values
-+var normalize = false; // normalize the data (convert from 0-255 to 0-1)
-+var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-+var offset = 0;        // start at the beginning of the buffer
++// 告诉法向量属性怎么从 normalBuffer (ARRAY_BUFFER) 中读取值
++var size = 3;          // 每次迭代使用3个单位的数据
++var type = gl.FLOAT;   // 单位数据类型是 32 位浮点型
++var normalize = false; // 单位化 (从 0-255 转换到 0-1)
++var stride = 0;        // 0 = 移动距离 * 单位距离长度sizeof(type)  每次迭代跳多少距离到下一个数据
++var offset = 0;        // 从绑定缓冲的起始处开始
 +gl.vertexAttribPointer(
 +    normalLocation, size, type, normalize, stride, offset)
 ```
 
-Now we need to make our shaders use them
+现在让着色器使用它
 
-First the vertex shader we just pass the normals through to
-the fragment shader
+首先在顶点着色器中只将法向量传递给片断着色器
 
     attribute vec4 a_position;
     -attribute vec4 a_color;
@@ -270,23 +252,22 @@ the fragment shader
     +varying vec3 v_normal;
 
     void main() {
-      // Multiply the position by the matrix.
+      // 将位置和矩阵相乘
       gl_Position = u_matrix * a_position;
 
-    -  // Pass the color to the fragment shader.
+    -  // 将颜色传到片断着色器
     -  v_color = a_color;
 
-    +  // Pass the normal to the fragment shader
+    +  // 将法向量传到片段着色器
     +  v_normal = a_normal;
     }
 
-And the fragment shader we'll do the math using the dot product
-of the direction of the light and the normal
+然后在片断着色器中将法向量和光照方向点乘
 
 ```
 precision mediump float;
 
-// Passed in from the vertex shader.
+// 从顶点着色器中传入的值
 -varying vec4 v_color;
 +varying vec3 v_normal;
 
@@ -294,17 +275,15 @@ precision mediump float;
 +uniform vec4 u_color;
 
 void main() {
-+   // because v_normal is a varying it's interpolated
-+   // we it will not be a uint vector. Normalizing it
-+   // will make it a unit vector again
++   // 由于 v_normal 是插值出来的，和有可能不是单位向量，
++   // 可以用 normalize 将其单位化。
 +   vec3 normal = normalize(v_normal);
 +
 +   float light = dot(normal, u_reverseLightDirection);
 
 *   gl_FragColor = u_color;
 
-+   // Lets multiply just the color portion (not the alpha)
-+   // by the light
++   // 将颜色部分（不包括 alpha）和 光照相乘
 +   gl_FragColor.rgb *= light;
 }
 ```
