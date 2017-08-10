@@ -61,7 +61,7 @@ positive x being <span style="color: red;">red</span>, up being
 <span style="color: blue;">blue</span>.
 
 So, let's go add normals to our `F` from [our previous
-examples](webgl-3d-cameras.html) so we can light it.  Since the `F` is
+examples](webgl-3d-camera.html) so we can light it.  Since the `F` is
 very boxy and its faces are aligned to the x, y, or z axis it will be
 pretty easy.  Things that are facing forward have the normal `0, 0, 1`.
 Things that are facing away are `0, 0, -1`.  Facing left is `-1, 0, 0`,
