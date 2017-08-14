@@ -145,7 +145,8 @@ window.langDB = {
     },
     "webgl-less-code-more-fun.html": {
       "en": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-render-to-texture.html": {
       "en": true

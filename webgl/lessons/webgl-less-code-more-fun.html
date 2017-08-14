@@ -366,7 +366,7 @@ gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 </div>
 
 </p>
-<p>This will even work if we have indices. <code>webglUtils.setAttribsAndBuffers</code> will set all the attributes
+<p>This will even work if we have indices. <code>webglUtils.setBuffersAndAttributes</code> will set all the attributes
 and setup the <code>ELEMENT_ARRAY_BUFFER</code> with your <code>indices</code> so you can call <code>gl.drawElements</code>.</p>
 <pre><code>// an indexed quad
 var arrays = {
@@ -376,7 +376,7 @@ var arrays = {
    indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
 };
 
-var bufferInfo = webglUtils.createBufferInfoFromTypedArray(gl, arrays);
+var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>and at render time we can call <code>gl.drawElements</code> instead of <code>gl.drawArrays</code>.</p>
 <pre><code>// Setup all the needed buffers and attributes.
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
