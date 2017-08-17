@@ -363,8 +363,6 @@ moonNode.setParent(moonOrbitNode);
 // update the local matrices for each object.
 matrixMultiply(earthOrbitNode.localMatrix, m4.yRotation(0.01), earthOrbitNode.localMatrix);
 matrixMultiply(moonOrbitNode.localMatrix, m4.yRotation(0.01), moonOrbitNode.localMatrix);
-// spin the sun
-matrixMultiply(sunNode.localMatrix, m4.yRotation(0.005), sunNode.localMatrix);
 +// spin the earth
 +m4.multiply(m4.yRotation(0.05), earthNode.localMatrix, earthNode.localMatrix);
 +// spin the moon

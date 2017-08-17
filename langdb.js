@@ -159,7 +159,8 @@ window.langDB = {
     "webgl-scene-graph.html": {
       "en": true,
       "fr": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-setup-and-installation.html": {
       "en": true,
