@@ -104,7 +104,8 @@ window.langDB = {
     },
     "webgl-boilerplate.html": {
       "en": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-cors-permission.html": {
       "en": true,
