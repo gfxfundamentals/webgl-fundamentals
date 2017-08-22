@@ -45,7 +45,7 @@ Description: 二次元で移動し方
     // 四角形の頂点をGPUにアップロードする。
     setRectangle(gl, translation[0], translation[1], width, height);
 
-    // 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取りか。
+    // 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取り出すか。
     var size = 2;          // 呼び出すごとに2つの数値
     var type = gl.FLOAT;   // データは32ビットの数値
     var normalize = false; // データをnormalizeしない
