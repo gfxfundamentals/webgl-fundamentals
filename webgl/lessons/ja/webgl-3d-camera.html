@@ -69,8 +69,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>この記事はWebGLシリーズのーつである。最初の記事は<a href="webgl-fundamentals.html">WebGLの基本で始まった</a>。 そして、前回の記事は<a href="webgl-3d-perspective.html">透視投影</a>についてだった。まだ読んでいなかったら先に読んで下さい。</p>
-<p>前回の記事で、<code>m4.perspective</code>の関数が原点(0,0,0)から<code>-zNear</code>〜<code>-zFar</code>の空間を描画するので、「F」をその錘台の中に移動しなければいけなかった。</p>
+      <p>この記事はWebGLシリーズのーつである。最初の記事は<a href="webgl-fundamentals.html">WebGLの基本で始まった</a>。 
+そして、前回の記事は<a href="webgl-3d-perspective.html">透視投影</a>についてだった。まだ読んでいなかったら先に読んで下さい。</p>
+<p>前回の記事で、<code>m4.perspective</code>の関数が原点(0,0,0)から<code>-zNear</code>〜<code>-zFar</code>の空間を描画するので、
+「F」をその錘台の中に移動しなければいけなかった。</p>
 <p>現実の世界でカメラを移動して、撮影したい物（ビル、山、森）に向ける。</p>
 <p><div>
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
@@ -305,17 +307,18 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
 </p>
 <p>スライダを操作して、カメラは特定の「F」を狙っていることに注目しよう。</p>
-<p><code>lookAt</code>の関数はカメラ以上色々なことで使える。
-通常に使う場合はキャラクターの頭を誰かに追いかけることとか。
-旋回砲塔を目標に目指すこととか。オブジェクトを通路に追いかけることとか。
-そのオブジェクトを通路の何処にあるかを計算して、
-ちょっと後通路に何処に存在するかを計算して、その2つの位置を<code>lookAt</code>の関数に入れたら、
-そのオブジェクトが通路に追いかける行列が出る。その上オブジェクトが通路先に向かう。</p>
+<p><code>lookAt</code>の関数はカメラ以上に色々なことで使える。
+通常使う場合はあるキャラクターの顔が別のキャラクターを追いかけることとか。
+旋回砲塔を目標に向けることとか。オブジェクトが通路通りにすすで行くこととか。
+そのオブジェクトが通路の何処にあるかを計算して、
+その直後通路に何処に存在するかを計算して、その2つの位置を<code>lookAt</code>の関数に入れたら、
+そのオブジェクトが通路を進んでいく行列が出る。そうするとオブジェクトがただしい方向で通路の先に向かう。</p>
 <p>次に<a href="webgl-animation.html">アニメーションを習おう</a>.</p>
 <div class="webgl_bottombar">
 <h3>lookAtの規格</h3>
 <p>
-通常に三次元数学ライブラリには<code>lookAt</code>関数がある。それは大抵カメラ行列ではなく、ビュー行列を作成の為に作られた。
+通常三次元数学ライブラリには<code>lookAt</code>関数がある。
+それは大抵カメラ行列ではなく、ビュー行列を作成するの為に作られた。
 つまり、カメラを移動して向きを決める行列じゃなくて、他の物を全てカメラの前に移動する行列を作る。
 </p>
 <p>
