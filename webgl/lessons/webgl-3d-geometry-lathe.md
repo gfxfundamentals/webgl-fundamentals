@@ -11,7 +11,7 @@ Someone asked how to make a bowling pin shape in WebGL. The *smart* answer is
 [3D Studio Max](http://www.autodesk.com/products/3ds-max/overview),
 [Cinema 4D](https://www.maxon.net/en/products/cinema-4d/overview/), etc.
 Use it to model a bowling pin, export, read the dat.
-([The OBJ format is relativly simple](https://en.wikipedia.org/wiki/Wavefront_.obj_file)).
+([The OBJ format is relative simple](https://en.wikipedia.org/wiki/Wavefront_.obj_file))".
 
 But, that got me thinking, what if they wanted to make a modeling package?
 
@@ -822,10 +822,10 @@ And the new code like this
 <pre class="prettyprint">
   const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
 </pre>
-<p>Because of the module the `angle` when `endAngle` is `Math.PI * 2` becomes 0
+<p>Because of the module the <code>angle</code> when <code>endAngle</code> is <code>Math.PI * 2</code> becomes 0
 and so it's the same as the start. The seam went away. Problem solved!</p>
-<p>Still, even with the change if you set `distance` to 0.001
-and `divisions` to 60 it takes nearly a second on my machine to recompute the mesh. While
+<p>Still, even with the change if you set <code>distance</code> to 0.001
+and <code>divisions</code> to 60 it takes nearly a second on my machine to recompute the mesh. While
 there might be ways to optimize that I think the point is realizing that generating complex
 meshes is a generally slow operation. This just one example of why a 3d game can run at 60fps
 but a 3d modeling package often chugs at very slow frame rates.
