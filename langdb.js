@@ -54,7 +54,8 @@ window.langDB = {
       "zh_cn": true
     },
     "webgl-3d-geometry-lathe.html": {
-      "en": true
+      "en": true,
+      "zh_cn": true
     },
     "webgl-3d-lighting-directional.html": {
       "en": true,
