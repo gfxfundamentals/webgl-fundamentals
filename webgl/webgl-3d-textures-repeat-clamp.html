@@ -298,7 +298,7 @@ function main() {
 
     // Compute the projection matrix
     var projectionMatrix =
-        m4.orthographic(0, gl.canvas.clientWidth, gl.canvas.clientHeight, 0, -1, 1);
+        m4.orthographic(0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, -1, 1);
 
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -324,10 +324,10 @@ function main() {
 function setGeometry(gl) {
   var positions = new Float32Array(
     [
+      -0.5,  0.5,  0.5,
+       0.5,  0.5,  0.5,
       -0.5, -0.5,  0.5,
-      -0.5,  0.5,  0.5,
-       0.5, -0.5,  0.5,
-      -0.5,  0.5,  0.5,
+      -0.5, -0.5,  0.5,
        0.5,  0.5,  0.5,
        0.5, -0.5,  0.5,
     ]);
@@ -341,11 +341,11 @@ function setTexcoords(gl) {
       new Float32Array(
         [
           -3, -1,
-          -3,  4,
            2, -1,
           -3,  4,
+          -3,  4,
+           2, -1,
            2,  4,
-           2, -1,
         ]),
       gl.STATIC_DRAW);
 }
