@@ -89,7 +89,8 @@ window.langDB = {
     },
     "webgl-3d-textures.html": {
       "en": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-and-alpha.html": {
       "en": true,
