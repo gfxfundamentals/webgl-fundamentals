@@ -115,7 +115,8 @@ window.langDB = {
       "ru": true
     },
     "webgl-data-textures.html": {
-      "en": true
+      "en": true,
+      "zh_cn": true
     },
     "webgl-drawing-multiple-things.html": {
       "en": true,
