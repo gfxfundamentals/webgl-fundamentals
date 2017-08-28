@@ -268,7 +268,7 @@ is because by not passing `W` as it was before WebGL is not able to do
 perspective correct texture mapping. Or more correctly, WebGL is not
 able to do perspective correct interpolation of varyings.
 
-If you recall `W` was our `Z` value from our [perspective matrix](webgl-3d-perspective.html)).
+If you recall `W` was our `Z` value from our [perspective matrix](webgl-3d-perspective.html).
 With `W` just being `1` WebGL just ends up doing a linear interpolation.
 In fact if you take the equation above
 
