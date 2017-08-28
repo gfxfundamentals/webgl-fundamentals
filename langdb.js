@@ -1,7 +1,8 @@
 window.langDB = {
   "articles": {
     "webgl-3d-perspective-correct-texturemapping.html": {
-      "en": true
+      "en": true,
+      "zh_cn": true
     },
     "webgl-anti-patterns.html": {
       "en": true,
