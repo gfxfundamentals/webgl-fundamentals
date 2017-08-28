@@ -112,7 +112,8 @@ window.langDB = {
     },
     "webgl-cors-permission.html": {
       "en": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-data-textures.html": {
       "en": true,
