@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ja/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ja/webgl-setup-and-installation.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Setup and Installation" />
+<meta property="og:title" content="WebGLの開発環境" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to do WebGL development" />
+<meta property="og:description" content="WebGLで開発するには" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/ja/webgl-setup-and-installation.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Setup and Installation" />
+<meta name="twitter:title" content="WebGLの開発環境" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/ja/webgl-setup-and-installation.html" />
-<meta name="twitter:description" content="How to do WebGL development" />
+<meta name="twitter:description" content="WebGLで開発するには" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL Setup and Installation</title>
+<title>WebGLの開発環境</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,13 +65,169 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Setup and Installation</h1>
+    <h1>WebGLの開発環境</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>ごめん！この記事はまだ翻訳されていない。<a href="https://github.com/greggman/webgl-fundamentals">翻訳してくれますか？</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-setup-and-installation.html">ここに英語版がある</a>.</p>
+      <p>技術的には、WebGLでの開発に必要なものは「Webブラウザだけ」です。
+Web上でコーディングを行うためのサイト(<a href="https://jsfiddle.net/greggman/8djzyjL3/">jsfiddle.net</a>、<a href="http://jsbin.com">jsbin.com</a>
+、<a href="http://codepen.io/greggman/pen/YGQjVV">codepen.io</a>など)
+を利用すれば、このサイトのサンプルプログラムを試してみることができます。</p>
+<p>上で紹介したサイトであればどれであっても、
+<code>&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;</code>といったコードを書けば
+外部スクリプトを参照することができます。</p>
+<p>ただ、この方法には制限があります。
+WebGLは、Canvas2Dと比較して画像のロードに関してセキュリティ上の強い制限があるため、
+「Web上の画像を読み込むようなプログラム」は簡単に動かすことはできません。
+また、単純に「全ての作業をローカルでやる方が手っ取り早い」です。</p>
+<p>ということで、あなたがこのサイトのサンプルを描いたり実行したりといった作業を、
+上記の方法ではなく、「ローカルでやることにした」、と仮定して話を続けましょう。</p>
+<p>最初にやるべきことはこのサイトをまるごとダウンロードすることです。
+<a href="https://github.com/greggman/webgl-fundamentals/">ここからダウンロードできます</a>。</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/download-webglfundamentals.gif">
+  <div class="webgl_center"></div>
+</div>
 
+</p>
+<p>適当なローカルのフォルダに、Unzipしてください。</p>
+<h2 id="-web-">簡単軽量単純なWebサーバを使う</h2>
+<p>次はWebサーバをインストールしましょう。
+「Webサーバ」というと「何やら恐ろしいもの」、と感じる人がいるのは知っていますが、
+実際のところWebサーバとはとても単純なプログラムであり、
+<a href="http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/">たった５行で書けるようなもの</a>
+です。</p>
+<p>あなたがChromeブラウザのユーザーなら、特に簡単な方法が利用できます。
+<a href="https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=en">Chromeの拡張機能として動くWebサーバー</a>
+があるので、それを使えばよいです。</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/chrome-webserver.png">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>この方法であれば、あとやるべきことは、
+さきほどダウンロードしたZipファイルを展開したディレクトリを指定して、
+WebサーバのURLをクリックするだけです。</p>
+<p>あなたがChromeユーザーでなかったり、拡張機能を使いたくない場合は、
+<a href="https://nodejs.org">node.js</a>を利用する方法があります。
+node.jsをダウンロード、インストールして、コマンドプロンプト
+(OSによってコンソール、ターミナルなどと呼ばれるものです)を開きます。
+Windowsの場合は&quot;Node Command Prompt&quot;という専用のプログラムが
+追加されているはずなので、それを利用します。</p>
+<p>そこからnode.jsのnpmコマンドを使って、
+「<a href="https://github.com/indexzero/http-server"><code>http-server</code></a>モジュール」を
+ダウンロード、インストールします。</p>
+<pre><code>npm -g install http-server
+</code></pre><p>OSXの場合は、</p>
+<pre><code>sudo npm -g install http-server
+</code></pre><p>となります。http-serverのインストールが完了したら、</p>
+<pre><code>http-server path/to/folder/where/you/unzipped/files
+</code></pre><p>といったコマンドで起動できます(path/to/folder/where/you/unzipped/filesは
+「ファイルをUnzipしたディレクトリへのパス」です)。
+起動に成功すると、</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/http-server-response.png">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>このようなログが表示されます。
+これで、ブラウザからは<a href="http://localhost:8080"><code>http://localhost:8080</code></a>
+でアクセスできます。</p>
+<p>パスを指定しなかった場合は、http-serverはカンレントフォルダを参照します。</p>
+<h2 id="web-">Webブラウザ付属の開発ツール</h2>
+<p>ほとんどのWebブラウザにはビルトインの開発ツールが付属しています。</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/chrome-devtools.png">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>開発ツールのドキュメントはオンラインで読むことができるので、使ってみるとよいでしょう。</p>
+<p>(<a href="https://developers.google.com/web/tools/chrome-devtools/">Chromeの開発ツール</a>、
+<a href="https://developer.mozilla.org/en-US/docs/Tools">Firefoxの開発ツール</a>）</p>
+<p>何をおいても「JavaScriptコンソール」は必ずチェックしてください。
+WebGLプログラムに問題がある時は、多くの場合
+JavaScriptコンソールにエラーメッセージが出力されます。
+エラーメッセージを注意深く読めば、問題箇所を探すヒントが
+見つかるはずです。</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/javascript-console.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<h2 id="webgl-">WebGLヘルパー機能</h2>
+<p>WebGL Inspector、WebGL Helperといった名前で呼ばれる
+ツールがいくつかあります。たとえば<a href="https://benvanik.github.io/WebGL-Inspector/">Chrome用としてはこんなものがあります</a>。</p>
+<p><div class="webgl_image ">
+  <img class="" src="https://benvanik.github.io/WebGL-Inspector/images/screenshots/1-Trace.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p><a href="https://hacks.mozilla.org/2014/03/introducing-the-canvas-debugger-in-firefox-developer-tools/">Firefoxにも類似のツールがあります</a>。
+これを利用するには<code>about:flags</code>で有効化をする必要があります。また、
+おそらくは<a href="https://www.mozilla.org/en-US/firefox/developer/">開発者向けFirefox</a>が必要です。</p>
+<p>これらのツールは万能ではなく、有効な場面もあるしあまり役に立たない場面もあります。
+多くのツールは「アニメーションするサンプル」向けにデザインされており、
+アニメーションフレームをキャプチャして、そのフレームの全WebGLコール
+を視覚化したりします。
+こういう機能は、「現在動いているプログラム」や、「動いていたけどいじって
+いるうちに動かなくなってしまったプログラム」の分析にはとても有効ですが、
+「アニメーションを始める以前の初期化部分の問題」や、「そもそも
+アニメーションしないようなプログラム」に使ってもあまり役に立ちません。
+一方で、「ドローコールでクリックしてuniformの設定値を確認する」、
+といった場面ではしばしば役に立つはずです。
+「uniformの設定値で大量の<code>NaN</code> (NaN = Not a Number)が出ていたら、
+そのuniform変数をセットする部分のコードに問題があるはずだ」、
+といったことがわかります。</p>
+<h2 id="-">コードを確認する機能</h2>
+<p>実行中のコードをブラウザ上でいつでも確認できることは覚えておいてください。
+通常はページを右クリックすればソースを確認するコマンドが使えます。</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/view-source.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>「右クリックできない」、「ソースが別ファイルになっている」
+といった場合でも、開発ツールの中であればソースを見ることができます。</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/devtools-source.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<h2 id="-">さあ、はじめよう</h2>
+<p>準備はできたでしょうか。<a href="/">講義に戻りましょう</a></p>
+
+      <hr class="lesson-comment-sep" />
+      <div class="lesson-comments">
+        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGLの開発環境';
+            var disqus_title = 'WebGLの開発環境';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <select id="language">

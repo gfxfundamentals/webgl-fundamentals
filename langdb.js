@@ -108,6 +108,7 @@ window.langDB = {
     },
     "webgl-boilerplate.html": {
       "en": true,
+      "ja": true,
       "ru": true,
       "zh_cn": true
     },
@@ -171,6 +172,7 @@ window.langDB = {
     },
     "webgl-setup-and-installation.html": {
       "en": true,
+      "ja": true,
       "ru": true,
       "zh_cn": true
     },
