@@ -158,7 +158,8 @@ window.langDB = {
       "zh_cn": true
     },
     "webgl-render-to-texture.html": {
-      "en": true
+      "en": true,
+      "zh_cn": true
     },
     "webgl-resizing-the-canvas.html": {
       "en": true,

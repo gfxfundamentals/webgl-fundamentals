@@ -120,7 +120,7 @@ bind it to the <code>FRAMEBUFFER</code> bind point. After that all functions rel
 framebuffers reference whatever framebuffer is bound there.</p>
 <p>With our framebuffer bound, anytime we call <code>gl.clear</code>, <code>gl.drawArrays</code>, or <code>gl.drawElements</code> WebGL
 would render to our texture instead of the canvas.</p>
-<p>Let&#39;s take are previous rendering code and make it a function so we can call it twice.
+<p>Let&#39;s take our previous rendering code and make it a function so we can call it twice.
 Once to render to the texture and again to render to the canvas.</p>
 <pre><code>function drawCube(aspect) {
   // Tell it to use our program (pair of shaders)
@@ -141,7 +141,7 @@ Once to render to the texture and again to render to the canvas.</p>
   gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset)
 
-  // Turn on the teccord attribute
+  // Turn on the texcord attribute
   gl.enableVertexAttribArray(texcoordLocation);
 
   // Bind the position buffer.
@@ -187,7 +187,7 @@ Once to render to the texture and again to render to the canvas.</p>
   gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
 }
 </code></pre><p>Note that we need to pass in the <code>aspect</code> for computing our projection matrix
-because our target texture has a different aspect than the camera.</p>
+because our target texture has a different aspect than the canvas.</p>
 <p>Here&#39;s how we call it</p>
 <pre><code>// Draw the scene.
 function drawScene(time) {
