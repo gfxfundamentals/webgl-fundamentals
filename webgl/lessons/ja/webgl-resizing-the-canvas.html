@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ja/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ja/webgl-resizing-the-canvas.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Resizing the Canvas." />
+<meta property="og:title" content="WebGLとcanvasのリサイズ" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to resize a WebGL canvas and the issues involved" />
+<meta property="og:description" content="WebGL使用時にcanvasをリサイズする方法と問題について" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/ja/webgl-resizing-the-canvas.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Resizing the Canvas." />
+<meta name="twitter:title" content="WebGLとcanvasのリサイズ" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/ja/webgl-resizing-the-canvas.html" />
-<meta name="twitter:description" content="How to resize a WebGL canvas and the issues involved" />
+<meta name="twitter:description" content="WebGL使用時にcanvasをリサイズする方法と問題について" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL Resizing the Canvas.</title>
+<title>WebGLとcanvasのリサイズ</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,13 +65,233 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Resizing the Canvas.</h1>
+    <h1>WebGLとcanvasのリサイズ</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>ごめん！この記事はまだ翻訳されていない。<a href="https://github.com/greggman/webgl-fundamentals">翻訳してくれますか？</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-resizing-the-canvas.html">ここに英語版がある</a>.</p>
+      <p>canvas要素のサイズを変更する際に知っておくべき点について説明します。</p>
+<p>canvasには２種類のサイズがあります。
+ひとつめは、canvasの「描画バッファーのサイズ」です。これは、canvas内のピクセル数です。
+ふたつめは、canvasの「表示サイズ」です。canvasの表示上のサイズは、CSS(style)で決定します。</p>
+<p>canvasの「<strong>描画バッファーのサイズ</strong>」を設定する方法は２種類あります。
+ひとつめは、HTMLを使う方法です。</p>
+<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+</code></pre><p>ふたつめは、JavaScriptを使う方法です。こちらの方法では、HTML側は</p>
+<pre><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
+</code></pre><p>JavaScript側は、</p>
+<pre><code>var canvas = document.getElementById(&quot;c&quot;);
+canvas.width = 400;
+canvas.height = 300;
+</code></pre><p>といったコードになります。</p>
+<p>canvasの「<strong>表示サイズ</strong>」については、
+「canvasの表示サイズに影響を与えるCSSが定義されてない場合」は、
+「描画バッファーと同じサイズ」になります。上の例で言えば、
+「描画バッファのサイズ」は400x300で、
+「表示サイズ」も同じく、400x300となります。</p>
+<p>別の例として「描画バッファが10x15ピクセル、表示サイズが400x300のcanvas」
+を定義する場合はこんなコードになります。</p>
+<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
+</code></pre><p>同じ意味で、こんな風に書くこともできます。</p>
+<pre><code>&lt;style&gt;
+#c {
+  width: 400px;
+  height: 300px;
+}
+&lt;/style&gt;
+&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot;&gt;&lt;/canvas&gt;
+</code></pre><p>描画バッファと表示上のサイズが違う場合どうなるか、実際に見てみましょう。
+下の例では、「描画バッファが10x15ピクセル、表示サイズが400x300のcanvas」
+で、「1ピクセル幅の直線」が回転しています。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-10x15-canvas-400x300-css.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-10x15-canvas-400x300-css.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
 
+</p>
+<p>なぜぼやけているのでしょうか？この例でブラウザは、
+「10x15ピクセルで描かれたcanvasを400x300ピクセルに引き伸ばす」
+ということをやっているのですが、
+一般にブラウザは、引き伸ばしを行う際にフィルタをかけるためです。</p>
+<p>では、canvasをウィンドウいっぱいにリサイズしたい時にはどうすればよいでしょうか？
+まず、CSSを使ってウィンドウいっぱいに引き伸ばしてみましょう。
+コードはこんな感じになります。</p>
+<pre><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;
+      /* border幅は0にしておく */
+      body {
+        border: 0;
+        background-color: white;
+      }
+      /* canvasを「ビューポート」のサイズにする */
+      canvas {
+        width: 100vw;
+        height: 100vh;
+        display: block;
+      }
+    &lt;style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>リサイズに際してやるべきことは、「ブラウザーがcanvasの表示サイズを
+引き伸ばしたら、とにかくそのサイズに描画バッファーのサイズを合わせる」ことだけです。
+これを実現するには、<code>clientWidth</code>と<code>clientHeight</code>を使います。
+これはHTMLのすべての要素が持っているプロパティです。
+これを使えばその要素が実際に表示されているサイズをJavaScriptから取得できます。</p>
+<pre><code>function resize(canvas) {
+  // ブラウザがcanvasを表示しているサイズを調べる。
+  var displayWidth  = canvas.clientWidth;
+  var displayHeight = canvas.clientHeight;
+
+  // canvasの「描画バッファーのサイズ」と「表示サイズ」が異なるかどうか確認する。
+  if (canvas.width  != displayWidth ||
+      canvas.height != displayHeight) {
+
+    // サイズが違っていたら、描画バッファーのサイズを
+    // 表示サイズと同じサイズに合わせる。
+    canvas.width  = displayWidth;
+    canvas.height = displayHeight;
+  }
+}
+</code></pre><p>WebGLアプリケーションの多くは<a href="webgl-animation.html">アニメーションする</a>
+ので、この関数はレンダリングの直前に呼び出すのがよいでしょう。
+このタイミングであれば描画の直前にcanvasを適切なサイズに合わせることができます。</p>
+<pre><code>function drawScene() {
+   resize(gl.canvas);
+
+   ...
+</code></pre><p>以上の修正を加えて実行するとこのようになります。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-canvas.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-resize-canvas.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>何かおかしいですね。表示領域いっぱいに直線が表示されないのはなぜでしょうか？</p>
+<p>結論から言えば、canvasをリサイズしたら同時に<code>gl.viewport</code>を呼んでビューポートを
+設定する必要があったためです。
+<code>gl.viewport</code>の役目は、「WebGLがクリップ空間座標(-1～+1)をピクセルに変換する」際に
+「どう変換するか」と「canvas内のどの範囲で変換するか」を指定することです。
+最初にWebGLコンテキストを取得する時には、ビューポートのサイズがcanvasのサイズと同じに
+なるようにWebGLが自動的にセットするのですが、それ以降の管理はあなたに任されています。
+つまり、canvasのサイズ変更があった時には、あなたが明示的にビューポートの設定を更新しなければなりません。</p>
+<p>ではそのようにコードを変更してみます。WebGLコンテキストはcanvasへの参照を
+持っているので、そのサイズをリサイズ処理に反映させましょう。</p>
+<pre><code>function drawScene() {
+   resize(gl.canvas);
+
++   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+   ...
+</code></pre><p>これでうまく動きました。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-canvas-viewport.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-resize-canvas-viewport.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>「別のウィンドウ」で開いてウィンドウサイズを変更しても、
+回転する直線はいつも画面いっぱいに描画されるのを確認してみてください。</p>
+<p>ここで「なぜWebGLはcanvasサイズを変更したときビューポートを自動的に更新してくれないの？」
+という疑問があるかと思います。
+それに対する答えは「あなたがビューポートをなぜ、どう使いたいのか、
+WebGLにはわからないから」となります。
+「フレームバッファーへの描画」など、通常と異なるビューポートサイズを使う状況は
+いくつかあります。
+WebGLには「あなたが何を意図しているか」を判断する手段がないので、
+ビューポートの設定を「あなたが望むように」自動で更新することはできないのです。</p>
+<p>WebGLプログラムをたくさん見ていくとわかりますが、
+canvasのサイズ設定やリサイズのやり方、考え方はいろいろなものがあります。
+もし興味があれば、<a href="webgl-anti-patterns.html">上で紹介したやり方を私が好んでいる理由を説明した記事</a>があるので確認してみてください。</p>
+<div class="webgl_bottombar">
+<h3>HD-DPI(Retina)ディスプレイではどうすればいい？</h3>
+<p>
+CSSやcanvasタグでサイズ指定する際には、単位としてピクセルが使えますが、
+これは厳密には「CSSピクセル」と呼ぶべきもので、
+実際のピクセル数とは一致する場合も、一致しない場合もあります。
+最新のスマートフォンでは、high-definition DPI(HD-DPI)ディスプレイが採用されています。
+Apple社が「Retinaディスプレイ」と呼んでいるものです。
+これらのスマートフォンのブラウザは、テキストやCSSで指定したスタイルの大半を
+自動的にHD-DPIグラフィクスとしてレンダリングするのですが、WebGLは例外となっています。
+"HD-DPI"品質のグラフィックを使いたい場合は、
+明示的に高解像度で描画するようにコードを書く必要があります。
+</p>
+<p>
+これを行うには<code>window.devicePixelRatio</code>の値を利用します。
+この値は「１CSSピクセルが実際の何ピクセルに相当するか」を表しています。
+これを使ってリサイズするコードは以下のようになります。</p>
+<pre class="prettyprint">
+function resize(gl) {
+  var realToCSSPixels = window.devicePixelRatio;
+
+  // ブラウザがcanvasでCSSピクセルを表示しているサイズを参照し、
+  // デバイスピクセルに合った描画バッファサイズを計算する。
+  var displayWidth  = Math.floor(gl.canvas.clientWidth  * realToCSSPixels);
+  var displayHeight = Math.floor(gl.canvas.clientHeight * realToCSSPixels);
+
+  // canvasの描画バッファサイズと表示サイズが異なるかどうか確認する。
+  if (gl.canvas.width  !== displayWidth ||
+      gl.canvas.height !== displayHeight) {
+
+    // サイズが違っていたら、同じサイズにする。
+    gl.canvas.width  = displayWidth;
+    gl.canvas.height = displayHeight;
+  }
+}
+</pre>
+<p>あなたがこのページをHD-DPIディスプレイ、たとえばスマートフォンで見ているなら、
+下の実行例の線は、上の、HD-DPI対応していない例の線よりも細くなっていることが
+確認できるはずです。</p>
+<div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-canvas-hd-dpi.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-resize-canvas-hd-dpi.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+
+
+<p>HD-DPIに対応するかどうかはあなた次第です。
+iPhone4やiPhone5の場合、<code>window.devicePixelRatio</code>の値は
+<code>2</code>、つまりピクセル数で言えば4倍の描画が行われます。
+iPhone6Plusであればこの値は<code>3</code>となっていたかと思います。
+これは9倍のピクセルが描画されるという意味です。
+描画すべきピクセル数が増えると、実行速度は低下します。
+実際、ゲーム製作では「描画は少ないピクセル数で行なって
+GPUに拡大表示させる」という最適化手法が一般的です。
+
+どちらを選ぶかはあなたの目的次第です。
+グラフ表示や印刷用途であればHD-DPIをサポートするのがよいでしょう。
+ゲーム用途の場合はHD-DPIを非サポートとすべきでしょう。
+高速に描画できる高性能機ではHD-DPIをオンにできるような
+オプション機能をユーザーに提供するのもよいかも知れません。
+</p>
+</div>
+
+      <hr class="lesson-comment-sep" />
+      <div class="lesson-comments">
+        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGLとcanvasのリサイズ';
+            var disqus_title = 'WebGLとcanvasのリサイズ';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <select id="language">
@@ -140,9 +362,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </ul>
   <li>Misc</li>
   <ul>
-    <li><a href="/webgl/lessons/ja/webgl-setup-and-installation.html">WebGL Setup And Installation(英語)</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-boilerplate.html">WebGL Boilerplate(英語)</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-resizing-the-canvas.html">WebGL Resizing the Canvas(英語)</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-setup-and-installation.html">WebGLの開発環境</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-boilerplate.html">WebGLのひな型コード</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-resizing-the-canvas.html">WebGLとcanvasのリサイズ</a></li>
     <li><a href="/webgl/lessons/ja/webgl-animation.html">WebGL - Animation(英語)</a></li>
     <li><a href="/webgl/lessons/ja/webgl-and-alpha.html">WebGL and Alpha(英語)</a></li>
     <li><a href="/webgl/lessons/ja/webgl-2d-vs-3d-library.html">WebGL - 2D vs 3D libraries(英語)</a></li>
