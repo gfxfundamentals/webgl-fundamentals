@@ -17,7 +17,8 @@ window.langDB = {
     },
     "webgl-2d-matrix-stack.html": {
       "en": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-2d-rotation.html": {
       "en": true,
