@@ -188,7 +188,8 @@ window.langDB = {
     },
     "webgl-text-canvas2d.html": {
       "en": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-text-glyphs.html": {
       "en": true,
