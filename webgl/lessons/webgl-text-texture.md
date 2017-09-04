@@ -250,7 +250,7 @@ And then draw text at all the positions we saved
 
       // use just the view position of the 'F' for the text
     *  var textMatrix = m4.translate(projectionMatrix, pos[0], pos[1], pos[2]);
-      // scale the F to the size we need it.
+      // scale the quad to the size we need it.
       textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 
       m4.copy(textMatrix, textUniforms.u_matrix);
@@ -295,7 +295,7 @@ toward or away from the eye.
     +var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
 
     *var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-    // scale the F to the size we need it.
+    // scale the quad to the size we need it.
     textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 
 Here's that.
@@ -352,7 +352,7 @@ can just scale by `-Z` times some desired-scale to compensate.
     +var scale = viewZ * desiredTextScale;
 
     var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-    // scale the F to the size we need it.
+    // scale the quad to the size we need it.
     *textMatrix = m4.scale(textMatrix, textWidth * scale, textHeight * scale, 1);
     ...
 
@@ -406,7 +406,7 @@ Then at render time select a texture
 
       // scale the F to the size we need it.
       var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-      // scale the F to the size we need it.
+      // scale the quad to the size we need it.
       *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
 
 and set the uniform for the texture before drawing
