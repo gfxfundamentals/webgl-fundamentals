@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-text-texture.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Text - Textures" />
+<meta property="og:title" content="WebGL 文字 - 使用纹理" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="Display Text in WebGL using Textures" />
+<meta property="og:description" content="用纹理在WebGL中显示文字" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-text-texture.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Text - Textures" />
+<meta name="twitter:title" content="WebGL 文字 - 使用纹理" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-text-texture.html" />
-<meta name="twitter:description" content="Display Text in WebGL using Textures" />
+<meta name="twitter:description" content="用纹理在WebGL中显示文字" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL Text - Textures</title>
+<title>WebGL 文字 - 使用纹理</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,13 +65,427 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Text - Textures</h1>
+    <h1>WebGL 文字 - 使用纹理</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-text-texture.html">英文原版地址</a></p>
+      <p>此文上接WebGL系列文章，上一篇是<a href="webgl-text-canvas2d.html">用Canvas 2D在WebGL画布上叠加一个文字层</a>，如果没读建议从那里开始。</p>
+<p>在上文中我们讲到<a href="webgl-text-canvas2d.html">如何在WebGL场景上方绘制一个二维画布文字层</a>，
+那种方法可行并且容易实现，但是有一些限制，比如不能被三维物体遮挡。为了实现这个就需要在WebGL
+中绘制文字。</p>
+<p>最简单的方式是制作一个文字纹理，你可以使用PhotoShop或其他绘图软件制作一个含有文字的图片。</p>
+<p><img class="webgl_center" src="../resources/my-awesme-text.png" /></p>
+<p>然后创建平整的几何体显示它，这其实是我做过的所有游戏使用的方法。例如 Locoroco
+只有大约 270 个句子，它被本地化为 17 种语言。我们有一个Excel表格包含了所有语言的句子，
+然后使用一个脚本将它们加载到PhotoShop种生成纹理，每种语言每个句子做成一个纹理。</p>
+<p>当然你也可以在运行时创建纹理，由于WebGL运行在浏览器中，我们可以借助 Canvas 2D API
+帮助生成纹理。</p>
+<p>从<a href="webgl-text-canvas2d.html">上文</a>的例子开始，添加一个方法向二维画布种填充文字</p>
+<pre><code>var textCtx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
 
+// 将文字放在画布中间
+function makeTextCanvas(text, width, height) {
+  textCtx.canvas.width  = width;
+  textCtx.canvas.height = height;
+  textCtx.font = &quot;20px monospace&quot;;
+  textCtx.textAlign = &quot;center&quot;;
+  textCtx.textBaseline = &quot;middle&quot;;
+  textCtx.fillStyle = &quot;black&quot;;
+  textCtx.clearRect(0, 0, textCtx.canvas.width, textCtx.canvas.height);
+  textCtx.fillText(text, width / 2, height / 2);
+  return textCtx.canvas;
+}
+</code></pre><p>现在需要使用WebGL绘制两个不同的物体，&#39;F&#39; 和文字。我将使用
+<a href="webgl-drawing-multiple-things.html">之前讲到的帮助方法</a>，
+如果你不清楚 <code>programInfo</code>, <code>bufferInfo</code> 是什么，就看看那篇文章。</p>
+<p>所以，先创建 &#39;F&#39; 和单位矩形。</p>
+<pre><code>// 创建 &#39;F&#39; 的数据
+var fBufferInfo = primitives.create3DFBufferInfo(gl);
+// 创建一个单位矩形供文字使用
+var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, m4.xRotation(Math.PI / 2));
+</code></pre><p>单位矩形是一个单位大小的矩形（正方形），这个矩形以原点为中心。<code>createPlaneBufferInfo</code>
+创建一个在 xz 面的平面，我们传入一个矩形将它变成 xy 平面的单位矩形。</p>
+<p>接着创建两个着色器</p>
+<pre><code>// 设置着色程序
+var fProgramInfo = createProgramInfo(gl, [&quot;3d-vertex-shader&quot;, &quot;3d-fragment-shader&quot;]);
+var textProgramInfo = createProgramInfo(gl, [&quot;text-vertex-shader&quot;, &quot;text-fragment-shader&quot;]);
+</code></pre><p>创建文字纹理</p>
+<pre><code>// 创建文字纹理
+var textCanvas = makeTextCanvas(&quot;Hello!&quot;, 100, 26);
+var textWidth  = textCanvas.width;
+var textHeight = textCanvas.height;
+var textTex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, textTex);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
+// 确保即使不是 2 的整数次幂也能渲染
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+</code></pre><p>设置 &#39;F&#39; 和文字的全局变量</p>
+<pre><code>var fUniforms = {
+  u_matrix: m4.identity(),
+};
+
+var textUniforms = {
+  u_matrix: m4.identity(),
+  u_texture: textTex,
+};
+</code></pre><p>计算出 F 的矩阵并保存它的视图矩阵</p>
+<pre><code>var fViewMatrix = m4.translate(viewMatrix,
+    translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
+fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
+fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
+fViewMatrix = m4.zRotate(fViewMatrix, rotation[2] + now + (yy * 3 + xx) * 0.1);
+fViewMatrix = m4.scale(fViewMatrix, scale[0], scale[1], scale[2]);
+fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
+</code></pre><p>像这样绘制 F</p>
+<pre><code>gl.useProgram(fProgramInfo.program);
+
+webglUtils.setBuffersAndAttributes(gl, fProgramInfo, fBufferInfo);
+
+fUniforms.u_matrix = m4.multiply(projectionMatrix, fViewMatrix);
+
+webglUtils.setUniforms(fProgramInfo, fUniforms);
+
+// 绘制几何体
+gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+</code></pre><p>对于文字我们只需要将原点移到 F，还需要将单位矩形缩放到纹理的大小，最后需要乘以投影矩阵。</p>
+<pre><code>// 只使用 &#39;F&#39; 视图矩阵的位置
+var textMatrix = m4.translate(projectionMatrix,
+    fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]);
+// 缩放单位矩形到所需大小
+textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
+</code></pre><p>然后渲染文字</p>
+<pre><code>// 绘制文字设置
+gl.useProgram(textProgramInfo.program);
+
+webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
+
+m4.copy(textMatrix, textUniforms.u_matrix);
+webglUtils.setUniforms(textProgramInfo, textUniforms);
+
+// 绘制文字
+gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+</code></pre><p>这是结果</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>你可能注意到文字部分覆盖了 F，那是因为我们绘制了一个矩形，画布的默认颜色是黑色透明(0,0,0,0)，
+然后我们将它绘制到矩形上了，我们可以混合像素。</p>
+<pre><code>gl.enable(gl.BLEND);
+gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+</code></pre><p>这样将源像素（片断着色器产生的颜色）和目标像素（画布上的颜色）的颜色根据混合方法进行混合，
+我们设置混合方法为 <code>SRC_ALPHA</code> 对源，<code>ONE_MINUS_SRC_ALPHA</code> 对目标。</p>
+<pre><code>result = dest * (1 - src_alpha) + src * src_alpha
+</code></pre><p>所以加入目标像素是绿色 <code>0,1,0,1</code>，源是红色 <code>1,0,0,1</code> 就得到</p>
+<pre><code>src = [1, 0, 0, 1]
+dst = [0, 1, 0, 1]
+src_alpha = src[3]  // 这是 1
+result = dst * (1 - src_alpha) + src * src_alpha
+
+// 相当于
+result = dst * 0 + src * 1
+
+// 最后结果
+result = src
+</code></pre><p>对于黑色透明的部分的纹理 <code>0,0,0,0</code></p>
+<pre><code>src = [0, 0, 0, 0]
+dst = [0, 1, 0, 1]
+src_alpha = src[3]  // 这是 0
+result = dst * (1 - src_alpha) + src * src_alpha
+
+// 相当于
+result = dst * 1 + src * 0
+
+// 最后结果
+result = dst
+</code></pre><p>这是使用混合的结果。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-enable-blend.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-enable-blend.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>你会发现这样好一些，但是还是有问题，如果仔细看就会看到这样的问题</p>
+<p><img class="webgl_center" src="../resources/text-zbuffer-issue.png" /></p>
+<p>为什么会这样？我们现在是绘制一个 F 然后绘制文字，然后绘制下一个 F 和文字。
+我们还有<a href="webgl-3d-orthographic.html">深度缓冲</a>，所以当绘制一个 F 的文字时，
+即使使用混合模式保留了背景色，但是深度缓冲还是会更新，当绘制下一个 F 时如果那个 F
+的某些部分在之前文字像素的后面，那些部分就不会绘制。</p>
+<p>我们遇到了一个使用GPU渲染三维时的最难解决的问题，<strong>透明出现问题</strong>。</p>
+<p>对与透明渲染常用的解决方法是先渲染不透明的物体，然后按照 z 的顺寻绘制透明物体，
+绘制时开启深度检测但是关闭深度缓冲更新。</p>
+<p>先将绘制的不透明物体（F）和透明物体区分开（文字），先定义一些东西保存文字的位置。</p>
+<pre><code>var textPositions = [];
+</code></pre><p>在循环绘制 F 时保存这些位置</p>
+<pre><code>var fViewMatrix = m4.translate(viewMatrix,
+    translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
+fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
+fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
+fViewMatrix = m4.zRotate(fViewMatrix, rotation[2] + now + (yy * 3 + xx) * 0.1);
+fViewMatrix = m4.scale(fViewMatrix, scale[0], scale[1], scale[2]);
+fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
++// 保存 f 的视图位置
++textPositions.push([fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]]);
+</code></pre><p>绘制 F 前关闭混合模式开启深度缓冲</p>
+<pre><code>gl.disable(gl.BLEND);
+gl.depthMask(true);
+</code></pre><p>绘制文字开启混合关闭深度缓冲写入</p>
+<pre><code>gl.enable(gl.BLEND);
+gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+gl.depthMask(false);
+</code></pre><p>然后在所有保存的位置绘制文字</p>
+<pre><code>+// 绘制文字设置
++gl.useProgram(textProgramInfo.program);
++
++webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
+
++textPositions.forEach(function(pos) {
+  // 绘制文字
+
+  // 使用 F 的视图位置
+*  var textMatrix = m4.translate(projectionMatrix, pos[0], pos[1], pos[2]);
+  // 将文字缩放到需要的大小
+  textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
+
+  m4.copy(textMatrix, textUniforms.u_matrix);
+  webglUtils.setUniforms(textProgramInfo, textUniforms);
+
+  // 绘制文字
+  gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
++});
+</code></pre><p>注意，我将设置程序和属性放在循环外面了，因为我们将同一个物体绘制很多遍不需要每次都设置这些。</p>
+<p>现在它基本上可以了</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-separate-opaque-from-transparent.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-separate-opaque-from-transparent.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>你可能注意到我并没有向之前提到的进行排序，在这个例子中我们绘制的几乎是透明的文字，
+如果排序了也看不出明显的效果，我会将它留在其他文章中去讲。</p>
+<p>另一个问题是文字和对应的 &#39;F&#39; 相交了，这其实没有一个明确的解决办法。
+如果你正在制作一个MMO然后想给每个玩家显示一些持续文字，你可能会将文字显示在头顶。
+只需要将它的 +Y 加一些距离，确保它总是在玩家头上方。</p>
+<p>你也可以将它移动到相机方向，我们来实现这个吧。由于 &#39;pos&#39; 在视图空间中，
+这意味着它和眼睛位置（在视图空间 0,0,0 处）有关，所以如果我们将它单位化然后乘以一个值，
+将它移到眼睛方向固定距离。</p>
+<pre><code>+// 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
++// 所以沿着向量超眼睛方向移动一定距离
++var fromEye = m4.normalize(pos);
++var amountToMoveTowardEye = 150;  // 因为 F 是 150 个单位长
++var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
++var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
++var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
++var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+
+*var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+// 将矩形缩放到需要的大小
+textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
+</code></pre><p>这是结果。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-moved-toward-view.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-moved-toward-view.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>你可能还会发现文字边缘的问题。</p>
+<p><img class="webgl_center" src="../resources/text-gray-outline.png" /></p>
+<p>这个问题是 Canvas 2D API 只生成预乘阿尔法通道的值，当我们上传画布内容为WebGL纹理时，
+WebGL视图获取没有预乘阿尔法的值，但是由于预乘阿尔法的值缺失阿尔法，所以很难完美转换成非预乘值。</p>
+<p>解决这个问题需要告诉WebGL不用做反预乘。</p>
+<pre><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+</code></pre><p>这个告诉WebGL提供预乘值到<code>gl.texImage2D</code> 和 <code>gl.texSubImage2D</code>，
+如果像 Canvas 2D 数据本身就是预乘的话，就直接传递到WebGL。</p>
+<p>我们还需要修改混合方法</p>
+<pre><code>-gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
++gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+</code></pre><p>旧的方法将源和它的阿尔法通道相乘，就是 <code>SRC_ALPHA</code> 代表的意思。
+但是现在我们的纹理数据已经乘了它的阿尔法值，就是预乘的意思。
+所以就不需要让GPU再做乘法，设置为 <code>ONE</code> 表示乘以 1。</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-premultiplied-alpha.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-premultiplied-alpha.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>现在边界消失了。</p>
+<p>如果你想让文字保持固定大小怎么办？如果你还记得<a href="webgl-3d-perspective.html">透视投影</a>
+种讲到过透视矩阵就是将物体缩放 <code>1 / -Z</code>，以实现近大远小。所以，我们只需缩放 <code>-Z</code> 的期望倍数。</p>
+<pre><code>...
+// 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
+// 所以沿着向量超眼睛方向移动一定距离
+var fromEye = normalize(pos);
+var amountToMoveTowardEye = 150;  // 因为 F 是 150 个单位长
+var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
+var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
+var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
++var desiredTextScale = -1 / gl.canvas.height;  // 1x1 像素大小
++var scale = viewZ * desiredTextScale;
+
+var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+// 将矩形缩放到需要的大小
+*textMatrix = m4.scale(textMatrix, textWidth * scale, textHeight * scale, 1);
+...
+</code></pre><p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-consistent-scale.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-consistent-scale.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>如果你想给每个 F 绘制不同的文字，就应该给每个 F 创建一个新纹理，然后更新那个 F 的全局变量。</p>
+<pre><code>// 创建纹理，每个 F 一个
+var textTextures = [
+  &quot;anna&quot;,   // 0
+  &quot;colin&quot;,  // 1
+  &quot;james&quot;,  // 2
+  &quot;danny&quot;,  // 3
+  &quot;kalin&quot;,  // 4
+  &quot;hiro&quot;,   // 5
+  &quot;eddie&quot;,  // 6
+  &quot;shu&quot;,    // 7
+  &quot;brian&quot;,  // 8
+  &quot;tami&quot;,   // 9
+  &quot;rick&quot;,   // 10
+  &quot;gene&quot;,   // 11
+  &quot;natalie&quot;,// 12,
+  &quot;evan&quot;,   // 13,
+  &quot;sakura&quot;, // 14,
+  &quot;kai&quot;,    // 15,
+].map(function(name) {
+  var textCanvas = makeTextCanvas(name, 100, 26);
+  var textWidth  = textCanvas.width;
+  var textHeight = textCanvas.height;
+  var textTex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, textTex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
+  // 确保即使不是 2 的整数次幂也能渲染
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  return {
+    texture: textTex,
+    width: textWidth,
+    height: textHeight,
+  };
+});
+</code></pre><p>然后再渲染时选择纹理</p>
+<pre><code>*textPositions.forEach(function(pos, ndx) {
+
+  +// 选择一个纹理
+  +var tex = textTextures[ndx];
+
+  // 将 F 缩放到需要的大小
+  var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+  // 将矩形缩放到需要的大小
+  *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
+</code></pre><p>然后再绘制前设置纹理全局变量</p>
+<pre><code>  *textUniforms.u_texture = tex.texture;
+</code></pre><p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-different-text.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-different-text.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>我们使用黑色绘制的文字，如果使用白色会更有用。那样就可以将文字颜色乘以一个颜色值然后变成任意需要的颜色。</p>
+<p>首先改变文字着色器，乘以一个颜色</p>
+<pre><code>varying vec2 v_texcoord;
+
+uniform sampler2D u_texture;
++uniform vec4 u_color;
+
+void main() {
+*   gl_FragColor = texture2D(u_texture, v_texcoord) * u_color;
+}
+</code></pre><p>然后绘制使用白色绘制文字到画布</p>
+<pre><code>textCtx.fillStyle = &quot;white&quot;;
+</code></pre><p>创建一些颜色</p>
+<pre><code>// 颜色，每个 F 一个
+var colors = [
+  [0.0, 0.0, 0.0, 1], // 0
+  [1.0, 0.0, 0.0, 1], // 1
+  [0.0, 1.0, 0.0, 1], // 2
+  [1.0, 1.0, 0.0, 1], // 3
+  [0.0, 0.0, 1.0, 1], // 4
+  [1.0, 0.0, 1.0, 1], // 5
+  [0.0, 1.0, 1.0, 1], // 6
+  [0.5, 0.5, 0.5, 1], // 7
+  [0.5, 0.0, 0.0, 1], // 8
+  [0.0, 0.0, 0.0, 1], // 9
+  [0.5, 5.0, 0.0, 1], // 10
+  [0.0, 5.0, 0.0, 1], // 11
+  [0.5, 0.0, 5.0, 1], // 12,
+  [0.0, 0.0, 5.0, 1], // 13,
+  [0.5, 5.0, 5.0, 1], // 14,
+  [0.0, 5.0, 5.0, 1], // 15,
+];
+</code></pre><p>绘制时选择颜色</p>
+<pre><code>// 设置颜色全局变量
+textUniforms.u_color = colors[ndx];
+</code></pre><p>不同颜色</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-different-colors.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-different-colors.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>事实上浏览器在开启 GPU 加速时使用了这个技术，它们使用你的HTML内容和各种样式生成纹理，
+只要内容不变就只需要不停渲染纹理，即使是滚动之类..当然，如果每次都不停的更新内容就会慢一些，
+因为重生成纹理并重上传它们到GPU是相对较慢的操作。</p>
+<p>在<a href="webgl-text-glyphs.html">下篇文章中我们将讲一个频繁更新时较好的处理方法</a>。</p>
+<div class="webgl_bottombar">
+<h3>缩放文字去像素化</h3>
+<p>
+你可能会注意到使用固定尺寸例子前的文字，在距离相机近的时候像素化很严重，如何修复？
+</p>
+<p>
+事实上在三维中缩放二维并不是十分常见，看大多数游戏或三维编辑器就会发现无论相机近还是远，
+文字总是固定尺寸。事实上那些文字通常都是绘制在二维而不是三维中，所以即使有人或物体在别的东西的背后，
+例如队友在墙后面，你还是可以看到和它相关的文字。
+</p>
+<p>如果你确实需要在三维中缩放二维文字，我不知道有什么简单的办法，我想到了这几个
+</p>
+<ul>
+<li>在不同的分辨率下使用不同的字体和字号生成不同大小的纹理，然后在高分辨率时使用大一点的纹理，
+这个技术叫做LODing（使用不同级别的细节）。</li>
+<li>另一个是在每一帧渲染文字时使用确切相关的大小，那样就会非常慢。</li>
+<li>另一个可能就是使用二维文字的外包几何体。换句话说就是使用三角形代替绘制纹理。
+这个方法可行，但是当文字很小的时候渲染的不是很正常，很大的时候可以看到三角形。</li>
+<li>还有一个是<a href="https://www.google.com/search?q=loop+blinn+curve+rendering">使用渲染曲线的特殊着色器</a>。
+这个非常酷但是超出了我可以在这里解释的范围。</li>
+</div>
+
+
+
+
+      <hr class="lesson-comment-sep" />
+      <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 文字 - 使用纹理';
+            var disqus_title = 'WebGL 文字 - 使用纹理';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <select id="language">
@@ -138,7 +554,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <ul>
       <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a>
       <li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a>
-      <li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL Text - Using a Texture</a>
+      <li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a>
       <li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
     </ul>
   </ul>

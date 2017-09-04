@@ -276,7 +276,7 @@ gl.depthMask(false);
 
   // use just the view position of the &#39;F&#39; for the text
 *  var textMatrix = m4.translate(projectionMatrix, pos[0], pos[1], pos[2]);
-  // scale the F to the size we need it.
+  // scale the quad to the size we need it.
   textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 
   m4.copy(textMatrix, textUniforms.u_matrix);
@@ -319,7 +319,7 @@ toward or away from the eye.</p>
 +var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
 
 *var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-// scale the F to the size we need it.
+// scale the quad to the size we need it.
 textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 </code></pre><p>Here&#39;s that.</p>
 <p><div>
@@ -371,7 +371,7 @@ var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
 +var scale = viewZ * desiredTextScale;
 
 var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-// scale the F to the size we need it.
+// scale the quad to the size we need it.
 *textMatrix = m4.scale(textMatrix, textWidth * scale, textHeight * scale, 1);
 ...
 </code></pre><p><div>
@@ -425,7 +425,7 @@ var textTextures = [
 
   // scale the F to the size we need it.
   var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-  // scale the F to the size we need it.
+  // scale the quad to the size we need it.
   *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
 </code></pre><p>and set the uniform for the texture before drawing</p>
 <pre><code>  *textUniforms.u_texture = tex.texture;
