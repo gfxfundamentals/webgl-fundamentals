@@ -250,7 +250,7 @@ Description: 用纹理在WebGL中显示文字
 将它移到眼睛方向固定距离。
 
     +// 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
-    +// 所以沿着向量超眼睛方向移动一定距离
+    +// 所以沿着向量朝眼睛方向移动一定距离
     +var fromEye = m4.normalize(pos);
     +var amountToMoveTowardEye = 150;  // 因为 F 是 150 个单位长
     +var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
@@ -298,7 +298,7 @@ WebGL视图获取没有预乘阿尔法的值，但是由于预乘阿尔法的值
 
     ...
     // 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
-    // 所以沿着向量超眼睛方向移动一定距离
+    // 所以沿着向量朝眼睛方向移动一定距离
     var fromEye = normalize(pos);
     var amountToMoveTowardEye = 150;  // 因为 F 是 150 个单位长
     var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;

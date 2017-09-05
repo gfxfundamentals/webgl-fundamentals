@@ -99,7 +99,7 @@ letter in each name.
         var scale = viewZ * desiredTextScale;
 
         var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-        // scale the F to the size we need it.
+        // scale the quad to the size we need it.
         textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
         +textMatrix = m4.translate(textMatrix, ii, 0, 0);
 
