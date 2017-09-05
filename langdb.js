@@ -193,7 +193,8 @@ window.langDB = {
     },
     "webgl-text-glyphs.html": {
       "en": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-text-html.html": {
       "en": true,

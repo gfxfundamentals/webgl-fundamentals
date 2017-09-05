@@ -274,7 +274,7 @@ gl.depthMask(false);
 这意味着它和眼睛位置（在视图空间 0,0,0 处）有关，所以如果我们将它单位化然后乘以一个值，
 将它移到眼睛方向固定距离。</p>
 <pre><code>+// 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
-+// 所以沿着向量超眼睛方向移动一定距离
++// 所以沿着向量朝眼睛方向移动一定距离
 +var fromEye = m4.normalize(pos);
 +var amountToMoveTowardEye = 150;  // 因为 F 是 150 个单位长
 +var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
@@ -317,7 +317,7 @@ WebGL视图获取没有预乘阿尔法的值，但是由于预乘阿尔法的值
 种讲到过透视矩阵就是将物体缩放 <code>1 / -Z</code>，以实现近大远小。所以，我们只需缩放 <code>-Z</code> 的期望倍数。</p>
 <pre><code>...
 // 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
-// 所以沿着向量超眼睛方向移动一定距离
+// 所以沿着向量朝眼睛方向移动一定距离
 var fromEye = normalize(pos);
 var amountToMoveTowardEye = 150;  // 因为 F 是 150 个单位长
 var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
@@ -555,7 +555,7 @@ textUniforms.u_color = colors[ndx];
       <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a>
       <li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a>
       <li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a>
-      <li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+      <li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a>
     </ul>
   </ul>
   <li>杂项</li>

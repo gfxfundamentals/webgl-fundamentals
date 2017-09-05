@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-text-glyphs.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Text - Using a Glyph Texture" />
+<meta property="og:title" content="WebGL 文字 - 使用字形纹理" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to display text using a texture full of glyphs" />
+<meta property="og:description" content="如何使用一个字形纹理显示文字" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-text-glyphs.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Text - Using a Glyph Texture" />
+<meta name="twitter:title" content="WebGL 文字 - 使用字形纹理" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-text-glyphs.html" />
-<meta name="twitter:description" content="How to display text using a texture full of glyphs" />
+<meta name="twitter:description" content="如何使用一个字形纹理显示文字" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL Text - Using a Glyph Texture</title>
+<title>WebGL 文字 - 使用字形纹理</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,13 +65,368 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Text - Using a Glyph Texture</h1>
+    <h1>WebGL 文字 - 使用字形纹理</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-text-glyphs.html">英文原版地址</a></p>
+      <p>此文上接WebGL系列文章，上一篇是<a href="webgl-text-texture.html">在WebGL中使用纹理渲染文字</a>，
+如果没读可以先看那些。</p>
+<p>上篇文章中讲到了<a href="webgl-text-texture.html">如何使用纹理在WebGL场景中绘制文字</a>，
+那个技术非常常用，并且常用在多人游戏角色头顶名称中，由于那个名字很少改变所以很好用。</p>
+<p>假如你想在UI中绘制很多文字并且经常改变，接着<a href="webgl-text-texture.html">上文</a>
+的例子我们可以为每个字母制作一个纹理。让我们修改代码实现。</p>
+<pre><code>+var names = [
++  &quot;anna&quot;,   // 0
++  &quot;colin&quot;,  // 1
++  &quot;james&quot;,  // 2
++  &quot;danny&quot;,  // 3
++  &quot;kalin&quot;,  // 4
++  &quot;hiro&quot;,   // 5
++  &quot;eddie&quot;,  // 6
++  &quot;shu&quot;,    // 7
++  &quot;brian&quot;,  // 8
++  &quot;tami&quot;,   // 9
++  &quot;rick&quot;,   // 10
++  &quot;gene&quot;,   // 11
++  &quot;natalie&quot;,// 12,
++  &quot;evan&quot;,   // 13,
++  &quot;sakura&quot;, // 14,
++  &quot;kai&quot;,    // 15,
++];
 
+// 创建文字纹理，一个字母一个
+var textTextures = [
++  &quot;a&quot;,    // 0
++  &quot;b&quot;,    // 1
++  &quot;c&quot;,    // 2
++  &quot;d&quot;,    // 3
++  &quot;e&quot;,    // 4
++  &quot;f&quot;,    // 5
++  &quot;g&quot;,    // 6
++  &quot;h&quot;,    // 7
++  &quot;i&quot;,    // 8
++  &quot;j&quot;,    // 9
++  &quot;k&quot;,    // 10
++  &quot;l&quot;,    // 11
++  &quot;m&quot;,    // 12,
++  &quot;n&quot;,    // 13,
++  &quot;o&quot;,    // 14,
++  &quot;p&quot;,    // 14,
++  &quot;q&quot;,    // 14,
++  &quot;r&quot;,    // 14,
++  &quot;s&quot;,    // 14,
++  &quot;t&quot;,    // 14,
++  &quot;u&quot;,    // 14,
++  &quot;v&quot;,    // 14,
++  &quot;w&quot;,    // 14,
++  &quot;x&quot;,    // 14,
++  &quot;y&quot;,    // 14,
++  &quot;z&quot;,    // 14,
+].map(function(name) {
+*  var textCanvas = makeTextCanvas(name, 10, 26);
+</code></pre><p>然后为名字中每个字母渲染一个矩形而不是原来的只用一个矩形。</p>
+<pre><code>// 绘制文字设置
++// 因为每个字母使用的是相通的属性和程序
++// 我们只需要设置一次
++gl.useProgram(textProgramInfo.program);
++setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
+
+textPositions.forEach(function(pos, ndx) {
++  var name = names[ndx];
++
++  // 每个字母
++  for (var ii = 0; ii &lt; name.length; ++ii) {
++    var letter = name.charCodeAt(ii);
++    var letterNdx = letter - &quot;a&quot;.charCodeAt(0);
++
++    // 选择一个字母纹理
++    var tex = textTextures[letterNdx];
+
+    // 使用 &#39;F&#39; 的位置
+
+    // 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
+    // 所以沿着向量朝眼睛方向移动一定距离
+    var fromEye = m4.normalize(pos);
+    var amountToMoveTowardEye = 150;  // 因为 F 是 150 个单位长
+    var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
+    var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
+    var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
+    var desiredTextScale = -1 / gl.canvas.height;  // 1x1 像素大小
+    var scale = viewZ * desiredTextScale;
+
+    var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+    // 将矩形缩放到需要的大小
+    textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
+    +textMatrix = m4.translate(textMatrix, ii, 0, 0);
+
+    // 设置全局变量
+    m4.copy(textMatrix, textUniforms.u_matrix);
+    textUniforms.u_texture = tex.texture;
+    webglUtils.setUniforms(textProgramInfo, textUniforms);
+
+    // 绘制文字
+    gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+  }
+});
+</code></pre><p>查看结果</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-glyphs.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-glyphs.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>不幸的是它比较慢，例子中并没有体现出来这一点，但是我们绘制了73个矩形，
+计算了73个矩阵并使用了292次矩阵乘法运算，一个典型的UI可能很容易超过1000个字母，
+这种方式就会在每一帧需要进行大量计算。</p>
+<p>为了解决这个问题通常是使用一个包含所有字母的纹理图集，
+我们在<a href="webgl-3d-textures.html#texture-atlas">给立方体 6 各面贴图</a>
+的例子中讲到过纹理图集。</p>
+<p>我在网上找到了<a href="http://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta">一个简单的开源字体纹理图集</a>。
+<img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../../resources/8x8-font.png" /></p>
+<pre><code>var fontInfo = {
+  letterHeight: 8,
+  spaceWidth: 8,
+  spacing: -1,
+  textureWidth: 64,
+  textureHeight: 40,
+  glyphInfos: {
+    &#39;a&#39;: { x:  0, y:  0, width: 8, },
+    &#39;b&#39;: { x:  8, y:  0, width: 8, },
+    &#39;c&#39;: { x: 16, y:  0, width: 8, },
+    &#39;d&#39;: { x: 24, y:  0, width: 8, },
+    &#39;e&#39;: { x: 32, y:  0, width: 8, },
+    &#39;f&#39;: { x: 40, y:  0, width: 8, },
+    &#39;g&#39;: { x: 48, y:  0, width: 8, },
+    &#39;h&#39;: { x: 56, y:  0, width: 8, },
+    &#39;i&#39;: { x:  0, y:  8, width: 8, },
+    &#39;j&#39;: { x:  8, y:  8, width: 8, },
+    &#39;k&#39;: { x: 16, y:  8, width: 8, },
+    &#39;l&#39;: { x: 24, y:  8, width: 8, },
+    &#39;m&#39;: { x: 32, y:  8, width: 8, },
+    &#39;n&#39;: { x: 40, y:  8, width: 8, },
+    &#39;o&#39;: { x: 48, y:  8, width: 8, },
+    &#39;p&#39;: { x: 56, y:  8, width: 8, },
+    &#39;q&#39;: { x:  0, y: 16, width: 8, },
+    &#39;r&#39;: { x:  8, y: 16, width: 8, },
+    &#39;s&#39;: { x: 16, y: 16, width: 8, },
+    &#39;t&#39;: { x: 24, y: 16, width: 8, },
+    &#39;u&#39;: { x: 32, y: 16, width: 8, },
+    &#39;v&#39;: { x: 40, y: 16, width: 8, },
+    &#39;w&#39;: { x: 48, y: 16, width: 8, },
+    &#39;x&#39;: { x: 56, y: 16, width: 8, },
+    &#39;y&#39;: { x:  0, y: 24, width: 8, },
+    &#39;z&#39;: { x:  8, y: 24, width: 8, },
+    &#39;0&#39;: { x: 16, y: 24, width: 8, },
+    &#39;1&#39;: { x: 24, y: 24, width: 8, },
+    &#39;2&#39;: { x: 32, y: 24, width: 8, },
+    &#39;3&#39;: { x: 40, y: 24, width: 8, },
+    &#39;4&#39;: { x: 48, y: 24, width: 8, },
+    &#39;5&#39;: { x: 56, y: 24, width: 8, },
+    &#39;6&#39;: { x:  0, y: 32, width: 8, },
+    &#39;7&#39;: { x:  8, y: 32, width: 8, },
+    &#39;8&#39;: { x: 16, y: 32, width: 8, },
+    &#39;9&#39;: { x: 24, y: 32, width: 8, },
+    &#39;-&#39;: { x: 32, y: 32, width: 8, },
+    &#39;*&#39;: { x: 40, y: 32, width: 8, },
+    &#39;!&#39;: { x: 48, y: 32, width: 8, },
+    &#39;?&#39;: { x: 56, y: 32, width: 8, },
+  },
+};
+</code></pre><p>然后我们<a href="webgl-3d-textures.html">像之前加载图像一样加载这个纹理</a>。</p>
+<pre><code>// 创建一个纹理
+var glyphTex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, glyphTex);
+// 使用 1×1 蓝色像素像素填充纹理
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([0, 0, 255, 255]));
+// 异步加载图像
+var image = new Image();
+image.src = &quot;resources/8x8-font.png&quot;;
+image.addEventListener(&#39;load&#39;, function() {
+  // 图像加载完成，将它拷贝到纹理
+  gl.bindTexture(gl.TEXTURE_2D, glyphTex);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+});
+</code></pre><p>现在我们有了一个包含字形的纹理，可以在运行时给每个字形创建矩形，这些顶点将使用纹理坐标选择确切的字形。</p>
+<p>给定字符串创建顶点。</p>
+<pre><code>function makeVerticesForString(fontInfo, s) {
+  var len = s.length;
+  var numVertices = len * 6;
+  var positions = new Float32Array(numVertices * 2);
+  var texcoords = new Float32Array(numVertices * 2);
+  var offset = 0;
+  var x = 0;
+  var maxX = fontInfo.textureWidth;
+  var maxY = fontInfo.textureHeight;
+  for (var ii = 0; ii &lt; len; ++ii) {
+    var letter = s[ii];
+    var glyphInfo = fontInfo.glyphInfos[letter];
+    if (glyphInfo) {
+      var x2 = x + glyphInfo.width;
+      var u1 = glyphInfo.x / maxX;
+      var v1 = (glyphInfo.y + fontInfo.letterHeight - 1) / maxY;
+      var u2 = (glyphInfo.x + glyphInfo.width - 1) / maxX;
+      var v2 = glyphInfo.y / maxY;
+
+      // 每个字母 6 个顶点
+      positions[offset + 0] = x;
+      positions[offset + 1] = 0;
+      texcoords[offset + 0] = u1;
+      texcoords[offset + 1] = v1;
+
+      positions[offset + 2] = x2;
+      positions[offset + 3] = 0;
+      texcoords[offset + 2] = u2;
+      texcoords[offset + 3] = v1;
+
+      positions[offset + 4] = x;
+      positions[offset + 5] = fontInfo.letterHeight;
+      texcoords[offset + 4] = u1;
+      texcoords[offset + 5] = v2;
+
+      positions[offset + 6] = x;
+      positions[offset + 7] = fontInfo.letterHeight;
+      texcoords[offset + 6] = u1;
+      texcoords[offset + 7] = v2;
+
+      positions[offset + 8] = x2;
+      positions[offset + 9] = 0;
+      texcoords[offset + 8] = u2;
+      texcoords[offset + 9] = v1;
+
+      positions[offset + 10] = x2;
+      positions[offset + 11] = fontInfo.letterHeight;
+      texcoords[offset + 10] = u2;
+      texcoords[offset + 11] = v2;
+
+      x += glyphInfo.width + fontInfo.spacing;
+      offset += 12;
+    } else {
+      // 没有的字母就留一个间距
+      x += fontInfo.spaceWidth;
+    }
+  }
+
+  // 返回用到的 TypedArrays 的 ArrayBufferViews 
+  return {
+    arrays: {
+      position: new Float32Array(positions.buffer, 0, offset),
+      texcoord: new Float32Array(texcoords.buffer, 0, offset),
+    },
+    numVertices: offset / 2,
+  };
+}
+</code></pre><p>我们还要手动创建一个 bufferInfo(<a href="webgl-drawing-multiple-things">如果你不知道 bufferInfo 是什么可以看看这里</a>)。</p>
+<pre><code>// 手动创建一个 bufferInfo
+var textBufferInfo = {
+  attribs: {
+    a_position: { buffer: gl.createBuffer(), numComponents: 2, },
+    a_texcoord: { buffer: gl.createBuffer(), numComponents: 2, },
+  },
+  numElements: 0,
+};
+</code></pre><p>然后需要在渲染文字时更新缓冲，我们也让文字动态变化</p>
+<pre><code>textPositions.forEach(function(pos, ndx) {
+
+  var name = names[ndx];
++  var s = name + &quot;:&quot; + pos[0].toFixed(0) + &quot;,&quot; + pos[1].toFixed(0) + &quot;,&quot; + pos[2].toFixed(0);
++  var vertices = makeVerticesForString(fontInfo, s);
++
++  // 更新缓冲
++  textBufferInfo.attribs.a_position.numComponents = 2;
++  gl.bindBuffer(gl.ARRAY_BUFFER, textBufferInfo.attribs.a_position.buffer);
++  gl.bufferData(gl.ARRAY_BUFFER, vertices.arrays.position, gl.DYNAMIC_DRAW);
++  gl.bindBuffer(gl.ARRAY_BUFFER, textBufferInfo.attribs.a_texcoord.buffer);
++  gl.bufferData(gl.ARRAY_BUFFER, vertices.arrays.texcoord, gl.DYNAMIC_DRAW);
+
+  // 使用 &#39;F&#39; 的位置
+
+  // 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
+  // 所以沿着向量朝眼睛方向移动一定距离
+  var fromEye = m4.normalize(pos);
+  var amountToMoveTowardEye = 150;  // because the F is 150 units long
+  var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
+  var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
+  var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
+  var desiredTextScale = -1 / gl.canvas.height * 2;  // 1x1 pixels
+  var scale = viewZ * desiredTextScale;
+
+  var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
+  textMatrix = m4.scale(textMatrix, scale, scale, 1);
+
+  m4.copy(textMatrix, textUniforms.u_matrix);
+  webglUtils.setUniforms(textProgramInfo, textUniforms);
+
+  // 绘制文字
+  gl.drawArrays(gl.TRIANGLES, 0, vertices.numVertices);
+});
+</code></pre><p>这是结果</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-glyphs-texture-atlas.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-glyphs-texture-atlas.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>这就是使用字形纹理图集的基本原理，还有几个明显值得添加或改进的地方。</p>
+<ul>
+<li><p>重用相同的序列</p>
+<p>当前 <code>makeVerticesForString</code> 在每次调用的时候都创建新的 Float32Arrays。
+这最终可能会导致垃圾回收停顿。重用相同的序列可能会好一些，如果序列不够大可以放大并保持大小不变。</p>
+</li>
+<li><p>添加回车支持</p>
+<p>检测是否是 <code>\n</code> 然后在创建顶点时换行，这样容易制作文字段落。</p>
+</li>
+<li><p>添加各种格式化支持</p>
+<p>如果你想居中或对齐文字就可以添加这个功能。</p>
+</li>
+<li><p>添加顶点颜色支持</p>
+<p>这样就可以对每个字母设置不同的颜色，当然你还需要决定如何改变文字颜色。</p>
+</li>
+<li><p>考虑在运行时用二维画布创建字形纹理图集</p>
+</li>
+</ul>
+<p>另一个没有讲到的重要的问题是纹理限制了大小但是字体不限，如果你想支持所有 Unicode 编码就需要处理汉语和日语，
+阿拉伯语等其他语言。截止2015年已经有了超过 110,000 种 Unicode 字形！你可以用纹理适应所有字形，只是没有足够的空间。</p>
+<p>操作系统和浏览器解决这个问题的方式是，在使用GPU加速时使用字形纹理缓冲。
+向上方一样它们可能将字形放在纹理图集中，但是每种字形可能有一个固定大小的空间，
+只在纹理中保存最近常用的字形。如果需要绘制的字形不在纹理中，就替换掉最不常用的那个。
+当然如果要替换的字形需要绘制的话，就要在绘制后再替换。</p>
+<p>另一个可以做的事情，尽管我不推荐，是结合这个技术和<a href="webgl-text-texture.html">上篇中的技术</a>，
+可以将字形直接渲染到一个纹理中。</p>
+<p>还有一个在WebGL中绘制文字的方式就是使用三维文字，例如所有例子中的 &#39;F&#39; 就是一个三维字母。
+你需要为每个字母创建一个，三位字母通常用于标题和电影logo，其他地方很少用。</p>
+<p>希望这些涵盖了WebGL的文字部分。</p>
+
+      <hr class="lesson-comment-sep" />
+      <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 文字 - 使用字形纹理';
+            var disqus_title = 'WebGL 文字 - 使用字形纹理';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <select id="language">
@@ -139,7 +496,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a>
       <li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a>
       <li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a>
-      <li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL Text - Using a Glyph Texture</a>
+      <li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a>
     </ul>
   </ul>
   <li>杂项</li>
