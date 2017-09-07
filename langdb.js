@@ -46,7 +46,8 @@ window.langDB = {
     "webgl-2d-vs-3d-library.html": {
       "en": true,
       "pl": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-3d-camera.html": {
       "en": true,
