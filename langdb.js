@@ -102,7 +102,8 @@ window.langDB = {
     },
     "webgl-animation.html": {
       "en": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-2d-drawimage.html": {
       "en": true,

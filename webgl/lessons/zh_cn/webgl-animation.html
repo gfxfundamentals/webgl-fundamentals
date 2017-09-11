@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-animation.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL - Animation" />
+<meta property="og:title" content="WebGL 动画" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to do animation in WebGL" />
+<meta property="og:description" content="如何使用WebGL实现动画" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-animation.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL - Animation" />
+<meta name="twitter:title" content="WebGL 动画" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-animation.html" />
-<meta name="twitter:description" content="How to do animation in WebGL" />
+<meta name="twitter:description" content="如何使用WebGL实现动画" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL - Animation</title>
+<title>WebGL 动画</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,13 +65,135 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL - Animation</h1>
+    <h1>WebGL 动画</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-animation.html">英文原版地址</a></p>
+      <p>此文上接WebGL系列文章，第一篇是<a href="webgl-fundamentals.html">基础概念</a>。
+前一篇是<a href="webgl-3d-camera.html">三维相机</a>，如果没读建议从那开始。</p>
+<p>如何使用WebGL实现动画？</p>
+<p>事实上这个问题和WebGL并不相关，如果你想实现动画只需要利用JavaScript
+随着时间改变一些值然后绘制。</p>
+<p>我们可以看看之前使用的动画的例子。</p>
+<pre><code>*var fieldOfViewRadians = degToRad(60);
+*var rotationSpeed = 1.2;
 
+*requestAnimationFrame(drawScene);
+
+// 绘制场景
+function drawScene() {
+*  // 每一帧旋转一点
+*  rotation[1] += rotationSpeed / 60.0;
+
+  ...
+*  // 下一帧继续调用 drawScene 
+*  requestAnimationFrame(drawScene);
+}
+</code></pre><p>这是结果</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation-not-frame-rate-independent.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-animation-not-frame-rate-independent.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>这里还有一些小细节，上方的代码中有<code>rotationSpeed / 60.0</code>，
+我们除以 60.0 是假设浏览器一秒钟调用 60 次 requestAnimationFrame。</p>
+<p>这并不是一个有效的假设，也许用户使用的是一个低效的设备，比如旧的智能手机。
+或者用户在后台运行了一个复杂的程序。有多种原因可能导致浏览器不是60帧每秒。
+也许在 2020 年所有的设备每秒 240 帧，也许用户是一个游戏玩家，在CRT显示器上每秒 90 帧。</p>
+<p>你可以在这个例子中发现问题</p>
+<p><div>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/../webgl-animation-frame-rate-issues.html"></iframe>
+</div>
+
+</p>
+<p>在上方的例子中我们想让所有的 &#39;F&#39; 以相同的速度转动。
+中间的 &#39;F&#39; 全速运行，并且帧率独立。左边和右边的模拟的是当前设备 1/8 的速率，
+左边的<strong>不是</strong>帧率独立，右边的<strong>是</strong>帧率独立。</p>
+<p>注意到由于左边的使用的计数，所以帧率变慢不能跟上正常速度。
+右边的尽管以 1/8 的帧率运行，它还是能和中间的保持相同的速度。</p>
+<p>让帧率独立的方法是计算两帧之间的时间，用这个时间计算当前帧的动画量。</p>
+<p>首先需要得到时间，幸好页面加载调用 <code>requestAnimationFrame</code> 时会传入时间。</p>
+<p>我觉得如果时间的单位是秒会简单一些，由于 <code>requestAnimationFrame</code> 传递给我们的时间是毫秒
+（千分之一秒），我们需要将它乘以 0.001 得到秒。</p>
+<p>所以就可以像这样计算出时间差</p>
+<pre><code>*var then = 0;
+
+requestAnimationFrame(drawScene);
+
+// 绘制场景
+*function drawScene(now) {
+*  // 转换时间为秒
+*  now *= 0.001;
+*  // 减去上一次的时间得到时间差
+*  var deltaTime = now - then;
+*  // 记住这次时间
+*  then = now;
+
+   ...
+</code></pre><p>一旦有了 <code>deltaTime</code> 就可以决定每秒转多少个单位，例子中是 1.2 意思就是每秒转动 1.2 弧度。
+大约书 1/5 圈或者说 5 秒可以转一整圈，不管帧率是多少。</p>
+<pre><code>*    rotation[1] += rotationSpeed * deltaTime;
+</code></pre><p>这是这个版本</p>
+<p><div>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-animation.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>除非你的机器比较慢，不然可能看不出和该页第一个的区别，
+但是如果不使动画帧率独立，不同的用户可能会得到预期之外的结果。</p>
+<p>接下来讲<a href="webgl-3d-textures.html">如何使用纹理</a>。</p>
+<div class="webgl_bottombar">
+<h3>不要使用 setInterval 或 setTimeout!</h3>
+<p>如果你之前使用JavaScript实现动画可能会使用<code>setInterval</code> 或 <code>setTimeout</code>
+调用绘制。
+</p><p>
+使用 <code>setInterval</code> 或 <code>setTimeout</code> 的问题是会出现双重动画。
+首先 <code>setInterval</code> 或 <code>setTimeout</code> 和浏览器的显示无关，
+它们和浏览器绘制每一帧不同步，所以就不能和用户的设备同步。如果使用
+<code>setInterval</code> 或 <code>setTimeout</code> 并且假设 60 帧每秒，
+然后用户的设备实际帧率可能是其他数值，就会和设备不同步。
+</p><p>
+另一个问题是浏览器不知道你为什么使用<code>setInterval</code> 或 <code>setTimeout</code>。
+例如，即使你的页面是不可见的，例如不是当前打开的标签，浏览器还是会运行你的代码。
+也许你会使用 <code>setInterval</code> 或 <code>setTimeout</code> 查看邮箱或 tweeter，
+浏览器并不知道你的目的是什么。每秒都检查新邮件和 tweeter 没什么问题，但每秒钟都使用WebGL绘制 1000
+个物体就有问题了。你将对用户不可见的标签页进行绘制。
+</p><p>
+<code>requestAnimationFrame</code> 解决了这些问题，他只会在正确的时间调用，
+保持动画和屏幕帧率相同，并且只会在可见时调用。
+</p>
+</div>
+
+
+
+
+      <hr class="lesson-comment-sep" />
+      <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 动画';
+            var disqus_title = 'WebGL 动画';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <select id="language">
@@ -147,7 +271,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
-    <li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL - Animation</a></li>
+    <li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL and Alpha</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL - Anti-Patterns</a></li>
