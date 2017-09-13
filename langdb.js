@@ -98,7 +98,8 @@ window.langDB = {
     },
     "webgl-and-alpha.html": {
       "en": true,
-      "ru": true
+      "ru": true,
+      "zh_cn": true
     },
     "webgl-animation.html": {
       "en": true,

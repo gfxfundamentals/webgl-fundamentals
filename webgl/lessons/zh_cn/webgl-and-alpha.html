@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-and-alpha.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL and Alpha" />
+<meta property="og:title" content="WebGL 和阿尔法通道" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How alpha in WebGL is different than alpha in OpenGL" />
+<meta property="og:description" content="WebGL和OpenGL的阿尔法通道有什么不同" />
 <meta property="og:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-and-alpha.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL and Alpha" />
+<meta name="twitter:title" content="WebGL 和阿尔法通道" />
 <meta name="twitter:url" content="http://webglfundamentals.org//webgl/lessons/zh_cn/webgl-and-alpha.html" />
-<meta name="twitter:description" content="How alpha in WebGL is different than alpha in OpenGL" />
+<meta name="twitter:description" content="WebGL和OpenGL的阿尔法通道有什么不同" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL and Alpha</title>
+<title>WebGL 和阿尔法通道</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
@@ -63,13 +65,99 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL and Alpha</h1>
+    <h1>WebGL 和阿尔法通道</h1>
   </div>
   <div class="row">
     <div class="col-sm-8 lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-and-alpha.html">英文原版地址</a></p>
+      <p>我发现有些OpenGL的开发者对WebGL的阿尔法通道有疑问，
+所以我觉得有必要讲一下WebGL和OpenGL的阿尔法通道的不同之处。</p>
+<p>最大的不同点是OpenGL渲染到一个后备缓冲中，不和其他东西混合，
+或者说不和操作系统窗口管理器中的其他东西混合。所以阿尔法通道是什么无所谓。</p>
+<p>WebGL则是被浏览器混合在页面中，默认使用的是预乘阿尔法通道，
+和带有透明的 .png <code>&lt;img&gt;</code>标签以及二维画布相同。</p>
+<p>WebGL可以使用几种方法去模仿WebGL。</p>
+<h3 id="-1-webgl-">#1) 告诉WebGL你想让它是非预乘阿尔法通道的</h3>
+<pre><code>gl = canvas.getContext(&quot;webgl&quot;, {
+  premultipliedAlpha: false  // 请求非预乘阿尔法通道
+});
+</code></pre><p>默认值是 true。</p>
+<p>当然结果还是会和背景混合，可能是画布的背景色，画布的容器的背景色，页面的背景色，
+在画布背后的东西等等。换句话说，CSS定义的那个区域的颜色。</p>
+<p>当遇到阿尔法通道问题时，一个比较好用方法就是将画布的背景色设置为一个亮色，
+比如红色，你会很容易知道发生了什么。</p>
+<pre><code>&lt;canvas style=&quot;background: red;&quot;&gt;&lt;canvas&gt;
+</code></pre><p>你也可以设置成黑色，用来隐藏你的阿尔法通道问题。</p>
+<h3 id="-2-webgl-">#2) 告诉WebGL你不想在后背缓冲中使用阿尔法通道</h3>
+<pre><code>gl = canvas.getContext(&quot;webgl&quot;, { alpha: false }};
+</code></pre><p>这样就很像OpenGL，因为后背缓冲只有RGB。这可能是最好的方式，因为好点的浏览器知道你没有阿尔法，
+并优化WebGL的混合方式。这也意味着后背缓冲中没有阿尔法通道，如果出于某些原因想在后背缓冲中使用阿尔法通道就不太合适了。
+我知道的只有极少数应用在后背缓冲中使用阿尔法通道，所以我认为这个设置应该成为默认设置。</p>
+<h3 id="-3-">#3) 在渲染结束后清楚阿尔法通道</h3>
+<pre><code>..
+renderScene();
+..
+// 设置后背缓冲的阿尔法为 1.0
+gl.clearColor(1, 1, 1, 1);
+gl.colorMask(false, false, false, true);
+gl.clear(gl.COLOR_BUFFER_BIT);
+</code></pre><p>在大多数硬件中使用清除时非常快速的，我经常在我的示例中使用这种方式。
+如果聪明点的话我会换成上方 #2 的方式，也许我会在这篇文章以后使用那种方式，
+似乎大多数WebGL库都将使用这个默认设置。少数想用阿尔法通道的开发者会请求这个特性，
+其他的会得到一些优化。</p>
+<h3 id="-4-">#4) 清除一次阿尔法通道不再渲染</h3>
+<pre><code>// 在初始化阶段，清楚后背缓冲
+gl.clearColor(1,1,1,1);
+gl.clear(gl.COLOR_BUFFER_BIT);
 
+// 关闭向阿尔法通道的渲染
+gl.colorMask(true, true, true, false);
+</code></pre><p>当然如果你想在帧缓冲中使用阿尔法通道，可以在渲染前开启，在渲染后再关闭，
+保证渲染到画布前是关闭的。</p>
+<h3 id="-5-">#5) 处理图像</h3>
+<p>默认的如果你将带有阿尔法的图像加载到WebGL中，WebGL会将它的值当作PNG的颜色值，
+不是预乘阿尔法的。这也是我在OpenGL程序中常用的方法，因为它比预乘的多了一些信息。</p>
+<pre><code>1, 0.5, 0.5, 0  // RGBA
+</code></pre><p>有可能会出现非预乘的值是有意义的而预乘值就没意义了，
+比如 <code>a = 0</code> 表示 <code>r</code>, <code>g</code>, 和 <code>b</code> 都将是零。</p>
+<p>你想的话也可以让WebGL使用预乘值，可以通过设置 <code>UNPACK_PREMULTIPLY_ALPHA_WEBGL</code>
+为 true 实现</p>
+<pre><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+</code></pre><p>默认值是非预乘值。</p>
+<p>要注意的是大多数二维画布使用的是预乘阿尔法通道的值。这就意味着你将
+<code>UNPACK_PREMULTIPLY_ALPHA_WEBGL</code> 设置为 false 时，WebGL会将传入的值转换成非预乘值。</p>
+<h3 id="-6-">#6) 对非预乘阿尔法的值使用混合方程</h3>
+<p>我写的或用的几乎所有的OpenGL应用都使用</p>
+<pre><code>gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+</code></pre><p>这适用于非预乘阿尔法通道的纹理。</p>
+<p>如果你确实想使用预乘阿尔法通道的纹理可能就需要使用</p>
+<pre><code>gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+</code></pre><p>这些是我想到的方法，如果你知道其它方法请在下方留言。</p>
+
+      <hr class="lesson-comment-sep" />
+      <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 和阿尔法通道';
+            var disqus_title = 'WebGL 和阿尔法通道';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
         <select id="language">
@@ -148,7 +236,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
-    <li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL and Alpha</a></li>
+    <li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
     <li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL - Anti-Patterns</a></li>
   </ul>
