@@ -1,111 +1,127 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>WebGL Fundamentals Module: primitives</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>primitives - Documentation</title>
 
-	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
-
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
-
 <body>
-<div class="container-fluid">
-	<div class="navbar navbar-fixed-top navbar-inverse">
-		<div class="navbar-inner">
-			<a class="brand" href="index.html">WebGL Fundamentals</a>
-			<ul class="nav">
-				
-				<li class="dropdown">
-					<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b
-						class="caret"></b></a>
 
-					<ul class="dropdown-menu ">
-						
-						<li>
-							<a href="module-primitives.html">primitives</a>
-						</li>
-						
-						<li>
-							<a href="module-webgl-2d-math.html">webgl-2d-math</a>
-						</li>
-						
-						<li>
-							<a href="module-webgl-3d-math.html">webgl-3d-math</a>
-						</li>
-						
-						<li>
-							<a href="module-webgl-utils.html">webgl-utils</a>
-						</li>
-						
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-					</ul>
-				</li>
-				
-			</ul>
-		</div>
-	</div>
+<label for="nav-trigger" class="overlay"></label>
 
-	<div class="row-fluid">
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-primitives.html">primitives</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.create3DFVertices">create3DFVertices</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.createCubeVertices">createCubeVertices</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.createPlaneVertices">createPlaneVertices</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.createSphereVertices">createSphereVertices</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.createTruncatedConeVertices">createTruncatedConeVertices</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.deindexVertices">deindexVertices</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.flattenNormals">flattenNormals</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.makeRandomVertexColors">makeRandomVertexColors</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.reorientDirections">reorientDirections</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.reorientNormals">reorientNormals</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.reorientPositions">reorientPositions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-primitives.html#.reorientVertices">reorientVertices</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-webgl-2d-math.html">webgl-2d-math</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-2d-math.html#.make2DProjection">make2DProjection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-2d-math.html#.makeRotation">makeRotation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-2d-math.html#.makeScale">makeScale</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-2d-math.html#.makeTranslation">makeTranslation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-2d-math.html#.matrixMultiply">matrixMultiply</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-webgl-3d-math.html">webgl-3d-math</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.cross">cross</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeAxisRotation">makeAxisRotation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeFrustum">makeFrustum</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeIdentity">makeIdentity</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeInverse">makeInverse</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeLookAt">makeLookAt</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeOrthographic">makeOrthographic</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makePerspective">makePerspective</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeScale">makeScale</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeTranslation">makeTranslation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeTranspose">makeTranspose</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeXRotation">makeXRotation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeYRotation">makeYRotation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.makeZRotation">makeZRotation</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.matrixVectorMultiply">matrixVectorMultiply</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.normalize">normalize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.subtractVectors">subtractVectors</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.transformDirection">transformDirection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.transformNormal">transformNormal</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-3d-math.html#.transformPoint">transformPoint</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-webgl-utils.html">webgl-utils</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.createAttribsFromArrays">createAttribsFromArrays</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.createAttributeSetters">createAttributeSetters</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.createAugmentedTypedArray">createAugmentedTypedArray</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.createBufferInfoFromArrays">createBufferInfoFromArrays</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.createBuffersFromArrays">createBuffersFromArrays</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.createProgram">createProgram</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.createProgramFromScripts">createProgramFromScripts</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.createProgramFromSources">createProgramFromSources</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.createProgramInfo">createProgramInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.createUniformSetters">createUniformSetters</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.drawBufferInfo">drawBufferInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.drawObjectList">drawObjectList</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.getExtensionWithKnownPrefixes">getExtensionWithKnownPrefixes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.resizeCanvasToDisplaySize">resizeCanvasToDisplaySize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.setAttributes">setAttributes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.setBuffersAndAttributes">setBuffersAndAttributes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-webgl-utils.html#.setUniforms">setUniforms</a></span></li>
+</nav>
 
-		
-		<div class="span8">
-			
-				<div id="main">
-					
+<div id="main">
+    
+    <h1 class="page-title">primitives</h1>
+    
+
+    
 
 
-	<h1 class="page-title">Module: primitives</h1>
+
+
 <section>
 
 <header>
-    <h2>
-    primitives
-    </h2>
+    
+        
+            
+        
     
 </header>
 
 <article>
     <div class="container-overview">
     
-
-    
         
             <div class="description"><p>Various functions to make simple primitives</p></div>
         
 
         
+            
+<div class="section-method">
+
+
+
+
+
+
+
 <dl class="details">
-	
 
-	
+    
 
-	
+    
 
-	
+    
 
-	
+    
 
-	
+    
 
-	
+    
 
-	
+    
 
-	
+    
 
+    
 
+    
 
-	
+    
 
-	
+    
 
-	
+    
 
-	
+    
+
+    
+
+    
 </dl>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
         
     
     </div>
@@ -116,7 +132,7 @@
 
     
 
-    
+     
 
     
 
@@ -125,136 +141,194 @@
     
         <h3 class="subsection-title">Methods</h3>
 
-        <dl>
+        
             
-<dt>
-    <h4 class="name" id=".create3DFVertices"><span class="type-signature"> </span>create3DFVertices<span class="signature">()</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Creates 3D 'F' vertices.<br>An 'F' is useful because you can easily tell which way it is oriented.<br>The created 'F' has position, normal and uv streams.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
+<div class="section-method">
 
     
 
+    <h4 class="name" id=".create3DFVertices"><span class="type-signature">(static) </span>create3DFVertices<span class="signature">()</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
+
     
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <p>The<br>        created plane vertices.</p>
+
+
+
+<div class="description">
+    <p>Creates 3D 'F' vertices.<br>An 'F' is useful because you can easily tell which way it is oriented.<br>The created 'F' has position, normal and uv streams.</p>
 </div>
 
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object.&lt;string, TypedArray></span>
 
-	</dd>
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object.&lt;string, TypedArray></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The<br>        created plane vertices.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
         
             
-<dt>
-    <h4 class="name" id=".createCubeVertices"><span class="type-signature"> </span>createCubeVertices<span class="signature">(size)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
+<div class="section-method">
+
     
+
+    <h4 class="name" id=".createCubeVertices"><span class="type-signature">(static) </span>createCubeVertices<span class="signature">(size)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
+
     
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Creates the vertices and indices for a cube. The<br>cube will be created around the origin. (-size / 2, size / 2)</p>
-    </div>
+
+
+
+<div class="description">
+    <p>Creates the vertices and indices for a cube. The<br>cube will be created around the origin. (-size / 2, size / 2)</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
     
 
     
+
     
+
     
+
     
+
     
-        <h5>Parameters:</h5>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
         
 
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+        <th>Type</th>
 
-		<th>Type</th>
+        
 
-		
+        
 
-		
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -264,7 +338,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -273,126 +348,144 @@
 
             
 
-            <td class="description last"><p>Width, height and depth of the cube.</p></td>
+            <td class="description last">
+                <p>Width, height and depth of the cube.</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object.&lt;string, TypedArray></code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>The<br>        created plane vertices.</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object.&lt;string, TypedArray></span>
 
-	</dd>
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".createPlaneVertices"><span class="type-signature">(static) </span>createPlaneVertices<span class="signature">(width<span class="signature-attributes">opt</span>, depth<span class="signature-attributes">opt</span>, subdivisionsWidth<span class="signature-attributes">opt</span>, subdivisionsDepth<span class="signature-attributes">opt</span>, matrix<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Creates XZ plane vertices.<br>The created plane has position, normal and uv streams.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id=".createPlaneVertices"><span class="type-signature"> </span>createPlaneVertices<span class="signature">(<span class="optional">width</span>, <span class="optional">depth</span>, <span class="optional">subdivisionsWidth</span>, <span class="optional">subdivisionsDepth</span>, <span class="optional">matrix</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Creates XZ plane vertices.<br>The created plane has position, normal and uv streams.</p>
-    </div>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Attributes</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -402,7 +495,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -421,10 +515,13 @@
 
             
 
-            <td class="description last"><p>Width of the plane. Default = 1</p></td>
+            <td class="description last">
+                <p>Width of the plane. Default = 1</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -434,7 +531,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -453,10 +551,13 @@
 
             
 
-            <td class="description last"><p>Depth of the plane. Default = 1</p></td>
+            <td class="description last">
+                <p>Depth of the plane. Default = 1</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -466,7 +567,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -485,10 +587,13 @@
 
             
 
-            <td class="description last"><p>Number of steps across the plane. Default = 1</p></td>
+            <td class="description last">
+                <p>Number of steps across the plane. Default = 1</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -498,7 +603,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -517,10 +623,13 @@
 
             
 
-            <td class="description last"><p>Number of steps down the plane. Default = 1</p></td>
+            <td class="description last">
+                <p>Number of steps down the plane. Default = 1</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -530,7 +639,8 @@
             <td class="type">
             
                 
-<span class="param-type">Matrix4</span>
+<span class="param-type"><code>Matrix4</code></span>
+
 
             
             </td>
@@ -549,126 +659,144 @@
 
             
 
-            <td class="description last"><p>A matrix by which to multiply all the vertices.</p></td>
+            <td class="description last">
+                <p>A matrix by which to multiply all the vertices.</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object.&lt;string, TypedArray></code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>The<br>        created plane vertices.</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object.&lt;string, TypedArray></span>
 
-	</dd>
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".createSphereVertices"><span class="type-signature">(static) </span>createSphereVertices<span class="signature">(radius, subdivisionsAxis, subdivisionsHeight, opt_startLatitudeInRadians<span class="signature-attributes">opt</span>, opt_endLatitudeInRadians<span class="signature-attributes">opt</span>, opt_startLongitudeInRadians<span class="signature-attributes">opt</span>, opt_endLongitudeInRadians<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Creates sphere vertices.<br>The created sphere has position, normal and uv streams.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id=".createSphereVertices"><span class="type-signature"> </span>createSphereVertices<span class="signature">(radius, subdivisionsAxis, subdivisionsHeight, <span class="optional">opt_startLatitudeInRadians</span>, <span class="optional">opt_endLatitudeInRadians</span>, <span class="optional">opt_startLongitudeInRadians</span>, <span class="optional">opt_endLongitudeInRadians</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Creates sphere vertices.<br>The created sphere has position, normal and uv streams.</p>
-    </div>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Attributes</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -678,7 +806,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -695,10 +824,13 @@
 
             
 
-            <td class="description last"><p>radius of the sphere.</p></td>
+            <td class="description last">
+                <p>radius of the sphere.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -708,7 +840,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -725,10 +858,13 @@
 
             
 
-            <td class="description last"><p>number of steps around the sphere.</p></td>
+            <td class="description last">
+                <p>number of steps around the sphere.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -738,7 +874,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -755,10 +892,13 @@
 
             
 
-            <td class="description last"><p>number of vertically on the sphere.</p></td>
+            <td class="description last">
+                <p>number of vertically on the sphere.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -768,7 +908,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -787,10 +928,13 @@
 
             
 
-            <td class="description last"><p>where to start the<br>    top of the sphere. Default = 0.</p></td>
+            <td class="description last">
+                <p>where to start the<br>    top of the sphere. Default = 0.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -800,7 +944,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -819,10 +964,13 @@
 
             
 
-            <td class="description last"><p>Where to end the<br>    bottom of the sphere. Default = Math.PI.</p></td>
+            <td class="description last">
+                <p>Where to end the<br>    bottom of the sphere. Default = Math.PI.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -832,7 +980,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -851,10 +1000,13 @@
 
             
 
-            <td class="description last"><p>where to start<br>    wrapping the sphere. Default = 0.</p></td>
+            <td class="description last">
+                <p>where to start<br>    wrapping the sphere. Default = 0.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -864,7 +1016,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -883,126 +1036,144 @@
 
             
 
-            <td class="description last"><p>where to end<br>    wrapping the sphere. Default = 2 * Math.PI.</p></td>
+            <td class="description last">
+                <p>where to end<br>    wrapping the sphere. Default = 2 * Math.PI.</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object.&lt;string, TypedArray></code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>The<br>        created plane vertices.</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object.&lt;string, TypedArray></span>
 
-	</dd>
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".createTruncatedConeVertices"><span class="type-signature">(static) </span>createTruncatedConeVertices<span class="signature">(bottomRadius, topRadius, height, radialSubdivisions, verticalSubdivisions, opt_topCap<span class="signature-attributes">opt</span>, opt_bottomCap<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Creates vertices for a truncated cone, which is like a cylinder<br>except that it has different top and bottom radii. A truncated cone<br>can also be used to create cylinders and regular cones. The<br>truncated cone will be created centered about the origin, with the<br>y axis as its vertical axis. The created cone has position, normal<br>and uv streams.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id=".createTruncatedConeVertices"><span class="type-signature"> </span>createTruncatedConeVertices<span class="signature">(bottomRadius, topRadius, height, radialSubdivisions, verticalSubdivisions, <span class="optional">opt_topCap</span>, <span class="optional">opt_bottomCap</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Creates vertices for a truncated cone, which is like a cylinder<br>except that it has different top and bottom radii. A truncated cone<br>can also be used to create cylinders and regular cones. The<br>truncated cone will be created centered about the origin, with the<br>y axis as its vertical axis. The created cone has position, normal<br>and uv streams.</p>
-    </div>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Attributes</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -1012,7 +1183,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -1029,10 +1201,13 @@
 
             
 
-            <td class="description last"><p>Bottom radius of truncated cone.</p></td>
+            <td class="description last">
+                <p>Bottom radius of truncated cone.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1042,7 +1217,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -1059,10 +1235,13 @@
 
             
 
-            <td class="description last"><p>Top radius of truncated cone.</p></td>
+            <td class="description last">
+                <p>Top radius of truncated cone.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1072,7 +1251,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -1089,10 +1269,13 @@
 
             
 
-            <td class="description last"><p>Height of truncated cone.</p></td>
+            <td class="description last">
+                <p>Height of truncated cone.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1102,7 +1285,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -1119,10 +1303,13 @@
 
             
 
-            <td class="description last"><p>The number of subdivisions around the<br>    truncated cone.</p></td>
+            <td class="description last">
+                <p>The number of subdivisions around the<br>    truncated cone.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1132,7 +1319,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -1149,10 +1337,13 @@
 
             
 
-            <td class="description last"><p>The number of subdivisions down the<br>    truncated cone.</p></td>
+            <td class="description last">
+                <p>The number of subdivisions down the<br>    truncated cone.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1162,7 +1353,8 @@
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type"><code>boolean</code></span>
+
 
             
             </td>
@@ -1181,10 +1373,13 @@
 
             
 
-            <td class="description last"><p>Create top cap. Default = true.</p></td>
+            <td class="description last">
+                <p>Create top cap. Default = true.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1194,7 +1389,8 @@
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type"><code>boolean</code></span>
+
 
             
             </td>
@@ -1213,124 +1409,142 @@
 
             
 
-            <td class="description last"><p>Create bottom cap. Default =<br>       true.</p></td>
+            <td class="description last">
+                <p>Create bottom cap. Default =<br>       true.</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object.&lt;string, TypedArray></code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>The<br>        created plane vertices.</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object.&lt;string, TypedArray></span>
 
-	</dd>
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".deindexVertices"><span class="type-signature">(static) </span>deindexVertices<span class="signature">(vertices)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Given indexed vertices creates a new set of vertices unindexed by expanding the indexed vertices.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id=".deindexVertices"><span class="type-signature"> </span>deindexVertices<span class="signature">(vertices)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Given indexed vertices creates a new set of vertices unindexed by expanding the indexed vertices.</p>
-    </div>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -1340,7 +1554,8 @@
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;string, TypedArray></span>
+<span class="param-type"><code>Object.&lt;string, TypedArray></code></span>
+
 
             
             </td>
@@ -1349,124 +1564,142 @@
 
             
 
-            <td class="description last"><p>The indexed vertices to deindex</p></td>
+            <td class="description last">
+                <p>The indexed vertices to deindex</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object.&lt;string, TypedArray></code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>The deindexed vertices</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object.&lt;string, TypedArray></span>
 
-	</dd>
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".flattenNormals"><span class="type-signature">(static) </span>flattenNormals<span class="signature">(vertices)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>flattens the normals of deindexed vertices in place.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id=".flattenNormals"><span class="type-signature"> </span>flattenNormals<span class="signature">(vertices)</span><span class="type-signature"> &rarr; {Object.&lt;string, TypedArray>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>flattens the normals of deindexed vertices in place.</p>
-    </div>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -1476,7 +1709,8 @@
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;string, TypedArray></span>
+<span class="param-type"><code>Object.&lt;string, TypedArray></code></span>
+
 
             
             </td>
@@ -1485,126 +1719,144 @@
 
             
 
-            <td class="description last"><p>The deindexed vertices who's normals to flatten</p></td>
+            <td class="description last">
+                <p>The deindexed vertices who's normals to flatten</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object.&lt;string, TypedArray></code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>The flattened vertices (same as was passed in)</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object.&lt;string, TypedArray></span>
 
-	</dd>
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".makeRandomVertexColors"><span class="type-signature">(static) </span>makeRandomVertexColors<span class="signature">(vertices, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, augmentedTypedArray>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Creates an augmentedTypedArray of random vertex colors.<br>If the vertices are indexed (have an indices array) then will<br>just make random colors. Otherwise assumes they are triangless<br>and makes one random color for every 3 vertices.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id=".makeRandomVertexColors"><span class="type-signature"> </span>makeRandomVertexColors<span class="signature">(vertices, <span class="optional">options</span>)</span><span class="type-signature"> &rarr; {Object.&lt;string, augmentedTypedArray>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Creates an augmentedTypedArray of random vertex colors.<br>If the vertices are indexed (have an indices array) then will<br>just make random colors. Otherwise assumes they are triangless<br>and makes one random color for every 3 vertices.</p>
-    </div>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Attributes</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -1614,7 +1866,8 @@
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;string, augmentedTypedArray></span>
+<span class="param-type"><code>Object.&lt;string, augmentedTypedArray></code></span>
+
 
             
             </td>
@@ -1631,10 +1884,13 @@
 
             
 
-            <td class="description last"><p>Vertices as returned from one of the createXXXVertices functions.</p></td>
+            <td class="description last">
+                <p>Vertices as returned from one of the createXXXVertices functions.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1644,7 +1900,8 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="module-primitives.html#.RandomVerticesOptions">RandomVerticesOptions</a></span>
+<span class="param-type"><code><a href="module-primitives.html#.RandomVerticesOptions">module:primitives.RandomVerticesOptions</a></code></span>
+
 
             
             </td>
@@ -1663,124 +1920,142 @@
 
             
 
-            <td class="description last"><p>options.</p></td>
+            <td class="description last">
+                <p>options.</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object.&lt;string, augmentedTypedArray></code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>same vertices as passed in with <code>color</code> added.</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object.&lt;string, augmentedTypedArray></span>
 
-	</dd>
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".reorientDirections"><span class="type-signature">(static) </span>reorientDirections<span class="signature">(array, matrix)</span><span class="type-signature"> &rarr; {Array.&lt;number>|TypedArray}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Reorients directions by the given matrix..</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id=".reorientDirections"><span class="type-signature"> </span>reorientDirections<span class="signature">(array, matrix)</span><span class="type-signature"> &rarr; {Array.&lt;number>|TypedArray}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Reorients directions by the given matrix..</p>
-    </div>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -1790,9 +2065,11 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;number>|</span>
+<span class="param-type"><code>Array.&lt;number></code></span>
+|
 
-<span class="param-type">TypedArray</span>
+<span class="param-type"><code>TypedArray</code></span>
+
 
             
             </td>
@@ -1801,10 +2078,13 @@
 
             
 
-            <td class="description last"><p>The array. Assumes value floats per element.</p></td>
+            <td class="description last">
+                <p>The array. Assumes value floats per element.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1814,7 +2094,8 @@
             <td class="type">
             
                 
-<span class="param-type">Matrix</span>
+<span class="param-type"><code>Matrix</code></span>
+
 
             
             </td>
@@ -1823,126 +2104,145 @@
 
             
 
-            <td class="description last"><p>A matrix to multiply by.</p></td>
+            <td class="description last">
+                <p>A matrix to multiply by.</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Array.&lt;number></code></span>
+|
+
+<span class="param-type"><code>TypedArray</code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>the same array that was passed in</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Array.&lt;number>|</span>
 
-<span class="param-type">TypedArray</span>
+</div>
+        
+            
+<div class="section-method">
 
-	</dd>
+    
+
+    <h4 class="name" id=".reorientNormals"><span class="type-signature">(static) </span>reorientNormals<span class="signature">(array, matrix)</span><span class="type-signature"> &rarr; {Array.&lt;number>|TypedArray}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Reorients normals by the inverse-transpose of the given<br>matrix..</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id=".reorientNormals"><span class="type-signature"> </span>reorientNormals<span class="signature">(array, matrix)</span><span class="type-signature"> &rarr; {Array.&lt;number>|TypedArray}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Reorients normals by the inverse-transpose of the given<br>matrix..</p>
-    </div>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -1952,9 +2252,11 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;number>|</span>
+<span class="param-type"><code>Array.&lt;number></code></span>
+|
 
-<span class="param-type">TypedArray</span>
+<span class="param-type"><code>TypedArray</code></span>
+
 
             
             </td>
@@ -1963,10 +2265,13 @@
 
             
 
-            <td class="description last"><p>The array. Assumes value floats per element.</p></td>
+            <td class="description last">
+                <p>The array. Assumes value floats per element.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -1976,7 +2281,8 @@
             <td class="type">
             
                 
-<span class="param-type">Matrix</span>
+<span class="param-type"><code>Matrix</code></span>
+
 
             
             </td>
@@ -1985,126 +2291,145 @@
 
             
 
-            <td class="description last"><p>A matrix to multiply by.</p></td>
+            <td class="description last">
+                <p>A matrix to multiply by.</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Array.&lt;number></code></span>
+|
+
+<span class="param-type"><code>TypedArray</code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>the same array that was passed in</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Array.&lt;number>|</span>
 
-<span class="param-type">TypedArray</span>
+</div>
+        
+            
+<div class="section-method">
 
-	</dd>
+    
+
+    <h4 class="name" id=".reorientPositions"><span class="type-signature">(static) </span>reorientPositions<span class="signature">(array, matrix)</span><span class="type-signature"> &rarr; {Array.&lt;number>|TypedArray}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Reorients positions by the given matrix. In other words, it<br>multiplies each vertex by the given matrix.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id=".reorientPositions"><span class="type-signature"> </span>reorientPositions<span class="signature">(array, matrix)</span><span class="type-signature"> &rarr; {Array.&lt;number>|TypedArray}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Reorients positions by the given matrix. In other words, it<br>multiplies each vertex by the given matrix.</p>
-    </div>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -2114,9 +2439,11 @@
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;number>|</span>
+<span class="param-type"><code>Array.&lt;number></code></span>
+|
 
-<span class="param-type">TypedArray</span>
+<span class="param-type"><code>TypedArray</code></span>
+
 
             
             </td>
@@ -2125,10 +2452,13 @@
 
             
 
-            <td class="description last"><p>The array. Assumes value floats per element.</p></td>
+            <td class="description last">
+                <p>The array. Assumes value floats per element.</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -2138,7 +2468,8 @@
             <td class="type">
             
                 
-<span class="param-type">Matrix</span>
+<span class="param-type"><code>Matrix</code></span>
+
 
             
             </td>
@@ -2147,126 +2478,145 @@
 
             
 
-            <td class="description last"><p>A matrix to multiply by.</p></td>
+            <td class="description last">
+                <p>A matrix to multiply by.</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Array.&lt;number></code></span>
+|
+
+<span class="param-type"><code>TypedArray</code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>the same array that was passed in</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Array.&lt;number>|</span>
 
-<span class="param-type">TypedArray</span>
+</div>
+        
+            
+<div class="section-method">
 
-	</dd>
+    
+
+    <h4 class="name" id=".reorientVertices"><span class="type-signature">(static) </span>reorientVertices<span class="signature">(arrays, matrix)</span><span class="type-signature"> &rarr; {Object.&lt;string, (Array.&lt;number>|TypedArray)>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Reorients arrays by the given matrix. Assumes arrays have<br>names that contains 'pos' could be reoriented as positions,<br>'binorm' or 'tan' as directions, and 'norm' as normals.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-        
-    
-    
-</dd>
 
-        
-            
-<dt>
-    <h4 class="name" id=".reorientVertices"><span class="type-signature"> </span>reorientVertices<span class="signature">(arrays, matrix)</span><span class="type-signature"> &rarr; {Object.&lt;string, (Array.&lt;number>|TypedArray)>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Reorients arrays by the given matrix. Assumes arrays have<br>names that contains 'pos' could be reoriented as positions,<br>'binorm' or 'tan' as directions, and 'norm' as normals.</p>
-    </div>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
+<table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -2276,7 +2626,8 @@
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;string, (Array.&lt;number>|TypedArray)></span>
+<span class="param-type"><code>Object.&lt;string, (Array.&lt;number>|TypedArray)></code></span>
+
 
             
             </td>
@@ -2285,10 +2636,13 @@
 
             
 
-            <td class="description last"><p>The vertices to reorient</p></td>
+            <td class="description last">
+                <p>The vertices to reorient</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -2298,7 +2652,8 @@
             <td class="type">
             
                 
-<span class="param-type">Matrix</span>
+<span class="param-type"><code>Matrix</code></span>
+
 
             
             </td>
@@ -2307,130 +2662,148 @@
 
             
 
-            <td class="description last"><p>matrix to reorient by.</p></td>
+            <td class="description last">
+                <p>matrix to reorient by.</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object.&lt;string, (Array.&lt;number>|TypedArray)></code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>same arrays that were passed in.</p>
 </div>
 
+    
+</div>
 
 
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object.&lt;string, (Array.&lt;number>|TypedArray)></span>
 
-	</dd>
-</dl>
-
-
+</div>
         
-    
-    
-</dd>
-
-        </dl>
     
 
     
         <h3 class="subsection-title">Type Definitions</h3>
 
-        <dl>
+        
                 
-<dt>
+<div class="section-method">
+
+    
+
     <h4 class="name" id=".RandomColorFunc"><span class="type-signature"></span>RandomColorFunc<span class="signature">(ndx, channel)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
     
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Used to supply random colors</p>
-    </div>
+
+
+
+<div class="description">
+    <p>Used to supply random colors</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
     
 
     
+
     
+
     
+
     
+
     
-        <h5>Parameters:</h5>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
         
 
-<table class="params table table-striped">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+        <th>Type</th>
 
-		<th>Type</th>
+        
 
-		
+        
 
-		
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -2440,7 +2813,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -2449,10 +2823,13 @@
 
             
 
-            <td class="description last"><p>index of triangle/quad if unindexed or index of vertex if indexed</p></td>
+            <td class="description last">
+                <p>index of triangle/quad if unindexed or index of vertex if indexed</p>
+                
+            </td>
         </tr>
 
-	
+    
 
         <tr>
             
@@ -2462,7 +2839,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -2471,132 +2849,94 @@
 
             
 
-            <td class="description last"><p>0 = red, 1 = green, 2 = blue, 3 = alpha</p></td>
+            <td class="description last">
+                <p>0 = red, 1 = green, 2 = blue, 3 = alpha</p>
+                
+            </td>
         </tr>
 
-	
-	</tbody>
+    
+    </tbody>
 </table>
 
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>number</code></span>
+
+
+    </dd>
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
 <div class="param-desc">
     <p>a number from 0 to 255</p>
 </div>
 
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">number</span>
-
-	</dd>
-</dl>
-
-
-        
     
-    
-</dd>
+</div>
 
+
+
+</div>
             
                 
-<dt class="name" id=".RandomVerticesOptions">
-    <h4>RandomVerticesOptions</h4>
+<div class="section-members">
+<h4 class="name" id=".RandomVerticesOptions">RandomVerticesOptions</h4>
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
 
     
-</dt>
-<dd>
-    
 
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-	
-
-	<h5 class="subsection-title">Properties:</h5>
-
-	<dl>
-
-<table class="props table table-striped">
+<table class="props">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
+    <tr>
+        
+        <th>Name</th>
+        
 
-		<th>Type</th>
+        <th>Type</th>
 
-		
-		<th>Argument</th>
-		
+        
+        <th>Attributes</th>
+        
 
-		
+        
 
-		<th class="last">Description</th>
-	</tr>
-	</thead>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	
+    <tbody>
+    
 
         <tr>
             
@@ -2606,7 +2946,8 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type"><code>number</code></span>
+
 
             
             </td>
@@ -2626,7 +2967,9 @@
             <td class="description last"><p>Defaults to 3 for non-indexed vertices</p></td>
         </tr>
 
-	
+        
+
+    
 
         <tr>
             
@@ -2636,7 +2979,8 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="module-primitives.html#.RandomColorFunc">RandomColorFunc</a></span>
+<span class="param-type"><code><a href="module-primitives.html#.RandomColorFunc">module:primitives.RandomColorFunc</a></code></span>
+
 
             
             </td>
@@ -2656,45 +3000,69 @@
             <td class="description last"><p>A function to generate random numbers</p></td>
         </tr>
 
-	
-	</tbody>
-</table>
-</dl>
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
+        
 
     
-</dd>
+    </tbody>
+</table>
 
-            </dl>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>Object</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+            
     
 
     
@@ -2705,114 +3073,15 @@
 
 
 
-				</div>
+</div>
 
-				<div class="clearfix"></div>
-				<footer>
-					
-					
-		<span class="copyright">
-		copyright Gregg Tavares
-		</span>
-					<br />
-					
-				</footer>
-			</div>
+<br class="clear">
 
-			
-			<div class="span3">
-				<div id="toc"></div>
-			</div>
-			
-			<br clear="both">
-		</div>
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> using the Minami theme.
+</footer>
 
-	</div>
-	<script src="scripts/prettify/prettify.js"></script>
-	<script src="scripts/docstrap.lib.js"></script>
-	<script src="scripts/bootstrap-dropdown.js"></script>
-	<script src="scripts/toc.js"></script>
-
-	<script>
-		$( function () {
-			$( "[id*='$']" ).each( function () {
-				var $this = $( this );
-
-				$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
-			} );
-
-			$(".dropdown-menu a").each(function() {
-				var text = $(this).text();
-				$(this).text(text.replace(/\//g, '.'));
-			});
-
-			$( "#toc" ).toc( {
-				showAndHide : false,
-				scrollTo    : "100px"
-			} );
-
-			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
-			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
-			$( '.dropdown-toggle' ).dropdown();
-
-			$( ".tutorial-section pre, .readme-section pre" ).each( function () {
-				var $this = $( this );
-
-				var example = $this.find( "code" );
-				exampleText = example.html();
-				var lang = /{@lang (.*?)}/.exec( exampleText );
-				if ( lang && lang[1] ) {
-					exampleText = exampleText.replace( lang[0], "" );
-					example.html( exampleText );
-					lang = lang[1];
-				} else {
-					lang = "javascript";
-				}
-
-				if ( lang ) {
-
-					$this
-						.addClass( "prettyprint" )
-						.html( example.html() );
-
-				}
-			} );
-
-			$('pre>code')
-			   .unwrap()
-			   .replaceWith(function() {
-				 return $('<pre class="prettyprint showlinemods">' + this.innerHTML + '</pre>')
-			   });
-			prettyPrint();
-
-		} );
-	 </script>
-
-
-
-	<!--Navigation and Symbol Display-->
-	
-
-
-	<!--Google Analytics-->
-	
-	<script>
-		(function ( i, s, o, g, r, a, m ) {
-			i['GoogleAnalyticsObject'] = r;
-			i[r] = i[r] || function () {
-				(i[r].q = i[r].q || []).push( arguments )
-			}, i[r].l = 1 * new Date();
-			a = s.createElement( o ),
-				m = s.getElementsByTagName( o )[0];
-			a.async = 1;
-			a.src = g;
-			m.parentNode.insertBefore( a, m )
-		})( window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga' );
-
-		ga( 'create', 'UA-59804936-1', 'auto' );
-		ga( 'send', 'pageview' );
-	</script>
-	
-
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>
