@@ -1151,7 +1151,7 @@
    *
    * If the buffer is named 'indices' it will be made an ELEMENT_ARRAY_BUFFER.
    *
-   * @param {WebGLRenderingContext) gl A WebGLRenderingContext.
+   * @param {WebGLRenderingContext} gl A WebGLRenderingContext.
    * @param {Object<string, array|typedarray>} arrays
    * @return {Object<string, WebGLBuffer>} returns an object with one WebGLBuffer per array
    * @memberOf module:webgl-utils
