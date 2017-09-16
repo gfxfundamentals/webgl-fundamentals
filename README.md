@@ -67,6 +67,9 @@ Current fields are
 
       // markdown that appears for untranslated articles
       missing: "Sorry this article has not been translated yet. [Translations Welcome](https://github.com/greggman/webgl-fundamentals)! 😄\n\n[Here's the original English article for now]({{{origLink}}}).",
+
+      // the phrase "Table of Contents"
+      toc: "Table of Contents",
     }
 
 #### `index.md`
