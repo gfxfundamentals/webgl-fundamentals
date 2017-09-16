@@ -54,12 +54,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <title>WebGL - Les Graphes de Scène</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
 <body>
+<div class="webgl_navbar">
+  <div>
+    <div class="language">
+    <a href="/webgl/lessons/webgl-scene-graph.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-scene-graph.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-scene-graph.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-scene-graph.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-scene-graph.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">简体中文</a>
+</div>
+
+
+    <a href="#toc">Table des Matières</a>
+  </div>
+</div>
 <div class="webgl_header">
-  <h1><a href="/">WebGLFundamentals.org</a></h1>
+  <h1><a href="/webgl/lessons/fr/">WebGLFundamentals.org</a></h1>
 </div>
 
 
@@ -67,12 +81,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson-title">
     <h1>WebGL - Les Graphes de Scène</h1>
   </div>
-  <div class="row">
-    <div class="col-sm-8 lesson-main">
+  <div class="lesson">
+    <div class="lesson-main">
       <p>Cet article est la suite d&#39;une <a href="webgl-fundamentals.html">série de posts</a> consacrés à WebGL. L&#39;article précédent parlait de <a href="webgl-drawing-multiple-things.html">dessiner plusieurs objets</a>. Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abord.</p>
 <p>Je suis sûr qu&#39;un expert en thoérie des graphes va me tirer les oreilles mais... un graphe de scène est un arbre où chaque noeud génère une matrice. Hmmm ce n&#39;est pas une définition très utile. Peut-être qu&#39;avec quelques exemples ce serait mieux.</p>
 <p>La plupart des moteurs 3D utilisent des graphes de scènes. On y met les objets qu&#39;on veut voir apparaître dans la scène. Ces moteurs 3D analysent le graphe et déduisent la liste des choses à dessiner. Les graphes de scènes sont hiérarchisés donc par exemple si vous voulez faire une simulation de l&#39;univers vous aurez peut-être un graphe qui ressemble à ça :</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 500px;" src="/webgl/lessons/resources/planet-diagram.html"></iframe>
 </div>
 
@@ -80,7 +94,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>À quoi sert un graphe de scène ? La première fonction d&#39;un graphe de scène est de fournir des relations parents-enfants aux matrices <a href="webgl-2d-matrices.html">présentées ici</a>. Donc pour une simulation simplifiée et non réaliste de l&#39;univers, les étoiles (enfants) se déplacent autour de la galaxie (parent). De même une lune (enfant) se déplace autour d&#39;une planète (parent). Si on déplace la Terre, la Lune va bouger avec elle. Si on déplace une galaxie ses étoiles vont bouger avec. Déplacez les noms dans le diagramme ci-dessus pour voir leur liens de parenté.</p>
 <p>Si on se rappelle des <a href="webgl-2d-matrices.html">matrices 2D</a> vous vous souvenez qu&#39;on multiplie plusieurs matrices pour déplacer, tourner et changer l&#39;échelle des géométries. Un graphe de scène fournit une structure pour aider à décider quelle matrice appliquer à un objet. </p>
 <p>Chaque <code>Noeud</code> dans un graphe de scène représente un <em>espace de coordonnées local</em>. Avec une matrice qui lui est propre dans ce système de coordonnées, l&#39;objet peut ignorer sa position par rapport à ce qui l&#39;entoure. Une autre façon de dire ça est de s&#39;imaginer que la Lune s&#39;occupe surtout de tourner autour de la Terre. Elle n&#39;a pas vraiment besoin de savoir quelle position elle a par rapport au Soleil. Sans le graphe de scène on aurait à écrire des algorithmes ultra compliqués pour trouver l&#39;orbite de la Lune dans le système de coordonnées du Soleil. Parce qu&#39;elle orbite un peu comme ça :</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/moon-orbit.html"></iframe>
 </div>
 
@@ -216,7 +230,7 @@ objects.forEach(function(objet) {
   objet.infoRendu.uniforms.u_matrice = multiplierMatrices(objet.matriceGlobale, matriceGlobaleVue);
 });
 </code></pre><p>Le rendu est <a href="webgl-drawing-multiple-things.html">la boucle évoquée dans l&#39;article précedent</a>.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-scene-graph-solar-system.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-scene-graph-solar-system.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
@@ -226,7 +240,7 @@ objects.forEach(function(objet) {
 <pre><code>noeudTerre.matriceLocale = multiplierMatrices(
     changerEchelle(2, 2, 2),           // Terre plus grosse
     deplacer(100, 0, 0));              // Terre à 100 unités du soleil
-</code></pre><p><div>
+</code></pre><p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-scene-graph-solar-system-larger-earth.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-scene-graph-solar-system-larger-earth.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
@@ -284,7 +298,7 @@ noeudLune.definirParent(noeudOrbiteLune);
 -noeudSoleil.mettreAJourMatriceGlobale();
 +noeudSystemeSolaire.mettreAJourMatriceGlobale();
 </code></pre><p>Maintenant la Terre est plus grande, mais pas la Lune.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-scene-graph-solar-system-larger-earth-fixed.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-scene-graph-solar-system-larger-earth-fixed.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
@@ -309,7 +323,7 @@ multiplierMatrices(noeudSoleil.matriceLocale, tournerY(0.005), noeudSoleil.matri
 +multiplierMatrices(noeudTerre.matriceLocale, tournerY(0.05), noeudTerre.matriceLocale);
 +// tourner la Lune
 +multiplierMatrices(noeudLune.matriceLocale, tournerY(-0.01), noeudLune.matriceLocale);
-</code></pre><p><div>
+</code></pre><p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-scene-graph-solar-system-adjusted.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-scene-graph-solar-system-adjusted.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
@@ -378,14 +392,14 @@ var monNoeud = new Noeud(mesTransformations);
 mesTransformations.rotation[2] += tempsEcoule;
 </code></pre><p>Maintenant plus de souci : la matrice est recréée à chaque fois. </p>
 <p>Vous vous dites peut-être, ça sert à quoi si je ne fais pas le système solaire ? Hé bien, si vous voulez animer un personnage vous aurez peut-être un graphe de scène qui ressemble à ça</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 400px;" src="/webgl/lessons/resources/person-diagram.html"></iframe>
 </div>
 
 </p>
 <p>À vous de voir combien de liens vous ajoutez pour les doigts aux mains et aux pieds. Plus vous en mettez plus ça demande de calculs au processeur et plus il y a d&#39;informations à transmettre. Des vieux jeux comme Virtua Fighter ont 15 liens. Au début des années 2000 les jeux avaient de 30 à 70 liens. Si vous faîtes chaque lien des articulations, il y en a au moins 20 pour chaque main donc 40 pour les deux... du coup de nombreux jeux qui animent les mains n&#39;animent que le pouce et assimilent les autres doigts à un deuxième gros doigt pour économiser de la mémoire et du temps (du temps pour le calcul sur CPU, sur GPU, et dans les têtes des artistes et des programmeurs).</p>
 <p>En tout cas voilà un personnage en cubes que j&#39;ai imbriqués ensemble. Il utilise une source <code>Transformations</code> pour chaque noeud mentionné au-dessus. L&#39;art de la programmation et de l&#39;animation à son sommet ! :P</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-scene-graph-block-guy.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-scene-graph-block-guy.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
@@ -415,37 +429,20 @@ Dans la plupart des graphes de scène c'est impossible. Du coup est-ce que la de
 Plus d'ambiguité, c'est 100% clair.
 </p>
 </div>
-      <hr class="lesson-comment-sep" />
-      <div class="lesson-comments">
-        <div>Une question ? <a href="http://stackoverflow.com/questions/tagged/webgl">Demander sur stackoverflow</a>.</div>
-        <div>Un problème ? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">Signaler sur github</a>.</div>
-
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL - Les Graphes de Scène';
-            var disqus_title = 'WebGL - Les Graphes de Scène';
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-                    return;
-                }
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </div>
     </div>
-    <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
-        <select id="language">
-</select>
+    <div class="lesson-sidebar">
+        <div class="language">
+    <a href="/webgl/lessons/webgl-scene-graph.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-scene-graph.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-scene-graph.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-scene-graph.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-scene-graph.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">简体中文</a>
+</div>
 
-        <ul>
+
+        <div id="toc">
+          <ul>
   <li>Les bases</li>
   <ul>
     <li><a href="/webgl/lessons/fr/webgl-fundamentals.html">WebGL - Les bases</a></li>
@@ -512,6 +509,31 @@ Plus d'ambiguité, c'est 100% clair.
   <li><a href="http://twgljs.org">TWGL, une librairie de base pour WebGL</a></li>
   <li><a href="https://github.com/greggman/webgl-fundamentals">Github</a></li>
 </ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Une question ? <a href="http://stackoverflow.com/questions/tagged/webgl">Demander sur stackoverflow</a>.</div>
+        <div>Un problème ? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">Signaler sur github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL - Les Graphes de Scène';
+            var disqus_title = 'WebGL - Les Graphes de Scène';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
@@ -519,8 +541,6 @@ Plus d'ambiguité, c'est 100% clair.
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="/langdb.js"></script>
-<script src="/webgl/lessons/resources/languages.js"></script>
 <script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -54,10 +54,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <title>WebGL 3D Perspective</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
 <body>
+<div class="webgl_navbar">
+  <div>
+    <div class="language">
+    <a href="/webgl/lessons/webgl-3d-perspective.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-3d-perspective.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-3d-perspective.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-3d-perspective.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-3d-perspective.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">简体中文</a>
+</div>
+
+
+    <a href="#toc">Table of Contents</a>
+  </div>
+</div>
 <div class="webgl_header">
   <h1><a href="/">WebGLFundamentals.org</a></h1>
 </div>
@@ -67,8 +81,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson-title">
     <h1>WebGL 3D Perspective</h1>
   </div>
-  <div class="row">
-    <div class="col-sm-8 lesson-main">
+  <div class="lesson">
+    <div class="lesson-main">
       <p>This post is a continuation of a series of posts about WebGL.
 The first <a href="webgl-fundamentals.html">started with fundamentals</a> and
 the previous was about <a href="webgl-3d-orthographic.html">3D Basics</a>.
@@ -149,7 +163,7 @@ void main() {
     var count = 16 * 6;
     gl.drawArrays(primitiveType, offset, count);
 </code></pre><p>And here&#39;s the result.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -183,7 +197,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>and see how it&#39;s exactly the same.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-w.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-w.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -306,7 +320,7 @@ void main() {
 
     ...
 </code></pre><p>and note, again, it&#39;s exactly the same.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-w-matrix.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-w-matrix.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -354,7 +368,7 @@ respectively.  It computes what to use for X by just multiplying by the
 display area.  Finally, it figures out how much to scale things in Z so
 that stuff at zFar ends up at <code>Z = 1</code>.</p>
 <p>Here&#39;s a diagram of the matrix in action.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  400px; height: 600px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Ffrustum-diagram.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../frustum-diagram.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -386,7 +400,7 @@ matrix = m4.yRotate(matrix, rotation[1]);
 matrix = m4.zRotate(matrix, rotation[2]);
 matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 </code></pre><p>And here it is.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-matrix.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-matrix.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -425,37 +439,20 @@ Similarly we moved 'X' from 45 to -150.  Again, the view used to represent
 
 
 
-      <hr class="lesson-comment-sep" />
-      <div class="lesson-comments">
-        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
-        <div>Issue/Bug? <a href="http://github.com/greggman/webgl-fundamentals/issues">Create an issue on github</a>.</div>
-
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 3D Perspective';
-            var disqus_title = 'WebGL 3D Perspective';
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-                    return;
-                }
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </div>
     </div>
-    <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
-        <select id="language">
-</select>
+    <div class="lesson-sidebar">
+        <div class="language">
+    <a href="/webgl/lessons/webgl-3d-perspective.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-3d-perspective.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-3d-perspective.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-3d-perspective.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-3d-perspective.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">简体中文</a>
+</div>
 
-        <ul>
+
+        <div id="toc">
+          <ul>
   <li>Fundamentals</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-fundamentals.html">WebGL Fundamentals</a></li>
@@ -539,6 +536,31 @@ Similarly we moved 'X' from 45 to -150.  Again, the view used to represent
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+        <div>Issue/Bug? <a href="http://github.com/greggman/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D Perspective';
+            var disqus_title = 'WebGL 3D Perspective';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
@@ -546,8 +568,6 @@ Similarly we moved 'X' from 45 to -150.  Again, the view used to represent
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="/langdb.js"></script>
-<script src="/webgl/lessons/resources/languages.js"></script>
 <script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

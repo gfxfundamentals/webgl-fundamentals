@@ -54,12 +54,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <title>WebGL 3D - Точечное освещение</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
 <body>
+<div class="webgl_navbar">
+  <div>
+    <div class="language">
+    <a href="/webgl/lessons/webgl-3d-lighting-point.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-3d-lighting-point.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-3d-lighting-point.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-3d-lighting-point.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">简体中文</a>
+</div>
+
+
+    <a href="#toc">оглавление</a>
+  </div>
+</div>
 <div class="webgl_header">
-  <h1><a href="/">WebGLFundamentals.org</a></h1>
+  <h1><a href="/webgl/lessons/ru/">WebGLFundamentals.org</a></h1>
 </div>
 
 
@@ -67,8 +81,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson-title">
     <h1>WebGL 3D - Точечное освещение</h1>
   </div>
-  <div class="row">
-    <div class="col-sm-8 lesson-main">
+  <div class="lesson">
+    <div class="lesson-main">
       <p>Эта статья продолжает статью о <a href="webgl-3d-lighting-directional.html">направленном освещении</a>.
 Если вы её ещё не читали, рекомендую ознакомиться сначала с ней.</p>
 <p>В последней статье мы рассмотрели направленное освещение, где свет падает
@@ -77,7 +91,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>А что если вместо задания направления света мы выберем точку источника
 света в 3D-пространстве и вычислим направление освещения в каждой точке
 поверхности модели в нашем шейдере? Это и даст нам точечное освещение.</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/point-lighting.html"></iframe>
 </div>
 
@@ -183,7 +197,7 @@ void main() {
 +  // Задаём положение освещения
 +  gl.uniform3fv(lightWorldPositionLocation, [20, 30, 50]);
 </code></pre><p>И получаем результат:</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
 </div>
@@ -199,7 +213,7 @@ void main() {
 света от поверхности равны, поэтому когда направление от поверхности к
 источнику света в точности равно направлению от поверхности до глаза, то
 перед нами идеальный угол для отражения света.</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/surface-reflection.html"></iframe>
 </div>
 
@@ -213,7 +227,7 @@ void main() {
 отражения света. Но как можно узнать, что они совпадают? Нужно воспользоваться
 <em>скалярным произведением</em>, как и прежде. 1 = они совпадают, одинаковое
 направление, 0 = они перпендикулярны, -1 = они направлены в разные стороны.</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/specular-lighting.html"></iframe>
 </div>
 
@@ -303,7 +317,7 @@ var cameraMatrix = makeLookAt(camera, target, up);
 +// Положение камеры/наблюдателя
 +gl.uniform3fv(viewWorldPositionLocation, camera);
 </code></pre><p>И вот наш результат:</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point-specular.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-specular.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
 </div>
@@ -313,7 +327,7 @@ var cameraMatrix = makeLookAt(camera, target, up);
 <p>Мы можем укротить яркость, возведя результат скалярного произведения
 в степень. Это сузит блики и приведёт график от линейного к
 экспоненциальному.</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example noborder" style="width: 300px; height: 300px;" src="/webgl/lessons/resources/power-graph.html"></iframe>
 </div>
 
@@ -343,7 +357,7 @@ var cameraMatrix = makeLookAt(camera, target, up);
 // установка степени яркости
 gl.uniform1f(shininessLocation, shininess);
 </code></pre><p>И вот результат</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point-specular-power.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-specular-power.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
 </div>
@@ -377,7 +391,7 @@ uniform float u_shininess;
 +  gl.uniform3fv(lightColorLocation, m4.normalize([1, 0.6, 0.6]));  // красный свет
 // заадаём цвет бликов
 +  gl.uniform3fv(specularColorLocation, m4.normalize([1, 0.6, 0.6]));  // красный свет
-</code></pre><p><div>
+</code></pre><p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point-color.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-color.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
 </div>
@@ -410,37 +424,20 @@ uniform float u_shininess;
 но это кажется неразрешимым и, следовательсно, неопределённым.</p>
 </div>
 
-      <hr class="lesson-comment-sep" />
-      <div class="lesson-comments">
-        <div>Вопросы? <a href="http://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
-        <div>Нашли ошибку? <a href="http://github.com/greggman/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
-
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 3D - Точечное освещение';
-            var disqus_title = 'WebGL 3D - Точечное освещение';
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-                    return;
-                }
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </div>
     </div>
-    <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
-        <select id="language">
-</select>
+    <div class="lesson-sidebar">
+        <div class="language">
+    <a href="/webgl/lessons/webgl-3d-lighting-point.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-3d-lighting-point.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-3d-lighting-point.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-3d-lighting-point.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">简体中文</a>
+</div>
 
-        <ul>
+
+        <div id="toc">
+          <ul>
   <li>Основы</li>
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-fundamentals.html">Основы WebGL</a></li>
@@ -518,6 +515,31 @@ uniform float u_shininess;
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Вопросы? <a href="http://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
+        <div>Нашли ошибку? <a href="http://github.com/greggman/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D - Точечное освещение';
+            var disqus_title = 'WebGL 3D - Точечное освещение';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
@@ -525,8 +547,6 @@ uniform float u_shininess;
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="/langdb.js"></script>
-<script src="/webgl/lessons/resources/languages.js"></script>
 <script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

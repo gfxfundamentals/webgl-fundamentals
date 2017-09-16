@@ -54,12 +54,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <title>WebGLにおける画像処理</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
 <body>
+<div class="webgl_navbar">
+  <div>
+    <div class="language">
+    <a href="/webgl/lessons/webgl-image-processing.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-image-processing.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-image-processing.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-image-processing.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-image-processing.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-image-processing.html">简体中文</a>
+</div>
+
+
+    <a href="#toc">目次</a>
+  </div>
+</div>
 <div class="webgl_header">
-  <h1><a href="/">WebGLFundamentals.org</a></h1>
+  <h1><a href="/webgl/lessons/ja/">WebGLFundamentals.org</a></h1>
 </div>
 
 
@@ -67,8 +81,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson-title">
     <h1>WebGLにおける画像処理</h1>
   </div>
-  <div class="row">
-    <div class="col-sm-8 lesson-main">
+  <div class="lesson">
+    <div class="lesson-main">
       <p>WebGLでは、画像の加工処理は簡単です。どれくらい簡単かって？続きを読んでください。
 <!--more-->
 この記事は、「<a href="webgl-fundamentals.html">WebGLの基礎</a>」の続きです。
@@ -160,7 +174,7 @@ function render(image) {
 </code></pre><p>以上で、WebGLで画像がレンダリングできるようになりました。
 注意：ローカルで動かす場合は、WebGLが画像をロードできるようにするために何らかのWebサーバーを動かす必要があります。
 この設定は<a href="webgl-setup-and-installation.html">数分の作業でできます</a>。</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-image.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-image.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
@@ -171,7 +185,7 @@ function render(image) {
 gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 ...
 </code></pre><p>赤と青を入れ替えてみました。</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-image-red2blue.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-image-red2blue.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
@@ -215,7 +229,7 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 
 ...
 </code></pre><p>これで、隣のピクセルの色の情報を使って「ぼかし」が表現できました。上の画像と比べてみてください。</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-image-blend.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-image-blend.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
@@ -283,7 +297,7 @@ void main() {
  gl.uniform1f(kernelWeightLocation, computeKernelWeight(edgeDetectKernel));
  ...
 </code></pre><p>これで、完成……。下の例では、ドロップリストでほかのカーネルを選択できます。</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-image-3x3-convolution.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-image-3x3-convolution.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
@@ -355,37 +369,20 @@ v_はvarying変数で頂点シェーダーからフラグメントシェーダ�
 
 
 
-      <hr class="lesson-comment-sep" />
-      <div class="lesson-comments">
-        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
-        <div>問題点/バグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
-
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGLにおける画像処理';
-            var disqus_title = 'WebGLにおける画像処理';
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-                    return;
-                }
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </div>
     </div>
-    <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
-        <select id="language">
-</select>
+    <div class="lesson-sidebar">
+        <div class="language">
+    <a href="/webgl/lessons/webgl-image-processing.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-image-processing.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-image-processing.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-image-processing.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-image-processing.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-image-processing.html">简体中文</a>
+</div>
 
-        <ul>
+
+        <div id="toc">
+          <ul>
   <li>基本</li>
   <ul>
     <li><a href="/webgl/lessons/ja/webgl-fundamentals.html">WebGLの基本</a></li>
@@ -465,6 +462,31 @@ v_はvarying変数で頂点シェーダーからフラグメントシェーダ�
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGLにおける画像処理';
+            var disqus_title = 'WebGLにおける画像処理';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
@@ -472,8 +494,6 @@ v_はvarying変数で頂点シェーダーからフラグメントシェーダ�
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="/langdb.js"></script>
-<script src="/webgl/lessons/resources/languages.js"></script>
 <script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

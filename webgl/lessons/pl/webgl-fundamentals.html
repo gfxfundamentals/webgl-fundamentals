@@ -54,12 +54,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <title>Podstawy WebGL</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
 <body>
+<div class="webgl_navbar">
+  <div>
+    <div class="language">
+    <a href="/webgl/lessons/webgl-fundamentals.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-fundamentals.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-fundamentals.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-fundamentals.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-fundamentals.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">简体中文</a>
+</div>
+
+
+    <a href="#toc">Spis Treści</a>
+  </div>
+</div>
 <div class="webgl_header">
-  <h1><a href="/">WebGLFundamentals.org</a></h1>
+  <h1><a href="/webgl/lessons/pl/">WebGLFundamentals.org</a></h1>
 </div>
 
 
@@ -67,8 +81,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson-title">
     <h1>Podstawy WebGL</h1>
   </div>
-  <div class="row">
-    <div class="col-sm-8 lesson-main">
+  <div class="lesson">
+    <div class="lesson-main">
       <p>WebGL umożliwia wyświetlanie w czasie rzeczywistym grafiki 3D w Twojej
 przeglądarce, chociaż wiele osób nie zdaje sobie sprawy, że
 <a href="webgl-2d-vs-3d-library.html">WebGL aktulanie udostępnia API rasteryzacyjne, a nie API 3D</a>.</p>
@@ -125,7 +139,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>To narysuje zielony prostokąt o rozmiarach cełego płótna.  Wynik jest tutaj</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-fundamentals.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-fundamentals.html" target="_blank">Kliknij tutaj by otworzyć w nowym oknie</a>
 </div>
@@ -173,7 +187,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
     80, 20,
     80, 30]), gl.STATIC_DRAW);
 </code></pre><p>I mamy go</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle.html" target="_blank">Kliknij tutaj by otworzyć w nowym oknie</a>
 </div>
@@ -186,7 +200,7 @@ Aby móc stosować zapis bardziej tradycyjny dla API grafiki 2d
 poprostu odwracamy współrzędną y.</p>
 <pre><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>I teraz nasz prostokąt jest tam, gdzie go oczekujemy.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-top-left.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-top-left.html" target="_blank">Kliknij tutaj by otworzyć w nowym oknie</a>
 </div>
@@ -248,7 +262,7 @@ function setRectangle(gl, x, y, width, height) {
      x2, y2]), gl.STATIC_DRAW);
 }
 </code></pre><p>I poniżej mamy nasze prostokąty.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangles.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangles.html" target="_blank">Kliknij tutaj by otworzyć w nowym oknie</a>
 </div>
@@ -290,8 +304,43 @@ którego prawie każdy program WebGL potrzebuje.
 </p>
 </div>
 
-      <hr class="lesson-comment-sep" />
-      <div class="lesson-comments">
+    </div>
+    <div class="lesson-sidebar">
+        <div class="language">
+    <a href="/webgl/lessons/webgl-fundamentals.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-fundamentals.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-fundamentals.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-fundamentals.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-fundamentals.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">简体中文</a>
+</div>
+
+
+        <div id="toc">
+          <ul>
+  <li>Podstawy</li>
+  <ul>
+    <li><a href="/webgl/lessons/pl/webgl-fundamentals.html">Podstawy WebGL</a></li>
+  </ul>
+  <li>2D translation, rotation, scale, matrix math</li>
+  <ul>
+    <li><a href="/webgl/lessons/pl/webgl-2d-translation.html">PrzesuniÄcie dwuwymiarowe w WebGL</a></li>
+    <li><a href="/webgl/lessons/pl/webgl-2d-rotation.html">Obrót dwuwymiarowy w WebGL</a></li>
+  </ul>
+  <li>Różności</li>
+  <ul>
+    <li><a href="/webgl/lessons/pl/webgl-2d-vs-3d-library.html">WebGL - biblioteki 2D vs 3D</a></li>
+  </ul>
+</ul>
+<ul>
+  <li><a href="/docs/">Dokumentacja Helper API</a></li>
+  <li><a href="http://twgljs.org">TWGL - zwięzła biblioteka wspomagająca WebGL</a></li>
+  <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
+</ul>
+
+        </div>
+    </div>
+    <div class="lesson-comments">
         <div>Masz pytania odnośnie WebGL? <a href="http://stackoverflow.com/questions/tagged/webgl">Zapytaj na platformie stackoverflow</a>.</div>
         <div>Błędy w tłumaczeniu? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">Stwórz zgłoszenie na platformie github</a>.</div>
 
@@ -314,33 +363,6 @@ którego prawie każdy program WebGL potrzebuje.
         </script>
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </div>
-    </div>
-    <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
-        <select id="language">
-</select>
-
-        <ul>
-  <li>Podstawy</li>
-  <ul>
-    <li><a href="/webgl/lessons/pl/webgl-fundamentals.html">Podstawy WebGL</a></li>
-  </ul>
-  <li>2D translation, rotation, scale, matrix math</li>
-  <ul>
-    <li><a href="/webgl/lessons/pl/webgl-2d-translation.html">PrzesuniÄcie dwuwymiarowe w WebGL</a></li>
-    <li><a href="/webgl/lessons/pl/webgl-2d-rotation.html">Obrót dwuwymiarowy w WebGL</a></li>
-  </ul>
-  <li>Różności</li>
-  <ul>
-    <li><a href="/webgl/lessons/pl/webgl-2d-vs-3d-library.html">WebGL - biblioteki 2D vs 3D</a></li>
-  </ul>
-</ul>
-<ul>
-  <li><a href="/docs/">Dokumentacja Helper API</a></li>
-  <li><a href="http://twgljs.org">TWGL - zwięzła biblioteka wspomagająca WebGL</a></li>
-  <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
-</ul>
-
     </div>
   </div>
 </div>
@@ -348,8 +370,6 @@ którego prawie każdy program WebGL potrzebuje.
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="/langdb.js"></script>
-<script src="/webgl/lessons/resources/languages.js"></script>
 <script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -57,20 +57,42 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <link rel="alternate" type="application/atom+xml" title="WebGL Fundamentals" href="http://webglfundamentals.org/atom.xml" />
 
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/index.css" type="text/css" />
 </head>
 <body>
 <div id="canvas">
 </div>
-<div class="container">
-  <div class="row">
-    <div class="not-jumbotron">
-      <h1>Les fondamentaux en WebGL <span class="rss"><a href="http://webglfundamentals.org/atom.xml"><img src="/webgl/lessons/resources/rss-icon.svg" alt="rss"/></a></span></h1>
-      <select id="language">
-</select>
+<div class="webgl_navbar">
+  <div>
+    <div class="language">
+    <a href="/">English</a>
+    <a href="/webgl/lessons/fr/">Français</a>
+    <a href="/webgl/lessons/ja/">日本語</a>
+    <a href="/webgl/lessons/pl/">Polski</a>
+    <a href="/webgl/lessons/ru/">Русский</a>
+    <a href="/webgl/lessons/zh_cn/">简体中文</a>
+</div>
 
+
+  </div>
+</div>
+<div class="container">
+  <div class="lesson">
+    <div class="lesson-main">
+      <h1>Les fondamentaux en WebGL <span class="rss"><a href="http://webglfundamentals.org/atom.xml"><img src="/webgl/lessons/resources/rss-icon.svg" alt="rss"/></a></span></h1>
+      <div class="home-lang">
+        <div class="language">
+    <a href="/">English</a>
+    <a href="/webgl/lessons/fr/">Français</a>
+    <a href="/webgl/lessons/ja/">日本語</a>
+    <a href="/webgl/lessons/pl/">Polski</a>
+    <a href="/webgl/lessons/ru/">Русский</a>
+    <a href="/webgl/lessons/zh_cn/">简体中文</a>
+</div>
+
+
+      </div>
       <p>WebGL de zéro. Sans magie.</p>
 <p>Ce site présente des articles pour apprendre les principes de bases en WebGL.
 Ils ne sont PAS un mix de vieux articles pour OpenGL, contrairement à d&#39;autres sur le web.
@@ -166,6 +188,12 @@ compréhension de ce que WebGL est vraiment et de comment il fonctionne vraiment
     position: relative;
     transition: 0.5s;
     display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
 }
 #forkongithub a:hover {
     background: #c11;
@@ -186,28 +214,25 @@ compréhension de ce que WebGL est vraiment et de comment il fonctionne vraiment
     top: auto;
 }
 
-@media screen and (min-width: 400px){
-    #forkongithub{
-        position: fixed;
-        display: block;
-        top: 0;
-        right: 0;
-        width: 200px;
-        overflow: hidden;
-        height: 200px;
-        z-index: 9999;
-    }
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}}
+@media (max-width: 900px) {
     #forkongithub a{
-        width: 200px;
-        position: absolute;
-        top: 40px;
-        right: -40px;
-        transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        -moz-transform: rotate(45deg);
-        -o-transform: rotate(45deg);
-        box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
     }
 }
 
@@ -219,8 +244,7 @@ compréhension de ce que WebGL est vraiment et de comment il fonctionne vraiment
 <script src="/webgl/resources/primitives.js"></script>
 <script src="/webgl/resources/same-code-02.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
-<script src="/langdb.js"></script>
-<script src="/webgl/lessons/resources/languages.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
 <script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

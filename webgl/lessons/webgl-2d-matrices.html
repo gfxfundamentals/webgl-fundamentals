@@ -54,10 +54,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <title>WebGL 2D Matrices</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
 <body>
+<div class="webgl_navbar">
+  <div>
+    <div class="language">
+    <a href="/webgl/lessons/webgl-2d-matrices.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-2d-matrices.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-2d-matrices.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-2d-matrices.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-2d-matrices.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">简体中文</a>
+</div>
+
+
+    <a href="#toc">Table of Contents</a>
+  </div>
+</div>
 <div class="webgl_header">
   <h1><a href="/">WebGLFundamentals.org</a></h1>
 </div>
@@ -67,8 +81,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson-title">
     <h1>WebGL 2D Matrices</h1>
   </div>
-  <div class="row">
-    <div class="col-sm-8 lesson-main">
+  <div class="lesson">
+    <div class="lesson-main">
       <p>This post is a continuation of a series of posts about WebGL.  The first
 <a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was
 <a href="webgl-2d-scale.html">about scaling 2D geometry</a>.</p>
@@ -282,7 +296,7 @@ void main() {
 </code></pre><p>Here&#39;s a sample using our new code.  The sliders are the same,
 translation, rotation and scale.  But the way they get used in the shader
 is much simpler.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -297,7 +311,7 @@ new shader.  We can just change the math.</p>
     matrix = m3.multiply(matrix, translationMatrix);
     ...
 </code></pre><p>Here&#39;s that version.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-trs.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-trs.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -355,7 +369,7 @@ Just like</p>
 
   ...
 </code></pre><p>Here&#39;s the 5 Fs.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-hierarchical.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-hierarchical.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -376,7 +390,7 @@ transforms are applied we can move the origin.</p>
     matrix = m3.multiply(matrix, scaleMatrix);
     matrix = m3.multiply(matrix, moveOriginMatrix);
 </code></pre><p>Here&#39;s that sample. Notice the F rotates and scales around the center.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-center-f.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-center-f.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -451,7 +465,7 @@ void main() {
 </code></pre><p>We also removed the code that set the resolution.  With this last step
 we&#39;ve gone from a rather complicated shader with 6-7 steps to a very
 simple shader with only 1 step all due to the magic of matrix math.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-with-projection.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-with-projection.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -486,7 +500,7 @@ matrix = m3.translate(matrix, translation[0], translation[1]);
 matrix = m3.rotate(matrix, angleInRadians);
 matrix = m3.scale(matrix, scale[0], scale[1]);
 </code></pre><p>And here&#39;s that</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-simpler-functions.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-simpler-functions.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -516,7 +530,7 @@ with representing clipspace (-1 to +1) in each direction. Each matrix applied
 from left to right changes the space represented by the canvas.</p>
 <p>Step 1:  no matrix (or the identiy matrix)</p>
 <blockquote>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=0"></iframe>
   <div class="webgl_center">clip space</div>
 </div>
@@ -527,7 +541,7 @@ Positions passed in need to be in clip space</p>
 </blockquote>
 <p>Step 2:  <code>matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);</code></p>
 <blockquote>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=1"></iframe>
   <div class="webgl_center">from clip space to pixel space</div>
 </div>
@@ -539,7 +553,7 @@ is when the space flips from positive Y = up to positive Y = down.</p>
 </blockquote>
 <p>Step 3:  <code>matrix = m3.translate(matrix, tx, ty);</code></p>
 <blockquote>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=2"></iframe>
   <div class="webgl_center">move origin to tx, ty</div>
 </div>
@@ -549,7 +563,7 @@ is when the space flips from positive Y = up to positive Y = down.</p>
 </blockquote>
 <p>Step 4:  <code>matrix = m3.rotate(matrix, rotationInRadians);</code></p>
 <blockquote>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=3"></iframe>
   <div class="webgl_center">rotate 33 degrees</div>
 </div>
@@ -559,7 +573,7 @@ is when the space flips from positive Y = up to positive Y = down.</p>
 </blockquote>
 <p>Step 5:  <code>matrix = m3.scale(matrix, sx, sy);</code></p>
 <blockquote>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=4"></iframe>
 </div>
 
@@ -611,7 +625,7 @@ For example if we made a canvas like this.</p>
 out to fill the page. The first one uses <code>canvas.width</code> and <code>canvas.height</code>. Open it in a new
 window and resize the window. Notice how the 'F' doesn't have the correct aspect. It gets
 distorted.</p>
-<div>
+<div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-width-height.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-width-height.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -620,7 +634,7 @@ distorted.</p>
 <p>In this second example we use <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> report
 the size the canvas is actually being displayed by the browser so in this case, even though the canvas still only has 400x300 pixels
 since we're defining our aspect ratio based on the size the canvas is being displayed the <code>F</code> always looks correct.</p>
-<div>
+<div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-clientwidth-clientheight.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-clientwidth-clientheight.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -635,37 +649,20 @@ projection matrix's aspect ratio using <code>canvas.clientHeight</code> and <cod
 </div>
 
 
-      <hr class="lesson-comment-sep" />
-      <div class="lesson-comments">
-        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
-        <div>Issue/Bug? <a href="http://github.com/greggman/webgl-fundamentals/issues">Create an issue on github</a>.</div>
-
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 2D Matrices';
-            var disqus_title = 'WebGL 2D Matrices';
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-                    return;
-                }
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </div>
     </div>
-    <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
-        <select id="language">
-</select>
+    <div class="lesson-sidebar">
+        <div class="language">
+    <a href="/webgl/lessons/webgl-2d-matrices.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-2d-matrices.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-2d-matrices.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-2d-matrices.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-2d-matrices.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">简体中文</a>
+</div>
 
-        <ul>
+
+        <div id="toc">
+          <ul>
   <li>Fundamentals</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-fundamentals.html">WebGL Fundamentals</a></li>
@@ -749,6 +746,31 @@ projection matrix's aspect ratio using <code>canvas.clientHeight</code> and <cod
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+        <div>Issue/Bug? <a href="http://github.com/greggman/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 2D Matrices';
+            var disqus_title = 'WebGL 2D Matrices';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
@@ -756,8 +778,6 @@ projection matrix's aspect ratio using <code>canvas.clientHeight</code> and <cod
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="/langdb.js"></script>
-<script src="/webgl/lessons/resources/languages.js"></script>
 <script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

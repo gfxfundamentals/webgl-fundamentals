@@ -54,10 +54,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <title>WebGL 3D Perspective Correct Texturemapping</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
 <body>
+<div class="webgl_navbar">
+  <div>
+    <div class="language">
+    <a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-3d-perspective-correct-texturemapping.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-3d-perspective-correct-texturemapping.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-3d-perspective-correct-texturemapping.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">简体中文</a>
+</div>
+
+
+    <a href="#toc">Table of Contents</a>
+  </div>
+</div>
 <div class="webgl_header">
   <h1><a href="/">WebGLFundamentals.org</a></h1>
 </div>
@@ -67,8 +81,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson-title">
     <h1>WebGL 3D Perspective Correct Texturemapping</h1>
   </div>
-  <div class="row">
-    <div class="col-sm-8 lesson-main">
+  <div class="lesson">
+    <div class="lesson-main">
       <p>This post is a continuation of a series of posts about WebGL.  The first
 <a href="webgl-fundamentals.html">started with fundamentals</a>. This article
 covers perspective correct texture mapping. To understand it you 
@@ -81,7 +95,7 @@ varying and set it to some value. Once the vertex shader has been called
 for every pixel it will call our fragment shader and ask it what
 color to make that pixel. Between the 3 vertices of the triangle
 it will pass us our varyings interpolated between the 3 values.</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/fragment-shader-anim.html"></iframe>
   <div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
 </div>
@@ -128,7 +142,7 @@ data with <code>X</code>, <code>Y</code>, <code>Z</code>, and <code>W</code> for
    .8,  .8, 0, 1,
 ];
 </code></pre><p>Here&#39;s that</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -206,7 +220,7 @@ at init time</p>
 when <code>brightness</code> is 0 and red on the right when <code>brightness</code> is 1 and
 for the area inbetween <code>brightness</code> is interpolated or (varied) as it
 goes across the triangles.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles-with-varying.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -238,7 +252,7 @@ rectangle we are multipliying <code>X</code> and <code>Y</code> by <code>mult</c
 settting <code>W</code> to <code>mult</code>. Since WebGL will divide by <code>W</code> we should get
 the exact same result right?</p>
 <p>Well here&#39;s that</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying-non-1-w.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles-with-varying-non-1-w.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -254,7 +268,7 @@ of varyings.</p>
 <pre><code>gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // reds
 </code></pre><p>multplying <code>v_brightness</code> by 10 will make the value go from 0 to 10. <code>fract</code> will
 just keep the fractional part so it will go 0 to 1, 0 to 1, 0 to 1, 10 times</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying-non-1-w-repeat.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles-with-varying-non-1-w-repeat.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -274,7 +288,7 @@ as set to <code>a</code> and <code>bW</code> is the <code>W</code> that was set 
 varying was set to <code>b</code>.</p>
 <p>Why is that important? Well here&#39;s a simple textured cube like we ended up with in the <a href="webgl-3d-textures.html">article on textures</a>. I&#39;ve adjusted
 the UV coordinates to go from 0 to 1 on each side and it&#39;s using a 4x4 pixel texture.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-perspective-correct-cube.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-perspective-correct-cube.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -302,7 +316,7 @@ void main() {
 </code></pre><p>Dividing by <code>W</code> means <code>gl_Position.w</code> will end up being 1. 
 <code>X</code>, <code>Y</code>, and <code>Z</code> will come out just like they would if we let
 WebGL do the division for us. Well here are the results.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-non-perspective-correct-cube.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-non-perspective-correct-cube.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -345,37 +359,20 @@ they looked the way they did.
 <div class="webgl_center"><img src="resources/ridge-racer-02.png" style="max-width: 500px;" /></div>
 </div>
 
-      <hr class="lesson-comment-sep" />
-      <div class="lesson-comments">
-        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
-        <div>Issue/Bug? <a href="http://github.com/greggman/webgl-fundamentals/issues">Create an issue on github</a>.</div>
-
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 3D Perspective Correct Texturemapping';
-            var disqus_title = 'WebGL 3D Perspective Correct Texturemapping';
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-                    return;
-                }
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </div>
     </div>
-    <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
-        <select id="language">
-</select>
+    <div class="lesson-sidebar">
+        <div class="language">
+    <a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-3d-perspective-correct-texturemapping.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-3d-perspective-correct-texturemapping.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-3d-perspective-correct-texturemapping.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">简体中文</a>
+</div>
 
-        <ul>
+
+        <div id="toc">
+          <ul>
   <li>Fundamentals</li>
   <ul>
     <li><a href="/webgl/lessons/webgl-fundamentals.html">WebGL Fundamentals</a></li>
@@ -459,6 +456,31 @@ they looked the way they did.
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+        <div>Issue/Bug? <a href="http://github.com/greggman/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D Perspective Correct Texturemapping';
+            var disqus_title = 'WebGL 3D Perspective Correct Texturemapping';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
@@ -466,8 +488,6 @@ they looked the way they did.
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="/langdb.js"></script>
-<script src="/webgl/lessons/resources/languages.js"></script>
 <script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -54,12 +54,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <title>WebGL 3D - Камеры</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
 <body>
+<div class="webgl_navbar">
+  <div>
+    <div class="language">
+    <a href="/webgl/lessons/webgl-3d-camera.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-3d-camera.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-3d-camera.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-3d-camera.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-3d-camera.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">简体中文</a>
+</div>
+
+
+    <a href="#toc">оглавление</a>
+  </div>
+</div>
 <div class="webgl_header">
-  <h1><a href="/">WebGLFundamentals.org</a></h1>
+  <h1><a href="/webgl/lessons/ru/">WebGLFundamentals.org</a></h1>
 </div>
 
 
@@ -67,8 +81,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson-title">
     <h1>WebGL 3D - Камеры</h1>
   </div>
-  <div class="row">
-    <div class="col-sm-8 lesson-main">
+  <div class="lesson">
+    <div class="lesson-main">
       <p>Эта статья продолжает серию статей о WebGL. В первой из них
 <a href="webgl-fundamentals.html">мы начали с основ WebGL</a>, а в предыдущей
 <a href="webgl-3d-perspective.html">рассмотрели перспективу в 3D</a>. Если вы их ещё
@@ -79,14 +93,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Перемещать объекты, чтобы они оказались впереди наблюдателя, кажется
 неправильным, не так ли? В реальной жизни вы обычно перемещаете камеру,
 чтобы снять здание.</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
   <div class="webgl_center">перемещение камеры относительно объектов</div>
 </div>
 
 </p>
 <p>Вы ведь не двигаете здания перед неподвижной камерой, верно?</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=1"></iframe>
   <div class="webgl_center">перемещение объектов относительно камеры</div>
 </div>
@@ -96,7 +110,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 объекты находились перед началом координат по оси -Z. Для достижения этого нам
 нужно сместить камеру в начало координат, а затем сместить всё остальное на
 заданное значение, чтобы их положение <em>относительно камеры</em> осталось неизменным.</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=2"></iframe>
   <div class="webgl_center">перемещение объектов относительно вида</div>
 </div>
@@ -174,7 +188,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 }
 </code></pre><p>И вуаля! Камера вращается вокруг кольца из букв &#39;F&#39;. Потяните за
 слайдер <code>cameraAngle</code> для вращения камеры.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
 </div>
@@ -213,7 +227,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 значение 1.0. В <a href="webgl-2d-rotation.html">статье про 2D-поворот</a> мы говорили
 о единичной окружности, и как она полезна в 2D-повороте. В 3D нам нужна уже
 единичная сфера, а нормализованный вектор представляет точку на этой сфере.</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=0"></iframe>
   <div class="webgl_center"><span style='color:blue;'>ось z</span></div>
 </div>
@@ -238,7 +252,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 <p>Так или иначе при вычислении векторного произведения наших <span style="color: blue;"><code>zAxis</code></span>
 и <span style="color: gray;"><code>up</code></span> мы получим <span style="color:red;">xAxis</span>
 для камеры.</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
   <div class="webgl_center"><span style='color:blue;'>zAxis</span> умножить на <span style='color:gray;'>up</span> = <span style='color:red;'>xAxis</span></div>
 </div>
@@ -247,7 +261,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 <p>И теперь, когда у нас есть <span style="color:red;"><code>xAxis</code></span>, мы можем умножить
 <span style="color:blue;"><code>zAxis</code></span> и <span style="color:red;"><code>xAxis</code></span>,
 что даст нам в итоге <span style="color:green;"><code>yAxis</code></span> камеры.</p>
-<p><div>
+<p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
   <div class="webgl_center"><span style='color:blue;'>zAxis</span> умножить на <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span></div>
 </div>
@@ -335,7 +349,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
   ...
 </code></pre><p>И вот результат.</p>
-<p><div>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
 </div>
@@ -371,7 +385,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 в мировом пространстве.
 
 </p>
-<div>
+<div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at-heads.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at-heads.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
 </div>
@@ -379,37 +393,20 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
 </div>
 
-      <hr class="lesson-comment-sep" />
-      <div class="lesson-comments">
-        <div>Вопросы? <a href="http://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
-        <div>Нашли ошибку? <a href="http://github.com/greggman/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
-
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 3D - Камеры';
-            var disqus_title = 'WebGL 3D - Камеры';
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-                    return;
-                }
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-      </div>
     </div>
-    <div class="col-sm-3 col-sm-offset-1 lesson-sidebar">
-        <select id="language">
-</select>
+    <div class="lesson-sidebar">
+        <div class="language">
+    <a href="/webgl/lessons/webgl-3d-camera.html">English</a>
+    <a href="/webgl/lessons/fr/webgl-3d-camera.html">Français</a>
+    <a href="/webgl/lessons/ja/webgl-3d-camera.html">日本語</a>
+    <a href="/webgl/lessons/pl/webgl-3d-camera.html">Polski</a>
+    <a href="/webgl/lessons/ru/webgl-3d-camera.html">Русский</a>
+    <a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">简体中文</a>
+</div>
 
-        <ul>
+
+        <div id="toc">
+          <ul>
   <li>Основы</li>
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-fundamentals.html">Основы WebGL</a></li>
@@ -487,6 +484,31 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Вопросы? <a href="http://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
+        <div>Нашли ошибку? <a href="http://github.com/greggman/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D - Камеры';
+            var disqus_title = 'WebGL 3D - Камеры';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
@@ -494,8 +516,6 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="/langdb.js"></script>
-<script src="/webgl/lessons/resources/languages.js"></script>
 <script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
