@@ -37,7 +37,7 @@ a shader can receive data.
    in the buffer the positions start, and how many bytes to get from one position to the next.
 
    Buffers are not random access. Instead a vertex shaders is executed a specified number
-   of times. Each time it's executed the next value from each specified buffers is pulled
+   of times. Each time it's executed the next value from each specified buffer is pulled
    out assigned to an attribute.
 
 2. Uniforms
@@ -291,10 +291,10 @@ To do this we call `gl.viewport` and pass it the current size of the canvas.
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-This tells WebGL the -1 +1 clip space maps to 0 &lt;-&gt; `gl.canvas.width` for x and 0 &lt;-&gt; `gl.canvas.height`
+This tells WebGL the -1 +1 clip space maps to 0 &lt;-&gt; `gl.canyvas.width` for x and 0 &lt;-&gt; `gl.canvas.height`
 for y.
 
-We clear the canvas. `0, 0, 0, 0` are r, g, b, alpha so in this case we're making the canvas transparent.
+We clear the canvas. `0, 0, 0, 0` are red, green, blue, alpha respectivel so in this case we're making the canvas transparent.
 
     // Clear the canvas
     gl.clearColor(0, 0, 0, 0);
@@ -329,7 +329,7 @@ to the attribute. In other words now this attribute is bound to
 `positionBuffer`. That means we're free to bind something else to the `ARRAY_BUFFER` bind point.
 The attribute will continue to use `positionBuffer`.
 
-note that from the point of view of our GLSL vertex shader the `a_position` attribute was a `vec4`
+note that from the point of view of our GLSL vertex shader the `a_position` attribute is a `vec4`
 
     attribute vec4 a_position;
 
@@ -361,7 +361,7 @@ triangle will be drawn at clip space coordinates
       0, 0.5,
       0.7, 0,
 
-Converting from clip space to screen space WebGL is going to draw a triangle at. If the canvas size
+Converting from clip space to screen space if the canvas size
 happned to be 400x300 we'd get something like this
 
      clip space      screen space
