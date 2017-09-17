@@ -112,7 +112,7 @@ per position. You would tell a particular attribute which buffer to pull the pos
 of data it should pull out (3 component 32 bit floating point numbers), what offset
 in the buffer the positions start, and how many bytes to get from one position to the next.</p>
 <p>Buffers are not random access. Instead a vertex shaders is executed a specified number
-of times. Each time it&#39;s executed the next value from each specified buffers is pulled
+of times. Each time it&#39;s executed the next value from each specified buffer is pulled
 out assigned to an attribute.</p>
 </li>
 <li><p>Uniforms</p>
@@ -316,9 +316,9 @@ By letting CSS determine the size and then adjusting to match we easily handle b
 values we&#39;ll be setting <code>gl_Position</code> to back into pixels, often called screen space.
 To do this we call <code>gl.viewport</code> and pass it the current size of the canvas.</p>
 <pre><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-</code></pre><p>This tells WebGL the -1 +1 clip space maps to 0 &lt;-&gt; <code>gl.canvas.width</code> for x and 0 &lt;-&gt; <code>gl.canvas.height</code>
+</code></pre><p>This tells WebGL the -1 +1 clip space maps to 0 &lt;-&gt; <code>gl.canyvas.width</code> for x and 0 &lt;-&gt; <code>gl.canvas.height</code>
 for y.</p>
-<p>We clear the canvas. <code>0, 0, 0, 0</code> are r, g, b, alpha so in this case we&#39;re making the canvas transparent.</p>
+<p>We clear the canvas. <code>0, 0, 0, 0</code> are red, green, blue, alpha respectivel so in this case we&#39;re making the canvas transparent.</p>
 <pre><code>// Clear the canvas
 gl.clearColor(0, 0, 0, 0);
 gl.clear(gl.COLOR_BUFFER_BIT);
@@ -344,7 +344,7 @@ gl.vertexAttribPointer(
 to the attribute. In other words now this attribute is bound to
 <code>positionBuffer</code>. That means we&#39;re free to bind something else to the <code>ARRAY_BUFFER</code> bind point.
 The attribute will continue to use <code>positionBuffer</code>.</p>
-<p>note that from the point of view of our GLSL vertex shader the <code>a_position</code> attribute was a <code>vec4</code></p>
+<p>note that from the point of view of our GLSL vertex shader the <code>a_position</code> attribute is a <code>vec4</code></p>
 <pre><code>attribute vec4 a_position;
 </code></pre><p><code>vec4</code> is a 4 float value. In JavaScript you could think of it something like
 <code>a_position = {x: 0, y: 0, z: 0, w: 0}</code>. Above we set <code>size = 2</code>. Attributes
@@ -367,7 +367,7 @@ triangle will be drawn at clip space coordinates</p>
 <pre><code>  0, 0,
   0, 0.5,
   0.7, 0,
-</code></pre><p>Converting from clip space to screen space WebGL is going to draw a triangle at. If the canvas size
+</code></pre><p>Converting from clip space to screen space if the canvas size
 happned to be 400x300 we&#39;d get something like this</p>
 <pre><code> clip space      screen space
    0, 0       -&gt;   200, 150
