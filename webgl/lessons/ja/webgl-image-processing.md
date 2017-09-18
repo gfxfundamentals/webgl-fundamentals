@@ -1,26 +1,31 @@
 Title: WebGLにおける画像処理
-Description: WebGLで画像の加工処理をするには
+Description: WebGLで画像の加工処理をする方法
 
-WebGLでは、画像の加工処理は簡単です。どれくらい簡単かって？続きを読んでください。
+WebGLでは、画像の加工処理は簡単である。どれくらい簡単か？まずは続きを読んで頂きたい。
 <!--more-->
-この記事は、「[WebGLの基礎](webgl-fundamentals.html)」の続きです。
-あらかじめ「[WebGLの基礎](webgl-fundamentals.html)」を読むことをお勧めします。
+この記事は、「[WebGLの基礎](webgl-fundamentals.html)」の続きである。
+あらかじめ「[WebGLの基礎](webgl-fundamentals.html)」を読むことをお勧めする。
 
-WebGLで画像を描く場合、テクスチャを使う必要があります。
-WebGLでレンダリングする際には、ピクセル単位ではなく「クリッピング空間」での座標を指定しますが、
-これと同じように、テクスチャを描く際には「テクスチャ座標」を使用します。
-テクスチャ座標は、テクスチャのサイズに関わらず0.0から1.0の数値で指定します。
+WebGLで画像を描くには「テクスチャー」を使う必要がある。
+WebGLでは、レンダリングする際に「ピクセル」ではなく「クリッピング空間座標」を使用したが、
+これと同じように、テクスチャを描く際には「テクスチャ座標」を使用する。
+テクスチャ座標は、テクスチャの大きさに関わらず0.0から1.0の数値で指定する。
 
-長方形を描く場合(はい。WebGLだから正確には「２つの三角形を描く場合」ですね)、
-「テクスチャのどの部分が、長方形のどの部分に対応するのか」という情報を、WebGLに教える必要があります。
+## テクスチャーとテクスチャ座標
+
+長方形を１つだけ描く(WebGLが描くのは、正確には「２つの三角形」であるが)状況を想定すると、
+WebGLが描画に必要とするのは「テクスチャーのどの部分が、長方形のどの部分に対応するのか」
+という情報である。
 頂点シェーダーからフラグメントシェーダーへこの情報を渡す際には、
-「varying」と呼ばれる特殊な変数を使用します。varyとは英語で「可変」といった意味です。
-フラグメントシェーダーで各ピクセルを描く際には、頂点シェーダに与えた情報をWebGLが「補間(interpolate)」します。
+「varying」と呼ばれる特殊な変数を使用する。varyとは英語で「可変」といった意味だ。
+頂点シェーダで提供されるvaryingの値は、各ピクセルをフラグメントシェーダーで描く段階で
+WebGLによって「補間」される。
 
+では、テクスチャーを利用する機能を、[以前の記事](webgl-fundamentals.html)で使った
+コードの最終版を元にして実装してみよう。
 
-[以前の記事の使った頂点シェーダーの最終版](webgl-fundamentals.html)を元にして、新たにテクスチャを使いたい場合、
-「テクスチャ座標を頂点シェーダーにアトリビュートとして与える仕組み」と、
-さらに「それを頂点シェーダーからフラグメントシェーダーに渡す仕組み」を追加する必要があります。
+まず「テクスチャ座標」を受け取るためのアトリビュートと、
+それを「頂点シェーダーからフラグメントシェーダーに渡す」仕組みを追加する必要がある。
 
     attribute vec2 a_texCoord;
     ...
@@ -28,13 +33,13 @@ WebGLでレンダリングする際には、ピクセル単位ではなく「ク
 
     void main() {
        ...
-       // texCoordをフラグメントシェーダーに渡す。
-       // この時、GPUは長方形の各頂点の間の部分を補間して塗りつぶす。
+       // texCoord(テクスチャ座標)をフラグメントシェーダーに渡す。
+       // GPUが各頂点間の補間を行う際、同時にこのtexCoordの値も補間される。
        v_texCoord = a_texCoord;
     }
 
-頂点シェーダーを変更したら、今度はフラグメントシェーダー側を、
-「描くべき色を、テクスチャを参照して判断する」ように変更しましょう。
+次は、フラグメントシェーダーを変更する。
+「描くべき色を、テクスチャを参照して判断する」ように変更する。
 
     <script id="2d-fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
@@ -42,19 +47,22 @@ WebGLでレンダリングする際には、ピクセル単位ではなく「ク
     // これが今回使うテクスチャ
     uniform sampler2D u_image;
 
-    // 頂点シェーダーから渡された、頂点座標が入った「texCoords」
+    // 頂点シェーダーから渡された「テクスチャ座標」の値。
     varying vec2 v_texCoord;
 
     void main() {
-       // テクスチャを参照して、今描くべきピクセルの色を取り出す
+       // テクスチャの色を参照する。
        gl_FragColor = texture2D(u_image, v_texCoord);
     }
     </script>
 
-２つのシェーダーが用意できたら、今度は「画像をロード」して「テクスチャを作成」して
-「テクスチャへ画像をコピー」する仕組みが必要です。
-ブラウザーでは、画像のロードは非同期に行われるので、画像のロード完了を待つための
-ちょっとした仕組みが必要になります。描画するのは、画像のロードが完了した後でなければなりません。
+## 画像からテクスチャーを生成する
+
+２つのシェーダーが用意できたら、次は「画像をロード」して
+「テクスチャーを生成」して「テクスチャーへ画像をコピー」する必要がある。
+ブラウザーでは画像のロードは非同期に行われるので、画像のロード完了を待つための
+ちょっとした仕組みが必要となる。
+画像のロードが完了したタイミングで、描画を行うようにする。
 
     function main() {
       var image = new Image();
@@ -68,7 +76,7 @@ WebGLでレンダリングする際には、ピクセル単位ではなく「ク
       ...
       // 前に書いたコード全部をここに書く……
       ...
-      // 「テクスチャ座標」情報を送る先を指定する
+      // 「テクスチャ座標」データの送り先(アトリビュート)のロケーションを取得する。
       var texCoordLocation = gl.getAttribLocation(program, "a_texCoord");
 
       // 長方形の各頂点とテクスチャ座標の対応付けを定義する
@@ -84,7 +92,7 @@ WebGLでレンダリングする際には、ピクセル単位ではなく「ク
       gl.enableVertexAttribArray(texCoordLocation);
       gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
 
-      // テクスチャオブジェクトを生成する
+      // 「テクスチャー」を生成する
       var texture = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -94,33 +102,37 @@ WebGLでレンダリングする際には、ピクセル単位ではなく「ク
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-      // テクスチャオブジェクトに画像のデータをアップロードする
+      // テクスチャーに画像のデータをアップロードする
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
       ...
     }
 
-以上で、WebGLで画像がレンダリングできるようになりました。
-注意：ローカルで動かす場合は、WebGLが画像をロードできるようにするために何らかのWebサーバーを動かす必要があります。
-この設定は[数分の作業でできます](webgl-setup-and-installation.html)。
+以上で、WebGLで画像がレンダリングできた。
+__注意__：WebGLの画像ロードにはセキュリティ上の制約があるため、
+ローカルでこのサンプルを試す場合は何らかのWebサーバーを動かす必要がある。
+この設定は[数分の作業](webgl-setup-and-installation.html)で終わる。
 
 {{{example url="../webgl-2d-image.html" }}}
 
-おもしろみがない？ちょっと軽く赤と青を入れ替えてみます？
+おもしろみがない？では、画像処理をやってみよう。例えば赤と青を入れ替えてみるのはどうだろうか。
 
     ...
     gl_FragColor = texture2D(u_image, v_texCoord).bgra;
     ...
 
-赤と青を入れ替えてみました。
+これで赤と青を入れ替えることができた。
 
 {{{example url="../webgl-2d-image-red2blue.html" }}}
 
-いま描いているピクセルだけでなく、「ほかのピクセル」の情報も使うような加工の場合はどうでしょうか？
-WebGLはテクスチャを参照する際、0.0から1.0の値を取る「テクスチャ座標」を使用しているので、
-元画像で１ピクセル移動するためにテクスチャ座標の数値をどれだけ移動すれば良いかは、
-<code>onePixel = 1.0 / textureSize</code>といったコードで知ることができます。
+## 他のピクセルの参照
 
-このコードは、「左右１ピクセルを見てその平均の色で描く」というフラグメントシェーダーです。
+やりたい画像処理が、いま描いているピクセルだけで完結せず「ほかのピクセル」の情報も
+必要とする場合はどうすればよいだろうか？
+WebGLはテクスチャを参照する際、0.0から1.0の値を取る「テクスチャ座標」を使用しているので、
+元画像で「１ピクセル」移動するためにテクスチャ座標の数値をどれだけ移動すれば良いかは、
+`onePixel = 1.0 / textureSize`といった計算で求めることができる。
+
+これは「左右１ピクセルを参照してその平均の色で描く」というフラグメントシェーダーである。
 
     <script id="2d-fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
@@ -129,14 +141,14 @@ WebGLはテクスチャを参照する際、0.0から1.0の値を取る「テク
     uniform sampler2D u_image;
     uniform vec2 u_textureSize;
 
-    // 頂点シェーダーから渡された、頂点座標が入った「texCoords」
+    // 頂点シェーダーから渡された「テクスチャ座標」の値。
     varying vec2 v_texCoord;
 
     void main() {
-       // １ピクセル分の、テクスチャ座標での大きさを求める
+       // 「１ピクセル」に相当する、テクスチャ座標での大きさを求める
        vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
 
-       // 左のピクセル、今のピクセル、右のピクセルの色の平均値を求める
+       // 左のピクセル、現在のピクセル、右のピクセルの色の平均値を求める
        gl_FragColor = (
            texture2D(u_image, v_texCoord) +
            texture2D(u_image, v_texCoord + vec2(onePixel.x, 0.0)) +
@@ -144,7 +156,7 @@ WebGLはテクスチャを参照する際、0.0から1.0の値を取る「テク
     }
     </script>
 
-そしてJavaScriptからは、テクスチャサイズの情報を渡します。
+そしてJavaScriptからは、テクスチャサイズの情報を渡す。
 
     ...
 
@@ -152,27 +164,33 @@ WebGLはテクスチャを参照する際、0.0から1.0の値を取る「テク
 
     ...
 
-    // 画像のサイズをセット
+    // 画像のサイズをセットする
     gl.uniform2f(textureSizeLocation, image.width, image.height);
 
     ...
 
-これで、隣のピクセルの色の情報を使って「ぼかし」が表現できました。上の画像と比べてみてください。
+これで「ぼかし」が表現できた。上の画像と比べてみよう。
 
 {{{example url="../webgl-2d-image-blend.html" }}}
 
-さて、「ほかのピクセル」を参照する方法がわかったので、今度は「畳み込み行列(convolution kernel)」を
-使ってもっと応用的汎用的に画像処理をやってみましょう。ここでは、3x3の行列(カーネル)を使ってみます。
-「畳み込み行列」は、ピクセルを描画する際に「縦横斜めに隣り合った周辺８ピクセルの値をそれぞれ何倍するか」、
-「3x3の行列で指定する」という仕組みです。ウェイト(カーネルの全要素の値の合計)が1.0の場合と、
-それより大きい場合では分けて考えます。
-We then divide the result by the weight of the kernel (the sum of all values in the kernel) or 1.0,
-whichever is greater.
-畳み込み行列については、[この記事がお勧めです](http://docs.gimp.org/en/plug-in-convmatrix.html)
-([日本語版](https://docs.gimp.org/ja/plug-in-convmatrix.html))。
-また、[この記事ではC++で実装したコードが見られます](http://www.codeproject.com/KB/graphics/ImageConvolution.aspx)。
+## 畳み込み行列
 
-以上の仕組みを実装したフラグメントシェーダーを書いてみます。
+さて、「ほかのピクセル」を参照する方法がわかったので、今度は
+「畳み込み行列(convolution kernel)」を使って、もっと汎用的に画像処理をやってみよう。
+ここでは、3x3の行列(カーネル)を使うことにする。
+
+「畳み込み行列」とは、ピクセルを描画する際に「縦横斜めに隣り合った周辺8ピクセルを参照」して、
+「それぞれの値をそれぞれ何倍するか」を「3x3の行列で指定する」仕組みである。
+そして得られた値をすべて足した結果を、「ウェイト(カーネルの全要素の値の合計)」と
+「1.0」を比較して「より大きい方」で割る。
+「ぼかし」の際に行なった「平均値を求める」仕組みの拡張と考えればよいだろう。
+
+ここでは「畳み込み行列」についてこれ以上の説明はしないが、興味があれば
+[この記事](http://docs.gimp.org/en/plug-in-convmatrix.html)([日本語版](https://docs.gimp.org/ja/plug-in-convmatrix.html))がわかりやすいので、参考にするとよいだろう。
+また、[この記事](http://www.codeproject.com/KB/graphics/ImageConvolution.aspx)では
+「畳み込み行列」をC++で実装したコードを見ることができる。
+
+フラグメントシェーダーで「畳み込み行列」を実装すると、このようになる。
 
     <script id="2d-fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
@@ -183,7 +201,7 @@ whichever is greater.
     uniform float u_kernel[9];
     uniform float u_kernelWeight;
 
-    // 頂点シェーダーから渡された、頂点座標が入った「texCoords」
+    // 頂点シェーダーから渡された「テクスチャ座標」の値。
     varying vec2 v_texCoord;
 
     void main() {
@@ -199,13 +217,13 @@ whichever is greater.
          texture2D(u_image, v_texCoord + onePixel * vec2( 0,  1)) * u_kernel[7] +
          texture2D(u_image, v_texCoord + onePixel * vec2( 1,  1)) * u_kernel[8] ;
 
-       // Divide the sum by the weight but just use rgb
-       // 透明度は1.0とする
+       // 計算の合計値のRGB値(赤緑青の色情報)の部分を「ウェイト」で割る。
+       // 透明度の部分は1.0とする
        gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1.0);
     }
     </script>
 
-JavaScript側からは、畳み込み行列とそのウェイトの情報をシェーダーに送ります。
+JavaScript側からは「畳み込み行列」とその「ウェイト」の情報をシェーダーに送る。
 
      function computeKernelWeight(kernel) {
        var weight = kernel.reduce(function(prev, curr) {
@@ -227,73 +245,80 @@ JavaScript側からは、畳み込み行列とそのウェイトの情報をシ�
      gl.uniform1f(kernelWeightLocation, computeKernelWeight(edgeDetectKernel));
      ...
 
-これで、完成……。下の例では、ドロップリストでほかのカーネルを選択できます。
+これで、完成……。下の例では、ドロップリストで別のカーネルも試せるようにした。
 
 {{{example url="../webgl-2d-image-3x3-convolution.html" }}}
 
-WebGLでの画像処理がどれほど簡単か、おわかりいただけたのではないでしょうか。
-次は、[２つ以上のエフェクトをかける](webgl-image-processing-continued.html)ことに挑戦しましょう。
+以上、WebGLでの画像処理がどれほど簡単か、おわかりいただけたと思う。
+
+次回の講義では「[画像に２つ以上のエフェクトをかける方法](webgl-image-processing-continued.html)」
+について説明しよう。
 
 <div class="webgl_bottombar">
-<h3><code>u_image</code>に値をセットしていないよ。どうなるの？</h3>
+<h3>サンプルコードでは<code>u_image</code>に値をセットしていないよ。どうして動くの？</h3>
 <p>
-Uniform変数のデフォルト値は0、という決まりがあるので、テクスチャユニット0が選択されます。
-テクスチャユニット0はデフォルトのアクティブテクスチャでもあるため、
-bindTextureメソッドが呼ばれた際にはテクスチャユニット0がバインドされます。
+シェーダーにおいては「uniformのデフォルト値は0」という決まりがあるため、
+今回のサンプルではu_imageは「テクスチャユニット0を使う」という意味になる。
+また「アクティブテクスチャのデフォルトはテクスチャユニット0」という決まりがあるため、
+JavaScript側でbindTextureが呼ばれたタイミングでテクスチャーは
+「テクスチャユニット0に自動的にバインド」される。
+このため、明示的にu_imageに値をセットしなくても問題なく動作する。
 </p>
 <p>
-WebGLにはテクスチャユニットの配列があります。
-uniform型の各サンプラー変数がどのテクスチャユニットを参照するかを指定するには、
-まず「サンプラー変数のロケーションを得て」、それに対して「目的のテクスチャユニットのインデックスを指定」します。
+WebGLには「テクスチャユニットの配列」がある。
+シェーダー中の各「uniformのsampler変数」がそれぞれ「何番のテクスチャユニットを参照するか」
+を指定するためには、まず「uniformのsampler変数」のロケーションを得て、それに対して
+「目的のテクスチャユニットのインデックス」を指定する、という手順を使う。
 </p>
 <p>
-例：
+例えば、実際のコードは次のようになる。
 </p>
 <pre class="prettyprint showlinemods">
-var textureUnitIndex = 6; // テクスチャユニット６を使う。
+var textureUnitIndex = 6; // テクスチャユニット6を使う。
 var u_imageLoc = gl.getUniformLocation(
     program, "u_image");
 gl.uniform1i(u_imageLoc, textureUnitIndex);
 </pre>
 <p>
 別のユニットのテクスチャを使いたい場合は、<code>gl.activeTexture</code>を呼び、
-そのユニットのテクスチャをバインドします。例は以下のとおり。
+そのユニットのテクスチャをバインドする。例は以下のとおり。
 </p>
 <pre class="prettyprint showlinemods">
-// テクスチャ「someTexture」を、テクスチャユニット６のテクスチャにバインドする。
+// テクスチャ「someTexture」を、テクスチャユニット6にバインドする。
 gl.activeTexture(gl.TEXTURE6);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
 <p>
-こんな書き方もできます。
+こんな書き方もできる。
 </p>
 <pre class="prettyprint showlinemods">
-var textureUnitIndex = 6; // テクスチャユニット６を使う。
-// テクスチャ「someTexture」を、テクスチャユニット６のテクスチャにバインドする。
+var textureUnitIndex = 6; // テクスチャユニット6を使う。
+// テクスチャ「someTexture」を、テクスチャユニット6にバインドする。
 gl.activeTexture(gl.TEXTURE0 + textureUnitIndex);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
 <p>
-WebGLの仕様では、すべてのWebGL実装は最低８個のテクスチャユニットを
-サポートする必要があります(フラグメントシェーダーの場合８個。頂点シェーダーで必須とされているテクスチャユニットは０個です)。
-８つより多くのテクスチャユニットを使いたい場合は、あらかじめ
-<code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>メソッドを呼んで利用可能な数を確認するべきです。
-頂点シェーダーでテクスチャを扱いたい場合は、
-<code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>を呼んで利用可能な数を確認します。
-実際のWebGLの実装では99%が、頂点シェーダにおいて最低４つのテクスチャユニットをサポートしています。
+すべてのWebGL実装は最低8個のテクスチャユニットをサポートすることになっている。
+仕様上サポートされるのは、フラグメントシェーダーでは最低8個、頂点シェーダーでは最低0個である。
+8つより多くのテクスチャユニットを使いたい場合は、あらかじめ
+<code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>を呼んで利用可能な数を確認するべきである。
+頂点シェーダーでテクスチャを扱いたい場合は
+<code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>を呼んで利用可能な数を確認する。
+実際のWebGLの実装では、その99%が、頂点シェーダにおいて最低4つのテクスチャユニットをサポートしている。
 </p>
 </div>
 
 <div class="webgl_bottombar">
 <h3>GLSLコードでa_, u_, v_とかで始まる変数があるけどこれは何？</h3>
 <p>
-ただの命名規則の話です。文法上必要な規則ではないのですが、私は、
-そういった名前にしておくとその変数がどこから来たのか見やすいのでそうしています。
-こうしておけば、a_で始まる変数はアトリビュートでバッファーから持ってきたデータ、
-u_はシェーダー共通のユニフォーム変数、
-v_はvarying変数で頂点シェーダーからフラグメントシェーダーに送られたもので描画時に頂点間が補間されている、といったことが一目でわかります。
-各変数の意味や仕組みについては「<a href="webgl-how-it-works.html">WebGLの仕組み</a>」で説明しているので、参考にしてください。
+これは私が採用している命名規則の話で、文法上必要な規則ではない。
+そういった名前にしておくとその変数がどこから来たのか見やすいので、慣習上、私はそうしている。
+こうしておけば、「a_で始まる変数はアトリビュートでバッファーから持ってきたデータ」、
+「u_はシェーダー共通のユニフォーム変数」、
+「v_はvarying変数で頂点シェーダーからフラグメントシェーダーに送られたもので、
+描画時に頂点間で補間されている」、といったことが一目でわかる。
+各変数の意味や仕組みについては「<a href="webgl-how-it-works.html">WebGLの仕組み</a>」
+の講義で説明しているので参考にするとよいだろう。
 </p>
 </div>
-
 
