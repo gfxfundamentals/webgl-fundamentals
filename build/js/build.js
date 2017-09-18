@@ -153,6 +153,24 @@ Handlebars.registerHelper('image', function(options) {
   return templateManager.apply("build/templates/image.template", options.hash);
 });
 
+Handlebars.registerHelper('selected', function(options) {
+  const key = options.hash.key;
+  const value = options.hash.value;
+  const re = options.hash.re;
+  const sub = options.hash.sub;
+
+  let a = this[key];
+  let b = options.data.root[value];
+
+  if (re) {
+    const r = new RegExp(re);
+    b = b.replace(r, sub);
+  }
+
+  console.log("A:", a, "B:", b);
+  return a === b ? 'selected' : '';
+});
+
 function slashify(s) {
   return s.replace(/\\/g, '/');
 }
@@ -253,7 +271,7 @@ var Builder = function(outBaseDir, options) {
     const relativeOutName = slashify(outFileName).substring(g_outBaseDir.length);
     const langs = Object.keys(g_langDB).map((name) => {
       const lang = g_langDB[name];
-      const url = (slashify(path.join(lang.basePath, path.basename(contentFileName, '.md'))) + '.html')
+      const url = slashify(path.join(lang.basePath, path.basename(outFileName)))
          .replace("index.html", "")
          .replace(/^\/webgl\/lessons\/$/, '/');
       return {
@@ -270,7 +288,8 @@ var Builder = function(outBaseDir, options) {
     metaData['toc'] = opt_extra.toc;
     metaData['templateOptions'] = opt_extra.templateOptions;
     metaData['langInfo'] = g_langInfo;
-    metaData['url'] = "http://webglfundamentals.org/" + relativeOutName;
+    metaData['url'] = "http://webglfundamentals.org" + relativeOutName;
+    metaData['relUrl'] = relativeOutName;
     metaData['screenshot'] = "http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg";
     var basename = path.basename(contentFileName, ".md");
     [".jpg", ".png"].forEach(function(ext) {
@@ -365,7 +384,12 @@ var Builder = function(outBaseDir, options) {
         toc: options.toc,
       };
       console.log("  generating missing:", outFileName);
-      applyTemplateToContent("build/templates/missing.template", path.join(options.lessons, "langinfo.hanson"), outFileName, extra, data);
+      applyTemplateToContent(
+          "build/templates/missing.template",
+          path.join(options.lessons, "langinfo.hanson"),
+          outFileName,
+          extra,
+          data);
     });
 
     function utcMomentFromGitLog(result) {
