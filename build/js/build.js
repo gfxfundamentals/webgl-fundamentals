@@ -167,7 +167,6 @@ Handlebars.registerHelper('selected', function(options) {
     b = b.replace(r, sub);
   }
 
-  console.log("A:", a, "B:", b);
   return a === b ? 'selected' : '';
 });
 
