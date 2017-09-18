@@ -67,18 +67,6 @@ $(document).ready(function($){
     document.body.className = document.body.className + " doubleSpace";
   }
 
-  $(".language").each(function() {
-    const $langs = $(this);
-    $langs.find("a").map(function() {
-      const $this = $(this);
-      return $("<option>")
-         .attr("value", $this.attr("href"))
-         .attr("selected", $this.attr("href") === window.location.pathname)
-         .text($this.text()).get();
-    }).appendTo($("<select>").attr({
-      'class': $langs.attr("class"),
-    })).parent().replaceAll($langs);
-  });
   $(".language").on('change', function() {
     window.location.href = this.value;
   });
