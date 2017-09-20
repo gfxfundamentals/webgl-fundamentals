@@ -6,14 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>WebGL - Frustum Diagram</title>
     <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+    <style>
+    #canvas {
+        width: 400px;
+        height: 600px;
+    }
+    </style>
 </head>
 <body>
 <div class="description">
 Drag sliders to change the frustum.
 </div>
 <div style="position:absolute;">
-  <canvas id="canvas" width="400" height="600" style="width: 400px; height: 600px"></canvas>
-  <img src="resources/eye-icon.png" style="position: absolute; z-index:2; left: 10px; top: 275px; width: 32px; height: auto;"/>
+  <canvas id="canvas"></canvas>
+  <img id="eye" src="resources/eye-icon.png" style="position: absolute; z-index:2; left: 10px; top: 275px; width: 32px; height: auto;"/>
 </div>
 <div id="uiContainer">
   <div id="ui">
@@ -103,6 +109,8 @@ function main() {
   if (!gl) {
     return;
   }
+
+  const eyeElem = document.querySelector("#eye");
 
   // Create Geometry.
   var wireCubeArrays = {
@@ -523,6 +531,8 @@ function main() {
     time *= 0.001;
 
     twgl.resizeCanvasToDisplaySize(canvas, pixelRatio);
+    const halfHeight = gl.canvas.height / 2;
+    const width = gl.canvas.width;
 
     // clear the screen.
     gl.disable(gl.SCISSOR_TEST);
@@ -530,7 +540,7 @@ function main() {
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    gl.viewport(0, 300 * pixelRatio, 400 * pixelRatio, 300 * pixelRatio);
+    gl.viewport(0, halfHeight, width, halfHeight);
 
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
@@ -643,6 +653,15 @@ function main() {
     twgl.setUniforms(vertexColorProgramInfo, cubeRaysUniforms);
     twgl.drawBufferInfo(gl, cubeRaysBufferInfo, gl.LINES);
 
+    {
+      const eyePosition = m4.transformPoint(worldViewProjection, [0, 0, 0]);
+      const ex = (eyePosition[0] *  .5 + .5) * width / pixelRatio;
+      const ey = (eyePosition[1] * -.5 + .5) * halfHeight / pixelRatio;
+      eyeElem.style.left = px(ex - eyeElem.width / 2);
+      eyeElem.style.top = px(ey - eyeElem.height / 2);
+    }
+
+
     // Draw Frustum Wire
     m4.perspective(
         degToRad(fieldOfView),
@@ -664,8 +683,8 @@ function main() {
 
     // Draw 3D view
     gl.enable(gl.SCISSOR_TEST);
-    gl.viewport(0, 0, 400 * pixelRatio, 300 * pixelRatio);
-    gl.scissor(0, 0, 400 * pixelRatio, 300 * pixelRatio);
+    gl.viewport(0, 0, width, halfHeight);
+    gl.scissor(0, 0, width, halfHeight);
     gl.clearColor(0.5, 0.5, 0.5, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -676,10 +695,15 @@ function main() {
         zFar * scale,
         projection);
     drawScene(exampleProjection, zeroMat);
+
     requestAnimationFrame(render);
   }
 
   requestAnimationFrame(render);
+}
+
+function px(v) {
+  return `${v | 0}px`;
 }
 
 function degToRad(deg) {

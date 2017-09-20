@@ -4,7 +4,13 @@
 <title>3D in canvas</title>
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
-canvas { g-border: 1px solid black; }
+body {
+    margin: 0;
+}
+#movie {
+    width: 100vw;
+    height: 100vh;
+}
 </style>
 </head>
 <body>
@@ -26,6 +32,10 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 "use strict";
 
 function main() {
+  var movieElem = document.getElementById('movie');
+  var areaWidth = movieElem.clientWidth;
+  var areaHeight = movieElem.clientHeight;
+
   var code = function() {
 
     var getURLOptions = function(s, obj) {
@@ -63,17 +73,25 @@ function main() {
     stage.setBackgroundColor(color('white'));
     stage.setFramerate(60);
 
+    var top = new Group()
+        .addTo(stage)
+        .attr({
+           scale: stage.options.initialData.areaWidth / 400,
+        });
+
+    console.log(areaWidth / 400);
+
     var yoff = (mode === 2) ? 90 : 0;
 
     var grid = new Group()
-        .addTo(stage)
+        .addTo(top)
         .attr({
           x: areaWidth / 2,
           y: areaHeight / 2 + yoff,
         });
 
     var world = new Group()
-        .addTo(stage)
+        .addTo(top)
         .attr({
           x: areaWidth / 2,
           y: areaHeight / 2 - (mode === 2 ? camRadius : 0) + yoff,
@@ -97,14 +115,14 @@ function main() {
          });
     }
     var base = new Group()
-        .addTo(stage)
+        .addTo(top)
         .attr({
           x: areaWidth / 2,
           y: areaHeight / 2 + yoff,
         });
 
     var axis = new Group()
-        .addTo(stage)
+        .addTo(top)
         .attr({
           x: areaWidth / 2,
           y: areaHeight / 2,
@@ -256,12 +274,14 @@ function main() {
     }
   };
 
-  bonsai.run(document.getElementById('movie'), {
+  bonsai.run(movieElem, {
     code: code,
-    width: 400,
-    height: 300,
+    width: areaWidth,
+    height: areaHeight,
     initialData: {
       url: window.location.href.toString(),
+      areaWidth: areaWidth,
+      areaHeight: areaHeight,
     },
   });
 }
