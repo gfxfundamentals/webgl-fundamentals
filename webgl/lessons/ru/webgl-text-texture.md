@@ -297,7 +297,7 @@ Y некоторое число, чтобы надпись была всегда
     +var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
 
     *var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-    // масштабируем F до нужного размера
+    // масштабируем квадрант до нужного размера
     textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 
 И вот, что мы получим
@@ -354,7 +354,7 @@ Y некоторое число, чтобы надпись была всегда
     +var scale = viewZ * desiredTextScale;
 
     var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-    // масштабируем F до нужного размера
+    // масштабируем квадрант до нужного размера
     *textMatrix = m4.scale(textMatrix, textWidth * scale, textHeight * scale, 1);
     ...
 
@@ -407,7 +407,7 @@ Y некоторое число, чтобы надпись была всегда
       +var tex = textTextures[ndx];
 
       var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-      // масштабируем F до нужного размера
+      // масштабируем квадрант до нужного размера
       *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
 
 и обновляем значение uniform-переменной перед отрисовкой.

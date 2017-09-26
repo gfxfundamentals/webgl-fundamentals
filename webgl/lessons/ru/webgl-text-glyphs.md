@@ -99,7 +99,7 @@ Description: Отображение текста, используя текст�
         var scale = viewZ * desiredTextScale;
 
         var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-        // масштабируем F до нужного размера
+        // масштабируем квадрант до нужного размера
         textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
         +textMatrix = m4.translate(textMatrix, ii, 0, 0);
 

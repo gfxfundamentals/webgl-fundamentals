@@ -60,7 +60,7 @@ abs(3.333 - 6.666) = 3.333
 "fudgeFactor".
 
 ```
-&lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -74,7 +74,7 @@ void main() {
 *  // Делим x и y на z
 *  gl_Position = vec4(position.xy / zToDivideBy, position.zw);
 }
-&lt;/script&gt;
+</script>
 ```
 
 Обратите внимание, что из-за того, что Z находится в пространстве
@@ -120,7 +120,7 @@ void main() {
 в шейдере самим, а передать `zToDivideBy` в `gl_Position.w`.
 
 ```
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
 ...
 uniform float u_fudgeFactor;
 ...
@@ -137,7 +137,7 @@ void main() {
   // Передаём цвет во фрагментный шейдер
   v_color = a_color;
 }
-&lt;/script&gt;
+</script>
 ```
 
 Теперь взгляните - мы получили то же самое.
@@ -244,7 +244,7 @@ w_out = z_in * fudgeFactor + 1;
 Сначала вернём обратно простой вершинный шейдер.
 
 ```
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
 uniform mat4 u_matrix;
 
 void main() {
@@ -252,7 +252,7 @@ void main() {
   gl_Position = u_matrix * a_position;
   ...
 }
-&lt;/script&gt;
+</script>
 ```
 
 Теперь сделаем функцию создания матрицы Z &rarr; W

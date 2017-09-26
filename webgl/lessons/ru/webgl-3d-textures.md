@@ -373,9 +373,9 @@ Description: Как работают текстуры в WebGL
          gl.generateMipmap(gl.TEXTURE_2D);
     *  } else {
     *     // Нет, это не степень двойки. Отключаем мипмапы и устанавливаем режим CLAMP_TO_EDGE
-    *     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    *     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    *     gl.texParameteri(gl.TETXURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    *     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    *     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    *     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     *  }
     }
 
@@ -468,11 +468,14 @@ Description: Как работают текстуры в WebGL
 в то время как разбитый на плоскости объект требует одного вызова отрисовки
 на каждую из текстур.
 
-Есть ещё пара вещей, которые, возможно, вы бы хотели знать о текстурах. Одна
+Есть ещё несколько вещей, которые, возможно, вы бы хотели знать о текстурах. Одна
 из них - [использование 2 и более текстур одновременно](webgl-2-texutres.html).
 Вторая - [загрузка изображений с других доменов](webgl-cors-permission.html).
+И ещё одна - [коррекция перспективы текстуры](webgl-3d-perspective-correct-texturemapping.html),
+которая хотя и тривиальная в некотором роде, но всё же о ней полезно знать.
 
-Далее попробуем [упростить код за счёт функций-помощников](webgl-less-code-more-fun.html).
+Далее разберём, [как передать данные в текстуру из JavaScript](webgl-data-textures.html).
+Или попробуем [упростить код за счёт функций-помощников](webgl-less-code-more-fun.html).
 
 <div class="webgl_bottombar">
 <h3>UV или Текстурные координаты?</h3>

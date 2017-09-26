@@ -326,7 +326,7 @@ objects.forEach(function(object) {
 
 {{{example url="../webgl-less-code-more-fun-triangle.html" }}}
 
-Это также будет работать, даже когда у нас будут индексы. `webglUtils.setAttribsAndBuffers`
+Это также будет работать, даже когда у нас будут индексы. `webglUtils.setBuffersAndAttributes`
 установит все атрибуты и привяжет `ELEMENT_ARRAY_BUFFER` к `indices`, после чего
 можно вызывать `gl.drawElements`.
 
@@ -338,7 +338,7 @@ objects.forEach(function(object) {
        indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
     };
 
-    var bufferInfo = webglUtils.createBufferInfoFromTypedArray(gl, arrays);
+    var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
 
 и при отрисовке мы будем вызывать `gl.drawElements` вместо `gl.drawArrays`.
 

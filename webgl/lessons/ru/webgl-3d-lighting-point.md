@@ -39,7 +39,7 @@ Description: Реализация точечного освещения в WebGL
 направленным освещением, но на этот раз мы будем вычислять вектор для
 каждой точки поверхности.
 
-    v_surfaceToLight = u_lightPosition - surfaceWorldPosition;
+    v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 
 Всё вместе выглядит следующим образом
 
@@ -94,8 +94,8 @@ Description: Реализация точечного освещения в WebGL
 
       vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
 
-      -float light = dot(v_normal, u_reverseLightDirection);
-      +float light = dot(v_normal, surfaceToLightDirection);
+      -  float light = dot(v_normal, u_reverseLightDirection);
+      +  float light = dot(v_normal, surfaceToLightDirection);
 
       gl_FragColor = u_color;
 
@@ -202,7 +202,7 @@ Description: Реализация точечного освещения в WebGL
 
     +  // вычисляем вектор от поверхности к наблюдателю
     +  // и передаём его во фрагментный шейдер
-    +  v_surfaceToView = normalize(u_viewWorldPosition - surfaceWorldPosition);
+    +  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
     }
 
 Затем во фрагментном шейдере вычисляем `halfVector` между вектором
