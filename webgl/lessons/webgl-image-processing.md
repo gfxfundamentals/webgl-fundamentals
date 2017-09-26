@@ -276,8 +276,8 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 All WebGL implementations are required to support at least 8 texture units
 in fragment shaders but only 0 in vertex shaders. So if you want to use
 more than 8 you should check how many there are by calling
-`gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)` or if you want to use
-textures in a vertex shader call `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`
+<code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code> or if you want to use
+textures in a vertex shader call <code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>
 to find out how many you can use. Over 99% of machines support at least 4
 texture units in vertex shaders.
 </p>

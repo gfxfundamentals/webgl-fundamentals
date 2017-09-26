@@ -323,7 +323,7 @@ Here's that
 
 {{{example url="../webgl-less-code-more-fun-triangle.html" }}}
 
-This will even work if we have indices. `webglUtils.setAttribsAndBuffers` will set all the attributes
+This will even work if we have indices. `webglUtils.setBuffersAndAttributes` will set all the attributes
 and setup the `ELEMENT_ARRAY_BUFFER` with your `indices` so you can call `gl.drawElements`.
 
     // an indexed quad
@@ -334,7 +334,7 @@ and setup the `ELEMENT_ARRAY_BUFFER` with your `indices` so you can call `gl.dra
        indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
     };
 
-    var bufferInfo = webglUtils.createBufferInfoFromTypedArray(gl, arrays);
+    var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
 
 and at render time we can call `gl.drawElements` instead of `gl.drawArrays`.
 

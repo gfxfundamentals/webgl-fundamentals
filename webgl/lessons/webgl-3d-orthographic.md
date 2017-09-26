@@ -37,7 +37,7 @@ And here's the new one
 
 ```
 <script id="3d-vertex-shader" type="x-shader/x-vertex">
-attribute vec4 a_position;
+*attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
 
@@ -228,7 +228,7 @@ Similarly we'll make our simplified functions
 
 ```
   translate: function(m, tx, ty, tz) {
-    return m4.multiply(b, m4.translation(tx, ty, tz));
+    return m4.multiply(m, m4.translation(tx, ty, tz));
   },
 
   xRotate: function(m, angleInRadians) {
@@ -306,7 +306,7 @@ The first problem we have is that our geometry is a flat F which makes it
 hard to see any 3D.  To fix that let's expand the geometry to 3D.  Our
 current F is made of 3 rectangles, 2 triangles each.  To make it 3D will
 require a total of 16 rectangles.  the 3 rectangles on the front, 3 on the
-back, 1 on the left, 4 on the right, 3 on the bottoms
+back, 1 on the left, 4 on the right, 2 on the tops, 3 on the bottoms.
 
 <img class="webgl_center" width="300" src="resources/3df.svg" />
 
@@ -336,7 +336,7 @@ shader to the fragment shader.
 Here's the new vertex shader
 
 ```
-&lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -351,13 +351,13 @@ void main() {
 +  // Pass the color to the fragment shader.
 +  v_color = a_color;
 }
-&lt;/script&gt;
+</script>
 ```
 
 And we need to use that color in the fragment shader
 
 ```
-&lt;script id="3d-vertex-shader" type="x-shader/x-fragment"&gt;
+<script id="3d-vertex-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 +// Passed in from the vertex shader.
@@ -366,7 +366,7 @@ precision mediump float;
 void main() {
 *   gl_FragColor = v_color;
 }
-&lt;/script&gt;
+</script>
 ```
 
 We need to lookup the location to supply the colors, then setup another
@@ -437,6 +437,14 @@ Uh oh, what's that mess?  Well, it turns out all the various parts of
 that 3D 'F', front, back, sides, etc get drawn in the order they appear in in
 our geometry.  That doesn't give us quite the desired results as sometimes
 the ones in the back get drawn after the ones in the front.
+
+<img class="webgl_center" width="163" height="190" src="resources/polygon-drawing-order.gif" />
+
+The <span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">redish part</span> is
+the **front** of the 'F'  but because it's the first part of our data
+it is drawn first and then the other triangles behind it get drawn
+after covering it up. For example the  <span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">purple part</span>
+is actually the back of the 'F'. It gets drawn 2nd because it comes 2nd in our data.
 
 Triangles in WebGL have the concept of front facing and back facing.  A
 front facing triangle has its vertices go in a clockwise direction.  A

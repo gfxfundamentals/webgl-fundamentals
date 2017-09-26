@@ -2,12 +2,12 @@ Title: WebGLの基本
 
 WebGLを基本から学ぶ授業.
 
-この記事はWebGLの基本のバースから教える記事である。
-他のサイトに載せてある昔のOpenGLが更新された記事ではなく、
-完全に新たな、時代遅れのアイデアを捨てて、
-WebGLの全て上WebGLがどうやて動くごとを理解される記事である。
+この記事はWebGLを基本から教える記事である。
+他のサイトに載せてあるような昔のOpenGLが更新された記事__ではなく__、
+時代遅れのアイデアを捨てて、
+WebGLとは何か、WebGLがどうやって動くかについて、理解へと導く、完全に新たな記事である。
 
-WebGL2の興味があればこれを参照して下さい[webgl2fundamentals.org](http://webgl2fundamentals.org)
+WebGL2に興味があればこれを参照して下さい[webgl2fundamentals.org](http://webgl2fundamentals.org)
 
 {{{include "webgl/lessons/ja/toc.html"}}}
 

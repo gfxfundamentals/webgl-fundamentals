@@ -1,3 +1,100 @@
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 19px;
+  line-height: 150%;
+}
+
+p + p {
+  margin-top: 1.5em;
+}
+li > p {
+  width: calc(100% - 2em);
+}
+
+table {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+pre.prettyprint {
+    margin-top: 2em !important;
+    margin-bottom: 2em !important;
+}
+pre.prettyprint li {
+    white-space: pre;
+}
+
+.webgl_navbar>div,
+.lesson-title,
+.lesson-comments,
+.lesson-comment-sep,
+.lesson-main>* {
+    margin: 0 auto 1em;
+    max-width: 700px;
+    width: calc(100% - 40px);
+}
+.lesson-main>.webgl_example_container {
+    max-width: 90%;
+}
+
+.webgl_example {
+    width: 100%;
+    height: 500px;
+}
+.webgl_header {
+    background-image: url(/webgl/lessons/resources/banner-00.jpg);
+    background-size: cover;
+    background-position: center, center;
+    padding: 1em;
+    text-align: center;
+}
+.webgl_header h1 {
+    font-size: 5vw;
+    margin: 0;
+    background-image: url(/webgl/lessons/resources/logo.png);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    font-weight: bold;
+    color: black;
+    /*
+    text-shadow: 0px 0px 15px #fff,
+                 0px 0px 5px #fff,
+                 0px 0px 10px #fff;
+    */
+}
+.webgl_header a {
+    color: rgba(0, 0, 0, 0);
+    text-decoration: none;
+}
+.webgl_navbar {
+    background: black;
+    color: white;
+}
+.webgl_navbar a {
+    color: white;
+}
+.webgl_navbar>div {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.webgl_navbar>div>* {
+    display: block;
+    margin: .25em 0;
+}
+.webgl_navbar select {
+    background: #444;
+    border: none;
+    font-size: large;
+    color: white;
+}
+.home-lang select {
+    font-size: large;
+}
+
 .fullscreen {
     position: fixed !important;
     left: 0;
@@ -18,8 +115,12 @@
   gbackground-color: #ffe;
 }
 .lesson-sidebar {
-  font-size: small;
-  gbackground-color: #eff;
+    font-size: small;
+    columns: 220px;
+    padding: 1em;
+    column-rule: dashed 1px #CCC;
+    background: #eee;
+    margin-bottom: 1em;
 }
 .lesson-sidebar>ul>li {
     line-height: 1.3em;
@@ -33,11 +134,9 @@
     padding-left: 1em;
     text-indent: -1em;
 }
-.container {
-    gbackground-color: green;
-}
 h1, h2, h3, h4 {
   font-family: sans-serif;
+  line-height: 1.2;
 }
 h3 {
   font-size: medium;
@@ -45,6 +144,10 @@ h3 {
 code {
     color: black;
     font-family: monospace;
+    background-color: #ddd;
+    padding: 0.1em 0.2em 0.1em 0.2em;
+    border-radius: 0.5em;
+    white-space: nowrap;
 }
 
 .webgl_table_div_center {
@@ -63,6 +166,7 @@ code {
   margin-right: auto;
   display: block;
   text-align: center;
+  max-width: 95%;
 }
 
 .webgl_image>img {
@@ -125,10 +229,11 @@ iframe.body {
   height: 100vh;
 }
 iframe.webgl_example {
-  border: 1px solid black;
+  border: none;
   margin-left: auto;
   margin-right: auto;
   display: block;
+  border: 1px solid black;
 }
 iframe.noborder {
   border: none !important;
@@ -144,21 +249,16 @@ iframe.external_diagram {
 div.webgl_bottombar {
   border: 1px solid #000;
   background-color: #def;
-  width: 95%;
   padding: 1em;
-  margin: 0.5em;
+  width: calc(100% - 80px);
 }
 div.webgl_bottombar>h3 {
-  gbackground-color: red;
   font-size: x-large;
   font-weight: bold;
   margin-bottom: 1em;
 }
 div.webgl_bottombar code {
     background-color: #ccc;
-}
-code {
-    background-color: #eee;
 }
 
 /* --- Prettify --- */
@@ -204,7 +304,6 @@ pre.prettyprint, code.prettyprint {
     box-shadow: 10px 10px 0px #ccc;
     font-size: 9pt;
     font-family: "Lucida Console", Monaco, monospace;
-    width: 95%;
     margin: auto;
     padding: 1em;
     text-align: left;           /* override justify on body */
@@ -212,6 +311,7 @@ pre.prettyprint, code.prettyprint {
     overflow: auto;             /* allow scroll bar in case of long lines - goes together with white-space: nowrap! */
     white-space: pre;        /* was nowrap, prevent line wrapping */
     line-height: 1.5em;
+    width: calc(100% - 80px);
 }
 
 @media print {
@@ -238,6 +338,22 @@ pre.prettyprint, code.prettyprint {
         white-space: pre;        /* was nowrap, prevent line wrapping */
         line-height: 1.5;
     }
+
+    pre.prettyprint ul.modifiedlines li.linemodified {
+        list-style-type: none;
+        background-color: #DDD;
+    }
+    pre.prettyprint ul.modifiedlines li.linedeleted {
+        list-style-type: none;
+        background-color: #CCC;
+        text-decoration: line-through;
+    }
+
+    pre.prettyprint ul.modifiedlines li.lineadded {
+        list-style-type: none;
+        background-color: #EEE;
+    }
+
     body {
         margin: 10mm;
     }
@@ -248,6 +364,7 @@ pre.prettyprint, code.prettyprint {
     .doubleSpace pre.prettyprint {
         font-size: 14pt;
     }
+    .webgl_navbar,
     .lesson-comment-sep,
     .lesson-sidebar,
     .lesson-comments {
@@ -255,15 +372,23 @@ pre.prettyprint, code.prettyprint {
     }
 }
 
-@media (max-width: 720px) {
-    iframe {
-      max-width: 400px !important;
+@media (max-height: 700px) {
+    .webgl_example {
+        height: 400px;
     }
 }
 
-@media (max-width: 420px) {
-  iframe {
-    max-width: 300px !important;
-  }
+@media (max-width: 720px) {
+    body {
+        font-size: 16px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    iframe {
+        max-width: 95% !important;
+    }
 }
+
+
 

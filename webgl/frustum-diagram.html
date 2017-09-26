@@ -6,14 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>WebGL - Frustum Diagram</title>
     <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+    <style>
+    #canvas {
+        width: 400px;
+        height: 600px;
+    }
+    </style>
 </head>
 <body>
 <div class="description">
 Drag sliders to change the frustum.
 </div>
 <div style="position:absolute;">
-  <canvas id="canvas" width="400" height="600" style="width: 400px; height: 600px"></canvas>
-  <img src="resources/eye-icon.png" style="position: absolute; z-index:2; left: 10px; top: 275px; width: 32px; height: auto;"/>
+  <canvas id="canvas"></canvas>
+  <img id="eye" src="resources/eye-icon.png" style="position: absolute; z-index:2; left: 10px; top: 275px; width: 32px; height: auto;"/>
 </div>
 <div id="uiContainer">
   <div id="ui">
@@ -45,7 +51,7 @@ void main() {
 </script>
 <script id="baseVertexShader" type="text/something-not-javascript">
 attribute vec4 position;
-attribute vec4 a_color;
+attribute vec4 color;
 uniform mat4 u_worldViewProjection;
 uniform mat4 u_exampleWorldViewProjection;
 varying vec4 v_color;
@@ -54,7 +60,7 @@ void main() {
   gl_Position = u_worldViewProjection * position;
   v_position = u_exampleWorldViewProjection * position;
   v_position = v_position / v_position.w;
-  v_color = a_color;
+  v_color = color;
 }
 
 </script>
@@ -81,36 +87,34 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/webgl-lessons-ui.js"></script>
 <script src="resources/webgl-lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
-<script src="resources/tdl/base.js"></script>
+<script src="resources/twgl-full.min.js"></script>
 <script>
 "use strict";
 
-tdl.require('tdl.buffers');
-tdl.require('tdl.clock');
-tdl.require('tdl.fast');
-tdl.require('tdl.log');
-tdl.require('tdl.math');
-tdl.require('tdl.models');
-tdl.require('tdl.primitives');
-tdl.require('tdl.programs');
-tdl.require('tdl.textures');
-tdl.require('tdl.webgl');
+const v3 = twgl.v3;
+const m4 = twgl.m4;
 
 var eyePosition;
 var target;
 
 // globals
-var gl;                   // the gl context.
-var canvas;               // the canvas
-var math;                 // the math lib.
-var fast;                 // the fast math lib.
 var pixelRatio = window.devicePixelRatio || 1;
+var scale = 1;
 
-function createApp() {
+function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  var canvas = document.getElementById("canvas");
+  var gl = canvas.getContext("webgl");
+  if (!gl) {
+    return;
+  }
+
+  const eyeElem = document.querySelector("#eye");
+
   // Create Geometry.
   var wireCubeArrays = {
-    position: new tdl.primitives.AttribBuffer(3,
-      [
+    position: [
         -1,  1, -1,
          1,  1, -1,
          1, -1, -1,
@@ -120,10 +124,8 @@ function createApp() {
          1,  1,  1,
          1, -1,  1,
         -1, -1,  1,
-      ]),
-    color: new tdl.primitives.AttribBuffer(
-      4,
-      [
+    ],
+    color: [
         1, 1, 1, 1,
         1, 1, 1, 1,
         1, 1, 1, 1,
@@ -133,31 +135,23 @@ function createApp() {
         1, 1, 1, 1,
         1, 1, 1, 1,
         1, 1, 1, 1,
-      ]),
-    indices: new tdl.primitives.AttribBuffer(
-      2,
-      [
+    ],
+    indices: [
         0, 1, 1, 2, 2, 3, 3, 0,
         4, 5, 5, 6, 6, 7, 7, 4,
         0, 4, 1, 5, 2, 6, 3, 7,
-      ],
-      'Uint16Array'),
-  };
-  // Load textures
-  var textures = {
+    ],
   };
 
-  // Create Shader Program
-  var vertexColorProgram = tdl.programs.loadProgramFromScriptTags(
+  var vertexColorProgramInfo = twgl.createProgramInfo(gl, [
       'vertexColorVertexShader',
-      'vertexColorFragmentShader');
-  var wireCubeModel = new tdl.models.Model(vertexColorProgram, wireCubeArrays, textures, gl.LINES);
+      'vertexColorFragmentShader',
+  ]);
+  var wireCubeBufferInfo = twgl.createBufferInfoFromArrays(gl, wireCubeArrays);
 
   var cubeRaysArrays = {
     position: wireCubeArrays.position,
-    color: new tdl.primitives.AttribBuffer(
-      4,
-      [
+    color: [
         1, 1, 1, 1,
         1, 1, 1, 1,
         1, 1, 1, 1,
@@ -167,22 +161,20 @@ function createApp() {
         0, 0, 0, 1,
         0, 0, 0, 1,
         0, 0, 0, 1,
-      ]),
-    indices: new tdl.primitives.AttribBuffer(
-      2,
-      [
+    ],
+    indices: [
         0, 4, 1, 5, 2, 6, 3, 7,
-      ],
-      'Uint16Array'),
+    ],
   };
-  var cubeRaysModel = new tdl.models.Model(vertexColorProgram, cubeRaysArrays, textures, gl.LINES);
+  var cubeRaysBufferInfo = twgl.createBufferInfoFromArrays(gl, cubeRaysArrays);
 
-  var colorProgram = tdl.programs.loadProgramFromScriptTags(
+  var colorProgramInfo = twgl.createProgramInfo(gl, [
       'baseVertexShader',
-      'colorFragmentShader');
-  var cubeArrays = tdl.primitives.createCube(2.0);
+      'colorFragmentShader',
+  ]);
+  var cubeArrays = twgl.primitives.createCubeVertices(2);
   delete cubeArrays.normal;
-  delete cubeArrays.texCoord;
+  delete cubeArrays.texcoord;
   var faceColors = [
     [ 1, 0, 0, 1, ],
     [ 0, 1, 0, 1, ],
@@ -191,14 +183,278 @@ function createApp() {
     [ 1, 0, 1, 1, ],
     [ 0, 1, 1, 1, ],
   ];
-  var colorVerts = new tdl.primitives.AttribBuffer(4, 6 * 4);
+  var colorVerts = [];
   for (var f = 0; f < 6; ++f) {
     for (var v = 0; v < 4; ++v) {
-      colorVerts.push(faceColors[f]);
+      colorVerts.push(...faceColors[f]);
     }
   }
-  cubeArrays.a_color = colorVerts;
-  var cubeModel = new tdl.models.Model(colorProgram, cubeArrays, textures);
+  cubeArrays.color = colorVerts;
+  var cubeBufferInfo = twgl.createBufferInfoFromArrays(gl, cubeArrays);
+
+  var fBufferInfo = twgl.createBufferInfoFromArrays(gl, {
+    position: [
+          // left column front
+          0,   0,  0,
+          0, 150,  0,
+          30,   0,  0,
+          0, 150,  0,
+          30, 150,  0,
+          30,   0,  0,
+
+          // top rung front
+          30,   0,  0,
+          30,  30,  0,
+          100,   0,  0,
+          30,  30,  0,
+          100,  30,  0,
+          100,   0,  0,
+
+          // middle rung front
+          30,  60,  0,
+          30,  90,  0,
+          67,  60,  0,
+          30,  90,  0,
+          67,  90,  0,
+          67,  60,  0,
+
+          // left column back
+            0,   0,  30,
+           30,   0,  30,
+            0, 150,  30,
+            0, 150,  30,
+           30,   0,  30,
+           30, 150,  30,
+
+          // top rung back
+           30,   0,  30,
+          100,   0,  30,
+           30,  30,  30,
+           30,  30,  30,
+          100,   0,  30,
+          100,  30,  30,
+
+          // middle rung back
+           30,  60,  30,
+           67,  60,  30,
+           30,  90,  30,
+           30,  90,  30,
+           67,  60,  30,
+           67,  90,  30,
+
+          // top
+            0,   0,   0,
+          100,   0,   0,
+          100,   0,  30,
+            0,   0,   0,
+          100,   0,  30,
+            0,   0,  30,
+
+          // top rung right
+          100,   0,   0,
+          100,  30,   0,
+          100,  30,  30,
+          100,   0,   0,
+          100,  30,  30,
+          100,   0,  30,
+
+          // under top rung
+          30,   30,   0,
+          30,   30,  30,
+          100,  30,  30,
+          30,   30,   0,
+          100,  30,  30,
+          100,  30,   0,
+
+          // between top rung and middle
+          30,   30,   0,
+          30,   60,  30,
+          30,   30,  30,
+          30,   30,   0,
+          30,   60,   0,
+          30,   60,  30,
+
+          // top of middle rung
+          30,   60,   0,
+          67,   60,  30,
+          30,   60,  30,
+          30,   60,   0,
+          67,   60,   0,
+          67,   60,  30,
+
+          // right of middle rung
+          67,   60,   0,
+          67,   90,  30,
+          67,   60,  30,
+          67,   60,   0,
+          67,   90,   0,
+          67,   90,  30,
+
+          // bottom of middle rung.
+          30,   90,   0,
+          30,   90,  30,
+          67,   90,  30,
+          30,   90,   0,
+          67,   90,  30,
+          67,   90,   0,
+
+          // right of bottom
+          30,   90,   0,
+          30,  150,  30,
+          30,   90,  30,
+          30,   90,   0,
+          30,  150,   0,
+          30,  150,  30,
+
+          // bottom
+          0,   150,   0,
+          0,   150,  30,
+          30,  150,  30,
+          0,   150,   0,
+          30,  150,  30,
+          30,  150,   0,
+
+          // left side
+          0,   0,   0,
+          0,   0,  30,
+          0, 150,  30,
+          0,   0,   0,
+          0, 150,  30,
+          0, 150,   0,
+    ],
+    color: {
+      numComponents: 3,
+      data: new Uint8Array([
+            // left column front
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+
+            // top rung front
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+
+            // middle rung front
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+          200,  70, 120,
+
+            // left column back
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+
+            // top rung back
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+
+            // middle rung back
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+          80, 70, 200,
+
+            // top
+          70, 200, 210,
+          70, 200, 210,
+          70, 200, 210,
+          70, 200, 210,
+          70, 200, 210,
+          70, 200, 210,
+
+            // top rung right
+          200, 200, 70,
+          200, 200, 70,
+          200, 200, 70,
+          200, 200, 70,
+          200, 200, 70,
+          200, 200, 70,
+
+            // under top rung
+          210, 100, 70,
+          210, 100, 70,
+          210, 100, 70,
+          210, 100, 70,
+          210, 100, 70,
+          210, 100, 70,
+
+            // between top rung and middle
+          210, 160, 70,
+          210, 160, 70,
+          210, 160, 70,
+          210, 160, 70,
+          210, 160, 70,
+          210, 160, 70,
+
+            // top of middle rung
+          70, 180, 210,
+          70, 180, 210,
+          70, 180, 210,
+          70, 180, 210,
+          70, 180, 210,
+          70, 180, 210,
+
+            // right of middle rung
+          100, 70, 210,
+          100, 70, 210,
+          100, 70, 210,
+          100, 70, 210,
+          100, 70, 210,
+          100, 70, 210,
+
+            // bottom of middle rung.
+          76, 210, 100,
+          76, 210, 100,
+          76, 210, 100,
+          76, 210, 100,
+          76, 210, 100,
+          76, 210, 100,
+
+            // right of bottom
+          140, 210, 80,
+          140, 210, 80,
+          140, 210, 80,
+          140, 210, 80,
+          140, 210, 80,
+          140, 210, 80,
+
+            // bottom
+          90, 130, 110,
+          90, 130, 110,
+          90, 130, 110,
+          90, 130, 110,
+          90, 130, 110,
+          90, 130, 110,
+
+            // left side
+          160, 160, 220,
+          160, 160, 220,
+          160, 160, 220,
+          160, 160, 220,
+          160, 160, 220,
+          160, 160, 220,
+      ]),
+    },
+  });
 
   // pre-allocate a bunch of arrays
   var projection = new Float32Array(16);
@@ -206,7 +462,6 @@ function createApp() {
   var exampleInverseProjection = new Float32Array(16);
   var view = new Float32Array(16);
   var world = new Float32Array(16);
-  var scaleMat = new Float32Array(16);
   var viewProjection = new Float32Array(16);
   eyePosition = new Float32Array([31, 17, 15]);
   var worldViewProjection = new Float32Array(16);
@@ -214,35 +469,34 @@ function createApp() {
   target = new Float32Array([23, 16, 0]);
   var up = new Float32Array([0, 1, 0]);
   var v3t0 = new Float32Array(3);
-  var m4t0 = new Float32Array(16);
   var zeroMat = new Float32Array(16);
 
   var targetToEye = new Float32Array(3);
-  fast.subVector(targetToEye, eyePosition, target);
+  v3.subtract(eyePosition, target, targetToEye);
 
   // uniforms.
   var sharedUniforms = {
   };
 
   var sceneCubeUniforms = {
-    u_color: new Float32Array([1, 1, 1, 1]),
+    u_color: [1, 1, 1, 1],
     u_worldViewProjection: worldViewProjection,
     u_exampleWorldViewProjection: exampleWorldViewProjection,
   };
 
   var frustumCubeUniforms = {
-    u_color: new Float32Array([1, 1, 1, 0.4]),
+    u_color: [1, 1, 1, 0.4],
     u_worldViewProjection: worldViewProjection,
     u_exampleWorldViewProjection: zeroMat,
   };
 
   var cubeRaysUniforms = {
-    u_color: new Float32Array([1, 1, 1, 1]),
+    u_color: [1, 1, 1, 1],
     u_worldViewProjection: worldViewProjection,
   };
 
   var wireFrustumUniforms = {
-    u_color: new Float32Array([1, 0, 0, 1]),
+    u_color: [1, 0, 0, 1],
     u_worldViewProjection: worldViewProjection,
   };
 
@@ -273,10 +527,12 @@ function createApp() {
   webglLessonsUI.setupSlider("#zFar", {value: zFar, slide: updateZFar, min: 1, max: 50});
   webglLessonsUI.setupSlider("#zPosition", {value: zPosition, slide: updateZPosition, min: -60, max: 0});
 
-  var clock = 0;
-  function render(elapsedTime) {
-    clock += elapsedTime;
-    var m4 = fast.matrix4;
+  function render(time) {
+    time *= 0.001;
+
+    twgl.resizeCanvasToDisplaySize(canvas, pixelRatio);
+    const halfHeight = gl.canvas.height / 2;
+    const width = gl.canvas.width;
 
     // clear the screen.
     gl.disable(gl.SCISSOR_TEST);
@@ -284,7 +540,7 @@ function createApp() {
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    gl.viewport(0, 300 * pixelRatio, 400 * pixelRatio, 300 * pixelRatio);
+    gl.viewport(0, halfHeight, width, halfHeight);
 
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
@@ -293,69 +549,79 @@ function createApp() {
     var aspect = gl.canvas.clientWidth / (gl.canvas.clientHeight / 2);
 
     m4.perspective(
-        projection,
-        math.degToRad(60),
+        degToRad(60),
         aspect,
         1,
-        5000);
+        5000,
+        projection);
 
     var f = Math.max(30, fieldOfView) - 30;
     f = f / (179 - 30);
     f = f * f * f * f;
-    f = math.lerpScalar(1, 179 * 0.9, f);
+    f = lerp(1, 179 * 0.9, f);
     f = 1;
-    fast.mulVectorScalar(v3t0, targetToEye, f);
-    fast.addVector(v3t0, v3t0, target);
+    v3.mulScalar(targetToEye, f, v3t0);
+    v3.add(v3t0, target, v3t0);
     m4.lookAt(
-        view,
         v3t0, //eyePosition,
         target,
-        up);
-    m4.mul(viewProjection, view, projection);
-
-    var scale = 1;
+        up,
+        view);
+    m4.inverse(view, view);
+    m4.multiply(projection, view, viewProjection);
 
     // Draw scene
     function drawScene(viewProjection, exampleProjection) {
-      cubeModel.drawPrep(sharedUniforms);
+      gl.useProgram(colorProgramInfo.program);
+      twgl.setBuffersAndAttributes(gl, colorProgramInfo, cubeBufferInfo);
       var cubeScale = scale * 3;
       for (var ii = -1; ii <= 1; ++ii) {
-        m4.scaling(world, [cubeScale, cubeScale, cubeScale]);
-        m4.rotationZ(m4t0, Math.PI / 4);
-        m4.mul(world, world, m4t0);
-        m4.rotationX(m4t0, Math.PI / 4);
-        m4.mul(world, world, m4t0);
-        m4.rotationY(m4t0, clock + ii * Math.PI / 6);
-        m4.mul(world, world, m4t0);
-        m4.translation(m4t0, [ii * 10, 0, zPosition]);
-        m4.mul(world, world, m4t0);
-        m4.mul(worldViewProjection, world, viewProjection);
+        m4.translation([ii * 10, 0, zPosition], world);
+        m4.rotateY(world, time + ii * Math.PI / 6, world);
+        m4.rotateX(world, Math.PI / 4, world);
+        m4.rotateZ(world, Math.PI / 4, world);
+        m4.scale(world, [cubeScale, cubeScale, cubeScale], world);
+        m4.multiply(viewProjection, world, worldViewProjection);
 
-        m4.mul(exampleWorldViewProjection, world, exampleProjection);
+        m4.multiply(exampleProjection, world, exampleWorldViewProjection);
 
-        cubeModel.draw(sceneCubeUniforms);
+        twgl.setUniforms(colorProgramInfo, sceneCubeUniforms);
+        twgl.drawBufferInfo(gl, cubeBufferInfo);
       }
+
+      var rotation = [degToRad(40), degToRad(25), degToRad(325)];
+      m4.translation([45, 150, 0], world);
+      m4.rotateX(world, rotation[0], world);
+      m4.rotateY(world, rotation[1], world);
+      m4.rotateZ(world, rotation[2], world);
+      m4.multiply(viewProjection, world, worldViewProjection);
+      m4.multiply(exampleProjection, world, exampleWorldViewProjection);
+      twgl.setBuffersAndAttributes(gl, colorProgramInfo, fBufferInfo);
+      twgl.setUniforms(colorProgramInfo, sceneCubeUniforms);
+      twgl.drawBufferInfo(gl, fBufferInfo);
     }
     drawScene(viewProjection, exampleProjection);
 
     // Draw Frustum Cube behind
     function drawFrustumCube() {
+      gl.useProgram(colorProgramInfo.program);
+      twgl.setBuffersAndAttributes(gl, colorProgramInfo, cubeBufferInfo);
       m4.perspective(
-          exampleProjection,
-          math.degToRad(fieldOfView),
+          degToRad(fieldOfView),
           aspect,
           zNear,
-          zFar);
-      m4.inverse(exampleInverseProjection, exampleProjection);
+          zFar * scale,
+          exampleProjection);
+      m4.inverse(exampleProjection, exampleInverseProjection);
 
-      m4.translation(world, [0, 0, 0]);
-      m4.mul(world, world, exampleInverseProjection);
-      m4.scaling(scaleMat, [scale, scale, scale]);
-      m4.mul(world, world, scaleMat);
-      m4.mul(worldViewProjection, world, viewProjection);
+      m4.translation([0, 0, 0], world);
+      m4.multiply(exampleInverseProjection, world, world);
+      m4.scale(world, [scale, scale, scale], world);
+      m4.multiply(viewProjection, world, worldViewProjection);
 
-      cubeModel.drawPrep(sharedUniforms);
-      cubeModel.draw(frustumCubeUniforms);
+      twgl.setUniforms(colorProgramInfo, sharedUniforms);
+      twgl.setUniforms(colorProgramInfo, frustumCubeUniforms);
+      twgl.drawBufferInfo(gl, cubeBufferInfo);
     }
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
@@ -369,101 +635,86 @@ function createApp() {
 
     // Draw view cone.
     m4.perspective(
-        exampleProjection,
-        math.degToRad(fieldOfView),
+        degToRad(fieldOfView),
         aspect,
         1,
-        5000);
-    m4.inverse(exampleInverseProjection, exampleProjection);
+        5000,
+        exampleProjection);
+    m4.inverse(exampleProjection, exampleInverseProjection);
 
-    m4.translation(world, [0, 0, 0]);
-    m4.mul(world, world, exampleInverseProjection);
-    m4.scaling(scaleMat, [scale, scale, scale]);
-    m4.mul(world, world, scaleMat);
-    m4.mul(worldViewProjection, world, viewProjection);
+    m4.translation([0, 0, 0], world);
+    m4.multiply(world, exampleInverseProjection, world);
+    m4.scale(world, [scale, scale, scale], world);
+    m4.multiply(viewProjection, world, worldViewProjection);
 
-    cubeRaysModel.drawPrep(sharedUniforms);
-    cubeRaysModel.draw(cubeRaysUniforms);
+    gl.useProgram(vertexColorProgramInfo.program);
+    twgl.setBuffersAndAttributes(gl, vertexColorProgramInfo, cubeRaysBufferInfo);
+    twgl.setUniforms(vertexColorProgramInfo, sharedUniforms);
+    twgl.setUniforms(vertexColorProgramInfo, cubeRaysUniforms);
+    twgl.drawBufferInfo(gl, cubeRaysBufferInfo, gl.LINES);
+
+    {
+      const eyePosition = m4.transformPoint(worldViewProjection, [0, 0, 0]);
+      const ex = (eyePosition[0] *  .5 + .5) * width / pixelRatio;
+      const ey = (eyePosition[1] * -.5 + .5) * halfHeight / pixelRatio;
+      eyeElem.style.left = px(ex - eyeElem.width / 2);
+      eyeElem.style.top = px(ey - eyeElem.height / 2);
+    }
+
 
     // Draw Frustum Wire
     m4.perspective(
-        exampleProjection,
-        math.degToRad(fieldOfView),
+        degToRad(fieldOfView),
         aspect,
         zNear,
-        zFar);
-    m4.inverse(exampleInverseProjection, exampleProjection);
+        zFar * scale,
+        exampleProjection);
+    m4.inverse(exampleProjection, exampleInverseProjection);
 
-    m4.translation(world, [0, 0, 0]);
-    m4.mul(world, world, exampleInverseProjection);
-    m4.scaling(scaleMat, [scale, scale, scale]);
-    m4.mul(world, world, scaleMat);
-    m4.mul(worldViewProjection, world, viewProjection);
+    m4.translation([0, 0, 0], world);
+    m4.multiply(world, exampleInverseProjection, world);
+    m4.scale(world, [scale, scale, scale], world);
+    m4.multiply(viewProjection, world, worldViewProjection);
 
-    wireCubeModel.drawPrep(sharedUniforms);
-    wireCubeModel.draw(wireFrustumUniforms);
+    twgl.setBuffersAndAttributes(gl, vertexColorProgramInfo, wireCubeBufferInfo);
+    twgl.setUniforms(vertexColorProgramInfo, sharedUniforms);
+    twgl.setUniforms(vertexColorProgramInfo, wireFrustumUniforms);
+    twgl.drawBufferInfo(gl, wireCubeBufferInfo, gl.LINES);
 
     // Draw 3D view
     gl.enable(gl.SCISSOR_TEST);
-    gl.viewport(0, 0, 400 * pixelRatio, 300 * pixelRatio);
-    gl.scissor(0, 0, 400 * pixelRatio, 300 * pixelRatio);
+    gl.viewport(0, 0, width, halfHeight);
+    gl.scissor(0, 0, width, halfHeight);
     gl.clearColor(0.5, 0.5, 0.5, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     m4.perspective(
-        projection,
-        math.degToRad(fieldOfView),
+        degToRad(fieldOfView),
         aspect,
         zNear,
-        zFar);
+        zFar * scale,
+        projection);
     drawScene(exampleProjection, zeroMat);
-  }
 
-  return {
-    render: render,
-  };
-}
-
-function resizeCanvas() {
-  var displayWidth  = canvas.clientWidth * pixelRatio;
-  var displayHeight = canvas.clientHeight * pixelRatio;
-  if (canvas.width !== displayWidth ||
-      canvas.height !== displayHeight) {
-
-    canvas.width = displayWidth;
-    canvas.height = displayHeight;
-    gl.viewport(0, 0, displayWidth, displayHeight);
-  }
-}
-var app;
-function main() {
-  math = tdl.math;
-  fast = tdl.fast;
-  canvas = document.getElementById("canvas");
-  var clock = tdl.clock.createClock();
-
-  gl = tdl.webgl.setupWebGL(canvas, {alpha: true, preMultipliedAlpha: false});
-  if (!gl) {
-    webglLessonsHelper.showNeedWebGL2(canvas);
-  }
-
-  resizeCanvas();
-
-  app = createApp();
-
-  var then = clock.getTime();
-  function render() {
-    var now = clock.getTime();
-    var elapsedTime = now - then;
-    then = now;
-    app.render(elapsedTime);
     requestAnimationFrame(render);
   }
-  render();
+
+  requestAnimationFrame(render);
 }
 
-// Need this because of tdl's loader :(
-window.onload = main;
+function px(v) {
+  return `${v | 0}px`;
+}
+
+function degToRad(deg) {
+  return deg * Math.PI / 180;
+}
+
+function lerp(a, b, l) {
+   return a + (b - a) * l;
+}
+
+main();
 </script>
 </html>
 

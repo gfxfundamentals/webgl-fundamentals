@@ -36,6 +36,10 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 "use strict";
 
 function main() {
+  const opt = getQueryParams();
+  const lang = {
+    reflection: opt.reflection || "reflection",
+  };
   var ctx = document.getElementById("canvas").getContext("2d");
   var surfaceAngle = 0;
 
@@ -106,7 +110,7 @@ function main() {
     ctx.translate(0, rl / 2);
     ctx.rotate(Math.PI * -0.5);
     ctx.translate(0, 7);
-    ctx.fillText("relfection", 0, 0);
+    ctx.fillText(lang.reflection, 0, 0);
     ctx.restore();
 
 //    var h = normalize(-ix + r[0], -iy + r[1]);
@@ -168,6 +172,19 @@ function main() {
     ctx.restore();
   }
   render();
+}
+
+function getQueryParams() {
+  var params = {};
+  if (window.location.search) {
+    window.location.search.substring(1).split("&").forEach(function(pair) {
+      var keyValue = pair.split("=").map(function (kv) {
+        return decodeURIComponent(kv);
+      });
+      params[keyValue[0]] = keyValue[1];
+    });
+  }
+  return params;
 }
 
 main();

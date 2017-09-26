@@ -1,13 +1,21 @@
 
 function getQuery(s) {
-  var query = {};
   s = s === undefined ? window.location.search : s;
-  s = s.substring(1);
+  if (s[0] === '?' ) {
+    s = s.substring(1);
+  }
+  var query = {};
   s.split('&').forEach(function(pair) {
       var parts = pair.split('=').map(decodeURIComponent);
       query[parts[0]] = parts[1];
   });
   return query;
+}
+
+function getSearch(url) {
+  // yea I know this is not perfect but whatever
+  var s = url.indexOf('?');
+  return s < 0 ? {} : getQuery(url.substring(s));
 }
 
 const getFQUrl = (function() {
@@ -150,6 +158,11 @@ function parseHTML(url, html) {
     html = html.replace("</head>", "<style>\n${css}</style>\n</head>");
   }
 
+  // add hackedparams section.
+  // We need a way to pass parameters to a blob. Normally they'd be passed as
+  // query params but that only works in Firefox >:(
+  html = html.replace("</head>",'<script id="hackedparams">window.hackedParams = ${hackedParams}\n</script>\n</head>');
+
   // add css if there is none
   if (!hasCanvasInCSSRE.test(htmlParts.css.source) && !hasCanvasStyleInHTMLRE.test(htmlParts.html.source)) {
     htmlParts.css.source = `body {
@@ -189,6 +202,7 @@ function cantGetHTML(e) {
 function main() {
   var query = getQuery();
   g.url = getFQUrl(query.url);
+  g.query = getSearch(g.url);
   getHTML(query.url, function(err, html) {
     if (err) {
       console.log(err);
@@ -207,6 +221,7 @@ function getSourceBlob(options) {
     URL.revokeObjectURL(blobUrl);
   }
   var source = g.html;
+  source = source.replace("${hackedParams}", JSON.stringify(g.query));
   source = source.replace('${html}', htmlParts.html.editor.getValue());
   source = source.replace('${css}', htmlParts.css.editor.getValue());
   source = source.replace('${js}', htmlParts.js.editor.getValue());
@@ -495,6 +510,7 @@ function runEditor(parent, source, language) {
     disableTranslate3d: true,
  //   model: null,
     scrollBeyondLastLine: false,
+    minimap: { enabled: false },
   });
 }
 

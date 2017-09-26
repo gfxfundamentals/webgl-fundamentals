@@ -322,7 +322,7 @@ function CreateApp(gl) {
   }
 
   function drawModel(programInfo, bufferInfo, type, uniforms, world, useWorldForWorldInverseTranspose) {
-    m4.multiply(world, viewProjection, worldViewProjection);
+    m4.multiply(viewProjection, world, worldViewProjection);
     if (useWorldForWorldInverseTranspose) {
       m4.copy(world, worldInverseTranspose);
     } else {
@@ -332,7 +332,7 @@ function CreateApp(gl) {
     gl.useProgram(programInfo.program);
     twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
     twgl.setUniforms(programInfo, sharedUniforms, uniforms);
-    twgl.drawBufferInfo(gl, type, bufferInfo);
+    twgl.drawBufferInfo(gl, bufferInfo, type);
   }
 
   function degToRad(deg) {
@@ -379,7 +379,7 @@ function CreateApp(gl) {
         [0, 0, -1],
         viewInverse);
     m4.inverse(viewInverse, view);
-    m4.multiply(view, projection, viewProjection);
+    m4.multiply(projection, view, viewProjection);
     m4.inverse(viewProjection, inverseViewProjection);
 
     var scale = 6 + Math.sin(time * 0.0003) * 4;

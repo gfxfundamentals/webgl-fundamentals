@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,7 +32,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
-<html>
+<html lang="{{langInfo.langCode}}">
 <head>
 <meta charset="utf-8">
 
@@ -55,18 +57,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <link rel="alternate" type="application/atom+xml" title="WebGL Fundamentals" href="http://webglfundamentals.org/atom.xml" />
 
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/base.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 <link rel="stylesheet" href="/webgl/lessons/resources/index.css" type="text/css" />
 </head>
 <body>
 <div id="canvas">
 </div>
+<div class="webgl_navbar">
+  <div>
+    {{{include "build/templates/languages.template"}}}
+  </div>
+</div>
 <div class="container">
-  <div class="row">
-    <div class="not-jumbotron">
-      <h1>{{title}} <span class="rss"><a href="http://webglfundamentals.org/atom.xml"><img src="/webgl/lessons/resources/rss-icon.svg" /></a></span></h1>
-      {{{langs}}}
+  <div class="lesson">
+    <div class="lesson-main">
+      <h1>{{title}} <span class="rss"><a href="http://webglfundamentals.org/atom.xml"><img src="/webgl/lessons/resources/rss-icon.svg" alt="rss"/></a></span></h1>
+      <div class="home-lang">
+        {{{include "build/templates/languages.template"}}}
+      </div>
       {{{content}}}
     </div>
   </div>
@@ -85,6 +93,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     position: relative;
     transition: 0.5s;
     display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
 }
 #forkongithub a:hover {
     background: #c11;
@@ -105,28 +120,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     top: auto;
 }
 
-@media screen and (min-width: 400px){
-    #forkongithub{
-        position: fixed;
-        display: block;
-        top: 0;
-        right: 0;
-        width: 200px;
-        overflow: hidden;
-        height: 200px;
-        z-index: 9999;
-    }
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}}
+@media (max-width: 900px) {
     #forkongithub a{
-        width: 200px;
-        position: absolute;
-        top: 40px;
-        right: -40px;
-        transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        -moz-transform: rotate(45deg);
-        -o-transform: rotate(45deg);
-        box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
     }
 }
 
@@ -138,8 +151,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <script src="/webgl/resources/primitives.js"></script>
 <script src="/webgl/resources/same-code-02.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
-<script src="/langdb.js"></script>
-<script src="/webgl/lessons/resources/languages.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
 {{{include "build/templates/analytics.template" }}}
 </html>
 

@@ -149,7 +149,7 @@ newY = y * sy;
 
 Which is the same as our [scaling sample](webgl-2d-scale.html).
 
-Now I'm sure you might still be thinking "So what?  What's the point?"
+Now I'm sure you might still be thinking "So what?  What's the point?".
 That seems like a lot of work just to do the same thing we were already
 doing.
 
@@ -481,32 +481,71 @@ and in the second we had
 
 And we saw how they are different.
 
-The general way to look at the matrices is you start with clipspace. Each matrix
-you apply transforms the space so
+The are 2 ways to look at matrices. Given the expression
+
+    projectionMat * translationMat * rotationMat * scaleMat * position
+
+The first way which many people find natural is to start on the right and work
+to the left
+
+First we mutiply the positon by the scale matrix to get a scaled postion
+
+    scaledPosition = scaleMat * position
+
+Then we multiply the scaledPostion by the rotation matrix to get a rotatedScaledPosition
+
+    rotatedScaledPosition = rotationMat * scaledPosition
+
+Then we multiply the rotatedScaledPositon by the translation matrix to get a
+translatedRotatedScaledPosition
+
+    translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
+
+And finally we multiple that by the projection matrix to get clipspace positions
+
+    clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
+
+The 2nd way to look at matrices is reading from left to right. In that case
+each matrix changes the *space* respesented by the canvas. The canvas starts
+with representing clipspace (-1 to +1) in each direction. Each matrix applied
+from left to right changes the space represented by the canvas.
 
 Step 1:  no matrix (or the identiy matrix)
 
-> we're in clip space. Positions passed in need to be in clip space
+> {{{diagram url="resources/matrix-space-change.html?stage=0" caption="clip space" }}}
+>
+> The white area is the canvas. Blue is outside the canvas. We're in clip space.
+> Positions passed in need to be in clip space
 
-Step 2:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)`;
+Step 2:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
 
-> we're now in pixel space. Positions passed in need to be in pixel space
+> {{{diagram url="resources/matrix-space-change.html?stage=1" caption="from clip space to pixel space" }}}
+>
+> We're now in pixel space. X = 0 to 400, Y = 0 to 300 with 0,0 at the top left.
+> Positions passed using this matrix in need to be in pixel space. The flash you see
+> is when the space flips from positive Y = up to positive Y = down.
 
 Step 3:  `matrix = m3.translate(matrix, tx, ty);`
 
-> The origin is now at tx, ty (the space has moved)
+> {{{diagram url="resources/matrix-space-change.html?stage=2" caption="move origin to tx, ty" }}}
+>
+> The origin has now been moved to tx, ty (150, 100). The space has moved.
 
 Step 4:  `matrix = m3.rotate(matrix, rotationInRadians);`
 
+> {{{diagram url="resources/matrix-space-change.html?stage=3" caption="rotate 33 degrees" }}}
+>
 > The space has been rotated around tx, ty
 
 Step 5:  `matrix = m3.scale(matrix, sx, sy);`
 
-> The previously rotated space with it's center at tx, ty has been scaled
+> {{{diagram url="resources/matrix-space-change.html?stage=4" capture="scale the space" }}}
+>
+> The previously rotated space with its center at tx, ty has been scaled 2 in x, 1.5 in y
 
-In the shader we then do `gl_Position = matrix * position;`
+In the shader we then do `gl_Position = matrix * position;`. The `position` values are effectively in this final space.
 
-the `position` values are effectively in that final space.
+Use which ever way you feel is easier to understand.
 
 I hope these posts have helped demystify matrix math. If you want
 to stick with 2D I'd suggest checking out [recreating canvas 2d's

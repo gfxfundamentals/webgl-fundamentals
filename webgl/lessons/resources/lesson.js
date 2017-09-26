@@ -58,12 +58,19 @@ $(document).ready(function($){
      .replaceWith(function() {
        return $('<pre class="prettyprint showlinemods">' + this.innerHTML + '</pre>')
      });
-  prettyPrint();
+  if (window.prettyPrint) {
+    window.prettyPrint();
+  }
 
   var params = getQueryParams();
   if (params.doubleSpace || params.doublespace) {
     document.body.className = document.body.className + " doubleSpace";
   }
+
+  $(".language").on('change', function() {
+    window.location.href = this.value;
+  });
+
 });
 }(jQuery));
 

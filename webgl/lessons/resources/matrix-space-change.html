@@ -1,0 +1,321 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Matrix Space Change</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<div class="description">
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas"></canvas>
+</div>
+</body>
+</html>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="../../resources/webgl-lessons-ui.js"></script>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
+<script src="../../resources/m3.js"></script>
+<script>
+"use strict";
+
+function main() {
+  const opt = getQueryParams();
+  const ctx = document.getElementById("canvas").getContext("2d");
+
+  const fpoints = [
+    // left column
+    [ 0, 0, ],
+    [ 30, 0, ],
+    [ 0, 150, ],
+    [ 0, 150, ],
+    [ 30, 0, ],
+    [ 30, 150, ],
+
+    // top rung
+    [ 30, 0, ],
+    [ 100, 0, ],
+    [ 30, 30, ],
+    [ 30, 30, ],
+    [ 100, 0, ],
+    [ 100, 30, ],
+
+    // middle rung
+    [ 30, 60, ],
+    [ 67, 60, ],
+    [ 30, 90, ],
+    [ 30, 90, ],
+    [ 67, 60, ],
+    [ 67, 90, ],
+  ];
+
+  function render(time) {
+    time *= 0.001; // seconds
+
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    const width = ctx.canvas.clientWidth;
+    const height = ctx.canvas.clientHeight;
+
+    ctx.font = "8pt monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.fillStyle = hsla(.66, 1, .5, .25);
+    ctx.fillRect(0, 0, width, height * .25);
+    ctx.fillRect(0, height * .25, width * .25, height * .5);
+    ctx.fillRect(0, height * .75, width, height * .25);
+    ctx.fillRect(width * .75, height * .25, width * .25, height * .5);
+
+
+    let matrix = [
+      width * .25, 0, 0,
+      0, height * -.25, 0,
+      width * .5, height * .5, 1,
+    ];
+
+    const tx = 150;
+    const ty = 100;
+    const angle = 33 * Math.PI / 180;
+    const sx = 2;
+    const sy = 1.5;
+
+    const t2 = time % 16 / 16;
+    const t = easeInOutSine(1 - Math.pow(1 - t2, 4));
+    const projection = m3.projection(width, height);
+    const translation = m3.translation(tx, ty);
+    const rotation = m3.rotation(angle);
+    const scale = m3.scaling(sx, sy);
+    const stage = opt.stage || 0;
+
+    matrix = m3.multiply(matrix, lerpMatrix(m3.identity(), projection, stageAmount(1, stage, t)));
+    matrix = m3.multiply(matrix, lerpMatrix(m3.identity(), translation, stageAmount(2, stage, t)));
+    matrix = m3.multiply(matrix, lerpMatrix(m3.identity(), rotation, stageAmount(3, stage, t)));
+    matrix = m3.multiply(matrix, lerpMatrix(m3.identity(), scale, stageAmount(4, stage, t)));
+
+    // draw f
+    ctx.fillStyle = hsla(.33, 1, .5, .3);
+    ctx.strokeStyle = hsla(.33, 1, .3, 1);
+
+    for (let i = 0; i < fpoints.length; i += 3) {
+      const p0 = m3.transformPoint(matrix, fpoints[i + 0]);
+      const p1 = m3.transformPoint(matrix, fpoints[i + 1]);
+      const p2 = m3.transformPoint(matrix, fpoints[i + 2]);
+
+      ctx.beginPath();
+      ctx.moveTo(...p0);
+      ctx.lineTo(...p1);
+      ctx.lineTo(...p2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function stageAmount(stage, actualStage, t) {
+      if (actualStage < stage) {
+        return 0;
+      }
+      if (actualStage > stage) {
+        return 1;
+      }
+      return t;
+    }
+
+    const minDimension = Math.min(width, height);
+    const maxDimension = Math.max(width, height);
+    const dimension = [width, height];
+
+    {
+      ctx.lineWidth = 1;
+      for (let axis = 0; axis < 2; ++axis) {
+        const p0 = m3.transformPoint(matrix, [0, 0]);
+        const p1 = m3.transformPoint(matrix, makeAxisPoint(.02, 0, axis));
+        const d = m3.distance(...p0, ...p1);
+        const step = Math.pow(10, -Math.trunc(Math.log10(d)));
+        const p2 = m3.transformPoint(matrix, makeAxisPoint(step, 0, axis));
+        const gridDist = m3.distance(...p0, ...p2);
+        const alpha = rangeLerp(0, 4, 10, dimension[axis], gridDist);
+        ctx.strokeStyle = hsla(0, 0, 0, alpha);
+        drawGridLines(ctx, matrix, step * -1000, step * 1000, step, axis);
+        if (alpha < 1) {
+          ctx.strokeStyle = hsla(0, 0, 0, 1);
+          drawGridLines(ctx, matrix, step * -10000, step * 10000, step * 10, axis);
+        }
+      }
+    }
+
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = hsla(1, 1, 0.5, 1);
+    drawAxis(ctx, matrix, -1000, 1000);
+
+    {
+      ctx.fillStyle = hsla(0, 0, 0, 1);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = hsla(0, 1, .5, 1);
+
+      for (let axis = 0; axis < 2; ++axis) {
+        const p0 = m3.transformPoint(matrix, [0, 0]);
+        const p1 = m3.transformPoint(matrix, makeAxisPoint(.002, 0, axis));
+        const d = m3.distance(...p0, ...p1);
+        const step = Math.pow(10, -Math.trunc(getBaseLog(10, d)));
+        const p2 = m3.transformPoint(matrix, makeAxisPoint(step, 0, axis));
+        const gridDist = m3.distance(...p0, ...p2);
+        const div = Math.pow(2, Math.floor(Math.log2(gridDist / 50)));
+        const alpha = rangeLerp(0, 1, 50, 70, gridDist);
+        drawCoordsAxis(ctx, matrix, step * -1000, step * 1000, step / div, axis, alpha);
+      }
+    }
+
+    ctx.restore();
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+}
+
+function easeInOutSine(pos) {
+  return (-0.5 * (Math.cos(Math.PI * pos) - 1));
+}
+
+
+function lerp(a, b, l) {
+  return a + (b - a) * l;
+}
+
+function lerpMatrix(a, b, l) {
+  return a.map((v, ndx) => {
+    return lerp(v, b[ndx], l);
+  });
+}
+
+function rangeLerp(a, b, min, max, l) {
+  const range = max - min;
+  return clamp(a, b, lerp(a, b, (l - min) / range));
+}
+
+function drawAxis(ctx, matrix, min, max) {
+  ctx.beginPath();
+
+  ctx.moveTo(...transformPoint(matrix, [min, 0]));
+  ctx.lineTo(...transformPoint(matrix, [max, 0]));
+  ctx.moveTo(...transformPoint(matrix, [0, min]));
+  ctx.lineTo(...transformPoint(matrix, [0, max]));
+
+  ctx.stroke();
+}
+
+function drawGridLines(ctx, matrix, min, max, step, axis) {
+  ctx.beginPath();
+  for (let y = min; y <= max; y += step) {
+    const p = [];
+    p[axis] = y;
+    p[1 - axis] = min;
+    ctx.moveTo(...transformPoint(matrix, p));
+    p[1 - axis] = max;
+    ctx.lineTo(...transformPoint(matrix, p));
+  }
+  ctx.stroke();
+}
+
+function drawCoordsAxis(ctx, matrix, min, max, step, axis, alpha) {
+  let count = 0;
+  for (let y = min; y <= max; y += step) {
+    const i = makeAxisPoint(y, 0, axis);
+    const p = m3.transformPoint(matrix, i);
+    const a = count % 2 ? alpha : 1;
+    if (a > 0 &&
+        p[0] > -50 && p[0] < ctx.canvas.width  + 50 &&
+        p[1] > -50 && p[1] < ctx.canvas.height + 50) {
+      ctx.save();
+      ctx.translate(...p);
+      ctx.fillStyle = hsla(0, 0, 0, a);
+      ctx.strokeStyle = hsla(0, 1, 1, a * .5);
+      ctx.rotate(Math.atan2(matrix[1], matrix[0]));
+      drawOutlineText(ctx, `${i[0]},${i[1]}`, 0, 0);
+      ctx.restore();
+    }
+    ++count;
+  }
+}
+
+function drawOutlineText(ctx, s, x, y) {
+  const m = ctx.measureText(s);
+  const w = m.width / 2 / window.devicePixelRatio + 10;
+  const offx = x + w;   // x + (x > ctx.canvas.width  / 2 / window.devicePixelRatio ? -w : w);
+  const offy = y + 12;  // y + (y > ctx.canvas.height / 2 / window.devicePixelRatio ? -12 : 12);
+  ctx.strokeText(s, offx, offy);
+  ctx.fillText(s, offx, offy);
+}
+
+function getBaseLog(x, y) {
+  return Math.log(y) / Math.log(x);
+}
+
+function makeAxisPoint(x, y, axis) {
+  const p = [];
+  p[axis] = x;
+  p[1 - axis] = y;
+  return p;
+}
+
+function clamp(min, max, v) {
+  return Math.min(max, Math.max(min, v));
+}
+
+function transformPoint(matrix, p) {
+  p = m3.transformPoint(matrix, p);
+  const result = [
+    p[0] | 0,
+    p[1] | 0,
+  ];
+  return result;
+}
+
+// convert from clipspace back into canvas
+function clipToCanvas(ctx, matrix) {
+  const toCanvasMatrix = [
+    ctx.canvas.width * .5, 0, 0,
+    0, ctx.canvas.height * -.5, 0,
+    ctx.canvas.width * .5, ctx.canvas.height * .5, 1,
+  ];
+
+  return m3.multiply(toCanvasMatrix, matrix);
+}
+
+function rgba(r, g, b, a) {
+  return `rgba(${r * 255 | 0}, ${g * 255 | 0}, ${b * 255 | 0}, ${a})`;
+}
+
+function hsla(h, s, l, a) {
+  return `hsla(${h * 360 | 0}, ${s * 100 | 0}%, ${l * 100 | 0}%, ${a})`;
+}
+
+function getQueryParams() {
+  var params = {};
+  if (window.location.search) {
+    window.location.search.substring(1).split("&").forEach(function(pair) {
+      var keyValue = pair.split("=").map(function (kv) {
+        return decodeURIComponent(kv);
+      });
+      params[keyValue[0]] = keyValue[1];
+    });
+  }
+  return params;
+}
+
+
+main();
+</script>
+

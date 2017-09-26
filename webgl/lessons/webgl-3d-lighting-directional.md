@@ -3,7 +3,7 @@ Description: How to implement directional lighting in WebGL
 
 This article is a continuation of [WebGL 3D
 Cameras](webgl-3d-camera.html).  If you haven't read that I suggest [you
-start there](webgl-3d-cameras.html).
+start there](webgl-3d-camera.html).
 
 There are many ways to implement lighting.  Probably the simplest is
 *directional lighting*.
@@ -61,7 +61,7 @@ positive x being <span style="color: red;">red</span>, up being
 <span style="color: blue;">blue</span>.
 
 So, let's go add normals to our `F` from [our previous
-examples](webgl-3d-cameras.html) so we can light it.  Since the `F` is
+examples](webgl-3d-camera.html) so we can light it.  Since the `F` is
 very boxy and its faces are aligned to the x, y, or z axis it will be
 pretty easy.  Things that are facing forward have the normal `0, 0, 1`.
 Things that are facing away are `0, 0, -1`.  Facing left is `-1, 0, 0`,

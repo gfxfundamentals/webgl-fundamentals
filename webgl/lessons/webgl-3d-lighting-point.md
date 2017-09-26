@@ -40,7 +40,7 @@ And we can compute a vector from the surface to the light which is simular
 to the direction we had before expect this time we're computing it for
 every position on the surface to a point.
 
-    v_surfaceToLight = u_lightPosition - surfaceWorldPosition;
+    v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 
 Here's all that in context
 
@@ -95,8 +95,8 @@ vector
 
       vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
 
-      -float light = dot(v_normal, u_reverseLightDirection);
-      +float light = dot(v_normal, surfaceToLightDirection);
+    -  float light = dot(v_normal, u_reverseLightDirection);
+    +  float light = dot(v_normal, surfaceToLightDirection);
 
       gl_FragColor = u_color;
 
@@ -204,7 +204,7 @@ and pass it to the fragment shader.
 
     +  // compute the vector of the surface to the view/camera
     +  // and pass it to the fragment shader
-    +  v_surfaceToView = normalize(u_viewWorldPosition - surfaceWorldPosition);
+    +  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
     }
 
 Next in the fragment shader we need to compute the `halfVector` between
