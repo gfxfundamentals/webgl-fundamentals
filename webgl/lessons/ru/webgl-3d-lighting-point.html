@@ -114,7 +114,7 @@ vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 </code></pre><p>Далее вычислим вектор от поверхности к источнику света по аналогии с
 направленным освещением, но на этот раз мы будем вычислять вектор для
 каждой точки поверхности.</p>
-<pre><code>v_surfaceToLight = u_lightPosition - surfaceWorldPosition;
+<pre><code>v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 </code></pre><p>Всё вместе выглядит следующим образом</p>
 <pre><code>attribute vec4 a_position;
 attribute vec3 a_normal;
@@ -165,8 +165,8 @@ void main() {
 
   vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
 
-  -float light = dot(v_normal, u_reverseLightDirection);
-  +float light = dot(v_normal, surfaceToLightDirection);
+  -  float light = dot(v_normal, u_reverseLightDirection);
+  +  float light = dot(v_normal, surfaceToLightDirection);
 
   gl_FragColor = u_color;
 

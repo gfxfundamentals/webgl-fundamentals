@@ -383,7 +383,7 @@ gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 </div>
 
 </p>
-<p>Это также будет работать, даже когда у нас будут индексы. <code>webglUtils.setAttribsAndBuffers</code>
+<p>Это также будет работать, даже когда у нас будут индексы. <code>webglUtils.setBuffersAndAttributes</code>
 установит все атрибуты и привяжет <code>ELEMENT_ARRAY_BUFFER</code> к <code>indices</code>, после чего
 можно вызывать <code>gl.drawElements</code>.</p>
 <pre><code>// прямоугольник с индексами
@@ -394,7 +394,7 @@ var arrays = {
    indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
 };
 
-var bufferInfo = webglUtils.createBufferInfoFromTypedArray(gl, arrays);
+var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>и при отрисовке мы будем вызывать <code>gl.drawElements</code> вместо <code>gl.drawArrays</code>.</p>
 <pre><code>// Устанавливаем все необходимые буферы и атрибуты
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);

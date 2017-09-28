@@ -131,7 +131,7 @@ abs(3.333 - 6.666) = 3.333
 <p>Попробуем это на практике. Сначала изменим вершинный шейдер, чтобы в
 нём происходило деление на Z, которое предварительно было умножено на
 &quot;fudgeFactor&quot;.</p>
-<pre><code>&amp;lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -145,7 +145,7 @@ void main() {
 *  // Делим x и y на z
 *  gl_Position = vec4(position.xy / zToDivideBy, position.zw);
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>Обратите внимание, что из-за того, что Z находится в пространстве
 отсечения от -1 до +1, я добавил 1, чтобы получить <code>zToDivideBy</code>
 в интервале от 0 до +2 * fudgeFactor</p>
@@ -183,7 +183,7 @@ void main() {
 значения x,y,z,w и делит их на w автоматически.</p>
 <p>Мы можем воспользоваться этим очень легко, достаточно не выполнять деление
 в шейдере самим, а передать <code>zToDivideBy</code> в <code>gl_Position.w</code>.</p>
-<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -200,7 +200,7 @@ void main() {
   // Передаём цвет во фрагментный шейдер
   v_color = a_color;
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>Теперь взгляните - мы получили то же самое.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-w.html"></iframe>
@@ -295,7 +295,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>Теперь изменим программу снова, чтобы использовать только матрицы.</p>
 <p>Сначала вернём обратно простой вершинный шейдер.</p>
-<pre><code>&amp;lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&amp;gt;
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -303,7 +303,7 @@ void main() {
   gl_Position = u_matrix * a_position;
   ...
 }
-&amp;lt;/script&amp;gt;
+&lt;/script&gt;
 </code></pre><p>Теперь сделаем функцию создания матрицы Z &rarr; W</p>
 <pre><code>function makeZToWMatrix(fudgeFactor) {
   return [

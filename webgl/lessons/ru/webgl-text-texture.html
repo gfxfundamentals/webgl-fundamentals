@@ -335,7 +335,7 @@ Y некоторое число, чтобы надпись была всегда
 +var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
 
 *var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-// масштабируем F до нужного размера
+// масштабируем квадрант до нужного размера
 textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 </code></pre><p>И вот, что мы получим</p>
 <p><div class="webgl_example_container">
@@ -387,7 +387,7 @@ var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
 +var scale = viewZ * desiredTextScale;
 
 var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-// масштабируем F до нужного размера
+// масштабируем квадрант до нужного размера
 *textMatrix = m4.scale(textMatrix, textWidth * scale, textHeight * scale, 1);
 ...
 </code></pre><p><div class="webgl_example_container">
@@ -440,7 +440,7 @@ var textTextures = [
   +var tex = textTextures[ndx];
 
   var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
-  // масштабируем F до нужного размера
+  // масштабируем квадрант до нужного размера
   *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
 </code></pre><p>и обновляем значение uniform-переменной перед отрисовкой.</p>
 <pre><code>  *textUniforms.u_texture = tex.texture;
