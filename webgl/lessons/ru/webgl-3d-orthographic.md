@@ -38,7 +38,7 @@ void main() {
 
 ```
 <script id="3d-vertex-shader" type="x-shader/x-vertex">
-attribute vec4 a_position;
+*attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
 
@@ -229,7 +229,7 @@ var m4 = {
 
 ```
   translate: function(m, tx, ty, tz) {
-    return m4.multiply(b, m4.translation(tx, ty, tz));
+    return m4.multiply(m, m4.translation(tx, ty, tz));
   },
 
   xRotate: function(m, angleInRadians) {
@@ -307,7 +307,7 @@ var m4 = {
 'F' сложно увидеть 3D. Для устранения этой проблемы перенесём геометрию в 3D.
 Наша 'F' сейчас сделана из 3 прямоугольников, 2 треугольника в каждом. Для
 3D-формы понадобится в сумме 16 прямоугольников - 3 прямоугольника впереди,
-3 сзади, один слева, 4 справа и 3 снизу.
+3 сзади, один слева, 4 справа, 2 сверху и 3 снизу.
 
 <img class="webgl_center" width="300" src="../resources/3df.svg" />
 
@@ -337,7 +337,7 @@ var m4 = {
 Вот новый вершинный шейдер:
 
 ```
-&lt;script id="3d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="3d-vertex-shader" type="x-shader/x-vertex">
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -352,13 +352,13 @@ void main() {
 +  // Передаём цвет во фрагментный шейдер
 +  v_color = a_color;
 }
-&lt;/script&gt;
+</script>
 ```
 
 Во фрагментном шейдере нам нужно использовать переданный цвет.
 
 ```
-&lt;script id="3d-vertex-shader" type="x-shader/x-fragment"&gt;
+<script id="3d-vertex-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 +// Передаётся из вершинного шейдера
@@ -367,7 +367,7 @@ precision mediump float;
 void main() {
 *   gl_FragColor = v_color;
 }
-&lt;/script&gt;
+</script>
 ```
 
 Нам нужно получить ссылку для передачи цветов, установить буфер и
@@ -438,6 +438,15 @@ gl.vertexAttribPointer(
 передняя, задняя, боковые и т.д. - отрисовываются в порядке объявления
 в геометрии. Это не даёт нам ожидаемый результат, так как иногда части,
 которые должны быть сзади, отрисовываются впереди.
+
+<img class="webgl_center" width="163" height="190" src="../resources/polygon-drawing-order.gif" />
+
+<span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">Красным цветом</span>
+отмечена **передняя часть** буквы 'F', но из-за того, что она отрисовывается
+первой, другие треугольники перекрывают её, хотя и находятся дальше. Например,
+<span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">фиолетовые части</span>
+на самом деле должны находиться позади. Фиолетовые части рисуются вторыми,
+так как они идут вторыми в массиве данных.
 
 Треугольники в WebGL могут располагаться лицевой или тыльной стороной.
 У треугольника с лицевой стороной вершины идут в направлении по часовой

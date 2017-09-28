@@ -66,6 +66,8 @@ var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 радиусу radius * 1.5, при этом камера направлена в центр
 координат.
 
+{{{diagram url="resources/camera-move-camera.html?mode=3" caption="Движение камеры" }}}
+
 ```
 var numFs = 5;
 var radius = 200;
