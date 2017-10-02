@@ -561,7 +561,7 @@ called `ortho` or `orthographic` that looks like this
         return [
           2 / (right - left), 0, 0, 0,
           0, 2 / (top - bottom), 0, 0,
-          0, 0, 2 / (far - near), 0,
+          0, 0, 2 / (near - far), 0,
 
           (left + right) / (left - right),
           (bottom + top) / (bottom - top),
