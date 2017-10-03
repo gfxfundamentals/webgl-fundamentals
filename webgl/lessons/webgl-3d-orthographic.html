@@ -556,7 +556,7 @@ called <code>ortho</code> or <code>orthographic</code> that looks like this</p>
     return [
       2 / (right - left), 0, 0, 0,
       0, 2 / (top - bottom), 0, 0,
-      0, 0, 2 / (far - near), 0,
+      0, 0, 2 / (near - far), 0,
 
       (left + right) / (left - right),
       (bottom + top) / (bottom - top),
@@ -572,8 +572,8 @@ our original projection function we&#39;d call it with</p>
 var right = gl.canvas.clientWidth;
 var bottom = gl.canvas.clientHeight;
 var top = 0;
-var near = -400;
-var far = 400;
+var near = 400;
+var far = -400;
 m4.orthographic(left, right, bottom, top, near, far);
 </code></pre><p>In the next post I&#39;ll go over <a href="webgl-3d-perspective.html">how to make it have perspective</a>.</p>
 <div class="webgl_bottombar">
