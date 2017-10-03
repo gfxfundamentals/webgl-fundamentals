@@ -582,8 +582,8 @@ CULL_FACE, как только треугольники с лицевой сто
     var right = gl.canvas.clientWidth;
     var bottom = gl.canvas.clientHeight;
     var top = 0;
-    var near = -400;
-    var far = 400;
+    var near = 400;
+    var far = -400;
     m4.orthographic(left, right, bottom, top, near, far);
 
 В следующей статье я расскажу о том, [как создать перспективу](webgl-3d-perspective.html).

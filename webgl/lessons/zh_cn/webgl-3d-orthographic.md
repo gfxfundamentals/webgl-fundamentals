@@ -543,8 +543,8 @@ WebGL绘制一个着色像素之前会检查对应的深度像素，
     var right = gl.canvas.clientWidth;
     var bottom = gl.canvas.clientHeight;
     var top = 0;
-    var near = -400;
-    var far = 400;
+    var near = 400;
+    var far = -400;
     m4.orthographic(left, right, bottom, top, near, far);
 
 下一篇将讲述[如何实现透视投影](webgl-3d-perspective.html)。

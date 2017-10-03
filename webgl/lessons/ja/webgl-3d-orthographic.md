@@ -537,8 +537,8 @@ XとYはクリップ空間に変更しなければいけないのと同じよう
     var right = gl.canvas.clientWidth;
     var bottom = gl.canvas.clientHeight;
     var top = 0;
-    var near = -400;
-    var far = 400;
+    var near = 400;
+    var far = -400;
     var projection = m4.orthographic(left, right, bottom, top, near, far);
 
 次の記事は[透視投影についての記事である](webgl-3d-perspective.html)。
