@@ -200,14 +200,14 @@ script要素から読み込んでコンパイルし、プログラムにアタ�
  * 二つのscript要素を使ってWebGLProgramを生成する。
  *
  * @param {!WebGLRenderingContext} gl WebGLコンテキスト。
- * @param {string} vertexShaderId 頂点シェーダーの書かれたscript要素のid。
- * @param {string} fragmentShaderId フラグメントシェーダーの書かれたscript要素のid。
+ * @param {string[]} shaderScriptIds script要素のidプロパティの配列。
+ *        一つ目を頂点シェーダー、二つ目をフラグメントシェーダーとみなす。
  * @return {!WebGLProgram} WebGLプログラム。
  */
 function createProgramFromScripts(
-    gl, vertexShaderId, fragmentShaderId) {
-  var vertexShader = createShaderFromScript(gl, vertexShaderId, gl.VERTEX_SHADER);
-  var fragmentShader = createShaderFromScript(gl, fragmentShaderId, gl.FRAGMENT_SHADER);
+    gl, shaderScriptIds) {
+  var vertexShader = createShaderFromScript(gl, shaderScriptIds[0], gl.VERTEX_SHADER);
+  var fragmentShader = createShaderFromScript(gl, shaderScriptIds[1], gl.FRAGMENT_SHADER);
   return createProgram(gl, vertexShader, fragmentShader);
 }
 </code></pre><h2 id="-canvas-">「canvasのリサイズ処理」のひな形コード</h2>
@@ -215,23 +215,23 @@ function createProgramFromScripts(
 「canvasのリサイズ処理」をするコードです。
 このコードの実装内容については<a href="webgl-resizing-the-canvas.html">このドキュメント</a>
 で紹介しています。</p>
-<h2 id="-">まとめ</h2>
-<p>上に挙げた２つのひな形コードを実際に利用するには、
-シェーダーのコードが、</p>
+<h2 id="-">ひな形コードの利用</h2>
+<p>以上、２つのひな形コードは<code>webgl-utils.js</code>として一つにまとめてあります。
+これを利用するには、</p>
 <pre><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
-</code></pre><p>の中に書かれているサンプルの場合、</p>
+</code></pre><p>といったコードで取り込んだ上で、以下のようなコードで呼び出します。</p>
 <pre><code>var program = webglUtils.createProgramFromScripts(
   gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...
 
 webglUtils.resizeCanvasToMatchDisplaySize(canvas);
-</code></pre><p>となります。</p>
-<p>まったく同じ大量のコードが全てのサンプルに含まれているために、
-そのサンプルが何のために書かれたサンプルなのか判りにくく
-なってしまう、という事態は避けるべき、と思います。</p>
+</code></pre><h2 id="-">まとめ</h2>
+<p>まったく同じ大量のコードが全てのサンプルに含まれているために
+「そのサンプルが何のために書かれたサンプルなのか判りにくく
+なってしまう」のは本末転倒で、避けるべきであるとと思います。</p>
 <p>以上で、私の「最小のWebGLひな型コード(boilerplate code)」のおおまかな紹介を終わります。
-<a href="../../resources/webgl-utils.js"><code>webgl-utils.js</code>はここにあります</a>。</p>
+<a href="../../resources/webgl-utils.js"><code>webgl-utils.js</code>のコードはここにあります</a>。</p>
 <p>さらにしっかり構成されたライブラリに興味があるようでしたら<a href="http://twgljs.org">TWGL.js</a>
 をチェックしてください。</p>
 <p>WebGLを複雑に見せているもう一つの要素は「シェーダーにデータを渡す手順」です。

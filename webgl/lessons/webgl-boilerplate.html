@@ -199,14 +199,15 @@ from script tags, attach them to a program and link them.</p>
  * Creates a program from 2 script tags.
  *
  * @param {!WebGLRenderingContext} gl The WebGL Context.
- * @param {string} vertexShaderId The id of the vertex shader script tag.
- * @param {string} fragmentShaderId The id of the fragment shader script tag.
+ * @param {string[]} shaderScriptIds Array of ids of the script
+ *        tags for the shaders. The first is assumed to be the
+ *        vertex shader, the second the fragment shader.
  * @return {!WebGLProgram} A program
  */
 function createProgramFromScripts(
-    gl, vertexShaderId, fragmentShaderId) {
-  var vertexShader = createShaderFromScriptTag(gl, vertexShaderId, gl.VERTEX_SHADER);
-  var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId, gl.FRAGMENT_SHADER);
+    gl, shaderScriptIds) {
+  var vertexShader = createShaderFromScript(gl, shaderScriptIds[0], gl.VERTEX_SHADER);
+  var fragmentShader = createShaderFromScript(gl, shaderScriptIds[1], gl.FRAGMENT_SHADER);
   return createProgram(gl, vertexShader, fragmentShader);
 }
 </code></pre><p>The other piece of code I use in almost every WebGL program is something to
