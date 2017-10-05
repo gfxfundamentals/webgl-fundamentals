@@ -1,0 +1,233 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Spot Lighting Diagram</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<div class="description">
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas" width="500" height="400" style="width: 500px; height: 400px;"></canvas>
+</div>
+<div id="uiContainer">
+  <div id="ui">
+    <div id="rotation"></div>
+    <div id="direction"></div>
+    <div id="limit"></div>
+</div>
+</div>
+</body>
+</html>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="../../resources/webgl-lessons-ui.js"></script>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
+<script src="../../resources/m3.js"></script>
+<script src="diagram.js"></script>
+<script>
+"use strict";
+
+function main() {
+  const opt = getQueryParams();
+  const lang = {
+    dot: opt.dot || "dot(surfaceToLight,surfaceNormal)",
+    surfaceNormal: opt.surfaceNormal || "surface normal",
+  };
+  var ctx = document.getElementById("canvas").getContext("2d");
+  var rotation = 0;
+  var direction = degToRad(20);
+  var limit = degToRad(20);
+
+  function radToDeg(rad) {
+    return rad * 180 / Math.PI;
+  }
+
+  function degToRad(deg) {
+    return deg * Math.PI / 180;
+  }
+
+  webglLessonsUI.setupSlider("#rotation", {value: radToDeg(direction), slide: updateRotation, min: -70, max: 70 });
+  webglLessonsUI.setupSlider("#direction", {value: radToDeg(direction), slide: updateDirection, min: -70, max: 70 });
+  webglLessonsUI.setupSlider("#limit", {value: radToDeg(limit), slide: updateLimit, min: 0, max: 180 });
+
+  function updateDirection(event, ui) {
+    direction = degToRad(ui.value);
+    render();
+  }
+
+  function updateRotation(event, ui) {
+    rotation = degToRad(ui.value);
+    render();
+  }
+
+  function updateLimit(event, ui) {
+    limit = degToRad(ui.value);
+    render();
+  }
+
+  function render() {
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
+    const width  = 250;
+    const height = 200;
+
+    const baseScale = Math.min(ctx.canvas.width / width,  ctx.canvas.height / height);
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
+
+    ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+    ctx.scale(baseScale, baseScale);
+    ctx.lineWidth = 1 / baseScale;
+
+    ctx.font = "6px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    const lx = 0;
+    const ly = -height / 4;
+
+    const sx = 0;
+    const sy = height / 2 - 40;
+
+    const ldx = Math.sin(direction);
+    const ldy = Math.cos(direction);
+
+    ctx.save();
+    ctx.translate(lx, ly);
+    ctx.rotate(direction + Math.PI * .5);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, 500, -limit, limit, false);
+    ctx.fillStyle = "#FFC";
+    ctx.fill();
+    ctx.restore();
+
+    var dots = [];
+    var numArrows = 64;
+    for (var ii = 0; ii <= numArrows; ++ii) {
+      const u = ii / numArrows;
+      const r = (u * 2 - 1) * Math.PI;
+
+      const c = Math.cos(rotation);
+      const s = Math.sin(rotation);
+      const x = c * r;
+      const y = s * r + sy;
+      const a = -Math.atan2(lx - x, ly - y);
+
+      const rayDx = Math.sin(r);
+      const rayDy = Math.cos(r);
+
+      const cutOffDot = m3.dot(ldx, ldy, rayDx, rayDy);
+      const cutOffAngle = Math.acos(cutOffDot);
+      const inLight = cutOffAngle <= limit;
+
+      ctx.save();
+      ctx.translate(lx, ly);
+      ctx.rotate(r);
+      ctx.fillStyle = "#EEE";
+      ctx.strokeStyle = "#EEE";
+      diagram.arrow(ctx, 0, 0, 0, 400, false, true, 0.5);
+      ctx.fillStyle = inLight ? "#888" : "#EEE";
+      ctx.strokeStyle = inLight ? "#888" : "#EEE";
+      diagram.arrow(ctx, 0, 0, 0, 100, false, true, 0.5);
+      ctx.translate(0, 90);
+      ctx.rotate(Math.PI * .5);
+      //ctx.fillText(cutOffDot.toFixed(2), 0, 0);
+      ctx.strokeStyle = "#FFF";
+      diagram.outlineText(ctx, cutOffDot.toFixed(3), 0, 0);
+      ctx.restore();
+    }
+
+    ctx.save();
+    ctx.translate(lx, ly);
+    ctx.rotate(direction);
+    ctx.fillStyle = "#000";
+    ctx.strokeStyle = "#000";
+    diagram.arrow(ctx, 0, 0, 0, 80, false, true, 0.5);
+    ctx.restore();
+
+//    ctx.strokeStyle = "#F00";
+    ctx.fillStyle = "orange";
+    diagram.drawSun(ctx, lx, ly, width / 20);
+
+    ctx.save();
+    ctx.translate(sx, sy);
+    ctx.rotate(rotation);
+
+    // draw surface
+    ctx.strokeStyle = "#000";
+    const surfaceWidth = 200;
+    diagram.roundedRect(ctx, -surfaceWidth / 2, 0, surfaceWidth, 20);
+
+    var d  = m3.dot(0, 1, Math.sin(direction), Math.cos(direction));
+    var gradient =  ctx.createLinearGradient(-surfaceWidth / 2, 0, surfaceWidth / 2, 10);
+
+    const numPoints = 200;
+    for (var p = 0; p <= numPoints; ++p) {
+        const pos = p / numPoints;
+
+        const r = pos * surfaceWidth - surfaceWidth / 2;
+        const c = Math.cos(rotation);
+        const s = Math.sin(rotation);
+        const x = c * r;
+        const y = s * r + sy;
+        const dx = x - lx;
+        const dy = y - ly;
+        const sp = m3.normalize(dx, dy);
+
+        const dot = m3.dot(sp[0], sp[1], -s, c);
+
+        const cutOffDot = m3.dot(ldx, ldy, -sp[0], sp[1]);
+        const cutOffAngle = Math.acos(cutOffDot);
+        const inLight = cutOffAngle < limit;
+
+        gradient.addColorStop(pos, diagram.hsl(0, 1, inLight ? dot : 0));
+    }
+
+    ctx.fillStyle = gradient; //diagram.rgb(1,0,0);
+
+    ctx.fill();
+    ctx.strokeStyle = diagram.rgb(0,0,0);
+    ctx.stroke();
+
+    ctx.restore();
+
+    ctx.translate(-100, -50);
+    ctx.fillStyle = "#000";
+    ctx.strokeStyle = "#FFF";
+    ctx.font = "8px sans-serif";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    diagram.outlineText(ctx, `dot limit = ${Math.cos(limit).toFixed(3)}`, 10, 20);
+
+    ctx.restore();
+  }
+  render();
+}
+
+function getQueryParams() {
+  var params = {};
+  if (window.location.search) {
+    window.location.search.substring(1).split("&").forEach(function(pair) {
+      var keyValue = pair.split("=").map(function (kv) {
+        return decodeURIComponent(kv);
+      });
+      params[keyValue[0]] = keyValue[1];
+    });
+  }
+  return params;
+}
+
+main();
+</script>
+

@@ -291,7 +291,7 @@ Let's call that `shininess` and add it to our shader.
     +  }
 
 The dot product can go negative.  Taking a negative number to a power is
-undefined which would be bad.  So, if the dot product would possibly be
+undefined in WebGL which would be bad.  So, if the dot product would possibly be
 negative then we just leave specular at 0.0.
 
 Of course we need to look up the location and set it
@@ -344,7 +344,7 @@ and
 
 {{{example url="../webgl-3d-lighting-point-color.html" }}}
 
-Coming up next ???
+Coming up next, [spot lighting](webgl-3d-lighting-spot.html).
 
 <div class="webgl_bottombar">
 <h3>Why is <code>pow(negative, power)</code> undefined?</h3>
@@ -368,7 +368,7 @@ Coming up next ???
 again makes it negative.</p>
 <p>Well then what does this mean?</p>
 <div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2.5)</pre></div>
-<p>How do you decide which is the result of that positive or negative? I'm not a math guy really
-but it seems undecidable hence it's undefined.</p>.
+<p>How do you decide which is the result of that positive or negative? That's
+the land of <a href="https://betterexplained.com/articles/a-visual-intuitive-guide-to-imaginary-numbers/">imaginary numbers</a>.</p>
 </div>
 
