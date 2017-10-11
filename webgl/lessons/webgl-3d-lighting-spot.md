@@ -77,8 +77,8 @@ uniform float u_shininess;
 +uniform float u_limit;          // in dot space
 
 void main() {
-  // because v_normal is a varying it's interpolated
-  // we it will not be a uint vector. Normalizing it
+  // because v_normal is a varying it's interpolated,
+  // it will not be a uint vector. Normalizing it
   // will make it a unit vector again
   vec3 normal = normalize(v_normal);
 
@@ -243,7 +243,7 @@ That works too
 
 {{{example url="../webgl-3d-lighting-spot-falloff-using-smoothstep.html" }}}
 
-The difference is `smoothstep` uses a hermite interpolation instead of a
+The difference is `smoothstep` uses a Hermite interpolation instead of a
 linear interpolation. That means between `lowerBound` and `upperBound`
 it intepolates like the image below on the right whereas a linear interpolation is like the image on the left.
 
