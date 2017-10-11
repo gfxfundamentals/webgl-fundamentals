@@ -84,9 +84,10 @@ CORS = Cross Origin Resource Sharing（跨域资源共享）。是一种网页�
     +    img.crossOrigin = "";   // 请求 CORS 许可
         img.src = url;
 
-设置给 `crossOrigin` 的字符串会被发送到图像服务器，服务器会根据字符串决定是否提供许可，
-大多数服务器并不看字符串，直接提供许可给所有人，这就是为什么设置成空字符串也行。
-在这个例子中的所有“请求许可”的意思就相当于 `img.crossOrigin = "bob"` 表示 “请求 ‘bob’ 的许可”。
+`crossOrign` 接受的值有三种。一种是 `undefined`，这也是默认值，表示“不需要请求许可”；
+一种是 `"anonymous"` 表示请求许可但不发送任何其他信息；最后一个是 `"use-credentials"`
+表示发送 cookies 和其他可能需要的信息，服务器通过这些信息决定是否授予许可。
+如果 `crossOrign` 设置为其他任意值则相当于 `"anonymous"`。
 
 那我们为什么不总是查看许可呢？因为请求许可需要 2 个HTTP请求，比不请求要慢一些，
 如果我们知道都在同一域名下，就不需要请求许可。或者只对需要跨域资源的 img 标签或
@@ -111,6 +112,10 @@ canvas2d 设置 `crossDomain` 属性，这样就不用让图像请求变慢。
 
 需要注意的是请求许可**不是**表示你一定会得到许可，结果取决于服务器。
 Github Pages 提供许可，flickr.com 提供许可，imgur.com 提供许可，但大多数网站不提供许可。
+服务器为了授予许可，在发送图片时会提供特定的头文件。
+
+需要注意的是仅服务器授予许可是不够的，如果图像在其他域名下，必须设置 `crossOrigin` 属性，
+否则即使服务器发送正确的头文件你也不能使用那个图像。
 
 <div class="webgl_bottombar">
 <h3>使 Apache 服务器提供 CORS 许可</h3>
