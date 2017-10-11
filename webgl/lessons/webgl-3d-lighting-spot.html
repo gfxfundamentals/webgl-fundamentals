@@ -150,8 +150,8 @@ uniform float u_shininess;
 +uniform float u_limit;          // in dot space
 
 void main() {
-  // because v_normal is a varying it&#39;s interpolated
-  // we it will not be a uint vector. Normalizing it
+  // because v_normal is a varying it&#39;s interpolated,
+  // it will not be a uint vector. Normalizing it
   // will make it a unit vector again
   vec3 normal = normalize(v_normal);
 
@@ -295,7 +295,7 @@ those bounds.</p>
 </div>
 
 </p>
-<p>The difference is <code>smoothstep</code> uses a hermite interpolation instead of a
+<p>The difference is <code>smoothstep</code> uses a Hermite interpolation instead of a
 linear interpolation. That means between <code>lowerBound</code> and <code>upperBound</code>
 it intepolates like the image below on the right whereas a linear interpolation is like the image on the left.</p>
 <p><img class="webgl_center" src="resources/linear-vs-hermite.png" /></p>
