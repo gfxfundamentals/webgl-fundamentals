@@ -90,7 +90,7 @@ image from the server, if it's not the same domain, the browser will ask for COR
 
 There are 3 values you can set `crossOrigin` to. One is `undefined` which is the default which means
 "do not ask for permission". Another is `"anonymous"` which means ask for permission but don't send extra info.
-The last is "use-credentials" which means send cookies and other info the server might look at to decide
+The last is `"use-credentials"` which means send cookies and other info the server might look at to decide
 whether or not it give permission. If `crossOrigin` is set to any other value it's the same as setting
 it to `anonymous`.
 
