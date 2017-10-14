@@ -8,8 +8,8 @@ Description: 着色器和GLSL分别是什么
 但以防万一，这里将详细讲解着色器和GLSL。
 
 在[工作原理](webgl-how-it-works.html)中我们提到，WebGL每次绘制需要两个着色器，
-一个**顶点着色器**和一个**片断着色器**，每一个着色器都是一个**方法**。
-一个顶点着色器和一个片断着色器链接在一起放入一个着色程序中（或者只叫程序）。
+一个**顶点着色器**和一个**片元着色器**，每一个着色器都是一个**方法**。
+一个顶点着色器和一个片元着色器链接在一起放入一个着色程序中（或者只叫程序）。
 一个典型的WebGL应用会有多个着色程序。
 
 ## 顶点着色器
@@ -165,11 +165,11 @@ Description: 着色器和GLSL分别是什么
 
 ### 纹理（顶点着色器中）
 
-同 [Textures 纹理（在片断着色器中）](#textures-)。
+同 [Textures 纹理（在片元着色器中）](#textures-)。
 
-## 片断着色器
+## 片元着色器
 
-一个片断着色器的工作是为当前光栅化的像素提供颜色值，通常是以下的形式
+一个片元着色器的工作是为当前光栅化的像素提供颜色值，通常是以下的形式
 
     precision mediump float;
 
@@ -177,19 +177,19 @@ Description: 着色器和GLSL分别是什么
        gl_FragColor = doMathToMakeAColor;
     }
 
-每个像素都将调用一次片段着色器，每次调用需要从你设置的特殊全局变量`gl_FragColor`中获取颜色信息。
+每个像素都将调用一次片元着色器，每次调用需要从你设置的特殊全局变量`gl_FragColor`中获取颜色信息。
 
-片段着色器所需的数据，可以通过以下三种方式获取
+片元着色器所需的数据，可以通过以下三种方式获取
 
 1.  [Uniforms 全局变量](#uniforms-) (values that stay the same for every pixel of a single draw call)
 2.  [Textures 纹理](#textures-) (data from pixels/texels)
 3.  [Varyings 可变量](#varyings-) (data passed from the vertex shader and interpolated)
 
-### Uniform 全局变量（片断着色器中）
+### Uniform 全局变量（片元着色器中）
 
 同 [Uniforms 全局变量](#uniforms-).
 
-### Textures 纹理（片断着色器中）
+### Textures 纹理（片元着色器中）
 
 在着色器中获取纹理信息，可以先创建一个`sampler2D`类型全局变量，然后用GLSL方法`texture2D`
 从纹理中提取信息。
@@ -233,10 +233,10 @@ Description: 着色器和GLSL分别是什么
 
 ### Varyings 可变量
 
-在[工作原理](webgl-how-it-works.html)提到过，可变量是一种顶点着色器给片断着色器传值的方式。
+在[工作原理](webgl-how-it-works.html)提到过，可变量是一种顶点着色器给片元着色器传值的方式。
 
 为了使用可变量，要在两个着色器中定义同名的可变量。
-给顶点着色器中可变量设置的值，会作为参考值进行内插，在绘制像素时传给片段着色器的可变量。
+给顶点着色器中可变量设置的值，会作为参考值进行内插，在绘制像素时传给片元着色器的可变量。
 
 顶点着色器
 
@@ -251,7 +251,7 @@ Description: 着色器和GLSL分别是什么
     +  v_positionWithOffset = a_position + u_offset;
     }
 
-片断着色器
+片元着色器
 
     precision mediump float;
 
@@ -263,7 +263,7 @@ Description: 着色器和GLSL分别是什么
     +  gl_FragColor = color;
     }
 
-上方的示例几乎没有意义，通常情况下直接将裁剪空间的值传给片断着色器当作颜色值是没有意义的，
+上方的示例几乎没有意义，通常情况下直接将裁剪空间的值传给片元着色器当作颜色值是没有意义的，
 虽然它可以运行并且可以生成颜色值。
 
 ## GLSL
@@ -384,7 +384,7 @@ T可以是 `float`, `vec2`, `vec3` 或 `vec4` 。如果你传的是 `vec4` 返�
 ## 总结
 
 这是当前系列文章的重点。WebGL的全部内容就是创建不同的着色器，向着色器提供数据然后调用`gl.drawArrays`
- 或 `gl.drawElements` 让WebGL调用当前顶点着色器处理每个顶点，调用当前片断着色器渲染每个像素。
+ 或 `gl.drawElements` 让WebGL调用当前顶点着色器处理每个顶点，调用当前片元着色器渲染每个像素。
 
 实际上创建着色器需要为数不多的几行代码，并且在大多数WebGL应用程序中都相似，
 因此一旦写完几乎可以不再关心它们了。[在这里介绍如何编译GLSL并链接到着色程序](webgl-boilerplate.html)。

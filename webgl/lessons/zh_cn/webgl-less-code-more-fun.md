@@ -39,7 +39,7 @@ void main() {
 }
 ```
 
-片断着色器：
+片元着色器：
 
 ```
 precision mediump float;
@@ -431,9 +431,9 @@ var uniformSetters = webglUtils.createUniformSetters(program);
 // 绘制时
 uniformSetters.u_ambient([1, 0, 0, 1]); // 设置环境光为红色
 </pre>
-<p>这样做不好的原因就是，在使用GLSL的过程中经常会修改，调试。假设屏幕上什么都没有出现，首先我会简化着色器，例如我会尽可能简化片断着色器。</p>
+<p>这样做不好的原因就是，在使用GLSL的过程中经常会修改，调试。假设屏幕上什么都没有出现，首先我会简化着色器，例如我会尽可能简化片元着色器。</p>
 <pre class="prettyprint showlinemods">
-// 片断着色器
+// 片元着色器
 precision mediump float;
 
 varying vec4 v_position;

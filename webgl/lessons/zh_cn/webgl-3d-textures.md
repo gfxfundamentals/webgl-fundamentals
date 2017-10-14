@@ -8,7 +8,7 @@ Description: WebGL中如何使用纹理
 中得到启发，如果我们讲的再深入一点可能更好理解。
 
 首先需要调整着色器以便使用纹理，这里是顶点着色器的修改部分，
-我们需要传递纹理坐标，在这个例子中直接将它们传到片断着色器中。
+我们需要传递纹理坐标，在这个例子中直接将它们传到片元着色器中。
 
     attribute vec4 a_position;
     *attribute vec2 a_texcoord;
@@ -21,11 +21,11 @@ Description: WebGL中如何使用纹理
       // 将位置和矩阵相乘
       gl_Position = u_matrix * a_position;
 
-    *  // 传递纹理坐标到片断着色器
+    *  // 传递纹理坐标到片元着色器
     *  v_texcoord = a_texcoord;
     }
 
-在片断着色器中声明一个 sampler2D 类型的全局变量，可以让我们引用一个纹理，
+在片元着色器中声明一个 sampler2D 类型的全局变量，可以让我们引用一个纹理，
 然后使用从顶点着色器传入的纹理坐标调用 `texture2D` 方法，
 在纹理上找到对应的颜色。
 

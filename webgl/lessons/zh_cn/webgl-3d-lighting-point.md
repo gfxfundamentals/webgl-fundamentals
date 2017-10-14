@@ -53,21 +53,21 @@ Description: 如何在WebGL中实现点光源
       // 将位置和矩阵相乘
       gl_Position = u_worldViewProjection * a_position;
 
-      // 重定向法向量并传递给片断着色器
+      // 重定向法向量并传递给片元着色器
       v_normal = mat3(u_worldInverseTranspose) * a_normal;
 
     +  // 计算表面的世界坐标
     +  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
     +
     +  // 计算表面到光源的方向
-    +  // 传递给片断着色器
+    +  // 传递给片元着色器
     +  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
     }
 
-在片断着色器中需要将表面到光源的方向进行单位化，
+在片元着色器中需要将表面到光源的方向进行单位化，
 注意，虽然我们可以在顶点着色器中传递单位向量，
-但是 `varying` 会进行插值再传给片断着色器，
-所以片断着色器中的向量基本上不是单位向量了。
+但是 `varying` 会进行插值再传给片元着色器，
+所以片元着色器中的向量基本上不是单位向量了。
 
     precision mediump float;
 
@@ -151,7 +151,7 @@ Description: 如何在WebGL中实现点光源
 {{{diagram url="resources/specular-lighting.html" width="500" height="400" className="noborder" }}}
 
 所以首先我们需要传入相机位置，计算表面到相机的方向矢量，
-然后传递到片断着色器。
+然后传递到片元着色器。
 
     attribute vec4 a_position;
     attribute vec3 a_normal;
@@ -172,22 +172,22 @@ Description: 如何在WebGL中实现点光源
       // 将位置和矩阵相乘
       gl_Position = u_worldViewProjection * a_position;
 
-      // 重定向法向量并传递到片断着色器
+      // 重定向法向量并传递到片元着色器
       v_normal = mat3(u_worldInverseTranspose) * a_normal;
 
       // 计算表面的世界坐标
       vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 
       // 计算表面到光源的方向
-      // 然后传递到片断着色器
+      // 然后传递到片元着色器
       v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 
     +  // 计算表面到相机的方向
-    +  // 然后传递到片断着色器
+    +  // 然后传递到片元着色器
     +  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
     }
 
-然后在片断着色器中计算表面到光源和相机之间的 `halfVector`，
+然后在片元着色器中计算表面到光源和相机之间的 `halfVector`，
 将它和法向量相乘，查看光线是否直接反射到眼前。
 
     // 从顶点着色器中传入的值
