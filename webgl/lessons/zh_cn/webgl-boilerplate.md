@@ -5,7 +5,7 @@ Description: WebGL应用中常用的代码
 学习WebGL似乎有些难度，因为大多数教程都想一次教完所有东西，
 而我会尽量避免这样，在需要合适的时候讲一些小的知识点。
 
-WebGL复杂的原因之一是需要两个方法，一个顶点着色器和一个片断着色器。
+WebGL复杂的原因之一是需要两个方法，一个顶点着色器和一个片元着色器。
 这两个方法通常是在你的GPU上运行，也是高速运行的保障。
 所以它们是一种自定义语言，目的是能够在GPU上良好运行。
 这两个方法需要编译并链接在一起，而这个过程在 99% 的WbgGL应用中是一样的。
@@ -48,7 +48,7 @@ WebGL复杂的原因之一是需要两个方法，一个顶点着色器和一个
      *
      * @param {!WebGLRenderingContext) gl WebGL上下文。
      * @param {!WebGLShader} vertexShader 一个顶点着色器。
-     * @param {!WebGLShader} fragmentShader 一个片断着色器。
+     * @param {!WebGLShader} fragmentShader 一个片元着色器。
      * @return {!WebGLProgram} 程序
      */
     function createProgram(gl, vertexShader, fragmentShader) {
@@ -123,7 +123,7 @@ WebGL复杂的原因之一是需要两个方法，一个顶点着色器和一个
      *
      * @param {!WebGLRenderingContext} gl WebGL上下文。
      * @param {string} vertexShaderId 顶点着色器的标签id。
-     * @param {string} fragmentShaderId 片断着色器的标签id。
+     * @param {string} fragmentShaderId 片元着色器的标签id。
      * @return {!WebGLProgram} 程序。
      */
     function createProgramFromScripts(
