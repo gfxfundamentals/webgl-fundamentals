@@ -34,7 +34,8 @@ that limit we don't light.
 In the diagram above we can see a light with rays going in all directions and
 printed on them is their dot product relative to the direction.
 We then have a specific **direction** that is the direction of the spotlight.
-We choose a limit (above it's in degrees). From the limit we compute a *dot limit* If the dot product of our chosen direction of the spotlight to
+We choose a limit (above it's in degrees). From the limit we compute a *dot limit*,
+we just take the cosine of the limit. If the dot product of our chosen direction of the spotlight to
 the direction of each ray of light is above the dot limit then we do the lighting. Otherwise no lighting.
 
 To say this another way, let's say the limit is 20 degrees. We can convert
