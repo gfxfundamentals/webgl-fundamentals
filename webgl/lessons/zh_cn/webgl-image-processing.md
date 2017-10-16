@@ -12,7 +12,7 @@ Description: 怎么用WebGL处理图像
 
 因为我们只用画一个矩形（其实是两个三角形），所以需要告诉WebGL矩形中每个顶点对应的纹理坐标。
 我们将使用一种特殊的叫做'varying'的变量将纹理坐标从顶点着色器传到片断着色器，它叫做“可变量”
-是因为它的值有很多个，WebGL会用顶点着色器中值的进行插值，然后传给对应像素执行的片段着色器。
+是因为它的值有很多个，WebGL会用顶点着色器中值的进行插值，然后传给对应像素执行的片断着色器。
 
 接着用[上篇文章中最后一个顶点着色器](webgl-fundamentals.html)，
 我们需要添加一个属性，用它接收纹理坐标然后传给片断着色器。
@@ -111,7 +111,7 @@ Description: 怎么用WebGL处理图像
 由于WebGL的纹理坐标范围是 0.0 到 1.0 ， 那我们可以简单计算出移动一个像素对应的距离，
 <code>onePixel = 1.0 / textureSize</code>。
 
-这个片段着色器将每个像素的值设置为与左右像素的均值。
+这个片断着色器将每个像素的值设置为与左右像素的均值。
 
     <script id="2d-fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
