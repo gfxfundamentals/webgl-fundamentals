@@ -215,8 +215,8 @@ var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.
 void main() {
    gl_FragColor = doMathToMakeAColor;
 }
-</code></pre><p>每个像素都将调用一次片段着色器，每次调用需要从你设置的特殊全局变量<code>gl_FragColor</code>中获取颜色信息。</p>
-<p>片段着色器所需的数据，可以通过以下三种方式获取</p>
+</code></pre><p>每个像素都将调用一次片断着色器，每次调用需要从你设置的特殊全局变量<code>gl_FragColor</code>中获取颜色信息。</p>
+<p>片断着色器所需的数据，可以通过以下三种方式获取</p>
 <ol>
 <li><a href="#uniforms-">Uniforms 全局变量</a> (values that stay the same for every pixel of a single draw call)</li>
 <li><a href="#textures-">Textures 纹理</a> (data from pixels/texels)</li>
@@ -258,7 +258,7 @@ gl.bindTexture(gl.TEXTURE_2D, tex);
 </code></pre><h3 id="varyings-">Varyings 可变量</h3>
 <p>在<a href="webgl-how-it-works.html">工作原理</a>提到过，可变量是一种顶点着色器给片断着色器传值的方式。</p>
 <p>为了使用可变量，要在两个着色器中定义同名的可变量。
-给顶点着色器中可变量设置的值，会作为参考值进行内插，在绘制像素时传给片段着色器的可变量。</p>
+给顶点着色器中可变量设置的值，会作为参考值进行内插，在绘制像素时传给片断着色器的可变量。</p>
 <p>顶点着色器</p>
 <pre><code>attribute vec4 a_position;
 

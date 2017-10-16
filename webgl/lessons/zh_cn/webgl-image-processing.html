@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 0.0 到 1.0 。</p>
 <p>因为我们只用画一个矩形（其实是两个三角形），所以需要告诉WebGL矩形中每个顶点对应的纹理坐标。
 我们将使用一种特殊的叫做&#39;varying&#39;的变量将纹理坐标从顶点着色器传到片断着色器，它叫做“可变量”
-是因为它的值有很多个，WebGL会用顶点着色器中值的进行插值，然后传给对应像素执行的片段着色器。</p>
+是因为它的值有很多个，WebGL会用顶点着色器中值的进行插值，然后传给对应像素执行的片断着色器。</p>
 <p>接着用<a href="webgl-fundamentals.html">上篇文章中最后一个顶点着色器</a>，
 我们需要添加一个属性，用它接收纹理坐标然后传给片断着色器。</p>
 <pre><code>attribute vec2 a_texCoord;
@@ -187,7 +187,7 @@ gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 <p>如果我们的图像处理需要其他像素的颜色值怎么办？
 由于WebGL的纹理坐标范围是 0.0 到 1.0 ， 那我们可以简单计算出移动一个像素对应的距离，
 <code>onePixel = 1.0 / textureSize</code>。</p>
-<p>这个片段着色器将每个像素的值设置为与左右像素的均值。</p>
+<p>这个片断着色器将每个像素的值设置为与左右像素的均值。</p>
 <pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
