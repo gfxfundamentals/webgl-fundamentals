@@ -258,7 +258,7 @@ function setNormals(gl) {
     -  // 将颜色传到片断着色器
     -  v_color = a_color;
 
-    +  // 将法向量传到片段着色器
+    +  // 将法向量传到片断着色器
     +  v_normal = a_normal;
     }
 
@@ -411,7 +411,7 @@ void main() {
   // 将位置和矩阵相乘
   gl_Position = u_worldViewProjection * a_position;
 
-  // 重定向法向量并传递给片段着色器
+  // 重定向法向量并传递给片断着色器
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 ```

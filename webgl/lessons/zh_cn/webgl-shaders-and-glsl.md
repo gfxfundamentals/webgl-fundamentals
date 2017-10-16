@@ -177,9 +177,9 @@ Description: 着色器和GLSL分别是什么
        gl_FragColor = doMathToMakeAColor;
     }
 
-每个像素都将调用一次片段着色器，每次调用需要从你设置的特殊全局变量`gl_FragColor`中获取颜色信息。
+每个像素都将调用一次片断着色器，每次调用需要从你设置的特殊全局变量`gl_FragColor`中获取颜色信息。
 
-片段着色器所需的数据，可以通过以下三种方式获取
+片断着色器所需的数据，可以通过以下三种方式获取
 
 1.  [Uniforms 全局变量](#uniforms-) (values that stay the same for every pixel of a single draw call)
 2.  [Textures 纹理](#textures-) (data from pixels/texels)
@@ -236,7 +236,7 @@ Description: 着色器和GLSL分别是什么
 在[工作原理](webgl-how-it-works.html)提到过，可变量是一种顶点着色器给片断着色器传值的方式。
 
 为了使用可变量，要在两个着色器中定义同名的可变量。
-给顶点着色器中可变量设置的值，会作为参考值进行内插，在绘制像素时传给片段着色器的可变量。
+给顶点着色器中可变量设置的值，会作为参考值进行内插，在绘制像素时传给片断着色器的可变量。
 
 顶点着色器
 
