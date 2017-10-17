@@ -255,7 +255,7 @@ Now we can put data in that buffer by referencing it through the bind point
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 There's a lot going on here. The first thing is we have `positions` which is a
-JavaScript array. WebGL on other hand needs strongly typed data so the part
+JavaScript array. WebGL on the other hand needs strongly typed data so the part
 `new Float32Array(positions)` creates a new array of 32bit floating point numbers
 and copies the values from `positions`. `gl.bufferData` then copies that data to
 the `positionBuffer` on the GPU. It's using the position buffer because we bound
