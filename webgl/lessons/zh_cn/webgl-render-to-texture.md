@@ -37,7 +37,7 @@ Description: 如何往纹理渲染内容
 
 注意 `data` 是 `null`，我们不需要提供数据，只需要让WebGL分配一个纹理。
 
-接下来创建一个帧缓冲（framebufffer），帧缓冲只是一个附件集，附件是纹理或者 renderbuffers，
+接下来创建一个帧缓冲（framebuffer），帧缓冲只是一个附件集，附件是纹理或者 renderbuffers，
 我们之前讲过纹理，Renderbuffers 和纹理很像但是支持纹理不支持的格式和可选项，同时，
 不能像纹理那样直接将 renderbuffer 提供给着色器。
 
@@ -195,7 +195,7 @@ function drawScene(time) {
 
 然后使用这个方法改变渲染对象，就不容易忘记了。
 
-还有一个需要主义的事情是我们的帧缓冲没有深度缓冲，只有纹理，意思是美哟深度检测，
+还有一个需要注意的事情是我们的帧缓冲没有深度缓冲，只有纹理。这意味着没有深度检测，
 所以三维就不能正常体现，如果我们绘制三个立方体就会看到这样。
 
 {{{example url="../webgl-render-to-texture-3-cubes-no-depth-buffer.html" }}}
