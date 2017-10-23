@@ -21,9 +21,9 @@ with that idea you wouldn't get a smooth top. A standard cylinder
 is generated as a series of equally spaced rings but you'd need more
 rings where things are more curvy.
 
-In a modeling package you do this by making a 2d silhouette or rather
+In a modeling package you'd make a bowling pin by making a 2d silhouette or rather
 a curved line that matches the edge of a 2d silhouette. You'd then
-lathe that into a 3d shape. By lathe I mean you'd spin it around
+lathe that into a 3d shape. By *lathe* I mean you'd spin it around
 some axis and generate points as you do. This lets you easily make
 any round objects like a bowl, a glass, a baseball bat, bottles,
 light bulbs, etc.
@@ -76,7 +76,7 @@ The positions of that <span style="color: red;">red point</span> make a curve.
 
 So this is a cubic bezier curve.
 
-Note that while while the interpolation between points above and
+Note that while the interpolation between points above and
 the process of making 3 points from 4, then 2 from 3, and finally 1
 point from 2 works that's not the normal way. Instead someone plugged
 in all the math and simplified it to a formula like this
@@ -142,7 +142,7 @@ to help do math with points.
 
 In the diagram above you can choose a number of points. If the curve is sharp
 you'd want more points. If the curve is nearly a straight line though you'd
-probably want less points. One solution which
+probably want less points. One solution
 is to check how curvy a curve is. If it's too curvy then split it into
 2 curves.
 
@@ -352,7 +352,7 @@ Once we've made all the points we connect them with triangles using indices.
         const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
         const mat = m4.yRotation(angle);
         if (capStart) {
-          // add point on Y access at start
+          // add point on Y axis at start
           positions.push(0, points[0][1], 0);
           texcoords.push(u, 0);
         }
@@ -360,10 +360,10 @@ Once we've made all the points we connect them with triangles using indices.
           const tp = m4.transformPoint(mat, [...p, 0]);
           positions.push(tp[0], tp[1], tp[2]);
           const v = (ndx + vOffset) / quadsDown;
-          texcoords.push(u, v); 
+          texcoords.push(u, v);
         });
         if (capEnd) {
-          // add point on Y access at end
+          // add point on Y axis at end
           positions.push(0, points[points.length - 1][1], 0);
           texcoords.push(u, 1);
         }
@@ -458,7 +458,7 @@ for `v`.
         const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
         const mat = m4.yRotation(angle);
         if (capStart) {
-          // add point on Y access at start
+          // add point on Y axis at start
           positions.push(0, points[0][1], 0);
           texcoords.push(u, 0);
         }
@@ -468,7 +468,7 @@ for `v`.
     *      texcoords.push(u, vcoords[ndx]);
         });
         if (capEnd) {
-          // add point on Y access at end
+          // add point on Y axis at end
           positions.push(0, points[points.length - 1][1], 0);
           texcoords.push(u, 1);
         }
@@ -731,7 +731,7 @@ Here's the result
 {{{example url="../webgl-3d-lathe-step-03.html"}}}
 
 Notice we get sharp edges where we want them. Make the `maxAngle` bigger and you'll see those edges
-get smoothed out when the neighbooring faces start getting included in the normal calculations.
+get smoothed out when the neighboring faces start getting included in the normal calculations.
 Also try adjusting the `divisions` to something like 5 or 6 then adjust the `maxAngle` until the
 edges around are hard but the parts you want smooth are still smooth. You can also set the `mode`
 to `lit` to see what the object would look like with lighting, the reason we needed normals.
@@ -742,7 +742,7 @@ We learned if you want to make 3D data **USE A 3D MODELING PACKAGE!!!** 😝
 
 To do anything really useful you'd likely need a real [UV editor](https://www.google.com/search?q=uv+editor).
 Dealing the the caps as well is something a 3D editor would help with. Instead of using
-a limited set up options when lathing you'd use other features of the editor
+a limited set of options when lathing you'd use other features of the editor
 to add caps and generate easier UVs for the caps. 3d editors also support [extruding faces](https://www.google.com/search?q=extruding+model)
 and [extruding along a path](https://www.google.com/search?q=extruding+along+a+path) which if you take
 a look it should be pretty obvious how they work based on the lathe example above.
