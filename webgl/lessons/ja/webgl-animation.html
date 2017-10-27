@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ja/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ja/webgl-animation.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL - Animation" />
+<meta property="og:title" content="WebGLのアニメーション" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to do animation in WebGL" />
+<meta property="og:description" content="WebGLでアニメーションする方法" />
 <meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/ja/webgl-animation.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL - Animation" />
+<meta name="twitter:title" content="WebGLのアニメーション" />
 <meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/ja/webgl-animation.html" />
-<meta name="twitter:description" content="How to do animation in WebGL" />
+<meta name="twitter:description" content="WebGLでアニメーションする方法" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL - Animation</title>
+<title>WebGLのアニメーション</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
@@ -77,12 +79,140 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL - Animation</h1>
+    <h1>WebGLのアニメーション</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>ごめん！この記事はまだ翻訳されていない。<a href="https://github.com/greggman/webgl-fundamentals">翻訳してくれますか？</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-animation.html">ここに英語版がある</a>.</p>
+      <p>この記事はWebGLの連載シリーズの続きである。
+この連載は「<a href="webgl-fundamentals.html">WebGLの基本</a>」から始まり、
+前回は「<a href="webgl-3d-camera.html">三次元でのカメラ処理</a>」について説明した。
+これらについて学んでいなければ、先にそちらを読んでおくことをお勧めする。</p>
+<p>WebGLでアニメーションするにはどうしたらよいだろうか？</p>
+<p>JavaScriptでアニメーションするためには、「映像のどこかを変更して再描画する」
+ということを「継続的にやる」必要がある。
+実際のところ、これはWebGLに限定した話ではない。</p>
+<p>以前書いたサンプルのひとつを例としてアニメーションを実装するとしたら、このようになる。</p>
+<pre><code>*var fieldOfViewRadians = degToRad(60);
+*var rotationSpeed = 1.2;
+
+*requestAnimationFrame(drawScene);
+
+// シーンを描画する
+function drawScene() {
+*  // 各フレームごとに回転量を少しだけ増加する
+*  rotation[1] += rotationSpeed / 60.0;
+
+  ...
+*  // 次のフレームの描画のために再度drawSceneを呼び出す。
+*  requestAnimationFrame(drawScene);
+}
+</code></pre><p>これを実際に動かすとこのようになる。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation-not-frame-rate-independent.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-animation-not-frame-rate-independent.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>一見よさそうに見えるが、このやり方には隠れた問題がある。
+上のコードでは<code>rotationSpeed / 60.0</code>としている。
+60.0で割っているのは、ブラウザがrequestAnimationFrameの処理を1秒あたり60回実行できることを
+想定しているためである。一般的なブラウザ環境はこの想定を満たしているはずだ。</p>
+<p>しかし、この想定が常に有効とは限らない。
+ユーザーは旧型のスマートフォンのような処理速度が遅い機器を使っているかも知れない。
+また、OS上でブラウザ以外の重たいプログラムを実行しているかも知れない。
+「ブラウザは1秒に60フレーム描画できる」という想定が正しくない状況はいくらでも考えられる。
+もしかしたら、2020年の世界ではあらゆるマシンが毎秒240フレーム処理しているかも知れない。
+ユーザーがゲーマーで、高性能CRTモニターを秒間90フレーム表示できる設定にしているかも知れない。</p>
+<p>この問題がどういう意味か、目で見てわかるようなサンプルを用意してみた。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/../webgl-animation-frame-rate-issues.html"></iframe>
+</div>
+
+</p>
+<p>この例では、どの&#39;F&#39;も同じ速度で回転することが期待されている。
+中央の&#39;F&#39;は、「期待した速度」且つ「フレームレート非依存の実装」で回転している。
+左右の&#39;F&#39;はいずれも、擬似的に「実行環境が1/8の速度しかない状況」を再現している。
+左の&#39;F&#39;は、「<strong>フレームレートに依存した実装</strong>」、
+右の&#39;F&#39;は、「<strong>フレームレートに依存しない実装</strong>」となっている。</p>
+<p>左の場合、フレームレートが60より小さくなることを想定していないため、
+期待した速度よりも遅い速度で回っていることに注目してほしい。
+一方、右の場合は、フレームレートは同じく1/8となっているが、期待した速度、つまり、
+フルスピードで回転している中央のFと同じ速度で回っている。</p>
+<p>アニメーションを「フレームレート非依存にする」ということは、
+「あるフレームと次のフレームの間にかかる時間」を計算して、
+その時間を元に「画面に表示される物体をどれくらい動かすか」を計算する、ということである。</p>
+<p>まず、この時間を知る必要がある。幸いなことに<code>requestAnimationFrame</code>を使えば、
+この時間を「ページをロードしてからコールバックするまでにかかった時間」として知ることができる。</p>
+<p>私は時間を秒単位で扱うのがわかりやすいと思うが、
+<code>requestAnimationFrame</code>は時間をミリ秒(1秒の1/1000)単位で扱うので、
+これに0.001を掛けている。</p>
+<p>以上のことから、フレームとフレームの間の小さな経過時間(deltaTime)はこのようにして求められる。</p>
+<pre><code>*var then = 0;
+
+requestAnimationFrame(drawScene);
+
+// シーンを描画する。
+*function drawScene(now) {
+*  // 時間の単位をミリ秒から秒に変換する。
+*  now *= 0.001;
+*  // 現在時刻から、前回のフレームの時刻を引く。
+*  var deltaTime = now - then;
+*  // 次回のフレームで利用するために、現在時刻を記憶しておく。
+*  then = now;
+
+   ...
+</code></pre><p>「フーレム間に何秒かかったか」が<code>deltaTime</code>として得られたので、次はこれを元にして
+画面上で「『1秒あたりどの程度(何単位)』動くべきか」について考えることができる。
+今回の場合「1秒あたり、<code>rotationSpeed</code>を、1.2単位動かす」ことにしている。
+動きの単位は好きなように決めればよいが、
+今回は「1秒あたり1ラジアン回転する動きを1単位とする」ことにしたので、
+1.2なら「1秒あたり1.2ラジアン回転する」、という意味になる。
+1.2ラジアンは1/5回転に相当するので、表現を変えれば「一回りに5秒ほどかけて回転する」という意味になる。
+フレームレートに関わらず「一回りに5秒ほどかけて回転する」のである。</p>
+<pre><code>*    rotation[1] += rotationSpeed * deltaTime;
+</code></pre><p>以上を実装した結果がこれである。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-animation.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>低速のマシンでないと、最初のサンプルとこのサンプルの動きの違いは見てもわからないかも知れない。
+しかし、フレームレートに依存しない実装を心がけておかないと、一部のユーザーは
+作り手が意図したものとはまったく違ったものを体験する可能性がある、ということだ。</p>
+<p>次回は「<a href="webgl-3d-textures.html">テクスチャーの使い方</a>」についての講義となる予定だ。</p>
+<div class="webgl_bottombar">
+<h3>setIntervalやsetTimeoutは禁止！</h3>
+<p>過去にJavaScriptでアニメーションするプログラムを書いた経験がある読者は、
+描画関数を呼び出す際に<code>setInterval</code>や<code>setTimeout</code>といったAPIを
+使ったことがあると思う。
+</p><p>
+アニメーションを実現する目的では、
+<code>setInterval</code>と<code>setTimeout</code>には共通した問題がふたつある。
+ひとつめは、これらのAPIは「ブラウザの描画と関係なく実行される」という点である。
+これらのAPIは、ブラウザがフレームを書き始めるタイミングと関係なく実行されるので、
+ユーザー環境のマシンと同期のしようがないない。
+<code>setInterval</code>や<code>setTimeout</code>を使って秒間60フレームの想定で
+描画しようとしているのにマシンが別のフレームレートで動作していた場合、
+「同期ずれ」が起こる可能性がある。
+</p><p>
+もうひとつの問題は「ブラウザは<code>setInterval</code>や<code>setTimeout</code>が
+どういう目的で使用されているか知ることができない」という点である。
+これらのAPIを使う限り「選択したタブが最前面にない」などの理由でページが非表示になっていても、
+コードが実行中であっても、ブラウザはそのことを知ることができない。
+<code>setInterval</code>や<code>setTimeout</code>が
+メール受信や新規Tweetの確認のような「非表示の状況でも実行し続けてほしい用途」
+で使われているかも知れない。が、ブラウザーはそれを知ることができない。
+「新規メッセージを確認する」のは数秒に1回実行するのが適切だろうが、
+「WebGLで1000オブジェクトを描画する」のには適切ではないだろう。
+同様に「非表示状態のタブ上のページでアニメーションを実行し続ける」のは適切ではない。
+ユーザーのマシンにDoS攻撃をするようなものである。
+</p><p>
+<code>requestAnimationFrame</code>はこのふたつの問題を解決する。
+このAPIを使えば画面の同期に合わせてアニメーションが描画されるし、
+ページが表示されていない時はそもそも実行されない。
+</p>
+</div>
 
     </div>
     <div class="lesson-sidebar">
@@ -96,7 +226,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>
+        <div id="toc">
+          <ul>
   <li>基本</li>
   <ul>
     <li><a href="/webgl/lessons/ja/webgl-fundamentals.html">WebGLの基本</a></li>
@@ -169,7 +300,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <li><a href="/webgl/lessons/ja/webgl-setup-and-installation.html">WebGLの開発環境</a></li>
     <li><a href="/webgl/lessons/ja/webgl-boilerplate.html">WebGLのひな型コード</a></li>
     <li><a href="/webgl/lessons/ja/webgl-resizing-the-canvas.html">WebGLとcanvasのリサイズ</a></li>
-    <li><a href="/webgl/lessons/ja/webgl-animation.html">WebGL - Animation(英語)</a></li>
+    <li><a href="/webgl/lessons/ja/webgl-animation.html">WebGLのアニメーション</a></li>
     <li><a href="/webgl/lessons/ja/webgl-and-alpha.html">WebGL and Alpha(英語)</a></li>
     <li><a href="/webgl/lessons/ja/webgl-2d-vs-3d-library.html">WebGL - 2D vs 3D libraries(英語)</a></li>
     <li><a href="/webgl/lessons/ja/webgl-anti-patterns.html">WebGL - Anti-Patterns(英語)</a></li>
@@ -181,6 +312,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="http://github.com/greggman/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGLのアニメーション';
+            var disqus_title = 'WebGLのアニメーション';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
