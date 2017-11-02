@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/pt-br/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/pt-br/webgl-setup-and-installation.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Setup and Installation" />
+<meta property="og:title" content="WebGL - Configuração e instalação" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to do WebGL development" />
+<meta property="og:description" content="Como desenvolver em WebGL" />
 <meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/pt-br/webgl-setup-and-installation.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Setup and Installation" />
+<meta name="twitter:title" content="WebGL - Configuração e instalação" />
 <meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/pt-br/webgl-setup-and-installation.html" />
-<meta name="twitter:description" content="How to do WebGL development" />
+<meta name="twitter:description" content="Como desenvolver em WebGL" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL Setup and Installation</title>
+<title>WebGL - Configuração e instalação</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
@@ -78,12 +80,101 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Setup and Installation</h1>
+    <h1>WebGL - Configuração e instalação</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>Sorry this article has not been translated yet. <a href="https://github.com/greggman/webgl2-fundamentals">Translations Welcome</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-setup-and-installation.html">Here&#39;s the original English article for now</a>.</p>
+      <p>Techincamente você não precisa de nada além de um navegador web para desenvolver em WebGL.
+Acesse [jsfiddle.net] <a href="https://jsfiddle.net/greggman/8djzyjL3/">https://jsfiddle.net/greggman/8djzyjL3/</a>) ou [jsbin.com] (<a href="http://jsbin.com">http://jsbin.com</a>) ou [codepen.io] (<a href="http://codepen.io/greggman/pen/YGQjVV">http://codepen.io/greggman/pen/YGQjVV</a>) e apenas comece a aplicar as lições aqui.</p>
+<p>Em todos eles, você pode fazer referência a scripts externos, adicionando um</p>
+<p><code>&lt;script src =&quot; ... &quot;&gt; &lt;/ script&gt;</code></p>
+<p>par de tags se você quiser usar scripts externos.</p>
+<p>Ainda assim, existem limites. O WebGL tem restrições mais fortes do que o Canvas2D para carregar imagens, o que significa que você não pode acessar facilmente imagens da Web para o seu trabalho WebGL.</p>
+<p>Além disso, é mais rápido trabalhar com tudo local.</p>
+<p>Vamos supor que você deseja executar e editar as amostras neste site. A primeira coisa que você deve fazer é baixar o site. [Você pode baixá-lo aqui] (<a href="https://github.com/greggman/webgl-fundamentals/">https://github.com/greggman/webgl-fundamentals/</a>).</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/download-webglfundamentals.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>Descompacte os arquivos para o mesmo diretório.</p>
+<h2 id="usando-um-pequeno-e-simples-servidor-web-simples">Usando um pequeno e simples servidor Web simples</h2>
+<p>Em seguida, você deve instalar um pequeno servidor web. Eu sei que o &quot;servidor web&quot; parece assustador, mas a verdade é [web
+Os servidores são realmente extremamente simples] (<a href="http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/">http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/</a>).</p>
+<p>Se você estiver no Chrome, aqui está uma solução simples.
+[Aqui está uma pequena extensão cromada que é um servidor web] (<a href="https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=pt-br">https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=pt-br</a>)</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources / chrome-webserver.png">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>Basta apontá-lo para a pasta onde você descompactou os arquivos e clique em um dos URLs do servidor web.</p>
+<p>Se você não estiver no Chrome ou se não quiser usar a extensão, outra maneira é usar [node.js] (<a href="https://nodejs.org">https://nodejs.org</a>).
+Faça o download, instale-o e abra um prompt de comando / console / janela de terminal. Se você estiver no Windows, o instalador
+irá adicionar um &quot;Node Command Prompt&quot; especial, então use isso.</p>
+<p>Em seguida, instale o [<code>http-server</code>] (<a href="https://github.com/indexzero/http-server">https://github.com/indexzero/http-server</a>) digitando</p>
+<pre><code>npm -g install http-server
+</code></pre><p>Se você estiver no uso OSX</p>
+<pre><code>sudo npm -g install http-server
+</code></pre><p>Depois de ter feito esse tipo</p>
+<pre><code>caminho do http-server/para/pasta/onde/você/descompactou/arquivos
+</code></pre><p>Deve imprimir algo como</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources / http-server-response.png">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>Então, no seu navegador, acesse [<code>http://localhost:8080</code>] (<a href="http://localhost:8080">http://localhost:8080</a>).</p>
+<p>Se você não especificar um caminho, então http-server será o servidor da pasta atual. Baixe-o aqui] (<a href="https://github.com/greggman/webgl-fundamentals/">https://github.com/greggman/webgl-fundamentals/</a>).</p>
+<h2 id="usando-as-ferramentas-de-desenvolvimento-dos-navegadores">Usando as Ferramentas de Desenvolvimento dos Navegadores</h2>
+<p>A maioria dos navegadores possui ferramentas extensas para desenvolvedores incorporadas.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources / chrome-devtools.png">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>[Docs para Chrome estão aqui] (<a href="https://developers.google.com/web/tools/chrome-devtools/">https://developers.google.com/web/tools/chrome-devtools/</a>),
+[Docs para Firefox estão aqui] (<a href="https://developer.mozilla.org/en-US/docs/Tools">https://developer.mozilla.org/en-US/docs/Tools</a>).</p>
+<p>Saiba como usá-los. Se nada mais verificar sempre o console de JavaScript. Se houver um problema, muitas vezes ele terá uma mensagem de erro. Leia a mensagem de erro de perto e você deve obter uma pista onde o problema é.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources / javascript-console.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<h2 id="assistentes-de-webgl">Assistentes de WebGL</h2>
+<p>Existem vários inspetores/assitentes de WebGL. [Aqui está um para o Chrome] (<a href="https://benvanik.github.io/WebGL-Inspector/">https://benvanik.github.io/WebGL-Inspector/</a>).</p>
+<p><div class="webgl_image ">
+  <img class="" src="https://benvanik.github.io/WebGL-Inspector/images/screenshots/1-Trace.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>[O Firefox também tem um semelhante] (<a href="https://hacks.mozilla.org/2014/03/introduzindo-the-canvas-debugger-in-firefox-developer-tools/">https://hacks.mozilla.org/2014/03/introduzindo-the-canvas-debugger-in-firefox-developer-tools/</a>).
+Ele precisa ser ativado em <code>about: flags</code> e pode exigir o [Modo de desenvolvedor do Firefox] (<a href="https://www.mozilla.org/en-US/firefox/developer/">https://www.mozilla.org/en-US/firefox/developer/</a>).</p>
+<p>Eles podem ou não ser úteis. A maioria deles é projetada para amostras animadas e irá capturar um quadro e permitir que você veja todas as chamadas do WebGL que fizeram essa moldura. Isso é ótimo se você já tiver algo a funcionar ou se você tivesse algo funcionando e quebrou. Mas não é tão bom se o seu problema é durante a inicialização que eles não capturam ou se você não está usando a animação, como no desenho de cada quadro. Ainda assim, eles podem ser muito úteis. Muitas vezes, vou clicar em uma chamada de sorteio e verificar os uniformes. Se eu vejo um
+monte de <code>NaN</code> (NaN = não é um número), então eu geralmente posso rastrear o código que definiu esse uniforme e encontrar o bug.</p>
+<h2 id="inspecione-o-c-digo">Inspecione o Código</h2>
+<p>Também lembre-se sempre de que você pode inspecionar o código. Você geralmente pode simplesmente escolher a fonte de visualização</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources / view-source.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<p>Mesmo se você não pode clicar com o botão direito em uma página ou se a fonte estiver em um arquivo separado, você sempre pode ver a fonte nos devtools</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources / devtools-source.gif">
+  <div class="webgl_center"></div>
+</div>
+
+</p>
+<h2 id="inicie">Inicie</h2>
+<p>Espero que isso o ajude a começar. [Agora de volte às aulas] (/).</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -98,7 +189,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>
+        <div id="toc">
+          <ul>
   <li>Fundamentos</li>
   <ul>
     <li><a href="/webgl/lessons/pt-br/webgl-fundamentals.html">Fundamentos do WebGL</a></li>
@@ -183,6 +275,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+        <div>Issue/Bug? <a href="http://github.com/greggman/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL - Configuração e instalação';
+            var disqus_title = 'WebGL - Configuração e instalação';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>

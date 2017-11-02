@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/pt-br/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/pt-br/webgl-animation.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL - Animation" />
+<meta property="og:title" content="WebGL - Animação" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to do animation in WebGL" />
+<meta property="og:description" content="Como fazer animação no WebGL" />
 <meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/pt-br/webgl-animation.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL - Animation" />
+<meta name="twitter:title" content="WebGL - Animação" />
 <meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/pt-br/webgl-animation.html" />
-<meta name="twitter:description" content="How to do animation in WebGL" />
+<meta name="twitter:description" content="Como fazer animação no WebGL" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL - Animation</title>
+<title>WebGL - Animação</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
@@ -78,12 +80,109 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL - Animation</h1>
+    <h1>WebGL - Animação</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>Sorry this article has not been translated yet. <a href="https://github.com/greggman/webgl2-fundamentals">Translations Welcome</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-animation.html">Here&#39;s the original English article for now</a>.</p>
+      <p>Esta publicação é uma continuação de uma série de postagens sobre o WebGL.
+O primeiro <a href="webgl-fundamentals.html"> começou com os fundamentos </a>.
+e o anterior foi sobre <a href="webgl-3d-camera.html"> câmeras 3D </a>.
+Se você não leu isso, veja-os primeiro.</p>
+<p>Como animamos algo no WebGL?</p>
+<p>Na verdade, isso não é específico para o WebGL, mas, em geral, se você quer animar algo em JavaScript, precisa mudar algo ao longo do tempo e desenhar novamente.</p>
+<p>Podemos tirar uma das nossas amostras anteriores e animá-la da seguinte forma.</p>
+<pre><code>* var fieldOfViewRadians = degToRad (60);
+* var rotationSpeed ​​= 1,2;
+
+* requestAnimationFrame (drawScene);
+
+// Desenhe a cena.
+função drawScene () {
+* // Cada quadro aumenta um pouco a rotação.
+* rotação [1] + = rotaçãoSpeed ​​/ 60.0;
+
+  ...
+* // Ligue drawScene novamente próximo quadro
+* requestAnimationFrame (drawScene);
+}
+</code></pre><p>E aqui está</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation-not-frame-rate-independent.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-animation-not-frame-rate-independent.html" target="_blank">clique aqui para abrir uma janela separada</a>
+</div>
+
+</p>
+<p>Há um problema sutil. O código acima tem um <code>rotationSpeed ​​/ 60.0</code>. Nós dividimos por 60,0 porque assumimos o navegador
+responderá a requestAnimationFrame 60 vezes por segundo, o que é bem comum.</p>
+<p>No entanto, essa não é uma suposição válida. Talvez o usuário esteja em um dispositivo de baixa potência como um smartphone antigo. Ou talvez o usuário esteja executando algum programa pesado em segundo plano. Há todos os tipos de razões pelas quais o navegador pode não exibir quadros em 60 quadros por segundo. Talvez seja o ano de 2020 e todas as máquinas funcionam a 240 quadros por segundo agora. Talvez o usuário seja um jogador e tenha um monitor CRT com 90 quadros por segundo.</p>
+<p>Você pode ver o problema neste exemplo</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/../webgl-animation-frame-rate-issues.html"></iframe>
+</div>
+
+</p>
+<p>No exemplo acima, queremos rodar todos os &#39;F&#39;s na mesma velocidade.
+O &#39;F&#39; no meio está em alta velocidade e é independente da taxa de quadros. O que está à esquerda e à direita simula se o navegador estiver funcionando apenas a uma velocidade máxima de 1/8 para a máquina atual. O do lado esquerdo é <strong> NOT </strong> taxa de quadros independente. O do direito <strong> IS </strong> taxa de quadros independente.</p>
+<p>Observe porque o que está à esquerda não está levando em consideração que a taxa de quadros pode ser lenta, não se mantém. O que está na direita, no entanto, embora esteja funcionando a 1/8 da taxa de quadros, ele está mantendo o meio correndo a toda velocidade.</p>
+<p>A maneira de tornar a taxa de quadros de animação independente é calcular o tempo que demorou entre os quadros e usar isso para calcular o quanto animar esse quadro.</p>
+<p>Em primeiro lugar, precisamos ter o tempo. Felizmente, <code>requestAnimationFrame</code> nos passa o tempo desde que a página foi carregada quando nos chama.</p>
+<p>Acho mais fácil se conseguimos o tempo em segundos, mas desde a
+<code>requestAnimationFrame</code> nos passa o tempo em milissegundos (1000ths de segundo), precisamos multiplicar por 0.001 para obter segundos.</p>
+<p>Então, podemos então calcular o tempo do delta como esse</p>
+<p>*var then = 0;</p>
+<pre><code>requestAnimationFrame(drawScene);
+
+// Draw the scene.
+*function drawScene(now) {
+*  // Convert the time to seconds
+*  now *= 0.001;
+*  // Subtract the previous time from the current time
+*  var deltaTime = now - then;
+*  // Remember the current time for the next frame.
+*  then = now;
+
+   ...
+</code></pre><p>Uma vez que temos o <code>deltaTime</code> em segundos, todos os nossos cálculos podem ser em quantas unidades por segundo queremos que algo aconteça. Nesse caso
+<code>rotationSpeed</code> é 1.2, o que significa que queremos girar 1,2 radianos por segundo.
+Isso é cerca de 1/5 de volta ou, em outras palavras, levará cerca de 5 segundos para se virar completamente, independentemente da taxa de quadros.</p>
+<ul>
+<li>rotation[1] += rotationSpeed * deltaTime;</li>
+</ul>
+<p>Aqui ele está trabalhando.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-animation.html" target="_blank">clique aqui para abrir uma janela separada</a>
+</div>
+
+</p>
+<p>Não é provável que você veja uma diferença de um no topo desta página a menos que você esteja em uma máquina lenta, mas se você não fizer sua taxa de quadros de animação independente, você provavelmente terá alguns usuários recebendo uma experiência muito diferente do que você planejou.</p>
+<p>Em seguida <a href="webgl-3d-textures.html"> como aplicar texturas </a>.</p>
+<p><div class = "webgl_bottombar"></p>
+<p><h3> Não use setInterval ou setTimeout! &lt;/ h3&gt;</p>
+<p><p> Se você programou animação em JavaScript no passado você pode ter usado <code> setInterval &lt;/ code&gt; ou <code> setTimeout &lt;/ code&gt; para obter o sua função de desenho a ser chamada.
+&lt;/ p&gt; <p>
+Os problemas com o uso de <code> setInterval &lt;/ code&gt; ou <code> setTimeout &lt;/ code&gt; para fazer animação
+são dois. Primeiro, os dois <code> setInterval &lt;/ code&gt; e <code> setTimeout &lt;/ code&gt; não têm nenhuma relação
+para o navegador exibir qualquer coisa. Eles não são sincronizados quando o navegador é
+vai desenhar uma nova moldura e, portanto, pode estar sem sincronia com a máquina do usuário.
+Se você usar <code> setInterval &lt;/ code&gt; ou <code> setTimeout &lt;/ code&gt; e assumir 60 quadros
+um segundo e a máquina do usuário está realmente executando alguma outra taxa de quadros que você irá
+estar fora de sincronia com a máquina deles.
+&lt;/ p&gt; <p>
+O outro problema é que o navegador não tem idéia de por que você está usando <code> setInterval &lt;/ code&gt; ou
+<code> setTimeout &lt;/ code&gt;. Por exemplo, mesmo quando sua página não está visível,
+como quando não é a aba da frente, o navegador ainda precisa executar seu código.
+Talvez você esteja usando <code> setTimeout &lt;/ code&gt; ou <code> setInterval &lt;/ code&gt; para verificar
+para novas mensagens ou tweets. Não há como saber para o navegador. Tudo bem se
+você está apenas a verificar cada poucos segundos para novas mensagens, mas não está bom se
+você está tentando desenhar 1000 objetos no WebGL. Você estará efetivamente a DOS
+máquina do usuário com o seu desenho de tabulação invisível que eles nem conseguem ver.
+&lt;/ p&gt; <p>
+<code> requestAnimationFrame &lt;/ code&gt; resolve esses dois problemas. Chama você apenas
+hora certa para sincronizar a sua animação com a tela e também só chama você se
+sua aba está visível.
+&lt;/ p&gt;
+&lt;/ div&gt;</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -98,7 +197,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>
+        <div id="toc">
+          <ul>
   <li>Fundamentos</li>
   <ul>
     <li><a href="/webgl/lessons/pt-br/webgl-fundamentals.html">Fundamentos do WebGL</a></li>
@@ -183,6 +283,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+        <div>Issue/Bug? <a href="http://github.com/greggman/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL - Animação';
+            var disqus_title = 'WebGL - Animação';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
