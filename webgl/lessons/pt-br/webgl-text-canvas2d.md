@@ -80,6 +80,6 @@ Outra razão para usar o Canvas 2D é fácil desenhar outras coisas. Por exemplo
 
 Antes de tirar proveito da tela Canvas 2D [matriz de pilha] (webgl-2d-matrix-stack.html) traduzir a função, então não precisamos fazer nenhuma matemática extra ao desenhar nossa seta. Nós apenas pretendemos desenhar na origem e traduz-se cuida de mover essa origem para o canto da nossa F.
 
-{{{exemplo, url = "../ webgl-text-html-canvas2d-arrows.html"}}}
+{{{example url="../webgl-text-html-canvas2d-arrows.html"}}}
 
 Eu acho que cobre o uso do Canvas 2D. [Confira a API Canvas 2D] (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) para obter mais ideias. [Em seguida, iremos renderizar texto no WebGL] (webgl-text-texture.html).

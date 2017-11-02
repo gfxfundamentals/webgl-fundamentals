@@ -29,7 +29,7 @@ Podemos tirar uma das nossas amostras anteriores e animá-la da seguinte forma.
 
 E aqui está
 
-{{{exemplo, url = "../ webgl-animation-not-frame-rate-independent.html"}}}
+{{{example url="../webgl-animation-not-frame-rate-independent.html"}}}
 
 Há um problema sutil. O código acima tem um `rotationSpeed ​​/ 60.0`. Nós dividimos por 60,0 porque assumimos o navegador
 responderá a requestAnimationFrame 60 vezes por segundo, o que é bem comum.
@@ -38,7 +38,7 @@ No entanto, essa não é uma suposição válida. Talvez o usuário esteja em um
 
 Você pode ver o problema neste exemplo
 
-{{{diagrama url = "../ webgl-animation-frame-rate-issues.html"}}}
+{{{diagram url="../webgl-animation-frame-rate-issues.html"}}}
 
 No exemplo acima, queremos rodar todos os 'F's na mesma velocidade.
 O 'F' no meio está em alta velocidade e é independente da taxa de quadros. O que está à esquerda e à direita simula se o navegador estiver funcionando apenas a uma velocidade máxima de 1/8 para a máquina atual. O do lado esquerdo é ** NOT ** taxa de quadros independente. O do direito ** IS ** taxa de quadros independente.
