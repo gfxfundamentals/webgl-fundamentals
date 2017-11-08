@@ -29,7 +29,7 @@ Here's a very simple one with an interface called [Servez](https://greggman.gith
 {{{image url="resources/servez.gif" }}}
 
 Just point it at the folder where you unzipped the files, click "Start", then go to
-in your browser [`http://localhost:8080/webgl/`]()`http://localhost:8080/webgl/) and choose
+in your browser [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/) and choose
 a sample.
 
 If you prefer the command line, another way is to use [node.js](https://nodejs.org).
