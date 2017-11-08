@@ -24,14 +24,14 @@ Unzip the files into some folder.
 Next up you should install a small web server. I know "web server" sounds scary but the truth is [web
 servers are actually extremely simple](http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/).
 
-If you're on Chrome here's a simple solution.
-[Here's a small chrome extension that's a web server](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=en)
+Here's a very simple one with an interface called [Servez](https://greggman.github.io/servez).
 
-{{{image url="resources/chrome-webserver.png" }}}
+{{{image url="resources/servez.gif" }}}
 
-Just point it at the folder where you unzipped the files and click one of the web server URLs.
+Just point it at the folder where you unzipped the files, click "Start", then click "Launch Browser" to go to
+`http://localhost:8080`
 
-If you're not on chrome or if you don't want to use the extension another way is to use [node.js](https://nodejs.org).
+If you prefer the command line, another way is to use [node.js](https://nodejs.org).
 Download it, install it, then open a command prompt / console / terminal window. If you're on Windows the installer
 will add a special "Node Command Prompt" so use that.
 
