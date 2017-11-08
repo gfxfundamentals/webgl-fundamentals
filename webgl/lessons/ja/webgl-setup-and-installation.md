@@ -35,7 +35,7 @@ WebGLは、Canvas2Dと比較して画像のロードに関してセキュリテ�
 
 ごく簡単なWebサーバーとして[Servez](https://greggman.github.io/servez/)を紹介しておきます。
 
-{{{image url="https://webglfundamentals.org/webgl/lessons/resources/servez.gif" }}}
+{{{image url="resources/servez.gif" }}}
 
 ダウンロードしたファイルをダブルクリックすればそのまま起動します。
 Servezのメイン画面が開いたら、
