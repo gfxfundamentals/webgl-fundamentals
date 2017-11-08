@@ -33,20 +33,21 @@ WebGLは、Canvas2Dと比較して画像のロードに関してセキュリテ�
 [たった５行で書けるようなもの](http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/)
 です。
 
-あなたがChromeブラウザのユーザーなら、特に簡単な方法が利用できます。
-[Chromeの拡張機能として動くWebサーバー](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=en)
-があるので、それを使えばよいです。
+ごく簡単なWebサーバーとして[Servez](https://greggman.github.io/servez/)を紹介しておきます。
 
-{{{image url="resources/chrome-webserver.png" }}}
+{{{image url="https://webglfundamentals.org/webgl/lessons/resources/servez.gif" }}}
 
-この方法であれば、あとやるべきことは、
-さきほどダウンロードしたZipファイルを展開したディレクトリを指定して、
-WebサーバのURLをクリックするだけです。
+ダウンロードしたファイルをダブルクリックすればそのまま起動します。
+Servezのメイン画面が開いたら、
+先ほどこのサイトのZipファイルを展開したローカルのディレクトリを選択して
+Startボタンを押せばWebサーバが起動します。
+Webサーバが起動できたらブラウザを起動してサンプルプログラムがあるディレクトリ
+「[`http://localhost:8080/webgl/`](http://localhost:8080/webgl/)」にアクセスしましょう。
 
-あなたがChromeユーザーでなかったり、拡張機能を使いたくない場合は、
+コマンドラインに抵抗がない人であるなら、
 [node.js](https://nodejs.org)を利用する方法があります。
 node.jsをダウンロード、インストールして、コマンドプロンプト
-(OSによってコンソール、ターミナルなどと呼ばれるものです)を開きます。
+(OSによってコンソール、ターミナルなどと呼ばれています)を開きます。
 Windowsの場合は"Node Command Prompt"という専用のプログラムが
 追加されているはずなので、それを利用します。
 
@@ -71,8 +72,8 @@ OSXの場合は、
 {{{image url="resources/http-server-response.png" }}}
 
 このようなログが表示されます。
-これで、ブラウザからは[`http://localhost:8080`](http://localhost:8080)
-でアクセスできます。
+これで、ブラウザからは[`http://localhost:8080/webgl/`](http://localhost:8080/webgl/)
+でサンプルプログラムのディレクトリにアクセスできるので、目的のサンプルを選択してください。
 
 パスを指定しなかった場合は、http-serverはカンレントフォルダを参照します。
 
