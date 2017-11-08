@@ -28,8 +28,9 @@ Here's a very simple one with an interface called [Servez](https://greggman.gith
 
 {{{image url="resources/servez.gif" }}}
 
-Just point it at the folder where you unzipped the files, click "Start", then click "Launch Browser" to go to
-`http://localhost:8080`
+Just point it at the folder where you unzipped the files, click "Start", then go to
+in your browser [`http://localhost:8080/webgl/`]()`http://localhost:8080/webgl/) and choose
+a sample.
 
 If you prefer the command line, another way is to use [node.js](https://nodejs.org).
 Download it, install it, then open a command prompt / console / terminal window. If you're on Windows the installer
@@ -51,7 +52,7 @@ It should print something like
 
 {{{image url="resources/http-server-response.png" }}}
 
-Then in your browser go to [`http://localhost:8080`](http://localhost:8080).
+Then in your browser go to [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/).
 
 If you don't specify a path then http-server will server the current folder.
 
