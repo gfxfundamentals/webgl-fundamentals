@@ -113,7 +113,7 @@ we can multiply our positions by the world matrix so ...</p>
 
 // compute the world position of the surfoace
 vec3 surfaceWorldPosition = (u_world * a_position).xyz;
-</code></pre><p>And we can compute a vector from the surface to the light which is simular
+</code></pre><p>And we can compute a vector from the surface to the light which is similar
 to the direction we had before expect this time we&#39;re computing it for
 every position on the surface to a point.</p>
 <pre><code>v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
@@ -147,7 +147,7 @@ void main() {
 }
 </code></pre><p>Now in the fragment shader we need to normalize the surface to light
 vector since it&#39;s a not a unit vector.  Note that we could normalize in
-the vertex shader but because it&#39;s a <code>varying</code> it will be linear
+the vertex shader but because it&#39;s a <code>varying</code> it will be linearly
 interpolated between our positions and so would not be a complete unit
 vector</p>
 <pre><code>precision mediump float;
