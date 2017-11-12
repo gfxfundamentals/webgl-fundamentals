@@ -343,7 +343,7 @@ into a unit vector. The specific values in the sample are
 `y = 0.7` which is positive `y` means the light is above pointing down.
 `z = 1` which is positive `z` means the light is in front pointing into the scene.
 the relative values means the the direction is mostly pointing into the scene
-and poiting more down then right.
+and pointing more down then right.
 
 And here it is
 
@@ -439,7 +439,7 @@ based on the other visualizations it's clear using the worldInverseTranspose
 is correct.
 
 To implement this in our example let's change the code like this.  First
-we'll update the shader.  Techincally we could just update the value of
+we'll update the shader.  Technically we could just update the value of
 `u_world` but it's best if we rename things so they're named what they
 actually are otherwise it will get confusing.
 
@@ -503,7 +503,7 @@ var m4 = {
 ```
 
 Because the effect is subtle and because we aren't scaling anything
-there's no noticble difference but at least now we're prepared.
+there's no noticeable difference but at least now we're prepared.
 
 {{{example url="../webgl-3d-lighting-directional-worldinversetranspose.html" }}}
 
