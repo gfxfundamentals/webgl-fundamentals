@@ -41,7 +41,18 @@
 }(this, function () {
   "use strict";
 
-  var wrap = function(ctx) {
+  function duplicate(src) {
+    const d = new window.DOMMatrix();
+    d.a = src.a;
+    d.b = src.b;
+    d.c = src.c;
+    d.d = src.d;
+    d.e = src.e;
+    d.f = src.f;
+    return d;
+  }
+
+  function patchCurrentTransform(ctx) {
 
     if (ctx.currentTransform) {
       return ctx;
@@ -51,28 +62,28 @@
 
     ctx.scale = function(scale) {
       return function(x, y) {
-        ctx.currentTransform.scale(x, y);
+        ctx.currentTransform.scaleSelf(x, y);
         scale(x, y);
       };
     }(ctx.scale.bind(ctx));
 
     ctx.rotate = function(rotate) {
       return function(r) {
-        ctx.currentTransform.rotate(r);
+        ctx.currentTransform.rotateSelf(r * 180 / Math.PI);
         rotate(r);
       };
     }(ctx.rotate.bind(ctx));
 
     ctx.translate = function(translate) {
       return function(x, y) {
-        ctx.currentTransform.translate(x, y);
+        ctx.currentTransform.translateSelf(x, y);
         translate(x, y);
       };
     }(ctx.translate.bind(ctx));
 
     ctx.save = function(save) {
       return function() {
-        stack.push(ctx.currentTransform.duplicate());
+        stack.push(duplicate(ctx.currentTransform));
         save();
       };
     }(ctx.save.bind(ctx));
@@ -90,19 +101,32 @@
 
     ctx.transform = function(transform) {
       return function(m11, m12, m21, m22, dx, dy) {
-        ctx.currentTransform.multiply(m11, m12, m21, m22, dx, dy);
+        const m = new DOMMatrix();
+        m.a = m11;
+        m.b = m12;
+        m.c = m21;
+        m.d = m22;
+        m.e = dx;
+        m.f = dy;
+        ctx.currentTransform.multiplySelf(m);
         transform(m11, m12, m21, m22, dx, dy);
       };
     }(ctx.transform.bind(ctx));
 
     ctx.setTransform = function(setTransform) {
       return function(m11, m12, m21, m22, dx, dy) {
-        ctx.currentTransform.multiply(m11, m12, m21, m22, dx, dy);
+        const d = ctx.currentTransform;
+        d.a = m11;
+        d.b = m12;
+        d.c = m21;
+        d.d = m22;
+        d.e = dx;
+        d.f = dy;
         setTransform(m11, m12, m21, m22, dx, dy);
       };
     }(ctx.setTransform.bind(ctx));
 
-    ctx.currentTransform = new Transform();
+    ctx.currentTransform = new DOMMatrix();
 
     ctx.validateTransformStack = function() {
       if (stack.length != 0) {
@@ -112,6 +136,11 @@
 
     return ctx;
   };
+
+  function wrap(ctx) {
+    //patchDOMMatrix();
+    return patchCurrentTransform(ctx);
+  }
 
   return {
     wrap: wrap,
