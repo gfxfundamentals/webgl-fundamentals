@@ -82,7 +82,7 @@ Let's start with a vertex shader
 When executed, if the entire thing was written in JavaScript instead of GLSL
 you could imagine it would be used like this
 
-    // *** PSUEDO CODE!! ***
+    // *** PSEUDO CODE!! ***
 
     var positionBuffer = [
       0, 0, 0, 0,
@@ -291,10 +291,10 @@ To do this we call `gl.viewport` and pass it the current size of the canvas.
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-This tells WebGL the -1 +1 clip space maps to 0 &lt;-&gt; `gl.canyvas.width` for x and 0 &lt;-&gt; `gl.canvas.height`
+This tells WebGL the -1 +1 clip space maps to 0 &lt;-&gt; `gl.canvas.width` for x and 0 &lt;-&gt; `gl.canvas.height`
 for y.
 
-We clear the canvas. `0, 0, 0, 0` are red, green, blue, alpha respectivel so in this case we're making the canvas transparent.
+We clear the canvas. `0, 0, 0, 0` are red, green, blue, alpha respectively so in this case we're making the canvas transparent.
 
     // Clear the canvas
     gl.clearColor(0, 0, 0, 0);
@@ -362,7 +362,7 @@ triangle will be drawn at clip space coordinates
       0.7, 0,
 
 Converting from clip space to screen space if the canvas size
-happned to be 400x300 we'd get something like this
+happened to be 400x300 we'd get something like this
 
      clip space      screen space
        0, 0       ->   200, 150
