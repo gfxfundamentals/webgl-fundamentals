@@ -94,10 +94,10 @@ pixels into clip space can all be done by 1 matrix and some magic
 matrix math. To do 3D is only a small step from there.</p>
 <p>In our previous 2D examples we had 2D points (x, y) that we multiplied by
 a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.</p>
-<p>Let&#39;s take our last example and change it to 3D.  We&#39;ll use an F again but
-this time a 3D &#39;F&#39;.</p>
+<p>Let&#39;s take our last example and change it to 3D. We&#39;ll use an F again
+but this time a 3D &#39;F&#39;.</p>
 <p>The first thing we need to do is change the vertex shader to handle 3D.
-Here&#39;s the old shader.</p>
+Here&#39;s the old vertex shader.</p>
 <pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
@@ -119,7 +119,10 @@ void main() {
 *  gl_Position = u_matrix * a_position;
 }
 &lt;/script&gt;
-</code></pre><p>It got even simpler!</p>
+</code></pre><p>It got even simpler! Just like in 2d we provided <code>x</code> and <code>y</code> and then
+set <code>z</code> to 1, in 3d we will provide <code>x</code>, <code>y</code>, and <code>z</code> and we need <code>w</code>
+to be 1 but we can take advantage of the fact that for attributes
+<code>w</code> defaults to 1.</p>
 <p>Then we need to provide 3D data.</p>
 <pre><code>  ...
 
@@ -394,8 +397,8 @@ void main() {
 *   gl_FragColor = v_color;
 }
 &lt;/script&gt;
-</code></pre><p>We need to lookup the location to supply the colors, then setup another
-buffer and put the colors in it.</p>
+</code></pre><p>We need to lookup the attribute location to supply the colors, then setup another
+buffer and attribute to give it the colors.</p>
 <pre><code>  ...
   var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 
@@ -453,8 +456,8 @@ gl.vertexAttribPointer(
 
 </p>
 <p>Uh oh, what&#39;s that mess?  Well, it turns out all the various parts of
-that 3D &#39;F&#39;, front, back, sides, etc get drawn in the order they appear in in
-our geometry.  That doesn&#39;t give us quite the desired results as sometimes
+that 3D &#39;F&#39;, front, back, sides, etc get drawn in the order they appear in
+our geometry data.  That doesn&#39;t give us quite the desired results as sometimes
 the ones in the back get drawn after the ones in the front.</p>
 <p><img class="webgl_center" width="163" height="190" src="resources/polygon-drawing-order.gif" /></p>
 <p>The <span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">redish part</span> is
@@ -462,9 +465,9 @@ the <strong>front</strong> of the &#39;F&#39;  but because it&#39;s the first pa
 it is drawn first and then the other triangles behind it get drawn
 after covering it up. For example the  <span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">purple part</span>
 is actually the back of the &#39;F&#39;. It gets drawn 2nd because it comes 2nd in our data.</p>
-<p>Triangles in WebGL have the concept of front facing and back facing.  A
-front facing triangle has its vertices go in a clockwise direction.  A
-back facing triangle has its vertices go in a counter clockwise direction</p>
+<p>Triangles in WebGL have the concept of front facing and back facing.  By default a
+front facing triangle has its vertices go in a counter clockwise direction.  A
+back facing triangle has its vertices go in a clockwise direction.</p>
 <p><img src="resources/triangle-winding.svg" class="webgl_center" width="400" /></p>
 <p>WebGL has the ability to draw only forward facing or back facing
 triangles.  We can turn that feature on with</p>
@@ -501,7 +504,7 @@ backward triangle is</p>
 <pre><code>           1,   2,   3,
           40,  50,  60,
          700, 800, 900,
-</code></pre><p>we just flip the last 2 vertices to make it forward.</p>
+</code></pre><p>we just swap the last 2 vertices to make it forward.</p>
 <pre><code>           1,   2,   3,
          700, 800, 900,
           40,  50,  60,
