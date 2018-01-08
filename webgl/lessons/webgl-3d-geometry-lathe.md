@@ -11,7 +11,7 @@ Someone asked how to make a bowling pin shape in WebGL. The *smart* answer is
 [3D Studio Max](http://www.autodesk.com/products/3ds-max/overview),
 [Cinema 4D](https://www.maxon.net/en/products/cinema-4d/overview/), etc.
 Use it to model a bowling pin, export, read the dat.
-([The OBJ format is relative simple](https://en.wikipedia.org/wiki/Wavefront_.obj_file))".
+([The OBJ format is relativly simple](https://en.wikipedia.org/wiki/Wavefront_.obj_file)).
 
 But, that got me thinking, what if they wanted to make a modeling package?
 
