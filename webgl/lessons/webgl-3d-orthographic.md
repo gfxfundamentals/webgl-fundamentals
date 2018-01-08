@@ -14,11 +14,11 @@ matrix math. To do 3D is only a small step from there.
 In our previous 2D examples we had 2D points (x, y) that we multiplied by
 a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.
 
-Let's take our last example and change it to 3D.  We'll use an F again but
-this time a 3D 'F'.
+Let's take our last example and change it to 3D. We'll use an F again
+but this time a 3D 'F'.
 
 The first thing we need to do is change the vertex shader to handle 3D.
-Here's the old shader.
+Here's the old vertex shader.
 
 ```
 <script id="2d-vertex-shader" type="x-shader/x-vertex">
@@ -48,7 +48,10 @@ void main() {
 </script>
 ```
 
-It got even simpler!
+It got even simpler! Just like in 2d we provided `x` and `y` and then
+set `z` to 1, in 3d we will provide `x`, `y`, and `z` and we need `w`
+to be 1 but we can take advantage of the fact that for attributes
+`w` defaults to 1.
 
 Then we need to provide 3D data.
 
@@ -369,8 +372,8 @@ void main() {
 </script>
 ```
 
-We need to lookup the location to supply the colors, then setup another
-buffer and put the colors in it.
+We need to lookup the attribute location to supply the colors, then setup another
+buffer and attribute to give it the colors.
 
 ```
   ...
@@ -434,8 +437,8 @@ Now we get this.
 {{{example url="../webgl-3d-step3.html" }}}
 
 Uh oh, what's that mess?  Well, it turns out all the various parts of
-that 3D 'F', front, back, sides, etc get drawn in the order they appear in in
-our geometry.  That doesn't give us quite the desired results as sometimes
+that 3D 'F', front, back, sides, etc get drawn in the order they appear in
+our geometry data.  That doesn't give us quite the desired results as sometimes
 the ones in the back get drawn after the ones in the front.
 
 <img class="webgl_center" width="163" height="190" src="resources/polygon-drawing-order.gif" />
@@ -446,9 +449,9 @@ it is drawn first and then the other triangles behind it get drawn
 after covering it up. For example the  <span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">purple part</span>
 is actually the back of the 'F'. It gets drawn 2nd because it comes 2nd in our data.
 
-Triangles in WebGL have the concept of front facing and back facing.  A
-front facing triangle has its vertices go in a clockwise direction.  A
-back facing triangle has its vertices go in a counter clockwise direction
+Triangles in WebGL have the concept of front facing and back facing.  By default a
+front facing triangle has its vertices go in a counter clockwise direction.  A
+back facing triangle has its vertices go in a clockwise direction.
 
 <img src="resources/triangle-winding.svg" class="webgl_center" width="400" />
 
@@ -494,7 +497,7 @@ backward triangle is
          700, 800, 900,
 ```
 
-we just flip the last 2 vertices to make it forward.
+we just swap the last 2 vertices to make it forward.
 
 ```
            1,   2,   3,
