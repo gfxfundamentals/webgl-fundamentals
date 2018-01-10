@@ -468,8 +468,10 @@ with that [boilerplate](webgl-boilerplate.html) code.
 
 {{{example url="../webgl-2d-rectangle.html" }}}
 
-Again you might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
-corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs
+Again you might notice the rectangle is near the bottom of that area. WebGL considers positive Y as
+up and negative Y as down. In clip space the bottom left corner -1,-1. We haven't changed any signs
+so with our current math 0, 0 becomes the bottom left corner.
+To get it to be the more traditional top left corner used for 2d graphics APIs
 we can just flip the clip space y coordinate.
 
     *   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
