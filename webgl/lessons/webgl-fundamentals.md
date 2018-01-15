@@ -82,7 +82,7 @@ Let's start with a vertex shader
 When executed, if the entire thing was written in JavaScript instead of GLSL
 you could imagine it would be used like this
 
-    // *** PSUEDO CODE!! ***
+    // *** PSEUDO CODE!! ***
 
     var positionBuffer = [
       0, 0, 0, 0,
@@ -255,7 +255,7 @@ Now we can put data in that buffer by referencing it through the bind point
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 There's a lot going on here. The first thing is we have `positions` which is a
-JavaScript array. WebGL on other hand needs strongly typed data so the part
+JavaScript array. WebGL on the other hand needs strongly typed data so the part
 `new Float32Array(positions)` creates a new array of 32bit floating point numbers
 and copies the values from `positions`. `gl.bufferData` then copies that data to
 the `positionBuffer` on the GPU. It's using the position buffer because we bound
@@ -291,10 +291,10 @@ To do this we call `gl.viewport` and pass it the current size of the canvas.
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-This tells WebGL the -1 +1 clip space maps to 0 &lt;-&gt; `gl.canyvas.width` for x and 0 &lt;-&gt; `gl.canvas.height`
+This tells WebGL the -1 +1 clip space maps to 0 &lt;-&gt; `gl.canvas.width` for x and 0 &lt;-&gt; `gl.canvas.height`
 for y.
 
-We clear the canvas. `0, 0, 0, 0` are red, green, blue, alpha respectivel so in this case we're making the canvas transparent.
+We clear the canvas. `0, 0, 0, 0` are red, green, blue, alpha respectively so in this case we're making the canvas transparent.
 
     // Clear the canvas
     gl.clearColor(0, 0, 0, 0);
@@ -362,7 +362,7 @@ triangle will be drawn at clip space coordinates
       0.7, 0,
 
 Converting from clip space to screen space if the canvas size
-happned to be 400x300 we'd get something like this
+happened to be 400x300 we'd get something like this
 
      clip space      screen space
        0, 0       ->   200, 150
@@ -468,8 +468,10 @@ with that [boilerplate](webgl-boilerplate.html) code.
 
 {{{example url="../webgl-2d-rectangle.html" }}}
 
-Again you might notice the rectangle is near the bottom of that area. WebGL considers the bottom left
-corner to be 0,0. To get it to be the more traditional top left corner used for 2d graphics APIs
+Again you might notice the rectangle is near the bottom of that area. WebGL considers positive Y as
+up and negative Y as down. In clip space the bottom left corner -1,-1. We haven't changed any signs
+so with our current math 0, 0 becomes the bottom left corner.
+To get it to be the more traditional top left corner used for 2d graphics APIs
 we can just flip the clip space y coordinate.
 
     *   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);

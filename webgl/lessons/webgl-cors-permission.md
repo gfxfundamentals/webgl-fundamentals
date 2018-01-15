@@ -88,10 +88,11 @@ image from the server, if it's not the same domain, the browser will ask for COR
     +    img.crossOrigin = "";   // ask for CORS permission
         img.src = url;
 
-The string you set `crossOrigin` to is sent to the server. The server can look at that string and decide
-whether or not to give you permission. Most servers that support CORS don't look at the string, they just
-give permission to everyone. This is why setting it to the empty string works. All it means in this case
-is "ask permission" vs say `img.crossOrigin = "bob"` would mean "ask permission for 'bob'.
+There are 3 values you can set `crossOrigin` to. One is `undefined` which is the default which means
+"do not ask for permission". Another is `"anonymous"` which means ask for permission but don't send extra info.
+The last is `"use-credentials"` which means send cookies and other info the server might look at to decide
+whether or not it give permission. If `crossOrigin` is set to any other value it's the same as setting
+it to `anonymous`.
 
 Why don't we just always see that permission? Because asking for permission takes 2 HTTP requests so it's
 slower than not asking. If we know we're on the same domain or we know we won't use the image for anything
@@ -118,7 +119,12 @@ And we can use it like this
 
 It's important to note asking for permission does NOT mean you'll be granted permission.
 That is up to the server. Github pages give permission, flickr.com gives permission,
-imgur.com gives permssion, but most websites do not.
+imgur.com gives permssion, but most websites do not. To give permission the server
+sends certain headers when sending the image.
+
+It's also important to note that the server giving permission is not enough. If the
+image is from another domain you must set the `crossOrigin` attribute or else you
+will not be able to use the image even if the server sends the correct headers.
 
 <div class="webgl_bottombar">
 <h3>Making Apache grant CORS permission</h3>

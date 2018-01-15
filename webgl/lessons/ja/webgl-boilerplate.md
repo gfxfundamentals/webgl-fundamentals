@@ -134,14 +134,14 @@ script要素から読み込んでコンパイルし、プログラムにアタ�
      * 二つのscript要素を使ってWebGLProgramを生成する。
      *
      * @param {!WebGLRenderingContext} gl WebGLコンテキスト。
-     * @param {string} vertexShaderId 頂点シェーダーの書かれたscript要素のid。
-     * @param {string} fragmentShaderId フラグメントシェーダーの書かれたscript要素のid。
+     * @param {string[]} shaderScriptIds script要素のidプロパティの配列。
+     *        一つ目を頂点シェーダー、二つ目をフラグメントシェーダーとみなす。
      * @return {!WebGLProgram} WebGLプログラム。
      */
     function createProgramFromScripts(
-        gl, vertexShaderId, fragmentShaderId) {
-      var vertexShader = createShaderFromScript(gl, vertexShaderId, gl.VERTEX_SHADER);
-      var fragmentShader = createShaderFromScript(gl, fragmentShaderId, gl.FRAGMENT_SHADER);
+        gl, shaderScriptIds) {
+      var vertexShader = createShaderFromScript(gl, shaderScriptIds[0], gl.VERTEX_SHADER);
+      var fragmentShader = createShaderFromScript(gl, shaderScriptIds[1], gl.FRAGMENT_SHADER);
       return createProgram(gl, vertexShader, fragmentShader);
     }
 
@@ -153,14 +153,13 @@ script要素から読み込んでコンパイルし、プログラムにアタ�
 このコードの実装内容については[このドキュメント](webgl-resizing-the-canvas.html)
 で紹介しています。
 
-## まとめ
-
-上に挙げた２つのひな形コードを実際に利用するには、
-シェーダーのコードが、
+## ひな形コードの利用
+以上、２つのひな形コードは`webgl-utils.js`として一つにまとめてあります。
+これを利用するには、
 
     <script src="resources/webgl-utils.js"></script>
 
-の中に書かれているサンプルの場合、
+といったコードで取り込んだ上で、以下のようなコードで呼び出します。
 
     var program = webglUtils.createProgramFromScripts(
       gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
@@ -169,20 +168,20 @@ script要素から読み込んでコンパイルし、プログラムにアタ�
 
     webglUtils.resizeCanvasToMatchDisplaySize(canvas);
 
-となります。
+## まとめ
 
-まったく同じ大量のコードが全てのサンプルに含まれているために、
-そのサンプルが何のために書かれたサンプルなのか判りにくく
-なってしまう、という事態は避けるべき、と思います。
+まったく同じ大量のコードが全てのサンプルに含まれているために
+「そのサンプルが何のために書かれたサンプルなのか判りにくく
+なってしまう」のは本末転倒で、避けるべきであるとと思います。
 
 以上で、私の「最小のWebGLひな型コード(boilerplate code)」のおおまかな紹介を終わります。
-[`webgl-utils.js`はここにあります](../../resources/webgl-utils.js)。
+[`webgl-utils.js`のコードはここにあります](../../resources/webgl-utils.js)。
 
 さらにしっかり構成されたライブラリに興味があるようでしたら[TWGL.js](http://twgljs.org)
 をチェックしてください。
 
 WebGLを複雑に見せているもう一つの要素は「シェーダーにデータを渡す手順」です。
-そのあたりの話題については「<a href="webgl-how-it-works.html">WebGLの仕組み</a>」
+そのあたりの話題については「[WebGLの仕組み](webgl-how-it-works.html)」
 で紹介しています。
 これについては、「[少ないコード、大きな喜び](webgl-less-code-more-fun.html)」や、
 [TWGL](http://twgljs.org)も参考になるはずです。

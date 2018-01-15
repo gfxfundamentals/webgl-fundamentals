@@ -32,7 +32,6 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 -->
 <script src="../../resources/webgl-utils.js"></script>
 <script src="../../resources/webgl-lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
-<script src="transform.js"></script>
 <script src="canvas-wrapper.js"></script>
 <script>
 "use strict";
@@ -104,7 +103,7 @@ function main() {
     ctx.stroke();
     if (node.drawOrbit) {
       var mat = ctx.currentTransform;
-      var point = mat.m.slice(4);
+      var point = [mat.e, mat.f];
       var old = history[curHistory];
       if (old) {
         orbitCtx.fillStyle = "white";

@@ -336,7 +336,7 @@ void main() {
   // 将位置和矩阵相乘.
   gl_Position = u_matrix * a_position;
 
-+  // 将颜色传递给片段着色器
++  // 将颜色传递给片断着色器
 +  v_color = a_color;
 }
 </script>
@@ -490,7 +490,7 @@ WebGL可以只绘制正面或反面三角形，可以这样开启
 Z 也在裁剪空间或者 (-1 到 +1) 。这个值会被转换到深度空间( 0 到 +1)，
 WebGL绘制一个着色像素之前会检查对应的深度像素，
 如果对应的深度像素中的深度值小于当前像素的深度值，WebGL就不会绘制新的颜色。
-反之它会绘制片段着色器提供的新颜色并更新深度像素中的深度值。
+反之它会绘制片断着色器提供的新颜色并更新深度像素中的深度值。
 这也意味着在其他像素后面的像素不会被绘制。
 
 我们可以像这样开启这个特性
@@ -543,8 +543,8 @@ WebGL绘制一个着色像素之前会检查对应的深度像素，
     var right = gl.canvas.clientWidth;
     var bottom = gl.canvas.clientHeight;
     var top = 0;
-    var near = -400;
-    var far = 400;
+    var near = 400;
+    var far = -400;
     m4.orthographic(left, right, bottom, top, near, far);
 
 下一篇将讲述[如何实现透视投影](webgl-3d-perspective.html)。

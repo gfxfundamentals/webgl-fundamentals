@@ -19,13 +19,13 @@ Description: 如何进行WebGL的开发
 
 下一步你需要搭建一个简单的web服务器。我知道“web服务器”听起来很吓人，但搭建[web服务器实际上是非常简单的](http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/)。
 
-如果你使用的是Chrome浏览器，[这有一个小插件可以当web服务器](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=en)。
+如果你使用的是Chrome浏览器，这有一个扩展[Servez](https://greggman.github.io/servez)可以当web服务器。
 
-{{{image url="resources/chrome-webserver.png" }}}
+{{{image url="resources/servez.gif" }}}
 
-只需定位到你解压缩文件的文件夹，然后点击其中一个URL就可以了。
+只需选择解压后的文件夹，点击“Start”，然后在地址 [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/) 中选择例子。
 
-如果你不用Chrome浏览器或者你不想用这个插件，另一种方法是使用[node.js](https://nodejs.org)。
+如果你更喜欢使用命令行，另一种方法是使用[node.js](https://nodejs.org)。
 在下载并安装后，打开命令行/控制台/终端窗口。
 如果你是Windows系统，安装过程会提示你额外安装“Node Command Prompt”，同意就可以了。
 
@@ -45,7 +45,7 @@ Description: 如何进行WebGL的开发
 
 {{{image url="resources/http-server-response.png" }}}
 
-最后你就可以在你的网页浏览器里访问[`http://localhost:8080`](http://localhost:8080)了。
+最后你就可以在你的网页浏览器里访问 [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/) 了。
 
 如果你不指定路径，http-server 会使用当前所在文件夹。
 

@@ -79,7 +79,7 @@ Next we change the shader to use 2 textures.  In this case we'll multiply
 1 texture by the other.
 
 ```
-&lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 // our textures
@@ -94,7 +94,7 @@ void main() {
    vec4 color1 = texture2D(u_image1, v_texCoord);
    gl_FragColor = color0 * color1;
 }
-&lt;/script&gt;
+</script>
 ```
 
 We need to create 2 WebGL texture objects.

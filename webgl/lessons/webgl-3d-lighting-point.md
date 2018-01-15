@@ -36,7 +36,7 @@ we can multiply our positions by the world matrix so ...
     // compute the world position of the surfoace
     vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 
-And we can compute a vector from the surface to the light which is simular
+And we can compute a vector from the surface to the light which is similar
 to the direction we had before expect this time we're computing it for
 every position on the surface to a point.
 
@@ -74,7 +74,7 @@ Here's all that in context
 
 Now in the fragment shader we need to normalize the surface to light
 vector since it's a not a unit vector.  Note that we could normalize in
-the vertex shader but because it's a `varying` it will be linear
+the vertex shader but because it's a `varying` it will be linearly
 interpolated between our positions and so would not be a complete unit
 vector
 
@@ -291,7 +291,7 @@ Let's call that `shininess` and add it to our shader.
     +  }
 
 The dot product can go negative.  Taking a negative number to a power is
-undefined which would be bad.  So, if the dot product would possibly be
+undefined in WebGL which would be bad.  So, if the dot product would possibly be
 negative then we just leave specular at 0.0.
 
 Of course we need to look up the location and set it
@@ -344,7 +344,7 @@ and
 
 {{{example url="../webgl-3d-lighting-point-color.html" }}}
 
-Coming up next ???
+Coming up next, [spot lighting](webgl-3d-lighting-spot.html).
 
 <div class="webgl_bottombar">
 <h3>Why is <code>pow(negative, power)</code> undefined?</h3>
@@ -368,7 +368,7 @@ Coming up next ???
 again makes it negative.</p>
 <p>Well then what does this mean?</p>
 <div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2.5)</pre></div>
-<p>How do you decide which is the result of that positive or negative? I'm not a math guy really
-but it seems undecidable hence it's undefined.</p>.
+<p>How do you decide which is the result of that positive or negative? That's
+the land of <a href="https://betterexplained.com/articles/a-visual-intuitive-guide-to-imaginary-numbers/">imaginary numbers</a>.</p>
 </div>
 
