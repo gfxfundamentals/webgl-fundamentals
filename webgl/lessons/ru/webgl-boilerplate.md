@@ -125,14 +125,15 @@ Description: Шаблон кода, который понадобится в к�
      * Создание программы из 2 тегов скриптов
      *
      * @param {!WebGLRenderingContext} gl Контекст WebGL
-     * @param {string} vertexShaderId id тега вершинного шейдера
-     * @param {string} fragmentShaderId id тега фрагментного шейдера
+     * @param {string[]} shaderScriptIds Массив идентификаторов
+              тегов  шейдеров. Первым передаётся вершинный шейдер,
+              вторым - фрагментный шейдер.
      * @return {!WebGLProgram} Программа
      */
     function createProgramFromScripts(
-        gl, vertexShaderId, fragmentShaderId) {
-      var vertexShader = createShaderFromScriptTag(gl, vertexShaderId, gl.VERTEX_SHADER);
-      var fragmentShader = createShaderFromScriptTag(gl, fragmentShaderId, gl.FRAGMENT_SHADER);
+        gl, shaderScriptIds) {
+      var vertexShader = createShaderFromScript(gl, shaderScriptIds[0], gl.VERTEX_SHADER);
+      var fragmentShader = createShaderFromScript(gl, shaderScriptIds[1], gl.FRAGMENT_SHADER);
       return createProgram(gl, vertexShader, fragmentShader);
     }
 
