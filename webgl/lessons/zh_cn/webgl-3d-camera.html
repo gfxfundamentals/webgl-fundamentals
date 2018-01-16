@@ -90,14 +90,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 默认将相机放在了原点(0, 0, 0)并且视锥的范围是 <code>-zNear</code> 到 <code>-zFar</code>。</p>
 <p>将物体移动到视场中可能并不是正确的方法，在实际生活中通常是移动相机去拍摄建筑物。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/camera-move-camera.html?mode=0"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/camera-move-camera.html?mode&#x3D;0"></iframe>
   <div class="webgl_center">将相机移动到物体前</div>
 </div>
 
 </p>
 <p>将物体移动到相机前面并不是常见做法。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/camera-move-camera.html?mode=1"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/camera-move-camera.html?mode&#x3D;1"></iframe>
   <div class="webgl_center">将物体移动到相机前</div>
 </div>
 
@@ -105,7 +105,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>但在上节中由于投影的原因物体需要在 -Z 轴上，我们通过将相机移动到原点，
 物体移动到相机前来保持原始的<strong>相对位置</strong>。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/camera-move-camera.html?mode=2"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/camera-move-camera.html?mode&#x3D;2"></iframe>
   <div class="webgl_center">将物体移动到相机前</div>
 </div>
 
@@ -129,7 +129,7 @@ var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 </code></pre><p>接着计算相机矩阵，这个矩阵代表的是相机在世界坐标中的位置和姿态。
 下方的代码计算的是看向原点，在半径为 radius * 1.5 的圆上移动的相机。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/camera-move-camera.html?mode=3"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/camera-move-camera.html?mode&#x3D;3"></iframe>
   <div class="webgl_center">相机运动</div>
 </div>
 
@@ -203,7 +203,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 单位化也就是一个做一个类似 1.0 的矢量，如果你回到<a href="webgl-2d-rotation.html">二维旋转的文章</a>，
 那里讲到的单位圆在二维旋转中用法，在三维中需要一个单位球，单位向量表示单位球上的点。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/cross-product-diagram.html?mode=0"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/cross-product-diagram.html?mode&#x3D;0"></iframe>
   <div class="webgl_center"><span style='color:blue;'>z 轴</span></div>
 </div>
 
@@ -218,7 +218,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 <p>在任何情况下我们可以通过叉乘<span style="color: blue;"><code>zAxis</code></span>
 和<span style="color: gray;"><code>up</code></span> 得到相机的<span style="color:red;">xAxis</span>。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/cross-product-diagram.html?mode=1"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/cross-product-diagram.html?mode&#x3D;1"></iframe>
   <div class="webgl_center"><span style='color:blue;'>zAxis</span> 叉乘 <span style='color:gray;'>up</span> = <span style='color:red;'>xAxis</span></div>
 </div>
 
@@ -227,7 +227,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 可以叉乘 <span style="color:blue;"><code>zAxis</code></span> 和 <span style="color:red;"><code>xAxis</code></span>
 的到相机的 <span style="color:green;"><code>yAxis</code></span>。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/cross-product-diagram.html?mode=2"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/./resources/cross-product-diagram.html?mode&#x3D;2"></iframe>
   <div class="webgl_center"><span style='color:blue;'>zAxis</span> 叉乘 <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span></div>
 </div>
 
