@@ -98,7 +98,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Возьмём наш последний пример и перенесём его в 3D-пространство. Мы
 по-прежнему будем использовать &#39;F&#39;, но на этот раз это будет &#39;F&#39; в 3D.</p>
 <p>Первым делом нам нужно поменять вершинный шейдер для работы в 3D.
-Вот старый шейдер:</p>
+Вот старый вершинный шейдер:</p>
 <pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
@@ -120,7 +120,10 @@ void main() {
 *  gl_Position = u_matrix * a_position;
 }
 &lt;/script&gt;
-</code></pre><p>Он стал даже проще!</p>
+</code></pre><p>Он стал даже проще! Если в 2D-пространстве мы передавали <code>x</code> и <code>y</code>,
+а <code>z</code> устанавливали в 1, в 3D мы мы передаём <code>x</code>, <code>y</code> и <code>z</code>. Ещё нам
+нужно, чтобы <code>w</code> равнялось единице, но здесь мы воспользуемся тем, что
+для атрибута <code>w</code> значение по умолчанию как раз равно 1.</p>
 <p>Теперь нам нужно передать 3D-данные.</p>
 <pre><code>  ...
 
@@ -395,7 +398,7 @@ void main() {
 *   gl_FragColor = v_color;
 }
 &lt;/script&gt;
-</code></pre><p>Нам нужно получить ссылку для передачи цветов, установить буфер и
+</code></pre><p>Нам нужно получить ссылку на атрибут для передачи цветов, установить буфер и
 заполнить этот буфер данными цвета.</p>
 <pre><code>  ...
   var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
@@ -454,9 +457,9 @@ gl.vertexAttribPointer(
 
 </p>
 <p>О-хо-хо, ну и каша. Оказывается, что разные части 3D-буквы &#39;F&#39; -
-передняя, задняя, боковые и т.д. - отрисовываются в порядке объявления
-в геометрии. Это не даёт нам ожидаемый результат, так как иногда части,
-которые должны быть сзади, отрисовываются впереди.</p>
+передняя, задняя, боковые и т.д. - отрисовываются в порядке следования
+данных геометрии. Это не даёт нам ожидаемый результат, так как иногда
+части, которые должны быть сзади, отрисовываются впереди.</p>
 <p><img class="webgl_center" width="163" height="190" src="../resources/polygon-drawing-order.gif" /></p>
 <p><span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">Красным цветом</span>
 отмечена <strong>передняя часть</strong> буквы &#39;F&#39;, но из-за того, что она отрисовывается
@@ -465,9 +468,9 @@ gl.vertexAttribPointer(
 на самом деле должны находиться позади. Фиолетовые части рисуются вторыми,
 так как они идут вторыми в массиве данных.</p>
 <p>Треугольники в WebGL могут располагаться лицевой или тыльной стороной.
-У треугольника с лицевой стороной вершины идут в направлении по часовой
-стрелке. У треугольника с тыльной стороной вершины идут в направлении
-против часовой стрелке.</p>
+По умолчанию у треугольника с лицевой стороной вершины идут в направлении
+против часовой стрелке. У треугольника с тыльной стороной вершины идут в
+направлении по часовой стрелке.</p>
 <p><img src="../resources/triangle-winding.svg" class="webgl_center" width="400" /></p>
 <p>В WebGL есть возможность отрисовывать только треугольники лицевой
 стороны или только треугольники тыльной стороны. Мы можем включить
@@ -667,6 +670,7 @@ x и y, а ещё нужно было установить 1 для z, так к
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-3d-lighting-directional.html">WebGL 3D - Направленное освещение</a></li>
     <li><a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">WebGL 3D - Точечное освещение</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор (en)</a></li>
   </ul>
   <li>Структура и устройство</li>
   <ul>
@@ -676,13 +680,19 @@ x и y, а ещё нужно было установить 1 для z, так к
   </ul>
   <li>Геометрия</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели (en)</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели</a></li>
   </ul>
   <li>Текстуры</li>
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-3d-textures.html">WebGL 3D - Текстуры</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-data-textures.html">WebGL - Данные для текстур</a></li>
     <li><a href="/webgl/lessons/ru/webgl-2-textures.html">WebGL - Использование 2 и более текстур</a></li>
     <li><a href="/webgl/lessons/ru/webgl-cors-permission.html">WebGL - Кросс-доменные изображения</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Текстуры с оглядкой на перспективу (en)</a></li>
+  </ul>
+  <li>Рендеринг в текстуру</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру (en)</a></li>
   </ul>
   <li>Приёмы</li>
   <ul>

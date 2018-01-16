@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ru/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ru/webgl-3d-geometry-lathe.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 3D Geometry - Lathe" />
+<meta property="og:title" content="WebGL 3D - Создание модели" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to lathe a bezier curve." />
+<meta property="og:description" content="Как создать геометрию с помощью кривых Безье" />
 <meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/ru/webgl-3d-geometry-lathe.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 3D Geometry - Lathe" />
+<meta name="twitter:title" content="WebGL 3D - Создание модели" />
 <meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/ru/webgl-3d-geometry-lathe.html" />
-<meta name="twitter:description" content="How to lathe a bezier curve." />
+<meta name="twitter:description" content="Как создать геометрию с помощью кривых Безье" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 3D Geometry - Lathe</title>
+<title>WebGL 3D - Создание модели</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
@@ -78,12 +80,849 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 3D Geometry - Lathe</h1>
+    <h1>WebGL 3D - Создание модели</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>Sorry this article has not been translated yet. <a href="https://github.com/greggman/webgl-fundamentals">Translations Welcome</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">Here&#39;s the original English article for now</a>.</p>
+      <p>Пожалуй, эту статью нельзя назвать самой востребованной, но мне она показалось интересной,
+поэтому я решил её написать. Не то, чтобы я рекомендую делать так, как описано в статье,
+скорей мне хочется продемонстрировать некоторые вещи, касающиеся создания 3D-моделей в WebGL.</p>
+<p>Однажды меня кто-то спросил, как сделать модель кегли для боулинга в WebGL.
+<em>Правильным</em> ответом было бы &quot;Используйте программу для 3D-моделирования,
+наподобие <a href="http://blender.org">Blender</a>, <a href="http://www.autodesk.com/products/maya/overview">Maya</a>,
+<a href="http://www.autodesk.com/products/3ds-max/overview">3D Studio Max</a>,
+<a href="https://www.maxon.net/en/products/cinema-4d/overview/">Cinema 4D</a> и т.д.&quot;.
+Используйте её для моделирования кегли, затем экспортируйте модель и
+загрузите её в своём приложении. (<a href="https://en.wikipedia.org/wiki/Wavefront_.obj_file">Относительно простым форматом
+является OBJ</a>).</p>
+<p>Но спустя некоторое время я подумал - а что, если человеку нужно было
+сделать собственную библиотеку для моделирования?</p>
+<p>У меня появилось несколько идей. Одна из них - сделать цилиндр, а затем
+сузить его в нужных местах через синусоиду. Проблема в том, что вы не
+получите необходимой плавности в верхней части. Обычный цилиндр состоит
+из нескольких равноудалённых колец, но в местах изгибов необходимо
+больше колец, чтобы достичь нужной плавности.</p>
+<p>В пакете для моделирования вы бы начали с создания двумерного силуэта,
+точнее с кривой линии, соответствующей грани двумерного силуэта. А затем
+создали 3D-объект на основе силуэта. Этого можно достичь, вращая силуэт
+вокруг определённой оси, создавая в процессе вращения точки фигуры. Эта
+техника позволяет легко создать любой закруглённый объект вроде шара,
+стакана, бейсбольной биты, бутылки, лампочки и т.д.</p>
+<p>Как же нам сделать это? Для начала нужно получить кривую. Затем нам
+необходимо получить точки этой кривой. Затем, вращая эти точки вокруг
+какой-то оси с помощью <a href="webgl-2d-matrices.html">математики матриц</a>,
+мы построим треугольники.</p>
+<p>Самой распространённой кривой в компьютерной графике, похоже,
+является кривая Безье. Если вы когда-либо редактировали кривую в
+<a href="http://www.adobe.com/products/illustrator.html">Adobe Illustrator</a>,
+или <a href="https://inkscape.org/en/">Inkscape</a>, или
+<a href="https://affinity.serif.com/en-us/designer/">Affinity Designer</a>,
+или в других похожих программах, то вы имели дело с кривой Безье.</p>
+<p>Кривая Безье (кубическая кривая Безье, если быть точным) формируется
+на основе 4 точек - 2 конечные точки и 2 &quot;контрольные точки&quot;.</p>
+<p>Вот эти 4 точки:</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=0"></iframe>
+</div>
+
+</p>
+<p>Возьмём число между 0 и 1 (назовём его <code>t</code>), где 0 = начало, а 1 -
+конец. Затем вычислим соответствующие точки <code>t</code> между каждой парой
+точек <code>P1 P2</code>, <code>P2 P3</code>, <code>P3 P4</code>.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=1"></iframe>
+</div>
+
+</p>
+<p>Другими словами, при <code>t = .25</code>, вы вычислим 25% пути от точки <code>P1</code>
+до <code>P2</code>, затем 25% пути от точки <code>P2</code> до <code>P3</code> и, наконец, 25% пути
+от точки <code>P3</code> до <code>P4</code>.</p>
+<p>Потяните за слайдер для регулировки <code>t</code>, также с помощью мыши можно
+перемещать точки <code>P1</code>, <code>P2</code>, <code>P3</code> и <code>P4</code>.</p>
+<p>Далее проделаем то же самое для полученных точек - вычислим <code>t</code> между
+точками <code>Q1 Q2</code> и <code>Q2 Q3</code>.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=2"></iframe>
+</div>
+
+</p>
+<p>Наконец, находим <code>t</code> для точек <code>R1 R2</code>.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=3"></iframe>
+</div>
+
+</p>
+<p>Положение <span style="color: red;">красной точки</span> задаёт кривую.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=4"></iframe>
+</div>
+
+</p>
+<p>Это и есть кубическая кривая Безье.</p>
+<p>Стоит заметить, что хотя описанная выше интерполяция по созданию
+3 точек из 4, затем 2 точек из 3 и, наконец, одной точки из 2 делает
+своё дело, такой подход нельзя назвать общепринятым. Вместо этого
+кто-то разобрался во всей математике и упростил всё до следующей формулы:</p>
+<div class="webgl_center">
+<pre class="webgl_math">
+invT = (1 - t)
+P = P1 * invT^3 +
+    P2 * 3 * t * invT^2 +
+    P3 * 3 * invT * t^2 +
+    P4 * t^3
+</pre>
+</div>
+
+<p>где <code>P1</code>, <code>P2</code>, <code>P3</code>, <code>P4</code> - точки из примера выше, а <code>P</code> -
+<span style="color: red;">красная точка</span>.</p>
+<p>В программах по работе с векторными 2D-изображения вроде Adobe Illustrator
+при создании более длинных кривых на самом деле создаётся несколько
+маленьких кривых из 4 точек, рассмотренных нами выше. По умолчанию
+большинство программ фиксируют контрольные точки вокруг общих начальной
+и конечной точки так, чтобы контрольные точки всегда были противоположны
+друг другу относительно общей точки.</p>
+<p>На следующем примере при перемещении <code>P3</code> или <code>P5</code> противоположная им
+точка будет также смещаться.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-edit.html"></iframe>
+</div>
+
+</p>
+<p>Заметьте, что кривая <code>P1,P2,P3,P4</code> - это самостоятельная кривая, как и
+кривая <code>P4,P5,P6,P7</code>. Именно когда <code>P3</code> и <code>P5</code> находятся на строго
+противоположных сторонах от <code>P4</code>, они выглядят как непрерывная кривая.
+Большинство приложений позволяют открепить <code>P3</code> и <code>P5</code> друг от друга и
+позволять таким образом создавать острые углы. Снимите пометку закрепления
+точек и потяните за <code>P3</code> или <code>P5</code>, тогда станет очевидно, что перед
+нами две отдельные кривые.</p>
+<p>Далее нам необходимо каким-то образом создать точки по нашей кривой.
+По формуле выше мы можем создать точку для значения <code>t</code> следующим
+образом:</p>
+<pre><code>function getPointOnBezierCurve(points, offset, t) {
+  const invT = (1 - t);
+  return v2.add(v2.mult(points[offset + 0], invT * invT * invT),
+                v2.mult(points[offset + 1], 3 * t * invT * invT),
+                v2.mult(points[offset + 2], 3 * invT * t * t),
+                v2.mult(points[offset + 3], t * t * t));
+}
+</code></pre><p>Тогда мы сможем создать набор точек кривой:</p>
+<pre><code>function getPointsOnBezierCurve(points, offset, numPoints) {
+  const points = [];
+  for (let i = 0; i &lt; numPoints; ++i) {
+    const t = i / (numPoints - 1);
+    points.push(getPointOnBezierCurve(points, offset, t));
+  }
+  return points;
+}
+</code></pre><p>Обратите внимание, что я добавил небольшие функции-помощники JavaScript
+<code>v2.mult</code> и <code>v2.add</code> для упрощения работы с точками.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=0&amp;showCurve=true&amp;showPoints=true"></iframe>
+</div>
+
+</p>
+<p>Вы можете выбрать количество точек на приведённой диаграмме. Для резких изгибов
+понадобится больше точек. Если же кривая больше напоминает ровную линию,
+можно использовать меньше точек. Одно из решений - проверять, насколько кривая
+кривая. Если линия слишком кривая, можно разбить её на две части.</p>
+<p>Разбить кривую совсем несложно. Если снова взглянуть на разные уровни
+интерполяции, точки <code>P1</code>, <code>Q1</code>, <code>R1</code> и КРАСНАЯ точка составляют одну
+кривую, а точки КРАСНАЯ, <code>R2</code>, <code>Q3</code>, <code>P4</code> образуют вторую кривую для
+любого значения t. Другими словами, мы в любом месте можем разбить
+одну кривую и получить из неё две кривых.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=4&amp;show2Curves=true"></iframe>
+</div>
+
+</p>
+<p>Теперь нам осталось решить, нужно ли разделять кривую или нет. Посмотрев по
+интернету я нашёл <a href="https://seant23.wordpress.com/2010/11/12/offset-bezier-curves/">функцию</a>,
+которая определяет, насколько ровная наша кривая линия.</p>
+<pre><code>function flatness(points, offset) {
+  const p1 = points[offset + 0];
+  const p2 = points[offset + 1];
+  const p3 = points[offset + 2];
+  const p4 = points[offset + 3];
+
+  let ux = 3 * p2[0] - 2 * p1[0] - p4[0]; ux *= ux;
+  let uy = 3 * p2[1] - 2 * p1[1] - p4[1]; uy *= uy;
+  let vx = 3 * p3[0] - 2 * p4[0] - p1[0]; vx *= vx;
+  let vy = 3 * p3[1] - 2 * p4[1] - p1[1]; vy *= vy;
+
+  if(ux &lt; vx) {
+    ux = vx;
+  }
+
+  if(uy &lt; vy) {
+    uy = vy;
+  }
+
+  return ux + uy;
+}
+</code></pre><p>Можно использовать определение ровности в нашей функции, которая
+создаёт точки кривой. Для начала проверим, сильно ли отличается от
+прямой линии наша кривая. Если сильно, мы будем разбивать на несколько
+линий, иначе просто добавим точки в массив.</p>
+<pre><code>function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
+  const outPoints = newPoints || [];
+  if (flatness(points, offset) &lt; tolerance) {
+
+    // кривизна в пределах допустимого, просто добавим точки кривой
+    outPoints.push(points[offset + 0]);
+    outPoints.push(points[offset + 3]);
+
+  } else {
+
+    // кривизна больше заданного порога, разбиваем
+    const t = .5;
+    const p1 = points[offset + 0];
+    const p2 = points[offset + 1];
+    const p3 = points[offset + 2];
+    const p4 = points[offset + 3];
+
+    const q1 = v2.lerp(p1, p2, t);
+    const q2 = v2.lerp(p2, p3, t);
+    const q3 = v2.lerp(p3, p4, t);
+
+    const r1 = v2.lerp(q1, q2, t);
+    const r2 = v2.lerp(q2, q3, t);
+
+    const red = v2.lerp(r1, r2, t);
+
+    // первая половина
+    getPointsOnBezierCurveWithSplitting([p1, q1, r1, red], 0, tolerance, outPoints);
+    // вторая половина
+    getPointsOnBezierCurveWithSplitting([red, r2, q3, p4], 0, tolerance, outPoints);
+
+  }
+  return outPoints;
+}
+</code></pre><p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=0&amp;showCurve=true&amp;showTolerance=true"></iframe>
+</div>
+
+</p>
+<p>С этим алгоритмом мы можем быть уверены, что у нас будет достаточно точек,
+однако, алгоритм не заботится о том, что получатся лишние точки.</p>
+<p>Для этого нам поможет другой алгоритм, который я также нашёл на просторах сети -
+<a href="https://ru.wikipedia.org/wiki/Алгоритм_Рамера_—_Дугласа_—_Пекера">алгоритм Рамера-Дугласа-Пекера</a></p>
+<p>Итак, у нас есть массив точек. Мы находим точку на кривой, максимально удалённую
+от отрезка, соединяющего первую и последнюю точку кривой. Потом мы сравниваем
+расстояние от отрезка до этой точки с условным значением. Если полученное
+расстояние меньше этого условного значения, мы просто оставляем 2 конечные точки,
+а все остальные точки исключаем. Иначе мы снова запускаем алгоритм - один раз на
+линии, начинающейся с первой точки и заканчивающейся на максимально удалённой
+точке, а второй раз запускаем на линии, начинающейся на максимально удалённой
+точке и заканчивающейся на последней точке кривой.</p>
+<pre><code>function simplifyPoints(points, start, end, epsilon, newPoints) {
+  const outPoints = newPoints || [];
+
+  // находим максимально удалённую точку от отрезка, соединяющего конечные точки
+  const s = points[start];
+  const e = points[end - 1];
+  let maxDistSq = 0;
+  let maxNdx = 1;
+  for (let i = start + 1; i &lt; end - 1; ++i) {
+    const distSq = v2.distanceToSegmentSq(points[i], s, e);
+    if (distSq &gt; maxDistSq) {
+      maxDistSq = distSq;
+      maxNdx = i;
+    }
+  }
+
+  // если точка слишком далеко
+  if (Math.sqrt(maxDistSq) &gt; epsilon) {
+
+    // разделяем
+    simplifyPoints(points, start, maxNdx + 1, epsilon, outPoints);
+    simplifyPoints(points, maxNdx, end, epsilon, outPoints);
+
+  } else {
+
+    // иначе оставляем конечные точки
+    outPoints.push(s, e);
+  }
+
+  return outPoints;
+}
+</code></pre><p>Функция <code>v2.distanceToSegmentSq</code> вычисляет квадратично расстояние от точки до отрезка.
+Мы используем квадратичное расстояние, так как его проще вычислить по сравнению с
+настоящим расстоянием. Для получения самой отдалённой от отрезка точки квадратичного
+расстояния нам вполне достаточно.</p>
+<p>Ниже идёт демонстрация. Регулируя расстояние, можно наблюдать, как
+добавляются или удаляются точки.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=0&amp;showCurve=true&amp;showDistance=true"></iframe>
+</div>
+
+</p>
+<p>Вернёмся к нашей кегле. Мы могли бы сделать полноценный редактор на основе приведённого
+выше кода. Редактор, который бы мог добавлять и удалять точки, закреплять и откреплять
+контрольные точки, выполнять действие назад и так далее... Но есть способ попроще.
+Мы можем просто взять один из зрелых редакторов, упомянутых выше. <a href="https://svg-edit.github.io/svgedit/releases/svg-edit-2.8.1/svg-editor.html">Я использовал
+этот онлайн-редактор</a>.</p>
+<p>Вот такой контур кегли у меня получился:</p>
+<p><img class="webgl_center" src="../resources/bowling-pin-silhouette.svg" width="50%" height="50%" /></p>
+<p>Контур состоит из 4 кривых Безье. Данные для этой кривой выглядят следующим образом:</p>
+<pre><code>&lt;path fill=&quot;none&quot; stroke-width=&quot;5&quot; d=&quot;
+   m44,434
+   c18,-33 19,-66 15,-111
+   c-4,-45 -37,-104 -39,-132
+   c-2,-28 11,-51 16,-81
+   c5,-30 3,-63 -36,-63
+&quot;/&gt;
+</code></pre><p><a href="https://developer.mozilla.org/en/docs/Web/SVG/Tutorial/Paths">Интерпретируя данные</a>, мы получим точки.</p>
+<pre><code>        ___
+44, 371,   |
+62, 338,   | 1-я кривая
+63, 305,___|__
+59, 260,___|  |
+55, 215,      | 2-я кривая
+22, 156,______|__
+20, 128,______|  |
+18, 100,         | 3-я кривая
+31,  77,_________|__
+36,  47,_________|  |
+41,  17,            | 4-я кривая
+39, -16,            |
+ 0, -16,____________|
+</code></pre><p>Итак, у нас есть данные для кривых, теперь нам нужно вычислить точки для них.</p>
+<pre><code>// получаем точки вдоль всех сегментов
+function getPointsOnBezierCurves(points, tolerance) {
+  const newPoints = [];
+  const numSegments = (points.length - 1) / 3;
+  for (let i = 0; i &lt; numSegments; ++i) {
+    const offset = i * 3;
+    getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints);
+  }
+  return newPoints;
+}
+</code></pre><p>Полученные точки не помешает прорядить функцией <code>simplifyPoints</code>.</p>
+<p>Теперь нужно провернуть наши точки вокруг оси кегли. Мы определяем, из скольких частей
+будет состоять кегля, и для каждой части создаём точки, поворачивая исходную кривую
+вокруг оси Y, используя <a href="webgl-2d-matrices.html">математику матриц</a>. Когда все точки
+созданы, мы соединяем их треугольниками, используя индексы.</p>
+<pre><code>// поворот вокруг оси Y
+function lathePoints(points,
+                     startAngle,   // начальный угол (равен 0)
+                     endAngle,     // конечный угол (равен Math.PI * 2)
+                     numDivisions, // сколько частей будет создано при вращении
+                     capStart,     // true, чтобы замыкать начальные точки
+                     capEnd) {     // true, чтобы замыкать конечные точки
+  const positions = [];
+  const texcoords = [];
+  const indices = [];
+
+  const vOffset = capStart ? 1 : 0;
+  const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
+  const quadsDown = pointsPerColumn - 1;
+
+  // создание точек
+  for (let division = 0; division &lt;= numDivisions; ++division) {
+    const u = division / numDivisions;
+    const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
+    const mat = m4.yRotation(angle);
+    if (capStart) {
+      // добавляем начальные точки по оси Y
+      positions.push(0, points[0][1], 0);
+      texcoords.push(u, 0);
+    }
+    points.forEach((p, ndx) =&gt; {
+      const tp = m4.transformPoint(mat, [...p, 0]);
+      positions.push(tp[0], tp[1], tp[2]);
+      const v = (ndx + vOffset) / quadsDown;
+      texcoords.push(u, v);
+    });
+    if (capEnd) {
+      // добавляем конечные точки по оси Y
+      positions.push(0, points[points.length - 1][1], 0);
+      texcoords.push(u, 1);
+    }
+  }
+
+  // создаём индексы
+  for (let division = 0; division &lt; numDivisions; ++division) {
+    const column1Offset = division * pointsPerColumn;
+    const column2Offset = column1Offset + pointsPerColumn;
+    for (let quad = 0; quad &lt; quadsDown; ++quad) {
+      indices.push(column1Offset + quad, column2Offset + quad, column1Offset + quad + 1);
+      indices.push(column1Offset + quad + 1, column2Offset + quad, column2Offset + quad + 1);
+    }
+  }
+
+  return {
+    position: positions,
+    texcoord: texcoords,
+    indices: indices,
+  };
+}
+</code></pre><p>Приведённый код создаёт координаты и текстурные координаты, затем создаёт индексы для
+дальнейшего создания из них треугольников. Переменные <code>capStart</code> и <code>capEnd</code> отвечают за
+создание замыкающих точек. Представьте, что мы бы создавали жестяную банку. Эти параметры
+указывали бы, нужно ли создавать дно и крышку.</p>
+<p>Используя наш <a href="webgl-less-code-more-fun.html">упрощённый код</a>, на основании этих данных мы
+создаём буферы WebGL:</p>
+<pre><code>const tolerance = 0.15;
+const distance = .4;
+const divisions = 16;
+const startAngle = 0;
+const endAngle = Math.PI * 2;
+const capStart = true;
+const capEnd = true;
+
+const tempPoints = getPointsOnBezierCurves(curvePoints, tolerance);
+const points = simplifyPoints(tempPoints, 0, tempPoints.length, distance);
+const arrays = lathePoints(points, startAngle, endAngle, divisions, capStart, capEnd);
+const extents = getExtents(arrays.position);
+if (!bufferInfo) {
+  bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
+</code></pre><p>Вот, что у нас получилось:</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lathe-step-01.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lathe-step-01.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Проверьте, как изменится результат, если изменить положение слайдеров.</p>
+<p>Однако, здесь есть проблема. Включите галку &quot;triangles&quot; и вы заметите, что текстура
+наложена неравномерно. Причина в том, что текстурная координата <code>v</code> основана на
+индексе точек кривой линии. Если бы они были расположены равномерно по кривой,
+всё могло бы получиться. Теперь же нам придётся придумать что-то ещё.</p>
+<p>Например, можно пройтись по точкам, вычислить общую длину кривой и расстояние до
+каждой точки на этой кривой. Затем делением на длину мы можем получить более
+подходящее значение для <code>v</code>.</p>
+<pre><code>// поворот вокруг оси Y
+function lathePoints(points,
+                     startAngle,   // начальный угол (равен 0)
+                     endAngle,     // конечный угол (равен Math.PI * 2)
+                     numDivisions, // сколько частей будет создано при вращении
+                     capStart,     // true, чтобы замыкать начальные точки
+                     capEnd) {     // true, чтобы замыкать конечные точки
+  const positions = [];
+  const texcoords = [];
+  const indices = [];
+
+  const vOffset = capStart ? 1 : 0;
+  const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
+  const quadsDown = pointsPerColumn - 1;
+
++  // создаём v-координаты
++  let vcoords = [];
++
++  // вычисляем общую длину и расстояние до каждой точки
++  let length = 0;
++  for (let i = 0; i &lt; points.length - 1; ++i) {
++    vcoords.push(length);
++    length += v2.distance(points[i], points[i + 1]);
++  }
++  vcoords.push(length);  // последняя точка
++
++  // делим каждое расстояние на общую длину
++  vcoords = vcoords.map(v =&gt; v / length);
+
+  // создание точек
+  for (let division = 0; division &lt;= numDivisions; ++division) {
+    const u = division / numDivisions;
+    const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
+    const mat = m4.yRotation(angle);
+    if (capStart) {
+      // добавляем начальные точки по оси Y
+      positions.push(0, points[0][1], 0);
+      texcoords.push(u, 0);
+    }
+    points.forEach((p, ndx) =&gt; {
+      const tp = m4.transformPoint(mat, [...p, 0]);
+      positions.push(tp[0], tp[1], tp[2]);
+*      texcoords.push(u, vcoords[ndx]);
+    });
+    if (capEnd) {
+      // добавляем конечные точки по оси Y
+      positions.push(0, points[points.length - 1][1], 0);
+      texcoords.push(u, 1);
+    }
+  }
+
+  // создаём индексы
+  for (let division = 0; division &lt; numDivisions; ++division) {
+    const column1Offset = division * pointsPerColumn;
+    const column2Offset = column1Offset + pointsPerColumn;
+    for (let quad = 0; quad &lt; quadsDown; ++quad) {
+      indices.push(column1Offset + quad, column1Offset + quad + 1, column2Offset + quad);
+      indices.push(column1Offset + quad + 1, column2Offset + quad + 1, column2Offset + quad);
+    }
+  }
+
+  return {
+    position: positions,
+    texcoord: texcoords,
+    indices: indices,
+  };
+}
+</code></pre><p>Получилось получше</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lathe-step-02.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lathe-step-02.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Но текстурные координаты по-прежнему не идеальны. Мы не решили, что делать с закрывающими точками.
+Это ещё одна причина, почему вам следует использовать программу для моделирования. Мы могли бы
+пробовать разные идеи для вычисления uv-координат для закрывающих точек, но вряд ли они нам
+сильно помогли. Если вы поищете <a href="https://www.google.com/search?q=uv+map+a+barrel">текстурную карту бочки</a>,
+вы увидите, что получение идеальных UV-координат не столько математическая проблема, сколько
+проблема входных данных, и вам понадобится хороший инструмент для задания этих данных.</p>
+<p>Итак, идём дальше. До этого времени мы выпускали из виду одну вещь - это нормали.</p>
+<p>Мы могли бы вычислить нормаль для каждой точки кривой. На самом деле, если вернуться к
+рассмотренным выше примерам, мы увидим, что линия между точками <code>R1</code> и <code>R2</code> является
+касательной к кривой.</p>
+<p><img class="webgl_center" src="../resources/tangent-to-curve.png" width="50%" /></p>
+<p>А нормаль - это перпендикуляр к касательной, поэтому, используя касательные,
+можно легко найти нормали.</p>
+<p>Но давайте представим, что нам необходимо сделать подсвечник с подобным контуром:</p>
+<p><img class="webgl_center" src="../resources/candle-holder.svg" width="50%" /></p>
+<p>Наряду со множеством гладких участков присутствуют и острые углы. Как понять, какие
+нормали использовать? Дело усугубляется тем, что для острых углов нужны дополнительные
+вершины. Вершины включают в себя как координату, так и нормаль, поэтому если нам
+нужна ещё одна нормаль, то нам нужна ещё одна вершина. Именно поэтому при создании
+куба нужно как минимум 24 вершины. Несмотря на то, что у куба всего 8 углов, каждая
+грань нуждается в отдельной нормали в каждом углу куба.</p>
+<p>При создании куба задать правильные нормали очень просто, но для сложных фигур
+простого способа не найти.</p>
+<p>Все программы для моделирования содержат разнообразные параметры создания нормалей. Обычно
+для каждой вершины находится усреднённая нормаль между всеми полигонами, в которые входит
+данная вершина. Но пользователь может задать максимальный угол. Если угол между полигонами
+с общей вершиной больше максимального, создаётся новая вершина.</p>
+<p>Реализуем данный алгоритм.</p>
+<pre><code>function generateNormals(arrays, maxAngle) {
+  const positions = arrays.position;
+  const texcoords = arrays.texcoord;
+
+  // сначала вычисляем нормаль для каждой грани
+  let getNextIndex = makeIndiceIterator(arrays);
+  const numFaceVerts = getNextIndex.numElements;
+  const numVerts = arrays.position.length;
+  const numFaces = numFaceVerts / 3;
+  const faceNormals = [];
+
+  // Вычисляем нормаль для каждой грани.
+  // При этом создаём новую вершину для каждой грани
+  for (let i = 0; i &lt; numFaces; ++i) {
+    const n1 = getNextIndex() * 3;
+    const n2 = getNextIndex() * 3;
+    const n3 = getNextIndex() * 3;
+
+    const v1 = positions.slice(n1, n1 + 3);
+    const v2 = positions.slice(n2, n2 + 3);
+    const v3 = positions.slice(n3, n3 + 3);
+
+    faceNormals.push(m4.normalize(m4.cross(m4.subtractVectors(v1, v2), m4.subtractVectors(v3, v2))));
+  }
+
+  let tempVerts = {};
+  let tempVertNdx = 0;
+
+  // предполагается, что координаты вершин точно совпадают между собой
+
+  function getVertIndex(x, y, z) {
+
+    const vertId = x + &quot;,&quot; + y + &quot;,&quot; + z;
+    const ndx = tempVerts[vertId];
+    if (ndx !== undefined) {
+      return ndx;
+    }
+    const newNdx = tempVertNdx++;
+    tempVerts[vertId] = newNdx;
+    return newNdx;
+  }
+
+  // Находим вершины, принадлежащие нескольким граням.
+  // При этом нельзя обращать внимание только на грани (треугольники)
+  // так как, например, если у нас есть обыкновенный цилиндр,
+  //
+  //
+  //      3-4
+  //     /   \
+  //    2     5   Если посмотреть на цилиндр, который начинается
+  //    |     |   в точке S и заканчивается в E, точки E и S не
+  //    1     6   являются одной и той же точкой с точки зрения
+  //     \   /    входных данных, так как у них разные UV-координаты.
+  //      S/E
+  //
+  // вершины в начале и в конце не будут принадлежать одной точке
+  // так как у них разные UV-координаты, но если мы будем так
+  // считать, мы получим неверные нормали.
+
+  const vertIndices = [];
+  for (let i = 0; i &lt; numVerts; ++i) {
+    const offset = i * 3;
+    const vert = positions.slice(offset, offset + 3);
+    vertIndices.push(getVertIndex(vert));
+  }
+
+  // проходим по каждой вершине и запоминаем, каким граням она принадлежит
+  const vertFaces = [];
+  getNextIndex.reset();
+  for (let i = 0; i &lt; numFaces; ++i) {
+    for (let j = 0; j &lt; 3; ++j) {
+      const ndx = getNextIndex();
+      const sharedNdx = vertIndices[ndx];
+      let faces = vertFaces[sharedNdx];
+      if (!faces) {
+        faces = [];
+        vertFaces[sharedNdx] = faces;
+      }
+      faces.push(i);
+    }
+  }
+
+  // теперь проходим по каждой грани и вычисляем нормаль для каждой
+  // вершины грани. Учитываются только те грани, которые в пределах
+  // maxAngle. Результатом будут массивы newPositions, newTexcoords
+  // и newNormals, за исключением одинаковых вершин.
+  tempVerts = {};
+  tempVertNdx = 0;
+  const newPositions = [];
+  const newTexcoords = [];
+  const newNormals = [];
+
+  function getNewVertIndex(x, y, z, nx, ny, nz, u, v) {
+    const vertId =
+        x + &quot;,&quot; + y + &quot;,&quot; + z + &quot;,&quot; +
+        nx + &quot;,&quot; + ny + &quot;,&quot; + nz + &quot;,&quot; +
+        u + &quot;,&quot; + v;
+
+    const ndx = tempVerts[vertId];
+    if (ndx !== undefined) {
+      return ndx;
+    }
+    const newNdx = tempVertNdx++;
+    tempVerts[vertId] = newNdx;
+    newPositions.push(x, y, z);
+    newNormals.push(nx, ny, nz);
+    newTexcoords.push(u, v);
+    return newNdx;
+  }
+
+  const newVertIndices = [];
+  getNextIndex.reset();
+  const maxAngleCos = Math.cos(maxAngle);
+  // для каждой грани
+  for (let i = 0; i &lt; numFaces; ++i) {
+    // получаем нормаль текущей грани
+    const thisFaceNormal = faceNormals[i];
+    // для каждой вершины грани
+    for (let j = 0; j &lt; 3; ++j) {
+      const ndx = getNextIndex();
+      const sharedNdx = vertIndices[ndx];
+      const faces = vertFaces[sharedNdx];
+      const norm = [0, 0, 0];
+      faces.forEach(faceNdx =&gt; {
+        // грань направлена в ту же сторону?
+        const otherFaceNormal = faceNormals[faceNdx];
+        const dot = m4.dot(thisFaceNormal, otherFaceNormal);
+        if (dot &gt; maxAngleCos) {
+          m4.addVectors(norm, otherFaceNormal, norm);
+        }
+      });
+      m4.normalize(norm, norm);
+      const poffset = ndx * 3;
+      const toffset = ndx * 2;
+      newVertIndices.push(getNewVertIndex(
+          positions[poffset + 0], positions[poffset + 1], positions[poffset + 2],
+          norm[0], norm[1], norm[2],
+          texcoords[toffset + 0], texcoords[toffset + 1]));
+    }
+  }
+
+  return {
+    position: newPositions,
+    texcoord: newTexcoords,
+    normal: newNormals,
+    indices: newVertIndices,
+  };
+
+}
+
+function makeIndexedIndicesFn(arrays) {
+  const indices = arrays.indices;
+  let ndx = 0;
+  const fn = function() {
+    return indices[ndx++];
+  };
+  fn.reset = function() {
+    ndx = 0;
+  };
+  fn.numElements = indices.length;
+  return fn;
+}
+
+function makeUnindexedIndicesFn(arrays) {
+  let ndx = 0;
+  const fn = function() {
+    return ndx++;
+  };
+  fn.reset = function() {
+    ndx = 0;
+  }
+  fn.numElements = arrays.positions.length / 3;
+  return fn;
+}
+
+function makeIndiceIterator(arrays) {
+  return arrays.indices
+      ? makeIndexedIndicesFn(arrays)
+      : makeUnindexedIndicesFn(arrays);
+}
+</code></pre><p>В этом коде мы сначала создаём нормали для каждой грани (каждого треугольника) из исходных точек.
+Затем мы генерируем набор индексов вершин для нахождения одинаковых точек. После выполнения поворота
+первая и последняя точка должны совпадать, однако, они имеют разные UV-координаты и, следовательно,
+не считаются одинаковыми точками - именно поэтому нам нужен набор, где мы находим подобные точки.
+Для вычисления нормалей нам нужно, чтобы первая и последняя точка рассматривались как одна и та же точка.</p>
+<p>После этого для каждой вершины мы находим все грани, в которых она используется.</p>
+<p>И, наконец, мы усредняем нормали всех граней для каждой вершины, за исключением тех, которые
+превышают порог <code>maxAngle</code> - для таких мы создаём новый набор вершин.</p>
+<p>Результат будет следующим:</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lathe-step-03.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lathe-step-03.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Обратите внимание, что мы получили острые углы в необходимых нам местах. Попробуйте увеличить значение
+<code>maxAngle</code> и вы увидите, как острые углы становятся плавными, как только соседние грани получают
+усреднённую нормаль вместо отдельных наборов. Также попробуйте изменить <code>divisions</code> до значения 5 или
+6, а затем увеличьте значение <code>maxAngle</code> так, чтобы даже острые углы получили плавный переход освещения.
+При изменении режима <code>mode</code> в значение <code>lit</code> мы увидим, как будет выглядеть объект при включении
+освещения - именно освещение является причиной, по которой мы так много внимания уделили нормалям.</p>
+<h2 id="-">Итак, что же мы узнали?</h2>
+<p>Мы узнали, что для создания 3D-данных <strong>НУЖНО ИСПОЛЬЗОВАТЬ ПРОГРАММУ ДЛЯ 3D-МОДЕЛИРОВАНИЯ!!!</strong> 😝</p>
+<p>Для создания чего-то действительно полезного вам, вероятней всего, понадобится какой-нибудь
+<a href="https://www.google.com/search?q=uv+editor">UV-редактор</a>. Такой редактор также поможет в оформлении
+конечных точек. Вместо ограниченного набора настроек при моделировании вы будете использовать функции
+редактора для добавления конечных точек и более простого создания UV-координат для них. Кроме того,
+редакторы поддерживают <a href="https://www.google.com/search?q=extruding+model">вытягивание граней</a> и
+<a href="https://www.google.com/search?q=extruding+along+a+path">вытягивание по определённой траектории</a>,
+работа которых должна быть довольно очевидной на вышеприведённых примерах моделирования.</p>
+<h2 id="-">Ссылки</h2>
+<p>В заключении хотел сказать, что не написал бы эту статью без <a href="https://pomax.github.io/bezierinfo/">замечательной статьи о кривых Безье</a>.</p>
+<div class="webgl_bottombar">
+<h3>Что здесь делает нахождение остатка деления?</h3>
+<p>Если посмотреть на функцию <code>lathePoints</code>, вы заметите нахождение
+остатка от деления при нахождении угла.</p>
+<pre class="prettyprint showlinemods">
+for (let division = 0; division <= numDivisions; ++division) {
+  const u = division / numDivisions;
+*  const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
+</pre>
+<p>Зачем она здесь нужна?</p>
+<p>При повороте точек вокруг своей оси нам нужно, чтобы первая и последняя точка совпадали.
+<code>Math.sin(0)</code> и <code>Math.sin(Math.PI * 2)</code> должны быть одним и тем
+же значением, но операции с плавающей точкой не совершенны, и даже когда значения очень близки,
+они всё же не не являются на 100% одинаковыми.</p>
+<p>Это незначительно отличие повлияет на вычисление нормалей. Нам нужно знать все грани,
+в которых используется данная вершина. Нахождение этих граней основывается на сравнении
+вершин. Если две вершины равны, то для нас это становится одной вершиной. К сожалению,
+из-за отличий в значениях <code>Math.sin(0)</code> и <code>Math.sin(Math.PI * 2)</code>
+вершины не будут равны и не сольются в одну вершину. А значит, при вычислении нормалей
+не все грани попадут в вычисление, что приведёт к неверным нормалям.</p>
+<p>Вот наглядный пример, что произойдёт</p>
+<img class="webgl_center" src="../resources/lathe-normal-seam.png" width="50%" />
+<p>На месте замыкания контура можно увидеть шов, что происходит из-за едва заметных
+отличий в значениях первой и последней вершины.</p>
+<p>Первой моей мыслью было изменить алгоритм таким образом, чтобы проверять вершины на
+равенство с какой-то погрешностью. Если вершины равны в пределах допустимой погрешности,
+то это одна и та же вершина. Что-то вроде такого:</p>
+<pre class="prettyprint">
+const epsilon = 0.0001;
+const tempVerts = [];
+function getVertIndex(position) {
+  if (tempVerts.length) {
+    // находим ближайшую из существующих вершин
+    let closestNdx = 0;
+    let closestDistSq = v2.distanceSq(position, tempVerts[0]);
+    for (let i = 1; i < tempVerts.length; ++i) {
+      let distSq = v2.distanceSq(position, tempVerts[i]);
+      if (distSq < closestDistSq) {
+        closestDistSq = distSq;
+        closestNdx = i;
+      }
+    }
+    // данная вершина достаточно близко?
+    if (closestDistSq < epsilon) {
+      // да, возвращаем индекс существующей вершины
+      return closestNdx;
+    }
+  }
+  // одинаковая вершина не найдена, создаём её и возвращаем её индекс
+  tempVerts.push(position);
+  return tempVerts.length - 1;
+}
+</pre>
+<p>И это сработало! Шов исчез. Но, к сожалению, данный алгоритм выполнялся несколько секунд
+и интерфейсом стало невозможно пользоваться. Так как сложность алгоритма возвросла до O^2.
+Если переместить слайдеры на максимум, мы можем получить около 20000 вершин. Для сложности
+O^2 получится под 300 миллионов итераций.</p>
+<p>Я обыскал интернет в поисках простого решения и не нашёл его. Я думал поместить все точки в
+<a href="https://en.wikipedia.org/wiki/Октодерево">октодерево</a> для более быстрого поиска
+совпадающих точек, но для одной статьи получалось многовато материала.</p>
+<p>Именно тогда я понял, что если проблема заключается только в конечных точках, мне может
+помочь остаток от деления. Изначально код выглядел следующим образом:</p>
+<pre class="prettyprint">
+  const angle = lerp(startAngle, endAngle, u);
+</pre>
+Затем я его переписал на окончательный вариант
+<pre class="prettyprint">
+  const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
+</pre>
+<p>Из-за применения операции остатка от деления для `angle`, значение `endAngle`
+равного `Math.PI * 2` становится нулём, а это то же значение, что и начальный
+угол. Шов ушёл и проблема была решена!</p>
+<p>И даже при установке `distance` в значение 0.001 и `divisions` в значение 60,
+на моём компьютере пересчёт фигуры занимает около секунды. И хотя должны быть способы
+оптимизации моего алгоритма, я думаю, что создание сложных фигур - это медленная
+операция в целом. Это лишь один пример, почему 3D-игры могут выполняться на частоте
+60fps, а 3D-редакторы могут работать на очень медленной частоте кадров.</p>
+</div>
+
+<p><div class="webgl_bottombar"></p>
+<p><h3>Так ли уж нужны здесь матрицы?</h3></p>
+<p>При моделировании мы использовали следующий код для поворота точек:</p>
+<pre class="prettyprint">
+const mat = m4.yRotation(angle);
+...
+points.forEach((p, ndx) => {
+  const tp = m4.transformPoint(mat, [...p, 0]);
+  ...
+</pre>
+<p>Преобразование любой 3D-точки матрицей 4х4 требует 16 умножений, 12 сложений и 3 делений. Мы могли бы
+уменьшить количество операций через <a href="webgl-2d-rotation.html">математику поворота единичной окружности</a>.</p>
+<pre class="prettyprint">
+const s = Math.sin(angle);
+const c = Math.cos(angle);
+...
+points.forEach((p, ndx) => {
+  const x = p[0];
+  const y = p[1];
+  const z = p[2];
+  const tp = [
+    x * c - z * s,
+    y,
+    x * s + z * c,
+  ];
+  ...
+</pre>
+<p>Здесь только 4 умножения и 2 сложения, к тому же мы обошлись без вызова функции,
+что, вероятно, раз в 6 быстрее.</p>
+<p>Стоит ли того оптимизация? Ну, для этого частного случая я не думаю, что это так уж
+необходимо. Я задумывался, что вы, возможно, захотите предоставить пользователю выбор
+оси, вокруг которой выполнять поворот. С помощью матриц можно было бы легко дать
+возможность пользователю передать ось - примерно следующим образом:</p>
+<pre class="prettyprint">
+   const mat = m4.axisRotation(userSuppliedAxis, angle);
+</pre>
+<p>Какой путь выбрать - полностью зависит от ваших нужд. На мой взгляд, на первом месте
+должна быть гибкость, а оптимизация уже тогда, когда выполнение какого-либо участка
+кода становится очень медленным.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -98,7 +937,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>
+        <div id="toc">
+          <ul>
   <li>Основы</li>
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-fundamentals.html">Основы WebGL</a></li>
@@ -127,6 +967,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-3d-lighting-directional.html">WebGL 3D - Направленное освещение</a></li>
     <li><a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">WebGL 3D - Точечное освещение</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор (en)</a></li>
   </ul>
   <li>Структура и устройство</li>
   <ul>
@@ -136,13 +977,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </ul>
   <li>Геометрия</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели (en)</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели</a></li>
   </ul>
   <li>Текстуры</li>
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-3d-textures.html">WebGL 3D - Текстуры</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-data-textures.html">WebGL - Данные для текстур</a></li>
     <li><a href="/webgl/lessons/ru/webgl-2-textures.html">WebGL - Использование 2 и более текстур</a></li>
     <li><a href="/webgl/lessons/ru/webgl-cors-permission.html">WebGL - Кросс-доменные изображения</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Текстуры с оглядкой на перспективу (en)</a></li>
+  </ul>
+  <li>Рендеринг в текстуру</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру (en)</a></li>
   </ul>
   <li>Приёмы</li>
   <ul>
@@ -176,6 +1023,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Вопросы? <a href="http://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
+        <div>Нашли ошибку? <a href="http://github.com/greggman/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D - Создание модели';
+            var disqus_title = 'WebGL 3D - Создание модели';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>

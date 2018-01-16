@@ -166,10 +166,11 @@ function loadImageAndCreateTextureInfo(url) {
 <pre><code>...
 +    img.crossOrigin = &quot;&quot;;   // спрашиваем разрешение CORS
     img.src = url;
-</code></pre><p>Значение атрибута <code>crossOrigin</code> отправляется на сервер. Сервер смотрит на это значение и решает, давать
-разрешение или нет. Большинство серверов с поддержкой CORS не обращают внимания на эту строку, они
-просто дают разрешение всем. Поэтому пустое значение работает. Его смысл - просто запросить разрешение,
-в отличие от <code>img.crossOrigin = &quot;bob&quot;</code>, что будет означать &quot;запросить разрешение для &#39;bob&#39;&quot;.</p>
+</code></pre><p><code>crossOrigin</code> может принимать 3 значения. Первое из них - <code>undefined</code>, это значение по умолчанию, и оно
+означает &quot;не запрашивать разрешения&quot;. Второе значение - <code>anonymous</code>, которое значит &quot;запрашивать разрешения,
+но не отправлять дополнительную информацию&quot;. Последнее значение - <code>use-credentials</code>, означающее &quot;отправлять
+куки и другую информацию, по которой сервер сможет определить, стоит ли давать разрешения или нет&quot;. При
+установке любого другого значения сервер будет считать, что установлено значение <code>anonymous</code>.</p>
 <p>Почему бы нам всегда не запрашивать разрешение? Потому что запрос разрешения требует двух HTTP-запросов,
 поэтому он медленнее. Если мы знаем, что мы находимся на том же домене, или мы не планируем использовать
 изображение для чего-то помимо тега img, нам не нужно устанавливать <code>crossDomain</code>, так как он замедлит
@@ -193,7 +194,11 @@ img.src = url;
 </p>
 <p>Следует отметить, что запрос разрешение вовсе НЕ означает, что это разрешение будет дано.
 Это зависит от сервера. Github-страницы дадут разрешение, как и flickr.com или imgur.com,
-но большинство других сайтов такого разрешения не дадут.</p>
+но большинство других сайтов такого разрешения не дадут. Под &quot;разрешением&quot; здесь понимаются
+HTTP-заголовки, которые сервер отправляет вместе с изображением.</p>
+<p>Также важно помнить, что разрешений от сервера недостаточно. Если изображение приходит
+с другого домена, вам нужно установить атрибут <code>crossOrigin</code>, в противном случае вы
+не сможете использовать изображение, даже если сервер пришлёт нужные заголовки.</p>
 <div class="webgl_bottombar">
 <h3>Настройка Apache для выдачи разрешений CORS</h3>
 <p>Если ваш веб-сайт работает на веб-сервере Apache и модуль mod_rewrite установлен,
@@ -249,6 +254,7 @@ img.src = url;
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-3d-lighting-directional.html">WebGL 3D - Направленное освещение</a></li>
     <li><a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">WebGL 3D - Точечное освещение</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор (en)</a></li>
   </ul>
   <li>Структура и устройство</li>
   <ul>
@@ -258,13 +264,19 @@ img.src = url;
   </ul>
   <li>Геометрия</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели (en)</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели</a></li>
   </ul>
   <li>Текстуры</li>
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-3d-textures.html">WebGL 3D - Текстуры</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-data-textures.html">WebGL - Данные для текстур</a></li>
     <li><a href="/webgl/lessons/ru/webgl-2-textures.html">WebGL - Использование 2 и более текстур</a></li>
     <li><a href="/webgl/lessons/ru/webgl-cors-permission.html">WebGL - Кросс-доменные изображения</a></li>
+    <li><a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Текстуры с оглядкой на перспективу (en)</a></li>
+  </ul>
+  <li>Рендеринг в текстуру</li>
+  <ul>
+    <li><a href="/webgl/lessons/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру (en)</a></li>
   </ul>
   <li>Приёмы</li>
   <ul>
