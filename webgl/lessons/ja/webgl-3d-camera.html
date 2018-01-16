@@ -90,14 +90,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 「F」をその錘台の中に移動しなければいけなかった。</p>
 <p>現実の世界でカメラを移動して、撮影したい物（ビル、山、森）に向ける。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode&#x3D;0"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
   <div class="webgl_center">カメラを物に移動する。</div>
 </div>
 
 </p>
 <p>現実の世界で何かを撮影したい場合、その物をカメラの前に移動することはほとんどない。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode&#x3D;1"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=1"></iframe>
   <div class="webgl_center">物をカメラに移動する。</div>
 </div>
 
@@ -105,7 +105,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>でも前回の記事で出来た透視投影が原点から-Zの方に向いていた。
 今回の目的を達成する為にカメラを原点に移動して、他のものを全てカメラの移動と連動して相対的に移動しなければいけない。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode&#x3D;2"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=2"></iframe>
   <div class="webgl_center">物をビューに移動する。</div>
 </div>
 
@@ -130,7 +130,7 @@ var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 </code></pre><p>次にカメラの行列を計算する。この行列はカメラの位置と向きを表している。
 下記のコードは向きが常に原点で、原点から<code>radius</code>を1.5掛けの距離で回転している行列を作成する。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode&#x3D;3"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=3"></iframe>
   <div class="webgl_center">カメラの動き</div>
 </div>
 
@@ -174,7 +174,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </code></pre><p>「F」の円の周りを回転しているカメラの出来上がり！<code>カメラ角度</code>のスライダでカメラを移動してみて下さい。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera.html%3Fui-cameraAngle%3D%25E3%2582%25AB%25E3%2583%25A1%25E3%2583%25AA%25E8%25A7%2592%25E5%25BA%25A6"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html?ui-cameraAngle&#x3D;%E3%82%AB%E3%83%A1%E3%83%AA%E8%A7%92%E5%BA%A6" target="_blank">クリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html?ui-cameraAngle=%E3%82%AB%E3%83%A1%E3%83%AA%E8%A7%92%E5%BA%A6" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
@@ -203,7 +203,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 単位円で二次元回転が出来た。三次元なら単位球体が必要で、
 ノーマライズをされたベクトルは単位球体の表面の位置を表している。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode&#x3D;0"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=0"></iframe>
   <div class="webgl_center"><span class='zaxis'>z軸</span></div>
 </div>
 
@@ -225,14 +225,14 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </style>
 いずれにせよ、<span class="zaxis">z軸</span>と<span class="up">上</span>を外積するとカメラの<span class="xaxis">x軸</span>が出る。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode&#x3D;1"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
   <div class="webgl_center"><span class='zaxis'>z軸</span>と<span class='up'>上</span>の外積 = <span class='xaxis'>x軸</span></div>
 </div>
 
 </p>
 <p><span class="xaxis">x軸</span>が出来たら<span class="zaxis">z軸</span>と<span class="xaxis">x軸</span>を外積したら<span class="yaxis">y軸</span>を計算出来る。</p>
 <p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode&#x3D;2"></iframe>
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
   <div class="webgl_center"><span class='zaxis'>z軸</span>と<span class='xaxis'>x軸</span>の外積 = <span class='yaxis'>y軸</span></div>
 </div>
 
@@ -317,7 +317,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </code></pre><p>これはその結果である。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at.html%3Fui-cameraAngle%3D%25E3%2582%25AB%25E3%2583%25A1%25E3%2583%25AA%25E8%25A7%2592%25E5%25BA%25A6"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at.html?ui-cameraAngle&#x3D;%E3%82%AB%E3%83%A1%E3%83%AA%E8%A7%92%E5%BA%A6" target="_blank">クリックして別のウインドウを開く</a>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at.html?ui-cameraAngle=%E3%82%AB%E3%83%A1%E3%83%AA%E8%A7%92%E5%BA%A6" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 </p>
