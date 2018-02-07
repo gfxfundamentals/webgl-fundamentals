@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ru/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 3D Perspective Correct Texturemapping" />
+<meta property="og:title" content="WebGL 3D - Перспективная коррекция текстур" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="What&#x27;s special about W" />
+<meta property="og:description" content="Что скрывает за собой W" />
 <meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 3D Perspective Correct Texturemapping" />
+<meta name="twitter:title" content="WebGL 3D - Перспективная коррекция текстур" />
 <meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html" />
-<meta name="twitter:description" content="What&#x27;s special about W" />
+<meta name="twitter:description" content="Что скрывает за собой W" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 3D Perspective Correct Texturemapping</title>
+<title>WebGL 3D - Перспективная коррекция текстур</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
@@ -78,12 +80,294 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 3D Perspective Correct Texturemapping</h1>
+    <h1>WebGL 3D - Перспективная коррекция текстур</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>К сожалению, страница ещё не переведена. <a href="https://github.com/greggman/webgl-fundamentals">Я всегда рад переводчикам</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">А пока можете почитать статью на английском языке</a>.</p>
+      <p>Эта статья продолжает серию, которая начинается с <a href="webgl-fundamentals.html">Основ WebGL</a>.
+В этой статье мы рассмотрим, как правильно использовать текстуры с учётом
+перспективы. Для понимания вам, вероятно, понадобится прочитать о
+<a href="webgl-3d-perspective.html">перспективе</a> и <a href="webgl-3d-textures.html">текстурах</a>.
+Также может понадобиться знание о <a href="webgl-how-it-works.html">varying-переменных</a>,
+хотя отчасти эта тема будет затронута.</p>
+<p>В статье о &quot;<a href="webgl-how-it-works.html">работе WebGL</a>&quot; мы рассмотрели
+работу varying-переменных. Varying-переменная объявляется и получает
+своё значение в вершинном шейдере. После трёх вызовов вершинного шейдера
+WebGL отрисует треугольник. Во время отрисовки этого треугольника
+для каждого пикселя будет вызван фрагментный шейдер, который определит
+цвет текущего пикселя. Цвет при этом будет интерполирован между тремя
+вершинами треугольника.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/fragment-shader-anim.html"></iframe>
+  <div class="webgl_center">v_color интерполируется между v0, v1 и v2</div>
+</div>
+
+</p>
+<p>Вернёмся к нашей <a href="webgl-fundamentals.html">первой статье</a>, где мы отображали
+треугольник в пространстве отсечения, где не было никакой математики. Мы просто
+передавали координаты в пространстве отсечения в простой вершинный шейдер, который
+выглядел следующим образом:</p>
+<pre><code>  // атрибут, который будет получать данные из буфера
+  attribute vec4 a_position;
+
+  // все шейдеры имеют функцию main
+  void main() {
+
+    // gl_Position - специальная переменная вершинного шейдера,
+    // которая отвечает за установку положения
+    gl_Position = a_position;
+  }
+</code></pre><p>Был у нас и простой фрагментный шейдер, который отображал один и тот же цвет.</p>
+<pre><code>  // фрагментные шейдеры не имеют точности по умолчанию, поэтому нам необходимо её
+  // указать. mediump подойдёт для большинства случаев. Он означает &quot;средняя точность&quot;
+  precision mediump float;
+
+  void main() {
+    // gl_FragColor - специальная переменная фрагментного шейдера.
+    // Она отвечает за установку цвета.
+    gl_FragColor = vec4(1, 0, 0.5, 1); // вернёт красновато-фиолетовый
+  }
+</code></pre><p>Итак, отобразим 2 треугольника в пространстве отсечения. Мы передадим
+данные <code>X</code>, <code>Y</code>, <code>Z</code> и <code>W</code> для каждой вершины.</p>
+<pre><code>var positions = [
+  -.8, -.8, 0, 1,  // первый треугольник первого прямоугольника
+   .8, -.8, 0, 1,
+  -.8, -.2, 0, 1,
+  -.8, -.2, 0, 1,  // второй треугольник первого прямоугольника
+   .8, -.8, 0, 1,
+   .8, -.2, 0, 1,
+
+  -.8,  .2, 0, 1,  // первый треугольник второго прямоугольника
+   .8,  .2, 0, 1,
+  -.8,  .8, 0, 1,
+  -.8,  .8, 0, 1,  // второй треугольник второго прямоугольника
+   .8,  .2, 0, 1,
+   .8,  .8, 0, 1,
+];
+</code></pre><p>Результат получится следующий:</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Теперь добавим некоторую varying-переменную с плавающей точкой.
+Передадим её напрямую из вершинного шейдера во фрагментный
+шейдер.</p>
+<pre><code>  attribute vec4 a_position;
++  attribute float a_brightness;
+
++  varying float v_brightness;
+
+  void main() {
+    gl_Position = a_position;
+
++    // передаём яркость во фрагментный шейдер
++    v_brightness = a_brightness;
+  }
+</code></pre><p>Во фрагментном шейдере используем varying-переменную для получения цвета.</p>
+<pre><code>  precision mediump float;
+
++  // интерполированная переменная из вершинного шейдера
++  varying float v_brightness;  
+
+  void main() {
+*    gl_FragColor = vec4(v_brightness, 0, 0, 1);  // красный
+  }
+</code></pre><p>Теперь нам нужно задать данные для varying-переменной, поэтому мы
+создадим буфер и поместим в него какие-нибудь значения - одно значение
+на одну вершину. Для вершин слева мы установим яркость в значение 0,
+а для правых вершин - в значение 1.</p>
+<pre><code>  // создаём буфер и помещаем в него 12 значений яркости
+  var brightnessBuffer = gl.createBuffer();
+
+  // привязываем буфер к ARRAY_BUFFER (можно сказать, что ARRAY_BUFFER = brightnessBuffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, brightnessBuffer);
+
+  var brightness = [
+    0,  // первый треугольник первого прямоугольника
+    1,
+    0,
+    0,  // второй треугольник первого прямоугольника
+    1,
+    1,
+
+    0,  // первый треугольник второго прямоугольника
+    1,
+    0,
+    0,  // второй треугольник второго прямоугольника
+    1,
+    1,
+  ];
+
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(brightness), gl.STATIC_DRAW);
+</code></pre><p>Затем получаем ссылку на атрибут <code>a_brightness</code> во время инициализации</p>
+<pre><code>  // сюда пойдут данные для вершин
+  var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
++  var brightnessAttributeLocation = gl.getAttribLocation(program, &quot;a_brightness&quot;);
+</code></pre><p>и устанавливаем значение атрибута при отрисовке</p>
+<pre><code>  // включаем атрибут
+  gl.enableVertexAttribArray(brightnessAttributeLocation);
+
+  // привязываем буфер
+  gl.bindBuffer(gl.ARRAY_BUFFER, brightnessBuffer);
+
+  // объясняем атрибуту, как забирать данные из буфера brightnessBuffer (ARRAY_BUFFER)
+  var size = 1;          // 1 компонент на итерацию
+  var type = gl.FLOAT;   // наши данные - 32-битные числа с плавающей точкой
+  var normalize = false; // не нормализовать данные
+  var stride = 0;        // 0 = перемещаться на size * sizeof(type) каждую итерацию для получения следующего положения
+  var offset = 0;        // начинать с начала буфера
+  gl.vertexAttribPointer(
+      brightnessAttributeLocation, size, type, normalize, stride, offset);
+</code></pre><p>И теперь при отрисовке мы получим два прямоугольника, которые имеют чёрный
+цвет слева, где <code>brightness</code> равна нулю, и красный цвет справа, где
+<code>brightness</code> равна 1. Внутри прямоугольников цвет будет плавно переходить
+от чёрного к красному (интерполяция varying-переменной).</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles-with-varying.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Идём дальше. Из <a href="webgl-3d-perspective">статьи о перспективе</a> мы знаем, что WebGL
+принимает значение, которое мы поместили в <code>gl_Position</code>, и делит это значение
+на <code>gl_Position.w</code>.</p>
+<p>Ранее в вершинах мы передавали <code>1</code> для <code>W</code>, но с нашим знанием о том,
+что WebGL разделит все значения на <code>W</code>, мы можем сделать нечто подобное
+и получить идентичный результат:</p>
+<pre><code>  var mult = 20;
+  var positions = [
+      -.8,  .8, 0, 1,  // первый треугольник первого прямоугольника
+       .8,  .8, 0, 1,
+      -.8,  .2, 0, 1,
+      -.8,  .2, 0, 1,  // второй треугольник первого прямоугольника
+       .8,  .8, 0, 1,
+       .8,  .2, 0, 1,
+
+      -.8       , -.2       , 0,    1,  // первый треугольник второго прямоугольника
+       .8 * mult, -.2 * mult, 0, mult,
+      -.8       , -.8       , 0,    1,
+      -.8       , -.8       , 0,    1,  // второй треугольник второго прямоугольника
+       .8 * mult, -.2 * mult, 0, mult,
+       .8 * mult, -.8 * mult, 0, mult,
+  ];
+</code></pre><p>В отрывке кода выше мы умножаем <code>X</code> и <code>Y</code> всех правых точек второго
+прямоугольника на <code>mult</code>, а затем устанавливаем параметру <code>W</code> значение
+<code>mult</code>. WebGL разделит все значения на <code>W</code>, поэтому в итоге мы должны
+получить то же самое, так ведь?</p>
+<p>Взглянем на результат.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying-non-1-w.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles-with-varying-non-1-w.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Мы видим, что два прямоугольника отрисовались в том же месте, где были до
+этого. Это значит, что <code>X * MULT / MULT(W)</code> по-прежнему равно <code>X</code>, то же
+самое справедливо и для <code>Y</code>. Но цвет довольно сильно изменился. Что произошло?</p>
+<p>Оказывается, что WebGL использует <code>W</code> для перспективной коррекции текстуры,
+а точнее для перспективной коррекции интерполяции значений varying-переменных.</p>
+<p>Для большей наглядности давайте изменим шейдер</p>
+<pre><code>gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // красный
+</code></pre><p>Умножая <code>v_brightness</code> на 10, мы получим значение от 0 до 10. Функция <code>fract</code>
+оставит только дробную часть, которая будет переходить от 0 до 1, от 0 до 1,
+от 0 до 1 - и так 10 раз.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying-non-1-w-repeat.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles-with-varying-non-1-w-repeat.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Теперь нам легко увидеть перспективу.</p>
+<p>Линейная интерполяция от одного значения до другого описывается
+следующей формулой:</p>
+<pre><code> result = (1 - t) * a + t * b
+</code></pre><p>где <code>t</code> изменяется от 0 до 1 и представляет собой определённое положение
+между <code>a</code> и <code>b</code>. Значение 0 соответствует <code>a</code>, а 1 соответствует <code>b</code>.</p>
+<p>Однако, для varying-переменных WebGL использует следующую формулу</p>
+<pre><code> result = (1 - t) * a / aW + t * b / bW
+          -----------------------------
+             (1 - t) / aW + t / bW
+</code></pre><p>Здесь <code>aW</code> - это <code>W</code>, установленное в значение <code>gl_Position.w</code>, когда
+varying-переменная равна <code>a</code>. А <code>bW</code> - это значение <code>W</code>, установленное в
+значение <code>gl_Position.w</code>, когда varying-переменная равна <code>b</code>.</p>
+<p>Так ли всё это важно? Взглянем на простой куб с текстурой, на котором мы
+закончили <a href="webgl-3d-textures.html">статью о текстурах</a>. UV-координаты принимают
+значения от 0 до 1 на каждой стороне. Используется текстура размером 4х4 пикселя.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-perspective-correct-cube.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-perspective-correct-cube.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Теперь изменим вершинный шейдер в этом примере таким образом, чтобы мы
+самостоятельно выполняли деление на <code>W</code>. Нам нужно добавить всего 1 строку:</p>
+<pre><code>attribute vec4 a_position;
+attribute vec2 a_texcoord;
+
+uniform mat4 u_matrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+  // умножаем координаты на матрицу
+  gl_Position = u_matrix * a_position;
+
++  // делим на W
++  gl_Position /= gl_Position.w;
+
+  // передаём текстурные координаты во фрагментный шейдер
+  v_texcoord = a_texcoord;
+}
+</code></pre><p>Деление на <code>W</code> означает, что конечное значение <code>gl_Position.w</code>
+будет равно 1. Значения <code>X</code>, <code>Y</code> и <code>Z</code> будут такими же, как если
+бы WebGL выполнял деление за нас. Посмотрим на результат.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-non-perspective-correct-cube.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-non-perspective-correct-cube.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>В итоге мы получили тот же 3D-куб, но текстуры заметно исказились.
+Дело в том, что если не передать <code>W</code>, WebGL не сможет выполнить
+перспективную коррекцию наложения текстуры. Точнее, WebGL не сможет
+корректно выполнить перспективную интерполяцию varying-переменных.</p>
+<p>Как вы помните из <a href="webgl-3d-perspective.html">статьи о матрицах перспективы</a>,
+значение <code>W</code> было нашим значением <code>Z</code>. При <code>W</code> равном <code>1</code> мы в итоге получаем
+линейную интерполяцию. То есть если взять уравнение выше</p>
+<pre><code> result = (1 - t) * a / aW + t * b / bW
+          -----------------------------
+             (1 - t) / aW + t / bW
+</code></pre><p>и заменить все <code>W</code> на 1</p>
+<pre><code> result = (1 - t) * a / 1 + t * b / 1
+          ---------------------------
+             (1 - t) / 1 + t / 1
+</code></pre><p>учитывая, что деление на 1 можно отбросить</p>
+<pre><code> result = (1 - t) * a + t * b
+          -------------------
+             (1 - t) + t
+</code></pre><p>далее <code>(1 - t) + t</code> упрощается до <code>1</code> и весь знаменатель уходит, у нас остаётся лишь</p>
+<pre><code> result = (1 - t) * a + t * b
+</code></pre><p>что в точности повторяет уравнение линейной интерполяции, приведённое выше.</p>
+<p>Надеюсь, теперь стало понятно, почему WebGL использует матрицы 4х4 и вектора из
+четырёх элементов <code>X</code>, <code>Y</code>, <code>Z</code> и <code>W</code>. Значения <code>X</code> и <code>Y</code> делятся на <code>W</code> и мы
+получаем координаты пространства отсечения. Значение <code>Z</code> делится на <code>W</code>, в результате
+чего также получается координата по оси Z в пространстве отсечения. А <code>W</code> используется
+при интерполяции значений varying-переменных и обеспечивает перспективную коррекцию
+при наложении текстур.</p>
+<div class="webgl_bottombar">
+<h3>Игровые консоли середины 1990-х</h3>
+<p>
+В качестве небольшого дополнения отмечу, что Playstation 1 и некоторые другие
+игровые консоли того же времени не выполняли перспективную коррекцию текстур.
+Глядя на результаты, которые мы получали в данной статье, вы понимаете, почему
+игры выглядели именно так, как они выглядели.
+</p>
+<div class="webgl_center"><img src="../resources/ridge-racer-01.png" style="max-width: 500px;" /></div>
+<p></p>
+<div class="webgl_center"><img src="../resources/ridge-racer-02.png" style="max-width: 500px;" /></div>
+</div>
 
     </div>
     <div class="lesson-sidebar">
@@ -98,7 +382,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>
+        <div id="toc">
+          <ul>
   <li>Основы</li>
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-fundamentals.html">Основы WebGL</a></li>
@@ -127,7 +412,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-3d-lighting-directional.html">WebGL 3D - Направленное освещение</a></li>
     <li><a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">WebGL 3D - Точечное освещение</a></li>
-    <li><a href="/webgl/lessons/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор (en)</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор</a></li>
   </ul>
   <li>Структура и устройство</li>
   <ul>
@@ -145,11 +430,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <li><a href="/webgl/lessons/ru/webgl-data-textures.html">WebGL - Данные для текстур</a></li>
     <li><a href="/webgl/lessons/ru/webgl-2-textures.html">WebGL - Использование 2 и более текстур</a></li>
     <li><a href="/webgl/lessons/ru/webgl-cors-permission.html">WebGL - Кросс-доменные изображения</a></li>
-    <li><a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Текстуры с оглядкой на перспективу (en)</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Перспективная коррекция текстур</a></li>
   </ul>
   <li>Рендеринг в текстуру</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру (en)</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру</a></li>
   </ul>
   <li>Приёмы</li>
   <ul>
@@ -183,6 +468,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Вопросы? <a href="http://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
+        <div>Нашли ошибку? <a href="http://github.com/greggman/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D - Перспективная коррекция текстур';
+            var disqus_title = 'WebGL 3D - Перспективная коррекция текстур';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>

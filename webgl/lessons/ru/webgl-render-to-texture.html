@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ru/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ru/webgl-render-to-texture.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Rendering to a Texture" />
+<meta property="og:title" content="WebGL - Рендеринг в текстуру" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to render to a texture." />
+<meta property="og:description" content="Как выполнить рендеринг в текстуру" />
 <meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/ru/webgl-render-to-texture.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Rendering to a Texture" />
+<meta name="twitter:title" content="WebGL - Рендеринг в текстуру" />
 <meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/ru/webgl-render-to-texture.html" />
-<meta name="twitter:description" content="How to render to a texture." />
+<meta name="twitter:description" content="Как выполнить рендеринг в текстуру" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL Rendering to a Texture</title>
+<title>WebGL - Рендеринг в текстуру</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
@@ -78,12 +80,254 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Rendering to a Texture</h1>
+    <h1>WebGL - Рендеринг в текстуру</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>К сожалению, страница ещё не переведена. <a href="https://github.com/greggman/webgl-fundamentals">Я всегда рад переводчикам</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-render-to-texture.html">А пока можете почитать статью на английском языке</a>.</p>
+      <p>Эта статья продолжает серию, которая начинается с
+<a href="webgl-fundamentals.html">Основ WebGL</a>. Предыдущая статья была о
+<a href="webgl-data-textures.html">передаче данных в текстуру</a>. Если вы
+их ещё не читали, предлагаю ознакомиться сначала с ними.</p>
+<p>В последней статье мы узнали, как передать данные в текстуру из JavaScript.
+Теперь с помощью WebGL мы выполним рендеринг в текстуру. Мы уже успели
+немного затронуть эту тему в <a href="webgl-image-processing-continued.html">обработке изображений</a>,
+теперь настало время ознакомиться с ней более детально.</p>
+<p>Ничего сложного в рендеринге в текстуру нет. Нам нужно создать текстуру
+определённого размера.</p>
+<pre><code>// текстура для рендеринга
+const targetTextureWidth = 256;
+const targetTextureHeight = 256;
+const targetTexture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, targetTexture);
+
+{
+  // определяем формат и размер уровня 0
+  const level = 0;
+  const internalFormat = gl.RGBA;
+  const border = 0;
+  const format = gl.RGBA;
+  const type = gl.UNSIGNED_BYTE;
+  const data = null;
+  gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                targetTextureWidth, targetTextureHeight, border,
+                format, type, data);
+
+  // устанавливаем фильтры без использования мипмапов
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+}
+</code></pre><p>Обратите внимание, что <code>data</code> равняется <code>null</code>, потому что нам не нужно передавать
+данные. Нам лишь нужно, чтобы WebGL выделил память под текстуру.</p>
+<p>Далее создаём фреймбуфер. Фреймбуфер - это просто набор вложений, которые могут быть либо текстурой,
+либо рендербуфером. С текстурами мы уже знакомы. Рендербуферы очень похожи на текстуры, но они
+поддерживают форматы и параметры, которыми текстуры не обладают. Также, в отличие от текстур, вы
+не сможете использовать напрямую рендербуфер в качестве входных данных для шейдера.</p>
+<p>Давайте создадим фреймбуфер и прикрепим нашу текстуру.</p>
+<pre><code>// создаём и привязываем фреймбуфер
+const fb = gl.createFramebuffer();
+gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+
+// прикрепляем текстуру в качестве первого цветового вложения
+const attachmentPoint = gl.COLOR_ATTACHMENT0;
+gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, tex, level);
+</code></pre><p>Как в случае с текстурами и буферами, после создания фреймбуфера нам нужно
+прикрепить его к точке привязки <code>FRAMEBUFFER</code>. После этого все функции будут
+обращаться к фреймбуферу, который привязан к этой точке.</p>
+<p>После привязки фреймбуфера каждый раз, когда мы вызываем функции <code>gl.clear</code>,
+<code>gl.drawArrays</code> или <code>gl.drawElements</code>, WebGL будет выполнять рендеринг в нашу
+текстуру вместо рендеринга в canvas.</p>
+<p>Теперь мы поместим код, выполняющий рендеринг, в отдельную функцию, чтобы мы могли
+вызвать её дважды - один раз для рендеринга в текстуру, второй раз в canvas.</p>
+<pre><code>function drawCube(aspect) {
+  // говорим использовать нашу программу (пару шейдеров)
+  gl.useProgram(program);
+
+  // включаем атрибут положений
+  gl.enableVertexAttribArray(positionLocation);
+
+  // привязываем буфер положений
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  // указываем атрибуту, как получать данные от positionBuffer (ARRAY_BUFFER)
+  var size = 3;          // 3 компоненты на итерацию
+  var type = gl.FLOAT;   // наши данные - 32-битные числа с плавающей точкой
+  var normalize = false; // не нормализовать данные
+  var stride = 0;        // 0 = перемещаться на size * sizeof(type) каждую итерацию для получения следующего положения
+  var offset = 0;        // начинать с начала буфера
+  gl.vertexAttribPointer(
+      positionLocation, size, type, normalize, stride, offset)
+
+  // включаем атрибут текстурных координат
+  gl.enableVertexAttribArray(texcoordLocation);
+
+  // привязываем буфер текстурных координат
+  gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+
+  // указываем атрибуту, как получать данные от texcoordBuffer (ARRAY_BUFFER)
+  var size = 2;          // 2 компоненты на итерацию
+  var type = gl.FLOAT;   // наши данные - 32-битные числа с плавающей точкой
+  var normalize = false; // не нормализовать данные
+  var stride = 0;        // 0 = перемещаться на size * sizeof(type) каждую итерацию для получения следующего положения
+  var offset = 0;        // начинать с начала буфера
+  gl.vertexAttribPointer(
+      texcoordLocation, size, type, normalize, stride, offset)
+
+  // вычисляем проекционную матрицу
+
+-  var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  var projectionMatrix =
+      m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
+
+  var cameraPosition = [0, 0, 2];
+  var up = [0, 1, 0];
+  var target = [0, 0, 0];
+
+  // вычисляем матрицу камеры, используя функцию &quot;смотреть на&quot;
+  var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+
+  // создаём матрицу вида из матрицы камеры
+  var viewMatrix = m4.inverse(cameraMatrix);
+
+  var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+
+  var matrix = m4.xRotate(viewProjectionMatrix, modelXRotationRadians);
+  matrix = m4.yRotate(matrix, modelYRotationRadians);
+
+  // устанавливаем матрицу
+  gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+  // указываем шейдеру, что нужно использовать текстурный блок 0 для u_texture
+  gl.uniform1i(textureLocation, 0);
+
+  // отрисовываем геометрию
+  gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
+}
+</code></pre><p>Обратите внимание, что нам нужно передать <code>aspect</code> для вычисления проекционной
+матрицы, так как соотношение сторон целевой текстуры отличается от соотношения
+сторон canvas.</p>
+<p>Вот пример вызова:</p>
+<pre><code>// отрисовка сцены
+function drawScene(time) {
+
+  ...
+
+  {
+    // привязываем фреймбуфер, чтобы рендеринг шёл в текстуру targetTexture
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+
+    // отрисовываем куб текстурой размером 3x2
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // объясняем WebGL, как преобразовать из пространства отсечения в пиксели
+    gl.viewport(0, 0, targetTextureWidth, targetTextureHeight);
+
+    // очищаем canvas и буфер глубины
+    gl.clearColor(0, 0, 1, 1);   // сплошная заливка синим цветом
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    const aspect = targetTextureWidth / targetTextureHeight;
+    drawCube(aspect)
+  }
+
+  {
+    // рендеринг в canvas
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+    // отрисовываем куб текстурой, в которую только что выполнился рендеринг
+    gl.bindTexture(gl.TEXTURE_2D, targetTexture);
+
+    // объясняем WebGL, как преобразовать из пространства отсечения в пиксели
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    // очищаем canvas и буфер глубины
+    gl.clearColor(1, 1, 1, 1);   // сплошная заливка белым цветом
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    drawCube(aspect)
+  }
+
+  requestAnimationFrame(drawScene);
+}
+</code></pre><p>В результате мы получим следующее:</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-render-to-texture.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-render-to-texture.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p><strong>ЧРЕЗВЫЧАЙНО ВАЖНО</strong> вызвать функцию <code>gl.viewport</code> и передать ей размер окна,
+куда будет выполняться рендеринг. В нашем случае мы сначала отрисовываем в
+текстуру, поэтому подстраиваем область отрисовки под размеры текстуры. Во второй
+раз мы отрисовываем в canvas, поэтому размеры области отрисовки будут совпадать
+с размерами элемента canvas.</p>
+<p>То же самое и при расчёте проекционной матрицы. Нам нужно использовать подходящее
+соотношение сторон при рендеринге. Я потратил бесчисленное множество часов на
+отладку, пытаясь понять, почему объекты отрисовываются таким странным образом
+или не отрисовываются вовсе, чтобы в итоге обнаружить, что я забыл вызвать <code>gl.viewport</code>
+и вычислить правильное соотношение сторон. Из опасений забыть выполнить вызов я
+стараюсь никогда не использовать напрямую <code>gl.bindFramebuffer</code> в своём коде. Вместо
+этого я пишу функцией, в которой есть следующие строки:</p>
+<pre><code>function bindFrambufferAndSetViewport(fb, width, height) {
+   gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+   gl.viewport(0, 0, width, height);
+}
+</code></pre><p>Затем я использую только эту функцию для смены назначения рендеринга. Так я точно не забуду.</p>
+<p>Хотел бы ещё обратить внимание, что у нас нет буфера глубины в нашем фреймбуфере. У нас есть
+только текстура. А это значит, что не будет проверки глубины и не получится реалистичного 3D.
+При отрисовке 3 кубов мы увидим следующее:</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-render-to-texture-3-cubes-no-depth-buffer.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-render-to-texture-3-cubes-no-depth-buffer.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Если вы взглянете на центральный куб, то вы увидите на нём три куба по вертикали - один позади, второй
+посередине, а третий на переднем плане. Но ведь все они находятся на одинаковом отдалении. При этом
+три горизонтальных куба, отрисованных на canvas, корректно пересекаются друг с другом. Причина заключается
+в том, что у нашего фреймбуфера отсутствует глубина, а у canvas глубина есть.</p>
+<p><img class="webgl_center" src="../resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" /></p>
+<p>Для добавления буфера глубины нам необходимо его создать и прикрепить к фреймбуферу.</p>
+<pre><code>// создаём рендербуфер глубины
+const depthBuffer = gl.createRenderbuffer();
+gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
+
+// размер буфера глубины будет совпадать с размером текстуры
+gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, targetTextureWidth, targetTextureHeight);
+gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
+</code></pre><p>Совсем другое дело:</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-render-to-texture-3-cubes-with-depth-buffer.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-render-to-texture-3-cubes-with-depth-buffer.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Теперь с наличием буфера глубины у фреймбуфера внутренние кубы тоже пересекаются корректно.</p>
+<p><img class="webgl_center" src="../resources/cubes-with-depth-buffer.jpg" width="100%" height="100%" /></p>
+<p>Обращаю внимание, что в WebGL заявлена поддержка только 3 комбинаций вложений.
+<a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS">В соответствие со спецификацией</a>,
+единственными поддерживаемыми комбинациями являются:</p>
+<ul>
+<li><code>COLOR_ATTACHMENT0</code> = текстура <code>RGBA/UNSIGNED_BYTE</code></li>
+<li><code>COLOR_ATTACHMENT0</code> = текстура <code>RGBA/UNSIGNED_BYTE</code> + <code>DEPTH_ATTACHMENT</code> = рендербуфер <code>DEPTH_COMPONENT16</code></li>
+<li><code>COLOR_ATTACHMENT0</code> = текстура <code>RGBA/UNSIGNED_BYTE</code> + <code>DEPTH_STENCIL_ATTACHMENT</code> = рендербуфер <code>DEPTH_STENCIL</code></li>
+</ul>
+<p>Для прочих комбинаций вам необходимо проверить поддержку системой/видеокартой/драйвером/браузером пользователя той
+или иной комбинации. Для проверки достаточно создать фреймбуфер, создать и прикрепить вложения, а затем вызвать:</p>
+<pre><code>var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+</code></pre><p>При статусе <code>FRAMEBUFFER_COMPLETE</code> комбинация вложений работает у данного пользователя. Иначе вам необходимо
+уведомить пользователя о неподдерживаемой функции, либо откатиться к другому методу.</p>
+<p>А если вы ещё не читали <a href="webgl-less-code-more-fun.html">статью об организации кода</a>, рекомендую с ней ознакомиться.</p>
+<div class="webgl_bottombar">
+<h3>Canvas - это тоже текстура</h3>
+<p>
+В качестве небольшого дополнения скажу, что браузеры используют описанные выше техники дл
+реализации canvas. Они создают цветовую текстуру, буфер глубины, фреймбуфер, а затем
+сопоставляют его с текущим фреймбуфером. Ваш рендеринг происходит именно в эту текстуру.
+После этого браузеры используют вашу текстуру для отрисовки canvas на веб-странице.
+</p>
+</div>
 
     </div>
     <div class="lesson-sidebar">
@@ -98,7 +342,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>
+        <div id="toc">
+          <ul>
   <li>Основы</li>
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-fundamentals.html">Основы WebGL</a></li>
@@ -127,7 +372,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <ul>
     <li><a href="/webgl/lessons/ru/webgl-3d-lighting-directional.html">WebGL 3D - Направленное освещение</a></li>
     <li><a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">WebGL 3D - Точечное освещение</a></li>
-    <li><a href="/webgl/lessons/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор (en)</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор</a></li>
   </ul>
   <li>Структура и устройство</li>
   <ul>
@@ -145,11 +390,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <li><a href="/webgl/lessons/ru/webgl-data-textures.html">WebGL - Данные для текстур</a></li>
     <li><a href="/webgl/lessons/ru/webgl-2-textures.html">WebGL - Использование 2 и более текстур</a></li>
     <li><a href="/webgl/lessons/ru/webgl-cors-permission.html">WebGL - Кросс-доменные изображения</a></li>
-    <li><a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Текстуры с оглядкой на перспективу (en)</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Перспективная коррекция текстур</a></li>
   </ul>
   <li>Рендеринг в текстуру</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру (en)</a></li>
+    <li><a href="/webgl/lessons/ru/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру</a></li>
   </ul>
   <li>Приёмы</li>
   <ul>
@@ -183,6 +428,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Вопросы? <a href="http://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
+        <div>Нашли ошибку? <a href="http://github.com/greggman/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL - Рендеринг в текстуру';
+            var disqus_title = 'WebGL - Рендеринг в текстуру';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
