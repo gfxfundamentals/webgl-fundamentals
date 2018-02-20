@@ -325,11 +325,11 @@ previous origin.
 At any point whatever we did before that on the matrix stack it doesn't
 matter.  We did a bunch of stuff to move or scale or rotate the origin but
 just before we call `drawImage` wherever the origin happens to be at the
-moment is irrelavent.  It's the new origin so we just have to decide where
+moment is irrelevant.  It's the new origin so we just have to decide where
 to move that origin relative where the texture would be drawn if we had
 nothing before it on the stack.
 
 You might notice a matrix stack is very similar to a [scene graph that we
 covered before](webgl-scene-graph.html).  A scene graph had a tree of
 nodes and as we walked the tree we multiplied each node by its parent's
-node.  A matrix stack is effectively antoher version that same process.
+node.  A matrix stack is effectively another version that same process.
