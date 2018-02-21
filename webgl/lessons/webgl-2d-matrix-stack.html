@@ -175,7 +175,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
 };
 </code></pre><p>Using our <a href="webgl-2d-drawimage.html"><code>drawImage</code> from the previous lesson</a>
 we had these lines</p>
-<pre><code>// this matirx will convert from pixels to clip space
+<pre><code>// this matrix will convert from pixels to clip space
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 // this matrix will translate our quad to dstX, dstY
@@ -187,7 +187,7 @@ matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>We just need to create a matrix stack</p>
 <pre><code>var matrixStack = new MatrixStack();
 </code></pre><p>and multiply in the top matrix from our stack in</p>
-<pre><code>// this matirx will convert from pixels to clip space
+<pre><code>// this matrix will convert from pixels to clip space
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 +// this matrix moves the origin to the one represented by
