@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>二维例子中的二维点 (x, y) 与 3x3 的矩阵相乘，
 在三维中我们需要三维点 (x, y, z) 与 4x4 的矩阵相乘。</p>
 <p>让我们将上个例子改成三维的，这里会继续使用 F ，但是这次是三维的 &#39;F&#39; 。</p>
-<p>首先需要修改顶点着色器以支持三维处理，这是原着色器，</p>
+<p>首先需要修改顶点着色器以支持三维处理，这是原顶点着色器，</p>
 <pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
@@ -114,7 +114,9 @@ void main() {
 *  gl_Position = u_matrix * a_position;
 }
 &lt;/script&gt;
-</code></pre><p>它甚至变简单了！</p>
+</code></pre><p>它甚至变简单了！在二维中我们提供<code>x</code>和<code>y</code>并设置<code>z</code>为1，
+在三维中我们将提供<code>x</code>，<code>y</code>和<code>z</code>，然后将<code>w</code>设置为1,
+而在属性中<code>w</code>的默认值就是1，我们可以利用这点不用再次设置。</p>
 <p>然后提供三维数据。</p>
 <pre><code>  ...
 
@@ -382,7 +384,7 @@ void main() {
 *   gl_FragColor = v_color;
 }
 &lt;/script&gt;
-</code></pre><p>我们需要根据位置提供颜色值，然后在另一个缓冲中放入对应的颜色。</p>
+</code></pre><p>我们需要找到属性的位置，然后在另一个缓冲中存入对应的颜色。</p>
 <pre><code>  ...
   var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 
@@ -445,8 +447,8 @@ gl.vertexAttribPointer(
 是 &#39;F&#39; 的<strong>正面</strong>，但是因为它在数据的前部所以最先被绘制出来，然后它后面的面绘制后挡住了它。
 例如<span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">紫色部分</span>
 实际上是 &#39;F&#39; 的背面，由于它在数据中是第二个所以第二个被画出来。</p>
-<p>WebGL中的三角形有正反面的概念，正面三角形的顶点顺序是顺时针方向，
-反面三角形是逆时针方向。</p>
+<p>WebGL中的三角形有正反面的概念，正面三角形的顶点顺序是逆时针方向，
+反面三角形是顺时针方向。</p>
 <p><img src="../resources/triangle-winding.svg" class="webgl_center" width="400" /></p>
 <p>WebGL可以只绘制正面或反面三角形，可以这样开启</p>
 <pre><code>  gl.enable(gl.CULL_FACE);
