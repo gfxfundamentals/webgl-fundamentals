@@ -208,7 +208,7 @@ WebGL затем может растеризовать различные при
       gl.attachShader(program, vertexShader);
       gl.attachShader(program, fragmentShader);
       gl.linkProgram(program);
-      var successs = gl.getProgramParameter(program, gl.LINK_STATUS);
+      var success = gl.getProgramParameter(program, gl.LINK_STATUS);
       if (success) {
         return program;
       }
