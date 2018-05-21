@@ -380,7 +380,7 @@ void main() {
 
 ```
   // получаем ссылки на uniform-переменные
-*  var worldViewProjetionLocation =
+*  var worldViewProjectionLocation =
 *      gl.getUniformLocation(program, "u_worldViewProjection");
 +  var worldLocation = gl.getUniformLocation(program, "u_world");
 ```
