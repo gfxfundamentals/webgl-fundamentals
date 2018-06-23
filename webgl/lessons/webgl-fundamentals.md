@@ -273,8 +273,8 @@ get executed each time we want to render/draw.
 
 Before we draw we should resize the canvas to match its display size. Canvases just like Images have 2 sizes.
 The number of pixels actually in them and separately the size they are displayed. CSS determines the size
-the canvas is displayed. **You should always set the size you want a canvas with CSS** since it is far far
-more flexible than any other method.
+the canvas is displayed. **You should always set the size you want a canvas to be with CSS** since it is far
+far more flexible than any other method.
 
 To make the number of pixels in the canvas match the size it's displayed
 [I'm using a helper function you can read about here](webgl-resizing-the-canvas.html).
