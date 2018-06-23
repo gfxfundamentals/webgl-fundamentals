@@ -1,7 +1,7 @@
 Title: WebGL Setup and Installation
 Description: How to do WebGL development
 
-Techincally you don't need anything other than a web browser to do WebGL
+Technically you don't need anything other than a web browser to do WebGL
 development. Go to [jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/) or [jsbin.com](http://jsbin.com)
 or [codepen.io](http://codepen.io/greggman/pen/YGQjVV) and just start applying the lessons here.
 
