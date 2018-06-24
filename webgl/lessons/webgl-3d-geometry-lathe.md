@@ -60,7 +60,7 @@ and one more 25% of the way going from `P3` to `P4`.
 You can drag the slider to adjust `t` and you can also move points
 `P1`, `P2`, `P3`, and `P4`.
 
-We do the same for the resuling points. Compute `t` points between `Q1 Q2`
+We do the same for the resulting points. Compute `t` points between `Q1 Q2`
 and `Q2 Q3`.
 
 {{{diagram url="resources/bezier-curve-diagram.html?maxDepth=2" }}}
