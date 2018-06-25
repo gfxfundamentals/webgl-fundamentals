@@ -97,7 +97,8 @@ you could imagine it would be used like this
       var size = 4;
       for (var i = 0; i < count; ++i) {
          // copy the next 4 values from positionBuffer to the a_position attribute
-         attributes.a_position = positionBuffer.slice((offset + i) * stride, size);
+         const start = (offset + i) * stride;
+         attributes.a_position = positionBuffer.slice(start, start + size);
          runVertexShader();
          ...
          doSomethingWith_gl_Position();
