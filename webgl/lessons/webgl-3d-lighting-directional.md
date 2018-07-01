@@ -388,7 +388,7 @@ Now we have to look those uniforms up
 
 ```
   // lookup uniforms
-*  var worldViewProjetionLocation =
+*  var worldViewProjectionLocation =
 *      gl.getUniformLocation(program, "u_worldViewProjection");
 +  var worldLocation = gl.getUniformLocation(program, "u_world");
 ```
