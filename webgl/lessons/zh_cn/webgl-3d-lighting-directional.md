@@ -355,7 +355,7 @@ void main() {
 
 ```
   // 寻找全局变量
-*  var worldViewProjetionLocation =
+*  var worldViewProjectionLocation =
 *      gl.getUniformLocation(program, "u_worldViewProjection");
 +  var worldLocation = gl.getUniformLocation(program, "u_world");
 ```
