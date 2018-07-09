@@ -1,3 +1,9 @@
+(function() {  // eslint-disable-line
+'use strict';  // eslint-disable-line
+
+/* global monaco, require */
+
+const lessonHelperScriptRE = /<script src="[^"]+webgl-lessons-helper\.js"><\/script>/;
 
 function getQuery(s) {
   s = s === undefined ? window.location.search : s;
@@ -144,7 +150,7 @@ function parseHTML(url, html) {
   });
 
   var dataScripts = '';
-  html = html.replace(dataScriptRE, function(p1, p1, p2, p3) {
+  html = html.replace(dataScriptRE, function(p0, p1, p2, p3) {
     p1 = p1 || '';
     dataScripts += '\n' + p1 + '<script ' + p2 + '>' + p3 + '</script>';
     return '';
@@ -285,7 +291,7 @@ function openInCodepen() {
     description           : "from: " + g.url,
     tags                  : ["webgl", "webglfundamentals.org"],
     editors               : "101",
-    html                  : htmlParts.html.editor.getValue(),
+    html                  : htmlParts.html.editor.getValue().replace(lessonHelperScriptRE, ''),
     css                   : htmlParts.css.editor.getValue(),
     js                    : comment + addCORSSupport(htmlParts.js.editor.getValue()),
   };
@@ -313,7 +319,7 @@ function openInJSFiddle() {
     description           : "from: " + g.url,
     tags                  : ["webgl", "webglfundamentals.org"],
     editors               : "101",
-    html                  : htmlParts.html.editor.getValue(),
+    html                  : htmlParts.html.editor.getValue().replace(lessonHelperScriptRE, ''),
     css                   : htmlParts.css.editor.getValue(),
     js                    : comment + htmlParts.js.editor.getValue(),
   };
@@ -529,7 +535,7 @@ function start() {
 }
 
 start();
-
+}());
 
 
 
