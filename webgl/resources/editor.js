@@ -48,6 +48,12 @@ function getHTML(url, callback) {
   req.send("");
 }
 
+function getPrefix(url) {
+  var u = new URL(window.location.origin + url);
+  var prefix = u.origin + dirname(u.pathname);
+  return prefix;
+}
+
 function fixSourceLinks(url, source) {
   var srcRE = /(src=)"(.*?)"/g;
   var linkRE = /(href=)"(.*?")/g
@@ -55,9 +61,7 @@ function fixSourceLinks(url, source) {
   var loadImageRE = /(loadImageAndCreateTextureInfo)\(('|")(.*?)('|")/g;
   var loadImagesRE = /loadImages(\s*)\((\s*)\[([^]*?)\](\s*),/g;
   var quoteRE = /"(.*?)"/g;
-
-  var u = new URL(window.location.origin + url);
-  var prefix = u.origin + dirname(u.pathname);
+  var prefix = getPrefix(url);
 
   function addPrefix(url) {
     return url.indexOf("://") < 0 ? (prefix + url) : url;
@@ -219,19 +223,20 @@ function main() {
   });
 }
 
-
 var blobUrl;
-function getSourceBlob(options) {
+function getSourceBlob(htmlParts, options) {
   options = options || {};
   if (blobUrl) {
     URL.revokeObjectURL(blobUrl);
   }
+  var prefix = dirname(g.url);
   var source = g.html;
   source = source.replace("${hackedParams}", JSON.stringify(g.query));
-  source = source.replace('${html}', htmlParts.html.editor.getValue());
-  source = source.replace('${css}', htmlParts.css.editor.getValue());
-  source = source.replace('${js}', htmlParts.js.editor.getValue());
-  source = source.replace('<head>', '<head>\n<script match="false">webglLessonSettings = ' + JSON.stringify(options) + ";</script>");
+  source = source.replace('${html}', htmlParts.html);
+  source = source.replace('${css}', htmlParts.css);
+  source = source.replace('${js}', htmlParts.js);
+  source = source.replace('<head>', '<head>\n<script match="false">webglLessonSettings = ' + JSON.stringify(options) + ';</script>');
+  source = source.replace('</head>', '<script src="' + prefix + '/resources/webgl-lessons-helper.js"></script>\n</head>');
 
   var scriptNdx = source.indexOf('<script>');
   g.numLinesBeforeScript = (source.substring(0, scriptNdx).match(/\n/g) || []).length;
@@ -239,6 +244,22 @@ function getSourceBlob(options) {
   var blob = new Blob([source], {type: 'text/html'});
   blobUrl = URL.createObjectURL(blob);
   return blobUrl;
+}
+
+function getSourceBlobFromEditor(options) {
+  return getSourceBlob({
+    html: htmlParts.html.editor.getValue(),
+    css: htmlParts.css.editor.getValue(),
+    js: htmlParts.js.editor.getValue(),
+  }, options);
+}
+
+function getSourceBlobFromOrig(options) {
+  return getSourceBlob({
+    html: htmlParts.html.source,
+    css: htmlParts.css.source,
+    js: htmlParts.js.source,
+  }, options);
 }
 
 function dirname(path) {
@@ -402,7 +423,7 @@ function toggleFullscreen() {
 
 function run(options) {
   g.setPosition = false;
-  var url = getSourceBlob(options);
+  var url = getSourceBlobFromEditor(options);
   g.iframe.src = url;
 }
 
@@ -520,14 +541,29 @@ function runEditor(parent, source, language) {
   });
 }
 
+function runAsBlob() {
+  var query = getQuery();
+  g.url = getFQUrl(query.url);
+  g.query = getSearch(g.url);
+  getHTML(query.url, function(err, html) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    parseHTML(query.url, html);
+    window.location.href = getSourceBlobFromOrig();
+  });
+}
+
 function start() {
   var query = getQuery();
   var parentQuery = getQuery(window.parent.location.search);
   var isSmallish = window.navigator.userAgent.match(/Android|iPhone|iPod|Windows Phone/i);
   var isEdge = window.navigator.userAgent.match(/Edge/i);
   if (isEdge || isSmallish || parentQuery.editor === 'false') {
-    var url = query.url;
-    window.location.href = url;
+    runAsBlob();
+    // var url = query.url;
+    // window.location.href = url;
   } else {
     require.config({ paths: { 'vs': '/monaco-editor/min/vs' }});
     require(['vs/editor/editor.main'], main);
