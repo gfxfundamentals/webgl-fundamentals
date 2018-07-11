@@ -1,0 +1,741 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Skinning</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+body {background: #333; color: white}
+canvas {background: #400;}
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+</body>
+<!-- vertex shader -->
+<script id="skinVS" type="notjs">
+attribute vec4 a_POSITION;
+attribute vec3 a_NORMAL;
+attribute vec4 a_WEIGHTS_0;
+attribute vec4 a_JOINTS_0;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform sampler2D u_jointTexture;
+uniform float u_numJoints;
+
+varying vec3 v_normal;
+
+// these offsets assume the texture is 4 pixels across
+#define ROW0_U ((0.5 + 0.0) / 4.)
+#define ROW1_U ((0.5 + 1.0) / 4.)
+#define ROW2_U ((0.5 + 2.0) / 4.)
+#define ROW3_U ((0.5 + 3.0) / 4.)
+
+mat4 getBoneMatrix(float jointNdx) {
+  float v = (jointNdx + 0.5) / u_numJoints;
+  return mat4(
+    texture2D(u_jointTexture, vec2(ROW0_U, v)),
+    texture2D(u_jointTexture, vec2(ROW1_U, v)),
+    texture2D(u_jointTexture, vec2(ROW2_U, v)),
+    texture2D(u_jointTexture, vec2(ROW3_U, v)));
+}
+
+void main() {
+  mat4 skinMatrix = getBoneMatrix(a_JOINTS_0[0]) * a_WEIGHTS_0[0] +
+                    getBoneMatrix(a_JOINTS_0[1]) * a_WEIGHTS_0[1] +
+                    getBoneMatrix(a_JOINTS_0[2]) * a_WEIGHTS_0[2] +
+                    getBoneMatrix(a_JOINTS_0[3]) * a_WEIGHTS_0[3];
+  gl_Position = u_projection * u_view * skinMatrix * a_POSITION;
+  v_normal = mat3(skinMatrix) * a_NORMAL;
+}
+</script>
+<script id="fs" type="notjs">
+precision mediump float;
+
+varying vec3 v_normal;
+
+uniform vec4 u_diffuse;
+uniform vec3 u_lightDirection;
+
+void main () {
+  vec3 normal = normalize(v_normal);
+  float light = dot(u_lightDirection, normal) * .5 + .5;
+  gl_FragColor = vec4(u_diffuse.rgb * light, u_diffuse.a);
+}
+</script>
+<script id="meshVS" type="notjs">
+attribute vec4 a_POSITION;
+attribute vec3 a_NORMAL;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+
+varying vec3 v_normal;
+
+void main() {
+  gl_Position = u_projection * u_view * u_world * a_POSITION;
+  v_normal = mat3(u_world) * a_NORMAL;
+}
+</script>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-ui.js"></script>
+<script src="resources/m4.js"></script>
+<script>
+"use strict";
+
+async function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  const canvas = document.getElementById("canvas");
+  const gl = canvas.getContext("webgl");
+  if (!gl) {
+    return;
+  }
+  const ext = gl.getExtension('OES_texture_float');
+  if (!ext) {
+    return;  // the extension doesn't exist on this device
+  }
+
+  // compiles and links the shaders, looks up attribute and uniform locations
+  const skinProgramInfo = webglUtils.createProgramInfo(gl, ["skinVS", "fs"]);
+  const meshProgramInfo = webglUtils.createProgramInfo(gl, ["meshVS", "fs"]);
+
+  class Skin {
+    constructor(joints, inverseBindMatrixData) {
+      this.joints = joints;
+      this.inverseBindMatrices = [];
+      this.jointMatrices = [];
+      this.jointData = new Float32Array(joints.length * 16);
+      for (let i = 0; i < joints.length; ++i) {
+        this.inverseBindMatrices.push(new Float32Array(inverseBindMatrixData.buffer, inverseBindMatrixData.byteOffset + Float32Array.BYTES_PER_ELEMENT * 16 * i, 16));
+        this.jointMatrices.push(new Float32Array(this.jointData.buffer, Float32Array.BYTES_PER_ELEMENT * 16 * i, 16));
+      }
+      this.jointTexture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, this.jointTexture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+    update(node) {
+      const globalWorldInverse = m4.inverse(node.worldMatrix);
+      for (let j = 0; j < this.joints.length; ++j) {
+        const joint = this.joints[j];
+        const dst = this.jointMatrices[j];
+        m4.multiply(globalWorldInverse, joint.worldMatrix, dst);
+        m4.multiply(dst, this.inverseBindMatrices[j], dst);
+      }
+      gl.bindTexture(gl.TEXTURE_2D, this.jointTexture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 4, this.joints.length, 0,
+                    gl.RGBA, gl.FLOAT, this.jointData);
+    }
+  }
+
+  class TRS {
+    constructor(translation = [0, 0, 0], rotation = [0, 0, 0, 1], scale = [1, 1, 1]) {
+      this.translation = translation;
+      this.rotation = rotation;
+      this.scale = scale;
+    }
+    getMatrix(dst) {
+      dst = dst || new Float32Array(16);
+      m4.compose(this.translation, this.rotation, this.scale, dst);
+      return dst;
+    }
+  }
+
+  class Node {
+    constructor(source, name) {
+      this.name = name;
+      this.source = source;
+      this.parent = null;
+      this.children = [];
+      this.localMatrix = m4.identity();
+      this.worldMatrix = m4.identity();
+      this.drawables = [];
+    }
+    setParent(parent) {
+      if (this.parent) {
+        this.parent._removeChild(this);
+        this.parent = null;
+      }
+      if (parent) {
+        parent._addChild(this);
+        this.parent = parent;
+      }
+    }
+    updateWorldMatrix(parentWorldMatrix) {
+      const source = this.source;
+      if (source) {
+        source.getMatrix(this.localMatrix);
+      }
+
+      if (parentWorldMatrix) {
+        // a matrix was passed in so do the math
+        m4.multiply(parentWorldMatrix, this.localMatrix, this.worldMatrix);
+      } else {
+        // no matrix was passed in so just copy local to world
+        m4.copy(this.localMatrix, this.worldMatrix);
+      }
+
+      // now process all the children
+      const worldMatrix = this.worldMatrix;
+      for (const child of this.children) {
+        child.updateWorldMatrix(worldMatrix);
+      }
+    }
+    traverse(fn) {
+      fn(this);
+      for (const child of this.children) {
+        child.traverse(fn);
+      }
+    }
+    _addChild(child) {
+      this.children.push(child);
+    }
+    _removeChild(child) {
+      const ndx = this.children.indexOf(child);
+      this.children.splice(ndx, 1);
+    }
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  /**
+   * @typedef OutputIndices
+   * @property {number} prevNdx
+   * @property {number} nextNdx
+   */
+  /**
+   * get 2 output indices to lerp between
+   * @param {number} t time to get indices for
+   * @param {number[]} input array of times in order
+   * @return {OutputIndices} the indices of the 2 data points to lerp between
+   */
+  function getOutputIndices(t, input) {
+    let ndx = 0;
+    for (; ndx < input.length; ++ndx) {
+      if (input[ndx] > t) {
+        break;
+      }      
+    }
+    const prevNdx = Math.max(0, ndx - 1);
+    const nextNdx = Math.min(input.length - 1, ndx);
+    const t0 = input[prevNdx];
+    const t1 = input[nextNdx];
+    const range = t1 - t0;
+    const localT = range > 0 ? (t - t0) / range : 1;
+
+    return {prevNdx, nextNdx, localT};
+  }
+
+  class LinearFloatSampler {
+    constructor(input, output) {
+      this.input = input;
+      this.output = output;
+    }
+    getValue(t, dst, path) {
+      const {input, output, numComponents} = this;
+      const {prevNdx, nextNdx, localT} = getOutputIndices(t, input);
+
+      dst[path] = lerp(output[prevNdx], output[nextNdx], localT);
+    }
+  }
+
+  class LinearVecSampler {
+    constructor(input, output, numComponents) {
+      this.input = input;
+      this.output = output;
+      this.numComponents = numComponents;
+    }
+    getValue(t, dst, path) {
+      const {input, output, numComponents} = this;
+      const {prevNdx, nextNdx, localT} = getOutputIndices(t, input);
+
+      const i0 = prevNdx * numComponents;
+      const i1 = nextNdx * numComponents;  
+
+      const d = dst[path];
+      for (let i = 0; i < numComponents; ++i) {
+        d[i] = lerp(output[i0 + i], output[i1 + i], localT);
+      }
+    }
+  }
+
+  class LinearVec2Sampler extends LinearVecSampler {
+    constructor(input, output) {
+      super(input, output, 2);
+    }
+  }
+
+  class LinearVec3Sampler extends LinearVecSampler {
+    constructor(input, output) {
+      super(input, output, 3);
+    }
+  }
+
+  class LinearVec4Sampler extends LinearVecSampler {
+    constructor(input, output) {
+      super(input, output, 4);
+    }
+  }
+
+  class LinearQuatSampler {
+    constructor(input, output) {
+      this.input = input;
+      this.output = output;
+    }
+    getValue(t, dst, path) {
+      const {input, output} = this;
+      const {prevNdx, nextNdx, localT} = getOutputIndices(t, input);
+
+      const i0 = prevNdx * 4;
+      const i1 = nextNdx * 4;  
+
+      const qa = output.slice(i0, i0 + 4);
+      const qb = output.slice(i1, i1 + 4);
+      slerp(qa, qb, localT, dst[path]);
+    }
+  }
+
+  function normalizeQ(q, dst) {
+    const lengthSq = q[0] * q[0] *
+                     q[1] * q[1] *
+                     q[2] * q[2] *
+                     q[1] * q[3];  
+    if (lengthSq === 0) {
+      dst[0] = 0;
+      dst[1] = 0;
+      dst[2] = 0;
+      dst[3] = 1;
+    } else {
+      const t = 1 / Math.sqrt(lengthSq);
+      dst[0] = q[0] * t;
+      dst[1] = q[1] * t;
+      dst[2] = q[2] * t;
+      dst[3] = q[3] * t;
+    }
+    return dst;
+  }
+
+  function slerp(qa, qb, t, dst) {
+    if (t <= 0) {
+      dst[0] = qa[0];
+      dst[1] = qa[1];
+      dst[2] = qa[2];
+      dst[3] = qa[3];
+      return dst;
+    }
+    if (t >= 1) {
+      dst[0] = qb[0];
+      dst[1] = qb[1];
+      dst[2] = qb[2];
+      dst[3] = qb[3];
+      return dst;
+    }
+
+    const x = qa[0];
+    const y = qa[1];
+    const z = qa[2];
+    const w = qa[3];
+
+    // http://www.euclideanspace.com/maths/algebra/realNormeqalgebra/quaternions/slerp/
+
+    let cosHalfTheta = w * qb[3] + x * qb[0] + y * qb[1] + z * qb[2];
+
+    if (cosHalfTheta < 0) {
+      dst[0] = -qb[0];
+      dst[1] = -qb[1];
+      dst[2] = -qb[2];
+      dst[3] = -qb[3];
+      cosHalfTheta = -cosHalfTheta;
+    } else {
+      dst[0] = qb[0];
+      dst[1] = qb[1];
+      dst[2] = qb[2];
+      dst[3] = qb[3];
+    }
+
+    if (cosHalfTheta >= 1.0) {
+      dst[0] = x;
+      dst[1] = y;
+      dst[2] = z;
+      dst[3] = w;
+      return dst;
+    }
+
+    const sqrSinHalfTheta = 1.0 - cosHalfTheta * cosHalfTheta;
+
+    if (sqrSinHalfTheta <= Number.EPSILON) {
+      const s = 1 - t;
+      dst[0] = s * x + t * dst[0];
+      dst[1] = s * y + t * dst[1];
+      dst[2] = s * z + t * dst[2];
+      dst[3] = s * w + t * dst[3];
+      return normalizeQ(dst);
+    }
+
+    const sinHalfTheta = Math.sqrt(sqrSinHalfTheta);
+    const halfTheta = Math.atan2(sinHalfTheta, cosHalfTheta);
+    const ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta;
+    const ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
+
+    dst[0] = ( x * ratioA + dst[0] * ratioB );
+    dst[1] = ( y * ratioA + dst[1] * ratioB );
+    dst[2] = ( z * ratioA + dst[2] * ratioB );
+    dst[3] = ( w * ratioA + dst[3] * ratioB );
+
+    return dst;
+  }
+
+  function accessorTypeToNumComponents(type) {
+    switch (type) {
+      case 'SCALAR': return 1;
+      case 'VEC2': return 2;
+      case 'VEC3': return 3;
+      case 'VEC4': return 4;
+      default:
+        throw new Error(`unknown type: ${type}`);
+    }    
+  }
+
+  class SkinRenderer {
+    constructor(mesh, skin) {
+      this.mesh = mesh;
+      this.skin = skin;
+    }
+    render(node, projection, view, sharedUniforms) {
+      const {skin, mesh} = this;
+      skin.update(node);
+      gl.useProgram(skinProgramInfo.program);
+      for (const primitive of mesh.primitives) {
+        webglUtils.setBuffersAndAttributes(gl, skinProgramInfo, primitive.bufferInfo);
+        webglUtils.setUniforms(skinProgramInfo, {
+          u_projection: projection,
+          u_view: view,
+          u_jointTexture: skin.jointTexture,
+          u_numJoints: skin.joints.length,
+        });
+        webglUtils.setUniforms(skinProgramInfo, primitive.material.uniforms);
+        webglUtils.setUniforms(skinProgramInfo, sharedUniforms);
+        webglUtils.drawBufferInfo(gl, primitive.bufferInfo);
+      }
+    }
+  }
+
+  class MeshRednerer {
+    constructor(mesh) {
+      this.mesh;
+    }
+    render(node, projection, view, sharedUniforms) {
+      const {mesh} = this;
+      gl.useProgram(meshProgramInfo.program);
+      for (const primitive of mesh.primitives) {
+        webglUtils.setBuffersAndAttributes(gl, meshProgramInfo, primitive.bufferInfo);
+        webglUtils.setUniforms(meshProgramInfo, {
+          u_projection: projection,
+          u_view: view,
+          u_world: node.worldMatrix,
+        })
+        webglUtils.setUniforms(skinProgramInfo, primitive.material.uniforms);
+        webglUtils.setUniforms(skinProgramInfo, sharedUniforms);
+        webglUtils.drawBufferInfo(gl, primitive.bufferInfo);
+      }
+    }
+  }
+
+  const samplersCtorTable = {
+    'SCALAR+LINEAR': LinearFloatSampler,
+    'VEC2+LINEAR': LinearVec2Sampler,
+    'VEC3+LINEAR': LinearVec3Sampler,
+    'VEC4+LINEAR': LinearVec4Sampler,
+  };
+
+  function accessorToSampler(accessor, interpolation) {
+    return samplersCtorTable[`${accessor.type}+${interpolation}`];
+  }
+
+  function glTypeToTypedArray(gl, type) {
+    switch(type) {
+      case gl.BYTE:                           return Int8Array;
+      case gl.UNSIGNED_BYTE:                  return Uint8Array;
+      case gl.SHORT:                          return Int16Array;
+      case gl.UNSIGNED_SHORT:                 return Uint16Array;
+      case gl.INT:                            return Int32Array;
+      case gl.UNSIGNED_INT:                   return Uint32Array;
+      case gl.FLOAT:                          return Float32Array;
+      case gl.HALF_FLOAT:                     return Uint16Array;
+      default:
+        throw new Error(`unknown type: ${type}`);
+    }
+  }
+
+  function getBufferView(gl, gltf, bufferViewIndex, type) {
+    const TypedArray = glTypeToTypedArray(gl, type);
+    const bufferView = gltf.bufferViews[bufferViewIndex];
+    const buffer = gltf.buffers[bufferView.buffer];
+    return new TypedArray(buffer, bufferView.byteOffset, bufferView.byteLength / TypedArray.BYTES_PER_ELEMENT);
+  }
+
+  function getAccessorAndBufferView(gl, gltf, accessorIndex) {
+    const accessor = gltf.accessors[accessorIndex];
+    const bufferView = getBufferView(gl, gltf, accessor.bufferView, accessor.componentType);
+    return {accessor, bufferView};
+  }
+
+  function getAnimationTarget(gltf, target) {
+    if (target.node !== undefined) {
+      return gltf.nodes[target.node];
+    }
+    throw new Error('unknown channel target');
+  };
+
+  async function loadGLTF(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`could not load gltf: ${url}`);
+    }
+    const gltf = await response.json();
+    const baseURL = new URL(url, location.href);
+    gltf.buffers = await Promise.all(gltf.buffers.map((buffer) => {
+      const url = new URL(buffer.uri, baseURL.href);
+      return loadBinary(url.href);
+    }));
+
+    const defaultMaterial = {
+      uniforms: {
+        u_diffuse: [.5, .8, 1, 1],
+      },
+    };
+
+    // setup meshes
+    gltf.meshes.forEach((mesh) => {
+      mesh.primitives.forEach((primitive) => {
+        const arrays = {};
+        for (const [attribName, index] of Object.entries(primitive.attributes)) {
+          const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, index);
+          arrays[attribName] = {
+            data: bufferView,
+            type: accessor.componentType,
+            numComponents: accessorTypeToNumComponents(accessor.type),
+          };
+        }
+        if (primitive.indices !== undefined) {
+          const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, primitive.indices);
+          arrays.indices = {
+            data: bufferView,
+            type: accessor.componentType,
+            numComponents: accessorTypeToNumComponents(accessor.type),
+          };
+        }
+        primitive.bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
+        primitive.material = gltf.materials && gltf.materials[primitive.material] || defaultMaterial;
+      });
+    });
+
+    const skinNodes = [];
+    const origNodes = gltf.nodes;
+    gltf.nodes = gltf.nodes.map((n) => {
+      const {name, skin, mesh, translation, rotation, scale} = n;
+      const trs = new TRS(translation, rotation, scale);
+      const node = new Node(trs, name);
+      const realMesh =　gltf.meshes[mesh];
+      if (skin !== undefined) {
+        skinNodes.push({node, mesh: realMesh, skinNdx: skin});
+      } else if (realMesh) {
+        node.drawables.push(new MeshRenderer(realMesh));
+      }
+      return node;
+    });
+
+    // setup skins
+    gltf.skins = gltf.skins.map((skin) => {
+      const joints = skin.joints.map(ndx => gltf.nodes[ndx]);
+      const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, skin.inverseBindMatrices);
+      return new Skin(joints, bufferView);
+    });
+
+    // fix nodes with skins
+    for (const {node, mesh, skinNdx} of skinNodes) {
+      node.drawables.push(new SkinRenderer(mesh, gltf.skins[skinNdx]));
+    }
+
+    // setup scenes
+    gltf.scenes.forEach((scene) => {
+      scene.root = new Node(new TRS(), scene.name);
+      addChildren(gltf.nodes, origNodes, scene.root, scene.nodes);
+    });
+
+    // setup animations
+    gltf.animationsByName = {};
+    gltf.animations.forEach((animation) => {
+      gltf.animationsByName[animation.name] = animation;
+      animation.samplers = animation.samplers.map((sampler) => {
+        const input = getAccessorAndBufferView(gl, gltf, sampler.input).bufferView;
+        const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, sampler.output);
+        const SamplerCtor = accessorToSampler(accessor, sampler.interpolation);
+        return new SamplerCtor(input, bufferView);
+      });
+      animation.channels = animation.channels.map((channel) => {
+        let target = getAnimationTarget(gltf, channel.target);
+        // wE want to target the TRS, not the node itself
+        if (target instanceof Node) {
+          target = target.source;
+        }
+        const path = channel.target.path;
+        let sampler = animation.samplers[channel.sampler];
+        if (path === "rotation") {
+          sampler = new LinearQuatSampler(sampler.input, sampler.output);
+        }
+        return {
+          sampler,
+          target,
+          path,
+        };
+      });     
+    });
+
+    return gltf;
+  }
+  const gltf = await loadGLTF('resources/models/killer_whale/whale.CYCLES.gltf');
+  console.log(gltf);
+  const anim = gltf.animationsByName.ATTACK; 
+  //const anim = gltf.animationsByName.swim; 
+
+  function addChildren(nodes, gltfNodes, node, childIndices) {
+    if (childIndices) {
+      childIndices.forEach((childNdx) => {
+        const child = nodes[childNdx];
+        const gltfNode = gltfNodes[childNdx];
+        addChildren(nodes, gltfNodes, child, gltfNode.children);
+        child.setParent(node);
+      });
+    }
+  }
+
+  async function loadBinary(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`could not load binary: ${url}`);
+    }
+    return await response.arrayBuffer();
+  }
+
+  function applyAnimation(anim, t) {
+    for(const channel of anim.channels) {
+      const {target, sampler, path} = channel;
+      sampler.getValue(t, target, path);
+    } 
+  }
+
+  function degToRad(deg) {
+    return deg * Math.PI / 180;
+  }
+
+  function render(time) {
+    time *= 0.001;  // convert to seconds
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    gl.clearColor(.1, .1, .1, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    const fieldOfViewRadians = degToRad(60);
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const projection = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
+
+    // camera going in circle 2 units from origin looking at origin
+    const cameraRadius = 20;
+    const cameraPosition = [20, 5, 10];
+    const target = [0, 3, 0];
+//    const cameraPosition = [Math.cos(time * .1) * cameraRadius, 0, Math.sin(time * .1) * cameraRadius];
+//    const target = [0, 0, 0];
+    const up = [0, 1, 0];
+    // Compute the camera's matrix using look at.
+    const camera = m4.lookAt(cameraPosition, target, up);
+
+    // Make a view matrix from the camera matrix.
+    const view = m4.inverse(camera);
+
+    applyAnimation(anim, (time * .2) % 1);
+
+  const sharedUniforms = {
+    u_lightDirection: m4.normalize([-1, 3, 5]),
+  };
+
+  function renderDrawables(node) {
+    for(const drawable of node.drawables) {
+      drawable.render(node, projection, view, sharedUniforms);
+    }
+  }
+
+    for (const scene of gltf.scenes) {
+      // updatte all world matices in the scene.
+      scene.root.updateWorldMatrix();
+      // walk the scene and render all renderables
+      scene.root.traverse(renderDrawables);
+    }
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+
+
+  // --- ignore below this line - it's not relevant to the exmample and it's kind of a bad example ---
+
+  var axisProgramInfo;
+  var axisBufferInfo;
+  function drawAxis(projection, view, bones) {
+    if (!axisProgramInfo) {
+      axisProgramInfo = webglUtils.createProgramInfo(gl, ['vs2', 'fs']);
+      axisBufferInfo  = webglUtils.createBufferInfoFromArrays(gl, {
+        position: {
+          numComponents: 2,
+          data: [
+            0, 0,
+            1, 0,
+          ],
+        },
+      });
+    }
+
+    var uniforms = {
+      projection: projection,
+      view: view,
+    };
+
+    gl.useProgram(axisProgramInfo.program);
+    webglUtils.setBuffersAndAttributes(gl, axisProgramInfo, axisBufferInfo);
+
+    for (var i = 0; i < 3; ++i) {
+      drawLine(bones[i], 0, [0 ,1, 0, 1]);
+      drawLine(bones[i], Math.PI * 0.5, [0, 0, 1, 1]);
+    }
+
+    function drawLine(mat, angle, color) {
+      uniforms.model = m4.zRotate(mat, angle);
+      uniforms.color = color;
+      webglUtils.setUniforms(axisProgramInfo, uniforms);
+      webglUtils.drawBufferInfo(gl, axisBufferInfo, gl.LINES);
+    }
+  }
+}
+
+main();
+</script>
+</html>
