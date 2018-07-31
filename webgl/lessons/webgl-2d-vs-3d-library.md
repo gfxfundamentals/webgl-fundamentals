@@ -184,7 +184,7 @@ library.  You use them for math whether or not that math is 1D, 2D, 3D,
 whatever. But ultimately, WebGL only rasterizes. You have to provide it
 with clipspace coordinates that represent what you want drawn. Sure
 you provide a x,y,z,w and it divides by W before rendering but that's
-hardly enough to qualify WebGL as a 3D library. In the 3D librares you
+hardly enough to qualify WebGL as a 3D library. In the 3D libraries you
 supply 3D data, the libraries take care of calculating clipspace points from 3D.
 
 I hope you at least understand where I'm coming from when I say WebGL is
