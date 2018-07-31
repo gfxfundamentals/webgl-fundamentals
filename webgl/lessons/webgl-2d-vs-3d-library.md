@@ -174,7 +174,7 @@ the Canvas version loops over the vertices, does the math WE SUPPLIED and
 draws some lines in 2D. The WebGL version does the same thing except the math
 WE SUPPLIED is in GLSL and executed by the GPU.
 
-The point of this last demostration is to show that effectively WebGL is
+The point of this last demonstration is to show that effectively WebGL is
 just a rasterization engine, similar to Canvas 2D. Sure
 WebGL does have features that help you implement 3D.  WebGL has a depth
 buffer which makes depth sorting far easier than a system without.  WebGL
