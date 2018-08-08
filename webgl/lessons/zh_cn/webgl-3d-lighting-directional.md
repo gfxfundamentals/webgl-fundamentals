@@ -475,7 +475,7 @@ v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
 </pre>
 <p>由于 <code>w</code> 在相乘前被赋值为 0，所以在相乘后负责平移的部分与 0 相乘被移除了。
 我认为这可能是更常用的方式，mat3 的做法只是对我来说更简洁但我经常用前一种方法。</p>
-<p>第二种解决方案会将<code>u_worldInverseTranspose</code>转换成<code>mat3</code>。
+<p>当然另一种解决方案是将<code>u_worldInverseTranspose</code>直接构造成<code>mat3</code>。
 这有两个不能这么做的理由，第一个是我们可能需要一个完整的 <code>u_worldInverseTranspose</code>
-对象传递一个<code>mat4</code>给还要给其他地方使用，另一个是我们在JavaScript中的所有矩阵方法都是针对 4x4 的矩阵，由于编译的原因没有必要在 4x4 和 3x3 进行多余转换。</p>
+对象传递一个<code>mat4</code>给还要给其他地方使用，另一个是我们在JavaScript中的所有矩阵方法都是针对 4x4 的矩阵，如果没有其他特别的需求，没有必要构造一个3x3的矩阵，或者是把 4x4 转换成 3x3 。</p>
 </div>
