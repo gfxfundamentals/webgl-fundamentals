@@ -240,8 +240,7 @@ is setting a translation and asking it to draw.  Even if our geometry had
 tens of thousands of points the main code would stay the same.
 
 If you want you can compare [the version that uses the complex JavaScript
-above to update all the points](../webgl-2d-geometry-translate.html"
-target="_blank).
+above to update all the points](../webgl-2d-geometry-translate.html).
 
 I hope this example was not too obvious. On the other hand please
 keep reading as we'll eventually get to a much better way to do this.

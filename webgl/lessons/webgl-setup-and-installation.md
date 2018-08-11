@@ -54,7 +54,7 @@ It should print something like
 
 Then in your browser go to [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/).
 
-If you don't specify a path then http-server will server the current folder.
+If you don't specify a path then http-server will serve the current folder.
 
 ## Using your Browsers Developer Tools
 
