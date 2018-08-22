@@ -462,7 +462,7 @@ requires 1 draw call to draw the shape instead of 1 draw call per texture
 as it might if we split it into planes.
 
 A few other very importanting things you might want to know about textures.
-One is [how to use 2 or more textures at once](webgl-2-texutres.html). Another
+One is [how to use 2 or more textures at once](webgl-2-textures.html). Another
 is [how to use images from other domains](webgl-cors-permission.html). And 
 one more is [perspective correct texture mapping](webgl-3d-perspective-correct-texturemapping.html) which in some ways
 is trivia but it's good to know.
