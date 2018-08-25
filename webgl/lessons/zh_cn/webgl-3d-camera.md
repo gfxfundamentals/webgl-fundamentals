@@ -147,7 +147,7 @@ for (var ii = 0; ii < numFs; ++ii) {
 在任何情况下我们可以通过叉乘<span style="color: blue;">`zAxis`</span>
 和<span style="color: gray;">`up`</span> 得到相机的<span style="color:red;">xAxis</span>。
 
-{{{diagram url="./resources/cross-product-diagram.html?mode=1" caption="<span style='color:blue;'>zAxis</span> 叉乘 <span style='color:gray;'>up</span> = <span style='color:red;'>xAxis</span>" }}}
+{{{diagram url="./resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> 叉乘 <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span>" }}}
 
 现在我们有了 <span style="color:red;">`xAxis`</span> ，
 可以叉乘 <span style="color:blue;">`zAxis`</span> 和 <span style="color:red;">`xAxis`</span>

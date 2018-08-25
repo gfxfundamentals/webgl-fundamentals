@@ -111,7 +111,7 @@ Je n'ai aucune idée de ce qu'est un produit vectoriel en maths. Mais je sais qu
 Dans tous les cas si on calule le produit vectoriel de notre <span style="color: blue;">`axeZ`</span> avec
 <span style="color: gray;">`vertical`</span> on aura l'<span style="color:red;">axeX</span> de la caméra.
 
-{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="Produit vectoriel de l'<span style='color:blue;'>axeZ</span> avec <span style='color:gray;'>vertical</span> = <span style='color:red;'>axeX</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="Produit vectoriel de l'<span style='color:gray;'>vertical</span> avec <span style='color:blue;'>axeZ</span> = <span style='color:red;'>axeX</span>" }}}
 
 Et maintenant qu'on a l'<span style="color:red;">`axeX`</span> on peut faire le produit vectoriel entre l'<span style="color:blue;">`axeZ`</span> et l'<span style="color:red;">`axeX`</span>
 qui nous donne l'<span style="color:green;">`axeY`</span> de la caméra. 

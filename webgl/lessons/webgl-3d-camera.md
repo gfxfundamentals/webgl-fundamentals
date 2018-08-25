@@ -190,7 +190,7 @@ compute the cross product in, you'll get the opposite answer.
 In any case if we compute the cross product of our <span style="color: blue;">`zAxis`</span> and
 <span style="color: gray;">`up`</span> we'll get the <span style="color:red;">xAxis</span> for the camera.
 
-{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:blue;'>zAxis</span> cross <span style='color:gray;'>up</span> = <span style='color:red;'>xAxis</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> cross <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span>" }}}
 
 And now that we have the <span style="color:red;">`xAxis`</span> we can cross the <span style="color:blue;">`zAxis`</span> and the <span style="color:red;">`xAxis`</span>
 which will give us the camera's <span style="color:green;">`yAxis`</span>

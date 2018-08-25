@@ -155,7 +155,7 @@ for (var ii = 0; ii < numFs; ++ii) {
 </style>
 いずれにせよ、<span class="zaxis">z軸</span>と<span class="up">上</span>を外積するとカメラの<span class="xaxis">x軸</span>が出る。
 
-{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span class='zaxis'>z軸</span>と<span class='up'>上</span>の外積 = <span class='xaxis'>x軸</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span class='up'>上</span>と<span class='zaxis'>z軸</span>の外積 = <span class='xaxis'>x軸</span>" }}}
 
 <span class="xaxis">x軸</span>が出来たら<span class="zaxis">z軸</span>と<span class="xaxis">x軸</span>を外積したら<span class="yaxis">y軸</span>を計算出来る。
 

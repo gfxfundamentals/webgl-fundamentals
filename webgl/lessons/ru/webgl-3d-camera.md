@@ -189,7 +189,7 @@ for (var ii = 0; ii < numFs; ++ii) {
 и <span style="color: gray;">`up`</span> мы получим <span style="color:red;">xAxis</span>
 для камеры.
 
-{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:blue;'>zAxis</span> умножить на <span style='color:gray;'>up</span> = <span style='color:red;'>xAxis</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> умножить на <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span>" }}}
 
 И теперь, когда у нас есть <span style="color:red;">`xAxis`</span>, мы можем умножить
 <span style="color:blue;">`zAxis`</span> и <span style="color:red;">`xAxis`</span>,
