@@ -64,7 +64,11 @@ You provide your 2 "shaders" to do this. A Vertex shader which provides the
 clipspace coordinates and a fragment shader that provides the color.
 
 Clipspace coordinates always go from -1 to +1 no matter what size your
-canvas is. Here is a simple WebGL example that shows WebGL in its simplest form.
+canvas is.
+
+<div class="webgl_center"><img src="resources/clipspace.svg" style="width: 400px"></div>
+
+Here is a simple WebGL example that shows WebGL in its simplest form.
 
 Let's start with a vertex shader
 
