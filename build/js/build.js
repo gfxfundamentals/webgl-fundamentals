@@ -437,48 +437,53 @@ var Builder = function(outBaseDir, options) {
         return b.dateAdded - a.dateAdded;
       });
 
-      var feed = new Feed({
-        title:          g_langInfo.title,
-        description:    g_langInfo.description,
-        link:           g_langInfo.link,
-        image:          'http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg',
-        date:           articles[0].dateModified.toDate(),
-        published:      articles[0].dateModified.toDate(),
-        updated:        articles[0].dateModified.toDate(),
-        author: {
-          name:       'WebGLFundamenals Contributors',
-          link:       'http://webglfundamentals.org/contributors.html',
-        },
-      });
-
-      articles.forEach(function(article, ndx) {
-        feed.addItem({
-          title:          article.title,
-          link:           "http://webglfundamentals.org" + article.dst_file_name,
-          description:    "",
-          author: [
-            {
-              name:       'WebGLFundamenals Contributors',
-              link:       'http://webglfundamentals.org/contributors.html',
-            },
-          ],
-          // contributor: [
-          // ],
-          date:           article.dateModified.toDate(),
-          published:      article.dateAdded.toDate(),
-          // image:          posts[key].image
+      if (articles.length) {
+        var feed = new Feed({
+          title:          g_langInfo.title,
+          description:    g_langInfo.description,
+          link:           g_langInfo.link,
+          image:          'http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg',
+          date:           articles[0].dateModified.toDate(),
+          published:      articles[0].dateModified.toDate(),
+          updated:        articles[0].dateModified.toDate(),
+          author: {
+            name:       'WebGLFundamenals Contributors',
+            link:       'http://webglfundamentals.org/contributors.html',
+          },
         });
 
-        addArticleByLang(article, options.lang);
-      });
+        articles.forEach(function(article, ndx) {
+          feed.addItem({
+            title:          article.title,
+            link:           "http://webglfundamentals.org" + article.dst_file_name,
+            description:    "",
+            author: [
+              {
+                name:       'WebGLFundamenals Contributors',
+                link:       'http://webglfundamentals.org/contributors.html',
+              },
+            ],
+            // contributor: [
+            // ],
+            date:           article.dateModified.toDate(),
+            published:      article.dateAdded.toDate(),
+            // image:          posts[key].image
+          });
 
-      try {
-        const outPath = path.join(g_outBaseDir, options.lessons, "atom.xml");
-        console.log("write:", outPath);
-        writeFileIfChanged(outPath, feed.render('atom-1.0'));
-      } catch (err) {
-        return Promise.reject(err);
+          addArticleByLang(article, options.lang);
+        });
+
+        try {
+          const outPath = path.join(g_outBaseDir, options.lessons, "atom.xml");
+          console.log("write:", outPath);
+          writeFileIfChanged(outPath, feed.render('atom-1.0'));
+        } catch (err) {
+          return Promise.reject(err);
+        }
+      } else {
+        console.log("no articles!");
       }
+
       return Promise.resolve();
     }).then(function() {
       // this used to insert a table of contents
