@@ -185,8 +185,9 @@ WebGLはテクスチャを参照する際、0.0から1.0の値を取る「テク
 「1.0」を比較して「より大きい方」で割る。
 「ぼかし」の際に行なった「平均値を求める」仕組みの拡張と考えればよいだろう。
 
-ここでは「畳み込み行列」についてこれ以上の説明はしないが、興味があれば
-[この記事](http://docs.gimp.org/en/plug-in-convmatrix.html)([日本語版](https://docs.gimp.org/ja/plug-in-convmatrix.html))がわかりやすいので、参考にするとよいだろう。
+「畳み込み行列」について、ここではこれ以上の説明はしないが、興味があれば
+[わかりやすい記事がある](https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html)
+([日本語版](https://docs.gimp.org/2.10/ja/gimp-filter-convolution-matrix.html))ので、参考にするとよいだろう。
 また、[この記事](http://www.codeproject.com/KB/graphics/ImageConvolution.aspx)では
 「畳み込み行列」をC++で実装したコードを見ることができる。
 

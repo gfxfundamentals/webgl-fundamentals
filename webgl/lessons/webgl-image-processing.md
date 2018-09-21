@@ -166,7 +166,7 @@ to do a bunch of common image processing. In this case we'll use a 3x3 kernel.
 A convolution kernel is just a 3x3 matrix where each entry in the matrix represents
 how much to multiply the 8 pixels around the pixel we are rendering. We then divide
 the result by the weight of the kernel (the sum of all values in the kernel) or 1.0,
-whichever is greater. [Here's a pretty good article on it](http://docs.gimp.org/en/plug-in-convmatrix.html).
+whichever is greater. [Here's a pretty good article on it](https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html).
 And [here's another article showing some actual code if you were to write this by
 hand in C++](http://www.codeproject.com/KB/graphics/ImageConvolution.aspx).
 
