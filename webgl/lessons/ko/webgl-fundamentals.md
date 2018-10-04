@@ -102,7 +102,7 @@ Vertex Shader부터 시작해봅시다.
 다음으로 필요한 것은 Fragment Shader 입니다.
 
     // Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
-    // mediump(중간 정도 정밀도)은 기본 값으로 좋습니다.
+    // mediump(중간 정도 정밀도)은 기본값으로 좋습니다.
     precision mediump float;
 
     void main() {
@@ -152,7 +152,7 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
     <script id="2d-fragment-shader" type="notjs">
 
       // Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
-      // mediump(중간 정도 정밀도)은 기본 값으로 좋습니다.
+      // mediump(중간 정도 정밀도)은 기본값으로 좋습니다.
       precision mediump float;
 
       void main() {
@@ -259,128 +259,129 @@ WebGL은 확정된 것들을 이용해서 최적화하려고 합니다.
 
 ## Rendering
 
-Before we draw we should resize the canvas to match its display size. Canvases just like Images have 2 sizes.
-The number of pixels actually in them and separately the size they are displayed. CSS determines the size
-the canvas is displayed. **You should always set the size you want a canvas to be with CSS** since it is far
-far more flexible than any other method.
+그리기 전에 canvas를 화면 크기와 일치하도록 조정해야 합니다.
+이미지처럼 canvas에는 2가지 크기가 있는데요.
+실제로 그 안에 있는 픽셀 수와 표시되는 크기를 개별적으로 나타냅니다.
+CSS는 canvas가 표시되는 크기를 결정하는데요.
+이건 다른 방법보다 훨씬 유연하기 떄문에 **항상 CSS로 원하는 Canvas 크기를 지정해야 합니다.**
 
-To make the number of pixels in the canvas match the size it's displayed
-[I'm using a helper function you can read about here](webgl-resizing-the-canvas.html).
+Canvas의 픽셀 수와 표시되는 크기를 일치하도록 만들기 위해 [여기에서 읽을 수 있는 도우미 함수를 쓰고 있습니다](webgl-resizing-the-canvas.html).
 
-In nearly all of these samples the canvas size is 400x300 pixels if the sample is run in its own window
-but stretches to fill the available space if it's inside an iframe like it is on this page.
-By letting CSS determine the size and then adjusting to match we easily handle both of these cases.
+여기 있는 대부분의 예제들은 window에서 실행할 경우 Canvas 크기가 400x300 픽셀이지만 iframe 내부에 있으면 사용 가능한 공간을 채우기 위해 늘어납니다.
+CSS가 크기를 결정하고 일치하도록 조정함으로써 우리는 이 두 가지 경우를 모두 쉽게 처리할 수 있습니다.
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-We need to tell WebGL how to convert from the clip space
-values we'll be setting `gl_Position` to back into pixels, often called screen space.
-To do this we call `gl.viewport` and pass it the current size of the canvas.
+우리는 `gl_Position`으로 설정될 clip 공간 값을 screen 공간이라고 불리는 픽셀로 변환하는 방법을 WebGL에게 알려줘야 합니다.
+이걸 하기 위해 `gl.viewport`을 호출하고 현재 Canvas 크기를 넘겨야 합니다.
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-This tells WebGL the -1 +1 clip space maps to 0 &lt;-&gt; `gl.canvas.width` for x and 0 &lt;-&gt; `gl.canvas.height`
-for y.
+이렇게 하면 -1 &lt;-&gt; +1 clip 공간이 x에 0 &lt;-&gt; `gl.canvas.width`, y에 0 &lt;-&gt; `gl.canvas.height`로 매핑됩니다.
 
-We clear the canvas. `0, 0, 0, 0` are red, green, blue, alpha respectively so in this case we're making the canvas transparent.
+Canvas를 꺠끗하게 지워봅시다.
+`0, 0, 0, 0`은 각각 빨강, 초록, 파랑, 투명도이므로 이 경우 canvas를 투명하게 만듭니다.
 
-    // Clear the canvas
+    // Canvas 지우기
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-We tell WebGL which shader program to execute.
+WebGL에게 Shader Program을 실행하라고 지시합니다.
 
-    // Tell it to use our program (pair of shaders)
+    // Program(Shader 씽) 사용 지시
     gl.useProgram(program);
 
-Next we need to tell WebGL how to take data from the buffer we setup above and supply it to the attribute
-in the shader. First off we need to turn the attribute on
+다음으로 WebGL에게 우리가 위에서 설정한 버퍼에서 데이터를 가져와 shader의 attribute에 공급하는 방법을 알려줘야 하는데요.
+우선 attribute를 활성화시킬 필요가 있습니다.
 
     gl.enableVertexAttribArray(positionAttributeLocation);
 
-Then we need to specify how to pull the data out
+그 다음 데이터를 어떻게 꺼낼지 지정합니다.
 
-    // Bind the position buffer.
+    // position buffer 할당
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    var size = 2;          // 2 components per iteration
-    var type = gl.FLOAT;   // the data is 32bit floats
-    var normalize = false; // don't normalize the data
-    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    var offset = 0;        // start at the beginning of the buffer
+    // attribute에게 positionBuffer의 데이터를 어떻게 꺼낼지 지시 (ARRAY_BUFFER)
+    var size = 2;          // 실행될 때마다 2개 구성 요소 사용
+    var type = gl.FLOAT;   // 데이터는 32bit 소수점
+    var normalize = false; // 정규화되지 않은 데이터
+    var stride = 0;        // 0 = 각 반복마다 size * sizeof(type)만큼 다음 위치로 이동
+    var offset = 0;        // buffer 시작점
     gl.vertexAttribPointer(
-        positionAttributeLocation, size, type, normalize, stride, offset)
+        positionAttributeLocation,
+        size,
+        type,
+        normalize,
+        stride,
+        offset
+    );
 
-A hidden part of `gl.vertexAttribPointer` is that it binds the current `ARRAY_BUFFER`
-to the attribute. In other words now this attribute is bound to
-`positionBuffer`. That means we're free to bind something else to the `ARRAY_BUFFER` bind point.
-The attribute will continue to use `positionBuffer`.
+`gl.vertexAttribPointer`의 숨겨진 부분은 현재 `ARRAY_BUFFER`를 attribute에 할당한다는 것 입니다.
+다시 말해서 지금 attribute는 `positionBuffer`에 할당됩니다.
+이건 우리가 자유롭게 다른 것들을 `ARRAY_BUFFER` bind point에 할당할 수 있다는 걸 의미합니다.
+attribute는 `positionBuffer`를 계속 사용합니다.
 
-note that from the point of view of our GLSL vertex shader the `a_position` attribute is a `vec4`
+참고로 GLSL vertex shader 관점에서 `a_position` 속성은 `vec4`입니다.
 
     attribute vec4 a_position;
 
-`vec4` is a 4 float value. In JavaScript you could think of it something like
-`a_position = {x: 0, y: 0, z: 0, w: 0}`. Above we set `size = 2`. Attributes
-default to `0, 0, 0, 1` so this attribute will get its first 2 values (x and y)
-from our buffer. The z, and w will be the default 0 and 1 respectively.
+`vec4`는 4개의 소수점 값입니다.
+JavaScript에서 `a_position = {x: 0, y: 0, z: 0, w: 0}`와 비슷하다고 생각하시면 됩니다.
+위에서 저희는 `size = 2`라고 설정했는데요.
+Attribute에서 기본값은 `0, 0, 0, 1`이기 때문에 버퍼에서 처음 2개 값(x와 y)을 가져올 겁니다.
+그리고 z와 w는 각각 0과 1의 기본값을 가질 겁니다.
 
-After all that we can finally ask WebGL to execute our GLSL program.
+이제 우리는 드디어 WebGL에게 GLSL program을 실행해달라고 요청할 수 있습니다.
 
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     var count = 3;
     gl.drawArrays(primitiveType, offset, count);
 
-Because the count is 3 this will execute our vertex shader 3 times. The first time `a_position.x` and `a_position.y`
-in our vertex shader attribute will be set to the first 2 values from the positionBuffer.
-The 2nd time `a_position.xy` will be set to the 2nd two values. The last time it will be
-set to the last 2 values.
+count가 3이기 때문에 vertex shader는 세 번 실행될 겁니다.
+먼저 vertex shader의 `a_position.x`와 `a_position.y` 속성이 positionBuffer의 처음 두 값으로 설정됩니다.
+두 번째로 `a_position.xy`가 그 다음 두 값으로 설정됩니다.
+끝으로 마지막에 있는 두 값으로 설정됩니다.
 
-Because we set `primitiveType` to `gl.TRIANGLES`, each time our vertex shader is run 3 times
-WebGL will draw a triangle based on the 3 values we set `gl_Position` to. No matter what size
-our canvas is those values are in clip space coordinates that go from -1 to 1 in each direction.
+`primitiveType`을 `gl.TRIANGLES`로 설정했기 때문에, vertex shader가 세 번 실행될 때마다 WebGL은 `gl_Position`에 설정한 세 값에 따라 삼각형을 그립니다.
+Canvas 크기에 상관없이 이 값들은 clip 공간 좌표에 있으며 방향에 따라 -1 ~ 1로 바뀝니다.
 
-Because our vertex shader is simply copying our positionBuffer values to `gl_Position` the
-triangle will be drawn at clip space coordinates
+Vertex Shader는 단순히 positionBuffer 값을 `gl_Position` 복사하기 때문에 삼각형은 clip 공간 좌표에 그려질 겁니다.
 
       0, 0,
       0, 0.5,
       0.7, 0,
 
-Converting from clip space to screen space if the canvas size
-happened to be 400x300 we'd get something like this
+clip 공간에서 화면 공간으로 전환할 때 canvas 크기가 400x300라면 다음과 같이 표시됩니다.
 
-     clip space      screen space
+     clip 공간           화면 공간
        0, 0       ->   200, 150
        0, 0.5     ->   200, 225
      0.7, 0       ->   340, 150
 
-WebGL will now render that triangle. For every pixel it is about to draw WebGL will call our fragment shader.
-Our fragment shader just sets `gl_FragColor` to `1, 0, 0.5, 1`. Since the Canvas is an 8bit
-per channel canvas that means WebGL is going to write the values `[255, 0, 127, 255]` into the canvas.
+WebGL은 이제 삼각형을 렌더링할 겁니다.
+WebGL이 그릴 모든 픽셀은 fragment shader를 호출합니다.
+우리가 작성한 fragment shader는 단순히 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
+Canvas는 채널 당 8bit이기 떄문에 WebGL은 `[255, 0, 127, 255]` 값을 canvas에 작성합니다.
 
-Here's a live version
+여기 실시간 버전이 있습니다.
 
-{{{example url="../webgl-fundamentals.html" }}}
+{{{example url="../../webgl-fundamentals.html" }}}
 
-In the case above you can see our vertex shader is doing nothing
-but passing on our position data directly. Since the position data is
-already in clipspace there is no work to do. *If you want 3D it's up to you
-to supply shaders that convert from 3D to clipspace because WebGL is only
-a rasterization API*.
+위 예제에서 vertex shader는 데이터를 전달하는 것 외에는 아무것도 하지 않습니다.
+위치 데이터가 이미 clip 공간에 있기 때문에 아무것도 할 게 없습니다.
+*WebGL은 단지 rasterization API이기 때문에 만약 당신이 3D를 원한다면 3D에서 clip 공간으로 변환하는 shader를 작성해야합니다.*
 
-You might be wondering why does the triangle start in the middle and go to toward the top right.
-Clip space in `x` goes from -1 to +1. That means 0 is in the center and positive values will
-be to the right of that.
+아마 왜 삼각형이 중앙에서 시작해서 우측 상단으로 이동하는지 궁금할 겁니다.
+`x`의 clip 공간은 -1부터 1사이 입니다.
+그 말은 0이 중앙이고 양수 값이 우측이라는 걸 의미합니다.
 
-As for why it's on the top, in clip space -1 is at the bottom and +1 is at the top. That means
-0 is in the center and so positive numbers will be above the center.
+상단에 있는 이유는, clip 공간에서 -1은 하단에 +1은 상단에 있기 때문입니다.
+즉 0은 중앙이고 양수 값이 중앙보다 위에 있다는 걸 의미합니다.
 
-For 2D stuff you would probably rather work in pixels than clipspace so
-let's change the shader so we can supply the position in pixels and have
-it convert to clipspace for us. Here's the new vertex shader
+2D의 경우 clip 공간보다는 픽셀 단위로 작업해야 합니다.
+그러니까 픽셀 단위로 위치를 제공하고 clip 공간으로 변환할 수 있도록 shader를 수정해야 합니다.
+여기 새로운 vertex shader 입니다.
 
     <script id="2d-vertex-shader" type="notjs">
 
@@ -390,13 +391,13 @@ it convert to clipspace for us. Here's the new vertex shader
     +  uniform vec2 u_resolution;
 
       void main() {
-    +    // convert the position from pixels to 0.0 to 1.0
+    +    // 위치를 픽셀에서 0.0->1.0으로 변환
     +    vec2 zeroToOne = a_position / u_resolution;
     +
-    +    // convert from 0->1 to 0->2
+    +    // 0->1에서 0->2로 변환
     +    vec2 zeroToTwo = zeroToOne * 2.0;
     +
-    +    // convert from 0->2 to -1->+1 (clipspace)
+    +    // 0->2에서 -1->+1로 변환 (clip 공간)
     +    vec2 clipSpace = zeroToTwo - 1.0;
     +
     *    gl_Position = vec4(clipSpace, 0, 1);
@@ -404,19 +405,20 @@ it convert to clipspace for us. Here's the new vertex shader
 
     </script>
 
-Some things to notice about the changes. We changed `a_position` to a `vec2` since we're
-only using `x` and `y` anyway. A `vec2` is similar to a `vec4` but only has `x` and `y`.
+몇 가지 변경 사항들이 있습니다.
+`x`와 `y`만 사용하기 때문에 `a_position`을 `vec2`로 수정했습니다.
+`vec2`는 `vec4`와 비슷하지만 `x`와 `y`만을 가집니다.
 
-Next we added a `uniform` called `u_resolution`. To set that we need to look up its location.
+다음으로 `u_resolution`을 호출하는 `uniform`을 추가했습니다.
+설정하기 위해서는 위치를 찾아야 합니다.
 
     var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
 
-The rest should be clear from the comments. By setting `u_resolution` to the resolution
-of our canvas the shader will now take the positions we put in `positionBuffer` supplied
-in pixels coordinates and convert them to clip space.
+이제 남은 것은 주석을 명확하게 하는 겁니다.
+`u_resolution`을 canvas의 해상도로 설정함으로써 shader는 픽셀 좌표로 제공한 `positionBuffer`에 넣은 위치를 가져와 clip 공간으로 변환할 겁니다.
 
-Now we can change our position values from clip space to pixels. This time we're going to draw a rectangle
-made from 2 triangles, 3 points each.
+이제 우리는 위치 값을 clip 공간에서 픽셀로 바꿀 수 있습니다.
+이번에는 각각 3개의 점으로 이루어진 삼각형 두 개로 만든 사각형을 그려볼 겁니다.
 
     var positions = [
     *  10, 20,
@@ -428,9 +430,9 @@ made from 2 triangles, 3 points each.
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-And after we set which program to use we can set the value for the uniform we created.
-`gl.useProgram` is like `gl.bindBuffer` above in that it sets the current program. After
-that all the `gl.uniformXXX` functions set uniforms on the current program.
+사용할 프로그램을 설정한 뒤 우리는 생성한 uniform 값을 설정할 수 있습니다.
+`gl.useProgram`은 위의 `gl.bindBuffer`처럼 현재 program을 설정합니다.
+이후 모든 `gl.uniformXXX` 함수들은 현재 program의 uniform을 설정합니다.
 
     gl.useProgram(program);
 
@@ -439,40 +441,37 @@ that all the `gl.uniformXXX` functions set uniforms on the current program.
     // set the resolution
     gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
-And of course to draw 2 triangles we need to have WebGL call our vertex shader 6 times
-so we need to change the `count` to `6`.
+그리고 두 삼각형을 그리기 위해서는 vertex shader를 6번 호출해야 하므로 `count`를 `6`으로 바꿔야 합니다.
 
-    // draw
+    // 그리
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     *var count = 6;
     gl.drawArrays(primitiveType, offset, count);
 
-And here it is
+여기 예제가 있습니다.
 
-Note: This example and all following examples use [`webgl-utils.js`](/webgl/resources/webgl-utils.js)
-which contains functions to compile and link the shaders. No reason to clutter the examples
-with that [boilerplate](webgl-boilerplate.html) code.
+참고: 이 다음에 있는 모든 예제들은 컴파일하고 shader를 연결시키는 함수가 포함된 [`webgl-utils.js`](/webgl/resources/webgl-utils.js)를 사용합니다.
+예제를 복잡하게 할 필요없이 [boilerplate](webgl-boilerplate.html) 코드를 사용합시다.
 
 {{{example url="../webgl-2d-rectangle.html" }}}
 
-Again you might notice the rectangle is near the bottom of that area. WebGL considers positive Y as
-up and negative Y as down. In clip space the bottom left corner -1,-1. We haven't changed any signs
-so with our current math 0, 0 becomes the bottom left corner.
-To get it to be the more traditional top left corner used for 2d graphics APIs
-we can just flip the clip space y coordinate.
+다시 사각형이 해당 영역의 아래쪽에 있음을 알 수 있습니다.
+WebGL은 양수 Y를 위로, 음수 Y를 아래로 간주합니다.
+clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
+우린 아직 어떤 부호도 바꾸지 않았기 때문에 현재 0, 0은 좌측 하단이 됩니다.
+2D 그래픽 API를 사용해서 전통적인 왼쪽 상단 모서리를 얻으려면 clip 공간 y좌표를 뒤집어서 사용 할 수 있습니다.
 
     *   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
-And now our rectangle is where we expect it.
+이제 우리가 예상한 위치에 사각형이 놓였습니다.
 
 {{{example url="../webgl-2d-rectangle-top-left.html" }}}
 
-Let's make the code that defines a rectangle into a function so
-we can call it for different sized rectangles. While we're at it
-we'll make the color settable.
+사각형을 정의하는 코드를 함수로 만들어서 다른 크기의 사각형을 호출할 수 있도록 합시다.
+사각형을 그리는 동안 우리는 색상 설정이 가능하도록 할 것 입니다.
 
-First we make the fragment shader take a color uniform input.
+먼저 fragment shader가 색상 uniform 입력을 가져오도록 만듭니다.
 
     <script id="2d-fragment-shader" type="notjs">
       precision mediump float;
@@ -484,46 +483,40 @@ First we make the fragment shader take a color uniform input.
       }
     </script>
 
-And here's the new code that draws 50 rectangles in random places and random colors.
+여기 무작위 색상의 사각형 50개를 무작위 위치에 그리는 코드가 있습니다.
 
       var colorUniformLocation = gl.getUniformLocation(program, "u_color");
       ...
 
-      // draw 50 random rectangles in random colors
+      // 무작위 색상의 사각형 50개 무작위로 그리기
       for (var ii = 0; ii < 50; ++ii) {
-        // Setup a random rectangle
-        // This will write to positionBuffer because
-        // its the last thing we bound on the ARRAY_BUFFER
-        // bind point
+        // 무작위 사각형 설정
+        // 이건 ARRAY_BUFFER bind point에서 마지막으로 할당한 것이기 때문에 positionBuffer에 쓸 것입니다.
         setRectangle(
             gl, randomInt(300), randomInt(300), randomInt(300), randomInt(300));
 
-        // Set a random color.
+        // 무작위 색상 설정
         gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
 
-        // Draw the rectangle.
+        // 사각형 그리기
         gl.drawArrays(gl.TRIANGLES, 0, 6);
       }
     }
 
-    // Returns a random integer from 0 to range - 1.
+    // 0부터 -1사이 무작위 정수 반환
     function randomInt(range) {
       return Math.floor(Math.random() * range);
     }
 
-    // Fills the buffer with the values that define a rectangle.
-
+    // 사각형을 정의한 값들로 buffer 채우기
     function setRectangle(gl, x, y, width, height) {
       var x1 = x;
       var x2 = x + width;
       var y1 = y;
       var y2 = y + height;
 
-      // NOTE: gl.bufferData(gl.ARRAY_BUFFER, ...) will affect
-      // whatever buffer is bound to the `ARRAY_BUFFER` bind point
-      // but so far we only have one buffer. If we had more than one
-      // buffer we'd want to bind that buffer to `ARRAY_BUFFER` first.
-
+      // 참고: gl.bufferData(gl.ARRAY_BUFFER, ...)는 `ARRAY_BUFFER` bind point에 할당된 buffer에 영향을 주지만 지금싸지는 하나만 있었습니다.
+      // 만약에 우리가 하나 이상의 buffer를 가지고 있다면 그 buffer룰 먼저 `ARRAY_BUFFER`에 할당하고 싶을겁니다.
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
          x1, y1,
          x2, y1,
@@ -533,45 +526,36 @@ And here's the new code that draws 50 rectangles in random places and random col
          x2, y2]), gl.STATIC_DRAW);
     }
 
-And here's the rectangles.
+여기 사각형이 있습니다.
 
-{{{example url="../webgl-2d-rectangles.html" }}}
+{{{example url="../../webgl-2d-rectangles.html" }}}
 
-I hope you can see that WebGL is actually a pretty simple API.
-Okay, simple might be the wrong word. What it does is simple. It just
-executes 2 user supplied functions, a vertex shader and fragment shader and
-draws triangles, lines, or points.
-While it can get more complicated to do 3D that complication is
-added by you, the programmer, in the form of more complex shaders.
-The WebGL API itself is just a rasterizer and conceptually fairly simple.
+WebGL이 실제로는 아주 간단한 API라고 보셨기를 바랍니다.
+네. 간단하다는 말은 아마 틀릴지도 모르지만 하는 일은 간단합니다.
+그저 사용자가 작성한 vertex shader와 fragment shader를 실행시키고 점, 선, 삼각형들을 그릴 뿐 입니다.
+프로그래머인 여러분이 복잡한 3D를 만들기 위해 더 복잡한 shader를 작성할 수 있습니다.
+하지만 WebGL API는 rasterizer 할 뿐이며 개념적으로 꽤 간단합니다.
 
-We covered a small example that showed how to supply data in an attribute and 2 uniforms.
-It's common to have multiple attributes and many uniforms. Near the top of this article
-we also mentioned *varyings* and *textures*. Those will show up in subsequent lessons.
+우리는 어떻게 데이터를 attribute와 두 uniform에 제공하는지 보여주는 작은 예제를 다뤘습니다.
+이 글의 맨위에서 varyings 과 textures에 대해서 언급을 했습니다. 이것들은 이후의 수업에서 소개가 될 것입니다.
+여러 attribute와 많은 uniform을 가지는 것이 일반적입니다.
+이 글을 서두에서 *varying*과 *texture*를 언급했습니다.
+이것들은 이후 수업에서 소개하겠습니다.
 
-Before we move on I want to mention that for *most* applications updating
-the data in a buffer like we did in `setRectangle` is not common. I used that
-example because I thought it was easiest to explain since it shows pixel coordinates
-as input and demonstrates doing a small amount of math in GLSL. It's not wrong, there
-are plenty of cases where it's the right thing to do, but you should [keep reading to find out
-the more common way to position, orient and scale things in WebGL](webgl-2d-translation.html).
+계속하기 전에 대부분의 어플리케이션은 `setRectangle`에서 했던 것 처럼 buffer의 데이터를 업데이트하는 것이 일반적이지 않다는 것을 말하고 싶습니다.
+이를 사용했던 것은 예제에서 입력을 픽셀 좌표를 표시하고 GLSL에서 간단한 수학을 사용하는 것을 보여주기 때문에 이것을 설명하는데 쉬운 방법이라고 생각했기 때문입니다. 
+이게 틀린 것은 아니고, 올바르게 하는 많은 경우가 있지만 [WebGL에서 물체의 위치, 방향, 크기를 지정하는 일반적인 방법을 찾으려면 여기를 방문하십시오](webgl-2d-translation.html).
 
-If you're new to web development or even if you're not please check out [Setup and Installation](webgl-setup-and-installation)
-for some tips on how to do WebGL development.
+웹 개발이 처음이든 아니든 [설치 및 설정](webgl-setup-and-installation)에서 WebGL 개발 방법에 대한 팁을 확인하십시오.
 
-If you're 100% new to WebGL and have no idea what GLSL is or shaders or what the GPU does
-then checkout [the basics of how WebGL really works](webgl-how-it-works.html).
+WebGL을 완전히 새로 배우고 GLSL 또는 쉐이더나 GPU가 무엇을 하는지 전혀 모르는 경우 [WebGL 실제 작동 원리 기초](webgl-how-it-works.html)를 확인하십시오.
 
-You should also, at least briefly read about [the boilerplate code used here](webgl-boilerplate.html)
-that is used in most of the examples. You should also at least skim
-[how to draw mulitple things](webgl-drawing-multiple-things.html) to give you some idea
-of how more typical WebGL apps are structured because unfortunately nearly all the examples
-only draw one thing and so do not show that structure.
+대부분의 예제에서 사용된 [여기서 사용한 boilerplate 코드](webgl-boilerplate.html)를 최소한 간단하게 읽어야합니다.
+또한 거의 모든 예제들은 오직 하나만 그리고 구조가 어떻게 되있는지 볼 수 없기 때문에 일반적인 WebGL 앱이 구조화 되어 있는지에 대한 어떻게 몇가지 아이디어를 얻기 위해 [여러가지를 그리는 법](webgl-drawing-multiple-things.html)을 봐야 합니다.
 
-Otherwise from here you can go in 2 directions. If you are interested in image procesing
-I'll show you [how to do some 2D image processing](webgl-image-processing.html).
-If you are interested in learning about translation,
-rotation and scale and eventually 3D then [start here](webgl-2d-translation.html).
+아니면 2가지 방향으로 갈 수 있습니다.
+이미지 처리에 관심이 있다면 [몇 가지 2D 이미지 처리 방법](webgl-image-processing.html)를 보시면 됩니다.
+위치, 회전, 크기에 대하여 관심이 있다면 [여기서 시작하시면 됩니다](webgl-2d-translation.html).
 
 <div class="webgl_bottombar">
     <h3>What does type="notjs" mean?</h3>
