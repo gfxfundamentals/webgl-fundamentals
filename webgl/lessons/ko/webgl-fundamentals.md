@@ -558,18 +558,15 @@ WebGL을 완전히 새로 배우고 GLSL 또는 쉐이더나 GPU가 무엇을 �
 위치, 회전, 크기에 대하여 관심이 있다면 [여기서 시작하시면 됩니다](webgl-2d-translation.html).
 
 <div class="webgl_bottombar">
-    <h3>What does type="notjs" mean?</h3>
+    <h3>type="notjs"가 무슨 뜻인가요?</h3>
     <p>
-<code>&lt;script&gt;</code> tags default to having JavaScript in them.
-You can put no type or you can put <code>type="javascript"</code> or
-<code>type="text/javascript"</code> and the browser will interpret the
-contents as JavaScript. If you put anything for else for <code>type</code> the browser ignores the
-contents of the script tag. In other words <code>type="notjs"</code>
-or <code>type="foobar"</code> have no meaning as far as the browser
-is concerned.
+<code>&lt;script&gt;</code> 태그는 기본적으로 JavaScript가 있습니다.
+type을 넣지 않거나 <code>type="javascript"</code> 또는 <code>type="text/javascript"</code>라고 넣으면 브라우저는 내용을 JavaScript로 해석합니다.
+만약 다른 <code>type</code>을 넣으면 브라우저는 스크립트 태그의 내용을 무시합니다.
+말인즉슨 <code>type="notjs"</code> 또는 <code>type="foobar"</code> 브라우저에서 아무런 의미가 없습니다.
     </p>
-    <p>This makes the shaders easy to edit.
-Other alternatives include string concatenations like
+    <p>이건 shader를 수정하기 쉽게 만들어줍니다.
+다른 대안은 다음과 같은 문자열을 연결해서 포함하는 겁니다.
     </p>
 <pre class="prettyprint">
   var shaderSource =
@@ -577,8 +574,8 @@ Other alternatives include string concatenations like
     "  gl_FragColor = vec4(1,0,0,1);\n" +
     "}";
 </pre>
-    <p>or we could load shaders with ajax requests but that is slow and asynchronous.</p>
-    <p>A more modern alternative would be to use multiline template literals.</p>
+    <p>또는 ajax 요청으로 shader를 가져올 수 있지만 느리고 비동기 통신입니다.</p>
+    <p>한 가지 더 현대적인 대안은 multiline template literal을 사용하는 겁니다.</p>
 <pre class="prettyprint">
   var shaderSource = `
     void main() {
@@ -586,9 +583,8 @@ Other alternatives include string concatenations like
     }
   `;
 </pre>
-    <p>Multiline template literals work in all browsers that support WebGL.
-Unfortunately they don't work in really old browsers so if you care
-about supporting a fallback for those browsers you might not want to
-use multiline template literals or you might want to use <a href="https://babeljs.io/">a transpiler</a>.
+    <p>Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 동작합니다.
+하지만 불행하게도 오래된 브라우저에서는 동작하지 않습니다.
+그러니 만약 이런 브라우저들을 지원해야 한다면 multiline template literal을 사용하지 않거나 <a href="https://babeljs.io/">transpiler</a>를 사용해야 합니다.
     </p>
 </div>
