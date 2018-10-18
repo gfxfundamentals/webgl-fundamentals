@@ -86,7 +86,7 @@ Istnieje prostsza droga. Zwyczajnie wgrać tą geometrię i wykonać przesunięc
 Oto nowe cieniowanie:
 
 <pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
