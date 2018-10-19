@@ -10,7 +10,7 @@ Description: WebGLの二次元拡大と縮小し方
 [前回のサンプル](webgl-2d-rotation.html)の更新はこれである。
 
 ```
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;

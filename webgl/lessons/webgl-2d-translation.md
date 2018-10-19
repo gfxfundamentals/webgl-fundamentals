@@ -140,7 +140,7 @@ the shader.
 Here's the new shader
 
 ```
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
