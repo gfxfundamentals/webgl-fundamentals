@@ -83,9 +83,9 @@ Vertex Shader부터 시작해봅시다.
     // *** PSEUDO CODE!! ***
 
     var positionBuffer = [
-      0, 0, 0, 0,
-      0, 0.5, 0, 0,
-      0.7, 0, 0, 0,
+        0,   0, 0, 0,
+        0, 0.5, 0, 0,
+      0.7,   0, 0, 0,
     ];
     var attributes = {};
     var gl_Position;
@@ -94,12 +94,12 @@ Vertex Shader부터 시작해봅시다.
       var stride = 4;
       var size = 4;
       for (var i = 0; i < count; ++i) {
-         // positionBuffer의 다음 값 4개를 a_position 속성에 복사합니다.
-         const start = (offset + i) * stride;
-         attributes.a_position = positionBuffer.slice(start, start + size);
-         runVertexShader();
-         ...
-         doSomethingWith_gl_Position();
+        // positionBuffer의 다음 값 4개를 a_position 속성에 복사합니다.
+        const start = (offset + i) * stride;
+        attributes.a_position = positionBuffer.slice(start, start + size);
+        runVertexShader();
+        ...
+        doSomethingWith_gl_Position();
     }
 
 실제로는 `positionBuffer`가 2진 데이터(아래 참조)로 전환되기 때문에 그렇게 간단하지 않습니다.
@@ -241,8 +241,8 @@ bind point를 WebGL 내부의 전역 변수라고 생각하시면 됩니다.
 
     // 2d point 3개
     var positions = [
-      0, 0,
-      0, 0.5,
+        0, 0,
+        0, 0.5,
       0.7, 0,
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
@@ -312,12 +312,12 @@ WebGL에게 Shader Program을 실행하라고 지시합니다.
     var stride = 0;        // 0 = 반복할 때마다 size * sizeof(type)만큼 다음 위치로 이동
     var offset = 0;        // buffer 시작점
     gl.vertexAttribPointer(
-        positionAttributeLocation,
-        size,
-        type,
-        normalize,
-        stride,
-        offset
+      positionAttributeLocation,
+      size,
+      type,
+      normalize,
+      stride,
+      offset
     );
 
 `gl.vertexAttribPointer`의 숨겨진 부분은 현재 `ARRAY_BUFFER`를 attribute에 할당한다는 겁니다.
@@ -352,16 +352,16 @@ Canvas 크기에 상관없이 이 값들은 clip 공간 좌표에 있으며 방�
 
 Vertex Shader는 단순히 positionBuffer 값을 `gl_Position`에 복사하기 때문에 삼각형은 clip 공간 좌표에 그려질 겁니다.
 
-      0, 0,
-      0, 0.5,
+        0, 0,
+        0, 0.5,
       0.7, 0,
 
 clip 공간에서 화면 공간으로 전환할 때 canvas 크기가 400x300이라면 다음과 같이 표시됩니다.
 
-     clip 공간           화면 공간
-       0, 0       ->   200, 150
-       0, 0.5     ->   200, 225
-     0.7, 0       ->   340, 150
+     clip 공간         화면 공간
+       0, 0     ->   200, 150
+       0, 0.5   ->   200, 225
+     0.7, 0     ->   340, 150
 
 WebGL은 이제 삼각형을 렌더링할 겁니다.
 WebGL이 그릴 모든 픽셀은 fragment shader를 호출합니다.
@@ -489,22 +489,32 @@ clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
 
 여기 무작위 색상의 사각형 50개를 무작위 위치에 그리는 코드가 있습니다.
 
-      var colorUniformLocation = gl.getUniformLocation(program, "u_color");
-      ...
+    var colorUniformLocation = gl.getUniformLocation(program, "u_color");
+    ...
 
-      // 무작위 색상의 사각형 50개 무작위로 그리기
-      for (var ii = 0; ii < 50; ++ii) {
-        // 무작위 사각형 설정
-        // 이건 ARRAY_BUFFER bind point에서 마지막으로 할당한 것이기 때문에 positionBuffer에 쓸 것입니다.
-        setRectangle(
-            gl, randomInt(300), randomInt(300), randomInt(300), randomInt(300));
+    // 무작위 색상의 사각형 50개 무작위로 그리기
+    for (var ii = 0; ii < 50; ++ii) {
+      // 무작위 사각형 설정
+      // 이건 ARRAY_BUFFER bind point에서 마지막으로 할당한 것이기 때문에 positionBuffer에 쓸 것입니다.
+      setRectangle(
+        gl,
+        randomInt(300),
+        randomInt(300),
+        randomInt(300),
+        randomInt(300)
+      );
 
-        // 무작위 색상 설정
-        gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
+      // 무작위 색상 설정
+      gl.uniform4f(
+        colorUniformLocation,
+        Math.random(),
+        Math.random(),
+        Math.random(),
+        1
+      );
 
-        // 사각형 그리기
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
-      }
+      // 사각형 그리기
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
 
     // 0부터 -1사이 무작위 정수 반환
@@ -521,13 +531,18 @@ clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
 
       // 참고: gl.bufferData(gl.ARRAY_BUFFER, ...)는 `ARRAY_BUFFER` bind point에 할당된 buffer에 영향을 주지만 지금까지는 하나만 있었습니다.
       // 만약 우리가 하나 이상의 buffer를 가지고 있다면 그 buffer를 먼저 `ARRAY_BUFFER`에 할당하고 싶을 겁니다.
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-         x1, y1,
-         x2, y1,
-         x1, y2,
-         x1, y2,
-         x2, y1,
-         x2, y2]), gl.STATIC_DRAW);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([
+          x1, y1,
+          x2, y1,
+          x1, y2,
+          x1, y2,
+          x2, y1,
+          x2, y2
+        ]),
+        gl.STATIC_DRAW
+      );
     }
 
 여기 사각형이 있습니다.
@@ -561,33 +576,30 @@ WebGL을 완전히 새로 배우고 GLSL 또는 쉐이더나 GPU가 무엇을 �
 위치, 회전, 크기에 대하여 관심이 있다면 [여기서 시작하시면 됩니다](webgl-2d-translation.html).
 
 <div class="webgl_bottombar">
-    <h3>type="notjs"가 무슨 뜻인가요?</h3>
-    <p>
-<code>&lt;script&gt;</code> 태그는 기본적으로 JavaScript가 있습니다.
+<h3>type="notjs"가 무슨 뜻인가요?</h3>
+<p><code>&lt;script&gt;</code> 태그는 기본적으로 JavaScript가 있습니다.
 type을 넣지 않거나 <code>type="javascript"</code> 또는 <code>type="text/javascript"</code>라고 넣으면 브라우저는 내용을 JavaScript로 해석합니다.
 만약 다른 <code>type</code>을 넣으면 브라우저는 스크립트 태그의 내용을 무시합니다.
-말인즉슨 <code>type="notjs"</code> 또는 <code>type="foobar"</code> 브라우저에서 아무런 의미가 없습니다.
-    </p>
-    <p>이건 shader를 수정하기 쉽게 만들어줍니다.
-다른 대안은 다음과 같은 문자열을 연결해서 포함하는 겁니다.
-    </p>
+말인즉슨 <code>type="notjs"</code> 또는 <code>type="foobar"</code> 브라우저에서 아무런 의미가 없습니다.</p>
+<p>이건 shader를 수정하기 쉽게 만들어줍니다.
+다른 대안은 다음과 같은 문자열을 연결해서 포함하는 겁니다.</p>
 <pre class="prettyprint">
-  var shaderSource =
-    "void main() {\n" +
-    "  gl_FragColor = vec4(1,0,0,1);\n" +
-    "}";
+var shaderSource = (
+  "void main() {\n" +
+  "  gl_FragColor = vec4(1,0,0,1);\n" +
+  "}"
+);
 </pre>
-    <p>또는 ajax 요청으로 shader를 가져올 수 있지만 느리고 비동기 통신입니다.</p>
-    <p>한 가지 더 현대적인 대안은 multiline template literal을 사용하는 겁니다.</p>
+<p>또는 ajax 요청으로 shader를 가져올 수 있지만 느리고 비동기 통신입니다.</p>
+<p>한 가지 더 현대적인 대안은 multiline template literal을 사용하는 겁니다.</p>
 <pre class="prettyprint">
-  var shaderSource = `
-    void main() {
-      gl_FragColor = vec4(1,0,0,1);
-    }
-  `;
+var shaderSource = `
+  void main() {
+    gl_FragColor = vec4(1,0,0,1);
+  }
+`;
 </pre>
-    <p>Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 동작합니다.
+<p>Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 동작합니다.
 하지만 불행하게도 오래된 브라우저에서는 동작하지 않습니다.
-그러니 만약 이런 브라우저들을 지원해야 한다면 multiline template literal을 사용하지 않거나 <a href="https://babeljs.io/">transpiler</a>를 사용해야 합니다.
-    </p>
+그러니 만약 이런 브라우저들을 지원해야 한다면 multiline template literal을 사용하지 않거나 <a href="https://babeljs.io/">transpiler</a>를 사용해야 합니다.</p>
 </div>
