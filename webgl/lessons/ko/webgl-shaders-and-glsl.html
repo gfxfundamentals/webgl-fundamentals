@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-shaders-and-glsl.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Shaders and GLSL" />
+<meta property="og:title" content="WebGL Shader 그리고 GLSL" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="What&#x27;s a shader and what&#x27;s GLSL" />
+<meta property="og:description" content="Shader와 GLSL이 뭔가요?" />
 <meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/ko/webgl-shaders-and-glsl.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Shaders and GLSL" />
+<meta name="twitter:title" content="WebGL Shader 그리고 GLSL" />
 <meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/ko/webgl-shaders-and-glsl.html" />
-<meta name="twitter:description" content="What&#x27;s a shader and what&#x27;s GLSL" />
+<meta name="twitter:description" content="Shader와 GLSL이 뭔가요?" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL Shaders and GLSL</title>
+<title>WebGL Shader 그리고 GLSL</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
@@ -79,12 +81,320 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Shaders and GLSL</h1>
+    <h1>WebGL Shader 그리고 GLSL</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송합니다 아직 이 글은 번역되지 않았습니다. <a href="https://github.com/greggman/webgl-fundamentals">번역 참여</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-shaders-and-glsl.html">영어 원문 링크</a>.</p>
+      <p>이 글은 <a href="webgl-fundamentals.html">WebGL 기초</a>에서 이어지는 글입니다.
+WebGL이 어떻게 동작하는지에 대해 읽어보신 적 없다면 <a href="webgl-how-it-works.html">이걸 먼저 읽어주세요</a>.</p>
+<p>우린 Shader와 GLSL에 대해서 얘기했지만 구체적인 세부 내용은 말하지 않았습니다.
+예제로 충분하길 바라지만 이번에 좀 더 명확하게 만들기 위해 노력해봅시다.</p>
+<p><a href="webgl-how-it-works.html">작동 원리</a>에서 언급했듯이 WebGL은 뭔가를 그릴 때 항상 shader 2개를 필요로 합니다.
+바로 <em>vertex shader</em>와 <em>fragment shader</em>입니다. 그리고 각각의 shader는 <em>함수</em>입니다.
+vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)에 연결되는데요.
+일반적인 WebGL 앱은 많은 shader program을 가지고 있습니다.</p>
+<h2 id="vertex-shader">Vertex Shader</h2>
+<p>Vertex Shader의 역할은 clip 공간 좌표를 생성하는 겁니다.
+항상 다음과 같은 양식을 따르는데</p>
+<pre><code>void main() {
+   gl_Position = doMathToMakeClipspaceCoordinates
+}
+</code></pre><p>shader는 각 vertex 마다 한 번씩 호출됩니다.
+호출될 때마다 특수 변수, <code>gl_Position</code>에 어떤 clip 공간 좌표를 설정해줘야 합니다.</p>
+<p>Vertex shader는 데이터가 필요합니다.
+데이터를 얻을 수 있는 방법에는 3가지가 있는데요.</p>
+<ol>
+<li><a href="#attribute">Attribute</a> (buffer에서 데이터를 가져옴)</li>
+<li><a href="#uniform">Uniform</a> (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)</li>
+<li><a href="#vertex-shader-texture">Texture</a> (pixel/texel의 데이터)</li>
+</ol>
+<h3 id="attribute">Attribute</h3>
+<p>가장 일반적인 방법은 buffer와 <em>attribute</em>를 사용하는 겁니다.
+<a href="webgl-how-it-works.html">작동 원리</a>에서 buffer와 attribute를 다뤘는데요.
+buffer를 만들고,</p>
+<pre><code>var buf = gl.createBuffer();
+</code></pre><p>buffer에 데이터를 넣습니다.</p>
+<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
+</code></pre><p>그러면, 초기화할 때 주어진 shader program으로 attribute의 위치를 찾습니다.</p>
+<pre><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
+</code></pre><p>그리고 렌더링할 때 WebGL에게 attribute 안에 있는 buffer에서 데이터를 어떻게 가져올지 알려줍니다.</p>
+<pre><code>// attribute의 buffer에서 데이터 가져오기 활성화
+gl.enableVertexAttribArray(positionLoc);
+
+var numComponents = 3;  // (x, y, z)
+var type = gl.FLOAT;    // 32bit 부동 소수점
+var normalize = false;  // 값 원본 그댜로 보존
+var offset = 0;         // buffer의 시작점에서 시작
+var stride = 0;         // 다음 vertex로 가기 위해 이동해야할 byte 수
+                        // 0 = 자료형과 numComponents에 따른 적절한 폭 사용 
+gl.vertexAttribPointer(
+   positionLoc,
+   numComponents,
+   type,
+   false,
+   stride,
+   offset
+);
+</code></pre><p><a href="webgl-fundamentals.html">WebGL 기초</a>에서 우리는 shader에 수학을 사용할 수 없고 직접 데이터를 넘길 수 있다는 것을 봤습니다</p>
+<pre><code>attribute vec4 a_position;
+
+void main() {
+   gl_Position = a_position;
+}
+</code></pre><p>buffer에 clip 공간 vertex를 넣으면 동작할 겁니다. </p>
+<p>Attribute는 자료형으로 <code>float</code>, <code>vec2</code>, <code>vec3</code>, <code>vec4</code>, <code>mat2</code>, <code>mat3</code>, 그리고 <code>mat4</code>를 사용할 수 있습니다.</p>
+<h3 id="uniform">Uniform</h3>
+<p>shader의 경우 uniform은 draw가 호출될 때 모든 vertex에서 동일하게 유지되는 전달 값입니다.
+간단한 예로 위 vertex shader에 offset을 추가할 수 있습니다.</p>
+<pre><code>attribute vec4 a_position;
++uniform vec4 u_offset;
+
+void main() {
+   gl_Position = a_position + u_offset;
+}
+</code></pre><p>이제 모든 vertex마다 특정한 값으로 offset을 지정할 수 있습니다.
+먼저 초기화 시 uniform의 위치를 찾아야합니다.</p>
+<pre><code>var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
+</code></pre><p>그런 다음 그리기 전에 uniform을 설정합니다.</p>
+<pre><code>gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 우측 절반으로 offset 지정
+</code></pre><p>참고로 uniform은 개별 shader program에 속합니다.
+만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면 uniform은 둘 다 고유한 위치와 자체 값을 가집니다.
+<code>gl.uniform???</code>을 호출하면 <em>현재 program</em>의 uniform만 설정됩니다.
+현재 program은 <code>gl.useProgram</code>에 넘긴 마지막 program 입니다.</p>
+<p>Uniform은 여러 자료형을 가질 수 있는데요.
+각각의 자료형에 대해 해당 함수를 호출하여 설정해야 합니다.</p>
+<pre><code>gl.uniform1f (floatUniformLoc, v);                 // float
+gl.uniform1fv(floatUniformLoc, [v]);               // float 또는 float 배열
+gl.uniform2f (vec2UniformLoc,  v0, v1);            // vec2
+gl.uniform2fv(vec2UniformLoc,  [v0, v1]);          // vec2 또는 vec2 배열
+gl.uniform3f (vec3UniformLoc,  v0, v1, v2);        // vec3
+gl.uniform3fv(vec3UniformLoc,  [v0, v1, v2]);      // vec3 또는 vec3 배열
+gl.uniform4f (vec4UniformLoc,  v0, v1, v2, v4);    // vec4
+gl.uniform4fv(vec4UniformLoc,  [v0, v1, v2, v4]);  // vec4 또는 vec4 배열
+
+gl.uniformMatrix2fv(mat2UniformLoc, false, [  4x element array ])  // mat2 또는 mat2 배열
+gl.uniformMatrix3fv(mat3UniformLoc, false, [  9x element array ])  // mat3 또는 mat3 배열
+gl.uniformMatrix4fv(mat4UniformLoc, false, [ 16x element array ])  // mat4 또는 mat4 배열
+
+gl.uniform1i (intUniformLoc,   v);                 // int
+gl.uniform1iv(intUniformLoc, [v]);                 // int 또는 int 배열
+gl.uniform2i (ivec2UniformLoc, v0, v1);            // ivec2
+gl.uniform2iv(ivec2UniformLoc, [v0, v1]);          // ivec2 또는 ivec2 배열
+gl.uniform3i (ivec3UniformLoc, v0, v1, v2);        // ivec3
+gl.uniform3iv(ivec3UniformLoc, [v0, v1, v2]);      // ivec3 또는 ivec3 배열
+gl.uniform4i (ivec4UniformLoc, v0, v1, v2, v4);    // ivec4
+gl.uniform4iv(ivec4UniformLoc, [v0, v1, v2, v4]);  // ivec4 또는 ivec4 배열
+
+gl.uniform1i (sampler2DUniformLoc,   v);           // sampler2D (texture)
+gl.uniform1iv(sampler2DUniformLoc, [v]);           // sampler2D 또는 sampler2D 배열
+
+gl.uniform1i (samplerCubeUniformLoc,   v);         // samplerCube (texture)
+gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 또는 samplerCube 배열
+</code></pre><p><code>bool</code>, <code>bvec2</code>, <code>bvec3</code>, 그리고 <code>bvec4</code>도 있는데요.
+<code>gl.uniform?f?</code> 또는 <code>gl.uniform?i?</code> 함수를 사용합니다.</p>
+<p>참고로 배열은 배열의 모든 uniform을 한번에 설정할 수 있습니다.
+예를들어</p>
+<pre><code>// in shader
+uniform vec2 u_someVec2[3];
+
+// in JavaScript at init time
+var someVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2&quot;);
+
+// at render time
+gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // set the entire array of u_someVec2
+</code></pre><p>하지만 배열의 요소를 개밸적으로 설정하고 싶다면 각 요소의 위치를 개별적으로 찾아야 합니다.</p>
+<pre><code>// JavaScript에서 초기화할 때
+var someVec2Element0Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[0]&quot;);
+var someVec2Element1Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[1]&quot;);
+var someVec2Element2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[2]&quot;);
+
+// 렌더링할 때
+gl.uniform2fv(someVec2Element0Loc, [1, 2]);  // 요소 0 설정
+gl.uniform2fv(someVec2Element1Loc, [3, 4]);  // 요소 1 설정
+gl.uniform2fv(someVec2Element2Loc, [5, 6]);  // 요소 2 설정
+</code></pre><p>마찬가지로 struct를 생성하면</p>
+<pre><code>struct SomeStruct {
+   bool active;
+   vec2 someVec2;
+};
+uniform SomeStruct u_someThing;
+</code></pre><p>각 필드를 개별적으로 찾을 수 있습니다.</p>
+<pre><code>var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
+var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
+</code></pre><h3 id="vertex-shader-texture">Vertex-Shader-Texture</h3>
+<p><a href="#fragment-shader-texture">Fragment Shader의 Texture</a>를 봐주세요.</p>
+<h2 id="fragment-shader">Fragment Shader</h2>
+<p>Fragment Shader의 역할은 rasterization 되는 현재 픽셀의 색상을 제공하는 것 입니다.
+항상 다음과 같은 양식을 따르는데</p>
+<pre><code>precision mediump float;
+
+void main() {
+   gl_FragColor = doMathToMakeAColor;
+}
+</code></pre><p>Fragment Shader는 각 픽셀마다 한 번씩 호출됩니다.
+호출될 때마다 특수 변수, <code>gl_FragColor</code>를 어떤 색상으로 설정해줘야 합니다.</p>
+<p>Fragment Shader는 데이터를 필요합니다.
+데이터를 받을 수 있는 방법에는 3가지가 있는데요.</p>
+<ol>
+<li><a href="#fragment-shader-uniform">Uniform</a> (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)</li>
+<li><a href="#fragment-shader-texture">Texture</a> (pixel/texel의 데이터)</li>
+<li><a href="#varying">Varying</a> (vertex shader에서 전달되고 보간된 데이터)</li>
+</ol>
+<h3 id="fragment-shader-uniform">Fragment-Shader-Uniform</h3>
+<p><a href="#uniform">Shader의 Uniform</a>을 봐주세요.</p>
+<h3 id="fragment-shader-texture">Fragment-Shader-Texture</h3>
+<p>Shader의 texture에서 값을 얻으려면 <code>sampler2D</code> uniform을 생성하고 GLSL 함수 <code>texture2D</code>를 사용해서 값을 추출해야 합니다.</p>
+<pre><code>precision mediump float;
+
+uniform sampler2D u_texture;
+
+void main() {
+   vec2 texcoord = vec2(0.5, 0.5)  // texture 중간에 있는 값 얻기
+   gl_FragColor = texture2D(u_texture, texcoord);
+}
+</code></pre><p>Texture에서 나오는 데이터는 <a href="webgl-3d-textures.html">많은 설정에 따라</a> 달라집니다.
+최소한 texture에 데이터를 생성하고 넣어야 하는데, 예를들어</p>
+<pre><code>var tex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, tex);
+var level = 0;
+var width = 2;
+var height = 1;
+var data = new Uint8Array([
+   255, 0, 0, 255,   // 빨강 pixel
+   0, 255, 0, 255,   // 초록 pixel
+]);
+gl.texImage2D(
+   gl.TEXTURE_2D,
+   level,
+   gl.RGBA,
+   width,
+   height,
+   0,
+   gl.RGBA,
+   gl.UNSIGNED_BYTE,
+   data
+);
+</code></pre><p>초기화할 때 shader program에 있는 uniform 위치를 찾습니다.</p>
+<pre><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
+</code></pre><p>렌더링할 때 texture unit에 texture를 할당합니다.</p>
+<pre><code>var unit = 5;  // texture unit 선택
+gl.activeTexture(gl.TEXTURE0 + unit);
+gl.bindTexture(gl.TEXTURE_2D, tex);
+</code></pre><p>그리고 texture를 할당한 unit을 shader에게 알려줍니다. </p>
+<pre><code>gl.uniform1i(someSamplerLoc, unit);
+</code></pre><h3 id="varying">Varying</h3>
+<p>Varying은 <a href="webgl-how-it-works.html">동작 원리</a>에 다룬 vertex shader에서 fragment shader로 값을 넘기는 방법입니다.</p>
+<p>Varying을 사용하려면 vertex 및 fragment shader에서 일치하는 varying을 선언해야 합니다.
+Vertex Shader의 vertex마다 어떤 값으로 varying을 설정합니다.
+WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader에 해당하는 varying으로 전달합니다.</p>
+<p>Vertex Shader</p>
+<pre><code>attribute vec4 a_position;
+
+uniform vec4 u_offset;
+
++varying vec4 v_positionWithOffset;
+
+void main() {
+  gl_Position = a_position + u_offset;
++  v_positionWithOffset = a_position + u_offset;
+}
+</code></pre><p>Fragment Shader</p>
+<pre><code>precision mediump float;
+
++varying vec4 v_positionWithOffset;
+
+void main() {
++  // clip 공간에서 (-1 &lt;-&gt; +1) 색상 공간으로 (0 -&gt; 1) 변환.
++  vec4 color = v_positionWithOffset * 0.5 + 0.5
++  gl_FragColor = color;
+}
+</code></pre><p>위 예제는 대게 말도 안되는 예제입니다.
+일반적으로 clip 공간 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
+그런데도 불구하고 위 코드는 동작하고 생삭을 만들어냅니다.</p>
+<h2 id="glsl">GLSL</h2>
+<p>GLSL는 Graphics Library Shader Language의 약자입니다.
+Shader가 바로 이것으로 작성되는데요.
+JavaScript에서는 흔히 볼 수 없는 특별한 고유 기능이 있습니다.
+그래픽을 rasterization 하기 위해서 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
+그래서 예를들어 <code>vec2</code>, <code>vec3</code>, 그리고 <code>vec4</code> 같은 자료형이 있습니다.
+이 자료형들은 각각 2개, 3개, 그리고 4개의 값을 가집니다.
+마찬가지로 행렬 2x2, 3x3, 그리고 4x4를 나타내는 <code>mat2</code>, <code>mat3</code> 그리고 <code>mat4</code>도 있습니다.
+scalar를 <code>vec</code>과 곱하는 것을 할 수 있습니다.</p>
+<pre><code>vec4 a = vec4(1, 2, 3, 4);
+vec4 b = a * 2.0;
+// 이제 b는 vec4(2, 4, 6, 8);
+</code></pre><p>마찬가지로 행렬 곱샘과 vector에 행렬 곱셈을 할 수 있습니다.</p>
+<pre><code>mat4 a = ???
+mat4 b = ???
+mat4 c = a * b;
+
+vec4 v = ???
+vec4 y = c * v;
+</code></pre><p>또한 vec의 일부를 선택하는 다양한 방법이 있는데요.</p>
+<p>vec4를 보면</p>
+<pre><code>vec4 v;
+</code></pre><ul>
+<li><code>v.x</code>는 <code>v.s</code>와 <code>v.r</code>과 <code>v[0]</code>과 같습니다.</li>
+<li><code>v.y</code>는 <code>v.t</code>와 <code>v.g</code>와 <code>v[1]</code>과 같습니다.</li>
+<li><code>v.z</code>는 <code>v.p</code>와 <code>v.b</code>와 <code>v[2]</code>와 같습니다.</li>
+<li><code>v.w</code>는 <code>v.q</code>와 <code>v.a</code>와 <code>v[3]</code>과 같습니다.</li>
+</ul>
+<p>vec 구성요소들을 <em>swizzle</em> 할 수 있기 때문에 구성요소를 교체하거나 반복할 수 있습니다.</p>
+<pre><code>v.yyyy
+</code></pre><p>이건 다음과 같습니다</p>
+<pre><code>vec4(v.y, v.y, v.y, v.y)
+</code></pre><p>마찬가지로</p>
+<pre><code>v.bgra
+</code></pre><p>이것도 다음과 같습니다</p>
+<pre><code>vec4(v.b, v.g, v.r, v.a)
+</code></pre><p>vec 또는 mat를 만들 때 한 번에 여러 부분을 제공할 수 있습니다.</p>
+<p>예를들면</p>
+<pre><code>vec4(v.rgb, 1)
+</code></pre><p>이건 다음과 같습니다</p>
+<pre><code>vec4(v.r, v.g, v.b, 1)
+</code></pre><p>또한</p>
+<pre><code>vec4(1)
+</code></pre><p>이것도 다음과 같습니다</p>
+<pre><code>vec4(1, 1, 1, 1)
+</code></pre><p>GLSL은 매우 엄격한 자료형입니다</p>
+<pre><code>float f = 1;  // ERROR 1은 int이고 float에 int를 할당할 수 없습니다.
+</code></pre><p>올바른 방법은 이것들입니다</p>
+<pre><code>float f = 1.0;      // float 사용
+float f = float(1)  // float에 integer를 cast
+</code></pre><p>위 예제에서 <code>vec4(v.rgb, 1)</code>는 <code>vec4</code>가 내부에서 <code>float(1)</code>로 cast 되기 때문에 <code>1</code>에 대해 문제를 제기하지 않습니다.</p>
+<p>GLSL은 많은 기능을 내장하고 있는데요.
+대부분이 여러 구성요소에서 동시에 작동합니다.
+예를들어</p>
+<pre><code>T sin(T angle)
+</code></pre><p>T는 <code>float</code>, <code>vec2</code>, <code>vec3</code> 또는 <code>vec4</code>가 될 수 있음을 뜻합니다.
+만약 <code>vec4</code>를 넘겨주면 각 구성요소의 sine(<code>vec4</code>)를 얻습니다.
+다시 말해 <code>v</code>가 <code>vec4</code>라면</p>
+<pre><code>vec4 s = sin(v);
+</code></pre><p>이건 다음과 같습니다</p>
+<pre><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
+</code></pre><p>가끔은 매개변수 하나가 부동 소수점이고 나머지는 <code>T</code>가 되는데요.
+말인즉슨 모든 구성요소에 부동 소수점이 적용된다는 걸 뜻합니다.
+예를들어 <code>v1</code>과 <code>v2</code>가 <code>vec4</code>이고 <code>f</code>는 부동 소수점이라면</p>
+<pre><code>vec4 m = mix(v1, v2, f);
+</code></pre><p>이건 다음과 같습니다</p>
+<pre><code>vec4 m = vec4(
+  mix(v1.x, v2.x, f),
+  mix(v1.y, v2.y, f),
+  mix(v1.z, v2.z, f),
+  mix(v1.w, v2.w, f));
+</code></pre><p><a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">WebGL Reference Card</a>의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
+만약 정말로 자세한 정보를 보고 싶다면 <a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL 사양</a>을 봐주세요.</p>
+<h2 id="-">총정리</h2>
+<p>그게 바로 이 모든 글들의 핵심입니다.
+WebGL은 다양한 shader를 생성하고, 데이터를 vertex에 제공한 다음 <code>gl.drawArrays</code> 또는 <code>gl.drawElements</code>를 호출합니다.
+그리고 WebGL이 vertex마다 현재 vertex shader를 호출하여 각 vertex를 처리하고 픽셀마다 현재 fragment shdaer를 호출하여 각 픽셀들을 렌더링하는 것에 대한 겁니다.</p>
+<p>실제로 shader를 생성하려면 몇 줄의 코드가 필요합니다.
+이 코드들은 대부분의 WebGL program에서 동작하므로 한 번 작성하면 꽤 많이 생략할 수 있습니다.
+<a href="webgl-boilerplate.html">GLSL shader를 컴파일하고 shader program에 연결하는 방법은 여기에서 다룹니다</a>.</p>
+<p>만약 여기서 시작한다면 2가지 방향으로 갈 수 있습니다.
+이미지 처리에 관심이 있다면 <a href="webgl-image-processing.html">2D 이미지 처리 방법</a>을 봐주세요.
+translation, rotation, scale 그리고 3D를 공부하는데 흥미가 있다면 <a href="webgl-2d-translation.html">여기서 시작해주세요</a>.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -100,12 +410,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>
+        <div id="toc">
+          <ul>
   <li>기초</li>
   <ul>
     <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">WebGL 기초</a></li>
     <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">WebGL 작동 원리</a></li>
-    <li><a href="/webgl/lessons/webgl-shaders-and-glsl.html">WebGL 셰이더와 GLSL</a></li>
+    <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">WebGL 셰이더와 GLSL</a></li>
   </ul>
   <li>이미지 처리</li>
   <ul>
@@ -185,6 +496,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>질문? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflow</a>로 물어봐주세요.</div>
+        <div>이슈/버그? <a href="http://github.com/greggman/webgl-fundamentals/issues">github</a>에 이슈를 만들어주세요.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL Shader 그리고 GLSL';
+            var disqus_title = 'WebGL Shader 그리고 GLSL';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
