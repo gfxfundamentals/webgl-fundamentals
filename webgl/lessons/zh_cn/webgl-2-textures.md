@@ -69,7 +69,7 @@ function main() {
 接下来修改着色器使用两个纹理，在这个例子中我们将两个纹理相乘。
 
 ```
-&lt;script id="2d-fragment-shader" type="x-shader/x-fragment"&gt;
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 // 纹理
@@ -84,7 +84,7 @@ void main() {
    vec4 color1 = texture2D(u_image1, v_texCoord);
    gl_FragColor = color0 * color1;
 }
-&lt;/script&gt;
+</script>
 ```
 
 需要创建两个WebGL纹理对象。

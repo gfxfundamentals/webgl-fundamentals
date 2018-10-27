@@ -80,7 +80,7 @@ Of course how you decide to handle errors might be different.  Throwing
 exceptions might not be the best way to handle things.  Still, those few
 lines of code are pretty much the same in nearly every WebGL program.
 
-I like to store my shaders in non javascript &lt;script&gt; tags.  It makes
+I like to store my shaders in non javascript <script> tags.  It makes
 them easy to edit so I use code like this.
 
     /**
