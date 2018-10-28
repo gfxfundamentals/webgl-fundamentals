@@ -94,8 +94,8 @@ Description: Реализация точечного освещения в WebGL
 
       vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
 
-      -  float light = dot(v_normal, u_reverseLightDirection);
-      +  float light = dot(v_normal, surfaceToLightDirection);
+    -  float light = dot(v_normal, u_reverseLightDirection);
+    +  float light = dot(v_normal, surfaceToLightDirection);
 
       gl_FragColor = u_color;
 
