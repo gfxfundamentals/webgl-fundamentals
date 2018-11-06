@@ -41,27 +41,27 @@ vertex shader에서 fragment shader로 전달하고자 하는 각 값에 “vary
 
     // 삼각형을 정의한 값들로 버퍼 채우기
     function setGeometry(gl) {
-        gl.bufferData(
-            gl.ARRAY_BUFFER,
-            new Float32Array([
-                   0, -100,
-                 150,  125,
-                -175,  100
-            ]),
-            gl.STATIC_DRAW
-        );
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([
+             0, -100,
+           150,  125,
+          -175,  100
+        ]),
+        gl.STATIC_DRAW
+      );
     }
 
 그리고 꼭지점 3개만 그립니다.
 
     // scene 그리기
     function drawScene() {
-        ...
-        // geometry 그리기
-        var primitiveType = gl.TRIANGLES;
-        var offset = 0;
-        var count = 3;
-        gl.drawArrays(primitiveType, offset, count);
+      ...
+      // geometry 그리기
+      var primitiveType = gl.TRIANGLES;
+      var offset = 0;
+      var count = 3;
+      gl.drawArrays(primitiveType, offset, count);
     }
 
 다음으로 vertex shader에서 fragment shader로 데이터를 넘기기 위해 *varying*을 선언합니다.
@@ -69,13 +69,13 @@ vertex shader에서 fragment shader로 전달하고자 하는 각 값에 “vary
     varying vec4 v_color;
     ...
     void main() {
-        // 위치에 행렬 곱하기
-        gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+      // 위치에 행렬 곱하기
+      gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 
-        // clip 공간에서 색상 공간으로 변환
-        // clip 공간은 -1.0에서 +1.0까지 입니다.
-        // 색상 공간은 0.0부터 1.0까지 입니다.
-    *    v_color = gl_Position * 0.5 + 0.5;
+      // clip 공간에서 색상 공간으로 변환
+      // clip 공간은 -1.0에서 +1.0까지 입니다.
+      // 색상 공간은 0.0부터 1.0까지 입니다.
+    *  v_color = gl_Position * 0.5 + 0.5;
     }
 
 그런 다음 fragment shader에 같은 *varying*을 선언합니다.
@@ -85,7 +85,7 @@ vertex shader에서 fragment shader로 전달하고자 하는 각 값에 “vary
     *varying vec4 v_color;
 
     void main() {
-    *    gl_FragColor = v_color;
+    *  gl_FragColor = v_color;
     }
 
 WebGL은 vertex shader의 varying을 같은 이름을 가진 fragment shader의 varying으로 연결할 겁니다.
@@ -176,9 +176,9 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     varying vec4 v_color;
 
     void main() {
-        ...
-        // 색상을 attribute에서 varying으로 복사
-    *    v_color = a_color;
+      ...
+      // 색상을 attribute에서 varying으로 복사
+    *  v_color = a_color;
     }
 
 이제 WebGL이 사용할 수 있게 색상들을 제공해야 합니다.
@@ -196,27 +196,27 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
 
     +// 사각형을 만들 두 삼각형의 색상으로 buffer 채우기
     +function setColors(gl) {
-    +    // Pick 2 random colors.
-    +    var r1 = Math.random();
-    +    var b1 = Math.random();
-    +    var g1 = Math.random();
+    +  // Pick 2 random colors.
+    +  var r1 = Math.random();
+    +  var b1 = Math.random();
+    +  var g1 = Math.random();
     +
-    +    var r2 = Math.random();
-    +    var b2 = Math.random();
-    +    var g2 = Math.random();
+    +  var r2 = Math.random();
+    +  var b2 = Math.random();
+    +  var g2 = Math.random();
     +
-    +    gl.bufferData(
-    +        gl.ARRAY_BUFFER,
-    +        new Float32Array([
-    +            r1, b1, g1, 1,
-    +            r1, b1, g1, 1,
-    +            r1, b1, g1, 1,
-    +            r2, b2, g2, 1,
-    +            r2, b2, g2, 1,
-    +            r2, b2, g2, 1
-    +        ]),
-    +        gl.STATIC_DRAW
-    +    );
+    +  gl.bufferData(
+    +    gl.ARRAY_BUFFER,
+    +    new Float32Array([
+    +      r1, b1, g1, 1,
+    +      r1, b1, g1, 1,
+    +      r1, b1, g1, 1,
+    +      r2, b2, g2, 1,
+    +      r2, b2, g2, 1,
+    +      r2, b2, g2, 1
+    +    ]),
+    +    gl.STATIC_DRAW
+    +  );
     +}
 
 렌더링할 때 색상 attribute 설정
@@ -234,12 +234,12 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     +var stride = 0;        // 0 = 각 반복마다 size * sizeof(type) 앞으로 이동해 다음 위치 얻기
     +var offset = 0;        // buffer의 시작점에서 시작
     +gl.vertexAttribPointer(
-    +    colorLocation,
-    +    size,
-    +    type,
-    +    normalize,
-    +    stride,
-    +    offset
+    +  colorLocation,
+    +  size,
+    +  type,
+    +  normalize,
+    +  stride,
+    +  offset
     +);
 
 그리고 삼각형 2개의 꼭지점 6개를 계산하도록 count를 조정
@@ -261,19 +261,19 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
 
     // 사각형을 만드는 삼각형 2개의 색상으로 buffer 채우기
     function setColors(gl) {
-        // 모든 vertex를 다른 색으로 만들기
-        gl.bufferData(
-            gl.ARRAY_BUFFER,
-    *        new Float32Array([
-    *            Math.random(), Math.random(), Math.random(), 1,
-    *            Math.random(), Math.random(), Math.random(), 1,
-    *            Math.random(), Math.random(), Math.random(), 1,
-    *            Math.random(), Math.random(), Math.random(), 1,
-    *            Math.random(), Math.random(), Math.random(), 1,
-    *            Math.random(), Math.random(), Math.random(), 1
-    *        ]),
-            gl.STATIC_DRAW
-        );
+      // 모든 vertex를 다른 색으로 만들기
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+    *    new Float32Array([
+    *      Math.random(), Math.random(), Math.random(), 1,
+    *      Math.random(), Math.random(), Math.random(), 1,
+    *      Math.random(), Math.random(), Math.random(), 1,
+    *      Math.random(), Math.random(), Math.random(), 1,
+    *      Math.random(), Math.random(), Math.random(), 1,
+    *      Math.random(), Math.random(), Math.random(), 1
+    *    ]),
+        gl.STATIC_DRAW
+      );
     }
 
 이제 보간된 *varying*을 봅시다.
@@ -315,12 +315,12 @@ attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실�
 이건 WebGL 내부에 있는 전역 변수입니다.
 
     gl.vertexAttribPointer(
-        location,
-        numComponents,
-        typeOfData,
-        normalizeFlag,
-        strideToNextPieceOfData,
-        offsetIntoBuffer
+      location,
+      numComponents,
+      typeOfData,
+      normalizeFlag,
+      strideToNextPieceOfData,
+      offsetIntoBuffer
     );
 
 그리고 이 명령어는 WebGL에게 현재 ARRAY_BUFFER bind point에 할당된 buffer에서 데이터를 가져오고,
@@ -368,39 +368,39 @@ var size = 4;                 // 반복마다 구성 요소 4개
 var stride = 0;               // 0 = 각 반복마다 size * sizeof(type) 앞으로 이동해 다음 위치 얻기
 var offset = 0;               // buffer의 시작점에서 시작
 gl.vertexAttribPointer(
-    colorLocation,
-    size,
-    type,
-    normalize,
-    stride,
-    offset
+  colorLocation,
+  size,
+  type,
+  normalize,
+  stride,
+  offset
 );
 </pre>
 <p>그리고 buffer를 색상으로 채울 때 우리는</p>
 <pre class="prettyprint showlinemods">
 // 사각형을 만드는 삼각형 2개의 색상으로 buffer 채우기
 function setColors(gl) {
-    // 무작위 색상 2개 선택
-    // 0에서 255.99999사이 값은 Uint8Array에 저장될 때 끝이 잘립니다.
-    var r1 = Math.random() * 256;
-    var b1 = Math.random() * 256;
-    var g1 = Math.random() * 256;
-    var r2 = Math.random() * 256;
-    var b2 = Math.random() * 256;
-    var g2 = Math.random() * 256;
+  // 무작위 색상 2개 선택
+  // 0에서 255.99999사이 값은 Uint8Array에 저장될 때 끝이 잘립니다.
+  var r1 = Math.random() * 256;
+  var b1 = Math.random() * 256;
+  var g1 = Math.random() * 256;
+  var r2 = Math.random() * 256;
+  var b2 = Math.random() * 256;
+  var g2 = Math.random() * 256;
 
-    gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Uint8Array([
-            r1, b1, g1, 255,
-            r1, b1, g1, 255,
-            r1, b1, g1, 255,
-            r2, b2, g2, 255,
-            r2, b2, g2, 255,
-            r2, b2, g2, 255
-        ]), // Uint8Array
-        gl.STATIC_DRAW
-    );
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Uint8Array([
+      r1, b1, g1, 255,
+      r1, b1, g1, 255,
+      r1, b1, g1, 255,
+      r2, b2, g2, 255,
+      r2, b2, g2, 255,
+      r2, b2, g2, 255
+    ]), // Uint8Array
+    gl.STATIC_DRAW
+  );
 }
 </pre>
 <p>여기 예제가 있습니다.</p>

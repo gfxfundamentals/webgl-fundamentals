@@ -22,23 +22,23 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
      * @return {!WebGLShader} Shader
      */
     function compileShader(gl, shaderSource, shaderType) {
-        // Shader 객체 생성
-        var shader = gl.createShader(shaderType);
+      // Shader 객체 생성
+      var shader = gl.createShader(shaderType);
 
-        // Shader source 코드 설정.
-        gl.shaderSource(shader, shaderSource);
+      // Shader source 코드 설정.
+      gl.shaderSource(shader, shaderSource);
 
-        // Shader 컴파일
-        gl.compileShader(shader);
+      // Shader 컴파일
+      gl.compileShader(shader);
 
-        // 컴파일 여부 확인
-        var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
-        if (!success) {
-            // 컴파일하는 동안 문제 발생; throw error
-            throw "could not compile shader:" + gl.getShaderInfoLog(shader);
-        }
+      // 컴파일 여부 확인
+      var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+      if (!success) {
+        // 컴파일하는 동안 문제 발생; throw error
+        throw "could not compile shader:" + gl.getShaderInfoLog(shader);
+      }
 
-        return shader;
+      return shader;
     }
 
 그리고 program에 두 shader를 연결하기 위한 boilerplate 코드
@@ -52,24 +52,24 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
      * @return {!WebGLProgram} Program
      */
     function createProgram(gl, vertexShader, fragmentShader) {
-        // program 생성
-        var program = gl.createProgram();
+      // program 생성
+      var program = gl.createProgram();
 
-        // shader 할당
-        gl.attachShader(program, vertexShader);
-        gl.attachShader(program, fragmentShader);
+      // shader 할당
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
 
-        // program 연결
-        gl.linkProgram(program);
+      // program 연결
+      gl.linkProgram(program);
 
-        // 연결 여부 확인
-        var success = gl.getProgramParameter(program, gl.LINK_STATUS);
-        if (!success) {
-            // 연결에 문제 발생
-            throw ("program filed to link:" + gl.getProgramInfoLog (program));
-        }
+      // 연결 여부 확인
+      var success = gl.getProgramParameter(program, gl.LINK_STATUS);
+      if (!success) {
+        // 연결에 문제 발생
+        throw ("program filed to link:" + gl.getProgramInfoLog (program));
+      }
 
-        return program;
+      return program;
     };
 
 물론 오류를 처리하는 방법은 다를 수 있습니다.
@@ -90,28 +90,28 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
      * @return {!WebGLShader} A shader.
      */
     function createShaderFromScript(gl, scriptId, opt_shaderType) {
-        // script tag의 id로 탐색
-        var shaderScript = document.getElementById(scriptId);
+      // script tag의 id로 탐색
+      var shaderScript = document.getElementById(scriptId);
         
-        if (!shaderScript) {
-            throw("*** Error: unknown script element" + scriptId);
+      if (!shaderScript) {
+        throw("*** Error: unknown script element" + scriptId);
+      }
+
+      // script tag의 내용 추출
+      var shaderSource = shaderScript.text;
+
+      // type을 넘기지 않으면, script tag의 'type' 사용
+      if (!opt_shaderType) {
+        if (shaderScript.type == "x-shader/x-vertex") {
+          opt_shaderType = gl.VERTEX_SHADER;
+        } else if (shaderScript.type == "x-shader/x-fragment") {
+          opt_shaderType = gl.FRAGMENT_SHADER;
+        } else if (!opt_shaderType) {
+          throw("*** Error: shader type not set");
         }
+      }
 
-        // script tag의 내용 추출
-        var shaderSource = shaderScript.text;
-
-        // type을 넘기지 않으면, script tag의 'type' 사용
-        if (!opt_shaderType) {
-            if (shaderScript.type == "x-shader/x-vertex") {
-                opt_shaderType = gl.VERTEX_SHADER;
-            } else if (shaderScript.type == "x-shader/x-fragment") {
-                opt_shaderType = gl.FRAGMENT_SHADER;
-            } else if (!opt_shaderType) {
-                throw("*** Error: shader type not set");
-            }
-        }
-
-        return compileShader(gl, shaderSource, opt_shaderType);
+      return compileShader(gl, shaderSource, opt_shaderType);
     };
 
 이제 shader를 컴파일할 수 있습니다.
@@ -130,9 +130,9 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
      * @return {!WebGLProgram} A program
      */
     function createProgramFromScripts(gl, shaderScriptIds) {
-        var vertexShader = createShaderFromScript(gl, shaderScriptIds[0], gl.VERTEX_SHADER);
-        var fragmentShader = createShaderFromScript(gl, shaderScriptIds[1], gl.FRAGMENT_SHADER);
-        return createProgram(gl, vertexShader, fragmentShader);
+      var vertexShader = createShaderFromScript(gl, shaderScriptIds[0], gl.VERTEX_SHADER);
+      var fragmentShader = createShaderFromScript(gl, shaderScriptIds[1], gl.FRAGMENT_SHADER);
+      return createProgram(gl, vertexShader, fragmentShader);
     }
 
 거의 모든 WebGL program에서 사용하는 다른 코드는 canvas의 크기를 조정하는 코드입니다.

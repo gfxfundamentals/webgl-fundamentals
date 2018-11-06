@@ -73,8 +73,8 @@ Vertex Shader부터 시작해봅시다.
 
     // 모든 shader는 main 함수를 가지고 있습니다.
     void main() {
-        // gl_Position은 Vertex Shader가 설정을 담당하는 특수 변수입니다.
-        gl_Position = a_position;
+      // gl_Position은 Vertex Shader가 설정을 담당하는 특수 변수입니다.
+      gl_Position = a_position;
     }
 
 실행될 때, GLSL 대신에 JavaScript로 작성된 것이라면 이렇게 쓰일 것입니다.
@@ -82,24 +82,24 @@ Vertex Shader부터 시작해봅시다.
     // *** PSEUDO CODE!! ***
 
     var positionBuffer = [
-          0,   0, 0, 0,
-          0, 0.5, 0, 0,
-        0.7,   0, 0, 0,
+        0,   0, 0, 0,
+        0, 0.5, 0, 0,
+      0.7,   0, 0, 0,
     ];
     var attributes = {};
     var gl_Position;
 
     drawArrays(..., offset, count) {
-        var stride = 4;
-        var size = 4;
-        for (var i = 0; i < count; ++i) {
-            // positionBuffer의 다음 값 4개를 a_position 속성에 복사합니다.
-            const start = (offset + i) * stride;
-            attributes.a_position = positionBuffer.slice(start, start + size);
-            runVertexShader();
-            ...
-            doSomethingWith_gl_Position();
-        }
+      var stride = 4;
+      var size = 4;
+      for (var i = 0; i < count; ++i) {
+        // positionBuffer의 다음 값 4개를 a_position 속성에 복사합니다.
+        const start = (offset + i) * stride;
+        attributes.a_position = positionBuffer.slice(start, start + size);
+        runVertexShader();
+        ...
+        doSomethingWith_gl_Position();
+      }
     }
 
 실제로는 `positionBuffer`가 2진 데이터(아래 참조)로 전환되기 때문에 그렇게 간단하지 않습니다.
@@ -112,8 +112,8 @@ Vertex Shader부터 시작해봅시다.
     precision mediump float;
 
     void main() {
-        // gl_FragColor는 Fragment Shader의 설정을 담당하는 특수 변수입니다.
-        gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은-보라색 반환
+      // gl_FragColor는 Fragment Shader의 설정을 담당하는 특수 변수입니다.
+      gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은-보라색 반환
     }
 
 위에서 우리는 `gl_FragColor`을 빨강 1, 초록 0, 파랑 0.5, 투명도 1인 `1, 0, 0.5, 1`로 설정했는데요.
@@ -133,8 +133,8 @@ WebGL에서 색상은 0에서 1까지 사용합니다.
 
      var gl = canvas.getContext("webgl");
      if (!gl) {
-         // webgl을 쓸 수 없어요!
-         ...
+       // webgl을 쓸 수 없어요!
+       ...
      }
 
 Shader를 컴파일해서 GPU에 넣어야 하므로 우선 문자열로 가져와야 합니다.
@@ -144,27 +144,27 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 
     <script id="2d-vertex-shader" type="notjs">
 
-        // Attribute는 Buffer로부터 데이터를 받습니다.
-        attribute vec4 a_position;
+      // Attribute는 Buffer로부터 데이터를 받습니다.
+      attribute vec4 a_position;
 
-        // 모든 shader는 main 함수를 가지고 있습니다.
-        void main() {
-            // gl_Position은 Vertex Shader가 설정을 담당하는 특수 변수입니다.
-            gl_Position = a_position;
-        }
+      // 모든 shader는 main 함수를 가지고 있습니다.
+      void main() {
+        // gl_Position은 Vertex Shader가 설정을 담당하는 특수 변수입니다.
+        gl_Position = a_position;
+      }
 
     </script>
 
     <script id="2d-fragment-shader" type="notjs">
 
-        // Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
-        // mediump(중간 정도 정밀도)은 기본값으로 좋습니다.
-        precision mediump float;
+      // Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
+      // mediump(중간 정도 정밀도)은 기본값으로 좋습니다.
+      precision mediump float;
 
-        void main() {
-            // gl_FragColor는 Fragment Shader의 설정을 담당하는 특수 변수입니다.
-            gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은-보라색 반환
-        }
+      void main() {
+        // gl_FragColor는 Fragment Shader의 설정을 담당하는 특수 변수입니다.
+        gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은-보라색 반환
+      }
 
     </script>
 
@@ -175,17 +175,17 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 참고로 함수의 이름을 보면 어떤 일을 하는지 명확하기 때문에 주석을 작성하지 않았습니다.
 
     function createShader(gl, type, source) {
-        var shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
+      var shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
 
-        var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
-        if (success) {
-            return shader;
-        }
+      var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+      if (success) {
+        return shader;
+      }
 
-        console.log(gl.getShaderInfoLog(shader));
-        gl.deleteShader(shader);
+      console.log(gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
     }
 
 이제 우리는 두 Shader를 만드는 함수를 호출할 수 있습니다.
@@ -199,18 +199,18 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 다음으로 두 Shader를 *program*으로 *link*해야 합니다.
 
     function createProgram(gl, vertexShader, fragmentShader) {
-        var program = gl.createProgram();
-        gl.attachShader(program, vertexShader);
-        gl.attachShader(program, fragmentShader);
-        gl.linkProgram(program);
+      var program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
 
-        var success = gl.getProgramParameter(program, gl.LINK_STATUS);
-        if (success) {
-            return program;
-        }
+      var success = gl.getProgramParameter(program, gl.LINK_STATUS);
+      if (success) {
+        return program;
+      }
 
-        console.log(gl.getProgramInfoLog(program));
-        gl.deleteProgram(program);
+      console.log(gl.getProgramInfoLog(program));
+      gl.deleteProgram(program);
     }
 
 그리고 호출합니다.
@@ -243,14 +243,14 @@ bind point를 WebGL 내부의 전역 변수라고 생각하시면 됩니다.
 
     // 2d point 3개
     var positions = [
-          0, 0,
-          0, 0.5,
-        0.7, 0,
+        0, 0,
+        0, 0.5,
+      0.7, 0,
     ];
     gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array(positions),
-        gl.STATIC_DRAW
+      gl.ARRAY_BUFFER,
+      new Float32Array(positions),
+      gl.STATIC_DRAW
     );
 
 여기까지 한 것들을 정리해보겠습니다.
@@ -318,12 +318,12 @@ WebGL에게 Shader Program을 실행하라고 지시합니다.
     var stride = 0;        // 0 = 반복할 때마다 size * sizeof(type)만큼 다음 위치로 이동
     var offset = 0;        // buffer 시작점
     gl.vertexAttribPointer(
-        positionAttributeLocation,
-        size,
-        type,
-        normalize,
-        stride,
-        offset
+      positionAttributeLocation,
+      size,
+      type,
+      normalize,
+      stride,
+      offset
     );
 
 `gl.vertexAttribPointer`의 숨겨진 부분은 현재 `ARRAY_BUFFER`를 attribute에 할당한다는 겁니다.
@@ -395,23 +395,23 @@ Canvas는 채널당 8bit이기 때문에 WebGL은 `[255, 0, 127, 255]` 값으로
 
     <script id="2d-vertex-shader" type="notjs">
 
-    -    attribute vec4 a_position;
-    *    attribute vec2 a_position;
+    -  attribute vec4 a_position;
+    *  attribute vec2 a_position;
 
-    +    uniform vec2 u_resolution;
+    +  uniform vec2 u_resolution;
 
-        void main() {
-    +        // 위치를 픽셀에서 0.0->1.0으로 변환
-    +        vec2 zeroToOne = a_position / u_resolution;
+      void main() {
+    +    // 위치를 픽셀에서 0.0->1.0으로 변환
+    +    vec2 zeroToOne = a_position / u_resolution;
     +
-    +        // 0->1에서 0->2로 변환
-    +        vec2 zeroToTwo = zeroToOne * 2.0;
+    +    // 0->1에서 0->2로 변환
+    +    vec2 zeroToTwo = zeroToOne * 2.0;
     +
-    +        // 0->2에서 -1->+1로 변환 (clip 공간)
-    +        vec2 clipSpace = zeroToTwo - 1.0;
+    +    // 0->2에서 -1->+1로 변환 (clip 공간)
+    +    vec2 clipSpace = zeroToTwo - 1.0;
     +
-    *        gl_Position = vec4(clipSpace, 0, 1);
-        }
+    *    gl_Position = vec4(clipSpace, 0, 1);
+      }
 
     </script>
 
@@ -431,12 +431,12 @@ Canvas는 채널당 8bit이기 때문에 WebGL은 `[255, 0, 127, 255]` 값으로
 이번에는 각각 3개의 점으로 이루어진 삼각형 두 개로 만든 사각형을 그려볼 겁니다.
 
     var positions = [
-    *    10, 20,
-    *    80, 20,
-    *    10, 30,
-    *    10, 30,
-    *    80, 20,
-    *    80, 30,
+    *  10, 20,
+    *  80, 20,
+    *  10, 30,
+    *  10, 30,
+    *  80, 20,
+    *  80, 30,
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
@@ -484,13 +484,13 @@ clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
 먼저 fragment shader가 색상 uniform 입력을 가져오도록 만듭니다.
 
     <script id="2d-fragment-shader" type="notjs">
-        precision mediump float;
+      precision mediump float;
 
-    +    uniform vec4 u_color;
+    +  uniform vec4 u_color;
 
-        void main() {
-    *        gl_FragColor = u_color;
-        }
+      void main() {
+    *    gl_FragColor = u_color;
+      }
     </script>
 
 여기 무작위 색상의 사각형 50개를 무작위 위치에 그리는 코드가 있습니다.
@@ -500,55 +500,55 @@ clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
 
     // 무작위 색상의 사각형 50개 무작위로 그리기
     for (var ii = 0; ii < 50; ++ii) {
-        // 무작위 사각형 설정
-        // 이건 ARRAY_BUFFER bind point에서 마지막으로 할당한 것이기 때문에 positionBuffer에 쓸 것입니다.
-        setRectangle(
-            gl,
-            randomInt(300),
-            randomInt(300),
-            randomInt(300),
-            randomInt(300)
-        );
+      // 무작위 사각형 설정
+      // 이건 ARRAY_BUFFER bind point에서 마지막으로 할당한 것이기 때문에 positionBuffer에 쓸 것입니다.
+      setRectangle(
+        gl,
+        randomInt(300),
+        randomInt(300),
+        randomInt(300),
+        randomInt(300)
+      );
 
-        // 무작위 색상 설정
-        gl.uniform4f(
-            colorUniformLocation,
-            Math.random(),
-            Math.random(),
-            Math.random(),
-            1
-        );
+      // 무작위 색상 설정
+      gl.uniform4f(
+        colorUniformLocation,
+        Math.random(),
+        Math.random(),
+        Math.random(),
+        1
+      );
 
-        // 사각형 그리기
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
+      // 사각형 그리기
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
 
     // 0부터 -1사이 무작위 정수 반환
     function randomInt(range) {
-        return Math.floor(Math.random() * range);
+      return Math.floor(Math.random() * range);
     }
 
     // 사각형을 정의한 값들로 buffer 채우기
     function setRectangle(gl, x, y, width, height) {
-        var x1 = x;
-        var x2 = x + width;
-        var y1 = y;
-        var y2 = y + height;
+      var x1 = x;
+      var x2 = x + width;
+      var y1 = y;
+      var y2 = y + height;
 
-        // 참고: gl.bufferData(gl.ARRAY_BUFFER, ...)는 `ARRAY_BUFFER` bind point에 할당된 buffer에 영향을 주지만 지금까지는 하나만 있었습니다.
-        // 만약 우리가 하나 이상의 buffer를 가지고 있다면 그 buffer를 먼저 `ARRAY_BUFFER`에 할당하고 싶을 겁니다.
-        gl.bufferData(
-            gl.ARRAY_BUFFER,
-            new Float32Array([
-                x1, y1,
-                x2, y1,
-                x1, y2,
-                x1, y2,
-                x2, y1,
-                x2, y2
-            ]),
-            gl.STATIC_DRAW
-        );
+      // 참고: gl.bufferData(gl.ARRAY_BUFFER, ...)는 `ARRAY_BUFFER` bind point에 할당된 buffer에 영향을 주지만 지금까지는 하나만 있었습니다.
+      // 만약 우리가 하나 이상의 buffer를 가지고 있다면 그 buffer를 먼저 `ARRAY_BUFFER`에 할당하고 싶을 겁니다.
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([
+          x1, y1,
+          x2, y1,
+          x1, y2,
+          x1, y2,
+          x2, y1,
+          x2, y2
+        ]),
+        gl.STATIC_DRAW
+      );
     }
 
 여기 사각형이 있습니다.
@@ -591,18 +591,18 @@ type을 넣지 않거나 <code>type="javascript"</code> 또는 <code>type="text/
 다른 대안은 다음과 같은 문자열을 연결해서 포함하는 겁니다.</p>
 <pre class="prettyprint">
 var shaderSource = (
-    "void main() {\n" +
-    "    gl_FragColor = vec4(1,0,0,1);\n" +
-    "}"
+  "void main() {\n" +
+  "  gl_FragColor = vec4(1,0,0,1);\n" +
+  "}"
 );
 </pre>
 <p>또는 ajax 요청으로 shader를 가져올 수 있지만 느리고 비동기 통신입니다.</p>
 <p>한 가지 더 현대적인 대안은 multiline template literal을 사용하는 겁니다.</p>
 <pre class="prettyprint">
 var shaderSource = `
-    void main() {
-        gl_FragColor = vec4(1,0,0,1);
-    }
+  void main() {
+    gl_FragColor = vec4(1,0,0,1);
+  }
 `;
 </pre>
 <p>Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 동작합니다.
