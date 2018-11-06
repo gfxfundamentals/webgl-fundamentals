@@ -79,26 +79,27 @@ canvas 크기 설정하는데 canvas 크기에 영향을 주는 CSS가 없다면
 `clientWidth` and `clientHeight`를 사용하면 JavaScript에서 HTML의 모든 요소가 어떤 크기로 표시되는지 확인할 수 있습니다.
 
     function resize(canvas) {
-      // 브라우저에서 canvas가 표시되는 크기 탐색
-      var displayWidth  = canvas.clientWidth;
-      var displayHeight = canvas.clientHeight;
+        // 브라우저에서 canvas가 표시되는 크기 탐색
+        var displayWidth  = canvas.clientWidth;
+        var displayHeight = canvas.clientHeight;
 
-      // canvas가 같은 크기가 아닐 때 확인
-      if (canvas.width  != displayWidth ||
-          canvas.height != displayHeight) {
+        // canvas가 같은 크기가 아닐 때 확인
+        if (canvas.width  != displayWidth ||
+            canvas.height != displayHeight) {
 
-        // canvas를 동일한 크기로 수정
-        canvas.width  = displayWidth;
-        canvas.height = displayHeight;
-      }
+            // canvas를 동일한 크기로 수정
+            canvas.width  = displayWidth;
+            canvas.height = displayHeight;
+        }
     }
 
 대부분의 WebGL 앱들은 <a href="webgl-animation.html">애니메이션이므로</a> 렌더링 전에 이 함수를 호출하여 그리기 직전에 원하는 크기로 canvas를 조정하겠습니다.
 
     function drawScene() {
-       resize(gl.canvas);
+        resize(gl.canvas);
 
-       ...
+        ...
+    }
 
 그리고 여기
 
@@ -116,10 +117,11 @@ WebGL context를 처음 만들 때 WebGL은 canvas와 같은 크기로 viewport�
 위에서 WebGL context가 canvas에 대한 참조를 가지므로 크기를 조절해봅시다.
 
     function drawScene() {
-       resize(gl.canvas);
+        resize(gl.canvas);
 
-    +   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-       ...
+    +    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        ...
+    }
 
 이제 동작합니다.
 
@@ -149,20 +151,20 @@ CSS나 Canvas에서 크기를 픽셀 단위로 지정하면 이걸 실제 픽셀
 </p>
 <pre class="prettyprint">
 function resize(gl) {
-  var realToCSSPixels = window.devicePixelRatio;
+    var realToCSSPixels = window.devicePixelRatio;
 
-  // 브라우저가 CSS 픽셀로 Canvas를 표시하는 크기를 찾고 drawingbuffer를 device 픽셀로 일치시키는데 필요한 크기를 계산합니다.
-  var displayWidth  = Math.floor(gl.canvas.clientWidth  * realToCSSPixels);
-  var displayHeight = Math.floor(gl.canvas.clientHeight * realToCSSPixels);
+    // 브라우저가 CSS 픽셀로 Canvas를 표시하는 크기를 찾고 drawingbuffer를 device 픽셀로 일치시키는데 필요한 크기를 계산합니다.
+    var displayWidth  = Math.floor(gl.canvas.clientWidth  * realToCSSPixels);
+    var displayHeight = Math.floor(gl.canvas.clientHeight * realToCSSPixels);
 
-  // Canvas와 같은 크기가 아닌지 확인
-  if (gl.canvas.width  !== displayWidth ||
-      gl.canvas.height !== displayHeight) {
+    // Canvas와 같은 크기가 아닌지 확인
+    if (gl.canvas.width  !== displayWidth ||
+        gl.canvas.height !== displayHeight) {
 
-    // Canvas를 같은 크기로 만듦
-    gl.canvas.width  = displayWidth;
-    gl.canvas.height = displayHeight;
-  }
+        // Canvas를 같은 크기로 만듦
+        gl.canvas.width  = displayWidth;
+        gl.canvas.height = displayHeight;
+    }
 }
 </pre>
 <p>HD-DPI display가 있다면, 예를들어 스마트폰에서 이 페이지를 보는 경우 아래에 있는 선이 HD-DPI display에 맞게 조정되지 않은 위의 선보다 얇은 걸 확인해야 합니다.</p>

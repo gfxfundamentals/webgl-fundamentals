@@ -18,7 +18,7 @@ Vertex Shader의 역할은 clip 공간 좌표를 생성하는 겁니다.
 항상 다음과 같은 양식을 따르는데
 
     void main() {
-       gl_Position = doMathToMakeClipspaceCoordinates
+        gl_Position = doMathToMakeClipspaceCoordinates
     }
 
 shader는 각 vertex 마다 한 번씩 호출됩니다.
@@ -60,12 +60,12 @@ buffer에 데이터를 넣습니다.
     var stride = 0;         // 다음 vertex로 가기 위해 이동해야할 byte 수
                             // 0 = 자료형과 numComponents에 따른 적절한 폭 사용 
     gl.vertexAttribPointer(
-       positionLoc,
-       numComponents,
-       type,
-       false,
-       stride,
-       offset
+        positionLoc,
+        numComponents,
+        type,
+        false,
+        stride,
+        offset
     );
 
 [WebGL 기초](webgl-fundamentals.html)에서 우리는 shader에 수학을 사용할 수 없고 직접 데이터를 넘길 수 있다는 것을 봤습니다
@@ -73,7 +73,7 @@ buffer에 데이터를 넣습니다.
     attribute vec4 a_position;
 
     void main() {
-       gl_Position = a_position;
+        gl_Position = a_position;
     }
 
 buffer에 clip 공간 vertex를 넣으면 동작할 겁니다. 
@@ -89,7 +89,7 @@ shader의 경우 uniform은 draw가 호출될 때 모든 vertex에서 동일하�
     +uniform vec4 u_offset;
 
     void main() {
-       gl_Position = a_position + u_offset;
+        gl_Position = a_position + u_offset;
     }
 
 이제 모든 vertex마다 특정한 값으로 offset을 지정할 수 있습니다.
@@ -167,8 +167,8 @@ Uniform은 여러 자료형을 가질 수 있는데요.
 마찬가지로 struct를 생성하면
 
     struct SomeStruct {
-       bool active;
-       vec2 someVec2;
+        bool active;
+        vec2 someVec2;
     };
     uniform SomeStruct u_someThing;
 
@@ -189,7 +189,7 @@ Fragment Shader의 역할은 rasterization 되는 현재 픽셀의 색상을 제
     precision mediump float;
 
     void main() {
-       gl_FragColor = doMathToMakeAColor;
+        gl_FragColor = doMathToMakeAColor;
     }
 
 Fragment Shader는 각 픽셀마다 한 번씩 호출됩니다.
@@ -215,8 +215,8 @@ Shader의 texture에서 값을 얻으려면 `sampler2D` uniform을 생성하고 
     uniform sampler2D u_texture;
 
     void main() {
-       vec2 texcoord = vec2(0.5, 0.5)  // texture 중간에 있는 값 얻기
-       gl_FragColor = texture2D(u_texture, texcoord);
+        vec2 texcoord = vec2(0.5, 0.5)  // texture 중간에 있는 값 얻기
+        gl_FragColor = texture2D(u_texture, texcoord);
     }
 
 Texture에서 나오는 데이터는 [많은 설정에 따라](webgl-3d-textures.html) 달라집니다.
@@ -228,19 +228,19 @@ Texture에서 나오는 데이터는 [많은 설정에 따라](webgl-3d-textures
     var width = 2;
     var height = 1;
     var data = new Uint8Array([
-       255, 0, 0, 255,   // 빨강 pixel
-       0, 255, 0, 255,   // 초록 pixel
+        255, 0, 0, 255,   // 빨강 pixel
+        0, 255, 0, 255,   // 초록 pixel
     ]);
     gl.texImage2D(
-       gl.TEXTURE_2D,
-       level,
-       gl.RGBA,
-       width,
-       height,
-       0,
-       gl.RGBA,
-       gl.UNSIGNED_BYTE,
-       data
+        gl.TEXTURE_2D,
+        level,
+        gl.RGBA,
+        width,
+        height,
+        0,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
+        data
     );
 
 초기화할 때 shader program에 있는 uniform 위치를 찾습니다.
@@ -274,8 +274,8 @@ Vertex Shader
     +varying vec4 v_positionWithOffset;
 
     void main() {
-      gl_Position = a_position + u_offset;
-    +  v_positionWithOffset = a_position + u_offset;
+        gl_Position = a_position + u_offset;
+    +    v_positionWithOffset = a_position + u_offset;
     }
 
 Fragment Shader
@@ -285,9 +285,9 @@ Fragment Shader
     +varying vec4 v_positionWithOffset;
 
     void main() {
-    +  // clip 공간에서 (-1 <-> +1) 색상 공간으로 (0 -> 1) 변환.
-    +  vec4 color = v_positionWithOffset * 0.5 + 0.5
-    +  gl_FragColor = color;
+    +    // clip 공간에서 (-1 <-> +1) 색상 공간으로 (0 -> 1) 변환.
+    +    vec4 color = v_positionWithOffset * 0.5 + 0.5
+    +    gl_FragColor = color;
     }
 
 위 예제는 대게 말도 안되는 예제입니다.
@@ -399,10 +399,11 @@ T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
 이건 다음과 같습니다
 
     vec4 m = vec4(
-      mix(v1.x, v2.x, f),
-      mix(v1.y, v2.y, f),
-      mix(v1.z, v2.z, f),
-      mix(v1.w, v2.w, f));
+        mix(v1.x, v2.x, f),
+        mix(v1.y, v2.y, f),
+        mix(v1.z, v2.z, f),
+        mix(v1.w, v2.w, f)
+    );
 
 [WebGL Reference Card](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf)의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
 만약 정말로 자세한 정보를 보고 싶다면 [GLSL 사양](https://www.khronos.org/files/opengles_shading_language.pdf)을 봐주세요.
