@@ -144,8 +144,8 @@ function createProgram(gl, vertexShader, fragmentShader) {
   // 연결 여부 확인
   var success = gl.getProgramParameter(program, gl.LINK_STATUS);
   if (!success) {
-      // 연결에 문제 발생
-      throw (&quot;program filed to link:&quot; + gl.getProgramInfoLog (program));
+    // 연결에 문제 발생
+    throw (&quot;program filed to link:&quot; + gl.getProgramInfoLog (program));
   }
 
   return program;
@@ -168,6 +168,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 function createShaderFromScript(gl, scriptId, opt_shaderType) {
   // script tag의 id로 탐색
   var shaderScript = document.getElementById(scriptId);
+
   if (!shaderScript) {
     throw(&quot;*** Error: unknown script element&quot; + scriptId);
   }
@@ -210,8 +211,7 @@ function createProgramFromScripts(gl, shaderScriptIds) {
 <p>모든 예제는 이 두 가지 함수를 포함하고 있습니다.</p>
 <pre><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>그리고 이렇게 사용합니다.</p>
-<pre><code>var program = webglUtils.createProgramFromScripts(
-  gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
+<pre><code>var program = webglUtils.createProgramFromScripts(gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...
 
@@ -269,7 +269,7 @@ live editor에서 다른 것들과 함께 사용하면 화면에 에러 메세�
   </ul>
   <li>이미지 처리</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-image-processing.html">WebGL 이미지 처리</a></li>
+    <li><a href="/webgl/lessons/ko/webgl-image-processing.html">WebGL 이미지 처리</a></li>
     <li><a href="/webgl/lessons/webgl-image-processing-continued.html">WebGL 이미지 처리 심화</a></li>
   </ul>
   <li>2D 변형, 회전, 크기, 행렬 수학</li>

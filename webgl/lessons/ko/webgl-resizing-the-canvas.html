@@ -163,9 +163,10 @@ canvas.height = 300;
 }
 </code></pre><p>대부분의 WebGL 앱들은 <a href="webgl-animation.html">애니메이션이므로</a> 렌더링 전에 이 함수를 호출하여 그리기 직전에 원하는 크기로 canvas를 조정하겠습니다.</p>
 <pre><code>function drawScene() {
-   resize(gl.canvas);
+  resize(gl.canvas);
 
-   ...
+  ...
+}
 </code></pre><p>그리고 여기</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-canvas.html"></iframe>
@@ -182,10 +183,11 @@ WebGL context를 처음 만들 때 WebGL은 canvas와 같은 크기로 viewport�
 <p>이걸 처리할 코드를 수정해봅시다.
 위에서 WebGL context가 canvas에 대한 참조를 가지므로 크기를 조절해봅시다.</p>
 <pre><code>function drawScene() {
-   resize(gl.canvas);
+  resize(gl.canvas);
 
-+   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-   ...
++  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  ...
+}
 </code></pre><p>이제 동작합니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-canvas-viewport.html"></iframe>
@@ -273,7 +275,7 @@ iPhone6Plus는 값이 <code>3</code>인 것으로 알고 있는데 이건 9배 �
   </ul>
   <li>이미지 처리</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-image-processing.html">WebGL 이미지 처리</a></li>
+    <li><a href="/webgl/lessons/ko/webgl-image-processing.html">WebGL 이미지 처리</a></li>
     <li><a href="/webgl/lessons/webgl-image-processing-continued.html">WebGL 이미지 처리 심화</a></li>
   </ul>
   <li>2D 변형, 회전, 크기, 행렬 수학</li>
