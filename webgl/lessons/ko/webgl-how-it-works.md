@@ -176,23 +176,23 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     varying vec4 v_color;
 
     void main() {
-       ...
+      ...
       // 색상을 attribute에서 varying으로 복사
     *  v_color = a_color;
     }
 
 이제 WebGL이 사용할 수 있게 색상들을 제공해야 합니다.
 
-      // vertex 데이터가 필요한 곳 탐색
-      var positionLocation = gl.getAttribLocation(program, "a_position");
-    +  var colorLocation = gl.getAttribLocation(program, "a_color");
-      ...
-    +  // 색상용 buffer 생성
-    +  var colorBuffer = gl.createBuffer();
-    +  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    +  // 색상 설정
-    +  setColors(gl);
-      ...
+    // vertex 데이터가 필요한 곳 탐색
+    var positionLocation = gl.getAttribLocation(program, "a_position");
+    +var colorLocation = gl.getAttribLocation(program, "a_color");
+    ...
+    +// 색상용 buffer 생성
+    +var colorBuffer = gl.createBuffer();
+    +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    +// 색상 설정
+    +setColors(gl);
+    ...
 
     +// 사각형을 만들 두 삼각형의 색상으로 buffer 채우기
     +function setColors(gl) {
@@ -361,20 +361,20 @@ normalize flag를 true로 설정하면 BYTE(-128 ~ 127)는 -1에서 +1.0사이�
 WebGL에 색상을 추출하는 방법을 알려줄 때 우리는
 </p>
 <pre class="prettyprint showlinemods">
-  // colorBuffer에서 데이터를 가져오는 방법을 색상 attribute에게 알림 (ARRAY_BUFFER)
-  var size = 4;                 // 반복마다 구성 요소 4개
-*  var type = gl.UNSIGNED_BYTE;  // 데이터는 8bit unsigned byte
-*  var normalize = true;         // 데이터 정규화
-  var stride = 0;               // 0 = 각 반복마다 size * sizeof(type) 앞으로 이동해 다음 위치 얻기
-  var offset = 0;               // buffer의 시작점에서 시작
-  gl.vertexAttribPointer(
-    colorLocation,
-    size,
-    type,
-    normalize,
-    stride,
-    offset
-  );
+// colorBuffer에서 데이터를 가져오는 방법을 색상 attribute에게 알림 (ARRAY_BUFFER)
+var size = 4;                 // 반복마다 구성 요소 4개
+*var type = gl.UNSIGNED_BYTE;  // 데이터는 8bit unsigned byte
+*var normalize = true;         // 데이터 정규화
+var stride = 0;               // 0 = 각 반복마다 size * sizeof(type) 앞으로 이동해 다음 위치 얻기
+var offset = 0;               // buffer의 시작점에서 시작
+gl.vertexAttribPointer(
+  colorLocation,
+  size,
+  type,
+  normalize,
+  stride,
+  offset
+);
 </pre>
 <p>그리고 buffer를 색상으로 채울 때 우리는</p>
 <pre class="prettyprint showlinemods">

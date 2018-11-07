@@ -73,7 +73,6 @@ Vertex Shader부터 시작해봅시다.
 
     // 모든 shader는 main 함수를 가지고 있습니다.
     void main() {
-
       // gl_Position은 Vertex Shader가 설정을 담당하는 특수 변수입니다.
       gl_Position = a_position;
     }
@@ -100,6 +99,7 @@ Vertex Shader부터 시작해봅시다.
         runVertexShader();
         ...
         doSomethingWith_gl_Position();
+      }
     }
 
 실제로는 `positionBuffer`가 2진 데이터(아래 참조)로 전환되기 때문에 그렇게 간단하지 않습니다.
@@ -133,8 +133,9 @@ WebGL에서 색상은 0에서 1까지 사용합니다.
 
      var gl = canvas.getContext("webgl");
      if (!gl) {
-        // webgl을 쓸 수 없어요!
-        ...
+       // webgl을 쓸 수 없어요!
+       ...
+     }
 
 Shader를 컴파일해서 GPU에 넣어야 하므로 우선 문자열로 가져와야 합니다.
 JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 수 있습니다.
@@ -148,7 +149,6 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 
       // 모든 shader는 main 함수를 가지고 있습니다.
       void main() {
-
         // gl_Position은 Vertex Shader가 설정을 담당하는 특수 변수입니다.
         gl_Position = a_position;
       }
@@ -178,6 +178,7 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
       var shader = gl.createShader(type);
       gl.shaderSource(shader, source);
       gl.compileShader(shader);
+
       var success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
       if (success) {
         return shader;
@@ -202,6 +203,7 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
       gl.attachShader(program, vertexShader);
       gl.attachShader(program, fragmentShader);
       gl.linkProgram(program);
+
       var success = gl.getProgramParameter(program, gl.LINK_STATUS);
       if (success) {
         return program;
@@ -245,7 +247,11 @@ bind point를 WebGL 내부의 전역 변수라고 생각하시면 됩니다.
         0, 0.5,
       0.7, 0,
     ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(positions),
+      gl.STATIC_DRAW
+    );
 
 여기까지 한 것들을 정리해보겠습니다.
 먼저 JavaScript 배열인 `positions`가 있습니다.
@@ -466,7 +472,7 @@ clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
 우린 아직 어떤 부호도 바꾸지 않았기 때문에 현재 0, 0은 좌측 하단이 됩니다.
 2D 그래픽 API를 사용해서 전통적인 왼쪽 상단 모서리를 얻으려면 clip 공간 y좌표를 뒤집어서 사용할 수 있습니다.
 
-    *   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+    *gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
 이제 우리가 예상한 위치에 사각형이 놓였습니다.
 

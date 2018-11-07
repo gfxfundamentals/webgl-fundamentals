@@ -65,8 +65,8 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
       // 연결 여부 확인
       var success = gl.getProgramParameter(program, gl.LINK_STATUS);
       if (!success) {
-          // 연결에 문제 발생
-          throw ("program filed to link:" + gl.getProgramInfoLog (program));
+        // 연결에 문제 발생
+        throw ("program filed to link:" + gl.getProgramInfoLog (program));
       }
 
       return program;
@@ -92,6 +92,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
     function createShaderFromScript(gl, scriptId, opt_shaderType) {
       // script tag의 id로 탐색
       var shaderScript = document.getElementById(scriptId);
+        
       if (!shaderScript) {
         throw("*** Error: unknown script element" + scriptId);
       }
@@ -143,8 +144,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
 
 그리고 이렇게 사용합니다.
 
-    var program = webglUtils.createProgramFromScripts(
-      gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
+    var program = webglUtils.createProgramFromScripts(gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
     ...
 

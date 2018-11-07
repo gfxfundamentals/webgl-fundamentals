@@ -96,9 +96,10 @@ canvas 크기 설정하는데 canvas 크기에 영향을 주는 CSS가 없다면
 대부분의 WebGL 앱들은 <a href="webgl-animation.html">애니메이션이므로</a> 렌더링 전에 이 함수를 호출하여 그리기 직전에 원하는 크기로 canvas를 조정하겠습니다.
 
     function drawScene() {
-       resize(gl.canvas);
+      resize(gl.canvas);
 
-       ...
+      ...
+    }
 
 그리고 여기
 
@@ -116,10 +117,11 @@ WebGL context를 처음 만들 때 WebGL은 canvas와 같은 크기로 viewport�
 위에서 WebGL context가 canvas에 대한 참조를 가지므로 크기를 조절해봅시다.
 
     function drawScene() {
-       resize(gl.canvas);
+      resize(gl.canvas);
 
-    +   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-       ...
+    +  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      ...
+    }
 
 이제 동작합니다.
 
