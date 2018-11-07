@@ -84,8 +84,8 @@ canvas 크기 설정하는데 canvas 크기에 영향을 주는 CSS가 없다면
       var displayHeight = canvas.clientHeight;
 
       // canvas가 같은 크기가 아닐 때 확인
-      if (canvas.width  != displayWidth
-        || canvas.height != displayHeight) {
+      if (canvas.width  != displayWidth ||
+          canvas.height != displayHeight) {
 
         // canvas를 동일한 크기로 수정
         canvas.width  = displayWidth;
@@ -158,8 +158,8 @@ function resize(gl) {
   var displayHeight = Math.floor(gl.canvas.clientHeight * realToCSSPixels);
 
   // Canvas와 같은 크기가 아닌지 확인
-  if (gl.canvas.width  !== displayWidth
-    || gl.canvas.height !== displayHeight) {
+  if (gl.canvas.width  !== displayWidth ||
+      gl.canvas.height !== displayHeight) {
 
     // Canvas를 같은 크기로 만듦
     gl.canvas.width  = displayWidth;
