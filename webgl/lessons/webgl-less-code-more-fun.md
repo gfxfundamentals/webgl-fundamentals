@@ -393,7 +393,7 @@ they consider as simple as possible.
 Why don't we look at the attributes on the shader program to figure out
 the number of components?  That's because it's common to supply 3
 components (x, y, z) from a buffer but use a `vec4` in the shader.  For
-attibutes WebGL will set `w = 1` automatically.  But that means we can't
+attributes WebGL will set `w = 1` automatically.  But that means we can't
 easily know the user's intent since what they declared in their shader
 might not match the number of components they provide.
 

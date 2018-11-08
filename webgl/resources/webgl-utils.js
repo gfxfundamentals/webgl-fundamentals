@@ -1084,7 +1084,7 @@
    * @param {WebGLRenderingContext} gl A WebGLRenderingContext
    * @param {Object.<string, array|object|typedarray>} arrays Your data
    * @param {Object.<string, string>} [opt_mapping] an optional mapping of attribute to array name.
-   *    If not passed in it's assumed the array names will be mapped to an attibute
+   *    If not passed in it's assumed the array names will be mapped to an attribute
    *    of the same name with "a_" prefixed to it. An other words.
    *
    *        var arrays = {
