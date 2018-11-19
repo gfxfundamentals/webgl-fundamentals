@@ -129,12 +129,12 @@ var offset = 0;         // buffer의 시작점에서 시작
 var stride = 0;         // 다음 vertex로 가기 위해 이동해야할 byte 수
                         // 0 = 자료형과 numComponents에 따른 적절한 폭 사용 
 gl.vertexAttribPointer(
-  positionLoc,
-  numComponents,
-  type,
-  false,
-  stride,
-  offset
+    positionLoc,
+    numComponents,
+    type,
+    false,
+    stride,
+    offset
 );
 </code></pre><p><a href="webgl-fundamentals.html">WebGL 기초</a>에서 우리는 shader에 수학을 사용할 수 없고 직접 데이터를 넘길 수 있다는 것을 봤습니다</p>
 <pre><code>attribute vec4 a_position;
@@ -166,18 +166,18 @@ void main() {
 각각의 자료형에 대해 해당 함수를 호출하여 설정해야 합니다.</p>
 <pre><code>gl.uniform1f (floatUniformLoc, v);                 // float
 gl.uniform1fv(floatUniformLoc, [v]);               // float 또는 float 배열
-gl.uniform2f (vec2UniformLoc,  v0, v1);            // vec2
-gl.uniform2fv(vec2UniformLoc,  [v0, v1]);          // vec2 또는 vec2 배열
-gl.uniform3f (vec3UniformLoc,  v0, v1, v2);        // vec3
-gl.uniform3fv(vec3UniformLoc,  [v0, v1, v2]);      // vec3 또는 vec3 배열
-gl.uniform4f (vec4UniformLoc,  v0, v1, v2, v4);    // vec4
-gl.uniform4fv(vec4UniformLoc,  [v0, v1, v2, v4]);  // vec4 또는 vec4 배열
+gl.uniform2f (vec2UniformLoc, v0, v1);             // vec2
+gl.uniform2fv(vec2UniformLoc, [v0, v1]);           // vec2 또는 vec2 배열
+gl.uniform3f (vec3UniformLoc, v0, v1, v2);         // vec3
+gl.uniform3fv(vec3UniformLoc, [v0, v1, v2]);       // vec3 또는 vec3 배열
+gl.uniform4f (vec4UniformLoc, v0, v1, v2, v4);     // vec4
+gl.uniform4fv(vec4UniformLoc, [v0, v1, v2, v4]);   // vec4 또는 vec4 배열
 
 gl.uniformMatrix2fv(mat2UniformLoc, false, [  4x element array ])  // mat2 또는 mat2 배열
 gl.uniformMatrix3fv(mat3UniformLoc, false, [  9x element array ])  // mat3 또는 mat3 배열
 gl.uniformMatrix4fv(mat4UniformLoc, false, [ 16x element array ])  // mat4 또는 mat4 배열
 
-gl.uniform1i (intUniformLoc,   v);                 // int
+gl.uniform1i (intUniformLoc, v);                   // int
 gl.uniform1iv(intUniformLoc, [v]);                 // int 또는 int 배열
 gl.uniform2i (ivec2UniformLoc, v0, v1);            // ivec2
 gl.uniform2iv(ivec2UniformLoc, [v0, v1]);          // ivec2 또는 ivec2 배열
@@ -186,10 +186,10 @@ gl.uniform3iv(ivec3UniformLoc, [v0, v1, v2]);      // ivec3 또는 ivec3 배열
 gl.uniform4i (ivec4UniformLoc, v0, v1, v2, v4);    // ivec4
 gl.uniform4iv(ivec4UniformLoc, [v0, v1, v2, v4]);  // ivec4 또는 ivec4 배열
 
-gl.uniform1i (sampler2DUniformLoc,   v);           // sampler2D (texture)
+gl.uniform1i (sampler2DUniformLoc, v);             // sampler2D (texture)
 gl.uniform1iv(sampler2DUniformLoc, [v]);           // sampler2D 또는 sampler2D 배열
 
-gl.uniform1i (samplerCubeUniformLoc,   v);         // samplerCube (texture)
+gl.uniform1i (samplerCubeUniformLoc, v);           // samplerCube (texture)
 gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 또는 samplerCube 배열
 </code></pre><p><code>bool</code>, <code>bvec2</code>, <code>bvec3</code>, 그리고 <code>bvec4</code>도 있는데요.
 <code>gl.uniform?f?</code> 또는 <code>gl.uniform?i?</code> 함수를 사용합니다.</p>
@@ -265,15 +265,15 @@ var data = new Uint8Array([
   0, 255, 0, 255,   // 초록 pixel
 ]);
 gl.texImage2D(
-  gl.TEXTURE_2D,
-  level,
-  gl.RGBA,
-  width,
-  height,
-  0,
-  gl.RGBA,
-  gl.UNSIGNED_BYTE,
-  data
+    gl.TEXTURE_2D,
+    level,
+    gl.RGBA,
+    width,
+    height,
+    0,
+    gl.RGBA,
+    gl.UNSIGNED_BYTE,
+    data
 );
 </code></pre><p>초기화할 때 shader program에 있는 uniform 위치를 찾습니다.</p>
 <pre><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
@@ -379,10 +379,10 @@ float f = float(1)  // float에 integer를 cast
 <pre><code>vec4 m = mix(v1, v2, f);
 </code></pre><p>이건 다음과 같습니다</p>
 <pre><code>vec4 m = vec4(
-  mix(v1.x, v2.x, f),
-  mix(v1.y, v2.y, f),
-  mix(v1.z, v2.z, f),
-  mix(v1.w, v2.w, f)
+    mix(v1.x, v2.x, f),
+    mix(v1.y, v2.y, f),
+    mix(v1.z, v2.z, f),
+    mix(v1.w, v2.w, f)
 );
 </code></pre><p><a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">WebGL Reference Card</a>의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
 만약 정말로 자세한 정보를 보고 싶다면 <a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL 사양</a>을 봐주세요.</p>
@@ -422,7 +422,7 @@ translation, rotation, scale 그리고 3D를 공부하는데 흥미가 있다면
   <li>이미지 처리</li>
   <ul>
     <li><a href="/webgl/lessons/ko/webgl-image-processing.html">WebGL 이미지 처리</a></li>
-    <li><a href="/webgl/lessons/webgl-image-processing-continued.html">WebGL 이미지 처리 심화</a></li>
+    <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">WebGL 이미지 처리 심화</a></li>
   </ul>
   <li>2D 변형, 회전, 크기, 행렬 수학</li>
   <ul>
