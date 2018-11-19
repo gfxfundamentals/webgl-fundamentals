@@ -60,12 +60,12 @@ buffer에 데이터를 넣습니다.
     var stride = 0;         // 다음 vertex로 가기 위해 이동해야할 byte 수
                             // 0 = 자료형과 numComponents에 따른 적절한 폭 사용 
     gl.vertexAttribPointer(
-      positionLoc,
-      numComponents,
-      type,
-      false,
-      stride,
-      offset
+        positionLoc,
+        numComponents,
+        type,
+        false,
+        stride,
+        offset
     );
 
 [WebGL 기초](webgl-fundamentals.html)에서 우리는 shader에 수학을 사용할 수 없고 직접 데이터를 넘길 수 있다는 것을 봤습니다
@@ -111,18 +111,18 @@ Uniform은 여러 자료형을 가질 수 있는데요.
 
     gl.uniform1f (floatUniformLoc, v);                 // float
     gl.uniform1fv(floatUniformLoc, [v]);               // float 또는 float 배열
-    gl.uniform2f (vec2UniformLoc,  v0, v1);            // vec2
-    gl.uniform2fv(vec2UniformLoc,  [v0, v1]);          // vec2 또는 vec2 배열
-    gl.uniform3f (vec3UniformLoc,  v0, v1, v2);        // vec3
-    gl.uniform3fv(vec3UniformLoc,  [v0, v1, v2]);      // vec3 또는 vec3 배열
-    gl.uniform4f (vec4UniformLoc,  v0, v1, v2, v4);    // vec4
-    gl.uniform4fv(vec4UniformLoc,  [v0, v1, v2, v4]);  // vec4 또는 vec4 배열
+    gl.uniform2f (vec2UniformLoc, v0, v1);             // vec2
+    gl.uniform2fv(vec2UniformLoc, [v0, v1]);           // vec2 또는 vec2 배열
+    gl.uniform3f (vec3UniformLoc, v0, v1, v2);         // vec3
+    gl.uniform3fv(vec3UniformLoc, [v0, v1, v2]);       // vec3 또는 vec3 배열
+    gl.uniform4f (vec4UniformLoc, v0, v1, v2, v4);     // vec4
+    gl.uniform4fv(vec4UniformLoc, [v0, v1, v2, v4]);   // vec4 또는 vec4 배열
 
     gl.uniformMatrix2fv(mat2UniformLoc, false, [  4x element array ])  // mat2 또는 mat2 배열
     gl.uniformMatrix3fv(mat3UniformLoc, false, [  9x element array ])  // mat3 또는 mat3 배열
     gl.uniformMatrix4fv(mat4UniformLoc, false, [ 16x element array ])  // mat4 또는 mat4 배열
 
-    gl.uniform1i (intUniformLoc,   v);                 // int
+    gl.uniform1i (intUniformLoc, v);                   // int
     gl.uniform1iv(intUniformLoc, [v]);                 // int 또는 int 배열
     gl.uniform2i (ivec2UniformLoc, v0, v1);            // ivec2
     gl.uniform2iv(ivec2UniformLoc, [v0, v1]);          // ivec2 또는 ivec2 배열
@@ -131,10 +131,10 @@ Uniform은 여러 자료형을 가질 수 있는데요.
     gl.uniform4i (ivec4UniformLoc, v0, v1, v2, v4);    // ivec4
     gl.uniform4iv(ivec4UniformLoc, [v0, v1, v2, v4]);  // ivec4 또는 ivec4 배열
 
-    gl.uniform1i (sampler2DUniformLoc,   v);           // sampler2D (texture)
+    gl.uniform1i (sampler2DUniformLoc, v);             // sampler2D (texture)
     gl.uniform1iv(sampler2DUniformLoc, [v]);           // sampler2D 또는 sampler2D 배열
 
-    gl.uniform1i (samplerCubeUniformLoc,   v);         // samplerCube (texture)
+    gl.uniform1i (samplerCubeUniformLoc, v);           // samplerCube (texture)
     gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 또는 samplerCube 배열
 
 `bool`, `bvec2`, `bvec3`, 그리고 `bvec4`도 있는데요.
@@ -232,15 +232,15 @@ Texture에서 나오는 데이터는 [많은 설정에 따라](webgl-3d-textures
       0, 255, 0, 255,   // 초록 pixel
     ]);
     gl.texImage2D(
-      gl.TEXTURE_2D,
-      level,
-      gl.RGBA,
-      width,
-      height,
-      0,
-      gl.RGBA,
-      gl.UNSIGNED_BYTE,
-      data
+        gl.TEXTURE_2D,
+        level,
+        gl.RGBA,
+        width,
+        height,
+        0,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
+        data
     );
 
 초기화할 때 shader program에 있는 uniform 위치를 찾습니다.
@@ -399,10 +399,10 @@ T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
 이건 다음과 같습니다
 
     vec4 m = vec4(
-      mix(v1.x, v2.x, f),
-      mix(v1.y, v2.y, f),
-      mix(v1.z, v2.z, f),
-      mix(v1.w, v2.w, f)
+        mix(v1.x, v2.x, f),
+        mix(v1.y, v2.y, f),
+        mix(v1.z, v2.z, f),
+        mix(v1.w, v2.w, f)
     );
 
 [WebGL Reference Card](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf)의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
