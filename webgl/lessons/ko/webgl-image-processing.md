@@ -70,15 +70,15 @@ WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 vertex shader�
       var texCoordBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
       gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array([
-          0.0,  0.0,
-          1.0,  0.0,
-          0.0,  1.0,
-          0.0,  1.0,
-          1.0,  0.0,
-          1.0,  1.0]),
-        gl.STATIC_DRAW
+          gl.ARRAY_BUFFER,
+          new Float32Array([
+            0.0,  0.0,
+            1.0,  0.0,
+            0.0,  1.0,
+            0.0,  1.0,
+            1.0,  0.0,
+            1.0,  1.0]),
+          gl.STATIC_DRAW
       );
       gl.enableVertexAttribArray(texCoordLocation);
       gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);

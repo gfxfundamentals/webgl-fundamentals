@@ -42,13 +42,13 @@ vertex shader에서 fragment shader로 전달하고자 하는 각 값에 “vary
     // 삼각형을 정의한 값들로 버퍼 채우기
     function setGeometry(gl) {
       gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array([
-             0, -100,
-           150,  125,
-          -175,  100
-        ]),
-        gl.STATIC_DRAW
+          gl.ARRAY_BUFFER,
+          new Float32Array([
+               0, -100,
+             150,  125,
+            -175,  100
+          ]),
+          gl.STATIC_DRAW
       );
     }
 
@@ -206,16 +206,16 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     +  var g2 = Math.random();
     +
     +  gl.bufferData(
-    +    gl.ARRAY_BUFFER,
-    +    new Float32Array([
-    +      r1, b1, g1, 1,
-    +      r1, b1, g1, 1,
-    +      r1, b1, g1, 1,
-    +      r2, b2, g2, 1,
-    +      r2, b2, g2, 1,
-    +      r2, b2, g2, 1
-    +    ]),
-    +    gl.STATIC_DRAW
+    +      gl.ARRAY_BUFFER,
+    +      new Float32Array([
+    +        r1, b1, g1, 1,
+    +        r1, b1, g1, 1,
+    +        r1, b1, g1, 1,
+    +        r2, b2, g2, 1,
+    +        r2, b2, g2, 1,
+    +        r2, b2, g2, 1
+    +      ]),
+    +      gl.STATIC_DRAW
     +  );
     +}
 
@@ -234,12 +234,12 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     +var stride = 0;        // 0 = 각 반복마다 size * sizeof(type) 앞으로 이동해 다음 위치 얻기
     +var offset = 0;        // buffer의 시작점에서 시작
     +gl.vertexAttribPointer(
-    +  colorLocation,
-    +  size,
-    +  type,
-    +  normalize,
-    +  stride,
-    +  offset
+    +    colorLocation,
+    +    size,
+    +    type,
+    +    normalize,
+    +    stride,
+    +    offset
     +);
 
 그리고 삼각형 2개의 꼭지점 6개를 계산하도록 count를 조정
@@ -263,16 +263,16 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     function setColors(gl) {
       // 모든 vertex를 다른 색으로 만들기
       gl.bufferData(
-        gl.ARRAY_BUFFER,
-    *    new Float32Array([
-    *      Math.random(), Math.random(), Math.random(), 1,
-    *      Math.random(), Math.random(), Math.random(), 1,
-    *      Math.random(), Math.random(), Math.random(), 1,
-    *      Math.random(), Math.random(), Math.random(), 1,
-    *      Math.random(), Math.random(), Math.random(), 1,
-    *      Math.random(), Math.random(), Math.random(), 1
-    *    ]),
-        gl.STATIC_DRAW
+          gl.ARRAY_BUFFER,
+    *      new Float32Array([
+    *        Math.random(), Math.random(), Math.random(), 1,
+    *        Math.random(), Math.random(), Math.random(), 1,
+    *        Math.random(), Math.random(), Math.random(), 1,
+    *        Math.random(), Math.random(), Math.random(), 1,
+    *        Math.random(), Math.random(), Math.random(), 1,
+    *        Math.random(), Math.random(), Math.random(), 1
+    *      ]),
+          gl.STATIC_DRAW
       );
     }
 
@@ -315,12 +315,12 @@ attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실�
 이건 WebGL 내부에 있는 전역 변수입니다.
 
     gl.vertexAttribPointer(
-      location,
-      numComponents,
-      typeOfData,
-      normalizeFlag,
-      strideToNextPieceOfData,
-      offsetIntoBuffer
+        location,
+        numComponents,
+        typeOfData,
+        normalizeFlag,
+        strideToNextPieceOfData,
+        offsetIntoBuffer
     );
 
 그리고 이 명령어는 WebGL에게 현재 ARRAY_BUFFER bind point에 할당된 buffer에서 데이터를 가져오고,
@@ -368,12 +368,12 @@ var size = 4;                 // 반복마다 구성 요소 4개
 var stride = 0;               // 0 = 각 반복마다 size * sizeof(type) 앞으로 이동해 다음 위치 얻기
 var offset = 0;               // buffer의 시작점에서 시작
 gl.vertexAttribPointer(
-  colorLocation,
-  size,
-  type,
-  normalize,
-  stride,
-  offset
+    colorLocation,
+    size,
+    type,
+    normalize,
+    stride,
+    offset
 );
 </pre>
 <p>그리고 buffer를 색상으로 채울 때 우리는</p>
@@ -390,16 +390,16 @@ function setColors(gl) {
   var g2 = Math.random() * 256;
 
   gl.bufferData(
-    gl.ARRAY_BUFFER,
-    new Uint8Array([
-      r1, b1, g1, 255,
-      r1, b1, g1, 255,
-      r1, b1, g1, 255,
-      r2, b2, g2, 255,
-      r2, b2, g2, 255,
-      r2, b2, g2, 255
-    ]), // Uint8Array
-    gl.STATIC_DRAW
+      gl.ARRAY_BUFFER,
+      new Uint8Array([
+        r1, b1, g1, 255,
+        r1, b1, g1, 255,
+        r1, b1, g1, 255,
+        r2, b2, g2, 255,
+        r2, b2, g2, 255,
+        r2, b2, g2, 255
+      ]), // Uint8Array
+      gl.STATIC_DRAW
   );
 }
 </pre>
