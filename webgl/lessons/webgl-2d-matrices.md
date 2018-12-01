@@ -563,7 +563,7 @@ in matrix math [check out this amazing videos](https://www.youtube.com/watch?v=k
 <h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
 <p>Up until this point whenever I referred to the canvas's dimensions I used <code>canvas.width</code> and <code>canvas.height</code>
 but above when I called <code>m3.projection</code> I instead used <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Why?</p>
-<p>Projection matrixes are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
+<p>Projection matrices are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
 to pixels. But, in the browser, there are 2 types of pixels we are dealing with. One is the number of pixels in
 the canvas itself. So for example a canvas defined like this.</p>
 <pre class="prettyprint">
