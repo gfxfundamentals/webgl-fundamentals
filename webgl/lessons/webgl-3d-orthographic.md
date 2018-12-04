@@ -225,7 +225,7 @@ X rotation
 
 which gives you these rotations.
 
-<iframe class="external_diagram" src="resources/axis-diagram.html" style="width: 540px; height: 240px;"></iframe>
+<iframe class="external_diagram" src="resources/axis-diagram.html" style="width: 540px; height: 280px;"></iframe>
 
 Similarly we'll make our simplified functions
 
