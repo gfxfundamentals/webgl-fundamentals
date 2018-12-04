@@ -230,9 +230,9 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     +// 색상 attribute에게 colorBuffer(ARRAY_BUFFER)의 데이터를 가져오는 방법 알려줌
     +var size = 4;          // 반복마다 4개 구성요소
     +var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
-    +var normalize = false; // 데이터 정규화
+    +var normalize = false; // 데이터 정규화하지 않기
     +var stride = 0;        // 0 = 각 반복마다 size * sizeof(type) 앞으로 이동해 다음 위치 얻기
-    +var offset = 0;        // buffer의 시작점에서 시작
+    +var offset = 0;        // buffer의 처음부터 시작
     +gl.vertexAttribPointer(
     +    colorLocation,
     +    size,
