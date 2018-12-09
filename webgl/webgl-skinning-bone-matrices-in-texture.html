@@ -219,6 +219,8 @@ function main() {
   function render(time) {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    m4.orthographic(-aspect * 10, aspect * 10, -10, 10, -1, 1, uniforms.projection);
 
     var t = time * 0.001;
     var angle = Math.sin(t) * 0.8;
