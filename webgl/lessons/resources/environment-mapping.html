@@ -1,0 +1,348 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Environment Mapping Diagram</title>
+<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<div class="description">
+</div>
+<div style="position:absolute;">
+  <canvas id="canvas" width="500" height="500" style="width: 500px; height: 500px;"></canvas>
+</div>
+<div id="uiContainer">
+  <div id="ui">
+  </div>
+</div>
+</body>
+</html>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="../../resources/webgl-lessons-ui.js"></script>
+<script src="../../resources/webgl-utils.js"></script>
+<script src="../../resources/webgl-lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
+<script src="../../resources/m3.js"></script>
+<script src="diagram.js"></script>
+<script>
+"use strict";
+
+function main() {
+  const opt = getQueryParams();
+  const lang = {
+    dot: opt.dot || "dot(eyeToSurfaceDir,surfaceNormal)",
+    surfaceNormal: opt.surfaceNormal || "surface normal",
+  };
+  var ctx = document.getElementById("canvas").getContext("2d");
+  var direction = 0;
+  var surfaceWidth = 200;
+
+  const gradientLabels = [
+    { label: "-x", rotation: Math.PI * 1.5, },
+    { label: "+y", rotation: Math.PI, },
+    { label: "+x", rotation: Math.PI * .5, },
+    { label: "-y", rotation: 0, },
+  ];
+  const envGradients = [];
+  for (let i = 0; i < 4; ++i) {
+    const grad = ctx.createLinearGradient(-125, 0, 125, 0);
+    for (let j = 0; j <= 20; ++j) {
+      grad.addColorStop(1 - j / 20, diagram.hsl((i + j / 20) / 4, 1, .5));
+    }
+    envGradients.push(grad);
+  }
+
+  function radToDeg(rad) {
+    return rad * 180 / Math.PI;
+  }
+
+  function degToRad(deg) {
+    return deg * Math.PI / 180;
+  }
+
+  const data = {
+    rotation: 20,
+    normals: true,
+    eyeToSurface: true,
+    addedVectors: true,
+    reflection: true,
+    multipleRays: false,
+  };
+  const ui = [
+    { type: "slider", key: "rotation", change: render, min: -70, max: 70 },
+    { type: "checkbox", key: "multipleRays", change: render, },
+    { type: "checkbox", key: "normals", change: render, },
+    { type: "checkbox", key: "eyeToSurface", change: render, },
+    { type: "checkbox", key: "addedVectors", change: render, },
+    { type: "checkbox", key: "reflection", change: render, },
+  ]
+  const widgets = webglLessonsUI.setupUI(document.querySelector('#ui'), data, ui);
+
+  function render() {
+    direction = degToRad(data.rotation);
+
+    webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
+    var width  = 250;
+    var height = 250;
+
+    var baseScale = Math.min(ctx.canvas.width / width,  ctx.canvas.height / height);
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
+    ctx.translate(ctx.canvas.width / 2, ctx.canvas.width / 2);
+    ctx.scale(baseScale, baseScale);
+
+    ctx.font = "8px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    var lx = 0;
+    var ly = -height / 3;
+
+    var sx = 0;
+    var sy = height / 5;
+
+    var dots = [];
+    var numArrows = data.multipleRays ? 6 : 1;
+    for (var ii = 0; ii < numArrows; ++ii) {
+      var u = numArrows > 1
+         ? (ii / (numArrows - 1))
+         : .5;
+      var r = (u * 2 - 1) * 70;
+      var c = Math.cos(direction);
+      var s = Math.sin(direction);
+      var x = c * r;
+      var y = s * r + sy;
+      var a = -Math.atan2(lx - x, ly - y);
+
+      if (data.eyeToSurface) {
+        ctx.fillStyle = "#F8F8F8";
+        ctx.strokeStyle = "#F8F8F8";
+        diagram.arrow(ctx, lx, ly, x, y, false, true, 0.5);
+
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(a);
+        ctx.fillStyle = "#000";
+        ctx.strokeStyle = "#000";
+        diagram.arrow(ctx, 0, 5, 0, 40, true, false, 0.5);
+        ctx.restore();
+      }
+
+      const eyeToSurfaceDir = [Math.sin(a), Math.cos(a)];
+      const surfaceNormal = [Math.sin(direction), Math.cos(direction)];
+      const dot = m3.dot(...eyeToSurfaceDir, ...surfaceNormal);
+
+      const snScale = 40;
+      const snx = x + -surfaceNormal[0] * snScale * dot;
+      const sny = y +  surfaceNormal[1] * snScale * dot;
+
+      const snx2 = snx + -surfaceNormal[0] * snScale * dot;
+      const sny2 = sny +  surfaceNormal[1] * snScale * dot;
+
+      const lex = x + -eyeToSurfaceDir[0] * snScale;
+      const ley = y +  eyeToSurfaceDir[1] * snScale;
+
+      if (data.normals) {
+        ctx.fillStyle = "#080";
+        ctx.strokeStyle = "#080";
+        diagram.arrow(ctx, x, y, snx, sny, false, true, 0.5);
+        diagram.arrow(ctx, snx, sny, snx2, sny2, false, true, 0.5);
+      }
+
+      if (data.addedVectors) {
+        ctx.fillStyle = "#FCC";
+        ctx.strokeStyle = "#FCC";
+        diagram.arrow(ctx, lex, ley, snx2, sny2, false, true, 0.3);
+      }
+
+      const minusOneDot = [];
+      // eyeToSurfaceDir – 2 ∗ dot(surfaceNormal, eyeToSurfaceDir) ∗ surfaceNormal
+      const reflect = eyeToSurfaceDir.map((incident, ndx) => {
+        const normal = surfaceNormal[ndx];
+        minusOneDot[ndx] = incident - dot * normal;
+        return incident - 2 * dot * normal;
+      });
+
+      const ra = Math.atan2(...reflect) + Math.PI;
+      {
+        ctx.save()
+        ctx.translate(-85, -85);
+        ctx.scale(.25, .25);
+        ctx.fillStyle = "#F00";
+        ctx.strokeStyle = "#F00";
+        let exToEdge = 110 / Math.max(Math.abs(reflect[0]), Math.abs(reflect[1]));
+        const ex = reflect[0] * exToEdge;
+        const ey = -reflect[1] * exToEdge;
+        diagram.arrow(ctx, 0, 0, ex, ey, false, true, 0.5);
+        ctx.restore();
+      }
+      if (data.reflection) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(ra);
+        //ctx.fillStyle = "#F8F8FF";
+        //ctx.strokeStyle = "#F8F8FF";
+        //diagram.arrow(ctx, 0, 0, 0, 300, false, false, 0.5);
+        ctx.fillStyle = "#F00";
+        ctx.strokeStyle = "#F00";
+        diagram.arrow(ctx, 0, 0, 0, 40, false, true, 0.5);
+        ctx.restore();
+      }
+
+      dots.push({
+        dot,
+        r: r,
+      });
+    }
+
+    {
+      ctx.strokeStyle = "black";
+      ctx.fillStyle = "brown";
+      diagram.drawEye(ctx, lx, ly, width / 10, height / 10);
+
+      ctx.save();
+      ctx.translate(sx, sy);
+      ctx.rotate(direction);
+
+      const gradient = ctx.createLinearGradient(-surfaceWidth / 2, 0, surfaceWidth / 2, 0);
+      const numPoints = 5;
+      for (var p = 0; p <= numPoints; ++p) {
+        const u = p / numPoints;
+        const r = (u * 2 - 1) * surfaceWidth * .5;
+        const c = Math.cos(direction);
+        const s = Math.sin(direction);
+        const x = c * r;
+        const y = s * r + sy;
+        const a = -Math.atan2(lx - x, ly - y);
+
+        const eyeToSurfaceDir = [-Math.sin(a), -Math.cos(a)];
+        const surfaceNormal = [Math.sin(direction), Math.cos(direction)];
+        const dot = m3.dot(...eyeToSurfaceDir, ...surfaceNormal);
+
+        const minusOneDot = [];
+        const reflect = eyeToSurfaceDir.map((incident, ndx) => {
+          const normal = surfaceNormal[ndx];
+          minusOneDot[ndx] = incident - dot * normal;
+          return incident - 2 * dot * normal;
+        });
+        
+        let gradNdx = 0;
+        let sc = reflect[1];
+        if (Math.abs(reflect[1]) > Math.abs(reflect[0])) {
+          if (reflect[1] > 0) {
+            gradNdx = 3;
+            sc = -reflect[0];
+          } else  {
+            gradNdx = 1;
+            sc = reflect[0];
+          }
+        } else if (reflect[0] < 0) {
+          gradNdx = 2;
+          sc = -reflect[1];
+        }
+        const ma = Math.max(Math.abs(reflect[0]), Math.abs(reflect[1]));
+        const t = 1 - .5 * (sc / ma + 1);
+        const ra = Math.atan2(...reflect);
+
+        gradient.addColorStop(u, diagram.hsl((gradNdx + t) / 4, 1, .5));
+      }
+      ctx.fillStyle = gradient;
+
+      // draw surface
+      diagram.roundedRect(ctx, surfaceWidth * -0.5, 0, surfaceWidth, 20);
+
+      //var d  = m3.dot(0, 1, Math.sin(direction), Math.cos(direction));
+      //ctx.fillStyle = 'rgba(0,255,0,.2)';//diagram.rgb(1,0,0);
+
+      ctx.fill();
+      ctx.strokeStyle = diagram.rgb(0,0,0);
+      ctx.stroke();
+
+      ctx.fillStyle = "#000";
+      ctx.fillText(lang.dot, 0, 14);
+
+      dots.forEach(function(dot, ndx) {
+          var r = dot.r;
+          ctx.save();
+          ctx.translate(r, 0);
+          ctx.font = "5px sans-serif";
+          ctx.fillText(dot.dot.toFixed(3), 0, 5);
+          ctx.restore();
+      });
+
+      var nx = 0;
+      var ny = -20;
+      /*
+      ctx.fillStyle = "#080";
+      ctx.strokeStyle = "#080";
+      var numArrows = 5;
+      for (var ii = 0; ii <= numArrows; ++ii) {
+        var u = ii / numArrows;
+        var x = (u * 2 - 1) * 70;
+        diagram.arrow(ctx, x, 0, x, ny, false, true, 0.5);
+      }
+      */
+
+      /*
+      if (data.normals) {
+        ctx.lineWidth = 2;
+        ctx.fillStyle = "#080";
+        ctx.strokeStyle = "#FFF";
+        diagram.outlineText(ctx, lang.surfaceNormal, nx, -8);
+      }
+      */
+
+      ctx.restore();
+    }
+
+    {
+      ctx.save()
+      ctx.translate(-85, -85);
+      ctx.scale(.25, .25);
+      envGradients.forEach((grad, ndx) => {
+        ctx.save();
+          ctx.rotate(Math.PI + (ndx - 1) / 2 * Math.PI);
+          ctx.translate(0, 125);
+          ctx.fillStyle = grad;
+          ctx.fillRect(-125, -10, 250, 20);
+          ctx.strokeStyle = "white";
+          ctx.fillStyle = "black";
+          ctx.translate(0, 15);
+          ctx.scale(4,4);
+          ctx.rotate(gradientLabels[ndx].rotation);
+          //ctx.fillText(gradientLabels[ndx].label, 0, 0);
+          diagram.outlineText(ctx, gradientLabels[ndx].label, 0, 0);
+        ctx.restore();
+      });
+      ctx.restore();
+    }
+
+    ctx.restore();
+  }
+  render();
+}
+
+function getQueryParams() {
+  var params = {};
+  if (window.location.search) {
+    window.location.search.substring(1).split("&").forEach(function(pair) {
+      var keyValue = pair.split("=").map(function (kv) {
+        return decodeURIComponent(kv);
+      });
+      params[keyValue[0]] = keyValue[1];
+    });
+  }
+  return params;
+}
+
+main();
+</script>
+

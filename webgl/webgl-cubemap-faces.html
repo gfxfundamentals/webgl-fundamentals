@@ -1,0 +1,77 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Textures - Canvas faces</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+img {
+  margin: 5px;
+  border: 1px solid black;
+}
+</style>
+</head>
+<body>
+<div class="description">
+Using Canvas2D to generate faces. <br/>
+</div>
+</body>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="resources/webgl-utils.js"></script>
+<script>
+"use strict";
+
+function main() {
+  // Get A 2D context
+  /** @type {Canvas2DRenderingContext} */
+  const ctx = document.createElement("canvas").getContext("2d");
+
+  ctx.canvas.width = 128;
+  ctx.canvas.height = 128;
+
+  const faceInfos = [
+    { faceColor: '#F00', textColor: '#0FF', text: '+X' },
+    { faceColor: '#FF0', textColor: '#00F', text: '-X' },
+    { faceColor: '#0F0', textColor: '#F0F', text: '+Y' },
+    { faceColor: '#0FF', textColor: '#F00', text: '-Y' },
+    { faceColor: '#00F', textColor: '#FF0', text: '+Z' },
+    { faceColor: '#F0F', textColor: '#0F0', text: '-Z' },
+  ];
+  faceInfos.forEach((faceInfo) => {
+    const {faceColor, textColor, text} = faceInfo;
+    generateFace(ctx, faceColor, textColor, text);
+
+    // show the result
+    ctx.canvas.toBlob((blob) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(blob);
+      document.body.appendChild(img);
+    });
+  });
+}
+
+function generateFace(ctx, faceColor, textColor, text) {
+  const {width, height} = ctx.canvas;
+  ctx.fillStyle = faceColor;
+  ctx.fillRect(0, 0, width, height);
+  ctx.font = `${width * 0.7}px sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = textColor;
+  ctx.fillText(text, width / 2, height / 2);
+}
+
+main();
+</script>
+</html>
+
+
+
