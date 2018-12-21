@@ -1,11 +1,6 @@
 Title: WebGL Skinning
 Description: How to skin a mesh in WebGL
 
-* fix to use skinmatrix? plus faster for 1, slower for 2
-* check multiple
-  * do I need inverse global?
-
-
 Skinning in graphics is the name given to moving a set of vertices based
 on the weighted influence of multiple matrices. That's pretty abstract.
 
