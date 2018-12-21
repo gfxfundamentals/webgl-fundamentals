@@ -894,6 +894,10 @@
       return array;
     }
 
+    if (isArrayBuffer(array.data)) {
+      return array.data;
+    }
+
     if (Array.isArray(array)) {
       array = {
         data: array,
@@ -962,10 +966,11 @@
     var attribs = {};
     Object.keys(mapping).forEach(function(attribName) {
       var bufferName = mapping[attribName];
-      var array = makeTypedArray(arrays[bufferName], bufferName);
+      var origArray = arrays[bufferName];
+      var array = makeTypedArray(origArray, bufferName);
       attribs[attribName] = {
         buffer:        createBufferFromTypedArray(gl, array),
-        numComponents: array.numComponents || guessNumComponentsFromName(bufferName),
+        numComponents: origArray.numComponents || array.numComponents || guessNumComponentsFromName(bufferName),
         type:          getGLTypeForTypedArray(gl, array),
         normalize:     getNormalizationForTypedArray(array),
       };

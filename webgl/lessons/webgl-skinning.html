@@ -85,19 +85,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>Skinning in graphics is the name given to moving a set of vertices based
+      <ul>
+<li>fix to use skinmatrix? plus faster for 1, slower for 2</li>
+<li>check multiple<ul>
+<li>do I need inverse global?</li>
+</ul>
+</li>
+</ul>
+<p>Skinning in graphics is the name given to moving a set of vertices based
 on the weighted influence of multiple matrices. That&#39;s pretty abstract.</p>
 <p>It&#39;s called <em>skinning</em> because it&#39;s typically used to make 3D characters
 have a &quot;skeleton&quot; made from &quot;bones&quot; where &quot;bone&quot; is another name for matrix
 and then <strong>per vertex</strong> setting the influence of each bone to that vertex.</p>
 <p>So for example the hand bone would have nearly 100% influence on the vertices
 near the hand of a character where as the foot bone would have zero influence
-on those same vertices.</p>
+on those same vertices. The vertices in around the wrist would have some influence form the hand bone and also some from the arm bone.</p>
 <p>The basic part is that you need bones (which is just a fancy way of saying
-a matrix hierarchy) and weights.  Weights are per vertex values that go
+a matrix hierarchy) and weights. Weights are per vertex values that go
 from 0 to 1 to say how much a particular bone-matrix affects the position
-of that vertex.  Weights are kind of like vertex colors as far as data.
-One set of weights per vertex.  In other words the weights are put in a
+of that vertex. Weights are kind of like vertex colors as far as data.
+One set of weights per vertex. In other words the weights are put in a
 buffer and provided through attributes.</p>
 <p>Typically you limit the number of weights per vertex partly because
 otherwise it would be way too much data.  A character can have anywhere
@@ -116,7 +123,8 @@ bones with the highest weights and then normalizing those weights</p>
                bone2Matrix * position * weight2 +
                bone3Matrix * position * weight3 +
                bone4Matrix * position * weight4);
-</code></pre><p>Assuming you stored the bones matrices in a uniform array, and you
+</code></pre><p>As you can see it&#39;s like were computing 4 different positions for each vertex and then blending them back into one by applying the weights.</p>
+<p>Assuming you stored the bones matrices in a uniform array, and you
 passed in the the weights and which bone each weight applies to as
 attributes you might do something like</p>
 <pre><code>attribute vec4 a_position;
@@ -129,7 +137,7 @@ gl_Position = projection * view *
                a_bones[int(a_boneNdx[1])] * a_position * a_weight[1] +
                a_bones[int(a_boneNdx[2])] * a_position * a_weight[2] +
                a_boneS[int(a_boneNdx[3])] * a_position * a_weight[3]);
-</code></pre><p>There&#39;s one more issue.  Let&#39;s say you have a model of a person with
+</code></pre><p>There&#39;s one more issue. Let&#39;s say you have a model of a person with
 the origin (0,0,0) on the floor just between their feet.</p>
 <div class="webgl_center"><img src="resources/bone-head.svg" style="width: 500px;"></div>
 
@@ -454,9 +462,593 @@ enough uniforms to pass in the matrices via uniforms.</p>
 <p>So that&#39;s the basics of skinning. It&#39;s not so hard to write the code to display
 a skinned mesh. The harder part is actually getting data. You generally need
 some 3D software like blender/maya/3d studio max, and then to either write
-your own exporter or find a an exporter and format that will provide all the data needed.
-The vertices, their bones, which bones influence which vertices and their influence
-weights,</p>
+your own exporter or find a an exporter and format that will provide all the data needed. You&#39;ll see as we go over it that there is 10x more code in loading a skin than there is in displaying it and that doesn&#39;t include the probably 20-30x more code in the exporter to get the data out of the 3D modeling program. As an aside this is one of the things people writing their own 3D engine often miss. The engine is the easy part 😜</p>
+<p>There&#39;s going to be a lot of code so let&#39;s first try to just get the un-skinned model to display.</p>
+<p>Let&#39;s try loading a glTF file. <a href="https://www.khronos.org/gltf/">glTF</a> as it&#39;s kind of desgined for WebGL. Searching the net I found <a href="https://www.blendswap.com/blends/view/65255">this killer whale blender file</a> by <a href="https://www.blendswap.com/user/pasilan">Junskie Pastilan</a></p>
+<div class="webgl_center"><img src="../resources/models/killer_whale/thumbnail.jpg"></div>
+
+<p>There are 2 top level formats for glTF. The <code>.gltf</code> format is a JSON file that generally references a <code>.bin</code> file which is a binary file that contains usually just the geometry and possibly animation data. The other format is <code>.glb</code> which is a binary format. It&#39;s basically just the JSON and any other files concatinated into one binary file with a short header and a size/type section between each
+concatinated piece. For JavaScript I think the <code>.gltf</code> format is slightly easier to get started with so let&#39;s try to load that.</p>
+<p>First <a href="https://www.blendswap.com/blends/view/65255">I downloaded the .blend file</a>, installed <a href="https://blender.org">blender</a>, installed <a href="https://github.com/KhronosGroup/glTF-Blender-IO">the gltf exporter</a>, loaded the file into blender and exported.</p>
+<div class="webgl_center"><img src="resources/blender-killer-whale.png" style="width: 700px;"></div>
+
+<blockquote>
+<p>A quick note: 3D software like Blender, Maya, 3DSMax is extremely complex software with 1000s of options. When I first learned 3DSMax in 1996 I spent 2-3 hrs a day reading through the 1000+ page manual and working though the tutorials for about 3 weeks. I did something similar when I learned Maya a few years later. Blender is just as complicated and further it has a very different interface from pretty much all other software. This is just a short way of saying that you should expect to spend some significant time learning whatever 3D package you decide to use.</p>
+</blockquote>
+<p>After exporting it I loaded the .gltf file into my text editor and took a look around. I used <a href="https://raw.githubusercontent.com/KhronosGroup/glTF/master/specification/2.0/figures/gltfOverview-2.0.0a.png">this cheat sheet</a> to figure out the format.</p>
+<p>I want to make it clear the code below is not a perfect glTF loader. It&#39;s just enough code to get the whale to display. I suspect that if we tried different files we&#39;d run into areas that need to be changed.</p>
+<p>The first thing we need to do is load the file. To make it simpler let&#39;s use JavaScript&#39;s <a href="https://javascript.info/async-await">async/await</a>. First let&#39;s write some code to load the <code>.gltf</code> file and any files it references.</p>
+<pre><code>async function loadGLTF(url) {
+  const gltf = await loadJSON(url);
+
+  // load all the referenced files relative to the gltf file
+  const baseURL = new URL(url, location.href);
+  gltf.buffers = await Promise.all(gltf.buffers.map((buffer) =&gt; {
+    const url = new URL(buffer.uri, baseURL.href);
+    return loadBinary(url.href);
+  }));
+
+  ...
+
+async function loadFile(url, typeFunc) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`could not load: ${url}`);
+  }
+  return await response[typeFunc]();
+}
+
+async function loadBinary(url) {
+  return loadFile(url, &#39;arrayBuffer&#39;);
+}
+
+async function loadJSON(url) {
+  return loadFile(url, &#39;json&#39;);
+}
+</code></pre><p>Now we need to walk through the data and connect things up.</p>
+<p>First let&#39;s handle what glTF considers a mesh. A mesh is collection of primitives. A primitive is effectively the buffers and attributes needed to render something. Let&#39;s use our webgl utilties we convered in <a href="webgl-less-code-more-fun.html">less code more fun</a>. We&#39;ll walk the meshes and for each one build up the arrays we need to pass to <code>webglUtils.createBufferInfoFromArrays</code>.</p>
+<p>Primitives have an array of attributes, each attribute references an accessor. An accessor says what kind of data is there, for example <code>VEC3</code>/<code>gl.FLOAT</code> and references a bufferView. A bufferView specifies some view into a buffer. We can write some code that given an accessor returns a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray">TypedArray</a></p>
+<pre><code>// Given a GL type return the TypedArray needed
+function glTypeToTypedArray(gl, type) {
+  switch(type) {
+    case gl.BYTE:                           return Int8Array;
+    case gl.UNSIGNED_BYTE:                  return Uint8Array;
+    case gl.SHORT:                          return Int16Array;
+    case gl.UNSIGNED_SHORT:                 return Uint16Array;
+    case gl.INT:                            return Int32Array;
+    case gl.UNSIGNED_INT:                   return Uint32Array;
+    case gl.FLOAT:                          return Float32Array;
+    case gl.HALF_FLOAT:                     return Uint16Array;
+    default:
+      throw new Error(`unknown type: ${type}`);
+  }
+}
+
+// Given a bufferViewIndex and a type return a TypedArray of the correct type
+// that views the correct portion of the buffer
+function getBufferView(gl, gltf, bufferViewIndex, type) {
+  const TypedArray = glTypeToTypedArray(gl, type);
+  const bufferView = gltf.bufferViews[bufferViewIndex];
+  const buffer = gltf.buffers[bufferView.buffer];
+  return new TypedArray(buffer, bufferView.byteOffset, bufferView.byteLength / TypedArray.BYTES_PER_ELEMENT);
+}
+
+// given an accessor index return both the accessor and
+// a TypedArray for the corrent portion of the buffer
+function getAccessorAndBufferView(gl, gltf, accessorIndex) {
+  const accessor = gltf.accessors[accessorIndex];
+  const bufferView = getBufferView(gl, gltf, accessor.bufferView, accessor.componentType);
+  return {accessor, bufferView};
+}
+</code></pre><p>We also need a way to convert from an glTF accessor type to a number of components</p>
+<pre><code>function accessorTypeToNumComponents(type) {
+  switch (type) {
+    case &#39;SCALAR&#39;: return 1;
+    case &#39;VEC2&#39;: return 2;
+    case &#39;VEC3&#39;: return 3;
+    case &#39;VEC4&#39;: return 4;
+    default:
+      throw new Error(`unknown type: ${type}`);
+  }    
+}
+</code></pre><p>Now that we&#39;ve made these functions we can use them to setup our meshes</p>
+<p>Note: glTF files can supposedly define materials but the exporter didn&#39;t put any materials in the file even though export materials was checked. I can only guess the exporter doesn&#39;t handle every kind of material in blender which is unfortunate. We&#39;ll use a default material if there is no material in the file. Since there are no materials in this file there&#39;s no code here to use glTF materials.</p>
+<pre><code>const defaultMaterial = {
+  uniforms: {
+    u_diffuse: [.5, .8, 1, 1],
+  },
+};
+
+// setup meshes
+gltf.meshes.forEach((mesh) =&gt; {
+  mesh.primitives.forEach((primitive) =&gt; {
+    // make arrays to pass to webglUtils.createBufferInfoFromArrays
+    const arrays = {};
+    for (const [attribName, index] of Object.entries(primitive.attributes)) {
+      const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, index);
+      arrays[attribName] = {
+        data: bufferView,
+        type: accessor.componentType,
+        numComponents: accessorTypeToNumComponents(accessor.type),
+      };
+    }
+    if (primitive.indices !== undefined) {
+      const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, primitive.indices);
+      arrays.indices = {
+        data: bufferView,
+        type: accessor.componentType,
+        numComponents: accessorTypeToNumComponents(accessor.type),
+      };
+    }
+    // create the webgl buffers
+    primitive.bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
+
+    // save the material info for this primitive
+    primitive.material = gltf.materials &amp;&amp; gltf.materials[primitive.material] || defaultMaterial;
+  });
+});
+</code></pre><p>Now each primitive will have a <code>bufferInfo</code> and a <code>material</code> property.</p>
+<p>For skinning we almost always need some kind of scene graph. We created a scene graph in <a href="webgl-scene-graph.html">the article about scene graphs</a> so let&#39;s use that one.</p>
+<pre><code>class TRS {
+  constructor(position = [0, 0, 0], rotation = [0, 0, 0, 1], scale = [1, 1, 1]) {
+    this.position = position;
+    this.rotation = rotation;
+    this.scale = scale;
+  }
+  getMatrix(dst) {
+    dst = dst || new Float32Array(16);
+    m4.compose(this.position, this.rotation, this.scale, dst);
+    return dst;
+  }
+}
+
+class Node {
+  constructor(source, name) {
+    this.name = name;
+    this.source = source;
+    this.parent = null;
+    this.children = [];
+    this.localMatrix = m4.identity();
+    this.worldMatrix = m4.identity();
+    this.drawables = [];
+  }
+  setParent(parent) {
+    if (this.parent) {
+      this.parent._removeChild(this);
+      this.parent = null;
+    }
+    if (parent) {
+      parent._addChild(this);
+      this.parent = parent;
+    }
+  }
+  updateWorldMatrix(parentWorldMatrix) {
+    const source = this.source;
+    if (source) {
+      source.getMatrix(this.localMatrix);
+    }
+
+    if (parentWorldMatrix) {
+      // a matrix was passed in so do the math
+      m4.multiply(parentWorldMatrix, this.localMatrix, this.worldMatrix);
+    } else {
+      // no matrix was passed in so just copy local to world
+      m4.copy(this.localMatrix, this.worldMatrix);
+    }
+
+    // now process all the children
+    const worldMatrix = this.worldMatrix;
+    for (const child of this.children) {
+      child.updateWorldMatrix(worldMatrix);
+    }
+  }
+  traverse(fn) {
+    fn(this);
+    for (const child of this.children) {
+      child.traverse(fn);
+    }
+  }
+  _addChild(child) {
+    this.children.push(child);
+  }
+  _removeChild(child) {
+    const ndx = this.children.indexOf(child);
+    this.children.splice(ndx, 1);
+  }
+}
+</code></pre><p>There are a couple of notable changes from the code in <a href="webgl-scene-graph.html">the scene graph article</a>.</p>
+<ul>
+<li><p>This code is using the <code>class</code> feature of ES6.</p>
+<p>It&#39;s much nicer to use the <code>class</code> syntax than the old style of defining a class.</p>
+</li>
+<li><p>We added an array of drawables to <code>Node</code></p>
+<p>This will list the things to draw from this Node. We&#39;ll put
+instances of a class on this list that are responsible for doing
+the actual drawing. This way we can generically draw different things
+by using different classes.  </p>
+<p>Note: It&#39;s not clear to me that putting an array of drawables on Node
+is the best decision. I feel like the scene graph itself should
+maybe not contain drawables at all. Things that need to be drawn could instead
+just reference the node in the graph where to get their data.
+This way with drawables in the graph is common though so lets start with that. </p>
+</li>
+<li><p>We added a <code>traverse</code> method.</p>
+<p>It calls a function passing it the current node and then recursively doing the
+same for all child nodes.</p>
+</li>
+<li><p>The <code>TRS</code> class is using a quaternion for rotation</p>
+<p>We have not convered quaternions and to be honest I don&#39;t think I understand
+them well enough to explain them. Fortunately we don&#39;t need to know how they
+work to use them. We just take the data out of the gltf file and call
+a function that builds a matrix from that data and use the matrix.</p>
+</li>
+</ul>
+<p>The nodes in the glTF file are stored as a flat array.
+We&#39;ll convert node data in the glTF to <code>Node</code> instances. We save off the old array
+of node data as <code>origNodes</code> as we&#39;ll need it later. </p>
+<pre><code>const origNodes = gltf.nodes;
+gltf.nodes = gltf.nodes.map((n) =&gt; {
+  const {name, skin, mesh, translation, rotation, scale} = n;
+  const trs = new TRS(translation, rotation, scale);
+  const node = new Node(trs, name);
+  const realMesh =　gltf.meshes[mesh];
+  if (realMesh) {
+    node.drawables.push(new MeshRenderer(realMesh));
+  }
+  return node;
+});
+</code></pre><p>Above we created a <code>TRS</code> instance for each node, a <code>Node</code> instance for each node, and, if there was a <code>mesh</code> property we looked up the mesh data we setup before and created a <code>MeshRenderer</code> to draw it. </p>
+<p>Let&#39;s make the <code>MeshRenderer</code>. It&#39;s just an encapsulation of the code we used in <a href="webgl-less-code-more-fun.html">less code more fun</a> to rendener a single model. All it does is hold a reference to a mesh and then for each primitive sets up the program, attributes, and uniforms and finally calls <code>gl.drawArrays</code> or <code>gl.drawElements</code> via <code>webglUtils.drawBufferInfo</code>;</p>
+<pre><code>class MeshRenderer {
+  constructor(mesh) {
+    this.mesh = mesh;
+  }
+  render(node, projection, view, sharedUniforms) {
+    const {mesh} = this;
+    gl.useProgram(meshProgramInfo.program);
+    for (const primitive of mesh.primitives) {
+      webglUtils.setBuffersAndAttributes(gl, meshProgramInfo, primitive.bufferInfo);
+      webglUtils.setUniforms(meshProgramInfo, {
+        u_projection: projection,
+        u_view: view,
+        u_world: node.worldMatrix,
+      });
+      webglUtils.setUniforms(skinProgramInfo, primitive.material.uniforms);
+      webglUtils.setUniforms(skinProgramInfo, sharedUniforms);
+      webglUtils.drawBufferInfo(gl, primitive.bufferInfo);
+    }
+  }
+}
+</code></pre><p>We&#39;ve created the nodes, now we need to actually arrange them into a scene graph. This is done at 2 levels in glTF.
+First, each node has an optional array of children that are also indicies into the array of nodes so we can walk all
+the nodes and parent their children</p>
+<pre><code>function addChildren(nodes, node, childIndices) {
+  childIndices.forEach((childNdx) =&gt; {
+    const child = nodes[childNdx];
+    child.setParent(node);
+  });
+}
+
+// arrange nodes into graph
+gltf.nodes.forEach((node, ndx) =&gt; {
+  const children = origNodes[ndx].children;
+  if (children) {
+    addChildren(gltf.nodes, node, children);
+  }
+});
+</code></pre><p>Then there is an array of scenes. A scene references an
+array of nodes by index into the nodes array that are at the bottom of the scene. It&#39;s not clear to me why they didn&#39;t just start with a single root node but whatever, it&#39;s what&#39;s in the glTF file so we create a root node and parent all the scene&#39;s children to that node</p>
+<pre><code>  // setup scenes
+  for (const scene of gltf.scenes) {
+    scene.root = new Node(new TRS(), scene.name);
+    addChildren(gltf.nodes, scene.root, scene.nodes);
+  }
+
+  return gltf;
+}
+</code></pre><p>and we&#39;re done with loading, at least just the meshes. Let&#39;s
+mark the main function as <code>async</code> so we can use the <code>await</code>
+keyword.</p>
+<pre><code>async function main() {
+</code></pre><p>and we can load the gltf file like this</p>
+<pre><code>const gltf = await loadGLTF(&#39;resources/models/killer_whale/whale.CYCLES.gltf&#39;);
+</code></pre><p>To render we need a shader that matches the data in the gltf file. Let&#39;s look at the data in the gltf file for the primitive that&#39;s in it </p>
+<pre><code>{
+    &quot;name&quot; : &quot;orca&quot;,
+    &quot;primitives&quot; : [
+        {
+            &quot;attributes&quot; : {
+                &quot;JOINTS_0&quot; : 5,
+                &quot;NORMAL&quot; : 2,
+                &quot;POSITION&quot; : 1,
+                &quot;TANGENT&quot; : 3,
+                &quot;TEXCOORD_0&quot; : 4,
+                &quot;WEIGHTS_0&quot; : 6
+            },
+            &quot;indices&quot; : 0
+        }
+    ]
+}
+</code></pre><p>Looking at that, to render let&#39;s just use <code>NORMAL</code> and <code>POSITION</code>. Our <code>webglUtils</code> prepend <code>a_</code> to the front of each attribute so a vertex shader like this should work</p>
+<pre><code>attribute vec4 a_POSITION;
+attribute vec3 a_NORMAL;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+
+varying vec3 v_normal;
+
+void main() {
+  gl_Position = u_projection * u_view * u_world * a_POSITION;
+  v_normal = mat3(u_world) * a_NORMAL;
+}
+</code></pre><p>and for the fragment shader let&#39;s use a simple directional light</p>
+<pre><code>precision mediump float;
+
+varying vec3 v_normal;
+
+uniform vec4 u_diffuse;
+uniform vec3 u_lightDirection;
+
+void main () {
+  vec3 normal = normalize(v_normal);
+  float light = dot(u_lightDirection, normal) * .5 + .5;
+  gl_FragColor = vec4(u_diffuse.rgb * light, u_diffuse.a);
+}
+</code></pre><p>Notice we take the dot product like we covered in <a href="webgl-3d-lighting-directional.html">the article on direcitonal lights</a> but unlike that one, here the dot product is multipled by .5 and we add .5. With normal directional lighting the surface is lit 100% when directly facing the light and trails off to 0% when the surface is perpendicular to the light. That means the entire 1/2 of the model facing away from the light is black. By multiplying by .5 and adding .5 we take the dot product from -1 &lt;-&gt; 1 to 0 &lt;-&gt; 1 which means it will only be black when facing the complete opposite direciton. This gives a cheap but pleasing lighting for simple tests.</p>
+<p>So, we need to compile and link the shaders.</p>
+<pre><code>// compiles and links the shaders, looks up attribute and uniform locations
+const meshProgramInfo = webglUtils.createProgramInfo(gl, [&quot;meshVS&quot;, &quot;fs&quot;]);
+</code></pre><p>and then to render all that&#39;s different from before is this</p>
+<pre><code>const sharedUniforms = {
+  u_lightDirection: m4.normalize([-1, 3, 5]),
+};
+
+function renderDrawables(node) {
+  for(const drawable of node.drawables) {
+      drawable.render(node, projection, view, sharedUniforms);
+  }
+}
+
+for (const scene of gltf.scenes) {
+  // updatte all world matices in the scene.
+  scene.root.updateWorldMatrix();
+  // walk the scene and render all renderables
+  scene.root.traverse(renderDrawables);
+}
+</code></pre><p>Left over from before (not shown above) is our code for computing a projection matrix, camera matrix, and view matrix. We then just walk each scene, call <code>scene.root.updateWorldMatrix</code> which will update the world
+matrix of all the nodes in that graph. Then we call <code>scene.root.traverse</code> with <code>renderDrawables</code>.</p>
+<p><code>renderDrawables</code> calls the render method of all
+the the drawables on that node passing in the projection, view, and lighting info via <code>sharedUniforms</code>.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-skinning-3d-gltf.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-skinning-3d-gltf.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>Now that that&#39;s working let&#39;s handle the skins. </p>
+<p>First let&#39;s make a class to represent a skin. It will manage the list of joints, which is another word for nodes in the scene graph that apply to the skin. It will also have the inverse bind matrices and it will manage the texture we put the joint matrices in.</p>
+<pre><code>class Skin {
+  constructor(joints, inverseBindMatrixData) {
+    this.joints = joints;
+    this.inverseBindMatrices = [];
+    this.jointMatrices = [];
+    // allocate enough space for one matrix per joint
+    this.jointData = new Float32Array(joints.length * 16);
+    // create views for each joint and inverseBindMatrix
+    for (let i = 0; i &lt; joints.length; ++i) {
+      this.inverseBindMatrices.push(new Float32Array(
+          inverseBindMatrixData.buffer, 
+          inverseBindMatrixData.byteOffset + Float32Array.BYTES_PER_ELEMENT * 16 * i,
+          16));
+      this.jointMatrices.push(new Float32Array(
+          this.jointData.buffer, 
+          Float32Array.BYTES_PER_ELEMENT * 16 * i,
+          16));
+    }
+    // create a texture to hold the joint matrices
+    this.jointTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, this.jointTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  }
+  update(node) {
+    const globalWorldInverse = m4.inverse(node.worldMatrix);
+    // go through each joint and get its current worldMatrix
+    // apply the inverse bind matrices and store the
+    // entire result in the texture
+    for (let j = 0; j &lt; this.joints.length; ++j) {
+      const joint = this.joints[j];
+      const dst = this.jointMatrices[j];
+      m4.multiply(globalWorldInverse, joint.worldMatrix, dst);
+      m4.multiply(dst, this.inverseBindMatrices[j], dst);
+    }
+    gl.bindTexture(gl.TEXTURE_2D, this.jointTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 4, this.joints.length, 0,
+                  gl.RGBA, gl.FLOAT, this.jointData);
+  }
+}
+</code></pre><p>And like we had a <code>MeshRenderer</code> let&#39;s make a <code>SkinRenderer</code> that uses the <code>Skin</code> to render a skinned mesh. </p>
+<pre><code>class SkinRenderer {
+  constructor(mesh, skin) {
+    this.mesh = mesh;
+    this.skin = skin;
+  }
+  render(node, projection, view, sharedUniforms) {
+    const {skin, mesh} = this;
+    skin.update(node);
+    gl.useProgram(skinProgramInfo.program);
+    for (const primitive of mesh.primitives) {
+      webglUtils.setBuffersAndAttributes(gl, skinProgramInfo, primitive.bufferInfo);
+      webglUtils.setUniforms(skinProgramInfo, {
+        u_projection: projection,
+        u_view: view,
+        u_world: node.worldMatrix,
+        u_jointTexture: skin.jointTexture,
+        u_numJoints: skin.joints.length,
+      });
+      webglUtils.setUniforms(skinProgramInfo, primitive.material.uniforms);
+      webglUtils.setUniforms(skinProgramInfo, sharedUniforms);
+      webglUtils.drawBufferInfo(gl, primitive.bufferInfo);
+    }
+  }
+}
+</code></pre><p>You can see it&#39;s very similar to the <code>MeshRenderer</code>. It has a reference to a <code>Skin</code> which it uses to update all the matrices needed to render. Then it follows the standard pattern for rendering, using the program, setting up the attributes, setting all the uniforms using <code>webglUtils.setUniforms</code> which also binds textures, and then rendering.</p>
+<p>We also need a vertex shader that supports skinning</p>
+<pre><code>&lt;script id=&quot;skinVS&quot; type=&quot;notjs&quot;&gt;
+attribute vec4 a_POSITION;
+attribute vec3 a_NORMAL;
+attribute vec4 a_WEIGHTS_0;
+attribute vec4 a_JOINTS_0;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+uniform sampler2D u_jointTexture;
+uniform float u_numJoints;
+
+varying vec3 v_normal;
+
+// these offsets assume the texture is 4 pixels across
+#define ROW0_U ((0.5 + 0.0) / 4.)
+#define ROW1_U ((0.5 + 1.0) / 4.)
+#define ROW2_U ((0.5 + 2.0) / 4.)
+#define ROW3_U ((0.5 + 3.0) / 4.)
+
+mat4 getBoneMatrix(float jointNdx) {
+  float v = (jointNdx + 0.5) / u_numJoints;
+  return mat4(
+    texture2D(u_jointTexture, vec2(ROW0_U, v)),
+    texture2D(u_jointTexture, vec2(ROW1_U, v)),
+    texture2D(u_jointTexture, vec2(ROW2_U, v)),
+    texture2D(u_jointTexture, vec2(ROW3_U, v)));
+}
+
+void main() {
+  mat4 skinMatrix = getBoneMatrix(a_JOINTS_0[0]) * a_WEIGHTS_0[0] +
+                    getBoneMatrix(a_JOINTS_0[1]) * a_WEIGHTS_0[1] +
+                    getBoneMatrix(a_JOINTS_0[2]) * a_WEIGHTS_0[2] +
+                    getBoneMatrix(a_JOINTS_0[3]) * a_WEIGHTS_0[3];
+  mat4 world = u_world * skinMatrix;
+  gl_Position = u_projection * u_view * world * a_POSITION;
+  v_normal = mat3(world) * a_NORMAL;
+}
+&lt;/script&gt;
+</code></pre><p>This is pretty much the same as our skinning shader above. We renamed the attributes to match what&#39;s in the gltf file.
+The biggest change it making a <code>skinMatrix</code>. In our previous skinning shader we multiplied the position by each individual joint/bone matrix and multplied those by the weight of influcence for each joint. In this case we instead add up the matrices multiplied by the weights and just multiply by position once. This produces same result but we can use the <code>skinMatrix</code> to multiply the normal as well which we need to do otherwise the normals won&#39;t match the skin.</p>
+<p>Also notice we multiply in the <code>u_world</code> matrix here. We subtracted it out in <code>Skin.update</code> with these lines</p>
+<pre><code>*const globalWorldInverse = m4.inverse(node.worldMatrix);
+// go through each joint and get its current worldMatrix
+// apply the inverse bind matrices and store the
+// entire result in the texture
+for (let j = 0; j &lt; this.joints.length; ++j) {
+  const joint = this.joints[j];
+  const dst = this.jointMatrices[j];
+*  m4.multiply(globalWorldInverse, joint.worldMatrix, dst);
+</code></pre><p>Whether you do that or not is up to you. The reason to do it is it lets you instance the skin. In other words you can render the skinned mesh in the exact same pose at more than
+one place in the same frame. The idea being that if there are lots of joints then doing all the matrix math for a skinned mesh is slow so
+you do that math once and then you can display that skinned
+mesh in different places just by re-rendering with a different world matrix.</p>
+<p>That&#39;s maybe useful for displaying a crowd of characters. Unfortunately all the characters will be in the exact same pose so it&#39;s unclear to me if it&#39;s really that useful or not. How often does that situation actually come up? You can remove multiplying by the inverse world matrix of the node in <code>Skin</code> and remove mutlplying by <code>u_world</code> in the shader and the result will look the same, you just can&#39;t <em>instance</em> that skinned mesh. Of course you can render the same skinned mesh as many times as you want in different poses. You&#39;ll need a different <code>Skin</code> object pointing to different nodes that are in some other orientation.</p>
+<p>Back in our loading code, when we&#39;re making <code>Node</code> instances, if there&#39;s a <code>skin</code> property we&#39;ll remember it so we can make a <code>Skin</code> for it.</p>
+<pre><code>+const skinNodes = [];
+const origNodes = gltf.nodes;
+gltf.nodes = gltf.nodes.map((n) =&gt; {
+  const {name, skin, mesh, translation, rotation, scale} = n;
+  const trs = new TRS(translation, rotation, scale);
+  const node = new Node(trs, name);
+  const realMesh =　gltf.meshes[mesh];
++  if (skin !== undefined) {
++    skinNodes.push({node, mesh: realMesh, skinNdx: skin});
++  } else if (realMesh) {
+    node.drawables.push(new MeshRenderer(realMesh));
+  }
+  return node;
+});
+</code></pre><p>After making <code>Node</code>s we need to make <code>Skin</code>s. Skins reference nodes via a <code>joints</code> array which is a list of indices of nodes that supply the matrices for the joints.
+A skin also references an accessor that references the inverse bind pose matrices saved in the file.</p>
+<pre><code>// setup skins
+gltf.skins = gltf.skins.map((skin) =&gt; {
+  const joints = skin.joints.map(ndx =&gt; gltf.nodes[ndx]);
+  const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, skin.inverseBindMatrices);
+  return new Skin(joints, bufferView);
+});
+</code></pre><p>Now what we have the skins we can go back and add them to the nodes that referenced them.</p>
+<pre><code>// Add SkinRenderers to nodes with skins
+for (const {node, mesh, skinNdx} of skinNodes) {
+  node.drawables.push(new SkinRenderer(mesh, gltf.skins[skinNdx]));
+}
+</code></pre><p>If we rendered like this we might not see any difference. We need to animate some of the nodes. Let&#39;s just go through each node in the <code>Skin</code>, in other words each joint, and rotate it plus a minus a little on the local X access.</p>
+<p>To do this we&#39;ll save off the original local matrix for each joint. We&#39;ll then rotate that original matrix some amount each frame, and using a special function, <code>m4.decompose</code>, will will convert the matrix back into position, rotation, scale into the joint.</p>
+<pre><code>const origMatrix = new Map();
+function animSkin(skin, a) {
+  for(let i = 0; i &lt; skin.joints.length; ++i) {
+    const joint = skin.joints[i];
+    // if there is no matrix saved for this joint
+    if (!origMatrix.has(joint)) {
+      // save a matrix for joint
+      origMatrix.set(joint, joint.source.getMatrix());
+    }
+    // get the original matrix
+    const origMatrix = origRotations.get(joint);
+    // rotate it
+    const m = m4.xRotate(origMatrix, a);
+    // decompose it back into position, rotation, scale
+    // into the joint
+    m4.decompose(m, joint.source.position, joint.source.rotation, joint.source.scale);
+  }
+}
+</code></pre><p>and then just before rendering we&#39;ll call that </p>
+<pre><code>animSkin(gltf.skins[0], Math.sin(time) * .5);
+</code></pre><p>Note <code>animSkin</code> is mostly a hack. Ideally we&#39;d load an animation some artist created OR we&#39;d know the names of specific joints we want to manipulate in code in some way. In this case we just to see if our skinning is working and this seemed like the easist way to do it.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-skinning-3d-gltf-skinned.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-skinning-3d-gltf-skinned.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>A few more notes before we move on</p>
+<p>When I first tried to get this working, as with most programs things didn&#39;t appear on the screen. </p>
+<p>So, the first thing did was go to the end of the skinning shader and add this line</p>
+<pre><code>  gl_Position = u_projection * u_view *  a_POSITION;
+</code></pre><p>In the fragment shader I changed it to just draw a solid color by adding this at the end</p>
+<pre><code>gl_FragColor = vec4(1, 0, 0, 1);
+</code></pre><p>This removes all the skinning and just draws the mesh at the origin. I adjusted the camera position until I had a good view.</p>
+<pre><code>const cameraPosition = [5, 0, 5];
+const target = [0, 0, 0];
+</code></pre><p>This showed a silhouette of the killer whale so I knew at least some of the data was working.</p>
+<div class="webgl_center"><img src="resources/skinning-debug-01.png"></div>
+
+<p>Next I made the fragment shader show the normals</p>
+<pre><code>gl_FragColor = vec4(normalize(v_normal) * .5 + .5, 1);
+</code></pre><p>Normals go from -1 to 1 so the <code>* .5 + .5</code> adjusts them to 0 to 1 for viewing as colors.</p>
+<p>Back in the vertex shader I just passed the normal through</p>
+<pre><code>v_normal = a_NORMAL;
+</code></pre><p>Which gave me a view like this</p>
+<div class="webgl_center"><img src="resources/skinning-debug-02.png"></div>
+
+<p>I didn&#39;t expect the normals to be bad but it was good to start with something I expected to work and confirm that it does indeed work.</p>
+<p>Next I thought I&#39;d check the weights. All I needed to do was
+pass the weights as normals from the vertex shader</p>
+<pre><code>v_normal = a_WEIGHTS_0.xyz * 2. - 1.;
+</code></pre><p>Weights go from 0 to 1 but since the fragment shader is expecting normals I just made the weights go from -1 to 1</p>
+<p>This originally produced a kind of mess of colors. Once I figured out the bug, I got an image like this</p>
+<div class="webgl_center"><img src="resources/skinning-debug-03.png"></div>
+
+<p>It&#39;s not entirely obvious it&#39;s correct but does make some sense. You&#39;d expect the vertices nearest each bone to have a strong color and you&#39;d expect to see rings of that color in the vertices around the bone since the weights in that area are likely 1.0 or at least all similar.</p>
+<p>Since the original image was so messy I also tried displaying the joint indices with</p>
+<pre><code>v_normal = a_JOINTS_0.xyz / (u_numJoints - 1.) * 2. - 1.;
+</code></pre><p>The indices go from 0 to numJoints - 1 so the code above would give values from -1 to 1.</p>
+<p>One things were working I got an image like this</p>
+<div class="webgl_center"><img src="resources/skinning-debug-04.png"></div>
+
+<p>Again it was originally a mess of colors. The image above is what it looked like after it was fixed. That&#39;s pretty much what you&#39;d expect to see for weights for the killer while. Rings of color around each bone.</p>
+<p>The bug had to do with how <code>webgl.createBufferInfoFromArrays</code> was figuring out the number of components. There were cases where it ignored
+the one specified, tried to guess, and guessed wrong. Once the bug was fixed then I removed those changes to the shaders. Note that I left them in the code above commented out if you want to play with them.</p>
+<p>I want to make it clear the code above is meant to help explain skinning. It is not meant to be a production ready skinning engine. I think if we were to try to make a production quality engine we&#39;d run into many things we&#39;d probably want to change but I hope going through this example helps slight demystify skinning.</p>
 
     </div>
     <div class="lesson-sidebar">
