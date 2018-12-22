@@ -10,7 +10,7 @@ on each wall is a full size poster of some view, add in a poster to cover the ce
 
 Lots of 3D games do this by just making a cube, making it really large, putting a texture on it of the sky.
 
-This works but it has issues. One issue is that you have a cube that you need to view in multiple directions, thatever direction the camera is facing. You want everything to draw far away but you don't want the corners of the cube to go out of the clipping plane. Complicating that issue, for performance reasons you want to draw close things before far things because the GPU, using [the depth buffer test](webgl-3d-orthographic.html), can skip drawing pixels it knows will fail the test. So ideally you should draw the skybox last with the depth test on but if you actually use a box, as the camera looks in different directions, the corners of the box will be further away than the sides causing issues.
+This works but it has issues. One issue is that you have a cube that you need to view in multiple directions, Whatever direction the camera is facing. You want everything to draw far away but you don't want the corners of the cube to go out of the clipping plane. Complicating that issue, for performance reasons you want to draw close things before far things because the GPU, using [the depth buffer test](webgl-3d-orthographic.html), can skip drawing pixels it knows will fail the test. So ideally you should draw the skybox last with the depth test on but if you actually use a box, as the camera looks in different directions, the corners of the box will be further away than the sides causing issues.
 
 <div class="webgl_center"><img src="resources/skybox-issues.svg" style="width: 500px"></div>
 
@@ -20,7 +20,7 @@ The typical solution is to turn off the depth test and draw the skybox first but
 
 Instead of using a cube lets just draw quad that covers the entire canvas and use [a cubemap](webgl-cube-maps.html). Normally we use a view projection matrix to project a quad in 3D space. In this case we'll do the opposite. We'll use the inverse of the view projection matrix to work backward and get the direction the camera is looking for each pixel on the quad. This will give us directions to look into the cubemap.
 
-Starting with the [environment map example](webgl-environment-maps.html) I removed all the code related to normals as were're not using them where. Then we need a quad.
+Starting with the [environment map example](webgl-environment-maps.html) I removed all the code related to normals as were're not using them here. Then we need a quad.
 
 ```
 // Fill the buffer with the values that define a quad.
