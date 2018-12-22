@@ -510,46 +510,6 @@ async function main() {
     requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
-
-
-  // --- ignore below this line - it's not relevant to the exmample and it's kind of a bad example ---
-
-  var axisProgramInfo;
-  var axisBufferInfo;
-  function drawAxis(projection, view, bones) {
-    if (!axisProgramInfo) {
-      axisProgramInfo = webglUtils.createProgramInfo(gl, ['vs2', 'fs']);
-      axisBufferInfo  = webglUtils.createBufferInfoFromArrays(gl, {
-        position: {
-          numComponents: 2,
-          data: [
-            0, 0,
-            1, 0,
-          ],
-        },
-      });
-    }
-
-    var uniforms = {
-      projection: projection,
-      view: view,
-    };
-
-    gl.useProgram(axisProgramInfo.program);
-    webglUtils.setBuffersAndAttributes(gl, axisProgramInfo, axisBufferInfo);
-
-    for (var i = 0; i < 3; ++i) {
-      drawLine(bones[i], 0, [0 ,1, 0, 1]);
-      drawLine(bones[i], Math.PI * 0.5, [0, 0, 1, 1]);
-    }
-
-    function drawLine(mat, angle, color) {
-      uniforms.model = m4.zRotate(mat, angle);
-      uniforms.color = color;
-      webglUtils.setUniforms(axisProgramInfo, uniforms);
-      webglUtils.drawBufferInfo(gl, axisBufferInfo, gl.LINES);
-    }
-  }
 }
 
 main();
