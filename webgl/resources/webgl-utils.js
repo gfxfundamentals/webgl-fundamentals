@@ -894,7 +894,7 @@
       return array;
     }
 
-    if (isArrayBuffer(array.data)) {
+    if (array.data && isArrayBuffer(array.data)) {
       return array.data;
     }
 
