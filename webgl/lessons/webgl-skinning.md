@@ -28,7 +28,7 @@ character had 10000 vertices that would be 3 million weights needed.
 So, instead most realtime skinning systems limit it ~4 weights per vertex.
 Usually this is accomplished in an exporter/converter that takes data from
 a 3D packages like blender/maya/3dsmax and for each vertex finds the 4
-bones with the highest weights and then normalizing those weights
+bones with the highest weights and then normalizes those weights
 
 To give an pseudo example a non-skinned vertex is typically computed like this
 
@@ -68,7 +68,7 @@ the origin (0,0,0) on the floor just between their feet.
 Now imagine you put a matrix/bone/joint at their head and you want to use
 that for bone for skinning.  To keep it simple imagine you just set the
 weights so the the vertices of the head have a weight of 1.0 for the head
-bone and no other joints influence those vertices.  
+bone and no other joints influence those vertices.
 
 <div class="webgl_center"><img src="resources/bone-head-setup.svg" style="width: 500px;"></div>
 
@@ -506,7 +506,7 @@ async function loadJSON(url) {
 
 Now we need to walk through the data and connect things up.
 
-First let's handle what glTF considers a mesh. A mesh is collection of primitives. A primitive is effectively the buffers and attributes needed to render something. Let's use our webgl utilties we convered in [less code more fun](webgl-less-code-more-fun.html). We'll walk the meshes and for each one build up the arrays we need to pass to `webglUtils.createBufferInfoFromArrays`.
+First let's handle what glTF considers a mesh. A mesh is collection of primitives. A primitive is effectively the buffers and attributes needed to render something. Let's use our webgl utilties we covered in [less code more fun](webgl-less-code-more-fun.html). We'll walk the meshes and for each one build up the arrays we need to pass to `webglUtils.createBufferInfoFromArrays`.
 
 Primitives have an array of attributes, each attribute references an accessor. An accessor says what kind of data is there, for example `VEC3`/`gl.FLOAT` and references a bufferView. A bufferView specifies some view into a buffer. We can write some code that given an accessor returns a [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray)
 
@@ -556,7 +556,7 @@ function accessorTypeToNumComponents(type) {
     case 'VEC4': return 4;
     default:
       throw new Error(`unknown type: ${type}`);
-  }    
+  }
 }
 ```
 
@@ -686,13 +686,13 @@ There are a couple of notable changes from the code in [the scene graph article]
   This will list the things to draw from this Node. We'll put
   instances of a class on this list that are responsible for doing
   the actual drawing. This way we can generically draw different things
-  by using different classes.  
-  
+  by using different classes.
+
   Note: It's not clear to me that putting an array of drawables on Node
   is the best decision. I feel like the scene graph itself should
   maybe not contain drawables at all. Things that need to be drawn could instead
   just reference the node in the graph where to get their data.
-  This way with drawables in the graph is common though so lets start with that. 
+  This way with drawables in the graph is common though so lets start with that.
 
 * We added a `traverse` method.
 
@@ -708,7 +708,7 @@ There are a couple of notable changes from the code in [the scene graph article]
 
 The nodes in the glTF file are stored as a flat array.
 We'll convert node data in the glTF to `Node` instances. We save off the old array
-of node data as `origNodes` as we'll need it later. 
+of node data as `origNodes` as we'll need it later.
 
 ```
 const origNodes = gltf.nodes;
@@ -724,7 +724,7 @@ gltf.nodes = gltf.nodes.map((n) => {
 });
 ```
 
-Above we created a `TRS` instance for each node, a `Node` instance for each node, and, if there was a `mesh` property we looked up the mesh data we setup before and created a `MeshRenderer` to draw it. 
+Above we created a `TRS` instance for each node, a `Node` instance for each node, and, if there was a `mesh` property we looked up the mesh data we setup before and created a `MeshRenderer` to draw it.
 
 Let's make the `MeshRenderer`. It's just an encapsulation of the code we used in [less code more fun](webgl-less-code-more-fun.html) to rendener a single model. All it does is hold a reference to a mesh and then for each primitive sets up the program, attributes, and uniforms and finally calls `gl.drawArrays` or `gl.drawElements` via `webglUtils.drawBufferInfo`;
 
@@ -800,7 +800,7 @@ and we can load the gltf file like this
 const gltf = await loadGLTF('resources/models/killer_whale/whale.CYCLES.gltf');
 ```
 
-To render we need a shader that matches the data in the gltf file. Let's look at the data in the gltf file for the primitive that's in it 
+To render we need a shader that matches the data in the gltf file. Let's look at the data in the gltf file for the primitive that's in it
 
 ```
 {
@@ -889,12 +889,11 @@ for (const scene of gltf.scenes) {
 Left over from before (not shown above) is our code for computing a projection matrix, camera matrix, and view matrix. We then just walk each scene, call `scene.root.updateWorldMatrix` which will update the world
 matrix of all the nodes in that graph. Then we call `scene.root.traverse` with `renderDrawables`.
 
-`renderDrawables` calls the render method of all
-the the drawables on that node passing in the projection, view, and lighting info via `sharedUniforms`.
+`renderDrawables` calls the render method of all the drawables on that node passing in the projection, view, and lighting info via `sharedUniforms`.
 
 {{{example url="../webgl-skinning-3d-gltf.html" }}}
 
-Now that that's working let's handle the skins. 
+Now that that's working let's handle the skins.
 
 First let's make a class to represent a skin. It will manage the list of joints, which is another word for nodes in the scene graph that apply to the skin. It will also have the inverse bind matrices and it will manage the texture we put the joint matrices in.
 
@@ -909,11 +908,11 @@ class Skin {
     // create views for each joint and inverseBindMatrix
     for (let i = 0; i < joints.length; ++i) {
       this.inverseBindMatrices.push(new Float32Array(
-          inverseBindMatrixData.buffer, 
+          inverseBindMatrixData.buffer,
           inverseBindMatrixData.byteOffset + Float32Array.BYTES_PER_ELEMENT * 16 * i,
           16));
       this.jointMatrices.push(new Float32Array(
-          this.jointData.buffer, 
+          this.jointData.buffer,
           Float32Array.BYTES_PER_ELEMENT * 16 * i,
           16));
     }
@@ -943,7 +942,7 @@ class Skin {
 }
 ```
 
-And like we had a `MeshRenderer` let's make a `SkinRenderer` that uses the `Skin` to render a skinned mesh. 
+And like we had a `MeshRenderer` let's make a `SkinRenderer` that uses the `Skin` to render a skinned mesh.
 
 ```
 class SkinRenderer {
@@ -1106,7 +1105,7 @@ function animSkin(skin, a) {
 }
 ```
 
-and then just before rendering we'll call that 
+and then just before rendering we'll call that
 
 ```
 animSkin(gltf.skins[0], Math.sin(time) * .5);
@@ -1118,7 +1117,7 @@ Note `animSkin` is mostly a hack. Ideally we'd load an animation some artist cre
 
 A few more notes before we move on
 
-When I first tried to get this working, as with most programs things didn't appear on the screen. 
+When I first tried to get this working, as with most programs things didn't appear on the screen.
 
 So, the first thing did was go to the end of the skinning shader and add this line
 
@@ -1186,11 +1185,11 @@ v_normal = a_JOINTS_0.xyz / (u_numJoints - 1.) * 2. - 1.;
 
 The indices go from 0 to numJoints - 1 so the code above would give values from -1 to 1.
 
-One things were working I got an image like this
+Once things were working I got an image like this
 
 <div class="webgl_center"><img src="resources/skinning-debug-04.png"></div>
 
-Again it was originally a mess of colors. The image above is what it looked like after it was fixed. That's pretty much what you'd expect to see for weights for the killer while. Rings of color around each bone.
+Again it was originally a mess of colors. The image above is what it looked like after it was fixed. That's pretty much what you'd expect to see for weights for the killer whale. Rings of color around each bone.
 
 The bug had to do with how `webgl.createBufferInfoFromArrays` was figuring out the number of components. There were cases where it ignored
 the one specified, tried to guess, and guessed wrong. Once the bug was fixed then I removed those changes to the shaders. Note that I left them in the code above commented out if you want to play with them.
