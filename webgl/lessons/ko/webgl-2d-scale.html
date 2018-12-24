@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-2d-scale.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 2D Scale" />
+<meta property="og:title" content="WebGL 2D 크기" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to scale in 2D" />
+<meta property="og:description" content="2D에서 크기 조정하는 방법" />
 <meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/ko/webgl-2d-scale.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 2D Scale" />
+<meta name="twitter:title" content="WebGL 2D 크기" />
 <meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/ko/webgl-2d-scale.html" />
-<meta name="twitter:description" content="How to scale in 2D" />
+<meta name="twitter:description" content="2D에서 크기 조정하는 방법" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 2D Scale</title>
+<title>WebGL 2D 크기</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
@@ -79,12 +81,92 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 2D Scale</h1>
+    <h1>WebGL 2D 크기</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송합니다 아직 이 글은 번역되지 않았습니다. <a href="https://github.com/greggman/webgl-fundamentals">번역 참여</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-2d-scale.html">영어 원문 링크</a>.</p>
+      <p>이 글은 WebGL 관련 시리즈에서 이어지는 글입니다.
+첫 번째는 <a href="webgl-fundamentals.html">기초로 시작했고</a> 이전에는 <a href="webgl-2d-rotation.html">geometry 회전에 대해</a> 다뤘습니다.</p>
+<p>크기 조정은 <a href="webgl-2d-translation.html">이동만큼이나</a> 쉽습니다.</p>
+<p>원하는 크기로 위치 값을 곱하면 되는데요.
+이건 <a href="webgl-2d-rotation.html">이전 예제를</a> 수정한 겁니다.</p>
+<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
+
+uniform vec2 u_resolution;
+uniform vec2 u_translation;
+uniform vec2 u_rotation;
++uniform vec2 u_scale;
+
+void main() {
++  // 위치 크기 조정
++  vec2 scaledPosition = a_position * u_scale;
+
+  // 위치 회전
+  vec2 rotatedPosition = vec2(
+*     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
+*     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
+
+  // 추가 이동
+  vec2 position = rotatedPosition + u_translation;
+</code></pre><p>그리고 그릴 때 크기를 조정하기 위해 필요한 JavaScript를 추가합니다.</p>
+<pre><code>  ...
+
++  var scaleLocation = gl.getUniformLocation(program, &quot;u_scale&quot;);
+
+  ...
+
++  var scale = [1, 1];
+
+  ...
+
+  // 화면 그리기
+  function drawScene() {
+
+    ...
+
+    // 이동 설정
+    gl.uniform2fv(translationLocation, translation);
+
+    // 회전 설정
+    gl.uniform2fv(rotationLocation, rotation);
+
++    // 크기 설정
++    gl.uniform2fv(scaleLocation, scale);
+
+    // geometry 그리기
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = 18;  // &#39;F&#39;에 삼각형 6개, 삼각형마다 점 3개
+    gl.drawArrays(primitiveType, offset, count);
+  }
+</code></pre><p>그러면 이제 크기를 가집니다.
+슬라이더를 드래그해보세요.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-scale.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-scale.html" target="_blank">새 창을 여시려면 여기를 클릭하세요.</a>
+</div>
+
+</p>
+<p>한 가지 알아두셔야 할 점은 음수로 크기를 조정하면 geometry가 뒤집힌다는 겁니다.</p>
+<p>지난 세 글이 <a href="webgl-2d-translation.html">이동</a>, <a href="webgl-2d-rotation.html">회전</a> 그리고 크기를 이해하는데 도움이 되셨기 바랍니다.</p>
+<p>다음에는 이 세 가지를 훨씬 간단하고 유용한 형태로 합쳐주는 <a href="webgl-2d-matrices.html">행렬의 마법을</a> 살펴보겠습니다.</p>
+<div class="webgl_bottombar">
+<h3>왜 'F' 인가요?</h3>
+<p>
+처음에 누군가가 texture에 'F'를 사용하는 것을 봤습니다.
+'F' 자체는 중요하지 않습니다.
+중요한 것은 어느 방향에서든 방향를 알 수 있다는 겁니다.
+만약 하트 ❤나 삼각형 △을 썼다면 예를들어 그게 수평으로 뒤집혔는지 알 수 없습니다.
+원 ○은 더 안 좋겠죠.
+색이 있는 사각형은 각 모서리의 색이 다르지만 각 모서리가 어떤 것인지 기억하고 있어야 합니다.
+F의 방향은 바로 인지할 수 있습니다.
+</p>
+<img src="../resources/f-orientation.svg" class="webgl_center"/>
+<p>
+방향을 알 수 있는 어떤 모양이라도 동작하겠지만, 처음으로 소개받은 아이디어여서 계속 'F'를 사용하고 있습니다. 
+</p>
+</div>
 
     </div>
     <div class="lesson-sidebar">
@@ -100,7 +182,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>
+        <div id="toc">
+          <ul>
   <li>기초</li>
   <ul>
     <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">WebGL 기초</a></li>
@@ -112,11 +195,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <li><a href="/webgl/lessons/ko/webgl-image-processing.html">WebGL 이미지 처리</a></li>
     <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">WebGL 이미지 처리 심화</a></li>
   </ul>
-  <li>2D 이동, 회전, 크기 변환, 행렬 수학</li>
+  <li>2D 이동, 회전, 크기, 행렬 수학</li>
   <ul>
     <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">WebGL 2D 이동</a></li>
     <li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">WebGL 2D 회전</a></li>
-    <li><a href="/webgl/lessons/webgl-2d-scale.html">WebGL 2D Scale</a></li>
+    <li><a href="/webgl/lessons/ko/webgl-2d-scale.html">WebGL 2D 크기</a></li>
     <li><a href="/webgl/lessons/webgl-2d-matrices.html">WebGL 2D Matrices</a></li>
   </ul>
   <li>3D</li>
@@ -185,6 +268,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/greggman/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>질문은? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflow</a>로 물어봐주세요.</div>
+        <div>이슈/버그는? <a href="http://github.com/greggman/webgl-fundamentals/issues">github</a>에 이슈를 만들어주세요.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 2D 크기';
+            var disqus_title = 'WebGL 2D 크기';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
