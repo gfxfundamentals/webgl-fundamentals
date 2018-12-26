@@ -1,11 +1,10 @@
 
-module.exports = function () { // wrapper in case we're in module_context mode
+module.exports = function() { // wrapper in case we're in module_context mode
 
 "use strict";
 
-const args       = require('minimist')(process.argv.slice(2));
-const cache      = new (require('inmemfilecache'));
-const Feed       = require('feed');
+const cache      = new (require('inmemfilecache'))();
+const Feed       = require('feed').Feed;
 const fs         = require('fs');
 const glob       = require('glob');
 const Handlebars = require('handlebars');
@@ -49,13 +48,13 @@ function readFile(fileName) {
 function writeFileIfChanged(fileName, content) {
   if (fs.existsSync(fileName)) {
     var old = readFile(fileName);
-    if (content == old) {
+    if (content === old) {
       return;
     }
   }
   fs.writeFileSync(fileName, content);
-  console.log("Wrote: " + fileName);
-};
+  console.log("Wrote: " + fileName);  // eslint-disable-line
+}
 
 function copyFile(src, dst) {
   writeFileIfChanged(dst, readFile(src));
@@ -75,7 +74,7 @@ function encodeQuery(query) {
     return '';
   }
   return '?' + query.split("&").map(function(pair) {
-    return pair.split("=").map(function (kv) {
+    return pair.split("=").map(function(kv) {
       return encodeURIComponent(decodeURIComponent(kv));
     }).join('=');
   }).join('&');
@@ -93,7 +92,7 @@ function TemplateManager() {
   this.apply = function(filename, params) {
     var template = templates[filename];
     if (!template) {
-      var template = Handlebars.compile(readFile(filename));
+      template = Handlebars.compile(readFile(filename));
       templates[filename] = template;
     }
 
@@ -192,7 +191,7 @@ var Builder = function(outBaseDir, options) {
     return function(content) {
       var metaData = { };
       var lines = content.split("\n");
-      while (true) {
+      for (;;) {
         var line = lines[0].trim();
         var m = headerRE.exec(line);
         if (!m) {
@@ -304,10 +303,10 @@ var Builder = function(outBaseDir, options) {
   };
 
   var applyTemplateToFile = function(templatePath, contentFileName, outFileName, opt_extra) {
-    console.log("processing: ", contentFileName);
+    console.log("processing: ", contentFileName);  // eslint-disable-line
     opt_extra = opt_extra || {};
     var data = loadMD(contentFileName);
-    var metaData= applyTemplateToContent(templatePath, contentFileName, outFileName, opt_extra, data);
+    var metaData = applyTemplateToContent(templatePath, contentFileName, outFileName, opt_extra, data);
     g_articles.push(metaData);
   };
 
@@ -358,7 +357,7 @@ var Builder = function(outBaseDir, options) {
   };
 
   this.process = function(options) {
-    console.log("Processing Lang: " + options.lang);
+    console.log("Processing Lang: " + options.lang);  // eslint-disable-line
     options.lessons     = options.lessons     || ("webgl/lessons/" + options.lang);
     options.toc         = options.toc         || ("webgl/lessons/" + options.lang + "/toc.html");
     options.template    = options.template    || "build/templates/lesson.template";
@@ -382,7 +381,7 @@ var Builder = function(outBaseDir, options) {
         origLink: '/' + slashify(path.join(g_origPath, baseName + ".html")),
         toc: options.toc,
       };
-      console.log("  generating missing:", outFileName);
+      console.log("  generating missing:", outFileName);  // eslint-disable-line
       applyTemplateToContent(
           "build/templates/missing.template",
           path.join(options.lessons, "langinfo.hanson"),
@@ -401,7 +400,7 @@ var Builder = function(outBaseDir, options) {
       return moment.utc(utcDateStr);
     }
 
-    const tasks = g_articles.map((article, ndx) => {
+    const tasks = g_articles.map((article) => {
       return function() {
         return executeP('git', [
           'log',
@@ -413,7 +412,7 @@ var Builder = function(outBaseDir, options) {
           article.dateAdded = utcMomentFromGitLog(result);
         });
       };
-    }).concat(g_articles.map((article, ndx) => {
+    }).concat(g_articles.map((article) => {
        return function() {
          return executeP('git', [
            'log',
@@ -431,7 +430,7 @@ var Builder = function(outBaseDir, options) {
         return cur.then(next);
     }, Promise.resolve()).then(function() {
       var articles = g_articles.filter(function(article) {
-        return article.dateAdded != undefined;
+        return article.dateAdded !== undefined;
       });
       articles = articles.sort(function(a, b) {
         return b.dateAdded - a.dateAdded;
@@ -452,7 +451,7 @@ var Builder = function(outBaseDir, options) {
           },
         });
 
-        articles.forEach(function(article, ndx) {
+        articles.forEach(function(article) {
           feed.addItem({
             title:          article.title,
             link:           "http://webglfundamentals.org" + article.dst_file_name,
@@ -475,13 +474,13 @@ var Builder = function(outBaseDir, options) {
 
         try {
           const outPath = path.join(g_outBaseDir, options.lessons, "atom.xml");
-          console.log("write:", outPath);
-          writeFileIfChanged(outPath, feed.render('atom-1.0'));
+          console.log("write:", outPath);  // eslint-disable-line
+          writeFileIfChanged(outPath, feed.atom1());
         } catch (err) {
           return Promise.reject(err);
         }
       } else {
-        console.log("no articles!");
+        console.log("no articles!");  // eslint-disable-line
       }
 
       return Promise.resolve();
@@ -494,17 +493,17 @@ var Builder = function(outBaseDir, options) {
       });
       return Promise.resolve();
     }, function(err) {
-      console.error("ERROR!:");
-      console.error(err);
+      console.error("ERROR!:");  // eslint-disable-line
+      console.error(err);  // eslint-disable-line
       if (err.stack) {
-        console.error(err.stack);
+        console.error(err.stack);  // eslint-disable-line
       }
       throw new Error(err.toString());
     });
-  }
+  };
 
   this.writeGlobalFiles = function() {
-    var sm = sitemap.createSitemap ({
+    var sm = sitemap.createSitemap({
       hostname: 'http://webglfundamentals.org',
       cacheTime: 600000,
     });

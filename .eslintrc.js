@@ -1,4 +1,4 @@
-{
+module.exports = {
   "env": {
     "browser": true,
     "es6": true
@@ -82,5 +82,4 @@
     "space-before-function-paren": [2, "never"],
     "keyword-spacing": [1, {"before": true, "after": true, "overrides": {}} ]
   }
-
-}
+};

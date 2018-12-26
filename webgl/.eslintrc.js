@@ -1,7 +1,10 @@
-{
+module.exports = {
   "env": {
     "browser": true,
     "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
   },
   "plugins": [
     "eslint-plugin-html",
@@ -41,7 +44,7 @@
     "no-spaced-func": 2,
     "no-trailing-spaces": 2,
     "no-undef-init": 2,
-    "no-underscore-dangle": 2,
+    "no-underscore-dangle": 0,
     "no-unused-expressions": 2,
     "no-use-before-define": 0,
     "no-with": 2,
@@ -64,7 +67,6 @@
     "optional-comma-spacing/optional-comma-spacing": [2, {"after": true}],
     "dot-notation": 0,
     "eol-last": [0],
-    "global-strict": [0],
     "key-spacing": [0],
     "no-comma-dangle": [0],
     "no-irregular-whitespace": 2,
@@ -74,6 +76,7 @@
     "no-shadow": [0],
     "no-undef": [0],
     "no-unreachable": 2,
+    "no-unused-vars": 0,
     "one-variable-per-var/one-variable-per-var": [2],
     "quotes": [0, "single"],
     "require-trailing-comma/require-trailing-comma": [2],
@@ -81,5 +84,14 @@
     "strict": [2, "global"],
     "space-before-function-paren": [2, "never"],
     "keyword-spacing": [1, {"before": true, "after": true, "overrides": {}} ]
-  }
-}
+  },
+  "overrides": [
+    {
+      "files": [ "resources/**/*.js" ],
+      "rules": {
+        "no-unused-vars": 2,
+        "strict": ["error", "function"],
+      }
+    }
+  ]
+};
