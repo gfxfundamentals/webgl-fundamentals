@@ -6,10 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>WebGL - Skinning glTF as mesh</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
-<style>
-body {background: #333; color: white}
-canvas {background: #400;}
-</style>
 </head>
 <body>
 <canvas id="canvas"></canvas>
@@ -160,63 +156,83 @@ async function main() {
     }
   }
 
-  function accessorTypeToNumComponents(type) {
-    switch (type) {
-      case 'SCALAR': return 1;
-      case 'VEC2': return 2;
-      case 'VEC3': return 3;
-      case 'VEC4': return 4;
-      default:
-        throw new Error(`unknown type: ${type}`);
-    }
+  function throwNoKey(key) {
+    throw new Error(`no key: ${key}`);
   }
+
+  const accessorTypeToNumComponentsMap = {
+    'SCALAR': 1,
+    'VEC2': 2,
+    'VEC3': 3,
+    'VEC4': 4,
+    'MAT2': 4,
+    'MAT3': 9,
+    'MAT4': 16,
+  };
+
+  function accessorTypeToNumComponents(type) {
+    return accessorTypeToNumComponentsMap[type] || throwNoKey(type);
+  }
+
+  const glTypeToTypedArrayMap = {
+    '5120': Int8Array,    // gl.BYTE
+    '5121': Uint8Array,   // gl.UNSIGNED_BYTE
+    '5122': Int16Array,   // gl.SHORT
+    '5123': Uint16Array,  // gl.UNSIGNED_SHORT
+    '5124': Int32Array,   // gl.INT
+    '5125': Uint32Array,  // gl.UNSIGNED_INT
+    '5126': Float32Array, // gl.FLOAT
+  }
+
 
   // Given a GL type return the TypedArray needed
-  function glTypeToTypedArray(gl, type) {
-    switch(type) {
-      case gl.BYTE:                           return Int8Array;
-      case gl.UNSIGNED_BYTE:                  return Uint8Array;
-      case gl.SHORT:                          return Int16Array;
-      case gl.UNSIGNED_SHORT:                 return Uint16Array;
-      case gl.INT:                            return Int32Array;
-      case gl.UNSIGNED_INT:                   return Uint32Array;
-      case gl.FLOAT:                          return Float32Array;
-      case gl.HALF_FLOAT:                     return Uint16Array;
-      default:
-        throw new Error(`unknown type: ${type}`);
-    }
-  }
-
-  // Given a bufferViewIndex and a type return a TypedArray of the correct type
-  // that views the correct portion of the buffer
-  function getBufferView(gl, gltf, bufferViewIndex, type) {
-    const TypedArray = glTypeToTypedArray(gl, type);
-    const bufferView = gltf.bufferViews[bufferViewIndex];
-    const buffer = gltf.buffers[bufferView.buffer];
-    return new TypedArray(buffer, bufferView.byteOffset, bufferView.byteLength / TypedArray.BYTES_PER_ELEMENT);
+  function glTypeToTypedArray(type) {
+    return glTypeToTypedArrayMap[type] || throwNoKey(type);
   }
 
   // given an accessor index return both the accessor and
-  // a TypedArray for the corrent portion of the buffer
-  function getAccessorAndBufferView(gl, gltf, accessorIndex) {
+  // a TypedArray for the correct portion of the buffer
+  function getAccessorTypedArrayAndStride(gl, gltf, accessorIndex) {
     const accessor = gltf.accessors[accessorIndex];
-    const bufferView = getBufferView(gl, gltf, accessor.bufferView, accessor.componentType);
-    return {accessor, bufferView};
+    const bufferView = gltf.bufferViews[accessor.bufferView];
+    const TypedArray = glTypeToTypedArray(accessor.componentType);
+    const buffer = gltf.buffers[bufferView.buffer];
+    return {
+      accessor,
+      array: new TypedArray(
+          buffer,
+          bufferView.byteOffset + (accessor.byteOffset || 0),
+          accessor.count * accessorTypeToNumComponents(accessor.type)),
+      stride: bufferView.byteStride || 0,
+    };
   }
 
-  function getAnimationTarget(gltf, target) {
-    if (target.node !== undefined) {
-      return gltf.nodes[target.node];
+  // Given an accessor index return a WebGLBuffer and a stride
+  function getAccessorAndWebGLBuffer(gl, gltf, accessorIndex) {
+    const accessor = gltf.accessors[accessorIndex];
+    const bufferView = gltf.bufferViews[accessor.bufferView];
+    if (!bufferView.webglBuffer) {
+      const buffer = gl.createBuffer();
+      const target = bufferView.target || gl.ARRAY_BUFFER;
+      const arrayBuffer = gltf.buffers[bufferView.buffer];
+      const data = new Uint8Array(arrayBuffer, bufferView.byteOffset, bufferView.byteLength);
+      gl.bindBuffer(target, buffer);
+      gl.bufferData(target, data, gl.STATIC_DRAW);
+      bufferView.webglBuffer = buffer;
     }
-    throw new Error('unknown channel target');
-  };
+    return {
+      accessor,
+      buffer: bufferView.webglBuffer,
+      stride: bufferView.stride || 0,
+    };
+  }
 
   async function loadGLTF(url) {
     const gltf = await loadJSON(url);
 
     // load all the referenced files relative to the gltf file
     const baseURL = new URL(url, location.href);
-      gltf.buffers = await Promise.all(gltf.buffers.map((buffer) => {
+    gltf.buffers = await Promise.all(gltf.buffers.map((buffer) => {
       const url = new URL(buffer.uri, baseURL.href);
       return loadBinary(url.href);
     }));
@@ -230,26 +246,33 @@ async function main() {
     // setup meshes
     gltf.meshes.forEach((mesh) => {
       mesh.primitives.forEach((primitive) => {
-        // make arrays to pass to webglUtils.createBufferInfoFromArrays
-        const arrays = {};
+        const attribs = {};
+        let numElements;
         for (const [attribName, index] of Object.entries(primitive.attributes)) {
-          const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, index);
-          arrays[attribName] = {
-            data: bufferView,
+          const {accessor, buffer, stride} = getAccessorAndWebGLBuffer(gl, gltf, index);
+          numElements = accessor.count;
+          attribs[`a_${attribName}`] = {
+            buffer,
             type: accessor.componentType,
             numComponents: accessorTypeToNumComponents(accessor.type),
+            stride,
+            offset: accessor.byteOffset | 0,
           };
         }
+
+        const bufferInfo = {
+          attribs,
+          numElements,
+        };
+
         if (primitive.indices !== undefined) {
-          const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, primitive.indices);
-          arrays.indices = {
-            data: bufferView,
-            type: accessor.componentType,
-            numComponents: accessorTypeToNumComponents(accessor.type),
-          };
+          const {accessor, buffer} = getAccessorAndWebGLBuffer(gl, gltf, primitive.indices);
+          bufferInfo.numElements = accessor.count;
+          bufferInfo.indices = buffer;
+          bufferInfo.elementType = accessor.componentType;
         }
-        // create the webgl buffers
-        primitive.bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
+
+        primitive.bufferInfo = bufferInfo;
 
         // save the material info for this primitive
         primitive.material = gltf.materials && gltf.materials[primitive.material] || defaultMaterial;
@@ -280,7 +303,7 @@ async function main() {
     for (const scene of gltf.scenes) {
       scene.root = new Node(new TRS(), scene.name);
       addChildren(gltf.nodes, scene.root, scene.nodes);
-    };
+    }
 
     return gltf;
   }
