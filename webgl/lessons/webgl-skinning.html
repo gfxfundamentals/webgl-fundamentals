@@ -499,50 +499,54 @@ async function loadJSON(url) {
   return loadFile(url, &#39;json&#39;);
 }
 </code></pre><p>Now we need to walk through the data and connect things up.</p>
-<p>First let&#39;s handle what glTF considers a mesh. A mesh is collection of primitives. A primitive is effectively the buffers and attributes needed to render something. Let&#39;s use our webgl utilties we covered in <a href="webgl-less-code-more-fun.html">less code more fun</a>. We&#39;ll walk the meshes and for each one build up the arrays we need to pass to <code>webglUtils.createBufferInfoFromArrays</code>.</p>
-<p>Primitives have an array of attributes, each attribute references an accessor. An accessor says what kind of data is there, for example <code>VEC3</code>/<code>gl.FLOAT</code> and references a bufferView. A bufferView specifies some view into a buffer. We can write some code that given an accessor returns a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray">TypedArray</a></p>
-<pre><code>// Given a GL type return the TypedArray needed
-function glTypeToTypedArray(gl, type) {
-  switch(type) {
-    case gl.BYTE:                           return Int8Array;
-    case gl.UNSIGNED_BYTE:                  return Uint8Array;
-    case gl.SHORT:                          return Int16Array;
-    case gl.UNSIGNED_SHORT:                 return Uint16Array;
-    case gl.INT:                            return Int32Array;
-    case gl.UNSIGNED_INT:                   return Uint32Array;
-    case gl.FLOAT:                          return Float32Array;
-    case gl.HALF_FLOAT:                     return Uint16Array;
-    default:
-      throw new Error(`unknown type: ${type}`);
-  }
+<p>First let&#39;s handle what glTF considers a mesh. A mesh is collection of primitives. A primitive is effectively the buffers and attributes needed to render something. Let&#39;s use our webgl utilties we covered in <a href="webgl-less-code-more-fun.html">less code more fun</a>. We&#39;ll walk the meshes and for each one build a <code>BufferInfo</code> we can pass to <code>webglUtils.setBuffersAndAttributes</code>. Recall a <code>BufferInfo</code> is effectively just the attribute information, the indicies if there are any, and the number of elements to pass to <code>gl.drawXXX</code>. For example a cube with just positions and normals might have a BufferInfo with this structure</p>
+<pre><code>const cubeBufferInfo = {
+  attribs: {
+    &#39;a_POSITION&#39;: { buffer: WebGLBuffer, type: gl.FLOAT, numComponents: 3, },
+    &#39;a_NORMAL&#39;: { buffer: WebGLBuffer, type: gl.FLOAT, numComponents: 3, },
+  },
+  numElements: 24,
+  indices: WebGLBuffer,
+  elementType: gl.UNSIGNED_SHORT,
 }
-
-// Given a bufferViewIndex and a type return a TypedArray of the correct type
-// that views the correct portion of the buffer
-function getBufferView(gl, gltf, bufferViewIndex, type) {
-  const TypedArray = glTypeToTypedArray(gl, type);
-  const bufferView = gltf.bufferViews[bufferViewIndex];
-  const buffer = gltf.buffers[bufferView.buffer];
-  return new TypedArray(buffer, bufferView.byteOffset, bufferView.byteLength / TypedArray.BYTES_PER_ELEMENT);
-}
-
-// given an accessor index return both the accessor and
-// a TypedArray for the corrent portion of the buffer
-function getAccessorAndBufferView(gl, gltf, accessorIndex) {
+</code></pre><p>So we will walk each primitive and generate a BufferInfo like that.</p>
+<p>Primitives have an array of attributes, each attribute references an accessor. An accessor says what kind of data is there, for example <code>VEC3</code>/<code>gl.FLOAT</code> and references a bufferView. Given an accessor index we can write some code that returns a WebGLBuffer with the data loaded, the accessor, and the stride specified for the bufferView.</p>
+<pre><code>// Given an accessor index return an accessor, WebGLBuffer and a stride
+function getAccessorAndWebGLBuffer(gl, gltf, accessorIndex) {
   const accessor = gltf.accessors[accessorIndex];
-  const bufferView = getBufferView(gl, gltf, accessor.bufferView, accessor.componentType);
-  return {accessor, bufferView};
+  const bufferView = gltf.bufferViews[accessor.bufferView];
+  if (!bufferView.webglBuffer) {
+    const buffer = gl.createBuffer();
+    const target = bufferView.target || gl.ARRAY_BUFFER;
+    const arrayBuffer = gltf.buffers[bufferView.buffer];
+    const data = new Uint8Array(arrayBuffer, bufferView.byteOffset, bufferView.byteLength);
+    gl.bindBuffer(target, buffer);
+    gl.bufferData(target, data, gl.STATIC_DRAW);
+    bufferView.webglBuffer = buffer;
+  }
+  return {
+    accessor,
+    buffer: bufferView.webglBuffer,
+    stride: bufferView.stride || 0,
+  };
 }
 </code></pre><p>We also need a way to convert from an glTF accessor type to a number of components</p>
-<pre><code>function accessorTypeToNumComponents(type) {
-  switch (type) {
-    case &#39;SCALAR&#39;: return 1;
-    case &#39;VEC2&#39;: return 2;
-    case &#39;VEC3&#39;: return 3;
-    case &#39;VEC4&#39;: return 4;
-    default:
-      throw new Error(`unknown type: ${type}`);
-  }
+<pre><code>function throwNoKey(key) {
+  throw new Error(`no key: ${key}`);
+}
+
+const accessorTypeToNumComponentsMap = {
+  &#39;SCALAR&#39;: 1,
+  &#39;VEC2&#39;: 2,
+  &#39;VEC3&#39;: 3,
+  &#39;VEC4&#39;: 4,
+  &#39;MAT2&#39;: 4,
+  &#39;MAT3&#39;: 9,
+  &#39;MAT4&#39;: 16,
+};
+
+function accessorTypeToNumComponents(type) {
+  return accessorTypeToNumComponentsMap[type] || throwNoKey(type);
 }
 </code></pre><p>Now that we&#39;ve made these functions we can use them to setup our meshes</p>
 <p>Note: glTF files can supposedly define materials but the exporter didn&#39;t put any materials in the file even though export materials was checked. I can only guess the exporter doesn&#39;t handle every kind of material in blender which is unfortunate. We&#39;ll use a default material if there is no material in the file. Since there are no materials in this file there&#39;s no code here to use glTF materials.</p>
@@ -555,29 +559,36 @@ function getAccessorAndBufferView(gl, gltf, accessorIndex) {
 // setup meshes
 gltf.meshes.forEach((mesh) =&gt; {
   mesh.primitives.forEach((primitive) =&gt; {
-    // make arrays to pass to webglUtils.createBufferInfoFromArrays
-    const arrays = {};
+    const attribs = {};
+    let numElements;
     for (const [attribName, index] of Object.entries(primitive.attributes)) {
-      const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, index);
-      arrays[attribName] = {
-        data: bufferView,
+      const {accessor, buffer, stride} = getAccessorAndWebGLBuffer(gl, gltf, index);
+      numElements = accessor.count;
+      attribs[`a_${attribName}`] = {
+        buffer,
         type: accessor.componentType,
         numComponents: accessorTypeToNumComponents(accessor.type),
+        stride,
+        offset: accessor.byteOffset | 0,
       };
     }
+
+    const bufferInfo = {
+      attribs,
+      numElements,
+    };
+
     if (primitive.indices !== undefined) {
-      const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, primitive.indices);
-      arrays.indices = {
-        data: bufferView,
-        type: accessor.componentType,
-        numComponents: accessorTypeToNumComponents(accessor.type),
-      };
+      const {accessor, buffer} = getAccessorAndWebGLBuffer(gl, gltf, primitive.indices);
+      bufferInfo.numElements = accessor.count;
+      bufferInfo.indices = buffer;
+      bufferInfo.elementType = accessor.componentType;
     }
-    // create the webgl buffers
-    primitive.bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
+
+    primitive.bufferInfo = bufferInfo;
 
     // save the material info for this primitive
-    primitive.material = gltf.materials &amp;&amp; gltf.materials[primitive.material] || defaultMaterial;
+    primitive.material = defaultMaterial;//gltf.materials &amp;&amp; gltf.materials[primitive.material] || defaultMaterial;
   });
 });
 </code></pre><p>Now each primitive will have a <code>bufferInfo</code> and a <code>material</code> property.</p>
@@ -762,7 +773,7 @@ keyword.</p>
         }
     ]
 }
-</code></pre><p>Looking at that, to render let&#39;s just use <code>NORMAL</code> and <code>POSITION</code>. Our <code>webglUtils</code> prepend <code>a_</code> to the front of each attribute so a vertex shader like this should work</p>
+</code></pre><p>Looking at that, to render let&#39;s just use <code>NORMAL</code> and <code>POSITION</code>. We prepended <code>a_</code> to the front of each attribute so a vertex shader like this should work</p>
 <pre><code>attribute vec4 a_POSITION;
 attribute vec3 a_NORMAL;
 
@@ -965,10 +976,43 @@ A skin also references an accessor that references the inverse bind pose matrice
 <pre><code>// setup skins
 gltf.skins = gltf.skins.map((skin) =&gt; {
   const joints = skin.joints.map(ndx =&gt; gltf.nodes[ndx]);
-  const {accessor, bufferView} = getAccessorAndBufferView(gl, gltf, skin.inverseBindMatrices);
-  return new Skin(joints, bufferView);
+  const {stride, array} = getAccessorTypedArrayAndStride(gl, gltf, skin.inverseBindMatrices);
+  return new Skin(joints, array);
 });
-</code></pre><p>Now what we have the skins we can go back and add them to the nodes that referenced them.</p>
+</code></pre><p>The code above called <code>getAccessorTypedArrayAndStride</code> given an accessor index. We need supply that code. For a given accessor we&#39;ll return a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray">TypedArray</a> view of the correct type to get access to the data in the buffer.</p>
+<pre><code>const glTypeToTypedArrayMap = {
+  &#39;5120&#39;: Int8Array,    // gl.BYTE
+  &#39;5121&#39;: Uint8Array,   // gl.UNSIGNED_BYTE
+  &#39;5122&#39;: Int16Array,   // gl.SHORT
+  &#39;5123&#39;: Uint16Array,  // gl.UNSIGNED_SHORT
+  &#39;5124&#39;: Int32Array,   // gl.INT
+  &#39;5125&#39;: Uint32Array,  // gl.UNSIGNED_INT
+  &#39;5126&#39;: Float32Array, // gl.FLOAT
+}
+
+// Given a GL type return the TypedArray needed
+function glTypeToTypedArray(type) {
+  return glTypeToTypedArrayMap[type] || throwNoKey(type);
+}
+
+// given an accessor index return both the accessor and
+// a TypedArray for the correct portion of the buffer
+function getAccessorTypedArrayAndStride(gl, gltf, accessorIndex) {
+  const accessor = gltf.accessors[accessorIndex];
+  const bufferView = gltf.bufferViews[accessor.bufferView];
+  const TypedArray = glTypeToTypedArray(accessor.componentType);
+  const buffer = gltf.buffers[bufferView.buffer];
+  return {
+    accessor,
+    array: new TypedArray(
+        buffer,
+        bufferView.byteOffset + (accessor.byteOffset || 0),
+        accessor.count * accessorTypeToNumComponents(accessor.type)),
+    stride: bufferView.byteStride || 0,
+  };
+}
+</code></pre><p>Something to note about the code above is we&#39;ve made a table with hardcoded WebGL constants. This is the first time we&#39;ve done this. The constants won&#39;t change so this is safe to do.</p>
+<p>Now what we have the skins we can go back and add them to the nodes that referenced them.</p>
 <pre><code>// Add SkinRenderers to nodes with skins
 for (const {node, mesh, skinNdx} of skinNodes) {
   node.drawables.push(new SkinRenderer(mesh, gltf.skins[skinNdx]));
