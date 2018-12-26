@@ -113,27 +113,27 @@ function main() {
 
   const faceInfos = [
     {
-      target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, 
+      target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
       url: 'resources/images/computer-history-museum/pos-x.jpg',
     },
     {
-      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 
+      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
       url: 'resources/images/computer-history-museum/neg-x.jpg',
     },
     {
-      target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 
+      target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
       url: 'resources/images/computer-history-museum/pos-y.jpg',
     },
     {
-      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 
+      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
       url: 'resources/images/computer-history-museum/neg-y.jpg',
     },
     {
-      target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 
+      target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
       url: 'resources/images/computer-history-museum/pos-z.jpg',
     },
     {
-      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 
+      target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
       url: 'resources/images/computer-history-museum/neg-z.jpg',
     },
   ];
@@ -147,7 +147,7 @@ function main() {
     const height = 512;
     const format = gl.RGBA;
     const type = gl.UNSIGNED_BYTE;
-    
+
     // setup each face so it's immediately renderable
     gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
 
@@ -223,7 +223,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset)
+        positionLocation, size, type, normalize, stride, offset);
 
     // Turn on the normal attribute
     gl.enableVertexAttribArray(normalLocation);
@@ -238,7 +238,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        normalLocation, size, type, normalize, stride, offset)
+        normalLocation, size, type, normalize, stride, offset);
 
     // Compute the projection matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
@@ -308,7 +308,7 @@ function setGeometry(gl) {
         Math.cos(u0) * s1, Math.cos(v1), Math.sin(u0) * s1,
         Math.cos(u1) * s0, Math.cos(v0), Math.sin(u1) * s0,
         Math.cos(u1) * s1, Math.cos(v1), Math.sin(u1) * s1,
-      )
+      );
     }
   }
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
@@ -383,7 +383,7 @@ function setNormals(gl) {
         Math.cos(u0) * s1, Math.cos(v1), Math.sin(u0) * s1,
         Math.cos(u1) * s0, Math.cos(v0), Math.sin(u1) * s0,
         Math.cos(u1) * s1, Math.cos(v1), Math.sin(u1) * s1,
-      )
+      );
     }
   }
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);

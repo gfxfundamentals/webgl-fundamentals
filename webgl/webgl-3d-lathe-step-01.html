@@ -143,7 +143,7 @@ function main() {
     // Compute the camera's matrix using look at.
     const midY = lerp(extents.min[1], extents.max[1], .5);
     const sizeToFitOnScreen = (extents.max[1] - extents.min[1]) * .6;
-    const distance = sizeToFitOnScreen / Math.tan(fieldOfViewRadians * .5)
+    const distance = sizeToFitOnScreen / Math.tan(fieldOfViewRadians * .5);
     const cameraPosition = [0, midY, distance];
     const target = [0, midY, 0];
     const up = [0, -1, 0];  // we used 2d points as input which means orientation is flipped
@@ -399,7 +399,7 @@ function main() {
     const texcoords = [];
     const indices = [];
 
-    const vOffset = capStart ? 1: 0;
+    const vOffset = capStart ? 1 : 0;
     const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
     const quadsDown = pointsPerColumn - 1;
 
@@ -500,7 +500,7 @@ function main() {
     var params = {};
     if (window.location.search) {
       window.location.search.substring(1).split("&").forEach(function(pair) {
-        var keyValue = pair.split("=").map(function (kv) {
+        var keyValue = pair.split("=").map(function(kv) {
           return decodeURIComponent(kv);
         });
         params[keyValue[0]] = keyValue[1];

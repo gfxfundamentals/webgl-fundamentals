@@ -110,7 +110,7 @@ function main() {
     return function(event, ui) {
       translation[index] = ui.value;
       drawScene();
-    }
+    };
   }
 
   function updateAngle(event, ui) {
@@ -123,7 +123,7 @@ function main() {
     return function(event, ui) {
       scale[index] = ui.value;
       drawScene();
-    }
+    };
   }
 
   // Draw the scene.
@@ -152,7 +152,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset)
+        positionLocation, size, type, normalize, stride, offset);
 
     // Turn on the color attribute
     gl.enableVertexAttribArray(colorLocation);
@@ -167,7 +167,7 @@ function main() {
     var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;               // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        colorLocation, size, type, normalize, stride, offset)
+        colorLocation, size, type, normalize, stride, offset);
 
     // Compute the matrix
     var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);

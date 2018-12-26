@@ -105,7 +105,7 @@ function main() {
     return function(event, ui) {
       translation[index] = ui.value;
       drawScene();
-    }
+    };
   }
 
   function updateAngle(event, ui) {
@@ -118,7 +118,7 @@ function main() {
     return function(event, ui) {
       scale[index] = ui.value;
       drawScene();
-    }
+    };
   }
 
   // Draw the scene.
@@ -147,7 +147,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionAttributeLocation, size, type, normalize, stride, offset)
+        positionAttributeLocation, size, type, normalize, stride, offset);
 
     // Compute the matrix
     var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);

@@ -150,7 +150,7 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 
 //const svg = "m44,434c18,-33 19,-66 15,-111c-4,-45 -37,-104 -39,-132c-2,-28 11,-51 16,-81c5,-30 3,-63 -36,-63";
 const svg =
-"M236,124L197,112L197,34C197,34 184.859,31.871 165,33C186.997,66.892 161.894,89.627 173,109C184.106,128.373 186.493,137.68 205,144C219.37,148.907 222,154 222,154L220,175L202,174L191,194L204,209L222,208C222,208 226.476,278.566 218,295C209.524,311.434 191.013,324.945 201,354C210.987,383.055 213,399 213,399L191,403L191,417L212,422C212,422 233.283,437.511 211,444C188.717,450.489 111,472 111,472L111,485L236,484L236,124Z"
+"M236,124L197,112L197,34C197,34 184.859,31.871 165,33C186.997,66.892 161.894,89.627 173,109C184.106,128.373 186.493,137.68 205,144C219.37,148.907 222,154 222,154L220,175L202,174L191,194L204,209L222,208C222,208 226.476,278.566 218,295C209.524,311.434 191.013,324.945 201,354C210.987,383.055 213,399 213,399L191,403L191,417L212,422C212,422 233.283,437.511 211,444C188.717,450.489 111,472 111,472L111,485L236,484L236,124Z";
 
 function main() {
   const opt = getQueryParams();
@@ -249,7 +249,7 @@ function main() {
     // Compute the camera's matrix using look at.
     const midY = lerp(extents.min[1], extents.max[1], .5);
     const sizeToFitOnScreen = (extents.max[1] - extents.min[1]) * .6;
-    const distance = sizeToFitOnScreen / Math.tan(fieldOfViewRadians * .5)
+    const distance = sizeToFitOnScreen / Math.tan(fieldOfViewRadians * .5);
     const cameraPosition = [0, midY, distance];
     const target = [0, midY, 0];
     const up = [0, -1, 0];  // we used 2d points as input which means orientation is flipped
@@ -335,7 +335,7 @@ function main() {
           --need;
           if (!need) {
             if (mode == 'l') {
-              const m4 = points.pop()
+              const m4 = points.pop();
               const m1 = points.pop();
               const m2 = v2.lerp(m1, m4, 0.25);
               const m3 = v2.lerp(m1, m4, 0.75);
@@ -551,7 +551,7 @@ function main() {
     const texcoords = [];
     const indices = [];
 
-    const vOffset = capStart ? 1: 0;
+    const vOffset = capStart ? 1 : 0;
     const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
     const quadsDown = pointsPerColumn - 1;
 
@@ -628,7 +628,7 @@ function main() {
     };
     fn.reset = function() {
       ndx = 0;
-    }
+    };
     fn.numElements = arrays.positions.length / 3;
     return fn;
   }
@@ -853,7 +853,7 @@ function main() {
     var params = {};
     if (window.location.search) {
       window.location.search.substring(1).split("&").forEach(function(pair) {
-        var keyValue = pair.split("=").map(function (kv) {
+        var keyValue = pair.split("=").map(function(kv) {
           return decodeURIComponent(kv);
         });
         params[keyValue[0]] = keyValue[1];

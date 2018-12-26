@@ -182,7 +182,7 @@ function main() {
   webglLessonsUI.setupSlider("#lightRotationX", {value: lightRotationX, slide: updatelightRotationX, min: -2, max: 2, precision: 2, step: 0.001});
   webglLessonsUI.setupSlider("#lightRotationY", {value: lightRotationY, slide: updatelightRotationY, min: -2, max: 2, precision: 2, step: 0.001});
   webglLessonsUI.setupSlider("#limit", {value: radToDeg(limit), slide: updateLimit, min: 0, max: 180});
-  
+
   function updateRotation(event, ui) {
     fRotationRadians = degToRad(ui.value);
     drawScene();
@@ -236,7 +236,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset)
+        positionLocation, size, type, normalize, stride, offset);
 
     // Turn on the normal attribute
     gl.enableVertexAttribArray(normalLocation);
@@ -251,7 +251,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        normalLocation, size, type, normalize, stride, offset)
+        normalLocation, size, type, normalize, stride, offset);
 
     // Compute the projection matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
@@ -307,7 +307,7 @@ function main() {
         lmat = m4.multiply(m4.yRotation(lightRotationY), lmat);
         // get the zAxis from the matrix
         // negate it because lookAt looks down the -Z axis
-        lightDirection = [-lmat[8], -lmat[9],-lmat[10]];  
+        lightDirection = [-lmat[8], -lmat[9],-lmat[10]];
     }
 
     gl.uniform3fv(lightDirectionLocation, lightDirection);
