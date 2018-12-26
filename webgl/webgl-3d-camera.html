@@ -144,7 +144,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset)
+        positionLocation, size, type, normalize, stride, offset);
 
     // Turn on the color attribute
     gl.enableVertexAttribArray(colorLocation);
@@ -159,7 +159,7 @@ function main() {
     var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;               // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        colorLocation, size, type, normalize, stride, offset)
+        colorLocation, size, type, normalize, stride, offset);
 
 
     var numFs = 5;
@@ -184,7 +184,7 @@ function main() {
     for (var ii = 0; ii < numFs; ++ii) {
       var angle = ii * Math.PI * 2 / numFs;
       var x = Math.cos(angle) * radius;
-      var y = Math.sin(angle) * radius
+      var y = Math.sin(angle) * radius;
 
       // starting with the view projection matrix
       // compute a matrix for the F
@@ -442,8 +442,9 @@ var m4 = {
     var dst = [];
     for (var i = 0; i < 4; ++i) {
       dst[i] = 0.0;
-      for (var j = 0; j < 4; ++j)
+      for (var j = 0; j < 4; ++j) {
         dst[i] += v[j] * m[j * 4 + i];
+      }
     }
     return dst;
   },
@@ -588,7 +589,7 @@ function setGeometry(gl) {
   // We could do by changing all the values above but I'm lazy.
   // We could also do it with a matrix at draw time but you should
   // never do stuff at draw time if you can do it at init time.
-  var matrix = m4.xRotation(Math.PI),
+  var matrix = m4.xRotation(Math.PI);
   matrix = m4.translate(matrix, -50, -75, -15);
 
   for (var ii = 0; ii < positions.length; ii += 3) {

@@ -144,7 +144,7 @@ function main() {
     // Compute the camera's matrix using look at.
     const midY = lerp(extents.min[1], extents.max[1], .5);
     const sizeToFitOnScreen = (extents.max[1] - extents.min[1]) * .6;
-    const distance = sizeToFitOnScreen / Math.tan(fieldOfViewRadians * .5)
+    const distance = sizeToFitOnScreen / Math.tan(fieldOfViewRadians * .5);
     const cameraPosition = [0, midY, distance];
     const target = [0, midY, 0];
     const up = [0, -1, 0];  // we used 2d points as input which means orientation is flipped
@@ -276,7 +276,7 @@ function main() {
     return v2.add(v2.mult(points[offset + 0], invT * invT * invT),
                   v2.mult(points[offset + 1], 3 * t * invT * invT),
                   v2.mult(points[offset + 2], 3 * invT * t * t),
-                  v2.mult(points[offset + 3], t * t  *t));
+                  v2.mult(points[offset + 3], t * t * t));
   }
 
   function getPointsOnBezierCurve(points, offset, numPoints) {
@@ -400,7 +400,7 @@ function main() {
     const texcoords = [];
     const indices = [];
 
-    const vOffset = capStart ? 1: 0;
+    const vOffset = capStart ? 1 : 0;
     const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
     const quadsDown = pointsPerColumn - 1;
 
@@ -467,6 +467,7 @@ function main() {
     { type: "checkbox", key: "triangles",  change: update },
   ]);
 
+  /* eslint brace-style: 0 */
   gl.canvas.addEventListener('mousedown', (e) => { e.preventDefault(); startRotateCamera(e); });
   window.addEventListener('mouseup', stopRotateCamera);
   window.addEventListener('mousemove', rotateCamera);
@@ -513,7 +514,7 @@ function main() {
     var params = {};
     if (window.location.search) {
       window.location.search.substring(1).split("&").forEach(function(pair) {
-        var keyValue = pair.split("=").map(function (kv) {
+        var keyValue = pair.split("=").map(function(kv) {
           return decodeURIComponent(kv);
         });
         params[keyValue[0]] = keyValue[1];
@@ -576,7 +577,7 @@ function main() {
   }
 
   function isPowerOf2(value) {
-    return (value & (value - 1)) == 0;
+    return (value & (value - 1)) === 0;
   }
 }
 
@@ -653,7 +654,7 @@ const v2 = (function() {
   // formed by v and w
   function distanceToSegmentSq(p, v, w) {
     const l2 = distanceSq(v, w);
-    if (l2 == 0) {
+    if (l2 === 0) {
       return distanceSq(p, v);
     }
     let t = ((p[0] - v[0]) * (w[0] - v[0]) + (p[1] - v[1]) * (w[1] - v[1])) / l2;

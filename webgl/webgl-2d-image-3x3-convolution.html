@@ -84,7 +84,7 @@ function main() {
   image.src = "resources/leaves.jpg";  // MUST BE SAME DOMAIN!!!
   image.onload = function() {
     render(image);
-  }
+  };
 }
 
 function render(image) {
@@ -248,11 +248,11 @@ function render(image) {
 
   // Setup UI to pick kernels.
   var ui = document.getElementById("ui");
-  var select = document.createElement("select")
+  var select = document.createElement("select");
   for (var name in kernels) {
     var option = document.createElement("option");
     option.value = name;
-    if (name == initialSelection) {
+    if (name === initialSelection) {
       option.selected = true;
     }
     option.appendChild(document.createTextNode(name));
@@ -297,7 +297,7 @@ function render(image) {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset)
+        positionLocation, size, type, normalize, stride, offset);
 
     // Turn on the teccord attribute
     gl.enableVertexAttribArray(texcoordLocation);
@@ -312,7 +312,7 @@ function render(image) {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        texcoordLocation, size, type, normalize, stride, offset)
+        texcoordLocation, size, type, normalize, stride, offset);
 
     // set the resolution
     gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);

@@ -93,7 +93,7 @@ function main() {
 
   ctx.canvas.width = 128;
   ctx.canvas.height = 128;
-  
+
   const faceInfos = [
     { target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, faceColor: '#F00', textColor: '#0FF', text: '+X' },
     { target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, faceColor: '#FF0', textColor: '#00F', text: '-X' },
@@ -105,7 +105,7 @@ function main() {
   faceInfos.forEach((faceInfo) => {
     const {target, faceColor, textColor, text} = faceInfo;
     generateFace(ctx, faceColor, textColor, text);
-    
+
     // Upload the canvas to the cubemap face.
     const level = 0;
     const internalFormat = gl.RGBA;
@@ -173,7 +173,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset)
+        positionLocation, size, type, normalize, stride, offset);
 
     // Compute the projection matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;

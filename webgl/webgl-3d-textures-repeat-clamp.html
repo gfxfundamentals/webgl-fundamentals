@@ -26,7 +26,6 @@ body, document {
     left: 1px;
     width: 400px;
     height: 300px;
-    g-background: rgba(255, 0, 0, 0.2);
 }
 #gridContainer>svg {
     width: 100%;
@@ -224,7 +223,7 @@ function main() {
   document.querySelector("#wrap_t2").addEventListener('click', function() { wrapT = gl.MIRRORED_REPEAT; drawScene(); });  // eslint-disable-line
 
   function isPowerOf2(value) {
-    return (value & (value - 1)) == 0;
+    return (value & (value - 1)) === 0;
   }
 
   function radToDeg(r) {
@@ -278,7 +277,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        positionLocation, size, type, normalize, stride, offset)
+        positionLocation, size, type, normalize, stride, offset);
 
     // Turn on the teccord attribute
     gl.enableVertexAttribArray(texcoordLocation);
@@ -293,7 +292,7 @@ function main() {
     var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
-        texcoordLocation, size, type, normalize, stride, offset)
+        texcoordLocation, size, type, normalize, stride, offset);
 
     // Compute the projection matrix
     var projectionMatrix =

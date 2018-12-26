@@ -83,7 +83,7 @@ function main() {
     1, 0,
     0, 1,
     1, 1,
-  ]
+  ];
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
   // Create a buffer for texture coords
@@ -98,7 +98,7 @@ function main() {
     1, 0,
     0, 1,
     1, 1,
-  ]
+  ];
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
 
   // creates a texture info { width: w, height: h, texture: tex }
@@ -351,7 +351,8 @@ MatrixStack.prototype.getCurrentMatrix = function() {
 
 // Lets us set the current matrix
 MatrixStack.prototype.setCurrentMatrix = function(m) {
-  return this.stack[this.stack.length - 1] = m;
+  this.stack[this.stack.length - 1] = m;
+  return m;
 };
 
 // Translates the current matrix

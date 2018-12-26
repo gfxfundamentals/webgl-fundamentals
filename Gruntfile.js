@@ -30,19 +30,12 @@ module.exports = function(grunt) {
           'webgl/resources/2d-math.js',
           'webgl/resources/3d-math.js',
         ],
-        options: {
-          config: 'build/conf/eslint.json',
-          //rulesdir: ['build/rules'],
-        },
       },
-      //examples: {
-      //  src: [
-      //    'webgl/*.html',
-      //  ],
-      //  options: {
-      //    configFile: 'build/conf/eslint-examples.json',
-      //  },
-      //},
+      examples: {
+        src: [
+          'webgl/*.html',
+        ],
+      },
     },
     jsdoc: {
       docs: {

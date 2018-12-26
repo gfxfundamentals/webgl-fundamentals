@@ -182,7 +182,7 @@ async function main() {
     '5124': Int32Array,   // gl.INT
     '5125': Uint32Array,  // gl.UNSIGNED_INT
     '5126': Float32Array, // gl.FLOAT
-  }
+  };
 
 
   // Given a GL type return the TypedArray needed
@@ -284,7 +284,7 @@ async function main() {
       const {name, skin, mesh, translation, rotation, scale} = n;
       const trs = new TRS(translation, rotation, scale);
       const node = new Node(trs, name);
-      const realMesh =　gltf.meshes[mesh];
+      const realMesh = gltf.meshes[mesh];
       if (realMesh) {
         node.drawables.push(new MeshRenderer(realMesh));
       }
@@ -367,7 +367,7 @@ async function main() {
     };
 
     function renderDrawables(node) {
-      for(const drawable of node.drawables) {
+      for (const drawable of node.drawables) {
           drawable.render(node, projection, view, sharedUniforms);
       }
     }
