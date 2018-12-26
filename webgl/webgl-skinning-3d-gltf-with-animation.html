@@ -4,11 +4,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>WebGL - Skinning glTF</title>
+<title>WebGL - Skinning glTF with Animation</title>
 <link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
 </head>
 <body>
 <canvas id="canvas"></canvas>
+<div id="uiContainer">
+  <div id="ui"></div>
+</div>
 </body>
 <!-- vertex shader -->
 <script id="skinVS" type="notjs">
@@ -47,13 +50,14 @@ void main() {
                     getBoneMatrix(a_JOINTS_0[3]) * a_WEIGHTS_0[3];
   mat4 world = u_world * skinMatrix;
   gl_Position = u_projection * u_view * world * a_POSITION;
+
   v_normal = mat3(world) * a_NORMAL;
 
   // for debugging .. see article
-  //gl_Position = u_projection * u_view *  a_POSITION;
-  //v_normal = a_NORMAL;
+  // gl_Position = u_projection * u_view * a_POSITION;
+  v_normal = a_NORMAL;
   //v_normal = a_WEIGHTS_0.xyz * 2. - 1.;
-  //v_normal = a_JOINTS_0.xyz / (u_numJoints - 1.) * 2. - 1.;
+  //v_normal = (a_JOINTS_0.xyz / (u_numJoints - 1.)) * 2. - 1.;
 }
 </script>
 <script id="fs" type="notjs">
@@ -68,6 +72,7 @@ void main () {
   vec3 normal = normalize(v_normal);
   float light = dot(u_lightDirection, normal) * .5 + .5;
   gl_FragColor = vec4(u_diffuse.rgb * light, u_diffuse.a);
+  gl_FragColor = vec4(normal * .5 + .5, 1);
 
   // for debugging .. see article
   //gl_FragColor = vec4(1, 0, 0, 1);
@@ -97,6 +102,7 @@ and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
 for webgl-utils, m3, m4, and webgl-lessons-ui.
 -->
 <script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-ui.js"></script>
 <script src="resources/m4.js"></script>
 <script>
 "use strict";
@@ -110,6 +116,10 @@ async function main() {
     return;
   }
   const ext = gl.getExtension('OES_texture_float');
+  if (!ext) {
+    return;  // the extension doesn't exist on this device
+  }
+  const uintExt = gl.getExtension('OES_element_index_uint');
   if (!ext) {
     return;  // the extension doesn't exist on this device
   }
@@ -127,14 +137,8 @@ async function main() {
       this.jointData = new Float32Array(joints.length * 16);
       // create views for each joint and inverseBindMatrix
       for (let i = 0; i < joints.length; ++i) {
-        this.inverseBindMatrices.push(new Float32Array(
-            inverseBindMatrixData.buffer,
-            inverseBindMatrixData.byteOffset + Float32Array.BYTES_PER_ELEMENT * 16 * i,
-            16));
-        this.jointMatrices.push(new Float32Array(
-            this.jointData.buffer,
-            Float32Array.BYTES_PER_ELEMENT * 16 * i,
-            16));
+        this.inverseBindMatrices.push(new Float32Array(inverseBindMatrixData.buffer, inverseBindMatrixData.byteOffset + Float32Array.BYTES_PER_ELEMENT * 16 * i, 16));
+        this.jointMatrices.push(new Float32Array(this.jointData.buffer, Float32Array.BYTES_PER_ELEMENT * 16 * i, 16));
       }
       // create a texture to hold the joint matrices
       this.jointTexture = gl.createTexture();
@@ -162,14 +166,14 @@ async function main() {
   }
 
   class TRS {
-    constructor(position = [0, 0, 0], rotation = [0, 0, 0, 1], scale = [1, 1, 1]) {
-      this.position = position;
+    constructor(translation = [0, 0, 0], rotation = [0, 0, 0, 1], scale = [1, 1, 1]) {
+      this.translation = translation;
       this.rotation = rotation;
       this.scale = scale;
     }
     getMatrix(dst) {
       dst = dst || new Float32Array(16);
-      m4.compose(this.position, this.rotation, this.scale, dst);
+      m4.compose(this.translation, this.rotation, this.scale, dst);
       return dst;
     }
   }
@@ -229,6 +233,197 @@ async function main() {
     }
   }
 
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  /**
+   * @typedef OutputIndices
+   * @property {number} prevNdx
+   * @property {number} nextNdx
+   */
+  /**
+   * get 2 output indices to lerp between
+   * @param {number} t time to get indices for
+   * @param {number[]} input array of times in order
+   * @return {OutputIndices} the indices of the 2 data points to lerp between
+   */
+  function getOutputIndices(t, input) {
+    let ndx = 0;
+    for (; ndx < input.length; ++ndx) {
+      if (input[ndx] > t) {
+        break;
+      }
+    }
+    const prevNdx = Math.max(0, ndx - 1);
+    const nextNdx = Math.min(input.length - 1, ndx);
+    const t0 = input[prevNdx];
+    const t1 = input[nextNdx];
+    const range = t1 - t0;
+    const localT = range > 0 ? (t - t0) / range : 1;
+
+    return {prevNdx, nextNdx, localT};
+  }
+
+  class LinearFloatSampler {
+    constructor(input, output) {
+      this.input = input;
+      this.output = output;
+    }
+    getValue(t, dst, path) {
+      const {input, output, numComponents} = this;
+      const {prevNdx, nextNdx, localT} = getOutputIndices(t, input);
+
+      dst[path] = lerp(output[prevNdx], output[nextNdx], localT);
+    }
+  }
+
+  class LinearVecSampler {
+    constructor(input, output, numComponents) {
+      this.input = input;
+      this.output = output;
+      this.numComponents = numComponents;
+    }
+    getValue(t, dst, path) {
+      const {input, output, numComponents} = this;
+      const {prevNdx, nextNdx, localT} = getOutputIndices(t, input);
+
+      const i0 = prevNdx * numComponents;
+      const i1 = nextNdx * numComponents;
+
+      const d = dst[path];
+      for (let i = 0; i < numComponents; ++i) {
+        d[i] = lerp(output[i0 + i], output[i1 + i], localT);
+      }
+    }
+  }
+
+  class LinearVec2Sampler extends LinearVecSampler {
+    constructor(input, output) {
+      super(input, output, 2);
+    }
+  }
+
+  class LinearVec3Sampler extends LinearVecSampler {
+    constructor(input, output) {
+      super(input, output, 3);
+    }
+  }
+
+  class LinearVec4Sampler extends LinearVecSampler {
+    constructor(input, output) {
+      super(input, output, 4);
+    }
+  }
+
+  class LinearQuatSampler {
+    constructor(input, output) {
+      this.input = input;
+      this.output = output;
+    }
+    getValue(t, dst, path) {
+      const {input, output} = this;
+      const {prevNdx, nextNdx, localT} = getOutputIndices(t, input);
+
+      const i0 = prevNdx * 4;
+      const i1 = nextNdx * 4;
+
+      const qa = output.slice(i0, i0 + 4);
+      const qb = output.slice(i1, i1 + 4);
+      slerp(qa, qb, localT, dst[path]);
+    }
+  }
+
+  function normalizeQ(q, dst) {
+    const lengthSq = q[0] * q[0] *
+                     q[1] * q[1] *
+                     q[2] * q[2] *
+                     q[1] * q[3];
+    if (lengthSq === 0) {
+      dst[0] = 0;
+      dst[1] = 0;
+      dst[2] = 0;
+      dst[3] = 1;
+    } else {
+      const t = 1 / Math.sqrt(lengthSq);
+      dst[0] = q[0] * t;
+      dst[1] = q[1] * t;
+      dst[2] = q[2] * t;
+      dst[3] = q[3] * t;
+    }
+    return dst;
+  }
+
+  function slerp(qa, qb, t, dst) {
+    if (t <= 0) {
+      dst[0] = qa[0];
+      dst[1] = qa[1];
+      dst[2] = qa[2];
+      dst[3] = qa[3];
+      return dst;
+    }
+    if (t >= 1) {
+      dst[0] = qb[0];
+      dst[1] = qb[1];
+      dst[2] = qb[2];
+      dst[3] = qb[3];
+      return dst;
+    }
+
+    const x = qa[0];
+    const y = qa[1];
+    const z = qa[2];
+    const w = qa[3];
+
+    // http://www.euclideanspace.com/maths/algebra/realNormeqalgebra/quaternions/slerp/
+
+    let cosHalfTheta = w * qb[3] + x * qb[0] + y * qb[1] + z * qb[2];
+
+    if (cosHalfTheta < 0) {
+      dst[0] = -qb[0];
+      dst[1] = -qb[1];
+      dst[2] = -qb[2];
+      dst[3] = -qb[3];
+      cosHalfTheta = -cosHalfTheta;
+    } else {
+      dst[0] = qb[0];
+      dst[1] = qb[1];
+      dst[2] = qb[2];
+      dst[3] = qb[3];
+    }
+
+    if (cosHalfTheta >= 1.0) {
+      dst[0] = x;
+      dst[1] = y;
+      dst[2] = z;
+      dst[3] = w;
+      return dst;
+    }
+
+    const sqrSinHalfTheta = 1.0 - cosHalfTheta * cosHalfTheta;
+
+    if (sqrSinHalfTheta <= Number.EPSILON) {
+      const s = 1 - t;
+      dst[0] = s * x + t * dst[0];
+      dst[1] = s * y + t * dst[1];
+      dst[2] = s * z + t * dst[2];
+      dst[3] = s * w + t * dst[3];
+      return normalizeQ(dst);
+    }
+
+    const sinHalfTheta = Math.sqrt(sqrSinHalfTheta);
+    const halfTheta = Math.atan2(sinHalfTheta, cosHalfTheta);
+    const ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta;
+    const ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
+
+    dst[0] = ( x * ratioA + dst[0] * ratioB );
+    dst[1] = ( y * ratioA + dst[1] * ratioB );
+    dst[2] = ( z * ratioA + dst[2] * ratioB );
+    dst[3] = ( w * ratioA + dst[3] * ratioB );
+
+    return dst;
+  }
+
   class SkinRenderer {
     constructor(mesh, skin) {
       this.mesh = mesh;
@@ -254,7 +449,7 @@ async function main() {
     }
   }
 
-  class MeshRenderer {
+  class MeshRednerer {
     constructor(mesh) {
       this.mesh = mesh;
     }
@@ -277,6 +472,18 @@ async function main() {
 
   function throwNoKey(key) {
     throw new Error(`no key: ${key}`);
+  }
+
+  const samplersCtorTable = {
+    'SCALAR+LINEAR': LinearFloatSampler,
+    'VEC2+LINEAR': LinearVec2Sampler,
+    'VEC3+LINEAR': LinearVec3Sampler,
+    'VEC4+LINEAR': LinearVec4Sampler,
+  };
+
+  function accessorToSampler(accessor, interpolation) {
+    const key = `${accessor.type}+${interpolation}`;
+    return samplersCtorTable[key] || throwNoKey(key);
   }
 
   const accessorTypeToNumComponentsMap = {
@@ -325,7 +532,7 @@ async function main() {
     };
   }
 
-  // Given an accessor index return a WebGLBuffer and a stride
+  // Given an accessor index return an accessor, WebGLBuffer and a stride
   function getAccessorAndWebGLBuffer(gl, gltf, accessorIndex) {
     const accessor = gltf.accessors[accessorIndex];
     const bufferView = gltf.bufferViews[accessor.bufferView];
@@ -347,6 +554,14 @@ async function main() {
 
   async function loadGLTF(url) {
     const gltf = await loadJSON(url);
+
+    // Given a bufferViewIndex and a type return a TypedArray of the correct type
+    function getAnimationTarget(gltf, target) {
+      if (target.node !== undefined) {
+        return gltf.nodes[target.node];
+      }
+      throw new Error('unknown channel target');
+    }
 
     // load all the referenced files relative to the gltf file
     const baseURL = new URL(url, location.href);
@@ -393,7 +608,7 @@ async function main() {
         primitive.bufferInfo = bufferInfo;
 
         // save the material info for this primitive
-        primitive.material = gltf.materials && gltf.materials[primitive.material] || defaultMaterial;
+        primitive.material = defaultMaterial;//gltf.materials && gltf.materials[primitive.material] || defaultMaterial;
       });
     });
 
@@ -415,7 +630,7 @@ async function main() {
     // setup skins
     gltf.skins = gltf.skins.map((skin) => {
       const joints = skin.joints.map(ndx => gltf.nodes[ndx]);
-      const {array} = getAccessorTypedArrayAndStride(gl, gltf, skin.inverseBindMatrices);
+      const {stride, array} = getAccessorTypedArrayAndStride(gl, gltf, skin.inverseBindMatrices);
       return new Skin(joints, array);
     });
 
@@ -437,6 +652,48 @@ async function main() {
       scene.root = new Node(new TRS(), scene.name);
       addChildren(gltf.nodes, scene.root, scene.nodes);
     }
+
+    // setup animations
+    gltf.animationsByName = {};
+    gltf.animations.forEach((animation) => {
+      let minTime;
+      let maxTime;
+      gltf.animationsByName[animation.name] = animation;
+      animation.samplers = animation.samplers.map((sampler) => {
+        const input = getAccessorTypedArrayAndStride(gl, gltf, sampler.input).array;
+        const startTime = input[0];
+        const endTime = input[input.length - 1];
+        if (minTime === undefined || startTime < minTime) {
+          minTime = startTime;
+        }
+        if (maxTime === undefined || endTime > maxTime) {
+          maxTime = endTime;
+        }
+        const {accessor, array, stride} = getAccessorTypedArrayAndStride(gl, gltf, sampler.output);
+        const SamplerCtor = accessorToSampler(accessor, sampler.interpolation);
+        return new SamplerCtor(input, array);
+      });
+      animation.channels = animation.channels.map((channel) => {
+        let target = getAnimationTarget(gltf, channel.target);
+        // We want to target the TRS, not the node itself
+        if (target instanceof Node) {
+          target = target.source;
+        }
+        const path = channel.target.path;
+        let sampler = animation.samplers[channel.sampler];
+        if (path === "rotation") {
+          sampler = new LinearQuatSampler(sampler.input, sampler.output);
+        }
+        return {
+          sampler,
+          target,
+          path,
+        };
+      });
+      animation.startTime = minTime;
+      animation.endTime = maxTime;
+      animation.range = maxTime - minTime;
+    });
 
     return gltf;
   }
@@ -464,33 +721,35 @@ async function main() {
     return loadFile(url, 'json');
   }
 
-  const gltf = await loadGLTF('resources/models/killer_whale/whale.CYCLES.gltf');
+  const gltf = await loadGLTF('resources/models/fencer_-_contrast_-_animated/scene.gltf');
+
+  const settings = {
+    speed: 1,
+    animation: 0,
+  };
+  webglLessonsUI.setupUI(document.querySelector("#ui"), settings, [
+    { type: "slider",   key: "speed", min: 0, max: 1,  precision: 2, step: 0.01, },
+    { type: "option",   key: "animation", options: Object.keys(gltf.animationsByName), },
+  ]);
+
+  function applyAnimation(anim, t) {
+    for(const channel of anim.channels) {
+      const {target, sampler, path} = channel;
+      sampler.getValue(t, target, path);
+    }
+  }
 
   function degToRad(deg) {
     return deg * Math.PI / 180;
   }
 
-  const origMatrices = new Map();
-  function animSkin(skin, a) {
-    for (let i = 0; i < skin.joints.length; ++i) {
-      const joint = skin.joints[i];
-      // if there is no matrix saved for this joint
-      if (!origMatrices.has(joint)) {
-        // save a matrix for joint
-        origMatrices.set(joint, joint.source.getMatrix());
-      }
-      // get the original matrix
-      const origMatrix = origMatrices.get(joint);
-      // rotate it
-      const m = m4.xRotate(origMatrix, a);
-      // decompose it back into position, rotation, scale
-      // into the joint
-      m4.decompose(m, joint.source.position, joint.source.rotation, joint.source.scale);
-    }
-  }
+  let animTimer = 0;
+  let then = 0;
+  function render(now) {
+    now *= 0.001;  // convert to seconds
 
-  function render(time) {
-    time *= 0.001;  // convert to seconds
+    const deltaTime = now - then;
+    then = now;
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -503,11 +762,10 @@ async function main() {
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const projection = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
-    const cameraPosition = [10, 0, -5];
-    const target = [0, 0, -10];
-    // for debugging .. see article
-    // const cameraPosition = [5, 0, 5];
-    // const target = [0, 0, 0];
+    // camera going in circle 2 units from origin looking at origin
+    const cameraRadius = 3;
+    const cameraPosition = [Math.cos(now * .3) * cameraRadius, 1, Math.sin(now * .3) * cameraRadius];
+    const target = [0, 0, 0];
     const up = [0, 1, 0];
     // Compute the camera's matrix using look at.
     const camera = m4.lookAt(cameraPosition, target, up);
@@ -515,19 +773,20 @@ async function main() {
     // Make a view matrix from the camera matrix.
     const view = m4.inverse(camera);
 
-    animSkin(gltf.skins[0], Math.sin(time) * .5);
+    const anim = gltf.animations[settings.animation];
+    animTimer += settings.speed * deltaTime;
+    if (anim.range) {
+      animTimer %= anim.range;
+    }
+    applyAnimation(anim, animTimer + anim.startTime);
 
     const sharedUniforms = {
       u_lightDirection: m4.normalize([-1, 3, 5]),
     };
 
     function renderDrawables(node) {
-      for (const drawable of node.drawables) {
-<<<<<<< HEAD
-          drawable.render(node, projection, view, sharedUniforms);
-=======
+      for(const drawable of node.drawables) {
         drawable.render(node, projection, view, sharedUniforms);
->>>>>>> wip
       }
     }
 
@@ -541,6 +800,7 @@ async function main() {
     requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
+
 }
 
 main();

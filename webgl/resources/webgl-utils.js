@@ -967,12 +967,29 @@
     Object.keys(mapping).forEach(function(attribName) {
       var bufferName = mapping[attribName];
       var origArray = arrays[bufferName];
-      var array = makeTypedArray(origArray, bufferName);
+      var buffer;
+      var numComponents;
+      var type;
+      var normalize;
+      if (origArray.buffer && origArray.buffer instanceof WebGLBuffer) {
+        buffer = origArray.buffer;
+        numComponents = origArray.numComponents || origArray.size;
+        type = origArray.type;
+        normalize = origArray.normalize;
+      } else {
+        var array = makeTypedArray(origArray, bufferName);
+        buffer = createBufferFromTypedArray(gl, array);
+        numComponents = origArray.numComponents || array.numComponents || guessNumComponentsFromName(bufferName);
+        type = getGLTypeForTypedArray(gl, array);
+        normalize = getNormalizationForTypedArray(array);
+      }
       attribs[attribName] = {
-        buffer:        createBufferFromTypedArray(gl, array),
-        numComponents: origArray.numComponents || array.numComponents || guessNumComponentsFromName(bufferName),
-        type:          getGLTypeForTypedArray(gl, array),
-        normalize:     getNormalizationForTypedArray(array),
+        buffer,
+        numComponents,
+        type,
+        normalize,
+        stride: origArray.stride || 0,
+        offset: origArray.offset || 0,
       };
     });
     return attribs;
@@ -1128,6 +1145,7 @@
     var indices = arrays.indices;
     if (indices) {
       indices = makeTypedArray(indices, "indices");
+      bufferInfo.elementType = getGLTypeForTypedArray(gl, indices);
       bufferInfo.indices = createBufferFromTypedArray(gl, indices, gl.ELEMENT_ARRAY_BUFFER);
       bufferInfo.numElements = indices.length;
     } else {
@@ -1199,7 +1217,7 @@
     var numElements = count === undefined ? bufferInfo.numElements : count;
     offset = offset === undefined ? offset : 0;
     if (indices) {
-      gl.drawElements(primitiveType, numElements, gl.UNSIGNED_SHORT, offset);
+      gl.drawElements(primitiveType, numElements, bufferInfo.elementType || gl.UNSIGNED_SHORT, offset);
     } else {
       gl.drawArrays(primitiveType, offset, numElements);
     }
