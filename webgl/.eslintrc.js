@@ -27,7 +27,7 @@ module.exports = {
     "no-label-var": 2,
     "no-labels": 2,
     "no-lone-blocks": 0,
-    "no-loop-func": 2,
+    "no-loop-func": 0,
     "no-multi-str": 2,
     "no-native-reassign": 2,
     "no-new": 2,
@@ -64,7 +64,7 @@ module.exports = {
     "comma-spacing": 0,
     "comma-dangle": 0,
     "comma-style": [2, "last"],
-    "optional-comma-spacing/optional-comma-spacing": [2, {"after": true}],
+    "optional-comma-spacing/optional-comma-spacing": [0],
     "dot-notation": 0,
     "eol-last": [0],
     "key-spacing": [0],
@@ -79,7 +79,7 @@ module.exports = {
     "no-unused-vars": 0,
     "one-variable-per-var/one-variable-per-var": [2],
     "quotes": [0, "single"],
-    "require-trailing-comma/require-trailing-comma": [2],
+    "require-trailing-comma/require-trailing-comma": [0],
     "semi": [2, "always"],
     "strict": [2, "global"],
     "space-before-function-paren": [2, "never"],
@@ -89,7 +89,9 @@ module.exports = {
     {
       "files": [ "resources/**/*.js" ],
       "rules": {
+        "optional-comma-spacing/optional-comma-spacing": [2, {"after": true}],
         "no-unused-vars": 2,
+        "require-trailing-comma/require-trailing-comma": [2],
         "strict": ["error", "function"],
       }
     }

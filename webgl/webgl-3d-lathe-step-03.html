@@ -320,7 +320,7 @@ function main() {
       if (value.length > 0) {
         const v = parseFloat(value);
         if (v > 1000) {
-          debugger;
+          debugger;  // eslint-disable-line
         }
         values.push(v);
         if (values.length === 2) {
@@ -334,7 +334,7 @@ function main() {
           }
           --need;
           if (!need) {
-            if (mode == 'l') {
+            if (mode === 'l') {
               const m4 = points.pop();
               const m1 = points.pop();
               const m2 = v2.lerp(m1, m4, 0.25);
@@ -398,7 +398,7 @@ function main() {
       } else if (c === ' ') {
         addValue();
       } else {
-        debugger;
+        debugger;  // eslint-disable-line
       }
     });
     addValue();
@@ -427,7 +427,7 @@ function main() {
     return v2.add(v2.mult(points[offset + 0], invT * invT * invT),
                   v2.mult(points[offset + 1], 3 * t * invT * invT),
                   v2.mult(points[offset + 2], 3 * invT * t * t),
-                  v2.mult(points[offset + 3], t * t  *t));
+                  v2.mult(points[offset + 3], t * t * t));
   }
 
   function getPointsOnBezierCurve(points, offset, numPoints) {
@@ -803,6 +803,7 @@ function main() {
     { type: "option",   key: "mode",       change: render, options: [ "normals", "lit", "texcoords" ], },
   ]);
 
+  /* eslint brace-style: 0 */
   gl.canvas.addEventListener('mousedown', (e) => { e.preventDefault(); startRotateCamera(e); });
   window.addEventListener('mouseup', stopRotateCamera);
   window.addEventListener('mousemove', rotateCamera);
@@ -916,7 +917,7 @@ function main() {
   }
 
   function isPowerOf2(value) {
-    return (value & (value - 1)) == 0;
+    return (value & (value - 1)) === 0;
   }
 }
 
@@ -993,7 +994,7 @@ const v2 = (function() {
   // formed by v and w
   function distanceToSegmentSq(p, v, w) {
     const l2 = distanceSq(v, w);
-    if (l2 == 0) {
+    if (l2 === 0) {
       return distanceSq(p, v);
     }
     let t = ((p[0] - v[0]) * (w[0] - v[0]) + (p[1] - v[1]) * (w[1] - v[1])) / l2;

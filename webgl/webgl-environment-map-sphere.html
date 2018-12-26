@@ -312,60 +312,11 @@ function setGeometry(gl) {
     }
   }
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-  return;
-
-  var positions = new Float32Array(
-    [
-    -0.5, -0.5,  -0.5,
-    -0.5,  0.5,  -0.5,
-     0.5, -0.5,  -0.5,
-    -0.5,  0.5,  -0.5,
-     0.5,  0.5,  -0.5,
-     0.5, -0.5,  -0.5,
-
-    -0.5, -0.5,   0.5,
-     0.5, -0.5,   0.5,
-    -0.5,  0.5,   0.5,
-    -0.5,  0.5,   0.5,
-     0.5, -0.5,   0.5,
-     0.5,  0.5,   0.5,
-
-    -0.5,   0.5, -0.5,
-    -0.5,   0.5,  0.5,
-     0.5,   0.5, -0.5,
-    -0.5,   0.5,  0.5,
-     0.5,   0.5,  0.5,
-     0.5,   0.5, -0.5,
-
-    -0.5,  -0.5, -0.5,
-     0.5,  -0.5, -0.5,
-    -0.5,  -0.5,  0.5,
-    -0.5,  -0.5,  0.5,
-     0.5,  -0.5, -0.5,
-     0.5,  -0.5,  0.5,
-
-    -0.5,  -0.5, -0.5,
-    -0.5,  -0.5,  0.5,
-    -0.5,   0.5, -0.5,
-    -0.5,  -0.5,  0.5,
-    -0.5,   0.5,  0.5,
-    -0.5,   0.5, -0.5,
-
-     0.5,  -0.5, -0.5,
-     0.5,   0.5, -0.5,
-     0.5,  -0.5,  0.5,
-     0.5,  -0.5,  0.5,
-     0.5,   0.5, -0.5,
-     0.5,   0.5,  0.5,
-
-    ]);
-  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
 }
 
 // Fill the buffer with normals for cube
 function setNormals(gl) {
-
-  var positions = [];
+  var normals = [];
   var across = 24;
   var down = 12;
   for (let v = 0; v < down; ++v) {
@@ -376,7 +327,7 @@ function setNormals(gl) {
     for (let u = 0; u < across; ++u) {
       const u0 = (u + 0) / across * Math.PI * 2;
       const u1 = (u + 1) / across * Math.PI * 2;
-      positions.push(
+      normals.push(
         Math.cos(u0) * s0, Math.cos(v0), Math.sin(u0) * s0,
         Math.cos(u1) * s0, Math.cos(v0), Math.sin(u1) * s0,
         Math.cos(u0) * s1, Math.cos(v1), Math.sin(u0) * s1,
@@ -386,54 +337,7 @@ function setNormals(gl) {
       );
     }
   }
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-  return;
-
-  var normals = new Float32Array(
-    [
-       0, 0, -1,
-       0, 0, -1,
-       0, 0, -1,
-       0, 0, -1,
-       0, 0, -1,
-       0, 0, -1,
-
-       0, 0, 1,
-       0, 0, 1,
-       0, 0, 1,
-       0, 0, 1,
-       0, 0, 1,
-       0, 0, 1,
-
-       0, 1, 0,
-       0, 1, 0,
-       0, 1, 0,
-       0, 1, 0,
-       0, 1, 0,
-       0, 1, 0,
-
-       0, -1, 0,
-       0, -1, 0,
-       0, -1, 0,
-       0, -1, 0,
-       0, -1, 0,
-       0, -1, 0,
-
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
-
-       1, 0, 0,
-       1, 0, 0,
-       1, 0, 0,
-       1, 0, 0,
-       1, 0, 0,
-       1, 0, 0,
-    ]);
-  gl.bufferData(gl.ARRAY_BUFFER, normals, gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 }
 
 main();

@@ -128,7 +128,7 @@ function main() {
   });
 
   function isPowerOf2(value) {
-    return (value & (value - 1)) == 0;
+    return (value & (value - 1)) === 0;
   }
 
   function radToDeg(r) {
@@ -230,7 +230,7 @@ function main() {
     var ySpacing = 0.7;
     var zDistance = 30;
     settings.forEach(function(s) {
-      var z = -5 + s.z; Math.cos(time * 0.3) * zDistance - zDistance;
+      var z = -5 + s.z; // Math.cos(time * 0.3) * zDistance - zDistance;
       var r = Math.abs(z) * Math.sin(fieldOfViewRadians * 0.5);
       var x = Math.sin(time * 0.2) * r;
       var y = Math.cos(time * 0.2) * r * 0.5;

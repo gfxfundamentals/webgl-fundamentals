@@ -276,7 +276,7 @@ function main() {
     return v2.add(v2.mult(points[offset + 0], invT * invT * invT),
                   v2.mult(points[offset + 1], 3 * t * invT * invT),
                   v2.mult(points[offset + 2], 3 * invT * t * t),
-                  v2.mult(points[offset + 3], t * t  *t));
+                  v2.mult(points[offset + 3], t * t * t));
   }
 
   function getPointsOnBezierCurve(points, offset, numPoints) {
@@ -467,6 +467,7 @@ function main() {
     { type: "checkbox", key: "triangles",  change: update },
   ]);
 
+  /* eslint brace-style: 0 */
   gl.canvas.addEventListener('mousedown', (e) => { e.preventDefault(); startRotateCamera(e); });
   window.addEventListener('mouseup', stopRotateCamera);
   window.addEventListener('mousemove', rotateCamera);
@@ -576,7 +577,7 @@ function main() {
   }
 
   function isPowerOf2(value) {
-    return (value & (value - 1)) == 0;
+    return (value & (value - 1)) === 0;
   }
 }
 
@@ -653,7 +654,7 @@ const v2 = (function() {
   // formed by v and w
   function distanceToSegmentSq(p, v, w) {
     const l2 = distanceSq(v, w);
-    if (l2 == 0) {
+    if (l2 === 0) {
       return distanceSq(p, v);
     }
     let t = ((p[0] - v[0]) * (w[0] - v[0]) + (p[1] - v[1]) * (w[1] - v[1])) / l2;
