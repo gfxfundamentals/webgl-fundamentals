@@ -611,7 +611,7 @@ gltf.meshes.forEach((mesh) => {
     primitive.bufferInfo = bufferInfo;
 
     // save the material info for this primitive
-    primitive.material = defaultMaterial;//gltf.materials && gltf.materials[primitive.material] || defaultMaterial;
+    primitive.material = gltf.materials && gltf.materials[primitive.material] || defaultMaterial;
   });
 });
 ```
