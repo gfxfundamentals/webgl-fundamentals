@@ -408,14 +408,13 @@ void main() {
 
 </p>
 <p>One thing to notice about density based fog is there are no near and far settings. It might be more realistic but it also might not fit your aesthetic needs. Which one you prefer is an artistic decision.</p>
-<p>There are many other ways to compute fog. On a low powered GPU you might just use <code>gl_FragCoord.z</code>. <code>gl_FragCoord</code> is a global variable that WebGL sets. The <code>x</code> and <code>y</code> components are the coordinate of the pixel being drawn. The <code>z</code> coordinate 0 to 1. While not directly translatable into distance you can still get something that looks like fog by picking some values between 0 and 1 for near and far. Nothing has to be passed from the vertex shader to the fragment shader and no distance calculations are needed so this is one way to make a cheap fog effect on a low powered GPU.</p>
+<p>There are many other ways to compute fog. On a low powered GPU you might just use <code>gl_FragCoord.z</code>. <code>gl_FragCoord</code> is a global variable that WebGL sets. The <code>x</code> and <code>y</code> components are the coordinate of the pixel being drawn. The <code>z</code> coordinate is the depth of that pixel from 0 to 1. While not directly translatable into distance you can still get something that looks like fog by picking some values between 0 and 1 for near and far. Nothing has to be passed from the vertex shader to the fragment shader and no distance calculations are needed so this is one way to make a cheap fog effect on a low powered GPU.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-fog-depth-based-gl_FragCoord.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-fog-depth-based-gl_FragCoord.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
-<p><a href="https://cs.gmu.edu/~jchen/cs662/fog.pdf">Here&#39;s another</a>.</p>
 
     </div>
     <div class="lesson-sidebar">
