@@ -1,7 +1,7 @@
+/* global module require */
+"use strict";
 
 module.exports = function() { // wrapper in case we're in module_context mode
-
-"use strict";
 
 const cache      = new (require('inmemfilecache'))();
 const Feed       = require('feed').Feed;
@@ -19,7 +19,7 @@ const url        = require('url');
 
 //process.title = "build";
 
-var executeP = Promise.denodeify(utils.execute);
+const executeP = Promise.denodeify(utils.execute);
 
 marked.setOptions({
   rawHtml: true,
@@ -34,7 +34,7 @@ function applyObject(src, dst) {
 }
 
 function mergeObjects() {
-  var merged = {};
+  const merged = {};
   Array.prototype.slice.call(arguments).forEach(function(src) {
     applyObject(src, merged);
   });
@@ -47,7 +47,7 @@ function readFile(fileName) {
 
 function writeFileIfChanged(fileName, content) {
   if (fs.existsSync(fileName)) {
-    var old = readFile(fileName);
+    const old = readFile(fileName);
     if (content === old) {
       return;
     }
@@ -61,7 +61,7 @@ function copyFile(src, dst) {
 }
 
 function replaceParams(str, params) {
-  var template = Handlebars.compile(str);
+  const template = Handlebars.compile(str);
   if (Array.isArray(params)) {
     params = mergeObjects.apply(null, params.slice().reverse());
   }
@@ -87,10 +87,10 @@ function encodeUrl(src) {
 }
 
 function TemplateManager() {
-  var templates = {};
+  const templates = {};
 
   this.apply = function(filename, params) {
-    var template = templates[filename];
+    let template = templates[filename];
     if (!template) {
       template = Handlebars.compile(readFile(filename));
       templates[filename] = template;
@@ -104,12 +104,12 @@ function TemplateManager() {
   };
 }
 
-var templateManager = new TemplateManager();
+const templateManager = new TemplateManager();
 
 Handlebars.registerHelper('include', function(filename, options) {
-  var context;
+  let context;
   if (options && options.hash && options.hash.filename) {
-    var varName = options.hash.filename;
+    const varName = options.hash.filename;
     filename = options.data.root[varName];
     context = options.hash;
   } else {
@@ -158,7 +158,7 @@ Handlebars.registerHelper('selected', function(options) {
   const re = options.hash.re;
   const sub = options.hash.sub;
 
-  let a = this[key];
+  const a = this[key];
   let b = options.data.root[value];
 
   if (re) {
@@ -173,27 +173,27 @@ function slashify(s) {
   return s.replace(/\\/g, '/');
 }
 
-var Builder = function(outBaseDir, options) {
+const Builder = function(outBaseDir, options) {
 
-  var g_articlesByLang = {};
-  var g_articles = [];
-  var g_langInfo;
-  var g_langDB = {};
-  var g_outBaseDir = outBaseDir;
-  var g_origPath = options.origPath;
+  const g_articlesByLang = {};
+  let g_articles = [];
+  let g_langInfo;
+  const g_langDB = {};
+  const g_outBaseDir = outBaseDir;
+  const g_origPath = options.origPath;
 
   // This are the english articles.
-  var g_origArticles = glob.sync(path.join(g_origPath, "*.md")).map(a => path.basename(a)).filter(a => a !== 'index.md');
+  const g_origArticles = glob.sync(path.join(g_origPath, "*.md")).map(a => path.basename(a)).filter(a => a !== 'index.md');
 
-  var extractHeader = (function() {
-    var headerRE = /([A-Z0-9_-]+): (.*?)$/i;
+  const extractHeader = (function() {
+    const headerRE = /([A-Z0-9_-]+): (.*?)$/i;
 
     return function(content) {
-      var metaData = { };
-      var lines = content.split("\n");
+      const metaData = { };
+      const lines = content.split("\n");
       for (;;) {
-        var line = lines[0].trim();
-        var m = headerRE.exec(line);
+        const line = lines[0].trim();
+        const m = headerRE.exec(line);
         if (!m) {
           break;
         }
@@ -207,25 +207,25 @@ var Builder = function(outBaseDir, options) {
     };
   }());
 
-  var parseMD = function(content) {
+  const parseMD = function(content) {
     return extractHeader(content);
   };
 
-  var loadMD = function(contentFileName) {
-    var content = cache.readFileSync(contentFileName, "utf-8");
+  const loadMD = function(contentFileName) {
+    const content = cache.readFileSync(contentFileName, "utf-8");
     return parseMD(content);
   };
 
   function extractHandlebars(content) {
-    var tripleRE = /\{\{\{.*?\}\}\}/g;
-    var doubleRE = /\{\{\{.*?\}\}\}/g;
+    const tripleRE = /\{\{\{.*?\}\}\}/g;
+    const doubleRE = /\{\{\{.*?\}\}\}/g;
 
-    var numExtractions = 0;
-    var extractions = {
+    let numExtractions = 0;
+    const extractions = {
     };
 
     function saveHandlebar(match) {
-      var id = "==HANDLEBARS_ID_" + (++numExtractions) + "==";
+      const id = "==HANDLEBARS_ID_" + (++numExtractions) + "==";
       extractions[id] = match;
       return id;
     }
@@ -240,10 +240,10 @@ var Builder = function(outBaseDir, options) {
   }
 
   function insertHandlebars(info, content) {
-    var handlebarRE = /==HANDLEBARS_ID_\d+==/g;
+    const handlebarRE = /==HANDLEBARS_ID_\d+==/g;
 
     function restoreHandlebar(match) {
-      var value = info.extractions[match];
+      const value = info.extractions[match];
       if (value === undefined) {
         throw new Error("no match restoring handlebar for: " + match);
       }
@@ -255,15 +255,15 @@ var Builder = function(outBaseDir, options) {
     return content;
   }
 
-  var applyTemplateToContent = function(templatePath, contentFileName, outFileName, opt_extra, data) {
+  const applyTemplateToContent = function(templatePath, contentFileName, outFileName, opt_extra, data) {
     // Call prep's Content which parses the HTML. This helps us find missing tags
     // should probably call something else.
     //Convert(md_content)
-    var metaData = data.headers;
-    var content = data.content;
+    const metaData = data.headers;
+    const content = data.content;
     //console.log(JSON.stringify(metaData, undefined, "  "));
-    var info = extractHandlebars(content);
-    var html = marked(info.content);
+    const info = extractHandlebars(content);
+    let html = marked(info.content);
     html = insertHandlebars(info, html);
     html = replaceParams(html, [opt_extra, g_langInfo]);
     const relativeOutName = slashify(outFileName).substring(g_outBaseDir.length);
@@ -289,42 +289,42 @@ var Builder = function(outBaseDir, options) {
     metaData['url'] = "http://webglfundamentals.org" + relativeOutName;
     metaData['relUrl'] = relativeOutName;
     metaData['screenshot'] = "http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg";
-    var basename = path.basename(contentFileName, ".md");
+    const basename = path.basename(contentFileName, ".md");
     [".jpg", ".png"].forEach(function(ext) {
-      var filename = path.join("webgl", "lessons", "screenshots", basename + ext);
+      const filename = path.join("webgl", "lessons", "screenshots", basename + ext);
       if (fs.existsSync(filename)) {
         metaData['screenshot'] = "http://webglfundamentals.org/webgl/lessons/screenshots/" + basename + ext;
       }
     });
-    var output = templateManager.apply(templatePath, metaData);
+    const output = templateManager.apply(templatePath, metaData);
     writeFileIfChanged(outFileName, output);
 
     return metaData;
   };
 
-  var applyTemplateToFile = function(templatePath, contentFileName, outFileName, opt_extra) {
+  const applyTemplateToFile = function(templatePath, contentFileName, outFileName, opt_extra) {
     console.log("processing: ", contentFileName);  // eslint-disable-line
     opt_extra = opt_extra || {};
-    var data = loadMD(contentFileName);
-    var metaData = applyTemplateToContent(templatePath, contentFileName, outFileName, opt_extra, data);
+    const data = loadMD(contentFileName);
+    const metaData = applyTemplateToContent(templatePath, contentFileName, outFileName, opt_extra, data);
     g_articles.push(metaData);
   };
 
-  var applyTemplateToFiles = function(templatePath, filesSpec, extra) {
-    var files = glob.sync(filesSpec).sort();
+  const applyTemplateToFiles = function(templatePath, filesSpec, extra) {
+    const files = glob.sync(filesSpec).sort();
     files.forEach(function(fileName) {
-      var ext = path.extname(fileName);
-      var baseName = fileName.substr(0, fileName.length - ext.length);
-      var outFileName = path.join(outBaseDir, baseName + ".html");
+      const ext = path.extname(fileName);
+      const baseName = fileName.substr(0, fileName.length - ext.length);
+      const outFileName = path.join(outBaseDir, baseName + ".html");
       applyTemplateToFile(templatePath, fileName, outFileName, extra);
     });
 
   };
 
-  var addArticleByLang = function(article, lang) {
-    var filename = path.basename(article.dst_file_name);
-    var articleInfo = g_articlesByLang[filename];
-    var url = "http://webglfundamentals.org" + article.dst_file_name;
+  const addArticleByLang = function(article, lang) {
+    const filename = path.basename(article.dst_file_name);
+    let articleInfo = g_articlesByLang[filename];
+    const url = "http://webglfundamentals.org" + article.dst_file_name;
     if (!articleInfo) {
       articleInfo = {
         url: url,
@@ -339,9 +339,9 @@ var Builder = function(outBaseDir, options) {
     });
   };
 
-  var getLanguageSelection = function(lang) {
-    var lessons = lang.lessons || ("webgl/lessons/" + lang.lang);
-    var langInfo = hanson.parse(fs.readFileSync(path.join(lessons, "langinfo.hanson"), {encoding: "utf8"}));
+  const getLanguageSelection = function(lang) {
+    const lessons = lang.lessons || ("webgl/lessons/" + lang.lang);
+    const langInfo = hanson.parse(fs.readFileSync(path.join(lessons, "langinfo.hanson"), {encoding: "utf8"}));
     langInfo.langCode = langInfo.langCode || lang.lang;
     langInfo.home = lang.home || ('/' + lessons + '/');
     g_langDB[lang.lang] = {
@@ -369,8 +369,8 @@ var Builder = function(outBaseDir, options) {
     applyTemplateToFiles(options.template, path.join(options.lessons, "webgl*.md"), options);
 
     // generate place holders for non-translated files
-    var articlesFilenames = g_articles.map(a => path.basename(a.src_file_name));
-    var missing = g_origArticles.filter(name => articlesFilenames.indexOf(name) < 0);
+    const articlesFilenames = g_articles.map(a => path.basename(a.src_file_name));
+    const missing = g_origArticles.filter(name => articlesFilenames.indexOf(name) < 0);
     missing.forEach(name => {
       const ext = path.extname(name);
       const baseName = name.substr(0, name.length - ext.length);
@@ -392,7 +392,7 @@ var Builder = function(outBaseDir, options) {
 
     function utcMomentFromGitLog(result, filename, timeType) {
       const dateStr = result.stdout.split("\n")[0].trim();
-      let utcDateStr = dateStr
+      const utcDateStr = dateStr
         .replace(/"/g, "")   // WTF to these quotes come from!??!
         .replace(" ", "T")
         .replace(" ", "")
@@ -434,7 +434,7 @@ var Builder = function(outBaseDir, options) {
     return tasks.reduce(function(cur, next){
         return cur.then(next);
     }, Promise.resolve()).then(function() {
-      var articles = g_articles.filter(function(article) {
+      let articles = g_articles.filter(function(article) {
         return article.dateAdded !== undefined;
       });
       articles = articles.sort(function(a, b) {
@@ -508,14 +508,14 @@ var Builder = function(outBaseDir, options) {
   };
 
   this.writeGlobalFiles = function() {
-    var sm = sitemap.createSitemap({
+    const sm = sitemap.createSitemap({
       hostname: 'http://webglfundamentals.org',
       cacheTime: 600000,
     });
-    var articleLangs = { };
+    const articleLangs = { };
     Object.keys(g_articlesByLang).forEach(function(filename) {
-      var article = g_articlesByLang[filename];
-      var langs = {};
+      const article = g_articlesByLang[filename];
+      const langs = {};
       article.links.forEach(function(link) {
         langs[link.lang] = true;
       });
@@ -541,17 +541,17 @@ var Builder = function(outBaseDir, options) {
 
 };
 
-var b = new Builder("out", {
+const b = new Builder("out", {
   origPath: "webgl/lessons",  // english articles
 });
 
-var readdirs = function(dirpath) {
-  var dirsOnly = function(filename) {
-    var stat = fs.statSync(filename);
+const readdirs = function(dirpath) {
+  const dirsOnly = function(filename) {
+    const stat = fs.statSync(filename);
     return stat.isDirectory();
   };
 
-  var addPath = function(filename) {
+  const addPath = function(filename) {
     return path.join(dirpath, filename);
   };
 
@@ -560,19 +560,19 @@ var readdirs = function(dirpath) {
       .filter(dirsOnly);
 };
 
-var isLangFolder = function(dirname) {
-  var filename = path.join(dirname, "langinfo.hanson");
+const isLangFolder = function(dirname) {
+  const filename = path.join(dirname, "langinfo.hanson");
   return fs.existsSync(filename);
 };
 
 
-var pathToLang = function(filename) {
+const pathToLang = function(filename) {
   return {
     lang: path.basename(filename),
   };
 };
 
-var langs = [
+let langs = [
   // English is special (sorry it's where I started)
   {
     template: "build/templates/lesson.template",
@@ -590,7 +590,7 @@ langs = langs.concat(readdirs("webgl/lessons")
 
 b.preProcess(langs);
 
-var tasks = langs.map(function(lang) {
+const tasks = langs.map(function(lang) {
   return function() {
     return b.process(lang);
   };
