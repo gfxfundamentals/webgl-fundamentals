@@ -370,8 +370,7 @@ And we get distance *exp2* density based fog
 
 One thing to notice about density based fog is there are no near and far settings. It might be more realistic but it also might not fit your aesthetic needs. Which one you prefer is an artistic decision.
 
-There are many other ways to compute fog. On a low powered GPU you might just use `gl_FragCoord.z`. `gl_FragCoord` is a global variable that WebGL sets. The `x` and `y` components are the coordinate of the pixel being drawn. The `z` coordinate 0 to 1. While not directly translatable into distance you can still get something that looks like fog by picking some values between 0 and 1 for near and far. Nothing has to be passed from the vertex shader to the fragment shader and no distance calculations are needed so this is one way to make a cheap fog effect on a low powered GPU.
+There are many other ways to compute fog. On a low powered GPU you might just use `gl_FragCoord.z`. `gl_FragCoord` is a global variable that WebGL sets. The `x` and `y` components are the coordinate of the pixel being drawn. The `z` coordinate is the depth of that pixel from 0 to 1. While not directly translatable into distance you can still get something that looks like fog by picking some values between 0 and 1 for near and far. Nothing has to be passed from the vertex shader to the fragment shader and no distance calculations are needed so this is one way to make a cheap fog effect on a low powered GPU.
 
 {{{example url="../webgl-3d-fog-depth-based-gl_FragCoord.html" }}}
 
-[Here's another](https://cs.gmu.edu/~jchen/cs662/fog.pdf).
