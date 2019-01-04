@@ -1,6 +1,5 @@
-"use strict";
+'use strict';
 
-const path = require('path');
 const fs = require('fs');
 
 module.exports = function(grunt) {
@@ -71,7 +70,13 @@ module.exports = function(grunt) {
   grunt.registerTask('buildlessons', function() {
     var buildStuff = require('./build/js/build');
     var finish = this.async();
-    buildStuff().then(function() {
+    buildStuff({
+      baseUrl: 'http://webglfundamentals.org',
+      rootFolder: 'webgl',
+      lessonGrep: 'webgl*.md',
+      siteName: 'WebGLFundamentals',
+      siteThumbnail: 'webglfundamentals.jpg',  // in rootFolder/lessons/resources
+    }).then(function() {
         finish();
     }).done();
   });
