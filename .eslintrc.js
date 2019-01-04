@@ -55,7 +55,7 @@ module.exports = {
     "semi-spacing": [2, {"before": false, "after": true}],
     "space-infix-ops": 2,
     "space-unary-ops": [2, { "words": true, "nonwords": false }],
-    "strict": [2, "function"],
+    "strict": [2, "global"],
     "yoda": [2, "never"],
 
     "brace-style": [2, "1tbs", { "allowSingleLine": false }],
@@ -76,7 +76,7 @@ module.exports = {
     "no-unreachable": 2,
     "one-variable-per-var/one-variable-per-var": [2],
     "optional-comma-spacing/optional-comma-spacing": [2, {"after": true}],
-    "quotes": [0, "single"],
+    "quotes": [2, "single"],
     "require-trailing-comma/require-trailing-comma": [2],
     "semi": [2, "always"],
     "space-before-function-paren": [2, "never"],
