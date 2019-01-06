@@ -88,7 +88,7 @@ void main() {
 색이 있는 사각형은 각 모서리의 색이 다르지만 각 모서리가 어떤 것인지 기억하고 있어야 합니다.
 F의 방향은 바로 인지할 수 있습니다.
 </p>
-<img src="../resources/f-orientation.svg" class="webgl_center"/>
+<img src="../../resources/f-orientation.svg" class="webgl_center"/>
 <p>
 방향을 알 수 있는 어떤 모양이라도 동작하겠지만, 처음으로 소개받은 아이디어여서 계속 'F'를 사용하고 있습니다. 
 </p>

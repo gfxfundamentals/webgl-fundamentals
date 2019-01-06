@@ -311,7 +311,7 @@ WebGL에게 Shader Program을 실행하라고 지시합니다.
     // position buffer 할당
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-    // attribute에게 positionBuffer의 데이터를 어떻게 꺼낼지 지시 (ARRAY_BUFFER)
+    // attribute에게 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 알려줍니다.
     var size = 2;          // 실행될 때마다 2개 구성 요소 사용
     var type = gl.FLOAT;   // 데이터는 32bit 소수점
     var normalize = false; // 정규화되지 않은 데이터

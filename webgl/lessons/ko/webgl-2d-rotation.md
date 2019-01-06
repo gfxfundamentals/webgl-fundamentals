@@ -91,7 +91,7 @@ shader에 다시 작성한 내용은 다음과 같습니다.
 회전시키기 전 우측 상단 모서리는 3.0, 9.0 인데요.
 unit circle 위에 12시부터 시계 방향 30도 간격으로 점을 찍어봅시다.
 
-<img src="../resources/rotate-30.png" class="webgl_center" />
+<img src="../../resources/rotate-30.png" class="webgl_center" />
 
 원의 위치는 0.50 그리고 0.87 입니다.
 
@@ -102,11 +102,11 @@ unit circle 위에 12시부터 시계 방향 30도 간격으로 점을 찍어봅
 
 이게 바로 우리가 필요로 하는겁니다.
 
-<img src="../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
+<img src="../../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
 
 시계방향으로 60도 또한 동일합니다. 
 
-<img src="../resources/rotate-60.png" class="webgl_center" />
+<img src="../../resources/rotate-60.png" class="webgl_center" />
 
 원의 위치는 0.87 그리고 0.50 입니다.
 

@@ -87,7 +87,7 @@ Description: 2D에서 이동하는 방법
 
 이처럼 삼각형 6개로 구성된 'F'를 그려야 한다고 가정해봅시다.
 
-<img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
+<img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
 
 이제 현재 코드에 맞춰서 `setRectangle`을 이렇게 변경해야합니다.
 
