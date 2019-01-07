@@ -94,7 +94,7 @@ C&#39;était ce qu&#39;on appelle des vues &quot;orthographiques&quot; qui ont l
 veulent en général quand on dit &quot;3D&quot;.</p>
 <p>Pour ça on a besoin de perspective. Qu&#39;est-ce que la perspective ? C&#39;est ce qui fait que ce qui est loin
  apparaît plus petit.</p>
-<p><img class="webgl_center" width="500" src="../../resources/perspective-example.svg" /></p>
+<p><img class="webgl_center" width="500" src="../resources/perspective-example.svg" /></p>
 <p>En voyant cet exemple on voit que ce qui est à plus grande distance est dessiné en plus petit. Avec notre exemple 
 habituel, une façon simple d&#39;implémenter ceci serait de diviser les composantes X et Y de l&#39;espace de projection, par Z.</p>
 <p>Pensez-y comme ça : si on a une ligne de (10,15) à (20,15) elle a 10 unités de long. 
@@ -168,7 +168,7 @@ void main() {
 
 </p>
 <p>Si ce n&#39;est pas clair la valeur du &quot;facteurDeFuite&quot; peut être changée entre 1 et 0 sur le slider pour voir comment les choses étaient avant d&#39;appliquer notre division par Z, c&#39;est-à-dire en orthographique.</p>
-<p><img class="webgl_center" src="../../resources/orthographic-vs-perspective.png" /></p>
+<p><img class="webgl_center" src="../resources/orthographic-vs-perspective.png" /></p>
 <div class="webgl_center">orthographique vs perspective</div>
 
 <p>Il se trouve que WebGL prend les valeurs x, y, z, w assignées à gl_Position dans notre shader de vertex 
@@ -337,7 +337,7 @@ function matriceZversW(facteurDeFuite) {
 </p>
 <p>Tout ça pour montrer que diviser par Z donne la perspective et que WebGL fait ça automatiquement.</p>
 <p>Mais il reste quelques soucis. Si on met Z à -100 on se retrouve avec quelque chose comme l&#39;animation ci-dessous</p>
-<p><img class="webgl_center" src="../../resources/z-clipping.gif" style="border: 1px solid black;" /></p>
+<p><img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" /></p>
 <p>Quest-ce qu&#39;il se passe ? Pourquoi le F disparaît ? Tout comme WebGL tronque le X et le Y au-delà de -1 et +1 il tronque aussi le Z. 
 Ce qu&#39;on voit c&#39;est le Z &lt; -1. </p>
 <p>Je pourrais entrer dans les détails pour résoudre ça mais <a href="http://stackoverflow.com/a/28301213/128511">vous pouvez déduire la solution</a> comme on l&#39;a fait dans les projections 2D. On a besoin de prendre Z, ajouter du déplacement et du changement d&#39;échelle, et on peut ajuster tout ce qu&#39;on veut entre -1 et +1. </p>
