@@ -2,7 +2,7 @@ Title: WebGL - Escala 2D
 Description: Como escalar em 2D
 
 Esta publicação é uma continuação de uma série de postagens sobre o WebGL. O primeiro
-[começou com os fundamentos](webgl-fundals.html) e o anterior foi
+[começou com os fundamentos](webgl-fundamentals.html) e o anterior foi
 [sobre a geometria rotativa](webgl-2d-rotation.html).
 
 Escalar é exatamente como [fácil como translação](webgl-2d-translation.html).

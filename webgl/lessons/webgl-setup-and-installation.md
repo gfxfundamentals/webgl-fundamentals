@@ -100,4 +100,4 @@ you can always view the source in the devtools
 
 ## Get Started
 
-Hopefully that helps you get started. [Now back to the lessons](/).
+Hopefully that helps you get started. [Now back to the lessons](index.html).
