@@ -71,6 +71,7 @@ module.exports = function(grunt) {
     var buildStuff = require('./build/js/build');
     var finish = this.async();
     buildStuff({
+      outDir: 'out',
       baseUrl: 'http://webglfundamentals.org',
       rootFolder: 'webgl',
       lessonGrep: 'webgl*.md',
