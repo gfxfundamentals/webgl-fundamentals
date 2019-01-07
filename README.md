@@ -92,6 +92,17 @@ This way you don't have to go back and fix already translated articles. Just tra
 at a time and leave the links as is. They'll link to placeholders until someone translates the missing
 articles.
 
+**DO NOT CHANGE LINKS** : For example a link to a local resources might look like
+
+    [text](link)
+
+or
+
+    <img src="somelink">
+
+While you can add query parameters (see below) do not add "../" to try to make the link relative to the
+.md file. Links should stay as though the article exists at the same location as the original English.
+
 ### UI localization
 
 Some of the diagrams allow passing translations for the UI and other text.
@@ -136,12 +147,27 @@ Steps
 
 now open your browser to `http://localhost:8080`
 
+#### Build options
+
+This is mostly for debugging `build.js`. Since it takes a while to process all the files
+you can set `ARTICLE_FILTER` to a substring of the filenames to process. For example
+
+    ARTICLE_FILTER=rotation npm run build
+
+Will build the site as though only articles with `rotation` in their filename exist.
+
 ## TO DO
 
-A list of articles I'd like to write or see written
+* Make a continuous build
+
+  Right now the build processes all files at once. Part if this is because
+  it builds RSS feeds and checks for missing files. If those are separated
+  out then could make it continously build individual articles which would
+  be super useful.
+
+### A list of articles I'd like to write or see written
 
 *   lighting
-    *   spot lighting
     *   normal maps
     *   shadow maps
 *   geometry
@@ -156,7 +182,6 @@ A list of articles I'd like to write or see written
 *   animation
     *   blendshapes
     *   hierarchical animation
-    *   skinning
 *   debugging
     *   debugging JS WebGL
         *   example (https://goo.gl/8U5whT)
@@ -185,7 +210,6 @@ A list of articles I'd like to write or see written
 *   text
     *   glyph cache
 *   post processing
-    *   how to render to a texture (scene on cube)
     *   DOF
     *   glow
     *   light rays
