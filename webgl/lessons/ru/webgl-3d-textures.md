@@ -98,7 +98,7 @@ Description: Как работают текстуры в WebGL
 
 Вот такое изображение мы будем использовать:
 
-<img class="webgl_center" src="../../resources/f-texture.png" />
+<img class="webgl_center" src="../resources/f-texture.png" />
 
 Изображение отлично нам подходит! По изображению буквы 'F' легко понять,
 в какую сторону повёрнуто изображение при использовании текстуры.
@@ -142,11 +142,11 @@ Description: Как работают текстуры в WebGL
 будет верха или низа. Важно лишь, что вы передаёте текстурные данные в WebGL. Начало данных
 начинается в текстурных координатах 0,0, а заканчиваются в 1,1.
 
-<img class="webgl_center" width="405" src="../resources/texture-coordinates-diagram.svg" />
+<img class="webgl_center" width="405" src="resources/texture-coordinates-diagram.svg" />
 
 Я загрузил текстуру в фотошоп и отметил необходимые координаты в пикселях.
 
-<img class="webgl_center" width="256" height="256" src="../../resources/f-texture-pixel-coords.png" />
+<img class="webgl_center" width="256" height="256" src="../resources/f-texture-pixel-coords.png" />
 
 Для конвертации из пиксельных координат в текстурные мы можем использовать формулу.
 
@@ -219,7 +219,7 @@ Description: Как работают текстуры в WebGL
 
 Представьте, что у нас есть текстура 16x16 пикселей.
 
-<img class="webgl_center" src="../resources/mip-low-res-enlarged.png" style="border: 2px solid black;" />
+<img class="webgl_center" src="resources/mip-low-res-enlarged.png" style="border: 2px solid black;" />
 
 Теперь представьте, что мы пытаемся отрисовать эту текстуру на полигоне
 размером 2x2 пикселей на экране. Какой цвет будет у этих 4 пикселей?
@@ -237,7 +237,7 @@ Description: Как работают текстуры в WebGL
 изображений, каждое из которых в 4 раза меньше предыдущего. Мипмап для уже
 знакомой нам текстуры 16x16 может выглядеть следующим образом:
 
-<img class="webgl_center" src="../resources/mipmap-low-res-enlarged.png" />
+<img class="webgl_center" src="resources/mipmap-low-res-enlarged.png" />
 
 Обычно каждое уменьшенное изображение - это просто билинейная интерполяция
 предыдущего, и именно их создаёт функция `gl.generateMipmap`. Она берёт
@@ -294,7 +294,7 @@ Description: Как работают текстуры в WebGL
 `LINEAR_MIPMAP_LINEAR`, где подбираются 2 наиболее подходящих изображения из
 мипмапа, из каждого выбирается по 4 пикселя, и эти 8 пикселей смешиваются.
 
-<img class="webgl_center" src="../resources/different-colored-mips.png" />
+<img class="webgl_center" src="resources/different-colored-mips.png" />
 <div class="webgl_center">мипмапы с изображениями разных цветов</div>
 
 Возможно, вы сейчас думаете, зачем вообще использовать что-то отличное от
@@ -327,7 +327,7 @@ Description: Как работают текстуры в WebGL
 
 Скажем, мы хотим использовать следующую текстуру.
 
-<img class="webgl_center" src="../../resources/keyboard.jpg" />
+<img class="webgl_center" src="../resources/keyboard.jpg" />
 
 Вот, что из этого выйдет:
 
@@ -388,8 +388,8 @@ Description: Как работают текстуры в WebGL
 
 <div class="webgl_table_div_center">
 <table class="webgl_table_center">
-<tr><td><img src="../resources/noodles-01.jpg" /></td><td><img src="../resources/noodles-02.jpg" /></td><td><img src="../resources/noodles-03.jpg" /></td></tr>
-<tr><td><img src="../resources/noodles-04.jpg" /></td><td><img src="../resources/noodles-05.jpg" /></td><td><img src="../resources/noodles-06.jpg" /></td></tr>
+<tr><td><img src="resources/noodles-01.jpg" /></td><td><img src="resources/noodles-02.jpg" /></td><td><img src="resources/noodles-03.jpg" /></td></tr>
+<tr><td><img src="resources/noodles-04.jpg" /></td><td><img src="resources/noodles-05.jpg" /></td><td><img src="resources/noodles-06.jpg" /></td></tr>
 </table>
 </div>
 
@@ -410,7 +410,7 @@ Description: Как работают текстуры в WebGL
 используется большинством высокопроизводительных приложений (читай *играми*). Поэтому мы помещаем
 все изображения в одну текстуру следующим образом:
 
-<img class="webgl_center" src="../../resources/noodles.jpg" />
+<img class="webgl_center" src="../resources/noodles.jpg" />
 
 и затем используем другой набор текстурных координат для каждой грани куба.
 
@@ -469,7 +469,7 @@ Description: Как работают текстуры в WebGL
 на каждую из текстур.
 
 Есть ещё несколько вещей, которые, возможно, вы бы хотели знать о текстурах. Одна
-из них - [использование 2 и более текстур одновременно](webgl-2-texutres.html).
+из них - [использование 2 и более текстур одновременно](webgl-2-textures.html).
 Вторая - [загрузка изображений с других доменов](webgl-cors-permission.html).
 И ещё одна - [коррекция перспективы текстуры](webgl-3d-perspective-correct-texturemapping.html),
 которая хотя и тривиальная в некотором роде, но всё же о ней полезно знать.

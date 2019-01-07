@@ -2,14 +2,14 @@ Title: WebGL - Utilizando 2 ou mais texturas
 Description: Como utilizar 2 ou mais texturas no WebGL
 
 Este artigo é uma continuação de [WebGL -
-Processamento de imagens] (webgl-image-processing.html). Se você ainda não leu, eu
-sugiro [que você começe lá] (webgl-image-processing.html).
+Processamento de imagens](webgl-image-processing.html). Se você ainda não leu, eu
+sugiro [que você começe lá](webgl-image-processing.html).
 
 Agora, pode ser um bom momento para responder a pergunta: "Como uso 2 ou mais
 texturas?""
 
 É bem simples. Vamos [voltar algumas aulas para o nosso primeiro sombreador que
-desenha uma única imagem] (webgl-image-processing.html) e atualize-a para 2
+desenha uma única imagem](webgl-image-processing.html) e atualize-a para 2
 imagens.
 
 A primeira coisa que precisamos fazer é mudar nosso código para que possamos carregar 2 imagens.

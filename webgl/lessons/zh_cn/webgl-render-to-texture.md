@@ -204,7 +204,7 @@ function drawScene(time) {
 但是我们绘制的三个立方体是相同深度的，观察画布上水平方向的 3 个立方体就会发现他们是正确相交的。
 那是因为在帧缓冲中没有深度缓冲，但是画布有。
 
-<img class="webgl_center" src="../resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" />
+<img class="webgl_center" src="resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" />
 
 想要加深度缓冲就需要创建一个，然后附加到帧缓冲中
 
@@ -224,7 +224,7 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 
 现在帧缓冲附加了深度缓冲以后内部的立方体也能正确相交了。
 
-<img class="webgl_center" src="../resources/cubes-with-depth-buffer.jpg" width="100%" height="100%" />
+<img class="webgl_center" src="resources/cubes-with-depth-buffer.jpg" width="100%" height="100%" />
 
 需要特别注意的是WebGL只允许三种附件组合形式。
 [根据规范](https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS)

@@ -9,16 +9,16 @@ Description: WebGL中相机的使用方式
 
 将物体移动到视场中可能并不是正确的方法，在实际生活中通常是移动相机去拍摄建筑物。
 
-{{{diagram url="./resources/camera-move-camera.html?mode=0" caption="将相机移动到物体前" }}}
+{{{diagram url="resources/camera-move-camera.html?mode=0" caption="将相机移动到物体前" }}}
 
 将物体移动到相机前面并不是常见做法。
 
-{{{diagram url="./resources/camera-move-camera.html?mode=1" caption="将物体移动到相机前" }}}
+{{{diagram url="resources/camera-move-camera.html?mode=1" caption="将物体移动到相机前" }}}
 
 但在上节中由于投影的原因物体需要在 -Z 轴上，我们通过将相机移动到原点，
 物体移动到相机前来保持原始的**相对位置**。
 
-{{{diagram url="./resources/camera-move-camera.html?mode=2" caption="将物体移动到相机前" }}}
+{{{diagram url="resources/camera-move-camera.html?mode=2" caption="将物体移动到相机前" }}}
 
 高效的将物体移动到相机前是非常重要的。最简单的方式是使用一个“逆向”矩阵，
 计算逆矩阵的数学原理比较复杂但概念很简单，逆就是你想通过一个值去抵消一个值。
@@ -47,7 +47,7 @@ var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 接着计算相机矩阵，这个矩阵代表的是相机在世界坐标中的位置和姿态。
 下方的代码计算的是看向原点，在半径为 radius * 1.5 的圆上移动的相机。
 
-{{{diagram url="./resources/camera-move-camera.html?mode=3" caption="相机运动" }}}
+{{{diagram url="resources/camera-move-camera.html?mode=3" caption="相机运动" }}}
 
 ```
 var numFs = 5;
@@ -133,7 +133,7 @@ for (var ii = 0; ii < numFs; ++ii) {
 单位化也就是一个做一个类似 1.0 的矢量，如果你回到[二维旋转的文章](webgl-2d-rotation.html)，
 那里讲到的单位圆在二维旋转中用法，在三维中需要一个单位球，单位向量表示单位球上的点。
 
-{{{diagram url="./resources/cross-product-diagram.html?mode=0" caption="<span style='color:blue;'>z 轴</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=0" caption="<span style='color:blue;'>z 轴</span>" }}}
 
 这些信息还不够，只给了一个单位圆上点，如何来确定物体的姿态呢？
 这就需要填充矩阵的其他区域，尤其是 X 轴和 Y 轴。通常情况下我们知道它们互相垂直，
@@ -147,13 +147,13 @@ for (var ii = 0; ii < numFs; ++ii) {
 在任何情况下我们可以通过叉乘<span style="color: blue;">`zAxis`</span>
 和<span style="color: gray;">`up`</span> 得到相机的<span style="color:red;">xAxis</span>。
 
-{{{diagram url="./resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> 叉乘 <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> 叉乘 <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span>" }}}
 
 现在我们有了 <span style="color:red;">`xAxis`</span> ，
 可以叉乘 <span style="color:blue;">`zAxis`</span> 和 <span style="color:red;">`xAxis`</span>
 的到相机的 <span style="color:green;">`yAxis`</span>。
 
-{{{diagram url="./resources/cross-product-diagram.html?mode=2" caption="<span style='color:blue;'>zAxis</span> 叉乘 <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span>"}}}
+{{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span style='color:blue;'>zAxis</span> 叉乘 <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span>"}}}
 
 现在将三个轴插入矩阵中，会给我们提供一个从 `cameraPosition` 指向 `target`
 的转换，只需要再加上 `position`

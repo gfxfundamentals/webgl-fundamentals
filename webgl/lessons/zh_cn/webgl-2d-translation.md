@@ -77,7 +77,7 @@ Description: 如何在二维中平移
 
 假设我们想绘制一个由六个三角形组成的 ‘F’ ，像这样
 
-<img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
+<img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
 
 接着当前的代码我们需要修改`setRectangle`，像这样
 
@@ -220,8 +220,7 @@ function setGeometry(gl) {
 现在当我们绘制时，WebGL几乎做了所有事情，我们做的仅仅是设置平移然后让它绘制，
 即使我们的几何体有成千上万个点，主要的代码还是保持不变。
 
-你可以对比[上方例子中使用JavaScript更新所有点的情况](../webgl-2d-geometry-translate.html"
-target="_blank)。
+你可以对比[上方例子中使用JavaScript更新所有点的情况](../webgl-2d-geometry-translate.html)。
 
 我希望这个例子不会过于简单，请继续阅读，我们会用更好的方式实现平移。
 [下一篇文章讲旋转](webgl-2d-rotation.html)。

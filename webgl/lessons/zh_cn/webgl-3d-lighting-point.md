@@ -134,7 +134,7 @@ Description: 如何在WebGL中实现点光源
 观察现实世界中的物体，如果物体表面恰好将光线反射到你眼前，
 就会显得非常明亮，像镜子一样。
 
-<img class="webgl_center" src="../resources/specular-highlights.jpg" />
+<img class="webgl_center" src="resources/specular-highlights.jpg" />
 
 我们可以通过计算光线是否反射到眼前来模拟这种情况，**点乘**又一次起到了至关重要的作用。
 

@@ -222,7 +222,7 @@ function drawScene(time) {
 три горизонтальных куба, отрисованных на canvas, корректно пересекаются друг с другом. Причина заключается
 в том, что у нашего фреймбуфера отсутствует глубина, а у canvas глубина есть.
 
-<img class="webgl_center" src="../resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" />
+<img class="webgl_center" src="resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" />
 
 Для добавления буфера глубины нам необходимо его создать и прикрепить к фреймбуферу.
 
@@ -242,7 +242,7 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 
 Теперь с наличием буфера глубины у фреймбуфера внутренние кубы тоже пересекаются корректно.
 
-<img class="webgl_center" src="../resources/cubes-with-depth-buffer.jpg" width="100%" height="100%" />
+<img class="webgl_center" src="resources/cubes-with-depth-buffer.jpg" width="100%" height="100%" />
 
 Обращаю внимание, что в WebGL заявлена поддержка только 3 комбинаций вложений.
 [В соответствие со спецификацией](https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS),

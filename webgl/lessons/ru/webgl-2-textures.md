@@ -148,7 +148,7 @@ void main() {
 Вот 2 изображения, которые я выбрал для загрузки:
 
 <style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; }</style>
-<div class="glocal-center"><table class="glocal-center-content"><tr><td><img src="../../resources/leaves.jpg" /> <img src="../../resources/star.jpg" /></td></tr></table></div>
+<div class="glocal-center"><table class="glocal-center-content"><tr><td><img src="../resources/leaves.jpg" /> <img src="../resources/star.jpg" /></td></tr></table></div>
 
 А вот результат их умножения, используя WebGL:
 

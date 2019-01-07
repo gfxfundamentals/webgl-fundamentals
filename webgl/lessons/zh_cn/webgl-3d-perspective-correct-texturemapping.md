@@ -277,7 +277,7 @@ WebGL就不能正确的对可变量的插值实现透视。
 一点小事，Playstation 1 和其他同一时代的游戏机都没有做纹理映射的透视纠正，
 根据以上的信息你就能看出为什么路面是这样的了。
 </p>
-<div class="webgl_center"><img src="../resources/ridge-racer-01.png" style="max-width: 500px;" /></div>
+<div class="webgl_center"><img src="resources/ridge-racer-01.png" style="max-width: 500px;" /></div>
 <p></p>
-<div class="webgl_center"><img src="../resources/ridge-racer-02.png" style="max-width: 500px;" /></div>
+<div class="webgl_center"><img src="resources/ridge-racer-02.png" style="max-width: 500px;" /></div>
 </div>

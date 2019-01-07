@@ -74,7 +74,7 @@ rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 
 Załóżmy, że masz prostokąt i chcesz go obracać. Zanim zaczniesz nim kręcić jego górny, prawy wierzchołek jest na pozycji 3.0, 9.0. Wybierzmy punkt na okręgu jednostkowym - 30 stopni zgodnie z ruchem wskazówek zegara od godziny 12.
 
-<img src="../../resources/rotate-30.png" class="webgl_center" />
+<img src="../resources/rotate-30.png" class="webgl_center" />
 
 Pozycja na okręgu wynosi wtedy 0.50 i 0.87:
 
@@ -85,11 +85,11 @@ Pozycja na okręgu wynosi wtedy 0.50 i 0.87:
 
 To jest dokładnie tam gdzie chcemy, żeby był:
 
-<img src="../../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
+<img src="../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
 
 Tak samo dla 60 stopni w kierunku ruchu wskazówek zegara:
 
-<img src="../../resources/rotate-60.png" class="webgl_center" />
+<img src="../resources/rotate-60.png" class="webgl_center" />
 
 Pozycja na okręgu wynosi wtedy 0.87 i 0.50:
 

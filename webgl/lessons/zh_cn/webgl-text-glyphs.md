@@ -119,7 +119,7 @@ Description: 如何使用一个字形纹理显示文字
 的例子中讲到过纹理图集。
 
 我在网上找到了[一个简单的开源字体纹理图集](http://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta)。
-<img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../../resources/8x8-font.png" />
+<img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../resources/8x8-font.png" />
 
 ```
 var fontInfo = {

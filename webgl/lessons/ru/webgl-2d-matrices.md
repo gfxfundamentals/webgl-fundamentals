@@ -17,11 +17,11 @@ Description: Математика матриц на простых и подро
 Например, вот результат масштабирования на 2, 1, поворота на 30 градусов
 и переноса на 100, 0.
 
-<img src="../../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
+<img src="../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
 
 А вот результат переноса на 100, 0, поворота на 30 градусов и масштабирования на 2, 1.
 
-<img src="../../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
+<img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
 
 Результаты абсолютно разные. Хуже того, если нам нужно достичь результата
 из второго примера, нам нужен другой шейдер, в котором перенос, поворот и

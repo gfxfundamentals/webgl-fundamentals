@@ -9,7 +9,7 @@ Description: WebGLで透視投影で描画する
 
 そこで遠近法を追加しなければいけない。遠近法は何だろう？遠近法は遠ければ遠くほど小さく見えることである。
 
-<img class="webgl_center" width="500" src="../resources/perspective-example.svg" />
+<img class="webgl_center" width="500" src="resources/perspective-example.svg" />
 
 上記の絵を見たら遠い物が小さく書かれている。
 前回のサンプルで遠い物を小さく描画させたければ、クリップ空間のXとY値をZで割ることで出来るだろう。
@@ -96,7 +96,7 @@ void main() {
 
 分からなければ、「fudgeFactor」のスライダを操作して、1.0から0.0にすると、前と同じようにZで割ってない形になる。
 
-<img class="webgl_center" src="../resources/orthographic-vs-perspective.png" />
+<img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
 <div class="webgl_center">正投影対透視投影</div>
 
 実は、WebGLが`gl_Position`を割り当てた値を自動的にWで割っている。
@@ -274,7 +274,7 @@ function makeZToWMatrix(fudgeFactor) {
 
 でもまだ色々な問題が残っている。例えばZを-100ぐらいにすればこのような結果になる。
 
-<img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" />
+<img class="webgl_center" src="resources/z-clipping.gif" style="border: 1px solid black;" />
 
 それは何でだろう？何で「F」が消えているか？XとYは-1〜+1の制限があると同じようにZも-1〜+1の制限がある。
 この消えているところはZが−１以下になっている場合である。

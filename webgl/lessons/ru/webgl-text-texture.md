@@ -16,7 +16,7 @@ Description: Отображение текста в WebGL с помощью те
 зайти в фотошоп или какой-нибудь другой графический редактор  и создать
 изображение с текстом внутри него.
 
-<img class="webgl_center" src="../resources/my-awesme-text.png" />
+<img class="webgl_center" src="resources/my-awesme-text.png" />
 
 Затем создадим плоскую геометрию и отобразим её. Именно так отображали
 весь текст некоторые игры, с которыми я работал. Например, игра Locoroco
@@ -193,7 +193,7 @@ Excel со всеми языками, а также скрипт, который
 Стало лучше, но по-прежнему есть недостатки. Если вы приглядитесь,
 то иногда заметите такую проблему:
 
-<img class="webgl_center" src="../resources/text-zbuffer-issue.png" />
+<img class="webgl_center" src="resources/text-zbuffer-issue.png" />
 
 Что происходит? Мы отрисовываем букву F, затем её текст. Затем следующую
 F и её текст и так далее. [Буфер глубины](webgl-3d-orthographic.html)
@@ -306,7 +306,7 @@ Y некоторое число, чтобы надпись была всегда
 
 Осталась ещё одна нерешённая проблема, которую можно увидеть на границах букв.
 
-<img class="webgl_center" src="../resources/text-gray-outline.png" />
+<img class="webgl_center" src="resources/text-gray-outline.png" />
 
 Всё дело в том, что Canvas 2D API даёт на выходе только предумноженную
 прозрачность. При загрузке содержимого canvas в текстуру WebGL пытается

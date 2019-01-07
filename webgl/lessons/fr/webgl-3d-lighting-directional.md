@@ -39,7 +39,7 @@ Les normales sont aussi colorées suivant leur direction, avec l'axe +X en <span
 <span style="color: green;">vert</span> et l'axe +Z en
 <span style="color: blue;">bleu</span>.
 
-C'est parti, ajoutons les normales au `F` de nos [précédents exemples](webgl-3d-cameras.html) comme ça on pourra l'éclairer. Puisque le `F` est assez anguleux et que ses faces sont alignées avec les axes X, Y et Z ça sera plutôt facile à définir. Les vertices qui pointent en avant auront comme coordonnées normales (0,0,1). Ceux qui regardent en arrière auront comme coordonnées normales (0,0,-1). À gauche ce sera (-1,0,0), à droite (1,0,0). En haut (0,1,0) et en bas (0,-1,0).
+C'est parti, ajoutons les normales au `F` de nos [précédents exemples](webgl-3d-camera.html) comme ça on pourra l'éclairer. Puisque le `F` est assez anguleux et que ses faces sont alignées avec les axes X, Y et Z ça sera plutôt facile à définir. Les vertices qui pointent en avant auront comme coordonnées normales (0,0,1). Ceux qui regardent en arrière auront comme coordonnées normales (0,0,-1). À gauche ce sera (-1,0,0), à droite (1,0,0). En haut (0,1,0) et en bas (0,-1,0).
 
 ```
 function creerNormales(gl) {

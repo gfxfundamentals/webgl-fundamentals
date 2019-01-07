@@ -14,11 +14,11 @@ Description: 分かりやすい行列数学の説明
 
 例えばこれは「2,1」の拡大、30度の回転、そして「100,0」の移動である。
 
-<img src="../../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
+<img src="../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
 
 そして、これは「100,0」の移動、30度の回転、「2,1」の拡大である。
 
-<img src="../../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
+<img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
 
 結果が全然違う。さらに悪い点は二番目の結果が欲しければ、その順番に変換を掛ける別のシェーダーを書かなければいけないことである。
 

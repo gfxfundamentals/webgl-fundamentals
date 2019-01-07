@@ -12,11 +12,11 @@ Description: 用简单易懂的方式讲解矩阵运算的用法
 
 例如这是缩放 2, 1 ，旋转30度，然后平移 100, 0 的结果。
 
-<img src="../../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
+<img src="../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
 
 这是平移 100, 0 ，旋转30度，然后缩放 2, 1 的结果。
 
-<img src="../../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
+<img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
 
 结果截然不同，更糟的是，针对第二种情况中的转换顺序，需要写一个新的着色器。
 

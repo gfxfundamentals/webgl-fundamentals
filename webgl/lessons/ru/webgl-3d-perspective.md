@@ -15,7 +15,7 @@ Description: Как отобразить перспективу в WebGL 3D.
 словами, это такая штука, которая заставляет объекты, которые
 находятся далеко, выглядеть меньше.
 
-<img class="webgl_center" width="500" src="../resources/perspective-example.svg" />
+<img class="webgl_center" width="500" src="resources/perspective-example.svg" />
 
 На примере выше мы видим, что далёкие объекты отображаются
 меньшими. Чтобы добиться эффекта, который демонстрируется
@@ -110,7 +110,7 @@ void main() {
 слайдер "fudgeFactor" от 1.0 до 0.0, и вы увидите, как выглядела 'F' до
 того, как мы добавили деление на Z.
 
-<img class="webgl_center" src="../resources/orthographic-vs-perspective.png" />
+<img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
 <div class="webgl_center">ортография и перспектива</div>
 
 Более того, оказывается, что WebGL принимает переданные в вершинном шейдере
@@ -294,7 +294,7 @@ function makeZToWMatrix(fudgeFactor) {
 Но проблемы на этом не кончаются. Например, если установить значение Z около
 -100, вы увидете картину, которая продемонстрирована на следующей анимации
 
-<img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" />
+<img class="webgl_center" src="resources/z-clipping.gif" style="border: 1px solid black;" />
 
 Что происходит? Почему F начинает пропадать раньше времени? Всё потому, что
 WebGL отсекает Z от -1 до +1, как он отсекал ранее X и Y. Мы видим, что

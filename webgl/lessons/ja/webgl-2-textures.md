@@ -156,8 +156,8 @@ WebGLには「テクスチャへの参照の配列」のようなものがある
 <style>.glocal-center { text-align: center; }
 .glocal-center-content { margin-left: auto; margin-right: auto; }</style>
 <div class="glocal-center"><table class="glocal-center-content"><tr>
-<td><img src="../../resources/leaves.jpg" />
-<img src="../../resources/star.jpg" /></td>
+<td><img src="../resources/leaves.jpg" />
+<img src="../resources/star.jpg" /></td>
 </tr></table></div>
 
 今回のプログラムの実行結果、つまり「２枚の画像をロード」して「乗算」した結果はこのようになる。

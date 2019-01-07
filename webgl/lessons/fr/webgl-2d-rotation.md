@@ -68,7 +68,7 @@ Pourquoi ça fonctionne ? Regardez les opérations :
 
 Disons que vous avez un rectangle et que vous voulez le tourner. Avant, le coin en haut à droite est à (3,9). Choisissons un point sur le cercle qui soit à 30 degrés plus loin dans le sens des aiguilles d'une montre, depuis disons, midi.
 
-<img src="../../resources/rotate-30.png" class="webgl_center" />
+<img src="../resources/rotate-30.png" class="webgl_center" />
 
 La position sur le cercle ici est à (0.50,0.87)
 
@@ -79,11 +79,11 @@ La position sur le cercle ici est à (0.50,0.87)
 
 Exctement ce qu'on voulait
 
-<img src="../../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
+<img src="../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
 
 Pour 60 degrees dans le même sens
 
-<img src="../../resources/rotate-60.png" class="webgl_center" />
+<img src="../resources/rotate-60.png" class="webgl_center" />
 
 La position sur le cercle est (0.87,0.50).
 

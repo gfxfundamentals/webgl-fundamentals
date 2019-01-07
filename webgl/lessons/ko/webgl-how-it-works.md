@@ -16,7 +16,7 @@ Description: WebGL은 실제로 어떻게 작동하나요?
 
 여기서 9는 "vertex 9개 처리"를 의미하므로 vertex 9개가 처리됩니다.
 
-<img src="../resources/vertex-shader-anim.gif" class="webgl_center" />
+<img src="resources/vertex-shader-anim.gif" class="webgl_center" />
 
 왼쪽에는 당신이 제공한 데이터가 있습니다.
 vertex shader는 [GLSL](webgl-shaders-and-glsl.html)로 작성하는 함수인데요.

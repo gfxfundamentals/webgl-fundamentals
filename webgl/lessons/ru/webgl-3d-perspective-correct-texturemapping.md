@@ -315,7 +315,7 @@ void main() {
 Глядя на результаты, которые мы получали в данной статье, вы понимаете, почему
 игры выглядели именно так, как они выглядели.
 </p>
-<div class="webgl_center"><img src="../resources/ridge-racer-01.png" style="max-width: 500px;" /></div>
+<div class="webgl_center"><img src="resources/ridge-racer-01.png" style="max-width: 500px;" /></div>
 <p></p>
-<div class="webgl_center"><img src="../resources/ridge-racer-02.png" style="max-width: 500px;" /></div>
+<div class="webgl_center"><img src="resources/ridge-racer-02.png" style="max-width: 500px;" /></div>
 </div>

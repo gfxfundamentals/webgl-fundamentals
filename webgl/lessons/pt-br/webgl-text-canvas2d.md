@@ -1,7 +1,7 @@
 Title: Texto WebGL - Telas 2D
 Description: Como exibir texto usando uma tela 2D que está em sincronia com o WebGL
 
-Este artigo é uma continuação de [artigos anteriores do WebGL sobre desenho de texto] (webgl-text-html.html). Se você não os leu, sugiro que você comece lá e trabalhe de volta.
+Este artigo é uma continuação de [artigos anteriores do WebGL sobre desenho de texto](webgl-text-html.html). Se você não os leu, sugiro que você comece lá e trabalhe de volta.
 
 Em vez de usar elementos HTML para texto, também podemos usar outra tela, mas com um contexto 2D. Sem perfis é apenas um palpite de que isso seria mais rápido do que usar o DOM. Claro que também é menos flexível. Você não possui todo o estilo sofisticado do CSS. Mas, não há elementos HTML para criar e acompanhar.
 
@@ -78,8 +78,8 @@ Outra razão para usar o Canvas 2D é fácil desenhar outras coisas. Por exemplo
     // restore the canvas to its old settings.
     ctx.restore();
 
-Antes de tirar proveito da tela Canvas 2D [matriz de pilha] (webgl-2d-matrix-stack.html) traduzir a função, então não precisamos fazer nenhuma matemática extra ao desenhar nossa seta. Nós apenas pretendemos desenhar na origem e traduz-se cuida de mover essa origem para o canto da nossa F.
+Antes de tirar proveito da tela Canvas 2D [matriz de pilha](webgl-2d-matrix-stack.html) traduzir a função, então não precisamos fazer nenhuma matemática extra ao desenhar nossa seta. Nós apenas pretendemos desenhar na origem e traduz-se cuida de mover essa origem para o canto da nossa F.
 
 {{{example url="../webgl-text-html-canvas2d-arrows.html"}}}
 
-Eu acho que cobre o uso do Canvas 2D. [Confira a API Canvas 2D] (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) para obter mais ideias. [Em seguida, iremos renderizar texto no WebGL] (webgl-text-texture.html).
+Eu acho que cobre o uso do Canvas 2D. [Confira a API Canvas 2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) para obter mais ideias. [Em seguida, iremos renderizar texto no WebGL](webgl-text-texture.html).

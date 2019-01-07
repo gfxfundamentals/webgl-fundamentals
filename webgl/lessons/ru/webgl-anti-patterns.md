@@ -123,13 +123,13 @@ Description: Что и почему не нужно делать в WebGL, и ч
     Ниже приведены 9 примеров. Все они используют один и тот же код. Ни один из
     них не использует ни `window.innerWidth`, ни `window.innerHeight`.
 
-    <a href="../../webgl-same-code-canvas-fullscreen.html" target="_blank">Страница с единственным элементом canvas, растянутым на весь экран через CSS</a>
+    <a href="../webgl-same-code-canvas-fullscreen.html" target="_blank">Страница с единственным элементом canvas, растянутым на весь экран через CSS</a>
 
-    <a href="../../webgl-same-code-canvas-partscreen.html" target="_blank">Страница с canvas размером 70% ширины страницы, чтобы осталось место для контрольной панели</a>
+    <a href="../webgl-same-code-canvas-partscreen.html" target="_blank">Страница с canvas размером 70% ширины страницы, чтобы осталось место для контрольной панели</a>
 
-    <a href="../../webgl-same-code-canvas-embedded.html" target="_blank">Страница с canvas внутри параграфа</a>
+    <a href="../webgl-same-code-canvas-embedded.html" target="_blank">Страница с canvas внутри параграфа</a>
 
-    <a href="../../webgl-same-code-canvas-embedded-border-box.html" target="_blank">Страница с canvas внутри параграфа, использует <code>box-sizing: border-box;</code></a>
+    <a href="../webgl-same-code-canvas-embedded-border-box.html" target="_blank">Страница с canvas внутри параграфа, использует <code>box-sizing: border-box;</code></a>
 
     При использовании <code>box-sizing: border-box;</code> границы и внутренние отступы забирают пространство самого элемента, а не области вокруг него.
     Другими словами, в обычном режиме box-sizing элемент размером 400x300 пикселей с границей толщиной 15 пикселей будет содержать 400x300 пикселей контента
@@ -138,15 +138,15 @@ Description: Что и почему не нужно делать в WebGL, и ч
     `clientWidth` и `clientHeight`. При установки ширины границы, скажем, `1em` вы не будете знать, какой размер у неё будет, так как он будет разным в
     зависимости от шрифта, компьютера, браузера.
 
-    <a href="../../webgl-same-code-container-fullscreen.html" target="_blank">Страница, содержащая только контейнер, которому через CSS задан полноэкранный размер, и в который через код вставлен canvas</a>
+    <a href="../webgl-same-code-container-fullscreen.html" target="_blank">Страница, содержащая только контейнер, которому через CSS задан полноэкранный размер, и в который через код вставлен canvas</a>
 
-    <a href="../../webgl-same-code-container-partscreen.html" target="_blank">Страница с контейнером шириной 70%, чтобы оставить место для панели управления, в который через код вставлен canvas</a>
+    <a href="../webgl-same-code-container-partscreen.html" target="_blank">Страница с контейнером шириной 70%, чтобы оставить место для панели управления, в который через код вставлен canvas</a>
 
-    <a href="../../webgl-same-code-container-embedded.html" target="_blank">Страница с контейнером, вставленным в параграф, в который через код вставлен canvas</a>
+    <a href="../webgl-same-code-container-embedded.html" target="_blank">Страница с контейнером, вставленным в параграф, в который через код вставлен canvas</a>
 
-    <a href="../../webgl-same-code-container-embedded-border-box.html" target="_blank"> Страница с контейнером, вставленным в параграф, используется <code>box-sizing: border-box;</code>, в контейнер через код вставлен canvas</a>
+    <a href="../webgl-same-code-container-embedded-border-box.html" target="_blank"> Страница с контейнером, вставленным в параграф, используется <code>box-sizing: border-box;</code>, в контейнер через код вставлен canvas</a>
 
-    <a href="../../webgl-same-code-body-only-fullscreen.html" target="_blank">Страница без элементов, настроенная через CSS для полноэкранного режима, в которую через код вставлен canvas</a>
+    <a href="../webgl-same-code-body-only-fullscreen.html" target="_blank">Страница без элементов, настроенная через CSS для полноэкранного режима, в которую через код вставлен canvas</a>
 
     Повторюсь, что смысл в том, чтобы при написании кода, используя описанные
     техники, вам не пришлось менять код, сталкиваясь с различными ситуациями.

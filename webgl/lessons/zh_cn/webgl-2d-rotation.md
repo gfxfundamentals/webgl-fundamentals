@@ -84,7 +84,7 @@ Description: 如何在二维中旋转
 假如你想旋转一个矩形，在开始旋转之前矩形右上角坐标是 3.0, 9.0 ，
 让我们在单位圆上以十二点方向为起点顺时针旋转30度后取一个点。
 
-<img src="../../resources/rotate-30.png" class="webgl_center" />
+<img src="../resources/rotate-30.png" class="webgl_center" />
 
 圆上该点的位置是 0.50 和 0.87
 
@@ -95,11 +95,11 @@ Description: 如何在二维中旋转
 
 这个结果正好是我们需要的结果
 
-<img src="../../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
+<img src="../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
 
 顺时针60度也一样
 
-<img src="../../resources/rotate-60.png" class="webgl_center" />
+<img src="../resources/rotate-60.png" class="webgl_center" />
 
 圆上该点的位置是 0.87 和 0.50 。
 

@@ -39,7 +39,7 @@ Jak na razie wszystko idzie dobrze.  Ale wyobraźmy sobie teraz, że chcielibyś
 
 Powiedzmy, że chcielibyśmy rysować literę 'F' składającą się z 6 trójkątów jak poniżej.
 
-<img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center" />
+<img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center" />
 
 Oto kod jakim musielibyśmy zastąpić dotychczasową funkcję setRectangle, by uzyskać kształt zbliżony do powyższego.
 
@@ -168,7 +168,7 @@ Poniżej jest kompletny przykład.  Poprzestawiaj suwaki jeszcze raz, by zmieni�
 
 Teraz praktycznie rysujemy całość w WebGL. Wszystko co robimy to ustawienie wartości przesunięcia i żądanie odrysowania.  Nawet jeśli nasza geometria zawiera dziesiątki tysięcy punktów główny kod pozostaje bez zmian.
 
-Jeśli chcesz możesz porównać powyższy kod z <a href="../../webgl-2d-geometry-translate.html" target="_blank">wersją używającą skomplikowanego JavaScript by aktualizować wszystkie punkty</a>.
+Jeśli chcesz możesz porównać powyższy kod z <a href="../webgl-2d-geometry-translate.html" target="_blank">wersją używającą skomplikowanego JavaScript by aktualizować wszystkie punkty</a>.
 
 Mam nadzieję, że ten przykład nie był zbyt trywialny.  W <a href="webgl-2d-rotation.html">następnym artykule przejdziemy do obrotów</a>.
 

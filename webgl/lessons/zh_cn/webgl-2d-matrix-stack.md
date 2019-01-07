@@ -291,14 +291,14 @@ matrixStack.rotateZ(time);
 在这时原点在 220, 50，所有的绘制都是相对于这一点，如果用 `0, 0` 调用 `drawImage`
 这里就是图像绘制的地方。
 
-<img class="webgl_center" width="400" src="../resources/matrixstack-before.svg" />
+<img class="webgl_center" width="400" src="resources/matrixstack-before.svg" />
 
 假设我想让旋转中心在右下角，在这种情况下就将原点移动到哪里调用 `drawImage`
 才会将旋转中心也就是右下角移动到之前的原点？
 纹理的右下角对应的坐标应该是 `-textureWidth, -textureHeight`，
 所以使用 `0, 0` 调用 `drawImage` 时右下角应该在之前的原点。
 
-<img class="webgl_center" width="400" src="../resources/matrixstack-after.svg" />
+<img class="webgl_center" width="400" src="resources/matrixstack-after.svg" />
 
 在矩阵栈上之前的的任何操作是无关的，我们在调用 `drawImage` 之前做了一系列移动旋转或缩放，
 只和当前时刻相关的原点有关，是新的原点，如果在栈前没有东西的话我们只需要决定将它移动到哪里。

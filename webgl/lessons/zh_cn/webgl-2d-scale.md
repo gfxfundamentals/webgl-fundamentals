@@ -81,7 +81,7 @@ void main() {
 <p>
 起初我看到有人在纹理上使用'F'，'F'本身并不重要，重要的是你可以从任何角度辨别出它的方向。如果我们使用心形❤或者三角形△，就无法判断出在水平方向是否翻转，一个圆形○就更糟糕了。理论上使用一个四个角有不同颜色的矩形也可以，但这样你就要记住每个角是什么颜色，F的方向可以立即判断出来。
 </p>
-<img src="../../resources/f-orientation.svg" class="webgl_center"/>
+<img src="../resources/f-orientation.svg" class="webgl_center"/>
 <p>
 可以分辨方向的任何形状都是可以的，自从我知道了这些后就一直用的'F'。
 </p>

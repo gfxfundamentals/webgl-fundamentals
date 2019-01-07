@@ -91,7 +91,7 @@ Description: WebGL中如何使用纹理
 
 这是我们将要使用的图像
 
-<img class="webgl_center" src="../../resources/f-texture.png" />
+<img class="webgl_center" src="../resources/f-texture.png" />
 
 一颗赛艇的图像！事实上使用一个带有 'F' 的图像能够在结果中清楚的分辨出纹理的方向。
 
@@ -127,11 +127,11 @@ Description: WebGL中如何使用纹理
 是没有上下的概念的，主要是依据传递给WebGL的纹理数据，纹理数据的开头对应纹理坐标 0, 0，
 结尾对应纹理坐标 1, 1
 
-<img class="webgl_center" width="405" src="../resources/texture-coordinates-diagram.svg" />
+<img class="webgl_center" width="405" src="resources/texture-coordinates-diagram.svg" />
 
 我将纹理载入到Photoshop中得到一些点的坐标。
 
-<img class="webgl_center" width="256" height="256" src="../../resources/f-texture-pixel-coords.png" />
+<img class="webgl_center" width="256" height="256" src="../resources/f-texture-pixel-coords.png" />
 
 可以像这样将像素坐标转换到纹理坐标
 
@@ -200,7 +200,7 @@ Description: WebGL中如何使用纹理
 
 假设我们有这样一个 16×16 像素的纹理。
 
-<img class="webgl_center" src="../resources/mip-low-res-enlarged.png" style="border: 2px solid black;" />
+<img class="webgl_center" src="resources/mip-low-res-enlarged.png" style="border: 2px solid black;" />
 
 假设我们要将它绘制在屏幕的 2×2 个像素上，那么这 4 个像素应该使用什么颜色？
 这里有 256 个像素可以选择，如果在Photoshop中将 16×16 的图像缩放到 2×2，
@@ -211,7 +211,7 @@ Description: WebGL中如何使用纹理
 事实上 GPU 使用的是一个纹理贴图（mipmap），纹理贴图是一个逐渐缩小的图像集合，
 每一个是前一个的四分之一大小，16×16 纹理的纹理贴图看起来像这样。
 
-<img class="webgl_center" src="../resources/mipmap-low-res-enlarged.png" />
+<img class="webgl_center" src="resources/mipmap-low-res-enlarged.png" />
 
 通常每个子图都是前一级的双线性插值，这就是 `gl.generateMipmap` 做的事情，
 它根据原始图像创建所有的缩小级别，你也可以自己提供缩小级别的图像。
@@ -253,7 +253,7 @@ WebGL会从创建的贴图中找到从之前级别贴图插值出的 2×2 贴图
 如果仔细看会发现仍然有块状感，尤其是水平方向；右下使用的是 `LINEAR_MIPMAP_LINEAR`，
 也就是选出最合适的两个贴图各取 4 个点进行混合。
 
-<img class="webgl_center" src="../resources/different-colored-mips.png" />
+<img class="webgl_center" src="resources/different-colored-mips.png" />
 <div class="webgl_center">不同颜色的贴图</div>
 
 你可能会想既然理论上 `LINEAR_MIPMAP_LINEAR` 是最好的选择为什么还要有其他选择，
@@ -276,7 +276,7 @@ WebGL会从创建的贴图中找到从之前级别贴图插值出的 2×2 贴图
 
 假设我们想使用这个纹理。
 
-<img class="webgl_center" src="../../resources/keyboard.jpg" />
+<img class="webgl_center" src="../resources/keyboard.jpg" />
 
 这是结果。
 
@@ -334,8 +334,8 @@ WebGL会从创建的贴图中找到从之前级别贴图插值出的 2×2 贴图
 
 <div class="webgl_table_div_center">
 <table class="webgl_table_center">
-<tr><td><img src="../resources/noodles-01.jpg" /></td><td><img src="../resources/noodles-02.jpg" /></td><td><img src="../resources/noodles-03.jpg" /></td></tr>
-<tr><td><img src="../resources/noodles-04.jpg" /></td><td><img src="../resources/noodles-05.jpg" /></td><td><img src="../resources/noodles-06.jpg" /></td></tr>
+<tr><td><img src="resources/noodles-01.jpg" /></td><td><img src="resources/noodles-02.jpg" /></td><td><img src="resources/noodles-03.jpg" /></td></tr>
+<tr><td><img src="resources/noodles-04.jpg" /></td><td><img src="resources/noodles-05.jpg" /></td><td><img src="resources/noodles-06.jpg" /></td></tr>
 </table>
 </div>
 
@@ -350,7 +350,7 @@ WebGL会从创建的贴图中找到从之前级别贴图插值出的 2×2 贴图
 3) 我敢说，**最好的方法**就是将图像放在一个纹理中，然后利用纹理坐标映射不同的图像到每个面，
 这是很多高性能应用（读作**游戏**）使用的技术。例如我们将所有的图像放入这样一个纹理中
 
-<img class="webgl_center" src="../../resources/noodles.jpg" />
+<img class="webgl_center" src="../resources/noodles.jpg" />
 
 然后为立方体的每个面设置不同的纹理坐标。
 

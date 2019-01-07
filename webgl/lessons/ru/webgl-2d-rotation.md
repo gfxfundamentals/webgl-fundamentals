@@ -92,7 +92,7 @@ Y равен 1, а X равен 0. Справа X равен 1, а Y равен 
 правый угол находится в координатах 3.0, 9.0. Теперь возьмём точку на единичной
 окружности, смещённой на 30 градусам от 12 часов по направлению часовой стрелки.
 
-<img src="../../resources/rotate-30.png" class="webgl_center" />
+<img src="../resources/rotate-30.png" class="webgl_center" />
 
 Положение на окружности в этом месте будет иметь значения 0.50 и 0.87.
 
@@ -103,11 +103,11 @@ Y равен 1, а X равен 0. Справа X равен 1, а Y равен 
 
 Именно здесь нам и нужно быть.
 
-<img src="../../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
+<img src="../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
 
 То же самое для 60 градусов по часовой стрелке.
 
-<img src="../../resources/rotate-60.png" class="webgl_center" />
+<img src="../resources/rotate-60.png" class="webgl_center" />
 
 Положение на окружности в этом месте будет иметь значения 0.87 и 0.50
 

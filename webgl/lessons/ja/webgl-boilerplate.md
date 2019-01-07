@@ -175,7 +175,7 @@ script要素から読み込んでコンパイルし、プログラムにアタ�
 なってしまう」のは本末転倒で、避けるべきであるとと思います。
 
 以上で、私の「最小のWebGLひな型コード(boilerplate code)」のおおまかな紹介を終わります。
-[`webgl-utils.js`のコードはここにあります](../../resources/webgl-utils.js)。
+[`webgl-utils.js`のコードはここにあります](../resources/webgl-utils.js)。
 
 さらにしっかり構成されたライブラリに興味があるようでしたら[TWGL.js](http://twgljs.org)
 をチェックしてください。
@@ -188,18 +188,18 @@ WebGLを複雑に見せているもう一つの要素は「シェーダーにデ
 
 以上のほかにも、同様の理由で作られたスクリプトがあるので紹介しておきます。
 
-*   [`webgl-lessons-ui.js`](../../resources/webgl-lessons-ui.js)
+*   [`webgl-lessons-ui.js`](../resources/webgl-lessons-ui.js)
 
     このスクリプトは、スライダを使って数値をセットしたり視覚化したりするためのものです。
     講義の中でよく使う機能なのでこのファイルにまとめました。
 
-*   [`webgl-lessons-helper.js`](../../resources/webgl-lessons-helper.js)
+*   [`webgl-lessons-helper.js`](../resources/webgl-lessons-helper.js)
 
     このスクリプトは、webglfundmentals.org以外では必要ないでしょう。
     ほかのものに埋め込まれたlive editor上で使うと、エラーメッセージを
     画面に表示することができます。
 
-*   [`m3.js`](../../resources/m3.js)
+*   [`m3.js`](../resources/m3.js)
 
     このスクリプトには、二次元を扱う計算関連の関数が多数定義されています。
     これらの関数は、このサイトの行列計算の最初の講義で作り始め、いくつかの章の中で
@@ -207,7 +207,7 @@ WebGLを複雑に見せているもう一つの要素は「シェーダーにデ
     より応用的な話題を扱う章では、同じものを一から書くのは話が複雑になるだけなので
     このスクリプトにまとめて使っています。
 
-*   [`m4.js`](../../resources/m4.js)
+*   [`m4.js`](../resources/m4.js)
 
     このスクリプトには、三次元を扱う計算関連の関数が多数定義されています。
     これらの関数は、このサイトの３Ｄ関連の講義の中で作ったものです。

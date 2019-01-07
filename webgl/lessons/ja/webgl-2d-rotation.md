@@ -85,7 +85,7 @@ Description: 二次元で回転する方法
 回転したい四角形があることを想像しよう。回転する前は右上の頂点は(3.0, 9.0)である。
 単位円の円周上、真上から右回り30度の位置を選ぼう。
 
-<img src="../../resources/rotate-30.png" class="webgl_center" />
+<img src="../resources/rotate-30.png" class="webgl_center" />
 
 この、単位円の円周上の位置は(0.50, 0.87)である。
 
@@ -96,11 +96,11 @@ Description: 二次元で回転する方法
 
 これが回転する為に必要な値になってくる！
 
-<img src="../../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
+<img src="../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
 
 60度も同じようにしてみよう。
 
-<img src="../../resources/rotate-60.png" class="webgl_center" />
+<img src="../resources/rotate-60.png" class="webgl_center" />
 
 この、単位円の円周上の位置は(0.87, 0.50)
 

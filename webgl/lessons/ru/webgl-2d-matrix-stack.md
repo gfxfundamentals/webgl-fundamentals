@@ -314,7 +314,7 @@ matrixStack.rotateZ(time);
 относительно этой точки. Если мы вызовем `drawImage` в координатах
 `0, 0`, то изображение отрисуется со смещением.
 
-<img class="webgl_center" width="400" src="../resources/matrixstack-before.svg" />
+<img class="webgl_center" width="400" src="resources/matrixstack-before.svg" />
 
 Скажем, нам нужно, чтобы центр поворота был в нижнем правом углу. В этом
 случае куда нам нужно сместить начало координат, чтобы при вызове `drawImage`
@@ -323,7 +323,7 @@ matrixStack.rotateZ(time);
 поэтому сейчас при вызове `drawImage` с параметром `0,0` нижний правый угол
 текстуры окажется в предыдущем начале координат.
 
-<img class="webgl_center" width="400" src="../resources/matrixstack-after.svg" />
+<img class="webgl_center" width="400" src="resources/matrixstack-after.svg" />
 
 Что бы ни происходило до этого со стеком матриц, это не важно. Мы выполняли
 перемещение, масштабирование и поворот начала координат, но прямо перед

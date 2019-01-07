@@ -17,7 +17,7 @@ Description: Как на самом деле работает WebGL
 
 цифра 9 означает "обработай 9 вершин" и 9 вершин обрабатываются:
 
-<img src="../resources/vertex-shader-anim.gif" class="webgl_center" />
+<img src="resources/vertex-shader-anim.gif" class="webgl_center" />
 
 Слева отображены переданные вами данные. Вершинный шейдер - это функция,
 которую вы написали на [GLSL](webgl-shaders-and-glsl.html). Она вызывается

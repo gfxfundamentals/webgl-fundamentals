@@ -9,7 +9,7 @@ Description: 用纹理在WebGL中显示文字
 
 最简单的方式是制作一个文字纹理，你可以使用PhotoShop或其他绘图软件制作一个含有文字的图片。
 
-<img class="webgl_center" src="../resources/my-awesme-text.png" />
+<img class="webgl_center" src="resources/my-awesme-text.png" />
 
 然后创建平整的几何体显示它，这其实是我做过的所有游戏使用的方法。例如 Locoroco
 只有大约 270 个句子，它被本地化为 17 种语言。我们有一个Excel表格包含了所有语言的句子，
@@ -171,7 +171,7 @@ Description: 用纹理在WebGL中显示文字
 
 你会发现这样好一些，但是还是有问题，如果仔细看就会看到这样的问题
 
-<img class="webgl_center" src="../resources/text-zbuffer-issue.png" />
+<img class="webgl_center" src="resources/text-zbuffer-issue.png" />
 
 为什么会这样？我们现在是绘制一个 F 然后绘制文字，然后绘制下一个 F 和文字。
 我们还有[深度缓冲](webgl-3d-orthographic.html)，所以当绘制一个 F 的文字时，
@@ -268,7 +268,7 @@ Description: 用纹理在WebGL中显示文字
 
 你可能还会发现文字边缘的问题。
 
-<img class="webgl_center" src="../resources/text-gray-outline.png" />
+<img class="webgl_center" src="resources/text-gray-outline.png" />
 
 这个问题是 Canvas 2D API 只生成预乘阿尔法通道的值，当我们上传画布内容为WebGL纹理时，
 WebGL视图获取没有预乘阿尔法的值，但是由于预乘阿尔法的值缺失阿尔法，所以很难完美转换成非预乘值。

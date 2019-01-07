@@ -15,7 +15,7 @@ WebGL在GPU上的工作基本上分为两部分，第一部分是将顶点（或
 
 这里的9表示“处理9个顶点”，所以将会有9个顶点被转换。
 
-<img src="../resources/vertex-shader-anim.gif" class="webgl_center" />
+<img src="resources/vertex-shader-anim.gif" class="webgl_center" />
 
 左侧是你提供的数据。顶点着色器（Vertex Shader）是你写进[GLSL](webgl-shaders-and-glsl.html)
 中的一个方法，每个顶点调用一次，在这个方法中做一些数学运算后设置了一个特殊的`gl_Position`变量，

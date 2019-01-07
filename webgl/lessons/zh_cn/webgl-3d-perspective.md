@@ -10,7 +10,7 @@ Description: 在WebGL中如何实现三维透视投影
 我们应使用透视投影代替它，但什么是透视投影？
 它的基础特性就是离得越远显得越小。
 
-<img class="webgl_center" width="500" src="../resources/perspective-example.svg" />
+<img class="webgl_center" width="500" src="resources/perspective-example.svg" />
 
 在上方的示例中，远处的物体会变小，想要实现例子中近大远小的效果，
 简单的做法就是将裁减空间中的 X 和 Y 值除以 Z 值。
@@ -98,7 +98,7 @@ void main() {
 如果效果不明显，可以将 "fudgeFactor" 滑块从 1.0 拖到 0.0
 来对比没添加这些代码之前的样子。
 
-<img class="webgl_center" src="../resources/orthographic-vs-perspective.png" />
+<img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
 <div class="webgl_center">orthographic vs perspective</div>
 
 事实上WebGL会将我们提供给 `gl_Position` 的  x,y,z,w 值自动除以 w 。
@@ -275,7 +275,7 @@ function makeZToWMatrix(fudgeFactor) {
 
 但还有一些问题需要解决，比如将 Z 值设置为 -100 左右的时候会遇到下面的情形
 
-<img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" />
+<img class="webgl_center" src="resources/z-clipping.gif" style="border: 1px solid black;" />
 
 为什么会这样？为什么 F 提前消失了？WebGL裁剪空间中的 X 和 Y 会被 +1
 和 -1 裁剪， Z也一样。我们看到的是 Z < -1 的情况。

@@ -85,7 +85,7 @@ void main() {
 もっと分かり辛くなる。色が付いている四角形なら区別出来るかも知れないが,
 どんな角はどの色を忘れたら困る。「F」なら識別し安くなる。
 </p>
-<img src="../../resources/f-orientation.svg" class="webgl_center"/>
+<img src="../resources/f-orientation.svg" class="webgl_center"/>
 <p>
 どの識別安い図形でもいいけど「F」に紹介してからずっと使った。
 </p>

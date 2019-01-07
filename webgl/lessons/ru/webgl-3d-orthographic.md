@@ -226,7 +226,7 @@ var m4 = {
 
 И мы получаем наши повороты.
 
-<iframe class="external_diagram" src="/webgl/lessons/resources/axis-diagram.html" style="width: 540px; height: 240px;"></iframe>
+<iframe class="external_diagram" src="resources/axis-diagram.html" style="width: 540px; height: 240px;"></iframe>
 
 Подобным образом мы сделаем упрощённые функции.
 
@@ -312,7 +312,7 @@ var m4 = {
 3D-формы понадобится в сумме 16 прямоугольников - 3 прямоугольника впереди,
 3 сзади, один слева, 4 справа, 2 сверху и 3 снизу.
 
-<img class="webgl_center" width="300" src="../resources/3df.svg" />
+<img class="webgl_center" width="300" src="resources/3df.svg" />
 
 Довольно много, чтобы перечислять здесь. 16 прямоугольников с двумя треугольниками
 на каждый и 3 вершины на каждый треугольник - в сумме 96 вершин. Если хотите
@@ -442,7 +442,7 @@ gl.vertexAttribPointer(
 данных геометрии. Это не даёт нам ожидаемый результат, так как иногда
 части, которые должны быть сзади, отрисовываются впереди.
 
-<img class="webgl_center" width="163" height="190" src="../resources/polygon-drawing-order.gif" />
+<img class="webgl_center" width="163" height="190" src="resources/polygon-drawing-order.gif" />
 
 <span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">Красным цветом</span>
 отмечена **передняя часть** буквы 'F', но из-за того, что она отрисовывается
@@ -456,7 +456,7 @@ gl.vertexAttribPointer(
 против часовой стрелке. У треугольника с тыльной стороной вершины идут в
 направлении по часовой стрелке.
 
-<img src="../resources/triangle-winding.svg" class="webgl_center" width="400" />
+<img src="resources/triangle-winding.svg" class="webgl_center" width="400" />
 
 В WebGL есть возможность отрисовывать только треугольники лицевой
 стороны или только треугольники тыльной стороны. Мы можем включить

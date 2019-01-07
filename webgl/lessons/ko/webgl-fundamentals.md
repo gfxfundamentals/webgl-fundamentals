@@ -62,7 +62,7 @@ Vertex Shader는 clip 공간 좌표를 제공하고 Fragment Shader는 색상을
 
 clip 공간 좌표는 canvas 크기에 상관없이 항상 -1에서 +1까지 사용합니다.
 
-<div class="webgl_center"><img src="../resources/clipspace.svg" style="width: 400px"></div>
+<div class="webgl_center"><img src="resources/clipspace.svg" style="width: 400px"></div>
 
 여기에 WebGL을 보여주는 간단한 WebGL 예제가 있는데요.
 

@@ -128,7 +128,7 @@ Description: Отображение текста, используя текст�
 
 На просторах интернета я нашёл [этот простой свободно распространяемый
 текстурный атлас со шрифтом](http://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta)
-<img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../../resources/8x8-font.png" />
+<img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../resources/8x8-font.png" />
 
 ```
 var fontInfo = {

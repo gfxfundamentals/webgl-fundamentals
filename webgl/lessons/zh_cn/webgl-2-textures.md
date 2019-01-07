@@ -138,7 +138,7 @@ WebGL有一个叫做"texture units"的对象，你可以把它看成是一个纹
 使用的两个图像像这样
 
 <style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; }</style>
-<div class="glocal-center"><table class="glocal-center-content"><tr><td><img src="../../resources/leaves.jpg" /> <img src="../../resources/star.jpg" /></td></tr></table></div>
+<div class="glocal-center"><table class="glocal-center-content"><tr><td><img src="../resources/leaves.jpg" /> <img src="../resources/star.jpg" /></td></tr></table></div>
 
 这就是使用WebGL将它们相乘的结果。
 

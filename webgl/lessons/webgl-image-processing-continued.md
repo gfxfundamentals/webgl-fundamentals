@@ -235,8 +235,7 @@ becoming a big mess of spaghetti.
 I hope this and the preceding examples have made WebGL seem a little more
 approachable and I hope starting with 2D helps make WebGL a little easier
 to understand.  If I find the time I'll try to write [a few more
-articles](webgl-2d-translation.html) about how to do 3D as well as more
-details on what WebGL is really doing under the hood.  For a next step
+articles](webgl-2d-translation.html) about how to do 3D as well as [more details on what WebGL is really doing under the hood](webgl-how-it-works.html).  For a next step
 consider learning [how to use 2 or more textures](webgl-2-textures.html).
 
 

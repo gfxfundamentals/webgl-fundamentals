@@ -152,7 +152,7 @@ WebGL复杂的原因之一是需要两个方法，一个顶点着色器和一个
 这样做就可以剔除大量和示例无关的代码，突出示例想要表达的内容。
 
 这是我最小的一套WebGL样板代码。
-[你可以在 `webgl-utils.js` 中找到源码](../resources/webgl-utils.js。
+[你可以在 `webgl-utils.js` 中找到源码](../resources/webgl-utils.js)。
 如果你想要更有组织的代码。可以查看[TWGL.js](http://twgljs.org)。
 
 其余的让WebGL显得比较复杂的部分就是设置着色器的输入，可以看看是

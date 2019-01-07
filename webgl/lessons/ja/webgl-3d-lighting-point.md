@@ -132,7 +132,7 @@ Description: WebGLで点光源の計算し方
 
 本物のオブジェクトを見ると、ちょっとでも光沢があれば、目に直接光が反射すると鏡のようになる。
 
-<img class="webgl_center" src="../resources/specular-highlights.jpg" />
+<img class="webgl_center" src="resources/specular-highlights.jpg" />
 
 光源の反射が目に当たるかどうかの計算でその結果も描画出来る。また内積の手を借りおう！
 

@@ -77,7 +77,7 @@ Description: 二次元で移動し方
 
 6つの三角形で出来ている’F'のような図形を描画しようとしたら。。。
 
-<img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
+<img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
 
 今のコードのようにするなら`setRectangle`をこういうふうにしなければいけない。
 
@@ -222,7 +222,7 @@ function setGeometry(gl) {
 今回描画する時、WebGLがほとんど全てやっている。JavaScriptはただ移動距離を設定して、
 WebGLに描画させているだけである。図形が何万頂点があっても同じである。
 
-比べたければ[これはJavaScriptで頂点を移動している版である](../../webgl-2d-geometry-translate.html)。
+比べたければ[これはJavaScriptで頂点を移動している版である](../webgl-2d-geometry-translate.html)。
 
 今回のサンプルは簡単過ぎないだろう。まだ読み続けて下さい。
 いずれ、もっとフレキシブルな方法が説明しよう。

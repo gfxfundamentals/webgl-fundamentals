@@ -245,7 +245,7 @@ P = P1 * invT^3 +
 
 这是我做的保龄球的半边轮廓的svg。
 
-<img class="webgl_center" src="../resources/bowling-pin-silhouette.svg" width="50%" height="50%" />
+<img class="webgl_center" src="resources/bowling-pin-silhouette.svg" width="50%" height="50%" />
 
 由 4 个曲线制成，路径的数据像这样
 
@@ -462,13 +462,13 @@ WebGL缓冲
 我们可以计算每一个曲线点的法向量，事实上如果你会看这节中的例子，你会发现 `R1` 和 `R2`
 构成的线段切曲线于红点处。
 
-<img class="webgl_center" src="../resources/tangent-to-curve.png" width="50%" />
+<img class="webgl_center" src="resources/tangent-to-curve.png" width="50%" />
 
 法向量和切线垂直所以从切线很容易求出法向量。
 
 但是，假设我们想要做一个烛台，有这样一个框架。
 
-<img class="webgl_center" src="../resources/candle-holder.svg" width="50%" />
+<img class="webgl_center" src="resources/candle-holder.svg" width="50%" />
 
 这有很多平滑区域也有很多锐利角，如何决定使用法向量的方向呢？当需要锐利边缘时就要使用多余的顶点，
 因为一个顶点有一个位置和一个法向量，如果需要多个法向量就需要不同的顶点，这也是制作立方体需要至少24
@@ -710,7 +710,7 @@ for (let division = 0; division <= numDivisions; ++division) {
 如果相同就认为是同一点，那么如果不被认为是同一点就会计算出错误的法向量。
 </p>
 <p>这是这种情况发生时的样子</p>
-<img class="webgl_center" src="../resources/lathe-normal-seam.png" width="50%" />
+<img class="webgl_center" src="resources/lathe-normal-seam.png" width="50%" />
 <p>你可以看到它们在共享处没有被当作相同点，因为它们不是100%的相等。</p>
 <p>起初我想通过提供一个误差范围，检查顶点的距离是否在范围内，如果小于误差范围就认为是同一点。
 就像这样。

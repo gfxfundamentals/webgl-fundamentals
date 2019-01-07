@@ -21,7 +21,7 @@ WebGLのコードで、
 と書いた場合、それは「９つの頂点データを処理せよ」という意味の、
 GPUに対する命令である。
 
-<img src="../resources/vertex-shader-anim.gif" class="webgl_center" />
+<img src="resources/vertex-shader-anim.gif" class="webgl_center" />
 
 図中、左の"Original Vertices"(元となる頂点情報)は、あなた(プログラマ)が用意したデータである。
 

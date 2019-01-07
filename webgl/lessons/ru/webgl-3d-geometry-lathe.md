@@ -289,7 +289,7 @@ P = P1 * invT^3 +
 
 Вот такой контур кегли у меня получился:
 
-<img class="webgl_center" src="../resources/bowling-pin-silhouette.svg" width="50%" height="50%" />
+<img class="webgl_center" src="resources/bowling-pin-silhouette.svg" width="50%" height="50%" />
 
 Контур состоит из 4 кривых Безье. Данные для этой кривой выглядят следующим образом:
 
@@ -516,14 +516,14 @@ P = P1 * invT^3 +
 рассмотренным выше примерам, мы увидим, что линия между точками `R1` и `R2` является
 касательной к кривой.
 
-<img class="webgl_center" src="../resources/tangent-to-curve.png" width="50%" />
+<img class="webgl_center" src="resources/tangent-to-curve.png" width="50%" />
 
 А нормаль - это перпендикуляр к касательной, поэтому, используя касательные,
 можно легко найти нормали.
 
 Но давайте представим, что нам необходимо сделать подсвечник с подобным контуром:
 
-<img class="webgl_center" src="../resources/candle-holder.svg" width="50%" />
+<img class="webgl_center" src="resources/candle-holder.svg" width="50%" />
 
 Наряду со множеством гладких участков присутствуют и острые углы. Как понять, какие
 нормали использовать? Дело усугубляется тем, что для острых углов нужны дополнительные
@@ -782,7 +782,7 @@ for (let division = 0; division <= numDivisions; ++division) {
 вершины не будут равны и не сольются в одну вершину. А значит, при вычислении нормалей
 не все грани попадут в вычисление, что приведёт к неверным нормалям.</p>
 <p>Вот наглядный пример, что произойдёт</p>
-<img class="webgl_center" src="../resources/lathe-normal-seam.png" width="50%" />
+<img class="webgl_center" src="resources/lathe-normal-seam.png" width="50%" />
 <p>На месте замыкания контура можно увидеть шов, что происходит из-за едва заметных
 отличий в значениях первой и последней вершины.</p>
 <p>Первой моей мыслью было изменить алгоритм таким образом, чтобы проверять вершины на

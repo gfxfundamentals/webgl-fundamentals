@@ -2,13 +2,13 @@ Title: WebGL - Escala 2D
 Description: Como escalar em 2D
 
 Esta publicação é uma continuação de uma série de postagens sobre o WebGL. O primeiro
-[começou com os fundamentos] (webgl-fundals.html) e o anterior foi
-[sobre a geometria rotativa] (webgl-2d-rotation.html).
+[começou com os fundamentos](webgl-fundals.html) e o anterior foi
+[sobre a geometria rotativa](webgl-2d-rotation.html).
 
-Escalar é exatamente como [fácil como translação] (webgl-2d-translation.html).
+Escalar é exatamente como [fácil como translação](webgl-2d-translation.html).
 
 Multiplicamos a posição pela escala desejada. Aqui estão as mudanças de
-nossa [amostra anterior] (webgl-2d-rotation.html).
+nossa [amostra anterior](webgl-2d-rotation.html).
 
 ```
 <script id="2d-vertex-shader" type="x-shader/x-vertex">
@@ -75,9 +75,9 @@ Uma coisa a notar é que a escala por um valor negativo virou nossa
 geometria.
 
 Espero que essas últimas 3 postagens tenham sido úteis na compreensão
-[translação] (webgl-2d-translation.html),
-[rotação] (webgl-2d-rotation.html) e escala. Em seguida, analisaremos [o
-magia que é matriz] (webgl-2d-matrices.html) que combina todos os 3 dos
+[translação](webgl-2d-translation.html),
+[rotação](webgl-2d-rotation.html) e escala. Em seguida, analisaremos [o
+magia que é matriz](webgl-2d-matrices.html) que combina todos os 3 dos
 estes em uma forma muito mais simples e muitas vezes mais útil.
 
 <div class="webgl_bottombar">
