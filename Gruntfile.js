@@ -11,6 +11,11 @@ module.exports = function(grunt) {
     return !s_ignoreRE.test(filename);
   }
 
+  const s_isMdRE = /\.md$/i;
+  function mdsOnly(filename) {
+    return s_isMdRE.test(filename);
+  }
+
   function notFolder(filename) {
     return !fs.statSync(filename).isDirectory();
   }
@@ -65,19 +70,86 @@ module.exports = function(grunt) {
     clean: [
       'out/**/*',
     ],
+    buildlesson: {
+      main: {
+        files: [],
+      },
+    },
+    watch: {
+      main: {
+        files: [
+          'webgl/**',
+          '3rdparty/**',
+        ],
+        tasks: ['copy'],
+        options: {
+          spawn: false,
+        },
+      },
+      lessons: {
+        files: [
+          'webgl/lessons/**/webgl*.md',
+        ],
+        tasks: ['buildlesson'],
+        options: {
+          spawn: false,
+        },
+      },
+    },
+  });
+
+  let changedFiles = {};
+  const onChange = grunt.util._.debounce(function() {
+    grunt.config('copy.main.files', Object.keys(changedFiles).filter(noMds).map((file) => {
+      return {
+        src: file,
+        dest: 'out/',
+      };
+    }));
+    grunt.config('buildlesson.main.files', Object.keys(changedFiles).filter(mdsOnly).map((file) => {
+      return {
+        src: file,
+      };
+    }));
+    changedFiles = {};
+  }, 200);
+  grunt.event.on('watch', function(action, filepath) {
+    changedFiles[filepath] = action;
+    onChange();
+  });
+
+  const buildSettings = {
+    outDir: 'out',
+    baseUrl: 'http://webglfundamentals.org',
+    rootFolder: 'webgl',
+    lessonGrep: 'webgl*.md',
+    siteName: 'WebGLFundamentals',
+    siteThumbnail: 'webglfundamentals.jpg',  // in rootFolder/lessons/resources
+    templatePath: 'build/templates',
+  };
+
+  // just the hackiest way to get this working.
+  grunt.registerMultiTask('buildlesson', 'build a lesson', function() {
+    const filenames = new Set();
+    this.files.forEach((files) => {
+      files.src.forEach((filename) => {
+        filenames.add(filename);
+      });
+    });
+    const buildStuff = require('./build/js/build');
+    const settings = Object.assign({}, buildSettings, {
+      filenames,
+    });
+    const finish = this.async();
+    buildStuff(settings).then(function() {
+      finish();
+    }).done();
   });
 
   grunt.registerTask('buildlessons', function() {
     var buildStuff = require('./build/js/build');
     var finish = this.async();
-    buildStuff({
-      outDir: 'out',
-      baseUrl: 'http://webglfundamentals.org',
-      rootFolder: 'webgl',
-      lessonGrep: 'webgl*.md',
-      siteName: 'WebGLFundamentals',
-      siteThumbnail: 'webglfundamentals.jpg',  // in rootFolder/lessons/resources
-    }).then(function() {
+    buildStuff(buildSettings).then(function() {
         finish();
     }).done();
   });

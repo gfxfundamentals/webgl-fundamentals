@@ -147,6 +147,11 @@ Steps
 
 now open your browser to `http://localhost:8080`
 
+### Continuous build
+
+You can run `npm run watch` after you've built to get continuous building.
+Only the article .md files and files that are normally copied are supported.
+
 #### Build options
 
 This is mostly for debugging `build.js`. Since it takes a while to process all the files
@@ -157,13 +162,6 @@ you can set `ARTICLE_FILTER` to a substring of the filenames to process. For exa
 Will build the site as though only articles with `rotation` in their filename exist.
 
 ## TO DO
-
-* Make a continuous build
-
-  Right now the build processes all files at once. Part if this is because
-  it builds RSS feeds and checks for missing files. If those are separated
-  out then could make it continously build individual articles which would
-  be super useful.
 
 ### A list of articles I'd like to write or see written
 
