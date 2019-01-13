@@ -1,5 +1,6 @@
 Title: WebGL 3D - Les lumières-point
 Description: Comment implémenter les lumières-point en WebGL
+TOC: WebGL 3D - Lumière-point
 
 Cet article est la suite de <a href="webgl-3d-lighting-directional.html">WebGL 3D - L'éclairage directionnel</a>. Si vous ne l'avez pas lu vous préférez peut-être démarrer par là.
 

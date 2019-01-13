@@ -1,5 +1,6 @@
 Title: Przesunięcie dwuwymiarowe w WebGL
 Description: Jak przesuwać w dwóch wymiarach
+TOC: PrzesuniÄcie dwuwymiarowe w WebGL
 
 Zanim przejdziemy do trzech wymiarów zatrzymajmy się na chwilę przy dwóch wymiarach.  Pozwól mi, proszę.  Ten artykuł może wydawać się komuś nader oczywisty, ale będzie fundamentem dla kilku innych publikacji.
 

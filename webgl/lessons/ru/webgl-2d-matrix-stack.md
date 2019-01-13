@@ -1,5 +1,6 @@
 Title: WebGL 2D - стек матриц
 Description: Реализация функции canvas для переноса/поворота/масштабирования на WebGL
+TOC: WebGL 2D - Стек матриц
 
 Эта статья продолжает статью о [функции DrawImage в WebGL](webgl-2d-drawimage.html).
 Если вы её ещё не читали, рекомендую [ознакомиться сначала с ней](webgl-2d-drawimage.html).

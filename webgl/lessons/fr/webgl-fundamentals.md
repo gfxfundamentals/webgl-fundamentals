@@ -1,5 +1,6 @@
 Title: Les bases
 Description: Première leçon pour WebGL en démarrant par les bases
+TOC: WebGL - Les bases
 
 WebGL rend possible l'affichage d'incroyables rendus graphiques 3D en temps réel dans le navigateur,
 mais ce que beaucoup de gens ignorent c'est que

@@ -1,5 +1,6 @@
 Title: WebGL Canvas 크기 조정.
 Description: WebGL Canvas 크기 조정 및 관련 문제 해결법
+TOC: WebGL Canvas 크기 조정
 
 Canvas의 크기를 조정하려면 알아야 할 사항이 있습니다.
 

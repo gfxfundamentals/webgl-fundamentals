@@ -1,5 +1,6 @@
 Title: WebGL二次元行列数学
 Description: 分かりやすい行列数学の説明
+TOC: WebGL - 二次元での行列数学
 
 本記事はWebGLシリーズの一つである。最初の記事は
 [WebGLの基本で始まった](webgl-fundamentals.html)。そして、前回の記事は

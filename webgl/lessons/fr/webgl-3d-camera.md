@@ -1,5 +1,6 @@
 Title: WebGL 3D - Les Caméras
 Description: Comment fonctionnent les caméras en WebGL
+TOC: WebGL 3D - Les caméras
 
 Cet article est la suite d'une série de posts consacrés à WebGL. Le premier <a href="webgl-fundamentals.html">présentait les bases</a> et le précédent parlait des <a href="webgl-3d-perspective.html">projection perspective</a>.
 Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d'abord.

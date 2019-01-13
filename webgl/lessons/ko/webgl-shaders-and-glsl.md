@@ -1,5 +1,6 @@
-﻿Title: WebGL Shader 그리고 GLSL
+Title: WebGL Shader 그리고 GLSL
 Description: Shader와 GLSL이 뭔가요?
+TOC: WebGL 셰이더와 GLSL
 
 이 글은 [WebGL 기초](webgl-fundamentals.html)에서 이어지는 글입니다.
 WebGL이 어떻게 동작하는지에 대해 읽어보신 적 없다면 [이걸 먼저 읽어주세요](webgl-how-it-works.html).

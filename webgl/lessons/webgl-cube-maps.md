@@ -1,5 +1,6 @@
 Title: WebGL Cubemaps
 Description: How to use cubemaps in WebGL
+TOC: WebGL - Cubemaps
 
 This aritcle is part of a series of articles about WebGL.
 [The first article starts with the fundamentals](webgl-fundamentals.html).

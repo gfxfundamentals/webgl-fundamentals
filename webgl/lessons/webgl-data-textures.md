@@ -1,5 +1,6 @@
 Title: WebGL 3D - Data Textures
 Description: Supplying data to a texture.
+TOC: WebGL Data Textures
 
 This post is a continuation of a series of posts about WebGL.
 The first [started with fundamentals](webgl-fundamentals.html)

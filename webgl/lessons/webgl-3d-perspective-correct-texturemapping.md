@@ -1,5 +1,6 @@
 Title: WebGL 3D Perspective Correct Texturemapping
 Description: What's special about W
+TOC: WebGL 3D - Perspective Correct Texture Mapping
 
 This post is a continuation of a series of posts about WebGL.  The first
 [started with fundamentals](webgl-fundamentals.html). This article
