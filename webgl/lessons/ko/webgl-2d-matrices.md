@@ -341,21 +341,21 @@ newY = y * sy;
 이제 Photoshop이나 Flash에서 어떻게 회전점을 이동시키는지 알 수 있습니다.
 
 이제 더 미친 짓을 해볼텐데요.
-첫 번째 글인 [WebGL 기초](webgl-fundamentals.html)로 돌아가 본다면 shader 안에 픽셀을 clip 공간으로 전환하는 코드가 있다는 것을 기억하실 겁니다.
+첫 번째 글인 [WebGL 기초](webgl-fundamentals.html)로 돌아가 본다면 shader 안에 픽셀을 clip 공간으로 변환하는 코드가 있다는 것을 기억하실 겁니다.
 
       ...
-      // 사각형의 픽셀을 0.0에서 1.0사이로 전환
+      // 사각형의 픽셀을 0.0에서 1.0사이로 변환
       vec2 zeroToOne = position / u_resolution;
 
-      // 0->1에서 0->2로 전환
+      // 0->1에서 0->2로 변환
       vec2 zeroToTwo = zeroToOne * 2.0;
 
-      // 0->2에서 -1->+1로 전환 (clipspace)
+      // 0->2에서 -1->+1로 변환 (clipspace)
       vec2 clipSpace = zeroToTwo - 1.0;
 
       gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
-이 단계를 차례대로 살펴보자면, 첫 단계, "픽셀을 0.0에서 1.0사이로 전환", 이건 실제로 크기 조정 작업입니다.
+이 단계를 차례대로 살펴보자면, 첫 단계, "픽셀을 0.0에서 1.0사이로 변환", 이건 실제로 크기 조정 작업입니다.
 두 번째 역시 크기 조정 작업입니다.
 다음은 이동하고 마지막으로 Y축을 -1로 크기 조정합니다.
 실제로 shader에 전달하는 행렬로 모든 것을 할 수 있습니다.
@@ -550,7 +550,7 @@ shader에서 우리는 `gl_Position = matrix * position;`을 실행합니다.
 왜일까요?
 </p>
 <p>
-Projection 행렬은 clipspace(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 전환하는 방법과 관련있습니다.
+Projection 행렬은 clipspace(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련있습니다.
 하지만, 브라우저에는, 두 가지 유형의 픽셀이 있는데요.
 하나는 canvas 자체의 픽셀 수 입니다.
 예를 들자면 이렇게 정의된 canvas가 있습니다.

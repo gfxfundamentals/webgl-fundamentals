@@ -176,7 +176,7 @@ WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어
 
 <code>null</code>을 넘긴 <code>gl.bindFramebuffer</code>를 호출하는 건 WebGL에게 framebuffer 중 하나 대신에 canvas에 렌더링하고 싶다는 걸 알려줍니다.
 
-WebGL은 [clip 공간](webgl-fundamentals.html)에서 다시 픽셀로 전환해줘야 하는데요.
+WebGL은 [clip 공간](webgl-fundamentals.html)에서 다시 픽셀로 변환해줘야 하는데요.
 이건 <code>gl.viewport</code>의 설정에 따라 수행됩니다.
 렌더링할 framebuffer는 canvas 크기와 다르기 때문에 framebuffer texture를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 canvas를 렌더링할 때 다시 설정합니다.
 
@@ -226,7 +226,7 @@ void main() {
 저는 이 예제를 여러 효과를 얻을 수 있는 단일 GLSL program을 만들어서 간단하게 유지했습니다.
 만약 이미지 처리에 전념하고 싶다면 많은 GLSL program이 필요할 겁니다.
 색조, 채도 그리고 휘도 조정, 밝기와 대비, 반전용 그리고 레벨 조정용 프로그램 등등.
-GLSL 프로그램을 전환하고 특정 프로그램에 대한 매개 변수를 갱신하려면 코드를 변경해야합니다.
+GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를 갱신하려면 코드를 변경해야합니다.
 이 예제 작성을 고려했지만 여러 GLSL program은 각자 매개변수가 필요하고 뒤엉키지 않도록 중요한 부분에 리펙토링이 필요하기 때문에 연습하기 좋은 것 같아 남겨뒀습니다.
 
 저는 이것과 앞 선 예제들로 WebGL이 좀 더 친근하게 보이셨기를 바랍니다.
