@@ -167,7 +167,7 @@ drawArrays(..., offset, count) {
     doSomethingWith_gl_Position();
   }
 }
-</code></pre><p>실제로는 <code>positionBuffer</code>가 2진 데이터(아래 참조)로 전환되기 때문에 그렇게 간단하지 않습니다.
+</code></pre><p>실제로는 <code>positionBuffer</code>가 2진 데이터(아래 참조)로 변환되기 때문에 그렇게 간단하지 않습니다.
 이렇게 하면 Buffer에서 가져오는 데이터는 실제 계산과 약간 다르지만, 이걸로 Vertex Shader가 어떻게 실행되는지 알 수 있습니다.</p>
 <p>다음으로 필요한 것은 Fragment Shader 입니다.</p>
 <pre><code>// Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
@@ -326,7 +326,7 @@ gl.useProgram(program);
 <pre><code>// position buffer 할당
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-// attribute에게 positionBuffer의 데이터를 어떻게 꺼낼지 지시 (ARRAY_BUFFER)
+// attribute에게 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 알려줍니다.
 var size = 2;          // 실행될 때마다 2개 구성 요소 사용
 var type = gl.FLOAT;   // 데이터는 32bit 소수점
 var normalize = false; // 정규화되지 않은 데이터
@@ -366,7 +366,7 @@ Canvas 크기에 상관없이 이 값들은 clip 공간 좌표에 있으며 방�
 <pre><code>    0, 0,
     0, 0.5,
   0.7, 0,
-</code></pre><p>clip 공간에서 화면 공간으로 전환할 때 canvas 크기가 400x300이라면 다음과 같이 표시됩니다.</p>
+</code></pre><p>clip 공간에서 화면 공간으로 변환할 때 canvas 크기가 400x300이라면 다음과 같이 표시됩니다.</p>
 <pre><code> clip 공간         화면 공간
    0, 0     -&gt;   200, 150
    0, 0.5   -&gt;   200, 225
@@ -629,7 +629,7 @@ var shaderSource = `
   </ul>
   <li>3D</li>
   <ul>
-    <li><a href="/webgl/lessons/webgl-3d-orthographic.html">WebGL - Orthographic 3D</a></li>
+    <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">WebGL - Orthographic 3D</a></li>
     <li><a href="/webgl/lessons/webgl-3d-perspective.html">WebGL 3D Perspective</a></li>
     <li><a href="/webgl/lessons/webgl-3d-camera.html">WebGL 3D - Cameras</a></li>
   </ul>
@@ -667,6 +667,14 @@ var shaderSource = `
     <ul>
       <li><a href="/webgl/lessons/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a>
       <li><a href="/webgl/lessons/webgl-2d-matrix-stack.html">WebGL 2D - Matrix Stack</a>
+    </ul>
+    <li>3D</li>
+    <ul>
+      <li><a href="/webgl/lessons/webgl-cube-maps.html">WebGL - Cubemaps</a></li>
+      <li><a href="/webgl/lessons/webgl-environment-maps.html">WebGL - Environment maps</a></li>
+      <li><a href="/webgl/lessons/webgl-skybox.html">WebGL - Skyboxes</a></li>
+      <li><a href="/webgl/lessons/webgl-skinning.html">WebGL - Skinning</a></li>
+      <li><a href="/webgl/lessons/webgl-fog.html">WebGL - Fog</a></li>
     </ul>
     <li>Text</li>
     <ul>
