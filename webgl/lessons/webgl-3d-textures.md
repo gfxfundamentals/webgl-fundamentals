@@ -408,42 +408,42 @@ like this
 
 and then use a different set of texture coordinates for each face of the cube.
 
-        // select the bottom left image
+        // select the top left image
         0   , 0  ,
         0   , 0.5,
         0.25, 0  ,
         0   , 0.5,
         0.25, 0.5,
         0.25, 0  ,
-        // select the bottom middle image
+        // select the top middle image
         0.25, 0  ,
         0.5 , 0  ,
         0.25, 0.5,
         0.25, 0.5,
         0.5 , 0  ,
         0.5 , 0.5,
-        // select to bottom right image
+        // select to top right image
         0.5 , 0  ,
         0.5 , 0.5,
         0.75, 0  ,
         0.5 , 0.5,
         0.75, 0.5,
         0.75, 0  ,
-        // select the top left image
+        // select the bottom left image
         0   , 0.5,
         0.25, 0.5,
         0   , 1  ,
         0   , 1  ,
         0.25, 0.5,
         0.25, 1  ,
-        // select the top middle image
+        // select the bottom middle image
         0.25, 0.5,
         0.25, 1  ,
         0.5 , 0.5,
         0.25, 1  ,
         0.5 , 1  ,
         0.5 , 0.5,
-        // select the top right image
+        // select the bottom right image
         0.5 , 0.5,
         0.75, 0.5,
         0.5 , 1  ,
