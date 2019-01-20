@@ -304,7 +304,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
 Those are a few of what I consider WebGL Anti-Patterns in code I've seen around the net.
 Hopefully I've made the case why to avoid them and given solutions that are easy and useful.
 
-<div class="webgl_bottombar"><a id="drawingbuffer"/><h3>What is drawingBufferWidth and drawingBufferHeight?</h3>
+<div class="webgl_bottombar"><a id="drawingbuffer"></a><h3>What is drawingBufferWidth and drawingBufferHeight?</h3>
 <p>
 GPUs have a limit on how big a rectangle of pixels (texture, renderbuffer) they can support. Often this
 size is the next power of 2 larger than whatever a common monitor resolution was at the time the GPU was

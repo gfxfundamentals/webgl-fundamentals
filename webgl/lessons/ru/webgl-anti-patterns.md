@@ -314,7 +314,7 @@ Description: Что и почему не нужно делать в WebGL, и ч
 интернета. Надеюсь, я показал, почему их нужно избегать, а приведённые решение будут
 вам полезны.
 
-<div class="webgl_bottombar"><a id="drawingbuffer"/><h3>Что такое drawingBufferWidth и drawingBufferHeight?</h3>
+<div class="webgl_bottombar"><a id="drawingbuffer"></a><h3>Что такое drawingBufferWidth и drawingBufferHeight?</h3>
 <p>
 В видеокарте есть ограничение на размер прямоугольника пикселей (текстуры, буфера отрисовки). Обычно этот
 размер является степенью двойки и при этом превышает разрешение монитора, которое распространено на момент

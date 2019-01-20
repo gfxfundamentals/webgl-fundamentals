@@ -277,7 +277,7 @@ Description: WebGL中不应该这么做，为什么，应该这么做。
 
 这些是我想到的一些WebGL的反面模式，希望我的例子能够解释清楚为什么要避免以及如何解决。
 
-<div class="webgl_bottombar"><a id="drawingbuffer"/><h3>drawingBufferWidth 和 drawingBufferHeight 是什么？</h3>
+<div class="webgl_bottombar"><a id="drawingbuffer"></a><h3>drawingBufferWidth 和 drawingBufferHeight 是什么？</h3>
 <p>
 GPU对矩形像素值(纹理, renderbuffer)的支持有限制。通常这个大小是GPU生产时常用显示器分辨率的下一个2的整数次幂。
 假如一个GPU设计用于 1280x1024 的屏幕，那么它的限制可能就是 2048 像素。
