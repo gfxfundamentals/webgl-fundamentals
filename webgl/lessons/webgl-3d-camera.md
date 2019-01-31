@@ -31,9 +31,10 @@ We need to effectively move the world in front of the camera.  The easiest
 way to do this is to use an "inverse" matrix.  The math to compute an
 inverse matrix in the general case is complex but conceptually it's easy.
 The inverse is the value you'd use to negate some other value.  For
-example, the inverse of 123 is -123.  The inverse of a scale matrix that
-scaled by 5 would be 1/5th or 0.2.  The inverse of a matrix that rotated
-30&deg; in X would be one that rotates -30&deg; in X.
+example, the inverse of a matrix that translates in X by 123 is a matrix that
+translates in X by -123.  The inverse of a matrix that
+scales by 5 is a matrix that scales by 1/5th or 0.2.  The inverse of a matrix that rotates
+30&deg; around the X axis would be one that rotates -30&deg; around the X axis.
 
 
 Up until this point we've used translation, rotation and scale to affect
