@@ -14,8 +14,8 @@ Drag slider to move camera.
 <canvas id="canvas"></canvas>
 <div id="uiContainer">
   <div id="ui">
-    <div id="cameraAngle"></div>
-    <div id="cameraHeight"></div>
+    <div id="targetAngle"></div>
+    <div id="targetHeight"></div>
   </div>
 </div>
 </body>
@@ -102,23 +102,26 @@ function main() {
     return d * Math.PI / 180;
   }
 
-  var cameraAngleRadians = degToRad(0);
+  var target = [0, 200, 300];
+  var targetAngleRadians = 0;
+  var targetRadius = 300;
   var fieldOfViewRadians = degToRad(60);
-  var cameraHeight = 50;
 
   drawScene();
 
   // Setup a ui.
-  webglLessonsUI.setupSlider("#cameraAngle", {value: radToDeg(cameraAngleRadians), slide: updateCameraAngle, min: -360, max: 360});
-  webglLessonsUI.setupSlider("#cameraHeight", {value: cameraHeight, slide: updateCameraHeight, min: -200, max: 200});
+  webglLessonsUI.setupSlider("#targetAngle", {value: radToDeg(targetAngleRadians), slide: updateTargetAngle, min: -360, max: 360});
+  webglLessonsUI.setupSlider("#targetHeight", {value: target[1], slide: updateTargetHeight, min: 50, max: 300});
 
-  function updateCameraAngle(event, ui) {
-    cameraAngleRadians = degToRad(ui.value);
+  function updateTargetAngle(event, ui) {
+    targetAngleRadians = degToRad(ui.value);
+    target[0] = Math.sin(targetAngleRadians) * targetRadius;
+    target[2] = Math.cos(targetAngleRadians) * targetRadius;
     drawScene();
   }
 
-  function updateCameraHeight(event, ui) {
-    cameraHeight = ui.value;
+  function updateTargetHeight(event, ui) {
+    target[1] = ui.value;
     drawScene();
   }
 
@@ -126,7 +129,7 @@ function main() {
   // Draw the scene.
   function drawScene() {
     var numFs = 5;
-    var radius = 200;
+    var radius = 600;
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -179,51 +182,51 @@ function main() {
     // Compute the projection matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var zNear = 1;
-    var zFar = 2000;
+    var zFar = 3000;
     var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 
-    // Compute the position of the first F
-    var fPosition = [radius, 0, 0];
-
-    // Use matrix math to compute a position on a circle where
-    // the camera is
-    var cameraMatrix = m4.yRotation(cameraAngleRadians);
-    cameraMatrix = m4.translate(cameraMatrix, 0, cameraHeight, radius * 1.5);
-
-    // Get the camera's postion from the matrix we computed
-    var cameraPosition = [
-      cameraMatrix[12],
-      cameraMatrix[13],
-      cameraMatrix[14],
-    ];
-
+    var cameraTarget = [0, -100, 0];
+    var cameraPosition = [500, 300, 500];
     var up = [0, 1, 0];
 
     // Compute the camera's matrix using look at.
-    var cameraMatrix = m4.lookAt(cameraPosition, fPosition, up);
+    var cameraMatrix = m4.lookAt(cameraPosition, cameraTarget, up);
 
-    // Make a view matrix from the camera matrix
+    // Make a view matrix from the camera matrix.
     var viewMatrix = m4.inverse(cameraMatrix);
 
-    // Compute a view projection matrix
+    // create a viewProjection matrix. This will both apply perspective
+    // AND move the world so that the camera is effectively the origin
     var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
-    // Draw 'F's in a circle
-    for (var ii = 0; ii < numFs; ++ii) {
-      var angle = ii * Math.PI * 2 / numFs;
-      var x = Math.cos(angle) * radius;
-      var z = Math.sin(angle) * radius;
-      var matrix = m4.lookAt([x, 0, z], cameraPosition, up);
-
-      // Multiply the matrices.
-      matrix = m4.multiply(viewProjectionMatrix, matrix);
-
-      // Set the matrix.
-      gl.uniformMatrix4fv(matrixLocation, false, matrix);
-
-      // Draw the geometry.
-      gl.drawArrays(gl.TRIANGLES, 0, numElements);
+    // Draw heads in a grid
+    var deep = 5;
+    var across = 5;
+    for (var zz = 0; zz < deep; ++zz) {
+      var v = zz / (deep - 1);
+      var z = (v - .5) * deep * 150;
+      for (var xx = 0; xx < across; ++xx) {
+        var u = xx / (across - 1);
+        var x = (u - .5) * across * 150;
+        var matrix = m4.lookAt([x, 0, z], target, up);
+        drawHead(matrix, viewProjectionMatrix, matrixLocation, numElements);
+      }
     }
+
+    drawHead(m4.translation(target[0], target[1], target[2]), viewProjectionMatrix, matrixLocation, numElements);
+  }
+
+  function drawHead(matrix, viewProjectionMatrix, matrixLocation, numElements) {
+    // multiply that with the viewProjecitonMatrix
+    matrix = m4.multiply(viewProjectionMatrix, matrix);
+
+    // Set the matrix.
+    gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+    // Draw the geometry.
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    gl.drawArrays(gl.TRIANGLES, 0, numElements);
   }
 }
 
@@ -254,8 +257,8 @@ var m4 = {
   lookAt: function(cameraPosition, target, up) {
     var zAxis = normalize(
         subtractVectors(cameraPosition, target));
-    var xAxis = cross(up, zAxis);
-    var yAxis = cross(zAxis, xAxis);
+    var xAxis = normalize(cross(up, zAxis));
+    var yAxis = normalize(cross(zAxis, xAxis));
 
     return [
        xAxis[0], xAxis[1], xAxis[2], 0,
