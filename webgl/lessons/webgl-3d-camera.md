@@ -53,7 +53,7 @@ Let's make a 3D scene with a circle of 'F's like the diagrams above.
 First, because we are drawing 5 things and they all use the same
 projection matrix we'll compute that outside the loop
 
-```
+```js
 
 // Compute the projection matrix
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
@@ -70,7 +70,7 @@ radius * 1.5 distance out and looking at the origin.
 
 {{{diagram url="resources/camera-move-camera.html?mode=3" caption="camera movement" }}}
 
-```
+```js
 var numFs = 5;
 var radius = 200;
 
@@ -88,14 +88,14 @@ In this case the supplied matrix would move the camera to some position
 and orientation relative to the origin. The inverse of that is a matrix
 that will move everything else such that the camera is at the origin.
 
-```
+```js
 // Make a view matrix from the camera matrix.
 var viewMatrix = m4.inverse(cameraMatrix);
 ```
 
 Now we combine the view and projection matrix into a view projection matrix.
 
-```
+```js
 // Compute a view projection matrix
 var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 ```
@@ -103,7 +103,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 Finally we draw a circle of Fs. For each F we start with the
 view projection matrix, then rotate and move out radius units.
 
-```
+```js
 for (var ii = 0; ii < numFs; ++ii) {
   var angle = ii * Math.PI * 2 / numFs;
   var x = Math.cos(angle) * radius;
@@ -216,7 +216,7 @@ matrix that will orient something that points at the `target` from the
 
 Here's the code to compute the cross product of 2 vectors.
 
-```
+```js
 function cross(a, b) {
   return [a[1] * b[2] - a[2] * b[1],
           a[2] * b[0] - a[0] * b[2],
@@ -226,7 +226,7 @@ function cross(a, b) {
 
 Here's the code to subtract two vectors.
 
-```
+```js
 function subtractVectors(a, b) {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
@@ -234,7 +234,7 @@ function subtractVectors(a, b) {
 
 Here's the code to normalize a vector (make it into a unit vector).
 
-```
+```js
 function normalize(v) {
   var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   // make sure we don't divide by 0.
@@ -248,7 +248,7 @@ function normalize(v) {
 
 Here's the code to compute a "lookAt" matrix.
 
-```
+```js
 var m4 = {
   lookAt: function(cameraPosition, target, up) {
     var zAxis = normalize(
@@ -271,7 +271,7 @@ var m4 = {
 And here is how we might use it to make the camera point at a specific 'F'
 as we move it.
 
-```
+```js
   ...
 
   // Compute the position of the first F

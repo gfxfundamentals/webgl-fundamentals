@@ -24,7 +24,7 @@ Here's an environment map from the lobby of the Computer History Museum in Mount
 
 Based on [the code in the previous article](webgl-cube-maps.html) let's load those 6 images instead of the images we generated
 
-```
+```js
 // Create a texture.
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
@@ -154,7 +154,7 @@ Now that we know how reflection works and that we can use it to look up values f
 
 First in the vertex shader we'll compute the world position and world oriented normal of the vertices and pass those to the fragment shader as varyings. This is similar to what we did in [the article on spotlights](webgl-3d-lighting-spot.html).
 
-```
+```glsl
 attribute vec4 a_position;
 attribute vec3 a_normal;
 
@@ -181,7 +181,7 @@ Then in the fragment shader we normalize the worldNormal since it's being interp
 
 And finally we use `reflect` which is a built in GLSL function that implements the formula we went over above. We use the result to get a color from the cubemap.
 
-```
+```glsl
 precision highp float;
 
 // Passed in from the vertex shader.
@@ -207,7 +207,7 @@ We also need real normals for this example. We need real normals so the faces of
 
 At init time
 
-```
+```js
 // Create a buffer to put normals in
 var normalBuffer = gl.createBuffer();
 // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = normalBuffer)
@@ -218,7 +218,7 @@ setNormals(gl);
 
 and at render time 
 
-```
+```js
 // Bind the normal buffer.
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 
