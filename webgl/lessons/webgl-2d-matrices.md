@@ -5,6 +5,20 @@ This post is a continuation of a series of posts about WebGL.  The first
 [started with fundamentals](webgl-fundamentals.html) and the previous was
 [about scaling 2D geometry](webgl-2d-scale.html).
 
+<div class="webgl_bottombar">
+<h3>Math vs Programming vs WebGL</h3>
+<p>
+Before we get started, if you have previously studied linear algebra or in general
+have experience working with matrices then 
+<a href="webgl-matrix-vs-math.html"><b>please read this article before
+continuing below.</b></a>.
+</p>
+<p>
+If you have little to no experience with matrices then feel free
+to skip the link above for now and continue reading.
+</p>
+</div>
+
 In the last 3 posts we went over how to [translate
 geometry](webgl-2d-translation.html), [rotate
 geometry](webgl-2d-rotation.html), and [scale
