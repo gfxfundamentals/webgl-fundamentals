@@ -104,7 +104,7 @@ If you have not read those articles already you might want to read them first.</
 </div>
 
 <p>Based on <a href="webgl-cube-maps.html">the code in the previous article</a> let&#39;s load those 6 images instead of the images we generated</p>
-<pre><code>// Create a texture.
+<pre><code class="lang-js">// Create a texture.
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
@@ -160,7 +160,8 @@ faceInfos.forEach((faceInfo) =&gt; {
 });
 gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-</code></pre><p>Note that for every face we fill it in with a 512x512 blank image by passing <code>null</code> to <code>texImage2D</code>. Cubemaps must have all 6 faces, all 6 faces must be the same size and be square. If they are not
+</code></pre>
+<p>Note that for every face we fill it in with a 512x512 blank image by passing <code>null</code> to <code>texImage2D</code>. Cubemaps must have all 6 faces, all 6 faces must be the same size and be square. If they are not
 the texture will not render. But, we&#39;re loading 6 images. We&#39;d
 like to start rendering immediately so we allocate all 6 faces then start loading the images. As each image arrives we upload it to the correct face then generate the mipmap again. This means we can start rendering immediately and as the images are download the faces of the cubemap will get filled in with the images one at a time and still be renderable even if all 6 have not arrived yet.</p>
 <p>But, just loading the images is not enough. Like <a href="webgl-3d-lighting-point.html">lighting</a> we need a little math here.</p>
@@ -213,7 +214,7 @@ like to start rendering immediately so we allocate all 6 faces then start loadin
 </p>
 <p>Now that we know how reflection works and that we can use it to look up values from the cubemap let&#39;s change the shaders to do that.</p>
 <p>First in the vertex shader we&#39;ll compute the world position and world oriented normal of the vertices and pass those to the fragment shader as varyings. This is similar to what we did in <a href="webgl-3d-lighting-spot.html">the article on spotlights</a>.</p>
-<pre><code>attribute vec4 a_position;
+<pre><code class="lang-glsl">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform mat4 u_projection;
@@ -233,9 +234,10 @@ void main() {
   // orient the normals and pass to the fragment shader
   v_worldNormal = mat3(u_world) * a_normal;
 }
-</code></pre><p>Then in the fragment shader we normalize the worldNormal since it&#39;s being interpolated across the surface between vertices. We pass in the world position of the camera and by subtracting that from the world position of the surface we get the eyeToSurfaceDir.</p>
+</code></pre>
+<p>Then in the fragment shader we normalize the worldNormal since it&#39;s being interpolated across the surface between vertices. We pass in the world position of the camera and by subtracting that from the world position of the surface we get the eyeToSurfaceDir.</p>
 <p>And finally we use <code>reflect</code> which is a built in GLSL function that implements the formula we went over above. We use the result to get a color from the cubemap.</p>
-<pre><code>precision highp float;
+<pre><code class="lang-glsl">precision highp float;
 
 // Passed in from the vertex shader.
 varying vec3 v_worldPosition;
@@ -254,16 +256,18 @@ void main() {
 
   gl_FragColor = textureCube(u_texture, direction);
 }
-</code></pre><p>We also need real normals for this example. We need real normals so the faces of the cube appear flat. In the previous example just to see the cubemap work we repurposed the cube&#39;s positions but in this case we need actual normals for a cube like we covered in <a href="webgl-3d-lighting-directional.html">the article on lighting</a></p>
+</code></pre>
+<p>We also need real normals for this example. We need real normals so the faces of the cube appear flat. In the previous example just to see the cubemap work we repurposed the cube&#39;s positions but in this case we need actual normals for a cube like we covered in <a href="webgl-3d-lighting-directional.html">the article on lighting</a></p>
 <p>At init time</p>
-<pre><code>// Create a buffer to put normals in
+<pre><code class="lang-js">// Create a buffer to put normals in
 var normalBuffer = gl.createBuffer();
 // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = normalBuffer)
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 // Put normals data into buffer
 setNormals(gl);
-</code></pre><p>and at render time </p>
-<pre><code>// Bind the normal buffer.
+</code></pre>
+<p>and at render time </p>
+<pre><code class="lang-js">// Bind the normal buffer.
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 
 // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
@@ -274,7 +278,8 @@ var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to
 var offset = 0;        // start at the beginning of the buffer
 gl.vertexAttribPointer(
     normalLocation, size, type, normalize, stride, offset)
-</code></pre><p>And of course we need to look up the uniform locations at init time</p>
+</code></pre>
+<p>And of course we need to look up the uniform locations at init time</p>
 <pre><code>var projectionLocation = gl.getUniformLocation(program, &quot;u_projection&quot;);
 var viewLocation = gl.getUniformLocation(program, &quot;u_view&quot;);
 var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
@@ -416,6 +421,7 @@ gl.uniform1i(textureLocation, 0);
     <li><a href="/webgl/lessons/webgl-and-alpha.html">WebGL and Alpha</a></li>
     <li><a href="/webgl/lessons/webgl-2d-vs-3d-library.html">WebGL - 2D vs 3D libraries</a></li>
     <li><a href="/webgl/lessons/webgl-anti-patterns.html">WebGL - Anti-Patterns</a></li>
+    <li><a href="/webgl/lessons/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
   </ul>
 </ul>
 <ul>

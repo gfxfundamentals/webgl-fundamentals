@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/webgl-2d-rotation.md. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/webgl-matrix-vs-math.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -36,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 2D Rotation" />
+<meta property="og:title" content="WebGL Matrices vs Math Matrices" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to rotate in 2D" />
-<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/webgl-2d-rotation.html" />
+<meta property="og:description" content="The difference between WebGL conventions and Math conventions." />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/webgl-matrix-vs-math.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 2D Rotation" />
-<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/webgl-2d-rotation.html" />
-<meta name="twitter:description" content="How to rotate in 2D" />
+<meta name="twitter:title" content="WebGL Matrices vs Math Matrices" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/webgl-matrix-vs-math.html" />
+<meta name="twitter:description" content="The difference between WebGL conventions and Math conventions." />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 2D Rotation</title>
+<title>WebGL Matrices vs Math Matrices</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
@@ -60,14 +60,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <div class="webgl_navbar">
   <div>
     <select class="language">
-    <option value="/webgl/lessons/webgl-2d-rotation.html" selected>English</a>
-    <option value="/webgl/lessons/fr/webgl-2d-rotation.html" >Français</a>
-    <option value="/webgl/lessons/ja/webgl-2d-rotation.html" >日本語</a>
-    <option value="/webgl/lessons/ko/webgl-2d-rotation.html" >한국어</a>
-    <option value="/webgl/lessons/pl/webgl-2d-rotation.html" >Polski</a>
-    <option value="/webgl/lessons/pt-br/webgl-2d-rotation.html" >Portuguese</a>
-    <option value="/webgl/lessons/ru/webgl-2d-rotation.html" >Русский</a>
-    <option value="/webgl/lessons/zh_cn/webgl-2d-rotation.html" >简体中文</a>
+    <option value="/webgl/lessons/webgl-matrix-vs-math.html" selected>English</a>
+    <option value="/webgl/lessons/fr/webgl-matrix-vs-math.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-matrix-vs-math.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-matrix-vs-math.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-matrix-vs-math.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-matrix-vs-math.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-matrix-vs-math.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html" >简体中文</a>
 </select>
 
 
@@ -81,174 +81,189 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 2D Rotation</h1>
+    <h1>WebGL Matrices vs Math Matrices</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>This post is a continuation of a series of posts about WebGL.  The first
-<a href="webgl-fundamentals.html">started with fundamentals</a> and the previous was
-<a href="webgl-2d-translation.html">about translating geometry</a>.</p>
-<p>I&#39;m going to admit right up front I have no idea if how I explain this
-will make sense but what the heck, might as well try.</p>
-<p>First I want to introduce you to what&#39;s called a &quot;unit circle&quot;.  If you
-remember your junior high school math (don&#39;t go to sleep on me!) a circle
-has a radius.  The radius of a circle is the distance from the center of
-the circle to the edge.  A unit circle is a circle with a radius of 1.0.</p>
-<p>Here&#39;s a unit circle.</p>
-<p><div class="webgl_diagram_container">
-  <iframe class="webgl_example " style="width: 300px; height: 300px;" src="/webgl/lessons/../unit-circle.html"></iframe>
-</div>
+      <p>This is article is an aside from the the various articles that talk about
+matrices in particular <a href="webgl-2d-matrices.html">the article that introduces matrices</a> but also
+<a href="webgl-3d-orthographic.html">the article that introduces 3D</a>, <a href="webgl-3d-perspective.html">the article on perspective projection</a>,
+and <a href="webgl-3d-camera.html">the article on cameras</a>.</p>
+<p>In programming generally a row goes from left to right, a column goes up and down.</p>
+<blockquote>
+<h2 id="col-umn">col·umn</h2>
+<p>/ˈkäləm/</p>
+<p><em>noun</em></p>
+<ol>
+<li><p>an upright pillar, typically cylindrical and made of stone or
+concrete, supporting an entablature, arch, or other structure or standing alone as a monument.</p>
+<p><em>synonyms</em>:    pillar, post, pole, upright, vertical, ...</p>
+</li>
+<li><p>a vertical division of a page or text.</p>
+</li>
+</ol>
+<h2 id="row">row</h2>
+<p>/rō/</p>
+<p><em>noun</em></p>
+<ul>
+<li>a horizontal line of entries in a table.</li>
+</ul>
+</blockquote>
+<p>We can see examples in our software. For example my text editors
+shows Lines and columns, lines being another word for row in this case since column is already taken</p>
+<div class="webgl_center"><img src="resources/editor-lines-and-columns.gif" class="gman-border-bshadow" style="width: 372px;"></div>
 
-</p>
-<p>Notice as you drag the blue handle around the circle the X and Y positions
-change.  Those represent the position of that point on the circle.  At the
-top Y is 1 and X is 0.  On the right X is 1 and Y is 0.</p>
-<p>If you remember from basic 3rd grade math if you multiply something by 1
-it stays the same.  So 123 * 1 = 123.  Pretty basic, right?  Well, a unit
-circle, a circle with a radius of 1.0 is also a form of 1.  It&#39;s a
-rotating 1.  So you can multiply something by this unit circle and in a
-way it&#39;s kind of like multiplying by 1 except magic happens and things
-rotate.</p>
-<p>We&#39;re going to take that X and Y value from any point on the unit circle
-and we&#39;ll multiply our geometry by them from <a href="webgl-2d-translation.html">our previous
-sample</a>.</p>
-<p>Here are the updates to our shader.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
-attribute vec2 a_position;
+<p>Notice in the bottom left area the status bar shows the line and column.</p>
+<p>In spreadsheet software we see rows go across</p>
+<div class="webgl_center"><img src="resources/spreadsheet-row.png" style="width: 808px;"></div>
 
-uniform vec2 u_resolution;
-uniform vec2 u_translation;
-+uniform vec2 u_rotation;
+<p>And columns go down.</p>
+<div class="webgl_center"><img src="resources/spreadsheet-column.png" style="width: 808px;"></div>
 
-void main() {
-+  // Rotate the position
-+  vec2 rotatedPosition = vec2(
-+     a_position.x * u_rotation.y + a_position.y * u_rotation.x,
-+     a_position.y * u_rotation.y - a_position.x * u_rotation.x);
+<p>So, when we make a 3x3 of 4x4 matrix in JavaScript for WebGL we make them like this</p>
+<pre><code class="lang-js">const m3x3 = [
+  0, 1, 2,  // row 0
+  3, 4, 5,  // row 1
+  6, 7, 8,  // row 2
+];
 
-  // Add in the translation.
-*  vec2 position = rotatedPosition + u_translation;
-</code></pre><p>And we update the JavaScript so that we can pass those 2 values in.</p>
-<pre><code>  ...
+const m4x4 = [
+   0,  1,  2,  3,  // row 0 
+   4,  5,  6,  7,  // row 1
+   8,  9, 10, 11,  // row 2
+  12, 13, 14, 15,  // row 3
+];
+</code></pre>
+<p>Clearly following the conventions above the first row of <code>m3x3</code> is <code>0, 1, 2</code> and the last row of <code>m4x4</code> is <code>12, 13, 14, 15</code></p>
+<p>As we see in <a href="webgl-2d-matrices.html">the first article on matrices</a> to make a fairly standard WebGL 3x3 2D translation matrix the translation values <code>ty</code> and <code>ty</code> go in locations 6 and 7</p>
+<pre><code class="lang-js">const some3x3TranslationMatrix = [
+   1,  0,  0,
+   0,  1,  0,
+  tx, ty,  1,
+];
+</code></pre>
+<p>or for a 4x4 matrix which is introduced in <a href="webgl-3d-orthographic.html">the first article on 3D</a> the translation goes in locations 12, 13, 14 as in</p>
+<pre><code class="lang-js">const some4x4TranslationMatrix = [
+   1,  0,  0,  0,
+   0,  1,  0,  0,
+   0,  0,  1,  0,
+  tx, ty, tz,  1,
+];
+</code></pre>
+<p>But, there&#39;s an issue. Math conventions for matrix math generally do things in columns. A mathematician would write out a 3x3 translation matrix like this</p>
+<div class="webgl_center"><img src="resources/3x3-math-translation-matrix.svg" style="width: 120px;"></div>
 
-+  var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
+<p>and a 4x4 translation matrix like this</p>
+<div class="webgl_center"><img src="resources/4x4-math-translation-matrix.svg" style="width: 150px;"></div>
 
-  ...
-
-+  var rotation = [0, 1];
-
-  ...
-
-  // Draw the scene.
-  function drawScene() {
-
-    ...
-
-    // Set the translation.
-    gl.uniform2fv(translationLocation, translation);
-
-+    // Set the rotation.
-+    gl.uniform2fv(rotationLocation, rotation);
-
-    // Draw the geometry.
-    var primitiveType = gl.TRIANGLES;
-    var offset = 0;
-    var count = 18;  // 6 triangles in the &#39;F&#39;, 3 points per triangle
-    gl.drawArrays(primitiveType, offset, count);
-  }
-</code></pre><p>And here&#39;s the result.  Drag the handle on the circle to rotate or the
-sliders to translate.</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-rotation.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-rotation.html" target="_blank">click here to open in a separate window</a>
-</div>
-
-</p>
-<p>Why does it work? Well, look at the math.</p>
-<pre><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
-rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
-</code></pre><p>Let&#39;s say you have a rectangle and you want to rotate it.  Before you
-start rotating it the top right corner is at 3.0, 9.0.  Let&#39;s pick a point
-on the unit circle 30 degrees clockwise from 12 o&#39;clock.</p>
-<p><img src="../resources/rotate-30.png" class="webgl_center" /></p>
-<p>The position on the circle there is 0.50 and 0.87</p>
-<pre class="webgl_center">
-   3.0 * 0.87 + 9.0 * 0.50 = 7.1
-   9.0 * 0.87 - 3.0 * 0.50 = 6.3
-</pre>
-
-<p>That&#39;s exactly where we need it to be</p>
-<p><img src="../resources/rotation-drawing.svg" width="500" class="webgl_center"/></p>
-<p>The same for 60 degrees clockwise</p>
-<p><img src="../resources/rotate-60.png" class="webgl_center" /></p>
-<p>The position on the circle there is 0.87 and 0.50</p>
-<pre class="webgl_center">
-   3.0 * 0.50 + 9.0 * 0.87 = 9.3
-   9.0 * 0.50 - 3.0 * 0.87 = 1.9
-</pre>
-
-<p>You can see that as we rotate that point clockwise to the right the X
-value gets bigger and the Y gets smaller.  If we kept going past 90
-degrees X would start getting smaller again and Y would start getting
-bigger.  That pattern gives us rotation.</p>
-<p>There&#39;s another name for the points on a unit circle.  They&#39;re called the
-sine and cosine.  So for any given angle we can just look up the sine and
-cosine like this.</p>
-<pre><code>function printSineAndCosineForAnAngle(angleInDegrees) {
-  var angleInRadians = angleInDegrees * Math.PI / 180;
-  var s = Math.sin(angleInRadians);
-  var c = Math.cos(angleInRadians);
-  console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
+<p>That leaves us with a problem. If we want our matrices to look like
+math matrices we might decide to write a 4x4 matrix like this</p>
+<pre><code class="lang-js">const some4x4TranslationMatrix = [
+   1,  0,  0,  tx,
+   0,  1,  0,  ty,
+   0,  0,  1,  tx,
+   0,  0,  0,  1,
+];
+</code></pre>
+<p>Unfortunately doing it like that has issues. As mentioned in <a href="webgl-3d-camera.html">the article on cameras</a> each of the columns of a 4x4 matrix often has a meaning</p>
+<p>The first, second, and third columns are often considered the x, y, and z axis respectively and the last column is the position or translation.</p>
+<p>The problem is in code it would be no fun to try to get those parts
+separately. Want the Z axis? You&#39;d have to do this</p>
+<pre><code class="lang-js">const zAxis = [
+  some4x4Matrix[2],
+  some4x4Matrix[6],
+  some4x4Matrix[10],
+];
+</code></pre>
+<p>Ugh!</p>
+<p>So, the way WebGL, and OpenGL ES on which WebGL is based, gets around this is it calls rows &quot;columns&quot;.</p>
+<pre><code class="lang-js">const some4x4TranslationMatrix = [
+   1,  0,  0,  0,   // this is column 0
+   0,  1,  0,  0,   // this is column 1
+   0,  0,  1,  0,   // this is column 2
+  tx, ty, tz,  1,   // this is column 3
+];
+</code></pre>
+<p>Now it matches the math definition. Comparing to the example above, if we want the Z axis all we need to do is</p>
+<pre><code class="lang-js">const zAxis = some4x4Matrix.slice(9, 11);
+</code></pre>
+<p>For those familiar with C++, OpenGL itself requires the 16 values of a 4x4 matrix to be consecutive in memory so in C++ we could create a <code>Vec4</code> struct or class</p>
+<pre><code class="lang-c++">// C++
+struct Vec4 {
+  float x;
+  float y;
+  float z;
+  float w;
+};
+</code></pre>
+<p>and we could create a matrix4x4 from 4 of them</p>
+<pre><code class="lang-c++">// C++
+struct Mat4x4 {
+  Vec4 x_axis;
+  Vec4 y_axis;
+  Vec4 z_axis;
+  Vec4 translation;
 }
-</code></pre><p>If you copy and paste the code into your JavaScript console and type
-<code>printSineAndCosignForAngle(30)</code> you see it prints <code>s = 0.49 c = 0.87</code>
-(note: I rounded off the numbers.)</p>
-<p>If you put it all together you can rotate your geometry to any angle you
-desire.  Just set the rotation to the sine and cosine of the angle you
-want to rotate to.</p>
-<pre><code>  ...
-  var angleInRadians = angleInDegrees * Math.PI / 180;
-  rotation[0] = Math.sin(angleInRadians);
-  rotation[1] = Math.cos(angleInRadians);
-</code></pre><p>Here&#39;s a version that just has an angle setting.  Drag the sliders to
-translate or rotate.</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-rotation-angle.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-rotation-angle.html" target="_blank">click here to open in a separate window</a>
-</div>
-
-</p>
-<p>I hope that made some sense. Please keep reading as this is not
-the most common way to do rotation but we&#39;ll get there in 2 more
-articles. <a href="webgl-2d-scale.html">Next up a simpler one. Scale</a>.</p>
-<div class="webgl_bottombar"><h3>What are radians?</h3>
-<p>
-Radians are a unit of measurement used with circles, rotation and angles. Just like we can measure distance in inches, yards, meters, etc we can measure angles in degrees or radians.
-</p>
-<p>
-You're probably aware that math with metric measurements is easier than math with imperial measurements. To go from inches to feet we divide by 12. To go from inches to yards we divide by 36. I don't know about you but I can't divide by 36 in my head. With metric it's much easier. To go from millimeters to centimeters we multiply by 10. To go from millimeters to meters we multiply by 1000. I <strong>can</strong> multiply by 1000 in my head.
-</p>
-<p>
-Radians vs degrees are similar. Degrees make the math hard. Radians make the math easy. There are 360 degrees in a circle but there are only 2π radians. So a full turn is 2π radians. A half turn is 1π radian. A 1/4 turn, ie 90 degress is 1/2π radians. So if you want to rotate something 90 degrees just use <code>Math.PI * 0.5</code>. If you want to rotate it 45 degrees use <code>Math.PI * 0.25</code> etc.
-</p>
-<p>
-Nearly all math involving angles, circles or rotation works very simply if you start thinking in radians. So give it try. Use radians, not degrees except in UI displays.
-</p>
-</div>
-
-
+</code></pre>
+<p>or just</p>
+<pre><code class="lang-c++">// C++
+struct Mat4x4 {
+  Vec4 column[4];
+}
+</code></pre>
+<p>And it would just appear to work. </p>
+<p>Unfortunately it looks nothing like the math version when you actually declare one statically in code.</p>
+<pre><code class="lang-C++">// C++
+Mat4x4 someTranslationMatrix = {
+  { 1, 0, 0, 0, },
+  { 0, 1, 0, 0, },
+  { 0, 0, 1, 0, },
+  { tx, ty, tz, 1},
+};
+</code></pre>
+<p>Or back to JavaScript where we don&#39;t generally have something like C++ structs.</p>
+<pre><code class="lang-js">const someTranslationMatrix = [
+   1,  0,  0,  0,
+   0,  1,  0,  0,
+   0,  0,  1,  0,
+  tx, ty, tz,  1,
+];
+</code></pre>
+<p>So, with this convention of calling rows &quot;columns&quot; some things are simpler but others can me more confusing if you&#39;re a math person.</p>
+<p>I bring all of this up because these article are written from the POV of a programmer, not a math person. That means like very other single dimensional array that is treated as a 2 dimensional array, rows go across.</p>
+<pre><code class="lang-js">const someTranslationMatrix = [
+   1,  0,  0,  0,  // row 0
+   0,  1,  0,  0,  // row 1
+   0,  0,  1,  0,  // row 2
+  tx, ty, tz,  1,  // row 3
+];
+</code></pre>
+<p>just like</p>
+<pre><code class="lang-js">const dataFor4x4OneChannelImage = [
+  255, 255, 255, 255,  // row 0
+  255,   0,   0, 255,  // row 1
+  255,   0,   0, 255,  // row 2
+  255, 255, 255, 255,  // row 3
+]
+</code></pre>
+<p>and so these articles will refer to them as rows.</p>
+<p>If you&#39;re a math person you might find it confusing. I&#39;m sorry I
+don&#39;t have a solution. I could call what is clearly row 3 a column
+but that would also be confusing since it matches no other programming.</p>
+<p>In any case, hopefully this helps clarify why none of the explanations look like something from a math book. Instead they look like code and use the conventions of code. I hope this helps explain what&#39;s going on
+and it&#39;s not too confusing for those who are used to math conventions.</p>
 
     </div>
     <div class="lesson-sidebar">
         <select class="language">
-    <option value="/webgl/lessons/webgl-2d-rotation.html" selected>English</a>
-    <option value="/webgl/lessons/fr/webgl-2d-rotation.html" >Français</a>
-    <option value="/webgl/lessons/ja/webgl-2d-rotation.html" >日本語</a>
-    <option value="/webgl/lessons/ko/webgl-2d-rotation.html" >한국어</a>
-    <option value="/webgl/lessons/pl/webgl-2d-rotation.html" >Polski</a>
-    <option value="/webgl/lessons/pt-br/webgl-2d-rotation.html" >Portuguese</a>
-    <option value="/webgl/lessons/ru/webgl-2d-rotation.html" >Русский</a>
-    <option value="/webgl/lessons/zh_cn/webgl-2d-rotation.html" >简体中文</a>
+    <option value="/webgl/lessons/webgl-matrix-vs-math.html" selected>English</a>
+    <option value="/webgl/lessons/fr/webgl-matrix-vs-math.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-matrix-vs-math.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-matrix-vs-math.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-matrix-vs-math.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-matrix-vs-math.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-matrix-vs-math.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html" >简体中文</a>
 </select>
 
 
@@ -357,8 +372,8 @@ Nearly all math involving angles, circles or rotation works very simply if you s
         <script type="text/javascript">
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 2D Rotation';
-            var disqus_title = 'WebGL 2D Rotation';
+            var disqus_identifier = 'WebGL Matrices vs Math Matrices';
+            var disqus_title = 'WebGL Matrices vs Math Matrices';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {
