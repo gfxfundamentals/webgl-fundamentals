@@ -104,7 +104,7 @@ Unfortunately doing it like that has issues. As mentioned in [the article on cam
 
 The first, second, and third columns are often considered the x, y, and z axis respectively and the last column is the position or translation.
 
-The problem is in code it would be no fun to try to get those parts
+One issue is in code it would be no fun to try to get those parts
 separately. Want the Z axis? You'd have to do this
 
 ```js
@@ -174,10 +174,10 @@ Unfortunately it looks nothing like the math version when you actually declare o
 ```C++
 // C++
 Mat4x4 someTranslationMatrix = {
-  { 1, 0, 0, 0, },
-  { 0, 1, 0, 0, },
-  { 0, 0, 1, 0, },
-  { tx, ty, tz, 1},
+  {  1,  0,  0,  0, },
+  {  0,  1,  0,  0, },
+  {  0,  0,  1,  0, },
+  { tx, ty, tz,  1, },
 };
 ```
 
