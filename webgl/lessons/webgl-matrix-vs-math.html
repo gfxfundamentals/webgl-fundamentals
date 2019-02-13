@@ -167,7 +167,7 @@ math matrices we might decide to write a 4x4 matrix like this</p>
 </code></pre>
 <p>Unfortunately doing it like that has issues. As mentioned in <a href="webgl-3d-camera.html">the article on cameras</a> each of the columns of a 4x4 matrix often has a meaning</p>
 <p>The first, second, and third columns are often considered the x, y, and z axis respectively and the last column is the position or translation.</p>
-<p>The problem is in code it would be no fun to try to get those parts
+<p>One issue is in code it would be no fun to try to get those parts
 separately. Want the Z axis? You&#39;d have to do this</p>
 <pre><code class="lang-js">const zAxis = [
   some4x4Matrix[2],
@@ -215,10 +215,10 @@ struct Mat4x4 {
 <p>Unfortunately it looks nothing like the math version when you actually declare one statically in code.</p>
 <pre><code class="lang-C++">// C++
 Mat4x4 someTranslationMatrix = {
-  { 1, 0, 0, 0, },
-  { 0, 1, 0, 0, },
-  { 0, 0, 1, 0, },
-  { tx, ty, tz, 1},
+  {  1,  0,  0,  0, },
+  {  0,  1,  0,  0, },
+  {  0,  0,  1,  0, },
+  { tx, ty, tz,  1, },
 };
 </code></pre>
 <p>Or back to JavaScript where we don&#39;t generally have something like C++ structs.</p>
