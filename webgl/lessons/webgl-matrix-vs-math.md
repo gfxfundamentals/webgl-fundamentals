@@ -194,7 +194,7 @@ const someTranslationMatrix = [
 
 So, with this convention of calling rows "columns" some things are simpler but others can me more confusing if you're a math person.
 
-I bring all of this up because these article are written from the POV of a programmer, not a math person. That means like very other single dimensional array that is treated as a 2 dimensional array, rows go across.
+I bring all of this up because these article are written from the POV of a programmer, not a math person. That means like every other single dimensional array that is treated as a 2 dimensional array, rows go across.
 
 ```js
 const someTranslationMatrix = [
@@ -208,11 +208,16 @@ const someTranslationMatrix = [
 just like
 
 ```js
-const dataFor4x4OneChannelImage = [
-  255, 255, 255, 255,  // row 0
-  255,   0,   0, 255,  // row 1
-  255,   0,   0, 255,  // row 2
-  255, 255, 255, 255,  // row 3
+// happy face image
+const dataFor7x8OneChannelImage = [
+    0, 255, 255, 255, 255, 255,   0,  // row 0
+  255,   0,   0,   0,   0,   0, 255,  // row 1
+  255,   0, 255,   0, 255,   0, 255,  // row 2
+  255,   0,   0,   0,   0,   0, 255,  // row 3
+  255,   0, 255,   0, 255,   0, 255,  // row 4
+  255,   0, 255, 255, 255,   0, 255,  // row 5
+  255,   0,   0,   0,   0,   0, 255,  // row 6
+    0, 255, 255, 255, 255, 255,   0,  // row 7
 ]
 ```
 
