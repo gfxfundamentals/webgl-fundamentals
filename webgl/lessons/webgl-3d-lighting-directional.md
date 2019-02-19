@@ -39,8 +39,9 @@ are facing.
 
 ## Introducing Normals
 
-I have no idea why they are called *normals* but at least in 3D graphics a
-normal is the word for a unit vector that describes the direction a
+Normals are called that from the Latin word *norma*, a carpenter's square.
+Just as a carpenter's square has a right angle, normals are at a right angle to a line or surface.
+In 3D graphics a normal is the word for a unit vector that describes the direction a
 surface is facing.
 
 Here are some normals for a cube and a sphere.
