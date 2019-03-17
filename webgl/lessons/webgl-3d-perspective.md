@@ -346,14 +346,13 @@ back.  Set `zNear` to 23 and you'll see the front of the spinning cubes
 get clipped.  Set `zFar` to 24 and you'll see the back of the cubes get
 clipped.
 
-There's just one problem left.  This matrix assumes there's a viewer at
-0,0,0 and it assumes it's looking in the negative Z direction and that
-positive Y is up.  Our matrices up to this point have done things in a
-different way.  To make this work we need to put our objects in front of
-the view.
+There's just one problem left.  This matrix assumes there's a viewer at 0,0,0
+and it assumes it's looking in the negative Z direction and that positive Y is
+up.  Our matrices up to this point have done things in a different way.
 
-We could do that by moving our F.  We were drawing at (45, 150, 0).  Let's
-move it to (-150, 0, -360)
+To make it appear we need to move it inside the frustum.
+We can do that by moving our F. We were drawing at (45, 150, 0). Let's move it to (-150, 0, -360)
+and let's set the rotation to something that makes it appear right side up.
 
 Now, to use it we just need to replace our old call to `m4.projection`
 with a call to `m4.perspective`
@@ -392,18 +391,38 @@ away?
 The reason is up until this last sample our <code>m4.projection</code> function
 has made a projection from pixels to clip space.  That means the area we
 were displaying represented 400x300 pixels.  Using 'pixels' really doesn't
-make sense in 3D.  The new projection makes a frustum that makes it so the
-area represented at <code>zNear</code> is 2 units tall and 2 * aspect units wide.
-Since our 'F' is 150 units big and the view can only see 2 units when it's
-at zNear we need to move it pretty far away from the origin to see it all.
+make sense in 3D. 
 
 </p>
 <p>
 
-Similarly we moved 'X' from 45 to -150.  Again, the view used to represent
-0 to 400 units across.  Now it represents -1 to +1 units across.
+In other words if we tried to draw with the F at 0,0,0 and not rotated we'd get this
 
 </p>
+
+<div class="webgl_center"><img src="resources/f-big-and-wrong-side.svg" style="width: 500px;"></div>
+
+<p>
+The F has its top left front corner at the origin. The projection
+looks toward negative Z but our F is built in positive Z. The projection has
+positive Y up but our F is built with positive Z down.
+</p>
+
+<p>
+Our new projection only sees what's in the blue frustum. The new projection
+makes a frustum such that the area represented at <code>-zNear</code> is
+2 units tall, one unit above the center and one unit below. The frustum is 2 *
+aspect units wide. Since our F is 150 units big and the view can only see 2
+units when something is at <code>-zNear</code> we need to move it pretty far away from the origin to
+see all of it.
+</p>
+
+<p>
+Moving it -360 units in Z moves in inside the frustum. We also rotated it to be right side up.
+</p>
+
+<div class="webgl_center"><img src="resources/f-right-side.svg" style="width: 500px;"><div>not to scale</div></div>
+
 </div>
 
 
