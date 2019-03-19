@@ -409,12 +409,13 @@ positive Y up but our F is built with positive Z down.
 </p>
 
 <p>
-Our new projection only sees what's in the blue frustum. With -zNear = 1 with a field of view of 60 degrees
-then at Z = -1 it's only 1.54 units tall and 1.54 * aspect units wide. At Z = -2000 (-zFar) its 2309 units tall.
+Our new projection only sees what's in the blue frustum. With -zNear = 1 and with a field of view of 60 degrees
+then at Z = -1 the frustum is only 1.54 units tall and 1.54 * aspect units wide. At Z = -2000 (-zFar) its 2309 units tall.
 Since our F is 150 units big and the view can only see 1.54
 units when something is at <code>-zNear</code> we need to move it pretty far away from the origin to
 see all of it.
 </p>
+
 
 <p>
 Moving it -360 units in Z moves in inside the frustum. We also rotated it to be right side up.
