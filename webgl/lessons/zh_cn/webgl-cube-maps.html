@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-cube-maps.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,23 +36,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Cubemaps" />
+<meta property="og:title" content="WebGL 立方体贴图" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to use cubemaps in WebGL" />
+<meta property="og:description" content="如何在WebGL中使用立方体贴图" />
 <meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cube-maps.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Cubemaps" />
+<meta name="twitter:title" content="WebGL 立方体贴图" />
 <meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cube-maps.html" />
-<meta name="twitter:description" content="How to use cubemaps in WebGL" />
+<meta name="twitter:description" content="如何在WebGL中使用立方体贴图" />
 <meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL Cubemaps</title>
+<title>WebGL 立方体贴图</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
@@ -79,12 +81,173 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Cubemaps</h1>
+    <h1>WebGL 立方体贴图</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-cube-maps.html">英文原版地址</a></p>
+      <p>这篇文章是WebGL系列文章的一部分。
+从<a href="webgl-fundamentals.html">基础概念</a>开始。
+上接<a href="webgl-3d-textures.html">三维纹理</a>。
+这篇文章也用到了<a href="webgl-3d-lighting-directional.html">WebGL 三维方向光源</a>中介绍的概念。
+如果你尚未阅读这些文章，则可能需要先阅读这些文章。</p>
+<p>在<a href="webgl-3d-textures.html">三维纹理</a> 中我们介绍了如果使用纹理，
+怎样通过横纵从0到1的纹理坐标引用, 以及如何使用mip筛选。</p>
+<p>还有一种纹理是<em>cubemap</em>。它包含了6个纹理代表立方体的6个面。 不像常规的纹理坐标有2个纬度, 立方体纹理使用法向量, 换句话说三维方向。
+根据法向量的朝向选取立方体6个面中的一个，这个面的像素用来采样生成颜色。</p>
+<p>这六个面通过他们相对于立方体中心的方向被引用。
+它们是</p>
+<pre><code>gl.TEXTURE_CUBE_MAP_POSITIVE_X
+gl.TEXTURE_CUBE_MAP_NEGATIVE_X
+gl.TEXTURE_CUBE_MAP_POSITIVE_Y
+gl.TEXTURE_CUBE_MAP_NEGATIVE_Y
+gl.TEXTURE_CUBE_MAP_POSITIVE_Z
+gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
+</code></pre><p>我们来做一个简单的例子，我们会使用二维canvas来生成6个面的图片</p>
+<p>这是填充画布纯色中心文字的代码</p>
+<pre><code>function generateFace(ctx, faceColor, textColor, text) {
+  const {width, height} = ctx.canvas;
+  ctx.fillStyle = faceColor;
+  ctx.fillRect(0, 0, width, height);
+  ctx.font = `${width * 0.7}px sans-serif`;
+  ctx.textAlign = &#39;center&#39;;
+  ctx.textBaseline = &#39;middle&#39;;
+  ctx.fillStyle = textColor;
+  ctx.fillText(text, width / 2, height / 2);
+}
+</code></pre><p>这是调用它生成6个图片的代码</p>
+<pre><code>// 获取二维上下文
+/** @type {Canvas2DRenderingContext} */
+const ctx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
+
+ctx.canvas.width = 128;
+ctx.canvas.height = 128;
+
+const faceInfos = [
+  { faceColor: &#39;#F00&#39;, textColor: &#39;#0FF&#39;, text: &#39;+X&#39; },
+  { faceColor: &#39;#FF0&#39;, textColor: &#39;#00F&#39;, text: &#39;-X&#39; },
+  { faceColor: &#39;#0F0&#39;, textColor: &#39;#F0F&#39;, text: &#39;+Y&#39; },
+  { faceColor: &#39;#0FF&#39;, textColor: &#39;#F00&#39;, text: &#39;-Y&#39; },
+  { faceColor: &#39;#00F&#39;, textColor: &#39;#FF0&#39;, text: &#39;+Z&#39; },
+  { faceColor: &#39;#F0F&#39;, textColor: &#39;#0F0&#39;, text: &#39;-Z&#39; },
+];
+faceInfos.forEach((faceInfo) =&gt; {
+  const {faceColor, textColor, text} = faceInfo;
+  generateFace(ctx, faceColor, textColor, text);
+
+  // 展示结果
+  ctx.canvas.toBlob((blob) =&gt; {
+    const img = new Image();
+    img.src = URL.createObjectURL(blob);
+    document.body.appendChild(img);
+  });
+});
+</code></pre><p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-cubemap-faces.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-cubemap-faces.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>现在我们将其应用在立方体上。 我们会使用 <a href="webgl-3d-textures.html">三维纹理</a>中使用纹理图集的代码。</p>
+<p>首先我们修改着色器来使用立方体纹理</p>
+<pre><code>attribute vec4 a_position;
+
+uniform mat4 u_matrix;
+
+varying vec3 v_normal;
+
+void main() {
+  // 将位置和矩阵相乘。
+  gl_Position = u_matrix * a_position;
+
+  // 传递法向量。因为位置是以几何中心为原点的
+  // 我们可以直接传递位置
+  v_normal = normalize(a_position.xyz);
+}
+</code></pre><p>我们从着色器中移除了纹理坐标增加了一个varing来传递法向量给片段着色器。
+由于位置坐标是完全以立方体中心为原点的，我们可以用它们来作为法向量。</p>
+<p>回忆<a href="webgl-3d-lighting-directional.html">WebGL 三维方向光源</a>这篇文章，法向量通常用来描述顶点所在面的方向。 由于我们使用单位化的位置来作为法向量，如果光照，我们会得到啊平滑的光照立方体。对于法线立方体我们需要为每个面的顶点设定不同的法向量。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cube-normals.html"></iframe>
+  <div class="webgl_center">standard cube normal vs this cube's normals</div>
+</div>
+
+</p>
+<p>我们已经不使用纹理坐标所以我们可以移除所有和设定纹理坐标相关的代码了。</p>
+<p>在片段着色器中我们需要用<code>samplerCube</code> 代替 <code>sampler2D</code>  用 <code>textureCube</code> 代替<code>texture2D</code>。<code>textureCube</code> 需要vec3 方向值
+所以我们传递单位化的法向量。 因为法向量是varing会被插值，我们需要单位化它。</p>
+<pre><code>precision mediump float;
+
+// 从顶点着色器传入。
+varying vec3 v_normal;
+
+// 纹理。
+uniform samplerCube u_texture;
+
+void main() {
+   gl_FragColor = textureCube(u_texture, normalize(v_normal));
+}
+</code></pre><p>之后, 在JavaScript中我们需要设置纹理</p>
+<pre><code>// 生成纹理。
+var texture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+
+// 获取2维上下文。
+/** @type {Canvas2DRenderingContext} */
+const ctx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
+
+ctx.canvas.width = 128;
+ctx.canvas.height = 128;
+
+const faceInfos = [
+  { target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, faceColor: &#39;#F00&#39;, textColor: &#39;#0FF&#39;, text: &#39;+X&#39; },
+  { target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, faceColor: &#39;#FF0&#39;, textColor: &#39;#00F&#39;, text: &#39;-X&#39; },
+  { target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, faceColor: &#39;#0F0&#39;, textColor: &#39;#F0F&#39;, text: &#39;+Y&#39; },
+  { target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, faceColor: &#39;#0FF&#39;, textColor: &#39;#F00&#39;, text: &#39;-Y&#39; },
+  { target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, faceColor: &#39;#00F&#39;, textColor: &#39;#FF0&#39;, text: &#39;+Z&#39; },
+  { target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, faceColor: &#39;#F0F&#39;, textColor: &#39;#0F0&#39;, text: &#39;-Z&#39; },
+];
+faceInfos.forEach((faceInfo) =&gt; {
+  const {target, faceColor, textColor, text} = faceInfo;
+  generateFace(ctx, faceColor, textColor, text);
+
+  // 上传画布到立方体贴图的每个面。
+  const level = 0;
+  const internalFormat = gl.RGBA;
+  const format = gl.RGBA;
+  const type = gl.UNSIGNED_BYTE;
+  gl.texImage2D(target, level, internalFormat, format, type, ctx.canvas);
+});
+gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+</code></pre><p>需要注意的事情:</p>
+<ul>
+<li><p>我们使用 <code>gl.TEXTURE_CUBE_MAP</code> 代替 <code>gl.TEXTURE_2D</code>。</p>
+<p>这告诉WebGL生成一个立方体纹理而不是二维纹理。</p>
+</li>
+<li><p>用特殊的目标上传到纹理的每个面。</p>
+<p><code>gl.TEXTURE_CUBE_MAP_POSITIVE_X</code>,
+<code>gl.TEXTURE_CUBE_MAP_NEGATIVE_X</code>,
+<code>gl.TEXTURE_CUBE_MAP_POSITIVE_Y</code>,
+<code>gl.TEXTURE_CUBE_MAP_NEGATIVE_Y</code>,
+<code>gl.TEXTURE_CUBE_MAP_POSITIVE_Z</code>, and
+<code>gl.TEXTURE_CUBE_MAP_NEGATIVE_Z</code>.</p>
+</li>
+<li><p>每个面都是正方形。上面的例子是 128x128的。</p>
+<p>立方体纹理需要正方形纹理。
+和2维纹理一样如果在两个方向上不是2的幂大小我们就不能筛选他们使用mip。
+在这个例子中它们是2的幂(128) 所以我们生成mip设置筛选来使用它们。</p>
+</li>
+</ul>
+<p>证明</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-cubemap.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-cubemap.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>立方体纹理通常<strong>不是</strong>给立方体设置纹理的。 <em>正确</em>或者说标准的给立方体设置纹理的方法是使用之前<a href="webgl-3d-textures.html">三维纹理</a>中介绍的纹理图集的方法。</p>
+<p>我们已经学习了立方体纹理是什么那么立方体纹理被用来做什么呢？</p>
+<p>可能立方体纹理最常见的用法是用来做<a href="webgl-environment-maps.html"><em>环境贴图</em></a>。</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -100,7 +263,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>
+        <div id="toc">
+          <ul>
   <li>基础概念</li>
   <ul>
     <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
@@ -160,6 +324,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a>
       <li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a>
     </ul>
+    <li>三维</li>
+    <ul>
+      <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a>
+    </ul>
     <li>文字</li>
     <ul>
       <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a>
@@ -185,6 +353,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/greggman/webgl-fundamentals">GitHub</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 立方体贴图';
+            var disqus_title = 'WebGL 立方体贴图';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
