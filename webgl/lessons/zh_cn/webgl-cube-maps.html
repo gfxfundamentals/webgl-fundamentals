@@ -91,8 +91,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 这篇文章也用到了<a href="webgl-3d-lighting-directional.html">WebGL 三维方向光源</a>中介绍的概念。
 如果你尚未阅读这些文章，则可能需要先阅读这些文章。</p>
 <p>在<a href="webgl-3d-textures.html">三维纹理</a> 中我们介绍了如果使用纹理，
-怎样通过横纵从0到1的纹理坐标引用, 以及如何使用mip筛选。</p>
-<p>还有一种纹理是<em>cubemap</em>。它包含了6个纹理代表立方体的6个面。 不像常规的纹理坐标有2个纬度, 立方体纹理使用法向量, 换句话说三维方向。
+怎样通过横纵从0到1的纹理坐标引用，以及如何使用mip筛选。</p>
+<p>还有一种纹理是<em>cubemap</em>。它包含了6个纹理代表立方体的6个面。不像常规的纹理坐标有2个纬度，立方体纹理使用法向量，换句话说三维方向。
 根据法向量的朝向选取立方体6个面中的一个，这个面的像素用来采样生成颜色。</p>
 <p>这六个面通过他们相对于立方体中心的方向被引用。
 它们是</p>
@@ -165,7 +165,7 @@ void main() {
 }
 </code></pre><p>我们从着色器中移除了纹理坐标增加了一个varing来传递法向量给片段着色器。
 由于位置坐标是完全以立方体中心为原点的，我们可以用它们来作为法向量。</p>
-<p>回忆<a href="webgl-3d-lighting-directional.html">WebGL 三维方向光源</a>这篇文章，法向量通常用来描述顶点所在面的方向。 由于我们使用单位化的位置来作为法向量，如果光照，我们会得到啊平滑的光照立方体。对于法线立方体我们需要为每个面的顶点设定不同的法向量。</p>
+<p>回忆<a href="webgl-3d-lighting-directional.html">WebGL 三维方向光源</a>这篇文章，法向量通常用来描述顶点所在面的方向。 由于我们使用单位化的位置来作为法向量，如果光照，我们会得到平滑的光照立方体。对于法线立方体我们需要为每个面的顶点设定不同的法向量。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cube-normals.html"></iframe>
   <div class="webgl_center">standard cube normal vs this cube's normals</div>
@@ -219,7 +219,7 @@ faceInfos.forEach((faceInfo) =&gt; {
 });
 gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-</code></pre><p>需要注意的事情:</p>
+</code></pre><p>需要注意的事情：</p>
 <ul>
 <li><p>我们使用 <code>gl.TEXTURE_CUBE_MAP</code> 代替 <code>gl.TEXTURE_2D</code>。</p>
 <p>这告诉WebGL生成一个立方体纹理而不是二维纹理。</p>
@@ -229,12 +229,12 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 <code>gl.TEXTURE_CUBE_MAP_NEGATIVE_X</code>,
 <code>gl.TEXTURE_CUBE_MAP_POSITIVE_Y</code>,
 <code>gl.TEXTURE_CUBE_MAP_NEGATIVE_Y</code>,
-<code>gl.TEXTURE_CUBE_MAP_POSITIVE_Z</code>, and
+<code>gl.TEXTURE_CUBE_MAP_POSITIVE_Z</code>, 和
 <code>gl.TEXTURE_CUBE_MAP_NEGATIVE_Z</code>.</p>
 </li>
 <li><p>每个面都是正方形。上面的例子是 128x128的。</p>
 <p>立方体纹理需要正方形纹理。
-和2维纹理一样如果在两个方向上不是2的幂大小我们就不能筛选他们使用mip。
+和二维纹理一样如果在两个方向上不是2的幂大小我们就不能使用mip进行筛选。
 在这个例子中它们是2的幂(128) 所以我们生成mip设置筛选来使用它们。</p>
 </li>
 </ul>
@@ -326,7 +326,8 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
     </ul>
     <li>三维</li>
     <ul>
-      <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a>
+      <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+      <li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
     </ul>
     <li>文字</li>
     <ul>
