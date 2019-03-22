@@ -8,9 +8,9 @@ Description: 如何在WebGL中使用立方体贴图
 如果你尚未阅读这些文章，则可能需要先阅读这些文章。
 
 在[三维纹理](webgl-3d-textures.html) 中我们介绍了如果使用纹理，
-怎样通过横纵从0到1的纹理坐标引用, 以及如何使用mip筛选。
+怎样通过横纵从0到1的纹理坐标引用，以及如何使用mip筛选。
 
-还有一种纹理是*cubemap*。它包含了6个纹理代表立方体的6个面。 不像常规的纹理坐标有2个纬度, 立方体纹理使用法向量, 换句话说三维方向。
+还有一种纹理是*cubemap*。它包含了6个纹理代表立方体的6个面。不像常规的纹理坐标有2个纬度，立方体纹理使用法向量，换句话说三维方向。
 根据法向量的朝向选取立方体6个面中的一个，这个面的像素用来采样生成颜色。
 
 这六个面通过他们相对于立方体中心的方向被引用。
@@ -97,7 +97,7 @@ void main() {
 我们从着色器中移除了纹理坐标增加了一个varing来传递法向量给片段着色器。
 由于位置坐标是完全以立方体中心为原点的，我们可以用它们来作为法向量。
 
-回忆[WebGL 三维方向光源](webgl-3d-lighting-directional.html)这篇文章，法向量通常用来描述顶点所在面的方向。 由于我们使用单位化的位置来作为法向量，如果光照，我们会得到啊平滑的光照立方体。对于法线立方体我们需要为每个面的顶点设定不同的法向量。
+回忆[WebGL 三维方向光源](webgl-3d-lighting-directional.html)这篇文章，法向量通常用来描述顶点所在面的方向。 由于我们使用单位化的位置来作为法向量，如果光照，我们会得到平滑的光照立方体。对于法线立方体我们需要为每个面的顶点设定不同的法向量。
 
 {{{diagram url="resources/cube-normals.html" caption="standard cube normal vs this cube's normals" }}}
 
@@ -157,7 +157,7 @@ gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 ```
 
-需要注意的事情:
+需要注意的事情：
 
 * 我们使用 `gl.TEXTURE_CUBE_MAP` 代替 `gl.TEXTURE_2D`。
 
@@ -169,13 +169,13 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
   `gl.TEXTURE_CUBE_MAP_NEGATIVE_X`,
   `gl.TEXTURE_CUBE_MAP_POSITIVE_Y`,
   `gl.TEXTURE_CUBE_MAP_NEGATIVE_Y`,
-  `gl.TEXTURE_CUBE_MAP_POSITIVE_Z`, and
+  `gl.TEXTURE_CUBE_MAP_POSITIVE_Z`, 和
   `gl.TEXTURE_CUBE_MAP_NEGATIVE_Z`.
 
 * 每个面都是正方形。上面的例子是 128x128的。
 
   立方体纹理需要正方形纹理。
-  和2维纹理一样如果在两个方向上不是2的幂大小我们就不能筛选他们使用mip。
+  和二维纹理一样如果在两个方向上不是2的幂大小我们就不能使用mip进行筛选。
   在这个例子中它们是2的幂(128) 所以我们生成mip设置筛选来使用它们。
 
 证明
