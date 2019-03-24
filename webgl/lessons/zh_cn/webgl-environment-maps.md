@@ -1,11 +1,7 @@
 Title: WebGL 环境贴图 (反射)
 Description: 如何实现环境贴图。
 
-这篇文章是WebGL系列文章的一部分
-从[基础概念](webgl-fundamentals.html)开始。
-上接[立方体纹理](webgl-cube-maps.html)。
-这篇文章也用到了[WebGL 三维方向光源](webgl-3d-lighting-directional.html)中介绍的概念。
-如果你尚未阅读这些文章，则可能需要先阅读这些文章。
+这篇文章是WebGL系列文章的一部分从[基础概念](webgl-fundamentals.html)开始。上接[立方体纹理](webgl-cube-maps.html)。这篇文章也用到了[WebGL 三维方向光源](webgl-3d-lighting-directional.html)中介绍的概念。如果你尚未阅读这些文章，则可能需要先阅读这些文章。
 
 *环境贴图*表示你所绘制物体的环境。如果你正在绘制室外场景它将表示室外环境。如果你正在绘制舞台上的人它将表示会场。如果你正在绘制外太空那它会是星星。 如果我们有能够展现从空间中一点看向6个方向的6张图片，我们可以用这6张图片实现环境贴图。
 
@@ -150,7 +146,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
     
 既然我们了解了反射是如何工作的，我们可以使用它从立方体纹理中选取颜色值，我们改变着色器来实现它.
 
-首先在顶点着色器中我们会计算世界坐标系中的顶点位置和顶点法线 ，然后用varing传递它们给片断着色器。这和[三维聚光灯](webgl-3d-lighting-spot.html)文章中我们所做的相似。
+首先在顶点着色器中我们会计算世界坐标系中的顶点位置和顶点法线，然后用varing传递它们给片断着色器。这和[三维聚光灯](webgl-3d-lighting-spot.html)文章中我们所做的相似。
 
 ```glsl
 attribute vec4 a_position;

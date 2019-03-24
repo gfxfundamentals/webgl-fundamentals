@@ -51,7 +51,7 @@ gl.vertexAttribPointer(
     positionLocation, size, type, normalize, stride, offset)
 ```
 
-接下来对于顶点着色器，我们直接将`gl_Position`设置为四边形顶点。不需要任何矩阵变换因为位置已经在裁剪空间中，被设定为覆盖整个画布。我们设置 `gl_Position.z`为1 确保像素有最远的深度。加下来我们传递位置给片断着色器。
+接下来对于顶点着色器，我们直接将`gl_Position`设置为四边形顶点。不需要任何矩阵变换因为位置已经在裁剪空间中，被设定为覆盖整个画布。我们设置 `gl_Position.z`为1 确保像素有最远的深度。接下来我们传递位置给片断着色器。
 
 ```
 attribute vec4 a_position;
@@ -123,7 +123,7 @@ gl.uniformMatrix4fv(
 gl.uniform1i(skyboxLocation, 0);
 ```
 
-注意上边我们围绕原点旋转相机并计算相机位置`cameraPosition`。 然后，在转换相聚矩阵`cameraMatrix`到视图矩阵`viewMatrix`之后，我们将表示移动的部分清零因为我们只关心相机看向哪里，而非它在哪里。
+注意上边我们围绕原点旋转相机并计算相机位置`cameraPosition`。 然后，在转换相机矩阵`cameraMatrix`到视图矩阵`viewMatrix`之后，我们将表示移动的部分清零因为我们只关心相机看向哪里，而非它在哪里。
 
 给结果乘以投影矩阵，求逆矩阵，之后设置矩阵。
 
