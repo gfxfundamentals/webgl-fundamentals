@@ -101,7 +101,7 @@ Let's make a small example. We'll animate in 2d a grid like this
 * Verts `2,3` will get a weight of 0.5 from bones b0 and b1
 * Verts `4,5` will get a weight of 1.0 from bone b1
 * Verts `6,7` will get a weight of 0.5 from bones b1 and b2
-* Verts `8,9` will get a weight of 1.0 from bone b3
+* Verts `8,9` will get a weight of 1.0 from bone b2
 
 We'll use the utils described in [less code more fun](webgl-less-code-more-fun.html).
 
