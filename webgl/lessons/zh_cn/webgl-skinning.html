@@ -475,7 +475,7 @@ function accessorTypeToNumComponents(type) {
   return accessorTypeToNumComponentsMap[type] || throwNoKey(type);
 }
 </code></pre><p>现在我们已经创建了这些函数，我们可以使用他们来设置网格</p>
-<p>注意：glTF文件可以定义材质，但是导出器并没有导出任何材质到文件内，即使已经勾选了导出材质的选项。我只能猜测在blender中导出器不处理任何材质。我们会使用默认材质如果文件中没有材质的话。引文这个文件中没有任何材质，这里没有使用glTF材质的代码。</p>
+<p>注意：glTF文件可以定义材质，但是导出器并没有导出任何材质到文件内，即使已经勾选了导出材质的选项。我只能猜测在blender中导出器不处理任何材质。我们会使用默认材质如果文件中没有材质的话。因为这个文件中没有任何材质，这里没有使用glTF材质的代码。</p>
 <pre><code>const defaultMaterial = {
   uniforms: {
     u_diffuse: [.5, .8, 1, 1],
@@ -984,7 +984,7 @@ const target = [0, 0, 0];
 <p>当正常工作时，我得到了这样的图像</p>
 <div class="webgl_center"><img src="../resources/skinning-debug-04.png"></div>
 
-<p>又一次得到来乱七八糟的颜色。上图是修复后的样子。这就是你期望看到的虎鲸的权重。每个骨骼周围的色环。</p>
+<p>又一次得到了乱七八糟的颜色。上图是修复后的样子。这就是你期望看到的虎鲸的权重。每个骨骼周围的色环。</p>
 <p>这个bug和<code>webgl.createBufferInfoFromArrays</code>如何计算组件数量有关。有些情况下它被忽略了特定的那个，试图猜测，并猜错了。修复bug后我移除了着色器的改动。注意如果你想使用它们，我在注释中保留它们。</p>
 <p>我想说清楚上面的代码是为了帮助说明蒙皮。它并不意味是一个成熟的蒙皮引擎。我想如果我们试图做一个可使用的引擎，我们会遇到许多我们可能需要改变的事情，但我希望这个例子可以帮助轻微揭开蒙皮的神秘面纱。</p>
 
