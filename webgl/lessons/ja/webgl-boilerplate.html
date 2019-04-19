@@ -98,7 +98,7 @@ GPUの特性を活かすため、これらの関数はGPU専用の言語で記�
 <p>これらの関数をコンパイル、リンクするという手順は必ず行います。
 また、そのためのコードはほとんどのWebGLアプリケーションで共通です。</p>
 <p>これは、「シェーダーをコンパイルする」ためのコードのひな型(Boilerplate code)です。</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * シェーダーを生成、コンパイルする。
  *
  * @param {!WebGLRenderingContext} gl WebGLコンテキスト。
@@ -127,7 +127,7 @@ function compileShader(gl, shaderSource, shaderType) {
   return shader;
 }
 </code></pre><p>そしてこれは「2つのシェーダーをプログラムにリンクする」コードのひな型です。</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * 2つのシェーダーからプログラムを生成する。
  *
  * @param {!WebGLRenderingContext) gl WebGLコンテキスト。
@@ -161,7 +161,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 しかし、ここに挙げた短いコードは、「ほとんど全てのWebGLプログラムで共通」です。</p>
 <p>私は、シェーダーのコードを&lt;script&gt;タグを使って書く方法を好んで使っています。
 この方法を使う場合、以下のようなコードで処理することになります。</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * script要素に書かれた内容からシェーダーを生成する。
  *
  * @param {!WebGLRenderingContext} gl WebGLコンテキスト。
@@ -195,10 +195,10 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
   return compileShader(gl, shaderSource, opt_shaderType);
 };
 </code></pre><p>以下のコードでシェーダーをコンパイルできます。</p>
-<pre><code>var shader = createShaderFromScript(gl, &quot;someScriptTagId&quot;);
+<pre class="prettyprint"><code>var shader = createShaderFromScript(gl, &quot;someScriptTagId&quot;);
 </code></pre><p>私がよく使うのは、さらに一歩踏み込んで「二つのシェーダーをそれぞれの書かれた
 script要素から読み込んでコンパイルし、プログラムにアタッチ、リンクまで行う関数」です。</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * 二つのscript要素を使ってWebGLProgramを生成する。
  *
  * @param {!WebGLRenderingContext} gl WebGLコンテキスト。
@@ -220,9 +220,9 @@ function createProgramFromScripts(
 <h2 id="-">ひな形コードの利用</h2>
 <p>以上、２つのひな形コードは<code>webgl-utils.js</code>として一つにまとめてあります。
 これを利用するには、</p>
-<pre><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
+<pre class="prettyprint"><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>といったコードで取り込んだ上で、以下のようなコードで呼び出します。</p>
-<pre><code>var program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(
   gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...

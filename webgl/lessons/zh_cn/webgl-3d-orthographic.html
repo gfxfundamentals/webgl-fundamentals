@@ -94,7 +94,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 在三维中我们需要三维点 (x, y, z) 与 4x4 的矩阵相乘。</p>
 <p>让我们将上个例子改成三维的，这里会继续使用 F ，但是这次是三维的 &#39;F&#39; 。</p>
 <p>首先需要修改顶点着色器以支持三维处理，这是原顶点着色器，</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -105,7 +105,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>这是新着色器</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -119,7 +119,7 @@ void main() {
 在三维中我们将提供<code>x</code>，<code>y</code>和<code>z</code>，然后将<code>w</code>设置为1,
 而在属性中<code>w</code>的默认值就是1，我们可以利用这点不用再次设置。</p>
 <p>然后提供三维数据。</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
   // 告诉属性怎么从 positionBuffer (ARRAY_BUFFER) 中读取位置
 *  var size = 3;          // 每次迭代使用 3 个单位的数据
@@ -165,7 +165,7 @@ function setGeometry(gl) {
 }
 </code></pre><p>接下来把二维矩阵方法改成三维的</p>
 <p>这是二维（之前的）版本的 m3.translation, m3.rotation, 和 m3.scaling 方法</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
   translation: function translation(tx, ty) {
     return [
       1, 0, 0,
@@ -193,7 +193,7 @@ function setGeometry(gl) {
   },
 };
 </code></pre><p>这是升级到三维的版本。</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   translation: function(tx, ty, tz) {
     return [
        1,  0,  0,  0,
@@ -273,7 +273,7 @@ function setGeometry(gl) {
 <iframe class="external_diagram" src="../resources/axis-diagram.html" style="width: 540px; height: 240px;"></iframe>
 
 <p>同样的我们将实现一些简单的方法</p>
-<pre><code>  translate: function(m, tx, ty, tz) {
+<pre class="prettyprint"><code>  translate: function(m, tx, ty, tz) {
     return m4.multiply(m, m4.translation(tx, ty, tz));
   },
 
@@ -293,7 +293,7 @@ function setGeometry(gl) {
     return m4.multiply(m, m4.scaling(sx, sy, sz));
   },
 </code></pre><p>我们还需要更新投影方法，这是原代码</p>
-<pre><code>  projection: function (width, height) {
+<pre class="prettyprint"><code>  projection: function (width, height) {
     // 注意：这个矩阵翻转了 Y 轴，所以 0 在上方
     return [
       2 / width, 0, 0,
@@ -303,7 +303,7 @@ function setGeometry(gl) {
   },
 }
 </code></pre><p>它将像素坐标转换到裁剪空间，在初次尝试三维时我们将这样做</p>
-<pre><code>  projection: function(width, height, depth) {
+<pre class="prettyprint"><code>  projection: function(width, height, depth) {
     // 注意：这个矩阵翻转了 Y 轴，所以 0 在上方
     return [
        2 / width, 0, 0, 0,
@@ -317,7 +317,7 @@ function setGeometry(gl) {
 <code>depth</code> ，所以我们的空间将会是 0 到 <code>width</code> 像素宽，0 到 <code>height</code> 像素高，
 但是对于<code>depth</code>将会是 <code>-depth / 2</code> 到 <code>+depth / 2</code> 。</p>
 <p>最后需要更新计算矩阵的代码</p>
-<pre><code>  // 计算矩阵
+<pre class="prettyprint"><code>  // 计算矩阵
 *  var matrix = m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400);
 *  matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
 *  matrix = m4.xRotate(matrix, rotation[0]);
@@ -342,7 +342,7 @@ function setGeometry(gl) {
 <p>需要列出的还有很多，16 个矩形每个有两个三角形，每个三角形有 3 个顶点，
 所以一共有 96 个顶点。如果你想看这些可以去示例的源码里找。</p>
 <p>我们需要绘制更多顶点所以</p>
-<pre><code>    // 绘制几何体
+<pre class="prettyprint"><code>    // 绘制几何体
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
 *    var count = 16 * 6;
@@ -358,7 +358,7 @@ function setGeometry(gl) {
 需要在顶点着色器中添加一个属性和一个可变量，
 将颜色值传到片断着色器中。</p>
 <p>这是新的顶点着色器</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -375,7 +375,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>然后在片断着色器中使用颜色</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +// 从顶点着色器中传入
@@ -386,7 +386,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>我们需要找到属性的位置，然后在另一个缓冲中存入对应的颜色。</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
   var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 
   ...
@@ -420,7 +420,7 @@ function setColors(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>在渲染时告诉颜色属性如何从缓冲中获取颜色值</p>
-<pre><code>// 启用颜色属性
+<pre class="prettyprint"><code>// 启用颜色属性
 gl.enableVertexAttribArray(colorLocation);
 
 // 绑定颜色缓冲
@@ -452,7 +452,7 @@ gl.vertexAttribPointer(
 反面三角形是顺时针方向。</p>
 <p><img src="../resources/triangle-winding.svg" class="webgl_center" width="400" /></p>
 <p>WebGL可以只绘制正面或反面三角形，可以这样开启</p>
-<pre><code>  gl.enable(gl.CULL_FACE);
+<pre class="prettyprint"><code>  gl.enable(gl.CULL_FACE);
 </code></pre><p>将它放在 <code>drawScene</code> 方法里，开启这个特性后WebGL默认“剔除”背面三角形，
 &quot;剔除&quot;在这里是“不用绘制”的花哨叫法。</p>
 <p>对于WebGL而言，一个三角形是顺时针还是逆时针是根据裁剪空间中的顶点顺序判断的，
@@ -473,11 +473,11 @@ gl.vertexAttribPointer(
 旋转的时候你会看到背面的三角形，幸好它很容易解决，
 我们只需要看看哪些是三角形是反的，然后交换它们的两个顶点。
 例如一个反的三角形</p>
-<pre><code>           1,   2,   3,
+<pre class="prettyprint"><code>           1,   2,   3,
           40,  50,  60,
          700, 800, 900,
 </code></pre><p>只需要交换后两个顶点的位置</p>
-<pre><code>           1,   2,   3,
+<pre class="prettyprint"><code>           1,   2,   3,
          700, 800, 900,
           40,  50,  60,
 </code></pre><p>通过修正朝向错误后得到</p>
@@ -500,9 +500,9 @@ WebGL绘制一个着色像素之前会检查对应的深度像素，
 反之它会绘制片断着色器提供的新颜色并更新深度像素中的深度值。
 这也意味着在其他像素后面的像素不会被绘制。</p>
 <p>我们可以像这样开启这个特性</p>
-<pre><code>  gl.enable(gl.DEPTH_TEST);
+<pre class="prettyprint"><code>  gl.enable(gl.DEPTH_TEST);
 </code></pre><p>在开始绘制前还需要清除深度缓冲为 1.0 。</p>
-<pre><code>  // 绘制场景
+<pre class="prettyprint"><code>  // 绘制场景
   function drawScene() {
     ...
 
@@ -520,7 +520,7 @@ WebGL绘制一个着色像素之前会检查对应的深度像素，
 <p>这才是三维！</p>
 <p>还有一件小事，在大多数三维数学库中没有负责像素空间与裁剪空间转换的 <code>projection</code> 方法。
 代替的是叫做 <code>ortho</code> 或 <code>orthographic</code> 的方法，它看起来像这样</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   orthographic: function(left, right, bottom, top, near, far) {
     return [
       2 / (right - left), 0, 0, 0,
@@ -536,7 +536,7 @@ WebGL绘制一个着色像素之前会检查对应的深度像素，
 </code></pre><p>和我们简单的 <code>projection</code> 方法不同的是正射投影有更多的参数可以传递，
 左，右，上，下，近和远，给我们更灵活的选择。为了用这个方法实现之前的投影，
 需要这样调用</p>
-<pre><code>var left = 0;
+<pre class="prettyprint"><code>var left = 0;
 var right = gl.canvas.clientWidth;
 var bottom = gl.canvas.clientHeight;
 var top = 0;

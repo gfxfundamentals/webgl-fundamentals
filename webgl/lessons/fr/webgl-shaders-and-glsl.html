@@ -96,7 +96,7 @@ Une application WebGL classique a plusieurs programmes de shader.</p>
 <h2 id="le-shader-de-vertex">Le shader de vertex</h2>
 <p>Le rôle d&#39;un shader de vertex est de générer des coordonnées dans l&#39;espace de projection (clipspace). 
 Il prend toujours la forme</p>
-<pre><code>void main() {
+<pre class="prettyprint"><code>void main() {
    gl_Position = quelquesOperationsPourTransformerLesCoordonnées
 }
 </code></pre><p>Ce shader est appelé une fois par vertex. Chaque fois qu&#39;il est exécuté la variable globale <code>gl_Position</code> 
@@ -110,14 +110,14 @@ doit être renseignée avec des coordonnées.</p>
 <h3 id="les-attributs">Les attributs</h3>
 <p>La principale façon est celle des <em>attributs</em> associés aux tampons. Les tampons et attributs ont été évoqués dans 
 <a href="webgl-how-it-works.html">WebGL - Comment ça marche</a>. On créé les tampons,</p>
-<pre><code>var tampon = gl.createBuffer();
+<pre class="prettyprint"><code>var tampon = gl.createBuffer();
 </code></pre><p>on y met des données</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, tampon);
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, tampon);
 gl.bufferData(gl.ARRAY_BUFFER, mesDonnees, gl.STATIC_DRAW);
 </code></pre><p>Ensuite, étant donné un programme de shader créé plus tôt, on créé l&#39;emplacement de ces attributs</p>
-<pre><code>var emplacementPosition = gl.getAttribLocation(programme, &quot;a_position&quot;);
+<pre class="prettyprint"><code>var emplacementPosition = gl.getAttribLocation(programme, &quot;a_position&quot;);
 </code></pre><p>et on dit à WebGL comment envoyer ces données des tampons vers ces attributs</p>
-<pre><code>// activer l&#39;extraction de données depuis un tampon pour cet attribut 
+<pre class="prettyprint"><code>// activer l&#39;extraction de données depuis un tampon pour cet attribut 
 gl.enableVertexAttribArray(emplacementPosition);
 
 var composantes = 3;  // (x, y, z)
@@ -130,7 +130,7 @@ var tailleDeLaFenetre = 0;  // taille du déplacement de la lecture entre chaque
 gl.vertexAttribPointer(emplacementPosition, composantes, type, normalisation, tailleDeLaFenetre, decalage);
 </code></pre><p>Dans <a href="webgl-fundamentals.html">WebGL -Les Bases</a> on a vu qu&#39;on pouvait se passer d&#39;opération dans 
 le shader de vertex et juste lui envoyer des données.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 
 void main() {
    gl_Position = a_position;
@@ -140,7 +140,7 @@ void main() {
 <h3 id="les-uniforms-dans-les-shaders-de-vertex">Les uniforms dans les shaders de vertex</h3>
 <p>Pour un vertex shader les uniforms sont des valeurs qui restent identiques pour tous les vertices d&#39;un appel de rendu. 
 Un exemple très simple est d&#39;ajouter un décalage dans le shader de vertex précédent :</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 +uniform vec4 u_decalage;
 
 void main() {
@@ -148,11 +148,11 @@ void main() {
 }
 </code></pre><p>Et maintenant on pourrait décaler chaque vertex d&#39;une certaine distance. D&#39;abord 
 on définit un emplacement pour la uniform :</p>
-<pre><code>var emplacementDecalage = gl.getUniformLocation(programme, &quot;u_decalage&quot;);
+<pre class="prettyprint"><code>var emplacementDecalage = gl.getUniformLocation(programme, &quot;u_decalage&quot;);
 </code></pre><p>Ensuite, on renseigne la valeur avant l&#39;appel de rendu.</p>
-<pre><code>gl.uniform4fv(emplacementDecalage, [1, 0, 0, 0]);  // décale vers la droite de la moitié de l&#39;écran
+<pre class="prettyprint"><code>gl.uniform4fv(emplacementDecalage, [1, 0, 0, 0]);  // décale vers la droite de la moitié de l&#39;écran
 </code></pre><p>Les uniforms peuvent avoir de nombreux types. Pour chaque type il faut appeler une fonction spéciale pour la renseigner. </p>
-<pre><code>gl.uniform1f (emplacementFloat, v);                 // pour les float
+<pre class="prettyprint"><code>gl.uniform1f (emplacementFloat, v);                 // pour les float
 gl.uniform1fv(emplacementFloat, [v]);               // pour les float ou tableaux de float
 gl.uniform2f (emplacementVec2,  v0, v1);            // pour les vec2
 gl.uniform2fv(emplacementVec2,  [v0, v1]);          // pour les vec2 ou tableaux de vec2
@@ -181,7 +181,7 @@ gl.uniform1i (emplacementSamplerCube,   v);         // pour les samplerCube (tex
 gl.uniform1iv(emplacementSamplerCube, [v]);         // pour les samplerCube ou tableaux de samplerCube
 </code></pre><p>Il y a aussi les types <code>bool</code>, <code>bvec2</code>, <code>bvec3</code> et <code>bvec4</code>. Ils utilisent les fonctions <code>gl.uniform?f?</code> ou <code>gl.uniform?i?</code>.</p>
 <p>Notons que pour un tableau vous pouvez indiquez toutes les uniforms d&#39;un coup. Par exemple :</p>
-<pre><code>// dans le shader
+<pre class="prettyprint"><code>// dans le shader
 uniform vec2 u_monVec2[3];
 
 // en JavaScript à l&#39;initialisation
@@ -190,7 +190,7 @@ var emplacementDeMonVec2 = gl.getUniformLocation(programme, &quot;u_monVec2&quot
 // avant le rendu
 gl.uniform2fv(emplacementDeMonVec2, [1, 2, 3, 4, 5, 6]);  // renseigne tout le tableau de u_monVec3
 </code></pre><p>Mais si on veut renseigner des éléments individuels dans un tableau il faut chercher l&#39;emplacement de chaque élément.</p>
-<pre><code>// en JavaScript à l&#39;initialisation
+<pre class="prettyprint"><code>// en JavaScript à l&#39;initialisation
 var emplacementDeLElement0DeMonVec2 = gl.getUniformLocation(programme, &quot;u_monVec2[0]&quot;);
 var emplacementDeLElement1DeMonVec2 = gl.getUniformLocation(programme, &quot;u_monVec2[1]&quot;);
 var emplacementDeLElement2DeMonVec2 = gl.getUniformLocation(programme, &quot;u_monVec2[2]&quot;);
@@ -200,20 +200,20 @@ gl.uniform2fv(emplacementDeLElement0DeMonVec2, [1, 2]);  // renseigne l&#39;él�
 gl.uniform2fv(emplacementDeLElement1DeMonVec2, [3, 4]);  // renseigne l&#39;élément 1
 gl.uniform2fv(emplacementDeLElement2DeMonVec2, [5, 6]);  // renseigne l&#39;élément 2
 </code></pre><p>De même si vous créez un struct</p>
-<pre><code>struct monStruct {
+<pre class="prettyprint"><code>struct monStruct {
   bool actif;
   vec2 monVec2;
 };
 uniform monStruct u_quelqueChose;
 </code></pre><p>Il faut renseigner chaque champ individuellement</p>
-<pre><code>var someThingActiveLoc = gl.getUniformLocation(programme, &quot;u_quelqueChose.actif&quot;);
+<pre class="prettyprint"><code>var someThingActiveLoc = gl.getUniformLocation(programme, &quot;u_quelqueChose.actif&quot;);
 var someThingSomeVec2Loc = gl.getUniformLocation(programme, &quot;u_quelqueChose.monVec2&quot;);
 </code></pre><h3 id="les-textures-dans-les-shaders-de-vertex">Les textures dans les shaders de vertex</h3>
 <p>Voire <a href="#les-textures-dans-les-shaders-de-fragment">Les textures dans les shaders de fragment</a>.</p>
 <h2 id="les-shaders-de-fragment">Les shaders de fragment</h2>
 <p>Le rôle d&#39;un shader de fragment est de colorier le pixel en cours. 
 Il prend toujours la forme</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 void main() {
    gl_FragColor = quelquesOperationPourCalculerLaCouleur;
@@ -230,7 +230,7 @@ void main() {
 <h3 id="les-textures-dans-les-shaders-de-fragment">Les textures dans les shaders de fragment</h3>
 <p>Pour obtenir une valeur depuis une texture dans un shader, on créé une uniform de type <code>sampler2D</code>et 
 on utilise la fonction <code>texture2D</code>.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 uniform sampler2D u_texture;
 
@@ -240,7 +240,7 @@ void main() {
 }
 </code></pre><p>Les données retournées par la fonction <a href="webgl-3d-textures.html">dépendent de plusieurs paramètres</a>.
 Au minimum on a besoin de créer et envoyer des données dans la texture, par exemple :</p>
-<pre><code>var tex = gl.createTexture();
+<pre class="prettyprint"><code>var tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 var niveau = 0;
 var largeur = 2;
@@ -248,13 +248,13 @@ var hauteur = 1;
 var donnees = new Uint8Array([255, 0, 0, 255, 0, 255, 0, 255]);
 gl.texImage2D(gl.TEXTURE_2D, niveau, gl.RGBA, largeur, hauteur, 0, gl.RGBA, gl.UNSIGNED_BYTE, donnees);
 </code></pre><p>Ensuite on regarde l&#39;emplacement de la uniform dans le programme</p>
-<pre><code>var emplacementDeMonSampler = gl.getUniformLocation(programme, &quot;u_texture&quot;);
+<pre class="prettyprint"><code>var emplacementDeMonSampler = gl.getUniformLocation(programme, &quot;u_texture&quot;);
 </code></pre><p>WebGL demande de la relier à une unité de texture</p>
-<pre><code>var unite = 5;  // Choix de l&#39;unité de texture
+<pre class="prettyprint"><code>var unite = 5;  // Choix de l&#39;unité de texture
 gl.activeTexture(gl.TEXTURE0 + unite);
 gl.bindTexture(gl.TEXTURE_2D, tex);
 </code></pre><p>Et de dire au shader à quelle unité on a lié notre texture</p>
-<pre><code>gl.uniform1i(emplacementDeMonSampler, unite);
+<pre class="prettyprint"><code>gl.uniform1i(emplacementDeMonSampler, unite);
 </code></pre><h3 id="les-varyings">Les varyings</h3>
 <p>Une varying est un moyen de passer une valeur d&#39;un shader de vertex à un shader de fragment 
 comment nous l&#39;avons vu <a href="webgl-how-it-works.html">WebGL - Comment ça marche</a>.</p>
@@ -262,7 +262,7 @@ comment nous l&#39;avons vu <a href="webgl-how-it-works.html">WebGL - Comment ç
 On la renseigne dans le shader de vertex. Quand WebGL colore les pixels les valeurs interpolées 
 sont envoyées au shader de fragment.</p>
 <p>Shader de vertex</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 
 uniform vec4 u_decalage;
 
@@ -273,7 +273,7 @@ void main() {
 +  v_positionDecalee = a_position + u_decalage;
 }
 </code></pre><p>Shader de fragment</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 +varying vec4 v_positionDecalee;
 
@@ -291,18 +291,18 @@ conçu pour les opérations propres aux calculs graphiques. Par exemple il a des
 natifs comme <code>vec2</code>, <code>vec3</code>, et <code>vec4</code> qui représentent respectivement 2 valeurs, 3 valeurs et 4 valeurs. 
 De même il a <code>mat2</code>, <code>mat3</code> et <code>mat4</code> qui représentent des matrices carrées 2x2, 3x3, et 4x4. 
 On peut faire nativement des opérations comme multiplier un <code>vec</code> par un scalaire.</p>
-<pre><code>vec4 a = vec4(1, 2, 3, 4);
+<pre class="prettyprint"><code>vec4 a = vec4(1, 2, 3, 4);
 vec4 b = a * 2.0;
 // b vaut vec4(2, 4, 6, 8);
 </code></pre><p>GLSL peut faire des multiplications de matrices avec d&#39;autres matrices ou encore avec des vecteurs</p>
-<pre><code>mat4 a = ???
+<pre class="prettyprint"><code>mat4 a = ???
 mat4 b = ???
 mat4 c = a * b;
 
 vec4 v = ???
 vec4 y = c * v;
 </code></pre><p>Il a aussi plusieurs sélecteurs pour choisir facilement les valeurs d&#39;un vec. Pour un vec4 :</p>
-<pre><code>vec4 v;
+<pre class="prettyprint"><code>vec4 v;
 </code></pre><ul>
 <li><code>v.x</code> est identique à <code>v.s</code>, à <code>v.r</code> et à <code>v[0]</code>.</li>
 <li><code>v.y</code> est identique à <code>v.t</code>, à <code>v.g</code> et à <code>v[1]</code>.</li>
@@ -310,37 +310,37 @@ vec4 y = c * v;
 <li><code>v.w</code> est identique à <code>v.q</code>, à <code>v.a</code> et à <code>v[3]</code>.</li>
 </ul>
 <p>Ce qui permet de <em>mixer</em> les composantes d&#39;un vec, donc de les exclure ou de les répéter</p>
-<pre><code>v.yyyy
+<pre class="prettyprint"><code>v.yyyy
 </code></pre><p>est identique à</p>
-<pre><code>vec4(v.y, v.y, v.y, v.y)
+<pre class="prettyprint"><code>vec4(v.y, v.y, v.y, v.y)
 </code></pre><p>De même</p>
-<pre><code>v.bgra
+<pre class="prettyprint"><code>v.bgra
 </code></pre><p>est identique à</p>
-<pre><code>vec4(v.b, v.g, v.r, v.a)
+<pre class="prettyprint"><code>vec4(v.b, v.g, v.r, v.a)
 </code></pre><p>en construisant un <code>vec</code> ou une <code>mat</code> on peut fournir plusieurs composantes d&#39;un coup. Par exemple</p>
-<pre><code>vec4(v.rgb, 1)
+<pre class="prettyprint"><code>vec4(v.rgb, 1)
 </code></pre><p>est identique à</p>
-<pre><code>vec4(v.r, v.g, v.b, 1)
+<pre class="prettyprint"><code>vec4(v.r, v.g, v.b, 1)
 </code></pre><p>Une chose à laquelle vous vous ferez sûrement avoir quelque fois, c&#39;est à quel point le GLSL est strict sur les types :</p>
-<pre><code>float f = 1;  // Crash du programme et message console : ERROR 1 is an int. You can&#39;t assign an int to a float
+<pre class="prettyprint"><code>float f = 1;  // Crash du programme et message console : ERROR 1 is an int. You can&#39;t assign an int to a float
 </code></pre><p>La bonne façon de faire pour ça :</p>
-<pre><code>float f = 1.0;      // indiquer une décimale bien sûr
+<pre class="prettyprint"><code>float f = 1.0;      // indiquer une décimale bien sûr
 float f = float(1)  // ou transformer l&#39;entier en décimale
 </code></pre><p>L&#39;exemple précédent de <code>vec4(v.rgb, 1)</code> reste valide car <code>vec4</code> convertit naturellement ses composantes en décimales, 
 comme <code>float(1)</code>.</p>
 <p>GLSL a aussi un tas de fonctions natives. Nombre d&#39;entre elles agissent sur plusieurs composantes 
 d&#39;un coup. Par exemple :</p>
-<pre><code>T sin(T angle)
+<pre class="prettyprint"><code>T sin(T angle)
 </code></pre><p>T signifie que la valeur peut être un <code>float</code>, un <code>vec2</code>, un <code>vec3</code> ou un <code>vec4</code>. Si on lui donne un <code>vec4</code> on reçoit un <code>vec4</code> en retour, 
 avec le sinus de chacun de ses composants. En d&#39;autres termes si <code>v</code> est un <code>vec4</code> alors</p>
-<pre><code>vec4 s = sin(v);
+<pre class="prettyprint"><code>vec4 s = sin(v);
 </code></pre><p>est identique à</p>
-<pre><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
+<pre class="prettyprint"><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 </code></pre><p>Parfois un argument est un float est le reste <code>T</code>. Ca signifie que le float sera appliqué à tous les composants. 
 Par exemple si <code>v1</code> et <code>v2</code> sont des <code>vec4</code> et <code>f</code> est un float</p>
-<pre><code>vec4 m = mix(v1, v2, f);
+<pre class="prettyprint"><code>vec4 m = mix(v1, v2, f);
 </code></pre><p>est identique à</p>
-<pre><code>vec4 m = vec4(
+<pre class="prettyprint"><code>vec4 m = vec4(
   mix(v1.x, v2.x, f),
   mix(v1.y, v2.y, f),
   mix(v1.z, v2.z, f),

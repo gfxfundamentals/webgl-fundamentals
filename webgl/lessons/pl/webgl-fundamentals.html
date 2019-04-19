@@ -96,7 +96,7 @@ zapewniające przekształcenie współrzędnych przestrzeni obcinania i cieniowa
 (ang. <em>fragment / pixel shader</em>) pozwalające określać kolor pikseli.</p>
 <p>Współrzędne przestrzeni obcinania zawsze przebiegają przedział od -1 do 1 bez względu na to jakiego rozmiaru
 jest Twoje płótno. Poniżej jest prosty przykład pokazujący WebGL w jego najprostszej formie.</p>
-<pre><code>// Pobierz kontekst WebGL
+<pre class="prettyprint"><code>// Pobierz kontekst WebGL
 var canvas = document.getElementById(&quot;canvas&quot;);
 var gl = canvas.getContext(&quot;experimental-webgl&quot;);
 
@@ -127,7 +127,7 @@ gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 // rysuj
 gl.drawArrays(gl.TRIANGLES, 0, 6);
 </code></pre><p>Poniżej są oba cieniowania</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 void main() {
@@ -157,7 +157,7 @@ dla rasteryzacji</em>.</p>
 <p>W zakresie 2D prawdopodobnie wolałbyś pracować raczej z pikselami niż przestrzenią obcinania więc
 zmieńmy cieniowanie tak, żebyśmy mogli pracować z prostokątami w pikselach i mieli
 zapewnioną ich konwersję do przestrzeni obcinania.  Poniżej jest nowe cieniowanie wierzchołków</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -176,7 +176,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Teraz możemy zmienić nasze dane z przestrzeni obcinania na piksele</p>
-<pre><code>// ustaw rozdzielczość
+<pre class="prettyprint"><code>// ustaw rozdzielczość
 var resolutionLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
 
@@ -200,7 +200,7 @@ wierzchołem ma współrzędne 0,0 (uwaga tłum.: liczby zmiennopozycyjne zapisu
 a przecinkiem oddzielamy elementy wektora, co jest zgodne z zapisem tych wartości w kodzie programu).
 Aby móc stosować zapis bardziej tradycyjny dla API grafiki 2d
 poprostu odwracamy współrzędną y.</p>
-<pre><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+<pre class="prettyprint"><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>I teraz nasz prostokąt jest tam, gdzie go oczekujemy.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-top-left.html"></iframe>
@@ -212,7 +212,7 @@ poprostu odwracamy współrzędną y.</p>
 będziemy mogli wywołać funkcję dla prostokątów o różnych rozmairach.  Przy tej okazji
 uczynimy kolor modyfikowalnym.</p>
 <p>Po pierwsze zmodyfikujemy cieniowanie fragmentów by uwzględniało kolor podany na wejściu.</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +uniform vec4 u_color;
@@ -222,7 +222,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>A poniżej jest nowy kod rysujący 50 prostokątów w losowych miejscach i losowych kolorach.</p>
-<pre><code>  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
+<pre class="prettyprint"><code>  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
   ...
   // Stwórz bufor
   var buffer = gl.createBuffer();

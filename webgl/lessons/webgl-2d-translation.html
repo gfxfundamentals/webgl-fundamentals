@@ -100,13 +100,13 @@ passed to setRectangle right?  Here&#39;s a sample based on our <a href="webgl-f
 sample</a>.</p>
 <p>First let&#39;s make some variables to hold the translation, width, height and
 color of the rectangle</p>
-<pre><code>  var translation = [0, 0];
+<pre class="prettyprint"><code>  var translation = [0, 0];
   var width = 100;
   var height = 30;
   var color = [Math.random(), Math.random(), Math.random(), 1];
 </code></pre><p>Then let&#39;s make a function to re-draw everything.  We can call this
 function after we update the translation.</p>
-<pre><code>  // Draw a the scene.
+<pre class="prettyprint"><code>  // Draw a the scene.
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -164,7 +164,7 @@ more complicated shape.</p>
 <p><img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
 <p>Well, following our current code we&#39;d have to change <code>setRectangle</code> to
 something more like this.</p>
-<pre><code>// Fill the buffer with the values that define a letter &#39;F&#39;.
+<pre class="prettyprint"><code>// Fill the buffer with the values that define a letter &#39;F&#39;.
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -205,7 +205,7 @@ JavaScript has to update all the points.</p>
 <p>There&#39;s a simpler way. Just upload the geometry and do the translation in
 the shader.</p>
 <p>Here&#39;s the new shader</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -220,7 +220,7 @@ void main() {
    ...
 </code></pre><p>and we&#39;ll restructure the code a little.  For one we only need to set the
 geometry once.</p>
-<pre><code>// Fill the buffer with the values that define a letter &#39;F&#39;.
+<pre class="prettyprint"><code>// Fill the buffer with the values that define a letter &#39;F&#39;.
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -253,7 +253,7 @@ function setGeometry(gl) {
 }
 </code></pre><p>Then we just need to update <code>u_translation</code> before we draw with the
 translation that we desire.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
 +  var translationLocation = gl.getUniformLocation(
 +             program, &quot;u_translation&quot;);

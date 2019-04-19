@@ -91,7 +91,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 中得到启发，如果我们讲的再深入一点可能更好理解。</p>
 <p>首先需要调整着色器以便使用纹理，这里是顶点着色器的修改部分，
 我们需要传递纹理坐标，在这个例子中直接将它们传到片断着色器中。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 *attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -108,7 +108,7 @@ void main() {
 </code></pre><p>在片断着色器中声明一个 sampler2D 类型的全局变量，可以让我们引用一个纹理，
 然后使用从顶点着色器传入的纹理坐标调用 <code>texture2D</code> 方法，
 在纹理上找到对应的颜色。</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // 从顶点着色器中传入的值
 *varying vec2 v_texcoord;
@@ -120,7 +120,7 @@ void main() {
 *   gl_FragColor = texture2D(u_texture, v_texcoord);
 }
 </code></pre><p>我们需要设置纹理坐标</p>
-<pre><code>// 找到顶点坐标中的属性
+<pre class="prettyprint"><code>// 找到顶点坐标中的属性
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 *var texcoordLocation = gl.getAttribLocation(program, &quot;a_texcoords&quot;);
 
@@ -137,7 +137,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 *// 设置纹理坐标
 *setTexcoords(gl);
 </code></pre><p>如你所见，我们将图像映射到 &#39;F&#39; 中的每个矩形面上。</p>
-<pre><code>*// 为 F 设置纹理坐标缓冲
+<pre class="prettyprint"><code>*// 为 F 设置纹理坐标缓冲
 *function setTexcoords(gl) {
 *  gl.bufferData(
 *      gl.ARRAY_BUFFER,
@@ -168,7 +168,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 <p>加载图像的过程是异步的，我们请求图像资源后浏览器需要一段时间去下载。
 通常有两种处理方法，一种是等纹理下载完成后再开始绘制，另一种是在图像加载前使用生成的纹理，
 这种方式可以立即启动渲染，一旦图像下载完成就拷贝到纹理。我们将使用下方的方法。</p>
-<pre><code>*// 创建一个纹理
+<pre class="prettyprint"><code>*// 创建一个纹理
 *var texture = gl.createTexture();
 *gl.bindTexture(gl.TEXTURE_2D, texture);
 *
@@ -201,10 +201,10 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 <p>我将纹理载入到Photoshop中得到一些点的坐标。</p>
 <p><img class="webgl_center" width="256" height="256" src="../../resources/f-texture-pixel-coords.png" /></p>
 <p>可以像这样将像素坐标转换到纹理坐标</p>
-<pre><code>texcoordX = pixelCoordX / (width  - 1)
+<pre class="prettyprint"><code>texcoordX = pixelCoordX / (width  - 1)
 texcoordY = pixelCoordY / (height - 1)
 </code></pre><p>这是正面的纹理坐标</p>
-<pre><code>// 正面左竖
+<pre class="prettyprint"><code>// 正面左竖
  38 / 255,  44 / 255,
  38 / 255, 223 / 255,
 113 / 255,  44 / 255,
@@ -242,7 +242,7 @@ texcoordY = pixelCoordY / (height - 1)
 <p>如果纹理坐标再 0.0 到 1.0 之外会怎样？WebGL默认会重复纹理，
 0.0 到 1.0 是一份纹理的“拷贝”，1.0 到 2.0 是另外一份拷贝，
 -4.0 到 -3.0 也是另外一份拷贝。让我们在一个平面上使用这些纹理坐标。</p>
-<pre><code> -3, -1,
+<pre class="prettyprint"><code> -3, -1,
   2, -1,
  -3,  4,
  -3,  4,
@@ -256,7 +256,7 @@ texcoordY = pixelCoordY / (height - 1)
 
 </p>
 <p>你可以使用<code>CLAMP_TO_EDGE</code>告诉WebGL再某个方向不需要重复，例如</p>
-<pre><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+<pre class="prettyprint"><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>点击上方示例中的按钮，观察结果。</p>
 <p>你可能注意到在加载纹理时调用了 <code>gl.generateMipmap</code>，那是干什么的？</p>
@@ -324,7 +324,7 @@ WebGL会从创建的贴图中找到从之前级别贴图插值出的 2×2 贴图
 尤其是使用很大的纹理例如想要在游戏的标题屏幕上绘制的东西。如果你不会绘制比最大的贴图要小的东西，
 为什么要把内存浪费在贴图上，直接使用 <code>NEAREST</code> 或 <code>LINEAR</code> 就只使用第一个贴图。</p>
 <p>设置筛选器可以调用 <code>gl.texParameter</code></p>
-<pre><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+<pre class="prettyprint"><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 </code></pre><p><code>TEXTURE_MIN_FILTER</code> 是当绘制的比最大贴图小的时候。
 <code>TEXTURE_MAG_FILTER</code> 是绘制的比最大的贴图大的时候。
@@ -344,7 +344,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 所以显示纹理失败，在着色器种当 <code>texture2D</code> 被调用的时候由于纹理没有正确设置，
 就会使用颜色 (0, 0, 0, 1) 也就是黑色。如果打开 JavaScript 控制台或者浏览器控制台，
 根据浏览器不同可能会显示不同的错误信息，像这样</p>
-<pre><code>WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
+<pre class="prettyprint"><code>WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
    or not all the same size
 WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
    It maybe non-power-of-2 and have incompatible texture filtering or
@@ -352,11 +352,11 @@ WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
 </code></pre><p>解决这个问题只需要将包裹模式设置为 <code>CLAMP_TO_EDGE</code> 并且通过设置过滤器为 <code>LINEAR</code> or <code>NEAREST</code>
 来关闭贴图映射。</p>
 <p>让我们来更新图像加载的代码解决这个问题，首先需要一个方法判断一个数是不是 2 的幂。</p>
-<pre><code>function isPowerOf2(value) {
+<pre class="prettyprint"><code>function isPowerOf2(value) {
   return (value &amp; (value - 1)) == 0;
 }
 </code></pre><p>我不准备深入讲解二进制运算，以及它的的原理。有了它后，就可以这样使用。</p>
-<pre><code>// 异步加载图像
+<pre class="prettyprint"><code>// 异步加载图像
 var image = new Image();
 image.src = &quot;resources/keyboard.jpg&quot;;
 image.addEventListener(&#39;load&#39;, function() {
@@ -399,7 +399,7 @@ image.addEventListener(&#39;load&#39;, function() {
 这是很多高性能应用（读作<strong>游戏</strong>）使用的技术。例如我们将所有的图像放入这样一个纹理中</p>
 <p><img class="webgl_center" src="../../resources/noodles.jpg" /></p>
 <p>然后为立方体的每个面设置不同的纹理坐标。</p>
-<pre><code>    // 选择左下图
+<pre class="prettyprint"><code>    // 选择左下图
     0   , 0  ,
     0   , 0.5,
     0.25, 0  ,

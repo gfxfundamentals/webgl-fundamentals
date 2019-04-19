@@ -139,7 +139,7 @@ it.</p>
 <p>Let&#39;s make a 3D scene with a circle of &#39;F&#39;s like the diagrams above.</p>
 <p>First, because we are drawing 5 things and they all use the same
 projection matrix we&#39;ll compute that outside the loop</p>
-<pre><code class="lang-js">
+<pre class="prettyprint"><code class="lang-js">
 // Compute the projection matrix
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
@@ -156,7 +156,7 @@ radius * 1.5 distance out and looking at the origin.</p>
 </div>
 
 </p>
-<pre><code class="lang-js">var numFs = 5;
+<pre class="prettyprint"><code class="lang-js">var numFs = 5;
 var radius = 200;
 
 // Compute a matrix for the camera
@@ -171,16 +171,16 @@ the inverse matrix (the matrix that does the exact opposite of the supplied matr
 In this case the supplied matrix would move the camera to some position
 and orientation relative to the origin. The inverse of that is a matrix
 that will move everything else such that the camera is at the origin.</p>
-<pre><code class="lang-js">// Make a view matrix from the camera matrix.
+<pre class="prettyprint"><code class="lang-js">// Make a view matrix from the camera matrix.
 var viewMatrix = m4.inverse(cameraMatrix);
 </code></pre>
 <p>Now we combine the view and projection matrix into a view projection matrix.</p>
-<pre><code class="lang-js">// Compute a view projection matrix
+<pre class="prettyprint"><code class="lang-js">// Compute a view projection matrix
 var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </code></pre>
 <p>Finally we draw a circle of Fs. For each F we start with the
 view projection matrix, then rotate and move out radius units.</p>
-<pre><code class="lang-js">for (var ii = 0; ii &lt; numFs; ++ii) {
+<pre class="prettyprint"><code class="lang-js">for (var ii = 0; ii &lt; numFs; ++ii) {
   var angle = ii * Math.PI * 2 / numFs;
   var x = Math.cos(angle) * radius;
   var y = Math.sin(angle) * radius
@@ -296,19 +296,19 @@ matrix that will orient something that points at the <code>target</code> from th
 </pre></div>
 
 <p>Here&#39;s the code to compute the cross product of 2 vectors.</p>
-<pre><code class="lang-js">function cross(a, b) {
+<pre class="prettyprint"><code class="lang-js">function cross(a, b) {
   return [a[1] * b[2] - a[2] * b[1],
           a[2] * b[0] - a[0] * b[2],
           a[0] * b[1] - a[1] * b[0]];
 }
 </code></pre>
 <p>Here&#39;s the code to subtract two vectors.</p>
-<pre><code class="lang-js">function subtractVectors(a, b) {
+<pre class="prettyprint"><code class="lang-js">function subtractVectors(a, b) {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 </code></pre>
 <p>Here&#39;s the code to normalize a vector (make it into a unit vector).</p>
-<pre><code class="lang-js">function normalize(v) {
+<pre class="prettyprint"><code class="lang-js">function normalize(v) {
   var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   // make sure we don&#39;t divide by 0.
   if (length &gt; 0.00001) {
@@ -319,7 +319,7 @@ matrix that will orient something that points at the <code>target</code> from th
 }
 </code></pre>
 <p>Here&#39;s the code to compute a &quot;lookAt&quot; matrix.</p>
-<pre><code class="lang-js">var m4 = {
+<pre class="prettyprint"><code class="lang-js">var m4 = {
   lookAt: function(cameraPosition, target, up) {
     var zAxis = normalize(
         subtractVectors(cameraPosition, target));
@@ -339,7 +339,7 @@ matrix that will orient something that points at the <code>target</code> from th
 </code></pre>
 <p>And here is how we might use it to make the camera point at a specific &#39;F&#39;
 as we move it.</p>
-<pre><code class="lang-js">  ...
+<pre class="prettyprint"><code class="lang-js">  ...
 
   // Compute the position of the first F
   var fPosition = [radius, 0, 0];

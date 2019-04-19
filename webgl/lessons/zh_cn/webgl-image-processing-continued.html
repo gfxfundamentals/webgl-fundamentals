@@ -105,7 +105,7 @@ WebGL/OpenGL 中的帧缓冲只是一系列状态（一列附加物）不是任�
 但是当我们给帧缓冲绑定一个纹理后，
 可以将渲染结果写入那个纹理。</p>
 <p>首先让我们把<a href="webgl-image-processing.html">以前创建纹理的代码</a>写到一个方法里</p>
-<pre><code>  function createAndSetupTexture(gl) {
+<pre class="prettyprint"><code>  function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -122,7 +122,7 @@ WebGL/OpenGL 中的帧缓冲只是一系列状态（一列附加物）不是任�
   var originalImageTexture = createAndSetupTexture(gl);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 </code></pre><p>现在让我们用这个方法生成两个纹理并绑定到两个帧缓冲。</p>
-<pre><code>  // 创建两个纹理绑定到帧缓冲
+<pre class="prettyprint"><code>  // 创建两个纹理绑定到帧缓冲
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
@@ -144,7 +144,7 @@ WebGL/OpenGL 中的帧缓冲只是一系列状态（一列附加物）不是任�
         gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
   }
 </code></pre><p>现在让我们做一些卷积核并按使用顺序存入列表中</p>
-<pre><code>  // 定义一些卷积核
+<pre class="prettyprint"><code>  // 定义一些卷积核
   var kernels = {
     normal: [
       0, 0, 0,
@@ -176,7 +176,7 @@ WebGL/OpenGL 中的帧缓冲只是一系列状态（一列附加物）不是任�
     &quot;unsharpen&quot;
   ];
 </code></pre><p>最后让我们使用所有渲染效果，像乒乓一样来回渲染</p>
-<pre><code>  // 从原始图像开始
+<pre class="prettyprint"><code>  // 从原始图像开始
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
   // 在渲染效果时不翻转y轴
@@ -234,7 +234,7 @@ WebGL/OpenGL 中的帧缓冲只是一系列状态（一列附加物）不是任�
 的 0, 0 点在左下角而不是常见二维屏幕坐标的左上角。而在帧缓冲中绘制的时候不需要翻转，
 因为帧缓冲不用显示，谁上谁下无所谓，最重要的是我们计算中的 0, 0 也对应帧缓冲中的 0, 0
 像素。为了解决这个问题，通过在着色器中添加一个输入来决定是否翻转。</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_flipY;
 ...
@@ -248,7 +248,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>然后在渲染的时候可以这样设置</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
   var flipYLocation = gl.getUniformLocation(program, &quot;u_flipY&quot;);
 

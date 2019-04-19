@@ -198,7 +198,7 @@ newY = y * sy;
 <p>ここで魔法のようなことが起こる。複数行列を掛け合わせたら全部の変換に適用出来る。
 <code>m3.multiply</code>という２つの行列を掛けて、結果の返り値を戻る関数があるとしよう。</p>
 <p>分かり易くするために移動、回転、拡大の行列の制作関数を作ろう。</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
   // 移動行列
   translation: function(tx, ty) {
     return [
@@ -229,7 +229,7 @@ newY = y * sy;
   },
 };
 </code></pre><p>シェーダーを変更しよう。前回のシェーダーはこれである。</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -250,7 +250,7 @@ void main() {
   vec2 position = rotatedPosition + u_translation;
   ...
 </code></pre><p>新しいシェーダーはそれよりずいぶん簡単である。</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -261,7 +261,7 @@ void main() {
   vec2 position = (u_matrix * vec3(a_position, 1)).xy;
   ...
 </code></pre><p>そして、このように使う。</p>
-<pre><code>  // シーンを描画する。
+<pre class="prettyprint"><code>  // シーンを描画する。
   function drawScene() {
 
     ,,,
@@ -295,7 +295,7 @@ void main() {
 </p>
 <p>まだ「で？それは便利か？」と思っているだろう？でも、順番を変更したければシェーダーを更新しなくていい。
 だだ計算式だけ更新したらいい。</p>
-<pre><code>    ...
+<pre class="prettyprint"><code>    ...
     // 行列を掛ける。
     var matrix = m3.multiply(scaleMatrix, rotationMatrix);
     matrix = m3.multiply(matrix, translationMatrix);
@@ -310,7 +310,7 @@ void main() {
 <p>人体の腕とか、太陽の周りを回っている惑星を回っている月とか、木の枝などの階層的なアニメーション
 のためにこのように行列を適用することは特に重要である。例えば、階層的なアニメーションの例として、
 「F」を５回描画して、「F」ごとに前の「F」の行列から始めよう。</p>
-<pre><code>  // シーンを描画する。
+<pre class="prettyprint"><code>  // シーンを描画する。
   function drawScene() {
     // キャンバスをクリアーする。
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -347,7 +347,7 @@ void main() {
 <div class="webgl_center">matrixX * identity = matrixX</div>
 
 <p>単位行列の作成コードはここにある。</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
   identity function() {
     return [
       1, 0, 0,
@@ -368,7 +368,7 @@ void main() {
 今までのサンプルは全て、「F」の左上角を軸として回転している（上にある順番を変えたサンプル以外）。
 それは、使っている計算式は原点軸を中心として周りを回転するものだから。「F」の左上の頂点は原点(0,0)にある。</p>
 <p>だが今は、行列数学を使っているから行列掛ける順番を選べる。それで原点を移動出来る。</p>
-<pre><code>    // 「F」の原点に「F」の真ん中に移動する行列を作成する。
+<pre class="prettyprint"><code>    // 「F」の原点に「F」の真ん中に移動する行列を作成する。
     var moveOriginMatrix = m3.translation(-50, -75);
     ...
 
@@ -387,7 +387,7 @@ void main() {
 フォトショップがどういうふうに好きな点で回転する機能を作ったか分かるようになって来た！</p>
 <p>もっとクレージにしよう！最初の記事「WebGLの基本」を思い出したら、このピクセル空間からクリップ空間に
 計算しているシェーダーコードがあった。</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 　// positionはピクセルから0〜1に
   vec2 zeroToOne = position / u_resolution;
 
@@ -404,7 +404,7 @@ void main() {
 渡す行列で出来る。ーつの1.0/resolutionの縮小変換行列を作成して、もう一つ2.0に拡大行列を作成して、
 「-1,-1」で移動行列作成して、Yに-１をサイズ拡大縮小行列を作成して、全部掛け合わせることが出来るが、
 その数学は簡単なのでその結果の行列を作る関数を作ろう。</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
   projection: function(width, height) {
     // Note: Y軸で０は上の方にするためYを弾く行列
     return [
@@ -416,7 +416,7 @@ void main() {
 
   ...
 </code></pre><p>そうすれば、シェーダーコードをもっと単純化出来る。これは最新のシェーダーの全て</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -427,7 +427,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>そしてJavaScriptで行列をprojection行列に掛けることが必要である。</p>
-<pre><code>  // シーンを描画する。
+<pre class="prettyprint"><code>  // シーンを描画する。
   function drawScene() {
     ...
 
@@ -454,7 +454,7 @@ void main() {
 </p>
 <p>次の記事へ行く前にもちょっと単純化しよう。複数行列を作成して、その後お互いに掛けることは珍しくないけど、
 作成しながら掛けることも通常の方法である。このような関数を作ろう。</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
 
   ...
 
@@ -474,7 +474,7 @@ void main() {
 
 };
 </code></pre><p>その関数を使ったら前にある行列計算コード７行をこのような４行にできる。</p>
-<pre><code>// 行列を計算する。
+<pre class="prettyprint"><code>// 行列を計算する。
 var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
 matrix = m3.translate(matrix, translation[0], translation[1]);
 matrix = m3.rotate(matrix, angleInRadians);
@@ -487,9 +487,9 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
 </p>
 <p>もう一つのこと、。。。上記の頭で話したように順番が大事だ。最初のサンプルで</p>
-<pre><code>移動 * 回転 * 拡大
+<pre class="prettyprint"><code>移動 * 回転 * 拡大
 </code></pre><p>その後これがあった。</p>
-<pre><code>拡大 * 回転 * 移動
+<pre class="prettyprint"><code>拡大 * 回転 * 移動
 </code></pre><p>その２つの方法の違いを見た。</p>
 <p>行列数学の考える方法はこのようである。クリップ空間から始まる。行列ごとに行列を適用するとその空間が変更される。</p>
 <p>ステップ1:  行列無し(それとも単位行列)</p>

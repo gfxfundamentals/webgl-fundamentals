@@ -123,7 +123,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Объясню по-другому. Скажем, наш предел равен 20 градусам. Мы можем преобразовать
 значение в радианы, а затем в диапазон от -1 до 1 через косинус. Назовём это скалярным
 пространством. Вот небольшая таблица для некоторых значений пределов:</p>
-<pre><code>          пределы в
+<pre class="prettyprint"><code>          пределы в
  градусах| радианах| скалярном пространстве
  --------+---------+----------
     0    |   0.0   |    1.0
@@ -133,14 +133,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     90   |   1.57  |    0.0
    180   |   3.14  |   -1.0
 </code></pre><p>Далее мы просто сравниваем с полученным пределом:</p>
-<pre><code>dotFromDirection = dot(surfaceToLight, -lightDirection)
+<pre class="prettyprint"><code>dotFromDirection = dot(surfaceToLight, -lightDirection)
 if (dotFromDirection &gt;= limitInDotSpace) {
    // освещение есть
 }
 </code></pre><p>Теперь можно перейти к реализации.</p>
 <p>Сначала изменим фрагментный шейдер из
 <a href="webgl-3d-lighting-point.html">последней статьи</a>.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // Передаётся из вершинного шейдера
 varying vec3 v_normal;
@@ -186,7 +186,7 @@ void main() {
 }
 </code></pre><p>Само собой нам необходимо получить ссылки на uniform-переменные,
 которые мы только что добавили</p>
-<pre><code>  var lightDirection = [?, ?, ?];
+<pre class="prettyprint"><code>  var lightDirection = [?, ?, ?];
   var limit = degToRad(20);
 
   ...
@@ -194,7 +194,7 @@ void main() {
   var lightDirectionLocation = gl.getUniformLocation(program, &quot;u_lightDirection&quot;);
   var limitLocation = gl.getUniformLocation(program, &quot;u_limit&quot;);
 </code></pre><p>и установить им значения</p>
-<pre><code>    gl.uniform3fv(lightDirectionLocation, lightDirection);
+<pre class="prettyprint"><code>    gl.uniform3fv(lightDirectionLocation, lightDirection);
     gl.uniform1f(limitLocation, Math.cos(limit));
 </code></pre><p>Получаем такой результат:</p>
 <p><div class="webgl_example_container">
@@ -224,7 +224,7 @@ uniform-переменная с именем <code>u_lightDirection</code> бу�
 <p>У нас есть функция на GLSL под названием <code>step</code>. Она принимает 2 значения, и
 если второе значение больше или равно первому значению, функция возвращает 1.0,
 в противном случае возвращается 0. В JavaScript она бы выглядела примерно так:</p>
-<pre><code>function step(a, b) {
+<pre class="prettyprint"><code>function step(a, b) {
    if (b &gt;= a) {
        return 1;
    } else {
@@ -232,7 +232,7 @@ uniform-переменная с именем <code>u_lightDirection</code> бу�
    }
 }
 </code></pre><p>Давайте переделаем функцию <code>step</code> и избавимся от условий.</p>
-<pre><code>  float dotFromDirection = dot(surfaceToLightDirection,
+<pre class="prettyprint"><code>  float dotFromDirection = dot(surfaceToLightDirection,
                                -u_lightDirection);
   // inLight примет значение 1, когда мы внутри прожектора, и значение 0 за его пределами
   float inLight = step(u_limit, dotFromDirection);
@@ -253,7 +253,7 @@ uniform-переменная с именем <code>u_lightDirection</code> бу�
 значение 0.0. А между пределами значение будет плавно затухать от
 единицы до нуля.</p>
 <p>Следующий код вполне справится с данной задачей</p>
-<pre><code>-uniform float u_limit;          // в скалярном пространстве
+<pre class="prettyprint"><code>-uniform float u_limit;          // в скалярном пространстве
 +uniform float u_innerLimit;     // в скалярном пространстве
 +uniform float u_outerLimit;     // в скалярном пространстве
 
@@ -283,9 +283,9 @@ uniform-переменная с именем <code>u_lightDirection</code> бу�
 Она называется <code>smoothstep</code>. Как и <code>step</code>, она возвращает значение от 0
 до 1, но принимает как нижнюю, так и верхнюю границу, и плавно переходит
 между этими значениями.</p>
-<pre><code> smoothstep(lowerBound, upperBound, value)
+<pre class="prettyprint"><code> smoothstep(lowerBound, upperBound, value)
 </code></pre><p>Применим эту функцию</p>
-<pre><code>  float dotFromDirection = dot(surfaceToLightDirection,
+<pre class="prettyprint"><code>  float dotFromDirection = dot(surfaceToLightDirection,
                                -u_lightDirection);
 -  float limitRange = u_innerLimit - u_outerLimit;
 -  float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.0, 1.0);

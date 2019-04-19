@@ -93,19 +93,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 CSS는 canvas가 표시되는 크기를 결정합니다.</p>
 <p>두 가지 방법을 통해 canvas의 drawingbuffer를 설정할 수 있는데요.
 한 가지는 HTML을 이용해서</p>
-<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>다른 방법은 JavaScript를 이용해서</p>
-<pre><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
 </code></pre><p>JavaScript</p>
-<pre><code>var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code>var canvas = document.getElementById(&quot;c&quot;);
 canvas.width = 400;
 canvas.height = 300;
 </code></pre><p>canvas 크기 설정하는데 canvas 크기에 영향을 주는 CSS가 없다면 표시 크기는 해당 drawingbuffer와 동일한 크기가 됩니다.
 위 두 예제에서 canvas의 drawingbuffer는 400x300이며 표시 크기 또한 400x300이 됩니다.</p>
 <p>여기 페이지에서 400x300 픽셀로 표시되는 drawingbuffer가 10x15 픽셀인 canvas 예제입니다.</p>
-<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>혹은 이 예제처럼</p>
-<pre><code>&lt;style&gt;
+<pre class="prettyprint"><code>&lt;style&gt;
 #c {
   width: 400px;
   height: 300px;
@@ -125,7 +125,7 @@ canvas.height = 300;
 <p>예를들어 canvas 창을 꽉 채우고 싶다면 어떻게 해야 할까요?
 먼저 CSS로 창을 채우기 위해 브라우저에서 canvas를 늘릴 수 있습니다.
 예를들어</p>
-<pre><code>&lt;html&gt;
+<pre class="prettyprint"><code>&lt;html&gt;
   &lt;head&gt;
     &lt;style&gt;
       /* border 제거 */
@@ -147,7 +147,7 @@ canvas.height = 300;
 &lt;/html&gt;
 </code></pre><p>이제 브라우저가 canvas를 확장한 크기와 일치하는 drawingbuffer를 만들면 됩니다.
 <code>clientWidth</code> and <code>clientHeight</code>를 사용하면 JavaScript에서 HTML의 모든 요소가 어떤 크기로 표시되는지 확인할 수 있습니다.</p>
-<pre><code>function resize(canvas) {
+<pre class="prettyprint"><code>function resize(canvas) {
   // 브라우저에서 canvas가 표시되는 크기 탐색
   var displayWidth  = canvas.clientWidth;
   var displayHeight = canvas.clientHeight;
@@ -162,7 +162,7 @@ canvas.height = 300;
   }
 }
 </code></pre><p>대부분의 WebGL 앱들은 <a href="webgl-animation.html">애니메이션이므로</a> 렌더링 전에 이 함수를 호출하여 그리기 직전에 원하는 크기로 canvas를 조정하겠습니다.</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
   resize(gl.canvas);
 
   ...
@@ -182,7 +182,7 @@ WebGL context를 처음 만들 때 WebGL은 canvas와 같은 크기로 viewport�
 만약 canvas 크기를 변경한다면 WebGL에게 새로운 viewport 설정을 알려줘야 합니다.</p>
 <p>이걸 처리할 코드를 수정해봅시다.
 위에서 WebGL context가 canvas에 대한 참조를 가지므로 크기를 조절해봅시다.</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
   resize(gl.canvas);
 
 +  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);

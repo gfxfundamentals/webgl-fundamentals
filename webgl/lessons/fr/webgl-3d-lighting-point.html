@@ -96,18 +96,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Si vous tournez la surface vous voyez que chaque point reçoit la lumière avec un angle différent. Le produit scalaire entre la normale de la surface et la direction de la lumière nous donnera donc une valeur différente pour chaque point de la surface.</p>
 <p>Codons ça !</p>
 <p>D&#39;abord on a besoin de la position de la lumière.</p>
-<pre><code>uniform vec3 u_positionGlobaleLumiere;
+<pre class="prettyprint"><code>uniform vec3 u_positionGlobaleLumiere;
 </code></pre><p>Et on a besoin de calculer la position de la surface dans l&#39;espace global. Pour ça on peut multiplier nos positions par la matrice globale donc... </p>
-<pre><code>uniform mat4 u_globale;
+<pre class="prettyprint"><code>uniform mat4 u_globale;
 
 ...
 
 // calcule la position globale de la surface
 vec3 positionSurfaceGlobale = (u_globale * a_position).xyz;
 </code></pre><p>Et on peut calculer un vecteur de la surface à la lumière, soit la direction, sauf que cette fois elle est calculée pour chaque point.</p>
-<pre><code>v_surfaceVersLumiere = u_positionLumiere - positionSurfaceGlobale;
+<pre class="prettyprint"><code>v_surfaceVersLumiere = u_positionLumiere - positionSurfaceGlobale;
 </code></pre><p>Voilà tout ça en place :</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec3 a_normale;
 
 +uniform vec3 u_positionGlobaleLumiere;
@@ -135,7 +135,7 @@ void main() {
 +  v_surfaceVersLumiere = u_positionGlobaleLumiere - positionSurfaceGlobale;
 }
 </code></pre><p>Maintenant dans le shader de fragment il nous faut normaliser ce vecteur de direction de la lumière puisqu&#39;il n&#39;est pas unitaire. On pourrait le normaliser dans le shader de vertex mais comme il est interpolé entre les deux shaders, puisque c&#39;est une varying, il faudrait quand-même le re-normaliser ensuite. </p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // Reçu depuis le shader de vertex
 varying vec3 v_normale;
@@ -162,14 +162,14 @@ void main() {
   gl_FragColor.rgb *= lumiere;
 }
 </code></pre><p>On crée les pointeurs pour <code>u_globale</code> et <code>u_positionGlobaleLumiere</code></p>
-<pre><code>-  var emplacementDirectionInverseLumiere =
+<pre class="prettyprint"><code>-  var emplacementDirectionInverseLumiere =
 -      gl.getUniformLocation(programme, &quot;u_directionInverseDeLaLumiere&quot;);
 +  var emplacementPositionGlobaleLumiere =
 +      gl.getUniformLocation(programme, &quot;u_positionGlobaleLumiere&quot;);
 +  var emplacementGlobale =
 +      gl.getUniformLocation(programme, &quot;u_globale&quot;);
 </code></pre><p>On indique leurs valeurs au programme</p>
-<pre><code>  // Transmet les matrices au programme actif
+<pre class="prettyprint"><code>  // Transmet les matrices au programme actif
 +  gl.uniformMatrix4fv(
 +      emplacementGlobale, false,
 +      matriceGlobale);
@@ -207,7 +207,7 @@ void main() {
 
 </p>
 <p>Premièrement on doit transmettre la position de la caméra, calculer le vecteur entre la surface et la caméra et le transmettre au shader de fragment.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec3 a_normale;
 
 uniform vec3 u_positionGlobaleLumiere;
@@ -241,7 +241,7 @@ void main() {
 +  v_surfaceVersCamera = u_positionGlobaleVue - positionSurfaceGlobale;
 }
 </code></pre><p>Ensuite dans le shader de fragment il nous faut calculer le <code>vecteurIntermediaire</code> entre les vecteurs surfaceVersCamera et surfaceVersLumiere. Ensuite on peut prendre le produit vectoriel entre le <code>vecteurIntermediaire</code> et la normale pour trouver le facteur de réflexion</p>
-<pre><code>// Reçu du shader de vertex
+<pre class="prettyprint"><code>// Reçu du shader de vertex
 varying vec3 v_normale;
 varying vec3 v_surfaceVersLumiere;
 +varying vec3 v_surfaceVersCamera;
@@ -271,7 +271,7 @@ void main() {
 +  gl_FragColor.rgb += specular;
 }
 </code></pre><p>Reste à créer les emplacements <code>u_positionGlobaleVue</code> et renseigner leurs valeurs dans le programme</p>
-<pre><code>var emplacementPositionGlobaleLumiere =
+<pre class="prettyprint"><code>var emplacementPositionGlobaleLumiere =
     gl.getUniformLocation(programme, &quot;u_positionGlobaleLumiere&quot;);
 +var emplacementPositionGlobaleVue =
 +    gl.getUniformLocation(programme, &quot;u_positionGlobaleVue&quot;);
@@ -302,7 +302,7 @@ var matriceCamera = regarderVers(camera, cible, vertical);
 </p>
 <p>Plus la ligne rouge est proche du haut du graphique plus l&#39;aspect spéculaire va être important. En augmentant la puissance la portée de la brillance est modifiée.</p>
 <p>Appelons ce facteur <code>brillance</code> (shininess en anglais) et ajoutons-le au shader.</p>
-<pre><code>uniform vec4 u_couleur;
+<pre class="prettyprint"><code>uniform vec4 u_couleur;
 +uniform float u_brillance;
 
 ...
@@ -314,7 +314,7 @@ var matriceCamera = regarderVers(camera, cible, vertical);
 +  }
 </code></pre><p>Le produit scalaire peut être négatif. Certaines puissances ne sont pas définies sur les nombres négatifs. On vérifie donc sa valeur pour le mettre à zéro s&#39;il est négatif.</p>
 <p>Bien sûr on doit créer le pointeur et renseigner sa valeur dans le programme</p>
-<pre><code>+var emplacementBrillance = gl.getUniformLocation(programme, &quot;u_brillance&quot;);
+<pre class="prettyprint"><code>+var emplacementBrillance = gl.getUniformLocation(programme, &quot;u_brillance&quot;);
 
 ...
 
@@ -329,7 +329,7 @@ gl.uniform1f(emplacementBrillance, brillance);
 </p>
 <p>Une dernière chose que je souhaite mentionner dans cet article, ce sont les couleurs des lumières. </p>
 <p>Jusque là on a utilisé <code>lumiere</code> pour multiplier la couleur qu&#39;on donne au F. On peut fournir une couleur de lumière aussi si on veut des lumières colorées.</p>
-<pre><code>uniform vec4 u_couleur;
+<pre class="prettyprint"><code>uniform vec4 u_couleur;
 uniform float u_brillance;
 +uniform vec3 u_couleurLumiere;
 +uniform vec3 u_couleurSpeculaire;
@@ -344,12 +344,12 @@ uniform float u_brillance;
 *  gl_FragColor.rgb += specular * u_couleurSpeculaire;
 }
 </code></pre><p>et bien sûr</p>
-<pre><code>+  var emplacementCouleurLumiere =
+<pre class="prettyprint"><code>+  var emplacementCouleurLumiere =
 +      gl.getUniformLocation(programme, &quot;u_couleurLumiere&quot;);
 +  var emplacementCouleurSpeculaire =
 +      gl.getUniformLocation(programme, &quot;u_couleurSpeculaire&quot;);
 </code></pre><p>et</p>
-<pre><code>// Indique la couleur de la lumière au programme
+<pre class="prettyprint"><code>// Indique la couleur de la lumière au programme
 +  gl.uniform3fv(emplacementCouleurLumiere, normaliser([1, 0.6, 0.6]));  // lumiere rouge
 // Indique la couleur de l&#39;éclairage spéculaire au programme
 +  gl.uniform3fv(emplacementCouleurSpeculaire, normaliser([1, 0.6, 0.6]));  // lumiere rouge

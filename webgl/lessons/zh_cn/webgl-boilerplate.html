@@ -93,7 +93,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 所以它们是一种自定义语言，目的是能够在GPU上良好运行。
 这两个方法需要编译并链接在一起，而这个过程在 99% 的WbgGL应用中是一样的。</p>
 <p>这是编译着色器的样板代码。</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * 创建并编译一个着色器
  *
  * @param {!WebGLRenderingContext} gl WebGL上下文。
@@ -122,7 +122,7 @@ function compileShader(gl, shaderSource, shaderType) {
   return shader;
 }
 </code></pre><p>这是链接 2 个着色器到一个着色程序中的代码</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * 从 2 个着色器中创建一个程序
  *
  * @param {!WebGLRenderingContext) gl WebGL上下文。
@@ -154,7 +154,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 而且这几行代码在几乎所有的WebGL程序中都是相似的。</p>
 <p>我喜欢把着色器代码放在非 JavaScript 代码的 &lt;script&gt; 标签中，
 这样很容易编辑，使用的时候可以这样做</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * 用 script 标签的内容创建着色器
  *
  * @param {!WebGLRenderingContext} gl WebGL上下文。
@@ -188,9 +188,9 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
   return compileShader(gl, shaderSource, opt_shaderType);
 };
 </code></pre><p>现在编译着色器只需要</p>
-<pre><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
+<pre class="prettyprint"><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
 </code></pre><p>我通常会更进一步，使用一个方法编译两个着色器，附加到程序并链接到程序。</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * 通过两个 script 标签创建程序。
  *
  * @param {!WebGLRenderingContext} gl WebGL上下文。
@@ -207,9 +207,9 @@ function createProgramFromScripts(
 </code></pre><p>另一几乎在我所有WebGL应用中都会使用的代码是重置画布大小。
 你可以<a href="webgl-resizing-the-canvas.html">在这里看看那个方法是如何实现的</a>。</p>
 <p>所有示例中使用的这两个方法都在</p>
-<pre><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
+<pre class="prettyprint"><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>里，并且像这样使用</p>
-<pre><code>var program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(
   gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...

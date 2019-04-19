@@ -133,7 +133,7 @@ facing.</p>
 <code>F</code>は四角柱と同じように表面がXとYとZ軸と同調しているので結構簡単である。
 前を向いている面の法線ベクトルは<code>0, 0, 1</code>である。裏を向いている面の法線ベクトル<code>0, 0, -1</code>である。
 左を向いている法線ベクトルは<code>-1, 0, 0</code>である。右は<code>1, 0, 0</code>、上は<code>0, 1, 0</code>、下は<code>0, -1, 0</code>である。</p>
-<pre><code>function setNormals(gl) {
+<pre class="prettyprint"><code>function setNormals(gl) {
   var normals = new Float32Array([
           // 前面の左縦列
           0, 0, 1,
@@ -266,7 +266,7 @@ facing.</p>
   gl.bufferData(gl.ARRAY_BUFFER, normals, gl.STATIC_DRAW);
 }
 </code></pre><p>そしてそれをセットアップする。その間照明を分かり易くする為に頂点の色を抜く。</p>
-<pre><code>// データはどれの属性に与えなければいけないかを調べる。
+<pre class="prettyprint"><code>// データはどれの属性に与えなければいけないかを調べる。
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 -var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 +var normalLocation = gl.getAttribLocation(program, &quot;a_normal&quot;);
@@ -285,7 +285,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +// バッファーに法線ベクトルを入れる。
 +setNormals(gl);
 </code></pre><p>そして描画する時</p>
-<pre><code>-// 色の属性オンにする。
+<pre class="prettyprint"><code>-// 色の属性オンにする。
 -gl.enableVertexAttribArray(colorLocation);
 -
 -// colorBufferをARRAY_BUFFERに結び付ける。
@@ -318,7 +318,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +    normalLocation, size, type, normalize, stride, offset)
 </code></pre><p>シェーダーに法線ベクトルを使わせよう</p>
 <p>まず、頂点シェーダーで法線ベクトルをピクセルシェーダーに伝えるように更新する。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 -attribute vec4 a_color;
 +attribute vec3 a_normal;
 
@@ -338,7 +338,7 @@ void main() {
 +  v_normal = a_normal;
 }
 </code></pre><p>そして、ピクセルシェーダーで光線の方向と法線ベクトルの内積を計算する。</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // 頂点シェーダーに渡された。
 -varying vec4 v_color;
@@ -361,13 +361,13 @@ void main() {
 +   gl_FragColor.rgb *= light;
 }
 </code></pre><p><code>u_color</code>と<code>u_reverseLightDirection</code>のユニフォム・ロケーションを調べなきゃ。</p>
-<pre><code>  // ユニフォムを調べる。
+<pre class="prettyprint"><code>  // ユニフォムを調べる。
   var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
 +  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 +  var reverseLightDirectionLocation =
 +      gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
 </code></pre><p>そして、それを設定しなきゃ。</p>
-<pre><code>  // 行列を設定する。
+<pre class="prettyprint"><code>  // 行列を設定する。
   gl.uniformMatrix4fv(matrixLocation, false, worldViewProjectionMatrix);
 
 +  // 色を設定する。
@@ -394,7 +394,7 @@ void main() {
 今は<code>u_matrix</code>という一つの行列しか使われていない。行列を２つにしよう。一つは<code>u_world</code>として、
 それがワールド行列になる。もう一つと<code>u_worldViewProjection</code>として、
 それが今までの<code>u_matrix</code>と同じような行列になる。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec3 a_normal;
 
 *uniform mat4 u_worldViewProjection;
@@ -412,12 +412,12 @@ void main() {
 </code></pre><p><code>a_normal</code>を<code>mat3(u_world)</code>に掛けていることに注目して。
 法線ベクトルは方向だけなので行列の移動する部分が要らない。行列の向き部分は上の3x3の部分である。</p>
 <p>ユニフォームを調べなきゃ。</p>
-<pre><code>  // ユニフォームを調べる。
+<pre class="prettyprint"><code>  // ユニフォームを調べる。
 *  var worldViewProjectionLocation =
 *      gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 +  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 </code></pre><p>そして、行列を設定しているところの更新が必要である。</p>
-<pre><code>*// 行列を設定する。
+<pre class="prettyprint"><code>*// 行列を設定する。
 *gl.uniformMatrix4fv(
 *    worldViewProjectionLocation, false,
 *    worldViewProjectionMatrix);
@@ -453,7 +453,7 @@ void main() {
 <p>この解決方法を実装するためにこういうふうに変更しよう。まず、シェーダーを更新する。
 技術的に<code>u_world</code>の値だけ変更出来るが、正しい意味がある変数の名前を付けた方がいい。
 そうしないとコードが分かりにくくなる。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform mat4 u_worldViewProjection;
@@ -469,11 +469,11 @@ void main() {
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 </code></pre><p>そして、それを調べなきゃ</p>
-<pre><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
+<pre class="prettyprint"><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 +  var worldInverseTransposeLocation =
 +      gl.getUniformLocation(program, &quot;u_worldInverseTranspose&quot;);
 </code></pre><p>そして、計算して設定しなきゃ。</p>
-<pre><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
+<pre class="prettyprint"><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
 var worldInverseMatrix = m4.inverse(worldMatrix);
 var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
@@ -486,7 +486,7 @@ gl.uniformMatrix4fv(
 +    worldInverseTransposeLocation, false,
 +    worldInverseTransposeMatrix);
 </code></pre><p>行列を転置するコードはこれである。</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   transpose: function(m) {
     return [
       m[0], m[4], m[8], m[12],

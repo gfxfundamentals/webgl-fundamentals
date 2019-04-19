@@ -107,7 +107,7 @@ WebGL과 OpenGL에서, Framebuffer는 좋은 이름이 아닙니다.
 WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어떤 종류의 buffer도 아닌데요.
 하지만, texture를 framebuffer에 첨부해서 해당 texture로 렌더링할 수 있습니다.</p>
 <p>먼저 <a href="webgl-image-processing.html">오래된 texture 생성 코드</a>를 함수로 바꿔봅시다</p>
-<pre><code>  function createAndSetupTexture(gl) {
+<pre class="prettyprint"><code>  function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -124,7 +124,7 @@ WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어
   var originalImageTexture = createAndSetupTexture(gl);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 </code></pre><p>그리고 2개 이상의 c 만드는 함수를 사용해서 framebuffer 2개에 첨부합니다.</p>
-<pre><code>  // texture 2개를 만들고 framebuffer에 첨부합니다.
+<pre class="prettyprint"><code>  // texture 2개를 만들고 framebuffer에 첨부합니다.
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
@@ -159,7 +159,7 @@ WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어
     );
   }
 </code></pre><p>이제 kernel 집합을 만든 다음 적용할 목록을 만들어봅시다.</p>
-<pre><code>  // 여러 convolution kernel 정의
+<pre class="prettyprint"><code>  // 여러 convolution kernel 정의
   var kernels = {
     normal: [
       0, 0, 0,
@@ -191,7 +191,7 @@ WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어
     &quot;unsharpen&quot;
   ];
 </code></pre><p>그리고 마지막으로 렌더링할 texture를 주고 받으면서, 하나씩 적용합니다.</p>
-<pre><code>  // 원본 이미지로 시작
+<pre class="prettyprint"><code>  // 원본 이미지로 시작
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
   // texture에 이미지를 그리는 동안 y축 뒤집지 않기
@@ -250,7 +250,7 @@ WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어
 왜냐하면 framebuffer는 보여지지 않기 때문에, 어느 부분이 상단/하단인지는 관계가 없습니다.
 중요한 건 framebuffer에서 픽셀 0,0이 우리 계산의 0,0에 상응한다는 겁니다.
 이것을 해결하기 위해 shader에 하나 이상의 입력을 추가해서 뒤집을지 말지를 설정할 수 있습니다.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_flipY;
 ...
@@ -264,7 +264,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>그런 다음 렌더링할 때 설정할 수 있습니다.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
   var flipYLocation = gl.getUniformLocation(program, &quot;u_flipY&quot;);
 

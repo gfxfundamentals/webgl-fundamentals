@@ -145,7 +145,7 @@ very boxy and its faces are aligned to the x, y, or z axis it will be
 pretty easy.  Things that are facing forward have the normal <code>0, 0, 1</code>.
 Things that are facing away are <code>0, 0, -1</code>.  Facing left is <code>-1, 0, 0</code>,
 Facing right is <code>1, 0, 0</code>.  Up is <code>0, 1, 0</code> and down is <code>0, -1, 0</code>.</p>
-<pre><code>function setNormals(gl) {
+<pre class="prettyprint"><code>function setNormals(gl) {
   var normals = new Float32Array([
           // left column front
           0, 0, 1,
@@ -278,7 +278,7 @@ Facing right is <code>1, 0, 0</code>.  Up is <code>0, 1, 0</code> and down is <c
 }
 </code></pre><p>and set them up. While we&#39;re at it let&#39;s remove the vertex colors
 so it&#39;s easier to see the lighting.</p>
-<pre><code>// look up where the vertex data needs to go.
+<pre class="prettyprint"><code>// look up where the vertex data needs to go.
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 -var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 +var normalLocation = gl.getAttribLocation(program, &quot;a_normal&quot;);
@@ -299,7 +299,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +// Put normals data into buffer
 +setNormals(gl);
 </code></pre><p>And at render time</p>
-<pre><code>-// Turn on the color attribute
+<pre class="prettyprint"><code>-// Turn on the color attribute
 -gl.enableVertexAttribArray(colorLocation);
 -
 -// Bind the color buffer.
@@ -331,7 +331,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 </code></pre><p>Now we need to make our shaders use them</p>
 <p>First the vertex shader we just pass the normals through to
 the fragment shader</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 -attribute vec4 a_color;
 +attribute vec3 a_normal;
 
@@ -352,7 +352,7 @@ void main() {
 }
 </code></pre><p>And the fragment shader we&#39;ll do the math using the dot product
 of the direction of the light and the normal</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // Passed in from the vertex shader.
 -varying vec4 v_color;
@@ -376,13 +376,13 @@ void main() {
 +   gl_FragColor.rgb *= light;
 }
 </code></pre><p>Then we need to lookup the locations of <code>u_color</code> and <code>u_reverseLightDirection</code>.</p>
-<pre><code>  // lookup uniforms
+<pre class="prettyprint"><code>  // lookup uniforms
   var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
 +  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 +  var reverseLightDirectionLocation =
 +      gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
 </code></pre><p>and we need to set them</p>
-<pre><code>  // Set the matrix.
+<pre class="prettyprint"><code>  // Set the matrix.
   gl.uniformMatrix4fv(matrixLocation, false, worldViewProjectionMatrix);
 
 +  // Set the color to use
@@ -414,7 +414,7 @@ only passing in 1 matrix called <code>u_matrix</code>.  Let&#39;s change it to p
 matrices.  One called <code>u_world</code> which will be the world matrix.  Another
 called <code>u_worldViewProjection</code> which will be what we&#39;re currently passing
 in as <code>u_matrix</code></p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec3 a_normal;
 
 *uniform mat4 u_worldViewProjection;
@@ -434,12 +434,12 @@ because normals are a direction so we don&#39;t care about translation.
 The orientation portion of the matrix is only in the top 3x3
 area of the matrix.</p>
 <p>Now we have to look those uniforms up</p>
-<pre><code>  // lookup uniforms
+<pre class="prettyprint"><code>  // lookup uniforms
 *  var worldViewProjectionLocation =
 *      gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 +  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 </code></pre><p>And we have to change the code that updates them</p>
-<pre><code>*// Set the matrices
+<pre class="prettyprint"><code>*// Set the matrices
 *gl.uniformMatrix4fv(
 *    worldViewProjectionLocation, false,
 *    worldViewProjectionMatrix);
@@ -485,7 +485,7 @@ is correct.</p>
 we&#39;ll update the shader.  Technically we could just update the value of
 <code>u_world</code> but it&#39;s best if we rename things so they&#39;re named what they
 actually are otherwise it will get confusing.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform mat4 u_worldViewProjection;
@@ -501,11 +501,11 @@ void main() {
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 </code></pre><p>Then we need to look that up</p>
-<pre><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
+<pre class="prettyprint"><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 +  var worldInverseTransposeLocation =
 +      gl.getUniformLocation(program, &quot;u_worldInverseTranspose&quot;);
 </code></pre><p>And we need to compute and set it</p>
-<pre><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
+<pre class="prettyprint"><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
 var worldInverseMatrix = m4.inverse(worldMatrix);
 var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
@@ -518,7 +518,7 @@ gl.uniformMatrix4fv(
 +    worldInverseTransposeLocation, false,
 +    worldInverseTransposeMatrix);
 </code></pre><p>and here&#39;s the code to transpose a matrix</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   transpose: function(m) {
     return [
       m[0], m[4], m[8], m[12],

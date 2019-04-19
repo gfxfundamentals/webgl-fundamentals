@@ -91,7 +91,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>事实上这个问题和WebGL并不相关，如果你想实现动画只需要利用JavaScript
 随着时间改变一些值然后绘制。</p>
 <p>我们可以看看之前使用的动画的例子。</p>
-<pre><code>*var fieldOfViewRadians = degToRad(60);
+<pre class="prettyprint"><code>*var fieldOfViewRadians = degToRad(60);
 *var rotationSpeed = 1.2;
 
 *requestAnimationFrame(drawScene);
@@ -133,7 +133,7 @@ function drawScene() {
 <p>我觉得如果时间的单位是秒会简单一些，由于 <code>requestAnimationFrame</code> 传递给我们的时间是毫秒
 （千分之一秒），我们需要将它乘以 0.001 得到秒。</p>
 <p>所以就可以像这样计算出时间差</p>
-<pre><code>*var then = 0;
+<pre class="prettyprint"><code>*var then = 0;
 
 requestAnimationFrame(drawScene);
 
@@ -149,7 +149,7 @@ requestAnimationFrame(drawScene);
    ...
 </code></pre><p>一旦有了 <code>deltaTime</code> 就可以决定每秒转多少个单位，例子中是 1.2 意思就是每秒转动 1.2 弧度。
 大约书 1/5 圈或者说 5 秒可以转一整圈，不管帧率是多少。</p>
-<pre><code>*    rotation[1] += rotationSpeed * deltaTime;
+<pre class="prettyprint"><code>*    rotation[1] += rotationSpeed * deltaTime;
 </code></pre><p>这是这个版本</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation.html"></iframe>

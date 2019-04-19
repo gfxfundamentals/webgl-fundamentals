@@ -93,7 +93,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 这样的文字基本上是固定在某个位置的。</p>
 <p>简单的实现方式是创建一个或多个HTML元素，然后使用CSS让它们覆盖在画布上。</p>
 <p>例如：首先创建一个容器然后将画布和一些HTML元素放在里面，让这些元素在容器中覆盖在画布上。</p>
-<pre><code>&lt;div class=&quot;container&quot;&gt;
+<pre class="prettyprint"><code>&lt;div class=&quot;container&quot;&gt;
   &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
   &lt;div id=&quot;overlay&quot;&gt;
     &lt;div&gt;Time: &lt;span id=&quot;time&quot;&gt;&lt;/span&gt;&lt;/div&gt;
@@ -101,7 +101,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   &lt;/div&gt;
 &lt;/div&gt;
 </code></pre><p>然后设置CSS使HTML元素覆盖在画布上</p>
-<pre><code>.container {
+<pre class="prettyprint"><code>.container {
     position: relative;
 }
 #overlay {
@@ -110,7 +110,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     top: 10px;
 }
 </code></pre><p>在初始化时找到这些元素并设置需要的属性。</p>
-<pre><code>// 找到需要用到的元素
+<pre class="prettyprint"><code>// 找到需要用到的元素
 var timeElement = document.getElementById(&quot;time&quot;);
 var angleElement = document.getElementById(&quot;angle&quot;);
 
@@ -122,7 +122,7 @@ var angleNode = document.createTextNode(&quot;&quot;);
 timeElement.appendChild(timeNode);
 angleElement.appendChild(angleNode);
 </code></pre><p>最后在渲染时更新节点</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
     ...
 
     // 将旋转角从弧度转换为角度
@@ -143,7 +143,7 @@ angleElement.appendChild(angleNode);
 </p>
 <p>注意到我将修改的内容放入 span 中再放到 div 里，我觉的这样比直接放在 div 中要快一些，
 像这样</p>
-<pre><code>timeNode.value = &quot;Time &quot; + clock.toFixed(2);
+<pre class="prettyprint"><code>timeNode.value = &quot;Time &quot; + clock.toFixed(2);
 </code></pre><p>我也使用的是  <code>node = document.createTextNode()</code> 并在之后调用的是
 <code>node.nodeValue = someMsg</code>，我也可以使用 <code>someElement.innerHTML = someHTML</code>，
 那样就更灵活，可以插入HTML字符串在里面，但是那样可能就会慢一些，
@@ -161,12 +161,12 @@ angleElement.appendChild(angleNode);
 </p>
 <p>还有一个重要的事情是让文字的位置和渲染的东西关联，我们也可以使用HTML实现。</p>
 <p>在这个例子中我们还是创建一个容器，放入画布和其他容器，用来放移动的HTML</p>
-<pre><code>&lt;div class=&quot;container&quot;&gt;
+<pre class="prettyprint"><code>&lt;div class=&quot;container&quot;&gt;
   &lt;canvas id=&quot;canvas&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
   &lt;div id=&quot;divcontainer&quot;&gt;&lt;/div&gt;
 &lt;/div&gt;
 </code></pre><p>设置CSS</p>
-<pre><code>.container {
+<pre class="prettyprint"><code>.container {
     position: relative;
     overflow: none;
     width: 400px;
@@ -194,7 +194,7 @@ angleElement.appendChild(angleNode);
 <code>z-index: 10</code> 使它浮在画布上，<code>overflow: hidden</code> 使子元素被边界裁剪。</p>
 <p>最后 <code>.floating-div</code> 用来定位创建的 div。</p>
 <p>所以现在需要找到divcontainer，创建 div 然后加在里面。</p>
-<pre><code>// 找到 divcontainer
+<pre class="prettyprint"><code>// 找到 divcontainer
 var divContainerElement = document.getElementById(&quot;divcontainer&quot;);
 
 // 创建 div
@@ -210,7 +210,7 @@ div.appendChild(textNode);
 // 加到 divcontainer 里
 divContainerElement.appendChild(div);
 </code></pre><p>现在就通过设置它的样式来改变位置。</p>
-<pre><code>div.style.left = Math.floor(x) + &quot;px&quot;;
+<pre class="prettyprint"><code>div.style.left = Math.floor(x) + &quot;px&quot;;
 div.style.top  = Math.floor(y) + &quot;px&quot;;
 textNode.nodeValue = clock.toFixed(2);
 </code></pre><p>这是例子，将文字限制在框内运动。</p>
@@ -225,7 +225,7 @@ textNode.nodeValue = clock.toFixed(2);
 <p>通过那篇文章我们知道了如何使用矩阵，如何将它们乘起来，如何使用一个透视投影矩阵将坐标转换到裁剪空间。
 我们也可以在JavaScript中做相同的运算，然后将裁剪空间坐标 (-1 到 +1) 转换到像素坐标，
 使用这个像素坐标设置 div 的位置。</p>
-<pre><code>gl.drawArrays(...);
+<pre class="prettyprint"><code>gl.drawArrays(...);
 
 // 我们刚计算出绘制三维 F 的矩阵
 

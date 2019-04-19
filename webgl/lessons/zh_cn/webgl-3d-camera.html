@@ -121,7 +121,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 就可以计算出它的逆矩阵，利用这个逆矩阵可以不动相机，将物体从相反的方向移动到相机前。</p>
 <p>让我们来做一个三维场景，像上图一样有一圈 &#39;F&#39; 。</p>
 <p>首先，由于5个物体使用的是同一个投影矩阵，所以我们将投影矩阵的计算放在循环外</p>
-<pre><code>
+<pre class="prettyprint"><code>
 // 计算投影矩阵
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
@@ -135,7 +135,7 @@ var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 </div>
 
 </p>
-<pre><code>var numFs = 5;
+<pre class="prettyprint"><code>var numFs = 5;
 var radius = 200;
 
 // 计算相机的矩阵
@@ -145,13 +145,13 @@ cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 尽管相机还是在原点但是相对关系是期望的。我们可以使用 <code>inverse</code> 方法计算逆矩阵（
 完全对立的转换矩阵），在这个例子中提供的是绕原点转动的矩阵，
 它的逆矩阵是移动相机以外的所有物体，好像相机在原点一样。</p>
-<pre><code>// 通过相机矩阵计算视图矩阵
+<pre class="prettyprint"><code>// 通过相机矩阵计算视图矩阵
 var viewMatrix = m4.inverse(cameraMatrix);
 </code></pre><p>现在将视图矩阵和投影矩阵结合在一起</p>
-<pre><code>// 计算组合矩阵
+<pre class="prettyprint"><code>// 计算组合矩阵
 var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </code></pre><p>最后绘制一圈 F，将每个 F 乘以视图投影矩阵，然后旋转和向外平移 radius 个单位。</p>
-<pre><code>for (var ii = 0; ii &lt; numFs; ++ii) {
+<pre class="prettyprint"><code>for (var ii = 0; ii &lt; numFs; ++ii) {
   var angle = ii * Math.PI * 2 / numFs;
   var x = Math.cos(angle) * radius;
   var y = Math.sin(angle) * radius
@@ -248,17 +248,17 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </pre></div>
 
 <p>这是计算叉乘的代码</p>
-<pre><code>function cross(a, b) {
+<pre class="prettyprint"><code>function cross(a, b) {
   return [a[1] * b[2] - a[2] * b[1],
           a[2] * b[0] - a[0] * b[2],
           a[0] * b[1] - a[1] * b[0]];
 }
 </code></pre><p>这是向量相减的代码</p>
-<pre><code>function subtractVectors(a, b) {
+<pre class="prettyprint"><code>function subtractVectors(a, b) {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 </code></pre><p>这是单位化向量的代码</p>
-<pre><code>function normalize(v) {
+<pre class="prettyprint"><code>function normalize(v) {
   var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   // 确定不会除以 0
   if (length &gt; 0.00001) {
@@ -268,7 +268,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
   }
 }
 </code></pre><p>这是计算“朝向”矩阵的代码</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   lookAt: function(cameraPosition, target, up) {
     var zAxis = normalize(
         subtractVectors(cameraPosition, target));
@@ -286,7 +286,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
     ];
   }
 </code></pre><p>这是在移动过程中朝向某个确切的 &#39;F&#39; 的用法。</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
   // 计算第一个 F 的位置
   var fPosition = [radius, 0, 0];

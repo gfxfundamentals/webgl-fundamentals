@@ -130,7 +130,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>无论你的画布有多大，裁剪空间的坐标范围永远是 -1 到 1 。
 这里有一个简单的WebGL例子展示WebGL的简单用法。</p>
 <p>让我们从顶点着色器开始</p>
-<pre><code>// 一个属性值，将会从缓冲中获取数据
+<pre class="prettyprint"><code>// 一个属性值，将会从缓冲中获取数据
 attribute vec4 a_position;
 
 // 所有着色器都有一个main方法
@@ -140,7 +140,7 @@ void main() {
   gl_Position = a_position;
 }
 </code></pre><p>如果用JavaScript代替GLSL，当它运行的时候，你可以想象它做了类似以下的事情</p>
-<pre><code>// *** 伪代码!! ***
+<pre class="prettyprint"><code>// *** 伪代码!! ***
 
 var positionBuffer = [
   0, 0, 0, 0,
@@ -163,7 +163,7 @@ drawArrays(..., offset, count) {
 </code></pre><p>实际情况没有那么简单，因为 <code>positionBuffer</code> 将会被转换成二进制数据（见下文），
 所以真实情况下从缓冲中读取数据有些麻烦，但是希望这个例子能够让你想象出顶点着色器是怎么执行的。</p>
 <p>接下来我们需要一个片断着色器</p>
-<pre><code>// 片断着色器没有默认精度，所以我们需要设置一个精度
+<pre class="prettyprint"><code>// 片断着色器没有默认精度，所以我们需要设置一个精度
 // mediump是一个不错的默认值，代表“medium precision”（中等精度）
 precision mediump float;
 
@@ -175,18 +175,18 @@ void main() {
 0.5代表蓝色值，最后一个1表示阿尔法通道值。WebGL中的颜色值范围从 0 到 1 。</p>
 <p>现在我们有了两个着色器方法，让我们开始使用WebGL吧</p>
 <p>首先我们需要一个HTML中的canvas（画布）对象</p>
-<pre><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>然后可以用JavaScript获取它</p>
-<pre><code> var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code> var canvas = document.getElementById(&quot;c&quot;);
 </code></pre><p>现在我们创建一个WebGL渲染上下文（WebGLRenderingContext）</p>
-<pre><code> var gl = canvas.getContext(&quot;webgl&quot;);
+<pre class="prettyprint"><code> var gl = canvas.getContext(&quot;webgl&quot;);
  if (!gl) {
     // 你不能使用WebGL！
     ...
 </code></pre><p>现在我们需要编译着色器对然后提交到GPU，先让我们通过字符串获取它们。
 你可以利用JavaScript中创建字符串的方式创建GLSL字符串：用串联的方式（concatenating），
 用AJAX下载，用多行模板数据。或者在这个例子里，将它们放在非JavaScript类型的标签中。</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
   // 一个属性变量，将会从缓冲中获取数据
   attribute vec4 a_position;
@@ -217,7 +217,7 @@ void main() {
 <p>接下来我们使用的方法将会创建一个着色器，只需要上传GLSL数据，然后编译成着色器。
 你可能注意到这段代码没有任何注释，因为可以从方法名很清楚的了解方法的作用
 （这里作为翻译版本我还是稍微注释一下）。</p>
-<pre><code>// 创建着色器方法，输入参数：渲染上下文，着色器类型，数据源
+<pre class="prettyprint"><code>// 创建着色器方法，输入参数：渲染上下文，着色器类型，数据源
 function createShader(gl, type, source) {
   var shader = gl.createShader(type); // 创建着色器对象
   gl.shaderSource(shader, source); // 提供数据源
@@ -231,13 +231,13 @@ function createShader(gl, type, source) {
   gl.deleteShader(shader);
 }
 </code></pre><p>现在我们可以使用以上方法创建两个着色器</p>
-<pre><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
+<pre class="prettyprint"><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
 var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot;).text;
 
 var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 </code></pre><p>然后我们将这两个着色器 <em>link</em>（链接）到一个 <em>program</em>（着色程序）</p>
-<pre><code>function createProgram(gl, vertexShader, fragmentShader) {
+<pre class="prettyprint"><code>function createProgram(gl, vertexShader, fragmentShader) {
   var program = gl.createProgram();
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
@@ -251,21 +251,21 @@ var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
   gl.deleteProgram(program);
 }
 </code></pre><p>然后调用它</p>
-<pre><code>var program = createProgram(gl, vertexShader, fragmentShader);
+<pre class="prettyprint"><code>var program = createProgram(gl, vertexShader, fragmentShader);
 </code></pre><p>现在我们已经在GPU上创建了一个GLSL着色程序，我们还需要给它提供数据。
 WebGL的主要任务就是设置好状态并为GLSL着色程序提供数据。
 在这个例子中GLSL着色程序的唯一输入是一个属性值<code>a_position</code>。
 我们要做的第一件事就是从刚才创建的GLSL着色程序中找到这个属性值所在的位置。</p>
-<pre><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
+<pre class="prettyprint"><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 </code></pre><p>寻找属性值位置（和全局属性位置）应该在初始化的时候完成，而不是在渲染循环中。</p>
 <p>属性值从缓冲中获取数据，所以我们创建一个缓冲</p>
-<pre><code>var positionBuffer = gl.createBuffer();
+<pre class="prettyprint"><code>var positionBuffer = gl.createBuffer();
 </code></pre><p>WebGL可以通过绑定点操控全局范围内的许多数据，你可以把绑定点想象成一个WebGL内部的全局变量。
 首先绑定一个数据源到绑定点，然后可以引用绑定点指向该数据源。
 所以让我们来绑定位置信息缓冲（下面的绑定点就是<code>ARRAY_BUFFER</code>）。</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 </code></pre><p>现在我们需要通过绑定点向缓冲中存放数据</p>
-<pre><code>// 三个二维点坐标
+<pre class="prettyprint"><code>// 三个二维点坐标
 var positions = [
   0, 0,
   0, 0.5,
@@ -290,26 +290,26 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 但是如果像稍后展示的示例那样嵌在页面中，它就会被拉伸以填满可用空间
 （你也可以点击示例下方的“点此在新窗口中浏览”在独立窗口中查看示例）。
 通过使用CSS调整画布尺寸可以轻松处理这些情况。</p>
-<pre><code>webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+<pre class="prettyprint"><code>webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 </code></pre><p>我们需要告诉WebGL怎样把提供的<code>gl_Position</code>裁剪空间坐标对应到画布像素坐标，
 通常我们也把画布像素坐标叫做屏幕空间。为了实现这个目的，我们只需要调用<code>gl.viewport</code>
 方法并传递画布的当前尺寸。</p>
-<pre><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+<pre class="prettyprint"><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 </code></pre><p>这样就告诉WebGL裁剪空间的 -1 -&gt; +1  分别对应到x轴的 0 -&gt; <code>gl.canvas.width</code>
 和y轴的 0 -&gt; <code>gl.canvas.height</code>。</p>
 <p>我们用<code>0, 0, 0, 0</code>清空画布，分别对应 r, g, b, alpha （红，绿，蓝，阿尔法）值，
 所以在这个例子中我们让画布变透明了。</p>
-<pre><code>// 清空画布
+<pre class="prettyprint"><code>// 清空画布
 gl.clearColor(0, 0, 0, 0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 </code></pre><p>我们需要告诉WebGL运行哪个着色程序</p>
-<pre><code>// 告诉它用我们之前写好的着色程序（一个着色器对）
+<pre class="prettyprint"><code>// 告诉它用我们之前写好的着色程序（一个着色器对）
 gl.useProgram(program);
 </code></pre><p>接下来我们需要告诉WebGL怎么从我们之前准备的缓冲中获取数据给着色器中的属性。
 首先我们需要启用对应属性</p>
-<pre><code>gl.enableVertexAttribArray(positionAttributeLocation);
+<pre class="prettyprint"><code>gl.enableVertexAttribArray(positionAttributeLocation);
 </code></pre><p>然后指定从缓冲中读取数据的方式</p>
-<pre><code>// 将绑定点绑定到缓冲数据（positionBuffer）
+<pre class="prettyprint"><code>// 将绑定点绑定到缓冲数据（positionBuffer）
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
 // 告诉属性怎么从positionBuffer中读取数据 (ARRAY_BUFFER)
@@ -325,13 +325,13 @@ gl.vertexAttribPointer(
 换句话说就是属性绑定到了<code>positionBuffer</code>上。这也意味着现在利用绑定点随意将
 <code>ARRAY_BUFFER</code>绑定到其它数据上后，该属性依然从<code>positionBuffer</code>上读取数据。</p>
 <p>从GLSL的顶点着色器中注意到<code>a_position</code>属性的数据类型是<code>vec4</code></p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 </code></pre><p><code>vec4</code>是一个有四个浮点数据的数据类型。在JavaScript中你可以把它想象成
 <code>a_position = {x: 0, y: 0, z: 0, w: 0}</code>。之前我们设置的<code>size = 2</code>，
 属性默认值是<code>0, 0, 0, 1</code>，然后属性将会从缓冲中获取前两个值（ x 和 y ）。
 z和w还是默认值 0 和 1 。</p>
 <p>我们终于可以让WebGL运行我们的GLSL着色程序了。</p>
-<pre><code>var primitiveType = gl.TRIANGLES;
+<pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
 var offset = 0;
 var count = 3;
 gl.drawArrays(primitiveType, offset, count);
@@ -343,12 +343,12 @@ gl.drawArrays(primitiveType, offset, count);
 不论我们的画布大小是多少，在裁剪空间中每个方向的坐标范围都是 -1 到 1 。</p>
 <p>由于我们的顶点着色器仅仅是传递位置缓冲中的值给<code>gl_Position</code>，
 所以三角形在裁剪空间中的坐标如下</p>
-<pre><code>  0, 0,
+<pre class="prettyprint"><code>  0, 0,
   0, 0.5,
   0.7, 0,
 </code></pre><p>WebGL将会把它们从裁剪空间转换到屏幕空间并在屏幕空间绘制一个三角形，
 如果画布大小是400×300我们会得到类似以下的转换</p>
-<pre><code> 裁剪空间            屏幕空间
+<pre class="prettyprint"><code> 裁剪空间            屏幕空间
    0, 0       -&gt;   200, 150
    0, 0.5     -&gt;   200, 225
  0.7, 0       -&gt;   340, 150
@@ -372,7 +372,7 @@ gl.drawArrays(primitiveType, offset, count);
 <p>对于描述二维空间中的物体，比起裁剪空间坐标你可能更希望使用屏幕像素坐标。
 所以我们来改造一下顶点着色器，让我们提供给它像素坐标而不是裁剪空间坐标。
 这是我们新的顶点着色器</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
 *  attribute vec2 a_position;
@@ -396,12 +396,12 @@ gl.drawArrays(primitiveType, offset, count);
 </code></pre><p>这里有些变化需要注意，我们将<code>a_position</code>改成<code>vec2</code>类型是因为我们只需要用<code>x</code>和<code>y</code>值。
 <code>vec2</code>和<code>vec4</code>有些类似但是仅有<code>x</code>和<code>y</code>值。</p>
 <p>接着我们添加了一个<code>uniform</code>（全局变量）叫做<code>u_resolution</code>，为了设置它的值我们需要找到它的位置。</p>
-<pre><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
+<pre class="prettyprint"><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 </code></pre><p>其余变化的应该能从注释中理解。通过设置<code>u_resolution</code>为画布的分辨率，
 着色器将会从<code>positionBuffer</code>中获取像素坐标将之转换为对应的裁剪空间坐标。</p>
 <p>现在我们可以将位置信息转换为像素坐标。这次我们将通过绘制两个三角形来绘制一个矩形，
 每个三角形有三个点。</p>
-<pre><code>var positions = [
+<pre class="prettyprint"><code>var positions = [
 *  10, 20,
 *  80, 20,
 *  10, 30,
@@ -413,7 +413,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 </code></pre><p>在我们设置好使用这个着色程序后，可以设置刚才创建的全局变量的值。
 <code>gl.useProgram</code>就与之前讲到的<code>gl.bindBuffer</code>相似，设置当前使用的着色程序。
 之后所有类似<code>gl.uniformXXX</code>格式的方法都是设置当前着色程序的全局变量。</p>
-<pre><code>gl.useProgram(program);
+<pre class="prettyprint"><code>gl.useProgram(program);
 
 ...
 
@@ -421,7 +421,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 </code></pre><p>显然我们需要告诉WebGL要运行六次顶点着色器来画两个三角形。
 所以我们将<code>count</code>改成<code>6</code>。</p>
-<pre><code>// 绘制
+<pre class="prettyprint"><code>// 绘制
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
 *var count = 6;
@@ -437,7 +437,7 @@ gl.drawArrays(primitiveType, offset, count);
 </p>
 <p>你可能注意到矩形在区域左下角，WebGL认为左下角是 0，0 。
 想要像传统二维API那样起点在左上角，我们只需翻转y轴即可。</p>
-<pre><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+<pre class="prettyprint"><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>现在矩形在我们期望的位置了</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-top-left.html"></iframe>
@@ -448,7 +448,7 @@ gl.drawArrays(primitiveType, offset, count);
 <p>让我们来定义一个可以生成矩形的方法，这样我们就可以调用它定义形状不一的多个矩形。
 同时我们需要矩形的颜色是可设置的。</p>
 <p>首先我们定义一个片断着色器，可以通过全局变量接收自定义颜色。</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
   precision mediump float;
 
 +  uniform vec4 u_color;
@@ -458,7 +458,7 @@ gl.drawArrays(primitiveType, offset, count);
   }
 &lt;/script&gt;
 </code></pre><p>这里是一段新代码，可以随机绘制50个随机位置，随机大小，随机颜色的矩形。</p>
-<pre><code>  var colorUniformLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
+<pre class="prettyprint"><code>  var colorUniformLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
   ...
 
   // 绘制50个随机颜色矩形

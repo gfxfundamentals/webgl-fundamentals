@@ -91,9 +91,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>这里有一些特别的地方你需要提前了解，WebGL就像是一个方法，
 但不同于一般的方法直接传递参数，它需要调用一些方法去设置状态，
 最后用某个方法执行绘制，并使用之前设置的状态。你在写代码时可能会用这种形式的方法</p>
-<pre><code>function drawCircle(centerX, centerY, radius, color) { ... }
+<pre class="prettyprint"><code>function drawCircle(centerX, centerY, radius, color) { ... }
 </code></pre><p>或者用这种形式的方法</p>
-<pre><code>var centerX;
+<pre class="prettyprint"><code>var centerX;
 var centerY;
 var radius;
 var color;
@@ -154,7 +154,7 @@ function drawCircle() {
 假设有方法能够返回<a href="webgl-less-code-more-fun.html">上篇文章中的 bufferInfo 对象</a>。</p>
 <p>这是代码，着色器是<a href="webgl-3d-perspective.html">透视示例</a>中的简单的着色器，
 新添加了一个 <code>u_colorMult</code> 全局变量和顶点颜色相乘。</p>
-<pre><code>// 从顶点着色器中传入的值
+<pre class="prettyprint"><code>// 从顶点着色器中传入的值
 varying vec4 v_color;
 
 uniform vec4 u_colorMult;
@@ -163,7 +163,7 @@ void main() {
    gl_FragColor = v_color * u_colorMult;
 }
 </code></pre><p>初始化阶段</p>
-<pre><code>// 每个物体需要的全局变量
+<pre class="prettyprint"><code>// 每个物体需要的全局变量
 var sphereUniforms = {
   u_colorMult: [0.5, 1, 0.5, 1],
   u_matrix: m4.identity(),
@@ -182,7 +182,7 @@ var sphereTranslation = [  0, 0, 0];
 var cubeTranslation   = [-40, 0, 0];
 var coneTranslation   = [ 40, 0, 0];
 </code></pre><p>绘制阶段</p>
-<pre><code>var sphereXRotation =  time;
+<pre class="prettyprint"><code>var sphereXRotation =  time;
 var sphereYRotation =  time;
 var cubeXRotation   = -time;
 var cubeYRotation   =  time;
@@ -254,7 +254,7 @@ gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 <li>绘制物体所需程序的全局变量</li>
 </ol>
 <p>简单的简化后制作一个序列对象，将三个物体放在其中</p>
-<pre><code>var objectsToDraw = [
+<pre class="prettyprint"><code>var objectsToDraw = [
   {
     programInfo: programInfo,
     bufferInfo: sphereBufferInfo,
@@ -272,7 +272,7 @@ gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
   },
 ];
 </code></pre><p>绘制的时候仍然需要更新矩阵</p>
-<pre><code>var sphereXRotation =  time;
+<pre class="prettyprint"><code>var sphereXRotation =  time;
 var sphereYRotation =  time;
 var cubeXRotation   = -time;
 var cubeYRotation   =  time;
@@ -298,7 +298,7 @@ coneUniforms.u_matrix = computeMatrix(
     coneXRotation,
     coneYRotation);
 </code></pre><p>但是绘制代码就会变成一个简单的循环</p>
-<pre><code>// ------ 绘制几何体 --------
+<pre class="prettyprint"><code>// ------ 绘制几何体 --------
 
 objectsToDraw.forEach(function(object) {
   var programInfo = object.programInfo;
@@ -328,7 +328,7 @@ objectsToDraw.forEach(function(object) {
 则不需要调用 <code>gl.useProgram</code>。同样的，如果绘制的形状/几何体/顶点
 是之前绘制过的，相同的参数就不必再设置一遍。</p>
 <p>所以，简单的优化后可能像这样</p>
-<pre><code>var lastUsedProgramInfo = null;
+<pre class="prettyprint"><code>var lastUsedProgramInfo = null;
 var lastUsedBufferInfo = null;
 
 objectsToDraw.forEach(function(object) {
@@ -359,7 +359,7 @@ objectsToDraw.forEach(function(object) {
   gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 });
 </code></pre><p>这次我们多绘制一些物体，用包含更多物体的序列代替之前的三个物体。</p>
-<pre><code>// 将图形放在数组中以便随机抽取
+<pre class="prettyprint"><code>// 将图形放在数组中以便随机抽取
 var shapes = [
   sphereBufferInfo,
   cubeBufferInfo,
@@ -396,7 +396,7 @@ for (var ii = 0; ii &lt; numObjects; ++ii) {
   });
 }
 </code></pre><p>渲染时</p>
-<pre><code>// 计算每个物体的矩阵
+<pre class="prettyprint"><code>// 计算每个物体的矩阵
 objects.forEach(function(object) {
   object.uniforms.u_matrix = computeMatrix(
       viewMatrix,

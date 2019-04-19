@@ -174,7 +174,7 @@ P = P1 * invT^3 +
 取消选中复选框然后拖拽 <code>P3</code> 或 <code>P5</code> 就会清晰看到独立的曲线。</p>
 <p>接下来我们需要获得生成曲线上的点，通过给上方的公式提供 <code>t</code>
 就可以生成一个点。</p>
-<pre><code>function getPointOnBezierCurve(points, offset, t) {
+<pre class="prettyprint"><code>function getPointOnBezierCurve(points, offset, t) {
   const invT = (1 - t);
   return v2.add(v2.mult(points[offset + 0], invT * invT * invT),
                 v2.mult(points[offset + 1], 3 * t * invT * invT),
@@ -182,7 +182,7 @@ P = P1 * invT^3 +
                 v2.mult(points[offset + 3], t * t  *t));
 }
 </code></pre><p>然后可以计算一系列点。</p>
-<pre><code>function getPointsOnBezierCurve(points, offset, numPoints) {
+<pre class="prettyprint"><code>function getPointsOnBezierCurve(points, offset, numPoints) {
   const points = [];
   for (let i = 0; i &lt; numPoints; ++i) {
     const t = i / (numPoints - 1);
@@ -210,7 +210,7 @@ P = P1 * invT^3 +
 </p>
 <p>第二个部分是如何决定曲线是否需要拆分，从网上查找后我发现了<a href="https://seant23.wordpress.com/2010/11/12/offset-bezier-curves/">这个方法</a>，
 对于给定的曲线可以求出平滑程度。</p>
-<pre><code>function flatness(points, offset) {
+<pre class="prettyprint"><code>function flatness(points, offset) {
   const p1 = points[offset + 0];
   const p2 = points[offset + 1];
   const p3 = points[offset + 2];
@@ -233,7 +233,7 @@ P = P1 * invT^3 +
 }
 </code></pre><p>我们可以用它获取曲线上的点，首先检查曲线是否太锐利，如果是就拆分，
 不是就将点加入列表。</p>
-<pre><code>function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
+<pre class="prettyprint"><code>function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
   const outPoints = newPoints || [];
   if (flatness(points, offset) &lt; tolerance) {
 
@@ -277,7 +277,7 @@ P = P1 * invT^3 +
 <p>在这个算法中我们提供一系列点，找到离最后两点构成的直线距离最远的点，
 然后将这个距离和一个定值进行比较，如果小于那个值就保留最后两个点然后丢弃其他的点，
 大于则将曲线沿那个最远点分成两份，分别对每一份再做一次这个运算。</p>
-<pre><code>function simplifyPoints(points, start, end, epsilon, newPoints) {
+<pre class="prettyprint"><code>function simplifyPoints(points, start, end, epsilon, newPoints) {
   const outPoints = newPoints || [];
 
   // 找到离最后两点距离最远的点
@@ -321,7 +321,7 @@ P = P1 * invT^3 +
 <p>这是我做的保龄球的半边轮廓的svg。</p>
 <p><img class="webgl_center" src="../resources/bowling-pin-silhouette.svg" width="50%" height="50%" /></p>
 <p>由 4 个曲线制成，路径的数据像这样</p>
-<pre><code>&lt;path fill=&quot;none&quot; stroke-width=&quot;5&quot; d=&quot;
+<pre class="prettyprint"><code>&lt;path fill=&quot;none&quot; stroke-width=&quot;5&quot; d=&quot;
    m44,434
    c18,-33 19,-66 15,-111
    c-4,-45 -37,-104 -39,-132
@@ -329,7 +329,7 @@ P = P1 * invT^3 +
    c5,-30 3,-63 -36,-63
 &quot;/&gt;
 </code></pre><p><a href="https://developer.mozilla.org/en/docs/Web/SVG/Tutorial/Paths">解译这些数据</a> 得到这些点。</p>
-<pre><code>        ___
+<pre class="prettyprint"><code>        ___
 44, 371,   |
 62, 338,   | 第一个曲线
 63, 305,___|__
@@ -344,7 +344,7 @@ P = P1 * invT^3 +
 39, -16,            |
  0, -16,____________|
 </code></pre><p>现在有了曲线数据，需要计算出曲线上的点。</p>
-<pre><code>// 获取所有片段的点
+<pre class="prettyprint"><code>// 获取所有片段的点
 function getPointsOnBezierCurves(points, tolerance) {
   const newPoints = [];
   const numSegments = (points.length - 1) / 3;
@@ -357,7 +357,7 @@ function getPointsOnBezierCurves(points, tolerance) {
 </code></pre><p>调用 <code>simplifyPoints</code> 处理结果。</p>
 <p>现在要旋转它们了，需要决定分多少个部分，对于每个部分都用<a href="webgl-2d-matrices.html">矩阵运算</a>
 绕 Y 轴转动一定角度获得，一旦获得所有点就用索引连接它们。</p>
-<pre><code>// 绕 Y 轴旋转
+<pre class="prettyprint"><code>// 绕 Y 轴旋转
 function lathePoints(points,
                      startAngle,   // 起始角 (例如 0)
                      endAngle,     // 终止角 (例如 Math.PI * 2)
@@ -416,7 +416,7 @@ function lathePoints(points,
 这些选项指明是否需要闭合顶面和底面。</p>
 <p>使用我们的 <a href="webgl-less-code-more-fun.html">简化代码</a> 就可以用哪些数据生成这样的
 WebGL缓冲</p>
-<pre><code>const tolerance = 0.15;
+<pre class="prettyprint"><code>const tolerance = 0.15;
 const distance = .4;
 const divisions = 16;
 const startAngle = 0;
@@ -441,7 +441,7 @@ if (!bufferInfo) {
 <p>这还有一个问题，开启三角形你会看到纹理不是均匀分布的，这是因为我们将纹理坐标的 <code>v</code>
 值赋为曲线点的索引，如果曲线上的点距离相等那就没问题，但是它们距离并不相等。</p>
 <p>我们可以遍历曲线上的点并计算出每一点对应曲线长度，最后将这个长度除以曲线总长度赋值给 <code>v</code>。</p>
-<pre><code>// 绕 Y 轴旋转
+<pre class="prettyprint"><code>// 绕 Y 轴旋转
 function lathePoints(points,
                      startAngle,   // 起始角 (例如 0)
                      endAngle,     // 终止角 (例如 Math.PI * 2)
@@ -533,7 +533,7 @@ function lathePoints(points,
 <p>所有的建模软件都有不同的方式创建法向量，一个常用的做法就是将该点邻接的三角面的法向量求平均。
 另外，还允许用户选择一个最大角度，如果邻接的多边形的法向量的夹角大于最大角度，就会创建一个新顶点。</p>
 <p>我们来实现这个。</p>
-<pre><code>function generateNormals(arrays, maxAngle) {
+<pre class="prettyprint"><code>function generateNormals(arrays, maxAngle) {
   const positions = arrays.position;
   const texcoords = arrays.texcoord;
 

@@ -137,7 +137,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 RGB全てのチャンネルでその値が使用される。&quot;luminance&quot;とは、英語で「明るさ」を表す。</p>
 <p><a href="webgl-3d-textures.html">前回の講義</a>で使用したサンプルを流用しよう。
 まず、立方体の各面で「テクスチャ全体を使う」ように、テクスチャ座標を変更する。</p>
-<pre><code>// 立方体の各面について「テクスチャ座標」をバッファにセットする。
+<pre class="prettyprint"><code>// 立方体の各面について「テクスチャ座標」をバッファにセットする。
 function setTexcoords(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -151,7 +151,7 @@ function setTexcoords(gl) {
         1, 1,
         ...
 </code></pre><p>テクスチャーを生成するコードを変更する。</p>
-<pre><code>// テクスチャーを生成する。
+<pre class="prettyprint"><code>// テクスチャーを生成する。
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -191,7 +191,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </p>
 <p>ええっ！？どうして動かないのだ？！？！？</p>
 <p>JavaScriptコンソールを調べると、以下のようなエラーが出ていることがわかる。</p>
-<pre><code>WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
+<pre class="prettyprint"><code>WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
 </code></pre><p>メッセージの細かい内容は実行環境によって異なるが「読み出そうとしたがデータが足りない」
 といった意味のエラーが出ているはずだ。</p>
 <p>WebGLには曖昧な設定があるのだが、この問題はそれに由来している。
@@ -209,7 +209,7 @@ WebGLはデータ全体が「4バイトの整数倍のサイズ」であると�
 これが「4バイトの整数倍のサイズ」でないためエラーを出しているのである。</p>
 <p>「<strong>1件あたり4バイト</strong>」ではなく「<strong>1件あたり1バイト</strong>」として処理させるには、
 WebGLに以下のような設定を行なえばよい。</p>
-<pre><code>const alignment = 1;
+<pre class="prettyprint"><code>const alignment = 1;
 gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
 </code></pre><p><code>alignment</code>の値には、<code>1</code>、<code>2</code>、<code>4</code>、<code>8</code>のいずれかが指定できる。
 アラインメント(<code>alignment</code>)とは、英語で「位置あわせ」のような意味である。</p>

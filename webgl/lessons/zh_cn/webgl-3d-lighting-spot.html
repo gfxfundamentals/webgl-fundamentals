@@ -108,7 +108,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 通过限定我们计算一个<strong>点乘限定</strong>，只需对限定值取余弦就可以得到。如果与选定聚光灯方向的点乘大于这个点乘限定，就照亮，否则不照亮。</p>
 <p>换一种方式解释，假设限定是 20 度，我们可以将它转换为弧度，然后取余弦值得到 -1 到 1 之间的数，
 暂且把它称作点乘空间。或者可以用这个表格表示限定值的转换。</p>
-<pre><code>            限制值
+<pre class="prettyprint"><code>            限制值
    角度   |   弧度   | 点乘空间
  --------+---------+----------
     0    |   0.0   |    1.0
@@ -118,13 +118,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     90   |   1.57  |    0.0
    180   |   3.14  |   -1.0
 </code></pre><p>我们可以只需判断</p>
-<pre><code>dotFromDirection = dot(surfaceToLight, -lightDirection)
+<pre class="prettyprint"><code>dotFromDirection = dot(surfaceToLight, -lightDirection)
 if (dotFromDirection &gt;= limitInDotSpace) {
    // 使用光照
 }
 </code></pre><p>让我们来实现它。</p>
 <p>首先修改<a href="webgl-3d-lighting-point.html">上文</a>的片断着色器。</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // 从顶点着色器传入的值
 varying vec3 v_normal;
@@ -167,7 +167,7 @@ void main() {
   gl_FragColor.rgb += specular;
 }
 </code></pre><p>当然我们需要找到刚才添加的全局变量的位置。</p>
-<pre><code>  var lightDirection = [?, ?, ?];
+<pre class="prettyprint"><code>  var lightDirection = [?, ?, ?];
   var limit = degToRad(20);
 
   ...
@@ -175,7 +175,7 @@ void main() {
   var lightDirectionLocation = gl.getUniformLocation(program, &quot;u_lightDirection&quot;);
   var limitLocation = gl.getUniformLocation(program, &quot;u_limit&quot;);
 </code></pre><p>然后设置它们</p>
-<pre><code>    gl.uniform3fv(lightDirectionLocation, lightDirection);
+<pre class="prettyprint"><code>    gl.uniform3fv(lightDirectionLocation, lightDirection);
     gl.uniform1f(limitLocation, Math.cos(limit));
 </code></pre><p>这是结果</p>
 <p><div class="webgl_example_container">
@@ -197,7 +197,7 @@ void main() {
 你自己可以选择用或不用。</p>
 <p>有一个 GLSL 函数叫做 <code>step</code>，它获取两个值，如果第二个值大于或等于第一个值就返回 1.0，
 否则返回 0。用JavaScript大概可以这样表示。</p>
-<pre><code>function step(a, b) {
+<pre class="prettyprint"><code>function step(a, b) {
    if (b &gt;= a) {
        return 1;
    } else {
@@ -205,7 +205,7 @@ void main() {
    }
 }
 </code></pre><p>让我们使用 <code>step</code> 避免这种情况</p>
-<pre><code>  float dotFromDirection = dot(surfaceToLightDirection,
+<pre class="prettyprint"><code>  float dotFromDirection = dot(surfaceToLightDirection,
                                -u_lightDirection);
   // 如果光线在聚光灯范围内 inLight 就为 1，否则为 0
   float inLight = step(u_limit, dotFromDirection);
@@ -224,7 +224,7 @@ void main() {
 一个内部限定一个外部限定。如果在内部限定内就使用 1.0，
 在外部限定外面就使用 0.0，在内部和外部限定之间就使用 1.0 到 0.0 之间的插值。</p>
 <p>这是我们实现这个的一种方式</p>
-<pre><code>-uniform float u_limit;          // 在点乘空间中
+<pre class="prettyprint"><code>-uniform float u_limit;          // 在点乘空间中
 +uniform float u_innerLimit;     // 在点乘空间中
 +uniform float u_outerLimit;     // 在点乘空间中
 
@@ -251,9 +251,9 @@ void main() {
 （注意：示例代码中并没有做这个。）</p>
 <p>GLSL 也有一个函数可以稍微做一些简化，叫做 <code>smoothstep</code>，和 <code>step</code> 相似返回一个 0 到 1
 之间的值，但是它获取最大和最小边界值，返回该值在边界范围映射到 0 到 1 之间的插值。</p>
-<pre><code> smoothstep(lowerBound, upperBound, value)
+<pre class="prettyprint"><code> smoothstep(lowerBound, upperBound, value)
 </code></pre><p>让我们来实现它</p>
-<pre><code>  float dotFromDirection = dot(surfaceToLightDirection,
+<pre class="prettyprint"><code>  float dotFromDirection = dot(surfaceToLightDirection,
                                -u_lightDirection);
 -  float limitRange = u_innerLimit - u_outerLimit;
 -  float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.0, 1.0);

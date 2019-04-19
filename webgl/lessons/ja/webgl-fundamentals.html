@@ -137,7 +137,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>クリップ空間座標はキャンバスの要素（canvas）のサイズに関係がなく、いつも−１から＋１になる。
 以下は一番単純なWebGLの例である。</p>
 <p>まず頂点シェーダーから始めよう。</p>
-<pre><code>// バッファーからデータを取る属性
+<pre class="prettyprint"><code>// バッファーからデータを取る属性
 attribute vec4 a_position;
 
 // 全てのシェーダーは「main」の関数がある
@@ -148,7 +148,7 @@ void main() {
 }
 </code></pre><p>このコードを起動したらどのように動くか、
 GLSLの代わりにJavaScriptで書かれていたとしたら以下のように動く、と想像してみるとよいだろう。</p>
-<pre><code>// *** 擬似コード!! ***
+<pre class="prettyprint"><code>// *** 擬似コード!! ***
 
 var positionBuffer = [
   0, 0, 0, 0,
@@ -173,7 +173,7 @@ drawArrays(..., offset, count) {
 バッファーがらデータを取り込む際の計算方法は異なる。
 でも、頂点シェーダーはこのように動くと考えてよい。</p>
 <p>次はフラグメントシェーダーが必要だ。</p>
-<pre><code>// フラグメントシェーダーは既定の精度がないので選択することが必要である。
+<pre class="prettyprint"><code>// フラグメントシェーダーは既定の精度がないので選択することが必要である。
 // 「mediump」は一般的な既定の設定である。それは「中間の精度」の意味である。
 precision mediump float;
 
@@ -186,18 +186,18 @@ void main() {
 WebGLでは、色は０〜１で指定する。</p>
 <p>２つのシェーダーを書いたのでWebGLを始めよう！</p>
 <p>まずHTMLのCanvas要素が必要である</p>
-<pre><code>&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>それをJavaScriptで調べられる</p>
-<pre><code>var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code>var canvas = document.getElementById(&quot;c&quot;);
 </code></pre><p>それで<code>WebGLRenderingContext</code>を作成出来る</p>
-<pre><code> var gl = canvas.getContext(&quot;webgl&quot;);
+<pre class="prettyprint"><code> var gl = canvas.getContext(&quot;webgl&quot;);
  if (!gl) {
     // no webgl for you!
     ...
 </code></pre><p>そして先のシェーダーをコンパイルしてGPUにアップロードすることが必要なのでstringに入れることが必要である。
 GLSLのstringをする方法はいくつかある。文字列の連結とか、AJAXでダウンロードすることとか、複数行テンプレートstring(multiline template strings)とか。
 今回は、typeがJavaScriptではないscript要素に入れる方法をとる。</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
   // バッファーからデータを取る属性
   attribute vec4 a_position;
@@ -227,7 +227,7 @@ GLSLのstringをする方法はいくつかある。文字列の連結とか、A
 </code></pre><p>本格的な三次元のエンジンは色々な方法で動的にコードを組み合わせてGLSLシェーダーを生成する。
 しかし、このサイトであまり複雑なシェーダーを使わないので、シェーダー・コードを動的に組み合わせて生成する必要はない。</p>
 <p>次に、シェーダーを作成し、GLSLのコードをアップロードし、シェーダーをコンパイルする関数が必要である。</p>
-<pre><code>function createShader(gl, type, source) {
+<pre class="prettyprint"><code>function createShader(gl, type, source) {
   // シェーダーを作成
   var shader = gl.createShader(type);
   // GLSLのコードをGPUにアップロード
@@ -246,13 +246,13 @@ GLSLのstringをする方法はいくつかある。文字列の連結とか、A
   gl.deleteShader(shader);
 }
 </code></pre><p>出来たら、その関数でシェーダー２つを作成出来る</p>
-<pre><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
+<pre class="prettyprint"><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
 var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot;).text;
 
 var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 </code></pre><p>それでその２つのシェーダーをプログラム(<em>program</em>)にリンク(<em>link</em>)する</p>
-<pre><code>function createProgram(gl, vertexShader, fragmentShader) {
+<pre class="prettyprint"><code>function createProgram(gl, vertexShader, fragmentShader) {
   // プログラムを作成
   var program = gl.createProgram();
   // プログラムに頂点シェーダーを付ける
@@ -273,21 +273,21 @@ var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
   gl.deleteProgram(program);
 }
 </code></pre><p>それを呼び出す</p>
-<pre><code>var program = createProgram(gl, vertexShader, fragmentShader);
+<pre class="prettyprint"><code>var program = createProgram(gl, vertexShader, fragmentShader);
 </code></pre><p>GLSLのプログラムを作成して、GPUにアップロードが出来たら、それにデータを与えることが必要である。
 WebGL APIの役割のほとんどはGLSLプログラムにデータを与えることと動きの状況を設定することである。
 今回のGLSLプログラムのインプットは<code>a_position</code>の属性しかない。
 作成したプログラムに最初するべきことは属性のローケーションを調べることである</p>
-<pre><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
+<pre class="prettyprint"><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 </code></pre><p>属性のローケーションを調べるのは描画する時ではなく、プログラムの初期化の時に行った方がいい。</p>
 <p>属性はバッファーからデータを取るので、バッファーを作成しなければならない。</p>
-<pre><code>var positionBuffer = gl.createBuffer();
+<pre class="prettyprint"><code>var positionBuffer = gl.createBuffer();
 </code></pre><p>WebGLのリソース（資源）を操るためグローバル結び点（bind point)に結び付けることが必要である。
 結び点はWebGLの中のグローバル変数のようなものである。リソースを結び点に結びつけたら、その後
 結び点でリソースを操る。さて、<code>positionBuffer</code>を結びつけよう。</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 </code></pre><p>そして、<code>ARRAY_BUFFER</code>という結び点を参照して、データをバッファーに入れる。</p>
-<pre><code>// 三点の二次元頂点
+<pre class="prettyprint"><code>// 三点の二次元頂点
 var positions = [
   0, 0,
   0, 0.5,
@@ -311,23 +311,23 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 <a href="webgl-resizing-the-canvas.html">ここで説明しているヘルパー関数</a>を利用している。</p>
 <p>ここにあるサンプルでは自分のウインドウで起動する場合、キャンバスのサイズは400x300になるが、
 iframeの中で起動する場合iframeのサイズに合わせられる。CSSで決定しているのでどちらにも対処出来る。</p>
-<pre><code>webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+<pre class="prettyprint"><code>webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 </code></pre><p>クリップ空間上の値である<code>gl_Position</code>を、画面空間上のピクセルにどうやって変換するのかWebGLに教える必要がある。
 そのためキャンバスのサイズを<code>gl.viewport</code>に渡す。</p>
-<pre><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+<pre class="prettyprint"><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 </code></pre><p>これは−1〜+１のクリップ空間から、ｘ軸は「0〜<code>gl.canvas.width</code>」に、y軸は「0〜<code>gl.canvas.height</code>」に変換するように、WebGLに設定するものである。</p>
 <p>キャンバスをクリアする。<code>0, 0, 0, 0</code>は赤、緑、青、アルファ（透明度）なので、今回はキャンバスを透明にクリアする。</p>
-<pre><code>// キャンバスをクリアする
+<pre class="prettyprint"><code>// キャンバスをクリアする
 gl.clearColor(0, 0, 0, 0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 </code></pre><p>WebGLにどのシェーダー・プログラムを起動してほしいか教える。</p>
-<pre><code>// 作成したプログラム（シェーダー2つ）を設定する
+<pre class="prettyprint"><code>// 作成したプログラム（シェーダー2つ）を設定する
 gl.useProgram(program);
 </code></pre><p>次にWebGLにどうやってデータを上記で作ったバッファーからシェーダーの属性に読み込むかを教えることが必要である。
 まず属性オンにする。</p>
-<pre><code>gl.enableVertexAttribArray(positionAttributeLocation);
+<pre class="prettyprint"><code>gl.enableVertexAttribArray(positionAttributeLocation);
 </code></pre><p>そしてデータの取り方を設定する。</p>
-<pre><code>// positionBufferをARRAY_BUFFERに結び付ける
+<pre class="prettyprint"><code>// positionBufferをARRAY_BUFFERに結び付ける
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
 // 属性にどうやってpositionBuffer（ARRAY_BUFFER)からデータを取り込むか。
@@ -343,12 +343,12 @@ gl.vertexAttribPointer(
 結び付ける。つまり<code>positionBuffer</code>はこの属性に結び付く。<code>ARRAY_BUFFER</code>に他のバッファーを
 結び付けても、属性はまだ<code>positionBuffer</code>に結び付いている。</p>
 <p>GLSLの頂点シェーダーの立場から<code>a_position</code>は<code>vec4</code>である。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 </code></pre><p><code>vec4</code>は４つの値がある。JavaScriptで表現するなら<code>a_position = {x: 0, y: 0, z: 0, w: 0}</code>に近い形になる。
 上記では<code>size = 2</code>とした。属性の規定値は<code>0, 0, 0, 1</code>なので、この属性の最初の2つの値（xとy）はバッファーから取る。
 zとwは既定値の0、1になる。</p>
 <p>上記の全ての後やっとWebGLにシェーダーを起動することを頼める。</p>
-<pre><code>var primitiveType = gl.TRIANGLES;
+<pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
 var offset = 0;
 var count = 3;
 gl.drawArrays(primitiveType, offset, count);
@@ -359,11 +359,11 @@ gl.drawArrays(primitiveType, offset, count);
 WebGLは<code>gl_Position</code>に割り当てられた３つの値で三角形を描画する。キャンバスがどんなサイズで
 あってもその値は-1~+1クリップ空間座標である。</p>
 <p>この頂点シェーダーは、ただ<code>positionBuffer</code>の値を<code>gl_Position</code>にコピーしているので、三角形はこのクリップ空間座標に描画される。</p>
-<pre><code>  0, 0,
+<pre class="prettyprint"><code>  0, 0,
   0, 0.5,
   0.7, 0,
 </code></pre><p>キャンバスのサイズが400x300のピクセルならWebGLはこのように頂点のクリップ空間から画面空間に変化する。</p>
-<pre><code> クリップ空間          画面空間
+<pre class="prettyprint"><code> クリップ空間          画面空間
    0, 0       -&gt;   200, 150
    0, 0.5     -&gt;   200, 225
  0.7, 0       -&gt;   340, 150
@@ -387,7 +387,7 @@ WebGLは<code>gl_Position</code>に割り当てられた３つの値で三角形
 <p>2次元のものならクリップ空間よりよく使われているピクセル空間の方が楽なので、<code>position</code>の座標を
 ピクセルで与えて、ピクセル座標からクリップ空間に自動で変換するように、シェーダーの計算の仕方を変更しよう。
 これは変更されたシェーダー：</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
 *  attribute vec2 a_position;
@@ -413,13 +413,13 @@ WebGLは<code>gl_Position</code>に割り当てられた３つの値で三角形
 <li><p><code>x</code>と<code>y</code>しか使ってないので<code>a_position</code>を<code>vec2</code>にした。 <code>vec2</code>は<code>vec4</code>に似てるがxとyしかない。</p>
 </li>
 <li><p><code>u_resolution</code>というユニフォームを追加した。ユニフォームを設定するためにそのロケーションを調べることが必要である。</p>
-<pre><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
+<pre class="prettyprint"><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 </code></pre></li>
 </ul>
 <p>それ以外は上記のコメントでご理解頂けるだろう。<code>u_resolution</code>をキャンバスの解像度に設定すれば、
 この頂点シェーダーが計算して<code>positionBuffer</code>に入っているピクセル座標をクリップ空間に変換する。</p>
 <p>これで頂点座標をクリップ空間からピクセルに変更出来る。今回3つの頂点で出来ている三角形2つで四角形を描画する。</p>
-<pre><code>var positions = [
+<pre class="prettyprint"><code>var positions = [
 *  10, 20,
 *  80, 20,
 *  10, 30,
@@ -431,7 +431,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 </code></pre><p>どのプログラムを利用するかを定義してから、ユニフォームの値を設定出来る。<code>gl.useProgram</code>は、上記の<code>gl.bindBuffer</code>
 と同じように、どのシェーダー・プログラムを使うかを定義する。その後<code>gl.uniform〜</code>の関数の全ては現行のプログラムの
 ユニフォームを設定出来る。</p>
-<pre><code>gl.useProgram(program);
+<pre class="prettyprint"><code>gl.useProgram(program);
 
 ...
 
@@ -439,7 +439,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 </code></pre><p>そして勿論２つの三角形を描画するため、先ほど頂点シェーダーを6回呼び出すことが必要なので<code>count</code>は
 <code>6</code>にする。</p>
-<pre><code>// 描画する
+<pre class="prettyprint"><code>// 描画する
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
 *var count = 6;
@@ -456,7 +456,7 @@ gl.drawArrays(primitiveType, offset, count);
 サンプルを煩雑にさせたくないので、<a href="webgl-boilerplate.html">ボイラプレート・コード・ライブラリ</a>にした。</p>
 <p>前回と同じく、目立つのはこの四角形は下の方に位置していることだろう。WebGLは0,0を左下とみなしている。
 2次元APIで一般的なように左上を0,0にしたければクリップ空間のｙ座標をひっくり返す。</p>
-<pre><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+<pre class="prettyprint"><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>それで四角形は期待通りになる。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-top-left.html"></iframe>
@@ -467,7 +467,7 @@ gl.drawArrays(primitiveType, offset, count);
 <p>四角形を定義している部分を関数にして、呼び出すときにサイズが設定出来るようにしよう。更に、描く色も設定出来る
 ようにする。</p>
 <p>まずフラグメントシェーダーを、色ユニフォームが使えるようにする。</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
   precision mediump float;
 
 +  uniform vec4 u_color;
@@ -477,7 +477,7 @@ gl.drawArrays(primitiveType, offset, count);
   }
 &lt;/script&gt;
 </code></pre><p>そして、次にあるのは50個の四角形をランダムなサイズとランダムな色で描画するコードである。</p>
-<pre><code>  var colorUniformLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
+<pre class="prettyprint"><code>  var colorUniformLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
   ...
 
   // 50個のランダム四角形をランダム色で描画する

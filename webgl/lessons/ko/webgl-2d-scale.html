@@ -90,7 +90,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>크기 조정은 <a href="webgl-2d-translation.html">이동만큼이나</a> 쉽습니다.</p>
 <p>원하는 크기로 위치 값을 곱하면 되는데요.
 이건 <a href="webgl-2d-rotation.html">이전 예제를</a> 수정한 겁니다.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -110,7 +110,7 @@ void main() {
   // 추가 이동
   vec2 position = rotatedPosition + u_translation;
 </code></pre><p>그리고 그릴 때 크기를 조정하기 위해 필요한 JavaScript를 추가합니다.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
 +  var scaleLocation = gl.getUniformLocation(program, &quot;u_scale&quot;);
 

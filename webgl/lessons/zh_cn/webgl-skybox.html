@@ -97,7 +97,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>典型的解决方案是关闭深度检测并首先绘制天空盒，但是我们也不能利用深度检测不会绘制场景中会被覆盖的物体的特性了。</p>
 <p>代替使用立方体，我们仅仅绘制一个覆盖整个画布的矩形，并使用<a href="webgl-cube-maps.html">立方体贴图</a>。通常我们使用视图投影矩阵在三维空间中投影矩形。在这里，我们会做相反的事情。我们会反过来使用视图投影矩阵的逆来获取相机看向矩形每一个像素的方向。这会是看向立方体贴图的方向。</p>
 <p>从<a href="webgl-environment-maps.html">环境贴图</a>文章中的例子开始，我移除了所有在这里我们不需要使用的关于法线的代码。之后我们需要一个矩形。</p>
-<pre><code>// 填充定义矩形的值给缓冲
+<pre class="prettyprint"><code>// 填充定义矩形的值给缓冲
 function setGeometry(gl) {
   var positions = new Float32Array(
     [
@@ -111,7 +111,7 @@ function setGeometry(gl) {
   gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
 }
 </code></pre><p>因为已经是裁剪空间中的坐标，矩形会铺满画布。由于每个顶点只有2个值，我们需要更改设置属性的代码。</p>
-<pre><code>// 告诉位置属性怎么从位置缓冲positionBuffer (ARRAY_BUFFER)中取数据
+<pre class="prettyprint"><code>// 告诉位置属性怎么从位置缓冲positionBuffer (ARRAY_BUFFER)中取数据
 -var size = 3;          // 每次迭代提取3个单位数据
 +var size = 2;          // 每次迭代提取2个单位数据
 var type = gl.FLOAT;   // 数据是32位浮点型
@@ -121,7 +121,7 @@ var offset = 0;        // 从缓冲起始位置开始读取
 gl.vertexAttribPointer(
     positionLocation, size, type, normalize, stride, offset)
 </code></pre><p>接下来对于顶点着色器，我们直接将<code>gl_Position</code>设置为四边形顶点。不需要任何矩阵变换因为位置已经在裁剪空间中，被设定为覆盖整个画布。我们设置 <code>gl_Position.z</code>为1 确保像素有最远的深度。接下来我们传递位置给片断着色器。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 varying vec4 v_position;
 void main() {
   v_position = a_position;
@@ -129,7 +129,7 @@ void main() {
   gl_Position.z = 1;
 }
 </code></pre><p>在片断着色器中我们将position和视图投影矩阵的逆相乘，除以w转换4D到3D。</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 uniform samplerCube u_skybox;
 uniform mat4 u_viewDirectionProjectionInverse;
@@ -140,11 +140,11 @@ void main() {
   gl_FragColor = textureCube(u_skybox, normalize(t.xyz / t.w));
 }
 </code></pre><p>最后我们需要获取全局属性位置</p>
-<pre><code>var skyboxLocation = gl.getUniformLocation(program, &quot;u_skybox&quot;);
+<pre class="prettyprint"><code>var skyboxLocation = gl.getUniformLocation(program, &quot;u_skybox&quot;);
 var viewDirectionProjectionInverseLocation = 
     gl.getUniformLocation(program, &quot;u_viewDirectionProjectionInverse&quot;);
 </code></pre><p>设置他们</p>
-<pre><code>// 计算投影矩阵
+<pre class="prettyprint"><code>// 计算投影矩阵
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var projectionMatrix =
     m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
@@ -186,7 +186,7 @@ gl.uniform1i(skyboxLocation, 0);
 </p>
 <p>让我们在这个例子中结合环境映射的立方体。我们会使用<a href="webgl-less-code-more-fun.html">码少趣多</a>中介绍的utils.</p>
 <p>我们需要加入两组着色器</p>
-<pre><code>&lt;script id=&quot;skybox-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;skybox-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 &lt;script id=&quot;skybox-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 ...
@@ -195,17 +195,17 @@ gl.uniform1i(skyboxLocation, 0);
 &lt;script id=&quot;envmap-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 ...
 </code></pre><p>然后编译着色器，找到所有的属性和全局变量的位置</p>
-<pre><code>// 设置GLSL程序查找位置 
+<pre class="prettyprint"><code>// 设置GLSL程序查找位置 
 const envmapProgramInfo = webglUtils.createProgramInfo(
     gl, [&quot;envmap-vertex-shader&quot;, &quot;envmap-fragment-shader&quot;]);
 const skyboxProgramInfo = webglUtils.createProgramInfo(
     gl, [&quot;skybox-vertex-shader&quot;, &quot;skybox-fragment-shader&quot;]);
 </code></pre><p>使用顶点数据设置缓冲。 <code>primitives</code>库已经有提供这些数据的函数，所以我们可以使用它们。</p>
-<pre><code>// 创建缓冲并填充顶点数据
+<pre class="prettyprint"><code>// 创建缓冲并填充顶点数据
 const cubeBufferInfo = primitives.createCubeBufferInfo(gl, 1);
 const quadBufferInfo = primitives.createXYQuadBufferInfo(gl);
 </code></pre><p>在渲染阶段我们计算了所有矩阵</p>
-<pre><code>// 相机在以原点为圆心直径2个单位的圆上看向原点 
+<pre class="prettyprint"><code>// 相机在以原点为圆心直径2个单位的圆上看向原点 
 var cameraPosition = [Math.cos(time * .1) * 2, 0, Math.sin(time * .1) * 2];
 var target = [0, 0, 0];
 var up = [0, 1, 0];
@@ -229,7 +229,7 @@ var viewDirectionProjectionMatrix = m4.multiply(
 var viewDirectionProjectionInverseMatrix = 
     m4.inverse(viewDirectionProjectionMatrix);
 </code></pre><p>然后先绘制立方体</p>
-<pre><code>// 绘制立方体
+<pre class="prettyprint"><code>// 绘制立方体
 gl.useProgram(envmapProgramInfo.program);
 webglUtils.setBuffersAndAttributes(gl, envmapProgramInfo, cubeBufferInfo);
 webglUtils.setUniforms(envmapProgramInfo, {
@@ -241,7 +241,7 @@ webglUtils.setUniforms(envmapProgramInfo, {
 });
 webglUtils.drawBufferInfo(gl, cubeBufferInfo);
 </code></pre><p>之后天空盒</p>
-<pre><code>// 绘制天空盒
+<pre class="prettyprint"><code>// 绘制天空盒
 gl.useProgram(skyboxProgramInfo.program);
 webglUtils.setBuffersAndAttributes(gl, skyboxProgramInfo, quadBufferInfo);
 webglUtils.setUniforms(skyboxProgramInfo, {

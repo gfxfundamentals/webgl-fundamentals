@@ -96,9 +96,9 @@ parameters to the function you instead have a single function that draws
 stuff and 70+ functions that set up the state for that one function.  So
 for example imagine you had a function that draws a circle.  You could
 program it like this</p>
-<pre><code>function drawCircle(centerX, centerY, radius, color) { ... }
+<pre class="prettyprint"><code>function drawCircle(centerX, centerY, radius, color) { ... }
 </code></pre><p>Or you could code it like this</p>
-<pre><code>var centerX;
+<pre class="prettyprint"><code>var centerX;
 var centerY;
 var radius;
 var color;
@@ -167,7 +167,7 @@ article</a>.</p>
 <p>So here&#39;s the code.  Our shader is the same one simple shader from our
 <a href="webgl-3d-perspective.html">perspective example</a> except we&#39;ve added a
 <code>u_colorMult</code> to multiply the vertex colors by.</p>
-<pre><code>// Passed in from the vertex shader.
+<pre class="prettyprint"><code>// Passed in from the vertex shader.
 varying vec4 v_color;
 
 uniform vec4 u_colorMult;
@@ -176,7 +176,7 @@ void main() {
    gl_FragColor = v_color * u_colorMult;
 }
 </code></pre><p>At init time</p>
-<pre><code>// Our uniforms for each thing we want to draw
+<pre class="prettyprint"><code>// Our uniforms for each thing we want to draw
 var sphereUniforms = {
   u_colorMult: [0.5, 1, 0.5, 1],
   u_matrix: m4.identity(),
@@ -195,7 +195,7 @@ var sphereTranslation = [  0, 0, 0];
 var cubeTranslation   = [-40, 0, 0];
 var coneTranslation   = [ 40, 0, 0];
 </code></pre><p>At draw time</p>
-<pre><code>var sphereXRotation =  time;
+<pre class="prettyprint"><code>var sphereXRotation =  time;
 var sphereYRotation =  time;
 var cubeXRotation   = -time;
 var cubeYRotation   =  time;
@@ -270,7 +270,7 @@ effectively 3 main things to combine.</p>
 </ol>
 <p>So, a simple simplification would be to make an array of things to draw
 and in that array put the 3 things togehter</p>
-<pre><code>var objectsToDraw = [
+<pre class="prettyprint"><code>var objectsToDraw = [
   {
     programInfo: programInfo,
     bufferInfo: sphereBufferInfo,
@@ -288,7 +288,7 @@ and in that array put the 3 things togehter</p>
   },
 ];
 </code></pre><p>At draw time we still need to update the matrices</p>
-<pre><code>var sphereXRotation =  time;
+<pre class="prettyprint"><code>var sphereXRotation =  time;
 var sphereYRotation =  time;
 var cubeXRotation   = -time;
 var cubeYRotation   =  time;
@@ -314,7 +314,7 @@ coneUniforms.u_matrix = computeMatrix(
     coneXRotation,
     coneYRotation);
 </code></pre><p>But the drawing code is now just a simple loop</p>
-<pre><code>// ------ Draw the objects --------
+<pre class="prettyprint"><code>// ------ Draw the objects --------
 
 objectsToDraw.forEach(function(object) {
   var programInfo = object.programInfo;
@@ -346,7 +346,7 @@ to call <code>gl.useProgram</code>.  Similarly if we&#39;re drawing with the sam
 shape/geometry/vertices we previously drew with there&#39;s no need to set
 those up again.</p>
 <p>So, a very simple optimization might look like this</p>
-<pre><code>var lastUsedProgramInfo = null;
+<pre class="prettyprint"><code>var lastUsedProgramInfo = null;
 var lastUsedBufferInfo = null;
 
 objectsToDraw.forEach(function(object) {
@@ -379,7 +379,7 @@ objectsToDraw.forEach(function(object) {
 });
 </code></pre><p>This time let&#39;s draw a lot more objects. Instead of just 3 like before let&#39;s make
 the list of things to draw larger</p>
-<pre><code>// put the shapes in an array so it&#39;s easy to pick them at random
+<pre class="prettyprint"><code>// put the shapes in an array so it&#39;s easy to pick them at random
 var shapes = [
   sphereBufferInfo,
   cubeBufferInfo,
@@ -416,7 +416,7 @@ for (var ii = 0; ii &lt; numObjects; ++ii) {
   });
 }
 </code></pre><p>At render time</p>
-<pre><code>// Compute the matrices for each object.
+<pre class="prettyprint"><code>// Compute the matrices for each object.
 objects.forEach(function(object) {
   object.uniforms.u_matrix = computeMatrix(
       viewMatrix,

@@ -96,7 +96,7 @@ detail.</p>
 are the changes to the vertex shader.  We need to pass in texture
 coordinates.  In this case we just pass them straight through to the
 fragment shader.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 *attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -114,7 +114,7 @@ void main() {
 reference a texture.  We use the texture coordinates passed from the
 vertex shader and we call <code>texture2D</code> to look up a color from that
 texture.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // Passed in from the vertex shader.
 *varying vec2 v_texcoord;
@@ -126,7 +126,7 @@ void main() {
 *   gl_FragColor = texture2D(u_texture, v_texcoord);
 }
 </code></pre><p>We need to setup the texture coordinates</p>
-<pre><code>// look up where the vertex data needs to go.
+<pre class="prettyprint"><code>// look up where the vertex data needs to go.
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 *var texcoordLocation = gl.getAttribLocation(program, &quot;a_texcoords&quot;);
 
@@ -144,7 +144,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 *setTexcoords(gl);
 </code></pre><p>And you can see the coordinates we&#39;re using which are mapping the entire
 texture to each quad on our &#39;F&#39;.</p>
-<pre><code>*// Fill the buffer with texture coordinates for the F.
+<pre class="prettyprint"><code>*// Fill the buffer with texture coordinates for the F.
 *function setTexcoords(gl) {
 *  gl.bufferData(
 *      gl.ARRAY_BUFFER,
@@ -182,7 +182,7 @@ solution is to make up some texture to use until the image is downloaded.
 That way we can start rendering immediately.  Then, once the image has
 been downloaded we copy the image to the texture.  We&#39;ll use that method
 below.</p>
-<pre><code>*// Create a texture.
+<pre class="prettyprint"><code>*// Create a texture.
 *var texture = gl.createTexture();
 *gl.bindTexture(gl.TEXTURE_2D, texture);
 *
@@ -217,10 +217,10 @@ and the end of that data is at 1,1</p>
 <p>I loaded the texture into photoshop and looked up the various coordinates in pixels.</p>
 <p><img class="webgl_center" width="256" height="256" src="../resources/f-texture-pixel-coords.png" /></p>
 <p>To convert from pixel coordinates to texture coordinates we can just use</p>
-<pre><code>texcoordX = pixelCoordX / (width  - 1)
+<pre class="prettyprint"><code>texcoordX = pixelCoordX / (width  - 1)
 texcoordY = pixelCoordY / (height - 1)
 </code></pre><p>Here are the texture coordinates for the front.</p>
-<pre><code>// left column front
+<pre class="prettyprint"><code>// left column front
  38 / 255,  44 / 255,
  38 / 255, 223 / 255,
 113 / 255,  44 / 255,
@@ -260,7 +260,7 @@ will adjust texture coordinates in those packages.</p>
 range.  By default WebGL repeats the texture.  0.0 to 1.0 is one &#39;copy&#39; of
 the texture.  1.0 to 2.0 is another copy.  even -4.0 to -3.0 is yet
 another copy.  Let&#39;s display a plane using these texture coordinates.</p>
-<pre><code> -3, -1,
+<pre class="prettyprint"><code> -3, -1,
   2, -1,
  -3,  4,
  -3,  4,
@@ -274,7 +274,7 @@ another copy.  Let&#39;s display a plane using these texture coordinates.</p>
 
 </p>
 <p>You can tell WebGL to not repeat the texture in a certain direction by using <code>CLAMP_TO_EDGE</code>. For example</p>
-<pre><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+<pre class="prettyprint"><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>Click the buttons in the sample above to see the difference.</p>
 <p>You might have noticed a call to <code>gl.generateMipmap</code> back when we loaded
@@ -370,7 +370,7 @@ are never going to draw something smaller than the largest mip why waste
 memory for those mips.  Instead just use <code>NEAREST</code> or <code>LINEAR</code> as they
 only ever use the first mip.</p>
 <p>To set filtering you call <code>gl.texParameter</code> like this</p>
-<pre><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+<pre class="prettyprint"><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 </code></pre><p><code>TEXTURE_MIN_FILTER</code> is the setting used when the size you are drawing is smaller than the largest mip.
 <code>TEXTURE_MAG_FILTER</code> is the setting used when the size you are drawing is larger than the largest mip. For
@@ -390,7 +390,7 @@ The &#39;F&#39; texture was 256x256. 256 is a power of 2. The keyboard texture i
 of 2 so trying to display the texture fails. In the shader when <code>texture2D</code> is called and when the texture
 referenced is not setup correctly WebGL will use color (0, 0, 0, 1) which is black. If you open up the JavaScript console
 or Web Console, depending on the browser you might see errors pointing out the problem like this</p>
-<pre><code>WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
+<pre class="prettyprint"><code>WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
    or not all the same size
 WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
    It maybe non-power-of-2 and have incompatible texture filtering or
@@ -399,11 +399,11 @@ WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
 to <code>LINEAR</code> or <code>NEAREST</code>.</p>
 <p>Let&#39;s update our image loading code to handle this. First we need a function that will tell us if a value is
 a power of 2.</p>
-<pre><code>function isPowerOf2(value) {
+<pre class="prettyprint"><code>function isPowerOf2(value) {
   return (value &amp; (value - 1)) == 0;
 }
 </code></pre><p>I&#39;m not going to go into the binary math on why this works. Since it does work though, we can use it as follows.</p>
-<pre><code>// Asynchronously load an image
+<pre class="prettyprint"><code>// Asynchronously load an image
 var image = new Image();
 image.src = &quot;resources/keyboard.jpg&quot;;
 image.addEventListener(&#39;load&#39;, function() {
@@ -452,7 +452,7 @@ all high performance apps (read <em>games</em>) use. So for example we&#39;d put
 like this</p>
 <p><img class="webgl_center" src="../resources/noodles.jpg" /></p>
 <p>and then use a different set of texture coordinates for each face of the cube.</p>
-<pre><code>    // select the top left image
+<pre class="prettyprint"><code>    // select the top left image
     0   , 0  ,
     0   , 0.5,
     0.25, 0  ,

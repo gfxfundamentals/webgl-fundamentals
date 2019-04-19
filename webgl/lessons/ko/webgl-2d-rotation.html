@@ -109,7 +109,7 @@ X와 Y는 원 위에 있는 점의 위치를 나타내는데요.
 그러므로 &quot;unit circle&quot;에 어떤 값으로 곱할 수 있고 마법이 일어나서 회전하는 걸 제외하고는 1을 곱하는 것과 마찬가지입니다.</p>
 <p>unit circle 위에 있는 어떤 점에서 X와 Y의 값을 가져와서 <a href="webgl-2d-translation.html">이전 예제</a>의 geometry에 곱하려고 하는데요.</p>
 <p>shader에 다시 작성한 내용은 다음과 같습니다.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -125,7 +125,7 @@ void main() {
   // 이동 추가
 *  vec2 position = rotatedPosition + u_translation;
 </code></pre><p>그리고 JavaScript를 재작성하면 두 값을 전달할 수 있습니다.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
 +  var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
 
@@ -162,7 +162,7 @@ void main() {
 </p>
 <p>왜 동작할까요?
 음, 수식을 봅시다.</p>
-<pre><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
+<pre class="prettyprint"><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </code></pre><p>사각형이 하나 있고 그걸 회전시키고 싶다고 해봅시다.
 회전시키기 전 우측 상단 모서리는 3.0, 9.0 인데요.
@@ -190,7 +190,7 @@ unit circle 위에 12시부터 시계 방향 30도 간격으로 점을 찍어봅
 <p>unit circle 위에 있는 점들은 또 다른 이름을 가지고 있는데요.
 바로 sine 그리고 cosine 입니다.
 그래서 주어진 어떤 각에 대해 우리는 이처럼 sine과 cosine을 찾을 수 있습니다.</p>
-<pre><code>function printSineAndCosineForAnAngle(angleInDegrees) {
+<pre class="prettyprint"><code>function printSineAndCosineForAnAngle(angleInDegrees) {
   var angleInRadians = angleInDegrees * Math.PI / 180;
   var s = Math.sin(angleInRadians);
   var c = Math.cos(angleInRadians);
@@ -200,7 +200,7 @@ unit circle 위에 12시부터 시계 방향 30도 간격으로 점을 찍어봅
 (참고로 저는 반올림했습니다)</p>
 <p>모든 것을 함께 넣으면 도형을 원하는 각도로 회전할 수 있습니다.
 그저 회전하려는 각도의 sine과 cosine으로 rotation을 설정하면 됩니다. </p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
   var angleInRadians = angleInDegrees * Math.PI / 180;
   rotation[0] = Math.sin(angleInRadians);
   rotation[1] = Math.cos(angleInRadians);

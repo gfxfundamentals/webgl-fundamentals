@@ -103,7 +103,7 @@ WebGLで何かを描くためには２つのシェーダーが必要である。
 <h2 id="-">頂点シェーダー</h2>
 <p>頂点シェーダーの役割は、「クリップ空間座標」の生成である。
 頂点シェーダーは、必ず次のような形になる。</p>
-<pre><code>void main() {
+<pre class="prettyprint"><code>void main() {
     // 何らかの計算をして「クリップ空間座標」の値を生成する。
     // 生成した計算結果をgl_Positionに代入する。
     gl_Position = doMathToMakeClipspaceCoordinates
@@ -122,17 +122,17 @@ WebGLで何かを描くためには２つのシェーダーが必要である。
 <p>もっとも一般的なのは、「バッファー」と<em>アトリビュート</em>を使う方法である。
 この方法は「<a href="webgl-how-it-works.html">WebGLの仕組み</a>」の講義でも説明した。</p>
 <p>この方法では、まずバッファーを生成、</p>
-<pre><code>var buf = gl.createBuffer();
+<pre class="prettyprint"><code>var buf = gl.createBuffer();
 </code></pre><p>バッファーにデータをセットする。</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 </code></pre><p>そして、データを受け取る側となるシェーダープログラムが持っている
 アトリビュートのロケーションを取得しておく。</p>
-<pre><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
+<pre class="prettyprint"><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
 </code></pre><p>以上は初期化時に行なう。</p>
 <p>描画時に必要なのは、シェーダーが「バッファー」から「アトリビュート」
 へとデータを読み出す際に必要なルールを示すことである。</p>
-<pre><code>// 指定したアトリビュートについて、バッファーからデータを読み出せるようにする。
+<pre class="prettyprint"><code>// 指定したアトリビュートについて、バッファーからデータを読み出せるようにする。
 gl.enableVertexAttribArray(positionLoc);
 
 var numComponents = 3;  // (x, y, z)に相当する３つのデータ
@@ -147,7 +147,7 @@ gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 「<a href="webgl-fundamentals.html">WebGLの基本</a>」の講義で使用した例を改めて振り返ると、
 こうして「バッファー」から「アトリビュート」へ読み出してきたデータを、
 頂点シェーダーでは特に計算を行なわずそのまま利用していた。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 
 void main() {
    gl_Position = a_position;
@@ -161,7 +161,7 @@ void main() {
 呼び出される多数の頂点シェーダーのどれでも同じ値を持つデータ、である。</p>
 <p>もっとも単純な使用例としては「頂点シェーダーでオフセット値を足す」と
 いったものが挙げられるだろう。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 +uniform vec4 u_offset;
 
 void main() {
@@ -171,9 +171,9 @@ void main() {
 結果として図形全体が平行移動することになる。
 ユニフォームを利用するには、まずシェーダープログラムで定義されている
 uniformのロケーションを取得する。これは初期化時に行なう。</p>
-<pre><code>var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
+<pre class="prettyprint"><code>var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
 </code></pre><p>描画直前のタイミングで、uniformに値をセットする。</p>
-<pre><code>gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 半画面分「右(Xの正方向)」へ動かす。
+<pre class="prettyprint"><code>gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 半画面分「右(Xの正方向)」へ動かす。
 </code></pre><p>利用する上で、「ユニフォームは個々のシェーダープログラムに属する」
 という点には注意が必要である。つまり、シェーダープログラムが複数ある場合、
 それぞれのシェーダープログラムに同じ名前のuniformが定義されていたとしても、
@@ -184,7 +184,7 @@ uniformのロケーションを取得する。これは初期化時に行なう�
 決定される。</p>
 <p>uniformで利用できるデータ型は多数ある。データをセットする際には、
 シェーダープログラム側のuniformの定義に合った、適切な関数を呼び出す必要がある。</p>
-<pre><code>gl.uniform1f (floatUniformLoc, v);                 // float
+<pre class="prettyprint"><code>gl.uniform1f (floatUniformLoc, v);                 // float
 gl.uniform1fv(floatUniformLoc, [v]);               // float、または、floatの配列
 gl.uniform2f (vec2UniformLoc,  v0, v1);            // vec2
 gl.uniform2fv(vec2UniformLoc,  [v0, v1]);          // vec2、または、vec2の配列
@@ -215,7 +215,7 @@ gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube、または、
 これには<code>gl.uniform?f?</code>や<code>gl.uniform?i?</code>を使うこともできる。</p>
 <p>uniformが配列として定義されている場合は、その値を一度にセットすることができる。
 例えば、このように書けばよい。</p>
-<pre><code>// シェーダー側のコード
+<pre class="prettyprint"><code>// シェーダー側のコード
 uniform vec2 u_someVec2[3];
 
 // JavaScript側のコード(初期化時)
@@ -224,7 +224,7 @@ var someVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2&quot;);
 // JavaScript側のコード(描画時)
 gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // u_someVec2の配列全体の値をまとめてセット
 </code></pre><p>一つ一つセットすることもできるが、その場合は配列要素一つ一つのロケーションを取得する必要がある。</p>
-<pre><code>// JavaScript側のコード(初期化時)
+<pre class="prettyprint"><code>// JavaScript側のコード(初期化時)
 var someVec2Element0Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[0]&quot;);
 var someVec2Element1Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[1]&quot;);
 var someVec2Element2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[2]&quot;);
@@ -234,20 +234,20 @@ gl.uniform2fv(someVec2Element0Loc, [1, 2]);  // u_someVec2[0]の値をセット
 gl.uniform2fv(someVec2Element1Loc, [3, 4]);  // u_someVec2[1]の値をセット
 gl.uniform2fv(someVec2Element2Loc, [5, 6]);  // u_someVec2[2]の値をセット
 </code></pre><p>「構造体」の文法を利用することもできる。</p>
-<pre><code>struct SomeStruct {
+<pre class="prettyprint"><code>struct SomeStruct {
   bool active;
   vec2 someVec2;
 };
 uniform SomeStruct u_someThing;
 </code></pre><p>構造体を使う場合、ロケーションの取得は構造体のフィールド一つ一つについて行なうことになる。</p>
-<pre><code>var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
+<pre class="prettyprint"><code>var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
 var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
 </code></pre><h3 id="-span-id-textures-in-vertex-shaders-span-"><span id="textures-in-vertex-shaders"></span>頂点シェーダーでのテクスチャーの利用</h3>
 <p>テクスチャーの利用については、<a href="#textures-in-fragment-shaders">フラグメントシェーダーでのテクスチャーの利用</a>の項で後述する。</p>
 <h2 id="-">フラグメントシェーダー</h2>
 <p>フラグメントシェーダーの役割は、描画対象となったピクセルの「色」を決定することである。
 フラグメントシェーダーは、必ず次のような形になる。</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 void main() {
    // 何らかの計算をして「ピクセルの色」を決定する。
@@ -270,7 +270,7 @@ void main() {
 <p>シェーダーにおいて、「テクスチャー」のデータにアクセスするには、
 「<code>sampler2D</code>型」のuniformを使用する。
 データを取り出す際にはGLSLの関数「<code>texture2D</code>」を使う。</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 uniform sampler2D u_texture;
 
@@ -282,7 +282,7 @@ void main() {
 その詳細については<a href="webgl-3d-textures.html">別の講義</a>で説明するが、
 ここではテクスチャの利用に最低限必要なサンプルコードで説明しておく。</p>
 <p>まず、テクスチャーの生成とデータのセットを行なう。</p>
-<pre><code>var tex = gl.createTexture();
+<pre class="prettyprint"><code>var tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 var level = 0;
 var width = 2;
@@ -293,13 +293,13 @@ var data = new Uint8Array([
 ]);
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
 </code></pre><p>初期化時、シェーダープログラムで定義したuniformのロケーションを取得しておく。</p>
-<pre><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
+<pre class="prettyprint"><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
 </code></pre><p>描画時には、テクスチャーを「テクスチャーユニット」のひとつにバインドし、</p>
-<pre><code>var unit = 5;  // 「テクスチャーユニット」のひとつを指定する
+<pre class="prettyprint"><code>var unit = 5;  // 「テクスチャーユニット」のひとつを指定する
 gl.activeTexture(gl.TEXTURE0 + unit);
 gl.bindTexture(gl.TEXTURE_2D, tex);
 </code></pre><p>シェーダーに対しては、「どのテクスチャーユニットを指定したか」の情報を渡す。</p>
-<pre><code>gl.uniform1i(someSamplerLoc, unit);
+<pre class="prettyprint"><code>gl.uniform1i(someSamplerLoc, unit);
 </code></pre><h3 id="-span-id-varyings-span-varying"><span id="varyings"></span>varying</h3>
 <p>varyingは、頂点シェーダーからフラグメントシェーダーへとデータを渡す手段である。
 これについては「<a href="webgl-how-it-works.html">WebGLの仕組み</a>」の講義でも説明した。</p>
@@ -310,7 +310,7 @@ gl.bindTexture(gl.TEXTURE_2D, tex);
 行なわれるが、同時に、補間された部分について「varyingの値の補間」も行なわれる。
 フラグメントシェーダーが呼び出される際には、この補間されたvaryingの値が渡される。</p>
 <p>頂点シェーダー：</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 
 uniform vec4 u_offset;
 
@@ -321,7 +321,7 @@ void main() {
 +  v_positionWithOffset = a_position + u_offset;
 }
 </code></pre><p>フラグメントシェーダー：</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 +varying vec4 v_positionWithOffset;
 
@@ -346,18 +346,18 @@ GLSLには、JavaScriptには見られないような少々独特な特殊機能
 同様に<code>mat2</code>、<code>mat3</code>、<code>mat4</code>は2x2、3x3、4x4の行列を扱うためのデータ型である。
 これらのデータ型があることで、例えば「行列にスカラー値(行列でない、いわゆる数値)
 を乗算する」といった計算を簡単に書くことができる。</p>
-<pre><code>vec4 a = vec4(1, 2, 3, 4);
+<pre class="prettyprint"><code>vec4 a = vec4(1, 2, 3, 4);
 vec4 b = a * 2.0;
 // bの値はvec4(2, 4, 6, 8)となる。
 </code></pre><p>「行列同士の乗算」や「ベクトルと行列の掛け算」も同様に記述できる。</p>
-<pre><code>mat4 a = ???
+<pre class="prettyprint"><code>mat4 a = ???
 mat4 b = ???
 mat4 c = a * b;
 
 vec4 v = ???
 vec4 y = c * v;
 </code></pre><p>また、各種のvec型の変数には多様な「セレクタ」がある。例えばvec4の場合、</p>
-<pre><code>vec4 v;
+<pre class="prettyprint"><code>vec4 v;
 </code></pre><ul>
 <li><code>v.x</code> と書けば、 <code>v.s</code> や <code>v.r</code> や <code>v[0]</code>と同じ意味になる。</li>
 <li><code>v.y</code> と書けば、 <code>v.t</code> や <code>v.g</code> や <code>v[1]</code>と同じ意味になる。</li>
@@ -366,29 +366,29 @@ vec4 y = c * v;
 </ul>
 <p>これによって、vecのコンポーネントの入れ替え(<em>swizzle</em>などと表現される)は
 容易である。入れ替えだけでなく、同じ要素を繰り返すこともできる。例えば、</p>
-<pre><code>v.yyyy
+<pre class="prettyprint"><code>v.yyyy
 </code></pre><p>と、</p>
-<pre><code>vec4(v.y, v.y, v.y, v.y)
+<pre class="prettyprint"><code>vec4(v.y, v.y, v.y, v.y)
 </code></pre><p>は同じ値である。同様に、</p>
-<pre><code>v.bgra
+<pre class="prettyprint"><code>v.bgra
 </code></pre><p>は</p>
-<pre><code>vec4(v.b, v.g, v.r, v.a)
+<pre class="prettyprint"><code>vec4(v.b, v.g, v.r, v.a)
 </code></pre><p>と同じ値となる。
 vecやmatの値を定義する際には複数の要素を一度に記述することもできる。例えば</p>
-<pre><code>vec4(v.rgb, 1)
+<pre class="prettyprint"><code>vec4(v.rgb, 1)
 </code></pre><p>と書けば</p>
-<pre><code>vec4(v.r, v.g, v.b, 1)
+<pre class="prettyprint"><code>vec4(v.r, v.g, v.b, 1)
 </code></pre><p>という意味になる。また、</p>
-<pre><code>vec4(1)
+<pre class="prettyprint"><code>vec4(1)
 </code></pre><p>は、</p>
-<pre><code>vec4(1, 1, 1, 1)
+<pre class="prettyprint"><code>vec4(1, 1, 1, 1)
 </code></pre><p>と解釈される。</p>
 <h3 id="-">データ型に厳しい</h3>
 <p>GLSLは「強い型付け言語」、即ち、データ型に非常に厳しい言語である。
 これに苦労させられることもあるだろう。</p>
-<pre><code>float f = 1;  // エラー。&#39;1&#39;はint型である。int型の値はfloat型変数に代入できない。
+<pre class="prettyprint"><code>float f = 1;  // エラー。&#39;1&#39;はint型である。int型の値はfloat型変数に代入できない。
 </code></pre><p>上のコードは、正しくはこう書かなければならない。</p>
-<pre><code>float f = 1.0;      // floatの値を使えば問題ない。
+<pre class="prettyprint"><code>float f = 1.0;      // floatの値を使えば問題ない。
 float f = float(1)  // 整数値はfloat型にキャスト(型変換)すればよい。
 </code></pre><p>上の方で挙げた<code>vec4(v.rgb, 1)</code>では<code>1</code>についてエラーは出ないが、
 これは<code>vec4</code>が<code>float(1)</code>に相当するキャストを行なっているからである。</p>
@@ -396,18 +396,18 @@ float f = float(1)  // 整数値はfloat型にキャスト(型変換)すれば�
 <p>GLSLには多くのビルトイン関数がある。
 その多くは多数のコンポーネントを同時に扱う。
 例えば、角度(angle)から正弦(sine)を計算する関数、</p>
-<pre><code>T sin(T angle)
+<pre class="prettyprint"><code>T sin(T angle)
 </code></pre><p>では、Tは<code>float</code>、<code>vec2</code>、<code>vec3</code>、<code>vec4</code>のどのデータ型を使ってもよい。
 引数に<code>vec4</code>型の値を渡せば、<code>vec4</code>の値、即ち、vec4の各コンポーネントの正弦が得られる。
 具体的に言えば、例えば<code>vec4</code>型の値<code>v</code>を引数とした場合、</p>
-<pre><code>vec4 s = sin(v);
+<pre class="prettyprint"><code>vec4 s = sin(v);
 </code></pre><p>は、以下のように解釈される。</p>
-<pre><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
+<pre class="prettyprint"><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 </code></pre><p>一つの引数がfloatで残りが<code>T</code>という場合もある。この場合、floatが全体に適用される。
 例えば、<code>v1</code>と<code>v2</code>が<code>vec4</code>型、<code>f</code>がfloat型だとして、</p>
-<pre><code>vec4 m = mix(v1, v2, f);
+<pre class="prettyprint"><code>vec4 m = mix(v1, v2, f);
 </code></pre><p>は、以下のように解釈される。</p>
-<pre><code>vec4 m = vec4(
+<pre class="prettyprint"><code>vec4 m = vec4(
   mix(v1.x, v2.x, f),
   mix(v1.y, v2.y, f),
   mix(v1.z, v2.z, f),

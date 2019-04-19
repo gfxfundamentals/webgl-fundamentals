@@ -90,20 +90,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The second size is the size the canvas is displayed. CSS determines the size the canvas is
 displayed.</p>
 <p>You can set the size of the canvas&#39;s drawingbuffer in 2 ways. One using HTML</p>
-<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>The other using JavaScript</p>
-<pre><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
 </code></pre><p>JavaScript</p>
-<pre><code>var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code>var canvas = document.getElementById(&quot;c&quot;);
 canvas.width = 400;
 canvas.height = 300;
 </code></pre><p>As for setting a canvas&#39;s display size if you don&#39;t have any CSS that affects the canvas&#39;s display size
 the display size will be the same size as its drawingbuffer. So in the 2 examples above the canvas&#39;s drawingbuffer is 400x300
 and its display size is also 400x300.</p>
 <p>Here&#39;s an example of a canvas whose drawingbuffer is 10x15 pixels that is displayed 400x300 pixels on the page</p>
-<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>or for example like this</p>
-<pre><code>&lt;style&gt;
+<pre class="prettyprint"><code>&lt;style&gt;
 #c {
   width: 400px;
   height: 300px;
@@ -121,7 +121,7 @@ and its display size is also 400x300.</p>
 generally it filters it when it stretches it.</p>
 <p>So, what do we do if, for example, we want the canvas to fill the window? Well, first we can get
 the browser to stretch the canvas to fill the window with CSS. Example</p>
-<pre><code>&lt;html&gt;
+<pre class="prettyprint"><code>&lt;html&gt;
   &lt;head&gt;
     &lt;style&gt;
       /* remove the border */
@@ -144,7 +144,7 @@ the browser to stretch the canvas to fill the window with CSS. Example</p>
 </code></pre><p>Now we just need to make the drawingbuffer match whatever size the browser has stretched the canvas. We can
 do that using <code>clientWidth</code> and <code>clientHeight</code> which are properties every element in HTML has that let
 JavaScript check what size that element is being displayed.</p>
-<pre><code>function resize(canvas) {
+<pre class="prettyprint"><code>function resize(canvas) {
   // Lookup the size the browser is displaying the canvas.
   var displayWidth  = canvas.clientWidth;
   var displayHeight = canvas.clientHeight;
@@ -160,7 +160,7 @@ JavaScript check what size that element is being displayed.</p>
 }
 </code></pre><p>Most WebGL apps <a href="webgl-animation.html">are animated</a> so let&#39;s call this function just before we render
 so it will always adjust the canvas to our desired size just before drawing.</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
    resize(gl.canvas);
 
    ...
@@ -179,7 +179,7 @@ of the canvas but after that it&#39;s up to you to set it. If you change the siz
 you need to tell WebGL a new viewport setting.</p>
 <p>Let&#39;s change the code to handle this. On top of that, since the WebGL context has a
 reference to the canvas let&#39;s pass that into resize.</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
    resize(gl.canvas);
 
 +   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);

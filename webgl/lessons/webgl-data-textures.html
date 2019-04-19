@@ -134,7 +134,7 @@ By default, WebGL1 only supports a few types of textures</p>
 there is only 1 value per pixel and it is repeated for each R, G, and B channels.</p>
 <p>We&#39;ll take the sample from the <a href="webgl-3d-textures.html">last article</a>. First we&#39;ll change
 the texture coordinates to use the entire texture on each face of the cube.</p>
-<pre><code>// Fill the buffer with texture coordinates the cube.
+<pre class="prettyprint"><code>// Fill the buffer with texture coordinates the cube.
 function setTexcoords(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -148,7 +148,7 @@ function setTexcoords(gl) {
         1, 1,
         ...
 </code></pre><p>Then we&#39;ll change the code that creates a texture</p>
-<pre><code>// Create a texture.
+<pre class="prettyprint"><code>// Create a texture.
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -188,7 +188,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </p>
 <p>Oops! Why is this not working?!?!?</p>
 <p>Checking the JavaScript console we see this error something like this</p>
-<pre><code>WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
+<pre class="prettyprint"><code>WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
 </code></pre><p>It turns out there&#39;s a kind of obscure setting in WebGL left
 over from when OpenGL was first created. Computers sometimes
 go faster then data is a certain size. For example it can
@@ -199,7 +199,7 @@ row of data to be a multiple of 4 bytes (except for the last row).</p>
 is going to try to read 4 bytes for the first row and 3 bytes
 for the 2nd row for a total of 7 bytes which is why it&#39;s complaining.</p>
 <p>We can tell WebGL to deal with 1 byte at a time like this</p>
-<pre><code>const alignment = 1;
+<pre class="prettyprint"><code>const alignment = 1;
 gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
 </code></pre><p>Valid alignment values are 1, 2, 4, and 8.</p>
 <p>I suspect in WebGL you will not be able to measure a difference

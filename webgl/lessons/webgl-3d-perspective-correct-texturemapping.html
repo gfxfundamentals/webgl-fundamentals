@@ -106,7 +106,7 @@ it will pass us our varyings interpolated between the 3 values.</p>
 <p>Going back to our <a href="webgl-fundamentals.html">first article</a> we drew a triangle in
 clipspace, no math. We just passed in some clipspace coordinates
 to a simple vertex shader that looked like this</p>
-<pre><code>  // an attribute will receive data from a buffer
+<pre class="prettyprint"><code>  // an attribute will receive data from a buffer
   attribute vec4 a_position;
 
   // all shaders have a main function
@@ -117,7 +117,7 @@ to a simple vertex shader that looked like this</p>
     gl_Position = a_position;
   }
 </code></pre><p>We had a simple fragment shader that draws a constant color</p>
-<pre><code>  // fragment shaders don&#39;t have a default precision so we need
+<pre class="prettyprint"><code>  // fragment shaders don&#39;t have a default precision so we need
   // to pick one. mediump is a good default
   precision mediump float;
 
@@ -128,7 +128,7 @@ to a simple vertex shader that looked like this</p>
   }
 </code></pre><p>So let&#39;s make that draw 2 rectangles in clipspace. We&#39;ll pass it this
 data with <code>X</code>, <code>Y</code>, <code>Z</code>, and <code>W</code> for each vertex.</p>
-<pre><code>var positions = [
+<pre class="prettyprint"><code>var positions = [
   -.8, -.8, 0, 1,  // 1st rect 1st triangle
    .8, -.8, 0, 1,
   -.8, -.2, 0, 1,
@@ -152,7 +152,7 @@ data with <code>X</code>, <code>Y</code>, <code>Z</code>, and <code>W</code> for
 </p>
 <p>Let&#39;s add a single varying float. We&#39;ll pass that directly
 from the vertex shader to the fragment shader.</p>
-<pre><code>  attribute vec4 a_position;
+<pre class="prettyprint"><code>  attribute vec4 a_position;
 +  attribute float a_brightness;
 
 +  varying float v_brightness;
@@ -164,7 +164,7 @@ from the vertex shader to the fragment shader.</p>
 +    v_brightness = a_brightness;
   }
 </code></pre><p>In the fragment shader we&#39;ll use that varying to set the color</p>
-<pre><code>  precision mediump float;
+<pre class="prettyprint"><code>  precision mediump float;
 
 +  // passed in from the vertex shader and interpolated
 +  varying float v_brightness;  
@@ -175,7 +175,7 @@ from the vertex shader to the fragment shader.</p>
 </code></pre><p>We need to supply data for that varying so we&#39;ll make a buffer and
 put in some data. One value per vertex. We&#39;ll set all the brightness
 values for vertices on the left to 0 and those on the right to 1.</p>
-<pre><code>  // Create a buffer and put 12 brightness values in it
+<pre class="prettyprint"><code>  // Create a buffer and put 12 brightness values in it
   var brightnessBuffer = gl.createBuffer();
 
   // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = brightnessBuffer)
@@ -200,11 +200,11 @@ values for vertices on the left to 0 and those on the right to 1.</p>
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(brightness), gl.STATIC_DRAW);
 </code></pre><p>We also need to look up the location of the <code>a_brightness</code> attribute 
 at init time</p>
-<pre><code>  // look up where the vertex data needs to go.
+<pre class="prettyprint"><code>  // look up where the vertex data needs to go.
   var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +  var brightnessAttributeLocation = gl.getAttribLocation(program, &quot;a_brightness&quot;);
 </code></pre><p>and setup that attribute at render time</p>
-<pre><code>  // Turn on the attribute
+<pre class="prettyprint"><code>  // Turn on the attribute
   gl.enableVertexAttribArray(brightnessAttributeLocation);
 
   // Bind the position buffer.
@@ -233,7 +233,7 @@ goes across the triangles.</p>
 <p>In the vertices above we supplied <code>1</code> for <code>W</code> but since we know WebGL
 will divide by <code>W</code> then we should be able do something like this
 and get the same result.</p>
-<pre><code>  var mult = 20;
+<pre class="prettyprint"><code>  var mult = 20;
   var positions = [
       -.8,  .8, 0, 1,  // 1st rect 1st triangle
        .8,  .8, 0, 1,
@@ -267,7 +267,7 @@ colors are different. What&#39;s going on?</p>
 texturemapping or rather to do perspective correct interpolation
 of varyings.</p>
 <p>In fact to make it easier to see let&#39;s hack the fragment shader to this</p>
-<pre><code>gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // reds
+<pre class="prettyprint"><code>gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // reds
 </code></pre><p>multplying <code>v_brightness</code> by 10 will make the value go from 0 to 10. <code>fract</code> will
 just keep the fractional part so it will go 0 to 1, 0 to 1, 0 to 1, 10 times</p>
 <p><div class="webgl_example_container">
@@ -279,10 +279,10 @@ just keep the fractional part so it will go 0 to 1, 0 to 1, 0 to 1, 10 times</p>
 <p>Now it should be easy to see the perspective.</p>
 <p>A linear interpolation from one value to another would be this
 formula</p>
-<pre><code> result = (1 - t) * a + t * b
+<pre class="prettyprint"><code> result = (1 - t) * a + t * b
 </code></pre><p>Where <code>t</code> is a value from 0 to 1 representing some position between <code>a</code> and <code>b</code>. 0 at <code>a</code> and 1 at <code>b</code>.</p>
 <p>For varyings though WebGL uses this formula</p>
-<pre><code> result = (1 - t) * a / aW + t * b / bW
+<pre class="prettyprint"><code> result = (1 - t) * a / aW + t * b / bW
           -----------------------------
              (1 - t) / aW + t / bW
 </code></pre><p>Where <code>aW</code> is the <code>W</code> that was set on <code>gl_Position.w</code> when the varying was
@@ -298,7 +298,7 @@ the UV coordinates to go from 0 to 1 on each side and it&#39;s using a 4x4 pixel
 </p>
 <p>Now let&#39;s take that example and change the vertex shader so that
 we divide by <code>W</code> ourselves. We just need to add 1 line.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -331,20 +331,20 @@ able to do perspective correct interpolation of varyings.</p>
 <p>If you recall <code>W</code> was our <code>Z</code> value from our <a href="webgl-3d-perspective.html">perspective matrix</a>.
 With <code>W</code> just being <code>1</code> WebGL just ends up doing a linear interpolation.
 In fact if you take the equation above</p>
-<pre><code> result = (1 - t) * a / aW + t * b / bW
+<pre class="prettyprint"><code> result = (1 - t) * a / aW + t * b / bW
           -----------------------------
              (1 - t) / aW + t / bW
 </code></pre><p>And change all the <code>W</code>s to 1s we get</p>
-<pre><code> result = (1 - t) * a / 1 + t * b / 1
+<pre class="prettyprint"><code> result = (1 - t) * a / 1 + t * b / 1
           ---------------------------
              (1 - t) / 1 + t / 1
 </code></pre><p>Dividing by 1 does nothing so we can simplify to this</p>
-<pre><code> result = (1 - t) * a + t * b
+<pre class="prettyprint"><code> result = (1 - t) * a + t * b
           -------------------
              (1 - t) + t
 </code></pre><p><code>(1 - t) + t</code> when <code>t</code> goes from 0 to 1 is the same as <code>1</code>. For example
 if <code>t</code> was <code>.7</code> we&#39;d get <code>(1 - .7) + .7</code> which is <code>.3 + .7</code> which is <code>1</code>. In other words we can remove the bottom so we&#39;re left with</p>
-<pre><code> result = (1 - t) * a + t * b
+<pre class="prettyprint"><code> result = (1 - t) * a + t * b
 </code></pre><p>Which the same as the linear interpolation equation above.</p>
 <p>Hopefully it&#39;s now clear why WebGL uses a 4x4 matrix and 
 4 value vectors with <code>X</code>, <code>Y</code>, <code>Z</code>, and <code>W</code>. <code>X</code> and <code>Y</code> divided by <code>W</code> get a clipsapce coordinate. <code>Z</code> divided by <code>W</code> also get a clipspace coordinate in Z and <code>W</code> is still used during interopation of varyings and

@@ -94,7 +94,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ということを「継続的にやる」必要がある。
 実際のところ、これはWebGLに限定した話ではない。</p>
 <p>以前書いたサンプルのひとつを例としてアニメーションを実装するとしたら、このようになる。</p>
-<pre><code>*var fieldOfViewRadians = degToRad(60);
+<pre class="prettyprint"><code>*var fieldOfViewRadians = degToRad(60);
 *var rotationSpeed = 1.2;
 
 *requestAnimationFrame(drawScene);
@@ -149,7 +149,7 @@ function drawScene() {
 <code>requestAnimationFrame</code>は時間をミリ秒(1秒の1/1000)単位で扱うので、
 これに0.001を掛けている。</p>
 <p>以上のことから、フレームとフレームの間の小さな経過時間(deltaTime)はこのようにして求められる。</p>
-<pre><code>*var then = 0;
+<pre class="prettyprint"><code>*var then = 0;
 
 requestAnimationFrame(drawScene);
 
@@ -171,7 +171,7 @@ requestAnimationFrame(drawScene);
 1.2なら「1秒あたり1.2ラジアン回転する」、という意味になる。
 1.2ラジアンは1/5回転に相当するので、表現を変えれば「一回りに5秒ほどかけて回転する」という意味になる。
 フレームレートに関わらず「一回りに5秒ほどかけて回転する」のである。</p>
-<pre><code>*    rotation[1] += rotationSpeed * deltaTime;
+<pre class="prettyprint"><code>*    rotation[1] += rotationSpeed * deltaTime;
 </code></pre><p>以上を実装した結果がこれである。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation.html"></iframe>

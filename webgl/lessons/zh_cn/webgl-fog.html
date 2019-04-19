@@ -88,14 +88,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>这篇文章是WebGL系列文章的一部分。从<a href="webgl-fundamentals.html">基础概念</a>开始。</p>
 <p>WebGL实现雾效果对我来说很有趣，因为当我思考它是如何实现时，会觉得它很<em>假</em>。基本上你所做的就是在着色器中使用某些从相机位置计算的深度或者距离来使颜色或多或少的成为雾色。 </p>
 <p>换句话说你从这样的基本公式开始</p>
-<pre><code class="lang-glsl">gl_FragColor = mix(originalColor, fogColor, fogAmount);
+<pre class="prettyprint"><code class="lang-glsl">gl_FragColor = mix(originalColor, fogColor, fogAmount);
 </code></pre>
 <p>其中<code>fogAmount</code>是0到1之间的值。<code>mix</code>函数混合前2个值。当<code>fogAmount</code>为0时，<code>mix</code>返回<code>originalColor</code>。当<code>fogAmount</code>为1时，<code>mix</code> 返回<code>fogColor</code>。在0到1之间时，你会获得两个颜色按百分比混合的颜色值。你可以像这样自己实现<code>mix</code> </p>
-<pre><code class="lang-glsl">gl_FragColor = originalColor + (fogColor - originalColor) * fogAmount;
+<pre class="prettyprint"><code class="lang-glsl">gl_FragColor = originalColor + (fogColor - originalColor) * fogAmount;
 </code></pre>
 <p>让我们来写一个这样的着色器。我们会使用<a href="webgl-3d-textures.html">纹理</a>文章中的纹理立方体。</p>
 <p>让我们将混合函数添加到片断着色器</p>
-<pre><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
 
 // 由顶点着色器传入。
 varying vec2 v_texcoord;
@@ -112,11 +112,11 @@ void main() {
 }
 </code></pre>
 <p>然后在初始化阶段，我们需要查找新的全局变量位置</p>
-<pre><code class="lang-js">var fogColorLocation = gl.getUniformLocation(program, &quot;u_fogColor&quot;);
+<pre class="prettyprint"><code class="lang-js">var fogColorLocation = gl.getUniformLocation(program, &quot;u_fogColor&quot;);
 var fogAmountLocation = gl.getUniformLocation(program, &quot;u_fogAmount&quot;);
 </code></pre>
 <p>在渲染阶段设置他们</p>
-<pre><code class="lang-js">var fogColor = [0.8, 0.9, 1, 1];
+<pre class="prettyprint"><code class="lang-js">var fogColor = [0.8, 0.9, 1, 1];
 var settings = {
   fogAmount: .5,
 };
@@ -150,7 +150,7 @@ function drawScene(time) {
 <p>所以现在我们真正需要做的是根据一些原则例如以相机为基准的深度来计算雾量代替传入雾量。</p>
 <p>回想关于<a href="webgl-3d-camera.html">相机</a>的文章，在我们应用视图矩阵之后，所有位置转换为相对于相机的位置。相机看向-z轴，所以如果我们只看z位置，在乘以世界和视图矩阵之后，我们会得到一个值代表相较于相机所在z平面的距离。</p>
 <p>让我们改变顶点着色器来传递那个数据给片断着色器，使我们能够用它来计算雾量。为此，我们将<code>u_matrix</code>分成两部分。一个投影矩阵和一个世界视图矩阵。</p>
-<pre><code class="lang-glsl">attribute vec4 a_position;
+<pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 -uniform mat4 u_matrix;
@@ -178,7 +178,7 @@ void main() {
 <p>现在在片断着色器中我们希望如果深度小于某些值，不融合雾色(fogAmount = 0)。如果深度大于某个值则为100%雾色(fogAmount = 1)。在两个值之间则融合颜色。</p>
 <p>我们可以编写代码来实现这点，但GLSL有一个函数<code>smoothstep</code>就是这样做的。你给定最小值，最大值，和要测试的值。如果测试值小于等于最小值返回0。如果测试值大于等于最大值返回1。如果测试值在两值之间，则根据测试值在最小值和最大值之间的位置返回0到1之间的插值。</p>
 <p>所以，在我们的片断着色器中使用它来计算雾量会是非常简单的。</p>
-<pre><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
 
 // 从顶点着色器传入的。
 varying vec2 v_texcoord;
@@ -201,7 +201,7 @@ void main() {
 }
 </code></pre>
 <p>当然我们需要在初始化阶段找到所有的全局变量</p>
-<pre><code class="lang-js">// 查找全局变量
+<pre class="prettyprint"><code class="lang-js">// 查找全局变量
 +var projectionLocation = gl.getUniformLocation(program, &quot;u_projection&quot;);
 +var worldViewLocation = gl.getUniformLocation(program, &quot;u_worldView&quot;);
 var textureLocation = gl.getUniformLocation(program, &quot;u_texture&quot;);
@@ -210,7 +210,7 @@ var fogColorLocation = gl.getUniformLocation(program, &quot;u_fogColor&quot;);
 +var fogFarLocation = gl.getUniformLocation(program, &quot;u_fogFar&quot;);
 </code></pre>
 <p>在渲染阶段设置他们 </p>
-<pre><code class="lang-js">var fogColor = [0.8, 0.9, 1, 1];
+<pre class="prettyprint"><code class="lang-js">var fogColor = [0.8, 0.9, 1, 1];
 var settings = {
 -  fogAmount: .5,
 +  fogNear: 1.1,
@@ -259,7 +259,7 @@ function drawScene(time) {
 -  gl.uniform1f(fogAmountLocation, settings.fogAmount);
 </code></pre>
 <p>我们绘制了40个立方体在不同的距离上，以便更容易看到雾效果。</p>
-<pre><code class="lang-js">var settings = {
+<pre class="prettyprint"><code class="lang-js">var settings = {
   fogNear: 1.1,
   fogFar: 2.0,
 +  xOff: 1.1,
@@ -289,7 +289,7 @@ for (let i = 0; i &lt;= numCubes; ++i) {
 </p>
 <p>注意：我们没有添加任何代码来确保<code>fogNear</code>小于等于<code>fogFar</code>，这可能是无效的设置，所以确保设定它们为合适的值。</p>
 <p>正如上面提到的，对我来说这像一个诡计。它看起来像雾因为雾色和背景色相同。改变背景色，幻觉消失了。</p>
-<pre><code class="lang-js">-gl.clearColor(...fogColor);
+<pre class="prettyprint"><code class="lang-js">-gl.clearColor(...fogColor);
 +gl.clearColor(1, 0, 0, 1);  // red
 </code></pre>
 <p>得到</p>
@@ -311,7 +311,7 @@ for (let i = 0; i &lt;= numCubes; ++i) {
 <div class="webgl_center"><img src="../resources/fog-distance.svg" style="width: 600px;"></div>
 
 <p>为此，我们只需将视图空间中的顶点位置从顶点着色器传递到片断着色器</p>
-<pre><code class="lang-glsl">attribute vec4 a_position;
+<pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 uniform mat4 u_worldView;
@@ -338,7 +338,7 @@ void main() {
 }
 </code></pre>
 <p>然后在片断着色器中我们可以使用位置来计算距离</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // 从顶点着色器传入
 varying vec2 v_texcoord;
@@ -368,13 +368,13 @@ void main() {
 
 </p>
 <p>到目前为止，我们所有的雾都使用了线性计算。换句话说，在最近处到最远处之间雾颜色被线性地施加。像现实中的许多事物一样，雾是指数方式显现的。它根据距观察者距离的平方变厚。一个常见的指数雾公式是</p>
-<pre><code class="lang-glsl">#define LOG2 1.442695
+<pre class="prettyprint"><code class="lang-glsl">#define LOG2 1.442695
 
 fogAmount = 1. - exp2(-fogDensity * fogDensity * fogDistance * fogDistance * LOG2));
 fogAmount = clamp(fogAmount, 0., 1.);
 </code></pre>
 <p>要使用它，我们将片断着色器改成这样</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // 从顶点着色器传入。
 varying vec2 v_texcoord;

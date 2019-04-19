@@ -111,7 +111,7 @@ WebGLやOpenGLの「フレームバッファ」は、フレームバッファと
 添付するとそのテクスチャーに対して描画できるようになる。</p>
 <p>では最初に、<a href="webgl-image-processing.html">前回の講義</a>で書いた
 テクスチャー生成コードを、関数として再定義しよう。</p>
-<pre><code>  function createAndSetupTexture(gl) {
+<pre class="prettyprint"><code>  function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -129,7 +129,7 @@ WebGLやOpenGLの「フレームバッファ」は、フレームバッファと
   var originalImageTexture = createAndSetupTexture(gl);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 </code></pre><p>この関数を使って新たに２つのテクスチャーを作成、２つのフレームバッファにアタッチ(添付)する。</p>
-<pre><code>  // テクスチャを２つ生成して、フレームバッファにアタッチする。
+<pre class="prettyprint"><code>  // テクスチャを２つ生成して、フレームバッファにアタッチする。
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
@@ -151,7 +151,7 @@ WebGLやOpenGLの「フレームバッファ」は、フレームバッファと
         gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
   }
 </code></pre><p>様々なエフェクトを「畳み込み行列」として定義して、そのリストを用意する。</p>
-<pre><code>  // 「畳み込み行列(convolution kernels)」を定義する
+<pre class="prettyprint"><code>  // 「畳み込み行列(convolution kernels)」を定義する
   var kernels = {
     normal: [
       0, 0, 0,
@@ -183,7 +183,7 @@ WebGLやOpenGLの「フレームバッファ」は、フレームバッファと
     &quot;unsharpen&quot;
   ];
 </code></pre><p>最後に、２つのテクスチャを交互に使って各エフェクトを次々にかけて行く。</p>
-<pre><code>  // 元画像から開始
+<pre class="prettyprint"><code>  // 元画像から開始
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
   // テクスチャに書き込む時点では画像の上下をひっくり返さない
@@ -248,7 +248,7 @@ WebGLやOpenGLの「フレームバッファ」は、フレームバッファと
 フレームバッファのピクセル(0,0)が、エフェクトの計算上の(0,0)と一致していればよい。
 これに対応するため、上下をひっくり返すかどうかはシェーダーの入力の一つ(u_flipY)
 を使って決められるようにした。</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_flipY;
 ...
@@ -262,7 +262,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>そして、これをレンダリングのタイミングでセットする。</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
   var flipYLocation = gl.getUniformLocation(program, &quot;u_flipY&quot;);
 

@@ -97,7 +97,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Если взять последний пример из <a href="webgl-text-texture.html">предыдущей статьи</a>,
 очевидным решением будет сделать текстуру для каждой буквы. Изменим пример
 соответствующим образом.</p>
-<pre><code>+var names = [
+<pre class="prettyprint"><code>+var names = [
 +  &quot;anna&quot;,   // 0
 +  &quot;colin&quot;,  // 1
 +  &quot;james&quot;,  // 2
@@ -148,7 +148,7 @@ var textTextures = [
 *  var textCanvas = makeTextCanvas(name, 10, 26);
 </code></pre><p>Затем вместо отрисовки одного квадранта для каждого имени мы будем отрисовывать
 по одному квадранту для каждой буквы.</p>
-<pre><code>// настройка отрисовки текста
+<pre class="prettyprint"><code>// настройка отрисовки текста
 +// Каждая буква использует одну программу и одни атрибуты, поэтому
 +// нам необходимо выполнить следующие строки лишь раз
 +gl.useProgram(textProgramInfo.program);
@@ -208,7 +208,7 @@ textPositions.forEach(function(pos, ndx) {
 <p>На просторах интернета я нашёл <a href="http://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta">этот простой свободно распространяемый
 текстурный атлас со шрифтом</a>
 <img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../../resources/8x8-font.png" /></p>
-<pre><code>var fontInfo = {
+<pre class="prettyprint"><code>var fontInfo = {
   letterHeight: 8,
   spaceWidth: 8,
   spacing: -1,
@@ -258,7 +258,7 @@ textPositions.forEach(function(pos, ndx) {
   },
 };
 </code></pre><p>Мы загрузим изображение, <a href="webgl-3d-textures.html">как мы уже делали в работе с текстурами</a></p>
-<pre><code>// создаём текстуру
+<pre class="prettyprint"><code>// создаём текстуру
 var glyphTex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, glyphTex);
 // заполняем текстуру синим пикселем 1x1
@@ -281,7 +281,7 @@ image.addEventListener(&#39;load&#39;, function() {
 на лету создадим квадранты для каждого глифа. Эти квадранты по текстурным координатам
 будут выбирать определённый глиф.</p>
 <p>Построим квадранты по строке.</p>
-<pre><code>function makeVerticesForString(fontInfo, s) {
+<pre class="prettyprint"><code>function makeVerticesForString(fontInfo, s) {
   var len = s.length;
   var numVertices = len * 6;
   var positions = new Float32Array(numVertices * 2);
@@ -351,7 +351,7 @@ image.addEventListener(&#39;load&#39;, function() {
 }
 </code></pre><p>Далее мы вручную создаём bufferInfo. (<a href="webgl-drawing-multiple-things">Загляните в предыдущую статью, если
 вы не помните, что такое bufferInfo</a>).</p>
-<pre><code>// создаём bufferInfo
+<pre class="prettyprint"><code>// создаём bufferInfo
 var textBufferInfo = {
   attribs: {
     a_position: { buffer: gl.createBuffer(), numComponents: 2, },
@@ -360,7 +360,7 @@ var textBufferInfo = {
   numElements: 0,
 };
 </code></pre><p>А затем для отрисовки текста мы обновим буферы. Также мы сделаем текст динамическим.</p>
-<pre><code>textPositions.forEach(function(pos, ndx) {
+<pre class="prettyprint"><code>textPositions.forEach(function(pos, ndx) {
 
   var name = names[ndx];
 +  var s = name + &quot;:&quot; + pos[0].toFixed(0) + &quot;,&quot; + pos[1].toFixed(0) + &quot;,&quot; + pos[2].toFixed(0);

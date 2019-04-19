@@ -96,7 +96,7 @@ o padrão é usar o alpha pré-multiplicado o mesmo que .png <code>&lt;img&gt;</
 tags com transparência e tags de tela 2D.</p>
 <p>O WebGL tem várias maneiras de tornar isso mais parecido com o OpenGL.</p>
 <h3 id="-1-diga-ao-webgl-que-voc-deseja-que-ele-seja-composto-com-alfa-n-o-premultiplicado">#1) Diga ao WebGL que você deseja que ele seja composto com alfa não premultiplicado</h3>
-<pre><code>gl = canvas.getContext(&quot;webgl&quot;, {
+<pre class="prettyprint"><code>gl = canvas.getContext(&quot;webgl&quot;, {
   premultipliedAlpha: false  // Ask for non-premultiplied alpha
 });
 </code></pre><p>O padrão é verdadeiro.</p>
@@ -108,10 +108,10 @@ em outras palavras, a cor CSS define para essa área da página.</p>
 <p>Uma boa maneira de encontrar se você tiver algum problema alfa é configurar o
 fundo da tela para uma cor brilhante como o vermelho. Você verá imediatamente
 o que está acontecendo.</p>
-<pre><code>&lt;canvas style=&quot;background: red;&quot;&gt;&lt;canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas style=&quot;background: red;&quot;&gt;&lt;canvas&gt;
 </code></pre><p>Você também pode configurá-lo em preto, o que irá ocultar quaisquer problemas alfa que você tenha.</p>
 <h3 id="-2-diga-ao-webgl-que-voc-n-o-quer-alfa-no-backbuffer">#2) Diga ao WebGL que você não quer alfa no backbuffer</h3>
-<pre><code>gl = canvas.getContext(&quot;webgl&quot;, { alpha: false }};
+<pre class="prettyprint"><code>gl = canvas.getContext(&quot;webgl&quot;, { alpha: false }};
 </code></pre><p>Isso fará com que ele atue mais como o OpenGL, já que o backbuffer só terá
 RGB. Esta é provavelmente a melhor opção porque um bom navegador pode ver que
 você não tem alfa e realmente otimiza a forma como o WebGL é composto. Claro
@@ -119,7 +119,7 @@ que isso também significa que na verdade não terá alfa no backbuffer, então,
 usando alpha no backbuffer para algum propósito que pode não funcionar para você.
 Poucos aplicativos que eu conheço usam alpha no backbuffer. Eu penso que isso deveria ter sido o padrão.</p>
 <h3 id="-3-limpe-o-alpha-no-final-da-sua-renderiza-o">#3) Limpe o Alpha no final da sua renderização</h3>
-<pre><code>..
+<pre class="prettyprint"><code>..
 renderScene();
 ..
 // Set the backbuffer&#39;s alpha to 1.0
@@ -133,7 +133,7 @@ A maioria das bibliotecas WebGL deve ser padrão para este método. Esses poucos
 que realmente estão usando alfa para efeitos de composição podem pedir isso. o
 O resto apenas obterá o melhor desempenho e as menos surpresas.</p>
 <h3 id="-4-climpe-o-alfa-uma-vez-ent-o-n-o-fa-a-mais-nada">#4) CLimpe o alfa uma vez, então não faça mais nada</h3>
-<pre><code>// At init time. Clear the back buffer.
+<pre class="prettyprint"><code>// At init time. Clear the back buffer.
 gl.clearColor(1,1,1,1);
 gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -147,12 +147,12 @@ quando você alternar torender para a tela.</p>
 os valores como estão no arquivo PNG com valores de cor não premultiplicados.
 Isso geralmente é o que eu estou acostumado com os programas OpenGL porque é sem
 perdas, enquanto o pré-multiplicado é com perdas.</p>
-<pre><code>1, 0.5, 0.5, 0  // RGBA
+<pre class="prettyprint"><code>1, 0.5, 0.5, 0  // RGBA
 </code></pre><p>É um valor possível sem premultiplicado, enquanto pré-multiplicado é um valor
 impossível porque <code>a = 0 &#39;que significa&#39; r</code>,<code>g</code> e <code>b</code> devem ser zero.</p>
 <p>Você pode ter o WebGL pré-multiplicar o alfa se desejar. Você faz isso
 configurando <code>UNPACK_PREMULTIPLY_ALPHA_WEBGL</code> para verdadeiro assim</p>
-<pre><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+<pre class="prettyprint"><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 </code></pre><p>O padrão não é premultiplicado.</p>
 <p>Esteja ciente de que a maioria, se não todas as implementações do Canvas 2D,
 funcionam com alfa pré-multiplicado. Isso significa que quando você os transfere
@@ -160,10 +160,10 @@ para o WebGL e <code>UNPACK_PREMULTIPLY_ALPHA_WEBGL</code> é falso, o WebGL ir�
 de novo para não premultipilado.</p>
 <h3 id="-6-usando-uma-equa-o-de-mistura-que-funciona-com-alfa-pr-multiplicada-">#6) Usando uma equação de mistura que funciona com alfa pré-multiplicada.</h3>
 <p>Quase todas as aplicações OpenGL que escrevi ou trabalharam no uso</p>
-<pre><code>gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+<pre class="prettyprint"><code>gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>Isso funciona para texturas alfa não pré-multiplicadas.</p>
 <p>Se você realmente quiser trabalhar com texturas alfa pré-multiplicadas, então você provavelmente quer</p>
-<pre><code>gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+<pre class="prettyprint"><code>gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>Esses são os métodos que conheço. Se você souber de mais, por favor, publique-os abaixo.</p>
 
     </div>

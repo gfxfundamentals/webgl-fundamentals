@@ -143,7 +143,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 иметь нормали <code>0, 0, -1</code>. Направленные влево грани получат нормали
 <code>-1, 0, 0</code>, направленные вправо - <code>1, 0, 0</code>, вверх - <code>0, 1, 0</code>, а вниз
 <code>0, -1, 0</code>.</p>
-<pre><code>function setNormals(gl) {
+<pre class="prettyprint"><code>function setNormals(gl) {
   var normals = new Float32Array([
           // лицо левого столба
           0, 0, 1,
@@ -276,7 +276,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 }
 </code></pre><p>Для того, чтобы можно было лучше рассмотреть освещение, уберём
 цвета в вершинах.</p>
-<pre><code>// получаем ссылки на атрибуты
+<pre class="prettyprint"><code>// получаем ссылки на атрибуты
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 -var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 +var normalLocation = gl.getAttribLocation(program, &quot;a_normal&quot;);
@@ -297,7 +297,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +// Записываем данные в буфер
 +setNormals(gl);
 </code></pre><p>И при рендеринге</p>
-<pre><code>-// Включаем атрибут цвета
+<pre class="prettyprint"><code>-// Включаем атрибут цвета
 -gl.enableVertexAttribArray(colorLocation);
 -
 -// Привязываем буфер цвета
@@ -328,7 +328,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +    normalLocation, size, type, normalize, stride, offset)
 </code></pre><p>Теперь нужно использовать эти данные в шейдерах.</p>
 <p>Сначала в вершинном шейдере нам нужно передать нормали во фрагментный шейдер.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 -attribute vec4 a_color;
 +attribute vec3 a_normal;
 
@@ -349,7 +349,7 @@ void main() {
 }
 </code></pre><p>А во фрагментном шейдере выполним скалярное умножение направления
 света и нормали.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // Передаются из вершинного шейдера
 -varying vec4 v_color;
@@ -373,13 +373,13 @@ void main() {
 +   gl_FragColor.rgb *= light;
 }
 </code></pre><p>Затем получаем ссылку на <code>u_color</code> и <code>u_reverseLightDirection</code>.</p>
-<pre><code>  // получаем ссылку на uniform-переменные
+<pre class="prettyprint"><code>  // получаем ссылку на uniform-переменные
   var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
 +  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 +  var reverseLightDirectionLocation =
 +      gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
 </code></pre><p>и задаём им значения</p>
-<pre><code>  // Задаём значение матрицы
+<pre class="prettyprint"><code>  // Задаём значение матрицы
   gl.uniformMatrix4fv(matrixLocation, false, worldViewProjectionMatrix);
 
 +  // Устанавливаем цвет
@@ -409,7 +409,7 @@ void main() {
 Сейчас мы передаём одну матрицу <code>u_matrix</code>. А будем передавать 2 матрицы.
 Одна, <code>u_world</code>, будет мировой матрицей. Другая, <code>u_worldViewProjection</code>,
 будет выполнять роль прежней <code>u_matrix</code>.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec3 a_normal;
 
 *uniform mat4 u_worldViewProjection;
@@ -428,12 +428,12 @@ void main() {
 это направления, поэтому нам не важен перенос. Направление занимает
 лишь верхнюю часть 3х3 матрицы.</p>
 <p>Теперь получим ссылки на эти uniform-переменные</p>
-<pre><code>  // получаем ссылки на uniform-переменные
+<pre class="prettyprint"><code>  // получаем ссылки на uniform-переменные
 *  var worldViewProjectionLocation =
 *      gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 +  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 </code></pre><p>Затем обновим код, который их устанавливает.</p>
-<pre><code>*// Задаём значения матрицам
+<pre class="prettyprint"><code>*// Задаём значения матрицам
 *gl.uniformMatrix4fv(
 *    worldViewProjectionLocation, false,
 *    worldViewProjectionMatrix);
@@ -478,7 +478,7 @@ void main() {
 обновим код шейдера. Технически мы могли бы просто обновить значение
 <code>u_world</code>, но лучше нам переименовать переменные, чтобы они отражали
 своё предназначение и чтобы мы не запутывались.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform mat4 u_worldViewProjection;
@@ -494,11 +494,11 @@ void main() {
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 </code></pre><p>Получаем ссылки на переменные</p>
-<pre><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
+<pre class="prettyprint"><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 +  var worldInverseTransposeLocation =
 +      gl.getUniformLocation(program, &quot;u_worldInverseTranspose&quot;);
 </code></pre><p>А затем вычисляем значения и устанавливаем их переменным</p>
-<pre><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
+<pre class="prettyprint"><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
 var worldInverseMatrix = m4.inverse(worldMatrix);
 var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
@@ -511,7 +511,7 @@ gl.uniformMatrix4fv(
 +    worldInverseTransposeLocation, false,
 +    worldInverseTransposeMatrix);
 </code></pre><p>Теперь код транспонирования матрицы</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   transpose: function(m) {
     return [
       m[0], m[4], m[8], m[12],

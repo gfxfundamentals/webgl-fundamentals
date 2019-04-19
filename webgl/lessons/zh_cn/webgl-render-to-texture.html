@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 这个话题在<a href="webgl-image-processing-continued.html">图像处理</a>中简单讲到过，
 但这里将详细介绍。</p>
 <p>渲染到纹理非常简单，创建一个确定大小的纹理</p>
-<pre><code>// 创建渲染对象
+<pre class="prettyprint"><code>// 创建渲染对象
 const targetTextureWidth = 256;
 const targetTextureHeight = 256;
 const targetTexture = gl.createTexture();
@@ -120,7 +120,7 @@ gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 我们之前讲过纹理，Renderbuffers 和纹理很像但是支持纹理不支持的格式和可选项，同时，
 不能像纹理那样直接将 renderbuffer 提供给着色器。</p>
 <p>让我们来创建一个帧缓冲并和纹理绑定</p>
-<pre><code>// 创建并绑定帧缓冲
+<pre class="prettyprint"><code>// 创建并绑定帧缓冲
 const fb = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
@@ -132,7 +132,7 @@ gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, tex, lev
 <p>绑定帧缓冲后，每次调用 <code>gl.clear</code>, <code>gl.drawArrays</code>, 或 <code>gl.drawElements</code>
 WebGL都会渲染到纹理上而不是画布上。</p>
 <p>将原来的渲染代码构造成一个方法，就可以调用两次，一次渲染到纹理，一次渲染到画布。</p>
-<pre><code>function drawCube(aspect) {
+<pre class="prettyprint"><code>function drawCube(aspect) {
   // 告诉它使用的程序（着色器对）
   gl.useProgram(program);
 
@@ -198,7 +198,7 @@ WebGL都会渲染到纹理上而不是画布上。</p>
 }
 </code></pre><p>注意到我们需要传入 <code>aspect</code> 计算投影矩阵，因为目标纹理的比例和画布不同。</p>
 <p>然后这样调用</p>
-<pre><code>// 绘制场景
+<pre class="prettyprint"><code>// 绘制场景
 function drawScene(time) {
 
   ...
@@ -254,7 +254,7 @@ function drawScene(time) {
 <p>同样的当我们计算投影矩阵的时候需要使用正确的比例，我花了无数个小时调试，寻找出现搞笑的渲染结果的原因，
 最后发现是少调用了一个 <code>gl.viewport</code> 或者都忘了，并使用正确的比例，由于在代码中很少直接调用
 <code>gl.bindFramebuffer</code> 所以就容易忘掉这些。所以我把这个方法调用放在一个方法里，像这样</p>
-<pre><code>function bindFrambufferAndSetViewport(fb, width, height) {
+<pre class="prettyprint"><code>function bindFrambufferAndSetViewport(fb, width, height) {
    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
    gl.viewport(0, 0, width, height);
 }
@@ -272,7 +272,7 @@ function drawScene(time) {
 那是因为在帧缓冲中没有深度缓冲，但是画布有。</p>
 <p><img class="webgl_center" src="../resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" /></p>
 <p>想要加深度缓冲就需要创建一个，然后附加到帧缓冲中</p>
-<pre><code>// 创建一个深度缓冲
+<pre class="prettyprint"><code>// 创建一个深度缓冲
 const depthBuffer = gl.createRenderbuffer();
 gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
 
@@ -298,7 +298,7 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 </ul>
 <p>对于其他的组合就需要检查用户系统/gpu/驱动/浏览器的支持情况。
 要检查的话需要创建帧缓冲，附加附件，然后调用</p>
-<pre><code>var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+<pre class="prettyprint"><code>var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
 </code></pre><p>如果状态是 <code>FRAMEBUFFER_COMPLETE</code> 那这种组合就能使用，反之不能使用。
 你就需要告诉用户他们不走运或者撤销一些方法。</p>
 <p>如果你还没有看过<a href="webgl-less-code-more-fun.html">简化WebGL代码</a>的话，

@@ -99,7 +99,7 @@ a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.</p>
 but this time a 3D &#39;F&#39;.</p>
 <p>The first thing we need to do is change the vertex shader to handle 3D.
 Here&#39;s the old vertex shader.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -110,7 +110,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>And here&#39;s the new one</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -125,7 +125,7 @@ set <code>z</code> to 1, in 3d we will provide <code>x</code>, <code>y</code>, a
 to be 1 but we can take advantage of the fact that for attributes
 <code>w</code> defaults to 1.</p>
 <p>Then we need to provide 3D data.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
   // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
 *  var size = 3;          // 3 components per iteration
@@ -171,7 +171,7 @@ function setGeometry(gl) {
 }
 </code></pre><p>Next we need to change all the matrix functions from 2D to 3D</p>
 <p>Here are the 2D (before) versions of m3.translation, m3.rotation, and m3.scaling</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
   translation: function translation(tx, ty) {
     return [
       1, 0, 0,
@@ -199,7 +199,7 @@ function setGeometry(gl) {
   },
 };
 </code></pre><p>And here are the updated 3D versions.</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   translation: function(tx, ty, tz) {
     return [
        1,  0,  0,  0,
@@ -281,7 +281,7 @@ work them out you&#39;d see them simplify just like before</p>
 <iframe class="external_diagram" src="resources/axis-diagram.html" style="width: 540px; height: 280px;"></iframe>
 
 <p>Similarly we&#39;ll make our simplified functions</p>
-<pre><code>  translate: function(m, tx, ty, tz) {
+<pre class="prettyprint"><code>  translate: function(m, tx, ty, tz) {
     return m4.multiply(m, m4.translation(tx, ty, tz));
   },
 
@@ -301,7 +301,7 @@ work them out you&#39;d see them simplify just like before</p>
     return m4.multiply(m, m4.scaling(sx, sy, sz));
   },
 </code></pre><p>And we need a 4x4 matrix multiplication function</p>
-<pre><code class="lang-js">  multiply: multiply(a, b) {
+<pre class="prettyprint"><code class="lang-js">  multiply: multiply(a, b) {
     var b00 = b[0 * 4 + 0];
     var b01 = b[0 * 4 + 1];
     var b02 = b[0 * 4 + 2];
@@ -354,7 +354,7 @@ work them out you&#39;d see them simplify just like before</p>
   },
 </code></pre>
 <p>We also need to update the projection function. Here&#39;s the old one</p>
-<pre><code>  projection: function (width, height) {
+<pre class="prettyprint"><code>  projection: function (width, height) {
     // Note: This matrix flips the Y axis so 0 is at the top.
     return [
       2 / width, 0, 0,
@@ -365,7 +365,7 @@ work them out you&#39;d see them simplify just like before</p>
 }
 </code></pre><p>which converted from pixels to clip space. For our first attempt at
 expanding it to 3D let&#39;s try</p>
-<pre><code>  projection: function(width, height, depth) {
+<pre class="prettyprint"><code>  projection: function(width, height, depth) {
     // Note: This matrix flips the Y axis so 0 is at the top.
     return [
        2 / width, 0, 0, 0,
@@ -380,7 +380,7 @@ units as well.  I&#39;ll pass in some value similar to <code>width</code> for th
 so our space will be 0 to <code>width</code> pixels wide, 0 to <code>height</code> pixels tall, but
 for <code>depth</code> it will be <code>-depth / 2</code> to <code>+depth / 2</code>.</p>
 <p>Finally we need to to update the code that computes the matrix.</p>
-<pre><code>  // Compute the matrix
+<pre class="prettyprint"><code>  // Compute the matrix
 *  var matrix = m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400);
 *  matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
 *  matrix = m4.xRotate(matrix, rotation[0]);
@@ -407,7 +407,7 @@ back, 1 on the left, 4 on the right, 2 on the tops, 3 on the bottoms.</p>
 16 rectangles with 2 triangles per rectangle and 3 vertices per triangle is 96
 vertices.  If you want to see all of them view the source of the sample.</p>
 <p>We have to draw more vertices so</p>
-<pre><code>    // Draw the geometry.
+<pre class="prettyprint"><code>    // Draw the geometry.
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
 *    var count = 16 * 6;
@@ -424,7 +424,7 @@ coloring each rectangle a different color.  To do this we will add another
 attribute to our vertex shader and a varying to pass it from the vertex
 shader to the fragment shader.</p>
 <p>Here&#39;s the new vertex shader</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -441,7 +441,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>And we need to use that color in the fragment shader</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +// Passed in from the vertex shader.
@@ -453,7 +453,7 @@ void main() {
 &lt;/script&gt;
 </code></pre><p>We need to lookup the attribute location to supply the colors, then setup another
 buffer and attribute to give it the colors.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
   var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 
   ...
@@ -488,7 +488,7 @@ function setColors(gl) {
 }
 </code></pre><p>Then at render time we need to tell the color attribute how to get colors
 out of the color buffer</p>
-<pre><code>// Turn on the color attribute
+<pre class="prettyprint"><code>// Turn on the color attribute
 gl.enableVertexAttribArray(colorLocation);
 
 // Bind the color buffer.
@@ -525,7 +525,7 @@ back facing triangle has its vertices go in a clockwise direction.</p>
 <p><img src="resources/triangle-winding.svg" class="webgl_center" width="400" /></p>
 <p>WebGL has the ability to draw only forward facing or back facing
 triangles.  We can turn that feature on with</p>
-<pre><code>  gl.enable(gl.CULL_FACE);
+<pre class="prettyprint"><code>  gl.enable(gl.CULL_FACE);
 </code></pre><p>Well put that in our <code>drawScene</code> function. With that
 feature turned on, WebGL defaults to &quot;culling&quot; back facing triangles.
 &quot;Culling&quot; in this case is a fancy word for &quot;not drawing&quot;.</p>
@@ -555,11 +555,11 @@ facing the wrong way.  Rotate it and you&#39;ll see them appear when you look
 at the other side.  Fortunately it&#39;s easy to fix.  We just look at which
 ones are backward and exchange 2 of their vertices.  For example if one
 backward triangle is</p>
-<pre><code>           1,   2,   3,
+<pre class="prettyprint"><code>           1,   2,   3,
           40,  50,  60,
          700, 800, 900,
 </code></pre><p>we just swap the last 2 vertices to make it forward.</p>
-<pre><code>           1,   2,   3,
+<pre class="prettyprint"><code>           1,   2,   3,
          700, 800, 900,
           40,  50,  60,
 </code></pre><p>Going through and fixing all the backward triangles gets us to this</p>
@@ -588,9 +588,9 @@ color from your fragment shader AND it draws the depth pixel with the new
 depth value.  This means, pixels that are behind other pixels won&#39;t get
 drawn.</p>
 <p>We can turn on this feature nearly as simply as we turned on culling with</p>
-<pre><code>  gl.enable(gl.DEPTH_TEST);
+<pre class="prettyprint"><code>  gl.enable(gl.DEPTH_TEST);
 </code></pre><p>We also need to clear the depth buffer back to 1.0 before we start drawing.</p>
-<pre><code>  // Draw the scene.
+<pre class="prettyprint"><code>  // Draw the scene.
   function drawScene() {
     ...
 
@@ -609,7 +609,7 @@ drawn.</p>
 <p>One minor thing. In most 3d math libraries there is no <code>projection</code> function to
 do our conversions from clip space to pixel space. Rather there&#39;s usually a function
 called <code>ortho</code> or <code>orthographic</code> that looks like this</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   orthographic: function(left, right, bottom, top, near, far) {
     return [
       2 / (right - left), 0, 0, 0,
@@ -626,7 +626,7 @@ called <code>ortho</code> or <code>orthographic</code> that looks like this</p>
 parameters this more common othrographic projection function we can pass in left, right,
 bottom, top, near, and far which gives as more flexability. To use it the same as
 our original projection function we&#39;d call it with</p>
-<pre><code>var left = 0;
+<pre class="prettyprint"><code>var left = 0;
 var right = gl.canvas.clientWidth;
 var bottom = gl.canvas.clientHeight;
 var top = 0;

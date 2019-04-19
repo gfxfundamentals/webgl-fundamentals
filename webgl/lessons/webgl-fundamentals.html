@@ -142,7 +142,7 @@ canvas is.</p>
 
 <p>Here is a simple WebGL example that shows WebGL in its simplest form.</p>
 <p>Let&#39;s start with a vertex shader</p>
-<pre><code>// an attribute will receive data from a buffer
+<pre class="prettyprint"><code>// an attribute will receive data from a buffer
 attribute vec4 a_position;
 
 // all shaders have a main function
@@ -154,7 +154,7 @@ void main() {
 }
 </code></pre><p>When executed, if the entire thing was written in JavaScript instead of GLSL
 you could imagine it would be used like this</p>
-<pre><code>// *** PSEUDO CODE!! ***
+<pre class="prettyprint"><code>// *** PSEUDO CODE!! ***
 
 var positionBuffer = [
   0, 0, 0, 0,
@@ -180,7 +180,7 @@ data (see below) and so the actual computation for getting data out of the buffe
 would be a little different but hopefully this gives you an idea of how a vertex
 shader will be executed.</p>
 <p>Next we need a fragment shader</p>
-<pre><code>// fragment shaders don&#39;t have a default precision so we need
+<pre class="prettyprint"><code>// fragment shaders don&#39;t have a default precision so we need
 // to pick one. mediump is a good default. It means &quot;medium precision&quot;
 precision mediump float;
 
@@ -193,11 +193,11 @@ void main() {
 0.5 for blue, 1 for alpha. Colors in WebGL go from 0 to 1.</p>
 <p>Now that we have written the 2 shader functions lets get started with WebGL</p>
 <p>First we need an HTML canvas element</p>
-<pre><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>Then in JavaScript we can look that up</p>
-<pre><code> var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code> var canvas = document.getElementById(&quot;c&quot;);
 </code></pre><p>Now we can create a WebGLRenderingContext</p>
-<pre><code> var gl = canvas.getContext(&quot;webgl&quot;);
+<pre class="prettyprint"><code> var gl = canvas.getContext(&quot;webgl&quot;);
  if (!gl) {
     // no webgl for you!
     ...
@@ -205,7 +205,7 @@ void main() {
 You can create your GLSL strings any way you normally create strings in JavaScript: by concatenating,
 by using AJAX to download them, by using multiline template strings. Or in this case, by
 putting them in non-JavaScript typed script tags.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
   // an attribute will receive data from a buffer
   attribute vec4 a_position;
@@ -238,7 +238,7 @@ For the samples on this site though none of them are complex enough to need to g
 <p>Next we need a function that will create a shader, upload the GLSL source, and compile the shader.
 Note I haven&#39;t written any comments because it should be clear from the names of the functions
 what is happening.</p>
-<pre><code>function createShader(gl, type, source) {
+<pre class="prettyprint"><code>function createShader(gl, type, source) {
   var shader = gl.createShader(type);
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
@@ -251,13 +251,13 @@ what is happening.</p>
   gl.deleteShader(shader);
 }
 </code></pre><p>We can now call that function to create the 2 shaders</p>
-<pre><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
+<pre class="prettyprint"><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
 var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot;).text;
 
 var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 </code></pre><p>We then need to <em>link</em> those 2 shaders into a <em>program</em></p>
-<pre><code>function createProgram(gl, vertexShader, fragmentShader) {
+<pre class="prettyprint"><code>function createProgram(gl, vertexShader, fragmentShader) {
   var program = gl.createProgram();
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
@@ -271,24 +271,24 @@ var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
   gl.deleteProgram(program);
 }
 </code></pre><p>And call it</p>
-<pre><code>var program = createProgram(gl, vertexShader, fragmentShader);
+<pre class="prettyprint"><code>var program = createProgram(gl, vertexShader, fragmentShader);
 </code></pre><p>Now that we&#39;ve created a GLSL program on the GPU we need to supply data to it.
 The majority of the WebGL API is about setting up state to supply data to our GLSL programs.
 In this case our only input to our GLSL program is <code>a_position</code> which is an attribute.
 The first thing we should do is look up the location of the attribute for the program
 we just created</p>
-<pre><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
+<pre class="prettyprint"><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 </code></pre><p>Looking up attribute locations (and uniform locations) is something you should
 do during initialization, not in your render loop.</p>
 <p>Attributes get their data from buffers so we need to create a buffer</p>
-<pre><code>var positionBuffer = gl.createBuffer();
+<pre class="prettyprint"><code>var positionBuffer = gl.createBuffer();
 </code></pre><p>WebGL lets us manipulate many WebGL resources on global bind points.
 You can think of bind points as internal global variables inside WebGL.
 First you bind a resource to a bind point. Then, all other functions
 refer to the resource through the bind point. So, let&#39;s bind the position buffer.</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 </code></pre><p>Now we can put data in that buffer by referencing it through the bind point</p>
-<pre><code>// three 2d points
+<pre class="prettyprint"><code>// three 2d points
 var positions = [
   0, 0,
   0, 0.5,
@@ -317,25 +317,25 @@ far more flexible than any other method.</p>
 <p>In nearly all of these samples the canvas size is 400x300 pixels if the sample is run in its own window
 but stretches to fill the available space if it&#39;s inside an iframe like it is on this page.
 By letting CSS determine the size and then adjusting to match we easily handle both of these cases.</p>
-<pre><code>webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+<pre class="prettyprint"><code>webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 </code></pre><p>We need to tell WebGL how to convert from the clip space
 values we&#39;ll be setting <code>gl_Position</code> to back into pixels, often called screen space.
 To do this we call <code>gl.viewport</code> and pass it the current size of the canvas.</p>
-<pre><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+<pre class="prettyprint"><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 </code></pre><p>This tells WebGL the -1 +1 clip space maps to 0 &lt;-&gt; <code>gl.canvas.width</code> for x and 0 &lt;-&gt; <code>gl.canvas.height</code>
 for y.</p>
 <p>We clear the canvas. <code>0, 0, 0, 0</code> are red, green, blue, alpha respectively so in this case we&#39;re making the canvas transparent.</p>
-<pre><code>// Clear the canvas
+<pre class="prettyprint"><code>// Clear the canvas
 gl.clearColor(0, 0, 0, 0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 </code></pre><p>We tell WebGL which shader program to execute.</p>
-<pre><code>// Tell it to use our program (pair of shaders)
+<pre class="prettyprint"><code>// Tell it to use our program (pair of shaders)
 gl.useProgram(program);
 </code></pre><p>Next we need to tell WebGL how to take data from the buffer we setup above and supply it to the attribute
 in the shader. First off we need to turn the attribute on</p>
-<pre><code>gl.enableVertexAttribArray(positionAttributeLocation);
+<pre class="prettyprint"><code>gl.enableVertexAttribArray(positionAttributeLocation);
 </code></pre><p>Then we need to specify how to pull the data out</p>
-<pre><code>// Bind the position buffer.
+<pre class="prettyprint"><code>// Bind the position buffer.
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
 // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
@@ -351,13 +351,13 @@ to the attribute. In other words now this attribute is bound to
 <code>positionBuffer</code>. That means we&#39;re free to bind something else to the <code>ARRAY_BUFFER</code> bind point.
 The attribute will continue to use <code>positionBuffer</code>.</p>
 <p>note that from the point of view of our GLSL vertex shader the <code>a_position</code> attribute is a <code>vec4</code></p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 </code></pre><p><code>vec4</code> is a 4 float value. In JavaScript you could think of it something like
 <code>a_position = {x: 0, y: 0, z: 0, w: 0}</code>. Above we set <code>size = 2</code>. Attributes
 default to <code>0, 0, 0, 1</code> so this attribute will get its first 2 values (x and y)
 from our buffer. The z, and w will be the default 0 and 1 respectively.</p>
 <p>After all that we can finally ask WebGL to execute our GLSL program.</p>
-<pre><code>var primitiveType = gl.TRIANGLES;
+<pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
 var offset = 0;
 var count = 3;
 gl.drawArrays(primitiveType, offset, count);
@@ -370,12 +370,12 @@ WebGL will draw a triangle based on the 3 values we set <code>gl_Position</code>
 our canvas is those values are in clip space coordinates that go from -1 to 1 in each direction.</p>
 <p>Because our vertex shader is simply copying our positionBuffer values to <code>gl_Position</code> the
 triangle will be drawn at clip space coordinates</p>
-<pre><code>  0, 0,
+<pre class="prettyprint"><code>  0, 0,
   0, 0.5,
   0.7, 0,
 </code></pre><p>Converting from clip space to screen space if the canvas size
 happened to be 400x300 we&#39;d get something like this</p>
-<pre><code> clip space      screen space
+<pre class="prettyprint"><code> clip space      screen space
    0, 0       -&gt;   200, 150
    0, 0.5     -&gt;   200, 225
  0.7, 0       -&gt;   340, 150
@@ -402,7 +402,7 @@ be to the right of that.</p>
 <p>For 2D stuff you would probably rather work in pixels than clipspace so
 let&#39;s change the shader so we can supply the position in pixels and have
 it convert to clipspace for us. Here&#39;s the new vertex shader</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
 *  attribute vec2 a_position;
@@ -426,13 +426,13 @@ it convert to clipspace for us. Here&#39;s the new vertex shader</p>
 </code></pre><p>Some things to notice about the changes. We changed <code>a_position</code> to a <code>vec2</code> since we&#39;re
 only using <code>x</code> and <code>y</code> anyway. A <code>vec2</code> is similar to a <code>vec4</code> but only has <code>x</code> and <code>y</code>.</p>
 <p>Next we added a <code>uniform</code> called <code>u_resolution</code>. To set that we need to look up its location.</p>
-<pre><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
+<pre class="prettyprint"><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 </code></pre><p>The rest should be clear from the comments. By setting <code>u_resolution</code> to the resolution
 of our canvas the shader will now take the positions we put in <code>positionBuffer</code> supplied
 in pixels coordinates and convert them to clip space.</p>
 <p>Now we can change our position values from clip space to pixels. This time we&#39;re going to draw a rectangle
 made from 2 triangles, 3 points each.</p>
-<pre><code>var positions = [
+<pre class="prettyprint"><code>var positions = [
 *  10, 20,
 *  80, 20,
 *  10, 30,
@@ -444,7 +444,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 </code></pre><p>And after we set which program to use we can set the value for the uniform we created.
 <code>gl.useProgram</code> is like <code>gl.bindBuffer</code> above in that it sets the current program. After
 that all the <code>gl.uniformXXX</code> functions set uniforms on the current program.</p>
-<pre><code>gl.useProgram(program);
+<pre class="prettyprint"><code>gl.useProgram(program);
 
 ...
 
@@ -452,7 +452,7 @@ that all the <code>gl.uniformXXX</code> functions set uniforms on the current pr
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 </code></pre><p>And of course to draw 2 triangles we need to have WebGL call our vertex shader 6 times
 so we need to change the <code>count</code> to <code>6</code>.</p>
-<pre><code>// draw
+<pre class="prettyprint"><code>// draw
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
 *var count = 6;
@@ -472,7 +472,7 @@ up and negative Y as down. In clip space the bottom left corner -1,-1. We haven&
 so with our current math 0, 0 becomes the bottom left corner.
 To get it to be the more traditional top left corner used for 2d graphics APIs
 we can just flip the clip space y coordinate.</p>
-<pre><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+<pre class="prettyprint"><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>And now our rectangle is where we expect it.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-top-left.html"></iframe>
@@ -484,7 +484,7 @@ we can just flip the clip space y coordinate.</p>
 we can call it for different sized rectangles. While we&#39;re at it
 we&#39;ll make the color settable.</p>
 <p>First we make the fragment shader take a color uniform input.</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
   precision mediump float;
 
 +  uniform vec4 u_color;
@@ -494,7 +494,7 @@ we&#39;ll make the color settable.</p>
   }
 &lt;/script&gt;
 </code></pre><p>And here&#39;s the new code that draws 50 rectangles in random places and random colors.</p>
-<pre><code>  var colorUniformLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
+<pre class="prettyprint"><code>  var colorUniformLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
   ...
 
   // draw 50 random rectangles in random colors

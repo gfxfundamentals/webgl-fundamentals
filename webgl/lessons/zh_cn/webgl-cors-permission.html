@@ -91,7 +91,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 有关<a href="webgl-3d-textures.html">纹理</a>的文章和有关
 <a href="webgl-2d-drawimage.html">二维 drawImage 实现</a>的文章。</p>
 <p>基本上我们像这样下载图像</p>
-<pre><code>// 创建纹理信息 { width: w, height: h, texture: tex }
+<pre class="prettyprint"><code>// 创建纹理信息 { width: w, height: h, texture: tex }
 // 纹理起初为 1×1 像素
 // 当图像下载完成后加载图像
 function loadImageAndCreateTextureInfo(url) {
@@ -129,9 +129,9 @@ function loadImageAndCreateTextureInfo(url) {
 <p>直接使用 <code>&lt;img src=&quot;private.jpg&quot;&gt;</code> 是没什么问题的，因为图像尽管被浏览器显示，
 便签对象并不能获取图像的内部数据。<a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">Canvas2D API</a>
 有一个方式可以读取图像信息，首先需要将图像绘制到画布</p>
-<pre><code>ctx.drawImage(someImg, 0, 0);
+<pre class="prettyprint"><code>ctx.drawImage(someImg, 0, 0);
 </code></pre><p>然后就可以获取数据</p>
-<pre><code>var data = ctx.getImageData(0, 0, width, heigh);
+<pre class="prettyprint"><code>var data = ctx.getImageData(0, 0, width, heigh);
 </code></pre><p>但是如果绘制的图像来自不同的域名，浏览器就会将画布标记为<strong>被污染</strong>，
 然后当你调用 <code>ctx.getImageData</code> 时就会得到一个安全错误。</p>
 <p>WebGL则更进一步，在WebGL中 <code>gl.readPixels</code> 和 <code>ctx.getImageData</code> 是相似的，
@@ -151,7 +151,7 @@ function loadImageAndCreateTextureInfo(url) {
 <p>CORS = Cross Origin Resource Sharing（跨域资源共享）。是一种网页向图像服务器请求使用图像许可的方式。</p>
 <p>要实现这个我们需要设置 <code>crossOrigin</code> 属性然后浏览器会试图从服务器获取图像，如果不是相同的域名，
 浏览器会请求 CORS 许可。</p>
-<pre><code>...
+<pre class="prettyprint"><code>...
 +    img.crossOrigin = &quot;&quot;;   // 请求 CORS 许可
     img.src = url;
 </code></pre><p><code>crossOrign</code> 接受的值有三种。一种是 <code>undefined</code>，这也是默认值，表示“不需要请求许可”；
@@ -162,13 +162,13 @@ function loadImageAndCreateTextureInfo(url) {
 如果我们知道都在同一域名下，就不需要请求许可。或者只对需要跨域资源的 img 标签或
 canvas2d 设置 <code>crossDomain</code> 属性，这样就不用让图像请求变慢。</p>
 <p>我们可以定义一个方法，当图像资源在其他域名下时就设置 <code>crossOrigin</code> 属性。</p>
-<pre><code>function requestCORSIfNotSameOrigin(img, url) {
+<pre class="prettyprint"><code>function requestCORSIfNotSameOrigin(img, url) {
   if ((new URL(url)).origin !== window.location.origin) {
     img.crossOrigin = &quot;&quot;;
   }
 }
 </code></pre><p>然后像这样使用</p>
-<pre><code>...
+<pre class="prettyprint"><code>...
 +requestCORSIfNotSameOrigin(img, url);
 img.src = url;
 </code></pre><p><div class="webgl_example_container">

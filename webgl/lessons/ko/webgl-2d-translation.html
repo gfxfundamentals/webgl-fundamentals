@@ -94,13 +94,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <a href="webgl-fundamentals.html">첫 번째 게시물</a>에 있는 예제 코드를 사용하면 setRectangle에 전달된 값을 변경하는 것 만으로 쉽게 사각형을 이동할 수 있었죠?
 여기 <a href="webgl-fundamentals.html">이전 예제</a>에 기반한 예제가 있습니다.</p>
 <p>먼저 사각형의 이동, 넓이, 높이 그리고 색상을 가지는 변수를 만들어봅시다.</p>
-<pre><code>  var translation = [0, 0];
+<pre class="prettyprint"><code>  var translation = [0, 0];
   var width = 100;
   var height = 30;
   var color = [Math.random(), Math.random(), Math.random(), 1];
 </code></pre><p>그런 다음 전부 다시 그리는 함수를 만듭니다.
 이동 값을 갱신한 후에 이 함수를 호출할 겁니다.</p>
-<pre><code>  // 화면 그리기
+<pre class="prettyprint"><code>  // 화면 그리기
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -163,7 +163,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>이처럼 삼각형 6개로 구성된 &#39;F&#39;를 그려야 한다고 가정해봅시다.</p>
 <p><img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
 <p>이제 현재 코드에 맞춰서 <code>setRectangle</code>을 이렇게 변경해야합니다.</p>
-<pre><code>// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
+<pre class="prettyprint"><code>// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -203,7 +203,7 @@ function setGeometry(gl, x, y) {
 <p>보다 더 간단한 방법이 있는데요.
 geometry를 업로드하고 shader에서 이동하면 됩니다.</p>
 <p>여기 새로운 shader가 있습니다.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -218,7 +218,7 @@ void main() {
    ...
 </code></pre><p>그리고 코드를 조금 재구성할 건데요.
 하나는 geometry를 한 번만 설정해도 된다는 겁니다.</p>
-<pre><code>// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
+<pre class="prettyprint"><code>// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -250,7 +250,7 @@ function setGeometry(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>그러면 우리가 원하는 이동을 해서 그리기 전에 <code>u_translation</code>을 갱신시키기만 하면 됩니다.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
 +  var translationLocation = gl.getUniformLocation(program, &quot;u_translation&quot;);
 

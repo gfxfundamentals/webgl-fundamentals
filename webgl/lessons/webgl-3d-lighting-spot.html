@@ -123,7 +123,7 @@ the direction of each ray of light is above the dot limit then we do the lightin
 <p>To say this another way, let&#39;s say the limit is 20 degrees. We can convert
 that to radians and from that to a value for -1 to 1 by taking the cosine. Let&#39;s call that dot space.
 In other words here&#39;s a small table for limit values</p>
-<pre><code>          limits in
+<pre class="prettyprint"><code>          limits in
  degrees | radians | dot space
  --------+---------+----------
     0    |   0.0   |    1.0
@@ -133,14 +133,14 @@ In other words here&#39;s a small table for limit values</p>
     90   |   1.57  |    0.0
    180   |   3.14  |   -1.0
 </code></pre><p>Then we can the just check</p>
-<pre><code>dotFromDirection = dot(surfaceToLight, -lightDirection)
+<pre class="prettyprint"><code>dotFromDirection = dot(surfaceToLight, -lightDirection)
 if (dotFromDirection &gt;= limitInDotSpace) {
    // do the lighting
 }
 </code></pre><p>Let&#39;s do that</p>
 <p>First let&#39;s modify our fragment shader from
 <a href="webgl-3d-lighting-point.html">the last article</a>.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec3 v_normal;
@@ -186,7 +186,7 @@ void main() {
 }
 </code></pre><p>Of course we need to look up the locations of the uniforms we
 just added.</p>
-<pre><code>  var lightDirection = [?, ?, ?];
+<pre class="prettyprint"><code>  var lightDirection = [?, ?, ?];
   var limit = degToRad(20);
 
   ...
@@ -194,7 +194,7 @@ just added.</p>
   var lightDirectionLocation = gl.getUniformLocation(program, &quot;u_lightDirection&quot;);
   var limitLocation = gl.getUniformLocation(program, &quot;u_limit&quot;);
 </code></pre><p>and we need to set them</p>
-<pre><code>    gl.uniform3fv(lightDirectionLocation, lightDirection);
+<pre class="prettyprint"><code>    gl.uniform3fv(lightDirectionLocation, lightDirection);
     gl.uniform1f(limitLocation, Math.cos(limit));
 </code></pre><p>And here it is</p>
 <p><div class="webgl_example_container">
@@ -223,7 +223,7 @@ just to show some techniques. You can decide yourself whether or not
 to use them.</p>
 <p>There is a GLSL function called <code>step</code>. It takes 2 values and if the
 second value is greater than or equal the first it returns 1.0. Otherwise it returns 0. You could write it like this in JavaScript</p>
-<pre><code>function step(a, b) {
+<pre class="prettyprint"><code>function step(a, b) {
    if (b &gt;= a) {
        return 1;
    } else {
@@ -231,7 +231,7 @@ second value is greater than or equal the first it returns 1.0. Otherwise it ret
    }
 }
 </code></pre><p>Let&#39;s use <code>step</code> to get rid of the conditions</p>
-<pre><code>  float dotFromDirection = dot(surfaceToLightDirection,
+<pre class="prettyprint"><code>  float dotFromDirection = dot(surfaceToLightDirection,
                                -u_lightDirection);
   // inLight will be 1 if we&#39;re inside the spotlight and 0 if not
   float inLight = step(u_limit, dotFromDirection);
@@ -252,7 +252,7 @@ If we&#39;re inside the inner limit then use 1.0. If we&#39;re outside the outer
 limit then use 0.0. If we&#39;re between the inner limit and the outer limit
 then lerp between 1.0 and 0.0.</p>
 <p>Here&#39;s one way we could do this</p>
-<pre><code>-uniform float u_limit;          // in dot space
+<pre class="prettyprint"><code>-uniform float u_limit;          // in dot space
 +uniform float u_innerLimit;     // in dot space
 +uniform float u_outerLimit;     // in dot space
 
@@ -282,9 +282,9 @@ need to make sure in our JavaScript that <code>u_innerLimit</code> is never equa
 called <code>smoothstep</code> and like <code>step</code> it returns a value from 0 to 1 but
 it takes both an lower and upper bound and lerps between 0 and 1 between
 those bounds.</p>
-<pre><code> smoothstep(lowerBound, upperBound, value)
+<pre class="prettyprint"><code> smoothstep(lowerBound, upperBound, value)
 </code></pre><p>Let&#39;s do that</p>
-<pre><code>  float dotFromDirection = dot(surfaceToLightDirection,
+<pre class="prettyprint"><code>  float dotFromDirection = dot(surfaceToLightDirection,
                                -u_lightDirection);
 -  float limitRange = u_innerLimit - u_outerLimit;
 -  float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.0, 1.0);

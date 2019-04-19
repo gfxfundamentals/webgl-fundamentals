@@ -94,7 +94,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 이 함수 두 개는 컴파일되고 연결되어야 합니다.
 해당 처리는 모든 WebGL program 시간의 99%와 같습니다.</p>
 <p>여기 shader를 컴파일 하기 위한 boilerplate 코드입니다.</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * Shader 생성 및 컴파일
  *
  * @param {!WebGLRenderingContext} gl은 WebGL Context
@@ -122,7 +122,7 @@ function compileShader(gl, shaderSource, shaderType) {
   return shader;
 }
 </code></pre><p>그리고 program에 두 shader를 연결하기 위한 boilerplate 코드</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * 두 shader로 program 생성합니다.
  *
  * @param {!WebGLRenderingContext) gl은 WebGL Context
@@ -155,7 +155,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 하지만 대부분의 WebGL program에서 이런 코드 몇 줄은 거의 비슷합니다.</p>
 <p>저는 shader를 javascript가 아닌 &lt;script&gt; tag에 저장하는 것을 선호하는데요.
 이렇게 하면 코드를 수정하기 쉽게 만들어 주므로 이런 식으로 코드를 작성합니다.</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * script tag의 내용으로 shader 생성
  *
  * @param {!WebGLRenderingContext) gl은 WebGL Context
@@ -190,9 +190,9 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
   return compileShader(gl, shaderSource, opt_shaderType);
 };
 </code></pre><p>이제 shader를 컴파일할 수 있습니다.</p>
-<pre><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
+<pre class="prettyprint"><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
 </code></pre><p>보통은 한 걸음 더 나아가서 script tag에서 shader 두 개를 컴파일하고 프로그램에 첨부하고 연결하는 함수를 만들겁니다.</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * script tag 2개로 program 생성
  *
  * @param {!WebGLRenderingContext} gl은 WebGL Context
@@ -209,9 +209,9 @@ function createProgramFromScripts(gl, shaderScriptIds) {
 </code></pre><p>거의 모든 WebGL program에서 사용하는 다른 코드는 canvas의 크기를 조정하는 코드입니다.
 <a href="webgl-resizing-the-canvas.html">여기에서 이 함수가 구현된 방법을</a> 볼 수 있습니다.</p>
 <p>모든 예제는 이 두 가지 함수를 포함하고 있습니다.</p>
-<pre><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
+<pre class="prettyprint"><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>그리고 이렇게 사용합니다.</p>
-<pre><code>var program = webglUtils.createProgramFromScripts(gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
+<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...
 

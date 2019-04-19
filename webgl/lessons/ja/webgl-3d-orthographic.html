@@ -96,7 +96,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>前回のサンプルを三次元に更新しよう！また「F」の図形を使うけど今回は三次元の「F」を使う。</p>
 <p>まず頂点シェーダーを三次元に更新しなければいけない。
 これは前のシェーダーである。</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -107,7 +107,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>これは新しいシェーダーである。</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -119,7 +119,7 @@ void main() {
 &lt;/script&gt;
 </code></pre><p>もっと単純化された！</p>
 <p>そして、三次元データを与えなければいけない。</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
     // 属性にどうやってpositionBuffer（ARRAY_BUFFER）からデータを取り出すか。
 *    var size = 3;          // 呼び出すごとに3つの数値
@@ -165,7 +165,7 @@ function setGeometry(gl) {
 }
 </code></pre><p>次に、行列関数を二次元から三次元に更新しよう。</p>
 <p>これは二次元（更新する前の形）<code>m3.translation</code>、と<code>m3.rotation</code>、と<code>m3.scaling</code>の関数である。</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
   translation: function translation(tx, ty) {
     return [
       1, 0, 0,
@@ -193,7 +193,7 @@ function setGeometry(gl) {
   },
 };
 </code></pre><p>そして、これは三次元に更新されたバージョンである。</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   translation: function(tx, ty, tz) {
     return [
        1,  0,  0,  0,
@@ -273,7 +273,7 @@ function setGeometry(gl) {
 <iframe class="external_diagram" src="../resources/axis-diagram.html" style="width: 540px; height: 240px;"></iframe>
 
 <p>前と同じように単純な関数も作ろう。</p>
-<pre><code>  translate: function(m, tx, ty, tz) {
+<pre class="prettyprint"><code>  translate: function(m, tx, ty, tz) {
     return m4.multiply(m, m4.translation(tx, ty, tz));
   },
 
@@ -293,7 +293,7 @@ function setGeometry(gl) {
     return m4.multiply(m, m4.scaling(sx, sy, sz));
   },
 </code></pre><p>投影関数も更新しなきゃ。これは前の関数。</p>
-<pre><code>  projection: function (width, height) {
+<pre class="prettyprint"><code>  projection: function (width, height) {
     // Note: Y軸で０を上の方にするためYをひっくり返す行列
     return [
       2 / width, 0, 0,
@@ -303,7 +303,7 @@ function setGeometry(gl) {
   },
 }
 </code></pre><p>これはピクセル空間からクリップ空間の変換である。三次元のため、初めからこうにしてみよう。</p>
-<pre><code>  projection: function(width, height, depth) {
+<pre class="prettyprint"><code>  projection: function(width, height, depth) {
     // Note: Y軸で０を上の方にするためYをひっくり返す行列
     return [
        2 / width, 0, 0, 0,
@@ -315,7 +315,7 @@ function setGeometry(gl) {
 </code></pre><p>XとYをピクセル空間からクリップ空間に変換するのが必要なのと同じように、Zにも変換が必要である。
 Zもピクセル単位で計算する。<code>width</code>のような値を<code>depth</code>に与えるとピクセル空間の横は０〜<code>width</code>ピクセルで、縦は0〜<code>height</code>ピクセルで、でも奥行きは<code>-depth / 2</code>〜<code>+depth / 2</code>である。</p>
 <p>最後に行列計算の所も更新が必要である。</p>
-<pre><code>  // 行列を計算する。
+<pre class="prettyprint"><code>  // 行列を計算する。
 *  var matrix = m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400);
 *  matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
 *  matrix = m4.xRotate(matrix, rotation[0]);
@@ -340,7 +340,7 @@ Zもピクセル単位で計算する。<code>width</code>のような値を<cod
 <p>これは全て表示するには多すぎる。四角形16枚、四角形ごとに2つの三角形、三角形ごとに3つの頂点は96頂点になる。
 全部を見たければソースを見て下さい。</p>
 <p>超点数が増えたので。。。</p>
-<pre><code>    // Draw the geometry.
+<pre class="prettyprint"><code>    // Draw the geometry.
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
 *    var count = 16 * 6;
@@ -356,7 +356,7 @@ Zもピクセル単位で計算する。<code>width</code>のような値を<cod
 四角形ごとに別色をつかってみよう！その為に頂点シェーダーに属性を追加して、
 バリイングで頂点シェーダーからピクセルシェーダーに渡す。</p>
 <p>これは新しい頂点シェーダーである。</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -373,7 +373,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>その色はピクセルシェーダーで使わなければいけない。</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +// 頂点シェーダーに渡された色。
@@ -384,7 +384,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>色の属性位置を調べて、他のバッファーを作成して、バッファーに頂点色を入れることが必要である。</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
   var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 
   ...
@@ -418,7 +418,7 @@ function setColors(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>図形を描画する時、色の属性をどういうふうに色のバァッファーからデータ取得するかの設定をする必要がある。</p>
-<pre><code>// 色の属性オンにする。
+<pre class="prettyprint"><code>// 色の属性オンにする。
 gl.enableVertexAttribArray(colorLocation);
 
 // 色バッファーをARRAY_BUFFERに結び付ける。
@@ -447,7 +447,7 @@ gl.vertexAttribPointer(
 時計回りになっている三角形である。裏向き三角形はその三角形の頂点が反時計回りになっている三角形である。</p>
 <p><img src="../resources/triangle-winding.svg" class="webgl_center" width="400" /></p>
 <p>WebGLで前向きか裏向きの三角形しか描画しない機能がある。このようにその機能をオンに出来る。</p>
-<pre><code>  gl.enable(gl.CULL_FACE);
+<pre class="prettyprint"><code>  gl.enable(gl.CULL_FACE);
 </code></pre><p><code>drawScene</code>の関数に入れる。その機能のデフォルトは裏向きの三角形を描画しないことである。</p>
 <p>三角形が時計回りか反時計回りかクリップ空間で判断される。つまり、頂点シェーだーを適用した後
 前向きか裏向きか判断する。時計回りの三角形が−1にスケールされたら反時計回りになる。あるいは、
@@ -465,11 +465,11 @@ WebGLに描画されない。それはいいことでしょう。三次元なら
 <p>やばい！三角形が消えた！実は多くの三角形の向きが間違えている。反対向きになるまで回転してみれば
 現れてくる。簡単に直せる。逆になっている三角形の頂点を2つ交換だけでいい。例えば裏向きの
 三角形の頂点はこうなら。</p>
-<pre><code>           1,   2,   3,
+<pre class="prettyprint"><code>           1,   2,   3,
           40,  50,  60,
          700, 800, 900,
 </code></pre><p>最後の2つの頂点を交換すれば前向きになる。</p>
-<pre><code>           1,   2,   3,
+<pre class="prettyprint"><code>           1,   2,   3,
          700, 800, 900,
           40,  50,  60,
 </code></pre><p>間違えている三角形を全て直したらこうなる。</p>
@@ -490,9 +490,9 @@ XとYはクリップ空間に変更しなければいけないのと同じよう
 さもなければ、ピクセルシェーダーに与えられた色で色ピクセルを描いて、デプスの値をデプス・ピクセルにも描く。
 つまり、前のピクセルの上に後ろのピクセルを描かないということである。</p>
 <p>この機能は裏向きの三角形を描画しないのと同じように簡単にオンに出来る。</p>
-<pre><code>  gl.enable(gl.DEPTH_TEST);
+<pre class="prettyprint"><code>  gl.enable(gl.DEPTH_TEST);
 </code></pre><p>描画する前にデプス・バッファを1.0にクリアしなきゃ。</p>
-<pre><code>  // Draw the scene.
+<pre class="prettyprint"><code>  // Draw the scene.
   function drawScene() {
     ...
 
@@ -512,7 +512,7 @@ XとYはクリップ空間に変更しなければいけないのと同じよう
 クリップ空間からピクセル空間に変換する「projection」という関数がない。
 その代わりに<code>ortho</code>とか<code>orthographic</code>という関数がある。
 通常このようになっている。</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   orthographic: function(left, right, bottom, top, near, far) {
     return [
       2 / (right - left), 0, 0, 0,
@@ -528,7 +528,7 @@ XとYはクリップ空間に変更しなければいけないのと同じよう
 </code></pre><p>先説明した横、縦、奥行きしか使ってない単純な<code>projection</code>関数と違って、
 この一般的なもっとフレキシブルな正投影の関数は右、左、上、下、全面、裏面を使っている。
 <code>projection</code>の関数と同じように使いたければこのように呼び出せばいい。</p>
-<pre><code>var left = 0;
+<pre class="prettyprint"><code>var left = 0;
 var right = gl.canvas.clientWidth;
 var bottom = gl.canvas.clientHeight;
 var top = 0;

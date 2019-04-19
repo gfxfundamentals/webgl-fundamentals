@@ -123,7 +123,7 @@ abs(3.333 - 6.666) = 3.333
 fudgeFactor 因子和 Z 相乘，这样就可以调整缩放的程度。</p>
 <p>让我们来试试，首先修改顶点着色器，除以 Z 再乘以我们的
 &quot;fudgeFactor&quot; 因子。</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -141,7 +141,7 @@ void main() {
 </code></pre><p>注意，由于裁减空间中的 Z 值是 -1 到 +1 的，所以 +1 是为了让
 <code>zToDivideBy</code> 变成 0 到 +2 * fudgeFactor</p>
 <p>还需要更新代码以设置 fudgeFactor。</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
   var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
 
   ...
@@ -171,7 +171,7 @@ void main() {
 
 <p>事实上WebGL会将我们提供给 <code>gl_Position</code> 的  x,y,z,w 值自动除以 w 。</p>
 <p>我们可以通过修改着色器来证明，用 <code>zToDivideBy</code> 代替 <code>gl_Position.w</code></p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -280,7 +280,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>我们来修改代码，使用这个矩阵。</p>
 <p>首先将顶点着色器还原，又变成简单的样子</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -290,7 +290,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>接下来定义一个方法实现 Z &rarr; W 的矩阵</p>
-<pre><code>function makeZToWMatrix(fudgeFactor) {
+<pre class="prettyprint"><code>function makeZToWMatrix(fudgeFactor) {
   return [
     1, 0, 0, 0,
     0, 1, 0, 0,
@@ -299,7 +299,7 @@ void main() {
   ];
 }
 </code></pre><p>然后使用它。</p>
-<pre><code>    ...
+<pre class="prettyprint"><code>    ...
     // 计算矩阵
 *    var matrix = makeZToWMatrix(fudgeFactor);
 *    matrix = m4.multiply(matrix, m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400));
@@ -330,7 +330,7 @@ void main() {
 我们可以定义一个 <code>fieldOfView</code> 代替 <code>fudgeFactor</code> ，
 计算出更合适的值。</p>
 <p>这是创建矩阵的方法。</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   perspective: function(fieldOfViewInRadians, aspect, near, far) {
     var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
     var rangeInv = 1.0 / (near - far);
@@ -367,7 +367,7 @@ Y 轴为上方向。这和我们目前为止做法不同，
 <p>我们在 (45, 150, 0) 绘制的 F，可以将它移动到 (-150, 0, -360)</p>
 <p>使用 <code>m4.projection</code> 方法代替之前的投影方法，可以调用
 <code>m4.perspective</code></p>
-<pre><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+<pre class="prettyprint"><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
 var zFar = 2000;
 var matrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);

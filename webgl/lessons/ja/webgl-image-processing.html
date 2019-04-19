@@ -105,7 +105,7 @@ WebGLによって「補間」される。</p>
 コードの最終版を元にして実装してみよう。</p>
 <p>まず「テクスチャ座標」を受け取るためのアトリビュートと、
 それを「頂点シェーダーからフラグメントシェーダーに渡す」仕組みを追加する必要がある。</p>
-<pre><code>attribute vec2 a_texCoord;
+<pre class="prettyprint"><code>attribute vec2 a_texCoord;
 ...
 varying vec2 v_texCoord;
 
@@ -117,7 +117,7 @@ void main() {
 }
 </code></pre><p>次は、フラグメントシェーダーを変更する。
 「描くべき色を、テクスチャを参照して判断する」ように変更する。</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // これが今回使うテクスチャ
@@ -137,7 +137,7 @@ void main() {
 ブラウザーでは画像のロードは非同期に行われるので、画像のロード完了を待つための
 ちょっとした仕組みが必要となる。
 画像のロードが完了したタイミングで、描画を行うようにする。</p>
-<pre><code>function main() {
+<pre class="prettyprint"><code>function main() {
   var image = new Image();
   image.src = &quot;http://someimage/on/our/server&quot;;  // 同じドメインじゃないとダメ！
   image.onload = function() {
@@ -190,7 +190,7 @@ function render(image) {
 
 </p>
 <p>おもしろみがない？では、画像処理をやってみよう。例えば赤と青を入れ替えてみるのはどうだろうか。</p>
-<pre><code>...
+<pre class="prettyprint"><code>...
 gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 ...
 </code></pre><p>これで赤と青を入れ替えることができた。</p>
@@ -207,7 +207,7 @@ WebGLはテクスチャを参照する際、0.0から1.0の値を取る「テク
 元画像で「１ピクセル」移動するためにテクスチャ座標の数値をどれだけ移動すれば良いかは、
 <code>onePixel = 1.0 / textureSize</code>といった計算で求めることができる。</p>
 <p>これは「左右１ピクセルを参照してその平均の色で描く」というフラグメントシェーダーである。</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 今回使うテクスチャ
@@ -229,7 +229,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>そしてJavaScriptからは、テクスチャサイズの情報を渡す。</p>
-<pre><code>...
+<pre class="prettyprint"><code>...
 
 var textureSizeLocation = gl.getUniformLocation(program, &quot;u_textureSize&quot;);
 
@@ -261,7 +261,7 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 また、<a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">この記事</a>では
 「畳み込み行列」をC++で実装したコードを見ることができる。</p>
 <p>フラグメントシェーダーで「畳み込み行列」を実装すると、このようになる。</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 今回使うテクスチャ
@@ -292,7 +292,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>JavaScript側からは「畳み込み行列」とその「ウェイト」の情報をシェーダーに送る。</p>
-<pre><code> function computeKernelWeight(kernel) {
+<pre class="prettyprint"><code> function computeKernelWeight(kernel) {
    var weight = kernel.reduce(function(prev, curr) {
        return prev + curr;
    });

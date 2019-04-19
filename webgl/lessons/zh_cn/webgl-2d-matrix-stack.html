@@ -96,7 +96,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 生成平移，旋转，缩放矩阵，放在栈中，创建一个方法每次和最顶部的矩阵相乘。</p>
 <p>这是实现。</p>
 <p>首先是构造器和 <code>save</code>, <code>restore</code> 方法。</p>
-<pre><code>function MatrixStack() {
+<pre class="prettyprint"><code>function MatrixStack() {
   this.stack = [];
 
   // 因为栈是空的，需要放入一个初始化矩阵
@@ -117,7 +117,7 @@ MatrixStack.prototype.save = function() {
   this.stack.push(this.getCurrentMatrix());
 };
 </code></pre><p>还需要一个方法获取或设置栈顶的矩阵</p>
-<pre><code>// 获取当前矩阵（栈顶的矩阵）
+<pre class="prettyprint"><code>// 获取当前矩阵（栈顶的矩阵）
 MatrixStack.prototype.getCurrentMatrix = function() {
   return this.stack[this.stack.length - 1].slice();
 };
@@ -127,7 +127,7 @@ MatrixStack.prototype.setCurrentMatrix = function(m) {
   return this.stack[this.stack.length - 1] = m;
 };
 </code></pre><p>最后使用之前的矩阵方法实现 <code>translate</code>, <code>rotate</code>, 和 <code>scale</code>。</p>
-<pre><code>// 平移当前矩阵
+<pre class="prettyprint"><code>// 平移当前矩阵
 MatrixStack.prototype.translate = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.translate(m, x, y, z));
@@ -146,7 +146,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
 };
 </code></pre><p>注意我们使用的是三维矩阵方法，需要在平移时设置 <code>z</code> 为 <code>0</code>，缩放时设置 <code>z</code> 为 <code>1</code>。
 由于我用惯了二维接口，经常忘记设置 <code>z</code> 值，所以就让 <code>z</code> 为可选参数。</p>
-<pre><code>// 平移当前矩阵
+<pre class="prettyprint"><code>// 平移当前矩阵
 MatrixStack.prototype.translate = function(x, y, z) {
 +  if (z === undefined) {
 +    z = 0;
@@ -166,7 +166,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
   this.setCurrentMatrix(m4.scale(m, x, y, z));
 };
 </code></pre><p>使用<a href="webgl-2d-drawimage.html">上一节中实现的 <code>drawImage</code></a>这些代码</p>
-<pre><code>// 将坐标从像素空间转换到裁剪空间
+<pre class="prettyprint"><code>// 将坐标从像素空间转换到裁剪空间
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 // 将矩形平移到 dstX, dstY
@@ -176,9 +176,9 @@ matrix = m4.translate(matrix, dstX, dstY, 0);
 // from 1 unit to texWidth, texHeight units
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>只需要创建一个矩阵栈</p>
-<pre><code>var matrixStack = new MatrixStack();
+<pre class="prettyprint"><code>var matrixStack = new MatrixStack();
 </code></pre><p>然后将栈顶的矩阵乘起来</p>
-<pre><code>// 将坐标从像素空间转换到裁剪空间
+<pre class="prettyprint"><code>// 将坐标从像素空间转换到裁剪空间
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 +// 将原点移动到栈顶矩阵代表的转换
@@ -194,7 +194,7 @@ matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 例如二维画布默认原点 (0,0) 为左上角。</p>
 <p>如果我们将原点移动到中心然后在绘制在 0,0 点，它的起点就是画布的中心</p>
 <p>让我们使用<a href="webgl-2d-drawimage.html">之前的例子</a>画一个图像</p>
-<pre><code>var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
+<pre class="prettyprint"><code>var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
 
 function draw(time) {
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -221,7 +221,7 @@ function draw(time) {
 <p>你可以看到，即使我们给 <code>drawImage</code> 传的 <code>0, 0</code>，由于使用了 <code>matrixStack.translate</code>
 将原点移动到画布的中心，图像画在中心，并绕中心转动。</p>
 <p>让我们将原点移动到图像中间</p>
-<pre><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 +matrixStack.translate(textureInfo.width / -2, textureInfo.height / -2);
 </code></pre><p>现在图像就在画布中心绕图像中心旋转。</p>
@@ -232,7 +232,7 @@ matrixStack.rotateZ(time);
 
 </p>
 <p>让我们在每个角画一个旋转的图像</p>
-<pre><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 
 +matrixStack.save();

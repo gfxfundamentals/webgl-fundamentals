@@ -102,7 +102,7 @@ multiply the top matrix of the stack using by either a translation, rotation, or
 <a href="webgl-2d-matrices.html">using the functions we created eariler</a>.</p>
 <p>Here&#39;s the implementation</p>
 <p>First the constructor and the <code>save</code> and <code>restore</code> functions</p>
-<pre><code>function MatrixStack() {
+<pre class="prettyprint"><code>function MatrixStack() {
   this.stack = [];
 
   // since the stack is empty this will put an initial matrix in it
@@ -123,7 +123,7 @@ MatrixStack.prototype.save = function() {
   this.stack.push(this.getCurrentMatrix());
 };
 </code></pre><p>We also need functions for getting and setting the top matrix</p>
-<pre><code>// Gets a copy of the current matrix (top of the stack)
+<pre class="prettyprint"><code>// Gets a copy of the current matrix (top of the stack)
 MatrixStack.prototype.getCurrentMatrix = function() {
   return this.stack[this.stack.length - 1].slice();
 };
@@ -134,7 +134,7 @@ MatrixStack.prototype.setCurrentMatrix = function(m) {
 };
 </code></pre><p>Finally we need to implement <code>translate</code>, <code>rotate</code>, and <code>scale</code> using our
 previous matrix functions.</p>
-<pre><code>// Translates the current matrix
+<pre class="prettyprint"><code>// Translates the current matrix
 MatrixStack.prototype.translate = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.translate(m, x, y, z));
@@ -155,7 +155,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
 <code>z</code> on translation and <code>1</code> for <code>z</code> on scale but I find that I&#39;m so used to
 using the 2d functions from Canvas 2d that I often forget to specify <code>z</code>
 an then the code breaks so let&#39;s make <code>z</code> optional</p>
-<pre><code>// Translates the current matrix
+<pre class="prettyprint"><code>// Translates the current matrix
 MatrixStack.prototype.translate = function(x, y, z) {
 +  if (z === undefined) {
 +    z = 0;
@@ -176,7 +176,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
 };
 </code></pre><p>Using our <a href="webgl-2d-drawimage.html"><code>drawImage</code> from the previous lesson</a>
 we had these lines</p>
-<pre><code>// this matrix will convert from pixels to clip space
+<pre class="prettyprint"><code>// this matrix will convert from pixels to clip space
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 // this matrix will translate our quad to dstX, dstY
@@ -186,9 +186,9 @@ matrix = m4.translate(matrix, dstX, dstY, 0);
 // from 1 unit to texWidth, texHeight units
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>We just need to create a matrix stack</p>
-<pre><code>var matrixStack = new MatrixStack();
+<pre class="prettyprint"><code>var matrixStack = new MatrixStack();
 </code></pre><p>and multiply in the top matrix from our stack in</p>
-<pre><code>// this matrix will convert from pixels to clip space
+<pre class="prettyprint"><code>// this matrix will convert from pixels to clip space
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 +// this matrix moves the origin to the one represented by
@@ -209,7 +209,7 @@ canvas the origin (0,0) is at the top left corner.</p>
 an image at 0,0 will draw it starting at the center of the canvas</p>
 <p>Let&#39;s take <a href="webgl-2d-drawimage.html">our previous example</a> and just draw a
 single image</p>
-<pre><code>var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
+<pre class="prettyprint"><code>var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
 
 function draw(time) {
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -237,7 +237,7 @@ function draw(time) {
 <code>matrixStack.translate</code> to move the origin to the center of the canvas
 the image is drawn and rotates around that center.</p>
 <p>Let&#39;s move the center of rotation to center of the image</p>
-<pre><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 +matrixStack.translate(textureInfo.width / -2, textureInfo.height / -2);
 </code></pre><p>And now it rotates around the center of the image in the center of the canvas</p>
@@ -248,7 +248,7 @@ matrixStack.rotateZ(time);
 
 </p>
 <p>Let&#39;s draw the same image at each corner rotating on different corners</p>
-<pre><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 
 +matrixStack.save();

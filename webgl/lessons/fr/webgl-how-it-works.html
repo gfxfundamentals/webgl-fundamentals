@@ -92,7 +92,7 @@ La première partie traite les vertices (du moins leurs données) et les convert
 en vertices dans l&#39;espace de coordonnées. La deuxième partie colore les pixels d&#39;après
 la première partie. </p>
 <p>Quand vous appelez</p>
-<pre><code>gl.drawArrays(gl.TRIANGLE, 0, 9);
+<pre class="prettyprint"><code>gl.drawArrays(gl.TRIANGLE, 0, 9);
 </code></pre><p>Le 9 ici signifie &quot;il y a 9 vertices à traiter&quot; donc voilà 9 vertices rendus.</p>
 <p><img src="../resources/vertex-shader-anim.gif" class="webgl_center" /></p>
 <p>Sur la gauche il y a les données fournies. Le shader de vertex est une fonction que vous écrivez en 
@@ -111,7 +111,7 @@ de fragment. </p>
 <p>Un exemple simple est d&#39;envoyer les coordonnées en espace de projection directement du shader 
 de vertex au shader de fragment. </p>
 <p>On va dessiner un simple triangle. Après notre <a href="webgl-2d-matrices.html">exemple précédent</a> changeons notre F en triangle.</p>
-<pre><code>// Remplit le tampon avec les valeurs qui définissent un triangle
+<pre class="prettyprint"><code>// Remplit le tampon avec les valeurs qui définissent un triangle
 function creerGeometrie(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -122,14 +122,14 @@ function creerGeometrie(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>Et on n&#39;a qu&#39;à rendre 3 points.</p>
-<pre><code>// Rendu de la scène
+<pre class="prettyprint"><code>// Rendu de la scène
 function rendreLaScene() {
   ...
   // Rendu de la géométrie.
 *  gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
 </code></pre><p>Ensuite dans notre shader de vertex on déclare une <em>varying</em> pour passer des données au shader de fragment.</p>
-<pre><code>varying vec4 v_couleur;
+<pre class="prettyprint"><code>varying vec4 v_couleur;
 ...
 void main() {
   // Multiplie la position par la matrice
@@ -141,7 +141,7 @@ void main() {
 *  v_couleur = gl_Position * 0.5 + 0.5;
 }
 </code></pre><p>Et ensuite on déclare la même <em>varying</em> dans le shader de fragment.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 *varying vec4 v_couleur;
 
@@ -235,7 +235,7 @@ transmettre ensuite au shader de fragment. Par exemple, dessinons un rectangle,
 soit 2 triangles, en 2 couleurs. Pour cela on va indiquer un autre attribut 
 dans le shader de vertex pour lui envoyer cette nouvelle information, et on va la 
 transmettre directement au shader de fragment.</p>
-<pre><code>attribute vec2 a_position;
+<pre class="prettyprint"><code>attribute vec2 a_position;
 +attribute vec4 a_couleur;
 ...
 varying vec4 v_couleur;
@@ -246,7 +246,7 @@ void main() {
 *  v_couleur = a_couleur;
 }
 </code></pre><p>Maintenant il nous faut indiquer les couleurs dans nos géométries.</p>
-<pre><code>  // créé les pointeurs pour nos données de vertices
+<pre class="prettyprint"><code>  // créé les pointeurs pour nos données de vertices
   var emplacementPosition = gl.getAttribLocation(program, &quot;a_position&quot;);
 +  var emplacementCouleur = gl.getAttribLocation(program, &quot;a_couleur&quot;);
   ...
@@ -295,7 +295,7 @@ bien les couleurs à nos <em>varying</em> et elles sont toujours interpolées po
 pixel. Mais on a mis les mêmes couleurs aux sommets d&#39;un même 
 triangle, d&#39;où ce résultat. Si on indique des couleurs différentes l&#39;interpolation 
 redevient visible :</p>
-<pre><code>// Remplit le tampon avec les couleurs pour les deux triangles
+<pre class="prettyprint"><code>// Remplit le tampon avec les couleurs pour les deux triangles
 // qui forment le rectangle.
 function creerCouleurs(gl) {
   // Créé une couleur différente par vertex
@@ -330,13 +330,13 @@ de géométrie. <code>gl.createBuffer</code> créé un tampon.
 lire ces données et où sont les attributs à envoyer à notre shader de vertex.</p>
 <p>Pour cela on demande d&#39;abord au programme WebGL l&#39;emplacement qu&#39;il a assigné aux attributs (le pointeur). 
 Par exemple dans le code précédent on a </p>
-<pre><code>// créé les pointeurs pour nos données de vertices
+<pre class="prettyprint"><code>// créé les pointeurs pour nos données de vertices
 var emplacementPosition = gl.getAttribLocation(programme, &quot;a_position&quot;);
 var emplacementCouleur = gl.getAttribLocation(programme, &quot;a_couleur&quot;);
 </code></pre><p>Une fois qu&#39;on connaît l&#39;emplacement d&#39;un attribut on soumet deux commandes.</p>
-<pre><code>gl.enableVertexAttribArray(emplacement);
+<pre class="prettyprint"><code>gl.enableVertexAttribArray(emplacement);
 </code></pre><p>Cette commande dit à WebGL qu&#39;on veut fournir des données depuis un tampon</p>
-<pre><code>gl.vertexAttribPointer(
+<pre class="prettyprint"><code>gl.vertexAttribPointer(
     emplacement,
     nombreDeComposantes,
     typeDeDonnée,

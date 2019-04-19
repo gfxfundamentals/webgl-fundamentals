@@ -131,11 +131,11 @@ because its orbit around the sun looks something like this</p>
 orbit the earth which is simple.  The scene graph takes care of the fact
 that the earth is orbiting the sun.  It does this by walking the nodes and
 multiplying the matrices as it walks</p>
-<pre><code>worldMatrix = greatGrandParent * grandParent * parent * self(localMatrix)
+<pre class="prettyprint"><code>worldMatrix = greatGrandParent * grandParent * parent * self(localMatrix)
 </code></pre><p>In concrete terms our universe simulation that would be</p>
-<pre><code>worldMatrixForMoon = galaxyMatrix * starMatrix * planetMatrix * moonMatrix;
+<pre class="prettyprint"><code>worldMatrixForMoon = galaxyMatrix * starMatrix * planetMatrix * moonMatrix;
 </code></pre><p>We can do this very simply with a recursive function which is effectively</p>
-<pre><code>function computeWorldMatrix(currentNode, parentWorldMatrix) {
+<pre class="prettyprint"><code>function computeWorldMatrix(currentNode, parentWorldMatrix) {
     // compute our world matrix by multplying our local matrix with
     // our parent&#39;s world matrix.
     var worldMatrix = m4.multiply(parentWorldMatrix, currentNode.localMatrix);
@@ -160,7 +160,7 @@ see above.</p>
 <p>A scene graph is pretty easy to make. Let&#39;s define a simple <code>Node</code> object.
 There&#39;s a zillion ways to organize a scene graph and I&#39;m not sure which
 way is best. The most common is to have an optional field of thing to draw</p>
-<pre><code>var node = {
+<pre class="prettyprint"><code>var node = {
    localMatrix: ...,  // the &quot;local&quot; matrix for this node
    worldMatrix: ...,  // the &quot;world&quot; matrix for this node
    children: [],      // array of children
@@ -170,13 +170,13 @@ way is best. The most common is to have an optional field of thing to draw</p>
 textures or anything like that as it would clutter the example.  First
 let&#39;s make a few functions to help manage nodes.  First we&#39;ll make a node
 class</p>
-<pre><code>var Node = function() {
+<pre class="prettyprint"><code>var Node = function() {
   this.children = [];
   this.localMatrix = m4.identity();
   this.worldMatrix = m4.identity();
 };
 </code></pre><p>Let&#39;s give it a way to set the parent of a node.</p>
-<pre><code>Node.prototype.setParent = function(parent) {
+<pre class="prettyprint"><code>Node.prototype.setParent = function(parent) {
   // remove us from our parent
   if (this.parent) {
     var ndx = this.parent.children.indexOf(this);
@@ -196,7 +196,7 @@ their parent-child relationships.  If we start at the parent and
 recursively visit the children we can compute their world matrices.  If
 you don&#39;t understand matrix math <a href="webgl-2d-matrices.html">check out this article on
 them</a>.</p>
-<pre><code>Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
+<pre class="prettyprint"><code>Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
   if (parentWorldMatrix) {
     // a matrix was passed in so do the math and
     // store the result in `this.worldMatrix`.
@@ -218,7 +218,7 @@ a single sphere model and color it yellowish for the sun, blue-greenish
 for the earth and grayish for the moon.  If <code>drawInfo</code>, <code>bufferInfo</code>, and
 <code>programInfo</code> are not familiar to you <a href="webgl-drawing-multiple-things.html">see the previous
 article</a>.</p>
-<pre><code>// Let&#39;s make all the nodes
+<pre class="prettyprint"><code>// Let&#39;s make all the nodes
 var sunNode = new Node();
 sunNode.localMatrix = m4.translation(0, 0, 0);  // sun at the center
 sunNode.drawInfo = {
@@ -252,11 +252,11 @@ moonNode.drawInfo = {
   bufferInfo: sphereBufferInfo,
 };
 </code></pre><p>Now that we&#39;ve made the nodes let&#39;s connect them.</p>
-<pre><code>// connect the celestial objects
+<pre class="prettyprint"><code>// connect the celestial objects
 moonNode.setParent(earthNode);
 earthNode.setParent(sunNode);
 </code></pre><p>We&#39;ll again make a list of objects and a list of objects to draw.</p>
-<pre><code>var objects = [
+<pre class="prettyprint"><code>var objects = [
   sunNode,
   earthNode,
   moonNode,
@@ -269,16 +269,16 @@ var objectsToDraw = [
 ];
 </code></pre><p>At render time we&#39;ll update each object&#39;s local matrix by rotating it
 slightly.</p>
-<pre><code>// update the local matrices for each object.
+<pre class="prettyprint"><code>// update the local matrices for each object.
 m4.multiply(m4.yRotation(0.01), sunNode.localMatrix  , sunNode.localMatrix);
 m4.multiply(m4.yRotation(0.01), earthNode.localMatrix, earthNode.localMatrix);
 m4.multiply(m4.yRotation(0.01), moonNode.localMatrix , moonNode.localMatrix);
 </code></pre><p>Now that the local matrices are updated we&#39;ll update all the world
 matrices</p>
-<pre><code>sunNode.updateWorldMatrix();
+<pre class="prettyprint"><code>sunNode.updateWorldMatrix();
 </code></pre><p>Finally now that we have world matrices we need to multiply those to get a
 <a href="webgl-3d-perspective.html">worldViewProjection matrix</a> for each object.</p>
-<pre><code>// Compute all the matrices for rendering
+<pre class="prettyprint"><code>// Compute all the matrices for rendering
 objects.forEach(function(object) {
   object.drawInfo.uniforms.u_matrix = m4.multiply(viewProjectionMatrix, object.worldMatrix);
 });
@@ -292,7 +292,7 @@ article</a>.</p>
 </p>
 <p>You&#39;ll notice all of the planets are the same size.  Let&#39;s try to make the
 earth larger</p>
-<pre><code>// earth 100 units from the sun
+<pre class="prettyprint"><code>// earth 100 units from the sun
 earthNode.localMatrix = m4.translation(100, 0, 0);
 // make the earth twice as large
 earthNode.localMatrix = m4.scale(earthNode.localMatrix, 2, 2, 2);
@@ -305,13 +305,13 @@ earthNode.localMatrix = m4.scale(earthNode.localMatrix, 2, 2, 2);
 <p>Oops.  The moon got larger too.  To fix this we could manually shrink the
 moon.  A better solution though is to add more nodes to our scene graph.
 Instead of just</p>
-<pre><code>  sun
+<pre class="prettyprint"><code>  sun
    |
   earth
    |
   moon
 </code></pre><p>We&#39;ll change it to</p>
-<pre><code> solarSystem
+<pre class="prettyprint"><code> solarSystem
    |    |
    |   sun
    |
@@ -326,13 +326,13 @@ Instead of just</p>
 separately rotate and scale the sun and it won&#39;t affect the earth.
 Similarly the earth can rotate separately from the moon.  Let&#39;s make more
 nodes for <code>solarSystem</code>, <code>earthOrbit</code> and <code>moonOrbit</code>.</p>
-<pre><code>var solarSystemNode = new Node();
+<pre class="prettyprint"><code>var solarSystemNode = new Node();
 var earthOrbitNode = new Node();
 earthOrbitNode.localMatrix = m4.translation(100, 0, 0);  // earth orbit 100 units from the sun
 var moonOrbitNode = new Node();
 moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // moon 20 units from the earth
 </code></pre><p>Those orbit distances have been removed from the old nodes</p>
-<pre><code>var earthNode = new Node();
+<pre class="prettyprint"><code>var earthNode = new Node();
 -// earth 100 units from the sun
 -earthNode.localMatrix = m4.translation(100, 0, 0);
 -// make the earth twice as large
@@ -342,14 +342,14 @@ moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // moon 20 units from the
 var moonNode = new Node();
 -moonNode.localMatrix = m4.translation(20, 0, 0);  // moon 20 units from the earth
 </code></pre><p>Connecting them now looks like this</p>
-<pre><code>// connect the celetial objects
+<pre class="prettyprint"><code>// connect the celetial objects
 sunNode.setParent(solarSystemNode);
 earthOrbitNode.setParent(solarSystemNode);
 earthNode.setParent(earthOrbitNode);
 moonOrbitNode.setParent(earthOrbitNode);
 moonNode.setParent(moonOrbitNode);
 </code></pre><p>And we only need to update the orbits</p>
-<pre><code>// update the local matrices for each object.
+<pre class="prettyprint"><code>// update the local matrices for each object.
 -m4.multiply(m4.yRotation(0.01), sunNode.localMatrix  , sunNode.localMatrix);
 -m4.multiply(m4.yRotation(0.01), earthNode.localMatrix, earthNode.localMatrix);
 -m4.multiply(m4.yRotation(0.01), moonNode.localMatrix , moonNode.localMatrix);
@@ -368,7 +368,7 @@ moonNode.setParent(moonOrbitNode);
 </p>
 <p>You might also notice the sun and the earth are no longer rotating in place. That is now independent.</p>
 <p>Let&#39;s adjust a few more things.</p>
-<pre><code>-sunNode.localMatrix = m4.translation(0, 0, 0);  // sun at the center
+<pre class="prettyprint"><code>-sunNode.localMatrix = m4.translation(0, 0, 0);  // sun at the center
 +sunNode.localMatrix = m4.scaling(5, 5, 5);
 
 ...
@@ -395,7 +395,7 @@ little bit of error.  There is a way to fix the math which is called
 <em>ortho normalizing a matrix</em> but even that won&#39;t always work.  For example
 let&#39;s imagine we scaled down zero and back.  Let&#39;s just do that for one
 value <code>x</code></p>
-<pre><code>x = 246;       // frame #0, x = 246
+<pre class="prettyprint"><code>x = 246;       // frame #0, x = 246
 
 scale = 1;
 x = x * scale  // frame #1, x = 246
@@ -414,7 +414,7 @@ x = x * scale  // frame #5, x = 0  OOPS!
 </code></pre><p>We lost our value. We can fix this by adding some other class that updates the matrix from
 other values. Let&#39;s change the <code>Node</code> definition to have a <code>source</code>. If it exists we&#39;ll
 ask the <code>source</code> to give us a local matrix.</p>
-<pre><code>*var Node = function(source) {
+<pre class="prettyprint"><code>*var Node = function(source) {
   this.children = [];
   this.localMatrix = m4.identity();
   this.worldMatrix = m4.identity();
@@ -431,7 +431,7 @@ Node.prototype.updateWorldMatrix = function(matrix) {
   ...
 </code></pre><p>Now we can create a source. A common source is one that provides translation, rotation, and scale
 something like this</p>
-<pre><code>var TRS = function() {
+<pre class="prettyprint"><code>var TRS = function() {
   this.translation = [0, 0, 0];
   this.rotation = [0, 0, 0];
   this.scale = [1, 1, 1];
@@ -452,7 +452,7 @@ TRS.prototype.getMatrix = function(dst) {
   return dst;
 };
 </code></pre><p>And we can use it like this</p>
-<pre><code>// at init time making a node with a source
+<pre class="prettyprint"><code>// at init time making a node with a source
 var someTRS  = new TRS();
 var someNode = new Node(someTRS);
 

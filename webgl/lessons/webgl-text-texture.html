@@ -108,7 +108,7 @@ textures.</p>
 <p>Starting with the examples from the <a href="webgl-text-canvas2d.html">previous
 article</a> let&#39;s add a function to fill a 2D
 canvas with some text</p>
-<pre><code>var textCtx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
+<pre class="prettyprint"><code>var textCtx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
 
 // Puts text in center of canvas.
 function makeTextCanvas(text, width, height) {
@@ -127,7 +127,7 @@ text, I&#39;m going to switch over to <a href="webgl-drawing-multiple-things.htm
 described in a previous article</a>.  If
 it&#39;s not clear what <code>programInfo</code>, <code>bufferInfo</code>, etc are see that article.</p>
 <p>So, let&#39;s create the &#39;F&#39; and a unit quad.</p>
-<pre><code>// Create data for &#39;F&#39;
+<pre class="prettyprint"><code>// Create data for &#39;F&#39;
 var fBufferInfo = primitives.create3DFBufferInfo(gl);
 // Create a unit quad for the &#39;text&#39;
 var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, m4.xRotation(Math.PI / 2));
@@ -135,11 +135,11 @@ var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, m4.xRotati
 over the origin.  <code>createPlaneBufferInfo</code> creates a plane in the xz plane.
 We pass in a matrix to rotate it and give us an xy plane unit quad.</p>
 <p>Next create 2 shaders</p>
-<pre><code>// setup GLSL programs
+<pre class="prettyprint"><code>// setup GLSL programs
 var fProgramInfo = createProgramInfo(gl, [&quot;3d-vertex-shader&quot;, &quot;3d-fragment-shader&quot;]);
 var textProgramInfo = createProgramInfo(gl, [&quot;text-vertex-shader&quot;, &quot;text-fragment-shader&quot;]);
 </code></pre><p>And create our text texture</p>
-<pre><code>// create text texture.
+<pre class="prettyprint"><code>// create text texture.
 var textCanvas = makeTextCanvas(&quot;Hello!&quot;, 100, 26);
 var textWidth  = textCanvas.width;
 var textHeight = textCanvas.height;
@@ -151,7 +151,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>Setup uniforms for both the &#39;F&#39; and text</p>
-<pre><code>var fUniforms = {
+<pre class="prettyprint"><code>var fUniforms = {
   u_matrix: m4.identity(),
 };
 
@@ -160,7 +160,7 @@ var textUniforms = {
   u_texture: textTex,
 };
 </code></pre><p>Now when we compute the matrices for the F we save off the F&#39;s view matrix</p>
-<pre><code>var fViewMatrix = m4.translate(viewMatrix,
+<pre class="prettyprint"><code>var fViewMatrix = m4.translate(viewMatrix,
     translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
 fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
 fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
@@ -168,7 +168,7 @@ fViewMatrix = m4.zRotate(fViewMatrix, rotation[2] + now + (yy * 3 + xx) * 0.1);
 fViewMatrix = m4.scale(fViewMatrix, scale[0], scale[1], scale[2]);
 fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
 </code></pre><p>Drawing the F looks like this</p>
-<pre><code>gl.useProgram(fProgramInfo.program);
+<pre class="prettyprint"><code>gl.useProgram(fProgramInfo.program);
 
 webglUtils.setBuffersAndAttributes(gl, fProgramInfo, fBufferInfo);
 
@@ -181,13 +181,13 @@ gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 </code></pre><p>For the text we just need the position of the origin of the F.  We also
 need to scale our unit quad to match the dimensions of the texture.
 Finally we need to multiply by the projection matrix.</p>
-<pre><code>// use just the view position of the &#39;F&#39; for the text
+<pre class="prettyprint"><code>// use just the view position of the &#39;F&#39; for the text
 var textMatrix = m4.translate(projectionMatrix,
     fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]);
 // scale the quad to the size we need it.
 textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 </code></pre><p>And then render the text</p>
-<pre><code>// setup to draw the text.
+<pre class="prettyprint"><code>// setup to draw the text.
 gl.useProgram(textProgramInfo.program);
 
 webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
@@ -208,16 +208,16 @@ gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 That&#39;s because we&#39;re drawing a quad.  The default color of the canvas is
 transparent black (0,0,0,0) and we&#39;re drawing that color in the quad.  We
 could instead blend our pixels.</p>
-<pre><code>gl.enable(gl.BLEND);
+<pre class="prettyprint"><code>gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>This makes it take the source pixel (the color from our fragment shader)
 and combine it with the dest pixel (the color in the canvas) according to
 the blend function.  We&#39;ve set the blend function to <code>SRC_ALPHA</code> for
 source and <code>ONE_MINUS_SRC_ALPHA</code> for dest.</p>
-<pre><code>result = dest * (1 - src_alpha) + src * src_alpha
+<pre class="prettyprint"><code>result = dest * (1 - src_alpha) + src * src_alpha
 </code></pre><p>so for example if the dest is green <code>0,1,0,1</code> and the source is red
 <code>1,0,0,1</code> we&#39;d have</p>
-<pre><code>src = [1, 0, 0, 1]
+<pre class="prettyprint"><code>src = [1, 0, 0, 1]
 dst = [0, 1, 0, 1]
 src_alpha = src[3]  // this is 1
 result = dst * (1 - src_alpha) + src * src_alpha
@@ -228,7 +228,7 @@ result = dst * 0 + src * 1
 // which is the same as
 result = src
 </code></pre><p>For the parts of the texture with transparent black <code>0,0,0,0</code></p>
-<pre><code>src = [0, 0, 0, 0]
+<pre class="prettyprint"><code>src = [0, 0, 0, 0]
 dst = [0, 1, 0, 1]
 src_alpha = src[3]  // this is 0
 result = dst * (1 - src_alpha) + src * src_alpha
@@ -263,9 +263,9 @@ buffer updating off.</p>
 <p>Let&#39;s first separate drawing of the opaque stuff (the Fs) from the
 transparent stuff (the text).  First we&#39;ll declare something to remember
 the text positions.</p>
-<pre><code>var textPositions = [];
+<pre class="prettyprint"><code>var textPositions = [];
 </code></pre><p>And in the loop for rendering the Fs we&#39;ll remember those positions</p>
-<pre><code>var fViewMatrix = m4.translate(viewMatrix,
+<pre class="prettyprint"><code>var fViewMatrix = m4.translate(viewMatrix,
     translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
 fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
 fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
@@ -275,14 +275,14 @@ fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
 +// Save the f&#39;s view position
 +textPositions.push([fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]]);
 </code></pre><p>Before we draw the &#39;F&#39;s we&#39;ll disable blending and turn on writing to the depth buffer</p>
-<pre><code>gl.disable(gl.BLEND);
+<pre class="prettyprint"><code>gl.disable(gl.BLEND);
 gl.depthMask(true);
 </code></pre><p>For drawing the text we&#39;ll turn on blending and turn off writing to the depth buffer.</p>
-<pre><code>gl.enable(gl.BLEND);
+<pre class="prettyprint"><code>gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 gl.depthMask(false);
 </code></pre><p>And then draw text at all the positions we saved</p>
-<pre><code>+// setup to draw the text.
+<pre class="prettyprint"><code>+// setup to draw the text.
 +gl.useProgram(textProgramInfo.program);
 +
 +webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
@@ -325,7 +325,7 @@ relative to the eye (which is at 0,0,0 in view space).  So if we normalize
 it we get a unit vector pointing from the eye to that point which we can
 then multiply by some amount to move the text a specific number of units
 toward or away from the eye.</p>
-<pre><code>+// because pos is in view space that means it&#39;s a vector from the eye to
+<pre class="prettyprint"><code>+// because pos is in view space that means it&#39;s a vector from the eye to
 +// some position. So translate along that vector back toward the eye some distance
 +var fromEye = m4.normalize(pos);
 +var amountToMoveTowardEye = 150;  // because the F is 150 units long
@@ -351,13 +351,13 @@ values.  When we upload the contents of the canvas to a texture WebGL
 tries to unpremultiply the values but it can&#39;t do this perfectly because
 premultiplied alpha is lossy.</p>
 <p>To fix that let&#39;s tell WebGL not to unpremultiply</p>
-<pre><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+<pre class="prettyprint"><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 </code></pre><p>This tells WebGL to supply premultiplied alpha values to <code>gl.texImage2D</code>
 and <code>gl.texSubImage2D</code>.  If the data passed to <code>gl.texImage2D</code> is already
 premultiplied as it is for Canvas 2D data then WebGL can just pass it
 through.</p>
 <p>We also need to change the blending function</p>
-<pre><code>-gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+<pre class="prettyprint"><code>-gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 +gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>The old one multiplied the src color by its alpha.  That&#39;s what
 <code>SRC_ALPHA</code> means.  But now our texture&#39;s data has already been multiplied
@@ -375,7 +375,7 @@ Well, if you remember from <a href="webgl-3d-perspective.html">the perspective
 article</a> our perspective matrix is going to
 scale our object by <code>1 / -Z</code> to make it get smaller in the distance.  So, we
 can just scale by <code>-Z</code> times some desired-scale to compensate.</p>
-<pre><code>...
+<pre class="prettyprint"><code>...
 // because pos is in view space that means it&#39;s a vector from the eye to
 // some position. So translate along that vector back toward the eye some distance
 var fromEye = normalize(pos);
@@ -398,7 +398,7 @@ var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
 </p>
 <p>If you want to draw different text at each F you should make a new texture
 for each F and just update the text uniforms for that F.</p>
-<pre><code>// create text textures, one for each F
+<pre class="prettyprint"><code>// create text textures, one for each F
 var textTextures = [
   &quot;anna&quot;,   // 0
   &quot;colin&quot;,  // 1
@@ -434,7 +434,7 @@ var textTextures = [
   };
 });
 </code></pre><p>Then at render time select a texture</p>
-<pre><code>*textPositions.forEach(function(pos, ndx) {
+<pre class="prettyprint"><code>*textPositions.forEach(function(pos, ndx) {
 
   +// select a texture
   +var tex = textTextures[ndx];
@@ -444,7 +444,7 @@ var textTextures = [
   // scale the quad to the size we need it.
   *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
 </code></pre><p>and set the uniform for the texture before drawing</p>
-<pre><code>  *textUniforms.u_texture = tex.texture;
+<pre class="prettyprint"><code>  *textUniforms.u_texture = tex.texture;
 </code></pre><p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-different-text.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-different-text.html" target="_blank">click here to open in a separate window</a>
@@ -455,7 +455,7 @@ var textTextures = [
 useful if we rendered the text in white.  Then we could multiply the text
 by a color and make it any color we want.</p>
 <p>First we&#39;ll change the text shader to multiply by a color</p>
-<pre><code>varying vec2 v_texcoord;
+<pre class="prettyprint"><code>varying vec2 v_texcoord;
 
 uniform sampler2D u_texture;
 +uniform vec4 u_color;
@@ -464,9 +464,9 @@ void main() {
 *   gl_FragColor = texture2D(u_texture, v_texcoord) * u_color;
 }
 </code></pre><p>And when we draw the text into the canvas use white</p>
-<pre><code>textCtx.fillStyle = &quot;white&quot;;
+<pre class="prettyprint"><code>textCtx.fillStyle = &quot;white&quot;;
 </code></pre><p>Then we&#39;ll make some colors</p>
-<pre><code>// colors, 1 for each F
+<pre class="prettyprint"><code>// colors, 1 for each F
 var colors = [
   [0.0, 0.0, 0.0, 1], // 0
   [1.0, 0.0, 0.0, 1], // 1
@@ -486,7 +486,7 @@ var colors = [
   [0.0, 5.0, 5.0, 1], // 15,
 ];
 </code></pre><p>At draw time we select a color</p>
-<pre><code>// set color uniform
+<pre class="prettyprint"><code>// set color uniform
 textUniforms.u_color = colors[ndx];
 </code></pre><p>Colors</p>
 <p><div class="webgl_example_container">

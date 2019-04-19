@@ -100,7 +100,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </p>
 <p>回到我们的<a href="webgl-fundamentals.html">第一篇文章</a>，在裁剪空间中绘制一个三角形，
 没有数学运算，只是传入裁剪空间坐标到一个简单的顶点着色器，像这样</p>
-<pre><code>  // 属性从缓冲中获取数据
+<pre class="prettyprint"><code>  // 属性从缓冲中获取数据
   attribute vec4 a_position;
 
   // 所有的着色器都有一个 main 函数
@@ -110,7 +110,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     gl_Position = a_position;
   }
 </code></pre><p>还有一个简单的片断着色器提供固定的颜色</p>
-<pre><code>  // 片断着色器没有默认的精度，
+<pre class="prettyprint"><code>  // 片断着色器没有默认的精度，
   // 中等精度是个不错的默认值
   precision mediump float;
 
@@ -119,7 +119,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     gl_FragColor = vec4(1, 0, 0.5, 1); // 返回红紫色
   }
 </code></pre><p>让我们在裁剪空间绘制两个矩形，为每个顶点传递<code>X</code>, <code>Y</code>, <code>Z</code>, 和 <code>W</code>。</p>
-<pre><code>var positions = [
+<pre class="prettyprint"><code>var positions = [
   -.8, -.8, 0, 1,  // 第一个矩形的第一个三角形
    .8, -.8, 0, 1,
   -.8, -.2, 0, 1,
@@ -142,7 +142,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </p>
 <p>再添加一个浮点型可变量，并把它从顶点着色器直接传递到片断着色器</p>
-<pre><code>  attribute vec4 a_position;
+<pre class="prettyprint"><code>  attribute vec4 a_position;
 +  attribute float a_brightness;
 
 +  varying float v_brightness;
@@ -154,7 +154,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 +    v_brightness = a_brightness;
   }
 </code></pre><p>在片断着色器中使用可变量设置颜色</p>
-<pre><code>  precision mediump float;
+<pre class="prettyprint"><code>  precision mediump float;
 
 +  // 顶点着色器的值插值后传入这里
 +  varying float v_brightness;  
@@ -164,7 +164,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   }
 </code></pre><p>我们需要给可变量提供数据，创建一个缓冲放入一些数据，每个顶点一个值，
 我们将设置左边亮度为 0，右边亮度为 1。</p>
-<pre><code>  // 创建缓冲并放入 12 个亮度值
+<pre class="prettyprint"><code>  // 创建缓冲并放入 12 个亮度值
   var brightnessBuffer = gl.createBuffer();
 
   // 绑定到 ARRAY_BUFFER
@@ -188,11 +188,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(brightness), gl.STATIC_DRAW);
 </code></pre><p>还需要在初始化阶段找到 <code>a_brightness</code> 的位置</p>
-<pre><code>  // 找到顶点数据的输入位置
+<pre class="prettyprint"><code>  // 找到顶点数据的输入位置
   var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +  var brightnessAttributeLocation = gl.getAttribLocation(program, &quot;a_brightness&quot;);
 </code></pre><p>然后在渲染阶段设置属性</p>
-<pre><code>  // 启用属性
+<pre class="prettyprint"><code>  // 启用属性
   gl.enableVertexAttribArray(brightnessAttributeLocation);
 
   // 绑定位置缓冲
@@ -218,7 +218,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 的值除以<code>gl_Position.w</code>。</p>
 <p>在上方的顶点中我们提供的 <code>W</code> 值为 <code>1</code>，但是我们知道WebGL会除以 <code>W</code>，
 所以做如下修改应该结果不变。</p>
-<pre><code>  var mult = 20;
+<pre class="prettyprint"><code>  var mult = 20;
   var positions = [
       -.8,  .8, 0, 1,  // 第一个矩形的第一个三角形
        .8,  .8, 0, 1,
@@ -247,7 +247,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <code>Y</code> 也一样，但颜色却不同，为什么？</p>
 <p>事实是WebGL使用 <code>W</code> 实现纹理映射或者可变量插值的透视投影。</p>
 <p>如果将片断着色器改成这样就更容以看出效果</p>
-<pre><code>gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // 红色
+<pre class="prettyprint"><code>gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // 红色
 </code></pre><p>将 <code>v_brightness</code> 乘以 10 就会是值的范围为 0 到 10，<code>fract</code> 会保留小数部分所以结果还是 0 到 1之间，
 但是总共是 10 次 0 到 1 了。</p>
 <p><div class="webgl_example_container">
@@ -258,10 +258,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </p>
 <p>现在应该更容易看出透视效果。</p>
 <p>线性插值应该是这样的公式</p>
-<pre><code> result = (1 - t) * a + t * b
+<pre class="prettyprint"><code> result = (1 - t) * a + t * b
 </code></pre><p><code>t</code> 的范围是 0 到 1，表示 <code>a</code> 到 <code>b</code> 之间的位置，0 表示在 <code>a</code> 点，1 表示在 <code>b</code> 点。</p>
 <p>可变量经过 WebGL 的插值时使用这个公式</p>
-<pre><code> result = (1 - t) * a / aW + t * b / bW
+<pre class="prettyprint"><code> result = (1 - t) * a / aW + t * b / bW
           -----------------------------
              (1 - t) / aW + t / bW
 </code></pre><p><code>aW</code> 表示 <code>a</code> 点的 <code>W</code> 值，也就是 <code>gl_Position.w</code> 的值，而不一定等于缓冲中的值，
@@ -275,7 +275,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </p>
 <p>现在将例子中的顶点着色器做一些修改，手工除以 <code>W</code>，只增加了一行代码</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -306,19 +306,19 @@ WebGL就不能正确的对可变量的插值实现透视。</p>
 <p>如果你还记得的话 <code>W</code> 就是<a href="webgl-3d-perspective.html">透视矩阵</a>中的 <code>Z</code>，
 当 <code>W</code> 始终为 <code>1</code> 时WebGL做的就是一个简单的线性插值，
 事实上如果你拿着上述的等式</p>
-<pre><code> result = (1 - t) * a / aW + t * b / bW
+<pre class="prettyprint"><code> result = (1 - t) * a / aW + t * b / bW
           -----------------------------
              (1 - t) / aW + t / bW
 </code></pre><p>设置所有的 <code>W</code> 为 1 就会得到</p>
-<pre><code> result = (1 - t) * a / 1 + t * b / 1
+<pre class="prettyprint"><code> result = (1 - t) * a / 1 + t * b / 1
           ---------------------------
              (1 - t) / 1 + t / 1
 </code></pre><p>除以 1 等于什么也没做，所以简化成这样</p>
-<pre><code> result = (1 - t) * a + t * b
+<pre class="prettyprint"><code> result = (1 - t) * a + t * b
           -------------------
              (1 - t) + t
 </code></pre><p><code>(1 - t) + t = 1</code>，继续简化</p>
-<pre><code> result = (1 - t) * a + t * b
+<pre class="prettyprint"><code> result = (1 - t) * a + t * b
 </code></pre><p>就和上方提到的线性插值一样了。</p>
 <p>现在就清楚为什么WebGL要使用 4x4 的矩阵和包含 <code>X</code>, <code>Y</code>, <code>Z</code>, 和 <code>W</code> 四个值的向量了吧。
 <code>X</code> 和 <code>Y</code> 除以 <code>W</code> 得到裁剪空间坐标，<code>Z</code> 除以 <code>W</code> 也得到裁剪空间的 Z 坐标，

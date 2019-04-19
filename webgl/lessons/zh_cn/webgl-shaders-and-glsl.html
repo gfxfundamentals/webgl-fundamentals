@@ -95,7 +95,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 一个典型的WebGL应用会有多个着色程序。</p>
 <h2 id="-">顶点着色器</h2>
 <p>一个顶点着色器的工作是生成裁剪空间坐标值，通常是以下的形式</p>
-<pre><code>void main() {
+<pre class="prettyprint"><code>void main() {
    gl_Position = doMathToMakeClipspaceCoordinates
 }
 </code></pre><p>每个顶点调用一次（顶点）着色器，每次调用都需要设置一个特殊的全局变量<code>gl_Position</code>，
@@ -109,14 +109,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <h3 id="attributes-">Attributes 属性</h3>
 <p>最常用的方法是缓冲和<strong>属性</strong>，在<a href="webgl-how-it-works.html">工作原理</a>
 中讲到了缓冲和属性，你可以创建缓冲，</p>
-<pre><code>var buf = gl.createBuffer();
+<pre class="prettyprint"><code>var buf = gl.createBuffer();
 </code></pre><p>将数据存入缓冲</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 </code></pre><p>然后初始化的时候，在你制作的（着色）程序中找到属性所在地址</p>
-<pre><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
+<pre class="prettyprint"><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
 </code></pre><p>在渲染的时候告诉WebGL怎么从缓冲中获取数据传递给属性</p>
-<pre><code>// 开启从缓冲中获取数据
+<pre class="prettyprint"><code>// 开启从缓冲中获取数据
 gl.enableVertexAttribArray(positionLoc);
 
 var numComponents = 3;  // (x, y, z)
@@ -128,7 +128,7 @@ var stride = 0;         // 到下一个数据跳多少位内存
 
 gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 </code></pre><p>在<a href="webgl-fundamentals.html">WebGL 基础概念</a>中示范了不做任何运算直接将数据传递给<code>gl_Position</code>。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 
 void main() {
    gl_Position = a_position;
@@ -138,21 +138,21 @@ void main() {
 <h3 id="uniforms-">Uniforms 全局变量</h3>
 <p>全局变量在一次绘制过程中传递给着色器的值都一样，在下面的一个简单的例子中，
 用全局变量给顶点着色器添加了一个偏移量</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 +uniform vec4 u_offset;
 
 void main() {
    gl_Position = a_position + u_offset;
 }
 </code></pre><p>现在可以把所有顶点偏移一个固定值，首先在初始化时找到全局变量的地址</p>
-<pre><code>var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
+<pre class="prettyprint"><code>var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
 </code></pre><p>然后在绘制前设置全局变量</p>
-<pre><code>gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 向右偏移一半屏幕宽度
+<pre class="prettyprint"><code>gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 向右偏移一半屏幕宽度
 </code></pre><p>要注意的是全局变量属于单个着色程序，如果多个着色程序有同名全局变量，需要找到每个全局变量并设置自己的值。
 我们调用<code>gl.uniform???</code>的时候只是设置了<strong>当前程序</strong>的全局变量，当前程序是传递给<code>gl.useProgram</code>
 的最后一个程序。</p>
 <p>全局变量有很多类型，对应的类型有对应的设置方法。</p>
-<pre><code>gl.uniform1f (floatUniformLoc, v);                 // float
+<pre class="prettyprint"><code>gl.uniform1f (floatUniformLoc, v);                 // float
 gl.uniform1fv(floatUniformLoc, [v]);               // float 或 float array
 gl.uniform2f (vec2UniformLoc,  v0, v1);            // vec2
 gl.uniform2fv(vec2UniformLoc,  [v0, v1]);          // vec2 或 vec2 array
@@ -181,7 +181,7 @@ gl.uniform1i (samplerCubeUniformLoc,   v);         // samplerCube (textures)
 gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 或 samplerCube array
 </code></pre><p>还有一些类型 <code>bool</code>, <code>bvec2</code>, <code>bvec3</code>, and <code>bvec4</code>。它们可用<code>gl.uniform?f?</code>或<code>gl.uniform?i?</code>。</p>
 <p>一个数组可以一次设置所有的全局变量，例如</p>
-<pre><code>// 着色器里
+<pre class="prettyprint"><code>// 着色器里
 uniform vec2 u_someVec2[3];
 
 // JavaScript 初始化时
@@ -190,7 +190,7 @@ var someVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2&quot;);
 // 渲染的时候
 gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // 设置数组 u_someVec2
 </code></pre><p>如果你想单独设置数组中的某个值，就要单独找到该值的地址。</p>
-<pre><code>// JavaScript 初始化时
+<pre class="prettyprint"><code>// JavaScript 初始化时
 var someVec2Element0Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[0]&quot;);
 var someVec2Element1Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[1]&quot;);
 var someVec2Element2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[2]&quot;);
@@ -200,19 +200,19 @@ gl.uniform2fv(someVec2Element0Loc, [1, 2]);  // set element 0
 gl.uniform2fv(someVec2Element1Loc, [3, 4]);  // set element 1
 gl.uniform2fv(someVec2Element2Loc, [5, 6]);  // set element 2
 </code></pre><p>同样的，如果你创建了一个结构体</p>
-<pre><code>struct SomeStruct {
+<pre class="prettyprint"><code>struct SomeStruct {
   bool active;
   vec2 someVec2;
 };
 uniform SomeStruct u_someThing;
 </code></pre><p>你需要找到每个元素的地址</p>
-<pre><code>var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
+<pre class="prettyprint"><code>var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
 var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
 </code></pre><h3 id="-">纹理（顶点着色器中）</h3>
 <p>同 <a href="#textures-">Textures 纹理（在片断着色器中）</a>。</p>
 <h2 id="-">片断着色器</h2>
 <p>一个片断着色器的工作是为当前光栅化的像素提供颜色值，通常是以下的形式</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 void main() {
    gl_FragColor = doMathToMakeAColor;
@@ -229,7 +229,7 @@ void main() {
 <h3 id="textures-">Textures 纹理（片断着色器中）</h3>
 <p>在着色器中获取纹理信息，可以先创建一个<code>sampler2D</code>类型全局变量，然后用GLSL方法<code>texture2D</code>
 从纹理中提取信息。</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 uniform sampler2D u_texture;
 
@@ -239,7 +239,7 @@ void main() {
 }
 </code></pre><p>从纹理中获取的数据<a href="webgl-3d-textures.html">取决于很多设置</a>。
 至少要创建并给纹理填充数据，例如</p>
-<pre><code>var tex = gl.createTexture();
+<pre class="prettyprint"><code>var tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 var level = 0;
 var width = 2;
@@ -250,19 +250,19 @@ var data = new Uint8Array([
 ]);
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
 </code></pre><p>在初始化时找到全局变量的地址</p>
-<pre><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
+<pre class="prettyprint"><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
 </code></pre><p>在渲染的时候WebGL要求纹理必须绑定到一个纹理单元上</p>
-<pre><code>var unit = 5;  // 挑选一个纹理单元
+<pre class="prettyprint"><code>var unit = 5;  // 挑选一个纹理单元
 gl.activeTexture(gl.TEXTURE0 + unit);
 gl.bindTexture(gl.TEXTURE_2D, tex);
 </code></pre><p>然后告诉着色器你要使用的纹理在那个纹理单元</p>
-<pre><code>gl.uniform1i(someSamplerLoc, unit);
+<pre class="prettyprint"><code>gl.uniform1i(someSamplerLoc, unit);
 </code></pre><h3 id="varyings-">Varyings 可变量</h3>
 <p>在<a href="webgl-how-it-works.html">工作原理</a>提到过，可变量是一种顶点着色器给片断着色器传值的方式。</p>
 <p>为了使用可变量，要在两个着色器中定义同名的可变量。
 给顶点着色器中可变量设置的值，会作为参考值进行内插，在绘制像素时传给片断着色器的可变量。</p>
 <p>顶点着色器</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 
 uniform vec4 u_offset;
 
@@ -273,7 +273,7 @@ void main() {
 +  v_positionWithOffset = a_position + u_offset;
 }
 </code></pre><p>片断着色器</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 +varying vec4 v_positionWithOffset;
 
@@ -290,18 +290,18 @@ void main() {
 所以它内建的数据类型例如<code>vec2</code>, <code>vec3</code>和 <code>vec4</code>分别代表两个值，三个值和四个值，
 类似的还有<code>mat2</code>, <code>mat3</code> 和 <code>mat4</code> 分别代表 2x2, 3x3 和 4x4 矩阵。
 你可以做一些运算例如常量和矢量的乘法。</p>
-<pre><code>vec4 a = vec4(1, 2, 3, 4);
+<pre class="prettyprint"><code>vec4 a = vec4(1, 2, 3, 4);
 vec4 b = a * 2.0;
 // b 现在是 vec4(2, 4, 6, 8);
 </code></pre><p>它同样可以做矩阵乘法以及矢量和矩阵的乘法</p>
-<pre><code>mat4 a = ???
+<pre class="prettyprint"><code>mat4 a = ???
 mat4 b = ???
 mat4 c = a * b;
 
 vec4 v = ???
 vec4 y = c * v;
 </code></pre><p>他还为矢量数据提供多种分量选择器，例如 vec4</p>
-<pre><code>vec4 v;
+<pre class="prettyprint"><code>vec4 v;
 </code></pre><ul>
 <li><code>v.x</code> 和 <code>v.s</code> 以及 <code>v.r</code> ， <code>v[0]</code> 表达的是同一个分量。</li>
 <li><code>v.y</code> 和 <code>v.t</code> 以及 <code>v.g</code> ， <code>v[1]</code> 表达的是同一个分量。</li>
@@ -309,44 +309,44 @@ vec4 y = c * v;
 <li><code>v.w</code> 和 <code>v.q</code> 以及 <code>v.a</code> ， <code>v[3]</code> 表达的是同一个分量。</li>
 </ul>
 <p>它还支持矢量<strong>调制</strong>，意味者你可以交换或重复分量。</p>
-<pre><code>v.yyyy
+<pre class="prettyprint"><code>v.yyyy
 </code></pre><p>和</p>
-<pre><code>vec4(v.y, v.y, v.y, v.y)
+<pre class="prettyprint"><code>vec4(v.y, v.y, v.y, v.y)
 </code></pre><p>是一样的</p>
 <p>同样的</p>
-<pre><code>v.bgra
+<pre class="prettyprint"><code>v.bgra
 </code></pre><p>和</p>
-<pre><code>vec4(v.b, v.g, v.r, v.a)
+<pre class="prettyprint"><code>vec4(v.b, v.g, v.r, v.a)
 </code></pre><p>等价</p>
 <p>当构造一个矢量或矩阵时可以一次提供多个分量，例如</p>
-<pre><code>vec4(v.rgb, 1)
+<pre class="prettyprint"><code>vec4(v.rgb, 1)
 </code></pre><p>和</p>
-<pre><code>vec4(v.r, v.g, v.b, 1)
+<pre class="prettyprint"><code>vec4(v.r, v.g, v.b, 1)
 </code></pre><p>是一样的</p>
 <p>同样</p>
-<pre><code>vec4(1)
+<pre class="prettyprint"><code>vec4(1)
 </code></pre><p>和</p>
-<pre><code>vec4(1, 1, 1, 1)
+<pre class="prettyprint"><code>vec4(1, 1, 1, 1)
 </code></pre><p>相同</p>
 <p>值得注意的是GLSL是一个强类型的语言。</p>
-<pre><code>float f = 1;  // 错误，1是int类型，不能将int型赋值给float
+<pre class="prettyprint"><code>float f = 1;  // 错误，1是int类型，不能将int型赋值给float
 </code></pre><p>正确的方式是</p>
-<pre><code>float f = 1.0;      // 使用float
+<pre class="prettyprint"><code>float f = 1.0;      // 使用float
 float f = float(1)  // 转换integer为float
 </code></pre><p>上例中 <code>vec4(v.rgb, 1)</code> 不会因为 <code>1</code> 报错，因为 <code>vec4</code> 内部进行了转换类似 <code>float(1)</code> 。</p>
 <p>GLSL有一系列内置方法，其中大多数运算支持多种数据类型，并且一次可以运算多个分量，例如</p>
-<pre><code>T sin(T angle)
+<pre class="prettyprint"><code>T sin(T angle)
 </code></pre><p>T可以是 <code>float</code>, <code>vec2</code>, <code>vec3</code> 或 <code>vec4</code> 。如果你传的是 <code>vec4</code> 返回的也是 <code>vec4</code>,
 返回结果对应每个分量的正弦值。换句话说如果 <code>v</code> 是 <code>vec4</code> 类型。那么</p>
-<pre><code>vec4 s = sin(v);
+<pre class="prettyprint"><code>vec4 s = sin(v);
 </code></pre><p>和</p>
-<pre><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
+<pre class="prettyprint"><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 </code></pre><p>是一样的</p>
 <p>有时一个参数是浮点型而剩下的都是 <code>T</code> ，意思是那个浮点数据会作为所有其他参数的一个新分量。
 例如如果 <code>v1</code> 和 <code>v2</code> 是 <code>vec4</code> 同时 <code>f</code> 是浮点型，那么</p>
-<pre><code>vec4 m = mix(v1, v2, f);
+<pre class="prettyprint"><code>vec4 m = mix(v1, v2, f);
 </code></pre><p>和</p>
-<pre><code>vec4 m = vec4(
+<pre class="prettyprint"><code>vec4 m = vec4(
   mix(v1.x, v2.x, f),
   mix(v1.y, v2.y, f),
   mix(v1.z, v2.z, f),

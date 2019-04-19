@@ -91,7 +91,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Для отображения изображений в WebGL нам нужно использовать текстуры. При чтении текстуры WebGL ожидает текстурные координаты, по аналогии с тем, как он ожидает координаты пространства отсечения вместо пикселей. Текстурные координаты занимают диапазон от 0.0 до 1.0, независимо от размеров текстуры.</p>
 <p>Так как мы отрисовываем один прямоугольник (ну, вообще 2 треугольника), нам нужно указать WebGL, за какой фрагмент текстуры отвечает каждая точка прямоугольника. Мы передадим эту информацию из вершинного шейдера фрагментному шейдеру, используя специальную varying-переменную. Она называется varying, потому что она варьируется. WebGL интерполирует переданные нами значения в вершинный шейдер, когда будет отрисовывать каждый пиксель во фрагментном шейдере.</p>
 <p>Мы используем вершинный шейдер <a href="webgl-fundamentals.html">из окончания предыдущей статьи</a>, плюс добавим атрибут для передачи текстурных координат, которые в дальнейшем попадут во фрагментный шейдер.</p>
-<pre><code>attribute vec2 a_texCoord;
+<pre class="prettyprint"><code>attribute vec2 a_texCoord;
 ...
 varying vec2 v_texCoord;
 
@@ -102,7 +102,7 @@ void main() {
    v_texCoord = a_texCoord;
 }
 </code></pre><p>Далее говорим фрагментному шейдеру, чтобы он брал цвета из текстуры.</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // наша текстура
@@ -117,7 +117,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Заключительным шагом будет загрузка изображения, создание текстуры и копирование изображения в текстуру. Из-за того, что браузер грузит изображения асинхронно, нам нужно немного изменить наш код, чтобы дожидаться загрузки текстуры. Как только текстура загрузится, мы отрисуем её.</p>
-<pre><code>function main() {
+<pre class="prettyprint"><code>function main() {
   var image = new Image();
   image.src = &quot;http://someimage/on/our/server&quot;;  // ДОЛЖНА НАХОДИТЬСЯ НА ТОМ ЖЕ ДОМЕНЕ!!!
   image.onload = function() {
@@ -170,7 +170,7 @@ function render(image) {
 </p>
 <p>Пока довольно банально, нужно что-то сделать с этим изображением.
 Как насчёт поменять местами красный и синий?</p>
-<pre><code>...
+<pre class="prettyprint"><code>...
 gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 ...
 </code></pre><p>Теперь красный и синий цвет поменялись местами.</p>
@@ -182,7 +182,7 @@ gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 </p>
 <p>А что если нам нужна обработка изображений, где мы принимаем в расчёт другие пиксели? Так как в WebGL идёт обращение к текстуре через текстурные координаты, которые от 0.0 до 1.0, мы можем вычислить, сколько занимает 1 пиксель через несложную математику <code>onePixel = 1.0 / textureSize</code>.</p>
 <p>Вот пример фрагментного шейдера, который берёт среднее значение каждого пикселя текстуры и его левого и правого соседа:</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // наша текстура
@@ -204,7 +204,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Ещё нам нужно передать размер текстуры из JavaScript.</p>
-<pre><code>...
+<pre class="prettyprint"><code>...
 
 var textureSizeLocation = gl.getUniformLocation(program, &quot;u_textureSize&quot;);
 
@@ -223,7 +223,7 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 </p>
 <p>Итак, теперь мы знаем, как брать значение других пикселей, теперь применим ядро свёртки, чтобы выполнить распространённые методы обработки изображений. Мы будем использовать ядро 3x3. Ядро свёртки - это просто матрица 3х3, где каждое значение в матрице означает, на сколько умножить 8 пикселей, находящихся вокруг пикселя, который мы отрисовываем. Затем мы делим результат на сумму всех значений ядра или на 1, смотря что больше. <a href="http://docs.gimp.org/en/plug-in-convmatrix.html">Вот довольно неплохая статья на этот счёт</a>. А <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">вот ещё одна статья</a>, показывающая, как написать код, задающий ядро свёртки на C++.</p>
 <p>В нашем случае мы планируем выполнить ту же работу в шейдере, поэтому вот код фрагментного шейдера.</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // наша текстура
@@ -254,7 +254,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>В JavaScript нужно задать ядро свёртки и делитель</p>
-<pre><code> function computeKernelWeight(kernel) {
+<pre class="prettyprint"><code> function computeKernelWeight(kernel) {
    var weight = kernel.reduce(function(prev, curr) {
        return prev + curr;
    });

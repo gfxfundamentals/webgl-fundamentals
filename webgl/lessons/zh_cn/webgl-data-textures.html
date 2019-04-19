@@ -131,7 +131,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 纹理，所以每个像素只有一个值，在 R， G， B通道是相同的。</p>
 <p>我们继续使用<a href="webgl-3d-textures.html">上篇文章</a>中的例子，
 首先修改纹理坐标，每个面使用整个纹理</p>
-<pre><code>// 填充立方体纹理坐标的缓冲
+<pre class="prettyprint"><code>// 填充立方体纹理坐标的缓冲
 function setTexcoords(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -145,7 +145,7 @@ function setTexcoords(gl) {
         1, 1,
         ...
 </code></pre><p>然后修改代码创建一个纹理</p>
-<pre><code>// 创建一个纹理
+<pre class="prettyprint"><code>// 创建一个纹理
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -185,7 +185,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </p>
 <p>哦！为什么不管用？！？！！</p>
 <p>查看 JavaScript 控制台看到这样的错误信息</p>
-<pre><code>WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
+<pre class="prettyprint"><code>WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
 </code></pre><p>结果是WebGL中有一种首次创建OpenGL后的模糊设定，
 计算机有时在数据为某些特定大小时速度会快一些，
 例如一次拷贝2，4 或 8 个字节比一次拷贝 1 个字节要快，
@@ -194,7 +194,7 @@ WebGL默认使用 4 字节长度，所以它期望每一行数据是多个 4 字
 但是 WebGL 试图在第一行获取 4 个字节，第二行获取 3 个字节，
 总共 7 个字节，所以会出现这样的报错。</p>
 <p>我们可以告诉WebGL一次处理 1 个字节</p>
-<pre><code>const alignment = 1;
+<pre class="prettyprint"><code>const alignment = 1;
 gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
 </code></pre><p>有效参数为 1，2，4 和 8.</p>
 <p>我觉得你可能无法计算出对齐数据和非对齐数据的速度区别，

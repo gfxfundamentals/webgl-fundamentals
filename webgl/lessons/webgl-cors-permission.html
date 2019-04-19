@@ -93,7 +93,7 @@ example the article about <a href="webgl-image-processing.html">image processing
 article about <a href="webgl-3d-textures.html">textures</a> and the article about
 <a href="webgl-2d-drawimage.html">implementing 2d drawImage</a>.</p>
 <p>Typically we download an image something like this</p>
-<pre><code>// creates a texture info { width: w, height: h, texture: tex }
+<pre class="prettyprint"><code>// creates a texture info { width: w, height: h, texture: tex }
 // The texture will start with 1x1 pixels and be updated
 // when the image has loaded
 function loadImageAndCreateTextureInfo(url) {
@@ -131,9 +131,9 @@ those things from looking at the contents of these private images.</p>
 <p>Just using <code>&lt;img src=&quot;private.jpg&quot;&gt;</code> is not a problem because although the image will get displayed by
 the browser a script can not see the data inside the image. <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">The Canvas2D API</a>
 has a way to see inside the image. First you draw the image into the canvas</p>
-<pre><code>ctx.drawImage(someImg, 0, 0);
+<pre class="prettyprint"><code>ctx.drawImage(someImg, 0, 0);
 </code></pre><p>Then you get the data</p>
-<pre><code>var data = ctx.getImageData(0, 0, width, heigh);
+<pre class="prettyprint"><code>var data = ctx.getImageData(0, 0, width, heigh);
 </code></pre><p>But, if the image you drew came from a different domain the browser will mark the canvas as <em>tainted</em> and
 you&#39;ll get a security error when you call <code>ctx.getImageData</code></p>
 <p>WebGL has to take it even one step further. In WebGL <code>gl.readPixels</code> is the equivilent call to <code>ctx.getImageData</code>
@@ -155,7 +155,7 @@ Notice the texture never loads and we get an error</p>
 to use the image.</p>
 <p>To do this we set the <code>crossOrigin</code> attribute to something and then when the browser tries to get the
 image from the server, if it&#39;s not the same domain, the browser will ask for CORS permission.</p>
-<pre><code>...
+<pre class="prettyprint"><code>...
 +    img.crossOrigin = &quot;&quot;;   // ask for CORS permission
     img.src = url;
 </code></pre><p>There are 3 values you can set <code>crossOrigin</code> to. One is <code>undefined</code> which is the default which means
@@ -169,13 +169,13 @@ except img tags and or canvas2d then we don&#39;t want to set <code>crossDomain<
 will make things slower.</p>
 <p>We can make a function that checks if the image we&#39;re trying to load is on the same origin and if
 so sets the <code>crossOrigin</code> attribute.</p>
-<pre><code>function requestCORSIfNotSameOrigin(img, url) {
+<pre class="prettyprint"><code>function requestCORSIfNotSameOrigin(img, url) {
   if ((new URL(url)).origin !== window.location.origin) {
     img.crossOrigin = &quot;&quot;;
   }
 }
 </code></pre><p>And we can use it like this</p>
-<pre><code>...
+<pre class="prettyprint"><code>...
 +requestCORSIfNotSameOrigin(img, url);
 img.src = url;
 </code></pre><p><div class="webgl_example_container">

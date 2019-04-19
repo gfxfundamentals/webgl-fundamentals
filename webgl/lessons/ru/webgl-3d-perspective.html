@@ -133,7 +133,7 @@ abs(3.333 - 6.666) = 3.333
 <p>Попробуем это на практике. Сначала изменим вершинный шейдер, чтобы в
 нём происходило деление на Z, которое предварительно было умножено на
 &quot;fudgeFactor&quot;.</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -152,7 +152,7 @@ void main() {
 отсечения от -1 до +1, я добавил 1, чтобы получить <code>zToDivideBy</code>
 в интервале от 0 до +2 * fudgeFactor</p>
 <p>Код также нуждается в редактировании для использования fudgeFactor.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
   var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
 
   ...
@@ -185,7 +185,7 @@ void main() {
 значения x,y,z,w и делит их на w автоматически.</p>
 <p>Мы можем воспользоваться этим очень легко, достаточно не выполнять деление
 в шейдере самим, а передать <code>zToDivideBy</code> в <code>gl_Position.w</code>.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -297,7 +297,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>Теперь изменим программу снова, чтобы использовать только матрицы.</p>
 <p>Сначала вернём обратно простой вершинный шейдер.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -307,7 +307,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Теперь сделаем функцию создания матрицы Z &rarr; W</p>
-<pre><code>function makeZToWMatrix(fudgeFactor) {
+<pre class="prettyprint"><code>function makeZToWMatrix(fudgeFactor) {
   return [
     1, 0, 0, 0,
     0, 1, 0, 0,
@@ -316,7 +316,7 @@ void main() {
   ];
 }
 </code></pre><p>и изменим код, чтобы матрица использовалась</p>
-<pre><code>    ...
+<pre class="prettyprint"><code>    ...
     // Задаём матрицы
 *    var matrix = makeZToWMatrix(fudgeFactor);
 *    matrix = m4.multiply(matrix, m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400));
@@ -351,7 +351,7 @@ WebGL отсекает Z от -1 до +1, как он отсекал ранее 
 того, вместо <code>fudgeFactor</code> мы используем <code>fieldOfView</code>, и у нас сразу
 будут все нужные значения.</p>
 <p>Ниже приводится функция создания матрицы.</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   perspective: function(fieldOfViewInRadians, aspect, near, far) {
     var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
     var rangeInv = 1.0 / (near - far);
@@ -399,7 +399,7 @@ WebGL отсекает Z от -1 до +1, как он отсекал ранее 
 происходила в (45, 150, 0). Давайте сместим её в (-150, 0, -360).</p>
 <p>Для этого нам нужно просто заменить прошлый вызов <code>m4.projection</code>
 на новый <code>m4.perspective</code>.</p>
-<pre><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+<pre class="prettyprint"><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
 var zFar = 2000;
 var matrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);

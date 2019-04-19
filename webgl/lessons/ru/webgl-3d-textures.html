@@ -95,7 +95,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Далее идут изменения в вершинном шейдере. Нам нужно передать в него текстурные
 координаты. В данном случае мы передаём их без изменений сразу во фрагментный
 шейдер.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 *attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -113,7 +113,7 @@ void main() {
 которую будем обращаться к текстуре. Мы используем текстурные координаты,
 переданные из вершинного шейдера и вызваем функцию <code>texture2D</code> для
 получения цвета из этой текстуры.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // приходит из вершинного шейдера
 *varying vec2 v_texcoord;
@@ -125,7 +125,7 @@ void main() {
 *   gl_FragColor = texture2D(u_texture, v_texcoord);
 }
 </code></pre><p>Нам необходимо настроить текстурные координаты.</p>
-<pre><code>// получаем ссылку на данные вершины
+<pre class="prettyprint"><code>// получаем ссылку на данные вершины
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 *var texcoordLocation = gl.getAttribLocation(program, &quot;a_texcoords&quot;);
 
@@ -143,7 +143,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 *setTexcoords(gl);
 </code></pre><p>Текстурные координаты сопоставляют целую текстуру с каждой гранью
 нашей буквы &#39;F&#39;.</p>
-<pre><code>*// заполняем буфер текстурными координатами для F
+<pre class="prettyprint"><code>*// заполняем буфер текстурными координатами для F
 *function setTexcoords(gl) {
 *  gl.bufferData(
 *      gl.ARRAY_BUFFER,
@@ -181,7 +181,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 случае мы могли бы начать отрисовку немедленно. А затем, когда изображение
 загрузится, мы перенесли бы его в текстуру. Именно такой подход мы и будем
 использовать далее.</p>
-<pre><code>*// создаём текстуру
+<pre class="prettyprint"><code>*// создаём текстуру
 *var texture = gl.createTexture();
 *gl.bindTexture(gl.TEXTURE_2D, texture);
 *
@@ -216,10 +216,10 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 <p>Я загрузил текстуру в фотошоп и отметил необходимые координаты в пикселях.</p>
 <p><img class="webgl_center" width="256" height="256" src="../../resources/f-texture-pixel-coords.png" /></p>
 <p>Для конвертации из пиксельных координат в текстурные мы можем использовать формулу.</p>
-<pre><code>texcoordX = pixelCoordX / (width  - 1)
+<pre class="prettyprint"><code>texcoordX = pixelCoordX / (width  - 1)
 texcoordY = pixelCoordY / (height - 1)
 </code></pre><p>Вот текстурные координаты для фронтальной части.</p>
-<pre><code>// лицевая часть левого столба
+<pre class="prettyprint"><code>// лицевая часть левого столба
  38 / 255,  44 / 255,
  38 / 255, 223 / 255,
 113 / 255,  44 / 255,
@@ -260,7 +260,7 @@ texcoordY = pixelCoordY / (height - 1)
 1.0 находится одна копия текстуры. От 1.0 до 2.0 - вторая. И даже от -4.0
 до -3.0 находится копия. Отобразим поверхность, используя следующие
 текстурные координаты.</p>
-<pre><code> -3, -1,
+<pre class="prettyprint"><code> -3, -1,
   2, -1,
  -3,  4,
  -3,  4,
@@ -274,7 +274,7 @@ texcoordY = pixelCoordY / (height - 1)
 
 </p>
 <p>Вы можете повторять текстуру в определённых направлениях через <code>CLAMP_TO_EDGE</code>. Например,</p>
-<pre><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+<pre class="prettyprint"><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>Попробуйте разные переключатели в примере выше, чтобы понять разницу.</p>
 <p>Вы могли заметить вызов функции <code>gl.generateMipmap</code> при загрузке текстуры.
@@ -373,7 +373,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 Вместо этого просто используйте <code>NEAREST</code> или <code>LINEAR</code>, так как они всегда
 используют первое изображение.</p>
 <p>Для задания фильтры вызовите <code>gl.texParameter</code> следующим образом:</p>
-<pre><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+<pre class="prettyprint"><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 </code></pre><p>Настройка <code>TEXTURE_MIN_FILTER</code> задаёт поведение фильтра, когда отрисовываемый
 объект меньше самого большого изображения мипмапа. Настройка <code>TEXTURE_MAG_FILTER</code>
@@ -395,7 +395,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 один из этих размеров не является степенью двойки, поэтому текстура не отображается. В шейдере, в котором
 вызывается <code>texture2D</code>, при некорректно настроенной текстуре используется цвет (0, 0, 0, 1) - чёрный. Если вы
 откроете консоль JavaScript (консоль браузера), вы сможете увидеть ошибки касательно проблемы с текстурой.</p>
-<pre><code>WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
+<pre class="prettyprint"><code>WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
    or not all the same size
 WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
    It maybe non-power-of-2 and have incompatible texture filtering or
@@ -404,12 +404,12 @@ WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
 и отключить мипмапы, используя фильтр<code>LINEAR</code> или <code>NEAREST</code>.</p>
 <p>Изменим код загрузки изображения соответствующим образом. Для начала нам понадобится
 функция, которая скажет, является ли значение степенью двойки.</p>
-<pre><code>function isPowerOf2(value) {
+<pre class="prettyprint"><code>function isPowerOf2(value) {
   return (value &amp; (value - 1)) == 0;
 }
 </code></pre><p>Я не буду вдаваться в двоичную арифметику, чтобы объяснить, как это работает.
 Это просто работает, мы же можем использовать функцию следующим образом:</p>
-<pre><code>// асинхронная загрузка изображения
+<pre class="prettyprint"><code>// асинхронная загрузка изображения
 var image = new Image();
 image.src = &quot;resources/keyboard.jpg&quot;;
 image.addEventListener(&#39;load&#39;, function() {
@@ -459,7 +459,7 @@ image.addEventListener(&#39;load&#39;, function() {
 все изображения в одну текстуру следующим образом:</p>
 <p><img class="webgl_center" src="../../resources/noodles.jpg" /></p>
 <p>и затем используем другой набор текстурных координат для каждой грани куба.</p>
-<pre><code>    // выбираем нижнее левое изображение
+<pre class="prettyprint"><code>    // выбираем нижнее левое изображение
     0   , 0  ,
     0   , 0.5,
     0.25, 0  ,

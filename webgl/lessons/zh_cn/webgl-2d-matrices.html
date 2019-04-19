@@ -197,7 +197,7 @@ newY = y * sy;
 <p>现在开始有趣的部分了，相乘后他们可以用一个矩阵代表三个变换，
 假定有一个方法<code>m3.multiply</code>可以将两个矩阵相乘并返回结果。</p>
 <p>为了方便讲解，我们先创建平移，旋转和缩放矩阵。</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
   translation: function(tx, ty) {
     return [
       1, 0, 0,
@@ -225,7 +225,7 @@ newY = y * sy;
   },
 };
 </code></pre><p>现在该修改着色器了，原来的着色器像这样</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -246,7 +246,7 @@ void main() {
   vec2 position = rotatedPosition + u_translation;
   ...
 </code></pre><p>新着色器就简单多了。</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -257,7 +257,7 @@ void main() {
   vec2 position = (u_matrix * vec3(a_position, 1)).xy;
   ...
 </code></pre><p>这是使用的方法</p>
-<pre><code>  // 绘制场景
+<pre class="prettyprint"><code>  // 绘制场景
   function drawScene() {
 
     ,,,
@@ -287,7 +287,7 @@ void main() {
 </p>
 <p>可能你还会问，那又怎样？看起来没什么特别好的地方。
 但是，如果现在我们想改变转换顺序的话，就不需要重写一个着色器了，只需要改变一下数学运算。</p>
-<pre><code>    ...
+<pre class="prettyprint"><code>    ...
     // 矩阵相乘
     var matrix = m3.multiply(scaleMatrix, rotationMatrix);
     matrix = m3.multiply(matrix, translationMatrix);
@@ -303,7 +303,7 @@ void main() {
 月球属于绕太阳转动的地球的一部分，或者树上的树枝。
 写一个简单的层级运动的例子，我们来画5个 &#39;F&#39; ，并且每个 &#39;F&#39; 
 都以前一个的矩阵为基础。</p>
-<pre><code>  // 绘制场景
+<pre class="prettyprint"><code>  // 绘制场景
   function drawScene() {
     // 清空画布
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -338,7 +338,7 @@ void main() {
 <div class="webgl_center">matrixX * identity = matrixX</div>
 
 <p>这是创建单位矩阵的代码。</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
   identity function() {
     return [
       1, 0, 0,
@@ -359,7 +359,7 @@ void main() {
 （当然，改变转换顺序的那个例子除外）。
 这是因为我们总是绕原点旋转，而 &#39;F&#39; 的原点就是左上角，也就是 (0, 0) 。</p>
 <p>现在我们可以使用矩阵运算，并且自定义转换的顺序。所以让我们改变旋转的中心</p>
-<pre><code>    // 创建一个矩阵，可以将原点移动到 &#39;F&#39; 的中心
+<pre class="prettyprint"><code>    // 创建一个矩阵，可以将原点移动到 &#39;F&#39; 的中心
     var moveOriginMatrix = m3.translation(-50, -75);
     ...
 
@@ -378,7 +378,7 @@ void main() {
 所以现在你可能知道为什么PhotoShop或Flash可以让你移动旋转中心。</p>
 <p>还可以做更有趣的事情，如果你回想第一篇文章<a href="webgl-fundamentals.html">WebGL 基础概念</a>，
 可能会记得在着色器中我们将像素坐标转换到裁剪空间，这是当时的代码</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
   // 从像素坐标转换到 0.0 到 1.0
   vec2 zeroToOne = position / u_resolution;
 
@@ -396,7 +396,7 @@ void main() {
 第三个平移  -1.0,-1.0 然后第四个将 Y 缩放 -1。
 然后将他们乘在一起，由于运算很简单，所以我们就直接定义一个 <code>projection</code>
 方法，根据分辨率直接生成矩阵。</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
   projection: function(width, height) {
     // 注意：这个矩阵翻转了 Y 轴，所以 0 在上方
     return [
@@ -408,7 +408,7 @@ void main() {
 
   ...
 </code></pre><p>现在可以简化着色器，这是新的着色器。</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -419,7 +419,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>在JavaScript中需要乘上投影矩阵</p>
-<pre><code>  // 绘制场景
+<pre class="prettyprint"><code>  // 绘制场景
   function drawScene() {
     ...
 
@@ -446,7 +446,7 @@ void main() {
 </p>
 <p>在继续之前我们可以先简化一下操作，虽然先创建一些矩阵再将它们相乘很常见，
 但是按照我们的顺序依次操作矩阵也比较常见，比较高效的做法是创建这样的方法</p>
-<pre><code>var m3 = {
+<pre class="prettyprint"><code>var m3 = {
 
   ...
 
@@ -466,7 +466,7 @@ void main() {
 
 };
 </code></pre><p>这能够让我们将 7 行的矩阵代码转换成 4 行</p>
-<pre><code>// 计算矩阵
+<pre class="prettyprint"><code>// 计算矩阵
 var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
 matrix = m3.translate(matrix, translation[0], translation[1]);
 matrix = m3.rotate(matrix, angleInRadians);
@@ -479,21 +479,21 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
 </p>
 <p>最后一件事，我们之前使用了多种矩阵顺序。第一例中使用</p>
-<pre><code>translation * rotation * scale // 平移 * 旋转 * 缩放
+<pre class="prettyprint"><code>translation * rotation * scale // 平移 * 旋转 * 缩放
 </code></pre><p>第二例中使用</p>
-<pre><code>scale * rotation * translation // 缩放 * 旋转 * 平移
+<pre class="prettyprint"><code>scale * rotation * translation // 缩放 * 旋转 * 平移
 </code></pre><p>然后观察了它们的区别。</p>
 <p>这有两种方式解读矩阵运算，给定这样一个表达式</p>
-<pre><code>projectionMat * translationMat * rotationMat * scaleMat * position
+<pre class="prettyprint"><code>projectionMat * translationMat * rotationMat * scaleMat * position
 </code></pre><p>第一种可能是多数人觉得比较自然的方式，从右向左解释</p>
 <p>首先将位置乘以缩放矩阵获得缩放后的位置</p>
-<pre><code>scaledPosition = scaleMat * position
+<pre class="prettyprint"><code>scaledPosition = scaleMat * position
 </code></pre><p>然后将缩放后的位置和旋转矩阵相乘得到缩放旋转位置</p>
-<pre><code>rotatedScaledPosition = rotationMat * scaledPosition
+<pre class="prettyprint"><code>rotatedScaledPosition = rotationMat * scaledPosition
 </code></pre><p>然后将缩放旋转位置和平移矩阵相乘得到缩放旋转平移位置</p>
-<pre><code>translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
+<pre class="prettyprint"><code>translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
 </code></pre><p>最后和投影矩阵相乘得到裁剪空间中的坐标</p>
-<pre><code>clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
+<pre class="prettyprint"><code>clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 </code></pre><p>第二种方式是从左往右解释，在这个例子中每一个矩阵改变的都是画布的<strong>坐标空间</strong>，
 画布的起始空间是裁剪空间的范围(-1 到 +1)，矩阵从左到右改变着画布所在的空间。</p>
 <p>第一步：没有矩阵（或者单位矩阵）</p>

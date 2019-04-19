@@ -96,7 +96,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 приложение на WebGL содержит множество шейдерных программ.</p>
 <h2 id="-">Вершинный шейдер</h2>
 <p>Задача вершинного шейдера - генерировать координаты пространства отсечения. Он всегда имеет вид</p>
-<pre><code>void main() {
+<pre class="prettyprint"><code>void main() {
    gl_Position = doMathToMakeClipspaceCoordinates
 }
 </code></pre><p>(doMathToMakeClipspaceCoordinates - выполнить математику для получения координат пространства отсечения, прим. пер.)</p>
@@ -113,14 +113,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Наиболее используемый способ - через буферы и <em>атрибуты</em>.
 Статья <a href="webgl-how-it-works.html">как работает WebGL</a> посвящена
 буферам и атрибутам. Вы создаёте буфер</p>
-<pre><code>var buf = gl.createBuffer();
+<pre class="prettyprint"><code>var buf = gl.createBuffer();
 </code></pre><p>записываете в него данные</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 </code></pre><p>Затем при инициализации вы получаете ссылку на атрибут в указанной шейдерной программе</p>
-<pre><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
+<pre class="prettyprint"><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
 </code></pre><p>а во время рендеринга указываете WebGL, как нужно перенести данные из буфера в атрибут</p>
-<pre><code>// включить получение данных из буфера для этого атрибута
+<pre class="prettyprint"><code>// включить получение данных из буфера для этого атрибута
 gl.enableVertexAttribArray(positionLoc);
 
 var numComponents = 3;  // (x, y, z)
@@ -133,7 +133,7 @@ var stride = 0;         // сколько байтов до следующей �
 gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 </code></pre><p>В статье <a href="webgl-fundamentals.html">как работает WebGL</a> мы рассматривали, что
 можно не выполнять какой-либо математики и просто передать данные напрямую.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 
 void main() {
    gl_Position = a_position;
@@ -145,7 +145,7 @@ void main() {
 <p>С точки зрения шейдера uniform-переменные - это значения, постоянные для всех
 вершин на протяжении одного вызова отрисовки. В качестве простого примера рассмотрим,
 как можно сделать смещение в вершинном шейдере:</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 +uniform vec4 u_offset;
 
 void main() {
@@ -153,9 +153,9 @@ void main() {
 }
 </code></pre><p>И теперь мы можем сместить все вершины на определённое значение. Для начала получим
 ссылку на uniform-переменную во время инициализации</p>
-<pre><code>var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
+<pre class="prettyprint"><code>var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
 </code></pre><p>И затем перед отрисовкой установим значение uniform-переменной</p>
-<pre><code>gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // сместить все вершины вправо на полэкрана
+<pre class="prettyprint"><code>gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // сместить все вершины вправо на полэкрана
 </code></pre><p>Обратите внимание, что uniform-переменные принадлежат конкретной шейдерной программе. Если у
 вас есть несколько шейдерных программ, в которых объявлены uniform-переменные с одинаковым
 именем, каждая из переменных будет иметь собственную ссылку и собственное значение. При вызове
@@ -163,7 +163,7 @@ void main() {
 это та, которая была установлена последней через <code>gl.useProgram</code>.</p>
 <p>Uniform-переменные могут быть многих типов. Для каждого типа вам нужно вызвать
 соответствующую функцию для установки значения.</p>
-<pre><code>gl.uniform1f (floatUniformLoc, v);                 // для float
+<pre class="prettyprint"><code>gl.uniform1f (floatUniformLoc, v);                 // для float
 gl.uniform1fv(floatUniformLoc, [v]);               // для float или массива float
 gl.uniform2f (vec2UniformLoc,  v0, v1);            // для vec2
 gl.uniform2fv(vec2UniformLoc,  [v0, v1]);          // для vec2 или массива vec2
@@ -193,7 +193,7 @@ gl.uniform1iv(samplerCubeUniformLoc, [v]);         // для samplerCube или 
 </code></pre><p>Есть ещё типы <code>bool</code>, <code>bvec2</code>, <code>bvec3</code> и <code>bvec4</code>. Они используют либо функцию
 <code>gl.uniform?f?</code>, либо <code>gl.uniform?i?</code>.</p>
 <p>Отметим, что для массива вы можете установить все значения за один раз. Например,</p>
-<pre><code>// в шейдере
+<pre class="prettyprint"><code>// в шейдере
 uniform vec2 u_someVec2[3];
 
 // в JavaScript при инициализации
@@ -203,7 +203,7 @@ var someVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2&quot;);
 gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // установить все значения массива u_someVec2
 </code></pre><p>Но если вам нужно устанавливать значения элементам массива отдельно, вам нужно
 получить ссылку на каждый элемент отдельно:</p>
-<pre><code>// в JavaScript при инициализации
+<pre class="prettyprint"><code>// в JavaScript при инициализации
 var someVec2Element0Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[0]&quot;);
 var someVec2Element1Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[1]&quot;);
 var someVec2Element2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[2]&quot;);
@@ -213,13 +213,13 @@ gl.uniform2fv(someVec2Element0Loc, [1, 2]);  // устанавливаем 0
 gl.uniform2fv(someVec2Element1Loc, [3, 4]);  // устанавливаем 1
 gl.uniform2fv(someVec2Element2Loc, [5, 6]);  // устанавливаем 2
 </code></pre><p>Таким же образом при использовании структуры</p>
-<pre><code>struct SomeStruct {
+<pre class="prettyprint"><code>struct SomeStruct {
   bool active;
   vec2 someVec2;
 };
 uniform SomeStruct u_someThing;
 </code></pre><p>вам нужно получать ссылку на каждое поле отдельно</p>
-<pre><code>var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
+<pre class="prettyprint"><code>var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
 var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
 </code></pre><h3 id="textures-in-vertex-shaders">Текстуры в вершинном шейдере</h3>
 
@@ -227,7 +227,7 @@ var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.
 <h2 id="-">Фрагментный шейдер</h2>
 <p>Задача фрагментного шейдера - устанавливать цвет для текущего пикселя при растеризации.
 Он всегда выглядит следующим образом:</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 void main() {
    gl_FragColor = doMathToMakeAColor;
@@ -248,7 +248,7 @@ void main() {
 
 <p>Для получения в шейдере значения из текстуры мы создаём uniform-переменную <code>sampler2D</code>
 и используем функцию из GLSL по названию <code>texture2D</code> для получения значения из неё.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 uniform sampler2D u_texture;
 
@@ -258,7 +258,7 @@ void main() {
 }
 </code></pre><p>Какие именно данные приходят из текстуры - <a href="webgl-3d-textures.html">зависит от многих настроек</a>.
 Как минимум нам нужно создать текстуру и поместить в неё данные:</p>
-<pre><code>var tex = gl.createTexture();
+<pre class="prettyprint"><code>var tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 var level = 0;
 var width = 2;
@@ -269,13 +269,13 @@ var data = new Uint8Array([
 ]);
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
 </code></pre><p>Во время инициализации получаем ссылку на uniform-переменную в шейдерной программе</p>
-<pre><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
+<pre class="prettyprint"><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
 </code></pre><p>При рендеринге необходимо привязать её к текстурному блоку</p>
-<pre><code>var unit = 5;  // выбираем текстурный блок
+<pre class="prettyprint"><code>var unit = 5;  // выбираем текстурный блок
 gl.activeTexture(gl.TEXTURE0 + unit);
 gl.bindTexture(gl.TEXTURE_2D, tex);
 </code></pre><p>И указать шейдеру, к какому блоку мы привязали текстуру</p>
-<pre><code>gl.uniform1i(someSamplerLoc, unit);
+<pre class="prettyprint"><code>gl.uniform1i(someSamplerLoc, unit);
 </code></pre><h3 id="varyings">Varying-переменные</h3>
 
 <p>С помощью varying-переменных можно передать значение из вершинного шейдера во фрагментный
@@ -285,7 +285,7 @@ gl.bindTexture(gl.TEXTURE_2D, tex);
 При отрисовке пикселей WebGL интерполирует эти значения и передаст соответствующую
 varying-переменную во фрагментный шейдер.</p>
 <p>Вершинный шейдер:</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 
 uniform vec4 u_offset;
 
@@ -296,7 +296,7 @@ void main() {
 +  v_positionWithOffset = a_position + u_offset;
 }
 </code></pre><p>Фрагментный шейдер:</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 +varying vec4 v_positionWithOffset;
 
@@ -316,11 +316,11 @@ void main() {
 данных вроде <code>vec2</code>, <code>vec3</code> и <code>vec4</code>, которые представляют 2 значения, 3 значения и 4 значения
 соответственно. Также имеются <code>mat2</code>, <code>mat3</code> и <code>mat4</code> для матриц 2х2, 3х3 и 4х4. Вы можете
 выполнять такие операции, как умножение <code>vec</code> на скалярное значение.</p>
-<pre><code>vec4 a = vec4(1, 2, 3, 4);
+<pre class="prettyprint"><code>vec4 a = vec4(1, 2, 3, 4);
 vec4 b = a * 2.0;
 // b теперь стало vec4(2, 4, 6, 8);
 </code></pre><p>Аналогичным образом можно умножать матрицы или вектор на матрицу.</p>
-<pre><code>mat4 a = ???
+<pre class="prettyprint"><code>mat4 a = ???
 mat4 b = ???
 mat4 c = a * b;
 
@@ -328,7 +328,7 @@ vec4 v = ???
 vec4 y = c * v;
 </code></pre><p>В языке также содержатся разнообразные конструкции, позволяющие получать разные
 компоненты типа vec. Например, для vec4:</p>
-<pre><code>vec4 v;
+<pre class="prettyprint"><code>vec4 v;
 </code></pre><ul>
 <li><code>v.x</code> то же, что и <code>v.s</code> или <code>v.r</code> или <code>v[0]</code>.</li>
 <li><code>v.y</code> то же, что и <code>v.t</code> или <code>v.g</code> или <code>v[1]</code>.</li>
@@ -337,44 +337,44 @@ vec4 y = c * v;
 </ul>
 <p>Или можно вообще устроить <em>коктейль</em> из компонентов, в результате чего
 можно поменять местами или продублировать компоненты. Например,</p>
-<pre><code>v.yyyy
+<pre class="prettyprint"><code>v.yyyy
 </code></pre><p>то же самое, что и</p>
-<pre><code>vec4(v.y, v.y, v.y, v.y)
+<pre class="prettyprint"><code>vec4(v.y, v.y, v.y, v.y)
 </code></pre><p>Или</p>
-<pre><code>v.bgra
+<pre class="prettyprint"><code>v.bgra
 </code></pre><p>то же, что и</p>
-<pre><code>vec4(v.b, v.g, v.r, v.a)
+<pre class="prettyprint"><code>vec4(v.b, v.g, v.r, v.a)
 </code></pre><p>При создании vec или mat можно передать несколько компонентов за раз. Например,</p>
-<pre><code>vec4(v.rgb, 1)
+<pre class="prettyprint"><code>vec4(v.rgb, 1)
 </code></pre><p>то же самое, что и</p>
-<pre><code>vec4(v.r, v.g, v.b, 1)
+<pre class="prettyprint"><code>vec4(v.r, v.g, v.b, 1)
 </code></pre><p>Также</p>
-<pre><code>vec4(1)
+<pre class="prettyprint"><code>vec4(1)
 </code></pre><p>то же самое, что и</p>
-<pre><code>vec4(1, 1, 1, 1)
+<pre class="prettyprint"><code>vec4(1, 1, 1, 1)
 </code></pre><p>Одна вещь, о которую вы вероятней всего споткнётесь, это то,
 что GLSL - очень строго типизированный язык.</p>
-<pre><code>float f = 1;  // ОШИБКА! 1 имеет тип int. Нельзя присвоить int типу float
+<pre class="prettyprint"><code>float f = 1;  // ОШИБКА! 1 имеет тип int. Нельзя присвоить int типу float
 </code></pre><p>Вот корректный способ выполнить присваивание</p>
-<pre><code>float f = 1.0;      // использовать формат float
+<pre class="prettyprint"><code>float f = 1.0;      // использовать формат float
 float f = float(1)  // привести integer к float
 </code></pre><p>В примере выше <code>vec4(v.rgb, 1)</code> не ругается на <code>1</code>, потому что <code>vec4</code> приводит значения -
 точно так же, как и <code>float(1)</code>.</p>
 <p>GLSL содержит набор встроенных функций. Многие из них работают сразу с несклькими
 компонентами. Например,</p>
-<pre><code>T sin(T angle)
+<pre class="prettyprint"><code>T sin(T angle)
 </code></pre><p>означает, что T может быть <code>float</code>, <code>vec2</code>, <code>vec3</code> или <code>vec4</code>. Если передать <code>vec4</code>,
 вернётся тоже <code>vec4</code> и это будет синус каждого компонента. Другими словами, если <code>v</code>
 имеет тип <code>vec4</code>, то</p>
-<pre><code>vec4 s = sin(v);
+<pre class="prettyprint"><code>vec4 s = sin(v);
 </code></pre><p>будет аналогичным следующей записи</p>
-<pre><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
+<pre class="prettyprint"><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 </code></pre><p>Иногда один аргумент имеет тип float, остальные - тип <code>T</code>. Это означает, что float
 будет применён ко всем компонентам. Например, если <code>v1</code> и <code>v2</code> имеют тип <code>vec4</code> и
 <code>f</code> - тип float, тогда</p>
-<pre><code>vec4 m = mix(v1, v2, f);
+<pre class="prettyprint"><code>vec4 m = mix(v1, v2, f);
 </code></pre><p>будет равносильно следующей записи</p>
-<pre><code>vec4 m = vec4(
+<pre class="prettyprint"><code>vec4 m = vec4(
   mix(v1.x, v2.x, f),
   mix(v1.y, v2.y, f),
   mix(v1.z, v2.z, f),

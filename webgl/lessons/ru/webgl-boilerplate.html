@@ -96,7 +96,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 необходимо скомпилировать и скомпоновать. В 99% случаев этот процесс будет
 одинаковым в каждой программе WebGL.</p>
 <p>Вот шаблон для компиляции шейдера.</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * Создание и компиляция шейдера
  *
  * @param {!WebGLRenderingContext} gl Контекст WebGL
@@ -124,7 +124,7 @@ function compileShader(gl, shaderSource, shaderType) {
   return shader;
 }
 </code></pre><p>И шаблон кода для компоновки 2 шейдеров в программу</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * Создаём программу из 2 шейдеров
  *
  * @param {!WebGLRenderingContext) gl Контекст WebGL
@@ -157,7 +157,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 будет одинаковым.</p>
 <p>Мне нравится хранить код шейдеров тегах &lt;script&gt;. Их так легче
 редактировать. Поэтому я использую следующий код:</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * Создание шейдера из содержимого тега
  *
  * @param {!WebGLRenderingContext} gl Контекст WebGL
@@ -190,10 +190,10 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
   return compileShader(gl, shaderSource, opt_shaderType);
 };
 </code></pre><p>Теперь для компиляции шейдера мне нужно лишь</p>
-<pre><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
+<pre class="prettyprint"><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
 </code></pre><p>Обычно я захожу немного дальше и создаю функцию для компиляции двух шейдеров
 из тега скрипта, прикрепления их к программе и их компоновки</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * Создание программы из 2 тегов скриптов
  *
  * @param {!WebGLRenderingContext} gl Контекст WebGL
@@ -211,9 +211,9 @@ function createProgramFromScripts(
 </code></pre><p>Кроме того практически в каждой программе WebGL я использую код для изменения
 размера canvas. Вы можете <a href="webgl-resizing-the-canvas.html">посмотреть реализацию функции здесь</a>.</p>
 <p>Во всех примерах эти две фунцкии подключаются через</p>
-<pre><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
+<pre class="prettyprint"><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>и используются следующим образом</p>
-<pre><code>var program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(
   gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...

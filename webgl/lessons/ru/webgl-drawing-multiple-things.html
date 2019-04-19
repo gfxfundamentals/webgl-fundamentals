@@ -95,9 +95,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 на руках есть больше 70 функций, которые подготавливают состояние
 для этой единственной функции. Для примера представьте, что вам нужна
 функция для отрисовки окружности. Вы могли бы написать что-то вроде</p>
-<pre><code>function drawCircle(centerX, centerY, radius, color) { ... }
+<pre class="prettyprint"><code>function drawCircle(centerX, centerY, radius, color) { ... }
 </code></pre><p>Или же такой вариант.</p>
-<pre><code>var centerX;
+<pre class="prettyprint"><code>var centerX;
 var centerY;
 var radius;
 var color;
@@ -165,7 +165,7 @@ function drawCircle() {
 <p>Итак, код. Наш шейдер практически не изменился с последнего
 <a href="webgl-3d-perspective.html">примера о перспективе</a>, за исключением того,
 что добавился <code>u_colorMult</code>, на который умножатся цвета вершин.</p>
-<pre><code>// Передаётся из вершинного шейдера
+<pre class="prettyprint"><code>// Передаётся из вершинного шейдера
 varying vec4 v_color;
 
 uniform vec4 u_colorMult;
@@ -174,7 +174,7 @@ void main() {
    gl_FragColor = v_color * u_colorMult;
 }
 </code></pre><p>При инициализации:</p>
-<pre><code>// uniform-переменные для каждого отображаемого объекта
+<pre class="prettyprint"><code>// uniform-переменные для каждого отображаемого объекта
 var sphereUniforms = {
   u_colorMult: [0.5, 1, 0.5, 1],
   u_matrix: m4.identity(),
@@ -193,7 +193,7 @@ var sphereTranslation = [  0, 0, 0];
 var cubeTranslation   = [-40, 0, 0];
 var coneTranslation   = [ 40, 0, 0];
 </code></pre><p>При рендеринге:</p>
-<pre><code>var sphereXRotation =  time;
+<pre class="prettyprint"><code>var sphereXRotation =  time;
 var sphereYRotation =  time;
 var cubeXRotation   = -time;
 var cubeYRotation   =  time;
@@ -269,7 +269,7 @@ gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 </ol>
 <p>Небольшим упрощением будет создание массива объектов для отрисовки и
 помещением в него 3 наших объектов.</p>
-<pre><code>var objectsToDraw = [
+<pre class="prettyprint"><code>var objectsToDraw = [
   {
     programInfo: programInfo,
     bufferInfo: sphereBufferInfo,
@@ -287,7 +287,7 @@ gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
   },
 ];
 </code></pre><p>При отрисовке нам нужно обновить матрицы</p>
-<pre><code>var sphereXRotation =  time;
+<pre class="prettyprint"><code>var sphereXRotation =  time;
 var sphereYRotation =  time;
 var cubeXRotation   = -time;
 var cubeYRotation   =  time;
@@ -313,7 +313,7 @@ coneUniforms.u_matrix = computeMatrix(
     coneXRotation,
     coneYRotation);
 </code></pre><p>И теперь код отрисовки - это просто цикл</p>
-<pre><code>// ------ Отрисовка объектов --------
+<pre class="prettyprint"><code>// ------ Отрисовка объектов --------
 
 objectsToDraw.forEach(function(object) {
   var programInfo = object.programInfo;
@@ -344,7 +344,7 @@ objectsToDraw.forEach(function(object) {
 Аналогично, если мы отрисовываем тот же объект/геометрию/вершину, нам
 не нужно устанавливать их снова.</p>
 <p>Очень простая оптимизация может выглядеть следующим образом:</p>
-<pre><code>var lastUsedProgramInfo = null;
+<pre class="prettyprint"><code>var lastUsedProgramInfo = null;
 var lastUsedBufferInfo = null;
 
 objectsToDraw.forEach(function(object) {
@@ -378,7 +378,7 @@ objectsToDraw.forEach(function(object) {
 });
 </code></pre><p>А теперь давайте создадим много объектов. Вместо 3 объектов мы сделаем
 значительно больший массив объектов.</p>
-<pre><code>// записываем фигуры в массив, чтобы было проще выбрать случайную
+<pre class="prettyprint"><code>// записываем фигуры в массив, чтобы было проще выбрать случайную
 var shapes = [
   sphereBufferInfo,
   cubeBufferInfo,
@@ -415,7 +415,7 @@ for (var ii = 0; ii &lt; numObjects; ++ii) {
   });
 }
 </code></pre><p>При рендеринге</p>
-<pre><code>// Вычисляем матрицы для каждого объекта
+<pre class="prettyprint"><code>// Вычисляем матрицы для каждого объекта
 objects.forEach(function(object) {
   object.uniforms.u_matrix = computeMatrix(
       viewMatrix,

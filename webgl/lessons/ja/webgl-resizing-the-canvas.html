@@ -91,11 +91,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ふたつめは、canvasの「表示サイズ」です。canvasの表示上のサイズは、CSS(style)で決定します。</p>
 <p>canvasの「<strong>描画バッファーのサイズ</strong>」を設定する方法は２種類あります。
 ひとつめは、HTMLを使う方法です。</p>
-<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>ふたつめは、JavaScriptを使う方法です。こちらの方法では、HTML側は</p>
-<pre><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
 </code></pre><p>JavaScript側は、</p>
-<pre><code>var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code>var canvas = document.getElementById(&quot;c&quot;);
 canvas.width = 400;
 canvas.height = 300;
 </code></pre><p>といったコードになります。</p>
@@ -106,9 +106,9 @@ canvas.height = 300;
 「表示サイズ」も同じく、400x300となります。</p>
 <p>別の例として「描画バッファが10x15ピクセル、表示サイズが400x300のcanvas」
 を定義する場合はこんなコードになります。</p>
-<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>同じ意味で、こんな風に書くこともできます。</p>
-<pre><code>&lt;style&gt;
+<pre class="prettyprint"><code>&lt;style&gt;
 #c {
   width: 400px;
   height: 300px;
@@ -131,7 +131,7 @@ canvas.height = 300;
 <p>では、canvasをウィンドウいっぱいにリサイズしたい時にはどうすればよいでしょうか？
 まず、CSSを使ってウィンドウいっぱいに引き伸ばしてみましょう。
 コードはこんな感じになります。</p>
-<pre><code>&lt;html&gt;
+<pre class="prettyprint"><code>&lt;html&gt;
   &lt;head&gt;
     &lt;style&gt;
       /* border幅は0にしておく */
@@ -156,7 +156,7 @@ canvas.height = 300;
 これを実現するには、<code>clientWidth</code>と<code>clientHeight</code>を使います。
 これはHTMLのすべての要素が持っているプロパティです。
 これを使えばその要素が実際に表示されているサイズをJavaScriptから取得できます。</p>
-<pre><code>function resize(canvas) {
+<pre class="prettyprint"><code>function resize(canvas) {
   // ブラウザがcanvasを表示しているサイズを調べる。
   var displayWidth  = canvas.clientWidth;
   var displayHeight = canvas.clientHeight;
@@ -174,7 +174,7 @@ canvas.height = 300;
 </code></pre><p>WebGLアプリケーションの多くは<a href="webgl-animation.html">アニメーションする</a>
 ので、この関数はレンダリングの直前に呼び出すのがよいでしょう。
 このタイミングであれば描画の直前にcanvasを適切なサイズに合わせることができます。</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
    resize(gl.canvas);
 
    ...
@@ -195,7 +195,7 @@ canvas.height = 300;
 つまり、canvasのサイズ変更があった時には、あなたが明示的にビューポートの設定を更新しなければなりません。</p>
 <p>ではそのようにコードを変更してみます。WebGLコンテキストはcanvasへの参照を
 持っているので、そのサイズをリサイズ処理に反映させましょう。</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
    resize(gl.canvas);
 
 +   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);

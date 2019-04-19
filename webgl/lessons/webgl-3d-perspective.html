@@ -130,7 +130,7 @@ fudgeFactor to multiply Z before we divide we can adjust how much smaller
 things get for a given distance.</p>
 <p>Let&#39;s try it.  First let&#39;s change the vertex shader to divide by Z after
 we&#39;ve multiplied it by our &quot;fudgeFactor&quot;.</p>
-<pre><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -148,7 +148,7 @@ void main() {
 </code></pre><p>Note, because Z in clip space goes from -1 to +1 I added 1 to get
 <code>zToDivideBy</code> to go from 0 to +2 * fudgeFactor</p>
 <p>We also need to update the code to let us set the fudgeFactor.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
   var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
 
   ...
@@ -180,7 +180,7 @@ what things used to look like before we added our divide by Z code.</p>
 our vertex shader and divides it by w automatically.</p>
 <p>We can prove this very easily by changing the shader and instead of doing
 the division ourselves, put <code>zToDivideBy</code> in <code>gl_Position.w</code>.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -291,7 +291,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>So, let&#39;s modify the program again to just use matrices.</p>
 <p>First let&#39;s put the vertex shader back. It&#39;s simple again</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -301,7 +301,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Next let&#39;s make a function to make our Z &rarr; W matrix.</p>
-<pre><code>function makeZToWMatrix(fudgeFactor) {
+<pre class="prettyprint"><code>function makeZToWMatrix(fudgeFactor) {
   return [
     1, 0, 0, 0,
     0, 1, 0, 0,
@@ -310,7 +310,7 @@ void main() {
   ];
 }
 </code></pre><p>and we&#39;ll change the code to use it.</p>
-<pre><code>    ...
+<pre class="prettyprint"><code>    ...
     // Compute the matrices
 *    var matrix = makeZToWMatrix(fudgeFactor);
 *    matrix = m4.multiply(matrix, m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400));
@@ -344,7 +344,7 @@ we can make any range we want get remapped to the -1 to +1.</p>
 better, rather than a <code>fudgeFactor</code> we&#39;ll decide on a <code>fieldOfView</code> and
 compute the right values to make that happen.</p>
 <p>Here&#39;s a function to build the matrix.</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   perspective: function(fieldOfViewInRadians, aspect, near, far) {
     var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
     var rangeInv = 1.0 / (near - far);
@@ -391,7 +391,7 @@ We can do that by moving our F. We were drawing at (45, 150, 0). Let&#39;s move 
 and let&#39;s set the rotation to something that makes it appear right side up.</p>
 <p>Now, to use it we just need to replace our old call to <code>m4.projection</code>
 with a call to <code>m4.perspective</code></p>
-<pre><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+<pre class="prettyprint"><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
 var zFar = 2000;
 var matrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);

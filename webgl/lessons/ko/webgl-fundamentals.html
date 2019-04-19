@@ -136,7 +136,7 @@ Vertex Shader는 clip 공간 좌표를 제공하고 Fragment Shader는 색상을
 
 <p>여기에 WebGL을 보여주는 간단한 WebGL 예제가 있는데요.</p>
 <p>Vertex Shader부터 시작해봅시다.</p>
-<pre><code>// Attribute는 Buffer로부터 데이터를 받습니다.
+<pre class="prettyprint"><code>// Attribute는 Buffer로부터 데이터를 받습니다.
 attribute vec4 a_position;
 
 // 모든 shader는 main 함수를 가지고 있습니다.
@@ -145,7 +145,7 @@ void main() {
   gl_Position = a_position;
 }
 </code></pre><p>실행될 때, GLSL 대신에 JavaScript로 작성된 것이라면 이렇게 쓰일 것입니다.</p>
-<pre><code>// *** PSEUDO CODE!! ***
+<pre class="prettyprint"><code>// *** PSEUDO CODE!! ***
 
 var positionBuffer = [
     0,   0, 0, 0,
@@ -170,7 +170,7 @@ drawArrays(..., offset, count) {
 </code></pre><p>실제로는 <code>positionBuffer</code>가 2진 데이터(아래 참조)로 변환되기 때문에 그렇게 간단하지 않습니다.
 이렇게 하면 Buffer에서 가져오는 데이터는 실제 계산과 약간 다르지만, 이걸로 Vertex Shader가 어떻게 실행되는지 알 수 있습니다.</p>
 <p>다음으로 필요한 것은 Fragment Shader 입니다.</p>
-<pre><code>// Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
+<pre class="prettyprint"><code>// Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
 // mediump(중간 정도 정밀도)은 기본값으로 좋습니다.
 precision mediump float;
 
@@ -182,11 +182,11 @@ void main() {
 WebGL에서 색상은 0에서 1까지 사용합니다.</p>
 <p>이제 두 Shader 함수를 작성해서 WebGL을 시작할 수 있습니다.</p>
 <p>먼저 HTML canvas 요소가 필요합니다.</p>
-<pre><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>그러면 JavaScript에서 찾을 수 있습니다.</p>
-<pre><code> var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code> var canvas = document.getElementById(&quot;c&quot;);
 </code></pre><p>이제 WebGLRenderingContext을 만들 수 있습니다.</p>
-<pre><code> var gl = canvas.getContext(&quot;webgl&quot;);
+<pre class="prettyprint"><code> var gl = canvas.getContext(&quot;webgl&quot;);
  if (!gl) {
    // webgl을 쓸 수 없어요!
    ...
@@ -195,7 +195,7 @@ WebGL에서 색상은 0에서 1까지 사용합니다.</p>
 JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 수 있습니다.
 예를 들어, 여러 줄의 template 문자열을 연결한 걸 AJAX를 이용해 내려받을 수 있겠죠.
 또는 이 경우, JavaScript type이 아닌 script 태그를 넣어야 합니다.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
   // Attribute는 Buffer로부터 데이터를 받습니다.
   attribute vec4 a_position;
@@ -224,7 +224,7 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 하지만 이 사이트에 있는 예제들은 runtime에서 GLSL 생성해야 할 만큼 복잡하지 않습니다.</p>
 <p>다음으로 Shader를 만들고, GLSL을 올리고, Shader를 컴파일하는 함수가 필요합니다.
 참고로 함수의 이름을 보면 어떤 일을 하는지 명확하기 때문에 주석을 작성하지 않았습니다.</p>
-<pre><code>function createShader(gl, type, source) {
+<pre class="prettyprint"><code>function createShader(gl, type, source) {
   var shader = gl.createShader(type);
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
@@ -238,13 +238,13 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
   gl.deleteShader(shader);
 }
 </code></pre><p>이제 우리는 두 Shader를 만드는 함수를 호출할 수 있습니다.</p>
-<pre><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
+<pre class="prettyprint"><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
 var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot;).text;
 
 var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 </code></pre><p>다음으로 두 Shader를 <em>program</em>으로 <em>link</em>해야 합니다.</p>
-<pre><code>function createProgram(gl, vertexShader, fragmentShader) {
+<pre class="prettyprint"><code>function createProgram(gl, vertexShader, fragmentShader) {
   var program = gl.createProgram();
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
@@ -259,23 +259,23 @@ var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
   gl.deleteProgram(program);
 }
 </code></pre><p>그리고 호출합니다.</p>
-<pre><code>var program = createProgram(gl, vertexShader, fragmentShader);
+<pre class="prettyprint"><code>var program = createProgram(gl, vertexShader, fragmentShader);
 </code></pre><p>GPU에 GLSL Program을 만들었고 이제 데이터를 제공해줘야 합니다.
 대부분의 WebGL API는 GLSL Program에 데이터 제공을 위한 상태 설정에 관한 것입니다.</p>
 <p>이 경우 우리는 그저 GLSL Program에 Attribute인 <code>a_position</code>을 입력하면 됩니다.
 먼저 해야 할 일은 우리가 방금 작성한 Program의 Attribute 위치를 찾는 것인데요.</p>
-<pre><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
+<pre class="prettyprint"><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 </code></pre><p>Attribute(또는 uniform) 위치를 찾는 것은 Render Loop가 아니라 초기화 과정에서 해야 합니다.</p>
 <p>Attribute는 buffer로부터 데이터를 가져오기 때문에 버퍼를 생성해야 합니다.</p>
-<pre><code>var positionBuffer = gl.createBuffer();
+<pre class="prettyprint"><code>var positionBuffer = gl.createBuffer();
 </code></pre><p>전역 bind point로 WebGL의 많은 자원을 조작할 수 있습니다.
 bind point를 WebGL 내부의 전역 변수라고 생각하시면 됩니다.
 먼저 bind point에 자원을 할당합시다.
 그러면 모든 함수가 bind point를 통해 자원을 참조합니다.
 자, point buffer를 할당해봅시다.</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 </code></pre><p>이제 bind point를 통해 buffer를 참조해서 데이터를 넣을 수 있습니다.</p>
-<pre><code>// 2d point 3개
+<pre class="prettyprint"><code>// 2d point 3개
 var positions = [
     0, 0,
     0, 0.5,
@@ -306,24 +306,24 @@ CSS는 canvas가 표시되는 크기를 결정하는데요.
 <p>Canvas의 픽셀 수와 표시되는 크기를 일치하도록 만들기 위해 <a href="webgl-resizing-the-canvas.html">여기에서 읽을 수 있는 도우미 함수를 쓰고 있습니다</a>.</p>
 <p>여기 있는 대부분의 예제는 window에서 실행할 경우 Canvas 크기가 400x300 픽셀이지만 iframe 내부에 있으면 사용 가능한 공간을 채우기 위해 늘어납니다.
 CSS로 크기를 결정하고 일치하도록 조정함으로써 우리는 이 두 가지 경우를 모두 쉽게 처리할 수 있습니다.</p>
-<pre><code>webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+<pre class="prettyprint"><code>webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 </code></pre><p>우리는 <code>gl_Position</code>으로 설정될 clip 공간 값을 화면 공간이라고 불리는 픽셀로 변환하는 방법을 WebGL에게 알려줘야 합니다.
 이를 위해 <code>gl.viewport</code>를 호출하고 현재 Canvas 크기를 넘겨야 합니다.</p>
-<pre><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+<pre class="prettyprint"><code>gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 </code></pre><p>이렇게 하면 -1 &lt;-&gt; +1 clip 공간이 x에 0 &lt;-&gt; <code>gl.canvas.width</code>, y에 0 &lt;-&gt; <code>gl.canvas.height</code>로 대응됩니다.</p>
 <p>Canvas를 깨끗하게 지워봅시다.
 <code>0, 0, 0, 0</code>은 각각 빨강, 초록, 파랑, 투명도이므로 canvas를 투명하게 만듭니다.</p>
-<pre><code>// Canvas 지우기
+<pre class="prettyprint"><code>// Canvas 지우기
 gl.clearColor(0, 0, 0, 0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 </code></pre><p>WebGL에게 Shader Program을 실행하라고 지시합니다.</p>
-<pre><code>// Program(Shader 씽) 사용 지시
+<pre class="prettyprint"><code>// Program(Shader 씽) 사용 지시
 gl.useProgram(program);
 </code></pre><p>다음으로 WebGL에게 우리가 위에서 설정한 버퍼에서 데이터를 가져와 shader의 attribute에 공급하는 방법을 알려줘야 하는데요.
 우선 attribute를 활성화해야 합니다.</p>
-<pre><code>gl.enableVertexAttribArray(positionAttributeLocation);
+<pre class="prettyprint"><code>gl.enableVertexAttribArray(positionAttributeLocation);
 </code></pre><p>그다음 데이터를 어떻게 꺼낼지 지정합니다.</p>
-<pre><code>// position buffer 할당
+<pre class="prettyprint"><code>// position buffer 할당
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
 // attribute에게 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 알려줍니다.
@@ -345,14 +345,14 @@ gl.vertexAttribPointer(
 이건 우리가 자유롭게 다른 것들을 <code>ARRAY_BUFFER</code> bind point에 할당할 수 있다는 걸 의미합니다.
 attribute는 <code>positionBuffer</code>를 계속 사용합니다.</p>
 <p>참고로 GLSL vertex shader 관점에서 <code>a_position</code> 속성은 <code>vec4</code>입니다.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 </code></pre><p><code>vec4</code>는 4개의 소수점 값입니다.
 JavaScript에서 <code>a_position = {x: 0, y: 0, z: 0, w: 0}</code>와 비슷하다고 생각하시면 됩니다.
 위에서 저희는 <code>size = 2</code>라고 설정했는데요.
 Attribute에서 기본값은 <code>0, 0, 0, 1</code>이기 때문에 버퍼에서 처음 2개 값(x와 y)을 가져올 겁니다.
 그리고 z와 w는 각각 0과 1의 기본값을 가질 겁니다.</p>
 <p>이제 우리는 드디어 WebGL에게 GLSL program을 실행해달라고 요청할 수 있습니다.</p>
-<pre><code>var primitiveType = gl.TRIANGLES;
+<pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
 var offset = 0;
 var count = 3;
 gl.drawArrays(primitiveType, offset, count);
@@ -363,11 +363,11 @@ gl.drawArrays(primitiveType, offset, count);
 <p><code>primitiveType</code>을 <code>gl.TRIANGLES</code>로 설정했기 때문에, vertex shader가 세 번 실행될 때마다 WebGL은 <code>gl_Position</code>에 설정한 세 값에 따라 삼각형을 그립니다.
 Canvas 크기에 상관없이 이 값들은 clip 공간 좌표에 있으며 방향에 따라 -1에서 1사이 값으로 바뀝니다.</p>
 <p>Vertex Shader는 단순히 positionBuffer 값을 <code>gl_Position</code>에 복사하기 때문에 삼각형은 clip 공간 좌표에 그려질 겁니다.</p>
-<pre><code>    0, 0,
+<pre class="prettyprint"><code>    0, 0,
     0, 0.5,
   0.7, 0,
 </code></pre><p>clip 공간에서 화면 공간으로 변환할 때 canvas 크기가 400x300이라면 다음과 같이 표시됩니다.</p>
-<pre><code> clip 공간         화면 공간
+<pre class="prettyprint"><code> clip 공간         화면 공간
    0, 0     -&gt;   200, 150
    0, 0.5   -&gt;   200, 225
  0.7, 0     -&gt;   340, 150
@@ -393,7 +393,7 @@ Canvas는 채널당 8bit이기 때문에 WebGL은 <code>[255, 0, 127, 255]</code
 <p>2D의 경우 clip 공간보다는 픽셀 단위로 작업해야 합니다.
 그러니까 픽셀 단위로 위치를 제공하고 clip 공간으로 변환할 수 있도록 shader를 수정해야 합니다.
 여기 새로운 vertex shader 입니다.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
 *  attribute vec2 a_position;
@@ -419,12 +419,12 @@ Canvas는 채널당 8bit이기 때문에 WebGL은 <code>[255, 0, 127, 255]</code
 <code>vec2</code>는 <code>vec4</code>와 비슷하지만 <code>x</code>와 <code>y</code>만을 가집니다.</p>
 <p>다음으로 <code>u_resolution</code>을 호출하는 <code>uniform</code>을 추가했습니다.
 설정하기 위해서는 위치를 찾아야 합니다.</p>
-<pre><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
+<pre class="prettyprint"><code>var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 </code></pre><p>나머지는 주석을 명확하게 해줍니다.
 <code>u_resolution</code>을 canvas의 해상도로 설정함으로써 shader는 픽셀 좌표로 제공한 <code>positionBuffer</code>에 넣은 위치를 가져와 clip 공간으로 변환할 겁니다.</p>
 <p>이제 우리는 위칫값을 clip 공간에서 픽셀로 바꿀 수 있습니다.
 이번에는 각각 3개의 점으로 이루어진 삼각형 두 개로 만든 사각형을 그려볼 겁니다.</p>
-<pre><code>var positions = [
+<pre class="prettyprint"><code>var positions = [
 *  10, 20,
 *  80, 20,
 *  10, 30,
@@ -436,14 +436,14 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 </code></pre><p>사용할 program을 설정한 뒤 우리는 생성한 uniform 값을 설정할 수 있습니다.
 <code>gl.useProgram</code>은 위의 <code>gl.bindBuffer</code>처럼 현재 program을 설정합니다.
 이후 모든 <code>gl.uniformXXX</code> 함수들은 현재 program의 uniform을 설정합니다.</p>
-<pre><code>gl.useProgram(program);
+<pre class="prettyprint"><code>gl.useProgram(program);
 
 ...
 
 // set the resolution
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 </code></pre><p>그리고 두 삼각형을 그리기 위해서는 vertex shader를 6번 호출해야 하므로 <code>count</code>를 <code>6</code>으로 바꿔야 합니다.</p>
-<pre><code>// 그리기
+<pre class="prettyprint"><code>// 그리기
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
 *var count = 6;
@@ -462,7 +462,7 @@ WebGL은 양수 Y를 위로, 음수 Y를 아래로 간주합니다.
 clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
 우린 아직 어떤 부호도 바꾸지 않았기 때문에 현재 0, 0은 좌측 하단이 됩니다.
 2D 그래픽 API를 사용해서 전통적인 왼쪽 상단 모서리를 얻으려면 clip 공간 y좌표를 뒤집어서 사용할 수 있습니다.</p>
-<pre><code>*gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+<pre class="prettyprint"><code>*gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>이제 우리가 예상한 위치에 사각형이 놓였습니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-top-left.html"></iframe>
@@ -473,7 +473,7 @@ clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
 <p>사각형을 정의하는 코드를 함수로 만들어서 다른 크기의 사각형을 호출할 수 있도록 합시다.
 사각형을 그리는 동안 우리는 색상 설정이 가능하도록 해봅시다.</p>
 <p>먼저 fragment shader가 색상 uniform 입력을 가져오도록 만듭니다.</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
   precision mediump float;
 
 +  uniform vec4 u_color;
@@ -483,7 +483,7 @@ clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
   }
 &lt;/script&gt;
 </code></pre><p>여기 무작위 색상의 사각형 50개를 무작위 위치에 그리는 코드가 있습니다.</p>
-<pre><code>var colorUniformLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
+<pre class="prettyprint"><code>var colorUniformLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 ...
 
 // 무작위 색상의 사각형 50개 무작위로 그리기

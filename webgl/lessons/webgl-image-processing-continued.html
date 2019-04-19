@@ -109,7 +109,7 @@ buffer of any kind.  But, by attaching a texture to a framebuffer we can
 render into that texture.</p>
 <p>First let&#39;s turn <a href="webgl-image-processing.html">the old texture creation
 code</a> into a function</p>
-<pre><code>  function createAndSetupTexture(gl) {
+<pre class="prettyprint"><code>  function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -128,7 +128,7 @@ code</a> into a function</p>
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 </code></pre><p>And now let&#39;s use that function to make 2 more textures and attach them to
 2 framebuffers.</p>
-<pre><code>  // create 2 textures and attach them to framebuffers.
+<pre class="prettyprint"><code>  // create 2 textures and attach them to framebuffers.
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
@@ -150,7 +150,7 @@ code</a> into a function</p>
         gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
   }
 </code></pre><p>Now let&#39;s make a set of kernels and then a list of them to apply.</p>
-<pre><code>  // Define several convolution kernels
+<pre class="prettyprint"><code>  // Define several convolution kernels
   var kernels = {
     normal: [
       0, 0, 0,
@@ -182,7 +182,7 @@ code</a> into a function</p>
     &quot;unsharpen&quot;
   ];
 </code></pre><p>And finally let&#39;s apply each one, ping ponging which texture we are rendering too</p>
-<pre><code>  // start with the original image
+<pre class="prettyprint"><code>  // start with the original image
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
   // don&#39;t y flip images while drawing to the textures
@@ -248,7 +248,7 @@ irrelevant.  All that matters is that pixel 0,0 in the framebuffer
 corresponds to 0,0 in our calculations.  To deal with this I made it
 possible to set whether to flip or not by adding one more input into the
 shader.</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_flipY;
 ...
@@ -262,7 +262,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>And then we can set it when we render with</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
   var flipYLocation = gl.getUniformLocation(program, &quot;u_flipY&quot;);
 

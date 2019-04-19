@@ -97,7 +97,7 @@ matches what a GPU can do.  Those 2 functions need to be compiled and
 linked.  That process is, 99% of the time, the same in every WebGL
 program.</p>
 <p>Here&#39;s the boilerplate code for compiling a shader.</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * Creates and compiles a shader.
  *
  * @param {!WebGLRenderingContext} gl The WebGL Context.
@@ -126,7 +126,7 @@ function compileShader(gl, shaderSource, shaderType) {
   return shader;
 }
 </code></pre><p>And the boilerplate code for linking 2 shaders into a program</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * Creates a program from 2 shaders.
  *
  * @param {!WebGLRenderingContext) gl The WebGL context.
@@ -159,7 +159,7 @@ exceptions might not be the best way to handle things.  Still, those few
 lines of code are pretty much the same in nearly every WebGL program.</p>
 <p>I like to store my shaders in non javascript &lt;script&gt; tags.  It makes
 them easy to edit so I use code like this.</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * Creates a shader from the content of a script tag.
  *
  * @param {!WebGLRenderingContext} gl The WebGL Context.
@@ -194,10 +194,10 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
   return compileShader(gl, shaderSource, opt_shaderType);
 };
 </code></pre><p>Now to compile a shader I can just do</p>
-<pre><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
+<pre class="prettyprint"><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
 </code></pre><p>I&#39;ll usually go one step further and make a function to compile two shaders
 from script tags, attach them to a program and link them.</p>
-<pre><code>/**
+<pre class="prettyprint"><code>/**
  * Creates a program from 2 script tags.
  *
  * @param {!WebGLRenderingContext} gl The WebGL Context.
@@ -215,9 +215,9 @@ function createProgramFromScripts(
 </code></pre><p>The other piece of code I use in almost every WebGL program is something to
 resize the canvas. You can see <a href="webgl-resizing-the-canvas.html">how that function is implemented here</a>.</p>
 <p>In the case of all the samples these 2 functions are included with</p>
-<pre><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
+<pre class="prettyprint"><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>and used like this</p>
-<pre><code>var program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(
   gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...

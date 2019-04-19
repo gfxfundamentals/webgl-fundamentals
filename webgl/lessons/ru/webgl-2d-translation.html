@@ -100,13 +100,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <a href="webgl-fundamentals.html">предыдущем примере</a>.</p>
 <p>Для начала заведём переменные для значений переноса, ширины, высоты и
 цвета прямоугольника</p>
-<pre><code>  var translation = [0, 0];
+<pre class="prettyprint"><code>  var translation = [0, 0];
   var width = 100;
   var height = 30;
   var color = [Math.random(), Math.random(), Math.random(), 1];
 </code></pre><p>Далее нам понадобится функция, чтобы всё перерисовывать. Мы сможем
 вызывать эту функцию после изменения значения переноса.</p>
-<pre><code>  // Отрисовка сцены.
+<pre class="prettyprint"><code>  // Отрисовка сцены.
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -165,7 +165,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p><img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
 <p>Исходя из нашего текущего кода нам нужно изменить функцию <code>setRectangle</code>
 примерно следующим образом:</p>
-<pre><code>// Заполняем буфер значениями, описывающими букву &#39;F&#39;
+<pre class="prettyprint"><code>// Заполняем буфер значениями, описывающими букву &#39;F&#39;
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -205,7 +205,7 @@ function setGeometry(gl, x, y) {
 отрисовке JavaScript&#39;у придётся заново генерировать все точки.</p>
 <p>Есть более простой способ. Нужно просто осуществлять перенос геометрии в шейдере.</p>
 <p>Так будет выглядеть шейдер:</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -219,7 +219,7 @@ void main() {
 *   vec2 zeroToOne = position / u_resolution;
    ...
 </code></pre><p>Код тоже немного изменится. Во-первых, нам нужно задать геометрию всего один раз.</p>
-<pre><code>// Заполняем буфер значениями, описывающими букву &#39;F&#39;
+<pre class="prettyprint"><code>// Заполняем буфер значениями, описывающими букву &#39;F&#39;
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -252,7 +252,7 @@ function setGeometry(gl) {
 }
 </code></pre><p>А затем перед отрисовкой нам нужно просто задавать необходимое значение
 переноса для переменной <code>u_translation</code>.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
 + var translationLocation = gl.getUniformLocation(
 +            program, &quot;u_translation&quot;);

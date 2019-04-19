@@ -96,7 +96,7 @@ and the code required to look up their locations can be wordy and tedious.</p>
 linking shader programs</a>.  Given a set of shaders
 like this.</p>
 <p>vertex shader:</p>
-<pre><code>uniform mat4 u_worldViewProjection;
+<pre class="prettyprint"><code>uniform mat4 u_worldViewProjection;
 uniform vec3 u_lightWorldPos;
 uniform mat4 u_world;
 uniform mat4 u_viewInverse;
@@ -121,7 +121,7 @@ void main() {
   gl_Position = v_position;
 }
 </code></pre><p>fragment shader:</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 varying vec4 v_position;
 varying vec2 v_texCoord;
@@ -159,7 +159,7 @@ void main() {
 }
 </code></pre><p>You&#39;d end up having to write code like this to look up and set all the
 various values to draw.</p>
-<pre><code>// At initialization time
+<pre class="prettyprint"><code>// At initialization time
 var u_worldViewProjectionLoc   = gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 var u_lightWorldPosLoc         = gl.getUniformLocation(program, &quot;u_lightWorldPos&quot;);
 var u_worldLoc                 = gl.getUniformLocation(program, &quot;u_world&quot;);
@@ -229,7 +229,7 @@ to tell us all the uniforms and locations and then setup functions to set
 them for us.  We can then pass in JavaScript objects to set our settings
 much more easily.  If that&#39;s clear as mud well, our code would look
 something like this</p>
-<pre><code>// At initialiation time
+<pre class="prettyprint"><code>// At initialiation time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -266,7 +266,7 @@ webglUtils.setUniforms(uniformSetters, uniforms);
 gl.drawArrays(...);
 </code></pre><p>That seems a heck of a lot smaller, easier, and less code to me.</p>
 <p>You can even use multiple JavaScript objects if it suits you. For example</p>
-<pre><code>// At initialiation time
+<pre class="prettyprint"><code>// At initialiation time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -342,7 +342,7 @@ objects.forEach(function(object) {
 <p>Let&#39;s take it a tiny step further. In the code above we setup a variable <code>attribs</code> with the buffers we created.
 Not shown is the code to setup those buffers. For example if you want to make positions, normals and texture
 coordinates you might need code like this</p>
-<pre><code>// a single triangle
+<pre class="prettyprint"><code>// a single triangle
 var positions = [0, -10, 0, 10, 10, 0, -10, 10, 0];
 var texcoords = [0.5, 0, 1, 1, 0, 1];
 var normals   = [0, 0, 1, 0, 0, 1, 0, 0, 1];
@@ -359,7 +359,7 @@ var normalBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 </code></pre><p>Looks like a pattern we can simplify as well.</p>
-<pre><code>// a single triangle
+<pre class="prettyprint"><code>// a single triangle
 var arrays = {
    position: { numComponents: 3, data: [0, -10, 0, 10, 10, 0, -10, 10, 0], },
    texcoord: { numComponents: 2, data: [0.5, 0, 1, 1, 0, 1],               },
@@ -368,7 +368,7 @@ var arrays = {
 
 var bufferInfo = createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>Much shorter! Now we can do this at render time</p>
-<pre><code>// Setup all the needed buffers and attributes.
+<pre class="prettyprint"><code>// Setup all the needed buffers and attributes.
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
@@ -384,7 +384,7 @@ gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 </p>
 <p>This will even work if we have indices. <code>webglUtils.setBuffersAndAttributes</code> will set all the attributes
 and setup the <code>ELEMENT_ARRAY_BUFFER</code> with your <code>indices</code> so you can call <code>gl.drawElements</code>.</p>
-<pre><code>// an indexed quad
+<pre class="prettyprint"><code>// an indexed quad
 var arrays = {
    position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
@@ -394,7 +394,7 @@ var arrays = {
 
 var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>and at render time we can call <code>gl.drawElements</code> instead of <code>gl.drawArrays</code>.</p>
-<pre><code>// Setup all the needed buffers and attributes.
+<pre class="prettyprint"><code>// Setup all the needed buffers and attributes.
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
@@ -409,7 +409,7 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 
 </p>
 <p><code>createBufferInfoFromArrays</code> basically makes an object that looks like this</p>
-<pre><code> bufferInfo = {
+<pre class="prettyprint"><code> bufferInfo = {
    numElements: 4,        // or whatever the number of elements is
    indices: WebGLBuffer,  // this property will not exist if there are no indices
    attribs: {
@@ -424,7 +424,7 @@ buffers and attributes.</p>
 almost always has 3 components (x, y, z) and <code>texcoords</code> almost always 2,
 indices 3, and normals 3, we can just let the system guess the number of
 components.</p>
-<pre><code>// an indexed quad
+<pre class="prettyprint"><code>// an indexed quad
 var arrays = {
    position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
    texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
@@ -452,13 +452,13 @@ attributes WebGL will set <code>w = 1</code> automatically.  But that means we c
 easily know the user&#39;s intent since what they declared in their shader
 might not match the number of components they provide.</p>
 <p>Looking for more patterns there&#39;s this</p>
-<pre><code>var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 </code></pre><p>Let&#39;s simplify that too into just</p>
-<pre><code>var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre class="prettyprint"><code>var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 </code></pre><p>Which returns something like</p>
-<pre><code>programInfo = {
+<pre class="prettyprint"><code>programInfo = {
    program: WebGLProgram,  // program we just compiled
    uniformSetters: ...,    // setters as returned from webglUtils.createUniformSetters,
    attribSetters: ...,     // setters as returned from createAttribSetters,

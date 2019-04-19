@@ -98,7 +98,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>这个例子中就等两个图像都加载完成后再开始绘制。</p>
 <p>首先修改加载单个图像的方法，非常简单，
 先创建一个新的 <code>Image</code> 对象，设置加载的url，然后设置回调函数在图像加载完成后调用。</p>
-<pre><code>function loadImage(url, callback) {
+<pre class="prettyprint"><code>function loadImage(url, callback) {
   var image = new Image();
   image.src = url;
   image.onload = callback;
@@ -107,7 +107,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </code></pre><p>现在来创建一个方法加载一个 URL 序列，并且创建一个图像序列。
 首先设置 <code>imagesToLoad</code> 为加载图像的个数，然后为每个图像调用 <code>loadImage</code>，
 当 <code>imagesToLoad</code> 递减到 0 的时候说明所有图像加载完成，调用回调函数。</p>
-<pre><code>function loadImages(urls, callback) {
+<pre class="prettyprint"><code>function loadImages(urls, callback) {
   var images = [];
   var imagesToLoad = urls.length;
 
@@ -126,14 +126,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   }
 }
 </code></pre><p>然后就可以像这样调用 loadImages</p>
-<pre><code>function main() {
+<pre class="prettyprint"><code>function main() {
   loadImages([
     &quot;resources/leaves.jpg&quot;,
     &quot;resources/star.jpg&quot;,
   ], render);
 }
 </code></pre><p>接下来修改着色器使用两个纹理，在这个例子中我们将两个纹理相乘。</p>
-<pre><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 纹理
@@ -150,7 +150,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>需要创建两个WebGL纹理对象。</p>
-<pre><code>  // 创建两个纹理
+<pre class="prettyprint"><code>  // 创建两个纹理
   var textures = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
     var texture = gl.createTexture();
@@ -170,7 +170,7 @@ void main() {
   }
 </code></pre><p>WebGL有一个叫做&quot;texture units&quot;的对象，你可以把它看成是一个纹理引用的序列，
 你需要告诉着色器每个 sampler（取样器） 使用哪一个 texture unit（纹理单元）。</p>
-<pre><code>  // 寻找取样器的位置
+<pre class="prettyprint"><code>  // 寻找取样器的位置
   var u_image0Location = gl.getUniformLocation(program, &quot;u_image0&quot;);
   var u_image1Location = gl.getUniformLocation(program, &quot;u_image1&quot;);
 
@@ -180,7 +180,7 @@ void main() {
   gl.uniform1i(u_image0Location, 0);  // 纹理单元 0
   gl.uniform1i(u_image1Location, 1);  // 纹理单元 1
 </code></pre><p>然后将每个纹理单元绑定纹理。</p>
-<pre><code>  // 设置每个纹理单元对应一个纹理
+<pre class="prettyprint"><code>  // 设置每个纹理单元对应一个纹理
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
@@ -202,7 +202,7 @@ void main() {
 每个纹理单元有两个目标对象，TEXTURE_2D 目标和 TEXTURE_CUBE_MAP 目标。
 每个纹理方法针对激活纹理单元上的一个目标，如果用 JavaScript 表示 WebGL
 方法可能像这样</p>
-<pre><code>var getContext = function() {
+<pre class="prettyprint"><code>var getContext = function() {
   var textureUnits = [
     { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
     { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
@@ -239,22 +239,22 @@ void main() {
   }
 };
 </code></pre><p>着色器获得纹理单元</p>
-<pre><code>  gl.uniform1i(u_image0Location, 0);  // 纹理单元 0
+<pre class="prettyprint"><code>  gl.uniform1i(u_image0Location, 0);  // 纹理单元 0
   gl.uniform1i(u_image1Location, 1);  // 纹理单元 1
 </code></pre><p>需要注意的是，设置全局变量的时候使用索引代替纹理单元，但是调用 gl.activeTexture
 的时候你需要传递特殊的常量gl.TEXTURE0, gl.TEXTURE1 之类。
 幸运的是这些常量是连续的，所以这些代码</p>
-<pre><code>  gl.activeTexture(gl.TEXTURE0);
+<pre class="prettyprint"><code>  gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </code></pre><p>可以写成这样</p>
-<pre><code>  gl.activeTexture(gl.TEXTURE0 + 0);
+<pre class="prettyprint"><code>  gl.activeTexture(gl.TEXTURE0 + 0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE0 + 1);
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </code></pre><p>或这样</p>
-<pre><code>  for (var ii = 0; ii &lt; 2; ++ii) {
+<pre class="prettyprint"><code>  for (var ii = 0; ii &lt; 2; ++ii) {
     gl.activeTexture(gl.TEXTURE0 + ii);
     gl.bindTexture(gl.TEXTURE_2D, textures[ii]);
   }

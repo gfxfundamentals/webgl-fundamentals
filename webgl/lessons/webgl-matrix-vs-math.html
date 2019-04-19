@@ -121,7 +121,7 @@ shows Lines and columns, lines being another word for row in this case since col
 <div class="webgl_center"><img src="resources/spreadsheet-column.png" style="width: 808px;"></div>
 
 <p>So, when we make a 3x3 of 4x4 matrix in JavaScript for WebGL we make them like this</p>
-<pre><code class="lang-js">const m3x3 = [
+<pre class="prettyprint"><code class="lang-js">const m3x3 = [
   0, 1, 2,  // row 0
   3, 4, 5,  // row 1
   6, 7, 8,  // row 2
@@ -136,14 +136,14 @@ const m4x4 = [
 </code></pre>
 <p>Clearly following the conventions above the first row of <code>m3x3</code> is <code>0, 1, 2</code> and the last row of <code>m4x4</code> is <code>12, 13, 14, 15</code></p>
 <p>As we see in <a href="webgl-2d-matrices.html">the first article on matrices</a> to make a fairly standard WebGL 3x3 2D translation matrix the translation values <code>ty</code> and <code>ty</code> go in locations 6 and 7</p>
-<pre><code class="lang-js">const some3x3TranslationMatrix = [
+<pre class="prettyprint"><code class="lang-js">const some3x3TranslationMatrix = [
    1,  0,  0,
    0,  1,  0,
   tx, ty,  1,
 ];
 </code></pre>
 <p>or for a 4x4 matrix which is introduced in <a href="webgl-3d-orthographic.html">the first article on 3D</a> the translation goes in locations 12, 13, 14 as in</p>
-<pre><code class="lang-js">const some4x4TranslationMatrix = [
+<pre class="prettyprint"><code class="lang-js">const some4x4TranslationMatrix = [
    1,  0,  0,  0,
    0,  1,  0,  0,
    0,  0,  1,  0,
@@ -158,7 +158,7 @@ const m4x4 = [
 
 <p>That leaves us with a problem. If we want our matrices to look like
 math matrices we might decide to write a 4x4 matrix like this</p>
-<pre><code class="lang-js">const some4x4TranslationMatrix = [
+<pre class="prettyprint"><code class="lang-js">const some4x4TranslationMatrix = [
    1,  0,  0,  tx,
    0,  1,  0,  ty,
    0,  0,  1,  tx,
@@ -169,7 +169,7 @@ math matrices we might decide to write a 4x4 matrix like this</p>
 <p>The first, second, and third columns are often considered the x, y, and z axis respectively and the last column is the position or translation.</p>
 <p>One issue is in code it would be no fun to try to get those parts
 separately. Want the Z axis? You&#39;d have to do this</p>
-<pre><code class="lang-js">const zAxis = [
+<pre class="prettyprint"><code class="lang-js">const zAxis = [
   some4x4Matrix[2],
   some4x4Matrix[6],
   some4x4Matrix[10],
@@ -177,7 +177,7 @@ separately. Want the Z axis? You&#39;d have to do this</p>
 </code></pre>
 <p>Ugh!</p>
 <p>So, the way WebGL, and OpenGL ES on which WebGL is based, gets around this is it calls rows &quot;columns&quot;.</p>
-<pre><code class="lang-js">const some4x4TranslationMatrix = [
+<pre class="prettyprint"><code class="lang-js">const some4x4TranslationMatrix = [
    1,  0,  0,  0,   // this is column 0
    0,  1,  0,  0,   // this is column 1
    0,  0,  1,  0,   // this is column 2
@@ -185,10 +185,10 @@ separately. Want the Z axis? You&#39;d have to do this</p>
 ];
 </code></pre>
 <p>Now it matches the math definition. Comparing to the example above, if we want the Z axis all we need to do is</p>
-<pre><code class="lang-js">const zAxis = some4x4Matrix.slice(9, 11);
+<pre class="prettyprint"><code class="lang-js">const zAxis = some4x4Matrix.slice(9, 11);
 </code></pre>
 <p>For those familiar with C++, OpenGL itself requires the 16 values of a 4x4 matrix to be consecutive in memory so in C++ we could create a <code>Vec4</code> struct or class</p>
-<pre><code class="lang-c++">// C++
+<pre class="prettyprint"><code class="lang-c++">// C++
 struct Vec4 {
   float x;
   float y;
@@ -197,7 +197,7 @@ struct Vec4 {
 };
 </code></pre>
 <p>and we could create a matrix4x4 from 4 of them</p>
-<pre><code class="lang-c++">// C++
+<pre class="prettyprint"><code class="lang-c++">// C++
 struct Mat4x4 {
   Vec4 x_axis;
   Vec4 y_axis;
@@ -206,14 +206,14 @@ struct Mat4x4 {
 }
 </code></pre>
 <p>or just</p>
-<pre><code class="lang-c++">// C++
+<pre class="prettyprint"><code class="lang-c++">// C++
 struct Mat4x4 {
   Vec4 column[4];
 }
 </code></pre>
 <p>And it would just appear to work. </p>
 <p>Unfortunately it looks nothing like the math version when you actually declare one statically in code.</p>
-<pre><code class="lang-C++">// C++
+<pre class="prettyprint"><code class="lang-C++">// C++
 Mat4x4 someTranslationMatrix = {
   {  1,  0,  0,  0, },
   {  0,  1,  0,  0, },
@@ -222,7 +222,7 @@ Mat4x4 someTranslationMatrix = {
 };
 </code></pre>
 <p>Or back to JavaScript where we don&#39;t generally have something like C++ structs.</p>
-<pre><code class="lang-js">const someTranslationMatrix = [
+<pre class="prettyprint"><code class="lang-js">const someTranslationMatrix = [
    1,  0,  0,  0,
    0,  1,  0,  0,
    0,  0,  1,  0,
@@ -231,7 +231,7 @@ Mat4x4 someTranslationMatrix = {
 </code></pre>
 <p>So, with this convention of calling rows &quot;columns&quot; some things are simpler but others can me more confusing if you&#39;re a math person.</p>
 <p>I bring all of this up because these article are written from the POV of a programmer, not a math person. That means like every other single dimensional array that is treated as a 2 dimensional array, rows go across.</p>
-<pre><code class="lang-js">const someTranslationMatrix = [
+<pre class="prettyprint"><code class="lang-js">const someTranslationMatrix = [
    1,  0,  0,  0,  // row 0
    0,  1,  0,  0,  // row 1
    0,  0,  1,  0,  // row 2
@@ -239,7 +239,7 @@ Mat4x4 someTranslationMatrix = {
 ];
 </code></pre>
 <p>just like</p>
-<pre><code class="lang-js">// happy face image
+<pre class="prettyprint"><code class="lang-js">// happy face image
 const dataFor7x8OneChannelImage = [
     0, 255, 255, 255, 255, 255,   0,  // row 0
   255,   0,   0,   0,   0,   0, 255,  // row 1

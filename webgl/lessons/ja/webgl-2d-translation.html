@@ -93,12 +93,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>最初の記事で出来たサンプルで、<code>setRectangle</code>に与えている値を変更したら、
 四角形を移動出来るように更新出来るだろう。これは<a href="webgl-fundamentals.html">先ほどのサンプル</a>の元のサンプルである。</p>
 <p>最初に四角形の移動距離と横と縦と色の変数を作成</p>
-<pre><code>  var translation = [0, 0];  // 移動距離
+<pre class="prettyprint"><code>  var translation = [0, 0];  // 移動距離
   var width = 100;           // 横
   var height = 30;           // 縦
   var color = [Math.random(), Math.random(), Math.random(), 1]; // 色
 </code></pre><p>そして、シーンの全てを描画する関数を作成。移動距離を変更したらこれを呼び出せる。</p>
-<pre><code>  // シーンを描画する
+<pre class="prettyprint"><code>  // シーンを描画する
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -153,7 +153,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>6つの三角形で出来ている’F&#39;のような図形を描画しようとしたら。。。</p>
 <p><img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
 <p>今のコードのようにするなら<code>setRectangle</code>をこういうふうにしなければいけない。</p>
-<pre><code>// バッファーに’F’の形の頂点を入れる。
+<pre class="prettyprint"><code>// バッファーに’F’の形の頂点を入れる。
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -192,7 +192,7 @@ function setGeometry(gl, x, y) {
 頂点全てを更新しなければいけない。</p>
 <p>もっと簡単の方法がある。頂点をアップロードして、シェーダーで移動することである。</p>
 <p>これは新しい頂点シェーダー</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -206,7 +206,7 @@ void main() {
 *   vec2 zeroToOne = position / u_resolution;
    ...
 </code></pre><p>ちょっとこコードの構造を変更する。 まず頂点は一回だけアップロードする。</p>
-<pre><code>// バッファーに’F’の形の頂点を入れる。
+<pre class="prettyprint"><code>// バッファーに’F’の形の頂点を入れる。
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -238,7 +238,7 @@ function setGeometry(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>そして描画する前に<code>u_translation</code>を希望している距離に設定する</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
 +  var translationLocation = gl.getUniformLocation(
 +             program, &quot;u_translation&quot;);

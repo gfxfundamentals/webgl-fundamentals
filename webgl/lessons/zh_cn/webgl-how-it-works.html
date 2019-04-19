@@ -90,7 +90,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 WebGL在GPU上的工作基本上分为两部分，第一部分是将顶点（或数据流）转换到裁剪空间坐标，
 第二部分是基于第一部分的结果绘制像素点。</p>
 <p>当你调用</p>
-<pre><code>var primitiveType = gl.TRIANGLES;
+<pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
 var offset = 0;
 var count = 9;
 gl.drawArrays(primitiveType, offset, count);
@@ -108,7 +108,7 @@ gl.drawArrays(primitiveType, offset, count);
 想要从顶点着色器传值到片断着色器，我们可以定义“可变量（varyings）”。</p>
 <p>一个简单的例子，将顶点着色器计算出的裁剪空间坐标从顶点着色器传递到片断着色器。</p>
 <p>我们来画一个简单的三角形，从<a href="webgl-2d-matrices.html">之前的例子</a>继续，让我们把矩形改成三角形。</p>
-<pre><code>// 定义一个三角形填充到缓冲里
+<pre class="prettyprint"><code>// 定义一个三角形填充到缓冲里
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -119,7 +119,7 @@ function setGeometry(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>我们只需要画三个顶点。</p>
-<pre><code>// 绘制场景
+<pre class="prettyprint"><code>// 绘制场景
 function drawScene() {
   ...
   // 绘制几何体
@@ -129,7 +129,7 @@ function drawScene() {
   gl.drawArrays(primitiveType, offset, count);
 }
 </code></pre><p>然后在我们的顶点着色器中定义一个<em>varying</em>（可变量）用来给片断着色器传值。</p>
-<pre><code>varying vec4 v_color;
+<pre class="prettyprint"><code>varying vec4 v_color;
 ...
 void main() {
   // 将位置和矩阵相乘
@@ -141,7 +141,7 @@ void main() {
 *  v_color = gl_Position * 0.5 + 0.5;
 }
 </code></pre><p>在片断着色器中定义同名<em>varying</em>变量。</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 *varying vec4 v_color;
 
@@ -222,7 +222,7 @@ table.vertex_table {
 <p>想要给片断着色器传值，我们可以先把值传递给顶点着色器然后再传给片断着色器。
 让我们来画一个由两个不同颜色三角形组成的矩形。我们需要给顶点着色器添加一个属性值，
 把值通过属性传递给它后它再直接传递给片断着色器。</p>
-<pre><code>attribute vec2 a_position;
+<pre class="prettyprint"><code>attribute vec2 a_position;
 +attribute vec4 a_color;
 ...
 varying vec4 v_color;
@@ -233,7 +233,7 @@ void main() {
 *  v_color = a_color;
 }
 </code></pre><p>现在要给WebGL提供要用的颜色。</p>
-<pre><code>  // 寻找顶点着色器中需要的数据
+<pre class="prettyprint"><code>  // 寻找顶点着色器中需要的数据
   var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +  var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
   ...
@@ -268,7 +268,7 @@ void main() {
 +      gl.STATIC_DRAW);
 +}
 </code></pre><p>在渲染的时候设置颜色属性</p>
-<pre><code>+gl.enableVertexAttribArray(colorLocation);
+<pre class="prettyprint"><code>+gl.enableVertexAttribArray(colorLocation);
 +
 +// 绑定颜色缓冲
 +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
@@ -283,7 +283,7 @@ void main() {
 +gl.vertexAttribPointer(
 +    colorLocation, size, type, normalize, stride, offset)
 </code></pre><p>调整顶点的数量为6用来画两个三角形</p>
-<pre><code>// 画几何体
+<pre class="prettyprint"><code>// 画几何体
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
 *var count = 6;
@@ -297,7 +297,7 @@ gl.drawArrays(primitiveType, offset, count);
 </p>
 <p>你可能注意到这两个三角形是纯色的。我们传递给每个三角形的顶点的颜色值是相同的，
 所以我们传递的<em>varying</em>会被插值成相同的颜色，如果我们传递不同的颜色，就会看到插值的颜色。</p>
-<pre><code>// 给矩形的两个三角形
+<pre class="prettyprint"><code>// 给矩形的两个三角形
 // 设置颜色值并发到缓冲
 function setColors(gl) {
   // 给每个顶点定义不同的颜色
@@ -328,16 +328,16 @@ function setColors(gl) {
 <code>gl.bufferData</code>将数据拷贝到缓冲，这个操作一般在初始化完成。</p>
 <p>一旦数据存到缓冲中，还需要告诉WebGL怎么从缓冲中提取数据传给顶点着色器的属性。</p>
 <p>要做这些，首先需要获取WebGL给属性分配的地址，如下方代码所示</p>
-<pre><code>// 询问顶点数据应该放在哪里
+<pre class="prettyprint"><code>// 询问顶点数据应该放在哪里
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 </code></pre><p>这一步一般也是在初始化部分完成。</p>
 <p>一旦知道了属性的地址，在绘制前还需要发出三个命令。</p>
-<pre><code>gl.enableVertexAttribArray(location);
+<pre class="prettyprint"><code>gl.enableVertexAttribArray(location);
 </code></pre><p>这个命令是告诉WebGL我们想从缓冲中提供数据。</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
 </code></pre><p>这个命令是将缓冲绑定到 ARRAY_BUFFER 绑定点，它是WebGL内部的一个全局变量。</p>
-<pre><code>gl.vertexAttribPointer(
+<pre class="prettyprint"><code>gl.vertexAttribPointer(
     location,
     numComponents,
     typeOfData,

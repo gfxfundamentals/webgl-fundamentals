@@ -90,11 +90,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 сколько пикселей помещается в canvas. Второй - размер отображаемого на HTML-странице
 элемента canvas. Этот размер задаётся через CSS.</p>
 <p>Размер буфера отрисовки можно задать двумя способами. Первый - через HTML:</p>
-<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>Второй способ - через JavaScript:</p>
-<pre><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
 </code></pre><p>JavaScript</p>
-<pre><code>var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code>var canvas = document.getElementById(&quot;c&quot;);
 canvas.width = 400;
 canvas.height = 300;
 </code></pre><p>Что касается размера отображаемого элемента, то при отсутствии стилей CSS, которые
@@ -102,9 +102,9 @@ canvas.height = 300;
 2 примерах выше размер буфера отрисовки будет равен 400x300, и размер отображаемого
 элемента будет также равен 400x300.</p>
 <p>А вот пример, когда размер буфера отображения - 10x15, а размер HTML-элемента - 400x300 пикселей:</p>
-<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>или можно задать так:</p>
-<pre><code>&lt;style&gt;
+<pre class="prettyprint"><code>&lt;style&gt;
 #c {
   width: 400px;
   height: 300px;
@@ -122,7 +122,7 @@ canvas.height = 300;
 растягивает его до размера 400x300 пикселей, применяя для этого фильтрацию.</p>
 <p>Так что же делать, если, к примеру, нам нужно, чтобы canvas заполнил всё окно? Для
 начала нам нужны CSS-стили, чтобы браузер растянул canvas на всё окно. Например:</p>
-<pre><code>&lt;html&gt;
+<pre class="prettyprint"><code>&lt;html&gt;
   &lt;head&gt;
     &lt;style&gt;
       /* убираем границу */
@@ -146,7 +146,7 @@ canvas.height = 300;
 как бы браузер его ни растянул. Мы можем использовать свойствами <code>clientWidth</code> и
 <code>clientHeight</code>, которые есть у любого HTML-элемента и которые позволяют JavaScript
 узнавать размер отображаемого элемента.</p>
-<pre><code>function resize(canvas) {
+<pre class="prettyprint"><code>function resize(canvas) {
   // получаем размер HTML-элемента canvas
   var displayWidth  = canvas.clientWidth;
   var displayHeight = canvas.clientHeight;
@@ -163,7 +163,7 @@ canvas.height = 300;
 </code></pre><p>Большинство приложений WebGL <a href="webgl-animation.html">используют анимацию</a>,
 поэтому будем вызывать эту функцию непосредственно перед отрисовкой, чтобы при отрисовке
 размер canvas всегда соответствовал размеру HTML-элемента.</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
    resize(gl.canvas);
 
    ...
@@ -183,7 +183,7 @@ canvas.height = 300;
 также необходимо сообщить WebGL новые параметры области просмотра.</p>
 <p>Изменим код, чтобы учитывать такую ситуацию. Более того, раз уж ссылка на canvas
 доступна из контекста WebGL, будем передавать его параметром функции resize.</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
    resize(gl.canvas);
 
 +   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);

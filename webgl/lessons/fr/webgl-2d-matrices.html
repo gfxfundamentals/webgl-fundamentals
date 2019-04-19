@@ -185,7 +185,7 @@ nouveauY = y * sy;
 <p>Maintenant je parie que vous fixez toujours l&#39;écran en pensant &quot;Alors quoi ?! C&#39;est quoi le truc ?&quot; Ca a l&#39;air d&#39;un beaucoup plus gros boulot pour faire ce qu&#39;on faisait déjà.</p>
 <p>C&#39;est là que la magie arrive. Il se trouve qu&#39;on peut multiplier des matrices ensemble. Et qu&#39;on peut appliquer toutes les transformations d&#39;un coup. Imaginons qu&#39;on a une fonction, <code>multiplierMatrices</code>, qui prend deux matrices, les multiplie et retourne la matrice finale.</p>
 <p>Pour rendre les choses plus claires faisons des fonctions pour fabriquer des matrices pour le déplacement, la rotation et l&#39;échelle :</p>
-<pre><code>function deplacer(tx, ty) {
+<pre class="prettyprint"><code>function deplacer(tx, ty) {
   return [
     1, 0, 0,
     0, 1, 0,
@@ -211,7 +211,7 @@ function changerEchelle(sx, sy) {
   ];
 }
 </code></pre><p>Maintenant changeons le shader. Le shader actuel est :</p>
-<pre><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -232,7 +232,7 @@ void main() {
   vec2 position = positionTournee + u_deplacement;
   ...
 </code></pre><p>Notre nouveau shader va être beaucoup plus simple</p>
-<pre><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -243,7 +243,7 @@ void main() {
   vec2 position = (u_matrice * vec3(a_position, 1)).xy;
   ...
 </code></pre><p>Et voilà comment on l&#39;utilise :</p>
-<pre><code>  // Rend la scène
+<pre class="prettyprint"><code>  // Rend la scène
   function rendreScene() {
     // Efface le canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -271,7 +271,7 @@ void main() {
 
 </p>
 <p>Mais, vous vous demandez peut-être encore, alors quoi ? Ca n&#39;a pas l&#39;air plus pratique. Mais maintenant si on veut changer l&#39;ordre des transformations on n&#39;a pas besoin d&#39;écrire un nouveau shader. On a juste à changer l&#39;ordre de nos fonctions. </p>
-<pre><code>    ...
+<pre class="prettyprint"><code>    ...
     // Multiplie les matrices
     var matrice = multiplierMatrices(matriceDeplacement, matriceRotation);
     matrice = multiplierMatrices(matrice, matriceEchelle);
@@ -284,7 +284,7 @@ void main() {
 
 </p>
 <p>Pouvoir multiplier par des matrices comme ça est particulièrement important dans les hiérarchies d&#39;animation comme des bras sur un corps, des lunes autour d&#39;une planète autour d&#39;un soleil, ou les branches d&#39;un arbre. Pour un exemple simple avec une animation hiérarchique dessinons notre &quot;F&quot; cinq fois mais chaque fois, partons de la matrice du F précédent. </p>
-<pre><code>  // Rend la scène
+<pre class="prettyprint"><code>  // Rend la scène
   function rendreScene() {
     // Efface le canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -317,7 +317,7 @@ void main() {
 <div class="webgl_center">matriceX * identite = matriceX</div>
 
 <p>Voilà le code pour faire une matrice identité :</p>
-<pre><code>function matriceIdentite() {
+<pre class="prettyprint"><code>function matriceIdentite() {
   return [
     1, 0, 0,
     0, 1, 0,
@@ -333,7 +333,7 @@ void main() {
 </p>
 <p>Voyons un autre exemple. Jusque là dans tous les exemples notre &quot;F&quot; tourne autour de son coin gauche. C&#39;est parce que les opérations qu&#39;on a utilisées faisaient des rotations autour de l&#39;origine et que ce coin gauche, c&#39;est l&#39;origine (0,0).</p>
 <p>Mais maintenant, parce qu&#39;on sait faire des opérations matricielles on peut choisir un ordre d&#39;application des transformations et déplacer l&#39;origine avant le reste des opérations :</p>
-<pre><code>    // créé une matrice qui va déplacer l&#39;origine du F vers son centre :
+<pre class="prettyprint"><code>    // créé une matrice qui va déplacer l&#39;origine du F vers son centre :
     var matriceDeplacementOrigine = deplacer(-50, -75);
     ...
 
@@ -350,7 +350,7 @@ void main() {
 </p>
 <p>Avec cette technique vous pouvez tourner et changer d&#39;échelle depuis n&#39;importe quel point. Maintenant vous savez comment Photoshop ou Flash vous laissent changer un centre de rotation.</p>
 <p>Allons plus loin dans cette folie. Si on revient au premier article <a href="webgl-fundamentals.html">WebGL - Les bases</a> vous vous rappelez peut-être qu&#39;on avait un code dans nos shaders pour convertir des coordonnées d&#39;écran aux coordonnées d&#39;espace de projection (clipspace). Ca ressemblait à ça :</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
   // convertit le rectangle de l&#39;espace des pixels à 0.0 &gt; 1.0
   vec2 zeroAUn = position / u_resolution;
 
@@ -362,7 +362,7 @@ void main() {
 
   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>Si vous regardez chaque étape, en fait, &quot;convertit le rectangle de l&#39;espace des pixels à 0.0 &gt; 1.0&quot;, est un changement d&#39;échelle. Pareil pour la seconde étape. La troisième est un déplacement et la dernière un changement d&#39;échelle par -1. On peut du coup faire ceci dans une matrice qu&#39;on envoie au shader. On pourrait faire deux matrices d&#39;échelle, une pour l&#39;échelle 1.0 / résolution, une autre pour l&#39;échelle 2.0, une troisième pour le déplacement (-1.0,-1.0) et une quatrième pour changer l&#39;échelle Y à -1.0, enfin multiplier tout ça. Mais à la place, parce que les maths c&#39;est sensé être simple, on va juste écrire une fonction qui retourne une matrice de &#39;projection&#39; pour une résolution donnée directement.</p>
-<pre><code>function projeter2D(largeur, hauteur) {
+<pre class="prettyprint"><code>function projeter2D(largeur, hauteur) {
   // Note: Cette matrice inverse l&#39;axe Y, il regarde vers le bas
   return [
     2 / largeur, 0, 0,
@@ -371,7 +371,7 @@ void main() {
   ];
 }
 </code></pre><p>Maintenant on peut simplifier le shader davantage. Voici le nouveau shader de vertex :</p>
-<pre><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrice;
@@ -382,7 +382,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Et en javascript il reste à multiplier par la matrice de projection :</p>
-<pre><code>  // Rend la scène
+<pre class="prettyprint"><code>  // Rend la scène
   function rendreScene() {
     ...
     // Calcule les matrices

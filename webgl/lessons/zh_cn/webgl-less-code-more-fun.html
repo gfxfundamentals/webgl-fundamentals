@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>假设我们有<a href="webgl-boilerplate.html">这样一个典型的WebGL着色程序模板</a>，
 有这样一对着色器。</p>
 <p>顶点着色器：</p>
-<pre><code>uniform mat4 u_worldViewProjection;
+<pre class="prettyprint"><code>uniform mat4 u_worldViewProjection;
 uniform vec3 u_lightWorldPos;
 uniform mat4 u_world;
 uniform mat4 u_viewInverse;
@@ -117,7 +117,7 @@ void main() {
   gl_Position = v_position;
 }
 </code></pre><p>片断着色器：</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 varying vec4 v_position;
 varying vec2 v_texCoord;
@@ -154,7 +154,7 @@ void main() {
   gl_FragColor = outColor;
 }
 </code></pre><p>你要在代码中像这样找到所有要设置的变量。</p>
-<pre><code>// 初始化时
+<pre class="prettyprint"><code>// 初始化时
 var u_worldViewProjectionLoc   = gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 var u_lightWorldPosLoc         = gl.getUniformLocation(program, &quot;u_lightWorldPos&quot;);
 var u_worldLoc                 = gl.getUniformLocation(program, &quot;u_world&quot;);
@@ -223,7 +223,7 @@ gl.drawArrays(...);
 首先可以一次获取WebGL中需要的所有属性和全局变量的位置，
 然后在一个方法中设置它们，我们可以传递一个JavaScript对象给这个方法。
 如果理解了这一步操作，我们的代码应该会变成这样</p>
-<pre><code>// 初始化时
+<pre class="prettyprint"><code>// 初始化时
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -260,7 +260,7 @@ webglUtils.setUniforms(uniformSetters, uniforms);
 gl.drawArrays(...);
 </code></pre><p>这样看起来就简单，清晰，代码量少一些了。</p>
 <p>如果需要你也可以使用多个JavaScript对象，例如</p>
-<pre><code>// 初始化时
+<pre class="prettyprint"><code>// 初始化时
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -336,7 +336,7 @@ objects.forEach(function(object) {
 <p>继续让代码更少一点，在之前的代码中我们用自己创建的缓冲设置 <code>attribs</code> ，
 创建缓冲的代码没有列出来，假设你想创建一个位置，
 法向量和纹理坐标的缓冲，你可能需要写这些代码</p>
-<pre><code>// 一个三角形
+<pre class="prettyprint"><code>// 一个三角形
 var positions = [0, -10, 0, 10, 10, 0, -10, 10, 0];
 var texcoords = [0.5, 0, 1, 1, 0, 1];
 var normals   = [0, 0, 1, 0, 0, 1, 0, 0, 1];
@@ -353,7 +353,7 @@ var normalBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 </code></pre><p>看起来像是这种简化形式。</p>
-<pre><code>// 一个三角形
+<pre class="prettyprint"><code>// 一个三角形
 var arrays = {
    position: { numComponents: 3, data: [0, -10, 0, 10, 10, 0, -10, 10, 0], },
    texcoord: { numComponents: 2, data: [0.5, 0, 1, 1, 0, 1],               },
@@ -362,7 +362,7 @@ var arrays = {
 
 var bufferInfo = createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>代码少多了！现在我们可以在渲染时这样写</p>
-<pre><code>// 设置所有需要的缓冲和属性
+<pre class="prettyprint"><code>// 设置所有需要的缓冲和属性
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
@@ -379,7 +379,7 @@ gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 <p>甚至在你使用索引时也可以这样做，<code>webglUtils.setBuffersAndAttributes</code>
 会设置所有属性并使用你提供的 <code>indices</code> 设置 <code>ELEMENT_ARRAY_BUFFER</code>，
 所以你需要调用 <code>gl.drawElements</code>。</p>
-<pre><code>// 有索引的矩形
+<pre class="prettyprint"><code>// 有索引的矩形
 var arrays = {
    position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
@@ -389,7 +389,7 @@ var arrays = {
 
 var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>在渲染时将调用 <code>gl.drawElements</code> 代替 <code>gl.drawArrays</code>。</p>
-<pre><code>// 设置所有需要的缓冲和属性
+<pre class="prettyprint"><code>// 设置所有需要的缓冲和属性
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
@@ -404,7 +404,7 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 
 </p>
 <p><code>createBufferInfoFromArrays</code>方法本质上创建了类似这样的一个对象</p>
-<pre><code> bufferInfo = {
+<pre class="prettyprint"><code> bufferInfo = {
    numElements: 4,        // 或者其他元素的实际个数
    indices: WebGLBuffer,  // 如果没有索引这个属性就不存在
    attribs: {
@@ -417,7 +417,7 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 <p>最后是我认为的最后一步，假定 <code>position</code> 总是有三个单位长度 (x, y, z)，
 <code>texcoords</code> 总是有 2 个单位长度，索引 3 个单位长度，法向量 3 个单位长度，
 然后让程序推测出单元的个数。</p>
-<pre><code>// 有索引的矩形
+<pre class="prettyprint"><code>// 有索引的矩形
 var arrays = {
    position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
    texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
@@ -441,13 +441,13 @@ var arrays = {
 WebGL会自动设置 <code>w = 1</code>。所以这就意味着我们不能轻易推断出用户的真实意愿，
 因为他们在着色器中定义的单位长度可能和提供的长度不相符。</p>
 <p>还有这样一个形式</p>
-<pre><code>var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 </code></pre><p>可以简化成这样</p>
-<pre><code>var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre class="prettyprint"><code>var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 </code></pre><p>返回类似这样的对象</p>
-<pre><code>programInfo = {
+<pre class="prettyprint"><code>programInfo = {
    program: WebGLProgram,  // 刚编译的程序
    uniformSetters: ...,    // webglUtils.createUniformSetters 返回的 setter
    attribSetters: ...,     // webglUtils.createAttribSetters 返回的 setter

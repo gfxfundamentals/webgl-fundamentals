@@ -95,7 +95,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 2D-изображения на экране, это уже покроет большинство 2D-игр.</p>
 <p>В программном интерфейсе Canvas 2D содержится очень гибкая функция для
 отрисовки изображения под названием <code>drawImage</code>. У неё есть 3 версии.</p>
-<pre><code>ctx.drawImage(image, dstX, dstY);
+<pre class="prettyprint"><code>ctx.drawImage(image, dstX, dstY);
 ctx.drawImage(image, dstX, dstY, dstWidth, dstHeight);
 ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
                      dstX, dstY, dstWidth, dstHeight);
@@ -107,7 +107,7 @@ ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
 творчески подойти к написанию шейдера, а затем всё так же творчески
 применить этот шейдер для решения задачи.</p>
 <p>Начнём с первой версии функции.</p>
-<pre><code>ctx.drawImage(image, x, y);
+<pre class="prettyprint"><code>ctx.drawImage(image, x, y);
 </code></pre><p>Она отрисовывает изображение в координатах <code>x, y</code>, размеры равны размерам
 изображения. Для создания аналогичной функции на WebGL мы могли бы создать
 вершины <code>x, y</code>, <code>x + width, y</code>, <code>x, y + height</code> и <code>x + width, y + height</code>,
@@ -118,7 +118,7 @@ ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
 для масштабирования и переноса, чтобы квадрант расположился в нужном
 нам месте.</p>
 <p>Перейдём к коду. Для начала нам понадобится простой вершинный шейдер.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -130,7 +130,7 @@ void main() {
    v_texcoord = a_texcoord;
 }
 </code></pre><p>И простой фрагментный шейдер.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 varying vec2 v_texcoord;
 
@@ -140,7 +140,7 @@ void main() {
    gl_FragColor = texture2D(u_texture, v_texcoord);
 }
 </code></pre><p>А теперь сама функция.</p>
-<pre><code>// В отличие от изображений, у текстур нет определённой ширины и высоты,
+<pre class="prettyprint"><code>// В отличие от изображений, у текстур нет определённой ширины и высоты,
 // поэтому мы сами установим ширину и высоту текстуры
 function drawImage(tex, texWidth, texHeight, dstX, dstY) {
   gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -176,7 +176,7 @@ function drawImage(tex, texWidth, texHeight, dstX, dstY) {
   gl.drawArrays(gl.TRIANGLES, 0, 6);
 }
 </code></pre><p>Теперь загрузим несколько изображений в текстуры.</p>
-<pre><code>// создаём объект с информацией о текстуре { width: w, height: h, texture: tex }
+<pre class="prettyprint"><code>// создаём объект с информацией о текстуре { width: w, height: h, texture: tex }
 // Текстура изначально будет размером 1х1 пиксель,
 // затем размеры изменятся под загружаемое изображение
 function loadImageAndCreateTextureInfo(url) {
@@ -211,7 +211,7 @@ var textureInfos = [
   loadImageAndCreateTextureInfo(&#39;resources/keyboard.jpg&#39;),
 ];
 </code></pre><p>Отобразим изображения в случайных местах.</p>
-<pre><code>var drawInfos = [];
+<pre class="prettyprint"><code>var drawInfos = [];
 var numToDraw = 9;
 var speed = 60;
 for (var ii = 0; ii &lt; numToDraw; ++ii) {
@@ -277,10 +277,10 @@ requestAnimationFrame(render);
 
 </p>
 <p>Займёмся второй версией функции <code>drawImage</code></p>
-<pre><code>ctx.drawImage(image, dstX, dstY, dstWidth, dstHeight);
+<pre class="prettyprint"><code>ctx.drawImage(image, dstX, dstY, dstWidth, dstHeight);
 </code></pre><p>Никакой принципиальной разницы здесь нет. Мы просто используем <code>dstWidth</code>
 и <code>dstHeight</code> вместо <code>texWidth</code> и <code>texHeight</code>.</p>
-<pre><code>*function drawImage(
+<pre class="prettyprint"><code>*function drawImage(
 *    tex, texWidth, texHeight,
 *    dstX, dstY, dstWidth, dstHeight) {
 +  if (dstWidth === undefined) {
@@ -326,7 +326,7 @@ requestAnimationFrame(render);
 
 </p>
 <p>Это было просто. Но как насчет третьей версии <code>drawImage</code>?</p>
-<pre><code>ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
+<pre class="prettyprint"><code>ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
                      dstX, dstY, dstWidth, dstHeight);
 </code></pre><p>Для выбора фрагмента текстуры нам нужно поработать с текстурными координатами.
 Работа текстурных координат <a href="webgl-3d-textures.html">рассмотрена в статье о текстурах</a>.
@@ -336,7 +336,7 @@ requestAnimationFrame(render);
 через матрицы координатами вершин.</p>
 <p>Давайте добавим матрицу текстуры в вершинный шейдер, а затем умножим
 текстурные координаты на эту матрицу.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -349,13 +349,13 @@ void main() {
 *   v_texcoord = (u_textureMatrix * vec4(a_texcoord, 0, 1)).xy;
 }
 </code></pre><p>Теперь получим ссылку на матрицу текстуры.</p>
-<pre><code>var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
+<pre class="prettyprint"><code>var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
 +var textureMatrixLocation = gl.getUniformLocation(program, &quot;u_textureMatrix&quot;);
 </code></pre><p>Затем внутри <code>drawImage</code> необходимо необходимо задать значение этой матрицы,
 чтобы она вырезала нужную часть текстуры. Мы знаем, что текстурные координаты -
 это по сути единичный квадрант, поэтому работа с ним очень похожа на работу с
 координатами вершин.</p>
-<pre><code>*function drawImage(
+<pre class="prettyprint"><code>*function drawImage(
 *    tex, texWidth, texHeight,
 *    srcX, srcY, srcWidth, srcHeight,
 *    dstX, dstY, dstWidth, dstHeight) {
@@ -439,7 +439,7 @@ void main() {
 <a href="webgl-2d-matrices.html">выполнять любую математику с матрицами</a>.</p>
 <p>Например, мы можем вращать текстурные координаты вокруг центра текстуры.</p>
 <p>Изменим код текстурной матрицы следующим образом</p>
-<pre><code>*  // По аналогии с проекционной матрицей нам нужно переместиться из текстурного
+<pre class="prettyprint"><code>*  // По аналогии с проекционной матрицей нам нужно переместиться из текстурного
 *  // пространства (0..1). Эта матрица перенесёт нас в пиксельное пространство.
 *  var texMatrix = m4.scaling(1 / texWidth, 1 / texHeight, 1);
 *
@@ -469,7 +469,7 @@ void main() {
 <p>Мы могли бы исправить эту ситуацию, отменив в шейдере отрисовку пикселей за
 пределами диапазона (0, 1). Функция <code>discard</code> немедленно выходит из шейдера
 без отрисовки пикселя.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 varying vec2 v_texcoord;
 
@@ -492,7 +492,7 @@ void main() {
 
 </p>
 <p>Или, возможно, вы предпочтёте сплошной цвет за краями текстуры.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 varying vec2 v_texcoord;
 

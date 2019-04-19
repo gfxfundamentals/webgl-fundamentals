@@ -103,7 +103,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <a href="webgl-2d-matrices.html">функции, которые мы создали ранее</a>.</p>
 <p>Далее идёт реализация.</p>
 <p>Сначала конструктор и функции <code>save</code> и <code>restore</code>.</p>
-<pre><code>function MatrixStack() {
+<pre class="prettyprint"><code>function MatrixStack() {
   this.stack = [];
 
   // стек пуст, поэтому просто поместим в него начальную матрицу
@@ -124,7 +124,7 @@ MatrixStack.prototype.save = function() {
   this.stack.push(this.getCurrentMatrix());
 };
 </code></pre><p>Также нам понадобятся функции для получения и установки верхней матрицы.</p>
-<pre><code>// получаем копию текущей матрицы (верхушки стека)
+<pre class="prettyprint"><code>// получаем копию текущей матрицы (верхушки стека)
 MatrixStack.prototype.getCurrentMatrix = function() {
   return this.stack[this.stack.length - 1].slice();
 };
@@ -135,7 +135,7 @@ MatrixStack.prototype.setCurrentMatrix = function(m) {
 };
 </code></pre><p>Наконец, нам нужно реализовать функции <code>translate</code>, <code>rotate</code> и <code>scale</code>,
 используя наши предыдущие функции матриц.</p>
-<pre><code>// перенос текущей матрицы
+<pre class="prettyprint"><code>// перенос текущей матрицы
 MatrixStack.prototype.translate = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.translate(m, x, y, z));
@@ -156,7 +156,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
 бы использовать <code>0</code> для <code>z</code> при переносе и <code>1</code> для <code>z</code> при масштабировании,
 но я привык к 2d-функциям canvas и часто забывал указывать <code>z</code>, что приводило
 к ошибкам в коде. Поэтому давайте сделаем <code>z</code> опциональным параметром.</p>
-<pre><code>// перенос текущей матрицы
+<pre class="prettyprint"><code>// перенос текущей матрицы
 MatrixStack.prototype.translate = function(x, y, z) {
 +  if (z === undefined) {
 +    z = 0;
@@ -177,7 +177,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
 };
 </code></pre><p>Теперь, используя функцию <a href="webgl-2d-drawimage.html"><code>drawImage</code> из предыдущей статьи</a>,
 мы получим следующий код</p>
-<pre><code>// матрица для конвертации из пикселей в пространство отсечения
+<pre class="prettyprint"><code>// матрица для конвертации из пикселей в пространство отсечения
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 // матрица переноса квадранта в координаты dstX, dstY
@@ -187,9 +187,9 @@ matrix = m4.translate(matrix, dstX, dstY, 0);
 // до размеров texWidth, texHeight
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>Нам нужно просто создать стек матриц</p>
-<pre><code>var matrixStack = new MatrixStack();
+<pre class="prettyprint"><code>var matrixStack = new MatrixStack();
 </code></pre><p>и умножить матрицу на текущую матрицу стека</p>
-<pre><code>// матрица для конвертации из пикселей в пространство отсечения
+<pre class="prettyprint"><code>// матрица для конвертации из пикселей в пространство отсечения
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 +// эта матрица сместит начало координат в положение,
@@ -211,7 +211,7 @@ matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 отрисуем изображение в 0,0, то изображение отрисуется в центре canvas.</p>
 <p>Возьмём <a href="webgl-2d-drawimage.html">наш предыдущий пример</a> и нарисуем
 одно изображение.</p>
-<pre><code>var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
+<pre class="prettyprint"><code>var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
 
 function draw(time) {
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -239,7 +239,7 @@ function draw(time) {
 изображение отрисовывается и вращается вокруг центра canvas, так как
 мы использовали <code>matrixStack.translate</code> для смещения начала координат.</p>
 <p>Сместим центр вращения в центр изображения.</p>
-<pre><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 +matrixStack.translate(textureInfo.width / -2, textureInfo.height / -2);
 </code></pre><p>И теперь вращение происходит вокруг центра изображения в центре canvas.</p>
@@ -250,7 +250,7 @@ matrixStack.rotateZ(time);
 
 </p>
 <p>Добавим ещё таких же изображений в углах, каждое со своим вращением.</p>
-<pre><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 
 +matrixStack.save();

@@ -96,7 +96,7 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
 <h2 id="vertex-shader">Vertex Shader</h2>
 <p>Vertex Shader의 역할은 clip 공간 좌표를 생성하는 겁니다.
 항상 다음과 같은 양식을 따르는데</p>
-<pre><code>void main() {
+<pre class="prettyprint"><code>void main() {
   gl_Position = doMathToMakeClipspaceCoordinates
 }
 </code></pre><p>shader는 각 vertex 마다 한 번씩 호출됩니다.
@@ -112,14 +112,14 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
 <p>가장 일반적인 방법은 buffer와 <em>attribute</em>를 사용하는 겁니다.
 <a href="webgl-how-it-works.html">작동 원리</a>에서 buffer와 attribute를 다뤘는데요.
 buffer를 만들고,</p>
-<pre><code>var buf = gl.createBuffer();
+<pre class="prettyprint"><code>var buf = gl.createBuffer();
 </code></pre><p>buffer에 데이터를 넣습니다.</p>
-<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 </code></pre><p>그러면, 초기화할 때 주어진 shader program으로 attribute의 위치를 찾습니다.</p>
-<pre><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
+<pre class="prettyprint"><code>var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
 </code></pre><p>그리고 렌더링할 때 WebGL에게 attribute 안에 있는 buffer에서 데이터를 어떻게 가져올지 알려줍니다.</p>
-<pre><code>// attribute의 buffer에서 데이터 가져오기 활성화
+<pre class="prettyprint"><code>// attribute의 buffer에서 데이터 가져오기 활성화
 gl.enableVertexAttribArray(positionLoc);
 
 var numComponents = 3;  // (x, y, z)
@@ -137,7 +137,7 @@ gl.vertexAttribPointer(
     offset
 );
 </code></pre><p><a href="webgl-fundamentals.html">WebGL 기초</a>에서 우리는 shader에 수학을 사용할 수 없고 직접 데이터를 넘길 수 있다는 것을 봤습니다</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 
 void main() {
   gl_Position = a_position;
@@ -147,7 +147,7 @@ void main() {
 <h3 id="uniform">Uniform</h3>
 <p>shader의 경우 uniform은 draw가 호출될 때 모든 vertex에서 동일하게 유지되는 전달 값입니다.
 간단한 예로 위 vertex shader에 offset을 추가할 수 있습니다.</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 +uniform vec4 u_offset;
 
 void main() {
@@ -155,16 +155,16 @@ void main() {
 }
 </code></pre><p>이제 모든 vertex마다 특정한 값으로 offset을 지정할 수 있습니다.
 먼저 초기화 시 uniform의 위치를 찾아야합니다.</p>
-<pre><code>var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
+<pre class="prettyprint"><code>var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
 </code></pre><p>그런 다음 그리기 전에 uniform을 설정합니다.</p>
-<pre><code>gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 우측 절반으로 offset 지정
+<pre class="prettyprint"><code>gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 우측 절반으로 offset 지정
 </code></pre><p>참고로 uniform은 개별 shader program에 속합니다.
 만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면 uniform은 둘 다 고유한 위치와 자체 값을 가집니다.
 <code>gl.uniform???</code>을 호출하면 <em>현재 program</em>의 uniform만 설정됩니다.
 현재 program은 <code>gl.useProgram</code>에 넘긴 마지막 program 입니다.</p>
 <p>Uniform은 여러 자료형을 가질 수 있는데요.
 각각의 자료형에 대해 해당 함수를 호출하여 설정해야 합니다.</p>
-<pre><code>gl.uniform1f (floatUniformLoc, v);                 // float
+<pre class="prettyprint"><code>gl.uniform1f (floatUniformLoc, v);                 // float
 gl.uniform1fv(floatUniformLoc, [v]);               // float 또는 float 배열
 gl.uniform2f (vec2UniformLoc, v0, v1);             // vec2
 gl.uniform2fv(vec2UniformLoc, [v0, v1]);           // vec2 또는 vec2 배열
@@ -195,7 +195,7 @@ gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 또는 sampler
 <code>gl.uniform?f?</code> 또는 <code>gl.uniform?i?</code> 함수를 사용합니다.</p>
 <p>참고로 배열은 배열의 모든 uniform을 한번에 설정할 수 있습니다.
 예를들어</p>
-<pre><code>// shader
+<pre class="prettyprint"><code>// shader
 uniform vec2 u_someVec2[3];
 
 // JavaScript에서 초기화 시
@@ -204,7 +204,7 @@ var someVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2&quot;);
 // 렌더링할 때
 gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // set the entire array of u_someVec2
 </code></pre><p>하지만 배열의 요소를 개밸적으로 설정하고 싶다면 각 요소의 위치를 개별적으로 찾아야 합니다.</p>
-<pre><code>// JavaScript에서 초기화할 때
+<pre class="prettyprint"><code>// JavaScript에서 초기화할 때
 var someVec2Element0Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[0]&quot;);
 var someVec2Element1Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[1]&quot;);
 var someVec2Element2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[2]&quot;);
@@ -214,20 +214,20 @@ gl.uniform2fv(someVec2Element0Loc, [1, 2]);  // 요소 0 설정
 gl.uniform2fv(someVec2Element1Loc, [3, 4]);  // 요소 1 설정
 gl.uniform2fv(someVec2Element2Loc, [5, 6]);  // 요소 2 설정
 </code></pre><p>마찬가지로 struct를 생성하면</p>
-<pre><code>struct SomeStruct {
+<pre class="prettyprint"><code>struct SomeStruct {
   bool active;
   vec2 someVec2;
 };
 uniform SomeStruct u_someThing;
 </code></pre><p>각 필드를 개별적으로 찾을 수 있습니다.</p>
-<pre><code>var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
+<pre class="prettyprint"><code>var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
 var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
 </code></pre><h3 id="vertex-shader-texture">Vertex-Shader-Texture</h3>
 <p><a href="#fragment-shader-texture">Fragment Shader의 Texture</a>를 봐주세요.</p>
 <h2 id="fragment-shader">Fragment Shader</h2>
 <p>Fragment Shader의 역할은 rasterization 되는 현재 픽셀의 색상을 제공하는 것 입니다.
 항상 다음과 같은 양식을 따르는데</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 void main() {
   gl_FragColor = doMathToMakeAColor;
@@ -245,7 +245,7 @@ void main() {
 <p><a href="#uniform">Shader의 Uniform</a>을 봐주세요.</p>
 <h3 id="fragment-shader-texture">Fragment-Shader-Texture</h3>
 <p>Shader의 texture에서 값을 얻으려면 <code>sampler2D</code> uniform을 생성하고 GLSL 함수 <code>texture2D</code>를 사용해서 값을 추출해야 합니다.</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 uniform sampler2D u_texture;
 
@@ -255,7 +255,7 @@ void main() {
 }
 </code></pre><p>Texture에서 나오는 데이터는 <a href="webgl-3d-textures.html">많은 설정에 따라</a> 달라집니다.
 최소한 texture에 데이터를 생성하고 넣어야 하는데, 예를들어</p>
-<pre><code>var tex = gl.createTexture();
+<pre class="prettyprint"><code>var tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 var level = 0;
 var width = 2;
@@ -276,20 +276,20 @@ gl.texImage2D(
     data
 );
 </code></pre><p>초기화할 때 shader program에 있는 uniform 위치를 찾습니다.</p>
-<pre><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
+<pre class="prettyprint"><code>var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
 </code></pre><p>렌더링할 때 texture unit에 texture를 할당합니다.</p>
-<pre><code>var unit = 5;  // texture unit 선택
+<pre class="prettyprint"><code>var unit = 5;  // texture unit 선택
 gl.activeTexture(gl.TEXTURE0 + unit);
 gl.bindTexture(gl.TEXTURE_2D, tex);
 </code></pre><p>그리고 texture를 할당한 unit을 shader에게 알려줍니다. </p>
-<pre><code>gl.uniform1i(someSamplerLoc, unit);
+<pre class="prettyprint"><code>gl.uniform1i(someSamplerLoc, unit);
 </code></pre><h3 id="varying">Varying</h3>
 <p>Varying은 <a href="webgl-how-it-works.html">동작 원리</a>에 다룬 vertex shader에서 fragment shader로 값을 넘기는 방법입니다.</p>
 <p>Varying을 사용하려면 vertex 및 fragment shader에서 일치하는 varying을 선언해야 합니다.
 Vertex Shader의 vertex마다 어떤 값으로 varying을 설정합니다.
 WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader에 해당하는 varying으로 전달합니다.</p>
 <p>Vertex Shader</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 
 uniform vec4 u_offset;
 
@@ -300,7 +300,7 @@ void main() {
 +  v_positionWithOffset = a_position + u_offset;
 }
 </code></pre><p>Fragment Shader</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 +varying vec4 v_positionWithOffset;
 
@@ -321,11 +321,11 @@ JavaScript에서는 흔히 볼 수 없는 특별한 고유 기능이 있습니�
 이 자료형들은 각각 2개, 3개, 그리고 4개의 값을 가집니다.
 마찬가지로 행렬 2x2, 3x3, 그리고 4x4를 나타내는 <code>mat2</code>, <code>mat3</code> 그리고 <code>mat4</code>도 있습니다.
 scalar를 <code>vec</code>과 곱하는 것을 할 수 있습니다.</p>
-<pre><code>vec4 a = vec4(1, 2, 3, 4);
+<pre class="prettyprint"><code>vec4 a = vec4(1, 2, 3, 4);
 vec4 b = a * 2.0;
 // 이제 b는 vec4(2, 4, 6, 8);
 </code></pre><p>마찬가지로 행렬 곱샘과 vector에 행렬 곱셈을 할 수 있습니다.</p>
-<pre><code>mat4 a = ???
+<pre class="prettyprint"><code>mat4 a = ???
 mat4 b = ???
 mat4 c = a * b;
 
@@ -333,7 +333,7 @@ vec4 v = ???
 vec4 y = c * v;
 </code></pre><p>또한 vec의 일부를 선택하는 다양한 방법이 있는데요.</p>
 <p>vec4를 보면</p>
-<pre><code>vec4 v;
+<pre class="prettyprint"><code>vec4 v;
 </code></pre><ul>
 <li><code>v.x</code>는 <code>v.s</code>와 <code>v.r</code>과 <code>v[0]</code>과 같습니다.</li>
 <li><code>v.y</code>는 <code>v.t</code>와 <code>v.g</code>와 <code>v[1]</code>과 같습니다.</li>
@@ -341,44 +341,44 @@ vec4 y = c * v;
 <li><code>v.w</code>는 <code>v.q</code>와 <code>v.a</code>와 <code>v[3]</code>과 같습니다.</li>
 </ul>
 <p>vec 구성요소들을 <em>swizzle</em> 할 수 있기 때문에 구성요소를 교체하거나 반복할 수 있습니다.</p>
-<pre><code>v.yyyy
+<pre class="prettyprint"><code>v.yyyy
 </code></pre><p>이건 다음과 같습니다</p>
-<pre><code>vec4(v.y, v.y, v.y, v.y)
+<pre class="prettyprint"><code>vec4(v.y, v.y, v.y, v.y)
 </code></pre><p>마찬가지로</p>
-<pre><code>v.bgra
+<pre class="prettyprint"><code>v.bgra
 </code></pre><p>이것도 다음과 같습니다</p>
-<pre><code>vec4(v.b, v.g, v.r, v.a)
+<pre class="prettyprint"><code>vec4(v.b, v.g, v.r, v.a)
 </code></pre><p>vec 또는 mat를 만들 때 한 번에 여러 부분을 제공할 수 있습니다.</p>
 <p>예를들면</p>
-<pre><code>vec4(v.rgb, 1)
+<pre class="prettyprint"><code>vec4(v.rgb, 1)
 </code></pre><p>이건 다음과 같습니다</p>
-<pre><code>vec4(v.r, v.g, v.b, 1)
+<pre class="prettyprint"><code>vec4(v.r, v.g, v.b, 1)
 </code></pre><p>또한</p>
-<pre><code>vec4(1)
+<pre class="prettyprint"><code>vec4(1)
 </code></pre><p>이것도 다음과 같습니다</p>
-<pre><code>vec4(1, 1, 1, 1)
+<pre class="prettyprint"><code>vec4(1, 1, 1, 1)
 </code></pre><p>GLSL은 매우 엄격한 자료형입니다</p>
-<pre><code>float f = 1;  // ERROR 1은 int이고 float에 int를 할당할 수 없습니다.
+<pre class="prettyprint"><code>float f = 1;  // ERROR 1은 int이고 float에 int를 할당할 수 없습니다.
 </code></pre><p>올바른 방법은 이것들입니다</p>
-<pre><code>float f = 1.0;      // float 사용
+<pre class="prettyprint"><code>float f = 1.0;      // float 사용
 float f = float(1)  // float에 integer를 cast
 </code></pre><p>위 예제에서 <code>vec4(v.rgb, 1)</code>는 <code>vec4</code>가 내부에서 <code>float(1)</code>로 cast 되기 때문에 <code>1</code>에 대해 문제를 제기하지 않습니다.</p>
 <p>GLSL은 많은 기능을 내장하고 있는데요.
 대부분이 여러 구성요소에서 동시에 작동합니다.
 예를들어</p>
-<pre><code>T sin(T angle)
+<pre class="prettyprint"><code>T sin(T angle)
 </code></pre><p>T는 <code>float</code>, <code>vec2</code>, <code>vec3</code> 또는 <code>vec4</code>가 될 수 있음을 뜻합니다.
 만약 <code>vec4</code>를 넘겨주면 각 구성요소의 sine(<code>vec4</code>)를 얻습니다.
 다시 말해 <code>v</code>가 <code>vec4</code>라면</p>
-<pre><code>vec4 s = sin(v);
+<pre class="prettyprint"><code>vec4 s = sin(v);
 </code></pre><p>이건 다음과 같습니다</p>
-<pre><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
+<pre class="prettyprint"><code>vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 </code></pre><p>가끔은 매개변수 하나가 부동 소수점이고 나머지는 <code>T</code>가 되는데요.
 말인즉슨 모든 구성요소에 부동 소수점이 적용된다는 걸 뜻합니다.
 예를들어 <code>v1</code>과 <code>v2</code>가 <code>vec4</code>이고 <code>f</code>는 부동 소수점이라면</p>
-<pre><code>vec4 m = mix(v1, v2, f);
+<pre class="prettyprint"><code>vec4 m = mix(v1, v2, f);
 </code></pre><p>이건 다음과 같습니다</p>
-<pre><code>vec4 m = vec4(
+<pre class="prettyprint"><code>vec4 m = vec4(
     mix(v1.x, v2.x, f),
     mix(v1.y, v2.y, f),
     mix(v1.z, v2.z, f),

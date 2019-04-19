@@ -90,19 +90,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 这个表示画布中有多少个像素。另一是画布显示的尺寸，
 CSS决定画布显示的尺寸。</p>
 <p>你可以通过两种方式设置画布的 drawingbuffer尺寸。一种是使用HTML</p>
-<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>另一种是使用JavaScript</p>
-<pre><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
 </code></pre><p>JavaScript</p>
-<pre><code>var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code>var canvas = document.getElementById(&quot;c&quot;);
 canvas.width = 400;
 canvas.height = 300;
 </code></pre><p>如果你没有使用CSS影响到画布的显示尺寸，画布的显示尺寸则和 drawingbuffer 尺寸相同。
 所以在上述两个例子中画布的 drawingbuffer 尺寸和显示尺寸都是 400x300。</p>
 <p>在下方的例子中画布的显示尺寸是 400x300，drawingbuffer 是 10x15</p>
-<pre><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>或者像这样</p>
-<pre><code>&lt;style&gt;
+<pre class="prettyprint"><code>&lt;style&gt;
 #c {
   width: 400px;
   height: 300px;
@@ -119,7 +119,7 @@ canvas.height = 300;
 <p>为什么它被模糊了？因为浏览器得到 10x15 像素的画布，将它拉伸到 400x300 像素，
 然后在拉伸的过程中进行了插值。</p>
 <p>假设我们想让画布填充满窗口该怎么做？首先使用CSS让浏览器将画布铺满窗口，例如</p>
-<pre><code>&lt;html&gt;
+<pre class="prettyprint"><code>&lt;html&gt;
   &lt;head&gt;
     &lt;style&gt;
       /* 移除边界 */
@@ -142,7 +142,7 @@ canvas.height = 300;
 </code></pre><p>现在只需要将 drawingbuffer 的尺寸设置为为浏览器拉伸后的画布尺寸。
 我们可以使用 <code>clientWidth</code> 和 <code>clientHeight</code> 属性，这个属性是所有HTML元素都有的属性，
 可以让JavaScript获取元素显示的尺寸。</p>
-<pre><code>function resize(canvas) {
+<pre class="prettyprint"><code>function resize(canvas) {
   // 获取浏览器中画布的显示尺寸
   var displayWidth  = canvas.clientWidth;
   var displayHeight = canvas.clientHeight;
@@ -157,7 +157,7 @@ canvas.height = 300;
   }
 }
 </code></pre><p>大多数WebGL应用是<a href="webgl-animation.html">变化</a>的，所以我们需要在绘制之前调用这个方法调画布为期望的大小。</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
    resize(gl.canvas);
 
    ...
@@ -174,7 +174,7 @@ canvas.height = 300;
 也就是画布内。当你第一次创建WebGL上下文的时候WebGL会设置视域大小和画布大小匹配，
 但是在那之后就需要你自己设置。当你改变画布大小就需要告诉WebGL新的视域设置。</p>
 <p>让我们来修改代码处理这个问题。由于WebGL上下文引用了画布，所以直接传递它的尺寸。</p>
-<pre><code>function drawScene() {
+<pre class="prettyprint"><code>function drawScene() {
    resize(gl.canvas);
 
 +   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);

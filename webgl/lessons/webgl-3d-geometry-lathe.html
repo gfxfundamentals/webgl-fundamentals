@@ -196,7 +196,7 @@ separate curves.</p>
 <p>Next up we need a way to generate points on a curve.
 Using the formula above we can generate a point for
 a given <code>t</code> value like this.</p>
-<pre><code>function getPointOnBezierCurve(points, offset, t) {
+<pre class="prettyprint"><code>function getPointOnBezierCurve(points, offset, t) {
   const invT = (1 - t);
   return v2.add(v2.mult(points[offset + 0], invT * invT * invT),
                 v2.mult(points[offset + 1], 3 * t * invT * invT),
@@ -204,7 +204,7 @@ a given <code>t</code> value like this.</p>
                 v2.mult(points[offset + 3], t * t  *t));
 }
 </code></pre><p>And we can generate a set of points for the curve like this</p>
-<pre><code>function getPointsOnBezierCurve(points, offset, numPoints) {
+<pre class="prettyprint"><code>function getPointsOnBezierCurve(points, offset, numPoints) {
   const points = [];
   for (let i = 0; i &lt; numPoints; ++i) {
     const t = i / (numPoints - 1);
@@ -237,7 +237,7 @@ that match the original.</p>
 <p>The second part is deciding if a curve needs to be split or not. Looking
 around the net I found <a href="https://seant23.wordpress.com/2010/11/12/offset-bezier-curves/">this function</a>
 that for a given curve decides how flat it is.</p>
-<pre><code>function flatness(points, offset) {
+<pre class="prettyprint"><code>function flatness(points, offset) {
   const p1 = points[offset + 0];
   const p2 = points[offset + 1];
   const p3 = points[offset + 2];
@@ -261,7 +261,7 @@ that for a given curve decides how flat it is.</p>
 </code></pre><p>We can use that in our function that gets points for a curve.
 First we&#39;ll check if the cuvry is too curvy. If so we&#39;ll subdivide,
 if not we&#39;ll add the points in.</p>
-<pre><code>function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
+<pre class="prettyprint"><code>function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
   const outPoints = newPoints || [];
   if (flatness(points, offset) &lt; tolerance) {
 
@@ -310,7 +310,7 @@ Then we check if that point is further away from the line than some distance.
 If it&#39;s less than than that distance we just keep the 2 end points and discard the rest
 Otherwise we run the algorithm again, once with the points from the start to the furthest
 point and again from the furthest point to the end point.</p>
-<pre><code>function simplifyPoints(points, start, end, epsilon, newPoints) {
+<pre class="prettyprint"><code>function simplifyPoints(points, start, end, epsilon, newPoints) {
   const outPoints = newPoints || [];
 
   // find the most distance point from the endpoints
@@ -358,7 +358,7 @@ major editors mentioned above. <a href="https://svg-edit.github.io/svgedit/relea
 <p>Here&#39;s the svg silhouette of a bowling pin I made.</p>
 <p><img class="webgl_center" src="resources/bowling-pin-silhouette.svg" width="50%" height="50%" /></p>
 <p>It&#39;s made from 4 bezier curves. The data for that path looks like this</p>
-<pre><code>&lt;path fill=&quot;none&quot; stroke-width=&quot;5&quot; d=&quot;
+<pre class="prettyprint"><code>&lt;path fill=&quot;none&quot; stroke-width=&quot;5&quot; d=&quot;
    m44,434
    c18,-33 19,-66 15,-111
    c-4,-45 -37,-104 -39,-132
@@ -366,7 +366,7 @@ major editors mentioned above. <a href="https://svg-edit.github.io/svgedit/relea
    c5,-30 3,-63 -36,-63
 &quot;/&gt;
 </code></pre><p><a href="https://developer.mozilla.org/en/docs/Web/SVG/Tutorial/Paths">Interpreting that data</a> we get these points.</p>
-<pre><code>        ___
+<pre class="prettyprint"><code>        ___
 44, 371,   |
 62, 338,   | 1st curve
 63, 305,___|__
@@ -382,7 +382,7 @@ major editors mentioned above. <a href="https://svg-edit.github.io/svgedit/relea
  0, -16,____________|
 </code></pre><p>Now that we have the data for the curves we need to compute some points
 on them.</p>
-<pre><code>// gets points across all segments
+<pre class="prettyprint"><code>// gets points across all segments
 function getPointsOnBezierCurves(points, tolerance) {
   const newPoints = [];
   const numSegments = (points.length - 1) / 3;
@@ -396,7 +396,7 @@ function getPointsOnBezierCurves(points, tolerance) {
 <p>Now we need to spin them around. We decide how many divisions to make, for each division
 you use the <a href="webgl-2d-matrices.html">matrix math</a> to rotate the points around the Y axis.
 Once we&#39;ve made all the points we connect them with triangles using indices.</p>
-<pre><code>// rotates around Y axis.
+<pre class="prettyprint"><code>// rotates around Y axis.
 function lathePoints(points,
                      startAngle,   // angle to start at (ie 0)
                      endAngle,     // angle to end at (ie Math.PI * 2)
@@ -455,7 +455,7 @@ out of those. The <code>capStart</code> and <code>capEnd</code> specify whether 
 we&#39;re making a can. These options would specify whether or not to close the ends.</p>
 <p>Using our <a href="webgl-less-code-more-fun.html">simplified code</a> we can generate WebGL buffers with
 this data like this</p>
-<pre><code>const tolerance = 0.15;
+<pre class="prettyprint"><code>const tolerance = 0.15;
 const distance = .4;
 const divisions = 16;
 const startAngle = 0;
@@ -484,7 +484,7 @@ so we need to do something else.</p>
 <p>We can walk the points and compute the total length of the curve and each point&#39;s
 distance on that curve. We can then divide by the length and get a better value
 for <code>v</code>.</p>
-<pre><code>// rotates around Y access.
+<pre class="prettyprint"><code>// rotates around Y access.
 function lathePoints(points,
                      startAngle,   // angle to start at (ie 0)
                      endAngle,     // angle to end at (ie Math.PI * 2)
@@ -585,7 +585,7 @@ single vertex they average the normals of all the polygons that share that verte
 let the user choose some maximum angle. If the angle between one polygon shared by
 a vertex is greater than that maximum angle then they generate a new vertex.</p>
 <p>Let&#39;s do that.</p>
-<pre><code>function generateNormals(arrays, maxAngle) {
+<pre class="prettyprint"><code>function generateNormals(arrays, maxAngle) {
   const positions = arrays.position;
   const texcoords = arrays.texcoord;
 

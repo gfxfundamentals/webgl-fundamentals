@@ -102,11 +102,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </p>
 <p>Avec un graphe de scène on place juste la Lune comme enfant de la Terre et on la fait tourner autour, ce qui est beaucoup plus simple. Le graphe de scène s&#39;occupe de la position finale en parcourant les noeuds et en multipliant les matrices au fur et à mesure :</p>
-<pre><code>matriceGlobale = grandGrandParent * grandParent * parent * matriceLocale
+<pre class="prettyprint"><code>matriceGlobale = grandGrandParent * grandParent * parent * matriceLocale
 </code></pre><p>Concrètement notre simulation de l&#39;univers serait </p>
-<pre><code>transformationsGlobaleDeLaLune = matriceGalaxie * matriceSoleil * matriceTerre * matriceLocaleLune;
+<pre class="prettyprint"><code>transformationsGlobaleDeLaLune = matriceGalaxie * matriceSoleil * matriceTerre * matriceLocaleLune;
 </code></pre><p>On peut faire ça avec une fonction très simple :</p>
-<pre><code>function creerMatriceGlobale(noeud, matriceGlobaleParent) {
+<pre class="prettyprint"><code>function creerMatriceGlobale(noeud, matriceGlobaleParent) {
     // calcule notre matrice globale en multipliant la matrice locale avec 
     // la matrice globale du noeud parent
     var matriceGlobale = multiplierMatrices(noeud.matriceLocale, matriceGlobaleParent);
@@ -124,20 +124,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </li>
 </ul>
 <p>Un graphe de scène est assez facile à faire. Définissons un objet <code>Noeud</code>. Il y a des tas de façons d&#39;organiser un graphe de scène et j&#39;ignore quelle est la meilleure. Une façon courrante est d&#39;avoir un champ optionnel avec les objets à dessiner :</p>
-<pre><code>var noeud = {
+<pre class="prettyprint"><code>var noeud = {
    matriceLocale: ...,    // la matrice local du noeud
    matriceGlobale: ...,   // la matrice monde du noeud
    enfants: [],           // tableau d&#39;enfants
    objetsADessiner: ??,   // objets à dessiner dans ce noeud
 };
 </code></pre><p>Faisons un graphe pour le système solaire. Je ne vais pas utiliser de super textures qui ne sont pas importantes dans cet exemple. D&#39;abord écrivons quelques fonctions pour gérer les noeuds. D&#39;abord la classe Noeud :</p>
-<pre><code>var Noeud = function() {
+<pre class="prettyprint"><code>var Noeud = function() {
   this.enfant = [];
   this.matriceLocale = matriceIdentite(); 
   this.matriceGlobale = matriceIdentite();
 };
 </code></pre><p>Donnons lui une méthode pour établie des liens de parenté :</p>
-<pre><code>Noeud.prototype.definirParent = function(parent) {
+<pre class="prettyprint"><code>Noeud.prototype.definirParent = function(parent) {
   // retirer du noeud parent précédent s&#39;il y en avait un
   if (this.parent) {
     var ndx = this.parent.enfant.indexOf(this);
@@ -153,7 +153,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   this.parent = parent;
 };
 </code></pre><p>Et voici le code pour calculer les matrices globales depuis les matrices locales, depuis leurs relations parent-enfant. Si on démarre à la racine et qu&#39;on parcoure les noeuds dans la hiérarchie on peut calculer leurs matrices globales. Si vous vous demandez comment fonctionnent les matrices <a href="webgl-2d-matrices.html">vous pouvez lire l&#39;article sur les matrices 2D</a>.</p>
-<pre><code>Noeud.prototype.mettreAJourMatriceGlobale = function(matriceGlobaleParent) {
+<pre class="prettyprint"><code>Noeud.prototype.mettreAJourMatriceGlobale = function(matriceGlobaleParent) {
   if (matriceGlobaleParent) {
     // une matrice parent reçue en argument donc 
     // calcule et stocke le résultat dans `this.matriceGlobale`.
@@ -170,7 +170,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   });
 };
 </code></pre><p>Faisons le Soleil, la Terre et la Lune pour avoir une exemple simple. On va utiliser des distances arbitraires pour pouvoir voir quelque chose sur l&#39;écran. On va se contenter d&#39;une sphère jaune pour le Soleil, bleue-verte pour la Terre et grise pour la Lune. Si les termes <code>infoRendu</code>, <code>infoTampon</code> et <code>infoProgramme</code> ne vous sont pas familiers voyez <a href="webgl-drawing-multiple-things.html">l&#39;article précédent</a>.</p>
-<pre><code>// Ecrivons les noeuds
+<pre class="prettyprint"><code>// Ecrivons les noeuds
 var noeudSoleil = new Noeud();
 noeudSoleil.matriceLocale = deplacer(0, 0, 0);  // Soleil au centre
 noeudSoleil.infoRendu = {
@@ -204,11 +204,11 @@ noeudLune.infoRendu = {
   infoTampon: infoTamponSphere,
 };
 </code></pre><p>Maintenant que c&#39;est fait connectons les noeuds</p>
-<pre><code>// filiation entre les objets
+<pre class="prettyprint"><code>// filiation entre les objets
 noeudLune.definirParent(noeudTerre);
 noeudTerre.definirParent(noeudSoleil);
 </code></pre><p>Ensuite on liste les objets puis les objets à dessiner</p>
-<pre><code>var objets = [
+<pre class="prettyprint"><code>var objets = [
   noeudSoleil,
   noeudTerre,
   noeudLune,
@@ -220,14 +220,14 @@ var objetsADessiner = [
   noeudLune.infoRendu,
 ];
 </code></pre><p>Au moment du rendu on met à jour la matrice locale de chaque objet en la tournant un peu</p>
-<pre><code>// nouvelle matrice locale pour chaque objet
+<pre class="prettyprint"><code>// nouvelle matrice locale pour chaque objet
 multiplierMatrices(noeudSoleil.matriceLocale, tournerY(0.01), noeudSoleil.matriceLocale);
 multiplierMatrices(noeudTerre.matriceLocale, tournerY(0.01), noeudTerre.matriceLocale);
 multiplierMatrices(noeudLune.matriceLocale, tournerY(0.01), noeudLune.matriceLocale);
 </code></pre><p>Maintenant que les matrices locales sont à jour on va s&#39;occuper des matrices globales.</p>
-<pre><code>noeudSoleil.mettreAJourMatriceGlobale();
+<pre class="prettyprint"><code>noeudSoleil.mettreAJourMatriceGlobale();
 </code></pre><p>Maintenant qu&#39;on a nos matrices globales on doit les multiplier pour avoir une <a href="webgl-3d-perspective.html">matriceGlobaleVue</a> pour chaque objet.</p>
-<pre><code>// Calcule toutes les matrices pour le rendu
+<pre class="prettyprint"><code>// Calcule toutes les matrices pour le rendu
 objects.forEach(function(objet) {
   objet.infoRendu.uniforms.u_matrice = multiplierMatrices(objet.matriceGlobale, matriceGlobaleVue);
 });
@@ -239,7 +239,7 @@ objects.forEach(function(objet) {
 
 </p>
 <p>Toutes les objets sont de la même taille. Essayons de rendre la Terre plus grande</p>
-<pre><code>noeudTerre.matriceLocale = multiplierMatrices(
+<pre class="prettyprint"><code>noeudTerre.matriceLocale = multiplierMatrices(
     changerEchelle(2, 2, 2),           // Terre plus grosse
     deplacer(100, 0, 0));              // Terre à 100 unités du soleil
 </code></pre><p><div class="webgl_example_container">
@@ -249,13 +249,13 @@ objects.forEach(function(objet) {
 
 </p>
 <p>Oups. La Lune a grossi aussi. Pour corriger ça on pourrait en même temps réduire sa taille. Mais une meilleure solution serait d&#39;ajouter plus de noeuds dans notre graphe. Au lieu de faire simplement</p>
-<pre><code>  soleil
+<pre class="prettyprint"><code>  soleil
    |
   terre
    |
   lune
 </code></pre><p>On va faire</p>
-<pre><code> systemeSolaire
+<pre class="prettyprint"><code> systemeSolaire
    |    |
    |   soleil
    |
@@ -267,13 +267,13 @@ objects.forEach(function(objet) {
       |
      lune
 </code></pre><p>Ca permettra à la Terre de tourner autour du Soleil tout en appliquant des transformations au Soleil qui n&#39;affecteront pas la Terre. Pareil entre la Terre et la Lune. Ecrivons ces nouveaux noeuds pour <code>systemeSolaire</code>, <code>orbiteTerre</code> and <code>orbiteLune</code>.</p>
-<pre><code>var noeudSystemeSolaire = new Noeud();
+<pre class="prettyprint"><code>var noeudSystemeSolaire = new Noeud();
 var noeudOrbiteTerre = new Noeud();
 noeudOrbiteTerre.matriceLocale = deplacer(100, 0, 0);  // Terre à 100 unités du Soleil
 var noeudOrbiteLune = new Noeud();
 noeudOrbiteLune.matriceLocale = deplacer(20, 0, 0);    // Lune à 20 unités de la Terre
 </code></pre><p>Ces orbites ont été changées depuis les précédentes</p>
-<pre><code>var noeudTerre = new Noeud();
+<pre class="prettyprint"><code>var noeudTerre = new Noeud();
 -noeudTerre.matriceLocale = multiplierMatrices(
 -    changerEchelle(2, 2, 2),                          // Terre deux fois plus grande
 -    deplacer(100, 0, 0));                             // Terre à 100 unités du Soleil
@@ -282,14 +282,14 @@ noeudOrbiteLune.matriceLocale = deplacer(20, 0, 0);    // Lune à 20 unités de 
 var noeudLune = new Noeud();
 -noeudLune.matriceLocale = deplacer(20, 0, 0);         // Lune à 20 unités de la Terre
 </code></pre><p>On définit leurs relations</p>
-<pre><code>// Liens entre les objets
+<pre class="prettyprint"><code>// Liens entre les objets
 noeudSoleil.definirParent(noeudSystemeSolaire);
 noeudOrbiteTerre.definirParent(noeudSystemeSolaire);
 noeudTerre.definirParent(noeudOrbiteTerre);
 noeudOrbiteLune.definirParent(noeudOrbiteTerre);
 noeudLune.definirParent(noeudOrbiteLune);
 </code></pre><p>Et on ne met à jour que les orbites</p>
-<pre><code>// mise à jour des matrices locales
+<pre class="prettyprint"><code>// mise à jour des matrices locales
 -multiplierMatrices(noeudSoleil.matriceLocale, tournerY(0.01), noeudSoleil.matriceLocale);
 -multiplierMatrices(noeudTerre.matriceLocale, tournerY(0.01), noeudTerre.matriceLocale);
 -multiplierMatrices(noeudLune.matriceLocale, tournerY(0.01), noeudLune.matriceLocale);
@@ -308,7 +308,7 @@ noeudLune.definirParent(noeudOrbiteLune);
 </p>
 <p>Vous aurez peut-être aussi remarqué que le soleil et la Terre ne tournent plus au même rythme.</p>
 <p>Ajoutons d&#39;autres trucs. </p>
-<pre><code>-noeudSoleil.matriceLocale = deplacer(0, 0, 0);  // Soleil au centre
+<pre class="prettyprint"><code>-noeudSoleil.matriceLocale = deplacer(0, 0, 0);  // Soleil au centre
 +noeudSoleil.matriceLocale = changerEchelle(5, 5, 5);
 
 ...
@@ -332,7 +332,7 @@ multiplierMatrices(noeudSoleil.matriceLocale, tournerY(0.005), noeudSoleil.matri
 
 </p>
 <p>Jusque là on a une <code>matriceLocale</code> et on la modifie à chaque rendu. Il y a un problème pourtant, puisqu&#39;à chaque rendu les opérations vont avoir quelques erreurs. Il y a un moyen de corriger ça qui s&#39;appelle <em>normalisation ortho d&#39;une matrice</em> mais même ça ne marchera pas toujours. Par exemple imaginons qu&#39;on change l&#39;échelle à zéro et qu&#39;on veuille ensuite la ramener à sa valeur initiale. Faisons ça pour une valeur <code>x</code></p>
-<pre><code>x = 246;       // rendu #0, x = 246
+<pre class="prettyprint"><code>x = 246;       // rendu #0, x = 246
 
 echelle = 1;
 x = x * echelle  // rendu #1, x = 246
@@ -349,7 +349,7 @@ x = x * echelle  // rendu #4, x = 0  OUPS !
 echelle = 1;
 x = x * echelle  // rendu #5, x = 0  OUPS !
 </code></pre><p>On a perdu notre valeur. On peut corriger ça en ajoutant une autre classe qui met à jour la matrice à partir d&#39;autres valeurs. Changeons la définition de <code>Noeud</code> pour s&#39;offrir une <code>source</code>. Si elle existe on demandera à la <code>source</code> de nous donner une matrice locale.</p>
-<pre><code>*var Noeud = function(source) {
+<pre class="prettyprint"><code>*var Noeud = function(source) {
   this.enfant = [];
   this.matriceLocale = matriceIdentite();
   this.matriceGlobale = matriceIdentite();
@@ -365,7 +365,7 @@ Noeud.prototype.mettreAJourMatriceGlobale = function(matrice) {
 
   ...
 </code></pre><p>Maintenant créons une source. Une source classique est d&#39;avoir les valeurs de translation, rotation et échelle comme ceci :</p>
-<pre><code>var Transformations = function() {
+<pre class="prettyprint"><code>var Transformations = function() {
   this.translation = [0, 0, 0];
   this.rotation = [0, 0, 0];
   this.echelle = [1, 1, 1];
@@ -386,7 +386,7 @@ Transformations.prototype.faireMatrice = function(dst) {
   return dst;
 };
 </code></pre><p>On peut utiliser ça comme ça :</p>
-<pre><code>// à l&#39;initialisation on crée un noeud avec sa source
+<pre class="prettyprint"><code>// à l&#39;initialisation on crée un noeud avec sa source
 var mesTransformations  = new Transformations();
 var monNoeud = new Noeud(mesTransformations);
 

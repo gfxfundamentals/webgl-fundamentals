@@ -95,7 +95,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 теперь настало время ознакомиться с ней более детально.</p>
 <p>Ничего сложного в рендеринге в текстуру нет. Нам нужно создать текстуру
 определённого размера.</p>
-<pre><code>// текстура для рендеринга
+<pre class="prettyprint"><code>// текстура для рендеринга
 const targetTextureWidth = 256;
 const targetTextureHeight = 256;
 const targetTexture = gl.createTexture();
@@ -125,7 +125,7 @@ gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 поддерживают форматы и параметры, которыми текстуры не обладают. Также, в отличие от текстур, вы
 не сможете использовать напрямую рендербуфер в качестве входных данных для шейдера.</p>
 <p>Давайте создадим фреймбуфер и прикрепим нашу текстуру.</p>
-<pre><code>// создаём и привязываем фреймбуфер
+<pre class="prettyprint"><code>// создаём и привязываем фреймбуфер
 const fb = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
@@ -140,7 +140,7 @@ gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, tex, lev
 текстуру вместо рендеринга в canvas.</p>
 <p>Теперь мы поместим код, выполняющий рендеринг, в отдельную функцию, чтобы мы могли
 вызвать её дважды - один раз для рендеринга в текстуру, второй раз в canvas.</p>
-<pre><code>function drawCube(aspect) {
+<pre class="prettyprint"><code>function drawCube(aspect) {
   // говорим использовать нашу программу (пару шейдеров)
   gl.useProgram(program);
 
@@ -208,7 +208,7 @@ gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, tex, lev
 матрицы, так как соотношение сторон целевой текстуры отличается от соотношения
 сторон canvas.</p>
 <p>Вот пример вызова:</p>
-<pre><code>// отрисовка сцены
+<pre class="prettyprint"><code>// отрисовка сцены
 function drawScene(time) {
 
   ...
@@ -270,7 +270,7 @@ function drawScene(time) {
 и вычислить правильное соотношение сторон. Из опасений забыть выполнить вызов я
 стараюсь никогда не использовать напрямую <code>gl.bindFramebuffer</code> в своём коде. Вместо
 этого я пишу функцией, в которой есть следующие строки:</p>
-<pre><code>function bindFrambufferAndSetViewport(fb, width, height) {
+<pre class="prettyprint"><code>function bindFrambufferAndSetViewport(fb, width, height) {
    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
    gl.viewport(0, 0, width, height);
 }
@@ -290,7 +290,7 @@ function drawScene(time) {
 в том, что у нашего фреймбуфера отсутствует глубина, а у canvas глубина есть.</p>
 <p><img class="webgl_center" src="../resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" /></p>
 <p>Для добавления буфера глубины нам необходимо его создать и прикрепить к фреймбуферу.</p>
-<pre><code>// создаём рендербуфер глубины
+<pre class="prettyprint"><code>// создаём рендербуфер глубины
 const depthBuffer = gl.createRenderbuffer();
 gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
 
@@ -316,7 +316,7 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 </ul>
 <p>Для прочих комбинаций вам необходимо проверить поддержку системой/видеокартой/драйвером/браузером пользователя той
 или иной комбинации. Для проверки достаточно создать фреймбуфер, создать и прикрепить вложения, а затем вызвать:</p>
-<pre><code>var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+<pre class="prettyprint"><code>var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
 </code></pre><p>При статусе <code>FRAMEBUFFER_COMPLETE</code> комбинация вложений работает у данного пользователя. Иначе вам необходимо
 уведомить пользователя о неподдерживаемой функции, либо откатиться к другому методу.</p>
 <p>А если вы ещё не читали <a href="webgl-less-code-more-fun.html">статью об организации кода</a>, рекомендую с ней ознакомиться.</p>

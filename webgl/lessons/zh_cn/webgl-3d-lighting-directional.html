@@ -126,7 +126,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 由于 <code>F</code> 非常规则并且朝向都是 x, y, z轴，所以非常简单。正面的的部分法向量为 <code>0, 0, 1</code>，
 背面的部分法向量为 <code>0, 0, -1</code>，左面为 <code>-1, 0, 0</code>，右面为 <code>1, 0, 0</code>，上面为 <code>0, 1, 0</code>，
 然后底面为 <code>0, -1, 0</code>。</p>
-<pre><code>function setNormals(gl) {
+<pre class="prettyprint"><code>function setNormals(gl) {
   var normals = new Float32Array([
           // 正面左竖
           0, 0, 1,
@@ -258,7 +258,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   gl.bufferData(gl.ARRAY_BUFFER, normals, gl.STATIC_DRAW);
 }
 </code></pre><p>在代码中使用它们，先移除顶点颜色以便观察光照效果。</p>
-<pre><code>// 找顶点着色器中的属性
+<pre class="prettyprint"><code>// 找顶点着色器中的属性
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 -var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 +var normalLocation = gl.getAttribLocation(program, &quot;a_normal&quot;);
@@ -279,7 +279,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +// 将法向量存入缓冲
 +setNormals(gl);
 </code></pre><p>在渲染的时候</p>
-<pre><code>-// 启用颜色属性
+<pre class="prettyprint"><code>-// 启用颜色属性
 -gl.enableVertexAttribArray(colorLocation);
 -
 -// 绑定颜色缓冲
@@ -310,7 +310,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +    normalLocation, size, type, normalize, stride, offset)
 </code></pre><p>现在让着色器使用它</p>
 <p>首先在顶点着色器中只将法向量传递给片断着色器</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 -attribute vec4 a_color;
 +attribute vec3 a_normal;
 
@@ -330,7 +330,7 @@ void main() {
 +  v_normal = a_normal;
 }
 </code></pre><p>然后在片断着色器中将法向量和光照方向点乘</p>
-<pre><code>precision mediump float;
+<pre class="prettyprint"><code>precision mediump float;
 
 // 从顶点着色器中传入的值
 -varying vec4 v_color;
@@ -352,13 +352,13 @@ void main() {
 +   gl_FragColor.rgb *= light;
 }
 </code></pre><p>然后找到 <code>u_color</code> 和 <code>u_reverseLightDirection</code> 的位置。</p>
-<pre><code>  // 寻找全局变量
+<pre class="prettyprint"><code>  // 寻找全局变量
   var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
 +  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 +  var reverseLightDirectionLocation =
 +      gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
 </code></pre><p>为它们赋值</p>
-<pre><code>  // 设置矩阵
+<pre class="prettyprint"><code>  // 设置矩阵
   gl.uniformMatrix4fv(matrixLocation, false, worldViewProjectionMatrix);
 
 +  // 设置使用的颜色
@@ -383,7 +383,7 @@ void main() {
 现在我们只传了一个矩阵 <code>u_matrix</code>，所以先来改成传递两个矩阵，
 一个叫做 <code>u_world</code> 的世界矩阵，另一个叫做 <code>u_worldViewProjection</code>
 也就是我们现在的 <code>u_matrix</code>。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec3 a_normal;
 
 *uniform mat4 u_worldViewProjection;
@@ -402,12 +402,12 @@ void main() {
 那是因为法向量是方向所以不用关心位移，
 矩阵的左上 3x3 部分才是控制姿态的。</p>
 <p>找到全局变量</p>
-<pre><code>  // 寻找全局变量
+<pre class="prettyprint"><code>  // 寻找全局变量
 *  var worldViewProjectionLocation =
 *      gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 +  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 </code></pre><p>然后更新它们</p>
-<pre><code>*// 设置矩阵
+<pre class="prettyprint"><code>*// 设置矩阵
 *gl.uniformMatrix4fv(
 *    worldViewProjectionLocation, false,
 *    worldViewProjectionMatrix);
@@ -441,7 +441,7 @@ void main() {
 基于可视化的结果可以得出使用世界矩阵求逆转置是对的。</p>
 <p>修改代码让示例使用这种矩阵，首先更新着色器，理论上我们可以直接更新 <code>u_world</code>
 的值，但是最好将它重命名以表示它真正的含义，防止混淆。</p>
-<pre><code>attribute vec4 a_position;
+<pre class="prettyprint"><code>attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform mat4 u_worldViewProjection;
@@ -457,11 +457,11 @@ void main() {
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 </code></pre><p>然后找到它</p>
-<pre><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
+<pre class="prettyprint"><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 +  var worldInverseTransposeLocation =
 +      gl.getUniformLocation(program, &quot;u_worldInverseTranspose&quot;);
 </code></pre><p>更新它</p>
-<pre><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
+<pre class="prettyprint"><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
 var worldInverseMatrix = m4.inverse(worldMatrix);
 var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
@@ -474,7 +474,7 @@ gl.uniformMatrix4fv(
 +    worldInverseTransposeLocation, false,
 +    worldInverseTransposeMatrix);
 </code></pre><p>这是转置的代码</p>
-<pre><code>var m4 = {
+<pre class="prettyprint"><code>var m4 = {
   transpose: function(m) {
     return [
       m[0], m[4], m[8], m[12],

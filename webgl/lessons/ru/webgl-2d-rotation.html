@@ -111,7 +111,7 @@ Y равен 1, а X равен 0. Справа X равен 1, а Y равен 
 <p>Мы возьмём значения X и Y из любой точки единичной окружности, и умножим на них
 нашу геометрию из <a href="webgl-2d-translation.html">предыдущего примера</a>.</p>
 <p>В шейдере произойдут следующие изменения:</p>
-<pre><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -127,7 +127,7 @@ void main() {
   // Затем перенос
 *  vec2 position = rotatedPosition + u_translation;
 </code></pre><p>Изменим JavaScript, чтобы можно было передать эти 2 значения.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
 
 +  var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
 
@@ -163,7 +163,7 @@ void main() {
 
 </p>
 <p>Как это работает? Взглянем на математику.</p>
-<pre><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
+<pre class="prettyprint"><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </code></pre><p>Скажем, у нас есть прямоугольник, который нужно перевернуть. Изначально его верхний
 правый угол находится в координатах 3.0, 9.0. Теперь возьмём точку на единичной
@@ -192,7 +192,7 @@ rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 <p>Точки на единичной окружности также известны под названиями синус и
 косинус. Поэтому для любого заданного угла мы можем получить значения
 синуса и косинуса следующим образом:</p>
-<pre><code>function printSineAndCosineForAnAngle(angleInDegrees) {
+<pre class="prettyprint"><code>function printSineAndCosineForAnAngle(angleInDegrees) {
   var angleInRadians = angleInDegrees * Math.PI / 180;
   var s = Math.sin(angleInRadians);
   var c = Math.cos(angleInRadians);
@@ -204,7 +204,7 @@ rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 <p>Если сложить всё вместе, мы можем поворачивать геометрию на любой заданный угол.
 Просто установите вращению значения синуса и косинуса угла, на который требуется
 выполнить поворот.</p>
-<pre><code>  ...
+<pre class="prettyprint"><code>  ...
   var angleInRadians = angleInDegrees * Math.PI / 180;
   rotation[0] = Math.sin(angleInRadians);
   rotation[1] = Math.cos(angleInRadians);
