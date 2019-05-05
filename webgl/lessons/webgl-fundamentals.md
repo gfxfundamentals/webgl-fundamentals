@@ -352,7 +352,7 @@ After all that we can finally ask WebGL to execute our GLSL program.
 
 Because the count is 3 this will execute our vertex shader 3 times. The first time `a_position.x` and `a_position.y`
 in our vertex shader attribute will be set to the first 2 values from the positionBuffer.
-The 2nd time `a_position.xy` will be set to the 2nd two values. The last time it will be
+The second time `a_position.x` and `a_position.y` will be set to the second 2 values. The last time they will be
 set to the last 2 values.
 
 Because we set `primitiveType` to `gl.TRIANGLES`, each time our vertex shader is run 3 times
