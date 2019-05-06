@@ -84,14 +84,16 @@
 <div class="description">
     <p>Creates a set of attribute data and WebGLBuffers from set of arrays</p>
 <p>Given</p>
-<pre class="prettyprint source"><code> var arrays = {
+<pre><code> var arrays = {
    position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
    normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
    color:    { numComponents: 4, data: [255, 255, 255, 255, 255, 0, 0, 255, 0, 0, 255, 255], type: Uint8Array, },
    indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
- };</code></pre><p>returns something like</p>
-<pre class="prettyprint source"><code> var attribs = {
+ };
+</code></pre>
+<p>returns something like</p>
+<pre><code> var attribs = {
    a_position: { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
    a_texcoord: { numComponents: 2, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
    a_normal:   { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
@@ -268,7 +270,8 @@
             
 
             <td class="description last">
-                <p>mapping from attribute name to array name.<br>    if not specified defaults to &quot;a_name&quot; -&gt; &quot;name&quot;.</p>
+                <p>mapping from attribute name to array name.<br>
+if not specified defaults to &quot;a_name&quot; -&gt; &quot;name&quot;.</p>
                 
             </td>
         </tr>
@@ -331,7 +334,8 @@
 
 
 <div class="description">
-    <p>Creates setter functions for all attributes of a shader<br>program. You can pass this to <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> to set all your buffers and attributes.</p>
+    <p>Creates setter functions for all attributes of a shader<br>
+program. You can pass this to <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> to set all your buffers and attributes.</p>
 </div>
 
 
@@ -493,13 +497,17 @@
 
 
 <div class="description">
-    <p>creates a typed array with a <code>push</code> function attached<br>so that you can easily <em>push</em> values.</p>
-<p><code>push</code> can take multiple arguments. If an argument is an array each element<br>of the array will be added to the typed array.</p>
+    <p>creates a typed array with a <code>push</code> function attached<br>
+so that you can easily <em>push</em> values.</p>
+<p><code>push</code> can take multiple arguments. If an argument is an array each element<br>
+of the array will be added to the typed array.</p>
 <p>Example:</p>
-<pre class="prettyprint source"><code>var array = createAugmentedTypedArray(3, 2);  // creates a Float32Array with 6 values
+<pre><code>var array = createAugmentedTypedArray(3, 2);  // creates a Float32Array with 6 values
 array.push(1, 2, 3);
 array.push([4, 5, 6]);
-// array now contains [1, 2, 3, 4, 5, 6]</code></pre><p>Also has <code>numComponents</code> and <code>numElements</code> properties.</p>
+// array now contains [1, 2, 3, 4, 5, 6]
+</code></pre>
+<p>Also has <code>numComponents</code> and <code>numElements</code> properties.</p>
 </div>
 
 
@@ -707,15 +715,18 @@ array.push([4, 5, 6]);
 
 <div class="description">
     <p>Creates a BufferInfo from an object of arrays.</p>
-<p>This can be passed to <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> and to<br><code>module:webgl-utils:drawBufferInfo</code>.</p>
+<p>This can be passed to <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> and to<br>
+<code>module:webgl-utils:drawBufferInfo</code>.</p>
 <p>Given an object like</p>
-<pre class="prettyprint source"><code>var arrays = {
+<pre><code>var arrays = {
   position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
   texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
   normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
   indices:  { numComponents: 3, data: [0, 1, 2, 1, 2, 3],                       },
-};</code></pre><p> Creates an BufferInfo like this</p>
-<pre class="prettyprint source"><code>bufferInfo = {
+};
+</code></pre>
+<p>Creates an BufferInfo like this</p>
+<pre><code>bufferInfo = {
   numElements: 4,        // or whatever the number of elements is
   indices: WebGLBuffer,  // this property will not exist if there are no indices
   attribs: {
@@ -723,20 +734,27 @@ array.push([4, 5, 6]);
     a_normal:   { buffer: WebGLBuffer, numComponents: 3, },
     a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
   },
-};</code></pre><p> The properties of arrays can be JavaScript arrays in which case the number of components<br> will be guessed.</p>
-<pre class="prettyprint source"><code>var arrays = {
+};
+</code></pre>
+<p>The properties of arrays can be JavaScript arrays in which case the number of components<br>
+will be guessed.</p>
+<pre><code>var arrays = {
    position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
    texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
    normal:   [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
    indices:  [0, 1, 2, 1, 2, 3],
-};</code></pre><p> They can also by TypedArrays</p>
-<pre class="prettyprint source"><code>var arrays = {
+};
+</code></pre>
+<p>They can also by TypedArrays</p>
+<pre><code>var arrays = {
    position: new Float32Array([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]),
    texcoord: new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]),
    normal:   new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]),
    indices:  new Uint16Array([0, 1, 2, 1, 2, 3]),
-};</code></pre><p> Or augmentedTypedArrays</p>
-<pre class="prettyprint source"><code>var positions = createAugmentedTypedArray(3, 4);
+};
+</code></pre>
+<p>Or augmentedTypedArrays</p>
+<pre><code>var positions = createAugmentedTypedArray(3, 4);
 var texcoords = createAugmentedTypedArray(2, 4);
 var normals   = createAugmentedTypedArray(3, 4);
 var indices   = createAugmentedTypedArray(3, 2, Uint16Array);
@@ -751,8 +769,10 @@ var arrays = {
    texcoord: texcoords,
    normal:   normals,
    indices:  indices,
-};</code></pre><p>For the last example it is equivalent to</p>
-<pre class="prettyprint source"><code>var bufferInfo = {
+};
+</code></pre>
+<p>For the last example it is equivalent to</p>
+<pre><code>var bufferInfo = {
   attribs: {
     a_position: { numComponents: 3, buffer: gl.createBuffer(), },
     a_texcoods: { numComponents: 2, buffer: gl.createBuffer(), },
@@ -941,16 +961,20 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>an optional mapping of attribute to array name.<br>   If not passed in it's assumed the array names will be mapped to an attribute<br>   of the same name with &quot;a_&quot; prefixed to it. An other words.</p>
-<pre class="prettyprint source"><code>   var arrays = {
+                <p>an optional mapping of attribute to array name.<br>
+If not passed in it's assumed the array names will be mapped to an attribute<br>
+of the same name with &quot;a_&quot; prefixed to it. An other words.</p>
+<pre><code>   var arrays = {
       position: ...,
       texcoord: ...,
       normal:   ...,
       indices:  ...,
    };
 
-   bufferInfo = createBufferInfoFromArrays(gl, arrays);</code></pre><p>   Is the same as</p>
-<pre class="prettyprint source"><code>   var arrays = {
+   bufferInfo = createBufferInfoFromArrays(gl, arrays);
+</code></pre>
+<p>Is the same as</p>
+<pre><code>   var arrays = {
       position: ...,
       texcoord: ...,
       normal:   ...,
@@ -1028,14 +1052,18 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 <div class="description">
     <p>Creates buffers from typed arrays</p>
 <p>Given something like this</p>
-<pre class="prettyprint source"><code>var arrays = {
+<pre><code>var arrays = {
    positions: [1, 2, 3],
    normals: [0, 0, 1],
-}</code></pre><p>returns something like</p>
-<pre class="prettyprint source"><code>buffers = {
+}
+</code></pre>
+<p>returns something like</p>
+<pre><code>buffers = {
   positions: WebGLBuffer,
   normals: WebGLBuffer,
-}</code></pre><p>If the buffer is named 'indices' it will be made an ELEMENT_ARRAY_BUFFER.</p>
+}
+</code></pre>
+<p>If the buffer is named 'indices' it will be made an ELEMENT_ARRAY_BUFFER.</p>
 </div>
 
 
@@ -1216,7 +1244,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 
 
 <div class="description">
-    <p>Creates a program, attaches shaders, binds attrib locations, links the<br>program and calls useProgram.</p>
+    <p>Creates a program, attaches shaders, binds attrib locations, links the<br>
+program and calls useProgram.</p>
 </div>
 
 
@@ -1424,7 +1453,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p>
+                <p>callback for errors. By default it just prints an error to the console<br>
+on error. If you want something else pass an callback. It's passed an error message.</p>
                 
             </td>
         </tr>
@@ -1564,7 +1594,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>The WebGLRenderingContext<br>       to use.</p>
+                <p>The WebGLRenderingContext<br>
+to use.</p>
                 
             </td>
         </tr>
@@ -1598,7 +1629,9 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>Array of ids of the script<br>       tags for the shaders. The first is assumed to be the<br>       vertex shader, the second the fragment shader.</p>
+                <p>Array of ids of the script<br>
+tags for the shaders. The first is assumed to be the<br>
+vertex shader, the second the fragment shader.</p>
                 
             </td>
         </tr>
@@ -1704,7 +1737,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p>
+                <p>callback for errors. By default it just prints an error to the console<br>
+on error. If you want something else pass an callback. It's passed an error message.</p>
                 
             </td>
         </tr>
@@ -1869,7 +1903,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>The WebGLRenderingContext<br>       to use.</p>
+                <p>The WebGLRenderingContext<br>
+to use.</p>
                 
             </td>
         </tr>
@@ -1903,7 +1938,9 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>Array of sources for the<br>       shaders. The first is assumed to be the vertex shader,<br>       the second the fragment shader.</p>
+                <p>Array of sources for the<br>
+shaders. The first is assumed to be the vertex shader,<br>
+the second the fragment shader.</p>
                 
             </td>
         </tr>
@@ -2009,7 +2046,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p>
+                <p>callback for errors. By default it just prints an error to the console<br>
+on error. If you want something else pass an callback. It's passed an error message.</p>
                 
             </td>
         </tr>
@@ -2074,7 +2112,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 <div class="description">
     <p>Creates a ProgramInfo from 2 sources.</p>
 <p>A ProgramInfo contains</p>
-<pre class="prettyprint source"><code>programInfo = {
+<pre><code>programInfo = {
    program: WebGLProgram,
    uniformSetters: object of setters as returned from createUniformSetters,
    attribSetters: object of setters as returned from createAttribSetters,
@@ -2180,7 +2218,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>The WebGLRenderingContext<br>       to use.</p>
+                <p>The WebGLRenderingContext<br>
+to use.</p>
                 
             </td>
         </tr>
@@ -2214,7 +2253,9 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>Array of sources for the<br>       shaders or ids. The first is assumed to be the vertex shader,<br>       the second the fragment shader.</p>
+                <p>Array of sources for the<br>
+shaders or ids. The first is assumed to be the vertex shader,<br>
+the second the fragment shader.</p>
                 
             </td>
         </tr>
@@ -2320,7 +2361,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>callback for errors. By default it just prints an error to the console<br>       on error. If you want something else pass an callback. It's passed an error message.</p>
+                <p>callback for errors. By default it just prints an error to the console<br>
+on error. If you want something else pass an callback. It's passed an error message.</p>
                 
             </td>
         </tr>
@@ -2383,7 +2425,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 
 
 <div class="description">
-    <p>Creates setter functions for all uniforms of a shader<br>program.</p>
+    <p>Creates setter functions for all uniforms of a shader<br>
+program.</p>
 </div>
 
 
@@ -2546,7 +2589,9 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 
 <div class="description">
     <p>Calls <code>gl.drawElements</code> or <code>gl.drawArrays</code>, whichever is appropriate</p>
-<p>normally you'd call <code>gl.drawElements</code> or <code>gl.drawArrays</code> yourself<br>but calling this means if you switch from indexed data to non-indexed<br>data you don't have to remember to update your draw call.</p>
+<p>normally you'd call <code>gl.drawElements</code> or <code>gl.drawArrays</code> yourself<br>
+but calling this means if you switch from indexed data to non-indexed<br>
+data you don't have to remember to update your draw call.</p>
 </div>
 
 
@@ -2984,7 +3029,9 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 
 
 <div class="description">
-    <p>Given an extension name like WEBGL_compressed_texture_s3tc<br>returns the supported version extension, like<br>WEBKIT_WEBGL_compressed_teture_s3tc</p>
+    <p>Given an extension name like WEBGL_compressed_texture_s3tc<br>
+returns the supported version extension, like<br>
+WEBKIT_WEBGL_compressed_teture_s3tc</p>
 </div>
 
 
@@ -3117,7 +3164,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 
 
 <div class="param-desc">
-    <p>The extension or undefined if not<br>    found.</p>
+    <p>The extension or undefined if not<br>
+found.</p>
 </div>
 
     
@@ -3277,7 +3325,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
             
 
             <td class="description last">
-                <p>amount to multiply by.<br>   Pass in window.devicePixelRatio for native pixels.</p>
+                <p>amount to multiply by.<br>
+Pass in window.devicePixelRatio for native pixels.</p>
                 
             </td>
         </tr>
@@ -3342,7 +3391,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
 <div class="description">
     <p>Sets attributes and binds buffers (deprecated... use <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a>)</p>
 <p>Example:</p>
-<pre class="prettyprint source"><code>var program = createProgramFromScripts(
+<pre><code>var program = createProgramFromScripts(
     gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
 
 var attribSetters = createAttributeSetters(program);
@@ -3355,16 +3404,24 @@ var attribs = {
   a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
 };
 
-gl.useProgram(program);</code></pre><p>This will automatically bind the buffers AND set the<br>attributes.</p>
-<pre class="prettyprint source"><code>setAttributes(attribSetters, attribs);</code></pre><p>Properties of attribs. For each attrib you can add<br>properties:</p>
+gl.useProgram(program);
+</code></pre>
+<p>This will automatically bind the buffers AND set the<br>
+attributes.</p>
+<pre><code>setAttributes(attribSetters, attribs);
+</code></pre>
+<p>Properties of attribs. For each attrib you can add<br>
+properties:</p>
 <ul>
 <li>type: the type of data in the buffer. Default = gl.FLOAT</li>
 <li>normalize: whether or not to normalize the data. Default = false</li>
 <li>stride: the stride. Default = 0</li>
 <li>offset: offset into the buffer. Default = 0</li>
 </ul>
-<p>For example if you had 3 value float positions, 2 value<br>float texcoord and 4 value uint8 colors you'd setup your<br>attribs like this</p>
-<pre class="prettyprint source"><code>var attribs = {
+<p>For example if you had 3 value float positions, 2 value<br>
+float texcoord and 4 value uint8 colors you'd setup your<br>
+attribs like this</p>
+<pre><code>var attribs = {
   a_position: {buffer: positionBuffer, numComponents: 3},
   a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
   a_color: {
@@ -3536,7 +3593,7 @@ gl.useProgram(program);</code></pre><p>This will automatically bind the buffers 
 <div class="description">
     <p>Sets attributes and buffers including the <code>ELEMENT_ARRAY_BUFFER</code> if appropriate</p>
 <p>Example:</p>
-<pre class="prettyprint source"><code>var programInfo = createProgramInfo(
+<pre><code>var programInfo = createProgramInfo(
     gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
 
 var arrays = {
@@ -3546,9 +3603,14 @@ var arrays = {
 
 var bufferInfo = createBufferInfoFromArrays(gl, arrays);
 
-gl.useProgram(programInfo.program);</code></pre><p>This will automatically bind the buffers AND set the<br>attributes.</p>
-<pre class="prettyprint source"><code>setBuffersAndAttributes(programInfo.attribSetters, bufferInfo);</code></pre><p>For the example above it is equivilent to</p>
-<pre class="prettyprint source"><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.useProgram(programInfo.program);
+</code></pre>
+<p>This will automatically bind the buffers AND set the<br>
+attributes.</p>
+<pre><code>setBuffersAndAttributes(programInfo.attribSetters, bufferInfo);
+</code></pre>
+<p>For the example above it is equivilent to</p>
+<pre><code>gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 gl.enableVertexAttribArray(a_positionLocation);
 gl.vertexAttribPointer(a_positionLocation, 3, gl.FLOAT, false, 0, 0);
 gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
@@ -3737,7 +3799,7 @@ gl.vertexAttribPointer(a_texcoordLocation, 4, gl.FLOAT, false, 0, 0);</code></pr
 <div class="description">
     <p>Set uniforms and binds related textures.</p>
 <p>example:</p>
-<pre class="prettyprint source"><code>var programInfo = createProgramInfo(
+<pre><code>var programInfo = createProgramInfo(
     gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
 
 var tex1 = gl.createTexture();
@@ -3758,9 +3820,14 @@ var uniforms = {
   ],
 };
 
-gl.useProgram(program);</code></pre><p>This will automatically bind the textures AND set the<br>uniforms.</p>
-<pre class="prettyprint source"><code>setUniforms(programInfo.uniformSetters, uniforms);</code></pre><p>For the example above it is equivalent to</p>
-<pre class="prettyprint source"><code>var texUnit = 0;
+gl.useProgram(program);
+</code></pre>
+<p>This will automatically bind the textures AND set the<br>
+uniforms.</p>
+<pre><code>setUniforms(programInfo.uniformSetters, uniforms);
+</code></pre>
+<p>For the example above it is equivalent to</p>
+<pre><code>var texUnit = 0;
 gl.activeTexture(gl.TEXTURE0 + texUnit);
 gl.bindTexture(gl.TEXTURE_2D, tex1);
 gl.uniform1i(u_someSamplerLocation, texUnit++);
@@ -3774,8 +3841,10 @@ gl.uniformMatrix4fv(u_someMatrix, false, [
     0,1,0,0,
     0,0,1,0,
     0,0,0,0,
-  ]);</code></pre><p>Note it is perfectly reasonable to call <code>setUniforms</code> multiple times. For example</p>
-<pre class="prettyprint source"><code>var uniforms = {
+  ]);
+</code></pre>
+<p>Note it is perfectly reasonable to call <code>setUniforms</code> multiple times. For example</p>
+<pre><code>var uniforms = {
   u_someSampler: tex1,
   u_someOtherSampler: tex2,
 };
@@ -3887,7 +3956,8 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
             
 
             <td class="description last">
-                <p>the setters returned from<br>       <code>createUniformSetters</code> or a ProgramInfo from <a href="module-webgl-utils.html#.createProgramInfo"><code>module:webgl-utils.createProgramInfo</code></a>.</p>
+                <p>the setters returned from<br>
+<code>createUniformSetters</code> or a ProgramInfo from <a href="module-webgl-utils.html#.createProgramInfo"><code>module:webgl-utils.createProgramInfo</code></a>.</p>
                 
             </td>
         </tr>
@@ -3913,7 +3983,8 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
             
 
             <td class="description last">
-                <p>object with values for the<br>       uniforms.</p>
+                <p>object with values for the<br>
+uniforms.</p>
                 
             </td>
         </tr>
@@ -5009,7 +5080,7 @@ setUniforms(programInfo.uniformSetters, moreUniforms);</code></pre>
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.1</a> using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
