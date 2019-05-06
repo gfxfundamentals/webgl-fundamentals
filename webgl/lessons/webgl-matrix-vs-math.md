@@ -192,9 +192,9 @@ const someTranslationMatrix = [
 ];
 ```
 
-So, with this convention of calling rows "columns" some things are simpler but others can me more confusing if you're a math person.
+So, with this convention of calling rows "columns" some things are simpler but others can be more confusing if you're a math person.
 
-I bring all of this up because these article are written from the POV of a programmer, not a math person. That means like every other single dimensional array that is treated as a 2 dimensional array, rows go across.
+I bring all of this up because these articles are written from the POV of a programmer, not a math person. That means like every other single dimensional array that is treated as a 2 dimensional array, rows go across.
 
 ```js
 const someTranslationMatrix = [
