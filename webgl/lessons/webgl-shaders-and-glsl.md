@@ -271,7 +271,7 @@ Fragment shader
     +varying vec4 v_positionWithOffset;
 
     void main() {
-    +  // convert from clipsapce (-1 <-> +1) to color space (0 -> 1).
+    +  // convert from clipspace (-1 <-> +1) to color space (0 -> 1).
     +  vec4 color = v_positionWithOffset * 0.5 + 0.5
     +  gl_FragColor = color;
     }
