@@ -250,7 +250,7 @@ var angle = Math.sin(t) * 0.8;
 computeBoneMatrices(bones, angle);
 ```
 
-Then we multiple the result of each by the inverse bind pose to deal with
+Then we multiply the result of each by the inverse bind pose to deal with
 the issue mentioned above
 
 ```

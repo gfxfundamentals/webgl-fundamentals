@@ -254,7 +254,7 @@ uniform vec2 u_rotation;
 uniform vec2 u_scale;
 
 void main() {
-  // Scale the positon
+  // Scale the position
   vec2 scaledPosition = a_position * u_scale;
 
   // Rotate the position
@@ -563,7 +563,7 @@ The are 2 ways to look at matrices. Given the expression
 The first way which many people find natural is to start on the right and work
 to the left
 
-First we mutiply the positon by the scale matrix to get a scaled postion
+First we mutiply the position by the scale matrix to get a scaled position
 
     scaledPosition = scaleMat * position
 
@@ -576,16 +576,16 @@ translatedRotatedScaledPosition
 
     translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
 
-And finally we multiple that by the projection matrix to get clipspace positions
+And finally we multiply that by the projection matrix to get clipspace positions
 
     clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 
 The 2nd way to look at matrices is reading from left to right. In that case
-each matrix changes the *space* respesented by the canvas. The canvas starts
+each matrix changes the *space* represented by the canvas. The canvas starts
 with representing clipspace (-1 to +1) in each direction. Each matrix applied
 from left to right changes the space represented by the canvas.
 
-Step 1:  no matrix (or the identiy matrix)
+Step 1:  no matrix (or the identity matrix)
 
 > {{{diagram url="resources/matrix-space-change.html?stage=0" caption="clip space" }}}
 >
