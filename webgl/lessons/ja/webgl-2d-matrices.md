@@ -186,7 +186,7 @@ newY = y * sy;
     uniform vec2 u_scale;
 
     void main() {
-      // Scale the positon
+      // Scale the position
       vec2 scaledPosition = a_position * u_scale;
 
       // Rotate the position
