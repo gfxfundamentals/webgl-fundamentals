@@ -302,7 +302,7 @@ uniform vec2 u_rotation;
 uniform vec2 u_scale;
 
 void main() {
-  // Scale the positon
+  // Scale the position
   vec2 scaledPosition = a_position * u_scale;
 
   // Rotate the position
@@ -580,20 +580,20 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 <pre class="prettyprint"><code>projectionMat * translationMat * rotationMat * scaleMat * position
 </code></pre><p>The first way which many people find natural is to start on the right and work
 to the left</p>
-<p>First we mutiply the positon by the scale matrix to get a scaled postion</p>
+<p>First we mutiply the position by the scale matrix to get a scaled position</p>
 <pre class="prettyprint"><code>scaledPosition = scaleMat * position
 </code></pre><p>Then we multiply the scaledPostion by the rotation matrix to get a rotatedScaledPosition</p>
 <pre class="prettyprint"><code>rotatedScaledPosition = rotationMat * scaledPosition
 </code></pre><p>Then we multiply the rotatedScaledPositon by the translation matrix to get a
 translatedRotatedScaledPosition</p>
 <pre class="prettyprint"><code>translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
-</code></pre><p>And finally we multiple that by the projection matrix to get clipspace positions</p>
+</code></pre><p>And finally we multiply that by the projection matrix to get clipspace positions</p>
 <pre class="prettyprint"><code>clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 </code></pre><p>The 2nd way to look at matrices is reading from left to right. In that case
-each matrix changes the <em>space</em> respesented by the canvas. The canvas starts
+each matrix changes the <em>space</em> represented by the canvas. The canvas starts
 with representing clipspace (-1 to +1) in each direction. Each matrix applied
 from left to right changes the space represented by the canvas.</p>
-<p>Step 1:  no matrix (or the identiy matrix)</p>
+<p>Step 1:  no matrix (or the identity matrix)</p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=0"></iframe>
