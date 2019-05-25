@@ -70,7 +70,7 @@ And we have to only draw 3 vertices.
 Then in our vertex shader we declare a *varying* to pass data to the
 fragment shader.
 
-    varying vec4 v_color;
+    *varying vec4 v_color;
     ...
     void main() {
       // Multiply the position by the matrix.
