@@ -153,9 +153,9 @@ function drawScene(time) {
     // Tell WebGL how to convert from clip space to pixels
     gl.viewport(0, 0, targetTextureWidth, targetTextureHeight);
 
-    // Clear the canvas AND the depth buffer.
+    // Clear the attachment(s).
     gl.clearColor(0, 0, 1, 1);   // clear to blue
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT| gl.DEPTH_BUFFER_BIT);
 
     const aspect = targetTextureWidth / targetTextureHeight;
     drawCube(aspect)
