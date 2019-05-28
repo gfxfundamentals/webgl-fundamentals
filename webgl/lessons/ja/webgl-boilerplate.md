@@ -193,7 +193,7 @@ WebGLを複雑に見せているもう一つの要素は「シェーダーにデ
     このスクリプトは、スライダを使って数値をセットしたり視覚化したりするためのものです。
     講義の中でよく使う機能なのでこのファイルにまとめました。
 
-*   [`webgl-lessons-helper.js`](../resources/webgl-lessons-helper.js)
+*   [`lessons-helper.js`](../resources/lessons-helper.js)
 
     このスクリプトは、webglfundmentals.org以外では必要ないでしょう。
     ほかのものに埋め込まれたlive editor上で使うと、エラーメッセージを

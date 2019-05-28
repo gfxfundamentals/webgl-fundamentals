@@ -166,7 +166,7 @@ WebGL复杂的原因之一是需要两个方法，一个顶点着色器和一个
     这个代码提供了含有数值的滑块，并更够在拖拽时更新数值。
     同样的，我只是不想在示例代码中参杂太多不相干代码。
 
-*   [`webgl-lessons-helper.js`](../resources/webgl-lessons-helper.js)
+*   [`lessons-helper.js`](../resources/lessons-helper.js)
 
     这个代码在 webglfundmentals.org 以外不是必须的，它只是能够在在线编辑器中提供合适的错误提示。
 

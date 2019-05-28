@@ -176,7 +176,7 @@ Note while we're add it there are several more scripts for similar reasons
     This provides code to setup sliders that have a visible value that updates when you drag the slider.
     Again I didn't want to clutter all the files with this code so it's in one place.
 
-*   [`webgl-lessons-helper.js`](../resources/webgl-lessons-helper.js)
+*   [`lessons-helper.js`](../resources/lessons-helper.js)
 
     This script is not needed except on webglfundmentals.org. It helps print error messages to
     the screen when used inside the live editor among other things.

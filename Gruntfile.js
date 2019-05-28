@@ -29,7 +29,7 @@ module.exports = function(grunt) {
       lib: {
         src: [
           'webgl/resources/webgl-utils.js',
-          'webgl/resources/webgl-lessons-helper.js',
+          'webgl/resources/lessons-helper.js',
           'webgl/resources/primitives.js',
           'webgl/resources/2d-math.js',
           'webgl/resources/3d-math.js',
