@@ -12,10 +12,27 @@ function getPrefix(url) {
   return prefix;
 }
 
+/**
+ * Fix any local URLs into fully qualified urls.
+ *
+ * Examples:
+ *    resources/image.jpg ->  https://domain.org/webgl/resouces/image.jpg
+ *    /3rdparty/lib.js    ->  https://domain.org/3rdparty/lib.js
+ *
+ * The reason is (a) we're running the code as via blobUrl and nothing is relative to a blob.
+ * (b) we can upload to jsfiddle/codepen and so need to link back to the files.
+ *
+ * This is all kind of hacky in that it's just a bunch of regular expressions looking
+ * for matches.
+ *
+ * @param {string} url The URL of the file source.
+ * @param {string} source An HTML file or JavaScript file
+ * @returns {string} the source after having urls fixed.
+ */
 function fixSourceLinks(url, source) {
-  const srcRE = /(src=)"(.*?)"/g;
-  const linkRE = /(href=)"(.*?)"/g;
-  const imageSrcRE = /((?:image|img)\.src = )"(.*?)"/g;
+  const srcRE = /(src=)(")(.*?)(")/g;
+  const linkRE = /(href=)(")(.*?)(")/g;
+  const imageSrcRE = /((?:image|img)\.src = )(")(.*?)(")/g;
   const loadImageRE = /(loadImageAndCreateTextureInfo)\(('|")(.*?)('|")/g;
   const loadImagesRE = /loadImages(\s*)\((\s*)\[([^]*?)\](\s*),/g;
   const loadGLTFRE = /(loadGLTF\(')(.*?)(')/g;
@@ -28,18 +45,15 @@ function fixSourceLinks(url, source) {
   function addPrefix(url) {
     return url.indexOf('://') < 0 && url[0] !== '?' ? (prefix + url) : url;
   }
-  function makeLinkFQed(match, p1, url) {
-    return p1 + '"' + addPrefix(url) + '"';
-  }
   function makeLinkFQedQuote(match, p1, url, p2) {
     return `${p1}${addPrefix(url)}${p2}`;
   }
   function makeLinkFDedQuotes(match, fn, q1, url, q2) {
     return fn + q1 + addPrefix(url) + q2;
   }
-  source = source.replace(srcRE, makeLinkFQed);
-  source = source.replace(linkRE, makeLinkFQed);
-  source = source.replace(imageSrcRE, makeLinkFQed);
+  source = source.replace(srcRE, makeLinkFDedQuotes);
+  source = source.replace(linkRE, makeLinkFDedQuotes);
+  source = source.replace(imageSrcRE, makeLinkFDedQuotes);
   source = source.replace(urlPropRE, makeLinkFDedQuotes);
   source = source.replace(workerRE, makeLinkFDedQuotes);
   source = source.replace(importScriptsRE, makeLinkFDedQuotes);
@@ -57,6 +71,12 @@ function fixSourceLinks(url, source) {
   return source;
 }
 
+/**
+ * Called after parsing to give a change to update htmlParts
+ * @param {string} html The main page html turned into a template with the <style>, <script> and <body> parts extracted
+ * @param {Object<string, HTMLPart>} htmlParts All the extracted parts
+ * @return {string} The modified html template
+ */
 function extraHTMLParsing(html, htmlParts) {
   const hasCanvasInCSSRE = /canvas/;
   const hasCanvasStyleInHTMLRE = /<canvas[^>]+?style[^>]+?>/;
@@ -77,6 +97,12 @@ canvas {
   return html;
 }
 
+/**
+ * Change JavaScript before uploading code to JSFiddle/Codepen
+ *
+ * @param {string} js JavaScript source
+ * @returns {string} The JavaScript source with any fixes applied.
+ */
 function fixJSForCodeSite(js) {
   if (/requestCORS/.test(js)) {
     return js;
