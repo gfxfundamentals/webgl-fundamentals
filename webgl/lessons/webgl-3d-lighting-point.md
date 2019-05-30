@@ -89,7 +89,7 @@ vector
 
     void main() {
       // because v_normal is a varying it's interpolated
-      // we it will not be a uint vector. Normalizing it
+      // so it will not be a unit vector. Normalizing it
       // will make it a unit vector again
       vec3 normal = normalize(v_normal);
 
@@ -221,7 +221,7 @@ reflecting into the view.
 
     void main() {
       // because v_normal is a varying it's interpolated
-      // we it will not be a uint vector. Normalizing it
+      // so it will not be a unit vector. Normalizing it
       // will make it a unit vector again
       vec3 normal = normalize(v_normal);
 
