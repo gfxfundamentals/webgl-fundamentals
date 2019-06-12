@@ -58,12 +58,12 @@ a shader can receive data.
 
 ## WebGL Hello World
 
-WebGL only cares about 2 things: clipspace coordinates and colors.
+WebGL only cares about 2 things: clip space coordinates and colors.
 Your job as a programmer using WebGL is to provide WebGL with those 2 things.
 You provide your 2 "shaders" to do this. A Vertex shader which provides the
-clipspace coordinates and a fragment shader that provides the color.
+clip space coordinates and a fragment shader that provides the color.
 
-Clipspace coordinates always go from -1 to +1 no matter what size your
+Clip space coordinates always go from -1 to +1 no matter what size your
 canvas is.
 
 <div class="webgl_center"><img src="resources/clipspace.svg" style="width: 400px"></div>
@@ -384,8 +384,8 @@ Here's a live version
 
 In the case above you can see our vertex shader is doing nothing
 but passing on our position data directly. Since the position data is
-already in clipspace there is no work to do. *If you want 3D it's up to you
-to supply shaders that convert from 3D to clipspace because WebGL is only
+already in clip space there is no work to do. *If you want 3D it's up to you
+to supply shaders that convert from 3D to clip space because WebGL is only
 a rasterization API*.
 
 You might be wondering why does the triangle start in the middle and go to toward the top right.
@@ -395,9 +395,9 @@ be to the right of that.
 As for why it's on the top, in clip space -1 is at the bottom and +1 is at the top. That means
 0 is in the center and so positive numbers will be above the center.
 
-For 2D stuff you would probably rather work in pixels than clipspace so
+For 2D stuff you would probably rather work in pixels than clip space so
 let's change the shader so we can supply the position in pixels and have
-it convert to clipspace for us. Here's the new vertex shader
+it convert to clip space for us. Here's the new vertex shader
 
     <script id="2d-vertex-shader" type="notjs">
 
@@ -413,7 +413,7 @@ it convert to clipspace for us. Here's the new vertex shader
     +    // convert from 0->1 to 0->2
     +    vec2 zeroToTwo = zeroToOne * 2.0;
     +
-    +    // convert from 0->2 to -1->+1 (clipspace)
+    +    // convert from 0->2 to -1->+1 (clip space)
     +    vec2 clipSpace = zeroToTwo - 1.0;
     +
     *    gl_Position = vec4(clipSpace, 0, 1);
