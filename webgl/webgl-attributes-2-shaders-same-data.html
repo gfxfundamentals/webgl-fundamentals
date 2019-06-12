@@ -1,0 +1,335 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - Attributes - 2 shaders same data</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+<canvas id="canvas"></canvas>
+</body>
+<!-- vertex shader -->
+<script id="vertex-color-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+attribute vec3 a_color;
+
+uniform mat4 u_matrix;
+
+varying vec3 v_color;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = u_matrix * a_position;
+
+  // Pass the color to the fragment shader
+  v_color = a_color;
+}
+</script>
+<!-- fragment shader -->
+<script id="vertex-color-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec3 v_color;
+
+void main() {
+  gl_FragColor = vec4(v_color, 1);
+}
+</script>
+<!-- vertex shader -->
+<script id="solid-color-vertex-shader" type="x-shader/x-vertex">
+  attribute vec4 a_position;
+  
+  uniform mat4 u_matrix;
+  
+  void main() {
+    // Multiply the position by the matrix.
+    gl_Position = u_matrix * a_position;
+  }
+  </script>
+  <!-- fragment shader -->
+  <script id="solid-color-fragment-shader" type="x-shader/x-fragment">
+  precision mediump float;
+  
+  uniform vec3 u_color;
+  
+  void main() {
+    gl_FragColor = vec4(u_color, 1);
+  }
+  </script>
+  <!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/webgl-lessons-ui.js"></script>
+<script src="resources/m4.js"></script>
+<script>
+"use strict";
+
+function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  var canvas = document.getElementById("canvas");
+  var gl = canvas.getContext("webgl");
+  if (!gl) {
+    return;
+  }
+
+  // setup GLSL programs
+  var solidColorProgram = webglUtils.createProgramFromScripts(
+      gl, ["solid-color-vertex-shader", "solid-color-fragment-shader"]);
+  var vertexColorProgram = webglUtils.createProgramFromScripts(
+      gl, ["vertex-color-vertex-shader", "vertex-color-fragment-shader"]);
+
+  var solidColorProgramInfo = {
+    program: solidColorProgram,
+    attribLocations: {
+      position: gl.getAttribLocation(solidColorProgram, "a_position"),
+    },
+    uniformLocations: {
+      u_color: gl.getUniformLocation(solidColorProgram, "u_color"),
+      u_matrix: gl.getUniformLocation(solidColorProgram, "u_matrix"),
+    },
+  };
+
+  var vertexColorProgramInfo = {
+    program: vertexColorProgram,
+    attribLocations: {
+      position: gl.getAttribLocation(vertexColorProgram, "a_position"),
+      color: gl.getAttribLocation(vertexColorProgram, "a_color"),
+    },
+    uniformLocations: {
+      u_matrix: gl.getUniformLocation(vertexColorProgram, "u_matrix"),
+    },
+  };
+
+  // Create a buffer to put positions in
+  var positionBuffer = gl.createBuffer();
+  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  // Put geometry data into buffer
+  setGeometry(gl);
+
+  // Create a buffer to put colors in
+  var colorBuffer = gl.createBuffer();
+  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = colorBuffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  // Put color data into buffer
+  setColors(gl);
+
+  drawScene();
+
+  // Draw the scene.
+  function drawScene() {
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    // Tell WebGL how to convert from clip space to pixels
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    // Clear the canvas AND the depth buffer.
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Turn on culling. By default backfacing triangles
+    // will be culled.
+    gl.enable(gl.CULL_FACE);
+
+    // Enable the depth buffer
+    gl.enable(gl.DEPTH_TEST);
+
+    function setupBufferAndAttributes(programInfo) {
+      // Turn on the position attribute
+      gl.enableVertexAttribArray(programInfo.attribLocations.position);
+
+      // Bind the position buffer.
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+      // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+      var size = 3;          // 3 components per iteration
+      var type = gl.FLOAT;   // the data is 32bit floats
+      var normalize = false; // don't normalize the data
+      var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+      var offset = 0;        // start at the beginning of the buffer
+      gl.vertexAttribPointer(
+          programInfo.attribLocations.position, size, type, normalize, stride, offset);
+
+      if (programInfo.attribLocations.color === undefined) {
+        return;
+      }
+
+      // Turn on the color attribute
+      gl.enableVertexAttribArray(programInfo.attribLocations.color);
+
+      // Bind the color buffer.
+      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+
+      // Tell the attribute how to get data out of colorBuffer (ARRAY_BUFFER)
+      var size = 3;          // 3 components per iteration
+      var type = gl.FLOAT;   // the data is 32bit floating point values
+      var normalize = false; // normalize the data (convert from 0-255 to 0-1)
+      var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+      var offset = 0;        // start at the beginning of the buffer
+      gl.vertexAttribPointer(
+        programInfo.attribLocations.color, size, type, normalize, stride, offset);
+    }
+
+    // Compute the projection matrix
+    var fieldOfViewRadians = 50 * Math.PI / 180;
+    var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    var zNear = 0.1;
+    var zFar = 200;
+    var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
+
+    // Compute the camera's matrix
+    var camera = [4, 2, 5];
+    var target = [0, 0, 0];
+    var up = [0, 1, 0];
+    var cameraMatrix = m4.lookAt(camera, target, up);
+
+    // Make a view matrix from the camera matrix.
+    var viewMatrix = m4.inverse(cameraMatrix);
+
+    // Compute a view projection matrix
+    var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+
+    // Draw a F at the origin
+    var worldMatrix = m4.identity();
+
+    // Multiply the matrices.
+    var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
+
+    // Depth test passes if new depth value is less than existing depth value
+    gl.depthFunc(gl.LESS);
+
+    {
+      // Tell it to use our program (pair of shaders)
+      gl.useProgram(vertexColorProgramInfo.program);
+      setupBufferAndAttributes(vertexColorProgramInfo);
+
+      // Set the matrix.
+      gl.uniformMatrix4fv(vertexColorProgramInfo.uniformLocations.u_matrix, false, worldViewProjectionMatrix);
+
+      // Draw the geometry.
+      var primitiveType = gl.TRIANGLES;
+      var offset = 0;
+      var count = 6 * 6;
+      gl.drawArrays(primitiveType, offset, count);
+    }
+
+    // Depth test passes if new depth value is less than or equal to existing depth value
+    gl.depthFunc(gl.LEQUAL);
+
+    {
+      gl.useProgram(solidColorProgramInfo.program);
+      setupBufferAndAttributes(solidColorProgramInfo);
+
+      // Set the matrix.
+      gl.uniformMatrix4fv(solidColorProgramInfo.uniformLocations.u_matrix, false, worldViewProjectionMatrix);
+
+      // Set the color to use
+      gl.uniform3fv(solidColorProgramInfo.uniformLocations.u_color, [2, 2, 2]); // white
+
+      // Draw the geometry.
+      var primitiveType = gl.LINE_STRIP;
+      var offset = 0;
+      var count = 6 * 6;
+      gl.drawArrays(primitiveType, offset, count);
+    }
+  }
+}
+
+// Fill the buffer with the values that define a letter 'F'.
+function setGeometry(gl) {
+  var positions = new Float32Array([
+    -1,-1, 1,
+     1,-1, 1,
+    -1, 1, 1,
+    -1, 1, 1,
+     1,-1, 1,
+     1, 1, 1,
+     1,-1, 1,
+     1,-1,-1,
+     1, 1, 1,
+     1, 1, 1,
+     1,-1,-1,
+     1, 1,-1,
+     1,-1,-1,
+    -1,-1,-1,
+     1, 1,-1,
+     1, 1,-1,
+    -1,-1,-1,
+    -1, 1,-1,
+    -1,-1,-1,
+    -1,-1, 1,
+    -1, 1,-1,
+    -1, 1,-1,
+    -1,-1, 1,
+    -1, 1, 1,
+     1, 1,-1,
+    -1, 1,-1,
+     1, 1, 1,
+     1, 1, 1,
+    -1, 1,-1,
+    -1, 1, 1,
+     1,-1, 1,
+    -1,-1, 1,
+     1,-1,-1,
+     1,-1,-1,
+    -1,-1, 1,
+    -1,-1,-1,
+  ]);
+  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+}
+
+function setColors(gl) {
+  var colors = new Float32Array([
+   0.25, 0.25, 0.75,
+   0.75, 0.25, 0.75,
+   0.25, 0.75, 0.75,
+   0.25, 0.75, 0.75,
+   0.75, 0.25, 0.75,
+   0.75, 0.75, 0.75,
+   0.75, 0.25, 0.75,
+   0.75, 0.25, 0.25,
+   0.75, 0.75, 0.75,
+   0.75, 0.75, 0.75,
+   0.75, 0.25, 0.25,
+   0.75, 0.75, 0.25,
+   0.75, 0.25, 0.25,
+   0.25, 0.25, 0.25,
+   0.75, 0.75, 0.25,
+   0.75, 0.75, 0.25,
+   0.25, 0.25, 0.25,
+   0.25, 0.75, 0.25,
+   0.25, 0.25, 0.25,
+   0.25, 0.25, 0.75,
+   0.25, 0.75, 0.25,
+   0.25, 0.75, 0.25,
+   0.25, 0.25, 0.75,
+   0.25, 0.75, 0.75,
+   0.75, 0.75, 0.25,
+   0.25, 0.75, 0.25,
+   0.75, 0.75, 0.75,
+   0.75, 0.75, 0.75,
+   0.25, 0.75, 0.25,
+   0.25, 0.75, 0.75,
+   0.75, 0.25, 0.75,
+   0.25, 0.25, 0.75,
+   0.75, 0.25, 0.25,
+   0.75, 0.25, 0.25,
+   0.25, 0.25, 0.75,
+   0.25, 0.25, 0.25,
+  ]);
+  gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+}
+
+main();
+</script>
+</html>
+
+
