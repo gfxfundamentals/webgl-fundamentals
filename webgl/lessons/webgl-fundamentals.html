@@ -132,11 +132,11 @@ by a vertex shader will be interpolated while executing the fragment shader.</p>
 </li>
 </ol>
 <h2 id="webgl-hello-world">WebGL Hello World</h2>
-<p>WebGL only cares about 2 things: clipspace coordinates and colors.
+<p>WebGL only cares about 2 things: clip space coordinates and colors.
 Your job as a programmer using WebGL is to provide WebGL with those 2 things.
 You provide your 2 &quot;shaders&quot; to do this. A Vertex shader which provides the
-clipspace coordinates and a fragment shader that provides the color.</p>
-<p>Clipspace coordinates always go from -1 to +1 no matter what size your
+clip space coordinates and a fragment shader that provides the color.</p>
+<p>Clip space coordinates always go from -1 to +1 no matter what size your
 canvas is.</p>
 <div class="webgl_center"><img src="resources/clipspace.svg" style="width: 400px"></div>
 
@@ -391,17 +391,17 @@ per channel canvas that means WebGL is going to write the values <code>[255, 0, 
 </p>
 <p>In the case above you can see our vertex shader is doing nothing
 but passing on our position data directly. Since the position data is
-already in clipspace there is no work to do. <em>If you want 3D it&#39;s up to you
-to supply shaders that convert from 3D to clipspace because WebGL is only
+already in clip space there is no work to do. <em>If you want 3D it&#39;s up to you
+to supply shaders that convert from 3D to clip space because WebGL is only
 a rasterization API</em>.</p>
 <p>You might be wondering why does the triangle start in the middle and go to toward the top right.
 Clip space in <code>x</code> goes from -1 to +1. That means 0 is in the center and positive values will
 be to the right of that.</p>
 <p>As for why it&#39;s on the top, in clip space -1 is at the bottom and +1 is at the top. That means
 0 is in the center and so positive numbers will be above the center.</p>
-<p>For 2D stuff you would probably rather work in pixels than clipspace so
+<p>For 2D stuff you would probably rather work in pixels than clip space so
 let&#39;s change the shader so we can supply the position in pixels and have
-it convert to clipspace for us. Here&#39;s the new vertex shader</p>
+it convert to clip space for us. Here&#39;s the new vertex shader</p>
 <pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
@@ -416,7 +416,7 @@ it convert to clipspace for us. Here&#39;s the new vertex shader</p>
 +    // convert from 0-&gt;1 to 0-&gt;2
 +    vec2 zeroToTwo = zeroToOne * 2.0;
 +
-+    // convert from 0-&gt;2 to -1-&gt;+1 (clipspace)
++    // convert from 0-&gt;2 to -1-&gt;+1 (clip space)
 +    vec2 clipSpace = zeroToTwo - 1.0;
 +
 *    gl_Position = vec4(clipSpace, 0, 1);
