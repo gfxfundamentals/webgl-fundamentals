@@ -441,7 +441,9 @@
    * @return {Matrix4} dst or a new matrix if none provided
    * @memberOf module:webgl-3d-math
    */
-  function frustum(left, right, bottom, top, near, far) {
+  function frustum(left, right, bottom, top, near, far, dst) {
+    dst = dst || new Float32Array(16);
+
     var dx = right - left;
     var dy = top - bottom;
     var dz = far - near;
