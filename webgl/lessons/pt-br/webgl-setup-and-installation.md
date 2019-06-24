@@ -17,7 +17,7 @@ Ainda assim, existem limites. O WebGL tem restrições mais fortes do que o Canv
 
 Além disso, é mais rápido trabalhar com tudo local.
 
-Vamos supor que você deseja executar e editar as amostras neste site. A primeira coisa que você deve fazer é baixar o site. [Você pode baixá-lo aqui](https://github.com/greggman/webgl-fundamentals/).
+Vamos supor que você deseja executar e editar as amostras neste site. A primeira coisa que você deve fazer é baixar o site. [Você pode baixá-lo aqui](https://github.com/gfxfundamentals/webgl-fundamentals/).
 
 {{{image url="resources/download-webglfundamentals.gif" }}}
 
@@ -57,7 +57,7 @@ Deve imprimir algo como
 
 Então, no seu navegador, acesse [`http://localhost:8080`](http://localhost:8080).
 
-Se você não especificar um caminho, então http-server será o servidor da pasta atual. Baixe-o aqui](https://github.com/greggman/webgl-fundamentals/).
+Se você não especificar um caminho, então http-server será o servidor da pasta atual. Baixe-o aqui](https://github.com/gfxfundamentals/webgl-fundamentals/).
 
 ## Usando as Ferramentas de Desenvolvimento dos Navegadores
 

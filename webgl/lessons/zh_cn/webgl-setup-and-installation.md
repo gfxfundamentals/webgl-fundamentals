@@ -12,7 +12,7 @@ TOC: WebGL 设置和安装
 但这么做有一些限制。WebGL在使用图片上有着比Canvas2D更强的限制，就是说WebGL不能随意使用网络获图像，
 还有一点需要注意的是WebGL读取本地数据的速度很快。
 
-如果你想运行和编辑本站示例，首先下载本网站。[你可以从这里下载](https://github.com/greggman/webgl-fundamentals/)。
+如果你想运行和编辑本站示例，首先下载本网站。[你可以从这里下载](https://github.com/gfxfundamentals/webgl-fundamentals/)。
 
 {{{image url="resources/download-webglfundamentals.gif" }}}
 

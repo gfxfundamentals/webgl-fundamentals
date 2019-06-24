@@ -22,7 +22,7 @@ WebGLは、Canvas2Dと比較して画像のロードに関してセキュリテ�
 上記の方法ではなく、「ローカルでやることにした」、と仮定して話を続けましょう。
 
 最初にやるべきことはこのサイトをまるごとダウンロードすることです。
-[ここからダウンロードできます](https://github.com/greggman/webgl-fundamentals/)。
+[ここからダウンロードできます](https://github.com/gfxfundamentals/webgl-fundamentals/)。
 
 {{{image url="resources/download-webglfundamentals.gif" }}}
 

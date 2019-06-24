@@ -18,7 +18,7 @@ WebGL은 이미지를 로딩하는데 Canvas2D보다 더 강력한 제한이 있
 
 이 사이트의 예제를 실행하고 수정한다고 가정해봅시다.
 제일 먼저 해야할 일은 사이트를 내려받는 것 인데요.
-[여기서 내려받을 수 있습니다](https://github.com/greggman/webgl-fundamentals/).
+[여기서 내려받을 수 있습니다](https://github.com/gfxfundamentals/webgl-fundamentals/).
 
 {{{image url="resources/download-webglfundamentals.gif" }}}
 

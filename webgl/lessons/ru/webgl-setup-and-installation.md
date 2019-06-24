@@ -16,7 +16,7 @@ TOC: WebGL Установка и настройка
 интернету. Кроме того, работа будет идти быстрее, когда всё находится на локальной машине.
 
 Предположим, что вы хотите запускать и редактировать примеры с этого сайта. Для начала
-нужно скачать сам сайт [по этой ссылке](https://github.com/greggman/webgl-fundamentals/).
+нужно скачать сам сайт [по этой ссылке](https://github.com/gfxfundamentals/webgl-fundamentals/).
 
 {{{image url="resources/download-webglfundamentals.gif" }}}
 

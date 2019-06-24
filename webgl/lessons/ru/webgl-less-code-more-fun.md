@@ -443,7 +443,7 @@ x, y, z), но в шейдере используется `vec4`. Для атр�
 Вы можете использовать подобный стиль и в своих проектах. Функции
 `createUniformSetters`, `createAttributeSetters`, `createBufferInfoFromArrays`,
 `setUniforms` и `setBuffersAndAttributes` содержатся в файле
-[`webgl-utils.js`](https://github.com/greggman/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js)
+[`webgl-utils.js`](https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js)
 и используются во всех примерах этой статьи. Если вам нужно что-то более
 систематизированное, обратите внимание на [TWGL.js](http://twgljs.org).
 

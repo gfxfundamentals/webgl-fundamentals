@@ -16,7 +16,7 @@ which means you can't easily access images from around the web for your WebGL wo
 On top of that it's just faster to work with everything local.
 
 Let's assume you want to run and edit the samples on this site. The first thing you should
-do is download the site. [You can download it here](https://github.com/greggman/webgl-fundamentals/).
+do is download the site. [You can download it here](https://github.com/gfxfundamentals/webgl-fundamentals/).
 
 {{{image url="resources/download-webglfundamentals.gif" }}}
 
