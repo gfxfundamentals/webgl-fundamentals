@@ -63,10 +63,10 @@ Current fields are
       link: 'http://webglfundamentals.org/webgl/lessons/ja',  // replace `ja` with country code
 
       // html that appears after the article and before the comments
-      commentSectionHeader: '<div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>\n        <div>Issue/Bug? <a href="http://github.com/greggman/webgl-fundamentals/issues">Create an issue on github</a>.</div>',
+      commentSectionHeader: '<div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>\n        <div>Issue/Bug? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>',
 
       // markdown that appears for untranslated articles
-      missing: "Sorry this article has not been translated yet. [Translations Welcome](https://github.com/greggman/webgl-fundamentals)! 😄\n\n[Here's the original English article for now]({{{origLink}}}).",
+      missing: "Sorry this article has not been translated yet. [Translations Welcome](https://github.com/gfxfundamentals/webgl-fundamentals)! 😄\n\n[Here's the original English article for now]({{{origLink}}}).",
 
       // the phrase "Table of Contents"
       toc: "Table of Contents",
@@ -169,7 +169,7 @@ The site is built into the `out` folder
 
 Steps
 
-    git clone https://github.com/greggman/webgl-fundamentals.git
+    git clone https://github.com/gfxfundamentals/webgl-fundamentals.git
     npm install
     npm run build
     npm start
