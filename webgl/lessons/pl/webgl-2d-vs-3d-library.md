@@ -1,5 +1,8 @@
 Title: WebGL - Rasteryzacja vs biblioteki 3D
 Description: Dlaczego WebGL nie jest biblioteką 3D i jakie to ma znaczenie.
+Category: misc
+TOC: WebGL - biblioteki 2D vs 3D
+
 
 Ten artykuł dotyczy nieco pobocznego wątku w stosunku do całej serii poświęconej WebGL.
 Pierwszy felieton <a href="webgl-fundamentals.html">zaczynał od podstaw</a>.

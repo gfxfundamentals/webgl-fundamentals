@@ -1,5 +1,8 @@
 Title: WebGL 天空盒
 Description: 用天空盒来展示天空!
+Category: 3d
+TOC: WebGL 天空盒
+
 
 这篇文章是WebGL系列文章的一部分。
 从[基础概念](webgl-fundamentals.html)开始。

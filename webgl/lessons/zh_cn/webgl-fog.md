@@ -1,5 +1,8 @@
 Title: WebGL 雾
 Description: 怎样实现雾
+Category: 3d
+TOC: WebGL 雾
+
 
 这篇文章是WebGL系列文章的一部分。从[基础概念](webgl-fundamentals.html)开始。
 

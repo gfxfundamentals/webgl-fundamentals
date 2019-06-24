@@ -1,5 +1,8 @@
 Title: Podstawy WebGL
 Description: Twoja pierwsza lekcja WebGL - podstawy
+Category: fundamentals
+TOC: Podstawy WebGL
+
 
 WebGL umożliwia wyświetlanie w czasie rzeczywistym grafiki 3D w Twojej
 przeglądarce, chociaż wiele osób nie zdaje sobie sprawy, że

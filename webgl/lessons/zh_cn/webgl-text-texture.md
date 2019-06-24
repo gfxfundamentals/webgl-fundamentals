@@ -1,5 +1,8 @@
 Title: WebGL 文字 - 使用纹理
 Description: 用纹理在WebGL中显示文字
+Category: text
+TOC: WebGL 文字 - 使用纹理
+
 
 此文上接WebGL系列文章，上一篇是[用Canvas 2D在WebGL画布上叠加一个文字层](webgl-text-canvas2d.html)，如果没读建议从那里开始。
 

@@ -1,5 +1,8 @@
 Title: Изменение размера Canvas в WebGL
 Description: Изменение размера canvas и связанные с этим проблемы
+Category: misc
+TOC: Изменение размера Canvas в WebGL
+
 
 Вот, что вам следует знать об изменениях размера canvas.
 

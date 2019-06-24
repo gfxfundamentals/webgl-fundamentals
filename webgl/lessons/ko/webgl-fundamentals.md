@@ -1,5 +1,8 @@
 Title: WebGL 기초
 Description: 기초부터 시작하는 WebGL 첫 강의
+Category: fundamentals
+TOC: WebGL 기초
+
 
 WebGL은 종종 3D API로 치부되는데요.
 사람들은 "WebGL을 사용해서 *멋진 3D*를 만들어야지!"라고 생각합니다.

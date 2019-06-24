@@ -1,5 +1,8 @@
 Title: Texto WebGL - Telas 2D
 Description: Como exibir texto usando uma tela 2D que está em sincronia com o WebGL
+Category: text
+TOC: Texto WebGL - Telas 2D
+
 
 Este artigo é uma continuação de [artigos anteriores do WebGL sobre desenho de texto](webgl-text-html.html). Se você não os leu, sugiro que você comece lá e trabalhe de volta.
 

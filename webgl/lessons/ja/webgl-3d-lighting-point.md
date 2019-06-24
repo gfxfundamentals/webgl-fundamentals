@@ -1,5 +1,8 @@
 Title: WebGL三次元点光源
 Description: WebGLで点光源の計算し方
+Category: lighting
+TOC: WebGL三次元点光源
+
 
 この記事は[WebGLで指向性光源の記事の続き](webgl-3d-lighting-directional.html)である。
 まだ読んでいなかったら[先に読んで下さい](webgl-3d-lighting-directional.html)。

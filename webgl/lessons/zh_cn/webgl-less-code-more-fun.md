@@ -1,5 +1,8 @@
 Title: WebGL 码少趣多
 Description: 让编写WebGL代码少点啰嗦
+Category: organization
+TOC: WebGL 码少趣多
+
 
 此文上接WebGL系列文章，从[基础理论](webgl-fundamentals.html)开始，
 如果没读请从那里开始。

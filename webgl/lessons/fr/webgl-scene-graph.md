@@ -1,5 +1,8 @@
 Title: WebGL - Les Graphes de Scène
 Description: Ce qu'est un graphe de scène et à quoi ça sert
+Category: organization
+TOC: WebGL - Graphes de scène
+
 
 Cet article est la suite d'une [série de posts](webgl-fundamentals.html) consacrés à WebGL. L'article précédent parlait de [dessiner plusieurs objets](webgl-drawing-multiple-things.html). Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d'abord.
 

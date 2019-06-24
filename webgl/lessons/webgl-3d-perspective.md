@@ -1,5 +1,8 @@
 Title: WebGL 3D Perspective
 Description: How to display perspective in 3D in WebGL
+Category: 3d
+TOC: WebGL 3D Perspective
+
 
 This post is a continuation of a series of posts about WebGL.
 The first [started with fundamentals](webgl-fundamentals.html) and

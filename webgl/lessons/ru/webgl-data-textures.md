@@ -1,5 +1,8 @@
 Title: WebGL 3D - Данные для текстур
 Description: Передача данных текстурам
+Category: textures
+TOC: WebGL - Данные для текстур
+
 
 Эта статья продолжает серию, которая начинается с
 [Основ WebGL](webgl-fundamentals.html). Предыдущая статья была

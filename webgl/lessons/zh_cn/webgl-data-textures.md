@@ -1,5 +1,8 @@
 Title: WebGL 数据纹理
 Description: 向纹理种传入数据
+Category: textures
+TOC: WebGL 数据纹理
+
 
 此文上接WebGL系列文章，第一篇是[基础概念](webgl-fundamentals.html)，
 上一篇是[纹理](webgl-3d-textures.html)。

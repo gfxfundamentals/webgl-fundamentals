@@ -1,5 +1,8 @@
 Title: WebGL 3D - Текстуры
 Description: Как работают текстуры в WebGL
+Category: textures
+TOC: WebGL 3D - Текстуры
+
 
 Эта статья продолжает серию статей о WebGL. В первой из них
 [мы начали с основ WebGL](webgl-fundamentals.html), а в предыдущей

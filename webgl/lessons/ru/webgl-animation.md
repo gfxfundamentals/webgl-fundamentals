@@ -1,5 +1,8 @@
 Title: WebGL - Анимация
 Description: Анимация в WebGL
+Category: misc
+TOC: WebGL - Анимация
+
 
 Эта статья продолжает серию статей о WebGL. Первая была об
 <a href="webgl-fundamentals.html">основах</a>, а в предыдущей мы рассмотрели

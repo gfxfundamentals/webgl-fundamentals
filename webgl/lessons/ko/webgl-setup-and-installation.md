@@ -1,5 +1,8 @@
 Title: WebGL 설치
 Description: WebGL 개발 방법
+Category: misc
+TOC: WebGL 설치
+
 
 WebGL을 개발하기 위해 웹 브라우저 이외에 기술적으로 아무것도 필요가 없습니다.
 

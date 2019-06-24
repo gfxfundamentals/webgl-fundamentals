@@ -1,5 +1,8 @@
 Title: WebGL三次元でカメラ
 Description: WebGLでカメラの計算し方
+Category: 3d
+TOC: WebGL三次元のカメラ
+
 
 この記事はWebGLシリーズのーつである。最初の記事は[WebGLの基本で始まった](webgl-fundamentals.html)。 
 そして、前回の記事は[透視投影](webgl-3d-perspective.html)についてだった。まだ読んでいなかったら先に読んで下さい。

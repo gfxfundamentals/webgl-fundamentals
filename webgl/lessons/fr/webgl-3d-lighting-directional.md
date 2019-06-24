@@ -1,5 +1,8 @@
 Title: WebGL 3D - Lumière directionnelle
 Description: Comment implémenter une lumière directionnelle en WebGL
+Category: lighting
+TOC: WebGL 3D - Lumière directionnelle
+
 
 Cet article est la suite d'une série de posts consacrés à WebGL. Le chapitre précédent parlait des <a href="webgl-3d-camera.html">caméras</a>. Vous voulez peut-être y jeter un oeil avant.
 

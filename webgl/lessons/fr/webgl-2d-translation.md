@@ -1,5 +1,8 @@
 Title: WebGL 2D - Les translations
 Description: Comment se déplacer en 2D
+Category: matrices
+TOC: WebGL 2D - Translation
+
 
 Avant de se lancer dans la 3D restons un moment sur la 2D. Restez avec moi : cet article a sûrement l'air facile pour certains mais les articles suivants se construisent sur celui-ci.
 

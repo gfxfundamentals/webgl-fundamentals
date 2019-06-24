@@ -1,5 +1,8 @@
 Title: WebGL三次元指向性光源
 Description: WebGLで指向性光源計算し方
+Category: lighting
+TOC: WebGL三次元指向性光源
+
 
 この記事はWebGLのシリーズの一つである。最初の記事は[WebGLの基本](webgl-fundamentals.html)についてだった。
 前回の記事は[三次元カメラ](webgl-3d-camera.html)についてだった。まだ読んでいなかったら先に読んで下さい。

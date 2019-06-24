@@ -1,5 +1,8 @@
 Title: WebGL - 二次元での回転
 Description: 二次元で回転する方法
+Category: matrices
+TOC: WebGL - 二次元での回転
+
 
 本記事もWebGLシリーズの一つである。最初の記事は[WebGLの基本](webgl-fundamentals.html)で、そして前回の記事は[二次元で移動すること](webgl-2d-translation.html)についての記事である.
 

@@ -1,5 +1,8 @@
 Title: Продолжаем обработку изображений в WebGL
 Description: Применяем несколько техник обработки изображений в WebGL
+Category: image-processing
+TOC: Продолжаем обработку изображений в WebGL
+
 
 Это продолжение статьи об [обработке изображений в WebGL](webgl-image-processing.html). Если вы её ещё не читали - предлагаю [ознакомиться сначала с ней](webgl-image-processing.html).
 

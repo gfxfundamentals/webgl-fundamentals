@@ -1,5 +1,8 @@
 Title: WebGL Attributes
 Description: What are attributes in WebGL?
+Category: reference
+TOC: WebGL Attributes
+
 
 This article is meant to try to give you a mental image
 of how attribute state is setup in WebGL. There is [a similar article on texture units](webgl-texture-units.html).

@@ -1,5 +1,8 @@
 Title: WebGL 设置和安装
 Description: 如何进行WebGL的开发
+Category: misc
+TOC: WebGL 设置和安装
+
 
 事实上，开发WebGL只需要一个网页浏览器。
 你可以用[jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/)、[jsbin.com](http://jsbin.com)或[codepen.io](http://codepen.io/greggman/pen/YGQjVV)当本教程的学习环境。

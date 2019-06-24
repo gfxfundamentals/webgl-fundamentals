@@ -1,5 +1,8 @@
-﻿Title: WebGL 작동 원리
+Title: WebGL 작동 원리
 Description: WebGL은 실제로 어떻게 작동하나요?
+Category: fundamentals
+TOC: WebGL 작동 원리
+
 
 이건 [WebGL Fundamentals](webgl-fundamentals.html)에서 이어지는 글입니다.
 이어서 하기 전에 WebGL과 GPU가 실제로 기본적인 수준에서 어떤 걸 하는지 얘기해봅시다.

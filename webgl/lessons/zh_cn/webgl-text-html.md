@@ -1,5 +1,8 @@
 Title: WebGL 文字 - HTML
 Description: 如何使用HTML显示文字，并和WebGL中的位置匹配。
+Category: text
+TOC: WebGL 文字 - HTML
+
 
 此文上接WebGL系列文章，如果没读建议[先看这个](webgl-3d-perspective.html)，
 然后再回来。

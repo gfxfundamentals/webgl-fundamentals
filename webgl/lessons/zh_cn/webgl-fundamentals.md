@@ -1,5 +1,8 @@
 Title: WebGL 基础概念
 Description: 第一节WebGL教程就从基础概念开始吧！
+Category: fundamentals
+TOC: WebGL 基础概念
+
 
 WebGL经常被当成3D API，人们总想“我可以使用WebGL和**一些神奇的东西**做出炫酷的3D作品”。
 事实上WebGL仅仅是一个光栅化引擎，它可以根据你的代码绘制出点，线和三角形。

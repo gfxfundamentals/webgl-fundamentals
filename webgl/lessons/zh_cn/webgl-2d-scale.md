@@ -1,5 +1,8 @@
-﻿Title: WebGL 二维缩放
+Title: WebGL 二维缩放
 Description: 如何在二维中缩放物体
+Category: matrices
+TOC: WebGL 二维缩放
+
 
 此文上接一系列文章，先[从基础概念开始](webgl-fundamentals.html)，上一篇是
 [物体旋转](webgl-2d-rotation.html)。

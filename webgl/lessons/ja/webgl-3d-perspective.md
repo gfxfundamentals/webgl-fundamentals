@@ -1,5 +1,8 @@
 Title: WebGL三次元透視投影
 Description: WebGLで透視投影で描画する
+Category: 3d
+TOC: WebGL三次元透視投影
+
 
 この記事はWebGLシリーズの一つである。最初の記事は[WebGLの基本で始まった](webgl-fundamentals.html)。
 そして、前回の記事は[正投影](webgl-3d-orthographic.html)についてだった。まだ読んでいなかったら先に読んで下さい。

@@ -1,5 +1,8 @@
 Title: WebGL 动画
 Description: 如何使用WebGL实现动画
+Category: misc
+TOC: WebGL 动画
+
 
 此文上接WebGL系列文章，第一篇是<a href="webgl-fundamentals.html">基础概念</a>。
 前一篇是<a href="webgl-3d-camera.html">三维相机</a>，如果没读建议从那开始。

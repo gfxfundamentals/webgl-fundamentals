@@ -1,5 +1,8 @@
 Title: WebGL 二维矩阵
 Description: 用简单易懂的方式讲解矩阵运算的用法
+Category: matrices
+TOC: WebGL 二维矩阵
+
 
 此文上接一系列文章，先[从基础概念开始](webgl-fundamentals.html)，上一篇是
 [物体缩放](webgl-2d-scale.html)。

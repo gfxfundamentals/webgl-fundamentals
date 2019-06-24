@@ -1,5 +1,8 @@
-﻿Title: 2D-масштабирование в WebGL
+Title: 2D-масштабирование в WebGL
 Description: Как выполнить масштабирование в 2D
+Category: matrices
+TOC: 2D-масштабирование в WebGL
+
 
 Эта статья из серии, которая начинается с [Основ WebGL](webgl-fundamentals.html),
 является продолжением предыдущей [статьи о повороте геометрии](webgl-2d-rotation.html).

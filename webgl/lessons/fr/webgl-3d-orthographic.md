@@ -1,5 +1,8 @@
 Title: WebGL - 3D orthographique
 Description: Comment faire de la 3D avec WebGL en démarrant avec la projection orthographique.
+Category: 3d
+TOC: WebGL 3D - Projection orthographique
+
 
 Cet article est la suite d'une série de posts à propos de WebGL.
 Le premier <a href="webgl-fundamentals.html">commençait par les bases</a> et le précédent parlait <a href="webgl-2d-matrices.html">des matrices 2D</a>.

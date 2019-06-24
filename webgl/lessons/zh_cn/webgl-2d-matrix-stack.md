@@ -1,5 +1,8 @@
 Title: WebGL 实现二维矩阵栈
 Description: 如何用WebGL实现二维的translate/rotate/scale方法
+Category: 2d
+TOC: WebGL 二维矩阵栈
+
 
 此文上接[WebGL二维DrawImage](webgl-2d-drawimage.html)，
 如果没读建议从[那里开始](webgl-2d-drawimage.html)。

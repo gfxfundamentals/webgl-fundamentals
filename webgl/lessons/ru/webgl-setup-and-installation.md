@@ -1,5 +1,8 @@
 Title: WebGL Установка и настройка
 Description: Как начать разрабатывать на WebGL
+Category: misc
+TOC: WebGL Установка и настройка
+
 
 Технически, вам не нужно ничего, кроме браузера, чтобы начать разработку на WebGL.
 Зайдите на [jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/), [jsbin.com](http://jsbin.com)

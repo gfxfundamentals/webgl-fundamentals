@@ -1,5 +1,8 @@
 Title: WebGLの開発環境
 Description: WebGLで開発するには
+Category: misc
+TOC: WebGLの開発環境
+
 
 技術的には、WebGLでの開発に必要なものは「Webブラウザだけ」です。
 Web上でコーディングを行うためのサイト([jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/)、[jsbin.com](http://jsbin.com)

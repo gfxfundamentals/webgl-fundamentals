@@ -1,5 +1,8 @@
 Title: WebGL Boilerplate
 Description: 모든 WebGL program에 필요한 코드
+Category: misc
+TOC: WebGL Boilerplate
+
 
 이건 <a href="webgl-fundamentals.html">WebGL 기초</a>에서 이어지는 글입니다.
 대부분의 WebGL 강의들은 모든걸 한 번에 처리하기 때문에 배우기가 복잡해 보이기도 합니다.

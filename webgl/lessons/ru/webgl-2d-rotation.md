@@ -1,5 +1,8 @@
-﻿Title: 2D-поворот в WebGL
+Title: 2D-поворот в WebGL
 Description: Как выполнить поворот в 2D
+Category: matrices
+TOC: 2D-поворот в WebGL
+
 
 Эта статья из серии, которая начинается с [Основ WebGL](webgl-fundamentals.html),
 является продолжением предыдущей [статьи о переносе геометрии](webgl-2d-translation.html).

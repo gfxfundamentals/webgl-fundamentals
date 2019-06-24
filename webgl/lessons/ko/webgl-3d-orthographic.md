@@ -1,5 +1,8 @@
 Title: WebGL - Orthographic 3D
 Description: 정사영으로 시작하는 WebGL에서 3D 하는 방법
+Category: 3d
+TOC: WebGL - Orthographic 3D
+
 
 이 글은 WebGL 관련 시리즈에서 이어지는 글입니다.
 첫 번째는 [기초로 시작했고](webgl-fundamentals.html) 이전에는 [2D 행렬에 대해](webgl-2d-matrices.html) 다뤘습니다.

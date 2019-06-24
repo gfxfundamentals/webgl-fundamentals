@@ -1,5 +1,8 @@
-﻿Title: WebGL 2D - Echelle
+Title: WebGL 2D - Echelle
 Description: Comment changer l'échelle en 2D
+Category: matrices
+TOC: WebGL 2D - Echelle
+
 
 Cet article est la suite d'une série de posts consacrés à WebGL. Le premier <a href="webgl-fundamentals.html">présentait les bases</a> et le précédent parlait <a href="webgl-2d-rotation.html">de rotations</a>. Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d'abord.
 

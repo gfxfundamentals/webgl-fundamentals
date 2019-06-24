@@ -1,5 +1,8 @@
-﻿Title: WebGL Shaders and GLSL
+Title: WebGL Shaders and GLSL
 Description: What's a shader and what's GLSL
+Category: fundamentals
+TOC: WebGL Shaders and GLSL
+
 
 This is a continuation from [WebGL Fundamentals](webgl-fundamentals.html).
 If you haven't read about how WebGL works you might want to [read this first](webgl-how-it-works.html).

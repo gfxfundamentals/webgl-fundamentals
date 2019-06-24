@@ -1,5 +1,8 @@
-﻿Title: WebGL How It Works
+Title: WebGL How It Works
 Description: What WebGL is really doing under the hood
+Category: fundamentals
+TOC: WebGL How It Works
+
 
 This is a continuation from [WebGL Fundamentals](webgl-fundamentals.html).
 Before we continue I think we need to discuss at a

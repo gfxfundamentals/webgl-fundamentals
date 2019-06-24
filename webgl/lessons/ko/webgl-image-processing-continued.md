@@ -1,5 +1,8 @@
 Title: WebGL 이미지 처리 심화
 Description: WebGL에서 이미지에 여러 이미지 처리를 적용하는 방법
+Category: image-processing
+TOC: WebGL 이미지 처리 심화
+
 
 이 글은 [WebGL 이미지 처리](webgl-image-processing.html)에서 이어지는 글입니다.
 아직 읽지 않았다면 [거기부터 시작하는 것이](webgl-image-processing.html) 좋습니다.

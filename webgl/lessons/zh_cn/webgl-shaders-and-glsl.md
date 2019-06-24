@@ -1,5 +1,8 @@
-﻿Title: WebGL 着色器和GLSL
+Title: WebGL 着色器和GLSL
 Description: 着色器和GLSL分别是什么
+Category: fundamentals
+TOC: WebGL 着色器和GLSL
+
 
 此文上接[WebGL 基础概念](webgl-fundamentals.html)。
 如果你还没有阅读WebGL工作原理，也许可以先[阅读这篇文章](webgl-how-it-works.html)。

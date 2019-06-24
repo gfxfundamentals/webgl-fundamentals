@@ -1,5 +1,8 @@
 Title: WebGL 3D - Point Lighting
 Description: How to implement point lighting in WebGL
+Category: lighting
+TOC: WebGL 3D - Point Lighting
+
 
 This article is a continuation of [WebGL 3D Directional
 Lighting](webgl-3d-lighting-directional.html).  If you haven't read that I

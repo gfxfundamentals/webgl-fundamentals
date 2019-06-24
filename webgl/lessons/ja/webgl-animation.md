@@ -1,5 +1,8 @@
 Title: WebGLのアニメーション
 Description: WebGLでアニメーションする方法
+Category: misc
+TOC: WebGLのアニメーション
+
 
 この記事はWebGLの連載シリーズの続きである。
 この連載は「[WebGLの基本](webgl-fundamentals.html)」から始まり、

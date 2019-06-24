@@ -1,5 +1,8 @@
 Title: WebGL 2D 이동
 Description: 2D에서 이동하는 방법
+Category: matrices
+TOC: WebGL 2D 이동
+
 
 3D로 넘어가기 전에 조금만 더 2D를 사용해봅시다.
 이 글은 일부 사람들에게는 굉장히 당연하게 보이겠지만 많은 글들 중에서 핵심만 강조할테니 끝까지 봐주세요.

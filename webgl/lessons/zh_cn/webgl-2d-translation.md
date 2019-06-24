@@ -1,5 +1,8 @@
 Title: WebGL 二维平移
 Description: 如何在二维中平移
+Category: matrices
+TOC: WebGL 二维平移
+
 
 在学习三维之前让我们先看一看二维，还请见谅。
 这个主题对有些人来说可能过于简单，但我还是准备在几篇文章中加以阐述。

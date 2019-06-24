@@ -1,5 +1,8 @@
 Title: Реализация DrawImage в WebGL
 Description: Реализация функции drawImage в canvas 2D средствами WebGL
+Category: 2d
+TOC: WebGL 2D - DrawImage
+
 
 Эта статья продолжает [статью про ортогональ в WebGL](webgl-3d-orthographic.html).
 Если вы её ещё не читали, предлагаю [начать с неё](webgl-3d-orthographic.html).

@@ -1,5 +1,8 @@
 Title: WebGL Image Processing Continued
 Description: How to apply multiple image processing techniques to images in WebGL
+Category: image-processing
+TOC: WebGL Image Processing Continued
+
 
 This article is a continuation of [WebGL Image Processing](webgl-image-processing.html).
 If you haven't read that I suggest [you start there](webgl-image-processing.html).

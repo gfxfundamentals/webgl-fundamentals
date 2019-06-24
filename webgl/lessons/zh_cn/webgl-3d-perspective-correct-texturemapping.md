@@ -1,5 +1,8 @@
 Title: WebGL 纹理映射的透视纠正
 Description: W 有什么特殊的地方
+Category: textures
+TOC: WebGL 纹理映射的透视纠正
+
 
 此文上接WebGL系列文章，第一个是[基础概念](webgl-fundamentals.html)，
 这篇文章讲纹理映射的透视纠正，要理解它你可能需要先看看[透视投影](webgl-3d-perspective.html)

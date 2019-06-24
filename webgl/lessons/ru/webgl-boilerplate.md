@@ -1,5 +1,8 @@
 Title: Шаблон WebGL
 Description: Шаблон кода, который понадобится в каждой программе WebGL
+Category: misc
+TOC: Шаблон WebGL
+
 
 Эта статья продолжает <a href="webgl-fundamentals.html">основы WebGL</a>.
 Порой WebGL кажется сложным для изучения из-за того, что большинство уроков

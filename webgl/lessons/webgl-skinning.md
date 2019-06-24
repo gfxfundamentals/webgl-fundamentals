@@ -1,5 +1,8 @@
 Title: WebGL Skinning
 Description: How to skin a mesh in WebGL
+Category: 3d
+TOC: WebGL - Skinning
+
 
 Skinning in graphics is the name given to moving a set of vertices based
 on the weighted influence of multiple matrices. That's pretty abstract.

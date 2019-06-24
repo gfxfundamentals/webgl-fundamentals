@@ -1,5 +1,8 @@
-﻿Title: WebGL 2D 회전
+Title: WebGL 2D 회전
 Description: 2D에서 회전하는 방법
+Category: matrices
+TOC: WebGL 2D 회전
+
 
 이 글은 WebGL 관련 시리즈에서 이어지는 글입니다.
 첫 번째는 [기초로 시작했고](webgl-fundamentals.html) 이전에는 [geometry 이동에 대해](webgl-2d-translation.html) 다뤘습니다.

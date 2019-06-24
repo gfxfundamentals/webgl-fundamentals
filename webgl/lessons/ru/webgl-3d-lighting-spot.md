@@ -1,5 +1,8 @@
 Title: WebGL 3D - Прожектор
 Description: Создание света от прожектора в WebGL
+Category: lighting
+TOC: WebGL 3D - Прожектор
+
 
 Эта статья продолжает [точечное освещение в WebGL](webgl-3d-lighting-point.html).
 Если вы ещё не читали её, советую [начать с неё](webgl-3d-lighting-point.html).

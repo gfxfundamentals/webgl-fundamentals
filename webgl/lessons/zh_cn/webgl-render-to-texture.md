@@ -1,5 +1,8 @@
 Title: WebGL 渲染到纹理
 Description: 如何往纹理渲染内容
+Category: rendertargets
+TOC: WebGL 渲染到纹理
+
 
 此文上接WebGL系列文章，第一篇是[基础概念](webgl-fundamentals.html)，
 上一篇是[写入数据到纹理](webgl-data-textures.html)，

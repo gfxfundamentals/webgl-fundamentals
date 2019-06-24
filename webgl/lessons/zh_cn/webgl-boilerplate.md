@@ -1,5 +1,8 @@
 Title: WebGL 样板
 Description: WebGL应用中常用的代码
+Category: misc
+TOC: WebGL 样板
+
 
 此文上接<a href="webgl-fundamentals.html">WebGL基础概念</a>，
 学习WebGL似乎有些难度，因为大多数教程都想一次教完所有东西，

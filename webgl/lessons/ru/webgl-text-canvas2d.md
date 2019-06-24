@@ -1,5 +1,8 @@
 Title: WebGL текст - Canvas 2D
 Description: Как отобразить текст, используя canvas 2D, который связан с WebGL
+Category: text
+TOC: WebGL текст - Canvas 2D
+
 
 Эта статья продолжает [статью об отрисовке текста в WebGL](webgl-text-html.html).
 Если вы её ещё не читали, предлагаю начать с неё.

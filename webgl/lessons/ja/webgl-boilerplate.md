@@ -1,5 +1,8 @@
 Title: WebGLのひな型コード
 Description: 全てのWebGLで共通して必要となるコード
+Category: misc
+TOC: WebGLのひな型コード
+
 
 この記事は「[WebGLの基本](webgl-fundamentals.html)」の続きです。
 

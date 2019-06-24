@@ -1,5 +1,8 @@
 Title: WebGL - Configuração e instalação
 Description: Como desenvolver em WebGL
+Category: misc
+TOC: WebGL - Setup e instalação
+
 
 Techincamente você não precisa de nada além de um navegador web para desenvolver em WebGL.
 Acesse [jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/) ou [jsbin.com](http://jsbin.com) ou [codepen.io](http://codepen.io/greggman/pen/YGQjVV) e apenas comece a aplicar as lições aqui.

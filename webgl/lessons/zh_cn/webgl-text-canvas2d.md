@@ -1,5 +1,8 @@
 Title: WebGL 文字 - 二维Canvas
 Description: 如何使用使用二维画布显示与WebGL同步的文字
+Category: text
+TOC: WebGL 文字 - 二维Canvas
+
 
 此文上接[WebGL文字绘制](webgl-text-html.html)，如果没读建议从那里开始。
 

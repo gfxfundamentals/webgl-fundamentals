@@ -1,5 +1,8 @@
 Title: WebGL 3D - Камеры
 Description: Как работают камеры в WebGL
+Category: 3d
+TOC: WebGL 3D - Камеры
+
 
 Эта статья продолжает серию статей о WebGL. В первой из них
 [мы начали с основ WebGL](webgl-fundamentals.html), а в предыдущей

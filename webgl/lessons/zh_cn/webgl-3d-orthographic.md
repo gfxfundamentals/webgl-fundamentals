@@ -1,5 +1,8 @@
 Title: WebGL 三维正射投影
 Description: 从正射投影开始讲WebGL中的三维
+Category: 3d
+TOC: WebGL 三维正射投影
+
 
 此文上接一系列相关文章，首先是[基础概念](webgl-fundamentals.html)，上一篇是
 [二维矩阵运算](webgl-2d-matrices.html)，如果没读过请从那里开始。

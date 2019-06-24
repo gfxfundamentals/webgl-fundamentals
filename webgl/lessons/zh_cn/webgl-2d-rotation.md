@@ -1,5 +1,8 @@
-﻿Title: WebGL 二维旋转
+Title: WebGL 二维旋转
 Description: 如何在二维中旋转
+Category: matrices
+TOC: WebGL 二维旋转
+
 
 此文上接一系列文章，先[从基础概念开始](webgl-fundamentals.html)，上一篇是
 [物体平移](webgl-2d-translation.html)。

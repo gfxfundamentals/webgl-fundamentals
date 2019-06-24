@@ -1,5 +1,8 @@
 Title: WebGLの基本
 Description: 基本から最初のWebGLのレッスン
+Category: fundamentals
+TOC: WebGLの基本
+
 
 WebGLは三次元APIとして思われることも多い。
 「WebGLを使えば_魔法のように_簡単に三次元の映像を表示出来るだろう」と思ってしまう人も多い。

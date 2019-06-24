@@ -1,5 +1,8 @@
 Title: WebGL 蒙皮
 Description: 在WebGL中如何蒙皮网格
+Category: 3d
+TOC: WebGL 蒙皮
+
 
 图形学中的蒙皮是根据多矩阵的加权影响来移动一组顶点。这很抽象。
 

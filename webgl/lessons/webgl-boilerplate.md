@@ -1,5 +1,8 @@
 Title: WebGL Boilerplate
 Description: Some of the code you need for all WebGL programs
+Category: misc
+TOC: WebGL Boilerplate
+
 
 This is a continuation from <a href="webgl-fundamentals.html">WebGL Fundamentals</a>.
 WebGL sometimes appears complicated to learn because most lessons

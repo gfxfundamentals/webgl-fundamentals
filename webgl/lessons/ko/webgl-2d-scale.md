@@ -1,5 +1,8 @@
-﻿Title: WebGL 2D 크기
+Title: WebGL 2D 크기
 Description: 2D에서 크기 조정하는 방법
+Category: matrices
+TOC: WebGL 2D 크기
+
 
 이 글은 WebGL 관련 시리즈에서 이어지는 글입니다.
 첫 번째는 [기초로 시작했고](webgl-fundamentals.html) 이전에는 [geometry 회전에 대해](webgl-2d-rotation.html) 다뤘습니다.

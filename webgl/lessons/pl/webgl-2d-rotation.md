@@ -1,5 +1,8 @@
-﻿Title: Obrót dwuwymiarowy w WebGL
+Title: Obrót dwuwymiarowy w WebGL
 Description: Jak obracać w dwóch wymiarach
+Category: matrices
+TOC: Obrót dwuwymiarowy w WebGL
+
 
 Tekst jest kontynuacją serii poświęconej WebGL.  Pierwszy artykuł <a href="webgl-fundamentals.html">rozpoczynał od podstaw</a>, a poprzedni <a href="webgl-2d-translation.html">opisywał przesunięcia geometryczne</a>.
 

@@ -1,5 +1,8 @@
 Title: WebGL 三维纹理
 Description: WebGL中如何使用纹理
+Category: textures
+TOC: WebGL 三维纹理
+
 
 此文上接一系列WebGL文章，从[基础概念](webgl-fundamentals.html)开始，
 上一篇讲的是[动画](webgl-animation.html)。

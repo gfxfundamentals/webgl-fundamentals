@@ -1,5 +1,8 @@
 Title: WebGL 光栅化 vs 三维库
 Description: 为什么WebGL不是一个三维库，为什么这一点很重要。
+Category: misc
+TOC: WebGL 2D vs 3D 库
+
 
 此文是WebGL系列文章的一个侧面话题，第一篇是[基础概念](webgl-fundamentals.html)。
 

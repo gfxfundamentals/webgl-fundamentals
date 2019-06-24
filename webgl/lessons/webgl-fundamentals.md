@@ -1,5 +1,8 @@
 Title: WebGL Fundamentals
 Description: Your first WebGL lesson starting with the fundamentals
+Category: fundamentals
+TOC: WebGL Fundamentals
+
 
 WebGL (Web Graphics Library) is often thought of as a 3D API. People think "I'll use WebGL and *magic* I'll get cool 3d".
 In reality [WebGL is just a rasterization engine](webgl-2d-vs-3d-library.html). It draws points, lines, and triangles based

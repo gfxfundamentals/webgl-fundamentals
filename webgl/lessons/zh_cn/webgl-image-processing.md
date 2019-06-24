@@ -1,5 +1,8 @@
 Title: WebGL 图像处理
 Description: 怎么用WebGL处理图像
+Category: image-processing
+TOC: WebGL 图像处理
+
 
 在WebGL中图像处理是比较简单的。到底有多简单，接着看。
 <!--more-->

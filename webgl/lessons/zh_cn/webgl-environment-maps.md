@@ -1,5 +1,8 @@
 Title: WebGL 环境贴图 (反射)
 Description: 如何实现环境贴图。
+Category: 3d
+TOC: WebGL 环境贴图
+
 
 这篇文章是WebGL系列文章的一部分从[基础概念](webgl-fundamentals.html)开始。上接[立方体纹理](webgl-cube-maps.html)。这篇文章也用到了[WebGL 三维方向光源](webgl-3d-lighting-directional.html)中介绍的概念。如果你尚未阅读这些文章，则可能需要先阅读这些文章。
 

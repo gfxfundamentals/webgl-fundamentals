@@ -1,5 +1,8 @@
 Title: WebGLで複数のテクスチャを使う
 Description: WebGLアプリケーションで２つ以上のテクスチャeを利用する方法
+Category: textures
+TOC: WebGLで複数のテクスチャを使う
+
 
 この記事は「[WebGLにおける画像処理](webgl-image-processing.html)」の続きである。
 画像処理の基本をまだ学んでいないなら「[WebGLにおける画像処理](webgl-image-processing.html)」

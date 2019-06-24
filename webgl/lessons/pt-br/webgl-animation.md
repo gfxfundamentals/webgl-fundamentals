@@ -1,5 +1,8 @@
 Title: WebGL - Animação
 Description: Como fazer animação no WebGL
+Category: misc
+TOC: WebGL - Animação
+
 
 Esta publicação é uma continuação de uma série de postagens sobre o WebGL.
 O primeiro <a href="webgl-fundamentals.html"> começou com os fundamentos </a>.

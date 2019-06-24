@@ -1,5 +1,8 @@
 Title: WebGL 和阿尔法通道
 Description: WebGL和OpenGL的阿尔法通道有什么不同
+Category: misc
+TOC: WebGL 和阿尔法通道
+
 
 我发现有些OpenGL的开发者对WebGL的阿尔法通道有疑问，
 所以我觉得有必要讲一下WebGL和OpenGL的阿尔法通道的不同之处。

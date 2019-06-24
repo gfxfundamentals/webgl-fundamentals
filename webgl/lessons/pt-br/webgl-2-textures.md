@@ -1,5 +1,8 @@
 Title: WebGL - Utilizando 2 ou mais texturas
 Description: Como utilizar 2 ou mais texturas no WebGL
+Category: textures
+TOC: WebGL - Usando duas ou mais texturas
+
 
 Este artigo é uma continuação de [WebGL -
 Processamento de imagens](webgl-image-processing.html). Se você ainda não leu, eu

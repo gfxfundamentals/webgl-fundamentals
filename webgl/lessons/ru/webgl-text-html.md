@@ -1,5 +1,8 @@
 Title: WebGL текст - HTML
 Description: Как использовать HTML для отображения текста над WebGL
+Category: text
+TOC: WebGL текст - HTML
+
 
 Эта статья продолжает серию статей о WebGL. Если вы их ещё не читали,
 предлагаю [начать отсюда](webgl-3d-perspective.html), а затем вернуться сюда.

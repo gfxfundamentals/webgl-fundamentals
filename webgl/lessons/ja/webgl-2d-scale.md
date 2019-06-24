@@ -1,5 +1,8 @@
 Title: WebGL二次元拡大と縮小
 Description: WebGLの二次元拡大と縮小し方
+Category: matrices
+TOC: WebGL - 二次元での拡大縮小
+
 
 本記事もWebGLのシリーズの一つである。
 最初の記事は[WebGLの基本](webgl-fundamentals.html)で、そして前回の記事は[二次元で図形を回転すること](webgl-2d-translation.html)についての記事である.

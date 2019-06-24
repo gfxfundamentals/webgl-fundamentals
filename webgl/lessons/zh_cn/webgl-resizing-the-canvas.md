@@ -1,5 +1,8 @@
 Title: WebGL 重置画布尺寸
 Description: 如何充值一个WebGL画布以及设计的问题
+Category: misc
+TOC: WebGL 重置画布尺寸
+
 
 这是重置画布尺寸时应该知道的知识。
 
