@@ -70,6 +70,24 @@ Current fields are
 
       // the phrase "Table of Contents"
       toc: "Table of Contents",
+
+      // translation of categories for table of contents
+      categoryMapping: {
+        'fundamentals': "Fundamentals",
+        'image-processing': "Image Processing",
+        'matrices': "2D translation, rotation, scale, matrix math",
+        '3d': "3D",
+        'lighting': "Lighting",
+        'organization': "Structure and Organization",
+        'geometry': "Geometry",
+        'textures': "Textures",
+        'rendertargets': "Rendering To A Texture",
+        '2d': "2D",
+        'text': "Text",
+        'misc': "Misc",
+        'reference': "Reference",
+      },
+
     }
 
 #### `index.md`
@@ -78,10 +96,11 @@ This is the template for the main page for each language
 
 #### `toc.html`
 
-This is the table of contents for the language. It is included on both the index
-and on each article. It's up to if you want to link to English articles for non-translated articles.
-The build system will create a placeholder for every English article for which there is no
-corresponding article in that langauge. It will be filled the `missing` message from above.
+This is template for the table of contents for the language.
+It is included on both the index and on each article. The only
+parts not auto-generated are the links ending links which
+you can translate if you want to.
+The build system will create a placeholder for every English article for which there is no corresponding article in that langauge. It will be filled the `missing` message from above.
 
 #### Translation notes
 
@@ -91,6 +110,16 @@ links in one article that links to another article but that other article has no
 This way you don't have to go back and fix already translated articles. Just translate one article
 at a time and leave the links as is. They'll link to placeholders until someone translates the missing
 articles.
+
+Articles have front matter at the top
+
+```
+Title: Localized Title of article
+Description: Localized description of article (used in RSS and social media tags)
+Cateogry: category for article **THIS STAYS IN ENGLISH**
+TOC: Localized text for Table of Contents
+```
+
 
 **DO NOT CHANGE LINKS** : For example a link to a local resources might look like
 
