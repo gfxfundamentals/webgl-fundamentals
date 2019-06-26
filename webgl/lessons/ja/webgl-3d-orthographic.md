@@ -301,7 +301,7 @@ Zもピクセル単位で計算する。`width`のような値を`depth`に与�
 立体にする為16枚の四角形が必要である。前面に三つ、裏面に三つ、左面に一つ、右面に四つ、
 上面2つ、下面に三つ四角形が必要である。
 
-<img class="webgl_center" width="300" src="resources/3df.svg" />
+<img class="webgl_center nodarkinvert" width="300" src="resources/3df.svg" />
 
 これは全て表示するには多すぎる。四角形16枚、四角形ごとに2つの三角形、三角形ごとに3つの頂点は96頂点になる。
 全部を見たければソースを見て下さい。
@@ -426,7 +426,7 @@ gl.vertexAttribPointer(
 このメチャクチャな絵は何だ？実は「F」の図形の三角形は定義された順番に描画される。
 その順番によると前面の三角形が書かれた後裏面の三角形が描画される。
 
-<img class="webgl_center" width="163" height="190" src="resources/polygon-drawing-order.gif" />
+<img class="webgl_center" style="background-color: transparent;" width="163" height="190" src="resources/polygon-drawing-order.gif" />
 
 WebGLで三角形は前向きと裏向きのコンセプトがある。前向き三角形はその三角形の頂点が
 時計回りになっている三角形である。裏向き三角形はその三角形の頂点が反時計回りになっている三角形である。

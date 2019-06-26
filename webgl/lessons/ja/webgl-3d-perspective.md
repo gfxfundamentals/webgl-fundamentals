@@ -12,7 +12,7 @@ TOC: WebGL三次元透視投影
 
 そこで遠近法を追加しなければいけない。遠近法は何だろう？遠近法は遠ければ遠くほど小さく見えることである。
 
-<img class="webgl_center" width="500" src="resources/perspective-example.svg" />
+<img class="webgl_center noinvertdark" width="500" src="resources/perspective-example.svg" />
 
 上記の絵を見たら遠い物が小さく書かれている。
 前回のサンプルで遠い物を小さく描画させたければ、クリップ空間のXとY値をZで割ることで出来るだろう。

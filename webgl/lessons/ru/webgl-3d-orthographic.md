@@ -315,7 +315,7 @@ var m4 = {
 3D-формы понадобится в сумме 16 прямоугольников - 3 прямоугольника впереди,
 3 сзади, один слева, 4 справа, 2 сверху и 3 снизу.
 
-<img class="webgl_center" width="300" src="resources/3df.svg" />
+<img class="webgl_center nodarkinvert" width="300" src="resources/3df.svg" />
 
 Довольно много, чтобы перечислять здесь. 16 прямоугольников с двумя треугольниками
 на каждый и 3 вершины на каждый треугольник - в сумме 96 вершин. Если хотите
@@ -445,7 +445,7 @@ gl.vertexAttribPointer(
 данных геометрии. Это не даёт нам ожидаемый результат, так как иногда
 части, которые должны быть сзади, отрисовываются впереди.
 
-<img class="webgl_center" width="163" height="190" src="resources/polygon-drawing-order.gif" />
+<img class="webgl_center" style="background-color: transparent;" width="163" height="190" src="resources/polygon-drawing-order.gif" />
 
 <span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">Красным цветом</span>
 отмечена **передняя часть** буквы 'F', но из-за того, что она отрисовывается

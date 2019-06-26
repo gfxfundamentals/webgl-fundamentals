@@ -370,7 +370,7 @@ current F is made of 3 rectangles, 2 triangles each.  To make it 3D will
 require a total of 16 rectangles.  the 3 rectangles on the front, 3 on the
 back, 1 on the left, 4 on the right, 2 on the tops, 3 on the bottoms.
 
-<img class="webgl_center" width="300" src="resources/3df.svg" />
+<img class="webgl_center noinvertdark" width="300" src="resources/3df.svg" />
 
 That's quite a few to list out here.
 16 rectangles with 2 triangles per rectangle and 3 vertices per triangle is 96
@@ -500,7 +500,7 @@ that 3D 'F', front, back, sides, etc get drawn in the order they appear in
 our geometry data.  That doesn't give us quite the desired results as sometimes
 the ones in the back get drawn after the ones in the front.
 
-<img class="webgl_center" width="163" height="190" src="resources/polygon-drawing-order.gif" />
+<img class="webgl_center" style="background-color: transparent;" width="163" height="190" src="resources/polygon-drawing-order.gif" />
 
 The <span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">redish part</span> is
 the **front** of the 'F'  but because it's the first part of our data

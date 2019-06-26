@@ -18,7 +18,7 @@ TOC: WebGL 3D - Перспектива
 словами, это такая штука, которая заставляет объекты, которые
 находятся далеко, выглядеть меньше.
 
-<img class="webgl_center" width="500" src="resources/perspective-example.svg" />
+<img class="webgl_center noinvertdark" width="500" src="resources/perspective-example.svg" />
 
 На примере выше мы видим, что далёкие объекты отображаются
 меньшими. Чтобы добиться эффекта, который демонстрируется

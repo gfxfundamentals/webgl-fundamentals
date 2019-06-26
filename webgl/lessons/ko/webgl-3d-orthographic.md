@@ -315,7 +315,7 @@ X와 Y를 픽셀에서 clip 공간으로 변환해줘야 했던 것처럼, Z도 
 이걸 3D로 만들기 위해서는 총 16개의 사각형이 필요한데요.
 삼각형이 앞쪽에 3개, 뒤쪽에 3개, 왼쪽에 1개, 오른쪽에 4개, 위쪽애 2개, 아래쪽에 3개가 있어야 합니다.
 
-<img class="webgl_center" width="300" src="resources/3df.svg" />
+<img class="webgl_center nodarkinvert" width="300" src="resources/3df.svg" />
 
 여기 나와있는 목록 중 상당 수 입니다.
 사각형 당 삼각형 2개 그리고 삼각형 당 꼭지점 3개인 사각형 16개는 96개의 꼭지점이 있습니다.
@@ -446,7 +446,7 @@ gl.vertexAttribPointer(
 음, 3D 'F'의 앞면, 뒷면, 옆면 등등 다양한 부분이 geometry 데이터가 나타나는 순서대로 그려진 것으로 보입니다.
 가끔씩 뒤쪽에 있는 것들이 앞쪽에 그려지기 때문에 원하는 결과를 얻지 못하는데요.
 
-<img class="webgl_center" width="163" height="190" src="resources/polygon-drawing-order.gif" />
+<img class="webgl_center" style="background-color: transparent;" width="163" height="190" src="resources/polygon-drawing-order.gif" />
 
 <span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">붉은 부분</span>은 'F'의 **앞쪽**이지만 우리 데이터 중 첫 번째이기 때문에 먼저 그려지고 다른 삼각형들이 그려진 후 덮어집니다.
 예를 들어 <span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">보라색 부분</span>은 실제로 'F'의 뒤쪽에 있는데요.

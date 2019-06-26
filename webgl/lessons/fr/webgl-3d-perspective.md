@@ -16,7 +16,7 @@ veulent en général quand on dit "3D".
 Pour ça on a besoin de perspective. Qu'est-ce que la perspective ? C'est ce qui fait que ce qui est loin
  apparaît plus petit.
 
-<img class="webgl_center" width="500" src="resources/perspective-example.svg" />
+<img class="webgl_center noinvertdark" width="500" src="resources/perspective-example.svg" />
 
 En voyant cet exemple on voit que ce qui est à plus grande distance est dessiné en plus petit. Avec notre exemple 
 habituel, une façon simple d'implémenter ceci serait de diviser les composantes X et Y de l'espace de projection, par Z.

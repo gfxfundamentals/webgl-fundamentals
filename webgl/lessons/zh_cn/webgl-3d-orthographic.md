@@ -303,7 +303,7 @@ var m4 = {
 现在的 F 是由三个矩形组成，每个矩形两个三角形。让它变三维需要 16 个矩形。
 三个矩形在正面，三个背面，一个左侧，四个右侧，两个上侧，三个底面。
 
-<img class="webgl_center" width="300" src="resources/3df.svg" />
+<img class="webgl_center nodarkinvert" width="300" src="resources/3df.svg" />
 
 需要列出的还有很多，16 个矩形每个有两个三角形，每个三角形有 3 个顶点，
 所以一共有 96 个顶点。如果你想看这些可以去示例的源码里找。
@@ -427,7 +427,7 @@ gl.vertexAttribPointer(
 呃，发生了什么？它好像把 'F' 的所有部分都按照提供的顺序显示出来了，
 正面，背面，侧面等等。有时候这并不是想要的结果，在背面的物体反而被绘制出来了。
 
-<img class="webgl_center" width="163" height="190" src="resources/polygon-drawing-order.gif" />
+<img class="webgl_center" style="background-color: transparent;" width="163" height="190" src="resources/polygon-drawing-order.gif" />
 
 <span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">红色部分</span>
 是 'F' 的**正面**，但是因为它在数据的前部所以最先被绘制出来，然后它后面的面绘制后挡住了它。

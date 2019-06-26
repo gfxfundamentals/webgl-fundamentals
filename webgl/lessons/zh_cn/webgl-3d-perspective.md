@@ -13,7 +13,7 @@ TOC: WebGL 三维透视投影
 我们应使用透视投影代替它，但什么是透视投影？
 它的基础特性就是离得越远显得越小。
 
-<img class="webgl_center" width="500" src="resources/perspective-example.svg" />
+<img class="webgl_center noinvertdark" width="500" src="resources/perspective-example.svg" />
 
 在上方的示例中，远处的物体会变小，想要实现例子中近大远小的效果，
 简单的做法就是将裁减空间中的 X 和 Y 值除以 Z 值。
