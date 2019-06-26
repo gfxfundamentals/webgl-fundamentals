@@ -338,7 +338,7 @@ function setGeometry(gl) {
 所以很难看出三维效果。解决这个问题的方法是将它拉伸成三维几何体。
 现在的 F 是由三个矩形组成，每个矩形两个三角形。让它变三维需要 16 个矩形。
 三个矩形在正面，三个背面，一个左侧，四个右侧，两个上侧，三个底面。</p>
-<p><img class="webgl_center" width="300" src="../resources/3df.svg" /></p>
+<p><img class="webgl_center nodarkinvert" width="300" src="../resources/3df.svg" /></p>
 <p>需要列出的还有很多，16 个矩形每个有两个三角形，每个三角形有 3 个顶点，
 所以一共有 96 个顶点。如果你想看这些可以去示例的源码里找。</p>
 <p>我们需要绘制更多顶点所以</p>
@@ -443,7 +443,7 @@ gl.vertexAttribPointer(
 </p>
 <p>呃，发生了什么？它好像把 &#39;F&#39; 的所有部分都按照提供的顺序显示出来了，
 正面，背面，侧面等等。有时候这并不是想要的结果，在背面的物体反而被绘制出来了。</p>
-<p><img class="webgl_center" width="163" height="190" src="../resources/polygon-drawing-order.gif" /></p>
+<p><img class="webgl_center" style="background-color: transparent;" width="163" height="190" src="../resources/polygon-drawing-order.gif" /></p>
 <p><span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">红色部分</span>
 是 &#39;F&#39; 的<strong>正面</strong>，但是因为它在数据的前部所以最先被绘制出来，然后它后面的面绘制后挡住了它。
 例如<span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">紫色部分</span>
