@@ -1,0 +1,79 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>WebGL - Simple Poin w/Texture</title>
+  </head>
+  <style>
+    canvas { border: 1px solid black; }
+  </style>
+  <body>
+    <canvas id="c"></canvas>
+  </body>
+</html>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="resources/webgl-utils.js"></script>
+<script>
+'use strict';
+const gl = document.querySelector('#c').getContext('webgl');
+
+const vs = `
+// vertex shader
+void main() {
+  gl_Position = vec4(0, 0, 0, 1);  // center
+  gl_PointSize = 120.0;
+} 
+`;
+
+const fs = `
+// fragment shader
+precision mediump float;
+
+uniform sampler2D tex;
+
+void main() {
+  gl_FragColor = texture2D(tex, gl_PointCoord.xy);
+}
+`;
+
+// setup GLSL program
+const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
+
+// a 2x2 pixel data
+const pixels = new Uint8Array([
+  0xFF, 0x00, 0x00, 0xFF,  // red
+  0x00, 0xFF, 0x00, 0xFF,  // green
+  0x00, 0x00, 0xFF, 0xFF,  // blue
+  0xFF, 0x00, 0xFF, 0xFF,  // cyan
+]);
+const tex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, tex);
+gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,                 // level
+    gl.RGBA,           // internal format
+    2,                 // width
+    2,                 // height
+    0,                 // border
+    gl.RGBA,           // format
+    gl.UNSIGNED_BYTE,  // type
+    pixels,            // data
+);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+gl.useProgram(program);
+
+const offset = 0;
+const count = 1;
+gl.drawArrays(gl.POINTS, offset, count);
+</script>
+
