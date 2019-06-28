@@ -6,6 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>WebGL - Directional Lighting Diagram</title>
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+@media (prefers-color-scheme: dark) {
+  canvas { 
+    background: #444;
+  }
+}
+</style>
 </head>
 <body>
 <div class="description">
@@ -42,6 +49,19 @@ function main() {
     surface1: opt.surface1 || "surface",
     surface2: opt.surface2 || "direction",
   };
+
+  const darkColors = {
+    arrow: '#DDD',
+    surfaceDir: '#0C0',
+  };
+  const lightColors = {
+    arrow: '#000',
+    surfaceDir: '#080',
+  };
+
+  const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
+  darkMatcher.addEventListener('change', render);
+
   var ctx = document.getElementById("canvas").getContext("2d");
   var direction = 0;
 
@@ -61,6 +81,9 @@ function main() {
   }
 
   function render() {
+    const isDarkMode = darkMatcher.matches;
+    const colors = isDarkMode ? darkColors : lightColors;
+
     webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
     var width  = 250;
     var height = 200;
@@ -82,8 +105,8 @@ function main() {
     ctx.save();
     ctx.translate(lx, ly);
 
-    ctx.fillStyle = "#000";
-    ctx.strokeSyole = "#000";
+    ctx.fillStyle = colors.arrow;
+    ctx.strokeStyle = colors.arrow;
     var numArrows = 5;
     for (var ii = 0; ii <= numArrows; ++ii) {
       var u = ii / numArrows;
@@ -117,8 +140,8 @@ function main() {
 
     var nx = 0;
     var ny = -20;
-    ctx.fillStyle = "#080";
-    ctx.strokeStyle = "#080";
+    ctx.fillStyle = colors.surfaceDir;
+    ctx.strokeStyle = colors.surfaceDir;
     diagram.arrow(ctx, 0, 0, nx, ny, false, true);
     ctx.fillText(lang.surface1, nx, ny - 22);
     ctx.fillText(lang.surface2, nx, ny - 14);

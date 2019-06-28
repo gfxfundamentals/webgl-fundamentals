@@ -6,6 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>WebGL - Point Lighting Diagram</title>
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+@media (prefers-color-scheme: dark) {
+  canvas { 
+    background: #444;
+  }
+}
+</style>
 </head>
 <body>
 <div class="description">
@@ -59,7 +66,23 @@ function main() {
     render();
   }
 
+  const darkColors = {
+    arrow: '#DDD',
+    surfaceNormal: '#0C0',
+    surfaceNormalOutline: '#444',
+  };
+  const lightColors = {
+    arrow: '#000',
+    surfaceNormal: '#080',
+    surfaceNormalOutline: '#FFF',
+  };
+
+  const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
+  darkMatcher.addEventListener('change', render);
+
   function render() {
+    const isDarkMode = darkMatcher.matches;
+    const colors = isDarkMode ? darkColors : lightColors;
     webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
     var width  = 250;
     var height = 200;
@@ -82,8 +105,8 @@ function main() {
     var sy = height / 6 + 10;
 
     var dots = [];
-    ctx.fillStyle = "#000";
-    ctx.strokeSyole = "#000";
+    ctx.fillStyle = colors.arrow;
+    ctx.strokeStyle = colors.arrow;
     var numArrows = 5;
     for (var ii = 0; ii <= numArrows; ++ii) {
       var u = ii / numArrows;
@@ -146,8 +169,8 @@ function main() {
 
     var nx = 0;
     var ny = -20;
-    ctx.fillStyle = "#080";
-    ctx.strokeStyle = "#080";
+    ctx.fillStyle = colors.surfaceNormal;
+    ctx.strokeStyle = colors.surfaceNormal;
     var numArrows = 5;
     for (var ii = 0; ii <= numArrows; ++ii) {
       var u = ii / numArrows;
@@ -156,8 +179,8 @@ function main() {
     }
 
     ctx.lineWidth = 2;
-    ctx.fillStyle = "#080";
-    ctx.strokeStyle = "#FFF";
+    ctx.fillStyle = colors.surfaceNormal;
+    ctx.strokeStyle = colors.surfaceNormalOutline;
     diagram.outlineText(ctx, lang.surfaceNormal, nx, -8);
 
     ctx.restore();
