@@ -146,7 +146,7 @@ because until you draw something and orient it there is no top and bottom. What 
 supply texture data to WebGL. The start of that data starts at texture coordinate 0,0
 and the end of that data is at 1,1
 
-<img class="webgl_center" width="405" src="resources/texture-coordinates-diagram.svg" />
+<img class="webgl_center noinvertdark" width="405" src="resources/texture-coordinates-diagram.svg" />
 
 I loaded the texture into photoshop and looked up the various coordinates in pixels.
 
@@ -239,7 +239,7 @@ So what the GPU does is it uses a mipmap.  A mipmap is a collection of
 progressively smaller images, each one 1/4th the size of the previous one.
 The mipmap for the 16x16 texture above would look something like this.
 
-<img class="webgl_center" src="resources/mipmap-low-res-enlarged.png" />
+<img class="webgl_center noinvertdark nobg" src="resources/mipmap-low-res-enlarged.png" />
 
 Generally each smaller level is just a bilinear interpolation of the
 previous level and that's what `gl.generateMipmap` does.  It looks at the
@@ -295,7 +295,7 @@ blocky, especially in the horizontal direction.  The bottom right is using
 `LINEAR_MIPMAP_LINEAR` which is picking the best 2 mips, picking 4 pixels
 from each, and blends all 8 pixels.
 
-<img class="webgl_center" src="resources/different-colored-mips.png" />
+<img class="webgl_center noinvertdark nobg" src="resources/different-colored-mips.png" />
 <div class="webgl_center">different colored mips</div>
 
 You might be thinking why would you ever pick anything other than

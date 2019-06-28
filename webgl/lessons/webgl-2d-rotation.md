@@ -18,7 +18,7 @@ the circle to the edge.  A unit circle is a circle with a radius of 1.0.
 
 Here's a unit circle.
 
-{{{diagram url="../unit-circle.html" width="300" height="300" }}}
+{{{diagram url="../unit-circle.html" width="300" height="300" className="invertdark" }}}
 
 Notice as you drag the blue handle around the circle the X and Y positions
 change.  Those represent the position of that point on the circle.  At the
@@ -97,7 +97,7 @@ Let's say you have a rectangle and you want to rotate it.  Before you
 start rotating it the top right corner is at 3.0, 9.0.  Let's pick a point
 on the unit circle 30 degrees clockwise from 12 o'clock.
 
-<img src="../resources/rotate-30.png" class="webgl_center" />
+<img src="../resources/rotate-30.png" class="webgl_center invertdark" />
 
 The position on the circle there is 0.50 and 0.87
 
@@ -112,7 +112,7 @@ That's exactly where we need it to be
 
 The same for 60 degrees clockwise
 
-<img src="../resources/rotate-60.png" class="webgl_center" />
+<img src="../resources/rotate-60.png" class="webgl_center invertdark" />
 
 The position on the circle there is 0.87 and 0.50
 

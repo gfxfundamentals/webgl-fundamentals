@@ -6,6 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>WebGL - Spot Lighting Diagram</title>
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+@media (prefers-color-scheme: dark) {
+  canvas { 
+    background: #444;
+  }
+}
+</style>
 </head>
 <body>
 <div class="description">
@@ -75,7 +82,30 @@ function main() {
     render();
   }
 
+  const darkColors = {
+    base: '#DDD',
+    background: '#444',
+    cone: '#663',
+    angleLines: '',
+    angleNumbersInLight: '#AAA',
+    angleNumbers: '#222',
+    surfaceNormalOutline: '#444',
+  };
+  const lightColors = {
+    base: '#000',
+    background: '#FFF',
+    cone: '#FFC',
+    angleNumbersInLight: '#888',
+    angleNumbers: '#EEE',
+    surfaceNormalOutline: '#FFF',
+  };
+
+  const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
+  darkMatcher.addEventListener('change', render);
+
   function render() {
+    const isDarkMode = darkMatcher.matches;
+    const colors = isDarkMode ? darkColors : lightColors;
     webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
     const width  = 250;
     const height = 200;
@@ -108,7 +138,7 @@ function main() {
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.arc(0, 0, 500, -limit, limit, false);
-    ctx.fillStyle = "#FFC";
+    ctx.fillStyle = colors.cone;
     ctx.fill();
     ctx.restore();
 
@@ -134,16 +164,16 @@ function main() {
       ctx.save();
       ctx.translate(lx, ly);
       ctx.rotate(r);
-      ctx.fillStyle = "#EEE";
-      ctx.strokeStyle = "#EEE";
+      ctx.fillStyle = colors.angleLines;
+      ctx.strokeStyle = colors.angleLines;
       diagram.arrow(ctx, 0, 0, 0, 400, false, true, 0.5);
-      ctx.fillStyle = inLight ? "#888" : "#EEE";
-      ctx.strokeStyle = inLight ? "#888" : "#EEE";
+      ctx.fillStyle = inLight ? colors.angleNumbersInLight : colors.angleNumbers;
+      ctx.strokeStyle = inLight ? colors.angleNumbersInLight : colors.angleNumbers;
       diagram.arrow(ctx, 0, 0, 0, 100, false, true, 0.5);
       ctx.translate(0, 90);
       ctx.rotate(Math.PI * .5);
       //ctx.fillText(cutOffDot.toFixed(2), 0, 0);
-      ctx.strokeStyle = "#FFF";
+      ctx.strokeStyle = colors.background;
       diagram.outlineText(ctx, cutOffDot.toFixed(3), 0, 0);
       ctx.restore();
     }
@@ -151,8 +181,8 @@ function main() {
     ctx.save();
     ctx.translate(lx, ly);
     ctx.rotate(direction);
-    ctx.fillStyle = "#000";
-    ctx.strokeStyle = "#000";
+    ctx.fillStyle = colors.base;
+    ctx.strokeStyle = colors.base;
     diagram.arrow(ctx, 0, 0, 0, 80, false, true, 0.5);
     ctx.restore();
 
@@ -203,8 +233,8 @@ function main() {
     ctx.restore();
 
     ctx.translate(-100, -50);
-    ctx.fillStyle = "#000";
-    ctx.strokeStyle = "#FFF";
+    ctx.fillStyle = colors.base;
+    ctx.strokeStyle = colors.background;
     ctx.font = "8px sans-serif";
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";

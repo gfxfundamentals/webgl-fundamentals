@@ -145,7 +145,7 @@ TOC: WebGL 3D - Текстуры
 будет верха или низа. Важно лишь, что вы передаёте текстурные данные в WebGL. Начало данных
 начинается в текстурных координатах 0,0, а заканчиваются в 1,1.
 
-<img class="webgl_center" width="405" src="resources/texture-coordinates-diagram.svg" />
+<img class="webgl_center noinvertdark" width="405" src="resources/texture-coordinates-diagram.svg" />
 
 Я загрузил текстуру в фотошоп и отметил необходимые координаты в пикселях.
 
@@ -240,7 +240,7 @@ TOC: WebGL 3D - Текстуры
 изображений, каждое из которых в 4 раза меньше предыдущего. Мипмап для уже
 знакомой нам текстуры 16x16 может выглядеть следующим образом:
 
-<img class="webgl_center" src="resources/mipmap-low-res-enlarged.png" />
+<img class="webgl_center noinvertdark nobg" src="resources/mipmap-low-res-enlarged.png" />
 
 Обычно каждое уменьшенное изображение - это просто билинейная интерполяция
 предыдущего, и именно их создаёт функция `gl.generateMipmap`. Она берёт
@@ -297,7 +297,7 @@ TOC: WebGL 3D - Текстуры
 `LINEAR_MIPMAP_LINEAR`, где подбираются 2 наиболее подходящих изображения из
 мипмапа, из каждого выбирается по 4 пикселя, и эти 8 пикселей смешиваются.
 
-<img class="webgl_center" src="resources/different-colored-mips.png" />
+<img class="webgl_center noinvertdark nobg" src="resources/different-colored-mips.png" />
 <div class="webgl_center">мипмапы с изображениями разных цветов</div>
 
 Возможно, вы сейчас думаете, зачем вообще использовать что-то отличное от

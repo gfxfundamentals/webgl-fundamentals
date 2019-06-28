@@ -6,6 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>WebGL - Specular Lighting Diagram</title>
 <link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+@media (prefers-color-scheme: dark) {
+  canvas { 
+    background: #444;
+  }
+}
+</style>
 </head>
 <body>
 <div class="description">
@@ -63,7 +70,25 @@ function main() {
     render();
   }
 
+  const darkColors = {
+    arrow: '#DDD',
+    surfaceNormal: '#0C0',
+    surfaceNormalOutline: '#444',
+    halfVector: '#F0F',
+  };
+  const lightColors = {
+    arrow: '#000',
+    surfaceNormal: '#080',
+    surfaceNormalOutline: '#FFF',
+    halfVector: 'purple',
+  };
+
+  const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
+  darkMatcher.addEventListener('change', render);
+
   function render() {
+    const isDarkMode = darkMatcher.matches;
+    const colors = isDarkMode ? darkColors : lightColors;
     webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
     var width  = 250;
     var height = 200;
@@ -95,8 +120,8 @@ function main() {
     // draw normal
     var nx = 0;
     var ny = -20;
-    ctx.fillStyle = "#080";
-    ctx.strokeStyle = "#080";
+    ctx.fillStyle = colors.surfaceNormal;
+    ctx.strokeStyle = colors.surfaceNormal;
     diagram.arrow(ctx, 0, 0, nx, ny, false, true);
     ctx.fillText(lang.surface, nx, ny - 22);
     ctx.fillText(lang.normal, nx, ny - 14);
@@ -129,8 +154,8 @@ function main() {
     ctx.fillStyle = "orange";
     diagram.drawSun(ctx, lx, ly, width / 10);
 
-    ctx.fillStyle = "#000";
-    ctx.strokeStyle = "#000";
+    ctx.fillStyle = colors.arrow;
+    ctx.strokeStyle = colors.arrow;
     ctx.save();
     ctx.translate(sx, sy);
     ctx.rotate(-Math.atan2(sx - ex, sy - ey) + Math.PI);
@@ -182,8 +207,8 @@ function main() {
 //    ctx.restore();
 
     ctx.save();
-    ctx.fillStyle = "purple";
-    ctx.strokStyle = "purple";
+    ctx.fillStyle = colors.halfVector;
+    ctx.strokeStyle = colors.halfVector;
     ctx.translate(sx, sy);
     ctx.rotate(-Math.atan2(h[0], h[1]));
     diagram.arrow(ctx, 0, 0, 0, 60, false, true, 0.7);

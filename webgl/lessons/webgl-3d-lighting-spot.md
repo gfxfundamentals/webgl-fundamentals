@@ -251,7 +251,7 @@ The difference is `smoothstep` uses a Hermite interpolation instead of a
 linear interpolation. That means between `lowerBound` and `upperBound`
 it intepolates like the image below on the right whereas a linear interpolation is like the image on the left.
 
-<img class="webgl_center" src="resources/linear-vs-hermite.png" />
+<img class="webgl_center invertdark" src="resources/linear-vs-hermite.png" />
 
 It's up to you if you think the difference matters.
 

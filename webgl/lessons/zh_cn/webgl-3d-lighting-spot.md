@@ -220,7 +220,7 @@ GLSL 也有一个函数可以稍微做一些简化，叫做 `smoothstep`，和 `
 也就是说 `lowerBound` 和 `upperBound` 之间的值插值后像下方右图所示，
 线型插值是左图。
 
-<img class="webgl_center" src="resources/linear-vs-hermite.png" />
+<img class="webgl_center invertdark" src="resources/linear-vs-hermite.png" />
 
 如果你觉得没什么关系的话，使用什么取决于你自己。
 

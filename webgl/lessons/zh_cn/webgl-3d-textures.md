@@ -130,7 +130,7 @@ TOC: WebGL 三维纹理
 是没有上下的概念的，主要是依据传递给WebGL的纹理数据，纹理数据的开头对应纹理坐标 0, 0，
 结尾对应纹理坐标 1, 1
 
-<img class="webgl_center" width="405" src="resources/texture-coordinates-diagram.svg" />
+<img class="webgl_center noinvertdark" width="405" src="resources/texture-coordinates-diagram.svg" />
 
 我将纹理载入到Photoshop中得到一些点的坐标。
 
@@ -214,7 +214,7 @@ TOC: WebGL 三维纹理
 事实上 GPU 使用的是一个纹理贴图（mipmap），纹理贴图是一个逐渐缩小的图像集合，
 每一个是前一个的四分之一大小，16×16 纹理的纹理贴图看起来像这样。
 
-<img class="webgl_center" src="resources/mipmap-low-res-enlarged.png" />
+<img class="webgl_center noinvertdark nobg" src="resources/mipmap-low-res-enlarged.png" />
 
 通常每个子图都是前一级的双线性插值，这就是 `gl.generateMipmap` 做的事情，
 它根据原始图像创建所有的缩小级别，你也可以自己提供缩小级别的图像。
@@ -256,7 +256,7 @@ WebGL会从创建的贴图中找到从之前级别贴图插值出的 2×2 贴图
 如果仔细看会发现仍然有块状感，尤其是水平方向；右下使用的是 `LINEAR_MIPMAP_LINEAR`，
 也就是选出最合适的两个贴图各取 4 个点进行混合。
 
-<img class="webgl_center" src="resources/different-colored-mips.png" />
+<img class="webgl_center noinvertdark nobg" src="resources/different-colored-mips.png" />
 <div class="webgl_center">不同颜色的贴图</div>
 
 你可能会想既然理论上 `LINEAR_MIPMAP_LINEAR` 是最好的选择为什么还要有其他选择，
