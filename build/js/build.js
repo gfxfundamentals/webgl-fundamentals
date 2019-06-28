@@ -538,7 +538,7 @@ const Builder = function(outBaseDir, options) {
     }
 
     function makeToc(toc) {
-      return `<ul>${
+      return `${
         Object.entries(toc).map(([category, files]) => `  <li>${getLocalizedCategory(category)}</li>
         <ul>
           ${Array.isArray(files)
@@ -547,11 +547,11 @@ const Builder = function(outBaseDir, options) {
           }
         </ul>`
         ).join('\n')
-      }</ul>`;
+      }`;
     }
 
     if (!hackyProcessSelectFiles) {
-      g_langInfo.tocHtml = makeToc(toc);
+      g_langInfo.tocHtml = `<ul>${makeToc(toc)}</ul>`;
     }
 
     files.forEach(function(fileName) {
