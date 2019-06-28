@@ -504,10 +504,10 @@ const Builder = function(outBaseDir, options) {
       if (localizedCategory) {
         return localizedCategory;
       }
-      console.error(`no localization for category: ${category}`);
+      console.error(`no localization for category: ${category} in langinfo.hanson file for ${extra.lang}`);
       const categoryName = g_originalLangInfo.categoryMapping[category];
       if (!categoryName) {
-        throw new Error(`no English mapping for category: ${category}`);
+        throw new Error(`no English mapping for category: ${category} in langinfo.hanson file for english`);
       }
       return categoryName;
     }
