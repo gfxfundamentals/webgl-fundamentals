@@ -114,19 +114,19 @@ you are <a href="webgl-render-to-texture.html">rendering to a texture</a> but th
 Let&#39;s say it&#39;s just like the example in <a href="webgl-render-to-texture.html">that article</a>.
 You&#39;re rendering 1 or more 3D things into a texture then rending that result onto a cube.</p>
 <p>You&#39;re not seeing anything. Well, as a simple test, stop rendering to the texture with
-shaders are just clear the texture</p>
+shaders are just clear the texture to a known color.</p>
 <pre class="prettyprint"><code class="lang-js">gl.bindFramebuffer(gl.FRAMEBUFFER, framebufferWithTexture)
 gl.clearColor(1, 0, 1, 1);  // magenta
 gl.clear(gl.COLOR_BUFFER_BIT);
 </code></pre>
-<p>now render with the texture from the framebuffer. Does your cube turn magenta? If not
+<p>Now render with the texture from the framebuffer. Does your cube turn magenta? If not
 then your issue is not the rendering to the texture part it&#39;s something else.</p>
 <h2 id="using-the-scissor_test-and-gl-clear-">Using the <code>SCISSOR_TEST</code> and <code>gl.clear</code></h2>
 <p>The <code>SCISSOR_TEST</code> clips both drawing and clearing to some sub rectangle of the canvas (or current framebuffer).</p>
-<p>You enable the scissor test with </p>
+<p>You enable the scissor test with</p>
 <pre class="prettyprint"><code class="lang-js">gl.enable(gl.SCISSOR_TEST);
 </code></pre>
-<p>and then you set the rectangle in pixels relative to the bottom right corner. The same parameters
+<p>and then you set the scissor rectangle in pixels relative to the bottom right corner. It uses the same parameters
 as <code>gl.viewport</code>.</p>
 <pre class="prettyprint"><code class="lang-js">gl.scissor(x, y, width, height);
 </code></pre>
@@ -215,11 +215,13 @@ that ask the more likely it will get fixed.</p>
 <p>About <code>gl.POINTS</code>: When you pass <code>gl.POINTS</code> to <code>gl.drawArrays</code> you&#39;re also
 required to set <code>gl_PointSize</code> in your vertex shader to a size in pixels. It&#39;s
 important to note that different GPU/Drivers have a different maximum point size
-you can use. The WebGL spec only requires a max size of 1.0. Fortunately
+you can use. You can query that maximum size with</p>
+<pre class="prettyprint"><code>const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
+</code></pre><p>The WebGL spec only requires a max size of 1.0. Fortunately
 <a href="https://webglstats.com/webgl/parameter/ALIASED_POINT_SIZE_RANGE">most if not all GPUs and drivers support a larger size</a>.</p>
 <p>After you set <code>gl_PointSize</code> then when the vertex shader exits, whatever value you set on <code>gl_Position</code> is converted
 to screen/canvas space in pixels, then a square is generated around that position that is +/- gl_PointSize / 2 in all 4 directions.</p>
-<p>Okay, I can here you thinking so what, who wants to draw a single point.</p>
+<p>Okay, I can hear you thinking so what, who wants to draw a single point.</p>
 <p>Well, points automatically get free <a href="webgl-3d-textures.html">texture coordinates</a>. They are available in the fragment
 shader with the special variable <code>gl_PointCoord</code>. So, let&#39;s draw a texture on that point.</p>
 <p>First let&#39;s change the fragment shader.</p>
@@ -235,7 +237,7 @@ void main() {
 </code></pre>
 <p>Now to keep it simple let&#39;s make a texture with raw data like we covered in
 <a href="webgl-data-textures.html">the article on data textures</a>.</p>
-<pre class="prettyprint"><code class="lang-js">// a 2x2 pixel data
+<pre class="prettyprint"><code class="lang-js">// 2x2 pixel data
 const pixels = new Uint8Array([
   0xFF, 0x00, 0x00, 0xFF,  // red
   0x00, 0xFF, 0x00, 0xFF,  // green
@@ -306,7 +308,7 @@ const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
 *  gl.drawArrays(gl.POINTS, offset, count);
 +}
 </code></pre>
-<p>Before we run it lets make the point smaller </p>
+<p>Before we run it lets make the point smaller</p>
 <pre class="prettyprint"><code class="lang-glsl">// vertex shader
 
 attribute vec4 position;
@@ -329,7 +331,7 @@ void main() {
 +  gl_FragColor = color;
 }
 </code></pre>
-<p>and we need to look the color location</p>
+<p>and we need to lookup the color location</p>
 <pre class="prettyprint"><code class="lang-js">// setup GLSL program
 const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
 const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
@@ -363,13 +365,13 @@ attributes.</p>
 draw lots of points in WebGL. If you want to draw lots
 of points you should do something like setup an attribute with a position
 for each point, and a color for each point and draw all the points
-in a single draw call. </p>
+in a single draw call.</p>
 <p>BUT!, for testing, for debugging, for making an <a href="https://meta.stackoverflow.com/a/349790/128511">MCVE</a> it&#39;s a great way to <strong>minimize</strong>
-the code. Let&#39;s say we&#39;re drawing to textures for a post processing
+the code. As another example let&#39;s say we&#39;re drawing to textures for a post processing
 affect and we want to visualize them. We could just draw one large
 point for each one using the combination of this example and
 the previous one with a texture. No complicated step of buffers
-and attributes needed.</p>
+and attributes needed, great for debugging.</p>
 
     </div>
     <div class="lesson-sidebar">
