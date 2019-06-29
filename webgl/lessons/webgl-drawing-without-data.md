@@ -574,5 +574,35 @@ and to emphasize other ways of thinking about what WebGL
 is actually doing. Again it only cares that you set `gl_Position`
 and `gl_FragColor` in your shaders. It doesn't care how you do it.
 
+<div class="webgl_bottombar">
+<h3>A problem with <code>gl.POINTS</code></h3>
+<p>
+One thing a technique like this can be useful for is to simulate drawing
+with <code>gl.POINTS</code>.
+</p>
 
+There are 2 problems with <code>gl.POINTS</code>
 
+<ol>
+<li>They have a maximum size<br/><br/>Most people using <code>gl.POINTS</code> use small sizes
+but if that maximum size is smaller than you need you'll need to choose a different solution.
+</li>
+<li>How they get clipped when off the screen is inconsistent<br/><br/>
+The issue here is imagine you set the center of a point to be 1 pixel off the left edge
+of the canvas but you set <code>gl_PointSize</code> to 32.0.
+<div class="webgl_center"><img src="resources/point-outside-canvas.svg" style="width: 400px"></div>
+According to the OpenGL ES 1.0
+spec what is supposed to happen is that because 15 columns of those 32x32 pixels are still on the canvas
+they are supposed to be drawn. Unfortunately OpenGL (not ES) says the exact opposite.
+If the center of the point is off the canvas nothing is drawn. Even worse, OpenGL until
+recently has been notoriously under tested and so some drivers do draw those pixels
+and some don't 😭
+</li>
+</ol>
+<p>
+So, if either of those issues is a problem for your needs then as a solution you need to draw your own quads
+with <code>gl.TRIANGLES</code> instead of using <code>gl.POINTS</code>.
+ If you do that both problems are solved.
+The maximum size problem goes away as does the inconsistent clipping problem. There are various
+ways to draw lots of quads. One of then is using techniques like the ones in this article.</p>
+</div>

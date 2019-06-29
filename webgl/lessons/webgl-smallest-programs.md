@@ -158,8 +158,16 @@ point in the middle of the canvas.
 There is a [bug filed here](https://bugs.webkit.org/show_bug.cgi?id=197592). Please consider **politetly** asking them to fix this issue. The more people
 that ask the more likely it will get fixed.
 
-Okay, I can here you thinking so what, who wants to draw a single
-point.
+About `gl.POINTS`: When you pass `gl.POINTS` to `gl.drawArrays` you're also
+required to set `gl_PointSize` in your vertex shader to a size in pixels. It's
+important to note that different GPU/Drivers have a different maximum point size
+you can use. The WebGL spec only requires a max size of 1.0. Fortunately
+[most if not all GPUs and drivers support a larger size](https://webglstats.com/webgl/parameter/ALIASED_POINT_SIZE_RANGE).
+
+After you set `gl_PointSize` then when the vertex shader exits, whatever value you set on `gl_Position` is converted
+to screen/canvas space in pixels, then a square is generated around that position that is +/- gl_PointSize / 2 in all 4 directions.
+
+Okay, I can here you thinking so what, who wants to draw a single point.
 
 Well, points automatically get free [texture coordinates](webgl-3d-textures.html). They are available in the fragment
 shader with the special variable `gl_PointCoord`. So, let's draw a texture on that point.
