@@ -4,6 +4,13 @@
 <title>Fragment Shader Anim</title>
 <meta charset="utf-8">
 <link type="text/css" href="webgl-lessons.css" rel="stylesheet" />
+<style>
+@media (prefers-color-scheme: dark) {
+  canvas { 
+    background: #444;
+  }
+}
+</style>
 <script src="lesson-utils.js"></script>
 <!--
 for most samples webgl-utils only provides shader compiling/linking and
@@ -28,6 +35,26 @@ function makeColorString(color) {
          color[2].toFixed(2);
 }
 
+const darkColors = {
+  base: '#DDD',
+  background: '#444',
+  cone: '#663',
+  angleLines: '',
+  angleNumbersInLight: '#AAA',
+  angleNumbers: '#222',
+  surfaceNormalOutline: '#444',
+};
+const lightColors = {
+  base: '#000',
+  background: '#FFF',
+  cone: '#FFC',
+  angleNumbersInLight: '#888',
+  angleNumbers: '#EEE',
+  surfaceNormalOutline: '#FFF',
+};
+const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
+
+
 function main() {
   var canvas = document.getElementById("canvas");
   var ctx = get2DContext(canvas);
@@ -44,14 +71,17 @@ function main() {
   var numPixelsToDraw = 0;
   var triangleInfo = {
     numPixels: 0
-  }
+  };
   var frameRate = 1 / 60;
   var then = getTime();
   var delay = 0;
   var dirty = false;
   var resetTimer = 0;
+  let isDarkMode;
 
   function render() {
+    isDarkMode = darkMatcher.matches;
+    const colors = isDarkMode ? darkColors : lightColors;
     var now = getTime();
     var elapsedTime = now - then;
     then = now;
@@ -75,7 +105,7 @@ function main() {
       triangleInfo = drawTriangle(triangle, numPixelsToDraw);
       ++numPixelsToDraw;
 
-      ctx.fillStyle = "black";
+      ctx.fillStyle = colors.base;
       for (var ii = 0; ii < triangle.length; ++ii) {
         var tri = triangle[ii];
         ctx.fillText(
@@ -85,7 +115,7 @@ function main() {
 
       }
 
-      if (numPixelsToDraw == triangleInfo.numPixels) {
+      if (numPixelsToDraw === triangleInfo.numPixels) {
         delay = 3.0;
         numPixelsToDraw = 0;
       } else {
@@ -94,7 +124,7 @@ function main() {
 
       ctx.restore();
 
-      ctx.fillStyle = "black";
+      ctx.fillStyle = colors.base;
       ctx.fillText("v_color = " + makeColorString(triangleInfo.color),
                    10, lineHeight * 1);
       ctx.fillText("gl_FragColor = v_color",
@@ -239,11 +269,11 @@ function main() {
 
     function drawPixel(x, y, color) {
       if (numPixelsDrawn > numPixelsToDraw) {
-        color = [1, 1, 1];
+        color = isDarkMode ? [0.3, 0.3, 0.3] : [1, 1, 1];
       }
       x *= pixelSize;
       y *= pixelSize;
-      if (numPixelsDrawn == numPixelsToDraw) {
+      if (numPixelsDrawn === numPixelsToDraw) {
         results.x = x;
         results.y = y;
         results.color = color.slice(0);

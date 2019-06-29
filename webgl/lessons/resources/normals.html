@@ -102,7 +102,7 @@ var cameraPosition;
 var eyePosition;
 var target;
 var gridScale = 400;
-var et = 1/30;
+var et = 1 / 30;
 var mode;
 
 // globals
@@ -147,43 +147,43 @@ function createGrid(size, subdivisions) {
     position: positions,
     color: colors,
   };
-};
+}
 
 function createNormalLines(vertices) {
-  var positions = [];
-  var colors = [];
-
   var scale = 10;
   var srcPositions = vertices.position;
   var srcNormals = vertices.normal;
+
+  const normVertices = [];
+
   for (var ii = 0; ii < srcPositions.length; ii += 3) {
-    positions.push(
-        srcPositions[ii + 0],
-        srcPositions[ii + 1],
-        srcPositions[ii + 2]);
-    colors.push(
-        srcNormals[ii + 0] * 0.5 + 0.5,
-        srcNormals[ii + 1] * 0.5 + 0.5,
-        srcNormals[ii + 2] * 0.5 + 0.5,
-        1);
-    positions.push(
-        srcPositions[ii    ] + srcNormals[ii + 0] * scale,
-        srcPositions[ii + 1] + srcNormals[ii + 1] * scale,
-        srcPositions[ii + 2] + srcNormals[ii + 2] * scale);
-    colors.push(
-        srcNormals[ii + 0] * 0.5 + 0.5,
-        srcNormals[ii + 1] * 0.5 + 0.5,
-        srcNormals[ii + 2] * 0.5 + 0.5,
-        1);
+    const cube = twgl.primitives.createCubeVertices(1);
+    delete cube.normal;
+    delete cube.texcoord;
+    cube.color = new Float32Array(cube.position.length / 3 * 4);
+    cube.color.forEach((v, i) => {
+      const ch = i % 4;
+      cube.color[i] = ch === 3
+          ? 1
+          : srcNormals[ii + ch] * 0.5 + 0.5;
+    });
+    const target = srcNormals.slice(ii, ii + 3);
+    const self = [0, 0, 0];
+    const up = Math.abs(target[1]) === 1 ? [1, 0, 0] : [0, 1, 0];
+    const lookAt = m4.lookAt(self, target, up);
+    let mat = m4.identity();
+    mat = m4.translate(mat, srcPositions.slice(ii, ii + 3));
+    mat = m4.multiply(mat, lookAt);
+    mat = m4.scale(mat, [1.5, 1.5, scale]);
+    mat = m4.translate(mat, [0, 0, -0.5]);
+    twgl.primitives.reorientVertices(cube, mat);
+    normVertices.push(cube);
   }
 
-  return {
-    position: positions,
-    color: colors,
-  };
+  return twgl.primitives.concatVertices(normVertices);
 }
 
-function CreateApp(gl) {
+function createApp(gl) {
 
   // Create Shader Programs
   var vertexColorProgramInfo = twgl.createProgramInfo(gl, [
@@ -331,10 +331,10 @@ function CreateApp(gl) {
 
     m4.translation([-50, 0, 0], world);
     drawModel(litProgramInfo, sphereBufferInfo, gl.TRIANGLES, sphereUniforms, world);
-    drawModel(vertexColorProgramInfo, sphereNormalsBufferInfo, gl.LINES, normalUniforms, world);
+    drawModel(vertexColorProgramInfo, sphereNormalsBufferInfo, gl.TRIANGLES, normalUniforms, world);
     m4.translation([ 50, 0, 0], world);
     drawModel(litProgramInfo, cubeBufferInfo, gl.TRIANGLES, cubeUniforms, world);
-    drawModel(vertexColorProgramInfo, cubeNormalsBufferInfo, gl.LINES, normalUniforms, world);
+    drawModel(vertexColorProgramInfo, cubeNormalsBufferInfo, gl.TRIANGLES, normalUniforms, world);
     m4.translation([0, -100, 0], world);
     m4.scale(world, [100, 100, 100], world);
     drawModel(vertexColorProgramInfo, gridBufferInfo, gl.LINES, gridUniforms, world);
@@ -351,13 +351,13 @@ function main() {
 
   var gl = twgl.getWebGLContext(canvas, {alpha: true, preMultipliedAlpha: false});
   if (!gl) {
-    return false;
+    return;
   }
 
   twgl.resizeCanvasToDisplaySize(gl.canvas, window.devicePixelRatio);
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-  app = CreateApp(gl);
+  app = createApp(gl);
 
   var then = 0;
   function render(time) {
