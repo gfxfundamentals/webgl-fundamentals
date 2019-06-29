@@ -10,9 +10,9 @@ If you have not read them please start there first.
 I don't really know what to file this article under because it has two
 purposes.
 
-1. Show you the smallest WebGL progarms.
+1. Show you the smallest WebGL programs.
 
-   These techinques are super useful for testing something or
+   These techniques are super useful for testing something or
    when making an [MCVE for Stack Overflow](https://meta.stackoverflow.com/a/349790/128511) or when trying to narrow
    down a bug.
 
@@ -20,6 +20,7 @@ purposes.
 
    I hope to write several more articles on this
    to help you see the bigger picture rather than just the common patterns.
+   [Here's one](webgl-drawing-without-data.html).
 
 ## Just clearing
 
