@@ -91,14 +91,15 @@ If you have not read them please start there first.</p>
 <p>I don&#39;t really know what to file this article under because it has two
 purposes.</p>
 <ol>
-<li><p>Show you the smallest WebGL progarms.</p>
-<p>These techinques are super useful for testing something or
+<li><p>Show you the smallest WebGL programs.</p>
+<p>These techniques are super useful for testing something or
 when making an <a href="https://meta.stackoverflow.com/a/349790/128511">MCVE for Stack Overflow</a> or when trying to narrow
 down a bug.</p>
 </li>
 <li><p>Learning to think outside the box</p>
 <p>I hope to write several more articles on this
-to help you see the bigger picture rather than just the common patterns.</p>
+to help you see the bigger picture rather than just the common patterns.
+<a href="webgl-drawing-without-data.html">Here&#39;s one</a>.</p>
 </li>
 </ol>
 <h2 id="just-clearing">Just clearing</h2>
@@ -211,8 +212,14 @@ point in the middle of the canvas.</p>
 There is a <a href="https://bugs.webkit.org/show_bug.cgi?id=197592">bug filed here</a>. Please consider <strong>politetly</strong> asking them to fix this issue. The more people
 that ask the more likely it will get fixed.</p>
 </blockquote>
-<p>Okay, I can here you thinking so what, who wants to draw a single
-point.</p>
+<p>About <code>gl.POINTS</code>: When you pass <code>gl.POINTS</code> to <code>gl.drawArrays</code> you&#39;re also
+required to set <code>gl_PointSize</code> in your vertex shader to a size in pixels. It&#39;s
+important to note that different GPU/Drivers have a different maximum point size
+you can use. The WebGL spec only requires a max size of 1.0. Fortunately
+<a href="https://webglstats.com/webgl/parameter/ALIASED_POINT_SIZE_RANGE">most if not all GPUs and drivers support a larger size</a>.</p>
+<p>After you set <code>gl_PointSize</code> then when the vertex shader exits, whatever value you set on <code>gl_Position</code> is converted
+to screen/canvas space in pixels, then a square is generated around that position that is +/- gl_PointSize / 2 in all 4 directions.</p>
+<p>Okay, I can here you thinking so what, who wants to draw a single point.</p>
 <p>Well, points automatically get free <a href="webgl-3d-textures.html">texture coordinates</a>. They are available in the fragment
 shader with the special variable <code>gl_PointCoord</code>. So, let&#39;s draw a texture on that point.</p>
 <p>First let&#39;s change the fragment shader.</p>
@@ -457,6 +464,7 @@ and attributes needed.</p>
   <li>Tips</li>
         <ul>
           <li><a href="/webgl/lessons/webgl-smallest-programs.html">WebGL Smallest Programs</a></li>
+<li><a href="/webgl/lessons/webgl-drawing-without-data.html">WebGL Drawing Without Data</a></li>
         </ul>
   <li>Misc</li>
         <ul>
