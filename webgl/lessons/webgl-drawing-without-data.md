@@ -348,8 +348,7 @@ So first we want some kind of counter that changes once per pie slice
 float sliceId = floor(vertexId / 3.0);
 ```
 
-Then we need a position around the edge of the circle
-that goes
+Then we need a count around the edge of the circle that goes
 
     0, 1, ?, 1, 2, ?, 2, 3, ?, ...
 

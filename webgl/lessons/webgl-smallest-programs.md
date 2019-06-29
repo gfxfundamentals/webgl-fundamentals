@@ -40,7 +40,7 @@ Let's say it's just like the example in [that article](webgl-render-to-texture.h
 You're rendering 1 or more 3D things into a texture then rending that result onto a cube.
 
 You're not seeing anything. Well, as a simple test, stop rendering to the texture with
-shaders are just clear the texture
+shaders are just clear the texture to a known color.
 
 ```js
 gl.bindFramebuffer(gl.FRAMEBUFFER, framebufferWithTexture)
@@ -48,20 +48,20 @@ gl.clearColor(1, 0, 1, 1);  // magenta
 gl.clear(gl.COLOR_BUFFER_BIT);
 ```
 
-now render with the texture from the framebuffer. Does your cube turn magenta? If not
+Now render with the texture from the framebuffer. Does your cube turn magenta? If not
 then your issue is not the rendering to the texture part it's something else.
 
 ## Using the `SCISSOR_TEST` and `gl.clear`
 
 The `SCISSOR_TEST` clips both drawing and clearing to some sub rectangle of the canvas (or current framebuffer).
 
-You enable the scissor test with 
+You enable the scissor test with
 
 ```js
 gl.enable(gl.SCISSOR_TEST);
 ```
 
-and then you set the rectangle in pixels relative to the bottom right corner. The same parameters
+and then you set the scissor rectangle in pixels relative to the bottom right corner. It uses the same parameters
 as `gl.viewport`.
 
 ```js
@@ -124,7 +124,7 @@ How about this set of shaders
 void main() {
   gl_Position = vec4(0, 0, 0, 1);  // center
   gl_PointSize = 120.0;
-} 
+}
 ```
 
 ```glsl
@@ -161,13 +161,19 @@ that ask the more likely it will get fixed.
 About `gl.POINTS`: When you pass `gl.POINTS` to `gl.drawArrays` you're also
 required to set `gl_PointSize` in your vertex shader to a size in pixels. It's
 important to note that different GPU/Drivers have a different maximum point size
-you can use. The WebGL spec only requires a max size of 1.0. Fortunately
+you can use. You can query that maximum size with
+
+```
+const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
+```
+
+The WebGL spec only requires a max size of 1.0. Fortunately
 [most if not all GPUs and drivers support a larger size](https://webglstats.com/webgl/parameter/ALIASED_POINT_SIZE_RANGE).
 
 After you set `gl_PointSize` then when the vertex shader exits, whatever value you set on `gl_Position` is converted
 to screen/canvas space in pixels, then a square is generated around that position that is +/- gl_PointSize / 2 in all 4 directions.
 
-Okay, I can here you thinking so what, who wants to draw a single point.
+Okay, I can hear you thinking so what, who wants to draw a single point.
 
 Well, points automatically get free [texture coordinates](webgl-3d-textures.html). They are available in the fragment
 shader with the special variable `gl_PointCoord`. So, let's draw a texture on that point.
@@ -190,7 +196,7 @@ Now to keep it simple let's make a texture with raw data like we covered in
 [the article on data textures](webgl-data-textures.html).
 
 ```js
-// a 2x2 pixel data
+// 2x2 pixel data
 const pixels = new Uint8Array([
   0xFF, 0x00, 0x00, 0xFF,  // red
   0x00, 0xFF, 0x00, 0xFF,  // green
@@ -242,7 +248,7 @@ void main() {
 -  gl_Position = vec4(0, 0, 0, 1);
 +  gl_Position = position;
   gl_PointSize = 120.0;
-} 
+}
 ```
 
 attributes have a default value of `0, 0, 0, 1` so with just that
@@ -267,7 +273,7 @@ const positionLoc = gl.getAttribLocation(program, 'position');
 +}
 ```
 
-Before we run it lets make the point smaller 
+Before we run it lets make the point smaller
 
 ```glsl
 // vertex shader
@@ -279,7 +285,7 @@ void main() {
   gl_Position = position;
 -  gl_PointSize = 120.0;
 +  gl_PointSize = 20.0;
-} 
+}
 ```
 
 And lets make it so we can set the color of the point.
@@ -296,7 +302,7 @@ void main() {
 }
 ```
 
-and we need to look the color location
+and we need to lookup the color location
 
 ```js
 // setup GLSL program
@@ -334,14 +340,14 @@ Of course this is **NOT** the way you should
 draw lots of points in WebGL. If you want to draw lots
 of points you should do something like setup an attribute with a position
 for each point, and a color for each point and draw all the points
-in a single draw call. 
+in a single draw call.
 
 BUT!, for testing, for debugging, for making an [MCVE](https://meta.stackoverflow.com/a/349790/128511) it's a great way to **minimize**
-the code. Let's say we're drawing to textures for a post processing
+the code. As another example let's say we're drawing to textures for a post processing
 affect and we want to visualize them. We could just draw one large
 point for each one using the combination of this example and
 the previous one with a texture. No complicated step of buffers
-and attributes needed.
+and attributes needed, great for debugging.
 
 
 
