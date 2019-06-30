@@ -1,12 +1,11 @@
+/*eslint-env node*/
+
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 const liveEditor = require('@gfxfundamentals/live-editor');
 const liveEditorPath = path.dirname(require.resolve('@gfxfundamentals/live-editor'));
-
-console.log(liveEditor.monacoEditor);
-console.log(liveEditorPath);
 
 module.exports = function(grunt) {
 
@@ -152,8 +151,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('buildlessons', function() {
-    var buildStuff = require('@gfxfundamentals/lesson-builder');
-    var finish = this.async();
+    const buildStuff = require('@gfxfundamentals/lesson-builder');
+    const finish = this.async();
     buildStuff(buildSettings).finally(finish);
   });
 
