@@ -1,6 +1,5 @@
 Title: WebGL 3D - Ортогональ
 Description: Знакомимся с 3D в WebGL, начиная с ортографической проекции.
-Category: 3d
 TOC: WebGL 3D - Ортогональ
 
 

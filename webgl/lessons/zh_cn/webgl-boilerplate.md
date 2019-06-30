@@ -1,6 +1,5 @@
 Title: WebGL 样板
 Description: WebGL应用中常用的代码
-Category: misc
 TOC: WebGL 样板
 
 

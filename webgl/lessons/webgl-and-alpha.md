@@ -1,6 +1,5 @@
 Title: WebGL and Alpha
 Description: How alpha in WebGL is different than alpha in OpenGL
-Category: misc
 TOC: WebGL and Alpha
 
 

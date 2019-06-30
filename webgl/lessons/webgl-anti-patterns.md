@@ -1,6 +1,5 @@
 Title: WebGL Anti-Patterns
 Description: What not to do in WebGL, why not to do it, and what to do instead
-Category: misc
 TOC: WebGL - Anti-Patterns
 
 

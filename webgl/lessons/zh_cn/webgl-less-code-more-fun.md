@@ -1,6 +1,5 @@
 Title: WebGL 码少趣多
 Description: 让编写WebGL代码少点啰嗦
-Category: organization
 TOC: WebGL 码少趣多
 
 

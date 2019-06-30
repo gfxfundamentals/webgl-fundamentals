@@ -1,6 +1,5 @@
 Title: WebGL Setup and Installation
 Description: How to do WebGL development
-Category: misc
 TOC: WebGL Setup And Installation
 
 

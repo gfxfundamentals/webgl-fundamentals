@@ -1,6 +1,5 @@
 Title: WebGL Fog
 Description: How to implementent fog
-Category: 3d
 TOC: WebGL - Fog
 
 

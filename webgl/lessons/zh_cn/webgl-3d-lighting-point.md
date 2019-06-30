@@ -1,6 +1,5 @@
 Title: WebGL 三维点光源
 Description: 如何在WebGL中实现点光源
-Category: lighting
 TOC: WebGL 三维点光源
 
 

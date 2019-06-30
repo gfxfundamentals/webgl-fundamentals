@@ -1,6 +1,5 @@
 Title: WebGL 三维方向光源
 Description: 如何在WebGL中实现方向光源
-Category: lighting
 TOC: WebGL 三维方向光源
 
 

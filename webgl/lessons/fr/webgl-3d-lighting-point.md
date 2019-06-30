@@ -1,6 +1,5 @@
 Title: WebGL 3D - Les lumières-point
 Description: Comment implémenter les lumières-point en WebGL
-Category: lighting
 TOC: WebGL 3D - Lumière-point
 
 

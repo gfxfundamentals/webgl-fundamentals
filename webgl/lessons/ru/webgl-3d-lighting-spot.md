@@ -1,6 +1,5 @@
 Title: WebGL 3D - Прожектор
 Description: Создание света от прожектора в WebGL
-Category: lighting
 TOC: WebGL 3D - Прожектор
 
 

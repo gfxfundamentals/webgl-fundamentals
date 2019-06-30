@@ -1,6 +1,5 @@
 Title: 2D-перенос в WebGL
 Description: Как выполнить перенос в 2D
-Category: matrices
 TOC: 2D-перенос в WebGL
 
 

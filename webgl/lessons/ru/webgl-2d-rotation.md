@@ -1,6 +1,5 @@
 Title: 2D-поворот в WebGL
 Description: Как выполнить поворот в 2D
-Category: matrices
 TOC: 2D-поворот в WebGL
 
 

@@ -1,6 +1,5 @@
 Title: WebGL e Alpha
 Description: Como o alpha no WebGL é diferente do alpha no OpenGL
-Category: misc
 TOC: WebGL e canal Alpha
 
 

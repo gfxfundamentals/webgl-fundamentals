@@ -1,6 +1,5 @@
 Title: WebGL - Рендеринг в текстуру
 Description: Как выполнить рендеринг в текстуру
-Category: rendertargets
 TOC: WebGL - Рендеринг в текстуру
 
 

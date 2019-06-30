@@ -1,6 +1,5 @@
 Title: Shaders et GLSL
 Description: Présentation des shaders et de GLSL
-Category: fundamentals
 TOC: WebGL - Shaders et GLSL
 
 

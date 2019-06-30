@@ -1,6 +1,5 @@
 Title: WebGL 基础概念
 Description: 第一节WebGL教程就从基础概念开始吧！
-Category: fundamentals
 TOC: WebGL 基础概念
 
 

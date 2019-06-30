@@ -1,6 +1,5 @@
 Title: WebGL 3D - Перспектива
 Description: Как отобразить перспективу в WebGL 3D.
-Category: 3d
 TOC: WebGL 3D - Перспектива
 
 

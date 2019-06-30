@@ -1,6 +1,5 @@
 Title: WebGL 三维透视投影
 Description: 在WebGL中如何实现三维透视投影
-Category: 3d
 TOC: WebGL 三维透视投影
 
 

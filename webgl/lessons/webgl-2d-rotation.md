@@ -1,6 +1,5 @@
 Title: WebGL 2D Rotation
 Description: How to rotate in 2D
-Category: matrices
 TOC: WebGL 2D Rotation
 
 

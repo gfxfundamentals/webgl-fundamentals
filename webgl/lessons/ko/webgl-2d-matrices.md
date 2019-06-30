@@ -1,6 +1,5 @@
 Title: WebGL 2D 행렬
 Description: 행렬 수학이 어떻게 동작하는지 지침서에 간단하고 쉽게 설명되어 있습니다.
-Category: matrices
 TOC: WebGL 2D 행렬
 
 

@@ -1,6 +1,5 @@
 Title: WebGL 环境贴图 (反射)
 Description: 如何实现环境贴图。
-Category: 3d
 TOC: WebGL 环境贴图
 
 

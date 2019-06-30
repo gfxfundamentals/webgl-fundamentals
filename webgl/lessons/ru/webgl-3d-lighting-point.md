@@ -1,6 +1,5 @@
 Title: WebGL 3D - Точечное освещение
 Description: Реализация точечного освещения в WebGL
-Category: lighting
 TOC: WebGL 3D - Точечное освещение
 
 

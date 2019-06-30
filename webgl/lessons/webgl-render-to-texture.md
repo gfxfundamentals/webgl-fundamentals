@@ -1,6 +1,5 @@
 Title: WebGL Rendering to a Texture
 Description: How to render to a texture.
-Category: rendertargets
 TOC: WebGL Render to Texture
 
 

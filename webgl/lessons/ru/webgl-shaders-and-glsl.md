@@ -1,6 +1,5 @@
 Title: Шейдеры и GLSL в WebGL
 Description: Что такое шейдеры и GLSL
-Category: fundamentals
 TOC: Шейдеры и GLSL в WebGL
 
 

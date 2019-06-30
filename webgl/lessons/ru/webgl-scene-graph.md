@@ -1,6 +1,5 @@
 Title: WebGL - Графы сцены
 Description: Что такое граф сцены, и для чего он используется
-Category: organization
 TOC: WebGL - Графы сцены
 
 

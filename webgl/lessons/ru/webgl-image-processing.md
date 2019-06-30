@@ -1,6 +1,5 @@
 Title: Обработка изображений в WebGL
 Description: Обработка изображений в WebGL
-Category: image-processing
 TOC: Обработка изображений в WebGL
 
 

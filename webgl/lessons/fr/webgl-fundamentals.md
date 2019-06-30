@@ -1,6 +1,5 @@
 Title: Les bases
 Description: Première leçon pour WebGL en démarrant par les bases
-Category: fundamentals
 TOC: WebGL - Les bases
 
 

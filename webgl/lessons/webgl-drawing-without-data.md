@@ -1,6 +1,5 @@
 Title: WebGL Drawing Without Data
 Description: Creative Coding - Drawing Without Data
-Category: tips
 TOC: WebGL Drawing Without Data
 
 This article assumes you've read many of the other articles

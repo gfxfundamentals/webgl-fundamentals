@@ -1,6 +1,5 @@
 Title: WebGL 使用多个纹理
 Description: 在WebGL中如何使用多个纹理
-Category: textures
 TOC: WebGL 使用多个纹理
 
 

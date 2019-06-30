@@ -1,6 +1,5 @@
 Title: WebGL Установка и настройка
 Description: Как начать разрабатывать на WebGL
-Category: misc
 TOC: WebGL Установка и настройка
 
 

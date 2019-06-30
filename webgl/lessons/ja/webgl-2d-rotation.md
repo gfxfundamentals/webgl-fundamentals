@@ -1,6 +1,5 @@
 Title: WebGL - 二次元での回転
 Description: 二次元で回転する方法
-Category: matrices
 TOC: WebGL - 二次元での回転
 
 

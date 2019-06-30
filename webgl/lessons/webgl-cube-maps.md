@@ -1,6 +1,5 @@
 Title: WebGL Cubemaps
 Description: How to use cubemaps in WebGL
-Category: 3d
 TOC: WebGL - Cubemaps
 
 

@@ -1,6 +1,5 @@
 Title: WebGL 绘制多个物体
 Description: 如何使用WebGL绘制多个物体
-Category: organization
 TOC: WebGL 绘制多个物体
 
 

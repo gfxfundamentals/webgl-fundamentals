@@ -1,6 +1,5 @@
 Title: WebGL 工作原理
 Description: WebGL究竟做了什么？！！
-Category: fundamentals
 TOC: WebGL 工作原理
 
 

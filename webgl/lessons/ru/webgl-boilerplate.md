@@ -1,6 +1,5 @@
 Title: Шаблон WebGL
 Description: Шаблон кода, который понадобится в каждой программе WebGL
-Category: misc
 TOC: Шаблон WebGL
 
 

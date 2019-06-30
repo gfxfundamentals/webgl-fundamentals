@@ -1,6 +1,5 @@
 Title: WebGL 图像处理
 Description: 怎么用WebGL处理图像
-Category: image-processing
 TOC: WebGL 图像处理
 
 

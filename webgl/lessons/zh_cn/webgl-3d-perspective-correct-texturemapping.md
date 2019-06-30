@@ -1,6 +1,5 @@
 Title: WebGL 纹理映射的透视纠正
 Description: W 有什么特殊的地方
-Category: textures
 TOC: WebGL 纹理映射的透视纠正
 
 

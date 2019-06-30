@@ -1,6 +1,5 @@
 Title: WebGL Boilerplate
 Description: Some of the code you need for all WebGL programs
-Category: misc
 TOC: WebGL Boilerplate
 
 

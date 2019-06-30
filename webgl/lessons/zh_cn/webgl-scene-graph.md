@@ -1,6 +1,5 @@
 Title: WebGL - 场景图
 Description: 场景图是的目的是什么，有什么用处。
-Category: organization
 TOC: WebGL 场景图
 
 

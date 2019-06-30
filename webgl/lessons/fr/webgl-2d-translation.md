@@ -1,6 +1,5 @@
 Title: WebGL 2D - Les translations
 Description: Comment se déplacer en 2D
-Category: matrices
 TOC: WebGL 2D - Translation
 
 

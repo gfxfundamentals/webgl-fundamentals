@@ -1,6 +1,5 @@
 Title: WebGL - Отрисовка нескольких объектов
 Description: Отображение различных объектов в WebGL
-Category: organization
 TOC: WebGL - Отрисовка нескольких объектов
 
 

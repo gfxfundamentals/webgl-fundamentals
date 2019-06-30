@@ -1,6 +1,5 @@
 Title: WebGL 二维矩阵
 Description: 用简单易懂的方式讲解矩阵运算的用法
-Category: matrices
 TOC: WebGL 二维矩阵
 
 

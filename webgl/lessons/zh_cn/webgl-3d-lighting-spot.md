@@ -1,6 +1,5 @@
 Title: WebGL 三维聚光灯
 Description: 如何在 WebGL 中实现聚光灯的效果
-Category: lighting
 TOC: WebGL 三维聚光灯
 
 

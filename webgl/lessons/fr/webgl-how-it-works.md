@@ -1,6 +1,5 @@
 Title: WebGL Comment ça marche
 Description: Ce que WebGL fait vraiment
-Category: fundamentals
 TOC: WebGL - Comment ça marche
 
 

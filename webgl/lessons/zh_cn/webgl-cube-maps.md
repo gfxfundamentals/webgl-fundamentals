@@ -1,6 +1,5 @@
 Title: WebGL 立方体贴图
 Description: 如何在WebGL中使用立方体贴图
-Category: 3d
 TOC: WebGL 立方体贴图
 
 

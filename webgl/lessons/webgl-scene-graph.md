@@ -1,6 +1,5 @@
 Title: WebGL - Scene Graph
 Description: What a scene graph is want what it's used for
-Category: organization
 TOC: WebGL - Scene Graphs
 
 

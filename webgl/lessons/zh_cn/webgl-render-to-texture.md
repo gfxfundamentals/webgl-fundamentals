@@ -1,6 +1,5 @@
 Title: WebGL 渲染到纹理
 Description: 如何往纹理渲染内容
-Category: rendertargets
 TOC: WebGL 渲染到纹理
 
 

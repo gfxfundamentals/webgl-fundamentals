@@ -1,6 +1,5 @@
 Title: WebGL 三维正射投影
 Description: 从正射投影开始讲WebGL中的三维
-Category: 3d
 TOC: WebGL 三维正射投影
 
 

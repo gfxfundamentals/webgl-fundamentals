@@ -1,6 +1,5 @@
 Title: WebGL二次元行列数学
 Description: 分かりやすい行列数学の説明
-Category: matrices
 TOC: WebGL - 二次元での行列数学
 
 

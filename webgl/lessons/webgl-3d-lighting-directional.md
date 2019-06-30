@@ -1,6 +1,5 @@
 Title: WebGL 3D - Directional Lighting
 Description: How to implement directional lighting in WebGL
-Category: lighting
 TOC: WebGL 3D - Directional Lighting
 
 

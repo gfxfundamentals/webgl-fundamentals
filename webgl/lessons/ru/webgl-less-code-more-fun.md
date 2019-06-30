@@ -1,6 +1,5 @@
 Title: WebGL - Меньше кода, больше веселья
 Description: Как сделать программирование в WebGL не таким многословным
-Category: organization
 TOC: WebGL - Меньше кода, больше веселья
 
 

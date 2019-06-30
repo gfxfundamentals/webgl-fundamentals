@@ -1,6 +1,5 @@
 Title: WebGLにおける画像処理
 Description: WebGLで画像の加工処理をする方法
-Category: image-processing
 TOC: WebGLにおける画像処理
 
 

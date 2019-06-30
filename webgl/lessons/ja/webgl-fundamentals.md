@@ -1,6 +1,5 @@
 Title: WebGLの基本
 Description: 基本から最初のWebGLのレッスン
-Category: fundamentals
 TOC: WebGLの基本
 
 

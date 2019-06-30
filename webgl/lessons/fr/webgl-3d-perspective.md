@@ -1,6 +1,5 @@
 Title: WebGL - La perspective
 Description: How to display perspective in 3D in WebGL
-Category: 3d
 TOC: WebGL 3D - La perspective
 
 

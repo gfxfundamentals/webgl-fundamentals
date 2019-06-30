@@ -1,6 +1,5 @@
 Title: WebGL 设置和安装
 Description: 如何进行WebGL的开发
-Category: misc
 TOC: WebGL 设置和安装
 
 

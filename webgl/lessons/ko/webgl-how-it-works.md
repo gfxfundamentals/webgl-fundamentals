@@ -1,6 +1,5 @@
 Title: WebGL 작동 원리
 Description: WebGL은 실제로 어떻게 작동하나요?
-Category: fundamentals
 TOC: WebGL 작동 원리
 
 

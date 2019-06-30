@@ -1,6 +1,5 @@
 Title: Obrót dwuwymiarowy w WebGL
 Description: Jak obracać w dwóch wymiarach
-Category: matrices
 TOC: Obrót dwuwymiarowy w WebGL
 
 

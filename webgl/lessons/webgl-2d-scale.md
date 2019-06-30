@@ -1,6 +1,5 @@
 Title: WebGL 2D Scale
 Description: How to scale in 2D
-Category: matrices
 TOC: WebGL 2D Scale
 
 

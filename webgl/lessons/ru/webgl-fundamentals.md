@@ -1,6 +1,5 @@
 Title: Основы WebGL
 Description: Ваш первый урок по WebGL начнётся с его основ
-Category: fundamentals
 TOC: Основы WebGL
 
 

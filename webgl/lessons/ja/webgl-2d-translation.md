@@ -1,6 +1,5 @@
 Title: WebGL二次元で移動すること
 Description: 二次元で移動し方
-Category: matrices
 TOC: WebGL - 二次元での移動
 
 

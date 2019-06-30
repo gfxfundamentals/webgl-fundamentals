@@ -1,6 +1,5 @@
 Title: WebGL Resizing the Canvas.
 Description: How to resize a WebGL canvas and the issues involved
-Category: misc
 TOC: WebGL Resizing the Canvas
 
 

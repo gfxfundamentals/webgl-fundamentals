@@ -1,6 +1,5 @@
 Title: WebGL Shader 그리고 GLSL
 Description: Shader와 GLSL이 뭔가요?
-Category: fundamentals
 TOC: WebGL 셰이더와 GLSL
 
 

@@ -1,6 +1,5 @@
 Title: WebGL 蒙皮
 Description: 在WebGL中如何蒙皮网格
-Category: 3d
 TOC: WebGL 蒙皮
 
 
@@ -393,7 +392,7 @@ glTF有两种格式。`.gltf`格式是一个JSON文件通常引用一个 `.bin`�
 
 首先我下载了[.blend文件](https://www.blendswap.com/blends/view/65255)，安装[blender](https://blender.org)，安装[gltf导出器](https://github.com/KhronosGroup/glTF-Blender-IO)，blender中加载文件并导出。
 
-<div class="webgl_center"><img src="resources/blender-killer-whale.png" style="width: 700px;"></div>
+<div class="webgl_center"><img src="resources/blender-killer-whale.png" style="width: 700px;" class="nobg"></div>
 
 > 快速说明：3D软件像Blender，Maya，3DSMax是极其复杂的软件，有1000多种选项。当我在1996年第一次学习3DSMax时，我大约3周每天花2-3小时阅读1000多页的手册，通过教程工作。几年后，当我学习Maya时，我做了类似的事情。Blender同样复杂并且更甚它与几乎所有其他软件的界面非常不同。你应该花费一些时间来学习你决定使用的3D软件包。
 

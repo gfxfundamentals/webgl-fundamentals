@@ -1,6 +1,5 @@
 Title: WebGL 着色器和GLSL
 Description: 着色器和GLSL分别是什么
-Category: fundamentals
 TOC: WebGL 着色器和GLSL
 
 

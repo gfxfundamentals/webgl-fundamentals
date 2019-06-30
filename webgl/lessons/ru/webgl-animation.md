@@ -1,6 +1,5 @@
 Title: WebGL - Анимация
 Description: Анимация в WebGL
-Category: misc
 TOC: WebGL - Анимация
 
 

@@ -1,6 +1,5 @@
 Title: Podstawy WebGL
 Description: Twoja pierwsza lekcja WebGL - podstawy
-Category: fundamentals
 TOC: Podstawy WebGL
 
 

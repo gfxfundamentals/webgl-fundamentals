@@ -1,6 +1,5 @@
 Title: WebGL Text - Canvas 2D
 Description: How to display text using a 2D canvas that is in sync with WebGL
-Category: text
 TOC: WebGL Text - Canvas 2D
 
 

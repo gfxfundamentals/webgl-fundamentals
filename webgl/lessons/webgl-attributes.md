@@ -1,6 +1,5 @@
 Title: WebGL Attributes
 Description: What are attributes in WebGL?
-Category: reference
 TOC: WebGL Attributes
 
 

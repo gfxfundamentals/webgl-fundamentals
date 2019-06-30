@@ -1,6 +1,5 @@
 Title: Przesunięcie dwuwymiarowe w WebGL
 Description: Jak przesuwać w dwóch wymiarach
-Category: matrices
 TOC: PrzesuniÄcie dwuwymiarowe w WebGL
 
 

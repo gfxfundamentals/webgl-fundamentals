@@ -1,6 +1,5 @@
 Title: WebGL - Orthographic 3D
 Description: 정사영으로 시작하는 WebGL에서 3D 하는 방법
-Category: 3d
 TOC: WebGL - Orthographic 3D
 
 

@@ -1,6 +1,5 @@
 Title: WebGLにおける画像処理。続き
 Description: WebGLで複数の画像加工処理をする方法
-Category: image-processing
 TOC: WebGLにおける画像処理。続き
 
 

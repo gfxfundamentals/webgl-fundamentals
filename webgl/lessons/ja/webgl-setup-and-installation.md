@@ -1,6 +1,5 @@
 Title: WebGLの開発環境
 Description: WebGLで開発するには
-Category: misc
 TOC: WebGLの開発環境
 
 

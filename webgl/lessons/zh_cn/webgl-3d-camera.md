@@ -1,6 +1,5 @@
 Title: WebGL 三维相机
 Description: WebGL中相机的使用方式
-Category: 3d
 TOC: WebGL 三维相机
 
 

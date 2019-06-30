@@ -1,6 +1,5 @@
 Title: WebGLのアニメーション
 Description: WebGLでアニメーションする方法
-Category: misc
 TOC: WebGLのアニメーション
 
 

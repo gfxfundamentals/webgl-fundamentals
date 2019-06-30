@@ -1,6 +1,5 @@
 Title: WebGLのシェーダーとGLSL
 Description: シェーダーとGLSLとは何か説明する。
-Category: fundamentals
 TOC: WebGLのシェーダーとGLSL
 
 

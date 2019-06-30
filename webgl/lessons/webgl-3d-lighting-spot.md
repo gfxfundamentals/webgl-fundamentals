@@ -1,6 +1,5 @@
 Title: WebGL 3D - Spot Lighting
 Description: How to implement spot lights in WebGL
-Category: lighting
 TOC: WebGL 3D - Spot Lighting
 
 

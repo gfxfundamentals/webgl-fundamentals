@@ -1,6 +1,5 @@
 Title: 2D-матрицы WebGL
 Description: Математика матриц на простых и подробных примерах.
-Category: matrices
 TOC: 2D-матрицы в WebGL
 
 

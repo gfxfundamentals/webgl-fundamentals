@@ -1,6 +1,5 @@
 Title: WebGL - Антипаттерны
 Description: Что и почему не нужно делать в WebGL, и что следует использовать
-Category: misc
 TOC: WebGL - Антипаттерны
 
 

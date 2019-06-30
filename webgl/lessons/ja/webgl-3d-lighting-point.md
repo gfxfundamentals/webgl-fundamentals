@@ -1,6 +1,5 @@
 Title: WebGL三次元点光源
 Description: WebGLで点光源の計算し方
-Category: lighting
 TOC: WebGL三次元点光源
 
 

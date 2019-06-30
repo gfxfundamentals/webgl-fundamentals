@@ -1,6 +1,5 @@
 Title: WebGL 二维缩放
 Description: 如何在二维中缩放物体
-Category: matrices
 TOC: WebGL 二维缩放
 
 

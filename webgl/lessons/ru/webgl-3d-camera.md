@@ -1,6 +1,5 @@
 Title: WebGL 3D - Камеры
 Description: Как работают камеры в WebGL
-Category: 3d
 TOC: WebGL 3D - Камеры
 
 

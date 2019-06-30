@@ -1,6 +1,5 @@
 Title: Использование 2 и более текстур в WebGL
 Description: Как использовать 2 и более текстуры в WebGL
-Category: textures
 TOC: WebGL - Использование 2 и более текстур
 
 

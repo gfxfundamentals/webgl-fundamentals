@@ -1,6 +1,5 @@
 Title: WebGL 3D - Создание модели
 Description: Как создать геометрию с помощью кривых Безье
-Category: geometry
 TOC: WebGL 3D - Создание модели
 
 

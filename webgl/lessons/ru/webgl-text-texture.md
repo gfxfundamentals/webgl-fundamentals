@@ -1,6 +1,5 @@
 Title: WebGL текст - текстуры
 Description: Отображение текста в WebGL с помощью текстур
-Category: text
 TOC: WebGL текст - Используем текстуру
 
 

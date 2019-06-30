@@ -1,6 +1,5 @@
 Title: WebGL 文字 - 使用字形纹理
 Description: 如何使用一个字形纹理显示文字
-Category: text
 TOC: WebGL 文字 - 使用字形纹理
 
 

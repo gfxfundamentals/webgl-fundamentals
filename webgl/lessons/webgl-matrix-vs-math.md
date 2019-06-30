@@ -1,6 +1,5 @@
 Title: WebGL Matrices vs Math Matrices
 Description: The difference between WebGL conventions and Math conventions.
-Category: misc
 TOC: WebGL Matrices vs Math Matrices
 
 

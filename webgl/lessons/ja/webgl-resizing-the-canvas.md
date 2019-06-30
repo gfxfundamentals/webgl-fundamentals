@@ -1,6 +1,5 @@
 Title: WebGLとcanvasのリサイズ
 Description: WebGL使用時にcanvasをリサイズする方法と問題について
-Category: misc
 TOC: WebGLとcanvasのリサイズ
 
 

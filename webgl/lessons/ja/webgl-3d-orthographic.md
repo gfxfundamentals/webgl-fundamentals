@@ -1,6 +1,5 @@
 Title: WebGL - 三次元正投影
 Description: WebGLで三次元図形を正投影で表示すること。
-Category: 3d
 TOC: WebGL三次元の正投影
 
 

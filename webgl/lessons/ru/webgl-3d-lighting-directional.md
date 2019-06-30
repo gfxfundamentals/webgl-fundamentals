@@ -1,6 +1,5 @@
 Title: WebGL 3D - Направленное освещение
 Description: Реализация направленного освещения в WebGL
-Category: lighting
 TOC: WebGL 3D - Направленное освещение
 
 

@@ -1,6 +1,5 @@
 Title: WebGL二次元拡大と縮小
 Description: WebGLの二次元拡大と縮小し方
-Category: matrices
 TOC: WebGL - 二次元での拡大縮小
 
 

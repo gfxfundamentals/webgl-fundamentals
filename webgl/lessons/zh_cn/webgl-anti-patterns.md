@@ -1,6 +1,5 @@
 Title: WebGL 反面模式
 Description: WebGL中不应该这么做，为什么，应该这么做。
-Category: misc
 TOC: WebGL 错误模式
 
 

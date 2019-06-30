@@ -1,6 +1,5 @@
 Title: WebGL 天空盒
 Description: 用天空盒来展示天空!
-Category: 3d
 TOC: WebGL 天空盒
 
 

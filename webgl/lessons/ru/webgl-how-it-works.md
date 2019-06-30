@@ -1,6 +1,5 @@
 Title: Как работает WebGL
 Description: Как на самом деле работает WebGL
-Category: fundamentals
 TOC: Как работает WebGL
 
 

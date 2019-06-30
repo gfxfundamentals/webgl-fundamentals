@@ -1,6 +1,5 @@
 Title: WebGL 2D - Echelle
 Description: Comment changer l'échelle en 2D
-Category: matrices
 TOC: WebGL 2D - Echelle
 
 

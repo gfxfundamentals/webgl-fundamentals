@@ -1,6 +1,5 @@
 Title: WebGL 3D - Перспективная коррекция текстур
 Description: Что скрывает за собой W
-Category: textures
 TOC: WebGL 3D - Перспективная коррекция текстур
 
 

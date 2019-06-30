@@ -1,6 +1,5 @@
 Title: WebGL Boilerplate
 Description: 모든 WebGL program에 필요한 코드
-Category: misc
 TOC: WebGL Boilerplate
 
 

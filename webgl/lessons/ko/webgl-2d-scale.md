@@ -1,6 +1,5 @@
 Title: WebGL 2D 크기
 Description: 2D에서 크기 조정하는 방법
-Category: matrices
 TOC: WebGL 2D 크기
 
 

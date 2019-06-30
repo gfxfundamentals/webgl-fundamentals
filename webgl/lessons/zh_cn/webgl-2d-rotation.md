@@ -1,6 +1,5 @@
 Title: WebGL 二维旋转
 Description: 如何在二维中旋转
-Category: matrices
 TOC: WebGL 二维旋转
 
 

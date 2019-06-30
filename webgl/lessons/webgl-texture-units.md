@@ -1,6 +1,5 @@
 Title: WebGL Texture Units
 Description: What are texture units in WebGL?
-Category: reference
 TOC: WebGL Texture Units
 
 

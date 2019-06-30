@@ -1,6 +1,5 @@
 Title: WebGL Fundamentals
 Description: Your first WebGL lesson starting with the fundamentals
-Category: fundamentals
 TOC: WebGL Fundamentals
 
 

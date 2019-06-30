@@ -1,6 +1,5 @@
 Title: WebGL 설치
 Description: WebGL 개발 방법
-Category: misc
 TOC: WebGL 설치
 
 

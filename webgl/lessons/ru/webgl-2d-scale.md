@@ -1,6 +1,5 @@
 Title: 2D-масштабирование в WebGL
 Description: Как выполнить масштабирование в 2D
-Category: matrices
 TOC: 2D-масштабирование в WebGL
 
 

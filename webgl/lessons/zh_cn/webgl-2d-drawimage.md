@@ -1,6 +1,5 @@
 Title: WebGL 实现 DrawImage 接口
 Description: 如何用 WebGL 实现画布的二维接口drawImage
-Category: 2d
 TOC: WebGL 二维DrawImage
 
 

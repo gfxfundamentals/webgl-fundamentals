@@ -1,6 +1,5 @@
 Title: WebGLのデータテクスチャ
 Description: テクスチャーを配列データから生成する
-Category: textures
 TOC: WebGLのデータテクスチャ
 
 

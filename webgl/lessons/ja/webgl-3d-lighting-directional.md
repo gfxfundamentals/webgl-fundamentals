@@ -1,6 +1,5 @@
 Title: WebGL三次元指向性光源
 Description: WebGLで指向性光源計算し方
-Category: lighting
 TOC: WebGL三次元指向性光源
 
 

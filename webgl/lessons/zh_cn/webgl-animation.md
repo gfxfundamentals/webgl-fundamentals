@@ -1,6 +1,5 @@
 Title: WebGL 动画
 Description: 如何使用WebGL实现动画
-Category: misc
 TOC: WebGL 动画
 
 

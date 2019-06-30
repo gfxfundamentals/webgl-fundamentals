@@ -1,6 +1,5 @@
 Title: WebGL 기초
 Description: 기초부터 시작하는 WebGL 첫 강의
-Category: fundamentals
 TOC: WebGL 기초
 
 

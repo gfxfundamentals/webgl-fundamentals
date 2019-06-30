@@ -1,6 +1,5 @@
 Title: WebGL 三维几何加工
 Description: 如何用工程化的方式生成贝塞尔曲线
-Category: geometry
 TOC: WebGL 三维几何加工
 
 

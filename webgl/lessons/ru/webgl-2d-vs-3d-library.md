@@ -1,6 +1,5 @@
 Title: WebGL - Растеризация или 3D-библиотека
 Description: Почему WebGL не является 3D-библиотекой и что из этого следует
-Category: misc
 TOC: WebGL - 2D и 3D библиотеки
 
 

@@ -1,6 +1,5 @@
 Title: WebGL текст - HTML
 Description: Как использовать HTML для отображения текста над WebGL
-Category: text
 TOC: WebGL текст - HTML
 
 

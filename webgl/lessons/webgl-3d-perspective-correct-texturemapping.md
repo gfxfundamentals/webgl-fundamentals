@@ -1,6 +1,5 @@
 Title: WebGL 3D Perspective Correct Texturemapping
 Description: What's special about W
-Category: textures
 TOC: WebGL 3D - Perspective Correct Texture Mapping
 
 

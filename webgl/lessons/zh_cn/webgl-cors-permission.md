@@ -1,6 +1,5 @@
 Title: WebGL 跨域图像
 Description: 使用跨域图像
-Category: textures
 TOC: WebGL 跨域图像
 
 

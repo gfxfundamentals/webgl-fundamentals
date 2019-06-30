@@ -1,6 +1,5 @@
 Title: WebGL 2D - Matrices
 Description: Comment les matrices sont utilisées en graphisme
-Category: matrices
 TOC: WebGL 2D - Matrices
 
 

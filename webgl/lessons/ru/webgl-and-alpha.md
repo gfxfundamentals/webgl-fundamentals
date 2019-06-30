@@ -1,6 +1,5 @@
 Title: WebGL и прозрачность
 Description: Как работа с прозрачностью в WebGL отличается от OpenGL
-Category: misc
 TOC: WebGL и прозрачность
 
 
