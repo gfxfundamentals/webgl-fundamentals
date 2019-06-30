@@ -467,7 +467,7 @@ concatinated piece. For JavaScript I think the `.gltf` format is slightly easier
 
 First [I downloaded the .blend file](https://www.blendswap.com/blends/view/65255), installed [blender](https://blender.org), installed [the gltf exporter](https://github.com/KhronosGroup/glTF-Blender-IO), loaded the file into blender and exported.
 
-<div class="webgl_center"><img src="resources/blender-killer-whale.png" style="width: 700px;"></div>
+<div class="webgl_center"><img src="resources/blender-killer-whale.png" style="width: 700px;" class="nobg"></div>
 
 > A quick note: 3D software like Blender, Maya, 3DSMax is extremely complex software with 1000s of options. When I first learned 3DSMax in 1996 I spent 2-3 hrs a day reading through the 1000+ page manual and working though the tutorials for about 3 weeks. I did something similar when I learned Maya a few years later. Blender is just as complicated and further it has a very different interface from pretty much all other software. This is just a short way of saying that you should expect to spend some significant time learning whatever 3D package you decide to use.
 
