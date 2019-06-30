@@ -141,17 +141,13 @@ module.exports = function(grunt) {
       filenames,
     });
     const finish = this.async();
-    buildStuff(settings).then(function() {
-      finish();
-    }).done();
+    buildStuff(settings).finally(finish);;
   });
 
   grunt.registerTask('buildlessons', function() {
     var buildStuff = require('./build/js/build');
     var finish = this.async();
-    buildStuff(buildSettings).then(function() {
-        finish();
-    }).done();
+    buildStuff(buildSettings).finally(finish);
   });
 
   grunt.registerTask('build', ['clean', 'copy', 'buildlessons']);

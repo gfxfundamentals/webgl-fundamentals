@@ -3,6 +3,9 @@ module.exports = {
     "browser": true,
     "es6": true
   },
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
   "plugins": [
     "eslint-plugin-html",
     "eslint-plugin-optional-comma-spacing",

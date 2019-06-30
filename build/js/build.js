@@ -33,11 +33,15 @@ const moment     = require('moment');
 const url        = require('url');
 const chalk      = require('chalk');
 
+const g_errors = [];
 function error(...args) {
+  g_errors.push([...args].join(' '));
   console.error(chalk.red(...args));  // eslint-disable-line no-console
 }
 
+const g_warnings = [];
 function warn(...args) {
+  g_warnings.push([...args].join(' '));
   console.warn(chalk.yellow(...args));  // eslint-disable-line no-console
 }
 
@@ -240,6 +244,58 @@ function articleFilter(f) {
   }
   return !process.env['ARTICLE_FILTER'] || f.indexOf(process.env['ARTICLE_FILTER']) >= 0;
 }
+
+
+const readdirs = function(dirpath) {
+  const dirsOnly = function(filename) {
+    const stat = fs.statSync(filename);
+    return stat.isDirectory();
+  };
+
+  const addPath = function(filename) {
+    return path.join(dirpath, filename);
+  };
+
+  return fs.readdirSync(`${settings.rootFolder}/lessons`)
+      .map(addPath)
+      .filter(dirsOnly);
+};
+
+const isLangFolder = function(dirname) {
+  const filename = path.join(dirname, 'langinfo.hanson');
+  return fs.existsSync(filename);
+};
+
+
+const pathToLang = function(filename) {
+  const lang = path.basename(filename);
+  const lessonBase = `${settings.rootFolder}/lessons`;
+  const lessons = `${lessonBase}/${lang}`;
+  return {
+    lang,
+    toc: `${settings.rootFolder}/lessons/${lang}/toc.html`,
+    lessons: `${lessonBase}/${lang}`,
+    template: 'build/templates/lesson.template',
+    examplePath: `/${lessonBase}/`,
+    home: `/${lessons}/`,
+  };
+};
+
+let g_langs = [
+  // English is special (sorry it's where I started)
+  {
+    template: 'build/templates/lesson.template',
+    lessons: `${settings.rootFolder}/lessons`,
+    lang: 'en',
+    toc: `${settings.rootFolder}/lessons/toc.html`,
+    examplePath: `/${settings.rootFolder}/lessons/`,
+    home: '/',
+  },
+];
+
+g_langs = g_langs.concat(readdirs(`${settings.rootFolder}/lessons`)
+    .filter(isLangFolder)
+    .map(pathToLang));
 
 const Builder = function(outBaseDir, options) {
 
@@ -511,7 +567,7 @@ const Builder = function(outBaseDir, options) {
       if (localizedCategory) {
         return localizedCategory;
       }
-      error(`no localization for category: ${category} in langinfo.hanson file for ${extra.lang}`);
+      warn(`no localization for category: ${category} in langinfo.hanson file for ${extra.lang}`);
       const categoryName = g_originalLangInfo.categoryMapping[category];
       if (!categoryName) {
         throw new Error(`no English mapping for category: ${category} in langinfo.hanson file for english`);
@@ -565,7 +621,7 @@ const Builder = function(outBaseDir, options) {
         if (!hackyProcessSelectFiles) {
           throw new Error(`${fileName} is not in toc.hanson`);
         }
-        error(fileName, 'is not in toc.hanson');
+        warn(fileName, 'is not in toc.hanson');
       }
 
       const baseName = fileName.substr(0, fileName.length - ext.length);
@@ -834,7 +890,7 @@ const Builder = function(outBaseDir, options) {
       const html = `
       <html>
       <body>
-      ${langs.map(lang => `<a href="${lang.home}">${lang.lang}</a>`).join('\n')}
+      ${g_langs.map(lang => `<a href="${lang.home}">${lang.lang}</a>`).join('\n')}
       </body>
       </html>
       `;
@@ -845,89 +901,41 @@ const Builder = function(outBaseDir, options) {
 
 };
 
-const b = new Builder(settings.outDir, {
-  origPath: `${settings.rootFolder}/lessons`,  // english articles
-});
-
-const readdirs = function(dirpath) {
-  const dirsOnly = function(filename) {
-    const stat = fs.statSync(filename);
-    return stat.isDirectory();
-  };
-
-  const addPath = function(filename) {
-    return path.join(dirpath, filename);
-  };
-
-  return fs.readdirSync(`${settings.rootFolder}/lessons`)
-      .map(addPath)
-      .filter(dirsOnly);
-};
-
-const isLangFolder = function(dirname) {
-  const filename = path.join(dirname, 'langinfo.hanson');
-  return fs.existsSync(filename);
-};
-
-
-const pathToLang = function(filename) {
-  const lang = path.basename(filename);
-  const lessonBase = `${settings.rootFolder}/lessons`;
-  const lessons = `${lessonBase}/${lang}`;
-  return {
-    lang,
-    toc: `${settings.rootFolder}/lessons/${lang}/toc.html`,
-    lessons: `${lessonBase}/${lang}`,
-    template: 'build/templates/lesson.template',
-    examplePath: `/${lessonBase}/`,
-    home: `/${lessons}/`,
-  };
-};
-
-let langs = [
-  // English is special (sorry it's where I started)
-  {
-    template: 'build/templates/lesson.template',
-    lessons: `${settings.rootFolder}/lessons`,
-    lang: 'en',
-    toc: `${settings.rootFolder}/lessons/toc.html`,
-    examplePath: `/${settings.rootFolder}/lessons/`,
-    home: '/',
-  },
-];
-
-langs = langs.concat(readdirs(`${settings.rootFolder}/lessons`)
-    .filter(isLangFolder)
-    .map(pathToLang));
-
-b.preProcess(langs);
-
-if (hackyProcessSelectFiles) {
-  const langsInFilenames = new Set();
-  [...settings.filenames].forEach((filename) => {
-    const m = /lessons\/(\w{2}|\w{5})\//.exec(filename);
-    const lang = m ? m[1] : 'en';
-    langsInFilenames.add(lang);
+async function main() {
+  const b = new Builder(settings.outDir, {
+    origPath: `${settings.rootFolder}/lessons`,  // english articles
   });
-  langs = langs.filter(lang => langsInFilenames.has(lang.lang));
+
+  b.preProcess(g_langs);
+
+  if (hackyProcessSelectFiles) {
+    const langsInFilenames = new Set();
+    [...settings.filenames].forEach((filename) => {
+      const m = /lessons\/(\w{2}|\w{5})\//.exec(filename);
+      const lang = m ? m[1] : 'en';
+      langsInFilenames.add(lang);
+    });
+    g_langs = g_langs.filter(lang => langsInFilenames.has(lang.lang));
+  }
+
+  try {
+    for (const lang of g_langs) {
+      await b.process(lang);
+    }
+    if (!hackyProcessSelectFiles) {
+      b.writeGlobalFiles(g_langs);
+    }
+    g_warnings.slice().forEach(str => warn(str));
+    g_errors.slice().forEach(str => error(str));
+    if (numErrors) {
+      throw new Error(`${numErrors} errors`);
+    }
+  } finally {
+    cache.clear();
+  }
 }
 
-const tasks = langs.map(function(lang) {
-  return function() {
-    return b.process(lang);
-  };
-});
-
-return tasks.reduce(function(cur, next) {
-  return cur.then(next);
-}, Promise.resolve()).then(function() {
-  if (!hackyProcessSelectFiles) {
-    b.writeGlobalFiles(langs);
-  }
-  return numErrors ? Promise.reject(new Error(`${numErrors} errors`)) : Promise.resolve();
-}).finally(() => {
-  cache.clear();
-});
+return main();
 
 };
 
