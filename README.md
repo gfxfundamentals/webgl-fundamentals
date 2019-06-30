@@ -116,10 +116,8 @@ Articles have front matter at the top
 ```
 Title: Localized Title of article
 Description: Localized description of article (used in RSS and social media tags)
-Cateogry: category for article **THIS STAYS IN ENGLISH**
 TOC: Localized text for Table of Contents
 ```
-
 
 **DO NOT CHANGE LINKS** : For example a link to a local resources might look like
 

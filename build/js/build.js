@@ -479,17 +479,14 @@ const Builder = function(outBaseDir, options) {
   };
 
   const applyTemplateToFiles = function(templatePath, filesSpec, extra) {
-    const files = glob
+    const allFiles = glob
         .sync(filesSpec)
-        .sort()
-        .filter(articleFilter);
+        .sort();
+    const files = allFiles.filter(articleFilter);
 
     const byFilename = {};
-    files.forEach((fileName) => {
+    allFiles.forEach((fileName) => {
       const data = loadMD(fileName);
-      if (!data.headers.category) {
-        throw new Error(`no catgeory for article: ${fileName}`);
-      }
       byFilename[path.basename(fileName)] = data;
     });
 
@@ -550,12 +547,17 @@ const Builder = function(outBaseDir, options) {
       }`;
     }
 
-    if (!hackyProcessSelectFiles) {
-      g_langInfo.tocHtml = `<ul>${makeToc(toc)}</ul>`;
-    }
+    g_langInfo.tocHtml = `<ul>${makeToc(toc)}</ul>`;
 
     files.forEach(function(fileName) {
       const ext = path.extname(fileName);
+      if (!byFilename[path.basename(fileName)]) {
+        if (!hackyProcessSelectFiles) {
+          throw new Error(`${fileName} is not in toc.hanson`);
+        }
+        console.error(fileName, 'is not in toc.hanson');
+      }
+
       const baseName = fileName.substr(0, fileName.length - ext.length);
       const outFileName = path.join(outBaseDir, baseName + '.html');
       applyTemplateToFile(templatePath, fileName, outFileName, extra);
