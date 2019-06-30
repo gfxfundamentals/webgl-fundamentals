@@ -1,6 +1,5 @@
 /* global module require process */
 /* eslint no-undef: "error" */
-/* eslint no-console: "off" */
 
 /*
 
@@ -32,13 +31,24 @@ const sitemap    = require('sitemap');
 const utils      = require('./utils');
 const moment     = require('moment');
 const url        = require('url');
+const chalk      = require('chalk');
 
-//process.title = 'build';
+function error(...args) {
+  console.error(chalk.red(...args));  // eslint-disable-line no-console
+}
+
+function warn(...args) {
+  console.warn(chalk.yellow(...args));  // eslint-disable-line no-console
+}
+
+function log(...args) {
+  console.log(...args);  // eslint-disable-line no-console
+}
 
 let numErrors = 0;
-function error(...args) {
+function failError(...args) {
   ++numErrors;
-  console.error(...args);
+  error(...args);
 }
 
 const executeP = Promise.denodeify(utils.execute);
@@ -67,7 +77,7 @@ function readFile(fileName) {
   try {
     return cache.readFileSync(fileName, 'utf-8');
   } catch (e) {
-    console.error('could not read:', fileName);
+    error('could not read:', fileName);
     throw e;
   }
 }
@@ -403,11 +413,11 @@ const Builder = function(outBaseDir, options) {
         for (const origLink of origLinks) {
           if (urlPath.endsWith(origLink)) {
             const newUrl = `${origLink}${urlQuery}`;
-            console.log('  fixing:', url, 'to', newUrl);
+            log('  fixing:', url, 'to', newUrl);
             return `${prefix}${newUrl}${suffix}`;
           }
         }
-        error('could not fix:', url);
+        failError('could not fix:', url);
       }
       return m;
     });
@@ -501,7 +511,7 @@ const Builder = function(outBaseDir, options) {
       if (localizedCategory) {
         return localizedCategory;
       }
-      console.error(`no localization for category: ${category} in langinfo.hanson file for ${extra.lang}`);
+      error(`no localization for category: ${category} in langinfo.hanson file for ${extra.lang}`);
       const categoryName = g_originalLangInfo.categoryMapping[category];
       if (!categoryName) {
         throw new Error(`no English mapping for category: ${category} in langinfo.hanson file for english`);
@@ -555,7 +565,7 @@ const Builder = function(outBaseDir, options) {
         if (!hackyProcessSelectFiles) {
           throw new Error(`${fileName} is not in toc.hanson`);
         }
-        console.error(fileName, 'is not in toc.hanson');
+        error(fileName, 'is not in toc.hanson');
       }
 
       const baseName = fileName.substr(0, fileName.length - ext.length);
@@ -619,9 +629,9 @@ const Builder = function(outBaseDir, options) {
         const transLinks = getLinks(loadMD(transMdFilename).content);
 
         if (process.env['ARTICLE_VERBOSE']) {
-          console.log('---[', transMdFilename, ']---');
-          console.log('origLinks: ---\n   ', [...origLinks].join('\n    '));
-          console.log('transLinks: ---\n   ', [...transLinks].join('\n    '));
+          log('---[', transMdFilename, ']---');
+          log('origLinks: ---\n   ', [...origLinks].join('\n    '));
+          log('transLinks: ---\n   ', [...transLinks].join('\n    '));
         }
 
         let show = true;
@@ -629,9 +639,9 @@ const Builder = function(outBaseDir, options) {
           if (!origLinks.has(link)) {
             if (show) {
               show = false;
-              error('---[', transMdFilename, ']---');
+              failError('---[', transMdFilename, ']---');
             }
-            error('   link:[', link, '] not found in English file');
+            failError('   link:[', link, '] not found in English file');
           }
         });
 
@@ -780,10 +790,10 @@ const Builder = function(outBaseDir, options) {
       });
       return Promise.resolve();
     }, function(err) {
-      error('ERROR!:');
-      error(err);
+      failError('ERROR!:');
+      failError(err);
       if (err.stack) {
-        error(err.stack);  // eslint-disable-line
+        failError(err.stack);  // eslint-disable-line
       }
       throw new Error(err.toString());
     });
