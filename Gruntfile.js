@@ -136,7 +136,7 @@ module.exports = function(grunt) {
         filenames.add(filename);
       });
     });
-    const buildStuff = require('./build/js/build');
+    const buildStuff = require('@gfxfundamentals/lesson-builder');
     const settings = Object.assign({}, buildSettings, {
       filenames,
     });
@@ -145,7 +145,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('buildlessons', function() {
-    var buildStuff = require('./build/js/build');
+    var buildStuff = require('@gfxfundamentals/lesson-builder');
     var finish = this.async();
     buildStuff(buildSettings).finally(finish);
   });
