@@ -141,7 +141,7 @@ module.exports = function(grunt) {
       filenames,
     });
     const finish = this.async();
-    buildStuff(settings).finally(finish);;
+    buildStuff(settings).finally(finish);
   });
 
   grunt.registerTask('buildlessons', function() {
