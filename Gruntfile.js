@@ -136,22 +136,18 @@ module.exports = function(grunt) {
         filenames.add(filename);
       });
     });
-    const buildStuff = require('./build/js/build');
+    const buildStuff = require('@gfxfundamentals/lesson-builder');
     const settings = Object.assign({}, buildSettings, {
       filenames,
     });
     const finish = this.async();
-    buildStuff(settings).then(function() {
-      finish();
-    }).done();
+    buildStuff(settings).finally(finish);;
   });
 
   grunt.registerTask('buildlessons', function() {
-    var buildStuff = require('./build/js/build');
+    var buildStuff = require('@gfxfundamentals/lesson-builder');
     var finish = this.async();
-    buildStuff(buildSettings).then(function() {
-        finish();
-    }).done();
+    buildStuff(buildSettings).finally(finish);
   });
 
   grunt.registerTask('build', ['clean', 'copy', 'buildlessons']);
