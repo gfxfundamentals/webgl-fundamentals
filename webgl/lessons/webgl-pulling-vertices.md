@@ -435,8 +435,9 @@ const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
 ```
 
 If we wanted to handle more data than that we'd need
-to pick some texture size that fits our data, possibly
-padding the data to make a rectangle.
+to pick some texture size that fits our data, and spread
+the data across multiple rows possibly
+padding last row to make a rectangle.
 
 Another thing we're doing here is using 2 textures,
 one for positions, one for texture coordinates.
@@ -460,7 +461,7 @@ might be slower than the more traditional way.
 The point of this article was to point out yet again,
 WebGL doesn't care how you set `gl_Position` with
 clip space coordinates nor does it care how you set
-`gl_FragCoord`. All it cares is that you set them.
+`gl_FragColor`. All it cares is that you set them.
 Textures are really just 2D arrays of random access
 data.
 
