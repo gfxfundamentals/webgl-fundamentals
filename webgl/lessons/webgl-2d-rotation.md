@@ -1,6 +1,6 @@
 Title: WebGL 2D Rotation
 Description: How to rotate in 2D
-TOC: WebGL 2D Rotation
+TOC: 2D Rotation
 
 
 This post is a continuation of a series of posts about WebGL.  The first

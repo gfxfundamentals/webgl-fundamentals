@@ -1,6 +1,6 @@
 Title: WebGL - Less Code, More Fun
 Description: Ways to make programming WebGL less verbose
-TOC: WebGL - Less Code, More Fun
+TOC: Less Code, More Fun
 
 
 This post is a continuation of a series of posts about WebGL.

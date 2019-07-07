@@ -1,6 +1,6 @@
 Title: WebGL Using 2 or More Textures
 Description: How to use 2 or more textures in WebGL
-TOC: WebGL - Using 2 or More Textures
+TOC: Using 2 or More Textures
 
 
 This article is a continuation of [WebGL Image

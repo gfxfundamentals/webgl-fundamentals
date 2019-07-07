@@ -1,6 +1,6 @@
 Title: WebGL Fog
 Description: How to implementent fog
-TOC: WebGL - Fog
+TOC: Fog
 
 
 This aritcle is part of a series of articles about WebGL.

@@ -1,6 +1,6 @@
 Title: WebGL Fundamentals
 Description: Your first WebGL lesson starting with the fundamentals
-TOC: WebGL Fundamentals
+TOC: Fundamentals
 
 
 WebGL (Web Graphics Library) is often thought of as a 3D API. People think "I'll use WebGL and *magic* I'll get cool 3d".

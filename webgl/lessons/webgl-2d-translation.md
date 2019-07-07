@@ -1,6 +1,6 @@
 Title: WebGL 2D Translation
 Description: How to translate in 2D
-TOC: WebGL 2D Translation
+TOC: 2D Translation
 
 
 Before we move on to 3D let's stick with 2D for a little while longer.

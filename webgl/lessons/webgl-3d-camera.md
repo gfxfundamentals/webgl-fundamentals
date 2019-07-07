@@ -1,6 +1,6 @@
 Title: WebGL 3D - Cameras
 Description: How cameras work in WebGL
-TOC: WebGL 3D - Cameras
+TOC: 3D Cameras
 
 
 This post is a continuation of a series of posts about WebGL.  The first

@@ -1,6 +1,6 @@
 Title: WebGL 2D Scale
 Description: How to scale in 2D
-TOC: WebGL 2D Scale
+TOC: 2D Scale
 
 
 This post is a continuation of a series of posts about WebGL.  The first

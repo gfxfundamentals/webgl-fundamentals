@@ -1,6 +1,6 @@
 Title: WebGL - Cross Origin Images
 Description: Using images across domains
-TOC: WebGL - Cross Origin Images
+TOC: Cross Origin Images
 
 
 This article is one in a series of articles about WebGL. If you haven't read

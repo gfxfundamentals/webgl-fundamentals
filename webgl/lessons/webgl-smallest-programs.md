@@ -1,6 +1,6 @@
 Title: WebGL Smallest Programs
 Description: Smallest Code for Testing
-TOC: WebGL Smallest Programs
+TOC: Smallest Programs
 
 This article assumes you've read many of the other articles
 starting with [the fundamentals](webgl-fundamentals.html).

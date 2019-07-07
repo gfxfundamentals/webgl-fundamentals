@@ -1,6 +1,6 @@
-Title: WebGL 3D - Textures
+Title: WebGL Textures
 Description: How textures work in WebGL
-TOC: WebGL 3D - Textures
+TOC: Textures
 
 
 This post is a continuation of a series of posts about WebGL.

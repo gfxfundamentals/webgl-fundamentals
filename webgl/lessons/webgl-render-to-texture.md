@@ -1,6 +1,6 @@
 Title: WebGL Rendering to a Texture
 Description: How to render to a texture.
-TOC: WebGL Render to Texture
+TOC: Render to Texture
 
 
 This post is a continuation of a series of posts about WebGL.

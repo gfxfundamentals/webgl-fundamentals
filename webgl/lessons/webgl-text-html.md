@@ -1,6 +1,6 @@
 Title: WebGL Text - HTML
 Description: How to use HTML to display text that is positioned to match WebGL
-TOC: WebGL Text - HTML
+TOC: Text - HTML
 
 
 This article is a continuation of previous WebGL articles.  If you haven't

@@ -1,6 +1,6 @@
 Title: WebGLの基本
 Description: 基本から最初のWebGLのレッスン
-TOC: WebGLの基本
+TOC: 基本
 
 
 WebGLは三次元APIとして思われることも多い。

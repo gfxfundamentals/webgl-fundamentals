@@ -1,6 +1,6 @@
 Title: WebGL 2D Matrices
 Description: How matrix math works explained in simple easy to follow directions.
-TOC: WebGL 2D Matrices
+TOC: 2D Matrices
 
 
 This post is a continuation of a series of posts about WebGL.  The first
