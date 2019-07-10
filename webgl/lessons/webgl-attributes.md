@@ -110,7 +110,7 @@ When you link a vertex shader with a fragment shader by calling
 `gl.linkProgram(someProgram)` WebGL (the driver/GPU/browser) decide on their own
 which index/location to use for each attribute. Unless you manually assign
 locations (see below) you have no idea which ones they're going to pick. It's up
-the the browser/driver/GPU. So, you have to ask it which attribute did you use
+to the browser/driver/GPU. So, you have to ask it which attribute did you use
 for position, texcoord, and normal?. You do this by calling
 `gl.getAttribLocation`
 
@@ -221,7 +221,7 @@ and for the solid-shader which only has one attribute it's
 a_position location = 0
 ```
 
-It's clear when switching shaders we'll need to setup are attributes differently.
+It's clear when switching shaders we'll need to setup our attributes differently.
 One shader expects `a_position`'s data to appear on attribute 0. The other shader
 expects it to appear on attribute 1.
 
