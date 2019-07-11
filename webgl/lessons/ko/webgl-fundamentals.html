@@ -160,7 +160,7 @@ drawArrays(..., offset, count) {
   var size = 4;
   for (var i = 0; i &lt; count; ++i) {
     // positionBuffer의 다음 값 4개를 a_position 속성에 복사합니다.
-    const start = (offset + i) * stride;
+    const start = offset + i * stride;
     attributes.a_position = positionBuffer.slice(start, start + size);
     runVertexShader();
     ...
