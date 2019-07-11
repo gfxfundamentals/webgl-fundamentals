@@ -99,7 +99,8 @@ WebGL затем может растеризовать различные при
       var size = 4;
       for (var i = 0; i < count; ++i) {
          // копировать следующие 4 значения из positionBuffer в атрибут a_position
-         attributes.a_position = positionBuffer.slice(offset + i * stride, size);
+         const start = offset + i * stride;
+         attributes.a_position = positionBuffer.slice(start, start + size);
          runVertexShader();
          ...
          doSomethingWith_gl_Position();

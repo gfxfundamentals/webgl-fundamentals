@@ -88,7 +88,8 @@ WebGL只关心两件事：裁剪空间中的坐标值和颜色值。使用WebGL�
       var size = 4;
       for (var i = 0; i < count; ++i) {
          // 从positionBuffer复制接下来4个值给a_position属性
-         attributes.a_position = positionBuffer.slice(offset + i * stride, size);
+         const start = offset + i * stride;
+         attributes.a_position = positionBuffer.slice(start, start + size);
          runVertexShader();// 运行顶点着色器
          ...
          doSomethingWith_gl_Position();

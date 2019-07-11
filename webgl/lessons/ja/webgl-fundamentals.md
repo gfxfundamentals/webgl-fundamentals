@@ -96,7 +96,8 @@ GLSLの代わりにJavaScriptで書かれていたとしたら以下のように
       var size = 4;
       for (var i = 0; i < count; ++i) {
          // positionBufferから次の４つの数値をa_positionの属性に読み込み
-         attributes.a_position = positionBuffer.slice(offset + i * stride, size);
+         const start = offset + i * stride;
+         attributes.a_position = positionBuffer.slice(start, start + size);
 
          runVertexShader();　// ⇐　頂点シェーダーを呼び出す！
          ...
