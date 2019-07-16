@@ -129,12 +129,12 @@ a given `t` value like this.
 And we can generate a set of points for the curve like this
 
     function getPointsOnBezierCurve(points, offset, numPoints) {
-      const points = [];
+      const cpoints = [];
       for (let i = 0; i < numPoints; ++i) {
         const t = i / (numPoints - 1);
-        points.push(getPointOnBezierCurve(points, offset, t));
+        cpoints.push(getPointOnBezierCurve(points, offset, t));
       }
-      return points;
+      return cpoints;
     }
 
 Note: `v2.mult` and `v2.add` are small JavaScript functions I included
