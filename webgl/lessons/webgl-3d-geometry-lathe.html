@@ -205,12 +205,12 @@ a given <code>t</code> value like this.</p>
 }
 </code></pre><p>And we can generate a set of points for the curve like this</p>
 <pre class="prettyprint"><code>function getPointsOnBezierCurve(points, offset, numPoints) {
-  const points = [];
+  const cpoints = [];
   for (let i = 0; i &lt; numPoints; ++i) {
     const t = i / (numPoints - 1);
-    points.push(getPointOnBezierCurve(points, offset, t));
+    cpoints.push(getPointOnBezierCurve(points, offset, t));
   }
-  return points;
+  return cpoints;
 }
 </code></pre><p>Note: <code>v2.mult</code> and <code>v2.add</code> are small JavaScript functions I included
 to help do math with points.</p>
