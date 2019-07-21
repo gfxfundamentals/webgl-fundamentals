@@ -171,7 +171,7 @@ void main() {
 <code>gl.linkProgram(someProgram)</code> WebGL (the driver/GPU/browser) decide on their own
 which index/location to use for each attribute. Unless you manually assign
 locations (see below) you have no idea which ones they&#39;re going to pick. It&#39;s up
-the the browser/driver/GPU. So, you have to ask it which attribute did you use
+to the browser/driver/GPU. So, you have to ask it which attribute did you use
 for position, texcoord, and normal?. You do this by calling
 <code>gl.getAttribLocation</code></p>
 <pre class="prettyprint"><code class="lang-js">const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
@@ -247,7 +247,7 @@ Let&#39;s assume for lighting-shader above the locations are</p>
 a_normal location = 0
 </code></pre><p>and for the solid-shader which only has one attribute it&#39;s</p>
 <pre class="prettyprint"><code>a_position location = 0
-</code></pre><p>It&#39;s clear when switching shaders we&#39;ll need to setup are attributes differently.
+</code></pre><p>It&#39;s clear when switching shaders we&#39;ll need to setup our attributes differently.
 One shader expects <code>a_position</code>&#39;s data to appear on attribute 0. The other shader
 expects it to appear on attribute 1.</p>
 <p>Resetting up the attributes is extra work. Worse, the entire point of using a

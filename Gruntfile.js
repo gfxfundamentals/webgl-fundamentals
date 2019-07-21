@@ -86,6 +86,7 @@ module.exports = function(grunt) {
         files: [
           'webgl/**',
           '3rdparty/**',
+          'node_modules/@gfxfundamentals/live-editor/src/**',
         ],
         tasks: ['copy'],
         options: {
@@ -107,10 +108,17 @@ module.exports = function(grunt) {
   let changedFiles = {};
   const onChange = grunt.util._.debounce(function() {
     grunt.config('copy.main.files', Object.keys(changedFiles).filter(noMds).map((file) => {
-      return {
+      const copy = {
         src: file,
         dest: 'out/',
       };
+      if (file.indexOf('live-editor') >= 0) {
+        copy.cwd = `${path.dirname(file)}/`;
+        copy.src = path.basename(file);
+        copy.expand = true;
+        copy.dest = 'out/webgl/resources/';
+      }
+      return copy;
     }));
     grunt.config('buildlesson.main.files', Object.keys(changedFiles).filter(mdsOnly).map((file) => {
       return {
