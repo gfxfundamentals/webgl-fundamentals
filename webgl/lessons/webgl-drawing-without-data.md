@@ -572,7 +572,7 @@ and to emphasize other ways of thinking about what WebGL
 is actually doing. Again it only cares that you set `gl_Position`
 and `gl_FragColor` in your shaders. It doesn't care how you do it.
 
-<div class="webgl_bottombar">
+<div class="webgl_bottombar" id="pointsissues">
 <h3>A problem with <code>gl.POINTS</code></h3>
 <p>
 One thing a technique like this can be useful for is to simulate drawing
