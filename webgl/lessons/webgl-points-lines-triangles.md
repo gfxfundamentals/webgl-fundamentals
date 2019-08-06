@@ -1,4 +1,5 @@
 Title: WebGL Points, Lines, and Triangles
+Description: Details on drawing Points, Lines, and Triangles
 
 The majority of this site draws everything
 with triangles. This is arguably the normal thing
