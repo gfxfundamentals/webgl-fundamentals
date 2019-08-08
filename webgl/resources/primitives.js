@@ -59,18 +59,18 @@
    * @memberOf module:primitives
    */
   function deindexVertices(vertices) {
-    var indices = vertices.indices;
-    var newVertices = {};
-    var numElements = indices.length;
+    const indices = vertices.indices;
+    const newVertices = {};
+    const numElements = indices.length;
 
     function expandToUnindexed(channel) {
-      var srcBuffer = vertices[channel];
-      var numComponents = srcBuffer.numComponents;
-      var dstBuffer = webglUtils.createAugmentedTypedArray(numComponents, numElements, srcBuffer.constructor);
-      for (var ii = 0; ii < numElements; ++ii) {
-        var ndx = indices[ii];
-        var offset = ndx * numComponents;
-        for (var jj = 0; jj < numComponents; ++jj) {
+      const srcBuffer = vertices[channel];
+      const numComponents = srcBuffer.numComponents;
+      const dstBuffer = webglUtils.createAugmentedTypedArray(numComponents, numElements, srcBuffer.constructor);
+      for (let ii = 0; ii < numElements; ++ii) {
+        const ndx = indices[ii];
+        const offset = ndx * numComponents;
+        for (let jj = 0; jj < numComponents; ++jj) {
           dstBuffer.push(srcBuffer[offset + jj]);
         }
       }
@@ -93,29 +93,29 @@
       throw "can't flatten normals of indexed vertices. deindex them first";
     }
 
-    var normals = vertices.normal;
-    var numNormals = normals.length;
-    for (var ii = 0; ii < numNormals; ii += 9) {
+    const normals = vertices.normal;
+    const numNormals = normals.length;
+    for (let ii = 0; ii < numNormals; ii += 9) {
       // pull out the 3 normals for this triangle
-      var nax = normals[ii + 0];
-      var nay = normals[ii + 1];
-      var naz = normals[ii + 2];
+      const nax = normals[ii + 0];
+      const nay = normals[ii + 1];
+      const naz = normals[ii + 2];
 
-      var nbx = normals[ii + 3];
-      var nby = normals[ii + 4];
-      var nbz = normals[ii + 5];
+      const nbx = normals[ii + 3];
+      const nby = normals[ii + 4];
+      const nbz = normals[ii + 5];
 
-      var ncx = normals[ii + 6];
-      var ncy = normals[ii + 7];
-      var ncz = normals[ii + 8];
+      const ncx = normals[ii + 6];
+      const ncy = normals[ii + 7];
+      const ncz = normals[ii + 8];
 
       // add them
-      var nx = nax + nbx + ncx;
-      var ny = nay + nby + ncy;
-      var nz = naz + nbz + ncz;
+      let nx = nax + nbx + ncx;
+      let ny = nay + nby + ncy;
+      let nz = naz + nbz + ncz;
 
       // normalize them
-      var length = Math.sqrt(nx * nx + ny * ny + nz * nz);
+      const length = Math.sqrt(nx * nx + ny * ny + nz * nz);
 
       nx /= length;
       ny /= length;
@@ -139,9 +139,9 @@
   }
 
   function applyFuncToV3Array(array, matrix, fn) {
-    var len = array.length;
-    var tmp = new Float32Array(3);
-    for (var ii = 0; ii < len; ii += 3) {
+    const len = array.length;
+    const tmp = new Float32Array(3);
+    for (let ii = 0; ii < len; ii += 3) {
       fn(matrix, [array[ii], array[ii + 1], array[ii + 2]], tmp);
       array[ii    ] = tmp[0];
       array[ii + 1] = tmp[1];
@@ -151,9 +151,9 @@
 
   function transformNormal(mi, v, dst) {
     dst = dst || new Float32Array(3);
-    var v0 = v[0];
-    var v1 = v[1];
-    var v2 = v[2];
+    const v0 = v[0];
+    const v1 = v[1];
+    const v2 = v[2];
 
     dst[0] = v0 * mi[0 * 4 + 0] + v1 * mi[0 * 4 + 1] + v2 * mi[0 * 4 + 2];
     dst[1] = v0 * mi[1 * 4 + 0] + v1 * mi[1 * 4 + 1] + v2 * mi[1 * 4 + 2];
@@ -212,7 +212,7 @@
    */
   function reorientVertices(arrays, matrix) {
     Object.keys(arrays).forEach(function(name) {
-      var array = arrays[name];
+      const array = arrays[name];
       if (name.indexOf("pos") >= 0) {
         reorientPositions(array, matrix);
       } else if (name.indexOf("tan") >= 0 || name.indexOf("binorm") >= 0) {
@@ -261,25 +261,24 @@
    */
   function makeRandomVertexColors(vertices, options) {
     options = options || {};
-    var numElements = vertices.position.numElements;
-    var vcolors = webglUtils.createAugmentedTypedArray(4, numElements, Uint8Array);
-    var ii;
-    var rand = options.rand || function(ndx, channel) {
+    const numElements = vertices.position.numElements;
+    const vcolors = webglUtils.createAugmentedTypedArray(4, numElements, Uint8Array);
+    const rand = options.rand || function(ndx, channel) {
       return channel < 3 ? randInt(256) : 255;
     };
     vertices.color = vcolors;
     if (vertices.indices) {
       // just make random colors if index
-      for (ii = 0; ii < numElements; ++ii) {
+      for (let ii = 0; ii < numElements; ++ii) {
         vcolors.push(rand(ii, 0), rand(ii, 1), rand(ii, 2), rand(ii, 3));
       }
     } else {
       // make random colors per triangle
-      var numVertsPerColor = options.vertsPerColor || 3;
-      var numSets = numElements / numVertsPerColor;
-      for (ii = 0; ii < numSets; ++ii) {
-        var color = [rand(ii, 0), rand(ii, 1), rand(ii, 2), rand(ii, 3)];
-        for (var jj = 0; jj < numVertsPerColor; ++jj) {
+      const numVertsPerColor = options.vertsPerColor || 3;
+      const numSets = numElements / numVertsPerColor;
+      for (let ii = 0; ii < numSets; ++ii) {
+        const color = [rand(ii, 0), rand(ii, 1), rand(ii, 2), rand(ii, 3)];
+        for (let jj = 0; jj < numVertsPerColor; ++jj) {
           vcolors.push(color);
         }
       }
@@ -293,7 +292,7 @@
    */
   function createBufferFunc(fn) {
     return function(gl) {
-      var arrays = fn.apply(this, Array.prototype.slice.call(arguments, 1));
+      const arrays = fn.apply(this, Array.prototype.slice.call(arguments, 1));
       return webglUtils.createBuffersFromArrays(gl, arrays);
     };
   }
@@ -304,7 +303,7 @@
    */
   function createBufferInfoFunc(fn) {
     return function(gl) {
-      var arrays = fn.apply(null,  Array.prototype.slice.call(arguments, 1));
+      const arrays = fn.apply(null,  Array.prototype.slice.call(arguments, 1));
       return webglUtils.createBufferInfoFromArrays(gl, arrays);
     };
   }
@@ -334,15 +333,15 @@
     subdivisionsDepth = subdivisionsDepth || 1;
     matrix = matrix || m4.identity();
 
-    var numVertices = (subdivisionsWidth + 1) * (subdivisionsDepth + 1);
-    var positions = webglUtils.createAugmentedTypedArray(3, numVertices);
-    var normals = webglUtils.createAugmentedTypedArray(3, numVertices);
-    var texcoords = webglUtils.createAugmentedTypedArray(2, numVertices);
+    const numVertices = (subdivisionsWidth + 1) * (subdivisionsDepth + 1);
+    const positions = webglUtils.createAugmentedTypedArray(3, numVertices);
+    const normals = webglUtils.createAugmentedTypedArray(3, numVertices);
+    const texcoords = webglUtils.createAugmentedTypedArray(2, numVertices);
 
-    for (var z = 0; z <= subdivisionsDepth; z++) {
-      for (var x = 0; x <= subdivisionsWidth; x++) {
-        var u = x / subdivisionsWidth;
-        var v = z / subdivisionsDepth;
+    for (let z = 0; z <= subdivisionsDepth; z++) {
+      for (let x = 0; x <= subdivisionsWidth; x++) {
+        const u = x / subdivisionsWidth;
+        const v = z / subdivisionsDepth;
         positions.push(
             width * u - width * 0.5,
             0,
@@ -352,12 +351,12 @@
       }
     }
 
-    var numVertsAcross = subdivisionsWidth + 1;
-    var indices = webglUtils.createAugmentedTypedArray(
+    const numVertsAcross = subdivisionsWidth + 1;
+    const indices = webglUtils.createAugmentedTypedArray(
         3, subdivisionsWidth * subdivisionsDepth * 2, Uint16Array);
 
-    for (z = 0; z < subdivisionsDepth; z++) {
-      for (x = 0; x < subdivisionsWidth; x++) {
+    for (let z = 0; z < subdivisionsDepth; z++) {
+      for (let x = 0; x < subdivisionsWidth; x++) {
         // Make triangle 1 of quad.
         indices.push(
             (z + 0) * numVertsAcross + x,
@@ -372,7 +371,7 @@
       }
     }
 
-    var arrays = reorientVertices({
+    const arrays = reorientVertices({
       position: positions,
       normal: normals,
       texcoord: texcoords,
@@ -448,42 +447,42 @@
     opt_startLongitudeInRadians = opt_startLongitudeInRadians || 0;
     opt_endLongitudeInRadians = opt_endLongitudeInRadians || (Math.PI * 2);
 
-    var latRange = opt_endLatitudeInRadians - opt_startLatitudeInRadians;
-    var longRange = opt_endLongitudeInRadians - opt_startLongitudeInRadians;
+    const latRange = opt_endLatitudeInRadians - opt_startLatitudeInRadians;
+    const longRange = opt_endLongitudeInRadians - opt_startLongitudeInRadians;
 
     // We are going to generate our sphere by iterating through its
     // spherical coordinates and generating 2 triangles for each quad on a
     // ring of the sphere.
-    var numVertices = (subdivisionsAxis + 1) * (subdivisionsHeight + 1);
-    var positions = webglUtils.createAugmentedTypedArray(3, numVertices);
-    var normals   = webglUtils.createAugmentedTypedArray(3, numVertices);
-    var texCoords = webglUtils.createAugmentedTypedArray(2 , numVertices);
+    const numVertices = (subdivisionsAxis + 1) * (subdivisionsHeight + 1);
+    const positions = webglUtils.createAugmentedTypedArray(3, numVertices);
+    const normals   = webglUtils.createAugmentedTypedArray(3, numVertices);
+    const texCoords = webglUtils.createAugmentedTypedArray(2 , numVertices);
 
     // Generate the individual vertices in our vertex buffer.
-    for (var y = 0; y <= subdivisionsHeight; y++) {
-      for (var x = 0; x <= subdivisionsAxis; x++) {
+    for (let y = 0; y <= subdivisionsHeight; y++) {
+      for (let x = 0; x <= subdivisionsAxis; x++) {
         // Generate a vertex based on its spherical coordinates
-        var u = x / subdivisionsAxis;
-        var v = y / subdivisionsHeight;
-        var theta = longRange * u;
-        var phi = latRange * v;
-        var sinTheta = Math.sin(theta);
-        var cosTheta = Math.cos(theta);
-        var sinPhi = Math.sin(phi);
-        var cosPhi = Math.cos(phi);
-        var ux = cosTheta * sinPhi;
-        var uy = cosPhi;
-        var uz = sinTheta * sinPhi;
+        const u = x / subdivisionsAxis;
+        const v = y / subdivisionsHeight;
+        const theta = longRange * u;
+        const phi = latRange * v;
+        const sinTheta = Math.sin(theta);
+        const cosTheta = Math.cos(theta);
+        const sinPhi = Math.sin(phi);
+        const cosPhi = Math.cos(phi);
+        const ux = cosTheta * sinPhi;
+        const uy = cosPhi;
+        const uz = sinTheta * sinPhi;
         positions.push(radius * ux, radius * uy, radius * uz);
         normals.push(ux, uy, uz);
         texCoords.push(1 - u, v);
       }
     }
 
-    var numVertsAround = subdivisionsAxis + 1;
-    var indices = webglUtils.createAugmentedTypedArray(3, subdivisionsAxis * subdivisionsHeight * 2, Uint16Array);
-    for (x = 0; x < subdivisionsAxis; x++) {
-      for (y = 0; y < subdivisionsHeight; y++) {
+    const numVertsAround = subdivisionsAxis + 1;
+    const indices = webglUtils.createAugmentedTypedArray(3, subdivisionsAxis * subdivisionsHeight * 2, Uint16Array);
+    for (let x = 0; x < subdivisionsAxis; x++) {
+      for (let y = 0; y < subdivisionsHeight; y++) {
         // Make triangle 1 of quad.
         indices.push(
             (y + 0) * numVertsAround + x,
@@ -510,7 +509,7 @@
    * Array of the indices of corners of each face of a cube.
    * @type {Array.<number[]>}
    */
-  var CUBE_FACE_INDICES = [
+  const CUBE_FACE_INDICES = [
     [3, 7, 5, 1], // right
     [6, 2, 0, 4], // left
     [6, 7, 3, 2], // ??
@@ -529,9 +528,9 @@
    * @memberOf module:primitives
    */
   function createCubeVertices(size) {
-    var k = size / 2;
+    const k = size / 2;
 
-    var cornerVertices = [
+    const cornerVertices = [
       [-k, -k, -k],
       [+k, -k, -k],
       [-k, +k, -k],
@@ -542,7 +541,7 @@
       [+k, +k, +k],
     ];
 
-    var faceNormals = [
+    const faceNormals = [
       [+1, +0, +0],
       [-1, +0, +0],
       [+0, +1, +0],
@@ -551,25 +550,25 @@
       [+0, +0, -1],
     ];
 
-    var uvCoords = [
+    const uvCoords = [
       [1, 0],
       [0, 0],
       [0, 1],
       [1, 1],
     ];
 
-    var numVertices = 6 * 4;
-    var positions = webglUtils.createAugmentedTypedArray(3, numVertices);
-    var normals   = webglUtils.createAugmentedTypedArray(3, numVertices);
-    var texCoords = webglUtils.createAugmentedTypedArray(2 , numVertices);
-    var indices   = webglUtils.createAugmentedTypedArray(3, 6 * 2, Uint16Array);
+    const numVertices = 6 * 4;
+    const positions = webglUtils.createAugmentedTypedArray(3, numVertices);
+    const normals   = webglUtils.createAugmentedTypedArray(3, numVertices);
+    const texCoords = webglUtils.createAugmentedTypedArray(2 , numVertices);
+    const indices   = webglUtils.createAugmentedTypedArray(3, 6 * 2, Uint16Array);
 
-    for (var f = 0; f < 6; ++f) {
-      var faceIndices = CUBE_FACE_INDICES[f];
-      for (var v = 0; v < 4; ++v) {
-        var position = cornerVertices[faceIndices[v]];
-        var normal = faceNormals[f];
-        var uv = uvCoords[v];
+    for (let f = 0; f < 6; ++f) {
+      const faceIndices = CUBE_FACE_INDICES[f];
+      for (let v = 0; v < 4; ++v) {
+        const position = cornerVertices[faceIndices[v]];
+        const normal = faceNormals[f];
+        const uv = uvCoords[v];
 
         // Each face needs all four vertices because the normals and texture
         // coordinates are not all the same.
@@ -579,7 +578,7 @@
 
       }
       // Two triangles make a square face.
-      var offset = 4 * f;
+      const offset = 4 * f;
       indices.push(offset + 0, offset + 1, offset + 2);
       indices.push(offset + 0, offset + 2, offset + 3);
     }
@@ -630,31 +629,31 @@
       throw Error('verticalSubdivisions must be 1 or greater');
     }
 
-    var topCap = (opt_topCap === undefined) ? true : opt_topCap;
-    var bottomCap = (opt_bottomCap === undefined) ? true : opt_bottomCap;
+    const topCap = (opt_topCap === undefined) ? true : opt_topCap;
+    const bottomCap = (opt_bottomCap === undefined) ? true : opt_bottomCap;
 
-    var extra = (topCap ? 2 : 0) + (bottomCap ? 2 : 0);
+    const extra = (topCap ? 2 : 0) + (bottomCap ? 2 : 0);
 
-    var numVertices = (radialSubdivisions + 1) * (verticalSubdivisions + 1 + extra);
-    var positions = webglUtils.createAugmentedTypedArray(3, numVertices);
-    var normals   = webglUtils.createAugmentedTypedArray(3, numVertices);
-    var texCoords = webglUtils.createAugmentedTypedArray(2, numVertices);
-    var indices   = webglUtils.createAugmentedTypedArray(3, radialSubdivisions * (verticalSubdivisions + extra) * 2, Uint16Array);
+    const numVertices = (radialSubdivisions + 1) * (verticalSubdivisions + 1 + extra);
+    const positions = webglUtils.createAugmentedTypedArray(3, numVertices);
+    const normals   = webglUtils.createAugmentedTypedArray(3, numVertices);
+    const texCoords = webglUtils.createAugmentedTypedArray(2, numVertices);
+    const indices   = webglUtils.createAugmentedTypedArray(3, radialSubdivisions * (verticalSubdivisions + extra) * 2, Uint16Array);
 
-    var vertsAroundEdge = radialSubdivisions + 1;
+    const vertsAroundEdge = radialSubdivisions + 1;
 
     // The slant of the cone is constant across its surface
-    var slant = Math.atan2(bottomRadius - topRadius, height);
-    var cosSlant = Math.cos(slant);
-    var sinSlant = Math.sin(slant);
+    const slant = Math.atan2(bottomRadius - topRadius, height);
+    const cosSlant = Math.cos(slant);
+    const sinSlant = Math.sin(slant);
 
-    var start = topCap ? -2 : 0;
-    var end = verticalSubdivisions + (bottomCap ? 2 : 0);
+    const start = topCap ? -2 : 0;
+    const end = verticalSubdivisions + (bottomCap ? 2 : 0);
 
-    for (var yy = start; yy <= end; ++yy) {
-      var v = yy / verticalSubdivisions;
-      var y = height * v;
-      var ringRadius;
+    for (let yy = start; yy <= end; ++yy) {
+      let v = yy / verticalSubdivisions;
+      let y = height * v;
+      let ringRadius;
       if (yy < 0) {
         y = 0;
         v = 1;
@@ -672,9 +671,9 @@
         v = 0;
       }
       y -= height / 2;
-      for (var ii = 0; ii < vertsAroundEdge; ++ii) {
-        var sin = Math.sin(ii * Math.PI * 2 / radialSubdivisions);
-        var cos = Math.cos(ii * Math.PI * 2 / radialSubdivisions);
+      for (let ii = 0; ii < vertsAroundEdge; ++ii) {
+        const sin = Math.sin(ii * Math.PI * 2 / radialSubdivisions);
+        const cos = Math.cos(ii * Math.PI * 2 / radialSubdivisions);
         positions.push(sin * ringRadius, y, cos * ringRadius);
         normals.push(
             (yy < 0 || yy > verticalSubdivisions) ? 0 : (sin * cosSlant),
@@ -684,8 +683,8 @@
       }
     }
 
-    for (yy = 0; yy < verticalSubdivisions + extra; ++yy) {
-      for (ii = 0; ii < radialSubdivisions; ++ii) {
+    for (let yy = 0; yy < verticalSubdivisions + extra; ++yy) {
+      for (let ii = 0; ii < radialSubdivisions; ++ii) {
         indices.push(vertsAroundEdge * (yy + 0) + 0 + ii,
                      vertsAroundEdge * (yy + 0) + 1 + ii,
                      vertsAroundEdge * (yy + 1) + 1 + ii);
@@ -711,12 +710,12 @@
    */
   function expandRLEData(rleData, padding) {
     padding = padding || [];
-    var data = [];
-    for (var ii = 0; ii < rleData.length; ii += 4) {
-      var runLength = rleData[ii];
-      var element = rleData.slice(ii + 1, ii + 4);
+    const data = [];
+    for (let ii = 0; ii < rleData.length; ii += 4) {
+      const runLength = rleData[ii];
+      const element = rleData.slice(ii + 1, ii + 4);
       element.push.apply(element, padding);
-      for (var jj = 0; jj < runLength; ++jj) {
+      for (let jj = 0; jj < runLength; ++jj) {
         data.push.apply(data, element);
       }
     }
@@ -734,7 +733,7 @@
    */
   function create3DFVertices() {
 
-    var positions = [
+    const positions = [
       // left column front
       0,   0,  0,
       0, 150,  0,
@@ -864,7 +863,7 @@
       0, 150,   0,
     ];
 
-    var texcoords = [
+    const texcoords = [
       // left column front
       0.22, 0.19,
       0.22, 0.79,
@@ -994,7 +993,7 @@
       1, 0,
     ];
 
-    var normals = expandRLEData([
+    const normals = expandRLEData([
       // left column front
       // top rung front
       // middle rung front
@@ -1036,7 +1035,7 @@
       6, -1, 0, 0,
     ]);
 
-    var colors = expandRLEData([
+    const colors = expandRLEData([
           // left column front
           // top rung front
           // middle rung front
@@ -1078,9 +1077,9 @@
         6, 160, 160, 220,
     ], [255]);
 
-    var numVerts = positions.length / 3;
+    const numVerts = positions.length / 3;
 
-    var arrays = {
+    const arrays = {
       position: webglUtils.createAugmentedTypedArray(3, numVerts),
       texcoord: webglUtils.createAugmentedTypedArray(2,  numVerts),
       normal: webglUtils.createAugmentedTypedArray(3, numVerts),
@@ -1093,7 +1092,7 @@
     arrays.normal.push(normals);
     arrays.color.push(colors);
 
-    for (var ii = 0; ii < numVerts; ++ii) {
+    for (let ii = 0; ii < numVerts; ++ii) {
       arrays.indices.push(ii);
     }
 
@@ -1116,7 +1115,7 @@
     createSphereBufferInfo: createBufferInfoFunc(createSphereVertices),
     createSphereBuffers: createBufferFunc(createSphereVertices),
     createSphereVertices: createSphereVertices,
-    createTruncatedConeBufferInfo: createBufferFunc(createTruncatedConeVertices),
+    createTruncatedConeBufferInfo: createBufferInfoFunc(createTruncatedConeVertices),
     createTruncatedConeBuffers: createBufferFunc(createTruncatedConeVertices),
     createTruncatedConeVertices: createTruncatedConeVertices,
     deindexVertices: deindexVertices,
