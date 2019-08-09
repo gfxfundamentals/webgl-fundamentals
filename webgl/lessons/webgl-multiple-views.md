@@ -428,9 +428,26 @@ that a `BufferInfo` is just a list of buffers by name and the settings need to s
 ```js
 // create buffers and fill with data for various things.
 const bufferInfos = [
-  primitives.createCubeBufferInfo(gl, 1, 1, 1),
-  primitives.createSphereBufferInfo(gl, 0.5, 8, 6),
-  primitives.createTruncatedConeBufferInfo(gl, 0.5, 0, 1, 6, 1),
+  primitives.createCubeBufferInfo(
+      gl,
+      1,  // width
+      1,  // height
+      1,  // depth
+  ),
+  primitives.createSphereBufferInfo(
+      gl,
+      0.5,  // radius
+      8,    // subdivisions around
+      6,    // subdivisions down
+  ),
+  primitives.createTruncatedConeBufferInfo(
+      gl,
+      0.5,  // bottom radius
+      0,    // top radius
+      1,    // height
+      6,    // subdivisions around
+      1,    // subdivisions down
+  ),
 ];
 ```
 
