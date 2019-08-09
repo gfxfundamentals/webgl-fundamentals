@@ -57,20 +57,20 @@ void main() {
 }
 </script>  
 <script>
-"use strict";
+'use strict';
 
 function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
-  const canvas = document.getElementById("canvas");
-  const gl = canvas.getContext("webgl");
+  const canvas = document.getElementById('canvas');
+  const gl = canvas.getContext('webgl');
   if (!gl) {
     return;
   }
 
   // setup GLSL programs
   // compiles shaders, links program, looks up locations
-  const programInfo = webglUtils.createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  const programInfo = webglUtils.createProgramInfo(gl, ['3d-vertex-shader', '3d-fragment-shader']);
 
   // create buffers and fill with data for a 3D 'F'
   const bufferInfo = primitives.create3DFBufferInfo(gl);
@@ -82,8 +82,8 @@ function main() {
   const settings = {
     rotation: 150,  // in degrees
   };
-  webglLessonsUI.setupUI(document.querySelector("#ui"), settings, [
-    { type: "slider",   key: "rotation",   min: 0, max: 360, change: render, precision: 2, step: 0.001, },
+  webglLessonsUI.setupUI(document.querySelector('#ui'), settings, [
+    { type: 'slider',   key: 'rotation',   min: 0, max: 360, change: render, precision: 2, step: 0.001, },
   ]);
 
   const fieldOfViewRadians = degToRad(120);
