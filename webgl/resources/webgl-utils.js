@@ -40,9 +40,9 @@
     root.webglUtils = factory.call(root);
   }
 }(this, function() {
-  "use strict";
+  'use strict';
 
-  var topWindow = this;
+  const topWindow = this;
 
   /** @module webgl-utils */
 
@@ -88,9 +88,9 @@
    * @return {WebGLShader} The created shader.
    */
   function loadShader(gl, shaderSource, shaderType, opt_errorCallback) {
-    var errFn = opt_errorCallback || error;
+    const errFn = opt_errorCallback || error;
     // Create the shader object
-    var shader = gl.createShader(shaderType);
+    const shader = gl.createShader(shaderType);
 
     // Load the shader source
     gl.shaderSource(shader, shaderSource);
@@ -99,11 +99,11 @@
     gl.compileShader(shader);
 
     // Check the compile status
-    var compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    const compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
     if (!compiled) {
       // Something went wrong during compilation; get the error
-      var lastError = gl.getShaderInfoLog(shader);
-      errFn("*** Error compiling shader '" + shader + "':" + lastError);
+      const lastError = gl.getShaderInfoLog(shader);
+      errFn('*** Error compiling shader \'' + shader + '\':' + lastError);
       gl.deleteShader(shader);
       return null;
     }
@@ -123,8 +123,8 @@
    */
   function createProgram(
       gl, shaders, opt_attribs, opt_locations, opt_errorCallback) {
-    var errFn = opt_errorCallback || error;
-    var program = gl.createProgram();
+    const errFn = opt_errorCallback || error;
+    const program = gl.createProgram();
     shaders.forEach(function(shader) {
       gl.attachShader(program, shader);
     });
@@ -139,11 +139,11 @@
     gl.linkProgram(program);
 
     // Check the link status
-    var linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+    const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
     if (!linked) {
         // something went wrong with the link
-        var lastError = gl.getProgramInfoLog(program);
-        errFn("Error in program linking:" + lastError);
+        const lastError = gl.getProgramInfoLog(program);
+        errFn('Error in program linking:' + lastError);
 
         gl.deleteProgram(program);
         return null;
@@ -162,21 +162,21 @@
    */
   function createShaderFromScript(
       gl, scriptId, opt_shaderType, opt_errorCallback) {
-    var shaderSource = "";
-    var shaderType;
-    var shaderScript = document.getElementById(scriptId);
+    let shaderSource = '';
+    let shaderType;
+    const shaderScript = document.getElementById(scriptId);
     if (!shaderScript) {
-      throw ("*** Error: unknown script element" + scriptId);
+      throw ('*** Error: unknown script element' + scriptId);
     }
     shaderSource = shaderScript.text;
 
     if (!opt_shaderType) {
-      if (shaderScript.type === "x-shader/x-vertex") {
+      if (shaderScript.type === 'x-shader/x-vertex') {
         shaderType = gl.VERTEX_SHADER;
-      } else if (shaderScript.type === "x-shader/x-fragment") {
+      } else if (shaderScript.type === 'x-shader/x-fragment') {
         shaderType = gl.FRAGMENT_SHADER;
       } else if (shaderType !== gl.VERTEX_SHADER && shaderType !== gl.FRAGMENT_SHADER) {
-        throw ("*** Error: unknown shader type");
+        throw ('*** Error: unknown shader type');
       }
     }
 
@@ -185,9 +185,9 @@
         opt_errorCallback);
   }
 
-  var defaultShaderType = [
-    "VERTEX_SHADER",
-    "FRAGMENT_SHADER",
+  const defaultShaderType = [
+    'VERTEX_SHADER',
+    'FRAGMENT_SHADER',
   ];
 
   /**
@@ -207,8 +207,8 @@
    */
   function createProgramFromScripts(
       gl, shaderScriptIds, opt_attribs, opt_locations, opt_errorCallback) {
-    var shaders = [];
-    for (var ii = 0; ii < shaderScriptIds.length; ++ii) {
+    const shaders = [];
+    for (let ii = 0; ii < shaderScriptIds.length; ++ii) {
       shaders.push(createShaderFromScript(
           gl, shaderScriptIds[ii], gl[defaultShaderType[ii]], opt_errorCallback));
     }
@@ -232,8 +232,8 @@
    */
   function createProgramFromSources(
       gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback) {
-    var shaders = [];
-    for (var ii = 0; ii < shaderSources.length; ++ii) {
+    const shaders = [];
+    for (let ii = 0; ii < shaderSources.length; ++ii) {
       shaders.push(loadShader(
           gl, shaderSources[ii], gl[defaultShaderType[ii]], opt_errorCallback));
     }
@@ -264,7 +264,7 @@
    * @memberOf module:webgl-utils
    */
   function createUniformSetters(gl, program) {
-    var textureUnit = 0;
+    let textureUnit = 0;
 
     /**
      * Creates a setter for a uniform of the given program with it's
@@ -274,10 +274,10 @@
      * @returns {function} the created setter.
      */
     function createUniformSetter(program, uniformInfo) {
-      var location = gl.getUniformLocation(program, uniformInfo.name);
-      var type = uniformInfo.type;
+      const location = gl.getUniformLocation(program, uniformInfo.name);
+      const type = uniformInfo.type;
       // Check if this uniform is an array
-      var isArray = (uniformInfo.size > 1 && uniformInfo.name.substr(-3) === "[0]");
+      const isArray = (uniformInfo.size > 1 && uniformInfo.name.substr(-3) === '[0]');
       if (type === gl.FLOAT && isArray) {
         return function(v) {
           gl.uniform1fv(location, v);
@@ -364,8 +364,8 @@
         };
       }
       if ((type === gl.SAMPLER_2D || type === gl.SAMPLER_CUBE) && isArray) {
-        var units = [];
-        for (var ii = 0; ii < info.size; ++ii) {
+        const units = [];
+        for (let ii = 0; ii < info.size; ++ii) {
           units.push(textureUnit++);
         }
         return function(bindPoint, units) {
@@ -387,23 +387,23 @@
           };
         }(getBindPointForSamplerType(gl, type), textureUnit++);
       }
-      throw ("unknown type: 0x" + type.toString(16)); // we should never get here.
+      throw ('unknown type: 0x' + type.toString(16)); // we should never get here.
     }
 
-    var uniformSetters = { };
-    var numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+    const uniformSetters = { };
+    const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
 
-    for (var ii = 0; ii < numUniforms; ++ii) {
-      var uniformInfo = gl.getActiveUniform(program, ii);
+    for (let ii = 0; ii < numUniforms; ++ii) {
+      const uniformInfo = gl.getActiveUniform(program, ii);
       if (!uniformInfo) {
         break;
       }
-      var name = uniformInfo.name;
+      let name = uniformInfo.name;
       // remove the array suffix.
-      if (name.substr(-3) === "[0]") {
+      if (name.substr(-3) === '[0]') {
         name = name.substr(0, name.length - 3);
       }
-      var setter = createUniformSetter(program, uniformInfo);
+      const setter = createUniformSetter(program, uniformInfo);
       uniformSetters[name] = setter;
     }
     return uniformSetters;
@@ -414,15 +414,15 @@
    *
    * example:
    *
-   *     var programInfo = createProgramInfo(
+   *     let programInfo = createProgramInfo(
    *         gl, ["some-vs", "some-fs");
    *
-   *     var tex1 = gl.createTexture();
-   *     var tex2 = gl.createTexture();
+   *     let tex1 = gl.createTexture();
+   *     let tex2 = gl.createTexture();
    *
    *     ... assume we setup the textures with data ...
    *
-   *     var uniforms = {
+   *     let uniforms = {
    *       u_someSampler: tex1,
    *       u_someOtherSampler: tex2,
    *       u_someColor: [1,0,0,1],
@@ -444,7 +444,7 @@
    *
    * For the example above it is equivalent to
    *
-   *     var texUnit = 0;
+   *     let texUnit = 0;
    *     gl.activeTexture(gl.TEXTURE0 + texUnit);
    *     gl.bindTexture(gl.TEXTURE_2D, tex1);
    *     gl.uniform1i(u_someSamplerLocation, texUnit++);
@@ -462,12 +462,12 @@
    *
    * Note it is perfectly reasonable to call `setUniforms` multiple times. For example
    *
-   *     var uniforms = {
+   *     let uniforms = {
    *       u_someSampler: tex1,
    *       u_someOtherSampler: tex2,
    *     };
    *
-   *     var moreUniforms {
+   *     let moreUniforms {
    *       u_someColor: [1,0,0,1],
    *       u_somePosition: [0,1,1],
    *       u_someMatrix: [
@@ -490,7 +490,7 @@
   function setUniforms(setters, values) {
     setters = setters.uniformSetters || setters;
     Object.keys(values).forEach(function(name) {
-      var setter = setters[name];
+      const setter = setters[name];
       if (setter) {
         setter(values[name]);
       }
@@ -507,7 +507,7 @@
    * @memberOf module:webgl-utils
    */
   function createAttributeSetters(gl, program) {
-    var attribSetters = {
+    const attribSetters = {
     };
 
     function createAttribSetter(index) {
@@ -519,13 +519,13 @@
         };
     }
 
-    var numAttribs = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
-    for (var ii = 0; ii < numAttribs; ++ii) {
-      var attribInfo = gl.getActiveAttrib(program, ii);
+    const numAttribs = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
+    for (let ii = 0; ii < numAttribs; ++ii) {
+      const attribInfo = gl.getActiveAttrib(program, ii);
       if (!attribInfo) {
         break;
       }
-      var index = gl.getAttribLocation(program, attribInfo.name);
+      const index = gl.getAttribLocation(program, attribInfo.name);
       attribSetters[attribInfo.name] = createAttribSetter(index);
     }
 
@@ -537,15 +537,15 @@
    *
    * Example:
    *
-   *     var program = createProgramFromScripts(
+   *     let program = createProgramFromScripts(
    *         gl, ["some-vs", "some-fs");
    *
-   *     var attribSetters = createAttributeSetters(program);
+   *     let attribSetters = createAttributeSetters(program);
    *
-   *     var positionBuffer = gl.createBuffer();
-   *     var texcoordBuffer = gl.createBuffer();
+   *     let positionBuffer = gl.createBuffer();
+   *     let texcoordBuffer = gl.createBuffer();
    *
-   *     var attribs = {
+   *     let attribs = {
    *       a_position: {buffer: positionBuffer, numComponents: 3},
    *       a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
    *     };
@@ -569,7 +569,7 @@
    * float texcoord and 4 value uint8 colors you'd setup your
    * attribs like this
    *
-   *     var attribs = {
+   *     let attribs = {
    *       a_position: {buffer: positionBuffer, numComponents: 3},
    *       a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
    *       a_color: {
@@ -588,7 +588,7 @@
   function setAttributes(setters, attribs) {
     setters = setters.attribSetters || setters;
     Object.keys(attribs).forEach(function(name) {
-      var setter = setters[name];
+      const setter = setters[name];
       if (setter) {
         setter(attribs[name]);
       }
@@ -606,7 +606,7 @@
    * @param {WebGLBuffer} [indices] an optional ELEMENT_ARRAY_BUFFER of indices
    */
   function createVAOAndSetAttributes(gl, setters, attribs, indices) {
-    var vao = gl.createVertexArray();
+    const vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
     setAttributes(setters, attribs);
     if (indices) {
@@ -666,15 +666,15 @@
   function createProgramInfo(
       gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback) {
     shaderSources = shaderSources.map(function(source) {
-      var script = document.getElementById(source);
+      const script = document.getElementById(source);
       return script ? script.text : source;
     });
-    var program = webglUtils.createProgramFromSources(gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback);
+    const program = webglUtils.createProgramFromSources(gl, shaderSources, opt_attribs, opt_locations, opt_errorCallback);
     if (!program) {
       return null;
     }
-    var uniformSetters = createUniformSetters(gl, program);
-    var attribSetters = createAttributeSetters(gl, program);
+    const uniformSetters = createUniformSetters(gl, program);
+    const attribSetters = createAttributeSetters(gl, program);
     return {
       program: program,
       uniformSetters: uniformSetters,
@@ -687,15 +687,15 @@
    *
    * Example:
    *
-   *     var programInfo = createProgramInfo(
+   *     let programInfo = createProgramInfo(
    *         gl, ["some-vs", "some-fs");
    *
-   *     var arrays = {
+   *     let arrays = {
    *       position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    *       texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
    *     };
    *
-   *     var bufferInfo = createBufferInfoFromArrays(gl, arrays);
+   *     let bufferInfo = createBufferInfoFromArrays(gl, arrays);
    *
    *     gl.useProgram(programInfo.program);
    *
@@ -726,11 +726,11 @@
   }
 
   // Add your prefix here.
-  var browserPrefixes = [
-    "",
-    "MOZ_",
-    "OP_",
-    "WEBKIT_",
+  const browserPrefixes = [
+    '',
+    'MOZ_',
+    'OP_',
+    'WEBKIT_',
   ];
 
   /**
@@ -743,9 +743,9 @@
    * @memberOf module:webgl-utils
    */
   function getExtensionWithKnownPrefixes(gl, name) {
-    for (var ii = 0; ii < browserPrefixes.length; ++ii) {
-      var prefixedName = browserPrefixes[ii] + name;
-      var ext = gl.getExtension(prefixedName);
+    for (let ii = 0; ii < browserPrefixes.length; ++ii) {
+      const prefixedName = browserPrefixes[ii] + name;
+      const ext = gl.getExtension(prefixedName);
       if (ext) {
         return ext;
       }
@@ -763,8 +763,8 @@
    */
   function resizeCanvasToDisplaySize(canvas, multiplier) {
     multiplier = multiplier || 1;
-    var width  = canvas.clientWidth  * multiplier | 0;
-    var height = canvas.clientHeight * multiplier | 0;
+    const width  = canvas.clientWidth  * multiplier | 0;
+    const height = canvas.clientHeight * multiplier | 0;
     if (canvas.width !== width ||  canvas.height !== height) {
       canvas.width  = width;
       canvas.height = height;
@@ -777,12 +777,12 @@
   // and allows use to `push` values into the array so we
   // don't have to manually compute offsets
   function augmentTypedArray(typedArray, numComponents) {
-    var cursor = 0;
+    let cursor = 0;
     typedArray.push = function() {
-      for (var ii = 0; ii < arguments.length; ++ii) {
-        var value = arguments[ii];
+      for (let ii = 0; ii < arguments.length; ++ii) {
+        const value = arguments[ii];
         if (value instanceof Array || (value.buffer && value.buffer instanceof ArrayBuffer)) {
-          for (var jj = 0; jj < value.length; ++jj) {
+          for (let jj = 0; jj < value.length; ++jj) {
             typedArray[cursor++] = value[jj];
           }
         } else {
@@ -811,7 +811,7 @@
    *
    * Example:
    *
-   *     var array = createAugmentedTypedArray(3, 2);  // creates a Float32Array with 6 values
+   *     let array = createAugmentedTypedArray(3, 2);  // creates a Float32Array with 6 values
    *     array.push(1, 2, 3);
    *     array.push([4, 5, 6]);
    *     // array now contains [1, 2, 3, 4, 5, 6]
@@ -825,26 +825,26 @@
    * @memberOf module:webgl-utils
    */
   function createAugmentedTypedArray(numComponents, numElements, opt_type) {
-    var Type = opt_type || Float32Array;
+    const Type = opt_type || Float32Array;
     return augmentTypedArray(new Type(numComponents * numElements), numComponents);
   }
 
   function createBufferFromTypedArray(gl, array, type, drawType) {
     type = type || gl.ARRAY_BUFFER;
-    var buffer = gl.createBuffer();
+    const buffer = gl.createBuffer();
     gl.bindBuffer(type, buffer);
     gl.bufferData(type, array, drawType || gl.STATIC_DRAW);
     return buffer;
   }
 
   function allButIndices(name) {
-    return name !== "indices";
+    return name !== 'indices';
   }
 
   function createMapping(obj) {
-    var mapping = {};
+    const mapping = {};
     Object.keys(obj).filter(allButIndices).forEach(function(key) {
-      mapping["a_" + key] = key;
+      mapping['a_' + key] = key;
     });
     return mapping;
   }
@@ -857,7 +857,7 @@
     if (typedArray instanceof Int32Array)   { return gl.INT; }             // eslint-disable-line
     if (typedArray instanceof Uint32Array)  { return gl.UNSIGNED_INT; }    // eslint-disable-line
     if (typedArray instanceof Float32Array) { return gl.FLOAT; }           // eslint-disable-line
-    throw "unsupported typed array type";
+    throw 'unsupported typed array type';
   }
 
   // This is really just a guess. Though I can't really imagine using
@@ -873,17 +873,17 @@
   }
 
   function guessNumComponentsFromName(name, length) {
-    var numComponents;
-    if (name.indexOf("coord") >= 0) {
+    let numComponents;
+    if (name.indexOf('coord') >= 0) {
       numComponents = 2;
-    } else if (name.indexOf("color") >= 0) {
+    } else if (name.indexOf('color') >= 0) {
       numComponents = 4;
     } else {
       numComponents = 3;  // position, normals, indices ...
     }
 
     if (length % numComponents > 0) {
-      throw "can not guess numComponents. You should specify it.";
+      throw 'can not guess numComponents. You should specify it.';
     }
 
     return numComponents;
@@ -908,13 +908,13 @@
       array.numComponents = guessNumComponentsFromName(name, array.length);
     }
 
-    var type = array.type;
+    let type = array.type;
     if (!type) {
-      if (name === "indices") {
+      if (name === 'indices') {
         type = Uint16Array;
       }
     }
-    var typedArray = createAugmentedTypedArray(array.numComponents, array.data.length / array.numComponents | 0, type);
+    const typedArray = createAugmentedTypedArray(array.numComponents, array.data.length / array.numComponents | 0, type);
     typedArray.push(array.data);
     return typedArray;
   }
@@ -937,7 +937,7 @@
    *
    * Given
    *
-   *      var arrays = {
+   *      let arrays = {
    *        position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    *        texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
    *        normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
@@ -947,7 +947,7 @@
    *
    * returns something like
    *
-   *      var attribs = {
+   *      let attribs = {
    *        a_position: { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
    *        a_texcoord: { numComponents: 2, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
    *        a_normal:   { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
@@ -962,12 +962,12 @@
    * @memberOf module:webgl-utils
    */
   function createAttribsFromArrays(gl, arrays, opt_mapping) {
-    var mapping = opt_mapping || createMapping(arrays);
-    var attribs = {};
+    const mapping = opt_mapping || createMapping(arrays);
+    const attribs = {};
     Object.keys(mapping).forEach(function(attribName) {
-      var bufferName = mapping[attribName];
-      var origArray = arrays[bufferName];
-      var array = makeTypedArray(origArray, bufferName);
+      const bufferName = mapping[attribName];
+      const origArray = arrays[bufferName];
+      const array = makeTypedArray(origArray, bufferName);
       attribs[attribName] = {
         buffer:        createBufferFromTypedArray(gl, array),
         numComponents: origArray.numComponents || array.numComponents || guessNumComponentsFromName(bufferName),
@@ -982,8 +982,8 @@
    * tries to get the number of elements from a set of arrays.
    */
   function getNumElementsFromNonIndexedArrays(arrays) {
-    var key = Object.keys(arrays)[0];
-    var array = arrays[key];
+    const key = Object.keys(arrays)[0];
+    const array = arrays[key];
     if (isArrayBuffer(array)) {
       return array.numElements;
     } else {
@@ -1008,7 +1008,7 @@
    *
    * Given an object like
    *
-   *     var arrays = {
+   *     let arrays = {
    *       position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    *       texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
    *       normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
@@ -1030,7 +1030,7 @@
    *  The properties of arrays can be JavaScript arrays in which case the number of components
    *  will be guessed.
    *
-   *     var arrays = {
+   *     let arrays = {
    *        position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
    *        texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
    *        normal:   [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
@@ -1039,7 +1039,7 @@
    *
    *  They can also by TypedArrays
    *
-   *     var arrays = {
+   *     let arrays = {
    *        position: new Float32Array([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]),
    *        texcoord: new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]),
    *        normal:   new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]),
@@ -1048,17 +1048,17 @@
    *
    *  Or augmentedTypedArrays
    *
-   *     var positions = createAugmentedTypedArray(3, 4);
-   *     var texcoords = createAugmentedTypedArray(2, 4);
-   *     var normals   = createAugmentedTypedArray(3, 4);
-   *     var indices   = createAugmentedTypedArray(3, 2, Uint16Array);
+   *     let positions = createAugmentedTypedArray(3, 4);
+   *     let texcoords = createAugmentedTypedArray(2, 4);
+   *     let normals   = createAugmentedTypedArray(3, 4);
+   *     let indices   = createAugmentedTypedArray(3, 2, Uint16Array);
    *
    *     positions.push([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]);
    *     texcoords.push([0, 0, 0, 1, 1, 0, 1, 1]);
    *     normals.push([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]);
    *     indices.push([0, 1, 2, 1, 2, 3]);
    *
-   *     var arrays = {
+   *     let arrays = {
    *        position: positions,
    *        texcoord: texcoords,
    *        normal:   normals,
@@ -1067,7 +1067,7 @@
    *
    * For the last example it is equivalent to
    *
-   *     var bufferInfo = {
+   *     let bufferInfo = {
    *       attribs: {
    *         a_position: { numComponents: 3, buffer: gl.createBuffer(), },
    *         a_texcoods: { numComponents: 2, buffer: gl.createBuffer(), },
@@ -1092,7 +1092,7 @@
    *    If not passed in it's assumed the array names will be mapped to an attribute
    *    of the same name with "a_" prefixed to it. An other words.
    *
-   *        var arrays = {
+   *        let arrays = {
    *           position: ...,
    *           texcoord: ...,
    *           normal:   ...,
@@ -1103,14 +1103,14 @@
    *
    *    Is the same as
    *
-   *        var arrays = {
+   *        let arrays = {
    *           position: ...,
    *           texcoord: ...,
    *           normal:   ...,
    *           indices:  ...,
    *        };
    *
-   *        var mapping = {
+   *        let mapping = {
    *          a_position: "position",
    *          a_texcoord: "texcoord",
    *          a_normal:   "normal",
@@ -1122,12 +1122,12 @@
    * @memberOf module:webgl-utils
    */
   function createBufferInfoFromArrays(gl, arrays, opt_mapping) {
-    var bufferInfo = {
+    const bufferInfo = {
       attribs: createAttribsFromArrays(gl, arrays, opt_mapping),
     };
-    var indices = arrays.indices;
+    let indices = arrays.indices;
     if (indices) {
-      indices = makeTypedArray(indices, "indices");
+      indices = makeTypedArray(indices, 'indices');
       bufferInfo.indices = createBufferFromTypedArray(gl, indices, gl.ELEMENT_ARRAY_BUFFER);
       bufferInfo.numElements = indices.length;
     } else {
@@ -1142,7 +1142,7 @@
    *
    * Given something like this
    *
-   *     var arrays = {
+   *     let arrays = {
    *        positions: [1, 2, 3],
    *        normals: [0, 0, 1],
    *     }
@@ -1162,10 +1162,10 @@
    * @memberOf module:webgl-utils
    */
   function createBuffersFromArrays(gl, arrays) {
-    var buffers = { };
+    const buffers = { };
     Object.keys(arrays).forEach(function(key) {
-      var type = key === "indices" ? gl.ELEMENT_ARRAY_BUFFER : gl.ARRAY_BUFFER;
-      var array = makeTypedArray(arrays[key], name);
+      const type = key === 'indices' ? gl.ELEMENT_ARRAY_BUFFER : gl.ARRAY_BUFFER;
+      const array = makeTypedArray(arrays[key], name);
       buffers[key] = createBufferFromTypedArray(gl, array, type);
     });
 
@@ -1194,9 +1194,9 @@
    * @memberOf module:webgl-utils
    */
   function drawBufferInfo(gl, bufferInfo, primitiveType, count, offset) {
-    var indices = bufferInfo.indices;
+    const indices = bufferInfo.indices;
     primitiveType = primitiveType === undefined ? gl.TRIANGLES : primitiveType;
-    var numElements = count === undefined ? bufferInfo.numElements : count;
+    const numElements = count === undefined ? bufferInfo.numElements : count;
     offset = offset === undefined ? offset : 0;
     if (indices) {
       gl.drawElements(primitiveType, numElements, gl.UNSIGNED_SHORT, offset);
@@ -1220,13 +1220,13 @@
    * @memberOf module:webgl-utils
    */
   function drawObjectList(gl, objectsToDraw) {
-    var lastUsedProgramInfo = null;
-    var lastUsedBufferInfo = null;
+    let lastUsedProgramInfo = null;
+    let lastUsedBufferInfo = null;
 
     objectsToDraw.forEach(function(object) {
-      var programInfo = object.programInfo;
-      var bufferInfo = object.bufferInfo;
-      var bindBuffers = false;
+      const programInfo = object.programInfo;
+      const bufferInfo = object.bufferInfo;
+      let bindBuffers = false;
 
       if (programInfo !== lastUsedProgramInfo) {
         lastUsedProgramInfo = programInfo;
@@ -1248,20 +1248,20 @@
     });
   }
 
-  var isIE = /*@cc_on!@*/false || !!document.documentMode;
+  const isIE = /*@cc_on!@*/false || !!document.documentMode;
   // Edge 20+
-  var isEdge = !isIE && !!window.StyleMedia;
+  const isEdge = !isIE && !!window.StyleMedia;
   if (isEdge) {
     // Hack for Edge. Edge's WebGL implmentation is crap still and so they
     // only respond to "experimental-webgl". I don't want to clutter the
     // examples with that so his hack works around it
     HTMLCanvasElement.prototype.getContext = function(origFn) {
       return function() {
-        var args = arguments;
-        var type = args[0];
-        if (type === "webgl") {
+        let args = arguments;
+        const type = args[0];
+        if (type === 'webgl') {
           args = [].slice.call(arguments);
-          args[0] = "experimental-webgl";
+          args[0] = 'experimental-webgl';
         }
         return origFn.apply(this, args);
       };
