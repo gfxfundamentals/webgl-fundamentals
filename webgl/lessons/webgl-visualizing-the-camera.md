@@ -34,7 +34,7 @@ be able to see this object we're drawing to represent the
 camera used in the other view.
 
 First let's make some data to represent the camera.
-Let's make a cube and then let's add a cone do the end.
+Let's make a cube and then let's add a cone to the end.
 We're going to draw this with lines. We'll use [indices](webgl-indexed-vertices.html)
 to connect the vertices.
 
