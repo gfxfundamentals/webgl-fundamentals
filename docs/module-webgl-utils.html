@@ -84,7 +84,7 @@
 <div class="description">
     <p>Creates a set of attribute data and WebGLBuffers from set of arrays</p>
 <p>Given</p>
-<pre><code> var arrays = {
+<pre><code> let arrays = {
    position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
    normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
@@ -93,7 +93,7 @@
  };
 </code></pre>
 <p>returns something like</p>
-<pre><code> var attribs = {
+<pre><code> let attribs = {
    a_position: { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
    a_texcoord: { numComponents: 2, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
    a_normal:   { numComponents: 3, type: gl.FLOAT,         normalize: false, buffer: WebGLBuffer, },
@@ -502,7 +502,7 @@ so that you can easily <em>push</em> values.</p>
 <p><code>push</code> can take multiple arguments. If an argument is an array each element<br>
 of the array will be added to the typed array.</p>
 <p>Example:</p>
-<pre><code>var array = createAugmentedTypedArray(3, 2);  // creates a Float32Array with 6 values
+<pre><code>let array = createAugmentedTypedArray(3, 2);  // creates a Float32Array with 6 values
 array.push(1, 2, 3);
 array.push([4, 5, 6]);
 // array now contains [1, 2, 3, 4, 5, 6]
@@ -718,7 +718,7 @@ array.push([4, 5, 6]);
 <p>This can be passed to <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a> and to<br>
 <code>module:webgl-utils:drawBufferInfo</code>.</p>
 <p>Given an object like</p>
-<pre><code>var arrays = {
+<pre><code>let arrays = {
   position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
   texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
   normal:   { numComponents: 3, data: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],     },
@@ -738,7 +738,7 @@ array.push([4, 5, 6]);
 </code></pre>
 <p>The properties of arrays can be JavaScript arrays in which case the number of components<br>
 will be guessed.</p>
-<pre><code>var arrays = {
+<pre><code>let arrays = {
    position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
    texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
    normal:   [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
@@ -746,7 +746,7 @@ will be guessed.</p>
 };
 </code></pre>
 <p>They can also by TypedArrays</p>
-<pre><code>var arrays = {
+<pre><code>let arrays = {
    position: new Float32Array([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]),
    texcoord: new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]),
    normal:   new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]),
@@ -754,17 +754,17 @@ will be guessed.</p>
 };
 </code></pre>
 <p>Or augmentedTypedArrays</p>
-<pre><code>var positions = createAugmentedTypedArray(3, 4);
-var texcoords = createAugmentedTypedArray(2, 4);
-var normals   = createAugmentedTypedArray(3, 4);
-var indices   = createAugmentedTypedArray(3, 2, Uint16Array);
+<pre><code>let positions = createAugmentedTypedArray(3, 4);
+let texcoords = createAugmentedTypedArray(2, 4);
+let normals   = createAugmentedTypedArray(3, 4);
+let indices   = createAugmentedTypedArray(3, 2, Uint16Array);
 
 positions.push([0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0]);
 texcoords.push([0, 0, 0, 1, 1, 0, 1, 1]);
 normals.push([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]);
 indices.push([0, 1, 2, 1, 2, 3]);
 
-var arrays = {
+let arrays = {
    position: positions,
    texcoord: texcoords,
    normal:   normals,
@@ -772,7 +772,7 @@ var arrays = {
 };
 </code></pre>
 <p>For the last example it is equivalent to</p>
-<pre><code>var bufferInfo = {
+<pre><code>let bufferInfo = {
   attribs: {
     a_position: { numComponents: 3, buffer: gl.createBuffer(), },
     a_texcoods: { numComponents: 2, buffer: gl.createBuffer(), },
@@ -964,7 +964,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arrays.indices, gl.STATIC_DRAW);</code></
                 <p>an optional mapping of attribute to array name.<br>
 If not passed in it's assumed the array names will be mapped to an attribute<br>
 of the same name with &quot;a_&quot; prefixed to it. An other words.</p>
-<pre><code>   var arrays = {
+<pre><code>   let arrays = {
       position: ...,
       texcoord: ...,
       normal:   ...,
@@ -974,14 +974,14 @@ of the same name with &quot;a_&quot; prefixed to it. An other words.</p>
    bufferInfo = createBufferInfoFromArrays(gl, arrays);
 </code></pre>
 <p>Is the same as</p>
-<pre><code>   var arrays = {
+<pre><code>   let arrays = {
       position: ...,
       texcoord: ...,
       normal:   ...,
       indices:  ...,
    };
 
-   var mapping = {
+   let mapping = {
      a_position: &quot;position&quot;,
      a_texcoord: &quot;texcoord&quot;,
      a_normal:   &quot;normal&quot;,
@@ -1052,7 +1052,7 @@ of the same name with &quot;a_&quot; prefixed to it. An other words.</p>
 <div class="description">
     <p>Creates buffers from typed arrays</p>
 <p>Given something like this</p>
-<pre><code>var arrays = {
+<pre><code>let arrays = {
    positions: [1, 2, 3],
    normals: [0, 0, 1],
 }
@@ -3391,15 +3391,15 @@ Pass in window.devicePixelRatio for native pixels.</p>
 <div class="description">
     <p>Sets attributes and binds buffers (deprecated... use <a href="module-webgl-utils.html#.setBuffersAndAttributes"><code>module:webgl-utils.setBuffersAndAttributes</code></a>)</p>
 <p>Example:</p>
-<pre><code>var program = createProgramFromScripts(
+<pre><code>let program = createProgramFromScripts(
     gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
 
-var attribSetters = createAttributeSetters(program);
+let attribSetters = createAttributeSetters(program);
 
-var positionBuffer = gl.createBuffer();
-var texcoordBuffer = gl.createBuffer();
+let positionBuffer = gl.createBuffer();
+let texcoordBuffer = gl.createBuffer();
 
-var attribs = {
+let attribs = {
   a_position: {buffer: positionBuffer, numComponents: 3},
   a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
 };
@@ -3421,7 +3421,7 @@ properties:</p>
 <p>For example if you had 3 value float positions, 2 value<br>
 float texcoord and 4 value uint8 colors you'd setup your<br>
 attribs like this</p>
-<pre><code>var attribs = {
+<pre><code>let attribs = {
   a_position: {buffer: positionBuffer, numComponents: 3},
   a_texcoord: {buffer: texcoordBuffer, numComponents: 2},
   a_color: {
@@ -3593,15 +3593,15 @@ attribs like this</p>
 <div class="description">
     <p>Sets attributes and buffers including the <code>ELEMENT_ARRAY_BUFFER</code> if appropriate</p>
 <p>Example:</p>
-<pre><code>var programInfo = createProgramInfo(
+<pre><code>let programInfo = createProgramInfo(
     gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
 
-var arrays = {
+let arrays = {
   position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
   texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
 };
 
-var bufferInfo = createBufferInfoFromArrays(gl, arrays);
+let bufferInfo = createBufferInfoFromArrays(gl, arrays);
 
 gl.useProgram(programInfo.program);
 </code></pre>
@@ -3799,15 +3799,15 @@ gl.vertexAttribPointer(a_texcoordLocation, 4, gl.FLOAT, false, 0, 0);</code></pr
 <div class="description">
     <p>Set uniforms and binds related textures.</p>
 <p>example:</p>
-<pre><code>var programInfo = createProgramInfo(
+<pre><code>let programInfo = createProgramInfo(
     gl, [&quot;some-vs&quot;, &quot;some-fs&quot;);
 
-var tex1 = gl.createTexture();
-var tex2 = gl.createTexture();
+let tex1 = gl.createTexture();
+let tex2 = gl.createTexture();
 
 ... assume we setup the textures with data ...
 
-var uniforms = {
+let uniforms = {
   u_someSampler: tex1,
   u_someOtherSampler: tex2,
   u_someColor: [1,0,0,1],
@@ -3827,7 +3827,7 @@ uniforms.</p>
 <pre><code>setUniforms(programInfo.uniformSetters, uniforms);
 </code></pre>
 <p>For the example above it is equivalent to</p>
-<pre><code>var texUnit = 0;
+<pre><code>let texUnit = 0;
 gl.activeTexture(gl.TEXTURE0 + texUnit);
 gl.bindTexture(gl.TEXTURE_2D, tex1);
 gl.uniform1i(u_someSamplerLocation, texUnit++);
@@ -3844,12 +3844,12 @@ gl.uniformMatrix4fv(u_someMatrix, false, [
   ]);
 </code></pre>
 <p>Note it is perfectly reasonable to call <code>setUniforms</code> multiple times. For example</p>
-<pre><code>var uniforms = {
+<pre><code>let uniforms = {
   u_someSampler: tex1,
   u_someOtherSampler: tex2,
 };
 
-var moreUniforms {
+let moreUniforms {
   u_someColor: [1,0,0,1],
   u_somePosition: [0,1,1],
   u_someMatrix: [

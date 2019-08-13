@@ -43,13 +43,13 @@
     root.primitives = factory.call(root);
   }
 }(this, function(webglUtils, m4) {
-  "use strict";
+  'use strict';
 
   webglUtils = webglUtils || this.webglUtils;
   m4 = m4 || this.m4 || math3d;
 
   function allButIndices(name) {
-    return name !== "indices";
+    return name !== 'indices';
   }
 
   /**
@@ -90,7 +90,7 @@
    */
   function flattenNormals(vertices) {
     if (vertices.indices) {
-      throw "can't flatten normals of indexed vertices. deindex them first";
+      throw 'can\'t flatten normals of indexed vertices. deindex them first';
     }
 
     const normals = vertices.normal;
@@ -213,11 +213,11 @@
   function reorientVertices(arrays, matrix) {
     Object.keys(arrays).forEach(function(name) {
       const array = arrays[name];
-      if (name.indexOf("pos") >= 0) {
+      if (name.indexOf('pos') >= 0) {
         reorientPositions(array, matrix);
-      } else if (name.indexOf("tan") >= 0 || name.indexOf("binorm") >= 0) {
+      } else if (name.indexOf('tan') >= 0 || name.indexOf('binorm') >= 0) {
         reorientDirections(array, matrix);
-      } else if (name.indexOf("norm") >= 0) {
+      } else if (name.indexOf('norm') >= 0) {
         reorientNormals(array, matrix);
       }
     });
