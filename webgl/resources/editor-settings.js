@@ -36,6 +36,7 @@ function fixSourceLinks(url, source) {
   const loadImageRE = /(loadImageAndCreateTextureInfo)\(('|")(.*?)('|")/g;
   const loadImagesRE = /loadImages(\s*)\((\s*)\[([^]*?)\](\s*),/g;
   const loadGLTFRE = /(loadGLTF\(')(.*?)(')/g;
+  const webglfundamentalsUrlRE = /(.*?)('|")([^"']*?)('|")([^'"]*?)(\/\*\s+webglfundamentals:\s+url\s+\*\/)/ig;
   const urlPropRE = /(url:\s*)('|")(.*?)('|")/g;
   const quoteRE = /"(.*?)"/g;
   const workerRE = /(new\s+Worker\s*\(\s*)('|")(.*?)('|")/g;
@@ -50,6 +51,9 @@ function fixSourceLinks(url, source) {
   }
   function makeLinkFDedQuotes(match, fn, q1, url, q2) {
     return fn + q1 + addPrefix(url) + q2;
+  }
+  function makeTaggedFDedQuotes(match, start, q1, url, q2, suffix) {
+    return start + q1 + addPrefix(url) + q2 + suffix;
   }
   source = source.replace(srcRE, makeLinkFDedQuotes);
   source = source.replace(linkRE, makeLinkFDedQuotes);
@@ -67,7 +71,7 @@ function fixSourceLinks(url, source) {
       return `loadImages${p1}(${p2}[${p3}]${p4},`;
   });
   source = source.replace(loadGLTFRE, makeLinkFQedQuote);
-
+  source = source.replace(webglfundamentalsUrlRE, makeTaggedFDedQuotes);
   return source;
 }
 
