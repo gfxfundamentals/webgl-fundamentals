@@ -166,6 +166,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', ['clean', 'copy', 'buildlessons']);
   grunt.registerTask('buildwatch', ['build', 'watch']);
+  grunt.registerTask('pre-push', ['eslint']);
 
   grunt.registerTask('default', ['eslint', 'build', 'jsdoc']);
 };
