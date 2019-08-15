@@ -1248,6 +1248,18 @@
     });
   }
 
+  function glEnumToString(gl, v) {
+    const results = [];
+    for (const key in gl) {
+      if (gl[key] === v) {
+        results.push(key);
+      }
+    }
+    return results.length
+        ? results.join(' | ')
+        : `0x${v.toString(16)}`;
+  }
+
   const isIE = /*@cc_on!@*/false || !!document.documentMode;
   // Edge 20+
   const isEdge = !isIE && !!window.StyleMedia;
@@ -1283,6 +1295,7 @@
     createVAOFromBufferInfo: createVAOFromBufferInfo,
     drawBufferInfo: drawBufferInfo,
     drawObjectList: drawObjectList,
+    glEnumToString: glEnumToString,
     getExtensionWithKnownPrefixes: getExtensionWithKnownPrefixes,
     resizeCanvasToDisplaySize: resizeCanvasToDisplaySize,
     setAttributes: setAttributes,
