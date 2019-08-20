@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-3d-lighting-spot.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL 三维聚光灯" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="如何在 WebGL 中实现聚光灯的效果" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL 三维聚光灯" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html" />
+<meta name="twitter:description" content="如何在 WebGL 中实现聚光灯的效果" />
+<meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+
+
+<title>WebGL 三维聚光灯</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-3d-lighting-spot.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-lighting-spot.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-lighting-spot.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-lighting-spot.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-lighting-spot.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-lighting-spot.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-lighting-spot.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 三维聚光灯</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>此文上接<a href="webgl-3d-lighting-point.html">WebGL 三维点光源</a>，
+如果没读建议从<a href="webgl-3d-lighting-point.html">那里开始</a>。</p>
+<p>在上篇文章中我们讲到点光源，计算光源到物体表面每一点的方向，然后做与
+<a href="webgl-3d-lighting-directional.html">方向光</a>相同的运算，
+也就是对光线方向和表面法向量（表面面对的方向）做点乘运算。
+如果两个方向完全相同就会得到 1，应该被完全照亮。
+如果两个方向垂直会得到0，相反会得到 -1。我们直接将这个值和表面的颜色相乘，
+实现光照效果。</p>
+<p>聚光灯只是做了少量修改，事实上如果你比较有创新能力的话，可能会根据之前学的东西知道聚光灯的实现方法。</p>
+<p>你可以把点光源想象成一个点，光线从那个点照向所有方向。
+实现聚光灯只需要以那个点为起点选择一个方向，作为聚光灯的方向，
+然后将其他光线方向与所选方向点乘，然后随意选择一个限定范围，
+然后判断光线是否在限定范围内，如果不在就不照亮。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/spot-lighting.html"></iframe>
+</div>
+
+</p>
+<p>在上方的图示中我们开一看到光线照向所有的方向，并且将每个方向的点乘结果显示在上面。
+然后指定一个方向<strong>方向</strong>表示聚光灯的方向，选择一个限定（上方以度为单位）。
+通过限定我们计算一个<strong>点乘限定</strong>，只需对限定值取余弦就可以得到。如果与选定聚光灯方向的点乘大于这个点乘限定，就照亮，否则不照亮。</p>
+<p>换一种方式解释，假设限定是 20 度，我们可以将它转换为弧度，然后取余弦值得到 -1 到 1 之间的数，
+暂且把它称作点乘空间。或者可以用这个表格表示限定值的转换。</p>
+<pre class="prettyprint"><code>            限制值
+   角度   |   弧度   | 点乘空间
+ --------+---------+----------
+    0    |   0.0   |    1.0
+    22   |    .38  |     .93
+    45   |    .79  |     .71
+    67   |   1.17  |     .39
+    90   |   1.57  |    0.0
+   180   |   3.14  |   -1.0
+</code></pre><p>我们可以只需判断</p>
+<pre class="prettyprint"><code>dotFromDirection = dot(surfaceToLight, -lightDirection)
+if (dotFromDirection &gt;= limitInDotSpace) {
+   // 使用光照
+}
+</code></pre><p>让我们来实现它。</p>
+<p>首先修改<a href="webgl-3d-lighting-point.html">上文</a>的片断着色器。</p>
+<pre class="prettyprint"><code>precision mediump float;
+
+// 从顶点着色器传入的值
+varying vec3 v_normal;
+varying vec3 v_surfaceToLight;
+varying vec3 v_surfaceToView;
+
+uniform vec4 u_color;
+uniform float u_shininess;
++uniform vec3 u_lightDirection;
++uniform float u_limit;          // 在点乘空间中
+
+void main() {
+  // 因为 v_normal 是可变量，被插值过
+  // 所以不是单位向量，单位可以让它成为再次成为单位向量
+  vec3 normal = normalize(v_normal);
+
+  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
+  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
+  vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
+
+-  float light = dot(normal, surfaceToLightDirection);
++  float light = 0.0;
+  float specular = 0.0;
+
++  float dotFromDirection = dot(surfaceToLightDirection,
++                               -u_lightDirection);
++  if (dotFromDirection &gt;= u_limit) {
+*    light = dot(normal, surfaceToLightDirection);
+*    if (light &gt; 0.0) {
+*      specular = pow(dot(normal, halfVector), u_shininess);
+*    }
++  }
+
+  gl_FragColor = u_color;
+
+  // 只将颜色部分（不包含 alpha） 和光照相乘
+  gl_FragColor.rgb *= light;
+
+  // 直接加上高光
+  gl_FragColor.rgb += specular;
+}
+</code></pre><p>当然我们需要找到刚才添加的全局变量的位置。</p>
+<pre class="prettyprint"><code>  var lightDirection = [?, ?, ?];
+  var limit = degToRad(20);
+
+  ...
+
+  var lightDirectionLocation = gl.getUniformLocation(program, &quot;u_lightDirection&quot;);
+  var limitLocation = gl.getUniformLocation(program, &quot;u_limit&quot;);
+</code></pre><p>然后设置它们</p>
+<pre class="prettyprint"><code>    gl.uniform3fv(lightDirectionLocation, lightDirection);
+    gl.uniform1f(limitLocation, Math.cos(limit));
+</code></pre><p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-spot.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-spot.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>一些需要注意的细节：一个是我们在上方对 <code>u_lightDirection</code> 取负，
+这其实是一个等价的选择，我们希望两个方向匹配的时候能指向相同的方向，
+也就是需要将 surfaceToLightDirection 和聚光灯的反方向相比，
+我们可以用很多种方式实现这个。可以在设置全局变量时传入反方向，
+那可能是我的首选，但是我觉得那样应该叫做 <code>u_reverseLightDirection</code> 或 <code>u_negativeLightDirection</code>
+而不是 <code>u_lightDirection</code>。</p>
+<p>另一件事，也许这个只是个人习惯，如果可能的话我尽量不在着色器中使用条件语句，
+原因是我认为着色器并不是真的使用条件语句，如果你在着色器中使用着色器，
+编译器会在代码中扩展很多 0 和 1 的乘法运算来实现，所以这里并不是真的条件语句，
+它会将你的代码扩展成多种组合。我不确定现在是否还是这样，但是我们可以使用一些技巧来避免这种情况，
+你自己可以选择用或不用。</p>
+<p>有一个 GLSL 函数叫做 <code>step</code>，它获取两个值，如果第二个值大于或等于第一个值就返回 1.0，
+否则返回 0。用JavaScript大概可以这样表示。</p>
+<pre class="prettyprint"><code>function step(a, b) {
+   if (b &gt;= a) {
+       return 1;
+   } else {
+       return 0;
+   }
+}
+</code></pre><p>让我们使用 <code>step</code> 避免这种情况</p>
+<pre class="prettyprint"><code>  float dotFromDirection = dot(surfaceToLightDirection,
+                               -u_lightDirection);
+  // 如果光线在聚光灯范围内 inLight 就为 1，否则为 0
+  float inLight = step(u_limit, dotFromDirection);
+  float light = inLight * dot(normal, surfaceToLightDirection);
+  float specular = inLight * pow(dot(normal, halfVector), u_shininess);
+</code></pre><p>看起来没有什么区别，这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-spot-using-step.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-spot-using-step.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>还有一件事，现在的聚光灯效果非常粗糙和僵硬。只有在聚光灯范围内或外，
+在外面就直接变黑，没有任何过渡。</p>
+<p>要修正它我们可以使用两个限定值代替原来的一个，
+一个内部限定一个外部限定。如果在内部限定内就使用 1.0，
+在外部限定外面就使用 0.0，在内部和外部限定之间就使用 1.0 到 0.0 之间的插值。</p>
+<p>这是我们实现这个的一种方式</p>
+<pre class="prettyprint"><code>-uniform float u_limit;          // 在点乘空间中
++uniform float u_innerLimit;     // 在点乘空间中
++uniform float u_outerLimit;     // 在点乘空间中
+
+...
+
+  float dotFromDirection = dot(surfaceToLightDirection,
+                               -u_lightDirection);
+-  float inLight = step(u_limit, dotFromDirection);
++  float limitRange = u_innerLimit - u_outerLimit;
++  float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.0, 1.0);
+  float light = inLight * dot(normal, surfaceToLightDirection);
+  float specular = inLight * pow(dot(normal, halfVector), u_shininess);
+</code></pre><p>这样就行了</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-spot-falloff.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-spot-falloff.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>现在我们得到了聚光灯的效果。</p>
+<p>需要注意的事如果 <code>u_innerLimit</code> 和 <code>u_outerLimit</code>相等那么 <code>limitRange</code>
+就会是 0.0 。除以 0 就会导致 undefined。这在着色器中没有什么解决办法，
+所以只需要在JavaScript中确保 <code>u_innerLimit</code> 和 <code>u_outerLimit</code> 永远不要相等。
+（注意：示例代码中并没有做这个。）</p>
+<p>GLSL 也有一个函数可以稍微做一些简化，叫做 <code>smoothstep</code>，和 <code>step</code> 相似返回一个 0 到 1
+之间的值，但是它获取最大和最小边界值，返回该值在边界范围映射到 0 到 1 之间的插值。</p>
+<pre class="prettyprint"><code> smoothstep(lowerBound, upperBound, value)
+</code></pre><p>让我们来实现它</p>
+<pre class="prettyprint"><code>  float dotFromDirection = dot(surfaceToLightDirection,
+                               -u_lightDirection);
+-  float limitRange = u_innerLimit - u_outerLimit;
+-  float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.0, 1.0);
+  float inLight = smoothstep(u_outerLimit, u_innerLimit, dotFromDirection);
+  float light = inLight * dot(normal, surfaceToLightDirection);
+  float specular = inLight * pow(dot(normal, halfVector), u_shininess);
+</code></pre><p>这样也可以</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-spot-falloff-using-smoothstep.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-spot-falloff-using-smoothstep.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>不同之处是 <code>smoothstep</code> 使用 Hermite 插值而不是线型插值，
+也就是说 <code>lowerBound</code> 和 <code>upperBound</code> 之间的值插值后像下方右图所示，
+线型插值是左图。</p>
+<p><img class="webgl_center invertdark" src="../resources/linear-vs-hermite.png" /></p>
+<p>如果你觉得没什么关系的话，使用什么取决于你自己。</p>
+<p>还有一件事就是注意当 <code>lowerBound</code> 大于或等于 <code>upperBound</code> 时 <code>smoothstep</code>
+方法会产生 undefined。它们值相等和志强的情况一样，多出的问题是 <code>lowerBound</code> 大于
+<code>upperBound</code> 时，但是对于正常的聚光灯这种情况永远不会出现。</p>
+<div class="webgl_bottombar">
+<h3>小心 GLSL 中的 undefined 情况</h3>
+<p>
+GLSL 中的一些函数在某些情况下会出现 undefined，对一个负值使用<code>pow</code>求幂就是一个例子，
+因为结果是无法预期。我们遇到的另一个例子就是上方的<code>smoothstep</code>。
+<p>
+你应该注意这些情况，否则你的着色器会在不同的设备上得到不同的结果。
+<a href="https://www.khronos.org/files/opengles_shading_language.pdf">规范第 8 节</a>
+列出了所有内置函数，它们的用法，是否会出现 undefined 情况。</p>
+<p>这是会出现undefined情况的列表。注意<code>genType</code> 表示 <code>float</code>, <code>vec2</code>, <code>vec3</code>, 或 <code>vec4</code>。</p>
+<pre class="prettyprint"><code>genType asin (genType x)</code></pre><p>反正弦函数，返回角度 x 的反正弦值，返回值在 [−π/2, π/2] 之间，如果 ∣x∣ > 1 导致undefined。</p>
+
+
+<pre class="prettyprint"><code>genType acos (genType x)</code></pre><p>反余弦函数。返回角度 x 的反余弦值，返回值范围为[0, π]，
+如果 ∣x∣ > 1 导致undefined。</p>
+
+
+
+<pre class="prettyprint"><code>genType atan (genType y, genType x)</code></pre><p>反正切函数。返回一个正切为 y/x 的角度，
+x 和 y 的符号决定象限，返回值范围为[−π,π]，如果 x 和 y 都是 0 导致undefined。</p>
+
+
+<pre class="prettyprint"><code>genType pow (genType x, genType y)</code></pre><p>返回 x 的 y 次幂, 例如, x<sup>y</sup>。
+如果 x < 0 导致undefined，如果 x = 0 并且 y <= 0 导致undefined。</p>
+
+
+<pre class="prettyprint"><code>genType log (genType x)</code></pre><p>返回 x 的自然对数, 例如, 返回 y 值满足 x = e<sup>y</sup>。
+如果 x <= 0 导致undefinded。</p>
+
+
+<pre class="prettyprint"><code>genType log2 (genType x)</code></pre><p>返回以 2 为底 x 的对数。例如，返回 y 满足 x=2<sup>y</sup>。
+如果 x <= 0 导致undefinded。</p>
+
+
+
+<pre class="prettyprint"><code>genType sqrt (genType x)</code></pre><p>返回 √x .
+如果 x < 0 导致undefinded。</p>
+
+
+<pre class="prettyprint"><code>genType inversesqrt (genType x)</code></pre><p>
+返回 1/√x.
+如果 x <= 0 导致undefinded。</p>
+
+
+<pre class="prettyprint"><code>genType clamp (genType x, genType minVal, genType maxVal)
+genType clamp (genType x, float minVal, float maxVal)</code></pre><p>
+返回 min (max (x, minVal), maxVal).
+如果 minVal > maxVal 导致undefined。</p>
+
+
+
+<pre class="prettyprint"><code>genType smoothstep (genType edge0, genType edge1, genType x)
+genType smoothstep (float edge0, float edge1, genType x)</code></pre><p>
+如果 x <= edge0 返回 0.0，如果 x >= edge1 返回 1.0，
+当 edge0 < x < edge1 使用 Hermite 插值到 0 到 1 之间。
+当你希望在阈值范围内平滑插值时这个函数就很有用。相当于：
+</p>
+<pre class="prettyprint">
+ genType t;
+ t = clamp ((x – edge0) / (edge1 – edge0), 0, 1);
+ return t * t * (3 – 2 * t);
+</pre>
+<p>如果 edge0 >= edge1 导致undefined。</p>
+
+
+
+
+
+</div>
+
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-3d-lighting-spot.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-lighting-spot.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-lighting-spot.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-lighting-spot.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-lighting-spot.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-lighting-spot.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-lighting-spot.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="http://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 三维聚光灯';
+            var disqus_title = 'WebGL 三维聚光灯';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

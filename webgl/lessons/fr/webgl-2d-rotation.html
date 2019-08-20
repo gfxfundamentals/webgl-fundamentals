@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/fr/webgl-2d-rotation.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL 2D - Les rotations" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="Comment faire des rotations en 2D" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/fr/webgl-2d-rotation.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL 2D - Les rotations" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/fr/webgl-2d-rotation.html" />
+<meta name="twitter:description" content="Comment faire des rotations en 2D" />
+<meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+
+
+<title>WebGL 2D - Les rotations</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-2d-rotation.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2d-rotation.html" selected>Français</a>
+    <option value="/webgl/lessons/ja/webgl-2d-rotation.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2d-rotation.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2d-rotation.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2d-rotation.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2d-rotation.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2d-rotation.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">Table des Matières</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/fr/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 2D - Les rotations</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>Cet article est la suite d&#39;une série de posts consacrés à WebGL. Le premier <a href="webgl-fundamentals.html">présentait les bases</a> et le précédent parlait des <a href="webgl-2d-translation.html">translations</a>. Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abord.</p>
+<p>Je vais commencer par admettre directement que je n&#39;ai aucune idée si ça va avoir du sens mais hé, autant essayer.
+<!--more-->
+D&#39;abord je voudrais introduire la notion de cercle trigonométrique ou cercle unitaire. Si vous vous rappelez les bons vieux cours de maths de collège (c&#39;est bon ne vous endormez pas !) un cercle a un rayon. Ce rayon est la distance du centre jusqu&#39;au bord du cercle. Un cercle unitaire a un rayon de distance 1.</p>
+<p>Voilà un cercle trigonométrique.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 300px; height: 300px;" src="/webgl/lessons/../unit-circle.html"></iframe>
+</div>
+
+</p>
+<p>Notez que si vous déplacez le bouton bleu autour du cercle les coordonnées x et y changent. Elles représentent la position du point sur le cercle. Tout en haut Y vaut 1 et X vaut 0. Sur la droite X vaut 1 et Y vaut 0. </p>
+<p>Si vous vous souvenez de cours autour de la classe de CE1 vous savez que ce qu&#39;on multiplie par 1 reste pareil : 123 * 1 = 123. Plutôt simple n&#39;est-ce pas ? Hé bien un cercle trigonométrique, avec un rayon de 1, est aussi une forme de 1. C&#39;est un 1 qui tourne. Donc on peut multiplier quelque chose par ce cercle unitaire, et d&#39;une certaine façon c&#39;est comme multiplier par 1, sauf qu&#39;en plus deux trois trucs se passent et ça tourne :)</p>
+<p>On va prendre ces valeurs X et Y de n&#39;importe quel point sur le cercle trigonométrique et on va multiplier notre géométrie avec elles depuis notre <a href="webgl-2d-translation.html">exemple précédent</a>.</p>
+<p>Voilà le nouveau shader</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
+
+uniform vec2 u_resolution;
+uniform vec2 u_translation;
+uniform vec2 u_rotation;
+
+void main() {
+  // Tourne
+  vec2 positionTournee = vec2(
+     a_position.x * u_rotation.y + a_position.y * u_rotation.x,
+     a_position.y * u_rotation.y - a_position.x * u_rotation.x);
+
+  // Ajoute la translation
+  vec2 position = positionTournee + u_translation;
+</code></pre><p>Et on change le javascript pour envoyer ces deux valeurs :</p>
+<pre class="prettyprint"><code>  ...
+  var emplacementRotation = gl.getUniformLocation(programme, &quot;u_rotation&quot;);
+  ...
+  var rotation = [0, 1];
+  ..
+  // Rend la scène.
+  function rendreScene() {
+    // Efface le canvas
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // Transmets les valeurs de translation au programme actif
+    gl.uniform2fv(emplacementTranslation, translation);
+
+    // Transmets les valeurs de rotation au programme actif
+    gl.uniform2fv(emplacementRotation, rotation);
+
+    // Appel de rendu
+    gl.drawArrays(gl.TRIANGLES, 0, 18);
+  }
+</code></pre><p>Voilà le résultat. Bougez le bouton sur le cercle pour tourner ou déplacer.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-rotation.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-rotation.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p>Pourquoi ça fonctionne ? Regardez les opérations :</p>
+<pre class="prettyprint"><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
+rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
+</code></pre><p>Disons que vous avez un rectangle et que vous voulez le tourner. Avant, le coin en haut à droite est à (3,9). Choisissons un point sur le cercle qui soit à 30 degrés plus loin dans le sens des aiguilles d&#39;une montre, depuis disons, midi.</p>
+<p><img src="../../resources/rotate-30.png" class="webgl_center" /></p>
+<p>La position sur le cercle ici est à (0.50,0.87)</p>
+<pre class="webgl_center">
+   3.0 * 0.87 + 9.0 * 0.50 = 7.1
+   9.0 * 0.87 - 3.0 * 0.50 = 6.3
+</pre>
+
+<p>Exctement ce qu&#39;on voulait</p>
+<p><img src="../../resources/rotation-drawing.svg" width="500" class="webgl_center"/></p>
+<p>Pour 60 degrees dans le même sens</p>
+<p><img src="../../resources/rotate-60.png" class="webgl_center" /></p>
+<p>La position sur le cercle est (0.87,0.50).</p>
+<pre class="webgl_center">
+   3.0 * 0.50 + 9.0 * 0.87 = 9.3
+   9.0 * 0.50 - 3.0 * 0.87 = 1.9
+</pre>
+
+<p>Vous voyez que pendant qu&#39;on bouge le point dans le sens des aiguilles d&#39;une montre X devient plus grand et Y plus petit. Si on dépasse 90 degrés X deviendrait plus petit et Y redeviendrait plus grand. C&#39;est ce qui nous donne la rotation. </p>
+<p>Il y a un autre nom pour les points sur un cercle trigonométrique. On les appelle sinus et cosinus. Pour n&#39;importe quel angle on peut juste regarder le sinus et le cosinus comme ceci :</p>
+<pre class="prettyprint"><code>function indiqueSinusEtCosinusPourLAngle(angleEnDegres) {
+  var angleEnRadians = angleEnDegres * Math.PI / 180;
+  var s = Math.sin(angleEnRadians);
+  var c = Math.cos(angleEnRadians);
+  console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
+}
+</code></pre><p>Si vous copiez et collez ce code dans la console du navigateur et tapez <code>indiqueSinusEtCosinusPourLAngle(30)</code> vous verrez qu&#39;il indique <code>s = 0.49 c = 0.87</code> (note: j&#39;ai arrondi les nombres).</p>
+<p>Si vous mettez tout ça ensemble vous pouvez tourner votre géométrie de n&#39;importe quel angle. Mettez juste les valeurs de sinus et de cosinus de l&#39;angle de rotation que vous voulez.</p>
+<pre class="prettyprint"><code>  ...
+  var angleEnRadians = angleEnDegres * Math.PI / 180;
+  rotation[0] = Math.sin(angleEnRadians);
+  rotation[1] = Math.cos(angleEnRadians);
+</code></pre><p>Voici une version qui a juste un changement d&#39;angle. Bougez les sliders pour déplacer ou tourner.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-rotation-angle.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-rotation-angle.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p>J&#39;espère que c&#39;était utile. Plus facile pour la suite : <a href="webgl-2d-scale.html">les changements d&#39;échelle</a>.</p>
+<div class="webgl_bottombar"><h3>C'est quoi les radians ?</h3>
+<p>
+Les radians sont l'unité de mesure utilisée avec les cercles, les rotations et les angles. Tout comme on peut mesurer des distances en pouces, pieds, en coudées, en milles, en mètre, années-lumières etc., on peut mesurer des angles en degrés ou en radians.
+</p>
+<p>
+Vous savez peut-être que faire des calculs avec des mètres est plus simple qu'avec des unités de mesure impériales : comment passer d'un pouce à un pied ou à un mille ? Pas simple. Dans le système métrique, un millimètre vaut un millième d'un mètre. Un centimètre vaut 10 millimètres. C'est simple et c'est faisable de tête.
+</p>
+<p>
+C'est pareil entre radians et degrés. Les degrés rendent les calculs compliqués. Les radians les rendent plus faciles. Il y a 360 degrés dans un cercle mais il y a seulement 2π radians. Un tour complet vaut 2π radians. Un demi-tour vaut 1π radian. Un quart de tour 1/4 * 2π radian, donc 90 degrés valent 1/2π radians. Donc si vous voulez tourner quelque chose de 90 degrés utilisez simplement <code>Math.PI / 2</code>. Si vous voulez tourner de 45 degrés utilisez <code>Math.PI / 4</code> etc.
+</p>
+<p>
+Presque tous les champs des mathématiques qui utilisent des angles, des cercles ou des rotations sont beaucoup plus simples avec des radians. Donc laissez-leur une chance. Utilisez les radians et pas les degrés, à part dans les interfaces utilisateur.
+</p>
+</div>
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-2d-rotation.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2d-rotation.html" selected>Français</a>
+    <option value="/webgl/lessons/ja/webgl-2d-rotation.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2d-rotation.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2d-rotation.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2d-rotation.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2d-rotation.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2d-rotation.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Les bases</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-fundamentals.html">WebGL - Les bases</a></li>
+<li><a href="/webgl/lessons/fr/webgl-how-it-works.html">WebGL - Comment ça marche</a></li>
+<li><a href="/webgl/lessons/fr/webgl-shaders-and-glsl.html">WebGL - Shaders et GLSL</a></li>
+        </ul>
+  <li>Traitement d'image</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-image-processing.html">Image Processing</a></li>
+<li><a href="/webgl/lessons/fr/webgl-image-processing-continued.html">Image Processing Continued</a></li>
+        </ul>
+  <li>2D : translation, rotation, échelle, matrices</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-2d-translation.html">WebGL 2D - Translation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-rotation.html">WebGL 2D - Rotation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-scale.html">WebGL 2D - Echelle</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-matrices.html">WebGL 2D - Matrices</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-orthographic.html">WebGL 3D - Projection orthographique</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-perspective.html">WebGL 3D - La perspective</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-camera.html">WebGL 3D - Les caméras</a></li>
+        </ul>
+  <li>Lumières</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-lighting-directional.html">WebGL 3D - Lumière directionnelle</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-lighting-point.html">WebGL 3D - Lumière-point</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+        </ul>
+  <li>Structure et Organisation</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+<li><a href="/webgl/lessons/fr/webgl-drawing-multiple-things.html">Drawing Multiple Things</a></li>
+<li><a href="/webgl/lessons/fr/webgl-scene-graph.html">WebGL - Graphes de scène</a></li>
+        </ul>
+  <li>Geometry</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+        </ul>
+  <li>Divers</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-textures.html">Textures</a></li>
+<li><a href="/webgl/lessons/fr/webgl-data-textures.html">Data Textures</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2-textures.html">Using 2 or More Textures</a></li>
+<li><a href="/webgl/lessons/fr/webgl-cors-permission.html">Cross Origin Images</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/fr/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Rendering To A Texture</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-render-to-texture.html">Render to Texture</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Techniques</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-2d-drawimage.html">2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/fr/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/fr/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/fr/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/fr/webgl-fog.html">Fog</a></li>
+        </ul>
+  <li>Texte</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-text-html.html">Text - HTML</a></li>
+<li><a href="/webgl/lessons/fr/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/fr/webgl-text-texture.html">Text - Using a Texture</a></li>
+<li><a href="/webgl/lessons/fr/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/fr/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/fr/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Divers</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-setup-and-installation.html">Setup And Installation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-boilerplate.html">Boilerplate</a></li>
+<li><a href="/webgl/lessons/fr/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/fr/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
+<li><a href="/webgl/lessons/fr/webgl-animation.html">Animation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/fr/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/fr/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/fr/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-vs-3d-library.html">2D vs 3D libraries</a></li>
+<li><a href="/webgl/lessons/fr/webgl-anti-patterns.html">Anti-Patterns</a></li>
+<li><a href="/webgl/lessons/fr/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/fr/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Aide pour la doc de l'API</a></li>
+  <li><a href="http://twgljs.org">TWGL, une librairie de base pour WebGL</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Une question ? <a href="http://stackoverflow.com/questions/tagged/webgl">Demander sur stackoverflow</a>.</div>
+        <div>Un problème ? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">Signaler sur github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 2D - Les rotations';
+            var disqus_title = 'WebGL 2D - Les rotations';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

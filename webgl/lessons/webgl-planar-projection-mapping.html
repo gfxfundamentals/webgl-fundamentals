@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/webgl-planar-projection-mapping.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL Planar and Perspective Projection Mapping" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="Projecting a texture as a plane" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/webgl-planar-projection-mapping.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL Planar and Perspective Projection Mapping" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/webgl-planar-projection-mapping.html" />
+<meta name="twitter:description" content="Projecting a texture as a plane" />
+<meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+
+
+<title>WebGL Planar and Perspective Projection Mapping</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-planar-projection-mapping.html" selected>English</a>
+    <option value="/webgl/lessons/fr/webgl-planar-projection-mapping.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-planar-projection-mapping.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-planar-projection-mapping.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-planar-projection-mapping.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-planar-projection-mapping.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-planar-projection-mapping.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">Table of Contents</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL Planar and Perspective Projection Mapping</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>This article assumes you&#39;ve read the article on
+<a href="webgl-less-code-more-fun.html">less code more fun</a>
+as it uses the library mentioned there so as to
+unclutter the example. If you don&#39;t understand
+when a function named <code>webglUtils.setBuffersAndAttributes</code>
+what it means to set the buffers and attributes, or when
+a function named <code>webglUtils.setUniforms</code> what it means
+to set uniforms, etc... then you should probably to go further back and
+<a href="webgl-fundamentals.html">read the fundamentals</a>.</p>
+<p>It also assumes you&#39;ve read <a href="webgl-3d-perspective.html">the articles on perspective</a>,
+<a href="webgl-3d-camera.html">the article on cameras</a>, <a href="webgl-3d-textures.html">the article on textures</a>,
+and <a href="webgl-visualizing-the-camera.html">the article visualizing the camera</a> so if
+you haven&#39;t read those you should probably start there first.</p>
+<p>Projection mapping is the process of &quot;projecting&quot; an image in the same sense
+of pointing a movie projector at a screen and projecting a movie on it.
+A movie projector projects a perspective plane. As the screen gets further
+from the projector the image gets bigger. If you angle the screen so
+it&#39;s non-perpendicular to the movie projector the result would be
+a trapezoid or some arbitrary quadrilateral.</p>
+<div class="webgl_center"><img src="resources/perspective-projection.svg" style="width: 400px"></div>
+
+<p>Of course projection mapping doesn&#39;t have to be flat. There are things like 
+cylindrical projection mapping, spherical projection mapping, and more etc... </p>
+<p>Let&#39;s cover planar projection mapping first. In this case
+you&#39;d have to imagine the movie projector is as large as the screen
+so that instead of movie getting larger as the screen gets further
+from the movie projector it stays the same size.</p>
+<div class="webgl_center"><img src="resources/orthographic-projection.svg" style="width: 400px"></div>
+
+<p>First let&#39;s make a simple scene that draws a plane and a sphere.
+We&#39;ll texture both with a simple 8x8 checkerboard texture.</p>
+<p>The shaders are similar to the ones from <a href="webgl-3d-textures.html">the article on textures</a>
+except the various matrices are separated out so we don&#39;t need to multiply them together
+in JavaScript. </p>
+<pre class="prettyprint"><code class="lang-glsl">// vertex shader
+attribute vec4 a_position;
+attribute vec2 a_texcoord;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+
+varying vec2 v_texcoord;
+
+void main() {
+  gl_Position = u_projection * u_view * u_world * a_position;
+
+  // Pass the texture coord to the fragment shader.
+  v_texcoord = a_texcoord;
+}
+</code></pre>
+<p>Also I added a uniform <code>u_colorMult</code> to multiply the texture color
+by. By making a monochrome texture we can change its color this way.</p>
+<pre class="prettyprint"><code class="lang-glsl">// fragment shader
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec2 v_texcoord;
+
+uniform vec4 u_colorMult;
+uniform sampler2D u_texture;
+
+void main() {
+  gl_FragColor = texture2D(u_texture, v_texcoord) * u_colorMult;
+}
+</code></pre>
+<p>Here&#39;s the code to setup the program, sphere buffers, and plane buffers</p>
+<pre class="prettyprint"><code class="lang-js">// setup GLSL program
+// compiles shader, links program, look up locations
+const textureProgramInfo = webglUtils.createProgramInfo(gl, [&#39;3d-vertex-shader&#39;, &#39;3d-fragment-shader&#39;]);
+
+const sphereBufferInfo = primitives.createSphereBufferInfo(
+    gl,
+    1,  // radius
+    12, // subdivisions around
+    6,  // subdivisions down
+);
+const planeBufferInfo = primitives.createPlaneBufferInfo(
+    gl,
+    20,  // width
+    20,  // height
+    1,   // subdivisions across
+    1,   // subdivisions down
+);
+</code></pre>
+<p>and the code to make an 8x8 pixel checkerboard texture
+using techniques we covered in <a href="webgl-data-textures.html">the article on data textures</a>.</p>
+<pre class="prettyprint"><code class="lang-js">// make a 8x8 checkerboard texture
+const checkerboardTexture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, checkerboardTexture);
+gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,                // mip level
+    gl.LUMINANCE,     // internal format
+    8,                // width
+    8,                // height
+    0,                // border
+    gl.LUMINANCE,     // format
+    gl.UNSIGNED_BYTE, // type
+    new Uint8Array([  // data
+      0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC,
+      0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF,
+      0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC,
+      0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF,
+      0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC,
+      0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF,
+      0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC,
+      0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF,
+    ]));
+gl.generateMipmap(gl.TEXTURE_2D);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+</code></pre>
+<p>To draw we&#39;ll make a function that takes a projection matrix
+and a camera matrix, computes the view matrix from the camera
+matrix and then draws the sphere and the cube</p>
+<pre class="prettyprint"><code class="lang-js">// Uniforms for each object.
+const planeUniforms = {
+  u_colorMult: [0.5, 0.5, 1, 1],  // lightblue
+  u_texture: checkerboardTexture,
+  u_world: m4.translation(0, 0, 0),
+};
+const sphereUniforms = {
+  u_colorMult: [1, 0.5, 0.5, 1],  // pink
+  u_texture: checkerboardTexture,
+  u_world: m4.translation(2, 3, 4),
+};
+
+function drawScene(projectionMatrix, cameraMatrix) {
+  // Make a view matrix from the camera matrix.
+  const viewMatrix = m4.inverse(cameraMatrix);
+
+  gl.useProgram(textureProgramInfo.program);
+
+  // Set the uniform that both the sphere and the plane share
+  webglUtils.setUniforms(textureProgramInfo, {
+    u_view: viewMatrix,
+    u_projection: projectionMatrix,
+  });
+
+  // ------ Draw the sphere --------
+
+  // Setup all the needed attributes.
+  webglUtils.setBuffersAndAttributes(gl, textureProgramInfo, sphereBufferInfo);
+
+  // Set the uniforms unique to the sphere
+  webglUtils.setUniforms(textureProgramInfo, sphereUniforms);
+
+  // calls gl.drawArrays or gl.drawElements
+  webglUtils.drawBufferInfo(gl, sphereBufferInfo);
+
+  // ------ Draw the plane --------
+
+  // Setup all the needed attributes.
+  webglUtils.setBuffersAndAttributes(gl, textureProgramInfo, planeBufferInfo);
+
+  // Set the uniforms unique to the plane
+  webglUtils.setUniforms(textureProgramInfo, planeUniforms);
+
+  // calls gl.drawArrays or gl.drawElements
+  webglUtils.drawBufferInfo(gl, planeBufferInfo);
+}
+</code></pre>
+<p>We can use this code from a <code>render</code> function like this</p>
+<pre class="prettyprint"><code class="lang-js">const settings = {
+  cameraX: 2.75,
+  cameraY: 5,
+};
+const fieldOfViewRadians = degToRad(60);
+
+function render() {
+  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+  // Tell WebGL how to convert from clip space to pixels
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+  gl.enable(gl.CULL_FACE);
+  gl.enable(gl.DEPTH_TEST);
+
+  // Clear the canvas AND the depth buffer.
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  // Compute the projection matrix
+  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const projectionMatrix =
+      m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
+
+  // Compute the camera&#39;s matrix using look at.
+  const cameraPosition = [settings.cameraX, settings.cameraY, 7];
+  const target = [0, 0, 0];
+  const up = [0, 1, 0];
+  const cameraMatrix = m4.lookAt(cameraPosition, target, up);
+
+  drawScene(projectionMatrix, cameraMatrix);
+}
+render();
+</code></pre>
+<p>So now we have a simple scene with a plane and a sphere.
+I added a couple of sliders to let you change the camera position
+to help understand the scene.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-planar-projection-setup.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-planar-projection-setup.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>Now let&#39;s planar project a texture on to those the sphere
+and the plane.</p>
+<p>The first thing to do, let&#39;s <a href="webgl-3d-textures.html">load a texture</a>.</p>
+<pre class="prettyprint"><code class="lang-js">function loadImageTexture(url) {
+  // Create a texture.
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  // Fill the texture with a 1x1 blue pixel.
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+                new Uint8Array([0, 0, 255, 255]));
+  // Asynchronously load an image
+  const image = new Image();
+  image.src = url;
+  image.addEventListener(&#39;load&#39;, function() {
+    // Now that the image has loaded make copy it to the texture.
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+    // assumes this texture is a power of 2
+    gl.generateMipmap(gl.TEXTURE_2D);
+    render();
+  });
+  return texture;
+}
+
+const imageTexture = loadImageTexture(&#39;resources/f-texture.png&#39;);
+</code></pre>
+<p>Recall from <a href="webgl-visualizing-the-camera.html">the article on visualizing the camera</a>
+We created a -1 to +1 cube and drew it to represent the frustum of the camera.
+Our matrices made it so the space inside that frustum represents some frustum shaped
+area inside the world space that is being converted from that world space into
+-1 to +1 clip space. We can do a similar thing here.</p>
+<p>Let&#39;s try it. First in our fragment shader we&#39;ll draw the projected texture
+anywhere its texture coordinates are between 0.0 and 1.0.
+Outside that range we&#39;ll use the checkerboard texture</p>
+<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec2 v_texcoord;
++varying vec4 v_projectedTexcoord;
+
+uniform vec4 u_colorMult;
+uniform sampler2D u_texture;
++uniform sampler2D u_projectedTexture;
+
+void main() {
+-  gl_FragColor = texture2D(u_texture, v_texcoord) * u_colorMult;
++  // divide by w to get the correct value. See article on perspective
++  vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
++
++  bool inRange = 
++      projectedTexcoord.x &gt;= 0.0 &amp;&amp;
++      projectedTexcoord.x &lt;= 1.0 &amp;&amp;
++      projectedTexcoord.y &gt;= 0.0 &amp;&amp;
++      projectedTexcoord.y &lt;= 1.0;
++
++  vec4 projectedTexColor = texture2D(u_projectedTexture, projectedTexcoord.xy);
++  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
++
++  float projectedAmount = inRange ? 1.0 : 0.0;
++  gl_FragColor = mix(texColor, projectedTexColor, projectedAmount);
+}
+</code></pre>
+<p>To compute the projected texture coordinates we&#39;ll make a
+a matrix that represents a 3D space oriented and positioned
+in a certain direction just like the camera from <a href="webgl-visualizing-the-camera.html">the article on visualizing the camera</a>. 
+We&#39;ll then project the world positions
+of the sphere and plane vertices through that space. Where
+they are between 0 and 1 the code we just wrote will show the
+texture.</p>
+<p>Let&#39;s add code to the vertex shader to project the world positions of the
+sphere and plane through this <em>space</em></p>
+<pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
+attribute vec2 a_texcoord;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
++uniform mat4 u_textureMatrix;
+
+varying vec2 v_texcoord;
++varying vec4 v_projectedTexcoord;
+
+void main() {
++  vec4 worldPosition = u_world * a_position;
+
+-  gl_Position = u_projection * u_view * u_world * a_position;
++  gl_Position = u_projection * u_view * worldPosition;
+
+  // Pass the texture coord to the fragment shader.
+  v_texcoord = a_texcoord;
+
++  v_projectedTexcoord = u_textureMatrix * worldPosition;
+}
+</code></pre>
+<p>So now all that&#39;s left is to actually compute the matrix that
+defines this oriented space. All we have to do is compute a
+world matrix like we would for any other object, then take
+its inverse. This will give as a matrix that lets us orient
+the world positions of other objects relative to this space.
+This is exactly the same thing the view matrix does from
+<a href="webgl-3d-camera.html">the article on cameras</a>.</p>
+<p>We&#39;ll use our <code>lookAt</code> function we made in that <a href="webgl-3d-cameras.html">same article</a></p>
+<pre class="prettyprint"><code class="lang-js">const settings = {
+  cameraX: 2.75,
+  cameraY: 5,
++  posX: 3.5,
++  posY: 4.4,
++  posZ: 4.7,
++  targetX: 0.8,
++  targetY: 0,
++  targetZ: 4.7,
+};
+
+function drawScene(projectionMatrix, cameraMatrix) {
+  // Make a view matrix from the camera matrix.
+  const viewMatrix = m4.inverse(cameraMatrix);
+
+  let textureWorldMatrix = m4.lookAt(
+      [settings.posX, settings.posY, settings.posZ],          // position
+      [settings.targetX, settings.targetY, settings.targetZ], // target
+      [0, 1, 0],                                              // up
+  );
+
+  // use the inverse of this world matrix to make
+  // a matrix that will transform other positions
+  // to be relative this this world space.
+  const textureMatrix = m4.inverse(textureWorldMatrix);
+
+  // set uniforms that are the same for both the sphere and plane
+  webglUtils.setUniforms(textureProgramInfo, {
+    u_view: viewMatrix,
+    u_projection: projectionMatrix,
++    u_textureMatrix: textureMatrix,
++    u_projectedTexture: imageTexture,
+  });
+
+  ...
+}
+</code></pre>
+<p>Of course you don&#39;t have to use <code>lookAt</code>. You can make
+a world matrix anyway you choose, for example using
+a <a href="webgl-scene-graph.html">scene graph</a> or <a href="webgl-2d-matrix-stack.html">matrix stack</a>.</p>
+<p>Before we run it let&#39;s add some kind of scale</p>
+<pre class="prettyprint"><code class="lang-js">const settings = {
+  cameraX: 2.75,
+  cameraY: 5,
+  posX: 3.5,
+  posY: 4.4,
+  posZ: 4.7,
+  targetX: 0.8,
+  targetY: 0,
+  targetZ: 4.7,
++  projWidth: 2,
++  projHeight: 2,
+};
+
+function drawScene(projectionMatrix, cameraMatrix) {
+  // Make a view matrix from the camera matrix.
+  const viewMatrix = m4.inverse(cameraMatrix);
+
+  let textureWorldMatrix = m4.lookAt(
+      [settings.posX, settings.posY, settings.posZ],          // position
+      [settings.targetX, settings.targetY, settings.targetZ], // target
+      [0, 1, 0],                                              // up
+  );
++  textureWorldMatrix = m4.scale(
++      textureWorldMatrix,
++      settings.projWidth, settings.projHeight, 1,
++  );
+
+  // use the inverse of this world matrix to make
+  // a matrix that will transform other positions
+  // to be relative this this world space.
+  const textureMatrix = m4.inverse(textureWorldMatrix);
+
+  ...
+}
+</code></pre>
+<p>and with that we get a projected texture.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-planar-projection.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-planar-projection.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>I think it might be hard to see the space the texture is in.
+Let&#39;s add a wireframe cube to help visualize</p>
+<p>First we need a separate set of shaders. These shaders
+can just draw a solid color, no textures.</p>
+<pre class="prettyprint"><code class="lang-html">&lt;script id=&quot;color-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec4 a_position;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+
+void main() {
+  // Multiply the position by the matrices.
+  gl_Position = u_projection * u_view * u_world * a_position;
+}
+&lt;/script&gt;
+</code></pre>
+<pre class="prettyprint"><code class="lang-html">&lt;script id=&quot;color-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+precision mediump float;
+
+uniform vec4 u_color;
+void main() {
+  gl_FragColor = u_color;
+}
+&lt;/script&gt;
+</code></pre>
+<p>Then we need to compile and link these shaders as well</p>
+<pre class="prettyprint"><code class="lang-js">// setup GLSL programs
+const textureProgramInfo = webglUtils.createProgramInfo(gl, [&#39;3d-vertex-shader&#39;, &#39;3d-fragment-shader&#39;]);
++const colorProgramInfo = webglUtils.createProgramInfo(gl, [&#39;color-vertex-shader&#39;, &#39;color-fragment-shader&#39;]);
+</code></pre>
+<p>And we need some data to draw a cube made from lines</p>
+<pre class="prettyprint"><code class="lang-js">const sphereBufferInfo = primitives.createSphereBufferInfo(
+    gl,
+    1,  // radius
+    12, // subdivisions around
+    6,  // subdivisions down
+);
+const planeBufferInfo = primitives.createPlaneBufferInfo(
+    gl,
+    20,  // width
+    20,  // height
+    1,   // subdivisions across
+    1,   // subdivisions down
+);
++const cubeLinesBufferInfo = webglUtils.createBufferInfoFromArrays(gl, {
++  position: [
++     0,  0, -1,
++     1,  0, -1,
++     0,  1, -1,
++     1,  1, -1,
++     0,  0,  1,
++     1,  0,  1,
++     0,  1,  1,
++     1,  1,  1,
++  ],
++  indices: [
++    0, 1,
++    1, 3,
++    3, 2,
++    2, 0,
++
++    4, 5,
++    5, 7,
++    7, 6,
++    6, 4,
++
++    0, 4,
++    1, 5,
++    3, 7,
++    2, 6,
++  ],
++});
+</code></pre>
+<p>Notice this cube goes from 0 to 1 in X and Y to match the
+texture coords. In Z it goes from -1 to 1. This is so we
+can scale it to stretch it in both directions.</p>
+<p>Now to use it we can just use the <code>textureWorldMatrix</code>
+from before since all we want to do is draw the cube where
+that space exists.</p>
+<pre class="prettyprint"><code class="lang-js">function drawScene(projectionMatrix, cameraMatrix) {
+
+  ...
++  // ------ Draw the cube ------
++
++  gl.useProgram(colorProgramInfo.program);
++
++  // Setup all the needed attributes.
++  webglUtils.setBuffersAndAttributes(gl, colorProgramInfo, cubeLinesBufferInfo);
++
++  // scale the cube in Z so it&#39;s really long
++  // to represent the texture is being projected to
++  // infinity
++  const mat = m4.scale(textureWorldMatrix, 1, 1, 1000);
++
++  // Set the uniforms we just computed
++  webglUtils.setUniforms(colorProgramInfo, {
++    u_color: [0, 0, 0, 1],
++    u_view: viewMatrix,
++    u_projection: projectionMatrix,
++    u_world: mat,
++  });
++
++  // calls gl.drawArrays or gl.drawElements
++  webglUtils.drawBufferInfo(gl, cubeLinesBufferInfo, gl.LINES);
+}
+</code></pre>
+<p>And with that now we can see more easily see where the projection
+is.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-planar-projection-with-lines.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-planar-projection-with-lines.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>I think it&#39;s important to note that we&#39;re not really <em>projecting</em>
+the texture. Rather we&#39;re doing the opposite. For each pixel
+of an object being rendered we&#39;re seeing what part of the texture
+would be projected there and then looking up the color at that part
+of the texture.</p>
+<p>Since we mentioned movie projectors above how would would we simulate
+a movie projector? Basically we can just multiply in a projection matrix</p>
+<pre class="prettyprint"><code class="lang-js">const settings = {
+  cameraX: 2.75,
+  cameraY: 5,
+  posX: 2.5,
+  posY: 4.8,
+  posZ: 4.3,
+  targetX: 2.5,
+  targetY: 0,
+  targetZ: 3.5,
+  projWidth: 1,
+  projHeight: 1,
++  perspective: true,
++  fieldOfView: 45,
+};
+
+...
+
+function drawScene(projectionMatrix, cameraMatrix) {
+  // Make a view matrix from the camera matrix.
+  const viewMatrix = m4.inverse(cameraMatrix);
+
+  const textureWorldMatrix = m4.lookAt(
+      [settings.posX, settings.posY, settings.posZ],          // position
+      [settings.targetX, settings.targetY, settings.targetZ], // target
+      [0, 1, 0],                                              // up
+  );
+-  textureWorldMatrix = m4.scale(
+-      textureWorldMatrix,
+-      settings.projWidth, settings.projHeight, 1,
+-  );
+
++  const textureProjectionMatrix = settings.perspective
++      ? m4.perspective(
++          degToRad(settings.fieldOfView),
++          settings.projWidth / settings.projHeight,
++          0.1,  // near
++          200)  // far
++      : m4.orthographic(
++          -settings.projWidth / 2,   // left
++           settings.projWidth / 2,   // right
++          -settings.projHeight / 2,  // bottom
++           settings.projHeight / 2,  // top
++           0.1,                      // near
++           200);                     // far
+
+  // use the inverse of this world matrix to make
+  // a matrix that will transform other positions
+  // to be relative this this world space.
+-  const textureMatrix = m4.inverse(textureWorldMatrix);
++  const textureMatrix = m4.multiply(
++      textureProjectionMatrix,
++      m4.inverse(textureWorldMatrix));
+</code></pre>
+<p>Note there is both an option to use a perspective or and orthographic projection matrix.</p>
+<p>We also need to use that projection matrix matrix when
+drawing the lines</p>
+<pre class="prettyprint"><code class="lang-js">// ------ Draw the cube ------
+
+...
+
+-// scale the cube in Z so it&#39;s really long
+-// to represent the texture is being projected to
+-// infinity
+-const mat = m4.scale(textureWorldMatrix, 1, 1, 1000);
+
++// orient the cube to match the projection.
++const mat = m4.multiply(
++    textureWorldMatrix, m4.inverse(textureProjectionMatrix));
+</code></pre>
+<p>and with that we get</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-planar-projection-with-projection-matrix-0-to-1.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-planar-projection-with-projection-matrix-0-to-1.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>It kind of works but both our projection and our cube lines
+are using the 0 to 1 space so it&#39;s only using a 1/4th of the
+projection frustum.</p>
+<p>To fix first let&#39;s make our cube be -1 to +1 cube in all directions</p>
+<pre class="prettyprint"><code class="lang-js">const cubeLinesBufferInfo = webglUtils.createBufferInfoFromArrays(gl, {
+  position: [
+-     0,  0, -1,
+-     1,  0, -1,
+-     0,  1, -1,
+-     1,  1, -1,
+-     0,  0,  1,
+-     1,  0,  1,
+-     0,  1,  1,
+-     1,  1,  1,
++    -1, -1, -1,
++     1, -1, -1,
++    -1,  1, -1,
++     1,  1, -1,
++    -1, -1,  1,
++     1, -1,  1,
++    -1,  1,  1,
++     1,  1,  1,
+  ],
+  indices: [
+    0, 1,
+    1, 3,
+    3, 2,
+    2, 0,
+
+    4, 5,
+    5, 7,
+    7, 6,
+    6, 4,
+
+    0, 4,
+    1, 5,
+    3, 7,
+    2, 6,
+  ],
+});
+</code></pre>
+<p>Then we need make the space inside the frustum go from 0 to 1
+when used for our texture matrix which we can do by offsetting the space by 0.5
+and scaling it by 0.5</p>
+<pre class="prettyprint"><code class="lang-js">const textureWorldMatrix = m4.lookAt(
+    [settings.posX, settings.posY, settings.posZ],          // position
+    [settings.targetX, settings.targetY, settings.targetZ], // target
+    [0, 1, 0],                                              // up
+);
+const textureProjectionMatrix = settings.perspective
+    ? m4.perspective(
+        degToRad(settings.fieldOfView),
+        settings.projWidth / settings.projHeight,
+        0.1,  // near
+        200)  // far
+    : m4.orthographic(
+        -settings.projWidth / 2,   // left
+         settings.projWidth / 2,   // right
+        -settings.projHeight / 2,  // bottom
+         settings.projHeight / 2,  // top
+         0.1,                      // near
+         200);                     // far
+
+-// use the inverse of this world matrix to make
+-// a matrix that will transform other positions
+-// to be relative this this world space.
+-const textureMatrix = m4.multiply(
+-    textureProjectionMatrix,
+-    m4.inverse(textureWorldMatrix));
+
++let textureMatrix = m4.identity();
++textureMatrix = m4.translate(textureMatrix, 0.5, 0.5, 0.5);
++textureMatrix = m4.scale(textureMatrix, 0.5, 0.5, 0.5);
++textureMatrix = m4.multiply(textureMatrix, textureProjectionMatrix);
++// use the inverse of this world matrix to make
++// a matrix that will transform other positions
++// to be relative this this world space.
++textureMatrix = m4.multiply(
++    textureMatrix,
++    m4.inverse(textureWorldMatrix));
+</code></pre>
+<p>And now it seems to work</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-planar-projection-with-projection-matrix.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-planar-projection-with-projection-matrix.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>So what good is planar projecting a texture?</p>
+<p>One is just because you want to, haha. Most 3D modeling packages
+offer a way to do planar projection with a texture.</p>
+<p>Another is decals. Decals are the way you put paint splats or explosion marks on
+a surface. Decals generally do not work via shaders like above. Instead, you
+write some function that goes over the geometry of the models you want to apply
+the decal. For each triangle you check if it&#39;s inside the area the decal would
+apply, the same as in <code>inRange</code> check in the shader example in JavaScript. For
+each triangle that is in range you add it to some new geometry with the
+projected texture coordinates. You then add that decal to the list of things you
+need to draw.</p>
+<p>Generating geometry is right thing to do otherwise you&#39;d
+need different shaders for 2 decals, 3 decals, 4 decals, etc...
+and your shaders would quickly get too complicated and hit your GPUs
+shader texture limit.</p>
+<p>Yet another is simulating real world <a href="https://en.wikipedia.org/wiki/Projection_mapping">projection mapping</a>.
+You build a 3D model of the thing you&#39;re going to project video on and then
+do the projection using code like above except with video as your texture.
+You can then perfect and edit the video to match the model without
+having to be at the actual site with a real projector.</p>
+<p>One other thing this type of projection is useful for is
+<a href="webgl-shadows.html">computing shadows with shadow mapping</a>.</p>
+<div class="webgl_bottombar">
+<h3>Conditional Texture References</h3>
+<p>In the fragment shader above we get read both textures
+in all cases.</p>
+<pre class="prettyprint"><code>
+  vec4 projectedTexColor = texture2D(u_projectedTexture, projectedTexcoord.xy);
+  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
+
+  float projectedAmount = inRange ? 1.0 : 0.0;
+  gl_FragColor = mix(texColor, projectedTexColor, projectedAmount);
+</code></pre>
+<p> Why didn't we do something like this?</p>
+<pre class="prettyprint"><code>
+  if (inRange) {
+    gl_FragColor = texture2D(u_projectedTexture, projectedTexcoord.xy);
+  } else {
+    gl_FragColor = texture2D(u_texture, v_texcoord) * u_colorMult;
+  }
+</code></pre>
+<p>From the <a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL ES 1.0 spec Appendix A, Section 6</a></p>
+<blockquote>
+<h4>Texture Accesses</h4>
+<p>Accessing mip-mapped textures within the body of a non-uniform conditional block gives an undefined
+value. A non-uniform conditional block is a block whose execution cannot be determined at compile
+time.<p>
+</blockquote>
+<p>In other words, if we are going to use mip-mapped textures we must always access them. We can use the results
+conditionally. For example would could have written this:</p>
+<pre class="prettyprint"><code>
+  vec4 projectedTexColor = texture2D(u_projectedTexture, projectedTexcoord.xy);
+  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
+
+  if (inRange) {
+    gl_FragColor = projectedTexColor;
+  } else {
+    gl_FragColor = texColor;
+  }
+</code></pre>
+<p>or this</p>
+<pre class="prettyprint"><code>
+  vec4 projectedTexColor = texture2D(u_projectedTexture, projectedTexcoord.xy);
+  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
+
+  gl_FragColor = inRange ? projectedTexColor : texColor;
+</code></pre>
+<p>But we can't access the mip-mapped textures themselves conditionally. It might work on your GPU but it won't
+work on all GPUs. Note that it says nothing about non-mipmapped textures so if you know your textures aren't mipmapped you're fine.</p>
+<p>In any case it's important to know.</p>
+<p>As for why I used <code>mix</code> instead of
+just branching based on <code>inRange</code> that's just a personal preference. <code>mix</code>
+is more flexible so I usually write that.</p>
+</div>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-planar-projection-mapping.html" selected>English</a>
+    <option value="/webgl/lessons/fr/webgl-planar-projection-mapping.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-planar-projection-mapping.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-planar-projection-mapping.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-planar-projection-mapping.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-planar-projection-mapping.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-planar-projection-mapping.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Fundamentals</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-fundamentals.html">Fundamentals</a></li>
+<li><a href="/webgl/lessons/webgl-how-it-works.html">How It Works</a></li>
+<li><a href="/webgl/lessons/webgl-shaders-and-glsl.html">Shaders and GLSL</a></li>
+        </ul>
+  <li>Image Processing</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-image-processing.html">Image Processing</a></li>
+<li><a href="/webgl/lessons/webgl-image-processing-continued.html">Image Processing Continued</a></li>
+        </ul>
+  <li>2D translation, rotation, scale, matrix math</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-2d-translation.html">2D Translation</a></li>
+<li><a href="/webgl/lessons/webgl-2d-rotation.html">2D Rotation</a></li>
+<li><a href="/webgl/lessons/webgl-2d-scale.html">2D Scale</a></li>
+<li><a href="/webgl/lessons/webgl-2d-matrices.html">2D Matrices</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-orthographic.html">Orthographic 3D</a></li>
+<li><a href="/webgl/lessons/webgl-3d-perspective.html">3D Perspective</a></li>
+<li><a href="/webgl/lessons/webgl-3d-camera.html">3D Cameras</a></li>
+        </ul>
+  <li>Lighting</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">Directional Lighting</a></li>
+<li><a href="/webgl/lessons/webgl-3d-lighting-point.html">Point Lighting</a></li>
+<li><a href="/webgl/lessons/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+        </ul>
+  <li>Structure and Organization</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+<li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">Drawing Multiple Things</a></li>
+<li><a href="/webgl/lessons/webgl-scene-graph.html">Scene Graphs</a></li>
+        </ul>
+  <li>Geometry</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+        </ul>
+  <li>Textures</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-textures.html">Textures</a></li>
+<li><a href="/webgl/lessons/webgl-data-textures.html">Data Textures</a></li>
+<li><a href="/webgl/lessons/webgl-2-textures.html">Using 2 or More Textures</a></li>
+<li><a href="/webgl/lessons/webgl-cors-permission.html">Cross Origin Images</a></li>
+<li><a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Rendering To A Texture</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-render-to-texture.html">Render to Texture</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Techniques</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-2d-drawimage.html">2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/webgl-fog.html">Fog</a></li>
+        </ul>
+  <li>Text</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-text-html.html">Text - HTML</a></li>
+<li><a href="/webgl/lessons/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/webgl-text-texture.html">Text - Using a Texture</a></li>
+<li><a href="/webgl/lessons/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Misc</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-setup-and-installation.html">Setup And Installation</a></li>
+<li><a href="/webgl/lessons/webgl-boilerplate.html">Boilerplate</a></li>
+<li><a href="/webgl/lessons/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
+<li><a href="/webgl/lessons/webgl-animation.html">Animation</a></li>
+<li><a href="/webgl/lessons/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/webgl-2d-vs-3d-library.html">2D vs 3D libraries</a></li>
+<li><a href="/webgl/lessons/webgl-anti-patterns.html">Anti-Patterns</a></li>
+<li><a href="/webgl/lessons/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Helper API Docs</a></li>
+  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+        <div>Issue/Bug? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL Planar and Perspective Projection Mapping';
+            var disqus_title = 'WebGL Planar and Perspective Projection Mapping';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

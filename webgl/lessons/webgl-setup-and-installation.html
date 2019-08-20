@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/webgl-setup-and-installation.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL Setup and Installation" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="How to do WebGL development" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/webgl-setup-and-installation.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL Setup and Installation" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/webgl-setup-and-installation.html" />
+<meta name="twitter:description" content="How to do WebGL development" />
+<meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+
+
+<title>WebGL Setup and Installation</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-setup-and-installation.html" selected>English</a>
+    <option value="/webgl/lessons/fr/webgl-setup-and-installation.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-setup-and-installation.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-setup-and-installation.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-setup-and-installation.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-setup-and-installation.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-setup-and-installation.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-setup-and-installation.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">Table of Contents</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL Setup and Installation</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>Technically you don&#39;t need anything other than a web browser to do WebGL
+development. Go to <a href="https://jsfiddle.net/greggman/8djzyjL3/">jsfiddle.net</a> or <a href="http://jsbin.com">jsbin.com</a>
+or <a href="http://codepen.io/greggman/pen/YGQjVV">codepen.io</a> and just start applying the lessons here.</p>
+<p>On all of them you can reference external scripts by adding a <code>&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;</code>
+tag pair if you want to use external scripts.</p>
+<p>Still, there are limits. WebGL has stronger restrictions than Canvas2D for loading images
+which means you can&#39;t easily access images from around the web for your WebGL work.
+On top of that it&#39;s just faster to work with everything local.</p>
+<p>Let&#39;s assume you want to run and edit the samples on this site. The first thing you should
+do is download the site. <a href="https://github.com/gfxfundamentals/webgl-fundamentals/">You can download it here</a>.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/download-webglfundamentals.gif">
+</div>
+
+</p>
+<p>Unzip the files into some folder.</p>
+<h2 id="using-a-small-simple-easy-web-server">Using a small simple easy Web Server</h2>
+<p>Next up you should install a small web server. I know &quot;web server&quot; sounds scary but the truth is <a href="http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/">web
+servers are actually extremely simple</a>.</p>
+<p>Here&#39;s a very simple one with an interface called <a href="https://greggman.github.io/servez">Servez</a>.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/servez.gif">
+</div>
+
+</p>
+<p>Just point it at the folder where you unzipped the files, click &quot;Start&quot;, then go to
+in your browser <a href="http://localhost:8080/webgl/"><code>http://localhost:8080/webgl/</code></a> and choose
+a sample.</p>
+<p>If you prefer the command line, another way is to use <a href="https://nodejs.org">node.js</a>.
+Download it, install it, then open a command prompt / console / terminal window. If you&#39;re on Windows the installer
+will add a special &quot;Node Command Prompt&quot; so use that.</p>
+<p>Then install the <a href="https://github.com/indexzero/http-server"><code>http-server</code></a> by typing</p>
+<pre class="prettyprint"><code>npm -g install http-server
+</code></pre><p>If you&#39;re on OSX use</p>
+<pre class="prettyprint"><code>sudo npm -g install http-server
+</code></pre><p>Once you&#39;ve done that type</p>
+<pre class="prettyprint"><code>http-server path/to/folder/where/you/unzipped/files
+</code></pre><p>It should print something like</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/http-server-response.png">
+</div>
+
+</p>
+<p>Then in your browser go to <a href="http://localhost:8080/webgl/"><code>http://localhost:8080/webgl/</code></a>.</p>
+<p>If you don&#39;t specify a path then http-server will serve the current folder.</p>
+<h2 id="using-your-browsers-developer-tools">Using your Browsers Developer Tools</h2>
+<p>Most browser have extensive developer tools built in.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/chrome-devtools.png">
+</div>
+
+</p>
+<p><a href="https://developers.google.com/web/tools/chrome-devtools/">Docs for Chrome&#39;s are here</a>,
+<a href="https://developer.mozilla.org/en-US/docs/Tools">Firefox&#39;s are here</a>.</p>
+<p>Learn how to use them. If nothing else always check the JavaScript console. If there is an issue it will often have
+an error message. Read the error message closely and you should get a clue where the issue is.</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/javascript-console.gif">
+</div>
+
+</p>
+<h2 id="webgl-helpers">WebGL Helpers</h2>
+<p>There are various WebGL Inspectors / Helpers. <a href="https://benvanik.github.io/WebGL-Inspector/">Here&#39;s one for Chrome</a>.</p>
+<p><div class="webgl_image ">
+  <img class="" src="https://benvanik.github.io/WebGL-Inspector/images/screenshots/1-Trace.gif">
+</div>
+
+</p>
+<p><a href="https://hacks.mozilla.org/2014/03/introducing-the-canvas-debugger-in-firefox-developer-tools/">Firefox also has a similar one</a>.
+It needs to be enabled in <code>about:flags</code> and might require the <a href="https://www.mozilla.org/en-US/firefox/developer/">Firefox Developer Edition</a>.</p>
+<p>They may or may not be helpful. Most of them are designed for animated samples and will capture a frame
+and let you see all the WebGL calls that made that frame. That&#39;s great if you already have something
+working or if you had something working and it broke. But it&#39;s not so great if your issue is during
+initialization which they don&#39;t catch or if you&#39;re not using animation, as in drawing something every frame.
+Still they can be very useful. I&#39;ll often click on a draw call, and check the uniforms. If I see a
+bunch of <code>NaN</code> (NaN = Not a Number) then I can usually track down the code that set that uniform and
+find the bug.</p>
+<h2 id="inspect-the-code">Inspect the Code</h2>
+<p>Also always remember you can inspect the code. You can usually just pick view source</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/view-source.gif">
+</div>
+
+</p>
+<p>Even if you can&#39;t right click a page or if the source is in a separate file
+you can always view the source in the devtools</p>
+<p><div class="webgl_image ">
+  <img class="" src="/webgl/lessons/resources/devtools-source.gif">
+</div>
+
+</p>
+<h2 id="get-started">Get Started</h2>
+<p>Hopefully that helps you get started. <a href="index.html">Now back to the lessons</a>.</p>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-setup-and-installation.html" selected>English</a>
+    <option value="/webgl/lessons/fr/webgl-setup-and-installation.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-setup-and-installation.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-setup-and-installation.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-setup-and-installation.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-setup-and-installation.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-setup-and-installation.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-setup-and-installation.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Fundamentals</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-fundamentals.html">Fundamentals</a></li>
+<li><a href="/webgl/lessons/webgl-how-it-works.html">How It Works</a></li>
+<li><a href="/webgl/lessons/webgl-shaders-and-glsl.html">Shaders and GLSL</a></li>
+        </ul>
+  <li>Image Processing</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-image-processing.html">Image Processing</a></li>
+<li><a href="/webgl/lessons/webgl-image-processing-continued.html">Image Processing Continued</a></li>
+        </ul>
+  <li>2D translation, rotation, scale, matrix math</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-2d-translation.html">2D Translation</a></li>
+<li><a href="/webgl/lessons/webgl-2d-rotation.html">2D Rotation</a></li>
+<li><a href="/webgl/lessons/webgl-2d-scale.html">2D Scale</a></li>
+<li><a href="/webgl/lessons/webgl-2d-matrices.html">2D Matrices</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-orthographic.html">Orthographic 3D</a></li>
+<li><a href="/webgl/lessons/webgl-3d-perspective.html">3D Perspective</a></li>
+<li><a href="/webgl/lessons/webgl-3d-camera.html">3D Cameras</a></li>
+        </ul>
+  <li>Lighting</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">Directional Lighting</a></li>
+<li><a href="/webgl/lessons/webgl-3d-lighting-point.html">Point Lighting</a></li>
+<li><a href="/webgl/lessons/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+        </ul>
+  <li>Structure and Organization</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+<li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">Drawing Multiple Things</a></li>
+<li><a href="/webgl/lessons/webgl-scene-graph.html">Scene Graphs</a></li>
+        </ul>
+  <li>Geometry</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+        </ul>
+  <li>Textures</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-textures.html">Textures</a></li>
+<li><a href="/webgl/lessons/webgl-data-textures.html">Data Textures</a></li>
+<li><a href="/webgl/lessons/webgl-2-textures.html">Using 2 or More Textures</a></li>
+<li><a href="/webgl/lessons/webgl-cors-permission.html">Cross Origin Images</a></li>
+<li><a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Rendering To A Texture</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-render-to-texture.html">Render to Texture</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Techniques</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-2d-drawimage.html">2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/webgl-fog.html">Fog</a></li>
+        </ul>
+  <li>Text</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-text-html.html">Text - HTML</a></li>
+<li><a href="/webgl/lessons/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/webgl-text-texture.html">Text - Using a Texture</a></li>
+<li><a href="/webgl/lessons/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Misc</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-setup-and-installation.html">Setup And Installation</a></li>
+<li><a href="/webgl/lessons/webgl-boilerplate.html">Boilerplate</a></li>
+<li><a href="/webgl/lessons/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
+<li><a href="/webgl/lessons/webgl-animation.html">Animation</a></li>
+<li><a href="/webgl/lessons/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/webgl-2d-vs-3d-library.html">2D vs 3D libraries</a></li>
+<li><a href="/webgl/lessons/webgl-anti-patterns.html">Anti-Patterns</a></li>
+<li><a href="/webgl/lessons/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Helper API Docs</a></li>
+  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+        <div>Issue/Bug? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL Setup and Installation';
+            var disqus_title = 'WebGL Setup and Installation';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

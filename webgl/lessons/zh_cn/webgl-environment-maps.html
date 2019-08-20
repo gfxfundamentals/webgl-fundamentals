@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-environment-maps.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL 环境贴图 (反射)" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="如何实现环境贴图。" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-environment-maps.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL 环境贴图 (反射)" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-environment-maps.html" />
+<meta name="twitter:description" content="如何实现环境贴图。" />
+<meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+
+
+<title>WebGL 环境贴图 (反射)</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-environment-maps.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-environment-maps.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-environment-maps.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-environment-maps.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-environment-maps.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-environment-maps.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-environment-maps.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-environment-maps.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 环境贴图 (反射)</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>这篇文章是WebGL系列文章的一部分从<a href="webgl-fundamentals.html">基础概念</a>开始。上接<a href="webgl-cube-maps.html">立方体纹理</a>。这篇文章也用到了<a href="webgl-3d-lighting-directional.html">WebGL 三维方向光源</a>中介绍的概念。如果你尚未阅读这些文章，则可能需要先阅读这些文章。</p>
+<p><em>环境贴图</em>表示你所绘制物体的环境。如果你正在绘制室外场景它将表示室外环境。如果你正在绘制舞台上的人它将表示会场。如果你正在绘制外太空那它会是星星。 如果我们有能够展现从空间中一点看向6个方向的6张图片，我们可以用这6张图片实现环境贴图。</p>
+<p>这是来自加州山景城计算机历史博物馆的环境贴图。</p>
+<div class="webgl_center">
+  <img src="../../resources/images/computer-history-museum/pos-x.jpg" style="width: 128px" class="border">
+  <img src="../../resources/images/computer-history-museum/neg-x.jpg" style="width: 128px" class="border">
+  <img src="../../resources/images/computer-history-museum/pos-y.jpg" style="width: 128px" class="border">
+</div>
+<div class="webgl_center">
+  <img src="../../resources/images/computer-history-museum/neg-y.jpg" style="width: 128px" class="border">
+  <img src="../../resources/images/computer-history-museum/pos-z.jpg" style="width: 128px" class="border">
+  <img src="../../resources/images/computer-history-museum/neg-z.jpg" style="width: 128px" class="border">
+</div>
+
+<p>以<a href="webgl-cube-maps.html">立方体纹理</a>中的代码为基础，我们使用6张图片代替我们生成的</p>
+<pre class="prettyprint"><code class="lang-js">// 创建纹理。
+var texture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+
+const faceInfos = [
+  {
+    target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, 
+    url: &#39;resources/images/computer-history-museum/pos-x.jpg&#39;,
+  },
+  {
+    target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 
+    url: &#39;resources/images/computer-history-museum/neg-x.jpg&#39;,
+  },
+  {
+    target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 
+    url: &#39;resources/images/computer-history-museum/pos-y.jpg&#39;,
+  },
+  {
+    target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 
+    url: &#39;resources/images/computer-history-museum/neg-y.jpg&#39;,
+  },
+  {
+    target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 
+    url: &#39;resources/images/computer-history-museum/pos-z.jpg&#39;,
+  },
+  {
+    target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 
+    url: &#39;resources/images/computer-history-museum/neg-z.jpg&#39;,
+  },
+];
+faceInfos.forEach((faceInfo) =&gt; {
+  const {target, url} = faceInfo;
+
+  // 上传画布到立方体贴图的每个面
+  const level = 0;
+  const internalFormat = gl.RGBA;
+  const width = 512;
+  const height = 512;
+  const format = gl.RGBA;
+  const type = gl.UNSIGNED_BYTE;
+
+  // 设置每个面，使其立即可渲染
+  gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
+
+  // 异步加载图片
+  const image = new Image();
+  image.src = url;
+  image.addEventListener(&#39;load&#39;, function() {
+    // 图片加载完成将其拷贝到纹理
+    gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+    gl.texImage2D(target, level, internalFormat, format, type, image);
+    gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+  });
+});
+gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+</code></pre>
+<p>注意我们通过传<code>null</code>给<code>texImage2D</code>来给每个面填充512x512的空图片。立方体贴图必须有6个面，6个面必须是同样大小的正方形。如果不是纹理不会渲染。但是，我们加载6张图片。我们希望可以立即渲染，所以我们分配6个面然后开始加载图片。当每个图片加载完成再上传到相应的面再生成mipmap。这意味着我们可以立即开始渲染，在图片加载过程中立方体贴图的面可以依次被填充，6个面都没加载完成时也能被渲染。</p>
+<p>但是，仅仅加载图片是不够的。与<a href="webgl-3d-lighting-point.html">光照</a>一样，这里我们需要一点数学。</p>
+<p>这里我们需要知道对于每个片元给定一个从视点／相机位置到物体表面的向量，它将反射到哪个方向。我们可以使用该方向从立方体贴图中获取颜色值。</p>
+<p>反射的公式是</p>
+<pre class="prettyprint"><code>reflectionDir = eyeToSurfaceDir – 
+    2 ∗ dot(surfaceNormal, eyeToSurfaceDir) ∗ surfaceNormal
+</code></pre><p>眼见为实。回忆关于[光照]的文章，点乘返回两个向量夹角的余弦值。向量相加得到一个新的向量，所以让我们来看一个视线垂直于平面的例子。</p>
+<div class="webgl_center"><img src="../resources/reflect-180-01.svg" style="width: 400px"></div>
+
+<p>让我们可视化上边的公式。首先回想一下两个方向完全相反的向量点乘结果为-1，用图来表示</p>
+<div class="webgl_center"><img src="../resources/reflect-180-02.svg" style="width: 400px"></div>
+
+<p>代入点乘结果和 <span style="color:black; font-weight:bold;">视点到平面的向量eyeToSurfaceDir</span> 和 <span style="color:green;">平面法向量surfaceNormal</span> 到反射公式得出结果</p>
+<div class="webgl_center"><img src="../resources/reflect-180-03.svg" style="width: 400px"></div>
+
+<p>-2乘以-1得到正2。</p>
+<div class="webgl_center"><img src="../resources/reflect-180-04.svg" style="width: 400px"></div>
+
+<p>相加向量得到<span style="color: red">反射向量reflectionDir</span></p>
+<div class="webgl_center"><img src="../resources/reflect-180-05.svg" style="width: 400px"></div>
+
+<p>我们可以看到给出的两个法向量, 一个完全抵消了视点发出的向量，另一个完全反射回了眼睛，正是在原图中我们期望得到的。</p>
+<div class="webgl_center"><img src="../resources/reflect-180-06.svg" style="width: 400px"></div>
+
+<p>让我们向右旋转平面45度。</p>
+<div class="webgl_center"><img src="../resources/reflect-45-01.svg" style="width: 400px"></div>
+
+<p>两个夹角为135度的向量点乘结果为-0.707</p>
+<div class="webgl_center"><img src="../resources/reflect-45-02.svg" style="width: 400px"></div>
+
+<p>在公式中带入得到</p>
+<div class="webgl_center"><img src="../resources/reflect-45-03.svg" style="width: 400px"></div>
+
+<p>同理负负得正，但是<span style="color: green">向量</span>现在缩短了30%。</p>
+<div class="webgl_center"><img src="../resources/reflect-45-04.svg" style="width: 400px"></div>
+
+<p>向量相加得到了<span style="color: red">反射向量</span></p>
+<div class="webgl_center"><img src="../resources/reflect-45-05.svg" style="width: 400px"></div>
+
+<p>我们放回原始图来看是正确的。</p>
+<div class="webgl_center"><img src="../resources/reflect-45-06.svg" style="width: 400px"></div>
+
+<p>我们用<span style="color: red">反射方向</span>选取立方体贴图的颜色来给物体表面着色。</p>
+<p>这是一个你能改变旋转方向并能看到等式各个部分的图。你也可以看到反射向量指向立方体贴图的不同面从而影响物体表面的着色。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 400px;" src="/webgl/lessons/resources/environment-mapping.html"></iframe>
+</div>
+
+</p>
+<p>既然我们了解了反射是如何工作的，我们可以使用它从立方体纹理中选取颜色值，我们改变着色器来实现它.</p>
+<p>首先在顶点着色器中我们会计算世界坐标系中的顶点位置和顶点法线，然后用varing传递它们给片断着色器。这和<a href="webgl-3d-lighting-spot.html">三维聚光灯</a>文章中我们所做的相似。</p>
+<pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
+attribute vec3 a_normal;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+
+varying vec3 v_worldPosition;
+varying vec3 v_worldNormal;
+
+void main() {
+  // 将位置与矩阵相乘。
+  gl_Position = u_projection * u_view * u_world * a_position;
+
+  // 传递世界位置给片断着色器
+  v_worldPosition = (u_world * a_position).xyz;
+
+  // 转换法线并传递给片断着色器
+  v_worldNormal = mat3(u_world) * a_normal;
+}
+</code></pre>
+<p>接下来在片断着色器中我们单位化worldNormal，因为顶点之间的法线会被插值。我们传递了世界坐标系中的相机位置接着用世界坐标系中的表面位置减去它我们得到了eyeToSurfaceDir。</p>
+<p>最终我们用GLSL的内置函数<code>reflect</code>，它实现了我们之前介绍的公式。我们使用这个结果从立方体纹理中获得一个颜色值。</p>
+<pre class="prettyprint"><code class="lang-glsl">precision highp float;
+
+// 从顶点着色器传入的。
+varying vec3 v_worldPosition;
+varying vec3 v_worldNormal;
+
+// 纹理。
+uniform samplerCube u_texture;
+
+// 相机位置。
+uniform vec3 u_worldCameraPosition;
+
+void main() {
+  vec3 worldNormal = normalize(v_worldNormal);
+  vec3 eyeToSurfaceDir = normalize(v_worldPosition - u_worldCameraPosition);
+  vec3 direction = reflect(eyeToSurfaceDir,worldNormal);
+
+  gl_FragColor = textureCube(u_texture, direction);
+}
+</code></pre>
+<p>在这个例子中我们也需要真实法线。我们用真实法线所以立方体的面看起来是平的。在之前的例子中我们重新定位了立方体的位置为了看到立方体贴图如何工作。但是在这个例子中我们需要真实的法线就像<a href="webgl-3d-lighting-directional.html">光照文章</a>中的一样。</p>
+<p>初始化阶段</p>
+<pre class="prettyprint"><code class="lang-js">// 创建缓冲来存法线
+var normalBuffer = gl.createBuffer();
+// 绑定它到ARRAY_BUFFER (可视为ARRAY_BUFFER = normalBuffer)
+gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+// 将法线数据赋给缓冲
+setNormals(gl);
+</code></pre>
+<p>渲染阶段</p>
+<pre class="prettyprint"><code class="lang-js">// 绑定normalbuffer
+gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+
+// 告诉属性怎么从normalBuffer (ARRAY_BUFFER)中取出数据
+var size = 3;          // 每次迭代运行提取三个单位数据
+var type = gl.FLOAT;   // 数据类型是32位浮点型
+var normalize = false; // 不归一化数据
+var stride = 0;        // 0 = 移动单位数量 * 每个单位占用内存sizeof(type)
+var offset = 0;        // 从缓冲起始位置开始读取
+gl.vertexAttribPointer(
+    normalLocation, size, type, normalize, stride, offset)
+</code></pre>
+<p>当然我们需要在初始化阶段找到全局变量的位置</p>
+<pre class="prettyprint"><code>var projectionLocation = gl.getUniformLocation(program, &quot;u_projection&quot;);
+var viewLocation = gl.getUniformLocation(program, &quot;u_view&quot;);
+var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
+var textureLocation = gl.getUniformLocation(program, &quot;u_texture&quot;);
+var worldCameraPositionLocation = gl.getUniformLocation(program, &quot;u_worldCameraPosition&quot;);
+</code></pre><p>在渲染阶段给它们赋值</p>
+<pre class="prettyprint"><code>// 计算投影矩阵
+var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+var projectionMatrix =
+    m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
+gl.uniformMatrix4fv(projectionLocation, false, projectionMatrix);
+
+var cameraPosition = [0, 0, 2];
+var target = [0, 0, 0];
+var up = [0, 1, 0];
+// 用lookAt函数计算相机的世界矩阵
+var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+
+// 通过相机的世界矩阵计算视图矩阵
+var viewMatrix = m4.inverse(cameraMatrix);
+
+var worldMatrix = m4.xRotation(modelXRotationRadians);
+worldMatrix = m4.yRotate(worldMatrix, modelYRotationRadians);
+
+// 设置全局变量
+gl.uniformMatrix4fv(projectionLocation, false, projectionMatrix);
+gl.uniformMatrix4fv(viewLocation, false, viewMatrix);
+gl.uniformMatrix4fv(worldLocation, false, worldMatrix);
+gl.uniform3fv(worldCameraPositionLocation, cameraPosition);
+
+// 告诉着色器对于u_texture使用纹理单元0
+gl.uniform1i(textureLocation, 0);
+</code></pre><p>基本反射</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-environment-map.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-environment-map.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>接下来让我们看怎样用立方体贴图实现<a href="webgl-skybox.html">天空盒</a>.</p>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-environment-maps.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-environment-maps.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-environment-maps.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-environment-maps.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-environment-maps.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-environment-maps.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-environment-maps.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-environment-maps.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="http://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 环境贴图 (反射)';
+            var disqus_title = 'WebGL 环境贴图 (反射)';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

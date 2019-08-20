@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-3d-camera.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL 三维相机" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="WebGL中相机的使用方式" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-camera.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL 三维相机" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-camera.html" />
+<meta name="twitter:description" content="WebGL中相机的使用方式" />
+<meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+
+
+<title>WebGL 三维相机</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-3d-camera.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-camera.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-camera.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-camera.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-camera.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-camera.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-camera.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-camera.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 三维相机</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>此文上接WebGL系列文章，从<a href="webgl-fundamentals.html">基础概念</a>开始，
+上一篇是<a href="webgl-3d-perspective.html">三维透视投影</a>，如果没读过请从那里开始。</p>
+<p>在上篇文章中我们将 F 移动到了视锥中，原因是 <code>m4.perspective</code>
+默认将相机放在了原点(0, 0, 0)并且视锥的范围是 <code>-zNear</code> 到 <code>-zFar</code>。</p>
+<p>将物体移动到视场中可能并不是正确的方法，在实际生活中通常是移动相机去拍摄建筑物。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
+  <div class="webgl_center">将相机移动到物体前</div>
+</div>
+
+</p>
+<p>将物体移动到相机前面并不是常见做法。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=1"></iframe>
+  <div class="webgl_center">将物体移动到相机前</div>
+</div>
+
+</p>
+<p>但在上节中由于投影的原因物体需要在 -Z 轴上，我们通过将相机移动到原点，
+物体移动到相机前来保持原始的<strong>相对位置</strong>。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=2"></iframe>
+  <div class="webgl_center">将物体移动到相机前</div>
+</div>
+
+</p>
+<p>高效的将物体移动到相机前是非常重要的。最简单的方式是使用一个“逆向”矩阵，
+计算逆矩阵的数学原理比较复杂但概念很简单，逆就是你想通过一个值去抵消一个值。
+例如，123 的逆就是 -123 ，一个缩放为 5 的缩放矩阵的逆是缩放为 1/5 或 0.2
+的缩放矩阵，一个绕 X 轴旋转 30&deg; 的旋转矩阵的逆是绕 X 旋转 -30&deg;。</p>
+<p>目前为止我们使用过平移，旋转和缩放去控制 &#39;F&#39; 的位置和姿态，
+将这些矩阵相乘后得到一个矩阵，可以将物体从原始位置移动到期望的位置，大小和姿态。
+我们可以对相机进行同样的操作，一旦有了相机从原点移动旋转到目标位置的矩阵后，
+就可以计算出它的逆矩阵，利用这个逆矩阵可以不动相机，将物体从相反的方向移动到相机前。</p>
+<p>让我们来做一个三维场景，像上图一样有一圈 &#39;F&#39; 。</p>
+<p>首先，由于5个物体使用的是同一个投影矩阵，所以我们将投影矩阵的计算放在循环外</p>
+<pre class="prettyprint"><code>
+// 计算投影矩阵
+var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+var zNear = 1;
+var zFar = 2000;
+var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
+</code></pre><p>接着计算相机矩阵，这个矩阵代表的是相机在世界坐标中的位置和姿态。
+下方的代码计算的是看向原点，在半径为 radius * 1.5 的圆上移动的相机。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=3"></iframe>
+  <div class="webgl_center">相机运动</div>
+</div>
+
+</p>
+<pre class="prettyprint"><code>var numFs = 5;
+var radius = 200;
+
+// 计算相机的矩阵
+var cameraMatrix = m4.yRotation(cameraAngleRadians);
+cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
+</code></pre><p>然后通过相机矩阵计算“视图矩阵”，视图矩阵是将所有物体以相反于相机的方向运动，
+尽管相机还是在原点但是相对关系是期望的。我们可以使用 <code>inverse</code> 方法计算逆矩阵（
+完全对立的转换矩阵），在这个例子中提供的是绕原点转动的矩阵，
+它的逆矩阵是移动相机以外的所有物体，好像相机在原点一样。</p>
+<pre class="prettyprint"><code>// 通过相机矩阵计算视图矩阵
+var viewMatrix = m4.inverse(cameraMatrix);
+</code></pre><p>现在将视图矩阵和投影矩阵结合在一起</p>
+<pre class="prettyprint"><code>// 计算组合矩阵
+var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+</code></pre><p>最后绘制一圈 F，将每个 F 乘以视图投影矩阵，然后旋转和向外平移 radius 个单位。</p>
+<pre class="prettyprint"><code>for (var ii = 0; ii &lt; numFs; ++ii) {
+  var angle = ii * Math.PI * 2 / numFs;
+  var x = Math.cos(angle) * radius;
+  var y = Math.sin(angle) * radius
+
+  // 从视图投影矩阵开始
+  // 计算 F 的矩阵
+  var matrix = m4.translate(viewProjectionMatrix, x, 0, y);
+
+  // 设置矩阵
+  gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+  // 获得几何体
+  var primitiveType = gl.TRIANGLES;
+  var offset = 0;
+  var count = 16 * 6;
+  gl.drawArrays(primitiveType, offset, count);
+}
+</code></pre><p>看！一个绕 F 旋转的相机。拖动 <code>cameraAngle</code> 滑块移动相机。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>这样做没什么问题，但是有时利用旋转和平移去移动相机，
+让它到达期望的位置并看向期望的方向并不容易。
+例如你想让它总是看向一个特定的 F , 而相机又在绕一圈 F 旋转，
+这时计算会变的相当复杂。</p>
+<p>幸好这有一个简单的方法，我们可以同时定义相机位置和朝向，然后矩阵就可以将相机放在那，
+基于矩阵这个工作就会变得非常简单。</p>
+<p>首先我们需要知道相机的期望位置，将它叫做 <code>cameraPosition</code>，
+然后需要知道看向或对准的目标位置，将它叫做 <code>target</code>。
+如果将 <code>target</code> 减去 <code>cameraPosition</code> 就会得到相机的朝向，
+将它叫做 <code>zAxis</code>。由于我们知道相机看向的是 -Z 方向，
+所以可以用另一种方式相减  <code>cameraPosition - target</code>，
+将结果单位化后直接赋给矩阵的 <code>z</code> 区域。</p>
+<div class="webgl_math_center"><pre class="webgl_math">
++----+----+----+----+
+|    |    |    |    |
++----+----+----+----+
+|    |    |    |    |
++----+----+----+----+
+| Zx | Zy | Zz |    |
++----+----+----+----+
+|    |    |    |    |
++----+----+----+----+
+</pre></div>
+
+<p>矩阵的这个区域代表的是 Z 轴。在这个例子中相机的 Z-axis 进行了单位化，
+单位化也就是一个做一个类似 1.0 的矢量，如果你回到<a href="webgl-2d-rotation.html">二维旋转的文章</a>，
+那里讲到的单位圆在二维旋转中用法，在三维中需要一个单位球，单位向量表示单位球上的点。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=0"></iframe>
+  <div class="webgl_center"><span style='color:blue;'>z 轴</span></div>
+</div>
+
+</p>
+<p>这些信息还不够，只给了一个单位圆上点，如何来确定物体的姿态呢？
+这就需要填充矩阵的其他区域，尤其是 X 轴和 Y 轴。通常情况下我们知道它们互相垂直，
+如果再知道哪里是上方，在该例中是(0,1,0)，就可以使用“叉乘”去计算矩阵的 X 轴和 Y 轴。</p>
+<p>我不知道叉乘的数学意义是什么，但我知道将两个单位向量叉乘后可以得到一个和它们都垂直的向量。
+换句话说，如果你有一个向量指向东南方，一个向量指向上方，
+叉乘后会得到一个指向西南方或东北方的矢量，因为这两个矢量都和东南方和上方垂直。
+相乘的顺序不同的到结果相反。</p>
+<p>在任何情况下我们可以通过叉乘<span style="color: blue;"><code>zAxis</code></span>
+和<span style="color: gray;"><code>up</code></span> 得到相机的<span style="color:red;">xAxis</span>。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
+  <div class="webgl_center"><span style='color:gray;'>up</span> 叉乘 <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span></div>
+</div>
+
+</p>
+<p>现在我们有了 <span style="color:red;"><code>xAxis</code></span> ，
+可以叉乘 <span style="color:blue;"><code>zAxis</code></span> 和 <span style="color:red;"><code>xAxis</code></span>
+的到相机的 <span style="color:green;"><code>yAxis</code></span>。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
+  <div class="webgl_center"><span style='color:blue;'>zAxis</span> 叉乘 <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span></div>
+</div>
+
+</p>
+<p>现在将三个轴插入矩阵中，会给我们提供一个从 <code>cameraPosition</code> 指向 <code>target</code>
+的转换，只需要再加上 <code>position</code></p>
+<div class="webgl_math_center"><pre class="webgl_math">
++----+----+----+----+
+| <span style="color:red">Xx</span> | <span style="color:red">Xy</span> | <span style="color:red">Xz</span> |  0 |  <- <span style="color:red">x axis</span>
++----+----+----+----+
+| <span style="color:green">Yx</span> | <span style="color:green">Yy</span> | <span style="color:green">Yz</span> |  0 |  <- <span style="color:green">y axis</span>
++----+----+----+----+
+| <span style="color:blue">Zx</span> | <span style="color:blue">Zy</span> | <span style="color:blue">Zz</span> |  0 |  <- <span style="color:blue">z axis</span>
++----+----+----+----+
+| Tx | Ty | Tz |  1 |  <- 相机位置
++----+----+----+----+
+</pre></div>
+
+<p>这是计算叉乘的代码</p>
+<pre class="prettyprint"><code>function cross(a, b) {
+  return [a[1] * b[2] - a[2] * b[1],
+          a[2] * b[0] - a[0] * b[2],
+          a[0] * b[1] - a[1] * b[0]];
+}
+</code></pre><p>这是向量相减的代码</p>
+<pre class="prettyprint"><code>function subtractVectors(a, b) {
+  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+}
+</code></pre><p>这是单位化向量的代码</p>
+<pre class="prettyprint"><code>function normalize(v) {
+  var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  // 确定不会除以 0
+  if (length &gt; 0.00001) {
+    return [v[0] / length, v[1] / length, v[2] / length];
+  } else {
+    return [0, 0, 0];
+  }
+}
+</code></pre><p>这是计算“朝向”矩阵的代码</p>
+<pre class="prettyprint"><code>var m4 = {
+  lookAt: function(cameraPosition, target, up) {
+    var zAxis = normalize(
+        subtractVectors(cameraPosition, target));
+    var xAxis = normalize(cross(up, zAxis));
+    var yAxis = normalize(cross(zAxis, xAxis));
+
+    return [
+       xAxis[0], xAxis[1], xAxis[2], 0,
+       yAxis[0], yAxis[1], yAxis[2], 0,
+       zAxis[0], zAxis[1], zAxis[2], 0,
+       cameraPosition[0],
+       cameraPosition[1],
+       cameraPosition[2],
+       1,
+    ];
+  }
+</code></pre><p>这是在移动过程中朝向某个确切的 &#39;F&#39; 的用法。</p>
+<pre class="prettyprint"><code>  ...
+
+  // 计算第一个 F 的位置
+  var fPosition = [radius, 0, 0];
+
+  // 计算相机在圆上的位置矩阵
+  var cameraMatrix = m4.yRotation(cameraAngleRadians);
+  cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
+
+  // 获得矩阵中相机的位置
+  var cameraPosition = [
+    cameraMatrix[12],
+    cameraMatrix[13],
+    cameraMatrix[14],
+  ];
+
+  var up = [0, 1, 0];
+
+  // 计算相机的朝向矩阵
+  var cameraMatrix = m4.lookAt(cameraPosition, fPosition, up);
+
+  // 通过相机矩阵获得视图矩阵
+  var viewMatrix = m4.inverse(cameraMatrix);
+
+  ...
+</code></pre><p>这是结果。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>拖动滑块观察相机是如何追踪单个 &#39;F&#39; 的。</p>
+<p>你也可以对其他东西使用“lookAt”方法而不只是相机。通常是让角色视线跟着某人，
+将炮塔指向目标，让物体沿着路径移动。你可以算出物体当前在路径上的位置和不久后的位置，
+然后将这两个值放入 <code>lookAt</code> 方法，可以让物体沿着路径移动并且朝着路径的方向。</p>
+<p>接下来让我们<a href="webgl-animation.html">学习动画</a>。</p>
+<div class="webgl_bottombar">
+<h3>lookAt 标准</h3>
+<p>
+
+大多数三维数学库都有<code>lookAt</code>方法，通常它是用于计算“视图矩阵”
+而不是“相机矩阵”。换句话说这个矩阵将所有物体移动到相机前而不是将相机移动到物体前。
+
+</p>
+<p>
+
+我发现它并不好用，前面指出，一个 lookAt 方法有很多用处，
+当你需要视图矩阵的时候只需要调用<code>inverse</code>方法，
+但当你想要让角色跟随另一个角色或者炮台跟随目标的时候，
+在我看来<code>lookAt</code>方法返回世界坐标中的朝向和位置转换会好一些。
+
+</p>
+<div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at-heads.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at-heads.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+
+</div>
+
+
+
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-3d-camera.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-camera.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-camera.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-camera.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-camera.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-camera.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-camera.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-camera.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="http://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 三维相机';
+            var disqus_title = 'WebGL 三维相机';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

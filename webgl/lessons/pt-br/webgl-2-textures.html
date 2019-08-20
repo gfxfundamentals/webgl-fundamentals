@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/pt-br/webgl-2-textures.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL - Utilizando 2 ou mais texturas" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="Como utilizar 2 ou mais texturas no WebGL" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/pt-br/webgl-2-textures.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL - Utilizando 2 ou mais texturas" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/pt-br/webgl-2-textures.html" />
+<meta name="twitter:description" content="Como utilizar 2 ou mais texturas no WebGL" />
+<meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+
+
+<title>WebGL - Utilizando 2 ou mais texturas</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-2-textures.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2-textures.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-2-textures.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2-textures.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2-textures.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2-textures.html" selected>Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2-textures.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2-textures.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">Table of Contents</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/pt-br/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL - Utilizando 2 ou mais texturas</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>Este artigo é uma continuação de <a href="webgl-image-processing.html">WebGL -
+Processamento de imagens</a>. Se você ainda não leu, eu
+sugiro <a href="webgl-image-processing.html">que você começe lá</a>.</p>
+<p>Agora, pode ser um bom momento para responder a pergunta: &quot;Como uso 2 ou mais
+texturas?&quot;&quot;</p>
+<p>É bem simples. Vamos <a href="webgl-image-processing.html">voltar algumas aulas para o nosso primeiro sombreador que
+desenha uma única imagem</a> e atualize-a para 2
+imagens.</p>
+<p>A primeira coisa que precisamos fazer é mudar nosso código para que possamos carregar 2 imagens.
+Esta não é realmente uma coisa de WebGL, é uma coisa de JavaScript HTML5, mas nós
+também podemos abordar isso. As imagens são carregadas de forma assíncrona, o que pode levar
+um pouco de tempo para você ir se acostumando.</p>
+<p>Existem basicamente 2 maneiras de lidar com isso. Poderíamos tentar estruturar
+nosso código para que ele seja executado sem texturas e como as texturas são carregadas
+as atualizações do programa. Salvaremos esse método para um artigo posterior.</p>
+<p>Neste caso, aguardamos que todas as imagens sejam carregadas antes de desenhar
+qualquer coisa.</p>
+<p>Primeiro vamos alterar o código que carrega uma imagem em uma função. Está
+bem direto. Ele cria um novo objeto <code>Image</code>, e define o URL para
+carregar e definir um retorno de chamada para ser chamado quando a imagem terminar de carregar.</p>
+<pre class="prettyprint"><code>function loadImage(url, callback) {
+  var image = new Image();
+  image.src = url;
+  image.onload = callback;
+  return image;
+}
+</code></pre><p>Agora vamos fazer uma função que carrega uma série de URLs e gera uma
+matriz de imagens. Primeiro, criamos <code>imagesToLoad</code> para o número de imagens
+vamos carregar. Então, fazemos o retorno de chamada que passamos para <code>loadImage</code>
+decrement <code>imagesToLoad</code>. Quando <code>imagesToLoad</code> passa a 0 todas as imagens
+foram carregados e passamos a matriz de imagens para um retorno de chamada.</p>
+<pre class="prettyprint"><code>function loadImages(urls, callback) {
+  var images = [];
+  var imagesToLoad = urls.length;
+
+  // Called each time an image finished loading.
+  var onImageLoad = function() {
+    --imagesToLoad;
+    // If all the images are loaded call the callback.
+    if (imagesToLoad == 0) {
+      callback(images);
+    }
+  };
+
+  for (var ii = 0; ii &lt; imagesToLoad; ++ii) {
+    var image = loadImage(urls[ii], onImageLoad);
+    images.push(image);
+  }
+}
+</code></pre><p>Agora chamamos loadImages assim</p>
+<pre class="prettyprint"><code>function main() {
+  loadImages([
+    &quot;resources/leaves.jpg&quot;,
+    &quot;resources/star.jpg&quot;,
+  ], render);
+}
+</code></pre><p>Em seguida, mudamos o sombreador para usar 2 texturas. Neste caso, vamos multiplicar
+1 textura pelo outro.</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+precision mediump float;
+
+// our textures
+uniform sampler2D u_image0;
+uniform sampler2D u_image1;
+
+// the texCoords passed in from the vertex shader.
+varying vec2 v_texCoord;
+
+void main() {
+   vec4 color0 = texture2D(u_image0, v_texCoord);
+   vec4 color1 = texture2D(u_image1, v_texCoord);
+   gl_FragColor = color0 * color1;
+}
+&lt;/script&gt;
+</code></pre><p>Precisamos criar 2 objetos de textura WebGL.</p>
+<pre class="prettyprint"><code>  // create 2 textures
+  var textures = [];
+  for (var ii = 0; ii &lt; 2; ++ii) {
+    var texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // Set the parameters so we can render any size image.
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+    // Upload the image into the texture.
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[ii]);
+
+    // add the texture to the array of textures.
+    textures.push(texture);
+  }
+</code></pre><p>O WebGL tem algo chamado &quot;unidades de textura&quot;. Você pode pensar nisso como uma série de referências
+para texturas. Você diz ao sombreador qual unidade de textura para usar para cada amostra.</p>
+<pre class="prettyprint"><code>  // lookup the sampler locations.
+  var u_image0Location = gl.getUniformLocation(program, &quot;u_image0&quot;);
+  var u_image1Location = gl.getUniformLocation(program, &quot;u_image1&quot;);
+
+  ...
+
+  // set which texture units to render with.
+  gl.uniform1i(u_image0Location, 0);  // texture unit 0
+  gl.uniform1i(u_image1Location, 1);  // texture unit 1
+</code></pre><p>Então, temos que vincular uma textura a cada uma dessas unidades de textura.</p>
+<pre class="prettyprint"><code>  // Set each texture unit to use a particular texture.
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+  gl.activeTexture(gl.TEXTURE1);
+  gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+</code></pre><p>As 2 imagens que estamos carregando parecem com isso</p>
+<p><style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; }</style></p>
+<div class="glocal-center"><table class="glocal-center-content"><tr><td><img src="../../resources/leaves.jpg" /> <img src="../../resources/star.jpg" /></td></tr></table></div>
+
+<p>E aqui está o resultado se os multiplicarmos juntos usando o WebGL.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2-textures.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2-textures.html" target="_blank">clique aqui para abrir uma janela separada</a>
+</div>
+
+</p>
+<p>Algumas coisas que devo passar.</p>
+<p>A maneira simples de pensar em unidades de textura é algo assim: todos
+as funções de textura funcionam na &quot;unidade de textura ativa&quot;. A &quot;active texture unit&quot;
+é apenas uma variável global que é o índice da textura
+com a qual você quer trabalhar. Cada unidade de textura tem 2 alvos. o
+Alvo TEXTURE_2D e o alvo TEXTURE_CUBE_MAP. Toda função de textura
+funciona com o alvo especificado na unidade de textura ativa atual. E se
+você deveria implementar o WebGL em JavaScript, seria algo parecido com
+esta</p>
+<pre class="prettyprint"><code>var getContext = function() {
+  var textureUnits = [
+    { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
+    { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
+    { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
+    { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
+    { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
+    ...
+  ];
+  var activeTextureUnit = 0;
+
+  var activeTexture = function(unit) {
+    // convert the unit enum to an index.
+    var index = unit - gl.TEXTURE0;
+    // Set the active texture unit
+    activeTextureUnit = index;
+  };
+
+  var bindTexture = function(target, texture) {
+    // Set the texture for the target of the active texture unit.
+    textureUnits[activeTextureUnit][target] = texture;
+  };
+
+  var texImage2D = function(target, ... args ...) {
+    // Call texImage2D on the current texture on the active texture unit
+    var texture = textureUnits[activeTextureUnit][target];
+    texture.image2D(...args...);
+  };
+
+  // return the WebGL API
+  return {
+    activeTexture: activeTexture,
+    bindTexture: bindTexture,
+    texImage2D: texImage2D,
+  }
+};
+</code></pre><p>Os sombreadores tomam índices nas unidades de textura. Esperemos que isso torne essas 2 linhas mais claras.</p>
+<pre class="prettyprint"><code>  gl.uniform1i(u_image0Location, 0);  // texture unit 0
+  gl.uniform1i(u_image1Location, 1);  // texture unit 1
+</code></pre><p>Uma coisa a ser mostrada, é que ao configurar os uniformes você usa índices para as unidades de textura,
+mas ao chamar o Gl.activeTexture você precisa passar nas constantes especiais gl.TEXTURE0, gl.TEXTURE1 etc.
+Felizmente, as constantes são consecutivas, então, ao invés disso</p>
+<pre class="prettyprint"><code>  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+  gl.activeTexture(gl.TEXTURE1);
+  gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+</code></pre><p>Nós poderíamos fazer isso</p>
+<pre class="prettyprint"><code>  gl.activeTexture(gl.TEXTURE0 + 0);
+  gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+  gl.activeTexture(gl.TEXTURE0 + 1);
+  gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+</code></pre><p>Ou isso</p>
+<pre class="prettyprint"><code>  for (var ii = 0; ii &lt; 2; ++ii) {
+    gl.activeTexture(gl.TEXTURE0 + ii);
+    gl.bindTexture(gl.TEXTURE_2D, textures[ii]);
+  }
+</code></pre><p>Espero que este pequeno passo ajuda a explicar como usar múltiplas texturas em uma única chamada de desenho no WebGL</p>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-2-textures.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2-textures.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-2-textures.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2-textures.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2-textures.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2-textures.html" selected>Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2-textures.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2-textures.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Fundamentos</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-fundamentals.html">Fundamentals</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-how-it-works.html">How It Works</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-shaders-and-glsl.html">Shaders and GLSL</a></li>
+        </ul>
+  <li>Tratamento de imagens</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-image-processing.html">Image Processing</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-image-processing-continued.html">Image Processing Continued</a></li>
+        </ul>
+  <li>2D: translação, rotação, escala, matriz matemática</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-2d-translation.html">2D Translation</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-2d-rotation.html">2D Rotation</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-2d-scale.html">Escala 2D WebGL</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-2d-matrices.html">2D Matrices</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-3d-orthographic.html">Orthographic 3D</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-3d-perspective.html">3D Perspective</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-3d-camera.html">3D Cameras</a></li>
+        </ul>
+  <li>Iluminação</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-3d-lighting-directional.html">Directional Lighting</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-3d-lighting-point.html">Point Lighting</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+        </ul>
+  <li>Estrutura e Organização</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-drawing-multiple-things.html">Drawing Multiple Things</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-scene-graph.html">Scene Graphs</a></li>
+        </ul>
+  <li>Geometria</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+        </ul>
+  <li>Texturas</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-3d-textures.html">Textures</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-data-textures.html">Data Textures</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-2-textures.html">WebGL - Usando duas ou mais texturas</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-cors-permission.html">Cross Origin Images</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Renderizando texturas</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-render-to-texture.html">Render to Texture</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Técnicas</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-2d-drawimage.html">2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-fog.html">Fog</a></li>
+        </ul>
+  <li>Texto</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-text-html.html">Text - HTML</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-text-canvas2d.html">Texto WebGL - Telas 2D</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-text-texture.html">Text - Using a Texture</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Diversos</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-setup-and-installation.html">WebGL - Setup e instalação</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-boilerplate.html">Boilerplate</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-animation.html">WebGL - Animação</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-and-alpha.html">WebGL e canal Alpha</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-2d-vs-3d-library.html">2D vs 3D libraries</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-anti-patterns.html">Anti-Patterns</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/pt-br/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/pt-br/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Ajudante de API dos DOCs</a></li>
+  <li><a href="http://twgljs.org">TWGL, uma pequena biblioteca ajudante do WebGL</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+        <div>Issue/Bug? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL - Utilizando 2 ou mais texturas';
+            var disqus_title = 'WebGL - Utilizando 2 ou mais texturas';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

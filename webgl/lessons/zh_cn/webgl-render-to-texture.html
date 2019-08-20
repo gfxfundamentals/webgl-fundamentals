@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-render-to-texture.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL 渲染到纹理" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="如何往纹理渲染内容" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-render-to-texture.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL 渲染到纹理" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-render-to-texture.html" />
+<meta name="twitter:description" content="如何往纹理渲染内容" />
+<meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+
+
+<title>WebGL 渲染到纹理</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-render-to-texture.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-render-to-texture.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-render-to-texture.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-render-to-texture.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-render-to-texture.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-render-to-texture.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-render-to-texture.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-render-to-texture.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 渲染到纹理</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>此文上接WebGL系列文章，第一篇是<a href="webgl-fundamentals.html">基础概念</a>，
+上一篇是<a href="webgl-data-textures.html">写入数据到纹理</a>，
+如果没读请先去那里。</p>
+<p>上篇讲到如何利用JavaScript向纹理提供数据，这篇文章我们会使用WebGL渲染内容到纹理上，
+这个话题在<a href="webgl-image-processing-continued.html">图像处理</a>中简单讲到过，
+但这里将详细介绍。</p>
+<p>渲染到纹理非常简单，创建一个确定大小的纹理</p>
+<pre class="prettyprint"><code>// 创建渲染对象
+const targetTextureWidth = 256;
+const targetTextureHeight = 256;
+const targetTexture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, targetTexture);
+
+{
+  // 定义 0 级的大小和格式
+  const level = 0;
+  const internalFormat = gl.RGBA;
+  const border = 0;
+  const format = gl.RGBA;
+  const type = gl.UNSIGNED_BYTE;
+  const data = null;
+  gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                targetTextureWidth, targetTextureHeight, border,
+                format, type, data);
+
+  // 设置筛选器，不需要使用贴图
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+}
+</code></pre><p>注意 <code>data</code> 是 <code>null</code>，我们不需要提供数据，只需要让WebGL分配一个纹理。</p>
+<p>接下来创建一个帧缓冲（framebuffer），帧缓冲只是一个附件集，附件是纹理或者 renderbuffers，
+我们之前讲过纹理，Renderbuffers 和纹理很像但是支持纹理不支持的格式和可选项，同时，
+不能像纹理那样直接将 renderbuffer 提供给着色器。</p>
+<p>让我们来创建一个帧缓冲并和纹理绑定</p>
+<pre class="prettyprint"><code>// 创建并绑定帧缓冲
+const fb = gl.createFramebuffer();
+gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+
+// 附加纹理为第一个颜色附件
+const attachmentPoint = gl.COLOR_ATTACHMENT0;
+gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, tex, level);
+</code></pre><p>与纹理和缓冲相似，在创建完帧缓冲后我们需要将它绑定到 <code>FRAMEBUFFER</code> 绑定点，
+那样所有的方法都会作用到绑定的帧缓冲，无论是哪个帧缓冲。</p>
+<p>绑定帧缓冲后，每次调用 <code>gl.clear</code>, <code>gl.drawArrays</code>, 或 <code>gl.drawElements</code>
+WebGL都会渲染到纹理上而不是画布上。</p>
+<p>将原来的渲染代码构造成一个方法，就可以调用两次，一次渲染到纹理，一次渲染到画布。</p>
+<pre class="prettyprint"><code>function drawCube(aspect) {
+  // 告诉它使用的程序（着色器对）
+  gl.useProgram(program);
+
+  // 启用位置属性
+  gl.enableVertexAttribArray(positionLocation);
+
+  // 绑定到位置缓冲
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  // 告诉位置属性如何从 positionBuffer (ARRAY_BUFFER) 中读取数据
+  var size = 3;          // 每次迭代需要三个单位数据
+  var type = gl.FLOAT;   // 单位数据类型为 32 位浮点型
+  var normalize = false; // 不需要单位化
+  var stride = 0;        // 每次迭代移动的距离
+  var offset = 0;        // 从缓冲起始处开始
+  gl.vertexAttribPointer(
+      positionLocation, size, type, normalize, stride, offset)
+
+  // 启用纹理坐标属性
+  gl.enableVertexAttribArray(texcoordLocation);
+
+  // 绑定纹理坐标缓冲
+  gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+
+  // 告诉纹理坐标属性如何从 texcoordBuffer 读取数据
+  var size = 2;          // 每次迭代两个单位数据
+  var type = gl.FLOAT;   // 单位数据类型是 32 位浮点型
+  var normalize = false; // 不需要单位化数据
+  var stride = 0;        // 每次迭代移动的数据
+  var offset = 0;        // 从缓冲起始处开始
+  gl.vertexAttribPointer(
+      texcoordLocation, size, type, normalize, stride, offset)
+
+  // 计算投影矩阵
+
+-  var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  var projectionMatrix =
+      m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
+
+  var cameraPosition = [0, 0, 2];
+  var up = [0, 1, 0];
+  var target = [0, 0, 0];
+
+  // 计算相机矩阵
+  var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+
+  // 根据相机矩阵计算视图矩阵
+  var viewMatrix = m4.inverse(cameraMatrix);
+
+  var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+
+  var matrix = m4.xRotate(viewProjectionMatrix, modelXRotationRadians);
+  matrix = m4.yRotate(matrix, modelYRotationRadians);
+
+  // 设置矩阵
+  gl.uniformMatrix4fv(matrixLocation, false, matrix);
+
+  // 使用纹理单元 0
+  gl.uniform1i(textureLocation, 0);
+
+  // 绘制几何体
+  gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
+}
+</code></pre><p>注意到我们需要传入 <code>aspect</code> 计算投影矩阵，因为目标纹理的比例和画布不同。</p>
+<p>然后这样调用</p>
+<pre class="prettyprint"><code>// 绘制场景
+function drawScene(time) {
+
+  ...
+
+  {
+    // 通过绑定帧缓冲绘制到纹理
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+
+    // 使用 3×2 的纹理渲染立方体
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // 告诉WebGL如何从裁剪空间映射到像素空间
+    gl.viewport(0, 0, targetTextureWidth, targetTextureHeight);
+
+    // 清空画布和深度缓冲
+    gl.clearColor(0, 0, 1, 1);   // clear to blue
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    const aspect = targetTextureWidth / targetTextureHeight;
+    drawCube(aspect)
+  }
+
+  {
+    // 渲染到画布
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+    // 立方体使用刚才渲染的纹理
+    gl.bindTexture(gl.TEXTURE_2D, targetTexture);
+
+    // 告诉WebGL如何从裁剪空间映射到像素空间
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    // 清空画布和深度缓冲
+    gl.clearColor(1, 1, 1, 1);   // clear to white
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    drawCube(aspect)
+  }
+
+  requestAnimationFrame(drawScene);
+}
+</code></pre><p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-render-to-texture.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-render-to-texture.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p><strong>十分重要</strong>的是要记得调用 <code>gl.viewport</code> 设置要绘制的对象的大小，
+在这个例子中第一次渲染到纹理，所以设置视图大小覆盖纹理，
+第二次渲染到画布所以设置视图大小覆盖画布。</p>
+<p>同样的当我们计算投影矩阵的时候需要使用正确的比例，我花了无数个小时调试，寻找出现搞笑的渲染结果的原因，
+最后发现是少调用了一个 <code>gl.viewport</code> 或者都忘了，并使用正确的比例，由于在代码中很少直接调用
+<code>gl.bindFramebuffer</code> 所以就容易忘掉这些。所以我把这个方法调用放在一个方法里，像这样</p>
+<pre class="prettyprint"><code>function bindFrambufferAndSetViewport(fb, width, height) {
+   gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+   gl.viewport(0, 0, width, height);
+}
+</code></pre><p>然后使用这个方法改变渲染对象，就不容易忘记了。</p>
+<p>还有一个需要注意的事情是我们的帧缓冲没有深度缓冲，只有纹理。这意味着没有深度检测，
+所以三维就不能正常体现，如果我们绘制三个立方体就会看到这样。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-render-to-texture-3-cubes-no-depth-buffer.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-render-to-texture-3-cubes-no-depth-buffer.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>如果仔细看中间的立方体，会看到 3 个垂直绘制的立方体，一个在后面，一个在中间另一个在前面，
+但是我们绘制的三个立方体是相同深度的，观察画布上水平方向的 3 个立方体就会发现他们是正确相交的。
+那是因为在帧缓冲中没有深度缓冲，但是画布有。</p>
+<p><img class="webgl_center" src="../resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" /></p>
+<p>想要加深度缓冲就需要创建一个，然后附加到帧缓冲中</p>
+<pre class="prettyprint"><code>// 创建一个深度缓冲
+const depthBuffer = gl.createRenderbuffer();
+gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
+
+// 设置深度缓冲的大小和targetTexture相同
+gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, targetTextureWidth, targetTextureHeight);
+gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
+</code></pre><p>有了这个以后的结果。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-render-to-texture-3-cubes-with-depth-buffer.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-render-to-texture-3-cubes-with-depth-buffer.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>现在帧缓冲附加了深度缓冲以后内部的立方体也能正确相交了。</p>
+<p><img class="webgl_center" src="../resources/cubes-with-depth-buffer.jpg" width="100%" height="100%" /></p>
+<p>需要特别注意的是WebGL只允许三种附件组合形式。
+<a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS">根据规范</a>
+一定能正确运行的附件组合是：</p>
+<ul>
+<li><code>COLOR_ATTACHMENT0</code> = <code>RGBA/UNSIGNED_BYTE</code> texture</li>
+<li><code>COLOR_ATTACHMENT0</code> = <code>RGBA/UNSIGNED_BYTE</code> texture + <code>DEPTH_ATTACHMENT</code> = <code>DEPTH_COMPONENT16</code> renderbuffer</li>
+<li><code>COLOR_ATTACHMENT0</code> = <code>RGBA/UNSIGNED_BYTE</code> texture + <code>DEPTH_STENCIL_ATTACHMENT</code> = <code>DEPTH_STENCIL</code> renderbuffer</li>
+</ul>
+<p>对于其他的组合就需要检查用户系统/gpu/驱动/浏览器的支持情况。
+要检查的话需要创建帧缓冲，附加附件，然后调用</p>
+<pre class="prettyprint"><code>var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+</code></pre><p>如果状态是 <code>FRAMEBUFFER_COMPLETE</code> 那这种组合就能使用，反之不能使用。
+你就需要告诉用户他们不走运或者撤销一些方法。</p>
+<p>如果你还没有看过<a href="webgl-less-code-more-fun.html">简化WebGL代码</a>的话，
+可以看一下。</p>
+<div class="webgl_bottombar">
+<h3>其实 Canvas 本身就是一个纹理</h3>
+<p>
+只是一点小事，浏览器使用上方的技术实现的画布，在背后它们创建了一个颜色纹理，
+一个深度缓冲，一个帧缓冲，然后绑定到当前的帧缓冲，
+当你调用你的渲染方法时就会绘制到那个纹理上，
+然后再用那个纹理将画布渲染到网页中。
+</p>
+</div>
+
+
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-render-to-texture.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-render-to-texture.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-render-to-texture.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-render-to-texture.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-render-to-texture.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-render-to-texture.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-render-to-texture.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-render-to-texture.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="http://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 渲染到纹理';
+            var disqus_title = 'WebGL 渲染到纹理';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

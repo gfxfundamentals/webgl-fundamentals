@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-how-it-works.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL 工作原理" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="http://webglfundamentals.org/webgl/lessons/screenshots/webgl-how-it-works.jpg" />
+<meta property="og:description" content="WebGL究竟做了什么？！！" />
+<meta property="og:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-how-it-works.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL 工作原理" />
+<meta name="twitter:url" content="http://webglfundamentals.org/webgl/lessons/zh_cn/webgl-how-it-works.html" />
+<meta name="twitter:description" content="WebGL究竟做了什么？！！" />
+<meta name="twitter:image:src" content="http://webglfundamentals.org/webgl/lessons/screenshots/webgl-how-it-works.jpg" />
+
+
+<title>WebGL 工作原理</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-how-it-works.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-how-it-works.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-how-it-works.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-how-it-works.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-how-it-works.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-how-it-works.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-how-it-works.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-how-it-works.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 工作原理</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>此文上接<a href="webgl-fundamentals.html">WebGL 基础概念</a>。
+在继续学习之前，我们需要探讨一下WebGL在GPU上究竟做了什么。
+WebGL在GPU上的工作基本上分为两部分，第一部分是将顶点（或数据流）转换到裁剪空间坐标，
+第二部分是基于第一部分的结果绘制像素点。</p>
+<p>当你调用</p>
+<pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
+var offset = 0;
+var count = 9;
+gl.drawArrays(primitiveType, offset, count);
+</code></pre><p>这里的9表示“处理9个顶点”，所以将会有9个顶点被转换。</p>
+<p><img src="../resources/vertex-shader-anim.gif" class="webgl_center" /></p>
+<p>左侧是你提供的数据。顶点着色器（Vertex Shader）是你写进<a href="webgl-shaders-and-glsl.html">GLSL</a>
+中的一个方法，每个顶点调用一次，在这个方法中做一些数学运算后设置了一个特殊的<code>gl_Position</code>变量，
+这个变量就是该顶点转换到裁剪空间中的坐标值，GPU接收该值并将其保存起来。</p>
+<p>假设你正在画三角形，顶点着色器每完成三次顶点处理，WebGL就会用这三个顶点画一个三角形。
+它计算出这三个顶点对应的像素后，就会光栅化这个三角形，“光栅化”其实就是“用像素画出来”
+的花哨叫法。对于每一个像素，它会调用你的片断着色器询问你使用什么颜色。
+你通过给片断着色器的一个特殊变量<code>gl_FragColor</code>设置一个颜色值，实现自定义像素颜色。</p>
+<p>使用它们可以做出非常有趣的东西，但如你所见，到目前为止的例子中，
+处理每个像素时片断着色器可用信息很少，幸运的是我们可以给它传递更多信息。
+想要从顶点着色器传值到片断着色器，我们可以定义“可变量（varyings）”。</p>
+<p>一个简单的例子，将顶点着色器计算出的裁剪空间坐标从顶点着色器传递到片断着色器。</p>
+<p>我们来画一个简单的三角形，从<a href="webgl-2d-matrices.html">之前的例子</a>继续，让我们把矩形改成三角形。</p>
+<pre class="prettyprint"><code>// 定义一个三角形填充到缓冲里
+function setGeometry(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+             0, -100,
+           150,  125,
+          -175,  100]),
+      gl.STATIC_DRAW);
+}
+</code></pre><p>我们只需要画三个顶点。</p>
+<pre class="prettyprint"><code>// 绘制场景
+function drawScene() {
+  ...
+  // 绘制几何体
+  var primitiveType = gl.TRIANGLES;
+  var offset = 0;
+  var count = 3;
+  gl.drawArrays(primitiveType, offset, count);
+}
+</code></pre><p>然后在我们的顶点着色器中定义一个<em>varying</em>（可变量）用来给片断着色器传值。</p>
+<pre class="prettyprint"><code>varying vec4 v_color;
+...
+void main() {
+  // 将位置和矩阵相乘
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+
+  // 从裁减空间转换到颜色空间
+  // 裁减空间范围 -1.0 到 +1.0
+  // 颜色空间范围 0.0 到 1.0
+*  v_color = gl_Position * 0.5 + 0.5;
+}
+</code></pre><p>在片断着色器中定义同名<em>varying</em>变量。</p>
+<pre class="prettyprint"><code>precision mediump float;
+
+*varying vec4 v_color;
+
+void main() {
+*  gl_FragColor = v_color;
+}
+</code></pre><p>WebGL会将同名的可变量从顶点着色器输入到片断着色器中。</p>
+<p>下面是运行结果。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-triangle-with-position-for-color.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-triangle-with-position-for-color.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>当你移动，缩放，旋转三角形时，发现颜色随位置变化，不跟着三角形移动。</p>
+<p>回想一下，我们只计算了三个顶点，调用了三次顶点着色器，所以也只计算出了三个颜色值，
+但是我们的三角形却有很多颜色，这就是称之为可变量的<em>varying</em>的原因啦！</p>
+<p>WebGL先获得顶点着色器中计算的三个颜色值，在光栅化三角形时将会根据这三个值进行插值。
+每一个像素在调用片断着色器时，可变量的值是与之对应的插值。</p>
+<p>让我们从上例的三个顶点开始分析</p>
+<p><style>
+table.vertex_table {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-family: monospace;
+  font-size: small;
+}</p>
+<p>table.vertex_table th {
+  background-color: #88ccff;
+  padding-right: 1em;
+  padding-left: 1em;
+}</p>
+<p>table.vertex_table td {
+  border: 1px solid black;
+  text-align: right;
+  padding-right: 1em;
+  padding-left: 1em;
+}
+</style></p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="2">顶点</th></tr>
+<tr><td>0</td><td>-100</td></tr>
+<tr><td>150</td><td>125</td></tr>
+<tr><td>-175</td><td>100</td></tr>
+</table>
+</div>
+
+<p>我们的给顶点着色器施加了一个包含平移，旋转和缩放的的矩阵，并将结果转换到裁剪空间。
+默认平移，旋转和缩放值为：平移 = 200, 150，旋转 = 0，缩放 = 1，所以这里只进行了平移。
+画布大小（背景缓冲）为 400×300，所以三个顶点在裁剪空间中为以下坐标值。</p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="3">写入 gl_Position 的值</th></tr>
+<tr><td>0.000</td><td>0.660</td></tr>
+<tr><td>0.750</td><td>-0.830</td></tr>
+<tr><td>-0.875</td><td>-0.660</td></tr>
+</table>
+</div>
+
+<p>同时将这些值转换到颜色空间中赋给我们定义的<strong>可变量</strong><code>v_color</code>。</p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="3">写入 v_color 的值</th></tr>
+<tr><td>0.5000</td><td>0.830</td><td>0.5</td></tr>
+<tr><td>0.8750</td><td>0.086</td><td>0.5</td></tr>
+<tr><td>0.0625</td><td>0.170</td><td>0.5</td></tr>
+</table>
+</div>
+
+<p>利用这三个值进行插值后传进每个像素运行的片断着色器中。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/fragment-shader-anim.html"></iframe>
+  <div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
+</div>
+
+</p>
+<p>想要给片断着色器传值，我们可以先把值传递给顶点着色器然后再传给片断着色器。
+让我们来画一个由两个不同颜色三角形组成的矩形。我们需要给顶点着色器添加一个属性值，
+把值通过属性传递给它后它再直接传递给片断着色器。</p>
+<pre class="prettyprint"><code>attribute vec2 a_position;
++attribute vec4 a_color;
+...
+varying vec4 v_color;
+
+void main() {
+   ...
+  // 直接把属性值中的数据赋给可变量
+*  v_color = a_color;
+}
+</code></pre><p>现在要给WebGL提供要用的颜色。</p>
+<pre class="prettyprint"><code>  // 寻找顶点着色器中需要的数据
+  var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
++  var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
+  ...
++  // 给颜色数据创建一个缓冲
++  var colorBuffer = gl.createBuffer();
++  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
++  // 设置颜色
++  setColors(gl);
+  ...
+
++// 给矩形的两个三角形
++// 设置颜色值并发到缓冲
++function setColors(gl) {
++  // 生成两个随机颜色
++  var r1 = Math.random();
++  var b1 = Math.random();
++  var g1 = Math.random();
++
++  var r2 = Math.random();
++  var b2 = Math.random();
++  var g2 = Math.random();
++
++  gl.bufferData(
++      gl.ARRAY_BUFFER,
++      new Float32Array(
++        [ r1, b1, g1, 1,
++          r1, b1, g1, 1,
++          r1, b1, g1, 1,
++          r2, b2, g2, 1,
++          r2, b2, g2, 1,
++          r2, b2, g2, 1]),
++      gl.STATIC_DRAW);
++}
+</code></pre><p>在渲染的时候设置颜色属性</p>
+<pre class="prettyprint"><code>+gl.enableVertexAttribArray(colorLocation);
++
++// 绑定颜色缓冲
++gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
++
++// 告诉颜色属性怎么从 colorBuffer (ARRAY_BUFFER) 中读取颜色值
++var size = 4;          // 每次迭代使用4个单位的数据
++var type = gl.FLOAT;   // 单位数据类型是32位的浮点型
++var normalize = false; // 不需要归一化数据
++var stride = 0;        // 0 = 移动距离 * 单位距离长度sizeof(type) 
+                       // 每次迭代跳多少距离到下一个数据
++var offset = 0;        // 从绑定缓冲的起始处开始
++gl.vertexAttribPointer(
++    colorLocation, size, type, normalize, stride, offset)
+</code></pre><p>调整顶点的数量为6用来画两个三角形</p>
+<pre class="prettyprint"><code>// 画几何体
+var primitiveType = gl.TRIANGLES;
+var offset = 0;
+*var count = 6;
+gl.drawArrays(primitiveType, offset, count);
+</code></pre><p>这里是结果。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-with-2-colors.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-with-2-colors.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>你可能注意到这两个三角形是纯色的。我们传递给每个三角形的顶点的颜色值是相同的，
+所以我们传递的<em>varying</em>会被插值成相同的颜色，如果我们传递不同的颜色，就会看到插值的颜色。</p>
+<pre class="prettyprint"><code>// 给矩形的两个三角形
+// 设置颜色值并发到缓冲
+function setColors(gl) {
+  // 给每个顶点定义不同的颜色
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(
+*        [ Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1]),
+      gl.STATIC_DRAW);
+}
+</code></pre><p>现在看到的是插值的<em>varying</em>。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-with-random-colors.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-with-random-colors.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>可能不值一提的是上例还演示了使用多个属性并且通过顶点着色器向片断着色器传值。
+如果你看了<a href="webgl-image-processing.html">处理图片的例子</a>，
+那里面还用了另外一个属性传递纹理坐标。</p>
+<h2 id="-buffer-attribute-">关于buffer和attribute的代码是干什么的？</h2>
+<p>缓冲操作是在GPU上获取顶点和其他顶点数据的一种方式。
+<code>gl.createBuffer</code>创建一个缓冲；<code>gl.bindBuffer</code>是设置缓冲为当前使用缓冲；
+<code>gl.bufferData</code>将数据拷贝到缓冲，这个操作一般在初始化完成。</p>
+<p>一旦数据存到缓冲中，还需要告诉WebGL怎么从缓冲中提取数据传给顶点着色器的属性。</p>
+<p>要做这些，首先需要获取WebGL给属性分配的地址，如下方代码所示</p>
+<pre class="prettyprint"><code>// 询问顶点数据应该放在哪里
+var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
+var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
+</code></pre><p>这一步一般也是在初始化部分完成。</p>
+<p>一旦知道了属性的地址，在绘制前还需要发出三个命令。</p>
+<pre class="prettyprint"><code>gl.enableVertexAttribArray(location);
+</code></pre><p>这个命令是告诉WebGL我们想从缓冲中提供数据。</p>
+<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
+</code></pre><p>这个命令是将缓冲绑定到 ARRAY_BUFFER 绑定点，它是WebGL内部的一个全局变量。</p>
+<pre class="prettyprint"><code>gl.vertexAttribPointer(
+    location,
+    numComponents,
+    typeOfData,
+    normalizeFlag,
+    strideToNextPieceOfData,
+    offsetIntoBuffer);
+</code></pre><p>这个命令告诉WebGL从 ARRAY_BUFFER 绑定点当前绑定的缓冲获取数据。
+每个顶点有几个单位的数据(1 - 4)，单位数据类型是什么(<code>BYTE</code>, <code>FLOAT</code>, <code>INT</code>, <code>UNSIGNED_SHORT</code>, 等等...)，
+stride 是从一个数据到下一个数据要跳过多少位，最后是数据在缓冲的什么位置。</p>
+<p>单位个数永远是 1 到 4 之间。</p>
+<p>如果每个类型的数据都用一个缓冲存储，stride 和 offset 都是 0 。
+对 stride 来说 0 表示 “用符合单位类型和单位个数的大小”。
+对 offset 来说 0 表示从缓冲起始位置开始读取。
+它们使用 0 以外的值时会复杂得多，虽然这样会取得一些性能能上的优势，
+但是一般情况下并不值得，除非你想充分压榨WebGL的性能。</p>
+<p>希望这些关于缓冲和属性的内容对你来说讲的足够清楚。</p>
+<p>接下来我们来看看<a href="webgl-shaders-and-glsl.html">着色器和 GLSL</a>。</p>
+<div class="webgl_bottombar"><h3>vertexAttribPointer 中的 normalizeFlag 参数是什么意思？</h3>
+<p>
+标准化标记（normalizeFlag）适用于所有非浮点型数据。如果传递false就解读原数据类型。
+BYTE 类型的范围是从 -128 到 127，UNSIGNED_BYTE 类型的范围是从 0 到 255，
+SHORT 类型的范围是从 -32768 到 32767，等等...
+</p>
+<p>
+如果标准化标记设为true，BYTE 数据的值(-128 to 127)将会转换到 -1.0 到 +1.0 之间，
+UNSIGNED_BYTE (0 to 255) 变为 0.0 到 +1.0 之间，SHORT 也是转换到 -1.0 到 +1.0 之间，
+但比 BYTE 精确度高。
+</p>
+<p>
+最常用的是标准化颜色数据。大多数情况颜色值范围为 0.0 到 +1.0。
+使用4个浮点型数据存储红，绿，蓝和阿尔法通道数据时，每个顶点的颜色将会占用16字节空间，
+如果你有复杂的几何体将会占用很多内存。代替的做法是将颜色数据转换为四个 UNSIGNED_BYTE ，
+其中 0 表示 0.0，255 表示 1.0。现在每个顶点只需要四个字节存储颜色值，省了 75% 空间。
+</p>
+<p>我们来修改之前代码实现。当我们告诉WebGL如何获取颜色数据时将这样</p>
+<pre class="prettyprint showlinemods">
+  // 告诉颜色属性如何从colorBuffer中提取数据 (ARRAY_BUFFER)
+  var size = 4;                 // 每次迭代使用四个单位数据
+*  var type = gl.UNSIGNED_BYTE;  // 数据类型是8位的 UNSIGNED_BYTE 类型。
+*  var normalize = true;         // 标准化数据
+  var stride = 0;               // 0 = 移动距离 * 单位距离长度sizeof(type) 
+                                // 每次迭代跳多少距离到下一个数据
+  var offset = 0;               // 从缓冲的起始处开始
+  gl.vertexAttribPointer(
+      colorLocation, size, type, normalize, stride, offset)
+</pre>
+<p>如下向缓冲添加数据</p>
+<pre class="prettyprint showlinemods">
+// 给矩形的两个三角形
+// 设置颜色值并发到缓冲
+function setColors(gl) {
+  // 设置两个随机颜色
+  var r1 = Math.random() * 256; // 0 到 255.99999 之间
+  var b1 = Math.random() * 256; // 这些数据
+  var g1 = Math.random() * 256; // 在存入缓冲时
+  var r2 = Math.random() * 256; // 将被截取成
+  var b2 = Math.random() * 256; // Uint8Array 类型
+  var g2 = Math.random() * 256;
+
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Uint8Array(   // Uint8Array
+        [ r1, b1, g1, 255,
+          r1, b1, g1, 255,
+          r1, b1, g1, 255,
+          r2, b2, g2, 255,
+          r2, b2, g2, 255,
+          r2, b2, g2, 255]),
+      gl.STATIC_DRAW);
+}
+</pre>
+<p>
+这里是结果。
+</p>
+
+<div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-with-2-byte-colors.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-with-2-byte-colors.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+
+</div>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-how-it-works.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-how-it-works.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-how-it-works.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-how-it-works.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-how-it-works.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-how-it-works.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-how-it-works.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-how-it-works.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="http://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 工作原理';
+            var disqus_title = 'WebGL 工作原理';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+
