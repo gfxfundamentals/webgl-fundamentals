@@ -58,7 +58,6 @@ from the light.
 
 <div class="webgl_center"><img class="noinvertdark" src="resources/depth-map-generation.svg" style="width: 600px;"></div>
 
-
 If we had that data then when choosing a color to render
 we could get a depth value from the projected texture and check if the
 depth of the pixel we're about to draw is closer or further from the light.
@@ -66,10 +65,10 @@ If it's further from the light that
 means something was else was closer to the light. In other words,
 something is blocking the light, therefore this pixel is in a shadow.
 
-<div class="webgl_center"><img class="noinvertdark" src="resources/shadow-map-projection.svg" style="width: 600px;"></div>
+<div class="webgl_center"><img class="noinvertdark" src="resources/projected-depth-texture.svg" style="width: 600px;"></div>
 
-Here are some depth values inside the frustum from the point of view of the light.
-When we are drawing the pixel on the floor we compute its depth from the point of view 
+Here the depth texture is projected through light space inside the frustum from the point of view of the light.
+When we are drawing the pixels of the floor we compute that pixel's depth from the point of view 
 of the light (0.3 in the diagram above). We then look at the corresponding depth in
 the projected depth map texture. From the point of view of the light the depth value
 in the texture will be 0.1 because it hit the sphere. Seeing that 0.1 &lt; 0.3 we
