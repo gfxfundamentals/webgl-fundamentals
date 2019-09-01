@@ -91,7 +91,7 @@ of how texture units are setup in WebGL. There is <a href="webgl-attributes.html
 and <a href="webgl-shaders-and-glsl.html">WebGL Shaders and GLSL</a>
 as well as <a href="webgl-3d-textures.html">WebGL Textures</a></p>
 <h2 id="texture-units">Texture Units</h2>
-<p>In WebGL there are textures. Textures are 2D arrays of data you can pass to a shader.
+<p>In WebGL there are textures. Textures are most often 2D arrays of data you can pass to a shader.
 In the shader you declare a <em>uniform sampler</em> like this</p>
 <pre class="prettyprint"><code class="lang-glsl">uniform sampler2D someTexture;
 </code></pre>
@@ -117,24 +117,24 @@ it would have some global state that looks like this</p>
 <p>You can see above <code>textureUnits</code> is an array<code>. You assign a texture to one of the *bind points* in that array
 of texture units. Let&#39;s assign</code>ourTexture` to texture unit 5.</p>
 <pre class="prettyprint"><code class="lang-js">// at init time
-const indexOfTextureUnit = 5;
 const ourTexture = gl.createTexture();
 // insert code it init texture here.
 
 ...
 
 // at render time
+const indexOfTextureUnit = 5;
 gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 </code></pre>
-<p>You then tell the shader which texture unit bound the texture to by calling </p>
+<p>You then tell the shader which texture unit you bound the texture to by calling </p>
 <pre class="prettyprint"><code class="lang-js">gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 </code></pre>
 <p>If <code>activeTexture</code> and <code>bindTexture</code> WebGL functions were implemented in JavaScript they&#39;d look
 something like:</p>
 <pre class="prettyprint"><code class="lang-js">// PSEUDO CODE!!!
 gl.activeTexture = function(unit) {
-  gl.activeTextureUnit = unit - gl.TEXTURE0;  // convert to index
+  gl.activeTextureUnit = unit - gl.TEXTURE0;  // convert to 0 based index
 };
 
 gl.bindTexture = function(target, texture) {
@@ -158,6 +158,11 @@ gl.texParameteri = function(target, pname, value) {
   texture[pname] = value; 
 }
 </code></pre>
+<p>It should be clear from the example pseudo code above <code>gl.activeTexture</code> sets an
+internal global variable inside WebGL to an index of the array of texture units.
+From that point on, all the other texture functions take a <code>target</code>, the first
+argument in every texture function, that references the bind point of the
+current texture unit.</p>
 <h2 id="maximum-texture-units">Maximum Texture Units</h2>
 <p>WebGL requires an implementation to support at least 8 texture units. You can query how many
 are supported with</p>
