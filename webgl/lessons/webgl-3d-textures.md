@@ -380,6 +380,24 @@ And here's that
 
 {{{example url="../webgl-3d-textures-good-npot.html" }}}
 
+It's not just non power of 2 textures that won't render. WebGL requires textures to be "texture complete".
+"texture complete" means that either
+
+1. You've set the filtering so it only uses the first mip level which means
+   setting the `TEXTURE_MIN_FILTER` to either `LINEAR` or `NEAREST`.
+
+2. If you are using mips then they need to be the correct sizes and you have to provide ALL OF THEM
+   down to the 1x1 size.
+
+   The easiest way to do that is to call `gl.generateMipmap`. Otherwise if you provide your own mips you need to provide
+   all of them.
+
+3. If the textures are not a power of 2 in both dimensions then like it mentions above
+   you must set `TEXTURE_MIN_FILTER` to either `LINEAR` or `NEAREST` **and** you must
+   set `TEXTURE_WRAP_S` and `TEXTURE_WRAP_T` to `CLAMP_TO_EDGE`.
+
+If any of those are not true then when you fetch the value of the texture in your shader you'll get 0,0,0,1.
+
 A common question is "How do I apply a different image to each face of a cube?". For example let's say we
 had these 6 images.
 
