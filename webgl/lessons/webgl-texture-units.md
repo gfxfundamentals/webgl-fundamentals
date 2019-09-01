@@ -12,7 +12,7 @@ as well as [WebGL Textures](webgl-3d-textures.html)
 
 ## Texture Units
 
-In WebGL there are textures. Textures are 2D arrays of data you can pass to a shader.
+In WebGL there are textures. Textures are most often 2D arrays of data you can pass to a shader.
 In the shader you declare a *uniform sampler* like this
 
 ```glsl
@@ -47,18 +47,18 @@ of texture units. Let's assign `ourTexture` to texture unit 5.
 
 ```js
 // at init time
-const indexOfTextureUnit = 5;
 const ourTexture = gl.createTexture();
 // insert code it init texture here.
 
 ...
 
 // at render time
+const indexOfTextureUnit = 5;
 gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 ```
 
-You then tell the shader which texture unit bound the texture to by calling 
+You then tell the shader which texture unit you bound the texture to by calling 
 
 ```js
 gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
@@ -70,7 +70,7 @@ something like:
 ```js
 // PSEUDO CODE!!!
 gl.activeTexture = function(unit) {
-  gl.activeTextureUnit = unit - gl.TEXTURE0;  // convert to index
+  gl.activeTextureUnit = unit - gl.TEXTURE0;  // convert to 0 based index
 };
 
 gl.bindTexture = function(target, texture) {
@@ -97,6 +97,12 @@ gl.texParameteri = function(target, pname, value) {
   texture[pname] = value; 
 }
 ```
+
+It should be clear from the example pseudo code above `gl.activeTexture` sets an
+internal global variable inside WebGL to an index of the array of texture units.
+From that point on, all the other texture functions take a `target`, the first
+argument in every texture function, that references the bind point of the
+current texture unit.
 
 ## Maximum Texture Units
 
