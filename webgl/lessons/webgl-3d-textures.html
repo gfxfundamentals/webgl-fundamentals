@@ -429,6 +429,23 @@ image.addEventListener(&#39;load&#39;, function() {
 </div>
 
 </p>
+<p>It&#39;s not just non power of 2 textures that won&#39;t render. WebGL requires textures to be &quot;texture complete&quot;.
+&quot;texture complete&quot; means that either</p>
+<ol>
+<li><p>You&#39;ve set the filtering so it only uses the first mip level which means
+setting the <code>TEXTURE_MIN_FILTER</code> to either <code>LINEAR</code> or <code>NEAREST</code>.</p>
+</li>
+<li><p>If you are using mips then they need to be the correct sizes and you have to provide ALL OF THEM
+down to the 1x1 size.</p>
+<p>The easiest way to do that is to call <code>gl.generateMipmap</code>. Otherwise if you provide your own mips you need to provide
+all of them.</p>
+</li>
+<li><p>If the textures are not a power of 2 in both dimensions then like it mentions above
+you must set <code>TEXTURE_MIN_FILTER</code> to either <code>LINEAR</code> or <code>NEAREST</code> <strong>and</strong> you must
+set <code>TEXTURE_WRAP_S</code> and <code>TEXTURE_WRAP_T</code> to <code>CLAMP_TO_EDGE</code>.</p>
+</li>
+</ol>
+<p>If any of those are not true then when you fetch the value of the texture in your shader you&#39;ll get 0,0,0,1.</p>
 <p>A common question is &quot;How do I apply a different image to each face of a cube?&quot;. For example let&#39;s say we
 had these 6 images.</p>
 <div class="webgl_table_div_center">
