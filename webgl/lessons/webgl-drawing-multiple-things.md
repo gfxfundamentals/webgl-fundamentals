@@ -46,7 +46,7 @@ Or you could code it like this
 WebGL works this second way.  Functions like `gl.createBuffer`,
 `gl.bufferData`, `gl.createTexture`, and `gl.texImage2D` let you upload
 buffer (vertex) and texture (color, etc..) data to WebGL.
-`gl.createProgram`, `gl.createShader`, `gl.compileProgram`, and
+`gl.createProgram`, `gl.createShader`, `gl.compileShader`, and
 `gl.linkProgram` let you create your GLSL shaders.  Nearly all the rest of
 the functions of WebGL are setting up these global variables or *state*
 that is used when `gl.drawArrays` or `gl.drawElements` is finally called.
