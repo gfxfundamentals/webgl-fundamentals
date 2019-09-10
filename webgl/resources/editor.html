@@ -21,10 +21,7 @@ iframe {
     border: none;
 }
 .frame {
-    min-width: 100vw;
-    min-height: 100vh;
-    max-width: 100vw;
-    max-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     background: #444;
@@ -46,12 +43,6 @@ iframe {
     flex: 1 1 50%;
     flex-direction: column;
     min-width: 0;
-    /*
-    this calc is to get things to work in safari.
-    but firefox and chrome will let children of
-    the panes go 100% size but not safari
-    */
-    height: calc(100vh - 2.5em - 5px - 1px);
 }
 .panes .code {
     flex: 1 1 auto;
@@ -157,6 +148,11 @@ iframe {
 .fullscreen .panebuttons>.button-fullscreen {
     background-image: url(editor-unfullscreen-icon.svg) !important;
 }
+
+@media ( max-width: 950px ) {
+    .panebuttons>button, body {
+      font-size: x-small;
+    }
 
 @media ( max-width: 740px ) {
     .panelogo>div>a:nth-child(1) {
