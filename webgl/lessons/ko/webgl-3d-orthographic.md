@@ -362,7 +362,7 @@ void main() {
 그리고 fragment shader에서 그 색을 써야 하는데
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-fragment">
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 +// vertex shader로부터 전달
