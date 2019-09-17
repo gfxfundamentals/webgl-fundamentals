@@ -418,7 +418,7 @@ void main() {
 And we need to use that color in the fragment shader
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-fragment">
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 +// Passed in from the vertex shader.

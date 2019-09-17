@@ -349,7 +349,7 @@ void main() {
 然后在片断着色器中使用颜色
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-fragment">
+<script id="3d-fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 +// 从顶点着色器中传入
