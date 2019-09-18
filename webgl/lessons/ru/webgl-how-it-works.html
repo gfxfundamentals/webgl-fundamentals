@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/ru/webgl-how-it-works.md. Do not edited directly -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Как на самом деле работает WebGL" />
+<meta name="keywords" content="webgl graphics" />
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-how-it-works_ru.jpg" />
+
+<meta property="og:title" content="Как работает WebGL" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-how-it-works_ru.jpg" />
+<meta property="og:description" content="Как на самом деле работает WebGL" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ru/webgl-how-it-works.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="Как работает WebGL" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ru/webgl-how-it-works.html" />
+<meta name="twitter:description" content="Как на самом деле работает WebGL" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-how-it-works_ru.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-how-it-works.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-how-it-works_ru.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-how-it-works.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ru/webgl-how-it-works.html",
+      "inLanguage":"ru",
+      "name":"Как работает WebGL",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-how-it-works.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>Как работает WebGL</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-how-it-works.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-how-it-works.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-how-it-works.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-how-it-works.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-how-it-works.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-how-it-works.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-how-it-works.html" selected>Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-how-it-works.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">оглавление</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/ru/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>Как работает WebGL</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>Это продолжение <a href="webgl-fundamentals.html">основ WebGL</a>.
+Перед нашим погружением я думаю, что нужно обсудить на базовом уровне,
+что делают на самом деле WebGL и видеокарта. По существу, графический
+процессор выполняет две задачи. Первая задача - обработка положений
+(массива данных) и вершин пространства отсечения. Вторая задача -
+отрисовка пикселей на основе результатов первой задачи.</p>
+<p>Когда вы вызываете</p>
+<pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
+var offset = 0;
+var count = 9;
+gl.drawArrays(primitiveType, offset, count);
+</code></pre><p>цифра 9 означает &quot;обработай 9 вершин&quot; и 9 вершин обрабатываются:</p>
+<p><img src="../resources/vertex-shader-anim.gif" class="webgl_center" /></p>
+<p>Слева отображены переданные вами данные. Вершинный шейдер - это функция,
+которую вы написали на <a href="webgl-shaders-and-glsl.html">GLSL</a>. Она вызывается
+один раз на каждую вершину. Вы описываете математическую часть и устанавливаете
+специальную переменную <code>gl_Position</code> со значением координат пространства отсечения
+для текущей вершины. Видеокарта принимает это значение и хранит его во внутренней памяти.</p>
+<p>Предположим, вы отрисовываете <code>TRIANGLES</code>, и каждый раз, когда первая задача создаёт
+3 вершины, видеокарта использует их для создания треугольника. Она определяет, какие
+пиксели соответствуют 3 точкам треугольника и затем растеризует треугольник. Растеризация
+означает &quot;отрисовка объекта пикселями&quot;. Для каждого пикселя будет вызван фрагментный шейдер,
+где вас спросят, каким цветом нужно закрасить этот пиксель. Чтобы ответить на этот вопрос, ваш
+фрагментный шейдер должен установить специльной переменной <code>gl_FragColor</code> значение
+цвета для данного пикселя.</p>
+<p>Всё это очень интересно, но как вы могли видеть раньше в наших примерах
+до фрагментного шейдера доходило очень мало информации о пикселе.
+К счастью, мы можем передать больше информации. Мы определим “varying-переменные”
+для каждого значения, которое мы хотим передать из вершинного шейдера во фрагментный шейдер.</p>
+<p>В качестве простого примера рассмотрим передачу координат пространства отсечения напрямую
+из вершинного шейдера во фрагментный шейдер.</p>
+<p>Мы нарисуем простой треугольник. Возьмём наш <a href="webgl-2d-matrices.html">предыдущий пример</a>
+и заменим F на треугольник.</p>
+<pre class="prettyprint"><code>// заполнение буфера значениями, определяющими треугольник
+function setGeometry(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+             0, -100,
+           150,  125,
+          -175,  100]),
+      gl.STATIC_DRAW);
+}
+</code></pre><p>И нам нужно отрисовать всего 3 вершины</p>
+<pre class="prettyprint"><code>// рисуем сцену
+function drawScene() {
+  ...
+  // рисуем геометрию
+  var primitiveType = gl.TRIANGLES;
+  var offset = 0;
+  var count = 3;
+  gl.drawArrays(primitiveType, offset, count);
+}
+</code></pre><p>Затем в нашем вершинном шейдере мы определяем <em>varying-переменную</em> для
+передачи данных во фрагментный шейдер.</p>
+<pre class="prettyprint"><code>varying vec4 v_color;
+...
+void main() {
+  // умножение положения на матрицу
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+
+  // преобразование из пространства отсечения в пространство цвета
+  // пространство отсечения находится в диапазоне от -1.0 до +1.0
+  // пространство цвета находится в диапазоне от 0.0 до 1.0
+*  v_color = gl_Position * 0.5 + 0.5;
+}
+</code></pre><p>И теперь мы объявляем ту же самую <em>varying-переменную</em> во фрагментном шейдере.</p>
+<pre class="prettyprint"><code>precision mediump float;
+
+*varying vec4 v_color;
+
+void main() {
+*  gl_FragColor = v_color;
+}
+</code></pre><p>WebGL свяжет varying-переменную в вершинном шейдере с varying-переменной
+с тем же именем во фрагментном шейдере.</p>
+<p>Вот рабочий пример.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-triangle-with-position-for-color.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-triangle-with-position-for-color.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Перемещайте, масштабируйте и поворачивайте треугольник. Обратите внимание, что из-за
+того, что цвета рассчитываются из координат, цвета не двигаются вместе с треугольником.
+Цвета зависят не от объекта, а от координат пикселя на canvas&#39;е.</p>
+<p>Теперь подумаем над этим. Мы задали только 3 вершины. Наш вершинный шейдер вызвался
+только 3 раза и рассчитал, соответственно, 3 цвета, однако у нашего треугольника гораздо
+больше цветов. Собственно, поэтому переменные и называются <em>varying</em> (англ. varying - изменяющийся).</p>
+<p>WebGL принимает 3 рассчитанных нами значения для каждой вершины и затем
+при растеризации треугольника происходит интерполяция между значениями вершин.
+Для каждого пикселя WebGL вызывает фрагментный шейдер с интерполированным значением
+для этого пикселя.</p>
+<p>В примере выше мы начали с 3 вершин</p>
+<p><style>
+table.vertex_table {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-family: monospace;
+  font-size: small;
+}</p>
+<p>table.vertex_table th {
+  background-color: #88ccff;
+  padding-right: 1em;
+  padding-left: 1em;
+}</p>
+<p>table.vertex_table td {
+  border: 1px solid black;
+  text-align: right;
+  padding-right: 1em;
+  padding-left: 1em;
+}
+</style></p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="2">Вершины</th></tr>
+<tr><td>0</td><td>-100</td></tr>
+<tr><td>150</td><td>125</td></tr>
+<tr><td>-175</td><td>100</td></tr>
+</table>
+</div>
+
+<p>Наш вершинный шейдер применил матрицу для переноса, вращения, масштабирования и
+конвертирования координат в пространство отсечения. Значения по умолчанию для этих
+операций следующие: перенос = 200, 150, поворот = 0, масштаб = 1, 1 - то есть
+объект не поворачивается и не масштабируется, а только переносится. Исходя из того,
+что наш вторичный буфер имеет размер 400х300, вершинный шейдер применит матрицу
+и вычислит следующие 3 значения вершин пространства отсечения.</p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="3">значения в gl_Position</th></tr>
+<tr><td>0.000</td><td>0.660</td></tr>
+<tr><td>0.750</td><td>-0.830</td></tr>
+<tr><td>-0.875</td><td>-0.660</td></tr>
+</table>
+</div>
+
+<p>Он также преобразует их в цвета и запишет значение в <em>varying-переменную</em>
+v_color, которую мы объявили.</p>
+<div class="hcenter">
+<table class="vertex_table">
+<tr><th colspan="3">значения в v_color</th></tr>
+<tr><td>0.5000</td><td>0.830</td><td>0.5</td></tr>
+<tr><td>0.8750</td><td>0.086</td><td>0.5</td></tr>
+<tr><td>0.0625</td><td>0.170</td><td>0.5</td></tr>
+</table>
+</div>
+
+<p>Эти 3 значения в v_color затем интерполируются и передадутся
+во фрагментный шейдер для каждого пикселя.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/fragment-shader-anim.html"></iframe>
+  <div class="webgl_center">v_color интерполируется между v0, v1 и v2</div>
+</div>
+
+</p>
+<p>Также в наших силах передать больше данных вершинному шейдеру, которые затем
+мы можем передать дальше во фрагментный шейдер. Нарисуем для примера прямоугольник,
+состоящий из 2 треугольников 2 разных цветов. Чтобы это сделать, добавим ещё один
+атрибут вершинному шейдеру, чтобы передать ему больше данных, которые дальше
+пойдут во фрагментный шейдер.</p>
+<pre class="prettyprint"><code>attribute vec2 a_position;
++attribute vec4 a_color;
+...
+varying vec4 v_color;
+
+void main() {
+   ...
+  // копируем цвет из атрибута в varying-переменную
+*  v_color = a_color;
+}
+</code></pre><p>Теперь нужно передать цвета для использования в WebGL.</p>
+<pre class="prettyprint"><code>  // получаем ссылки на атрибуты, куда запишутся данные
+  var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
++  var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
+  ...
++  // создаём буфер для цветов
++  var colorBuffer = gl.createBuffer();
++  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  // устанавливаем цвета
++  setColors(gl);
+  ...
+
++// заполняем буфер цветами для двух треугольников,
++// образующих прямоугольник
++function setColors(gl) {
++  // выбираем 2 случайных цвета
++  var r1 = Math.random();
++  var b1 = Math.random();
++  var g1 = Math.random();
++
++  var r2 = Math.random();
++  var b2 = Math.random();
++  var g2 = Math.random();
++
++  gl.bufferData(
++      gl.ARRAY_BUFFER,
++      new Float32Array(
++        [ r1, b1, g1, 1,
++          r1, b1, g1, 1,
++          r1, b1, g1, 1,
++          r2, b2, g2, 1,
++          r2, b2, g2, 1,
++          r2, b2, g2, 1]),
++      gl.STATIC_DRAW);
++}
+</code></pre><p>Во время отрисовки настраиваем атрибут цвета</p>
+<pre class="prettyprint"><code>+gl.enableVertexAttribArray(colorLocation);
++
++// Привязываем буфер цветов.
++gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
++
++// Указываем атрибуту, как получать данные от colorBuffer (ARRAY_BUFFER)
++var size = 4;          // 4 компоненты на итерацию
++var type = gl.FLOAT;   // наши данные - 32-битные числа с плавающей точкой
++var normalize = false; // не нормализовать данные
++var stride = 0;        // 0 = перемещаться на size * sizeof(type) каждую итерацию для получения следующего положения
++var offset = 0;        // начинать с начала буфера
++gl.vertexAttribPointer(
++    colorLocation, size, type, normalize, stride, offset)
+</code></pre><p>И устанавливаем count для вычисления 6 вершин 2 треугольников</p>
+<pre class="prettyprint"><code>// Отрисовка геометрии.
+var primitiveType = gl.TRIANGLES;
+var offset = 0;
+*var count = 6;
+gl.drawArrays(primitiveType, offset, count);
+</code></pre><p>И вот результат:</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-with-2-colors.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-with-2-colors.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Заметьте, что у нас получилось 2 треугольника со сплошным цветом. Однако, мы
+передаём значения в <em>varying-переменной</em> и эти значения интерполируются при
+отрисовке треугольника. Но так как мы использовали одинаковый цвет для всех
+3 вершин каждого треугольника, цвет не меняется. Если сделать цвет каждой
+вершины различным, мы увидим интерполяцию.</p>
+<pre class="prettyprint"><code>// заполняем буфер цветами для двух треугольников,
+// образующих прямоугольник
+function setColors(gl) {
+  // делаем отдельный цвет для каждой вершины
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(
+*        [ Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1,
+*          Math.random(), Math.random(), Math.random(), 1]),
+      gl.STATIC_DRAW);
+}
+</code></pre><p>И теперь мы видим интерполированную <em>varying-переменную</em>.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-with-random-colors.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-with-random-colors.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Полагаю, выглядит не особо захватывающе, но это отлично демонстрирует использование
+более одного атрибута и передачу данных из вершинного шейдера во фрагментный шейдер.
+Если вы посмотрите на <a href="webgl-image-processing.html">пример обработки изображений</a>,
+вы увидите, что там также используется дополнительный атрибут для передачи координат текстур.</p>
+<h2 id="-">Что делают эти команды, связанные с буферами и атрибутами?</h2>
+<p>Буферы - средство передачи вершин и вершинных данных на видеокарту.
+<code>gl.createBuffer</code> создаёт буфер.
+<code>gl.bindBuffer</code> устанавливает данный буфер как активный буфер, с которым будет происходить работа.
+<code>gl.bufferData</code> копирует данные в активный буфер. Обычно выполняется на этапе инициализации.</p>
+<p>Когда данные помещены в буфер, нам нужно подсказать WebGL, как извлечь
+эти данные и передать атрибуту вершинного шейдера.</p>
+<p>Чтобы это сделать, сначала получим у WebGL ссылку на атрибут.
+Например, в коде выше у нас было</p>
+<pre class="prettyprint"><code>// получаем ссылки на атрибуты, куда запишутся данные
+var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
+var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
+</code></pre><p>Этот код обычно выполняется на этапе инициализации. Когда нам известна ссылка
+на атрибут, мы можем выполнить 3 команды прямо перед отрисовкой.</p>
+<pre class="prettyprint"><code>gl.enableVertexAttribArray(location);
+</code></pre><p>Эта команда говорит WebGL, что мы хотим получать данные из буфера.</p>
+<p>gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);</p>
+<p>Здесь буфер привязывается к точке связи ARRAY_BUFFER. Это глобальная
+переменная внутри WebGL.</p>
+<pre class="prettyprint"><code>gl.vertexAttribPointer(
+    location,
+    numComponents,
+    typeOfData,
+    normalizeFlag,
+    strideToNextPieceOfData,
+    offsetIntoBuffer);
+</code></pre><p>А эта команда говорит WebGL получить данные из буфера, который привязан к
+точке связи ARRAY_BUFFER; сколько компонентов уходит на вершину (1 - 4);
+какого типа данные (<code>BYTE</code>, <code>FLOAT</code>, <code>INT</code>, <code>UNSIGNED_SHORT</code>, и т.д.); шаг,
+который указывает, сколько байтов нужно пропустить, чтобы перейти от одной
+порции данных к следующей; отступ, чтобы указать, как далеко от начала буфера
+находятся наши данные.</p>
+<p>Количество компонентов всегда от 1 до 4.</p>
+<p>Если вы используете 1 буфер на один тип данных, тогда шаг и отступ можно всегда
+устанавливать в значение 0. Шаг со значением 0 означает, что нужно использовать
+шаг который соответствует этому типу и размеру&quot;. Отступ со значением 0 означает,
+что нужно начинать с самого начала буфера. Установка этих значений отличными от 0
+нужна в более сложных случаях, и хотя это даёт некоторые преимущества в плане
+производительности, оно не стоит той сложности, пока вам не нужно использовать
+WebGL на полную катушку.</p>
+<p>Надеюсь, с буферами и атрибутами стало понятней.</p>
+<p>Далее пройдёмся по <a href="webgl-shaders-and-glsl.html">шейдерам и GLSL</a>.</p>
+<div class="webgl_bottombar"><h3>Что такое normalizeFlag в vertexAttribPointer?</h3>
+<p>
+Флаг нормализации предназначен для всех типов без плавающей точки. Если вы
+передадите false, типы значений будут интерпретироваться как есть. BYTE занимает
+диапазон от -128 до 127, UNSIGNED_BYTE от 0 до 255, SHORT от -32768 до 32767 и т.д.
+</p>
+<p>
+Если установить флаг нормализации в значение true, значения BYTE (-128 to 127)
+будут представлять значения от -1.0 до +1.0, UNSIGNED_BYTE (0 to 255) от 0.0 до +1.0.
+Нормализованный SHORT тоже станет от -1.0 до +1.0, просто большей дискретности
+по сравнению с BYTE.
+</p>
+<p>
+Наиболее часто нормализованные данные используются для цветов. Чаще всего цвет
+варьируется от 0.0 до 1.0. Использование типа float для красного, зелёного,
+синего цвета и прозрачности заняло бы 16 байтов на цвет каждой вершины. Если у
+вас сложная геометрия, такое использование прибавит большое количество байтов.
+Вместо этого вы можете конвертировать ваши цвета в UNSIGNED_BYTE, где 0 представляет
+0.0, а 255 представляет 1.0. Теперь ван нужно всего 4 байта на цвет каждой вершины,
+что даёт экономию по памяти в 75%.
+</p>
+<p>Давайте изменим код соответствующим образом. Когда мы говорим WebGL,
+как извлекать наши цвета, мы бы использовали</p>
+<pre class="prettyprint showlinemods">
+  // Указываем атрибуту, как получать данные от colorBuffer (ARRAY_BUFFER)
+  var size = 4;                    // 4 компоненты на итерацию
+  *  var type = gl.UNSIGNED_BYTE;  // наши данные - 8-битные числа с плавающей точкой
+  *  var normalize = true;         // нормализовать данные
+  var stride = 0;                  // 0 = перемещаться на size * sizeof(type) каждую итерацию для получения следующего положения
+  var offset = 0;                  // начинать с начала буфера
+  gl.vertexAttribPointer(
+      colorLocation, size, type, normalize, stride, offset)
+</pre>
+<p>И при заполнении буфера цветом мы бы написали</p>
+<pre class="prettyprint showlinemods">
+// заполняем буфер цветами для двух треугольников,
+// образующих прямоугольник
+function setColors(gl) {
+  // выбираем 2 случайных цвета
+  var r1 = Math.random() * 256; // от 0 до 255.99999
+  var b1 = Math.random() * 256; // эти значения
+  var g1 = Math.random() * 256; // будут усечены
+  var r2 = Math.random() * 256; // чтобы поместиться
+  var b2 = Math.random() * 256; // Uint8Array
+  var g2 = Math.random() * 256;
+
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Uint8Array(   // Uint8Array
+        [ r1, b1, g1, 255,
+          r1, b1, g1, 255,
+          r1, b1, g1, 255,
+          r2, b2, g2, 255,
+          r2, b2, g2, 255,
+          r2, b2, g2, 255]),
+      gl.STATIC_DRAW);
+}
+</pre>
+<p>
+Вот пример этого кода:
+</p>
+
+<div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-with-2-byte-colors.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-with-2-byte-colors.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+
+</div>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-how-it-works.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-how-it-works.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-how-it-works.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-how-it-works.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-how-it-works.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-how-it-works.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-how-it-works.html" selected>Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-how-it-works.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Основы</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-fundamentals.html">Основы WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-how-it-works.html">Как работает WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-shaders-and-glsl.html">Шейдеры и GLSL в WebGL</a></li>
+        </ul>
+  <li>Обработка изображений</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-image-processing.html">Обработка изображений в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-image-processing-continued.html">Продолжаем обработку изображений в WebGL</a></li>
+        </ul>
+  <li>Математика переноса, поворота и масштабирования в 2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-2d-translation.html">2D-перенос в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-rotation.html">2D-поворот в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-scale.html">2D-масштабирование в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-matrices.html">2D-матрицы в WebGL</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-orthographic.html">WebGL 3D - Ортогональ</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-perspective.html">WebGL 3D - Перспектива</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-camera.html">WebGL 3D - Камеры</a></li>
+        </ul>
+  <li>Освещение</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-lighting-directional.html">WebGL 3D - Направленное освещение</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">WebGL 3D - Точечное освещение</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор</a></li>
+        </ul>
+  <li>Структура и устройство</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-less-code-more-fun.html">WebGL - Меньше кода, больше веселья</a></li>
+<li><a href="/webgl/lessons/ru/webgl-drawing-multiple-things.html">WebGL - Отрисовка нескольких объектов</a></li>
+<li><a href="/webgl/lessons/ru/webgl-scene-graph.html">WebGL - Графы сцены</a></li>
+        </ul>
+  <li>Геометрия</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели</a></li>
+        </ul>
+  <li>Текстуры</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-textures.html">WebGL 3D - Текстуры</a></li>
+<li><a href="/webgl/lessons/ru/webgl-data-textures.html">WebGL - Данные для текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2-textures.html">WebGL - Использование 2 и более текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-cors-permission.html">WebGL - Кросс-доменные изображения</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Перспективная коррекция текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Рендеринг в текстуру</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Приёмы</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-matrix-stack.html">WebGL 2D - Стек матриц</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/ru/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/ru/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/ru/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/ru/webgl-fog.html">Fog</a></li>
+        </ul>
+  <li>Текст</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-text-html.html">WebGL текст - HTML</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-canvas2d.html">WebGL текст - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-texture.html">WebGL текст - Используем текстуру</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-glyphs.html">WebGL текст - Используем глиф-текстуру</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/ru/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/ru/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Разное</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-setup-and-installation.html">WebGL Установка и настройка</a></li>
+<li><a href="/webgl/lessons/ru/webgl-boilerplate.html">Шаблон WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/ru/webgl-resizing-the-canvas.html">Изменение размера Canvas в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-animation.html">WebGL - Анимация</a></li>
+<li><a href="/webgl/lessons/ru/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/ru/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ru/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ru/webgl-and-alpha.html">WebGL и прозрачность</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-vs-3d-library.html">WebGL - 2D и 3D библиотеки</a></li>
+<li><a href="/webgl/lessons/ru/webgl-anti-patterns.html">WebGL - Антипаттерны</a></li>
+<li><a href="/webgl/lessons/ru/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/ru/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Документация по вспомогательным функциям</a></li>
+  <li><a href="http://twgljs.org">TWGL, лёгкая библиотека-помощник для WebGL</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Вопросы? <a href="http://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
+        <div>Нашли ошибку? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'Как работает WebGL';
+            var disqus_title = 'Как работает WebGL';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/ru/webgl-2d-matrices.md. Do not edited directly -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Математика матриц на простых и подробных примерах." />
+<meta name="keywords" content="webgl graphics" />
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrices_ru.jpg" />
+
+<meta property="og:title" content="2D-матрицы WebGL" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrices_ru.jpg" />
+<meta property="og:description" content="Математика матриц на простых и подробных примерах." />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-matrices.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="2D-матрицы WebGL" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-matrices.html" />
+<meta name="twitter:description" content="Математика матриц на простых и подробных примерах." />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrices_ru.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-matrices.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrices_ru.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-matrices.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-matrices.html",
+      "inLanguage":"ru",
+      "name":"2D-матрицы WebGL",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-matrices.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>2D-матрицы WebGL</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-2d-matrices.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2d-matrices.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-2d-matrices.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2d-matrices.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2d-matrices.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2d-matrices.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2d-matrices.html" selected>Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2d-matrices.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">оглавление</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/ru/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>2D-матрицы WebGL</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>Эта статья из серии, которая начинается с <a href="webgl-fundamentals.html">Основ WebGL</a>,
+является продолжением предыдущей <a href="webgl-2d-scale.html">статьи о масштабировании геометрии</a>.</p>
+<p>В последних 3 статьях мы разобрались, как
+<a href="webgl-2d-translation.html">переносить</a>,
+<a href="webgl-2d-rotation.html">поворачивать</a>,
+и <a href="webgl-2d-scale.html">масштабировать</a> геометрию. Перенос, поворот и
+масштабирование являются &#39;трансформациями&#39;. Каждая из этих трансформаций
+требовала внесения изменений в шейдер и шла в строго определённом порядке.
+В <a href="webgl-2d-scale.html">нашем предыдущем примере</a> мы сначала масштабировали,
+затем поворачивали, а затем переносили. Если изменить порядок, мы получим
+другой результат.</p>
+<p>Например, вот результат масштабирования на 2, 1, поворота на 30 градусов
+и переноса на 100, 0.</p>
+<p><img src="../../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" /></p>
+<p>А вот результат переноса на 100, 0, поворота на 30 градусов и масштабирования на 2, 1.</p>
+<p><img src="../../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" /></p>
+<p>Результаты абсолютно разные. Хуже того, если нам нужно достичь результата
+из второго примера, нам нужен другой шейдер, в котором перенос, поворот и
+масштабирование будут идти в новом порядке.</p>
+<p>И вот одни умные люди выяснили, что можно сделать всю математику
+с помощью матриц. Для 2D мы используем матрицу 3х3. Матрицу 3х3
+можно представить в виде таблицы с 9 ячейками.</p>
+<p><style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style></p>
+<div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
+
+<p>Для вычисления нам нужно умножить положение на колонку матрицы и сложить
+результаты. Наше положение имеет 2 значения - x и y, но для вычисления
+нам нужно 3 значения, поэтому возьмём 1 для третьего значения.</p>
+<p>В этом случае результатом будет</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/>
+<tr><td class="glocal-right">newX&nbsp;=&nbsp;</td><td>x&nbsp;*&nbsp;</td><td class="glocal-border">1.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x&nbsp;*&nbsp;</td><td class="glocal-border">2.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td>x&nbsp;*&nbsp;</td><td class="glocal-border">3.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">4.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">5.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">6.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>1&nbsp;*&nbsp;</td><td>7.0</td><td>&nbsp;</td><td></td><td>1&nbsp;*&nbsp;</td><td>8.0</td><td>&nbsp;&nbsp;</td><td></td><td>1&nbsp;*&nbsp;</td><td>9.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>Возможно, вы смотрите на это всё и думаете &quot;В ЧЁМ СМЫСЛ?&quot;. Предположим,
+у нас есть перенос. Назовём tx и ty значения, на которые мы хотим выполнить
+перенос. Зададим соответствующую матрицу.</p>
+<div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>1.0</td><td>0.0</td></tr><tr><td>tx</td><td>ty</td><td>1.0</td></tr></table></div>
+
+<p>А теперь взгляните</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">1.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr><tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">1.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>tx</td><td>&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>ty</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>Из курса математики вы помните, что можно игнорировать всё, что умножается
+на ноль. Умножение на 1 не меняет значение, поэтому просто посмотрим на
+результат.</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">&nbsp;+</td><td></td><td>y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>tx</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>ty</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>Или более лаконично</p>
+<pre class="webgl_center">
+newX = x + tx;
+newY = y + ty;
+</pre>
+
+<p>На extra можно не обращать внимания. Результат удивительно похож на код,
+который <a href="webgl-2d-translation.html">мы использовали в статье про 2D-перенос</a>.</p>
+<p>Аналогичным образом сделаем поворот. Как мы выяснили в статье про 2D-поворот, нам
+нужны значения синуса и косинуса угла, на который мы хотим выполнить поворот, поэтому</p>
+<pre class="webgl_center">
+s = Math.sin(angleToRotateInRadians);
+c = Math.cos(angleToRotateInRadians);
+</pre>
+
+<p>И у нас получится такая матрица</p>
+<div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>c</td><td>-s</td><td>0.0</td></tr><tr><td>s</td><td>c</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
+
+<p>Применяя матрицу, мы получим</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">c</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">-s</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">s</td><td class="glocal-left">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">c</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>Закрасим всё, что умножается на 0 или 1, и получим</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">c</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">-s</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">s</td><td class="glocal-left glocal-blk">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">c</td><td class="glocal-left glocal-blk">&nbsp;+&nbsp;</td><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>После упрощения останется</p>
+<pre class="webgl_center">
+newX = x *  c + y * s;
+newY = x * -s + y * c;
+</pre>
+
+<p>Что является точной копией формулы, которую
+<a href="webgl-2d-rotation.html">мы использовали в статье про 2D-поворот</a>.</p>
+<p>И, наконец, масштаб. Назовём коэффициента масштаба sx и sy.</p>
+<p>У нас получится матрица следующего вида.</p>
+<div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>sx</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>sy</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
+
+<p>Применяя матрицу, мы получим</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">sx</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">sy</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>что на самом деле</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">sx</td><td class="glocal-left glocal-blk">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">sy</td><td class="glocal-left glocal-blk">&nbsp;+&nbsp;</td><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>и после упрощения</p>
+<pre class="webgl_center">
+newX = x * sx;
+newY = y * sy;
+</pre>
+
+<p>Что опять-таки повторяет <a href="webgl-2d-scale.html">формулу масштабирования из прежней статьи</a>.</p>
+<p>Уверен, что вы по-прежнему думаете &quot;И что? В чём все-таки смысл?&quot;. Похоже,
+что проделано много работы для того, чтобы просто повторить то, что мы
+уже сделали ранее.</p>
+<p>И именно здесь появляется магия. Так получается, что мы можем умножить
+все матрицы и применить все трансформации сразу. Предположим, у нас есть
+функция <code>m3.multiply</code>, которая принимает две матрицы, умножает их и
+возвращает результат.</p>
+<p>Чтобы внести ясность, напишем функции для создания матриц переноса,
+поворота и масштабирования.</p>
+<pre class="prettyprint"><code>var m3 = {
+  translation: function(tx, ty) {
+    return [
+      1, 0, 0,
+      0, 1, 0,
+      tx, ty, 1,
+    ];
+  },
+
+  rotation: function(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+    return [
+      c,-s, 0,
+      s, c, 0,
+      0, 0, 1,
+    ];
+  },
+
+  scaling: function(sx, sy) {
+    return [
+      sx, 0, 0,
+      0, sy, 0,
+      0, 0, 1,
+    ];
+  },
+};
+</code></pre><p>Теперь внесём изменения в шейдер. Код прежнего шейдера выглядел так:</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
+
+uniform vec2 u_resolution;
+uniform vec2 u_translation;
+uniform vec2 u_rotation;
+uniform vec2 u_scale;
+
+void main() {
+  // Масштабирование
+  vec2 scaledPosition = a_position * u_scale;
+
+  // Поворот
+  vec2 rotatedPosition = vec2(
+     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
+     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
+
+  // Перенос
+  vec2 position = rotatedPosition + u_translation;
+  ...
+</code></pre><p>Код нового шейдера намного проще</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
+
+uniform vec2 u_resolution;
+uniform mat3 u_matrix;
+
+void main() {
+  // Умножаем координаты на матрицу
+  vec2 position = (u_matrix * vec3(a_position, 1)).xy;
+  ...
+</code></pre><p>И вот как мы используем его в JavaScript:</p>
+<pre class="prettyprint"><code>  // Отрисовка сцены
+  function drawScene() {
+
+    ,,,
+
+    // Создаём матрицы
+    var translationMatrix = m3.translation(translation[0], translation[1]);
+    var rotationMatrix = m3.rotation(angleInRadians);
+    var scaleMatrix = m3.scaling(scale[0], scale[1]);
+
+    // Умножаем матрицы
+    var matrix = m3.multiply(translationMatrix, rotationMatrix);
+    matrix = m3.multiply(matrix, scaleMatrix);
+
+    // Передаём матрицу в шейдер
+    gl.uniformMatrix3fv(matrixLocation, false, matrix);
+
+    // Отрисовываем треугольник
+    gl.drawArrays(gl.TRIANGLES, 0, 18);
+  }
+</code></pre><p>Вот пример использования нового кода. Слайдеры остались те же самые,
+перенос, поворот и масштабирование. Но их использование в шейдере
+гораздо проще.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>И по-прежнему вы можете недоумевать, что теперь? Не похоже на большое
+преимущество. Дело ещё в том, что для изменения порядка трансформаций
+нам не нужно менять код шейдера. Достаточно изменить порядок умножения
+матриц.</p>
+<pre class="prettyprint"><code>    ...
+    // Умножаем матрицы
+    var matrix = m3.multiply(scaleMatrix, rotationMatrix);
+    matrix = m3.multiply(matrix, translationMatrix);
+    ...
+</code></pre><p>И вот, что получится.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-trs.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-trs.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Такая способность матриц особенно важна в иерархической анимации, например
+руки относительно тела, спутники относительно планеты вокруг солнца, или
+ветви дерева. Для простого примера иерархической анимации нарисуем &#39;F&#39; 5
+раз, каждый раз начиная с матрицы предыдущей &#39;F&#39;.</p>
+<pre class="prettyprint"><code>  // Отрисовка сцены
+  function drawScene() {
+    // Очищаем canvas
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // Создаём матрицы
+    var translationMatrix = m3.translation(translation[0], translation[1]);
+    var rotationMatrix = m3.rotation(angleInRadians);
+    var scaleMatrix = m3.scaling(scale[0], scale[1]);
+
+    // Начальная матрица
+    var matrix = m3.identity();
+
+    for (var i = 0; i &lt; 5; ++i) {
+      // Умножаем матрицы
+      matrix = m3.multiply(matrix, translationMatrix);
+      matrix = m3.multiply(matrix, rotationMatrix);
+      matrix = m3.multiply(matrix, scaleMatrix);
+
+      // Передаём матрицу в шейдер
+      gl.uniformMatrix3fv(matrixLocation, false, matrix);
+
+      // Отрисовываем геометрию
+      gl.drawArrays(gl.TRIANGLES, 0, 18);
+    }
+  }
+</code></pre><p>У нас появилась новая функция <code>m3.identity</code>, которая создаёт единичную
+матрицу. Единичная матрица - это матрица, которая фактически представляет
+собой единицу, то есть при умножении матрицы на единичную матрицу ничего
+не изменится. Прямо как</p>
+<div class="webgl_center">X * 1 = X</div>
+
+<p>так и</p>
+<div class="webgl_center">matrixX * identity = matrixX</div>
+
+<p>Вот код, создающий единичную матрицу</p>
+<pre class="prettyprint"><code>var m3 = {
+  identity function() {
+    return [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1,
+    ];
+  },
+
+  ...
+</code></pre><p>И вот наши 5 букв &#39;F&#39;.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-hierarchical.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-hierarchical.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Рассмотрим ещё один момент. В каждом рассмотренном примере &#39;F&#39; поворачивалась
+вокруг своего верхнего левого угла (ну за исключением примера, где мы меняли
+порядок матриц). Так происходит по той причине, что вычисления всегда выполняются
+относительно начала координат, а левый верхний угол буквы &#39;F&#39; как раз в начале
+координат (0, 0).</p>
+<p>Но теперь, используя матрицы, мы можем задавать порядок применения
+трансформаций и сместить таким образом начало координат.</p>
+<pre class="prettyprint"><code>    // создаём матрицу, которая переместит начало координат в центр буквы &#39;F&#39;
+    var moveOriginMatrix = m3.translation(-50, -75);
+    ...
+
+    // Умножаем матрицы
+    var matrix = m3.multiply(translationMatrix, rotationMatrix);
+    matrix = m3.multiply(matrix, scaleMatrix);
+    matrix = m3.multiply(matrix, moveOriginMatrix);
+</code></pre><p>Вот этот пример. Заметьте, что F вращается и масштабируется относительно своего центра.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-center-f.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-center-f.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>С помощью такого подхода можно указывать точку, относительно которой будет
+происходить поворот и масштабирование. Теперь вы знаете, как Photoshop и Flash
+задаёт точку вращения.</p>
+<p>Теперь пойдём ещё дальше. Если вы вернётесь к первой статье про
+<a href="webgl-fundamentals.html">Основы WebGL</a>, вы можете вспомнить код шейдера,
+который конвертировал пиксели в координаты пространства отсечения:</p>
+<pre class="prettyprint"><code>  ...
+  // преобразуем положение в пикселях к диапазону от 0.0 до 1.0
+  vec2 zeroToOne = position / u_resolution;
+
+  // преобразуем из 0-&gt;1 в 0-&gt;2
+  vec2 zeroToTwo = zeroToOne * 2.0;
+
+  // преобразуем из 0-&gt;2 в -1-&gt;+1 (пространство отсечения)
+  vec2 clipSpace = zeroToTwo - 1.0;
+
+  gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+</code></pre><p>Если вы посмотрите на каждую строчку кода, первая из них, &quot;преобразуем
+положение в пикселях к диапазону от 0.0 до 1.0&quot;, - это на самом деле
+масштабирование. Как и вторая. Далее идёт перенос и последняя является
+тоже масштабированием Y на -1. Мы можем сделать всё то же самое через
+матрицу. Мы могли бы сделать матрицу масштабирования на 1.0/resolution,
+ещё одну матрицу масштабирования на 2.0, третью матрицу переноса на
+-1.0,-1.0 и четвёртую матрицу масштабирования Y на -1. Затем можно было
+умножить все эти матрицы, но так как вычисления здесь очень простые, мы
+просто можем написать функцию, которая сразу создаёт &#39;проекционную&#39;
+матрицу для заданного разрешения.</p>
+<pre class="prettyprint"><code>var m3 = {
+  projection: function(width, height) {
+    // Эта матрица переворачивает Y, чтобы 0 был наверху
+    return [
+      2 / width, 0, 0,
+      0, -2 / height, 0,
+      -1, 1, 1
+    ];
+  },
+
+  ...
+</code></pre><p>Теперь шейдер можно сделать ещё проще. Так будет выглядеть полностью
+новый вершинный шейдер.</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
+
+uniform mat3 u_matrix;
+
+void main() {
+  // Умножаем координаты на матрицу
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+}
+&lt;/script&gt;
+</code></pre><p>В JavaScript нам нужно умножить на проекционную матрицу.</p>
+<pre class="prettyprint"><code>  // Отрисовка сцены
+  function drawScene() {
+    ...
+
+    // Создаём матрицы
+    var projectionMatrix = m3.projection(
+        gl.canvas.clientWidth, gl.canvas.clientHeight);
+
+    ...
+
+    // Умножаем матрицы
+    var matrix = m3.multiply(projectionMatrix, translationMatrix);
+    matrix = m3.multiply(matrix, rotationMatrix);
+    matrix = m3.multiply(matrix, scaleMatrix);
+
+    ...
+  }
+</code></pre><p>Мы также удалили код установки разрешения. С этим последним изменением
+мы упростили шейдер с 6-7 шагов до очень простого шейдера в 1 шаг и всё
+это из-за магии матриц.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-with-projection.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-with-projection.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Прежде, чем мы продолжим, давайте немного упростим код. Мы можем не просто умножать
+отдельно созданные матрицы, а создать соответствующие операции трансформации. Например,
+мы могли бы написать следующие функции:</p>
+<pre class="prettyprint"><code>var m3 = {
+
+  ...
+
+  translate: function(m, tx, ty) {
+    return m3.multiply(m, m3.translation(tx, ty));
+  },
+
+  rotate: function(m, angleInRadians) {
+    return m3.multiply(m, m3.rotation(angleInRadians));
+  },
+
+  scale: function(m, sx, sy) {
+    return m3.multiply(m, m3.scaling(sx, sy));
+  },
+
+  ...
+
+};
+</code></pre><p>С помощью этих функций 7 строк кода, рассмотренных выше, превратятся в 4 строки:</p>
+<pre class="prettyprint"><code>// Вычисление матриц
+var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
+matrix = m3.translate(matrix, translation[0], translation[1]);
+matrix = m3.rotate(matrix, angleInRadians);
+matrix = m3.scale(matrix, scale[0], scale[1]);
+</code></pre><p>И вот результат</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-simpler-functions.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-simpler-functions.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>И последнее, что касается порядка следования матриц. В первом примере у нас было</p>
+<pre class="prettyprint"><code>translation * rotation * scale
+</code></pre><p>а во втором</p>
+<pre class="prettyprint"><code>scale * rotation * translation
+</code></pre><p>И вы видели, как они отличаются.</p>
+<p>Если отследить весь путь преобразования матрицами, то вы начинаете с координат
+пространства отсечения, и каждая матрица вносит изменение в это пространство:</p>
+<p>Шаг 1:  матрица отсутствует (или единичная матрица)</p>
+<blockquote>
+<p>Мы в пространстве отсечения, координаты должны передаваться тоже в нём.</p>
+</blockquote>
+<p>Шаг 2:  <code>matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)</code>;</p>
+<blockquote>
+<p>Мы в пиксельном пространстве. Координаты должны передаваться тоже в пикселях.</p>
+</blockquote>
+<p>Шаг 3:  <code>matrix = m3.translate(matrix, tx, ty);</code></p>
+<blockquote>
+<p>Начало координат теперь в tx, ty (пространство сдвинулось)</p>
+</blockquote>
+<p>Шаг 4:  <code>matrix = m3.rotate(matrix, rotationInRadians);</code></p>
+<blockquote>
+<p>Пространство повернулось вокруг tx, ty</p>
+</blockquote>
+<p>Шаг 5:  <code>matrix = m3.scale(matrix, sx, sy);</code></p>
+<blockquote>
+<p>Повёрнутое пространство с центром в tx, ty теперь масштабируется</p>
+</blockquote>
+<p>Затем в шейдере мы выполняем <code>gl_Position = matrix * position;</code>
+и значения <code>position</code> теперь находятся в этом конечном пространстве.</p>
+<p>Надеюсь, статья помогла снять завесу тайны с математики матриц.
+Если вы хотите продолжить тему 2D, советую ознакомиться с
+<a href="webgl-2d-drawimage.html">WebGL 2D - DrawImage</a> и следующий за ним
+<a href="webgl-2d-matrix-stack.html">WebGL 2D - Стек матриц</a>.</p>
+<p>В противном случае <a href="webgl-3d-orthographic.html">следуйте за мной в 3D</a>.
+В 3D используются те же принципы использования матриц. Я начал с 2D в
+надежде упростить материал.</p>
+<p>Также, если вы хотите стать экспертом в области матриц, рекомендую
+<a href="https://www.youtube.com/watch?v=kjBOesZCoqc&amp;list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">ознакомиться с этими замечательными видео</a>.</p>
+<div class="webgl_bottombar">
+<h3>Что такое <code>clientWidth</code> и <code>clientHeight</code>?</h3>
+<p>До этого момента для получения размеров canvas я использовал <code>canvas.width</code> и <code>canvas.height</code>,
+но немного ранее при вызове <code>m3.projection</code> я использовал <code>canvas.clientWidth</code> и <code>canvas.clientHeight</code> вместо них. Почему же?</p>
+
+<p>Проекционные матрицы отвечают за то, как конвертировать пространство отсечения (-1 до +1 во всех измерениях)
+в пиксели. Но в браузере есть 2 типа пикселей, с которыми мы работаем. Один тип - количество пикселей в самом
+canvas. Например, если canvas задан следующим образом</p>
+<pre class="prettyprint">
+  &lt;canvas width="400" height="300"&gt;&lt;/canvas&gt;
+</pre>
+<p>или так</p>
+<pre class="prettyprint">
+  var canvas = document.createElement("canvas");
+  canvas.width = 400;
+  canvas.height = 300;
+</pre>
+<p>то каждый из них соответствует картинке 400 пикселей по ширине и 300 по высоте. Но этот размер не
+обязательно будет совпадать с тем, как браузер отобразит canvas 400x300. За размер отвечает CSS.
+Например, создадим canvas следующим образом:</p>
+<pre class="prettyprint"><!>
+  &lt;style&gt;
+  canvas {
+    width: 100vw;
+    height: 100vh;
+  }
+  &lt;/style&gt;
+  ...
+  &lt;canvas width="400" height="300">&lt;/canvas&gt;
+</pre>
+<p>Canvas займет весь отведённый ему контейнер, а это не 400x300.</p>
+<p>Рассмотрим два примера, где canvas'у задан размер 100% черз CSS, чтобы растянуть canvas на всю
+страницу. Первый использует <code>canvas.width</code> и <code>canvas.height</code>. Откройте его в
+новом окне и измените размер окна. Как видите, 'F' не сохраняет пропорции и искажается.</p>
+<div class="webgl_example_container">
+  <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-width-height.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-width-height.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+
+<p>Во втором примере мы используем <code>canvas.clientWidth</code> и <code>canvas.clientHeight</code>.
+<code>canvas.clientWidth</code> и <code>canvas.clientHeight</code> возвращают размер canvas, который
+в итоге отобразится браузером на странице, поэтому несмотря на то, что в canvas по-прежнему содержится
+400x300 пикселей, 'F' будет отображаться корректно, так как соотношение сторон будет рассчитываться из
+конечного размера элемента браузера.</p>
+<div class="webgl_example_container">
+  <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-clientwidth-clientheight.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-clientwidth-clientheight.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+
+<p>Большинство приложений, допускающих менять размеры canvas, пытаются поддерживать равенство
+<code>canvas.width</code> и <code>canvas.height</code> с <code>canvas.clientWidth</code> и <code>canvas.clientHeight</code>,
+чтобы один пиксель canvas соответствовал одному пикселю, отображённому в браузере. Но, как мы видели
+выше, это не единственное решение. Практически в любом случае использование <code>canvas.clientHeight</code>
+и <code>canvas.clientWidth</code> для вычисления соотношения сторон будет более корректным с технической
+точки зрения.</p>
+</div>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-2d-matrices.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2d-matrices.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-2d-matrices.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2d-matrices.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2d-matrices.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2d-matrices.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2d-matrices.html" selected>Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2d-matrices.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Основы</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-fundamentals.html">Основы WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-how-it-works.html">Как работает WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-shaders-and-glsl.html">Шейдеры и GLSL в WebGL</a></li>
+        </ul>
+  <li>Обработка изображений</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-image-processing.html">Обработка изображений в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-image-processing-continued.html">Продолжаем обработку изображений в WebGL</a></li>
+        </ul>
+  <li>Математика переноса, поворота и масштабирования в 2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-2d-translation.html">2D-перенос в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-rotation.html">2D-поворот в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-scale.html">2D-масштабирование в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-matrices.html">2D-матрицы в WebGL</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-orthographic.html">WebGL 3D - Ортогональ</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-perspective.html">WebGL 3D - Перспектива</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-camera.html">WebGL 3D - Камеры</a></li>
+        </ul>
+  <li>Освещение</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-lighting-directional.html">WebGL 3D - Направленное освещение</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">WebGL 3D - Точечное освещение</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор</a></li>
+        </ul>
+  <li>Структура и устройство</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-less-code-more-fun.html">WebGL - Меньше кода, больше веселья</a></li>
+<li><a href="/webgl/lessons/ru/webgl-drawing-multiple-things.html">WebGL - Отрисовка нескольких объектов</a></li>
+<li><a href="/webgl/lessons/ru/webgl-scene-graph.html">WebGL - Графы сцены</a></li>
+        </ul>
+  <li>Геометрия</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели</a></li>
+        </ul>
+  <li>Текстуры</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-textures.html">WebGL 3D - Текстуры</a></li>
+<li><a href="/webgl/lessons/ru/webgl-data-textures.html">WebGL - Данные для текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2-textures.html">WebGL - Использование 2 и более текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-cors-permission.html">WebGL - Кросс-доменные изображения</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Перспективная коррекция текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Рендеринг в текстуру</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Приёмы</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-matrix-stack.html">WebGL 2D - Стек матриц</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/ru/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/ru/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/ru/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/ru/webgl-fog.html">Fog</a></li>
+        </ul>
+  <li>Текст</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-text-html.html">WebGL текст - HTML</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-canvas2d.html">WebGL текст - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-texture.html">WebGL текст - Используем текстуру</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-glyphs.html">WebGL текст - Используем глиф-текстуру</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/ru/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/ru/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Разное</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-setup-and-installation.html">WebGL Установка и настройка</a></li>
+<li><a href="/webgl/lessons/ru/webgl-boilerplate.html">Шаблон WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/ru/webgl-resizing-the-canvas.html">Изменение размера Canvas в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-animation.html">WebGL - Анимация</a></li>
+<li><a href="/webgl/lessons/ru/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/ru/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ru/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ru/webgl-and-alpha.html">WebGL и прозрачность</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-vs-3d-library.html">WebGL - 2D и 3D библиотеки</a></li>
+<li><a href="/webgl/lessons/ru/webgl-anti-patterns.html">WebGL - Антипаттерны</a></li>
+<li><a href="/webgl/lessons/ru/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/ru/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Документация по вспомогательным функциям</a></li>
+  <li><a href="http://twgljs.org">TWGL, лёгкая библиотека-помощник для WebGL</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Вопросы? <a href="http://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
+        <div>Нашли ошибку? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = '2D-матрицы WebGL';
+            var disqus_title = '2D-матрицы WebGL';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

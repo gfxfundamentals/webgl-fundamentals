@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/ja/webgl-3d-perspective.md. Do not edited directly -->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="WebGLで透視投影で描画する" />
+<meta name="keywords" content="webgl graphics" />
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ja.jpg" />
+
+<meta property="og:title" content="WebGL三次元透視投影" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ja.jpg" />
+<meta property="og:description" content="WebGLで透視投影で描画する" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-perspective.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL三次元透視投影" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-perspective.html" />
+<meta name="twitter:description" content="WebGLで透視投影で描画する" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ja.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-perspective.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ja.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-perspective.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-perspective.html",
+      "inLanguage":"ja",
+      "name":"WebGL三次元透視投影",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-perspective.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL三次元透視投影</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-3d-perspective.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-perspective.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-perspective.html" selected>日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-perspective.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-perspective.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-perspective.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-perspective.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-perspective.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">目次</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/ja/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL三次元透視投影</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>この記事はWebGLシリーズの一つである。最初の記事は<a href="webgl-fundamentals.html">WebGLの基本で始まった</a>。
+そして、前回の記事は<a href="webgl-3d-orthographic.html">正投影</a>についてだった。まだ読んでいなかったら先に読んで下さい。</p>
+<p>前回の記事は、三次元の描画のし方についてだったが、その方法では遠近法がなかった。その記事のサンプルは正投影を使ったが、
+「三次元で何かを描画したい」と思った人の想像と違うだろう。</p>
+<p>そこで遠近法を追加しなければいけない。遠近法は何だろう？遠近法は遠ければ遠くほど小さく見えることである。</p>
+<p><img class="webgl_center noinvertdark" width="500" src="../resources/perspective-example.svg" /></p>
+<p>上記の絵を見たら遠い物が小さく書かれている。
+前回のサンプルで遠い物を小さく描画させたければ、クリップ空間のXとY値をZで割ることで出来るだろう。</p>
+<p>このように考えてみよう。10,15から20,15の線とする。前回のサンプルで描画したら、その線の横は１０単位になる。
+Zで割って、Z=1なら</p>
+<pre class="webgl_center">
+10 / 1 = 10
+20 / 1 = 20
+abs(10-20) = 10
+</pre>
+
+<p>その線は１０ピクセルになる。Z=2なら</p>
+<pre class="webgl_center">
+10 / 2 = 5
+20 / 2 = 10
+abs(5 - 10) = 5
+</pre>
+
+<p>横は５ピクセルになる。Z=3なら</p>
+<pre class="webgl_center">
+10 / 3 = 3.333
+20 / 3 = 6.666
+abs(3.333 - 6.666) = 3.333
+</pre>
+
+<p>横は3.333になる。</p>
+<p>Zが大きければ大きいほど、つまり、遠ければ遠くほど小さく描かれる。
+クリップ空間でZが+1〜-1になるので簡単にZで割れる。
+Zは補正係数を掛けると調整出来るようになる。</p>
+<p>じゃあ、やってみょう！最初に頂点シェーダーを更新して、頂点位置を補正係数に掛けたZで割る。</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+...
++uniform float u_fudgeFactor;  // 補正係数
+...
+void main() {
+  // positionを行列に掛ける。
+  vec4 position = u_matrix * a_position;
+
++  // ｚで割る値を調整する。
++  float zToDivideBy = 1.0 + position.z * u_fudgeFactor;
+
+*  // XとYをZで割る。
+*  gl_Position = vec4(position.xy / zToDivideBy, position.zw);
+
+　　...
+}
+&lt;/script&gt;
+</code></pre><p>クリップ空間のZが-1〜+1なので、１を足して、<code>zToDivideBy</code>は0〜+2*fudgeFactorになる。</p>
+<p><code>fudgeFactor</code>を設定出来るように更新しなきゃ。</p>
+<pre class="prettyprint"><code>  ...
+  var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
+
+  ...
+  var fudgeFactor = 1;
+  ...
+  function drawScene() {
+    ...
+    // fudgeFactorを設定する。
+    gl.uniform1f(fudgeLocation, fudgeFactor);
+
+    // 図形を描画する。
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = 16 * 6;
+    gl.drawArrays(primitiveType, offset, count);
+</code></pre><p>そしてこの結果になる。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective.html%3Fui-angleX%3DX%25E8%25A7%2592%25E5%25BA%25A6%26ui-angleY%3DY%25E8%25A7%2592%25E5%25BA%25A6%26ui-angleZ%3DZ%25E8%25A7%2592%25E5%25BA%25A6"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective.html?ui-angleX=X%E8%A7%92%E5%BA%A6&ui-angleY=Y%E8%A7%92%E5%BA%A6&ui-angleZ=Z%E8%A7%92%E5%BA%A6" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>分からなければ、「fudgeFactor」のスライダを操作して、1.0から0.0にすると、前と同じようにZで割ってない形になる。</p>
+<p><img class="webgl_center" src="../resources/orthographic-vs-perspective.png" /></p>
+<div class="webgl_center">正投影対透視投影</div>
+
+<p>実は、WebGLが<code>gl_Position</code>を割り当てた値を自動的にWで割っている。</p>
+<p>簡単に確認したければ、頂点シェーダーで手動でXとYを割る代わりに<code>gl_Position.w</code>を<code>zToDivideBy</code>に割り当てる。</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+...
+uniform float u_fudgeFactor;
+...
+void main() {
+  // positionを行列に掛ける。
+  vec4 position = u_matrix * a_position;
+
+  // ｚで割る値を調整する。
+  float zToDivideBy = 1.0 + position.z * u_fudgeFactor;
+
+*  // XとYをZで割る。
+*  gl_Position = vec4(position.xyz, zToDivideBy);
+
+  // 色をピクセルシェーダーに渡す。
+  v_color = a_color;
+}
+&lt;/script&gt;
+</code></pre><p>これは前と全く同じ結果になる。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-w.html%3Fui-angleX%3DX%25E8%25A7%2592%25E5%25BA%25A6%26ui-angleY%3DY%25E8%25A7%2592%25E5%25BA%25A6%26ui-angleZ%3DZ%25E8%25A7%2592%25E5%25BA%25A6"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-w.html?ui-angleX=X%E8%A7%92%E5%BA%A6&ui-angleY=Y%E8%A7%92%E5%BA%A6&ui-angleZ=Z%E8%A7%92%E5%BA%A6" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>なぜWebGLが自動的にWで割と便利なのか？そうなると魔法のような行列数学でZをWに移動出来るからだ。</p>
+<p>このような行列を使えば。。。</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, 1,
+0, 0, 0, 0,
+</pre></div>
+
+<p>ZがWに移動される。縦の行ごとにみて。。。</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+x_out = x_in * 1 +
+        y_in * 0 +
+        z_in * 0 +
+        w_in * 0 ;
+
+y_out = x_in * 0 +
+        y_in * 1 +
+        z_in * 0 +
+        w_in * 0 ;
+
+z_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 0 ;
+
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 0 ;
+</pre></div>
+
+<p>単純化すると。。。</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+x_out = x_in;
+y_out = y_in;
+z_out = z_in;
+w_out = z_in;
+</pre></div>
+
+<p><code>w_in</code>はいつも１になっているので、シェーダーと同じように１を足すことも出来る。</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, 1,
+0, 0, 0, 1,
+</pre></div>
+
+<p>それで<code>w_out</code>の計算式がこうなる。</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 1 ;
+</pre></div>
+
+<p>いつも<code>w_in</code>=1.0なので実はこうなる。</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = z_in + 1;
+</pre></div>
+
+<p>最後に補正係数の<code>fudgeFactor</code>に掛けることも追加出来る。</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, fudgeFactor,
+0, 0, 0, 1,
+</pre></div>
+
+<p>という意味はこれ</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * fudgeFactor +
+        w_in * 1 ;
+</pre></div>
+
+<p>単純化すると</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = z_in * fudgeFactor + 1;
+</pre></div>
+
+<p>さあ、また行列しか使ってない形に戻そう。</p>
+<p>まず頂点シェーダーを前の単純な形に戻す。</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+uniform mat4 u_matrix;
+
+void main() {
+  // positionを行列に掛ける。
+  gl_Position = u_matrix * a_position;
+  ...
+}
+&lt;/script&gt;
+</code></pre><p>次に、Z &rarr; Wの行列作成関数を作ろう。</p>
+<pre class="prettyprint"><code>function makeZToWMatrix(fudgeFactor) {
+  return [
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, fudgeFactor,
+    0, 0, 0, 1,
+  ];
+}
+</code></pre><p>そして、その行列を含むように更新する。</p>
+<pre class="prettyprint"><code>    ...
+    // Compute the matrices
+*    var matrix = makeZToWMatrix(fudgeFactor);
+*    matrix = m4.multiply(matrix, m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400));
+    matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
+    matrix = m4.xRotate(matrix, rotation[0]);
+    matrix = m4.yRotate(matrix, rotation[1]);
+    matrix = m4.zRotate(matrix, rotation[2]);
+    matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
+
+    ...
+</code></pre><p>また結果は全く同じである。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-w-matrix.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-w-matrix.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>上記を見せたのは、WebGLが自動的にWで割っているので、頂点を補正係数に掛けたZで割りたければ、
+行列しか要らないことを説明しかったからだ。</p>
+<p>でもまだ色々な問題が残っている。例えばZを-100ぐらいにすればこのような結果になる。</p>
+<p><img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" /></p>
+<p>それは何でだろう？何で「F」が消えているか？XとYは-1〜+1の制限があると同じようにZも-1〜+1の制限がある。
+この消えているところはZが−１以下になっている場合である。</p>
+<p>その問題を解決する数学を細かく説明出来るけど、二次元の投影行列数学と同じように<a href="http://stackoverflow.com/a/28301213/128511">答えを導き出すこと出来るだろう</a>。Zをとって、何かを足して、何かにスケールすると、
+どの値の範囲からも-1〜+1出来る。</p>
+<p>それら全部を一つの行列で出来る。その上、補正係数の<code>fudgeFactor</code>は<code>fieldOfView</code>という視野も同じ行列で決められる。</p>
+<p>これはその行列の関数である。</p>
+<pre class="prettyprint"><code>var m4 = {
+  perspective: function(fieldOfViewInRadians, aspect, near, far) {
+    var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
+    var rangeInv = 1.0 / (near - far);
+
+    return [
+      f / aspect, 0, 0, 0,
+      0, f, 0, 0,
+      0, 0, (near + far) * rangeInv, -1,
+      0, 0, near * far * rangeInv * 2, 0
+    ];
+  },
+
+  ...
+</code></pre><p>この行列で全ての変換が出来る。三次元単位はクリップ空間にする。好きな視野、
+好きなZ空間にもする。目、またカメラは0,0,0にあるとする。<code>zNear</code>というZの近い境界と<code>fieldOfView</code>の視野で
+<code>Z=-zNear</code>の頂点のZは<code>-1</code>になって、中心点から<code>fieldOfView</code>の上半分と下半分の頂点のYはそれぞれ+1か-1になる。頂点のX
+は<code>aspect</code>というキャンバスの比較率で計算する。最後に、Zが<code>-zFar</code>の頂点は<code>Z = 1</code>になる。</p>
+<p>この行列の働き方のダイヤグラムである。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style="width:  400px; height: 600px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Ffrustum-diagram.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../frustum-diagram.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>このトップがない四角錐は錘台(すいだい）と呼ばれる。この行列はその錘台の空間からクリップ空間に変換する。
+<code>zNear</code>は前面を定義して、<code>zFar</code>は裏面を定義する。<code>zNear</code>を23にすると回転している立方体がクリップされる。
+<code>zFar</code>を24にすると立方体の後ろの方がクリップされることも見える。</p>
+<p>あと一つだけ問題が残っている。この行列は原点(0,0,0)から-Zの方に上は＋Yで見ている。今までの投影行列と違う。
+この行列を使う為に図形をビューの前に移動しなければいけない。</p>
+<p>「F」を移動したらいい。前は45,150,0だったが、-150,0,-360を移動しよう。</p>
+<p>前は<code>m4.projection</code>を呼び出したが、今回<code>m4.perspective</code>を呼び出す。</p>
+<pre class="prettyprint"><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+var zNear = 1;
+var zFar = 2000;
+var matrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
+matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
+matrix = m4.xRotate(matrix, rotation[0]);
+matrix = m4.yRotate(matrix, rotation[1]);
+matrix = m4.zRotate(matrix, rotation[2]);
+matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
+</code></pre><p>そしてこうなる。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-matrix.html%3Fui-angleX%3DX%25E8%25A7%2592%25E5%25BA%25A6%26ui-angleY%3DY%25E8%25A7%2592%25E5%25BA%25A6%26ui-angleZ%3DZ%25E8%25A7%2592%25E5%25BA%25A6"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-matrix.html?ui-angleX=X%E8%A7%92%E5%BA%A6&ui-angleY=Y%E8%A7%92%E5%BA%A6&ui-angleZ=Z%E8%A7%92%E5%BA%A6" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>頂点を行列に掛けるだけの形に戻った。それだけでZの空間と視野も選べるようになった。
+まだ完成してないけどこの記事も多大部長くなってきた。次に、<a href="webgl-3d-camera.html">カメラ</a>である。</p>
+<div class="webgl_bottombar">
+<h3>何で「F」をZで遠く移動した？(-360)?</h3>
+<p>
+
+今までのサンプルで「F」は(45, 150, 0)で存在したが、今回(-150, 0, -360)に移動した。
+何でそんな遠くに移動しなければいけないのか？
+
+</p>
+<p>
+
+今までのサンプルの<code>m4.projection</code>関数はピクセル空間からクリップ空間に変換行列を作った。
+その時ピクセル空間は400x300ピクセル（例）になった。三次元ならピクセル単位はあまり意味がない。
+新しい錘台の投影行列は<code>zNear</code>で空間の縦が2単位と横は2掛け<code>aspect</code>単位になる。
+「F」図形の縦は150単位で、ビューが<code>zNear</code>では2単位しか見えないので原点から遠く移動しないと見えない。
+</p>
+<p>
+
+Xは同じように45から-150に移動した。前の投影行列空間は0〜400だったけど、今回投影行列空間は+1〜-1なので移動が必要である。
+
+</p>
+</div>
+
+
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-3d-perspective.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-perspective.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-perspective.html" selected>日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-perspective.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-perspective.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-perspective.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-perspective.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-perspective.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基本</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-fundamentals.html">基本</a></li>
+<li><a href="/webgl/lessons/ja/webgl-how-it-works.html">WebGLの仕組み</a></li>
+<li><a href="/webgl/lessons/ja/webgl-shaders-and-glsl.html">WebGLのシェーダーとGLSL</a></li>
+        </ul>
+  <li>画像処理</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-image-processing.html">WebGLにおける画像処理</a></li>
+<li><a href="/webgl/lessons/ja/webgl-image-processing-continued.html">WebGLにおける画像処理。続き</a></li>
+        </ul>
+  <li>2Dでの移動、回転、拡大縮小、行列計算</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-2d-translation.html">二次元での移動</a></li>
+<li><a href="/webgl/lessons/ja/webgl-2d-rotation.html">二次元での回転</a></li>
+<li><a href="/webgl/lessons/ja/webgl-2d-scale.html">二次元での拡大縮小</a></li>
+<li><a href="/webgl/lessons/ja/webgl-2d-matrices.html">二次元での行列数学</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-3d-orthographic.html">三次元の正投影</a></li>
+<li><a href="/webgl/lessons/ja/webgl-3d-perspective.html">三次元透視投影</a></li>
+<li><a href="/webgl/lessons/ja/webgl-3d-camera.html">三次元のカメラ</a></li>
+        </ul>
+  <li>Lighting</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-3d-lighting-directional.html">三次元指向性光源</a></li>
+<li><a href="/webgl/lessons/ja/webgl-3d-lighting-point.html">三次元点光源</a></li>
+<li><a href="/webgl/lessons/ja/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+        </ul>
+  <li>Structure and Organization</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+<li><a href="/webgl/lessons/ja/webgl-drawing-multiple-things.html">Drawing Multiple Things</a></li>
+<li><a href="/webgl/lessons/ja/webgl-scene-graph.html">Scene Graphs</a></li>
+        </ul>
+  <li>Geometry</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+        </ul>
+  <li>テクスチャ</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-3d-textures.html">Textures</a></li>
+<li><a href="/webgl/lessons/ja/webgl-data-textures.html">データテクスチャ</a></li>
+<li><a href="/webgl/lessons/ja/webgl-2-textures.html">複数のテクスチャを使う</a></li>
+<li><a href="/webgl/lessons/ja/webgl-cors-permission.html">Cross Origin Images</a></li>
+<li><a href="/webgl/lessons/ja/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/ja/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Rendering To A Texture</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-render-to-texture.html">Render to Texture</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Techniques</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-2d-drawimage.html">2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/ja/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/ja/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/ja/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/ja/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/ja/webgl-fog.html">Fog</a></li>
+        </ul>
+  <li>Text</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-text-html.html">Text - HTML</a></li>
+<li><a href="/webgl/lessons/ja/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/ja/webgl-text-texture.html">Text - Using a Texture</a></li>
+<li><a href="/webgl/lessons/ja/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/ja/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/ja/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>その他のトピック</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-setup-and-installation.html">WebGLの開発環境</a></li>
+<li><a href="/webgl/lessons/ja/webgl-boilerplate.html">WebGLのひな型コード</a></li>
+<li><a href="/webgl/lessons/ja/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/ja/webgl-resizing-the-canvas.html">WebGLとcanvasのリサイズ</a></li>
+<li><a href="/webgl/lessons/ja/webgl-animation.html">アニメーション</a></li>
+<li><a href="/webgl/lessons/ja/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/ja/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ja/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ja/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/ja/webgl-2d-vs-3d-library.html">2D vs 3D libraries</a></li>
+<li><a href="/webgl/lessons/ja/webgl-anti-patterns.html">Anti-Patterns</a></li>
+<li><a href="/webgl/lessons/ja/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/ja/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/ja/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Helper API Docs(英語)</a></li>
+  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL三次元透視投影';
+            var disqus_title = 'WebGL三次元透視投影';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+

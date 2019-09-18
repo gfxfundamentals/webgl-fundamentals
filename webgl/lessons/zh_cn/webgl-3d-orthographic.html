@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-3d-orthographic.md. Do not edited directly -->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="从正射投影开始讲WebGL中的三维" />
+<meta name="keywords" content="webgl graphics" />
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-orthographic_zh-cn.jpg" />
+
+<meta property="og:title" content="WebGL 三维正射投影" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-orthographic_zh-cn.jpg" />
+<meta property="og:description" content="从正射投影开始讲WebGL中的三维" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-orthographic.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL 三维正射投影" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-orthographic.html" />
+<meta name="twitter:description" content="从正射投影开始讲WebGL中的三维" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-orthographic_zh-cn.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-orthographic.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-orthographic_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-orthographic.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-orthographic.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 三维正射投影",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-orthographic.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL 三维正射投影</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-3d-orthographic.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-orthographic.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-orthographic.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-orthographic.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-orthographic.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-orthographic.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-orthographic.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-orthographic.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 三维正射投影</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>此文上接一系列相关文章，首先是<a href="webgl-fundamentals.html">基础概念</a>，上一篇是
+<a href="webgl-2d-matrices.html">二维矩阵运算</a>，如果没读过请从那里开始。</p>
+<p>上一篇文章概述了二维矩阵的工作原理，我们讲到了如何平移，
+旋转，缩放甚至从像素空间投影到裁剪空间，并且将这些操作通过一个矩阵实现，
+做三维只需要再迈出一小步。</p>
+<p>二维例子中的二维点 (x, y) 与 3x3 的矩阵相乘，
+在三维中我们需要三维点 (x, y, z) 与 4x4 的矩阵相乘。</p>
+<p>让我们将上个例子改成三维的，这里会继续使用 F ，但是这次是三维的 &#39;F&#39; 。</p>
+<p>首先需要修改顶点着色器以支持三维处理，这是原顶点着色器，</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
+
+uniform mat3 u_matrix;
+
+void main() {
+  // 将位置和矩阵相乘
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+}
+&lt;/script&gt;
+</code></pre><p>这是新着色器</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+*attribute vec4 a_position;
+
+*uniform mat4 u_matrix;
+
+void main() {
+  // 将位置和矩阵相乘
+*  gl_Position = u_matrix * a_position;
+}
+&lt;/script&gt;
+</code></pre><p>它甚至变简单了！在二维中我们提供<code>x</code>和<code>y</code>并设置<code>z</code>为1，
+在三维中我们将提供<code>x</code>，<code>y</code>和<code>z</code>，然后将<code>w</code>设置为1,
+而在属性中<code>w</code>的默认值就是1，我们可以利用这点不用再次设置。</p>
+<p>然后提供三维数据。</p>
+<pre class="prettyprint"><code>  ...
+
+  // 告诉属性怎么从 positionBuffer (ARRAY_BUFFER) 中读取位置
+*  var size = 3;          // 每次迭代使用 3 个单位的数据
+  var type = gl.FLOAT;   // 单位数据类型是32位的浮点型
+  var normalize = false; // 不需要归一化数据
+  var stride = 0;        // 0 = 移动距离 * 单位距离长度sizeof(type)  每次迭代跳多少距离到下一个数据
+  var offset = 0;        // 从绑定缓冲的起始处开始
+  gl.vertexAttribPointer(
+      positionAttributeLocation, size, type, normalize, stride, offset);
+
+  ...
+
+// 填充当前 ARRAY_BUFFER 缓冲
+// 使用组成 &#39;F&#39; 的数据填充缓冲.
+function setGeometry(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([
+           // 左竖
+            0,   0,  0,
+           30,   0,  0,
+            0, 150,  0,
+            0, 150,  0,
+           30,   0,  0,
+           30, 150,  0,
+
+           // 上横
+           30,   0,  0,
+          100,   0,  0,
+           30,  30,  0,
+           30,  30,  0,
+          100,   0,  0,
+          100,  30,  0,
+
+           // 下横
+           30,  60,  0,
+           67,  60,  0,
+           30,  90,  0,
+           30,  90,  0,
+           67,  60,  0,
+           67,  90,  0]),
+      gl.STATIC_DRAW);
+}
+</code></pre><p>接下来把二维矩阵方法改成三维的</p>
+<p>这是二维（之前的）版本的 m3.translation, m3.rotation, 和 m3.scaling 方法</p>
+<pre class="prettyprint"><code>var m3 = {
+  translation: function translation(tx, ty) {
+    return [
+      1, 0, 0,
+      0, 1, 0,
+      tx, ty, 1
+    ];
+  },
+
+  rotation: function rotation(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+    return [
+      c,-s, 0,
+      s, c, 0,
+      0, 0, 1
+    ];
+  },
+
+  scaling: function scaling(sx, sy) {
+    return [
+      sx, 0, 0,
+      0, sy, 0,
+      0, 0, 1
+    ];
+  },
+};
+</code></pre><p>这是升级到三维的版本。</p>
+<pre class="prettyprint"><code>var m4 = {
+  translation: function(tx, ty, tz) {
+    return [
+       1,  0,  0,  0,
+       0,  1,  0,  0,
+       0,  0,  1,  0,
+       tx, ty, tz, 1,
+    ];
+  },
+
+  xRotation: function(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+
+    return [
+      1, 0, 0, 0,
+      0, c, s, 0,
+      0, -s, c, 0,
+      0, 0, 0, 1,
+    ];
+  },
+
+  yRotation: function(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+
+    return [
+      c, 0, -s, 0,
+      0, 1, 0, 0,
+      s, 0, c, 0,
+      0, 0, 0, 1,
+    ];
+  },
+
+  zRotation: function(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+
+    return [
+       c, s, 0, 0,
+      -s, c, 0, 0,
+       0, 0, 1, 0,
+       0, 0, 0, 1,
+    ];
+  },
+
+  scaling: function(sx, sy, sz) {
+    return [
+      sx, 0,  0,  0,
+      0, sy,  0,  0,
+      0,  0, sz,  0,
+      0,  0,  0,  1,
+    ];
+  },
+};
+</code></pre><p>注意到我们现在有三个旋转方法，在二维中只需要一个是因为我们只需要绕 Z
+轴旋转，现在在三维中还可以绕 X 轴和 Y 轴旋转。它们看起来还是很简单，
+如果使用它们后你会发现和之前一样</p>
+<p>绕 Z 轴旋转</p>
+<div class="webgl_center">
+<div>newX = x *  c + y * s;</div>
+<div>newY = x * -s + y * c;</div>
+</div>
+
+<p>绕 Y 轴旋转</p>
+<div class="webgl_center">
+<div>newX = x *  c + z * s;</div>
+<div>newZ = x * -s + z * c;</div>
+</div>
+
+<p>绕 X 轴旋转</p>
+<div class="webgl_center">
+<div>newY = y *  c + z * s;</div>
+<div>newZ = y * -s + z * c;</div>
+</div>
+
+<p>它们提供这些旋转方式。</p>
+<iframe class="external_diagram" src="../resources/axis-diagram.html" style="width: 540px; height: 240px;"></iframe>
+
+<p>同样的我们将实现一些简单的方法</p>
+<pre class="prettyprint"><code>  translate: function(m, tx, ty, tz) {
+    return m4.multiply(m, m4.translation(tx, ty, tz));
+  },
+
+  xRotate: function(m, angleInRadians) {
+    return m4.multiply(m, m4.xRotation(angleInRadians));
+  },
+
+  yRotate: function(m, angleInRadians) {
+    return m4.multiply(m, m4.yRotation(angleInRadians));
+  },
+
+  zRotate: function(m, angleInRadians) {
+    return m4.multiply(m, m4.zRotation(angleInRadians));
+  },
+
+  scale: function(m, sx, sy, sz) {
+    return m4.multiply(m, m4.scaling(sx, sy, sz));
+  },
+</code></pre><p>我们还需要更新投影方法，这是原代码</p>
+<pre class="prettyprint"><code>  projection: function (width, height) {
+    // 注意：这个矩阵翻转了 Y 轴，所以 0 在上方
+    return [
+      2 / width, 0, 0,
+      0, -2 / height, 0,
+      -1, 1, 1
+    ];
+  },
+}
+</code></pre><p>它将像素坐标转换到裁剪空间，在初次尝试三维时我们将这样做</p>
+<pre class="prettyprint"><code>  projection: function(width, height, depth) {
+    // 注意：这个矩阵翻转了 Y 轴，所以 0 在上方
+    return [
+       2 / width, 0, 0, 0,
+       0, -2 / height, 0, 0,
+       0, 0, 2 / depth, 0,
+      -1, 1, 0, 1,
+    ];
+  },
+</code></pre><p>就像 X 和 Y 需要从像素空间转换到裁剪空间一样，Z 也需要。
+在这个例子中我也将 Z 单位化了，我会传递一些和 <code>width</code> 相似的值给
+<code>depth</code> ，所以我们的空间将会是 0 到 <code>width</code> 像素宽，0 到 <code>height</code> 像素高，
+但是对于<code>depth</code>将会是 <code>-depth / 2</code> 到 <code>+depth / 2</code> 。</p>
+<p>最后需要更新计算矩阵的代码</p>
+<pre class="prettyprint"><code>  // 计算矩阵
+*  var matrix = m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400);
+*  matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
+*  matrix = m4.xRotate(matrix, rotation[0]);
+*  matrix = m4.yRotate(matrix, rotation[1]);
+*  matrix = m4.zRotate(matrix, rotation[2]);
+*  matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
+
+  // 设置矩阵
+*  gl.uniformMatrix4fv(matrixLocation, false, matrix);
+</code></pre><p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-step1.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step1.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>我们遇到的第一个问题是 F 在三维中过于扁平，
+所以很难看出三维效果。解决这个问题的方法是将它拉伸成三维几何体。
+现在的 F 是由三个矩形组成，每个矩形两个三角形。让它变三维需要 16 个矩形。
+三个矩形在正面，三个背面，一个左侧，四个右侧，两个上侧，三个底面。</p>
+<p><img class="webgl_center nodarkinvert" width="300" src="../resources/3df.svg" /></p>
+<p>需要列出的还有很多，16 个矩形每个有两个三角形，每个三角形有 3 个顶点，
+所以一共有 96 个顶点。如果你想看这些可以去示例的源码里找。</p>
+<p>我们需要绘制更多顶点所以</p>
+<pre class="prettyprint"><code>    // 绘制几何体
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+*    var count = 16 * 6;
+    gl.drawArrays(primitiveType, offset, count);
+</code></pre><p>这是对应结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-step2.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step2.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>拖动滑块很难看出它是三维的，让我们给矩形上不同的颜色。
+需要在顶点着色器中添加一个属性和一个可变量，
+将颜色值传到片断着色器中。</p>
+<p>这是新的顶点着色器</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec4 a_position;
++attribute vec4 a_color;
+
+uniform mat4 u_matrix;
+
++varying vec4 v_color;
+
+void main() {
+  // 将位置和矩阵相乘.
+  gl_Position = u_matrix * a_position;
+
++  // 将颜色传递给片断着色器
++  v_color = a_color;
+}
+&lt;/script&gt;
+</code></pre><p>然后在片断着色器中使用颜色</p>
+<pre class="prettyprint"><code>&lt;script id=&quot;3d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+precision mediump float;
+
++// 从顶点着色器中传入
++varying vec4 v_color;
+
+void main() {
+*   gl_FragColor = v_color;
+}
+&lt;/script&gt;
+</code></pre><p>我们需要找到属性的位置，然后在另一个缓冲中存入对应的颜色。</p>
+<pre class="prettyprint"><code>  ...
+  var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
+
+  ...
+  // 给颜色创建一个缓冲
+  var colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  // 将颜色值传入缓冲
+  setColors(gl);
+
+
+  ...
+// 向缓冲传入 &#39;F&#39; 的颜色值
+
+function setColors(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Uint8Array([
+        // 正面左竖
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+        200,  70, 120,
+
+        // 正面上横
+        200,  70, 120,
+        200,  70, 120,
+        ...
+        ...
+      gl.STATIC_DRAW);
+}
+</code></pre><p>在渲染时告诉颜色属性如何从缓冲中获取颜色值</p>
+<pre class="prettyprint"><code>// 启用颜色属性
+gl.enableVertexAttribArray(colorLocation);
+
+// 绑定颜色缓冲
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+
+// 告诉颜色属性怎么从 colorBuffer (ARRAY_BUFFER) 中读取颜色值
+var size = 3;                 // 每次迭代使用3个单位的数据
+var type = gl.UNSIGNED_BYTE;  // 单位数据类型是无符号 8 位整数
+var normalize = true;         // 标准化数据 (从 0-255 转换到 0.0-1.0)
+var stride = 0;               // 0 = 移动距离 * 单位距离长度sizeof(type)  每次迭代跳多少距离到下一个数据
+var offset = 0;               // 从绑定缓冲的起始处开始
+gl.vertexAttribPointer(
+    colorLocation, size, type, normalize, stride, offset)
+</code></pre><p>现在我们得到这个。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-step3.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step3.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>呃，发生了什么？它好像把 &#39;F&#39; 的所有部分都按照提供的顺序显示出来了，
+正面，背面，侧面等等。有时候这并不是想要的结果，在背面的物体反而被绘制出来了。</p>
+<p><img class="webgl_center" style="background-color: transparent;" width="163" height="190" src="../resources/polygon-drawing-order.gif" /></p>
+<p><span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">红色部分</span>
+是 &#39;F&#39; 的<strong>正面</strong>，但是因为它在数据的前部所以最先被绘制出来，然后它后面的面绘制后挡住了它。
+例如<span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">紫色部分</span>
+实际上是 &#39;F&#39; 的背面，由于它在数据中是第二个所以第二个被画出来。</p>
+<p>WebGL中的三角形有正反面的概念，正面三角形的顶点顺序是逆时针方向，
+反面三角形是顺时针方向。</p>
+<p><img src="../resources/triangle-winding.svg" class="webgl_center" width="400" /></p>
+<p>WebGL可以只绘制正面或反面三角形，可以这样开启</p>
+<pre class="prettyprint"><code>  gl.enable(gl.CULL_FACE);
+</code></pre><p>将它放在 <code>drawScene</code> 方法里，开启这个特性后WebGL默认“剔除”背面三角形，
+&quot;剔除&quot;在这里是“不用绘制”的花哨叫法。</p>
+<p>对于WebGL而言，一个三角形是顺时针还是逆时针是根据裁剪空间中的顶点顺序判断的，
+换句话说，WebGL是根据你在顶点着色器中运算后提供的结果来判定的，
+这就意味着如果你把一个顺时针的三角形沿 X 轴缩放 -1 ，它将会变成逆时针，
+或者将顺时针的三角形旋转180度后变成逆时针。由于我们没有开启 CULL_FACE，
+所以可以同时看到顺时针（正面）和逆时针（反面）三角形。现在开启了，
+任何时候正面三角形无论是缩放还是旋转的原因导致翻转了，WebGL就不会绘制它。
+这件事很有用，因为通常情况下你只需要看到你正面对的面。</p>
+<p>开启 CULL_FACE 后得到</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-step4.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step4.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>嗨！三角形都去哪了？结果证明，大多数三角形朝向都是错的，
+旋转的时候你会看到背面的三角形，幸好它很容易解决，
+我们只需要看看哪些是三角形是反的，然后交换它们的两个顶点。
+例如一个反的三角形</p>
+<pre class="prettyprint"><code>           1,   2,   3,
+          40,  50,  60,
+         700, 800, 900,
+</code></pre><p>只需要交换后两个顶点的位置</p>
+<pre class="prettyprint"><code>           1,   2,   3,
+         700, 800, 900,
+          40,  50,  60,
+</code></pre><p>通过修正朝向错误后得到</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-step5.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step5.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>这很接近实际效果了但是还有一个问题，即使所有三角形的朝向是正确的，
+然后背面的被剔除了，有些应该在背面的部分还是出现在了前面。</p>
+<p>接触 DEPTH BUFFER（深度缓冲）。</p>
+<p>深度缓冲有时也叫 Z-Buffer，是一个存储像素深度的矩形，
+一个深度像素对应一个着色像素，在绘制图像时组合使用。
+当WebGL绘制每个着色像素时也会写入深度像素，
+它的值基于顶点着色器返回的Z值，就像我们将 X 和 Y 转换到裁剪空间一样，
+Z 也在裁剪空间或者 (-1 到 +1) 。这个值会被转换到深度空间( 0 到 +1)，
+WebGL绘制一个着色像素之前会检查对应的深度像素，
+如果对应的深度像素中的深度值小于当前像素的深度值，WebGL就不会绘制新的颜色。
+反之它会绘制片断着色器提供的新颜色并更新深度像素中的深度值。
+这也意味着在其他像素后面的像素不会被绘制。</p>
+<p>我们可以像这样开启这个特性</p>
+<pre class="prettyprint"><code>  gl.enable(gl.DEPTH_TEST);
+</code></pre><p>在开始绘制前还需要清除深度缓冲为 1.0 。</p>
+<pre class="prettyprint"><code>  // 绘制场景
+  function drawScene() {
+    ...
+
+    // 清空画布和深度缓冲
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    ...
+</code></pre><p>现在得到</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-step6.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step6.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>这才是三维！</p>
+<p>还有一件小事，在大多数三维数学库中没有负责像素空间与裁剪空间转换的 <code>projection</code> 方法。
+代替的是叫做 <code>ortho</code> 或 <code>orthographic</code> 的方法，它看起来像这样</p>
+<pre class="prettyprint"><code>var m4 = {
+  orthographic: function(left, right, bottom, top, near, far) {
+    return [
+      2 / (right - left), 0, 0, 0,
+      0, 2 / (top - bottom), 0, 0,
+      0, 0, 2 / (near - far), 0,
+
+      (left + right) / (left - right),
+      (bottom + top) / (bottom - top),
+      (near + far) / (near - far),
+      1,
+    ];
+  }
+</code></pre><p>和我们简单的 <code>projection</code> 方法不同的是正射投影有更多的参数可以传递，
+左，右，上，下，近和远，给我们更灵活的选择。为了用这个方法实现之前的投影，
+需要这样调用</p>
+<pre class="prettyprint"><code>var left = 0;
+var right = gl.canvas.clientWidth;
+var bottom = gl.canvas.clientHeight;
+var top = 0;
+var near = 400;
+var far = -400;
+m4.orthographic(left, right, bottom, top, near, far);
+</code></pre><p>下一篇将讲述<a href="webgl-3d-perspective.html">如何实现透视投影</a>。</p>
+<div class="webgl_bottombar">
+<h3>为什么属性类型是 vec4 但是 gl.vertexAttribPointer 的大小是 3</h3>
+<p>
+注意细节的你可能发现，我们定义了这样两个属性
+</p>
+<pre class="prettyprint showlinemods">
+attribute vec4 a_position;
+attribute vec4 a_color;
+</pre>
+<p>两个都是 'vec4' 类型，当我们告诉WebGL如何从缓冲中获取数据时使用</p>
+<pre class="prettyprint showlinemods">
+// 告诉属性怎么从 positionBuffer (ARRAY_BUFFER) 中读取位置
+var size = 3;          // 每次迭代使用 3 个单位的数据
+var type = gl.FLOAT;   // 单位数据类型是32位的浮点型
+var normalize = false; // 不需要归一化数据
+var stride = 0;        // 0 = 移动距离 * 单位距离长度sizeof(type)
+                       // 每次迭代跳多少距离到下一个数据
+var offset = 0;        // 从绑定缓冲的起始处开始
+gl.vertexAttribPointer(
+    positionAttributeLocation, size, type, normalize, stride, offset);
+
+...
+// 告诉颜色属性怎么从 colorBuffer (ARRAY_BUFFER) 中读取颜色值
+var size = 3;          // 每次迭代使用3个单位的数据
+var type = gl.UNSIGNED_BYTE;   // 单位数据类型是无符号 8 位整数
+var normalize = true;  // 标准化数据 (从 0-255 转换到 0.0-1.0)
+var stride = 0;        // 0 = 移动距离 * 单位距离长度sizeof(type)
+                       // 每次迭代跳多少距离到下一个数据
+var offset = 0;        // 从绑定缓冲的起始处开始
+gl.vertexAttribPointer(
+    colorAttributeLocation, size, type, normalize, stride, offset);
+</pre>
+<p>
+这里的 '3' 表示的时每次迭代从缓冲中提取三个值给顶点着色器中的属性。
+能正常运行是因为WebGL会给这些值设定默认值，默认值是0, 0, 0, 1
+也就是 x = 0, y = 0, z = 0 和 w = 1 。我们需要传入 x 和 y 并且需要 z 是 1 ，
+由于 z 的默认值是 0 所以我们需要额外提供 z 值，对于三维，即使我们没有提供 'w'，
+默认的 1 正是矩阵运算需要的值。
+</p>
+</div>
+
+
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-3d-orthographic.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-orthographic.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-orthographic.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-orthographic.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-orthographic.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-orthographic.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-orthographic.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-orthographic.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">Texture Units</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="http://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="http://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 三维正射投影';
+            var disqus_title = 'WebGL 三维正射投影';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</html>
+
+
+
