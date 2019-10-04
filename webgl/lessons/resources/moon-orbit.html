@@ -2,7 +2,7 @@
 <head>
 <meta charset="utf8">
 <title>moon orbit</title>
-<link type="text/css" href="../../resources/webgl-tutorials.css" rel="stylesheet" />
+<link href="../../resources/webgl-tutorials.css" rel="stylesheet" />
 <style>
 canvas {
     border: 1px solid black;
@@ -16,6 +16,11 @@ p {
   top: 0px;
   z-index: 2;
   background-color: transparent;
+}
+@media (prefers-color-scheme: dark) {
+  canvas { 
+    background: #444;
+  }
 }
 </style>
 </head>
@@ -34,28 +39,39 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 <script src="../../resources/lessons-helper.js"></script> <!-- you can and should delete this script. it is only used on the site to help with errors -->
 <script src="canvas-wrapper.js"></script>
 <script>
-"use strict";
+'use strict';  // eslint-disable-line
+
+/* global wrapCanvasRenderingContext2D, threejsUtils */
 
 function main() {
 
-  var root = {
-    name: "sun",
+
+  const darkColors = {
+    trail: '#DDD',
+  };
+  const lightColors = {
+    trail: '#000',
+  };
+  const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const root = {
+    name: 'sun',
     translation: [0, 0],
-    color: "yellow",
+    color: 'yellow',
     radius: 30,
     speed: 1,
     children: [
       {
-        name: "earth",
+        name: 'earth',
         translation: [-5, 1],
-        color: "blue",
+        color: 'blue',
         radius: 10,
         speed: 2,
         children: [
           {
-            name: "moon",
+            name: 'moon',
             translation: [-1, 1],
-            color: "gray",
+            color: 'gray',
             drawOrbit: true,
             radius: 5,
             speed: 36.13,
@@ -67,11 +83,12 @@ function main() {
     ],
   };
 
-  var canvas = document.getElementById("c");
-  var ctx = wrapCanvasRenderingContext2D(canvas.getContext("2d"));
-  var orbitCtx = document.getElementById("orbit").getContext("2d");
+  const canvas = document.getElementById('c');
+  const ctx = wrapCanvasRenderingContext2D(canvas.getContext('2d'));
+  const orbitCtx = document.getElementById('orbit').getContext('2d');
+  let colors;
 
-  var spread = 16;
+  const spread = 16;
   function updateTranslation(node) {
     node.translation[0] *= spread;
     node.translation[1] *= spread;
@@ -80,10 +97,10 @@ function main() {
   }
   updateTranslation(root);
 
-  var clock = 0;
-  var maxHistory = 400;
-  var curHistory = 0;
-  var history = [];
+  let clock = 0;
+  const maxHistory = 400;
+  let curHistory = 0;
+  const history = [];
 
   function drawTrail(ctx, pos, radius) {
     ctx.beginPath();
@@ -96,22 +113,25 @@ function main() {
     ctx.rotate(node.speed * clock);
     ctx.translate(node.translation[0], node.translation[1]);
     ctx.fillStyle = node.color;
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = 'black';
     ctx.beginPath();
     ctx.arc(0, 0, node.radius, 0, Math.PI * 2, false);
     ctx.fill();
     ctx.stroke();
     if (node.drawOrbit) {
-      var mat = ctx.currentTransform;
-      var point = [mat.e, mat.f];
-      var old = history[curHistory];
+      const mat = ctx.currentTransform;
+      const point = [mat.e, mat.f];
+      const old = history[curHistory];
       if (old) {
-        orbitCtx.fillStyle = "white";
+        orbitCtx.save();
+        orbitCtx.globalCompositeOperation = 'destination-out';
+        orbitCtx.fillStyle = 'rgba(255,255,255,1)';
         drawTrail(orbitCtx, old, 2);
+        orbitCtx.restore();
       }
       history[curHistory] = point;
       curHistory = (curHistory + 1) % maxHistory;
-      orbitCtx.fillStyle = "rgba(255, 0, 0, 0.5)";
+      orbitCtx.fillStyle = 'rgba(255, 0, 0, 1)';
       drawTrail(orbitCtx, point, 1);
     }
     node.children.forEach(drawNode);
@@ -119,6 +139,8 @@ function main() {
   }
 
   function drawScene() {
+    const isDarkMode = darkMatcher.matches;
+    colors = isDarkMode ? darkColors : lightColors;
     webglUtils.resizeCanvasToDisplaySize(ctx.canvas);
     webglUtils.resizeCanvasToDisplaySize(orbitCtx.canvas);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -128,8 +150,8 @@ function main() {
     ctx.restore();
   }
 
-  function render(time) {
-    clock += 1/60 * 0.25;
+  function render() {
+    clock += 1 / 60 * 0.25;
 
     drawScene();
 
