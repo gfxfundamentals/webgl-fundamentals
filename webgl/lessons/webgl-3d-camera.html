@@ -286,7 +286,7 @@ In 3D we need unit spheres and a normalized vector represents a point on a
 unit sphere.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=0"></iframe>
-  <div class="webgl_center">the <span style='color:blue;'>z axis</span></div>
+  <div class="webgl_center">the <span class='z-axis'>z axis</span></div>
 </div>
 
 </p>
@@ -306,19 +306,19 @@ vector pointing up, and you compute the cross product you&#39;ll get a vector
 pointing either south west or north east since those are the 2 vectors
 that are perpendicular to south east and up.  Depending on which order you
 compute the cross product in, you&#39;ll get the opposite answer.</p>
-<p>In any case if we compute the cross product of our <span style="color: blue;"><code>zAxis</code></span> and
-<span style="color: gray;"><code>up</code></span> we&#39;ll get the <span style="color:red;">xAxis</span> for the camera.</p>
+<p>In any case if we compute the cross product of our <span class="z-axis"><code>zAxis</code></span> and
+<span style="color: gray;"><code>up</code></span> we&#39;ll get the <span class="x-axis">xAxis</span> for the camera.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
-  <div class="webgl_center"><span style='color:gray;'>up</span> cross <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span></div>
+  <div class="webgl_center"><span style='color:gray;'>up</span> cross <span class='z-axis'>zAxis</span> = <span class='x-axis'>xAxis</span></div>
 </div>
 
 </p>
-<p>And now that we have the <span style="color:red;"><code>xAxis</code></span> we can cross the <span style="color:blue;"><code>zAxis</code></span> and the <span style="color:red;"><code>xAxis</code></span>
-which will give us the camera&#39;s <span style="color:green;"><code>yAxis</code></span></p>
+<p>And now that we have the <span class="x-axis"><code>xAxis</code></span> we can cross the <span class="z-axis"><code>zAxis</code></span> and the <span class="x-axis"><code>xAxis</code></span>
+which will give us the camera&#39;s <span class="y-axis"><code>yAxis</code></span></p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
-  <div class="webgl_center"><span style='color:blue;'>zAxis</span> cross <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span></div>
+  <div class="webgl_center"><span class='z-axis'>zAxis</span> cross <span class='x-axis'>xAxis</span> = <span class='y-axis'>yAxis</span></div>
 </div>
 
 </p>
@@ -327,11 +327,11 @@ matrix that will orient something that points at the <code>target</code> from th
 <code>cameraPosition</code>. We just need to add in the <code>position</code></p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
-| <span style="color:red">Xx</span> | <span style="color:red">Xy</span> | <span style="color:red">Xz</span> |  0 |  <- <span style="color:red">x axis</span>
+| <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">x axis</span>
 +----+----+----+----+
-| <span style="color:green">Yx</span> | <span style="color:green">Yy</span> | <span style="color:green">Yz</span> |  0 |  <- <span style="color:green">y axis</span>
+| <span class="y-axis">Yx</span> | <span class="y-axis">Yy</span> | <span class="y-axis">Yz</span> |  0 |  <- <span class="y-axis">y axis</span>
 +----+----+----+----+
-| <span style="color:blue">Zx</span> | <span style="color:blue">Zy</span> | <span style="color:blue">Zz</span> |  0 |  <- <span style="color:blue">z axis</span>
+| <span class="z-axis">Zx</span> | <span class="z-axis">Zy</span> | <span class="z-axis">Zz</span> |  0 |  <- <span class="z-axis">z axis</span>
 +----+----+----+----+
 | Tx | Ty | Tz |  1 |  <- camera position
 +----+----+----+----+

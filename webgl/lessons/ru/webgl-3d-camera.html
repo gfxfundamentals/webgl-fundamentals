@@ -279,7 +279,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 единичная сфера, а нормализованный вектор представляет точку на этой сфере.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=0"></iframe>
-  <div class="webgl_center"><span style='color:blue;'>ось z</span></div>
+  <div class="webgl_center"><span class='z-axis'>ось z</span></div>
 </div>
 
 </p>
@@ -299,21 +299,21 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 на северо-восток, так как эти два вектора перпендикулярны юго-востоку
 и верху. В зависимости от порядка вычисления векторного произведения
 вы получите противоположный ответ.</p>
-<p>Так или иначе при вычислении векторного произведения наших <span style="color: blue;"><code>zAxis</code></span>
-и <span style="color: gray;"><code>up</code></span> мы получим <span style="color:red;">xAxis</span>
+<p>Так или иначе при вычислении векторного произведения наших <span class="z-axis"><code>zAxis</code></span>
+и <span style="color: gray;"><code>up</code></span> мы получим <span class="x-axis">xAxis</span>
 для камеры.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
-  <div class="webgl_center"><span style='color:gray;'>up</span> умножить на <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span></div>
+  <div class="webgl_center"><span style='color:gray;'>up</span> умножить на <span class='z-axis'>zAxis</span> = <span class='x-axis'>xAxis</span></div>
 </div>
 
 </p>
-<p>И теперь, когда у нас есть <span style="color:red;"><code>xAxis</code></span>, мы можем умножить
-<span style="color:blue;"><code>zAxis</code></span> и <span style="color:red;"><code>xAxis</code></span>,
-что даст нам в итоге <span style="color:green;"><code>yAxis</code></span> камеры.</p>
+<p>И теперь, когда у нас есть <span class="x-axis"><code>xAxis</code></span>, мы можем умножить
+<span class="z-axis"><code>zAxis</code></span> и <span class="x-axis"><code>xAxis</code></span>,
+что даст нам в итоге <span class="y-axis"><code>yAxis</code></span> камеры.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
-  <div class="webgl_center"><span style='color:blue;'>zAxis</span> умножить на <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span></div>
+  <div class="webgl_center"><span class='z-axis'>zAxis</span> умножить на <span class='x-axis'>xAxis</span> = <span class='y-axis'>yAxis</span></div>
 </div>
 
 </p>
@@ -322,11 +322,11 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 осталось лишь добавить <code>position</code>.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
-| <span style="color:red">Xx</span> | <span style="color:red">Xy</span> | <span style="color:red">Xz</span> |  0 |  <- <span style="color:red">ось x</span>
+| <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">ось x</span>
 +----+----+----+----+
-| <span style="color:green">Yx</span> | <span style="color:green">Yy</span> | <span style="color:green">Yz</span> |  0 |  <- <span style="color:green">ось y</span>
+| <span class="y-axis">Yx</span> | <span class="y-axis">Yy</span> | <span class="y-axis">Yz</span> |  0 |  <- <span class="y-axis">ось y</span>
 +----+----+----+----+
-| <span style="color:blue">Zx</span> | <span style="color:blue">Zy</span> | <span style="color:blue">Zz</span> |  0 |  <- <span style="color:blue">ось z</span>
+| <span class="z-axis">Zx</span> | <span class="z-axis">Zy</span> | <span class="z-axis">Zz</span> |  0 |  <- <span class="z-axis">ось z</span>
 +----+----+----+----+
 | Tx | Ty | Tz |  1 |  <- положение камеры
 +----+----+----+----+
