@@ -135,7 +135,7 @@ for (var ii = 0; ii < numFs; ++ii) {
 单位化也就是一个做一个类似 1.0 的矢量，如果你回到[二维旋转的文章](webgl-2d-rotation.html)，
 那里讲到的单位圆在二维旋转中用法，在三维中需要一个单位球，单位向量表示单位球上的点。
 
-{{{diagram url="resources/cross-product-diagram.html?mode=0" caption="<span style='color:blue;'>z 轴</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=0" caption="<span class='z-axis'>z 轴</span>" }}}
 
 这些信息还不够，只给了一个单位圆上点，如何来确定物体的姿态呢？
 这就需要填充矩阵的其他区域，尤其是 X 轴和 Y 轴。通常情况下我们知道它们互相垂直，
@@ -146,27 +146,27 @@ for (var ii = 0; ii < numFs; ++ii) {
 叉乘后会得到一个指向西南方或东北方的矢量，因为这两个矢量都和东南方和上方垂直。
 相乘的顺序不同的到结果相反。
 
-在任何情况下我们可以通过叉乘<span style="color: blue;">`zAxis`</span>
-和<span style="color: gray;">`up`</span> 得到相机的<span style="color:red;">xAxis</span>。
+在任何情况下我们可以通过叉乘<span class="z-axis">`zAxis`</span>
+和<span style="color: gray;">`up`</span> 得到相机的<span class="x-axis">xAxis</span>。
 
-{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> 叉乘 <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> 叉乘 <span class='z-axis'>zAxis</span> = <span class='x-axis'>xAxis</span>" }}}
 
-现在我们有了 <span style="color:red;">`xAxis`</span> ，
-可以叉乘 <span style="color:blue;">`zAxis`</span> 和 <span style="color:red;">`xAxis`</span>
-的到相机的 <span style="color:green;">`yAxis`</span>。
+现在我们有了 <span class="x-axis">`xAxis`</span> ，
+可以叉乘 <span class="z-axis">`zAxis`</span> 和 <span class="x-axis">`xAxis`</span>
+的到相机的 <span class="y-axis">`yAxis`</span>。
 
-{{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span style='color:blue;'>zAxis</span> 叉乘 <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span>"}}}
+{{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span class='z-axis'>zAxis</span> 叉乘 <span class='x-axis'>xAxis</span> = <span class='y-axis'>yAxis</span>"}}}
 
 现在将三个轴插入矩阵中，会给我们提供一个从 `cameraPosition` 指向 `target`
 的转换，只需要再加上 `position`
 
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
-| <span style="color:red">Xx</span> | <span style="color:red">Xy</span> | <span style="color:red">Xz</span> |  0 |  <- <span style="color:red">x axis</span>
+| <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">x axis</span>
 +----+----+----+----+
-| <span style="color:green">Yx</span> | <span style="color:green">Yy</span> | <span style="color:green">Yz</span> |  0 |  <- <span style="color:green">y axis</span>
+| <span class="y-axis">Yx</span> | <span class="y-axis">Yy</span> | <span class="y-axis">Yz</span> |  0 |  <- <span class="y-axis">y axis</span>
 +----+----+----+----+
-| <span style="color:blue">Zx</span> | <span style="color:blue">Zy</span> | <span style="color:blue">Zz</span> |  0 |  <- <span style="color:blue">z axis</span>
+| <span class="z-axis">Zx</span> | <span class="z-axis">Zy</span> | <span class="z-axis">Zz</span> |  0 |  <- <span class="z-axis">z axis</span>
 +----+----+----+----+
 | Tx | Ty | Tz |  1 |  <- 相机位置
 +----+----+----+----+

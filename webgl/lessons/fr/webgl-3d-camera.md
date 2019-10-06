@@ -104,31 +104,31 @@ D'abord on doit savoir où se situe la caméra. On va appeler cette position, `p
 
 Cette partie de la matrice représente l'axe Z. Dans ce cas c'est l'axe Z de la caméra. Normaliser un vecteur signifie changer sa norme pour qu'elle vale 1. Si vous vous souvenez de <a href="webgl-2d-rotation.html">l'article sur les rotations 2D</a> on parlait du cercle trigonométrique (de rayon 1) et de comment il aide à faire les rotations 2D. En 3D on a besoin d'une sphère de rayon 1 et d'un vecteur normalisé qui représente un point sur cette sphère. 
 
-{{{diagram url="resources/cross-product-diagram.html?mode=0" caption="L'<span style='color:blue;'>axe Z</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=0" caption="L'<span class='z-axis'>axe Z</span>" }}}
 
 Cependant ce n'est pas assez. Un vecteur nous donne un point sur une sphère de rayon 1 mais quelle orientation déduire de ce point ? On doit remplir les autres parties de la matrice. En particulier l'axe X et l'axe Y. On sait qu'en général, ces axes sont tous perpendiculaires entre eux. Et qu'en général on ne pointe pas la caméra à la verticale. Avec ces trois informations, l'axe Z, les autres axes perpendiculaires et l'axe vertical Y (0,1,0), on peut utiliser les "produits vectoriels" pour déduire les axes X et Y de notre matrice.
 
 Je n'ai aucune idée de ce qu'est un produit vectoriel en maths. Mais je sais qu'avec 2 vecteurs normalisés, le produit vectoriel donne un troisième vecteur perpendiculaire aux deux autres. En d'autres termes, si on a un vecteur qui pointe au sud-est et un qui pointe à la verticale, le produit vectoriel donne une vecteur qui pointe ou bien au sud ouest ou bien au nord est, puisque ces deux possibilités forment des vecteurs perpendiculaires aux deux autres. Suivant l'ordre du calcul, on aura une réponse ou l'autre.
 
-Dans tous les cas si on calule le produit vectoriel de notre <span style="color: blue;">`axeZ`</span> avec
-<span style="color: gray;">`vertical`</span> on aura l'<span style="color:red;">axeX</span> de la caméra.
+Dans tous les cas si on calule le produit vectoriel de notre <span class="z-axis">`axeZ`</span> avec
+<span style="color: gray;">`vertical`</span> on aura l'<span class="x-axis">axeX</span> de la caméra.
 
-{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="Produit vectoriel de l'<span style='color:gray;'>vertical</span> avec <span style='color:blue;'>axeZ</span> = <span style='color:red;'>axeX</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="Produit vectoriel de l'<span style='color:gray;'>vertical</span> avec <span class='z-axis'>axeZ</span> = <span class='x-axis'>axeX</span>" }}}
 
-Et maintenant qu'on a l'<span style="color:red;">`axeX`</span> on peut faire le produit vectoriel entre l'<span style="color:blue;">`axeZ`</span> et l'<span style="color:red;">`axeX`</span>
-qui nous donne l'<span style="color:green;">`axeY`</span> de la caméra. 
+Et maintenant qu'on a l'<span class="x-axis">`axeX`</span> on peut faire le produit vectoriel entre l'<span class="z-axis">`axeZ`</span> et l'<span class="x-axis">`axeX`</span>
+qui nous donne l'<span class="y-axis">`axeY`</span> de la caméra. 
 
-{{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span style='color:blue;'>axeZ</span> cross <span style='color:red;'>axeX</span> = <span style='color:green;'>axeY</span>"}}}
+{{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span class='z-axis'>axeZ</span> cross <span class='x-axis'>axeX</span> = <span class='y-axis'>axeY</span>"}}}
 
 Maintenant tout ce qu'il nous reste à faire c'est de mettre ces axes dans une matrice. Cette matrice pourra orienter un objet qui pointe la `cible` depuis `positionCamera`. Il reste donc à ajouter la `position`
 
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
-| <span style="color:red">Xx</span> | <span style="color:red">Xy</span> | <span style="color:red">Xz</span> |  0 |  <- <span style="color:red">axe x</span>
+| <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">axe x</span>
 +----+----+----+----+
-| <span style="color:green">Yx</span> | <span style="color:green">Yy</span> | <span style="color:green">Yz</span> |  0 |  <- <span style="color:green">axe y</span>
+| <span class="y-axis">Yx</span> | <span class="y-axis">Yy</span> | <span class="y-axis">Yz</span> |  0 |  <- <span class="y-axis">axe y</span>
 +----+----+----+----+
-| <span style="color:blue">Zx</span> | <span style="color:blue">Zy</span> | <span style="color:blue">Zz</span> |  0 |  <- <span style="color:blue">axe z</span>
+| <span class="z-axis">Zx</span> | <span class="z-axis">Zy</span> | <span class="z-axis">Zz</span> |  0 |  <- <span class="z-axis">axe z</span>
 +----+----+----+----+
 | Tx | Ty | Tz |  1 |  <- position camera
 +----+----+----+----+

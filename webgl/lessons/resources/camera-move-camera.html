@@ -11,6 +11,11 @@ body {
     width: 100vw;
     height: 100vh;
 }
+@media (prefers-color-scheme: dark) {
+  canvas { 
+    background: #444;
+  }
+}
 </style>
 </head>
 <body>
@@ -69,8 +74,9 @@ function main() {
     var gridsAcross = Math.ceil(areaWidth / gridSpacing);
     var gridsDown = Math.ceil(areaHeight / gridSpacing);
     var gridLines = Math.max(gridsAcross, gridsDown);
+    var colors = stage.options.initialData.colors;
 
-    stage.setBackgroundColor(color('white'));
+    stage.setBackgroundColor(color(colors.background));
     stage.setFramerate(60);
 
     var top = new Group()
@@ -79,7 +85,7 @@ function main() {
            scale: stage.options.initialData.areaWidth / 400,
         });
 
-    console.log(areaWidth / 400);
+    // console.log(areaWidth / 400);
 
     var yoff = (mode === 2) ? 90 : 0;
 
@@ -102,7 +108,7 @@ function main() {
          .addTo(world)
          .attr({
            fillColor: "transparent",
-           strokeColor: "#888",
+           strokeColor: colors.innerRadius,
            strokeWidth: 1,
          });
 
@@ -110,7 +116,7 @@ function main() {
          .addTo(world)
          .attr({
            fillColor: "transparent",
-           strokeColor: "#F00",
+           strokeColor: colors.outerRadius,
            strokeWidth: 1,
          });
     }
@@ -129,7 +135,7 @@ function main() {
         });
 
     for (var ii = -gridLines; ii < gridLines; ++ii) {
-      var c = ii ? '#CCC' : 'black';
+      var c = ii ? colors.grid : colors.gridHighlight;
       new Rect(-areaWidth, ii * gridSpacing, areaWidth * 2, 0.5)
           .addTo(grid)
           .attr('fillColor', c);
@@ -149,6 +155,7 @@ function main() {
           .attr({
             x: t.x,
             y: t.y,
+            textFillColor: colors.axisLabel,
           });
     });
 
@@ -169,13 +176,13 @@ function main() {
         .lineTo(fRadius, 0)
         .attr({
           fillColor: "transparent",
-          strokeColor: "#888",
+          strokeColor: colors.innerRadius,
           strokeWidth: 1,
         });
       new Text("radius")
         .addTo(ip)
         .attr({
-          textFillColor: "#888",
+          textFillColor: colors.innerRadius,
           x: fRadius * .1,
           y: -10,
           fontSize: 12,
@@ -191,13 +198,13 @@ function main() {
         .lineTo(camRadius, 0)
         .attr({
           fillColor: "transparent",
-          strokeColor: "#F00",
+          strokeColor: colors.outerRadius,
           strokeWidth: 1,
         });
       new Text("radius*1.5")
         .addTo(cp)
         .attr({
-          textFillColor: "#F00",
+          textFillColor: colors.outerRadius,
           x: camRadius * 0.05,
           y: -12,
           fontSize: 12,
@@ -217,16 +224,16 @@ function main() {
           .lineTo(10, -10)
           .lineTo(0, 0)
           .closePath()
-          .fill('blue');
+          .fill(colors.camera);
       return c;
     };
 
     var createF = function() {
       var f = new Group();
-      new Rect(-15,  0 - 25, 30, 10).addTo(f).attr('fillColor', 'purple');
-      new Rect(-15, 10 - 25, 10, 10).addTo(f).attr('fillColor', 'purple');
-      new Rect(-15, 20 - 25, 20, 10).addTo(f).attr('fillColor', 'purple');
-      new Rect(-15, 30 - 25, 10, 20).addTo(f).attr('fillColor', 'purple');
+      new Rect(-15,  0 - 25, 30, 10).addTo(f).attr('fillColor', colors.f);
+      new Rect(-15, 10 - 25, 10, 10).addTo(f).attr('fillColor', colors.f);
+      new Rect(-15, 20 - 25, 20, 10).addTo(f).attr('fillColor', colors.f);
+      new Rect(-15, 30 - 25, 10, 20).addTo(f).attr('fillColor', colors.f);
       f.attr({scale: mode === 3 ? .5 : 1});
       return f;
     };
@@ -234,7 +241,7 @@ function main() {
     var numF = 5;
     for (var ii = 0; ii < numF; ++ii) {
       var f = createF();
-      var a = ii * Math.PI * 2 / numF
+      var a = ii * Math.PI * 2 / numF;
       f.addTo(world)
        .attr('x', Math.cos(a) * fRadius)
        .attr('y', Math.sin(a) * fRadius);
@@ -261,7 +268,7 @@ function main() {
       case 2:
         world.animate(new KeyframeAnimation('8s', {
           '0%':   { rotation: 0},
-          '100%': { rotation: Math.PI * 2 }
+          '100%': { rotation: Math.PI * 2 * (mode === 2 ? -1 : 1) }
         }, {repeat: 100000000}));
         break;
       case 3:
@@ -274,6 +281,30 @@ function main() {
     }
   };
 
+  const darkColors = {
+    grid: '#666',
+    gridHighlight: '#FFF',
+    axisLabel: '#FFF',
+    background: '#444',
+    f: '#F4F',
+    camera: '#48F',
+    innerRadius: '#AAA',
+    outerRadius: '#F44',
+  };
+  const lightColors = {
+    grid: '#CCC',
+    gridHighlight: '#000',
+    axisLabel: '#000',
+    background: '#FFF',
+    f: 'purple',
+    camera: 'blue',
+    innerRadius: '#888',
+    outerRadius: '#F00',
+  };
+  const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
+  const isDarkMode = darkMatcher.matches;
+  const colors = isDarkMode ? darkColors : lightColors;
+
   bonsai.run(movieElem, {
     code: code,
     width: areaWidth,
@@ -282,6 +313,7 @@ function main() {
       url: window.location.href.toString(),
       areaWidth: areaWidth,
       areaHeight: areaHeight,
+      colors: isDarkMode ? darkColors : lightColors,
     },
   });
 }

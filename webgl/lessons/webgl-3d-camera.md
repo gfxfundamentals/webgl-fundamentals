@@ -170,7 +170,7 @@ where we talked about unit circles and how those helped with 2D rotation.
 In 3D we need unit spheres and a normalized vector represents a point on a
 unit sphere.
 
-{{{diagram url="resources/cross-product-diagram.html?mode=0" caption="the <span style='color:blue;'>z axis</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=0" caption="the <span class='z-axis'>z axis</span>" }}}
 
 That's not enough info though.  Just a single vector gives us a point on a
 unit sphere but which orientation from that point to orient things?  We
@@ -190,15 +190,15 @@ pointing either south west or north east since those are the 2 vectors
 that are perpendicular to south east and up.  Depending on which order you
 compute the cross product in, you'll get the opposite answer.
 
-In any case if we compute the cross product of our <span style="color: blue;">`zAxis`</span> and
-<span style="color: gray;">`up`</span> we'll get the <span style="color:red;">xAxis</span> for the camera.
+In any case if we compute the cross product of our <span class="z-axis">`zAxis`</span> and
+<span style="color: gray;">`up`</span> we'll get the <span class="x-axis">xAxis</span> for the camera.
 
-{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> cross <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> cross <span class='z-axis'>zAxis</span> = <span class='x-axis'>xAxis</span>" }}}
 
-And now that we have the <span style="color:red;">`xAxis`</span> we can cross the <span style="color:blue;">`zAxis`</span> and the <span style="color:red;">`xAxis`</span>
-which will give us the camera's <span style="color:green;">`yAxis`</span>
+And now that we have the <span class="x-axis">`xAxis`</span> we can cross the <span class="z-axis">`zAxis`</span> and the <span class="x-axis">`xAxis`</span>
+which will give us the camera's <span class="y-axis">`yAxis`</span>
 
-{{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span style='color:blue;'>zAxis</span> cross <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span>"}}}
+{{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span class='z-axis'>zAxis</span> cross <span class='x-axis'>xAxis</span> = <span class='y-axis'>yAxis</span>"}}}
 
 Now all we have to do is plug the 3 axes into a matrix. That gives us a
 matrix that will orient something that points at the `target` from the
@@ -206,11 +206,11 @@ matrix that will orient something that points at the `target` from the
 
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
-| <span style="color:red">Xx</span> | <span style="color:red">Xy</span> | <span style="color:red">Xz</span> |  0 |  <- <span style="color:red">x axis</span>
+| <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">x axis</span>
 +----+----+----+----+
-| <span style="color:green">Yx</span> | <span style="color:green">Yy</span> | <span style="color:green">Yz</span> |  0 |  <- <span style="color:green">y axis</span>
+| <span class="y-axis">Yx</span> | <span class="y-axis">Yy</span> | <span class="y-axis">Yz</span> |  0 |  <- <span class="y-axis">y axis</span>
 +----+----+----+----+
-| <span style="color:blue">Zx</span> | <span style="color:blue">Zy</span> | <span style="color:blue">Zz</span> |  0 |  <- <span style="color:blue">z axis</span>
+| <span class="z-axis">Zx</span> | <span class="z-axis">Zy</span> | <span class="z-axis">Zz</span> |  0 |  <- <span class="z-axis">z axis</span>
 +----+----+----+----+
 | Tx | Ty | Tz |  1 |  <- camera position
 +----+----+----+----+

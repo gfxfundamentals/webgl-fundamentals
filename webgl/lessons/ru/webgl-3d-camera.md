@@ -167,7 +167,7 @@ for (var ii = 0; ii < numFs; ++ii) {
 о единичной окружности, и как она полезна в 2D-повороте. В 3D нам нужна уже
 единичная сфера, а нормализованный вектор представляет точку на этой сфере.
 
-{{{diagram url="resources/cross-product-diagram.html?mode=0" caption="<span style='color:blue;'>ось z</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=0" caption="<span class='z-axis'>ось z</span>" }}}
 
 Однако, этого недостаточно. Просто вектор даёт нам точку на единичной сфере,
 но от какой и до какой точки проходит этот вектор? Нам нужно заполнить и
@@ -187,17 +187,17 @@ for (var ii = 0; ii < numFs; ++ii) {
 и верху. В зависимости от порядка вычисления векторного произведения
 вы получите противоположный ответ.
 
-Так или иначе при вычислении векторного произведения наших <span style="color: blue;">`zAxis`</span>
-и <span style="color: gray;">`up`</span> мы получим <span style="color:red;">xAxis</span>
+Так или иначе при вычислении векторного произведения наших <span class="z-axis">`zAxis`</span>
+и <span style="color: gray;">`up`</span> мы получим <span class="x-axis">xAxis</span>
 для камеры.
 
-{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> умножить на <span style='color:blue;'>zAxis</span> = <span style='color:red;'>xAxis</span>" }}}
+{{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> умножить на <span class='z-axis'>zAxis</span> = <span class='x-axis'>xAxis</span>" }}}
 
-И теперь, когда у нас есть <span style="color:red;">`xAxis`</span>, мы можем умножить
-<span style="color:blue;">`zAxis`</span> и <span style="color:red;">`xAxis`</span>,
-что даст нам в итоге <span style="color:green;">`yAxis`</span> камеры.
+И теперь, когда у нас есть <span class="x-axis">`xAxis`</span>, мы можем умножить
+<span class="z-axis">`zAxis`</span> и <span class="x-axis">`xAxis`</span>,
+что даст нам в итоге <span class="y-axis">`yAxis`</span> камеры.
 
-{{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span style='color:blue;'>zAxis</span> умножить на <span style='color:red;'>xAxis</span> = <span style='color:green;'>yAxis</span>"}}}
+{{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span class='z-axis'>zAxis</span> умножить на <span class='x-axis'>xAxis</span> = <span class='y-axis'>yAxis</span>"}}}
 
 Теперь нам остаётся объединить 3 оси в матрицу. Это даст нам матрицу,
 которая направляет некий объект от `cameraPosition` до `target`. Нам
@@ -205,11 +205,11 @@ for (var ii = 0; ii < numFs; ++ii) {
 
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
-| <span style="color:red">Xx</span> | <span style="color:red">Xy</span> | <span style="color:red">Xz</span> |  0 |  <- <span style="color:red">ось x</span>
+| <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">ось x</span>
 +----+----+----+----+
-| <span style="color:green">Yx</span> | <span style="color:green">Yy</span> | <span style="color:green">Yz</span> |  0 |  <- <span style="color:green">ось y</span>
+| <span class="y-axis">Yx</span> | <span class="y-axis">Yy</span> | <span class="y-axis">Yz</span> |  0 |  <- <span class="y-axis">ось y</span>
 +----+----+----+----+
-| <span style="color:blue">Zx</span> | <span style="color:blue">Zy</span> | <span style="color:blue">Zz</span> |  0 |  <- <span style="color:blue">ось z</span>
+| <span class="z-axis">Zx</span> | <span class="z-axis">Zy</span> | <span class="z-axis">Zz</span> |  0 |  <- <span class="z-axis">ось z</span>
 +----+----+----+----+
 | Tx | Ty | Tz |  1 |  <- положение камеры
 +----+----+----+----+
