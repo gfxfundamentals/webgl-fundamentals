@@ -501,7 +501,7 @@ the ones in the back get drawn after the ones in the front.
 
 <img class="webgl_center" style="background-color: transparent;" width="163" height="190" src="resources/polygon-drawing-order.gif" />
 
-The <span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">redish part</span> is
+The <span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">reddish part</span> is
 the **front** of the 'F'  but because it's the first part of our data
 it is drawn first and then the other triangles behind it get drawn
 after covering it up. For example the  <span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">purple part</span>
@@ -530,7 +530,7 @@ vertices of that triangle in clip space.  In other words, WebGL figures out
 whether a triangle is front or back AFTER you've applied math to the
 vertices in the vertex shader.  That means for example a clockwise
 triangle that is scaled in X by -1 becomes a counter clockwise triangle or
-a clockwise triangle rotated 180 degrees becomes a couter clockwise
+a clockwise triangle rotated 180 degrees becomes a counter clockwise
 triangle.  Because we had CULL_FACE disabled we can see both
 clockwise(front) and counter clockwise(back) triangles.  Now that we've
 turned it on, any time a front facing triangle flips around either because
@@ -632,8 +632,8 @@ called `ortho` or `orthographic` that looks like this
       }
 
 Unlike our simplified `projection` function above which only had width, height, and depth
-parameters this more common othrographic projection function we can pass in left, right,
-bottom, top, near, and far which gives as more flexability. To use it the same as
+parameters this more common orthographic projection function we can pass in left, right,
+bottom, top, near, and far which gives as more flexibility. To use it the same as
 our original projection function we'd call it with
 
     var left = 0;
