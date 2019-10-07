@@ -131,7 +131,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Before we continue I think we need to discuss at a
 basic level what WebGL and your GPU actually do.  There are basically 2
 parts to this GPU thing.  The first part processes vertices (or streams of
-data) into clipspace vertices.  The second part draws pixels based on the
+data) into clip space vertices.  The second part draws pixels based on the
 first part.</p>
 <p>When you call</p>
 <pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
@@ -142,7 +142,7 @@ gl.drawArrays(primitiveType, offset, count);
 <p><img src="resources/vertex-shader-anim.gif" class="webgl_center" /></p>
 <p>On the left is the data you provide.  The vertex shader is a function you
 write in <a href="webgl-shaders-and-glsl.html">GLSL</a>.  It gets called once for each vertex.
-You do some math and set the special variable <code>gl_Position</code> with a clipspace value
+You do some math and set the special variable <code>gl_Position</code> with a clip space value
 for the current vertex. The GPU takes that value and stores it internally.</p>
 <p>Assuming you&#39;re drawing <code>TRIANGLES</code>, every time this first part generates 3
 vertices the GPU uses them to make a triangle.  It figures out which
@@ -155,7 +155,7 @@ with the color it wants for that pixel.</p>
 this point the fragment shader has very little info per pixel.
 Fortunately we can pass it more info.  We define “varyings” for each
 value we want to pass from the vertex shader to the fragment shader.</p>
-<p>As a simple example, let&#39;s just pass the clipspace coordinates we computed
+<p>As a simple example, let&#39;s just pass the clip space coordinates we computed
 directly from the vertex shader to the fragment shader.</p>
 <p>We&#39;ll draw with a simple triangle.  Continuing from our
 <a href="webgl-2d-matrices.html">previous example</a> let&#39;s change our rectangle to a
@@ -188,9 +188,9 @@ void main() {
   // Multiply the position by the matrix.
   gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 
-  // Convert from clipspace to colorspace.
-  // Clipspace goes -1.0 to +1.0
-  // Colorspace goes from 0.0 to 1.0
+  // Convert from clip space to color space.
+  // Clip space goes -1.0 to +1.0
+  // Color space goes from 0.0 to 1.0
 *  v_color = gl_Position * 0.5 + 0.5;
 }
 </code></pre><p>And then we declare the same <em>varying</em> in the fragment shader.</p>
@@ -211,7 +211,7 @@ same name and type in the fragment shader.</p>
 
 </p>
 <p>Move, scale and rotate the triangle.  Notice that since the colors are
-computed from clipspace they don&#39;t move with the triangle.  They are
+computed from clip space they don&#39;t move with the triangle.  They are
 relative to the background.</p>
 <p>Now think about it.  We only compute 3 vertices.  Our vertex shader only
 gets called 3 times therefore it&#39;s only computing 3 colors yet our
@@ -250,10 +250,10 @@ table.vertex_table {
 </div>
 
 <p>Our vertex shader applies a matrix to translate, rotate, scale and convert
-to clipspace.  The defaults for translation, rotation and scale are
+to clip space.  The defaults for translation, rotation and scale are
 translation = 200, 150, rotation = 0, scale = 1,1 so that&#39;s really only
 translation.  Given our backbuffer is 400x300 our vertex shader applies
-the matrix and then computes the following 3 clipspace vertices.</p>
+the matrix and then computes the following 3 clip space vertices.</p>
 <div class="hcenter">
 <table class="vertex_table">
 <tr><th colspan="3">values written to gl_Position</th></tr>
@@ -263,7 +263,7 @@ the matrix and then computes the following 3 clipspace vertices.</p>
 </table>
 </div>
 
-<p>It also converts those to colorspace and writes them to the <em>varying</em>
+<p>It also converts those to color space and writes them to the <em>varying</em>
 v_color that we declared.</p>
 <div class="hcenter">
 <table class="vertex_table">

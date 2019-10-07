@@ -168,7 +168,7 @@ function loadImageAndCreateTextureInfo(url) {
   return textureInfo;
 }
 </code></pre><p>The problem is images might have private data in them (for example a captcha, a signature, a naked picture, ...).
-A webpage often has ads and other things not in direct cotnrol of the page and so the browser needs to prevent
+A webpage often has ads and other things not in direct control of the page and so the browser needs to prevent
 those things from looking at the contents of these private images.</p>
 <p>Just using <code>&lt;img src=&quot;private.jpg&quot;&gt;</code> is not a problem because although the image will get displayed by
 the browser a script can not see the data inside the image. <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">The Canvas2D API</a>
@@ -178,7 +178,7 @@ has a way to see inside the image. First you draw the image into the canvas</p>
 <pre class="prettyprint"><code>var data = ctx.getImageData(0, 0, width, heigh);
 </code></pre><p>But, if the image you drew came from a different domain the browser will mark the canvas as <em>tainted</em> and
 you&#39;ll get a security error when you call <code>ctx.getImageData</code></p>
-<p>WebGL has to take it even one step further. In WebGL <code>gl.readPixels</code> is the equivilent call to <code>ctx.getImageData</code>
+<p>WebGL has to take it even one step further. In WebGL <code>gl.readPixels</code> is the equivalent call to <code>ctx.getImageData</code>
 so you&#39;d think maybe just blocking that would be enough but it turns out even if you can&#39;t read the pixels
 directly you can make shaders that take longer to run based on the colors in the image. Using that information
 you can use timing to effectively look inside the image indirectly and find out its contents.</p>
@@ -228,7 +228,7 @@ img.src = url;
 </p>
 <p>It&#39;s important to note asking for permission does NOT mean you&#39;ll be granted permission.
 That is up to the server. Github pages give permission, flickr.com gives permission,
-imgur.com gives permssion, but most websites do not. To give permission the server
+imgur.com gives permission, but most websites do not. To give permission the server
 sends certain headers when sending the image.</p>
 <p>It&#39;s also important to note that the server giving permission is not enough. If the
 image is from another domain you must set the <code>crossOrigin</code> attribute or else you

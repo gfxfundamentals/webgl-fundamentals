@@ -161,7 +161,7 @@ gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 }
 </code></pre><p>Notice how <code>data</code> is <code>null</code>. We don&#39;t need to supply any data. We just need WebGL to
 allocate the texture.</p>
-<p>Next we create a framebufffer. A framebuffer is just a collection of attachments. Attachments
+<p>Next we create a framebuffer. A framebuffer is just a collection of attachments. Attachments
 are either textures or renderbuffers. We&#39;ve gone over textures before. Renderbuffers are very similar
 to textures but they support formats and options that textures don&#39;t support. Also, unlike a texture
 you can&#39;t directly use a renderbuffer as input to a shader.</p>
@@ -199,7 +199,7 @@ Once to render to the texture and again to render to the canvas.</p>
   gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset)
 
-  // Turn on the texcord attribute
+  // Turn on the texcoord attribute
   gl.enableVertexAttribArray(texcoordLocation);
 
   // Bind the position buffer.
@@ -308,7 +308,7 @@ at all only to finally discover that I forgot one or both calling <code>gl.viewp
 and computing the correct aspect. It&#39;s so easy to forget that I now try to never call
 <code>gl.bindFramebuffer</code> in my own code directly. Instead I make a function that does both
 something like</p>
-<pre class="prettyprint"><code>function bindFrambufferAndSetViewport(fb, width, height) {
+<pre class="prettyprint"><code>function bindFramebufferAndSetViewport(fb, width, height) {
    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
    gl.viewport(0, 0, width, height);
 }

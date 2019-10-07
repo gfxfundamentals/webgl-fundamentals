@@ -191,7 +191,7 @@ var textTextures = [
 </code></pre><p>Then instead of rendering one quad for each name we&#39;ll render one quad for each
 letter in each name.</p>
 <pre class="prettyprint"><code>// setup to draw the text.
-+// Because every letter uses the same attributes and the same progarm
++// Because every letter uses the same attributes and the same program
 +// we only need to do this once.
 +gl.useProgram(textProgramInfo.program);
 +setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
@@ -199,7 +199,7 @@ letter in each name.</p>
 textPositions.forEach(function(pos, ndx) {
 +  var name = names[ndx];
 +
-+  // for each leter
++  // for each letter
 +  for (var ii = 0; ii &lt; name.length; ++ii) {
 +    var letter = name.charCodeAt(ii);
 +    var letterNdx = letter - &quot;a&quot;.charCodeAt(0);
@@ -320,7 +320,7 @@ image.addEventListener(&#39;load&#39;, function() {
 });
 </code></pre><p>Now that we have a texture with glyphs in it we need to use it. To do that we&#39;ll
 build quad vertices on the fly for each glyph. Those vertices will use texture coordinates
-to select a particlar glyph</p>
+to select a particular glyph</p>
 <p>Given a string let&#39;s build the vertices</p>
 <pre class="prettyprint"><code>function makeVerticesForString(fontInfo, s) {
   var len = s.length;
@@ -391,7 +391,7 @@ to select a particlar glyph</p>
   };
 }
 </code></pre><p>To use it we&#39;ll manually create a bufferInfo. (<a href="webgl-drawing-multiple-things">See previous article if you don&#39;t remember what a bufferInfo is</a>).</p>
-<pre class="prettyprint"><code>// Maunally create a bufferInfo
+<pre class="prettyprint"><code>// Manually create a bufferInfo
 var textBufferInfo = {
   attribs: {
     a_position: { buffer: gl.createBuffer(), numComponents: 2, },
@@ -471,7 +471,7 @@ well, as of 2015 there are over 110,000 glyphs in Unicode! You can&#39;t fit all
 those in textures. There just isn&#39;t enough room.</p>
 <p>The way the OS and browsers handle this when they&#39;re GPU accelerated is by using a glyph texture cache. Like
 above they might put textures in a texture atlas but they probably make the area
-for each glpyh a fixed size. They keep the most recently used glyphs in the texture.
+for each glyph a fixed size. They keep the most recently used glyphs in the texture.
 If they need to draw a glyph that&#39;s not in the texture they replace the least
 recently used one with the new one they need. Of course if that glyph they are
 about to replace is still being referenced by a quad yet to be drawn then they need

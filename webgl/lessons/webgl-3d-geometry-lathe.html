@@ -136,7 +136,7 @@ the topic will help illustrate some things about making 3d models for WebGL.</p>
 <a href="http://www.autodesk.com/products/3ds-max/overview">3D Studio Max</a>,
 <a href="https://www.maxon.net/en/products/cinema-4d/overview/">Cinema 4D</a>, etc.
 Use it to model a bowling pin, export, read the dat.
-(<a href="https://en.wikipedia.org/wiki/Wavefront_.obj_file">The OBJ format is relativly simple</a>).</p>
+(<a href="https://en.wikipedia.org/wiki/Wavefront_.obj_file">The OBJ format is relatively simple</a>).</p>
 <p>But, that got me thinking, what if they wanted to make a modeling package?</p>
 <p>There&#39;s a few ideas. One is to make a cylinder and try to pinch it in
 the right places using sin waves applied in certain places. The problem
@@ -232,7 +232,7 @@ opposite relative to the shared point.</p>
 the one made by <code>P4,P5,P6,P7</code>. It&#39;s just when <code>P3</code> and <code>P5</code> are on exact
 opposite sides of <code>P4</code> together they look like one continuous curve.
 Most apps will then usually give you the option to stop locking them
-together so you can get a sharp corner. Uncheck the lock checkbox
+together so you can get a sharp corner. Un-check the lock checkbox
 then drag <code>P3</code> or <code>P5</code> and it will become even more clear they are
 separate curves.</p>
 <p>Next up we need a way to generate points on a curve.
@@ -301,7 +301,7 @@ that for a given curve decides how flat it is.</p>
   return ux + uy;
 }
 </code></pre><p>We can use that in our function that gets points for a curve.
-First we&#39;ll check if the cuvry is too curvy. If so we&#39;ll subdivide,
+First we&#39;ll check if the curve is too curvy. If so we&#39;ll subdivide,
 if not we&#39;ll add the points in.</p>
 <pre class="prettyprint"><code>function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
   const outPoints = newPoints || [];
@@ -541,7 +541,7 @@ function lathePoints(points,
   const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
   const quadsDown = pointsPerColumn - 1;
 
-+  // generate v coordniates
++  // generate v coordinates
 +  let vcoords = [];
 +
 +  // first compute the length of the points
@@ -611,7 +611,7 @@ and you need nice tools to enter that data.</p>
 on this page you can see the line formed by <code>R1</code> and <code>R2</code> are a line tangent to the curve.</p>
 <p><img class="webgl_center" src="resources/tangent-to-curve.png" width="50%" /></p>
 <p>A normal is perpendicular to the tangent so it would be easy to use the tangents
-to genearate normals.</p>
+to generate normals.</p>
 <p>But, lets imagine we wanted to make a candle holder with a silhouette like this</p>
 <p><img class="webgl_center" src="resources/candle-holder.svg" width="50%" /></p>
 <p>There are many smooth areas but also many hard corners. How do we decide which normals
@@ -808,14 +808,14 @@ function makeIndiceIterator(arrays) {
       ? makeIndexedIndicesFn(arrays)
       : makeUnindexedIndicesFn(arrays);
 }
-</code></pre><p>In the code above first we genearte normals for each face (each triangle) from the original points.
+</code></pre><p>In the code above first we generate normals for each face (each triangle) from the original points.
 We then generate a set of vertex indices to find points that are the same. That&#39;s because as we rotated
-the points the first point and the last point should match up but they have differnet UV coordinates
+the points the first point and the last point should match up but they have different UV coordinates
 so they are not the same point. To compute the vertex normals we need them to be considered the same
 point.</p>
 <p>Once that&#39;s done, for each vertex, we make a list of all the faces it&#39;s used by.</p>
 <p>Finally we average the normals of all the faces each vertex uses excluding ones that are
-more than <code>maxAngle</code> different and genearte a new set of vertices.</p>
+more than <code>maxAngle</code> different and generate a new set of vertices.</p>
 <p>Here&#39;s the result</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lathe-step-03.html"></iframe>
@@ -930,7 +930,7 @@ points.forEach((p, ndx) => {
   ...
 </pre>
 <p>Transforming an arbitrary 3d point by a 4x4 matrix requires 16 multiplies, 12 adds, and 3 divides.
-We could simplifiy by just using <a href="webgl-2d-rotation.html">unit circle style rotation math</a>.
+We could simplify by just using <a href="webgl-2d-rotation.html">unit circle style rotation math</a>.
 </p>
 <pre class="prettyprint">
 const s = Math.sin(angle);

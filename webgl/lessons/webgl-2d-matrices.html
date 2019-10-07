@@ -501,7 +501,7 @@ matrix = m3.multiply(matrix, moveOriginMatrix);
 how Photoshop or Flash let you move the rotation point.</p>
 <p>Let&#39;s go even more crazy.  If you go back to the first article on <a href="webgl-fundamentals.html">WebGL
 fundamentals</a> you might remember we have code in
-the shader to convert from pixels to clipspace that looks like this.</p>
+the shader to convert from pixels to clip space that looks like this.</p>
 <pre class="prettyprint"><code class="lang-js">...
 // convert the rectangle from pixels to 0.0 to 1.0
 vec2 zeroToOne = position / u_resolution;
@@ -509,7 +509,7 @@ vec2 zeroToOne = position / u_resolution;
 // convert from 0-&gt;1 to 0-&gt;2
 vec2 zeroToTwo = zeroToOne * 2.0;
 
-// convert from 0-&gt;2 to -1-&gt;+1 (clipspace)
+// convert from 0-&gt;2 to -1-&gt;+1 (clip space)
 vec2 clipSpace = zeroToTwo - 1.0;
 
 gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
@@ -576,7 +576,7 @@ simple shader with only 1 step all due to the magic of matrix math.</p>
 </div>
 
 </p>
-<p>Before we move on let&#39;s simplifiy a little bit. While it&#39;s common to generate
+<p>Before we move on let&#39;s simplify a little bit. While it&#39;s common to generate
 various matrices and separately multiply them together it&#39;s also common to just
 multiply them as we go. Effectively we could functions like this</p>
 <pre class="prettyprint"><code class="lang-js">var m3 = {
@@ -622,18 +622,18 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 <pre class="prettyprint"><code>projectionMat * translationMat * rotationMat * scaleMat * position
 </code></pre><p>The first way which many people find natural is to start on the right and work
 to the left</p>
-<p>First we mutiply the position by the scale matrix to get a scaled position</p>
+<p>First we multiply the position by the scale matrix to get a scaled position</p>
 <pre class="prettyprint"><code>scaledPosition = scaleMat * position
-</code></pre><p>Then we multiply the scaledPostion by the rotation matrix to get a rotatedScaledPosition</p>
+</code></pre><p>Then we multiply the scaledPosition by the rotation matrix to get a rotatedScaledPosition</p>
 <pre class="prettyprint"><code>rotatedScaledPosition = rotationMat * scaledPosition
-</code></pre><p>Then we multiply the rotatedScaledPositon by the translation matrix to get a
+</code></pre><p>Then we multiply the rotatedScaledPosition by the translation matrix to get a
 translatedRotatedScaledPosition</p>
 <pre class="prettyprint"><code>translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
-</code></pre><p>And finally we multiply that by the projection matrix to get clipspace positions</p>
-<pre class="prettyprint"><code>clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
+</code></pre><p>And finally we multiply that by the projection matrix to get clip space positions</p>
+<pre class="prettyprint"><code>clipspacePosition = projectionMatrix * translatedRotatedScaledPosition
 </code></pre><p>The 2nd way to look at matrices is reading from left to right. In that case
 each matrix changes the <em>space</em> represented by the canvas. The canvas starts
-with representing clipspace (-1 to +1) in each direction. Each matrix applied
+with representing clip space (-1 to +1) in each direction. Each matrix applied
 from left to right changes the space represented by the canvas.</p>
 <p>Step 1:  no matrix (or the identity matrix)</p>
 <blockquote>
@@ -702,7 +702,7 @@ in matrix math <a href="https://www.youtube.com/watch?v=kjBOesZCoqc&amp;list=PLZ
 <h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
 <p>Up until this point whenever I referred to the canvas's dimensions I used <code>canvas.width</code> and <code>canvas.height</code>
 but above when I called <code>m3.projection</code> I instead used <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Why?</p>
-<p>Projection matrices are concerned with how to take clipspace (-1 to +1 in each dimension) and convert it back
+<p>Projection matrices are concerned with how to take clip space (-1 to +1 in each dimension) and convert it back
 to pixels. But, in the browser, there are 2 types of pixels we are dealing with. One is the number of pixels in
 the canvas itself. So for example a canvas defined like this.</p>
 <pre class="prettyprint">

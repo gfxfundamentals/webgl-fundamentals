@@ -271,7 +271,7 @@ to tell us all the uniforms and locations and then setup functions to set
 them for us.  We can then pass in JavaScript objects to set our settings
 much more easily.  If that&#39;s clear as mud well, our code would look
 something like this</p>
-<pre class="prettyprint"><code>// At initialiation time
+<pre class="prettyprint"><code>// At initialization time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -308,7 +308,7 @@ webglUtils.setUniforms(uniformSetters, uniforms);
 gl.drawArrays(...);
 </code></pre><p>That seems a heck of a lot smaller, easier, and less code to me.</p>
 <p>You can even use multiple JavaScript objects if it suits you. For example</p>
-<pre class="prettyprint"><code>// At initialiation time
+<pre class="prettyprint"><code>// At initialization time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -371,7 +371,7 @@ webglUtils.setUniforms(uniformSetters, uniformThatAreTheSameForAllObjects);
 objects.forEach(function(object) {
   computeMatricesForObject(object, uniformsThatAreComputedForEachObject);
   webglUtils.setUniforms(uniformSetters, uniformThatAreComputedForEachObject);
-  webglUtils.setUniforms(unifromSetters, objects.materialUniforms);
+  webglUtils.setUniforms(uniformSetters, objects.materialUniforms);
   gl.drawArrays(...);
 });
 </code></pre><p>Here&#39;s an example using these helper functions</p>
@@ -531,11 +531,11 @@ organized check out <a href="http://twgljs.org">TWGL.js</a>.</p>
 <div class="webgl_bottombar">
 <h3>Can we use the setters directly?</h3>
 <p>
-For those of you familar with JavaScript you might be wondering if you can use the setters
+For those of you familiar with JavaScript you might be wondering if you can use the setters
 directly like this.
 </p>
 <pre class="prettyprint">
-// At initialiation time
+// At initialization time
 var uniformSetters = webglUtils.createUniformSetters(program);
 
 // At draw time

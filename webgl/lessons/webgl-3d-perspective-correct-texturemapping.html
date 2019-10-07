@@ -9,7 +9,7 @@
 <meta name="keywords" content="webgl graphics" />
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective-correct-texturemapping_en.jpg" />
 
-<meta property="og:title" content="WebGL 3D Perspective Correct Texturemapping" />
+<meta property="og:title" content="WebGL 3D Perspective Correct Texture Mapping" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective-correct-texturemapping_en.jpg" />
 <meta property="og:description" content="What&#x27;s special about W" />
@@ -19,7 +19,7 @@
 <meta name="twitter:site" content="@greggman" />
 <meta name="twitter:creator" content="@greggman" />
 <meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 3D Perspective Correct Texturemapping" />
+<meta name="twitter:title" content="WebGL 3D Perspective Correct Texture Mapping" />
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html" />
 <meta name="twitter:description" content="What&#x27;s special about W" />
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective-correct-texturemapping_en.jpg" />
@@ -46,7 +46,7 @@
       "@id":"https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html",
       "inLanguage":"en",
-      "name":"WebGL 3D Perspective Correct Texturemapping",
+      "name":"WebGL 3D Perspective Correct Texture Mapping",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -60,7 +60,7 @@
 </script>
 
 
-<title>WebGL 3D Perspective Correct Texturemapping</title>
+<title>WebGL 3D Perspective Correct Texture Mapping</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 
@@ -123,7 +123,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 3D Perspective Correct Texturemapping</h1>
+    <h1>WebGL 3D Perspective Correct Texture Mapping</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
@@ -146,7 +146,7 @@ it will pass us our varyings interpolated between the 3 values.</p>
 
 </p>
 <p>Going back to our <a href="webgl-fundamentals.html">first article</a> we drew a triangle in
-clipspace, no math. We just passed in some clipspace coordinates
+clip space, no math. We just passed in some clip space coordinates
 to a simple vertex shader that looked like this</p>
 <pre class="prettyprint"><code>  // an attribute will receive data from a buffer
   attribute vec4 a_position;
@@ -166,9 +166,9 @@ to a simple vertex shader that looked like this</p>
   void main() {
     // gl_FragColor is a special variable a fragment shader
     // is responsible for setting
-    gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
+    gl_FragColor = vec4(1, 0, 0.5, 1); // return reddish-purple
   }
-</code></pre><p>So let&#39;s make that draw 2 rectangles in clipspace. We&#39;ll pass it this
+</code></pre><p>So let&#39;s make that draw 2 rectangles in clip space. We&#39;ll pass it this
 data with <code>X</code>, <code>Y</code>, <code>Z</code>, and <code>W</code> for each vertex.</p>
 <pre class="prettyprint"><code>var positions = [
   -.8, -.8, 0, 1,  // 1st rect 1st triangle
@@ -262,7 +262,7 @@ at init time</p>
       brightnessAttributeLocation, size, type, normalize, stride, offset);
 </code></pre><p>And now when we render we get two rectangles that are black on the left
 when <code>brightness</code> is 0 and red on the right when <code>brightness</code> is 1 and
-for the area inbetween <code>brightness</code> is interpolated or (varied) as it
+for the area in between <code>brightness</code> is interpolated or (varied) as it
 goes across the triangles.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying.html"></iframe>
@@ -292,8 +292,8 @@ and get the same result.</p>
        .8 * mult, -.8 * mult, 0, mult,
   ];
 </code></pre><p>Above you can see that for every point on the right in the second
-rectangle we are multipliying <code>X</code> and <code>Y</code> by <code>mult</code> but, we are also
-settting <code>W</code> to <code>mult</code>. Since WebGL will divide by <code>W</code> we should get
+rectangle we are multiplying <code>X</code> and <code>Y</code> by <code>mult</code> but, we are also
+setting <code>W</code> to <code>mult</code>. Since WebGL will divide by <code>W</code> we should get
 the exact same result right?</p>
 <p>Well here&#39;s that</p>
 <p><div class="webgl_example_container">
@@ -306,11 +306,11 @@ the exact same result right?</p>
 proves <code>X * MULT / MULT(W)</code> is still just <code>X</code> and same for <code>Y</code>. But, the
 colors are different. What&#39;s going on?</p>
 <p>It turns out WebGL uses <code>W</code> to implement perspective correct
-texturemapping or rather to do perspective correct interpolation
+texture mapping or rather to do perspective correct interpolation
 of varyings.</p>
 <p>In fact to make it easier to see let&#39;s hack the fragment shader to this</p>
 <pre class="prettyprint"><code>gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // reds
-</code></pre><p>multplying <code>v_brightness</code> by 10 will make the value go from 0 to 10. <code>fract</code> will
+</code></pre><p>multiplying <code>v_brightness</code> by 10 will make the value go from 0 to 10. <code>fract</code> will
 just keep the fractional part so it will go 0 to 1, 0 to 1, 0 to 1, 10 times</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying-non-1-w-repeat.html"></iframe>
@@ -394,8 +394,8 @@ provides the ability to do perspective correct texture mapping.</p>
 <div class="webgl_bottombar">
 <h3>Mid 1990s Game Consoles</h3>
 <p>
-As a little piece of trivia the Playstation 1 and some of the other 
-game consoles from the same era didn't do perspective correct texturemapping. Looking at the results above you can now see why
+As a little piece of trivia the PlayStation 1 and some of the other 
+game consoles from the same era didn't do perspective correct texture mapping. Looking at the results above you can now see why
 they looked the way they did.
 </p>
 <div class="webgl_center"><img src="resources/ridge-racer-01.png" style="max-width: 500px;" /></div>
@@ -539,8 +539,8 @@ they looked the way they did.
         <script type="text/javascript">
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 3D Perspective Correct Texturemapping';
-            var disqus_title = 'WebGL 3D Perspective Correct Texturemapping';
+            var disqus_identifier = 'WebGL 3D Perspective Correct Texture Mapping';
+            var disqus_title = 'WebGL 3D Perspective Correct Texture Mapping';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

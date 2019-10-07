@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="How to implementent fog" />
+<meta name="description" content="How to implement fog" />
 <meta name="keywords" content="webgl graphics" />
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-fog_en.jpg" />
 
 <meta property="og:title" content="WebGL Fog" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-fog_en.jpg" />
-<meta property="og:description" content="How to implementent fog" />
+<meta property="og:description" content="How to implement fog" />
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/webgl-fog.html" />
 
 <meta name="twitter:card" content="summary_large_image" />
@@ -21,7 +21,7 @@
 <meta name="twitter:domain" content="webglfundamentals.org" />
 <meta name="twitter:title" content="WebGL Fog" />
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/webgl-fog.html" />
-<meta name="twitter:description" content="How to implementent fog" />
+<meta name="twitter:description" content="How to implement fog" />
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-fog_en.jpg" />
 
 <script type="application/ld+json">
@@ -127,13 +127,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>This aritcle is part of a series of articles about WebGL.
+      <p>This article is part of a series of articles about WebGL.
 <a href="webgl-fundamentals.html">The first article starts with the fundamentals</a>.</p>
-<p>Fog in WebGL is interesting to me because of how <em>fake</em> it seems when I think about how it works. Basically what you do is use some kind of depth or distance from the camera calculation in your shaders to make the color more or less the fog color.</p>
+<p>Fog in WebGL is interesting to me because of how <em>fake</em> it seems when I think
+about how it works. Basically what you do is use some kind of depth or distance
+from the camera calculation in your shaders to make the color more or less the
+fog color.</p>
 <p>In other words you start with a basic equation like this</p>
 <pre class="prettyprint"><code class="lang-glsl">gl_FragColor = mix(originalColor, fogColor, fogAmount);
 </code></pre>
-<p>Where <code>fogAmount</code> is a value from 0 to 1. The <code>mix</code> function mixes the first 2 values. When <code>fogAmount</code> is 0 <code>mix</code> returns <code>originalColor</code>. Then <code>fogAmount</code> is 1 <code>mix</code> returns <code>fogColor</code>. In between 0 and 1 you get a percentage of both colors. You could implement <code>mix</code> yourself like this</p>
+<p>Where <code>fogAmount</code> is a value from 0 to 1. The <code>mix</code> function mixes the first 2
+values. When <code>fogAmount</code> is 0 <code>mix</code> returns <code>originalColor</code>. Then <code>fogAmount</code> is
+1 <code>mix</code> returns <code>fogColor</code>. In between 0 and 1 you get a percentage of both
+colors. You could implement <code>mix</code> yourself like this</p>
 <pre class="prettyprint"><code class="lang-glsl">gl_FragColor = originalColor + (fogColor - originalColor) * fogAmount;
 </code></pre>
 <p>Let&#39;s make a shader that does this. We&#39;ll use a textured cube from <a href="webgl-3d-textures.html">the article on textures</a>.</p>
@@ -170,7 +176,7 @@ function drawScene(time) {
   ...
 
   // Clear the canvas AND the depth buffer.
-  // Clear to the fog colort
+  // Clear to the fog color
   gl.clearColor(...fogColor);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -183,16 +189,24 @@ function drawScene(time) {
   ...
 }
 </code></pre>
-<p>And here you&#39;ll see if you drag the slider you can change between the texture and the fog color</p>
+<p>And here you&#39;ll see if you drag the slider you can change between the texture
+and the fog color</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-fog-just-mix.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-fog-just-mix.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
-<p>So now all we really need to do is instead of passing in the fog amount we compute it based on the something like the depth from the camera.</p>
-<p>Recall from the article on <a href="webgl-3d-camera.html">cameras</a> that after we apply the view matrix all positions are relative to the camera. The camera looks down the -z axis so if we just look at the z position after multiplying by the world and view matrices we&#39;ll have a value that repesents how far away something is from the z plane of the camera.</p>
-<p>Let&#39;s change the vertex shader to pass that data to the fragment shader so we can use it compute a fog amount. To do that let&#39;s split <code>u_matrix</code> into 2 parts. A projection matrix and a worldView matrix.</p>
+<p>So now all we really need to do is instead of passing in the fog amount we
+compute it based on the something like the depth from the camera.</p>
+<p>Recall from the article on <a href="webgl-3d-camera.html">cameras</a> that after we apply
+the view matrix all positions are relative to the camera. The camera looks down
+the -z axis so if we just look at the z position after multiplying by the world
+and view matrices we&#39;ll have a value that represents how far away something is
+from the z plane of the camera.</p>
+<p>Let&#39;s change the vertex shader to pass that data to the fragment shader so we
+can use it compute a fog amount. To do that let&#39;s split <code>u_matrix</code> into 2 parts.
+A projection matrix and a worldView matrix.</p>
 <pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
@@ -218,9 +232,17 @@ void main() {
 +  v_fogDepth = -(u_worldView * a_position).z;
 }
 </code></pre>
-<p>Now in the fragment shader we want it to work that if the depth is less than some value, don&#39;t mix any fog (fogAmount = 0). If the depth is greater than some value then 100% fog (fogAmount = 1). Between those 2 values mix the colors.</p>
-<p>We could write code to do that but GLSL has a function, <code>smoothstep</code> that does just that. You give it the min value, the max value, and the value to test. If the test value is less than or equal to the min value it returns 0. If the test value is greater than or equal to the max value it returns 1. If test is between those 2 values it returns something between 0 and 1 in proportion to where the test value is between min and max.</p>
-<p>So, it should be pretty easy to use that in our fragment shader to compute a fog amount</p>
+<p>Now in the fragment shader we want it to work that if the depth is less than
+some value, don&#39;t mix any fog (fogAmount = 0). If the depth is greater than some
+value then 100% fog (fogAmount = 1). Between those 2 values mix the colors.</p>
+<p>We could write code to do that but GLSL has a function, <code>smoothstep</code> that does
+just that. You give it the min value, the max value, and the value to test. If
+the test value is less than or equal to the min value it returns 0. If the test
+value is greater than or equal to the max value it returns 1. If test is between
+those 2 values it returns something between 0 and 1 in proportion to where the
+test value is between min and max.</p>
+<p>So, it should be pretty easy to use that in our fragment shader to compute a fog
+amount</p>
 <pre class="prettyprint"><code class="lang-glsl">precision mediump float;
 
 // Passed in from the vertex shader.
@@ -330,8 +352,12 @@ for (let i = 0; i &lt;= numCubes; ++i) {
 </div>
 
 </p>
-<p>Note: We didn&#39;t add any code to make sure <code>fogNear</code> is less then or equal to <code>fogFar</code> which are arguably invalid settings so be sure to set both appropriately.</p>
-<p>As I mentioned above it&#39;s feels like a trick to me. It works because the fog color we&#39;re fading to matches the background color. Change the background color and the illusion disappears.</p>
+<p>Note: We didn&#39;t add any code to make sure <code>fogNear</code> is less then or equal to
+<code>fogFar</code> which are arguably invalid settings so be sure to set both
+appropriately.</p>
+<p>As I mentioned above it&#39;s feels like a trick to me. It works because the fog
+color we&#39;re fading to matches the background color. Change the background color
+and the illusion disappears.</p>
 <pre class="prettyprint"><code class="lang-js">-gl.clearColor(...fogColor);
 +gl.clearColor(1, 0, 0, 1);  // red
 </code></pre>
@@ -339,7 +365,11 @@ for (let i = 0; i &lt;= numCubes; ++i) {
 <div class="webgl_center"><img src="resources/fog-background-color-mismatch.png"></div>
 
 <p>so just remember to you need to set the background color to match the fog color.</p>
-<p>Using the depth works and it&#39;s cheap but there&#39;s a problem. Let&#39;s say you have a circle of objects around the camera. We&#39;re computing a fog amount based on the distance from the camera&#39;s z plane. That means as you turn the camera objects will appear to come into and out of the fog slightly as their view space Z value gets closer to 0</p>
+<p>Using the depth works and it&#39;s cheap but there&#39;s a problem. Let&#39;s say you have a
+circle of objects around the camera. We&#39;re computing a fog amount based on the
+distance from the camera&#39;s z plane. That means as you turn the camera objects
+will appear to come into and out of the fog slightly as their view space Z value
+gets closer to 0</p>
 <div class="webgl_center"><img src="resources/fog-depth.svg" style="width: 600px;"></div>
 
 <p>You can see the problem in this example</p>
@@ -349,11 +379,16 @@ for (let i = 0; i &lt;= numCubes; ++i) {
 </div>
 
 </p>
-<p>Above there is a ring of 8 cubes directly around the camera. The camera in spinning in place. That means the cubes are always the same distance from the camera but a different distance from the Z plane and so our fog amount calculation results in the cubes near the edge coming out of the fog.</p>
-<p>The fix is to instead compute the distance from the camera which will be the same for all cubes</p>
+<p>Above there is a ring of 8 cubes directly around the camera. The camera in
+spinning in place. That means the cubes are always the same distance from the
+camera but a different distance from the Z plane and so our fog amount
+calculation results in the cubes near the edge coming out of the fog.</p>
+<p>The fix is to instead compute the distance from the camera which will be the
+same for all cubes</p>
 <div class="webgl_center"><img src="resources/fog-distance.svg" style="width: 600px;"></div>
 
-<p>To do this we just need to pass the vertex position in view space from the vertex shader to the fragment shader</p>
+<p>To do this we just need to pass the vertex position in view space from the
+vertex shader to the fragment shader</p>
 <pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
@@ -410,7 +445,10 @@ void main() {
 </div>
 
 </p>
-<p>So far all of our fog has used a linear calculation. In other words the fog color gets applied linearly between near and far. Like many things in the real world fog apparently works expotentially. It gets thicker with the square of the distance from the viewer. A common equation for expotential fog is</p>
+<p>So far all of our fog has used a linear calculation. In other words the fog
+color gets applied linearly between near and far. Like many things in the real
+world fog apparently works exponentially. It gets thicker with the square of the
+distance from the viewer. A common equation for exponential fog is</p>
 <pre class="prettyprint"><code class="lang-glsl">#define LOG2 1.442695
 
 fogAmount = 1. - exp2(-fogDensity * fogDensity * fogDistance * fogDistance * LOG2));

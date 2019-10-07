@@ -149,7 +149,7 @@ like this</p>
 provides a parent child relationship for matrices as <a href="webgl-2d-matrices.html">we discussed in 2D
 matrix math</a>.  So for example in a simple (but
 unrealistic) universe simulation the stars (children), move along with
-their galaxy (parent).  Similary a moon (child) moves along with its
+their galaxy (parent).  Similarly a moon (child) moves along with its
 planet (parent).  If you move the earth the moon will move with it.  If
 you move a galaxy all the stars inside will move with it.  Drag the names
 in the diagram above and hopefully you can see their relationships.</p>
@@ -178,7 +178,7 @@ multiplying the matrices as it walks</p>
 <pre class="prettyprint"><code>worldMatrixForMoon = galaxyMatrix * starMatrix * planetMatrix * moonMatrix;
 </code></pre><p>We can do this very simply with a recursive function which is effectively</p>
 <pre class="prettyprint"><code>function computeWorldMatrix(currentNode, parentWorldMatrix) {
-    // compute our world matrix by multplying our local matrix with
+    // compute our world matrix by multiplying our local matrix with
     // our parent&#39;s world matrix.
     var worldMatrix = m4.multiply(parentWorldMatrix, currentNode.localMatrix);
 
@@ -384,7 +384,7 @@ moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // moon 20 units from the
 var moonNode = new Node();
 -moonNode.localMatrix = m4.translation(20, 0, 0);  // moon 20 units from the earth
 </code></pre><p>Connecting them now looks like this</p>
-<pre class="prettyprint"><code>// connect the celetial objects
+<pre class="prettyprint"><code>// connect the celestial objects
 sunNode.setParent(solarSystemNode);
 earthOrbitNode.setParent(solarSystemNode);
 earthNode.setParent(earthOrbitNode);
