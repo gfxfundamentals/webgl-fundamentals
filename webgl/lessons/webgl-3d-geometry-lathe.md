@@ -13,7 +13,7 @@ Someone asked how to make a bowling pin shape in WebGL. The *smart* answer is
 [3D Studio Max](http://www.autodesk.com/products/3ds-max/overview),
 [Cinema 4D](https://www.maxon.net/en/products/cinema-4d/overview/), etc.
 Use it to model a bowling pin, export, read the dat.
-([The OBJ format is relativly simple](https://en.wikipedia.org/wiki/Wavefront_.obj_file)).
+([The OBJ format is relatively simple](https://en.wikipedia.org/wiki/Wavefront_.obj_file)).
 
 But, that got me thinking, what if they wanted to make a modeling package?
 
@@ -110,7 +110,7 @@ Notice the curve made by `P1,P2,P3,P4` is a separate curve from
 the one made by `P4,P5,P6,P7`. It's just when `P3` and `P5` are on exact
 opposite sides of `P4` together they look like one continuous curve.
 Most apps will then usually give you the option to stop locking them
-together so you can get a sharp corner. Uncheck the lock checkbox
+together so you can get a sharp corner. Un-check the lock checkbox
 then drag `P3` or `P5` and it will become even more clear they are
 separate curves.
 
@@ -183,7 +183,7 @@ that for a given curve decides how flat it is.
     }
 
 We can use that in our function that gets points for a curve.
-First we'll check if the cuvry is too curvy. If so we'll subdivide,
+First we'll check if the curve is too curvy. If so we'll subdivide,
 if not we'll add the points in.
 
     function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
@@ -440,7 +440,7 @@ for `v`.
       const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
       const quadsDown = pointsPerColumn - 1;
 
-    +  // generate v coordniates
+    +  // generate v coordinates
     +  let vcoords = [];
     +
     +  // first compute the length of the points
@@ -512,7 +512,7 @@ on this page you can see the line formed by `R1` and `R2` are a line tangent to 
 <img class="webgl_center" src="resources/tangent-to-curve.png" width="50%" />
 
 A normal is perpendicular to the tangent so it would be easy to use the tangents
-to genearate normals.
+to generate normals.
 
 But, lets imagine we wanted to make a candle holder with a silhouette like this
 
@@ -717,16 +717,16 @@ Let's do that.
           : makeUnindexedIndicesFn(arrays);
     }
 
-In the code above first we genearte normals for each face (each triangle) from the original points.
+In the code above first we generate normals for each face (each triangle) from the original points.
 We then generate a set of vertex indices to find points that are the same. That's because as we rotated
-the points the first point and the last point should match up but they have differnet UV coordinates
+the points the first point and the last point should match up but they have different UV coordinates
 so they are not the same point. To compute the vertex normals we need them to be considered the same
 point.
 
 Once that's done, for each vertex, we make a list of all the faces it's used by.
 
 Finally we average the normals of all the faces each vertex uses excluding ones that are
-more than `maxAngle` different and genearte a new set of vertices.
+more than `maxAngle` different and generate a new set of vertices.
 
 Here's the result
 
@@ -845,7 +845,7 @@ points.forEach((p, ndx) => {
   ...
 </pre>
 <p>Transforming an arbitrary 3d point by a 4x4 matrix requires 16 multiplies, 12 adds, and 3 divides.
-We could simplifiy by just using <a href="webgl-2d-rotation.html">unit circle style rotation math</a>.
+We could simplify by just using <a href="webgl-2d-rotation.html">unit circle style rotation math</a>.
 </p>
 <pre class="prettyprint">
 const s = Math.sin(angle);

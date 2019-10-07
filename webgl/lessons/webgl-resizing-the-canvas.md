@@ -106,7 +106,7 @@ And here's that
 Hey, something is wrong? Why is the line not covering the entire area?
 
 The reason is when we resize the canvas we also need to call `gl.viewport` to set the viewport.
-`gl.viewport` tells WebGL how to convert from clipspace (-1 to +1) back to pixels and where to do
+`gl.viewport` tells WebGL how to convert from clip space (-1 to +1) back to pixels and where to do
 it within the canvas. When you first create the WebGL context WebGL will set the viewport to match the size
 of the canvas but after that it's up to you to set it. If you change the size of the canvas
 you need to tell WebGL a new viewport setting.

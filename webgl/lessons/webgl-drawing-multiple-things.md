@@ -8,7 +8,7 @@ articles](webgl-fundamentals.html).  If you haven't read them I suggest
 you start there.
 
 One of the most common questions after first getting something up in WebGL
-is how do I draw mulitple things.
+is how do I draw multiple things.
 
 The first thing to realize is that with few exceptions, WebGL is like
 having a function someone wrote where instead of passing lots of
@@ -198,7 +198,7 @@ effectively 3 main things to combine.
 3.  The uniforms needed to draw that thing with the given shader.
 
 So, a simple simplification would be to make an array of things to draw
-and in that array put the 3 things togehter
+and in that array put the 3 things together
 
     var objectsToDraw = [
       {

@@ -1,4 +1,4 @@
-Title: WebGL 3D Perspective Correct Texturemapping
+Title: WebGL 3D Perspective Correct Texture Mapping
 Description: What's special about W
 TOC: Perspective Correct Texture Mapping
 
@@ -20,7 +20,7 @@ it will pass us our varyings interpolated between the 3 values.
 {{{diagram url="resources/fragment-shader-anim.html" caption="v_color is interpolated between v0, v1 and v2" }}}
 
 Going back to our [first article](webgl-fundamentals.html) we drew a triangle in
-clipspace, no math. We just passed in some clipspace coordinates
+clip space, no math. We just passed in some clip space coordinates
 to a simple vertex shader that looked like this
 
       // an attribute will receive data from a buffer
@@ -43,10 +43,10 @@ We had a simple fragment shader that draws a constant color
       void main() {
         // gl_FragColor is a special variable a fragment shader
         // is responsible for setting
-        gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
+        gl_FragColor = vec4(1, 0, 0.5, 1); // return reddish-purple
       }
 
-So let's make that draw 2 rectangles in clipspace. We'll pass it this
+So let's make that draw 2 rectangles in clip space. We'll pass it this
 data with `X`, `Y`, `Z`, and `W` for each vertex.
 
     var positions = [
@@ -155,7 +155,7 @@ and setup that attribute at render time
 
 And now when we render we get two rectangles that are black on the left
 when `brightness` is 0 and red on the right when `brightness` is 1 and
-for the area inbetween `brightness` is interpolated or (varied) as it
+for the area in between `brightness` is interpolated or (varied) as it
 goes across the triangles.
 
 {{{example url="../webgl-clipspace-rectangles-with-varying.html" }}}
@@ -187,8 +187,8 @@ and get the same result.
 ```
 
 Above you can see that for every point on the right in the second
-rectangle we are multipliying `X` and `Y` by `mult` but, we are also
-settting `W` to `mult`. Since WebGL will divide by `W` we should get
+rectangle we are multiplying `X` and `Y` by `mult` but, we are also
+setting `W` to `mult`. Since WebGL will divide by `W` we should get
 the exact same result right?
 
 Well here's that
@@ -200,14 +200,14 @@ proves `X * MULT / MULT(W)` is still just `X` and same for `Y`. But, the
 colors are different. What's going on?
 
 It turns out WebGL uses `W` to implement perspective correct
-texturemapping or rather to do perspective correct interpolation
+texture mapping or rather to do perspective correct interpolation
 of varyings.
 
 In fact to make it easier to see let's hack the fragment shader to this
 
     gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // reds
 
-multplying `v_brightness` by 10 will make the value go from 0 to 10. `fract` will
+multiplying `v_brightness` by 10 will make the value go from 0 to 10. `fract` will
 just keep the fractional part so it will go 0 to 1, 0 to 1, 0 to 1, 10 times
 
 {{{example url="../webgl-clipspace-rectangles-with-varying-non-1-w-repeat.html" }}}
@@ -304,8 +304,8 @@ provides the ability to do perspective correct texture mapping.
 <div class="webgl_bottombar">
 <h3>Mid 1990s Game Consoles</h3>
 <p>
-As a little piece of trivia the Playstation 1 and some of the other 
-game consoles from the same era didn't do perspective correct texturemapping. Looking at the results above you can now see why
+As a little piece of trivia the PlayStation 1 and some of the other 
+game consoles from the same era didn't do perspective correct texture mapping. Looking at the results above you can now see why
 they looked the way they did.
 </p>
 <div class="webgl_center"><img src="resources/ridge-racer-01.png" style="max-width: 500px;" /></div>

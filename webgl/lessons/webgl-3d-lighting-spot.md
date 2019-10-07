@@ -27,7 +27,7 @@ directions from that point.
 To make a spot light all we need to do is choose a direction from
 that point, this is the direction of our spotlight. Then, for every
 direction the light is going we could take the dot product of
-that direction with our chosen spotlight direction. We'd pick some arbitary
+that direction with our chosen spotlight direction. We'd pick some arbitrary
 limit and decide if we're within that limit we light. If we're not within
 that limit we don't light.
 
@@ -152,7 +152,7 @@ is it used to be that shaders didn't actually have conditionals. If you added
 a conditional the shader compiler would expand the code with lots
 of multiply by 0 and 1 here and there to make it so there were not
 any actual conditionals in the code. That meant adding conditionals
-could make your code explode into combinitorial expansions. I'm not
+could make your code explode into combinatorial expansions. I'm not
 sure that's true anymore but let's get rid of the conditionals anyway
 just to show some techniques. You can decide yourself whether or not
 to use them.
@@ -248,7 +248,7 @@ That works too
 
 The difference is `smoothstep` uses a Hermite interpolation instead of a
 linear interpolation. That means between `lowerBound` and `upperBound`
-it intepolates like the image below on the right whereas a linear interpolation is like the image on the left.
+it interpolates like the image below on the right whereas a linear interpolation is like the image on the left.
 
 <img class="webgl_center invertdark" src="resources/linear-vs-hermite.png" />
 

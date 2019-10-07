@@ -3,13 +3,13 @@ Description: How to implement environment maps.
 TOC: Environment maps
 
 
-This aritcle is part of a series of articles about WebGL.
+This article is part of a series of articles about WebGL.
 [The first article starts with the fundamentals](webgl-fundamentals.html).
 This article continues from [the article on cube maps](webgl-cube-maps.html).
-This article also uses concepts convered in [the article on lighting](webgl-3d-lighting-directional.html).
+This article also uses concepts covered in [the article on lighting](webgl-3d-lighting-directional.html).
 If you have not read those articles already you might want to read them first.
 
-An *environment map* represents the environment of the objects you're drawing. If the you're drawing an outdoor scene it would represent the outdoors. If you're drawing people on a stage it would represent the venue. If you're drawing an outer space scene it would be the stars. We can implement an environment map with a cube map if we have 6 images that show the enivornment from a point in space in the 6 directions of the cubemap.
+An *environment map* represents the environment of the objects you're drawing. If the you're drawing an outdoor scene it would represent the outdoors. If you're drawing people on a stage it would represent the venue. If you're drawing an outer space scene it would be the stars. We can implement an environment map with a cube map if we have 6 images that show the environment from a point in space in the 6 directions of the cubemap.
 
 Here's an environment map from the lobby of the Computer History Museum in Mountain View, California.
 
@@ -85,28 +85,43 @@ gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 ```
 
-Note that for every face we fill it in with a 512x512 blank image by passing `null` to `texImage2D`. Cubemaps must have all 6 faces, all 6 faces must be the same size and be square. If they are not
-the texture will not render. But, we're loading 6 images. We'd
-like to start rendering immediately so we allocate all 6 faces then start loading the images. As each image arrives we upload it to the correct face then generate the mipmap again. This means we can start rendering immediately and as the images are download the faces of the cubemap will get filled in with the images one at a time and still be renderable even if all 6 have not arrived yet.
+Note that for every face we fill it in with a 512x512 blank image by passing
+`null` to `texImage2D`. Cubemaps must have all 6 faces, all 6 faces must be the
+same size and be square. If they are not the texture will not render. But, we're
+loading 6 images. We'd like to start rendering immediately so we allocate all 6
+faces then start loading the images. As each image arrives we upload it to the
+correct face then generate the mipmap again. This means we can start rendering
+immediately and as the images are download the faces of the cubemap will get
+filled in with the images one at a time and still be renderable even if all 6
+have not arrived yet.
 
-But, just loading the images is not enough. Like [lighting](webgl-3d-lighting-point.html) we need a little math here.
+But, just loading the images is not enough. Like
+[lighting](webgl-3d-lighting-point.html) we need a little math here.
 
-In this case we want to know for each fragment to be drawn, given a vector from the eye/camera to thtat position on the surface of the object, which direction will it reflect off the that surface. We can then use that direction to get a color from the cubemap.
+In this case we want to know for each fragment to be drawn, given a vector from
+the eye/camera to that position on the surface of the object, which direction
+will it reflect off the that surface. We can then use that direction to get a
+color from the cubemap.
 
 The formula to reflect is
 
     reflectionDir = eyeToSurfaceDir – 
         2 ∗ dot(surfaceNormal, eyeToSurfaceDir) ∗ surfaceNormal
 
-Thinking about what we can see it's true. Recall from the [lighting articles] that a dot prodoct of 2 vectors returns the cosine of the angle between the 2 vectors. Adding vectors gives as a new vector so let's take the example of a eye looking directly perpendicular to a flat surface.
+Thinking about what we can see it's true. Recall from the [lighting articles]
+that a dot product of 2 vectors returns the cosine of the angle between the 2
+vectors. Adding vectors gives as a new vector so let's take the example of a eye
+looking directly perpendicular to a flat surface.
 
 <div class="webgl_center"><img src="resources/reflect-180-01.svg" style="width: 400px"></div>
 
-Let's visualize the forumla above. First off recall the dot product of 2 vectors pointing in exactly opposite dfirections is -1 so visually
+Let's visualize the formula above. First off recall the dot product of 2 vectors
+pointing in exactly opposite directions is -1 so visually
 
 <div class="webgl_center"><img src="resources/reflect-180-02.svg" style="width: 400px"></div>
 
-Plugging that dot product and the <span style="color:black; font-weight:bold;">eyeToSurfaceDir</span> and <span style="color:green;">normal</span> in the reflection formula gives us this
+Plugging that dot product and the <span style="color:black; font-weight:bold;">eyeToSurfaceDir</span>
+and <span style="color:green;">normal</span> in the reflection formula gives us this
 
 <div class="webgl_center"><img src="resources/reflect-180-03.svg" style="width: 400px"></div>
 
@@ -114,11 +129,13 @@ Which multiplying -2 by -1 makes it positive 2.
 
 <div class="webgl_center"><img src="resources/reflect-180-04.svg" style="width: 400px"></div>
 
-So adding the vectors by connecting them up gives us the <span style="color: red">refected vector</span>
+So adding the vectors by connecting them up gives us the <span style="color: red">reflected vector</span>
 
 <div class="webgl_center"><img src="resources/reflect-180-05.svg" style="width: 400px"></div>
 
-We can see above given 2 normals, one completely cancels out the direction from the eye and the second one points the reflection directly back torwards the eye. Which if we put back in the original diagram is exactly what we'd expect
+We can see above given 2 normals, one completely cancels out the direction from
+the eye and the second one points the reflection directly back towards the eye.
+Which if we put back in the original diagram is exactly what we'd expect
 
 <div class="webgl_center"><img src="resources/reflect-180-06.svg" style="width: 400px"></div>
 
@@ -148,13 +165,18 @@ Which if we put back in the original diagram seems correct.
 
 We use that  <span style="color: red">reflected direction</span> to look at the cubemap to color the surface of the object.
 
-Here's a digram where you can set the rotation of the surface and see the various parts of the equation. You can also see the reflection vectors point to the different faces of the cubemap and effect the color of the surface.
+Here's a diagram where you can set the rotation of the surface and see the
+various parts of the equation. You can also see the reflection vectors point to
+the different faces of the cubemap and effect the color of the surface.
 
 {{{diagram url="resources/environment-mapping.html" width="400" height="400" }}}
     
-Now that we know how reflection works and that we can use it to look up values from the cubemap let's change the shaders to do that.
+Now that we know how reflection works and that we can use it to look up values
+from the cubemap let's change the shaders to do that.
 
-First in the vertex shader we'll compute the world position and world oriented normal of the vertices and pass those to the fragment shader as varyings. This is similar to what we did in [the article on spotlights](webgl-3d-lighting-spot.html).
+First in the vertex shader we'll compute the world position and world oriented
+normal of the vertices and pass those to the fragment shader as varyings. This
+is similar to what we did in [the article on spotlights](webgl-3d-lighting-spot.html).
 
 ```glsl
 attribute vec4 a_position;
@@ -179,9 +201,14 @@ void main() {
 }
 ```
 
-Then in the fragment shader we normalize the worldNormal since it's being interpolated across the surface between vertices. We pass in the world position of the camera and by subtracting that from the world position of the surface we get the eyeToSurfaceDir.
+Then in the fragment shader we normalize the worldNormal since it's being
+interpolated across the surface between vertices. We pass in the world position
+of the camera and by subtracting that from the world position of the surface we
+get the eyeToSurfaceDir.
 
-And finally we use `reflect` which is a built in GLSL function that implements the formula we went over above. We use the result to get a color from the cubemap.
+And finally we use `reflect` which is a built in GLSL function that implements
+the formula we went over above. We use the result to get a color from the
+cubemap.
 
 ```glsl
 precision highp float;

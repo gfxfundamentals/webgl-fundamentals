@@ -42,7 +42,7 @@ Rendering to a texture is pretty simple. We create a texture of a certain size
 Notice how `data` is `null`. We don't need to supply any data. We just need WebGL to
 allocate the texture.
 
-Next we create a framebufffer. A framebuffer is just a collection of attachments. Attachments
+Next we create a framebuffer. A framebuffer is just a collection of attachments. Attachments
 are either textures or renderbuffers. We've gone over textures before. Renderbuffers are very similar
 to textures but they support formats and options that textures don't support. Also, unlike a texture
 you can't directly use a renderbuffer as input to a shader.
@@ -87,7 +87,7 @@ function drawCube(aspect) {
   gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset)
 
-  // Turn on the texcord attribute
+  // Turn on the texcoord attribute
   gl.enableVertexAttribArray(texcoordLocation);
 
   // Bind the position buffer.
@@ -202,7 +202,7 @@ and computing the correct aspect. It's so easy to forget that I now try to never
 `gl.bindFramebuffer` in my own code directly. Instead I make a function that does both
 something like
 
-    function bindFrambufferAndSetViewport(fb, width, height) {
+    function bindFramebufferAndSetViewport(fb, width, height) {
        gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
        gl.viewport(0, 0, width, height);
     }

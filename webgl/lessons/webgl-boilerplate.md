@@ -180,7 +180,7 @@ Note while we're add it there are several more scripts for similar reasons
 
 *   [`lessons-helper.js`](../resources/lessons-helper.js)
 
-    This script is not needed except on webglfundmentals.org. It helps print error messages to
+    This script is not needed except on webglfundamentals.org. It helps print error messages to
     the screen when used inside the live editor among other things.
 
 *   [`m3.js`](../resources/m3.js)

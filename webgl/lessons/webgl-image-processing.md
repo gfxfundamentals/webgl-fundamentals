@@ -9,7 +9,7 @@ This is a continuation from [WebGL Fundamentals](webgl-fundamentals.html).
 If you haven't read that I'd suggest [going there first](webgl-fundamentals.html).
 
 To draw images in WebGL we need to use textures. Similarly to the way WebGL
-expects clipspace coordinates when rendering instead of pixels, WebGL expects
+expects clip space coordinates when rendering instead of pixels, WebGL expects
 texture coordinates when reading a texture. Texture coordinates go from 0.0 to
 1.0 no matter the dimensions of the texture.
 

@@ -136,7 +136,9 @@ Now it matches the math definition. Comparing to the example above, if we want t
 const zAxis = some4x4Matrix.slice(9, 11);
 ```
 
-For those familiar with C++, OpenGL itself requires the 16 values of a 4x4 matrix to be consecutive in memory so in C++ we could create a `Vec4` struct or class
+For those familiar with C++, OpenGL itself requires the 16 values of a 4x4
+matrix to be consecutive in memory so in C++ we could create a `Vec4` struct or
+class
 
 ```c++
 // C++

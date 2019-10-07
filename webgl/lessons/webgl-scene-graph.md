@@ -25,7 +25,7 @@ What's the point of a scene graph?  The #1 feature of a scene graph is it
 provides a parent child relationship for matrices as [we discussed in 2D
 matrix math](webgl-2d-matrices.html).  So for example in a simple (but
 unrealistic) universe simulation the stars (children), move along with
-their galaxy (parent).  Similary a moon (child) moves along with its
+their galaxy (parent).  Similarly a moon (child) moves along with its
 planet (parent).  If you move the earth the moon will move with it.  If
 you move a galaxy all the stars inside will move with it.  Drag the names
 in the diagram above and hopefully you can see their relationships.
@@ -59,7 +59,7 @@ In concrete terms our universe simulation that would be
 We can do this very simply with a recursive function which is effectively
 
     function computeWorldMatrix(currentNode, parentWorldMatrix) {
-        // compute our world matrix by multplying our local matrix with
+        // compute our world matrix by multiplying our local matrix with
         // our parent's world matrix.
         var worldMatrix = m4.multiply(parentWorldMatrix, currentNode.localMatrix);
 
@@ -289,7 +289,7 @@ Those orbit distances have been removed from the old nodes
 
 Connecting them now looks like this
 
-    // connect the celetial objects
+    // connect the celestial objects
     sunNode.setParent(solarSystemNode);
     earthOrbitNode.setParent(solarSystemNode);
     earthNode.setParent(earthOrbitNode);

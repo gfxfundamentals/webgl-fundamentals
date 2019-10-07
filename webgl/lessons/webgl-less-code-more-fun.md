@@ -165,7 +165,7 @@ much more easily.  If that's clear as mud well, our code would look
 something like this
 
 ```
-// At initialiation time
+// At initialization time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -207,7 +207,7 @@ That seems a heck of a lot smaller, easier, and less code to me.
 You can even use multiple JavaScript objects if it suits you. For example
 
 ```
-// At initialiation time
+// At initialization time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -270,7 +270,7 @@ webglUtils.setUniforms(uniformSetters, uniformThatAreTheSameForAllObjects);
 objects.forEach(function(object) {
   computeMatricesForObject(object, uniformsThatAreComputedForEachObject);
   webglUtils.setUniforms(uniformSetters, uniformThatAreComputedForEachObject);
-  webglUtils.setUniforms(unifromSetters, objects.materialUniforms);
+  webglUtils.setUniforms(uniformSetters, objects.materialUniforms);
   gl.drawArrays(...);
 });
 ```
@@ -443,11 +443,11 @@ Next up, [drawing multiple things](webgl-drawing-multiple-things.html).
 <div class="webgl_bottombar">
 <h3>Can we use the setters directly?</h3>
 <p>
-For those of you familar with JavaScript you might be wondering if you can use the setters
+For those of you familiar with JavaScript you might be wondering if you can use the setters
 directly like this.
 </p>
 <pre class="prettyprint">
-// At initialiation time
+// At initialization time
 var uniformSetters = webglUtils.createUniformSetters(program);
 
 // At draw time

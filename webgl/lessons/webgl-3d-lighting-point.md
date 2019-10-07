@@ -35,7 +35,7 @@ we can multiply our positions by the world matrix so ...
 
     ...
 
-    // compute the world position of the surfoace
+    // compute the world position of the surface
     vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 
 And we can compute a vector from the surface to the light which is similar
@@ -66,7 +66,7 @@ Here's all that in context
       // orient the normals and pass to the fragment shader
       v_normal = mat3(u_worldInverseTranspose) * a_normal;
 
-    +  // compute the world position of the surfoace
+    +  // compute the world position of the surface
     +  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
     +
     +  // compute the vector of the surface to the light
@@ -197,7 +197,7 @@ and pass it to the fragment shader.
       // orient the normals and pass to the fragment shader
       v_normal = mat3(u_worldInverseTranspose) * a_normal;
 
-      // compute the world position of the surfoace
+      // compute the world position of the surface
       vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 
       // compute the vector of the surface to the light
@@ -366,7 +366,7 @@ Coming up next, [spot lighting](webgl-3d-lighting-spot.html).
 <div class="webgl_center"><pre class="glocal-center-content">pow(-5, 3)</pre></div>
 <p>Well you can look at as</p>
 <div class="webgl_center"><pre class="glocal-center-content">-5 * -5 * -5 = -125</pre></div>
-<p>As you know multiplying a negative by a negative makes a positive. Multplying by a negative
+<p>As you know multiplying a negative by a negative makes a positive. Multiplying by a negative
 again makes it negative.</p>
 <p>Well then what does this mean?</p>
 <div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2.5)</pre></div>

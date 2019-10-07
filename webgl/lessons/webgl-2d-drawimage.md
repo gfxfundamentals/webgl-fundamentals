@@ -36,7 +36,7 @@ Let's start with the first version
     ctx.drawImage(image, x, y);
 
 It draws an image at location `x, y` the same size as the image.  To make
-a similar WebGL based funciton we could upload vertices that for `x, y`,
+a similar WebGL based function we could upload vertices that for `x, y`,
 `x + width, y`, `x, y + height`, and `x + width, y + height` then as we
 draw different images at different locations we'd generate different sets
 of vertices.
@@ -92,7 +92,7 @@ And now the function
       gl.enableVertexAttribArray(texcoordLocation);
       gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 
-      // this matirx will convert from pixels to clip space
+      // this matrix will convert from pixels to clip space
       var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
       // this matrix will translate our quad to dstX, dstY
@@ -236,7 +236,7 @@ Is really no different. We just use `dstWidth` and `dstHeight` instead of
 
       ...
 
-      // this matirx will convert from pixels to clip space
+      // this matrix will convert from pixels to clip space
       var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
       // this matrix will scale our 1 unit quad
@@ -246,7 +246,7 @@ Is really no different. We just use `dstWidth` and `dstHeight` instead of
       // this matrix will translate our quad to dstX, dstY
       var translationMatrix = m4.translation(dstX, dstY, 0);
 
-      // multiply them all togehter
+      // multiply them all together
       var matrix = m4.multiply(translationMatrix, scaleMatrix);
       matrix = m4.multiply(projectionMatrix, matrix);
 
@@ -269,12 +269,12 @@ So that was easy. But what about the 3rd version of canvas `drawImage`?
     ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
                          dstX, dstY, dstWidth, dstHeight);
 
-In order to select part of the texture we need to manipulate the texure
+In order to select part of the texture we need to manipulate the texture
 coordinates.  How texture coordinates work was [covered in the article
 about textures](webgl-3d-textures.html).  In that article we manually
 created texture coordinates which is a very common way to do this but we
 can also create them on the fly and just like we're manipulating our
-positions using a matrix we can similarly manipluate texture coordinates
+positions using a matrix we can similarly manipulate texture coordinates
 using another matrix.
 
 Let's add a texture matrix to the vertex shader and multiply the texture
@@ -333,7 +333,7 @@ what we've already done for the positions.
 
       ...
 
-      // this matirx will convert from pixels to clip space
+      // this matrix will convert from pixels to clip space
       var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
       // this matrix will scale our 1 unit quad
@@ -343,7 +343,7 @@ what we've already done for the positions.
       // this matrix will translate our quad to dstX, dstY
       var translationMatrix = m4.translation(dstX, dstY, 0);
 
-      // multiply them all togehter
+      // multiply them all together
       var matrix = m4.multiply(translationMatrix, scaleMatrix);
       matrix = m4.multiply(projectionMatrix, matrix);
 

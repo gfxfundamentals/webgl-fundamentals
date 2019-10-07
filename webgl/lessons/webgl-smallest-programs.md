@@ -102,7 +102,7 @@ function rand(min, max) {
 
 {{{example url="../webgl-simple-scissor.html"}}}
 
-Not saying that particlar one is all that useful but still
+Not saying that particular one is all that useful but still
 it's good to know.
 
 ## Using one large `gl.POINTS`
@@ -154,7 +154,7 @@ point in the middle of the canvas.
 {{{example url="../webgl-simple-point.html"}}}
 
 > NOTE: Safari doesn't pass [the WebGL Conformance Tests](https://www.khronos.org/registry/webgl/sdk/tests/conformance/rendering/point-no-attributes.html?webglVersion=1&quiet=0) for this feature.
-There is a [bug filed here](https://bugs.webkit.org/show_bug.cgi?id=197592). Please consider **politetly** asking them to fix this issue. The more people
+There is a [bug filed here](https://bugs.webkit.org/show_bug.cgi?id=197592). Please consider **politely** asking them to fix this issue. The more people
 that ask the more likely it will get fixed.
 
 About `gl.POINTS`: When you pass `gl.POINTS` to `gl.drawArrays` you're also

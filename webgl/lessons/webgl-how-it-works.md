@@ -7,7 +7,7 @@ This is a continuation from [WebGL Fundamentals](webgl-fundamentals.html).
 Before we continue I think we need to discuss at a
 basic level what WebGL and your GPU actually do.  There are basically 2
 parts to this GPU thing.  The first part processes vertices (or streams of
-data) into clipspace vertices.  The second part draws pixels based on the
+data) into clip space vertices.  The second part draws pixels based on the
 first part.
 
 When you call
@@ -23,7 +23,7 @@ The 9 there means "process 9 vertices" so here are 9 vertices being processed.
 
 On the left is the data you provide.  The vertex shader is a function you
 write in [GLSL](webgl-shaders-and-glsl.html).  It gets called once for each vertex.
-You do some math and set the special variable `gl_Position` with a clipspace value
+You do some math and set the special variable `gl_Position` with a clip space value
 for the current vertex. The GPU takes that value and stores it internally.
 
 Assuming you're drawing `TRIANGLES`, every time this first part generates 3
@@ -39,7 +39,7 @@ this point the fragment shader has very little info per pixel.
 Fortunately we can pass it more info.  We define “varyings” for each
 value we want to pass from the vertex shader to the fragment shader.
 
-As a simple example, let's just pass the clipspace coordinates we computed
+As a simple example, let's just pass the clip space coordinates we computed
 directly from the vertex shader to the fragment shader.
 
 We'll draw with a simple triangle.  Continuing from our
@@ -78,9 +78,9 @@ fragment shader.
       // Multiply the position by the matrix.
       gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 
-      // Convert from clipspace to colorspace.
-      // Clipspace goes -1.0 to +1.0
-      // Colorspace goes from 0.0 to 1.0
+      // Convert from clip space to color space.
+      // Clip space goes -1.0 to +1.0
+      // Color space goes from 0.0 to 1.0
     *  v_color = gl_Position * 0.5 + 0.5;
     }
 
@@ -102,7 +102,7 @@ Here's the working version.
 {{{example url="../webgl-2d-triangle-with-position-for-color.html" }}}
 
 Move, scale and rotate the triangle.  Notice that since the colors are
-computed from clipspace they don't move with the triangle.  They are
+computed from clip space they don't move with the triangle.  They are
 relative to the background.
 
 Now think about it.  We only compute 3 vertices.  Our vertex shader only
@@ -147,10 +147,10 @@ table.vertex_table td {
 </div>
 
 Our vertex shader applies a matrix to translate, rotate, scale and convert
-to clipspace.  The defaults for translation, rotation and scale are
+to clip space.  The defaults for translation, rotation and scale are
 translation = 200, 150, rotation = 0, scale = 1,1 so that's really only
 translation.  Given our backbuffer is 400x300 our vertex shader applies
-the matrix and then computes the following 3 clipspace vertices.
+the matrix and then computes the following 3 clip space vertices.
 
 <div class="hcenter">
 <table class="vertex_table">
@@ -161,7 +161,7 @@ the matrix and then computes the following 3 clipspace vertices.
 </table>
 </div>
 
-It also converts those to colorspace and writes them to the *varying*
+It also converts those to color space and writes them to the *varying*
 v_color that we declared.
 
 <div class="hcenter">

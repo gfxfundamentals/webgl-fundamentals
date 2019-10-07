@@ -3,10 +3,10 @@ Description: How to use cubemaps in WebGL
 TOC: Cubemaps
 
 
-This aritcle is part of a series of articles about WebGL.
+This article is part of a series of articles about WebGL.
 [The first article starts with the fundamentals](webgl-fundamentals.html).
 This article continues from [the article on textures](webgl-3d-textures.html).
-This article also uses concepts convered in [the article on lighting](webgl-3d-lighting-directional.html).
+This article also uses concepts covered in [the article on lighting](webgl-3d-lighting-directional.html).
 If you have not read those articles already you might want to read them first.
 
 In a [previous article](webgl-3d-textures.html) we covered how to use textures,
@@ -14,9 +14,9 @@ how they are referenced by texture coordinates that go from 0 to 1 across and up
 the texture, and how they are filtered optionally using mips.
 
 Another kind of texture is a *cubemap*. It consists of 6 textures representing
-the 6 faces of a cube. Instead of the traditional texture coordnates that
+the 6 faces of a cube. Instead of the traditional texture coordinates that
 have 2 dimensions, a cubemap uses a normal, in other words a 3D direction.
-Depending on the direction the normal pointd one of the 6 faces of the cube
+Depending on the direction the normal points one of the 6 faces of the cube
 is selected and then within that face the pixels are sampled to produce a color.
 
 The 6 faces are called referenced by their direction from the center of the cube.

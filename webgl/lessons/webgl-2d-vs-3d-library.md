@@ -24,7 +24,7 @@ some material parameters, some lights and it should draw 3D for you.
 WebGL (and OpenGL ES 2.0+) are both used to draw 3D but neither fits this
 description.
 
-To give an anology, C++ does not "process words" out of the box.  We
+To give an analogy, C++ does not "process words" out of the box.  We
 don't call C++ a "word processor" even though word processors can be
 written in C++.  Similarly WebGL does not draw 3D graphics out of the box.
 You can write a library that will draw 3D graphics with WebGL but by itself
@@ -184,15 +184,15 @@ also has various math functions built in that are very useful for doing 3D
 math although there is arguably nothing that makes them 3D.  They're a math
 library.  You use them for math whether or not that math is 1D, 2D, 3D,
 whatever. But ultimately, WebGL only rasterizes. You have to provide it
-with clipspace coordinates that represent what you want drawn. Sure
+with clip space coordinates that represent what you want drawn. Sure
 you provide a x,y,z,w and it divides by W before rendering but that's
 hardly enough to qualify WebGL as a 3D library. In the 3D libraries you
-supply 3D data, the libraries take care of calculating clipspace points from 3D.
+supply 3D data, the libraries take care of calculating clip space points from 3D.
 
 I hope you at least understand where I'm coming from when I say WebGL is
 not a 3D library. I hope you'll also realize that a 3D library should
 handle the 3D for you. OpenGL did. Three.js does. OpenGL ES 2.0 and WebGL
-do not. Therefore they argubly don't belong in the same broad category of
+do not. Therefore they arguably don't belong in the same broad category of
 "3D libraries".
 
 The point of all of this is to give a developer that is new to WebGL

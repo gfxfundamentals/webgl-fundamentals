@@ -406,7 +406,7 @@ gl.uniform1i(texcoordTexLoc, 1);
 // Tell the shader the size of the texcoord texture
 gl.uniform2f(texcoordTexSizeLoc, uvs.length / 2, 1);
 
-// put the checkboard texture on texture unit 2
+// put the checkerboard texture on texture unit 2
 gl.activeTexture(gl.TEXTURE0 + 2);
 gl.bindTexture(gl.TEXTURE_2D, checkerTexture);
 // Tell the shader to use texture unit 2 for u_texture

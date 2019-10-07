@@ -27,7 +27,7 @@ from 15 bones (Virtua Fighter 1) to 150-300 bones (some modern games).
 If you had 300 bones you'd need 300 weights PER vertex PER bone.  If your
 character had 10000 vertices that would be 3 million weights needed.
 
-So, instead most realtime skinning systems limit it ~4 weights per vertex.
+So, instead most real time skinning systems limit it ~4 weights per vertex.
 Usually this is accomplished in an exporter/converter that takes data from
 a 3D packages like blender/maya/3dsmax and for each vertex finds the 4
 bones with the highest weights and then normalizes those weights
@@ -214,7 +214,7 @@ for (var i = 0; i < numBones; ++i) {
 ```
 
 And then some code to manipulate the bone matrixes. We'll just rotate
-them in a heirarchy like the bones of a finger.
+them in a hierarchy like the bones of a finger.
 
 ```
 // rotate each bone by angle and simulate a hierarchy
@@ -244,7 +244,7 @@ var bindPoseInv = bindPose.map(function(m) {
 
 Now we're ready to render
 
-First we animate the bones, conmputing a new world matrix for each
+First we animate the bones, computing a new world matrix for each
 
 ```
 var t = time * 0.001;
@@ -457,24 +457,48 @@ your own exporter or find a an exporter and format that will provide all the dat
 
 There's going to be a lot of code so let's first try to just get the un-skinned model to display.
 
-Let's try loading a glTF file. [glTF](https://www.khronos.org/gltf/) as it's kind of desgined for WebGL. Searching the net I found [this killer whale blender file](https://www.blendswap.com/blends/view/65255) by [Junskie Pastilan](https://www.blendswap.com/user/pasilan)
+Let's try loading a glTF file. [glTF](https://www.khronos.org/gltf/) as it's
+kind of designed for WebGL. Searching the net I found
+[this killer whale blender file](https://www.blendswap.com/blends/view/65255) by
+[Junskie Pastilan](https://www.blendswap.com/user/pasilan)
 
 <div class="webgl_center"><img src="../resources/models/killer_whale/thumbnail.jpg"></div>
 
-There are 2 top level formats for glTF. The `.gltf` format is a JSON file that generally references a `.bin` file which is a binary file that contains usually just the geometry and possibly animation data. The other format is `.glb` which is a binary format. It's basically just the JSON and any other files concatinated into one binary file with a short header and a size/type section between each
-concatinated piece. For JavaScript I think the `.gltf` format is slightly easier to get started with so let's try to load that.
+There are 2 top level formats for glTF. The `.gltf` format is a JSON file that
+generally references a `.bin` file which is a binary file that contains usually
+just the geometry and possibly animation data. The other format is `.glb` which
+is a binary format. It's basically just the JSON and any other files
+concatenated into one binary file with a short header and a size/type section
+between each concatenated piece. For JavaScript I think the `.gltf` format is
+slightly easier to get started with so let's try to load that.
 
-First [I downloaded the .blend file](https://www.blendswap.com/blends/view/65255), installed [blender](https://blender.org), installed [the gltf exporter](https://github.com/KhronosGroup/glTF-Blender-IO), loaded the file into blender and exported.
+First [I downloaded the .blend file](https://www.blendswap.com/blends/view/65255), installed
+[blender](https://blender.org), installed 
+[the gltf exporter](https://github.com/KhronosGroup/glTF-Blender-IO), loaded the file into
+blender and exported.
 
 <div class="webgl_center"><img src="resources/blender-killer-whale.png" style="width: 700px;" class="nobg"></div>
 
-> A quick note: 3D software like Blender, Maya, 3DSMax is extremely complex software with 1000s of options. When I first learned 3DSMax in 1996 I spent 2-3 hrs a day reading through the 1000+ page manual and working though the tutorials for about 3 weeks. I did something similar when I learned Maya a few years later. Blender is just as complicated and further it has a very different interface from pretty much all other software. This is just a short way of saying that you should expect to spend some significant time learning whatever 3D package you decide to use.
+> A quick note: 3D software like Blender, Maya, 3DSMax is extremely complex
+> software with 1000s of options. When I first learned 3DSMax in 1996 I spent
+> 2-3 hrs a day reading through the 1000+ page manual and working though the
+> tutorials for about 3 weeks. I did something similar when I learned Maya a few
+> years later. Blender is just as complicated and further it has a very
+> different interface from pretty much all other software. This is just a short
+> way of saying that you should expect to spend some significant time learning
+> whatever 3D package you decide to use.
 
-After exporting it I loaded the .gltf file into my text editor and took a look around. I used [this cheat sheet](https://raw.githubusercontent.com/KhronosGroup/glTF/master/specification/2.0/figures/gltfOverview-2.0.0a.png) to figure out the format.
+After exporting it I loaded the .gltf file into my text editor and took a look
+around. I used [this cheat sheet](https://raw.githubusercontent.com/KhronosGroup/glTF/master/specification/2.0/figures/gltfOverview-2.0.0a.png)
+to figure out the format.
 
-I want to make it clear the code below is not a perfect glTF loader. It's just enough code to get the whale to display. I suspect that if we tried different files we'd run into areas that need to be changed.
+I want to make it clear the code below is not a perfect glTF loader. It's just
+enough code to get the whale to display. I suspect that if we tried different
+files we'd run into areas that need to be changed.
 
-The first thing we need to do is load the file. To make it simpler let's use JavaScript's [async/await](https://javascript.info/async-await). First let's write some code to load the `.gltf` file and any files it references.
+The first thing we need to do is load the file. To make it simpler let's use
+JavaScript's [async/await](https://javascript.info/async-await). First let's
+write some code to load the `.gltf` file and any files it references.
 
 ```
 async function loadGLTF(url) {
@@ -508,7 +532,14 @@ async function loadJSON(url) {
 
 Now we need to walk through the data and connect things up.
 
-First let's handle what glTF considers a mesh. A mesh is collection of primitives. A primitive is effectively the buffers and attributes needed to render something. Let's use our webgl utilties we covered in [less code more fun](webgl-less-code-more-fun.html). We'll walk the meshes and for each one build a `BufferInfo` we can pass to `webglUtils.setBuffersAndAttributes`. Recall a `BufferInfo` is effectively just the attribute information, the indicies if there are any, and the number of elements to pass to `gl.drawXXX`. For example a cube with just positions and normals might have a BufferInfo with this structure
+First let's handle what glTF considers a mesh. A mesh is collection of
+primitives. A primitive is effectively the buffers and attributes needed to
+render something. Let's use our webgl utilities we covered in [less code more
+fun](webgl-less-code-more-fun.html). We'll walk the meshes and for each one
+build a `BufferInfo` we can pass to `webglUtils.setBuffersAndAttributes`. Recall
+a `BufferInfo` is effectively just the attribute information, the indices if
+there are any, and the number of elements to pass to `gl.drawXXX`. For example a
+cube with just positions and normals might have a BufferInfo with this structure
 
 ```
 const cubeBufferInfo = {
@@ -718,7 +749,7 @@ There are a couple of notable changes from the code in [the scene graph article]
 
 * The `TRS` class is using a quaternion for rotation
 
-  We have not convered quaternions and to be honest I don't think I understand
+  We have not covered quaternions and to be honest I don't think I understand
   them well enough to explain them. Fortunately we don't need to know how they
   work to use them. We just take the data out of the gltf file and call
   a function that builds a matrix from that data and use the matrix.
@@ -741,9 +772,15 @@ gltf.nodes = gltf.nodes.map((n) => {
 });
 ```
 
-Above we created a `TRS` instance for each node, a `Node` instance for each node, and, if there was a `mesh` property we looked up the mesh data we setup before and created a `MeshRenderer` to draw it.
+Above we created a `TRS` instance for each node, a `Node` instance for each
+node, and, if there was a `mesh` property we looked up the mesh data we setup
+before and created a `MeshRenderer` to draw it.
 
-Let's make the `MeshRenderer`. It's just an encapsulation of the code we used in [less code more fun](webgl-less-code-more-fun.html) to rendener a single model. All it does is hold a reference to a mesh and then for each primitive sets up the program, attributes, and uniforms and finally calls `gl.drawArrays` or `gl.drawElements` via `webglUtils.drawBufferInfo`;
+Let's make the `MeshRenderer`. It's just an encapsulation of the code we used in
+[less code more fun](webgl-less-code-more-fun.html) to render a single model.
+All it does is hold a reference to a mesh and then for each primitive sets up
+the program, attributes, and uniforms and finally calls `gl.drawArrays` or
+`gl.drawElements` via `webglUtils.drawBufferInfo`;
 
 ```
 class MeshRenderer {
@@ -769,7 +806,7 @@ class MeshRenderer {
 ```
 
 We've created the nodes, now we need to actually arrange them into a scene graph. This is done at 2 levels in glTF.
-First, each node has an optional array of children that are also indicies into the array of nodes so we can walk all
+First, each node has an optional array of children that are also indices into the array of nodes so we can walk all
 the nodes and parent their children
 
 ```
@@ -838,7 +875,8 @@ To render we need a shader that matches the data in the gltf file. Let's look at
 }
 ```
 
-Looking at that, to render let's just use `NORMAL` and `POSITION`. We prepended `a_` to the front of each attribute so a vertex shader like this should work
+Looking at that, to render let's just use `NORMAL` and `POSITION`. We prepended
+`a_` to the front of each attribute so a vertex shader like this should work
 
 ```
 attribute vec4 a_POSITION;
@@ -873,7 +911,14 @@ void main () {
 }
 ```
 
-Notice we take the dot product like we covered in [the article on direcitonal lights](webgl-3d-lighting-directional.html) but unlike that one, here the dot product is multipled by .5 and we add .5. With normal directional lighting the surface is lit 100% when directly facing the light and trails off to 0% when the surface is perpendicular to the light. That means the entire 1/2 of the model facing away from the light is black. By multiplying by .5 and adding .5 we take the dot product from -1 &lt;-&gt; 1 to 0 &lt;-&gt; 1 which means it will only be black when facing the complete opposite direciton. This gives a cheap but pleasing lighting for simple tests.
+Notice we take the dot product like we covered in [the article on directional lights](webgl-3d-lighting-directional.html)
+but unlike that one, here the dot product is multiplied by .5 and we add .5. 
+With normal directional lighting the surface is lit 100% when directly facing
+the light and trails off to 0% when the surface is perpendicular to the light.
+That means the entire 1/2 of the model facing away from the light is black.
+By multiplying by .5 and adding .5 we take the dot product from -1 &lt;-&gt; 1 to 0 &lt;-&gt; 
+1 which means it will only be black when facing the complete opposite direction.
+This gives a cheap but pleasing lighting for simple tests.
 
 So, we need to compile and link the shaders.
 
@@ -896,7 +941,7 @@ function renderDrawables(node) {
 }
 
 for (const scene of gltf.scenes) {
-  // updatte all world matices in the scene.
+  // update all world matrices in the scene.
   scene.root.updateWorldMatrix();
   // walk the scene and render all renderables
   scene.root.traverse(renderDrawables);
@@ -1034,8 +1079,14 @@ void main() {
 </script>
 ```
 
-This is pretty much the same as our skinning shader above. We renamed the attributes to match what's in the gltf file.
-The biggest change it making a `skinMatrix`. In our previous skinning shader we multiplied the position by each individual joint/bone matrix and multplied those by the weight of influcence for each joint. In this case we instead add up the matrices multiplied by the weights and just multiply by position once. This produces same result but we can use the `skinMatrix` to multiply the normal as well which we need to do otherwise the normals won't match the skin.
+This is pretty much the same as our skinning shader above. We renamed the
+attributes to match what's in the gltf file. The biggest change it making a
+`skinMatrix`. In our previous skinning shader we multiplied the position by each
+individual joint/bone matrix and multiplied those by the weight of influence for
+each joint. In this case we instead add up the matrices multiplied by the
+weights and just multiply by position once. This produces same result but we can
+use the `skinMatrix` to multiply the normal as well which we need to do
+otherwise the normals won't match the skin.
 
 Also notice we multiply in the `u_world` matrix here. We subtracted it out in `Skin.update` with these lines
 
@@ -1050,14 +1101,25 @@ for (let j = 0; j < this.joints.length; ++j) {
 *  m4.multiply(globalWorldInverse, joint.worldMatrix, dst);
 ```
 
-Whether you do that or not is up to you. The reason to do it is it lets you instance the skin. In other words you can render the skinned mesh in the exact same pose at more than
-one place in the same frame. The idea being that if there are lots of joints then doing all the matrix math for a skinned mesh is slow so
-you do that math once and then you can display that skinned
-mesh in different places just by re-rendering with a different world matrix.
+Whether you do that or not is up to you. The reason to do it is it lets you
+instance the skin. In other words you can render the skinned mesh in the exact
+same pose at more than one place in the same frame. The idea being that if there
+are lots of joints then doing all the matrix math for a skinned mesh is slow so
+you do that math once and then you can display that skinned mesh in different
+places just by re-rendering with a different world matrix.
 
-That's maybe useful for displaying a crowd of characters. Unfortunately all the characters will be in the exact same pose so it's unclear to me if it's really that useful or not. How often does that situation actually come up? You can remove multiplying by the inverse world matrix of the node in `Skin` and remove mutlplying by `u_world` in the shader and the result will look the same, you just can't *instance* that skinned mesh. Of course you can render the same skinned mesh as many times as you want in different poses. You'll need a different `Skin` object pointing to different nodes that are in some other orientation.
+That's maybe useful for displaying a crowd of characters. Unfortunately all the
+characters will be in the exact same pose so it's unclear to me if it's really
+that useful or not. How often does that situation actually come up? You can
+remove multiplying by the inverse world matrix of the node in `Skin` and remove
+multiplying by `u_world` in the shader and the result will look the same, you
+just can't *instance* that skinned mesh. Of course you can render the same
+skinned mesh as many times as you want in different poses. You'll need a
+different `Skin` object pointing to different nodes that are in some other
+orientation.
 
-Back in our loading code, when we're making `Node` instances, if there's a `skin` property we'll remember it so we can make a `Skin` for it.
+Back in our loading code, when we're making `Node` instances, if there's a
+`skin` property we'll remember it so we can make a `Skin` for it.
 
 ```
 +const skinNodes = [];
@@ -1076,8 +1138,10 @@ gltf.nodes = gltf.nodes.map((n) => {
 });
 ```
 
-After making `Node`s we need to make `Skin`s. Skins reference nodes via a `joints` array which is a list of indices of nodes that supply the matrices for the joints.
-A skin also references an accessor that references the inverse bind pose matrices saved in the file.
+After making `Node`s we need to make `Skin`s. Skins reference nodes via a
+`joints` array which is a list of indices of nodes that supply the matrices for
+the joints. A skin also references an accessor that references the inverse bind
+pose matrices saved in the file.
 
 ```
 // setup skins
@@ -1088,7 +1152,10 @@ gltf.skins = gltf.skins.map((skin) => {
 });
 ```
 
-The code above called `getAccessorTypedArrayAndStride` given an accessor index. We need supply that code. For a given accessor we'll return a [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) view of the correct type to get access to the data in the buffer.
+The code above called `getAccessorTypedArrayAndStride` given an accessor index.
+We need supply that code. For a given accessor we'll return a
+[TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray)
+view of the correct type to get access to the data in the buffer.
 
 ```
 const glTypeToTypedArrayMap = {
@@ -1124,7 +1191,9 @@ function getAccessorTypedArrayAndStride(gl, gltf, accessorIndex) {
 }
 ```
 
-Something to note about the code above is we've made a table with hardcoded WebGL constants. This is the first time we've done this. The constants won't change so this is safe to do.
+Something to note about the code above is we've made a table with hard coded
+WebGL constants. This is the first time we've done this. The constants won't
+change so this is safe to do.
 
 Now what we have the skins we can go back and add them to the nodes that referenced them.
 
@@ -1135,9 +1204,14 @@ for (const {node, mesh, skinNdx} of skinNodes) {
 }
 ```
 
-If we rendered like this we might not see any difference. We need to animate some of the nodes. Let's just go through each node in the `Skin`, in other words each joint, and rotate it plus a minus a little on the local X access.
+If we rendered like this we might not see any difference. We need to animate
+some of the nodes. Let's just go through each node in the `Skin`, in other words
+each joint, and rotate it plus a minus a little on the local X access.
 
-To do this we'll save off the original local matrix for each joint. We'll then rotate that original matrix some amount each frame, and using a special function, `m4.decompose`, will will convert the matrix back into position, rotation, scale into the joint.
+To do this we'll save off the original local matrix for each joint. We'll then
+rotate that original matrix some amount each frame, and using a special
+function, `m4.decompose`, will will convert the matrix back into position,
+rotation, scale into the joint.
 
 ```
 const origMatrix = new Map();
@@ -1166,7 +1240,10 @@ and then just before rendering we'll call that
 animSkin(gltf.skins[0], Math.sin(time) * .5);
 ```
 
-Note `animSkin` is mostly a hack. Ideally we'd load an animation some artist created OR we'd know the names of specific joints we want to manipulate in code in some way. In this case we just to see if our skinning is working and this seemed like the easist way to do it.
+Note `animSkin` is mostly a hack. Ideally we'd load an animation some artist
+created OR we'd know the names of specific joints we want to manipulate in code
+in some way. In this case we just to see if our skinning is working and this
+seemed like the easiest way to do it.
 
 {{{example url="../webgl-skinning-3d-gltf-skinned.html" }}}
 
@@ -1230,7 +1307,10 @@ This originally produced a kind of mess of colors. Once I figured out the bug, I
 
 <div class="webgl_center"><img src="resources/skinning-debug-03.png"></div>
 
-It's not entirely obvious it's correct but does make some sense. You'd expect the vertices nearest each bone to have a strong color and you'd expect to see rings of that color in the vertices around the bone since the weights in that area are likely 1.0 or at least all similar.
+It's not entirely obvious it's correct but does make some sense. You'd expect
+the vertices nearest each bone to have a strong color and you'd expect to see
+rings of that color in the vertices around the bone since the weights in that
+area are likely 1.0 or at least all similar.
 
 Since the original image was so messy I also tried displaying the joint indices with
 
@@ -1244,9 +1324,17 @@ Once things were working I got an image like this
 
 <div class="webgl_center"><img src="resources/skinning-debug-04.png"></div>
 
-Again it was originally a mess of colors. The image above is what it looked like after it was fixed. That's pretty much what you'd expect to see for weights for the killer whale. Rings of color around each bone.
+Again it was originally a mess of colors. The image above is what it looked like
+after it was fixed. That's pretty much what you'd expect to see for weights for
+the killer whale. Rings of color around each bone.
 
-The bug had to do with how `webgl.createBufferInfoFromArrays` was figuring out the number of components. There were cases where it ignored
-the one specified, tried to guess, and guessed wrong. Once the bug was fixed then I removed those changes to the shaders. Note that I left them in the code above commented out if you want to play with them.
+The bug had to do with how `webgl.createBufferInfoFromArrays` was figuring out
+the number of components. There were cases where it ignored the one specified,
+tried to guess, and guessed wrong. Once the bug was fixed then I removed those
+changes to the shaders. Note that I left them in the code above commented out if
+you want to play with them.
 
-I want to make it clear the code above is meant to help explain skinning. It is not meant to be a production ready skinning engine. I think if we were to try to make a production quality engine we'd run into many things we'd probably want to change but I hope going through this example helps slight demystify skinning.
+I want to make it clear the code above is meant to help explain skinning. It is
+not meant to be a production ready skinning engine. I think if we were to try to
+make a production quality engine we'd run into many things we'd probably want to
+change but I hope going through this example helps slight demystify skinning.

@@ -159,7 +159,7 @@ And with that covered lets move on to [rendering to a texture](webgl-render-to-t
 Texel is short for Texture Element.
 </p>
 <p>I'm sure I'll get an earful from some graphics guru but as far as I can tell "texel" is an example of jargon.
-Personally I generally use "pixel" when refering to the elements of a texture without thinking about it. &#x1f607;
+Personally I generally use "pixel" when referring to the elements of a texture without thinking about it. &#x1f607;
 </p>
 </div>
 

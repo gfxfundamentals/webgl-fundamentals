@@ -62,7 +62,7 @@ running at 1/8 the frame rate it is keeping up with the middle one running at fu
 speed.
 
 The way to make animation frame rate independent is to compute how much time it took
-between frames and use that to calcuate how much to animate this frame.
+between frames and use that to calculate how much to animate this frame.
 
 First off we need to get the time. Fortunately `requestAnimationFrame` passes
 us the time since the page was loaded when it calls us.

@@ -172,7 +172,7 @@ Some things I should go over.
 Calling <code>gl.bindFramebuffer</code> with <code>null</code> tells WebGL
 you want to render to the canvas instead of to one of your framebuffers.
 
-WebGL has to convert from [clipspace](webgl-fundamentals.html) back into
+WebGL has to convert from [clip space](webgl-fundamentals.html) back into
 pixels.  It does this based on the settings of <code>gl.viewport</code>.
 Since the framebuffers we are rendering into are a different size than the
 canvas we need to set the viewport appropriately when rendering to the

@@ -330,7 +330,7 @@ Here it is.
 
 {{{example url="../webgl-3d-textures-bad-npot.html" }}}
 
-Why doesn't the keyboard texture show up? That's beacuse WebGL has a kind of severe restriction on textures that
+Why doesn't the keyboard texture show up? That's because WebGL has a kind of severe restriction on textures that
 are not a power of 2 in both dimensions. Powers of 2 are 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, etc.
 The 'F' texture was 256x256. 256 is a power of 2. The keyboard texture is 320x240. Neither of those are a power
 of 2 so trying to display the texture fails. In the shader when `texture2D` is called and when the texture
@@ -497,7 +497,7 @@ Or, you could also check out [simplifying WebGL with less code more fun](webgl-l
 <p>Texture coordinates are often shortened to texture coords, texcoords or UVs
 (pronounced Ew-Vees). I have no idea where the term UVs came from except that
 vertex positions often use <code>x, y, z, w</code> so for texture coordinates they decided to use
-<code>s, t, u, v</code> to try to make it clear which of the 2 types you're refering to.
+<code>s, t, u, v</code> to try to make it clear which of the 2 types you're referring to.
 Given that though you'd think they'd be called Es-Tees and in fact if you look
 at the texture wrap settings they are called <code>TEXTURE_WRAP_S</code> and
 <code>TEXTURE_WRAP_T</code> but for some reason as long as I've been working

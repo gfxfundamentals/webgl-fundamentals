@@ -125,7 +125,7 @@ Next we need a fragment shader
     void main() {
       // gl_FragColor is a special variable a fragment shader
       // is responsible for setting
-      gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
+      gl_FragColor = vec4(1, 0, 0.5, 1); // return reddish-purple
     }
 
 Above we're setting `gl_FragColor` to `1, 0, 0.5, 1` which is 1 for red, 0 for green,
@@ -177,7 +177,7 @@ putting them in non-JavaScript typed script tags.
       void main() {
         // gl_FragColor is a special variable a fragment shader
         // is responsible for setting
-        gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
+        gl_FragColor = vec4(1, 0, 0.5, 1); // return reddish-purple
       }
 
     </script>
@@ -584,11 +584,11 @@ then checkout [the basics of how WebGL really works](webgl-how-it-works.html).
 
 You should also, at least briefly read about [the boilerplate code used here](webgl-boilerplate.html)
 that is used in most of the examples. You should also at least skim
-[how to draw mulitple things](webgl-drawing-multiple-things.html) to give you some idea
+[how to draw multiple things](webgl-drawing-multiple-things.html) to give you some idea
 of how more typical WebGL apps are structured because unfortunately nearly all the examples
 only draw one thing and so do not show that structure.
 
-Otherwise from here you can go in 2 directions. If you are interested in image procesing
+Otherwise from here you can go in 2 directions. If you are interested in image processing
 I'll show you [how to do some 2D image processing](webgl-image-processing.html).
 If you are interested in learning about translation,
 rotation and scale and eventually 3D then [start here](webgl-2d-translation.html).

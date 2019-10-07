@@ -10,7 +10,7 @@ Computing basic shadows is not *that* hard but it does require
 a lot of background knowledge. To understand this article
 you need to already understand the following topics.
 
-* [Orthographic Projection](webgl-3d-orthographics.html)
+* [Orthographic Projection](webgl-3d-orthographic.html)
 * [Perspective Projection](webgl-3d-perspective.html)
 * [Spot Lighting](webgl-3d-lighting-spot.html)
 * [Textures](webgl-3d-textures.html)

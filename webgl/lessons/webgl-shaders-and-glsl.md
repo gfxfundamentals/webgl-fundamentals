@@ -16,14 +16,14 @@ WebGL app will have many shader programs.
 
 ## Vertex Shader
 
-A Vertex Shader's job is to generate clipspace coordinates. It always takes the form
+A Vertex Shader's job is to generate clip space coordinates. It always takes the form
 
     void main() {
        gl_Position = doMathToMakeClipspaceCoordinates
     }
 
 Your shader is called once per vertex. Each time it's called you are required to set the
-the special global variable, `gl_Position` to some clipspace coordinates.
+the special global variable, `gl_Position` to some clip space coordinates.
 
 Vertex shaders need data. They can get that data in 3 ways.
 
@@ -72,7 +72,7 @@ in the shader and just pass the data directly through.
        gl_Position = a_position;
     }
 
-If we put clipspace vertices into our buffers it will work.
+If we put clip space vertices into our buffers it will work.
 
 Attributes can use `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, and `mat4` as types.
 
@@ -273,13 +273,13 @@ Fragment shader
     +varying vec4 v_positionWithOffset;
 
     void main() {
-    +  // convert from clipspace (-1 <-> +1) to color space (0 -> 1).
+    +  // convert from clip space (-1 <-> +1) to color space (0 -> 1).
     +  vec4 color = v_positionWithOffset * 0.5 + 0.5
     +  gl_FragColor = color;
     }
 
 The example above is a mostly nonsense example. It doesn't generally make sense to
-directly copy the clipspace values to the fragment shader and use them as colors. Nevertheless
+directly copy the clip space values to the fragment shader and use them as colors. Nevertheless
 it will work and produce colors.
 
 ## GLSL
@@ -401,7 +401,7 @@ Actually creating the shaders requires several lines of code. Since those lines 
 most WebGL programs and since once written you can pretty much ignore them. [How to compile GLSL shaders
 and link them into a shader program is covered here](webgl-boilerplate.html).
 
-If you're just starting from here you can go in 2 directions. If you are interested in image procesing
+If you're just starting from here you can go in 2 directions. If you are interested in image processing
 I'll show you [how to do some 2D image processing](webgl-image-processing.html).
 If you are interesting in learning about translation,
 rotation, scale and eventually 3D then [start here](webgl-2d-translation.html).

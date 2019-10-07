@@ -166,7 +166,7 @@ Radians are a unit of measurement used with circles, rotation and angles. Just l
 You're probably aware that math with metric measurements is easier than math with imperial measurements. To go from inches to feet we divide by 12. To go from inches to yards we divide by 36. I don't know about you but I can't divide by 36 in my head. With metric it's much easier. To go from millimeters to centimeters we multiply by 10. To go from millimeters to meters we multiply by 1000. I <strong>can</strong> multiply by 1000 in my head.
 </p>
 <p>
-Radians vs degrees are similar. Degrees make the math hard. Radians make the math easy. There are 360 degrees in a circle but there are only 2π radians. So a full turn is 2π radians. A half turn is 1π radian. A 1/4 turn, ie 90 degress is 1/2π radians. So if you want to rotate something 90 degrees just use <code>Math.PI * 0.5</code>. If you want to rotate it 45 degrees use <code>Math.PI * 0.25</code> etc.
+Radians vs degrees are similar. Degrees make the math hard. Radians make the math easy. There are 360 degrees in a circle but there are only 2π radians. So a full turn is 2π radians. A half turn is 1π radian. A 1/4 turn, ie 90 degrees is 1/2π radians. So if you want to rotate something 90 degrees just use <code>Math.PI * 0.5</code>. If you want to rotate it 45 degrees use <code>Math.PI * 0.25</code> etc.
 </p>
 <p>
 Nearly all math involving angles, circles or rotation works very simply if you start thinking in radians. So give it try. Use radians, not degrees except in UI displays.

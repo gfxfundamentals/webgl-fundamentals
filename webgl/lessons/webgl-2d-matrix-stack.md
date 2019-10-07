@@ -7,7 +7,7 @@ This article is a continuation of [WebGL 2D
 DrawImage](webgl-2d-drawimage.html).  If you haven't read that I suggest
 [you start there](webgl-2d-drawimage.html).
 
-In that last article we implemented the WebGL equivilent of Canvas 2D's
+In that last article we implemented the WebGL equivalent of Canvas 2D's
 `drawImage` function including its ability to specify both the source
 rectangle and the destination rectangle.
 
@@ -20,7 +20,7 @@ Canvas 2D API are `save`, `restore`, `translate`, `rotate`, and `scale`.
 
 A matrix stack is pretty simple to implement. We make a stack of matrices. We make functions to
 multiply the top matrix of the stack using by either a translation, rotation, or scale matrix
-[using the functions we created eariler](webgl-2d-matrices.html).
+[using the functions we created earlier](webgl-2d-matrices.html).
 
 Here's the implementation
 

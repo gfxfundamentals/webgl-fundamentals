@@ -93,7 +93,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
 
     <pre class="prettyprint">
     canvas.width = window.innerWidth;                    // BAD!!
-    canvas.height = window.hinnerHeight;                 // BAD!!
+    canvas.height = window.innerHeight;                  // BAD!!
     </pre>
 
     **Why it's Bad:**
@@ -340,7 +340,7 @@ stretch that window across both monitors. Your code tries to set the <code>canva
 </li>
 </ol>
 <p>Most people don't have multiple monitors so this issue rarely comes up. Or at least it used to.
-Chrome and Safari, at least as of January 2015, had a hardcoded limit on canvas size of 4096. Apple's
+Chrome and Safari, at least as of January 2015, had a hard coded limit on canvas size of 4096. Apple's
 5k iMac is past that limit. Lots of WebGL apps were having strange displays because of this.
 Similarly many people have started using WebGL with multiple monitors for installation work and have
 been hitting this limit.</p>

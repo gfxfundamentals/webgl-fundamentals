@@ -72,7 +72,7 @@ Then instead of rendering one quad for each name we'll render one quad for each
 letter in each name.
 
     // setup to draw the text.
-    +// Because every letter uses the same attributes and the same progarm
+    +// Because every letter uses the same attributes and the same program
     +// we only need to do this once.
     +gl.useProgram(textProgramInfo.program);
     +setBuffersAndAttributes(gl, textProgramInfo.attribSetters, textBufferInfo);
@@ -80,7 +80,7 @@ letter in each name.
     textPositions.forEach(function(pos, ndx) {
     +  var name = names[ndx];
     +
-    +  // for each leter
+    +  // for each letter
     +  for (var ii = 0; ii < name.length; ++ii) {
     +    var letter = name.charCodeAt(ii);
     +    var letterNdx = letter - "a".charCodeAt(0);
@@ -209,7 +209,7 @@ image.addEventListener('load', function() {
 
 Now that we have a texture with glyphs in it we need to use it. To do that we'll
 build quad vertices on the fly for each glyph. Those vertices will use texture coordinates
-to select a particlar glyph
+to select a particular glyph
 
 Given a string let's build the vertices
 
@@ -286,7 +286,7 @@ function makeVerticesForString(fontInfo, s) {
 
 To use it we'll manually create a bufferInfo. ([See previous article if you don't remember what a bufferInfo is](webgl-drawing-multiple-things)).
 
-    // Maunally create a bufferInfo
+    // Manually create a bufferInfo
     var textBufferInfo = {
       attribs: {
         a_position: { buffer: gl.createBuffer(), numComponents: 2, },
@@ -370,7 +370,7 @@ those in textures. There just isn't enough room.
 
 The way the OS and browsers handle this when they're GPU accelerated is by using a glyph texture cache. Like
 above they might put textures in a texture atlas but they probably make the area
-for each glpyh a fixed size. They keep the most recently used glyphs in the texture.
+for each glyph a fixed size. They keep the most recently used glyphs in the texture.
 If they need to draw a glyph that's not in the texture they replace the least
 recently used one with the new one they need. Of course if that glyph they are
 about to replace is still being referenced by a quad yet to be drawn then they need

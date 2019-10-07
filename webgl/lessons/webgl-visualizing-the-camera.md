@@ -17,7 +17,7 @@ to set uniforms, etc... then you should probably to go further back and
 
 It's often useful to be able to visualize what a camera
 sees, it's "frustum". This is surprisingly easy.
-As pointed in the articles on [orthographic](webgl-3d-orthgraphic.html)
+As pointed in the articles on [orthographic](webgl-3d-orthographic.html)
 and [perspective](webgl-3d-perspective.html) projection those projection
 matrices take some space and convert them into the -1 to +1 box of clip space.
 Further a camera matrix is just a matrix that represents some
@@ -245,7 +245,7 @@ function render() {
 
   // Compute a perspective projection matrix
   const perspectiveProjectionMatrix =
--      m4.perspective(fielOfViewRadians), aspect, near, far);
+-      m4.perspective(fieldOfViewRadians), aspect, near, far);
 +      m4.perspective(degToRad(settings.cam1FieldOfView), aspect, near, far);
 
   // Compute the camera's matrix using look at.
