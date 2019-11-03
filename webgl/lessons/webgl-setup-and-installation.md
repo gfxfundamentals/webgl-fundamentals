@@ -38,25 +38,25 @@ If you prefer the command line, another way is to use [node.js](https://nodejs.o
 Download it, install it, then open a command prompt / console / terminal window. If you're on Windows the installer
 will add a special "Node Command Prompt" so use that.
 
-Then install the [`http-server`](https://github.com/indexzero/http-server) by typing
+Then install [`servez`](https://github.com/greggman/servez-cli) by typing
 
-    npm -g install http-server
+    npm -g install servez
 
 If you're on OSX use
 
-    sudo npm -g install http-server
+    sudo npm -g install servez
 
 Once you've done that type
 
-    http-server path/to/folder/where/you/unzipped/files
+    servez path/to/folder/where/you/unzipped/files
 
 It should print something like
 
-{{{image url="resources/http-server-response.png" }}}
+{{{image url="resources/servez-response.png" }}}
 
 Then in your browser go to [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/).
 
-If you don't specify a path then http-server will serve the current folder.
+If you don't specify a path then servez will serve the current folder.
 
 ## Using your Browsers Developer Tools
 

@@ -54,30 +54,30 @@ Windowsの場合は"Node Command Prompt"という専用のプログラムが
 追加されているはずなので、それを利用します。
 
 そこからnode.jsのnpmコマンドを使って、
-「[`http-server`](https://github.com/indexzero/http-server)モジュール」を
+「[`servez`](https://github.com/greggman/servez-cli)モジュール」を
 ダウンロード、インストールします。
 
-    npm -g install http-server
+    npm -g install servez
 
 OSXの場合は、
 
-    sudo npm -g install http-server
+    sudo npm -g install servez
 
-となります。http-serverのインストールが完了したら、
+となります。servezのインストールが完了したら、
 
-    http-server path/to/folder/where/you/unzipped/files
+    servez path/to/folder/where/you/unzipped/files
 
 といったコマンドで起動できます(path/to/folder/where/you/unzipped/filesは
 「ファイルをUnzipしたディレクトリへのパス」です)。
 起動に成功すると、
 
-{{{image url="resources/http-server-response.png" }}}
+{{{image url="resources/servez-response.png" }}}
 
 このようなログが表示されます。
 これで、ブラウザからは[`http://localhost:8080/webgl/`](http://localhost:8080/webgl/)
 でサンプルプログラムのディレクトリにアクセスできるので、目的のサンプルを選択してください。
 
-パスを指定しなかった場合は、http-serverはカンレントフォルダを参照します。
+パスを指定しなかった場合は、servezはカンレントフォルダを参照します。
 
 ## Webブラウザ付属の開発ツール
 

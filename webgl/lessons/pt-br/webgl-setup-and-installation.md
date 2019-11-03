@@ -38,25 +38,25 @@ Se você não estiver no Chrome ou se não quiser usar a extensão, outra maneir
 Faça o download, instale-o e abra um prompt de comando / console / janela de terminal. Se você estiver no Windows, o instalador
 irá adicionar um "Node Command Prompt" especial, então use isso.
 
-Em seguida, instale o [`http-server`](https://github.com/indexzero/http-server) digitando
+Em seguida, instale o [`servez`](https://github.com/greggman/servez-cli) digitando
 
-    npm -g install http-server
+    npm -g install servez
 
 Se você estiver no uso OSX
 
-    sudo npm -g install http-server
+    sudo npm -g install servez
 
 Depois de ter feito esse tipo
 
-    caminho do http-server/para/pasta/onde/você/descompactou/arquivos
+    caminho do servez/para/pasta/onde/você/descompactou/arquivos
 
 Deve imprimir algo como
 
-{{{image url = "resources/http-server-response.png"}}}
+{{{image url = "resources/servez-response.png"}}}
 
 Então, no seu navegador, acesse [`http://localhost:8080`](http://localhost:8080).
 
-Se você não especificar um caminho, então http-server será o servidor da pasta atual. Baixe-o aqui](https://github.com/gfxfundamentals/webgl-fundamentals/).
+Se você não especificar um caminho, então servez será o servidor da pasta atual. Baixe-o aqui](https://github.com/gfxfundamentals/webgl-fundamentals/).
 
 ## Usando as Ferramentas de Desenvolvimento dos Navegadores
 

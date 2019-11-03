@@ -38,25 +38,25 @@ WebGL은 이미지를 로딩하는데 Canvas2D보다 더 강력한 제한이 있
 내려받고, 설치하고, 명령어 창(prompt / console / terminal)을 열면 됩니다.
 Windows라면 설치 관리자가 특별한 "Node Command Prompt"를 추가해주니 그걸 사용하세요.
 
-그런 다음 [`http-server`](https://github.com/indexzero/http-server)를 입력해서 설치합니다
+그런 다음 [`servez`](https://github.com/greggman/servez-cli)를 입력해서 설치합니다
 
-    npm -g install http-server
+    npm -g install servez
 
 만약 OS X를 사용한다면
 
-    sudo npm -g install http-server
+    sudo npm -g install servez
 
 해당 과정을 완료하면
 
-    http-server path/to/folder/where/you/unzipped/files
+    servez path/to/folder/where/you/unzipped/files
 
 이렇게 출력될 겁니다
 
-{{{image url="resources/http-server-response.png" }}}
+{{{image url="resources/servez-response.png" }}}
 
 그런 다음 브라우저에서 [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/)로 접속하세요.
 
-경로를 지정하지 않으면 http-server가 현재 폴더를 제공합니다.
+경로를 지정하지 않으면 servez가 현재 폴더를 제공합니다.
 
 ## 브라우저 개발자 도구 사용하기
 

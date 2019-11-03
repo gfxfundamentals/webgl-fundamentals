@@ -31,25 +31,25 @@ TOC: WebGL 设置和安装
 在下载并安装后，打开命令行/控制台/终端窗口。
 如果你是Windows系统，安装过程会提示你额外安装“Node Command Prompt”，同意就可以了。
 
-然后通过输入如下内容安装[`http-server`](https://github.com/indexzero/http-server)
+然后通过输入如下内容安装[`servez`](https://github.com/greggman/servez-cli)
 
-    npm -g install http-server
+    npm -g install servez
 
 如果你用的是OSX系统
 
-    sudo npm -g install http-server
+    sudo npm -g install servez
 
 完成安装后接着输入
 
-    http-server 你/的/文/件/解/压/地/址
+    servez 你/的/文/件/解/压/地/址
 
 然后应该显示类似的东西
 
-{{{image url="resources/http-server-response.png" }}}
+{{{image url="resources/servez-response.png" }}}
 
 最后你就可以在你的网页浏览器里访问 [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/) 了。
 
-如果你不指定路径，http-server 会使用当前所在文件夹。
+如果你不指定路径，servez 会使用当前所在文件夹。
 
 ## 使用浏览器中的开发者工具
 

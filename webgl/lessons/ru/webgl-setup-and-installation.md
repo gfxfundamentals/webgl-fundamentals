@@ -38,25 +38,25 @@ TOC: WebGL Установка и настройка
 Скачайте и установите его, затем откройте командную строку / консоль / терминал. На Windows установщик добавит
 "Командную строку Node", которую и нужно использовать.
 
-Затем установите [`http-server`](https://github.com/indexzero/http-server) командой
+Затем установите [`servez`](https://github.com/greggman/servez-cli) командой
 
-    npm -g install http-server
+    npm -g install servez
 
 Для OSX используйте
 
-    sudo npm -g install http-server
+    sudo npm -g install servez
 
 А после установки запустите
 
-    http-server путь/к/распакованным/файлам
+    servez путь/к/распакованным/файлам
 
 На экране должно показаться что-то вроде
 
-{{{image url="resources/http-server-response.png" }}}
+{{{image url="resources/servez-response.png" }}}
 
 Теперь можно в браузере перейти по адресу [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/).
 
-Без указания пути http-server будет использовать текущую папку.
+Без указания пути servez будет использовать текущую папку.
 
 ## Использование инструментов разработки браузера
 
