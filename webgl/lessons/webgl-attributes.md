@@ -24,14 +24,14 @@ const gl = {
   arrayBuffer: null,
   vertexArray: {
     attributes: [
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
     ],
     elementArrayBuffer: null,
   },
@@ -140,15 +140,16 @@ value. It is left out above because it is uncommon to use it.
 ```js
 attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-     value: [0, 0, 0, 1], },
+   　divisor: 0, value: [0, 0, 0, 1], },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-     value: [0, 0, 0, 1], },
+   　divisor: 0, value: [0, 0, 0, 1], },
    ..
 ```
 You can set each attribute's value with the various `gl.vertexAttribXXX`
 functions. The value is used when `enable` is false. When enable is true data for
 the attribute is pulled from the assigned buffer.
 
+<a id="vaos"></a>
 ## Vertex Array Objects (VAO)s
 
 WebGL has an extension, `OES_vertex_array_object`
