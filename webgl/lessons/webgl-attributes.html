@@ -143,14 +143,14 @@ const gl = {
   arrayBuffer: null,
   vertexArray: {
     attributes: [
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
-      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ? },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
+      { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?, divisor: 0, },
     ],
     elementArrayBuffer: null,
   },
@@ -234,14 +234,15 @@ gl.bindAttribLocation(program, 7, &#39;position&#39;);
 value. It is left out above because it is uncommon to use it.</p>
 <pre class="prettyprint"><code class="lang-js">attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-     value: [0, 0, 0, 1], },
+   　divisor: 0, value: [0, 0, 0, 1], },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-     value: [0, 0, 0, 1], },
+   　divisor: 0, value: [0, 0, 0, 1], },
    ..
 </code></pre>
 <p>You can set each attribute&#39;s value with the various <code>gl.vertexAttribXXX</code>
 functions. The value is used when <code>enable</code> is false. When enable is true data for
 the attribute is pulled from the assigned buffer.</p>
+<p><a id="vaos"></a></p>
 <h2 id="vertex-array-objects-vao-s">Vertex Array Objects (VAO)s</h2>
 <p>WebGL has an extension, <code>OES_vertex_array_object</code></p>
 <p>In the diagram above the <code>OES_vertex_array_object</code> extension lets you create and
@@ -422,6 +423,8 @@ machine doesn&#39;t have enough or else fallback to simpler shaders.</p>
 <li><a href="/webgl/lessons/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
 <li><a href="/webgl/lessons/webgl-animation.html">Animation</a></li>
 <li><a href="/webgl/lessons/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/webgl-instanced-drawing.html">Instanced Drawing</a></li>
 <li><a href="/webgl/lessons/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
 <li><a href="/webgl/lessons/webgl-and-alpha.html">WebGL and Alpha</a></li>
