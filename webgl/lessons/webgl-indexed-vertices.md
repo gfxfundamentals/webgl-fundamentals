@@ -126,7 +126,7 @@ the maximum index is 65535. There is an extension, `OES_element_index_uint` you 
 check for and enable which allows `gl.UNSIGNED_INT` and indices up to 4294967296.
 
 ```js
-const ext = gl.getExtension('OES_element_index_uint`);
+const ext = gl.getExtension('OES_element_index_uint');
 if (!ext) {
   // fall back to using gl.UNSIGNED_SHORT or tell the user they are out of luck
 }
