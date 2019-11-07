@@ -136,7 +136,7 @@ According to WebGLStats [nearly all devices support this extension](https://webg
 
 <div class="webgl_bottombar">
 <p>
-Note: Above we bind the `indexBuffer` to the `ELEMENT_ARRAY_BUFFER` binding point when
+Note: Above we bind the <code>indexBuffer</code> to the <code>ELEMENT_ARRAY_BUFFER</code> binding point when
 putting the indices in the buffer then we bind it again later. Why bind it twice?
 </p>
 <p>
