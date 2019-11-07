@@ -14,27 +14,8 @@ using an image we'll create the data in JavaScript directly.
 Creating data for a texture in JavaScript is pretty straight forward.
 By default, WebGL1 only supports a few types of textures
 
-<style>
-.local-data {
-  font-family: monospace;
-  font-size: large;
-  text-align: left;
-  display: inline-block;
-}
-.local-data thead {
-  background: lightblue;
-}
-.local-data td {
-  border: 1px solid black;
-  padding: 0.2em;
-}
-.local-data td:nth-child(3),
-.local-data td:nth-child(4) {
-  text-align: center;
-}
-</style>
 <div class="webgl_center">
-  <table class="local-data">
+  <table class="tabular-data tabular-data1">
     <thead>
       <tr><td>Format</td><td>Type</td><td>Channels</td><td>Bytes per pixel</td></tr>
     </thead>

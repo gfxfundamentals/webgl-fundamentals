@@ -14,27 +14,8 @@ TOC: WebGL - Данные для текстур
 Задать данные для текстуры в JavaScript совсем не сложно. По умолчанию
 WebGL1 поддерживает лишь несколько типов текстур:
 
-<style>
-.local-data {
-  font-family: monospace;
-  font-size: large;
-  text-align: left;
-  display: inline-block;
-}
-.local-data thead {
-  background: lightblue;
-}
-.local-data td {
-  border: 1px solid black;
-  padding: 0.2em;
-}
-.local-data td:nth-child(3),
-.local-data td:nth-child(4) {
-  text-align: center;
-}
-</style>
 <div class="webgl_center">
-  <table class="local-data">
+  <table class="tabular-data tabular-data1">
     <thead>
       <tr><td>Формат</td><td>Тип</td><td>Каналов</td><td>Бит на пиксель</td></tr>
     </thead>

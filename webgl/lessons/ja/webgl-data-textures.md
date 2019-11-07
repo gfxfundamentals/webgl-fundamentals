@@ -16,27 +16,8 @@ JavaScriptでテクスチャーのデータを生成する方法は、とても�
 テクスチャで利用できるデータ型は以下の通りである。
 このリストは、「WebGL1がデフォルトでサポートしているもの」に限定している。
 
-<style>
-.local-data {
-  font-family: monospace;
-  font-size: large;
-  text-align: left;
-  display: inline-block;
-}
-.local-data thead {
-  background: lightblue;
-}
-.local-data td {
-  border: 1px solid black;
-  padding: 0.2em;
-}
-.local-data td:nth-child(3),
-.local-data td:nth-child(4) {
-  text-align: center;
-}
-</style>
 <div class="webgl_center">
-  <table class="local-data">
+  <table class="tabular-data tabular-data1">
     <thead>
       <tr><td>フォーマット</td><td>データ型</td><td>チャンネル数</td><td>ピクセルあたりのバイト数</td></tr>
     </thead>

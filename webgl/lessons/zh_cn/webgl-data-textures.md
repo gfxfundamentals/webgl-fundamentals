@@ -11,27 +11,8 @@ TOC: WebGL 数据纹理
 
 用JavaScript为纹理创建数据是比较直接的，默认情况下WebGL1只支持少量数据类型的纹理
 
-<style>
-.local-data {
-  font-family: monospace;
-  font-size: large;
-  text-align: left;
-  display: inline-block;
-}
-.local-data thead {
-  background: lightblue;
-}
-.local-data td {
-  border: 1px solid black;
-  padding: 0.2em;
-}
-.local-data td:nth-child(3),
-.local-data td:nth-child(4) {
-  text-align: center;
-}
-</style>
 <div class="webgl_center">
-  <table class="local-data">
+  <table class="tabular-data tabular-data1">
     <thead>
       <tr><td>格式</td><td>数据类型</td><td>通道数</td><td>单像素字节数</td></tr>
     </thead>
