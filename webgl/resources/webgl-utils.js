@@ -412,10 +412,10 @@
   /**
    * Set uniforms and binds related textures.
    *
-   * example:
+   * Example:
    *
    *     let programInfo = createProgramInfo(
-   *         gl, ["some-vs", "some-fs");
+   *         gl, ["some-vs", "some-fs"]);
    *
    *     let tex1 = gl.createTexture();
    *     let tex2 = gl.createTexture();
@@ -538,7 +538,7 @@
    * Example:
    *
    *     let program = createProgramFromScripts(
-   *         gl, ["some-vs", "some-fs");
+   *         gl, ["some-vs", "some-fs"]);
    *
    *     let attribSetters = createAttributeSetters(program);
    *
@@ -688,7 +688,7 @@
    * Example:
    *
    *     let programInfo = createProgramInfo(
-   *         gl, ["some-vs", "some-fs");
+   *         gl, ["some-vs", "some-fs"]);
    *
    *     let arrays = {
    *       position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
