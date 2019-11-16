@@ -42,7 +42,7 @@ const gl = {
 }
 ```
 
-You can see above `textureUnits` is an array`. You assign a texture to one of the *bind points* in that array
+You can see above `textureUnits` is an array. You assign a texture to one of the *bind points* in that array
 of texture units. Let's assign `ourTexture` to texture unit 5.
 
 ```js
