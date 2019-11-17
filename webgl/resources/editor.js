@@ -55,7 +55,7 @@ function fixCSSLinks(url, source) {
   const prefix = getPrefix(url);
 
   function addPrefix(url) {
-    return url.indexOf('://') < 0 ? `${prefix}/${url}` : url;
+    return url.indexOf('://') < 0 && !url.startsWith('data:') ? `${prefix}/${url}` : url;
   }
   function makeFQ(match, prefix, url, suffix) {
     return `${prefix}${addPrefix(url)}${suffix}`;
@@ -178,6 +178,7 @@ async function getWorkerScripts(text, baseUrl, scriptInfos = {}) {
   const parentScriptInfo = scriptInfos[baseUrl];
   const workerRE = /(new\s+Worker\s*\(\s*)('|")(.*?)('|")/g;
   const importScriptsRE = /(importScripts\s*\(\s*)('|")(.*?)('|")/g;
+  const importRE = /(import.*?)('|")(.*?)('|")/g;
 
   const newScripts = [];
   const slashRE = /\/threejs\/[^/]+$/;
@@ -203,6 +204,7 @@ async function getWorkerScripts(text, baseUrl, scriptInfos = {}) {
 
   text = text.replace(workerRE, replaceWithUUID);
   text = text.replace(importScriptsRE, replaceWithUUID);
+  text = text.replace(importRE, replaceWithUUID);
 
   await Promise.all(newScripts.map((url) => {
     return getScript(url, scriptInfos);
@@ -217,6 +219,10 @@ function addSource(type, name, source, scriptInfo) {
   htmlParts[type].sources.push({source, name, scriptInfo});
 }
 
+function safeStr(s) {
+  return s === undefined ? '' : s;
+}
+
 async function parseHTML(url, html) {
   html = fixSourceLinks(url, html);
 
@@ -226,8 +232,9 @@ async function parseHTML(url, html) {
   const titleRE = /<title>([^]*?)<\/title>/i;
   const bodyRE = /<body>([^]*?)<\/body>/i;
   const inlineScriptRE = /<script>([^]*?)<\/script>/i;
-  const externalScriptRE = /(<!--(?:(?!-->)[\s\S])*?-->\n){0,1}<script\s*src\s*=\s*"(.*?)"\s*>\s*<\/script>/ig;
-  const dataScriptRE = /(<!--(?:(?!-->)[\s\S])*?-->\n){0,1}<script (.*?)>([^]*?)<\/script>/ig;
+  const inlineModuleScriptRE = /<script type="module">([^]*?)<\/script>/i;
+  const externalScriptRE = /(<!--(?:(?!-->)[\s\S])*?-->\n){0,1}<script\s+(type="module"\s+)?src\s*=\s*"(.*?)"\s*>\s*<\/script>/ig;
+  const dataScriptRE = /(<!--(?:(?!-->)[\s\S])*?-->\n){0,1}<script(.*?src=".*?)>([^]*?)<\/script>/ig;
   const cssLinkRE = /<link ([^>]+?)>/g;
   const isCSSLinkRE = /type="text\/css"|rel="stylesheet"/;
   const hrefRE = /href="([^"]+)"/;
@@ -235,7 +242,8 @@ async function parseHTML(url, html) {
   const obj = { html: html };
   addSource('css', 'css', formatCSS(fixCSSLinks(url, getHTMLPart(styleRE, obj, '<style>\n${css}</style>'))));
   addSource('html', 'html', getHTMLPart(bodyRE, obj, '<body>${html}</body>'));
-  const rootScript = getHTMLPart(inlineScriptRE, obj, '<script>${js}</script>');
+  const rootScript = getHTMLPart(inlineScriptRE, obj, '<script>${js}</script>') ||
+                     getHTMLPart(inlineModuleScriptRE, obj, '<script type="module">${js}</script>');
   html = obj.html;
 
   const fqURL = getFQUrl(url);
@@ -261,9 +269,9 @@ async function parseHTML(url, html) {
   }
 
   const scripts = [];
-  html = html.replace(externalScriptRE, function(p0, p1, p2) {
+  html = html.replace(externalScriptRE, function(p0, p1, type, p2) {
     p1 = p1 || '';
-    scripts.push(`${p1}<script src="${p2}"></script>`);
+    scripts.push(`${p1}<script ${safeStr(type)}src="${p2}"></script>`);
     return '';
   });
 
@@ -387,7 +395,7 @@ function getSourceBlob(htmlParts) {
   source = source.replace('</head>', `<script src="${prefix}/resources/webgl-debug-helper.js"></script>
 <script src="${prefix}/resources/lessons-helper.js"></script>
   </head>`);
-  const scriptNdx = source.indexOf('<script>');
+  const scriptNdx = source.search(/<script(\s+type="module"\s*)?>/);
   g.rootScriptInfo.numLinesBeforeScript = (source.substring(0, scriptNdx).match(/\n/g) || []).length;
 
   const blob = new Blob([source], {type: 'text/html'});
@@ -523,7 +531,7 @@ function openInCodepen() {
 // from ${g.url}
 
 
-  `;
+`;
   getSourcesFromEditor();
   const scripts = makeScriptsForWorkers(g.rootScriptInfo);
   const pen = {
@@ -553,7 +561,7 @@ function openInJSFiddle() {
   const comment = `// ${g.title}
 // from ${g.url}
 
-  `;
+`;
 
   getSourcesFromEditor();
   const scripts = makeScriptsForWorkers(g.rootScriptInfo);

@@ -141,12 +141,18 @@ module.exports = function(grunt) {
     siteThumbnail: 'webglfundamentals.jpg',  // in rootFolder/lessons/resources
     templatePath: 'build/templates',
     thumbnailOptions: {
-      font: 'bold 100px sans-serif',
-      verticalSpacing: 100,
-      offset: [100, 120],
-      shadowOffset: [15, 15],
-      strokeWidth: 15,
-      textWrapWidth: 1000,
+      thumbnailBackground: 'webglfundamentals.jpg',
+      text: [
+        {
+          font: 'bold 100px sans-serif',
+          verticalSpacing: 100,
+          offset: [100, 120],
+          textAlign: 'left',
+          shadowOffset: [15, 15],
+          strokeWidth: 15,
+          textWrapWidth: 1000,
+        },
+      ],
     },
   };
 

@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<html>
+<head>
 <style>
 html {
   box-sizing: border-box;
@@ -37,6 +39,7 @@ iframe {
 .panes {
     display: flex;
     flex: 1 1 auto;
+    height: 50%;  /* this is needed for firefox. It won't actually be 50% because the flex: 1 1 auto means stretch */
 }
 .panes>div {
     display: none;
@@ -81,6 +84,9 @@ iframe {
     width: 100%;
     height: 100%;
     background: white;
+}
+.result .console .log {
+    white-space: pre;
 }
 .other>div,
 .other>div>div {
@@ -153,6 +159,7 @@ iframe {
     .panebuttons>button, body {
       font-size: x-small;
     }
+}
 
 @media ( max-width: 740px ) {
     .panelogo>div>a:nth-child(1) {
@@ -173,6 +180,7 @@ iframe {
     }
 }
 </style>
+</head>
 <body>
 <div class="frame">
     <div class="tabs">
@@ -208,3 +216,4 @@ iframe {
 <script src="editor-settings.js"></script>
 <script src="editor.js"></script>
 
+</html>
