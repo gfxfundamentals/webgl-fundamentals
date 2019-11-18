@@ -5,7 +5,7 @@ TOC: Anti-Patterns
 
 This is a list of anti patterns for WebGL. Anti patterns are things you should avoid doing
 
-1.  Putting `viewportWidth` and `viewportHeight` on the `WebGLRenderingContext`
+1.  <a id="viewportwidth"></a>Putting `viewportWidth` and `viewportHeight` on the `WebGLRenderingContext`
 
     Some code adds properties for their viewport width and height
     and sticks them on the `WebGLRenderingContext` something like this
@@ -47,7 +47,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     Even better it will handle extreme cases whereas using `gl.canvas.width`
     and `gl.canvas.height` will not. [As for why see here](#drawingbuffer).
 
-2.  Using `canvas.width` and `canvas.height` for aspect ratio
+2.  <a id="canvaswidth"></a>Using `canvas.width` and `canvas.height` for aspect ratio
 
     Often code uses `canvas.width` and `canvas.height` for aspect ratio like this
 
@@ -86,7 +86,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     <p></p>
     {{{diagram url="../webgl-canvas-width-height.html" width="400" height="150" }}}
 
-3.  Using `window.innerWidth` and `window.innerHeight` to compute anything
+3.  <a id="innerwidth"></a>Using `window.innerWidth` and `window.innerHeight` to compute anything
 
     Many WebGL programs use `window.innerWidth` and `window.innerHeight` in many places.
     For example:
@@ -148,7 +148,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
 
     Again, the point is, if you embrace the web and write your code using the techniques above you won't have to change any code when you run into different use cases.
 
-4.  Using the `'resize'` event to change the size of your canvas.
+4.  <a id="resize"></a>Using the `'resize'` event to change the size of your canvas.
 
     Some apps check for the window `'resize'` event like this to resize their canvas.
 
@@ -241,7 +241,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
     Just set `needToRender` any time you've changed something in the scene and you want
     the scene to be rendered incorporating your changes.
 
-5.  Adding properties to `WebGLObject`s
+5.  <a id="properties"></a>Adding properties to `WebGLObject`s
 
     `WebGLObject`s are the various types of resources in WebGL like a `WebGLBuffer`
     or `WebGLTexture`. Some apps add properties to those objects. For example code like this:
