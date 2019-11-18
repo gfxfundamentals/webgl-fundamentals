@@ -214,7 +214,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>This is a list of anti patterns for WebGL. Anti patterns are things you should avoid doing</p>
 <ol>
-<li><p>Putting <code>viewportWidth</code> and <code>viewportHeight</code> on the <code>WebGLRenderingContext</code></p>
+<li><p><a id="viewportwidth"></a>Putting <code>viewportWidth</code> and <code>viewportHeight</code> on the <code>WebGLRenderingContext</code></p>
 <p>Some code adds properties for their viewport width and height
 and sticks them on the <code>WebGLRenderingContext</code> something like this</p>
 <pre class="prettyprint">
@@ -248,7 +248,7 @@ gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 <p>Even better it will handle extreme cases whereas using <code>gl.canvas.width</code>
 and <code>gl.canvas.height</code> will not. <a href="#drawingbuffer">As for why see here</a>.</p>
 </li>
-<li><p>Using <code>canvas.width</code> and <code>canvas.height</code> for aspect ratio</p>
+<li><p><a id="canvaswidth"></a>Using <code>canvas.width</code> and <code>canvas.height</code> for aspect ratio</p>
 <p>Often code uses <code>canvas.width</code> and <code>canvas.height</code> for aspect ratio like this</p>
 <pre class="prettyprint">
 var aspect = canvas.width / canvas.height;
@@ -294,7 +294,7 @@ Notice the samples all display the &#39;F&#39; in the correct aspect ratio.</p>
 
 </p>
 </li>
-<li><p>Using <code>window.innerWidth</code> and <code>window.innerHeight</code> to compute anything</p>
+<li><p><a id="innerwidth"></a>Using <code>window.innerWidth</code> and <code>window.innerHeight</code> to compute anything</p>
 <p>Many WebGL programs use <code>window.innerWidth</code> and <code>window.innerHeight</code> in many places.
 For example:</p>
 <pre class="prettyprint">
@@ -339,7 +339,7 @@ way of knowing what size your canvas will turn out. It would be different with d
 <p><a href="../webgl-same-code-body-only-fullscreen.html" target="_blank">A page with no elements with CSS setup to make it fullscreen into which the code will insert a canvas</a></p>
 <p>Again, the point is, if you embrace the web and write your code using the techniques above you won&#39;t have to change any code when you run into different use cases.</p>
 </li>
-<li><p>Using the <code>&#39;resize&#39;</code> event to change the size of your canvas.</p>
+<li><p><a id="resize"></a>Using the <code>&#39;resize&#39;</code> event to change the size of your canvas.</p>
 <p>Some apps check for the window <code>&#39;resize&#39;</code> event like this to resize their canvas.</p>
 <pre class="prettyprint">
 window.addEventListener('resize', resizeTheCanvas);
@@ -426,7 +426,7 @@ This would handle the resize case for apps that don&#39;t render the scene every
 Just set <code>needToRender</code> any time you&#39;ve changed something in the scene and you want
 the scene to be rendered incorporating your changes.</p>
 </li>
-<li><p>Adding properties to <code>WebGLObject</code>s</p>
+<li><p><a id="properties"></a>Adding properties to <code>WebGLObject</code>s</p>
 <p><code>WebGLObject</code>s are the various types of resources in WebGL like a <code>WebGLBuffer</code>
 or <code>WebGLTexture</code>. Some apps add properties to those objects. For example code like this:</p>
 <pre class="prettyprint">
