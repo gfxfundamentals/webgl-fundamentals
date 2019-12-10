@@ -367,7 +367,7 @@ void main() {
   vec2 uv = vec2(u, 0.5);
 
 +  // scale to size of ramp
-+  vec2 texelRange =  * (u_rampSize - 1.0);
++  vec2 texelRange = uv * (u_rampSize - 1.0);
 +
 +  // offset by half a texel and convert to texture coordinate
 +  vec2 rampUV = (texelRange + 0.5) / u_rampSize;
@@ -423,7 +423,7 @@ void main() {
   vec2 uv = vec2(u, 0.5);
 
   // scale to size of ramp
-  vec2 texelRange =  * (u_rampSize - 1.0);
+  vec2 texelRange = uv * (u_rampSize - 1.0);
 
   // offset by half a texel and convert to texture coordinate
   vec2 rampUV = (texelRange + 0.5) / u_rampSize;
@@ -479,6 +479,8 @@ the point of this article so in this case I decided to use a conditional.
 In general though I try avoid conditionals to select features in shaders and
 instead create different shaders for different features.</p>
 </blockquote>
+<p>Note: This math is only important if we&#39;re using <code>LINEAR</code> filtering. If we&#39;re using <code>NEAREST</code>
+filtering we want the original math.</p>
 <p>Now that we know the ramp math is correct let&#39;s make a bunch of different ramp
 textures.</p>
 <pre class="prettyprint"><code class="lang-js">+// make a 256 array where elements 0 to 127
@@ -542,13 +544,68 @@ textures.</p>
 +  ramp.size = [width, 1];
 +});
 </code></pre>
-<p>and at render time pick one</p>
+<p>and let&#39;s make the shader so we can handle both <code>NEAREST</code> and <code>LINEAR</code>. Like I mentioned
+above I don&#39;t generally use boolean if statements in shaders but if the difference is
+simple and I can do it without an conditional then I&#39;ll consider using one shader.
+To do that here we can add a float uniform <code>u_linearAdjust</code> that we&#39;ll set to 0.0 or 1.0</p>
+<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec3 v_normal;
+
+uniform vec3 u_reverseLightDirection;
+uniform vec4 u_color;
+uniform sampler2D u_ramp;
+uniform vec2 u_rampSize;
+-uniform bool u_useRampTexture;
+-uniform float u_linearAdjust;  // 1.0 if linear, 0.0 if nearest
+
+void main() {
+  // because v_normal is a varying it&#39;s interpolated
+  // so it will not be a unit vector. Normalizing it
+  // will make it a unit vector again
+  vec3 normal = normalize(v_normal);
+
+  float cosAngle = dot(normal, u_reverseLightDirection);
+
+  // convert from -1 &lt;-&gt; 1 to 0 &lt;-&gt; 1
+  float u = cosAngle * 0.5 + 0.5;
+
+  // make a texture coordinate.
+  vec2 uv = vec2(u, 0.5);
+
+  // scale to size of ramp
+-  vec2 texelRange = uv * (u_rampSize - 1.0);
++  vec2 texelRange = uv * (u_rampSize - u_linearAdjust);
+
+-  // offset by half a texel and convert to texture coordinate
+-  vec2 rampUV = (texelRange + 0.5) / u_rampSize;
++  // offset by half a texel if linear and convert to texture coordinate
++  vec2 rampUV = (texelRange + 0.5 * u_linearAdjust) / u_rampSize;
+
+  vec4 rampColor = texture2D(u_ramp, rampUV);
+
+-  if (!u_useRampTexture) {
+-    rampColor = vec4(u, u, u, 1);
+-  }
+
+  gl_FragColor = u_color;
+  gl_FragColor *= rampColor;
+}
+</code></pre>
+<p>at init time look up the location</p>
+<pre class="prettyprint"><code class="lang-js">var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
+var rampLocation = gl.getUniformLocation(program, &quot;u_ramp&quot;);
+var rampSizeLocation = gl.getUniformLocation(program, &quot;u_rampSize&quot;);
++var linearAdustLocation = gl.getUniformLocation(program, &quot;u_linearAdjust&quot;);
+</code></pre>
+<p>and at render time pick one of the textures</p>
 <pre class="prettyprint"><code class="lang-js">var data = {
   ramp: 0,
 };
 
 ...
-+const {texture, color, size} = ramps[data.ramp];
++const {texture, color, size, filter} = ramps[data.ramp];
 
 // Set the color to use
 -gl.uniform4fv(colorLocation, [0.2, 1, 0.2, 1]);
@@ -565,6 +622,9 @@ gl.activeTexture(gl.TEXTURE0 + 0);
 gl.uniform1i(rampLocation, 0);
 -gl.uniform2fv(rampSizeLocation, [2, 1]);
 +gl.uniform2fv(rampSizeLocation, size);
+
++// adjust if linear
++gl.uniform1f(linearAdustLocation, filter ? 1 : 0);
 </code></pre>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-ramp-textures.html"></iframe>

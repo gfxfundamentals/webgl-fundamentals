@@ -47,6 +47,7 @@ uniform vec3 u_reverseLightDirection;
 uniform vec4 u_color;
 uniform sampler2D u_ramp;
 uniform vec2 u_rampSize;
+uniform float u_linearAdjust; // 1.0 if linear, 0.0 if nearest
 
 void main() {
   // because v_normal is a varying it's interpolated
@@ -63,10 +64,10 @@ void main() {
   vec2 uv = vec2(u, 0.5);
 
   // scale to size of ramp
-  vec2 texelRange = uv * (u_rampSize - 1.0);
+  vec2 texelRange = uv * (u_rampSize - u_linearAdjust);
 
   // offset by half a texel and convert to texture coordinate
-  vec2 rampUV = (texelRange + 0.5) / u_rampSize;
+  vec2 rampUV = (texelRange + u_linearAdjust * 0.5) / u_rampSize;
 
   // lookup a value from a 1d texture
   vec4 rampColor = texture2D(u_ramp, rampUV);
@@ -112,6 +113,7 @@ function main() {
   var colorLocation = gl.getUniformLocation(program, "u_color");
   var rampLocation = gl.getUniformLocation(program, "u_ramp");
   var rampSizeLocation = gl.getUniformLocation(program, "u_rampSize");
+  var linearAdustLocation = gl.getUniformLocation(program, "u_linearAdjust");
   var reverseLightDirectionLocation =
       gl.getUniformLocation(program, "u_reverseLightDirection");
 
@@ -299,7 +301,7 @@ function main() {
     gl.uniformMatrix4fv(worldInverseTransposeLocation, false, worldInverseTransposeMatrix);
 
     {
-      const {texture, color, size} = ramps[data.ramp];
+      const {texture, color, size, filter} = ramps[data.ramp];
 
       // Set the color to use
       gl.uniform4fv(colorLocation, color);
@@ -313,6 +315,9 @@ function main() {
       // tell the shader that u_ramp should use the texture on texture unit 0
       gl.uniform1i(rampLocation, 0);
       gl.uniform2fv(rampSizeLocation, size);
+
+      // adjust if linear
+      gl.uniform1f(linearAdustLocation, filter ? 1 : 0);
     }
 
     // Draw the geometry.
