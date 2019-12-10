@@ -179,7 +179,7 @@ void main() {
   vec2 uv = vec2(u, 0.5);
 
 +  // scale to size of ramp
-+  vec2 texelRange =  * (u_rampSize - 1.0);
++  vec2 texelRange = uv * (u_rampSize - 1.0);
 +
 +  // offset by half a texel and convert to texture coordinate
 +  vec2 rampUV = (texelRange + 0.5) / u_rampSize;
@@ -245,7 +245,7 @@ void main() {
   vec2 uv = vec2(u, 0.5);
 
   // scale to size of ramp
-  vec2 texelRange =  * (u_rampSize - 1.0);
+  vec2 texelRange = uv * (u_rampSize - 1.0);
 
   // offset by half a texel and convert to texture coordinate
   vec2 rampUV = (texelRange + 0.5) / u_rampSize;
@@ -304,6 +304,9 @@ now match.
 > the point of this article so in this case I decided to use a conditional.
 > In general though I try avoid conditionals to select features in shaders and
 > instead create different shaders for different features.
+
+Note: This math is only important if we're using `LINEAR` filtering. If we're using `NEAREST`
+filtering we want the original math.
 
 Now that we know the ramp math is correct let's make a bunch of different ramp
 textures.
@@ -371,7 +374,68 @@ textures.
 +});
 ```
 
-and at render time pick one
+and let's make the shader so we can handle both `NEAREST` and `LINEAR`. Like I mentioned
+above I don't generally use boolean if statements in shaders but if the difference is
+simple and I can do it without an conditional then I'll consider using one shader.
+To do that here we can add a float uniform `u_linearAdjust` that we'll set to 0.0 or 1.0
+
+```glsl
+precision mediump float;
+
+// Passed in from the vertex shader.
+varying vec3 v_normal;
+
+uniform vec3 u_reverseLightDirection;
+uniform vec4 u_color;
+uniform sampler2D u_ramp;
+uniform vec2 u_rampSize;
+-uniform bool u_useRampTexture;
+-uniform float u_linearAdjust;  // 1.0 if linear, 0.0 if nearest
+
+void main() {
+  // because v_normal is a varying it's interpolated
+  // so it will not be a unit vector. Normalizing it
+  // will make it a unit vector again
+  vec3 normal = normalize(v_normal);
+
+  float cosAngle = dot(normal, u_reverseLightDirection);
+
+  // convert from -1 <-> 1 to 0 <-> 1
+  float u = cosAngle * 0.5 + 0.5;
+
+  // make a texture coordinate.
+  vec2 uv = vec2(u, 0.5);
+
+  // scale to size of ramp
+-  vec2 texelRange = uv * (u_rampSize - 1.0);
++  vec2 texelRange = uv * (u_rampSize - u_linearAdjust);
+
+-  // offset by half a texel and convert to texture coordinate
+-  vec2 rampUV = (texelRange + 0.5) / u_rampSize;
++  // offset by half a texel if linear and convert to texture coordinate
++  vec2 rampUV = (texelRange + 0.5 * u_linearAdjust) / u_rampSize;
+
+  vec4 rampColor = texture2D(u_ramp, rampUV);
+
+-  if (!u_useRampTexture) {
+-    rampColor = vec4(u, u, u, 1);
+-  }
+
+  gl_FragColor = u_color;
+  gl_FragColor *= rampColor;
+}
+```
+
+at init time look up the location
+
+```js
+var colorLocation = gl.getUniformLocation(program, "u_color");
+var rampLocation = gl.getUniformLocation(program, "u_ramp");
+var rampSizeLocation = gl.getUniformLocation(program, "u_rampSize");
++var linearAdustLocation = gl.getUniformLocation(program, "u_linearAdjust");
+```
+
+and at render time pick one of the textures
 
 ```js
 var data = {
@@ -379,7 +443,7 @@ var data = {
 };
 
 ...
-+const {texture, color, size} = ramps[data.ramp];
++const {texture, color, size, filter} = ramps[data.ramp];
 
 // Set the color to use
 -gl.uniform4fv(colorLocation, [0.2, 1, 0.2, 1]);
@@ -396,6 +460,9 @@ gl.activeTexture(gl.TEXTURE0 + 0);
 gl.uniform1i(rampLocation, 0);
 -gl.uniform2fv(rampSizeLocation, [2, 1]);
 +gl.uniform2fv(rampSizeLocation, size);
+
++// adjust if linear
++gl.uniform1f(linearAdustLocation, filter ? 1 : 0);
 ```
 
 {{{example url="../webgl-ramp-textures.html"}}}
