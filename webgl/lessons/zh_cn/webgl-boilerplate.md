@@ -68,7 +68,7 @@ WebGL复杂的原因之一是需要两个方法，一个顶点着色器和一个
       var success = gl.getProgramParameter(program, gl.LINK_STATUS);
       if (!success) {
           // 链接过程出现问题
-          throw ("program filed to link:" + gl.getProgramInfoLog (program));
+          throw ("program failed to link:" + gl.getProgramInfoLog (program));
       }
 
       return program;

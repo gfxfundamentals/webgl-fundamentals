@@ -68,7 +68,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
       var success = gl.getProgramParameter(program, gl.LINK_STATUS);
       if (!success) {
         // 연결에 문제 발생
-        throw ("program filed to link:" + gl.getProgramInfoLog (program));
+        throw ("program failed to link:" + gl.getProgramInfoLog (program));
       }
 
       return program;
