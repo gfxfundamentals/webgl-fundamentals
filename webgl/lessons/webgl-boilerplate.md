@@ -72,7 +72,7 @@ And the boilerplate code for linking 2 shaders into a program
       var success = gl.getProgramParameter(program, gl.LINK_STATUS);
       if (!success) {
           // something went wrong with the link
-          throw ("program filed to link:" + gl.getProgramInfoLog (program));
+          throw ("program failed to link:" + gl.getProgramInfoLog (program));
       }
 
       return program;

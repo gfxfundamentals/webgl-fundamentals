@@ -76,7 +76,7 @@ GPUの特性を活かすため、これらの関数はGPU専用の言語で記�
       var success = gl.getProgramParameter(program, gl.LINK_STATUS);
       if (!success) {
           // リンク中に問題があった場合、エラーを取得する。
-          throw ("program filed to link:" + gl.getProgramInfoLog (program));
+          throw ("program failed to link:" + gl.getProgramInfoLog (program));
       }
 
       return program;
