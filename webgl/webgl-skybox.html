@@ -20,6 +20,7 @@ varying vec4 v_position;
 void main() {
   v_position = a_position;
   gl_Position = a_position;
+  gl_Position.z = 1.0;
 }
 </script>
 <!-- fragment shader -->
@@ -218,6 +219,9 @@ function main() {
 
     // Tell the shader to use texture unit 0 for u_skybox
     gl.uniform1i(skyboxLocation, 0);
+
+    // let our quad pass the depth test at 1.0
+    gl.depthFunc(gl.LEQUAL);
 
     // Draw the geometry.
     gl.drawArrays(gl.TRIANGLES, 0, 1 * 6);

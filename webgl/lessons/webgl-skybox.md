@@ -47,7 +47,7 @@ Starting with the [environment map example](webgl-environment-maps.html) I
 removed all the code related to normals as we're not using them here. Then we
 need a quad.
 
-```
+```js
 // Fill the buffer with the values that define a quad.
 function setGeometry(gl) {
   var positions = new Float32Array(
@@ -66,7 +66,7 @@ function setGeometry(gl) {
 This quad will fill the canvas since it's already in clip space. Since there are
 only 2 values per vertex we need to change the code that sets the attribute.
 
-```
+```js
 // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
 -var size = 3;          // 3 components per iteration
 +var size = 2;          // 2 components per iteration
@@ -83,7 +83,7 @@ No need for any matrix math since the positions are already in clip space, setup
 to cover the entire canvas. We set `gl_Position.z` to 1 to guarantee the pixels
 have the furthest depth. And, we pass the position on to the fragment shader.
 
-```
+```glsl
 attribute vec4 a_position;
 varying vec4 v_position;
 void main() {
@@ -96,7 +96,7 @@ void main() {
 In the fragment shader we multiply the position by
 the inverse view projection matrix and divide by w to go from 4D space to 3D space.
 
-```
+```glsl
 precision mediump float;
 
 uniform samplerCube u_skybox;
@@ -111,7 +111,7 @@ void main() {
 
 Finally we need to lookup the uniform locations
 
-```
+```js
 var skyboxLocation = gl.getUniformLocation(program, "u_skybox");
 var viewDirectionProjectionInverseLocation = 
     gl.getUniformLocation(program, "u_viewDirectionProjectionInverse");
@@ -119,7 +119,7 @@ var viewDirectionProjectionInverseLocation =
 
 and set them
 
-```
+```js
 // Compute the projection matrix
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var projectionMatrix =
@@ -168,7 +168,7 @@ utils mentioned in [less code more fun](webgl-less-code-more-fun.html).
 
 We need to put both sets of shaders in
 
-```
+```html
 <script id="skybox-vertex-shader" type="x-shader/x-vertex">
 ...
 <script id="skybox-fragment-shader" type="x-shader/x-fragment">
@@ -181,7 +181,7 @@ We need to put both sets of shaders in
 
 Then compile the shaders and look up all the attribute and uniform locations
 
-```
+```js
 // setup GLSL programs and lookup locations
 const envmapProgramInfo = webglUtils.createProgramInfo(
     gl, ["envmap-vertex-shader", "envmap-fragment-shader"]);
@@ -191,7 +191,7 @@ const skyboxProgramInfo = webglUtils.createProgramInfo(
 
 Set up our buffers with vertex data. The `primitives` library already has functions to supply this data so we can use those.
 
-```
+```js
 // create buffers and fill with vertex data
 const cubeBufferInfo = primitives.createCubeBufferInfo(gl, 1);
 const quadBufferInfo = primitives.createXYQuadBufferInfo(gl);
@@ -199,7 +199,7 @@ const quadBufferInfo = primitives.createXYQuadBufferInfo(gl);
 
 At render time we compute all the matrices
 
-```
+```js
 // camera going in circle 2 units from origin looking at origin
 var cameraPosition = [Math.cos(time * .1) * 2, 0, Math.sin(time * .1) * 2];
 var target = [0, 0, 0];
@@ -227,8 +227,9 @@ var viewDirectionProjectionInverseMatrix =
 
 Then first draw the cube
 
-```
+```js
 // draw the cube
+gl.depthFunc(gl.LESS);  // use the default depth test
 gl.useProgram(envmapProgramInfo.program);
 webglUtils.setBuffersAndAttributes(gl, envmapProgramInfo, cubeBufferInfo);
 webglUtils.setUniforms(envmapProgramInfo, {
@@ -243,8 +244,12 @@ webglUtils.drawBufferInfo(gl, cubeBufferInfo);
 
 followed by the skybox
 
-```
+```js
 // draw the skybox
+
+// let our quad pass the depth test at 1.0
+gl.depthFunc(gl.LEQUAL);
+
 gl.useProgram(skyboxProgramInfo.program);
 webglUtils.setBuffersAndAttributes(gl, skyboxProgramInfo, quadBufferInfo);
 webglUtils.setUniforms(skyboxProgramInfo, {
@@ -259,8 +264,8 @@ and
 {{{example url="../webgl-skybox-plus-environment-map.html" }}}
 
 I hope these last 3 articles have given you some idea of how to use a cubemap.
-It's common take for example the code [from computing
-lighting](webgl-3d-lighting-spot.html) and combine that result with results from
+It's common for example to take the code [from computing lighting](webgl-3d-lighting-spot.html)
+and combine that result with results from
 an environment map to make materials like the hood of a car or polished floor.
 There's also a technique to compute lighting using cubemaps. It's the same as the
 environment map except instead of using the value you get from the environment

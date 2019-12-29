@@ -62,7 +62,7 @@ attribute vec4 a_position;
 varying vec4 v_position;
 void main() {
   v_position = a_position;
-  gl_Position = a_position;
+  gl_Position = vec4(a_position.xy, 1, 1);
 }
 </script>
 <script id="skybox-fragment-shader" type="x-shader/x-fragment">
@@ -233,6 +233,7 @@ function main() {
         m4.inverse(viewDirectionProjectionMatrix);
 
     // draw the cube
+    gl.depthFunc(gl.LESS);  // use the default depth test
     gl.useProgram(envmapProgramInfo.program);
     webglUtils.setBuffersAndAttributes(gl, envmapProgramInfo, cubeBufferInfo);
     webglUtils.setUniforms(envmapProgramInfo, {
@@ -245,6 +246,10 @@ function main() {
     webglUtils.drawBufferInfo(gl, cubeBufferInfo);
 
     // draw the skybox
+
+    // let our quad pass the depth test at 1.0
+    gl.depthFunc(gl.LEQUAL);
+
     gl.useProgram(skyboxProgramInfo.program);
     webglUtils.setBuffersAndAttributes(gl, skyboxProgramInfo, quadBufferInfo);
     webglUtils.setUniforms(skyboxProgramInfo, {
