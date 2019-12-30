@@ -13,7 +13,7 @@
 <div style="position:absolute;">
   <canvas id="canvas" width="500" height="500" style="width: 500px; height: 500px;"></canvas>
 </div>
-<div id="uiContainer">
+<div id="uiContainer" class="ui-dark-support">
   <div id="ui">
   </div>
 </div>
@@ -85,7 +85,28 @@ function main() {
   ]
   const widgets = webglLessonsUI.setupUI(document.querySelector('#ui'), data, ui);
 
+  const darkColors = {
+    base: '#DDD',
+    background: '#444',
+    text: '#FFF',
+    textOutline: '#000',
+    eyeToSurface: '#555',
+  };
+  const lightColors = {
+    base: '#000',
+    background: '#FFF',
+    text: '#000',
+    textOutline: '#FFF',
+    eyeToSurface: '#F8F8F8',
+  };
+
+  const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
+  darkMatcher.addEventListener('change', render);
+
   function render() {
+    const isDarkMode = darkMatcher.matches;
+    const colors = isDarkMode ? darkColors : lightColors;
+
     direction = degToRad(data.rotation);
 
     webglUtils.resizeCanvasToDisplaySize(ctx.canvas, window.devicePixelRatio);
@@ -94,7 +115,8 @@ function main() {
 
     var baseScale = Math.min(ctx.canvas.width / width,  ctx.canvas.height / height);
 
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillStyle = colors.background;
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
     ctx.translate(ctx.canvas.width / 2, ctx.canvas.width / 2);
     ctx.scale(baseScale, baseScale);
@@ -123,8 +145,8 @@ function main() {
       var a = -Math.atan2(lx - x, ly - y);
 
       if (data.eyeToSurface) {
-        ctx.fillStyle = "#F8F8F8";
-        ctx.strokeStyle = "#F8F8F8";
+        ctx.fillStyle = colors.eyeToSurface;
+        ctx.strokeStyle = colors.eyeToSurface;
         diagram.arrow(ctx, lx, ly, x, y, false, true, 0.5);
 
         ctx.save();
@@ -233,7 +255,7 @@ function main() {
           minusOneDot[ndx] = incident - dot * normal;
           return incident - 2 * dot * normal;
         });
-        
+
         let gradNdx = 0;
         let sc = reflect[1];
         if (Math.abs(reflect[1]) > Math.abs(reflect[0])) {
@@ -304,7 +326,7 @@ function main() {
     }
 
     {
-      ctx.save()
+      ctx.save();
       ctx.translate(-85, -85);
       ctx.scale(.25, .25);
       envGradients.forEach((grad, ndx) => {
@@ -313,8 +335,8 @@ function main() {
           ctx.translate(0, 125);
           ctx.fillStyle = grad;
           ctx.fillRect(-125, -10, 250, 20);
-          ctx.strokeStyle = "white";
-          ctx.fillStyle = "black";
+          ctx.strokeStyle = colors.textOutline;
+          ctx.fillStyle = colors.text;
           ctx.translate(0, 15);
           ctx.scale(4,4);
           ctx.rotate(gradientLabels[ndx].rotation);
