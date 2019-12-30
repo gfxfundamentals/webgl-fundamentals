@@ -220,23 +220,24 @@ If you have not read those articles already you might want to read them first.</
 <p>In a <a href="webgl-3d-textures.html">previous article</a> we covered how to use textures,
 how they are referenced by texture coordinates that go from 0 to 1 across and up
 the texture, and how they are filtered optionally using mips.</p>
-<p>Another kind of texture is a <em>cubemap</em>. It consists of 6 textures representing
+<p>Another kind of texture is a <em>cubemap</em>. It consists of 6 faces representing
 the 6 faces of a cube. Instead of the traditional texture coordinates that
 have 2 dimensions, a cubemap uses a normal, in other words a 3D direction.
 Depending on the direction the normal points one of the 6 faces of the cube
 is selected and then within that face the pixels are sampled to produce a color.</p>
-<p>The 6 faces are called referenced by their direction from the center of the cube.
+<p>The 6 faces are referenced by their direction from the center of the cube.
 They are</p>
-<pre class="prettyprint"><code>gl.TEXTURE_CUBE_MAP_POSITIVE_X
+<pre class="prettyprint"><code class="lang-js">gl.TEXTURE_CUBE_MAP_POSITIVE_X
 gl.TEXTURE_CUBE_MAP_NEGATIVE_X
 gl.TEXTURE_CUBE_MAP_POSITIVE_Y
 gl.TEXTURE_CUBE_MAP_NEGATIVE_Y
 gl.TEXTURE_CUBE_MAP_POSITIVE_Z
 gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
-</code></pre><p>Let&#39;s make a simple example, we&#39;ll use a 2D canvas to make the images used in
+</code></pre>
+<p>Let&#39;s make a simple example, we&#39;ll use a 2D canvas to make the images used in
 each of the 6 faces.</p>
-<p>Here&#39;s some code to fill a canvas with a color and a centered msg</p>
-<pre class="prettyprint"><code>function generateFace(ctx, faceColor, textColor, text) {
+<p>Here&#39;s some code to fill a canvas with a color and a centered message</p>
+<pre class="prettyprint"><code class="lang-js">function generateFace(ctx, faceColor, textColor, text) {
   const {width, height} = ctx.canvas;
   ctx.fillStyle = faceColor;
   ctx.fillRect(0, 0, width, height);
@@ -246,8 +247,9 @@ each of the 6 faces.</p>
   ctx.fillStyle = textColor;
   ctx.fillText(text, width / 2, height / 2);
 }
-</code></pre><p>And here&#39;s some code to call it to generate 6 images</p>
-<pre class="prettyprint"><code>// Get A 2D context
+</code></pre>
+<p>And here&#39;s some code to call it to generate 6 images</p>
+<pre class="prettyprint"><code class="lang-js">// Get A 2D context
 /** @type {Canvas2DRenderingContext} */
 const ctx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
 
@@ -273,7 +275,8 @@ faceInfos.forEach((faceInfo) =&gt; {
     document.body.appendChild(img);
   });
 });
-</code></pre><p><div class="webgl_example_container">
+</code></pre>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-cubemap-faces.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-cubemap-faces.html" target="_blank">click here to open in a separate window</a>
 </div>
@@ -282,7 +285,7 @@ faceInfos.forEach((faceInfo) =&gt; {
 <p>Now let&#39;s apply that to a cube. We&#39;ll start with the code
 from the texture atlas example <a href="webgl-3d-textures.html">in the previous article</a>.</p>
 <p>First off let&#39;s change the shaders to use a cube map</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
 
 uniform mat4 u_matrix;
 
@@ -292,12 +295,13 @@ void main() {
   // Multiply the position by the matrix.
   gl_Position = u_matrix * a_position;
 
-  // Pass a normal. Since the positions
+  // Pass a normal. Since the positions are
   // centered around the origin we can just 
   // pass the position
   v_normal = normalize(a_position.xyz);
 }
-</code></pre><p>We&#39;ve removed the texture coordinates from the shader and
+</code></pre>
+<p>We&#39;ve removed the texture coordinates from the shader and
 added a varying to pass a normal to the fragment shader.
 Since the positions of our cube are perfectly centered around the origin
 we can just use them as our normals.</p>
@@ -317,8 +321,8 @@ vertex for each face.</p>
 setting up the texture coordinates.</p>
 <p>In the fragment shader we need to use a <code>samplerCube</code> instead of a <code>sampler2D</code><br>and use <code>textureCube</code> instead of <code>texture2D</code>. <code>textureCube</code> takes a vec3 direction
 so we pass the normalized normal. Since the normal is a varying and will be interpolated
-we need to normalize it.</p>
-<pre class="prettyprint"><code>precision mediump float;
+we need to normalize it again.</p>
+<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec3 v_normal;
@@ -329,8 +333,9 @@ uniform samplerCube u_texture;
 void main() {
    gl_FragColor = textureCube(u_texture, normalize(v_normal));
 }
-</code></pre><p>Then, in the JavaScript we need to setup the texture</p>
-<pre class="prettyprint"><code>// Create a texture.
+</code></pre>
+<p>Then, in the JavaScript we need to setup the texture</p>
+<pre class="prettyprint"><code class="lang-js">// Create a texture.
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
@@ -362,7 +367,8 @@ faceInfos.forEach((faceInfo) =&gt; {
 });
 gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-</code></pre><p>Things to notice above:</p>
+</code></pre>
+<p>Things to notice above:</p>
 <ul>
 <li><p>We are using <code>gl.TEXTURE_CUBE_MAP</code> instead of <code>gl.TEXTURE_2D</code>.</p>
 <p>This tells WebGL to make a cube map instead of a 2D texture.</p>
@@ -393,8 +399,9 @@ generating mips and turning on filtering to use the mips.</p>
 <p>Using a cubemap to texture a cube is <strong>not</strong> what cubemaps are normally
 used for. The <em>correct</em> or rather standard way to texture a cube is
 to use a texture atlas like we <a href="webgl-3d-textures.html">mentioned before</a>.</p>
-<p>Now that we&#39;ve learned what a cubemap is and how it&#39;s what is a cubemap used for?</p>
-<p>Probably the single most common thing a cubemap is used for is as an <a href="webgl-environment-maps.html"><em>environment map</em></a>. </p>
+<p>Now that we&#39;ve learned what a cubemap is and how to set one up what is a cubemap
+used for? Probably the single most common thing a cubemap is used for is as an
+<a href="webgl-environment-maps.html"><em>environment map</em></a>. </p>
 
     </div>
     <div class="lesson-sidebar">
