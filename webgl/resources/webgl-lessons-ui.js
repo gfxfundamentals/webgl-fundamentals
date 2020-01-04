@@ -41,18 +41,19 @@
     root.webglLessonsUI = factory.call(root);
   }
 }(this, function() {
-
+  'use strict';
   const gopt = getQueryParams();
 
   function setupSlider(selector, options) {
     var parent = document.querySelector(selector);
     if (!parent) {
-      return; // like jquery don't fail on a bad selector
+      // like jquery don't fail on a bad selector
+      return;
     }
     if (!options.name) {
       options.name = selector.substring(1);
     }
-    return createSlider(parent, options);
+    return createSlider(parent, options); // eslint-disable-line
   }
 
   function createSlider(parent, options) {
@@ -157,7 +158,7 @@
       const opt = document.createElement("option");
       opt.textContent = gopt["ui-" + name] || name;
       opt.value = ndx;
-      opt.selected = ndx === options.value
+      opt.selected = ndx === options.value;
       selectElem.appendChild(opt);
     });
     selectElem.className = "gman-widget-select";
@@ -172,7 +173,7 @@
     return {
       elem: div,
       updateValue: function(v) {
-        selectedElem.selectedIndex = v;
+        selectElem.selectedIndex = v;
       },
     };
   }
@@ -245,7 +246,7 @@
     }
     if (window.location.search) {
       window.location.search.substring(1).split("&").forEach(function(pair) {
-        var keyValue = pair.split("=").map(function (kv) {
+        var keyValue = pair.split("=").map(function(kv) {
           return decodeURIComponent(kv);
         });
         params[keyValue[0]] = keyValue[1];
