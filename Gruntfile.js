@@ -144,7 +144,7 @@ module.exports = function(grunt) {
       thumbnailBackground: 'webglfundamentals.jpg',
       text: [
         {
-          font: 'bold 100px sans-serif',
+          font: '100px lesson-font',
           verticalSpacing: 100,
           offset: [100, 120],
           textAlign: 'left',
