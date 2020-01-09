@@ -217,7 +217,7 @@ It is basically a way to draw more than one of the
 same thing faster than drawing each thing individually.</p>
 <p>Note that the feature is an optional extension in WebGL1
 but is apparently <a href="https://webglstats.com/webgl/extension/ANGLE_instanced_arrays">available in pretty much all browsers and devices</a>.</p>
-<p>First let&#39;s make an example that runs multiple instances of the
+<p>First let&#39;s make an example that draws multiple instances of the
 same thing.</p>
 <p>Starting with code <em>similar</em> to what we ended up with at
 the end of <a href="webgl-3d-orthographic.html">the article on orthographic projection</a>
@@ -246,11 +246,11 @@ void main() {
 &lt;/script&gt;
 </code></pre>
 <p>The vertex shader multiplies each vertex by a single matrix which we
-covered in <a href="webgl-3d-orthographic.html">that article</a> is
+covered in <a href="webgl-3d-orthographic.html">that article</a> as it is
 a fairly flexible arrangement. The fragment shader just uses
 a color we pass in via a uniform.</p>
-<p>To draw them we need compile the shaders, link them together
-and look up the locations of the attributes and uniforms</p>
+<p>To draw we need to compile the shaders, link them together
+and look up the locations of the attributes and uniforms.</p>
 <pre class="prettyprint"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
     gl, [&#39;3d-vertex-shader&#39;, &#39;3d-fragment-shader&#39;]);
 
@@ -258,7 +258,7 @@ const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 const colorLoc = gl.getUniformLocation(program, &#39;color&#39;);
 const matrixLoc = gl.getUniformLocation(program, &#39;matrix&#39;);
 </code></pre>
-<p>Then we need to supply data for the positions via a buffer</p>
+<p>Then we need to supply data for the positions via a buffer.</p>
 <pre class="prettyprint"><code class="lang-js">const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
@@ -278,7 +278,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 const numVertices = 12;
 </code></pre>
 <p>Let&#39;s draw 5 instances. We&#39;ll make 5 matrixes and 5 colors for
-each instance</p>
+each instance.</p>
 <pre class="prettyprint"><code class="lang-js">const numInstances = 5;
 const matrices = [
   m4.identity(),
@@ -296,8 +296,8 @@ const colors = [
   [ 0, 1, 1, 1, ],  // cyan
 ];
 </code></pre>
-<p>To draw use the shader program, setup the attribute,
-then loop over the 5 instances, computing a new matrix
+<p>To draw first we use the shader program, then setup the attribute,
+and then loop over the 5 instances, computing a new matrix
 for each one, setting the matrix uniform and color
 and then drawing.</p>
 <pre class="prettyprint"><code class="lang-js">function render(time) {
@@ -338,7 +338,7 @@ and then drawing.</p>
 requestAnimationFrame(render);
 </code></pre>
 <p>Note that the matrix math library takes an optional destination
-matrix at the end of each matrix math function. In the past we
+matrix at the end of each matrix math function. In most articles we
 haven&#39;t used this feature and just let the library allocate a new
 matrix for us but this time we want the result to be stored
 in the matrices we already created.</p>
@@ -364,7 +364,7 @@ from its assigned buffer every time the vertex shader is
 called (the default), or only every N instances where N is usually
 1.</p>
 <p>So for example instead of supplying <code>matrix</code> and <code>color</code>
-from a uniform, we would instead supply them via an <code>attribute</code>.
+from a uniform, we would instead supply them via <code>attribute</code>s.
 We&#39;d put the matrix and color for each instance in a buffer,
 set up the attributes to pull data from those buffers, and
 tell WebGL, only advance to the next value once per instance.</p>
@@ -418,10 +418,10 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre>
-<p>attributes only work in the vertex shader do we need to
+<p>attributes only work in the vertex shader so we need to
 get the color from an attribute in the vertex shader
-and pass it to the fragment shader.</p>
-<p>Next we need to look up the locations of these attributes</p>
+and pass it to the fragment shader via a varying.</p>
+<p>Next we need to look up the locations of these attributes.</p>
 <pre class="prettyprint"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
     gl, [&#39;3d-vertex-shader&#39;, &#39;3d-fragment-shader&#39;]);
 
@@ -576,7 +576,7 @@ we should use <a href="webgl-attributes.html#vaos">vertex array objects</a>.</p>
 
 </p>
 <p>In the example above we had 3 WebGL calls per shape * 5 shapes
-are 15 calls total. We now have just 2 calls for all 5 shapes,
+which were 15 calls total. We now have just 2 calls for all 5 shapes,
 one to upload the matrices, another to draw.
 There is a some setup for the colors and matrices to start
 drawing. We could move that setup from render time to init time
@@ -587,7 +587,8 @@ above does not take into account the aspect of the canvas.
 It does not use a <a href="webgl-3d-orthographic.html">projection matrix</a>
 or a <a href="webgl-3d-camera.html">view matrix</a>. It was meant only
 to demonstrate instanced drawing. If you wanted a projection and/or
-a view matrix the most obvious way to add them would be to add
+a view matrix we could add the calculation to JavaScript. That would
+mean more work for JavaScript. The more obvious way would be to add
 one or two more uniforms to the vertex shader.</p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- vertex shader --&gt;
 &lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;

@@ -215,7 +215,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>This article assumes you&#39;ve at least read
 <a href="webgl-fundamentals.html">the article on fundamentals</a>. If
 you have not read that yet you should probably start there.</p>
-<p>This is short article to cover <code>gl.drawElements</code>. There are 2
+<p>This is a short article to cover <code>gl.drawElements</code>. There are 2
 basic drawing functions in WebGL. <code>gl.drawArrays</code> and <code>gl.drawElements</code>.
 Most of the articles on the site that explicitly call one or the other
 call <code>gl.drawArrays</code> as it&#39;s the most straight forward.</p>
@@ -292,7 +292,7 @@ var count = 6;
 +gl.drawElements(primitiveType, count, indexType, offset);
 </code></pre>
 <p>We get the same results as before but we only had to supply data for 4
-vertices instead of 6. We still had to ask WebGL to draw 6 vertices but let
+vertices instead of 6. We still had to ask WebGL to draw 6 vertices but this let
 us reuse data for 4 vertices through the indices.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangles-indexed.html"></iframe>
@@ -304,11 +304,12 @@ us reuse data for 4 vertices through the indices.</p>
 <p>It&#39;s important to note that indexed vertices won&#39;t usually let you make a cube
 with 8 vertex positions because generally you want to associate other data with
 each vertex, data that is different depending on which face that vertex position 
-is being used. For example if you wanted to give each face of the cube a different
+is being used with. For example if you wanted to give each face of the cube a different
 color you&#39;d need to provide that color with the position. So even though the
-same position is used 3 times, once for each face vertex touches, you&#39;d still
+same position is used 3 times, once for each face a vertex touches, you&#39;d still
 need to repeat the position, once for each different face, each with a different
-associated color.</p>
+associated color. That would mean you&#39;d need 24 vertices for a cube, 4 for each
+side and then 36 indices to draw the required 12 triangles.</p>
 <p>Note that valid types for <code>indexType</code> above in WebGL1 are only <code>gl.UNSIGNED_BYTE</code>
 where you can only have indices from 0 to 255, and, <code>gl.UNSIGNED_SHORT</code> where
 the maximum index is 65535. There is an extension, <code>OES_element_index_uint</code> you can
