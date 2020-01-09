@@ -6,7 +6,7 @@ This article assumes you've at least read
 [the article on fundamentals](webgl-fundamentals.html). If
 you have not read that yet you should probably start there.
 
-This is short article to cover `gl.drawElements`. There are 2
+This is a short article to cover `gl.drawElements`. There are 2
 basic drawing functions in WebGL. `gl.drawArrays` and `gl.drawElements`.
 Most of the articles on the site that explicitly call one or the other
 call `gl.drawArrays` as it's the most straight forward.
@@ -104,7 +104,7 @@ var count = 6;
 ```
 
 We get the same results as before but we only had to supply data for 4
-vertices instead of 6. We still had to ask WebGL to draw 6 vertices but let
+vertices instead of 6. We still had to ask WebGL to draw 6 vertices but this let
 us reuse data for 4 vertices through the indices.
 
 {{{example url="../webgl-2d-rectangles-indexed.html"}}}
@@ -114,11 +114,12 @@ Whether you use indexed or non indexed data is up to you.
 It's important to note that indexed vertices won't usually let you make a cube
 with 8 vertex positions because generally you want to associate other data with
 each vertex, data that is different depending on which face that vertex position 
-is being used. For example if you wanted to give each face of the cube a different
+is being used with. For example if you wanted to give each face of the cube a different
 color you'd need to provide that color with the position. So even though the
-same position is used 3 times, once for each face vertex touches, you'd still
+same position is used 3 times, once for each face a vertex touches, you'd still
 need to repeat the position, once for each different face, each with a different
-associated color.
+associated color. That would mean you'd need 24 vertices for a cube, 4 for each
+side and then 36 indices to draw the required 12 triangles.
 
 Note that valid types for `indexType` above in WebGL1 are only `gl.UNSIGNED_BYTE`
 where you can only have indices from 0 to 255, and, `gl.UNSIGNED_SHORT` where

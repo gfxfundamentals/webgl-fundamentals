@@ -9,7 +9,7 @@ same thing faster than drawing each thing individually.
 Note that the feature is an optional extension in WebGL1
 but is apparently [available in pretty much all browsers and devices](https://webglstats.com/webgl/extension/ANGLE_instanced_arrays).
 
-First let's make an example that runs multiple instances of the
+First let's make an example that draws multiple instances of the
 same thing.
 
 Starting with code *similar* to what we ended up with at
@@ -45,12 +45,12 @@ void main() {
 ```
 
 The vertex shader multiplies each vertex by a single matrix which we
-covered in [that article](webgl-3d-orthographic.html) is
+covered in [that article](webgl-3d-orthographic.html) as it is
 a fairly flexible arrangement. The fragment shader just uses
 a color we pass in via a uniform.
 
-To draw them we need compile the shaders, link them together
-and look up the locations of the attributes and uniforms
+To draw we need to compile the shaders, link them together
+and look up the locations of the attributes and uniforms.
 
 ```js
 const program = webglUtils.createProgramFromScripts(
@@ -61,7 +61,7 @@ const colorLoc = gl.getUniformLocation(program, 'color');
 const matrixLoc = gl.getUniformLocation(program, 'matrix');
 ```
 
-Then we need to supply data for the positions via a buffer
+Then we need to supply data for the positions via a buffer.
 
 ```js
 const positionBuffer = gl.createBuffer();
@@ -84,7 +84,7 @@ const numVertices = 12;
 ```
 
 Let's draw 5 instances. We'll make 5 matrixes and 5 colors for
-each instance
+each instance.
 
 ```js
 const numInstances = 5;
@@ -105,8 +105,8 @@ const colors = [
 ];
 ```
 
-To draw use the shader program, setup the attribute,
-then loop over the 5 instances, computing a new matrix
+To draw first we use the shader program, then setup the attribute,
+and then loop over the 5 instances, computing a new matrix
 for each one, setting the matrix uniform and color
 and then drawing.
 
@@ -150,7 +150,7 @@ requestAnimationFrame(render);
 ```
 
 Note that the matrix math library takes an optional destination
-matrix at the end of each matrix math function. In the past we
+matrix at the end of each matrix math function. In most articles we
 haven't used this feature and just let the library allocate a new
 matrix for us but this time we want the result to be stored
 in the matrices we already created.
@@ -176,7 +176,7 @@ called (the default), or only every N instances where N is usually
 1.
 
 So for example instead of supplying `matrix` and `color`
-from a uniform, we would instead supply them via an `attribute`.
+from a uniform, we would instead supply them via `attribute`s.
 We'd put the matrix and color for each instance in a buffer,
 set up the attributes to pull data from those buffers, and
 tell WebGL, only advance to the next value once per instance.
@@ -241,11 +241,11 @@ void main() {
 </script>  
 ```
 
-attributes only work in the vertex shader do we need to
+attributes only work in the vertex shader so we need to
 get the color from an attribute in the vertex shader
-and pass it to the fragment shader.
+and pass it to the fragment shader via a varying.
 
-Next we need to look up the locations of these attributes
+Next we need to look up the locations of these attributes.
 
 ```js
 const program = webglUtils.createProgramFromScripts(
@@ -430,7 +430,7 @@ ext.drawArraysInstancedANGLE(
 {{{example url="../webgl-instanced-drawing.html"}}}
 
 In the example above we had 3 WebGL calls per shape * 5 shapes
-are 15 calls total. We now have just 2 calls for all 5 shapes,
+which were 15 calls total. We now have just 2 calls for all 5 shapes,
 one to upload the matrices, another to draw.
 There is a some setup for the colors and matrices to start
 drawing. We could move that setup from render time to init time
@@ -442,7 +442,8 @@ above does not take into account the aspect of the canvas.
 It does not use a [projection matrix](webgl-3d-orthographic.html)
 or a [view matrix](webgl-3d-camera.html). It was meant only
 to demonstrate instanced drawing. If you wanted a projection and/or
-a view matrix the most obvious way to add them would be to add
+a view matrix we could add the calculation to JavaScript. That would
+mean more work for JavaScript. The more obvious way would be to add
 one or two more uniforms to the vertex shader.
 
 ```html
