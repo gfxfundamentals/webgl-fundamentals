@@ -106,7 +106,7 @@ WebGL只关心两件事：裁剪空间中的坐标值和颜色值。使用WebGL�
 
     void main() {
       // gl_FragColor是一个片断着色器主要设置的变量
-      gl_FragColor = vec4(1, 0, 0.5, 1); // 返回“瑞迪施紫色”
+      gl_FragColor = vec4(1, 0, 0.5, 1); // 返回“红紫色”
     }
 
 上方我们设置 `gl_FragColor` 为 `1, 0, 0.5, 1`，其中1代表红色值，0代表绿色值，
@@ -533,7 +533,7 @@ WebGL将会把它们从裁剪空间转换到屏幕空间并在屏幕空间绘制
 这可能是最简单的方式。这不是常规做法，这里有一些常用的例子，你可以
 [继续阅读并发现在WebGL中移动，旋转，缩放物体的通用方式](webgl-2d-translation.html)。
 
-无路你是不是web开发新手都请查看[设置和安装](webgl-setup-and-installation)，
+无论你是不是web开发新手都请查看[设置和安装](webgl-setup-and-installation)，
 获取一些WebGL开发的小技巧。
 
 如果你是100%的WebGL新手甚至不知道GLSL或者着色器是什么，或者GPU是做什么的，查看
