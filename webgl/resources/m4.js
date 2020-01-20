@@ -176,7 +176,7 @@
 
   /**
    * normalizes a vector.
-   * @param {Vector3} v vector to normalzie
+   * @param {Vector3} v vector to normalize
    * @param {Vector3} dst optional vector3 to store result
    * @return {Vector3} dst or new Vector3 if not provided
    * @memberOf module:webgl-3d-math
@@ -194,7 +194,7 @@
   }
 
   /**
-   * Computes the length of a vecgor
+   * Computes the length of a vector
    * @param {Vector3} v vector to take length of
    * @return {number} length of vector
    */
@@ -234,7 +234,7 @@
    * Computes the distance squared between 2 points
    * @param {Vector3} a
    * @param {Vector3} b
-   * @return {nubmer} distance squared between a and b
+   * @return {number} distance squared between a and b
    */
   function distanceSq(a, b) {
     const dx = a[0] - b[0];
@@ -247,7 +247,7 @@
    * Computes the distance between 2 points
    * @param {Vector3} a
    * @param {Vector3} b
-   * @return {nubmer} distance between a and b
+   * @return {number} distance between a and b
    */
   function distance(a, b) {
     return Math.sqrt(distanceSq(a, b));
@@ -515,7 +515,7 @@
   }
 
   /**
-   * Mutliply by translation matrix.
+   * Multiply by translation matrix.
    * @param {Matrix4} m matrix to multiply
    * @param {number} tx x translation.
    * @param {number} ty y translation.
@@ -689,7 +689,7 @@
    * @memberOf module:webgl-3d-math
    */
   function yRotate(m, angleInRadians, dst) {
-    // this is the optimized verison of
+    // this is the optimized version of
     // return multiply(m, yRotation(angleInRadians), dst);
     dst = dst || new MatType(16);
 
@@ -768,7 +768,7 @@
    * @memberOf module:webgl-3d-math
    */
   function zRotate(m, angleInRadians, dst) {
-    // This is the optimized verison of
+    // This is the optimized version of
     // return multiply(m, zRotation(angleInRadians), dst);
     dst = dst || new MatType(16);
 
@@ -861,7 +861,7 @@
    * @memberOf module:webgl-3d-math
    */
   function axisRotate(m, axis, angleInRadians, dst) {
-    // This is the optimized verison of
+    // This is the optimized version of
     // return multiply(m, axisRotation(axis, angleInRadians), dst);
     dst = dst || new MatType(16);
 
@@ -968,7 +968,7 @@
    * @memberOf module:webgl-3d-math
    */
   function scale(m, sx, sy, sz, dst) {
-    // This is the optimized verison of
+    // This is the optimized version of
     // return multiply(m, scaling(sx, sy, sz), dst);
     dst = dst || new MatType(16);
 
@@ -1102,7 +1102,7 @@
     const sy = m4.length(mat.slice(4, 7));
     const sz = m4.length(mat.slice(8, 11));
 
-    // if dematrmine is negative, we need to invert one scale
+    // if determinate is negative, we need to invert one scale
     const det = determinate(mat);
     if (det < 0) {
       sx = -sx;
@@ -1167,18 +1167,6 @@
     var tmp_9  = m22 * m03;
     var tmp_10 = m02 * m13;
     var tmp_11 = m12 * m03;
-    var tmp_12 = m20 * m31;
-    var tmp_13 = m30 * m21;
-    var tmp_14 = m10 * m31;
-    var tmp_15 = m30 * m11;
-    var tmp_16 = m10 * m21;
-    var tmp_17 = m20 * m11;
-    var tmp_18 = m00 * m31;
-    var tmp_19 = m30 * m01;
-    var tmp_20 = m00 * m21;
-    var tmp_21 = m20 * m01;
-    var tmp_22 = m00 * m11;
-    var tmp_23 = m10 * m01;
 
     var t0 = (tmp_0 * m11 + tmp_3 * m21 + tmp_4 * m31) -
         (tmp_1 * m11 + tmp_2 * m21 + tmp_5 * m31);
@@ -1444,6 +1432,7 @@
     transformPoint: transformPoint,
     transformDirection: transformDirection,
     transformNormal: transformNormal,
+    setDefaultType: setDefaultType,
   };
 
 }));
