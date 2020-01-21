@@ -481,7 +481,7 @@ will work just as well as the actual distance.</p>
 <p>Back to our bowling pin. We could try to extend the code above into a full editor.
 It would need to be able to add and remove points, lock and unlock control points.
 It would need undo, etc... But there&#39;s an easier way. We can just use any of the
-major editors mentioned above. <a href="https://svg-edit.github.io/svgedit/releases/svg-edit-2.8.1/svg-editor.html">I used this online editor</a>.</p>
+major editors mentioned above. <a href="https://svg-edit.github.io/svgedit/">I used this online editor</a>.</p>
 <p>Here&#39;s the svg silhouette of a bowling pin I made.</p>
 <p><img class="webgl_center" src="resources/bowling-pin-silhouette.svg" width="50%" height="50%" /></p>
 <p>It&#39;s made from 4 bezier curves. The data for that path looks like this</p>
@@ -1196,7 +1196,7 @@ and only later optimize if something was too slow for whatever I was doing.</p>
   
 
         <div id="disqus_thread"></div>
-        <script type="text/javascript">
+        <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
             var disqus_identifier = 'WebGL 3D Geometry - Lathe';
@@ -1221,8 +1221,26 @@ and only later optimize if something was too slow for whatever I was doing.</p>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTag('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -1230,7 +1248,7 @@ and only later optimize if something was too slow for whatever I was doing.</p>
 
   ga('create', 'UA-59804936-1', 'auto');
   ga('send', 'pageview');
-
+}());
 </script>
 
 

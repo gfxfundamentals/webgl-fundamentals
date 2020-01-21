@@ -487,7 +487,7 @@ P = P1 * invT^3 +
 <p>Вернёмся к нашей кегле. Мы могли бы сделать полноценный редактор на основе приведённого
 выше кода. Редактор, который бы мог добавлять и удалять точки, закреплять и откреплять
 контрольные точки, выполнять действие назад и так далее... Но есть способ попроще.
-Мы можем просто взять один из зрелых редакторов, упомянутых выше. <a href="https://svg-edit.github.io/svgedit/releases/svg-edit-2.8.1/svg-editor.html">Я использовал
+Мы можем просто взять один из зрелых редакторов, упомянутых выше. <a href="https://svg-edit.github.io/svgedit/">Я использовал
 этот онлайн-редактор</a>.</p>
 <p>Вот такой контур кегли у меня получился:</p>
 <p><img class="webgl_center" src="../resources/bowling-pin-silhouette.svg" width="50%" height="50%" /></p>
@@ -1195,7 +1195,7 @@ points.forEach((p, ndx) => {
         <div>Нашли ошибку? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
 
         <div id="disqus_thread"></div>
-        <script type="text/javascript">
+        <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
             var disqus_identifier = 'WebGL 3D - Создание модели';
@@ -1220,8 +1220,26 @@ points.forEach((p, ndx) => {
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTag('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -1229,7 +1247,7 @@ points.forEach((p, ndx) => {
 
   ga('create', 'UA-59804936-1', 'auto');
   ga('send', 'pageview');
-
+}());
 </script>
 
 

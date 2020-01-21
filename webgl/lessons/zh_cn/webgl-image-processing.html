@@ -360,7 +360,7 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 3×3 的内核，卷积内核就是一个 3×3 的矩阵，
 矩阵中的每一项代表当前处理的像素和周围8个像素的乘法因子，
 相乘后将结果加起来除以内核权重（内核中所有值的和或 1.0 ，取二者中较大者），
-<a href="http://docs.gimp.org/en/plug-in-convmatrix.html">这有一个不错的相关文章</a>，
+<a href="https://docs.gimp.org/2.6/en/plug-in-convmatrix.html">这有一个不错的相关文章</a>，
 <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">这里是C++实现的一些具体代码</a>。</p>
 <p>我们将在片断着色器中计算卷积，所以创建一个新的片断着色器。</p>
 <pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
@@ -622,7 +622,7 @@ u_ 代表全局变量，直接对着色器设置；v_ 代表可变量，是从�
         <div>有意见或建议? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
 
         <div id="disqus_thread"></div>
-        <script type="text/javascript">
+        <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
             var disqus_identifier = 'WebGL 图像处理';
@@ -647,8 +647,26 @@ u_ 代表全局变量，直接对着色器设置；v_ 代表可变量，是从�
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js"></script>
-<script src="//cdn.webglstats.com/stat.js" defer="defer" async="async"></script>
 <script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTag('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -656,7 +674,7 @@ u_ 代表全局变量，直接对着色器设置；v_ 代表可变量，是从�
 
   ga('create', 'UA-59804936-1', 'auto');
   ga('send', 'pageview');
-
+}());
 </script>
 
 

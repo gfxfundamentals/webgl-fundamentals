@@ -1197,7 +1197,7 @@
     const indices = bufferInfo.indices;
     primitiveType = primitiveType === undefined ? gl.TRIANGLES : primitiveType;
     const numElements = count === undefined ? bufferInfo.numElements : count;
-    offset = offset === undefined ? offset : 0;
+    offset = offset === undefined ? 0 : offset;
     if (indices) {
       gl.drawElements(primitiveType, numElements, gl.UNSIGNED_SHORT, offset);
     } else {
