@@ -396,7 +396,7 @@ glTF有两种格式。`.gltf`格式是一个JSON文件通常引用一个 `.bin`�
 
 > 快速说明：3D软件像Blender，Maya，3DSMax是极其复杂的软件，有1000多种选项。当我在1996年第一次学习3DSMax时，我大约3周每天花2-3小时阅读1000多页的手册，通过教程工作。几年后，当我学习Maya时，我做了类似的事情。Blender同样复杂并且更甚它与几乎所有其他软件的界面非常不同。你应该花费一些时间来学习你决定使用的3D软件包。
 
-导出之后我用文本编辑器打开.gltf文件并浏览了一下。我用这个[表](https://raw.githubusercontent.com/KhronosGroup/glTF/master/specification/2.0/figures/gltfOverview-2.0.0a.png)来弄清楚格式。
+导出之后我用文本编辑器打开.gltf文件并浏览了一下。我用这个[表](https://www.khronos.org/files/gltf20-reference-guide.pdf)来弄清楚格式。
 
 我想说明下面的代码不是一个完美的gltf加载器，只是足以展示鲸鱼的代码。我怀疑如果我们尝试不同的文件，我们会遇到需要更改的区域。
 

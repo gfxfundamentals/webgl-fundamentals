@@ -146,7 +146,7 @@ TOC: WebGL 纹理映射的透视纠正
 
 {{{example url="../webgl-clipspace-rectangles-with-varying.html" }}}
 
-在[透视投影的文章](webgl-3d-perspective)中我们知道WebGL会将放入 `gl_Position`
+在[透视投影的文章](webgl-3d-perspective.html)中我们知道WebGL会将放入 `gl_Position`
 的值除以`gl_Position.w`。
 
 在上方的顶点中我们提供的 `W` 值为 `1`，但是我们知道WebGL会除以 `W`，

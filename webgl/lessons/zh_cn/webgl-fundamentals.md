@@ -533,7 +533,7 @@ WebGL将会把它们从裁剪空间转换到屏幕空间并在屏幕空间绘制
 这可能是最简单的方式。这不是常规做法，这里有一些常用的例子，你可以
 [继续阅读并发现在WebGL中移动，旋转，缩放物体的通用方式](webgl-2d-translation.html)。
 
-无论你是不是web开发新手都请查看[设置和安装](webgl-setup-and-installation)，
+无论你是不是web开发新手都请查看[设置和安装](webgl-setup-and-installation.html)，
 获取一些WebGL开发的小技巧。
 
 如果你是100%的WebGL新手甚至不知道GLSL或者着色器是什么，或者GPU是做什么的，查看

@@ -160,7 +160,7 @@ goes across the triangles.
 
 {{{example url="../webgl-clipspace-rectangles-with-varying.html" }}}
 
-So then, from the [perspective article](webgl-3d-perspective) we know that WebGL takes whatever value we put in `gl_Position` and it divides it by
+So then, from the [perspective article](webgl-3d-perspective.html) we know that WebGL takes whatever value we put in `gl_Position` and it divides it by
 `gl_Position.w`.
 
 In the vertices above we supplied `1` for `W` but since we know WebGL

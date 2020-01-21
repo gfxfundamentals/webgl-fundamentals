@@ -342,7 +342,7 @@ the world positions of other objects relative to this space.
 This is exactly the same thing the view matrix does from
 [the article on cameras](webgl-3d-camera.html).
 
-We'll use our `lookAt` function we made in that [same article](webgl-3d-cameras.html)
+We'll use our `lookAt` function we made in that [same article](webgl-3d-camera.html)
 
 ```js
 const settings = {

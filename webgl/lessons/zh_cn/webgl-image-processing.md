@@ -158,7 +158,7 @@ TOC: WebGL 图像处理
 3×3 的内核，卷积内核就是一个 3×3 的矩阵，
 矩阵中的每一项代表当前处理的像素和周围8个像素的乘法因子，
 相乘后将结果加起来除以内核权重（内核中所有值的和或 1.0 ，取二者中较大者），
-[这有一个不错的相关文章](http://docs.gimp.org/en/plug-in-convmatrix.html)，
+[这有一个不错的相关文章](https://docs.gimp.org/2.6/en/plug-in-convmatrix.html)，
 [这里是C++实现的一些具体代码](http://www.codeproject.com/KB/graphics/ImageConvolution.aspx)。
 
 我们将在片断着色器中计算卷积，所以创建一个新的片断着色器。

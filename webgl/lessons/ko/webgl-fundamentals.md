@@ -572,7 +572,7 @@ WebGL이 실제로는 아주 간단한 API라는 걸 보셨기 바랍니다.
 이를 사용했던 것은 예제에서 입력을 픽셀 좌표를 표시하고 GLSL에서 간단한 수학을 사용하는 것을 보여주기 때문에 이것을 설명하는데 쉬운 방법이라고 생각했기 때문입니다. 
 이게 틀린 것은 아니고, 올바르게 하는 많은 경우가 있지만 [WebGL에서 물체의 위치, 방향, 크기를 지정하는 일반적인 방법을 찾으려면 여기를 방문하십시오](webgl-2d-translation.html).
 
-웹 개발이 처음이든 아니든 [설치 및 설정](webgl-setup-and-installation)에서 WebGL 개발 방법에 대한 팁을 확인하십시오.
+웹 개발이 처음이든 아니든 [설치 및 설정](webgl-setup-and-installation.html)에서 WebGL 개발 방법에 대한 팁을 확인하십시오.
 
 WebGL을 완전히 새로 배우고 GLSL 또는 쉐이더나 GPU가 무엇을 하는지 전혀 모르는 경우 [WebGL 실제 작동 원리 기초](webgl-how-it-works.html)를 확인하십시오.
 

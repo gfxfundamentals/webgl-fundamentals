@@ -280,7 +280,7 @@ Here's that in action. Adjust the distance to see more points added or removed.
 Back to our bowling pin. We could try to extend the code above into a full editor.
 It would need to be able to add and remove points, lock and unlock control points.
 It would need undo, etc... But there's an easier way. We can just use any of the
-major editors mentioned above. [I used this online editor](https://svg-edit.github.io/svgedit/releases/svg-edit-2.8.1/svg-editor.html).
+major editors mentioned above. [I used this online editor](https://svg-edit.github.io/svgedit/).
 
 Here's the svg silhouette of a bowling pin I made.
 

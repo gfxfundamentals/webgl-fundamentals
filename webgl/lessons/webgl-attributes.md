@@ -6,7 +6,7 @@ TOC: Attributes
 This article is meant to try to give you a mental image
 of how attribute state is setup in WebGL. There is [a similar article on texture units](webgl-texture-units.html).
 
-As a prerequisite you probably want to read [How WebGL Works](webgl-how-it-works)
+As a prerequisite you probably want to read [How WebGL Works](webgl-how-it-works.html)
 and [WebGL Shaders and GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html). 
 
 ## Attributes

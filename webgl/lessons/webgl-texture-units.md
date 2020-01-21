@@ -6,7 +6,7 @@ TOC: Texture Units
 This article is meant to try to give you a mental image
 of how texture units are setup in WebGL. There is [a similar article on attributes](webgl-attributes.html).
 
-As a prerequisite you probably want to read [How WebGL Works](webgl-how-it-works)
+As a prerequisite you probably want to read [How WebGL Works](webgl-how-it-works.html)
 and [WebGL Shaders and GLSL](webgl-shaders-and-glsl.html)
 as well as [WebGL Textures](webgl-3d-textures.html)
 

@@ -284,7 +284,7 @@ function makeVerticesForString(fontInfo, s) {
 }
 ```
 
-To use it we'll manually create a bufferInfo. ([See previous article if you don't remember what a bufferInfo is](webgl-drawing-multiple-things)).
+To use it we'll manually create a bufferInfo. ([See previous article if you don't remember what a bufferInfo is](webgl-drawing-multiple-things.html)).
 
     // Manually create a bufferInfo
     var textBufferInfo = {

@@ -489,7 +489,7 @@ blender and exported.
 > whatever 3D package you decide to use.
 
 After exporting it I loaded the .gltf file into my text editor and took a look
-around. I used [this cheat sheet](https://raw.githubusercontent.com/KhronosGroup/glTF/master/specification/2.0/figures/gltfOverview-2.0.0a.png)
+around. I used [this cheat sheet](https://www.khronos.org/files/gltf20-reference-guide.pdf)
 to figure out the format.
 
 I want to make it clear the code below is not a perfect glTF loader. It's just

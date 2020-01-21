@@ -77,7 +77,7 @@ Existem vários inspetores/assitentes de WebGL. [Aqui está um para o Chrome](ht
 
 {{{image url = "https://benvanik.github.io/WebGL-Inspector/images/screenshots/1-Trace.gif"}}}
 
-[O Firefox também tem um semelhante](https://hacks.mozilla.org/2014/03/introduzindo-the-canvas-debugger-in-firefox-developer-tools/).
+[O Firefox também tem um semelhante](https://hacks.mozilla.org/2014/03/introducing-the-canvas-debugger-in-firefox-developer-tools/).
 Ele precisa ser ativado em `about: flags` e pode exigir o [Modo de desenvolvedor do Firefox](https://www.mozilla.org/en-US/firefox/developer/).
 
 Eles podem ou não ser úteis. A maioria deles é projetada para amostras animadas e irá capturar um quadro e permitir que você veja todas as chamadas do WebGL que fizeram essa moldura. Isso é ótimo se você já tiver algo a funcionar ou se você tivesse algo funcionando e quebrou. Mas não é tão bom se o seu problema é durante a inicialização que eles não capturam ou se você não está usando a animação, como no desenho de cada quadro. Ainda assim, eles podem ser muito úteis. Muitas vezes, vou clicar em uma chamada de sorteio e verificar os uniformes. Se eu vejo um

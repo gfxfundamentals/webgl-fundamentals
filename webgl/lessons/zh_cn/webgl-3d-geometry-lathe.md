@@ -243,7 +243,7 @@ P = P1 * invT^3 +
 {{{diagram url="resources/bezier-curve-diagram.html?maxDepth=0&showCurve=true&showDistance=true" }}}
 
 回到保龄球瓶，我们可以将上方的代码整理一下，需要添加和移除点，锁定和解锁控制点，
-撤销等等。但是这有一个简单的方式，我们可以使用一个上方提到的编辑器，[我使用这个在线编辑器](https://svg-edit.github.io/svgedit/releases/svg-edit-2.8.1/svg-editor.html)。
+撤销等等。但是这有一个简单的方式，我们可以使用一个上方提到的编辑器，[我使用这个在线编辑器](https://svg-edit.github.io/svgedit/)。
 
 这是我做的保龄球的半边轮廓的svg。
 

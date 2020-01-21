@@ -535,7 +535,7 @@ passing those the the fragment shader and texture mapping
 our generated geometry. This might be good for 
 falling snowflakes or leaves that actually flip around in 3D
 by applying the 3D techniques we used in the articles
-on [3D perspective](webgl-3d-perspective).
+on [3D perspective](webgl-3d-perspective.html).
 
 I want to emphasize **these techniques** are not common.
 Making a simple particle system might be semi common or
