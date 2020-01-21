@@ -23,7 +23,7 @@ cube and each face needs different texture coordinates.
 <div class="webgl_center"><img src="resources/cube-vertices-uv.svg" style="width: 400px;"></div>
 
 In the diagram above we can see that the left face's use of corner 3 needs
-texture coordinates 1,1 but in the right face's use of corner 3 needs texture coordinates
+texture coordinates 1,1 but the right face's use of corner 3 needs texture coordinates
 0,1. The top face would need different texture coordinates as well.
 
 This is usually accomplished by expanding from 8 corner positions
@@ -267,7 +267,7 @@ So given an integer pixel coordinate and the size of the texture in pixels the
 code above will pull out a pixel value. If you're curious why the `+ 0.5` see [the
 article on skinning](webgl-skinning.html).
 
-Given the `texelFetch` function we can take a 1D array index
+Using the `texelFetch` function we can take a 1D array index
 and lookup a value out of a 2D texture like this
 
 ```glsl
@@ -437,7 +437,7 @@ const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
 If we wanted to handle more data than that we'd need
 to pick some texture size that fits our data, and spread
 the data across multiple rows possibly
-padding last row to make a rectangle.
+padding the last row to make a rectangle.
 
 Another thing we're doing here is using 2 textures,
 one for positions, one for texture coordinates.
@@ -476,11 +476,11 @@ seeing the real flexibility that's there.
 <div class="webgl_bottombar">
 <h3>Why is it called Vertex Pulling?</h3>
 <p>I'd actually only heard the term recently (July 2019)
-even thought I'd used the technique before. It comes
+even though I'd used the technique before. It comes
 from <a href='https://www.google.com/search?q=OpenGL+Insights+"Programmable+Vertex+Pulling"+article+by+Daniel+Rakos'>OpenGL Insights "Programmable Vertex Pulling" article by Daniel Rakos</a>.
 </p>
 <p>It's called vertex *pulling* since it's the vertex shader
 that decides which vertex data to read vs the traditional way where
 vertex data is supplied automatically via attributes. Effectively
-the vertex shader is *pulling* data out memory.</p>
+the vertex shader is *pulling* data out of memory.</p>
 </div>
