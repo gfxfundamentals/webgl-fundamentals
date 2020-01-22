@@ -1,0 +1,1665 @@
+<link href="/3rdparty/monokai-sublime.css" rel="stylesheet">
+<style>
+.svg-center {
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: red;
+}
+.box {
+  stroke-width: 1px;
+  stroke: black;
+}
+*[data-help]:hover {
+  outline: 1px solid red;
+  cursor: pointer;
+}
+#hint {
+  position: absolute;
+  display: inline-block;
+  pointer-events: none;
+  background: #444;
+  color: white;
+  border: 1px solid black;
+  box-shadow: 5px 5px 10px black;
+  padding: 1em;
+  max-width: 600px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#hint a {
+  color: aquamarine;
+}
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+body {
+  font-family: monospace;
+}
+.name {
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 5px;
+}
+.state-block {
+  border: 1px solid black;
+  background: hsl(240, 100%, 85%);
+  display: inline-block;
+}
+.webgl-object {
+  border: 1px solid black;
+  display: inline-block;
+  padding: 10px;
+}
+.texture { background: hsl(200, 100%, 85%); }
+.vertex-array { background: hsl(260, 100%, 85%); }
+.shader { background: hsl(30, 100%, 80%); }
+.program { background: hsl(30, 100%, 70%); }
+.program-attributes { background: hsl(30, 100%, 80%); }
+.program-uniforms { background: hsl(30, 100%, 80%); }
+.program-attributes, .program-uniforms {
+  margin-top: 10px;
+  border: 1px solid black;
+}
+/* .vertex-array .attrib-enabled {  } */
+.vertex-array .attrib-disabled { background: #888; }
+.shader {
+  display: flex;
+  flex-direction: column;
+}
+.shader>*:last-child {
+  flex: 1 1 auto;
+  background: #23241f
+}
+table {
+  border-collapse: collapse;
+  display: block;
+}
+td, th {
+  border: 1px solid black;
+  padding: 0.25em;
+}
+th {
+  background: rgba(255,255,255,0.3);
+}
+.across2 {
+  display: flex;
+}
+.across2>*:first-child {
+  margin-right: 5px;
+}
+.across2>*:last-child {
+  margin-left: 5px;
+}
+.fill-height {
+  align-items: stretch;
+}
+.mips {
+  display: flex;
+  align-items: flex-end;
+}
+.mips>* {
+  border: 1px solid black;
+  margin-right: 2px;
+  background: hsl(0, 100%, 50%);
+  background-size: cover;
+}
+.mip0 {
+  width: 128px;
+  height: 128px;
+}
+.mip1 {
+  width: 64px;
+  height: 64px;
+}
+.mip2 {
+  width: 32px;
+  height: 32px;
+}
+.mip3 {
+  width: 16px;
+  height: 16px;
+}
+.mip4 {
+  width: 8px;
+  height: 8px;
+}
+.mip5 {
+  width: 4px;
+  height: 4px;
+}
+.mip6 {
+  width: 2px;
+  height: 2px;
+}
+.mip7 {
+  width: 1px;
+  height: 1px;
+}
+</style>
+<body>
+
+<div class="state-block texture-units">
+  <div class="name">
+    Texture Units
+  </div>
+  <div>
+      <table>
+        <thead><th>2D</th><th>CUBE_MAP</th></thead>
+        <tbody>
+        </tbody>
+      </table>
+  </div>
+</div>
+
+<template id="texture-template">
+<div class="webgl-object texture" data-help="
+Textures are created with
+
+```js
+const tex = gl.createTexture();
+```
+
+and bound to a texture unit bind point (target) with
+
+```
+gl.activeTexture(gl.TEXTURE0 + texUnitIndex);
+const bindPoint = gl.TEXTURE_2D;
+gl.bindTexture(bindPoint, tex);
+```
+
+All texture functions reference textures
+through the bind points on the active texture unit.
+ie.
+
+```js
+texture = textureUnits[activeTexture][bindPoint]
+```
+">
+  <div class="name">Texture</div>
+  <div class="mips"></div>
+</div>
+</template>
+
+<template id="vertex-array-template">
+<div class="webgl-object vertex-array" data-help="
+Normally there is only the 1 default vertex array in WebGL 1.0.
+
+You can create more vertex arrays with the
+[`OES_vertex_array_object`](https://www.khronos.org/registry/webgl/extensions/OES_vertex_array_object/)
+extension.
+
+```js
+const ext = gl.getExtension('OES_vertex_array_object')
+const vertexArray = ext.createVertexArrayOES();
+```
+
+and bind one (make it the current vertex array) with
+
+```js
+ext.bindVertexArrayOES(someVertexArray);
+```
+
+Passing `null` to `gl.bindVertexArrayOES` binds the default vertex array.
+">
+  <div class="name">vertex array</div>
+  <div class="state-table">
+      <table>
+        <thead><th>enabled</th><th>value</th><th>size</th><th>type</th><th>normalize</th><th>stride</th><th>offset</th><th>buffer</th><th>divisor</th></thead>
+        <tbody>
+        </tbody>
+      </table>
+  </div>
+</div>
+</template>
+
+<template id="program-template">
+<div class="webgl-object program" data-help="
+```js
+const program = gl.createProgram();
+gl.attachShader(program, someVertexShader);
+gl.attachShader(program, someFragmentShader);
+gl.linkProgram(program);
+if (gl.getProgramParameter(program, gl.LINK_STATUS) === 0) {
+  console.error(gl.getProgramInfoLog(program));
+}
+```
+">
+  <div class="name">program</div>
+  <div class="across2 fill-height">
+    <div class="webgl-object shader vertex-shader" data-help="
+A vertex shader's sole responsibility is to set `gl_Position`
+to a clip space position. To create one use:
+
+```js
+const shader = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(shader, glslString);
+gl.compileShader(shader);
+if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) === 0) {
+  console.error(gl.getShaderInfoLog(shader));
+}
+```
+">
+      <div class="name">vertex shader</div>
+      <pre><code class="lang-glsl"></code></pre>
+    </div>
+    <div class="webgl-object shader fragment-shader" data-help="
+A fragment shader's sole responsibility is to set `gl_FragColor`
+to a color. To create one use:
+
+```js
+≈const shader = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(shader, glslString);
+gl.compileShader(shader);
+if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) === 0) {
+  console.error(gl.getShaderInfoLog(shader));
+}
+```
+">
+      <div class="name">fragment shader</div>
+      <pre><code class="lang-glsl"></code></pre>
+    </div>
+  </div>
+  <div class="across2">
+    <div class="program-attributes" data-help="
+attributes are user defined. Their values come from buffers as specified in a *vertex array*.
+    ">
+      <div class="name">attribute info</div>
+      <table>
+        <thead><th>name</th><th>location</th></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="program-uniforms" data-help="
+uniform values are user defined program state. The locations and values
+are different for each program.
+    ">
+      <div class="name">uniforms</div>
+      <table>
+        <thead><th>name</th><th>loc</th><th>value</th></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</template>
+
+<div id="hint"></div>
+
+
+
+</body>
+<script src="/3rdparty/showdown.min.js"></script>
+<script src="/3rdparty/highlight.pack.js"></script>
+<script src="../../resources/m4.js"></script>
+<script>
+'use strict';
+
+hljs.initHighlightingOnLoad();
+
+const gl = document.createElement('canvas').getContext('webgl');
+
+const styleToText = styles => Object.entries(styles).map(([key, value]) => `${key}:${value};`).join('');
+const hsl = (h, s, l) => `hsl(${h * 360},${s * 100 | 0}%,${l * 100 | 0}%)`;
+const px = (v) => `${v}px`;
+
+function helpToMarkdown(s) {
+  s = s.replace(/---/g, '```')
+       .replace(/--/g, '`');
+  const m = /^\n( +)/.exec(s);
+  if (!m) {
+    return s;
+  }
+  const lines = s.split('\n');
+  if (lines[0].trim() === '') {
+    lines.shift();
+  }
+  if (lines[lines.length - 1].trim() === '') {
+    lines.pop();
+  }
+  const indent = m[1];
+  return lines.map(line => line.startsWith(indent) ? line.substr(indent.length) : line).join('\n');
+}
+
+const converter = new showdown.Converter();
+const hintElem = document.querySelector('#hint');
+let lastWidth;
+let lastHint;
+function setHint(e, hint = '') {
+  if (lastHint !== hint) {
+    lastHint = hint;
+    const html = converter.makeHtml(hint);
+    hintElem.innerHTML = html;
+    hintElem.querySelectorAll('pre>code').forEach(elem => hljs.highlightBlock(elem));
+    lastWidth = hintElem.clientWidth;
+  }
+  hintElem.style.left = px(e.pageX + lastWidth > window.innerWidth ? window.innerWidth - lastWidth : e.pageX + 5);
+  hintElem.style.top = px(e.pageY + 5);
+  hintElem.style.display = hint ? '' : 'none';
+}
+
+document.body.addEventListener('mousemove', function(e) {
+  let elem = e.target;
+  while (!elem.dataset.help && elem.nodeName !== 'BODY') {
+      elem = elem.parentElement;
+  }
+  setHint(e, elem.dataset.help);
+});
+
+const webglFuncs = `
+--gl.NEVER--,
+--gl.LESS--,
+--gl.EQUAL--,
+--gl.LEQUAL--,
+--gl.GREATER--,
+--gl.NOTEQUAL--,
+--gl.GEQUAL--,
+--gl.ALWAYS--
+`;
+
+const depthState = [
+  {
+    pname: 'DEPTH_CLEAR_VALUE',
+    value: '1',
+    help: `
+    the value to clear the depth buffer to
+
+    ---js
+    gl.clearDepth(value);
+    ---
+    `,
+  },
+  {
+    pname: 'DEPTH_TEST',
+    value: 'TRUE',
+    help: `
+      to enable
+
+      ---js
+      gl.enable(gl.DEPTH_TEST);
+      ---
+
+      to disable
+
+      ---js
+      gl.disable(gl.DEPTH_TEST);
+      ---
+    `,
+  },
+  {
+    pname: 'DEPTH_FUNC',
+    value: 'LESS',
+    help: `
+      ---js
+      gl.depthFunc(func);
+      ---
+
+      sets the function used for the depth test where func is one of
+      ${webglFuncs}.
+    `,
+  },
+  {
+    pname: 'DEPTH_RANGE',
+    value: '0, 1',
+    help: `
+      specifies how to convert from clip space to a depth value
+
+      ---js
+      gl.depthRange(zNear, zFar);
+      ---
+    `,
+  },
+  {
+    pname: 'DEPTH_WRITEMASK',
+    value: 'true',
+    help: `
+      sets whether or not to write to the depth buffer
+
+      ---js
+      gl.depthMask(trueFalse);
+      ---
+    `,
+  },
+];
+
+function addElem(tag, parent, attrs = {}) {
+  const elem = document.createElement(tag);
+  for (const [key, value] of Object.entries(attrs)) {
+    if (typeof value === 'object') {
+      for (const [k, v] of Object.entries(value)) {
+        try {
+        elem[key][k] = v;
+        } catch (e) {
+          debugger;
+        }
+      }
+    } else if (elem[key] === undefined) {
+      elem.setAttribute(key, value);
+    } else {
+      elem[key] = value;
+    }
+  }
+  parent.appendChild(elem);
+  return elem;
+}
+
+function createStateTable(states, parent) {
+  const table = addElem('table', parent);
+  const tbody = addElem('tbody', table);
+  for (const state of states) {
+    const {pname, value, help} = state;
+    const tr = addElem('tr', tbody);
+    tr.dataset.help = helpToMarkdown(help);
+    addElem('td', tr, {textContent: pname});
+    addElem('td', tr, {textContent: value});
+  }
+}
+
+function createShader(gl, type, glslString) {
+  const shader = gl.createShader(type);
+  gl.shaderSource(shader, glslString);
+  gl.compileShader(shader);
+  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) === 0) {
+    throw new Error(gl.getShaderInfoLog(shader));
+  }
+  return shader;
+}
+
+function createProgram(gl, vsGLSL, fsGLSL) {
+  const program = gl.createProgram();
+  gl.attachShader(program, createShader(gl, gl.VERTEX_SHADER, vsGLSL));
+  gl.attachShader(program, createShader(gl, gl.FRAGMENT_SHADER, fsGLSL));
+  gl.linkProgram(program);
+  if (gl.getProgramParameter(program, gl.LINK_STATUS) === 0) {
+    throw new Error(gl.getProgramInfoLog(program));
+  }
+  return program;
+}
+
+const vs = `
+attribute vec4 position;
+attribute vec3 normal;
+attribute vec2 texcoord;
+
+uniform mat4 projection;
+uniform mat4 modelView;
+
+varying vec3 v_normal;
+varying vec2 v_texcoord;
+
+void main() {
+    gl_Position = projection * modelView * position;
+    v_normal = mat3(modelView) * normal;
+    v_texcoord = texcoord;
+}
+`;
+
+const fs = `
+precision highp float;
+
+varying vec3 v_normal;
+varying vec2 v_texcoord;
+
+uniform sampler2D diffuse;
+uniform vec3 lightDir;
+
+void main() {
+    vec3 normal = normalize(v_normal);
+    float light = dot(normal, lightDir) * 0.5 + 0.5;
+    vec4 color = texture2D(diffuse, v_texcoord);
+    gl_FragColor = vec4(color.rgb * light, color.a);
+}
+`;
+
+function isBuiltIn(info) {
+  const name = info.name;
+  return name.startsWith("gl_") || name.startsWith("webgl_");
+}
+
+function createProgramAttributes(parent, gl, program) {
+  const numAttribs = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
+  for (let ii = 0; ii < numAttribs; ++ii) {
+    const attribInfo = gl.getActiveAttrib(program, ii);
+    if (isBuiltIn(attribInfo)) {
+        continue;
+    }
+    const index = gl.getAttribLocation(program, attribInfo.name);
+    const tr = addElem('tr', parent);
+    const help = helpToMarkdown(`
+      get attribute location with
+
+      ---js
+      const loc = gl.getAttribLocation(program, '${attribInfo.name}');
+      ---
+      
+      attribute locations are chosen by WebGL. You can choose locations
+      by calling.
+
+      ---js
+      gl.bindAttribLocation(program, desiredLocation, '${attribInfo.name}');
+      ---
+
+      **BEFORE** calling
+      
+      ---js
+      gl.linkProgram(program);
+      ---
+    `);
+    addElem('td', tr, {textContent: attribInfo.name, dataset: {help}});
+    addElem('td', tr, {textContent: index, dataset: {help}});
+    parent.appendChild(tr);
+  }
+}
+
+const getUniformInfo = (function() {
+
+const FLOAT                         = 0x1406;
+const FLOAT_VEC2                    = 0x8B50;
+const FLOAT_VEC3                    = 0x8B51;
+const FLOAT_VEC4                    = 0x8B52;
+const INT                           = 0x1404;
+const INT_VEC2                      = 0x8B53;
+const INT_VEC3                      = 0x8B54;
+const INT_VEC4                      = 0x8B55;
+const BOOL                          = 0x8B56;
+const BOOL_VEC2                     = 0x8B57;
+const BOOL_VEC3                     = 0x8B58;
+const BOOL_VEC4                     = 0x8B59;
+const FLOAT_MAT2                    = 0x8B5A;
+const FLOAT_MAT3                    = 0x8B5B;
+const FLOAT_MAT4                    = 0x8B5C;
+const SAMPLER_2D                    = 0x8B5E;
+const SAMPLER_CUBE                  = 0x8B60;
+const SAMPLER_3D                    = 0x8B5F;
+const SAMPLER_2D_SHADOW             = 0x8B62;
+const FLOAT_MAT2x3                  = 0x8B65;
+const FLOAT_MAT2x4                  = 0x8B66;
+const FLOAT_MAT3x2                  = 0x8B67;
+const FLOAT_MAT3x4                  = 0x8B68;
+const FLOAT_MAT4x2                  = 0x8B69;
+const FLOAT_MAT4x3                  = 0x8B6A;
+const SAMPLER_2D_ARRAY              = 0x8DC1;
+const SAMPLER_2D_ARRAY_SHADOW       = 0x8DC4;
+const SAMPLER_CUBE_SHADOW           = 0x8DC5;
+const UNSIGNED_INT                  = 0x1405;
+const UNSIGNED_INT_VEC2             = 0x8DC6;
+const UNSIGNED_INT_VEC3             = 0x8DC7;
+const UNSIGNED_INT_VEC4             = 0x8DC8;
+const INT_SAMPLER_2D                = 0x8DCA;
+const INT_SAMPLER_3D                = 0x8DCB;
+const INT_SAMPLER_CUBE              = 0x8DCC;
+const INT_SAMPLER_2D_ARRAY          = 0x8DCF;
+const UNSIGNED_INT_SAMPLER_2D       = 0x8DD2;
+const UNSIGNED_INT_SAMPLER_3D       = 0x8DD3;
+const UNSIGNED_INT_SAMPLER_CUBE     = 0x8DD4;
+const UNSIGNED_INT_SAMPLER_2D_ARRAY = 0x8DD7;
+
+const TEXTURE_2D                    = 0x0DE1;
+const TEXTURE_CUBE_MAP              = 0x8513;
+const TEXTURE_3D                    = 0x806F;
+const TEXTURE_2D_ARRAY              = 0x8C1A;
+
+const typeMap = {};
+
+/**
+ * Returns the corresponding bind point for a given sampler type
+ */
+function getBindPointForSamplerType(gl, type) {
+  return typeMap[type].bindPoint;
+}
+
+// This kind of sucks! If you could compose functions as in `var fn = gl[name];`
+// this code could be a lot smaller but that is sadly really slow (T_T)
+
+const floatSetter = 'gl.uniform1f(location, value);';
+const floatArraySetter = 'gl.uniform1fv(location, arrayOfValues);';
+const floatVec2Setter = 'gl.uniform2fv(location, arrayOf2Values); // or\ngl.uniform2f(location, v0, v1);';
+const floatVec3Setter = 'gl.uniform3fv(location, arrayOf3Values); // or\ngl.uniform3f(location, v0, v1, v2);';
+const floatVec4Setter = 'gl.uniform4fv(location, arrayOf4Values); // or\ngl.uniform4f(location, v0, v1, v2, v3);';
+const intSetter = 'gl.uniform1i(location, value);';
+const intArraySetter = 'gl.uniform1iv(location, arrayOfValues);';
+const intVec2Setter = 'gl.uniform2iv(location, arrayOf2Values); // or\ngl.uniform2i(location, v0, v1)';
+const intVec3Setter = 'gl.uniform3iv(location, arrayOf3Values); // or\ngl.uniform3i(location, v0, v1, v2)';
+const intVec4Setter = 'gl.uniform4iv(location, arrayOf4Values); // or\ngl.uniform4i(location, v0, v1, v2, v3)';
+const uintSetter = 'gl.uniform1ui(location, value);';
+const uintArraySetter = 'gl.uniform1uiv(location, arrayOf1Value);';
+const uintVec2Setter = 'gl.uniform2uiv(location, arrayOf2Values); // or\ngl.uniform2ui(location, v0, v1)';
+const uintVec3Setter = 'gl.uniform3uiv(location, arrayOf3Values); // or\ngl.uniform3ui(location, v0, v1, v2)';
+const uintVec4Setter = 'gl.uniform4uiv(location, arrayOf4Values); // or\ngl.uniform4ui(location, v0, v1, v2, v3)';
+const floatMat2Setter = 'gl.uniformMatrix2fv(location, false, arrayOf4Values);';
+const floatMat3Setter = 'gl.uniformMatrix3fv(location, false, arrayOf9Values);';
+const floatMat4Setter = 'gl.uniformMatrix4fv(location, false, arrayOf16Values);';
+const floatMat23Setter = 'gl.uniformMatrix2x3fv(location, false, arrayOf6Values);';
+const floatMat32Setter = 'gl.uniformMatrix3x2fv(location, false, arrayOf6values);';
+const floatMat24Setter = 'gl.uniformMatrix2x4fv(location, false, arrayOf8Values);';
+const floatMat42Setter = 'gl.uniformMatrix4x2fv(location, false, arrayOf8Values);';
+const floatMat34Setter = 'gl.uniformMatrix3x4fv(location, false, arrayOf12Values);';
+const floatMat43Setter = 'gl.uniformMatrix4x3fv(location, false, arrayOf12Values);';
+const samplerSetter = 'gl.uniform1i(location, textureUnitIndex);\n// note: this only tells the shader\n// which texture unit to reference.\n// you still need to bind a texture\n// to that texture unit';
+const samplerArraySetter = 'gl.uniform1iv(location, arrayOfTextureUnitIndices);';
+
+typeMap[FLOAT]                         = { Type: Float32Array, size:  4, setter: floatSetter,      arraySetter: floatArraySetter, };
+typeMap[FLOAT_VEC2]                    = { Type: Float32Array, size:  8, setter: floatVec2Setter,  };
+typeMap[FLOAT_VEC3]                    = { Type: Float32Array, size: 12, setter: floatVec3Setter,  };
+typeMap[FLOAT_VEC4]                    = { Type: Float32Array, size: 16, setter: floatVec4Setter,  };
+typeMap[INT]                           = { Type: Int32Array,   size:  4, setter: intSetter,        arraySetter: intArraySetter, };
+typeMap[INT_VEC2]                      = { Type: Int32Array,   size:  8, setter: intVec2Setter,    };
+typeMap[INT_VEC3]                      = { Type: Int32Array,   size: 12, setter: intVec3Setter,    };
+typeMap[INT_VEC4]                      = { Type: Int32Array,   size: 16, setter: intVec4Setter,    };
+typeMap[UNSIGNED_INT]                  = { Type: Uint32Array,  size:  4, setter: uintSetter,       arraySetter: uintArraySetter, };
+typeMap[UNSIGNED_INT_VEC2]             = { Type: Uint32Array,  size:  8, setter: uintVec2Setter,   };
+typeMap[UNSIGNED_INT_VEC3]             = { Type: Uint32Array,  size: 12, setter: uintVec3Setter,   };
+typeMap[UNSIGNED_INT_VEC4]             = { Type: Uint32Array,  size: 16, setter: uintVec4Setter,   };
+typeMap[BOOL]                          = { Type: Uint32Array,  size:  4, setter: intSetter,        arraySetter: intArraySetter, };
+typeMap[BOOL_VEC2]                     = { Type: Uint32Array,  size:  8, setter: intVec2Setter,    };
+typeMap[BOOL_VEC3]                     = { Type: Uint32Array,  size: 12, setter: intVec3Setter,    };
+typeMap[BOOL_VEC4]                     = { Type: Uint32Array,  size: 16, setter: intVec4Setter,    };
+typeMap[FLOAT_MAT2]                    = { Type: Float32Array, size: 16, setter: floatMat2Setter,  };
+typeMap[FLOAT_MAT3]                    = { Type: Float32Array, size: 36, setter: floatMat3Setter,  };
+typeMap[FLOAT_MAT4]                    = { Type: Float32Array, size: 64, setter: floatMat4Setter,  };
+typeMap[FLOAT_MAT2x3]                  = { Type: Float32Array, size: 24, setter: floatMat23Setter, };
+typeMap[FLOAT_MAT2x4]                  = { Type: Float32Array, size: 32, setter: floatMat24Setter, };
+typeMap[FLOAT_MAT3x2]                  = { Type: Float32Array, size: 24, setter: floatMat32Setter, };
+typeMap[FLOAT_MAT3x4]                  = { Type: Float32Array, size: 48, setter: floatMat34Setter, };
+typeMap[FLOAT_MAT4x2]                  = { Type: Float32Array, size: 32, setter: floatMat42Setter, };
+typeMap[FLOAT_MAT4x3]                  = { Type: Float32Array, size: 48, setter: floatMat43Setter, };
+typeMap[SAMPLER_2D]                    = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D,       };
+typeMap[SAMPLER_CUBE]                  = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_CUBE_MAP, };
+typeMap[SAMPLER_3D]                    = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_3D,       };
+typeMap[SAMPLER_2D_SHADOW]             = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D,       };
+typeMap[SAMPLER_2D_ARRAY]              = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D_ARRAY, };
+typeMap[SAMPLER_2D_ARRAY_SHADOW]       = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D_ARRAY, };
+typeMap[SAMPLER_CUBE_SHADOW]           = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_CUBE_MAP, };
+typeMap[INT_SAMPLER_2D]                = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D,       };
+typeMap[INT_SAMPLER_3D]                = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_3D,       };
+typeMap[INT_SAMPLER_CUBE]              = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_CUBE_MAP, };
+typeMap[INT_SAMPLER_2D_ARRAY]          = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D_ARRAY, };
+typeMap[UNSIGNED_INT_SAMPLER_2D]       = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D,       };
+typeMap[UNSIGNED_INT_SAMPLER_3D]       = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_3D,       };
+typeMap[UNSIGNED_INT_SAMPLER_CUBE]     = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_CUBE_MAP, };
+typeMap[UNSIGNED_INT_SAMPLER_2D_ARRAY] = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D_ARRAY, };
+
+return function(type) {
+  return typeMap[type];
+};
+
+}());
+
+function createProgramUniforms(parent, gl, program) {
+  const uniformSetters = { };
+  const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+
+  for (let ii = 0; ii < numUniforms; ++ii) {
+    const uniformInfo = gl.getActiveUniform(program, ii);
+    if (isBuiltIn(uniformInfo)) {
+        continue;
+    }
+    let name = uniformInfo.name;
+    // remove the array suffix.
+    if (name.substr(-3) === "[0]") {
+      name = name.substr(0, name.length - 3);
+    }
+    const loc = gl.getUniformLocation(program, name);
+    const info = getUniformInfo(uniformInfo.type);
+    const help = helpToMarkdown(`---js\ngl.useProgram(program); // set current program\n${info.setter}\n---`);
+
+    const tr = addElem('tr', parent);
+    addElem('td', tr, {textContent: name, dataset: {help}});
+    addElem('td', tr, {
+      textContent: '?',
+      dataset: {
+        help: helpToMarkdown(`---js\nconst loc = gl.getUniformLocation(program, '${name}');\n---`),
+      },
+    });
+    addElem('td', tr, {
+      textContent: gl.getUniform(program, loc).toString(),
+      dataset: {help},
+    });
+    parent.appendChild(tr);
+  }
+}
+
+function createProgramDisplay(parent, gl, vsGLSL, fsGLSL) {
+  const prg = createProgram(gl, vsGLSL, fsGLSL);
+  const template = document.querySelector('#program-template');
+  const prgElem = template.content.cloneNode(true);
+  prgElem.querySelector('.vertex-shader .lang-glsl').textContent = vsGLSL;
+  prgElem.querySelector('.fragment-shader .lang-glsl').textContent = fsGLSL;
+
+  createProgramAttributes(prgElem.querySelector('.program-attributes tbody'), gl, prg);
+  createProgramUniforms(prgElem.querySelector('.program-uniforms tbody'), gl, prg);
+
+  parent.appendChild(prgElem);
+}
+
+function createVertexArrayDisplay(parent, attribs = [], maxAttribs = 8) {
+  const template = document.querySelector('#vertex-array-template');
+  const vaElem = template.content.cloneNode(true);
+
+  const vaoNote = helpToMarkdown(`
+    note: the current vertex array can be set with the
+    [--OES_vertex_array_object--](https://www.khronos.org/registry/webgl/extensions/OES_vertex_array_object/)
+    extension. Otherwise there is only the 1 default vertex array in WebGL 1.0.
+  `);
+  const attrsElem = vaElem.querySelector('tbody');
+  for (let i = 0; i < maxAttribs; ++i) {
+    const {size = 1, type = 'FLOAT', normalize = 'false', stride = '0', offset = '0', buffer = 'null', divisor = '0'} = attribs[i] || {};
+    const enabled = i < attribs.length;
+    const enabledClassName = enabled ? 'attrib-enabled' : 'attrib-disabled';
+    const disabledClassName = enabled ? 'attrib-disabled' : 'attrib-enabled';
+    const tr = addElem('tr', attrsElem);
+    addElem('td', tr, {
+      textContent: enabled,
+      dataset: {
+        help: helpToMarkdown(`
+        * --true-- this attribute uses data from a buffer.
+        * --false-- it uses --value--.
+
+        ---js
+        const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+        gl.enableVertexAttribArray(index);   // turn on
+        gl.disableVertexAttribArray(index);  // turn off
+        ---
+
+        ${vaoNote}`),
+      },
+    });
+    addElem('td', tr, {
+      textContent: '0,0,0,1',
+      className: disabledClassName,
+      dataset: {
+        help: helpToMarkdown(`
+        The value used if this attribute is disabled.
+
+        ---js
+        const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+        gl.vertexAttrib4fv(index, [1, 2, 3, 4]);
+        ---
+
+        ${vaoNote}`),
+      },
+    });
+    addElem('td', tr, {
+      textContent: size,
+      className: enabledClassName,
+      dataset: {
+        help: helpToMarkdown(`
+        Number of values to pull from buffer per vertex shader iteration
+
+        ---js
+        const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+        gl.vertexAttribPointer(index, SIZE, type, normalize, stride, offset);
+        ---
+
+        ${vaoNote}`),
+      },
+    });
+    addElem('td', tr, {
+      textContent: type,
+      className: enabledClassName,
+      dataset: {
+        help: helpToMarkdown(`
+        The type of the data to read from the buffer. 
+        --BYTE--, --UNSIGNED_BYTE--, --SHORT--, --UNSIGNED_SHORT--,
+        --INT--, --UNSIGNED_INT--, --FLOAT--
+
+        ---js
+        const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+        gl.vertexAttribPointer(index, size, TYPE, normalize, stride, offset);
+        ---
+
+        ${vaoNote}`),
+      },
+    });
+    addElem('td', tr, {
+      textContent: normalize,
+      className: enabledClassName,
+      dataset: {
+        help: helpToMarkdown(`
+        true = use the value as is
+        false = convert the value to 0.0 to 1.0 for UNSIGNED types
+        and -1.0 to 1.0 for signed types.
+
+        ---js
+        const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+        gl.vertexAttribPointer(index, size, type, NORMALIZE, stride, offset);
+        ---
+
+        ${vaoNote}`),
+      },
+    });
+    addElem('td', tr, {
+      textContent: stride,
+      className: enabledClassName,
+      dataset: {
+        help: helpToMarkdown(`
+        how many bytes to advance in the buffer per vertex shader iteration
+        to get to the next value for this attribute. 0 is a special value
+        that means WebGL will figure out the stride from the --type-- and
+        --size-- arguments.
+        
+        ---js
+        const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+        gl.vertexAttribPointer(index, size, type, normalize, STRIDE, offset);
+        ---
+
+        ${vaoNote}`),
+      },
+    });
+    addElem('td', tr, {
+      textContent: offset,
+      className: enabledClassName,
+      dataset: {
+        help: helpToMarkdown(`
+        The offset in bytes where the data for this attribute starts in the buffer.
+        
+        ---js
+        const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+        gl.vertexAttribPointer(index, size, type, normalize, stride, OFFSET);
+        ---
+
+        ${vaoNote}`),
+      },
+    });
+    addElem('td', tr, {
+      textContent: buffer,
+      className: enabledClassName,
+      dataset: {
+        help: helpToMarkdown(`
+        The buffer this attribute will pull data from. This gets set
+        implicitly when calling --gl.vertexAttribPointer-- from the
+        currently bound --ARRAY_BUFFER--
+        
+        ---js
+        const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+
+        // bind someBuffer to ARRAY_BUFFER
+        gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
+
+        // someBuffer will get bound to this attribute
+        gl.vertexAttribPointer(index, size, type, normalize, stride, offset);
+        ---
+
+        ${vaoNote}`),
+      },
+    });
+    addElem('td', tr, {
+      textContent: divisor,
+      className: enabledClassName,
+      dataset: {
+        help: helpToMarkdown(`
+        Used with the [ANGLE_instanced_arrays extension](https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/).
+        If --divisor-- === 0 then this attribute advances normally, once each vertex shader iteration.
+        If --divisor-- > 0 then this attribute advances once each --divisor-- instances.
+        
+        ---js
+        const ext = gl.getExtension('ANGLE_instanced_arrays');
+        const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+        ext.vertexAttribDivisor(index, divisor);
+        ---
+
+        ${vaoNote}`),
+      },
+    });
+  }
+
+  const vaState = [
+    {
+      pname: 'ELEMENT_ARRAY_BUFFER',
+      value: 'null',
+      help: `
+      buffer that contains element indices used when calling --gl.drawElements--.
+
+      ---js
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, someBuffer);
+      ---
+      `,
+    },
+  ];
+  createStateTable(vaState, vaElem.querySelector('.state-table'));
+
+  parent.appendChild(vaElem);
+}
+
+const stencilOps = helpToMarkdown(`--KEEP--, --ZERO--, --REPLACE--, --INCR--, --INCR_WRAP--, --DECR--, --DECR_WRAP--, --INVERT--`);
+const stencilFuncSnippet = face => helpToMarkdown(`
+---js
+const func = gl.ALWAYS;
+const ref = 0x1;
+const mask = 0xFF;
+
+// set for both front and back facing triangles
+gl.stencilFunc(func, ref, mask);
+
+// set only for ${face} facing triangles
+const face = gl.${face.toUpperCase()};
+gl.stencilFuncSeparate(face, func, ref, mask);
+---
+`);
+
+const stencilOpSnippet = face => helpToMarkdown(`
+---js
+const stencilFailOp = gl.KEEP;
+const depthFailOp = gl.KEEP;
+const depthPassUp = gl.INCR;
+
+// sets for both front and back facing triangles
+gl.stencilOp(stencilFailOp, depthFailOp, depthPassUp); 
+
+// set only for ${face} facing triangles
+const face = gl.${face.toUpperCase()};
+gl.stencilOpSeparate(face, stencilFailOp, depthFailOp, depthPassUp);
+---
+`);
+
+const stencilWriteMaskSnippet = face => `
+write mask for stencil for ${face} facing triangles.
+
+---js
+const mask = 0xFF;
+
+// set for both front and back facing triangles
+gl.stencilMask(mask);
+
+// set only for ${face} facing triangles.
+const face = gl.${face.toUpperCase()};
+gl.stencilMaskSeparate(face, mask);
+---
+`;
+
+const stencilState = [
+    {
+      pname: 'STENCIL_TEST',
+      value: 'false',
+      help: `
+      Stencil test enabled/disabled
+
+      ---js
+      gl.enable(gl.STENCIL_TEST);
+      gl.disable(gl.STENCIL_TEST);
+      ---
+      `,
+    },
+    {
+      pname: 'STENCIL_CLEAR_VALUE',
+      value: '0xFF',
+      help: `
+      value to clear stencil to when --gl.clear(gl.STENCIL_BUFFER_BIT);-- is called. 
+
+      ---js
+      gl.clearStencil(0xFF);
+      ---
+      `,
+    },
+    {
+      pname: 'STENCIL_FUNC',
+      value: 'ALWAYS',
+      help: `
+      function to use for stencil test for front facing triangles.
+      One of ${webglFuncs}.
+
+${stencilFuncSnippet('front')}
+      `,
+    },
+    {
+      pname: 'STENCIL_FAIL',
+      value: 'KEEP',
+      help: `
+      operation when stencil test fails for front facing triangles.
+      One of: ${stencilOps}
+
+${stencilOpSnippet('front')}
+      `,
+    },
+    {
+      pname: 'STENCIL_PASS_DEPTH_FAIL',
+      value: 'KEEP',
+      help: `
+      operation when depth test fails for front facing triangles.
+      One of: ${stencilOps}
+
+${stencilOpSnippet('front')}
+      `,
+    },
+    {
+      pname: 'STENCIL_PASS_DEPTH_PASS',
+      value: 'KEEP',
+      help: `
+      operation when depth test passes for front facing triangles.
+      One of: ${stencilOps}
+
+${stencilOpSnippet('front')}
+      `,
+    },
+    {
+      pname: 'STENCIL_REF',
+      value: '0',
+      help: `
+      reference value to use for stencil test for front facing triangles.
+
+${stencilFuncSnippet('front')}
+      `,
+    },
+    {
+      pname: 'STENCIL_VALUE_MASK',
+      value: '',
+      help: `
+      mask value to use for stencil test for front facing triangles.
+
+${stencilFuncSnippet('front')}
+      `,
+    },
+    {
+      pname: 'STENCIL_WRITEMASK',
+      value: '0xFF',
+      help: stencilWriteMaskSnippet('front'),
+    },
+    {
+      pname: 'STENCIL_BACK_FUNC',
+      value: 'ALWAYS',
+      help: `
+      function to use for stencil test for back facing triangles.
+      One of ${webglFuncs}.
+
+${stencilFuncSnippet('back')}
+      `,
+    },
+    {
+      pname: 'STENCIL_BACK_FAIL',
+      value: 'KEEP',
+      help: `
+      operation when stencil test fails for back facing triangles.
+      One of: ${stencilOps}
+
+${stencilOpSnippet('back')}
+      `,
+    },
+    {
+      pname: 'STENCIL_BACK_PASS_DEPTH_FAIL',
+      value: 'KEEP',
+      help: `
+      operation when depth test fails for back facing triangles.
+      One of: ${stencilOps}
+
+${stencilOpSnippet('back')}
+      `,
+    },
+    {
+      pname: 'STENCIL_BACK_PASS_DEPTH_PASS',
+      value: 'KEEP',
+      help: `
+      operation when depth test passes for back facing triangles.
+      One of: ${stencilOps}
+
+${stencilOpSnippet('back')}
+      `,
+    },
+    {
+      pname: 'STENCIL_BACK_REF',
+      value: '0',
+      help: `
+      reference value to use for stencil test for back facing triangles.
+
+${stencilFuncSnippet('back')}
+      `,
+    },
+    {
+      pname: 'STENCIL_BACK_VALUE_MASK',
+      value: '0xFF',
+      help: `
+      mask value to use for stencil test for back facing triangles.
+
+${stencilFuncSnippet('back')}
+      `,
+    },
+    {
+      pname: 'STENCIL_BACK_WRITEMASK',
+      value: '0xFF',
+      help: stencilWriteMaskSnippet('front'),
+    },
+];
+
+const blendFuncs = helpToMarkdown(`
+--ZERO--,
+--ONE--,
+--SRC_COLOR--,
+--ONE_MINUS_SRC_COLOR--,
+--DST_COLOR--,
+--ONE_MINUS_DST_COLOR--,
+--SRC_ALPHA--,
+--ONE_MINUS_SRC_ALPHA--,
+--DST_ALPHA--,
+--ONE_MINUS_DST_ALPHA--,
+--CONSTANT_COLOR--,
+--ONE_MINUS_CONSTANT_COLOR--,
+--CONSTANT_ALPHA--,
+--ONE_MINUS_CONSTANT_ALPHA--,
+--SRC_ALPHA_SATURATE--
+`);
+
+const blendFuncSnippet = `
+---js
+// set both RGB and alpha to same value
+const srcRGBFunc = gl.ONE;
+const dstRGBFunc = gl.ONE_MINUS_SRC_ALPHA;
+gl.blendFunc(srcRGBFunc, dstRGBFunc);
+
+// set RGB and alpha to separate values
+const srcAlphaFunc = gl.ONE;
+const dstAlphaFunc = gl.ONE;
+gl.blendFuncSeparate(
+    srcRGBFunc, dstRGBFunc, srcAlphaFunc, dstAlphaFunc);
+---
+`;
+
+const blendEquationSnippet = `
+One of --FUNC_ADD--, --FUNC_SUBTRACT--, --FUNC_REVERSE_SUBTRACT--
+
+---js
+// set both RGB and ALPHA equations to the same value
+const rgbEquation = gl.FUNC_ADD;
+gl.blendEquation(rgbEquation);
+
+// set RGB and alpha equations to separate values
+const alphaEquation = gl.FUNC_SUBTRACT;
+gl.blendEquationSeparate(rgbEquation, alphaEquation);
+---
+`;
+
+const blendState = [
+    {
+      pname: 'BLEND',
+      value: 'false',
+      help: `
+      blending enabled/disabled
+
+      ---js
+      gl.enable(gl.BLEND);
+      gl.disable(gl.BLEND);
+      ---
+      `,
+    },
+    {
+      pname: 'BLEND_DST_RGB',
+      value: 'ZERO',
+      help: `
+      The blend function for destination RGB.
+      One of ${blendFuncs}.
+
+${blendFuncSnippet}
+      `,
+    },
+    {
+      pname: 'BLEND_SRC_RGB',
+      value: 'ONE',
+      help: `
+      The blend function for source RGB.
+      One of ${blendFuncs}.
+
+${blendFuncSnippet}
+      `,
+    },
+    {
+      pname: 'BLEND_DST_ALPHA',
+      value: 'ZERO',
+      help: `
+      The blend function for destination alpha
+      One of ${blendFuncs}.
+
+${blendFuncSnippet}
+      `,
+    },
+    {
+      pname: 'BLEND_SRC_ALPHA',
+      value: 'ONE',
+      help: `
+      The blend function for source alpha
+      One of ${blendFuncs}.
+
+${blendFuncSnippet}
+      `,
+    },
+    {
+      pname: 'BLEND_COLOR',
+      value: '0, 0, 0, 0',
+      help: `
+      constant color and alpha used when blend function
+      is --gl.CONSTANT_COLOR--, --gl.CONSTANT_ALPHA--,
+      --gl.ONE_MINUS_CONSTANT_COLOR--, or --gl.ONE_MINUS_CONSTANT_ALPHA--.
+
+      ---js
+      gl.blendColor(r, g, b, a);
+      ---
+      `,
+    },
+    {
+      pname: 'BLEND_EQUATION_RGB',
+      value: 'FUNC_ADD',
+      help: `
+      Blend equation for RGB.
+
+${blendEquationSnippet}
+      `,
+    },
+    {
+      pname: 'BLEND_EQUATION_ALPHA',
+      value: 'FUNC_ADD',
+      help: `
+      Blend equation for alpha  .
+
+${blendEquationSnippet}
+      `,
+    },
+];
+
+const polygonState = [
+    {
+      pname: 'CULL_FACE',
+      value: '',
+      help: `
+      `,
+    },
+    {
+      pname: 'CULL_FACE_MODE',
+      value: '',
+      help: `
+      `,
+    },
+    {
+      pname: 'POLYGON_OFFSET_UNITS',
+      value: '',
+      help: `
+      `,
+    },
+    {
+      pname: 'POLYGON_OFFSET_FACTOR',
+      value: '',
+      help: `
+      `,
+    },
+]
+
+const colorState = [
+    {
+      pname: 'COLOR_CLEAR_VALUE',
+      value: '',
+      help: `
+      `,
+    },
+    {
+      pname: 'COLOR_WRITEMASK',
+      value: '',
+      help: `
+      `,
+    },
+
+]
+const miscState = [
+    {
+      pname: 'VIEWPORT',
+      value: '',
+      help: `
+      `,
+    },
+
+    {
+      pname: 'SCISSOR_TEST',
+      value: '',
+      help: `
+      `,
+    },
+    {
+      pname: 'SCISSOR_BOX',
+      value: '',
+      help: `
+      `,
+    },
+
+    {
+      pname: 'UNPACK_ALIGNMENT',
+      value: '',
+      help: `
+      `,
+    },
+    {
+      pname: 'PACK_ALIGNMENT',
+      value: '',
+      help: `
+      `,
+    },
+];
+
+
+
+
+function createTextureDisplay(parent, imgHref) {
+  const template = document.querySelector('#texture-template');
+  const texElem = template.content.cloneNode(true);
+
+  const activeTexNote = helpToMarkdown(`
+    note: the texture affected is the current active texture on
+    the specified bind point. ie (--webglState.textureUnits[activeTexture][bindPoint]--)
+  `);
+
+  const mipsElem = texElem.querySelector('.mips');
+  const numMips = 8;
+  for (let i = 0; i < numMips; ++i) {
+    const size = 2 ** (numMips - i - 1);
+    addElem('div', mipsElem, {
+      className: `mip${i}`,
+      style: { backgroundImage: `url(${imgHref})` },
+      dataset: {
+        help: helpToMarkdown(`
+          Uploading data
+
+          ---js
+          const target = gl.TEXTURE_2D;
+          const level = ${i};
+          const internalFormat = gl.RGBA;
+          const width = ${size};
+          const height = ${size};
+          const format = gl.RGBA;
+          const type = gl.UNSIGNED_BYTE;
+          gl.texImage2D(
+              target, level, internalFormat,
+              width, height, 0, format, type,
+              someUnit8ArrayWith${size}x${size}x4Values);
+          ---
+
+          Uploading an image/canvas/video. The image must
+          have finished downloading.
+
+          ---js
+          const target = gl.TEXTURE_2D;
+          const level = ${i};
+          const internalFormat = gl.RGBA;
+          const format = gl.RGBA;
+          const type = gl.UNSIGNED_BYTE;
+          gl.texImage2D(
+              target, level, internalFormat,
+              format, type, imageCanvasVideoElem);
+          ---
+
+          mips > 0 can be generated by calling
+          --gl.genererateMipmap(gl.TEXTURE_2D);--
+
+          ${activeTexNote}`),
+      },
+    });
+  }
+
+  const texState = [
+   {
+      pname: 'WRAP_S',
+      value: 'REPEAT',
+      help: `
+      what happens for texture coordinates outside the 0 to 1 range
+      in the S direction (horizontal). Can be one of --gl.REPEAT--,
+      --gl.CLAMP_TO_EDGE--, --gl.MIRRORED_REPEAT--. **For non power
+      of 2 textures must be --gl.CLAMP_TO_EDGE--**.
+
+      ---js
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+      ---
+
+      ${activeTexNote}`,
+    },
+    {
+      pname: 'WRAP_T',
+      value: 'REPEAT',
+      help: `
+      what happens for texture coordinates outside the 0 to 1 range
+      in the S direction (vertical). Can be one of --gl.REPEAT--,
+      --gl.CLAMP_TO_EDGE--, --gl.MIRRORED_REPEAT--. **For non power
+      of 2 textures must be --gl.CLAMP_TO_EDGE--**.
+
+      ---js
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+      ---
+
+      ${activeTexNote}`,
+    },
+    {
+      pname: 'MIN_FILTER',
+      value: 'LINEAR_MIPMAP_NEAREST',
+      help: `
+      How the texture is sampled when drawn smaller than its intrinsic size.
+      Can be one of:
+      --gl.NEAREST--,
+      --gl.LINEAR--,
+      --gl.NEAREST_MIPMAP_NEAREST--,
+      --gl.LINEAR_MIPMAP_NEAREST--,
+      --gl.NEAREST_MIPMAP_LINEAR--,
+      --gl.LINEAR_MIPMAP_LINEAR--.
+      **For non power of 2 textures must be --gl.NEAREST-- or --gl.LINEAR--**.
+
+      ---js
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+      ---
+
+      ${activeTexNote}`,
+    },
+    {
+      pname: 'MAG_FILTER',
+      value: 'LINEAR',
+      help: `
+      How the texture is sampled when drawn larger than its intrinsic size.
+      Can be one of
+      --gl.NEAREST--,
+      --gl.LINEAR--.
+
+      ---js
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      ---
+
+      ${activeTexNote}`,
+    },
+  ];
+
+  createStateTable(texState, texElem.querySelector('.texture'));
+  parent.appendChild(texElem);
+}
+
+function createTextureUnits(maxUnits = 8) {
+  const tbody = document.querySelector('.texture-units tbody');
+  for (let i = 0; i < maxUnits; ++i) {
+    const tr = addElem('tr', tbody);
+    addElem('td', tr, {
+      textContent: '2D',
+      dataset: {
+        help: helpToMarkdown(`
+          bind a texture to this unit with
+
+          ---js
+          gl.activeTexture(gl.TEXTURE0 + ${i});
+          gl.bindTexture(gl.TEXTURE_2D, someTexture);
+          ---
+        `),
+      },
+    });
+    addElem('td', tr, {
+      textContent: 'CUBE_MAP',
+      dataset: {
+        help: helpToMarkdown(`
+          bind a texture to this unit with
+
+          ---js
+          gl.activeTexture(gl.TEXTURE0 + ${i});
+          gl.bindTexture(gl.TEXTURE_CUBE_MAP, someTexture);
+          ---
+        `),
+      },
+    });
+  }
+}
+
+createStateTable(depthState, document.body);
+createStateTable(blendState, document.body);
+createStateTable(stencilState, document.body);
+
+createTextureDisplay(document.body, '/webgl/resources/f-texture.png');
+
+createVertexArrayDisplay(document.body, [
+  {size: 2, type: 'FLOAT', buffer: 'texcoordBuffer',},
+  {size: 3, type: 'FLOAT', buffer: 'normalBuffer',},
+  {size: 3, type: 'FLOAT', buffer: 'positionBuffer',},
+]);
+
+createProgramDisplay(document.body, gl, vs, fs);
+
+createTextureUnits(8);
+
+function matToStr(m) {
+  return `matrix(${m[0]},${m[1]},${m[4]},${m[5]},${m[12]},${m[13]})`;
+}
+
+const m = {
+  translation: (x, y) => matToStr(m4.translation(x, y, 0)),
+  rotation: (a) => matToStr(m4.zRotation(a)),
+  scale: (x, y) => matToStr(m4.scaling(x, y === undefined ? x : y, 1)),
+};
+
+class MatrixStack {
+  constructor() {
+    this.reset();
+  }
+  _topRef() {
+    return this._stack[this._stack.length - 1];
+  }
+  translate(x, y, z = 0) {
+    m4.translate(this._topRef(), x, y, z, this._topRef());
+    return this;
+  }
+  rotate(a) {
+    m4.zRotate(this._topRef(), a, this._topRef());
+    return this;
+  }
+  scale(x, y) {
+    m4.scale(this._topRef(), x, y === undefined ? x : y, 1, this._topRef());
+    return this;
+  }
+  push() {
+    this._stack.push(this._topRef().slice());
+  }
+  pop() {
+    this._stack.pop();
+  }
+  scope(fn) {
+    this.push();
+    fn();
+    this.pop();
+  }
+  reset() {
+    this._stack = [m4.identity()];
+  }
+  current() {
+    return matToStr(this._topRef());
+  }
+}
+
+const ms = new MatrixStack();
+
+function addSVG(tag, parent, attrs) {
+  const elem = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [key, value] of Object.entries(attrs)) {
+    elem.setAttribute(key, value);
+  }
+  parent.appendChild(elem);
+  return elem;
+}
+
+const svg = addSVG('svg', document.body, {
+  width: '100%',
+  height: '100%',
+  viewBox: '0 0 640 480',
+  version: '1.1',
+  xmlns: "http://www.w3.org/2000/svg",
+  style: styleToText({
+    'font-family': 'monospace',
+  }),
+});
+
+function attrsPlusClass(attrs, className) {
+  if (className) {
+    attrs['class'] = className;
+  }
+  return attrs;
+}
+
+
+function addText(parent, str, x, y, className, style) {
+  const attrs = attrsPlusClass({
+    x,
+    y,
+    ...style && {style},
+  }, className);
+  const text = addSVG('text', parent, attrs);
+  text.textContent = str;
+  return text;
+}
+
+function addRect(parent, x, y, width, height, style, className) {
+  const attrs = attrsPlusClass({
+    x,
+    y,
+    width,
+    height,
+    ...style && {style},
+  }, className);
+  return addSVG('rect', parent, attrs);
+}
+
+function addGroup(parent, transform) {
+  transform = transform || ms.current();
+  return addSVG('g', parent, {transform})
+}
+
+const s = {
+  texUnit: {
+    count: 8,
+    width: 200,
+    height: 20,
+  },
+};
+
+const texUnitsGroup = addGroup(svg);
+const texUnits = addRect(texUnitsGroup, 0, 0, 200, 300, 'fill:red;');
+ms.scope(() => {
+  for (let i = 0; i < s.texUnit.count; ++i) {
+    const texUnitGroup = addGroup(texUnitsGroup);
+    const w2d = s.texUnit.width / 4 | 0;
+    const h = s.texUnit.height;
+    const tex2D = addGroup(texUnitGroup, m.translation(0, 0));
+    tex2D.dataset['help'] = helpToMarkdown(`
+---js
+// select this texture unit
+gl.activeTexture(gl.TEXTURE0 + ${i});
+
+// bind a texture
+gl.bindTexture(gl.TEXTURE_2D, tex);
+---
+`);
+    tex2D.setAttribute('class', 'hint');
+    addRect(tex2D, 0, 0, w2d, h, styleToText({fill: hsl(.3, i / 16 + .5, .5)}), 'box');
+    addText(tex2D, '2D', w2d / 2, h / 2, 'svg-center');
+
+    const wcb = s.texUnit.width - w2d;
+    const texCB = addGroup(texUnitGroup, m.translation(w2d, 0));
+    texCB.dataset['hint'] = helpToMarkdown(`
+---js
+gl.activeTexture(gl.TEXTURE0 + ${i});
+gl.bindTexture(gl.TEXTURE_CUBE_MAP, tex);
+---
+`);
+    texCB.setAttribute('class', 'hint');
+    addRect(texCB, 0, 0, wcb, h, styleToText({fill: hsl(.3, i / 16 + .5, .5)}), 'box');
+    addText(texCB, 'CUBEMAP', wcb / 2, h / 2, 'svg-center');
+    ms.translate(0, s.texUnit.height);
+  }
+});
+ms.pop();
+
+
+
+</script>
