@@ -87,7 +87,30 @@ module.exports = {
   },
   "overrides": [
     {
-      "files": [ "resources/**/*.js" ],
+      "files": [
+        "resources/**/*.js",
+        "lessons/resources/**/*.js",
+      ],
+      /*
+      "parserOptions": {
+        "sourceType": "module",
+      },
+      */
+      "rules": {
+        "optional-comma-spacing/optional-comma-spacing": [2, {"after": true}],
+        "no-unused-vars": 2,
+        "require-trailing-comma/require-trailing-comma": [2],
+        "strict": ["error", "function"],
+      }
+    },
+    {
+      "files": [
+        "lessons/resources/**/webgl-state-diagram-*.js",
+      ],
+      "parserOptions": {
+        "ecmaVersion": 9,
+        "sourceType": "module",
+      },
       "rules": {
         "optional-comma-spacing/optional-comma-spacing": [2, {"after": true}],
         "no-unused-vars": 2,

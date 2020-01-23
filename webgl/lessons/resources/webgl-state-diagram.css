@@ -1,0 +1,334 @@
+body {
+  margin: 0;
+  gfont-size: x-small;
+  background-color: #333;
+  color: white;
+}
+canvas {
+  display: block;
+  background: white;
+}
+.svg-center {
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: red;
+}
+.box {
+  stroke-width: 1px;
+  stroke: black;
+}
+*[data-help]:hover {
+  outline: 2px solid red;
+  cursor: pointer;
+}
+.draggable {
+  position: absolute;
+  box-shadow: 2px 2px 15px #000;
+}
+.draggable-svg {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+#arrows {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -10;
+  pointer-events: none;
+}
+#hint {
+  position: absolute;
+  display: inline-block;
+  background: #444;
+  color: white;
+  /* border: 1px solid black; */
+  box-shadow: 5px 5px 10px black;
+  padding: 1em;
+  max-width: 600px;
+  font-family: Arial, Helvetica, sans-serif;
+  z-index: 1000;
+}
+#hint a {
+  color: aquamarine;
+}
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+body {
+  font-family: monospace;
+}
+.name {
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 5px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 0)
+  );
+  background-size: 100% 2px;
+}
+.state-block {
+  border: 1px solid black;
+  background: hsl(240, 100%, 85%);
+  display: inline-block;
+}
+#global-state,
+.webgl-object {
+  /* border: 1px solid black; */
+  display: inline-block;
+  padding: 10px;
+}
+/*
+#canvas { background: hsla(190, 100%, 80%, 0.9); }
+#global-state { background: hsla(0, 100%, 85%, 0.9); }
+.texture { background: hsla(200, 100%, 85%, 0.9); }
+.buffer { background: hsla(130, 100%, 85%, 0.9); }
+.vertex-array { background: hsla(260, 100%, 85%, 0.9); }
+.shader { background: hsla(60, 100%, 85%, 0.9); }
+.program { background: hsla(30, 100%, 70%, 0.9); }
+.program-attributes { background: hsla(30, 100%, 80%, 0.9); }
+.program-uniforms { background: hsla(30, 100%, 80%, 0.9); }
+*/
+#canvas { background: hsla(190, 100%, 20%, 0.9); }
+#global-state { background: hsla(0, 100%, 15%, 0.9); }
+.texture { background: hsla(200, 100%, 15%, 0.9); }
+.buffer { background: hsla(130, 100%, 15%, 0.9); }
+.vertex-array { background: hsla(260, 100%, 15%, 0.9); }
+.shader { background: hsla(60, 100%, 15%, 0.9); }
+.program { background: hsla(30, 100%, 30%, 0.9); }
+.program-attributes { background: hsla(30, 100%, 20%, 0.9); }
+.program-uniforms { background: hsla(30, 100%, 20%, 0.9); }
+.active-texture-unit {
+  background: hsl(0, 50%, 50%);
+}
+.program-attributes, .program-uniforms {
+  margin-top: 10px;
+  border: 1px solid black;
+}
+.vertex-array .attrib-enable .used-when-enabled,
+.vertex-array .used-when-disabled {
+  background: inherit;
+}
+
+.vertex-array .attrib-enable .used-when-disabled,
+.vertex-array .used-when-enabled {  /* but not enabled */
+  background: #444;
+  color: #888;
+}
+.vertex-array .attrib-enable .used-when-enabled,
+.vertex-array .used-when-disabled { /* but not enabled */
+  color: #FFF;
+}
+
+.vertex-array .attrib-enable .used-when-disabled 
+.vertex-array .used-when-disabled {
+  gbackground: #666;
+  gcolor: #AAA;
+}
+.attrib-disabled { background: #888; }
+.shader {
+  display: flex;
+  flex-direction: column;
+}
+/*
+.shader>*:last-child {
+  flex: 1 1 auto;
+  background: #23241f
+}
+*/
+.expander.open>div:first-child {
+  margin-bottom: 10px;
+}
+.expander>div:first-child::before {
+  content: '▶';
+  padding-right: 1em;
+}
+.expander>*:nth-child(0n+2) {
+  display: none;
+}
+.expander {
+  padding: 0 0.5em 0 0.5em;
+}
+.expander.open {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5em;
+}
+.expander.open>*:nth-child(0n+2) {
+  display: initial;
+}
+.expander.open>div:first-child:before {
+  content: '▼';
+}
+.expander-content {
+  width: 100%;
+}
+.flash {
+  animation: flash 1s 100;
+}
+
+@keyframes flash {
+  1% {
+    background-color: red;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+td, th {
+  border: 1px solid hsla(0, 0%, 100%, 0.5);
+  padding: 0.25em;
+  white-space: pre;
+}
+th {
+  background: rgba(255,255,255,0.3);
+}
+.across2 {
+  display: flex;
+}
+.across2>*:first-child {
+  margin-right: 5px;
+}
+.across2>*:last-child {
+  margin-left: 5px;
+}
+.fill-height {
+  align-items: stretch;
+}
+.mips {
+  display: flex;
+  align-items: flex-end;
+}
+.mips>* {
+  border: 1px solid black;
+  margin-right: 2px;
+  background: hsl(0, 100%, 50%);
+  background-size: cover;
+}
+.filtering-linear {
+  image-rendering: auto;
+}
+.filtering-nearest {
+  image-rendering: pixelated;
+}
+/*
+.mip0 {
+  width: 128px;
+  height: 128px;
+}
+.mip1 {
+  width: 64px;
+  height: 64px;
+}
+.mip2 {
+  width: 32px;
+  height: 32px;
+}
+.mip3 {
+  width: 16px;
+  height: 16px;
+}
+.mip4 {
+  width: 8px;
+  height: 8px;
+}
+.mip5 {
+  width: 4px;
+  height: 4px;
+}
+.mip6 {
+  width: 2px;
+  height: 2px;
+}
+.mip7 {
+  width: 1px;
+  height: 1px;
+}
+*/
+#everything {
+  display: flex;
+}
+#diagram {
+  flex: 3 1 auto;
+  width: 70%;
+  user-select: none;
+  min-height: 100vh;
+}
+#codearea {
+  flex: 1 1 auto;
+  background: #23241f;
+  color: white;
+  width: 30%;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 990;
+}
+#ui {
+  font-size: xx-large;
+  flex: 0 0 auto;
+  display: flex;
+}
+#ui>* {
+  margin: 0.1em;
+  padding: 0.5em;
+  background: hsl(240, 100%, 50%);
+  color: white;
+  line-height: 0.5;
+}
+.ui-button {
+  background: hsl(240, 100%, 50%);
+  padding: 0.25em;
+}
+#ui>*:hover {
+  background: hsl(240, 100%, 80%);
+}
+#code {
+  flex: 1 1 auto;
+  padding: 0.5em;
+  overflow: scroll;
+}
+#code>div {
+  display: flex;
+}
+#code pre {
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+#code pre:hover {
+  background: hsl(240, 100%, 20%);
+}
+#code .line-marker:before {
+  content: '>●';
+  font-weight: bold;
+  color: red;
+  visibility: hidden;
+}
+#code .current-line .line-marker:before {
+  visibility: visible;
+}
+
+.current-line,
+.current-line .hljs {
+  background: hsl(0, 100%, 10%);
+}
+
+@media (max-width: 1200px) {
+  body {
+  }
+}
