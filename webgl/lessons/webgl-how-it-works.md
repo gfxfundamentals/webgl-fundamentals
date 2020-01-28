@@ -349,6 +349,10 @@ you are trying to push WebGL to its absolute limits.
 
 I hope that clears up buffers and attributes.
 
+You might want to take a look at this
+[interactive state diagram](/webgl/lessons/resources/webgl-state-diagram.html)
+for another way of understanding how WebGL works.
+
 Next let's go over [shaders and GLSL](webgl-shaders-and-glsl.html).
 
 <div class="webgl_bottombar"><h3>What's normalizeFlag for in vertexAttribPointer?</h3>
