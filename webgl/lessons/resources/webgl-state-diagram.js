@@ -39,7 +39,7 @@ function main() {
 
   hljs.initHighlightingOnLoad();
 
-  gl = document.querySelector('canvas').getContext('webgl');  /* eslint-disable-line */
+  gl = document.querySelector('canvas').getContext('webgl', {preserveDrawingBuffer: true});  /* eslint-disable-line */
   twgl.addExtensionsToContext(gl);
 
   const diagramElem = document.querySelector('#diagram');
