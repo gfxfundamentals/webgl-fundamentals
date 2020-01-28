@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+  <meta name="description" content="WebGL State Diagram to help visualize WebGL" />
+  <meta name="keywords" content="webgl graphics" />
+  <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals-webgl-state-diagram.jpg" />
+
+  <meta property="og:title" content="WebGLFundamentals WebGL State Diagram" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+  <meta property="og:description" content="WebGL State Diagram to help visualize WebGL" />
+  <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/resources/webgl-state-diagram.html">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@greggman">
+  <meta name="twitter:creator" content="@greggman">
+  <meta name="twitter:domain" content="webglfundamentals.org">
+  <meta name="twitter:title" content="WebGLFundamentals WebGL State Diagram">
+  <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/resources/webgl-state-diagram.html">
+  <meta name="twitter:description" content="WebGL State Diagram to help visualize WebGL" />
+  <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg">
+
+  <title>WebGLFundamentals WebGL State Diagram</title>
+
+  <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+
+
+  <link href="/3rdparty/monokai-sublime.css" rel="stylesheet">
+  <!-- <link href="/3rdparty/tomorrow-night-bright.css" rel="stylesheet"> -->
+  <!-- <link href="/3rdparty/atom-one-dark-reasonable.css" rel="stylesheet">  --> 
+  <link href="webgl-state-diagram.css" rel="stylesheet">
+</head>
+<body>
+<div id="everything">
+  <div id="diagram">
+    <div id="canvas">
+      <div class="name">canvas</div>
+      <canvas></canvas>
+    </div>
+    <div id="global-state" class="window-content">
+      <div class="name">global state</div>
+    </div>
+
+    <svg id="arrows" width="100%" height="100%">
+      <defs>
+      </defs>
+    </svg>
+  </div>
+  <div id="codearea">
+    <div id="ui">
+      <div id="step">⇥</div>
+      <div id="run">⇉</div>
+      <div id="restart">↺</div>
+      <div id="help">?</div>
+    </div>
+    <div id="code"></div>
+  </div>
+</div>
+<div id="hint"></div>
+
+<template id="buffer-template">
+<div class="webgl-object window-content buffer" data-help="
+Buffers are created with
+
+```js
+const buffer = gl.createBuffers();
+```
+">
+  <div class="name">buffer</div>
+  <div class="type"></div>
+  <div class="content"></div>
+</div>
+</template>
+
+<template id="texture-template">
+<div class="webgl-object window-content texture" data-help="
+Textures are created with
+
+```js
+const tex = gl.createTexture();
+```
+
+and bound to a texture unit bind point (target) with
+
+```
+gl.activeTexture(gl.TEXTURE0 + texUnitIndex);
+const bindPoint = gl.TEXTURE_2D;
+gl.bindTexture(bindPoint, tex);
+```
+
+All texture functions reference textures
+through the bind points on the active texture unit.
+ie.
+
+```js
+texture = textureUnits[activeTexture][bindPoint]
+```
+">
+  <div class="name">texture</div>
+  <div class="mips"></div>
+</div>
+</template>
+
+<template id="vertex-attributes-template">
+      <table>
+        <thead><th>enabled</th><th>value</th><th>size</th><th>type</th><th>normalize</th><th>stride</th><th>offset</th><th>divisor</th><th>buffer</th></thead>
+        <tbody>
+        </tbody>
+      </table>
+</template>
+
+<template id="vertex-array-template">
+  <div class="webgl-object window-content vertex-array" data-help="
+Normally there is only the 1 default vertex array in WebGL 1.0.
+
+You can create more vertex arrays with the
+[`OES_vertex_array_object`](https://www.khronos.org/registry/webgl/extensions/OES_vertex_array_object/)
+extension.
+
+```js
+const ext = gl.getExtension('OES_vertex_array_object')
+const vertexArray = ext.createVertexArrayOES();
+```
+
+and bind one (make it the current vertex array) with
+
+```js
+ext.bindVertexArrayOES(someVertexArray);
+```
+
+Passing `null` to `gl.bindVertexArrayOES` binds the default vertex array.
+">
+    <div class="name">vertex array</div>
+    <div class="state-table">
+    </div>
+  </div>
+</template>
+
+<template id="vertex-shader-template">
+  <div class="webgl-object window-content shader vertex-shader" data-help="
+A vertex shader's sole responsibility is to set `gl_Position`
+to a clip space position. To create one use:
+
+```js
+const shader = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(shader, glslString);
+gl.compileShader(shader);
+if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) === 0) {
+  console.error(gl.getShaderInfoLog(shader));
+}
+```
+">
+    <div class="name">shader</div>
+  </div>
+</template>
+
+<template id="fragment-shader-template">
+  <div class="webgl-object window-content shader fragment-shader" data-help="
+A fragment shader's sole responsibility is to set `gl_FragColor`
+to a color. To create one use:
+
+```js
+≈const shader = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(shader, glslString);
+gl.compileShader(shader);
+if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) === 0) {
+  console.error(gl.getShaderInfoLog(shader));
+}
+```
+">
+    <div class="name">shader</div>
+  </div>
+</template>
+
+<template id="program-template">
+  <div class="webgl-object window-content program" data-help="
+A program is a combination of a vertex shader
+and a fragment shader *linked* together.
+
+```js
+const program = gl.createProgram();
+gl.attachShader(program, someVertexShader);
+gl.attachShader(program, someFragmentShader);
+gl.linkProgram(program);
+if (gl.getProgramParameter(program, gl.LINK_STATUS) === 0) {
+  console.error(gl.getProgramInfoLog(program));
+}
+```
+">
+    <div class="name">program</div>
+  </div>
+</template>
+
+</body>
+<script id="docs-start" type="not-js">
+# WebGL State diagram
+
+This is an attempt to give a visual representation
+of most of WebGL's internal state. 
+
+WebGL is really just an API to run shaders. The only
+functions that actually effect pixels are `gl.clear`,
+`gl.drawArrays` and `gl.drawElements`. That's it!
+All other API calls just setup internal state for when
+those 3 functions are called.
+
+## Instructions
+
+* Click <span class="ui-button">⇥</span> to step one line
+at a time and watch what WebGL state is affected.
+
+* You might need to zoom out in your browser to see everything
+
+* Help appears by hovering. Clicking something makes the 
+  help stay until you click somewhere else.
+
+## Notes:
+
+* A program that has a sampler uniform only indirectly
+  references a texture unit by index. Similarly a 
+  program attribute only indirectly references a vertex
+  array attribute by index. The arrows showing
+  these connection is dotted to indicate it is not a
+  direct connection.
+
+  For vertex arrays this is important to notice the program
+  attributes are not connected to a specific vertex array.
+  They will reference the attributes of the current vertex array.
+</script>
+<script id="js" type="not-js">
+'use strict';
+
+const canvas = document.querySelector('canvas');
+const gl = canvas.getContext('webgl');
+
+const vsGLSL = `
+attribute vec4 position;
+attribute vec3 normal;
+attribute vec2 texcoord;
+
+uniform mat4 projection;
+uniform mat4 modelView;
+
+varying vec3 v_normal;
+varying vec2 v_texcoord;
+
+void main() {
+    gl_Position = projection * modelView * position;
+    v_normal = mat3(modelView) * normal;
+    v_texcoord = texcoord;
+}
+`;
+
+const fsGLSL = `
+precision highp float;
+
+varying vec3 v_normal;
+varying vec2 v_texcoord;
+
+uniform sampler2D diffuse;
+uniform vec3 lightDir;
+
+void main() {
+    vec3 normal = normalize(v_normal);
+    float light = dot(normal, lightDir) * 0.5 + 0.5;
+    vec4 color = texture2D(diffuse, v_texcoord);
+    gl_FragColor = vec4(color.rgb * light, color.a);
+}
+`;
+
+const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(vertexShader, vsGLSL);
+gl.compileShader(vertexShader);
+if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+  throw new Error(gl.getShaderInfoLog(vertexShader))
+};
+
+const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(fragmentShader, fsGLSL);
+gl.compileShader(fragmentShader);
+if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+  throw new Error(gl.getShaderInfoLog(fragmentShader))
+};
+
+const prg = gl.createProgram();
+gl.attachShader(prg, vertexShader);
+gl.attachShader(prg, fragmentShader);
+gl.linkProgram(prg);
+if (!gl.getProgramParameter(prg, gl.LINK_STATUS)) {
+  throw new Error(gl.getProgramParameter(prg))
+};
+
+// NOTE! These are here to unclutter the diagram.
+// It is safe to delete shaders once a program is linked
+// though it is arguably not common
+gl.deleteShader(vertexShader);
+gl.deleteShader(fragmentShader);
+
+const positionLoc = gl.getAttribLocation(prg, 'position');
+const normalLoc = gl.getAttribLocation(prg, 'normal');
+const texcoordLoc = gl.getAttribLocation(prg, 'texcoord');
+
+const projectionLoc = gl.getUniformLocation(prg, 'projection');
+const modelViewLoc = gl.getUniformLocation(prg, 'modelView');
+const diffuseLoc = gl.getUniformLocation(prg, 'diffuse');
+const lightDirLoc = gl.getUniformLocation(prg, 'lightDir');
+
+// vertex positions for a cube
+const cubeVertexPositions = new Float32Array([
+    1, 1, -1, 1, 1, 1, 1, -1, 1, 1, -1, -1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1,
+]);
+// vertex normals for a cube
+const cubeVertexNormals = new Float32Array([
+    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1,
+]);
+// vertex texture coordinates for a cube
+const cubeVertexTexcoords = new Float32Array([
+    1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1,
+]);
+// vertex indices for the triangles of a cube
+// the data above defines 24 vertices. We need to draw 12
+// triangles, 2 for each size, each triangle needs
+// 3 vertices so 12 * 3 = 36
+const cubeVertexIndices = new Uint16Array([
+    0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23,
+],);
+
+const positionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, cubeVertexPositions, gl.STATIC_DRAW);
+
+const normalBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, cubeVertexNormals, gl.STATIC_DRAW);
+
+const texcoordBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, cubeVertexTexcoords, gl.STATIC_DRAW);
+
+const indexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndices, gl.STATIC_DRAW);
+
+const checkerTexture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, checkerTexture);
+gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,                // mip level
+    gl.LUMINANCE,     // internal format
+    4,                // width
+    4,                // height
+    0,                // border
+    gl.LUMINANCE,     // format
+    gl.UNSIGNED_BYTE, // type
+    new Uint8Array([  // data
+      192, 128, 192, 128,
+      128, 192, 128, 192,
+      192, 128, 192, 128,
+      128, 192, 128, 192,
+    ]));
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+// above this line is initialization code
+// --------------------------------------
+// below is rendering code.
+
+gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+gl.clearColor(0.5, 0.7, 1.0, 1.0);
+gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+gl.enable(gl.DEPTH_TEST);
+gl.enable(gl.CULL_FACE);
+
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.enableVertexAttribArray(positionLoc);
+gl.vertexAttribPointer(
+    positionLoc,  // location
+    3,            // size (components per iteration)
+    gl.FLOAT,     // type of to get from buffer
+    false,        // normalize
+    0,            // stride (bytes to advance each iteration)
+    0,            // offset (bytes from start of buffer)
+);
+
+gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+gl.enableVertexAttribArray(normalLoc);
+gl.vertexAttribPointer(
+    normalLoc,  // location
+    3,          // size (components per iteration)
+    gl.FLOAT,   // type of to get from buffer
+    false,      // normalize
+    0,          // stride (bytes to advance each iteration)
+    0,          // offset (bytes from start of buffer)
+);
+
+gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
+gl.enableVertexAttribArray(texcoordLoc);
+gl.vertexAttribPointer(
+    texcoordLoc,  // location
+    2,            // size (components per iteration)
+    gl.FLOAT,     // type of to get from buffer
+    false,        // normalize
+    0,            // stride (bytes to advance each iteration)
+    0,            // offset (bytes from start of buffer)
+);
+
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+gl.useProgram(prg);
+
+// Picking unit 6 just to be different. The default of 0
+// would render but would show less state changing.
+const texUnit = 6;
+gl.activeTexture(gl.TEXTURE0 + texUnit);
+gl.bindTexture(gl.TEXTURE_2D, checkerTexture);
+gl.uniform1i(diffuseLoc, texUnit);
+
+gl.uniform3fv(lightDirLoc, m4.normalize([1, 5, 3]));
+
+const projection = m4.perspective(
+  60 * Math.PI / 180,  // fov
+  gl.canvas.clientWidth / gl.canvas.clientHeight,  // aspect
+  0.1,  // near
+  10,   // far
+);
+gl.uniformMatrix4fv(projectionLoc, false, projection);
+
+let modelView = m4.identity();
+modelView = m4.translate(modelView, 0, 0, -4);
+modelView = m4.xRotate(modelView, 0.5);
+modelView = m4.yRotate(modelView, 0.5);
+
+gl.uniformMatrix4fv(modelViewLoc, false, modelView);
+
+gl.drawElements(
+    gl.TRIANGLES,
+    36,                // num vertices to process
+    gl.UNSIGNED_SHORT, // type of indices
+    0,                 // offset on bytes to indices
+);
+</script>
+<script src="/webgl/resources/chroma.min.js"></script>
+<script src="/3rdparty/showdown.min.js"></script>
+<script src="/3rdparty/highlight.pack.js"></script>
+<script src="../../resources/m4.js"></script>
+<script src="../../resources/twgl-full.min.js"></script>
+<script src="webgl-state-diagram-eval-helper.js"></script>
+<script type="module" src="webgl-state-diagram-stepper.js"></script>
+<script type="module" src="webgl-state-diagram.js"></script>
+</html>
