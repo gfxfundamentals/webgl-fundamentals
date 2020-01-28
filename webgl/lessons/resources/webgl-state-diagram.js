@@ -732,7 +732,7 @@ export default function main({webglVersion, windowPositions}) {
     setName(vaElem, name);
     const vaoNote = isWebGL2
         ? helpToMarkdown(`
-            The current vertex array --gl.bindVertexArray(someVertexArray)--.
+            The current vertex array is set with --gl.bindVertexArray(someVertexArray)--.
           `)
         : helpToMarkdown(`
             note: the current vertex array can be set with the
@@ -806,18 +806,46 @@ export default function main({webglVersion, windowPositions}) {
           ${vaoNote}`),
         },
       });
+      if (isWebGL2) {
+        addElem('td', tr, {
+          className: 'used-when-enabled',
+          dataset: {
+            help: helpToMarkdown(`
+            --true-- = the data is and stays an integer (for int and uint attributes)
+            --false-- = the data gets converted to float
+
+            for float based attributes (float, vec2, vec3, vec4, mat4, ...)
+
+            ---js
+            const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+            gl.vertexAttribPointer(index, size, type, NORMALIZE, stride, offset);
+            ---
+
+            for int and uint attributes (int, uint, ivec3, uvec4, ...)
+
+            ---js
+            const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+            gl.vertexAttribIPointer(index, size, type, stride, offset);
+            ---
+
+            ${vaoNote}`),
+          },
+        });
+      }
       addElem('td', tr, {
         className: 'used-when-enabled',
         dataset: {
           help: helpToMarkdown(`
-          true = use the value as is
-          false = convert the value to 0.0 to 1.0 for UNSIGNED types
+          --true-- = use the value as is
+          --false-- = convert the value to 0.0 to 1.0 for UNSIGNED types
           and -1.0 to 1.0 for signed types.
 
           ---js
           const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
           gl.vertexAttribPointer(index, size, type, NORMALIZE, stride, offset);
           ---
+
+          ${isWebGL2 ? 'Not used for integer attributes like (int, uint, ivec3, uvec4, ...' : ''}
 
           ${vaoNote}`),
         },
@@ -856,18 +884,30 @@ export default function main({webglVersion, windowPositions}) {
       addElem('td', tr, {
         className: 'used-when-enabled',
         dataset: {
-          help: helpToMarkdown(`
-          Used with the [--ANGLE_instanced_arrays--](https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/)  extension.
-          If --divisor-- === 0 then this attribute advances normally, once each vertex shader iteration.
-          If --divisor-- > 0 then this attribute advances once each --divisor-- instances.
-          
-          ---js
-          const ext = gl.getExtension('ANGLE_instanced_arrays');
-          const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
-          ext.vertexAttribDivisor(index, divisor);
-          ---
+          help: isWebGL2
+              ? helpToMarkdown(`
+                Used when calling --gl.drawArraysInstanced-- or gl.drawDrawElementsInstanced--.
+                If --divisor-- === 0 then this attribute advances normally, once each vertex shader iteration.
+                If --divisor-- > 0 then this attribute advances once each --divisor-- instances.
+                
+                ---js
+                const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+                gl.vertexAttribDivisor(index, divisor);
+                ---
 
-          ${vaoNote}`),
+                ${vaoNote}`)
+              : helpToMarkdown(`
+                Used with the [--ANGLE_instanced_arrays--](https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/)  extension.
+                If --divisor-- === 0 then this attribute advances normally, once each vertex shader iteration.
+                If --divisor-- > 0 then this attribute advances once each --divisor-- instances.
+                
+                ---js
+                const ext = gl.getExtension('ANGLE_instanced_arrays');
+                const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
+                ext.vertexAttribDivisor(index, divisor);
+                ---
+
+                ${vaoNote}`),
         },
       });
       addElem('td', tr, {
@@ -893,43 +933,70 @@ export default function main({webglVersion, windowPositions}) {
       });
     }
 
-    const formatters = [
-      formatBoolean,      // enable
-      formatUniformValue, // value
-      formatUniformValue, // size
-      formatEnum,         // type
-      formatBoolean,      // normalize
-      formatUniformValue, // stride
-      formatUniformValue, // offset
-      formatUniformValue, // divisor
-      formatWebGLObject,  // buffer
-    ];
+    const formatters = isWebGL2
+        ? [
+            formatBoolean,      // enable
+            formatUniformValue, // value
+            formatUniformValue, // size
+            formatEnum,         // type
+            formatBoolean,      // integer
+            formatBoolean,      // normalize
+            formatUniformValue, // stride
+            formatUniformValue, // offset
+            formatUniformValue, // divisor
+            formatWebGLObject,  // buffer
+          ]
+        : [
+            formatBoolean,      // enable
+            formatUniformValue, // value
+            formatUniformValue, // size
+            formatEnum,         // type
+            formatBoolean,      // normalize
+            formatUniformValue, // stride
+            formatUniformValue, // offset
+            formatUniformValue, // divisor
+            formatWebGLObject,  // buffer
+          ];
     const arrows = [];
 
     const updateAttributes = (flashOnChange = true) => {
       for (let i = 0; i < maxAttribs; ++i) {
         const row = attrsElem.rows[i];
-        const data = [
-          gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_ENABLED),
-          gl.getVertexAttrib(i, gl.CURRENT_VERTEX_ATTRIB),
-          gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_SIZE),
-          gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_TYPE),
-          gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_NORMALIZED),
-          gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_STRIDE),
-          gl.getVertexAttribOffset(i, gl.VERTEX_ATTRIB_ARRAY_POINTER),
-          gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_DIVISOR),
-          gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING),
-        ];
+        const data = isWebGL2
+            ? [
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_ENABLED),
+                gl.getVertexAttrib(i, gl.CURRENT_VERTEX_ATTRIB),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_SIZE),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_TYPE),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_INTEGER),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_NORMALIZED),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_STRIDE),
+                gl.getVertexAttribOffset(i, gl.VERTEX_ATTRIB_ARRAY_POINTER),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_DIVISOR),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING),
+              ]
+            : [
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_ENABLED),
+                gl.getVertexAttrib(i, gl.CURRENT_VERTEX_ATTRIB),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_SIZE),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_TYPE),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_NORMALIZED),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_STRIDE),
+                gl.getVertexAttribOffset(i, gl.VERTEX_ATTRIB_ARRAY_POINTER),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_DIVISOR),
+                gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING),
+              ];
         if (data[0]) {
           row.classList.add('attrib-enable');
         } else {
           row.classList.remove('attrib-enable');
         }
+        const bufferNdx = isWebGL2 ? 9 : 8;  // FIXME
         data.forEach((value, cellNdx) => {
           const cell = row.cells[cellNdx];
           const newValue = formatters[cellNdx](value);
           if (updateElem(cell, newValue, flashOnChange)) {
-            if (cellNdx === 8) {  // FIXME
+            if (cellNdx === bufferNdx) {
               const oldArrow = arrows[i];
               if (oldArrow) {
                 arrowManager.remove(oldArrow);
