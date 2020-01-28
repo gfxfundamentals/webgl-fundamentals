@@ -128,6 +128,26 @@ function createTemplate(parent, selector) {
     throw new Error('template must have 1 child');
   }
   const elem = collection.children[0];
+
+  // HACK to fix help
+  const nameElem = elem.querySelector('.name');
+  if (nameElem) {
+    const nameParent = nameElem.parentElement;
+    const nameLine = addElem('div', nameParent, {className: 'name-line'});
+    nameLine.remove();
+    nameParent.insertBefore(nameLine, nameElem);
+    nameElem.remove();
+    nameLine.appendChild(nameElem);
+    addElem('div', nameLine, {
+      className: 'name-help',
+      dataset: {
+        help: elem.dataset.help,
+      },
+      textContent: '?',
+    });
+    delete elem.dataset.help;
+  }
+
   parent.appendChild(elem);
   return elem;
 }
