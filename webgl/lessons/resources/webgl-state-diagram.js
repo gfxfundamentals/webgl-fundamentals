@@ -1490,6 +1490,11 @@ export default function main({webglVersion, windowPositions}) {
     const {ui} = getWebGLObjectInfo(program);
     ui.updateAttachedShaders();
   });
+  wrapFn('detachShader', function(origFn, program, shader) {
+    origFn.call(this, program, shader);
+    const {ui} = getWebGLObjectInfo(program);
+    ui.updateAttachedShaders();
+  });
 
   wrapFn('compileShader', function(origFn, shader) {
     origFn.call(this, shader);
