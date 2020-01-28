@@ -114,6 +114,7 @@ export default function main({webglVersion, windowPositions}) {
     e.stopPropagation();
     e.target.parentElement.classList.toggle('open');
     arrowManager.update();
+    moveToFront(e.target);
   }
 
   function moveToFront(elemToFront) {
