@@ -116,13 +116,8 @@ function main() {
   }
 
   function moveToFront(elemToFront) {
-    const elements = [];
-    document.querySelectorAll('.draggable').forEach(elem => {
-      if (elem !== elemToFront) {
-        elements.push(elem);
-      }
-    });
-    elements.sort((a, b) => a.style.zIndex > b.style.zIndex);
+    const elements = [...document.querySelectorAll('.draggable')].filter(elem => elem !== elemToFront);
+    elements.sort((a, b) => a.style.zIndex < b.style.zIndex);
     elements.push(elemToFront);
     elements.forEach((elem, ndx) => {
       elem.style.zIndex = ndx + 1;
@@ -142,7 +137,7 @@ function main() {
     window.addEventListener('mousemove', dragMove, {passive: false});
     window.addEventListener('mouseup', dragStop, {passive: false});
 
-    moveToFront(this);
+    moveToFront(dragTarget);
   }
 
   function dragMove(e) {
@@ -226,6 +221,7 @@ function main() {
     div.style.left = px(pos.x);
     div.style.top = px(pos.y);
     const nameElem = div.querySelector('.name');
+    div.addEventListener('mousedown', (e) => {moveToFront(div);}, {passive: false});
     nameElem.addEventListener('mousedown', dragStart, {passive: false});
     nameElem.addEventListener('click', (e) => e.stopPropagation());
   }
