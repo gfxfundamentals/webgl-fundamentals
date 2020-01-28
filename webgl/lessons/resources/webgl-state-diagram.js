@@ -105,7 +105,7 @@ export default function main({webglVersion, windowPositions}) {
     setHint(e, elem ? elem.dataset.help : '');
   }
 
-  document.body.addEventListener('mousemove', showHint);
+  // document.body.addEventListener('mousemove', showHint);
   document.body.addEventListener('click', showHint);
 
 
@@ -211,7 +211,7 @@ export default function main({webglVersion, windowPositions}) {
     div.style.top = px(pos.y);
     const nameElem = div.querySelector('.name');
     div.addEventListener('mousedown', (e) => {moveToFront(div);}, {passive: false});
-    nameElem.addEventListener('mousedown', dragStart, {passive: false});
+    div.addEventListener('mousedown', dragStart, {passive: false});
     nameElem.addEventListener('click', (e) => e.stopPropagation());
     moveToFront(div);
   }
