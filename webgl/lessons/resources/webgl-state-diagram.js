@@ -35,11 +35,12 @@ import {
 import Stepper from './webgl-state-diagram-stepper.js';
 import ArrowManager from './webgl-state-diagram-arrows.js';
 
-function main() {
+export default function main({webglVersion, windowPositions}) {
+  const isWebGL2 = webglVersion === 'webgl2';
 
   hljs.initHighlightingOnLoad();
 
-  gl = document.querySelector('canvas').getContext('webgl', {preserveDrawingBuffer: true});  /* eslint-disable-line */
+  gl = document.querySelector('canvas').getContext(webglVersion, {preserveDrawingBuffer: true});  /* eslint-disable-line */
   twgl.addExtensionsToContext(gl);
 
   const diagramElem = document.querySelector('#diagram');
@@ -116,8 +117,9 @@ function main() {
   }
 
   function moveToFront(elemToFront) {
+    elemToFront = elemToFront.closest('.draggable');
     const elements = [...document.querySelectorAll('.draggable')].filter(elem => elem !== elemToFront);
-    elements.sort((a, b) => a.style.zIndex < b.style.zIndex);
+    elements.sort((a, b) => a.style.zIndex - b.style.zIndex);
     elements.push(elemToFront);
     elements.forEach((elem, ndx) => {
       elem.style.zIndex = ndx + 1;
@@ -162,19 +164,6 @@ function main() {
 
   // format for position is selfSide:baseSide:offset.
   // eg.: left:right-10 = put our left side - 10 units from right of base
-  const windowPositions = [
-    { note: 'vertex-array', base: '#diagram',       x: 'left:left+10',   y: 'bottom:bottom-10', },
-    { note: 'global-state', base: '#diagram',       x: 'left:left+10',   y: 'top:top+10', },
-    { note: 'canvas',       base: '#diagram',       x: 'right:right-10', y: 'top:top+10', },
-    { note: 'v-shader',     base: 'canvas',         x: 'left:left-50',   y: 'top:bottom+10', },
-    { note: 'f-shader',     base: 'vertexShader',   x: 'left:left-10',   y: 'top:bottom-90', },
-    { note: 'program',      base: 'global state',   x: 'left:right+60',  y: 'top:top+0', },
-    { note: 'p-buffer',     base: 'canvas',         x: 'left:left+70',   y: 'top:bottom+10', },
-    { note: 'n-buffer',     base: 'positionBuffer', x: 'left:left-0',    y: 'top:bottom+10', },
-    { note: 't-buffer',     base: 'normalBuffer',   x: 'left:left-0',    y: 'top:bottom+10', },
-    { note: 'i-buffer',     base: 'texcoordBuffer', x: 'left:left-0',    y: 'top:bottom+10', },
-    { note: 'texture ',     base: 'indexBuffer',    x: 'left:left-0',    y: 'top:bottom+10', },
-  ];
   let windowCount = 0;
   function getNextWindowPosition(elem) {
     const info = windowPositions[windowCount++];
@@ -224,6 +213,7 @@ function main() {
     div.addEventListener('mousedown', (e) => {moveToFront(div);}, {passive: false});
     nameElem.addEventListener('mousedown', dragStart, {passive: false});
     nameElem.addEventListener('click', (e) => e.stopPropagation());
+    moveToFront(div);
   }
 
   function createExpander(parent, title, attrs = {}) {
@@ -324,7 +314,7 @@ function main() {
     const scan = () => {
       tbody.innerHTML = '';
       flash(tbody);
-      arrows.forEach(arrow => arrow.remove());
+      arrows.forEach(arrow => arrowManager.remove(arrow));
 
       const vao = gl.getParameter(gl.VERTEX_ARRAY_BINDING);
       const vaoInfo = vao ? getWebGLObjectInfo(vao) : defaultVAOInfo;
@@ -737,14 +727,18 @@ function main() {
   }
 
   const maxAttribs = 8;
-  function createVertexArrayDisplay(parent, name, /* webglObject */) {
+  function createVertexArrayDisplay(parent, name, webglObject) {
     const vaElem = createTemplate(parent, '#vertex-array-template');
     setName(vaElem, name);
-    const vaoNote = helpToMarkdown(`
-      note: the current vertex array can be set with the
-      [--OES_vertex_array_object--](https://www.khronos.org/registry/webgl/extensions/OES_vertex_array_object/)
-      extension. Otherwise there is only the 1 default vertex array in WebGL 1.0.
-    `);
+    const vaoNote = isWebGL2
+        ? helpToMarkdown(`
+            The current vertex array --gl.bindVertexArray(someVertexArray)--.
+          `)
+        : helpToMarkdown(`
+            note: the current vertex array can be set with the
+            [--OES_vertex_array_object--](https://www.khronos.org/registry/webgl/extensions/OES_vertex_array_object/)
+            extension. Otherwise there is only the 1 default vertex array in WebGL 1.0.
+          `);
     const attrExpander = createExpander(vaElem.querySelector('.state-table'), 'attributes');
     expand(attrExpander);
     const table = createTemplate(attrExpander, '#vertex-attributes-template');
@@ -1360,10 +1354,14 @@ function main() {
   wrapCreationFn('createProgram', (name, webglObject) => {
     return createProgramDisplay(diagramElem, name, webglObject);
   });
+  wrapCreationFn('createVertexArray', (name, webglObject) => {
+    return createVertexArrayDisplay(diagramElem, name, webglObject);
+  });
   wrapDeleteFn('deleteTexture');
   wrapDeleteFn('deleteBuffer');
   wrapDeleteFn('deleteShader');
   wrapDeleteFn('deleteProgram');
+  wrapDeleteFn('deleteVertexArray');
 
   for (const [fnName, stateUpdaters] of Object.entries(settersToWrap)) {
     wrapFn(fnName, function(origFn, ...args) {
@@ -1456,9 +1454,8 @@ function main() {
     ui.updateData(dataOrSize);
   });
   function getCurrentVAOInfo() {
-    //const vertexArray = gl.getParameter(gl.VERTEX_ARRAY_BINDING);
-    //const info = vertexArray ? webglObjects.get(vertexArray) : defaultVAOInfo;
-    return defaultVAOInfo;
+    const vertexArray = gl.getParameter(gl.VERTEX_ARRAY_BINDING);
+    return vertexArray ? getWebGLObjectInfo(vertexArray) : defaultVAOInfo;
   }
   wrapFn('enableVertexAttribArray', function(origFn, ...args) {
     origFn.call(this, ...args);
@@ -1488,6 +1485,8 @@ function main() {
   }
   wrapFn('bindVertexArray', function(origFn, vao) {
     origFn.call(this, vao);
+    const {ui} = getCurrentVAOInfo();
+    moveToFront(ui.elem);
     updateProgramAttributesAndUniforms(gl.getParameter(gl.CURRENT_PROGRAM));
   });
   wrapFn('useProgram', function(origFn, vao) {
@@ -1595,4 +1594,3 @@ function main() {
 
   window.addEventListener('resize', handleResizes);
 }
-main();
