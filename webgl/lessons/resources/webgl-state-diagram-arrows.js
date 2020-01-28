@@ -4,7 +4,14 @@
 import {addSVG} from './webgl-state-diagram-utils.js';
 
 function getPageRelativeRect(elem) {
-  const rect = elem.getBoundingClientRect();
+  let rect;
+  for(;;) {
+    rect = elem.getBoundingClientRect();
+    if (rect.width > 0) {
+      break;
+    } 
+    elem = elem.parentElement;
+  }
   const left = rect.left + window.scrollX | 0;
   const top = rect.top + window.scrollY | 0;
   const width = rect.width | 0;
