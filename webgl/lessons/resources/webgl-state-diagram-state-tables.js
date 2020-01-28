@@ -620,9 +620,19 @@ export const commonState = [
       setter: ['bindVertexArray'],
       formatter: formatWebGLObjectOrDefaultVAO,
       help: `
-      The current vertex array. In WebGL 1.0 this is only settable via the 
+      The current vertex array. 
+      
+      In WebGL 1.0 this is only settable via the 
       [--OES_vertex_array_object--](https://www.khronos.org/registry/webgl/extensions/OES_vertex_array_object/)
       extension. Otherwise there is only the 1 default vertex array in WebGL 1.0.
+
+      In WebGL 2.0 set with
+      
+      ---js
+      gl.bindVertexArray(someVertexArray);
+      ---
+
+      passing in --null-- binds the default vertex array.
       `,
     },
     {
@@ -748,6 +758,10 @@ export const shaderState = [
     formatter: formatUniformValue,
     help: `
     Whether or not the last call to --gl.compileShader-- was successful.
+    
+    ---js
+    const status = gl.getShaderParameter(someShader, gl.COMPILE_STATUS);
+    ---
     `,
   },
 ];
@@ -758,6 +772,10 @@ export const programState = [
     formatter: formatUniformValue,
     help: `
     Whether or not the last call to --gl.linkProgram-- was successful.
+
+    ---js
+    const status = gl.getProgramParameter(someShader, gl.LINK_STATUS);
+    ---
     `,
   },
 ];
