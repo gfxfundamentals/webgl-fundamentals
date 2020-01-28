@@ -131,7 +131,7 @@ and bind one (make it the current vertex array) with
 ext.bindVertexArrayOES(someVertexArray);
 ```
 
-Passing `null` to `gl.bindVertexArrayOES` binds the default vertex array.
+Passing `null` to `ext.bindVertexArrayOES` binds the default vertex array.
 ">
     <div class="name">vertex array</div>
     <div class="state-table">
@@ -229,6 +229,8 @@ at a time and watch what WebGL state is affected.
   For vertex arrays this is important to notice the program
   attributes are not connected to a specific vertex array.
   They will reference the attributes of the current vertex array.
+
+* **Not all state is shown.**
 </script>
 <script id="js" type="not-js">
 'use strict';
@@ -450,8 +452,24 @@ gl.drawElements(
 <script src="/3rdparty/showdown.min.js"></script>
 <script src="/3rdparty/highlight.pack.js"></script>
 <script src="../../resources/m4.js"></script>
-<script src="../../resources/twgl-full.min.js"></script>
 <script src="webgl-state-diagram-eval-helper.js"></script>
-<script type="module" src="webgl-state-diagram-stepper.js"></script>
-<script type="module" src="webgl-state-diagram.js"></script>
+<script type="module">
+import webglStateDiagram from './webgl-state-diagram.js';
+webglStateDiagram({
+  webglVersion: 'webgl',
+  windowPositions: [
+    { note: 'vertex-array', base: '#diagram',       x: 'left:left+10',   y: 'bottom:bottom-10', },
+    { note: 'global-state', base: '#diagram',       x: 'left:left+10',   y: 'top:top+10', },
+    { note: 'canvas',       base: '#diagram',       x: 'right:right-10', y: 'top:top+10', },
+    { note: 'v-shader',     base: 'canvas',         x: 'left:left-50',   y: 'top:bottom+10', },
+    { note: 'f-shader',     base: 'vertexShader',   x: 'left:left-10',   y: 'top:bottom-90', },
+    { note: 'program',      base: 'global state',   x: 'left:right+60',  y: 'top:top+0', },
+    { note: 'p-buffer',     base: 'canvas',         x: 'left:left+70',   y: 'top:bottom+10', },
+    { note: 'n-buffer',     base: 'positionBuffer', x: 'left:left-0',    y: 'top:bottom+10', },
+    { note: 't-buffer',     base: 'normalBuffer',   x: 'left:left-0',    y: 'top:bottom+10', },
+    { note: 'i-buffer',     base: 'texcoordBuffer', x: 'left:left-0',    y: 'top:bottom+10', },
+    { note: 'texture ',     base: 'indexBuffer',    x: 'left:left-0',    y: 'top:bottom+10', },
+  ],
+});
+</script>
 </html>
