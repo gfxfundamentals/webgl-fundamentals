@@ -43,7 +43,6 @@ export default function main({webglVersion, windowPositions}) {
   hljs.initHighlightingOnLoad();
 
   gl = document.querySelector('canvas').getContext(webglVersion, {preserveDrawingBuffer: true});  /* eslint-disable-line */
-
   if (!gl) {
     document.body.classList.add('no-webgl');
     return;
