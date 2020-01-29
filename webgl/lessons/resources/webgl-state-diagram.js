@@ -1254,58 +1254,54 @@ export default function main({webglVersion, windowPositions}) {
 
   function createTextureUnits(parent, maxUnits = 8) {
     const expander = createExpander(parent, 'Texture Units');
-    const tbody = createTable(expander, ['2D', 'CUBE_MAP']);
+
+    const targets = isWebGL2
+        ? ['TEXTURE_2D', 'TEXTURE_CUBE_MAP', 'TEXTURE_3D', 'TEXTURE_2D_ARRAY']
+        : ['TEXTURE_2D', 'TEXTURE_CUBE_MAP'];
+
+    const tbody = createTable(expander, targets.map(v => v.replace('TEXTURE_', '')));
     const arrows = [];
     let activeTextureUnit = 0;
 
     for (let i = 0; i < maxUnits; ++i) {
       arrows.push({});
       const tr = addElem('tr', tbody);
-      addElem('td', tr, {
-        textContent: 'null',
-        dataset: {
-          help: helpToMarkdown(`
-            bind a texture to this unit with
+      for (const target of targets) {
+        addElem('td', tr, {
+          textContent: 'null',
+          dataset: {
+            help: helpToMarkdown(`
+              bind a texture to this unit with
 
-            ---js
-            gl.activeTexture(gl.TEXTURE0 + ${i});
-            gl.bindTexture(gl.TEXTURE_2D, someTexture);
-            ---
-          `),
-        },
-      });
-      addElem('td', tr, {
-        textContent: 'null',
-        dataset: {
-          help: helpToMarkdown(`
-            bind a texture to this unit with
-
-            ---js
-            gl.activeTexture(gl.TEXTURE0 + ${i});
-            gl.bindTexture(gl.TEXTURE_CUBE_MAP, someTexture);
-            ---
-          `),
-        },
-      });
+              ---js
+              gl.activeTexture(gl.TEXTURE0 + ${i});
+              gl.bindTexture(gl.${target}, someTexture);
+              ---
+            `),
+          },
+        });
+      }
     }
 
-    const targets = [gl.TEXTURE_BINDING_2D, gl.TEXTURE_BINDING_CUBE_MAP];
+    const targetBindings = isWebGL2
+        ? [gl.TEXTURE_BINDING_2D, gl.TEXTURE_BINDING_CUBE_MAP, gl.TEXTURE_BINDING_3D, gl.TEXTURE_BINDING_2D_ARRAY]
+        : [gl.TEXTURE_BINDING_2D, gl.TEXTURE_BINDING_CUBE_MAP];
     const updateCurrentTextureUnit = () => {
       const unit = gl.getParameter(gl.ACTIVE_TEXTURE) - gl.TEXTURE0;
       const row = tbody.rows[unit];
-      targets.forEach((target, colNdx) => {
+      targetBindings.forEach((targetBinding, colNdx) => {
         const cell = row.cells[colNdx];
-        const texture = gl.getParameter(target);
+        const texture = gl.getParameter(targetBinding);
         if (updateElemAndFlashExpanderIfClosed(cell, formatWebGLObject(texture))) {
-          const oldArrow = arrows[unit][target];
+          const oldArrow = arrows[unit][targetBinding];
           if (oldArrow) {
             arrowManager.remove(oldArrow);
-            arrows[unit][target] = null;
+            arrows[unit][targetBinding] = null;
           }
           if (texture) {
             const targetInfo = getWebGLObjectInfo(texture);
             if (!targetInfo.deleted) {
-              arrows[unit][target] = arrowManager.add(
+              arrows[unit][targetBinding] = arrowManager.add(
                   cell,
                   targetInfo.ui.elem.querySelector('.name'),
                   getColorForWebGLObject(texture, targetInfo.ui.elem));
