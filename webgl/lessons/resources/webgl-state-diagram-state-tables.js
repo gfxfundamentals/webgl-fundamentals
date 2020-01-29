@@ -501,7 +501,8 @@ export const polygonState = [
       pname: 'POLYGON_OFFSET_UNITS',
       setter: 'polygonOffset',
       formatter: formatUniformValue,
-      help: `The amount to offset the calculated depth value for the depth test.
+      help: `
+      The amount to offset the calculated depth value for the depth test.
 
       ---js
       const factor = 0;
@@ -514,7 +515,8 @@ export const polygonState = [
       pname: 'POLYGON_OFFSET_FACTOR',
       setter: 'polygonOffset',
       formatter: formatUniformValue,
-      help: `The depth factor to offset the calculated depth value for the depth test.
+      help: `
+      The depth factor to offset the calculated depth value for the depth test.
 
       ---js
       const factor = 1;
