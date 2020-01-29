@@ -264,13 +264,15 @@ varying vec3 v_normal;
 varying vec2 v_texcoord;
 
 uniform sampler2D diffuse;
+uniform vec4 diffuseMult;
 uniform vec3 lightDir;
 
 void main() {
     vec3 normal = normalize(v_normal);
     float light = dot(normal, lightDir) * 0.5 + 0.5;
     vec4 color = texture2D(diffuse, v_texcoord);
-    gl_FragColor = vec4(color.rgb * light, color.a);
+    gl_FragColor = vec4(color.rgb * light, color.a)
+       * diffuseMult;
 }
 `;
 
@@ -312,6 +314,7 @@ const texcoordLoc = gl.getAttribLocation(prg, 'texcoord');
 const projectionLoc = gl.getUniformLocation(prg, 'projection');
 const modelViewLoc = gl.getUniformLocation(prg, 'modelView');
 const diffuseLoc = gl.getUniformLocation(prg, 'diffuse');
+const diffuseMultLoc = gl.getUniformLocation(prg, 'diffuseMult');
 const lightDirLoc = gl.getUniformLocation(prg, 'lightDir');
 
 // vertex positions for a cube
@@ -438,6 +441,8 @@ const projection = m4.perspective(
 );
 gl.uniformMatrix4fv(projectionLoc, false, projection);
 
+// draw center cube
+
 let modelView = m4.identity();
 modelView = m4.translate(modelView, 0, 0, -4);
 modelView = m4.xRotate(modelView, 0.5);
@@ -445,12 +450,53 @@ modelView = m4.yRotate(modelView, 0.5);
 
 gl.uniformMatrix4fv(modelViewLoc, false, modelView);
 
+gl.uniform4fv(diffuseMultLoc, [0.7, 1, 0.7, 1]);
+
 gl.drawElements(
     gl.TRIANGLES,
     36,                // num vertices to process
     gl.UNSIGNED_SHORT, // type of indices
     0,                 // offset on bytes to indices
 );
+
+// draw left cube
+
+let modelView = m4.identity();
+modelView = m4.translate(modelView, -3, 0, -4);
+modelView = m4.xRotate(modelView, 0.5);
+modelView = m4.yRotate(modelView, 0.8);
+
+gl.uniformMatrix4fv(modelViewLoc, false, modelView);
+
+gl.uniform4fv(diffuseMultLoc, [1, 0.7, 0.7, 1]);
+
+gl.drawElements(
+    gl.TRIANGLES,
+    36,                // num vertices to process
+    gl.UNSIGNED_SHORT, // type of indices
+    0,                 // offset on bytes to indices
+);
+
+// draw right cube
+
+let modelView = m4.identity();
+modelView = m4.translate(modelView, 3, 0, -4);
+modelView = m4.xRotate(modelView, 0.6);
+modelView = m4.yRotate(modelView, -0.6);
+
+gl.uniformMatrix4fv(modelViewLoc, false, modelView);
+
+gl.uniform4fv(diffuseMultLoc, [0.7, 0.7, 1, 1]);
+
+gl.drawElements(
+    gl.TRIANGLES,
+    36,                // num vertices to process
+    gl.UNSIGNED_SHORT, // type of indices
+    0,                 // offset on bytes to indices
+);
+
+
+
 </script>
 <script src="/webgl/resources/chroma.min.js"></script>
 <script src="/3rdparty/showdown.min.js"></script>

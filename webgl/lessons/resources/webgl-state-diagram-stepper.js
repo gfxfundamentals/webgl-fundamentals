@@ -53,10 +53,10 @@ export default class Stepper {
 
     function step() {
       const line = lines[currentLineNo++];
+      execute(line ? line.code : '');
+      onAfter();
       if (line) {
         line.elem.classList.remove('current-line');
-        execute(line.code);
-        onAfter();
         highlightCurrentLine();
       }
     }
@@ -80,7 +80,8 @@ export default class Stepper {
     highlightCurrentLine();
 
     async function run() {
-      while (currentLineNo < lines.length) {
+      // execute one past last line so that onAfter is called
+      while (currentLineNo <= lines.length) {
         step();
         await wait(50);
       }
