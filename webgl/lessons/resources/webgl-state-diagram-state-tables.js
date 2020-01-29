@@ -608,7 +608,7 @@ export const commonState = [
       formatter: formatWebGLObject,
       help: `
       The current program. Used when calling --gl.drawArrays--, --gl.drawElements--
-      and --gl.uniformXXX---.
+      and --gl.uniformXXX--.
 
       ---js
       gl.useProgram(someProgram);
