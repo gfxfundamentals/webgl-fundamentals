@@ -671,12 +671,12 @@ export default function main({webglVersion, windowPositions}) {
     let newShaders;
 
     const updateAttachedShaders = () => {
-      expand(shaderExpander);
       shadersTbody.innerHTML = '';
 
       arrows.forEach(arrow => arrowManager.remove(arrow));
 
       newShaders = gl.getAttachedShaders(program);
+      collapseOrExpand(shaderExpander, newShaders.length > 0);
 
       // sort so VERTEX_SHADER is first.
       newShaders.sort((a, b) => {
@@ -1344,15 +1344,18 @@ export default function main({webglVersion, windowPositions}) {
     };
   }
 
-  function expand(inner) {
+  function collapseOrExpand(inner, open) {
+    const action = open ? 'add' : 'remove' 
     const elem = inner.parentElement;
     if (elem.classList.contains('expander')) {
-      elem.classList.add('open');
+      elem.classList[action]('open');
     } else {
-      elem.querySelector('.expander').classList.add('open');
+      elem.querySelector('.expander').classList[action]('open');
     }
     return elem;
   }
+  const expand = (elem) => collapseOrExpand(elem, true);
+  // const collapse = (elem) => collapseOrExpand(elem, false);
 
   function globalStateQuery(state) {
     const {pname} = state;
