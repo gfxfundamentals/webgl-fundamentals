@@ -239,15 +239,16 @@ at a time and watch what WebGL state is affected.
 const canvas = document.querySelector('canvas');
 const gl = canvas.getContext('webgl');
 
-const makeTextCanvas = () => {
+// make a canvas with text in the center
+const makeTextCanvas = (text, width, height, color) => {
   const ctx = document.createElement('canvas').getContext('2d')
-  ctx.canvas.width = 64
-  ctx.canvas.height = 64
-  ctx.font = 'bold 50px sans-serif'
+  ctx.canvas.width = width
+  ctx.canvas.height = height
+  ctx.font = `bold ${height * 5 / 6 | 0}px sans-serif`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  ctx.fillStyle = 'red'
-  ctx.fillText('F', 32, 32)
+  ctx.fillStyle = color
+  ctx.fillText(text, width / 2, height / 2)
   return ctx.canvas
 };
 
@@ -411,7 +412,7 @@ gl.texImage2D(
     gl.RGBA,          // internal format
     gl.RGBA,          // format
     gl.UNSIGNED_BYTE, // type
-    makeTextCanvas());
+    makeTextCanvas('F', 32, 32, red));
 gl.generateMipmap(gl.TEXTURE_2D);
 
 // above this line is initialization code
