@@ -235,6 +235,7 @@ export default function main({webglVersion, windowPositions}) {
     div.addEventListener('mousedown', (e) => {moveToFront(div);}, {passive: false});
     div.addEventListener('mousedown', dragStart, {passive: false});
     moveToFront(div);
+    return div;
   }
 
   function createExpander(parent, title, attrs = {}) {
@@ -1392,7 +1393,7 @@ export default function main({webglVersion, windowPositions}) {
   expand(globalUI.depthState.elem);
 
   makeDraggable(globalStateElem);
-  makeDraggable(document.querySelector('#canvas'));
+  const canvasDraggable = makeDraggable(document.querySelector('#canvas'));
   moveToFront(defaultVAOInfo.ui.elem.parentElement);
   arrowManager.update();
 
@@ -1588,6 +1589,18 @@ export default function main({webglVersion, windowPositions}) {
     updateProgramAttributesAndUniforms(oldProg);
     updateProgramAttributesAndUniforms(newProg);
   });
+
+  function wrapDrawFn(fnName) {
+    wrapFn(fnName, function(origFn, ...args) {
+      origFn.call(this, ...args);
+      flash(canvasDraggable.querySelector('.name'));
+    });
+  }
+  wrapDrawFn('clear');
+  wrapDrawFn('drawArrays');
+  wrapDrawFn('drawElements');
+  wrapDrawFn('drawArraysInstanced');
+  wrapDrawFn('drawElementsInstanced');
 
   function handleResizes() {
     arrowManager.update();
