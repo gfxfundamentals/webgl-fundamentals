@@ -121,11 +121,11 @@ export default function main({webglVersion, windowPositions}) {
   }
 
   function updateElemAndFlashExpanderIfClosed(elem, value, flashOnChange = true) {
-    if (updateElem(elem, value, flashOnChange)) {
-      if (flashOnChange) {
-        flashExpanderIfClosed(elem);
-      }
+    const changed = updateElem(elem, value, flashOnChange);
+    if (changed && flashOnChange) {
+      flashExpanderIfClosed(elem);
     }
+    return changed;
   }
 
   function toggleExpander(e) {
