@@ -42,6 +42,10 @@ function updateElem(elem, newValue, flashOnChange = true) {
   return needUpdate;
 }
 
+function addRemoveClass(elem, className, add) {
+  elem.classList[add ? 'add' : 'remove'](className);
+}
+
 function helpToMarkdown(s) {
   s = s.replace(/---/g, '```')
        .replace(/--/g, '`');
@@ -60,7 +64,7 @@ function helpToMarkdown(s) {
   return lines.map(line => line.startsWith(indent) ? line.substr(indent.length) : line).join('\n');
 }
 
-function addElem(tag, parent, attrs = {}) {
+function createElem(tag, attrs = {}) {
   const elem = document.createElement(tag);
   for (const [key, value] of Object.entries(attrs)) {
     if (typeof value === 'object') {
@@ -77,6 +81,11 @@ function addElem(tag, parent, attrs = {}) {
       elem[key] = value;
     }
   }
+  return elem;
+}
+
+function addElem(tag, parent, attrs = {}) {
+  const elem = createElem(tag, attrs);
   parent.appendChild(elem);
   return elem;
 }
@@ -163,8 +172,10 @@ export {
   createTemplate,
   updateElem,
   helpToMarkdown,
+  addRemoveClass,
   flash,
   removeFlashes,
+  createElem,
   addElem,
   addSVG,
   createTable,
