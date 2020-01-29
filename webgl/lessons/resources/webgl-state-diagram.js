@@ -108,6 +108,25 @@ export default function main({webglVersion, windowPositions}) {
   // document.body.addEventListener('mousemove', showHint);
   document.body.addEventListener('click', showHint);
 
+  function flashExpanderIfClosed(elem) {
+    const expander = elem.closest('.expander');
+    if (!expander.classList.contains('open')) {
+      flash(expander.children[0]);
+    }
+  }
+
+  function flashSelfAndExpanderIfClosed(elem) {
+    flash(elem);
+    flashExpanderIfClosed(elem);
+  }
+
+  function updateElemAndFlashExpanderIfClosed(elem, value, flashOnChange = true) {
+    if (updateElem(elem, value, flashOnChange)) {
+      if (flashOnChange) {
+        flashExpanderIfClosed(elem);
+      }
+    }
+  }
 
   function toggleExpander(e) {
     e.preventDefault();
@@ -271,7 +290,7 @@ export default function main({webglVersion, windowPositions}) {
       const value = formatter(raw);
       const row = tbody.rows[rowNdx];
       const cell = row.cells[1];
-      const isNew = cell.textContent !== value;
+      const isNew = cell.textContent !== value.toString();
       cell.textContent = value;
       // FIX: should put this data else were instead of guessing
       if (isNew) {
@@ -298,7 +317,7 @@ export default function main({webglVersion, windowPositions}) {
       }
 
       if (!initial && isNew) {
-        flash(row);
+        flashSelfAndExpanderIfClosed(row);
       }
     });
   }
@@ -531,7 +550,7 @@ export default function main({webglVersion, windowPositions}) {
         const {location, uniformTypeInfo} = locationInfo;
         const cell = tbody.rows[ndx].cells[1];
         const value = gl.getUniform(program, location);
-        updateElem(cell, formatUniformValue(value), !initial);
+        updateElemAndFlashExpanderIfClosed(cell, formatUniformValue(value), !initial);
         const bindPoint = uniformTypeInfo.bindPoint;
         if (bindPoint) {
           if (locationInfo.arrow) {
@@ -671,7 +690,7 @@ export default function main({webglVersion, windowPositions}) {
             textContent: formatWebGLObject(shader),
         });
         if (oldShaders.indexOf(shader) < 0) {
-          flash(td);
+          flashSelfAndExpanderIfClosed(td);
         }
         const targetInfo = getWebGLObjectInfo(shader);
         if (!targetInfo.deleted) {
@@ -996,7 +1015,7 @@ export default function main({webglVersion, windowPositions}) {
         data.forEach((value, cellNdx) => {
           const cell = row.cells[cellNdx];
           const newValue = formatters[cellNdx](value);
-          if (updateElem(cell, newValue, flashOnChange)) {
+          if (updateElemAndFlashExpanderIfClosed(cell, newValue, flashOnChange)) {
             if (cellNdx === bufferNdx) {
               const oldArrow = arrows[i];
               if (oldArrow) {
@@ -1048,7 +1067,7 @@ export default function main({webglVersion, windowPositions}) {
       const maxValues = 9;
       const data = typeof dataOrSize === 'number' ? new Array(maxValues).fill(0) : dataOrSize;
       expand(dataExpander);
-      flash(dataElem);
+      flashSelfAndExpanderIfClosed(dataElem);
       const value = formatUniformValue(Array.from(data).slice(0, maxValues));
       dataElem.textContent = `${value}${data.length > maxValues ? ', ...' : ''}`;
     };
@@ -1276,7 +1295,7 @@ export default function main({webglVersion, windowPositions}) {
       targets.forEach((target, colNdx) => {
         const cell = row.cells[colNdx];
         const texture = gl.getParameter(target);
-        if (updateElem(cell, formatWebGLObject(texture))) {
+        if (updateElemAndFlashExpanderIfClosed(cell, formatWebGLObject(texture))) {
           const oldArrow = arrows[unit][target];
           if (oldArrow) {
             arrowManager.remove(oldArrow);
