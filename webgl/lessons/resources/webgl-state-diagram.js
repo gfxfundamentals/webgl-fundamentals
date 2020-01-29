@@ -1105,7 +1105,6 @@ export default function main({webglVersion, windowPositions}) {
         const filter = i === 0
            ? magFilter === gl.LINEAR
            : minFilter === gl.NEAREST_MIPMAP_LINEAR || minFilter === gl.LINEAR_MIPMAP_LINEAR;
-        const currentSize = size;
         if (foundMip) {
           size = Math.max(size / 2, 1);
         }
@@ -1114,7 +1113,7 @@ export default function main({webglVersion, windowPositions}) {
           continue;
         }
         foundMip = true;
-        const width = currentSize;
+        const width = size;
         const height = Math.max(size * mipCanvas.height / mipCanvas.width, 1);
 
         mipCanvas.remove();
@@ -1194,14 +1193,18 @@ export default function main({webglVersion, windowPositions}) {
       updateMips();
     }
 
-    function updateMipFromImage(target, level, internalFormat, format, type, element) {
-      const {width, height} = element;
+    function makeCanvasCopyOfElement(elem, width, height) {
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d');
-      ctx.drawImage(element, 0, 0);
-      mips[level] = canvas;
+      ctx.drawImage(elem, 0, 0, width, height);
+      return ctx.canvas;
+    }
+
+    function updateMipFromImage(target, level, internalFormat, format, type, element) {
+      const {width, height} = element;
+      mips[level] = makeCanvasCopyOfElement(element, width, height);
       updateMips();
     }
 
@@ -1217,6 +1220,21 @@ export default function main({webglVersion, windowPositions}) {
         default:
           throw new Error('unknown arguments for texImage2D');
       }
+    }
+
+    function generateMips(target) {
+      let level = 0;
+      for (;;) {
+        const mipCanvas = mips[level++]
+        const {width, height} = mipCanvas;
+        if (width === 1 && height === 1) {
+          break;
+        }
+        const mipWidth = Math.max(width / 2 | 0, 1);
+        const mipHeight = Math.max(height / 2 | 0, 1);
+        mips[level] = makeCanvasCopyOfElement(mipCanvas, mipWidth, mipHeight);
+      }
+      updateMips();
     }
 
     const updateData = () => {};
@@ -1249,6 +1267,7 @@ export default function main({webglVersion, windowPositions}) {
         }
       },
       updateMip,
+      generateMips,
     };
   }
 
@@ -1494,6 +1513,12 @@ export default function main({webglVersion, windowPositions}) {
     const texture = getCurrentTextureForTarget(target);
     const {ui} = getWebGLObjectInfo(texture);
     ui.updateMip(target, ...args);
+  });
+  wrapFn('generateMipmap', function(origFn, target) {
+    origFn.call(this, target);
+    const texture = getCurrentTextureForTarget(target);
+    const {ui} = getWebGLObjectInfo(texture);
+    ui.generateMips(target);
   });
   wrapFn('shaderSource', function(origFn, shader, source) {
     origFn.call(this, shader, source);
