@@ -1029,7 +1029,7 @@ export default function main({webglVersion, windowPositions}) {
                   arrows[i] = arrowManager.add(
                       cell,
                       targetInfo.ui.elem.querySelector('.name'),
-                      getColorForWebGLObject(value, targetInfo.ui.elem));
+                      getColorForWebGLObject(value, targetInfo.ui.elem, i / maxAttribs));
                 }
               }
             }
@@ -1323,7 +1323,7 @@ export default function main({webglVersion, windowPositions}) {
               arrows[unit][targetBinding] = arrowManager.add(
                   cell,
                   targetInfo.ui.elem.querySelector('.name'),
-                  getColorForWebGLObject(texture, targetInfo.ui.elem));
+                  getColorForWebGLObject(texture, targetInfo.ui.elem, unit / maxUnits));
             }
           }
         }
