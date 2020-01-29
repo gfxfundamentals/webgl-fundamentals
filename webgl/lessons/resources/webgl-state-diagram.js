@@ -166,6 +166,7 @@ export default function main({webglVersion, windowPositions}) {
     if (dragTarget) {
       e.preventDefault();
       e.stopPropagation();
+      dragTarget.classList.add('dragging');
       const x = dragTargetStartX + (e.pageX - dragMouseStartX);
       const y = dragTargetStartY + (e.pageY - dragMouseStartY);
       dragTarget.style.left = px(x);
@@ -177,6 +178,7 @@ export default function main({webglVersion, windowPositions}) {
   function dragStop(e) {
     e.preventDefault();
     e.stopPropagation();
+    dragTarget.classList.remove('dragging');
     dragTarget = undefined;
     window.removeEventListener('mousemove', dragMove);
     window.removeEventListener('mouseup', dragStop);
@@ -232,7 +234,6 @@ export default function main({webglVersion, windowPositions}) {
     const nameElem = div.querySelector('.name');
     div.addEventListener('mousedown', (e) => {moveToFront(div);}, {passive: false});
     div.addEventListener('mousedown', dragStart, {passive: false});
-    nameElem.addEventListener('click', (e) => e.stopPropagation());
     moveToFront(div);
   }
 
@@ -243,7 +244,6 @@ export default function main({webglVersion, windowPositions}) {
     });
     const inner = addElem('div', outer, {className: 'expander-content'});
     titleElem.addEventListener('click', toggleExpander);
-    titleElem.addEventListener('mousedown', (e) => e.stopPropagation());
     return inner;
   }
 

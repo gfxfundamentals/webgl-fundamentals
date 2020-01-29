@@ -21,6 +21,9 @@ canvas {
 *[data-help]:hover {
   outline: 2px solid red;
 }
+.dragging {
+  pointer-events: none;
+}
 .draggable {
   position: absolute;
   box-shadow: 2px 2px 15px #000;
@@ -163,7 +166,7 @@ body {
   background:rgba(255, 255, 255, 0.4);
 }
 .expander.open>div:first-child {
-  margin-bottom: 10px;
+  margin-bottom: 0.5em;
 }
 .expander>div:first-child::before {
   content: '▶';
@@ -173,11 +176,11 @@ body {
   display: none;
 }
 .expander {
-  padding: 0 0.5em 0 0.5em;
+  padding: 0.5em 0 0 0;
 }
 .expander.open {
   background: rgba(255, 255, 255, 0.1);
-  padding: 0.5em;
+  padding-bottom: 0.5em;
 }
 .expander.open>*:nth-child(0n+2) {
   display: initial;
