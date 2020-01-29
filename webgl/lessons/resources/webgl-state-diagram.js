@@ -43,6 +43,12 @@ export default function main({webglVersion, windowPositions}) {
   hljs.initHighlightingOnLoad();
 
   gl = document.querySelector('canvas').getContext(webglVersion, {preserveDrawingBuffer: true});  /* eslint-disable-line */
+
+  if (!gl) {
+    document.body.classList.add('no-webgl');
+    return;
+  }
+
   twgl.addExtensionsToContext(gl);
 
   const diagramElem = document.querySelector('#diagram');
@@ -58,6 +64,7 @@ export default function main({webglVersion, windowPositions}) {
   let dragMouseStartY;
   let dragTargetStartX;
   let dragTargetStartY;
+  let dragDist;
 
   const converter = new showdown.Converter();
   const hintElem = document.querySelector('#hint');
@@ -151,17 +158,25 @@ export default function main({webglVersion, windowPositions}) {
   function dragStart(e) {
     e.preventDefault();
     e.stopPropagation();
+    const isTouch = e.type === 'touchstart';
+
+    if (isTouch) {
+      dragMouseStartX = e.touches[0].pageX;
+      dragMouseStartY = e.touches[0].pageY;
+    } else {
+      dragMouseStartX = e.pageX;
+      dragMouseStartY = e.pageY;
+    }
+
+    dragDist = 0;
     dragTarget = this.closest('.draggable');
     const rect = this.getBoundingClientRect();
-    dragMouseStartX = e.pageX;
-    dragMouseStartY = e.pageY;
     dragTargetStartX = (window.scrollX + rect.left) | 0; // parseInt(this.style.left || '0');
-    dragTargetStartY = (window.scrollY + rect.top) | 0;  // parseInt(this.style.top || '0');
-
-    window.addEventListener('mousemove', dragMove, {passive: false});
-    window.addEventListener('mouseup', dragStop, {passive: false});
-
+    dragTargetStartY = (window.scrollY + rect.top) | 0;  // parseInt(this.style.top || '0');  
     moveToFront(dragTarget);
+
+    window.addEventListener(isTouch ? 'touchmove' : 'mousemove', dragMove, {passive: false});
+    window.addEventListener(isTouch ? 'touchend' : 'mouseup', dragStop, {passive: false});
   }
 
   function dragMove(e) {
@@ -169,8 +184,12 @@ export default function main({webglVersion, windowPositions}) {
       e.preventDefault();
       e.stopPropagation();
       dragTarget.classList.add('dragging');
-      const x = dragTargetStartX + (e.pageX - dragMouseStartX);
-      const y = dragTargetStartY + (e.pageY - dragMouseStartY);
+      const isTouch = e.type === 'touchmove';
+      const dx = ((isTouch ? e.touches[0].pageX : e.pageX) - dragMouseStartX);
+      const dy = ((isTouch ? e.touches[0].pageY : e.pageY) - dragMouseStartY);
+      dragDist += dx + dy;
+      const x = dragTargetStartX + dx;
+      const y = dragTargetStartY + dy;
       dragTarget.style.left = px(x);
       dragTarget.style.top = px(y);
       arrowManager.update();
@@ -178,13 +197,27 @@ export default function main({webglVersion, windowPositions}) {
   }
 
   function dragStop(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    dragTarget.classList.remove('dragging');
-    dragTarget = undefined;
-    window.removeEventListener('mousemove', dragMove);
-    window.removeEventListener('mouseup', dragStop);
+    if (dragTarget) {
+      e.preventDefault();
+      e.stopPropagation();
+      const isTouch = e.type === 'touchend';
+      dragTarget.classList.remove('dragging');
+      dragTarget = undefined;
+      window.removeEventListener(isTouch ? 'touchmove' : 'mousemove', dragMove);
+      window.removeEventListener(isTouch ? 'touchend' : 'mouseup', dragStop);
+      if (isTouch && dragDist === 0) {
+        const clickElem = document.elementFromPoint(dragMouseStartX, dragMouseStartY);
+      	clickElem.dispatchEvent(new MouseEvent('click', {
+      		bubbles: true,
+      		cancelable: true,
+      		view: window,
+          clientX: dragMouseStartX,
+          clientY: dragMouseStartY,
+      	}));
+      }
+    }
   }
+
 
   // format for position is selfSide:baseSide:offset.
   // eg.: left:right-10 = put our left side - 10 units from right of base
@@ -236,6 +269,7 @@ export default function main({webglVersion, windowPositions}) {
     const nameElem = div.querySelector('.name');
     div.addEventListener('mousedown', (e) => {moveToFront(div);}, {passive: false});
     div.addEventListener('mousedown', dragStart, {passive: false});
+    div.addEventListener('touchstart', dragStart, {passing: false});
     moveToFront(div);
     return div;
   }
