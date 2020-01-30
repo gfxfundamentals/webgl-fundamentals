@@ -25,6 +25,8 @@ import {
 const glEnumToString = twgl.glEnumToString;
 const formatEnum = v => glEnumToString(gl, v);
 const formatEnumZero = v => v ? v === 1 ? 'ONE' : glEnumToString(gl, v) : 'ZERO';
+const formatEnumNone = v => v ? glEnumToString(gl, v) : 'NONE';
+const insertIf = (condition, ...elements) => condition ? elements : [];
 
 const webglFuncs = `
 --gl.NEVER--,
@@ -842,36 +844,6 @@ export function getStateTables(isWebGL2) {
   const textureState = {
     states: [
       {
-        pname: 'TEXTURE_WRAP_S',
-        formatter: formatEnum,
-        help: `
-        what happens for texture coordinates outside the 0 to 1 range
-        in the S direction (horizontal). Can be one of --gl.REPEAT--,
-        --gl.CLAMP_TO_EDGE--, --gl.MIRRORED_REPEAT--. **For non power
-        of 2 textures must be --gl.CLAMP_TO_EDGE--**.
-
-        ---js
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-        ---
-
-        ${activeTexNote}`,
-      },
-      {
-        pname: 'TEXTURE_WRAP_T',
-        formatter: formatEnum,
-        help: `
-        what happens for texture coordinates outside the 0 to 1 range
-        in the S direction (vertical). Can be one of --gl.REPEAT--,
-        --gl.CLAMP_TO_EDGE--, --gl.MIRRORED_REPEAT--. **For non power
-        of 2 textures must be --gl.CLAMP_TO_EDGE--**.
-
-        ---js
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-        ---
-
-        ${activeTexNote}`,
-      },
-      {
         pname: 'TEXTURE_MIN_FILTER',
         formatter: formatEnum,
         help: `
@@ -906,6 +878,92 @@ export function getStateTables(isWebGL2) {
 
         ${activeTexNote}`,
       },
+      {
+        pname: 'TEXTURE_WRAP_S',
+        formatter: formatEnum,
+        help: `
+        what happens for texture coordinates outside the 0 to 1 range
+        in the S direction (horizontal). Can be one of --gl.REPEAT--,
+        --gl.CLAMP_TO_EDGE--, --gl.MIRRORED_REPEAT--. **For non power
+        of 2 textures must be --gl.CLAMP_TO_EDGE--**.
+
+        ---js
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        ---
+
+        ${activeTexNote}`,
+      },
+      {
+        pname: 'TEXTURE_WRAP_T',
+        formatter: formatEnum,
+        help: `
+        what happens for texture coordinates outside the 0 to 1 range
+        in the S direction (vertical). Can be one of --gl.REPEAT--,
+        --gl.CLAMP_TO_EDGE--, --gl.MIRRORED_REPEAT--. **For non power
+        of 2 textures must be --gl.CLAMP_TO_EDGE--**.
+
+        ---js
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        ---
+
+        ${activeTexNote}`,
+      },
+      ...insertIf(isWebGL2,
+        {
+          pname: 'TEXTURE_WRAP_R',
+          formatter: formatEnum,
+          help: `
+          what happens for texture coordinates outside the 0 to 1 range
+          in the R direction (depth). Used on cube maps and 3D textures.
+          Can be one of --gl.REPEAT--,
+          --gl.CLAMP_TO_EDGE--, --gl.MIRRORED_REPEAT--. **For non power
+          of 2 textures must be --gl.CLAMP_TO_EDGE--**.
+  
+          ---js
+          gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_R, gl.REPEAT);
+          ---
+  
+          ${activeTexNote}`,
+        },
+        /*
+        {
+          pname: 'TEXTURE_MIN_LOD',
+          formatter: formatUniformValue,
+          help: `
+          `,
+        },
+        {
+          pname: 'TEXTURE_MAX_LOD',
+          formatter: formatUniformValue,
+          help: `
+          `,
+        },
+        {
+          pname: 'TEXTURE_BASE_LEVEL',
+          formatter: formatUniformValue,
+          help: `
+          `,
+        },
+        {
+          pname: 'TEXTURE_MAX_LEVEL',
+          formatter: formatUniformValue,
+          help: `
+          `,
+        },
+        {
+          pname: 'TEXTURE_COMPARE_MODE',
+          formatter: formatEnumNone,
+          help: `
+          `,
+        },
+        {
+          pname: 'TEXTURE_COMPARE_FUNC',
+          formatter: formatEnum,
+          help: `
+          `,
+        },
+        */
+      ),
     ],
   };
 
