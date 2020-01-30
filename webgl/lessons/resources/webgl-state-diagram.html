@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="utf8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
   <meta name="description" content="WebGL State Diagram to help visualize WebGL" />
   <meta name="keywords" content="webgl graphics" />
@@ -58,9 +57,6 @@
     </div>
     <div id="code"></div>
   </div>
-</div>
-<div class="too-small">
-  <div>please make your window bigger or use another device</div>
 </div>
 <div class="get-webgl">
 <pre>
@@ -231,16 +227,15 @@ at a time and watch what WebGL state is affected.
 
 ## Notes:
 
-* A program that has a sampler uniform only indirectly
-  references a texture unit by index. Similarly a 
-  program attribute only indirectly references a vertex
-  array attribute by index. The arrows showing
-  these connection is dotted to indicate it is not a
-  direct connection.
+* A programs only indirectly
+  reference textures via texture units by index. Similarly 
+  programs only indirectly reference buffers via vertex
+  array attribute index. The arrows showing
+  these connection are dotted to indicate they are not
+  direct connections.
 
-  For vertex arrays this is important to notice the program
-  attributes are not connected to a specific vertex array.
-  They will reference the attributes of the current vertex array.
+  Program attributes are not connected to a specific vertex array
+  nor are program uniforms connected to a particular texture.
 
 * **Not all state is shown.**
 </script>
