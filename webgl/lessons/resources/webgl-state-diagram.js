@@ -1465,10 +1465,10 @@ export default function main({webglVersion, windowPositions}) {
     const expander = createExpander(parent, 'Texture Units');
 
     const targets = isWebGL2
-        ? ['TEXTURE_2D', 'TEXTURE_CUBE_MAP', 'TEXTURE_3D', 'TEXTURE_2D_ARRAY']
+        ? ['TEXTURE_2D', 'TEXTURE_CUBE_MAP', 'TEXTURE_3D', 'TEXTURE_2D_ARRAY', 'SAMPLER_BINDING']
         : ['TEXTURE_2D', 'TEXTURE_CUBE_MAP'];
 
-    const tbody = createTable(expander, targets.map(v => v.replace('TEXTURE_', '')));
+    const tbody = createTable(expander, targets.map(v => v.replace(/TEXTURE_|_BINDING/, '')));
     const arrows = [];
     let activeTextureUnit = 0;
 
@@ -1476,24 +1476,52 @@ export default function main({webglVersion, windowPositions}) {
       arrows.push({});
       const tr = addElem('tr', tbody);
       for (const target of targets) {
-        addElem('td', tr, {
-          textContent: 'null',
-          dataset: {
-            help: helpToMarkdown(`
-              bind a texture to this unit with
+        if (target === 'SAMPLER_BINDING') {
+          addElem('td', tr, {
+            textContent: 'null',
+            dataset: {
+              help: helpToMarkdown(`
+                bind a sampler to this unit with
 
-              ---js
-              gl.activeTexture(gl.TEXTURE0 + ${i});
-              gl.bindTexture(gl.${target}, someTexture);
-              ---
-            `),
-          },
-        });
+                ---js
+                const textureUnit = ${i};
+                gl.bindSampler(textureUnit, someSampler);
+                ---
+
+                and unbind one by passing --null--.
+
+                Samplers override a texture's parameters
+                letting you use the same texture with different
+                parameters. All the same parameters set with
+                --gl.texParameteri-- can be set on a sampler
+                with
+
+                ---js
+                gl.samplerParameteri(someSampler, textureParamEnum, value);
+                ---
+              `),
+            },
+          });
+        } else {
+          addElem('td', tr, {
+            textContent: 'null',
+            dataset: {
+              help: helpToMarkdown(`
+                bind a texture to this unit with
+
+                ---js
+                gl.activeTexture(gl.TEXTURE0 + ${i});
+                gl.bindTexture(gl.${target}, someTexture);
+                ---
+              `),
+            },
+          });
+        }
       }
     }
 
     const targetBindings = isWebGL2
-        ? [gl.TEXTURE_BINDING_2D, gl.TEXTURE_BINDING_CUBE_MAP, gl.TEXTURE_BINDING_3D, gl.TEXTURE_BINDING_2D_ARRAY]
+        ? [gl.TEXTURE_BINDING_2D, gl.TEXTURE_BINDING_CUBE_MAP, gl.TEXTURE_BINDING_3D, gl.TEXTURE_BINDING_2D_ARRAY, gl.SAMPLER_BINDING]
         : [gl.TEXTURE_BINDING_2D, gl.TEXTURE_BINDING_CUBE_MAP];
     const updateCurrentTextureUnit = () => {
       const unit = gl.getParameter(gl.ACTIVE_TEXTURE) - gl.TEXTURE0;
