@@ -1,5 +1,6 @@
 /* eslint strict: "off" */
 /* eslint no-undef: "error" */
+/* eslint no-return-assign: "off" */
 
 /* global hljs, showdown, gl, chroma */
 
@@ -38,7 +39,7 @@ import Stepper from './webgl-state-diagram-stepper.js';
 import ArrowManager from './webgl-state-diagram-arrows.js';
 
 function isBadWebGL2(gl) {
-  // check if it really supports WebGL2. Issues, Some browers claim to support WebGL2
+  // check if it really supports WebGL2. Issues, Some browsers claim to support WebGL2
   // but in reality pass less than 20% of the conformance tests. Add a few simple
   // tests to fail so as not to mislead users.
   const params = [
@@ -53,7 +54,7 @@ function isBadWebGL2(gl) {
   ];
   for (const {pname, min} of params) {
     const value = gl.getParameter(gl[pname]);
-    if (typeof value !== 'number' || Number.isNaN(value) || value < params.min || gl.getError()) {
+    if (typeof value !== 'number' || Number.isNaN(value) || value < min || gl.getError()) {
       return true;
     }
   }
@@ -177,6 +178,28 @@ export default function main({webglVersion, windowPositions}) {
     });
   }
 
+  const queuedRequests = new Map();
+  function updateQueuedElementPosition() {
+    requestId = undefined;
+    queuedRequests.forEach((value, key) => {
+      const {x, y} = value;
+      key.style.left = px(x);
+      key.style.top = px(y);
+    });
+    queuedRequests.clear();
+    arrowManager.update();
+  }
+
+  let requestId;
+  function requestDragUpdate(elem, x, y) {
+    queuedRequests.set(elem, {x, y});
+    if (requestId) {
+      return;
+    }
+
+    requestId = requestAnimationFrame(updateQueuedElementPosition);
+  }
+
   function dragStart(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -194,7 +217,7 @@ export default function main({webglVersion, windowPositions}) {
     dragTarget = this.closest('.draggable');
     const rect = this.getBoundingClientRect();
     dragTargetStartX = (window.scrollX + rect.left) | 0; // parseInt(this.style.left || '0');
-    dragTargetStartY = (window.scrollY + rect.top) | 0;  // parseInt(this.style.top || '0');  
+    dragTargetStartY = (window.scrollY + rect.top) | 0;  // parseInt(this.style.top || '0');
     moveToFront(dragTarget);
 
     window.addEventListener(isTouch ? 'touchmove' : 'mousemove', dragMove, {passive: false});
@@ -212,9 +235,7 @@ export default function main({webglVersion, windowPositions}) {
       dragDist += dx + dy;
       const x = dragTargetStartX + dx;
       const y = dragTargetStartY + dy;
-      dragTarget.style.left = px(x);
-      dragTarget.style.top = px(y);
-      arrowManager.update();
+      requestDragUpdate(dragTarget, x, y);
     }
   }
 
@@ -229,13 +250,13 @@ export default function main({webglVersion, windowPositions}) {
       window.removeEventListener(isTouch ? 'touchend' : 'mouseup', dragStop);
       if (isTouch && dragDist === 0) {
         const clickElem = document.elementFromPoint(dragMouseStartX, dragMouseStartY);
-      	clickElem.dispatchEvent(new MouseEvent('click', {
-      		bubbles: true,
-      		cancelable: true,
-      		view: window,
+       clickElem.dispatchEvent(new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window,
           clientX: dragMouseStartX,
           clientY: dragMouseStartY,
-      	}));
+       }));
       }
     }
   }
@@ -288,8 +309,7 @@ export default function main({webglVersion, windowPositions}) {
     const pos = getNextWindowPosition(div);
     div.style.left = px(pos.x);
     div.style.top = px(pos.y);
-    const nameElem = div.querySelector('.name');
-    div.addEventListener('mousedown', (e) => {moveToFront(div);}, {passive: false});
+    div.addEventListener('mousedown', () => moveToFront(div), {passive: false});
     div.addEventListener('mousedown', dragStart, {passive: false});
     div.addEventListener('touchstart', dragStart, {passing: false});
     moveToFront(div);
@@ -806,7 +826,7 @@ export default function main({webglVersion, windowPositions}) {
   }
 
   const maxAttribs = 8;
-  function createVertexArrayDisplay(parent, name, webglObject) {
+  function createVertexArrayDisplay(parent, name /*, webglObject */) {
     const vaElem = createTemplate(parent, '#vertex-array-template');
     setName(vaElem, name);
     const vaoNote = isWebGL2
@@ -1179,7 +1199,7 @@ export default function main({webglVersion, windowPositions}) {
               * It needs mips but doesn't have mips all the way down to 1x1 size.
               * It's a --CUBE_MAP-- but it's not square or its sides are not the matching sizes
               `),
-      }
+      },
     });
     nameLine.insertBefore(badElem, nameLine.lastChild);
 
@@ -1213,7 +1233,7 @@ export default function main({webglVersion, windowPositions}) {
       if (!isPOT) {
         const wrapS = gl.getTexParameter(target, gl.TEXTURE_WRAP_S);
         const wrapT = gl.getTexParameter(target, gl.TEXTURE_WRAP_T);
-        if (wrapS !== gl.CLAMP_TO_EDGE || wrapS !== gl.CLAMP_TO_EDGE) {
+        if (wrapS !== gl.CLAMP_TO_EDGE || wrapT !== gl.CLAMP_TO_EDGE) {
           return false;
         }
       }
@@ -1373,10 +1393,10 @@ export default function main({webglVersion, windowPositions}) {
       }
     }
 
-    function generateMips(target) {
+    function generateMips() {
       let level = 0;
       for (;;) {
-        const mipCanvas = mips[level++]
+        const mipCanvas = mips[level++];
         const {width, height} = mipCanvas;
         if (width === 1 && height === 1) {
           break;
@@ -1497,7 +1517,7 @@ export default function main({webglVersion, windowPositions}) {
   }
 
   function collapseOrExpand(inner, open) {
-    const action = open ? 'add' : 'remove' 
+    const action = open ? 'add' : 'remove';
     const elem = inner.parentElement;
     if (elem.classList.contains('expander')) {
       elem.classList[action]('open');
