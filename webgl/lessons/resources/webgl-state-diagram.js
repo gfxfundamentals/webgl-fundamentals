@@ -21,14 +21,7 @@ import {
   removeFlashes,
   createTable,
 } from './webgl-state-diagram-utils.js';
-import {
-  vertexArrayState,
-  textureState,
-  activeTexNote,
-  shaderState,
-  programState,
-  globalState,
-} from './webgl-state-diagram-state-tables.js';
+import { getStateTables } from './webgl-state-diagram-state-tables.js';
 import {
   formatWebGLObject,
   addWebGLObjectInfo,
@@ -73,6 +66,15 @@ export default function main({webglVersion, windowPositions}) {
   }
 
   twgl.addExtensionsToContext(gl);
+
+  const {
+    vertexArrayState,
+    textureState,
+    activeTexNote,
+    shaderState,
+    programState,
+    globalState,
+  } = getStateTables(isWebGL2);
 
   const diagramElem = document.querySelector('#diagram');
   const codeElem = document.querySelector('#code');
@@ -133,6 +135,8 @@ export default function main({webglVersion, windowPositions}) {
         (e.type !== 'click' && !showHintOnHover)) {
       return;
     }
+    e.preventDefault();
+    e.stopPropagation();
     const elem = e.target.closest('[data-help]');
     setHint(e, elem ? elem.dataset.help : '');
   }
@@ -163,7 +167,7 @@ export default function main({webglVersion, windowPositions}) {
   function toggleExpander(e) {
     e.preventDefault();
     e.stopPropagation();
-    e.target.parentElement.classList.toggle('open');
+    this.parentElement.classList.toggle('open');
     arrowManager.update();
     moveToFront(e.target);
   }
@@ -316,19 +320,32 @@ export default function main({webglVersion, windowPositions}) {
     return div;
   }
 
-  function createExpander(parent, title, attrs = {}) {
+  function createExpander(parent, title, attrs = {}, help) {
     const outer = addElem('div', parent, Object.assign({className: 'expander'}, attrs));
-    const titleElem = addElem('div', outer, {
+    const titleLine = addElem('div', outer, {className: 'expander-name-line'});
+    addElem('div', titleLine, {
+      className: 'expander-name',
       textContent: title,
     });
+    if (help) {
+      const helpElem = addElem('div', titleLine, {
+        className: 'expander-help',
+        textContent: '?',
+        dataset: {
+          help: helpToMarkdown(help),
+        },
+      });
+      helpElem.addEventListener('click', showHint);
+    }
     const inner = addElem('div', outer, {className: 'expander-content'});
-    titleElem.addEventListener('click', toggleExpander);
+    titleLine.addEventListener('click', toggleExpander);
     return inner;
   }
 
   const elemToArrowMap = new Map();
-  function createStateTable(states, parent, title, queryFn, update = true) {
-    const expander = createExpander(parent, title);
+  function createStateTable(statesInfo, parent, title, queryFn, update = true) {
+    const {states, help} = statesInfo;
+    const expander = createExpander(parent, title, {}, help);
     const div = addElem('div', expander, {className: 'expander-content'});
     const table = addElem('table', div);
     const tbody = addElem('tbody', table);
@@ -340,7 +357,7 @@ export default function main({webglVersion, windowPositions}) {
       addElem('td', tr);
     }
     if (update) {
-      updateStateTable(states, expander, queryFn, true);
+      updateStateTable(statesInfo, expander, queryFn, true);
     }
     return expander;
   }
@@ -360,7 +377,8 @@ export default function main({webglVersion, windowPositions}) {
     return hsl(c[0] / 360 + level * 8, 1, 0.8 - level * 0.4);
   }
 
-  function updateStateTable(states, parent, queryFn, initial) {
+  function updateStateTable(statesInfo, parent, queryFn, initial) {
+    const {states} = statesInfo;
     const tbody = parent.querySelector('tbody');
     // NOTE: Assumption that states array is parallel to table rows
     states.forEach((state, rowNdx) => {
@@ -1549,7 +1567,7 @@ export default function main({webglVersion, windowPositions}) {
       updateStateTable(stateTable, elem, queryFn);
     };
 
-    for (const state of stateTable) {
+    for (const state of stateTable.states) {
       const setters = Array.isArray(state.setter) ? state.setter : [state.setter];
       for (const setter of setters) {
         if (!settersToWrap[setter]) {
