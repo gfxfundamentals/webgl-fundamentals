@@ -37,13 +37,36 @@ import {
 import Stepper from './webgl-state-diagram-stepper.js';
 import ArrowManager from './webgl-state-diagram-arrows.js';
 
+function isBadWebGL2(gl) {
+  // check if it really supports WebGL2. Issues, Some browers claim to support WebGL2
+  // but in reality pass less than 20% of the conformance tests. Add a few simple
+  // tests to fail so as not to mislead users.
+  const params = [
+      { pname: 'MAX_3D_TEXTURE_SIZE', min: 256, },
+      { pname: 'MAX_DRAW_BUFFERS', min:4, },
+      { pname: 'MAX_COLOR_ATTACHMENTS', min:4, },
+      { pname: 'MAX_VERTEX_UNIFORM_BLOCKS', min:12, },
+      { pname: 'MAX_VERTEX_TEXTURE_IMAGE_UNITS', min:16, },
+      { pname: 'MAX_FRAGMENT_INPUT_COMPONENTS', min:60, },
+      { pname: 'MAX_UNIFORM_BUFFER_BINDINGS', min:24, },
+      { pname: 'MAX_COMBINED_UNIFORM_BLOCKS', min:24, },
+  ];
+  for (const {pname, min} of params) {
+    const value = gl.getParameter(gl[pname]);
+    if (typeof value !== 'number' || Number.isNaN(value) || value < params.min || gl.getError()) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export default function main({webglVersion, windowPositions}) {
   const isWebGL2 = webglVersion === 'webgl2';
 
   hljs.initHighlightingOnLoad();
 
   gl = document.querySelector('canvas').getContext(webglVersion, {preserveDrawingBuffer: true});  /* eslint-disable-line */
-  if (!gl) {
+  if (!gl || (isWebGL2 && isBadWebGL2(gl))) {
     document.body.classList.add('no-webgl');
     return;
   }
