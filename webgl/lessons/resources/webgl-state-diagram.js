@@ -68,8 +68,10 @@ export default function main({webglVersion, examples}) {
 
   twgl.addExtensionsToContext(gl);
 
-  const params = Object.fromEntries(new URLSearchParams(window.location.search).entries());
-  const lang = params.lang;
+  const defaultExampleId = Object.keys(examples)[0];
+  const search = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(search.entries());
+  let {lang, exampleId = defaultExampleId} = params;
   const subs = {
     langPathSegment: lang ? `${lang}/` : '',
   };
@@ -178,8 +180,24 @@ export default function main({webglVersion, examples}) {
     };
   }());
 
-  const example = examples[0];
-  const {windowPositions, id: exampleId} = example;
+  if (!examples[exampleId]) {
+    exampleId = defaultExampleId;
+  }
+  const example = examples[exampleId];
+  const {windowPositions} = example;
+
+  const examplesElem = document.querySelector('#example');
+  for (const [id, example] of Object.entries(examples)) {
+    addElem('option', examplesElem, {
+      textContent: example.name,
+      value: id,
+      ...id === exampleId && {selected: true},
+    });
+  }
+  examplesElem.addEventListener('change', (e) => {
+    search.set('exampleId', e.target.value);
+    location.search = search.toString();
+  });
 
   const {
     vertexArrayState,
@@ -1661,6 +1679,7 @@ export default function main({webglVersion, examples}) {
     const updateContentsAfterBeingRenderedTo = (texture, level/*, face*/) => {
       // assuming 2D, renderable, ...
       const {width, height, data} = renderTexture(texture);
+      // copy the data to a new canvas
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
@@ -1668,10 +1687,15 @@ export default function main({webglVersion, examples}) {
       const imgData = ctx.createImageData(width, height);
       imgData.data.set(data);
       ctx.putImageData(imgData, 0, 0);
+      // draw to the mip canvas scaling to fit
       const dstCanvas = mips[level];
       const dstCtx = dstCanvas.getContext('2d');
-      ctx.globalCompositeOperation = 'copy';
+      dstCtx.save();
+      dstCtx.globalCompositeOperation = 'copy';
+      dstCtx.translate(0, dstCanvas.height);
+      dstCtx.scale(1, -1);
       dstCtx.drawImage(canvas, 0, 0, dstCanvas.width, dstCanvas.height);
+      dstCtx.restore();
     };
 
     const updateData = () => {};
@@ -2242,7 +2266,7 @@ export default function main({webglVersion, examples}) {
     // console.log(line);
   }
 
-  stepper.init(codeElem, document.querySelector(exampleId).text, {
+  stepper.init(codeElem, document.querySelector(`#${exampleId}`).text, {
     onAfter: afterStep,
     onHelp: showHelp,
     onLine: showLineHelp,

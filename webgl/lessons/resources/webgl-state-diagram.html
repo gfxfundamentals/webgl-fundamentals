@@ -54,6 +54,9 @@
       <div id="run">⇉</div>
       <div id="restart">↺</div>
       <div id="help">?</div>
+      <div>
+        <select id="example"></select>
+      </div>
     </div>
     <div id="code"></div>
   </div>
@@ -264,6 +267,8 @@ at a time and watch what WebGL state is affected.
 * Anything you hover over that shows a 
   <span class="help-outline">red outline</span>
   can be clicked to show help.
+
+* Choose different samples on the top right.
 
 ## Notes:
 
@@ -574,6 +579,255 @@ gl.drawElements(
     0,                 // offset on bytes to indices
 );
 </script>
+<script id="smallest" type="not-js">
+'use strict';
+
+const canvas = document.querySelector('canvas');
+const gl = canvas.getContext('webgl');
+
+gl.clearColor(1, 0, 0, 1);
+gl.clear(gl.COLOR_BUFFER_BIT);
+</script>
+<script id="smallest-glsl" type="not-js">
+'use strict';
+
+const canvas = document.querySelector('canvas');
+const gl = canvas.getContext('webgl');
+
+const vsGLSL = `
+void main() {
+    gl_Position = vec4(0, 0, 0, 1);
+    gl_PointSize = 100.0;
+}
+`;
+
+const fsGLSL = `
+precision highp float;
+
+void main() {
+    gl_FragColor = vec4(1, 0.5, 0, 1);
+}
+`;
+
+const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(vertexShader, vsGLSL);
+gl.compileShader(vertexShader);
+if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+  throw new Error(gl.getShaderInfoLog(vertexShader))
+};
+
+const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(fragmentShader, fsGLSL);
+gl.compileShader(fragmentShader);
+if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+  throw new Error(gl.getShaderInfoLog(fragmentShader))
+};
+
+const prg = gl.createProgram();
+gl.attachShader(prg, vertexShader);
+gl.attachShader(prg, fragmentShader);
+gl.linkProgram(prg);
+if (!gl.getProgramParameter(prg, gl.LINK_STATUS)) {
+  throw new Error(gl.getProgramParameter(prg))
+};
+
+gl.useProgram(prg);
+
+// draw 1 point
+gl.drawArrays(gl.POINTS, 0, 1);
+</script>
+<script id="triangle" type="not-js">
+'use strict';
+
+const canvas = document.querySelector('canvas');
+const gl = canvas.getContext('webgl');
+
+const vsGLSL = `
+attribute vec4 position;
+void main() {
+    gl_Position = position;
+}
+`;
+
+const fsGLSL = `
+precision highp float;
+
+void main() {
+    gl_FragColor = vec4(0, 1, 0.5, 1);
+}
+`;
+
+const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(vertexShader, vsGLSL);
+gl.compileShader(vertexShader);
+if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+  throw new Error(gl.getShaderInfoLog(vertexShader))
+};
+
+const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(fragmentShader, fsGLSL);
+gl.compileShader(fragmentShader);
+if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+  throw new Error(gl.getShaderInfoLog(fragmentShader))
+};
+
+const prg = gl.createProgram();
+gl.attachShader(prg, vertexShader);
+gl.attachShader(prg, fragmentShader);
+gl.linkProgram(prg);
+if (!gl.getProgramParameter(prg, gl.LINK_STATUS)) {
+  throw new Error(gl.getProgramParameter(prg))
+};
+
+
+// NOTE! These are only here to unclutter the diagram.
+// It is safe to detach and delete shaders once
+// a program is linked though it is arguably not common.
+// and I usually don't do it.
+gl.detachShader(prg, vertexShader);
+gl.deleteShader(vertexShader);
+gl.detachShader(prg, fragmentShader);
+gl.deleteShader(fragmentShader);
+
+const positionLoc = gl.getAttribLocation(prg, 'position');
+
+// in clip space
+const vertexPositions = new Float32Array([
+    0,   0.7,
+  0.5,  -0.7,
+ -0.5,  -0.7,
+]);
+
+const positionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, vertexPositions, gl.STATIC_DRAW);
+
+gl.enableVertexAttribArray(positionLoc);
+gl.vertexAttribPointer(
+    positionLoc,  
+    2,            // 2 values per vertex shader iteration
+    gl.FLOAT,     // data is 32bit floats
+    false,        // don't normalize
+    0,            // stride (0 = auto)
+    0,            // offset into buffer
+);
+
+gl.useProgram(prg);
+
+// compute 3 vertices for 1 triangle
+gl.drawArrays(gl.TRIANGLES, 0, 3);
+</script>
+<script id="rainbow-triangle" type="not-js">
+'use strict';
+
+const canvas = document.querySelector('canvas');
+const gl = canvas.getContext('webgl');
+
+const vsGLSL = `
+attribute vec4 position;
+attribute vec4 color;
+
+varying vec4 v_color;
+
+void main() {
+    gl_Position = position;
+    v_color = color;
+}
+`;
+
+const fsGLSL = `
+precision highp float;
+
+varying vec4 v_color;
+
+void main() {
+    gl_FragColor = v_color;
+}
+`;
+
+const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(vertexShader, vsGLSL);
+gl.compileShader(vertexShader);
+if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+  throw new Error(gl.getShaderInfoLog(vertexShader))
+};
+
+const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(fragmentShader, fsGLSL);
+gl.compileShader(fragmentShader);
+if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+  throw new Error(gl.getShaderInfoLog(fragmentShader))
+};
+
+const prg = gl.createProgram();
+gl.attachShader(prg, vertexShader);
+gl.attachShader(prg, fragmentShader);
+gl.linkProgram(prg);
+if (!gl.getProgramParameter(prg, gl.LINK_STATUS)) {
+  throw new Error(gl.getProgramParameter(prg))
+};
+
+
+// NOTE! These are only here to unclutter the diagram.
+// It is safe to detach and delete shaders once
+// a program is linked though it is arguably not common.
+// and I usually don't do it.
+gl.detachShader(prg, vertexShader);
+gl.deleteShader(vertexShader);
+gl.detachShader(prg, fragmentShader);
+gl.deleteShader(fragmentShader);
+
+const positionLoc = gl.getAttribLocation(prg, 'position');
+const colorLoc = gl.getAttribLocation(prg, 'color');
+
+// in clip space
+const vertexPositions = new Float32Array([
+    0,   0.7,
+  0.5,  -0.7,
+ -0.5,  -0.7,
+]);
+
+const positionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, vertexPositions, gl.STATIC_DRAW);
+
+const vertexColors = new Uint8Array([
+    255, 0, 0, 255,
+    0, 255, 0, 255,
+    0, 0, 255, 255,
+]);
+
+const colorBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, vertexColors, gl.STATIC_DRAW);
+
+gl.enableVertexAttribArray(positionLoc);
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.vertexAttribPointer(
+    positionLoc,  
+    2,            // 2 values per vertex shader iteration
+    gl.FLOAT,     // data is 32bit floats
+    false,        // don't normalize
+    0,            // stride (0 = auto)
+    0,            // offset into buffer
+);
+
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+gl.enableVertexAttribArray(colorLoc);
+gl.vertexAttribPointer(
+    colorLoc,  
+    4,                // 4 values per vertex shader iteration
+    gl.UNSIGNED_BYTE, // data is 8bit unsigned bytes
+    true,             // do normalize
+    0,                // stride (0 = auto)
+    0,                // offset into buffer
+);
+
+gl.useProgram(prg);
+
+// compute 3 vertices for 1 triangle
+gl.drawArrays(gl.TRIANGLES, 0, 3);
+</script>
 <script id="draw-cube-on-cube" type="not-js">
 'use strict';
 
@@ -877,10 +1131,9 @@ gl.drawElements(
 import webglStateDiagram from './webgl-state-diagram.js';
 webglStateDiagram({
   webglVersion: 'webgl',
-  examples: [
-    {
+  examples: {
+    'draw-cubes': {
       name: 'Draw Cubes',
-      id: '#draw-cubes',
       windowPositions: [
         { note: 'vertex-array', base: '#diagram',       x: 'left:left+10',   y: 'bottom:bottom-10', },
         { note: 'global-state', base: '#diagram',       x: 'left:left+10',   y: 'top:top+10', },
@@ -892,13 +1145,12 @@ webglStateDiagram({
         { note: 'n-buffer',     base: 'positionBuffer', x: 'left:left-0',    y: 'top:bottom+10', },
         { note: 't-buffer',     base: 'normalBuffer',   x: 'left:left-0',    y: 'top:bottom+10', },
         { note: 'i-buffer',     base: 'texcoordBuffer', x: 'left:left-0',    y: 'top:bottom+10', },
-        { note: 'ch-texture ',  base: 'indexBuffer',    x: 'left:left-0',    y: 'top:bottom+10', },
-        { note: 'dc-texture ',  base: 'checkerTexture', x: 'left:left-20',   y: 'top:top+20', },
+        { note: 'ch-texture',   base: 'indexBuffer',    x: 'left:left-0',    y: 'top:bottom+10', },
+        { note: 'dc-texture',   base: 'checkerTexture', x: 'left:left-20',   y: 'top:top+20', },
       ],
     },
-    {
+    'draw-cube-on-cube': {
       name: 'Draw Cube on Cube',
-      id: '#draw-cube-on-cube',
       windowPositions: [
         { note: 'vertex-array', base: '#diagram',       x: 'left:left+10',   y: 'bottom:bottom-10', },
         { note: 'global-state', base: '#diagram',       x: 'left:left+10',   y: 'top:top+10', },
@@ -910,11 +1162,56 @@ webglStateDiagram({
         { note: 'n-buffer',     base: 'positionBuffer', x: 'left:left-0',    y: 'top:bottom+10', },
         { note: 't-buffer',     base: 'normalBuffer',   x: 'left:left-0',    y: 'top:bottom+10', },
         { note: 'i-buffer',     base: 'texcoordBuffer', x: 'left:left-0',    y: 'top:bottom+10', },
-        { note: 'ch-texture ',  base: 'indexBuffer',    x: 'left:left-0',    y: 'top:bottom+10', },
-        { note: 'dc-texture ',  base: 'checkerTexture', x: 'left:left-20',   y: 'top:top+20', },
+        { note: 'ch-texture',   base: 'indexBuffer',    x: 'left:left-0',    y: 'top:bottom+10', },
+        { note: 'fb-texture',   base: 'checkerTexture', x: 'left:left-20',   y: 'top:top+20', },
+        { note: 'renderbuffer', base: 'texcoordBuffer', x: 'right:left+100', y: 'top:top+40', },
+        { note: 'framebuffer',  base: 'program',        x: 'left:left+0',    y: 'top:bottom+30', },
       ],
     },
-  ],
+    'smallest': {
+      name: 'Smallest',
+      windowPositions: [
+        { note: 'vertex-array', base: '#diagram',       x: 'left:left+10',   y: 'bottom:bottom-10', },
+        { note: 'global-state', base: '#diagram',       x: 'left:left+10',   y: 'top:top+10', },
+        { note: 'canvas',       base: '#diagram',       x: 'right:right-10', y: 'top:top+10', },
+      ],
+    },
+    'smallest-glsl': {
+      name: 'Smallest GLSL',
+      windowPositions: [
+        { note: 'vertex-array', base: '#diagram',       x: 'left:left+10',   y: 'bottom:bottom-10', },
+        { note: 'global-state', base: '#diagram',       x: 'left:left+10',   y: 'top:top+10', },
+        { note: 'canvas',       base: '#diagram',       x: 'right:right-10', y: 'top:top+10', },
+        { note: 'v-shader',     base: 'canvas',         x: 'left:left-50',   y: 'top:bottom+10', },
+        { note: 'f-shader',     base: 'vertexShader',   x: 'left:left-10',   y: 'top:bottom+10', },
+        { note: 'program',      base: 'global state',   x: 'left:right+60',  y: 'top:top+0', },
+      ],
+    },
+    'triangle': {
+      name: 'Triangle',
+      windowPositions: [
+        { note: 'vertex-array', base: '#diagram',       x: 'left:left+10',   y: 'bottom:bottom-10', },
+        { note: 'global-state', base: '#diagram',       x: 'left:left+10',   y: 'top:top+10', },
+        { note: 'canvas',       base: '#diagram',       x: 'right:right-10', y: 'top:top+10', },
+        { note: 'v-shader',     base: 'canvas',         x: 'left:left-50',   y: 'top:bottom+10', },
+        { note: 'f-shader',     base: 'vertexShader',   x: 'left:left-10',   y: 'top:bottom+10', },
+        { note: 'program',      base: 'global state',   x: 'left:right+60',  y: 'top:top+0', },
+        { note: 'p-buffer',     base: 'canvas',         x: 'left:left+70',   y: 'top:bottom+10', },
+      ],
+    },
+    'rainbow-triangle': {
+      name: 'Rainbow Triangle',
+      windowPositions: [
+        { note: 'vertex-array', base: '#diagram',       x: 'left:left+10',   y: 'bottom:bottom-10', },
+        { note: 'global-state', base: '#diagram',       x: 'left:left+10',   y: 'top:top+10', },
+        { note: 'canvas',       base: '#diagram',       x: 'right:right-10', y: 'top:top+10', },
+        { note: 'v-shader',     base: 'canvas',         x: 'left:left-50',   y: 'top:bottom+10', },
+        { note: 'f-shader',     base: 'vertexShader',   x: 'left:left-10',   y: 'top:bottom+10', },
+        { note: 'program',      base: 'global state',   x: 'left:right+60',  y: 'top:top+0', },
+        { note: 'p-buffer',     base: 'canvas',         x: 'left:left+70',   y: 'top:bottom+10', },
+        { note: 'c-buffer',     base: 'positionBuffer', x: 'left:left-0',    y: 'top:bottom+10', },
+      ],
+    },  },
 });
 </script>
 </html>
