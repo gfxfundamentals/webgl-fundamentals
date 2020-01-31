@@ -46,6 +46,16 @@ function addRemoveClass(elem, className, add) {
   elem.classList[add ? 'add' : 'remove'](className);
 }
 
+function replaceParams(s, params) {
+  return s.replace(/\${(\w+)}/g, (m, key) => {
+    const value = params[key];
+    if (value === undefined) {
+      throw new Error(`unknown sub: ${key}`);
+    }
+    return value;
+  })  
+}
+
 function helpToMarkdown(s) {
   s = s.replace(/---/g, '```')
        .replace(/--/g, '`');
@@ -171,6 +181,7 @@ export {
   formatUniformValue,
   createTemplate,
   updateElem,
+  replaceParams,
   helpToMarkdown,
   addRemoveClass,
   flash,

@@ -13,6 +13,7 @@ import {
   formatUniformValue,
   createTemplate,
   updateElem,
+  replaceParams,
   helpToMarkdown,
   addRemoveClass,
   createElem,
@@ -67,6 +68,12 @@ export default function main({webglVersion, windowPositions}) {
 
   twgl.addExtensionsToContext(gl);
 
+  const params = Object.fromEntries(new URLSearchParams(window.location.search).entries());
+  const lang = params.lang;
+  const subs = {
+    langPathSegment: lang ? `${lang}/` : '',
+  };
+
   const {
     vertexArrayState,
     textureState,
@@ -103,7 +110,7 @@ export default function main({webglVersion, windowPositions}) {
     }
     if (lastHint !== hint) {
       lastHint = hint;
-      const html = converter.makeHtml(hint);
+      const html = converter.makeHtml(replaceParams(hint, subs));
       hintElem.style.display = '';  // show it so we can measure it
       hintElem.style.left = '0';    // let it expand
       hintElem.style.top = '0';     // let it expand

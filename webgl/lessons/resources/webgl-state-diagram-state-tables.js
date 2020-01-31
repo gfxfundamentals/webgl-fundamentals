@@ -45,6 +45,8 @@ export function getStateTables(isWebGL2) {
   const depthState = {
     help: `
     state that effects if and how the depth buffer is used.
+
+    The depth buffer is first brought up in [this article](/webgl/lessons/\${langPathSegment}webgl-3d-orthographic.html).
     `,
     states: [
       {
@@ -391,6 +393,8 @@ export function getStateTables(isWebGL2) {
 
     The default is blending is disabled and the value output from your
     fragment shader replaces the pixel being written to.
+
+    There are a few examples of blending in [this article](/webgl/lessons/\${langPathSegment}webgl-text-texture.html).
     `,
     states: [
       {
@@ -491,6 +495,8 @@ export function getStateTables(isWebGL2) {
     help: `
     state affecting culling of polygons based on how they are facing
     as well as adjusting their depth buffer calculations.
+
+    Culling is brought up in [this article](/webgl/lessons/\${langPathSegment}webgl-3d-orthographic.html).
     `,
     states: [
       {
