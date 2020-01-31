@@ -118,7 +118,7 @@ export default function main({webglVersion, windowPositions}) {
       hintElem.querySelectorAll('pre>code').forEach(elem => hljs.highlightBlock(elem));
       hintElem.querySelectorAll('a').forEach(elem => elem.target = '_blank');
       lastWidth = hintElem.clientWidth;
-      lastHeight = hintElem.clientHeight;
+      lastHeight = hintElem.clientHeight + 10;  // +10 here will make it leave space at the bottom
     }
 
     // hack: If not pageX then it's the start docs so center
