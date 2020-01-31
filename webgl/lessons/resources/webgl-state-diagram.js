@@ -55,7 +55,7 @@ function isBadWebGL2(gl) {
   return false;
 }
 
-export default function main({webglVersion, windowPositions}) {
+export default function main({webglVersion, examples}) {
   const isWebGL2 = webglVersion === 'webgl2';
 
   hljs.initHighlightingOnLoad();
@@ -68,11 +68,136 @@ export default function main({webglVersion, windowPositions}) {
 
   twgl.addExtensionsToContext(gl);
 
-  const params = Object.fromEntries(new URLSearchParams(window.location.search).entries());
-  const lang = params.lang;
+  const defaultExampleId = Object.keys(examples)[0];
+  const search = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(search.entries());
+  let {lang, exampleId = defaultExampleId} = params;
   const subs = {
     langPathSegment: lang ? `${lang}/` : '',
   };
+
+  let executeWebGLWrappers = true;
+
+  const {renderTexture} = (function() {
+    const vs = `
+    attribute vec4 position;
+    varying vec2 v_texcoord;
+    void main() {
+      gl_Position = position;
+      v_texcoord = position.xy * 0.5 + 0.5;
+    }`;
+    const fs = `
+    precision mediump float;
+    varying vec2 v_texcoord;
+    uniform sampler2D tex;
+    void main() {
+      gl_FragColor = texture2D(tex, v_texcoord);
+    }`;
+    const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+    const bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+      position: {
+        numComponents: 2,
+        data: [
+          -1, -1,
+           1, -1,
+          -1,  1,
+          -1,  1,
+           1, -1,
+           1,  1,
+        ],
+      },
+    });
+    const vaoInfo = twgl.createVertexArrayInfo(gl, programInfo, bufferInfo);
+    const fbInfo = twgl.createFramebufferInfo(gl, [{format: gl.RGBA, minMag: gl.LINEAR}], 128, 128);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+    function enableDisable(gl, pname, enable) {
+      if (enable) {
+        gl.enable(pname);
+      } else {
+        gl.disable(pname);
+      }
+    }
+
+    function renderTexture(texture) {
+      executeWebGLWrappers = false;
+
+      // really need to save a lot more state
+      const savedState = {
+        blend: gl.getParameter(gl.BLEND),
+        depthTest: gl.getParameter(gl.DEPTH_TEST),
+        stencilTest: gl.getParameter(gl.STENCIL_TEST),
+        scissorTest: gl.getParameter(gl.SCISSOR_TEST),
+        cullFace: gl.getParameter(gl.CULL_FACE),
+        framebuffer: gl.getParameter(gl.FRAMEBUFFER_BINDING),
+        program: gl.getParameter(gl.CURRENT_PROGRAM),
+        texture: gl.getParameter(gl.TEXTURE_BINDING_2D),
+        viewport: gl.getParameter(gl.VIEWPORT),
+        activeTexture: gl.getParameter(gl.ACTIVE_TEXTURE),
+        vertexArray: gl.getParameter(gl.VERTEX_ARRAY_BINDING),
+      };
+
+      twgl.bindFramebufferInfo(gl, fbInfo);
+      twgl.setBuffersAndAttributes(gl, programInfo, vaoInfo);
+      gl.useProgram(programInfo.program);
+      // we're assuming the texture is renderable
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.disable(gl.BLEND);
+      gl.disable(gl.DEPTH_TEST);
+      gl.disable(gl.SCISSOR_TEST);
+      gl.disable(gl.STENCIL_TEST);
+      gl.disable(gl.CULL_FACE);
+      gl.uniform1i(programInfo.uniformSetters.tex.location, savedState.activeTexture - gl.TEXTURE0);
+      twgl.drawBufferInfo(gl, vaoInfo);
+
+      const data = new Uint8Array(fbInfo.width * fbInfo.height * 4);
+      gl.readPixels(0, 0, fbInfo.width, fbInfo.height, gl.RGBA, gl.UNSIGNED_BYTE, data);
+
+      enableDisable(gl, gl.BLEND, savedState.blend);
+      enableDisable(gl, gl.DEPTH_TEST, savedState.depthTest);
+      enableDisable(gl, gl.SCISSOR_TEST, savedState.scissorTest);
+      enableDisable(gl, gl.STENCIL_TEST, savedState.stencilTest);
+      enableDisable(gl, gl.CULL_FACE, savedState.cullFace);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, savedState.framebuffer);
+      gl.viewport(...savedState.viewport);
+      gl.useProgram(savedState.program);
+      gl.bindTexture(gl.TEXTURE_2D, savedState.texture);
+      gl.bindVertexArray(savedState.vertexArray);
+
+      executeWebGLWrappers = true;
+
+      return {
+        width: fbInfo.width,
+        height: fbInfo.height,
+        data,
+      };
+    }
+
+    return {
+      renderTexture,
+    };
+  }());
+
+  if (!examples[exampleId]) {
+    exampleId = defaultExampleId;
+  }
+  const example = examples[exampleId];
+  const {windowPositions} = example;
+
+  const examplesElem = document.querySelector('#example');
+  for (const [id, example] of Object.entries(examples)) {
+    addElem('option', examplesElem, {
+      textContent: example.name,
+      value: id,
+      ...id === exampleId && {selected: true},
+    });
+  }
+  examplesElem.addEventListener('change', (e) => {
+    search.set('exampleId', e.target.value);
+    location.search = search.toString();
+  });
 
   const {
     vertexArrayState,
@@ -118,7 +243,7 @@ export default function main({webglVersion, windowPositions}) {
       hintElem.querySelectorAll('pre>code').forEach(elem => hljs.highlightBlock(elem));
       hintElem.querySelectorAll('a').forEach(elem => elem.target = '_blank');
       lastWidth = hintElem.clientWidth;
-      lastHeight = hintElem.clientHeight;
+      lastHeight = hintElem.clientHeight + 10;  // +10 here will make it leave space at the bottom
     }
 
     // hack: If not pageX then it's the start docs so center
@@ -198,17 +323,22 @@ export default function main({webglVersion, windowPositions}) {
       key.style.top = px(y);
     });
     queuedRequests.clear();
-    arrowManager.update();
   }
 
   let requestId;
-  function requestDragUpdate(elem, x, y) {
-    queuedRequests.set(elem, {x, y});
+  function requestUpdate() {
     if (requestId) {
       return;
     }
 
+    arrowManager.update();
+
     requestId = requestAnimationFrame(updateQueuedElementPosition);
+  }
+
+  function requestDragUpdate(elem, x, y) {
+    queuedRequests.set(elem, {x, y});
+    requestUpdate();
   }
 
   function dragStart(e) {
@@ -272,7 +402,6 @@ export default function main({webglVersion, windowPositions}) {
     }
   }
 
-
   // format for position is selfSide:baseSide:offset.
   // eg.: left:right-10 = put our left side - 10 units from right of base
   let windowCount = 0;
@@ -323,6 +452,9 @@ export default function main({webglVersion, windowPositions}) {
     div.addEventListener('mousedown', () => moveToFront(div), {passive: false});
     div.addEventListener('mousedown', dragStart, {passive: false});
     div.addEventListener('touchstart', dragStart, {passing: false});
+    div.addEventListener('wheel', () => {
+      requestUpdate();
+    });
     moveToFront(div);
     return div;
   }
@@ -1183,6 +1315,111 @@ export default function main({webglVersion, windowPositions}) {
     };
   }
 
+  function createRenderbufferDisplay(parent, name /*, renderbuffer */) {
+    const renderbufferElem = createTemplate(parent, '#renderbuffer-template');
+    setName(renderbufferElem, name);
+
+    const formatElem = renderbufferElem.querySelector('.format');
+
+    function updateStorage(target) {
+      const width = gl.getRenderbufferParameter(target, gl.RENDERBUFFER_WIDTH);
+      const height = gl.getRenderbufferParameter(target, gl.RENDERBUFFER_HEIGHT);
+      const format = gl.getRenderbufferParameter(target, gl.RENDERBUFFER_INTERNAL_FORMAT);
+      formatElem.textContent = `${width} x ${height} : ${glEnumToString(gl, format)}`;
+    }
+
+    makeDraggable(renderbufferElem);
+    return {
+      elem: renderbufferElem,
+      updateStorage,
+      updateContentsAfterBeingRenderedTo() {
+        // blank!
+      },
+    };
+  }
+
+  function createFramebufferDisplay(parent, name /*, webglObject */) {
+    const fbElem = createTemplate(parent, '#framebuffer-template');
+    setName(fbElem, name);
+
+    const attachmentExpander = createExpander(fbElem, 'attachment');
+    const attachmentsTbody = createTable(attachmentExpander, ['attachment point', 'level', 'face', 'attachment']);
+    const maxDrawBuffers = isWebGL2 ? gl.getParameter(gl.MAX_DRAW_BUFFERS) : 1;
+    const attachmentPoints = [];
+    for (let i = 0; i < maxDrawBuffers; ++i) {
+      attachmentPoints.push(gl.COLOR_ATTACHMENT0 + i);
+    }
+    attachmentPoints.push(gl.DEPTH_ATTACHMENT);
+    attachmentPoints.push(gl.STENCIL_ATTACHMENT);
+    attachmentPoints.push(gl.DEPTH_STENCIL_ATTACHMENT);
+
+    let arrows = [];
+    let oldAttachmentInfos = new Map();
+
+    const updateAttachments = (target) => {
+      attachmentsTbody.innerHTML = '';
+      const newAttachmentInfos = new Map();
+
+      arrows.forEach(arrow => arrowManager.remove(arrow));
+
+      for (const attachmentPoint of attachmentPoints) {
+        let level = 'N/A';
+        let face = 'N/A';
+        let rawFace;
+        const type = gl.getFramebufferAttachmentParameter(target, attachmentPoint, gl.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE);
+        switch (type) {
+          case gl.NONE:
+            continue;
+          case gl.TEXTURE:
+            level = gl.getFramebufferAttachmentParameter(target, attachmentPoint, gl.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL);
+            rawFace = gl.getFramebufferAttachmentParameter(target, attachmentPoint, gl.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE);
+            face = rawFace ? glEnumToString(gl, rawFace) : 'N/A';
+            break;
+          case gl.RENDERBUFFER:
+            break;
+          default:
+            throw new Error('unknown attachment type');
+        }
+        const attachment = gl.getFramebufferAttachmentParameter(target, attachmentPoint, gl.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME);
+        const tr = addElem('tr', attachmentsTbody);
+        addElem('td', tr, {textContent: glEnumToString(gl, attachmentPoint)});
+        addElem('td', tr, {textContent: level});
+        addElem('td', tr, {textContent: face});
+        addElem('td', tr, {textContent: formatWebGLObject(attachment)});
+        const targetInfo = getWebGLObjectInfo(attachment);
+        if (!targetInfo.deleted) {
+          arrows.push(arrowManager.add(
+              tr,
+              targetInfo.ui.elem.querySelector('.name'),
+              getColorForWebGLObject(attachment, targetInfo.ui.elem)));
+        }
+
+        const oldAttachmentInfo = oldAttachmentInfos.get(attachmentPoint);
+        if (oldAttachmentInfo && attachment !== oldAttachmentInfo.attachment) {
+          flashSelfAndExpanderIfClosed(tr);
+        }
+        newAttachmentInfos.set(attachmentPoint, {attachment, level, face: rawFace});
+      }
+
+      collapseOrExpand(attachmentExpander, newAttachmentInfos.size > 0);
+      oldAttachmentInfos = newAttachmentInfos;
+    };
+
+    const updateAttachmentContents = () => {
+      oldAttachmentInfos.forEach(({attachment, level, face}) => {
+        getWebGLObjectInfo(attachment).ui.updateContentsAfterBeingRenderedTo(attachment, level, face);
+      });
+    };
+
+    expand(attachmentExpander);
+    makeDraggable(fbElem);
+    return {
+      elem: fbElem,
+      updateAttachments,
+      updateAttachmentContents,
+    };
+  }
+
   function isPowerOf2(value) {
     return (value & (value - 1)) === 0;
   }
@@ -1370,21 +1607,25 @@ export default function main({webglVersion, windowPositions}) {
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d');
-      const imgData = ctx.createImageData(width, height);
-      const pixels = imgData.data;
 
-      for (let y = 0; y < height; ++y) {
-        for (let x = 0; x < width; ++x) {
-          const srcOff = y * width + x;
-          const dstOff = srcOff * 4;
-          pixels[dstOff    ] = data[srcOff];
-          pixels[dstOff + 1] = data[srcOff];
-          pixels[dstOff + 2] = data[srcOff];
-          pixels[dstOff + 3] = 0xFF;
+      if (data) {
+        const imgData = ctx.createImageData(width, height);
+        const pixels = imgData.data;
+
+        for (let y = 0; y < height; ++y) {
+          for (let x = 0; x < width; ++x) {
+            const srcOff = y * width + x;
+            const dstOff = srcOff * 4;
+            pixels[dstOff    ] = data[srcOff];
+            pixels[dstOff + 1] = data[srcOff];
+            pixels[dstOff + 2] = data[srcOff];
+            pixels[dstOff + 3] = 0xFF;
+          }
         }
+
+        ctx.putImageData(imgData, 0, 0);
       }
 
-      ctx.putImageData(imgData, 0, 0);
       mips[level] = canvas;
       updateMips();
     }
@@ -1394,6 +1635,7 @@ export default function main({webglVersion, windowPositions}) {
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d');
+      ctx.globalCompositeOperation = 'copy';
       ctx.drawImage(elem, 0, 0, width, height);
       return ctx.canvas;
     }
@@ -1433,6 +1675,29 @@ export default function main({webglVersion, windowPositions}) {
       updateMips();
     }
 
+
+    const updateContentsAfterBeingRenderedTo = (texture, level/*, face*/) => {
+      // assuming 2D, renderable, ...
+      const {width, height, data} = renderTexture(texture);
+      // copy the data to a new canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      const imgData = ctx.createImageData(width, height);
+      imgData.data.set(data);
+      ctx.putImageData(imgData, 0, 0);
+      // draw to the mip canvas scaling to fit
+      const dstCanvas = mips[level];
+      const dstCtx = dstCanvas.getContext('2d');
+      dstCtx.save();
+      dstCtx.globalCompositeOperation = 'copy';
+      dstCtx.translate(0, dstCanvas.height);
+      dstCtx.scale(1, -1);
+      dstCtx.drawImage(canvas, 0, 0, dstCanvas.width, dstCanvas.height);
+      dstCtx.restore();
+    };
+
     const updateData = () => {};
 
     const queryFn = state => {
@@ -1453,6 +1718,7 @@ export default function main({webglVersion, windowPositions}) {
     return {
       elem: texElem,
       updateData,
+      updateContentsAfterBeingRenderedTo,
       updateState: (initial = false) => {
         const info = getWebGLObjectInfo(texture);
         const target = info.target;
@@ -1469,7 +1735,33 @@ export default function main({webglVersion, windowPositions}) {
   }
 
   function createTextureUnits(parent, maxUnits = 8) {
-    const expander = createExpander(parent, 'Texture Units');
+    const expander = createExpander(parent, 'Texture Units', {}, `
+    Each texture unit has multiple bind points. You can bind
+    a texture to each point but it is an error for a program
+    to try to access 2 or more different bind points from the
+    same texture unit.
+
+    For example you have a shader with both a 2D sampler and a cube sampler.
+
+    ---glsl
+    uniform sampler2D foo;
+    uniform samplerCube bar;
+    ---
+
+    Even though there are are both --TEXTURE_2D-- and --TEXTURE_CUBE_MAP-- bind points
+    in a single texture unit if you set both --bar-- and --foo-- to the same unit you'll get
+    an error
+
+    ---js
+    const unit = 3;
+    gl.uniform1i(fooLocation, unit);
+    gl.uniform1i(barLocation, unit);
+    ---
+
+    The code above will generate an error at draw time because --foo-- and --bar--
+    require different sampler types. If they are the same type it is okay to point
+    both to the same texture unit.
+    `);
 
     const targets = isWebGL2
         ? ['TEXTURE_2D', 'TEXTURE_CUBE_MAP', 'TEXTURE_3D', 'TEXTURE_2D_ARRAY', 'SAMPLER_BINDING']
@@ -1646,7 +1938,11 @@ export default function main({webglVersion, windowPositions}) {
         throw new Error(`unknown function:${fnName}`);
       }
       return function(...args) {
-        return fn.call(this, origFn, ...args);
+        if (executeWebGLWrappers) {
+          return fn.call(this, origFn, ...args);
+        } else {
+          return origFn.call(this, ...args);
+        }
       };
     }(gl[fnName]);
   }
@@ -1674,7 +1970,7 @@ export default function main({webglVersion, windowPositions}) {
   }
 
   wrapCreationFn('createTexture', (name, webglObject) => {
-    return createTextureDisplay(diagramElem, name, webglObject, '/webgl/resources/f-texture.png');
+    return createTextureDisplay(diagramElem, name, webglObject);
   });
   wrapCreationFn('createBuffer', (name, webglObject) => {
     return createBufferDisplay(diagramElem, name, webglObject);
@@ -1688,11 +1984,19 @@ export default function main({webglVersion, windowPositions}) {
   wrapCreationFn('createVertexArray', (name, webglObject) => {
     return createVertexArrayDisplay(diagramElem, name, webglObject);
   });
+  wrapCreationFn('createFramebuffer', (name, webglObject) => {
+    return createFramebufferDisplay(diagramElem, name, webglObject);
+  });
+  wrapCreationFn('createRenderbuffer', (name, webglObject) => {
+    return createRenderbufferDisplay(diagramElem, name, webglObject);
+  });
   wrapDeleteFn('deleteTexture');
   wrapDeleteFn('deleteBuffer');
   wrapDeleteFn('deleteShader');
   wrapDeleteFn('deleteProgram');
   wrapDeleteFn('deleteVertexArray');
+  wrapDeleteFn('deleteFramebuffer');
+  wrapDeleteFn('deleteRenderbuffer');
 
   for (const [fnName, stateUpdaters] of Object.entries(settersToWrap)) {
     wrapFn(fnName, function(origFn, ...args) {
@@ -1839,10 +2143,36 @@ export default function main({webglVersion, windowPositions}) {
     updateProgramAttributesAndUniforms(newProg);
   });
 
+  wrapFn('renderbufferStorage', function(origFn, target, ...args) {
+    origFn.call(this, target, ...args);
+    const renderbuffer = gl.getParameter(gl.RENDERBUFFER_BINDING);
+    const {ui} = getWebGLObjectInfo(renderbuffer);
+    ui.updateStorage(target);
+  });
+  function updateFramebufferAttachments(target) {
+    const framebuffer = gl.getParameter(target === gl.FRAMEBUFFER ? gl.FRAMEBUFFER_BINDING : gl.READ_FRAMEBUFFER_BINDING);
+    const {ui} = getWebGLObjectInfo(framebuffer);
+    ui.updateAttachments(target);
+  }
+  wrapFn('framebufferRenderbuffer', function(origFn, target, ...args) {
+    origFn.call(this, target, ...args);
+    updateFramebufferAttachments(target);
+  });
+  wrapFn('framebufferTexture2D', function(origFn, target, ...args) {
+    origFn.call(this, target, ...args);
+    updateFramebufferAttachments(target);
+  });
+
   function wrapDrawFn(fnName) {
     wrapFn(fnName, function(origFn, ...args) {
       origFn.call(this, ...args);
-      flash(canvasDraggable.querySelector('.name'));
+      const framebuffer = gl.getParameter(gl.FRAMEBUFFER_BINDING);
+      if (framebuffer) {
+        const {ui} = getWebGLObjectInfo(framebuffer);
+        ui.updateAttachmentContents(gl.FRAMEBUFFER);
+      } else {
+        flash(canvasDraggable.querySelector('.name'));
+      }
     });
   }
   wrapDrawFn('clear');
@@ -1936,7 +2266,7 @@ export default function main({webglVersion, windowPositions}) {
     // console.log(line);
   }
 
-  stepper.init(codeElem, document.querySelector('#js').text, {
+  stepper.init(codeElem, document.querySelector(`#${exampleId}`).text, {
     onAfter: afterStep,
     onHelp: showHelp,
     onLine: showLineHelp,

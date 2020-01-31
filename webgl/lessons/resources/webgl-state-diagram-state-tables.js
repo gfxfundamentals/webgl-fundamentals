@@ -19,13 +19,14 @@ import {
 } from './webgl-state-diagram-utils.js';
 import {
   formatWebGLObject,
+  formatWebGLObjectOrCanvas,
   formatWebGLObjectOrDefaultVAO,
 } from './webgl-state-diagram-context-wrapper.js';
 
 const glEnumToString = twgl.glEnumToString;
 const formatEnum = v => glEnumToString(gl, v);
 const formatEnumZero = v => v ? v === 1 ? 'ONE' : glEnumToString(gl, v) : 'ZERO';
-const formatEnumNone = v => v ? glEnumToString(gl, v) : 'NONE';
+// const formatEnumNone = v => v ? glEnumToString(gl, v) : 'NONE';
 const insertIf = (condition, ...elements) => condition ? elements : [];
 
 const webglFuncs = `
@@ -690,6 +691,73 @@ export function getStateTables(isWebGL2) {
         passing in --null-- binds the default vertex array.
         `,
       },
+      {
+        pname: 'RENDERBUFFER_BINDING',
+        setter: ['bindRenderbuffer'],
+        formatter: formatWebGLObject,
+        help: `
+        The current renderbuffer. 
+
+        Set with
+
+        ---js
+        gl.bindRenderbuffer(gl.RENDERBUFFER, someRenderbuffer);
+        ---
+        `,
+      },
+      ...insertIf(!isWebGL2, {
+          pname: 'FRAMEBUFFER_BINDING',
+          setter: ['bindFramebuffer'],
+          formatter: formatWebGLObjectOrCanvas,
+          help: `
+          The current framebuffer (--null-- = the canvas). 
+
+          Set with
+
+          ---js
+          gl.bindFramebuffer(gl.FRAMEBUFFER, someFramebuffer);
+          ---
+          `,
+        },
+      ),
+      ...insertIf(isWebGL2, {
+          pname: 'DRAW_FRAMEBUFFER_BINDING',
+          setter: ['bindFramebuffer'],
+          formatter: formatWebGLObjectOrCanvas,
+          help: `
+          The current **draw** framebuffer (--null-- = the canvas).
+          This is framebuffer pixels are written to when calling
+          --gl.clear--, --gl.drawXXX---, --gl.blitFramebuffer--.
+
+          Set with
+
+          ---js
+          gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, someFramebuffer);
+          ---
+
+          or with
+
+          ---js
+          gl.bindFramebuffer(gl.FRAMEBUFFER, someFramebuffer);
+          ---
+          `,
+      }, {
+          pname: 'READ_FRAMEBUFFER_BINDING',
+          setter: ['bindFramebuffer'],
+          formatter: formatWebGLObjectOrCanvas,
+          help: `
+          The current **read** framebuffer (--null-- = the canvas). 
+          This is the framebuffer pixels are read from when calling
+          --gl.readPixels--, --gl.copyTexImageXX--, --gl.copyTexSubImageXX--,
+          --gl.blitFramebuffer--, ...
+
+          Set with
+
+          ---js
+          gl.bindFramebuffer(gl.READ_FRAMEBUFFER, someFramebuffer);
+          ---
+          `,
+      }),
       {
         pname: 'ACTIVE_TEXTURE',
         setter: 'activeTexture',
