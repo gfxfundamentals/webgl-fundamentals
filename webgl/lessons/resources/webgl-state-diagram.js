@@ -1477,7 +1477,33 @@ export default function main({webglVersion, windowPositions}) {
   }
 
   function createTextureUnits(parent, maxUnits = 8) {
-    const expander = createExpander(parent, 'Texture Units');
+    const expander = createExpander(parent, 'Texture Units', {}, `
+    Each texture unit has multiple bind points. You can bind
+    a texture to each point but it is an error for a program
+    to try to access 2 or more different bind points from the
+    same texture unit.
+
+    For example you have a shader with both a 2D sampler and a cube sampler.
+
+    ---glsl
+    uniform sampler2D foo;
+    uniform samplerCube bar;
+    ---
+
+    Even though there are are both --TEXTURE_2D-- and --TEXTURE_CUBE_MAP-- bind points
+    in a single texture unit if you set both --bar-- and --foo-- to the same unit you'll get
+    an error
+
+    ---js
+    const unit = 3;
+    gl.uniform1i(fooLocation, unit);
+    gl.uniform1i(barLocation, unit);
+    ---
+
+    The code above will generate an error at draw time because --foo-- and --bar--
+    require different sampler types. If they are the same type it is okay to point
+    both to the same texture unit.
+    `);
 
     const targets = isWebGL2
         ? ['TEXTURE_2D', 'TEXTURE_CUBE_MAP', 'TEXTURE_3D', 'TEXTURE_2D_ARRAY', 'SAMPLER_BINDING']
