@@ -198,17 +198,22 @@ export default function main({webglVersion, windowPositions}) {
       key.style.top = px(y);
     });
     queuedRequests.clear();
-    arrowManager.update();
   }
 
   let requestId;
-  function requestDragUpdate(elem, x, y) {
-    queuedRequests.set(elem, {x, y});
+  function requestUpdate() {
     if (requestId) {
       return;
     }
 
+    arrowManager.update();
+
     requestId = requestAnimationFrame(updateQueuedElementPosition);
+  }
+
+  function requestDragUpdate(elem, x, y) {
+    queuedRequests.set(elem, {x, y});
+    requestUpdate();
   }
 
   function dragStart(e) {
@@ -323,6 +328,9 @@ export default function main({webglVersion, windowPositions}) {
     div.addEventListener('mousedown', () => moveToFront(div), {passive: false});
     div.addEventListener('mousedown', dragStart, {passive: false});
     div.addEventListener('touchstart', dragStart, {passing: false});
+    div.addEventListener('wheel', () => {
+      requestUpdate();
+    });
     moveToFront(div);
     return div;
   }
