@@ -105,6 +105,8 @@ ie.
 ```js
 texture = textureUnits[activeTexture][bindPoint]
 ```
+
+For more details see [the article on textures](/webgl/lessons/webgl-3d-textures.html).
 ">
   <div class="name">texture</div>
   <div class="mips"></div>
@@ -170,7 +172,7 @@ A fragment shader's sole responsibility is to set `gl_FragColor`
 to a color. To create one use:
 
 ```js
-≈const shader = gl.createShader(gl.FRAGMENT_SHADER);
+const shader = gl.createShader(gl.FRAGMENT_SHADER);
 gl.shaderSource(shader, glslString);
 gl.compileShader(shader);
 if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) === 0) {
@@ -209,7 +211,7 @@ This is an attempt to give a visual representation
 of most of WebGL's internal state. 
 
 WebGL is really just an API to run shaders. The only
-functions that actually effect pixels are `gl.clear`,
+functions that actually write pixels are `gl.clear`,
 `gl.drawArrays` and `gl.drawElements`. That's it!
 All other API calls just setup internal state for when
 those 3 functions are called.
