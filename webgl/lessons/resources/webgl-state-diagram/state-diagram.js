@@ -252,6 +252,16 @@ export default function main({webglVersion, examples}) {
       const {ui} = getWebGLObjectInfo(sampler);
       ui.updateState();
     });
+    wrapFn('drawBuffers', function(origFn, ...args) {
+      origFn.call(this, ...args);
+      const framebuffer = gl.getParameter(gl.FRAMEBUFFER_BINDING);
+      if (framebuffer) {
+        const {ui} = getWebGLObjectInfo(framebuffer);
+        ui.updateState();
+      } else {
+        globals.globalUI.drawBuffersState.updateState();
+      }
+    });
   }
 
   wrapFn('shaderSource', function(origFn, shader, source) {
@@ -372,16 +382,6 @@ export default function main({webglVersion, examples}) {
         info.boundOnce = true;
         info.ui.firstBind(target);
       }
-    }
-  });
-  wrapFn('drawBuffers', function(origFn, ...args) {
-    origFn.call(this, ...args);
-    const framebuffer = gl.getParameter(gl.FRAMEBUFFER_BINDING);
-    if (framebuffer) {
-      const {ui} = getWebGLObjectInfo(framebuffer);
-      ui.updateState();
-    } else {
-      globals.globalUI.drawBuffersState.updateState();
     }
   });
 
