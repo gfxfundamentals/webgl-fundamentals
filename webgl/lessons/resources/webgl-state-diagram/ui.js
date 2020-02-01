@@ -1,5 +1,3 @@
-/* eslint no-undef: "error" */
-/* eslint no-return-assign: "off" */
 
 /* global hljs, showdown */
 
@@ -10,8 +8,8 @@ import {
   px,
   replaceParams,
   updateElem,
-} from './webgl-state-diagram-utils.js';
-import {arrowManager} from './webgl-state-diagram-arrows.js';
+} from './utils.js';
+import {arrowManager} from './arrows.js';
 
 const diagramElem = document.querySelector('#diagram');
 

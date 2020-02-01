@@ -1,4 +1,3 @@
-/* eslint no-undef: "error" */
 
 /* global gl */
 
@@ -11,30 +10,30 @@ import {
   getColorForWebGLObject,
   helpToMarkdown,
   setName,
-} from './webgl-state-diagram-utils.js';
+} from './utils.js';
 
 import {
   formatWebGLObject,
   getWebGLObjectInfo,
-} from './webgl-state-diagram-context-wrapper.js';
+} from './context-wrapper.js';
 
 import {
   createExpander,
   expand,
   makeDraggable,
   updateElemAndFlashExpanderIfClosed,
-} from './webgl-state-diagram-ui.js';
+} from './ui.js';
 
 import {
   createStateTable,
   updateStateTable,
-} from './webgl-state-diagram-state-table.js';
+} from './state-table.js';
 
 import {
   globals,
-} from './webgl-state-diagram-globals.js';
+} from './globals.js';
 
-import {arrowManager} from './webgl-state-diagram-arrows.js';
+import {arrowManager} from './arrows.js';
 
 const glEnumToString = twgl.glEnumToString;
 const formatEnum = v => glEnumToString(gl, v);

@@ -1,5 +1,3 @@
-/* eslint strict: "off" */
-/* eslint no-undef: "error" */
 
 /* global chroma */
 

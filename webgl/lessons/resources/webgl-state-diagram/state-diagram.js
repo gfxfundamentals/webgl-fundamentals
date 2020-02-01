@@ -1,6 +1,3 @@
-/* eslint strict: "off" */
-/* eslint no-undef: "error" */
-/* eslint no-return-assign: "off" */
 
 /* global hljs, gl */
 
@@ -11,14 +8,14 @@ import {
   addElem,
   flash,
   removeFlashes,
-} from './webgl-state-diagram-utils.js';
-import { getStateTables } from './webgl-state-diagram-state-tables.js';
+} from './utils.js';
+import { getStateTables } from './state-tables.js';
 import {
   addWebGLObjectInfo,
   getWebGLObjectInfo,
   setDefaultVAOInfo,
   getWebGLObjectInfoOrDefaultVAO,
-} from './webgl-state-diagram-context-wrapper.js';
+} from './context-wrapper.js';
 import {
   makeDraggable,
   moveToFront,
@@ -26,33 +23,33 @@ import {
   setHint,
   setHintSubs,
   showHint,
-} from './webgl-state-diagram-ui.js';
+} from './ui.js';
 
-import Stepper from './webgl-state-diagram-stepper.js';
-import {arrowManager} from './webgl-state-diagram-arrows.js';
+import Stepper from './stepper.js';
+import {arrowManager} from './arrows.js';
 import {
   isBadWebGL2,
   init as initWebGL,
-} from './webgl-state-diagram-webgl.js';
+} from './webgl.js';
 import {
   globals,
-} from './webgl-state-diagram-globals.js';
+} from './globals.js';
 import {
   createShaderDisplay,
   createProgramDisplay,
-} from './webgl-state-diagram-program-ui.js';
+} from './program-ui.js';
 import {
   createTextureDisplay,
-} from './webgl-state-diagram-texture-ui.js';
+} from './texture-ui.js';
 import {
   createBufferDisplay,
   createFramebufferDisplay,
   createRenderbufferDisplay,
-} from './webgl-state-diagram-buffer-ui.js';
+} from './buffer-ui.js';
 import {
   createVertexArrayDisplay,
-} from './webgl-state-diagram-vertex-array-ui.js';
-import { createGlobalUI } from './webgl-state-diagram-global-ui.js';
+} from './vertex-array-ui.js';
+import { createGlobalUI } from './global-ui.js';
 
 export default function main({webglVersion, examples}) {
   globals.isWebGL2 = webglVersion === 'webgl2';

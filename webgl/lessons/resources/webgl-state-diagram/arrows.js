@@ -1,7 +1,4 @@
-/* eslint strict: "off" */
-/* eslint no-undef: "error" */
-
-import {addSVG} from './webgl-state-diagram-utils.js';
+import {addSVG} from './utils.js';
 
 function getPageRelativeRect(elem) {
   let rect;

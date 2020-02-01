@@ -1,5 +1,3 @@
-/* eslint no-undef: "error" */
-
 /* global gl */
 
 import * as twgl from '/3rdparty/twgl-full.module.js';
@@ -10,12 +8,12 @@ import {
   formatUniformValue,
   getColorForWebGLObject,
   setName,
-} from './webgl-state-diagram-utils.js';
+} from './utils.js';
 
 import {
   formatWebGLObject,
   getWebGLObjectInfo,
-} from './webgl-state-diagram-context-wrapper.js';
+} from './context-wrapper.js';
 
 import {
   collapseOrExpand,
@@ -23,11 +21,11 @@ import {
   expand,
   flashSelfAndExpanderIfClosed,
   makeDraggable,
-} from './webgl-state-diagram-ui.js';
+} from './ui.js';
 import {
   globals,
-} from './webgl-state-diagram-globals.js';
-import {arrowManager} from './webgl-state-diagram-arrows.js';
+} from './globals.js';
+import {arrowManager} from './arrows.js';
 
 const glEnumToString = twgl.glEnumToString;
 

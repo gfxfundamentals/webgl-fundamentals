@@ -1,22 +1,20 @@
-/* eslint no-undef: "error" */
-/* eslint no-return-assign: "off" */
 
 import {
   addElem,
   getColorForWebGLObject,
   helpToMarkdown,
-} from './webgl-state-diagram-utils.js';
+} from './utils.js';
 import {
   formatWebGLObject,
   formatWebGLObjectOrDefaultVAO,
   getWebGLObjectInfo,
   getWebGLObjectInfoOrDefaultVAO,
-} from './webgl-state-diagram-context-wrapper.js';
+} from './context-wrapper.js';
 import {
   createExpander,
   flashSelfAndExpanderIfClosed,
-} from './webgl-state-diagram-ui.js';
-import {arrowManager} from './webgl-state-diagram-arrows.js';
+} from './ui.js';
+import {arrowManager} from './arrows.js';
 
 const elemToArrowMap = new Map();
 

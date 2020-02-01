@@ -1,4 +1,3 @@
-/* eslint no-undef: "error" */
 
 /* global gl */
 
@@ -10,26 +9,26 @@ import {
   helpToMarkdown,
   px,
   setName,
-} from './webgl-state-diagram-utils.js';
+} from './utils.js';
 
 import {
   getWebGLObjectInfo,
-} from './webgl-state-diagram-context-wrapper.js';
+} from './context-wrapper.js';
 
 import {
   createExpander,
   expand,
   makeDraggable,
-} from './webgl-state-diagram-ui.js';
+} from './ui.js';
 
 import {
   createStateTable,
   updateStateTable,
-} from './webgl-state-diagram-state-table.js';
+} from './state-table.js';
 
 import {
   globals,
-} from './webgl-state-diagram-globals.js';
+} from './globals.js';
 
 function isPowerOf2(value) {
   return (value & (value - 1)) === 0;

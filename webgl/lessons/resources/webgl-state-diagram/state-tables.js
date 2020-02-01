@@ -1,5 +1,3 @@
-/* eslint strict: "off" */
-/* eslint no-undef: "error" */
 
 /* global gl */
 
@@ -16,12 +14,12 @@ import {
   formatBoolean,
   formatUniformValue,
   helpToMarkdown,
-} from './webgl-state-diagram-utils.js';
+} from './utils.js';
 import {
   formatWebGLObject,
   formatWebGLObjectOrCanvas,
   formatWebGLObjectOrDefaultVAO,
-} from './webgl-state-diagram-context-wrapper.js';
+} from './context-wrapper.js';
 
 const glEnumToString = twgl.glEnumToString;
 const formatEnum = v => glEnumToString(gl, v);

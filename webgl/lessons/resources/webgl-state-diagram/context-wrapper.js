@@ -1,6 +1,3 @@
-/* eslint no-undef: "error" */
-
-
 // TODO: move all the wrapper stuff in here?
 // There is direct integration with the UI at the moment.
 // Need to decide if/how to separate

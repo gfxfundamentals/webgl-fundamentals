@@ -1,4 +1,3 @@
-/* eslint no-undef: "error" */
 
 /* global hljs, gl */
 
@@ -11,13 +10,13 @@ import {
   getColorForWebGLObject,
   helpToMarkdown,
   setName,
-} from './webgl-state-diagram-utils.js';
+} from './utils.js';
 
 import {
   formatWebGLObject,
   getWebGLObjectInfo,
   getWebGLObjectInfoOrDefaultVAO,
-} from './webgl-state-diagram-context-wrapper.js';
+} from './context-wrapper.js';
 
 import {
   collapseOrExpand,
@@ -26,17 +25,17 @@ import {
   expand,
   makeDraggable,
   updateElemAndFlashExpanderIfClosed,
-} from './webgl-state-diagram-ui.js';
+} from './ui.js';
 
 import {
   createStateTable,
   updateStateTable,
-} from './webgl-state-diagram-state-table.js';
+} from './state-table.js';
 
-import {arrowManager} from './webgl-state-diagram-arrows.js';
+import {arrowManager} from './arrows.js';
 import {
   globals,
-} from './webgl-state-diagram-globals.js';
+} from './globals.js';
 
 function isBuiltIn(info) {
   const name = info.name;
