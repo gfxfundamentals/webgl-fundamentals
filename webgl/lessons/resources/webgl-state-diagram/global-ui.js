@@ -118,8 +118,8 @@ function createTextureUnits(parent, maxUnits = 8) {
   const targetBindings = globals.isWebGL2
       ? [gl.TEXTURE_BINDING_2D, gl.TEXTURE_BINDING_CUBE_MAP, gl.TEXTURE_BINDING_3D, gl.TEXTURE_BINDING_2D_ARRAY, gl.SAMPLER_BINDING]
       : [gl.TEXTURE_BINDING_2D, gl.TEXTURE_BINDING_CUBE_MAP];
-  const updateCurrentTextureUnit = () => {
-    const unit = gl.getParameter(gl.ACTIVE_TEXTURE) - gl.TEXTURE0;
+
+  const updateTextureUnit = unit => {
     const row = tbody.rows[unit];
     targetBindings.forEach((targetBinding, colNdx) => {
       const cell = row.cells[colNdx];
@@ -136,11 +136,17 @@ function createTextureUnits(parent, maxUnits = 8) {
             arrows[unit][targetBinding] = arrowManager.add(
                 cell,
                 targetInfo.ui.elem.querySelector('.name'),
-                getColorForWebGLObject(texture, targetInfo.ui.elem, unit / maxUnits));
+                getColorForWebGLObject(texture, targetInfo.ui.elem, unit / maxUnits),
+                {offset: { start: {x: 0, y: colNdx * 2 - 4}}});
           }
         }
       }
     });
+  };
+
+  const updateCurrentTextureUnit = () => {
+    const unit = gl.getParameter(gl.ACTIVE_TEXTURE) - gl.TEXTURE0;
+    updateTextureUnit(unit);
   };
 
   const updateActiveTextureUnit = () => {
@@ -154,6 +160,7 @@ function createTextureUnits(parent, maxUnits = 8) {
     elem: expander,
     updateCurrentTextureUnit,
     updateActiveTextureUnit,
+    updateTextureUnitSampler: updateTextureUnit,
   };
 }
 
