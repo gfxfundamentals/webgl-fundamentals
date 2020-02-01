@@ -20,6 +20,7 @@ import {
   formatWebGLObjectOrCanvas,
   formatWebGLObjectOrDefaultVAO,
 } from './context-wrapper.js';
+import { globals } from './globals.js';
 
 const glEnumToString = twgl.glEnumToString;
 const formatEnum = v => glEnumToString(gl, v);
@@ -1069,28 +1070,30 @@ export function getStateTables(isWebGL2) {
     states: [],
   };
 
-  const maxDrawBuffers = gl.getParameter(gl.MAX_DRAW_BUFFERS);
-  for (let i = 0; i < maxDrawBuffers; ++i) {
-    drawBuffersState.states.push({
-      pname: `DRAW_BUFFER${i}`,
-      formatter: formatEnumNone,
-      help: `
-      Used for framebuffers with multiple color attachments. Sets whether
-      writing to an attachment draws or not. Note that the i'th
-      setting can only be --NONE-- or --COLOR_ATTACHMENT(i)-- where i
-      matches the index of the attachment.
+  if (isWebGL2) {
+    const maxDrawBuffers = gl.getParameter(gl.MAX_DRAW_BUFFERS);
+    for (let i = 0; i < maxDrawBuffers; ++i) {
+      drawBuffersState.states.push({
+        pname: `DRAW_BUFFER${i}`,
+        formatter: formatEnumNone,
+        help: `
+        Used for framebuffers with multiple color attachments. Sets whether
+        writing to an attachment draws or not. Note that the i'th
+        setting can only be --NONE-- or --COLOR_ATTACHMENT(i)-- where i
+        matches the index of the attachment.
 
-      ---js
-      gl.framebuffer(gl.DRAW_FRAMEBUFFER, fourAttachmentFramebuffer); 
-      gl.drawBuffers([
-          gl.COLOR_ATTACHMENT0,  // write to 0
-          gl.COLOR_ATTACHMENT1,  // write to 1
-          gl.NONE,               // do not write to 2
-          gl.COLOR_ATTACHMENT3,  // write to 3
-      ]);
-      ---
-      `,
-    });
+        ---js
+        gl.framebuffer(gl.DRAW_FRAMEBUFFER, fourAttachmentFramebuffer); 
+        gl.drawBuffers([
+            gl.COLOR_ATTACHMENT0,  // write to 0
+            gl.COLOR_ATTACHMENT1,  // write to 1
+            gl.NONE,               // do not write to 2
+            gl.COLOR_ATTACHMENT3,  // write to 3
+        ]);
+        ---
+        `,
+      });
+    }
   }
 
   return {
