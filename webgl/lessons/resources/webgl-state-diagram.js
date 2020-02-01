@@ -2,61 +2,69 @@
 /* eslint no-undef: "error" */
 /* eslint no-return-assign: "off" */
 
-/* global hljs, showdown, gl, chroma */
+/* global hljs, gl */
 
 //'use strict';
 
 import * as twgl from '/3rdparty/twgl-full.module.js';
 import {
-  px,
-  formatBoolean,
-  formatUniformValue,
-  createTemplate,
-  updateElem,
-  replaceParams,
-  helpToMarkdown,
+  addElem,
   addRemoveClass,
   createElem,
-  addElem,
-  flash,
-  removeFlashes,
   createTable,
+  createTemplate,
+  flash,
+  formatBoolean,
+  formatUniformValue,
+  getColorForWebGLObject,
+  helpToMarkdown,
+  px,
+  removeFlashes,
+  setName,
 } from './webgl-state-diagram-utils.js';
 import { getStateTables } from './webgl-state-diagram-state-tables.js';
 import {
-  formatWebGLObject,
   addWebGLObjectInfo,
+  formatWebGLObject,
   getWebGLObjectInfo,
-  formatWebGLObjectOrDefaultVAO,
+  setDefaultVAOInfo,
+  getWebGLObjectInfoOrDefaultVAO,
 } from './webgl-state-diagram-context-wrapper.js';
-import Stepper from './webgl-state-diagram-stepper.js';
-import ArrowManager from './webgl-state-diagram-arrows.js';
+import {
+  collapseOrExpand,
+  createExpander,
+  expand,
+  flashSelfAndExpanderIfClosed,
+  makeDraggable,
+  moveToFront,
+  setWindowPositions,
+  setHint,
+  setHintSubs,
+  showHint,
+  updateElemAndFlashExpanderIfClosed,
+} from './webgl-state-diagram-ui.js';
+import {
+  createStateTable,
+  updateStateTable,
+} from './webgl-state-diagram-state-table.js';
 
-function isBadWebGL2(gl) {
-  // check if it really supports WebGL2. Issues, Some browsers claim to support WebGL2
-  // but in reality pass less than 20% of the conformance tests. Add a few simple
-  // tests to fail so as not to mislead users.
-  const params = [
-      { pname: 'MAX_3D_TEXTURE_SIZE', min: 256, },
-      { pname: 'MAX_DRAW_BUFFERS', min:4, },
-      { pname: 'MAX_COLOR_ATTACHMENTS', min:4, },
-      { pname: 'MAX_VERTEX_UNIFORM_BLOCKS', min:12, },
-      { pname: 'MAX_VERTEX_TEXTURE_IMAGE_UNITS', min:16, },
-      { pname: 'MAX_FRAGMENT_INPUT_COMPONENTS', min:60, },
-      { pname: 'MAX_UNIFORM_BUFFER_BINDINGS', min:24, },
-      { pname: 'MAX_COMBINED_UNIFORM_BLOCKS', min:24, },
-  ];
-  for (const {pname, min} of params) {
-    const value = gl.getParameter(gl[pname]);
-    if (typeof value !== 'number' || Number.isNaN(value) || value < min || gl.getError()) {
-      return true;
-    }
-  }
-  return false;
-}
+import Stepper from './webgl-state-diagram-stepper.js';
+import {arrowManager} from './webgl-state-diagram-arrows.js';
+import {
+  isBadWebGL2,
+  init as initWebGL,
+} from './webgl-state-diagram-webgl.js';
+import {
+  globals,
+} from './webgl-state-diagram-globals.js';
+import {
+  createShaderDisplay,
+  createProgramDisplay,
+} from './webgl-state-diagram-program-ui.js';
 
 export default function main({webglVersion, examples}) {
-  const isWebGL2 = webglVersion === 'webgl2';
+  globals.isWebGL2 = webglVersion === 'webgl2';
+  const isWebGL2 = globals.isWebGL2;
 
   hljs.initHighlightingOnLoad();
 
@@ -68,123 +76,25 @@ export default function main({webglVersion, examples}) {
 
   twgl.addExtensionsToContext(gl);
 
+  const {renderTexture} = initWebGL(gl);
+
   const defaultExampleId = Object.keys(examples)[0];
   const search = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(search.entries());
   let {lang, exampleId = defaultExampleId} = params;
-  const subs = {
+  setHintSubs({
     langPathSegment: lang ? `${lang}/` : '',
-  };
+  });
 
   let executeWebGLWrappers = true;
 
-  const {renderTexture} = (function() {
-    const vs = `
-    attribute vec4 position;
-    varying vec2 v_texcoord;
-    void main() {
-      gl_Position = position;
-      v_texcoord = position.xy * 0.5 + 0.5;
-    }`;
-    const fs = `
-    precision mediump float;
-    varying vec2 v_texcoord;
-    uniform sampler2D tex;
-    void main() {
-      gl_FragColor = texture2D(tex, v_texcoord);
-    }`;
-    const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
-    const bufferInfo = twgl.createBufferInfoFromArrays(gl, {
-      position: {
-        numComponents: 2,
-        data: [
-          -1, -1,
-           1, -1,
-          -1,  1,
-          -1,  1,
-           1, -1,
-           1,  1,
-        ],
-      },
-    });
-    const vaoInfo = twgl.createVertexArrayInfo(gl, programInfo, bufferInfo);
-    const fbInfo = twgl.createFramebufferInfo(gl, [{format: gl.RGBA, minMag: gl.LINEAR}], 128, 128);
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    gl.bindTexture(gl.TEXTURE_2D, null);
-    gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-    function enableDisable(gl, pname, enable) {
-      if (enable) {
-        gl.enable(pname);
-      } else {
-        gl.disable(pname);
-      }
-    }
-
-    function renderTexture(texture) {
-      executeWebGLWrappers = false;
-
-      // really need to save a lot more state
-      const savedState = {
-        blend: gl.getParameter(gl.BLEND),
-        depthTest: gl.getParameter(gl.DEPTH_TEST),
-        stencilTest: gl.getParameter(gl.STENCIL_TEST),
-        scissorTest: gl.getParameter(gl.SCISSOR_TEST),
-        cullFace: gl.getParameter(gl.CULL_FACE),
-        framebuffer: gl.getParameter(gl.FRAMEBUFFER_BINDING),
-        program: gl.getParameter(gl.CURRENT_PROGRAM),
-        texture: gl.getParameter(gl.TEXTURE_BINDING_2D),
-        viewport: gl.getParameter(gl.VIEWPORT),
-        activeTexture: gl.getParameter(gl.ACTIVE_TEXTURE),
-        vertexArray: gl.getParameter(gl.VERTEX_ARRAY_BINDING),
-      };
-
-      twgl.bindFramebufferInfo(gl, fbInfo);
-      twgl.setBuffersAndAttributes(gl, programInfo, vaoInfo);
-      gl.useProgram(programInfo.program);
-      // we're assuming the texture is renderable
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.disable(gl.BLEND);
-      gl.disable(gl.DEPTH_TEST);
-      gl.disable(gl.SCISSOR_TEST);
-      gl.disable(gl.STENCIL_TEST);
-      gl.disable(gl.CULL_FACE);
-      gl.uniform1i(programInfo.uniformSetters.tex.location, savedState.activeTexture - gl.TEXTURE0);
-      twgl.drawBufferInfo(gl, vaoInfo);
-
-      const data = new Uint8Array(fbInfo.width * fbInfo.height * 4);
-      gl.readPixels(0, 0, fbInfo.width, fbInfo.height, gl.RGBA, gl.UNSIGNED_BYTE, data);
-
-      enableDisable(gl, gl.BLEND, savedState.blend);
-      enableDisable(gl, gl.DEPTH_TEST, savedState.depthTest);
-      enableDisable(gl, gl.SCISSOR_TEST, savedState.scissorTest);
-      enableDisable(gl, gl.STENCIL_TEST, savedState.stencilTest);
-      enableDisable(gl, gl.CULL_FACE, savedState.cullFace);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, savedState.framebuffer);
-      gl.viewport(...savedState.viewport);
-      gl.useProgram(savedState.program);
-      gl.bindTexture(gl.TEXTURE_2D, savedState.texture);
-      gl.bindVertexArray(savedState.vertexArray);
-
-      executeWebGLWrappers = true;
-
-      return {
-        width: fbInfo.width,
-        height: fbInfo.height,
-        data,
-      };
-    }
-
-    return {
-      renderTexture,
-    };
-  }());
 
   if (!examples[exampleId]) {
     exampleId = defaultExampleId;
   }
   const example = examples[exampleId];
-  const {windowPositions} = example;
+  setWindowPositions(example.windowPositions);
 
   const examplesElem = document.querySelector('#example');
   for (const [id, example] of Object.entries(examples)) {
@@ -199,788 +109,16 @@ export default function main({webglVersion, examples}) {
     location.search = search.toString();
   });
 
-  const {
-    vertexArrayState,
-    textureState,
-    activeTexNote,
-    shaderState,
-    programState,
-    globalState,
-  } = getStateTables(isWebGL2);
+  globals.stateTables = getStateTables(isWebGL2);
 
   const diagramElem = document.querySelector('#diagram');
   const codeElem = document.querySelector('#code');
   const stepper = new Stepper();
-  const arrowManager = new ArrowManager(document.querySelector('#arrows'));
 
   const glEnumToString = twgl.glEnumToString;
   const formatEnum = v => glEnumToString(gl, v);
 
-  let dragTarget;
-  let dragMouseStartX;
-  let dragMouseStartY;
-  let dragTargetStartX;
-  let dragTargetStartY;
-  let dragDist;
-
-  const converter = new showdown.Converter();
-  const hintElem = document.querySelector('#hint');
-  let lastWidth;
-  let lastHeight;
-  let lastHint;
-  let showHintOnHover = true;
-  function setHint(e, hint = '') {
-    if (dragTarget) {
-      hint = '';
-    }
-    if (lastHint !== hint) {
-      lastHint = hint;
-      const html = converter.makeHtml(replaceParams(hint, subs));
-      hintElem.style.display = '';  // show it so we can measure it
-      hintElem.style.left = '0';    // let it expand
-      hintElem.style.top = '0';     // let it expand
-      hintElem.innerHTML = html;
-      hintElem.querySelectorAll('pre>code').forEach(elem => hljs.highlightBlock(elem));
-      hintElem.querySelectorAll('a').forEach(elem => elem.target = '_blank');
-      lastWidth = hintElem.clientWidth;
-      lastHeight = hintElem.clientHeight + 10;  // +10 here will make it leave space at the bottom
-    }
-
-    // hack: If not pageX then it's the start docs so center
-    if (e.pageX === undefined) {
-      e.pageX = (window.innerWidth - lastWidth) / 2 | 0;
-      e.pageY = (window.innerHeight - hintElem.clientHeight) / 2 | 0;
-    }
-
-    hintElem.style.left = px(e.pageX + lastWidth > window.innerWidth ? window.innerWidth - lastWidth : e.pageX + 5);
-    if (e.type === 'click') {
-      hintElem.style.top = px(e.pageY + lastHeight > window.innerHeight ? window.innerHeight - lastHeight : e.pageY + 5);
-    } else {
-      hintElem.style.top = px(e.pageY + 5);
-    }
-    hintElem.style.display = hint ? '' : 'none';
-    showHintOnHover = hint ? e.type !== 'click' : true;
-  }
-
-  function showHint(e) {
-    if (e.target.nodeName === 'A' ||
-        (e.type !== 'click' && !showHintOnHover)) {
-      return;
-    }
-    e.preventDefault();
-    e.stopPropagation();
-    const elem = e.target.closest('[data-help]');
-    setHint(e, elem ? elem.dataset.help : '');
-  }
-
-  // document.body.addEventListener('mousemove', showHint);
   document.body.addEventListener('click', showHint);
-
-  function flashExpanderIfClosed(elem) {
-    const expander = elem.closest('.expander');
-    if (!expander.classList.contains('open')) {
-      flash(expander.children[0]);
-    }
-  }
-
-  function flashSelfAndExpanderIfClosed(elem) {
-    flash(elem);
-    flashExpanderIfClosed(elem);
-  }
-
-  function updateElemAndFlashExpanderIfClosed(elem, value, flashOnChange = true) {
-    const changed = updateElem(elem, value, flashOnChange);
-    if (changed && flashOnChange) {
-      flashExpanderIfClosed(elem);
-    }
-    return changed;
-  }
-
-  function toggleExpander(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.parentElement.classList.toggle('open');
-    arrowManager.update();
-    moveToFront(e.target);
-  }
-
-  function moveToFront(elemToFront) {
-    elemToFront = elemToFront.closest('.draggable');
-    const elements = [...document.querySelectorAll('.draggable')].filter(elem => elem !== elemToFront);
-    elements.sort((a, b) => a.style.zIndex - b.style.zIndex);
-    elements.push(elemToFront);
-    elements.forEach((elem, ndx) => {
-      elem.style.zIndex = ndx + 1;
-    });
-  }
-
-  const queuedRequests = new Map();
-  function updateQueuedElementPosition() {
-    requestId = undefined;
-    queuedRequests.forEach((value, key) => {
-      const {x, y} = value;
-      key.style.left = px(x);
-      key.style.top = px(y);
-    });
-    queuedRequests.clear();
-  }
-
-  let requestId;
-  function requestUpdate() {
-    if (requestId) {
-      return;
-    }
-
-    arrowManager.update();
-
-    requestId = requestAnimationFrame(updateQueuedElementPosition);
-  }
-
-  function requestDragUpdate(elem, x, y) {
-    queuedRequests.set(elem, {x, y});
-    requestUpdate();
-  }
-
-  function dragStart(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    const isTouch = e.type === 'touchstart';
-
-    if (isTouch) {
-      dragMouseStartX = e.touches[0].pageX;
-      dragMouseStartY = e.touches[0].pageY;
-    } else {
-      dragMouseStartX = e.pageX;
-      dragMouseStartY = e.pageY;
-    }
-
-    dragDist = 0;
-    dragTarget = this.closest('.draggable');
-    const rect = this.getBoundingClientRect();
-    dragTargetStartX = (window.scrollX + rect.left) | 0; // parseInt(this.style.left || '0');
-    dragTargetStartY = (window.scrollY + rect.top) | 0;  // parseInt(this.style.top || '0');
-    moveToFront(dragTarget);
-
-    window.addEventListener(isTouch ? 'touchmove' : 'mousemove', dragMove, {passive: false});
-    window.addEventListener(isTouch ? 'touchend' : 'mouseup', dragStop, {passive: false});
-  }
-
-  function dragMove(e) {
-    if (dragTarget) {
-      e.preventDefault();
-      e.stopPropagation();
-      dragTarget.classList.add('dragging');
-      const isTouch = e.type === 'touchmove';
-      const dx = ((isTouch ? e.touches[0].pageX : e.pageX) - dragMouseStartX);
-      const dy = ((isTouch ? e.touches[0].pageY : e.pageY) - dragMouseStartY);
-      dragDist += dx + dy;
-      const x = dragTargetStartX + dx;
-      const y = dragTargetStartY + dy;
-      requestDragUpdate(dragTarget, x, y);
-    }
-  }
-
-  function dragStop(e) {
-    if (dragTarget) {
-      e.preventDefault();
-      e.stopPropagation();
-      const isTouch = e.type === 'touchend';
-      dragTarget.classList.remove('dragging');
-      dragTarget = undefined;
-      window.removeEventListener(isTouch ? 'touchmove' : 'mousemove', dragMove);
-      window.removeEventListener(isTouch ? 'touchend' : 'mouseup', dragStop);
-      if (isTouch && dragDist === 0) {
-        const clickElem = document.elementFromPoint(dragMouseStartX, dragMouseStartY);
-       clickElem.dispatchEvent(new MouseEvent('click', {
-          bubbles: true,
-          cancelable: true,
-          view: window,
-          clientX: dragMouseStartX,
-          clientY: dragMouseStartY,
-       }));
-      }
-    }
-  }
-
-  // format for position is selfSide:baseSide:offset.
-  // eg.: left:right-10 = put our left side - 10 units from right of base
-  let windowCount = 0;
-  function getNextWindowPosition(elem) {
-    const info = windowPositions[windowCount++];
-    let x = windowCount * 10;
-    let y = windowCount * 10;
-    if (info) {
-      const {base, x: xDesc, y: yDesc} = info;
-      const baseElem = getWindowElem(base);
-      x = computeRelativePosition(elem, baseElem, xDesc);
-      y = computeRelativePosition(elem, baseElem, yDesc);
-    }
-    return {x, y};
-  }
-
-  const relRE = /(\w+):(\w+)([-+]\d+)/;
-  function computeRelativePosition(elem, base, desc) {
-    const [, elemSide, baseSide, offset] = relRE.exec(desc);
-    const rect = elem.getBoundingClientRect();
-    const elemRect = {
-      left: 0,
-      top: 0,
-      right: -rect.width,
-      bottom: -rect.height,
-    };
-    const baseRect = base.getBoundingClientRect();
-    return elemRect[elemSide] + baseRect[baseSide] + parseInt(offset) | 0;
-  }
-
-  function getWindowElem(name) {
-    const nameElem = [...diagramElem.querySelectorAll('.name')].find(elem => elem.textContent.indexOf(name) >= 0);
-    if (nameElem) {
-      return nameElem.closest('.draggable');
-    }
-    return name === '#diagram' ? diagramElem : null;
-  }
-
-  function makeDraggable(elem) {
-    const div = addElem('div', elem.parentElement, {
-      className: 'draggable',
-    });
-    elem.remove();
-    div.appendChild(elem);
-    const pos = getNextWindowPosition(div);
-    div.style.left = px(pos.x);
-    div.style.top = px(pos.y);
-    div.addEventListener('mousedown', () => moveToFront(div), {passive: false});
-    div.addEventListener('mousedown', dragStart, {passive: false});
-    div.addEventListener('touchstart', dragStart, {passing: false});
-    div.addEventListener('wheel', () => {
-      requestUpdate();
-    });
-    moveToFront(div);
-    return div;
-  }
-
-  function createExpander(parent, title, attrs = {}, help) {
-    const outer = addElem('div', parent, Object.assign({className: 'expander'}, attrs));
-    const titleLine = addElem('div', outer, {className: 'expander-name-line'});
-    addElem('div', titleLine, {
-      className: 'expander-name',
-      textContent: title,
-    });
-    if (help) {
-      const helpElem = addElem('div', titleLine, {
-        className: 'expander-help',
-        textContent: '?',
-        dataset: {
-          help: helpToMarkdown(help),
-        },
-      });
-      helpElem.addEventListener('click', showHint);
-    }
-    const inner = addElem('div', outer, {className: 'expander-content'});
-    titleLine.addEventListener('click', toggleExpander);
-    return inner;
-  }
-
-  const elemToArrowMap = new Map();
-  function createStateTable(statesInfo, parent, title, queryFn, update = true) {
-    const {states, help} = statesInfo;
-    const expander = createExpander(parent, title, {}, help);
-    const div = addElem('div', expander, {className: 'expander-content'});
-    const table = addElem('table', div);
-    const tbody = addElem('tbody', table);
-    for (const state of states) {
-      const {pname, help} = state;
-      const tr = addElem('tr', tbody);
-      tr.dataset.help = helpToMarkdown(help);
-      addElem('td', tr, {textContent: pname});
-      addElem('td', tr);
-    }
-    if (update) {
-      updateStateTable(statesInfo, expander, queryFn, true);
-    }
-    return expander;
-  }
-
-  function querySelectorClassInclusive(elem, className) {
-    return elem.classList.contains(className)
-        ? elem
-        : elem.querySelector(`.${className}`);
-  }
-
-  const hsl = (h, s, l) => `hsl(${h * 360 | 0}, ${s * 100 | 0}%, ${l * 100 | 0}%)`;
-
-  function getColorForWebGLObject(webglObject, elem, level = 0) {
-    const win = querySelectorClassInclusive(elem, 'window-content') || elem.closest('.window-content');
-    const style = getComputedStyle(win);
-    const c = chroma(style.backgroundColor).hsl();
-    return hsl(c[0] / 360 + level * 8, 1, 0.8 - level * 0.4);
-  }
-
-  function updateStateTable(statesInfo, parent, queryFn, initial) {
-    const {states} = statesInfo;
-    const tbody = parent.querySelector('tbody');
-    // NOTE: Assumption that states array is parallel to table rows
-    states.forEach((state, rowNdx) => {
-      const {formatter} = state;
-      const raw = queryFn(state);
-      const value = formatter(raw);
-      const row = tbody.rows[rowNdx];
-      const cell = row.cells[1];
-      const isNew = cell.textContent !== value.toString();
-      cell.textContent = value;
-      // FIX: should put this data else were instead of guessing
-      if (isNew) {
-        if (formatter === formatWebGLObject || formatter === formatWebGLObjectOrDefaultVAO) {
-          const oldArrow = elemToArrowMap.get(cell);
-          if (oldArrow) {
-            arrowManager.remove(oldArrow);
-            elemToArrowMap.delete(cell);
-          }
-          const targetInfo = raw
-              ? getWebGLObjectInfo(raw)
-              : (formatter === formatWebGLObjectOrDefaultVAO)
-                  ? defaultVAOInfo
-                  : null;
-          if (targetInfo && !targetInfo.deleted) {
-            elemToArrowMap.set(
-                cell,
-                arrowManager.add(
-                    cell,
-                    targetInfo.ui.elem.querySelector('.name'),
-                    getColorForWebGLObject(raw, targetInfo.ui.elem)));
-          }
-        }
-      }
-
-      if (!initial && isNew) {
-        flashSelfAndExpanderIfClosed(row);
-      }
-    });
-  }
-
-  function isBuiltIn(info) {
-    const name = info.name;
-    return name.startsWith("gl_") || name.startsWith("webgl_");
-  }
-
-  function createProgramAttributes(parent, gl, program) {
-    const tbody = createTable(parent, ['name', 'location']);
-    const arrows = [];
-
-    const scan = () => {
-      tbody.innerHTML = '';
-      flash(tbody);
-      arrows.forEach(arrow => arrowManager.remove(arrow));
-
-      const vao = gl.getParameter(gl.VERTEX_ARRAY_BINDING);
-      const vaoInfo = vao ? getWebGLObjectInfo(vao) : defaultVAOInfo;
-      const isCurrent = gl.getParameter(gl.CURRENT_PROGRAM) === program;
-
-      const numAttribs = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
-      for (let ii = 0; ii < numAttribs; ++ii) {
-        const attribInfo = gl.getActiveAttrib(program, ii);
-        if (isBuiltIn(attribInfo)) {
-            continue;
-        }
-        const index = gl.getAttribLocation(program, attribInfo.name);
-        const tr = addElem('tr', tbody);
-        const help = helpToMarkdown(`
-          get attribute location with
-
-          ---js
-          const loc = gl.getAttribLocation(program, '${attribInfo.name}');
-          ---
-          
-          attribute locations are chosen by WebGL. You can choose locations
-          by calling.
-
-          ---js
-          gl.bindAttribLocation(program, desiredLocation, '${attribInfo.name}');
-          ---
-
-          **BEFORE** calling
-          
-          ---js
-          gl.linkProgram(program);
-          ---
-        `);
-        addElem('td', tr, {textContent: attribInfo.name, dataset: {help}});
-        addElem('td', tr, {textContent: index, dataset: {help}});
-
-        if (isCurrent) {
-          const target = vaoInfo.ui.elem.querySelector('tbody').rows[index]; /*.cells[bindPointIndex]; */
-          arrows.push(arrowManager.add(
-              tr,
-              target,
-              getColorForWebGLObject(vao, target, index / 8),
-              {startDir: 'right', endDir: 'right', attrs: {'stroke-dasharray': '2 4'}}));
-        }
-      }
-    };
-
-    scan(true);
-
-    return {
-      elem: tbody,
-      scan,
-      update: scan,
-    };
-  }
-
-  const {getUniformTypeInfo} = (function() {
-
-  const FLOAT                         = 0x1406;
-  const FLOAT_VEC2                    = 0x8B50;
-  const FLOAT_VEC3                    = 0x8B51;
-  const FLOAT_VEC4                    = 0x8B52;
-  const INT                           = 0x1404;
-  const INT_VEC2                      = 0x8B53;
-  const INT_VEC3                      = 0x8B54;
-  const INT_VEC4                      = 0x8B55;
-  const BOOL                          = 0x8B56;
-  const BOOL_VEC2                     = 0x8B57;
-  const BOOL_VEC3                     = 0x8B58;
-  const BOOL_VEC4                     = 0x8B59;
-  const FLOAT_MAT2                    = 0x8B5A;
-  const FLOAT_MAT3                    = 0x8B5B;
-  const FLOAT_MAT4                    = 0x8B5C;
-  const SAMPLER_2D                    = 0x8B5E;
-  const SAMPLER_CUBE                  = 0x8B60;
-  const SAMPLER_3D                    = 0x8B5F;
-  const SAMPLER_2D_SHADOW             = 0x8B62;
-  const FLOAT_MAT2x3                  = 0x8B65;
-  const FLOAT_MAT2x4                  = 0x8B66;
-  const FLOAT_MAT3x2                  = 0x8B67;
-  const FLOAT_MAT3x4                  = 0x8B68;
-  const FLOAT_MAT4x2                  = 0x8B69;
-  const FLOAT_MAT4x3                  = 0x8B6A;
-  const SAMPLER_2D_ARRAY              = 0x8DC1;
-  const SAMPLER_2D_ARRAY_SHADOW       = 0x8DC4;
-  const SAMPLER_CUBE_SHADOW           = 0x8DC5;
-  const UNSIGNED_INT                  = 0x1405;
-  const UNSIGNED_INT_VEC2             = 0x8DC6;
-  const UNSIGNED_INT_VEC3             = 0x8DC7;
-  const UNSIGNED_INT_VEC4             = 0x8DC8;
-  const INT_SAMPLER_2D                = 0x8DCA;
-  const INT_SAMPLER_3D                = 0x8DCB;
-  const INT_SAMPLER_CUBE              = 0x8DCC;
-  const INT_SAMPLER_2D_ARRAY          = 0x8DCF;
-  const UNSIGNED_INT_SAMPLER_2D       = 0x8DD2;
-  const UNSIGNED_INT_SAMPLER_3D       = 0x8DD3;
-  const UNSIGNED_INT_SAMPLER_CUBE     = 0x8DD4;
-  const UNSIGNED_INT_SAMPLER_2D_ARRAY = 0x8DD7;
-
-  const TEXTURE_2D                    = 0x0DE1;
-  const TEXTURE_CUBE_MAP              = 0x8513;
-  const TEXTURE_3D                    = 0x806F;
-  const TEXTURE_2D_ARRAY              = 0x8C1A;
-
-  const typeMap = {};
-
-  /**
-   * Returns the corresponding bind point for a given sampler type
-   */
-  //function getBindPointForSamplerType(gl, type) {
-  //  return typeMap[type].bindPoint;
-  //}
-
-  // This kind of sucks! If you could compose functions as in `var fn = gl[name];`
-  // this code could be a lot smaller but that is sadly really slow (T_T)
-
-  const floatSetter = 'gl.uniform1f(location, value);';
-  const floatArraySetter = 'gl.uniform1fv(location, arrayOfValues);';
-  const floatVec2Setter = 'gl.uniform2fv(location, arrayOf2Values); // or\ngl.uniform2f(location, v0, v1);';
-  const floatVec3Setter = 'gl.uniform3fv(location, arrayOf3Values); // or\ngl.uniform3f(location, v0, v1, v2);';
-  const floatVec4Setter = 'gl.uniform4fv(location, arrayOf4Values); // or\ngl.uniform4f(location, v0, v1, v2, v3);';
-  const intSetter = 'gl.uniform1i(location, value);';
-  const intArraySetter = 'gl.uniform1iv(location, arrayOfValues);';
-  const intVec2Setter = 'gl.uniform2iv(location, arrayOf2Values); // or\ngl.uniform2i(location, v0, v1)';
-  const intVec3Setter = 'gl.uniform3iv(location, arrayOf3Values); // or\ngl.uniform3i(location, v0, v1, v2)';
-  const intVec4Setter = 'gl.uniform4iv(location, arrayOf4Values); // or\ngl.uniform4i(location, v0, v1, v2, v3)';
-  const uintSetter = 'gl.uniform1ui(location, value);';
-  const uintArraySetter = 'gl.uniform1uiv(location, arrayOf1Value);';
-  const uintVec2Setter = 'gl.uniform2uiv(location, arrayOf2Values); // or\ngl.uniform2ui(location, v0, v1)';
-  const uintVec3Setter = 'gl.uniform3uiv(location, arrayOf3Values); // or\ngl.uniform3ui(location, v0, v1, v2)';
-  const uintVec4Setter = 'gl.uniform4uiv(location, arrayOf4Values); // or\ngl.uniform4ui(location, v0, v1, v2, v3)';
-  const floatMat2Setter = 'gl.uniformMatrix2fv(location, false, arrayOf4Values);';
-  const floatMat3Setter = 'gl.uniformMatrix3fv(location, false, arrayOf9Values);';
-  const floatMat4Setter = 'gl.uniformMatrix4fv(location, false, arrayOf16Values);';
-  const floatMat23Setter = 'gl.uniformMatrix2x3fv(location, false, arrayOf6Values);';
-  const floatMat32Setter = 'gl.uniformMatrix3x2fv(location, false, arrayOf6values);';
-  const floatMat24Setter = 'gl.uniformMatrix2x4fv(location, false, arrayOf8Values);';
-  const floatMat42Setter = 'gl.uniformMatrix4x2fv(location, false, arrayOf8Values);';
-  const floatMat34Setter = 'gl.uniformMatrix3x4fv(location, false, arrayOf12Values);';
-  const floatMat43Setter = 'gl.uniformMatrix4x3fv(location, false, arrayOf12Values);';
-  const samplerSetter = 'gl.uniform1i(location, textureUnitIndex);\n// note: this only tells the shader\n// which texture unit to reference.\n// you still need to bind a texture\n// to that texture unit';
-  const samplerArraySetter = 'gl.uniform1iv(location, arrayOfTextureUnitIndices);';
-
-  typeMap[FLOAT]                         = { Type: Float32Array, size:  4, setter: floatSetter,      arraySetter: floatArraySetter, };
-  typeMap[FLOAT_VEC2]                    = { Type: Float32Array, size:  8, setter: floatVec2Setter,  };
-  typeMap[FLOAT_VEC3]                    = { Type: Float32Array, size: 12, setter: floatVec3Setter,  };
-  typeMap[FLOAT_VEC4]                    = { Type: Float32Array, size: 16, setter: floatVec4Setter,  };
-  typeMap[INT]                           = { Type: Int32Array,   size:  4, setter: intSetter,        arraySetter: intArraySetter, };
-  typeMap[INT_VEC2]                      = { Type: Int32Array,   size:  8, setter: intVec2Setter,    };
-  typeMap[INT_VEC3]                      = { Type: Int32Array,   size: 12, setter: intVec3Setter,    };
-  typeMap[INT_VEC4]                      = { Type: Int32Array,   size: 16, setter: intVec4Setter,    };
-  typeMap[UNSIGNED_INT]                  = { Type: Uint32Array,  size:  4, setter: uintSetter,       arraySetter: uintArraySetter, };
-  typeMap[UNSIGNED_INT_VEC2]             = { Type: Uint32Array,  size:  8, setter: uintVec2Setter,   };
-  typeMap[UNSIGNED_INT_VEC3]             = { Type: Uint32Array,  size: 12, setter: uintVec3Setter,   };
-  typeMap[UNSIGNED_INT_VEC4]             = { Type: Uint32Array,  size: 16, setter: uintVec4Setter,   };
-  typeMap[BOOL]                          = { Type: Uint32Array,  size:  4, setter: intSetter,        arraySetter: intArraySetter, };
-  typeMap[BOOL_VEC2]                     = { Type: Uint32Array,  size:  8, setter: intVec2Setter,    };
-  typeMap[BOOL_VEC3]                     = { Type: Uint32Array,  size: 12, setter: intVec3Setter,    };
-  typeMap[BOOL_VEC4]                     = { Type: Uint32Array,  size: 16, setter: intVec4Setter,    };
-  typeMap[FLOAT_MAT2]                    = { Type: Float32Array, size: 16, setter: floatMat2Setter,  };
-  typeMap[FLOAT_MAT3]                    = { Type: Float32Array, size: 36, setter: floatMat3Setter,  };
-  typeMap[FLOAT_MAT4]                    = { Type: Float32Array, size: 64, setter: floatMat4Setter,  };
-  typeMap[FLOAT_MAT2x3]                  = { Type: Float32Array, size: 24, setter: floatMat23Setter, };
-  typeMap[FLOAT_MAT2x4]                  = { Type: Float32Array, size: 32, setter: floatMat24Setter, };
-  typeMap[FLOAT_MAT3x2]                  = { Type: Float32Array, size: 24, setter: floatMat32Setter, };
-  typeMap[FLOAT_MAT3x4]                  = { Type: Float32Array, size: 48, setter: floatMat34Setter, };
-  typeMap[FLOAT_MAT4x2]                  = { Type: Float32Array, size: 32, setter: floatMat42Setter, };
-  typeMap[FLOAT_MAT4x3]                  = { Type: Float32Array, size: 48, setter: floatMat43Setter, };
-  typeMap[SAMPLER_2D]                    = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D,       };
-  typeMap[SAMPLER_CUBE]                  = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_CUBE_MAP, };
-  typeMap[SAMPLER_3D]                    = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_3D,       };
-  typeMap[SAMPLER_2D_SHADOW]             = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D,       };
-  typeMap[SAMPLER_2D_ARRAY]              = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D_ARRAY, };
-  typeMap[SAMPLER_2D_ARRAY_SHADOW]       = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D_ARRAY, };
-  typeMap[SAMPLER_CUBE_SHADOW]           = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_CUBE_MAP, };
-  typeMap[INT_SAMPLER_2D]                = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D,       };
-  typeMap[INT_SAMPLER_3D]                = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_3D,       };
-  typeMap[INT_SAMPLER_CUBE]              = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_CUBE_MAP, };
-  typeMap[INT_SAMPLER_2D_ARRAY]          = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D_ARRAY, };
-  typeMap[UNSIGNED_INT_SAMPLER_2D]       = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D,       };
-  typeMap[UNSIGNED_INT_SAMPLER_3D]       = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_3D,       };
-  typeMap[UNSIGNED_INT_SAMPLER_CUBE]     = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_CUBE_MAP, };
-  typeMap[UNSIGNED_INT_SAMPLER_2D_ARRAY] = { Type: null,         size:  0, setter: samplerSetter,    arraySetter: samplerArraySetter, bindPoint: TEXTURE_2D_ARRAY, };
-
-  // this is the wrong place for this data. Should be asking the texture unit display
-  const bindPointToIndex = {};
-  bindPointToIndex[TEXTURE_2D] = 0;
-  bindPointToIndex[TEXTURE_CUBE_MAP] = 1;
-  bindPointToIndex[TEXTURE_3D] = 2;
-  bindPointToIndex[TEXTURE_2D_ARRAY] = 3;
-
-  return {
-    getUniformTypeInfo(type) {
-      return typeMap[type];
-    },
-    getIndexOfBindPoint(bindPoint) {
-      return bindPointToIndex[bindPoint];
-    },
-  };
-
-  }());
-
-  function createProgramUniforms(parent, gl, program) {
-    const tbody = createTable(parent, ['name', 'value']);
-
-    let locationInfos = [];
-    let numUniforms;
-
-    const update = (initial) => {
-      const isCurrent = gl.getParameter(gl.CURRENT_PROGRAM) === program;
-
-      locationInfos.forEach((locationInfo, ndx) => {
-        const {location, uniformTypeInfo} = locationInfo;
-        const cell = tbody.rows[ndx].cells[1];
-        const value = gl.getUniform(program, location);
-        updateElemAndFlashExpanderIfClosed(cell, formatUniformValue(value), !initial);
-        const bindPoint = uniformTypeInfo.bindPoint;
-        if (bindPoint) {
-          if (locationInfo.arrow) {
-            arrowManager.remove(locationInfo.arrow);
-          }
-          if (isCurrent) {
-            // const bindPointIndex = getIndexOfBindPoint(bindPoint);
-            const target = globalUI.textureUnits.elem.querySelector('tbody').rows[value]; /*.cells[bindPointIndex]; */
-            locationInfo.arrow =  arrowManager.add(
-                  tbody.rows[ndx].cells[0],
-                  target,
-                  getColorForWebGLObject(null, target),
-                  {startDir: 'left', endDir: 'right', attrs: {'stroke-dasharray': '2 4'}});
-          }
-        }
-      });
-    };
-
-    const scan = () => {
-      locationInfos.forEach(({arrow}) => {
-        if (arrow) {
-          arrowManager.remove(arrow);
-        }
-      });
-      locationInfos = [];
-      numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-      tbody.innerHTML = '';
-      flash(tbody);
-
-      for (let ii = 0; ii < numUniforms; ++ii) {
-        const uniformInfo = gl.getActiveUniform(program, ii);
-        if (isBuiltIn(uniformInfo)) {
-            continue;
-        }
-        let name = uniformInfo.name;
-        // remove the array suffix.
-        if (name.substr(-3) === "[0]") {
-          name = name.substr(0, name.length - 3);
-        }
-        const uniformTypeInfo = getUniformTypeInfo(uniformInfo.type);
-        const help = helpToMarkdown(`---js\nconst location = gl.getUniformLocation(\n    program,\n    '${name}');\ngl.useProgram(program); // set current program\n${uniformTypeInfo.setter}\n---`);
-        locationInfos.push({
-          location: gl.getUniformLocation(program, name),
-          uniformInfo,
-          uniformTypeInfo,
-        });
-
-        const tr = addElem('tr', tbody);
-        addElem('td', tr, {textContent: name, dataset: {help}});
-        addElem('td', tr, {
-          dataset: {help},
-        });
-      }
-      update();
-    };
-
-    scan();
-    update(true);
-
-    return {
-      elem: tbody,
-      scan,
-      update,
-    };
-  }
-
-  function setName(elem, name) {
-    const nameElem = elem.querySelector('.name');
-    nameElem.textContent = `${nameElem.textContent}[${name}]`;
-  }
-
-  function createShaderDisplay(parent, name, shader) {
-    const type = gl.getShaderParameter(shader, gl.SHADER_TYPE) === gl.VERTEX_SHADER ? 'vertex' : 'fragment';
-
-    const shElem = createTemplate(parent, `#${type}-shader-template`);
-    setName(shElem, name);
-
-    const sourceExpander = createExpander(shElem, 'source');
-    const preElem = addElem('pre', sourceExpander);
-
-    const updateSource = () => {
-      preElem.innerHTML = '';
-      const codeElem = addElem('code', preElem, {className: 'lang-glsl'});
-      codeElem.textContent = gl.getShaderSource(shader);
-      hljs.highlightBlock(codeElem);
-      expand(sourceExpander);
-    };
-
-    const queryFn = state => {
-      const {pname} = state;
-      const value = gl.getShaderParameter(shader, gl[pname]);
-      return value;
-    };
-
-    const stateTable = createStateTable(shaderState, shElem, 'state', queryFn);
-    expand(stateTable);
-    makeDraggable(shElem);
-
-    return {
-      elem: shElem,
-      updateSource,
-      updateState: () => {
-        updateStateTable(shaderState, stateTable, queryFn);
-      },
-    };
-  }
-
-  function createProgramDisplay(parent, name, program) {
-    const prgElem = createTemplate(parent, '#program-template');
-    setName(prgElem, name);
-
-    const shaderExpander = createExpander(prgElem, 'attached shaders');
-    const shadersTbody = createTable(shaderExpander, []);
-
-    let arrows = [];
-    let oldShaders = [];
-    let newShaders;
-
-    const updateAttachedShaders = () => {
-      shadersTbody.innerHTML = '';
-
-      arrows.forEach(arrow => arrowManager.remove(arrow));
-
-      newShaders = gl.getAttachedShaders(program);
-      collapseOrExpand(shaderExpander, newShaders.length > 0);
-
-      // sort so VERTEX_SHADER is first.
-      newShaders.sort((a, b) => {
-        const aType = gl.getShaderParameter(a, gl.SHADER_TYPE);
-        const bType = gl.getShaderParameter(b, gl.SHADER_TYPE);
-        return aType < bType;
-      });
-
-      for (const shader of newShaders) {
-        const tr = addElem('tr', shadersTbody);
-        const td = addElem('td', tr, {
-            textContent: formatWebGLObject(shader),
-        });
-        if (oldShaders.indexOf(shader) < 0) {
-          flashSelfAndExpanderIfClosed(td);
-        }
-        const targetInfo = getWebGLObjectInfo(shader);
-        if (!targetInfo.deleted) {
-          arrows.push(arrowManager.add(
-              tr,
-              targetInfo.ui.elem.querySelector('.name'),
-              getColorForWebGLObject(shader, targetInfo.ui.elem)));
-        }
-      }
-
-      oldShaders = newShaders;
-    };
-
-    const attribExpander = createExpander(prgElem, 'attribute info', {
-      dataset: {
-        hint: 'attributes are user defined. Their values come from buffers as specified in a *vertex array*.',
-      },
-    });
-    const uniformExpander = createExpander(prgElem, 'uniforms', {
-      dataset: {
-        hint: 'uniform values are user defined program state. The locations and values are different for each program.',
-      },
-    });
-
-
-    expand(attribExpander);
-    expand(uniformExpander);
-
-    const attribUI = createProgramAttributes(attribExpander, gl, program);
-    const uniformUI = createProgramUniforms(uniformExpander, gl, program);
-
-    const queryFn = state => {
-      const {pname} = state;
-      const value = gl.getProgramParameter(program, gl[pname]);
-      return value;
-    };
-
-    const stateTable = createStateTable(programState, prgElem, 'state', queryFn);
-    expand(stateTable);
-
-    makeDraggable(prgElem);
-
-    return {
-      elem: prgElem,
-      updateAttachedShaders,
-      updateState: () => {
-        updateStateTable(programState, stateTable, queryFn);
-      },
-      scanAttributes: attribUI.scan,
-      updateAttributes: attribUI.update,
-      scanUniforms: uniformUI.scan,
-      updateUniforms: uniformUI.update,
-    };
-  }
 
   const maxAttribs = 8;
   function createVertexArrayDisplay(parent, name /*, webglObject */) {
@@ -1280,7 +418,7 @@ export default function main({webglVersion, examples}) {
       return value;
     };
 
-    const stateTable = createStateTable(vertexArrayState, vaElem.querySelector('.state-table'), 'state', vaQueryFn);
+    const stateTable = createStateTable(globals.stateTables.vertexArrayState, vaElem.querySelector('.state-table'), 'state', vaQueryFn);
     expand(stateTable);
     makeDraggable(vaElem);
 
@@ -1288,7 +426,7 @@ export default function main({webglVersion, examples}) {
       elem: vaElem,
       updateAttributes,
       updateState: () => {
-        updateStateTable(vertexArrayState, stateTable, vaQueryFn);
+        updateStateTable(globals.stateTables.vertexArrayState, stateTable, vaQueryFn);
       },
     };
   }
@@ -1592,7 +730,7 @@ export default function main({webglVersion, examples}) {
               mips > 0 can be generated by calling
               --gl.generateMipmap(gl.TEXTURE_2D);--
 
-              ${activeTexNote}`),
+              ${globals.stateTables.activeTexNote}`),
           },
         });
         div.appendChild(mipCanvas);
@@ -1678,7 +816,9 @@ export default function main({webglVersion, examples}) {
 
     const updateContentsAfterBeingRenderedTo = (texture, level/*, face*/) => {
       // assuming 2D, renderable, ...
+      executeWebGLWrappers = false;
       const {width, height, data} = renderTexture(texture);
+      executeWebGLWrappers = true;
       // copy the data to a new canvas
       const canvas = document.createElement('canvas');
       canvas.width = width;
@@ -1709,7 +849,7 @@ export default function main({webglVersion, examples}) {
       return value;
     };
 
-    const stateTable = createStateTable(textureState, texElem, 'texture state', queryFn, false);
+    const stateTable = createStateTable(globals.stateTables.textureState, texElem, 'texture state', queryFn, false);
 
     expand(mipsExpander);
     expand(stateTable);
@@ -1725,7 +865,7 @@ export default function main({webglVersion, examples}) {
         // because when texture is created we don't know what kind it is until
         // first bind (2D, CUBE_MAP, ...)
         if (target) {
-          updateStateTable(textureState, stateTable, queryFn, initial);
+          updateStateTable(globals.stateTables.textureState, stateTable, queryFn, initial);
           updateMips();
         }
       },
@@ -1861,19 +1001,6 @@ export default function main({webglVersion, examples}) {
     };
   }
 
-  function collapseOrExpand(inner, open) {
-    const action = open ? 'add' : 'remove';
-    const elem = inner.parentElement;
-    if (elem.classList.contains('expander')) {
-      elem.classList[action]('open');
-    } else {
-      elem.querySelector('.expander').classList[action]('open');
-    }
-    return elem;
-  }
-  const expand = (elem) => collapseOrExpand(elem, true);
-  // const collapse = (elem) => collapseOrExpand(elem, false);
-
   function globalStateQuery(state) {
     const {pname} = state;
     const value = gl.getParameter(gl[pname]);
@@ -1885,6 +1012,7 @@ export default function main({webglVersion, examples}) {
   const defaultVAOInfo = {
     ui: createVertexArrayDisplay(diagramElem, '*default*', null),
   };
+  setDefaultVAOInfo(defaultVAOInfo);
 
   const settersToWrap = {};
 
@@ -1912,7 +1040,8 @@ export default function main({webglVersion, examples}) {
     };
   }
   const globalStateElem = document.querySelector('#global-state');
-  const globalUI = {
+  const {globalState} = globals.stateTables;
+  globals.globalUI = {
     commonState: createStateUI(globalState.commonState, globalStateElem, 'common state', globalStateQuery),
     textureUnits: createTextureUnits(globalStateElem, 8),
     clearState: createStateUI(globalState.clearState, globalStateElem, 'clear state', globalStateQuery),
@@ -1922,10 +1051,10 @@ export default function main({webglVersion, examples}) {
     stencilState: createStateUI(globalState.stencilState, globalStateElem, 'stencil state', globalStateQuery),
     polygonState: createStateUI(globalState.polygonState, globalStateElem, 'polygon state', globalStateQuery),
   };
-  expand(globalUI.textureUnits.elem);
-  expand(globalUI.commonState.elem);
-  expand(globalUI.clearState.elem);
-  expand(globalUI.depthState.elem);
+  expand(globals.globalUI.textureUnits.elem);
+  expand(globals.globalUI.commonState.elem);
+  expand(globals.globalUI.clearState.elem);
+  expand(globals.globalUI.depthState.elem);
 
   makeDraggable(globalStateElem);
   const canvasDraggable = makeDraggable(document.querySelector('#canvas'));
@@ -2023,7 +1152,7 @@ export default function main({webglVersion, examples}) {
       info.target = target;
       info.ui.updateState(true);
     }
-    globalUI.textureUnits.updateCurrentTextureUnit(target);
+    globals.globalUI.textureUnits.updateCurrentTextureUnit(target);
   });
   function getCurrentTextureForTarget(target) {
     if (target === gl.TEXTURE_CUBE_MAP) {
@@ -2087,7 +1216,7 @@ export default function main({webglVersion, examples}) {
   wrapFn('bindBuffer', function(origFn, bindPoint, buffer) {
     origFn.call(this, bindPoint, buffer);
     if (bindPoint === gl.ARRAY_BUFFER) {
-      globalUI.commonState.updateState();
+      globals.globalUI.commonState.updateState();
     } else {
       const {ui} = getCurrentVAOInfo();
       ui.updateState();
@@ -2101,7 +1230,7 @@ export default function main({webglVersion, examples}) {
   });
   function getCurrentVAOInfo() {
     const vertexArray = gl.getParameter(gl.VERTEX_ARRAY_BINDING);
-    return vertexArray ? getWebGLObjectInfo(vertexArray) : defaultVAOInfo;
+    return getWebGLObjectInfoOrDefaultVAO(vertexArray);
   }
   wrapFn('enableVertexAttribArray', function(origFn, ...args) {
     origFn.call(this, ...args);
@@ -2120,7 +1249,7 @@ export default function main({webglVersion, examples}) {
   });
   wrapFn('activeTexture', function(origFn, unit) {
     origFn.call(this, unit);
-    globalUI.textureUnits.updateActiveTextureUnit();
+    globals.globalUI.textureUnits.updateActiveTextureUnit();
   });
   function updateProgramAttributesAndUniforms(prog) {
     if (prog) {

@@ -1,28 +1,28 @@
 /* eslint strict: "off" */
 /* eslint no-undef: "error" */
 
-/* global */
+/* global chroma */
 
-const px = (v) => `${v}px`;
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+export const px = (v) => `${v}px`;
+export const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const formatG = v => typeof v === 'number' ? v.toFixed(3).replace(/\.?0+$/, '') : v;
-function formatX(v, n = 0) {
+export const formatG = v => typeof v === 'number' ? v.toFixed(3).replace(/\.?0+$/, '') : v;
+export function formatX(v, n = 0) {
   const s = v.toString(16);
   return `0x${s.padStart(n, '0').substr(0, 2)}`;
 }
-const formatX2 = v => formatX(v, 2);
-const formatBoolean = v => v.toString();
+export const formatX2 = v => formatX(v, 2);
+export const formatBoolean = v => v.toString();
 
 
 let flashElements = [];
 
-function removeFlashes() {
+export function removeFlashes() {
   flashElements.forEach(elem => elem.classList.remove('flash'));
   flashElements = [];
 }
 
-function flash(elem) {
+export function flash(elem) {
   elem.classList.remove('flash');
   setTimeout(() => {
     elem.classList.add('flash');
@@ -31,7 +31,7 @@ function flash(elem) {
   flashElements.push(elem);
 }
 
-function updateElem(elem, newValue, flashOnChange = true) {
+export function updateElem(elem, newValue, flashOnChange = true) {
   const needUpdate = elem.textContent !== newValue;
   if (needUpdate) {
     elem.textContent = newValue;
@@ -42,21 +42,21 @@ function updateElem(elem, newValue, flashOnChange = true) {
   return needUpdate;
 }
 
-function addRemoveClass(elem, className, add) {
+export function addRemoveClass(elem, className, add) {
   elem.classList[add ? 'add' : 'remove'](className);
 }
 
-function replaceParams(s, params) {
+export function replaceParams(s, params) {
   return s.replace(/\${(\w+)}/g, (m, key) => {
     const value = params[key];
     if (value === undefined) {
       throw new Error(`unknown sub: ${key}`);
     }
     return value;
-  })  
+  });
 }
 
-function helpToMarkdown(s) {
+export function helpToMarkdown(s) {
   s = s.replace(/---/g, '```')
        .replace(/--/g, '`');
   const m = /^\n( +)/.exec(s);
@@ -74,7 +74,7 @@ function helpToMarkdown(s) {
   return lines.map(line => line.startsWith(indent) ? line.substr(indent.length) : line).join('\n');
 }
 
-function createElem(tag, attrs = {}) {
+export function createElem(tag, attrs = {}) {
   const elem = document.createElement(tag);
   for (const [key, value] of Object.entries(attrs)) {
     if (typeof value === 'object') {
@@ -94,13 +94,13 @@ function createElem(tag, attrs = {}) {
   return elem;
 }
 
-function addElem(tag, parent, attrs = {}) {
+export function addElem(tag, parent, attrs = {}) {
   const elem = createElem(tag, attrs);
   parent.appendChild(elem);
   return elem;
 }
 
-function addSVG(tag, parent, attrs = {}) {
+export function addSVG(tag, parent, attrs = {}) {
   const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
   for (const [key, value] of Object.entries(attrs)) {
     elem.setAttribute(key, value);
@@ -109,14 +109,14 @@ function addSVG(tag, parent, attrs = {}) {
   return elem;
 }
 
-function createTable(parent, headings) {
+export function createTable(parent, headings) {
   const table = addElem('table', parent);
   const thead = addElem('thead', table);
   headings.forEach(heading => addElem('th', thead, {textContent: heading}));
   return addElem('tbody', table);
 }
 
-function formatUniformValue(v) {
+export function formatUniformValue(v) {
   if (v.buffer && v.buffer instanceof ArrayBuffer) {
     v = Array.from(v);
   }
@@ -140,7 +140,7 @@ function formatUniformValue(v) {
   return typeof v === 'number' ? formatG(v) : v;
 }
 
-function createTemplate(parent, selector) {
+export function createTemplate(parent, selector) {
   const template = document.querySelector(selector);
   const collection = template.content.cloneNode(true);
   if (collection.children.length !== 1) {
@@ -171,23 +171,24 @@ function createTemplate(parent, selector) {
   return elem;
 }
 
-export {
-  px,
-  wait,
-  formatG,
-  formatX,
-  formatX2,
-  formatBoolean,
-  formatUniformValue,
-  createTemplate,
-  updateElem,
-  replaceParams,
-  helpToMarkdown,
-  addRemoveClass,
-  flash,
-  removeFlashes,
-  createElem,
-  addElem,
-  addSVG,
-  createTable,
-};
+export function querySelectorClassInclusive(elem, className) {
+  return elem.classList.contains(className)
+      ? elem
+      : elem.querySelector(`.${className}`);
+}
+
+const hsl = (h, s, l) => `hsl(${h * 360 | 0}, ${s * 100 | 0}%, ${l * 100 | 0}%)`;
+
+export function getColorForWebGLObject(webglObject, elem, level = 0) {
+  const win = querySelectorClassInclusive(elem, 'window-content') || elem.closest('.window-content');
+  const style = getComputedStyle(win);
+  const c = chroma(style.backgroundColor).hsl();
+  return hsl(c[0] / 360 + level * 8, 1, 0.8 - level * 0.4);
+}
+
+export function setName(elem, name) {
+  const nameElem = elem.querySelector('.name');
+  nameElem.textContent = `${nameElem.textContent}[${name}]`;
+}
+
+
