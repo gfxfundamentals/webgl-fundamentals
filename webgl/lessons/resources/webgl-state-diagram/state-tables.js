@@ -24,7 +24,7 @@ import {
 const glEnumToString = twgl.glEnumToString;
 const formatEnum = v => glEnumToString(gl, v);
 const formatEnumZero = v => v ? v === 1 ? 'ONE' : glEnumToString(gl, v) : 'ZERO';
-// const formatEnumNone = v => v ? glEnumToString(gl, v) : 'NONE';
+const formatEnumNone = v => v ? glEnumToString(gl, v) : 'NONE';
 const insertIf = (condition, ...elements) => condition ? elements : [];
 
 const webglFuncs = `
@@ -1039,10 +1039,65 @@ export function getStateTables(isWebGL2) {
     ],
   };
 
+  const drawBuffersState = {
+    help: `
+    **NOTE: draw buffer state is *per* framebuffer state
+    with the canvas having its own draw buffer state.**
+
+    draw buffer state is set for whatever is bound as the 
+    current --DRAW_FRAMEBUFFER-- by calling --gl.drawBuffers--.
+
+    Examples
+
+    ---js
+    // bind the canvas as both the DRAW and READ framebuffers
+    gl.framebuffer(gl.FRAMEBUFFER, null); 
+    gl.drawBuffers([gl.BACK]);  // draw to the canvas (the default)
+    ---
+
+    ---js
+    // bind some 4 attachment framebuffer as the DRAW framebuffer
+    gl.framebuffer(gl.DRAW_FRAMEBUFFER, fourAttachmentFramebuffer); 
+    gl.drawBuffers([
+        gl.COLOR_ATTACHMENT0,  // write to 0
+        gl.COLOR_ATTACHMENT1,  // write to 1
+        gl.NONE,               // do not write to 2
+        gl.COLOR_ATTACHMENT3,  // write to 3
+    ]);
+    ---
+    `,
+    states: [],
+  };
+
+  const maxDrawBuffers = gl.getParameter(gl.MAX_DRAW_BUFFERS);
+  for (let i = 0; i < maxDrawBuffers; ++i) {
+    drawBuffersState.states.push({
+      pname: `DRAW_BUFFER${i}`,
+      formatter: formatEnumNone,
+      help: `
+      Used for framebuffers with multiple color attachments. Sets whether
+      writing to an attachment draws or not. Note that the i'th
+      setting can only be --NONE-- or --COLOR_ATTACHMENT(i)-- where i
+      matches the index of the attachment.
+
+      ---js
+      gl.framebuffer(gl.DRAW_FRAMEBUFFER, fourAttachmentFramebuffer); 
+      gl.drawBuffers([
+          gl.COLOR_ATTACHMENT0,  // write to 0
+          gl.COLOR_ATTACHMENT1,  // write to 1
+          gl.NONE,               // do not write to 2
+          gl.COLOR_ATTACHMENT3,  // write to 3
+      ]);
+      ---
+      `,
+    });
+  }
+
   return {
     shaderState,
     programState,
     textureState,
+    drawBuffersState,
     vertexArrayState,
     activeTexNote,
     globalState: {

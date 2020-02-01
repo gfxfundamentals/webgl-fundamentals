@@ -22,6 +22,12 @@ import {
   flashSelfAndExpanderIfClosed,
   makeDraggable,
 } from './ui.js';
+
+import {
+  createStateTable,
+  updateStateTable,
+} from './state-table.js';
+
 import {
   globals,
 } from './globals.js';
@@ -78,7 +84,7 @@ export function createFramebufferDisplay(parent, name /*, webglObject */) {
   const fbElem = createTemplate(parent, '#framebuffer-template');
   setName(fbElem, name);
 
-  const attachmentExpander = createExpander(fbElem, 'attachment');
+  const attachmentExpander = createExpander(fbElem.querySelector('.attachments'), 'attachment');
   const attachmentsTbody = createTable(attachmentExpander, ['attachment point', 'level', 'face', 'attachment']);
   const maxDrawBuffers = globals.isWebGL2 ? gl.getParameter(gl.MAX_DRAW_BUFFERS) : 1;
   const attachmentPoints = [];
@@ -87,7 +93,9 @@ export function createFramebufferDisplay(parent, name /*, webglObject */) {
   }
   attachmentPoints.push(gl.DEPTH_ATTACHMENT);
   attachmentPoints.push(gl.STENCIL_ATTACHMENT);
-  attachmentPoints.push(gl.DEPTH_STENCIL_ATTACHMENT);
+  if (!globals.isWebGL2) {
+    attachmentPoints.push(gl.DEPTH_STENCIL_ATTACHMENT);
+  }
 
   let arrows = [];
   let oldAttachmentInfos = new Map();
@@ -147,11 +155,29 @@ export function createFramebufferDisplay(parent, name /*, webglObject */) {
     });
   };
 
+  const queryFn = state => {
+    const {pname} = state;
+    const value = gl.getParameter(gl[pname]);
+    return value;
+  };
+  let stateTable;
+
+  const firstBind = () => {
+    if (globals.isWebGL2) {
+      stateTable = createStateTable(globals.stateTables.drawBuffersState, fbElem.querySelector('.draw-buffers'), 'draw buffers', queryFn);
+      expand(stateTable);
+    }
+  };
+
   expand(attachmentExpander);
   makeDraggable(fbElem);
   return {
     elem: fbElem,
     updateAttachments,
     updateAttachmentContents,
+    updateState: () => {
+      updateStateTable(globals.stateTables.drawBuffersState, stateTable, queryFn);
+    },
+    firstBind,
   };
 }

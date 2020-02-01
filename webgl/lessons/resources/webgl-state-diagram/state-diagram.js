@@ -343,6 +343,26 @@ export default function main({webglVersion, examples}) {
     origFn.call(this, target, ...args);
     updateFramebufferAttachments(target);
   });
+  wrapFn('bindFramebuffer', function(origFn, target, framebuffer) {
+    origFn.call(this, target, framebuffer);
+    if (framebuffer) {
+      const info = getWebGLObjectInfo(framebuffer);
+      if (!info.boundOnce) {
+        info.boundOnce = true;
+        info.ui.firstBind(target);
+      }
+    }
+  });
+  wrapFn('drawBuffers', function(origFn, ...args) {
+    origFn.call(this, ...args);
+    const framebuffer = gl.getParameter(gl.FRAMEBUFFER_BINDING);
+    if (framebuffer) {
+      const {ui} = getWebGLObjectInfo(framebuffer);
+      ui.updateState();
+    } else {
+      globals.globalUI.drawBuffersState.updateState();
+    }
+  });
 
   function wrapDrawFn(fnName) {
     wrapFn(fnName, function(origFn, ...args) {

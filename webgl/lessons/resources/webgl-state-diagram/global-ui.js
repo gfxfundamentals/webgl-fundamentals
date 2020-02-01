@@ -176,6 +176,9 @@ export function createGlobalUI(globalStateElem) {
     };
 
     for (const state of stateTable.states) {
+      if (!state.setter) {
+        continue;
+      }
       const setters = Array.isArray(state.setter) ? state.setter : [state.setter];
       for (const setter of setters) {
         if (!settersToWrap[setter]) {
@@ -203,6 +206,9 @@ export function createGlobalUI(globalStateElem) {
     miscState: createStateUI(globalState.miscState, globalStateElem, 'misc state', globalStateQuery),
     stencilState: createStateUI(globalState.stencilState, globalStateElem, 'stencil state', globalStateQuery),
     polygonState: createStateUI(globalState.polygonState, globalStateElem, 'polygon state', globalStateQuery),
+    ...globals.isWebGL2 && {
+      drawBuffersState: createStateUI(globals.stateTables.drawBuffersState, globalStateElem, 'draw buffers', globalStateQuery),
+    },
     settersToWrap,
   };
   expand(globalUI.textureUnits.elem);
