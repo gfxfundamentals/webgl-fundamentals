@@ -164,7 +164,7 @@ function updateArrow(arrow) {
   // |    |
   // +----+
   //
-  const {startDir, endDir} = options;
+  const {startDir, endDir, offset} = options;
   let posA;
   let posC;
   let posCCP;
@@ -201,6 +201,11 @@ function updateArrow(arrow) {
       throw new Error(`unknown startDir: ${startDir}`);
   }
 
+  posA.x += offset.start.x;
+  posA.y += offset.start.y;
+  posC.y += offset.start.y;
+  posCCP.y += offset.start.y;
+
   let posB;
   let posBCP;
   switch (endDir) {
@@ -227,6 +232,11 @@ function updateArrow(arrow) {
     default:
       throw new Error(`unknown endDir: ${endDir}`);
   }
+
+  posB.x += offset.end.x;
+  posB.y += offset.end.y;
+  posBCP.y += offset.end.y;
+
   const posARel = {
     x: posA.x - c.left,
     y: posA.y - c.top,
@@ -246,9 +256,17 @@ function updateArrow(arrow) {
           <path d="M 0 0 L 10 5 L 0 10 z" />
         </marker>
 */
+
+const zeroZero = {x: 0, y: 0};
+const zeroOffset = {
+  start: zeroZero,
+  end: zeroZero,
+};
+
 const defaultOptions = {
   startDir: 'right',
   endDir: 'left',
+  offset: zeroOffset,
 };
 
 function getInnerSVG(elem) {
@@ -306,8 +324,9 @@ export default class ArrowManager {
       endSegment,
       divA,
       divB,
-      options,
+      options: Object.assign({}, defaultOptions, options),
     };
+    arrow.options.offset = Object.assign({}, defaultOptions.offset, arrow.options.offset);
     this.arrows.push(arrow);
     updateArrow(arrow);
     return arrow;

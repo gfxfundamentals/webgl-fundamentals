@@ -46,6 +46,9 @@ export function createTextureDisplay(parent, name, texture) {
           ? helpToMarkdown(`
             <span style="color:red;">**This texture is un-renderable!**</span>
 
+            NOTE: If a sampler is applied to the texture unit it may maybe this
+            texture renderable.
+
             One or more of the following are true
 
             * It as never been bound. A texture's type is unknown until bound at least once
@@ -345,5 +348,31 @@ export function createTextureDisplay(parent, name, texture) {
     generateMips,
   };
 }
+
+export function createSamplerDisplay(parent, name, sampler) {
+  const samplerElem = createTemplate(parent, '#sampler-template');
+  setName(samplerElem, name);
+
+  const updateData = () => {};
+
+  const queryFn = state => {
+    const {pname} = state;
+    const value = gl.getSamplerParameter(sampler, gl[pname]);
+    return value;
+  };
+
+  const stateTable = createStateTable(globals.stateTables.textureState, samplerElem, 'sampler state', queryFn);
+  expand(stateTable);
+  makeDraggable(samplerElem);
+
+  return {
+    elem: samplerElem,
+    updateData,
+    updateState: () => {
+      updateStateTable(globals.stateTables.textureState, stateTable, queryFn);
+    },
+  };
+}
+
 
 
