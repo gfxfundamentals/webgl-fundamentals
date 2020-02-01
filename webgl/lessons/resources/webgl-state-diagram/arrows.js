@@ -1,15 +1,12 @@
-/* eslint strict: "off" */
-/* eslint no-undef: "error" */
-
-import {addSVG} from './webgl-state-diagram-utils.js';
+import {addSVG} from './utils.js';
 
 function getPageRelativeRect(elem) {
   let rect;
-  for(;;) {
+  for (;;) {
     rect = elem.getBoundingClientRect();
     if (rect.width > 0) {
       break;
-    } 
+    }
     elem = elem.parentElement;
   }
   const left = rect.left + window.scrollX | 0;
@@ -333,3 +330,5 @@ export default class ArrowManager {
   }
 }
 
+// this is crap but easy
+export const arrowManager = new ArrowManager(document.querySelector('#arrows'));

@@ -45,6 +45,11 @@ module.exports = function(grunt) {
           'webgl/*.html',
         ],
       },
+      diagram: {
+        src: [
+          'webgl/lessons/resources/webgl-state-diagram/*.js',
+        ],
+      },
     },
     jsdoc: {
       docs: {

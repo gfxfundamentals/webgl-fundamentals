@@ -1,9 +1,7 @@
-/* eslint strict: "off" */
-/* eslint no-undef: "error" */
 
 /* global evalHelper, hljs */
 
-import { addElem, wait } from './webgl-state-diagram-utils.js';
+import { addElem, wait } from './utils.js';
 
 function noop() {}
 

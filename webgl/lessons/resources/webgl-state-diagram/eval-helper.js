@@ -1,4 +1,3 @@
-/* eslint strict: "off" */
 
 var gl;  // eslint-disable-line no-unused-vars
 
