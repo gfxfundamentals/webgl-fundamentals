@@ -20,7 +20,6 @@ import {
   formatWebGLObjectOrCanvas,
   formatWebGLObjectOrDefaultVAO,
 } from './context-wrapper.js';
-import { globals } from './globals.js';
 
 const glEnumToString = twgl.glEnumToString;
 const formatEnum = v => glEnumToString(gl, v);
