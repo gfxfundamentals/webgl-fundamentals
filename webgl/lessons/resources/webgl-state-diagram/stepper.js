@@ -1,11 +1,12 @@
 
-/* global evalHelper, hljs */
+/* global evalHelper */
 
 import { addElem, wait } from './utils.js';
+import { highlightBlock } from './code-highlight.js';
 
 function noop() {}
 
-const nameRE = /\s+(\w+)\s*=\s*\w+\.create\w+/;
+const nameRE = /\s+(\w+)\s*=\s*(?:\w+\.)?create\w+/;
 
 export default class Stepper {
   constructor() {
@@ -14,7 +15,12 @@ export default class Stepper {
   }
 
   init(codeElem, js, options) {
-    const {onAfter = noop, onHelp = noop, onLine = noop} = options;
+    const {
+      onBefore = noop,
+      onAfter = noop,
+      onHelp = noop,
+      onLine = noop,
+    } = options;
     const lines = [...js.matchAll(/[^`;]*(?:`[^`]*?`)?[^`;]*;?;\n/g)].map(m => {
       let code = m[0];
       if (code.startsWith('\n')) {
@@ -23,7 +29,7 @@ export default class Stepper {
       }
       const elem = addElem('div', codeElem);
       addElem('div', elem, {className: 'line-marker'});
-      hljs.highlightBlock(addElem('pre', elem, {textContent: code}));
+      highlightBlock(addElem('pre', elem, {textContent: code}));
       return {
         code,
         elem,
@@ -51,6 +57,7 @@ export default class Stepper {
 
     function step() {
       const line = lines[currentLineNo++];
+      onBefore();
       execute(line ? line.code : '');
       onAfter();
       if (line) {

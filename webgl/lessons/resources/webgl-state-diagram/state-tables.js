@@ -755,7 +755,8 @@ export function getStateTables(isWebGL2) {
           gl.bindFramebuffer(gl.READ_FRAMEBUFFER, someFramebuffer);
           ---
           `,
-      }),
+      },
+      ),
       {
         pname: 'ACTIVE_TEXTURE',
         setter: 'activeTexture',
@@ -788,6 +789,39 @@ export function getStateTables(isWebGL2) {
           ...
         ---
         `,
+      },
+    ],
+  };
+
+  const transformFeedbackState = {
+    states: [
+      {
+          pname: 'TRANSFORM_FEEDBACK_BUFFER_BINDING',
+          setter: ['bindBuffer'],
+          formatter: formatWebGLObject,
+          help: `
+          This is a bind point for working with buffers that will
+          be used for transform feedback.
+
+          Set with
+
+          ---js
+          gl.bindBuffer(gl.TRANSFORM_FEEDBACK_BUFFER, someTransformFeedbackBuffer);
+          ---
+          `,
+      }, {
+          pname: 'TRANSFORM_FEEDBACK_BINDING',
+          setter: ['bindTransformFeedback'],
+          formatter: formatWebGLObject,
+          help: `
+          This is a bind point for working with a transform feedback
+
+          Set with
+
+          ---js
+          gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, someTransformFeedback);
+          ---
+          `,
       },
     ],
   };
@@ -1110,6 +1144,7 @@ export function getStateTables(isWebGL2) {
       clearState,
       commonState,
       miscState,
+      transformFeedbackState,
     },
   };
 }

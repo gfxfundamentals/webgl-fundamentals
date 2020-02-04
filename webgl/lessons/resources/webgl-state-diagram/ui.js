@@ -1,5 +1,5 @@
 
-/* global hljs, showdown */
+/* global showdown */
 
 import {
   addElem,
@@ -9,6 +9,7 @@ import {
   replaceParams,
   updateElem,
 } from './utils.js';
+import {highlightBlock} from './code-highlight.js';
 import {arrowManager} from './arrows.js';
 
 const diagramElem = document.querySelector('#diagram');
@@ -44,7 +45,7 @@ export function setHint(e, hint = '') {
     hintElem.style.left = '0';    // let it expand
     hintElem.style.top = '0';     // let it expand
     hintElem.innerHTML = html;
-    hintElem.querySelectorAll('pre>code').forEach(elem => hljs.highlightBlock(elem));
+    hintElem.querySelectorAll('pre>code').forEach(elem => highlightBlock(elem));
     hintElem.querySelectorAll('a').forEach(elem => elem.target = '_blank');
     lastWidth = hintElem.clientWidth;
     lastHeight = hintElem.clientHeight + 10;  // +10 here will make it leave space at the bottom
@@ -217,8 +218,10 @@ function getNextWindowPosition(elem) {
   if (info) {
     const {base, x: xDesc, y: yDesc} = info;
     const baseElem = getWindowElem(base);
-    x = computeRelativePosition(elem, baseElem, xDesc);
-    y = computeRelativePosition(elem, baseElem, yDesc);
+    if (baseElem) {
+      x = computeRelativePosition(elem, baseElem, xDesc);
+      y = computeRelativePosition(elem, baseElem, yDesc);
+    }
   }
   return {x, y};
 }
