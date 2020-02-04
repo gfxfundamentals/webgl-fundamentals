@@ -208,6 +208,9 @@ export function createGlobalUI(globalStateElem) {
     commonState: createStateUI(globalState.commonState, globalStateElem, 'common state', globalStateQuery),
     textureUnits: createTextureUnits(globalStateElem, 8),
     clearState: createStateUI(globalState.clearState, globalStateElem, 'clear state', globalStateQuery),
+    ...globals.isWebGL2 && {
+      transformFeedbackState: createStateUI(globalState.transformFeedbackState, globalStateElem, 'transform feedback', globalStateQuery),
+    },
     depthState: createStateUI(globalState.depthState, globalStateElem, 'depth state', globalStateQuery),
     blendState: createStateUI(globalState.blendState, globalStateElem, 'blend state', globalStateQuery),
     miscState: createStateUI(globalState.miscState, globalStateElem, 'misc state', globalStateQuery),

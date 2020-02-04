@@ -1,6 +1,7 @@
 
-/* global hljs, gl */
+/* global gl */
 
+import * as twgl from '/3rdparty/twgl-full.module.js';
 import {
   addElem,
   createTable,
@@ -31,11 +32,14 @@ import {
   createStateTable,
   updateStateTable,
 } from './state-table.js';
-
+import {highlightBlock} from './code-highlight.js';
 import {arrowManager} from './arrows.js';
 import {
   globals,
 } from './globals.js';
+
+const glEnumToString = twgl.glEnumToString;
+const noop = () => {};
 
 function isBuiltIn(info) {
   const name = info.name;
@@ -43,8 +47,9 @@ function isBuiltIn(info) {
 }
 
 function createProgramAttributes(parent, gl, program) {
-  const tbody = createTable(parent, ['name', 'location']);
+  const tbody = createTable(parent, ['name', 'type', 'location']);
   const arrows = [];
+  let expanded = false;
 
   const scan = () => {
     tbody.innerHTML = '';
@@ -55,12 +60,14 @@ function createProgramAttributes(parent, gl, program) {
     const vaoInfo = getWebGLObjectInfoOrDefaultVAO(vao);
     const isCurrent = gl.getParameter(gl.CURRENT_PROGRAM) === program;
 
+    let numActualAttribs = 0;
     const numAttribs = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
     for (let ii = 0; ii < numAttribs; ++ii) {
       const attribInfo = gl.getActiveAttrib(program, ii);
       if (isBuiltIn(attribInfo)) {
           continue;
       }
+      ++numActualAttribs;
       const index = gl.getAttribLocation(program, attribInfo.name);
       const tr = addElem('tr', tbody);
       const help = helpToMarkdown(`
@@ -84,6 +91,7 @@ function createProgramAttributes(parent, gl, program) {
         ---
       `);
       addElem('td', tr, {textContent: attribInfo.name, dataset: {help}});
+      addElem('td', tr, {textContent: glEnumToString(gl, attribInfo.type), dataset: {help}});
       addElem('td', tr, {textContent: index, dataset: {help}});
 
       if (isCurrent) {
@@ -93,6 +101,64 @@ function createProgramAttributes(parent, gl, program) {
             target,
             getColorForWebGLObject(vao, target, index / 8),
             {startDir: 'right', endDir: 'right', attrs: {'stroke-dasharray': '2 4'}}));
+      }
+    }
+    if (!expanded && numActualAttribs > 0) {
+      expanded = true;
+      expand(parent);
+    }
+  };
+
+  scan(true);
+
+  return {
+    elem: tbody,
+    scan,
+    update: scan,
+  };
+}
+
+function createProgramTransformFeedbackVaryings(parent, gl, program) {
+  const tbody = createTable(parent, ['name', 'type', 'size']);
+  const arrows = [];
+  let expanded = false;
+
+  const scan = () => {
+    const isLinked = gl.getProgramParameter(program, gl.LINK_STATUS);
+    if (!isLinked) {
+      return;
+    }
+
+    tbody.innerHTML = '';
+    flash(tbody);
+    arrows.forEach(arrow => arrowManager.remove(arrow));
+
+    const tf = gl.getParameter(gl.TRANSFORM_FEEDBACK_BINDING);
+    const tfInfo = getWebGLObjectInfo(tf);
+    const isCurrent = gl.getParameter(gl.CURRENT_PROGRAM) === program;
+
+    const numAttribs = gl.getProgramParameter(program, gl.TRANSFORM_FEEDBACK_VARYINGS);
+    if (!expanded && numAttribs > 0) {
+      expanded = true;
+      expand(parent);
+    }
+    for (let ii = 0; ii < numAttribs; ++ii) {
+      const attribInfo = gl.getTransformFeedbackVarying(program, ii);
+      const tr = addElem('tr', tbody);
+      const help = helpToMarkdown(`
+      foo
+      `);
+      addElem('td', tr, {textContent: attribInfo.name, dataset: {help}});
+      addElem('td', tr, {textContent: glEnumToString(gl, attribInfo.type), dataset: {help}});
+      addElem('td', tr, {textContent: ii, dataset: {help}});
+
+      if (isCurrent && tfInfo) {
+        const target = tfInfo.ui.elem.querySelector('tbody').rows[ii]; /*.cells[bindPointIndex]; */
+        arrows.push(arrowManager.add(
+            tr,
+            target,
+            getColorForWebGLObject(tf, target, ii / 8),
+            {startDir: 'right', endDir: 'left', attrs: {'stroke-dasharray': '2 4'}}));
       }
     }
   };
@@ -254,7 +320,7 @@ return {
 
 function createProgramUniforms(parent, gl, program) {
   const tbody = createTable(parent, ['name', 'value']);
-
+  let expanded = false;
   let locationInfos = [];
   let numUniforms;
 
@@ -294,6 +360,10 @@ function createProgramUniforms(parent, gl, program) {
     numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
     tbody.innerHTML = '';
     flash(tbody);
+    if (!expanded && numUniforms > 0) {
+      expanded = true;
+      expand(parent);
+    }
 
     for (let ii = 0; ii < numUniforms; ++ii) {
       const uniformInfo = gl.getActiveUniform(program, ii);
@@ -345,7 +415,7 @@ export function createShaderDisplay(parent, name, shader) {
     preElem.innerHTML = '';
     const codeElem = addElem('code', preElem, {className: 'lang-glsl'});
     codeElem.textContent = gl.getShaderSource(shader);
-    hljs.highlightBlock(codeElem);
+    highlightBlock(codeElem);
     expand(sourceExpander);
   };
 
@@ -419,6 +489,14 @@ export function createProgramDisplay(parent, name, program) {
       hint: 'attributes are user defined. Their values come from buffers as specified in a *vertex array*.',
     },
   });
+  let tfVaryingsExpander;
+  if (globals.isWebGL2) {
+    tfVaryingsExpander = createExpander(prgElem, 'transform feedback varyings', {
+      dataset: {
+        hint: 'vertex shader output that can be written to buffers',
+      },
+    });
+  }
   const uniformExpander = createExpander(prgElem, 'uniforms', {
     dataset: {
       hint: 'uniform values are user defined program state. The locations and values are different for each program.',
@@ -426,10 +504,11 @@ export function createProgramDisplay(parent, name, program) {
   });
 
 
-  expand(attribExpander);
-  expand(uniformExpander);
-
   const attribUI = createProgramAttributes(attribExpander, gl, program);
+  let tfVaryingUI;
+  if (tfVaryingsExpander) {
+    tfVaryingUI = createProgramTransformFeedbackVaryings(tfVaryingsExpander, gl, program);
+  }
   const uniformUI = createProgramUniforms(uniformExpander, gl, program);
 
   const queryFn = state => {
@@ -453,5 +532,7 @@ export function createProgramDisplay(parent, name, program) {
     updateAttributes: attribUI.update,
     scanUniforms: uniformUI.scan,
     updateUniforms: uniformUI.update,
+    scanTransformFeedbackVaryings: tfVaryingUI ? tfVaryingUI.scan : noop,
+    updateTransformFeedbackVaryings: tfVaryingUI ? tfVaryingUI.update : noop,
   };
 }

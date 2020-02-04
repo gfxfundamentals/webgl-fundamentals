@@ -1,5 +1,5 @@
 
-/* global hljs, gl */
+/* global gl */
 
 //'use strict';
 
@@ -17,12 +17,14 @@ import {
   getWebGLObjectInfoOrDefaultVAO,
 } from './context-wrapper.js';
 import {
+  expand,
   makeDraggable,
   moveToFront,
   setWindowPositions,
   setHint,
   setHintSubs,
   showHint,
+  collapse,
 } from './ui.js';
 
 import Stepper from './stepper.js';
@@ -50,13 +52,17 @@ import {
 import {
   createVertexArrayDisplay,
 } from './vertex-array-ui.js';
+import {
+  createTransformFeedbackDisplay,
+} from './transform-feedback-ui.js';
 import { createGlobalUI } from './global-ui.js';
+import { highlightDocument } from './code-highlight.js';
 
 export default function main({webglVersion, examples}) {
   globals.isWebGL2 = webglVersion === 'webgl2';
   const isWebGL2 = globals.isWebGL2;
 
-  hljs.initHighlightingOnLoad();
+  highlightDocument();
 
   gl = document.querySelector('canvas').getContext(webglVersion, {preserveDrawingBuffer: true});  /* eslint-disable-line */
   if (!gl || (isWebGL2 && isBadWebGL2(gl))) {
@@ -115,6 +121,35 @@ export default function main({webglVersion, examples}) {
   globals.globalUI = createGlobalUI(document.querySelector('#global-state'));
   const canvasDraggable = makeDraggable(document.querySelector('#canvas'));
   moveToFront(defaultVAOInfo.ui.elem.parentElement);
+
+  function getUIById(id) {
+    const [base, part] = id.split('.');
+    switch (base) {
+      case 'globalUI':
+        return globals.globalUI[part];
+      default:
+        throw new Error(`unknown base: ${base}`);
+    }
+  }
+
+  function adjustUI({cmd, id}) {
+    const ui = getUIById(id);
+    switch (cmd) {
+      case 'expand':
+        expand(ui.elem);
+        break;
+      case 'collapse':
+        collapse(ui.elem);
+        break;
+      default:
+        throw new Error(`unknown cmd: ${cmd}`);
+    }
+  }
+
+  if (example.adjust) {
+    example.adjust.forEach(adjustUI);
+  }
+
   arrowManager.update();
 
   function wrapFn(fnName, fn) {
@@ -123,11 +158,21 @@ export default function main({webglVersion, examples}) {
         throw new Error(`unknown function:${fnName}`);
       }
       return function(...args) {
+        let result;
         if (globals.executeWebGLWrappers) {
-          return fn.call(this, origFn, ...args);
-        } else {
-          return origFn.call(this, ...args);
+        const err2 = gl.getError();
+        if (err2) {
+          throw new Error(`gl error: ${err2}`);
         }
+          result = fn.call(this, origFn, ...args);
+        const err = gl.getError();
+        if (err) {
+          throw new Error(`gl error: ${err}`);
+        }
+        } else {
+          result = origFn.call(this, ...args);
+        }
+        return result;
       };
     }(gl[fnName]);
   }
@@ -262,6 +307,38 @@ export default function main({webglVersion, examples}) {
         globals.globalUI.drawBuffersState.updateState();
       }
     });
+    wrapFn('bindTransformFeedback', function(origFn, ...args) {
+      origFn.call(this, ...args);
+      const prog = gl.getParameter(gl.CURRENT_PROGRAM);
+      updateProgramAttributesAndUniforms(prog);
+    });
+    wrapCreationFn('createTransformFeedback', (name, webglObject) => {
+      return createTransformFeedbackDisplay(diagramElem, name, webglObject);
+    });
+    wrapDeleteFn('deleteTransformFeedback');
+    const updateUnit = (target, index, buffer, offset, size) => {
+      let webglObject;
+      switch (target) {
+        case gl.TRANSFORM_FEEDBACK_BUFFER:
+          webglObject = gl.getParameter(gl.TRANSFORM_FEEDBACK_BINDING);
+          break;
+        case gl.UNIFORM_BUFFER:
+          webglObject = gl.getParameter(gl.UNIFORM_BUFFER_BINDING);
+          break;
+        default:
+          throw new Error('unhandled buffer type');
+      }
+      const {ui} = getWebGLObjectInfo(webglObject);
+      ui.updateUnit(target, index, buffer, offset, size);
+    };
+    wrapFn('bindBufferBase', function(origFn, target, index, buffer, offset, size) {
+      origFn.call(this, target, index, buffer, offset, size);
+      updateUnit(target, index, buffer, offset, size);
+    });
+    wrapFn('bindBufferRange', function(origFn, target, index, buffer) {
+      origFn.call(this, target, index, buffer);
+      updateUnit(target, index, buffer);
+    });
   }
 
   wrapFn('shaderSource', function(origFn, shader, source) {
@@ -294,15 +371,23 @@ export default function main({webglVersion, examples}) {
     if (gl.getProgramParameter(program, gl.LINK_STATUS)) {
       ui.scanAttributes();
       ui.scanUniforms();
+      ui.scanTransformFeedbackVaryings();
     }
   });
   wrapFn('bindBuffer', function(origFn, bindPoint, buffer) {
     origFn.call(this, bindPoint, buffer);
-    if (bindPoint === gl.ARRAY_BUFFER) {
-      globals.globalUI.commonState.updateState();
-    } else {
-      const {ui} = getCurrentVAOInfo();
-      ui.updateState();
+    switch (bindPoint) {
+      case gl.ARRAY_BUFFER:
+      case gl.TRANSFORM_FEEDBACK_BUFFER:
+        globals.globalUI.commonState.updateState();
+        break;
+      case gl.ELEMENT_ARRAY_BUFFER: {
+        const {ui} = getCurrentVAOInfo();
+        ui.updateState();
+        break;
+      }
+      default:
+        throw new Error('unhandled buffer bind point');
     }
   });
   wrapFn('bufferData', function(origFn, bindPoint, dataOrSize, hint) {
@@ -339,6 +424,7 @@ export default function main({webglVersion, examples}) {
       const info = getWebGLObjectInfo(prog);
       info.ui.updateAttributes();
       info.ui.updateUniforms();
+      info.ui.updateTransformFeedbackVaryings();
     }
   }
   wrapFn('bindVertexArray', function(origFn, vao) {
@@ -403,13 +489,60 @@ export default function main({webglVersion, examples}) {
   wrapDrawFn('drawArraysInstanced');
   wrapDrawFn('drawElementsInstanced');
 
-  function handleResizes() {
-    arrowManager.update();
+  // This mess is because of a bug on Mac NVidia drivers.
+  // If transform feedback is on and we draw, and we exit the current
+  // event without stopping transform feedback then both Chrome 79 and
+  // Firefox 72 crash WebGL. Hopefully they'll integrate this workaround
+  // themselves but for now...
+
+  let runningTransformFeedback = false;
+  let pauseTransformFeedback = false;
+
+  if (globals.isWebGL2) {
+    wrapFn('beginTransformFeedback', function(origFn, ...args) {
+      origFn.call(this, ...args);
+      runningTransformFeedback = true;
+    });
+    wrapFn('endTransformFeedback', function(origFn, ...args) {
+      origFn.call(this, ...args);
+      runningTransformFeedback = false;
+    });
+    wrapFn('pauseTransformFeedback', function(origFn, ...args) {
+      origFn.call(this, ...args);
+      pauseTransformFeedback = true;
+    });
+    wrapFn('resumeTransformFeedback', function(origFn, ...args) {
+      origFn.call(this, ...args);
+      pauseTransformFeedback = false;
+    });
+  }
+
+  function beforeStep() {
+    if (runningTransformFeedback) {
+      if (!pauseTransformFeedback) {
+        const old = globals.executeWebGLWrappers;
+        globals.executeWebGLWrappers = false;
+        gl.resumeTransformFeedback();
+        globals.executeWebGLWrappers = old;
+      }
+    }
   }
 
   function afterStep() {
+    if (runningTransformFeedback) {
+      if (!pauseTransformFeedback) {
+        const old = globals.executeWebGLWrappers;
+        globals.executeWebGLWrappers = false;
+        gl.pauseTransformFeedback();
+        globals.executeWebGLWrappers = old;
+      }
+    }
     arrowManager.update();
     removeFlashes();
+  }
+
+  function handleResizes() {
+    arrowManager.update();
   }
 
   function showHelp() {
@@ -488,7 +621,9 @@ export default function main({webglVersion, examples}) {
     // console.log(line);
   }
 
+
   stepper.init(codeElem, document.querySelector(`#${exampleId}`).text, {
+    onBefore: beforeStep,
     onAfter: afterStep,
     onHelp: showHelp,
     onLine: showLineHelp,
