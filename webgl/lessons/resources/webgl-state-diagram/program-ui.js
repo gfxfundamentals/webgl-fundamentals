@@ -146,7 +146,10 @@ function createProgramTransformFeedbackVaryings(parent, gl, program) {
       const attribInfo = gl.getTransformFeedbackVarying(program, ii);
       const tr = addElem('tr', tbody);
       const help = helpToMarkdown(`
-      foo
+      created by declaring an --out-- varying in a vertex shader
+      and then calling **before** calling --gl.linkProgram--
+      you call --gl.transformFeedbackVaryings--  and pass the names
+      of the varyings in the order you want them written.
       `);
       addElem('td', tr, {textContent: attribInfo.name, dataset: {help}});
       addElem('td', tr, {textContent: glEnumToString(gl, attribInfo.type), dataset: {help}});
