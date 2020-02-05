@@ -33,7 +33,7 @@ export function createTransformFeedbackDisplay(parent, name /*, transformFeedbac
   setName(tfElem, name);
   const tfNote = helpToMarkdown(`
   `);
-  const attrExpander = createExpander(tfElem.querySelector('.state-table'), 'attributes');
+  const attrExpander = createExpander(tfElem.querySelector('.state-table'), 'varyings');
   expand(attrExpander);
   const attrsElem = createTable(attrExpander, ['offset', 'size', 'buffer']);
   const arrows = [];
