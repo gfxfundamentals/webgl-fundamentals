@@ -16,6 +16,3 @@ WebGL 맨 땅에 헤딩!
 {{{table_of_contents}}}
 
 -->
-
-
-
