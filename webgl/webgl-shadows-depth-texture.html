@@ -229,6 +229,29 @@ function main() {
       depthTexture,         // texture
       0);                   // mip level
 
+  //binding color component to framebuffer technically only necessary for safari
+  const color = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, color);
+  gl.texImage2D(
+          gl.TEXTURE_2D,
+          0,
+          gl.RGBA,
+          depthTextureSize,
+          depthTextureSize,
+          0,
+          gl.RGBA,
+          gl.UNSIGNED_BYTE,
+          null,
+  );
+
+  gl.framebufferTexture2D(
+          gl.FRAMEBUFFER,
+          gl.COLOR_ATTACHMENT0,
+          gl.TEXTURE_2D,
+          color,
+          0,
+  );
+
   function degToRad(d) {
     return d * Math.PI / 180;
   }
