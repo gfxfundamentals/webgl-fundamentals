@@ -225,7 +225,7 @@ WebGL can then rasterize various kinds of primitives including
 <a href="webgl-points-lines-triangles.html">points, lines, or triangles</a>.
 When rasterizing these primitives it calls a second user supplied function called a fragment shader.
 A fragment shader&#39;s job is to compute a color for each pixel of the primitive currently being drawn.</p>
-<p>Nearly all of the entire WebGL API is about setting up state for these pairs of functions to run.
+<p>Nearly all of the entire WebGL API is about <a href="resources/webgl-state-diagram.html">setting up state</a> for these pairs of functions to run.
 For each thing you want to draw you setup a bunch of state then execute a pair of functions by calling
 <code>gl.drawArrays</code> or <code>gl.drawElements</code> which executes your shaders on the GPU.</p>
 <p>Any data you want those functions to have access to must be provided to the GPU. There are 4 ways
@@ -243,7 +243,7 @@ of data it should pull out (3 component 32 bit floating point numbers), what off
 in the buffer the positions start, and how many bytes to get from one position to the next.</p>
 <p>Buffers are not random access. Instead a vertex shader is executed a specified number
 of times. Each time it&#39;s executed the next value from each specified buffer is pulled
-out assigned to an attribute.</p>
+out and assigned to an attribute.</p>
 </li>
 <li><p>Uniforms</p>
 <p>Uniforms are effectively global variables you set before you execute your shader program.</p>
@@ -263,7 +263,7 @@ by a vertex shader will be interpolated while executing the fragment shader.</p>
 <p>WebGL only cares about 2 things: clip space coordinates and colors.
 Your job as a programmer using WebGL is to provide WebGL with those 2 things.
 You provide your 2 &quot;shaders&quot; to do this. A Vertex shader which provides the
-clip space coordinates and a fragment shader that provides the color.</p>
+clip space coordinates, and a fragment shader that provides the color.</p>
 <p>Clip space coordinates always go from -1 to +1 no matter what size your
 canvas is.</p>
 <div class="webgl_center"><img src="resources/clipspace.svg" style="width: 400px"></div>
