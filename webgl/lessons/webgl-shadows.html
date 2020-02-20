@@ -1085,7 +1085,8 @@ at least 3 common combinations. From <a href="https://www.khronos.org/registry/w
   <li><code>COLOR_ATTACHMENT0</code> = <code>RGBA</code>/<code>UNSIGNED_BYTE</code> texture + <code>DEPTH_STENCIL_ATTACHMENT</code> = <code>DEPTH_STENCIL</code> renderbuffer</li>
 </blockquote>
 <p>
-Later the <a href="">WEBGL_depth_texture</a> extensions was created. All is says is
+Later the <a href="https://www.khronos.org/registry/webgl/extensions/WEBGL_depth_texture/">WEBGL_depth_texture</a> extensions was created.
+All it really says is
 that you can create depth textures and you can attach them to framebuffers
 but it does not say anything more about required combinations. So, given
 the OpenGL ES 2.0 spec rule that says what combinations are allowed to work
@@ -1096,7 +1097,7 @@ that using a depth texture will ever work, at least according to the spec.
 </p>
 <p>In practice it appears that most drivers themselves work with just a depth
 texture attached and no other attachments. Unfortunately Safari, at least as of
-February 2020 does not allow that combination to work. It requires there be a
+February 2020, does not allow that combination to work. It requires there be a
 color attachment as well, most likely it requires an <code>RGBA</code>/<code>UNSIGNED_BYTE</code>
 color attachment. The fact that it fails without it is within the specs above.
 </p>
@@ -1106,7 +1107,7 @@ across all drivers/gpus/browsers. Fortunately it appears that combination does
 work everywhere. Also fortunately OpenGL ES 3.0 on which <a href="https://webgl2fundamentals.org">WebGL2</a>
 is based changed the spec and requires many more combinations to just work. Unfortunately
 as of February 2020 <a href="https://webgl2fundamentals.org/webgl/lessons/webgl-getting-webgl2.html">Safari does not support WebGL2</a>.
-So, in WebGL1, we need to add the unused color texture and then cross our fingers.
+So, in WebGL1, we need to add the unused color texture and then cross our fingers. 😭
 </p>
 </div>
     </div>
