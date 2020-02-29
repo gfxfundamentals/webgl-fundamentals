@@ -94,7 +94,7 @@ TOC: WebGL 图像处理
       ...
     }
 
-这是WenGL绘制的图像。注意：如果你想在本地运行，需要使用一个简单的web服务，
+这是WebGL绘制的图像。注意：如果你想在本地运行，需要使用一个简单的web服务，
 使得WebGL可以加载本地图片。[在这里教你如何架设一个简单的web服务](webgl-setup-and-installation.html)。
 
 {{{example url="../webgl-2d-image.html" }}}

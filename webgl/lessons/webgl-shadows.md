@@ -135,7 +135,40 @@ gl.framebufferTexture2D(
     0);                   // mip level
 ```
 
-To use it we need to able to render the scene more than once with different
+[For a bunch of reasons](#attachment-combinations) we also need to create
+a color texture and attach it as a color attachment even though we won't
+actually use it.
+
+```js
+// create a color texture of the same size as the depth texture
+const unusedTexture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, unusedTexture);
+gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,
+    gl.RGBA,
+    depthTextureSize,
+    depthTextureSize,
+    0,
+    gl.RGBA,
+    gl.UNSIGNED_BYTE,
+    null,
+);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+// attach it to the framebuffer
+gl.framebufferTexture2D(
+    gl.FRAMEBUFFER,        // target
+    gl.COLOR_ATTACHMENT0,  // attachment point
+    gl.TEXTURE_2D,         // texture target
+    unusedTexture,         // texture
+    0);                    // mip level
+```
+
+To use the depth texture we need to able to render the scene more than once with different
 shaders. Once with a simple shader just to render to the depth texture and
 then again with our current shader that projects a texture.
 
@@ -864,3 +897,65 @@ the shadow map.
 
 This article is getting long and there are still many things to cover related
 to shadows so we'll leave the rest to [the next article](webgl-shadows-continued.html).
+
+<div class="webgl_bottombar">
+<a id="attachment-combinations"></a>
+<h3>Why did we need to create an unused color texture?</h3>
+<p>Here we get buried in the minutia of the WebGL spec.</p>
+<p>WebGL is based on OpenGL ES 2.0 and the <a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/">WebGL spec</a>
+basically says WebGL follows the OpenGL ES 2.0 spec except for any exceptions
+listed in the WebGL spec.</p>
+<p>When you make a framebuffer you add attachments. You can add all kinds of
+attachments. Above we added an RGBA/UNSIGNED_BYTE texture color attachment
+and a depth texture attachment. In the article on rendering to textures we
+attached a similar color attachment but we attached a depth renderbuffer,
+not a depth texture. We could also attach an RGB texture, a LUMINANCE texture,
+and many other types of textures and renderbuffers.</p>
+<p>The <a href="">OpenGL ES 2.0 spec</a> gives a bunch of rules on whether
+or not a certain combination of attachments will work together. One rule
+is that there must be at least one attachment. Another rule is
+that they all have to be the same size. The final rule is</p>
+<blockquote>
+<h4>4.4.5 Framebuffer Completeness</h4>
+<p>
+The combination of internal formats of the attached images does not violate an <b>implementation-dependent</b> set of restrictions.
+</p>
+</blockquote>
+<p>
+That unfortunate wording means <b>no combinations of attachments are required to work!</b>
+</p>
+<p>
+The WebGL committee saw that and decided to require that WebGL implementations support
+at least 3 common combinations. From <a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#6.8">Section 6.8 of the WebGL spec</a> they are:
+<blockquote>
+<ul>
+  <li><code>COLOR_ATTACHMENT0</code> = <code>RGBA</code>/<code>UNSIGNED_BYTE</code> texture</li>
+  <li><code>COLOR_ATTACHMENT0</code> = <code>RGBA</code>/<code>UNSIGNED_BYTE</code> texture + <code>DEPTH_ATTACHMENT</code> = <code>DEPTH_COMPONENT16</code> renderbuffer</li>
+  <li><code>COLOR_ATTACHMENT0</code> = <code>RGBA</code>/<code>UNSIGNED_BYTE</code> texture + <code>DEPTH_STENCIL_ATTACHMENT</code> = <code>DEPTH_STENCIL</code> renderbuffer</li>
+</blockquote>
+<p>
+Later the <a href="https://www.khronos.org/registry/webgl/extensions/WEBGL_depth_texture/">WEBGL_depth_texture</a> extensions was created.
+All it really says is
+that you can create depth textures and you can attach them to framebuffers
+but it does not say anything more about required combinations. So, given
+the OpenGL ES 2.0 spec rule that says what combinations are allowed to work
+is up to the implementation, and given that the WebGL spec only lists 3
+combinations required to work and that none of those combinations include
+depth textures, only depth renderbuffers, that means there is no guarantee
+that using a depth texture will ever work, at least according to the spec.
+</p>
+<p>In practice it appears that most drivers themselves work with just a depth
+texture attached and no other attachments. Unfortunately Safari, at least as of
+February 2020, does not allow that combination to work. It requires there be a
+color attachment as well, most likely it requires an <code>RGBA</code>/<code>UNSIGNED_BYTE</code>
+color attachment. The fact that it fails without it is within the specs above.
+</p>
+<p>All that is the long way of saying we need the unused color texture to work
+in Safari. It also sadly means there's still no guarantee that things will work
+across all drivers/gpus/browsers. Fortunately it appears that combination does
+work everywhere. Also fortunately OpenGL ES 3.0 on which <a href="https://webgl2fundamentals.org">WebGL2</a>
+is based changed the spec and requires many more combinations to just work. Unfortunately
+as of February 2020 <a href="https://webgl2fundamentals.org/webgl/lessons/webgl-getting-webgl2.html">Safari does not support WebGL2</a>.
+So, in WebGL1, we need to add the unused color texture and then cross our fingers. 😭
+</p>
+</div>
