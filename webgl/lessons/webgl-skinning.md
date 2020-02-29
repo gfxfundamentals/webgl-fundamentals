@@ -56,10 +56,10 @@ attributes you might do something like
     uniform mat4 bones[MAX_BONES];    // 1 matrix per bone
 
     gl_Position = projection * view *
-                  (a_bones[int(a_boneNdx[0])] * a_position * a_weight[0] +
-                   a_bones[int(a_boneNdx[1])] * a_position * a_weight[1] +
-                   a_bones[int(a_boneNdx[2])] * a_position * a_weight[2] +
-                   a_boneS[int(a_boneNdx[3])] * a_position * a_weight[3]);
+                  (bones[int(a_boneNdx[0])] * a_position * a_weight[0] +
+                   bones[int(a_boneNdx[1])] * a_position * a_weight[1] +
+                   bones[int(a_boneNdx[2])] * a_position * a_weight[2] +
+                   boneS[int(a_boneNdx[3])] * a_position * a_weight[3]);
 
 
 There's one more issue. Let's say you have a model of a person with
