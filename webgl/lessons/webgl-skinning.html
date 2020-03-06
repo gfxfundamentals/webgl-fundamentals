@@ -253,10 +253,10 @@ attribute vec4 a_boneNdx;         // 4 bone indices per vertex
 uniform mat4 bones[MAX_BONES];    // 1 matrix per bone
 
 gl_Position = projection * view *
-              (a_bones[int(a_boneNdx[0])] * a_position * a_weight[0] +
-               a_bones[int(a_boneNdx[1])] * a_position * a_weight[1] +
-               a_bones[int(a_boneNdx[2])] * a_position * a_weight[2] +
-               a_boneS[int(a_boneNdx[3])] * a_position * a_weight[3]);
+              (bones[int(a_boneNdx[0])] * a_position * a_weight[0] +
+               bones[int(a_boneNdx[1])] * a_position * a_weight[1] +
+               bones[int(a_boneNdx[2])] * a_position * a_weight[2] +
+               boneS[int(a_boneNdx[3])] * a_position * a_weight[3]);
 </code></pre><p>There&#39;s one more issue. Let&#39;s say you have a model of a person with
 the origin (0,0,0) on the floor just between their feet.</p>
 <div class="webgl_center"><img src="resources/bone-head.svg" style="width: 500px;"></div>
