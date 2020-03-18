@@ -61,7 +61,7 @@ const m4x4 = [
 
 Clearly following the conventions above the first row of `m3x3` is `0, 1, 2` and the last row of `m4x4` is `12, 13, 14, 15`
 
-As we see in [the first article on matrices](webgl-2d-matrices.html) to make a fairly standard WebGL 3x3 2D translation matrix the translation values `ty` and `ty` go in locations 6 and 7
+As we see in [the first article on matrices](webgl-2d-matrices.html) to make a fairly standard WebGL 3x3 2D translation matrix the translation values `tx` and `ty` go in locations 6 and 7
 
 ```js
 const some3x3TranslationMatrix = [
