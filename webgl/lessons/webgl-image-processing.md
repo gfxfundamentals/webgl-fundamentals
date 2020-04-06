@@ -37,7 +37,7 @@ on to the fragment shader.
 
 Then we supply a fragment shader to look up colors from the texture.
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // our texture
@@ -124,7 +124,7 @@ then we can calculate how much to move for 1 pixel with the simple math
 Here's a fragment shader that averages the left and right pixels of each pixel
 in the texture.
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // our texture
@@ -170,12 +170,12 @@ how much to multiply the 8 pixels around the pixel we are rendering. We then div
 the result by the weight of the kernel (the sum of all values in the kernel) or 1.0,
 whichever is greater. [Here's a pretty good article on it](https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html).
 And [here's another article showing some actual code if you were to write this by
-hand in C++](http://www.codeproject.com/KB/graphics/ImageConvolution.aspx).
+hand in C++](https://www.codeproject.com/KB/graphics/ImageConvolution.aspx).
 
 In our case we're going to do that work in the shader so here's the new fragment
 shader.
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // our texture

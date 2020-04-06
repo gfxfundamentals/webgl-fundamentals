@@ -4,8 +4,8 @@ TOC: Setup And Installation
 
 
 Technically you don't need anything other than a web browser to do WebGL
-development. Go to [jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/) or [jsbin.com](http://jsbin.com)
-or [codepen.io](http://codepen.io/greggman/pen/YGQjVV) and just start applying the lessons here.
+development. Go to [jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/) or [jsbin.com](https://jsbin.com)
+or [codepen.io](https://codepen.io/greggman/pen/YGQjVV) and just start applying the lessons here.
 
 On all of them you can reference external scripts by adding a `<script src="..."></script>`
 tag pair if you want to use external scripts.
@@ -24,7 +24,7 @@ Unzip the files into some folder.
 ## Using a small simple easy Web Server
 
 Next up you should install a small web server. I know "web server" sounds scary but the truth is [web
-servers are actually extremely simple](http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/).
+servers are actually extremely simple](https://games.greggman.com/game/saving-and-loading-files-in-a-web-page/).
 
 Here's a very simple one with an interface called [Servez](https://greggman.github.io/servez).
 

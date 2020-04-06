@@ -42,15 +42,15 @@ body {
 <!--
 for most samples webgl-utils only provides shader compiling/linking and
 canvas resizing because why clutter the examples with code that's the same in every sample.
-See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
-and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+See https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
 for webgl-utils, m3, m4, and webgl-lessons-ui.
 -->
 <script src="resources/webgl-utils.js"></script>
 <script src="resources/m4.js"></script>
 <script src="resources/primitives.js"></script>
 <!-- vertex shader -->
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 attribute vec3 a_normal;
 
@@ -67,7 +67,7 @@ void main() {
 }
 </script>
 <!-- fragment shader -->
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 // Passed in from the vertex shader.
@@ -91,7 +91,7 @@ function main() {
 
   // setup GLSL programs
   // compiles shaders, links program, looks up locations
-  const programInfo = webglUtils.createProgramInfo(gl, ['3d-vertex-shader', '3d-fragment-shader']);
+  const programInfo = webglUtils.createProgramInfo(gl, ['vertex-shader-3d', 'fragment-shader-3d']);
 
   // create buffers and fill with data for various things.
   const bufferInfos = [

@@ -175,7 +175,7 @@ newY = y * sy;
 
 现在该修改着色器了，原来的着色器像这样
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;
@@ -198,7 +198,7 @@ newY = y * sy;
 
 新着色器就简单多了。
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;
@@ -368,7 +368,7 @@ newY = y * sy;
 
 现在可以简化着色器，这是新的着色器。
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform mat3 u_matrix;

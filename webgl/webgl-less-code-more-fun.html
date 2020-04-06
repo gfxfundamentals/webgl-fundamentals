@@ -14,7 +14,7 @@ Uses a few utility functions so there's much less code.
 <canvas id="canvas"></canvas>
 </body>
 <!-- vertex shader -->
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 uniform mat4 u_worldViewProjection;
 uniform vec3 u_lightWorldPos;
 uniform mat4 u_world;
@@ -41,7 +41,7 @@ void main() {
 }
 </script>
 <!-- fragment shader -->
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 varying vec4 v_position;
@@ -83,8 +83,8 @@ void main() {
 <!--
 for most samples webgl-utils only provides shader compiling/linking and
 canvas resizing because why clutter the examples with code that's the same in every sample.
-See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
-and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+See https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
 for webgl-utils, m3, m4, and webgl-lessons-ui.
 -->
 <script src="resources/webgl-utils.js"></script>
@@ -107,7 +107,7 @@ function main() {
   var buffers = window.primitives.createSphereBuffers(gl, 10, 48, 24);
 
   // setup GLSL program
-  var program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  var program = webglUtils.createProgramFromScripts(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
   var uniformSetters = webglUtils.createUniformSetters(gl, program);
   var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 

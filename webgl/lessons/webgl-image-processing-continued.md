@@ -12,7 +12,7 @@ Well, you could try to generate shaders on the fly.  Provide a UI that
 lets the user select the effects he wants to use then generate a shader
 that does all of the effects.  That might not always be possible though
 that technique is often used to [create effects for real time
-graphics](http://www.youtube.com/watch?v=cQUn0Zeh-0Q).
+graphics](https://www.youtube.com/watch?v=cQUn0Zeh-0Q).
 
 A more flexible way is to use 2 more textures and render to each texture
 in turn, ping ponging back and forth and applying the next effect each
@@ -189,7 +189,7 @@ possible to set whether to flip or not by adding one more input into the
 shader.
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 ...
 uniform float u_flipY;
 ...

@@ -7,7 +7,7 @@ WebGLを基本から学ぶ授業.
 時代遅れのアイデアを捨てて、
 WebGLとは何か、WebGLがどうやって動くかについて、理解へと導く、完全に新たな記事である。
 
-WebGL2に興味があればこれを参照して下さい[webgl2fundamentals.org](http://webgl2fundamentals.org)
+WebGL2に興味があればこれを参照して下さい[webgl2fundamentals.org](https://webgl2fundamentals.org)
 
 {{{include "webgl/lessons/ja/toc.html"}}}
 

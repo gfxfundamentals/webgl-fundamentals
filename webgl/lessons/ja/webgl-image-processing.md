@@ -43,7 +43,7 @@ WebGLによって「補間」される。
 次は、フラグメントシェーダーを変更する。
 「描くべき色を、テクスチャを参照して判断する」ように変更する。
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // これが今回使うテクスチャ
@@ -136,7 +136,7 @@ WebGLはテクスチャを参照する際、0.0から1.0の値を取る「テク
 
 これは「左右１ピクセルを参照してその平均の色で描く」というフラグメントシェーダーである。
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // 今回使うテクスチャ
@@ -190,12 +190,12 @@ WebGLはテクスチャを参照する際、0.0から1.0の値を取る「テク
 「畳み込み行列」について、ここではこれ以上の説明はしないが、興味があれば
 [わかりやすい記事がある](https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html)
 ([日本語版](https://docs.gimp.org/2.10/ja/gimp-filter-convolution-matrix.html))ので、参考にするとよいだろう。
-また、[この記事](http://www.codeproject.com/KB/graphics/ImageConvolution.aspx)では
+また、[この記事](https://www.codeproject.com/KB/graphics/ImageConvolution.aspx)では
 「畳み込み行列」をC++で実装したコードを見ることができる。
 
 フラグメントシェーダーで「畳み込み行列」を実装すると、このようになる。
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // 今回使うテクスチャ

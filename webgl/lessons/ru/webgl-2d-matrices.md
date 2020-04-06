@@ -192,7 +192,7 @@ newY = y * sy;
 
 Теперь внесём изменения в шейдер. Код прежнего шейдера выглядел так:
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;
@@ -215,7 +215,7 @@ newY = y * sy;
 
 Код нового шейдера намного проще
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;
@@ -398,7 +398,7 @@ newY = y * sy;
 Теперь шейдер можно сделать ещё проще. Так будет выглядеть полностью
 новый вершинный шейдер.
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform mat3 u_matrix;

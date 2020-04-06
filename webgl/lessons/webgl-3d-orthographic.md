@@ -23,7 +23,7 @@ The first thing we need to do is change the vertex shader to handle 3D.
 Here's the old vertex shader.
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -38,7 +38,7 @@ void main() {
 And here's the new one
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -397,7 +397,7 @@ shader to the fragment shader.
 Here's the new vertex shader
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -418,7 +418,7 @@ void main() {
 And we need to use that color in the fragment shader
 
 ```
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 +// Passed in from the vertex shader.

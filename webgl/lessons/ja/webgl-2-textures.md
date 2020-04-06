@@ -87,7 +87,7 @@ function main() {
 今回は２枚の画像をそれぞれ表示するのではなく、画素ひとつひとつを乗算するような処理にしておこう。
 
 ```
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-2d" type="x-shader/x-fragment">
 precision mediump float;
 
 // ロードされたテクスチャ

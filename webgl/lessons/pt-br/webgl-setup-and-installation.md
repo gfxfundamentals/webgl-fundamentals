@@ -4,7 +4,7 @@ TOC: WebGL - Setup e instalação
 
 
 Techincamente você não precisa de nada além de um navegador web para desenvolver em WebGL.
-Acesse [jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/) ou [jsbin.com](http://jsbin.com) ou [codepen.io](http://codepen.io/greggman/pen/YGQjVV) e apenas comece a aplicar as lições aqui.
+Acesse [jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/) ou [jsbin.com](https://jsbin.com) ou [codepen.io](https://codepen.io/greggman/pen/YGQjVV) e apenas comece a aplicar as lições aqui.
 
 Em todos eles, você pode fazer referência a scripts externos, adicionando um
 
@@ -25,7 +25,7 @@ Descompacte os arquivos para o mesmo diretório.
 ## Usando um pequeno e simples servidor Web simples
 
 Em seguida, você deve instalar um pequeno servidor web. Eu sei que o "servidor web" parece assustador, mas a verdade é [web
-Os servidores são realmente extremamente simples](http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/).
+Os servidores são realmente extremamente simples](https://games.greggman.com/game/saving-and-loading-files-in-a-web-page/).
 
 Se você estiver no Chrome, aqui está uma solução simples.
 [Aqui está uma pequena extensão cromada que é um servidor web](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=pt-br)

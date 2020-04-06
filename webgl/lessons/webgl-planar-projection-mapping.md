@@ -85,7 +85,7 @@ Here's the code to setup the program, sphere buffers, and plane buffers
 ```js
 // setup GLSL program
 // compiles shader, links program, look up locations
-const textureProgramInfo = webglUtils.createProgramInfo(gl, ['3d-vertex-shader', '3d-fragment-shader']);
+const textureProgramInfo = webglUtils.createProgramInfo(gl, ['vertex-shader-3d', 'fragment-shader-3d']);
 
 const sphereBufferInfo = primitives.createSphereBufferInfo(
     gl,
@@ -466,7 +466,7 @@ Then we need to compile and link these shaders as well
 
 ```js
 // setup GLSL programs
-const textureProgramInfo = webglUtils.createProgramInfo(gl, ['3d-vertex-shader', '3d-fragment-shader']);
+const textureProgramInfo = webglUtils.createProgramInfo(gl, ['vertex-shader-3d', 'fragment-shader-3d']);
 +const colorProgramInfo = webglUtils.createProgramInfo(gl, ['color-vertex-shader', 'color-fragment-shader']);
 ```
 

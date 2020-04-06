@@ -50,7 +50,7 @@ Zは補正係数を掛けると調整出来るようになる。
 じゃあ、やってみょう！最初に頂点シェーダーを更新して、頂点位置を補正係数に掛けたZで割る。
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 ...
 +uniform float u_fudgeFactor;  // 補正係数
 ...
@@ -106,7 +106,7 @@ void main() {
 簡単に確認したければ、頂点シェーダーで手動でXとYを割る代わりに`gl_Position.w`を`zToDivideBy`に割り当てる。
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 ...
 uniform float u_fudgeFactor;
 ...
@@ -227,7 +227,7 @@ w_out = z_in * fudgeFactor + 1;
 まず頂点シェーダーを前の単純な形に戻す。
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 uniform mat4 u_matrix;
 
 void main() {
@@ -281,7 +281,7 @@ function makeZToWMatrix(fudgeFactor) {
 それは何でだろう？何で「F」が消えているか？XとYは-1〜+1の制限があると同じようにZも-1〜+1の制限がある。
 この消えているところはZが−１以下になっている場合である。
 
-その問題を解決する数学を細かく説明出来るけど、二次元の投影行列数学と同じように[答えを導き出すこと出来るだろう](http://stackoverflow.com/a/28301213/128511)。Zをとって、何かを足して、何かにスケールすると、
+その問題を解決する数学を細かく説明出来るけど、二次元の投影行列数学と同じように[答えを導き出すこと出来るだろう](https://stackoverflow.com/a/28301213/128511)。Zをとって、何かを足して、何かにスケールすると、
 どの値の範囲からも-1〜+1出来る。
 
 それら全部を一つの行列で出来る。その上、補正係数の`fudgeFactor`は`fieldOfView`という視野も同じ行列で決められる。

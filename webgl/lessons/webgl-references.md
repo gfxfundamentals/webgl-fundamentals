@@ -24,7 +24,7 @@ Some other links you might find useful
 
 * [three.js](https://threejs.org): the most popular JavaScript 3D library.
 
-* [regl](http://regl.party/): A stateless functional WebGL library.
+* [regl](https://regl.party/): A stateless functional WebGL library.
 
 * [PlayCanvas](https://playcanvas.com/) A WebGL game engine with game editor
 
@@ -43,7 +43,7 @@ Some other links you might find useful
   Warning: The shaders on shadertoy.com are usually not the kind of shader that are used in production
   WebGL apps. Still there are many techniques to be learned from their examples.
 
-* [glslsandbox.com](https://glslandbox.com): The original fragment shader playground.
+* [glslsandbox.com](https://glslsandbox.com): The original fragment shader playground.
 
 * [vertexshaerart.com](https://vertexshaderart.com): The vertex shader version of glslsandbox.
 

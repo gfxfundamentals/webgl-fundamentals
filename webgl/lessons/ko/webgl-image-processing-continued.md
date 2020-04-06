@@ -9,7 +9,7 @@ TOC: WebGL 이미지 처리 심화
 이미지 처리 다음으로 가장 많이 받는 질문이 "어떻게 여러 효과를 적용하나요?" 입니다.
 글쎄요, 즉석으로 shader를 생성할 수 있긴 합니다.
 사용자가 쓰고자 하는 효과를 선택하는 UI를 제공한 다음 모든 효과를 내는 shader를 생성하는 건데요.
-항상 가능한 건 아니지만 이 기술은 종종 [실기간 그래픽을 만드는 데](http://www.youtube.com/watch?v=cQUn0Zeh-0Q) 사용됩니다.
+항상 가능한 건 아니지만 이 기술은 종종 [실기간 그래픽을 만드는 데](https://www.youtube.com/watch?v=cQUn0Zeh-0Q) 사용됩니다.
 
 더 유연한 방법은 texture 2개를 더 사용해서 각 texture를 차례대로 렌더링하고, 주고 받으면서 매번 다음 효과를 적용하는 겁니다.
 
@@ -191,7 +191,7 @@ WebGL은 [clip 공간](webgl-fundamentals.html)에서 다시 픽셀로 변환해
 이것을 해결하기 위해 shader에 하나 이상의 입력을 추가해서 뒤집을지 말지를 설정할 수 있습니다.
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 ...
 uniform float u_flipY;
 ...

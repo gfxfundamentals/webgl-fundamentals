@@ -80,7 +80,7 @@ Pour de la 2D on travaillera plutôt en pixels qu'en espace de projection, donc 
 pouvoir fournir des rectangles en pixels et les faire convertir en espace de projection à notre place.
 Voici le nouveau shader de vertex
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;

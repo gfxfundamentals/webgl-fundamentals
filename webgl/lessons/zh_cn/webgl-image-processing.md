@@ -32,7 +32,7 @@ TOC: WebGL 图像处理
 
 然后用片断着色器寻找纹理上对应的颜色
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // 纹理
@@ -115,7 +115,7 @@ TOC: WebGL 图像处理
 
 这个片断着色器将每个像素的值设置为与左右像素的均值。
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // 纹理
@@ -163,7 +163,7 @@ TOC: WebGL 图像处理
 
 我们将在片断着色器中计算卷积，所以创建一个新的片断着色器。
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // 纹理

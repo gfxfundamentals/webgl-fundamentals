@@ -153,7 +153,7 @@ You can create your GLSL strings any way you normally create strings in JavaScri
 by using AJAX to download them, by using multiline template strings. Or in this case, by
 putting them in non-JavaScript typed script tags.
 
-    <script id="2d-vertex-shader" type="notjs">
+    <script id="vertex-shader-2d" type="notjs">
 
       // an attribute will receive data from a buffer
       attribute vec4 a_position;
@@ -168,7 +168,7 @@ putting them in non-JavaScript typed script tags.
 
     </script>
 
-    <script id="2d-fragment-shader" type="notjs">
+    <script id="fragment-shader-2d" type="notjs">
 
       // fragment shaders don't have a default precision so we need
       // to pick one. mediump is a good default
@@ -204,8 +204,8 @@ what is happening.
 
 We can now call that function to create the 2 shaders
 
-    var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
-    var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
+    var vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
+    var fragmentShaderSource = document.querySelector("#fragment-shader-2d").text;
 
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -402,7 +402,7 @@ For 2D stuff you would probably rather work in pixels than clip space so
 let's change the shader so we can supply the position in pixels and have
 it convert to clip space for us. Here's the new vertex shader
 
-    <script id="2d-vertex-shader" type="notjs">
+    <script id="vertex-shader-2d" type="notjs">
 
     -  attribute vec4 a_position;
     *  attribute vec2 a_position;
@@ -494,7 +494,7 @@ we'll make the color settable.
 
 First we make the fragment shader take a color uniform input.
 
-    <script id="2d-fragment-shader" type="notjs">
+    <script id="fragment-shader-2d" type="notjs">
       precision mediump float;
 
     +  uniform vec4 u_color;

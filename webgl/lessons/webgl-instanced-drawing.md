@@ -18,7 +18,7 @@ we start with these 2 shaders
 
 ```html
 <!-- vertex shader -->
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 uniform mat4 matrix;
 
@@ -33,7 +33,7 @@ and
 
 ```html
 <!-- fragment shader -->
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 uniform vec4 color;
@@ -54,7 +54,7 @@ and look up the locations of the attributes and uniforms.
 
 ```js
 const program = webglUtils.createProgramFromScripts(
-    gl, ['3d-vertex-shader', '3d-fragment-shader']);
+    gl, ['vertex-shader-3d', 'fragment-shader-3d']);
 
 const positionLoc = gl.getAttribLocation(program, 'a_position');
 const colorLoc = gl.getUniformLocation(program, 'color');
@@ -205,7 +205,7 @@ and `color` instead of uniforms.
 
 ```html
 <!-- vertex shader -->
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 -uniform mat4 matrix;
 +attribute vec4 color;
@@ -227,7 +227,7 @@ and
 
 ```html
 <!-- fragment shader -->
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 -uniform vec4 color;
@@ -249,7 +249,7 @@ Next we need to look up the locations of these attributes.
 
 ```js
 const program = webglUtils.createProgramFromScripts(
-    gl, ['3d-vertex-shader', '3d-fragment-shader']);
+    gl, ['vertex-shader-3d', 'fragment-shader-3d']);
 
 const positionLoc = gl.getAttribLocation(program, 'a_position');
 -const colorLoc = gl.getUniformLocation(program, 'color');
@@ -448,7 +448,7 @@ one or two more uniforms to the vertex shader.
 
 ```html
 <!-- vertex shader -->
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 attribute vec4 color;
 attribute mat4 matrix;

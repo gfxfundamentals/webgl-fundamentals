@@ -12,7 +12,7 @@ TOC: WebGL 2D 크기
 이건 [이전 예제를](webgl-2d-rotation.html) 수정한 겁니다.
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;

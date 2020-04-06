@@ -164,12 +164,12 @@ as they just get in the way of what that specific example is about.
 
 That's most of my minimum set of WebGL boilerplate code.
 [You can find `webgl-utils.js` code here](../resources/webgl-utils.js).
-If you want something slightly more organized check out [TWGL.js](http://twgljs.org).
+If you want something slightly more organized check out [TWGL.js](https://twgljs.org).
 
 The rest of what makes WebGL look complicated is setting up all the inputs
 to your shaders.  See <a href="webgl-how-it-works.html">how it works</a>.
 
-I'd also suggest you read up on [less code more fun](webgl-less-code-more-fun.html) and check out [TWGL](http://twgljs.org).
+I'd also suggest you read up on [less code more fun](webgl-less-code-more-fun.html) and check out [TWGL](https://twgljs.org).
 
 Note while we're add it there are several more scripts for similar reasons
 

@@ -4,8 +4,8 @@ TOC: WebGLの開発環境
 
 
 技術的には、WebGLでの開発に必要なものは「Webブラウザだけ」です。
-Web上でコーディングを行うためのサイト([jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/)、[jsbin.com](http://jsbin.com)
-、[codepen.io](http://codepen.io/greggman/pen/YGQjVV)など)
+Web上でコーディングを行うためのサイト([jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/)、[jsbin.com](https://jsbin.com)
+、[codepen.io](https://codepen.io/greggman/pen/YGQjVV)など)
 を利用すれば、このサイトのサンプルプログラムを試してみることができます。
 
 上で紹介したサイトであればどれであっても、
@@ -32,7 +32,7 @@ WebGLは、Canvas2Dと比較して画像のロードに関してセキュリテ�
 次はWebサーバをインストールしましょう。
 「Webサーバ」というと「何やら恐ろしいもの」、と感じる人がいるのは知っていますが、
 実際のところWebサーバとはとても単純なプログラムであり、
-[たった５行で書けるようなもの](http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/)
+[たった５行で書けるようなもの](https://games.greggman.com/game/saving-and-loading-files-in-a-web-page/)
 です。
 
 ごく簡単なWebサーバーとして[Servez](https://greggman.github.io/servez/)を紹介しておきます。

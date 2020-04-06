@@ -62,7 +62,7 @@ abs(3.333 - 6.666) = 3.333
 "fudgeFactor".
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -122,7 +122,7 @@ void main() {
 в шейдере самим, а передать `zToDivideBy` в `gl_Position.w`.
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 ...
 uniform float u_fudgeFactor;
 ...
@@ -246,7 +246,7 @@ w_out = z_in * fudgeFactor + 1;
 Сначала вернём обратно простой вершинный шейдер.
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 uniform mat4 u_matrix;
 
 void main() {

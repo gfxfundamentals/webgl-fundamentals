@@ -22,7 +22,7 @@ Będziemy mnożyć przez współrzędne X i Y punktu na okręgu jednostkowym geo
 Poniżej są aktualizacje wymagane dla naszego cieniowania.
 
 <pre class="prettyprint showlinemods">
-&lt;script id="2d-vertex-shader" type="x-shader/x-vertex"&gt;
+&lt;script id="vertex-shader-2d" type="x-shader/x-vertex"&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;

@@ -142,7 +142,7 @@ function setGeometry(gl, x, y) {
 Так будет выглядеть шейдер:
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;

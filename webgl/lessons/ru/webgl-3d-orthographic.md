@@ -24,7 +24,7 @@ TOC: WebGL 3D - Ортогональ
 Вот старый вершинный шейдер:
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -39,7 +39,7 @@ void main() {
 А вот новый:
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -342,7 +342,7 @@ var m4 = {
 Вот новый вершинный шейдер:
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -363,7 +363,7 @@ void main() {
 Во фрагментном шейдере нам нужно использовать переданный цвет.
 
 ```
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 +// Передаётся из вершинного шейдера

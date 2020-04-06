@@ -14,12 +14,12 @@
 <!--
 for most samples webgl-utils only provides shader compiling/linking and
 canvas resizing because why clutter the examples with code that's the same in every sample.
-See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
-and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+See https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
 for webgl-utils, m3, m4, and webgl-lessons-ui.
 -->
 <script src="resources/webgl-utils.js"></script>
-<script id="2d-vertex-shader" type="notjs">
+<script id="vertex-shader-2d" type="notjs">
 
   // an attribute will receive data from a buffer
   attribute vec4 a_position;
@@ -34,7 +34,7 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 
 </script>
 
-<script id="2d-fragment-shader" type="notjs">
+<script id="fragment-shader-2d" type="notjs">
 
   // fragment shaders don't have a default precision so we need
   // to pick one. mediump is a good default
@@ -87,8 +87,8 @@ function main() {
   }
 
   // Get the strings for our GLSL shaders
-  var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
-  var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
+  var vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
+  var fragmentShaderSource = document.querySelector("#fragment-shader-2d").text;
 
   // create GLSL shaders, upload the GLSL source, compile the shaders
   var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);

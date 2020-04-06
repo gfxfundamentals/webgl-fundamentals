@@ -247,7 +247,7 @@ var m3 = {
 Now let's change our shader. The old shader looked like this
 
 ```html
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -272,7 +272,7 @@ void main() {
 Our new shader will be much simpler.
 
 ```html
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -468,7 +468,7 @@ Now we can simplify the shader even more.  Here's the entire new vertex
 shader.
 
 ```html
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;

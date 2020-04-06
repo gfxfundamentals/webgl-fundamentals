@@ -67,7 +67,7 @@ We pass in a matrix to rotate it and give us an xy plane unit quad.
 Next create 2 shaders
 
     // setup GLSL programs
-    var fProgramInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+    var fProgramInfo = createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
     var textProgramInfo = createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
 
 And create our text texture

@@ -32,7 +32,7 @@ unit circle 위에 있는 어떤 점에서 X와 Y의 값을 가져와서 [이전
 
 shader에 다시 작성한 내용은 다음과 같습니다.
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;

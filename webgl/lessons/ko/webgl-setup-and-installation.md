@@ -5,8 +5,8 @@ TOC: WebGL 설치
 
 WebGL을 개발하기 위해 웹 브라우저 이외에 기술적으로 아무것도 필요가 없습니다.
 
-[jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/)이나 [jsbin.com](http://jsbin.com)
-혹은 [codepen.io](http://codepen.io/greggman/pen/YGQjVV)에 가서 여기 있는 학습서들을 적용하면 됩니다.
+[jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/)이나 [jsbin.com](https://jsbin.com)
+혹은 [codepen.io](https://codepen.io/greggman/pen/YGQjVV)에 가서 여기 있는 학습서들을 적용하면 됩니다.
 
 외부 스크립트를 참조하려면 `<script src="..."></script>` 태그 쌍을 추가해서 외부 스크립트를 참조할 수 있습니다.
 
@@ -26,7 +26,7 @@ WebGL은 이미지를 로딩하는데 Canvas2D보다 더 강력한 제한이 있
 ## 작고 간단한 웹 서버 사용하기
 
 다음으로 작은 웹 서버 하나를 설치해야 합니다.
-"웹 서버"라는 말이 무섭게 들릴 수도 있지만 [사실 웹 서버는 굉장히 간단합니다](http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/).
+"웹 서버"라는 말이 무섭게 들릴 수도 있지만 [사실 웹 서버는 굉장히 간단합니다](https://games.greggman.com/game/saving-and-loading-files-in-a-web-page/).
 
 여기 [Servez](https://greggman.github.io/servez)라는 매우 간단한 인터페이스가 있습니다.
 

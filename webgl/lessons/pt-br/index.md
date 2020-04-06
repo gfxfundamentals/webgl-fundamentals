@@ -7,7 +7,7 @@ Eles não são antigos reanalisando artigos OpenGL abertos, como muitos outros n
 Eles são totalmente novos, descartando as antigas idéias desatualizadas e trazendo você
 para uma compreensão completa do que o WebGL realmente é e como ele realmente funciona.
 
-Se você está interessado no WebGL2, por favor acesse: [webgl2fundamentals.org](http://webgl2fundamentals.org)
+Se você está interessado no WebGL2, por favor acesse: [webgl2fundamentals.org](https://webgl2fundamentals.org)
 
 {{{include "webgl/lessons/pt-br/toc.html"}}}
 

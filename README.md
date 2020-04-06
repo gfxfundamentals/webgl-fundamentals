@@ -1,7 +1,7 @@
 WebGL Fundamentals
 ===================
 
-This is [a series of lessons or tutorials about WebGL](http://webglfundamentals.org/).
+This is [a series of lessons or tutorials about WebGL](https://webglfundamentals.org/).
 
 Unlike most WebGL lessons these are not based off of OpenGL.
 OpenGL is 20 years old. The lessons of OpenGL don't match well with WebGL.
@@ -60,10 +60,10 @@ Current fields are
       description: 'Learn WebGL from the ground up. No magic',
 
       // Link to the language root.
-      link: 'http://webglfundamentals.org/webgl/lessons/ja',  // replace `ja` with country code
+      link: 'https://webglfundamentals.org/webgl/lessons/ja',  // replace `ja` with country code
 
       // html that appears after the article and before the comments
-      commentSectionHeader: '<div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>\n        <div>Issue/Bug? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>',
+      commentSectionHeader: '<div>Questions? <a href="https://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>\n        <div>Issue/Bug? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>',
 
       // markdown that appears for untranslated articles
       missing: "Sorry this article has not been translated yet. [Translations Welcome](https://github.com/gfxfundamentals/webgl-fundamentals)! 😄\n\n[Here's the original English article for now]({{{origLink}}}).",
@@ -159,7 +159,7 @@ Which means you can localize the labels like this
 
 For testing reference the sample directly in your browser. For example
 
-[`http://localhost:8080/webgl/lessons/resources/directional-lighting.html?lightDir=光線方向&surface1=オブジェクト&surface2=表面方向&dot=dot(光線反対方向,表面方向)%20%3D%20&ui-rotation=角度`](http://webglfundamentals.org/webgl/lessons/resources/directional-lighting.html?lightDir=光線方向&surface1=オブジェクト&surface2=表面方向&dot=dot(光線反対方向,表面方向)%20%3D%20&ui-rotation=角度)
+[`http://localhost:8080/webgl/lessons/resources/directional-lighting.html?lightDir=光線方向&surface1=オブジェクト&surface2=表面方向&dot=dot(光線反対方向,表面方向)%20%3D%20&ui-rotation=角度`](https://webglfundamentals.org/webgl/lessons/resources/directional-lighting.html?lightDir=光線方向&surface1=オブジェクト&surface2=表面方向&dot=dot(光線反対方向,表面方向)%20%3D%20&ui-rotation=角度)
 
 ### To build
 

@@ -80,7 +80,7 @@ function main() {
 умножим одну текстуру на другую.
 
 ```
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-2d" type="x-shader/x-fragment">
 precision mediump float;
 
 // наши текстуры

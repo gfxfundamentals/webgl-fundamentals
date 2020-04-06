@@ -18,7 +18,7 @@ TOC: WebGL 三维正射投影
 首先需要修改顶点着色器以支持三维处理，这是原顶点着色器，
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -33,7 +33,7 @@ void main() {
 这是新着色器
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -328,7 +328,7 @@ var m4 = {
 这是新的顶点着色器
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -349,7 +349,7 @@ void main() {
 然后在片断着色器中使用颜色
 
 ```
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 +// 从顶点着色器中传入

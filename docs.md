@@ -2,7 +2,7 @@ WebGLFundamentals API Docs
 ==========================
 
 These docs are an attempt to help explain some of the helper functions
-used in the articles on [webglfundamentals.org](http://webglfundamentals.org).
+used in the articles on [webglfundamentals.org](https://webglfundamentals.org).
 
 WebGL is a very low-level API and so using it is very verbose. To draw a simple
 lighted cube can easily require 50-100 WebGL calls. Calls to create buffers
@@ -29,7 +29,7 @@ for common shapes like spheres, cubes, planes, cones, etc can be found here](/do
 
 #JSDoc3 Plea
 
-These docs are generated with [JSDoc3](http://usejsdoc.org/). I find them very confusing to look at
+These docs are generated with [JSDoc3](https://usejsdoc.org/). I find them very confusing to look at
 and in some places frustratingly verbose. If you have any experience with JSDoc3 and know how to
 make the docs more approachable and useful please [submit a pull request](https://github.com/gfxfundamentals/webgl-fundamentals)
 or [file an issue with details](https://github.com/gfxfundamentals/webgl-fundamentals/issues).

@@ -144,7 +144,7 @@ WebGLでは、色は０〜１で指定する。
 GLSLのstringをする方法はいくつかある。文字列の連結とか、AJAXでダウンロードすることとか、複数行テンプレートstring(multiline template strings)とか。
 今回は、typeがJavaScriptではないscript要素に入れる方法をとる。
 
-    <script id="2d-vertex-shader" type="notjs">
+    <script id="vertex-shader-2d" type="notjs">
 
       // バッファーからデータを取る属性
       attribute vec4 a_position;
@@ -158,7 +158,7 @@ GLSLのstringをする方法はいくつかある。文字列の連結とか、A
 
     </script>
 
-    <script id="2d-fragment-shader" type="notjs">
+    <script id="fragment-shader-2d" type="notjs">
 
       // フラグメントシェーダーは既定の精度がないので選択することが必要である。
       // 「mediump」は一般的な既定の設定である。それは「中間の精度」の意味である。
@@ -198,8 +198,8 @@ GLSLのstringをする方法はいくつかある。文字列の連結とか、A
 
 出来たら、その関数でシェーダー２つを作成出来る
 
-    var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
-    var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
+    var vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
+    var fragmentShaderSource = document.querySelector("#fragment-shader-2d").text;
 
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -385,7 +385,7 @@ WebGLは`gl_Position`に割り当てられた３つの値で三角形を描画�
 ピクセルで与えて、ピクセル座標からクリップ空間に自動で変換するように、シェーダーの計算の仕方を変更しよう。
 これは変更されたシェーダー：
 
-    <script id="2d-vertex-shader" type="notjs">
+    <script id="vertex-shader-2d" type="notjs">
 
     -  attribute vec4 a_position;
     *  attribute vec2 a_position;
@@ -473,7 +473,7 @@ Note: このサンプルとその後の全てのサンプルは、シェーダ�
 
 まずフラグメントシェーダーを、色ユニフォームが使えるようにする。
 
-    <script id="2d-fragment-shader" type="notjs">
+    <script id="fragment-shader-2d" type="notjs">
       precision mediump float;
 
     +  uniform vec4 u_color;

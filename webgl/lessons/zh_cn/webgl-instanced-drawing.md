@@ -16,7 +16,7 @@ WebGL有一个拓展叫做*实例化绘制*。
 
 ```html
 <!-- 顶点着色器 -->
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 uniform mat4 matrix;
 
@@ -31,7 +31,7 @@ and
 
 ```html
 <!-- 片元着色器 -->
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 uniform vec4 color;
@@ -51,7 +51,7 @@ void main() {
 
 ```js
 const program = webglUtils.createProgramFromScripts(
-    gl, ['3d-vertex-shader', '3d-fragment-shader']);
+    gl, ['vertex-shader-3d', 'fragment-shader-3d']);
 
 const positionLoc = gl.getAttribLocation(program, 'a_position');
 const colorLoc = gl.getUniformLocation(program, 'color');
@@ -191,7 +191,7 @@ if (!gl) {
 
 ```html
 <!-- 顶点着色器 -->
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 -uniform mat4 matrix;
 +attribute vec4 color;
@@ -213,7 +213,7 @@ and
 
 ```html
 <!-- 片元着色器 -->
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 -uniform vec4 color;
@@ -234,7 +234,7 @@ void main() {
 
 ```js
 const program = webglUtils.createProgramFromScripts(
-    gl, ['3d-vertex-shader', '3d-fragment-shader']);
+    gl, ['vertex-shader-3d', 'fragment-shader-3d']);
 
 const positionLoc = gl.getAttribLocation(program, 'a_position');
 -const colorLoc = gl.getUniformLocation(program, 'color');
@@ -419,7 +419,7 @@ uniform来储存这些矩阵。
 
 ```html
 <!-- 顶点着色器 -->
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 attribute vec4 color;
 attribute mat4 matrix;

@@ -20,7 +20,7 @@ TOC: 三次元の正投影
 これは前のシェーダーである。
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -35,7 +35,7 @@ void main() {
 これは新しいシェーダーである。
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -326,7 +326,7 @@ Zもピクセル単位で計算する。`width`のような値を`depth`に与�
 これは新しい頂点シェーダーである。
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -347,7 +347,7 @@ void main() {
 その色はピクセルシェーダーで使わなければいけない。
 
 ```
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 +// 頂点シェーダーに渡された色。

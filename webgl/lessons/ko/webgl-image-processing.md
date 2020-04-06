@@ -34,7 +34,7 @@ WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 vertex shader�
 
 그런 다음 texture의 색상을 찾기 위해 fragment shader를 제공합니다.
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // texture
@@ -122,7 +122,7 @@ WebGL은 0.0에서 1.0사이 좌표를 가진 texture를 참조하므로 간단�
 
 이건 texture에서 각 픽셀의 왼쪽/오른쪽 픽셀을 평균화하는 fragment shader 입니다.
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // texture
@@ -167,11 +167,11 @@ WebGL은 0.0에서 1.0사이 좌표를 가진 texture를 참조하므로 간단�
 convolution kernel은 렌더링할 때 각 항목이 주위의 픽셀 8개에 몇을 곱할건지 나타내는 3x3 행렬입니다.
 그런 다음 그 결과를 kernel의 가중치(kernel에 있는 모든 값들의 합) 또는 1.0 중 더 큰 값으로 나눕니다.
 [여기에 꽤 좋은 글이 있습니다](https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html).
-그리고 [여기 C++로 직접 작성하면 어떤지 실제 코드를 보여주는 또 다른 글입니다](http://www.codeproject.com/KB/graphics/ImageConvolution.aspx).
+그리고 [여기 C++로 직접 작성하면 어떤지 실제 코드를 보여주는 또 다른 글입니다](https://www.codeproject.com/KB/graphics/ImageConvolution.aspx).
 
 우리는 shader에서 작업을 수행하므로 여기 새로운 fragment shader가 있습니다.
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // texture

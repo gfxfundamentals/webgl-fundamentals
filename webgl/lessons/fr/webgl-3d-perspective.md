@@ -282,7 +282,7 @@ Mais il reste quelques soucis. Si on met Z à -100 on se retrouve avec quelque c
 Quest-ce qu'il se passe ? Pourquoi le F disparaît ? Tout comme WebGL tronque le X et le Y au-delà de -1 et +1 il tronque aussi le Z. 
 Ce qu'on voit c'est le Z < -1. 
 
-Je pourrais entrer dans les détails pour résoudre ça mais [vous pouvez déduire la solution](http://stackoverflow.com/a/28301213/128511) comme on l'a fait dans les projections 2D. On a besoin de prendre Z, ajouter du déplacement et du changement d'échelle, et on peut ajuster tout ce qu'on veut entre -1 et +1. 
+Je pourrais entrer dans les détails pour résoudre ça mais [vous pouvez déduire la solution](https://stackoverflow.com/a/28301213/128511) comme on l'a fait dans les projections 2D. On a besoin de prendre Z, ajouter du déplacement et du changement d'échelle, et on peut ajuster tout ce qu'on veut entre -1 et +1. 
 
 Ce qui est génial c'est que tout ça peut être fusionné dans une seule matrice ! Mieux, plutôt qu'un 'facteur de fuite' on va plutôt prendre en entrée l'angle du champ de vision désiré et calculer le reste à partir de ça. 
 

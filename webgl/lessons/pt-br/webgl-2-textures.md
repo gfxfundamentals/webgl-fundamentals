@@ -81,7 +81,7 @@ Em seguida, mudamos o sombreador para usar 2 texturas. Neste caso, vamos multipl
 1 textura pelo outro.
 
 ```
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-2d" type="x-shader/x-fragment">
 precision mediump float;
 
 // our textures

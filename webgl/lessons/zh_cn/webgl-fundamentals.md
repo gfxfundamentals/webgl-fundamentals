@@ -133,7 +133,7 @@ WebGL只关心两件事：裁剪空间中的坐标值和颜色值。使用WebGL�
 你可以利用JavaScript中创建字符串的方式创建GLSL字符串：用串联的方式（concatenating），
 用AJAX下载，用多行模板数据。或者在这个例子里，将它们放在非JavaScript类型的标签中。
 
-    <script id="2d-vertex-shader" type="notjs">
+    <script id="vertex-shader-2d" type="notjs">
 
       // 一个属性变量，将会从缓冲中获取数据
       attribute vec4 a_position;
@@ -147,7 +147,7 @@ WebGL只关心两件事：裁剪空间中的坐标值和颜色值。使用WebGL�
 
     </script>
 
-    <script id="2d-fragment-shader" type="notjs">
+    <script id="fragment-shader-2d" type="notjs">
 
       // 片断着色器没有默认精度，所以我们需要设置一个精度
       // mediump是一个不错的默认值，代表“medium precision”（中等精度）
@@ -183,8 +183,8 @@ WebGL只关心两件事：裁剪空间中的坐标值和颜色值。使用WebGL�
 
 现在我们可以使用以上方法创建两个着色器
 
-    var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
-    var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
+    var vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
+    var fragmentShaderSource = document.querySelector("#fragment-shader-2d").text;
 
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -371,7 +371,7 @@ WebGL将会把它们从裁剪空间转换到屏幕空间并在屏幕空间绘制
 所以我们来改造一下顶点着色器，让我们提供给它像素坐标而不是裁剪空间坐标。
 这是我们新的顶点着色器
 
-    <script id="2d-vertex-shader" type="notjs">
+    <script id="vertex-shader-2d" type="notjs">
 
     -  attribute vec4 a_position;
     *  attribute vec2 a_position;
@@ -457,7 +457,7 @@ WebGL将会把它们从裁剪空间转换到屏幕空间并在屏幕空间绘制
 
 首先我们定义一个片断着色器，可以通过全局变量接收自定义颜色。
 
-    <script id="2d-fragment-shader" type="notjs">
+    <script id="fragment-shader-2d" type="notjs">
       precision mediump float;
 
     +  uniform vec4 u_color;

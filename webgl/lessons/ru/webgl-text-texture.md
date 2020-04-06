@@ -68,7 +68,7 @@ Excel со всеми языками, а также скрипт, который
 Далее создаём два шейдера
 
     // настройка программы GLSL
-    var fProgramInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+    var fProgramInfo = createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
     var textProgramInfo = createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
 
 И создаём текстуру текста.

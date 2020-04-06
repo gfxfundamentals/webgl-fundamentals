@@ -81,7 +81,7 @@ Next we change the shader to use 2 textures.  In this case we'll multiply
 1 texture by the other.
 
 ```
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-2d" type="x-shader/x-fragment">
 precision mediump float;
 
 // our textures

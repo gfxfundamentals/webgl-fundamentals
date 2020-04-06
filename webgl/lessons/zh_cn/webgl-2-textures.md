@@ -71,7 +71,7 @@ function main() {
 接下来修改着色器使用两个纹理，在这个例子中我们将两个纹理相乘。
 
 ```
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-2d" type="x-shader/x-fragment">
 precision mediump float;
 
 // 纹理

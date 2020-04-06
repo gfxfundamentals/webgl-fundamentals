@@ -28,7 +28,7 @@ TOC: Обработка изображений в WebGL
 
 Далее говорим фрагментному шейдеру, чтобы он брал цвета из текстуры.
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // наша текстура
@@ -109,7 +109,7 @@ TOC: Обработка изображений в WebGL
 
 Вот пример фрагментного шейдера, который берёт среднее значение каждого пикселя текстуры и его левого и правого соседа:
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // наша текстура
@@ -152,7 +152,7 @@ TOC: Обработка изображений в WebGL
 
 В нашем случае мы планируем выполнить ту же работу в шейдере, поэтому вот код фрагментного шейдера.
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     // наша текстура

@@ -175,7 +175,7 @@ WebGL需要从[裁剪空间](webgl-fundamentals.html)对应到屏幕像素，
 像素。为了解决这个问题，通过在着色器中添加一个输入来决定是否翻转。
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 ...
 uniform float u_flipY;
 ...

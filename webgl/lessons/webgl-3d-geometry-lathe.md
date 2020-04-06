@@ -8,9 +8,9 @@ It is not something I recommend you actually do. Rather, I think working through
 the topic will help illustrate some things about making 3d models for WebGL.
 
 Someone asked how to make a bowling pin shape in WebGL. The *smart* answer is
-"Use a 3D modeling package like [Blender](http://blender.org),
-[Maya](http://www.autodesk.com/products/maya/overview),
-[3D Studio Max](http://www.autodesk.com/products/3ds-max/overview),
+"Use a 3D modeling package like [Blender](https://blender.org),
+[Maya](https://www.autodesk.com/products/maya/overview),
+[3D Studio Max](https://www.autodesk.com/products/3ds-max/overview),
 [Cinema 4D](https://www.maxon.net/en/products/cinema-4d/overview/), etc.
 Use it to model a bowling pin, export, read the dat.
 ([The OBJ format is relatively simple](https://en.wikipedia.org/wiki/Wavefront_.obj_file)).
@@ -37,7 +37,7 @@ and build triangles from those points.
 
 The most common kind of curve in computer graphics seems to be
 a bezier curve. If you've ever edited a curve in
-[Adobe Illustrator](http://www.adobe.com/products/illustrator.html) or
+[Adobe Illustrator](https://www.adobe.com/products/illustrator.html) or
 [Inkscape](https://inkscape.org/en/) or
 [Affinity Designer](https://affinity.serif.com/en-us/designer/)
 or similar programs that's a bezier curve.

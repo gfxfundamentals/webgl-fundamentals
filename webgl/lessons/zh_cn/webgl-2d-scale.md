@@ -11,7 +11,7 @@ TOC: WebGL 二维缩放
 让我们将位置乘以期望的缩放值，这是[前例](webgl-2d-rotation.html)中的变化部分。
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;

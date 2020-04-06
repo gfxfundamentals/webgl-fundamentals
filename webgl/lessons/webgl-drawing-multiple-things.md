@@ -392,7 +392,7 @@ with geometry that has no normals.  Similarly a shader that requires
 textures will not work without textures.
 
 This is one of the many reasons it's great to choose a 3D Library like
-[Three.js](http://threejs.org) because it handles all of this for you.
+[Three.js](https://threejs.org) because it handles all of this for you.
 You create some geometry, you tell three.js how you want it rendered and
 it generates shaders at runtime to handle the things you need.  Pretty
 much all 3D engines do this from Unity3D to Unreal to Source to Crytek.

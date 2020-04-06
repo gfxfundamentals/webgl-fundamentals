@@ -21,7 +21,7 @@ TOC: WebGL - Orthographic 3D
 여기 기존 vertex shader가 있습니다.
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -36,7 +36,7 @@ void main() {
 그리고 이게 새로운 것인데
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -341,7 +341,7 @@ X와 Y를 픽셀에서 clip 공간으로 변환해줘야 했던 것처럼, Z도 
 여기 새로운 vertex shader 입니다.
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -362,7 +362,7 @@ void main() {
 그리고 fragment shader에서 그 색을 써야 하는데
 
 ```
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 +// vertex shader로부터 전달

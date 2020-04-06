@@ -34,7 +34,7 @@ Y равен 1, а X равен 0. Справа X равен 1, а Y равен 
 
 В шейдере произойдут следующие изменения:
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;

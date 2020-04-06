@@ -156,13 +156,13 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
 
 여기까지가 WebGL boilerplate의 minimum set 입니다.
 [`webgl-utils.js`](../resources/webgl-utils.js) 코드는 여기서 찾으실 수 있구요.
-좀 더 정리된 것을 원하신다면 [TWGL.js](http://twgljs.org)를 확인해주세요.
+좀 더 정리된 것을 원하신다면 [TWGL.js](https://twgljs.org)를 확인해주세요.
 
 WebGL을 복잡하게 보이게 만드는 나머지 부분은 shader로 보내는 모든 입력을 설정하는 겁니다.
 
 <a href="webgl-how-it-works.html">작동 원리</a>를 봐주세요.
 
-또한 [코드는 적게 재미는 더](webgl-less-code-more-fun.html)를 읽고 [TWGL](http://twgljs.org)를 확인하는 걸 권장합니다.
+또한 [코드는 적게 재미는 더](webgl-less-code-more-fun.html)를 읽고 [TWGL](https://twgljs.org)를 확인하는 걸 권장합니다.
 
 참고로 우리가 그것을 추가하는 것과 비슷한 이유로 몇 가지 script가 더 있습니다.
 

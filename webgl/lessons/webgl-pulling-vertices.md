@@ -333,7 +333,7 @@ To use the shader we need to lookup all the locations
 
 ```js
 // setup GLSL program
-const program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+const program = webglUtils.createProgramFromScripts(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
 
 +// look up where the vertex data needs to go.
 +const posTexIndexLoc = gl.getAttribLocation(

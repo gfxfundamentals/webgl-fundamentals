@@ -59,7 +59,7 @@ Let's try it.  First let's change the vertex shader to divide by Z after
 we've multiplied it by our "fudgeFactor".
 
 ```
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -117,7 +117,7 @@ We can prove this very easily by changing the shader and instead of doing
 the division ourselves, put `zToDivideBy` in `gl_Position.w`.
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 ...
 uniform float u_fudgeFactor;
 ...
@@ -240,7 +240,7 @@ So, let's modify the program again to just use matrices.
 First let's put the vertex shader back. It's simple again
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 uniform mat4 u_matrix;
 
 void main() {
@@ -297,7 +297,7 @@ X and Y or +1 to -1 it also clips Z.  What we're seeing here is where Z <
 -1.
 
 I could go into detail about the math to fix it but [you can derive
-it](http://stackoverflow.com/a/28301213/128511) the same way we did 2D
+it](https://stackoverflow.com/a/28301213/128511) the same way we did 2D
 projection.  We need to take Z, add some amount and scale some amount and
 we can make any range we want get remapped to the -1 to +1.
 

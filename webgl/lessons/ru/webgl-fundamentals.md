@@ -147,7 +147,7 @@ WebGL затем может растеризовать различные при
 или используя AJAX для их загрузки, или используя шаблонные строки, ну или в нашем случае помещая строки в специальные
 теги с типом, не равным "JavaScript"
 
-    <script id="2d-vertex-shader" type="notjs">
+    <script id="vertex-shader-2d" type="notjs">
 
       // атрибут, который будет получать данные из буфера
       attribute vec4 a_position;
@@ -162,7 +162,7 @@ WebGL затем может растеризовать различные при
 
     </script>
 
-    <script id="2d-fragment-shader" type="notjs">
+    <script id="fragment-shader-2d" type="notjs">
 
       // фрагментные шейдеры не имеют точности по умолчанию, поэтому нам необходимо её
       // указать. mediump подойдёт для большинства случаев. Он означает "средняя точность"
@@ -198,8 +198,8 @@ WebGL затем может растеризовать различные при
 
 Теперь создадим 2 шейдера с помощью этой функции
 
-    var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
-    var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
+    var vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
+    var fragmentShaderSource = document.querySelector("#fragment-shader-2d").text;
 
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -400,7 +400,7 @@ iframe, как на этой странице. Если определять р�
 шейдер соответствующим образом, чтобы он мог конвертировать координаты за нас.
 Новый вершинный шейдер выглядит следующим образом
 
-    <script id="2d-vertex-shader" type="notjs">
+    <script id="vertex-shader-2d" type="notjs">
 
     -  attribute vec4 a_position;
     *  attribute vec2 a_position;
@@ -494,7 +494,7 @@ y-координату пространства отсечения.
 
 Сначала сделаем фрагментный шейдер, который принимает цвет через uniform-переменную
 
-    <script id="2d-fragment-shader" type="notjs">
+    <script id="fragment-shader-2d" type="notjs">
       precision mediump float;
 
     +  uniform vec4 u_color;

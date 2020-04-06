@@ -103,7 +103,7 @@ the buffers for the 'F'
 ```js
 // setup GLSL programs
 // compiles shaders, links program, looks up locations
-const programInfo = webglUtils.createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+const programInfo = webglUtils.createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
 
 // create buffers and fill with data for a 3D 'F'
 const bufferInfo = primitives.create3DFBufferInfo(gl);

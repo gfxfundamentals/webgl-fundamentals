@@ -144,7 +144,7 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 예를 들어, 여러 줄의 template 문자열을 연결한 걸 AJAX를 이용해 내려받을 수 있겠죠.
 또는 이 경우, JavaScript type이 아닌 script 태그를 넣어야 합니다.
 
-    <script id="2d-vertex-shader" type="notjs">
+    <script id="vertex-shader-2d" type="notjs">
 
       // Attribute는 Buffer로부터 데이터를 받습니다.
       attribute vec4 a_position;
@@ -157,7 +157,7 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 
     </script>
 
-    <script id="2d-fragment-shader" type="notjs">
+    <script id="fragment-shader-2d" type="notjs">
 
       // Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
       // mediump(중간 정도 정밀도)은 기본값으로 좋습니다.
@@ -192,8 +192,8 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 
 이제 우리는 두 Shader를 만드는 함수를 호출할 수 있습니다.
 
-    var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
-    var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
+    var vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
+    var fragmentShaderSource = document.querySelector("#fragment-shader-2d").text;
 
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -395,7 +395,7 @@ Canvas는 채널당 8bit이기 때문에 WebGL은 `[255, 0, 127, 255]` 값으로
 그러니까 픽셀 단위로 위치를 제공하고 clip 공간으로 변환할 수 있도록 shader를 수정해야 합니다.
 여기 새로운 vertex shader 입니다.
 
-    <script id="2d-vertex-shader" type="notjs">
+    <script id="vertex-shader-2d" type="notjs">
 
     -  attribute vec4 a_position;
     *  attribute vec2 a_position;
@@ -485,7 +485,7 @@ clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
 
 먼저 fragment shader가 색상 uniform 입력을 가져오도록 만듭니다.
 
-    <script id="2d-fragment-shader" type="notjs">
+    <script id="fragment-shader-2d" type="notjs">
       precision mediump float;
 
     +  uniform vec4 u_color;

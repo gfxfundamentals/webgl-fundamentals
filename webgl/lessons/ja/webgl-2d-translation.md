@@ -129,7 +129,7 @@ function setGeometry(gl, x, y) {
 これは新しい頂点シェーダー
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;

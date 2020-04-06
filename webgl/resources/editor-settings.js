@@ -125,7 +125,7 @@ ${indent}${variable}${code}${url};`;
 // NOTE: The server providing the images must give CORS permissions
 // in order to be able to use the image with WebGL. Most sites
 // do NOT give permission.
-// See: http://webglfundamentals.org/webgl/lessons/webgl-cors-permission.html
+// See: https://webglfundamentals.org/webgl/lessons/webgl-cors-permission.html
 function requestCORSIfNotSameOrigin(img, url) {
   if ((new URL(url)).origin !== window.location.origin) {
     img.crossOrigin = "";

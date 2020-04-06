@@ -13,7 +13,7 @@ TOC: WebGLにおける画像処理。続き
 専用のUI画面を用意して、使いたい画像処理エフェクトをユーザーが選択すると
 カスタムメードのシェーダーがそのたびに生成される、といった仕組みは可能だろう。
 この方法は万能ではないが、リアルタイムグラフィクスのためのエフェクト作成では
-[実際に使われている](http://www.youtube.com/watch?v=cQUn0Zeh-0Q)方法である。
+[実際に使われている](https://www.youtube.com/watch?v=cQUn0Zeh-0Q)方法である。
 
 ## フレームバッファの利用
 
@@ -189,7 +189,7 @@ WebGLは[クリッピング空間](webgl-fundamentals.html)からピクセルに
 を使って決められるようにした。
 
 ```
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 ...
 uniform float u_flipY;
 ...

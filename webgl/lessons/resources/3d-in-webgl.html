@@ -13,7 +13,7 @@ canvas { border: 1px solid black; }
 <p class="description"><a href="3d-in-canvas.html">compare to 3D in Canvas</a></p>
 </body>
 <!-- vertex shader -->
-<script id="2d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 uniform mat4 u_worldViewProjection;
 
@@ -22,7 +22,7 @@ void main() {
 }
 </script>
 <!-- fragment shader -->
-<script id="2d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-2d" type="x-shader/x-fragment">
 void main() {
    gl_FragColor = vec4(0,0,0,1);
 }
@@ -30,8 +30,8 @@ void main() {
 <!--
 for most samples webgl-utils only provides shader compiling/linking and
 canvas resizing because why clutter the examples with code that's the same in every sample.
-See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
-and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+See https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
 for webgl-utils, m3, m4, and webgl-lessons-ui.
 -->
 <script src="../../resources/webgl-utils.js"></script>
@@ -73,7 +73,7 @@ function main() {
   }
 
   var program = webglUtils.createProgramFromScripts(
-      gl, ["2d-vertex-shader", "2d-fragment-shader"]);
+      gl, ["vertex-shader-2d", "fragment-shader-2d"]);
   gl.useProgram(program);
 
   var positionLoc = gl.getAttribLocation(program, "a_position");

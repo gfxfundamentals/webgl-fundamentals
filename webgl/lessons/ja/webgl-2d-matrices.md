@@ -179,7 +179,7 @@ newY = y * sy;
 
 シェーダーを変更しよう。前回のシェーダーはこれである。
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;
@@ -202,7 +202,7 @@ newY = y * sy;
 
 新しいシェーダーはそれよりずいぶん簡単である。
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;
@@ -379,7 +379,7 @@ newY = y * sy;
 
 そうすれば、シェーダーコードをもっと単純化出来る。これは最新のシェーダーの全て
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform mat3 u_matrix;

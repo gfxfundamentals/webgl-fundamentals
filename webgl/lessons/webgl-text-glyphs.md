@@ -128,7 +128,7 @@ So to fix that the way this is usually done is to make a texture atlas
 that contains all the letters.  We went over what a texture atlas is when
 we talked about [texturing the 6 faces of a cube](webgl-3d-textures.html#texture-atlas).
 
-Searching the web I found [this simple open source font texture atlas](http://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta)
+Searching the web I found [this simple open source font texture atlas](https://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta)
 <img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../resources/8x8-font.png" />
 
 ```

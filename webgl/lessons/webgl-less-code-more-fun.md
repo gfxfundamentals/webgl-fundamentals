@@ -436,7 +436,7 @@ Feel free to use this style in your own code.  The functions
 are included in the
 [`webgl-utils.js`](https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js)
 file used by all the samples.  If you want something slightly more
-organized check out [TWGL.js](http://twgljs.org).
+organized check out [TWGL.js](https://twgljs.org).
 
 Next up, [drawing multiple things](webgl-drawing-multiple-things.html).
 

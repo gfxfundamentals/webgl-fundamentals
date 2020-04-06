@@ -179,14 +179,14 @@ script要素から読み込んでコンパイルし、プログラムにアタ�
 以上で、私の「最小のWebGLひな型コード(boilerplate code)」のおおまかな紹介を終わります。
 [`webgl-utils.js`のコードはここにあります](../resources/webgl-utils.js)。
 
-さらにしっかり構成されたライブラリに興味があるようでしたら[TWGL.js](http://twgljs.org)
+さらにしっかり構成されたライブラリに興味があるようでしたら[TWGL.js](https://twgljs.org)
 をチェックしてください。
 
 WebGLを複雑に見せているもう一つの要素は「シェーダーにデータを渡す手順」です。
 そのあたりの話題については「[WebGLの仕組み](webgl-how-it-works.html)」
 で紹介しています。
 これについては、「[少ないコード、大きな喜び](webgl-less-code-more-fun.html)」や、
-[TWGL](http://twgljs.org)も参考になるはずです。
+[TWGL](https://twgljs.org)も参考になるはずです。
 
 以上のほかにも、同様の理由で作られたスクリプトがあるので紹介しておきます。
 

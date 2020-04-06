@@ -54,7 +54,7 @@ TOC: WebGL 文字 - 使用纹理
 接着创建两个着色器
 
     // 设置着色程序
-    var fProgramInfo = createProgramInfo(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+    var fProgramInfo = createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
     var textProgramInfo = createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
 
 创建文字纹理

@@ -183,7 +183,7 @@ newY = y * sy;
 이제 shader를 바꿔봅시다.
 기존 shader는 이렇게 되어 있는데
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;
@@ -206,7 +206,7 @@ newY = y * sy;
 
 새로운 shader는 훨씬 간단합니다.
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;
@@ -383,7 +383,7 @@ newY = y * sy;
 이제 shader를 더 단순하게 할 수 있습니다.
 여기 완전히 새로운 vertex shader 입니다.
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform mat3 u_matrix;

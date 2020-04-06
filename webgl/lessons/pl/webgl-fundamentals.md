@@ -23,7 +23,7 @@ jest Twoje płótno. Poniżej jest prosty przykład pokazujący WebGL w jego naj
     var gl = canvas.getContext("experimental-webgl");
 
     // skonfiguruj program GLSL
-    var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
+    var program = createProgramFromScripts(gl, ["vertex-shader-2d", "fragment-shader-2d"]);
     gl.useProgram(program);
 
     // sprawdź pozycję wierzchołków.
@@ -51,7 +51,7 @@ jest Twoje płótno. Poniżej jest prosty przykład pokazujący WebGL w jego naj
 
 Poniżej są oba cieniowania
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     void main() {
@@ -59,7 +59,7 @@ Poniżej są oba cieniowania
     }
     </script>
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     void main() {
       gl_FragColor = vec4(0, 1, 0, 1);  // zielony
     }
@@ -82,7 +82,7 @@ W zakresie 2D prawdopodobnie wolałbyś pracować raczej z pikselami niż przest
 zmieńmy cieniowanie tak, żebyśmy mogli pracować z prostokątami w pikselach i mieli
 zapewnioną ich konwersję do przestrzeni obcinania.  Poniżej jest nowe cieniowanie wierzchołków
 
-    <script id="2d-vertex-shader" type="x-shader/x-vertex">
+    <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
 
     uniform vec2 u_resolution;
@@ -138,7 +138,7 @@ uczynimy kolor modyfikowalnym.
 
 Po pierwsze zmodyfikujemy cieniowanie fragmentów by uwzględniało kolor podany na wejściu.
 
-    <script id="2d-fragment-shader" type="x-shader/x-fragment">
+    <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
 
     +uniform vec4 u_color;
