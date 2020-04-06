@@ -247,7 +247,7 @@ abs(3.333 - 6.666) = 3.333
 クリップ空間でZが+1〜-1になるので簡単にZで割れる。
 Zは補正係数を掛けると調整出来るようになる。</p>
 <p>じゃあ、やってみょう！最初に頂点シェーダーを更新して、頂点位置を補正係数に掛けたZで割る。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;  // 補正係数
 ...
@@ -295,7 +295,7 @@ void main() {
 
 <p>実は、WebGLが<code>gl_Position</code>を割り当てた値を自動的にWで割っている。</p>
 <p>簡単に確認したければ、頂点シェーダーで手動でXとYを割る代わりに<code>gl_Position.w</code>を<code>zToDivideBy</code>に割り当てる。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -404,7 +404,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>さあ、また行列しか使ってない形に戻そう。</p>
 <p>まず頂点シェーダーを前の単純な形に戻す。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -447,7 +447,7 @@ void main() {
 <p><img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" /></p>
 <p>それは何でだろう？何で「F」が消えているか？XとYは-1〜+1の制限があると同じようにZも-1〜+1の制限がある。
 この消えているところはZが−１以下になっている場合である。</p>
-<p>その問題を解決する数学を細かく説明出来るけど、二次元の投影行列数学と同じように<a href="http://stackoverflow.com/a/28301213/128511">答えを導き出すこと出来るだろう</a>。Zをとって、何かを足して、何かにスケールすると、
+<p>その問題を解決する数学を細かく説明出来るけど、二次元の投影行列数学と同じように<a href="https://stackoverflow.com/a/28301213/128511">答えを導き出すこと出来るだろう</a>。Zをとって、何かを足して、何かにスケールすると、
 どの値の範囲からも-1〜+1出来る。</p>
 <p>それら全部を一つの行列で出来る。その上、補正係数の<code>fudgeFactor</code>は<code>fieldOfView</code>という視野も同じ行列で決められる。</p>
 <p>これはその行列の関数である。</p>
@@ -660,14 +660,14 @@ Xは同じように45から-150に移動した。前の投影行列空間は0〜
         </ul></ul>
 <ul>
   <li><a href="/docs/">Helper API Docs(英語)</a></li>
-  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
         </div>
     </div>
     <div class="lesson-comments">
-        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
-        <div>問題点/バグ? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+        <div>質問? <a href="https://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
 
         <div id="disqus_thread"></div>
         <script>

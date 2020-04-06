@@ -311,7 +311,7 @@ WebGL에서 색상은 0에서 1까지 사용합니다.</p>
 <p>먼저 HTML canvas 요소가 필요합니다.</p>
 <pre class="prettyprint"><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>그러면 JavaScript에서 찾을 수 있습니다.</p>
-<pre class="prettyprint"><code> var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code> var canvas = document.querySelector(&quot;#c&quot;);
 </code></pre><p>이제 WebGLRenderingContext을 만들 수 있습니다.</p>
 <pre class="prettyprint"><code> var gl = canvas.getContext(&quot;webgl&quot;);
  if (!gl) {
@@ -322,7 +322,7 @@ WebGL에서 색상은 0에서 1까지 사용합니다.</p>
 JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 수 있습니다.
 예를 들어, 여러 줄의 template 문자열을 연결한 걸 AJAX를 이용해 내려받을 수 있겠죠.
 또는 이 경우, JavaScript type이 아닌 script 태그를 넣어야 합니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
   // Attribute는 Buffer로부터 데이터를 받습니다.
   attribute vec4 a_position;
@@ -335,7 +335,7 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 
 &lt;/script&gt;
 
-&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
   // Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
   // mediump(중간 정도 정밀도)은 기본값으로 좋습니다.
@@ -365,8 +365,8 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
   gl.deleteShader(shader);
 }
 </code></pre><p>이제 우리는 두 Shader를 만드는 함수를 호출할 수 있습니다.</p>
-<pre class="prettyprint"><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
-var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot;).text;
+<pre class="prettyprint"><code>var vertexShaderSource = document.querySelector(&quot;#vertex-shader-2d&quot;).text;
+var fragmentShaderSource = document.querySelector(&quot;#fragment-shader-2d&quot;).text;
 
 var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -520,7 +520,7 @@ Canvas는 채널당 8bit이기 때문에 WebGL은 <code>[255, 0, 127, 255]</code
 <p>2D의 경우 clip 공간보다는 픽셀 단위로 작업해야 합니다.
 그러니까 픽셀 단위로 위치를 제공하고 clip 공간으로 변환할 수 있도록 shader를 수정해야 합니다.
 여기 새로운 vertex shader 입니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
 *  attribute vec2 a_position;
@@ -600,7 +600,7 @@ clip 공간에서 왼쪽 하단 모서리는 -1, -1 입니다.
 <p>사각형을 정의하는 코드를 함수로 만들어서 다른 크기의 사각형을 호출할 수 있도록 합시다.
 사각형을 그리는 동안 우리는 색상 설정이 가능하도록 해봅시다.</p>
 <p>먼저 fragment shader가 색상 uniform 입력을 가져오도록 만듭니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
   precision mediump float;
 
 +  uniform vec4 u_color;
@@ -855,7 +855,7 @@ var shaderSource = `
         </ul></ul>
 <ul>
   <li><a href="/docs/">도우미 API 문서</a></li>
-  <li><a href="http://twgljs.org">TWGL, 가벼운 WebGL 라이브러리</a></li>
+  <li><a href="https://twgljs.org">TWGL, 가벼운 WebGL 라이브러리</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
 
@@ -863,8 +863,8 @@ var shaderSource = `
     </div>
     <div class="lesson-comments">
         
-    <div>질문은? <a href="http://stackoverflow.com/questions/tagged/webgl">Stackoverflow</a>에서 물어봐주세요.</div>
-    <div>이슈/버그는? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div>질문은? <a href="https://stackoverflow.com/questions/tagged/webgl">Stackoverflow</a>에서 물어봐주세요.</div>
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
     <div class="lesson-comment-notes">
        코드 블록에 <b>&lt;pre&gt;&lt;code&gt;</b>코드는 여기에<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
     </div>

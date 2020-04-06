@@ -260,7 +260,7 @@ abs(3.333 - 6.666) = 3.333
 <p>Попробуем это на практике. Сначала изменим вершинный шейдер, чтобы в
 нём происходило деление на Z, которое предварительно было умножено на
 &quot;fudgeFactor&quot;.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -312,7 +312,7 @@ void main() {
 значения x,y,z,w и делит их на w автоматически.</p>
 <p>Мы можем воспользоваться этим очень легко, достаточно не выполнять деление
 в шейдере самим, а передать <code>zToDivideBy</code> в <code>gl_Position.w</code>.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -424,7 +424,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>Теперь изменим программу снова, чтобы использовать только матрицы.</p>
 <p>Сначала вернём обратно простой вершинный шейдер.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {

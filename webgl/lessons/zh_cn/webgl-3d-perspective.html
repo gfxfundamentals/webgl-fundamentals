@@ -250,7 +250,7 @@ abs(3.333 - 6.666) = 3.333
 fudgeFactor 因子和 Z 相乘，这样就可以调整缩放的程度。</p>
 <p>让我们来试试，首先修改顶点着色器，除以 Z 再乘以我们的
 &quot;fudgeFactor&quot; 因子。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -298,7 +298,7 @@ void main() {
 
 <p>事实上WebGL会将我们提供给 <code>gl_Position</code> 的  x,y,z,w 值自动除以 w 。</p>
 <p>我们可以通过修改着色器来证明，用 <code>zToDivideBy</code> 代替 <code>gl_Position.w</code></p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -407,7 +407,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>我们来修改代码，使用这个矩阵。</p>
 <p>首先将顶点着色器还原，又变成简单的样子</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {

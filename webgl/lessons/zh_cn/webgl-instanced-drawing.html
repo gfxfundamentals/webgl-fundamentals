@@ -221,7 +221,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <a href="webgl-3d-orthographic.html">正射投影</a>
 这篇文章中的结尾部分。我们先来看下面两个着色器的代码。</p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- 顶点着色器 --&gt;
-&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 uniform mat4 matrix;
 
@@ -233,7 +233,7 @@ void main() {
 </code></pre>
 <p>and</p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- 片元着色器 --&gt;
-&lt;script id=&quot;3d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 uniform vec4 color;
@@ -249,7 +249,7 @@ void main() {
 <p>要进行绘制我们得先编译着色器并连接为一个program，
 然后再找到所有attribute和uniform的地址。</p>
 <pre class="prettyprint"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
-    gl, [&#39;3d-vertex-shader&#39;, &#39;3d-fragment-shader&#39;]);
+    gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
 const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 const colorLoc = gl.getUniformLocation(program, &#39;color&#39;);
@@ -359,7 +359,7 @@ attribute，然后告诉WebGL只有在绘制下一个实例的时候才迭代到
 <p>Let&#39;s do it!</p>
 <p>第一件要做的事是启用这项可选的WebGL拓展。它叫做
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays"><code>ANGLE_instanced_arrays</code></a>。</p>
-<pre class="prettyprint"><code class="lang-js">const canvas = document.getElementById(&#39;canvas&#39;);
+<pre class="prettyprint"><code class="lang-js">const canvas = document.querySelector(&#39;#canvas&#39;);
 const gl = canvas.getContext(&#39;webgl&#39;);
 if (!gl) {
   return;
@@ -372,7 +372,7 @@ if (!gl) {
 </code></pre>
 <p>接下来我们改一下这些着色器，用attribute给<code>matrix</code>和<code>color</code>提供数据。</p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- 顶点着色器 --&gt;
-&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 -uniform mat4 matrix;
 +attribute vec4 color;
@@ -391,7 +391,7 @@ void main() {
 </code></pre>
 <p>and </p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- 片元着色器 --&gt;
-&lt;script id=&quot;3d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 -uniform vec4 color;
@@ -408,7 +408,7 @@ void main() {
 把颜色传递到片元着色器。</p>
 <p>然后我们需要找到所有attribute的位置。</p>
 <pre class="prettyprint"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
-    gl, [&#39;3d-vertex-shader&#39;, &#39;3d-fragment-shader&#39;]);
+    gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
 const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 -const colorLoc = gl.getUniformLocation(program, &#39;color&#39;);
@@ -563,7 +563,7 @@ ext.vertexAttribDivisorANGLE(colorLoc, 1);
 这可能会引起一些性能问题。有个更好的办法是给顶点着色器添加一到两个
 uniform来储存这些矩阵。</p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- 顶点着色器 --&gt;
-&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 attribute vec4 color;
 attribute mat4 matrix;

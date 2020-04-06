@@ -229,7 +229,7 @@ void main() {
    v_texCoord = a_texCoord;
 }
 </code></pre><p>Далее говорим фрагментному шейдеру, чтобы он брал цвета из текстуры.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // наша текстура
@@ -309,7 +309,7 @@ gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 </p>
 <p>А что если нам нужна обработка изображений, где мы принимаем в расчёт другие пиксели? Так как в WebGL идёт обращение к текстуре через текстурные координаты, которые от 0.0 до 1.0, мы можем вычислить, сколько занимает 1 пиксель через несложную математику <code>onePixel = 1.0 / textureSize</code>.</p>
 <p>Вот пример фрагментного шейдера, который берёт среднее значение каждого пикселя текстуры и его левого и правого соседа:</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // наша текстура
@@ -350,7 +350,7 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 </p>
 <p>Итак, теперь мы знаем, как брать значение других пикселей, теперь применим ядро свёртки, чтобы выполнить распространённые методы обработки изображений. Мы будем использовать ядро 3x3. Ядро свёртки - это просто матрица 3х3, где каждое значение в матрице означает, на сколько умножить 8 пикселей, находящихся вокруг пикселя, который мы отрисовываем. Затем мы делим результат на сумму всех значений ядра или на 1, смотря что больше. <a href="https://docs.gimp.org/2.6/en/plug-in-convmatrix.html">Вот довольно неплохая статья на этот счёт</a>. А <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">вот ещё одна статья</a>, показывающая, как написать код, задающий ядро свёртки на C++.</p>
 <p>В нашем случае мы планируем выполнить ту же работу в шейдере, поэтому вот код фрагментного шейдера.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // наша текстура

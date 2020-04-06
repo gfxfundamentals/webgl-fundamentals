@@ -14,7 +14,7 @@ Get vertices from a texture instead of a buffer.
 <canvas id="canvas"></canvas>
 </body>
 <!-- vertex shader -->
-<script id="3d-vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec2 positionAndTexcoordIndices;
 
 uniform sampler2D positionTexture;
@@ -54,7 +54,7 @@ void main() {
 }
 </script>
 <!-- fragment shader -->
-<script id="3d-fragment-shader" type="x-shader/x-fragment">
+<script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
 // Passed in from the vertex shader.
@@ -70,8 +70,8 @@ void main() {
 <!--
 for most samples webgl-utils only provides shader compiling/linking and
 canvas resizing because why clutter the examples with code that's the same in every sample.
-See http://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
-and http://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+See https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
 for webgl-utils, m3, m4, and webgl-lessons-ui.
 -->
 <script src="resources/webgl-utils.js"></script>
@@ -82,7 +82,7 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
-  const canvas = document.getElementById("canvas");
+  const canvas = document.querySelector("#canvas");
   const gl = canvas.getContext("webgl");
   if (!gl) {
     return;
@@ -94,7 +94,7 @@ function main() {
   }
 
   // setup GLSL program
-  const program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);
+  const program = webglUtils.createProgramFromScripts(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
 
   // look up where the vertex data needs to go.
   const posTexIndexLoc = gl.getAttribLocation(

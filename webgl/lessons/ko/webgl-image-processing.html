@@ -236,7 +236,7 @@ void main() {
   v_texCoord = a_texCoord;
 }
 </code></pre><p>그런 다음 texture의 색상을 찾기 위해 fragment shader를 제공합니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // texture
@@ -323,7 +323,7 @@ gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 <p>만약 실제로 다른 픽셀들을 보는 이미지 처리를 원한다면 어떻게 해야 할까요?
 WebGL은 0.0에서 1.0사이 좌표를 가진 texture를 참조하므로 간단한 식(<code>onePixel = 1.0 / textureSize</code>)으로 1픽셀 당 얼마나 이동해야 하는지 계산할 수 있습니다.</p>
 <p>이건 texture에서 각 픽셀의 왼쪽/오른쪽 픽셀을 평균화하는 fragment shader 입니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // texture
@@ -368,9 +368,9 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 convolution kernel은 렌더링할 때 각 항목이 주위의 픽셀 8개에 몇을 곱할건지 나타내는 3x3 행렬입니다.
 그런 다음 그 결과를 kernel의 가중치(kernel에 있는 모든 값들의 합) 또는 1.0 중 더 큰 값으로 나눕니다.
 <a href="https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html">여기에 꽤 좋은 글이 있습니다</a>.
-그리고 <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">여기 C++로 직접 작성하면 어떤지 실제 코드를 보여주는 또 다른 글입니다</a>.</p>
+그리고 <a href="https://www.codeproject.com/KB/graphics/ImageConvolution.aspx">여기 C++로 직접 작성하면 어떤지 실제 코드를 보여주는 또 다른 글입니다</a>.</p>
 <p>우리는 shader에서 작업을 수행하므로 여기 새로운 fragment shader가 있습니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // texture
@@ -617,7 +617,7 @@ v_는  vertex shader에서 fragment shader로 전달된 값이면서 그려진 �
         </ul></ul>
 <ul>
   <li><a href="/docs/">도우미 API 문서</a></li>
-  <li><a href="http://twgljs.org">TWGL, 가벼운 WebGL 라이브러리</a></li>
+  <li><a href="https://twgljs.org">TWGL, 가벼운 WebGL 라이브러리</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
 
@@ -625,8 +625,8 @@ v_는  vertex shader에서 fragment shader로 전달된 값이면서 그려진 �
     </div>
     <div class="lesson-comments">
         
-    <div>질문은? <a href="http://stackoverflow.com/questions/tagged/webgl">Stackoverflow</a>에서 물어봐주세요.</div>
-    <div>이슈/버그는? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div>질문은? <a href="https://stackoverflow.com/questions/tagged/webgl">Stackoverflow</a>에서 물어봐주세요.</div>
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
     <div class="lesson-comment-notes">
        코드 블록에 <b>&lt;pre&gt;&lt;code&gt;</b>코드는 여기에<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
     </div>

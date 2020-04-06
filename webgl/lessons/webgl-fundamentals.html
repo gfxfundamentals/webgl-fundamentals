@@ -323,7 +323,7 @@ void main() {
 <p>First we need an HTML canvas element</p>
 <pre class="prettyprint"><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>Then in JavaScript we can look that up</p>
-<pre class="prettyprint"><code> var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code> var canvas = document.querySelector(&quot;#c&quot;);
 </code></pre><p>Now we can create a WebGLRenderingContext</p>
 <pre class="prettyprint"><code> var gl = canvas.getContext(&quot;webgl&quot;);
  if (!gl) {
@@ -333,7 +333,7 @@ void main() {
 You can create your GLSL strings any way you normally create strings in JavaScript: by concatenating,
 by using AJAX to download them, by using multiline template strings. Or in this case, by
 putting them in non-JavaScript typed script tags.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
   // an attribute will receive data from a buffer
   attribute vec4 a_position;
@@ -348,7 +348,7 @@ putting them in non-JavaScript typed script tags.</p>
 
 &lt;/script&gt;
 
-&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
   // fragment shaders don&#39;t have a default precision so we need
   // to pick one. mediump is a good default
@@ -379,8 +379,8 @@ what is happening.</p>
   gl.deleteShader(shader);
 }
 </code></pre><p>We can now call that function to create the 2 shaders</p>
-<pre class="prettyprint"><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
-var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot;).text;
+<pre class="prettyprint"><code>var vertexShaderSource = document.querySelector(&quot;#vertex-shader-2d&quot;).text;
+var fragmentShaderSource = document.querySelector(&quot;#fragment-shader-2d&quot;).text;
 
 var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -530,7 +530,7 @@ be to the right of that.</p>
 <p>For 2D stuff you would probably rather work in pixels than clip space so
 let&#39;s change the shader so we can supply the position in pixels and have
 it convert to clip space for us. Here&#39;s the new vertex shader</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
 *  attribute vec2 a_position;
@@ -612,7 +612,7 @@ we can just flip the clip space y coordinate.</p>
 we can call it for different sized rectangles. While we&#39;re at it
 we&#39;ll make the color settable.</p>
 <p>First we make the fragment shader take a color uniform input.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
   precision mediump float;
 
 +  uniform vec4 u_color;
@@ -876,15 +876,15 @@ use multiline template literals or you might want to use <a href="https://babelj
         </ul></ul>
 <ul>
   <li><a href="/docs/">Helper API Docs</a></li>
-  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
         </div>
     </div>
     <div class="lesson-comments">
         
-    <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
-    <div>Issue/Bug? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+    <div>Questions? <a href="https://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+    <div>Issue/Bug? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
     <div class="lesson-comment-notes">
        Use <b>&lt;pre&gt;&lt;code&gt;</b>code goes here<b>&lt;/code&gt;&lt;/pre&gt;</b> for code blocks
     </div>

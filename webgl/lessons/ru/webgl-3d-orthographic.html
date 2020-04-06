@@ -227,7 +227,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 по-прежнему будем использовать &#39;F&#39;, но на этот раз это будет &#39;F&#39; в 3D.</p>
 <p>Первым делом нам нужно поменять вершинный шейдер для работы в 3D.
 Вот старый вершинный шейдер:</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -238,7 +238,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>А вот новый:</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -499,7 +499,7 @@ function setGeometry(gl) {
 атрибут в вершинный шейдер и заведём varying-переменную для передачи значения
 из вершинного во фрагментный шейдер.</p>
 <p>Вот новый вершинный шейдер:</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -516,7 +516,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Во фрагментном шейдере нам нужно использовать переданный цвет.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +// Передаётся из вершинного шейдера

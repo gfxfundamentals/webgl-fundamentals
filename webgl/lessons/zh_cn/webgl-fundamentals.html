@@ -305,7 +305,7 @@ void main() {
 <p>首先我们需要一个HTML中的canvas（画布）对象</p>
 <pre class="prettyprint"><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>然后可以用JavaScript获取它</p>
-<pre class="prettyprint"><code> var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code> var canvas = document.querySelector(&quot;#c&quot;);
 </code></pre><p>现在我们创建一个WebGL渲染上下文（WebGLRenderingContext）</p>
 <pre class="prettyprint"><code> var gl = canvas.getContext(&quot;webgl&quot;);
  if (!gl) {
@@ -314,7 +314,7 @@ void main() {
 </code></pre><p>现在我们需要编译着色器对然后提交到GPU，先让我们通过字符串获取它们。
 你可以利用JavaScript中创建字符串的方式创建GLSL字符串：用串联的方式（concatenating），
 用AJAX下载，用多行模板数据。或者在这个例子里，将它们放在非JavaScript类型的标签中。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
   // 一个属性变量，将会从缓冲中获取数据
   attribute vec4 a_position;
@@ -328,7 +328,7 @@ void main() {
 
 &lt;/script&gt;
 
-&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
   // 片断着色器没有默认精度，所以我们需要设置一个精度
   // mediump是一个不错的默认值，代表“medium precision”（中等精度）
@@ -359,8 +359,8 @@ function createShader(gl, type, source) {
   gl.deleteShader(shader);
 }
 </code></pre><p>现在我们可以使用以上方法创建两个着色器</p>
-<pre class="prettyprint"><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
-var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot;).text;
+<pre class="prettyprint"><code>var vertexShaderSource = document.querySelector(&quot;#vertex-shader-2d&quot;).text;
+var fragmentShaderSource = document.querySelector(&quot;#fragment-shader-2d&quot;).text;
 
 var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -500,7 +500,7 @@ gl.drawArrays(primitiveType, offset, count);
 <p>对于描述二维空间中的物体，比起裁剪空间坐标你可能更希望使用屏幕像素坐标。
 所以我们来改造一下顶点着色器，让我们提供给它像素坐标而不是裁剪空间坐标。
 这是我们新的顶点着色器</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
 *  attribute vec2 a_position;
@@ -576,7 +576,7 @@ gl.drawArrays(primitiveType, offset, count);
 <p>让我们来定义一个可以生成矩形的方法，这样我们就可以调用它定义形状不一的多个矩形。
 同时我们需要矩形的颜色是可设置的。</p>
 <p>首先我们定义一个片断着色器，可以通过全局变量接收自定义颜色。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
   precision mediump float;
 
 +  uniform vec4 u_color;

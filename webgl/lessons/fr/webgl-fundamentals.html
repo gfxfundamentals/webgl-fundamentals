@@ -223,7 +223,7 @@ de projection, et un shader de pixel (on dit aussi shader de fragment), qui va f
 <p>Dans l&#39;espace de projection, les coordonnées vont toujours de -1 à +1 quelle que soit la taille du canvas.
 Voici un simple exemple pour illustrer un code WebGL dans sa forme la plus simple.</p>
 <pre class="prettyprint"><code>// Création du contexte WebGL
-var canvas = document.getElementById(&quot;canvas&quot;);
+var canvas = document.querySelector(&quot;#canvas&quot;);
 var gl = canvas.getContext(&quot;webgl&quot;) || canvas.getContext(&quot;experimental-webgl&quot;);
 
 // Création d&#39;un programme
@@ -282,7 +282,7 @@ parce que WebGL n&#39;est qu&#39;une interface de pixelisation</em>.</p>
 <p>Pour de la 2D on travaillera plutôt en pixels qu&#39;en espace de projection, donc changeons le shader pour
 pouvoir fournir des rectangles en pixels et les faire convertir en espace de projection à notre place.
 Voici le nouveau shader de vertex</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -571,14 +571,14 @@ nécessaire à presque tout programme WebGL.
         </ul></ul>
 <ul>
   <li><a href="/docs/">Aide pour la doc de l'API</a></li>
-  <li><a href="http://twgljs.org">TWGL, une librairie de base pour WebGL</a></li>
+  <li><a href="https://twgljs.org">TWGL, une librairie de base pour WebGL</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
         </div>
     </div>
     <div class="lesson-comments">
-        <div>Une question ? <a href="http://stackoverflow.com/questions/tagged/webgl">Demander sur stackoverflow</a>.</div>
-        <div>Un problème ? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">Signaler sur github</a>.</div>
+        <div>Une question ? <a href="https://stackoverflow.com/questions/tagged/webgl">Demander sur stackoverflow</a>.</div>
+        <div>Un problème ? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">Signaler sur github</a>.</div>
 
         <div id="disqus_thread"></div>
         <script>

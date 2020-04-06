@@ -244,7 +244,7 @@ void main() {
 }
 </code></pre><p>次は、フラグメントシェーダーを変更する。
 「描くべき色を、テクスチャを参照して判断する」ように変更する。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // これが今回使うテクスチャ
@@ -334,7 +334,7 @@ WebGLはテクスチャを参照する際、0.0から1.0の値を取る「テク
 元画像で「１ピクセル」移動するためにテクスチャ座標の数値をどれだけ移動すれば良いかは、
 <code>onePixel = 1.0 / textureSize</code>といった計算で求めることができる。</p>
 <p>これは「左右１ピクセルを参照してその平均の色で描く」というフラグメントシェーダーである。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 今回使うテクスチャ
@@ -385,10 +385,10 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 <p>「畳み込み行列」について、ここではこれ以上の説明はしないが、興味があれば
 <a href="https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html">わかりやすい記事がある</a>
 (<a href="https://docs.gimp.org/2.10/ja/gimp-filter-convolution-matrix.html">日本語版</a>)ので、参考にするとよいだろう。
-また、<a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">この記事</a>では
+また、<a href="https://www.codeproject.com/KB/graphics/ImageConvolution.aspx">この記事</a>では
 「畳み込み行列」をC++で実装したコードを見ることができる。</p>
 <p>フラグメントシェーダーで「畳み込み行列」を実装すると、このようになる。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 今回使うテクスチャ
@@ -652,14 +652,14 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
         </ul></ul>
 <ul>
   <li><a href="/docs/">Helper API Docs(英語)</a></li>
-  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
         </div>
     </div>
     <div class="lesson-comments">
-        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
-        <div>問題点/バグ? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+        <div>質問? <a href="https://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
 
         <div id="disqus_thread"></div>
         <script>

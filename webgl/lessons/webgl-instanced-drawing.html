@@ -223,7 +223,7 @@ same thing.</p>
 the end of <a href="webgl-3d-orthographic.html">the article on orthographic projection</a>
 we start with these 2 shaders</p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- vertex shader --&gt;
-&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 uniform mat4 matrix;
 
@@ -235,7 +235,7 @@ void main() {
 </code></pre>
 <p>and </p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- fragment shader --&gt;
-&lt;script id=&quot;3d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 uniform vec4 color;
@@ -252,7 +252,7 @@ a color we pass in via a uniform.</p>
 <p>To draw we need to compile the shaders, link them together
 and look up the locations of the attributes and uniforms.</p>
 <pre class="prettyprint"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
-    gl, [&#39;3d-vertex-shader&#39;, &#39;3d-fragment-shader&#39;]);
+    gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
 const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 const colorLoc = gl.getUniformLocation(program, &#39;color&#39;);
@@ -372,7 +372,7 @@ tell WebGL, only advance to the next value once per instance.</p>
 <p>The first thing we need to do is check for and enable this
 optional feature of WebGL. It&#39;s called
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays"><code>ANGLE_instanced_arrays</code></a>.</p>
-<pre class="prettyprint"><code class="lang-js">const canvas = document.getElementById(&#39;canvas&#39;);
+<pre class="prettyprint"><code class="lang-js">const canvas = document.querySelector(&#39;#canvas&#39;);
 const gl = canvas.getContext(&#39;webgl&#39;);
 if (!gl) {
   return;
@@ -386,7 +386,7 @@ if (!gl) {
 <p>Next we&#39;ll change the shaders to use attributes for <code>matrix</code>
 and <code>color</code> instead of uniforms.</p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- vertex shader --&gt;
-&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 -uniform mat4 matrix;
 +attribute vec4 color;
@@ -405,7 +405,7 @@ void main() {
 </code></pre>
 <p>and </p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- fragment shader --&gt;
-&lt;script id=&quot;3d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 -uniform vec4 color;
@@ -423,7 +423,7 @@ get the color from an attribute in the vertex shader
 and pass it to the fragment shader via a varying.</p>
 <p>Next we need to look up the locations of these attributes.</p>
 <pre class="prettyprint"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
-    gl, [&#39;3d-vertex-shader&#39;, &#39;3d-fragment-shader&#39;]);
+    gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
 const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 -const colorLoc = gl.getUniformLocation(program, &#39;color&#39;);
@@ -591,7 +591,7 @@ a view matrix we could add the calculation to JavaScript. That would
 mean more work for JavaScript. The more obvious way would be to add
 one or two more uniforms to the vertex shader.</p>
 <pre class="prettyprint"><code class="lang-html">&lt;!-- vertex shader --&gt;
-&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 attribute vec4 color;
 attribute mat4 matrix;
@@ -769,15 +769,15 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
         </ul></ul>
 <ul>
   <li><a href="/docs/">Helper API Docs</a></li>
-  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
         </div>
     </div>
     <div class="lesson-comments">
         
-    <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
-    <div>Issue/Bug? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+    <div>Questions? <a href="https://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+    <div>Issue/Bug? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
     <div class="lesson-comment-notes">
        Use <b>&lt;pre&gt;&lt;code&gt;</b>code goes here<b>&lt;/code&gt;&lt;/pre&gt;</b> for code blocks
     </div>

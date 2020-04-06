@@ -317,7 +317,7 @@ void main() {
 <p>Для начала нам понадобится HTML-элемент canvas</p>
 <pre class="prettyprint"><code> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>Далее получаем ссылку на него из JavaScript</p>
-<pre class="prettyprint"><code> var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code> var canvas = document.querySelector(&quot;#c&quot;);
 </code></pre><p>Теперь мы можем получить объект WebGLRenderingContext - контекст отрисовки WebGL</p>
 <pre class="prettyprint"><code> var gl = canvas.getContext(&quot;webgl&quot;);
  if (!gl) {
@@ -327,7 +327,7 @@ void main() {
 преобразовать их в строки. Строки для GLSL создаются так же, как и строки в JavaScript. Например, через конкатенацию,
 или используя AJAX для их загрузки, или используя шаблонные строки, ну или в нашем случае помещая строки в специальные
 теги с типом, не равным &quot;JavaScript&quot;</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
   // атрибут, который будет получать данные из буфера
   attribute vec4 a_position;
@@ -342,7 +342,7 @@ void main() {
 
 &lt;/script&gt;
 
-&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
   // фрагментные шейдеры не имеют точности по умолчанию, поэтому нам необходимо её
   // указать. mediump подойдёт для большинства случаев. Он означает &quot;средняя точность&quot;
@@ -373,8 +373,8 @@ void main() {
   gl.deleteShader(shader);
 }
 </code></pre><p>Теперь создадим 2 шейдера с помощью этой функции</p>
-<pre class="prettyprint"><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
-var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot;).text;
+<pre class="prettyprint"><code>var vertexShaderSource = document.querySelector(&quot;#vertex-shader-2d&quot;).text;
+var fragmentShaderSource = document.querySelector(&quot;#fragment-shader-2d&quot;).text;
 
 var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -528,7 +528,7 @@ gl.drawArrays(primitiveType, offset, count);
 координатах, нежели в координатах пространства отсечения, поэтому давайте изменим
 шейдер соответствующим образом, чтобы он мог конвертировать координаты за нас.
 Новый вершинный шейдер выглядит следующим образом</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
 *  attribute vec2 a_position;
@@ -612,7 +612,7 @@ y-координату пространства отсечения.</p>
 мы могли вызывать её для прямоугольников разного размера. И заодно
 сделаем, чтобы цвет можно было выбирать.</p>
 <p>Сначала сделаем фрагментный шейдер, который принимает цвет через uniform-переменную</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
   precision mediump float;
 
 +  uniform vec4 u_color;

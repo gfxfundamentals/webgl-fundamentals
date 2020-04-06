@@ -257,7 +257,7 @@ fudgeFactor to multiply Z before we divide we can adjust how much smaller
 things get for a given distance.</p>
 <p>Let&#39;s try it.  First let&#39;s change the vertex shader to divide by Z after
 we&#39;ve multiplied it by our &quot;fudgeFactor&quot;.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -307,7 +307,7 @@ what things used to look like before we added our divide by Z code.</p>
 our vertex shader and divides it by w automatically.</p>
 <p>We can prove this very easily by changing the shader and instead of doing
 the division ourselves, put <code>zToDivideBy</code> in <code>gl_Position.w</code>.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -418,7 +418,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>So, let&#39;s modify the program again to just use matrices.</p>
 <p>First let&#39;s put the vertex shader back. It&#39;s simple again</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -463,7 +463,7 @@ perspective and that WebGL conveniently does this divide by Z for us.</p>
 <p>What&#39;s going on?  Why is the F disappearing early?  Just like WebGL clips
 X and Y or +1 to -1 it also clips Z.  What we&#39;re seeing here is where Z &lt;
 -1.</p>
-<p>I could go into detail about the math to fix it but <a href="http://stackoverflow.com/a/28301213/128511">you can derive
+<p>I could go into detail about the math to fix it but <a href="https://stackoverflow.com/a/28301213/128511">you can derive
 it</a> the same way we did 2D
 projection.  We need to take Z, add some amount and scale some amount and
 we can make any range we want get remapped to the -1 to +1.</p>
@@ -720,15 +720,15 @@ Moving it -360 units in Z moves in inside the frustum. We also rotated it to be 
         </ul></ul>
 <ul>
   <li><a href="/docs/">Helper API Docs</a></li>
-  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
         </div>
     </div>
     <div class="lesson-comments">
         
-    <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
-    <div>Issue/Bug? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+    <div>Questions? <a href="https://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+    <div>Issue/Bug? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
     <div class="lesson-comment-notes">
        Use <b>&lt;pre&gt;&lt;code&gt;</b>code goes here<b>&lt;/code&gt;&lt;/pre&gt;</b> for code blocks
     </div>

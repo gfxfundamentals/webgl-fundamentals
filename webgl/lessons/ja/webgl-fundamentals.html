@@ -316,7 +316,7 @@ WebGLでは、色は０〜１で指定する。</p>
 <p>まずHTMLのCanvas要素が必要である</p>
 <pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>それをJavaScriptで調べられる</p>
-<pre class="prettyprint"><code>var canvas = document.getElementById(&quot;c&quot;);
+<pre class="prettyprint"><code>var canvas = document.querySelector(&quot;#c&quot;);
 </code></pre><p>それで<code>WebGLRenderingContext</code>を作成出来る</p>
 <pre class="prettyprint"><code> var gl = canvas.getContext(&quot;webgl&quot;);
  if (!gl) {
@@ -325,7 +325,7 @@ WebGLでは、色は０〜１で指定する。</p>
 </code></pre><p>そして先のシェーダーをコンパイルしてGPUにアップロードすることが必要なのでstringに入れることが必要である。
 GLSLのstringをする方法はいくつかある。文字列の連結とか、AJAXでダウンロードすることとか、複数行テンプレートstring(multiline template strings)とか。
 今回は、typeがJavaScriptではないscript要素に入れる方法をとる。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
   // バッファーからデータを取る属性
   attribute vec4 a_position;
@@ -339,7 +339,7 @@ GLSLのstringをする方法はいくつかある。文字列の連結とか、A
 
 &lt;/script&gt;
 
-&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
   // フラグメントシェーダーは既定の精度がないので選択することが必要である。
   // 「mediump」は一般的な既定の設定である。それは「中間の精度」の意味である。
@@ -374,8 +374,8 @@ GLSLのstringをする方法はいくつかある。文字列の連結とか、A
   gl.deleteShader(shader);
 }
 </code></pre><p>出来たら、その関数でシェーダー２つを作成出来る</p>
-<pre class="prettyprint"><code>var vertexShaderSource = document.getElementById(&quot;2d-vertex-shader&quot;).text;
-var fragmentShaderSource = document.getElementById(&quot;2d-fragment-shader&quot;).text;
+<pre class="prettyprint"><code>var vertexShaderSource = document.querySelector(&quot;#vertex-shader-2d&quot;).text;
+var fragmentShaderSource = document.querySelector(&quot;#fragment-shader-2d&quot;).text;
 
 var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -515,7 +515,7 @@ WebGLは<code>gl_Position</code>に割り当てられた３つの値で三角形
 <p>2次元のものならクリップ空間よりよく使われているピクセル空間の方が楽なので、<code>position</code>の座標を
 ピクセルで与えて、ピクセル座標からクリップ空間に自動で変換するように、シェーダーの計算の仕方を変更しよう。
 これは変更されたシェーダー：</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
 *  attribute vec2 a_position;
@@ -595,7 +595,7 @@ gl.drawArrays(primitiveType, offset, count);
 <p>四角形を定義している部分を関数にして、呼び出すときにサイズが設定出来るようにしよう。更に、描く色も設定出来る
 ようにする。</p>
 <p>まずフラグメントシェーダーを、色ユニフォームが使えるようにする。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
   precision mediump float;
 
 +  uniform vec4 u_color;
@@ -846,14 +846,14 @@ AJAXでダウンロードする方法もあるが、これは遅くて非同期�
         </ul></ul>
 <ul>
   <li><a href="/docs/">Helper API Docs(英語)</a></li>
-  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
         </div>
     </div>
     <div class="lesson-comments">
-        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
-        <div>問題点/バグ? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+        <div>質問? <a href="https://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
 
         <div id="disqus_thread"></div>
         <script>

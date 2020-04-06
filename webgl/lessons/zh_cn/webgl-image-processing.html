@@ -235,7 +235,7 @@ void main() {
    v_texCoord = a_texCoord;
 }
 </code></pre><p>然后用片断着色器寻找纹理上对应的颜色</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 纹理
@@ -317,7 +317,7 @@ gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 由于WebGL的纹理坐标范围是 0.0 到 1.0 ， 那我们可以简单计算出移动一个像素对应的距离，
 <code>onePixel = 1.0 / textureSize</code>。</p>
 <p>这个片断着色器将每个像素的值设置为与左右像素的均值。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 纹理
@@ -363,7 +363,7 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 <a href="https://docs.gimp.org/2.6/en/plug-in-convmatrix.html">这有一个不错的相关文章</a>，
 <a href="http://www.codeproject.com/KB/graphics/ImageConvolution.aspx">这里是C++实现的一些具体代码</a>。</p>
 <p>我们将在片断着色器中计算卷积，所以创建一个新的片断着色器。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 纹理

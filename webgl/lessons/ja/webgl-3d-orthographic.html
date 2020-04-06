@@ -223,7 +223,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>前回のサンプルを三次元に更新しよう！また「F」の図形を使うけど今回は三次元の「F」を使う。</p>
 <p>まず頂点シェーダーを三次元に更新しなければいけない。
 これは前のシェーダーである。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -234,7 +234,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>これは新しいシェーダーである。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -483,7 +483,7 @@ Zもピクセル単位で計算する。<code>width</code>のような値を<cod
 四角形ごとに別色をつかってみよう！その為に頂点シェーダーに属性を追加して、
 バリイングで頂点シェーダーからピクセルシェーダーに渡す。</p>
 <p>これは新しい頂点シェーダーである。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -500,7 +500,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>その色はピクセルシェーダーで使わなければいけない。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +// 頂点シェーダーに渡された色。
@@ -840,14 +840,14 @@ gl.vertexAttribPointer(
         </ul></ul>
 <ul>
   <li><a href="/docs/">Helper API Docs(英語)</a></li>
-  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
         </div>
     </div>
     <div class="lesson-comments">
-        <div>質問? <a href="http://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
-        <div>問題点/バグ? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+        <div>質問? <a href="https://stackoverflow.com/questions/tagged/webgl">stackoverflowで質問(英語)</a>.</div>
+        <div>問題点/バグ? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
 
         <div id="disqus_thread"></div>
         <script>

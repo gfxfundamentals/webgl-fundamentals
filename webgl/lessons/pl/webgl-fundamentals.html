@@ -224,11 +224,11 @@ zapewniające przekształcenie współrzędnych przestrzeni obcinania i cieniowa
 <p>Współrzędne przestrzeni obcinania zawsze przebiegają przedział od -1 do 1 bez względu na to jakiego rozmiaru
 jest Twoje płótno. Poniżej jest prosty przykład pokazujący WebGL w jego najprostszej formie.</p>
 <pre class="prettyprint"><code>// Pobierz kontekst WebGL
-var canvas = document.getElementById(&quot;canvas&quot;);
+var canvas = document.querySelector(&quot;#canvas&quot;);
 var gl = canvas.getContext(&quot;experimental-webgl&quot;);
 
 // skonfiguruj program GLSL
-var program = createProgramFromScripts(gl, [&quot;2d-vertex-shader&quot;, &quot;2d-fragment-shader&quot;]);
+var program = createProgramFromScripts(gl, [&quot;vertex-shader-2d&quot;, &quot;fragment-shader-2d&quot;]);
 gl.useProgram(program);
 
 // sprawdź pozycję wierzchołków.
@@ -254,7 +254,7 @@ gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 // rysuj
 gl.drawArrays(gl.TRIANGLES, 0, 6);
 </code></pre><p>Poniżej są oba cieniowania</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 void main() {
@@ -262,7 +262,7 @@ void main() {
 }
 &lt;/script&gt;
 
-&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 void main() {
   gl_FragColor = vec4(0, 1, 0, 1);  // zielony
 }
@@ -284,7 +284,7 @@ dla rasteryzacji</em>.</p>
 <p>W zakresie 2D prawdopodobnie wolałbyś pracować raczej z pikselami niż przestrzenią obcinania więc
 zmieńmy cieniowanie tak, żebyśmy mogli pracować z prostokątami w pikselach i mieli
 zapewnioną ich konwersję do przestrzeni obcinania.  Poniżej jest nowe cieniowanie wierzchołków</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -339,7 +339,7 @@ poprostu odwracamy współrzędną y.</p>
 będziemy mogli wywołać funkcję dla prostokątów o różnych rozmairach.  Przy tej okazji
 uczynimy kolor modyfikowalnym.</p>
 <p>Po pierwsze zmodyfikujemy cieniowanie fragmentów by uwzględniało kolor podany na wejściu.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +uniform vec4 u_color;
@@ -568,14 +568,14 @@ którego prawie każdy program WebGL potrzebuje.
         </ul></ul>
 <ul>
   <li><a href="/docs/">Dokumentacja Helper API</a></li>
-  <li><a href="http://twgljs.org">TWGL - zwięzła biblioteka wspomagająca WebGL</a></li>
+  <li><a href="https://twgljs.org">TWGL - zwięzła biblioteka wspomagająca WebGL</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
         </div>
     </div>
     <div class="lesson-comments">
-        <div>Masz pytania odnośnie WebGL? <a href="http://stackoverflow.com/questions/tagged/webgl">Zapytaj na platformie stackoverflow</a>.</div>
-        <div>Błędy w tłumaczeniu? <a href="http://github.com/vinci-mz/webgl-fundamentals/issues">Stwórz zgłoszenie na platformie github</a>.</div>
+        <div>Masz pytania odnośnie WebGL? <a href="https://stackoverflow.com/questions/tagged/webgl">Zapytaj na platformie stackoverflow</a>.</div>
+        <div>Błędy w tłumaczeniu? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">Stwórz zgłoszenie na platformie github</a>.</div>
 
         <div id="disqus_thread"></div>
         <script>

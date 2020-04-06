@@ -226,7 +226,7 @@ a 3x3 matrix. To do 3D we need 3D points (x, y, z) and a 4x4 matrix.</p>
 but this time a 3D &#39;F&#39;.</p>
 <p>The first thing we need to do is change the vertex shader to handle 3D.
 Here&#39;s the old vertex shader.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -237,7 +237,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>And here&#39;s the new one</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -551,7 +551,7 @@ coloring each rectangle a different color.  To do this we will add another
 attribute to our vertex shader and a varying to pass it from the vertex
 shader to the fragment shader.</p>
 <p>Here&#39;s the new vertex shader</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -568,7 +568,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>And we need to use that color in the fragment shader</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +// Passed in from the vertex shader.
@@ -943,15 +943,15 @@ we need for the matrix math to work.
         </ul></ul>
 <ul>
   <li><a href="/docs/">Helper API Docs</a></li>
-  <li><a href="http://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
         </div>
     </div>
     <div class="lesson-comments">
         
-    <div>Questions? <a href="http://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
-    <div>Issue/Bug? <a href="http://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+    <div>Questions? <a href="https://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+    <div>Issue/Bug? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
     <div class="lesson-comment-notes">
        Use <b>&lt;pre&gt;&lt;code&gt;</b>code goes here<b>&lt;/code&gt;&lt;/pre&gt;</b> for code blocks
     </div>

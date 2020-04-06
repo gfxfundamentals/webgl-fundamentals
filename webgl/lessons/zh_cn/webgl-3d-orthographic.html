@@ -221,7 +221,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 在三维中我们需要三维点 (x, y, z) 与 4x4 的矩阵相乘。</p>
 <p>让我们将上个例子改成三维的，这里会继续使用 F ，但是这次是三维的 &#39;F&#39; 。</p>
 <p>首先需要修改顶点着色器以支持三维处理，这是原顶点着色器，</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;2d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -232,7 +232,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>这是新着色器</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -485,7 +485,7 @@ function setGeometry(gl) {
 需要在顶点着色器中添加一个属性和一个可变量，
 将颜色值传到片断着色器中。</p>
 <p>这是新的顶点着色器</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -502,7 +502,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>然后在片断着色器中使用颜色</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;3d-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +// 从顶点着色器中传入
