@@ -89,7 +89,7 @@ and enable the extension is:
 function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
-  const canvas = document.getElementById('canvas');
+  const canvas = document.querySelector('#canvas');
   const gl = canvas.getContext('webgl');
   if (!gl) {
     return;

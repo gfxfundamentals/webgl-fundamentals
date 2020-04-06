@@ -139,7 +139,7 @@ First we need an HTML canvas element
 
 Then in JavaScript we can look that up
 
-     var canvas = document.getElementById("c");
+     var canvas = document.querySelector("#c");
 
 Now we can create a WebGLRenderingContext
 
@@ -204,8 +204,8 @@ what is happening.
 
 We can now call that function to create the 2 shaders
 
-    var vertexShaderSource = document.getElementById("2d-vertex-shader").text;
-    var fragmentShaderSource = document.getElementById("2d-fragment-shader").text;
+    var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
+    var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
 
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);

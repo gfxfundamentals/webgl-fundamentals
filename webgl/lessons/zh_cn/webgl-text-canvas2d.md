@@ -32,7 +32,7 @@ TOC: WebGL 文字 - 二维Canvas
 在初始化时找到文字画布并创建一个二维上下文。
 
     // 找到画布
-    var textCanvas = document.getElementById("text");
+    var textCanvas = document.querySelector("#text");
 
     // 创建一个二维上下文
     var ctx = textCanvas.getContext("2d");

@@ -21,7 +21,7 @@ const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
 let colors;
 
 function renderSceneGraph(root) {
-  const canvas = document.getElementById("c");
+  const canvas = document.querySelector("#c");
   const ctx = wrapCanvasRenderingContext2D(canvas.getContext("2d"));
   var g_update = true;
 

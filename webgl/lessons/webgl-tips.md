@@ -197,7 +197,7 @@ clearing the canvas.
 Taking the last example from [the article on animation](webgl-animation.html)
 
 ```js
-var canvas = document.getElementById("canvas");
+var canvas = document.querySelector("#canvas");
 -var gl = canvas.getContext("webgl");
 +var gl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
 ```

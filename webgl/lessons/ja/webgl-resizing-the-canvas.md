@@ -20,7 +20,7 @@ canvasの「**描画バッファーのサイズ**」を設定する方法は２�
 
 JavaScript側は、
 
-    var canvas = document.getElementById("c");
+    var canvas = document.querySelector("#c");
     canvas.width = 400;
     canvas.height = 300;
 

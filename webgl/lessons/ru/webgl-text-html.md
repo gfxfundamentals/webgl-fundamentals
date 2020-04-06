@@ -44,8 +44,8 @@ CSS, чтобы текст расположился сверху.
 чтобы в дальнейшем мы могли их менять.
 
     // получаем ссылки на элементы DOM
-    var timeElement = document.getElementById("time");
-    var angleElement = document.getElementById("angle");
+    var timeElement = document.querySelector("#time");
+    var angleElement = document.querySelector("#angle");
 
     // создаём текстовые узлы, чтобы сэкономить немного браузерного времени
     var timeNode = document.createTextNode("");
@@ -151,7 +151,7 @@ WebGL работает в браузере. Не забывайте исполь
 Нам осталось получить ссылку на divcontainer, создать div и добавить его.
 
     // получаем ссылку на divcontainer
-    var divContainerElement = document.getElementById("divcontainer");
+    var divContainerElement = document.querySelector("#divcontainer");
 
     // создаём div
     var div = document.createElement("div");

@@ -74,7 +74,7 @@ tdl.io.createLoadInfo = function(opt_request) {
  * function statusUpdate() {
  *   if (g_loadInfo) {
  *     var progress = g_loadInfo.getKnownProgressInfoSoFar();
- *     document.getElementById('loadstatus').innerHTML = progress.percent;
+ *     document.querySelector('#loadstatus').innerHTML = progress.percent;
  *   }
  * }
  * </pre>

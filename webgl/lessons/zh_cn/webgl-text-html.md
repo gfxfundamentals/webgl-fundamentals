@@ -38,8 +38,8 @@ TOC: WebGL 文字 - HTML
 在初始化时找到这些元素并设置需要的属性。
 
     // 找到需要用到的元素
-    var timeElement = document.getElementById("time");
-    var angleElement = document.getElementById("angle");
+    var timeElement = document.querySelector("#time");
+    var angleElement = document.querySelector("#angle");
 
     // 创建文字节点为浏览器节省一些时间
     var timeNode = document.createTextNode("");
@@ -132,7 +132,7 @@ TOC: WebGL 文字 - HTML
 所以现在需要找到divcontainer，创建 div 然后加在里面。
 
     // 找到 divcontainer
-    var divContainerElement = document.getElementById("divcontainer");
+    var divContainerElement = document.querySelector("#divcontainer");
 
     // 创建 div
     var div = document.createElement("div");

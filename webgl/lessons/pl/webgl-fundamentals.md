@@ -19,7 +19,7 @@ Współrzędne przestrzeni obcinania zawsze przebiegają przedział od -1 do 1 b
 jest Twoje płótno. Poniżej jest prosty przykład pokazujący WebGL w jego najprostszej formie.
 
     // Pobierz kontekst WebGL
-    var canvas = document.getElementById("canvas");
+    var canvas = document.querySelector("#canvas");
     var gl = canvas.getContext("experimental-webgl");
 
     // skonfiguruj program GLSL

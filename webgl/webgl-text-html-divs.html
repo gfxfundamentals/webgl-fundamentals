@@ -91,13 +91,13 @@ void main() {
 function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
-  var canvas = document.getElementById("canvas");
+  var canvas = document.querySelector("#canvas");
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
   }
 
-  var divContainerElement = document.getElementById("divcontainer");
+  var divContainerElement = document.querySelector("#divcontainer");
 
   // setup GLSL program
   var program = webglUtils.createProgramFromScripts(gl, ["3d-vertex-shader", "3d-fragment-shader"]);

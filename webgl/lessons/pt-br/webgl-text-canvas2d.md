@@ -30,7 +30,7 @@ Em seguida, configure o CSS para que a tela e o HTML se sobrepnham
 Agora procure a tela de texto no tempo de inicialização e crie um contexto 2D para isso.
 
     // look up the text canvas.
-    var textCanvas = document.getElementById("text");
+    var textCanvas = document.querySelector("#text");
 
     // make a 2D context for it
     var ctx = textCanvas.getContext("2d");

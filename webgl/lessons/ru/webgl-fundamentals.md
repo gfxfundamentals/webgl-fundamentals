@@ -133,7 +133,7 @@ WebGL затем может растеризовать различные при
 
 Далее получаем ссылку на него из JavaScript
 
-     var canvas = document.getElementById("c");
+     var canvas = document.querySelector("#c");
 
 Теперь мы можем получить объект WebGLRenderingContext - контекст отрисовки WebGL
 
@@ -198,8 +198,8 @@ WebGL затем может растеризовать различные при
 
 Теперь создадим 2 шейдера с помощью этой функции
 
-    var vertexShaderSource = document.getElementById("2d-vertex-shader").text;
-    var fragmentShaderSource = document.getElementById("2d-fragment-shader").text;
+    var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
+    var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
 
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);

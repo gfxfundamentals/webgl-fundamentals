@@ -188,7 +188,7 @@ optional feature of WebGL. It's called
 [`ANGLE_instanced_arrays`](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays).
 
 ```js
-const canvas = document.getElementById('canvas');
+const canvas = document.querySelector('#canvas');
 const gl = canvas.getContext('webgl');
 if (!gl) {
   return;

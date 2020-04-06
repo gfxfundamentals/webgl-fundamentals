@@ -37,7 +37,7 @@ Here's the code in three.js to display this
 
 <pre class="prettyprint showlinemods">
   // Setup WebGL.
-  var c = document.getElementById("c");
+  var c = document.querySelector("#c");
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(c.clientWidth, c.clientHeight);
   c.appendChild(renderer.domElement);

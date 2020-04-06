@@ -120,7 +120,7 @@ WebGL只关心两件事：裁剪空间中的坐标值和颜色值。使用WebGL�
 
 然后可以用JavaScript获取它
 
-     var canvas = document.getElementById("c");
+     var canvas = document.querySelector("#c");
 
 现在我们创建一个WebGL渲染上下文（WebGLRenderingContext）
 
@@ -183,8 +183,8 @@ WebGL只关心两件事：裁剪空间中的坐标值和颜色值。使用WebGL�
 
 现在我们可以使用以上方法创建两个着色器
 
-    var vertexShaderSource = document.getElementById("2d-vertex-shader").text;
-    var fragmentShaderSource = document.getElementById("2d-fragment-shader").text;
+    var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
+    var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
 
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);

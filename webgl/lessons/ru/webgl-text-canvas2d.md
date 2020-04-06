@@ -36,7 +36,7 @@ TOC: WebGL текст - Canvas 2D
 При инициализации получим ссылку на canvas с текстом и создадим контекст 2D.
 
     // получаем ссылку на canvas с текстом
-    var textCanvas = document.getElementById("text");
+    var textCanvas = document.querySelector("#text");
 
     // создаём контекст 2D
     var ctx = textCanvas.getContext("2d");

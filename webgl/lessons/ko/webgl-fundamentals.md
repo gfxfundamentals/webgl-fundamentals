@@ -129,7 +129,7 @@ WebGL에서 색상은 0에서 1까지 사용합니다.
 
 그러면 JavaScript에서 찾을 수 있습니다.
 
-     var canvas = document.getElementById("c");
+     var canvas = document.querySelector("#c");
 
 이제 WebGLRenderingContext을 만들 수 있습니다.
 
@@ -192,8 +192,8 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 
 이제 우리는 두 Shader를 만드는 함수를 호출할 수 있습니다.
 
-    var vertexShaderSource = document.getElementById("2d-vertex-shader").text;
-    var fragmentShaderSource = document.getElementById("2d-fragment-shader").text;
+    var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
+    var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
 
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);

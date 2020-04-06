@@ -37,7 +37,7 @@ TOC: WebGL - 2D и 3D библиотеки
 
 <pre class="prettyprint showlinemods">
   // настраиваем WebGL
-  var c = document.getElementById("c");
+  var c = document.querySelector("#c");
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(c.clientWidth, c.clientHeight);
   c.appendChild(renderer.domElement);

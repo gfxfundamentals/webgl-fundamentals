@@ -131,7 +131,7 @@ WebGLでは、色は０〜１で指定する。
 
 それをJavaScriptで調べられる
 
-    var canvas = document.getElementById("c");
+    var canvas = document.querySelector("#c");
 
 それで`WebGLRenderingContext`を作成出来る
 
@@ -198,8 +198,8 @@ GLSLのstringをする方法はいくつかある。文字列の連結とか、A
 
 出来たら、その関数でシェーダー２つを作成出来る
 
-    var vertexShaderSource = document.getElementById("2d-vertex-shader").text;
-    var fragmentShaderSource = document.getElementById("2d-fragment-shader").text;
+    var vertexShaderSource = document.querySelector("#2d-vertex-shader").text;
+    var fragmentShaderSource = document.querySelector("#2d-fragment-shader").text;
 
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);

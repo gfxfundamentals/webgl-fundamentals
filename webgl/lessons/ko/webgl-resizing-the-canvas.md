@@ -22,7 +22,7 @@ CSS는 canvas가 표시되는 크기를 결정합니다.
 
 JavaScript
 
-    var canvas = document.getElementById("c");
+    var canvas = document.querySelector("#c");
     canvas.width = 400;
     canvas.height = 300;
 

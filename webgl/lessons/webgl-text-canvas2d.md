@@ -37,7 +37,7 @@ Next setup the CSS so the the canvas and the HTML overlap
 Now look up the text canvas at init time and create a 2D context for it.
 
     // look up the text canvas.
-    var textCanvas = document.getElementById("text");
+    var textCanvas = document.querySelector("#text");
 
     // make a 2D context for it
     var ctx = textCanvas.getContext("2d");

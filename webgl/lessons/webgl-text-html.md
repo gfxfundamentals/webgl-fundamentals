@@ -45,8 +45,8 @@ Now look up those elements at init time and create or lookup the areas you want 
 change.
 
     // look up the elements we want to affect
-    var timeElement = document.getElementById("time");
-    var angleElement = document.getElementById("angle");
+    var timeElement = document.querySelector("#time");
+    var angleElement = document.querySelector("#angle");
 
     // Create text nodes to save some time for the browser.
     var timeNode = document.createTextNode("");
@@ -150,7 +150,7 @@ Finally `.floating-div` will be used for the positionable div we create.
 So now we need to look up the divcontainer, create a div and append it.
 
     // look up the divcontainer
-    var divContainerElement = document.getElementById("divcontainer");
+    var divContainerElement = document.querySelector("#divcontainer");
 
     // make the div
     var div = document.createElement("div");

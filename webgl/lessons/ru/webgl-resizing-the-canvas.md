@@ -19,7 +19,7 @@ TOC: Изменение размера Canvas в WebGL
 
 JavaScript
 
-    var canvas = document.getElementById("c");
+    var canvas = document.querySelector("#c");
     canvas.width = 400;
     canvas.height = 300;
 

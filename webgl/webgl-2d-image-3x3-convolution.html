@@ -90,7 +90,7 @@ function main() {
 function render(image) {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
-  var canvas = document.getElementById("canvas");
+  var canvas = document.querySelector("#canvas");
   var gl = canvas.getContext("webgl");
   if (!gl) {
     return;
@@ -247,7 +247,7 @@ function render(image) {
   var initialSelection = 'edgeDetect2';
 
   // Setup UI to pick kernels.
-  var ui = document.getElementById("ui");
+  var ui = document.querySelector("#ui");
   var select = document.createElement("select");
   for (var name in kernels) {
     var option = document.createElement("option");

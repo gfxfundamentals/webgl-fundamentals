@@ -18,7 +18,7 @@ Dans l'espace de projection, les coordonnées vont toujours de -1 à +1 quelle q
 Voici un simple exemple pour illustrer un code WebGL dans sa forme la plus simple.
 
     // Création du contexte WebGL
-    var canvas = document.getElementById("canvas");
+    var canvas = document.querySelector("#canvas");
     var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 
     // Création d'un programme
