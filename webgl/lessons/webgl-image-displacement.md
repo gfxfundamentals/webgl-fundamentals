@@ -193,7 +193,7 @@ here's an example: It's only displacing a single vertex a random amount instead 
 
 For the second one instead of displacing vertices you make a displacement texture, over time you reset that displacement back to 0 
 
-You can see an example of [fading things out here](http://stackoverflow.com/a/38407507/128511). If you took that sample and instead of drawing random square you draw under the mouse, then use that texture as a displacement to your main image. By displacement I mean normally you look up a texture in a fragment shader like this
+You can see an example of [fading things out here](https://stackoverflow.com/a/38407507/128511). If you took that sample and instead of drawing random square you draw under the mouse, then use that texture as a displacement to your main image. By displacement I mean normally you look up a texture in a fragment shader like this
 
     vec4 color = texture2D(someTexture, someTextureCoords);
 

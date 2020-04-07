@@ -111,4 +111,4 @@ note some troubles you'll likely run into.
 
 ---
 
-music: [DOCTOR VOX - Level Up](http://youtu.be/eUX39M_0MJ8)
+music: [DOCTOR VOX - Level Up](https://youtu.be/eUX39M_0MJ8)

@@ -35,7 +35,7 @@ You'd set `depthOffset` and `depthScale` to something like
 
 That assumes each value in the depth texture is less per depth change.
 
-As for how to draw in 2D in WebGL [see this article](http://webglfundamentals.org/webgl/lessons/webgl-2d-drawimage.html).
+As for how to draw in 2D in WebGL [see this article](https://webglfundamentals.org/webgl/lessons/webgl-2d-drawimage.html).
 
 Here's an example that seems to work. I generated the image because I'm too lazy to draw it in photoshop. Manually drawing depth values is pretty tedious. It assumes the furthest pixel in the image of depth values of 1, the next closest pixels have a depth value of 2, etc.
 
@@ -280,7 +280,7 @@ To save memory you could put the depth value in the alpha channel of the color t
 
 ---
 
-Unfortunately according to [webglstats.com](http://webglstats.com) only 75% of desktops and 0% of phones support `EXT_frag_depth`. Although WebGL2 requires support for `gl_FragDepth` and AFAIK most phones support `OpenGL ES 3.0` on which WebGL2 is based so in another couple of months most Android phones and most PCs will be getting WebGL2. iOS on the other hand, as usual, Apple is secret about when they will ship WebGL2 on iOS. The good news is they have publically announced they are adding WebGL2 to Webkit.
+Unfortunately according to [webglstats.com](https://webglstats.com) only 75% of desktops and 0% of phones support `EXT_frag_depth`. Although WebGL2 requires support for `gl_FragDepth` and AFAIK most phones support `OpenGL ES 3.0` on which WebGL2 is based so in another couple of months most Android phones and most PCs will be getting WebGL2. iOS on the other hand, as usual, Apple is secret about when they will ship WebGL2 on iOS. The good news is they have publically announced they are adding WebGL2 to Webkit.
 
 For systems that don't support WebGL2 or `EXT_frag_depth` on WebGL1 you could simulate `EXT_frag_depth` using vertex shaders. You'd pass the depth texture to a vertex shader and draw with `gl.POINTS`, one point per pixel. That way you can choose the depth of each point.
 
@@ -498,7 +498,7 @@ Here's an example
 
 Note that if it is too slow I don't actually think doing it in JavaScript in software is guaranteed to be too slow. You could use asm.js to make a renderer. You setup and manipulate the data for what goes where in JavaScript then call your asm.js routine to do software rendering.
 
-As an example [this demo is entirely software rendered in asm.js](http://www.lexaloffle.com/voxatron.php?page=demo) as is [this one](http://www.lexaloffle.com/bbs/?tid=736)
+As an example [this demo is entirely software rendered in asm.js](https://www.lexaloffle.com/voxatron.php?page=demo) as is [this one](https://www.lexaloffle.com/bbs/?tid=736)
 
 ---
 

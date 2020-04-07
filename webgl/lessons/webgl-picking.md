@@ -90,7 +90,7 @@ The code draws the scene twice. Once with each cube's color, again with each cub
     const cubeColors = [];
     const radius = 25;
 
-    // adapted from http://stackoverflow.com/a/26127012/128511
+    // adapted from https://stackoverflow.com/a/26127012/128511
     // used to space the cubes around the sphere
     function fibonacciSphere(samples, i) {
       const rnd = 1.;
@@ -451,7 +451,7 @@ We could also make it work using just a single pixel offscreen framebuffer and u
     const cubeColors = [];
     const radius = 25;
 
-    // adapted from http://stackoverflow.com/a/26127012/128511
+    // adapted from https://stackoverflow.com/a/26127012/128511
     // used to space the cubes around the sphere
     function fibonacciSphere(samples, i) {
       const rnd = 1.;

@@ -2,9 +2,9 @@ WebGL is a rasterization API. It just draws. It has no concept of "layers".
 
 You can achieve layers by every frame, drawing your first tilemap, then drawing your second tilemap on top of the first one. This is no different than the canvas 2D API.
 
-As for how to render a tilemap with just 2 triangles (or one even) [see this article](http://blog.tojicode.com/2012/07/sprite-tile-maps-on-gpu.html)
+As for how to render a tilemap with just 2 triangles (or one even) [see this article](https://blog.tojicode.com/2012/07/sprite-tile-maps-on-gpu.html)
 
-There is also in [this project](http://github.com/greggman/hft-boomboom) that uses the same technique but it also supports flipped and rotated tiles (by 90 degrees) and there's code to load maps from [Tiled](http://www.mapeditor.org/). Sorry there's no docs though. See [tilemap.js](https://github.com/greggman/hft-boomboom/blob/master/3rdparty/hft-utils/dist/tilemap.js) for the shader and code that draws a layer and [tiledloader.js](https://github.com/greggman/hft-boomboom/blob/master/3rdparty/hft-utils/dist/levelloader.js) for code that loads maps and tiles from Tiled.
+There is also in [this project](https://github.com/greggman/hft-boomboom) that uses the same technique but it also supports flipped and rotated tiles (by 90 degrees) and there's code to load maps from [Tiled](https://www.mapeditor.org/). Sorry there's no docs though. See [tilemap.js](https://github.com/greggman/hft-boomboom/blob/master/3rdparty/hft-utils/dist/tilemap.js) for the shader and code that draws a layer and [tiledloader.js](https://github.com/greggman/hft-boomboom/blob/master/3rdparty/hft-utils/dist/levelloader.js) for code that loads maps and tiles from Tiled.
 
 Let's start from basics. First if we just draw 2 rectangles the 2nd one (blue) is a "layer" over the first (red)
 
@@ -47,11 +47,11 @@ If we put static tilemap like images in each nothing changes except the content 
 
 Here's the first image
 
-![layer2](http://i.imgur.com/KTXDmsa.png)
+![layer2](https://i.imgur.com/KTXDmsa.png)
 
 And here's the second
 
-![layer2](http://i.imgur.com/3qVLkO5.png)
+![layer2](https://i.imgur.com/3qVLkO5.png)
 
 <!-- begin snippet: js hide: false console: true babel: false -->
 
@@ -59,9 +59,9 @@ And here's the second
 
     const ctx = document.querySelector("canvas").getContext("2d");
     const layer1 = new Image();
-    layer1.src = "http://i.imgur.com/KTXDmsa.png";
+    layer1.src = "https://i.imgur.com/KTXDmsa.png";
     const layer2 = new Image();
-    layer2.src = "http://i.imgur.com/3qVLkO5.png";
+    layer2.src = "https://i.imgur.com/3qVLkO5.png";
 
 
     function render(time) {
@@ -93,9 +93,9 @@ Again, no different in WebGL.
 
 Now you need to generate those image from a tilemap instead of statically loading them which is what the code linked does and the code below.
 
-Based on [this tileset](http://opengameart.org/content/platformer-tilesets)
+Based on [this tileset](https://opengameart.org/content/platformer-tilesets)
 
-![tileset](http://i.imgur.com/sz79FPd.png)
+![tileset](https://i.imgur.com/sz79FPd.png)
 
 <!-- begin snippet: js hide: false console: true babel: false -->
 
@@ -116,7 +116,7 @@ Based on [this tileset](http://opengameart.org/content/platformer-tilesets)
     const tileWidth = 32;
     const tileHeight = 32;
     const tiles = twgl.createTexture(gl, {
-      src: "http://i.imgur.com/sz79FPd.png",
+      src: "https://i.imgur.com/sz79FPd.png",
       crossOrigin: "",
       minMag: gl.NEAREST,
     });

@@ -56,7 +56,7 @@ If you have a sphere then you kind of know the position of each vertex is some d
 
 Note that this would actually slightly flare each cube since each of the points is at a slightly different place from the center. If you didn't want to flare the cube you'd need to pass in another attribute with the normal for each cube and use that * height. If you're just doing points like in the example you linked to then it should just work, no need for a `normal` attribute.
 
-Not sure any of that is helping. [These samples](http://webglsamples.org/google-io/2011/index.html) and the attached talk tries to cover a few things related to animating merged geometry.
+Not sure any of that is helping. [These samples](https://webglsamples.org/google-io/2011/index.html) and the attached talk tries to cover a few things related to animating merged geometry.
 
 For animating you can update `height` every frame for every cube that needs to be animated. You can also update its colors in another buffer. OR, you can also potentially just use a time stamp per cube/point and pass in the time to the shader. A simple example might be
 
@@ -173,7 +173,7 @@ Here's one example putting the 2 things together using cubes
     const cubeColors = [];
     const radius = 25;
 
-    // adapted from http://stackoverflow.com/a/26127012/128511
+    // adapted from https://stackoverflow.com/a/26127012/128511
     // used to space the cubes around the sphere
     function fibonacciSphere(samples, i) {
       const rnd = 1.;
@@ -461,6 +461,6 @@ It's up to you to figure out some math/code for however you want to animate. For
 
 You could also pass the highlight color into the shader and just use the timestamp to decide whether to use the cube's original color or the highlight. That would be no need to upload new colors.
 
-If you want the cube to do some fancier animation then use `animTime` or something like it as input into a function that computes a fancier animation. If you want the animation to be data based then use `animTime` to look up data from a row of a texture. In that row you could store colors (if you wanted to animate over specific colors). Or positions & orientations (if you wanted the cube to go to a specific place). You can see an example of lerping in a shader between 2 positions [here]((http://webglsamples.org/google-io/2011/lots-of-objects-google.html)) where one position is stored in an attribute and the other position is computed in a function.
+If you want the cube to do some fancier animation then use `animTime` or something like it as input into a function that computes a fancier animation. If you want the animation to be data based then use `animTime` to look up data from a row of a texture. In that row you could store colors (if you wanted to animate over specific colors). Or positions & orientations (if you wanted the cube to go to a specific place). You can see an example of lerping in a shader between 2 positions [here]((https://webglsamples.org/google-io/2011/lots-of-objects-google.html)) where one position is stored in an attribute and the other position is computed in a function.
 
 Really the sky's the limit. It's really up to you.

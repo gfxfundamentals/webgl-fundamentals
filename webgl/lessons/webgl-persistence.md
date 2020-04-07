@@ -1,6 +1,6 @@
 It's actually common it just redraw stuff which I went over here
 
-http://stackoverflow.com/questions/38339215/webgl-smoothly-fade-lines-out-of-canvas/38345958#38345958
+https://stackoverflow.com/questions/38339215/webgl-smoothly-fade-lines-out-of-canvas/38345958#38345958
 
 Redrawing stuff means you can keep some things from not fading out. For example if you're making a space shooting game and you only want explosions and missile trails to fade out but you don't want the spaceships and asteroids to fade out then you need to do it by redrawing everything and manually fading stuff out by drawn them while decreasing their alpha
 
@@ -25,9 +25,9 @@ Note you don't clear when you draw since you need the result to be left behind
 
 As for setting up framebuffers there's a tutorial here that might be useful
 
-http://webglfundamentals.org/webgl/lessons/webgl-image-processing-continued.html
+https://webglfundamentals.org/webgl/lessons/webgl-image-processing-continued.html
 
-Here's an example using [twgl](http://twgljs.org) since I'm too lazy for straight WebGL
+Here's an example using [twgl](https://twgljs.org) since I'm too lazy for straight WebGL
 
 <!-- begin snippet: js hide: false console: true babel: false -->
 

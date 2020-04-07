@@ -14,11 +14,11 @@ worked on use 3D data created by artists in a 3D modeling package like
 [Blender](https://www.blender.org/),
 [Maya](https://www.autodesk.com/products/maya/overview),
 [3DSMax](https://www.autodesk.com/products/3ds-max/overview),
-[ZBrush](http://pixologic.com/),
+[ZBrush](https://pixologic.com/),
 and I suppose soon all the
 [awesome](https://vr.google.com/blocks/)
 [VR](https://www.gravitysketch.com/vr/)
-[modeling](http://tvori.co/)
+[modeling](https://tvori.co/)
 [packages](https://www.oculus.com/medium/)
 that are making it easier than ever to make 3D data. Maybe in another article
 we'll cover an example of how to load some of that data.

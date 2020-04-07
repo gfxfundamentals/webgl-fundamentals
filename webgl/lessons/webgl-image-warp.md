@@ -6,7 +6,7 @@ Is there any reason to do this in WebGL? Sure, you can do stuff like that in Web
 
     var img = new Image();
     img.onload = start;
-    img.src = "http://i.imgur.com/v38pV.jpg";
+    img.src = "https://i.imgur.com/v38pV.jpg";
 
     function start() {
 
@@ -207,7 +207,7 @@ Here's a twgl version
     });
           
     var texture = twgl.createTexture(gl, { 
-      src: "http://i.imgur.com/v38pV.jpg",
+      src: "https://i.imgur.com/v38pV.jpg",
       crossOrigin: '',
     });
 

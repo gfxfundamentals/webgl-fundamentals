@@ -8,9 +8,9 @@ Description: How to draw low-res graphics
 
 There are many ways to do it. The easiest is just to render to a low res texture by attaching it a framebuffer and then render that texture to the canvas with texture filtering set to `NEAREST`.
 
-Here's a sample. It's using [TWGL](http://twgljs.org) which is not a framework, just a helper to make WebGL less verbose. See comments (and [docs](http://twgljs.org/docs/)) if you want to translate it to verbose raw webgl.
+Here's a sample. It's using [TWGL](https://twgljs.org) which is not a framework, just a helper to make WebGL less verbose. See comments (and [docs](https://twgljs.org/docs/)) if you want to translate it to verbose raw webgl.
 
-If you're new to webgl [I'd suggest starting here](http://webglfundamentals.org)
+If you're new to webgl [I'd suggest starting here](https://webglfundamentals.org)
 
 <!-- begin snippet: js hide: false console: true babel: false -->
 

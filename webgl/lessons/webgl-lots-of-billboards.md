@@ -138,7 +138,7 @@ Here's 100k quads
     }
 
     const tex = twgl.createTexture(gl, {
-      src: "http://i.imgur.com/weklTat.gif",
+      src: "https://i.imgur.com/weklTat.gif",
       crossOrigin: "",
       flipY: true,
     });
@@ -372,7 +372,7 @@ Now you need to put your world positions in a texture, you probably want a float
     }
 
     const tex = twgl.createTexture(gl, {
-      src: "http://i.imgur.com/weklTat.gif",
+      src: "https://i.imgur.com/weklTat.gif",
       crossOrigin: "",
       flipY: true,
     });

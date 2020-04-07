@@ -116,7 +116,7 @@ Hopefully you get the point. It's up to you to add whatever other data you want 
     void main() {
       vec4 position = mix(startPosition, endPosition, u_lerp);
 
-Otherwise there's nothing wrong with uploading every frame via `bufferData` or `bufferSubData`. [Here's an example](http://webglsamples.org/google-io/2011/10000-objects-optimized.html) from [this talk](http://webglsamples.org/google-io/2011/index.html) updating 10000 objects where JavaScript is computing the position of the objects and updating all 210596 vertex positions and uploading the values via `bufferData` every frame.
+Otherwise there's nothing wrong with uploading every frame via `bufferData` or `bufferSubData`. [Here's an example](https://webglsamples.org/google-io/2011/10000-objects-optimized.html) from [this talk](https://webglsamples.org/google-io/2011/index.html) updating 10000 objects where JavaScript is computing the position of the objects and updating all 210596 vertex positions and uploading the values via `bufferData` every frame.
 
 The big difference between uploading via bufferData and canvas/svg is that with WebGL you're removing a ton from your loops. Consider
 
