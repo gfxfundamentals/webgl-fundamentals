@@ -120,7 +120,7 @@ TOC: WebGL 文字 - 使用字形纹理
 我们在[给立方体 6 各面贴图](webgl-3d-textures.html#texture-atlas)
 的例子中讲到过纹理图集。
 
-我在网上找到了[一个简单的开源字体纹理图集](http://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta)。
+我在网上找到了[一个简单的开源字体纹理图集](https://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta)。
 <img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../resources/8x8-font.png" />
 
 ```

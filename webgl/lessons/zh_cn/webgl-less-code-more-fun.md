@@ -417,7 +417,7 @@ WebGL会自动设置 `w = 1`。所以这就意味着我们不能轻易推断出�
 你也可以在你的代码中使用这种风格，例子中使用的方法 `createUniformSetters`,
  `createAttributeSetters`, `createBufferInfoFromArrays`, `setUniforms`,
 和 `setBuffersAndAttributes` 都在 [`webgl-utils.js`](https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js)中。
-如果你想更有组织的使用，可以看看 [TWGL.js](http://twgljs.org)。
+如果你想更有组织的使用，可以看看 [TWGL.js](https://twgljs.org)。
 
 接下来，[绘制多个物体](webgl-drawing-multiple-things.html)。
 

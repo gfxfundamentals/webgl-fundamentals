@@ -283,7 +283,7 @@ function makeZToWMatrix(fudgeFactor) {
 和 -1 裁剪， Z也一样。我们看到的是 Z < -1 的情况。
 
 我可以从数学方法深入探讨并寻找解决办法，但是你可以
-[联想](http://stackoverflow.com/a/28301213/128511)
+[联想](https://stackoverflow.com/a/28301213/128511)
 二维中的的解决方法。我们需要获取 Z 值，然后加上一些量，
 缩放一些量，就可以将任意范围映射到 -1 到 +1 的范围内。
 

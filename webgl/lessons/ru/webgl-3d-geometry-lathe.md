@@ -9,8 +9,8 @@ TOC: WebGL 3D - Создание модели
 
 Однажды меня кто-то спросил, как сделать модель кегли для боулинга в WebGL.
 *Правильным* ответом было бы "Используйте программу для 3D-моделирования,
-наподобие [Blender](http://blender.org), [Maya](http://www.autodesk.com/products/maya/overview),
-[3D Studio Max](http://www.autodesk.com/products/3ds-max/overview),
+наподобие [Blender](https://blender.org), [Maya](https://www.autodesk.com/products/maya/overview),
+[3D Studio Max](https://www.autodesk.com/products/3ds-max/overview),
 [Cinema 4D](https://www.maxon.net/en/products/cinema-4d/overview/) и т.д.".
 Используйте её для моделирования кегли, затем экспортируйте модель и
 загрузите её в своём приложении. ([Относительно простым форматом
@@ -39,7 +39,7 @@ TOC: WebGL 3D - Создание модели
 
 Самой распространённой кривой в компьютерной графике, похоже,
 является кривая Безье. Если вы когда-либо редактировали кривую в
-[Adobe Illustrator](http://www.adobe.com/products/illustrator.html),
+[Adobe Illustrator](https://www.adobe.com/products/illustrator.html),
 или [Inkscape](https://inkscape.org/en/), или
 [Affinity Designer](https://affinity.serif.com/en-us/designer/),
 или в других похожих программах, то вы имели дело с кривой Безье.

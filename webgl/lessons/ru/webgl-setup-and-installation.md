@@ -4,8 +4,8 @@ TOC: WebGL Установка и настройка
 
 
 Технически, вам не нужно ничего, кроме браузера, чтобы начать разработку на WebGL.
-Зайдите на [jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/), [jsbin.com](http://jsbin.com)
-или [codepen.io](http://codepen.io/greggman/pen/YGQjVV) и просто начните выполнять уроки.
+Зайдите на [jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/), [jsbin.com](https://jsbin.com)
+или [codepen.io](https://codepen.io/greggman/pen/YGQjVV) и просто начните выполнять уроки.
 
 На всех указанных ресурсах при желании можно добавлять внешние скрипты через
 пару тегов `<script src="..."></script>`.

@@ -7,7 +7,7 @@ Title: Основы WebGL
 Здесь собраны абсолютно новые статьи, без устаревших идей, и они помогут вам
 полностью разобраться, чем на самом деле является WebGL и как он работает.
 
-Если вам интересен WebGL2, посмотрите на [webgl2fundamentals.org](http://webgl2fundamentals.org)
+Если вам интересен WebGL2, посмотрите на [webgl2fundamentals.org](https://webgl2fundamentals.org)
 
 {{{include "webgl/lessons/ru/toc.html"}}}
 

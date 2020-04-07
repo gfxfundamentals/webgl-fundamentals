@@ -4,7 +4,7 @@ TOC: WebGL 设置和安装
 
 
 事实上，开发WebGL只需要一个网页浏览器。
-你可以用[jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/)、[jsbin.com](http://jsbin.com)或[codepen.io](http://codepen.io/greggman/pen/YGQjVV)当本教程的学习环境。
+你可以用[jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/)、[jsbin.com](https://jsbin.com)或[codepen.io](https://codepen.io/greggman/pen/YGQjVV)当本教程的学习环境。
 
 如果你想在之前的网站里引用外部脚本，只需要添加一对`<script src="..."></script>`标签。
 
@@ -19,7 +19,7 @@ TOC: WebGL 设置和安装
 
 ## 使用一个简单易用的Web Server
 
-下一步你需要搭建一个简单的web服务器。我知道“web服务器”听起来很吓人，但搭建[web服务器实际上是非常简单的](http://games.greggman.com/game/saving-and-loading-files-in-a-web-page/)。
+下一步你需要搭建一个简单的web服务器。我知道“web服务器”听起来很吓人，但搭建[web服务器实际上是非常简单的](https://games.greggman.com/game/saving-and-loading-files-in-a-web-page/)。
 
 如果你使用的是Chrome浏览器，这有一个扩展[Servez](https://greggman.github.io/servez)可以当web服务器。
 

@@ -7,9 +7,9 @@ TOC: WebGL 三维几何加工
 这些东西并不是建议你要会做的，我只是认为通过这个话题能够让你对制作WebGL三维模型有一些理解。
 
 有人问我怎么在WebGL中制作一个保龄球瓶，**聪明**的回答是
-“使用一个三维建模工具例如[Blender](http://blender.org),
-[Maya](http://www.autodesk.com/products/maya/overview),
-[3D Studio Max](http://www.autodesk.com/products/3ds-max/overview),
+“使用一个三维建模工具例如[Blender](https://blender.org),
+[Maya](https://www.autodesk.com/products/maya/overview),
+[3D Studio Max](https://www.autodesk.com/products/3ds-max/overview),
 [Cinema 4D](https://www.maxon.net/en/products/cinema-4d/overview/), 等等”。
 使用它创建一个保龄球瓶，导出，读取点坐标([OBJ格式相对简单些](https://en.wikipedia.org/wiki/Wavefront_.obj_file))。
 
@@ -28,7 +28,7 @@ TOC: WebGL 三维几何加工
 构建出三角形网格。
 
 计算机中常用的曲线就是贝塞尔曲线，你可能在一些编辑器例如
-[Adobe Illustrator](http://www.adobe.com/products/illustrator.html) 或
+[Adobe Illustrator](https://www.adobe.com/products/illustrator.html) 或
 [Inkscape](https://inkscape.org/en/) 或
 [Affinity Designer](https://affinity.serif.com/en-us/designer/)
 中编辑过贝塞尔曲线。
