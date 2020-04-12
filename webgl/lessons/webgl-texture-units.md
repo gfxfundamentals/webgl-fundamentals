@@ -110,7 +110,7 @@ WebGL requires an implementation to support at least 8 texture units. You can qu
 are supported with
 
 ```js
-const maxTextureUnits = gl.getParameter(gl.AX_COMBINED_TEXTURE_IMAGE_UNITS);
+const maxTextureUnits = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 ```
 
 Note that vertex shaders and fragment shaders might have different limits
