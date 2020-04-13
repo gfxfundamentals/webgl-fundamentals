@@ -6,6 +6,7 @@ import {
 } from './utils.js';
 import {
   formatWebGLObject,
+  formatWebGLObjectOrCanvas,
   formatWebGLObjectOrDefaultVAO,
   getWebGLObjectInfo,
   getWebGLObjectInfoOrDefaultVAO,
@@ -49,9 +50,11 @@ export function updateStateTable(statesInfo, parent, queryFn, initial) {
     const cell = row.cells[1];
     const isNew = cell.textContent !== value.toString();
     cell.textContent = value;
-    // FIX: should put this data else were instead of guessing
     if (isNew) {
-      if (formatter === formatWebGLObject || formatter === formatWebGLObjectOrDefaultVAO) {
+      // FIX: should put this data else were instead of guessing
+      if (formatter === formatWebGLObject ||
+          formatter === formatWebGLObjectOrDefaultVAO ||
+          formatter === formatWebGLObjectOrCanvas) {
         const oldArrow = elemToArrowMap.get(cell);
         if (oldArrow) {
           arrowManager.remove(oldArrow);
