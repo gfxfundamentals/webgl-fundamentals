@@ -7,6 +7,7 @@ import {
   createTemplate,
   formatUniformValue,
   getColorForWebGLObject,
+  helpToMarkdown,
   setName,
 } from './utils.js';
 
@@ -110,6 +111,7 @@ export function createFramebufferDisplay(parent, name /*, webglObject */) {
       let level = 'N/A';
       let face = 'N/A';
       let rawFace;
+      const dataset = {};
       const type = gl.getFramebufferAttachmentParameter(target, attachmentPoint, gl.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE);
       switch (type) {
         case gl.NONE:
@@ -118,18 +120,48 @@ export function createFramebufferDisplay(parent, name /*, webglObject */) {
           level = gl.getFramebufferAttachmentParameter(target, attachmentPoint, gl.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL);
           rawFace = gl.getFramebufferAttachmentParameter(target, attachmentPoint, gl.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE);
           face = rawFace ? glEnumToString(gl, rawFace) : 'N/A';
+          dataset.help = helpToMarkdown(`
+            textures are attached to framebuffers with
+
+            ---js
+            gl.bindFramebuffer(gl.FRAMEBUFFER, someFramebuffer);
+            gl.framebufferTexture2D(
+              gl.FRAMEBUFFER,
+              gl.${glEnumToString(gl, attachmentPoint)}, // attachment point
+              gl.TEXTURE_2D,  // target
+              someTexture,    // the texture to attach
+              0,              // the mip level to write to (must be 0 in WebGL1)
+            );
+            ---
+
+            To write to a cube map pass in a cube map texture target for --target--
+            for example --TEXTURE_CUBE_MAP_POSITIVE_X--.
+          `);
           break;
         case gl.RENDERBUFFER:
+          dataset.help = helpToMarkdown(`
+            renderbuffers are attached to framebuffers with
+
+            ---js
+            gl.bindFramebuffer(gl.FRAMEBUFFER, someFramebuffer);
+            gl.framebufferRenderbuffer(
+              gl.FRAMEBUFFER,
+              gl.${glEnumToString(gl, attachmentPoint)}, // attachment point
+              gl.RENDERBUFFER,  // target
+              someRenderbuffer, // the renderbuffer to attach
+            );
+            ---
+          `);
           break;
         default:
           throw new Error('unknown attachment type');
       }
       const attachment = gl.getFramebufferAttachmentParameter(target, attachmentPoint, gl.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME);
       const tr = addElem('tr', attachmentsTbody);
-      addElem('td', tr, {textContent: glEnumToString(gl, attachmentPoint)});
-      addElem('td', tr, {textContent: level});
-      addElem('td', tr, {textContent: face});
-      addElem('td', tr, {textContent: formatWebGLObject(attachment)});
+      addElem('td', tr, {textContent: glEnumToString(gl, attachmentPoint), dataset});
+      addElem('td', tr, {textContent: level, dataset});
+      addElem('td', tr, {textContent: face, dataset});
+      addElem('td', tr, {textContent: formatWebGLObject(attachment), dataset});
       const targetInfo = getWebGLObjectInfo(attachment);
       if (!targetInfo.deleted) {
         arrows.push(arrowManager.add(
