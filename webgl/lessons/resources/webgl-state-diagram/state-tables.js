@@ -387,7 +387,7 @@ export function getStateTables(isWebGL2) {
 
   const blendState = {
     help: `
-    state that affects out the output of your fragment shader gets
+    state that affects how the output of your fragment shader gets
     blended with the pixel being written to.
 
     The default is blending is disabled and the value output from your
