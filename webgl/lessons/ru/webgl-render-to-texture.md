@@ -56,7 +56,8 @@ TOC: WebGL - Рендеринг в текстуру
 
     // прикрепляем текстуру в качестве первого цветового вложения
     const attachmentPoint = gl.COLOR_ATTACHMENT0;
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, tex, level);
+    gl.framebufferTexture2D(
+        gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 
 Как в случае с текстурами и буферами, после создания фреймбуфера нам нужно
 прикрепить его к точке привязки `FRAMEBUFFER`. После этого все функции будут

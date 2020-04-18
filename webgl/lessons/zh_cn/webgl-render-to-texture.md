@@ -51,7 +51,8 @@ TOC: WebGL 渲染到纹理
 
     // 附加纹理为第一个颜色附件
     const attachmentPoint = gl.COLOR_ATTACHMENT0;
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, tex, level);
+    gl.framebufferTexture2D(
+        gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 
 与纹理和缓冲相似，在创建完帧缓冲后我们需要将它绑定到 `FRAMEBUFFER` 绑定点，
 那样所有的方法都会作用到绑定的帧缓冲，无论是哪个帧缓冲。
