@@ -257,7 +257,8 @@ gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
 // attach the texture as the first color attachment
 const attachmentPoint = gl.COLOR_ATTACHMENT0;
-gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, tex, level);
+gl.framebufferTexture2D(
+    gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 </code></pre><p>Just like textures and buffers, after we create the framebuffer we need to
 bind it to the <code>FRAMEBUFFER</code> bind point. After that all functions related to
 framebuffers reference whatever framebuffer is bound there.</p>

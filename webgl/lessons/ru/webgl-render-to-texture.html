@@ -258,7 +258,8 @@ gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
 // прикрепляем текстуру в качестве первого цветового вложения
 const attachmentPoint = gl.COLOR_ATTACHMENT0;
-gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, tex, level);
+gl.framebufferTexture2D(
+    gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 </code></pre><p>Как в случае с текстурами и буферами, после создания фреймбуфера нам нужно
 прикрепить его к точке привязки <code>FRAMEBUFFER</code>. После этого все функции будут
 обращаться к фреймбуферу, который привязан к этой точке.</p>
