@@ -572,6 +572,8 @@ and to emphasize other ways of thinking about what WebGL
 is actually doing. Again it only cares that you set `gl_Position`
 and `gl_FragColor` in your shaders. It doesn't care how you do it.
 
+Next up see how [Shadertoy shaders work](webgl-shadertoy.html).
+
 <div class="webgl_bottombar" id="pointsissues">
 <h3>A problem with <code>gl.POINTS</code></h3>
 <p>
