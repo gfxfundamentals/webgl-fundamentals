@@ -513,6 +513,8 @@ that renders to an offscreen texture. "sound" is
 a shader where [your shader is expected to generate
 sound data into a texture](https://stackoverflow.com/questions/34859701/how-do-shadertoys-audio-shaders-work).
 
+One last thing is some shaders on shadertoy require [WebGL2](https://webgl2fundamentals.org).
+
 I hope this helped explain Shadertoy. It's a great site with amazing works
 but is good to know what's really going on.
 
