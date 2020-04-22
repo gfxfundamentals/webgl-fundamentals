@@ -89,23 +89,12 @@ function main() {
     useSorted = e.target.checked;
   });
 
-  var createFlattenedVertices = function(gl, vertices) {
-    return webglUtils.createBufferInfoFromArrays(
-        gl,
-        primitives.makeRandomVertexColors(
-            primitives.deindexVertices(vertices),
-            {
-              vertsPerColor: 6,
-              rand: function(ndx, channel) {
-                return channel < 3 ? ((128 + Math.random() * 128) | 0) : 255;
-              }
-            })
-      );
-  };
-
-  var sphereBufferInfo = createFlattenedVertices(gl, primitives.createSphereVertices(10, 12, 6));
-  var cubeBufferInfo   = createFlattenedVertices(gl, primitives.createCubeVertices(20));
-  var coneBufferInfo   = createFlattenedVertices(gl, primitives.createTruncatedConeVertices(10, 0, 20, 12, 1, true, false));
+  // creates buffers with position, normal, texcoord, and vertex color
+  // data for primitives by calling gl.createBuffer, gl.bindBuffer,
+  // and gl.bufferData
+  const sphereBufferInfo = primitives.createSphereWithVertexColorsBufferInfo(gl, 10, 12, 6);
+  const cubeBufferInfo   = primitives.createCubeWithVertexColorsBufferInfo(gl, 20);
+  const coneBufferInfo   = primitives.createTruncatedConeWithVertexColorsBufferInfo(gl, 10, 0, 20, 12, 1, true, false);
 
   // setup GLSL program
   var programInfo = webglUtils.createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
