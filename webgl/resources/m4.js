@@ -175,6 +175,21 @@
   }
 
   /**
+   * scale vectors3
+   * @param {Vector3} v vector
+   * @param {Number} s scale
+   * @param {Vector3} dst optional vector3 to store result
+   * @return {Vector3} dst or new Vector3 if not provided
+   * @memberOf module:webgl-3d-math
+   */
+  function scaleVector(v, s, dst) {
+    dst = dst || new MatType(3);
+    dst[0] = v[0] * s;
+    dst[1] = v[1] * s;
+    dst[2] = v[2] * s;
+    return dst;
+  }  
+  /**
    * normalizes a vector.
    * @param {Vector3} v vector to normalize
    * @param {Vector3} dst optional vector3 to store result
@@ -200,6 +215,15 @@
    */
   function length(v) {
     return Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  }
+
+  /**
+   * Computes the length squared of a vector
+   * @param {Vector3} v vector to take length of
+   * @return {number} length sqaured of vector
+   */
+  function lengthSq(v) {
+    return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
   }
 
   /**
@@ -1401,6 +1425,7 @@
     lookAt: lookAt,
     addVectors: addVectors,
     subtractVectors: subtractVectors,
+    scaleVector: scaleVector,
     distance: distance,
     distanceSq: distanceSq,
     normalize: normalize,
@@ -1411,6 +1436,7 @@
     identity: identity,
     transpose: transpose,
     length: length,
+    lengthSq: lengthSq,
     orthographic: orthographic,
     frustum: frustum,
     perspective: perspective,

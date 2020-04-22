@@ -1099,32 +1099,54 @@
     return arrays;
   }
 
+  function createFlattenedFunc(vertFunc) {
+    return function(gl, ...args) {
+      let vertices = vertFunc(...args);
+      vertices = deindexVertices(vertices);
+      vertices = makeRandomVertexColors(vertices, {
+          vertsPerColor: 6,
+          rand: function(ndx, channel) {
+            return channel < 3 ? ((128 + Math.random() * 128) | 0) : 255;
+          },
+        });
+      return webglUtils.createBufferInfoFromArrays(gl, vertices);
+    };
+  }
+
+
+
   return {
     create3DFBufferInfo: createBufferInfoFunc(create3DFVertices),
     create3DFBuffer: createBufferFunc(create3DFVertices),
-    create3DFVertices: create3DFVertices,
+    create3DFVertices,
+    create3DFWithVertexColorsBufferInfo: createFlattenedFunc(create3DFVertices),
     createCubeBufferInfo: createBufferInfoFunc(createCubeVertices),
     createCubeBuffers: createBufferFunc(createCubeVertices),
-    createCubeVertices: createCubeVertices,
+    createCubeVertices,
+    createCubeWithVertexColorsBufferInfo: createFlattenedFunc(createCubeVertices),
     createPlaneBufferInfo: createBufferInfoFunc(createPlaneVertices),
     createPlaneBuffers: createBufferFunc(createPlaneVertices),
-    createPlaneVertices: createPlaneVertices,
+    createPlaneVertices,
+    createPlaneWithVertexColorsBufferInfo: createFlattenedFunc(createPlaneVertices),
     createXYQuadBufferInfo: createBufferInfoFunc(createXYQuadVertices),
     createXYQuadBuffers: createBufferFunc(createXYQuadVertices),
-    createXYQuadVertices: createXYQuadVertices,
+    createXYQuadVertices,
+    createXYQuadWithVertexColorsBufferInfo: createFlattenedFunc(createXYQuadVertices),
     createSphereBufferInfo: createBufferInfoFunc(createSphereVertices),
     createSphereBuffers: createBufferFunc(createSphereVertices),
-    createSphereVertices: createSphereVertices,
+    createSphereVertices,
+    createSphereWithVertexColorsBufferInfo: createFlattenedFunc(createSphereVertices),
     createTruncatedConeBufferInfo: createBufferInfoFunc(createTruncatedConeVertices),
     createTruncatedConeBuffers: createBufferFunc(createTruncatedConeVertices),
-    createTruncatedConeVertices: createTruncatedConeVertices,
-    deindexVertices: deindexVertices,
-    flattenNormals: flattenNormals,
-    makeRandomVertexColors: makeRandomVertexColors,
-    reorientDirections: reorientDirections,
-    reorientNormals: reorientNormals,
-    reorientPositions: reorientPositions,
-    reorientVertices: reorientVertices,
+    createTruncatedConeVertices,
+    createTruncatedConeWithVertexColorsBufferInfo: createFlattenedFunc(createTruncatedConeVertices),
+    deindexVertices,
+    flattenNormals,
+    makeRandomVertexColors,
+    reorientDirections,
+    reorientNormals,
+    reorientPositions,
+    reorientVertices,
   };
 
 }));
