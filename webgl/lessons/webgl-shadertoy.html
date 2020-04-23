@@ -552,35 +552,33 @@ canvas.addEventListener(&#39;mousemove&#39;, (e) =&gt; {
 <code>fragCoord</code> is the same as <code>gl_FragCoord</code>. Adding this extra function lets Shadertoy
 impose a little more structure as well as do some extra work before or after calling
 <code>mainImage</code>. For us to use it we just need to call it like this</p>
-<pre class="prettyprint"><code class="lang-glsl">  precision highp float;
+<pre class="prettyprint"><code class="lang-glsl">precision highp float;
 
-  uniform vec2 u_resolution;
-  uniform vec2 u_mouse;
-  uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
 
-  //---insert shadertoy code here--
+//---insert shadertoy code here--
 
-  void main() {
-    mainImage(gl_FragColor, gl_FragCoord.xy);
-  }
-`;
+void main() {
+  mainImage(gl_FragColor, gl_FragCoord.xy);
+}
 </code></pre>
 <p>Except that Shadertoy uses the uniform names <code>iResolution</code>, <code>iMouse</code> and <code>iTime</code> so let&#39;s rename them.</p>
-<pre class="prettyprint"><code class="lang-glsl">  precision highp float;
+<pre class="prettyprint"><code class="lang-glsl">precision highp float;
 
--  uniform vec2 u_resolution;
--  uniform vec2 u_mouse;
--  uniform float u_time;
-+  uniform vec2 iResolution;
-+  uniform vec2 iMouse;
-+  uniform float iTime;
+-uniform vec2 u_resolution;
+-uniform vec2 u_mouse;
+-uniform float u_time;
++uniform vec2 iResolution;
++uniform vec2 iMouse;
++uniform float iTime;
 
-  //---insert shadertoy code here--
+//---insert shadertoy code here--
 
-  void main() {
-    mainImage(gl_FragColor, gl_FragCoord.xy);
-  }
-`;
+void main() {
+  mainImage(gl_FragColor, gl_FragCoord.xy);
+}
 </code></pre>
 <p>and look them up by the new names</p>
 <pre class="prettyprint"><code class="lang-js">// look up uniform locations
@@ -599,6 +597,7 @@ in our shader above where it says <code>//---insert shadertoy code here--</code>
 </div>
 
 </p>
+<p>That&#39;s an extraordinarily beautiful image for having no data!</p>
 <p>I made the sample above only render when the mouse is over the canvas or when touched.
 This is because the math required
 to draw the image above is complex and slow and letting it run continuously would
