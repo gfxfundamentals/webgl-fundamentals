@@ -174,7 +174,7 @@ function drawObjects(objectsToDraw, overrideProgramInfo) {
 we can pass in to use our picking shader instead of
 the object's assigned shader.
 
-Let's call it, one to draw into the texture with
+Let's call it, once to draw into the texture with
 ids and again to draw the scene to the canvas.
 
 ```js
@@ -288,7 +288,7 @@ not the space of how many pixels are in the canvas.
 In other words if you had a canvas like this
 
 ```html
-<canvas width="11" height="22" style: "width:33px; height:44px;"></canvas>
+<canvas width="11" height="22" style="width:33px; height:44px;"></canvas>
 ```
 
 then `mouseX` will go from 0 to 33 across the canvas and
@@ -413,7 +413,7 @@ a perspective matrix defined by those values.
 Using that we can generate a perspective matrix for
 the one pixel under the mouse
 
-First we compute the edges and size of our near plane *would be*
+First we compute the edges and size of what our near plane *would be*
 if we were to use the `perspective` function
 
 ```js
