@@ -360,7 +360,7 @@ all the objects into a function.</p>
 <p><code>drawObjects</code> takes an optional <code>overrideProgramInfo</code>
 we can pass in to use our picking shader instead of
 the object&#39;s assigned shader.</p>
-<p>Let&#39;s call it, one to draw into the texture with
+<p>Let&#39;s call it, once to draw into the texture with
 ids and again to draw the scene to the canvas.</p>
 <pre class="prettyprint"><code class="lang-js">// Draw the scene.
 function drawScene(time) {
@@ -459,7 +459,7 @@ are in CSS pixels in display space. That means
 they are in the space the canvas is displayed,
 not the space of how many pixels are in the canvas.
 In other words if you had a canvas like this</p>
-<pre class="prettyprint"><code class="lang-html">&lt;canvas width=&quot;11&quot; height=&quot;22&quot; style: &quot;width:33px; height:44px;&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint"><code class="lang-html">&lt;canvas width=&quot;11&quot; height=&quot;22&quot; style=&quot;width:33px; height:44px;&quot;&gt;&lt;/canvas&gt;
 </code></pre>
 <p>then <code>mouseX</code> will go from 0 to 33 across the canvas and
 <code>mouseY</code> will go from 0 to 44 across the canvas. See <a href="webgl-resizing-the-canvas.html">this</a>
@@ -571,7 +571,7 @@ z-near and z-far values for the z-planes and generates
 a perspective matrix defined by those values.</p>
 <p>Using that we can generate a perspective matrix for
 the one pixel under the mouse</p>
-<p>First we compute the edges and size of our near plane <em>would be</em>
+<p>First we compute the edges and size of what our near plane <em>would be</em>
 if we were to use the <code>perspective</code> function</p>
 <pre class="prettyprint"><code class="lang-js">// compute the rectangle the near plane of our frustum covers
 const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
