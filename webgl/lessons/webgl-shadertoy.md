@@ -123,6 +123,9 @@ And of course we get a solid color that covers the canvas.
 
 {{{example url="../webgl-shadertoy-solid.html"}}}
 
+In [the article on how WebGL works](webgl-how-it-works.html) we added more
+color by providing a color for each vertex. In [the article on textures](webgl-3d-textures.html)
+we added more color by supplying textures and texture coordinates.
 So how do we get something more than a solid color with out any more data? 
 WebGL provides a variable called `gl_FragCoord` that is equal to the **pixel**
 coordinate of the pixel currently being drawn.
