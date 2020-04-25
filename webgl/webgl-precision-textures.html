@@ -1,0 +1,193 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - precision - textures</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+  table {
+    border-collapse: collapse;
+  }
+  thead {
+    background: lightcoral;
+  }
+  th, td {
+    border: 1px solid black;
+    padding: 0.2em;
+  }
+  .shader-type {
+    background: lightseagreen;
+  }
+  .no-support {
+    background: red;
+    color: white;
+  }
+</style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+</body>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="resources/webgl-utils.js"></script>
+<script>
+"use strict";
+
+function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  const canvas = document.querySelector("#c");
+  const gl = canvas.getContext("webgl");
+  if (!gl) {
+    return;
+  }
+
+  const gradientVS = `
+  attribute vec4 position;
+
+  varying vec4 v_color;
+
+  void main() {
+    gl_Position = position;
+
+    // we know position is a clip space quad from -1 to +1
+    v_color = vec4(position.x * 0.5 + 0.5, 0, 0, 1);
+  }
+  `;
+
+  const gradientFS = `
+  precision mediump float;
+
+  varying vec4 v_color;
+
+  void main() {
+    gl_FragColor = v_color;
+  }
+  `;
+
+  const textureVS = `
+  attribute vec4 position;
+
+  varying vec2 v_texcoord;
+
+  void main() {
+    gl_Position = position;
+
+    // we know position is a clip space quad from -1 to +1
+    v_texcoord = position.xy * 0.5 + 0.5;
+  }
+  `;
+
+  const textureFS = `
+  precision mediump float;
+
+  varying vec2 v_texcoord;
+
+  uniform sampler2D tex;
+
+  void main() {
+    gl_FragColor = texture2D(tex, v_texcoord);
+  }
+  `;
+
+  const gradientPrg = webglUtils.createProgramFromSources(
+      gl, [gradientVS, gradientFS]);
+  const gradientPrgInfo = {
+    program: gradientPrg,
+    positionLoc: gl.getAttribLocation(gradientPrg, 'position'),
+  };
+  const texturePrg = webglUtils.createProgramFromSources(
+      gl, [textureVS, textureFS]);
+  const texturePrgInfo = {
+    program: texturePrg,
+    positionLoc: gl.getAttribLocation(texturePrg, 'position'),
+  };
+
+  const tex = gl.createTexture();
+  const width = 256;
+  const height = 128;
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(
+    gl.TEXTURE_2D,               // target
+    0,                           // mip level
+    gl.RGBA,                     // internal format
+    width,                       // width
+    height,                      // height
+    0,                           // border
+    gl.RGBA,                     // format
+    gl.UNSIGNED_SHORT_4_4_4_4,   // type
+    null,
+  );
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+  const fb = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+  gl.framebufferTexture2D(
+    gl.FRAMEBUFFER,
+    gl.COLOR_ATTACHMENT0,  // attachment point
+    gl.TEXTURE_2D,         // texture target
+    tex,                   // texture
+    0,                     // mip level
+  );
+  const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+  if (status !== gl.FRAMEBUFFER_COMPLETE) {
+    // only RGBA/UNSIGNED_BYTE is guaranteed to be supported
+    document.body.textContent = 'can not render to RGBA/UNSIGNED_SHORT_4_4_4_4 texture';
+    return;
+  }
+
+  const positionBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    -1, -1,
+     1, -1,
+    -1,  1,
+    -1,  1,
+     1, -1,
+     1,  1,
+  ]), gl.STATIC_DRAW);
+
+  // turn off dithering so we can more easily
+  // see if there are only 4 bits per channel.
+  gl.disable(gl.DITHER);
+
+  // draw gradient to texture
+  draw(gradientPrgInfo, width, height);
+
+  // draw texture to canvas
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  draw(texturePrgInfo, gl.canvas.width, gl.canvas.height);
+
+  function draw(programInfo, width, height) {
+    gl.viewport(0, 0, width, height);
+    gl.useProgram(programInfo.program);
+    gl.enableVertexAttribArray(programInfo.positionLoc);
+    gl.vertexAttribPointer(
+        programInfo.programLoc,  // location
+        2,                       // values to read from buffer per iteration
+        gl.FLOAT,                // type of data in buffer
+        false,                   // normalize
+        0,                       // stride (0 = compute from size and type)
+        0,                       // offset in buffer to data
+    );
+    gl.drawArrays(
+        gl.TRIANGLES,
+        0,    // offset
+        6,    // number of vertices to process
+    );
+  }
+}
+
+main();
+</script>
+</html>
+
+
