@@ -1,0 +1,121 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - precision - check if mediump is really mediump in vertex shader</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="result"></div>
+</body>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="resources/webgl-utils.js"></script>
+<script>
+"use strict";
+
+// This entire program is only needed because of a bug in Safari.
+// Safari doesn't correctly report precision from getShaderPrecisionFormat
+// at least as of April 2020
+// see: https://bugs.webkit.org/show_bug.cgi?id=211013
+
+function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  const canvas = document.createElement("canvas");
+  const gl = canvas.getContext("webgl");
+  if (!gl) {
+    return;
+  }
+
+  const vs = `
+  attribute vec4 position;  // needed because of another bug in Safari
+  uniform vec2 v;
+  varying float v_result;
+  void main() {
+    gl_Position = position;
+    gl_PointSize = 1.0;
+    v_result = v.x / v.y;
+  }
+  `;
+
+  const fs = `
+  precision mediump float;
+  varying float v_result;
+  void main() {
+    gl_FragColor = vec4(v_result);
+  }
+  `;
+
+  const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
+  const positionLocation = gl.getAttribLocation(program, 'position');
+  const vLocation = gl.getUniformLocation(program, 'v');
+
+  // create a buffer and setup an attribute
+  // We wouldn't need this except for a bug in Safari.
+  // See https://webglfundamentals.org/webgl/lessons/webgl-smallest-programs.html
+  // and https://bugs.webkit.org/show_bug.cgi?id=197592
+  {
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, 1, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(
+      positionLocation,
+      1,                // pull 1 value per vertex shader iteration from buffer
+      gl.UNSIGNED_BYTE, // type of data in buffer,
+      false,            // don't normalize
+      0,                // bytes to advance per iteration (0 = compute from size and type)
+      0,                // offset into buffer
+    );
+  }
+
+  gl.viewport(0, 0, 1, 1);
+  gl.useProgram(program);
+
+  // we're going to divide v.x by v.y
+  // we set v.x to 2^16 (65536.0) and v.y to 2^17 (131072)
+  // bot of which are out of range for mediump
+  //
+  // In my head there are 2 possibilities in real 'mediump'
+  //
+  // (1) an out of range number is set to Infinity
+  // (2) an out of range number is set to Max (which is 1024 for mediump)
+  //
+  // in case (1) we'll get either Infinity / Infinity which could be NaN or 1 or 0
+  // in case (2) we'll get Max / Max = 1 or we'll get Max / 131072
+  //             which at most would be 0.25
+  //
+  // if mediump is actually highp then we'll get 0.5
+  //
+  // the result is passed to the fragment shader but at that point it should
+  // already be in range of even lowp.
+
+  gl.uniform2f(vLocation, 2 ** 16, 2 ** 17);
+  gl.drawArrays(
+    gl.POINTS,
+    0, // offset
+    1, // number of vertices to process
+  );
+
+  const pixel = new Uint8Array(4);
+  gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
+
+  const isMediumpActuallyMediump = Math.abs(pixel[0] - 128) > 16;
+  const elem = document.querySelector('#result');
+  elem.textContent = isMediumpActuallyMediump
+    ? 'vertex shader mediump is really mediump'
+    : 'vertex shader mediump is probably highp';
+}
+
+main();
+</script>
+</html>
+
+
