@@ -32,22 +32,22 @@ precision issues but one way to explain it is like the difference between a byte
 
 `lowp`, `mediump`, and `highp` are similar.
 
-* `lowp` is at least an 8 bit value. For floating point values they can range from: -2 to +2, for integer values they are similar to `Uint8Array` or `Int8Array`
+* `lowp` is at least an 9 bit value. For floating point values they can range from: -2 to +2, for integer values they are similar to `Uint8Array` or `Int8Array`
 * `mediump` is at least a 16 bit value. For floating point values they can range from: -2<sup>14</sup> to +2<sup>14</sup>, for integer values they are similar to `Uint16Array` or `Int16Array`
 * `highp` is at least a 32 bit value. For floating point values they can range from: -2<sup>62</sup> to +2<sup>62</sup>, for integer values they are similar to `Uint32Array` or `Int32Array`
 
 It's important to note that not every value inside the range can be represented.
-The easiest to understand is probably `lowp`. There are only 8 bits and so only
-256 unique values can be represented. Above it says the range is -2 to +2 but
+The easiest to understand is probably `lowp`. There are only 9 bits and so only
+512 unique values can be represented. Above it says the range is -2 to +2 but
 there are an infinite number of values between -2 and +2. For example 1.9999999
-and 1.999998 are 2 values between -2 and +2. With only 8bits `lowp` can't
+and 1.999998 are 2 values between -2 and +2. With only 9 bits `lowp` can't
 represent those 2 values. So for example, if you want do some math on color and
 you used `lowp` you might see a some banding. Without actually digging into what
 actual values can be represented, we know colors go from 0 to 1. Is if `lowp`
-goes from -2 to +2 and can only represent 256 unique values then it seems likely
-only 64 of those values fit between 0 and 1. That would also suggest if you have
-a value that is 4/64ths and I try to add 1/256th to it, nothing will happen
-because 1/256th can't be represented by `lowp` so it's effectively 0.
+goes from -2 to +2 and can only represent 512 unique values then it seems likely
+only 128 of those values fit between 0 and 1. That would also suggest if you have
+a value that is 4/128ths and I try to add 1/512th to it, nothing will happen
+because 1/512th can't be represented by `lowp` so it's effectively 0.
 
 Ideally we could just use `highp` everywhere and ignore this issue completely but
 unfortunately that's not reality. There are 2 issues.
@@ -62,7 +62,7 @@ unfortunately that's not reality. There are 2 issues.
    resolution for common things, for example 
    [point lights](webgl-3d-lighting-point.html).
 
-2. On devices that do actually use 8bits for `lowp` and/or 16bits for `mediump` they are usually faster than `highp`. Often significantly faster.
+2. On devices that do actually use 9 bits for `lowp` and/or 16bits for `mediump` they are usually faster than `highp`. Often significantly faster.
 
 To that last point, unlike values in a `Uint8Array` or `Uint16Array`, a `lowp`
 or `mediump` value or for that matter even a `highp` value is allowed to use
@@ -251,11 +251,15 @@ Here and an example for checking if the vertex shader's `mediump` is really
 
 More minutia: There is actually no guarantee that `lowp` is 8 bits,
 `mediump` is 16 bits, and `highp` is 32 bits. All the spec says is that is
-the minimum each can be. It could be `lowp` is 9 bits for example which would
-still satisfy the spec (9 >= 8) and still be faster than `mediump` and so
+the minimum each can be. It could be `lowp` is 10 bits for example which would
+still satisfy the spec (10 >= 9) and still be faster than `mediump` and so
 still have a point. That said, AFAICT any device that actually supports `lowp`
-as `lowp` uses 8bits and any device that actually supports `mediump` uses
-16bits.
+as `lowp` uses 9 bits and any device that actually supports `mediump` uses
+16bits. 
+
+While my iPhone6+ from 2014 uses 16 bits for `mediump` it also uses 16 bits
+for `lowp`. I'm not sure I've ever used a device that uses 9 bits for `lowp`
+so I'm not sure what issues commonly come up if any.
 
 Throughout these articles we've specified a default precision
 in the fragment shader. We can also specify the precision of any individual
@@ -270,7 +274,7 @@ lowp float foo;              // a variable
 
 ## Canvas Precision Issues
 
-The spec allows a canvas to be 16bits instead of 32.
+The spec allows a canvas to be 16 bits instead of 32.
 
 You can check by calling 
 
