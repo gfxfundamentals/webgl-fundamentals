@@ -2,12 +2,6 @@
 (function($){
 var log = function(msg) {
   return;
-  if (window.dump) {
-    dump(msg + "\n");
-  }
-  if (window.console && window.console.log) {
-    console.log(msg);
-  }
 };
 
 function getQueryParams() {
