@@ -77,19 +77,15 @@
   }
 
   /**
-   * Creates a webgl context. If creation fails it will
-   * change the contents of the container of the <canvas>
-   * tag to an error message with the correct links for WebGL.
+   * Changes canvas to message about needing webgl
    * @param {HTMLCanvasElement} canvas. The canvas element to
    *     create a context from.
-   * @param {WebGLContextCreationAttributes} opt_attribs Any
-   *     creation attributes you want to pass in.
-   * @return {WebGLRenderingContext} The created context.
    * @memberOf module:webgl-utils
    */
-  function showNeedWebGL(canvas) {
+  function showNeedWebGL(canvas, type) {
     const doc = canvas.ownerDocument;
     if (doc) {
+      const isWebGL2 = type === 'webgl2';
       const temp = doc.createElement('div');
       temp.innerHTML = `
         <div style="
@@ -106,8 +102,8 @@
           align-items: center;
         ">
           <div style="text-align: center;">
-            It doesn't appear your browser supports WebGL.<br/>
-            <a href="http://get.webgl.org" target="_blank">Click here for more information.</a>
+            It doesn't appear your browser supports ${isWebGL2 ? 'WebGL2' : 'WebGL'}.<br/>
+            <a href="https://get.webgl.org${isWebGL2 ? '/webgl2/' : ''}" target="_blank">Click here for more information.</a>
           </div>
         </div>
       `;
@@ -392,16 +388,17 @@
     const options = opt_options || {};
 
     if (canvas) {
-      canvas.addEventListener('webglcontextlost', function(e) {
+      canvas.addEventListener('webglcontextlost', function() {
           // the default is to do nothing. Preventing the default
           // means allowing context to be restored
-          e.preventDefault();
           addContextLostHTML();
       });
+      /* because of bug in firefox we can't auto restore
       canvas.addEventListener('webglcontextrestored', function() {
           // just reload the page. Easiest.
           window.location.reload();
       });
+      */
     }
 
     if (isInIFrame()) {
@@ -549,7 +546,7 @@
         }, args[1]);
         const ctx = oldFn.apply(this, args);
         if (!ctx && isWebGL) {
-          showNeedWebGL(this);
+          showNeedWebGL(this, type);
         }
         return ctx;
       };
