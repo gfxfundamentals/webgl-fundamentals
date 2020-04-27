@@ -45,9 +45,9 @@ function main() {
 
   const fs = `
   precision mediump float;
-  uniform vec2 v;
+  uniform mediump vec3 v;
   void main() {
-    gl_FragColor = vec4(v.x / v.y);
+    gl_FragColor = vec4(normalize(v) * 0.5 + 0.5, 1);
   }
   `;
 
@@ -76,21 +76,14 @@ function main() {
   gl.viewport(0, 0, 1, 1);
   gl.useProgram(program);
 
-  // we're going to divide v.x by v.y
-  // we set v.x to 2^16 (65536.0) and v.y to 2^17 (131072)
-  // bot of which are out of range for mediump
-  //
-  // In my head there are 2 possibilities in real 'mediump'
-  //
-  // (1) an out of range number is set to Infinity
-  // (2) an out of range number is set to Max (which is 1024 for mediump)
-  //
-  // in case (1) we'll get either Infinity / Infinity which could be NaN or 1 or 0
-  // in case (2) we'll get Max / Max = 1 or we'll get Max / 131072 =
-  //
-  // if mediump is actually highp then we'll get 0.5
+  // we're going to compute the normalize vector of
+  // (sqrt(2^31-1), sqrt(2^31-1), sqrt(2^31-1))
+  // which should be impossible on mediump
+  const value = 2 ** 31 - 1;
+  const input = Math.sqrt(value);
+  const expected = ((input / Math.sqrt(input * input * 3)) * 0.5 + 0.5) * 255 | 0;
 
-  gl.uniform2f(vLocation, 2 ** 16, 2 ** 17);
+  gl.uniform3f(vLocation, input, input, input);
   gl.drawArrays(
     gl.POINTS,
     0, // offset
@@ -100,7 +93,7 @@ function main() {
   const pixel = new Uint8Array(4);
   gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
 
-  const isMediumpActuallyMediump = Math.abs(pixel[0] - 128) > 16;
+  const isMediumpActuallyMediump = Math.abs(pixel[0] - expected) > 16;
   const elem = document.querySelector('#result');
   elem.textContent = isMediumpActuallyMediump
     ? 'fragment shader mediump is really mediump'
