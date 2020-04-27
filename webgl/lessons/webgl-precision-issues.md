@@ -203,7 +203,7 @@ for `mediump`.
 Most of the above is about just making sure your app works on
 devices that don't support `highp`. 
 
-Another reason to use care about these feature is speed. Even though
+Another reason to care about these features is speed. Even though
 you can use `highp` on most relatively modern smartphones, `mediump`
 will run faster. Note again, this is only true if the device actually
 supports lower precision `mediump`. If the device chose to use the
@@ -249,7 +249,7 @@ Here and an example for checking if the vertex shader's `mediump` is really
 
 {{{example url="../webgl-precision-check-vertex-shader.html"}}}
 
-More minutia: There is actually no guarantee that `lowp` is 8 bits,
+More minutia: There is actually no guarantee that `lowp` is 9 bits,
 `mediump` is 16 bits, and `highp` is 32 bits. All the spec says is that is
 the minimum each can be. It could be `lowp` is 10 bits for example which would
 still satisfy the spec (10 >= 9) and still be faster than `mediump` and so
