@@ -188,7 +188,8 @@
     dst[1] = v[1] * s;
     dst[2] = v[2] * s;
     return dst;
-  }  
+  }
+
   /**
    * normalizes a vector.
    * @param {Vector3} v vector to normalize
