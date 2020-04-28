@@ -978,17 +978,55 @@
     return attribs;
   }
 
+  function getArray(array) {
+    return array.length ? array : array.data;
+  }
+
+  const texcoordRE = /coord|texture/i;
+  const colorRE = /color|colour/i;
+
+  function guessNumComponentsFromName(name, length) {
+    let numComponents;
+    if (texcoordRE.test(name)) {
+      numComponents = 2;
+    } else if (colorRE.test(name)) {
+      numComponents = 4;
+    } else {
+      numComponents = 3;  // position, normals, indices ...
+    }
+
+    if (length % numComponents > 0) {
+      throw new Error(`Can not guess numComponents for attribute '${name}'. Tried ${numComponents} but ${length} values is not evenly divisible by ${numComponents}. You should specify it.`);
+    }
+
+    return numComponents;
+  }
+
+  function getNumComponents(array, arrayName) {
+    return array.numComponents || array.size || guessNumComponentsFromName(arrayName, getArray(array).length);
+  }
+
   /**
    * tries to get the number of elements from a set of arrays.
    */
+  const positionKeys = ['position', 'positions', 'a_position'];
   function getNumElementsFromNonIndexedArrays(arrays) {
-    const key = Object.keys(arrays)[0];
-    const array = arrays[key];
-    if (isArrayBuffer(array)) {
-      return array.numElements;
-    } else {
-      return array.data.length / array.numComponents;
+    let key;
+    for (const k of positionKeys) {
+      if (k in arrays) {
+        key = k;
+        break;
+      }
     }
+    key = key || Object.keys(arrays)[0];
+    const array = arrays[key];
+    const length = getArray(array).length;
+    const numComponents = getNumComponents(array, key);
+    const numElements = length / numComponents;
+    if (length % numComponents > 0) {
+      throw new Error(`numComponents ${numComponents} not correct for length ${length}`);
+    }
+    return numElements;
   }
 
   /**
