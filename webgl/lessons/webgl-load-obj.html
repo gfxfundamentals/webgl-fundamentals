@@ -674,7 +674,21 @@ is an array of objects, each of which contain <code>name</code> and <code>data</
 -    normal: webglVertexData[2],
 -  };
 +  return geometries;
-};
+}
+</code></pre>
+<p>While we&#39;re here we should also handle the case where texcoords
+or normals are missing and just not include them.</p>
+<pre class="prettyprint"><code class="lang-js">+  // remove any arrays that have no entries.
++  for (const geometry of geometries) {
++    geometry.data = Object.fromEntries(
++        Object.entries(geometry.data).filter(([, array]) =&gt; array.length &gt; 0));
++  }
+
+  return {
+    materialLibs,
+    geometries,
+  };
+}
 </code></pre>
 <p>Continuing with keywords, <code>matlib</code> specifies separate file(s) that contains material info. We&#39;ll handle that latter. For now let&#39;s just add it on to our loader so we can reference it later.</p>
 <pre class="prettyprint"><code class="lang-js">async function loadOBJ(url) {
@@ -696,7 +710,7 @@ is an array of objects, each of which contain <code>name</code> and <code>data</
 +    materialLibs,
 +    geometries,
 +  };
-};
+}
 </code></pre>
 <p><code>o</code> specifies the following items belong to the named &quot;object&quot;. It&#39;s
 not really clear how to use this. Can we have a file with just <code>o</code>
