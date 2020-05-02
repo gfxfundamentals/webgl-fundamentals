@@ -519,7 +519,24 @@ is an array of objects, each of which contain `name` and `data`.
 -    normal: webglVertexData[2],
 -  };
 +  return geometries;
-};
+}
+```
+
+While we're here we should also handle the case where texcoords
+or normals are missing and just not include them.
+
+```js
++  // remove any arrays that have no entries.
++  for (const geometry of geometries) {
++    geometry.data = Object.fromEntries(
++        Object.entries(geometry.data).filter(([, array]) => array.length > 0));
++  }
+
+  return {
+    materialLibs,
+    geometries,
+  };
+}
 ```
 
 Continuing with keywords, `matlib` specifies separate file(s) that contains material info. We'll handle that latter. For now let's just add it on to our loader so we can reference it later.
@@ -544,7 +561,7 @@ async function loadOBJ(url) {
 +    materialLibs,
 +    geometries,
 +  };
-};
+}
 ```
 
 `o` specifies the following items belong to the named "object". It's

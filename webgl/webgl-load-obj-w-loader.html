@@ -162,6 +162,12 @@ function parseOBJ(text) {
     handler(parts);
   }
 
+  // remove any arrays that have no entries.
+  for (const geometry of geometries) {
+    geometry.data = Object.fromEntries(
+        Object.entries(geometry.data).filter(([, array]) => array.length > 0));
+  }
+
   return {
     geometries,
     materialLibs,
@@ -311,9 +317,6 @@ async function main() {
     };
     reader.readAsText(file);
   }
-
-
-
 
   function degToRad(deg) {
     return deg * Math.PI / 180;
