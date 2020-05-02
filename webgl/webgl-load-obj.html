@@ -155,6 +155,12 @@ async function loadOBJ(url) {
     handler(parts);
   }
 
+  // remove any arrays that have no entries.
+  for (const geometry of geometries) {
+    geometry.data = Object.fromEntries(
+        Object.entries(geometry.data).filter(([, array]) => array.length > 0));
+  }
+
   return {
     geometries,
     materialLibs,

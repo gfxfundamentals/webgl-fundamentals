@@ -155,36 +155,16 @@ async function loadOBJ(url) {
     handler(parts);
   }
 
+  // remove any arrays that have no entries.
+  for (const geometry of geometries) {
+    geometry.data = Object.fromEntries(
+        Object.entries(geometry.data).filter(([, array]) => array.length > 0));
+  }
+
   return {
     geometries,
     materialLibs,
   };
-}
-
-function getExtents(positions) {
-  const min = position.slice(0, 3);
-  const max = position.slice(0, 3);
-  for (let i = 3; i < position.length; i += 3) {
-    for (let j = 0; j < 3; ++j) {
-      const v = position[i + j];
-      min[j] = Math.min(v, min[j]);
-      max[j] = Math.max(v, max[j]);
-    }
-  }
-  return [min, max];
-}
-
-function getGeomtriesExtents(geometries) {
-  return geometries.reduce(([min, max], {data}) => {
-    const minMax = getExtents(data.position);
-    return [
-      Math.min(minMax.min, min),
-      Math.max(minMax.max, max),
-    ];
-  }, [
-    new Array(3).fill(Number.POSITIVE_INFINITY),
-    new Array(3).fill(Number.NEGATIVE_INFINITY),
-  ]);
 }
 
 async function main() {
