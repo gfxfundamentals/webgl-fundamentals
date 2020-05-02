@@ -88,8 +88,8 @@ module.exports = {
   "overrides": [
     {
       "files": [
-        "resources/**/*.js",
-        "lessons/resources/**/*.js",
+       "resources/**/*.js",
+       "lessons/resources/**/*.js",
       ],
       /*
       "parserOptions": {
@@ -105,6 +105,7 @@ module.exports = {
     },
     {
       "files": [
+        "webgl-load-obj-w-loader.html",
         "lessons/resources/**/webgl-state-diagram-*.js",
       ],
       "parserOptions": {

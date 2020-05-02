@@ -35,12 +35,6 @@ import * as dragAndDrop from './resources/drag-and-drop.js';
 // This is not a full .obj parser.
 // see http://paulbourke.net/dataformats/obj/
 
-async function loadOBJ(url) {
-  const response = await fetch(url)
-  const text = await response.text();
-  return parseOBJ(text);
-}
-
 function parseOBJ(text) {
   // because indices are base 1 let's just fill in the 0th data
   const objPositions = [[0, 0, 0]];
@@ -175,29 +169,29 @@ function parseOBJ(text) {
 }
 
 function getExtents(positions) {
-  const min = position.slice(0, 3);
-  const max = position.slice(0, 3);
-  for (let i = 3; i < position.length; i += 3) {
+  const min = positions.slice(0, 3);
+  const max = positions.slice(0, 3);
+  for (let i = 3; i < positions.length; i += 3) {
     for (let j = 0; j < 3; ++j) {
-      const v = position[i + j];
+      const v = positions[i + j];
       min[j] = Math.min(v, min[j]);
       max[j] = Math.max(v, max[j]);
     }
   }
-  return [min, max];
+  return {min, max};
 }
 
-function getGeomtriesExtents(geometries) {
-  return geometries.reduce(([min, max], {data}) => {
+function getGeometriesExtents(geometries) {
+  return geometries.reduce(({min, max}, {data}) => {
     const minMax = getExtents(data.position);
-    return [
-      Math.min(minMax.min, min),
-      Math.max(minMax.max, max),
-    ];
-  }, [
-    new Array(3).fill(Number.POSITIVE_INFINITY),
-    new Array(3).fill(Number.NEGATIVE_INFINITY),
-  ]);
+    return {
+      min: min.map((min, ndx) => Math.min(minMax.min[ndx], min)),
+      max: max.map((max, ndx) => Math.max(minMax.max[ndx], max)),
+    };
+  }, {
+    min: Array(3).fill(Number.POSITIVE_INFINITY),
+    max: Array(3).fill(Number.NEGATIVE_INFINITY),
+  });
 }
 
 async function main() {
@@ -244,32 +238,6 @@ async function main() {
   // compiles and links the shaders, looks up attribute and uniform locations
   const meshProgramInfo = webglUtils.createProgramInfo(gl, [vs, fs]);
 
-  function getExtents(positions) {
-    const min = positions.slice(0, 3);
-    const max = positions.slice(0, 3);
-    for (let i = 3; i < positions.length; i += 3) {
-      for (let j = 0; j < 3; ++j) {
-        const v = positions[i + j];
-        min[j] = Math.min(v, min[j]);
-        max[j] = Math.max(v, max[j]);
-      }
-    }
-    return {min, max};
-  }
-
-  function getGeometriesExtents(geometries) {
-    return geometries.reduce(({min, max}, {data}) => {
-      const minMax = getExtents(data.position);
-      return {
-        min: min.map((min, ndx) => Math.min(minMax.min[ndx], min)),
-        max: max.map((max, ndx) => Math.max(minMax.max[ndx], max)),
-      };
-    }, {
-      min: Array(3).fill(Number.POSITIVE_INFINITY),
-      max: Array(3).fill(Number.NEGATIVE_INFINITY),
-    });
-  }
-
   let parts = [];
   let objOffset = [0, 0, 0];
   let cameraTarget = [0, 0, 0];
@@ -285,7 +253,7 @@ async function main() {
       }
     }
 
-    parts = obj.geometries.map(({data}, ndx) => {
+    parts = obj.geometries.map(({data}) => {
       // Because data is just named arrays like this
       //
       // {
@@ -385,7 +353,7 @@ async function main() {
     // are at the same space.
     let u_world = m4.yRotation(time);
     u_world = m4.translate(u_world, ...objOffset);
- 
+
     for (const {bufferInfo, material} of parts) {
       // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
       webglUtils.setBuffersAndAttributes(gl, meshProgramInfo, bufferInfo);
