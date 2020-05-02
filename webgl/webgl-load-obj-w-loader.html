@@ -1,0 +1,408 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WebGL - load obj</title>
+<link type="text/css" href="resources/webgl-tutorials.css" rel="stylesheet" />
+<style>
+  body {
+    margin: 0;
+  }
+  canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+  }
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+</body>
+<!--
+for most samples webgl-utils only provides shader compiling/linking and
+canvas resizing because why clutter the examples with code that's the same in every sample.
+See https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+and https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+for webgl-utils, m3, m4, and webgl-lessons-ui.
+-->
+<script src="resources/webgl-utils.js"></script>
+<script src="resources/m4.js"></script>
+<script type="module">
+import * as dragAndDrop from './resources/drag-and-drop.js';
+
+// This is not a full .obj parser.
+// see http://paulbourke.net/dataformats/obj/
+
+async function loadOBJ(url) {
+  const response = await fetch(url)
+  const text = await response.text();
+  return parseOBJ(text);
+}
+
+function parseOBJ(text) {
+  // because indices are base 1 let's just fill in the 0th data
+  const objPositions = [[0, 0, 0]];
+  const objTexcoords = [[0, 0]];
+  const objNormals = [[0, 0, 0]];
+
+  // same order as `f` indices
+  const objVertexData = [
+    objPositions,
+    objTexcoords,
+    objNormals,
+  ];
+
+  // same order as `f` indices
+  let webglVertexData = [
+    [],   // positions
+    [],   // texcoords
+    [],   // normals
+  ];
+
+  const materialLibs = [];
+  const geometries = [];
+  let geometry;
+  let groups = ['default'];
+  let material = 'default';
+  let object = 'default';
+
+  const noop = () => {};
+
+  function newGeometry() {
+    // If there is an existing geometry and it's
+    // not empty then start a new one.
+    if (geometry && geometry.data.position.length) {
+      geometry = undefined;
+    }
+  }
+
+  function setGeometry() {
+    if (!geometry) {
+      const position = [];
+      const texcoord = [];
+      const normal = [];
+      webglVertexData = [
+        position,
+        texcoord,
+        normal,
+      ];
+      geometry = {
+        object,
+        groups,
+        material,
+        data: {
+          position,
+          texcoord,
+          normal,
+        },
+      };
+      geometries.push(geometry);
+    }
+  }
+
+  function addVertex(vert) {
+    const ptn = vert.split('/');
+    ptn.forEach((objIndexStr, i) => {
+      if (!objIndexStr) {
+        return;
+      }
+      const objIndex = parseInt(objIndexStr);
+      const index = objIndex + (objIndex >= 0 ? 0 : objVertexData[i].length);
+      webglVertexData[i].push(...objVertexData[i][index]);
+    });
+  }
+
+  const keywords = {
+    v(parts) {
+      objPositions.push(parts.map(parseFloat));
+    },
+    vn(parts) {
+      objNormals.push(parts.map(parseFloat));
+    },
+    vt(parts) {
+      // should check for missing v and extra w?
+      objTexcoords.push(parts.map(parseFloat));
+    },
+    f(parts) {
+      setGeometry();
+      const numTriangles = parts.length - 2;
+      for (let tri = 0; tri < numTriangles; ++tri) {
+        addVertex(parts[0]);
+        addVertex(parts[tri + 1]);
+        addVertex(parts[tri + 2]);
+      }
+    },
+    s: noop,    // smoothing group
+    mtllib(parts) {
+      materialLibs.push(...parts);
+    },
+    usemtl(parts) {
+      material = parts[0];
+      newGeometry();
+    },
+    g(parts) {
+      groups = parts;
+      newGeometry();
+    },
+    o(parts) {
+      object = parts[0];
+      newGeometry();
+    },
+  };
+
+  const lines = text.split('\n');
+  for (let lineNo = 0; lineNo < lines.length; ++lineNo) {
+    const line = lines[lineNo].trim();
+    if (line === '' || line.startsWith('#')) {
+      continue;
+    }
+    const parts = line.split(/ +/);
+    const keyword = parts.shift();
+    const handler = keywords[keyword];
+    if (!handler) {
+      console.warn('unhandled keyword:', keyword);  // eslint-disable-line no-console
+      continue;
+    }
+    handler(parts);
+  }
+
+  return {
+    geometries,
+    materialLibs,
+  };
+}
+
+function getExtents(positions) {
+  const min = position.slice(0, 3);
+  const max = position.slice(0, 3);
+  for (let i = 3; i < position.length; i += 3) {
+    for (let j = 0; j < 3; ++j) {
+      const v = position[i + j];
+      min[j] = Math.min(v, min[j]);
+      max[j] = Math.max(v, max[j]);
+    }
+  }
+  return [min, max];
+}
+
+function getGeomtriesExtents(geometries) {
+  return geometries.reduce(([min, max], {data}) => {
+    const minMax = getExtents(data.position);
+    return [
+      Math.min(minMax.min, min),
+      Math.max(minMax.max, max),
+    ];
+  }, [
+    new Array(3).fill(Number.POSITIVE_INFINITY),
+    new Array(3).fill(Number.NEGATIVE_INFINITY),
+  ]);
+}
+
+async function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  const canvas = document.querySelector("#canvas");
+  const gl = canvas.getContext("webgl");
+  if (!gl) {
+    return;
+  }
+
+  const vs = `
+  attribute vec4 a_position;
+  attribute vec3 a_normal;
+
+  uniform mat4 u_projection;
+  uniform mat4 u_view;
+  uniform mat4 u_world;
+
+  varying vec3 v_normal;
+
+  void main() {
+    gl_Position = u_projection * u_view * u_world * a_position;
+    v_normal = mat3(u_world) * a_normal;
+  }
+  `;
+
+  const fs = `
+  precision mediump float;
+
+  varying vec3 v_normal;
+
+  uniform vec4 u_diffuse;
+  uniform vec3 u_lightDirection;
+
+  void main () {
+    vec3 normal = normalize(v_normal);
+    float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
+    gl_FragColor = vec4(u_diffuse.rgb * fakeLight, u_diffuse.a);
+  }
+  `;
+
+
+  // compiles and links the shaders, looks up attribute and uniform locations
+  const meshProgramInfo = webglUtils.createProgramInfo(gl, [vs, fs]);
+
+  function getExtents(positions) {
+    const min = positions.slice(0, 3);
+    const max = positions.slice(0, 3);
+    for (let i = 3; i < positions.length; i += 3) {
+      for (let j = 0; j < 3; ++j) {
+        const v = positions[i + j];
+        min[j] = Math.min(v, min[j]);
+        max[j] = Math.max(v, max[j]);
+      }
+    }
+    return {min, max};
+  }
+
+  function getGeometriesExtents(geometries) {
+    return geometries.reduce(({min, max}, {data}) => {
+      const minMax = getExtents(data.position);
+      return {
+        min: min.map((min, ndx) => Math.min(minMax.min[ndx], min)),
+        max: max.map((max, ndx) => Math.max(minMax.max[ndx], max)),
+      };
+    }, {
+      min: Array(3).fill(Number.POSITIVE_INFINITY),
+      max: Array(3).fill(Number.NEGATIVE_INFINITY),
+    });
+  }
+
+  let parts = [];
+  let objOffset = [0, 0, 0];
+  let cameraTarget = [0, 0, 0];
+  let cameraPosition = [0, 0, 0];
+  let zNear = 1;
+  let zFar = 10;
+
+  function setupObj(obj) {
+    // delete the old parts.
+    for (const part of parts) {
+      for (const {buffer} of Object.values(part.bufferInfo.attribs)) {
+        gl.deleteBuffer(buffer);
+      }
+    }
+
+    parts = obj.geometries.map(({data}, ndx) => {
+      // Because data is just named arrays like this
+      //
+      // {
+      //   position: [...],
+      //   texcoord: [...],
+      //   normal: [...],
+      // }
+      //
+      // and because those names match the attributes in our vertex
+      // shader we can pass it directly into `createBufferInfoFromArrays`
+      // from the article "less code more fun".
+
+      // create a buffer for each array by calling
+      // gl.createBuffer, gl.bindBuffer, gl.bufferData
+      const bufferInfo = webglUtils.createBufferInfoFromArrays(gl, data);
+      return {
+        material: {
+          u_diffuse: [Math.random(), Math.random(), Math.random(), 1],
+        },
+        bufferInfo,
+      };
+    });
+
+    const extents = getGeometriesExtents(obj.geometries);
+    const range = m4.subtractVectors(extents.max, extents.min);
+    // amount to move the object so its center is at the origin
+    objOffset = m4.scaleVector(
+        m4.addVectors(
+          extents.min,
+          m4.scaleVector(range, 0.5)),
+        -1);
+    cameraTarget = [0, 0, 0];
+    // figure out how far away to move the camera so we can likely
+    // see the object.
+    const radius = m4.length(range) * 1.2;
+    cameraPosition = m4.addVectors(cameraTarget, [
+      0,
+      0,
+      radius,
+    ]);
+    // Set zNear and zFar to something hopefully appropriate
+    // for the size of this object.
+    zNear = radius / 100;
+    zFar = radius * 3;
+  }
+
+  dragAndDrop.setup({msg: 'Drop .OBJ file here'});
+  dragAndDrop.onDropFile(readOBJFile);
+
+  function readOBJFile(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const obj = parseOBJ(e.target.result);
+      setupObj(obj);
+    };
+    reader.readAsText(file);
+  }
+
+
+
+
+  function degToRad(deg) {
+    return deg * Math.PI / 180;
+  }
+
+  function render(time) {
+    time *= 0.001;  // convert to seconds
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+
+    const fieldOfViewRadians = degToRad(60);
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const projection = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
+
+    const up = [0, 1, 0];
+    // Compute the camera's matrix using look at.
+    const camera = m4.lookAt(cameraPosition, cameraTarget, up);
+
+    // Make a view matrix from the camera matrix.
+    const view = m4.inverse(camera);
+
+    const sharedUniforms = {
+      u_lightDirection: m4.normalize([-1, 3, 5]),
+      u_view: view,
+      u_projection: projection,
+    };
+
+    gl.useProgram(meshProgramInfo.program);
+
+    // calls gl.uniform
+    webglUtils.setUniforms(meshProgramInfo, sharedUniforms);
+
+    // compute the world matrix once since all parts
+    // are at the same space.
+    let u_world = m4.yRotation(time);
+    u_world = m4.translate(u_world, ...objOffset);
+ 
+    for (const {bufferInfo, material} of parts) {
+      // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+      webglUtils.setBuffersAndAttributes(gl, meshProgramInfo, bufferInfo);
+      // calls gl.uniform
+      webglUtils.setUniforms(meshProgramInfo, {
+        u_world,
+        u_diffuse: material.u_diffuse,
+      });
+      // calls gl.drawArrays or gl.drawElements
+      webglUtils.drawBufferInfo(gl, bufferInfo);
+    }
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+}
+
+main();
+</script>
+</html>
