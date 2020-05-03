@@ -277,10 +277,11 @@ with <code>vn</code> are normals. What&#39;s left is to figure out the rest.</p>
 <p>It appears .OBJ files are text files so the first thing we need
 to do is load a text file. Fortunately in 2020 that&#39;s super easy
 if we use <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Async_await">async/await</a>.</p>
-<pre class="prettyprint"><code class="lang-js">async loadOBJ(url) {
-  const response = await fetch(url);
+<pre class="prettyprint"><code class="lang-js">async function main() {
+  ...
+
+  const response = await fetch(&#39;resources/models/cube/cube.obj&#39;);
   const text = await response.text();
-}
 </code></pre>
 <p>Next it looks like we can parse it one line at time and that
 each line is in the form of</p>
@@ -289,10 +290,8 @@ each line is in the form of</p>
 is separated by spaces. Lines that start with <code>#</code> are comments.</p>
 <p>So, let&#39;s set up some code to parse each line, skip blank lines
 and comments and then call some function based on the keyword</p>
-<pre class="prettyprint"><code class="lang-js">async loadOBJ(url) {
-  const response = await fetch(url);
-  const text = await response.text();
-
+<pre class="prettyprint"><code class="lang-js">+function parseOBJ(text) {
++
 +  const keywords = {
 +  };
 +
@@ -349,10 +348,7 @@ per triangle is 36. Even though there are only 8 unique positions,
 need to read the face vertex indices and generate a &quot;webgl vertex&quot;
 that is the combination of data of all 3 things. <a href="webgl-pulling-vertices.html">*</a></p>
 <p>So given all that it looks like we can parse these parts as follows</p>
-<pre class="prettyprint"><code class="lang-js">async loadOBJ(url) {
-  const response = await fetch(url);
-  const text = await response.text();
-
+<pre class="prettyprint"><code class="lang-js">function parseOBJ(text) {
 +  // because indices are base 1 let&#39;s just fill in the 0th data
 +  const objPositions = [[0, 0, 0]];
 +  const objTexcoords = [[0, 0]];
@@ -569,10 +565,7 @@ the code so that each time we see a <code>usemat</code> we&#39;ll start a new se
 data.</p>
 <p>First let&#39;s make some code that starts a new webgl data if we don&#39;t already
 have some</p>
-<pre class="prettyprint"><code class="lang-js">async function loadOBJ(url) {
-  const response = await fetch(url)
-  const text = await response.text();
-
+<pre class="prettyprint"><code class="lang-js">function parseOBJ(text) {
   // because indices are base 1 let&#39;s just fill in the 0th data
   const objPositions = [[0, 0, 0]];
   const objTexcoords = [[0, 0]];
@@ -691,7 +684,7 @@ or normals are missing and just not include them.</p>
 }
 </code></pre>
 <p>Continuing with keywords, <code>matlib</code> specifies separate file(s) that contains material info. We&#39;ll handle that latter. For now let&#39;s just add it on to our loader so we can reference it later.</p>
-<pre class="prettyprint"><code class="lang-js">async function loadOBJ(url) {
+<pre class="prettyprint"><code class="lang-js">function parseOBJ(text) {
   ...
 +  const materialLibs = [];
 
@@ -715,7 +708,7 @@ or normals are missing and just not include them.</p>
 <p><code>o</code> specifies the following items belong to the named &quot;object&quot;. It&#39;s
 not really clear how to use this. Can we have a file with just <code>o</code>
 but no <code>usemat</code>? Let&#39;s assume yes.</p>
-<pre class="prettyprint"><code class="lang-js">async function loadOBJ(url) {
+<pre class="prettyprint"><code class="lang-js">function parseOBJ(text) {
   ...
   let material = &#39;default&#39;;
 +  let object = &#39;default&#39;;
@@ -780,7 +773,7 @@ normals.</p>
 just meta data. Objects can belong to more than one group.
 Because it will appear in the next file we try let&#39;s add support here
 even though we won&#39;t actually use the data.</p>
-<pre class="prettyprint"><code class="lang-js">async function loadOBJ(url) {
+<pre class="prettyprint"><code class="lang-js">function parseOBJ(text) {
   ...
 +  let groups = [&#39;default&#39;];
   ...
@@ -822,9 +815,12 @@ even though we won&#39;t actually use the data.</p>
 <p>Now that we&#39;re creating multiple sets of geometry we need to change
 our setup code to create <code>WebGLBuffers</code> for each one. We&#39;ll also create
 a random color so hopefully it&#39;s easy to see the different parts.</p>
-<pre class="prettyprint"><code class="lang-js">-  const data = await loadOBJ(&#39;resources/models/cube/cube.obj&#39;);
-+  const obj = await loadOBJ(&#39;resources/models/chair/chair.obj&#39;);
-+
+<pre class="prettyprint"><code class="lang-js">-  const response = await fetch(&#39;resources/models/cube/cube.obj&#39;);
++  const response = await fetch(&#39;resources/models/cube/chair.obj&#39;);
+  const text = await response.text();
+-  const data = parseOBJ(text);
++  const obj = parseOBJ(text);
+
 +  const parts = obj.geometries.map(({data}) =&gt; {
     // Because data is just named arrays like this
     //
