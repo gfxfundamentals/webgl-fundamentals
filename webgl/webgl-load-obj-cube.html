@@ -25,10 +25,7 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 // This is not a full .obj parser.
 // see http://paulbourke.net/dataformats/obj/
 
-async function loadOBJ(url) {
-  const response = await fetch(url);
-  const text = await response.text();
-
+function parseOBJ(text) {
   // because indices are base 1 let's just fill in the 0th data
   const objPositions = [[0, 0, 0]];
   const objTexcoords = [[0, 0]];
@@ -157,7 +154,9 @@ async function main() {
   // compiles and links the shaders, looks up attribute and uniform locations
   const meshProgramInfo = webglUtils.createProgramInfo(gl, [vs, fs]);
 
-  const data = await loadOBJ('resources/models/cube/cube.obj');  /* webglfundamentals: url */
+  const response = await fetch('resources/models/cube/cube.obj');  /* webglfundamentals: url */
+  const text = await response.text();
+  const data = parseOBJ(text);
 
   // Because data is just named arrays like this
   //

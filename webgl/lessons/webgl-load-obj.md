@@ -75,10 +75,11 @@ to do is load a text file. Fortunately in 2020 that's super easy
 if we use [async/await](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Async_await).
 
 ```js
-async loadOBJ(url) {
-  const response = await fetch(url);
+async function main() {
+  ...
+
+  const response = await fetch('resources/models/cube/cube.obj');
   const text = await response.text();
-}
 ```
 
 Next it looks like we can parse it one line at time and that
@@ -95,10 +96,8 @@ So, let's set up some code to parse each line, skip blank lines
 and comments and then call some function based on the keyword
 
 ```js
-async loadOBJ(url) {
-  const response = await fetch(url);
-  const text = await response.text();
-
++function parseOBJ(text) {
++
 +  const keywords = {
 +  };
 +
@@ -166,10 +165,7 @@ that is the combination of data of all 3 things. [*](webgl-pulling-vertices.html
 So given all that it looks like we can parse these parts as follows
 
 ```js
-async loadOBJ(url) {
-  const response = await fetch(url);
-  const text = await response.text();
-
+function parseOBJ(text) {
 +  // because indices are base 1 let's just fill in the 0th data
 +  const objPositions = [[0, 0, 0]];
 +  const objTexcoords = [[0, 0]];
@@ -406,10 +402,7 @@ First let's make some code that starts a new webgl data if we don't already
 have some
 
 ```js
-async function loadOBJ(url) {
-  const response = await fetch(url)
-  const text = await response.text();
-
+function parseOBJ(text) {
   // because indices are base 1 let's just fill in the 0th data
   const objPositions = [[0, 0, 0]];
   const objTexcoords = [[0, 0]];
@@ -542,7 +535,7 @@ or normals are missing and just not include them.
 Continuing with keywords, `matlib` specifies separate file(s) that contains material info. We'll handle that latter. For now let's just add it on to our loader so we can reference it later.
 
 ```js
-async function loadOBJ(url) {
+function parseOBJ(text) {
   ...
 +  const materialLibs = [];
 
@@ -569,7 +562,7 @@ not really clear how to use this. Can we have a file with just `o`
 but no `usemat`? Let's assume yes.
 
 ```js
-async function loadOBJ(url) {
+function parseOBJ(text) {
   ...
   let material = 'default';
 +  let object = 'default';
@@ -641,7 +634,7 @@ Because it will appear in the next file we try let's add support here
 even though we won't actually use the data.
 
 ```js
-async function loadOBJ(url) {
+function parseOBJ(text) {
   ...
 +  let groups = ['default'];
   ...
@@ -686,9 +679,12 @@ our setup code to create `WebGLBuffers` for each one. We'll also create
 a random color so hopefully it's easy to see the different parts.
 
 ```js
--  const data = await loadOBJ('resources/models/cube/cube.obj');
-+  const obj = await loadOBJ('resources/models/chair/chair.obj');
-+
+-  const response = await fetch('resources/models/cube/cube.obj');
++  const response = await fetch('resources/models/cube/chair.obj');
+  const text = await response.text();
+-  const data = parseOBJ(text);
++  const obj = parseOBJ(text);
+
 +  const parts = obj.geometries.map(({data}) => {
     // Because data is just named arrays like this
     //
