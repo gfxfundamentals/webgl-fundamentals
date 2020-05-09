@@ -314,7 +314,7 @@ It also has various selectors for the parts of a vec. For a vec4
 *   `v.z` is the same as `v.p` and `v.b` and `v[2]`.
 *   `v.w` is the same as `v.q` and `v.a` and `v[3]`.
 
-It it able to *swizzle* vec components which means you can swap or repeat components.
+It is able to *swizzle* vec components which means you can swap or repeat components.
 
     v.yyyy
 
