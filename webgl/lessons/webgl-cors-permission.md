@@ -98,7 +98,7 @@ it to `anonymous`.
 
 Why don't we just always see that permission? Because asking for permission takes 2 HTTP requests so it's
 slower than not asking. If we know we're on the same domain or we know we won't use the image for anything
-except img tags and or canvas2d then we don't want to set `crossDomain` because it
+except img tags and or canvas2d then we don't want to set `crossOrigin` because it
 will make things slower.
 
 We can make a function that checks if the image we're trying to load is on the same origin and if
