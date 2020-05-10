@@ -104,7 +104,7 @@ WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
 
 It turns out there's a kind of obscure setting in WebGL left
 over from when OpenGL was first created. Computers sometimes
-go faster then data is a certain size. For example it can
+go faster when data is a certain size. For example it can
 be faster to copy 2, 4, or 8 bytes at a time instead of 1 a time.
 WebGL defaults to using 4 bytes at a time so it expects each
 row of data to be a multiple of 4 bytes (except for the last row).
