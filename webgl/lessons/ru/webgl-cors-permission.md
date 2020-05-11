@@ -114,7 +114,7 @@ CORS = Cross Origin Resource Sharing (совместное использова�
 на том же домене, и в зависимости от этого установит атрибут `crossOrigin`.
 
     function requestCORSIfNotSameOrigin(img, url) {
-      if ((new URL(url)).origin !== window.location.origin) {
+      if ((new URL(url, window.location.href)).origin !== window.location.origin) {
         img.crossOrigin = "";
       }
     }
