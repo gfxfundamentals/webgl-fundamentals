@@ -98,7 +98,7 @@ canvas2d 设置 `crossOrigin` 属性，这样就不用让图像请求变慢。
 我们可以定义一个方法，当图像资源在其他域名下时就设置 `crossOrigin` 属性。
 
     function requestCORSIfNotSameOrigin(img, url) {
-      if ((new URL(url)).origin !== window.location.origin) {
+      if ((new URL(url, window.location.href)).origin !== window.location.origin) {
         img.crossOrigin = "";
       }
     }

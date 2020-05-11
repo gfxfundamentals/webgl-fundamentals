@@ -127,7 +127,7 @@ ${indent}${variable}${code}${url};`;
 // do NOT give permission.
 // See: https://webglfundamentals.org/webgl/lessons/webgl-cors-permission.html
 function requestCORSIfNotSameOrigin(img, url) {
-  if ((new URL(url)).origin !== window.location.origin) {
+  if ((new URL(url, window.location.href)).origin !== window.location.origin) {
     img.crossOrigin = "";
   }
 }

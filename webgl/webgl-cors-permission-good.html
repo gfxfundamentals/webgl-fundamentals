@@ -98,7 +98,7 @@ function main() {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
 
   function requestCORSIfNotSameOrigin(img, url) {
-    if ((new URL(url)).origin !== window.location.origin) {
+    if ((new URL(url, window.location.href)).origin !== window.location.origin) {
       img.crossOrigin = "";
     }
   }

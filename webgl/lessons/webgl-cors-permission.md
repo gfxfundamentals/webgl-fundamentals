@@ -105,7 +105,7 @@ We can make a function that checks if the image we're trying to load is on the s
 so sets the `crossOrigin` attribute.
 
     function requestCORSIfNotSameOrigin(img, url) {
-      if ((new URL(url)).origin !== window.location.origin) {
+      if ((new URL(url, window.location.href)).origin !== window.location.origin) {
         img.crossOrigin = "";
       }
     }
