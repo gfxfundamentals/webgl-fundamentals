@@ -297,7 +297,7 @@ will make things slower.</p>
 <p>We can make a function that checks if the image we&#39;re trying to load is on the same origin and if
 so sets the <code>crossOrigin</code> attribute.</p>
 <pre class="prettyprint"><code>function requestCORSIfNotSameOrigin(img, url) {
-  if ((new URL(url)).origin !== window.location.origin) {
+  if ((new URL(url, window.location.href)).origin !== window.location.origin) {
     img.crossOrigin = &quot;&quot;;
   }
 }
