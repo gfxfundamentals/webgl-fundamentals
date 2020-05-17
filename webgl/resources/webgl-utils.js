@@ -487,14 +487,16 @@
    *        uniforms.
    * @memberOf module:webgl-utils
    */
-  function setUniforms(setters, values) {
+  function setUniforms(setters, ...values) {
     setters = setters.uniformSetters || setters;
-    Object.keys(values).forEach(function(name) {
-      const setter = setters[name];
-      if (setter) {
-        setter(values[name]);
-      }
-    });
+    for (const uniforms of values) {
+      Object.keys(uniforms).forEach(function(name) {
+        const setter = setters[name];
+        if (setter) {
+          setter(uniforms[name]);
+        }
+      });
+    }
   }
 
   /**
@@ -512,10 +514,30 @@
 
     function createAttribSetter(index) {
       return function(b) {
-          gl.bindBuffer(gl.ARRAY_BUFFER, b.buffer);
-          gl.enableVertexAttribArray(index);
-          gl.vertexAttribPointer(
-              index, b.numComponents || b.size, b.type || gl.FLOAT, b.normalize || false, b.stride || 0, b.offset || 0);
+          if (b.value) {
+            gl.disableVertexAttribArray(index);
+            switch (b.value.length) {
+              case 4:
+                gl.vertexAttrib4fv(index, b.value);
+                break;
+              case 3:
+                gl.vertexAttrib3fv(index, b.value);
+                break;
+              case 2:
+                gl.vertexAttrib2fv(index, b.value);
+                break;
+              case 1:
+                gl.vertexAttrib1fv(index, b.value);
+                break;
+              default:
+                throw new Error('the length of a float constant value must be between 1 and 4!');
+            }
+          } else {
+            gl.bindBuffer(gl.ARRAY_BUFFER, b.buffer);
+            gl.enableVertexAttribArray(index);
+            gl.vertexAttribPointer(
+                index, b.numComponents || b.size, b.type || gl.FLOAT, b.normalize || false, b.stride || 0, b.offset || 0);
+          }
         };
     }
 
@@ -967,13 +989,19 @@
     Object.keys(mapping).forEach(function(attribName) {
       const bufferName = mapping[attribName];
       const origArray = arrays[bufferName];
-      const array = makeTypedArray(origArray, bufferName);
-      attribs[attribName] = {
-        buffer:        createBufferFromTypedArray(gl, array),
-        numComponents: origArray.numComponents || array.numComponents || guessNumComponentsFromName(bufferName),
-        type:          getGLTypeForTypedArray(gl, array),
-        normalize:     getNormalizationForTypedArray(array),
-      };
+      if (origArray.value) {
+        attribs[attribName] = {
+          value: origArray.value,
+        };
+      } else {
+        const array = makeTypedArray(origArray, bufferName);
+        attribs[attribName] = {
+          buffer:        createBufferFromTypedArray(gl, array),
+          numComponents: origArray.numComponents || array.numComponents || guessNumComponentsFromName(bufferName),
+          type:          getGLTypeForTypedArray(gl, array),
+          normalize:     getNormalizationForTypedArray(array),
+        };
+      }
     });
     return attribs;
   }

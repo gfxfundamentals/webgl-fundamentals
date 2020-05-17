@@ -961,17 +961,248 @@ well.</p>
 </div>
 
 </p>
-<p>As for parsing and using materials that will have to wait
-for another article.</p>
-<p>Parsing an .MTL file is easier than parsing a .OBJ file which
-itself was not that hard. But, depending on the parameters,
-we&#39;ll need different shaders with different features if we
-want to support more options and that will take some work.</p>
+<p>Looking around the net it turns out there are non-standard versions of
+.OBJ files that include vertex colors. To do this they tack on extra
+values to each vertex position so instead of</p>
+<pre class="prettyprint"><code>v &lt;x&gt; &lt;y&gt; &lt;z&gt;
+</code></pre><p>its</p>
+<pre class="prettyprint"><code>v &lt;x&gt; &lt;y&gt; &lt;z&gt; &lt;red&gt; &lt;green&gt; &lt;blue&gt;
+</code></pre><p>It&#39;s not clear if there is also an optional alpha at end of that.</p>
+<p>I looked around and found this <a href="https://sketchfab.com/3d-models/book-vertex-chameleon-study-51b0b3bdcd844a9e951a9ede6f192da8">Book - Vertex chameleon study</a> by <a href="https://sketchfab.com/homkahom0">Oleaf</a> License: <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC</a> that uses vertex colors.</p>
+<div class="webgl_center"><img src="../resources/models/book-vertex-chameleon-study/book.png" style="width: 446px;"></div>
+
+<p>Let&#39;s see if we can add in support to our parser to handle the vertex colors.</p>
+<p>We need to add stuff for colors everywhere we had position, normals, and texcoords</p>
+<pre class="prettyprint"><code class="lang-js">function parseOBJ(text) {
+  // because indices are base 1 let&#39;s just fill in the 0th data
+  const objPositions = [[0, 0, 0]];
+  const objTexcoords = [[0, 0]];
+  const objNormals = [[0, 0, 0]];
++  const objColors = [[0, 0, 0]];
+
+  // same order as `f` indices
+  const objVertexData = [
+    objPositions,
+    objTexcoords,
+    objNormals,
++    objColors,
+  ];
+
+  // same order as `f` indices
+  let webglVertexData = [
+    [],   // positions
+    [],   // texcoords
+    [],   // normals
++    [],   // colors
+  ];
+
+  ...
+
+  function setGeometry() {
+    if (!geometry) {
+      const position = [];
+      const texcoord = [];
+      const normal = [];
++      const color = [];
+      webglVertexData = [
+        position,
+        texcoord,
+        normal,
++        color,
+      ];
+      geometry = {
+        object,
+        groups,
+        material,
+        data: {
+          position,
+          texcoord,
+          normal,
++          color,
+        },
+      };
+      geometries.push(geometry);
+    }
+  }
+</code></pre>
+<p>Then unfortunately actually parsing makes the code a little less generic.</p>
+<pre class="prettyprint"><code class="lang-js">  const keywords = {
+    v(parts) {
+-      objPositions.push(parts.map(parseFloat));
++      // if there are more than 3 values here they are vertex colors
++      if (parts.length &gt; 3) {
++        objPositions.push(parts.slice(0, 3).map(parseFloat));
++        objColors.push(parts.slice(3).map(parseFloat));
++      } else {
++        objPositions.push(parts.map(parseFloat));
++      }
+    },
+    ...
+  };
+</code></pre>
+<p>Then when we read a <code>f</code> face line we call <code>addVertex</code>. We&#39;ll need to grab
+the vertex colors here</p>
+<pre class="prettyprint"><code class="lang-js">  function addVertex(vert) {
+    const ptn = vert.split(&#39;/&#39;);
+    ptn.forEach((objIndexStr, i) =&gt; {
+      if (!objIndexStr) {
+        return;
+      }
+      const objIndex = parseInt(objIndexStr);
+      const index = objIndex + (objIndex &gt;= 0 ? 0 : objVertexData[i].length);
+      webglVertexData[i].push(...objVertexData[i][index]);
++      // if this is the position index (index 0) and we parsed
++      // vertex colors then copy the vertex colors to the webgl vertex color data
++      if (i === 0 &amp;&amp; objColors.length &gt; 1) {
++        geometry.data.color.push(...objColors[index]);
++      }
+    });
+  }
+</code></pre>
+<p>Now we need to change our shaders to use vertex colors</p>
+<pre class="prettyprint"><code class="lang-js">const vs = `
+attribute vec4 a_position;
+attribute vec3 a_normal;
++attribute vec4 a_color;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+
+varying vec3 v_normal;
++varying vec4 v_color;
+
+void main() {
+  gl_Position = u_projection * u_view * u_world * a_position;
+  v_normal = mat3(u_world) * a_normal;
++  v_color = a_color;
+}
+`;
+
+const fs = `
+precision mediump float;
+
+varying vec3 v_normal;
++varying vec4 v_color;
+
+uniform vec4 u_diffuse;
+uniform vec3 u_lightDirection;
+
+void main () {
+  vec3 normal = normalize(v_normal);
+  float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
+-  gl_FragColor = vec4(u_diffuse.rgb * fakeLight, u_diffuse.a);
++  vec4 diffuse = u_diffuse * v_color;
++  gl_FragColor = vec4(diffuse.rgb * fakeLight, diffuse.a);
+}
+`;
+</code></pre>
+<p>Like I mentioned above I have no idea if this non-standard version of .OBJ
+can include alpha values for each vertex color. Our <a href="webgl-less-code-more-fun.html">helper library</a> has been automatically taking the data we pass it and making buffers for
+us. It guesses how many components there are per element in the data. For data with a name
+that contains the string <code>position</code> or <code>normal</code> it assumes 3 components per element.
+For a name that contains <code>texcoord</code> it assumes 2 components per element. For everything
+else it assumes 4 components per element. That means if our colors are only r, g, b,
+3 components per element, we need to tell it so it doesn&#39;t guess 4.</p>
+<pre class="prettyprint"><code class="lang-js">const parts = obj.geometries.map(({data}) =&gt; {
+  // Because data is just named arrays like this
+  //
+  // {
+  //   position: [...],
+  //   texcoord: [...],
+  //   normal: [...],
+  // }
+  //
+  // and because those names match the attributes in our vertex
+  // shader we can pass it directly into `createBufferInfoFromArrays`
+  // from the article &quot;less code more fun&quot;.
+
++   if (data.position.length === data.color.length) {
++     // it&#39;s 3. The our helper library assumes 4 so we need
++     // to tell it there are only 3.
++     data.color = { numComponents: 3, data: data.color };
++   }
+
+  // create a buffer for each array by calling
+  // gl.createBuffer, gl.bindBuffer, gl.bufferData
+  const bufferInfo = webglUtils.createBufferInfoFromArrays(gl, data);
+  return {
+    material: {
+      u_diffuse: [Math.random(), Math.random(), Math.random(), 1],
+    },
+    bufferInfo,
+  };
+});
+</code></pre>
+<p>We probably also want to still handle the more common case when there are no
+vertex colors. On <a href="webgl-fundamentals.html">the first article</a> as well as
+<a href="webgl-attributes.html">other articles</a> we covered that an attribute usually
+gets its value from a buffer. But, we can also make attributes just be constant.
+An attribute that is turned off uses a constant value. Example</p>
+<pre class="prettyprint"><code class="lang-js">gl.disableVertexAttribArray(someAttributeLocation);  // use a constant value
+const value = [1, 2, 3, 4];
+gl.vertexAttrib4fv(someAttributeLocation, value);    // the constant value to use
+</code></pre>
+<p>Our <a href="webgl-less-code-more-fun.html">helper library</a> handles this for us if
+we set the data for that attribute to <code>{value: [1, 2, 3, 4]}</code>. So, we can
+check if there are no vertex colors then if so set the vertex color attribute
+to constant white.</p>
+<pre class="prettyprint"><code class="lang-js">const parts = obj.geometries.map(({data}) =&gt; {
+  // Because data is just named arrays like this
+  //
+  // {
+  //   position: [...],
+  //   texcoord: [...],
+  //   normal: [...],
+  // }
+  //
+  // and because those names match the attributes in our vertex
+  // shader we can pass it directly into `createBufferInfoFromArrays`
+  // from the article &quot;less code more fun&quot;.
+
++  if (data.color) {
+      if (data.position.length === data.color.length) {
+        // it&#39;s 3. The our helper library assumes 4 so we need
+        // to tell it there are only 3.
+        data.color = { numComponents: 3, data: data.color };
+      }
++  } else {
++    // there are no vertex colors so just use constant white
++    data.color = { value: [1, 1, 1, 1] };
++  }
+
+  ...
+});
+</code></pre>
+<p>We also can&#39;t use a random color per part any more</p>
+<pre class="prettyprint"><code class="lang-js">const parts = obj.geometries.map(({data}) =&gt; {
+  ...
+
+  // create a buffer for each array by calling
+  // gl.createBuffer, gl.bindBuffer, gl.bufferData
+  const bufferInfo = webglUtils.createBufferInfoFromArrays(gl, data);
+  return {
+    material: {
+-      u_diffuse: [Math.random(), Math.random(), Math.random(), 1],
++      u_diffuse: [1, 1, 1, 1],
+    },
+    bufferInfo,
+  };
+});
+</code></pre>
+<p>And we that we&#39;re able to load an .OBJ file with vertex colors.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-load-obj-w-vertex-colors.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-load-obj-w-vertex-colors.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>As for parsing and using materials <a href="webgl-load-obj-with-mtl.html">see the next article</a></p>
 <h2 id="a-bunch-of-notes">A bunch of notes</h2>
 <h3 id="the-loader-above-is-incomplete">The loader above is incomplete</h3>
 <p>You can go <a href="http://paulbourke.net/dataformats/obj/">read more about the .obj format</a>.
 The are tons of features the code above doesn&#39;t support. Also, the code has
-not been tested on very many .obj files so maybe there is lurking bugs. That said, I 
+not been tested on very many .obj files so maybe there are lurking bugs. That said, I 
 suspect the majority of .obj files online only use the features shown above so I suspect
 it&#39;s probably a useful example.</p>
 <h3 id="the-loader-is-not-checking-for-errors">The loader is not checking for errors</h3>
@@ -980,9 +1211,14 @@ would be for 3D textures which is not common so I didn&#39;t bother. If you did 
 a file with 3D texture coordinates you&#39;d have to change the shaders to handle 3D
 textures and the code that generates <code>WebGLBuffers</code> (calls <code>createBufferInfoFromArrays</code>)
 to tell it it&#39;s 3 components per UV coordinate.</p>
-<p>As another example I have no idea if some <code>f</code> keywords can have 3 entries
+<h3 id="it-s-assuming-the-data-is-homogeneous">It&#39;s assuming the data is homogeneous</h3>
+<p>I have no idea if some <code>f</code> keywords can have 3 entries
 and others only 2 in the same file. If that&#39;s possible the code above doesn&#39;t
 handle it.</p>
+<p>The code also assumes that if vertex positions have x, y, z they all
+have x, y, z. If there are files out there where some vertex positions
+have x, y, z, others have only x, y, and still others have x, y, z, r, g, b
+then we&#39;d have to refractor.</p>
 <h3 id="you-could-put-all-the-data-in-one-buffer">You could put all the data in one buffer</h3>
 <p>The code above puts the data for position, texcoord, normal in separate buffers.
 You could put them in one buffer by either interleaving them 
@@ -1130,6 +1366,7 @@ to some other format first, offline, and then use the better format on your page
         <ul>
           <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
 <li><a href="/webgl/lessons/webgl-load-obj.html">Loading .obj files</a></li>
+<li><a href="/webgl/lessons/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
   <li>Textures</li>
         <ul>
