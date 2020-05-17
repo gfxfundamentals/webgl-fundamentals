@@ -827,7 +827,15 @@ for [environment map](webgl-environment-maps.html). They also show the various
 * `-o u v w` specifies an offset for texture coordinates. You'd apply those using a texture matrix similar to what we did in [the article on drawImage](webgl-2d-drawimage.html)
 * `-s u v w` specifies a scale for texture coordinates. As above you'd put those in a texture matrix
 
-I have no idea how many .MTL files are out there that use those settings.
+I have no idea how many .MTL files are out there that use those settings or how
+far to take it. For example if we add support for `-o` and `-s` do we want
+to add that support for every texture under the assumption they might be different
+for the diffuseMap vs the normalMap vs the specularMap etc..? That then requires
+that we pass in a separate texture matrix for each texture which would then
+require either passing a different set of texture coordinates per texture from
+the vertex shader to the fragment shader or else doing the texture matrix
+multiplication in the fragment shader instead of the traditional way of doing it
+in the vertex shader.
 
 A bigger point to take home is that adding support for every feature makes
 the shaders bigger and more complicated. Above we have a form of *uber shader*,
@@ -865,3 +873,28 @@ Managing all of that is a lot of work. This is one reason why many people
 chose a 3D engine like [three.js](https://threejs.org) instead of doing this
 all themselves. But least hopefully this article gives some idea of
 the types of things involved in displaying arbitrary 3D content.
+
+<div class="webgl_bottombar">
+<h3>Avoid conditionals in shaders where possible</h3>
+<p>The traditional advice is to avoid conditionals in shaders. As an example
+we could have done something like this</p>
+<pre class="prettyprint"><code>
+uniform bool hasDiffuseMap;
+uniform vec4 diffuse;
+uniform sampler2D diffuseMap
+
+...
+  vec4 effectiveDiffuse = diffuse;
+  if (hasDiffuseMap) {
+    effectiveDiffuse *= texture2D(diffuseMap, texcoord);
+  }
+...
+</code></pre>
+<p>Conditionals like that are generally discouraged because depending on the
+GPU/driver they are often not very performant.</p>
+<p>Either do like we did above and try to make the code have no conditionals. We used
+a single 1x1 white pixel texture when there is no texture so our math would work
+without a conditional.<p>
+<p>Or, use different shaders. One that doesn't have the feature and one the does
+and choose the correct one for each situation.</p>
+</div>
