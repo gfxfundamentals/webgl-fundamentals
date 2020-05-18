@@ -5,6 +5,13 @@ TOC: Loading .obj w .mtl files
 In [the previous article](webgl-load-obj.html) we parsed .OBJ files.
 In this article lets parse their complementary .MTL material files.
 
+**Disclaimer:** This .MTL parser is not meant to be exhaustive or
+flawless or handle every .MTL file. Rather it's meant as an
+exercise to walk through handling what we run into on the way.
+That said, if you run into big issues and solutions a comment
+at the bottom might be helpful for others if they choose to
+use this code.
+
 We loaded this [CC-BY 4.0](http://creativecommons.org/licenses/by/4.0/) [chair](https://sketchfab.com/3d-models/chair-aa2acddb218646a59ece132bf95aa558) by [haytonm](https://sketchfab.com/haytonm) I found on [Sketchfab](https://sketchfab.com/)
 
 <div class="webgl_center"><img src="../resources/models/chair/chair.jpg" style="width: 452px;"></div>

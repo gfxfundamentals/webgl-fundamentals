@@ -8,6 +8,13 @@ parse the most common forms so let's parse one. It will
 hopefully provide a useful example for parsing 3D formats
 in general.
 
+**Disclaimer:** This .OBJ parser is not meant to be exhaustive or
+flawless or handle every .OBJ file. Rather it's meant as an
+exercise to walk through handling what we run into on the way.
+That said, if you run into big issues and solutions a comment
+at the bottom might be helpful for others if they choose to
+use this code.
+
 The best documentation I've found for the .OBJ format is
 [here](http://paulbourke.net/dataformats/obj/). Though 
 [this page](https://www.loc.gov/preservation/digital/formats/fdd/fdd000507.shtml)
