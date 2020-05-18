@@ -136,19 +136,21 @@ function parseOBJ(text) {
       }
     },
     s: noop,    // smoothing group
-    mtllib(parts) {
-      materialLibs.push(...parts);
+    mtllib(parts, unparsedArgs) {
+      // the spec says there can be multiple filenames here
+      // but many exist with spaces in a single filename
+      materialLibs.push(unparsedArgs);
     },
-    usemtl(parts) {
-      material = parts[0];
+    usemtl(parts, unparsedArgs) {
+      material = unparsedArgs;
       newGeometry();
     },
     g(parts) {
       groups = parts;
       newGeometry();
     },
-    o(parts) {
-      object = parts[0];
+    o(parts, unparsedArgs) {
+      object = unparsedArgs;
       newGeometry();
     },
   };
@@ -159,14 +161,18 @@ function parseOBJ(text) {
     if (line === '' || line.startsWith('#')) {
       continue;
     }
-    const parts = line.split(/\s+/);
-    const keyword = parts.shift();
+    const m = keywordRE.exec(line);
+    if (!m) {
+      continue;
+    }
+    const [, keyword, unparsedArgs] = m;
+    const parts = line.split(/\s+/).slice(1);
     const handler = keywords[keyword];
     if (!handler) {
       console.warn('unhandled keyword:', keyword);  // eslint-disable-line no-console
       continue;
     }
-    handler(parts);
+    handler(parts, unparsedArgs);
   }
 
   // remove any arrays that have no entries.
@@ -179,6 +185,11 @@ function parseOBJ(text) {
     geometries,
     materialLibs,
   };
+}
+
+function parseMapArgs(unparsedArgs) {
+  // TODO: handle options
+  return unparsedArgs;
 }
 
 function parseMTL(text) {
@@ -207,14 +218,18 @@ function parseMTL(text) {
     if (line === '' || line.startsWith('#')) {
       continue;
     }
-    const parts = line.split(/\s+/);
-    const keyword = parts.shift();
+    const m = keywordRE.exec(line);
+    if (!m) {
+      continue;
+    }
+    const [, keyword, unparsedArgs] = m;
+    const parts = line.split(/\s+/).slice(1);
     const handler = keywords[keyword];
     if (!handler) {
       console.warn('unhandled keyword:', keyword);  // eslint-disable-line no-console
       continue;
     }
-    handler(parts);
+    handler(parts, unparsedArgs);
   }
 
   return materials;

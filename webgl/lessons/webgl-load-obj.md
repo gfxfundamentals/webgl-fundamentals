@@ -108,13 +108,18 @@ and comments and then call some function based on the keyword
 +      continue;
 +    }
 +    const parts = line.split(/\s+/);
-+    const keyword = parts.shift();
++    const m = keywordRE.exec(line);
++    if (!m) {
++      continue;
++    }
++    const [, keyword, unparsedArgs] = m;
++    const parts = line.split(/\s+/).slice(1);
 +    const handler = keywords[keyword];
 +    if (!handler) {
 +      console.warn('unhandled keyword:', keyword, 'at line', lineNo + 1);
 +      continue;
 +    }
-+    handler(parts);
++    handler(parts, unparsedArgs);
 +  }
 }
 ```
@@ -485,8 +490,8 @@ function.
         addVertex(parts[tri + 2]);
       }
     },
-+    usemtl(parts) {
-+      material = parts[0];
++    usemtl(parts, unparsedArgs) {
++      material = unparsedArgs;
 +      newGeometry();
 +    },
   };
@@ -532,7 +537,16 @@ or normals are missing and just not include them.
 }
 ```
 
-Continuing with keywords, `matlib` specifies separate file(s) that contains material info. We'll handle that latter. For now let's just add it on to our loader so we can reference it later.
+Continuing with keywords, According to the [*official spec*](http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf),
+`matlib` specifies separate file(s) that contains material info. Unfortunately that
+doesn't seem to match reality because filenames can have spaces them and the .OBJ format
+provides no way to escape spaces or quote arguments. Ideally they should have used a well defined format
+like json or xml or yaml or something that solves this issue but in their defense .OBJ is older
+than any of those formats.
+
+We handle loading the file latter.
+For now let's just add it on to our loader so we can reference it later.
+
 
 ```js
 function parseOBJ(text) {
@@ -543,8 +557,8 @@ function parseOBJ(text) {
 
   const keywords = {
     ...
-+    mtllib(parts) {
-+      materialLibs.push(...parts);
++    mtllib(parts, unparsedArgs) {
++      materialLibs.push(unparsedArgs);
 +    },
     ...
   };
@@ -594,8 +608,8 @@ function parseOBJ(text) {
 
   const keywords = {
     ...
-+    o(parts) {
-+      object = parts[0];
++    o(parts, unparsedArgs) {
++      object = unparsedArgs;
 +      newGeometry();
 +    },
     ...
