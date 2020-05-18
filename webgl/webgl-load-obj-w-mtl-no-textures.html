@@ -197,9 +197,9 @@ function parseMTL(text) {
   let material;
 
   const keywords = {
-    newmtl(parts) {
+    newmtl(parts, unparsedArgs) {
       material = {};
-      materials[parts[0]] = material;
+      materials[unparsedArgs] = material;
     },
     /* eslint brace-style:0 */
     Ns(parts)       { material.shininess      = parseFloat(parts[0]); },
