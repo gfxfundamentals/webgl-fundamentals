@@ -77,7 +77,7 @@ void main() {
 
   vec2 pos = vec2(cos(angle), sin(angle)) * radius;
   
-+  float aspect = resolution.y / resolution.y;
++  float aspect = resolution.y / resolution.x;
 +  vec2 scale = vec2(aspect, 1);
   
 +  gl_Position = vec4(pos * scale, 0, 1);
