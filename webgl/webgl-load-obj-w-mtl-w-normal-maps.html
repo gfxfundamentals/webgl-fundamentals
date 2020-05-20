@@ -330,10 +330,12 @@ function generateTangents(position, texcoord, indices) {
     const duv13 = subtractVector2(uv3, uv1);
 
     const f = 1.0 / (duv12[0] * duv13[1] - duv13[0] * duv12[1]);
-    const tangent = m4.normalize(m4.scaleVector(m4.subtractVectors(
-      m4.scaleVector(dp12, duv13[1]),
-      m4.scaleVector(dp13, duv12[1]),
-    ), f));
+    const tangent = Number.isFinite(f)
+      ? m4.normalize(m4.scaleVector(m4.subtractVectors(
+          m4.scaleVector(dp12, duv13[1]),
+          m4.scaleVector(dp13, duv12[1]),
+        ), f))
+      : [1, 0, 0];
 
     tangents.push(...tangent, ...tangent, ...tangent);
   }
