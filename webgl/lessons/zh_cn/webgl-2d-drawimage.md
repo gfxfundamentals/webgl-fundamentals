@@ -190,7 +190,7 @@ WebGL需要上传`x, y`, `x + width, y`, `x, y + height`, 和
       var deltaTime = Math.min(0.1, now - then);
       then = now;
 
-      update(time);
+      update(deltaTime);
       draw();
 
       requestAnimationFrame(render);

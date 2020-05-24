@@ -203,7 +203,7 @@ And lets draw them at random places
       var deltaTime = Math.min(0.1, now - then);
       then = now;
 
-      update(time);
+      update(deltaTime);
       draw();
 
       requestAnimationFrame(render);
