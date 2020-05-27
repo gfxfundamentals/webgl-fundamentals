@@ -1128,7 +1128,7 @@ And we that we're able to load an .OBJ file with vertex colors.
 
 {{{example url="../webgl-load-obj-w-vertex-colors.html"}}}
 
-As for parsing and using materials [see the next article](webgl-load-obj-with-mtl.html)
+As for parsing and using materials [see the next article](webgl-load-obj-w-mtl.html)
 
 ## A bunch of notes
 
