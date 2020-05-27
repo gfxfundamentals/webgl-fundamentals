@@ -72,6 +72,7 @@ function parseMTL(text) {
     },
   };
 
+  const keywordRE = /(\w*)(?: )*(.*)/;
   const lines = text.split('\n');
   for (let lineNo = 0; lineNo < lines.length; ++lineNo) {
     const line = lines[lineNo].trim();
