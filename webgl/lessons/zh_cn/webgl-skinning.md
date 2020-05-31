@@ -674,8 +674,8 @@ class MeshRenderer {
         u_view: view,
         u_world: node.worldMatrix,
       });
-      webglUtils.setUniforms(skinProgramInfo, primitive.material.uniforms);
-      webglUtils.setUniforms(skinProgramInfo, sharedUniforms);
+      webglUtils.setUniforms(meshProgramInfo, primitive.material.uniforms);
+      webglUtils.setUniforms(meshProgramInfo, sharedUniforms);
       webglUtils.drawBufferInfo(gl, primitive.bufferInfo);
     }
   }
