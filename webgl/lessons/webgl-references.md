@@ -18,15 +18,25 @@ Some other links you might find useful
   shader languages have many differences. Still, many of the ideas and techniques shown are
   just as useful in WebGL as they are in OpenGL.
 
+## Helpers / Extensions
+
+* [Spector](https://chrome.google.com/webstore/detail/spectorjs/denbgaamihkadbghdceggmchnflmhpmk?hl=en): An extension to show all your WebGL calls
+
+* [Shader Editor](https://chrome.google.com/webstore/detail/shader-editor/ggeaidddejpbakgafapihjbgdlbbbpob?hl=en): An extension that lets you view and edit shaders in live web pages.
+
+* [WebGL Insight](https://chrome.google.com/webstore/detail/webgl-insight/djdcbmfacaaocoomokenoalbomllhnko?hl=en): An extension to let you see WebGL usage
+
+* [webgl-helpers](https://greggman.github.io/webgl-helpers/): Scripts to help with WebGL
+
 ## Libraries
 
 * [twgl](https://twgljs.org): A library to help make WebGL less verbose.
 
 * [three.js](https://threejs.org): the most popular JavaScript 3D library.
 
-* [regl](https://regl.party/): A stateless functional WebGL library.
-
 * [PlayCanvas](https://playcanvas.com/) A WebGL game engine with game editor
+
+* [regl](https://regl.party/): A stateless functional WebGL library.
 
 ## Specs
 
