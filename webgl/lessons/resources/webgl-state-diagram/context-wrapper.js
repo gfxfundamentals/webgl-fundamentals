@@ -10,11 +10,18 @@ export function setDefaultVAOInfo(vaoInfo) {
   defaultVAOInfo = vaoInfo;
 }
 
+let defaultTFOInfo;
+export function setDefaultTFOInfo(vaoInfo) {
+  defaultTFOInfo = vaoInfo;
+}
+
 export const getWebGLObjectInfoOrDefaultVAO = v => v ? webglObjects.get(v) : defaultVAOInfo;
+export const getWebGLObjectInfoOrDefaultTFO = v => v ? webglObjects.get(v) : defaultTFOInfo;
 
 export const formatWebGLObject = v => v ? webglObjects.get(v).name : 'null';
 export const formatWebGLObjectOrCanvas = v => v ? webglObjects.get(v).name : 'null (canvas)';
 export const formatWebGLObjectOrDefaultVAO = v => v ? webglObjects.get(v).name : 'null (default VAO)';
+export const formatWebGLObjectOrDefaultTFO = v => v ? webglObjects.get(v).name : 'null (default TFO)';
 export function getWebGLObjectInfo(webglObject) {
   return webglObjects.get(webglObject);
 }

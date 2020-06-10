@@ -8,8 +8,10 @@ import {
   formatWebGLObject,
   formatWebGLObjectOrCanvas,
   formatWebGLObjectOrDefaultVAO,
+  formatWebGLObjectOrDefaultTFO,
   getWebGLObjectInfo,
   getWebGLObjectInfoOrDefaultVAO,
+  getWebGLObjectInfoOrDefaultTFO,
 } from './context-wrapper.js';
 import {
   createExpander,
@@ -54,17 +56,21 @@ export function updateStateTable(statesInfo, parent, queryFn, initial) {
       // FIX: should put this data else were instead of guessing
       if (formatter === formatWebGLObject ||
           formatter === formatWebGLObjectOrDefaultVAO ||
+          formatter === formatWebGLObjectOrDefaultTFO ||
           formatter === formatWebGLObjectOrCanvas) {
         const oldArrow = elemToArrowMap.get(cell);
         if (oldArrow) {
           arrowManager.remove(oldArrow);
           elemToArrowMap.delete(cell);
         }
+        // FIX: should put this data else were instead of guessing
         const targetInfo = raw
             ? getWebGLObjectInfo(raw)
             : (formatter === formatWebGLObjectOrDefaultVAO)
                 ? getWebGLObjectInfoOrDefaultVAO(raw)
-                : null;
+                : (formatter === formatWebGLObjectOrDefaultTFO)
+                   ? getWebGLObjectInfoOrDefaultTFO(raw)
+                   : null;
         if (targetInfo && !targetInfo.deleted) {
           elemToArrowMap.set(
               cell,

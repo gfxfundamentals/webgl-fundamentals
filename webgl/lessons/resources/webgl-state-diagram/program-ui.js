@@ -17,6 +17,7 @@ import {
   formatWebGLObject,
   getWebGLObjectInfo,
   getWebGLObjectInfoOrDefaultVAO,
+  getWebGLObjectInfoOrDefaultTFO,
 } from './context-wrapper.js';
 
 import {
@@ -134,7 +135,7 @@ function createProgramTransformFeedbackVaryings(parent, gl, program) {
     arrows.forEach(arrow => arrowManager.remove(arrow));
 
     const tf = gl.getParameter(gl.TRANSFORM_FEEDBACK_BINDING);
-    const tfInfo = getWebGLObjectInfo(tf);
+    const tfInfo = getWebGLObjectInfoOrDefaultTFO(tf);
     const isCurrent = gl.getParameter(gl.CURRENT_PROGRAM) === program;
 
     const numAttribs = gl.getProgramParameter(program, gl.TRANSFORM_FEEDBACK_VARYINGS);
