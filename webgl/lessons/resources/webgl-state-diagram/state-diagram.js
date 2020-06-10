@@ -15,6 +15,8 @@ import {
   getWebGLObjectInfo,
   setDefaultVAOInfo,
   getWebGLObjectInfoOrDefaultVAO,
+  setDefaultTFOInfo,
+  getWebGLObjectInfoOrDefaultTFO,
 } from './context-wrapper.js';
 import {
   expand,
@@ -112,6 +114,13 @@ export default function main({webglVersion, examples}) {
   const stepper = new Stepper();
 
   document.body.addEventListener('click', showHint);
+
+  const defaultTFOInfo = {
+  };
+  if (globals.isWebGL2) {
+    defaultTFOInfo.ui = createTransformFeedbackDisplay(diagramElem, '*default*', null);
+    setDefaultTFOInfo(defaultTFOInfo);
+  }
 
   const defaultVAOInfo = {
     ui: createVertexArrayDisplay(diagramElem, '*default*', null),
@@ -309,6 +318,8 @@ export default function main({webglVersion, examples}) {
     });
     wrapFn('bindTransformFeedback', function(origFn, ...args) {
       origFn.call(this, ...args);
+      const {ui} = getCurrentTFOInfo();
+      moveToFront(ui.elem);
       const prog = gl.getParameter(gl.CURRENT_PROGRAM);
       updateProgramAttributesAndUniforms(prog);
     });
@@ -328,7 +339,7 @@ export default function main({webglVersion, examples}) {
         default:
           throw new Error('unhandled buffer type');
       }
-      const {ui} = getWebGLObjectInfo(webglObject);
+      const {ui} = getWebGLObjectInfoOrDefaultTFO(webglObject);
       ui.updateUnit(target, index, buffer, offset, size);
     };
     wrapFn('bindBufferBase', function(origFn, target, index, buffer, offset, size) {
@@ -426,6 +437,10 @@ export default function main({webglVersion, examples}) {
       info.ui.updateUniforms();
       info.ui.updateTransformFeedbackVaryings();
     }
+  }
+  function getCurrentTFOInfo() {
+    const transformFeedback = gl.getParameter(gl.TRANSFORM_FEEDBACK_BINDING);
+    return getWebGLObjectInfoOrDefaultTFO(transformFeedback);
   }
   wrapFn('bindVertexArray', function(origFn, vao) {
     origFn.call(this, vao);

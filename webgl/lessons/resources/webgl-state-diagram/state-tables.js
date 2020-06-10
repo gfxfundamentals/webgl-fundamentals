@@ -19,6 +19,7 @@ import {
   formatWebGLObject,
   formatWebGLObjectOrCanvas,
   formatWebGLObjectOrDefaultVAO,
+  formatWebGLObjectOrDefaultTFO,
 } from './context-wrapper.js';
 
 const glEnumToString = twgl.glEnumToString;
@@ -812,7 +813,7 @@ export function getStateTables(isWebGL2) {
       }, {
           pname: 'TRANSFORM_FEEDBACK_BINDING',
           setter: ['bindTransformFeedback'],
-          formatter: formatWebGLObject,
+          formatter: formatWebGLObjectOrDefaultTFO,
           help: `
           This is a bind point for working with a transform feedback
 
