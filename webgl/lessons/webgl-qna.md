@@ -103,13 +103,13 @@ A collection of links to random questions and/or answers about topics related to
 
 * [Can I mute the warning about vertex attrib 0 being disabled?](https://stackoverflow.com/questions/61612994/can-i-mute-the-warning-about-vertex-attrib-array-0-being-disabled)
 * [How to make a smudge brush tool](https://stackoverflow.com/questions/28197378/html5-canvas-javascript-smudge-brush-tool/61970857#61970857)
-* [How to read a single component with readPixels)[https://stackoverflow.com/questions/60796680/how-to-read-only-single-channelr-component-from-webgl-context-readpixels-api)
+* [How to read a single component with readPixels](https://stackoverflow.com/questions/60796680/how-to-read-only-single-channelr-component-from-webgl-context-readpixels-api)
 * [I get invalid type error when calling readPixels](https://stackoverflow.com/questions/61984296/i-get-invalid-type-error-when-trying-to-call-readpixels)
 * [How to optimize rendering a UI](https://stackoverflow.com/questions/62330231/webgl-2d-rendering-images-too-heavy)
 
 ## WebGL2
 
 * [Accessing textures by pixel coordinate in WebGL2](https://stackoverflow.com/questions/54100955)
-* [How can I get all the uniforms and uniformBlocks][https://stackoverflow.com/questions/60933510/webgl2-0-how-i-can-get-all-uniforms-except-uniformbuffer-item)
+* [How can I get all the uniforms and uniformBlocks](https://stackoverflow.com/questions/60933510/webgl2-0-how-i-can-get-all-uniforms-except-uniformbuffer-item)
 * [How can I create a 16bit historgram of 16bit data](https://stackoverflow.com/questions/58015221/how-to-create-a-histogram-in-webgl2-using-16-bit-data/)
 * [How to process particle positions](https://stackoverflow.com/questions/56780278/how-to-keep-coordination-between-particles-and-which-texture-pixel-contains-each/)
