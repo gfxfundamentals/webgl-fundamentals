@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/webgl-precision-issues.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Precision Issues in WebGL" />
+<meta name="keywords" content="webgl graphics" />
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-precision-issues_en.jpg" />
+
+<meta property="og:title" content="WebGL Precision Issues" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-precision-issues_en.jpg" />
+<meta property="og:description" content="Precision Issues in WebGL" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/webgl-precision-issues.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL Precision Issues" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/webgl-precision-issues.html" />
+<meta name="twitter:description" content="Precision Issues in WebGL" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-precision-issues_en.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/webgl-precision-issues.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-precision-issues_en.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/webgl-precision-issues.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/webgl-precision-issues.html",
+      "inLanguage":"en",
+      "name":"WebGL Precision Issues",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/webgl-precision-issues.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL Precision Issues</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+
+
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-precision-issues.html" selected>English</a>
+    <option value="/webgl/lessons/fr/webgl-precision-issues.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-precision-issues.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-precision-issues.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-precision-issues.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-precision-issues.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-precision-issues.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-precision-issues.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">Table of Contents</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub a {
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub a::before,#forkongithub a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub a::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+@media (max-width: 900px) {
+    #forkongithub a{
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL Precision Issues</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>This article is about various precision issues in WebGL</p>
+<h2 id="-lowp-mediump-highp-"><code>lowp</code>, <code>mediump</code>, <code>highp</code></h2>
+<p>In <a href="webgl-fundamentals.html">the first article on this site</a> we created
+a vertex shader and a fragment shader. When we created the fragment
+shader it was mentioned almost in passing that a fragment shader
+doesn&#39;t have a default precision and so we needed to set one by adding
+the line</p>
+<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+</code></pre>
+<p>What that heck was that about?</p>
+<p><code>lowp</code>, <code>mediump</code>, and <code>highp</code> are precision settings. Precision in this case
+effectively means how many bits are used to store a value. A number in
+Javascript uses 64bits. Most numbers in WebGL are only 32bits. Less bits =
+faster, more bits = more accurate and/or larger range.</p>
+<p>I don&#39;t know if I can explain this well. You can search for <a href="https://www.google.com/search?q=double+vs+float">double vs float</a> for other examples of
+precision issues but one way to explain it is like the difference between a byte and a short or in JavaScript a <code>Uint8Array</code> vs a <code>Uint16Array</code>.</p>
+<ul>
+<li>A <code>Uint8Array</code> is an array of unsigned 8bit integers. 8bits can hold 2<sup>8</sup> values from 0 to 255.</li>
+<li>A <code>Uint16Array</code> is an array of unsigned 16bit integers. 16bits can hold 2<sup>16</sup> values from 0 to 65535.</li>
+<li>A <code>Uint32Array</code> is an array of unsigned 32bit integers. 32bits can hold 2<sup>32</sup> values from 0 to 4294967295.</li>
+</ul>
+<p><code>lowp</code>, <code>mediump</code>, and <code>highp</code> are similar.</p>
+<ul>
+<li><code>lowp</code> is at least an 9 bit value. For floating point values they can range from: -2 to +2, for integer values they are similar to <code>Uint8Array</code> or <code>Int8Array</code></li>
+<li><code>mediump</code> is at least a 16 bit value. For floating point values they can range from: -2<sup>14</sup> to +2<sup>14</sup>, for integer values they are similar to <code>Uint16Array</code> or <code>Int16Array</code></li>
+<li><code>highp</code> is at least a 32 bit value. For floating point values they can range from: -2<sup>62</sup> to +2<sup>62</sup>, for integer values they are similar to <code>Uint32Array</code> or <code>Int32Array</code></li>
+</ul>
+<p>It&#39;s important to note that not every value inside the range can be represented.
+The easiest to understand is probably <code>lowp</code>. There are only 9 bits and so only
+512 unique values can be represented. Above it says the range is -2 to +2 but
+there are an infinite number of values between -2 and +2. For example 1.9999999
+and 1.999998 are 2 values between -2 and +2. With only 9 bits <code>lowp</code> can&#39;t
+represent those 2 values. So for example, if you want do some math on color and
+you used <code>lowp</code> you might see a some banding. Without actually digging into what
+actual values can be represented, we know colors go from 0 to 1. Is if <code>lowp</code>
+goes from -2 to +2 and can only represent 512 unique values then it seems likely
+only 128 of those values fit between 0 and 1. That would also suggest if you have
+a value that is 4/128ths and I try to add 1/512th to it, nothing will happen
+because 1/512th can&#39;t be represented by <code>lowp</code> so it&#39;s effectively 0.</p>
+<p>Ideally we could just use <code>highp</code> everywhere and ignore this issue completely but
+unfortunately that&#39;s not reality. There are 2 issues.</p>
+<ol>
+<li><p>Some devices, mostly older or cheaper smartphones do not support <code>highp</code> in fragment shaders.</p>
+<p>This is problem if you declare your fragment shader to use <code>highp</code> and a user
+tries to load your page on a device that doesn&#39;t support <code>highp</code> the shader
+will fail to compile.</p>
+<p>Conversely, <code>mediump</code> which can be used everywhere, is often not high enough
+resolution for common things, for example 
+<a href="webgl-3d-lighting-point.html">point lights</a>.</p>
+</li>
+<li><p>On devices that do actually use 9 bits for <code>lowp</code> and/or 16bits for <code>mediump</code> they are usually faster than <code>highp</code>. Often significantly faster.</p>
+</li>
+</ol>
+<p>To that last point, unlike values in a <code>Uint8Array</code> or <code>Uint16Array</code>, a <code>lowp</code>
+or <code>mediump</code> value or for that matter even a <code>highp</code> value is allowed to use
+higher precision (more bits). So for example on a desktop GPU if you put
+<code>mediump</code> in your shader it will still most likely use 32bits internally. This
+has the problem of making it hard to test your shaders. To see if the your
+shaders actually work correctly with <code>lowp</code> or <code>mediump</code> you have to test on a
+device that actually uses 8bits for <code>lowp</code> and 16bits for <code>highp</code>.</p>
+<p>So, what do you do?</p>
+<p>Well one is you could just use <code>highp</code> and not worry about it. Users that have
+devices that don&#39;t support <code>highp</code> might not be your target audience anyway
+as maybe the have older slower devices that can&#39;t run your page well.</p>
+<p>Another easy thing you can do is default to <code>highp</code> but fallback to <code>mediump</code>
+if the device doesn&#39;t support <code>highp</code>. You can do that using the <code>GL_FRAGMENT_PRECISION_HIGH</code> preprocessor macro in your fragment shaders.</p>
+<pre class="prettyprint"><code class="lang-glsl">// some fragment shader
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+#else
+  precision mediump float;
+#endif
+
+...
+</code></pre>
+<p>Now your shader will compile even if on a device that doesn&#39;t support <code>highp</code>
+though it might get strange rendering artifacts depending on the contents of the shader.</p>
+<p>Another option is you can try to write your fragment shaders to only need <code>mediump</code>.
+You need to test on a device that actually supports true <code>mediump</code> to make sure
+you actually succeeded.</p>
+<p>Yet another option is to use different shaders if the device only supports
+<code>mediump</code>. I mentioned above point lights can be an issue in <code>mediump</code>. This
+is because <a href="webgl-3d-lighting-point.html">point lights</a>, in particular the specular highlight calculation, passes values in world or view space to the fragment shader,
+those values can easily get out of range for a <code>mediump</code> value. So, maybe on
+a <code>mediump</code> device you just leave out the specular highlights. For example here
+is the point light shader from <a href="webgl-3d-lighting-point.html">the article on point lights</a> modified to remove the highlight if the
+device only supports <code>mediump</code>.</p>
+<pre class="prettyprint"><code class="lang-glsl">#ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+#else
+  precision mediump float;
+#endif
+
+// Passed in from the vertex shader.
+varying vec3 v_normal;
+varying vec3 v_surfaceToLight;
+varying vec3 v_surfaceToView;
+
+uniform vec4 u_color;
+uniform float u_shininess;
+
+void main() {
+  // because v_normal is a varying it&#39;s interpolated
+  // so it will not be a unit vector. Normalizing it
+  // will make it a unit vector again
+  vec3 normal = normalize(v_normal);
+
+  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
+  float light = dot(normal, surfaceToLightDirection);
+
+  gl_FragColor = u_color;
+
+  // Lets multiply just the color portion (not the alpha)
+  // by the light
+  gl_FragColor.rgb *= light;
+
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
+  vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
+
+  float specular = 0.0;
+  if (light &gt; 0.0) {
+    specular = pow(dot(normal, halfVector), u_shininess);
+  }
+
+  // Just add in the specular
+  gl_FragColor.rgb += specular;
+#endif
+}
+</code></pre>
+<p>Note: Even that is not really enough. In the vertex shader we have</p>
+<pre class="prettyprint"><code class="lang-glsl">  // compute the vector of the surface to the light
+  // and pass it to the fragment shader
+  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+</code></pre>
+<p>So let&#39;s say the light is 1000 units away from the surface.
+We then get to the fragment shader and this line</p>
+<pre class="prettyprint"><code class="lang-glsl">  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
+</code></pre>
+<p>seems innocent enough. Except that the normal way to normalize vector
+is to divide by its length and the normal way to compute a length is</p>
+<pre class="prettyprint"><code>  float length = sqrt(v.x * v.x + v.y * v.y * v.z * v.z);
+</code></pre><p>If one of those x, y, or z is 1000 then 1000*1000 is 1000000. 1000000
+is out of range for <code>mediump</code>.</p>
+<p>One solution here is to normalize in the vertex shader.</p>
+<pre class="prettyprint"><code>  // compute the vector of the surface to the light
+  // and pass it to the fragment shader
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+#else
+  v_surfaceToLight = normalize(u_lightWorldPosition - surfaceWorldPosition);
+#endif
+</code></pre><p>Now the values assigned to <code>v_surfaceToLight</code> are between -1 and +1 which
+is in range for <code>mediump</code>.</p>
+<p>Note that normalizing in the vertex shader will not actually give the
+same results but they might be close enough that no one will notice
+unless compared side by side.</p>
+<p>Functions like <code>normalize</code>, <code>length</code>, <code>distance</code>, <code>dot</code> all have this
+issue that if the values are too large they&#39;re going to go out of range
+for <code>mediump</code>.</p>
+<p>Most of the above is about just making sure your app works on
+devices that don&#39;t support <code>highp</code>. </p>
+<p>Another reason to care about these features is speed. Even though
+you can use <code>highp</code> on most relatively modern smartphones, <code>mediump</code>
+will run faster. Note again, this is only true if the device actually
+supports lower precision <code>mediump</code>. If the device chose to use the
+same precision for <code>mediump</code> as <code>highp</code> like most desktops do then
+there will be no difference in speed but if you&#39;re wondering why your
+app is slow on mobile and you&#39;ve ruled out other things you might
+try using <code>mediump</code> even on a device that supports <code>highp</code>. In fact
+without all the stuff above you can just set your shader to use <code>mediump</code>
+and see if your app runs faster on mobile. If it does then fix any
+rendering issues. If it doesn&#39;t then maybe there is no reason to bother.</p>
+<h2 id="detecting-support-for-highp-and-the-precision-of-mediump-">Detecting support for <code>highp</code> and the precision of <code>mediump</code></h2>
+<p>This is supposed to be relatively easy. You call <code>gl.getShaderPrecisionFormat</code>,
+you pass in the shader type, <code>VERTEX_SHADER</code> or <code>FRAGMENT_SHADER</code> and you
+pass in one of <code>LOW_FLOAT</code>, <code>MEDIUM_FLOAT</code>, <code>HIGH_FLOAT</code>,
+<code>LOW_INT</code>, <code>MEDIUM_INT</code>, <code>HIGH_INT</code>, and it
+<a href="../webgl-precision-lowp-mediump-highp.html">returns the precision info</a>.</p>
+<p>Unfortunately Safari has a bug here which means checking this way will fail on iPhone, at least as of April 2020.</p>
+<p>So, to check if a device supports <code>highp</code> at all you can just create
+a fragment shader that uses <code>highp</code>, compile it, link it, and check for errors.
+If it fails then <code>highp</code> is not supported. Note that you must link it with
+a vertex shader. The spec does not require compiling to return errors as long
+as those errors are caught at link time so just compiling a shader and
+checking the <code>COMPILE_STATUS</code> is not sufficient to know if compiling actually
+succeeded or failed. You must link and check the <code>LINK_STATUS</code>.</p>
+<p>To check if <code>mediump</code> is really medium precision and not high precision
+you&#39;ll have to do a render test. Basically you create a shader that uses
+<code>mediump</code> and that does some math that will work in <code>highp</code> but fail in <code>mediump</code> then check the result. If the result is correct then that driver/gpu/device
+uses <code>highp</code> for <code>mediump</code>. If the result is incorrect then <code>mediump</code> is
+actually <code>mediump</code>.</p>
+<p>Here is an example for checking if the fragment shader&#39;s <code>mediump</code> is really
+<code>mediump</code></p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-precision-check-fragment-shader.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-precision-check-fragment-shader.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>Here and an example for checking if the vertex shader&#39;s <code>mediump</code> is really
+<code>mediump</code></p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-precision-check-vertex-shader.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-precision-check-vertex-shader.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>More minutia: There is actually no guarantee that <code>lowp</code> is 9 bits,
+<code>mediump</code> is 16 bits, and <code>highp</code> is 32 bits. All the spec says is that is
+the minimum each can be. It could be <code>lowp</code> is 10 bits for example which would
+still satisfy the spec (10 &gt;= 9) and still be faster than <code>mediump</code> and so
+still have a point. That said, AFAICT any device that actually supports <code>lowp</code>
+as <code>lowp</code> uses 9 bits and any device that actually supports <code>mediump</code> uses
+16bits. </p>
+<p>While my iPhone6+ from 2014 uses 16 bits for <code>mediump</code> it also uses 16 bits
+for <code>lowp</code>. I&#39;m not sure I&#39;ve ever used a device that uses 9 bits for <code>lowp</code>
+so I&#39;m not sure what issues commonly come up if any.</p>
+<p>Throughout these articles we&#39;ve specified a default precision
+in the fragment shader. We can also specify the precision of any individual
+variable. For example</p>
+<pre class="prettyprint"><code class="lang-glsl">uniform mediump vec4 color;  // a uniform
+attribute lowp vec4 normal;  // an attribute
+varying lowp vec4 texcoord;  // a varying
+lowp float foo;              // a variable
+</code></pre>
+<h2 id="canvas-precision-issues">Canvas Precision Issues</h2>
+<p>The spec allows a canvas to be 16 bits instead of 32.</p>
+<p>You can check by calling </p>
+<pre class="prettyprint"><code>const bitsInCanvas =
+    gl.getParameter(gl.RED_BITS) +
+    gl.getParameter(gl.GREEN_BITS) +
+    gl.getParameter(gl.BLUE_BITS) +
+    gl.getParameter(gl.ALPHA_BITS);
+</code></pre><p>Note that this actually returns the bit depths of the channels in the
+currently bound framebuffer color attachment or the canvas if no
+framebuffer is attached.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-precision-check-canvas-bits.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-precision-check-canvas-bits.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>Note: I don&#39;t actually know if any browsers on any devices use a 16 bit canvas
+in 2020. I do know back when WebGL shipped in 2011 that Firefox at least
+experimented with 16bit canvases to try to gain speed on mobile devices.
+This is generally something you can ignore except if you are reading the
+pixels out of the canvas for something other than images. Also, even if
+the canvas is 16 bits you can still create 32bit render targets (<a href="webgl-render-to-texture.html">textures
+attached to framebuffers</a>).</p>
+<h2 id="texture-formats">Texture Formats</h2>
+<p>Textures are another place where the spec says the actual precision
+used can be greater then the precision requested.</p>
+<p>As an example you can ask for 16 bit, 4bits per channel texture like this</p>
+<pre class="prettyprint"><code>gl.texImage2D(
+  gl.TEXTURE_2D,               // target
+  0,                           // mip level
+  gl.RGBA,                     // internal format
+  width,                       // width
+  height,                      // height
+  0,                           // border
+  gl.RGBA,                     // format
+  gl.UNSIGNED_SHORT_4_4_4_4,   // type
+  null,
+);
+</code></pre><p>But the implementation might actually use a higher resolution format internally.
+I believe most desktops do this and most mobile GPUs do not.</p>
+<p>We can test. First we&#39;ll request a 4bit per channel texture like above.
+Then we&#39;ll <a href="webgl-render-to-texture.html">render to it</a> by rendering
+some 0 to 1 gradient.</p>
+<p>We&#39;ll then render that texture to the canvas. If the texture really is 4 bits
+per channel internally there will only be 16 levels of color from the gradient
+we drew. If the texture is really 8bits per channel we&#39;ll see 256 levels of
+colors.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-precision-textures.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-precision-textures.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>Running it on my smartphone I see the texture is using 4bits per channel
+(or at least 4 bits in red since I didn&#39;t test the other channels).</p>
+<div class="webgl_center"><img src="resources/mobile-4-4-4-4-texture-no-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
+
+<p>Where as on my desktop I can see the texture is actually using 8bits per
+channel even though I only asked for 4.</p>
+<div class="webgl_center"><img src="resources/desktop-4-4-4-4-texture-no-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
+
+<p>One thing to note is that by default WebGL can dither its results to make
+gradations like this look smoother. You can turn off dithering with</p>
+<pre class="prettyprint"><code class="lang-js">gl.disable(gl.DITHER);
+</code></pre>
+<p>If I don&#39;t turn off dithering then my smartphone produces this.</p>
+<div class="webgl_center"><img src="resources/mobile-4-4-4-4-texture-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
+
+<p>Off the top of my head the only place this would really come up is if you
+used some lower bit resolution format texture as a render target and didn&#39;t
+test on a device where that texture is actually that lower resolution.
+If you only tested on desktop any issues it cause might not be apparent.</p>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-precision-issues.html" selected>English</a>
+    <option value="/webgl/lessons/fr/webgl-precision-issues.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-precision-issues.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-precision-issues.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-precision-issues.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-precision-issues.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-precision-issues.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-precision-issues.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Fundamentals</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-fundamentals.html">Fundamentals</a></li>
+<li><a href="/webgl/lessons/webgl-how-it-works.html">How It Works</a></li>
+<li><a href="/webgl/lessons/webgl-shaders-and-glsl.html">Shaders and GLSL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>Image Processing</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-image-processing.html">Image Processing</a></li>
+<li><a href="/webgl/lessons/webgl-image-processing-continued.html">Image Processing Continued</a></li>
+        </ul>
+  <li>2D translation, rotation, scale, matrix math</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-2d-translation.html">2D Translation</a></li>
+<li><a href="/webgl/lessons/webgl-2d-rotation.html">2D Rotation</a></li>
+<li><a href="/webgl/lessons/webgl-2d-scale.html">2D Scale</a></li>
+<li><a href="/webgl/lessons/webgl-2d-matrices.html">2D Matrices</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-orthographic.html">Orthographic 3D</a></li>
+<li><a href="/webgl/lessons/webgl-3d-perspective.html">3D Perspective</a></li>
+<li><a href="/webgl/lessons/webgl-3d-camera.html">3D Cameras</a></li>
+        </ul>
+  <li>Lighting</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-lighting-directional.html">Directional Lighting</a></li>
+<li><a href="/webgl/lessons/webgl-3d-lighting-point.html">Point Lighting</a></li>
+<li><a href="/webgl/lessons/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+        </ul>
+  <li>Structure and Organization</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+<li><a href="/webgl/lessons/webgl-drawing-multiple-things.html">Drawing Multiple Things</a></li>
+<li><a href="/webgl/lessons/webgl-scene-graph.html">Scene Graphs</a></li>
+        </ul>
+  <li>Geometry</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+<li><a href="/webgl/lessons/webgl-load-obj.html">Loading .obj files</a></li>
+<li><a href="/webgl/lessons/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+        </ul>
+  <li>Textures</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-3d-textures.html">Textures</a></li>
+<li><a href="/webgl/lessons/webgl-data-textures.html">Data Textures</a></li>
+<li><a href="/webgl/lessons/webgl-2-textures.html">Using 2 or More Textures</a></li>
+<li><a href="/webgl/lessons/webgl-cors-permission.html">Cross Origin Images</a></li>
+<li><a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Rendering To A Texture</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-render-to-texture.html">Render to Texture</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Techniques</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-2d-drawimage.html">2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+<li><a href="/webgl/lessons/webgl-sprites.html">Sprites</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/webgl-fog.html">Fog</a></li>
+<li><a href="/webgl/lessons/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>Text</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-text-html.html">Text - HTML</a></li>
+<li><a href="/webgl/lessons/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/webgl-text-texture.html">Text - Using a Texture</a></li>
+<li><a href="/webgl/lessons/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
+        </ul>
+  <li>Textures</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Optimization</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+        </ul>
+  <li>Misc</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-setup-and-installation.html">Setup And Installation</a></li>
+<li><a href="/webgl/lessons/webgl-boilerplate.html">Boilerplate</a></li>
+<li><a href="/webgl/lessons/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
+<li><a href="/webgl/lessons/webgl-animation.html">Animation</a></li>
+<li><a href="/webgl/lessons/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/webgl-2d-vs-3d-library.html">2D vs 3D libraries</a></li>
+<li><a href="/webgl/lessons/webgl-anti-patterns.html">Anti-Patterns</a></li>
+<li><a href="/webgl/lessons/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/webgl-tips.html#screenshot">Taking a screenshot</a></li>
+<li><a href="/webgl/lessons/webgl-tips.html#preservedrawingbuffer">Prevent the Canvas Being Cleared</a></li>
+<li><a href="/webgl/lessons/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
+<li><a href="/webgl/lessons/webgl-tips.html#html-background">Use WebGL as Background in HTML</a></li>
+<li><a href="/webgl/lessons/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/webgl-texture-units.html">Texture Units</a></li>
+<li><a href="/webgl/lessons/webgl-readpixels.html">readPixels</a></li>
+<li><a href="/webgl/lessons/webgl-references.html">References</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Helper API Docs</a></li>
+  <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>Questions? <a href="https://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>
+    <div>Issue/Bug? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>
+    <div class="lesson-comment-notes">
+       Use <b>&lt;pre&gt;&lt;code&gt;</b>code goes here<b>&lt;/code&gt;&lt;/pre&gt;</b> for code blocks
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL Precision Issues';
+            var disqus_title = 'WebGL Precision Issues';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTagName('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+}());
+</script>
+
+
+</html>
+
+
+

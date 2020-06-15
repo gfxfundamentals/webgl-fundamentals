@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/ru/webgl-2d-vs-3d-library.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Почему WebGL не является 3D-библиотекой и что из этого следует" />
+<meta name="keywords" content="webgl graphics" />
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-vs-3d-library_ru.jpg" />
+
+<meta property="og:title" content="WebGL - Растеризация или 3D-библиотека" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-vs-3d-library_ru.jpg" />
+<meta property="og:description" content="Почему WebGL не является 3D-библиотекой и что из этого следует" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-vs-3d-library.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL - Растеризация или 3D-библиотека" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-vs-3d-library.html" />
+<meta name="twitter:description" content="Почему WebGL не является 3D-библиотекой и что из этого следует" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-vs-3d-library_ru.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-vs-3d-library.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-vs-3d-library_ru.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-vs-3d-library.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-vs-3d-library.html",
+      "inLanguage":"ru",
+      "name":"WebGL - Растеризация или 3D-библиотека",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-vs-3d-library.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL - Растеризация или 3D-библиотека</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+
+
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-2d-vs-3d-library.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2d-vs-3d-library.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-2d-vs-3d-library.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2d-vs-3d-library.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2d-vs-3d-library.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2d-vs-3d-library.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2d-vs-3d-library.html" selected>Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">оглавление</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/ru/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub a {
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub a::before,#forkongithub a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub a::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+@media (max-width: 900px) {
+    #forkongithub a{
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL - Растеризация или 3D-библиотека</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>Эта статья - что-то вроде отступления от серии статей о WebGL. Первая статья
+<a href="webgl-fundamentals.html">начинается с основ WebGL</a>.</p>
+<p>Меня побудило написать эту статью то, что некоторых людей задевает, когда я говорю,
+что WebGL - это не API 3D, а на самом деле API растеризации. Не понимаю, почему
+люди так остро реагируют и расстраиваются, когда я говорю, что WebGL - API растеризации.</p>
+<p>Пожалуй, всё зависит от того, с какой стороны взглянуть. Например, я могу назвать
+нож кухонной принадлежностью, кто-то назовёт его инструментом, а кто-то скажет,
+что нож - это оружие.</p>
+<p>Однако, в случае с WebGL есть причины, по которым я считаю, что WebGL необходимо
+называть API растеризации, и это в основном из-за того, каким объёмом знаний в
+3D-математике вам необходимо обладать, чтобы отрисовать что-нибудь в 3D,
+используя WebGL.</p>
+<p>По моему мнению то, что называет себя 3D-библиотекой, должно выполнять эти
+вещи за вас. У вас должна быть возможность передать библиотеке 3D-данные,
+некоторые параметры материала, плюс освещение, и библиотека должна нарисовать
+всё для вас. WebGL (как и OpenGL ES 2.0+) может отрисовывать 3D, но в целом
+не попадает под данное выше определение.</p>
+<p>Для сравнения, C++ не может редактировать тексты из коробки. Поэтому мы и
+не называем C++ текстовым редактором, хотя он и может быть написан на C++.
+Аналогично, WebGL не отрисовывает 3D-графику из коробки. Вы можете написать
+библиотеку, которая отрисует 3D-графику с помощью WebGL, но сам по себе он
+не может работать с 3D-графикой.</p>
+<p>Следующий пример. Предположим, нам нужно отобразить 3D-куб с освещением.</p>
+<p>Вот код на three.js, который делает это:</p>
+<pre class="prettyprint showlinemods">
+  // настраиваем WebGL
+  var c = document.querySelector("#c");
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(c.clientWidth, c.clientHeight);
+  c.appendChild(renderer.domElement);
+
+  // устанавливаем камеру
+  camera = new THREE.PerspectiveCamera(
+      70, c.clientWidth / c.clientHeight, 1, 1000);
+  camera.position.z = 400;
+  camera.updateProjectionMatrix();
+
+  // создаём сцену
+  scene = new THREE.Scene();
+
+  // создаём куб
+  var geometry = new THREE.BoxGeometry(200, 200, 200);
+
+  // создаём материал
+  var material = new THREE.MeshPhongMaterial({
+    ambient: 0x555555,
+    color: 0x555555,
+    specular: 0xffffff,
+    shininess: 50,
+    shading: THREE.SmoothShading
+  });
+
+  // создаём меш на основании геометрии и материала
+  mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  // добавляем 2 источника освещения
+  light1 = new THREE.PointLight(0xff0040, 2, 0);
+  light1.position.set(200, 100, 300);
+  scene.add(light1);
+
+  light2 = new THREE.PointLight(0x0040ff, 2, 0);
+  light2.position.set(-200, 100, 300);
+  scene.add(light2);
+</pre>
+
+<p>И вот куб уже отображается:</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/resources%2Fthree-js-cube-with-lights.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/resources/three-js-cube-with-lights.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Вот аналогичный пример кода на OpenGL (не ES) для отображения
+куба с 2 источниками освещения.</p>
+<pre class="prettyprint showlinemods">
+  // настройка
+  glViewport(0, 0, width, height);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  gluPerspective(70.0, width / height, 1, 1000);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
+  glClearColor(0.0, 0.0, 0.0, 0.0);
+  glEnable(GL_DEPTH_TEST);
+  glShadeModel(GL_SMOOTH);
+  glEnable(GL_LIGHTING);
+
+  // задаём 2 источника освещения
+  glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHT1);
+  float light0_position[] = {  200, 100, 300, };
+  float light1_position[] = { -200, 100, 300, };
+  float light0_color[] = { 1, 0, 0.25, 1, };
+  float light1_color[] = { 0, 0.25, 1, 1, };
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_color);
+  glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_color);
+  glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+  glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
+...
+
+  // отрисовка куба
+  static int count = 0;
+  ++count;
+
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glLoadIdentity();
+  double angle = count * 0.1;
+  glTranslatef(0, 0, -400);
+  glRotatef(angle, 0, 1, 0);
+
+  glBegin(GL_TRIANGLES);
+  glNormal3f(0, 0, 1);
+  glVertex3f(-100, -100, 100);
+  glVertex3f( 100, -100, 100);
+  glVertex3f(-100,  100, 100);
+  glVertex3f(-100,  100, 100);
+  glVertex3f( 100, -100, 100);
+  glVertex3f( 100,  100, 100);
+
+  /*
+  ...
+  ... повторить для 5 других граней куба
+  ...
+  */
+
+  glEnd();
+</pre>
+
+<p>Заметьте, что нам практически не нужно знаний 3D-математики для этих двух
+примеров. Сравните их с WebGL. Я не буду приводить код, необходимый для
+WebGL. Кода будет ненамного больше. Дело даже не в том, сколько строк кода
+необходимо. Дело в том, сколько всего нужно <strong>знать</strong>. Эти две 3D-библиотеки
+участвуют в 3D. Вы передаёте им положение камеры и поле зрения, пару источников
+света и куб. Остальное они доделывают сами. Другими словами, они являются
+3D-библиотеками.</p>
+<p>Что касается WebGL, вам необходимо знать математику матриц, нормализацию
+координат, фрустумы, векторное произведение, скалярное произведение,
+интерполяцию varying-переменных, расчёт бликов освещения и всех этих вещей,
+изучение которых зачастую занимает месяцы, а то и годы.</p>
+<p>Весь смысл 3D-библиотек в том, что все эти знания уже встроены в библиотеку,
+и вам не нужно самому обладать этими знаниями, вы можете положиться на
+библиотеку. Это было свойственно OpenGL, пример с которым был показан выше.
+Это свойственно другим библиотекам вроде three.js. Но это НЕ свойственно
+OpenGL ES 2.0+ или WebGL.</p>
+<p>Поэтому будет заблуждением назвать WebGL 3D-библиотекой. Пользователь придёт
+к WebGL с мыслью &quot;О, 3D-библиотека. Здорово. Сейчас она сделает за меня всё 3D&quot;.
+А затем он понимает, что нет, всё не так просто.</p>
+<p>Мы можем зайти ещё дальше. Вот каркас 3D-куба на Canvas:</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/resources%2F3d-in-canvas.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/resources/3d-in-canvas.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>А вот каркас 3D-куба на WebGL:</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/resources%2F3d-in-webgl.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/resources/3d-in-webgl.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
+</div>
+
+</p>
+<p>Если вы взглянете на код, вы увидите, что между ними не такая уж большая разница
+в плане количества знаний и даже в плане объёма кода. В конечном счёте, версия
+с Canvas обходит вершины, выполняет ПЕРЕДАННУЮ НАМИ математику и рисует линии
+в 2D. Версия с WebGL делает то же самое, с тем лишь исключением, что ПЕРЕДАННАЯ
+НАМИ математика выполняется на языке GLSL на видеокарте.</p>
+<p>Цель последней демонстрации - показать, что по сути WebGL является средством
+растеризации, как и Canvas 2D. Конечно, WebGL включает в себя функциональные
+возможности, которые упрощают реализацию 3D. WebGL имеет буфер глубины, который
+делает сортировку по глубине значительно более простой. Также WebGL содержит
+множество встроенных математических функций, которые очень полезны для
+3D-математики, хотя это не делает их 3D-функциями. Скорей это библиотека для
+математики. Вы используете их для вычисления математики хоть для 1D, хоть для
+2D, хоть для 3D. Но сам WebGL - только растеризация. Вам необходимо задать
+координаты отсечения, которые указывают, что нужно отрисовать. Вы передаёте
+x,y,z,w и всё это делится на W перед рендерингом, но этого вряд ли достаточно,
+чтобы назвать WebGL 3D-библиотекой. В 3D-библиотеке вы указываете 3D-данные,
+библиотека сама вычисляет точки пространства отсечения из 3D.</p>
+<p>Надеюсь, что, по крайней мере, вы понимаете, из чего я исхожу, когда говорю,
+что WebGL нельзя назвать 3D-библиотекой. Также надеюсь, что вы понимаете,
+что 3D-библиотека должна управлять 3D-данными. OpenGL это умеет. Three.js
+тоже. OpenGL ES 2.0 и WebGL - нет. Поэтому, на мой взгляд, он не принадлежит
+к понятию &quot;3D-библиотека&quot;.</p>
+<p>Цель данной статьи - дать разработчику, который хочет познакомиться с
+WebGL, понимание того, чем на самом деле является WebGL. Зная, что WebGL
+не является 3D-библиотекой, и разработчику придётся самому разбираться
+во многих вещах, человек сможет решить, захочет ли он сам разобраться в
+3D-математике, или же он выберет 3D-библиотеку, которая сделает всё за
+него. Кроме того, подобное понимание снимает завесу тайны с того, как
+работает WebGL.</p>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-2d-vs-3d-library.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2d-vs-3d-library.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-2d-vs-3d-library.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2d-vs-3d-library.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2d-vs-3d-library.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2d-vs-3d-library.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2d-vs-3d-library.html" selected>Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Основы</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-fundamentals.html">Основы WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-how-it-works.html">Как работает WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-shaders-and-glsl.html">Шейдеры и GLSL в WebGL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>Обработка изображений</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-image-processing.html">Обработка изображений в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-image-processing-continued.html">Продолжаем обработку изображений в WebGL</a></li>
+        </ul>
+  <li>Математика переноса, поворота и масштабирования в 2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-2d-translation.html">2D-перенос в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-rotation.html">2D-поворот в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-scale.html">2D-масштабирование в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-matrices.html">2D-матрицы в WebGL</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-orthographic.html">WebGL 3D - Ортогональ</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-perspective.html">WebGL 3D - Перспектива</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-camera.html">WebGL 3D - Камеры</a></li>
+        </ul>
+  <li>Освещение</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-lighting-directional.html">WebGL 3D - Направленное освещение</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">WebGL 3D - Точечное освещение</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор</a></li>
+        </ul>
+  <li>Структура и устройство</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-less-code-more-fun.html">WebGL - Меньше кода, больше веселья</a></li>
+<li><a href="/webgl/lessons/ru/webgl-drawing-multiple-things.html">WebGL - Отрисовка нескольких объектов</a></li>
+<li><a href="/webgl/lessons/ru/webgl-scene-graph.html">WebGL - Графы сцены</a></li>
+        </ul>
+  <li>Геометрия</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели</a></li>
+<li><a href="/webgl/lessons/ru/webgl-load-obj.html">Loading .obj files</a></li>
+<li><a href="/webgl/lessons/ru/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+        </ul>
+  <li>Текстуры</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-textures.html">WebGL 3D - Текстуры</a></li>
+<li><a href="/webgl/lessons/ru/webgl-data-textures.html">WebGL - Данные для текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2-textures.html">WebGL - Использование 2 и более текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-cors-permission.html">WebGL - Кросс-доменные изображения</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Перспективная коррекция текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Рендеринг в текстуру</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Приёмы</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-matrix-stack.html">WebGL 2D - Стек матриц</a></li>
+<li><a href="/webgl/lessons/ru/webgl-sprites.html">Sprites</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/ru/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/ru/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/ru/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/ru/webgl-fog.html">Fog</a></li>
+<li><a href="/webgl/lessons/ru/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>Текст</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-text-html.html">WebGL текст - HTML</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-canvas2d.html">WebGL текст - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-texture.html">WebGL текст - Используем текстуру</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-glyphs.html">WebGL текст - Используем глиф-текстуру</a></li>
+        </ul>
+  <li>Текстуры</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/ru/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/ru/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/ru/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Optimization</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/ru/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+        </ul>
+  <li>Разное</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-setup-and-installation.html">WebGL Установка и настройка</a></li>
+<li><a href="/webgl/lessons/ru/webgl-boilerplate.html">Шаблон WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-resizing-the-canvas.html">Изменение размера Canvas в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-animation.html">WebGL - Анимация</a></li>
+<li><a href="/webgl/lessons/ru/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/ru/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ru/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ru/webgl-and-alpha.html">WebGL и прозрачность</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-vs-3d-library.html">WebGL - 2D и 3D библиотеки</a></li>
+<li><a href="/webgl/lessons/ru/webgl-anti-patterns.html">WebGL - Антипаттерны</a></li>
+<li><a href="/webgl/lessons/ru/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/ru/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/ru/webgl-tips.html#screenshot">Taking a screenshot</a></li>
+<li><a href="/webgl/lessons/ru/webgl-tips.html#preservedrawingbuffer">Prevent the Canvas Being Cleared</a></li>
+<li><a href="/webgl/lessons/ru/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
+<li><a href="/webgl/lessons/ru/webgl-tips.html#html-background">Use WebGL as Background in HTML</a></li>
+<li><a href="/webgl/lessons/ru/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/ru/webgl-texture-units.html">Texture Units</a></li>
+<li><a href="/webgl/lessons/ru/webgl-readpixels.html">readPixels</a></li>
+<li><a href="/webgl/lessons/ru/webgl-references.html">References</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Документация по вспомогательным функциям</a></li>
+  <li><a href="https://twgljs.org">TWGL, лёгкая библиотека-помощник для WebGL</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Вопросы? <a href="https://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
+        <div>Нашли ошибку? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL - Растеризация или 3D-библиотека';
+            var disqus_title = 'WebGL - Растеризация или 3D-библиотека';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTagName('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+}());
+</script>
+
+
+</html>
+
+
+

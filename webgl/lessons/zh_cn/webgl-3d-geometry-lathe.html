@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-3d-geometry-lathe.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="如何用工程化的方式生成贝塞尔曲线" />
+<meta name="keywords" content="webgl graphics" />
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-geometry-lathe_zh-cn.jpg" />
+
+<meta property="og:title" content="WebGL 三维几何加工" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-geometry-lathe_zh-cn.jpg" />
+<meta property="og:description" content="如何用工程化的方式生成贝塞尔曲线" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL 三维几何加工" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html" />
+<meta name="twitter:description" content="如何用工程化的方式生成贝塞尔曲线" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-geometry-lathe_zh-cn.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-geometry-lathe_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 三维几何加工",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL 三维几何加工</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+
+
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-3d-geometry-lathe.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-geometry-lathe.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-geometry-lathe.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-geometry-lathe.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-geometry-lathe.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-geometry-lathe.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-geometry-lathe.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub a {
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub a::before,#forkongithub a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub a::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+@media (max-width: 900px) {
+    #forkongithub a{
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 三维几何加工</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>这可能是一个晦涩的话题，但是我觉得很有趣所以就写出来了。
+这些东西并不是建议你要会做的，我只是认为通过这个话题能够让你对制作WebGL三维模型有一些理解。</p>
+<p>有人问我怎么在WebGL中制作一个保龄球瓶，<strong>聪明</strong>的回答是
+“使用一个三维建模工具例如<a href="https://blender.org">Blender</a>,
+<a href="https://www.autodesk.com/products/maya/overview">Maya</a>,
+<a href="https://www.autodesk.com/products/3ds-max/overview">3D Studio Max</a>,
+<a href="https://www.maxon.net/en/products/cinema-4d/overview/">Cinema 4D</a>, 等等”。
+使用它创建一个保龄球瓶，导出，读取点坐标(<a href="https://en.wikipedia.org/wiki/Wavefront_.obj_file">OBJ格式相对简单些</a>)。</p>
+<p>但是，这让我想到，如果他们想做一个模型库该怎么办？</p>
+<p>这有几种方法，一种方法是将圆柱体按照正弦函数放置在合适位置上，
+但这样表面并不平滑。一个标准的圆柱需要一些间距相等的圆环，
+但当曲线变得锐利的时候所需圆环的数量就会很多。</p>
+<p>在模型库中你需要制作一个二维轮廓或者是一个符合边缘的曲线，然后将他们加工成三维图形。
+这里加工的意思就是将生成的二维点按照某些轴旋转。这样就可以很轻松的做出一些圆的物体，
+例如碗，棒球棒，瓶子，灯泡之类的物体。</p>
+<p>那么该怎么做呢？首先我们要通过某种方式生成一个曲线，计算曲线上的点。
+然后使用<a href="webgl-2d-matrices.html">矩阵运算</a>将这些点按照某个轴旋转，
+构建出三角形网格。</p>
+<p>计算机中常用的曲线就是贝塞尔曲线，你可能在一些编辑器例如
+<a href="https://www.adobe.com/products/illustrator.html">Adobe Illustrator</a> 或
+<a href="https://inkscape.org/en/">Inkscape</a> 或
+<a href="https://affinity.serif.com/en-us/designer/">Affinity Designer</a>
+中编辑过贝塞尔曲线。</p>
+<p>贝塞尔曲线或三次贝塞尔曲线由 4 个点组成，2 个端点，2 个“控制点”。</p>
+<p>这就是四个点</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=0"></iframe>
+</div>
+
+</p>
+<p>从 0 到 1 之间选一个数（叫做 <code>t</code>），其中 0 是起点，1 是终点。
+然后在每个线段中计算出与 <code>t</code> 相关的点，<code>P1 P2</code>, <code>P2 P3</code>, <code>P3 P4</code>。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=1"></iframe>
+</div>
+
+</p>
+<p>换句话说如果 <code>t = .25</code> 那么就计算出 <code>P1</code> 到 <code>P2</code> 距离为 25% 的点，
+从 <code>P2</code> 到 <code>P3</code> 距离为 25% 的点，从 <code>P3</code> 到 <code>P4</code> 距离为 25% 的点。</p>
+<p>你可以拖动滑块调整 <code>t</code> 的值，也可以拖动 <code>P1</code>, <code>P2</code>, <code>P3</code>, 和 <code>P4</code> 调整位置。</p>
+<p>对这些结果点做同样的操作，计算 <code>t</code> 对应的 <code>Q1 Q2</code> 和 <code>Q2 Q3</code> 之间的点。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=2"></iframe>
+</div>
+
+</p>
+<p>最后在 <code>R1 R2</code> 中计算出与 <code>t</code> 相关的点。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=3"></iframe>
+</div>
+
+</p>
+<p><span style="color: red;">红点</span>的位置就构成了一个曲线。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=4"></iframe>
+</div>
+
+</p>
+<p>这就是三次贝塞尔曲线。</p>
+<p>注意到在上述差值过程中通过 4 个点差出 3 个点，3 个点差出 2 个点，最后从 2 个点差出 1 个点，
+这并不是常用的做法，有人将这些数学运算简化成了一个公式，像这样</p>
+<div class="webgl_center">
+<pre class="webgl_math">
+invT = (1 - t)
+P = P1 * invT^3 +
+    P2 * 3 * t * invT^2 +
+    P3 * 3 * invT * t^2 +
+    P4 * t^3
+</pre>
+</div>
+
+<p>其中 <code>P1</code>, <code>P2</code>, <code>P3</code>, <code>P4</code> 就像上例中的四个点，
+<code>P</code> 就是那个 <span style="color: red;">红点</span>。</p>
+<p>在二维美术应用例如 Adobe Illustrator 中，
+当你制作一个较长的曲线时通常是由一些小的四点片段组成的。
+默认情况下应用将控制点沿着起/终点方向锁死，
+确保在公共点部分方向相反。</p>
+<p>看这个例子。移动 <code>P3</code> 或 <code>P5</code> 会同时移动另一个。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-edit.html"></iframe>
+</div>
+
+</p>
+<p>注意这个曲线是两段，<code>P1,P2,P3,P4</code> 和 <code>P4,P5,P6,P7</code>。
+只有在 <code>P3</code>，<code>P5</code> 与 <code>P4</code> 的连线方向相反时曲线在这一点才会连续。
+大多数应用可以让你断开连接，并获得一个锐利的拐点。
+取消选中复选框然后拖拽 <code>P3</code> 或 <code>P5</code> 就会清晰看到独立的曲线。</p>
+<p>接下来我们需要获得生成曲线上的点，通过给上方的公式提供 <code>t</code>
+就可以生成一个点。</p>
+<pre class="prettyprint"><code>function getPointOnBezierCurve(points, offset, t) {
+  const invT = (1 - t);
+  return v2.add(v2.mult(points[offset + 0], invT * invT * invT),
+                v2.mult(points[offset + 1], 3 * t * invT * invT),
+                v2.mult(points[offset + 2], 3 * invT * t * t),
+                v2.mult(points[offset + 3], t * t  *t));
+}
+</code></pre><p>然后可以计算一系列点。</p>
+<pre class="prettyprint"><code>function getPointsOnBezierCurve(points, offset, numPoints) {
+  const points = [];
+  for (let i = 0; i &lt; numPoints; ++i) {
+    const t = i / (numPoints - 1);
+    points.push(getPointOnBezierCurve(points, offset, t));
+  }
+  return points;
+}
+</code></pre><p>注意： <code>v2.mult</code> 和 <code>v2.add</code> 是我加入的二维点运算辅助方法。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=0&showCurve=true&showPoints=true"></iframe>
+</div>
+
+</p>
+<p>在图示中你可以选择点的个数，如果曲线比较锐利就可以多差值一些点，
+如果曲线比较平缓就可以少插值一些点。一个解决办法是检查曲线的锐利程度，
+如果过于锐利就拆分成两个曲线。</p>
+<p>拆分的部分比较简单，如果我们再看看不同级别的查分，对于任意值的 <code>t</code>,
+<code>P1</code>, <code>Q1</code>, <code>R1</code>, 红点构成一个曲线，终点是红点。
+红点, <code>R2</code>, <code>Q3</code>, <code>P4</code> 构成一个曲线。换句话说我们可以将曲线从任意位置分成两段，
+并且和原曲线相同。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=4&show2Curves=true"></iframe>
+</div>
+
+</p>
+<p>第二个部分是如何决定曲线是否需要拆分，从网上查找后我发现了<a href="https://seant23.wordpress.com/2010/11/12/offset-bezier-curves/">这个方法</a>，
+对于给定的曲线可以求出平滑程度。</p>
+<pre class="prettyprint"><code>function flatness(points, offset) {
+  const p1 = points[offset + 0];
+  const p2 = points[offset + 1];
+  const p3 = points[offset + 2];
+  const p4 = points[offset + 3];
+
+  let ux = 3 * p2[0] - 2 * p1[0] - p4[0]; ux *= ux;
+  let uy = 3 * p2[1] - 2 * p1[1] - p4[1]; uy *= uy;
+  let vx = 3 * p3[0] - 2 * p4[0] - p1[0]; vx *= vx;
+  let vy = 3 * p3[1] - 2 * p4[1] - p1[1]; vy *= vy;
+
+  if(ux &lt; vx) {
+    ux = vx;
+  }
+
+  if(uy &lt; vy) {
+    uy = vy;
+  }
+
+  return ux + uy;
+}
+</code></pre><p>我们可以用它获取曲线上的点，首先检查曲线是否太锐利，如果是就拆分，
+不是就将点加入列表。</p>
+<pre class="prettyprint"><code>function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
+  const outPoints = newPoints || [];
+  if (flatness(points, offset) &lt; tolerance) {
+
+    // 将它加入点队列中
+    outPoints.push(points[offset + 0]);
+    outPoints.push(points[offset + 3]);
+
+  } else {
+
+    // 拆分
+    const t = .5;
+    const p1 = points[offset + 0];
+    const p2 = points[offset + 1];
+    const p3 = points[offset + 2];
+    const p4 = points[offset + 3];
+
+    const q1 = v2.lerp(p1, p2, t);
+    const q2 = v2.lerp(p2, p3, t);
+    const q3 = v2.lerp(p3, p4, t);
+
+    const r1 = v2.lerp(q1, q2, t);
+    const r2 = v2.lerp(q2, q3, t);
+
+    const red = v2.lerp(r1, r2, t);
+
+    // 求前半段的点
+    getPointsOnBezierCurveWithSplitting([p1, q1, r1, red], 0, tolerance, outPoints);
+    // 求后半段的点
+    getPointsOnBezierCurveWithSplitting([red, r2, q3, p4], 0, tolerance, outPoints);
+
+  }
+  return outPoints;
+}
+</code></pre><p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=0&showCurve=true&showTolerance=true"></iframe>
+</div>
+
+</p>
+<p>这个算法在获取曲线点的过程中确保了点的数量比较充足，但是不能很好的排除不必要的点。</p>
+<p>由于这个原因我们将使用我在网上找到的 <a href="https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm">Ramer Douglas Peucker 算法</a>。</p>
+<p>在这个算法中我们提供一系列点，找到离最后两点构成的直线距离最远的点，
+然后将这个距离和一个定值进行比较，如果小于那个值就保留最后两个点然后丢弃其他的点，
+大于则将曲线沿那个最远点分成两份，分别对每一份再做一次这个运算。</p>
+<pre class="prettyprint"><code>function simplifyPoints(points, start, end, epsilon, newPoints) {
+  const outPoints = newPoints || [];
+
+  // 找到离最后两点距离最远的点
+  const s = points[start];
+  const e = points[end - 1];
+  let maxDistSq = 0;
+  let maxNdx = 1;
+  for (let i = start + 1; i &lt; end - 1; ++i) {
+    const distSq = v2.distanceToSegmentSq(points[i], s, e);
+    if (distSq &gt; maxDistSq) {
+      maxDistSq = distSq;
+      maxNdx = i;
+    }
+  }
+
+  // 如果距离太远
+  if (Math.sqrt(maxDistSq) &gt; epsilon) {
+
+    // 拆分
+    simplifyPoints(points, start, maxNdx + 1, epsilon, outPoints);
+    simplifyPoints(points, maxNdx, end, epsilon, outPoints);
+
+  } else {
+
+    // 添加最后两个点
+    outPoints.push(s, e);
+  }
+
+  return outPoints;
+}
+</code></pre><p><code>v2.distanceToSegmentSq</code> 是计算点到线段距离平方的一个方法，
+使用距离平方的原因是比使用实际距离要快一些，因为我们值管线最远距离所以和实际距离的效果相同。</p>
+<p>这是结果，调整距离查看添加或删除的点。</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=0&showCurve=true&showDistance=true"></iframe>
+</div>
+
+</p>
+<p>回到保龄球瓶，我们可以将上方的代码整理一下，需要添加和移除点，锁定和解锁控制点，
+撤销等等。但是这有一个简单的方式，我们可以使用一个上方提到的编辑器，<a href="https://svg-edit.github.io/svgedit/">我使用这个在线编辑器</a>。</p>
+<p>这是我做的保龄球的半边轮廓的svg。</p>
+<p><img class="webgl_center" src="../resources/bowling-pin-silhouette.svg" width="50%" height="50%" /></p>
+<p>由 4 个曲线制成，路径的数据像这样</p>
+<pre class="prettyprint"><code>&lt;path fill=&quot;none&quot; stroke-width=&quot;5&quot; d=&quot;
+   m44,434
+   c18,-33 19,-66 15,-111
+   c-4,-45 -37,-104 -39,-132
+   c-2,-28 11,-51 16,-81
+   c5,-30 3,-63 -36,-63
+&quot;/&gt;
+</code></pre><p><a href="https://developer.mozilla.org/en/docs/Web/SVG/Tutorial/Paths">解译这些数据</a> 得到这些点。</p>
+<pre class="prettyprint"><code>        ___
+44, 371,   |
+62, 338,   | 第一个曲线
+63, 305,___|__
+59, 260,___|  |
+55, 215,      | 第二个曲线
+22, 156,______|__
+20, 128,______|  |
+18, 100,         | 第三个曲线
+31,  77,_________|__
+36,  47,_________|  |
+41,  17,            | 第四个曲线
+39, -16,            |
+ 0, -16,____________|
+</code></pre><p>现在有了曲线数据，需要计算出曲线上的点。</p>
+<pre class="prettyprint"><code>// 获取所有片段的点
+function getPointsOnBezierCurves(points, tolerance) {
+  const newPoints = [];
+  const numSegments = (points.length - 1) / 3;
+  for (let i = 0; i &lt; numSegments; ++i) {
+    const offset = i * 3;
+    getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints);
+  }
+  return newPoints;
+}
+</code></pre><p>调用 <code>simplifyPoints</code> 处理结果。</p>
+<p>现在要旋转它们了，需要决定分多少个部分，对于每个部分都用<a href="webgl-2d-matrices.html">矩阵运算</a>
+绕 Y 轴转动一定角度获得，一旦获得所有点就用索引连接它们。</p>
+<pre class="prettyprint"><code>// 绕 Y 轴旋转
+function lathePoints(points,
+                     startAngle,   // 起始角 (例如 0)
+                     endAngle,     // 终止角 (例如 Math.PI * 2)
+                     numDivisions, // 这中间生成多少块
+                     capStart,     // true 就封闭起点
+                     capEnd) {     // true 就封闭重点
+  const positions = [];
+  const texcoords = [];
+  const indices = [];
+
+  const vOffset = capStart ? 1 : 0;
+  const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
+  const quadsDown = pointsPerColumn - 1;
+
+  // 生成点
+  for (let division = 0; division &lt;= numDivisions; ++division) {
+    const u = division / numDivisions;
+    const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
+    const mat = m4.yRotation(angle);
+    if (capStart) {
+      // 在开始处添加一个 Y 轴上的点
+      positions.push(0, points[0][1], 0);
+      texcoords.push(u, 0);
+    }
+    points.forEach((p, ndx) =&gt; {
+      const tp = m4.transformPoint(mat, [...p, 0]);
+      positions.push(tp[0], tp[1], tp[2]);
+      const v = (ndx + vOffset) / quadsDown;
+      texcoords.push(u, v); 
+    });
+    if (capEnd) {
+      // 在终点处添加一个 Y 轴上的点
+      positions.push(0, points[points.length - 1][1], 0);
+      texcoords.push(u, 1);
+    }
+  }
+
+  // 创建索引
+  for (let division = 0; division &lt; numDivisions; ++division) {
+    const column1Offset = division * pointsPerColumn;
+    const column2Offset = column1Offset + pointsPerColumn;
+    for (let quad = 0; quad &lt; quadsDown; ++quad) {
+      indices.push(column1Offset + quad, column2Offset + quad, column1Offset + quad + 1);
+      indices.push(column1Offset + quad + 1, column2Offset + quad, column2Offset + quad + 1);
+    }
+  }
+
+  return {
+    position: positions,
+    texcoord: texcoords,
+    indices: indices,
+  };
+}
+</code></pre><p>上方的代码创建了位置点和纹理坐标，然后创建索引生成三角网。
+<code>capStart</code> 和 <code>capEnd</code> 确定是都生成闭合点，假设我们在做一个罐头，
+这些选项指明是否需要闭合顶面和底面。</p>
+<p>使用我们的 <a href="webgl-less-code-more-fun.html">简化代码</a> 就可以用哪些数据生成这样的
+WebGL缓冲</p>
+<pre class="prettyprint"><code>const tolerance = 0.15;
+const distance = .4;
+const divisions = 16;
+const startAngle = 0;
+const endAngle = Math.PI * 2;
+const capStart = true;
+const capEnd = true;
+
+const tempPoints = getPointsOnBezierCurves(curvePoints, tolerance);
+const points = simplifyPoints(tempPoints, 0, tempPoints.length, distance);
+const arrays = lathePoints(points, startAngle, endAngle, divisions, capStart, capEnd);
+const extents = getExtents(arrays.position);
+if (!bufferInfo) {
+  bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
+</code></pre><p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lathe-step-01.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lathe-step-01.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>拖动滑块观察对结果的影响。</p>
+<p>这还有一个问题，开启三角形你会看到纹理不是均匀分布的，这是因为我们将纹理坐标的 <code>v</code>
+值赋为曲线点的索引，如果曲线上的点距离相等那就没问题，但是它们距离并不相等。</p>
+<p>我们可以遍历曲线上的点并计算出每一点对应曲线长度，最后将这个长度除以曲线总长度赋值给 <code>v</code>。</p>
+<pre class="prettyprint"><code>// 绕 Y 轴旋转
+function lathePoints(points,
+                     startAngle,   // 起始角 (例如 0)
+                     endAngle,     // 终止角 (例如 Math.PI * 2)
+                     numDivisions, // 这中间生成多少块
+                     capStart,     // true 就封闭起点
+                     capEnd) {     // true 就封闭重点
+  const positions = [];
+  const texcoords = [];
+  const indices = [];
+
+  const vOffset = capStart ? 1 : 0;
+  const pointsPerColumn = points.length + vOffset + (capEnd ? 1 : 0);
+  const quadsDown = pointsPerColumn - 1;
+
++  // 生成 v 值
++  let vcoords = [];
++
++  // 先计算出每一点对应的长度
++  let length = 0;
++  for (let i = 0; i &lt; points.length - 1; ++i) {
++    vcoords.push(length);
++    length += v2.distance(points[i], points[i + 1]);
++  }
++  vcoords.push(length);  // 最后一个点
++
++  // 除以总长
++  vcoords = vcoords.map(v =&gt; v / length);
+
+  // 生成点
+  for (let division = 0; division &lt;= numDivisions; ++division) {
+    const u = division / numDivisions;
+    const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
+    const mat = m4.yRotation(angle);
+    if (capStart) {
+      // 在开始处添加一个 Y 轴上的点
+      positions.push(0, points[0][1], 0);
+      texcoords.push(u, 0);
+    }
+    points.forEach((p, ndx) =&gt; {
+      const tp = m4.transformPoint(mat, [...p, 0]);
+      positions.push(tp[0], tp[1], tp[2]);
+*      texcoords.push(u, vcoords[ndx]);
+    });
+    if (capEnd) {
+      // 在终点处添加一个 Y 轴上的点
+      positions.push(0, points[points.length - 1][1], 0);
+      texcoords.push(u, 1);
+    }
+  }
+
+  // 创建索引
+  for (let division = 0; division &lt; numDivisions; ++division) {
+    const column1Offset = division * pointsPerColumn;
+    const column2Offset = column1Offset + pointsPerColumn;
+    for (let quad = 0; quad &lt; quadsDown; ++quad) {
+      indices.push(column1Offset + quad, column1Offset + quad + 1, column2Offset + quad);
+      indices.push(column1Offset + quad + 1, column2Offset + quad + 1, column2Offset + quad);
+    }
+  }
+
+  return {
+    position: positions,
+    texcoord: texcoords,
+    indices: indices,
+  };
+}
+</code></pre><p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lathe-step-02.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lathe-step-02.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>这些纹理坐标还是不完美，因为我们还没决定怎么处理闭合部分的纹理。这也是使用建模软件的一个原因。
+我们可以总结出很多计算闭合处 uv 值的方法，但并不是很有意义。
+如果你 <a href="https://www.google.com/search?q=uv+map+a+barrel">谷歌一下 UV map a barrel</a>，
+你会发现完美的 UV 坐标是不需要太多数学运算的，只需要生成合适的点数据，这时你就需要一个合适工具创建点数据。</p>
+<p>还有一个事情要做，就是添加法向量。</p>
+<p>我们可以计算每一个曲线点的法向量，事实上如果你会看这节中的例子，你会发现 <code>R1</code> 和 <code>R2</code>
+构成的线段切曲线于红点处。</p>
+<p><img class="webgl_center" src="../resources/tangent-to-curve.png" width="50%" /></p>
+<p>法向量和切线垂直所以从切线很容易求出法向量。</p>
+<p>但是，假设我们想要做一个烛台，有这样一个框架。</p>
+<p><img class="webgl_center" src="../resources/candle-holder.svg" width="50%" /></p>
+<p>这有很多平滑区域也有很多锐利角，如何决定使用法向量的方向呢？当需要锐利边缘时就要使用多余的顶点，
+因为一个顶点有一个位置和一个法向量，如果需要多个法向量就需要不同的顶点，这也是制作立方体需要至少24
+个顶点的原因，虽然立方体只有 8 个顶点，但每个面在那个顶点处都需要不同的法向量。</p>
+<p>创建立方体的时候很容易确定法向量，但是形状复杂的时候就没那么容易了。</p>
+<p>所有的建模软件都有不同的方式创建法向量，一个常用的做法就是将该点邻接的三角面的法向量求平均。
+另外，还允许用户选择一个最大角度，如果邻接的多边形的法向量的夹角大于最大角度，就会创建一个新顶点。</p>
+<p>我们来实现这个。</p>
+<pre class="prettyprint"><code>function generateNormals(arrays, maxAngle) {
+  const positions = arrays.position;
+  const texcoords = arrays.texcoord;
+
+  // 首先计算出每个面的法向量
+  let getNextIndex = makeIndiceIterator(arrays);
+  const numFaceVerts = getNextIndex.numElements;
+  const numVerts = arrays.position.length;
+  const numFaces = numFaceVerts / 3;
+  const faceNormals = [];
+
+  // 计算每个面的法向量，
+  // 计算过程中为每个面新建顶点
+  for (let i = 0; i &lt; numFaces; ++i) {
+    const n1 = getNextIndex() * 3;
+    const n2 = getNextIndex() * 3;
+    const n3 = getNextIndex() * 3;
+
+    const v1 = positions.slice(n1, n1 + 3);
+    const v2 = positions.slice(n2, n2 + 3);
+    const v3 = positions.slice(n3, n3 + 3);
+
+    faceNormals.push(m4.normalize(m4.cross(m4.subtractVectors(v1, v2), m4.subtractVectors(v3, v2))));
+  }
+
+  let tempVerts = {};
+  let tempVertNdx = 0;
+
+  // 假设顶点位置精确匹配
+
+  function getVertIndex(x, y, z) {
+
+    const vertId = x + &quot;,&quot; + y + &quot;,&quot; + z;
+    const ndx = tempVerts[vertId];
+    if (ndx !== undefined) {
+      return ndx;
+    }
+    const newNdx = tempVertNdx++;
+    tempVerts[vertId] = newNdx;
+    return newNdx;
+  }
+
+  // 我们需要算出共享的顶点
+  // 这并不像我们看着面那么简单 (三角形)
+  // 因为加入我们有一个标准的圆柱
+  //
+  //
+  //      3-4
+  //     /   \
+  //    2     5   从上往下看，从 S 走到 E, E 和 S 
+  //    1     6   是不同的点，因为它们不共享UV坐标。
+  //     \   /    
+  //      S/E
+  //
+  // 顶点在其实和结束位置并不是共享的
+  // 由于它们有不同的UV坐标，但如果不
+  // 把它们看作共享顶点就会得到错误结果
+
+  const vertIndices = [];
+  for (let i = 0; i &lt; numVerts; ++i) {
+    const offset = i * 3;
+    const vert = positions.slice(offset, offset + 3);
+    vertIndices.push(getVertIndex(vert));
+  }
+
+  // 遍历所有顶点记录所在的面
+  const vertFaces = [];
+  getNextIndex.reset();
+  for (let i = 0; i &lt; numFaces; ++i) {
+    for (let j = 0; j &lt; 3; ++j) {
+      const ndx = getNextIndex();
+      const sharedNdx = vertIndices[ndx];
+      let faces = vertFaces[sharedNdx];
+      if (!faces) {
+        faces = [];
+        vertFaces[sharedNdx] = faces;
+      }
+      faces.push(i);
+    }
+  }
+
+  // 遍历面上的顶点计算每个顶点的法向量
+  // 只计算两面角度不大于 maxAngle 面
+  // 将结果写入 newPositions,
+  // newTexcoords 和 newNormals, 
+  // 丢弃相同的顶点
+  tempVerts = {};
+  tempVertNdx = 0;
+  const newPositions = [];
+  const newTexcoords = [];
+  const newNormals = [];
+
+  function getNewVertIndex(x, y, z, nx, ny, nz, u, v) {
+    const vertId =
+        x + &quot;,&quot; + y + &quot;,&quot; + z + &quot;,&quot; +
+        nx + &quot;,&quot; + ny + &quot;,&quot; + nz + &quot;,&quot; +
+        u + &quot;,&quot; + v;
+
+    const ndx = tempVerts[vertId];
+    if (ndx !== undefined) {
+      return ndx;
+    }
+    const newNdx = tempVertNdx++;
+    tempVerts[vertId] = newNdx;
+    newPositions.push(x, y, z);
+    newNormals.push(nx, ny, nz);
+    newTexcoords.push(u, v);
+    return newNdx;
+  }
+
+  const newVertIndices = [];
+  getNextIndex.reset();
+  const maxAngleCos = Math.cos(maxAngle);
+  // 对每个面
+  for (let i = 0; i &lt; numFaces; ++i) {
+    // 获取该面的法向量
+    const thisFaceNormal = faceNormals[i];
+    // 对于面上的每一点
+    for (let j = 0; j &lt; 3; ++j) {
+      const ndx = getNextIndex();
+      const sharedNdx = vertIndices[ndx];
+      const faces = vertFaces[sharedNdx];
+      const norm = [0, 0, 0];
+      faces.forEach(faceNdx =&gt; {
+        // 面的法向量是否相同
+        const otherFaceNormal = faceNormals[faceNdx];
+        const dot = m4.dot(thisFaceNormal, otherFaceNormal);
+        if (dot &gt; maxAngleCos) {
+          m4.addVectors(norm, otherFaceNormal, norm);
+        }
+      });
+      m4.normalize(norm, norm);
+      const poffset = ndx * 3;
+      const toffset = ndx * 2;
+      newVertIndices.push(getNewVertIndex(
+          positions[poffset + 0], positions[poffset + 1], positions[poffset + 2],
+          norm[0], norm[1], norm[2],
+          texcoords[toffset + 0], texcoords[toffset + 1]));
+    }
+  }
+
+  return {
+    position: newPositions,
+    texcoord: newTexcoords,
+    normal: newNormals,
+    indices: newVertIndices,
+  };
+
+}
+
+function makeIndexedIndicesFn(arrays) {
+  const indices = arrays.indices;
+  let ndx = 0;
+  const fn = function() {
+    return indices[ndx++];
+  };
+  fn.reset = function() {
+    ndx = 0;
+  };
+  fn.numElements = indices.length;
+  return fn;
+}
+
+function makeUnindexedIndicesFn(arrays) {
+  let ndx = 0;
+  const fn = function() {
+    return ndx++;
+  };
+  fn.reset = function() {
+    ndx = 0;
+  }
+  fn.numElements = arrays.positions.length / 3;
+  return fn;
+}
+
+function makeIndiceIterator(arrays) {
+  return arrays.indices
+      ? makeIndexedIndicesFn(arrays)
+      : makeUnindexedIndicesFn(arrays);
+}
+</code></pre><p>上方的代码首先通过原始顶点计算每个面（三角形）的法向量，
+然后创建一个顶点索引集寻找相同的顶点，那是因为我们旋转后的起始和终止点应该是同一个点，
+但UV坐标不同所以要单独处理，计算顶点法向量时要将它们看作相同点。</p>
+<p>这些做完之后，对于每个顶点，生成了一个包含它的面的集合。</p>
+<p>最后将所有除了差值大于 <code>maxAngle</code> 的面的法向量求平平均，获得一个新的顶点集合。</p>
+<p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lathe-step-03.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lathe-step-03.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>注意到在期望的位置得到了锐利的边缘，调大 <code>maxAngle</code> 的值就会将相邻的面加入计算，得到平滑的边缘。
+试试调整 <code>divisions</code> 为 5 或者 6 然后调整 <code>maxAngle</code> 的值让该平滑的地方平滑，该锐利的地方锐利，
+你也可以设置 <code>mode</code> 为 <code>lit</code> 查看光照效果，这是我们需要法向量的原因。</p>
+<h2 id="-">那么，我们学到了什么呢？</h2>
+<p>我们学到了如果想做三维模型就<strong>用三维建模库</strong>😝</p>
+<p>你可能需要以个 <a href="https://www.google.com/search?q=uv+editor">UV 编辑器</a>，
+帮助完成封闭问题也是三维编辑器提供的功能。代替使用有限的组合处理闭合处问题，
+可以使用其他编辑器提供的特性处理闭合处并轻松的获取UV值，三维编辑器还支持
+<a href="https://www.google.com/search?q=extruding+model">拉伸面</a>和
+<a href="https://www.google.com/search?q=extruding+along+a+path">沿路径拉伸</a>，
+你看了之后就会发现它们基于上方的加工方式。</p>
+<h2 id="-">参考</h2>
+<p>如果没有<a href="https://pomax.github.io/bezierinfo/">这篇出色的贝塞尔曲线文章</a>
+我就不可能完成这些内容。</p>
+<div class="webgl_bottombar">
+<h3>这里的模运算符是做什么的?</h3>
+<p>如果你仔细看了 <code>lathePoints</code> 方法就会看到计算角度时使用了模运算符。</p>
+<pre class="prettyprint showlinemods">
+for (let division = 0; division <= numDivisions; ++division) {
+  const u = division / numDivisions;
+*  const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
+</pre>
+<p>为什么这么做?</p>
+<p>当我们将点旋转成一个圆形时我们希望起点和终点是匹配的。 <code>Math.sin(0)</code> 和
+<code>Math.sin(Math.PI * 2)</code> 应该相等，但是浮点运算并不精确，所以通常它们并不是
+100% 的相等。</p>
+<p>这在计算法向量的时候十分重要，我们想知道到一个顶点共享的所有面，我们比较顶点，
+如果相同就认为是同一点，那么如果不被认为是同一点就会计算出错误的法向量。
+</p>
+<p>这是这种情况发生时的样子</p>
+<img class="webgl_center" src="../resources/lathe-normal-seam.png" width="50%" />
+<p>你可以看到它们在共享处没有被当作相同点，因为它们不是100%的相等。</p>
+<p>起初我想通过提供一个误差范围，检查顶点的距离是否在范围内，如果小于误差范围就认为是同一点。
+就像这样。
+<pre class="prettyprint">
+const epsilon = 0.0001;
+const tempVerts = [];
+function getVertIndex(position) {
+  if (tempVerts.length) {
+    // 找到最近的点
+    let closestNdx = 0;
+    let closestDistSq = v2.distanceSq(position, tempVerts[0]);
+    for (let i = 1; i < tempVerts.length; ++i) {
+      let distSq = v2.distanceSq(position, tempVerts[i]);
+      if (distSq < closestDistSq) {
+        closestDistSq = distSq;
+        closestNdx = i;
+      }
+    }
+    // 是否在误差范围内
+    if (closestDistSq < epsilon) {
+      // 是就返回那个点
+      return closestNdx;
+    }
+  }
+  // 不是就将它添加到序列中并返回索引
+  tempVerts.push(position);
+  return tempVerts.length - 1;
+}
+</pre>
+<p>它成功了，我解决了接缝问题。但是它消耗的时间太长，导致UI交互不稳定。
+这是因为它是一个复杂度为 O^2 的解决方法，如果你滑动滑块在最多的情况下就会创建大约 20000 个点，
+再加上 O^2 的复杂度就是 3 亿次迭代。
+</p>
+<p>我在网上寻找简单的方法但没找到，我想过将所有点都放到
+<a href="https://en.wikipedia.org/wiki/Octree">八叉树</a> 中，让寻找匹配点速度快一些，
+但那似乎远离了本章的范围。
+</p>
+<p>然后我就想到既然只是终点问题我就可以进行模运算，让结果相等。原始代码像这样
+</p>
+<pre class="prettyprint">
+  const angle = lerp(startAngle, endAngle, u);
+</pre>
+新代码像这样
+<pre class="prettyprint">
+  const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
+</pre>
+<p>由于模运算 <code>endAngle</code> 为 <code>Math.PI * 2</code> 时 <code>angle</code> 就为 0，和起始点相同，接缝消失了，问题解决了！</p>
+<p>但是，即使这样当设置 <code>distance</code> 为 0.001 并且 <code>divisions</code> 为 60 时，在我的机子上还要几乎1 秒钟的运算。这可能还有很多可以优化的地方，但创建复杂的网格是一个耗时的工作，这就是我的三维游戏可以以
+60fps 运行，但是三维建模工具通常都是很低的帧率。
+</p>
+</div>
+
+<div class="webgl_bottombar">
+<h3>使用矩阵运算是不是大材小用了?</h3>
+<p>当我们旋转点的时候使用这样的代码</p>
+<pre class="prettyprint">
+const mat = m4.yRotation(angle);
+...
+points.forEach((p, ndx) => {
+  const tp = m4.transformPoint(mat, [...p, 0]);
+  ...
+</pre>
+<p>使用 4x4 矩阵转换一个任意三维点需要 16 次乘法，12 次加法，和 3 次除法。
+我们可以只使用 <a href="webgl-2d-rotation.html">单位圆形式的旋转运算</a>。
+</p>
+<pre class="prettyprint">
+const s = Math.sin(angle);
+const c = Math.cos(angle);
+...
+points.forEach((p, ndx) => {
+  const x = p[0];
+  const y = p[1];
+  const z = p[2];
+  const tp = [
+    x * c - z * s,
+    y,
+    x * s + z * c,
+  ];
+  ...
+</pre>
+<p>
+这样就只有 4 次乘法和 2 次加法，没有方法调用，应该至少要快 6 倍。
+</p>
+<p>
+这个优化值得么？当然，对于这个特殊的例子，我不认为这个有什么意义，我认为你可能需要让用户决定绕那个轴旋转，
+使用矩阵就可以让用户传入一个轴，像这样
+</p>
+<pre class="prettyprint">
+   const mat = m4.axisRotation(userSuppliedAxis, angle);
+</pre>
+<p>哪种方式更好其实取决于你自己和你的需求，我认为我会优先选择灵活的方式，然后运行太慢时再去考虑优化。</p>
+</div>
+
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-3d-geometry-lathe.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-geometry-lathe.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-geometry-lathe.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-geometry-lathe.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-geometry-lathe.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-geometry-lathe.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-geometry-lathe.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj.html">Loading .obj files</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-sprites.html">Sprites</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Optimization</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-instanced-drawing.html">实例化绘制</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#screenshot">Taking a screenshot</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#preservedrawingbuffer">Prevent the Canvas Being Cleared</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#html-background">Use WebGL as Background in HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">Texture Units</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-readpixels.html">readPixels</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-references.html">References</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 三维几何加工';
+            var disqus_title = 'WebGL 三维几何加工';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTagName('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+}());
+</script>
+
+
+</html>
+
+
+

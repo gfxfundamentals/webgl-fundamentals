@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-2d-matrix-stack.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="如何用WebGL实现二维的translate/rotate/scale方法" />
+<meta name="keywords" content="webgl graphics" />
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrix-stack_zh-cn.jpg" />
+
+<meta property="og:title" content="WebGL 实现二维矩阵栈" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrix-stack_zh-cn.jpg" />
+<meta property="og:description" content="如何用WebGL实现二维的translate/rotate/scale方法" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL 实现二维矩阵栈" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html" />
+<meta name="twitter:description" content="如何用WebGL实现二维的translate/rotate/scale方法" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrix-stack_zh-cn.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrix-stack_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 实现二维矩阵栈",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL 实现二维矩阵栈</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+
+
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-2d-matrix-stack.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2d-matrix-stack.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-2d-matrix-stack.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2d-matrix-stack.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2d-matrix-stack.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2d-matrix-stack.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2d-matrix-stack.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub a {
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub a::before,#forkongithub a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub a::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+@media (max-width: 900px) {
+    #forkongithub a{
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 实现二维矩阵栈</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>此文上接<a href="webgl-2d-drawimage.html">WebGL二维DrawImage</a>，
+如果没读建议从<a href="webgl-2d-drawimage.html">那里开始</a>。</p>
+<p>上篇文章中实现了画布的二维 <code>drawImage</code> 接口，包括可以自定义源矩形和目标矩形。</p>
+<p>还没有实现的是从任意点旋转或/和缩放，我么可以增加参数来实现，
+最少需要一个中心点，旋转角和 x , y 方向缩放量。幸运的是有更普遍和好用的方式，
+画布的二维接口中使用的是一个矩阵栈，它有<code>save</code>, <code>restore</code>, <code>translate</code>,
+<code>rotate</code>, 和 <code>scale</code>方法。</p>
+<p>实现矩阵栈其实很简单，我们创建一个存放矩阵的栈，使用<a href="webgl-2d-matrices.html">之前创建的方法</a>
+生成平移，旋转，缩放矩阵，放在栈中，创建一个方法每次和最顶部的矩阵相乘。</p>
+<p>这是实现。</p>
+<p>首先是构造器和 <code>save</code>, <code>restore</code> 方法。</p>
+<pre class="prettyprint"><code>function MatrixStack() {
+  this.stack = [];
+
+  // 因为栈是空的，需要放入一个初始化矩阵
+  this.restore();
+}
+
+// 抛出顶部的矩阵，重置为前一个矩阵
+MatrixStack.prototype.restore = function() {
+  this.stack.pop();
+  // 永远不要让栈为空
+  if (this.stack.length &lt; 1) {
+    this.stack[0] = m4.identity();
+  }
+};
+
+// 讲当前矩阵备份到栈中
+MatrixStack.prototype.save = function() {
+  this.stack.push(this.getCurrentMatrix());
+};
+</code></pre><p>还需要一个方法获取或设置栈顶的矩阵</p>
+<pre class="prettyprint"><code>// 获取当前矩阵（栈顶的矩阵）
+MatrixStack.prototype.getCurrentMatrix = function() {
+  return this.stack[this.stack.length - 1].slice();
+};
+
+// 设置当前矩阵
+MatrixStack.prototype.setCurrentMatrix = function(m) {
+  return this.stack[this.stack.length - 1] = m;
+};
+</code></pre><p>最后使用之前的矩阵方法实现 <code>translate</code>, <code>rotate</code>, 和 <code>scale</code>。</p>
+<pre class="prettyprint"><code>// 平移当前矩阵
+MatrixStack.prototype.translate = function(x, y, z) {
+  var m = this.getCurrentMatrix();
+  this.setCurrentMatrix(m4.translate(m, x, y, z));
+};
+
+// 旋转当前矩阵
+MatrixStack.prototype.rotateZ = function(angleInRadians) {
+  var m = this.getCurrentMatrix();
+  this.setCurrentMatrix(m4.zRotate(m, angleInRadians));
+};
+
+// 缩放当前矩阵
+MatrixStack.prototype.scale = function(x, y, z) {
+  var m = this.getCurrentMatrix();
+  this.setCurrentMatrix(m4.scale(m, x, y, z));
+};
+</code></pre><p>注意我们使用的是三维矩阵方法，需要在平移时设置 <code>z</code> 为 <code>0</code>，缩放时设置 <code>z</code> 为 <code>1</code>。
+由于我用惯了二维接口，经常忘记设置 <code>z</code> 值，所以就让 <code>z</code> 为可选参数。</p>
+<pre class="prettyprint"><code>// 平移当前矩阵
+MatrixStack.prototype.translate = function(x, y, z) {
++  if (z === undefined) {
++    z = 0;
++  }
+  var m = this.getCurrentMatrix();
+  this.setCurrentMatrix(m4.translate(m, x, y, z));
+};
+
+...
+
+// 缩放当前矩阵
+MatrixStack.prototype.scale = function(x, y, z) {
++  if (z === undefined) {
++    z = 1;
++  }
+  var m = this.getCurrentMatrix();
+  this.setCurrentMatrix(m4.scale(m, x, y, z));
+};
+</code></pre><p>使用<a href="webgl-2d-drawimage.html">上一节中实现的 <code>drawImage</code></a>这些代码</p>
+<pre class="prettyprint"><code>// 将坐标从像素空间转换到裁剪空间
+var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
+
+// 将矩形平移到 dstX, dstY
+matrix = m4.translate(matrix, dstX, dstY, 0);
+
+// 将单位矩形的宽高缩放到 texWidth, texHeight 个单位
+// from 1 unit to texWidth, texHeight units
+matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
+</code></pre><p>只需要创建一个矩阵栈</p>
+<pre class="prettyprint"><code>var matrixStack = new MatrixStack();
+</code></pre><p>然后将栈顶的矩阵乘起来</p>
+<pre class="prettyprint"><code>// 将坐标从像素空间转换到裁剪空间
+var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
+
++// 将原点移动到栈顶矩阵代表的转换
++matrix = m4.multiply(matrix, matrixStack.getCurrentMatrix());
+
+// 将矩形平移到 dstX, dstY
+matrix = m4.translate(matrix, dstX, dstY, 0);
+
+// 将单位矩形的宽高缩放到 texWidth, texHeight 个单位
+matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
+</code></pre><p>现在就可以像用画布二维接口一样使用了。</p>
+<p>如果你不清楚如何使用矩阵栈，可以把它想成平移和重定向原点。
+例如二维画布默认原点 (0,0) 为左上角。</p>
+<p>如果我们将原点移动到中心然后在绘制在 0,0 点，它的起点就是画布的中心</p>
+<p>让我们使用<a href="webgl-2d-drawimage.html">之前的例子</a>画一个图像</p>
+<pre class="prettyprint"><code>var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
+
+function draw(time) {
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  matrixStack.save();
+  matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+  matrixStack.rotateZ(time);
+
+  drawImage(
+    textureInfo.texture,
+    textureInfo.width,
+    textureInfo.height,
+    0, 0);
+
+  matrixStack.restore();
+}
+</code></pre><p>这是结果。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-matrixstack-01.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-matrixstack-01.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>你可以看到，即使我们给 <code>drawImage</code> 传的 <code>0, 0</code>，由于使用了 <code>matrixStack.translate</code>
+将原点移动到画布的中心，图像画在中心，并绕中心转动。</p>
+<p>让我们将原点移动到图像中间</p>
+<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+matrixStack.rotateZ(time);
++matrixStack.translate(textureInfo.width / -2, textureInfo.height / -2);
+</code></pre><p>现在图像就在画布中心绕图像中心旋转。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-matrixstack-02.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-matrixstack-02.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>让我们在每个角画一个旋转的图像</p>
+<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+matrixStack.rotateZ(time);
+
++matrixStack.save();
++{
++  matrixStack.translate(textureInfo.width / -2, textureInfo.height / -2);
++
++  drawImage(
++    textureInfo.texture,
++    textureInfo.width,
++    textureInfo.height,
++    0, 0);
++
++}
++matrixStack.restore();
++
++matrixStack.save();
++{
++  // 我们在中间图像的中心，所以去左上角
++  matrixStack.translate(textureInfo.width / -2, textureInfo.height / -2);
++  matrixStack.rotateZ(Math.sin(time * 2.2));
++  matrixStack.scale(0.2, 0.2);
++  // 我想让图像的右下角绘制在这里
++  matrixStack.translate(-textureInfo.width, -textureInfo.height);
++
++  drawImage(
++    textureInfo.texture,
++    textureInfo.width,
++    textureInfo.height,
++    0, 0);
++
++}
++matrixStack.restore();
++
++matrixStack.save();
++{
++  // 我们在中间图像的中心，所以去右上角
++  matrixStack.translate(textureInfo.width / 2, textureInfo.height / -2);
++  matrixStack.rotateZ(Math.sin(time * 2.3));
++  matrixStack.scale(0.2, 0.2);
++  // 我想让图像的左下角绘制在这里
++  matrixStack.translate(0, -textureInfo.height);
++
++  drawImage(
++    textureInfo.texture,
++    textureInfo.width,
++    textureInfo.height,
++    0, 0);
++
++}
++matrixStack.restore();
++
++matrixStack.save();
++{
++  // 我们在中间图像的中心，所以去左下角
++  matrixStack.translate(textureInfo.width / -2, textureInfo.height / 2);
++  matrixStack.rotateZ(Math.sin(time * 2.4));
++  matrixStack.scale(0.2, 0.2);
++  // 我想让图像的右上角绘制在这里
++  matrixStack.translate(-textureInfo.width, 0);
++
++  drawImage(
++    textureInfo.texture,
++    textureInfo.width,
++    textureInfo.height,
++    0, 0);
++
++}
++matrixStack.restore();
++
++matrixStack.save();
++{
++  // 我们在中间图像的中心，所以去右下角
++  matrixStack.translate(textureInfo.width / 2, textureInfo.height / 2);
++  matrixStack.rotateZ(Math.sin(time * 2.5));
++  matrixStack.scale(0.2, 0.2);
++  // 我想让图像的左上角绘制在这里
++  matrixStack.translate(0, 0);  // 0,0 表示这行代码其实什么也没做
++
++  drawImage(
++    textureInfo.texture,
++    textureInfo.width,
++    textureInfo.height,
++    0, 0);
++
++}
++matrixStack.restore();
+</code></pre><p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-matrixstack-03.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-matrixstack-03.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>仔细想想使用不同的矩阵栈方法<code>translate</code>, <code>rotateZ</code>, 和 <code>scale</code>
+变换原点的过程中，决定旋转中心的的方式是
+<strong>在调用 drawImage 绘制某个部分前我应该将如何移动才能将旋转中心移动到之前的原点？</strong>。</p>
+<p>换句话说如果我们有一个 400x300 的画布，我调用 <code>matrixStack.translate(220, 150)</code>，
+在这时原点在 220, 50，所有的绘制都是相对于这一点，如果用 <code>0, 0</code> 调用 <code>drawImage</code>
+这里就是图像绘制的地方。</p>
+<p><img class="webgl_center" width="400" src="../resources/matrixstack-before.svg" /></p>
+<p>假设我想让旋转中心在右下角，在这种情况下就将原点移动到哪里调用 <code>drawImage</code>
+才会将旋转中心也就是右下角移动到之前的原点？
+纹理的右下角对应的坐标应该是 <code>-textureWidth, -textureHeight</code>，
+所以使用 <code>0, 0</code> 调用 <code>drawImage</code> 时右下角应该在之前的原点。</p>
+<p><img class="webgl_center" width="400" src="../resources/matrixstack-after.svg" /></p>
+<p>在矩阵栈上之前的的任何操作是无关的，我们在调用 <code>drawImage</code> 之前做了一系列移动旋转或缩放，
+只和当前时刻相关的原点有关，是新的原点，如果在栈前没有东西的话我们只需要决定将它移动到哪里。
+（一个好点的方法是从 <code>drawImage</code> 开始往上看，先平移到旋转中心，再缩放，再旋转，再移动到中间图像的某一角，
+其中每个操作的原点只和前一步有关）。</p>
+<p>你可能发现矩阵栈和<a href="webgl-scene-graph.html">场景图</a>十分相似，
+场景图有树和节点，遍历数将每个节点和它的父节点的矩阵相乘，
+矩阵栈只是是另一个版本而已。</p>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-2d-matrix-stack.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2d-matrix-stack.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-2d-matrix-stack.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2d-matrix-stack.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2d-matrix-stack.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2d-matrix-stack.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2d-matrix-stack.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj.html">Loading .obj files</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-sprites.html">Sprites</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Optimization</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-instanced-drawing.html">实例化绘制</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#screenshot">Taking a screenshot</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#preservedrawingbuffer">Prevent the Canvas Being Cleared</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#html-background">Use WebGL as Background in HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">Texture Units</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-readpixels.html">readPixels</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-references.html">References</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 实现二维矩阵栈';
+            var disqus_title = 'WebGL 实现二维矩阵栈';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTagName('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+}());
+</script>
+
+
+</html>
+
+
+

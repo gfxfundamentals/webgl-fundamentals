@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/fr/webgl-3d-camera.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Comment fonctionnent les caméras en WebGL" />
+<meta name="keywords" content="webgl graphics" />
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-camera_fr.jpg" />
+
+<meta property="og:title" content="WebGL 3D - Les Caméras" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-camera_fr.jpg" />
+<meta property="og:description" content="Comment fonctionnent les caméras en WebGL" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-camera.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL 3D - Les Caméras" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-camera.html" />
+<meta name="twitter:description" content="Comment fonctionnent les caméras en WebGL" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-camera_fr.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-camera.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-camera_fr.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-camera.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-camera.html",
+      "inLanguage":"fr",
+      "name":"WebGL 3D - Les Caméras",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-camera.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL 3D - Les Caméras</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+
+
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-3d-camera.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-camera.html" selected>Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-camera.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-camera.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-camera.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-camera.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-camera.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-camera.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">Table des Matières</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/fr/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub a {
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub a::before,#forkongithub a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub a::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+@media (max-width: 900px) {
+    #forkongithub a{
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 3D - Les Caméras</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>Cet article est la suite d&#39;une série de posts consacrés à WebGL. Le premier <a href="webgl-fundamentals.html">présentait les bases</a> et le précédent parlait des <a href="webgl-3d-perspective.html">projection perspective</a>.
+Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abord.</p>
+<p>Dans le dernier article on devait déplacer le F devant le frustum parce que la fonction <code>projeterPerspective</code> plaçait l&#39;observateur à l&#39;origine (0,0,0). On devait faire attention à ce que les objets soient plus loin que le plan limite proche <code>zNear</code> et moins loin que le plan limite lointain <code>zFar</code>. </p>
+<p>Déplacer les objets dans la vue de cette façon n&#39;a pas l&#39;air bien sage n&#39;est-ce pas ? Dans le vrai monde on va plutôt déplacer sa caméra pour filmer un immeuble</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
+  <div class="webgl_center">déplacer la caméra vers les objets</div>
+</div>
+
+</p>
+<p>Et pas déplacer l&#39;immeuble pour qu&#39;il soit dans le champ de la caméra.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=1"></iframe>
+  <div class="webgl_center">déplacer les objets vers la caméra</div>
+</div>
+
+</p>
+<p>Mais dans l&#39;article précédent notre fonction on devait quand-même placer les objets devant l&#39;observateur sur l&#39;axe -Z. Pour résoudre ça, ce qu&#39;on veut en fait c&#39;est qu&#39;une caméra placée quelque part dans la scène subisse les transformations nécessaires pour qu&#39;elle se retrouve à l&#39;origine et regarde vers l&#39;axe -Z, puis faire subire aux objets les mêmes transformations, pour que finalement ils gardent la même position <em>relativement à la caméra</em>.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=2"></iframe>
+  <div class="webgl_center">déplacer les objets dans la vue</div>
+</div>
+
+</p>
+<p>Finalement on va donc bien déplacer les objets devant la caméra. La façon la plus simple de faire ça est d&#39;utiliser une matrice inverse. Les opérations pour la calculer sont en général assez compliquées, mais le concept est simple : elle applique le contraire des transformations de la matrice d&#39;entrée. L&#39;inverse d&#39;une matrice qui change l&#39;échelle par 5 serait une matrice qui change l&#39;échelle par 1/5. L&#39;inverse d&#39;une matrice qui fait une translation de (123,0,0) est une matrice qui fait une translation de (-123,0,0). L&#39;inverse d&#39;une matrice qui fait une rotation de 30 degrés sur l&#39;axe X est une matrice qui tourne de -30 degrés sur l&#39;axe X. </p>
+<p>Jusque là on a utilisé les translations, rotations et changements d&#39;échelle pour dicter la position et l&#39;orientation de notre &#39;F&#39;. Après multiplication des matrices entre elles on a une unique matrice qui contient toutes les transformations qu&#39;on veut appliquer à la géométrie. On fait pareil pour les caméras. Une fois qu&#39;on a une matrice avec la position et la rotation de notre caméra on peut calculer sa matrice inverse qui contient les informations pour déplacer le reste de la scène suivant les transformations inverses. La caméra reste donc finalement à (0,0,0) et on déplace tout devant elle. </p>
+<p>Faisons un cercle de &#39;F&#39; comme dans le diagramme précédent. Voilà le code :</p>
+<pre class="prettyprint showlinemods">
+  var numFs = 5;
+  var rayon = 200;
+
+  // Calcule la matrice de projection
+  var aspect = canvas.clientWidth / canvas.clientHeight;
+  var matriceProjection =
+      projeterPerspective(FOVEnRadians, aspect, 1, 2000);
+
+  // Dessine des 'F's en cercle
+  for (var ii = 0; ii < numFs; ++ii) {
+    var angle = ii * Math.PI * 2 / numFs;
+
+    var x = Math.cos(angle) * rayon;
+    var z = Math.sin(angle) * rayon;
+    var matriceDeplacement = deplacer(x, 0, z);
+
+    // Multiplie les matrices
+    var matrice = matriceDeplacement;
+    matrice = multiplierMatrices(matrice, matriceProjection);
+
+    // Transmets la matrice au programme en cours
+    gl.uniformMatrix4fv(emplacementMatrice, false, matrice);
+
+    // Appel de rendu
+    gl.drawArrays(gl.TRIANGLES, 0, 16 * 6);
+  }
+</pre>
+
+<p>Après avoir calculé notre matrice de projection, calculons une caméra qui tourne autour des &#39;F&#39;s comme dans l&#39;exemple précédent</p>
+<pre class="prettyprint showlinemods">
+  // Calcule la matrice de la caméra
+  var matriceCamera = deplacer(0, 0, rayon * 1.5);
+  matriceCamera = multiplierMatrices(
+      matriceCamera, tournerY(angleCameraEnRadians));
+</pre>
+
+<p>On déduit ensuite une &quot;matrice vue&quot; pour pour la matrice caméra. Une &quot;matrice vue&quot; est la matrice qui déplace tout avec les transformations inverses de celles de la caméra, comme si la caméra était à l&#39;origine (0,0,0).</p>
+<pre class="prettyprint showlinemods">
+  // Construit la matrice vue, à partir de l'inverse de la matrice caméra 
+  var matriceVue = inverserMatrice(matriceCamera);
+</pre>
+
+<p>Finallement on applique la matrice vue dans notre suite de calculs qui forment la matrice de projection de nos &#39;F&#39; :</p>
+<pre class="prettyprint showlinemods">
+    // Multiplie les matrices
+    var matrice = matriceDeplacement;
+    matrice = multiplierMatrices(matrice, matriceVue);  // <=-- ajouté
+    matrice = multiplierMatrices(matrice, matriceProjection);
+</pre>
+
+<p>Et voilà ! Une caméra qui tourne autour du cercle de &#39;F&#39;s. Changez le slider <code>cameraAngle</code> pour bouger la caméra sur le cercle.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p>C&#39;est super, mais utiliser des rotations et translations pour positionner une caméra où on veut et la pointer vers ce qu&#39;on veut, ce n&#39;est pas pratique du tout. Par exemple si on voulait que la caméra regarde toujours un des &#39;F&#39;s en particulier, ça nous demanderait un algorithme de fou à coder, et ça changerait dans chaque situation. </p>
+<p>Heureusement on peut faire en sorte qu&#39;une caméra soit positionnée à un endroit et regarde une cible précise. Vous le devinez déjà : grâce à une nouvelle matrice. </p>
+<p>D&#39;abord on doit savoir où se situe la caméra. On va appeler cette position, <code>positionCamera</code>. Ensuite on doit savoir ce que la caméra regarde, la <code>cible</code>. Si on soustrait le vecteur <code>cible</code> du vecteur <code>positionCamera</code> on a un vecteur qui pointe dans la direction de la cible depuis la caméra. Appelons-le <code>axeZ</code>. Puisqu&#39;on sait que la caméra pointe dans la direction -Z on peut soustraire dans l&#39;autre sens <code>positionCamera - cible</code>. On normalise le résultat et on le copie directement dans la partie <code>z</code> de la matrice.</p>
+<div class="webgl_math_center"><pre class="webgl_math">
++----+----+----+----+
+|    |    |    |    |
++----+----+----+----+
+|    |    |    |    |
++----+----+----+----+
+| Zx | Zy | Zz |    |
++----+----+----+----+
+|    |    |    |    |
++----+----+----+----+
+</pre></div>
+
+<p>Cette partie de la matrice représente l&#39;axe Z. Dans ce cas c&#39;est l&#39;axe Z de la caméra. Normaliser un vecteur signifie changer sa norme pour qu&#39;elle vale 1. Si vous vous souvenez de <a href="webgl-2d-rotation.html">l&#39;article sur les rotations 2D</a> on parlait du cercle trigonométrique (de rayon 1) et de comment il aide à faire les rotations 2D. En 3D on a besoin d&#39;une sphère de rayon 1 et d&#39;un vecteur normalisé qui représente un point sur cette sphère. </p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=0"></iframe>
+  <div class="webgl_center">L'<span class='z-axis'>axe Z</span></div>
+</div>
+
+</p>
+<p>Cependant ce n&#39;est pas assez. Un vecteur nous donne un point sur une sphère de rayon 1 mais quelle orientation déduire de ce point ? On doit remplir les autres parties de la matrice. En particulier l&#39;axe X et l&#39;axe Y. On sait qu&#39;en général, ces axes sont tous perpendiculaires entre eux. Et qu&#39;en général on ne pointe pas la caméra à la verticale. Avec ces trois informations, l&#39;axe Z, les autres axes perpendiculaires et l&#39;axe vertical Y (0,1,0), on peut utiliser les &quot;produits vectoriels&quot; pour déduire les axes X et Y de notre matrice.</p>
+<p>Je n&#39;ai aucune idée de ce qu&#39;est un produit vectoriel en maths. Mais je sais qu&#39;avec 2 vecteurs normalisés, le produit vectoriel donne un troisième vecteur perpendiculaire aux deux autres. En d&#39;autres termes, si on a un vecteur qui pointe au sud-est et un qui pointe à la verticale, le produit vectoriel donne une vecteur qui pointe ou bien au sud ouest ou bien au nord est, puisque ces deux possibilités forment des vecteurs perpendiculaires aux deux autres. Suivant l&#39;ordre du calcul, on aura une réponse ou l&#39;autre.</p>
+<p>Dans tous les cas si on calule le produit vectoriel de notre <span class="z-axis"><code>axeZ</code></span> avec
+<span style="color: gray;"><code>vertical</code></span> on aura l&#39;<span class="x-axis">axeX</span> de la caméra.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
+  <div class="webgl_center">Produit vectoriel de l'<span style='color:gray;'>vertical</span> avec <span class='z-axis'>axeZ</span> = <span class='x-axis'>axeX</span></div>
+</div>
+
+</p>
+<p>Et maintenant qu&#39;on a l&#39;<span class="x-axis"><code>axeX</code></span> on peut faire le produit vectoriel entre l&#39;<span class="z-axis"><code>axeZ</code></span> et l&#39;<span class="x-axis"><code>axeX</code></span>
+qui nous donne l&#39;<span class="y-axis"><code>axeY</code></span> de la caméra. </p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
+  <div class="webgl_center"><span class='z-axis'>axeZ</span> cross <span class='x-axis'>axeX</span> = <span class='y-axis'>axeY</span></div>
+</div>
+
+</p>
+<p>Maintenant tout ce qu&#39;il nous reste à faire c&#39;est de mettre ces axes dans une matrice. Cette matrice pourra orienter un objet qui pointe la <code>cible</code> depuis <code>positionCamera</code>. Il reste donc à ajouter la <code>position</code></p>
+<div class="webgl_math_center"><pre class="webgl_math">
++----+----+----+----+
+| <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">axe x</span>
++----+----+----+----+
+| <span class="y-axis">Yx</span> | <span class="y-axis">Yy</span> | <span class="y-axis">Yz</span> |  0 |  <- <span class="y-axis">axe y</span>
++----+----+----+----+
+| <span class="z-axis">Zx</span> | <span class="z-axis">Zy</span> | <span class="z-axis">Zz</span> |  0 |  <- <span class="z-axis">axe z</span>
++----+----+----+----+
+| Tx | Ty | Tz |  1 |  <- position camera
++----+----+----+----+
+</pre></div>
+
+<p>Voilà le code pour calculer un produit vectoriel</p>
+<pre class="prettyprint showlinemods">
+function produitVectoriel(a, b) {
+  return [a[1] * b[2] - a[2] * b[1],
+          a[2] * b[0] - a[0] * b[2],
+          a[0] * b[1] - a[1] * b[0]];
+}
+</pre>
+
+<p>Le code pour soustraire deux vecteurs :</p>
+<pre class="prettyprint showlinemods">
+function soustraireVecteurs(a, b) {
+  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+}
+</pre>
+
+<p>Et celui pour normaliser un vecteur (mettre sa norme à 1)</p>
+<pre class="prettyprint showlinemods">
+function normaliser(v) {
+  var norme = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  // s'assurer qu'on ne va pas diviser par zéro
+  if (norme > 0.00001) {
+    return [v[0] / norme, v[1] / norme, v[2] / norme];
+  } else {
+    return [0, 0, 0];
+  }
+}
+</pre>
+
+<p>Voilà le code pour calculer une matrice &quot;regarderVers&quot;</p>
+<pre class="prettyprint showlinemods">
+function regarderVers(positionCamera, cible, vertical) {
+  var axeZ = normaliser(
+      soustraireVecteurs(positionCamera, cible));
+  var axeX = produitVectoriel(vertical, axeZ);
+  var axeY = produitVectoriel(axeZ, axeX);
+
+  return [
+     axeX[0], axeX[1], axeX[2], 0,
+     axeY[0], axeY[1], axeY[2], 0,
+     axeZ[0], axeZ[1], axeZ[2], 0,
+     positionCamera[0],
+     positionCamera[1],
+     positionCamera[2],
+     1];
+}
+</pre>
+
+<p>Et voilà comment on pourrait l&#39;utiliser pour pointer la caméra vers un &#39;F&#39; en particulier pendant qu&#39;on la déplace.</p>
+<pre class="prettyprint showlinemods">
+  ...
+
+  // Calcule la position du premier F
+  var positionF = [rayon, 0, 0];
+
+  // Utilise une matrice pour déduire une position sur le cercle
+  var matriceCamera = deplacer(0, 50, rayon * 1.5);
+  matriceCamera = multiplierMatrices(
+      matriceCamera, tournerY(angleCameraEnRadians));
+
+  // Trouve la position de la caméra à partir de la matrice précédente
+  positionCamera = [
+      matriceCamera[12],
+      matriceCamera[13],
+      matriceCamera[14]];
+
+  var vertical = [0, 1, 0];
+
+  // Calcule la matrice caméra avec regarderVers
+  var matriceCamera = regarderVers(positionCamera, positionF, vertical);
+
+  // Fait une matrice vue à partir de la matrice caméra
+  var matriceVue = inverserMatrice(matriceCamera);
+
+  ...
+</pre>
+
+<p>Voilà le résultat</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p>Déplacez le slider : la caméra suit le &#39;F&#39; !</p>
+<p>Notez que la fonction &quot;regarderVers&quot; a bien d&#39;autres applications. Des utilisations classiques sont de faire tourner la tête d&#39;un personnage vers un objet, de tourner une tourelle vers un vaisseau, faire qu&#39;un objet suive un chemin. Pour ce dernier cas on calcule où l&#39;objet sera sur le chemin l&#39;instant suivant et on le fait regarder cette cible depuis sa position : l&#39;objet suivra le chemin que vous programmez et regardera où il va en même temps.</p>
+<p>Découvrons ensuite <a href="webgl-animation.html">l&#39;animation</a>.</p>
+<div class="webgl_bottombar">
+<h3>Bonnes pratiques de la fonction regarderVers</h3>
+<p>La plupart des librairies 3D ont une fonction regarderVers ou en anglais <code>lookAt</code>. Elle est souvent utilisée pour faire une "matriceVue" ou "viewMatrix" et non une matrice caméra. En d'autres termes, elles produisent une matrice qui déplace tout devant la caméra plutôt qu'une caméra qui déplace la caméra elle-même.</p>
+<p>Je trouve ça moins efficace. Comme mentionné plus tôt, une fonction regarderVers a d'autres cas. C'est facile de faire une inversion de matrice quand on veut une matrice vue mais si on utilise <code>regarderVers</code> pour qu'un personnage en suive un autre ou qu'une tourelle suive sa cible c'est plus simple que regarderVers retourne une matrice qui positionne et oriente un objet dans les coordonnées globales à mon avis.
+</p>
+<div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at-heads.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at-heads.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+
+</div>
+
+
+
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-3d-camera.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-camera.html" selected>Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-camera.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-camera.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-camera.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-camera.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-camera.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-camera.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Les bases</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-fundamentals.html">WebGL - Les bases</a></li>
+<li><a href="/webgl/lessons/fr/webgl-how-it-works.html">WebGL - Comment ça marche</a></li>
+<li><a href="/webgl/lessons/fr/webgl-shaders-and-glsl.html">WebGL - Shaders et GLSL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>Traitement d'image</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-image-processing.html">Image Processing</a></li>
+<li><a href="/webgl/lessons/fr/webgl-image-processing-continued.html">Image Processing Continued</a></li>
+        </ul>
+  <li>2D : translation, rotation, échelle, matrices</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-2d-translation.html">WebGL 2D - Translation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-rotation.html">WebGL 2D - Rotation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-scale.html">WebGL 2D - Echelle</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-matrices.html">WebGL 2D - Matrices</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-orthographic.html">WebGL 3D - Projection orthographique</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-perspective.html">WebGL 3D - La perspective</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-camera.html">WebGL 3D - Les caméras</a></li>
+        </ul>
+  <li>Lumières</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-lighting-directional.html">WebGL 3D - Lumière directionnelle</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-lighting-point.html">WebGL 3D - Lumière-point</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+        </ul>
+  <li>Structure et Organisation</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+<li><a href="/webgl/lessons/fr/webgl-drawing-multiple-things.html">Drawing Multiple Things</a></li>
+<li><a href="/webgl/lessons/fr/webgl-scene-graph.html">WebGL - Graphes de scène</a></li>
+        </ul>
+  <li>Geometry</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+<li><a href="/webgl/lessons/fr/webgl-load-obj.html">Loading .obj files</a></li>
+<li><a href="/webgl/lessons/fr/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+        </ul>
+  <li>Divers</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-textures.html">Textures</a></li>
+<li><a href="/webgl/lessons/fr/webgl-data-textures.html">Data Textures</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2-textures.html">Using 2 or More Textures</a></li>
+<li><a href="/webgl/lessons/fr/webgl-cors-permission.html">Cross Origin Images</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/fr/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Rendering To A Texture</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-render-to-texture.html">Render to Texture</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Techniques</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-2d-drawimage.html">2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+<li><a href="/webgl/lessons/fr/webgl-sprites.html">Sprites</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/fr/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/fr/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/fr/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/fr/webgl-fog.html">Fog</a></li>
+<li><a href="/webgl/lessons/fr/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>Texte</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-text-html.html">Text - HTML</a></li>
+<li><a href="/webgl/lessons/fr/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/fr/webgl-text-texture.html">Text - Using a Texture</a></li>
+<li><a href="/webgl/lessons/fr/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
+        </ul>
+  <li>Divers</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/fr/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/fr/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/fr/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Optimization</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/fr/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+        </ul>
+  <li>Divers</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-setup-and-installation.html">Setup And Installation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-boilerplate.html">Boilerplate</a></li>
+<li><a href="/webgl/lessons/fr/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
+<li><a href="/webgl/lessons/fr/webgl-animation.html">Animation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/fr/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/fr/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/fr/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-vs-3d-library.html">2D vs 3D libraries</a></li>
+<li><a href="/webgl/lessons/fr/webgl-anti-patterns.html">Anti-Patterns</a></li>
+<li><a href="/webgl/lessons/fr/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/fr/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/fr/webgl-tips.html#screenshot">Taking a screenshot</a></li>
+<li><a href="/webgl/lessons/fr/webgl-tips.html#preservedrawingbuffer">Prevent the Canvas Being Cleared</a></li>
+<li><a href="/webgl/lessons/fr/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
+<li><a href="/webgl/lessons/fr/webgl-tips.html#html-background">Use WebGL as Background in HTML</a></li>
+<li><a href="/webgl/lessons/fr/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/fr/webgl-texture-units.html">Texture Units</a></li>
+<li><a href="/webgl/lessons/fr/webgl-readpixels.html">readPixels</a></li>
+<li><a href="/webgl/lessons/fr/webgl-references.html">References</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Aide pour la doc de l'API</a></li>
+  <li><a href="https://twgljs.org">TWGL, une librairie de base pour WebGL</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Une question ? <a href="https://stackoverflow.com/questions/tagged/webgl">Demander sur stackoverflow</a>.</div>
+        <div>Un problème ? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">Signaler sur github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D - Les Caméras';
+            var disqus_title = 'WebGL 3D - Les Caméras';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTagName('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+}());
+</script>
+
+
+</html>
+
+
+
