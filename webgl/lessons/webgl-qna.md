@@ -2,9 +2,9 @@ Title: Questions and Answers
 Description: Random Questions and Answers
 TOC: Questions and Answers
 
-A collection of random questions and/or answers about topics related to WebGL
+A collection of links to random questions and/or answers about topics related to WebGL
 
-* [Show a night view vs a day view on a 3D Earth sphere](https://stackoverflow.com/questions/10644236)
+* [WebGL Droste effect](https://stackoverflow.com/questions/56841018)
 * [Working around gl_PointSize limitations webGL](https://stackoverflow.com/questions/15371940)
 * [How to simulate a 3D texture in WebGL](https://stackoverflow.com/questions/19939557)
 * [How to render large scale images like 32000x32000](https://stackoverflow.com/questions/51232023/high-resolution-draw-canvas-with-webgl)
@@ -41,7 +41,7 @@ A collection of random questions and/or answers about topics related to WebGL
 * [Creating a smudge/liquify effect](https://stackoverflow.com/questions/42049942)
 * [How to get pixelize effect in webgl?](https://stackoverflow.com/questions/43878959)
 * [How to make WebGL canvas transparent](https://stackoverflow.com/questions/12273858)
-* [WebGL Droste effect](https://stackoverflow.com/questions/56841018)
+* [Show a night view vs a day view on a 3D Earth sphere](https://stackoverflow.com/questions/10644236)
 
 ---
 
