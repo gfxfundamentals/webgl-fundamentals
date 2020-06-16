@@ -129,7 +129,7 @@
       background: rgba(221, 221, 221, 0.9);
     }
     .console .console-line {
-      white-space: pre;
+      white-space: pre-line;
     }
     .console .log .warn {
       color: black;
