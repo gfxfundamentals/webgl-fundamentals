@@ -11,6 +11,11 @@
         width: 400px;
         height: 600px;
     }
+    @media (prefers-color-scheme: dark) {
+      canvas { 
+        background: #444;
+      }
+    }
     </style>
 </head>
 <body>
@@ -110,6 +115,17 @@ function main() {
     return;
   }
 
+  const darkColors = {
+    lines: [1, 1, 1, 1],
+  };
+  const lightColors = {
+    lines: [0, 0, 0, 1],
+  };
+  const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
+  const isDarkMode = darkMatcher.matches;
+  const colors = isDarkMode ? darkColors : lightColors;
+
+
   const eyeElem = document.querySelector("#eye");
 
   // Create Geometry.
@@ -157,10 +173,10 @@ function main() {
         1, 1, 1, 1,
         1, 1, 1, 1,
 
-        0, 0, 0, 1,
-        0, 0, 0, 1,
-        0, 0, 0, 1,
-        0, 0, 0, 1,
+        ...colors.lines,
+        ...colors.lines,
+        ...colors.lines,
+        ...colors.lines,
     ],
     indices: [
         0, 4, 1, 5, 2, 6, 3, 7,
@@ -491,12 +507,12 @@ function main() {
   };
 
   var cubeRaysUniforms = {
-    u_color: [1, 1, 1, 1],
+    u_color: colors.lines,
     u_worldViewProjection: worldViewProjection,
   };
 
   var wireFrustumUniforms = {
-    u_color: [1, 0, 0, 1],
+    u_color: colors.lines,
     u_worldViewProjection: worldViewProjection,
   };
 
