@@ -313,7 +313,7 @@ export default function main({webglVersion, examples}) {
         const {ui} = getWebGLObjectInfo(framebuffer);
         ui.updateState();
       } else {
-        globals.globalUI.drawBuffersState.updateState();
+        globals.globalUI.framebufferState.updateState();
       }
     });
     wrapFn('bindTransformFeedback', function(origFn, ...args) {

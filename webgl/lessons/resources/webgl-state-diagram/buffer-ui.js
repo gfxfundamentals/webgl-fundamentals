@@ -85,7 +85,7 @@ export function createFramebufferDisplay(parent, name /*, webglObject */) {
   const fbElem = createTemplate(parent, '#framebuffer-template');
   setName(fbElem, name);
 
-  const attachmentExpander = createExpander(fbElem.querySelector('.attachments'), 'attachment');
+  const attachmentExpander = createExpander(fbElem.querySelector('.attachments'), 'attachments');
   const attachmentsTbody = createTable(attachmentExpander, ['attachment point', 'level', 'face', 'attachment']);
   const maxDrawBuffers = globals.isWebGL2 ? gl.getParameter(gl.MAX_DRAW_BUFFERS) : 1;
   const attachmentPoints = [];
@@ -196,7 +196,7 @@ export function createFramebufferDisplay(parent, name /*, webglObject */) {
 
   const firstBind = () => {
     if (globals.isWebGL2) {
-      stateTable = createStateTable(globals.stateTables.drawBuffersState, fbElem.querySelector('.draw-buffers'), 'draw buffers', queryFn);
+      stateTable = createStateTable(globals.stateTables.framebufferState, fbElem.querySelector('.state'), 'draw/read buffers', queryFn);
       expand(stateTable);
     }
   };
@@ -208,7 +208,7 @@ export function createFramebufferDisplay(parent, name /*, webglObject */) {
     updateAttachments,
     updateAttachmentContents,
     updateState: () => {
-      updateStateTable(globals.stateTables.drawBuffersState, stateTable, queryFn);
+      updateStateTable(globals.stateTables.framebufferState, stateTable, queryFn);
     },
     firstBind,
   };
