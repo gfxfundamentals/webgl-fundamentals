@@ -217,7 +217,7 @@ export function createGlobalUI(globalStateElem) {
     stencilState: createStateUI(globalState.stencilState, globalStateElem, 'stencil state', globalStateQuery),
     polygonState: createStateUI(globalState.polygonState, globalStateElem, 'polygon state', globalStateQuery),
     ...globals.isWebGL2 && {
-      drawBuffersState: createStateUI(globals.stateTables.drawBuffersState, globalStateElem, 'draw buffers', globalStateQuery),
+      framebufferState: createStateUI(globals.stateTables.framebufferState, globalStateElem, 'read/draw buffers', globalStateQuery),
     },
     settersToWrap,
   };
