@@ -178,6 +178,7 @@ const fs = `
 +    gl_FragColor = vec4(fract(gl_FragCoord.xy / u_resolution), 0, 1);
   }
 `;
+```
 
 and look up and set the uniform
 
