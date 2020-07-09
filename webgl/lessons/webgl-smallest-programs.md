@@ -60,7 +60,7 @@ You enable the scissor test with
 gl.enable(gl.SCISSOR_TEST);
 ```
 
-and then you set the scissor rectangle in pixels relative to the bottom right corner. It uses the same parameters
+and then you set the scissor rectangle in pixels relative to the bottom left corner. It uses the same parameters
 as `gl.viewport`.
 
 ```js
