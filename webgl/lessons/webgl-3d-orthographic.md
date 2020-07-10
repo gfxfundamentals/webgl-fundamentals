@@ -289,6 +289,7 @@ And we need a 4x4 matrix multiplication function
     var a31 = a[3 * 4 + 1];
     var a32 = a[3 * 4 + 2];
     var a33 = a[3 * 4 + 3];
+    var dst = new Array(16).fill(0);
     dst[ 0] = b00 * a00 + b01 * a10 + b02 * a20 + b03 * a30;
     dst[ 1] = b00 * a01 + b01 * a11 + b02 * a21 + b03 * a31;
     dst[ 2] = b00 * a02 + b01 * a12 + b02 * a22 + b03 * a32;
