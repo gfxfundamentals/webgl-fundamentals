@@ -644,7 +644,7 @@ our original projection function we'd call it with
     var top = 0;
     var near = 400;
     var far = -400;
-    m4.orthographic(left, right, bottom, top, near, far);
+    var matrix = m4.orthographic(left, right, bottom, top, near, far);
 
 In the next post I'll go over [how to make it have perspective](webgl-3d-perspective.html).
 
