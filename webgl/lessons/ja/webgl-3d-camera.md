@@ -106,7 +106,7 @@ for (var ii = 0; ii < numFs; ++ii) {
 
 「F」の円の周りを回転しているカメラの出来上がり！`カメラ角度`のスライダでカメラを移動してみて下さい。
 
-{{{example url="../webgl-3d-camera.html?ui-cameraAngle=カメリ角度" }}}
+{{{example url="../webgl-3d-camera.html?ui-cameraAngle=カメラ角度" }}}
 
 それで良しとすることも出来るけど、移動と回転でカメラを目標に向かせることはあまり簡単ではないような気がする。
 例えば一つの特定の「F」を目指したければ、「F」の円の回りに回っているカメラが特定の「F」に向ける計算はウンザリするものかもしれない。
@@ -263,7 +263,7 @@ var m4 = {
 
 これはその結果である。
 
-{{{example url="../webgl-3d-camera-look-at.html?ui-cameraAngle=カメリ角度" }}}
+{{{example url="../webgl-3d-camera-look-at.html?ui-cameraAngle=カメラ角度" }}}
 
 スライダを操作して、カメラは特定の「F」を狙っていることに注目しよう。
 
