@@ -19,15 +19,16 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-eslint": "^22.0.0",
     "grunt-jsdoc": "^2.4.0",
+    "ld-check-dependencies": "^1.1.1",
     "load-grunt-tasks": "^4.0.0",
     "minami": "^1.2.3",
     "servez": "^1.5.0"
   },
   "scripts": {
-    "build": "grunt",
-    "watch": "grunt buildwatch",
-    "eslint": "grunt eslint",
-    "pre-push": "grunt pre-push",
+    "build": "ld-check-dependencies && grunt",
+    "watch": "ld-check-dependencies && grunt buildwatch",
+    "eslint": "ld-check-dependencies && grunt eslint",
+    "pre-push": "ld-check-dependencies && grunt pre-push",
     "start": "servez out",
     "test": "check-all-the-errors --follow-links=both --output=webglfundamentals.check.json out \"*.html\""
   },
