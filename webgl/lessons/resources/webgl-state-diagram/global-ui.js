@@ -20,6 +20,7 @@ import {
 } from './ui.js';
 
 import {
+  createStateGrid,
   createStateTable,
   updateStateTable,
 } from './state-table.js';
@@ -57,6 +58,11 @@ function createTextureUnits(parent, maxUnits = 8) {
   The code above will generate an error at draw time because --foo-- and --bar--
   require different sampler types. If they are the same type it is okay to point
   both to the same texture unit.
+
+  > Note: Only 8 texture units are shown here for space reasons but 
+  the actual number of bind points you can look up with
+  --gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS)--
+  which will be a minimum of ${globals.isWebGL2 ? 32 : 8}.
   `);
 
   const targets = globals.isWebGL2
@@ -164,6 +170,128 @@ function createTextureUnits(parent, maxUnits = 8) {
   };
 }
 
+function createUniformBufferBindings(parent, maxUnits = 8) {
+  const expander = createExpander(parent, 'Uniform Buffer Bindings', {}, `
+  In each program you tell each uniform block which index to find
+  the buffer to get it's values here.
+
+  Example:
+
+  at init time
+
+  ---
+  // look up the index of the block in the program
+  const someUniformBlockIndex = gl.getUniformBlockIndex(somePrg, 'nameOfUniformBlock');
+
+  // set which of these binding points you'll specify the buffer and range
+  // form which to set the uniforms
+  const uniformBufferIndex = 3; // use the 3 indexed buffer
+  gl.uniformBlockBinding(somePrg, someUniformBlockIndex, uniformBufferIndex)
+  ---
+
+  at render time
+
+  ---
+  gl.useProgram(somePrg);
+
+  gl.bindBufferBase(gl.UNIFORM_BUFFER,
+                    uniformBufferIndex,
+                    bufferWithUniformData);
+  //or
+  gl.bindBufferRange(gl.UNIFORM_BUFFER,
+                     uniformBufferIndex,
+                     bufferWithUniformData,
+                     offsetInBytes,
+                     sizeInBytes);
+  ---
+
+  You need to put the data for the uniforms in the buffer with
+  --gl.bufferData-- or --gl.bufferSubData--.
+
+  > Note: Only 8 bind points are shown here for space reasons but 
+  the actual number of bind points you can look up with
+  --gl.getParameter(gl.MAX_UNIFORM_BUFFER_BINDINGS)--
+  which will be a minimum of 24.
+  `);
+
+  const tbody = createTable(expander, ['offset', 'size', 'buffer'], '');
+  const arrows = [];
+
+  for (let i = 0; i < maxUnits; ++i) {
+    arrows.push({});
+    const tr = addElem('tr', tbody);
+    addElem('td', tr, {
+      textContent: '0',
+      dataset: {
+        help: helpToMarkdown(`
+          offset in buffer for this uniform block.
+          Set to 0 with --gl.bindBufferBase-- or whatever
+          you specify with --gl.bindBufferRange--.
+        `),
+      },
+    });
+    addElem('td', tr, {
+      textContent: '0',
+      dataset: {
+        help: helpToMarkdown(`
+          size of area to use in buffer for this uniform block.
+          Set to entire buffer with --gl.bindBufferBase-- or whatever
+          you specify with --gl.bindBufferRange--.
+        `),
+      },
+    });
+    addElem('td', tr, {
+      textContent: 'null',
+      dataset: {
+        help: helpToMarkdown(`
+          buffer set with either --gl.bindBufferBase-- or
+          --gl.bindBufferRange--.
+        `),
+      },
+    });
+  }
+
+  const {globalState} = globals.stateTables;
+  const stateTableElem = createStateGrid(globalState.uniformBufferState, expander, globalStateQuery, true);
+
+  const updateUniformBufferBinding = index => {
+    const row = tbody.rows[index];
+
+    const offset = gl.getIndexedParameter(gl.UNIFORM_BUFFER_START, index);
+    const bufSectionSize = gl.getIndexedParameter(gl.UNIFORM_BUFFER_SIZE, index);
+    const buffer = gl.getIndexedParameter(gl.UNIFORM_BUFFER_BINDING, index);
+
+    updateElemAndFlashExpanderIfClosed(row.cells[0], offset);
+    updateElemAndFlashExpanderIfClosed(row.cells[1], bufSectionSize);
+    const cell = row.cells[2];
+    if (updateElemAndFlashExpanderIfClosed(cell, formatWebGLObject(buffer))) {
+      const oldArrow = arrows[index];
+      if (oldArrow) {
+        arrowManager.remove(oldArrow);
+        arrows[index] = null;
+      }
+      if (buffer) {
+        const targetInfo = getWebGLObjectInfo(buffer);
+        if (!targetInfo.deleted) {
+          arrows[index] = arrowManager.add(
+              cell,
+              targetInfo.ui.elem.querySelector('.name'),
+              getColorForWebGLObject(buffer, targetInfo.ui.elem, index / maxUnits),
+              {offset: { start: {x: 0, y: 2 * 2 - 4}}});
+        }
+      }
+    }
+  };
+
+  return {
+    elem: expander,
+    updateUniformBufferBinding,
+    updateState: () => {
+      updateStateTable(globalState.uniformBufferState, stateTableElem, globalStateQuery);
+    },
+  };
+}
+
 function globalStateQuery(state) {
   const {pname} = state;
   const value = gl.getParameter(gl[pname]);
@@ -210,6 +338,7 @@ export function createGlobalUI(globalStateElem) {
     clearState: createStateUI(globalState.clearState, globalStateElem, 'clear state', globalStateQuery),
     ...globals.isWebGL2 && {
       transformFeedbackState: createStateUI(globalState.transformFeedbackState, globalStateElem, 'transform feedback', globalStateQuery),
+      uniformBufferBindingsState: createUniformBufferBindings(globalStateElem, Math.min(8, gl.getParameter(gl.MAX_UNIFORM_BUFFER_BINDINGS))),
     },
     depthState: createStateUI(globalState.depthState, globalStateElem, 'depth state', globalStateQuery),
     blendState: createStateUI(globalState.blendState, globalStateElem, 'blend state', globalStateQuery),

@@ -103,6 +103,10 @@ body {
   );
   background-size: 100% 2px;
 }
+.expander-content code>pre,
+#hint code>pre {
+  background: #23241f;
+}
 .bad {
   background: red;
   font-weight: bold;
@@ -143,6 +147,11 @@ body {
   margin-top: 10px;
   border: 1px solid black;
 }
+.program-uniform-block {
+  background: rgba(0, 0, 0, 0.25);
+  background-blend-mode: darken;
+} 
+
 .vertex-array .attrib-enable .used-when-enabled,
 .vertex-array .used-when-disabled {
   background: inherit;
@@ -362,13 +371,20 @@ th {
 #code pre:hover {
   background: hsl(240, 100%, 20%);
 }
-#code .line-marker:before {
+#code .line-marker {
+  position: relative;
+  width: 1.5em;
+  flex: 0 0 auto;
+}
+#code .line-marker::before {
   content: '>●';
   font-weight: bold;
   color: red;
   visibility: hidden;
+  position: absolute;
+  bottom: 0;
 }
-#code .current-line .line-marker:before {
+#code .current-line .line-marker::before {
   visibility: visible;
 }
 .get-webgl {
@@ -393,7 +409,7 @@ th {
 
 .current-line,
 .current-line .hljs {
-  background: hsl(0, 100%, 10%);
+  background: hsl(0, 100%, 16%);
 }
 
 @media (max-width: 1200px) {

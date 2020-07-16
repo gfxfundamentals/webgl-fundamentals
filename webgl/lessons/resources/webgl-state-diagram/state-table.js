@@ -21,11 +21,9 @@ import {arrowManager} from './arrows.js';
 
 const elemToArrowMap = new Map();
 
-export function createStateTable(statesInfo, parent, title, queryFn, update = true) {
-  const {states, help} = statesInfo;
-  const expander = createExpander(parent, title, {}, help);
-  const div = addElem('div', expander, {className: 'expander-content'});
-  const table = addElem('table', div);
+export function createStateGrid(statesInfo, parent, queryFn, update = true) {
+  const {states} = statesInfo;
+  const table = addElem('table', parent);
   const tbody = addElem('tbody', table);
   for (const state of states) {
     const {pname, help} = state;
@@ -35,8 +33,16 @@ export function createStateTable(statesInfo, parent, title, queryFn, update = tr
     addElem('td', tr);
   }
   if (update) {
-    updateStateTable(statesInfo, expander, queryFn, true);
+    updateStateTable(statesInfo, table, queryFn, true);
   }
+  return table;
+}
+
+export function createStateTable(statesInfo, parent, title, queryFn, update = true) {
+  const {help} = statesInfo;
+  const expander = createExpander(parent, title, {}, help);
+  const div = addElem('div', expander, {className: 'expander-content'});
+  createStateGrid(statesInfo, div, queryFn, update);
   return expander;
 }
 
