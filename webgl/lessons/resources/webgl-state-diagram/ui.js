@@ -38,6 +38,11 @@ export function setHint(e, hint = '') {
   if (dragTarget) {
     hint = '';
   }
+  // if the hint is visible and there is a selection just exit
+  // so the user can copy text from the hint.
+  if (!hintElem.style.display && window.getSelection().toString()) {
+    return;
+  }
   if (lastHint !== hint) {
     lastHint = hint;
     const html = converter.makeHtml(replaceParams(hint, hintSubs));

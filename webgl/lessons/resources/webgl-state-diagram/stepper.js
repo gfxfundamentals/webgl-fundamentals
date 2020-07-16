@@ -24,7 +24,7 @@ export default class Stepper {
     const lines = [...js.matchAll(/[^`;]*(?:`[^`]*?`)?[^`;]*;?;\n/g)].map(m => {
       let code = m[0];
       if (code.startsWith('\n')) {
-        code = code.substr(1);
+        //code = code.substr(1);
         addElem('div', codeElem, {textContent: ' ', className: 'hljs'});
       }
       const elem = addElem('div', codeElem);

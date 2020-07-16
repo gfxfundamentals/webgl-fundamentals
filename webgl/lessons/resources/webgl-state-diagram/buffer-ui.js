@@ -51,10 +51,21 @@ export function createBufferDisplay(parent, name /*, webglObject */) {
     dataElem.textContent = `${value}${data.length > maxValues ? ', ...' : ''}`;
   };
 
+  const updateSubData = (data, offset) => {
+    const maxValues = 9;
+    expand(dataExpander);
+    flashSelfAndExpanderIfClosed(dataElem);
+    const oldData = dataElem.textContent.replace(', ...', '').split(', ').map(parseFloat);
+    oldData.splice(offset, data.length, ...data);
+    const value = formatUniformValue(Array.from(oldData).slice(0, maxValues));
+    dataElem.textContent = `${value}${oldData.length > maxValues ? ', ...' : ''}`;
+  };
+
   makeDraggable(bufElem);
   return {
     elem: bufElem,
     updateData,
+    updateSubData,
   };
 }
 

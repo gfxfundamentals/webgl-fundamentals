@@ -325,7 +325,8 @@ return {
 function createProgramUniforms(parent, gl, program) {
   const tbody = createTable(parent, ['name', 'value']);
   let expanded = false;
-  let locationInfos = [];
+  let locationInfos = [];  // info for free uniforms
+  let blockSpecs = {};     // info for each uniform block
   let numUniforms;
 
   const update = (initial) => {
@@ -352,14 +353,77 @@ function createProgramUniforms(parent, gl, program) {
         }
       }
     });
+
+    if (globals.isWebGL2) {
+      const oldUniformBuffer = gl.getParameter(gl.UNIFORM_BUFFER_BINDING);
+      let ndx = locationInfos.length;
+      for (const blockSpec of Object.values(blockSpecs)) {
+        const {index, size, uniformInfos, arrow} = blockSpec;
+        const blockNameCell = tbody.rows[ndx].cells[0];
+        const blockIndexCell = tbody.rows[ndx++].cells[1];
+        arrowManager.remove(arrow);
+
+        const bufferIndex = gl.getActiveUniformBlockParameter(program, index, gl.UNIFORM_BLOCK_BINDING);
+        updateElemAndFlashExpanderIfClosed(blockIndexCell, formatUniformValue(bufferIndex), !initial);
+
+        let data;
+        let bad = false;
+        if (isCurrent) {
+          // which index is this block using
+          // TODO: connect this block to its bufferIndex
+          // which buffer is on that index
+          const buffer = gl.getIndexedParameter(gl.UNIFORM_BUFFER_BINDING, bufferIndex);
+          const offset = gl.getIndexedParameter(gl.UNIFORM_BUFFER_START, bufferIndex);
+          gl.bindBuffer(gl.UNIFORM_BUFFER, buffer);
+          const bufferSize = buffer ? gl.getBufferParameter(gl.UNIFORM_BUFFER, gl.BUFFER_SIZE) : 0;
+          const bindingSize = gl.getIndexedParameter(gl.UNIFORM_BUFFER_SIZE, bufferIndex);
+          const bufSectionSize = bindingSize || bufferSize;
+
+          const target = globals.globalUI.uniformBufferBindingsState.elem.querySelector('tbody').rows[bufferIndex];
+          blockSpec.arrow = arrowManager.add(
+              blockNameCell,
+              target,
+              getColorForWebGLObject(null, target),
+              {startDir: 'left', endDir: 'right', attrs: {'stroke-dasharray': '2 4'}});
+
+          if (bufSectionSize < size) {
+            bad = true;
+          } else if (buffer) {
+            // get the data from the buffer
+            data = new Uint8Array(bufSectionSize);
+            if (offset + bufSectionSize > bufferSize) {
+              bad = true;
+            } else {
+              gl.getBufferSubData(gl.UNIFORM_BUFFER, offset, data);
+            }
+          }
+
+        }
+        for (const uniformInfo of uniformInfos) {
+          const cell = tbody.rows[ndx++].cells[1];
+          let value;
+          if (bad) {
+            value = '-OUT-OF-RANGE-';
+          } else if (!data) {
+            value = '-unknown-';
+          } else {
+            const typeInfo = getUniformTypeInfo(uniformInfo.type);
+            const Type = typeInfo.Type;
+            const length = uniformInfo.size * typeInfo.size;
+            value = new Type(data.buffer, uniformInfo.offset, length / Type.BYTES_PER_ELEMENT);
+          }
+          updateElemAndFlashExpanderIfClosed(cell, formatUniformValue(value), !initial);
+        }
+      }
+      gl.bindBuffer(gl.UNIFORM_BUFFER, oldUniformBuffer);
+    }
   };
 
   const scan = () => {
-    locationInfos.forEach(({arrow}) => {
-      if (arrow) {
-        arrowManager.remove(arrow);
-      }
-    });
+    locationInfos.forEach(({arrow}) => arrowManager.remove(arrow));
+    for (const {arrow} of Object.values(blockSpecs)) {
+      arrowManager.remove(arrow);
+    }
     locationInfos = [];
     numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
     tbody.innerHTML = '';
@@ -369,6 +433,7 @@ function createProgramUniforms(parent, gl, program) {
       expand(parent);
     }
 
+    // look up free uniforms
     for (let ii = 0; ii < numUniforms; ++ii) {
       const uniformInfo = gl.getActiveUniform(program, ii);
       if (isBuiltIn(uniformInfo)) {
@@ -381,18 +446,122 @@ function createProgramUniforms(parent, gl, program) {
       }
       const uniformTypeInfo = getUniformTypeInfo(uniformInfo.type);
       const help = helpToMarkdown(`---js\nconst location = gl.getUniformLocation(\n    program,\n    '${name}');\ngl.useProgram(program); // set current program\n${uniformTypeInfo.setter}\n---`);
+      const location = gl.getUniformLocation(program, name);
+      // the uniform will have no location if it's in a uniform block
+      if (!location) {
+        continue;
+      }
       locationInfos.push({
-        location: gl.getUniformLocation(program, name),
+        location,
         uniformInfo,
         uniformTypeInfo,
       });
-
       const tr = addElem('tr', tbody);
       addElem('td', tr, {textContent: name, dataset: {help}});
       addElem('td', tr, {
         dataset: {help},
       });
     }
+
+    // look up uniform blocks
+    if (globals.isWebGL2 && numUniforms) {
+      const uniformData = [];
+      blockSpecs = {};
+      const uniformIndices = [];
+
+      for (let ii = 0; ii < numUniforms; ++ii) {
+        uniformIndices.push(ii);
+        uniformData.push({});
+        const uniformInfo = gl.getActiveUniform(program, ii);
+        if (isBuiltIn(uniformInfo)) {
+          break;
+        }
+        // REMOVE [0]?
+        uniformData[ii].name = uniformInfo.name;
+      }
+
+      [
+        [ "UNIFORM_TYPE", "type" ],
+        [ "UNIFORM_SIZE", "size" ],  // num elements
+        [ "UNIFORM_BLOCK_INDEX", "blockNdx" ],
+        [ "UNIFORM_OFFSET", "offset", ],
+      ].forEach(function(pair) {
+        const pname = pair[0];
+        const key = pair[1];
+        gl.getActiveUniforms(program, uniformIndices, gl[pname]).forEach(function(value, ndx) {
+          uniformData[ndx][key] = value;
+        });
+      });
+
+      const numUniformBlocks = gl.getProgramParameter(program, gl.ACTIVE_UNIFORM_BLOCKS);
+      for (let ii = 0; ii < numUniformBlocks; ++ii) {
+        const name = gl.getActiveUniformBlockName(program, ii);
+        const uniformIndices = gl.getActiveUniformBlockParameter(program, ii, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
+        // because uniformIndices is a Uint32Array map will only convert to another Uint32Array
+        const uniformInfos = Array.from(uniformIndices).map(ndx => uniformData[ndx]);
+        const blockSpec = {
+          index: gl.getUniformBlockIndex(program, name),
+          usedByVertexShader: gl.getActiveUniformBlockParameter(program, ii, gl.UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER),
+          usedByFragmentShader: gl.getActiveUniformBlockParameter(program, ii, gl.UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER),
+          size: gl.getActiveUniformBlockParameter(program, ii, gl.UNIFORM_BLOCK_DATA_SIZE),
+          uniformInfos,
+        };
+        blockSpec.used = blockSpec.usedByVertexShader || blockSpec.usedByFragmentShader;
+        blockSpecs[name] = blockSpec;
+      }
+
+      for (const [name, blockSpec] of Object.entries(blockSpecs)) {
+        const {uniformInfos} = blockSpec;
+        const tr = addElem('tr', tbody, {className: 'program-uniform-block'});
+        const help = helpToMarkdown(`
+          A uniform block is a collection of uniforms that get their values
+          from a buffer. In the program's state you specify in index into the
+          array of global Uniform Buffer Binding Points, telling the program which binding
+          point to look at to find the buffer (and offset, size into the buffer)
+          to find the values for the uniforms.
+
+          set with
+
+          ---
+          // look up the index of the block in the program
+          const someUniformBlockIndex = gl.getUniformBlockIndex(somePrg, '${name}');
+
+          // set which of these binding points you'll specify the buffer and range
+          // form which to set the uniforms
+          const uniformBufferIndex = 3; // use the 3 indexed buffer
+          gl.uniformBlockBinding(somePrg, someUniformBlockIndex, uniformBufferIndex)
+          ---
+        `);
+        addElem('td', tr, {textContent: `UniformBlock: ${name}`, dataset: {help}});
+        addElem('td', tr, {dataset: {help}});
+        for (const {name, type, offset} of uniformInfos) {
+          const help = helpToMarkdown(`
+          Uniforms in a uniform block get their data from a buffer. 
+          The format of a uniform block is well defined so you can know
+          the offsets, types, and sizes of the values in the buffer **without**
+          having to query query them.
+
+          This particular uniform is of type: --${glEnumToString(gl, type)}--
+          so you'd most likely use a TypedArray view of --${getUniformTypeInfo(type).Type.name}--
+          and its data starts at byte offset: ${offset} from the position you
+          specify with --gl.bindBufferRange-- or from the beginning of the buffer
+          if you use --gl.bindBufferBase--.
+
+          note: a value of --'-unknown-'-- means we can't know what value this is
+          because it's not the current program or there is no buffer assign
+          to the bind point
+
+          a value of --'-OUT-OF-RANGE-'-- means there is an error condition, like for example
+          the buffer is too small.
+
+          `);
+          const tr = addElem('tr', tbody);
+          addElem('td', tr, {textContent: name, dataset: {help}});
+          addElem('td', tr, {dataset: {help}});
+        }
+      }
+    }
+
     update();
   };
 

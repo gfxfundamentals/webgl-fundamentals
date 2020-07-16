@@ -794,6 +794,27 @@ export function getStateTables(isWebGL2) {
     ],
   };
 
+  const uniformBufferState = {
+    states: [
+      {
+          pname: 'UNIFORM_BUFFER_BINDING',
+          setter: ['bindBuffer'],
+          formatter: formatWebGLObject,
+          help: `
+          This is a bind point for working with buffers that will
+          be used for uniform blocks.
+
+          Set with
+
+          ---js
+          gl.bindBuffer(gl.UNIFORM_BUFFER, someUniformBlockBuffer);
+          ---
+          `,
+      },
+    ],
+  };
+
+
   const transformFeedbackState = {
     states: [
       {
@@ -1166,6 +1187,7 @@ export function getStateTables(isWebGL2) {
       commonState,
       miscState,
       transformFeedbackState,
+      uniformBufferState,
     },
   };
 }
