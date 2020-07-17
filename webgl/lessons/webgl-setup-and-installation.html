@@ -274,21 +274,68 @@ an error message. Read the error message closely and you should get a clue where
 
 </p>
 <h2 id="webgl-helpers">WebGL Helpers</h2>
-<p>There are various WebGL Inspectors / Helpers. <a href="https://benvanik.github.io/WebGL-Inspector/">Here&#39;s one for Chrome</a>.</p>
+<p><a href="https://greggman.github.io/webgl-helpers/">Here</a> are some scripts you might find
+useful. In particular just add this to your page before your other scripts</p>
+<pre class="prettyprint"><code>&lt;script src=&quot;https://greggman.github.io/webgl-helpers/webgl-gl-error-check.js&quot;&gt;&lt;/script&gt;
+</code></pre><p>and your program will throw an exception if it gets a WebGL error and if you&#39;re lucky
+print more info.</p>
+<p>There are various WebGL Inspectors. 
+<a href="https://spector.babylonjs.com/">Here&#39;s one for Chrome and Firefox</a>.</p>
 <p><div class="webgl_image ">
-  <img class="" src="https://benvanik.github.io/WebGL-Inspector/images/screenshots/1-Trace.gif">
+  <img class="" src="https://camo.githubusercontent.com/5bbc9caf2fc0ecc2eebf615fa8348146b37b08fe/68747470733a2f2f73706563746f72646f632e626162796c6f6e6a732e636f6d2f70696374757265732f7469746c652e706e67">
 </div>
 
 </p>
-<p><a href="https://hacks.mozilla.org/2014/03/introducing-the-canvas-debugger-in-firefox-developer-tools/">Firefox also has a similar one</a>.
-It needs to be enabled in <code>about:flags</code> and might require the <a href="https://www.mozilla.org/en-US/firefox/developer/">Firefox Developer Edition</a>.</p>
-<p>They may or may not be helpful. Most of them are designed for animated samples and will capture a frame
-and let you see all the WebGL calls that made that frame. That&#39;s great if you already have something
-working or if you had something working and it broke. But it&#39;s not so great if your issue is during
-initialization which they don&#39;t catch or if you&#39;re not using animation, as in drawing something every frame.
-Still they can be very useful. I&#39;ll often click on a draw call, and check the uniforms. If I see a
-bunch of <code>NaN</code> (NaN = Not a Number) then I can usually track down the code that set that uniform and
-find the bug.</p>
+<p>Note: <a href="https://github.com/BabylonJS/Spector.js/blob/master/readme.md">READ THE DOCS</a>!</p>
+<p>The extension version of spector.js captures frames. What this is means is it only
+works if your WebGL app successfully initializes itself and then renders in a
+<code>requestAnimationFrame</code> loop. You click the &quot;record&quot; button and it captures
+all the WebGL API calls for one &quot;frame&quot;.</p>
+<p>This means without some work it won&#39;t help you find issues during initialization.</p>
+<p>To workaround that there are 2 methods.</p>
+<ol>
+<li><p>Use it as a library, not as an extension. </p>
+<p>See <a href="https://github.com/BabylonJS/Spector.js/blob/master/readme.md">the docs</a>. This way you can tell it &quot;Capture the WebGL API commands now!&quot;</p>
+</li>
+<li><p>Change your app so that it doesn&#39;t start until you click a button.</p>
+<p>This way you can go to the extension and pick &quot;record&quot; and then start your
+app. If your app doesn&#39;t animate then just add a few fake frames. Example:</p>
+</li>
+</ol>
+<pre class="prettyprint"><code class="lang-html">&lt;button type=&quot;button&quot;&gt;start&lt;/button&gt;
+&lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
+</code></pre>
+<pre class="prettyprint"><code class="lang-js">function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  const canvas = document.querySelector(&quot;#canvas&quot;);
+  const gl = canvas.getContext(&quot;webgl&quot;);
+  if (!gl) {
+    return;
+  }
+
+  const startElem = document.querySelector(&#39;button&#39;);
+  startElem.addEventListener(&#39;click&#39;, start, {once: true});
+
+  function start() {
+    // run the initialization in rAF since spector only captures inside rAF events
+    requestAnimationFrame(() =&gt; {
+      // do all the initialization
+      init(gl);
+    });
+    // make so more frames so spector has something to look at.
+    requestAnimationFrame(() =&gt; {});
+    requestAnimationFrame(() =&gt; {});
+    requestAnimationFrame(() =&gt; {});
+  }
+}
+
+main();
+</code></pre>
+<p>Now you can click &quot;record&quot; in the spector.js extension, then click &quot;start&quot; in your page
+and spector will record your initialization.</p>
+<p>Safari also has a similar built in feature that has <a href="https://stackoverflow.com/questions/62446483/debugging-in-webgl">similar issues with similar workarounds</a>. </p>
+<p>When I use a helper like this I&#39;ll often click on a draw call, and check the uniforms. If I see a bunch of <code>NaN</code> (NaN = Not a Number) then I can usually track down the code that set that uniform and find the bug.</p>
 <h2 id="inspect-the-code">Inspect the Code</h2>
 <p>Also always remember you can inspect the code. You can usually just pick view source</p>
 <p><div class="webgl_image ">
