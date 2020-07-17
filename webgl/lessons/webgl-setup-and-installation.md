@@ -74,20 +74,82 @@ an error message. Read the error message closely and you should get a clue where
 
 ## WebGL Helpers
 
-There are various WebGL Inspectors / Helpers. [Here's one for Chrome](https://benvanik.github.io/WebGL-Inspector/).
 
-{{{image url="https://benvanik.github.io/WebGL-Inspector/images/screenshots/1-Trace.gif" }}}
+[Here](https://greggman.github.io/webgl-helpers/) are some scripts you might find
+useful. In particular just add this to your page before your other scripts
 
-[Firefox also has a similar one](https://hacks.mozilla.org/2014/03/introducing-the-canvas-debugger-in-firefox-developer-tools/).
-It needs to be enabled in `about:flags` and might require the [Firefox Developer Edition](https://www.mozilla.org/en-US/firefox/developer/).
+```
+<script src="https://greggman.github.io/webgl-helpers/webgl-gl-error-check.js"></script>
+```
 
-They may or may not be helpful. Most of them are designed for animated samples and will capture a frame
-and let you see all the WebGL calls that made that frame. That's great if you already have something
-working or if you had something working and it broke. But it's not so great if your issue is during
-initialization which they don't catch or if you're not using animation, as in drawing something every frame.
-Still they can be very useful. I'll often click on a draw call, and check the uniforms. If I see a
-bunch of `NaN` (NaN = Not a Number) then I can usually track down the code that set that uniform and
-find the bug.
+and your program will throw an exception if it gets a WebGL error and if you're lucky
+print more info.
+
+There are various WebGL Inspectors. 
+[Here's one for Chrome and Firefox](https://spector.babylonjs.com/).
+
+{{{image url="https://camo.githubusercontent.com/5bbc9caf2fc0ecc2eebf615fa8348146b37b08fe/68747470733a2f2f73706563746f72646f632e626162796c6f6e6a732e636f6d2f70696374757265732f7469746c652e706e67" }}}
+
+Note: [READ THE DOCS](https://github.com/BabylonJS/Spector.js/blob/master/readme.md)!
+
+The extension version of spector.js captures frames. What this is means is it only
+works if your WebGL app successfully initializes itself and then renders in a
+`requestAnimationFrame` loop. You click the "record" button and it captures
+all the WebGL API calls for one "frame".
+
+This means without some work it won't help you find issues during initialization.
+
+To workaround that there are 2 methods.
+
+1. Use it as a library, not as an extension. 
+
+   See [the docs](https://github.com/BabylonJS/Spector.js/blob/master/readme.md). This way you can tell it "Capture the WebGL API commands now!"
+
+2. Change your app so that it doesn't start until you click a button.
+
+   This way you can go to the extension and pick "record" and then start your
+   app. If your app doesn't animate then just add a few fake frames. Example:
+
+```html
+<button type="button">start</button>
+<canvas id="canvas"></canvas>
+```
+
+```js
+function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  const canvas = document.querySelector("#canvas");
+  const gl = canvas.getContext("webgl");
+  if (!gl) {
+    return;
+  }
+
+  const startElem = document.querySelector('button');
+  startElem.addEventListener('click', start, {once: true});
+
+  function start() {
+    // run the initialization in rAF since spector only captures inside rAF events
+    requestAnimationFrame(() => {
+      // do all the initialization
+      init(gl);
+    });
+    // make so more frames so spector has something to look at.
+    requestAnimationFrame(() => {});
+    requestAnimationFrame(() => {});
+    requestAnimationFrame(() => {});
+  }
+}
+
+main();
+```
+
+Now you can click "record" in the spector.js extension, then click "start" in your page
+and spector will record your initialization.
+
+Safari also has a similar built in feature that has [similar issues with similar workarounds](https://stackoverflow.com/questions/62446483/debugging-in-webgl). 
+
+When I use a helper like this I'll often click on a draw call, and check the uniforms. If I see a bunch of `NaN` (NaN = Not a Number) then I can usually track down the code that set that uniform and find the bug.
 
 ## Inspect the Code
 

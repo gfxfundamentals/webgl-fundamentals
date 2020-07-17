@@ -2,7 +2,7 @@ Title: WebGL Tips
 Description: Small issues that might trip you up with WebGL
 TOC: #
 
-This article is a collection of small issues you might run into
+This article is a collection of issues you might run into
 using WebGL that seemed too small to have their own article.
 
 ---
