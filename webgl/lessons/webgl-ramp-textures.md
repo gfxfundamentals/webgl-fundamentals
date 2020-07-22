@@ -432,7 +432,7 @@ at init time look up the location
 var colorLocation = gl.getUniformLocation(program, "u_color");
 var rampLocation = gl.getUniformLocation(program, "u_ramp");
 var rampSizeLocation = gl.getUniformLocation(program, "u_rampSize");
-+var linearAdustLocation = gl.getUniformLocation(program, "u_linearAdjust");
++var linearAdjustLocation = gl.getUniformLocation(program, "u_linearAdjust");
 ```
 
 and at render time pick one of the textures
@@ -462,7 +462,7 @@ gl.uniform1i(rampLocation, 0);
 +gl.uniform2fv(rampSizeLocation, size);
 
 +// adjust if linear
-+gl.uniform1f(linearAdustLocation, filter ? 1 : 0);
++gl.uniform1f(linearAdjustLocation, filter ? 1 : 0);
 ```
 
 {{{example url="../webgl-ramp-textures.html"}}}
@@ -473,7 +473,7 @@ that does 2 color toon shading by setting 2 colors and a threshold like this.
 
 ```js
 uniform vec4 color1;
-uniform vec2 color2;
+uniform vec4 color2;
 uniform float threshold;
 
 ...
