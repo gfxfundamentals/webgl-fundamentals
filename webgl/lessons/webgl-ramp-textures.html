@@ -597,7 +597,7 @@ void main() {
 <pre class="prettyprint"><code class="lang-js">var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 var rampLocation = gl.getUniformLocation(program, &quot;u_ramp&quot;);
 var rampSizeLocation = gl.getUniformLocation(program, &quot;u_rampSize&quot;);
-+var linearAdustLocation = gl.getUniformLocation(program, &quot;u_linearAdjust&quot;);
++var linearAdjustLocation = gl.getUniformLocation(program, &quot;u_linearAdjust&quot;);
 </code></pre>
 <p>and at render time pick one of the textures</p>
 <pre class="prettyprint"><code class="lang-js">var data = {
@@ -624,7 +624,7 @@ gl.uniform1i(rampLocation, 0);
 +gl.uniform2fv(rampSizeLocation, size);
 
 +// adjust if linear
-+gl.uniform1f(linearAdustLocation, filter ? 1 : 0);
++gl.uniform1f(linearAdjustLocation, filter ? 1 : 0);
 </code></pre>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-ramp-textures.html"></iframe>
@@ -636,7 +636,7 @@ gl.uniform1i(rampLocation, 0);
 This is one way make a generic adjusting shader. You could make a shader
 that does 2 color toon shading by setting 2 colors and a threshold like this.</p>
 <pre class="prettyprint"><code class="lang-js">uniform vec4 color1;
-uniform vec2 color2;
+uniform vec4 color2;
 uniform float threshold;
 
 ...
