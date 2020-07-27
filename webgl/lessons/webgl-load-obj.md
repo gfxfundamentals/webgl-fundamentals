@@ -115,7 +115,6 @@ and comments and then call some function based on the keyword
 +    if (line === '' || line.startsWith('#')) {
 +      continue;
 +    }
-+    const parts = line.split(/\s+/);
 +    const m = keywordRE.exec(line);
 +    if (!m) {
 +      continue;
@@ -400,15 +399,15 @@ And with that we can see our cube is loaded and drawing
 
 We also see some messages about unhandled keywords. What are those for?
 
-`usemat` is the most important of these. It specifies that all geometry that
+`usemtl` is the most important of these. It specifies that all geometry that
 appears after uses a specific material. For example if you had a model of a car
 you probably want transparent windows and chrome bumpers. The windows are
 [transparent](webgl-text-texture.html) and the bumpers are
 [reflective](webgl-environment-maps.html) so they need to be drawn differently
-than the body of the car. The `usemat` tag marks this separation of parts.
+than the body of the car. The `usemtl` tag marks this separation of parts.
 
 Because we'll need to draw each of these parts separately let's fix
-the code so that each time we see a `usemat` we'll start a new set of webgl
+the code so that each time we see a `usemtl` we'll start a new set of webgl
 data.
 
 First let's make some code that starts a new webgl data if we don't already
@@ -546,7 +545,7 @@ or normals are missing and just not include them.
 ```
 
 Continuing with keywords, According to the [*official spec*](http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf),
-`matlib` specifies separate file(s) that contains material info. Unfortunately that
+`mtllib` specifies separate file(s) that contains material info. Unfortunately that
 doesn't seem to match reality because filenames can have spaces them and the .OBJ format
 provides no way to escape spaces or quote arguments. Ideally they should have used a well defined format
 like json or xml or yaml or something that solves this issue but in their defense .OBJ is older
@@ -581,7 +580,7 @@ function parseOBJ(text) {
 
 `o` specifies the following items belong to the named "object". It's
 not really clear how to use this. Can we have a file with just `o`
-but no `usemat`? Let's assume yes.
+but no `usemtl`? Let's assume yes.
 
 ```js
 function parseOBJ(text) {
@@ -702,7 +701,7 @@ a random color so hopefully it's easy to see the different parts.
 
 ```js
 -  const response = await fetch('resources/models/cube/cube.obj');
-+  const response = await fetch('resources/models/cube/chair.obj');
++  const response = await fetch('resources/models/chair/chair.obj');
   const text = await response.text();
 -  const data = parseOBJ(text);
 +  const obj = parseOBJ(text);
