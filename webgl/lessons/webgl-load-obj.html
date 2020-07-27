@@ -308,7 +308,6 @@ and comments and then call some function based on the keyword</p>
 +    if (line === &#39;&#39; || line.startsWith(&#39;#&#39;)) {
 +      continue;
 +    }
-+    const parts = line.split(/\s+/);
 +    const m = keywordRE.exec(line);
 +    if (!m) {
 +      continue;
@@ -566,14 +565,14 @@ first we&#39;ll load our data</p>
 
 </p>
 <p>We also see some messages about unhandled keywords. What are those for?</p>
-<p><code>usemat</code> is the most important of these. It specifies that all geometry that
+<p><code>usemtl</code> is the most important of these. It specifies that all geometry that
 appears after uses a specific material. For example if you had a model of a car
 you probably want transparent windows and chrome bumpers. The windows are
 <a href="webgl-text-texture.html">transparent</a> and the bumpers are
 <a href="webgl-environment-maps.html">reflective</a> so they need to be drawn differently
-than the body of the car. The <code>usemat</code> tag marks this separation of parts.</p>
+than the body of the car. The <code>usemtl</code> tag marks this separation of parts.</p>
 <p>Because we&#39;ll need to draw each of these parts separately let&#39;s fix
-the code so that each time we see a <code>usemat</code> we&#39;ll start a new set of webgl
+the code so that each time we see a <code>usemtl</code> we&#39;ll start a new set of webgl
 data.</p>
 <p>First let&#39;s make some code that starts a new webgl data if we don&#39;t already
 have some</p>
@@ -696,7 +695,7 @@ or normals are missing and just not include them.</p>
 }
 </code></pre>
 <p>Continuing with keywords, According to the <a href="http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf"><em>official spec</em></a>,
-<code>matlib</code> specifies separate file(s) that contains material info. Unfortunately that
+<code>mtllib</code> specifies separate file(s) that contains material info. Unfortunately that
 doesn&#39;t seem to match reality because filenames can have spaces them and the .OBJ format
 provides no way to escape spaces or quote arguments. Ideally they should have used a well defined format
 like json or xml or yaml or something that solves this issue but in their defense .OBJ is older
@@ -726,7 +725,7 @@ For now let&#39;s just add it on to our loader so we can reference it later.</p>
 </code></pre>
 <p><code>o</code> specifies the following items belong to the named &quot;object&quot;. It&#39;s
 not really clear how to use this. Can we have a file with just <code>o</code>
-but no <code>usemat</code>? Let&#39;s assume yes.</p>
+but no <code>usemtl</code>? Let&#39;s assume yes.</p>
 <pre class="prettyprint"><code class="lang-js">function parseOBJ(text) {
   ...
   let material = &#39;default&#39;;
@@ -835,7 +834,7 @@ even though we won&#39;t actually use the data.</p>
 our setup code to create <code>WebGLBuffers</code> for each one. We&#39;ll also create
 a random color so hopefully it&#39;s easy to see the different parts.</p>
 <pre class="prettyprint"><code class="lang-js">-  const response = await fetch(&#39;resources/models/cube/cube.obj&#39;);
-+  const response = await fetch(&#39;resources/models/cube/chair.obj&#39;);
++  const response = await fetch(&#39;resources/models/chair/chair.obj&#39;);
   const text = await response.text();
 -  const data = parseOBJ(text);
 +  const obj = parseOBJ(text);
