@@ -23,7 +23,7 @@ I started programming on machines with 16k to 64k of memory 😜)
 ## Device Limits
 
 WebGL has various minimum supported features but your local device might support
-> than that minimum which means it will fail on other devices that support less.
+\> than that minimum which means it will fail on other devices that support less.
 
 Examples include:
 
@@ -35,7 +35,7 @@ Examples include:
   Note: the max texture size is the maximum dimension the GPU can process. It
   doesn't mean that GPU has enough memory for that dimension squared (for a 2D
   texture) or cubed (for a 3D texture). For example some GPUs have a max size of
-  16384. But a 3D texture 16384 on each side would require 16 terabytes of
+  16384\. But a 3D texture 16384 on each side would require 16 terabytes of
   memory!!!
 
 * The maximum number of vertex attributes in a single program
