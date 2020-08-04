@@ -247,7 +247,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </li>
 <li><p>テクスチャー</p>
 <p>テクスチャーは自由にデータを読める配列です。
-よくテくスチャーにイメージとか写真とかか絵のデータを入れるが、
+よくテクスチャーにイメージとか写真とかか絵のデータを入れるが、
 テクスチャーはただのデータ配列なので色以外のデータを入れることも可能である。</p>
 </li>
 <li><p>ヴァリイング（varying)</p>
@@ -298,7 +298,7 @@ drawArrays(..., offset, count) {
      doSomethingWith_gl_Position();
 }
 </code></pre><p>実際にはGLSLのシェーダーでのデータ<code>positionBuffer</code>はバイナリに変換しなければならないので、
-バッファーがらデータを取り込む際の計算方法は異なる。
+バッファーからデータを取り込む際の計算方法は異なる。
 でも、頂点シェーダーはこのように動くと考えてよい。</p>
 <p>次はフラグメントシェーダーが必要だ。</p>
 <pre class="prettyprint"><code>// フラグメントシェーダーは既定の精度がないので選択することが必要である。
@@ -405,9 +405,9 @@ var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 </code></pre><p>GLSLのプログラムを作成して、GPUにアップロードが出来たら、それにデータを与えることが必要である。
 WebGL APIの役割のほとんどはGLSLプログラムにデータを与えることと動きの状況を設定することである。
 今回のGLSLプログラムのインプットは<code>a_position</code>の属性しかない。
-作成したプログラムに最初するべきことは属性のローケーションを調べることである</p>
+作成したプログラムに最初するべきことは属性のロケーションを調べることである</p>
 <pre class="prettyprint"><code>var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
-</code></pre><p>属性のローケーションを調べるのは描画する時ではなく、プログラムの初期化の時に行った方がいい。</p>
+</code></pre><p>属性のロケーションを調べるのは描画する時ではなく、プログラムの初期化の時に行った方がいい。</p>
 <p>属性はバッファーからデータを取るので、バッファーを作成しなければならない。</p>
 <pre class="prettyprint"><code>var positionBuffer = gl.createBuffer();
 </code></pre><p>WebGLのリソース（資源）を操るためグローバル結び点（bind point)に結び付けることが必要である。
@@ -423,7 +423,7 @@ var positions = [
 ];
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 </code></pre><p>ここでは色々なことが行われている。まず<code>positions</code>というJavaScriptの配列がある。WebGLは強く
-定型化されたデータが要るので、 <code>new Float32Array(positions)</code>の部分は32ビット数値配列を
+型付けされたデータが要るので、 <code>new Float32Array(positions)</code>の部分は32ビット数値配列を
 作成して、それに<code>positions</code>の内容をコピーする。それで<code>gl.bufferData</code>はそのデータをGPUに
 ある<code>positionBuffer</code>にアップロードする。<code>positionBuffer</code>が<code>ARRAY_BUFFER</code>に結び付いている
 ので<code>positionBuffer</code>はコピーの目標になっている。</p>
@@ -663,7 +663,7 @@ function setRectangle(gl, x, y, width, height) {
 <p>気が付いて欲しい点はWebGLが結構単純なAPIということである。
 まあ、ここまでの流れは「単純」とは言えないが、WebGLがやっていること自体は単純なことである。
 ただプログラマーが書いた２つの関数（頂点シェーダーとフラグメントシェーダー）で三角形、線、
-点を描画する。三次元する為にはもっと複雑になるかもしれないが、その複雑さは、あなた、つまりプログラマーの手で、「より複雑なシェーダー」として追加される。
+点を描画する。三次元にする為にはもっと複雑になるかもしれないが、その複雑さは、あなた、つまりプログラマーの手で、「より複雑なシェーダー」として追加される。
 WebGLはただ単純な描画をするAPIである。</p>
 <p>今回のサンプルでは1つの属性と2つのユニフォームでデータを提供した。
 一般的には複数の属性と多くのユニフォームを使う。この記事の上の方で<em>ヴァリイング</em>と<em>テクスチャー</em>を紹介した。
