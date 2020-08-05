@@ -520,7 +520,9 @@ sound data into a texture](https://stackoverflow.com/questions/34859701/how-do-s
 One last thing is some shaders on shadertoy require [WebGL2](https://webgl2fundamentals.org).
 
 I hope this helped explain Shadertoy. It's a great site with amazing works
-but is good to know what's really going on.
+but is good to know what's really going on. If you want to learn more about
+the techniques used in these kinds of shader 2 good resources are
+[the blog of the person that created the shadertoy website]("https://www.iquilezles.org/www/index.htm) and [The Book of Shaders](https://thebookofshaders.com/) (which is a little misleading since it really only covers the kind of shaders used on shadertoy, not the kind used in performant apps and games. Still, it's a great resource!
 
 <div class="webgl_bottombar" id="pixel-coords">
 <h3>Pixel Coordinates</h3>
