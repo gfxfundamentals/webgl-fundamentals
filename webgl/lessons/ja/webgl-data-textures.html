@@ -240,12 +240,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </table>
 </div>
 
-<p>早速だが、「3x2ピクセルの<code>LUMINANCE</code>型のテクスチャー」を生成してみよう。
-<code>LUMINANCE</code>テクスチャーは、ピクセル1つにつき1つだけ値を持ち、
+<p>早速だが、「3x2ピクセルの<code class="notranslate" translate="no">LUMINANCE</code>型のテクスチャー」を生成してみよう。
+<code class="notranslate" translate="no">LUMINANCE</code>テクスチャーは、ピクセル1つにつき1つだけ値を持ち、
 RGB全てのチャンネルでその値が使用される。&quot;luminance&quot;とは、英語で「明るさ」を表す。</p>
 <p><a href="webgl-3d-textures.html">前回の講義</a>で使用したサンプルを流用しよう。
 まず、立方体の各面で「テクスチャ全体を使う」ように、テクスチャ座標を変更する。</p>
-<pre class="prettyprint"><code>// 立方体の各面について「テクスチャ座標」をバッファにセットする。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 立方体の各面について「テクスチャ座標」をバッファにセットする。
 function setTexcoords(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -259,7 +259,7 @@ function setTexcoords(gl) {
         1, 1,
         ...
 </code></pre><p>テクスチャーを生成するコードを変更する。</p>
-<pre class="prettyprint"><code>// テクスチャーを生成する。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// テクスチャーを生成する。
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -299,7 +299,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </p>
 <p>ええっ！？どうして動かないのだ？！？！？</p>
 <p>JavaScriptコンソールを調べると、以下のようなエラーが出ていることがわかる。</p>
-<pre class="prettyprint"><code>WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
 </code></pre><p>メッセージの細かい内容は実行環境によって異なるが「読み出そうとしたがデータが足りない」
 といった意味のエラーが出ているはずだ。</p>
 <p>WebGLには曖昧な設定があるのだが、この問題はそれに由来している。
@@ -317,10 +317,10 @@ WebGLはデータ全体が「4バイトの整数倍のサイズ」であると�
 これが「4バイトの整数倍のサイズ」でないためエラーを出しているのである。</p>
 <p>「<strong>1件あたり4バイト</strong>」ではなく「<strong>1件あたり1バイト</strong>」として処理させるには、
 WebGLに以下のような設定を行なえばよい。</p>
-<pre class="prettyprint"><code>const alignment = 1;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const alignment = 1;
 gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
-</code></pre><p><code>alignment</code>の値には、<code>1</code>、<code>2</code>、<code>4</code>、<code>8</code>のいずれかが指定できる。
-アラインメント(<code>alignment</code>)とは、英語で「位置あわせ」のような意味である。</p>
+</code></pre><p><code class="notranslate" translate="no">alignment</code>の値には、<code class="notranslate" translate="no">1</code>、<code class="notranslate" translate="no">2</code>、<code class="notranslate" translate="no">4</code>、<code class="notranslate" translate="no">8</code>のいずれかが指定できる。
+アラインメント(<code class="notranslate" translate="no">alignment</code>)とは、英語で「位置あわせ」のような意味である。</p>
 <p>私が観察した限り、alignmentの違いによる実行速度の差は
 測定できるようなレベルでは全くない。
 WebGLのこの仕様のデフォルトが4バイトではなく1バイトになっていたら
@@ -330,7 +330,7 @@ OpenGLとの互換性を保つ必要があるためこのようになってい�
 パディングのデフォルト値に依存していたとしても変更なしに動作する。
 これは「デフォルト値」だけの問題なので、新たに最初からWebGL用に
 アプリケーションを作る際は、
-単純に「必ず明示的に<code>1</code>をセット」してしまえばよいだろう。</p>
+単純に「必ず明示的に<code class="notranslate" translate="no">1</code>をセット」してしまえばよいだろう。</p>
 <p>以上を踏まえてサンプルを書き直すと、このようになる。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-data-texture-3x2.html"></iframe>

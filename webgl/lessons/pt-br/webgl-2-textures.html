@@ -230,20 +230,20 @@ as atualizações do programa. Salvaremos esse método para um artigo posterior.
 <p>Neste caso, aguardamos que todas as imagens sejam carregadas antes de desenhar
 qualquer coisa.</p>
 <p>Primeiro vamos alterar o código que carrega uma imagem em uma função. Está
-bem direto. Ele cria um novo objeto <code>Image</code>, e define o URL para
+bem direto. Ele cria um novo objeto <code class="notranslate" translate="no">Image</code>, e define o URL para
 carregar e definir um retorno de chamada para ser chamado quando a imagem terminar de carregar.</p>
-<pre class="prettyprint"><code>function loadImage(url, callback) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function loadImage(url, callback) {
   var image = new Image();
   image.src = url;
   image.onload = callback;
   return image;
 }
 </code></pre><p>Agora vamos fazer uma função que carrega uma série de URLs e gera uma
-matriz de imagens. Primeiro, criamos <code>imagesToLoad</code> para o número de imagens
-vamos carregar. Então, fazemos o retorno de chamada que passamos para <code>loadImage</code>
-decrement <code>imagesToLoad</code>. Quando <code>imagesToLoad</code> passa a 0 todas as imagens
+matriz de imagens. Primeiro, criamos <code class="notranslate" translate="no">imagesToLoad</code> para o número de imagens
+vamos carregar. Então, fazemos o retorno de chamada que passamos para <code class="notranslate" translate="no">loadImage</code>
+decrement <code class="notranslate" translate="no">imagesToLoad</code>. Quando <code class="notranslate" translate="no">imagesToLoad</code> passa a 0 todas as imagens
 foram carregados e passamos a matriz de imagens para um retorno de chamada.</p>
-<pre class="prettyprint"><code>function loadImages(urls, callback) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function loadImages(urls, callback) {
   var images = [];
   var imagesToLoad = urls.length;
 
@@ -262,7 +262,7 @@ foram carregados e passamos a matriz de imagens para um retorno de chamada.</p>
   }
 }
 </code></pre><p>Agora chamamos loadImages assim</p>
-<pre class="prettyprint"><code>function main() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function main() {
   loadImages([
     &quot;resources/leaves.jpg&quot;,
     &quot;resources/star.jpg&quot;,
@@ -270,7 +270,7 @@ foram carregados e passamos a matriz de imagens para um retorno de chamada.</p>
 }
 </code></pre><p>Em seguida, mudamos o sombreador para usar 2 texturas. Neste caso, vamos multiplicar
 1 textura pelo outro.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // our textures
@@ -287,7 +287,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Precisamos criar 2 objetos de textura WebGL.</p>
-<pre class="prettyprint"><code>  // create 2 textures
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // create 2 textures
   var textures = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
     var texture = gl.createTexture();
@@ -307,7 +307,7 @@ void main() {
   }
 </code></pre><p>O WebGL tem algo chamado &quot;unidades de textura&quot;. Você pode pensar nisso como uma série de referências
 para texturas. Você diz ao sombreador qual unidade de textura para usar para cada amostra.</p>
-<pre class="prettyprint"><code>  // lookup the sampler locations.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // lookup the sampler locations.
   var u_image0Location = gl.getUniformLocation(program, &quot;u_image0&quot;);
   var u_image1Location = gl.getUniformLocation(program, &quot;u_image1&quot;);
 
@@ -317,7 +317,7 @@ para texturas. Você diz ao sombreador qual unidade de textura para usar para ca
   gl.uniform1i(u_image0Location, 0);  // texture unit 0
   gl.uniform1i(u_image1Location, 1);  // texture unit 1
 </code></pre><p>Então, temos que vincular uma textura a cada uma dessas unidades de textura.</p>
-<pre class="prettyprint"><code>  // Set each texture unit to use a particular texture.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Set each texture unit to use a particular texture.
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
@@ -342,7 +342,7 @@ Alvo TEXTURE_2D e o alvo TEXTURE_CUBE_MAP. Toda função de textura
 funciona com o alvo especificado na unidade de textura ativa atual. E se
 você deveria implementar o WebGL em JavaScript, seria algo parecido com
 esta</p>
-<pre class="prettyprint"><code>var getContext = function() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var getContext = function() {
   var textureUnits = [
     { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
     { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
@@ -379,22 +379,22 @@ esta</p>
   }
 };
 </code></pre><p>Os sombreadores tomam índices nas unidades de textura. Esperemos que isso torne essas 2 linhas mais claras.</p>
-<pre class="prettyprint"><code>  gl.uniform1i(u_image0Location, 0);  // texture unit 0
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.uniform1i(u_image0Location, 0);  // texture unit 0
   gl.uniform1i(u_image1Location, 1);  // texture unit 1
 </code></pre><p>Uma coisa a ser mostrada, é que ao configurar os uniformes você usa índices para as unidades de textura,
 mas ao chamar o Gl.activeTexture você precisa passar nas constantes especiais gl.TEXTURE0, gl.TEXTURE1 etc.
 Felizmente, as constantes são consecutivas, então, ao invés disso</p>
-<pre class="prettyprint"><code>  gl.activeTexture(gl.TEXTURE0);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </code></pre><p>Nós poderíamos fazer isso</p>
-<pre class="prettyprint"><code>  gl.activeTexture(gl.TEXTURE0 + 0);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.activeTexture(gl.TEXTURE0 + 0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE0 + 1);
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </code></pre><p>Ou isso</p>
-<pre class="prettyprint"><code>  for (var ii = 0; ii &lt; 2; ++ii) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  for (var ii = 0; ii &lt; 2; ++ii) {
     gl.activeTexture(gl.TEXTURE0 + ii);
     gl.bindTexture(gl.TEXTURE_2D, textures[ii]);
   }

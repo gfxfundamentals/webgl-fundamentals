@@ -223,7 +223,7 @@ detail.</p>
 are the changes to the vertex shader.  We need to pass in texture
 coordinates.  In this case we just pass them straight through to the
 fragment shader.</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 *attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -239,9 +239,9 @@ void main() {
 }
 </code></pre><p>In the fragment shader we declare a uniform sampler2D which lets us
 reference a texture.  We use the texture coordinates passed from the
-vertex shader and we call <code>texture2D</code> to look up a color from that
+vertex shader and we call <code class="notranslate" translate="no">texture2D</code> to look up a color from that
 texture.</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // Passed in from the vertex shader.
 *varying vec2 v_texcoord;
@@ -253,7 +253,7 @@ void main() {
 *   gl_FragColor = texture2D(u_texture, v_texcoord);
 }
 </code></pre><p>We need to setup the texture coordinates</p>
-<pre class="prettyprint"><code>// look up where the vertex data needs to go.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// look up where the vertex data needs to go.
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 *var texcoordLocation = gl.getAttribLocation(program, &quot;a_texcoords&quot;);
 
@@ -271,7 +271,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 *setTexcoords(gl);
 </code></pre><p>And you can see the coordinates we&#39;re using which are mapping the entire
 texture to each quad on our &#39;F&#39;.</p>
-<pre class="prettyprint"><code>*// Fill the buffer with texture coordinates for the F.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*// Fill the buffer with texture coordinates for the F.
 *function setTexcoords(gl) {
 *  gl.bufferData(
 *      gl.ARRAY_BUFFER,
@@ -309,7 +309,7 @@ solution is to make up some texture to use until the image is downloaded.
 That way we can start rendering immediately.  Then, once the image has
 been downloaded we copy the image to the texture.  We&#39;ll use that method
 below.</p>
-<pre class="prettyprint"><code>*// Create a texture.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*// Create a texture.
 *var texture = gl.createTexture();
 *gl.bindTexture(gl.TEXTURE_2D, texture);
 *
@@ -344,10 +344,10 @@ and the end of that data is at 1,1</p>
 <p>I loaded the texture into photoshop and looked up the various coordinates in pixels.</p>
 <p><img class="webgl_center" width="256" height="256" src="../resources/f-texture-pixel-coords.png" /></p>
 <p>To convert from pixel coordinates to texture coordinates we can just use</p>
-<pre class="prettyprint"><code>texcoordX = pixelCoordX / (width  - 1)
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">texcoordX = pixelCoordX / (width  - 1)
 texcoordY = pixelCoordY / (height - 1)
 </code></pre><p>Here are the texture coordinates for the front.</p>
-<pre class="prettyprint"><code>// left column front
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// left column front
  38 / 255,  44 / 255,
  38 / 255, 223 / 255,
 113 / 255,  44 / 255,
@@ -387,7 +387,7 @@ will adjust texture coordinates in those packages.</p>
 range.  By default WebGL repeats the texture.  0.0 to 1.0 is one &#39;copy&#39; of
 the texture.  1.0 to 2.0 is another copy.  even -4.0 to -3.0 is yet
 another copy.  Let&#39;s display a plane using these texture coordinates.</p>
-<pre class="prettyprint"><code> -3, -1,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> -3, -1,
   2, -1,
  -3,  4,
  -3,  4,
@@ -400,11 +400,11 @@ another copy.  Let&#39;s display a plane using these texture coordinates.</p>
 </div>
 
 </p>
-<p>You can tell WebGL to not repeat the texture in a certain direction by using <code>CLAMP_TO_EDGE</code>. For example</p>
-<pre class="prettyprint"><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+<p>You can tell WebGL to not repeat the texture in a certain direction by using <code class="notranslate" translate="no">CLAMP_TO_EDGE</code>. For example</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>Click the buttons in the sample above to see the difference.</p>
-<p>You might have noticed a call to <code>gl.generateMipmap</code> back when we loaded
+<p>You might have noticed a call to <code class="notranslate" translate="no">gl.generateMipmap</code> back when we loaded
 the texture.  What is that for?</p>
 <p>Imagine we had this 16x16 pixel texture.</p>
 <p><img class="webgl_center" src="resources/mip-low-res-enlarged.png" style="border: 2px solid black;" /></p>
@@ -423,7 +423,7 @@ progressively smaller images, each one 1/4th the size of the previous one.
 The mipmap for the 16x16 texture above would look something like this.</p>
 <p><img class="webgl_center noinvertdark nobg" src="resources/mipmap-low-res-enlarged.png" /></p>
 <p>Generally each smaller level is just a bilinear interpolation of the
-previous level and that&#39;s what <code>gl.generateMipmap</code> does.  It looks at the
+previous level and that&#39;s what <code class="notranslate" translate="no">gl.generateMipmap</code> does.  It looks at the
 biggest level and generates all the smaller levels for you.  Of course you
 can supply the smaller levels yourself if you want.</p>
 <p>Now if you try to draw that 16x16 pixel texture only 2x2 pixels on the
@@ -432,15 +432,15 @@ from the previous mips.</p>
 <p>You can choose what WebGL does by setting the texture filtering for each
 texture.  There are 6 modes</p>
 <ul>
-<li><code>NEAREST</code> = choose 1 pixel from the biggest mip</li>
-<li><code>LINEAR</code> = choose 4 pixels from the biggest mip and blend them</li>
-<li><code>NEAREST_MIPMAP_NEAREST</code> = choose the best mip, then pick one pixel from that mip</li>
-<li><code>LINEAR_MIPMAP_NEAREST</code> = choose the best mip, then blend 4 pixels from that mip</li>
-<li><code>NEAREST_MIPMAP_LINEAR</code> = choose the best 2 mips, choose 1 pixel from each, blend them</li>
-<li><code>LINEAR_MIPMAP_LINEAR</code> = choose the best 2 mips. choose 4 pixels from each, blend them</li>
+<li><code class="notranslate" translate="no">NEAREST</code> = choose 1 pixel from the biggest mip</li>
+<li><code class="notranslate" translate="no">LINEAR</code> = choose 4 pixels from the biggest mip and blend them</li>
+<li><code class="notranslate" translate="no">NEAREST_MIPMAP_NEAREST</code> = choose the best mip, then pick one pixel from that mip</li>
+<li><code class="notranslate" translate="no">LINEAR_MIPMAP_NEAREST</code> = choose the best mip, then blend 4 pixels from that mip</li>
+<li><code class="notranslate" translate="no">NEAREST_MIPMAP_LINEAR</code> = choose the best 2 mips, choose 1 pixel from each, blend them</li>
+<li><code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code> = choose the best 2 mips. choose 4 pixels from each, blend them</li>
 </ul>
 <p>You can see the importance of mips in these 2 examples.  The first one
-shows that if you use <code>NEAREST</code> or <code>LINEAR</code> and only pick from the largest
+shows that if you use <code class="notranslate" translate="no">NEAREST</code> or <code class="notranslate" translate="no">LINEAR</code> and only pick from the largest
 image then you&#39;ll get a lot of flickering because as things move, for each
 pixel it draws it has to pick a single pixel from the largest image.  That
 changes depending on the size and position and so sometimes it will pick
@@ -453,7 +453,7 @@ one pixel, other times a different one and so it flickers.</p>
 </p>
 <p>Notice how much the ones on the left and middle flicker where as the ones on the right flicker less.
 The ones on the right also have blended colors since they are using the mips. The smaller you draw the texture the further apart WebGL is
-going to pick pixels. That&#39;s why for example the bottom middle one, even though it&#39;s using <code>LINEAR</code> and blending
+going to pick pixels. That&#39;s why for example the bottom middle one, even though it&#39;s using <code class="notranslate" translate="no">LINEAR</code> and blending
 4 pixels it flickers because those 4 pixels are from different corners of the 16x16 image depending on which
 4 are picked you&#39;ll get a different color. The one on the bottom right though stays a consistent color
 because it&#39;s using the 2nd to the smallest mip.</p>
@@ -465,43 +465,43 @@ because it&#39;s using the 2nd to the smallest mip.</p>
 
 </p>
 <p>The 6 beams going into the screen are using the 6 filtering modes listed
-above.  The top left beam is using <code>NEAREST</code> and you can see it&#39;s clearly
-very blocky.  The top middle is using <code>LINEAR</code> and it&#39;s not much better.
-The top right is using <code>NEAREST_MIPMAP_NEAREST</code>.  Click on the image to
+above.  The top left beam is using <code class="notranslate" translate="no">NEAREST</code> and you can see it&#39;s clearly
+very blocky.  The top middle is using <code class="notranslate" translate="no">LINEAR</code> and it&#39;s not much better.
+The top right is using <code class="notranslate" translate="no">NEAREST_MIPMAP_NEAREST</code>.  Click on the image to
 switch to a texture where every mip is a different color and you&#39;ll easily
 see where it chooses to use a specific mip.  The bottom left is using
-<code>LINEAR_MIPMAP_NEAREST</code> meaning it picks the best mip and then blends 4
+<code class="notranslate" translate="no">LINEAR_MIPMAP_NEAREST</code> meaning it picks the best mip and then blends 4
 pixels within that mip.  You can still see a clear area where it switches
 from one mip to the next mip.  The bottom middle is using
-<code>NEAREST_MIPMAP_LINEAR</code> meaning picking the best 2 mips, picking one pixel
+<code class="notranslate" translate="no">NEAREST_MIPMAP_LINEAR</code> meaning picking the best 2 mips, picking one pixel
 from each and blending them.  If you look close you can see how it&#39;s still
 blocky, especially in the horizontal direction.  The bottom right is using
-<code>LINEAR_MIPMAP_LINEAR</code> which is picking the best 2 mips, picking 4 pixels
+<code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code> which is picking the best 2 mips, picking 4 pixels
 from each, and blends all 8 pixels.</p>
 <p><img class="webgl_center noinvertdark nobg" src="resources/different-colored-mips.png" /></p>
 <div class="webgl_center">different colored mips</div>
 
 <p>You might be thinking why would you ever pick anything other than
-<code>LINEAR_MIPMAP_LINEAR</code> which is arguably the best one.  There are many
-reasons.  One is that <code>LINEAR_MIPMAP_LINEAR</code> is the slowest.  Reading 8
+<code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code> which is arguably the best one.  There are many
+reasons.  One is that <code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code> is the slowest.  Reading 8
 pixels is slower than reading 1 pixel.  On modern GPU hardware it&#39;s
 probably not an issue if you are only using 1 texture at a time but modern
 games might use 2 to 4 textures at once.  4 textures * 8 pixels per
 texture = needing to read 32 pixels for every pixel drawn.  That&#39;s going
 to be slow.  Another reason is if you&#39;re trying to achieve a certain
 effect.  For example if you want something to have that pixelated <em>retro</em>
-look maybe you want to use <code>NEAREST</code>.  Mips also take memory.  In fact
+look maybe you want to use <code class="notranslate" translate="no">NEAREST</code>.  Mips also take memory.  In fact
 they take 33% more memory.  That can be a lot of memory especially for a
 very large texture like you might use on a title screen of a game.  If you
 are never going to draw something smaller than the largest mip why waste
-memory for those mips.  Instead just use <code>NEAREST</code> or <code>LINEAR</code> as they
+memory for those mips.  Instead just use <code class="notranslate" translate="no">NEAREST</code> or <code class="notranslate" translate="no">LINEAR</code> as they
 only ever use the first mip.</p>
-<p>To set filtering you call <code>gl.texParameter</code> like this</p>
-<pre class="prettyprint"><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+<p>To set filtering you call <code class="notranslate" translate="no">gl.texParameter</code> like this</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-</code></pre><p><code>TEXTURE_MIN_FILTER</code> is the setting used when the size you are drawing is smaller than the largest mip.
-<code>TEXTURE_MAG_FILTER</code> is the setting used when the size you are drawing is larger than the largest mip. For
-<code>TEXTURE_MAG_FILTER</code> only <code>NEAREST</code> and <code>LINEAR</code> are valid settings.</p>
+</code></pre><p><code class="notranslate" translate="no">TEXTURE_MIN_FILTER</code> is the setting used when the size you are drawing is smaller than the largest mip.
+<code class="notranslate" translate="no">TEXTURE_MAG_FILTER</code> is the setting used when the size you are drawing is larger than the largest mip. For
+<code class="notranslate" translate="no">TEXTURE_MAG_FILTER</code> only <code class="notranslate" translate="no">NEAREST</code> and <code class="notranslate" translate="no">LINEAR</code> are valid settings.</p>
 <p>Let&#39;s say we wanted to apply this texture.</p>
 <p><img class="webgl_center" src="../resources/keyboard.jpg" /></p>
 <p>Here it is.</p>
@@ -514,23 +514,23 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 <p>Why doesn&#39;t the keyboard texture show up? That&#39;s because WebGL has a kind of severe restriction on textures that
 are not a power of 2 in both dimensions. Powers of 2 are 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, etc.
 The &#39;F&#39; texture was 256x256. 256 is a power of 2. The keyboard texture is 320x240. Neither of those are a power
-of 2 so trying to display the texture fails. In the shader when <code>texture2D</code> is called and when the texture
+of 2 so trying to display the texture fails. In the shader when <code class="notranslate" translate="no">texture2D</code> is called and when the texture
 referenced is not setup correctly WebGL will use color (0, 0, 0, 1) which is black. If you open up the JavaScript console
 or Web Console, depending on the browser you might see errors pointing out the problem like this</p>
-<pre class="prettyprint"><code>WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
    or not all the same size
 WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
    It maybe non-power-of-2 and have incompatible texture filtering or
    is not &#39;texture complete&#39;.
-</code></pre><p>To fix it we need to set the wrap mode to <code>CLAMP_TO_EDGE</code> and turn off mip mapping by setting filtering
-to <code>LINEAR</code> or <code>NEAREST</code>.</p>
+</code></pre><p>To fix it we need to set the wrap mode to <code class="notranslate" translate="no">CLAMP_TO_EDGE</code> and turn off mip mapping by setting filtering
+to <code class="notranslate" translate="no">LINEAR</code> or <code class="notranslate" translate="no">NEAREST</code>.</p>
 <p>Let&#39;s update our image loading code to handle this. First we need a function that will tell us if a value is
 a power of 2.</p>
-<pre class="prettyprint"><code>function isPowerOf2(value) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function isPowerOf2(value) {
   return (value &amp; (value - 1)) == 0;
 }
 </code></pre><p>I&#39;m not going to go into the binary math on why this works. Since it does work though, we can use it as follows.</p>
-<pre class="prettyprint"><code>// Asynchronously load an image
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Asynchronously load an image
 var image = new Image();
 image.src = &quot;resources/keyboard.jpg&quot;;
 image.addEventListener(&#39;load&#39;, function() {
@@ -560,16 +560,16 @@ image.addEventListener(&#39;load&#39;, function() {
 &quot;texture complete&quot; means that either</p>
 <ol>
 <li><p>You&#39;ve set the filtering so it only uses the first mip level which means
-setting the <code>TEXTURE_MIN_FILTER</code> to either <code>LINEAR</code> or <code>NEAREST</code>.</p>
+setting the <code class="notranslate" translate="no">TEXTURE_MIN_FILTER</code> to either <code class="notranslate" translate="no">LINEAR</code> or <code class="notranslate" translate="no">NEAREST</code>.</p>
 </li>
 <li><p>If you are using mips then they need to be the correct sizes and you have to provide ALL OF THEM
 down to the 1x1 size.</p>
-<p>The easiest way to do that is to call <code>gl.generateMipmap</code>. Otherwise if you provide your own mips you need to provide
+<p>The easiest way to do that is to call <code class="notranslate" translate="no">gl.generateMipmap</code>. Otherwise if you provide your own mips you need to provide
 all of them.</p>
 </li>
 <li><p>If the textures are not a power of 2 in both dimensions then like it mentions above
-you must set <code>TEXTURE_MIN_FILTER</code> to either <code>LINEAR</code> or <code>NEAREST</code> <strong>and</strong> you must
-set <code>TEXTURE_WRAP_S</code> and <code>TEXTURE_WRAP_T</code> to <code>CLAMP_TO_EDGE</code>.</p>
+you must set <code class="notranslate" translate="no">TEXTURE_MIN_FILTER</code> to either <code class="notranslate" translate="no">LINEAR</code> or <code class="notranslate" translate="no">NEAREST</code> <strong>and</strong> you must
+set <code class="notranslate" translate="no">TEXTURE_WRAP_S</code> and <code class="notranslate" translate="no">TEXTURE_WRAP_T</code> to <code class="notranslate" translate="no">CLAMP_TO_EDGE</code>.</p>
 </li>
 </ol>
 <p>If any of those are not true then when you fetch the value of the texture in your shader you&#39;ll get 0,0,0,1.</p>
@@ -597,7 +597,7 @@ all high performance apps (read <em>games</em>) use. So for example we&#39;d put
 like this</p>
 <p><img class="webgl_center" src="../resources/noodles.jpg" /></p>
 <p>and then use a different set of texture coordinates for each face of the cube.</p>
-<pre class="prettyprint"><code>    // select the top left image
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    // select the top left image
     0   , 0  ,
     0   , 0.5,
     0.25, 0  ,
@@ -663,11 +663,11 @@ Or, you could also check out <a href="webgl-less-code-more-fun.html">simplifying
 <h3>UVs vs. Texture Coordinates</h3>
 <p>Texture coordinates are often shortened to texture coords, texcoords or UVs
 (pronounced Ew-Vees). I have no idea where the term UVs came from except that
-vertex positions often use <code>x, y, z, w</code> so for texture coordinates they decided to use
-<code>s, t, u, v</code> to try to make it clear which of the 2 types you're referring to.
+vertex positions often use <code class="notranslate" translate="no">x, y, z, w</code> so for texture coordinates they decided to use
+<code class="notranslate" translate="no">s, t, u, v</code> to try to make it clear which of the 2 types you're referring to.
 Given that though you'd think they'd be called Es-Tees and in fact if you look
-at the texture wrap settings they are called <code>TEXTURE_WRAP_S</code> and
-<code>TEXTURE_WRAP_T</code> but for some reason as long as I've been working
+at the texture wrap settings they are called <code class="notranslate" translate="no">TEXTURE_WRAP_S</code> and
+<code class="notranslate" translate="no">TEXTURE_WRAP_T</code> but for some reason as long as I've been working
 in graphics people have called them Ew-Vees.
 </p>
 <p>So now you know if someone says UVs they're talking about texture coordinates.</p>

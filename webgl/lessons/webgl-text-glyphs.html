@@ -224,7 +224,7 @@ a name over an avatar.  As that name rarely changes it&#39;s perfect.</p>
 Given the last example in <a href="webgl-text-texture.html">the previous article</a>
 an obvious solution is to make a texture for each letter.  Let&#39;s change
 the last sample to do that.</p>
-<pre class="prettyprint"><code>+var names = [
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+var names = [
 +  &quot;anna&quot;,   // 0
 +  &quot;colin&quot;,  // 1
 +  &quot;james&quot;,  // 2
@@ -275,7 +275,7 @@ var textTextures = [
 *  var textCanvas = makeTextCanvas(name, 10, 26);
 </code></pre><p>Then instead of rendering one quad for each name we&#39;ll render one quad for each
 letter in each name.</p>
-<pre class="prettyprint"><code>// setup to draw the text.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// setup to draw the text.
 +// Because every letter uses the same attributes and the same program
 +// we only need to do this once.
 +gl.useProgram(textProgramInfo.program);
@@ -334,7 +334,7 @@ that contains all the letters.  We went over what a texture atlas is when
 we talked about <a href="webgl-3d-textures.html#texture-atlas">texturing the 6 faces of a cube</a>.</p>
 <p>Searching the web I found <a href="https://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta">this simple open source font texture atlas</a>
 <img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../resources/8x8-font.png" /></p>
-<pre class="prettyprint"><code>var fontInfo = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var fontInfo = {
   letterHeight: 8,
   spaceWidth: 8,
   spacing: -1,
@@ -384,7 +384,7 @@ we talked about <a href="webgl-3d-textures.html#texture-atlas">texturing the 6 f
   },
 };
 </code></pre><p>And we&#39;ll <a href="webgl-3d-textures.html">load the image just like we loaded textures before</a></p>
-<pre class="prettyprint"><code>// Create a texture.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Create a texture.
 var glyphTex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, glyphTex);
 // Fill the texture with a 1x1 blue pixel.
@@ -407,7 +407,7 @@ image.addEventListener(&#39;load&#39;, function() {
 build quad vertices on the fly for each glyph. Those vertices will use texture coordinates
 to select a particular glyph</p>
 <p>Given a string let&#39;s build the vertices</p>
-<pre class="prettyprint"><code>function makeVerticesForString(fontInfo, s) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function makeVerticesForString(fontInfo, s) {
   var len = s.length;
   var numVertices = len * 6;
   var positions = new Float32Array(numVertices * 2);
@@ -476,7 +476,7 @@ to select a particular glyph</p>
   };
 }
 </code></pre><p>To use it we&#39;ll manually create a bufferInfo. (<a href="webgl-drawing-multiple-things.html">See previous article if you don&#39;t remember what a bufferInfo is</a>).</p>
-<pre class="prettyprint"><code>// Manually create a bufferInfo
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Manually create a bufferInfo
 var textBufferInfo = {
   attribs: {
     a_position: { buffer: gl.createBuffer(), numComponents: 2, },
@@ -485,7 +485,7 @@ var textBufferInfo = {
   numElements: 0,
 };
 </code></pre><p>And then to render text we&#39;ll update the buffers. We&#39;ll also make the text dynamic</p>
-<pre class="prettyprint"><code>textPositions.forEach(function(pos, ndx) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">textPositions.forEach(function(pos, ndx) {
 
   var name = names[ndx];
 +  var s = name + &quot;:&quot; + pos[0].toFixed(0) + &quot;,&quot; + pos[1].toFixed(0) + &quot;,&quot; + pos[2].toFixed(0);
@@ -530,13 +530,13 @@ var textBufferInfo = {
 obvious things to add or ways to improve it.</p>
 <ul>
 <li><p>Reuse the same arrays.</p>
-<p>Currently <code>makeVerticesForString</code> allocates new Float32Arrays each time it&#39;s called.
+<p>Currently <code class="notranslate" translate="no">makeVerticesForString</code> allocates new Float32Arrays each time it&#39;s called.
 That&#39;s probably going to eventually cause garbage collection hiccups. Re-using the
 same arrays would probably be better. You&#39;d enlarge the array if it&#39;s not large
 enough and keep that size around</p>
 </li>
 <li><p>Add support for carriage return</p>
-<p>Check for <code>\n</code> and go down a line when generating vertices. This would make it
+<p>Check for <code class="notranslate" translate="no">\n</code> and go down a line when generating vertices. This would make it
 easy to make paragraphs of text.</p>
 </li>
 <li><p>Add support for all kinds of other formatting.</p>

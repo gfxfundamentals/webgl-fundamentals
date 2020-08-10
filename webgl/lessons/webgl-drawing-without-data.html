@@ -224,9 +224,9 @@ into shaders and convert them to clip space.</p>
 <p>The word <strong>traditionally</strong> is important. It&#39;s only a <strong>tradition</strong>
 to do it this way. It is in no way a requirement. WebGL doesn&#39;t
 care how we do it, it only cares that our vertex shaders
-assign clip space coordinates to <code>gl_Position</code>.</p>
+assign clip space coordinates to <code class="notranslate" translate="no">gl_Position</code>.</p>
 <p>So, let&#39;s provide only a count as an attribute instead of positions</p>
-<pre class="prettyprint"><code class="lang-js">const numVerts = 20;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const numVerts = 20;
 const vertexIds = new Float32Array(numVerts);
 vertexIds.forEach((v, i) =&gt; {
   vertexIds[i] = i;
@@ -237,7 +237,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, idBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, vertexIds, gl.STATIC_DRAW);
 </code></pre>
 <p>Now let&#39;s make a vertex shader to draw a circle of points based on that count.</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute float vertexId;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute float vertexId;
 uniform float numVerts;
 
 #define PI radians(180.0)
@@ -254,14 +254,14 @@ void main() {
 }
 </code></pre>
 <p>The code above should be pretty straight forward.
-<code>vertexId</code> is going to count from 0 to <code>numVerts</code>.
+<code class="notranslate" translate="no">vertexId</code> is going to count from 0 to <code class="notranslate" translate="no">numVerts</code>.
 Based on that we generate positions for a circle.</p>
 <p>If we stopped there the circle would be an ellipse
 because clip space is normalized (goes from -1 to 1)
 across and down the canvas. If we pass in the resolution
 we can take into account that -1 to 1 across might not
 represent the same space as -1 to 1 down the canvas.</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute float vertexId;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute float vertexId;
 uniform float numVerts;
 +uniform vec2 resolution;
 
@@ -282,22 +282,22 @@ void main() {
 }
 </code></pre>
 <p>And our fragment shader can just draw a solid color</p>
-<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 void main() {
   gl_FragColor = vec4(1, 0, 0, 1);
 }
 </code></pre>
 <p>In our JavaScript at init time we&#39;ll compile the shader and look up the attributes and uniforms,</p>
-<pre class="prettyprint"><code class="lang-js">// setup GLSL program
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup GLSL program
 const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
 const vertexIdLoc = gl.getAttribLocation(program, &#39;vertexId&#39;);
 const numVertsLoc = gl.getUniformLocation(program, &#39;numVerts&#39;);
 const resolutionLoc = gl.getUniformLocation(program, &#39;resolution&#39;);
 </code></pre>
 <p>And to render we&#39;ll use the program, setup our one attribute with vertex ids,
-set the <code>resolution</code> and <code>numVerts</code> uniforms, and finally draw the points.</p>
-<pre class="prettyprint"><code class="lang-js">gl.useProgram(program);
+set the <code class="notranslate" translate="no">resolution</code> and <code class="notranslate" translate="no">numVerts</code> uniforms, and finally draw the points.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.useProgram(program);
 
 {
   // Turn on the attribute
@@ -336,7 +336,7 @@ we could make a starfield or a simple rain effect with
 almost no data and a single draw call.</p>
 <p>Let&#39;s do the rain just to see it work. First we&#39;ll
 change the vertex shader to</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute float vertexId;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute float vertexId;
 uniform float numVerts;
 uniform float time;
 
@@ -350,16 +350,16 @@ void main() {
 }
 </code></pre>
 <p>For this situation we don&#39;t need the resolution.</p>
-<p>We&#39;ve added a <code>time</code> uniform which will be the time
+<p>We&#39;ve added a <code class="notranslate" translate="no">time</code> uniform which will be the time
 in seconds since the page loaded.</p>
 <p>For &#39;x&#39; we&#39;re just going to go from -1 to 1</p>
-<p>For &#39;y&#39; we use <code>time + u</code> but <code>fract</code> returns
+<p>For &#39;y&#39; we use <code class="notranslate" translate="no">time + u</code> but <code class="notranslate" translate="no">fract</code> returns
 only the fractional portion so a value from 0.0 to 1.0.
 By expanding that to 1.0 to -1.0 we get a y that repeats
 over time but one that is offset differently for each
 point.</p>
 <p>Let&#39;s change the color to blue in the fragment shader.</p>
-<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 void main() {
 -  gl_FragColor = vec4(1, 0, 0, 1);
@@ -367,7 +367,7 @@ void main() {
 }
 </code></pre>
 <p>Then in JavaScript we need to look up the time uniform</p>
-<pre class="prettyprint"><code class="lang-js">// setup GLSL program
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup GLSL program
 const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
 const vertexIdLoc = gl.getAttribLocation(program, &#39;vertexId&#39;);
 const numVertsLoc = gl.getUniformLocation(program, &#39;numVerts&#39;);
@@ -375,8 +375,8 @@ const numVertsLoc = gl.getUniformLocation(program, &#39;numVerts&#39;);
 +const timeLoc = gl.getUniformLocation(program, &#39;time&#39;);
 </code></pre>
 <p>And we need to convert to code to <a href="webgl-animation.html">animate</a>
-by creating a render loop and setting the <code>time</code> uniform.</p>
-<pre class="prettyprint"><code class="lang-js">+function render(time) {
+by creating a render loop and setting the <code class="notranslate" translate="no">time</code> uniform.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">+function render(time) {
 +  time *= 0.001;  // convert to seconds
 
 +  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
@@ -425,7 +425,7 @@ random number generator in GLSL. Instead we can use a
 function that generates something that appears random
 enough.</p>
 <p>Here&#39;s one</p>
-<pre class="prettyprint"><code class="lang-glsl">// hash function from https://www.shadertoy.com/view/4djSRW
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// hash function from https://www.shadertoy.com/view/4djSRW
 // given a value between 0 and 1
 // returns a value between 0 and 1 that *appears* kind of random
 float hash(float p) {
@@ -435,7 +435,7 @@ float hash(float p) {
 }
 </code></pre>
 <p>and we can use that like this</p>
-<pre class="prettyprint"><code class="lang-glsl">void main() {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">void main() {
   float u = vertexId / numVerts;          // goes from 0 to 1
 -  float x = u * 2.0 - 1.0;                // -1 to 1
 +  float x = hash(u) * 2.0 - 1.0;          // random position
@@ -445,15 +445,15 @@ float hash(float p) {
   gl_PointSize = 5.0;
 }
 </code></pre>
-<p>We pass <code>hash</code> our previous 0 to 1 value and it gives us
+<p>We pass <code class="notranslate" translate="no">hash</code> our previous 0 to 1 value and it gives us
 back a pseudo random 0 to 1 value.</p>
 <p>Let&#39;s also make the points smaller</p>
-<pre class="prettyprint"><code class="lang-glsl">  gl_Position = vec4(x, y, 0, 1);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">  gl_Position = vec4(x, y, 0, 1);
 -  gl_PointSize = 5.0;
 +  gl_PointSize = 2.0;
 </code></pre>
 <p>And bump up the number of points we&#39;re drawing</p>
-<pre class="prettyprint"><code class="lang-js">-const numVerts = 20;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-const numVerts = 20;
 +const numVerts = 400;
 </code></pre>
 <p>And with that we get</p>
@@ -470,7 +470,7 @@ If there was more going on in the background like if
 this cheap rain effect was happening over a 3D game
 it&#39;s possible no one would ever notice it&#39;s repeating.</p>
 <p>We can fix the repetition by adding in a little more randomness.</p>
-<pre class="prettyprint"><code class="lang-glsl">void main() {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">void main() {
   float u = vertexId / numVerts;          // goes from 0 to 1
 +  float off = floor(time + u) / 1000.0;   // changes once per second per vertex
 -  float x = hash(u) * 2.0 - 1.0;          // random position
@@ -481,13 +481,13 @@ it&#39;s possible no one would ever notice it&#39;s repeating.</p>
   gl_PointSize = 2.0;
 }
 </code></pre>
-<p>In the code above we added <code>off</code>. Since we&#39;re calling <code>floor</code>
-the value of <code>floor(time + u)</code> will effectively give us
+<p>In the code above we added <code class="notranslate" translate="no">off</code>. Since we&#39;re calling <code class="notranslate" translate="no">floor</code>
+the value of <code class="notranslate" translate="no">floor(time + u)</code> will effectively give us
 a second timer that only changes once per second for each vertex.
 This offset is in sync with the code moving the point down the screen
 so at the same instance the point jumps back to the top
 of the screen some small amount is added to the value
-<code>hash</code> is being passed which means this particular point
+<code class="notranslate" translate="no">hash</code> is being passed which means this particular point
 will get a new random number and therefore a new random horizontal position.</p>
 <p>The result is a rain effect that doesn&#39;t appear to repeat</p>
 <p><div class="webgl_example_container">
@@ -496,7 +496,7 @@ will get a new random number and therefore a new random horizontal position.</p>
 </div>
 
 </p>
-<p>Can we do more than <code>gl.POINTS</code>? Of course! </p>
+<p>Can we do more than <code class="notranslate" translate="no">gl.POINTS</code>? Of course! </p>
 <p>Let&#39;s make circles. To do this we need triangles around
 a center like slices of pie. We can think of each triangle
 as 2 points around the edge of the pie followed by 1 point in the center.
@@ -504,33 +504,33 @@ We then repeat for each slice of the pie.</p>
 <div class="webgl_center"><img src="resources/circle-points.svg" style="width: 400px;"></div>
 
 <p>So first we want some kind of counter that changes once per pie slice</p>
-<pre class="prettyprint"><code class="lang-glsl">float sliceId = floor(vertexId / 3.0);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">float sliceId = floor(vertexId / 3.0);
 </code></pre>
 <p>Then we need a count around the edge of the circle that goes</p>
-<pre class="prettyprint"><code>0, 1, ?, 1, 2, ?, 2, 3, ?, ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">0, 1, ?, 1, 2, ?, 2, 3, ?, ...
 </code></pre><p>The ? value doesn&#39;t really matter because looking at the
 diagram above the 3rd value is always in the center (0,0)
 so we can just multiply by 0 regardless of value.</p>
 <p>To get the pattern above this would work</p>
-<pre class="prettyprint"><code class="lang-glsl">float triVertexId = mod(vertexId, 3.0);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">float triVertexId = mod(vertexId, 3.0);
 float edge = triVertexId + sliceId;
 </code></pre>
 <p>For points on the edge vs points in the center we need
 this pattern. 2 on the edge then 1 in the center, repeat.</p>
-<pre class="prettyprint"><code>1, 1, 0, 1, 1, 0, 1, 1, 0, ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">1, 1, 0, 1, 1, 0, 1, 1, 0, ...
 </code></pre><p>We can get that pattern with</p>
-<pre class="prettyprint"><code class="lang-glsl">float radius = step(1.5, triVertexId);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">float radius = step(1.5, triVertexId);
 </code></pre>
-<p><code>step(a, b)</code> is 0 if a &lt; b and 1 otherwise. You can think of it as</p>
-<pre class="prettyprint"><code class="lang-js">function step(a, b) {
+<p><code class="notranslate" translate="no">step(a, b)</code> is 0 if a &lt; b and 1 otherwise. You can think of it as</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function step(a, b) {
   return a &lt; b ? 0 : 1;
 }
 </code></pre>
-<p><code>step(1.5, triVertexId)</code> will be 1 when 1.5 is less than <code>triVertexId</code>.
+<p><code class="notranslate" translate="no">step(1.5, triVertexId)</code> will be 1 when 1.5 is less than <code class="notranslate" translate="no">triVertexId</code>.
 That&#39;s true for the first 2 vertices of each triangle and false
 for the last one.</p>
 <p>We can get triangle vertices for a circle like this</p>
-<pre class="prettyprint"><code class="lang-glsl">float numSlices = 8.0;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">float numSlices = 8.0;
 float sliceId = floor(vertexId / 3.0);
 float triVertexId = mod(vertexId, 3.0);
 float edge = triVertexId + sliceId;
@@ -540,7 +540,7 @@ float radius = step(triVertexId, 1.5);
 vec2 pos = vec2(cos(angle), sin(angle)) * radius;
 </code></pre>
 <p>Putting all of this together let&#39;s just try to draw 1 circle.</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute float vertexId;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute float vertexId;
 uniform float numVerts;
 uniform vec2 resolution;
 
@@ -562,13 +562,13 @@ void main() {
   gl_Position = vec4(pos * scale, 0, 1);
 }
 </code></pre>
-<p>Notice we put <code>resolution</code> back in so we don&#39;t get an ellipse.</p>
+<p>Notice we put <code class="notranslate" translate="no">resolution</code> back in so we don&#39;t get an ellipse.</p>
 <p>For a 8 slice circle we need 8 * 3 vertices</p>
-<pre class="prettyprint"><code class="lang-js">-const numVerts = 400;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-const numVerts = 400;
 +const numVerts = 8 * 3;
 </code></pre>
-<p>and we need to draw <code>TRIANGLES</code> not <code>POINTS</code></p>
-<pre class="prettyprint"><code class="lang-js">const offset = 0;
+<p>and we need to draw <code class="notranslate" translate="no">TRIANGLES</code> not <code class="notranslate" translate="no">POINTS</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const offset = 0;
 -gl.drawArrays(gl.POINTS, offset, numVerts);
 +gl.drawArrays(gl.TRIANGLES, offset, numVerts);
 </code></pre>
@@ -579,15 +579,15 @@ void main() {
 
 </p>
 <p>And if what if we wanted to draw multiple circles?</p>
-<p>All we need to do is come up with a <code>circleId</code> which we
+<p>All we need to do is come up with a <code class="notranslate" translate="no">circleId</code> which we
 can use to pick some position for each circle that is
 the same for all vertices in the circle.</p>
-<pre class="prettyprint"><code class="lang-glsl">float numVertsPerCircle = numSlices * 3.0;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">float numVertsPerCircle = numSlices * 3.0;
 float circleId = floor(vertexId / numVertsPerCircle);
 </code></pre>
 <p>For example let&#39;s draw a circle of circles.</p>
 <p>First let&#39;s turn the code above into a function,</p>
-<pre class="prettyprint"><code class="lang-glsl">vec2 computeCircleTriangleVertex(float vertexId) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">vec2 computeCircleTriangleVertex(float vertexId) {
   float numSlices = 8.0;
   float sliceId = floor(vertexId / 3.0);
   float triVertexId = mod(vertexId, 3.0);
@@ -600,7 +600,7 @@ float circleId = floor(vertexId / numVertsPerCircle);
 </code></pre>
 <p>Now here&#39;s the original code we used to draw
 a circle of points at the top of this article.</p>
-<pre class="prettyprint"><code class="lang-glsl">float u = vertexId / numVerts;      // goes from 0 to 1
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">float u = vertexId / numVerts;      // goes from 0 to 1
 float angle = u * PI * 2.0;         // goes from 0 to 2PI
 float radius = 0.8;
 
@@ -611,10 +611,10 @@ vec2 scale = vec2(aspect, 1);
 
 gl_Position = vec4(pos * scale, 0, 1);
 </code></pre>
-<p>We just need to change it to use <code>circleId</code> instead
-of <code>vertexId</code> and to divide by the number of circles
+<p>We just need to change it to use <code class="notranslate" translate="no">circleId</code> instead
+of <code class="notranslate" translate="no">vertexId</code> and to divide by the number of circles
 instead of the number of vertices.</p>
-<pre class="prettyprint"><code class="lang-glsl">void main() {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">void main() {
 +  float circleId = floor(vertexId / numVertsPerCircle);
 +  float numCircles = numVerts / numVertsPerCircle;
 
@@ -635,7 +635,7 @@ instead of the number of vertices.</p>
 }
 </code></pre>
 <p>Then we just need to increase the number of vertices</p>
-<pre class="prettyprint"><code class="lang-js">-const numVerts = 8 * 3;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-const numVerts = 8 * 3;
 +const numVerts = 8 * 3 * 20;
 </code></pre>
 <p>And now we have a circle of 20 circles.</p>
@@ -684,25 +684,25 @@ as well but you have to decide on a case by case basis when to use one
 way or another.</p>
 <p>The point of this article is mostly to introduce these ideas 
 and to emphasize other ways of thinking about what WebGL
-is actually doing. Again it only cares that you set <code>gl_Position</code>
-and <code>gl_FragColor</code> in your shaders. It doesn&#39;t care how you do it.</p>
+is actually doing. Again it only cares that you set <code class="notranslate" translate="no">gl_Position</code>
+and <code class="notranslate" translate="no">gl_FragColor</code> in your shaders. It doesn&#39;t care how you do it.</p>
 <p>Next up see how <a href="webgl-shadertoy.html">Shadertoy shaders work</a>.</p>
 <div class="webgl_bottombar" id="pointsissues">
-<h3>A problem with <code>gl.POINTS</code></h3>
+<h3>A problem with <code class="notranslate" translate="no">gl.POINTS</code></h3>
 <p>
 One thing a technique like this can be useful for is to simulate drawing
-with <code>gl.POINTS</code>.
+with <code class="notranslate" translate="no">gl.POINTS</code>.
 </p>
 
-There are 2 problems with <code>gl.POINTS</code>
+There are 2 problems with <code class="notranslate" translate="no">gl.POINTS</code>
 
 <ol>
-<li>They have a maximum size<br/><br/>Most people using <code>gl.POINTS</code> use small sizes
+<li>They have a maximum size<br/><br/>Most people using <code class="notranslate" translate="no">gl.POINTS</code> use small sizes
 but if that maximum size is smaller than you need you'll need to choose a different solution.
 </li>
 <li>How they get clipped when off the screen is inconsistent<br/><br/>
 The issue here is imagine you set the center of a point to be 1 pixel off the left edge
-of the canvas but you set <code>gl_PointSize</code> to 32.0.
+of the canvas but you set <code class="notranslate" translate="no">gl_PointSize</code> to 32.0.
 <div class="webgl_center"><img src="resources/point-outside-canvas.svg" style="width: 400px"></div>
 According to the OpenGL ES 1.0
 spec what is supposed to happen is that because 15 columns of those 32x32 pixels are still on the canvas
@@ -714,7 +714,7 @@ and some don't 😭
 </ol>
 <p>
 So, if either of those issues is a problem for your needs then as a solution you need to draw your own quads
-with <code>gl.TRIANGLES</code> instead of using <code>gl.POINTS</code>.
+with <code class="notranslate" translate="no">gl.TRIANGLES</code> instead of using <code class="notranslate" translate="no">gl.POINTS</code>.
  If you do that both problems are solved.
 The maximum size problem goes away as does the inconsistent clipping problem. There are various
 ways to draw lots of quads. One of then is using techniques like the ones in this article.</p>

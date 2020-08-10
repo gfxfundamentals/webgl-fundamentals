@@ -228,21 +228,21 @@ HTML5 JavaScript, но и с этим мы справимся. И не буде�
 <p>Сейчас же мы будем дожидаться полной загрузки всех изображений,
 прежде чем что-либо отрисовать.</p>
 <p>Для начала вынесем код загрузки изображения в функцию. Здесь всё понятно.
-Создаётся новый объект <code>Image</code>, задаётся URL для загрузки и по завершению
+Создаётся новый объект <code class="notranslate" translate="no">Image</code>, задаётся URL для загрузки и по завершению
 загрузки изображения выполняется функция обратного вызова.</p>
-<pre class="prettyprint"><code>function loadImage(url, callback) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function loadImage(url, callback) {
   var image = new Image();
   image.src = url;
   image.onload = callback;
   return image;
 }
 </code></pre><p>Теперь сделаем функцию, которая принимает массив URL-адресов, а возвращает
-массив изображений. Заведём переменную <code>imagesToLoad</code>, где будет содержаться
+массив изображений. Заведём переменную <code class="notranslate" translate="no">imagesToLoad</code>, где будет содержаться
 количество загружаемых изображений. При загрузке очередного изображения
-значение <code>imagesToLoad</code> уменьшается. А когда значение доходит до 0, значит,
+значение <code class="notranslate" translate="no">imagesToLoad</code> уменьшается. А когда значение доходит до 0, значит,
 все изображения загрузились, и мы вызываем переданную функцию callback
 с массивом изображений в качестве параметра.</p>
-<pre class="prettyprint"><code>function loadImages(urls, callback) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function loadImages(urls, callback) {
   var images = [];
   var imagesToLoad = urls.length;
 
@@ -261,7 +261,7 @@ HTML5 JavaScript, но и с этим мы справимся. И не буде�
   }
 }
 </code></pre><p>Использование функции loadImages выглядит следующим образом:</p>
-<pre class="prettyprint"><code>function main() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function main() {
   loadImages([
     &quot;resources/leaves.jpg&quot;,
     &quot;resources/star.jpg&quot;,
@@ -269,7 +269,7 @@ HTML5 JavaScript, но и с этим мы справимся. И не буде�
 }
 </code></pre><p>Далее меняем шейдер под использование 2 текстур. В данном случае мы
 умножим одну текстуру на другую.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // наши текстуры
@@ -286,7 +286,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Создаём 2 объекта текстуры WebGL.</p>
-<pre class="prettyprint"><code>  // создаём 2 текстуры
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // создаём 2 текстуры
   var textures = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
     var texture = gl.createTexture();
@@ -307,7 +307,7 @@ void main() {
 </code></pre><p>В WebGL есть нечто под названием &quot;текстурные блоки&quot;. Вы можете представить, что это
 массив ссылок на текстуры. Необходимо сообщить шейдеру, какой текстурный блок
 использовать для каждого сэмплера.</p>
-<pre class="prettyprint"><code>  // получаем ссылки на сэмплеры
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // получаем ссылки на сэмплеры
   var u_image0Location = gl.getUniformLocation(program, &quot;u_image0&quot;);
   var u_image1Location = gl.getUniformLocation(program, &quot;u_image1&quot;);
 
@@ -317,7 +317,7 @@ void main() {
   gl.uniform1i(u_image0Location, 0);  // текстурный блок 0
   gl.uniform1i(u_image1Location, 1);  // текстурный блок 1
 </code></pre><p>Затем привязываем текстуру к каждому из этих текстурных блоков.</p>
-<pre class="prettyprint"><code>  // привязываем текстуру к текстурному блоку
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // привязываем текстуру к текстурному блоку
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
@@ -342,7 +342,7 @@ void main() {
 функция по работе с текстурами работает с указанным объектом в текущем
 активном текстурном блоке. Если бы вы реализовывали WebGL на JavaScript,
 мог бы получиться примерно следующий код:</p>
-<pre class="prettyprint"><code>var getContext = function() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var getContext = function() {
   var textureUnits = [
     { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
     { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
@@ -379,23 +379,23 @@ void main() {
   }
 };
 </code></pre><p>Шейдеры принимают индексы для текстурного блока. Надеюсь, следующие 2 строки будут понятнее.</p>
-<pre class="prettyprint"><code>  gl.uniform1i(u_image0Location, 0);  // текстурный блок 0
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.uniform1i(u_image0Location, 0);  // текстурный блок 0
   gl.uniform1i(u_image1Location, 1);  // текстурный блок 1
 </code></pre><p>Однако, необходимо помнить, что при установке uniform-переменных вы используете индексы
 для текстурных блоков, но при вызове gl.activeTexture необходимо передавать специальные
 константы gl.TEXTURE0, gl.TEXTURE1 и т.д. К счастью, константы идут последовательно,
 поэтому вместо следующего кода</p>
-<pre class="prettyprint"><code>  gl.activeTexture(gl.TEXTURE0);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </code></pre><p>мы можем записать следующим образом:</p>
-<pre class="prettyprint"><code>  gl.activeTexture(gl.TEXTURE0 + 0);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.activeTexture(gl.TEXTURE0 + 0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE0 + 1);
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </code></pre><p>или же так:</p>
-<pre class="prettyprint"><code>  for (var ii = 0; ii &lt; 2; ++ii) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  for (var ii = 0; ii &lt; 2; ++ii) {
     gl.activeTexture(gl.TEXTURE0 + ii);
     gl.bindTexture(gl.TEXTURE_2D, textures[ii]);
   }

@@ -214,7 +214,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>Эта статья продолжает статью о <a href="webgl-2d-drawimage.html">функции DrawImage в WebGL</a>.
 Если вы её ещё не читали, рекомендую <a href="webgl-2d-drawimage.html">ознакомиться сначала с ней</a>.</p>
-<p>В предыдущей статье мы реализовали аналог 2D-фукнции canvas <code>drawImage</code>,
+<p>В предыдущей статье мы реализовали аналог 2D-фукнции canvas <code class="notranslate" translate="no">drawImage</code>,
 включая возможность указания обрезающего прямоугольника как исходного
 изображения, так и конечного.</p>
 <p>У нас впереди реализация функций поворота и/или масштабирования из любой
@@ -222,15 +222,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 функцию - как минимум, для указания центральной точки, величины вращения,
 а также масштабирования по x и y. К счастью, есть более распространённый
 и удобный способ. API-функции 2D-canvas используют для этих целей стек
-матриц. Функциями стека матриц Canvas 2D API являются <code>save</code>, <code>restore</code>,
-<code>translate</code>, <code>rotate</code> и <code>scale</code>.</p>
+матриц. Функциями стека матриц Canvas 2D API являются <code class="notranslate" translate="no">save</code>, <code class="notranslate" translate="no">restore</code>,
+<code class="notranslate" translate="no">translate</code>, <code class="notranslate" translate="no">rotate</code> и <code class="notranslate" translate="no">scale</code>.</p>
 <p>Реализовать стек матриц довольно просто. Нам просто нужно сделать стек,
 состоящий из матриц. Мы сделаем функции для умножения верхней матрицы из
 стека на матрицу переноса, поворота или масштабирования, используя
 <a href="webgl-2d-matrices.html">функции, которые мы создали ранее</a>.</p>
 <p>Далее идёт реализация.</p>
-<p>Сначала конструктор и функции <code>save</code> и <code>restore</code>.</p>
-<pre class="prettyprint"><code>function MatrixStack() {
+<p>Сначала конструктор и функции <code class="notranslate" translate="no">save</code> и <code class="notranslate" translate="no">restore</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function MatrixStack() {
   this.stack = [];
 
   // стек пуст, поэтому просто поместим в него начальную матрицу
@@ -251,7 +251,7 @@ MatrixStack.prototype.save = function() {
   this.stack.push(this.getCurrentMatrix());
 };
 </code></pre><p>Также нам понадобятся функции для получения и установки верхней матрицы.</p>
-<pre class="prettyprint"><code>// получаем копию текущей матрицы (верхушки стека)
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// получаем копию текущей матрицы (верхушки стека)
 MatrixStack.prototype.getCurrentMatrix = function() {
   return this.stack[this.stack.length - 1].slice();
 };
@@ -260,9 +260,9 @@ MatrixStack.prototype.getCurrentMatrix = function() {
 MatrixStack.prototype.setCurrentMatrix = function(m) {
   return this.stack[this.stack.length - 1] = m;
 };
-</code></pre><p>Наконец, нам нужно реализовать функции <code>translate</code>, <code>rotate</code> и <code>scale</code>,
+</code></pre><p>Наконец, нам нужно реализовать функции <code class="notranslate" translate="no">translate</code>, <code class="notranslate" translate="no">rotate</code> и <code class="notranslate" translate="no">scale</code>,
 используя наши предыдущие функции матриц.</p>
-<pre class="prettyprint"><code>// перенос текущей матрицы
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// перенос текущей матрицы
 MatrixStack.prototype.translate = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.translate(m, x, y, z));
@@ -280,10 +280,10 @@ MatrixStack.prototype.scale = function(x, y, z) {
   this.setCurrentMatrix(m4.scale(m, x, y, z));
 };
 </code></pre><p>Обратите внимание, что мы используем математику функций для 3D. Мы могли
-бы использовать <code>0</code> для <code>z</code> при переносе и <code>1</code> для <code>z</code> при масштабировании,
-но я привык к 2d-функциям canvas и часто забывал указывать <code>z</code>, что приводило
-к ошибкам в коде. Поэтому давайте сделаем <code>z</code> опциональным параметром.</p>
-<pre class="prettyprint"><code>// перенос текущей матрицы
+бы использовать <code class="notranslate" translate="no">0</code> для <code class="notranslate" translate="no">z</code> при переносе и <code class="notranslate" translate="no">1</code> для <code class="notranslate" translate="no">z</code> при масштабировании,
+но я привык к 2d-функциям canvas и часто забывал указывать <code class="notranslate" translate="no">z</code>, что приводило
+к ошибкам в коде. Поэтому давайте сделаем <code class="notranslate" translate="no">z</code> опциональным параметром.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// перенос текущей матрицы
 MatrixStack.prototype.translate = function(x, y, z) {
 +  if (z === undefined) {
 +    z = 0;
@@ -302,9 +302,9 @@ MatrixStack.prototype.scale = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.scale(m, x, y, z));
 };
-</code></pre><p>Теперь, используя функцию <a href="webgl-2d-drawimage.html"><code>drawImage</code> из предыдущей статьи</a>,
+</code></pre><p>Теперь, используя функцию <a href="webgl-2d-drawimage.html"><code class="notranslate" translate="no">drawImage</code> из предыдущей статьи</a>,
 мы получим следующий код</p>
-<pre class="prettyprint"><code>// матрица для конвертации из пикселей в пространство отсечения
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// матрица для конвертации из пикселей в пространство отсечения
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 // матрица переноса квадранта в координаты dstX, dstY
@@ -314,9 +314,9 @@ matrix = m4.translate(matrix, dstX, dstY, 0);
 // до размеров texWidth, texHeight
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>Нам нужно просто создать стек матриц</p>
-<pre class="prettyprint"><code>var matrixStack = new MatrixStack();
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var matrixStack = new MatrixStack();
 </code></pre><p>и умножить матрицу на текущую матрицу стека</p>
-<pre class="prettyprint"><code>// матрица для конвертации из пикселей в пространство отсечения
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// матрица для конвертации из пикселей в пространство отсечения
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 +// эта матрица сместит начало координат в положение,
@@ -338,7 +338,7 @@ matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 отрисуем изображение в 0,0, то изображение отрисуется в центре canvas.</p>
 <p>Возьмём <a href="webgl-2d-drawimage.html">наш предыдущий пример</a> и нарисуем
 одно изображение.</p>
-<pre class="prettyprint"><code>var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
 
 function draw(time) {
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -362,11 +362,11 @@ function draw(time) {
 </div>
 
 </p>
-<p>Как вы видите, несмотря на передачу <code>0, 0</code> в функцию <code>drawImage</code>,
+<p>Как вы видите, несмотря на передачу <code class="notranslate" translate="no">0, 0</code> в функцию <code class="notranslate" translate="no">drawImage</code>,
 изображение отрисовывается и вращается вокруг центра canvas, так как
-мы использовали <code>matrixStack.translate</code> для смещения начала координат.</p>
+мы использовали <code class="notranslate" translate="no">matrixStack.translate</code> для смещения начала координат.</p>
 <p>Сместим центр вращения в центр изображения.</p>
-<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 +matrixStack.translate(textureInfo.width / -2, textureInfo.height / -2);
 </code></pre><p>И теперь вращение происходит вокруг центра изображения в центре canvas.</p>
@@ -377,7 +377,7 @@ matrixStack.rotateZ(time);
 
 </p>
 <p>Добавим ещё таких же изображений в углах, каждое со своим вращением.</p>
-<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 
 +matrixStack.save();
@@ -471,27 +471,27 @@ matrixStack.rotateZ(time);
 </div>
 
 </p>
-<p>Можно сказать, различные функции стека матриц, такие как <code>translate</code>,
-<code>rotateZ</code> и <code>scale</code>, смещают начало координат, в то время как установка
+<p>Можно сказать, различные функции стека матриц, такие как <code class="notranslate" translate="no">translate</code>,
+<code class="notranslate" translate="no">rotateZ</code> и <code class="notranslate" translate="no">scale</code>, смещают начало координат, в то время как установка
 центра поворота - это <em>место, куда нужно сместить начало координат,
 чтобы при вызове drawImage определённая часть изображения была бы
 <strong>в</strong> предыдущем центре координат</em>.</p>
 <p>Другими словами, если canvas имеет размер 400x300, то мы вызываем
-<code>matrixStack.translate(220, 150)</code>. В этом случае начало координат
+<code class="notranslate" translate="no">matrixStack.translate(220, 150)</code>. В этом случае начало координат
 будет находиться в точке 220,150, и вся отрисовка будет происходить
-относительно этой точки. Если мы вызовем <code>drawImage</code> в координатах
-<code>0, 0</code>, то изображение отрисуется со смещением.</p>
+относительно этой точки. Если мы вызовем <code class="notranslate" translate="no">drawImage</code> в координатах
+<code class="notranslate" translate="no">0, 0</code>, то изображение отрисуется со смещением.</p>
 <p><img class="webgl_center" width="400" src="../resources/matrixstack-before.svg" /></p>
 <p>Скажем, нам нужно, чтобы центр поворота был в нижнем правом углу. В этом
-случае куда нам нужно сместить начало координат, чтобы при вызове <code>drawImage</code>
+случае куда нам нужно сместить начало координат, чтобы при вызове <code class="notranslate" translate="no">drawImage</code>
 нужная нам точка центра поворота оказалась в текущем начале координат? Для
-нижнего правого угла текстуры это будет <code>-textureWidth, -textureHeight</code>,
-поэтому сейчас при вызове <code>drawImage</code> с параметром <code>0,0</code> нижний правый угол
+нижнего правого угла текстуры это будет <code class="notranslate" translate="no">-textureWidth, -textureHeight</code>,
+поэтому сейчас при вызове <code class="notranslate" translate="no">drawImage</code> с параметром <code class="notranslate" translate="no">0,0</code> нижний правый угол
 текстуры окажется в предыдущем начале координат.</p>
 <p><img class="webgl_center" width="400" src="../resources/matrixstack-after.svg" /></p>
 <p>Что бы ни происходило до этого со стеком матриц, это не важно. Мы выполняли
 перемещение, масштабирование и поворот начала координат, но прямо перед
-вызовом <code>drawImage</code> не имеет значения, где находится центр координат. Это
+вызовом <code class="notranslate" translate="no">drawImage</code> не имеет значения, где находится центр координат. Это
 уже новый центр координат, поэтому нам просто нужно определить, куда сместить
 центр относительно места отрисовки текстуры, как-будто до этого со стеком
 ничего не было.</p>

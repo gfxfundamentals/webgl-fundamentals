@@ -214,9 +214,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>This is a list of anti patterns for WebGL. Anti patterns are things you should avoid doing</p>
 <ol>
-<li><p><a id="viewportwidth"></a>Putting <code>viewportWidth</code> and <code>viewportHeight</code> on the <code>WebGLRenderingContext</code></p>
+<li><p><a id="viewportwidth"></a>Putting <code class="notranslate" translate="no">viewportWidth</code> and <code class="notranslate" translate="no">viewportHeight</code> on the <code class="notranslate" translate="no">WebGLRenderingContext</code></p>
 <p>Some code adds properties for their viewport width and height
-and sticks them on the <code>WebGLRenderingContext</code> something like this</p>
+and sticks them on the <code class="notranslate" translate="no">WebGLRenderingContext</code> something like this</p>
 <pre class="prettyprint">
 gl = canvas.getContext("webgl");
 gl.viewportWidth = canvas.width;    // BAD!!!
@@ -231,10 +231,10 @@ gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 <p><strong>Why it&#39;s Bad:</strong></p>
 <p>It&#39;s objectively bad because you now have 2 properties that need to be updated
 anytime you change the size of the canvas. For example if you change the size
-of the canvas when the user resizes the window <code>gl.viewportWidth</code> &amp; <code>gl.viewportHeight</code>
+of the canvas when the user resizes the window <code class="notranslate" translate="no">gl.viewportWidth</code> &amp; <code class="notranslate" translate="no">gl.viewportHeight</code>
 will be wrong unless you set them again.</p>
 <p>It&#39;s subjectively bad because any new WebGL programmer will glance at your code
-and likely think <code>gl.viewportWidth</code> and <code>gl.viewportHeight</code> are part of the WebGL
+and likely think <code class="notranslate" translate="no">gl.viewportWidth</code> and <code class="notranslate" translate="no">gl.viewportHeight</code> are part of the WebGL
 spec, confusing them for months.</p>
 <p><strong>What to do instead:</strong></p>
 <p>Why make more work for yourself? The WebGL context has its width and height
@@ -245,11 +245,11 @@ directly on it. Just use that.</p>
 gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 </pre>
 
-<p>Even better it will handle extreme cases whereas using <code>gl.canvas.width</code>
-and <code>gl.canvas.height</code> will not. <a href="#drawingbuffer">As for why see here</a>.</p>
+<p>Even better it will handle extreme cases whereas using <code class="notranslate" translate="no">gl.canvas.width</code>
+and <code class="notranslate" translate="no">gl.canvas.height</code> will not. <a href="#drawingbuffer">As for why see here</a>.</p>
 </li>
-<li><p><a id="canvaswidth"></a>Using <code>canvas.width</code> and <code>canvas.height</code> for aspect ratio</p>
-<p>Often code uses <code>canvas.width</code> and <code>canvas.height</code> for aspect ratio like this</p>
+<li><p><a id="canvaswidth"></a>Using <code class="notranslate" translate="no">canvas.width</code> and <code class="notranslate" translate="no">canvas.height</code> for aspect ratio</p>
+<p>Often code uses <code class="notranslate" translate="no">canvas.width</code> and <code class="notranslate" translate="no">canvas.height</code> for aspect ratio like this</p>
 <pre class="prettyprint">
 var aspect = canvas.width / canvas.height;
 perspective(fieldOfView, aspect, zNear, zFar);
@@ -259,7 +259,7 @@ perspective(fieldOfView, aspect, zNear, zFar);
 <p>The width and height of the canvas have nothing to do with the size the canvas is
 displayed. CSS controls the size the canvas is displayed.</p>
 <p><strong>What to do instead:</strong></p>
-<p>Use <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Those values tell you what
+<p>Use <code class="notranslate" translate="no">canvas.clientWidth</code> and <code class="notranslate" translate="no">canvas.clientHeight</code>. Those values tell you what
 size your canvas is actually being displayed on the screen. Using those values
 you&#39;ll always get the correct aspect ratio regardless of your CSS settings.</p>
 <pre class="prettyprint">
@@ -267,7 +267,7 @@ var aspect = canvas.clientWidth / canvas.clientHeight;
 perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 </pre>
 
-<p>Here are examples of a canvas that&#39;s the same size (<code>width=&quot;400&quot; height=&quot;300&quot;</code>)
+<p>Here are examples of a canvas that&#39;s the same size (<code class="notranslate" translate="no">width=&quot;400&quot; height=&quot;300&quot;</code>)
 but using CSS we&#39;ve told the browser to display the canvas a different size.
 Notice the samples all display the &#39;F&#39; in the correct aspect ratio.</p>
 <p><div class="webgl_diagram_container">
@@ -281,7 +281,7 @@ Notice the samples all display the &#39;F&#39; in the correct aspect ratio.</p>
 </div>
 
 </p>
-<p>If we had used <code>canvas.width</code> and <code>canvas.height</code> that would not be true.</p>
+<p>If we had used <code class="notranslate" translate="no">canvas.width</code> and <code class="notranslate" translate="no">canvas.height</code> that would not be true.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 150px; height: 200px;" src="/webgl/lessons/../webgl-canvas-width-height.html"></iframe>
 </div>
@@ -294,8 +294,8 @@ Notice the samples all display the &#39;F&#39; in the correct aspect ratio.</p>
 
 </p>
 </li>
-<li><p><a id="innerwidth"></a>Using <code>window.innerWidth</code> and <code>window.innerHeight</code> to compute anything</p>
-<p>Many WebGL programs use <code>window.innerWidth</code> and <code>window.innerHeight</code> in many places.
+<li><p><a id="innerwidth"></a>Using <code class="notranslate" translate="no">window.innerWidth</code> and <code class="notranslate" translate="no">window.innerHeight</code> to compute anything</p>
+<p>Many WebGL programs use <code class="notranslate" translate="no">window.innerWidth</code> and <code class="notranslate" translate="no">window.innerHeight</code> in many places.
 For example:</p>
 <pre class="prettyprint">
 canvas.width = window.innerWidth;                    // BAD!!
@@ -312,7 +312,7 @@ Then you won&#39;t have to go change any code when you copy it to a new project 
 project in a new way.</p>
 <p><strong>What to do instead:</strong></p>
 <p>Instead of fighting the Web platform, use the Web platform as it was designed to be used.
-Use CSS and <code>clientWidth</code> and <code>clientHeight</code>.</p>
+Use CSS and <code class="notranslate" translate="no">clientWidth</code> and <code class="notranslate" translate="no">clientHeight</code>.</p>
 <pre class="prettyprint">
 var width = gl.canvas.clientWidth;
 var height = gl.canvas.clientHeight;
@@ -322,25 +322,25 @@ gl.canvas.height = height;
 </pre>
 
 <p>Here are 9 cases. They all use exactly the same code. Notice that none of them
-reference <code>window.innerWidth</code> nor <code>window.innerHeight</code>.</p>
+reference <code class="notranslate" translate="no">window.innerWidth</code> nor <code class="notranslate" translate="no">window.innerHeight</code>.</p>
 <p><a href="../webgl-same-code-canvas-fullscreen.html" target="_blank">A page with nothing but a canvas using CSS to make it fullscreen</a></p>
 <p><a href="../webgl-same-code-canvas-partscreen.html" target="_blank">A page with a canvas set to using 70% width so there is room for editor controls</a></p>
 <p><a href="../webgl-same-code-canvas-embedded.html" target="_blank">A page with a canvas embedded in a paragraph</a></p>
-<p><a href="../webgl-same-code-canvas-embedded-border-box.html" target="_blank">A page with a canvas embedded in a paragraph using <code>box-sizing: border-box;</code></a></p>
-<p><code>box-sizing: border-box;</code> makes borders and padding take space from the element they&#39;re defined on rather than outside it. In other words, in
+<p><a href="../webgl-same-code-canvas-embedded-border-box.html" target="_blank">A page with a canvas embedded in a paragraph using <code class="notranslate" translate="no">box-sizing: border-box;</code></a></p>
+<p><code class="notranslate" translate="no">box-sizing: border-box;</code> makes borders and padding take space from the element they&#39;re defined on rather than outside it. In other words, in
 normal box-sizing mode a 400x300 pixel element with 15 pixel border has a 400x300 pixel content space surrounded by a 15 pixel border making its total size
 430x330 pixels. In box-sizing: border-box mode the border goes on the inside so that same element would stay 400x300 pixels, the content would end up
-being 370x270. This is yet another reason why using <code>clientWidth</code> and <code>clientHeight</code> is so important. If you set the border to say <code>1em</code> you&#39;d have no
+being 370x270. This is yet another reason why using <code class="notranslate" translate="no">clientWidth</code> and <code class="notranslate" translate="no">clientHeight</code> is so important. If you set the border to say <code class="notranslate" translate="no">1em</code> you&#39;d have no
 way of knowing what size your canvas will turn out. It would be different with different fonts on different machines or different browsers.</p>
 <p><a href="../webgl-same-code-container-fullscreen.html" target="_blank">A page with nothing but a container using CSS to make it fullscreen into which the code will insert a canvas</a></p>
 <p><a href="../webgl-same-code-container-partscreen.html" target="_blank">A page with a container set to using 70% width so there is room for editor controls into which the code will insert a canvas</a></p>
 <p><a href="../webgl-same-code-container-embedded.html" target="_blank">A page with a container embedded in a paragraph into which the code will insert a canvas</a></p>
-<p><a href="../webgl-same-code-container-embedded-border-box.html" target="_blank">A page with a container embedded in a paragraph using <code>box-sizing: border-box;</code> into which the code will insert a canvas</a></p>
+<p><a href="../webgl-same-code-container-embedded-border-box.html" target="_blank">A page with a container embedded in a paragraph using <code class="notranslate" translate="no">box-sizing: border-box;</code> into which the code will insert a canvas</a></p>
 <p><a href="../webgl-same-code-body-only-fullscreen.html" target="_blank">A page with no elements with CSS setup to make it fullscreen into which the code will insert a canvas</a></p>
 <p>Again, the point is, if you embrace the web and write your code using the techniques above you won&#39;t have to change any code when you run into different use cases.</p>
 </li>
-<li><p><a id="resize"></a>Using the <code>&#39;resize&#39;</code> event to change the size of your canvas.</p>
-<p>Some apps check for the window <code>&#39;resize&#39;</code> event like this to resize their canvas.</p>
+<li><p><a id="resize"></a>Using the <code class="notranslate" translate="no">&#39;resize&#39;</code> event to change the size of your canvas.</p>
+<p>Some apps check for the window <code class="notranslate" translate="no">&#39;resize&#39;</code> event like this to resize their canvas.</p>
 <pre class="prettyprint">
 window.addEventListener('resize', resizeTheCanvas);
 </pre>
@@ -352,11 +352,11 @@ window.onresize = resizeTheCanvas;
 
 <p><strong>Why it&#39;s Bad:</strong></p>
 <p>It&#39;s not bad per se, rather, for <em>most</em> WebGL programs it fits less use cases.
-Specifically <code>&#39;resize&#39;</code> only works when the window is resized. It doesn&#39;t work
+Specifically <code class="notranslate" translate="no">&#39;resize&#39;</code> only works when the window is resized. It doesn&#39;t work
 if the canvas is resized for some other reason. For example let&#39;s say you&#39;re making
 a 3D editor. You have your canvas on the left and your settings on the right. You&#39;ve
 made it so there&#39;s a draggable bar separating the 2 parts and you can drag that bar
-to make the settings area larger or smaller. In this case you won&#39;t get any <code>&#39;resize&#39;</code>
+to make the settings area larger or smaller. In this case you won&#39;t get any <code class="notranslate" translate="no">&#39;resize&#39;</code>
 events. Similarly if you&#39;ve got a page where other content gets added or removed and
 the canvas changes size as the browser re-lays out the page you won&#39;t get a resize
 event.</p>
@@ -421,14 +421,14 @@ function checkRender() {
 checkRender();
 </pre>
 
-<p>This would only draw if the canvas has been resized or if <code>needToRender</code> is true.
+<p>This would only draw if the canvas has been resized or if <code class="notranslate" translate="no">needToRender</code> is true.
 This would handle the resize case for apps that don&#39;t render the scene every frame.
-Just set <code>needToRender</code> any time you&#39;ve changed something in the scene and you want
+Just set <code class="notranslate" translate="no">needToRender</code> any time you&#39;ve changed something in the scene and you want
 the scene to be rendered incorporating your changes.</p>
 </li>
-<li><p><a id="properties"></a>Adding properties to <code>WebGLObject</code>s</p>
-<p><code>WebGLObject</code>s are the various types of resources in WebGL like a <code>WebGLBuffer</code>
-or <code>WebGLTexture</code>. Some apps add properties to those objects. For example code like this:</p>
+<li><p><a id="properties"></a>Adding properties to <code class="notranslate" translate="no">WebGLObject</code>s</p>
+<p><code class="notranslate" translate="no">WebGLObject</code>s are the various types of resources in WebGL like a <code class="notranslate" translate="no">WebGLBuffer</code>
+or <code class="notranslate" translate="no">WebGLTexture</code>. Some apps add properties to those objects. For example code like this:</p>
 <pre class="prettyprint">
 var buffer = gl.createBuffer();
 buffer.itemSize = 3;        // BAD!!
@@ -442,10 +442,10 @@ program.u_matrixLoc = gl.getUniformLocation(program, "u_matrix");  // BAD!!
 <p><strong>Why it&#39;s Bad:</strong></p>
 <p>The reason this is bad is that WebGL can &quot;lose the context&quot;. This can happen for any
 reason but the most common reason is if the browser decides too many GPU resources are being used
-it might intentionally lose the context on some <code>WebGLRenderingContext</code>s to free up space.
+it might intentionally lose the context on some <code class="notranslate" translate="no">WebGLRenderingContext</code>s to free up space.
 WebGL programs that want to always work have to handle this. Google Maps handles this for example.</p>
 <p>The problem with the code above is that when the context is lost the WebGL creation functions like
-<code>gl.createBuffer()</code> above will return <code>null</code>. That effectively makes the code this</p>
+<code class="notranslate" translate="no">gl.createBuffer()</code> above will return <code class="notranslate" translate="no">null</code>. That effectively makes the code this</p>
 <pre class="prettyprint">
 var buffer = null;
 buffer.itemSize = 3;        // ERROR!
@@ -461,7 +461,7 @@ TypeError: Cannot set property 'itemSize' of null
 to write code that will have to be fixed later if the developers ever decide to update their
 app to handle context lost events.</p>
 <p><strong>What to do instead:</strong></p>
-<p>If you want to keep <code>WebGLObjects</code> and some info about them together one way would be
+<p>If you want to keep <code class="notranslate" translate="no">WebGLObjects</code> and some info about them together one way would be
 to use JavaScript objects. For example:</p>
 <pre class="prettyprint">
 var bufferInfo = {
@@ -491,8 +491,8 @@ If it was designed for 2560x1600 screens it might have a limit of 4096.
 </p><p>
 That seems reasonable but what happens if you have multiple monitors? Let's say I have a GPU with a limit
 of 2048 but I have two 1920x1080 monitors. The user opens a browser window with a WebGL page, they then
-stretch that window across both monitors. Your code tries to set the <code>canvas.width</code> to
-<code>canvas.clientWidth</code> which in this case is 3840. What should happen?
+stretch that window across both monitors. Your code tries to set the <code class="notranslate" translate="no">canvas.width</code> to
+<code class="notranslate" translate="no">canvas.clientWidth</code> which in this case is 3840. What should happen?
 <p>Off the top of my head there are only 3 options</p>
 <ol>
 <li>
@@ -521,7 +521,7 @@ Chrome and Safari, at least as of January 2015, had a hard coded limit on canvas
 Similarly many people have started using WebGL with multiple monitors for installation work and have
 been hitting this limit.</p>
 <p>
-So, if you want to handle these cases use <code>gl.drawingBufferWidth</code> and <code>gl.drawingBufferHeight</code> as
+So, if you want to handle these cases use <code class="notranslate" translate="no">gl.drawingBufferWidth</code> and <code class="notranslate" translate="no">gl.drawingBufferHeight</code> as
 shown in #1 above. For most apps if you follow the best practices above things will just work. Be aware
 though if you are doing calculations that need to know the actual size of the drawingbuffer you need
 to take that into account. Examples off the top of my head, picking, in other words converting from

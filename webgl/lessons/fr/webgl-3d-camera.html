@@ -214,7 +214,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>Cet article est la suite d&#39;une série de posts consacrés à WebGL. Le premier <a href="webgl-fundamentals.html">présentait les bases</a> et le précédent parlait des <a href="webgl-3d-perspective.html">projection perspective</a>.
 Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abord.</p>
-<p>Dans le dernier article on devait déplacer le F devant le frustum parce que la fonction <code>projeterPerspective</code> plaçait l&#39;observateur à l&#39;origine (0,0,0). On devait faire attention à ce que les objets soient plus loin que le plan limite proche <code>zNear</code> et moins loin que le plan limite lointain <code>zFar</code>. </p>
+<p>Dans le dernier article on devait déplacer le F devant le frustum parce que la fonction <code class="notranslate" translate="no">projeterPerspective</code> plaçait l&#39;observateur à l&#39;origine (0,0,0). On devait faire attention à ce que les objets soient plus loin que le plan limite proche <code class="notranslate" translate="no">zNear</code> et moins loin que le plan limite lointain <code class="notranslate" translate="no">zFar</code>. </p>
 <p>Déplacer les objets dans la vue de cette façon n&#39;a pas l&#39;air bien sage n&#39;est-ce pas ? Dans le vrai monde on va plutôt déplacer sa caméra pour filmer un immeuble</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
@@ -290,7 +290,7 @@ Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abo
     matrice = multiplierMatrices(matrice, matriceProjection);
 </pre>
 
-<p>Et voilà ! Une caméra qui tourne autour du cercle de &#39;F&#39;s. Changez le slider <code>cameraAngle</code> pour bouger la caméra sur le cercle.</p>
+<p>Et voilà ! Une caméra qui tourne autour du cercle de &#39;F&#39;s. Changez le slider <code class="notranslate" translate="no">cameraAngle</code> pour bouger la caméra sur le cercle.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
@@ -299,7 +299,7 @@ Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abo
 </p>
 <p>C&#39;est super, mais utiliser des rotations et translations pour positionner une caméra où on veut et la pointer vers ce qu&#39;on veut, ce n&#39;est pas pratique du tout. Par exemple si on voulait que la caméra regarde toujours un des &#39;F&#39;s en particulier, ça nous demanderait un algorithme de fou à coder, et ça changerait dans chaque situation. </p>
 <p>Heureusement on peut faire en sorte qu&#39;une caméra soit positionnée à un endroit et regarde une cible précise. Vous le devinez déjà : grâce à une nouvelle matrice. </p>
-<p>D&#39;abord on doit savoir où se situe la caméra. On va appeler cette position, <code>positionCamera</code>. Ensuite on doit savoir ce que la caméra regarde, la <code>cible</code>. Si on soustrait le vecteur <code>cible</code> du vecteur <code>positionCamera</code> on a un vecteur qui pointe dans la direction de la cible depuis la caméra. Appelons-le <code>axeZ</code>. Puisqu&#39;on sait que la caméra pointe dans la direction -Z on peut soustraire dans l&#39;autre sens <code>positionCamera - cible</code>. On normalise le résultat et on le copie directement dans la partie <code>z</code> de la matrice.</p>
+<p>D&#39;abord on doit savoir où se situe la caméra. On va appeler cette position, <code class="notranslate" translate="no">positionCamera</code>. Ensuite on doit savoir ce que la caméra regarde, la <code class="notranslate" translate="no">cible</code>. Si on soustrait le vecteur <code class="notranslate" translate="no">cible</code> du vecteur <code class="notranslate" translate="no">positionCamera</code> on a un vecteur qui pointe dans la direction de la cible depuis la caméra. Appelons-le <code class="notranslate" translate="no">axeZ</code>. Puisqu&#39;on sait que la caméra pointe dans la direction -Z on peut soustraire dans l&#39;autre sens <code class="notranslate" translate="no">positionCamera - cible</code>. On normalise le résultat et on le copie directement dans la partie <code class="notranslate" translate="no">z</code> de la matrice.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 |    |    |    |    |
@@ -321,23 +321,23 @@ Si vous ne les avez pas lus vous préférez peut-être y jeter un oeil d&#39;abo
 </p>
 <p>Cependant ce n&#39;est pas assez. Un vecteur nous donne un point sur une sphère de rayon 1 mais quelle orientation déduire de ce point ? On doit remplir les autres parties de la matrice. En particulier l&#39;axe X et l&#39;axe Y. On sait qu&#39;en général, ces axes sont tous perpendiculaires entre eux. Et qu&#39;en général on ne pointe pas la caméra à la verticale. Avec ces trois informations, l&#39;axe Z, les autres axes perpendiculaires et l&#39;axe vertical Y (0,1,0), on peut utiliser les &quot;produits vectoriels&quot; pour déduire les axes X et Y de notre matrice.</p>
 <p>Je n&#39;ai aucune idée de ce qu&#39;est un produit vectoriel en maths. Mais je sais qu&#39;avec 2 vecteurs normalisés, le produit vectoriel donne un troisième vecteur perpendiculaire aux deux autres. En d&#39;autres termes, si on a un vecteur qui pointe au sud-est et un qui pointe à la verticale, le produit vectoriel donne une vecteur qui pointe ou bien au sud ouest ou bien au nord est, puisque ces deux possibilités forment des vecteurs perpendiculaires aux deux autres. Suivant l&#39;ordre du calcul, on aura une réponse ou l&#39;autre.</p>
-<p>Dans tous les cas si on calule le produit vectoriel de notre <span class="z-axis"><code>axeZ</code></span> avec
-<span style="color: gray;"><code>vertical</code></span> on aura l&#39;<span class="x-axis">axeX</span> de la caméra.</p>
+<p>Dans tous les cas si on calule le produit vectoriel de notre <span class="z-axis"><code class="notranslate" translate="no">axeZ</code></span> avec
+<span style="color: gray;"><code class="notranslate" translate="no">vertical</code></span> on aura l&#39;<span class="x-axis">axeX</span> de la caméra.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
   <div class="webgl_center">Produit vectoriel de l'<span style='color:gray;'>vertical</span> avec <span class='z-axis'>axeZ</span> = <span class='x-axis'>axeX</span></div>
 </div>
 
 </p>
-<p>Et maintenant qu&#39;on a l&#39;<span class="x-axis"><code>axeX</code></span> on peut faire le produit vectoriel entre l&#39;<span class="z-axis"><code>axeZ</code></span> et l&#39;<span class="x-axis"><code>axeX</code></span>
-qui nous donne l&#39;<span class="y-axis"><code>axeY</code></span> de la caméra. </p>
+<p>Et maintenant qu&#39;on a l&#39;<span class="x-axis"><code class="notranslate" translate="no">axeX</code></span> on peut faire le produit vectoriel entre l&#39;<span class="z-axis"><code class="notranslate" translate="no">axeZ</code></span> et l&#39;<span class="x-axis"><code class="notranslate" translate="no">axeX</code></span>
+qui nous donne l&#39;<span class="y-axis"><code class="notranslate" translate="no">axeY</code></span> de la caméra. </p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
   <div class="webgl_center"><span class='z-axis'>axeZ</span> cross <span class='x-axis'>axeX</span> = <span class='y-axis'>axeY</span></div>
 </div>
 
 </p>
-<p>Maintenant tout ce qu&#39;il nous reste à faire c&#39;est de mettre ces axes dans une matrice. Cette matrice pourra orienter un objet qui pointe la <code>cible</code> depuis <code>positionCamera</code>. Il reste donc à ajouter la <code>position</code></p>
+<p>Maintenant tout ce qu&#39;il nous reste à faire c&#39;est de mettre ces axes dans une matrice. Cette matrice pourra orienter un objet qui pointe la <code class="notranslate" translate="no">cible</code> depuis <code class="notranslate" translate="no">positionCamera</code>. Il reste donc à ajouter la <code class="notranslate" translate="no">position</code></p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 | <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">axe x</span>
@@ -439,8 +439,8 @@ function regarderVers(positionCamera, cible, vertical) {
 <p>Découvrons ensuite <a href="webgl-animation.html">l&#39;animation</a>.</p>
 <div class="webgl_bottombar">
 <h3>Bonnes pratiques de la fonction regarderVers</h3>
-<p>La plupart des librairies 3D ont une fonction regarderVers ou en anglais <code>lookAt</code>. Elle est souvent utilisée pour faire une "matriceVue" ou "viewMatrix" et non une matrice caméra. En d'autres termes, elles produisent une matrice qui déplace tout devant la caméra plutôt qu'une caméra qui déplace la caméra elle-même.</p>
-<p>Je trouve ça moins efficace. Comme mentionné plus tôt, une fonction regarderVers a d'autres cas. C'est facile de faire une inversion de matrice quand on veut une matrice vue mais si on utilise <code>regarderVers</code> pour qu'un personnage en suive un autre ou qu'une tourelle suive sa cible c'est plus simple que regarderVers retourne une matrice qui positionne et oriente un objet dans les coordonnées globales à mon avis.
+<p>La plupart des librairies 3D ont une fonction regarderVers ou en anglais <code class="notranslate" translate="no">lookAt</code>. Elle est souvent utilisée pour faire une "matriceVue" ou "viewMatrix" et non une matrice caméra. En d'autres termes, elles produisent une matrice qui déplace tout devant la caméra plutôt qu'une caméra qui déplace la caméra elle-même.</p>
+<p>Je trouve ça moins efficace. Comme mentionné plus tôt, une fonction regarderVers a d'autres cas. C'est facile de faire une inversion de matrice quand on veut une matrice vue mais si on utilise <code class="notranslate" translate="no">regarderVers</code> pour qu'un personnage en suive un autre ou qu'une tourelle suive sa cible c'est plus simple que regarderVers retourne une matrice qui positionne et oriente un objet dans les coordonnées globales à mon avis.
 </p>
 <div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at-heads.html"></iframe>

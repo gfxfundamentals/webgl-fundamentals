@@ -250,7 +250,7 @@ the direction of each ray of light is above the dot limit then we do the lightin
 <p>To say this another way, let&#39;s say the limit is 20 degrees. We can convert
 that to radians and from that to a value for -1 to 1 by taking the cosine. Let&#39;s call that dot space.
 In other words here&#39;s a small table for limit values</p>
-<pre class="prettyprint"><code>          limits in
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">          limits in
  degrees | radians | dot space
  --------+---------+----------
     0    |   0.0   |    1.0
@@ -260,14 +260,14 @@ In other words here&#39;s a small table for limit values</p>
     90   |   1.57  |    0.0
    180   |   3.14  |   -1.0
 </code></pre><p>Then we can the just check</p>
-<pre class="prettyprint"><code>dotFromDirection = dot(surfaceToLight, -lightDirection)
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">dotFromDirection = dot(surfaceToLight, -lightDirection)
 if (dotFromDirection &gt;= limitInDotSpace) {
    // do the lighting
 }
 </code></pre><p>Let&#39;s do that</p>
 <p>First let&#39;s modify our fragment shader from
 <a href="webgl-3d-lighting-point.html">the last article</a>.</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec3 v_normal;
@@ -313,7 +313,7 @@ void main() {
 }
 </code></pre><p>Of course we need to look up the locations of the uniforms we
 just added.</p>
-<pre class="prettyprint"><code>  var lightDirection = [?, ?, ?];
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  var lightDirection = [?, ?, ?];
   var limit = degToRad(20);
 
   ...
@@ -321,7 +321,7 @@ just added.</p>
   var lightDirectionLocation = gl.getUniformLocation(program, &quot;u_lightDirection&quot;);
   var limitLocation = gl.getUniformLocation(program, &quot;u_limit&quot;);
 </code></pre><p>and we need to set them</p>
-<pre class="prettyprint"><code>    gl.uniform3fv(lightDirectionLocation, lightDirection);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    gl.uniform3fv(lightDirectionLocation, lightDirection);
     gl.uniform1f(limitLocation, Math.cos(limit));
 </code></pre><p>And here it is</p>
 <p><div class="webgl_example_container">
@@ -330,14 +330,14 @@ just added.</p>
 </div>
 
 </p>
-<p>A few things to note: One is we&#39;re negating <code>u_lightDirection</code> above.
+<p>A few things to note: One is we&#39;re negating <code class="notranslate" translate="no">u_lightDirection</code> above.
 That&#39;s a <a href="https://en.wiktionary.org/wiki/six_of_one,_half_a_dozen_of_the_other"><em>six of one, half dozen of another</em></a>
 type of thing. We want the 2 directions we&#39;re comparing to point in
 the same direction when they match. That means we need to compare
 the surfaceToLightDirection to the opposite of the spotlight direction.
 We could do this in many different ways. We could pass the negative
 direction when setting the uniform. This would be my 1st choice
-but I thought it would be less confusing to call the uniform <code>u_lightDirection</code> instead of <code>u_reverseLightDirection</code> or <code>u_negativeLightDirection</code></p>
+but I thought it would be less confusing to call the uniform <code class="notranslate" translate="no">u_lightDirection</code> instead of <code class="notranslate" translate="no">u_reverseLightDirection</code> or <code class="notranslate" translate="no">u_negativeLightDirection</code></p>
 <p>Another thing, and maybe this is just a personal preference, I don&#39;t
 like to use conditionals in shaders if possible. I think the reason
 is it used to be that shaders didn&#39;t actually have conditionals. If you added
@@ -348,17 +348,17 @@ could make your code explode into combinatorial expansions. I&#39;m not
 sure that&#39;s true anymore but let&#39;s get rid of the conditionals anyway
 just to show some techniques. You can decide yourself whether or not
 to use them.</p>
-<p>There is a GLSL function called <code>step</code>. It takes 2 values and if the
+<p>There is a GLSL function called <code class="notranslate" translate="no">step</code>. It takes 2 values and if the
 second value is greater than or equal the first it returns 1.0. Otherwise it returns 0. You could write it like this in JavaScript</p>
-<pre class="prettyprint"><code>function step(a, b) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function step(a, b) {
    if (b &gt;= a) {
        return 1;
    } else {
        return 0;
    }
 }
-</code></pre><p>Let&#39;s use <code>step</code> to get rid of the conditions</p>
-<pre class="prettyprint"><code>  float dotFromDirection = dot(surfaceToLightDirection,
+</code></pre><p>Let&#39;s use <code class="notranslate" translate="no">step</code> to get rid of the conditions</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  float dotFromDirection = dot(surfaceToLightDirection,
                                -u_lightDirection);
   // inLight will be 1 if we&#39;re inside the spotlight and 0 if not
   float inLight = step(u_limit, dotFromDirection);
@@ -379,7 +379,7 @@ If we&#39;re inside the inner limit then use 1.0. If we&#39;re outside the outer
 limit then use 0.0. If we&#39;re between the inner limit and the outer limit
 then lerp between 1.0 and 0.0.</p>
 <p>Here&#39;s one way we could do this</p>
-<pre class="prettyprint"><code>-uniform float u_limit;          // in dot space
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-uniform float u_limit;          // in dot space
 +uniform float u_innerLimit;     // in dot space
 +uniform float u_outerLimit;     // in dot space
 
@@ -400,18 +400,18 @@ then lerp between 1.0 and 0.0.</p>
 
 </p>
 <p>Now we&#39;re getting something that looks more like a spotlight!</p>
-<p>One thing to be aware of is if <code>u_innerLimit</code> is equal to <code>u_outerLimit</code>
-then <code>limitRange</code> will be 0.0. We divide by <code>limitRange</code> and dividing by
+<p>One thing to be aware of is if <code class="notranslate" translate="no">u_innerLimit</code> is equal to <code class="notranslate" translate="no">u_outerLimit</code>
+then <code class="notranslate" translate="no">limitRange</code> will be 0.0. We divide by <code class="notranslate" translate="no">limitRange</code> and dividing by
 zero is bad/undefined. There&#39;s nothing to do in the shader here we just
-need to make sure in our JavaScript that <code>u_innerLimit</code> is never equal to
-<code>u_outerLimit</code>. (note: the example code does not do this).</p>
+need to make sure in our JavaScript that <code class="notranslate" translate="no">u_innerLimit</code> is never equal to
+<code class="notranslate" translate="no">u_outerLimit</code>. (note: the example code does not do this).</p>
 <p>GLSL also has a function we could use to slightly simplify this. It&#39;s
-called <code>smoothstep</code> and like <code>step</code> it returns a value from 0 to 1 but
+called <code class="notranslate" translate="no">smoothstep</code> and like <code class="notranslate" translate="no">step</code> it returns a value from 0 to 1 but
 it takes both an lower and upper bound and lerps between 0 and 1 between
 those bounds.</p>
-<pre class="prettyprint"><code> smoothstep(lowerBound, upperBound, value)
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> smoothstep(lowerBound, upperBound, value)
 </code></pre><p>Let&#39;s do that</p>
-<pre class="prettyprint"><code>  float dotFromDirection = dot(surfaceToLightDirection,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  float dotFromDirection = dot(surfaceToLightDirection,
                                -u_lightDirection);
 -  float limitRange = u_innerLimit - u_outerLimit;
 -  float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.0, 1.0);
@@ -425,80 +425,80 @@ those bounds.</p>
 </div>
 
 </p>
-<p>The difference is <code>smoothstep</code> uses a Hermite interpolation instead of a
-linear interpolation. That means between <code>lowerBound</code> and <code>upperBound</code>
+<p>The difference is <code class="notranslate" translate="no">smoothstep</code> uses a Hermite interpolation instead of a
+linear interpolation. That means between <code class="notranslate" translate="no">lowerBound</code> and <code class="notranslate" translate="no">upperBound</code>
 it interpolates like the image below on the right whereas a linear interpolation is like the image on the left.</p>
 <p><img class="webgl_center invertdark" src="resources/linear-vs-hermite.png" /></p>
 <p>It&#39;s up to you if you think the difference matters.</p>
-<p>One other thing to be aware is the <code>smoothstep</code> function has undefined
-results if the <code>lowerBound</code> is greater than or equal to <code>upperBound</code>. Having
+<p>One other thing to be aware is the <code class="notranslate" translate="no">smoothstep</code> function has undefined
+results if the <code class="notranslate" translate="no">lowerBound</code> is greater than or equal to <code class="notranslate" translate="no">upperBound</code>. Having
 them be equal is the same issue we had above. The added issue of not being
-defined if <code>lowerBound</code> is greater than <code>upperBound</code> is new but for the
+defined if <code class="notranslate" translate="no">lowerBound</code> is greater than <code class="notranslate" translate="no">upperBound</code> is new but for the
 purpose of a spotlight that should never be true.</p>
 <div class="webgl_bottombar">
 <h3>Be aware of undefined behavior in GLSL</h3>
 <p>
 Several functions in GLSL are undefined for certain values.
-Trying to raise a negative number to a power with <code>pow</code> is one
+Trying to raise a negative number to a power with <code class="notranslate" translate="no">pow</code> is one
 example since the result would be an imaginary number. We went
-over another example above with <code>smoothstep</code>.</p>
+over another example above with <code class="notranslate" translate="no">smoothstep</code>.</p>
 <p>
 You need to try to be aware of these or else your shaders will
 get different results on different machines. <a href="https://www.khronos.org/files/opengles_shading_language.pdf">The spec, in section
 8</a> lists all the built in functions, what they do, and if there is
 any undefined behavior.</p>
-<p>Here's a list of undefined behaviors. Note <code>genType</code> means <code>float</code>, <code>vec2</code>, <code>vec3</code>, or <code>vec4</code>.</p>
-  <pre class="prettyprint"><code>genType asin (genType x)</code></pre><p>Arc sine. Returns an angle whose sine is x. The range
+<p>Here's a list of undefined behaviors. Note <code class="notranslate" translate="no">genType</code> means <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, or <code class="notranslate" translate="no">vec4</code>.</p>
+  <pre class="prettyprint"><code class="notranslate" translate="no">genType asin (genType x)</code></pre><p>Arc sine. Returns an angle whose sine is x. The range
 of values returned by this function is [−π/2, π/2]
 Results are undefined if ∣x∣ > 1.</p>
 
 
-<pre class="prettyprint"><code>genType acos (genType x)</code></pre><p>Arc cosine. Returns an angle whose cosine is x. The
+<pre class="prettyprint"><code class="notranslate" translate="no">genType acos (genType x)</code></pre><p>Arc cosine. Returns an angle whose cosine is x. The
 range of values returned by this function is [0, π].
 Results are undefined if ∣x∣ > 1.</p>
 
 
 
-<pre class="prettyprint"><code>genType atan (genType y, genType x)</code></pre><p>Arc tangent. Returns an angle whose tangent is y/x. The
+<pre class="prettyprint"><code class="notranslate" translate="no">genType atan (genType y, genType x)</code></pre><p>Arc tangent. Returns an angle whose tangent is y/x. The
 signs of x and y are used to determine what quadrant the
 angle is in. The range of values returned by this
 function is [−π,π]. Results are undefined if x and y
 are both 0.</p>
 
 
-<pre class="prettyprint"><code>genType pow (genType x, genType y)</code></pre><p>Returns x raised to the y power, i.e., x<sup>y</sup>.
+<pre class="prettyprint"><code class="notranslate" translate="no">genType pow (genType x, genType y)</code></pre><p>Returns x raised to the y power, i.e., x<sup>y</sup>.
 Results are undefined if x < 0.
 Results are undefined if x = 0 and y <= 0.</p>
 
 
-<pre class="prettyprint"><code>genType log (genType x)</code></pre><p>Returns the natural logarithm of x, i.e., returns the value
+<pre class="prettyprint"><code class="notranslate" translate="no">genType log (genType x)</code></pre><p>Returns the natural logarithm of x, i.e., returns the value
 y which satisfies the equation x = e<sup>y</sup>.
 Results are undefined if x <= 0.</p>
 
 
-<pre class="prettyprint"><code>genType log2 (genType x)</code></pre><p>Returns the base 2 logarithm of x, i.e., returns the value
+<pre class="prettyprint"><code class="notranslate" translate="no">genType log2 (genType x)</code></pre><p>Returns the base 2 logarithm of x, i.e., returns the value
 y which satisfies the equation x=2<sup>y</sup>.
 Results are undefined if x <= 0.</p>
 
 
 
-<pre class="prettyprint"><code>genType sqrt (genType x)</code></pre><p>Returns √x .
+<pre class="prettyprint"><code class="notranslate" translate="no">genType sqrt (genType x)</code></pre><p>Returns √x .
 Results are undefined if x < 0.</p>
 
 
-<pre class="prettyprint"><code>genType inversesqrt (genType x)</code></pre><p>
+<pre class="prettyprint"><code class="notranslate" translate="no">genType inversesqrt (genType x)</code></pre><p>
 Returns 1/√x.
 Results are undefined if x <= 0.</p>
 
 
-<pre class="prettyprint"><code>genType clamp (genType x, genType minVal, genType maxVal)
+<pre class="prettyprint"><code class="notranslate" translate="no">genType clamp (genType x, genType minVal, genType maxVal)
 genType clamp (genType x, float minVal, float maxVal)</code></pre><p>
 Returns min (max (x, minVal), maxVal).
 Results are undefined if minVal > maxVal</p>
 
 
 
-<pre class="prettyprint"><code>genType smoothstep (genType edge0, genType edge1, genType x)
+<pre class="prettyprint"><code class="notranslate" translate="no">genType smoothstep (genType edge0, genType edge1, genType x)
 genType smoothstep (float edge0, float edge1, genType x)</code></pre><p>
 Returns 0.0 if x <= edge0 and 1.0 if x >= edge1 and
 performs smooth Hermite interpolation between 0 and 1

@@ -217,8 +217,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <a href="webgl-3d-perspective.html">рассмотрели перспективу в 3D</a>. Если вы их ещё
 не читали, рекомендую ознакомиться сначала с ними.</p>
 <p>В последней статье нам пришлось сдвинуть F в переднюю часть фрустума, потому
-что именно там её ожидает функция <code>m4.perspective</code>, а объекты во фрустуме
-находятся от <code>-zNear</code> до <code>-zFar</code> впереди.</p>
+что именно там её ожидает функция <code class="notranslate" translate="no">m4.perspective</code>, а объекты во фрустуме
+находятся от <code class="notranslate" translate="no">-zNear</code> до <code class="notranslate" translate="no">-zFar</code> впереди.</p>
 <p>Перемещать объекты, чтобы они оказались впереди наблюдателя, кажется
 неправильным, не так ли? В реальной жизни вы обычно перемещаете камеру,
 чтобы снять здание.</p>
@@ -264,7 +264,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Сделаем 3D-сцену с кругом из букв &#39;F&#39;, как показано на анимациях выше.</p>
 <p>Так как мы отрисовываем 5 объектов, и все они используют одну и
 ту же проекционную матрицу, мы инициируем её за пределами цикла.</p>
-<pre class="prettyprint"><code>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">
 // Задаём проекционную матрицу
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
@@ -281,7 +281,7 @@ var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 </div>
 
 </p>
-<pre class="prettyprint"><code>var numFs = 5;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var numFs = 5;
 var radius = 200;
 
 // Вычисление матрицы камеры
@@ -290,20 +290,20 @@ cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 </code></pre><p>Далее вычисляем &quot;матрицу вида&quot; на основе матрицы камеры. &quot;Матрица вида&quot; -
 это матрица, которая перемещает всё в противоположном камере направлении,
 таким образом всё вращается относительно камеры, словно она находится в
-начале координат (0,0,0). Это возможно благодаря функции <code>inverse</code>, которая
+начале координат (0,0,0). Это возможно благодаря функции <code class="notranslate" translate="no">inverse</code>, которая
 вычисляет обратную матрицу (матрица, которая делает всё с точностью наоборот
 по сравнению с исходной матрицей). Другими словами, если исходная матрица
 переносила бы камеру в определённое положение и ориентацию, то обратная
 матрица вращает всё кроме камеры, словно камера находится в начале координат.</p>
-<pre class="prettyprint"><code>// Создаём обратную матрицу камеры
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Создаём обратную матрицу камеры
 var viewMatrix = m4.inverse(cameraMatrix);
 </code></pre><p>Теперь объединим матрицу вида и проекционную матрицу в одну.</p>
-<pre class="prettyprint"><code>// Получаем видо-проекционную матрицу
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Получаем видо-проекционную матрицу
 var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </code></pre><p>Наконец, отрисовываем круг из букв F. Каждая F начинается с
 видо-проекционной матрицы, затем поворачивается и смещается
 на значение радиуса.</p>
-<pre class="prettyprint"><code>for (var ii = 0; ii &lt; numFs; ++ii) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">for (var ii = 0; ii &lt; numFs; ++ii) {
   var angle = ii * Math.PI * 2 / numFs;
   var x = Math.cos(angle) * radius;
   var y = Math.sin(angle) * radius
@@ -322,7 +322,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
   gl.drawArrays(primitiveType, offset, count);
 }
 </code></pre><p>И вуаля! Камера вращается вокруг кольца из букв &#39;F&#39;. Потяните за
-слайдер <code>cameraAngle</code> для вращения камеры.</p>
+слайдер <code class="notranslate" translate="no">cameraAngle</code> для вращения камеры.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
@@ -339,12 +339,12 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 матрицу, которая задаст камере все необходимые параметры. В математике
 матриц это выполняется очень легко.</p>
 <p>Для начала нам нужно определиться, где расположить камеру. Назовём эту
-переменную <code>cameraPosition</code>. Ещё нам нужно знать положение объекта, на
-который смотрит камера. Назовём его <code>target</code>. Если вычесть <code>target</code> из
-<code>cameraPosition</code>, мы получим вектор, указывающий в нужном нам направлении
-от камеры до объекта. Назовём это <code>zAxis</code>. Мы знаем, что камера направлена
-в сторону -Z, поэтому мы можем отнять <code>cameraPosition - target</code>. Затем
-нормализуем результат и копируем его в <code>z</code> матрицы.</p>
+переменную <code class="notranslate" translate="no">cameraPosition</code>. Ещё нам нужно знать положение объекта, на
+который смотрит камера. Назовём его <code class="notranslate" translate="no">target</code>. Если вычесть <code class="notranslate" translate="no">target</code> из
+<code class="notranslate" translate="no">cameraPosition</code>, мы получим вектор, указывающий в нужном нам направлении
+от камеры до объекта. Назовём это <code class="notranslate" translate="no">zAxis</code>. Мы знаем, что камера направлена
+в сторону -Z, поэтому мы можем отнять <code class="notranslate" translate="no">cameraPosition - target</code>. Затем
+нормализуем результат и копируем его в <code class="notranslate" translate="no">z</code> матрицы.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 |    |    |    |    |
@@ -384,8 +384,8 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 на северо-восток, так как эти два вектора перпендикулярны юго-востоку
 и верху. В зависимости от порядка вычисления векторного произведения
 вы получите противоположный ответ.</p>
-<p>Так или иначе при вычислении векторного произведения наших <span class="z-axis"><code>zAxis</code></span>
-и <span style="color: gray;"><code>up</code></span> мы получим <span class="x-axis">xAxis</span>
+<p>Так или иначе при вычислении векторного произведения наших <span class="z-axis"><code class="notranslate" translate="no">zAxis</code></span>
+и <span style="color: gray;"><code class="notranslate" translate="no">up</code></span> мы получим <span class="x-axis">xAxis</span>
 для камеры.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
@@ -393,9 +393,9 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </div>
 
 </p>
-<p>И теперь, когда у нас есть <span class="x-axis"><code>xAxis</code></span>, мы можем умножить
-<span class="z-axis"><code>zAxis</code></span> и <span class="x-axis"><code>xAxis</code></span>,
-что даст нам в итоге <span class="y-axis"><code>yAxis</code></span> камеры.</p>
+<p>И теперь, когда у нас есть <span class="x-axis"><code class="notranslate" translate="no">xAxis</code></span>, мы можем умножить
+<span class="z-axis"><code class="notranslate" translate="no">zAxis</code></span> и <span class="x-axis"><code class="notranslate" translate="no">xAxis</code></span>,
+что даст нам в итоге <span class="y-axis"><code class="notranslate" translate="no">yAxis</code></span> камеры.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
   <div class="webgl_center"><span class='z-axis'>zAxis</span> умножить на <span class='x-axis'>xAxis</span> = <span class='y-axis'>yAxis</span></div>
@@ -403,8 +403,8 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
 </p>
 <p>Теперь нам остаётся объединить 3 оси в матрицу. Это даст нам матрицу,
-которая направляет некий объект от <code>cameraPosition</code> до <code>target</code>. Нам
-осталось лишь добавить <code>position</code>.</p>
+которая направляет некий объект от <code class="notranslate" translate="no">cameraPosition</code> до <code class="notranslate" translate="no">target</code>. Нам
+осталось лишь добавить <code class="notranslate" translate="no">position</code>.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 | <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">ось x</span>
@@ -418,17 +418,17 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </pre></div>
 
 <p>Вот код для вычисления векторного произведения 2 векторов.</p>
-<pre class="prettyprint"><code>function cross(a, b) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function cross(a, b) {
   return [a[1] * b[2] - a[2] * b[1],
           a[2] * b[0] - a[0] * b[2],
           a[0] * b[1] - a[1] * b[0]];
 }
 </code></pre><p>Вот код разницы двух векторов.</p>
-<pre class="prettyprint"><code>function subtractVectors(a, b) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function subtractVectors(a, b) {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 </code></pre><p>Код нормализации вектора (делает нормализованный вектор).</p>
-<pre class="prettyprint"><code>function normalize(v) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function normalize(v) {
   var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   // проверяем, что мы не делим на 0
   if (length &gt; 0.00001) {
@@ -438,7 +438,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
   }
 }
 </code></pre><p>Код для создания матрицы &quot;lookAt&quot; (&quot;смотреть на&quot; - прим.пер.)</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   lookAt: function(cameraPosition, target, up) {
     var zAxis = normalize(
         subtractVectors(cameraPosition, target));
@@ -457,7 +457,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
   }
 </code></pre><p>А вот как мы можем использовать это, чтобы камера указывала на
 определённую &#39;F&#39;, перемещаясь вокруг кольца букв.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
   // Вычисление положения первой буквы F
   var fPosition = [radius, 0, 0];
@@ -496,14 +496,14 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 турель следовала за целью. То есть следование объекта своему пути. Вы
 вычисляете, где находится цель на пути объекта. Затем вычисляете, где
 цель будет на пути через несколько мгновений в будущем. Далее помещаете
-эти два значения в функцию <code>lookAt</code>, и получаете матрицу, которая направляет
+эти два значения в функцию <code class="notranslate" translate="no">lookAt</code>, и получаете матрицу, которая направляет
 объект по заданному пути и направлению.</p>
 <p>Узнайте <a href="webgl-animation.html">больше об анимации в этой статье</a>.</p>
 <div class="webgl_bottombar">
 <h3>Стандарт lookAt</h3>
 <p>
 
-Большинство 3D-библиотек имеют функцию <code>lookAt</code>. Часто она
+Большинство 3D-библиотек имеют функцию <code class="notranslate" translate="no">lookAt</code>. Часто она
 создана, чтобы получать "матрицу вида", а не "матрицу камеры". Другими
 словами, она создаёт матрицу, которая вращает всё впереди камеры, вместо
 того, чтобы оперировать матрицей изменения самой камеры.
@@ -512,10 +512,10 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 <p>
 
 Я нахожу это менее полезным. Как упоминалось выше, функция lookAt имеет
-множество использований. Всегда можно вызвать <code>inverse</code>, когда
-нужна матрица вида, но если вы используете <code>lookAt</code>, чтобы
+множество использований. Всегда можно вызвать <code class="notranslate" translate="no">inverse</code>, когда
+нужна матрица вида, но если вы используете <code class="notranslate" translate="no">lookAt</code>, чтобы
 взгляд одного персонажа следовал за другим персонажем, или чтобы турель
-целилась в свою цель, на мой взгляд гораздо полезней, если <code>lookAt</code>
+целилась в свою цель, на мой взгляд гораздо полезней, если <code class="notranslate" translate="no">lookAt</code>
 возвращает матрицу, которая устанавливает положение и направление объекта
 в мировом пространстве.
 

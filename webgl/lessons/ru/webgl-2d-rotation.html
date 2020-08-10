@@ -238,7 +238,7 @@ Y равен 1, а X равен 0. Справа X равен 1, а Y равен 
 <p>Мы возьмём значения X и Y из любой точки единичной окружности, и умножим на них
 нашу геометрию из <a href="webgl-2d-translation.html">предыдущего примера</a>.</p>
 <p>В шейдере произойдут следующие изменения:</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -254,7 +254,7 @@ void main() {
   // Затем перенос
 *  vec2 position = rotatedPosition + u_translation;
 </code></pre><p>Изменим JavaScript, чтобы можно было передать эти 2 значения.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
 
@@ -290,7 +290,7 @@ void main() {
 
 </p>
 <p>Как это работает? Взглянем на математику.</p>
-<pre class="prettyprint"><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </code></pre><p>Скажем, у нас есть прямоугольник, который нужно перевернуть. Изначально его верхний
 правый угол находится в координатах 3.0, 9.0. Теперь возьмём точку на единичной
@@ -319,19 +319,19 @@ rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 <p>Точки на единичной окружности также известны под названиями синус и
 косинус. Поэтому для любого заданного угла мы можем получить значения
 синуса и косинуса следующим образом:</p>
-<pre class="prettyprint"><code>function printSineAndCosineForAnAngle(angleInDegrees) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function printSineAndCosineForAnAngle(angleInDegrees) {
   var angleInRadians = angleInDegrees * Math.PI / 180;
   var s = Math.sin(angleInRadians);
   var c = Math.cos(angleInRadians);
   console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
 }
 </code></pre><p>Если вы скопируете код и вставите его в консоль JavaScript, а затем введёте
-<code>printSineAndCosignForAngle(30)</code>, то вы увидите <code>s = 0.49 c = 0.87</code>
+<code class="notranslate" translate="no">printSineAndCosignForAngle(30)</code>, то вы увидите <code class="notranslate" translate="no">s = 0.49 c = 0.87</code>
 (я округлил значения).</p>
 <p>Если сложить всё вместе, мы можем поворачивать геометрию на любой заданный угол.
 Просто установите вращению значения синуса и косинуса угла, на который требуется
 выполнить поворот.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var angleInRadians = angleInDegrees * Math.PI / 180;
   rotation[0] = Math.sin(angleInRadians);
   rotation[1] = Math.cos(angleInRadians);
@@ -354,7 +354,7 @@ rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 Как вы знаете, с метрическими величинами работать проще, чем с имперскими величинами. Нужно разделить на 12, чтобы получить футы из дюймов. Для перевода дюймов в ярды нужно разделить на 36. Не знаю как вы, а я не могу делить на 36 в уме. С метрическими величинами всё гораздо проще. Для перевода миллиметров в сантиметры мы делим на 10. Для перевода из миллиметров в метры мы делим на 1000. На 1000 я <strong>могу</strong> разделить в уме.
 </p>
 <p>
-Похожая ситуация в случае с радианами и градусами. С градусами работать сложнее. В окружности 360 градусов и только 2π радиан. Полный круг 2π радиан. Половина круга - 1π радиан. 1/4 круга, т.е. 90 градусов, это 1/2π радиан. Поэтому если вам нужно выполнить поворот на 90 градусов, просто используйте значение <code>Math.PI * 0.5</code>. Для 45 градусов значение радианов будет равно <code>Math.PI * 0.25</code> и т.д.
+Похожая ситуация в случае с радианами и градусами. С градусами работать сложнее. В окружности 360 градусов и только 2π радиан. Полный круг 2π радиан. Половина круга - 1π радиан. 1/4 круга, т.е. 90 градусов, это 1/2π радиан. Поэтому если вам нужно выполнить поворот на 90 градусов, просто используйте значение <code class="notranslate" translate="no">Math.PI * 0.5</code>. Для 45 градусов значение радианов будет равно <code class="notranslate" translate="no">Math.PI * 0.25</code> и т.д.
 </p>
 <p>
 Практически вся математика, связанная с углами, окружностями и поворотами, станет очень простой, если вы будете думать в радианах. Попробуйте. Используйте радианы, а не градусы, за исключением отображения в интерфейсе.

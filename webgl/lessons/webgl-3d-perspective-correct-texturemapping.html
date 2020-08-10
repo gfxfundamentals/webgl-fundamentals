@@ -233,7 +233,7 @@ it will pass us our varyings interpolated between the 3 values.</p>
 <p>Going back to our <a href="webgl-fundamentals.html">first article</a> we drew a triangle in
 clip space, no math. We just passed in some clip space coordinates
 to a simple vertex shader that looked like this</p>
-<pre class="prettyprint"><code>  // an attribute will receive data from a buffer
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // an attribute will receive data from a buffer
   attribute vec4 a_position;
 
   // all shaders have a main function
@@ -244,7 +244,7 @@ to a simple vertex shader that looked like this</p>
     gl_Position = a_position;
   }
 </code></pre><p>We had a simple fragment shader that draws a constant color</p>
-<pre class="prettyprint"><code>  // fragment shaders don&#39;t have a default precision so we need
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // fragment shaders don&#39;t have a default precision so we need
   // to pick one. mediump is a good default
   precision mediump float;
 
@@ -254,8 +254,8 @@ to a simple vertex shader that looked like this</p>
     gl_FragColor = vec4(1, 0, 0.5, 1); // return reddish-purple
   }
 </code></pre><p>So let&#39;s make that draw 2 rectangles in clip space. We&#39;ll pass it this
-data with <code>X</code>, <code>Y</code>, <code>Z</code>, and <code>W</code> for each vertex.</p>
-<pre class="prettyprint"><code>var positions = [
+data with <code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code>, <code class="notranslate" translate="no">Z</code>, and <code class="notranslate" translate="no">W</code> for each vertex.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positions = [
   -.8, -.8, 0, 1,  // 1st rect 1st triangle
    .8, -.8, 0, 1,
   -.8, -.2, 0, 1,
@@ -279,7 +279,7 @@ data with <code>X</code>, <code>Y</code>, <code>Z</code>, and <code>W</code> for
 </p>
 <p>Let&#39;s add a single varying float. We&#39;ll pass that directly
 from the vertex shader to the fragment shader.</p>
-<pre class="prettyprint"><code>  attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  attribute vec4 a_position;
 +  attribute float a_brightness;
 
 +  varying float v_brightness;
@@ -291,7 +291,7 @@ from the vertex shader to the fragment shader.</p>
 +    v_brightness = a_brightness;
   }
 </code></pre><p>In the fragment shader we&#39;ll use that varying to set the color</p>
-<pre class="prettyprint"><code>  precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  precision mediump float;
 
 +  // passed in from the vertex shader and interpolated
 +  varying float v_brightness;  
@@ -302,7 +302,7 @@ from the vertex shader to the fragment shader.</p>
 </code></pre><p>We need to supply data for that varying so we&#39;ll make a buffer and
 put in some data. One value per vertex. We&#39;ll set all the brightness
 values for vertices on the left to 0 and those on the right to 1.</p>
-<pre class="prettyprint"><code>  // Create a buffer and put 12 brightness values in it
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Create a buffer and put 12 brightness values in it
   var brightnessBuffer = gl.createBuffer();
 
   // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = brightnessBuffer)
@@ -325,13 +325,13 @@ values for vertices on the left to 0 and those on the right to 1.</p>
   ];
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(brightness), gl.STATIC_DRAW);
-</code></pre><p>We also need to look up the location of the <code>a_brightness</code> attribute 
+</code></pre><p>We also need to look up the location of the <code class="notranslate" translate="no">a_brightness</code> attribute 
 at init time</p>
-<pre class="prettyprint"><code>  // look up where the vertex data needs to go.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // look up where the vertex data needs to go.
   var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +  var brightnessAttributeLocation = gl.getAttribLocation(program, &quot;a_brightness&quot;);
 </code></pre><p>and setup that attribute at render time</p>
-<pre class="prettyprint"><code>  // Turn on the attribute
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Turn on the attribute
   gl.enableVertexAttribArray(brightnessAttributeLocation);
 
   // Bind the position buffer.
@@ -346,8 +346,8 @@ at init time</p>
   gl.vertexAttribPointer(
       brightnessAttributeLocation, size, type, normalize, stride, offset);
 </code></pre><p>And now when we render we get two rectangles that are black on the left
-when <code>brightness</code> is 0 and red on the right when <code>brightness</code> is 1 and
-for the area in between <code>brightness</code> is interpolated or (varied) as it
+when <code class="notranslate" translate="no">brightness</code> is 0 and red on the right when <code class="notranslate" translate="no">brightness</code> is 1 and
+for the area in between <code class="notranslate" translate="no">brightness</code> is interpolated or (varied) as it
 goes across the triangles.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying.html"></iframe>
@@ -355,12 +355,12 @@ goes across the triangles.</p>
 </div>
 
 </p>
-<p>So then, from the <a href="webgl-3d-perspective.html">perspective article</a> we know that WebGL takes whatever value we put in <code>gl_Position</code> and it divides it by
-<code>gl_Position.w</code>.</p>
-<p>In the vertices above we supplied <code>1</code> for <code>W</code> but since we know WebGL
-will divide by <code>W</code> then we should be able do something like this
+<p>So then, from the <a href="webgl-3d-perspective.html">perspective article</a> we know that WebGL takes whatever value we put in <code class="notranslate" translate="no">gl_Position</code> and it divides it by
+<code class="notranslate" translate="no">gl_Position.w</code>.</p>
+<p>In the vertices above we supplied <code class="notranslate" translate="no">1</code> for <code class="notranslate" translate="no">W</code> but since we know WebGL
+will divide by <code class="notranslate" translate="no">W</code> then we should be able do something like this
 and get the same result.</p>
-<pre class="prettyprint"><code>  var mult = 20;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  var mult = 20;
   var positions = [
       -.8,  .8, 0, 1,  // 1st rect 1st triangle
        .8,  .8, 0, 1,
@@ -377,8 +377,8 @@ and get the same result.</p>
        .8 * mult, -.8 * mult, 0, mult,
   ];
 </code></pre><p>Above you can see that for every point on the right in the second
-rectangle we are multiplying <code>X</code> and <code>Y</code> by <code>mult</code> but, we are also
-setting <code>W</code> to <code>mult</code>. Since WebGL will divide by <code>W</code> we should get
+rectangle we are multiplying <code class="notranslate" translate="no">X</code> and <code class="notranslate" translate="no">Y</code> by <code class="notranslate" translate="no">mult</code> but, we are also
+setting <code class="notranslate" translate="no">W</code> to <code class="notranslate" translate="no">mult</code>. Since WebGL will divide by <code class="notranslate" translate="no">W</code> we should get
 the exact same result right?</p>
 <p>Well here&#39;s that</p>
 <p><div class="webgl_example_container">
@@ -388,14 +388,14 @@ the exact same result right?</p>
 
 </p>
 <p>Note the 2 rectangles are drawn in the same place they were before. This
-proves <code>X * MULT / MULT(W)</code> is still just <code>X</code> and same for <code>Y</code>. But, the
+proves <code class="notranslate" translate="no">X * MULT / MULT(W)</code> is still just <code class="notranslate" translate="no">X</code> and same for <code class="notranslate" translate="no">Y</code>. But, the
 colors are different. What&#39;s going on?</p>
-<p>It turns out WebGL uses <code>W</code> to implement perspective correct
+<p>It turns out WebGL uses <code class="notranslate" translate="no">W</code> to implement perspective correct
 texture mapping or rather to do perspective correct interpolation
 of varyings.</p>
 <p>In fact to make it easier to see let&#39;s hack the fragment shader to this</p>
-<pre class="prettyprint"><code>gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // reds
-</code></pre><p>multiplying <code>v_brightness</code> by 10 will make the value go from 0 to 10. <code>fract</code> will
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // reds
+</code></pre><p>multiplying <code class="notranslate" translate="no">v_brightness</code> by 10 will make the value go from 0 to 10. <code class="notranslate" translate="no">fract</code> will
 just keep the fractional part so it will go 0 to 1, 0 to 1, 0 to 1, 10 times</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying-non-1-w-repeat.html"></iframe>
@@ -406,15 +406,15 @@ just keep the fractional part so it will go 0 to 1, 0 to 1, 0 to 1, 10 times</p>
 <p>Now it should be easy to see the perspective.</p>
 <p>A linear interpolation from one value to another would be this
 formula</p>
-<pre class="prettyprint"><code> result = (1 - t) * a + t * b
-</code></pre><p>Where <code>t</code> is a value from 0 to 1 representing some position between <code>a</code> and <code>b</code>. 0 at <code>a</code> and 1 at <code>b</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a + t * b
+</code></pre><p>Where <code class="notranslate" translate="no">t</code> is a value from 0 to 1 representing some position between <code class="notranslate" translate="no">a</code> and <code class="notranslate" translate="no">b</code>. 0 at <code class="notranslate" translate="no">a</code> and 1 at <code class="notranslate" translate="no">b</code>.</p>
 <p>For varyings though WebGL uses this formula</p>
-<pre class="prettyprint"><code> result = (1 - t) * a / aW + t * b / bW
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a / aW + t * b / bW
           -----------------------------
              (1 - t) / aW + t / bW
-</code></pre><p>Where <code>aW</code> is the <code>W</code> that was set on <code>gl_Position.w</code> when the varying was
-as set to <code>a</code> and <code>bW</code> is the <code>W</code> that was set on <code>gl_Position.w</code> when the
-varying was set to <code>b</code>.</p>
+</code></pre><p>Where <code class="notranslate" translate="no">aW</code> is the <code class="notranslate" translate="no">W</code> that was set on <code class="notranslate" translate="no">gl_Position.w</code> when the varying was
+as set to <code class="notranslate" translate="no">a</code> and <code class="notranslate" translate="no">bW</code> is the <code class="notranslate" translate="no">W</code> that was set on <code class="notranslate" translate="no">gl_Position.w</code> when the
+varying was set to <code class="notranslate" translate="no">b</code>.</p>
 <p>Why is that important? Well here&#39;s a simple textured cube like we ended up with in the <a href="webgl-3d-textures.html">article on textures</a>. I&#39;ve adjusted
 the UV coordinates to go from 0 to 1 on each side and it&#39;s using a 4x4 pixel texture.</p>
 <p><div class="webgl_example_container">
@@ -424,8 +424,8 @@ the UV coordinates to go from 0 to 1 on each side and it&#39;s using a 4x4 pixel
 
 </p>
 <p>Now let&#39;s take that example and change the vertex shader so that
-we divide by <code>W</code> ourselves. We just need to add 1 line.</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+we divide by <code class="notranslate" translate="no">W</code> ourselves. We just need to add 1 line.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -442,8 +442,8 @@ void main() {
   // Pass the texcoord to the fragment shader.
   v_texcoord = a_texcoord;
 }
-</code></pre><p>Dividing by <code>W</code> means <code>gl_Position.w</code> will end up being 1. 
-<code>X</code>, <code>Y</code>, and <code>Z</code> will come out just like they would if we let
+</code></pre><p>Dividing by <code class="notranslate" translate="no">W</code> means <code class="notranslate" translate="no">gl_Position.w</code> will end up being 1. 
+<code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code>, and <code class="notranslate" translate="no">Z</code> will come out just like they would if we let
 WebGL do the division for us. Well here are the results.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-non-perspective-correct-cube.html"></iframe>
@@ -452,29 +452,29 @@ WebGL do the division for us. Well here are the results.</p>
 
 </p>
 <p>We still get a 3D cube but the textures are getting warped. This 
-is because by not passing <code>W</code> as it was before WebGL is not able to do
+is because by not passing <code class="notranslate" translate="no">W</code> as it was before WebGL is not able to do
 perspective correct texture mapping. Or more correctly, WebGL is not
 able to do perspective correct interpolation of varyings.</p>
-<p>If you recall <code>W</code> was our <code>Z</code> value from our <a href="webgl-3d-perspective.html">perspective matrix</a>.
-With <code>W</code> just being <code>1</code> WebGL just ends up doing a linear interpolation.
+<p>If you recall <code class="notranslate" translate="no">W</code> was our <code class="notranslate" translate="no">Z</code> value from our <a href="webgl-3d-perspective.html">perspective matrix</a>.
+With <code class="notranslate" translate="no">W</code> just being <code class="notranslate" translate="no">1</code> WebGL just ends up doing a linear interpolation.
 In fact if you take the equation above</p>
-<pre class="prettyprint"><code> result = (1 - t) * a / aW + t * b / bW
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a / aW + t * b / bW
           -----------------------------
              (1 - t) / aW + t / bW
-</code></pre><p>And change all the <code>W</code>s to 1s we get</p>
-<pre class="prettyprint"><code> result = (1 - t) * a / 1 + t * b / 1
+</code></pre><p>And change all the <code class="notranslate" translate="no">W</code>s to 1s we get</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a / 1 + t * b / 1
           ---------------------------
              (1 - t) / 1 + t / 1
 </code></pre><p>Dividing by 1 does nothing so we can simplify to this</p>
-<pre class="prettyprint"><code> result = (1 - t) * a + t * b
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a + t * b
           -------------------
              (1 - t) + t
-</code></pre><p><code>(1 - t) + t</code> when <code>t</code> goes from 0 to 1 is the same as <code>1</code>. For example
-if <code>t</code> was <code>.7</code> we&#39;d get <code>(1 - .7) + .7</code> which is <code>.3 + .7</code> which is <code>1</code>. In other words we can remove the bottom so we&#39;re left with</p>
-<pre class="prettyprint"><code> result = (1 - t) * a + t * b
+</code></pre><p><code class="notranslate" translate="no">(1 - t) + t</code> when <code class="notranslate" translate="no">t</code> goes from 0 to 1 is the same as <code class="notranslate" translate="no">1</code>. For example
+if <code class="notranslate" translate="no">t</code> was <code class="notranslate" translate="no">.7</code> we&#39;d get <code class="notranslate" translate="no">(1 - .7) + .7</code> which is <code class="notranslate" translate="no">.3 + .7</code> which is <code class="notranslate" translate="no">1</code>. In other words we can remove the bottom so we&#39;re left with</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a + t * b
 </code></pre><p>Which the same as the linear interpolation equation above.</p>
 <p>Hopefully it&#39;s now clear why WebGL uses a 4x4 matrix and 
-4 value vectors with <code>X</code>, <code>Y</code>, <code>Z</code>, and <code>W</code>. <code>X</code> and <code>Y</code> divided by <code>W</code> get a clipspace coordinate. <code>Z</code> divided by <code>W</code> also get a clipspace coordinate in Z and <code>W</code> is still used during interopation of varyings and
+4 value vectors with <code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code>, <code class="notranslate" translate="no">Z</code>, and <code class="notranslate" translate="no">W</code>. <code class="notranslate" translate="no">X</code> and <code class="notranslate" translate="no">Y</code> divided by <code class="notranslate" translate="no">W</code> get a clipspace coordinate. <code class="notranslate" translate="no">Z</code> divided by <code class="notranslate" translate="no">W</code> also get a clipspace coordinate in Z and <code class="notranslate" translate="no">W</code> is still used during interopation of varyings and
 provides the ability to do perspective correct texture mapping.</p>
 <div class="webgl_bottombar">
 <h3>Mid 1990s Game Consoles</h3>

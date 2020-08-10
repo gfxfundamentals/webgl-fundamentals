@@ -222,9 +222,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 на руках есть больше 70 функций, которые подготавливают состояние
 для этой единственной функции. Для примера представьте, что вам нужна
 функция для отрисовки окружности. Вы могли бы написать что-то вроде</p>
-<pre class="prettyprint"><code>function drawCircle(centerX, centerY, radius, color) { ... }
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawCircle(centerX, centerY, radius, color) { ... }
 </code></pre><p>Или же такой вариант.</p>
-<pre class="prettyprint"><code>var centerX;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var centerX;
 var centerY;
 var radius;
 var color;
@@ -245,13 +245,13 @@ function setColor(c) {
 function drawCircle() {
    ...
 }
-</code></pre><p>WebGL работает по второму сценарию. Через функции <code>gl.createBuffer</code>,
-<code>gl.bufferData</code>, <code>gl.createTexture</code> и <code>gl.texImage2D</code> вы можете загрузить
+</code></pre><p>WebGL работает по второму сценарию. Через функции <code class="notranslate" translate="no">gl.createBuffer</code>,
+<code class="notranslate" translate="no">gl.bufferData</code>, <code class="notranslate" translate="no">gl.createTexture</code> и <code class="notranslate" translate="no">gl.texImage2D</code> вы можете загрузить
 данные буферов (вершины) и текстур (цвета и прочее) в WebGL. Через функции
-<code>gl.createProgram</code>, <code>gl.createShader</code>, <code>gl.compileProgram</code> и <code>gl.linkProgram</code>
+<code class="notranslate" translate="no">gl.createProgram</code>, <code class="notranslate" translate="no">gl.createShader</code>, <code class="notranslate" translate="no">gl.compileProgram</code> и <code class="notranslate" translate="no">gl.linkProgram</code>
 вы можете создать шейдеры GLSL. Практически все из оставшихся функций WebGL
 устанавливают глобальные переменные или <em>состояние</em>, которое используется
-при вызове функции <code>gl.drawArrays</code> или <code>gl.drawElements</code>.</p>
+при вызове функции <code class="notranslate" translate="no">gl.drawArrays</code> или <code class="notranslate" translate="no">gl.drawElements</code>.</p>
 <p>Исходя из вышесказанного типичная программа WebGL придерживается следующей структуры:</p>
 <p>При инициализации</p>
 <ul>
@@ -264,19 +264,19 @@ function drawCircle() {
 <li>очищаем и устанавливаем область просмотра и другие глобальные
 переменные (включение проверки глубины, отбраковки и других);</li>
 <li>Для каждого объекта, который будем отрисовывать:<ul>
-<li>устанавливаем активную программу через <code>gl.useProgram</code>;</li>
+<li>устанавливаем активную программу через <code class="notranslate" translate="no">gl.useProgram</code>;</li>
 <li>настраиваем атрибуты:<ul>
-<li>для каждого атрибута вызываем <code>gl.bindBuffer</code>,
-<code>gl.vertexAttribPointer</code>, <code>gl.enableVertexAttribArray</code>;</li>
+<li>для каждого атрибута вызываем <code class="notranslate" translate="no">gl.bindBuffer</code>,
+<code class="notranslate" translate="no">gl.vertexAttribPointer</code>, <code class="notranslate" translate="no">gl.enableVertexAttribArray</code>;</li>
 </ul>
 </li>
 <li>настраиваем uniform-переменные:<ul>
-<li>для каждой переменной вызываем <code>gl.uniformXXX</code>;</li>
-<li>вызываем <code>gl.activeTexture</code> и <code>gl.bindTexture</code> для привязки
+<li>для каждой переменной вызываем <code class="notranslate" translate="no">gl.uniformXXX</code>;</li>
+<li>вызываем <code class="notranslate" translate="no">gl.activeTexture</code> и <code class="notranslate" translate="no">gl.bindTexture</code> для привязки
 текстур к текстурным блокам;</li>
 </ul>
 </li>
-<li>вызываем <code>gl.drawArrays</code> или <code>gl.drawElements</code>.</li>
+<li>вызываем <code class="notranslate" translate="no">gl.drawArrays</code> или <code class="notranslate" translate="no">gl.drawElements</code>.</li>
 </ul>
 </li>
 </ul>
@@ -291,8 +291,8 @@ function drawCircle() {
 статье</a>.</p>
 <p>Итак, код. Наш шейдер практически не изменился с последнего
 <a href="webgl-3d-perspective.html">примера о перспективе</a>, за исключением того,
-что добавился <code>u_colorMult</code>, на который умножатся цвета вершин.</p>
-<pre class="prettyprint"><code>// Передаётся из вершинного шейдера
+что добавился <code class="notranslate" translate="no">u_colorMult</code>, на который умножатся цвета вершин.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Передаётся из вершинного шейдера
 varying vec4 v_color;
 
 uniform vec4 u_colorMult;
@@ -301,7 +301,7 @@ void main() {
    gl_FragColor = v_color * u_colorMult;
 }
 </code></pre><p>При инициализации:</p>
-<pre class="prettyprint"><code>// uniform-переменные для каждого отображаемого объекта
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// uniform-переменные для каждого отображаемого объекта
 var sphereUniforms = {
   u_colorMult: [0.5, 1, 0.5, 1],
   u_matrix: m4.identity(),
@@ -320,7 +320,7 @@ var sphereTranslation = [  0, 0, 0];
 var cubeTranslation   = [-40, 0, 0];
 var coneTranslation   = [ 40, 0, 0];
 </code></pre><p>При рендеринге:</p>
-<pre class="prettyprint"><code>var sphereXRotation =  time;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var sphereXRotation =  time;
 var sphereYRotation =  time;
 var cubeXRotation   = -time;
 var cubeYRotation   =  time;
@@ -383,9 +383,9 @@ gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 </div>
 
 </p>
-<p>Заметьте, что мы вызываем <code>gl.useProgram</code> лишь один раз, так как у нас
+<p>Заметьте, что мы вызываем <code class="notranslate" translate="no">gl.useProgram</code> лишь один раз, так как у нас
 есть всего одна шейдерная программа. Если бы у нас было несколько шейдерных
-программ, нам бы потребовалось вызывать <code>gl.useProgram</code> перед... эм...
+программ, нам бы потребовалось вызывать <code class="notranslate" translate="no">gl.useProgram</code> перед... эм...
 использованием каждой программы.</p>
 <p>Есть ещё одно место, где не помешало бы упрощение. По сути есть
 3 основных вещи, которые можно объединить.</p>
@@ -396,7 +396,7 @@ gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 </ol>
 <p>Небольшим упрощением будет создание массива объектов для отрисовки и
 помещением в него 3 наших объектов.</p>
-<pre class="prettyprint"><code>var objectsToDraw = [
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var objectsToDraw = [
   {
     programInfo: programInfo,
     bufferInfo: sphereBufferInfo,
@@ -414,7 +414,7 @@ gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
   },
 ];
 </code></pre><p>При отрисовке нам нужно обновить матрицы</p>
-<pre class="prettyprint"><code>var sphereXRotation =  time;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var sphereXRotation =  time;
 var sphereYRotation =  time;
 var cubeXRotation   = -time;
 var cubeYRotation   =  time;
@@ -440,7 +440,7 @@ coneUniforms.u_matrix = computeMatrix(
     coneXRotation,
     coneYRotation);
 </code></pre><p>И теперь код отрисовки - это просто цикл</p>
-<pre class="prettyprint"><code>// ------ Отрисовка объектов --------
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// ------ Отрисовка объектов --------
 
 objectsToDraw.forEach(function(object) {
   var programInfo = object.programInfo;
@@ -458,7 +458,7 @@ objectsToDraw.forEach(function(object) {
   gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 });
 </code></pre><p>И это, вероятно, основной цикл отрисовки большинства существующих 3D-движков.
-Где-то в другом месте код решает, что будет передано в массив <code>objectsToDraw</code>,
+Где-то в другом месте код решает, что будет передано в массив <code class="notranslate" translate="no">objectsToDraw</code>,
 но в целом схема такова.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-multiple-objects-list.html"></iframe>
@@ -467,11 +467,11 @@ objectsToDraw.forEach(function(object) {
 
 </p>
 <p>Есть ещё несколько оптимизаций. Если программа для текущей отрисовки не
-изменилась с предыдущей отрисовки, нам не нужно вызывать <code>gl.useProgram</code>.
+изменилась с предыдущей отрисовки, нам не нужно вызывать <code class="notranslate" translate="no">gl.useProgram</code>.
 Аналогично, если мы отрисовываем тот же объект/геометрию/вершину, нам
 не нужно устанавливать их снова.</p>
 <p>Очень простая оптимизация может выглядеть следующим образом:</p>
-<pre class="prettyprint"><code>var lastUsedProgramInfo = null;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var lastUsedProgramInfo = null;
 var lastUsedBufferInfo = null;
 
 objectsToDraw.forEach(function(object) {
@@ -505,7 +505,7 @@ objectsToDraw.forEach(function(object) {
 });
 </code></pre><p>А теперь давайте создадим много объектов. Вместо 3 объектов мы сделаем
 значительно больший массив объектов.</p>
-<pre class="prettyprint"><code>// записываем фигуры в массив, чтобы было проще выбрать случайную
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// записываем фигуры в массив, чтобы было проще выбрать случайную
 var shapes = [
   sphereBufferInfo,
   cubeBufferInfo,
@@ -542,7 +542,7 @@ for (var ii = 0; ii &lt; numObjects; ++ii) {
   });
 }
 </code></pre><p>При рендеринге</p>
-<pre class="prettyprint"><code>// Вычисляем матрицы для каждого объекта
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Вычисляем матрицы для каждого объекта
 objects.forEach(function(object) {
   object.uniforms.u_matrix = computeMatrix(
       viewMatrix,
@@ -558,7 +558,7 @@ objects.forEach(function(object) {
 </div>
 
 </p>
-<p>Вы также можете отсортировать массив по <code>programInfo</code> и/или <code>bufferInfo</code>,
+<p>Вы также можете отсортировать массив по <code class="notranslate" translate="no">programInfo</code> и/или <code class="notranslate" translate="no">bufferInfo</code>,
 чтобы оптимизация срабатывала намного чаще. Большая часть игровых движков
 именно так и делает. К сожалению, это не так-то просто. Если все объекты
 непрозрачные, то подойдёт простая сортировка. Но если вам нужны полупрозрачные
@@ -590,7 +590,7 @@ target="_blank">Вот пример с сортировкой</a>. На моём
 помните, что <a href="webgl-2d-vs-3d-library.html">WebGL очень низкоуровневый</a>,
 поэтому вам придётся самому сделать тонну работы, включая написание
 генератора шейдеров, потому что разные свойства требуют разных шейдеров.</p>
-<p>Обратите внимание, что я не внёс <code>computeMatrix</code> внутрь цикла. Потому что
+<p>Обратите внимание, что я не внёс <code class="notranslate" translate="no">computeMatrix</code> внутрь цикла. Потому что
 я считаю, что рендеринг должен быть отделён от вычисления матриц.
 Общепринятым подходом является вычисление матриц из
 <a href="webgl-scene-graph.html">графа сцен, который мы рассмотрим в следующей статье</a>.</p>

@@ -257,7 +257,7 @@ fudgeFactor to multiply Z before we divide we can adjust how much smaller
 things get for a given distance.</p>
 <p>Let&#39;s try it.  First let&#39;s change the vertex shader to divide by Z after
 we&#39;ve multiplied it by our &quot;fudgeFactor&quot;.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -273,9 +273,9 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Note, because Z in clip space goes from -1 to +1 I added 1 to get
-<code>zToDivideBy</code> to go from 0 to +2 * fudgeFactor</p>
+<code class="notranslate" translate="no">zToDivideBy</code> to go from 0 to +2 * fudgeFactor</p>
 <p>We also need to update the code to let us set the fudgeFactor.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
 
   ...
@@ -303,11 +303,11 @@ what things used to look like before we added our divide by Z code.</p>
 <p><img class="webgl_center" src="resources/orthographic-vs-perspective.png" /></p>
 <div class="webgl_center">orthographic vs perspective</div>
 
-<p>It turns out WebGL takes the x,y,z,w value we assign to <code>gl_Position</code> in
+<p>It turns out WebGL takes the x,y,z,w value we assign to <code class="notranslate" translate="no">gl_Position</code> in
 our vertex shader and divides it by w automatically.</p>
 <p>We can prove this very easily by changing the shader and instead of doing
-the division ourselves, put <code>zToDivideBy</code> in <code>gl_Position.w</code>.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+the division ourselves, put <code class="notranslate" translate="no">zToDivideBy</code> in <code class="notranslate" translate="no">gl_Position.w</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -374,7 +374,7 @@ z_out = z_in;
 w_out = z_in;
 </pre></div>
 
-<p>We can add the plus 1 we had before with this matrix since we know <code>w_in</code> is always 1.0.</p>
+<p>We can add the plus 1 we had before with this matrix since we know <code class="notranslate" translate="no">w_in</code> is always 1.0.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 1, 0, 0, 0,
 0, 1, 0, 0,
@@ -390,7 +390,7 @@ w_out = x_in * 0 +
         w_in * 1 ;
 </pre></div>
 
-<p>and since we know <code>w_in</code> = 1.0 then that&#39;s really</p>
+<p>and since we know <code class="notranslate" translate="no">w_in</code> = 1.0 then that&#39;s really</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in + 1;
 </pre></div>
@@ -418,7 +418,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>So, let&#39;s modify the program again to just use matrices.</p>
 <p>First let&#39;s put the vertex shader back. It&#39;s simple again</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -428,7 +428,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Next let&#39;s make a function to make our Z &rarr; W matrix.</p>
-<pre class="prettyprint"><code>function makeZToWMatrix(fudgeFactor) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function makeZToWMatrix(fudgeFactor) {
   return [
     1, 0, 0, 0,
     0, 1, 0, 0,
@@ -437,7 +437,7 @@ void main() {
   ];
 }
 </code></pre><p>and we&#39;ll change the code to use it.</p>
-<pre class="prettyprint"><code>    ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ...
     // Compute the matrices
 *    var matrix = makeZToWMatrix(fudgeFactor);
 *    matrix = m4.multiply(matrix, m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400));
@@ -468,10 +468,10 @@ it</a> the same way we did 2D
 projection.  We need to take Z, add some amount and scale some amount and
 we can make any range we want get remapped to the -1 to +1.</p>
 <p>The cool thing is all of these steps can be done in 1 matrix.  Even
-better, rather than a <code>fudgeFactor</code> we&#39;ll decide on a <code>fieldOfView</code> and
+better, rather than a <code class="notranslate" translate="no">fudgeFactor</code> we&#39;ll decide on a <code class="notranslate" translate="no">fieldOfView</code> and
 compute the right values to make that happen.</p>
 <p>Here&#39;s a function to build the matrix.</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   perspective: function(fieldOfViewInRadians, aspect, near, far) {
     var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
     var rangeInv = 1.0 / (near - far);
@@ -489,13 +489,13 @@ compute the right values to make that happen.</p>
 so they are in clip space, it will do the math so that we can choose a
 field of view by angle and it will let us choose our Z-clipping space.  It
 assumes there&#39;s an <em>eye</em> or <em>camera</em> at the origin (0, 0, 0) and given a
-<code>zNear</code> and a <code>fieldOfView</code> it computes what it would take so that stuff
-at <code>zNear</code> ends up at <code>Z = -1</code> and stuff at <code>zNear</code> that is half of
-<code>fieldOfView</code> above or below the center ends up with <code>Y = -1</code> and <code>Y = 1</code>
+<code class="notranslate" translate="no">zNear</code> and a <code class="notranslate" translate="no">fieldOfView</code> it computes what it would take so that stuff
+at <code class="notranslate" translate="no">zNear</code> ends up at <code class="notranslate" translate="no">Z = -1</code> and stuff at <code class="notranslate" translate="no">zNear</code> that is half of
+<code class="notranslate" translate="no">fieldOfView</code> above or below the center ends up with <code class="notranslate" translate="no">Y = -1</code> and <code class="notranslate" translate="no">Y = 1</code>
 respectively.  It computes what to use for X by just multiplying by the
-<code>aspect</code> passed in.  We&#39;d normally set this to the <code>width / height</code> of the
+<code class="notranslate" translate="no">aspect</code> passed in.  We&#39;d normally set this to the <code class="notranslate" translate="no">width / height</code> of the
 display area.  Finally, it figures out how much to scale things in Z so
-that stuff at zFar ends up at <code>Z = 1</code>.</p>
+that stuff at zFar ends up at <code class="notranslate" translate="no">Z = 1</code>.</p>
 <p>Here&#39;s a diagram of the matrix in action.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  400px; height: 600px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Ffrustum-diagram.html"></iframe>
@@ -505,10 +505,10 @@ that stuff at zFar ends up at <code>Z = 1</code>.</p>
 </p>
 <p>That shape that looks like a 4 sided cone the cubes are spinning in is
 called a &quot;frustum&quot;.  The matrix takes the space inside the frustum and
-converts that to clip space.  <code>zNear</code> defines where things will get
-clipped in the front and <code>zFar</code> defines where things get clipped in the
-back.  Set <code>zNear</code> to 23 and you&#39;ll see the front of the spinning cubes
-get clipped.  Set <code>zFar</code> to 24 and you&#39;ll see the back of the cubes get
+converts that to clip space.  <code class="notranslate" translate="no">zNear</code> defines where things will get
+clipped in the front and <code class="notranslate" translate="no">zFar</code> defines where things get clipped in the
+back.  Set <code class="notranslate" translate="no">zNear</code> to 23 and you&#39;ll see the front of the spinning cubes
+get clipped.  Set <code class="notranslate" translate="no">zFar</code> to 24 and you&#39;ll see the back of the cubes get
 clipped.</p>
 <p>There&#39;s just one problem left.  This matrix assumes there&#39;s a viewer at 0,0,0
 and it assumes it&#39;s looking in the negative Z direction and that positive Y is
@@ -516,9 +516,9 @@ up.  Our matrices up to this point have done things in a different way.</p>
 <p>To make it appear we need to move it inside the frustum.
 We can do that by moving our F. We were drawing at (45, 150, 0). Let&#39;s move it to (-150, 0, -360)
 and let&#39;s set the rotation to something that makes it appear right side up.</p>
-<p>Now, to use it we just need to replace our old call to <code>m4.projection</code>
-with a call to <code>m4.perspective</code></p>
-<pre class="prettyprint"><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+<p>Now, to use it we just need to replace our old call to <code class="notranslate" translate="no">m4.projection</code>
+with a call to <code class="notranslate" translate="no">m4.perspective</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
 var zFar = 2000;
 var matrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
@@ -548,7 +548,7 @@ away?
 </p>
 <p>
 
-The reason is up until this last sample our <code>m4.projection</code> function
+The reason is up until this last sample our <code class="notranslate" translate="no">m4.projection</code> function
 has made a projection from pixels to clip space.  That means the area we
 were displaying represented 400x300 pixels.  Using 'pixels' really doesn't
 make sense in 3D. 
@@ -572,7 +572,7 @@ positive Y up but our F is built with positive Z down.
 Our new projection only sees what's in the blue frustum. With -zNear = 1 and with a field of view of 60 degrees
 then at Z = -1 the frustum is only 1.154 units tall and 1.154 * aspect units wide. At Z = -2000 (-zFar) its 2309 units tall.
 Since our F is 150 units big and the view can only see 1.154
-units when something is at <code>-zNear</code> we need to move it pretty far away from the origin to
+units when something is at <code class="notranslate" translate="no">-zNear</code> we need to move it pretty far away from the origin to
 see all of it.
 </p>
 

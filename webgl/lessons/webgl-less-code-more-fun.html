@@ -223,7 +223,7 @@ and the code required to look up their locations can be wordy and tedious.</p>
 linking shader programs</a>.  Given a set of shaders
 like this.</p>
 <p>vertex shader:</p>
-<pre class="prettyprint"><code>uniform mat4 u_worldViewProjection;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform mat4 u_worldViewProjection;
 uniform vec3 u_lightWorldPos;
 uniform mat4 u_world;
 uniform mat4 u_viewInverse;
@@ -248,7 +248,7 @@ void main() {
   gl_Position = v_position;
 }
 </code></pre><p>fragment shader:</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 varying vec4 v_position;
 varying vec2 v_texCoord;
@@ -286,7 +286,7 @@ void main() {
 }
 </code></pre><p>You&#39;d end up having to write code like this to look up and set all the
 various values to draw.</p>
-<pre class="prettyprint"><code>// At initialization time
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// At initialization time
 var u_worldViewProjectionLoc   = gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 var u_lightWorldPosLoc         = gl.getUniformLocation(program, &quot;u_lightWorldPos&quot;);
 var u_worldLoc                 = gl.getUniformLocation(program, &quot;u_world&quot;);
@@ -356,7 +356,7 @@ to tell us all the uniforms and locations and then setup functions to set
 them for us.  We can then pass in JavaScript objects to set our settings
 much more easily.  If that&#39;s clear as mud well, our code would look
 something like this</p>
-<pre class="prettyprint"><code>// At initialization time
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// At initialization time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -393,7 +393,7 @@ webglUtils.setUniforms(uniformSetters, uniforms);
 gl.drawArrays(...);
 </code></pre><p>That seems a heck of a lot smaller, easier, and less code to me.</p>
 <p>You can even use multiple JavaScript objects if it suits you. For example</p>
-<pre class="prettyprint"><code>// At initialization time
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// At initialization time
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -466,10 +466,10 @@ objects.forEach(function(object) {
 </div>
 
 </p>
-<p>Let&#39;s take it a tiny step further. In the code above we setup a variable <code>attribs</code> with the buffers we created.
+<p>Let&#39;s take it a tiny step further. In the code above we setup a variable <code class="notranslate" translate="no">attribs</code> with the buffers we created.
 Not shown is the code to setup those buffers. For example if you want to make positions, normals and texture
 coordinates you might need code like this</p>
-<pre class="prettyprint"><code>// a single triangle
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// a single triangle
 var positions = [0, -10, 0, 10, 10, 0, -10, 10, 0];
 var texcoords = [0.5, 0, 1, 1, 0, 1];
 var normals   = [0, 0, 1, 0, 0, 1, 0, 0, 1];
@@ -486,7 +486,7 @@ var normalBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 </code></pre><p>Looks like a pattern we can simplify as well.</p>
-<pre class="prettyprint"><code>// a single triangle
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// a single triangle
 var arrays = {
    position: { numComponents: 3, data: [0, -10, 0, 10, 10, 0, -10, 10, 0], },
    texcoord: { numComponents: 2, data: [0.5, 0, 1, 1, 0, 1],               },
@@ -495,7 +495,7 @@ var arrays = {
 
 var bufferInfo = createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>Much shorter! Now we can do this at render time</p>
-<pre class="prettyprint"><code>// Setup all the needed buffers and attributes.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Setup all the needed buffers and attributes.
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
@@ -509,9 +509,9 @@ gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 </div>
 
 </p>
-<p>This will even work if we have indices. <code>webglUtils.setBuffersAndAttributes</code> will set all the attributes
-and setup the <code>ELEMENT_ARRAY_BUFFER</code> with your <code>indices</code> so you can call <code>gl.drawElements</code>.</p>
-<pre class="prettyprint"><code>// an indexed quad
+<p>This will even work if we have indices. <code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code> will set all the attributes
+and setup the <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code> with your <code class="notranslate" translate="no">indices</code> so you can call <code class="notranslate" translate="no">gl.drawElements</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// an indexed quad
 var arrays = {
    position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
@@ -520,8 +520,8 @@ var arrays = {
 };
 
 var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
-</code></pre><p>and at render time we can call <code>gl.drawElements</code> instead of <code>gl.drawArrays</code>.</p>
-<pre class="prettyprint"><code>// Setup all the needed buffers and attributes.
+</code></pre><p>and at render time we can call <code class="notranslate" translate="no">gl.drawElements</code> instead of <code class="notranslate" translate="no">gl.drawArrays</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Setup all the needed buffers and attributes.
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
@@ -535,8 +535,8 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 </div>
 
 </p>
-<p><code>createBufferInfoFromArrays</code> basically makes an object that looks like this</p>
-<pre class="prettyprint"><code> bufferInfo = {
+<p><code class="notranslate" translate="no">createBufferInfoFromArrays</code> basically makes an object that looks like this</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> bufferInfo = {
    numElements: 4,        // or whatever the number of elements is
    indices: WebGLBuffer,  // this property will not exist if there are no indices
    attribs: {
@@ -545,13 +545,13 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
      a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
    },
  };
-</code></pre><p>And <code>webglUtils.setBuffersAndAttributes</code> uses that object to set all the
+</code></pre><p>And <code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code> uses that object to set all the
 buffers and attributes.</p>
-<p>Finally we can go what I consider possibly too far.  Given <code>position</code>
-almost always has 3 components (x, y, z) and <code>texcoords</code> almost always 2,
+<p>Finally we can go what I consider possibly too far.  Given <code class="notranslate" translate="no">position</code>
+almost always has 3 components (x, y, z) and <code class="notranslate" translate="no">texcoords</code> almost always 2,
 indices 3, and normals 3, we can just let the system guess the number of
 components.</p>
-<pre class="prettyprint"><code>// an indexed quad
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// an indexed quad
 var arrays = {
    position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
    texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
@@ -574,18 +574,18 @@ stuff might break.  It&#39;s up to you.  Some people like things to be what
 they consider as simple as possible.</p>
 <p>Why don&#39;t we look at the attributes on the shader program to figure out
 the number of components?  That&#39;s because it&#39;s common to supply 3
-components (x, y, z) from a buffer but use a <code>vec4</code> in the shader.  For
-attributes WebGL will set <code>w = 1</code> automatically.  But that means we can&#39;t
+components (x, y, z) from a buffer but use a <code class="notranslate" translate="no">vec4</code> in the shader.  For
+attributes WebGL will set <code class="notranslate" translate="no">w = 1</code> automatically.  But that means we can&#39;t
 easily know the user&#39;s intent since what they declared in their shader
 might not match the number of components they provide.</p>
 <p>Looking for more patterns there&#39;s this</p>
-<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 </code></pre><p>Let&#39;s simplify that too into just</p>
-<pre class="prettyprint"><code>var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 </code></pre><p>Which returns something like</p>
-<pre class="prettyprint"><code>programInfo = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">programInfo = {
    program: WebGLProgram,  // program we just compiled
    uniformSetters: ...,    // setters as returned from webglUtils.createUniformSetters,
    attribSetters: ...,     // setters as returned from createAttribSetters,
@@ -606,10 +606,10 @@ and what is my own style.  At some point though showing all the steps gets
 in the way of the point so going forward some lessons will be using this
 style.</p>
 <p>Feel free to use this style in your own code.  The functions
-<code>createUniformSetters</code>, <code>createAttributeSetters</code>,
-<code>createBufferInfoFromArrays</code>, <code>setUniforms</code>, and <code>setBuffersAndAttributes</code>
+<code class="notranslate" translate="no">createUniformSetters</code>, <code class="notranslate" translate="no">createAttributeSetters</code>,
+<code class="notranslate" translate="no">createBufferInfoFromArrays</code>, <code class="notranslate" translate="no">setUniforms</code>, and <code class="notranslate" translate="no">setBuffersAndAttributes</code>
 are included in the
-<a href="https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code>webgl-utils.js</code></a>
+<a href="https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code class="notranslate" translate="no">webgl-utils.js</code></a>
 file used by all the samples.  If you want something slightly more
 organized check out <a href="https://twgljs.org">TWGL.js</a>.</p>
 <p>Next up, <a href="webgl-drawing-multiple-things.html">drawing multiple things</a>.</p>
@@ -671,15 +671,15 @@ void main() {
 *  gl_FragColor = vec4(0,1,0,1);  // &lt;!--- just green
 }
 </pre>
-<p>Notice I just added a line that sets <code>gl_FragColor</code> to a constant color.
+<p>Notice I just added a line that sets <code class="notranslate" translate="no">gl_FragColor</code> to a constant color.
 Most drivers will see that none of the previous lines in the file actually contribute
 to the result. As such they'll optimize out all of our uniforms. The next time we run the program
-when we call <code>createUniformSetters</code> it won't create a setter for <code>u_ambient</code> so the
-code above that calls <code>uniformSetters.u_ambient()</code> directly will fail with</p>
+when we call <code class="notranslate" translate="no">createUniformSetters</code> it won't create a setter for <code class="notranslate" translate="no">u_ambient</code> so the
+code above that calls <code class="notranslate" translate="no">uniformSetters.u_ambient()</code> directly will fail with</p>
 <pre class="prettyprint">
 TypeError: undefined is not a function
 </pre>
-<p><code>setUniforms</code> solves that issue. It only sets those uniforms that actually exist</p>
+<p><code class="notranslate" translate="no">setUniforms</code> solves that issue. It only sets those uniforms that actually exist</p>
 </div>
 
     </div>

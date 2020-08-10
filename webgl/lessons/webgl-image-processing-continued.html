@@ -236,7 +236,7 @@ buffer of any kind.  But, by attaching a texture to a framebuffer we can
 render into that texture.</p>
 <p>First let&#39;s turn <a href="webgl-image-processing.html">the old texture creation
 code</a> into a function</p>
-<pre class="prettyprint"><code>  function createAndSetupTexture(gl) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -255,7 +255,7 @@ code</a> into a function</p>
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 </code></pre><p>And now let&#39;s use that function to make 2 more textures and attach them to
 2 framebuffers.</p>
-<pre class="prettyprint"><code>  // create 2 textures and attach them to framebuffers.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // create 2 textures and attach them to framebuffers.
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
@@ -277,7 +277,7 @@ code</a> into a function</p>
         gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
   }
 </code></pre><p>Now let&#39;s make a set of kernels and then a list of them to apply.</p>
-<pre class="prettyprint"><code>  // Define several convolution kernels
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Define several convolution kernels
   var kernels = {
     normal: [
       0, 0, 0,
@@ -309,7 +309,7 @@ code</a> into a function</p>
     &quot;unsharpen&quot;
   ];
 </code></pre><p>And finally let&#39;s apply each one, ping ponging which texture we are rendering too</p>
-<pre class="prettyprint"><code>  // start with the original image
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // start with the original image
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
   // don&#39;t y flip images while drawing to the textures
@@ -359,10 +359,10 @@ applied.</p>
 
 </p>
 <p>Some things I should go over.</p>
-<p>Calling <code>gl.bindFramebuffer</code> with <code>null</code> tells WebGL
+<p>Calling <code class="notranslate" translate="no">gl.bindFramebuffer</code> with <code class="notranslate" translate="no">null</code> tells WebGL
 you want to render to the canvas instead of to one of your framebuffers.</p>
 <p>WebGL has to convert from <a href="webgl-fundamentals.html">clip space</a> back into
-pixels.  It does this based on the settings of <code>gl.viewport</code>.
+pixels.  It does this based on the settings of <code class="notranslate" translate="no">gl.viewport</code>.
 Since the framebuffers we are rendering into are a different size than the
 canvas we need to set the viewport appropriately when rendering to the
 framebuffer textures and then again when finally rendering to the canvas.</p>
@@ -375,7 +375,7 @@ irrelevant.  All that matters is that pixel 0,0 in the framebuffer
 corresponds to 0,0 in our calculations.  To deal with this I made it
 possible to set whether to flip or not by adding one more input into the
 shader.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_flipY;
 ...
@@ -389,7 +389,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>And then we can set it when we render with</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
   var flipYLocation = gl.getUniformLocation(program, &quot;u_flipY&quot;);
 

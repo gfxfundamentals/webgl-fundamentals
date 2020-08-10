@@ -242,7 +242,7 @@ in the diagram above and hopefully you can see their relationships.</p>
 remember we multiply lots of matrices in order to translate, rotate, and
 scale objects.  A scene graph provides a structure to help decide what
 matrix math to apply to an object.</p>
-<p>Typically each <code>Node</code> in a scene graph represents a <em>local space</em>.  Given
+<p>Typically each <code class="notranslate" translate="no">Node</code> in a scene graph represents a <em>local space</em>.  Given
 the correct matrix math anything in that <em>local space</em> can ignore
 everything above it.  Another way to state the same thing is that the moon
 only has to care about orbiting the earth.  It does not have to care about
@@ -258,11 +258,11 @@ because its orbit around the sun looks something like this</p>
 orbit the earth which is simple.  The scene graph takes care of the fact
 that the earth is orbiting the sun.  It does this by walking the nodes and
 multiplying the matrices as it walks</p>
-<pre class="prettyprint"><code>worldMatrix = greatGrandParent * grandParent * parent * self(localMatrix)
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">worldMatrix = greatGrandParent * grandParent * parent * self(localMatrix)
 </code></pre><p>In concrete terms our universe simulation that would be</p>
-<pre class="prettyprint"><code>worldMatrixForMoon = galaxyMatrix * starMatrix * planetMatrix * moonMatrix;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">worldMatrixForMoon = galaxyMatrix * starMatrix * planetMatrix * moonMatrix;
 </code></pre><p>We can do this very simply with a recursive function which is effectively</p>
-<pre class="prettyprint"><code>function computeWorldMatrix(currentNode, parentWorldMatrix) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function computeWorldMatrix(currentNode, parentWorldMatrix) {
     // compute our world matrix by multiplying our local matrix with
     // our parent&#39;s world matrix.
     var worldMatrix = m4.multiply(parentWorldMatrix, currentNode.localMatrix);
@@ -274,20 +274,20 @@ multiplying the matrices as it walks</p>
 }
 </code></pre><p>This brings up some terminology which is pretty common to 3D scene graphs.</p>
 <ul>
-<li><p><code>localMatrix</code>: The local matrix for the current node. It transforms
+<li><p><code class="notranslate" translate="no">localMatrix</code>: The local matrix for the current node. It transforms
 it and its children in local space with itself at the origin.</p>
 </li>
-<li><p><code>worldMatrix</code>: For a given node it takes stuff in the local space of
+<li><p><code class="notranslate" translate="no">worldMatrix</code>: For a given node it takes stuff in the local space of
 that node and transforms it to the space of the root node of the
 scene graph. Or in other words it places it in the world. If we
 compute the worldMatrix for the moon we&#39;ll get that funky orbit you
 see above.</p>
 </li>
 </ul>
-<p>A scene graph is pretty easy to make. Let&#39;s define a simple <code>Node</code> object.
+<p>A scene graph is pretty easy to make. Let&#39;s define a simple <code class="notranslate" translate="no">Node</code> object.
 There&#39;s a zillion ways to organize a scene graph and I&#39;m not sure which
 way is best. The most common is to have an optional field of thing to draw</p>
-<pre class="prettyprint"><code>var node = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var node = {
    localMatrix: ...,  // the &quot;local&quot; matrix for this node
    worldMatrix: ...,  // the &quot;world&quot; matrix for this node
    children: [],      // array of children
@@ -297,13 +297,13 @@ way is best. The most common is to have an optional field of thing to draw</p>
 textures or anything like that as it would clutter the example.  First
 let&#39;s make a few functions to help manage nodes.  First we&#39;ll make a node
 class</p>
-<pre class="prettyprint"><code>var Node = function() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var Node = function() {
   this.children = [];
   this.localMatrix = m4.identity();
   this.worldMatrix = m4.identity();
 };
 </code></pre><p>Let&#39;s give it a way to set the parent of a node.</p>
-<pre class="prettyprint"><code>Node.prototype.setParent = function(parent) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">Node.prototype.setParent = function(parent) {
   // remove us from our parent
   if (this.parent) {
     var ndx = this.parent.children.indexOf(this);
@@ -323,7 +323,7 @@ their parent-child relationships.  If we start at the parent and
 recursively visit the children we can compute their world matrices.  If
 you don&#39;t understand matrix math <a href="webgl-2d-matrices.html">check out this article on
 them</a>.</p>
-<pre class="prettyprint"><code>Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
   if (parentWorldMatrix) {
     // a matrix was passed in so do the math and
     // store the result in `this.worldMatrix`.
@@ -342,10 +342,10 @@ them</a>.</p>
 </code></pre><p>Let&#39;s just do the sun, the earth, and the moon to keep it simple.  We&#39;ll
 of course use fake distances so things fit on the screen.  We&#39;ll just use
 a single sphere model and color it yellowish for the sun, blue-greenish
-for the earth and grayish for the moon.  If <code>drawInfo</code>, <code>bufferInfo</code>, and
-<code>programInfo</code> are not familiar to you <a href="webgl-drawing-multiple-things.html">see the previous
+for the earth and grayish for the moon.  If <code class="notranslate" translate="no">drawInfo</code>, <code class="notranslate" translate="no">bufferInfo</code>, and
+<code class="notranslate" translate="no">programInfo</code> are not familiar to you <a href="webgl-drawing-multiple-things.html">see the previous
 article</a>.</p>
-<pre class="prettyprint"><code>// Let&#39;s make all the nodes
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Let&#39;s make all the nodes
 var sunNode = new Node();
 sunNode.localMatrix = m4.translation(0, 0, 0);  // sun at the center
 sunNode.drawInfo = {
@@ -379,11 +379,11 @@ moonNode.drawInfo = {
   bufferInfo: sphereBufferInfo,
 };
 </code></pre><p>Now that we&#39;ve made the nodes let&#39;s connect them.</p>
-<pre class="prettyprint"><code>// connect the celestial objects
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// connect the celestial objects
 moonNode.setParent(earthNode);
 earthNode.setParent(sunNode);
 </code></pre><p>We&#39;ll again make a list of objects and a list of objects to draw.</p>
-<pre class="prettyprint"><code>var objects = [
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var objects = [
   sunNode,
   earthNode,
   moonNode,
@@ -396,16 +396,16 @@ var objectsToDraw = [
 ];
 </code></pre><p>At render time we&#39;ll update each object&#39;s local matrix by rotating it
 slightly.</p>
-<pre class="prettyprint"><code>// update the local matrices for each object.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// update the local matrices for each object.
 m4.multiply(m4.yRotation(0.01), sunNode.localMatrix  , sunNode.localMatrix);
 m4.multiply(m4.yRotation(0.01), earthNode.localMatrix, earthNode.localMatrix);
 m4.multiply(m4.yRotation(0.01), moonNode.localMatrix , moonNode.localMatrix);
 </code></pre><p>Now that the local matrices are updated we&#39;ll update all the world
 matrices</p>
-<pre class="prettyprint"><code>sunNode.updateWorldMatrix();
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">sunNode.updateWorldMatrix();
 </code></pre><p>Finally now that we have world matrices we need to multiply those to get a
 <a href="webgl-3d-perspective.html">worldViewProjection matrix</a> for each object.</p>
-<pre class="prettyprint"><code>// Compute all the matrices for rendering
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Compute all the matrices for rendering
 objects.forEach(function(object) {
   object.drawInfo.uniforms.u_matrix = m4.multiply(viewProjectionMatrix, object.worldMatrix);
 });
@@ -419,7 +419,7 @@ article</a>.</p>
 </p>
 <p>You&#39;ll notice all of the planets are the same size.  Let&#39;s try to make the
 earth larger</p>
-<pre class="prettyprint"><code>// earth 100 units from the sun
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// earth 100 units from the sun
 earthNode.localMatrix = m4.translation(100, 0, 0);
 // make the earth twice as large
 earthNode.localMatrix = m4.scale(earthNode.localMatrix, 2, 2, 2);
@@ -432,13 +432,13 @@ earthNode.localMatrix = m4.scale(earthNode.localMatrix, 2, 2, 2);
 <p>Oops.  The moon got larger too.  To fix this we could manually shrink the
 moon.  A better solution though is to add more nodes to our scene graph.
 Instead of just</p>
-<pre class="prettyprint"><code>  sun
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  sun
    |
   earth
    |
   moon
 </code></pre><p>We&#39;ll change it to</p>
-<pre class="prettyprint"><code> solarSystem
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> solarSystem
    |    |
    |   sun
    |
@@ -452,14 +452,14 @@ Instead of just</p>
 </code></pre><p>This will let the earth rotate around the solarSystem but we can
 separately rotate and scale the sun and it won&#39;t affect the earth.
 Similarly the earth can rotate separately from the moon.  Let&#39;s make more
-nodes for <code>solarSystem</code>, <code>earthOrbit</code> and <code>moonOrbit</code>.</p>
-<pre class="prettyprint"><code>var solarSystemNode = new Node();
+nodes for <code class="notranslate" translate="no">solarSystem</code>, <code class="notranslate" translate="no">earthOrbit</code> and <code class="notranslate" translate="no">moonOrbit</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var solarSystemNode = new Node();
 var earthOrbitNode = new Node();
 earthOrbitNode.localMatrix = m4.translation(100, 0, 0);  // earth orbit 100 units from the sun
 var moonOrbitNode = new Node();
 moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // moon 20 units from the earth
 </code></pre><p>Those orbit distances have been removed from the old nodes</p>
-<pre class="prettyprint"><code>var earthNode = new Node();
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var earthNode = new Node();
 -// earth 100 units from the sun
 -earthNode.localMatrix = m4.translation(100, 0, 0);
 -// make the earth twice as large
@@ -469,14 +469,14 @@ moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // moon 20 units from the
 var moonNode = new Node();
 -moonNode.localMatrix = m4.translation(20, 0, 0);  // moon 20 units from the earth
 </code></pre><p>Connecting them now looks like this</p>
-<pre class="prettyprint"><code>// connect the celestial objects
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// connect the celestial objects
 sunNode.setParent(solarSystemNode);
 earthOrbitNode.setParent(solarSystemNode);
 earthNode.setParent(earthOrbitNode);
 moonOrbitNode.setParent(earthOrbitNode);
 moonNode.setParent(moonOrbitNode);
 </code></pre><p>And we only need to update the orbits</p>
-<pre class="prettyprint"><code>// update the local matrices for each object.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// update the local matrices for each object.
 -m4.multiply(m4.yRotation(0.01), sunNode.localMatrix  , sunNode.localMatrix);
 -m4.multiply(m4.yRotation(0.01), earthNode.localMatrix, earthNode.localMatrix);
 -m4.multiply(m4.yRotation(0.01), moonNode.localMatrix , moonNode.localMatrix);
@@ -495,7 +495,7 @@ moonNode.setParent(moonOrbitNode);
 </p>
 <p>You might also notice the sun and the earth are no longer rotating in place. That is now independent.</p>
 <p>Let&#39;s adjust a few more things.</p>
-<pre class="prettyprint"><code>-sunNode.localMatrix = m4.translation(0, 0, 0);  // sun at the center
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-sunNode.localMatrix = m4.translation(0, 0, 0);  // sun at the center
 +sunNode.localMatrix = m4.scaling(5, 5, 5);
 
 ...
@@ -516,13 +516,13 @@ matrixMultiply(moonOrbitNode.localMatrix, m4.yRotation(0.01), moonOrbitNode.loca
 </div>
 
 </p>
-<p>Currently we have a <code>localMatrix</code> and we&#39;re modifying it each frame.
+<p>Currently we have a <code class="notranslate" translate="no">localMatrix</code> and we&#39;re modifying it each frame.
 There&#39;s a problem though in that every frame our math will collect a
 little bit of error.  There is a way to fix the math which is called
 <em>ortho normalizing a matrix</em> but even that won&#39;t always work.  For example
 let&#39;s imagine we scaled down zero and back.  Let&#39;s just do that for one
-value <code>x</code></p>
-<pre class="prettyprint"><code>x = 246;       // frame #0, x = 246
+value <code class="notranslate" translate="no">x</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">x = 246;       // frame #0, x = 246
 
 scale = 1;
 x = x * scale  // frame #1, x = 246
@@ -539,9 +539,9 @@ x = x * scale  // frame #4, x = 0  OOPS!
 scale = 1;
 x = x * scale  // frame #5, x = 0  OOPS!
 </code></pre><p>We lost our value. We can fix this by adding some other class that updates the matrix from
-other values. Let&#39;s change the <code>Node</code> definition to have a <code>source</code>. If it exists we&#39;ll
-ask the <code>source</code> to give us a local matrix.</p>
-<pre class="prettyprint"><code>*var Node = function(source) {
+other values. Let&#39;s change the <code class="notranslate" translate="no">Node</code> definition to have a <code class="notranslate" translate="no">source</code>. If it exists we&#39;ll
+ask the <code class="notranslate" translate="no">source</code> to give us a local matrix.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*var Node = function(source) {
   this.children = [];
   this.localMatrix = m4.identity();
   this.worldMatrix = m4.identity();
@@ -558,7 +558,7 @@ Node.prototype.updateWorldMatrix = function(matrix) {
   ...
 </code></pre><p>Now we can create a source. A common source is one that provides translation, rotation, and scale
 something like this</p>
-<pre class="prettyprint"><code>var TRS = function() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var TRS = function() {
   this.translation = [0, 0, 0];
   this.rotation = [0, 0, 0];
   this.scale = [1, 1, 1];
@@ -579,7 +579,7 @@ TRS.prototype.getMatrix = function(dst) {
   return dst;
 };
 </code></pre><p>And we can use it like this</p>
-<pre class="prettyprint"><code>// at init time making a node with a source
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// at init time making a node with a source
 var someTRS  = new TRS();
 var someNode = new Node(someTRS);
 
@@ -602,7 +602,7 @@ games like Virtua Fighter had around 15 joints.  Games in the early to mid
 at least 20 in each hand so just 2 hands is 40 joints.  Many games that
 want to animate hands animate the thumb as one and the 4 fingers as one
 large finger to save on time (both CPU/GPU and artist time) and memory.</p>
-<p>In any case here&#39;s a block guy I hacked together.  It&#39;s using the <code>TRS</code>
+<p>In any case here&#39;s a block guy I hacked together.  It&#39;s using the <code class="notranslate" translate="no">TRS</code>
 source for each node mentioned above.  Programmer art and programmer
 animation FTW!  :P</p>
 <p><div class="webgl_example_container">
@@ -615,22 +615,22 @@ animation FTW!  :P</p>
 similar to this.</p>
 <div class="webgl_bottombar">
 <h3>SetParent vs AddChild / RemoveChild</h3>
-<p>Many scene graphs have a <code>node.addChild</code> function and a <code>node.removeChild</code>
-function whereas above I made a <code>node.setParent</code> function. Which way is better
+<p>Many scene graphs have a <code class="notranslate" translate="no">node.addChild</code> function and a <code class="notranslate" translate="no">node.removeChild</code>
+function whereas above I made a <code class="notranslate" translate="no">node.setParent</code> function. Which way is better
 is arguably a matter of style but I'd argue one objectively better reason
-<code>setParent</code> is better than <code>addChild</code> is because it makes code like
+<code class="notranslate" translate="no">setParent</code> is better than <code class="notranslate" translate="no">addChild</code> is because it makes code like
 this impossible.</p>
 <pre class="prettyprint">
     someParent.addChild(someNode);
     ...
     someOtherParent.addChild(someNode);
 </pre>
-<p>What does that mean? Does <code>someNode</code> get added to both <code>someParent</code> and <code>someOtherParent</code>?
+<p>What does that mean? Does <code class="notranslate" translate="no">someNode</code> get added to both <code class="notranslate" translate="no">someParent</code> and <code class="notranslate" translate="no">someOtherParent</code>?
 In most scene graphs that's impossible. Does the second call generate an error?
-<code>ERROR: Already have parent</code>. Does it magically remove <code>someNode</code> from <code>someParent</code> before
-adding it to <code>someOtherParent</code>? If it does it's certainly not clear from the name <code>addChild</code>.
+<code class="notranslate" translate="no">ERROR: Already have parent</code>. Does it magically remove <code class="notranslate" translate="no">someNode</code> from <code class="notranslate" translate="no">someParent</code> before
+adding it to <code class="notranslate" translate="no">someOtherParent</code>? If it does it's certainly not clear from the name <code class="notranslate" translate="no">addChild</code>.
 </p>
-<p><code>setParent</code> on the other hand has no such issue</p>
+<p><code class="notranslate" translate="no">setParent</code> on the other hand has no such issue</p>
 <pre class="prettyprint">
     someNode.setParent(someParent);
     ...

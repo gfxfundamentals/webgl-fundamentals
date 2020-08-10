@@ -219,7 +219,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>假设我们有<a href="webgl-boilerplate.html">这样一个典型的WebGL着色程序模板</a>，
 有这样一对着色器。</p>
 <p>顶点着色器：</p>
-<pre class="prettyprint"><code>uniform mat4 u_worldViewProjection;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform mat4 u_worldViewProjection;
 uniform vec3 u_lightWorldPos;
 uniform mat4 u_world;
 uniform mat4 u_viewInverse;
@@ -244,7 +244,7 @@ void main() {
   gl_Position = v_position;
 }
 </code></pre><p>片断着色器：</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 varying vec4 v_position;
 varying vec2 v_texCoord;
@@ -281,7 +281,7 @@ void main() {
   gl_FragColor = outColor;
 }
 </code></pre><p>你要在代码中像这样找到所有要设置的变量。</p>
-<pre class="prettyprint"><code>// 初始化时
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 初始化时
 var u_worldViewProjectionLoc   = gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 var u_lightWorldPosLoc         = gl.getUniformLocation(program, &quot;u_lightWorldPos&quot;);
 var u_worldLoc                 = gl.getUniformLocation(program, &quot;u_world&quot;);
@@ -350,7 +350,7 @@ gl.drawArrays(...);
 首先可以一次获取WebGL中需要的所有属性和全局变量的位置，
 然后在一个方法中设置它们，我们可以传递一个JavaScript对象给这个方法。
 如果理解了这一步操作，我们的代码应该会变成这样</p>
-<pre class="prettyprint"><code>// 初始化时
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 初始化时
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -387,7 +387,7 @@ webglUtils.setUniforms(uniformSetters, uniforms);
 gl.drawArrays(...);
 </code></pre><p>这样看起来就简单，清晰，代码量少一些了。</p>
 <p>如果需要你也可以使用多个JavaScript对象，例如</p>
-<pre class="prettyprint"><code>// 初始化时
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 初始化时
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -460,10 +460,10 @@ objects.forEach(function(object) {
 </div>
 
 </p>
-<p>继续让代码更少一点，在之前的代码中我们用自己创建的缓冲设置 <code>attribs</code> ，
+<p>继续让代码更少一点，在之前的代码中我们用自己创建的缓冲设置 <code class="notranslate" translate="no">attribs</code> ，
 创建缓冲的代码没有列出来，假设你想创建一个位置，
 法向量和纹理坐标的缓冲，你可能需要写这些代码</p>
-<pre class="prettyprint"><code>// 一个三角形
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 一个三角形
 var positions = [0, -10, 0, 10, 10, 0, -10, 10, 0];
 var texcoords = [0.5, 0, 1, 1, 0, 1];
 var normals   = [0, 0, 1, 0, 0, 1, 0, 0, 1];
@@ -480,7 +480,7 @@ var normalBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 </code></pre><p>看起来像是这种简化形式。</p>
-<pre class="prettyprint"><code>// 一个三角形
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 一个三角形
 var arrays = {
    position: { numComponents: 3, data: [0, -10, 0, 10, 10, 0, -10, 10, 0], },
    texcoord: { numComponents: 2, data: [0.5, 0, 1, 1, 0, 1],               },
@@ -489,7 +489,7 @@ var arrays = {
 
 var bufferInfo = createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>代码少多了！现在我们可以在渲染时这样写</p>
-<pre class="prettyprint"><code>// 设置所有需要的缓冲和属性
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 设置所有需要的缓冲和属性
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
@@ -503,10 +503,10 @@ gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 </div>
 
 </p>
-<p>甚至在你使用索引时也可以这样做，<code>webglUtils.setBuffersAndAttributes</code>
-会设置所有属性并使用你提供的 <code>indices</code> 设置 <code>ELEMENT_ARRAY_BUFFER</code>，
-所以你需要调用 <code>gl.drawElements</code>。</p>
-<pre class="prettyprint"><code>// 有索引的矩形
+<p>甚至在你使用索引时也可以这样做，<code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code>
+会设置所有属性并使用你提供的 <code class="notranslate" translate="no">indices</code> 设置 <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code>，
+所以你需要调用 <code class="notranslate" translate="no">gl.drawElements</code>。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 有索引的矩形
 var arrays = {
    position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
@@ -515,8 +515,8 @@ var arrays = {
 };
 
 var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
-</code></pre><p>在渲染时将调用 <code>gl.drawElements</code> 代替 <code>gl.drawArrays</code>。</p>
-<pre class="prettyprint"><code>// 设置所有需要的缓冲和属性
+</code></pre><p>在渲染时将调用 <code class="notranslate" translate="no">gl.drawElements</code> 代替 <code class="notranslate" translate="no">gl.drawArrays</code>。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 设置所有需要的缓冲和属性
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
@@ -530,8 +530,8 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 </div>
 
 </p>
-<p><code>createBufferInfoFromArrays</code>方法本质上创建了类似这样的一个对象</p>
-<pre class="prettyprint"><code> bufferInfo = {
+<p><code class="notranslate" translate="no">createBufferInfoFromArrays</code>方法本质上创建了类似这样的一个对象</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> bufferInfo = {
    numElements: 4,        // 或者其他元素的实际个数
    indices: WebGLBuffer,  // 如果没有索引这个属性就不存在
    attribs: {
@@ -540,11 +540,11 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
      a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
    },
  };
-</code></pre><p>然后 <code>webglUtils.setBuffersAndAttributes</code> 使用通过这个对象设置所有的缓冲和属性。</p>
-<p>最后是我认为的最后一步，假定 <code>position</code> 总是有三个单位长度 (x, y, z)，
-<code>texcoords</code> 总是有 2 个单位长度，索引 3 个单位长度，法向量 3 个单位长度，
+</code></pre><p>然后 <code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code> 使用通过这个对象设置所有的缓冲和属性。</p>
+<p>最后是我认为的最后一步，假定 <code class="notranslate" translate="no">position</code> 总是有三个单位长度 (x, y, z)，
+<code class="notranslate" translate="no">texcoords</code> 总是有 2 个单位长度，索引 3 个单位长度，法向量 3 个单位长度，
 然后让程序推测出单元的个数。</p>
-<pre class="prettyprint"><code>// 有索引的矩形
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 有索引的矩形
 var arrays = {
    position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
    texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
@@ -564,17 +564,17 @@ var arrays = {
 如果出错了我可以像前一个例子中那样声明单元个数，取决于个人。
 有些人喜欢事情按照他们的思路实现，越简单越好。</p>
 <p>为什么不按照属性在着色器中的类型来确定单元的个数？
-因为当我们使用 <code>vec4</code> 时大多数情况下只从缓冲中提供 3 个单位长度的数据  (x, y, z)，
-WebGL会自动设置 <code>w = 1</code>。所以这就意味着我们不能轻易推断出用户的真实意愿，
+因为当我们使用 <code class="notranslate" translate="no">vec4</code> 时大多数情况下只从缓冲中提供 3 个单位长度的数据  (x, y, z)，
+WebGL会自动设置 <code class="notranslate" translate="no">w = 1</code>。所以这就意味着我们不能轻易推断出用户的真实意愿，
 因为他们在着色器中定义的单位长度可能和提供的长度不相符。</p>
 <p>还有这样一个形式</p>
-<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 </code></pre><p>可以简化成这样</p>
-<pre class="prettyprint"><code>var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 </code></pre><p>返回类似这样的对象</p>
-<pre class="prettyprint"><code>programInfo = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">programInfo = {
    program: WebGLProgram,  // 刚编译的程序
    uniformSetters: ...,    // webglUtils.createUniformSetters 返回的 setter
    attribSetters: ...,     // webglUtils.createAttribSetters 返回的 setter
@@ -589,9 +589,9 @@ var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 <p>总之，这是我在写WebGL程序时喜欢的模式，这些教程中的例子我会使用标准的
 <strong>啰唆</strong>的方式，这样就不会让别人因为我自己的模式感到迷惑。
 在某些时候标准形式过于复杂，所以在接下来的课程中可能会使用这种模式。</p>
-<p>你也可以在你的代码中使用这种风格，例子中使用的方法 <code>createUniformSetters</code>,
- <code>createAttributeSetters</code>, <code>createBufferInfoFromArrays</code>, <code>setUniforms</code>,
-和 <code>setBuffersAndAttributes</code> 都在 <a href="https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code>webgl-utils.js</code></a>中。
+<p>你也可以在你的代码中使用这种风格，例子中使用的方法 <code class="notranslate" translate="no">createUniformSetters</code>,
+ <code class="notranslate" translate="no">createAttributeSetters</code>, <code class="notranslate" translate="no">createBufferInfoFromArrays</code>, <code class="notranslate" translate="no">setUniforms</code>,
+和 <code class="notranslate" translate="no">setBuffersAndAttributes</code> 都在 <a href="https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code class="notranslate" translate="no">webgl-utils.js</code></a>中。
 如果你想更有组织的使用，可以看看 <a href="https://twgljs.org">TWGL.js</a>。</p>
 <p>接下来，<a href="webgl-drawing-multiple-things.html">绘制多个物体</a>。</p>
 <div class="webgl_bottombar">
@@ -647,14 +647,14 @@ void main() {
 *  gl_FragColor = vec4(0,1,0,1);  // &lt;!--- 就是绿色
 }
 </pre>
-<p>注意到我添加了一行，直接将 <code>gl_FragColor</code> 设置为固定颜色。
+<p>注意到我添加了一行，直接将 <code class="notranslate" translate="no">gl_FragColor</code> 设置为固定颜色。
 大多数驱动会发现之前的行没有为结果做贡献，优化后就会把没用的变量移除，
-下次我运行程序调用<code>createUniformSetters</code>就不会为<code>u_ambient</code>
-创建 setter，所以 <code>uniformSetters.u_ambient()</code> 就会报错。
+下次我运行程序调用<code class="notranslate" translate="no">createUniformSetters</code>就不会为<code class="notranslate" translate="no">u_ambient</code>
+创建 setter，所以 <code class="notranslate" translate="no">uniformSetters.u_ambient()</code> 就会报错。
 <pre class="prettyprint">
 TypeError: undefined is not a function
 </pre>
-<p><code>setUniforms</code> 可以避免这种错误，它只会设置存在的全局变量。</p>
+<p><code class="notranslate" translate="no">setUniforms</code> 可以避免这种错误，它只会设置存在的全局变量。</p>
 </div>
 
     </div>

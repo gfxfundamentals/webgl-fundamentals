@@ -219,7 +219,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 (массива данных) и вершин пространства отсечения. Вторая задача -
 отрисовка пикселей на основе результатов первой задачи.</p>
 <p>Когда вы вызываете</p>
-<pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var primitiveType = gl.TRIANGLES;
 var offset = 0;
 var count = 9;
 gl.drawArrays(primitiveType, offset, count);
@@ -228,14 +228,14 @@ gl.drawArrays(primitiveType, offset, count);
 <p>Слева отображены переданные вами данные. Вершинный шейдер - это функция,
 которую вы написали на <a href="webgl-shaders-and-glsl.html">GLSL</a>. Она вызывается
 один раз на каждую вершину. Вы описываете математическую часть и устанавливаете
-специальную переменную <code>gl_Position</code> со значением координат пространства отсечения
+специальную переменную <code class="notranslate" translate="no">gl_Position</code> со значением координат пространства отсечения
 для текущей вершины. Видеокарта принимает это значение и хранит его во внутренней памяти.</p>
-<p>Предположим, вы отрисовываете <code>TRIANGLES</code>, и каждый раз, когда первая задача создаёт
+<p>Предположим, вы отрисовываете <code class="notranslate" translate="no">TRIANGLES</code>, и каждый раз, когда первая задача создаёт
 3 вершины, видеокарта использует их для создания треугольника. Она определяет, какие
 пиксели соответствуют 3 точкам треугольника и затем растеризует треугольник. Растеризация
 означает &quot;отрисовка объекта пикселями&quot;. Для каждого пикселя будет вызван фрагментный шейдер,
 где вас спросят, каким цветом нужно закрасить этот пиксель. Чтобы ответить на этот вопрос, ваш
-фрагментный шейдер должен установить специльной переменной <code>gl_FragColor</code> значение
+фрагментный шейдер должен установить специльной переменной <code class="notranslate" translate="no">gl_FragColor</code> значение
 цвета для данного пикселя.</p>
 <p>Всё это очень интересно, но как вы могли видеть раньше в наших примерах
 до фрагментного шейдера доходило очень мало информации о пикселе.
@@ -245,7 +245,7 @@ gl.drawArrays(primitiveType, offset, count);
 из вершинного шейдера во фрагментный шейдер.</p>
 <p>Мы нарисуем простой треугольник. Возьмём наш <a href="webgl-2d-matrices.html">предыдущий пример</a>
 и заменим F на треугольник.</p>
-<pre class="prettyprint"><code>// заполнение буфера значениями, определяющими треугольник
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// заполнение буфера значениями, определяющими треугольник
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -256,7 +256,7 @@ function setGeometry(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>И нам нужно отрисовать всего 3 вершины</p>
-<pre class="prettyprint"><code>// рисуем сцену
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// рисуем сцену
 function drawScene() {
   ...
   // рисуем геометрию
@@ -267,7 +267,7 @@ function drawScene() {
 }
 </code></pre><p>Затем в нашем вершинном шейдере мы определяем <em>varying-переменную</em> для
 передачи данных во фрагментный шейдер.</p>
-<pre class="prettyprint"><code>varying vec4 v_color;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">varying vec4 v_color;
 ...
 void main() {
   // умножение положения на матрицу
@@ -279,7 +279,7 @@ void main() {
 *  v_color = gl_Position * 0.5 + 0.5;
 }
 </code></pre><p>И теперь мы объявляем ту же самую <em>varying-переменную</em> во фрагментном шейдере.</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 *varying vec4 v_color;
 
@@ -373,7 +373,7 @@ v_color, которую мы объявили.</p>
 состоящий из 2 треугольников 2 разных цветов. Чтобы это сделать, добавим ещё один
 атрибут вершинному шейдеру, чтобы передать ему больше данных, которые дальше
 пойдут во фрагментный шейдер.</p>
-<pre class="prettyprint"><code>attribute vec2 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_position;
 +attribute vec4 a_color;
 ...
 varying vec4 v_color;
@@ -384,7 +384,7 @@ void main() {
 *  v_color = a_color;
 }
 </code></pre><p>Теперь нужно передать цвета для использования в WebGL.</p>
-<pre class="prettyprint"><code>  // получаем ссылки на атрибуты, куда запишутся данные
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // получаем ссылки на атрибуты, куда запишутся данные
   var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +  var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
   ...
@@ -419,7 +419,7 @@ void main() {
 +      gl.STATIC_DRAW);
 +}
 </code></pre><p>Во время отрисовки настраиваем атрибут цвета</p>
-<pre class="prettyprint"><code>+gl.enableVertexAttribArray(colorLocation);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+gl.enableVertexAttribArray(colorLocation);
 +
 +// Привязываем буфер цветов.
 +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
@@ -433,7 +433,7 @@ void main() {
 +gl.vertexAttribPointer(
 +    colorLocation, size, type, normalize, stride, offset)
 </code></pre><p>И устанавливаем count для вычисления 6 вершин 2 треугольников</p>
-<pre class="prettyprint"><code>// Отрисовка геометрии.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Отрисовка геометрии.
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
 *var count = 6;
@@ -450,7 +450,7 @@ gl.drawArrays(primitiveType, offset, count);
 отрисовке треугольника. Но так как мы использовали одинаковый цвет для всех
 3 вершин каждого треугольника, цвет не меняется. Если сделать цвет каждой
 вершины различным, мы увидим интерполяцию.</p>
-<pre class="prettyprint"><code>// заполняем буфер цветами для двух треугольников,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// заполняем буфер цветами для двух треугольников,
 // образующих прямоугольник
 function setColors(gl) {
   // делаем отдельный цвет для каждой вершины
@@ -478,24 +478,24 @@ function setColors(gl) {
 вы увидите, что там также используется дополнительный атрибут для передачи координат текстур.</p>
 <h2 id="-">Что делают эти команды, связанные с буферами и атрибутами?</h2>
 <p>Буферы - средство передачи вершин и вершинных данных на видеокарту.
-<code>gl.createBuffer</code> создаёт буфер.
-<code>gl.bindBuffer</code> устанавливает данный буфер как активный буфер, с которым будет происходить работа.
-<code>gl.bufferData</code> копирует данные в активный буфер. Обычно выполняется на этапе инициализации.</p>
+<code class="notranslate" translate="no">gl.createBuffer</code> создаёт буфер.
+<code class="notranslate" translate="no">gl.bindBuffer</code> устанавливает данный буфер как активный буфер, с которым будет происходить работа.
+<code class="notranslate" translate="no">gl.bufferData</code> копирует данные в активный буфер. Обычно выполняется на этапе инициализации.</p>
 <p>Когда данные помещены в буфер, нам нужно подсказать WebGL, как извлечь
 эти данные и передать атрибуту вершинного шейдера.</p>
 <p>Чтобы это сделать, сначала получим у WebGL ссылку на атрибут.
 Например, в коде выше у нас было</p>
-<pre class="prettyprint"><code>// получаем ссылки на атрибуты, куда запишутся данные
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// получаем ссылки на атрибуты, куда запишутся данные
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 </code></pre><p>Этот код обычно выполняется на этапе инициализации. Когда нам известна ссылка
 на атрибут, мы можем выполнить 3 команды прямо перед отрисовкой.</p>
-<pre class="prettyprint"><code>gl.enableVertexAttribArray(location);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enableVertexAttribArray(location);
 </code></pre><p>Эта команда говорит WebGL, что мы хотим получать данные из буфера.</p>
 <p>gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);</p>
 <p>Здесь буфер привязывается к точке связи ARRAY_BUFFER. Это глобальная
 переменная внутри WebGL.</p>
-<pre class="prettyprint"><code>gl.vertexAttribPointer(
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.vertexAttribPointer(
     location,
     numComponents,
     typeOfData,
@@ -504,7 +504,7 @@ var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
     offsetIntoBuffer);
 </code></pre><p>А эта команда говорит WebGL получить данные из буфера, который привязан к
 точке связи ARRAY_BUFFER; сколько компонентов уходит на вершину (1 - 4);
-какого типа данные (<code>BYTE</code>, <code>FLOAT</code>, <code>INT</code>, <code>UNSIGNED_SHORT</code>, и т.д.); шаг,
+какого типа данные (<code class="notranslate" translate="no">BYTE</code>, <code class="notranslate" translate="no">FLOAT</code>, <code class="notranslate" translate="no">INT</code>, <code class="notranslate" translate="no">UNSIGNED_SHORT</code>, и т.д.); шаг,
 который указывает, сколько байтов нужно пропустить, чтобы перейти от одной
 порции данных к следующей; отступ, чтобы указать, как далеко от начала буфера
 находятся наши данные.</p>

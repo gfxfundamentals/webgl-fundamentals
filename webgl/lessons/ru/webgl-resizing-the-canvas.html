@@ -217,11 +217,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 сколько пикселей помещается в canvas. Второй - размер отображаемого на HTML-странице
 элемента canvas. Этот размер задаётся через CSS.</p>
 <p>Размер буфера отрисовки можно задать двумя способами. Первый - через HTML:</p>
-<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>Второй способ - через JavaScript:</p>
-<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
 </code></pre><p>JavaScript</p>
-<pre class="prettyprint"><code>var canvas = document.querySelector(&quot;#c&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var canvas = document.querySelector(&quot;#c&quot;);
 canvas.width = 400;
 canvas.height = 300;
 </code></pre><p>Что касается размера отображаемого элемента, то при отсутствии стилей CSS, которые
@@ -229,9 +229,9 @@ canvas.height = 300;
 2 примерах выше размер буфера отрисовки будет равен 400x300, и размер отображаемого
 элемента будет также равен 400x300.</p>
 <p>А вот пример, когда размер буфера отображения - 10x15, а размер HTML-элемента - 400x300 пикселей:</p>
-<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>или можно задать так:</p>
-<pre class="prettyprint"><code>&lt;style&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;style&gt;
 #c {
   width: 400px;
   height: 300px;
@@ -249,7 +249,7 @@ canvas.height = 300;
 растягивает его до размера 400x300 пикселей, применяя для этого фильтрацию.</p>
 <p>Так что же делать, если, к примеру, нам нужно, чтобы canvas заполнил всё окно? Для
 начала нам нужны CSS-стили, чтобы браузер растянул canvas на всё окно. Например:</p>
-<pre class="prettyprint"><code>&lt;html&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;html&gt;
   &lt;head&gt;
     &lt;style&gt;
       /* убираем границу */
@@ -270,10 +270,10 @@ canvas.height = 300;
   &lt;/body&gt;
 &lt;/html&gt;
 </code></pre><p>Теперь нам нужно, чтобы размер буфера отрисовки соответствовал размеру HTML-элемента,
-как бы браузер его ни растянул. Мы можем использовать свойствами <code>clientWidth</code> и
-<code>clientHeight</code>, которые есть у любого HTML-элемента и которые позволяют JavaScript
+как бы браузер его ни растянул. Мы можем использовать свойствами <code class="notranslate" translate="no">clientWidth</code> и
+<code class="notranslate" translate="no">clientHeight</code>, которые есть у любого HTML-элемента и которые позволяют JavaScript
 узнавать размер отображаемого элемента.</p>
-<pre class="prettyprint"><code>function resize(canvas) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function resize(canvas) {
   // получаем размер HTML-элемента canvas
   var displayWidth  = canvas.clientWidth;
   var displayHeight = canvas.clientHeight;
@@ -290,7 +290,7 @@ canvas.height = 300;
 </code></pre><p>Большинство приложений WebGL <a href="webgl-animation.html">используют анимацию</a>,
 поэтому будем вызывать эту функцию непосредственно перед отрисовкой, чтобы при отрисовке
 размер canvas всегда соответствовал размеру HTML-элемента.</p>
-<pre class="prettyprint"><code>function drawScene() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
    resize(gl.canvas);
 
    ...
@@ -302,15 +302,15 @@ canvas.height = 300;
 
 </p>
 <p>Но что не так? Почему линия не занимает всю область?</p>
-<p>Причина в том, что при изменении размера canvas нам также необходимо вызвать <code>gl.viewport</code>
-для установки размера области просмотра. <code>gl.viewport</code> сообщает WebGL, как и в какую область
+<p>Причина в том, что при изменении размера canvas нам также необходимо вызвать <code class="notranslate" translate="no">gl.viewport</code>
+для установки размера области просмотра. <code class="notranslate" translate="no">gl.viewport</code> сообщает WebGL, как и в какую область
 внутри canvas преобразовывать координаты пространства отсечения (от -1 до +1) в пиксели.
 При первом создании контекста WebGL область просмотра будет соответствовать размеру canvas,
 но после этого вам необходимо следить за её размерами. Если вы меняете размер canvas, вам
 также необходимо сообщить WebGL новые параметры области просмотра.</p>
 <p>Изменим код, чтобы учитывать такую ситуацию. Более того, раз уж ссылка на canvas
 доступна из контекста WebGL, будем передавать его параметром функции resize.</p>
-<pre class="prettyprint"><code>function drawScene() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
    resize(gl.canvas);
 
 +   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -340,7 +340,7 @@ canvas.height = 300;
 WebGL вы сами отвечаете за графику, и вам необходимо самим позаботиться об отображении графики с
 более высоким разрешением, если вы хотите получить качество HD-DPI.
 </p>
-<p>Для этого мы можем посмотреть на значение <code>window.devicePixelRatio</code>. Это значение укажет,
+<p>Для этого мы можем посмотреть на значение <code class="notranslate" translate="no">window.devicePixelRatio</code>. Это значение укажет,
 как много действительных пикселей помещаются в одном пикселе CSS. Мы можем внести изменения в функцию
 изменения размера для ориентации на действительный пиксель.</p>
 <pre class="prettyprint">
@@ -372,8 +372,8 @@ function resize(gl) {
 
 
 <p>Настраивать ли программу под использование дисплеев HD-DPI, зависит только от вас. На iPhone4 и iPhone5
-<code>window.devicePixelRatio</code> равен <code>2</code>, что означает, что вы будете отображать в 4
-раза больше пикселей. Думаю, что на iPhone6Plus это значение равно <code>3</code>, то есть вы будете
+<code class="notranslate" translate="no">window.devicePixelRatio</code> равен <code class="notranslate" translate="no">2</code>, что означает, что вы будете отображать в 4
+раза больше пикселей. Думаю, что на iPhone6Plus это значение равно <code class="notranslate" translate="no">3</code>, то есть вы будете
 отображать в 9 раз больше пикселей. Это может замедлить вашу програму. Вообще, для игр типично отображать
 меньше пикселей, чтобы видеокарта сама растянула их. Всё зависит от ваших целей. Например, если вы готовите
 график для печати, то, возможно, вам понадобится поддержка HD-DPI. Для игр, возможно, не понадобится такой

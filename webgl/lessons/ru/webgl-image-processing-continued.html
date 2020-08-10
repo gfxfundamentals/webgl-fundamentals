@@ -224,7 +224,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <p>Для такой реализации нам понадобятся фреймбуферы. В WebGL и OpenGL фреймбуфер является не совсем тем, чем называется. Фреймбуфер WebGL/OpenGL - это просто набор состояний и на самом деле никакой не буфер. Но, прикрепив текстуру к фреймбуферу, мы можем провести рендеринг в эту текстуру.</p>
 <p>Сначала преобразуем <a href="webgl-image-processing.html">старый код создания текстуры</a> в функцию</p>
-<pre class="prettyprint"><code>  function createAndSetupTexture(gl) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -242,7 +242,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   var originalImageTexture = createAndSetupTexture(gl);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 </code></pre><p>А теперь используем эту функцию для создания ещё 2 текстур и прикрепления их к 2 фреймбуферам.</p>
-<pre class="prettyprint"><code>  // создаём 2 текстуры и прикрепления их к фреймбуферам
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // создаём 2 текстуры и прикрепления их к фреймбуферам
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
@@ -264,7 +264,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
   }
 </code></pre><p>Теперь создадим набор ядер и зададим порядок, в котором они будут применяться</p>
-<pre class="prettyprint"><code>  // определяем несколько ядер свёртки
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // определяем несколько ядер свёртки
   var kernels = {
     normal: [
       0, 0, 0,
@@ -296,7 +296,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     &quot;unsharpen&quot;
   ];
 </code></pre><p>И, наконец, применим каждый эффект, меняя текстуру, в которую идёт отрисовка.</p>
-<pre class="prettyprint"><code>  // начинаем с оригинального изображения
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // начинаем с оригинального изображения
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
   // не переворачиваем изображение при отрисовке в текстуру
@@ -345,10 +345,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </p>
 <p>Теперь о некоторых вещах подробнее.</p>
-<p>Вызывая <code>gl.bindFramebuffer</code> со значением параметра <code>null</code>, мы говорим WebGL, что хотим отрисовать в канвас, а не в один из фреймбуферов.</p>
-<p>Для WebGL необходима конвертация из <a href="webgl-fundamentals.html">пространства отсечения</a> в пиксели. Это осуществляется через установку <code>gl.viewport</code>, значение по умолчанию которого равно размеру канваса, которое мы установили при инициализации WebGL. Так как размер фреймбуфера, в который происходит отрисовка, отличается от размера canvas, нам необходимо установить viewport соответствующим образом.</p>
+<p>Вызывая <code class="notranslate" translate="no">gl.bindFramebuffer</code> со значением параметра <code class="notranslate" translate="no">null</code>, мы говорим WebGL, что хотим отрисовать в канвас, а не в один из фреймбуферов.</p>
+<p>Для WebGL необходима конвертация из <a href="webgl-fundamentals.html">пространства отсечения</a> в пиксели. Это осуществляется через установку <code class="notranslate" translate="no">gl.viewport</code>, значение по умолчанию которого равно размеру канваса, которое мы установили при инициализации WebGL. Так как размер фреймбуфера, в который происходит отрисовка, отличается от размера canvas, нам необходимо установить viewport соответствующим образом.</p>
 <p>Наконец, в <a href="webgl-fundamentals.html">исходном примере</a> мы переворачивали координату Y при отрисовке, потому что у WebGL координаты 0,0 находятся в нижнем левом углу canvas, а не в верхнем левом, что более привычно для 2D. Переворот не нужен при отрисовке во фреймбуфер. Так как фреймбуфер никогда не отображается, нам не важно, что является низом, а что верхом. Что имеет значение, так это то, что пиксель 0,0 во фреймбуфере соответствует значению 0,0 в наших вычислениях. Для того, чтобы управлять переворотом, я добавил ещё одну входную переменную в шейдер.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_flipY;
 ...
@@ -362,7 +362,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>И теперь при рендеринге мы можем её устанавливать</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
   var flipYLocation = gl.getUniformLocation(program, &quot;u_flipY&quot;);
 

@@ -219,7 +219,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 这个话题在<a href="webgl-image-processing-continued.html">图像处理</a>中简单讲到过，
 但这里将详细介绍。</p>
 <p>渲染到纹理非常简单，创建一个确定大小的纹理</p>
-<pre class="prettyprint"><code>// 创建渲染对象
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 创建渲染对象
 const targetTextureWidth = 256;
 const targetTextureHeight = 256;
 const targetTexture = gl.createTexture();
@@ -242,12 +242,12 @@ gl.bindTexture(gl.TEXTURE_2D, targetTexture);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 }
-</code></pre><p>注意 <code>data</code> 是 <code>null</code>，我们不需要提供数据，只需要让WebGL分配一个纹理。</p>
+</code></pre><p>注意 <code class="notranslate" translate="no">data</code> 是 <code class="notranslate" translate="no">null</code>，我们不需要提供数据，只需要让WebGL分配一个纹理。</p>
 <p>接下来创建一个帧缓冲（framebuffer），帧缓冲只是一个附件集，附件是纹理或者 renderbuffers，
 我们之前讲过纹理，Renderbuffers 和纹理很像但是支持纹理不支持的格式和可选项，同时，
 不能像纹理那样直接将 renderbuffer 提供给着色器。</p>
 <p>让我们来创建一个帧缓冲并和纹理绑定</p>
-<pre class="prettyprint"><code>// 创建并绑定帧缓冲
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 创建并绑定帧缓冲
 const fb = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
@@ -255,12 +255,12 @@ gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 const attachmentPoint = gl.COLOR_ATTACHMENT0;
 gl.framebufferTexture2D(
     gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
-</code></pre><p>与纹理和缓冲相似，在创建完帧缓冲后我们需要将它绑定到 <code>FRAMEBUFFER</code> 绑定点，
+</code></pre><p>与纹理和缓冲相似，在创建完帧缓冲后我们需要将它绑定到 <code class="notranslate" translate="no">FRAMEBUFFER</code> 绑定点，
 那样所有的方法都会作用到绑定的帧缓冲，无论是哪个帧缓冲。</p>
-<p>绑定帧缓冲后，每次调用 <code>gl.clear</code>, <code>gl.drawArrays</code>, 或 <code>gl.drawElements</code>
+<p>绑定帧缓冲后，每次调用 <code class="notranslate" translate="no">gl.clear</code>, <code class="notranslate" translate="no">gl.drawArrays</code>, 或 <code class="notranslate" translate="no">gl.drawElements</code>
 WebGL都会渲染到纹理上而不是画布上。</p>
 <p>将原来的渲染代码构造成一个方法，就可以调用两次，一次渲染到纹理，一次渲染到画布。</p>
-<pre class="prettyprint"><code>function drawCube(aspect) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawCube(aspect) {
   // 告诉它使用的程序（着色器对）
   gl.useProgram(program);
 
@@ -324,9 +324,9 @@ WebGL都会渲染到纹理上而不是画布上。</p>
   // 绘制几何体
   gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
 }
-</code></pre><p>注意到我们需要传入 <code>aspect</code> 计算投影矩阵，因为目标纹理的比例和画布不同。</p>
+</code></pre><p>注意到我们需要传入 <code class="notranslate" translate="no">aspect</code> 计算投影矩阵，因为目标纹理的比例和画布不同。</p>
 <p>然后这样调用</p>
-<pre class="prettyprint"><code>// 绘制场景
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 绘制场景
 function drawScene(time) {
 
   ...
@@ -376,13 +376,13 @@ function drawScene(time) {
 </div>
 
 </p>
-<p><strong>十分重要</strong>的是要记得调用 <code>gl.viewport</code> 设置要绘制的对象的大小，
+<p><strong>十分重要</strong>的是要记得调用 <code class="notranslate" translate="no">gl.viewport</code> 设置要绘制的对象的大小，
 在这个例子中第一次渲染到纹理，所以设置视图大小覆盖纹理，
 第二次渲染到画布所以设置视图大小覆盖画布。</p>
 <p>同样的当我们计算投影矩阵的时候需要使用正确的比例，我花了无数个小时调试，寻找出现搞笑的渲染结果的原因，
-最后发现是少调用了一个 <code>gl.viewport</code> 或者都忘了，并使用正确的比例，由于在代码中很少直接调用
-<code>gl.bindFramebuffer</code> 所以就容易忘掉这些。所以我把这个方法调用放在一个方法里，像这样</p>
-<pre class="prettyprint"><code>function bindFrambufferAndSetViewport(fb, width, height) {
+最后发现是少调用了一个 <code class="notranslate" translate="no">gl.viewport</code> 或者都忘了，并使用正确的比例，由于在代码中很少直接调用
+<code class="notranslate" translate="no">gl.bindFramebuffer</code> 所以就容易忘掉这些。所以我把这个方法调用放在一个方法里，像这样</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function bindFrambufferAndSetViewport(fb, width, height) {
    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
    gl.viewport(0, 0, width, height);
 }
@@ -400,7 +400,7 @@ function drawScene(time) {
 那是因为在帧缓冲中没有深度缓冲，但是画布有。</p>
 <p><img class="webgl_center" src="../resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" /></p>
 <p>想要加深度缓冲就需要创建一个，然后附加到帧缓冲中</p>
-<pre class="prettyprint"><code>// 创建一个深度缓冲
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 创建一个深度缓冲
 const depthBuffer = gl.createRenderbuffer();
 gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
 
@@ -420,14 +420,14 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 <a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS">根据规范</a>
 一定能正确运行的附件组合是：</p>
 <ul>
-<li><code>COLOR_ATTACHMENT0</code> = <code>RGBA/UNSIGNED_BYTE</code> texture</li>
-<li><code>COLOR_ATTACHMENT0</code> = <code>RGBA/UNSIGNED_BYTE</code> texture + <code>DEPTH_ATTACHMENT</code> = <code>DEPTH_COMPONENT16</code> renderbuffer</li>
-<li><code>COLOR_ATTACHMENT0</code> = <code>RGBA/UNSIGNED_BYTE</code> texture + <code>DEPTH_STENCIL_ATTACHMENT</code> = <code>DEPTH_STENCIL</code> renderbuffer</li>
+<li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> texture</li>
+<li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> texture + <code class="notranslate" translate="no">DEPTH_ATTACHMENT</code> = <code class="notranslate" translate="no">DEPTH_COMPONENT16</code> renderbuffer</li>
+<li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> texture + <code class="notranslate" translate="no">DEPTH_STENCIL_ATTACHMENT</code> = <code class="notranslate" translate="no">DEPTH_STENCIL</code> renderbuffer</li>
 </ul>
 <p>对于其他的组合就需要检查用户系统/gpu/驱动/浏览器的支持情况。
 要检查的话需要创建帧缓冲，附加附件，然后调用</p>
-<pre class="prettyprint"><code>var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-</code></pre><p>如果状态是 <code>FRAMEBUFFER_COMPLETE</code> 那这种组合就能使用，反之不能使用。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+</code></pre><p>如果状态是 <code class="notranslate" translate="no">FRAMEBUFFER_COMPLETE</code> 那这种组合就能使用，反之不能使用。
 你就需要告诉用户他们不走运或者撤销一些方法。</p>
 <p>如果你还没有看过<a href="webgl-less-code-more-fun.html">简化WebGL代码</a>的话，
 可以看一下。</p>

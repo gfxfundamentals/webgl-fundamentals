@@ -235,7 +235,7 @@ Excel со всеми языками, а также скрипт, который
 генерации наших текстур.</p>
 <p>Начнём с примера из <a href="webgl-text-canvas2d.html">предыдущей статьи</a>
 и добавим в него функцию для заполнения canvas 2D текстом.</p>
-<pre class="prettyprint"><code>var textCtx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var textCtx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
 
 // помещаем текст в центр canvas
 function makeTextCanvas(text, width, height) {
@@ -251,23 +251,23 @@ function makeTextCanvas(text, width, height) {
 }
 </code></pre><p>Так как нам нужно отрисовать два разных объекта в WebGL (букву F и текст)
 я буду использовать <a href="webgl-drawing-multiple-things.html">функцию-помощник из предыдущей
-статьи</a>. Если вещи вроде <code>programInfo</code>,
-<code>bufferInfo</code> и другие вам непонятны, то загляните в предыдущую статью.</p>
+статьи</a>. Если вещи вроде <code class="notranslate" translate="no">programInfo</code>,
+<code class="notranslate" translate="no">bufferInfo</code> и другие вам непонятны, то загляните в предыдущую статью.</p>
 <p>Итак, создадим букву &#39;F&#39; и единичный квадрант.</p>
-<pre class="prettyprint"><code>// подготавливаем данные для буквы F
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// подготавливаем данные для буквы F
 var fBufferInfo = primitives.create3DFBufferInfo(gl);
 // создаём единичный квадрант для текста
 var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, m4.xRotation(Math.PI / 2));
 </code></pre><p>Единичный квадрант - это квадрант (квадрат) единичного размера. Центр нашего
-квадранта находится в начале системы координат. <code>createPlaneBufferInfo</code>
+квадранта находится в начале системы координат. <code class="notranslate" translate="no">createPlaneBufferInfo</code>
 создаёт плоскость в плоскости xz. Мы передаём матрицу для поворота и получаем
 единичный квадрант в плоскости xy.</p>
 <p>Далее создаём два шейдера</p>
-<pre class="prettyprint"><code>// настройка программы GLSL
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// настройка программы GLSL
 var fProgramInfo = createProgramInfo(gl, [&quot;vertex-shader-3d&quot;, &quot;fragment-shader-3d&quot;]);
 var textProgramInfo = createProgramInfo(gl, [&quot;text-vertex-shader&quot;, &quot;text-fragment-shader&quot;]);
 </code></pre><p>И создаём текстуру текста.</p>
-<pre class="prettyprint"><code>// создаём текстуру текста.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// создаём текстуру текста.
 var textCanvas = makeTextCanvas(&quot;Hello!&quot;, 100, 26);
 var textWidth  = textCanvas.width;
 var textHeight = textCanvas.height;
@@ -279,7 +279,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>Устанавливаем uniform-переменные для текста и буквы &#39;F&#39;</p>
-<pre class="prettyprint"><code>var fUniforms = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var fUniforms = {
   u_matrix: m4.identity(),
 };
 
@@ -288,7 +288,7 @@ var textUniforms = {
   u_texture: textTex,
 };
 </code></pre><p>Теперь при вычислении матриц для F мы сохраняем матрицу вида для буквы.</p>
-<pre class="prettyprint"><code>var fViewMatrix = m4.translate(viewMatrix,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var fViewMatrix = m4.translate(viewMatrix,
     translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
 fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
 fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
@@ -296,7 +296,7 @@ fViewMatrix = m4.zRotate(fViewMatrix, rotation[2] + now + (yy * 3 + xx) * 0.1);
 fViewMatrix = m4.scale(fViewMatrix, scale[0], scale[1], scale[2]);
 fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
 </code></pre><p>Отрисовка F выглядит следующим образом.</p>
-<pre class="prettyprint"><code>gl.useProgram(fProgramInfo.program);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.useProgram(fProgramInfo.program);
 
 webglUtils.setBuffersAndAttributes(gl, fProgramInfo, fBufferInfo);
 
@@ -309,13 +309,13 @@ gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 </code></pre><p>Для вывода текста нам нужно положение начальной точки F. Также нам нужно
 масштабировать наш единичный квадрант, чтобы он соответствовал размерам
 текстуры. Наконец, нам нужно умножить всё это на проекционную матрицу.</p>
-<pre class="prettyprint"><code>// для текста используем положение вида буквы &#39;F&#39;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// для текста используем положение вида буквы &#39;F&#39;
 var textMatrix = m4.translate(projectionMatrix,
     fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]);
 // масштабируем квадрант до нужного размера
 textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 </code></pre><p>И отображаем текст.</p>
-<pre class="prettyprint"><code>// предварительные настройки для отображения текста
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// предварительные настройки для отображения текста
 gl.useProgram(textProgramInfo.program);
 
 webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
@@ -336,16 +336,16 @@ gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 Это происходит из-за отрисовки квадранта. Цвет по умолчанию для canvas -
 чёрный прозрачный (0,0,0,0), и этот цвет мы отображаем в квадранте. Для решения
 проблемы будем использовать смешивание пикселей.</p>
-<pre class="prettyprint"><code>gl.enable(gl.BLEND);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>Пиксель источника (цвет из фрагментного шейдера) соединится с пикселем в
 приемника (цвет canvas) в соответствии с функцией смешивания. Мы установили
-функции смешивания <code>SRC_ALPHA</code> для источника и <code>ONE_MINUS_SRC_ALPHA</code> для
+функции смешивания <code class="notranslate" translate="no">SRC_ALPHA</code> для источника и <code class="notranslate" translate="no">ONE_MINUS_SRC_ALPHA</code> для
 приемника, значит</p>
-<pre class="prettyprint"><code>result = dest * (1 - src_alpha) + src * src_alpha
-</code></pre><p>Например, если в приемнике зелёный цвет <code>0,1,0,1</code>, а в источнике -
-красный <code>1,0,0,1</code>, то мы получим</p>
-<pre class="prettyprint"><code>src = [1, 0, 0, 1]
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">result = dest * (1 - src_alpha) + src * src_alpha
+</code></pre><p>Например, если в приемнике зелёный цвет <code class="notranslate" translate="no">0,1,0,1</code>, а в источнике -
+красный <code class="notranslate" translate="no">1,0,0,1</code>, то мы получим</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">src = [1, 0, 0, 1]
 dst = [0, 1, 0, 1]
 src_alpha = src[3]  // равно 1
 result = dst * (1 - src_alpha) + src * src_alpha
@@ -355,8 +355,8 @@ result = dst * 0 + src * 1
 
 // и ещё раз упростить до
 result = src
-</code></pre><p>Для частей текстуры с прозрачным чёрным цветом <code>0,0,0,0</code></p>
-<pre class="prettyprint"><code>src = [0, 0, 0, 0]
+</code></pre><p>Для частей текстуры с прозрачным чёрным цветом <code class="notranslate" translate="no">0,0,0,0</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">src = [0, 0, 0, 0]
 dst = [0, 1, 0, 1]
 src_alpha = src[3]  // равно 0
 result = dst * (1 - src_alpha) + src * src_alpha
@@ -392,9 +392,9 @@ F и её текст и так далее. <a href="webgl-3d-orthographic.html">
 <p>Давайте для начала отделим отрисовку непрозрачных объектов (буквы F) от
 прозрачных (текст). Для начала заведём переменную, где будем хранить
 положения для текста.</p>
-<pre class="prettyprint"><code>var textPositions = [];
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var textPositions = [];
 </code></pre><p>И при цикле отрисовки букв F мы будем запоминать эти положения.</p>
-<pre class="prettyprint"><code>var fViewMatrix = m4.translate(viewMatrix,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var fViewMatrix = m4.translate(viewMatrix,
     translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
 fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
 fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
@@ -404,14 +404,14 @@ fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
 +// запоминаем положение вида буквы F
 +textPositions.push([fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]]);
 </code></pre><p>Перед отрисовкой букв F мы отключим смешивание и включим запись в буфер глубины.</p>
-<pre class="prettyprint"><code>gl.disable(gl.BLEND);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.disable(gl.BLEND);
 gl.depthMask(true);
 </code></pre><p>Для текста мы включим смешивание и отключим запись в буфер глубины.</p>
-<pre class="prettyprint"><code>gl.enable(gl.BLEND);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 gl.depthMask(false);
 </code></pre><p>И далее отрисуем текст во всех сохранённых положениях.</p>
-<pre class="prettyprint"><code>+// предварительные настройки для отображения текста
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+// предварительные настройки для отображения текста
 +gl.useProgram(textProgramInfo.program);
 +
 +webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
@@ -454,7 +454,7 @@ Y некоторое число, чтобы надпись была всегда
 при его нормализации мы получим единичный вектор, направленный от наблюдателя
 к координате, и при умножении этого вектора на определённое число надпись
 сдвинется на несколько единиц по направлению к наблюдателю (или от него).</p>
-<pre class="prettyprint"><code>+// pos находится в пространстве вида - то есть является вектором от наблюдателя
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+// pos находится в пространстве вида - то есть является вектором от наблюдателя
 +// к координате. Поэтому сместимся вдоль этого вектора ближе к наблюдателю.
 +var fromEye = m4.normalize(pos);
 +var amountToMoveTowardEye = 150;  // длина буквы F составляет 150 единиц
@@ -480,18 +480,18 @@ textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 получить не предумноженную прозрачность, но у него не получается сделать
 это идеально, так как предумножение прозрачности идёт с потерями.</p>
 <p>Чтобы поправить ситуацию, скажем WebGL, чтобы он не получал предумноженную прозрачность.</p>
-<pre class="prettyprint"><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 </code></pre><p>Эта строчка говорит WebGL, что нужно передать предумноженную прозрачность в
-<code>gl.texImage2D</code> и <code>gl.texSubImage2D</code>. Если данные для <code>gl.texImage2D</code> уже
+<code class="notranslate" translate="no">gl.texImage2D</code> и <code class="notranslate" translate="no">gl.texSubImage2D</code>. Если данные для <code class="notranslate" translate="no">gl.texImage2D</code> уже
 предумноженные, как в случае с Canvas 2D, то WebGL сможет просто передать
 их далее.</p>
 <p>Кроме того, нам нужно изменить функцию смешивания.</p>
-<pre class="prettyprint"><code>-gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 +gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>Старая функция умножала цвет источника на его прозрачность. За это отвечает
-<code>SRC_ALPHA</code>. Но сейчас данные для текстуры уже предумноженные на прозрачность.
+<code class="notranslate" translate="no">SRC_ALPHA</code>. Но сейчас данные для текстуры уже предумноженные на прозрачность.
 Это и есть смысл предумножения. Поэтому нам не нужно заставлять видеокарту
-выполнять умножение. Значение параметра <code>ONE</code> означает умножение на 1.</p>
+выполнять умножение. Значение параметра <code class="notranslate" translate="no">ONE</code> означает умножение на 1.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-premultiplied-alpha.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-premultiplied-alpha.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
@@ -502,9 +502,9 @@ textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 <p>А что, если нам нужно, чтобы текст оставался фиксированного размера, но
 по-прежнему находился на переднем плане? Как вы помните из <a href="webgl-3d-perspective.html">статьи о
 перспективе</a>, наша матрица перспективы
-масштабирует объекты на значение <code>1 / -Z</code>, чтобы они были меньше на расстоянии.
-Поэтому нам нужно лишь компенсировать этот коэффициент, масштабируя на <code>-Z</code>.</p>
-<pre class="prettyprint"><code>...
+масштабирует объекты на значение <code class="notranslate" translate="no">1 / -Z</code>, чтобы они были меньше на расстоянии.
+Поэтому нам нужно лишь компенсировать этот коэффициент, масштабируя на <code class="notranslate" translate="no">-Z</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 // pos находится в пространстве вида - то есть является вектором от наблюдателя
 // к координате. Поэтому сместимся вдоль этого вектора ближе к наблюдателю.
 var fromEye = normalize(pos);
@@ -527,7 +527,7 @@ var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
 </p>
 <p>Мы можем установить разные надписи для каждой буквы F, нужно лишь задать новую
 текстуру для каждой F, а затем просто обновлять uniform-переменную для этой F.</p>
-<pre class="prettyprint"><code>// создаём текстуры с текстом, по одной на каждую F
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// создаём текстуры с текстом, по одной на каждую F
 var textTextures = [
   &quot;anna&quot;,   // 0
   &quot;colin&quot;,  // 1
@@ -563,7 +563,7 @@ var textTextures = [
   };
 });
 </code></pre><p>Затем при отрисовке выбираем текстуру</p>
-<pre class="prettyprint"><code>*textPositions.forEach(function(pos, ndx) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*textPositions.forEach(function(pos, ndx) {
 
   +// выбираем текстуру
   +var tex = textTextures[ndx];
@@ -572,7 +572,7 @@ var textTextures = [
   // масштабируем квадрант до нужного размера
   *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
 </code></pre><p>и обновляем значение uniform-переменной перед отрисовкой.</p>
-<pre class="prettyprint"><code>  *textUniforms.u_texture = tex.texture;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  *textUniforms.u_texture = tex.texture;
 </code></pre><p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-different-text.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-different-text.html" target="_blank">нажмите здесь, чтобы открыть в отдельном окне</a>
@@ -583,7 +583,7 @@ var textTextures = [
 цвет для текста. Тогда мы могли бы умножить текст на цвет и получить в итоге
 цветной текст.</p>
 <p>Для начала внесём изменения в шейдер текста для умножения на цвет.</p>
-<pre class="prettyprint"><code>varying vec2 v_texcoord;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">varying vec2 v_texcoord;
 
 uniform sampler2D u_texture;
 +uniform vec4 u_color;
@@ -592,9 +592,9 @@ void main() {
 *   gl_FragColor = texture2D(u_texture, v_texcoord) * u_color;
 }
 </code></pre><p>Далее при отрисовке текста в canvas будем использовать белый цвет.</p>
-<pre class="prettyprint"><code>textCtx.fillStyle = &quot;white&quot;;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">textCtx.fillStyle = &quot;white&quot;;
 </code></pre><p>Теперь создадим цвета надписей.</p>
-<pre class="prettyprint"><code>// цвета, по 1 на каждую F
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// цвета, по 1 на каждую F
 var colors = [
   [0.0, 0.0, 0.0, 1], // 0
   [1.0, 0.0, 0.0, 1], // 1
@@ -614,7 +614,7 @@ var colors = [
   [0.0, 5.0, 5.0, 1], // 15,
 ];
 </code></pre><p>При отрисовке устанавливаем цвет</p>
-<pre class="prettyprint"><code>// задаём значение для uniform-переменной цвета
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// задаём значение для uniform-переменной цвета
 textUniforms.u_color = colors[ndx];
 </code></pre><p>И получаем цветные надписи.</p>
 <p><div class="webgl_example_container">

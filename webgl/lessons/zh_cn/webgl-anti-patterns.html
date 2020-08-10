@@ -214,8 +214,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>这里是一些WebGL的反面模式，反面模式就是一些你应该避免的做法</p>
 <ol>
-<li><p>将 <code>viewportWidth</code> 和 <code>viewportHeight</code> 属性放在 <code>WebGLRenderingContext</code> 对象上。</p>
-<p>有些代码添加了视图宽度和高度属性，并将它附加在 <code>WebGLRenderingContext</code> 上，像这样</p>
+<li><p>将 <code class="notranslate" translate="no">viewportWidth</code> 和 <code class="notranslate" translate="no">viewportHeight</code> 属性放在 <code class="notranslate" translate="no">WebGLRenderingContext</code> 对象上。</p>
+<p>有些代码添加了视图宽度和高度属性，并将它附加在 <code class="notranslate" translate="no">WebGLRenderingContext</code> 上，像这样</p>
 <pre class="prettyprint">
 gl = canvas.getContext("webgl");
 gl.viewportWidth = canvas.width;    // 不好!!!
@@ -229,9 +229,9 @@ gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 
 <p><strong>为什么这样不好:</strong></p>
 <p>主要的错误就是多了两个属性，并且需要在画布尺寸改变的时候更新这些属性。
-假如你将画布的宽高设置为某值，但当用户改变窗口大小时 <code>gl.viewportWidth</code> &amp; <code>gl.viewportHeight</code>
+假如你将画布的宽高设置为某值，但当用户改变窗口大小时 <code class="notranslate" translate="no">gl.viewportWidth</code> &amp; <code class="notranslate" translate="no">gl.viewportHeight</code>
 就不是正确的值，你就需要重新设置它们。</p>
-<p>其次是假如一些WebGL新手看到你的代码，会把 <code>gl.viewportWidth</code> 和 <code>gl.viewportHeight</code>
+<p>其次是假如一些WebGL新手看到你的代码，会把 <code class="notranslate" translate="no">gl.viewportWidth</code> 和 <code class="notranslate" translate="no">gl.viewportHeight</code>
 当作WebGL规范的一部分，会给他们带来长时间影响或困惑。</p>
 <p><strong>应该怎么做:</strong></p>
 <p>为什么自己给自己找麻烦？WebGL上下文有它的宽和高，直接使用就行。</p>
@@ -241,11 +241,11 @@ gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 </pre>
 
-<p>甚至能解决使用 <code>gl.canvas.width</code> 和 <code>gl.canvas.height</code> 时无法解决的情况。
+<p>甚至能解决使用 <code class="notranslate" translate="no">gl.canvas.width</code> 和 <code class="notranslate" translate="no">gl.canvas.height</code> 时无法解决的情况。
 <a href="#drawingbuffer">具体原因看这里</a>。</p>
 </li>
-<li><p>使用 <code>canvas.width</code> 和 <code>canvas.height</code> 计算长宽比</p>
-<p>经常有代码使用 <code>canvas.width</code> 和 <code>canvas.height</code> 计算长宽比，像这样 </p>
+<li><p>使用 <code class="notranslate" translate="no">canvas.width</code> 和 <code class="notranslate" translate="no">canvas.height</code> 计算长宽比</p>
+<p>经常有代码使用 <code class="notranslate" translate="no">canvas.width</code> 和 <code class="notranslate" translate="no">canvas.height</code> 计算长宽比，像这样 </p>
 <pre class="prettyprint">
 var aspect = canvas.width / canvas.height;
 perspective(fieldOfView, aspect, zNear, zFar);
@@ -254,14 +254,14 @@ perspective(fieldOfView, aspect, zNear, zFar);
 <p><strong>为什么这样不好:</strong></p>
 <p>画布的宽和高属性与画布的显示尺寸无关，CSS控制画布的显示尺寸。</p>
 <p><strong>应该怎么做:</strong></p>
-<p>使用 <code>canvas.clientWidth</code> 和 <code>canvas.clientHeight</code>，这些值可以告诉你画布显示在屏幕上的实际尺寸。
+<p>使用 <code class="notranslate" translate="no">canvas.clientWidth</code> 和 <code class="notranslate" translate="no">canvas.clientHeight</code>，这些值可以告诉你画布显示在屏幕上的实际尺寸。
 这样就可以不用关心CSS设置，得到正确的长宽比。</p>
 <pre class="prettyprint">
 var aspect = canvas.clientWidth / canvas.clientHeight;
 perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 </pre>
 
-<p>这有一些示例，使用大小相同(<code>width=&quot;400&quot; height=&quot;300&quot;</code>)的画布，
+<p>这有一些示例，使用大小相同(<code class="notranslate" translate="no">width=&quot;400&quot; height=&quot;300&quot;</code>)的画布，
 但是用CSS告诉浏览器显示不同的尺寸，注意示例中的所有 &#39;F&#39; 都有正确的长宽比。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 150px; height: 200px;" src="/webgl/lessons/../webgl-canvas-clientwidth-clientheight.html"></iframe>
@@ -274,7 +274,7 @@ perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 </div>
 
 </p>
-<p>如果我们使用 <code>canvas.width</code> 和 <code>canvas.height</code>，结果就不是正确的了。</p>
+<p>如果我们使用 <code class="notranslate" translate="no">canvas.width</code> 和 <code class="notranslate" translate="no">canvas.height</code>，结果就不是正确的了。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 150px; height: 200px;" src="/webgl/lessons/../webgl-canvas-width-height.html"></iframe>
 </div>
@@ -287,8 +287,8 @@ perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
 </p>
 </li>
-<li><p>使用 <code>window.innerWidth</code> 和 <code>window.innerHeight</code>计算任何东西</p>
-<p>大多数WebGL应用在任何地方都使用 <code>window.innerWidth</code> 和 <code>window.innerHeight</code>。
+<li><p>使用 <code class="notranslate" translate="no">window.innerWidth</code> 和 <code class="notranslate" translate="no">window.innerHeight</code>计算任何东西</p>
+<p>大多数WebGL应用在任何地方都使用 <code class="notranslate" translate="no">window.innerWidth</code> 和 <code class="notranslate" translate="no">window.innerHeight</code>。
 例如：</p>
 <pre class="prettyprint">
 canvas.width = window.innerWidth;                    // 不好!!
@@ -302,7 +302,7 @@ canvas.height = window.hinnerHeight;                 // 不好!!
 这样就不需要在新项目中修改所有的相关代码。</p>
 <p><strong>应该怎么做:</strong></p>
 <p>使用Web平台而不是对抗Web平台，它有自己的设计模式。
-使用CSS和 <code>clientWidth</code> 和 <code>clientHeight</code>。</p>
+使用CSS和 <code class="notranslate" translate="no">clientWidth</code> 和 <code class="notranslate" translate="no">clientHeight</code>。</p>
 <pre class="prettyprint">
 var width = gl.canvas.clientWidth;
 var height = gl.canvas.clientHeight;
@@ -311,24 +311,24 @@ gl.canvas.width = width;
 gl.canvas.height = height;
 </pre>
 
-<p>这有 9 个例子，都使用相同的代码，注意它们中没有一个使用了 <code>window.innerWidth</code> 或 <code>window.innerHeight</code>。</p>
+<p>这有 9 个例子，都使用相同的代码，注意它们中没有一个使用了 <code class="notranslate" translate="no">window.innerWidth</code> 或 <code class="notranslate" translate="no">window.innerHeight</code>。</p>
 <p><a href="../../webgl-same-code-canvas-fullscreen.html" target="_blank">使用CSS让一个画布全屏</a></p>
 <p><a href="../../webgl-same-code-canvas-partscreen.html" target="_blank">使画布宽度为 70%，给编辑器留下空间</a></p>
 <p><a href="../../webgl-same-code-canvas-embedded.html" target="_blank">将画布嵌入到段落中</a></p>
-<p><a href="../../webgl-same-code-canvas-embedded-border-box.html" target="_blank">使用<code>box-sizing: border-box;</code>将画布嵌入到段落中</a></p>
-<p><code>box-sizing: border-box;</code>将边框和内边距算入元素，而不是算在外面。换句话说，普通的盒模型定义一个 400x300 像素的元素，
+<p><a href="../../webgl-same-code-canvas-embedded-border-box.html" target="_blank">使用<code class="notranslate" translate="no">box-sizing: border-box;</code>将画布嵌入到段落中</a></p>
+<p><code class="notranslate" translate="no">box-sizing: border-box;</code>将边框和内边距算入元素，而不是算在外面。换句话说，普通的盒模型定义一个 400x300 像素的元素，
 边框为 15 像素，实际内容部分为 400x300 像素，并且外边有一个 15 像素宽的边框，这样总共就是 430x330 像素。在 box-sizing: border-box 模式下，
-边框算在内部，所以内容部分就为 370x270 像素，这也是使用 <code>clientWidth</code> 和 <code>clientHeight</code> 的另一个重要原因。如果设置边框为 <code>1em</code>，
+边框算在内部，所以内容部分就为 370x270 像素，这也是使用 <code class="notranslate" translate="no">clientWidth</code> 和 <code class="notranslate" translate="no">clientHeight</code> 的另一个重要原因。如果设置边框为 <code class="notranslate" translate="no">1em</code>，
 你就没办法知道画布的最终尺寸，它在不同的浏览器和字体下都不同。</p>
 <p><a href="../../webgl-same-code-container-fullscreen.html" target="_blank">使用CSS控制容器全屏，并使用代码插入一个画布到容器中</a></p>
 <p><a href="../../webgl-same-code-container-partscreen.html" target="_blank">使用一个宽度为 70% 的容器，并使用代码插入一个画布到容器中</a></p>
 <p><a href="../../webgl-same-code-container-embedded.html" target="_blank">在段落中嵌入一个容器，并使用代码插入一个画布到容器中</a></p>
-<p><a href="../../webgl-same-code-container-embedded-border-box.html" target="_blank">使用 <code>box-sizing: border-box;</code>在段落中嵌入一个容器，并使用代码插入一个画布到容器中</a></p>
+<p><a href="../../webgl-same-code-container-embedded-border-box.html" target="_blank">使用 <code class="notranslate" translate="no">box-sizing: border-box;</code>在段落中嵌入一个容器，并使用代码插入一个画布到容器中</a></p>
 <p><a href="../../webgl-same-code-body-only-fullscreen.html" target="_blank">一个页面使用CSS设置为全屏，并使用代码插入一个画布到页面中</a></p>
 <p>重点是，如果你拥抱Web技术并使用上面的技巧，就可以在多种情况中不需要改变代码。</p>
 </li>
-<li><p>使用 <code>&#39;resize&#39;</code> 事件改变画布的大小</p>
-<p>有些应用监听窗口的 <code>&#39;resize&#39;</code> 事件，像这样去重置画布大小。</p>
+<li><p>使用 <code class="notranslate" translate="no">&#39;resize&#39;</code> 事件改变画布的大小</p>
+<p>有些应用监听窗口的 <code class="notranslate" translate="no">&#39;resize&#39;</code> 事件，像这样去重置画布大小。</p>
 <pre class="prettyprint">
 window.addEventListener('resize', resizeTheCanvas);
 </pre>
@@ -340,9 +340,9 @@ window.onresize = resizeTheCanvas;
 
 <p><strong>为什么这样不好:</strong></p>
 <p>这样本身没什么问题，然而，对于<strong>大多数</strong>WebGL应用，它适用的情况比较少。
-尤其是 <code>&#39;resize&#39;</code> 只有在窗口重置大小的时候才能触发。在其他情况下画布改变大小就不管用了，
+尤其是 <code class="notranslate" translate="no">&#39;resize&#39;</code> 只有在窗口重置大小的时候才能触发。在其他情况下画布改变大小就不管用了，
 例如假设要制作一个三维编辑器，画布在左侧设置在右侧，你使用了一个拖动条可以改变两个部分的大小，
-在这种情况下你不会得到任何 <code>&#39;resize&#39;</code> 事件，相似的，如果一个页面中添加和移除一些内容，
+在这种情况下你不会得到任何 <code class="notranslate" translate="no">&#39;resize&#39;</code> 事件，相似的，如果一个页面中添加和移除一些内容，
 你也不会得到重置大小事件。</p>
 <p><strong>应该怎么做:</strong></p>
 <p>像大多数其他反面模式一样，可以用一种更通用的方式应多多种情况。
@@ -402,11 +402,11 @@ function checkRender() {
 checkRender();
 </pre>
 
-<p>这样每当 <code>needToRender</code> 为true时就会重置画布大小。
-这样在不需要持续绘制的应用中，就能处理画布问题。只需要在场景需要重新绘制时设置 <code>needToRender</code> 为true。</p>
+<p>这样每当 <code class="notranslate" translate="no">needToRender</code> 为true时就会重置画布大小。
+这样在不需要持续绘制的应用中，就能处理画布问题。只需要在场景需要重新绘制时设置 <code class="notranslate" translate="no">needToRender</code> 为true。</p>
 </li>
-<li><p>给 <code>WebGLObject</code> 添加属性</p>
-<p><code>WebGLObject</code> 是WebGL资源中的多种类型，比如 <code>WebGLBuffer</code> 或 <code>WebGLTexture</code>。
+<li><p>给 <code class="notranslate" translate="no">WebGLObject</code> 添加属性</p>
+<p><code class="notranslate" translate="no">WebGLObject</code> 是WebGL资源中的多种类型，比如 <code class="notranslate" translate="no">WebGLBuffer</code> 或 <code class="notranslate" translate="no">WebGLTexture</code>。
 一些应用为这些属性对象添加属性，例如像这样：</p>
 <pre class="prettyprint">
 var buffer = gl.createBuffer();
@@ -420,9 +420,9 @@ program.u_matrixLoc = gl.getUniformLocation(program, "u_matrix");  // 不好!!
 
 <p><strong>为什么这样不好:</strong></p>
 <p>原因是WebGL可能“丢失上下文”，这样在大多数情况下没问题，但假如浏览器发现太多GPU资源被使用时，
-可能会故意丢失<code>WebGLRenderingContext</code>的上下文用来释放一些空间，
+可能会故意丢失<code class="notranslate" translate="no">WebGLRenderingContext</code>的上下文用来释放一些空间，
 WebGL应用需要处理这样情况，比如 Google 地图。</p>
-<p>上方代码的问题是当上下文丢失，WebGL创建方法比如 <code>gl.createBuffer()</code> 会返回 <code>null</code>。
+<p>上方代码的问题是当上下文丢失，WebGL创建方法比如 <code class="notranslate" translate="no">gl.createBuffer()</code> 会返回 <code class="notranslate" translate="no">null</code>。
 等于让代码变成这样</p>
 <pre class="prettyprint">
 var buffer = null;
@@ -437,7 +437,7 @@ TypeError: Cannot set property 'itemSize' of null
 
 <p>尽管很多应用不关心丢失上下文后是否会中断，但在后续更新中才想到解决这个问题似乎就不是那么好了。</p>
 <p><strong>应该怎么做:</strong></p>
-<p>如果你想让 <code>WebGLObjects</code> 和一些相关信息关联，应该使用 JavaScript 对象，例如：</p>
+<p>如果你想让 <code class="notranslate" translate="no">WebGLObjects</code> 和一些相关信息关联，应该使用 JavaScript 对象，例如：</p>
 <pre class="prettyprint">
 var bufferInfo = {
   id: gl.createBuffer(),
@@ -462,7 +462,7 @@ GPU对矩形像素值(纹理, renderbuffer)的支持有限制。通常这个大�
 如果设计用于 2560x1600 的屏幕，限制可能是 4096 像素。
 </p><p>
 这样似乎很合理，但是如果你有多个显示器怎么办？假设我们有一个限制为 2048 的GPU，但是有两个 1920x1080 的显示器。
-你的代码想要设置<code>canvas.width</code>为<code>canvas.width</code>也就是 3840，会发生什么？</p>
+你的代码想要设置<code class="notranslate" translate="no">canvas.width</code>为<code class="notranslate" translate="no">canvas.width</code>也就是 3840，会发生什么？</p>
 <p>我想到的只有三种情况</p>
 <ol>
 <li>
@@ -486,7 +486,7 @@ GPU对矩形像素值(纹理, renderbuffer)的支持有限制。通常这个大�
 将画布尺寸硬编码限制为 4096。苹果的 5K iMac 受到了这个限制。大多数WebGL应用因为这个原因出现奇怪的显示结果。
 同样的很多开始学习WebGL的人，在使用多个显示器时会触发这个限制。</p>
 <p>
-所以，如果你想处理这些情况就像 #1 一样使用<code>gl.drawingBufferWidth</code> 和 <code>gl.drawingBufferHeight</code>。
+所以，如果你想处理这些情况就像 #1 一样使用<code class="notranslate" translate="no">gl.drawingBufferWidth</code> 和 <code class="notranslate" translate="no">gl.drawingBufferHeight</code>。
 对于大多数应用使用上方的设置就没什么问题。要注意的是如果你需要计算一些东西的话，就要通过这个知道drawingbuffer的实际尺寸，
 并将它带入计算。例如选择物体，换句话说从鼠标坐标转换到画布像素坐标。另一种就是任何一种需要知道drawingbuffer实际大小的后处理效果。
 </p>

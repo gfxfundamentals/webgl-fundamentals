@@ -218,9 +218,9 @@ If you have not read that article please <a href="webgl-multiple-views.html">go 
 <a href="webgl-less-code-more-fun.html">less code more fun</a>
 as it uses the library mentioned there so as to
 unclutter the example. If you don&#39;t understand
-when a function named <code>webglUtils.setBuffersAndAttributes</code>
+when a function named <code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code>
 what it means to set the buffers and attributes, or when
-a function named <code>webglUtils.setUniforms</code> what it means
+a function named <code class="notranslate" translate="no">webglUtils.setUniforms</code> what it means
 to set uniforms, etc... then you should probably to go further back and
 <a href="webgl-fundamentals.html">read the fundamentals</a>.</p>
 <p>It&#39;s often useful to be able to visualize what a camera
@@ -247,7 +247,7 @@ to connect the vertices.</p>
 so let&#39;s put the cube and cone on the positive side with the
 cone opening toward -Z</p>
 <p>First the cube lines</p>
-<pre class="prettyprint"><code class="lang-js">// create geometry for a camera
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// create geometry for a camera
 function createCameraBufferInfo(gl) {
   // first let&#39;s add a cube. It goes from 1 to 3
   // because cameras look down -Z so we want
@@ -274,7 +274,7 @@ function createCameraBufferInfo(gl) {
 }
 </code></pre>
 <p>Then let&#39;s add in the cone lines</p>
-<pre class="prettyprint"><code class="lang-js">// create geometry for a camera
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// create geometry for a camera
 function createCameraBufferInfo(gl) {
   // first let&#39;s add a cube. It goes from 1 to 3
   // because cameras look down -Z so we want
@@ -323,7 +323,7 @@ function createCameraBufferInfo(gl) {
 be tiny next to our F. We could scale it by multiplying in
 a scale matrix when we draw it or we could scale the data
 itself here.</p>
-<pre class="prettyprint"><code class="lang-js">-function createCameraBufferInfo(gl) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-function createCameraBufferInfo(gl) {
 +function createCameraBufferInfo(gl, scale = 1) {
   // first let&#39;s add a cube. It goes from 1 to 3
   // because cameras look down -Z so we want
@@ -372,7 +372,7 @@ itself here.</p>
 </code></pre>
 <p>Our current shader program draws with vertex colors.
 Let&#39;s make another that draws with a solid color.</p>
-<pre class="prettyprint"><code class="lang-html">&lt;script id=&quot;solid-color-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;script id=&quot;solid-color-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 
 uniform mat4 u_matrix;
@@ -395,7 +395,7 @@ void main() {
 </code></pre>
 <p>Now let&#39;s use those to draw one scene with a camera viewing the
 other scene</p>
-<pre class="prettyprint"><code class="lang-js">// setup GLSL programs
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup GLSL programs
 // compiles shaders, links program, looks up locations
 -const programInfo = webglUtils.createProgramInfo(gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 +const vertexColorProgramInfo = webglUtils.createProgramInfo(gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
@@ -524,7 +524,7 @@ then we can make a cube that represents clip space
 and use the inverse of the projection matrix to place it
 in the scene.</p>
 <p>First we need a clip space line cube.</p>
-<pre class="prettyprint"><code class="lang-js">function createClipspaceCubeBufferInfo(gl) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function createClipspaceCubeBufferInfo(gl) {
   // first let&#39;s add a cube. It goes from 1 to 3
   // because cameras look down -Z so we want
   // the camera to start at Z = 0. We&#39;ll put a
@@ -552,7 +552,7 @@ in the scene.</p>
 }
 </code></pre>
 <p>Then we can create one and draw it</p>
-<pre class="prettyprint"><code class="lang-js">const cameraScale = 20;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const cameraScale = 20;
 const cameraBufferInfo = createCameraBufferInfo(gl, cameraScale);
 
 +const clipspaceCubeBufferInfo = createClipspaceCubeBufferInfo(gl);
@@ -603,7 +603,7 @@ const cameraBufferInfo = createCameraBufferInfo(gl, cameraScale);
 </code></pre>
 <p>Let&#39;s also make it so we can adjust the near and far settings
 of the first camera</p>
-<pre class="prettyprint"><code class="lang-js">const settings = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const settings = {
   rotation: 150,  // in degrees
   cam1FieldOfView: 60,  // in degrees
   cam1PosX: 0,
@@ -638,7 +638,7 @@ projection for the camera on the left it will work either way
 because a projection matrix always converts to clip space
 so it&#39;s inverse will always take our +1 to -1 cube and warp
 it appropriately.</p>
-<pre class="prettyprint"><code class="lang-js">const settings = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const settings = {
   rotation: 150,  // in degrees
   cam1FieldOfView: 60,  // in degrees
   cam1PosX: 0,

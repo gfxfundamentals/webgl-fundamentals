@@ -222,7 +222,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Далее идут изменения в вершинном шейдере. Нам нужно передать в него текстурные
 координаты. В данном случае мы передаём их без изменений сразу во фрагментный
 шейдер.</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 *attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -238,9 +238,9 @@ void main() {
 }
 </code></pre><p>Во фрагментном шейдере мы объявляем uniform-переменную sampler2D, через
 которую будем обращаться к текстуре. Мы используем текстурные координаты,
-переданные из вершинного шейдера и вызваем функцию <code>texture2D</code> для
+переданные из вершинного шейдера и вызваем функцию <code class="notranslate" translate="no">texture2D</code> для
 получения цвета из этой текстуры.</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // приходит из вершинного шейдера
 *varying vec2 v_texcoord;
@@ -252,7 +252,7 @@ void main() {
 *   gl_FragColor = texture2D(u_texture, v_texcoord);
 }
 </code></pre><p>Нам необходимо настроить текстурные координаты.</p>
-<pre class="prettyprint"><code>// получаем ссылку на данные вершины
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// получаем ссылку на данные вершины
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 *var texcoordLocation = gl.getAttribLocation(program, &quot;a_texcoords&quot;);
 
@@ -270,7 +270,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 *setTexcoords(gl);
 </code></pre><p>Текстурные координаты сопоставляют целую текстуру с каждой гранью
 нашей буквы &#39;F&#39;.</p>
-<pre class="prettyprint"><code>*// заполняем буфер текстурными координатами для F
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*// заполняем буфер текстурными координатами для F
 *function setTexcoords(gl) {
 *  gl.bufferData(
 *      gl.ARRAY_BUFFER,
@@ -308,7 +308,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 случае мы могли бы начать отрисовку немедленно. А затем, когда изображение
 загрузится, мы перенесли бы его в текстуру. Именно такой подход мы и будем
 использовать далее.</p>
-<pre class="prettyprint"><code>*// создаём текстуру
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*// создаём текстуру
 *var texture = gl.createTexture();
 *gl.bindTexture(gl.TEXTURE_2D, texture);
 *
@@ -343,10 +343,10 @@ gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 <p>Я загрузил текстуру в фотошоп и отметил необходимые координаты в пикселях.</p>
 <p><img class="webgl_center" width="256" height="256" src="../../resources/f-texture-pixel-coords.png" /></p>
 <p>Для конвертации из пиксельных координат в текстурные мы можем использовать формулу.</p>
-<pre class="prettyprint"><code>texcoordX = pixelCoordX / (width  - 1)
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">texcoordX = pixelCoordX / (width  - 1)
 texcoordY = pixelCoordY / (height - 1)
 </code></pre><p>Вот текстурные координаты для фронтальной части.</p>
-<pre class="prettyprint"><code>// лицевая часть левого столба
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// лицевая часть левого столба
  38 / 255,  44 / 255,
  38 / 255, 223 / 255,
 113 / 255,  44 / 255,
@@ -387,7 +387,7 @@ texcoordY = pixelCoordY / (height - 1)
 1.0 находится одна копия текстуры. От 1.0 до 2.0 - вторая. И даже от -4.0
 до -3.0 находится копия. Отобразим поверхность, используя следующие
 текстурные координаты.</p>
-<pre class="prettyprint"><code> -3, -1,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> -3, -1,
   2, -1,
  -3,  4,
  -3,  4,
@@ -400,11 +400,11 @@ texcoordY = pixelCoordY / (height - 1)
 </div>
 
 </p>
-<p>Вы можете повторять текстуру в определённых направлениях через <code>CLAMP_TO_EDGE</code>. Например,</p>
-<pre class="prettyprint"><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+<p>Вы можете повторять текстуру в определённых направлениях через <code class="notranslate" translate="no">CLAMP_TO_EDGE</code>. Например,</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>Попробуйте разные переключатели в примере выше, чтобы понять разницу.</p>
-<p>Вы могли заметить вызов функции <code>gl.generateMipmap</code> при загрузке текстуры.
+<p>Вы могли заметить вызов функции <code class="notranslate" translate="no">gl.generateMipmap</code> при загрузке текстуры.
 Для чего она нужна?</p>
 <p>Представьте, что у нас есть текстура 16x16 пикселей.</p>
 <p><img class="webgl_center" src="../resources/mip-low-res-enlarged.png" style="border: 2px solid black;" /></p>
@@ -424,7 +424,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 знакомой нам текстуры 16x16 может выглядеть следующим образом:</p>
 <p><img class="webgl_center noinvertdark nobg" src="../resources/mipmap-low-res-enlarged.png" /></p>
 <p>Обычно каждое уменьшенное изображение - это просто билинейная интерполяция
-предыдущего, и именно их создаёт функция <code>gl.generateMipmap</code>. Она берёт
+предыдущего, и именно их создаёт функция <code class="notranslate" translate="no">gl.generateMipmap</code>. Она берёт
 самое большое изображение и создаёт все уменьшенные копии. Конечно же, вы
 можете сделать уменьшенные изображения и сами.</p>
 <p>Теперь, если вы попытаетесь отрисовать текстуру 16x16 пикселей на полигоне
@@ -432,15 +432,15 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 из мипмапа.</p>
 <p>Вы можете выбрать одну из 6 моделей фильтра текстуры.</p>
 <ul>
-<li><code>NEAREST</code> = выбрать 1 пиксель из большего изображения</li>
-<li><code>LINEAR</code> = выбрать 4 пикселя из большего изображения и смешать их</li>
-<li><code>NEAREST_MIPMAP_NEAREST</code> = выбрать лучшее изображение (меньшее или большее) и выбрать 1 пиксель из него</li>
-<li><code>LINEAR_MIPMAP_NEAREST</code> = выбрать лучшее изображение и смешать 4 пикселя из него</li>
-<li><code>NEAREST_MIPMAP_LINEAR</code> = выбрать 2 лучших изображения, взять по 1 пикселю из каждого и смешать их</li>
-<li><code>LINEAR_MIPMAP_LINEAR</code> = выбрать 2 лучших изображения, взять по 4 пикселя из каждого и смешать их</li>
+<li><code class="notranslate" translate="no">NEAREST</code> = выбрать 1 пиксель из большего изображения</li>
+<li><code class="notranslate" translate="no">LINEAR</code> = выбрать 4 пикселя из большего изображения и смешать их</li>
+<li><code class="notranslate" translate="no">NEAREST_MIPMAP_NEAREST</code> = выбрать лучшее изображение (меньшее или большее) и выбрать 1 пиксель из него</li>
+<li><code class="notranslate" translate="no">LINEAR_MIPMAP_NEAREST</code> = выбрать лучшее изображение и смешать 4 пикселя из него</li>
+<li><code class="notranslate" translate="no">NEAREST_MIPMAP_LINEAR</code> = выбрать 2 лучших изображения, взять по 1 пикселю из каждого и смешать их</li>
+<li><code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code> = выбрать 2 лучших изображения, взять по 4 пикселя из каждого и смешать их</li>
 </ul>
 <p>На следующих 2 примерах можно увидеть разницу в этих моделях. Первый пример
-демонстрирует использование <code>NEAREST</code> или <code>LINEAR</code>, где всегда берётся пиксель
+демонстрирует использование <code class="notranslate" translate="no">NEAREST</code> или <code class="notranslate" translate="no">LINEAR</code>, где всегда берётся пиксель
 из большего изображения, и поэтому изображение начинает мигать при движении
 объекта. При такое модели необходимо всегда выбрать единственный пиксель из
 большего изображение, а в зависимости от размера и положения изображения иногда
@@ -454,7 +454,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 <p>Обратите внимание, как сильно мерцают левые и средние изображения, в то время как правые мерцает
 значительно меньше. Правые изображения тоже имеют смешанные цвета, так как они используют мипмапы.
 Чем меньше текстура, тем дальше друг от друга WebGL берёт пиксели. Именно поэтому нижнее изображение
-посередине, мерцает, даже не смотря на использование <code>LINEAR</code> и смешивание 4 пикселей - это происходит
+посередине, мерцает, даже не смотря на использование <code class="notranslate" translate="no">LINEAR</code> и смешивание 4 пикселей - это происходит
 из-за того, что эти 4 пикселя из разных углов изображения 16x16, и в зависимости от того, какие 4
 пикселя выберутся, будут получены разные цвета. А изображение справа внизу остаётся постоянного цвета,
 так как использует предпоследнее (почти самое маленькое) изображение из мипмапа.</p>
@@ -466,47 +466,47 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
 </p>
 <p>6 лент, идущих вглубь экрана, используют 6 различных моделей фильтрации,
-рассмотренных выше. Верхняя левая лента использует <code>NEAREST</code> и выглядит
-очень угловатой. Верхняя средняя использует <code>LINEAR</code>, и она ненамного лучше.
-Правая верхняя использует <code>NEAREST_MIPMAP_NEAREST</code>. Кликните на изображении
+рассмотренных выше. Верхняя левая лента использует <code class="notranslate" translate="no">NEAREST</code> и выглядит
+очень угловатой. Верхняя средняя использует <code class="notranslate" translate="no">LINEAR</code>, и она ненамного лучше.
+Правая верхняя использует <code class="notranslate" translate="no">NEAREST_MIPMAP_NEAREST</code>. Кликните на изображении
 для переключения на текстуру, где каждое изображение из мипмапа отличается
 по цвету, и вам будет легко определить, какое именно изображение используется.
-Нижняя левая лента использует <code>LINEAR_MIPMAP_NEAREST</code>, при котором выбирается
+Нижняя левая лента использует <code class="notranslate" translate="no">LINEAR_MIPMAP_NEAREST</code>, при котором выбирается
 лучшее изображение мипмапа, а затем смешивается 4 пикселя из этого изображения.
 Хороши видны переходы от одного изображения мипмапа к другому. Нижнее
-изображение посередине использует <code>NEAREST_MIPMAP_LINEAR</code>, где подбираются 2
+изображение посередине использует <code class="notranslate" translate="no">NEAREST_MIPMAP_LINEAR</code>, где подбираются 2
 наиболее подходящих изображения из мипмапа, из каждого берётся по пикселю и
 смешивается. В нём можно по-прежнему разглядеть угловатость, особенно в
 горизонтальном направлении. Ну и нижнее правое изображение использует
-<code>LINEAR_MIPMAP_LINEAR</code>, где подбираются 2 наиболее подходящих изображения из
+<code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code>, где подбираются 2 наиболее подходящих изображения из
 мипмапа, из каждого выбирается по 4 пикселя, и эти 8 пикселей смешиваются.</p>
 <p><img class="webgl_center noinvertdark nobg" src="../resources/different-colored-mips.png" /></p>
 <div class="webgl_center">мипмапы с изображениями разных цветов</div>
 
 <p>Возможно, вы сейчас думаете, зачем вообще использовать что-то отличное от
-<code>LINEAR_MIPMAP_LINEAR</code>, которое, вероятно, лучше всех. Причин множество.
-Во-первых, <code>LINEAR_MIPMAP_LINEAR</code> - самая медленная. Чтение 8 пикселей
+<code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code>, которое, вероятно, лучше всех. Причин множество.
+Во-первых, <code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code> - самая медленная. Чтение 8 пикселей
 происходит медленнее, чем чтение одного. На современных видеокартах скорей
 всего это не будет проблемой, если вы используете одновременно одну текстуру,
 но современные игры могут использовать от 2 до 4 текстур сразу. 4 текстуры
 * 8 пикселей на текстуру = чтение 32 пикселей для каждой отрисовки. Это
 будет медленным. Во-вторых, вам могут понадобиться определённые эффекты.
 Например, если вам нужно получить пикселизованный <em>ретро</em> вид, возможно,
-вы захотите использовать <code>NEAREST</code>. Кроме того, для мипмапов нужна память.
+вы захотите использовать <code class="notranslate" translate="no">NEAREST</code>. Кроме того, для мипмапов нужна память.
 По сути, они используют на 33% больше памяти. Это может быть большим объёмом
 памяти, особенно для очень больших текстур вроде приветственного экрана игры.
 Если вы не планируете отрисовывать объект меньше, чем самый большой размер
 изображения, зачем создавать уменьшенные копии и тратить на них память?
-Вместо этого просто используйте <code>NEAREST</code> или <code>LINEAR</code>, так как они всегда
+Вместо этого просто используйте <code class="notranslate" translate="no">NEAREST</code> или <code class="notranslate" translate="no">LINEAR</code>, так как они всегда
 используют первое изображение.</p>
-<p>Для задания фильтры вызовите <code>gl.texParameter</code> следующим образом:</p>
-<pre class="prettyprint"><code>gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+<p>Для задания фильтры вызовите <code class="notranslate" translate="no">gl.texParameter</code> следующим образом:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-</code></pre><p>Настройка <code>TEXTURE_MIN_FILTER</code> задаёт поведение фильтра, когда отрисовываемый
-объект меньше самого большого изображения мипмапа. Настройка <code>TEXTURE_MAG_FILTER</code>
+</code></pre><p>Настройка <code class="notranslate" translate="no">TEXTURE_MIN_FILTER</code> задаёт поведение фильтра, когда отрисовываемый
+объект меньше самого большого изображения мипмапа. Настройка <code class="notranslate" translate="no">TEXTURE_MAG_FILTER</code>
 задаёт поведение фильтра, когда отрисовываемый объект больше самого большого
-изображения мипмапа. Для <code>TEXTURE_MAG_FILTER</code> допустимыми значениями являются
-только <code>NEAREST</code> и <code>LINEAR</code>.</p>
+изображения мипмапа. Для <code class="notranslate" translate="no">TEXTURE_MAG_FILTER</code> допустимыми значениями являются
+только <code class="notranslate" translate="no">NEAREST</code> и <code class="notranslate" translate="no">LINEAR</code>.</p>
 <p>Скажем, мы хотим использовать следующую текстуру.</p>
 <p><img class="webgl_center" src="../../resources/keyboard.jpg" /></p>
 <p>Вот, что из этого выйдет:</p>
@@ -520,23 +520,23 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 степенью двойки в обоих измерениях. Степени двойки - 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048 и т.д.
 Текстура с буквой &#39;F&#39; имеет размер 256x256. 256 - степень двойки. А размер текстуры клавиатуры - 320x240. Ни
 один из этих размеров не является степенью двойки, поэтому текстура не отображается. В шейдере, в котором
-вызывается <code>texture2D</code>, при некорректно настроенной текстуре используется цвет (0, 0, 0, 1) - чёрный. Если вы
+вызывается <code class="notranslate" translate="no">texture2D</code>, при некорректно настроенной текстуре используется цвет (0, 0, 0, 1) - чёрный. Если вы
 откроете консоль JavaScript (консоль браузера), вы сможете увидеть ошибки касательно проблемы с текстурой.</p>
-<pre class="prettyprint"><code>WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
    or not all the same size
 WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
    It maybe non-power-of-2 and have incompatible texture filtering or
    is not &#39;texture complete&#39;.
-</code></pre><p>Для устранения этой ошибки нам нужно задать режим оборачивания <code>CLAMP_TO_EDGE</code>
-и отключить мипмапы, используя фильтр<code>LINEAR</code> или <code>NEAREST</code>.</p>
+</code></pre><p>Для устранения этой ошибки нам нужно задать режим оборачивания <code class="notranslate" translate="no">CLAMP_TO_EDGE</code>
+и отключить мипмапы, используя фильтр<code class="notranslate" translate="no">LINEAR</code> или <code class="notranslate" translate="no">NEAREST</code>.</p>
 <p>Изменим код загрузки изображения соответствующим образом. Для начала нам понадобится
 функция, которая скажет, является ли значение степенью двойки.</p>
-<pre class="prettyprint"><code>function isPowerOf2(value) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function isPowerOf2(value) {
   return (value &amp; (value - 1)) == 0;
 }
 </code></pre><p>Я не буду вдаваться в двоичную арифметику, чтобы объяснить, как это работает.
 Это просто работает, мы же можем использовать функцию следующим образом:</p>
-<pre class="prettyprint"><code>// асинхронная загрузка изображения
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// асинхронная загрузка изображения
 var image = new Image();
 image.src = &quot;resources/keyboard.jpg&quot;;
 image.addEventListener(&#39;load&#39;, function() {
@@ -586,7 +586,7 @@ image.addEventListener(&#39;load&#39;, function() {
 все изображения в одну текстуру следующим образом:</p>
 <p><img class="webgl_center" src="../../resources/noodles.jpg" /></p>
 <p>и затем используем другой набор текстурных координат для каждой грани куба.</p>
-<pre class="prettyprint"><code>    // выбираем нижнее левое изображение
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    // выбираем нижнее левое изображение
     0   , 0  ,
     0   , 0.5,
     0.25, 0  ,
@@ -652,10 +652,10 @@ image.addEventListener(&#39;load&#39;, function() {
 <h3>UV или Текстурные координаты?</h3>
 <p>Текстурные координаты часто упрощают до UV (произносится как Ю-Ви). Я понятия
 не имею, откуда взялся термин UV, разве что как положения вершин используют
-<code>x, y, z, w</code>, так и текстурные координаты используют <code>s, t, u, v</code>,
+<code class="notranslate" translate="no">x, y, z, w</code>, так и текстурные координаты используют <code class="notranslate" translate="no">s, t, u, v</code>,
 чтобы было понятней, о каких из двух типов координат говорится. На основании
 этого можно подумать, что они бы назывались ST, особенно учитывая, что настройки
-оборачивания текстуры называются <code>TEXTURE_WRAP_S</code> и <code>TEXTURE_WRAP_T</code>,
+оборачивания текстуры называются <code class="notranslate" translate="no">TEXTURE_WRAP_S</code> и <code class="notranslate" translate="no">TEXTURE_WRAP_T</code>,
 но по каким-то причинам люди назвали их UV.</p>
 <p>Теперь вы знаете, что если кто-то говорит о UV, он имеет ввиду текстурные координаты.</p>
 </div>

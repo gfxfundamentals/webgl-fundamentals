@@ -250,7 +250,7 @@ abs(3.333 - 6.666) = 3.333
 fudgeFactor 因子和 Z 相乘，这样就可以调整缩放的程度。</p>
 <p>让我们来试试，首先修改顶点着色器，除以 Z 再乘以我们的
 &quot;fudgeFactor&quot; 因子。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -266,9 +266,9 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>注意，由于裁减空间中的 Z 值是 -1 到 +1 的，所以 +1 是为了让
-<code>zToDivideBy</code> 变成 0 到 +2 * fudgeFactor</p>
+<code class="notranslate" translate="no">zToDivideBy</code> 变成 0 到 +2 * fudgeFactor</p>
 <p>还需要更新代码以设置 fudgeFactor。</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
 
   ...
@@ -296,9 +296,9 @@ void main() {
 <p><img class="webgl_center" src="../resources/orthographic-vs-perspective.png" /></p>
 <div class="webgl_center">orthographic vs perspective</div>
 
-<p>事实上WebGL会将我们提供给 <code>gl_Position</code> 的  x,y,z,w 值自动除以 w 。</p>
-<p>我们可以通过修改着色器来证明，用 <code>zToDivideBy</code> 代替 <code>gl_Position.w</code></p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<p>事实上WebGL会将我们提供给 <code class="notranslate" translate="no">gl_Position</code> 的  x,y,z,w 值自动除以 w 。</p>
+<p>我们可以通过修改着色器来证明，用 <code class="notranslate" translate="no">zToDivideBy</code> 代替 <code class="notranslate" translate="no">gl_Position.w</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -379,7 +379,7 @@ w_out = x_in * 0 +
         w_in * 1 ;
 </pre></div>
 
-<p>因为 <code>w_in</code> = 1.0 是已知的</p>
+<p>因为 <code class="notranslate" translate="no">w_in</code> = 1.0 是已知的</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in + 1;
 </pre></div>
@@ -407,7 +407,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>我们来修改代码，使用这个矩阵。</p>
 <p>首先将顶点着色器还原，又变成简单的样子</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -417,7 +417,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>接下来定义一个方法实现 Z &rarr; W 的矩阵</p>
-<pre class="prettyprint"><code>function makeZToWMatrix(fudgeFactor) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function makeZToWMatrix(fudgeFactor) {
   return [
     1, 0, 0, 0,
     0, 1, 0, 0,
@@ -426,7 +426,7 @@ void main() {
   ];
 }
 </code></pre><p>然后使用它。</p>
-<pre class="prettyprint"><code>    ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ...
     // 计算矩阵
 *    var matrix = makeZToWMatrix(fudgeFactor);
 *    matrix = m4.multiply(matrix, m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400));
@@ -454,10 +454,10 @@ void main() {
 二维中的的解决方法。我们需要获取 Z 值，然后加上一些量，
 缩放一些量，就可以将任意范围映射到 -1 到 +1 的范围内。</p>
 <p>最有意思的是这件事可以在一个矩阵中完成，更方便的是，
-我们可以定义一个 <code>fieldOfView</code> 代替 <code>fudgeFactor</code> ，
+我们可以定义一个 <code class="notranslate" translate="no">fieldOfView</code> 代替 <code class="notranslate" translate="no">fudgeFactor</code> ，
 计算出更合适的值。</p>
 <p>这是创建矩阵的方法。</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   perspective: function(fieldOfViewInRadians, aspect, near, far) {
     var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
     var rangeInv = 1.0 / (near - far);
@@ -473,10 +473,10 @@ void main() {
   ...
 </code></pre><p>这个矩阵会为我们完成所有转换。它可以调整单位以适应裁剪空间，
 它可以自定义视场角，选择 Z-裁剪面。假设有一个<strong>眼睛</strong>或者<strong>摄像机</strong>
-在原点(0, 0, 0)，根据 <code>zNear</code> 和 <code>fieldOfView</code> 可以将 <code>zNear</code> 
-对应到 <code>Z = -1</code> ，在 <code>zNear</code> 平面上一半的 <code>fieldOfView</code> 长度
-对应画布中心到 <code>Y = -1</code> 或 <code>Y = 1</code> 的距离，X 的值通过乘以
-<code>aspect</code> 获取，最后通过设置 zFar 对应 <code>Z = 1</code> ，控制缩放的程度。</p>
+在原点(0, 0, 0)，根据 <code class="notranslate" translate="no">zNear</code> 和 <code class="notranslate" translate="no">fieldOfView</code> 可以将 <code class="notranslate" translate="no">zNear</code> 
+对应到 <code class="notranslate" translate="no">Z = -1</code> ，在 <code class="notranslate" translate="no">zNear</code> 平面上一半的 <code class="notranslate" translate="no">fieldOfView</code> 长度
+对应画布中心到 <code class="notranslate" translate="no">Y = -1</code> 或 <code class="notranslate" translate="no">Y = 1</code> 的距离，X 的值通过乘以
+<code class="notranslate" translate="no">aspect</code> 获取，最后通过设置 zFar 对应 <code class="notranslate" translate="no">Z = 1</code> ，控制缩放的程度。</p>
 <p>这是矩阵的图解。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  400px; height: 600px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Ffrustum-diagram.html"></iframe>
@@ -485,16 +485,16 @@ void main() {
 
 </p>
 <p>正方体所在的有四个侧面的椎体叫做“视锥”，矩阵将视锥中的空间转换到裁剪空间中，
-<code>zNear</code> 决定了被正面切割的位置，<code>zFar</code> 决定被背面切割的位置。
-将 <code>zNear</code> 设置为 23 就会看到正方体正面被切割，
-将 <code>zFar</code> 设置为 24 就会看到正方体背面被切割。</p>
+<code class="notranslate" translate="no">zNear</code> 决定了被正面切割的位置，<code class="notranslate" translate="no">zFar</code> 决定被背面切割的位置。
+将 <code class="notranslate" translate="no">zNear</code> 设置为 23 就会看到正方体正面被切割，
+将 <code class="notranslate" translate="no">zFar</code> 设置为 24 就会看到正方体背面被切割。</p>
 <p>还有一个问题，矩阵假定观察位置为 0,0,0 并且看向 Z 轴负方向，
 Y 轴为上方向。这和我们目前为止做法不同，
 为了解决这个问题我们需要将物体放到视图范围内。</p>
 <p>我们在 (45, 150, 0) 绘制的 F，可以将它移动到 (-150, 0, -360)</p>
-<p>使用 <code>m4.projection</code> 方法代替之前的投影方法，可以调用
-<code>m4.perspective</code></p>
-<pre class="prettyprint"><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+<p>使用 <code class="notranslate" translate="no">m4.projection</code> 方法代替之前的投影方法，可以调用
+<code class="notranslate" translate="no">m4.perspective</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
 var zFar = 2000;
 var matrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
@@ -522,9 +522,9 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 </p>
 <p>
 
-原因是在最后一个例子中用 <code>m4.projection</code> 方法将
+原因是在最后一个例子中用 <code class="notranslate" translate="no">m4.projection</code> 方法将
 像素移动到裁减空间，我们的显示范围是 400x300 像素，
-“像素”在三维中无法解释。所以新投影创建了一个视锥，它在 <code>zNear</code> 
+“像素”在三维中无法解释。所以新投影创建了一个视锥，它在 <code class="notranslate" translate="no">zNear</code> 
 的距离时是 2 个单位高和 2 * aspect 个单位宽。由于 'F' 的大小是 150 个单位，
 在近平面的时候只能看到 2 个单位的高度，
 所以我们将它移到足够远的地方才能看到完整的它。

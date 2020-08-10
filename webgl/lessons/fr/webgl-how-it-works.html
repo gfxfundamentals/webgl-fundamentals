@@ -219,18 +219,18 @@ La première partie traite les vertices (du moins leurs données) et les convert
 en vertices dans l&#39;espace de coordonnées. La deuxième partie colore les pixels d&#39;après
 la première partie. </p>
 <p>Quand vous appelez</p>
-<pre class="prettyprint"><code>gl.drawArrays(gl.TRIANGLE, 0, 9);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.drawArrays(gl.TRIANGLE, 0, 9);
 </code></pre><p>Le 9 ici signifie &quot;il y a 9 vertices à traiter&quot; donc voilà 9 vertices rendus.</p>
 <p><img src="../resources/vertex-shader-anim.gif" class="webgl_center" /></p>
 <p>Sur la gauche il y a les données fournies. Le shader de vertex est une fonction que vous écrivez en 
 <a href="webgl-shaders-and-glsl.html">GLSL</a>. Il est appelé une fois pour chaque vertex.
-Vous écrivez quelques opérations et renseignez la variable <code>gl_Position</code> avec une valeur
+Vous écrivez quelques opérations et renseignez la variable <code class="notranslate" translate="no">gl_Position</code> avec une valeur
 dans l&#39;espace de projection pour le vertex en cours. La carte graphique prend cette valeur et la met en mémoire.</p>
-<p>En supposant que vous faîtes des <code>TRIANGLES</code>, à chaque fois que cette première partie génère 
+<p>En supposant que vous faîtes des <code class="notranslate" translate="no">TRIANGLES</code>, à chaque fois que cette première partie génère 
 3 points la carte graphique s&#39;en sert pour faire un triangle. Elle regarde quels pixels sont 
 concernés entre ces trois points, et pixélise le triangle. Pour chaque pixel elle va appeler
 notre shader de fragment pour nous demander quelle couleur nous voulons pour ce pixel. Le
-shader de fragment doit renseigner la variable <code>gl_FragColor</code> avec la couleur finale de chaque pixel.</p>
+shader de fragment doit renseigner la variable <code class="notranslate" translate="no">gl_FragColor</code> avec la couleur finale de chaque pixel.</p>
 <p>Tout ceci est passionnant mais comme vous voyez dans nos exemples jusqu&#39;à maintenant le 
 shader de fragment a très peu d&#39;information. Heureusement on peut lui en envoyer davantage. On 
 définit des “varyings” pour chaque valeur qu&#39;on veut transmettre du shader de vertex au shader 
@@ -238,7 +238,7 @@ de fragment. </p>
 <p>Un exemple simple est d&#39;envoyer les coordonnées en espace de projection directement du shader 
 de vertex au shader de fragment. </p>
 <p>On va dessiner un simple triangle. Après notre <a href="webgl-2d-matrices.html">exemple précédent</a> changeons notre F en triangle.</p>
-<pre class="prettyprint"><code>// Remplit le tampon avec les valeurs qui définissent un triangle
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Remplit le tampon avec les valeurs qui définissent un triangle
 function creerGeometrie(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -249,14 +249,14 @@ function creerGeometrie(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>Et on n&#39;a qu&#39;à rendre 3 points.</p>
-<pre class="prettyprint"><code>// Rendu de la scène
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Rendu de la scène
 function rendreLaScene() {
   ...
   // Rendu de la géométrie.
 *  gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
 </code></pre><p>Ensuite dans notre shader de vertex on déclare une <em>varying</em> pour passer des données au shader de fragment.</p>
-<pre class="prettyprint"><code>varying vec4 v_couleur;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">varying vec4 v_couleur;
 ...
 void main() {
   // Multiplie la position par la matrice
@@ -268,7 +268,7 @@ void main() {
 *  v_couleur = gl_Position * 0.5 + 0.5;
 }
 </code></pre><p>Et ensuite on déclare la même <em>varying</em> dans le shader de fragment.</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 *varying vec4 v_couleur;
 
@@ -362,7 +362,7 @@ transmettre ensuite au shader de fragment. Par exemple, dessinons un rectangle,
 soit 2 triangles, en 2 couleurs. Pour cela on va indiquer un autre attribut 
 dans le shader de vertex pour lui envoyer cette nouvelle information, et on va la 
 transmettre directement au shader de fragment.</p>
-<pre class="prettyprint"><code>attribute vec2 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_position;
 +attribute vec4 a_couleur;
 ...
 varying vec4 v_couleur;
@@ -373,7 +373,7 @@ void main() {
 *  v_couleur = a_couleur;
 }
 </code></pre><p>Maintenant il nous faut indiquer les couleurs dans nos géométries.</p>
-<pre class="prettyprint"><code>  // créé les pointeurs pour nos données de vertices
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // créé les pointeurs pour nos données de vertices
   var emplacementPosition = gl.getAttribLocation(program, &quot;a_position&quot;);
 +  var emplacementCouleur = gl.getAttribLocation(program, &quot;a_couleur&quot;);
   ...
@@ -422,7 +422,7 @@ bien les couleurs à nos <em>varying</em> et elles sont toujours interpolées po
 pixel. Mais on a mis les mêmes couleurs aux sommets d&#39;un même 
 triangle, d&#39;où ce résultat. Si on indique des couleurs différentes l&#39;interpolation 
 redevient visible :</p>
-<pre class="prettyprint"><code>// Remplit le tampon avec les couleurs pour les deux triangles
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Remplit le tampon avec les couleurs pour les deux triangles
 // qui forment le rectangle.
 function creerCouleurs(gl) {
   // Créé une couleur différente par vertex
@@ -450,20 +450,20 @@ Si vous jetez un oeil aux <a href="webgl-image-processing.html">exemples de trai
 on verra qu&#39;ils utilisent aussi un attribut spécial pour transmettre les coordonnées de texture. </p>
 <h2 id="que-font-ces-tampons-et-ces-fonctions-pour-attributs-">Que font ces tampons et ces fonctions pour attributs ?</h2>
 <p>Les tampons (buffer) sont l&#39;espace mémoire dans la carte graphique dans lequel on place les informations 
-de géométrie. <code>gl.createBuffer</code> créé un tampon.
-<code>gl.bindBuffer</code> active le tampon pour une action à suivre.
-<code>gl.bufferData</code> place des données dans le tampon.</p>
+de géométrie. <code class="notranslate" translate="no">gl.createBuffer</code> créé un tampon.
+<code class="notranslate" translate="no">gl.bindBuffer</code> active le tampon pour une action à suivre.
+<code class="notranslate" translate="no">gl.bufferData</code> place des données dans le tampon.</p>
 <p>Une fois que les données sont dans le tampon on doit indiquer au programme WebGL comment 
 lire ces données et où sont les attributs à envoyer à notre shader de vertex.</p>
 <p>Pour cela on demande d&#39;abord au programme WebGL l&#39;emplacement qu&#39;il a assigné aux attributs (le pointeur). 
 Par exemple dans le code précédent on a </p>
-<pre class="prettyprint"><code>// créé les pointeurs pour nos données de vertices
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// créé les pointeurs pour nos données de vertices
 var emplacementPosition = gl.getAttribLocation(programme, &quot;a_position&quot;);
 var emplacementCouleur = gl.getAttribLocation(programme, &quot;a_couleur&quot;);
 </code></pre><p>Une fois qu&#39;on connaît l&#39;emplacement d&#39;un attribut on soumet deux commandes.</p>
-<pre class="prettyprint"><code>gl.enableVertexAttribArray(emplacement);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enableVertexAttribArray(emplacement);
 </code></pre><p>Cette commande dit à WebGL qu&#39;on veut fournir des données depuis un tampon</p>
-<pre class="prettyprint"><code>gl.vertexAttribPointer(
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.vertexAttribPointer(
     emplacement,
     nombreDeComposantes,
     typeDeDonnée,
@@ -472,7 +472,7 @@ var emplacementCouleur = gl.getAttribLocation(programme, &quot;a_couleur&quot;);
     décalage);
 </code></pre><p>Et cette commande dit à WebGL d&#39;utiliser les données du dernier tampon activé gl.bindBuffer, 
 combient de composant il y a dans l&#39;attribut par vertex (1 - 4), de quel type de donnée il s&#39;agit 
-(<code>BYTE</code>, <code>FLOAT</code>, <code>INT</code>, <code>UNSIGNED_SHORT</code>, etc.), la taille (en byte) de la fenêtre de lecture, 
+(<code class="notranslate" translate="no">BYTE</code>, <code class="notranslate" translate="no">FLOAT</code>, <code class="notranslate" translate="no">INT</code>, <code class="notranslate" translate="no">UNSIGNED_SHORT</code>, etc.), la taille (en byte) de la fenêtre de lecture, 
 et le décalage de départ de la première composante de l&#39;attribut.</p>
 <p>Le nombre de composantes est toujours entre 1 et 4.</p>
 <p>Si vous utilisez un tampon par type de données alors la fenêtre de lecture et le décalage de départ 

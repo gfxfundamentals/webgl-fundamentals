@@ -224,7 +224,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>当然你也可以在运行时创建纹理，由于WebGL运行在浏览器中，我们可以借助 Canvas 2D API
 帮助生成纹理。</p>
 <p>从<a href="webgl-text-canvas2d.html">上文</a>的例子开始，添加一个方法向二维画布种填充文字</p>
-<pre class="prettyprint"><code>var textCtx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var textCtx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
 
 // 将文字放在画布中间
 function makeTextCanvas(text, width, height) {
@@ -240,20 +240,20 @@ function makeTextCanvas(text, width, height) {
 }
 </code></pre><p>现在需要使用WebGL绘制两个不同的物体，&#39;F&#39; 和文字。我将使用
 <a href="webgl-drawing-multiple-things.html">之前讲到的帮助方法</a>，
-如果你不清楚 <code>programInfo</code>, <code>bufferInfo</code> 是什么，就看看那篇文章。</p>
+如果你不清楚 <code class="notranslate" translate="no">programInfo</code>, <code class="notranslate" translate="no">bufferInfo</code> 是什么，就看看那篇文章。</p>
 <p>所以，先创建 &#39;F&#39; 和单位矩形。</p>
-<pre class="prettyprint"><code>// 创建 &#39;F&#39; 的数据
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 创建 &#39;F&#39; 的数据
 var fBufferInfo = primitives.create3DFBufferInfo(gl);
 // 创建一个单位矩形供文字使用
 var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, m4.xRotation(Math.PI / 2));
-</code></pre><p>单位矩形是一个单位大小的矩形（正方形），这个矩形以原点为中心。<code>createPlaneBufferInfo</code>
+</code></pre><p>单位矩形是一个单位大小的矩形（正方形），这个矩形以原点为中心。<code class="notranslate" translate="no">createPlaneBufferInfo</code>
 创建一个在 xz 面的平面，我们传入一个矩形将它变成 xy 平面的单位矩形。</p>
 <p>接着创建两个着色器</p>
-<pre class="prettyprint"><code>// 设置着色程序
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 设置着色程序
 var fProgramInfo = createProgramInfo(gl, [&quot;vertex-shader-3d&quot;, &quot;fragment-shader-3d&quot;]);
 var textProgramInfo = createProgramInfo(gl, [&quot;text-vertex-shader&quot;, &quot;text-fragment-shader&quot;]);
 </code></pre><p>创建文字纹理</p>
-<pre class="prettyprint"><code>// 创建文字纹理
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 创建文字纹理
 var textCanvas = makeTextCanvas(&quot;Hello!&quot;, 100, 26);
 var textWidth  = textCanvas.width;
 var textHeight = textCanvas.height;
@@ -265,7 +265,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>设置 &#39;F&#39; 和文字的全局变量</p>
-<pre class="prettyprint"><code>var fUniforms = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var fUniforms = {
   u_matrix: m4.identity(),
 };
 
@@ -274,7 +274,7 @@ var textUniforms = {
   u_texture: textTex,
 };
 </code></pre><p>计算出 F 的矩阵并保存它的视图矩阵</p>
-<pre class="prettyprint"><code>var fViewMatrix = m4.translate(viewMatrix,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var fViewMatrix = m4.translate(viewMatrix,
     translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
 fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
 fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
@@ -282,7 +282,7 @@ fViewMatrix = m4.zRotate(fViewMatrix, rotation[2] + now + (yy * 3 + xx) * 0.1);
 fViewMatrix = m4.scale(fViewMatrix, scale[0], scale[1], scale[2]);
 fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
 </code></pre><p>像这样绘制 F</p>
-<pre class="prettyprint"><code>gl.useProgram(fProgramInfo.program);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.useProgram(fProgramInfo.program);
 
 webglUtils.setBuffersAndAttributes(gl, fProgramInfo, fBufferInfo);
 
@@ -293,13 +293,13 @@ webglUtils.setUniforms(fProgramInfo, fUniforms);
 // 绘制几何体
 gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 </code></pre><p>对于文字我们只需要将原点移到 F，还需要将单位矩形缩放到纹理的大小，最后需要乘以投影矩阵。</p>
-<pre class="prettyprint"><code>// 只使用 &#39;F&#39; 视图矩阵的位置
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 只使用 &#39;F&#39; 视图矩阵的位置
 var textMatrix = m4.translate(projectionMatrix,
     fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]);
 // 缩放单位矩形到所需大小
 textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 </code></pre><p>然后渲染文字</p>
-<pre class="prettyprint"><code>// 绘制文字设置
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 绘制文字设置
 gl.useProgram(textProgramInfo.program);
 
 webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
@@ -318,13 +318,13 @@ gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 </p>
 <p>你可能注意到文字部分覆盖了 F，那是因为我们绘制了一个矩形，画布的默认颜色是黑色透明(0,0,0,0)，
 然后我们将它绘制到矩形上了，我们可以混合像素。</p>
-<pre class="prettyprint"><code>gl.enable(gl.BLEND);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>这样将源像素（片断着色器产生的颜色）和目标像素（画布上的颜色）的颜色根据混合方法进行混合，
-我们设置混合方法为 <code>SRC_ALPHA</code> 对源，<code>ONE_MINUS_SRC_ALPHA</code> 对目标。</p>
-<pre class="prettyprint"><code>result = dest * (1 - src_alpha) + src * src_alpha
-</code></pre><p>所以加入目标像素是绿色 <code>0,1,0,1</code>，源是红色 <code>1,0,0,1</code> 就得到</p>
-<pre class="prettyprint"><code>src = [1, 0, 0, 1]
+我们设置混合方法为 <code class="notranslate" translate="no">SRC_ALPHA</code> 对源，<code class="notranslate" translate="no">ONE_MINUS_SRC_ALPHA</code> 对目标。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">result = dest * (1 - src_alpha) + src * src_alpha
+</code></pre><p>所以加入目标像素是绿色 <code class="notranslate" translate="no">0,1,0,1</code>，源是红色 <code class="notranslate" translate="no">1,0,0,1</code> 就得到</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">src = [1, 0, 0, 1]
 dst = [0, 1, 0, 1]
 src_alpha = src[3]  // 这是 1
 result = dst * (1 - src_alpha) + src * src_alpha
@@ -334,8 +334,8 @@ result = dst * 0 + src * 1
 
 // 最后结果
 result = src
-</code></pre><p>对于黑色透明的部分的纹理 <code>0,0,0,0</code></p>
-<pre class="prettyprint"><code>src = [0, 0, 0, 0]
+</code></pre><p>对于黑色透明的部分的纹理 <code class="notranslate" translate="no">0,0,0,0</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">src = [0, 0, 0, 0]
 dst = [0, 1, 0, 1]
 src_alpha = src[3]  // 这是 0
 result = dst * (1 - src_alpha) + src * src_alpha
@@ -362,9 +362,9 @@ result = dst
 <p>对与透明渲染常用的解决方法是先渲染不透明的物体，然后按照 z 的顺寻绘制透明物体，
 绘制时开启深度检测但是关闭深度缓冲更新。</p>
 <p>先将绘制的不透明物体（F）和透明物体区分开（文字），先定义一些东西保存文字的位置。</p>
-<pre class="prettyprint"><code>var textPositions = [];
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var textPositions = [];
 </code></pre><p>在循环绘制 F 时保存这些位置</p>
-<pre class="prettyprint"><code>var fViewMatrix = m4.translate(viewMatrix,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var fViewMatrix = m4.translate(viewMatrix,
     translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
 fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
 fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
@@ -374,14 +374,14 @@ fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
 +// 保存 f 的视图位置
 +textPositions.push([fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]]);
 </code></pre><p>绘制 F 前关闭混合模式开启深度缓冲</p>
-<pre class="prettyprint"><code>gl.disable(gl.BLEND);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.disable(gl.BLEND);
 gl.depthMask(true);
 </code></pre><p>绘制文字开启混合关闭深度缓冲写入</p>
-<pre class="prettyprint"><code>gl.enable(gl.BLEND);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 gl.depthMask(false);
 </code></pre><p>然后在所有保存的位置绘制文字</p>
-<pre class="prettyprint"><code>+// 绘制文字设置
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+// 绘制文字设置
 +gl.useProgram(textProgramInfo.program);
 +
 +webglUtils.setBuffersAndAttributes(gl, textProgramInfo, textBufferInfo);
@@ -416,7 +416,7 @@ gl.depthMask(false);
 <p>你也可以将它移动到相机方向，我们来实现这个吧。由于 &#39;pos&#39; 在视图空间中，
 这意味着它和眼睛位置（在视图空间 0,0,0 处）有关，所以如果我们将它单位化然后乘以一个值，
 将它移到眼睛方向固定距离。</p>
-<pre class="prettyprint"><code>+// 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+// 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
 +// 所以沿着向量朝眼睛方向移动一定距离
 +var fromEye = m4.normalize(pos);
 +var amountToMoveTowardEye = 150;  // 因为 F 是 150 个单位长
@@ -440,15 +440,15 @@ textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
 <p>这个问题是 Canvas 2D API 只生成预乘阿尔法通道的值，当我们上传画布内容为WebGL纹理时，
 WebGL视图获取没有预乘阿尔法的值，但是由于预乘阿尔法的值缺失阿尔法，所以很难完美转换成非预乘值。</p>
 <p>解决这个问题需要告诉WebGL不用做反预乘。</p>
-<pre class="prettyprint"><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-</code></pre><p>这个告诉WebGL提供预乘值到<code>gl.texImage2D</code> 和 <code>gl.texSubImage2D</code>，
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+</code></pre><p>这个告诉WebGL提供预乘值到<code class="notranslate" translate="no">gl.texImage2D</code> 和 <code class="notranslate" translate="no">gl.texSubImage2D</code>，
 如果像 Canvas 2D 数据本身就是预乘的话，就直接传递到WebGL。</p>
 <p>我们还需要修改混合方法</p>
-<pre class="prettyprint"><code>-gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 +gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-</code></pre><p>旧的方法将源和它的阿尔法通道相乘，就是 <code>SRC_ALPHA</code> 代表的意思。
+</code></pre><p>旧的方法将源和它的阿尔法通道相乘，就是 <code class="notranslate" translate="no">SRC_ALPHA</code> 代表的意思。
 但是现在我们的纹理数据已经乘了它的阿尔法值，就是预乘的意思。
-所以就不需要让GPU再做乘法，设置为 <code>ONE</code> 表示乘以 1。</p>
+所以就不需要让GPU再做乘法，设置为 <code class="notranslate" translate="no">ONE</code> 表示乘以 1。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-premultiplied-alpha.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-premultiplied-alpha.html" target="_blank">点此在新窗口中浏览</a>
@@ -457,8 +457,8 @@ WebGL视图获取没有预乘阿尔法的值，但是由于预乘阿尔法的值
 </p>
 <p>现在边界消失了。</p>
 <p>如果你想让文字保持固定大小怎么办？如果你还记得<a href="webgl-3d-perspective.html">透视投影</a>
-种讲到过透视矩阵就是将物体缩放 <code>1 / -Z</code>，以实现近大远小。所以，我们只需缩放 <code>-Z</code> 的期望倍数。</p>
-<pre class="prettyprint"><code>...
+种讲到过透视矩阵就是将物体缩放 <code class="notranslate" translate="no">1 / -Z</code>，以实现近大远小。所以，我们只需缩放 <code class="notranslate" translate="no">-Z</code> 的期望倍数。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 // 由于 pos 在视图空间，表示它是一个从眼睛位置出发的一个向量
 // 所以沿着向量朝眼睛方向移动一定距离
 var fromEye = normalize(pos);
@@ -480,7 +480,7 @@ var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
 
 </p>
 <p>如果你想给每个 F 绘制不同的文字，就应该给每个 F 创建一个新纹理，然后更新那个 F 的全局变量。</p>
-<pre class="prettyprint"><code>// 创建纹理，每个 F 一个
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 创建纹理，每个 F 一个
 var textTextures = [
   &quot;anna&quot;,   // 0
   &quot;colin&quot;,  // 1
@@ -516,7 +516,7 @@ var textTextures = [
   };
 });
 </code></pre><p>然后再渲染时选择纹理</p>
-<pre class="prettyprint"><code>*textPositions.forEach(function(pos, ndx) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*textPositions.forEach(function(pos, ndx) {
 
   +// 选择一个纹理
   +var tex = textTextures[ndx];
@@ -526,7 +526,7 @@ var textTextures = [
   // 将矩形缩放到需要的大小
   *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
 </code></pre><p>然后再绘制前设置纹理全局变量</p>
-<pre class="prettyprint"><code>  *textUniforms.u_texture = tex.texture;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  *textUniforms.u_texture = tex.texture;
 </code></pre><p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-different-text.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-text-texture-different-text.html" target="_blank">点此在新窗口中浏览</a>
@@ -535,7 +535,7 @@ var textTextures = [
 </p>
 <p>我们使用黑色绘制的文字，如果使用白色会更有用。那样就可以将文字颜色乘以一个颜色值然后变成任意需要的颜色。</p>
 <p>首先改变文字着色器，乘以一个颜色</p>
-<pre class="prettyprint"><code>varying vec2 v_texcoord;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">varying vec2 v_texcoord;
 
 uniform sampler2D u_texture;
 +uniform vec4 u_color;
@@ -544,9 +544,9 @@ void main() {
 *   gl_FragColor = texture2D(u_texture, v_texcoord) * u_color;
 }
 </code></pre><p>然后绘制使用白色绘制文字到画布</p>
-<pre class="prettyprint"><code>textCtx.fillStyle = &quot;white&quot;;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">textCtx.fillStyle = &quot;white&quot;;
 </code></pre><p>创建一些颜色</p>
-<pre class="prettyprint"><code>// 颜色，每个 F 一个
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 颜色，每个 F 一个
 var colors = [
   [0.0, 0.0, 0.0, 1], // 0
   [1.0, 0.0, 0.0, 1], // 1
@@ -566,7 +566,7 @@ var colors = [
   [0.0, 5.0, 5.0, 1], // 15,
 ];
 </code></pre><p>绘制时选择颜色</p>
-<pre class="prettyprint"><code>// 设置颜色全局变量
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 设置颜色全局变量
 textUniforms.u_color = colors[ndx];
 </code></pre><p>不同颜色</p>
 <p><div class="webgl_example_container">

@@ -218,11 +218,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ふたつめは、canvasの「表示サイズ」です。canvasの表示上のサイズは、CSS(style)で決定します。</p>
 <p>canvasの「<strong>描画バッファーのサイズ</strong>」を設定する方法は２種類あります。
 ひとつめは、HTMLを使う方法です。</p>
-<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>ふたつめは、JavaScriptを使う方法です。こちらの方法では、HTML側は</p>
-<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
 </code></pre><p>JavaScript側は、</p>
-<pre class="prettyprint"><code>var canvas = document.querySelector(&quot;#c&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var canvas = document.querySelector(&quot;#c&quot;);
 canvas.width = 400;
 canvas.height = 300;
 </code></pre><p>といったコードになります。</p>
@@ -233,9 +233,9 @@ canvas.height = 300;
 「表示サイズ」も同じく、400x300となります。</p>
 <p>別の例として「描画バッファが10x15ピクセル、表示サイズが400x300のcanvas」
 を定義する場合はこんなコードになります。</p>
-<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>同じ意味で、こんな風に書くこともできます。</p>
-<pre class="prettyprint"><code>&lt;style&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;style&gt;
 #c {
   width: 400px;
   height: 300px;
@@ -258,7 +258,7 @@ canvas.height = 300;
 <p>では、canvasをウィンドウいっぱいにリサイズしたい時にはどうすればよいでしょうか？
 まず、CSSを使ってウィンドウいっぱいに引き伸ばしてみましょう。
 コードはこんな感じになります。</p>
-<pre class="prettyprint"><code>&lt;html&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;html&gt;
   &lt;head&gt;
     &lt;style&gt;
       /* border幅は0にしておく */
@@ -280,10 +280,10 @@ canvas.height = 300;
 &lt;/html&gt;
 </code></pre><p>リサイズに際してやるべきことは、「ブラウザーがcanvasの表示サイズを
 引き伸ばしたら、とにかくそのサイズに描画バッファーのサイズを合わせる」ことだけです。
-これを実現するには、<code>clientWidth</code>と<code>clientHeight</code>を使います。
+これを実現するには、<code class="notranslate" translate="no">clientWidth</code>と<code class="notranslate" translate="no">clientHeight</code>を使います。
 これはHTMLのすべての要素が持っているプロパティです。
 これを使えばその要素が実際に表示されているサイズをJavaScriptから取得できます。</p>
-<pre class="prettyprint"><code>function resize(canvas) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function resize(canvas) {
   // ブラウザがcanvasを表示しているサイズを調べる。
   var displayWidth  = canvas.clientWidth;
   var displayHeight = canvas.clientHeight;
@@ -301,7 +301,7 @@ canvas.height = 300;
 </code></pre><p>WebGLアプリケーションの多くは<a href="webgl-animation.html">アニメーションする</a>
 ので、この関数はレンダリングの直前に呼び出すのがよいでしょう。
 このタイミングであれば描画の直前にcanvasを適切なサイズに合わせることができます。</p>
-<pre class="prettyprint"><code>function drawScene() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
    resize(gl.canvas);
 
    ...
@@ -313,16 +313,16 @@ canvas.height = 300;
 
 </p>
 <p>何かおかしいですね。表示領域いっぱいに直線が表示されないのはなぜでしょうか？</p>
-<p>結論から言えば、canvasをリサイズしたら同時に<code>gl.viewport</code>を呼んでビューポートを
+<p>結論から言えば、canvasをリサイズしたら同時に<code class="notranslate" translate="no">gl.viewport</code>を呼んでビューポートを
 設定する必要があったためです。
-<code>gl.viewport</code>の役目は、「WebGLがクリップ空間座標(-1～+1)をピクセルに変換する」際に
+<code class="notranslate" translate="no">gl.viewport</code>の役目は、「WebGLがクリップ空間座標(-1～+1)をピクセルに変換する」際に
 「どう変換するか」と「canvas内のどの範囲で変換するか」を指定することです。
 最初にWebGLコンテキストを取得する時には、ビューポートのサイズがcanvasのサイズと同じに
 なるようにWebGLが自動的にセットするのですが、それ以降の管理はあなたに任されています。
 つまり、canvasのサイズ変更があった時には、あなたが明示的にビューポートの設定を更新しなければなりません。</p>
 <p>ではそのようにコードを変更してみます。WebGLコンテキストはcanvasへの参照を
 持っているので、そのサイズをリサイズ処理に反映させましょう。</p>
-<pre class="prettyprint"><code>function drawScene() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
    resize(gl.canvas);
 
 +   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -361,7 +361,7 @@ Apple社が「Retinaディスプレイ」と呼んでいるものです。
 明示的に高解像度で描画するようにコードを書く必要があります。
 </p>
 <p>
-これを行うには<code>window.devicePixelRatio</code>の値を利用します。
+これを行うには<code class="notranslate" translate="no">window.devicePixelRatio</code>の値を利用します。
 この値は「１CSSピクセルが実際の何ピクセルに相当するか」を表しています。
 これを使ってリサイズするコードは以下のようになります。</p>
 <pre class="prettyprint">
@@ -394,9 +394,9 @@ function resize(gl) {
 
 
 <p>HD-DPIに対応するかどうかはあなた次第です。
-iPhone4やiPhone5の場合、<code>window.devicePixelRatio</code>の値は
-<code>2</code>、つまりピクセル数で言えば4倍の描画が行われます。
-iPhone6Plusであればこの値は<code>3</code>となっていたかと思います。
+iPhone4やiPhone5の場合、<code class="notranslate" translate="no">window.devicePixelRatio</code>の値は
+<code class="notranslate" translate="no">2</code>、つまりピクセル数で言えば4倍の描画が行われます。
+iPhone6Plusであればこの値は<code class="notranslate" translate="no">3</code>となっていたかと思います。
 これは9倍のピクセルが描画されるという意味です。
 描画すべきピクセル数が増えると、実行速度は低下します。
 実際、ゲーム製作では「描画は少ないピクセル数で行なって

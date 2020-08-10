@@ -219,7 +219,7 @@ Se você não leu isso, veja-os primeiro.</p>
 <p>Como animamos algo no WebGL?</p>
 <p>Na verdade, isso não é específico para o WebGL, mas, em geral, se você quer animar algo em JavaScript, precisa mudar algo ao longo do tempo e desenhar novamente.</p>
 <p>Podemos tirar uma das nossas amostras anteriores e animá-la da seguinte forma.</p>
-<pre class="prettyprint"><code>* var fieldOfViewRadians = degToRad (60);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">* var fieldOfViewRadians = degToRad (60);
 * var rotationSpeed ​​= 1,2;
 
 * requestAnimationFrame (drawScene);
@@ -240,7 +240,7 @@ função drawScene () {
 </div>
 
 </p>
-<p>Há um problema sutil. O código acima tem um <code>rotationSpeed ​​/ 60.0</code>. Nós dividimos por 60,0 porque assumimos o navegador
+<p>Há um problema sutil. O código acima tem um <code class="notranslate" translate="no">rotationSpeed ​​/ 60.0</code>. Nós dividimos por 60,0 porque assumimos o navegador
 responderá a requestAnimationFrame 60 vezes por segundo, o que é bem comum.</p>
 <p>No entanto, essa não é uma suposição válida. Talvez o usuário esteja em um dispositivo de baixa potência como um smartphone antigo. Ou talvez o usuário esteja executando algum programa pesado em segundo plano. Há todos os tipos de razões pelas quais o navegador pode não exibir quadros em 60 quadros por segundo. Talvez seja o ano de 2020 e todas as máquinas funcionam a 240 quadros por segundo agora. Talvez o usuário seja um jogador e tenha um monitor CRT com 90 quadros por segundo.</p>
 <p>Você pode ver o problema neste exemplo</p>
@@ -253,12 +253,12 @@ responderá a requestAnimationFrame 60 vezes por segundo, o que é bem comum.</p
 O &#39;F&#39; no meio está em alta velocidade e é independente da taxa de quadros. O que está à esquerda e à direita simula se o navegador estiver funcionando apenas a uma velocidade máxima de 1/8 para a máquina atual. O do lado esquerdo é <strong> NOT </strong> taxa de quadros independente. O do direito <strong> IS </strong> taxa de quadros independente.</p>
 <p>Observe porque o que está à esquerda não está levando em consideração que a taxa de quadros pode ser lenta, não se mantém. O que está na direita, no entanto, embora esteja funcionando a 1/8 da taxa de quadros, ele está mantendo o meio correndo a toda velocidade.</p>
 <p>A maneira de tornar a taxa de quadros de animação independente é calcular o tempo que demorou entre os quadros e usar isso para calcular o quanto animar esse quadro.</p>
-<p>Em primeiro lugar, precisamos ter o tempo. Felizmente, <code>requestAnimationFrame</code> nos passa o tempo desde que a página foi carregada quando nos chama.</p>
+<p>Em primeiro lugar, precisamos ter o tempo. Felizmente, <code class="notranslate" translate="no">requestAnimationFrame</code> nos passa o tempo desde que a página foi carregada quando nos chama.</p>
 <p>Acho mais fácil se conseguimos o tempo em segundos, mas desde a
-<code>requestAnimationFrame</code> nos passa o tempo em milissegundos (1000ths de segundo), precisamos multiplicar por 0.001 para obter segundos.</p>
+<code class="notranslate" translate="no">requestAnimationFrame</code> nos passa o tempo em milissegundos (1000ths de segundo), precisamos multiplicar por 0.001 para obter segundos.</p>
 <p>Então, podemos então calcular o tempo do delta como esse</p>
 <p>*var then = 0;</p>
-<pre class="prettyprint"><code>requestAnimationFrame(drawScene);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">requestAnimationFrame(drawScene);
 
 // Draw the scene.
 *function drawScene(now) {
@@ -270,8 +270,8 @@ O &#39;F&#39; no meio está em alta velocidade e é independente da taxa de quad
 *  then = now;
 
    ...
-</code></pre><p>Uma vez que temos o <code>deltaTime</code> em segundos, todos os nossos cálculos podem ser em quantas unidades por segundo queremos que algo aconteça. Nesse caso
-<code>rotationSpeed</code> é 1.2, o que significa que queremos girar 1,2 radianos por segundo.
+</code></pre><p>Uma vez que temos o <code class="notranslate" translate="no">deltaTime</code> em segundos, todos os nossos cálculos podem ser em quantas unidades por segundo queremos que algo aconteça. Nesse caso
+<code class="notranslate" translate="no">rotationSpeed</code> é 1.2, o que significa que queremos girar 1,2 radianos por segundo.
 Isso é cerca de 1/5 de volta ou, em outras palavras, levará cerca de 5 segundos para se virar completamente, independentemente da taxa de quadros.</p>
 <ul>
 <li>rotation[1] += rotationSpeed * deltaTime;</li>
@@ -287,26 +287,26 @@ Isso é cerca de 1/5 de volta ou, em outras palavras, levará cerca de 5 segundo
 <p>Em seguida <a href="webgl-3d-textures.html"> como aplicar texturas </a>.</p>
 <p><div class = "webgl_bottombar"></p>
 <p><h3> Não use setInterval ou setTimeout! &lt;/ h3&gt;</p>
-<p><p> Se você programou animação em JavaScript no passado você pode ter usado <code> setInterval &lt;/ code&gt; ou <code> setTimeout &lt;/ code&gt; para obter o sua função de desenho a ser chamada.
+<p><p> Se você programou animação em JavaScript no passado você pode ter usado <code class="notranslate" translate="no"> setInterval &lt;/ code&gt; ou <code class="notranslate" translate="no"> setTimeout &lt;/ code&gt; para obter o sua função de desenho a ser chamada.
 &lt;/ p&gt; <p>
-Os problemas com o uso de <code> setInterval &lt;/ code&gt; ou <code> setTimeout &lt;/ code&gt; para fazer animação
-são dois. Primeiro, os dois <code> setInterval &lt;/ code&gt; e <code> setTimeout &lt;/ code&gt; não têm nenhuma relação
+Os problemas com o uso de <code class="notranslate" translate="no"> setInterval &lt;/ code&gt; ou <code class="notranslate" translate="no"> setTimeout &lt;/ code&gt; para fazer animação
+são dois. Primeiro, os dois <code class="notranslate" translate="no"> setInterval &lt;/ code&gt; e <code class="notranslate" translate="no"> setTimeout &lt;/ code&gt; não têm nenhuma relação
 para o navegador exibir qualquer coisa. Eles não são sincronizados quando o navegador é
 vai desenhar uma nova moldura e, portanto, pode estar sem sincronia com a máquina do usuário.
-Se você usar <code> setInterval &lt;/ code&gt; ou <code> setTimeout &lt;/ code&gt; e assumir 60 quadros
+Se você usar <code class="notranslate" translate="no"> setInterval &lt;/ code&gt; ou <code class="notranslate" translate="no"> setTimeout &lt;/ code&gt; e assumir 60 quadros
 um segundo e a máquina do usuário está realmente executando alguma outra taxa de quadros que você irá
 estar fora de sincronia com a máquina deles.
 &lt;/ p&gt; <p>
-O outro problema é que o navegador não tem idéia de por que você está usando <code> setInterval &lt;/ code&gt; ou
-<code> setTimeout &lt;/ code&gt;. Por exemplo, mesmo quando sua página não está visível,
+O outro problema é que o navegador não tem idéia de por que você está usando <code class="notranslate" translate="no"> setInterval &lt;/ code&gt; ou
+<code class="notranslate" translate="no"> setTimeout &lt;/ code&gt;. Por exemplo, mesmo quando sua página não está visível,
 como quando não é a aba da frente, o navegador ainda precisa executar seu código.
-Talvez você esteja usando <code> setTimeout &lt;/ code&gt; ou <code> setInterval &lt;/ code&gt; para verificar
+Talvez você esteja usando <code class="notranslate" translate="no"> setTimeout &lt;/ code&gt; ou <code class="notranslate" translate="no"> setInterval &lt;/ code&gt; para verificar
 para novas mensagens ou tweets. Não há como saber para o navegador. Tudo bem se
 você está apenas a verificar cada poucos segundos para novas mensagens, mas não está bom se
 você está tentando desenhar 1000 objetos no WebGL. Você estará efetivamente a DOS
 máquina do usuário com o seu desenho de tabulação invisível que eles nem conseguem ver.
 &lt;/ p&gt; <p>
-<code> requestAnimationFrame &lt;/ code&gt; resolve esses dois problemas. Chama você apenas
+<code class="notranslate" translate="no"> requestAnimationFrame &lt;/ code&gt; resolve esses dois problemas. Chama você apenas
 hora certa para sincronizar a sua animação com a tela e também só chama você se
 sua aba está visível.
 &lt;/ p&gt;

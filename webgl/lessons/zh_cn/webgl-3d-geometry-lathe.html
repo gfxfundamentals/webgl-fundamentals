@@ -242,23 +242,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </div>
 
 </p>
-<p>从 0 到 1 之间选一个数（叫做 <code>t</code>），其中 0 是起点，1 是终点。
-然后在每个线段中计算出与 <code>t</code> 相关的点，<code>P1 P2</code>, <code>P2 P3</code>, <code>P3 P4</code>。</p>
+<p>从 0 到 1 之间选一个数（叫做 <code class="notranslate" translate="no">t</code>），其中 0 是起点，1 是终点。
+然后在每个线段中计算出与 <code class="notranslate" translate="no">t</code> 相关的点，<code class="notranslate" translate="no">P1 P2</code>, <code class="notranslate" translate="no">P2 P3</code>, <code class="notranslate" translate="no">P3 P4</code>。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=1"></iframe>
 </div>
 
 </p>
-<p>换句话说如果 <code>t = .25</code> 那么就计算出 <code>P1</code> 到 <code>P2</code> 距离为 25% 的点，
-从 <code>P2</code> 到 <code>P3</code> 距离为 25% 的点，从 <code>P3</code> 到 <code>P4</code> 距离为 25% 的点。</p>
-<p>你可以拖动滑块调整 <code>t</code> 的值，也可以拖动 <code>P1</code>, <code>P2</code>, <code>P3</code>, 和 <code>P4</code> 调整位置。</p>
-<p>对这些结果点做同样的操作，计算 <code>t</code> 对应的 <code>Q1 Q2</code> 和 <code>Q2 Q3</code> 之间的点。</p>
+<p>换句话说如果 <code class="notranslate" translate="no">t = .25</code> 那么就计算出 <code class="notranslate" translate="no">P1</code> 到 <code class="notranslate" translate="no">P2</code> 距离为 25% 的点，
+从 <code class="notranslate" translate="no">P2</code> 到 <code class="notranslate" translate="no">P3</code> 距离为 25% 的点，从 <code class="notranslate" translate="no">P3</code> 到 <code class="notranslate" translate="no">P4</code> 距离为 25% 的点。</p>
+<p>你可以拖动滑块调整 <code class="notranslate" translate="no">t</code> 的值，也可以拖动 <code class="notranslate" translate="no">P1</code>, <code class="notranslate" translate="no">P2</code>, <code class="notranslate" translate="no">P3</code>, 和 <code class="notranslate" translate="no">P4</code> 调整位置。</p>
+<p>对这些结果点做同样的操作，计算 <code class="notranslate" translate="no">t</code> 对应的 <code class="notranslate" translate="no">Q1 Q2</code> 和 <code class="notranslate" translate="no">Q2 Q3</code> 之间的点。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=2"></iframe>
 </div>
 
 </p>
-<p>最后在 <code>R1 R2</code> 中计算出与 <code>t</code> 相关的点。</p>
+<p>最后在 <code class="notranslate" translate="no">R1 R2</code> 中计算出与 <code class="notranslate" translate="no">t</code> 相关的点。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=3"></iframe>
 </div>
@@ -283,25 +283,25 @@ P = P1 * invT^3 +
 </pre>
 </div>
 
-<p>其中 <code>P1</code>, <code>P2</code>, <code>P3</code>, <code>P4</code> 就像上例中的四个点，
-<code>P</code> 就是那个 <span style="color: red;">红点</span>。</p>
+<p>其中 <code class="notranslate" translate="no">P1</code>, <code class="notranslate" translate="no">P2</code>, <code class="notranslate" translate="no">P3</code>, <code class="notranslate" translate="no">P4</code> 就像上例中的四个点，
+<code class="notranslate" translate="no">P</code> 就是那个 <span style="color: red;">红点</span>。</p>
 <p>在二维美术应用例如 Adobe Illustrator 中，
 当你制作一个较长的曲线时通常是由一些小的四点片段组成的。
 默认情况下应用将控制点沿着起/终点方向锁死，
 确保在公共点部分方向相反。</p>
-<p>看这个例子。移动 <code>P3</code> 或 <code>P5</code> 会同时移动另一个。</p>
+<p>看这个例子。移动 <code class="notranslate" translate="no">P3</code> 或 <code class="notranslate" translate="no">P5</code> 会同时移动另一个。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-edit.html"></iframe>
 </div>
 
 </p>
-<p>注意这个曲线是两段，<code>P1,P2,P3,P4</code> 和 <code>P4,P5,P6,P7</code>。
-只有在 <code>P3</code>，<code>P5</code> 与 <code>P4</code> 的连线方向相反时曲线在这一点才会连续。
+<p>注意这个曲线是两段，<code class="notranslate" translate="no">P1,P2,P3,P4</code> 和 <code class="notranslate" translate="no">P4,P5,P6,P7</code>。
+只有在 <code class="notranslate" translate="no">P3</code>，<code class="notranslate" translate="no">P5</code> 与 <code class="notranslate" translate="no">P4</code> 的连线方向相反时曲线在这一点才会连续。
 大多数应用可以让你断开连接，并获得一个锐利的拐点。
-取消选中复选框然后拖拽 <code>P3</code> 或 <code>P5</code> 就会清晰看到独立的曲线。</p>
-<p>接下来我们需要获得生成曲线上的点，通过给上方的公式提供 <code>t</code>
+取消选中复选框然后拖拽 <code class="notranslate" translate="no">P3</code> 或 <code class="notranslate" translate="no">P5</code> 就会清晰看到独立的曲线。</p>
+<p>接下来我们需要获得生成曲线上的点，通过给上方的公式提供 <code class="notranslate" translate="no">t</code>
 就可以生成一个点。</p>
-<pre class="prettyprint"><code>function getPointOnBezierCurve(points, offset, t) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function getPointOnBezierCurve(points, offset, t) {
   const invT = (1 - t);
   return v2.add(v2.mult(points[offset + 0], invT * invT * invT),
                 v2.mult(points[offset + 1], 3 * t * invT * invT),
@@ -309,7 +309,7 @@ P = P1 * invT^3 +
                 v2.mult(points[offset + 3], t * t  *t));
 }
 </code></pre><p>然后可以计算一系列点。</p>
-<pre class="prettyprint"><code>function getPointsOnBezierCurve(points, offset, numPoints) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function getPointsOnBezierCurve(points, offset, numPoints) {
   const points = [];
   for (let i = 0; i &lt; numPoints; ++i) {
     const t = i / (numPoints - 1);
@@ -317,7 +317,7 @@ P = P1 * invT^3 +
   }
   return points;
 }
-</code></pre><p>注意： <code>v2.mult</code> 和 <code>v2.add</code> 是我加入的二维点运算辅助方法。</p>
+</code></pre><p>注意： <code class="notranslate" translate="no">v2.mult</code> 和 <code class="notranslate" translate="no">v2.add</code> 是我加入的二维点运算辅助方法。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=0&showCurve=true&showPoints=true"></iframe>
 </div>
@@ -326,9 +326,9 @@ P = P1 * invT^3 +
 <p>在图示中你可以选择点的个数，如果曲线比较锐利就可以多差值一些点，
 如果曲线比较平缓就可以少插值一些点。一个解决办法是检查曲线的锐利程度，
 如果过于锐利就拆分成两个曲线。</p>
-<p>拆分的部分比较简单，如果我们再看看不同级别的查分，对于任意值的 <code>t</code>,
-<code>P1</code>, <code>Q1</code>, <code>R1</code>, 红点构成一个曲线，终点是红点。
-红点, <code>R2</code>, <code>Q3</code>, <code>P4</code> 构成一个曲线。换句话说我们可以将曲线从任意位置分成两段，
+<p>拆分的部分比较简单，如果我们再看看不同级别的查分，对于任意值的 <code class="notranslate" translate="no">t</code>,
+<code class="notranslate" translate="no">P1</code>, <code class="notranslate" translate="no">Q1</code>, <code class="notranslate" translate="no">R1</code>, 红点构成一个曲线，终点是红点。
+红点, <code class="notranslate" translate="no">R2</code>, <code class="notranslate" translate="no">Q3</code>, <code class="notranslate" translate="no">P4</code> 构成一个曲线。换句话说我们可以将曲线从任意位置分成两段，
 并且和原曲线相同。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=4&show2Curves=true"></iframe>
@@ -337,7 +337,7 @@ P = P1 * invT^3 +
 </p>
 <p>第二个部分是如何决定曲线是否需要拆分，从网上查找后我发现了<a href="https://seant23.wordpress.com/2010/11/12/offset-bezier-curves/">这个方法</a>，
 对于给定的曲线可以求出平滑程度。</p>
-<pre class="prettyprint"><code>function flatness(points, offset) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function flatness(points, offset) {
   const p1 = points[offset + 0];
   const p2 = points[offset + 1];
   const p3 = points[offset + 2];
@@ -360,7 +360,7 @@ P = P1 * invT^3 +
 }
 </code></pre><p>我们可以用它获取曲线上的点，首先检查曲线是否太锐利，如果是就拆分，
 不是就将点加入列表。</p>
-<pre class="prettyprint"><code>function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
   const outPoints = newPoints || [];
   if (flatness(points, offset) &lt; tolerance) {
 
@@ -404,7 +404,7 @@ P = P1 * invT^3 +
 <p>在这个算法中我们提供一系列点，找到离最后两点构成的直线距离最远的点，
 然后将这个距离和一个定值进行比较，如果小于那个值就保留最后两个点然后丢弃其他的点，
 大于则将曲线沿那个最远点分成两份，分别对每一份再做一次这个运算。</p>
-<pre class="prettyprint"><code>function simplifyPoints(points, start, end, epsilon, newPoints) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function simplifyPoints(points, start, end, epsilon, newPoints) {
   const outPoints = newPoints || [];
 
   // 找到离最后两点距离最远的点
@@ -435,7 +435,7 @@ P = P1 * invT^3 +
 
   return outPoints;
 }
-</code></pre><p><code>v2.distanceToSegmentSq</code> 是计算点到线段距离平方的一个方法，
+</code></pre><p><code class="notranslate" translate="no">v2.distanceToSegmentSq</code> 是计算点到线段距离平方的一个方法，
 使用距离平方的原因是比使用实际距离要快一些，因为我们值管线最远距离所以和实际距离的效果相同。</p>
 <p>这是结果，调整距离查看添加或删除的点。</p>
 <p><div class="webgl_diagram_container">
@@ -448,7 +448,7 @@ P = P1 * invT^3 +
 <p>这是我做的保龄球的半边轮廓的svg。</p>
 <p><img class="webgl_center" src="../resources/bowling-pin-silhouette.svg" width="50%" height="50%" /></p>
 <p>由 4 个曲线制成，路径的数据像这样</p>
-<pre class="prettyprint"><code>&lt;path fill=&quot;none&quot; stroke-width=&quot;5&quot; d=&quot;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;path fill=&quot;none&quot; stroke-width=&quot;5&quot; d=&quot;
    m44,434
    c18,-33 19,-66 15,-111
    c-4,-45 -37,-104 -39,-132
@@ -456,7 +456,7 @@ P = P1 * invT^3 +
    c5,-30 3,-63 -36,-63
 &quot;/&gt;
 </code></pre><p><a href="https://developer.mozilla.org/en/docs/Web/SVG/Tutorial/Paths">解译这些数据</a> 得到这些点。</p>
-<pre class="prettyprint"><code>        ___
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">        ___
 44, 371,   |
 62, 338,   | 第一个曲线
 63, 305,___|__
@@ -471,7 +471,7 @@ P = P1 * invT^3 +
 39, -16,            |
  0, -16,____________|
 </code></pre><p>现在有了曲线数据，需要计算出曲线上的点。</p>
-<pre class="prettyprint"><code>// 获取所有片段的点
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 获取所有片段的点
 function getPointsOnBezierCurves(points, tolerance) {
   const newPoints = [];
   const numSegments = (points.length - 1) / 3;
@@ -481,10 +481,10 @@ function getPointsOnBezierCurves(points, tolerance) {
   }
   return newPoints;
 }
-</code></pre><p>调用 <code>simplifyPoints</code> 处理结果。</p>
+</code></pre><p>调用 <code class="notranslate" translate="no">simplifyPoints</code> 处理结果。</p>
 <p>现在要旋转它们了，需要决定分多少个部分，对于每个部分都用<a href="webgl-2d-matrices.html">矩阵运算</a>
 绕 Y 轴转动一定角度获得，一旦获得所有点就用索引连接它们。</p>
-<pre class="prettyprint"><code>// 绕 Y 轴旋转
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 绕 Y 轴旋转
 function lathePoints(points,
                      startAngle,   // 起始角 (例如 0)
                      endAngle,     // 终止角 (例如 Math.PI * 2)
@@ -539,11 +539,11 @@ function lathePoints(points,
   };
 }
 </code></pre><p>上方的代码创建了位置点和纹理坐标，然后创建索引生成三角网。
-<code>capStart</code> 和 <code>capEnd</code> 确定是都生成闭合点，假设我们在做一个罐头，
+<code class="notranslate" translate="no">capStart</code> 和 <code class="notranslate" translate="no">capEnd</code> 确定是都生成闭合点，假设我们在做一个罐头，
 这些选项指明是否需要闭合顶面和底面。</p>
 <p>使用我们的 <a href="webgl-less-code-more-fun.html">简化代码</a> 就可以用哪些数据生成这样的
 WebGL缓冲</p>
-<pre class="prettyprint"><code>const tolerance = 0.15;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const tolerance = 0.15;
 const distance = .4;
 const divisions = 16;
 const startAngle = 0;
@@ -565,10 +565,10 @@ if (!bufferInfo) {
 
 </p>
 <p>拖动滑块观察对结果的影响。</p>
-<p>这还有一个问题，开启三角形你会看到纹理不是均匀分布的，这是因为我们将纹理坐标的 <code>v</code>
+<p>这还有一个问题，开启三角形你会看到纹理不是均匀分布的，这是因为我们将纹理坐标的 <code class="notranslate" translate="no">v</code>
 值赋为曲线点的索引，如果曲线上的点距离相等那就没问题，但是它们距离并不相等。</p>
-<p>我们可以遍历曲线上的点并计算出每一点对应曲线长度，最后将这个长度除以曲线总长度赋值给 <code>v</code>。</p>
-<pre class="prettyprint"><code>// 绕 Y 轴旋转
+<p>我们可以遍历曲线上的点并计算出每一点对应曲线长度，最后将这个长度除以曲线总长度赋值给 <code class="notranslate" translate="no">v</code>。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 绕 Y 轴旋转
 function lathePoints(points,
                      startAngle,   // 起始角 (例如 0)
                      endAngle,     // 终止角 (例如 Math.PI * 2)
@@ -647,7 +647,7 @@ function lathePoints(points,
 如果你 <a href="https://www.google.com/search?q=uv+map+a+barrel">谷歌一下 UV map a barrel</a>，
 你会发现完美的 UV 坐标是不需要太多数学运算的，只需要生成合适的点数据，这时你就需要一个合适工具创建点数据。</p>
 <p>还有一个事情要做，就是添加法向量。</p>
-<p>我们可以计算每一个曲线点的法向量，事实上如果你会看这节中的例子，你会发现 <code>R1</code> 和 <code>R2</code>
+<p>我们可以计算每一个曲线点的法向量，事实上如果你会看这节中的例子，你会发现 <code class="notranslate" translate="no">R1</code> 和 <code class="notranslate" translate="no">R2</code>
 构成的线段切曲线于红点处。</p>
 <p><img class="webgl_center" src="../resources/tangent-to-curve.png" width="50%" /></p>
 <p>法向量和切线垂直所以从切线很容易求出法向量。</p>
@@ -660,7 +660,7 @@ function lathePoints(points,
 <p>所有的建模软件都有不同的方式创建法向量，一个常用的做法就是将该点邻接的三角面的法向量求平均。
 另外，还允许用户选择一个最大角度，如果邻接的多边形的法向量的夹角大于最大角度，就会创建一个新顶点。</p>
 <p>我们来实现这个。</p>
-<pre class="prettyprint"><code>function generateNormals(arrays, maxAngle) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function generateNormals(arrays, maxAngle) {
   const positions = arrays.position;
   const texcoords = arrays.texcoord;
 
@@ -844,7 +844,7 @@ function makeIndiceIterator(arrays) {
 然后创建一个顶点索引集寻找相同的顶点，那是因为我们旋转后的起始和终止点应该是同一个点，
 但UV坐标不同所以要单独处理，计算顶点法向量时要将它们看作相同点。</p>
 <p>这些做完之后，对于每个顶点，生成了一个包含它的面的集合。</p>
-<p>最后将所有除了差值大于 <code>maxAngle</code> 的面的法向量求平平均，获得一个新的顶点集合。</p>
+<p>最后将所有除了差值大于 <code class="notranslate" translate="no">maxAngle</code> 的面的法向量求平平均，获得一个新的顶点集合。</p>
 <p>这是结果</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lathe-step-03.html"></iframe>
@@ -852,9 +852,9 @@ function makeIndiceIterator(arrays) {
 </div>
 
 </p>
-<p>注意到在期望的位置得到了锐利的边缘，调大 <code>maxAngle</code> 的值就会将相邻的面加入计算，得到平滑的边缘。
-试试调整 <code>divisions</code> 为 5 或者 6 然后调整 <code>maxAngle</code> 的值让该平滑的地方平滑，该锐利的地方锐利，
-你也可以设置 <code>mode</code> 为 <code>lit</code> 查看光照效果，这是我们需要法向量的原因。</p>
+<p>注意到在期望的位置得到了锐利的边缘，调大 <code class="notranslate" translate="no">maxAngle</code> 的值就会将相邻的面加入计算，得到平滑的边缘。
+试试调整 <code class="notranslate" translate="no">divisions</code> 为 5 或者 6 然后调整 <code class="notranslate" translate="no">maxAngle</code> 的值让该平滑的地方平滑，该锐利的地方锐利，
+你也可以设置 <code class="notranslate" translate="no">mode</code> 为 <code class="notranslate" translate="no">lit</code> 查看光照效果，这是我们需要法向量的原因。</p>
 <h2 id="-">那么，我们学到了什么呢？</h2>
 <p>我们学到了如果想做三维模型就<strong>用三维建模库</strong>😝</p>
 <p>你可能需要以个 <a href="https://www.google.com/search?q=uv+editor">UV 编辑器</a>，
@@ -868,15 +868,15 @@ function makeIndiceIterator(arrays) {
 我就不可能完成这些内容。</p>
 <div class="webgl_bottombar">
 <h3>这里的模运算符是做什么的?</h3>
-<p>如果你仔细看了 <code>lathePoints</code> 方法就会看到计算角度时使用了模运算符。</p>
+<p>如果你仔细看了 <code class="notranslate" translate="no">lathePoints</code> 方法就会看到计算角度时使用了模运算符。</p>
 <pre class="prettyprint showlinemods">
 for (let division = 0; division <= numDivisions; ++division) {
   const u = division / numDivisions;
 *  const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
 </pre>
 <p>为什么这么做?</p>
-<p>当我们将点旋转成一个圆形时我们希望起点和终点是匹配的。 <code>Math.sin(0)</code> 和
-<code>Math.sin(Math.PI * 2)</code> 应该相等，但是浮点运算并不精确，所以通常它们并不是
+<p>当我们将点旋转成一个圆形时我们希望起点和终点是匹配的。 <code class="notranslate" translate="no">Math.sin(0)</code> 和
+<code class="notranslate" translate="no">Math.sin(Math.PI * 2)</code> 应该相等，但是浮点运算并不精确，所以通常它们并不是
 100% 的相等。</p>
 <p>这在计算法向量的时候十分重要，我们想知道到一个顶点共享的所有面，我们比较顶点，
 如果相同就认为是同一点，那么如果不被认为是同一点就会计算出错误的法向量。
@@ -929,8 +929,8 @@ function getVertIndex(position) {
 <pre class="prettyprint">
   const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
 </pre>
-<p>由于模运算 <code>endAngle</code> 为 <code>Math.PI * 2</code> 时 <code>angle</code> 就为 0，和起始点相同，接缝消失了，问题解决了！</p>
-<p>但是，即使这样当设置 <code>distance</code> 为 0.001 并且 <code>divisions</code> 为 60 时，在我的机子上还要几乎1 秒钟的运算。这可能还有很多可以优化的地方，但创建复杂的网格是一个耗时的工作，这就是我的三维游戏可以以
+<p>由于模运算 <code class="notranslate" translate="no">endAngle</code> 为 <code class="notranslate" translate="no">Math.PI * 2</code> 时 <code class="notranslate" translate="no">angle</code> 就为 0，和起始点相同，接缝消失了，问题解决了！</p>
+<p>但是，即使这样当设置 <code class="notranslate" translate="no">distance</code> 为 0.001 并且 <code class="notranslate" translate="no">divisions</code> 为 60 时，在我的机子上还要几乎1 秒钟的运算。这可能还有很多可以优化的地方，但创建复杂的网格是一个耗时的工作，这就是我的三维游戏可以以
 60fps 运行，但是三维建模工具通常都是很低的帧率。
 </p>
 </div>

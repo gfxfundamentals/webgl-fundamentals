@@ -236,7 +236,7 @@ space in the 6 directions of the cubemap.</p>
 </div>
 
 <p>Based on <a href="webgl-cube-maps.html">the code in the previous article</a> let&#39;s load those 6 images instead of the images we generated</p>
-<pre class="prettyprint"><code class="lang-js">// Create a texture.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Create a texture.
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
@@ -294,7 +294,7 @@ gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 </code></pre>
 <p>Note that for every face we initialize it with a 512x512 blank image by passing
-<code>null</code> to <code>texImage2D</code>. Cubemaps must have all 6 faces, all 6 faces must be the
+<code class="notranslate" translate="no">null</code> to <code class="notranslate" translate="no">texImage2D</code>. Cubemaps must have all 6 faces, all 6 faces must be the
 same size and be square. If they are not the texture will not render. But, we&#39;re
 loading 6 images. We&#39;d like to start rendering immediately so we allocate all 6
 faces then start loading the images. As each image arrives we upload it to the
@@ -309,7 +309,7 @@ the eye/camera to that position on the surface of the object, which direction
 will it reflect off the that surface. We can then use that direction to get a
 color from the cubemap.</p>
 <p>The formula to reflect is</p>
-<pre class="prettyprint"><code>reflectionDir = eyeToSurfaceDir – 
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">reflectionDir = eyeToSurfaceDir – 
     2 ∗ dot(surfaceNormal, eyeToSurfaceDir) ∗ surfaceNormal
 </code></pre><p>Thinking about what we can see it&#39;s true. Recall from the <a href="webgl-3d-lighting-directional.html">lighting articles</a>
 that a dot product of 2 vectors returns the cosine of the angle between the 2
@@ -368,7 +368,7 @@ from the cubemap let&#39;s change the shaders to do that.</p>
 <p>First in the vertex shader we&#39;ll compute the world position and world oriented
 normal of the vertices and pass those to the fragment shader as varyings. This
 is similar to what we did in <a href="webgl-3d-lighting-spot.html">the article on spotlights</a>.</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform mat4 u_projection;
@@ -389,14 +389,14 @@ void main() {
   v_worldNormal = mat3(u_world) * a_normal;
 }
 </code></pre>
-<p>Then in the fragment shader we normalize the <code>worldNormal</code> since it&#39;s being
+<p>Then in the fragment shader we normalize the <code class="notranslate" translate="no">worldNormal</code> since it&#39;s being
 interpolated across the surface between vertices. We pass in the world position
 of the camera and by subtracting that from the world position of the surface we
-get the <code>eyeToSurfaceDir</code>.</p>
-<p>And finally we use <code>reflect</code> which is a built in GLSL function that implements
+get the <code class="notranslate" translate="no">eyeToSurfaceDir</code>.</p>
+<p>And finally we use <code class="notranslate" translate="no">reflect</code> which is a built in GLSL function that implements
 the formula we went over above. We use the result to get a color from the
 cubemap.</p>
-<pre class="prettyprint"><code class="lang-glsl">precision highp float;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision highp float;
 
 // Passed in from the vertex shader.
 varying vec3 v_worldPosition;
@@ -421,7 +421,7 @@ the cube appear flat. In the previous example just to see the cubemap work we
 repurposed the cube&#39;s positions but in this case we need actual normals for a
 cube like we covered in <a href="webgl-3d-lighting-directional.html">the article on lighting</a></p>
 <p>At init time</p>
-<pre class="prettyprint"><code class="lang-js">// Create a buffer to put normals in
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Create a buffer to put normals in
 var normalBuffer = gl.createBuffer();
 // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = normalBuffer)
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
@@ -429,7 +429,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 setNormals(gl);
 </code></pre>
 <p>and at render time </p>
-<pre class="prettyprint"><code class="lang-js">// Bind the normal buffer.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Bind the normal buffer.
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 
 // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
@@ -442,14 +442,14 @@ gl.vertexAttribPointer(
     normalLocation, size, type, normalize, stride, offset)
 </code></pre>
 <p>And of course we need to look up the uniform locations at init time</p>
-<pre class="prettyprint"><code class="lang-js">var projectionLocation = gl.getUniformLocation(program, &quot;u_projection&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var projectionLocation = gl.getUniformLocation(program, &quot;u_projection&quot;);
 var viewLocation = gl.getUniformLocation(program, &quot;u_view&quot;);
 var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 var textureLocation = gl.getUniformLocation(program, &quot;u_texture&quot;);
 var worldCameraPositionLocation = gl.getUniformLocation(program, &quot;u_worldCameraPosition&quot;);
 </code></pre>
 <p>and set them at render time</p>
-<pre class="prettyprint"><code class="lang-js">// Compute the projection matrix
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Compute the projection matrix
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var projectionMatrix =
     m4.perspective(fieldOfViewRadians, aspect, 1, 2000);

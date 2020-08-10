@@ -252,28 +252,28 @@ or similar programs that&#39;s a bezier curve.</p>
 </div>
 
 </p>
-<p>We pick a number between 0 and 1 (called <code>t</code>) where 0 = the beginning
-and 1 = the end. We then compute the corresponding <code>t</code> point
-between each pair of points. <code>P1 P2</code>, <code>P2 P3</code>, <code>P3 P4</code>.</p>
+<p>We pick a number between 0 and 1 (called <code class="notranslate" translate="no">t</code>) where 0 = the beginning
+and 1 = the end. We then compute the corresponding <code class="notranslate" translate="no">t</code> point
+between each pair of points. <code class="notranslate" translate="no">P1 P2</code>, <code class="notranslate" translate="no">P2 P3</code>, <code class="notranslate" translate="no">P3 P4</code>.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=1"></iframe>
 </div>
 
 </p>
-<p>In other words if <code>t = .25</code> then we compute a point 25% of the way
-going from <code>P1</code> to <code>P2</code>, another 25% of the way going from <code>P2</code> to <code>P3</code>
-and one more 25% of the way going from <code>P3</code> to <code>P4</code>.</p>
-<p>You can drag the slider to adjust <code>t</code> and you can also move points
-<code>P1</code>, <code>P2</code>, <code>P3</code>, and <code>P4</code>.</p>
-<p>We do the same for the resulting points. Compute <code>t</code> points between <code>Q1 Q2</code>
-and <code>Q2 Q3</code>.</p>
+<p>In other words if <code class="notranslate" translate="no">t = .25</code> then we compute a point 25% of the way
+going from <code class="notranslate" translate="no">P1</code> to <code class="notranslate" translate="no">P2</code>, another 25% of the way going from <code class="notranslate" translate="no">P2</code> to <code class="notranslate" translate="no">P3</code>
+and one more 25% of the way going from <code class="notranslate" translate="no">P3</code> to <code class="notranslate" translate="no">P4</code>.</p>
+<p>You can drag the slider to adjust <code class="notranslate" translate="no">t</code> and you can also move points
+<code class="notranslate" translate="no">P1</code>, <code class="notranslate" translate="no">P2</code>, <code class="notranslate" translate="no">P3</code>, and <code class="notranslate" translate="no">P4</code>.</p>
+<p>We do the same for the resulting points. Compute <code class="notranslate" translate="no">t</code> points between <code class="notranslate" translate="no">Q1 Q2</code>
+and <code class="notranslate" translate="no">Q2 Q3</code>.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=2"></iframe>
 </div>
 
 </p>
-<p>Finally we do the same for those 2 points and compute the <code>t</code> point between
-<code>R1 R2</code>.</p>
+<p>Finally we do the same for those 2 points and compute the <code class="notranslate" translate="no">t</code> point between
+<code class="notranslate" translate="no">R1 R2</code>.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=3"></iframe>
 </div>
@@ -300,30 +300,30 @@ P = P1 * invT^3 +
 </pre>
 </div>
 
-<p>Where <code>P1</code>, <code>P2</code>, <code>P3</code>, <code>P4</code> are the points like the examples above and <code>P</code>
+<p>Where <code class="notranslate" translate="no">P1</code>, <code class="notranslate" translate="no">P2</code>, <code class="notranslate" translate="no">P3</code>, <code class="notranslate" translate="no">P4</code> are the points like the examples above and <code class="notranslate" translate="no">P</code>
 is the <span style="color: red;">red dot</span>.</p>
 <p>In a 2D vector art program like Adobe Illustrator
 when you make a longer curve it&#39;s actually made from many small 4 point
 curves like this. By default most apps lock the control points
 around a shared start/end point and make sure they are always
 opposite relative to the shared point.</p>
-<p>See this example, move <code>P3</code> or <code>P5</code> and the code will move the other.</p>
+<p>See this example, move <code class="notranslate" translate="no">P3</code> or <code class="notranslate" translate="no">P5</code> and the code will move the other.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-edit.html"></iframe>
 </div>
 
 </p>
-<p>Notice the curve made by <code>P1,P2,P3,P4</code> is a separate curve from
-the one made by <code>P4,P5,P6,P7</code>. It&#39;s just when <code>P3</code> and <code>P5</code> are on exact
-opposite sides of <code>P4</code> together they look like one continuous curve.
+<p>Notice the curve made by <code class="notranslate" translate="no">P1,P2,P3,P4</code> is a separate curve from
+the one made by <code class="notranslate" translate="no">P4,P5,P6,P7</code>. It&#39;s just when <code class="notranslate" translate="no">P3</code> and <code class="notranslate" translate="no">P5</code> are on exact
+opposite sides of <code class="notranslate" translate="no">P4</code> together they look like one continuous curve.
 Most apps will then usually give you the option to stop locking them
 together so you can get a sharp corner. Un-check the lock checkbox
-then drag <code>P3</code> or <code>P5</code> and it will become even more clear they are
+then drag <code class="notranslate" translate="no">P3</code> or <code class="notranslate" translate="no">P5</code> and it will become even more clear they are
 separate curves.</p>
 <p>Next up we need a way to generate points on a curve.
 Using the formula above we can generate a point for
-a given <code>t</code> value like this.</p>
-<pre class="prettyprint"><code>function getPointOnBezierCurve(points, offset, t) {
+a given <code class="notranslate" translate="no">t</code> value like this.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function getPointOnBezierCurve(points, offset, t) {
   const invT = (1 - t);
   return v2.add(v2.mult(points[offset + 0], invT * invT * invT),
                 v2.mult(points[offset + 1], 3 * t * invT * invT),
@@ -331,7 +331,7 @@ a given <code>t</code> value like this.</p>
                 v2.mult(points[offset + 3], t * t  *t));
 }
 </code></pre><p>And we can generate a set of points for the curve like this</p>
-<pre class="prettyprint"><code>function getPointsOnBezierCurve(points, offset, numPoints) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function getPointsOnBezierCurve(points, offset, numPoints) {
   const cpoints = [];
   for (let i = 0; i &lt; numPoints; ++i) {
     const t = i / (numPoints - 1);
@@ -339,7 +339,7 @@ a given <code>t</code> value like this.</p>
   }
   return cpoints;
 }
-</code></pre><p>Note: <code>v2.mult</code> and <code>v2.add</code> are small JavaScript functions I included
+</code></pre><p>Note: <code class="notranslate" translate="no">v2.mult</code> and <code class="notranslate" translate="no">v2.add</code> are small JavaScript functions I included
 to help do math with points.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/bezier-curve-diagram.html?maxDepth=0&showCurve=true&showPoints=true"></iframe>
@@ -352,8 +352,8 @@ probably want less points. One solution
 is to check how curvy a curve is. If it&#39;s too curvy then split it into
 2 curves.</p>
 <p>The splitting part turns out to be easy. If we look at the various
-levels of interpolation again, the points <code>P1</code>, <code>Q1</code>, <code>R1</code>, RED make one
-curve and the points RED, <code>R2</code>, <code>Q3</code>, <code>P4</code> make the other for any value of t.
+levels of interpolation again, the points <code class="notranslate" translate="no">P1</code>, <code class="notranslate" translate="no">Q1</code>, <code class="notranslate" translate="no">R1</code>, RED make one
+curve and the points RED, <code class="notranslate" translate="no">R2</code>, <code class="notranslate" translate="no">Q3</code>, <code class="notranslate" translate="no">P4</code> make the other for any value of t.
 In other words we can split the curve anywhere and get 2 curves
 that match the original.</p>
 <p><div class="webgl_diagram_container">
@@ -364,7 +364,7 @@ that match the original.</p>
 <p>The second part is deciding if a curve needs to be split or not. Looking
 around the net I found <a href="https://seant23.wordpress.com/2010/11/12/offset-bezier-curves/">this function</a>
 that for a given curve decides how flat it is.</p>
-<pre class="prettyprint"><code>function flatness(points, offset) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function flatness(points, offset) {
   const p1 = points[offset + 0];
   const p2 = points[offset + 1];
   const p3 = points[offset + 2];
@@ -388,7 +388,7 @@ that for a given curve decides how flat it is.</p>
 </code></pre><p>We can use that in our function that gets points for a curve.
 First we&#39;ll check if the curve is too curvy. If so we&#39;ll subdivide,
 if not we&#39;ll add the points in.</p>
-<pre class="prettyprint"><code>function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function getPointsOnBezierCurveWithSplitting(points, offset, tolerance, newPoints) {
   const outPoints = newPoints || [];
   if (flatness(points, offset) &lt; tolerance) {
 
@@ -437,7 +437,7 @@ Then we check if that point is further away from the line than some distance.
 If it&#39;s less than than that distance we just keep the 2 end points and discard the rest
 Otherwise we run the algorithm again, once with the points from the start to the furthest
 point and again from the furthest point to the end point.</p>
-<pre class="prettyprint"><code>function simplifyPoints(points, start, end, epsilon, newPoints) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function simplifyPoints(points, start, end, epsilon, newPoints) {
   const outPoints = newPoints || [];
 
   // find the most distance point from the endpoints
@@ -468,7 +468,7 @@ point and again from the furthest point to the end point.</p>
 
   return outPoints;
 }
-</code></pre><p><code>v2.distanceToSegmentSq</code> is a function that computes the distance squared from a point
+</code></pre><p><code class="notranslate" translate="no">v2.distanceToSegmentSq</code> is a function that computes the distance squared from a point
 to a line segment. We use the distance squared because it&#39;s faster to compute than
 the actual distance. Since we only care which point is furthest the distance squared
 will work just as well as the actual distance.</p>
@@ -485,7 +485,7 @@ major editors mentioned above. <a href="https://svg-edit.github.io/svgedit/">I u
 <p>Here&#39;s the svg silhouette of a bowling pin I made.</p>
 <p><img class="webgl_center" src="resources/bowling-pin-silhouette.svg" width="50%" height="50%" /></p>
 <p>It&#39;s made from 4 bezier curves. The data for that path looks like this</p>
-<pre class="prettyprint"><code>&lt;path fill=&quot;none&quot; stroke-width=&quot;5&quot; d=&quot;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;path fill=&quot;none&quot; stroke-width=&quot;5&quot; d=&quot;
    m44,434
    c18,-33 19,-66 15,-111
    c-4,-45 -37,-104 -39,-132
@@ -493,7 +493,7 @@ major editors mentioned above. <a href="https://svg-edit.github.io/svgedit/">I u
    c5,-30 3,-63 -36,-63
 &quot;/&gt;
 </code></pre><p><a href="https://developer.mozilla.org/en/docs/Web/SVG/Tutorial/Paths">Interpreting that data</a> we get these points.</p>
-<pre class="prettyprint"><code>        ___
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">        ___
 44, 371,   |
 62, 338,   | 1st curve
 63, 305,___|__
@@ -509,7 +509,7 @@ major editors mentioned above. <a href="https://svg-edit.github.io/svgedit/">I u
  0, -16,____________|
 </code></pre><p>Now that we have the data for the curves we need to compute some points
 on them.</p>
-<pre class="prettyprint"><code>// gets points across all segments
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// gets points across all segments
 function getPointsOnBezierCurves(points, tolerance) {
   const newPoints = [];
   const numSegments = (points.length - 1) / 3;
@@ -519,11 +519,11 @@ function getPointsOnBezierCurves(points, tolerance) {
   }
   return newPoints;
 }
-</code></pre><p>We&#39;d call <code>simplifyPoints</code> on the result.</p>
+</code></pre><p>We&#39;d call <code class="notranslate" translate="no">simplifyPoints</code> on the result.</p>
 <p>Now we need to spin them around. We decide how many divisions to make, for each division
 you use the <a href="webgl-2d-matrices.html">matrix math</a> to rotate the points around the Y axis.
 Once we&#39;ve made all the points we connect them with triangles using indices.</p>
-<pre class="prettyprint"><code>// rotates around Y axis.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// rotates around Y axis.
 function lathePoints(points,
                      startAngle,   // angle to start at (ie 0)
                      endAngle,     // angle to end at (ie Math.PI * 2)
@@ -578,11 +578,11 @@ function lathePoints(points,
   };
 }
 </code></pre><p>The code above generates positions and texcoords, it then generates indices to make triangles
-out of those. The <code>capStart</code> and <code>capEnd</code> specify whether or not generate cap points. Imagine
+out of those. The <code class="notranslate" translate="no">capStart</code> and <code class="notranslate" translate="no">capEnd</code> specify whether or not generate cap points. Imagine
 we&#39;re making a can. These options would specify whether or not to close the ends.</p>
 <p>Using our <a href="webgl-less-code-more-fun.html">simplified code</a> we can generate WebGL buffers with
 this data like this</p>
-<pre class="prettyprint"><code>const tolerance = 0.15;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const tolerance = 0.15;
 const distance = .4;
 const divisions = 16;
 const startAngle = 0;
@@ -605,13 +605,13 @@ if (!bufferInfo) {
 </p>
 <p>Play with the sliders to see how they effect the result.</p>
 <p>There&#39;s an issue though. Turn on triangles and you&#39;ll see the texture is not evenly
-applied. This is because we based the <code>v</code> texture coordinate on the index of the
+applied. This is because we based the <code class="notranslate" translate="no">v</code> texture coordinate on the index of the
 points on the line. If they were evenly spaced that might work. They&#39;re not though
 so we need to do something else.</p>
 <p>We can walk the points and compute the total length of the curve and each point&#39;s
 distance on that curve. We can then divide by the length and get a better value
-for <code>v</code>.</p>
-<pre class="prettyprint"><code>// rotates around Y access.
+for <code class="notranslate" translate="no">v</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// rotates around Y access.
 function lathePoints(points,
                      startAngle,   // angle to start at (ie 0)
                      endAngle,     // angle to end at (ie Math.PI * 2)
@@ -693,7 +693,7 @@ you&#39;ll see that getting perfect UV coordinates is not so much a math problem
 and you need nice tools to enter that data.</p>
 <p>There&#39;s still one other thing we should do and that&#39;s add normals.</p>
 <p>We could compute a normal for each point on the curve. In fact if you go back to the examples
-on this page you can see the line formed by <code>R1</code> and <code>R2</code> are a line tangent to the curve.</p>
+on this page you can see the line formed by <code class="notranslate" translate="no">R1</code> and <code class="notranslate" translate="no">R2</code> are a line tangent to the curve.</p>
 <p><img class="webgl_center" src="resources/tangent-to-curve.png" width="50%" /></p>
 <p>A normal is perpendicular to the tangent so it would be easy to use the tangents
 to generate normals.</p>
@@ -712,7 +712,7 @@ single vertex they average the normals of all the polygons that share that verte
 let the user choose some maximum angle. If the angle between one polygon shared by
 a vertex is greater than that maximum angle then they generate a new vertex.</p>
 <p>Let&#39;s do that.</p>
-<pre class="prettyprint"><code>function generateNormals(arrays, maxAngle) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function generateNormals(arrays, maxAngle) {
   const positions = arrays.position;
   const texcoords = arrays.texcoord;
 
@@ -900,7 +900,7 @@ so they are not the same point. To compute the vertex normals we need them to be
 point.</p>
 <p>Once that&#39;s done, for each vertex, we make a list of all the faces it&#39;s used by.</p>
 <p>Finally we average the normals of all the faces each vertex uses excluding ones that are
-more than <code>maxAngle</code> different and generate a new set of vertices.</p>
+more than <code class="notranslate" translate="no">maxAngle</code> different and generate a new set of vertices.</p>
 <p>Here&#39;s the result</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lathe-step-03.html"></iframe>
@@ -908,11 +908,11 @@ more than <code>maxAngle</code> different and generate a new set of vertices.</p
 </div>
 
 </p>
-<p>Notice we get sharp edges where we want them. Make the <code>maxAngle</code> bigger and you&#39;ll see those edges
+<p>Notice we get sharp edges where we want them. Make the <code class="notranslate" translate="no">maxAngle</code> bigger and you&#39;ll see those edges
 get smoothed out when the neighboring faces start getting included in the normal calculations.
-Also try adjusting the <code>divisions</code> to something like 5 or 6 then adjust the <code>maxAngle</code> until the
-edges around are hard but the parts you want smooth are still smooth. You can also set the <code>mode</code>
-to <code>lit</code> to see what the object would look like with lighting, the reason we needed normals.</p>
+Also try adjusting the <code class="notranslate" translate="no">divisions</code> to something like 5 or 6 then adjust the <code class="notranslate" translate="no">maxAngle</code> until the
+edges around are hard but the parts you want smooth are still smooth. You can also set the <code class="notranslate" translate="no">mode</code>
+to <code class="notranslate" translate="no">lit</code> to see what the object would look like with lighting, the reason we needed normals.</p>
 <h2 id="so-what-did-we-learn-">So, what did we learn?</h2>
 <p>We learned if you want to make 3D data <strong>USE A 3D MODELING PACKAGE!!!</strong> 😝</p>
 <p>To do anything really useful you&#39;d likely need a real <a href="https://www.google.com/search?q=uv+editor">UV editor</a>.
@@ -925,7 +925,7 @@ a look it should be pretty obvious how they work based on the lathe example abov
 <p>I wanted to mention I couldn&#39;t have done this without <a href="https://pomax.github.io/bezierinfo/">this awesome page about bezier curves</a>.</p>
 <div class="webgl_bottombar">
 <h3>What's this modulo operator doing here?</h3>
-<p>If you look closely at the <code>lathePoints</code> function you'll see this modulo
+<p>If you look closely at the <code class="notranslate" translate="no">lathePoints</code> function you'll see this modulo
 when computing the angle.</p>
 <pre class="prettyprint showlinemods">
 for (let division = 0; division <= numDivisions; ++division) {
@@ -934,12 +934,12 @@ for (let division = 0; division <= numDivisions; ++division) {
 </pre>
 <p>Why is that there?</p>
 <p>When we rotate the points all the way around a circle we really want the first
-and last points to match. <code>Math.sin(0)</code> and <code>Math.sin(Math.PI * 2)</code>
+and last points to match. <code class="notranslate" translate="no">Math.sin(0)</code> and <code class="notranslate" translate="no">Math.sin(Math.PI * 2)</code>
 should match but floating point math on a computer is not perfect and while they are close enough
 in general they are not actually 100% equal.</p>
 <p>That matters when we try to compute normals. We want to know all the faces a vertex
 uses. We compute that by comparing vertices. If 2 vertices are equal we assume they are the
-same vertex. Unfortunately, because <code>Math.sin(0)</code> and <code>Math.sin(Math.PI * 2)</code>
+same vertex. Unfortunately, because <code class="notranslate" translate="no">Math.sin(0)</code> and <code class="notranslate" translate="no">Math.sin(Math.PI * 2)</code>
 are not equal they will not be considered the same vertex. That means when computing the normals
 they won't take into consideration all the faces and their normals will come out wrong.</p>
 <p>Here's the result when that happens</p>
@@ -994,10 +994,10 @@ And the new code like this
 <pre class="prettyprint">
   const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
 </pre>
-<p>Because of the module the <code>angle</code> when <code>endAngle</code> is <code>Math.PI * 2</code> becomes 0
+<p>Because of the module the <code class="notranslate" translate="no">angle</code> when <code class="notranslate" translate="no">endAngle</code> is <code class="notranslate" translate="no">Math.PI * 2</code> becomes 0
 and so it's the same as the start. The seam went away. Problem solved!</p>
-<p>Still, even with the change if you set <code>distance</code> to 0.001
-and <code>divisions</code> to 60 it takes nearly a second on my machine to recompute the mesh. While
+<p>Still, even with the change if you set <code class="notranslate" translate="no">distance</code> to 0.001
+and <code class="notranslate" translate="no">divisions</code> to 60 it takes nearly a second on my machine to recompute the mesh. While
 there might be ways to optimize that I think the point is realizing that generating complex
 meshes is a generally slow operation. This just one example of why a 3d game can run at 60fps
 but a 3d modeling package often chugs at very slow frame rates.

@@ -352,9 +352,9 @@ That seems like a lot of work just to do the same thing we were already
 doing.</p>
 <p>This is where the magic comes in.  It turns out we can multiply matrices
 together and apply all the transformations at once.  Let&#39;s assume we have
-a function, <code>m3.multiply</code>, that takes two matrices, multiplies them and
+a function, <code class="notranslate" translate="no">m3.multiply</code>, that takes two matrices, multiplies them and
 returns the result.</p>
-<pre class="prettyprint"><code class="lang-js">var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var m3 = {
   multiply: function(a, b) {
     var a00 = a[0 * 3 + 0];
     var a01 = a[0 * 3 + 1];
@@ -391,7 +391,7 @@ returns the result.</p>
 </code></pre>
 <p>To make things clearer let&#39;s make functions to build matrices for
 translation, rotation and scale.</p>
-<pre class="prettyprint"><code class="lang-js">var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var m3 = {
   translation: function(tx, ty) {
     return [
       1, 0, 0,
@@ -420,7 +420,7 @@ translation, rotation and scale.</p>
 };
 </code></pre>
 <p>Now let&#39;s change our shader. The old shader looked like this</p>
-<pre class="prettyprint"><code class="lang-html">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -442,7 +442,7 @@ void main() {
   ...
 </code></pre>
 <p>Our new shader will be much simpler.</p>
-<pre class="prettyprint"><code class="lang-html">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -454,7 +454,7 @@ void main() {
   ...
 </code></pre>
 <p>And here&#39;s how we use it</p>
-<pre class="prettyprint"><code class="lang-js">// Draw the scene.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Draw the scene.
 function drawScene() {
 
   ,,,
@@ -487,7 +487,7 @@ is much simpler.</p>
 <p>Still, you might be asking, so what?  That doesn&#39;t seem like much of a
 benefit.  But, now if we want to change the order we don&#39;t have to write a
 new shader.  We can just change the math.</p>
-<pre class="prettyprint"><code class="lang-js">...
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">...
 // Multiply the matrices.
 var matrix = m3.multiply(scaleMatrix, rotationMatrix);
 matrix = m3.multiply(matrix, translationMatrix);
@@ -505,7 +505,7 @@ hierarchical animation like arms on a body, moons on a planet around a
 sun, or branches on a tree.  For a simple example of hierarchical
 animation lets draw draw our &#39;F&#39; 5 times but each time lets start with the
 matrix from the previous &#39;F&#39;.</p>
-<pre class="prettyprint"><code class="lang-js">// Draw the scene.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Draw the scene.
 function drawScene() {
   // Clear the canvas.
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -532,7 +532,7 @@ function drawScene() {
   }
 }
 </code></pre>
-<p>To do this we introduced the function, <code>m3.identity</code>, that makes an
+<p>To do this we introduced the function, <code class="notranslate" translate="no">m3.identity</code>, that makes an
 identity matrix.  An identity matrix is a matrix that effectively
 represents 1.0 so that if you multiply by the identity nothing happens.
 Just like</p>
@@ -542,7 +542,7 @@ Just like</p>
 <div class="webgl_center">matrixX * identity = matrixX</div>
 
 <p>Here&#39;s the code to make an identity matrix.</p>
-<pre class="prettyprint"><code class="lang-js">var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var m3 = {
   identity function() {
     return [
       1, 0, 0,
@@ -566,7 +566,7 @@ This is because the math we are using always rotates around the origin and
 the top left corner of our &#39;F&#39; is at the origin, (0, 0).</p>
 <p>But now, because we can do matrix math and we can choose the order that
 transforms are applied we can move the origin.</p>
-<pre class="prettyprint"><code class="lang-js">// make a matrix that will move the origin of the &#39;F&#39; to its center.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// make a matrix that will move the origin of the &#39;F&#39; to its center.
 var moveOriginMatrix = m3.translation(-50, -75);
 ...
 
@@ -587,7 +587,7 @@ how Photoshop or Flash let you move the rotation point.</p>
 <p>Let&#39;s go even more crazy.  If you go back to the first article on <a href="webgl-fundamentals.html">WebGL
 fundamentals</a> you might remember we have code in
 the shader to convert from pixels to clip space that looks like this.</p>
-<pre class="prettyprint"><code class="lang-js">...
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">...
 // convert the rectangle from pixels to 0.0 to 1.0
 vec2 zeroToOne = position / u_resolution;
 
@@ -608,7 +608,7 @@ scale by 2.0, a 3rd to translate by -1.0,-1.0 and a 4th to scale Y by -1
 then multiply them all together but instead, because the math is simple,
 we&#39;ll just make a function that makes a &#39;projection&#39; matrix for a given
 resolution directly.</p>
-<pre class="prettyprint"><code class="lang-js">var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var m3 = {
   projection: function(width, height) {
     // Note: This matrix flips the Y axis so that 0 is at the top.
     return [
@@ -622,7 +622,7 @@ resolution directly.</p>
 </code></pre>
 <p>Now we can simplify the shader even more.  Here&#39;s the entire new vertex
 shader.</p>
-<pre class="prettyprint"><code class="lang-html">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -634,7 +634,7 @@ void main() {
 &lt;/script&gt;
 </code></pre>
 <p>And in JavaScript we need to multiply by the projection matrix</p>
-<pre class="prettyprint"><code class="lang-js">// Draw the scene.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Draw the scene.
 function drawScene() {
   ...
 
@@ -664,7 +664,7 @@ simple shader with only 1 step all due to the magic of matrix math.</p>
 <p>Before we move on let&#39;s simplify a little bit. While it&#39;s common to generate
 various matrices and separately multiply them together it&#39;s also common to just
 multiply them as we go. Effectively we could functions like this</p>
-<pre class="prettyprint"><code class="lang-js">var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var m3 = {
 
   ...
 
@@ -685,7 +685,7 @@ multiply them as we go. Effectively we could functions like this</p>
 };
 </code></pre>
 <p>This would let us change 7 lines of matrix code above to just 4 lines like this</p>
-<pre class="prettyprint"><code class="lang-js">// Compute the matrix
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Compute the matrix
 var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
 matrix = m3.translate(matrix, translation[0], translation[1]);
 matrix = m3.rotate(matrix, angleInRadians);
@@ -699,23 +699,23 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
 </p>
 <p>One last thing, we saw above order matters. In the first example we had</p>
-<pre class="prettyprint"><code>translation * rotation * scale
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">translation * rotation * scale
 </code></pre><p>and in the second we had</p>
-<pre class="prettyprint"><code>scale * rotation * translation
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">scale * rotation * translation
 </code></pre><p>And we saw how they are different.</p>
 <p>The are 2 ways to look at matrices. Given the expression</p>
-<pre class="prettyprint"><code>projectionMat * translationMat * rotationMat * scaleMat * position
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">projectionMat * translationMat * rotationMat * scaleMat * position
 </code></pre><p>The first way which many people find natural is to start on the right and work
 to the left</p>
 <p>First we multiply the position by the scale matrix to get a scaled position</p>
-<pre class="prettyprint"><code>scaledPosition = scaleMat * position
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">scaledPosition = scaleMat * position
 </code></pre><p>Then we multiply the scaledPosition by the rotation matrix to get a rotatedScaledPosition</p>
-<pre class="prettyprint"><code>rotatedScaledPosition = rotationMat * scaledPosition
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedScaledPosition = rotationMat * scaledPosition
 </code></pre><p>Then we multiply the rotatedScaledPosition by the translation matrix to get a
 translatedRotatedScaledPosition</p>
-<pre class="prettyprint"><code>translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
 </code></pre><p>And finally we multiply that by the projection matrix to get clip space positions</p>
-<pre class="prettyprint"><code>clipspacePosition = projectionMatrix * translatedRotatedScaledPosition
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">clipspacePosition = projectionMatrix * translatedRotatedScaledPosition
 </code></pre><p>The 2nd way to look at matrices is reading from left to right. In that case
 each matrix changes the <em>space</em> represented by the canvas. The canvas starts
 with representing clip space (-1 to +1) in each direction. Each matrix applied
@@ -731,7 +731,7 @@ from left to right changes the space represented by the canvas.</p>
 <p>The white area is the canvas. Blue is outside the canvas. We&#39;re in clip space.
 Positions passed in need to be in clip space</p>
 </blockquote>
-<p>Step 2:  <code>matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);</code></p>
+<p>Step 2:  <code class="notranslate" translate="no">matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);</code></p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=1"></iframe>
@@ -743,7 +743,7 @@ Positions passed in need to be in clip space</p>
 Positions passed using this matrix in need to be in pixel space. The flash you see
 is when the space flips from positive Y = up to positive Y = down.</p>
 </blockquote>
-<p>Step 3:  <code>matrix = m3.translate(matrix, tx, ty);</code></p>
+<p>Step 3:  <code class="notranslate" translate="no">matrix = m3.translate(matrix, tx, ty);</code></p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=2"></iframe>
@@ -753,7 +753,7 @@ is when the space flips from positive Y = up to positive Y = down.</p>
 </p>
 <p>The origin has now been moved to tx, ty (150, 100). The space has moved.</p>
 </blockquote>
-<p>Step 4:  <code>matrix = m3.rotate(matrix, rotationInRadians);</code></p>
+<p>Step 4:  <code class="notranslate" translate="no">matrix = m3.rotate(matrix, rotationInRadians);</code></p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=3"></iframe>
@@ -763,7 +763,7 @@ is when the space flips from positive Y = up to positive Y = down.</p>
 </p>
 <p>The space has been rotated around tx, ty</p>
 </blockquote>
-<p>Step 5:  <code>matrix = m3.scale(matrix, sx, sy);</code></p>
+<p>Step 5:  <code class="notranslate" translate="no">matrix = m3.scale(matrix, sx, sy);</code></p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=4"></iframe>
@@ -772,7 +772,7 @@ is when the space flips from positive Y = up to positive Y = down.</p>
 </p>
 <p>The previously rotated space with its center at tx, ty has been scaled 2 in x, 1.5 in y</p>
 </blockquote>
-<p>In the shader we then do <code>gl_Position = matrix * position;</code>. The <code>position</code> values are effectively in this final space.</p>
+<p>In the shader we then do <code class="notranslate" translate="no">gl_Position = matrix * position;</code>. The <code class="notranslate" translate="no">position</code> values are effectively in this final space.</p>
 <p>Use which ever way you feel is easier to understand.</p>
 <p>I hope these posts have helped demystify matrix math. If you want
 to stick with 2D I&#39;d suggest checking out <a href="webgl-2d-drawimage.html">recreating canvas 2d&#39;s
@@ -784,9 +784,9 @@ I started with 2D to hopefully keep it simple to understand.</p>
 <p>Also, if you really want to become an expert
 in matrix math <a href="https://www.youtube.com/watch?v=kjBOesZCoqc&amp;list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">check out this amazing videos</a>.</p>
 <div class="webgl_bottombar">
-<h3>What are <code>clientWidth</code> and <code>clientHeight</code>?</h3>
-<p>Up until this point whenever I referred to the canvas's dimensions I used <code>canvas.width</code> and <code>canvas.height</code>
-but above when I called <code>m3.projection</code> I instead used <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. Why?</p>
+<h3>What are <code class="notranslate" translate="no">clientWidth</code> and <code class="notranslate" translate="no">clientHeight</code>?</h3>
+<p>Up until this point whenever I referred to the canvas's dimensions I used <code class="notranslate" translate="no">canvas.width</code> and <code class="notranslate" translate="no">canvas.height</code>
+but above when I called <code class="notranslate" translate="no">m3.projection</code> I instead used <code class="notranslate" translate="no">canvas.clientWidth</code> and <code class="notranslate" translate="no">canvas.clientHeight</code>. Why?</p>
 <p>Projection matrices are concerned with how to take clip space (-1 to +1 in each dimension) and convert it back
 to pixels. But, in the browser, there are 2 types of pixels we are dealing with. One is the number of pixels in
 the canvas itself. So for example a canvas defined like this.</p>
@@ -814,7 +814,7 @@ For example if we made a canvas like this.</p>
 </pre>
 <p>The canvas will be displayed whatever size its container is. That's likely not 400x300.</p>
 <p>Here are two examples that set the canvas's CSS display size to 100% so the canvas is stretched
-out to fill the page. The first one uses <code>canvas.width</code> and <code>canvas.height</code>. Open it in a new
+out to fill the page. The first one uses <code class="notranslate" translate="no">canvas.width</code> and <code class="notranslate" translate="no">canvas.height</code>. Open it in a new
 window and resize the window. Notice how the 'F' doesn't have the correct aspect. It gets
 distorted.</p>
 <div class="webgl_example_container">
@@ -823,20 +823,20 @@ distorted.</p>
 </div>
 
 
-<p>In this second example we use <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code>. <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> report
+<p>In this second example we use <code class="notranslate" translate="no">canvas.clientWidth</code> and <code class="notranslate" translate="no">canvas.clientHeight</code>. <code class="notranslate" translate="no">canvas.clientWidth</code> and <code class="notranslate" translate="no">canvas.clientHeight</code> report
 the size the canvas is actually being displayed by the browser so in this case, even though the canvas still only has 400x300 pixels
-since we're defining our aspect ratio based on the size the canvas is being displayed the <code>F</code> always looks correct.</p>
+since we're defining our aspect ratio based on the size the canvas is being displayed the <code class="notranslate" translate="no">F</code> always looks correct.</p>
 <div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-clientwidth-clientheight.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-clientwidth-clientheight.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 
-<p>Most apps that allow their canvases to be resized try to make the <code>canvas.width</code> and <code>canvas.height</code> match
-the <code>canvas.clientWidth</code> and <code>canvas.clientHeight</code> because they want there to be
+<p>Most apps that allow their canvases to be resized try to make the <code class="notranslate" translate="no">canvas.width</code> and <code class="notranslate" translate="no">canvas.height</code> match
+the <code class="notranslate" translate="no">canvas.clientWidth</code> and <code class="notranslate" translate="no">canvas.clientHeight</code> because they want there to be
 one pixel in the canvas for each pixel displayed by the browser. But, as we've seen above, that's not
 the only option. That means, in almost all cases, it's more technically correct to compute a
-projection matrix's aspect ratio using <code>canvas.clientHeight</code> and <code>canvas.clientWidth</code>.
+projection matrix's aspect ratio using <code class="notranslate" translate="no">canvas.clientHeight</code> and <code class="notranslate" translate="no">canvas.clientWidth</code>.
 </p>
 </div>
 

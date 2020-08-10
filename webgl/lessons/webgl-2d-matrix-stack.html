@@ -216,20 +216,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 DrawImage</a>.  If you haven&#39;t read that I suggest
 <a href="webgl-2d-drawimage.html">you start there</a>.</p>
 <p>In that last article we implemented the WebGL equivalent of Canvas 2D&#39;s
-<code>drawImage</code> function including its ability to specify both the source
+<code class="notranslate" translate="no">drawImage</code> function including its ability to specify both the source
 rectangle and the destination rectangle.</p>
 <p>What we haven&#39;t done yet is let us rotate and/or scale it from any
 arbitrary point.  We could do that by adding more arguments, at a minimum
 we&#39;d to specify a center point, a rotation and an x and y scale.
 Fortunately there&#39;s a more generic and useful way.  The way the Canvas 2D
 API does that is with a matrix stack.  The matrix stack functions of the
-Canvas 2D API are <code>save</code>, <code>restore</code>, <code>translate</code>, <code>rotate</code>, and <code>scale</code>.</p>
+Canvas 2D API are <code class="notranslate" translate="no">save</code>, <code class="notranslate" translate="no">restore</code>, <code class="notranslate" translate="no">translate</code>, <code class="notranslate" translate="no">rotate</code>, and <code class="notranslate" translate="no">scale</code>.</p>
 <p>A matrix stack is pretty simple to implement. We make a stack of matrices. We make functions to
 multiply the top matrix of the stack using by either a translation, rotation, or scale matrix
 <a href="webgl-2d-matrices.html">using the functions we created earlier</a>.</p>
 <p>Here&#39;s the implementation</p>
-<p>First the constructor and the <code>save</code> and <code>restore</code> functions</p>
-<pre class="prettyprint"><code>function MatrixStack() {
+<p>First the constructor and the <code class="notranslate" translate="no">save</code> and <code class="notranslate" translate="no">restore</code> functions</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function MatrixStack() {
   this.stack = [];
 
   // since the stack is empty this will put an initial matrix in it
@@ -250,7 +250,7 @@ MatrixStack.prototype.save = function() {
   this.stack.push(this.getCurrentMatrix());
 };
 </code></pre><p>We also need functions for getting and setting the top matrix</p>
-<pre class="prettyprint"><code>// Gets a copy of the current matrix (top of the stack)
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Gets a copy of the current matrix (top of the stack)
 MatrixStack.prototype.getCurrentMatrix = function() {
   return this.stack[this.stack.length - 1].slice();
 };
@@ -259,9 +259,9 @@ MatrixStack.prototype.getCurrentMatrix = function() {
 MatrixStack.prototype.setCurrentMatrix = function(m) {
   return this.stack[this.stack.length - 1] = m;
 };
-</code></pre><p>Finally we need to implement <code>translate</code>, <code>rotate</code>, and <code>scale</code> using our
+</code></pre><p>Finally we need to implement <code class="notranslate" translate="no">translate</code>, <code class="notranslate" translate="no">rotate</code>, and <code class="notranslate" translate="no">scale</code> using our
 previous matrix functions.</p>
-<pre class="prettyprint"><code>// Translates the current matrix
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Translates the current matrix
 MatrixStack.prototype.translate = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.translate(m, x, y, z));
@@ -278,11 +278,11 @@ MatrixStack.prototype.scale = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.scale(m, x, y, z));
 };
-</code></pre><p>Note we&#39;re using the 3d matrix math functions.  We could just use <code>0</code> for
-<code>z</code> on translation and <code>1</code> for <code>z</code> on scale but I find that I&#39;m so used to
-using the 2d functions from Canvas 2d that I often forget to specify <code>z</code>
-an then the code breaks so let&#39;s make <code>z</code> optional</p>
-<pre class="prettyprint"><code>// Translates the current matrix
+</code></pre><p>Note we&#39;re using the 3d matrix math functions.  We could just use <code class="notranslate" translate="no">0</code> for
+<code class="notranslate" translate="no">z</code> on translation and <code class="notranslate" translate="no">1</code> for <code class="notranslate" translate="no">z</code> on scale but I find that I&#39;m so used to
+using the 2d functions from Canvas 2d that I often forget to specify <code class="notranslate" translate="no">z</code>
+an then the code breaks so let&#39;s make <code class="notranslate" translate="no">z</code> optional</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Translates the current matrix
 MatrixStack.prototype.translate = function(x, y, z) {
 +  if (z === undefined) {
 +    z = 0;
@@ -301,9 +301,9 @@ MatrixStack.prototype.scale = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.scale(m, x, y, z));
 };
-</code></pre><p>Using our <a href="webgl-2d-drawimage.html"><code>drawImage</code> from the previous lesson</a>
+</code></pre><p>Using our <a href="webgl-2d-drawimage.html"><code class="notranslate" translate="no">drawImage</code> from the previous lesson</a>
 we had these lines</p>
-<pre class="prettyprint"><code>// this matrix will convert from pixels to clip space
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// this matrix will convert from pixels to clip space
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 // this matrix will translate our quad to dstX, dstY
@@ -313,9 +313,9 @@ matrix = m4.translate(matrix, dstX, dstY, 0);
 // from 1 unit to texWidth, texHeight units
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>We just need to create a matrix stack</p>
-<pre class="prettyprint"><code>var matrixStack = new MatrixStack();
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var matrixStack = new MatrixStack();
 </code></pre><p>and multiply in the top matrix from our stack in</p>
-<pre class="prettyprint"><code>// this matrix will convert from pixels to clip space
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// this matrix will convert from pixels to clip space
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 +// this matrix moves the origin to the one represented by
@@ -336,7 +336,7 @@ canvas the origin (0,0) is at the top left corner.</p>
 an image at 0,0 will draw it starting at the center of the canvas</p>
 <p>Let&#39;s take <a href="webgl-2d-drawimage.html">our previous example</a> and just draw a
 single image</p>
-<pre class="prettyprint"><code>var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
 
 function draw(time) {
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -360,11 +360,11 @@ function draw(time) {
 </div>
 
 </p>
-<p>you can see even though we&#39;re passing <code>0, 0</code> to <code>drawImage</code> since we use
-<code>matrixStack.translate</code> to move the origin to the center of the canvas
+<p>you can see even though we&#39;re passing <code class="notranslate" translate="no">0, 0</code> to <code class="notranslate" translate="no">drawImage</code> since we use
+<code class="notranslate" translate="no">matrixStack.translate</code> to move the origin to the center of the canvas
 the image is drawn and rotates around that center.</p>
 <p>Let&#39;s move the center of rotation to center of the image</p>
-<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 +matrixStack.translate(textureInfo.width / -2, textureInfo.height / -2);
 </code></pre><p>And now it rotates around the center of the image in the center of the canvas</p>
@@ -375,7 +375,7 @@ matrixStack.rotateZ(time);
 
 </p>
 <p>Let&#39;s draw the same image at each corner rotating on different corners</p>
-<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 
 +matrixStack.save();
@@ -469,27 +469,27 @@ matrixStack.rotateZ(time);
 </div>
 
 </p>
-<p>If you think of the various matrix stack functions, <code>translate</code>,
-<code>rotateZ</code>, and <code>scale</code> as moving the origin then the way I think of
+<p>If you think of the various matrix stack functions, <code class="notranslate" translate="no">translate</code>,
+<code class="notranslate" translate="no">rotateZ</code>, and <code class="notranslate" translate="no">scale</code> as moving the origin then the way I think of
 setting the center of rotation is <em>where would I have to move the origin
 so that when I call drawImage a certain part of the image is <strong>at</strong> the
 previous origin?</em></p>
 <p>In other words let&#39;s say on a 400x300 canvas I call
-<code>matrixStack.translate(220, 150)</code>.  At that point the origin is at 220,
-150 and all drawing will be relative that point.  If we call <code>drawImage</code>
-with <code>0, 0</code> this is where the image will be drawn.</p>
+<code class="notranslate" translate="no">matrixStack.translate(220, 150)</code>.  At that point the origin is at 220,
+150 and all drawing will be relative that point.  If we call <code class="notranslate" translate="no">drawImage</code>
+with <code class="notranslate" translate="no">0, 0</code> this is where the image will be drawn.</p>
 <p><img class="webgl_center" width="400" src="resources/matrixstack-before.svg" /></p>
 <p>Lets say we want the center of rotation to be the bottom right.  In that
 case where would be have to move the origin so that when we call
-<code>drawImage</code> the point we want to be the center of rotation is at the
+<code class="notranslate" translate="no">drawImage</code> the point we want to be the center of rotation is at the
 current origin?  For the bottom right of the texture that would be
-<code>-textureWidth, -textureHeight</code> so now when we call <code>drawImage</code> with <code>0,
+<code class="notranslate" translate="no">-textureWidth, -textureHeight</code> so now when we call <code class="notranslate" translate="no">drawImage</code> with <code class="notranslate" translate="no">0,
 0</code> the texture would be drawn here and it&#39;s bottom right corner as at the
 previous origin.</p>
 <p><img class="webgl_center" width="400" src="resources/matrixstack-after.svg" /></p>
 <p>At any point whatever we did before that on the matrix stack it doesn&#39;t
 matter.  We did a bunch of stuff to move or scale or rotate the origin but
-just before we call <code>drawImage</code> wherever the origin happens to be at the
+just before we call <code class="notranslate" translate="no">drawImage</code> wherever the origin happens to be at the
 moment is irrelevant.  It&#39;s the new origin so we just have to decide where
 to move that origin relative where the texture would be drawn if we had
 nothing before it on the stack.</p>

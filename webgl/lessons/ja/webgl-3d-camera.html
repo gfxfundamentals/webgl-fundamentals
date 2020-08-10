@@ -214,7 +214,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>この記事はWebGLシリーズのーつである。最初の記事は<a href="webgl-fundamentals.html">WebGLの基本で始まった</a>。 
 そして、前回の記事は<a href="webgl-3d-perspective.html">透視投影</a>についてだった。まだ読んでいなかったら先に読んで下さい。</p>
-<p>前回の記事で、<code>m4.perspective</code>の関数が原点(0,0,0)から<code>-zNear</code>〜<code>-zFar</code>の空間を描画するので、
+<p>前回の記事で、<code class="notranslate" translate="no">m4.perspective</code>の関数が原点(0,0,0)から<code class="notranslate" translate="no">-zNear</code>〜<code class="notranslate" translate="no">-zFar</code>の空間を描画するので、
 「F」をその錘台の中に移動しなければいけなかった。</p>
 <p>現実の世界でカメラを移動して、撮影したい物（ビル、山、森）に向ける。</p>
 <p><div class="webgl_diagram_container">
@@ -249,21 +249,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 その逆行列でカメラが原点から-Zの方に向いて、表示したいものを全てカメラの前に移動出来る。</p>
 <p>上の「F」の円のような三次元シーンを作成しよう。</p>
 <p>まず、5つの物を描画して、全部同じ投影行列を使うので、ループの前に透視投影行列を計算する。</p>
-<pre class="prettyprint"><code>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">
 // 透視投影行列を計算する。
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
 var zFar = 2000;
 var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 </code></pre><p>次にカメラの行列を計算する。この行列はカメラの位置と向きを表している。
-下記のコードは向きが常に原点で、原点から<code>radius</code>を1.5掛けの距離で回転している行列を作成する。</p>
+下記のコードは向きが常に原点で、原点から<code class="notranslate" translate="no">radius</code>を1.5掛けの距離で回転している行列を作成する。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=3"></iframe>
   <div class="webgl_center">カメラの動き</div>
 </div>
 
 </p>
-<pre class="prettyprint"><code>var numFs = 5;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var numFs = 5;
 var radius = 200;
 
 // カメラ行列を計算する。
@@ -272,17 +272,17 @@ cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 </code></pre><p>そして、カメラ行列からビュー行列を計算する。
 ビュー行列はある物を全てカメラの前に移動する行列である。カメラは原点にあるとして、
 他のものがカメラと相対しているように移動出来るような行列である。
-<code>inverse</code>という関数を使ってカメラ行列の逆行列計算が出来る。</p>
+<code class="notranslate" translate="no">inverse</code>という関数を使ってカメラ行列の逆行列計算が出来る。</p>
 <p>この場合、カメラ行列は原点を基点とした位置と向きでカメラが移動する行列である。
-その行列を<code>inverse</code>関数に与えて、
+その行列を<code class="notranslate" translate="no">inverse</code>関数に与えて、
 出た逆行列はカメラを原点にして、他の物がカメラと相対的に移動する。</p>
-<pre class="prettyprint"><code>// カメラ行列からビュー行列を作成する。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// カメラ行列からビュー行列を作成する。
 var viewMatrix = m4.inverse(cameraMatrix);
 </code></pre><p>そして、ビュー行列と投影行列を組み合わせてビュー投影行列を作成する。</p>
-<pre class="prettyprint"><code>// ビュー投影行列を計算する。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// ビュー投影行列を計算する。
 var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
-</code></pre><p>最後に、「F」の円を描画する。「F」ごとにビュー投影行列から始まって、そして回転して、<code>radius</code>単位で外側へ移動する。</p>
-<pre class="prettyprint"><code>for (var ii = 0; ii &lt; numFs; ++ii) {
+</code></pre><p>最後に、「F」の円を描画する。「F」ごとにビュー投影行列から始まって、そして回転して、<code class="notranslate" translate="no">radius</code>単位で外側へ移動する。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">for (var ii = 0; ii &lt; numFs; ++ii) {
   var angle = ii * Math.PI * 2 / numFs;
   var x = Math.cos(angle) * radius;
   var y = Math.sin(angle) * radius
@@ -299,7 +299,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
   var count = 16 * 6;
   gl.drawArrays(primitiveType, offset, count);
 }
-</code></pre><p>「F」の円の周りを回転しているカメラの出来上がり！<code>カメラ角度</code>のスライダでカメラを移動してみて下さい。</p>
+</code></pre><p>「F」の円の周りを回転しているカメラの出来上がり！<code class="notranslate" translate="no">カメラ角度</code>のスライダでカメラを移動してみて下さい。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera.html%3Fui-cameraAngle%3D%25E3%2582%25AB%25E3%2583%25A1%25E3%2583%25A9%25E8%25A7%2592%25E5%25BA%25A6"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html?ui-cameraAngle=%E3%82%AB%E3%83%A1%E3%83%A9%E8%A7%92%E5%BA%A6" target="_blank">クリックして別のウインドウを開く</a>
@@ -310,9 +310,9 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 例えば一つの特定の「F」を目指したければ、「F」の円の回りに回っているカメラが特定の「F」に向ける計算はウンザリするものかもしれない。</p>
 <p>幸いにも、もっと簡単な方法がある。カメラの位置を好きにして、目標も好きにして、そのデータで行列の計算が出来る。
 行列の動き方で驚くほど簡単である。</p>
-<p>まず、カメラの位置を決める。それは「<code>cameraPosition</code>」と呼ぶ。そして、目標を位置も決める。
-それは「 <code>target</code>」と呼ぶ。<code>cameraPosition</code>から<code>target</code>を引くとカメラから目標を目指しているベクトルが出る。それは<code>zAxis</code>と呼ぼう。
-カメラは-Zの方向に向かうので逆に計算しよう「<code>cameraPosition - target</code>」。その結果をノーマライズする。それを行列のZの部分に直接入れる。</p>
+<p>まず、カメラの位置を決める。それは「<code class="notranslate" translate="no">cameraPosition</code>」と呼ぶ。そして、目標を位置も決める。
+それは「 <code class="notranslate" translate="no">target</code>」と呼ぶ。<code class="notranslate" translate="no">cameraPosition</code>から<code class="notranslate" translate="no">target</code>を引くとカメラから目標を目指しているベクトルが出る。それは<code class="notranslate" translate="no">zAxis</code>と呼ぼう。
+カメラは-Zの方向に向かうので逆に計算しよう「<code class="notranslate" translate="no">cameraPosition - target</code>」。その結果をノーマライズする。それを行列のZの部分に直接入れる。</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 |    |    |    |    |
@@ -365,8 +365,8 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </div>
 
 </p>
-<p>最後に三つの軸を行列に入れなきゃ。その行列は<code>cameraPosition</code>から<code>target</code>を目指すと同じような向きになる。
- ただ<code>position</code>も追加して、<code>cameraPosition</code>から<code>target</code>を目指す行列になる。</p>
+<p>最後に三つの軸を行列に入れなきゃ。その行列は<code class="notranslate" translate="no">cameraPosition</code>から<code class="notranslate" translate="no">target</code>を目指すと同じような向きになる。
+ ただ<code class="notranslate" translate="no">position</code>も追加して、<code class="notranslate" translate="no">cameraPosition</code>から<code class="notranslate" translate="no">target</code>を目指す行列になる。</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 | <span class="xaxis">Xx</span> | <span class="xaxis">Xy</span> | <span class="xaxis">Xz</span> |  0 |  <- <span class="xaxis">x軸</span>
@@ -380,17 +380,17 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </pre></div>
 
 <p>これは２つのベクトルの外積計算法である。</p>
-<pre class="prettyprint"><code>function cross(a, b) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function cross(a, b) {
   return [a[1] * b[2] - a[2] * b[1],
           a[2] * b[0] - a[0] * b[2],
           a[0] * b[1] - a[1] * b[0]];
 }
 </code></pre><p>これは２つのベクトルの引き算のコードである。</p>
-<pre class="prettyprint"><code>function subtractVectors(a, b) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function subtractVectors(a, b) {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 </code></pre><p>これはベクトルをノーマライズするコードである。（単位ベクトルにする）</p>
-<pre class="prettyprint"><code>function normalize(v) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function normalize(v) {
   var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   // ０で割らないようにする。
   if (length &gt; 0.00001) {
@@ -400,7 +400,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
   }
 }
 </code></pre><p>これは”lookAt”（目指す）行列を計算するコードである。</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   lookAt: function(cameraPosition, target, up) {
     var zAxis = normalize(subtractVectors(cameraPosition, target));
     var xAxis = normalize(cross(up, zAxis));
@@ -417,7 +417,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
     ];
   }
 </code></pre><p>そして、これはカメラを移動しながら、特定の「F」を目指す方法の一つである。</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
   // 最初の「F」の位置を計算する。
   var fPosition = [radius, 0, 0];
@@ -450,26 +450,26 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
 </p>
 <p>スライダを操作して、カメラは特定の「F」を狙っていることに注目しよう。</p>
-<p><code>lookAt</code>の関数はカメラ以上に色々なことで使える。
+<p><code class="notranslate" translate="no">lookAt</code>の関数はカメラ以上に色々なことで使える。
 通常使う場合はあるキャラクターの顔が別のキャラクターを追いかけることとか。
 旋回砲塔を目標に向けることとか。オブジェクトが通路通りにすすで行くこととか。
 そのオブジェクトが通路の何処にあるかを計算して、
-その直後通路に何処に存在するかを計算して、その2つの位置を<code>lookAt</code>の関数に入れたら、
+その直後通路に何処に存在するかを計算して、その2つの位置を<code class="notranslate" translate="no">lookAt</code>の関数に入れたら、
 そのオブジェクトが通路を進んでいく行列が出る。そうするとオブジェクトがただしい方向で通路の先に向かう。</p>
 <p>次に<a href="webgl-animation.html">アニメーションを習おう</a>.</p>
 <div class="webgl_bottombar">
 <h3>lookAtの規格</h3>
 <p>
-通常三次元数学ライブラリには<code>lookAt</code>関数がある。
+通常三次元数学ライブラリには<code class="notranslate" translate="no">lookAt</code>関数がある。
 それは大抵カメラ行列ではなく、ビュー行列を作成するの為に作られた。
 つまり、カメラを移動して向きを決める行列じゃなくて、他の物を全てカメラの前に移動する行列を作る。
 </p>
 <p>
 それはあまり便利じゃないような気がする。
-以前に指摘したように<code>lookAt</code>のような関数は多くの事に利用出来る。
-ビュー行列が必要な場合、簡単に<code>inverse</code>を呼び出せる。
+以前に指摘したように<code class="notranslate" translate="no">lookAt</code>のような関数は多くの事に利用出来る。
+ビュー行列が必要な場合、簡単に<code class="notranslate" translate="no">inverse</code>を呼び出せる。
 でも、キャラクタの頭を他のキャラクタに追いかけさせる時とか、旋回砲塔を目標に狙わせる時とか、オブジェクトを移動させて、
-向きを設定させる行列を作成する<code>lookAt</code>関数の方が便利だと個人的に思う。
+向きを設定させる行列を作成する<code class="notranslate" translate="no">lookAt</code>関数の方が便利だと個人的に思う。
 </p>
 <div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at-heads.html"></iframe>

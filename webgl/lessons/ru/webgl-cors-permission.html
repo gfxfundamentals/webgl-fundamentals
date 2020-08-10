@@ -220,7 +220,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 изображений</a>, в статье <a href="webgl-3d-textures.html">о текстурах</a>
 и в статье о <a href="webgl-2d-drawimage.html">реализация функции DrawImage</a>.</p>
 <p>Обычно мы загружаем изображение примерно следующим образом:</p>
-<pre class="prettyprint"><code>// создаём параметры текстуры { width: w, height: h, texture: tex }
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// создаём параметры текстуры { width: w, height: h, texture: tex }
 // Изначально размер текстуры составляет 1x1 пикселей, а
 // при завершении загрузки изображения размер изменяется
 function loadImageAndCreateTextureInfo(url) {
@@ -256,18 +256,18 @@ function loadImageAndCreateTextureInfo(url) {
 капча, подпись, ню и т.д.). Веб-страница часто содержит рекламу и другие
 подобные вещи, которые не находятся под контролем страницы, поэтому браузер
 должен ограничить эти вещи от доступа к одержимому приватных изображений.</p>
-<p>Простое использование <code>&lt;img src=&quot;private.jpg&quot;&gt;</code> не представляет проблемы, ведь
+<p>Простое использование <code class="notranslate" translate="no">&lt;img src=&quot;private.jpg&quot;&gt;</code> не представляет проблемы, ведь
 несмотря на то, что изображение отобразится в браузере, скрипт не сможет получить
 доступ к его содержимому. А вот <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">Canvas2D API</a>
 обладает инструментами заглянуть внутрь изображения. Для начала отображаем
 изображение в canvas</p>
-<pre class="prettyprint"><code>ctx.drawImage(someImg, 0, 0);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">ctx.drawImage(someImg, 0, 0);
 </code></pre><p>Затем получаем данные</p>
-<pre class="prettyprint"><code>var data = ctx.getImageData(0, 0, width, heigh);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var data = ctx.getImageData(0, 0, width, heigh);
 </code></pre><p>Но если изображение пришло с другого домена, браузер отметит canvas <em>запятнанным</em>
-и вы получите ошибку безопасности при вызове <code>ctx.getImageData</code>.</p>
-<p>В WebGL всё ещё сложнее. Функция <code>gl.readPixels</code> в WebGL является эквивалентом
-<code>ctx.getImageData</code>, поэтому, казалось бы, блокирование этой функции было бы
+и вы получите ошибку безопасности при вызове <code class="notranslate" translate="no">ctx.getImageData</code>.</p>
+<p>В WebGL всё ещё сложнее. Функция <code class="notranslate" translate="no">gl.readPixels</code> в WebGL является эквивалентом
+<code class="notranslate" translate="no">ctx.getImageData</code>, поэтому, казалось бы, блокирование этой функции было бы
 достаточным в плане безопасности, но, оказывается, даже при невозможности прочитать
 пиксели напрямую можно создать шейдеры, которые потребуют более долгого времени
 выполнения на основе цветов изображения. Используя эту информацию, вы сможете
@@ -288,30 +288,30 @@ function loadImageAndCreateTextureInfo(url) {
 <p>CORS = Cross Origin Resource Sharing (совместное использование ресурсов между
 разными источниками). Веб-страница может запросить у сервера, на котором
 расположено изображение, разрешение на использование изображения.</p>
-<p>Для этого необходимо установить атрибут <code>crossOrigin</code> в какое-либо значение, тогда
+<p>Для этого необходимо установить атрибут <code class="notranslate" translate="no">crossOrigin</code> в какое-либо значение, тогда
 браузер при получении изображения с сервера будет запрашивать разрешение, если
 домен отличается.</p>
-<pre class="prettyprint"><code>...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 +    img.crossOrigin = &quot;&quot;;   // спрашиваем разрешение CORS
     img.src = url;
-</code></pre><p><code>crossOrigin</code> может принимать 3 значения. Первое из них - <code>undefined</code>, это значение по умолчанию, и оно
-означает &quot;не запрашивать разрешения&quot;. Второе значение - <code>anonymous</code>, которое значит &quot;запрашивать разрешения,
-но не отправлять дополнительную информацию&quot;. Последнее значение - <code>use-credentials</code>, означающее &quot;отправлять
+</code></pre><p><code class="notranslate" translate="no">crossOrigin</code> может принимать 3 значения. Первое из них - <code class="notranslate" translate="no">undefined</code>, это значение по умолчанию, и оно
+означает &quot;не запрашивать разрешения&quot;. Второе значение - <code class="notranslate" translate="no">anonymous</code>, которое значит &quot;запрашивать разрешения,
+но не отправлять дополнительную информацию&quot;. Последнее значение - <code class="notranslate" translate="no">use-credentials</code>, означающее &quot;отправлять
 куки и другую информацию, по которой сервер сможет определить, стоит ли давать разрешения или нет&quot;. При
-установке любого другого значения сервер будет считать, что установлено значение <code>anonymous</code>.</p>
+установке любого другого значения сервер будет считать, что установлено значение <code class="notranslate" translate="no">anonymous</code>.</p>
 <p>Почему бы нам всегда не запрашивать разрешение? Потому что запрос разрешения требует двух HTTP-запросов,
 поэтому он медленнее. Если мы знаем, что мы находимся на том же домене, или мы не планируем использовать
-изображение для чего-то помимо тега img, нам не нужно устанавливать <code>crossOrigin</code>, так как он замедлит
+изображение для чего-то помимо тега img, нам не нужно устанавливать <code class="notranslate" translate="no">crossOrigin</code>, так как он замедлит
 получение ресурса.</p>
 <p>Мы можем написать функцию, которая проверит, находится ли наше изображение
-на том же домене, и в зависимости от этого установит атрибут <code>crossOrigin</code>.</p>
-<pre class="prettyprint"><code>function requestCORSIfNotSameOrigin(img, url) {
+на том же домене, и в зависимости от этого установит атрибут <code class="notranslate" translate="no">crossOrigin</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function requestCORSIfNotSameOrigin(img, url) {
   if ((new URL(url, window.location.href)).origin !== window.location.origin) {
     img.crossOrigin = &quot;&quot;;
   }
 }
 </code></pre><p>Использовать функцию можно следующим образом:</p>
-<pre class="prettyprint"><code>...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 +requestCORSIfNotSameOrigin(img, url);
 img.src = url;
 </code></pre><p><div class="webgl_example_container">
@@ -325,7 +325,7 @@ img.src = url;
 но большинство других сайтов такого разрешения не дадут. Под &quot;разрешением&quot; здесь понимаются
 HTTP-заголовки, которые сервер отправляет вместе с изображением.</p>
 <p>Также важно помнить, что разрешений от сервера недостаточно. Если изображение приходит
-с другого домена, вам нужно установить атрибут <code>crossOrigin</code>, в противном случае вы
+с другого домена, вам нужно установить атрибут <code class="notranslate" translate="no">crossOrigin</code>, в противном случае вы
 не сможете использовать изображение, даже если сервер пришлёт нужные заголовки.</p>
 <div class="webgl_bottombar">
 <h3>Настройка Apache для выдачи разрешений CORS</h3>
@@ -335,7 +335,7 @@ HTTP-заголовки, которые сервер отправляет вме
     Header set Access-Control-Allow-Origin "*"
 </pre>
 <p>
-в соответствующем файле <code>.htaccess</code>.
+в соответствующем файле <code class="notranslate" translate="no">.htaccess</code>.
 </p>
 </div>
 

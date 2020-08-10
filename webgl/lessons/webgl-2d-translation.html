@@ -227,13 +227,13 @@ passed to setRectangle right?  Here&#39;s a sample based on our <a href="webgl-f
 sample</a>.</p>
 <p>First let&#39;s make some variables to hold the translation, width, height and
 color of the rectangle</p>
-<pre class="prettyprint"><code>  var translation = [0, 0];
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  var translation = [0, 0];
   var width = 100;
   var height = 30;
   var color = [Math.random(), Math.random(), Math.random(), 1];
 </code></pre><p>Then let&#39;s make a function to re-draw everything.  We can call this
 function after we update the translation.</p>
-<pre class="prettyprint"><code>  // Draw a the scene.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Draw a the scene.
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -277,7 +277,7 @@ function after we update the translation.</p>
     gl.drawArrays(primitiveType, offset, count);
   }
 </code></pre><p>In the example below I&#39;ve attached a couple of sliders that will update
-<code>translation[0]</code> and <code>translation[1]</code> and call <code>drawScene</code> anytime they
+<code class="notranslate" translate="no">translation[0]</code> and <code class="notranslate" translate="no">translation[1]</code> and call <code class="notranslate" translate="no">drawScene</code> anytime they
 change.  Drag the sliders to translate the rectangle.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-translate.html"></iframe>
@@ -289,9 +289,9 @@ change.  Drag the sliders to translate the rectangle.</p>
 more complicated shape.</p>
 <p>Let&#39;s say we wanted to draw an &#39;F&#39; that consists of 6 triangles like this.</p>
 <p><img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
-<p>Well, following our current code we&#39;d have to change <code>setRectangle</code> to
+<p>Well, following our current code we&#39;d have to change <code class="notranslate" translate="no">setRectangle</code> to
 something more like this.</p>
-<pre class="prettyprint"><code>// Fill the buffer with the values that define a letter &#39;F&#39;.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Fill the buffer with the values that define a letter &#39;F&#39;.
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -332,7 +332,7 @@ JavaScript has to update all the points.</p>
 <p>There&#39;s a simpler way. Just upload the geometry and do the translation in
 the shader.</p>
 <p>Here&#39;s the new shader</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -347,7 +347,7 @@ void main() {
    ...
 </code></pre><p>and we&#39;ll restructure the code a little.  For one we only need to set the
 geometry once.</p>
-<pre class="prettyprint"><code>// Fill the buffer with the values that define a letter &#39;F&#39;.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Fill the buffer with the values that define a letter &#39;F&#39;.
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -378,9 +378,9 @@ function setGeometry(gl) {
       ]),
       gl.STATIC_DRAW);
 }
-</code></pre><p>Then we just need to update <code>u_translation</code> before we draw with the
+</code></pre><p>Then we just need to update <code class="notranslate" translate="no">u_translation</code> before we draw with the
 translation that we desire.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var translationLocation = gl.getUniformLocation(
 +             program, &quot;u_translation&quot;);
@@ -409,8 +409,8 @@ translation that we desire.</p>
 *    var count = 18;
     gl.drawArrays(primitiveType, offset, count);
   }
-</code></pre><p>Notice <code>setGeometry</code> is called only once.  It is no longer inside
-<code>drawScene</code>.</p>
+</code></pre><p>Notice <code class="notranslate" translate="no">setGeometry</code> is called only once.  It is no longer inside
+<code class="notranslate" translate="no">drawScene</code>.</p>
 <p>And here&#39;s that example.  Again, drag the sliders to update the
 translation.</p>
 <p><div class="webgl_example_container">

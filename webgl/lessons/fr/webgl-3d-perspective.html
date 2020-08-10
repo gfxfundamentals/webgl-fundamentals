@@ -269,7 +269,7 @@ void main() {
 &lt;/script&gt;
 </pre>
 
-<p>Le Z de l&#39;espace de projection va de -1 à +1. J&#39;ai ajouté 1 pour que <code>zDeDivision</code> aille de 0 à +2 * facteurDeFuite</p>
+<p>Le Z de l&#39;espace de projection va de -1 à +1. J&#39;ai ajouté 1 pour que <code class="notranslate" translate="no">zDeDivision</code> aille de 0 à +2 * facteurDeFuite</p>
 <p>On doit aussi renseigner ce facteurDeFuite dans le programme javascript</p>
 <pre class="prettyprint showlinemods">
   ...
@@ -301,7 +301,7 @@ void main() {
 <p>Il se trouve que WebGL prend les valeurs x, y, z, w assignées à gl_Position dans notre shader de vertex 
 et divise par w automatiquement. </p>
 <p>On peut le constater facilement en changeant le shader, et au lieu de faire la division nous-même, mettre 
-<code>zDeDivision</code> dans <code>gl_Position.w</code>.</p>
+<code class="notranslate" translate="no">zDeDivision</code> dans <code class="notranslate" translate="no">gl_Position.w</code>.</p>
 <pre class="prettyprint showlinemods">
 &lt;script id="shader-de-vertex-2d" type="x-shader/x-vertex"&gt;
 ...
@@ -383,7 +383,7 @@ nouveauW = x * 0 +
            w * 1 ;
 </pre></div>
 
-<p>et puisque <code>w</code> = 1 c&#39;est en fait</p>
+<p>et puisque <code class="notranslate" translate="no">w</code> = 1 c&#39;est en fait</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 nouveauW = z + 1;
 </pre></div>
@@ -484,7 +484,7 @@ function projeterPerspective(FOVenRadians, aspect, limiteProche, limiteLoin) {
 };
 </pre>
 
-<p>Cette matrice va faire les conversions pour nous. Elle va ajuster les coordonnées dans l&#39;espace de projection, elle va faire les opérations pour qu&#39;on choisisse le FOV qu&#39;on veut, et nous laisse choisir nos limites proche et lointaine. C&#39;est comme s&#39;il y avait un <em>oeil</em> ou une <em>caméra</em> à l&#39;origine (0,0,0) et à partir des valeurs d&#39;entrée elle calculait la matrice nécessaire pour que ce qui est proche du plan proche soit à <code>z = -1</code> dans l&#39;espace de projection, que ce qui est proche du plan lointain se retrouve à <code>z = 1</code>, et que ce qui est sur la plan proche à la moitié de la valeur FOV au-dessus ou au-dessous du centre se retrouve à <code>Y = -1</code> et <code>Y = 1</code> respectivement. Elle déduit la valeur de X en multipliant par la valeur <code>aspect</code>. L&#39;aspect est généralement trouvé par le rapport <code>largeur / hauteur</code> de la zone d&#39;affichage. Finalement, elle déduit comment changer l&#39;échelle des objets avec Z pour que les objets loitains finissent à <code>Z = 1</code>.</p>
+<p>Cette matrice va faire les conversions pour nous. Elle va ajuster les coordonnées dans l&#39;espace de projection, elle va faire les opérations pour qu&#39;on choisisse le FOV qu&#39;on veut, et nous laisse choisir nos limites proche et lointaine. C&#39;est comme s&#39;il y avait un <em>oeil</em> ou une <em>caméra</em> à l&#39;origine (0,0,0) et à partir des valeurs d&#39;entrée elle calculait la matrice nécessaire pour que ce qui est proche du plan proche soit à <code class="notranslate" translate="no">z = -1</code> dans l&#39;espace de projection, que ce qui est proche du plan lointain se retrouve à <code class="notranslate" translate="no">z = 1</code>, et que ce qui est sur la plan proche à la moitié de la valeur FOV au-dessus ou au-dessous du centre se retrouve à <code class="notranslate" translate="no">Y = -1</code> et <code class="notranslate" translate="no">Y = 1</code> respectivement. Elle déduit la valeur de X en multipliant par la valeur <code class="notranslate" translate="no">aspect</code>. L&#39;aspect est généralement trouvé par le rapport <code class="notranslate" translate="no">largeur / hauteur</code> de la zone d&#39;affichage. Finalement, elle déduit comment changer l&#39;échelle des objets avec Z pour que les objets loitains finissent à <code class="notranslate" translate="no">Z = 1</code>.</p>
 <p>Voilà un diagramme de la matrice en action</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  400px; height: 600px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Ffrustum-diagram.html"></iframe>

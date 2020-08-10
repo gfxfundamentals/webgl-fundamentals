@@ -222,7 +222,7 @@ same thing.</p>
 <p>Starting with code <em>similar</em> to what we ended up with at
 the end of <a href="webgl-3d-orthographic.html">the article on orthographic projection</a>
 we start with these 2 shaders</p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- vertex shader --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- vertex shader --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 uniform mat4 matrix;
@@ -234,7 +234,7 @@ void main() {
 &lt;/script&gt;
 </code></pre>
 <p>and </p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- fragment shader --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- fragment shader --&gt;
 &lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -251,7 +251,7 @@ a fairly flexible arrangement. The fragment shader just uses
 a color we pass in via a uniform.</p>
 <p>To draw we need to compile the shaders, link them together
 and look up the locations of the attributes and uniforms.</p>
-<pre class="prettyprint"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
     gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
 const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
@@ -259,7 +259,7 @@ const colorLoc = gl.getUniformLocation(program, &#39;color&#39;);
 const matrixLoc = gl.getUniformLocation(program, &#39;matrix&#39;);
 </code></pre>
 <p>Then we need to supply data for the positions via a buffer.</p>
-<pre class="prettyprint"><code class="lang-js">const positionBuffer = gl.createBuffer();
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
     -0.1,  0.4,
@@ -279,7 +279,7 @@ const numVertices = 12;
 </code></pre>
 <p>Let&#39;s draw 5 instances. We&#39;ll make 5 matrixes and 5 colors for
 each instance.</p>
-<pre class="prettyprint"><code class="lang-js">const numInstances = 5;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const numInstances = 5;
 const matrices = [
   m4.identity(),
   m4.identity(),
@@ -300,7 +300,7 @@ const colors = [
 and then loop over the 5 instances, computing a new matrix
 for each one, setting the matrix uniform and color
 and then drawing.</p>
-<pre class="prettyprint"><code class="lang-js">function render(time) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render(time) {
   time *= 0.001; // seconds
 
   gl.useProgram(program);
@@ -349,12 +349,12 @@ in the matrices we already created.</p>
 </div>
 
 </p>
-<p>That took 5 calls each to <code>gl.uniform4v</code>, <code>gl.uniformMatrix4fv</code>,
-and <code>gl.drawArrays</code> for a total of 15 WebGL calls. If our
+<p>That took 5 calls each to <code class="notranslate" translate="no">gl.uniform4v</code>, <code class="notranslate" translate="no">gl.uniformMatrix4fv</code>,
+and <code class="notranslate" translate="no">gl.drawArrays</code> for a total of 15 WebGL calls. If our
 shaders were more complex, like the shaders in
 <a href="webgl-3d-lighting-spot.html">the article on spot lighting</a>
-we&#39;d have at least 7 calls per object, 6 calls to <code>gl.uniformXXX</code>
-and one call to <code>gl.drawArrays</code>. If we were drawing 400 objects
+we&#39;d have at least 7 calls per object, 6 calls to <code class="notranslate" translate="no">gl.uniformXXX</code>
+and one call to <code class="notranslate" translate="no">gl.drawArrays</code>. If we were drawing 400 objects
 that would be 2800 WebGL calls.</p>
 <p>Instancing is a way to reduce those calls. It works by
 letting you tell WebGL how many times you want the same
@@ -363,16 +363,16 @@ you designate if that attribute will advance to the <em>next value</em>
 from its assigned buffer every time the vertex shader is
 called (the default), or only every N instances where N is usually
 1.</p>
-<p>So for example instead of supplying <code>matrix</code> and <code>color</code>
-from a uniform, we would instead supply them via <code>attribute</code>s.
+<p>So for example instead of supplying <code class="notranslate" translate="no">matrix</code> and <code class="notranslate" translate="no">color</code>
+from a uniform, we would instead supply them via <code class="notranslate" translate="no">attribute</code>s.
 We&#39;d put the matrix and color for each instance in a buffer,
 set up the attributes to pull data from those buffers, and
 tell WebGL, only advance to the next value once per instance.</p>
 <p>Let&#39;s do it!</p>
 <p>The first thing we need to do is check for and enable this
 optional feature of WebGL. It&#39;s called
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays"><code>ANGLE_instanced_arrays</code></a>.</p>
-<pre class="prettyprint"><code class="lang-js">const canvas = document.querySelector(&#39;#canvas&#39;);
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays"><code class="notranslate" translate="no">ANGLE_instanced_arrays</code></a>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const canvas = document.querySelector(&#39;#canvas&#39;);
 const gl = canvas.getContext(&#39;webgl&#39;);
 if (!gl) {
   return;
@@ -383,9 +383,9 @@ if (!gl) {
 +  return alert(&#39;need ANGLE_instanced_arrays&#39;);
 +}
 </code></pre>
-<p>Next we&#39;ll change the shaders to use attributes for <code>matrix</code>
-and <code>color</code> instead of uniforms.</p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- vertex shader --&gt;
+<p>Next we&#39;ll change the shaders to use attributes for <code class="notranslate" translate="no">matrix</code>
+and <code class="notranslate" translate="no">color</code> instead of uniforms.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- vertex shader --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 -uniform mat4 matrix;
@@ -404,7 +404,7 @@ void main() {
 &lt;/script&gt;
 </code></pre>
 <p>and </p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- fragment shader --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- fragment shader --&gt;
 &lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -422,7 +422,7 @@ void main() {
 get the color from an attribute in the vertex shader
 and pass it to the fragment shader via a varying.</p>
 <p>Next we need to look up the locations of these attributes.</p>
-<pre class="prettyprint"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
     gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
 const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
@@ -433,14 +433,14 @@ const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 </code></pre>
 <p>Now, we need a buffer hold the matrices at will get applied
 to the attribute. Since a buffer is best updated in one
-<em>chuck</em> we&#39;ll put all of our matrices in the same <code>Float32Array</code></p>
-<pre class="prettyprint"><code class="lang-js">// setup matrixes, one per instance
+<em>chuck</em> we&#39;ll put all of our matrices in the same <code class="notranslate" translate="no">Float32Array</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup matrixes, one per instance
 const numInstances = 5;
 +// make a typed array with one view per matrix
 +const matrixData = new Float32Array(numInstances * 16);
 </code></pre>
-<p>We&#39;ll then make <code>Float32Array</code> views, one for each matrix.</p>
-<pre class="prettyprint"><code class="lang-js">-const matrices = [
+<p>We&#39;ll then make <code class="notranslate" translate="no">Float32Array</code> views, one for each matrix.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-const matrices = [
 -  m4.identity(),
 -  m4.identity(),
 -  m4.identity(),
@@ -458,23 +458,23 @@ for (let i = 0; i &lt; numInstances; ++i) {
 }
 </code></pre>
 <p>This way when we want to reference the data for all the matrixes
-we can use <code>matrixData</code> but when we want any individual matrix
-we can use <code>matrices[ndx]</code>.</p>
+we can use <code class="notranslate" translate="no">matrixData</code> but when we want any individual matrix
+we can use <code class="notranslate" translate="no">matrices[ndx]</code>.</p>
 <p>We also need to create a buffer on the GPU for this data.
 We only need to allocate the buffer at this point, we don&#39;t
-need to supply data so the 2nd parameter to <code>gl.bufferData</code>
+need to supply data so the 2nd parameter to <code class="notranslate" translate="no">gl.bufferData</code>
 is a size which just allocates the buffer.</p>
-<pre class="prettyprint"><code class="lang-js">const matrixBuffer = gl.createBuffer();
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const matrixBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, matrixBuffer);
 // just allocate the buffer
 gl.bufferData(gl.ARRAY_BUFFER, matrixData.byteLength, gl.DYNAMIC_DRAW);
 </code></pre>
-<p>Notice we passed <code>gl.DYNAMIC_DRAW</code> as the last parameter. This is a <em>hint</em>
+<p>Notice we passed <code class="notranslate" translate="no">gl.DYNAMIC_DRAW</code> as the last parameter. This is a <em>hint</em>
 to WebGL that we&#39;re going to change this data often.</p>
 <p>Next we need our colors also in a buffer. This data will not
 be changing, at least in this example, so we&#39;ll just upload
 the data.</p>
-<pre class="prettyprint"><code class="lang-js">-const colors = [
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-const colors = [
 -  [ 1, 0, 0, 1, ],  // red
 -  [ 0, 1, 0, 1, ],  // green
 -  [ 0, 0, 1, 1, ],  // blue
@@ -497,7 +497,7 @@ the data.</p>
 <p>At draw time instead of looping over each instance,
 setting the matrix and color uniforms, and then calling draw
 we&#39;ll first compute the matrix for each instance.</p>
-<pre class="prettyprint"><code class="lang-js">// update all the matrices
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// update all the matrices
 matrices.forEach((mat, ndx) =&gt; {
   m4.translation(-0.5 + ndx * 0.25, 0, 0, mat);
   m4.zRotate(mat, time * (0.1 + 0.1 * ndx), mat);
@@ -515,17 +515,17 @@ matrices.forEach((mat, ndx) =&gt; {
 });
 </code></pre>
 <p>Because our matrix library takes an optional destination matrix
-and because our matrices are just <code>Float32Array</code> views into
-the same larger <code>Float32Array</code>, when we&#39;re done all the matrix
+and because our matrices are just <code class="notranslate" translate="no">Float32Array</code> views into
+the same larger <code class="notranslate" translate="no">Float32Array</code>, when we&#39;re done all the matrix
 data is ready to upload to the GPU directly.</p>
-<pre class="prettyprint"><code class="lang-js">// upload the new matrix data
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// upload the new matrix data
 gl.bindBuffer(gl.ARRAY_BUFFER, matrixBuffer);
 gl.bufferSubData(gl.ARRAY_BUFFER, 0, matrixData);
 </code></pre>
 <p>Now we need to set up the attributes for the matrices and colors.
-The matrix attribute is a <code>mat4</code>. A <code>mat4</code> actually uses
+The matrix attribute is a <code class="notranslate" translate="no">mat4</code>. A <code class="notranslate" translate="no">mat4</code> actually uses
 4 attribute slots.</p>
-<pre class="prettyprint"><code class="lang-js">const bytesPerMatrix = 4 * 16;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const bytesPerMatrix = 4 * 16;
 for (let i = 0; i &lt; 4; ++i) {
   const loc = matrixLoc + i;
   gl.enableVertexAttribArray(loc);
@@ -544,13 +544,13 @@ for (let i = 0; i &lt; 4; ++i) {
 }
 </code></pre>
 <p>The most important point relative to instanced drawing is
-the call to <code>ext.vertexAttribDivisorANGLE</code>. It sets this
+the call to <code class="notranslate" translate="no">ext.vertexAttribDivisorANGLE</code>. It sets this
 attribute to only advance to the next value once per instance.
-This means the <code>matrix</code> attributes will use the first matrix for
+This means the <code class="notranslate" translate="no">matrix</code> attributes will use the first matrix for
 every vertex for the first instance, the second matrix for the
 second instance and so on.</p>
 <p>We also need to setup the color attribute</p>
-<pre class="prettyprint"><code class="lang-js">// set attribute for color
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// set attribute for color
 gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 gl.enableVertexAttribArray(colorLoc);
 gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
@@ -562,7 +562,7 @@ on these 2 attributes if we want to use them to draw something
 else we&#39;d need to set them back to their default of 0 <strong>or, better</strong>
 we should use <a href="webgl-attributes.html#vaos">vertex array objects</a>.</p>
 <p>Finally we can draw all instances in a single draw call.</p>
-<pre class="prettyprint"><code class="lang-js">ext.drawArraysInstancedANGLE(
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">ext.drawArraysInstancedANGLE(
   gl.TRIANGLES,
   0,             // offset
   numVertices,   // num vertices per instance
@@ -590,7 +590,7 @@ to demonstrate instanced drawing. If you wanted a projection and/or
 a view matrix we could add the calculation to JavaScript. That would
 mean more work for JavaScript. The more obvious way would be to add
 one or two more uniforms to the vertex shader.</p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- vertex shader --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- vertex shader --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 attribute vec4 color;
@@ -611,14 +611,14 @@ void main() {
 &lt;/script&gt;
 </code></pre>
 <p>and then look up their locations at init time</p>
-<pre class="prettyprint"><code class="lang-js">const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 const colorLoc = gl.getAttribLocation(program, &#39;color&#39;);
 const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
 +const projectionLoc = gl.getUniformLocation(program, &#39;projection&#39;);
 +const viewLoc = gl.getUniformLocation(program, &#39;view&#39;);
 </code></pre>
 <p>and set them appropriately at render time.</p>
-<pre class="prettyprint"><code class="lang-js">gl.useProgram(program);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.useProgram(program);
 
 +// set the view and projection matrices since
 +// they are shared by all instances

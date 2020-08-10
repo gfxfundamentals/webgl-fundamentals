@@ -220,7 +220,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>下面的代码<em>类似</em>于我们在
 <a href="webgl-3d-orthographic.html">正射投影</a>
 这篇文章中的结尾部分。我们先来看下面两个着色器的代码。</p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- 顶点着色器 --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 顶点着色器 --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 uniform mat4 matrix;
@@ -232,7 +232,7 @@ void main() {
 &lt;/script&gt;
 </code></pre>
 <p>and</p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- 片元着色器 --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 片元着色器 --&gt;
 &lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -248,7 +248,7 @@ void main() {
 在片元着色器中则使用通过uniform传递的颜色变量。</p>
 <p>要进行绘制我们得先编译着色器并连接为一个program，
 然后再找到所有attribute和uniform的地址。</p>
-<pre class="prettyprint"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
     gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
 const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
@@ -256,7 +256,7 @@ const colorLoc = gl.getUniformLocation(program, &#39;color&#39;);
 const matrixLoc = gl.getUniformLocation(program, &#39;matrix&#39;);
 </code></pre>
 <p>之后我们需要使用一个缓冲区提供顶点数据。</p>
-<pre class="prettyprint"><code class="lang-js">const positionBuffer = gl.createBuffer();
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
     -0.1,  0.4,
@@ -275,7 +275,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 const numVertices = 12;
 </code></pre>
 <p>让我们绘制5个实例，并给每个实例分别提供1个矩阵和1种颜色。</p>
-<pre class="prettyprint"><code class="lang-js">const numInstances = 5;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const numInstances = 5;
 const matrices = [
   m4.identity(),
   m4.identity(),
@@ -295,7 +295,7 @@ const colors = [
 <p>要绘制它们我们首先得使用着色器程序，并设置attribute，
 然后在一个循环当中为这5个实例分别计算新的矩阵，
 再去设置矩阵和颜色的uniform，最后把它们绘制出来。</p>
-<pre class="prettyprint"><code class="lang-js">function render(time) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render(time) {
   time *= 0.001; // seconds
 
   gl.useProgram(program);
@@ -342,24 +342,24 @@ requestAnimationFrame(render);
 </div>
 
 </p>
-<p>对于每个实例来说，每绘制一次要调用一次<code>gl.uniform4v</code>，<code>gl.uniformMatrix4fv</code>
-还有<code>gl.drawArrays</code>，一共是15个WebGL的函数调用。如果我们的着色器
+<p>对于每个实例来说，每绘制一次要调用一次<code class="notranslate" translate="no">gl.uniform4v</code>，<code class="notranslate" translate="no">gl.uniformMatrix4fv</code>
+还有<code class="notranslate" translate="no">gl.drawArrays</code>，一共是15个WebGL的函数调用。如果我们的着色器
 更加复杂，像是<a href="webgl-3d-lighting-spot.html">聚光灯那篇文章</a>一样的话，
-每个物体至少要有7次函数调用，分别是6次调用<code>gl.uniformXXX</code>，
-最后一次调用<code>gl.drawArrays</code>。如果我们要绘制400个物体的话
+每个物体至少要有7次函数调用，分别是6次调用<code class="notranslate" translate="no">gl.uniformXXX</code>，
+最后一次调用<code class="notranslate" translate="no">gl.drawArrays</code>。如果我们要绘制400个物体的话
 那将会是2800个WebGL函数调用。</p>
 <p>实例化就是一个帮助我们减少函数调用的好路子。
 它的工作原理是让你告诉WebGL你想绘制多少次相同的物体（实例的数量）。
 对于每个attribute，你可以让它每次调用顶点着色器时迭代到缓冲区的
 <em>下一个值</em>（默认行为），或者是每绘制N（N通常为1）个实例时才迭代到
 <em>下一个值</em>。</p>
-<p>举个栗子，我们不妨使用attribute来提供<code>matrix</code>和<code>color</code>的值以取代uniform。
+<p>举个栗子，我们不妨使用attribute来提供<code class="notranslate" translate="no">matrix</code>和<code class="notranslate" translate="no">color</code>的值以取代uniform。
 我们会在缓冲区里为每个实例提供矩阵和颜色，设置好从缓冲区里读取数据的
 attribute，然后告诉WebGL只有在绘制下一个实例的时候才迭代到下一个值。</p>
 <p>Let&#39;s do it!</p>
 <p>第一件要做的事是启用这项可选的WebGL拓展。它叫做
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays"><code>ANGLE_instanced_arrays</code></a>。</p>
-<pre class="prettyprint"><code class="lang-js">const canvas = document.querySelector(&#39;#canvas&#39;);
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays"><code class="notranslate" translate="no">ANGLE_instanced_arrays</code></a>。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const canvas = document.querySelector(&#39;#canvas&#39;);
 const gl = canvas.getContext(&#39;webgl&#39;);
 if (!gl) {
   return;
@@ -370,8 +370,8 @@ if (!gl) {
 +  return alert(&#39;need ANGLE_instanced_arrays&#39;);
 +}
 </code></pre>
-<p>接下来我们改一下这些着色器，用attribute给<code>matrix</code>和<code>color</code>提供数据。</p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- 顶点着色器 --&gt;
+<p>接下来我们改一下这些着色器，用attribute给<code class="notranslate" translate="no">matrix</code>和<code class="notranslate" translate="no">color</code>提供数据。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 顶点着色器 --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 -uniform mat4 matrix;
@@ -390,7 +390,7 @@ void main() {
 &lt;/script&gt;
 </code></pre>
 <p>and </p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- 片元着色器 --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 片元着色器 --&gt;
 &lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -407,7 +407,7 @@ void main() {
 <p>因为attribute只能在顶点着色器中声明所以我们需要用varying
 把颜色传递到片元着色器。</p>
 <p>然后我们需要找到所有attribute的位置。</p>
-<pre class="prettyprint"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const program = webglUtils.createProgramFromScripts(
     gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
 const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
@@ -418,14 +418,14 @@ const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 </code></pre>
 <p>现在，我们需要一个缓冲区来储存所有一会我们要提供给attribute的矩阵。
 因为缓冲区最好在一个<em>chuck</em>中更新，所以我们把所有的矩阵放在一个
-<code>Float32Array</code>当中。</p>
-<pre class="prettyprint"><code class="lang-js">// 为每一个实例设置矩阵
+<code class="notranslate" translate="no">Float32Array</code>当中。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 为每一个实例设置矩阵
 const numInstances = 5;
 +// make a typed array with one view per matrix
 +const matrixData = new Float32Array(numInstances * 16);
 </code></pre>
-<p>然后我们再为每一个矩阵创建一个更小的<code>Float32Array</code>的观察视图。</p>
-<pre class="prettyprint"><code class="lang-js">-const matrices = [
+<p>然后我们再为每一个矩阵创建一个更小的<code class="notranslate" translate="no">Float32Array</code>的观察视图。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-const matrices = [
 -  m4.identity(),
 -  m4.identity(),
 -  m4.identity(),
@@ -442,21 +442,21 @@ for (let i = 0; i &lt; numInstances; ++i) {
       numFloatsForView));
 }
 </code></pre>
-<p>这样做的话我们可以用<code>matrixData</code>来取得所有矩阵的数据，
-当需要取得某一个矩阵的数据的时候只要用<code>matrices[ndx]</code>即可。</p>
+<p>这样做的话我们可以用<code class="notranslate" translate="no">matrixData</code>来取得所有矩阵的数据，
+当需要取得某一个矩阵的数据的时候只要用<code class="notranslate" translate="no">matrices[ndx]</code>即可。</p>
 <p>同时我们也需要在GPU上创建缓冲区来储存这些数据。
 目前只需要申请一段合适大小的缓冲区就好了，我们暂时不需要提供数据给它，
-所以<code>gl.bufferData</code>第二个参数设置为要为缓冲区申请的字节数。</p>
-<pre class="prettyprint"><code class="lang-js">const matrixBuffer = gl.createBuffer();
+所以<code class="notranslate" translate="no">gl.bufferData</code>第二个参数设置为要为缓冲区申请的字节数。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const matrixBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, matrixBuffer);
 // 只为缓冲区申请特定大小的空间
 gl.bufferData(gl.ARRAY_BUFFER, matrixData.byteLength, gl.DYNAMIC_DRAW);
 </code></pre>
-<p>注意到最后一个参数是<code>gl.DYNAMIC_DRAW</code>。这是一个给WebGL的<em>指示</em>，
+<p>注意到最后一个参数是<code class="notranslate" translate="no">gl.DYNAMIC_DRAW</code>。这是一个给WebGL的<em>指示</em>，
 告诉它我们要经常刷新这里的数据。</p>
 <p>接下来颜色值也需要储存在缓冲区当中。因为在这个例子当中颜色不会改变，
 所以我们直接上传数据即可。</p>
-<pre class="prettyprint"><code class="lang-js">-const colors = [
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-const colors = [
 -  [ 1, 0, 0, 1, ],  // red
 -  [ 0, 1, 0, 1, ],  // green
 -  [ 0, 0, 1, 1, ],  // blue
@@ -478,7 +478,7 @@ gl.bufferData(gl.ARRAY_BUFFER, matrixData.byteLength, gl.DYNAMIC_DRAW);
 </code></pre>
 <p>在绘制的时候，我们再也不用在循环中设置矩阵和颜色的uniform，
 而是先来计算一下每个实例的矩阵。</p>
-<pre class="prettyprint"><code class="lang-js">// 更新所有矩阵
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 更新所有矩阵
 matrices.forEach((mat, ndx) =&gt; {
   m4.translation(-0.5 + ndx * 0.25, 0, 0, mat);
   m4.zRotate(mat, time * (0.1 + 0.1 * ndx), mat);
@@ -496,14 +496,14 @@ matrices.forEach((mat, ndx) =&gt; {
 });
 </code></pre>
 <p>因为我们的矩阵已经作为了目标矩阵参数来传递，同时它还是一个
-<code>Float32Array</code>的数组，所以在计算完以后我们就可以把数据直接上传给GPU了。</p>
-<pre class="prettyprint"><code class="lang-js">// 上传新的矩阵数据
+<code class="notranslate" translate="no">Float32Array</code>的数组，所以在计算完以后我们就可以把数据直接上传给GPU了。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 上传新的矩阵数据
 gl.bindBuffer(gl.ARRAY_BUFFER, matrixBuffer);
 gl.bufferSubData(gl.ARRAY_BUFFER, 0, matrixData);
 </code></pre>
 <p>现在我们需要为矩阵和颜色设置attribute。
-注意矩阵的类型为<code>mat4</code>，一个<code>mat4</code>实际上占用了4个attribute槽位。</p>
-<pre class="prettyprint"><code class="lang-js">const bytesPerMatrix = 4 * 16;
+注意矩阵的类型为<code class="notranslate" translate="no">mat4</code>，一个<code class="notranslate" translate="no">mat4</code>实际上占用了4个attribute槽位。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const bytesPerMatrix = 4 * 16;
 for (let i = 0; i &lt; 4; ++i) {
   const loc = matrixLoc + i;
   gl.enableVertexAttribArray(loc);
@@ -521,12 +521,12 @@ for (let i = 0; i &lt; 4; ++i) {
   ext.vertexAttribDivisorANGLE(loc, 1);
 }
 </code></pre>
-<p>要进行实例化绘制最重要的其实是调用<code>ext.vertexAttribDivisorANGLE</code>，
+<p>要进行实例化绘制最重要的其实是调用<code class="notranslate" translate="no">ext.vertexAttribDivisorANGLE</code>，
 它告诉attribute只有在绘制下一个实例的时候才迭代到下一个值。
-意思是说，<code>matrix</code> attribute会对于第一个实例的所有顶点使用
+意思是说，<code class="notranslate" translate="no">matrix</code> attribute会对于第一个实例的所有顶点使用
 第一个矩阵，第二个实例使用第二个矩阵以此类推。</p>
 <p>接下来我们还需要去设置颜色的attribute。</p>
-<pre class="prettyprint"><code class="lang-js">// 为颜色设置attribute
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 为颜色设置attribute
 gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 gl.enableVertexAttribArray(colorLoc);
 gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
@@ -537,7 +537,7 @@ ext.vertexAttribDivisorANGLE(colorLoc, 1);
 如果我们想要绘制其它东西的话我们需要把divisor重新设置为0（默认）。
 <strong>或者，我们有更好的选择——</strong><a href="webgl-attributes.html#vaos">vertex array objects</a>。</p>
 <p>最后我们总算是可以在一个draw call当中绘制所有的实例了。</p>
-<pre class="prettyprint"><code class="lang-js">ext.drawArraysInstancedANGLE(
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">ext.drawArraysInstancedANGLE(
   gl.TRIANGLES,
   0,             // offset
   numVertices,   // 每个实例的顶点数
@@ -562,7 +562,7 @@ ext.vertexAttribDivisorANGLE(colorLoc, 1);
 那将意味着更多的计算会放到JavaScript当中，
 这可能会引起一些性能问题。有个更好的办法是给顶点着色器添加一到两个
 uniform来储存这些矩阵。</p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- 顶点着色器 --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 顶点着色器 --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 attribute vec4 color;
@@ -583,14 +583,14 @@ void main() {
 &lt;/script&gt;
 </code></pre>
 <p>然后在初始化的时候找到他们的位置</p>
-<pre class="prettyprint"><code class="lang-js">const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 const colorLoc = gl.getAttribLocation(program, &#39;color&#39;);
 const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
 +const projectionLoc = gl.getUniformLocation(program, &#39;projection&#39;);
 +const viewLoc = gl.getUniformLocation(program, &#39;view&#39;);
 </code></pre>
 <p>然后再渲染的时候设置它们。</p>
-<pre class="prettyprint"><code class="lang-js">gl.useProgram(program);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.useProgram(program);
 
 +// 设置视图和投影矩阵
 +// 因为对于所有实例来说它们是一样的

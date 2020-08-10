@@ -227,7 +227,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </div>
 
 <p>以<a href="webgl-cube-maps.html">立方体纹理</a>中的代码为基础，我们使用6张图片代替我们生成的</p>
-<pre class="prettyprint"><code class="lang-js">// 创建纹理。
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 创建纹理。
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
@@ -284,11 +284,11 @@ faceInfos.forEach((faceInfo) =&gt; {
 gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 </code></pre>
-<p>注意我们通过传<code>null</code>给<code>texImage2D</code>来给每个面填充512x512的空图片。立方体贴图必须有6个面，6个面必须是同样大小的正方形。如果不是纹理不会渲染。但是，我们加载6张图片。我们希望可以立即渲染，所以我们分配6个面然后开始加载图片。当每个图片加载完成再上传到相应的面再生成mipmap。这意味着我们可以立即开始渲染，在图片加载过程中立方体贴图的面可以依次被填充，6个面都没加载完成时也能被渲染。</p>
+<p>注意我们通过传<code class="notranslate" translate="no">null</code>给<code class="notranslate" translate="no">texImage2D</code>来给每个面填充512x512的空图片。立方体贴图必须有6个面，6个面必须是同样大小的正方形。如果不是纹理不会渲染。但是，我们加载6张图片。我们希望可以立即渲染，所以我们分配6个面然后开始加载图片。当每个图片加载完成再上传到相应的面再生成mipmap。这意味着我们可以立即开始渲染，在图片加载过程中立方体贴图的面可以依次被填充，6个面都没加载完成时也能被渲染。</p>
 <p>但是，仅仅加载图片是不够的。与<a href="webgl-3d-lighting-point.html">光照</a>一样，这里我们需要一点数学。</p>
 <p>这里我们需要知道对于每个片元给定一个从视点／相机位置到物体表面的向量，它将反射到哪个方向。我们可以使用该方向从立方体贴图中获取颜色值。</p>
 <p>反射的公式是</p>
-<pre class="prettyprint"><code>reflectionDir = eyeToSurfaceDir – 
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">reflectionDir = eyeToSurfaceDir – 
     2 ∗ dot(surfaceNormal, eyeToSurfaceDir) ∗ surfaceNormal
 </code></pre><p>眼见为实。回忆关于[光照]的文章，点乘返回两个向量夹角的余弦值。向量相加得到一个新的向量，所以让我们来看一个视线垂直于平面的例子。</p>
 <div class="webgl_center"><img src="../resources/reflect-180-01.svg" style="width: 400px"></div>
@@ -335,7 +335,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 </p>
 <p>既然我们了解了反射是如何工作的，我们可以使用它从立方体纹理中选取颜色值，我们改变着色器来实现它.</p>
 <p>首先在顶点着色器中我们会计算世界坐标系中的顶点位置和顶点法线，然后用varing传递它们给片断着色器。这和<a href="webgl-3d-lighting-spot.html">三维聚光灯</a>文章中我们所做的相似。</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform mat4 u_projection;
@@ -357,8 +357,8 @@ void main() {
 }
 </code></pre>
 <p>接下来在片断着色器中我们单位化worldNormal，因为顶点之间的法线会被插值。我们传递了世界坐标系中的相机位置接着用世界坐标系中的表面位置减去它我们得到了eyeToSurfaceDir。</p>
-<p>最终我们用GLSL的内置函数<code>reflect</code>，它实现了我们之前介绍的公式。我们使用这个结果从立方体纹理中获得一个颜色值。</p>
-<pre class="prettyprint"><code class="lang-glsl">precision highp float;
+<p>最终我们用GLSL的内置函数<code class="notranslate" translate="no">reflect</code>，它实现了我们之前介绍的公式。我们使用这个结果从立方体纹理中获得一个颜色值。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision highp float;
 
 // 从顶点着色器传入的。
 varying vec3 v_worldPosition;
@@ -380,7 +380,7 @@ void main() {
 </code></pre>
 <p>在这个例子中我们也需要真实法线。我们用真实法线所以立方体的面看起来是平的。在之前的例子中我们重新定位了立方体的位置为了看到立方体贴图如何工作。但是在这个例子中我们需要真实的法线就像<a href="webgl-3d-lighting-directional.html">光照文章</a>中的一样。</p>
 <p>初始化阶段</p>
-<pre class="prettyprint"><code class="lang-js">// 创建缓冲来存法线
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 创建缓冲来存法线
 var normalBuffer = gl.createBuffer();
 // 绑定它到ARRAY_BUFFER (可视为ARRAY_BUFFER = normalBuffer)
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
@@ -388,7 +388,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 setNormals(gl);
 </code></pre>
 <p>渲染阶段</p>
-<pre class="prettyprint"><code class="lang-js">// 绑定normalbuffer
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 绑定normalbuffer
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 
 // 告诉属性怎么从normalBuffer (ARRAY_BUFFER)中取出数据
@@ -401,13 +401,13 @@ gl.vertexAttribPointer(
     normalLocation, size, type, normalize, stride, offset)
 </code></pre>
 <p>当然我们需要在初始化阶段找到全局变量的位置</p>
-<pre class="prettyprint"><code>var projectionLocation = gl.getUniformLocation(program, &quot;u_projection&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var projectionLocation = gl.getUniformLocation(program, &quot;u_projection&quot;);
 var viewLocation = gl.getUniformLocation(program, &quot;u_view&quot;);
 var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 var textureLocation = gl.getUniformLocation(program, &quot;u_texture&quot;);
 var worldCameraPositionLocation = gl.getUniformLocation(program, &quot;u_worldCameraPosition&quot;);
 </code></pre><p>在渲染阶段给它们赋值</p>
-<pre class="prettyprint"><code>// 计算投影矩阵
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 计算投影矩阵
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var projectionMatrix =
     m4.perspective(fieldOfViewRadians, aspect, 1, 2000);

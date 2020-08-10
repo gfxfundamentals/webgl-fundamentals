@@ -337,11 +337,11 @@ newY = y * sy;
 уже сделали ранее.</p>
 <p>И именно здесь появляется магия. Так получается, что мы можем умножить
 все матрицы и применить все трансформации сразу. Предположим, у нас есть
-функция <code>m3.multiply</code>, которая принимает две матрицы, умножает их и
+функция <code class="notranslate" translate="no">m3.multiply</code>, которая принимает две матрицы, умножает их и
 возвращает результат.</p>
 <p>Чтобы внести ясность, напишем функции для создания матриц переноса,
 поворота и масштабирования.</p>
-<pre class="prettyprint"><code>var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
   translation: function(tx, ty) {
     return [
       1, 0, 0,
@@ -369,7 +369,7 @@ newY = y * sy;
   },
 };
 </code></pre><p>Теперь внесём изменения в шейдер. Код прежнего шейдера выглядел так:</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -390,7 +390,7 @@ void main() {
   vec2 position = rotatedPosition + u_translation;
   ...
 </code></pre><p>Код нового шейдера намного проще</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -401,7 +401,7 @@ void main() {
   vec2 position = (u_matrix * vec3(a_position, 1)).xy;
   ...
 </code></pre><p>И вот как мы используем его в JavaScript:</p>
-<pre class="prettyprint"><code>  // Отрисовка сцены
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Отрисовка сцены
   function drawScene() {
 
     ,,,
@@ -434,7 +434,7 @@ void main() {
 преимущество. Дело ещё в том, что для изменения порядка трансформаций
 нам не нужно менять код шейдера. Достаточно изменить порядок умножения
 матриц.</p>
-<pre class="prettyprint"><code>    ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ...
     // Умножаем матрицы
     var matrix = m3.multiply(scaleMatrix, rotationMatrix);
     matrix = m3.multiply(matrix, translationMatrix);
@@ -450,7 +450,7 @@ void main() {
 руки относительно тела, спутники относительно планеты вокруг солнца, или
 ветви дерева. Для простого примера иерархической анимации нарисуем &#39;F&#39; 5
 раз, каждый раз начиная с матрицы предыдущей &#39;F&#39;.</p>
-<pre class="prettyprint"><code>  // Отрисовка сцены
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Отрисовка сцены
   function drawScene() {
     // Очищаем canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -476,7 +476,7 @@ void main() {
       gl.drawArrays(gl.TRIANGLES, 0, 18);
     }
   }
-</code></pre><p>У нас появилась новая функция <code>m3.identity</code>, которая создаёт единичную
+</code></pre><p>У нас появилась новая функция <code class="notranslate" translate="no">m3.identity</code>, которая создаёт единичную
 матрицу. Единичная матрица - это матрица, которая фактически представляет
 собой единицу, то есть при умножении матрицы на единичную матрицу ничего
 не изменится. Прямо как</p>
@@ -486,7 +486,7 @@ void main() {
 <div class="webgl_center">matrixX * identity = matrixX</div>
 
 <p>Вот код, создающий единичную матрицу</p>
-<pre class="prettyprint"><code>var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
   identity function() {
     return [
       1, 0, 0,
@@ -510,7 +510,7 @@ void main() {
 координат (0, 0).</p>
 <p>Но теперь, используя матрицы, мы можем задавать порядок применения
 трансформаций и сместить таким образом начало координат.</p>
-<pre class="prettyprint"><code>    // создаём матрицу, которая переместит начало координат в центр буквы &#39;F&#39;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    // создаём матрицу, которая переместит начало координат в центр буквы &#39;F&#39;
     var moveOriginMatrix = m3.translation(-50, -75);
     ...
 
@@ -531,7 +531,7 @@ void main() {
 <p>Теперь пойдём ещё дальше. Если вы вернётесь к первой статье про
 <a href="webgl-fundamentals.html">Основы WebGL</a>, вы можете вспомнить код шейдера,
 который конвертировал пиксели в координаты пространства отсечения:</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   // преобразуем положение в пикселях к диапазону от 0.0 до 1.0
   vec2 zeroToOne = position / u_resolution;
 
@@ -552,7 +552,7 @@ void main() {
 умножить все эти матрицы, но так как вычисления здесь очень простые, мы
 просто можем написать функцию, которая сразу создаёт &#39;проекционную&#39;
 матрицу для заданного разрешения.</p>
-<pre class="prettyprint"><code>var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
   projection: function(width, height) {
     // Эта матрица переворачивает Y, чтобы 0 был наверху
     return [
@@ -565,7 +565,7 @@ void main() {
   ...
 </code></pre><p>Теперь шейдер можно сделать ещё проще. Так будет выглядеть полностью
 новый вершинный шейдер.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -576,7 +576,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>В JavaScript нам нужно умножить на проекционную матрицу.</p>
-<pre class="prettyprint"><code>  // Отрисовка сцены
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Отрисовка сцены
   function drawScene() {
     ...
 
@@ -605,7 +605,7 @@ void main() {
 <p>Прежде, чем мы продолжим, давайте немного упростим код. Мы можем не просто умножать
 отдельно созданные матрицы, а создать соответствующие операции трансформации. Например,
 мы могли бы написать следующие функции:</p>
-<pre class="prettyprint"><code>var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
 
   ...
 
@@ -625,7 +625,7 @@ void main() {
 
 };
 </code></pre><p>С помощью этих функций 7 строк кода, рассмотренных выше, превратятся в 4 строки:</p>
-<pre class="prettyprint"><code>// Вычисление матриц
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Вычисление матриц
 var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
 matrix = m3.translate(matrix, translation[0], translation[1]);
 matrix = m3.rotate(matrix, angleInRadians);
@@ -638,9 +638,9 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
 </p>
 <p>И последнее, что касается порядка следования матриц. В первом примере у нас было</p>
-<pre class="prettyprint"><code>translation * rotation * scale
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">translation * rotation * scale
 </code></pre><p>а во втором</p>
-<pre class="prettyprint"><code>scale * rotation * translation
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">scale * rotation * translation
 </code></pre><p>И вы видели, как они отличаются.</p>
 <p>Если отследить весь путь преобразования матрицами, то вы начинаете с координат
 пространства отсечения, и каждая матрица вносит изменение в это пространство:</p>
@@ -648,24 +648,24 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 <blockquote>
 <p>Мы в пространстве отсечения, координаты должны передаваться тоже в нём.</p>
 </blockquote>
-<p>Шаг 2:  <code>matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)</code>;</p>
+<p>Шаг 2:  <code class="notranslate" translate="no">matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)</code>;</p>
 <blockquote>
 <p>Мы в пиксельном пространстве. Координаты должны передаваться тоже в пикселях.</p>
 </blockquote>
-<p>Шаг 3:  <code>matrix = m3.translate(matrix, tx, ty);</code></p>
+<p>Шаг 3:  <code class="notranslate" translate="no">matrix = m3.translate(matrix, tx, ty);</code></p>
 <blockquote>
 <p>Начало координат теперь в tx, ty (пространство сдвинулось)</p>
 </blockquote>
-<p>Шаг 4:  <code>matrix = m3.rotate(matrix, rotationInRadians);</code></p>
+<p>Шаг 4:  <code class="notranslate" translate="no">matrix = m3.rotate(matrix, rotationInRadians);</code></p>
 <blockquote>
 <p>Пространство повернулось вокруг tx, ty</p>
 </blockquote>
-<p>Шаг 5:  <code>matrix = m3.scale(matrix, sx, sy);</code></p>
+<p>Шаг 5:  <code class="notranslate" translate="no">matrix = m3.scale(matrix, sx, sy);</code></p>
 <blockquote>
 <p>Повёрнутое пространство с центром в tx, ty теперь масштабируется</p>
 </blockquote>
-<p>Затем в шейдере мы выполняем <code>gl_Position = matrix * position;</code>
-и значения <code>position</code> теперь находятся в этом конечном пространстве.</p>
+<p>Затем в шейдере мы выполняем <code class="notranslate" translate="no">gl_Position = matrix * position;</code>
+и значения <code class="notranslate" translate="no">position</code> теперь находятся в этом конечном пространстве.</p>
 <p>Надеюсь, статья помогла снять завесу тайны с математики матриц.
 Если вы хотите продолжить тему 2D, советую ознакомиться с
 <a href="webgl-2d-drawimage.html">WebGL 2D - DrawImage</a> и следующий за ним
@@ -676,9 +676,9 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 <p>Также, если вы хотите стать экспертом в области матриц, рекомендую
 <a href="https://www.youtube.com/watch?v=kjBOesZCoqc&amp;list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">ознакомиться с этими замечательными видео</a>.</p>
 <div class="webgl_bottombar">
-<h3>Что такое <code>clientWidth</code> и <code>clientHeight</code>?</h3>
-<p>До этого момента для получения размеров canvas я использовал <code>canvas.width</code> и <code>canvas.height</code>,
-но немного ранее при вызове <code>m3.projection</code> я использовал <code>canvas.clientWidth</code> и <code>canvas.clientHeight</code> вместо них. Почему же?</p>
+<h3>Что такое <code class="notranslate" translate="no">clientWidth</code> и <code class="notranslate" translate="no">clientHeight</code>?</h3>
+<p>До этого момента для получения размеров canvas я использовал <code class="notranslate" translate="no">canvas.width</code> и <code class="notranslate" translate="no">canvas.height</code>,
+но немного ранее при вызове <code class="notranslate" translate="no">m3.projection</code> я использовал <code class="notranslate" translate="no">canvas.clientWidth</code> и <code class="notranslate" translate="no">canvas.clientHeight</code> вместо них. Почему же?</p>
 
 <p>Проекционные матрицы отвечают за то, как конвертировать пространство отсечения (-1 до +1 во всех измерениях)
 в пиксели. Но в браузере есть 2 типа пикселей, с которыми мы работаем. Один тип - количество пикселей в самом
@@ -707,7 +707,7 @@ canvas. Например, если canvas задан следующим обра
 </pre>
 <p>Canvas займет весь отведённый ему контейнер, а это не 400x300.</p>
 <p>Рассмотрим два примера, где canvas'у задан размер 100% черз CSS, чтобы растянуть canvas на всю
-страницу. Первый использует <code>canvas.width</code> и <code>canvas.height</code>. Откройте его в
+страницу. Первый использует <code class="notranslate" translate="no">canvas.width</code> и <code class="notranslate" translate="no">canvas.height</code>. Откройте его в
 новом окне и измените размер окна. Как видите, 'F' не сохраняет пропорции и искажается.</p>
 <div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-width-height.html"></iframe>
@@ -715,8 +715,8 @@ canvas. Например, если canvas задан следующим обра
 </div>
 
 
-<p>Во втором примере мы используем <code>canvas.clientWidth</code> и <code>canvas.clientHeight</code>.
-<code>canvas.clientWidth</code> и <code>canvas.clientHeight</code> возвращают размер canvas, который
+<p>Во втором примере мы используем <code class="notranslate" translate="no">canvas.clientWidth</code> и <code class="notranslate" translate="no">canvas.clientHeight</code>.
+<code class="notranslate" translate="no">canvas.clientWidth</code> и <code class="notranslate" translate="no">canvas.clientHeight</code> возвращают размер canvas, который
 в итоге отобразится браузером на странице, поэтому несмотря на то, что в canvas по-прежнему содержится
 400x300 пикселей, 'F' будет отображаться корректно, так как соотношение сторон будет рассчитываться из
 конечного размера элемента браузера.</p>
@@ -727,10 +727,10 @@ canvas. Например, если canvas задан следующим обра
 
 
 <p>Большинство приложений, допускающих менять размеры canvas, пытаются поддерживать равенство
-<code>canvas.width</code> и <code>canvas.height</code> с <code>canvas.clientWidth</code> и <code>canvas.clientHeight</code>,
+<code class="notranslate" translate="no">canvas.width</code> и <code class="notranslate" translate="no">canvas.height</code> с <code class="notranslate" translate="no">canvas.clientWidth</code> и <code class="notranslate" translate="no">canvas.clientHeight</code>,
 чтобы один пиксель canvas соответствовал одному пикселю, отображённому в браузере. Но, как мы видели
-выше, это не единственное решение. Практически в любом случае использование <code>canvas.clientHeight</code>
-и <code>canvas.clientWidth</code> для вычисления соотношения сторон будет более корректным с технической
+выше, это не единственное решение. Практически в любом случае использование <code class="notranslate" translate="no">canvas.clientHeight</code>
+и <code class="notranslate" translate="no">canvas.clientWidth</code> для вычисления соотношения сторон будет более корректным с технической
 точки зрения.</p>
 </div>
 

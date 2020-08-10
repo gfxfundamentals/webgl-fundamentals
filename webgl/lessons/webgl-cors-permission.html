@@ -220,7 +220,7 @@ example the article about <a href="webgl-image-processing.html">image processing
 article about <a href="webgl-3d-textures.html">textures</a> and the article about
 <a href="webgl-2d-drawimage.html">implementing 2d drawImage</a>.</p>
 <p>Typically we download an image something like this</p>
-<pre class="prettyprint"><code>// creates a texture info { width: w, height: h, texture: tex }
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// creates a texture info { width: w, height: h, texture: tex }
 // The texture will start with 1x1 pixels and be updated
 // when the image has loaded
 function loadImageAndCreateTextureInfo(url) {
@@ -255,15 +255,15 @@ function loadImageAndCreateTextureInfo(url) {
 </code></pre><p>The problem is images might have private data in them (for example a captcha, a signature, a naked picture, ...).
 A webpage often has ads and other things not in direct control of the page and so the browser needs to prevent
 those things from looking at the contents of these private images.</p>
-<p>Just using <code>&lt;img src=&quot;private.jpg&quot;&gt;</code> is not a problem because although the image will get displayed by
+<p>Just using <code class="notranslate" translate="no">&lt;img src=&quot;private.jpg&quot;&gt;</code> is not a problem because although the image will get displayed by
 the browser a script can not see the data inside the image. <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">The Canvas2D API</a>
 has a way to see inside the image. First you draw the image into the canvas</p>
-<pre class="prettyprint"><code>ctx.drawImage(someImg, 0, 0);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">ctx.drawImage(someImg, 0, 0);
 </code></pre><p>Then you get the data</p>
-<pre class="prettyprint"><code>var data = ctx.getImageData(0, 0, width, heigh);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var data = ctx.getImageData(0, 0, width, heigh);
 </code></pre><p>But, if the image you drew came from a different domain the browser will mark the canvas as <em>tainted</em> and
-you&#39;ll get a security error when you call <code>ctx.getImageData</code></p>
-<p>WebGL has to take it even one step further. In WebGL <code>gl.readPixels</code> is the equivalent call to <code>ctx.getImageData</code>
+you&#39;ll get a security error when you call <code class="notranslate" translate="no">ctx.getImageData</code></p>
+<p>WebGL has to take it even one step further. In WebGL <code class="notranslate" translate="no">gl.readPixels</code> is the equivalent call to <code class="notranslate" translate="no">ctx.getImageData</code>
 so you&#39;d think maybe just blocking that would be enough but it turns out even if you can&#39;t read the pixels
 directly you can make shaders that take longer to run based on the colors in the image. Using that information
 you can use timing to effectively look inside the image indirectly and find out its contents.</p>
@@ -280,29 +280,29 @@ Notice the texture never loads and we get an error</p>
 <h2 id="enter-cors">Enter CORS</h2>
 <p>CORS = Cross Origin Resource Sharing. It&#39;s a way for the webpage to ask the image server for permission
 to use the image.</p>
-<p>To do this we set the <code>crossOrigin</code> attribute to something and then when the browser tries to get the
+<p>To do this we set the <code class="notranslate" translate="no">crossOrigin</code> attribute to something and then when the browser tries to get the
 image from the server, if it&#39;s not the same domain, the browser will ask for CORS permission.</p>
-<pre class="prettyprint"><code>...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 +    img.crossOrigin = &quot;&quot;;   // ask for CORS permission
     img.src = url;
-</code></pre><p>There are 3 values you can set <code>crossOrigin</code> to. One is <code>undefined</code> which is the default which means
-&quot;do not ask for permission&quot;. Another is <code>&quot;anonymous&quot;</code> which means ask for permission but don&#39;t send extra info.
-The last is <code>&quot;use-credentials&quot;</code> which means send cookies and other info the server might look at to decide
-whether or not it give permission. If <code>crossOrigin</code> is set to any other value it&#39;s the same as setting
-it to <code>anonymous</code>.</p>
+</code></pre><p>There are 3 values you can set <code class="notranslate" translate="no">crossOrigin</code> to. One is <code class="notranslate" translate="no">undefined</code> which is the default which means
+&quot;do not ask for permission&quot;. Another is <code class="notranslate" translate="no">&quot;anonymous&quot;</code> which means ask for permission but don&#39;t send extra info.
+The last is <code class="notranslate" translate="no">&quot;use-credentials&quot;</code> which means send cookies and other info the server might look at to decide
+whether or not it give permission. If <code class="notranslate" translate="no">crossOrigin</code> is set to any other value it&#39;s the same as setting
+it to <code class="notranslate" translate="no">anonymous</code>.</p>
 <p>Why don&#39;t we just always see that permission? Because asking for permission takes 2 HTTP requests so it&#39;s
 slower than not asking. If we know we&#39;re on the same domain or we know we won&#39;t use the image for anything
-except img tags and or canvas2d then we don&#39;t want to set <code>crossOrigin</code> because it
+except img tags and or canvas2d then we don&#39;t want to set <code class="notranslate" translate="no">crossOrigin</code> because it
 will make things slower.</p>
 <p>We can make a function that checks if the image we&#39;re trying to load is on the same origin and if
-so sets the <code>crossOrigin</code> attribute.</p>
-<pre class="prettyprint"><code>function requestCORSIfNotSameOrigin(img, url) {
+so sets the <code class="notranslate" translate="no">crossOrigin</code> attribute.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function requestCORSIfNotSameOrigin(img, url) {
   if ((new URL(url, window.location.href)).origin !== window.location.origin) {
     img.crossOrigin = &quot;&quot;;
   }
 }
 </code></pre><p>And we can use it like this</p>
-<pre class="prettyprint"><code>...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 +requestCORSIfNotSameOrigin(img, url);
 img.src = url;
 </code></pre><p><div class="webgl_example_container">
@@ -316,7 +316,7 @@ That is up to the server. Github pages give permission, flickr.com gives permiss
 imgur.com gives permission, but most websites do not. To give permission the server
 sends certain headers when sending the image.</p>
 <p>It&#39;s also important to note that the server giving permission is not enough. If the
-image is from another domain you must set the <code>crossOrigin</code> attribute or else you
+image is from another domain you must set the <code class="notranslate" translate="no">crossOrigin</code> attribute or else you
 will not be able to use the image even if the server sends the correct headers.</p>
 <div class="webgl_bottombar">
 <h3>Making Apache grant CORS permission</h3>
@@ -326,7 +326,7 @@ you can grant blanket CORS support by putting</p>
     Header set Access-Control-Allow-Origin "*"
 </pre>
 <p>
-In the appropriate <code>.htaccess</code> file.
+In the appropriate <code class="notranslate" translate="no">.htaccess</code> file.
 </p>
 </div>
 

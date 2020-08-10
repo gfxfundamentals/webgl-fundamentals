@@ -236,9 +236,9 @@ Usually this is accomplished in an exporter/converter that takes data from
 a 3D packages like blender/maya/3dsmax and for each vertex finds the 4
 bones with the highest weights and then normalizes those weights</p>
 <p>To give an pseudo example a non-skinned vertex is typically computed like this</p>
-<pre class="prettyprint"><code>gl_Position = projection * view * model * position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl_Position = projection * view * model * position;
 </code></pre><p>A skinned vertex is effectively computed like this</p>
-<pre class="prettyprint"><code>gl_Position = projection * view *
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl_Position = projection * view *
               (bone1Matrix * position * weight1 +
                bone2Matrix * position * weight2 +
                bone3Matrix * position * weight3 +
@@ -247,7 +247,7 @@ bones with the highest weights and then normalizes those weights</p>
 <p>Assuming you stored the bones matrices in a uniform array, and you
 passed in the the weights and which bone each weight applies to as
 attributes you might do something like</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec4 a_weights;         // 4 weights per vertex
 attribute vec4 a_boneNdx;         // 4 bone indices per vertex
 uniform mat4 bones[MAX_BONES];    // 1 matrix per bone
@@ -287,19 +287,19 @@ of the mesh.</p>
 <div class="webgl_center"><img src="resources/skinned-mesh.svg" style="width: 400px;"></div>
 
 <ul>
-<li>Where <code>b0</code>, <code>b1</code>, and <code>b2</code> are the bone matrices.</li>
-<li><code>b1</code> is a child of <code>b0</code> and <code>b2</code> is a child of <code>b1</code></li>
-<li>Verts <code>0,1</code> will get a weight of 1.0 from bone b0</li>
-<li>Verts <code>2,3</code> will get a weight of 0.5 from bones b0 and b1</li>
-<li>Verts <code>4,5</code> will get a weight of 1.0 from bone b1</li>
-<li>Verts <code>6,7</code> will get a weight of 0.5 from bones b1 and b2</li>
-<li>Verts <code>8,9</code> will get a weight of 1.0 from bone b2</li>
+<li>Where <code class="notranslate" translate="no">b0</code>, <code class="notranslate" translate="no">b1</code>, and <code class="notranslate" translate="no">b2</code> are the bone matrices.</li>
+<li><code class="notranslate" translate="no">b1</code> is a child of <code class="notranslate" translate="no">b0</code> and <code class="notranslate" translate="no">b2</code> is a child of <code class="notranslate" translate="no">b1</code></li>
+<li>Verts <code class="notranslate" translate="no">0,1</code> will get a weight of 1.0 from bone b0</li>
+<li>Verts <code class="notranslate" translate="no">2,3</code> will get a weight of 0.5 from bones b0 and b1</li>
+<li>Verts <code class="notranslate" translate="no">4,5</code> will get a weight of 1.0 from bone b1</li>
+<li>Verts <code class="notranslate" translate="no">6,7</code> will get a weight of 0.5 from bones b1 and b2</li>
+<li>Verts <code class="notranslate" translate="no">8,9</code> will get a weight of 1.0 from bone b2</li>
 </ul>
 <p>We&#39;ll use the utils described in <a href="webgl-less-code-more-fun.html">less code more fun</a>.</p>
 <p>First we need the vertices and for each vertex the index
 of each bone that influences it and a number from 0 to 1
 of how much influence that bone has.</p>
-<pre class="prettyprint"><code>var arrays = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var arrays = {
   position: {
     numComponents: 2,
     data: [
@@ -368,7 +368,7 @@ of how much influence that bone has.</p>
 // calls gl.createBuffer, gl.bindBuffer, gl.bufferData
 var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>We can define our uniform values including a matrix for each bone</p>
-<pre class="prettyprint"><code>// 4 matrices, one for each bone
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 4 matrices, one for each bone
 var numBones = 4;
 var boneArray = new Float32Array(numBones * 16);
 
@@ -379,7 +379,7 @@ var uniforms = {
   color: [1, 0, 0, 1],
 };
 </code></pre><p>We can make views into the boneArray, one for each matrix</p>
-<pre class="prettyprint"><code>// make views for each bone. This lets all the bones
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// make views for each bone. This lets all the bones
 // exist in 1 array for uploading but as separate
 // arrays for using with the math functions
 var boneMatrices = [];  // the uniform data
@@ -392,7 +392,7 @@ for (var i = 0; i &lt; numBones; ++i) {
 }
 </code></pre><p>And then some code to manipulate the bone matrixes. We&#39;ll just rotate
 them in a hierarchy like the bones of a finger.</p>
-<pre class="prettyprint"><code>// rotate each bone by angle and simulate a hierarchy
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// rotate each bone by angle and simulate a hierarchy
 function computeBoneMatrices(bones, angle) {
   var m = m4.identity();
   m4.zRotate(m, angle, bones[0]);
@@ -404,7 +404,7 @@ function computeBoneMatrices(bones, angle) {
 }
 </code></pre><p>Now call it once to generate their initial positions and use the result
 to compute the inverse bind pose matrices.</p>
-<pre class="prettyprint"><code>// compute the initial positions of each matrix
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// compute the initial positions of each matrix
 computeBoneMatrices(bindPose, 0);
 
 // compute their inverses
@@ -413,17 +413,17 @@ var bindPoseInv = bindPose.map(function(m) {
 });
 </code></pre><p>Now we&#39;re ready to render</p>
 <p>First we animate the bones, computing a new world matrix for each</p>
-<pre class="prettyprint"><code>var t = time * 0.001;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var t = time * 0.001;
 var angle = Math.sin(t) * 0.8;
 computeBoneMatrices(bones, angle);
 </code></pre><p>Then we multiply the result of each by the inverse bind pose to deal with
 the issue mentioned above</p>
-<pre class="prettyprint"><code>// multiply each by its bindPoseInverse
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// multiply each by its bindPoseInverse
 bones.forEach(function(bone, ndx) {
   m4.multiply(bone, bindPoseInv[ndx], boneMatrices[ndx]);
 });
 </code></pre><p>Then all the normal stuff, setting up the attributes, setting the uniforms, and drawing.</p>
-<pre class="prettyprint"><code>gl.useProgram(programInfo.program);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.useProgram(programInfo.program);
 // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
 webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
 
@@ -455,12 +455,12 @@ to the next to make it kind of look like a skeleton.</p>
 </div>
 
 <p>Another minor thing to note, the example above is using floats for the weights
-and the bone indices but you could easily use <code>UNSIGNED_BYTE</code> to save a
+and the bone indices but you could easily use <code class="notranslate" translate="no">UNSIGNED_BYTE</code> to save a
 bunch of space.</p>
 <p>Unfortunately there&#39;s a limit to the number of uniforms you can use in a shader.
 The lower limit on WebGL is 64 vec4s which is only 8 mat4s and you probably
-need some of those uniforms for other things like for example we have <code>color</code>
-in the fragment shader and we have <code>projection</code> and <code>view</code> which means if
+need some of those uniforms for other things like for example we have <code class="notranslate" translate="no">color</code>
+in the fragment shader and we have <code class="notranslate" translate="no">projection</code> and <code class="notranslate" translate="no">view</code> which means if
 we were on a device with a limit of 64 vec4s we could only have 5 bones! Checking
 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_UNIFORM_VECTORS">WebGLStats</a>
 most devices support 128 vec4s and 70% of them support 256 vec4s but with
@@ -479,7 +479,7 @@ easy we&#39;re going to use floating point textures. Floating point textures are
 an optional feature of WebGL but fortunately they are supported by most devices.</p>
 <p>Here&#39;s the code to get the extension. If it fails we&#39;d probably want to either tell
 the user they are out of luck or choose some other solution.</p>
-<pre class="prettyprint"><code>var ext = gl.getExtension(&#39;OES_texture_float&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var ext = gl.getExtension(&#39;OES_texture_float&#39;);
 if (!ext) {
   return;  // the extension doesn&#39;t exist on this device
 }
@@ -489,7 +489,7 @@ has R, G, B, and A, that&#39;s 4 values so we only need 4 pixels per matrix,
 one pixel for each row of the matrix.
 Textures can usually be at least 2048 pixels in certain dimension so
 this will give us room for at least 2048 bone matrices which is plenty.</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec4 a_weight;
 attribute vec4 a_boneNdx;
 
@@ -530,16 +530,16 @@ it would be like this.</p>
 <div class="webgl_center"><img src="resources/texel-coords.svg" style="width: 400px;"></div>
 
 <p>If you want to look up a specific pixel then the formula is</p>
-<pre class="prettyprint"><code> (x + .5) / width
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> (x + .5) / width
 </code></pre><p>Above you&#39;ll see for each pixel that&#39;s</p>
-<pre class="prettyprint"><code> (0 + .5) / 3  = 0.166
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> (0 + .5) / 3  = 0.166
  (1 + .5) / 3 =  0.5
  (2 + .5) / 3 =  0.833
 </code></pre><p>or</p>
 <div class="webgl_center"><img src="resources/texel-coords-middle.svg" style="width: 400px;"></div>
 
 <p>Now we&#39;ll setup a texture we can put the bone matrices in</p>
-<pre class="prettyprint"><code>// prepare the texture for bone matrices
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// prepare the texture for bone matrices
 var boneMatrixTexture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, boneMatrixTexture);
 // since we want to use the texture for pure data we turn
@@ -550,7 +550,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 </code></pre><p>And we&#39;ll pass that texture and number of bones in as uniforms</p>
-<pre class="prettyprint"><code>var uniforms = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var uniforms = {
   projection: m4.orthographic(-20, 20, -10, 10, -1, 1),
   view: m4.translation(-6, 0, 0),
 *  boneMatrixTexture,
@@ -559,7 +559,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 };
 </code></pre><p>Then the only thing we need to change is to update the texture with the
 latest bone matrices when rendering</p>
-<pre class="prettyprint"><code>// update the texture with the current matrices
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// update the texture with the current matrices
 gl.bindTexture(gl.TEXTURE_2D, boneMatrixTexture);
 gl.texImage2D(
     gl.TEXTURE_2D,
@@ -590,12 +590,12 @@ kind of designed for WebGL. Searching the net I found
 <a href="https://www.blendswap.com/user/pasilan">Junskie Pastilan</a></p>
 <div class="webgl_center"><img src="../resources/models/killer_whale/thumbnail.jpg"></div>
 
-<p>There are 2 top level formats for glTF. The <code>.gltf</code> format is a JSON file that
-generally references a <code>.bin</code> file which is a binary file that contains usually
-just the geometry and possibly animation data. The other format is <code>.glb</code> which
+<p>There are 2 top level formats for glTF. The <code class="notranslate" translate="no">.gltf</code> format is a JSON file that
+generally references a <code class="notranslate" translate="no">.bin</code> file which is a binary file that contains usually
+just the geometry and possibly animation data. The other format is <code class="notranslate" translate="no">.glb</code> which
 is a binary format. It&#39;s basically just the JSON and any other files
 concatenated into one binary file with a short header and a size/type section
-between each concatenated piece. For JavaScript I think the <code>.gltf</code> format is
+between each concatenated piece. For JavaScript I think the <code class="notranslate" translate="no">.gltf</code> format is
 slightly easier to get started with so let&#39;s try to load that.</p>
 <p>First <a href="https://www.blendswap.com/blends/view/65255">I downloaded the .blend file</a>, installed
 <a href="https://blender.org">blender</a>, installed 
@@ -621,8 +621,8 @@ enough code to get the whale to display. I suspect that if we tried different
 files we&#39;d run into areas that need to be changed.</p>
 <p>The first thing we need to do is load the file. To make it simpler let&#39;s use
 JavaScript&#39;s <a href="https://javascript.info/async-await">async/await</a>. First let&#39;s
-write some code to load the <code>.gltf</code> file and any files it references.</p>
-<pre class="prettyprint"><code>async function loadGLTF(url) {
+write some code to load the <code class="notranslate" translate="no">.gltf</code> file and any files it references.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">async function loadGLTF(url) {
   const gltf = await loadJSON(url);
 
   // load all the referenced files relative to the gltf file
@@ -654,11 +654,11 @@ async function loadJSON(url) {
 primitives. A primitive is effectively the buffers and attributes needed to
 render something. Let&#39;s use our webgl utilities we covered in <a href="webgl-less-code-more-fun.html">less code more
 fun</a>. We&#39;ll walk the meshes and for each one
-build a <code>BufferInfo</code> we can pass to <code>webglUtils.setBuffersAndAttributes</code>. Recall
-a <code>BufferInfo</code> is effectively just the attribute information, the indices if
-there are any, and the number of elements to pass to <code>gl.drawXXX</code>. For example a
+build a <code class="notranslate" translate="no">BufferInfo</code> we can pass to <code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code>. Recall
+a <code class="notranslate" translate="no">BufferInfo</code> is effectively just the attribute information, the indices if
+there are any, and the number of elements to pass to <code class="notranslate" translate="no">gl.drawXXX</code>. For example a
 cube with just positions and normals might have a BufferInfo with this structure</p>
-<pre class="prettyprint"><code>const cubeBufferInfo = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const cubeBufferInfo = {
   attribs: {
     &#39;a_POSITION&#39;: { buffer: WebGLBuffer, type: gl.FLOAT, numComponents: 3, },
     &#39;a_NORMAL&#39;: { buffer: WebGLBuffer, type: gl.FLOAT, numComponents: 3, },
@@ -668,8 +668,8 @@ cube with just positions and normals might have a BufferInfo with this structure
   elementType: gl.UNSIGNED_SHORT,
 }
 </code></pre><p>So we will walk each primitive and generate a BufferInfo like that.</p>
-<p>Primitives have an array of attributes, each attribute references an accessor. An accessor says what kind of data is there, for example <code>VEC3</code>/<code>gl.FLOAT</code> and references a bufferView. Given an accessor index we can write some code that returns a WebGLBuffer with the data loaded, the accessor, and the stride specified for the bufferView.</p>
-<pre class="prettyprint"><code>// Given an accessor index return an accessor, WebGLBuffer and a stride
+<p>Primitives have an array of attributes, each attribute references an accessor. An accessor says what kind of data is there, for example <code class="notranslate" translate="no">VEC3</code>/<code class="notranslate" translate="no">gl.FLOAT</code> and references a bufferView. Given an accessor index we can write some code that returns a WebGLBuffer with the data loaded, the accessor, and the stride specified for the bufferView.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Given an accessor index return an accessor, WebGLBuffer and a stride
 function getAccessorAndWebGLBuffer(gl, gltf, accessorIndex) {
   const accessor = gltf.accessors[accessorIndex];
   const bufferView = gltf.bufferViews[accessor.bufferView];
@@ -689,7 +689,7 @@ function getAccessorAndWebGLBuffer(gl, gltf, accessorIndex) {
   };
 }
 </code></pre><p>We also need a way to convert from an glTF accessor type to a number of components</p>
-<pre class="prettyprint"><code>function throwNoKey(key) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function throwNoKey(key) {
   throw new Error(`no key: ${key}`);
 }
 
@@ -708,7 +708,7 @@ function accessorTypeToNumComponents(type) {
 }
 </code></pre><p>Now that we&#39;ve made these functions we can use them to setup our meshes</p>
 <p>Note: glTF files can supposedly define materials but the exporter didn&#39;t put any materials in the file even though export materials was checked. I can only guess the exporter doesn&#39;t handle every kind of material in blender which is unfortunate. We&#39;ll use a default material if there is no material in the file. Since there are no materials in this file there&#39;s no code here to use glTF materials.</p>
-<pre class="prettyprint"><code>const defaultMaterial = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const defaultMaterial = {
   uniforms: {
     u_diffuse: [.5, .8, 1, 1],
   },
@@ -749,9 +749,9 @@ gltf.meshes.forEach((mesh) =&gt; {
     primitive.material = gltf.materials &amp;&amp; gltf.materials[primitive.material] || defaultMaterial;
   });
 });
-</code></pre><p>Now each primitive will have a <code>bufferInfo</code> and a <code>material</code> property.</p>
+</code></pre><p>Now each primitive will have a <code class="notranslate" translate="no">bufferInfo</code> and a <code class="notranslate" translate="no">material</code> property.</p>
 <p>For skinning we almost always need some kind of scene graph. We created a scene graph in <a href="webgl-scene-graph.html">the article about scene graphs</a> so let&#39;s use that one.</p>
-<pre class="prettyprint"><code>class TRS {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">class TRS {
   constructor(position = [0, 0, 0], rotation = [0, 0, 0, 1], scale = [1, 1, 1]) {
     this.position = position;
     this.rotation = rotation;
@@ -820,10 +820,10 @@ class Node {
 }
 </code></pre><p>There are a couple of notable changes from the code in <a href="webgl-scene-graph.html">the scene graph article</a>.</p>
 <ul>
-<li><p>This code is using the <code>class</code> feature of ES6.</p>
-<p>It&#39;s much nicer to use the <code>class</code> syntax than the old style of defining a class.</p>
+<li><p>This code is using the <code class="notranslate" translate="no">class</code> feature of ES6.</p>
+<p>It&#39;s much nicer to use the <code class="notranslate" translate="no">class</code> syntax than the old style of defining a class.</p>
 </li>
-<li><p>We added an array of drawables to <code>Node</code></p>
+<li><p>We added an array of drawables to <code class="notranslate" translate="no">Node</code></p>
 <p>This will list the things to draw from this Node. We&#39;ll put
 instances of a class on this list that are responsible for doing
 the actual drawing. This way we can generically draw different things
@@ -834,11 +834,11 @@ maybe not contain drawables at all. Things that need to be drawn could instead
 just reference the node in the graph where to get their data.
 This way with drawables in the graph is common though so lets start with that.</p>
 </li>
-<li><p>We added a <code>traverse</code> method.</p>
+<li><p>We added a <code class="notranslate" translate="no">traverse</code> method.</p>
 <p>It calls a function passing it the current node and then recursively doing the
 same for all child nodes.</p>
 </li>
-<li><p>The <code>TRS</code> class is using a quaternion for rotation</p>
+<li><p>The <code class="notranslate" translate="no">TRS</code> class is using a quaternion for rotation</p>
 <p>We have not covered quaternions and to be honest I don&#39;t think I understand
 them well enough to explain them. Fortunately we don&#39;t need to know how they
 work to use them. We just take the data out of the gltf file and call
@@ -846,9 +846,9 @@ a function that builds a matrix from that data and use the matrix.</p>
 </li>
 </ul>
 <p>The nodes in the glTF file are stored as a flat array.
-We&#39;ll convert node data in the glTF to <code>Node</code> instances. We save off the old array
-of node data as <code>origNodes</code> as we&#39;ll need it later.</p>
-<pre class="prettyprint"><code>const origNodes = gltf.nodes;
+We&#39;ll convert node data in the glTF to <code class="notranslate" translate="no">Node</code> instances. We save off the old array
+of node data as <code class="notranslate" translate="no">origNodes</code> as we&#39;ll need it later.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const origNodes = gltf.nodes;
 gltf.nodes = gltf.nodes.map((n) =&gt; {
   const {name, skin, mesh, translation, rotation, scale} = n;
   const trs = new TRS(translation, rotation, scale);
@@ -859,15 +859,15 @@ gltf.nodes = gltf.nodes.map((n) =&gt; {
   }
   return node;
 });
-</code></pre><p>Above we created a <code>TRS</code> instance for each node, a <code>Node</code> instance for each
-node, and, if there was a <code>mesh</code> property we looked up the mesh data we setup
-before and created a <code>MeshRenderer</code> to draw it.</p>
-<p>Let&#39;s make the <code>MeshRenderer</code>. It&#39;s just an encapsulation of the code we used in
+</code></pre><p>Above we created a <code class="notranslate" translate="no">TRS</code> instance for each node, a <code class="notranslate" translate="no">Node</code> instance for each
+node, and, if there was a <code class="notranslate" translate="no">mesh</code> property we looked up the mesh data we setup
+before and created a <code class="notranslate" translate="no">MeshRenderer</code> to draw it.</p>
+<p>Let&#39;s make the <code class="notranslate" translate="no">MeshRenderer</code>. It&#39;s just an encapsulation of the code we used in
 <a href="webgl-less-code-more-fun.html">less code more fun</a> to render a single model.
 All it does is hold a reference to a mesh and then for each primitive sets up
-the program, attributes, and uniforms and finally calls <code>gl.drawArrays</code> or
-<code>gl.drawElements</code> via <code>webglUtils.drawBufferInfo</code>;</p>
-<pre class="prettyprint"><code>class MeshRenderer {
+the program, attributes, and uniforms and finally calls <code class="notranslate" translate="no">gl.drawArrays</code> or
+<code class="notranslate" translate="no">gl.drawElements</code> via <code class="notranslate" translate="no">webglUtils.drawBufferInfo</code>;</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">class MeshRenderer {
   constructor(mesh) {
     this.mesh = mesh;
   }
@@ -890,7 +890,7 @@ the program, attributes, and uniforms and finally calls <code>gl.drawArrays</cod
 </code></pre><p>We&#39;ve created the nodes, now we need to actually arrange them into a scene graph. This is done at 2 levels in glTF.
 First, each node has an optional array of children that are also indices into the array of nodes so we can walk all
 the nodes and parent their children</p>
-<pre class="prettyprint"><code>function addChildren(nodes, node, childIndices) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function addChildren(nodes, node, childIndices) {
   childIndices.forEach((childNdx) =&gt; {
     const child = nodes[childNdx];
     child.setParent(node);
@@ -906,7 +906,7 @@ gltf.nodes.forEach((node, ndx) =&gt; {
 });
 </code></pre><p>Then there is an array of scenes. A scene references an
 array of nodes by index into the nodes array that are at the bottom of the scene. It&#39;s not clear to me why they didn&#39;t just start with a single root node but whatever, it&#39;s what&#39;s in the glTF file so we create a root node and parent all the scene&#39;s children to that node</p>
-<pre class="prettyprint"><code>  // setup scenes
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // setup scenes
   for (const scene of gltf.scenes) {
     scene.root = new Node(new TRS(), scene.name);
     addChildren(gltf.nodes, scene.root, scene.nodes);
@@ -915,13 +915,13 @@ array of nodes by index into the nodes array that are at the bottom of the scene
   return gltf;
 }
 </code></pre><p>and we&#39;re done with loading, at least just the meshes. Let&#39;s
-mark the main function as <code>async</code> so we can use the <code>await</code>
+mark the main function as <code class="notranslate" translate="no">async</code> so we can use the <code class="notranslate" translate="no">await</code>
 keyword.</p>
-<pre class="prettyprint"><code>async function main() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">async function main() {
 </code></pre><p>and we can load the gltf file like this</p>
-<pre class="prettyprint"><code>const gltf = await loadGLTF(&#39;resources/models/killer_whale/whale.CYCLES.gltf&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const gltf = await loadGLTF(&#39;resources/models/killer_whale/whale.CYCLES.gltf&#39;);
 </code></pre><p>To render we need a shader that matches the data in the gltf file. Let&#39;s look at the data in the gltf file for the primitive that&#39;s in it</p>
-<pre class="prettyprint"><code>{
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">{
     &quot;name&quot; : &quot;orca&quot;,
     &quot;primitives&quot; : [
         {
@@ -937,9 +937,9 @@ keyword.</p>
         }
     ]
 }
-</code></pre><p>Looking at that, to render let&#39;s just use <code>NORMAL</code> and <code>POSITION</code>. We prepended
-<code>a_</code> to the front of each attribute so a vertex shader like this should work</p>
-<pre class="prettyprint"><code>attribute vec4 a_POSITION;
+</code></pre><p>Looking at that, to render let&#39;s just use <code class="notranslate" translate="no">NORMAL</code> and <code class="notranslate" translate="no">POSITION</code>. We prepended
+<code class="notranslate" translate="no">a_</code> to the front of each attribute so a vertex shader like this should work</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_POSITION;
 attribute vec3 a_NORMAL;
 
 uniform mat4 u_projection;
@@ -953,7 +953,7 @@ void main() {
   v_normal = mat3(u_world) * a_NORMAL;
 }
 </code></pre><p>and for the fragment shader let&#39;s use a simple directional light</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 varying vec3 v_normal;
 
@@ -974,10 +974,10 @@ By multiplying by .5 and adding .5 we take the dot product from -1 &lt;-&gt; 1 t
 1 which means it will only be black when facing the complete opposite direction.
 This gives a cheap but pleasing lighting for simple tests.</p>
 <p>So, we need to compile and link the shaders.</p>
-<pre class="prettyprint"><code>// compiles and links the shaders, looks up attribute and uniform locations
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// compiles and links the shaders, looks up attribute and uniform locations
 const meshProgramInfo = webglUtils.createProgramInfo(gl, [&quot;meshVS&quot;, &quot;fs&quot;]);
 </code></pre><p>and then to render all that&#39;s different from before is this</p>
-<pre class="prettyprint"><code>const sharedUniforms = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const sharedUniforms = {
   u_lightDirection: m4.normalize([-1, 3, 5]),
 };
 
@@ -993,9 +993,9 @@ for (const scene of gltf.scenes) {
   // walk the scene and render all renderables
   scene.root.traverse(renderDrawables);
 }
-</code></pre><p>Left over from before (not shown above) is our code for computing a projection matrix, camera matrix, and view matrix. We then just walk each scene, call <code>scene.root.updateWorldMatrix</code> which will update the world
-matrix of all the nodes in that graph. Then we call <code>scene.root.traverse</code> with <code>renderDrawables</code>.</p>
-<p><code>renderDrawables</code> calls the render method of all the drawables on that node passing in the projection, view, and lighting info via <code>sharedUniforms</code>.</p>
+</code></pre><p>Left over from before (not shown above) is our code for computing a projection matrix, camera matrix, and view matrix. We then just walk each scene, call <code class="notranslate" translate="no">scene.root.updateWorldMatrix</code> which will update the world
+matrix of all the nodes in that graph. Then we call <code class="notranslate" translate="no">scene.root.traverse</code> with <code class="notranslate" translate="no">renderDrawables</code>.</p>
+<p><code class="notranslate" translate="no">renderDrawables</code> calls the render method of all the drawables on that node passing in the projection, view, and lighting info via <code class="notranslate" translate="no">sharedUniforms</code>.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-skinning-3d-gltf.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-skinning-3d-gltf.html" target="_blank">click here to open in a separate window</a>
@@ -1004,7 +1004,7 @@ matrix of all the nodes in that graph. Then we call <code>scene.root.traverse</c
 </p>
 <p>Now that that&#39;s working let&#39;s handle the skins.</p>
 <p>First let&#39;s make a class to represent a skin. It will manage the list of joints, which is another word for nodes in the scene graph that apply to the skin. It will also have the inverse bind matrices and it will manage the texture we put the joint matrices in.</p>
-<pre class="prettyprint"><code>class Skin {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">class Skin {
   constructor(joints, inverseBindMatrixData) {
     this.joints = joints;
     this.inverseBindMatrices = [];
@@ -1046,8 +1046,8 @@ matrix of all the nodes in that graph. Then we call <code>scene.root.traverse</c
                   gl.RGBA, gl.FLOAT, this.jointData);
   }
 }
-</code></pre><p>And like we had a <code>MeshRenderer</code> let&#39;s make a <code>SkinRenderer</code> that uses the <code>Skin</code> to render a skinned mesh.</p>
-<pre class="prettyprint"><code>class SkinRenderer {
+</code></pre><p>And like we had a <code class="notranslate" translate="no">MeshRenderer</code> let&#39;s make a <code class="notranslate" translate="no">SkinRenderer</code> that uses the <code class="notranslate" translate="no">Skin</code> to render a skinned mesh.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">class SkinRenderer {
   constructor(mesh, skin) {
     this.mesh = mesh;
     this.skin = skin;
@@ -1071,9 +1071,9 @@ matrix of all the nodes in that graph. Then we call <code>scene.root.traverse</c
     }
   }
 }
-</code></pre><p>You can see it&#39;s very similar to the <code>MeshRenderer</code>. It has a reference to a <code>Skin</code> which it uses to update all the matrices needed to render. Then it follows the standard pattern for rendering, using the program, setting up the attributes, setting all the uniforms using <code>webglUtils.setUniforms</code> which also binds textures, and then rendering.</p>
+</code></pre><p>You can see it&#39;s very similar to the <code class="notranslate" translate="no">MeshRenderer</code>. It has a reference to a <code class="notranslate" translate="no">Skin</code> which it uses to update all the matrices needed to render. Then it follows the standard pattern for rendering, using the program, setting up the attributes, setting all the uniforms using <code class="notranslate" translate="no">webglUtils.setUniforms</code> which also binds textures, and then rendering.</p>
 <p>We also need a vertex shader that supports skinning</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;skinVS&quot; type=&quot;notjs&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;skinVS&quot; type=&quot;notjs&quot;&gt;
 attribute vec4 a_POSITION;
 attribute vec3 a_NORMAL;
 attribute vec4 a_WEIGHTS_0;
@@ -1114,14 +1114,14 @@ void main() {
 &lt;/script&gt;
 </code></pre><p>This is pretty much the same as our skinning shader above. We renamed the
 attributes to match what&#39;s in the gltf file. The biggest change it making a
-<code>skinMatrix</code>. In our previous skinning shader we multiplied the position by each
+<code class="notranslate" translate="no">skinMatrix</code>. In our previous skinning shader we multiplied the position by each
 individual joint/bone matrix and multiplied those by the weight of influence for
 each joint. In this case we instead add up the matrices multiplied by the
 weights and just multiply by position once. This produces same result but we can
-use the <code>skinMatrix</code> to multiply the normal as well which we need to do
+use the <code class="notranslate" translate="no">skinMatrix</code> to multiply the normal as well which we need to do
 otherwise the normals won&#39;t match the skin.</p>
-<p>Also notice we multiply in the <code>u_world</code> matrix here. We subtracted it out in <code>Skin.update</code> with these lines</p>
-<pre class="prettyprint"><code>*const globalWorldInverse = m4.inverse(node.worldMatrix);
+<p>Also notice we multiply in the <code class="notranslate" translate="no">u_world</code> matrix here. We subtracted it out in <code class="notranslate" translate="no">Skin.update</code> with these lines</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*const globalWorldInverse = m4.inverse(node.worldMatrix);
 // go through each joint and get its current worldMatrix
 // apply the inverse bind matrices and store the
 // entire result in the texture
@@ -1138,15 +1138,15 @@ places just by re-rendering with a different world matrix.</p>
 <p>That&#39;s maybe useful for displaying a crowd of characters. Unfortunately all the
 characters will be in the exact same pose so it&#39;s unclear to me if it&#39;s really
 that useful or not. How often does that situation actually come up? You can
-remove multiplying by the inverse world matrix of the node in <code>Skin</code> and remove
-multiplying by <code>u_world</code> in the shader and the result will look the same, you
+remove multiplying by the inverse world matrix of the node in <code class="notranslate" translate="no">Skin</code> and remove
+multiplying by <code class="notranslate" translate="no">u_world</code> in the shader and the result will look the same, you
 just can&#39;t <em>instance</em> that skinned mesh. Of course you can render the same
 skinned mesh as many times as you want in different poses. You&#39;ll need a
-different <code>Skin</code> object pointing to different nodes that are in some other
+different <code class="notranslate" translate="no">Skin</code> object pointing to different nodes that are in some other
 orientation.</p>
-<p>Back in our loading code, when we&#39;re making <code>Node</code> instances, if there&#39;s a
-<code>skin</code> property we&#39;ll remember it so we can make a <code>Skin</code> for it.</p>
-<pre class="prettyprint"><code>+const skinNodes = [];
+<p>Back in our loading code, when we&#39;re making <code class="notranslate" translate="no">Node</code> instances, if there&#39;s a
+<code class="notranslate" translate="no">skin</code> property we&#39;ll remember it so we can make a <code class="notranslate" translate="no">Skin</code> for it.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+const skinNodes = [];
 const origNodes = gltf.nodes;
 gltf.nodes = gltf.nodes.map((n) =&gt; {
   const {name, skin, mesh, translation, rotation, scale} = n;
@@ -1160,21 +1160,21 @@ gltf.nodes = gltf.nodes.map((n) =&gt; {
   }
   return node;
 });
-</code></pre><p>After making <code>Node</code>s we need to make <code>Skin</code>s. Skins reference nodes via a
-<code>joints</code> array which is a list of indices of nodes that supply the matrices for
+</code></pre><p>After making <code class="notranslate" translate="no">Node</code>s we need to make <code class="notranslate" translate="no">Skin</code>s. Skins reference nodes via a
+<code class="notranslate" translate="no">joints</code> array which is a list of indices of nodes that supply the matrices for
 the joints. A skin also references an accessor that references the inverse bind
 pose matrices saved in the file.</p>
-<pre class="prettyprint"><code>// setup skins
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// setup skins
 gltf.skins = gltf.skins.map((skin) =&gt; {
   const joints = skin.joints.map(ndx =&gt; gltf.nodes[ndx]);
   const {stride, array} = getAccessorTypedArrayAndStride(gl, gltf, skin.inverseBindMatrices);
   return new Skin(joints, array);
 });
-</code></pre><p>The code above called <code>getAccessorTypedArrayAndStride</code> given an accessor index.
+</code></pre><p>The code above called <code class="notranslate" translate="no">getAccessorTypedArrayAndStride</code> given an accessor index.
 We need supply that code. For a given accessor we&#39;ll return a
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray">TypedArray</a>
 view of the correct type to get access to the data in the buffer.</p>
-<pre class="prettyprint"><code>const glTypeToTypedArrayMap = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const glTypeToTypedArrayMap = {
   &#39;5120&#39;: Int8Array,    // gl.BYTE
   &#39;5121&#39;: Uint8Array,   // gl.UNSIGNED_BYTE
   &#39;5122&#39;: Int16Array,   // gl.SHORT
@@ -1209,18 +1209,18 @@ function getAccessorTypedArrayAndStride(gl, gltf, accessorIndex) {
 WebGL constants. This is the first time we&#39;ve done this. The constants won&#39;t
 change so this is safe to do.</p>
 <p>Now what we have the skins we can go back and add them to the nodes that referenced them.</p>
-<pre class="prettyprint"><code>// Add SkinRenderers to nodes with skins
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Add SkinRenderers to nodes with skins
 for (const {node, mesh, skinNdx} of skinNodes) {
   node.drawables.push(new SkinRenderer(mesh, gltf.skins[skinNdx]));
 }
 </code></pre><p>If we rendered like this we might not see any difference. We need to animate
-some of the nodes. Let&#39;s just go through each node in the <code>Skin</code>, in other words
+some of the nodes. Let&#39;s just go through each node in the <code class="notranslate" translate="no">Skin</code>, in other words
 each joint, and rotate it plus a minus a little on the local X access.</p>
 <p>To do this we&#39;ll save off the original local matrix for each joint. We&#39;ll then
 rotate that original matrix some amount each frame, and using a special
-function, <code>m4.decompose</code>, will will convert the matrix back into position,
+function, <code class="notranslate" translate="no">m4.decompose</code>, will will convert the matrix back into position,
 rotation, scale into the joint.</p>
-<pre class="prettyprint"><code>const origMatrix = new Map();
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const origMatrix = new Map();
 function animSkin(skin, a) {
   for(let i = 0; i &lt; skin.joints.length; ++i) {
     const joint = skin.joints[i];
@@ -1239,8 +1239,8 @@ function animSkin(skin, a) {
   }
 }
 </code></pre><p>and then just before rendering we&#39;ll call that</p>
-<pre class="prettyprint"><code>animSkin(gltf.skins[0], Math.sin(time) * .5);
-</code></pre><p>Note <code>animSkin</code> is mostly a hack. Ideally we&#39;d load an animation some artist
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">animSkin(gltf.skins[0], Math.sin(time) * .5);
+</code></pre><p>Note <code class="notranslate" translate="no">animSkin</code> is mostly a hack. Ideally we&#39;d load an animation some artist
 created OR we&#39;d know the names of specific joints we want to manipulate in code
 in some way. In this case we just to see if our skinning is working and this
 seemed like the easiest way to do it.</p>
@@ -1253,27 +1253,27 @@ seemed like the easiest way to do it.</p>
 <p>A few more notes before we move on</p>
 <p>When I first tried to get this working, as with most programs things didn&#39;t appear on the screen.</p>
 <p>So, the first thing did was go to the end of the skinning shader and add this line</p>
-<pre class="prettyprint"><code>  gl_Position = u_projection * u_view *  a_POSITION;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl_Position = u_projection * u_view *  a_POSITION;
 </code></pre><p>In the fragment shader I changed it to just draw a solid color by adding this at the end</p>
-<pre class="prettyprint"><code>gl_FragColor = vec4(1, 0, 0, 1);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl_FragColor = vec4(1, 0, 0, 1);
 </code></pre><p>This removes all the skinning and just draws the mesh at the origin. I adjusted the camera position until I had a good view.</p>
-<pre class="prettyprint"><code>const cameraPosition = [5, 0, 5];
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const cameraPosition = [5, 0, 5];
 const target = [0, 0, 0];
 </code></pre><p>This showed a silhouette of the killer whale so I knew at least some of the data was working.</p>
 <div class="webgl_center"><img src="resources/skinning-debug-01.png"></div>
 
 <p>Next I made the fragment shader show the normals</p>
-<pre class="prettyprint"><code>gl_FragColor = vec4(normalize(v_normal) * .5 + .5, 1);
-</code></pre><p>Normals go from -1 to 1 so the <code>* .5 + .5</code> adjusts them to 0 to 1 for viewing as colors.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl_FragColor = vec4(normalize(v_normal) * .5 + .5, 1);
+</code></pre><p>Normals go from -1 to 1 so the <code class="notranslate" translate="no">* .5 + .5</code> adjusts them to 0 to 1 for viewing as colors.</p>
 <p>Back in the vertex shader I just passed the normal through</p>
-<pre class="prettyprint"><code>v_normal = a_NORMAL;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v_normal = a_NORMAL;
 </code></pre><p>Which gave me a view like this</p>
 <div class="webgl_center"><img src="resources/skinning-debug-02.png"></div>
 
 <p>I didn&#39;t expect the normals to be bad but it was good to start with something I expected to work and confirm that it does indeed work.</p>
 <p>Next I thought I&#39;d check the weights. All I needed to do was
 pass the weights as normals from the vertex shader</p>
-<pre class="prettyprint"><code>v_normal = a_WEIGHTS_0.xyz * 2. - 1.;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v_normal = a_WEIGHTS_0.xyz * 2. - 1.;
 </code></pre><p>Weights go from 0 to 1 but since the fragment shader is expecting normals I just made the weights go from -1 to 1</p>
 <p>This originally produced a kind of mess of colors. Once I figured out the bug, I got an image like this</p>
 <div class="webgl_center"><img src="resources/skinning-debug-03.png"></div>
@@ -1283,7 +1283,7 @@ the vertices nearest each bone to have a strong color and you&#39;d expect to se
 rings of that color in the vertices around the bone since the weights in that
 area are likely 1.0 or at least all similar.</p>
 <p>Since the original image was so messy I also tried displaying the joint indices with</p>
-<pre class="prettyprint"><code>v_normal = a_JOINTS_0.xyz / (u_numJoints - 1.) * 2. - 1.;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v_normal = a_JOINTS_0.xyz / (u_numJoints - 1.) * 2. - 1.;
 </code></pre><p>The indices go from 0 to numJoints - 1 so the code above would give values from -1 to 1.</p>
 <p>Once things were working I got an image like this</p>
 <div class="webgl_center"><img src="resources/skinning-debug-04.png"></div>
@@ -1291,7 +1291,7 @@ area are likely 1.0 or at least all similar.</p>
 <p>Again it was originally a mess of colors. The image above is what it looked like
 after it was fixed. That&#39;s pretty much what you&#39;d expect to see for weights for
 the killer whale. Rings of color around each bone.</p>
-<p>The bug had to do with how <code>webgl.createBufferInfoFromArrays</code> was figuring out
+<p>The bug had to do with how <code class="notranslate" translate="no">webgl.createBufferInfoFromArrays</code> was figuring out
 the number of components. There were cases where it ignored the one specified,
 tried to guess, and guessed wrong. Once the bug was fixed then I removed those
 changes to the shaders. Note that I left them in the code above commented out if

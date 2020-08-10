@@ -231,10 +231,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 до источника света будет отличаться для каждой точки поверхности.</p>
 <p>Итак, приступим к реализации.</p>
 <p>Для начала нам понадобится положение источника света.</p>
-<pre class="prettyprint"><code>uniform vec3 u_lightWorldPosition;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec3 u_lightWorldPosition;
 </code></pre><p>Ещё нам нужно вычислить мировые координаты поверхности. Для этого мы можем
 умножить наши координаты на мировую матрицу</p>
-<pre class="prettyprint"><code>uniform mat4 u_world;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform mat4 u_world;
 
 ...
 
@@ -243,9 +243,9 @@ vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 </code></pre><p>Далее вычислим вектор от поверхности к источнику света по аналогии с
 направленным освещением, но на этот раз мы будем вычислять вектор для
 каждой точки поверхности.</p>
-<pre class="prettyprint"><code>v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 </code></pre><p>Всё вместе выглядит следующим образом</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 +uniform vec3 u_lightWorldPosition;
@@ -274,10 +274,10 @@ void main() {
 }
 </code></pre><p>Во фрагментном шейдере нам необходимо нормализовать вектор от поверхности
 к источнику света, так как изначально вектор не будет единичным. Мы могли
-бы нормализовать вектор в вершинном шейдере, но так как <code>varying</code>-переменная
+бы нормализовать вектор в вершинном шейдере, но так как <code class="notranslate" translate="no">varying</code>-переменная
 интерполируется между координатами, то вектор перестанем быть единичным
 после интерполяции.</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // Передаётся из вершинного шейдера
 varying vec3 v_normal;
@@ -303,15 +303,15 @@ void main() {
   // на значение света
   gl_FragColor.rgb *= light;
 }
-</code></pre><p>Далее получаем ссылки на <code>u_world</code> и <code>u_lightWorldPosition</code></p>
-<pre class="prettyprint"><code>-  var reverseLightDirectionLocation =
+</code></pre><p>Далее получаем ссылки на <code class="notranslate" translate="no">u_world</code> и <code class="notranslate" translate="no">u_lightWorldPosition</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-  var reverseLightDirectionLocation =
 -      gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
 +  var lightWorldPositionLocation =
 +      gl.getUniformLocation(program, &quot;u_lightWorldPosition&quot;);
 +  var worldLocation =
 +      gl.getUniformLocation(program, &quot;u_world&quot;);
 </code></pre><p>и задаём им значения</p>
-<pre class="prettyprint"><code>  // Задаём значения матрицам
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Задаём значения матрицам
 +  gl.uniformMatrix4fv(
 +      worldLocation, false,
 +      worldMatrix);
@@ -350,7 +350,7 @@ void main() {
 <p>Если нам известно направление от поверхности нашей модели к свету (а нам
 это известно, мы как раз этим и занимались), и если нам известно направление
 поверхности к глазу/наблюдателю/камере (что мы можем вычислить), то мы можем
-сложить эти два вектора, нормализовать эту сумму и получить <code>halfVector</code> - то
+сложить эти два вектора, нормализовать эту сумму и получить <code class="notranslate" translate="no">halfVector</code> - то
 есть вектор, который находится на полпути между ними. Если этот половинный
 вектор и нормаль поверхности совпадают, то перед нами угол идеального
 отражения света. Но как можно узнать, что они совпадают? Нужно воспользоваться
@@ -363,7 +363,7 @@ void main() {
 </p>
 <p>Итак, сначала передадим положение глаза/наблюдателя/камеры, вычислим вектор
 от поверхности к наблюдателю и передадим его во фрагментный шейдер.</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform vec3 u_lightWorldPosition;
@@ -396,11 +396,11 @@ void main() {
 +  // и передаём его во фрагментный шейдер
 +  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
 }
-</code></pre><p>Затем во фрагментном шейдере вычисляем <code>halfVector</code> между вектором
+</code></pre><p>Затем во фрагментном шейдере вычисляем <code class="notranslate" translate="no">halfVector</code> между вектором
 от поверхности до наблюдателя и вектором от поверхности до источника
-света. После этого мы можем вычислить скалярное произведение <code>halfVector</code>
+света. После этого мы можем вычислить скалярное произведение <code class="notranslate" translate="no">halfVector</code>
 и нормали, чтобы узнать, отражается ли свет в наблюдателя.</p>
-<pre class="prettyprint"><code>// Получаем из вершинного шейдера
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Получаем из вершинного шейдера
 varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 +varying vec3 v_surfaceToView;
@@ -429,8 +429,8 @@ void main() {
 +  // Просто добавляем блики
 +  gl_FragColor.rgb += specular;
 }
-</code></pre><p>Наконец, получаем ссылку на <code>u_viewWorldPosition</code> и задаём ей значение.</p>
-<pre class="prettyprint"><code>var lightWorldPositionLocation =
+</code></pre><p>Наконец, получаем ссылку на <code class="notranslate" translate="no">u_viewWorldPosition</code> и задаём ей значение.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var lightWorldPositionLocation =
     gl.getUniformLocation(program, &quot;u_lightWorldPosition&quot;);
 +var viewWorldPositionLocation =
 +    gl.getUniformLocation(program, &quot;u_viewWorldPosition&quot;);
@@ -464,8 +464,8 @@ var cameraMatrix = makeLookAt(camera, target, up);
 <p>Чем ближе красная линия к верхнему краю графика, тем ярче будут блики.
 С увеличением степени уменьшается диапазон ярких бликов, прижимаясь к
 правому краю.</p>
-<p>Назовём эту степень <code>shininess</code> и добавим её в наш шейдер.</p>
-<pre class="prettyprint"><code>uniform vec4 u_color;
+<p>Назовём эту степень <code class="notranslate" translate="no">shininess</code> и добавим её в наш шейдер.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec4 u_color;
 +uniform float u_shininess;
 
 ...
@@ -479,7 +479,7 @@ var cameraMatrix = makeLookAt(camera, target, up);
 в степень негативного значения не определено в WebGL, что не очень-то хорошо.
 Поэтому в случае отрицательного значения мы просто задаём ему значение 0.0.</p>
 <p>Само собой, нам нужно получить ссылку на переменную и задать ей значение</p>
-<pre class="prettyprint"><code>+var shininessLocation = gl.getUniformLocation(program, &quot;u_shininess&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+var shininessLocation = gl.getUniformLocation(program, &quot;u_shininess&quot;);
 
 ...
 
@@ -493,10 +493,10 @@ gl.uniform1f(shininessLocation, shininess);
 
 </p>
 <p>Последнее, о чём бы я хотел поговорить в этой статье, - это цвета света.</p>
-<p>До этого момента мы умножали <code>light</code> на цвет буквы F. Но мы также могли
+<p>До этого момента мы умножали <code class="notranslate" translate="no">light</code> на цвет буквы F. Но мы также могли
 бы задать цвет самого источника света, если бы нам было нужно цветное
 освещение.</p>
-<pre class="prettyprint"><code>uniform vec4 u_color;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec4 u_color;
 uniform float u_shininess;
 +uniform vec3 u_lightColor;
 +uniform vec3 u_specularColor;
@@ -511,12 +511,12 @@ uniform float u_shininess;
 *  gl_FragColor.rgb += specular * u_specularColor;
 }
 </code></pre><p>и конечно же</p>
-<pre class="prettyprint"><code>+  var lightColorLocation =
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+  var lightColorLocation =
 +      gl.getUniformLocation(program, &quot;u_lightColor&quot;);
 +  var specularColorLocation =
 +      gl.getUniformLocation(program, &quot;u_specularColor&quot;);
 </code></pre><p>и</p>
-<pre class="prettyprint"><code>// задаём цвет освещения
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// задаём цвет освещения
 +  gl.uniform3fv(lightColorLocation, m4.normalize([1, 0.6, 0.6]));  // красный свет
 // заадаём цвет бликов
 +  gl.uniform3fv(specularColorLocation, m4.normalize([1, 0.6, 0.6]));  // красный свет
@@ -528,7 +528,7 @@ uniform float u_shininess;
 </p>
 <p>Далее в программе - <a href="webgl-3d-lighting-spot.html">прожектор</a>.</p>
 <div class="webgl_bottombar">
-<h3>Почему <code>pow(negative, power)</code> не определено?</h3>
+<h3>Почему <code class="notranslate" translate="no">pow(negative, power)</code> не определено?</h3>
 <p>Что означает следующее?</p>
 <div class="webgl_center"><pre class="glocal-center-content">pow(5, 2)</pre></div>
 <p>Это можно представить как</p>

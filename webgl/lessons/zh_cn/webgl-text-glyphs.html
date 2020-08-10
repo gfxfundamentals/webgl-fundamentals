@@ -218,7 +218,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 那个技术非常常用，并且常用在多人游戏角色头顶名称中，由于那个名字很少改变所以很好用。</p>
 <p>假如你想在UI中绘制很多文字并且经常改变，接着<a href="webgl-text-texture.html">上文</a>
 的例子我们可以为每个字母制作一个纹理。让我们修改代码实现。</p>
-<pre class="prettyprint"><code>+var names = [
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+var names = [
 +  &quot;anna&quot;,   // 0
 +  &quot;colin&quot;,  // 1
 +  &quot;james&quot;,  // 2
@@ -268,7 +268,7 @@ var textTextures = [
 ].map(function(name) {
 *  var textCanvas = makeTextCanvas(name, 10, 26);
 </code></pre><p>然后为名字中每个字母渲染一个矩形而不是原来的只用一个矩形。</p>
-<pre class="prettyprint"><code>// 绘制文字设置
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 绘制文字设置
 +// 因为每个字母使用的是相通的属性和程序
 +// 我们只需要设置一次
 +gl.useProgram(textProgramInfo.program);
@@ -326,7 +326,7 @@ textPositions.forEach(function(pos, ndx) {
 的例子中讲到过纹理图集。</p>
 <p>我在网上找到了<a href="https://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta">一个简单的开源字体纹理图集</a>。
 <img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../../resources/8x8-font.png" /></p>
-<pre class="prettyprint"><code>var fontInfo = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var fontInfo = {
   letterHeight: 8,
   spaceWidth: 8,
   spacing: -1,
@@ -376,7 +376,7 @@ textPositions.forEach(function(pos, ndx) {
   },
 };
 </code></pre><p>然后我们<a href="webgl-3d-textures.html">像之前加载图像一样加载这个纹理</a>。</p>
-<pre class="prettyprint"><code>// 创建一个纹理
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 创建一个纹理
 var glyphTex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, glyphTex);
 // 使用 1×1 蓝色像素像素填充纹理
@@ -397,7 +397,7 @@ image.addEventListener(&#39;load&#39;, function() {
 });
 </code></pre><p>现在我们有了一个包含字形的纹理，可以在运行时给每个字形创建矩形，这些顶点将使用纹理坐标选择确切的字形。</p>
 <p>给定字符串创建顶点。</p>
-<pre class="prettyprint"><code>function makeVerticesForString(fontInfo, s) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function makeVerticesForString(fontInfo, s) {
   var len = s.length;
   var numVertices = len * 6;
   var positions = new Float32Array(numVertices * 2);
@@ -465,7 +465,7 @@ image.addEventListener(&#39;load&#39;, function() {
   };
 }
 </code></pre><p>我们还要手动创建一个 bufferInfo(<a href="webgl-drawing-multiple-things.html">如果你不知道 bufferInfo 是什么可以看看这里</a>)。</p>
-<pre class="prettyprint"><code>// 手动创建一个 bufferInfo
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 手动创建一个 bufferInfo
 var textBufferInfo = {
   attribs: {
     a_position: { buffer: gl.createBuffer(), numComponents: 2, },
@@ -474,7 +474,7 @@ var textBufferInfo = {
   numElements: 0,
 };
 </code></pre><p>然后需要在渲染文字时更新缓冲，我们也让文字动态变化</p>
-<pre class="prettyprint"><code>textPositions.forEach(function(pos, ndx) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">textPositions.forEach(function(pos, ndx) {
 
   var name = names[ndx];
 +  var s = name + &quot;:&quot; + pos[0].toFixed(0) + &quot;,&quot; + pos[1].toFixed(0) + &quot;,&quot; + pos[2].toFixed(0);
@@ -518,11 +518,11 @@ var textBufferInfo = {
 <p>这就是使用字形纹理图集的基本原理，还有几个明显值得添加或改进的地方。</p>
 <ul>
 <li><p>重用相同的序列</p>
-<p>当前 <code>makeVerticesForString</code> 在每次调用的时候都创建新的 Float32Arrays。
+<p>当前 <code class="notranslate" translate="no">makeVerticesForString</code> 在每次调用的时候都创建新的 Float32Arrays。
 这最终可能会导致垃圾回收停顿。重用相同的序列可能会好一些，如果序列不够大可以放大并保持大小不变。</p>
 </li>
 <li><p>添加回车支持</p>
-<p>检测是否是 <code>\n</code> 然后在创建顶点时换行，这样容易制作文字段落。</p>
+<p>检测是否是 <code class="notranslate" translate="no">\n</code> 然后在创建顶点时换行，这样容易制作文字段落。</p>
 </li>
 <li><p>添加各种格式化支持</p>
 <p>如果你想居中或对齐文字就可以添加这个功能。</p>

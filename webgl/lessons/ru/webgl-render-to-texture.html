@@ -222,7 +222,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 теперь настало время ознакомиться с ней более детально.</p>
 <p>Ничего сложного в рендеринге в текстуру нет. Нам нужно создать текстуру
 определённого размера.</p>
-<pre class="prettyprint"><code>// текстура для рендеринга
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// текстура для рендеринга
 const targetTextureWidth = 256;
 const targetTextureHeight = 256;
 const targetTexture = gl.createTexture();
@@ -245,14 +245,14 @@ gl.bindTexture(gl.TEXTURE_2D, targetTexture);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 }
-</code></pre><p>Обратите внимание, что <code>data</code> равняется <code>null</code>, потому что нам не нужно передавать
+</code></pre><p>Обратите внимание, что <code class="notranslate" translate="no">data</code> равняется <code class="notranslate" translate="no">null</code>, потому что нам не нужно передавать
 данные. Нам лишь нужно, чтобы WebGL выделил память под текстуру.</p>
 <p>Далее создаём фреймбуфер. Фреймбуфер - это просто набор вложений, которые могут быть либо текстурой,
 либо рендербуфером. С текстурами мы уже знакомы. Рендербуферы очень похожи на текстуры, но они
 поддерживают форматы и параметры, которыми текстуры не обладают. Также, в отличие от текстур, вы
 не сможете использовать напрямую рендербуфер в качестве входных данных для шейдера.</p>
 <p>Давайте создадим фреймбуфер и прикрепим нашу текстуру.</p>
-<pre class="prettyprint"><code>// создаём и привязываем фреймбуфер
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// создаём и привязываем фреймбуфер
 const fb = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
@@ -261,14 +261,14 @@ const attachmentPoint = gl.COLOR_ATTACHMENT0;
 gl.framebufferTexture2D(
     gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 </code></pre><p>Как в случае с текстурами и буферами, после создания фреймбуфера нам нужно
-прикрепить его к точке привязки <code>FRAMEBUFFER</code>. После этого все функции будут
+прикрепить его к точке привязки <code class="notranslate" translate="no">FRAMEBUFFER</code>. После этого все функции будут
 обращаться к фреймбуферу, который привязан к этой точке.</p>
-<p>После привязки фреймбуфера каждый раз, когда мы вызываем функции <code>gl.clear</code>,
-<code>gl.drawArrays</code> или <code>gl.drawElements</code>, WebGL будет выполнять рендеринг в нашу
+<p>После привязки фреймбуфера каждый раз, когда мы вызываем функции <code class="notranslate" translate="no">gl.clear</code>,
+<code class="notranslate" translate="no">gl.drawArrays</code> или <code class="notranslate" translate="no">gl.drawElements</code>, WebGL будет выполнять рендеринг в нашу
 текстуру вместо рендеринга в canvas.</p>
 <p>Теперь мы поместим код, выполняющий рендеринг, в отдельную функцию, чтобы мы могли
 вызвать её дважды - один раз для рендеринга в текстуру, второй раз в canvas.</p>
-<pre class="prettyprint"><code>function drawCube(aspect) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawCube(aspect) {
   // говорим использовать нашу программу (пару шейдеров)
   gl.useProgram(program);
 
@@ -332,11 +332,11 @@ gl.framebufferTexture2D(
   // отрисовываем геометрию
   gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
 }
-</code></pre><p>Обратите внимание, что нам нужно передать <code>aspect</code> для вычисления проекционной
+</code></pre><p>Обратите внимание, что нам нужно передать <code class="notranslate" translate="no">aspect</code> для вычисления проекционной
 матрицы, так как соотношение сторон целевой текстуры отличается от соотношения
 сторон canvas.</p>
 <p>Вот пример вызова:</p>
-<pre class="prettyprint"><code>// отрисовка сцены
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// отрисовка сцены
 function drawScene(time) {
 
   ...
@@ -386,7 +386,7 @@ function drawScene(time) {
 </div>
 
 </p>
-<p><strong>ЧРЕЗВЫЧАЙНО ВАЖНО</strong> вызвать функцию <code>gl.viewport</code> и передать ей размер окна,
+<p><strong>ЧРЕЗВЫЧАЙНО ВАЖНО</strong> вызвать функцию <code class="notranslate" translate="no">gl.viewport</code> и передать ей размер окна,
 куда будет выполняться рендеринг. В нашем случае мы сначала отрисовываем в
 текстуру, поэтому подстраиваем область отрисовки под размеры текстуры. Во второй
 раз мы отрисовываем в canvas, поэтому размеры области отрисовки будут совпадать
@@ -394,11 +394,11 @@ function drawScene(time) {
 <p>То же самое и при расчёте проекционной матрицы. Нам нужно использовать подходящее
 соотношение сторон при рендеринге. Я потратил бесчисленное множество часов на
 отладку, пытаясь понять, почему объекты отрисовываются таким странным образом
-или не отрисовываются вовсе, чтобы в итоге обнаружить, что я забыл вызвать <code>gl.viewport</code>
+или не отрисовываются вовсе, чтобы в итоге обнаружить, что я забыл вызвать <code class="notranslate" translate="no">gl.viewport</code>
 и вычислить правильное соотношение сторон. Из опасений забыть выполнить вызов я
-стараюсь никогда не использовать напрямую <code>gl.bindFramebuffer</code> в своём коде. Вместо
+стараюсь никогда не использовать напрямую <code class="notranslate" translate="no">gl.bindFramebuffer</code> в своём коде. Вместо
 этого я пишу функцией, в которой есть следующие строки:</p>
-<pre class="prettyprint"><code>function bindFrambufferAndSetViewport(fb, width, height) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function bindFrambufferAndSetViewport(fb, width, height) {
    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
    gl.viewport(0, 0, width, height);
 }
@@ -418,7 +418,7 @@ function drawScene(time) {
 в том, что у нашего фреймбуфера отсутствует глубина, а у canvas глубина есть.</p>
 <p><img class="webgl_center" src="../resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" /></p>
 <p>Для добавления буфера глубины нам необходимо его создать и прикрепить к фреймбуферу.</p>
-<pre class="prettyprint"><code>// создаём рендербуфер глубины
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// создаём рендербуфер глубины
 const depthBuffer = gl.createRenderbuffer();
 gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
 
@@ -438,14 +438,14 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 <a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS">В соответствие со спецификацией</a>,
 единственными поддерживаемыми комбинациями являются:</p>
 <ul>
-<li><code>COLOR_ATTACHMENT0</code> = текстура <code>RGBA/UNSIGNED_BYTE</code></li>
-<li><code>COLOR_ATTACHMENT0</code> = текстура <code>RGBA/UNSIGNED_BYTE</code> + <code>DEPTH_ATTACHMENT</code> = рендербуфер <code>DEPTH_COMPONENT16</code></li>
-<li><code>COLOR_ATTACHMENT0</code> = текстура <code>RGBA/UNSIGNED_BYTE</code> + <code>DEPTH_STENCIL_ATTACHMENT</code> = рендербуфер <code>DEPTH_STENCIL</code></li>
+<li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = текстура <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code></li>
+<li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = текстура <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> + <code class="notranslate" translate="no">DEPTH_ATTACHMENT</code> = рендербуфер <code class="notranslate" translate="no">DEPTH_COMPONENT16</code></li>
+<li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = текстура <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> + <code class="notranslate" translate="no">DEPTH_STENCIL_ATTACHMENT</code> = рендербуфер <code class="notranslate" translate="no">DEPTH_STENCIL</code></li>
 </ul>
 <p>Для прочих комбинаций вам необходимо проверить поддержку системой/видеокартой/драйвером/браузером пользователя той
 или иной комбинации. Для проверки достаточно создать фреймбуфер, создать и прикрепить вложения, а затем вызвать:</p>
-<pre class="prettyprint"><code>var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-</code></pre><p>При статусе <code>FRAMEBUFFER_COMPLETE</code> комбинация вложений работает у данного пользователя. Иначе вам необходимо
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+</code></pre><p>При статусе <code class="notranslate" translate="no">FRAMEBUFFER_COMPLETE</code> комбинация вложений работает у данного пользователя. Иначе вам необходимо
 уведомить пользователя о неподдерживаемой функции, либо откатиться к другому методу.</p>
 <p>А если вы ещё не читали <a href="webgl-less-code-more-fun.html">статью об организации кода</a>, рекомендую с ней ознакомиться.</p>
 <div class="webgl_bottombar">

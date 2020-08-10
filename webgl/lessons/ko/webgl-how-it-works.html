@@ -218,7 +218,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 첫 번째는 vertex(또는 데이터 스트림)를 clip 공간의 vertex로 처리합니다.
 두 번째는 처음한 것을 기반으로 픽셀을 그립니다.</p>
 <p>호출할 때</p>
-<pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var primitiveType = gl.TRIANGLES;
 var offset = 0;
 var count = 9;
 gl.drawArrays(primitiveType, offset, count);
@@ -227,19 +227,19 @@ gl.drawArrays(primitiveType, offset, count);
 <p>왼쪽에는 당신이 제공한 데이터가 있습니다.
 vertex shader는 <a href="webgl-shaders-and-glsl.html">GLSL</a>로 작성하는 함수인데요.
 이 함수는 각 vertex마다 한 번씩 호출됩니다.
-몇몇 수학적 계산을 하고 현재 vertex의 clip 공간 값을 가진 특수 변수 <code>gl_Position</code>를 선언합니다.
+몇몇 수학적 계산을 하고 현재 vertex의 clip 공간 값을 가진 특수 변수 <code class="notranslate" translate="no">gl_Position</code>를 선언합니다.
 GPU는 이 값을 내부적으로 저장합니다.</p>
-<p><code>삼각형</code>을 그린다고 가정하면, 첫 부분에서 꼭지점 3개를 생성할 때마다 GPU는 이걸 이용해 삼각형을 만듭니다.
+<p><code class="notranslate" translate="no">삼각형</code>을 그린다고 가정하면, 첫 부분에서 꼭지점 3개를 생성할 때마다 GPU는 이걸 이용해 삼각형을 만듭니다.
 어떤 픽셀이 삼각형의 점 3개에 해당하는지 확인하고, 삼각형을 rasterization(=&quot;픽셀에 그리기&quot;) 하는데요.
 각 픽셀마다 fragment shader를 호출해서 어떤 색상으로 할지 묻습니다.
-fragment shader는 특수 변수 <code>gl_FragColor</code>를 픽셀에 필요한 색상으로 설정해야 합니다.</p>
+fragment shader는 특수 변수 <code class="notranslate" translate="no">gl_FragColor</code>를 픽셀에 필요한 색상으로 설정해야 합니다.</p>
 <p>모든 것들이 흥미롭지만 예제에서 볼 수 있듯이 fragment shader는 픽셀당 아주 적은 정보를 가지고 있습니다.
 운 좋게도 우리는 더 많은 정보를 fragment shader에 넘길 수 있습니다.
 vertex shader에서 fragment shader로 전달하고자 하는 각 값에 “varying”을 정의하는건데요.</p>
 <p>간단한 예시로, 우리가 직접 계산한 clip 공간 좌표를 vertex shader에서 fragment shader로 전달해봅시다.</p>
 <p>간단하게 삼각형을 그려볼 건데요.
 <a href="webgl-2d-matrices.html">이전 예제</a>에서 계속해서 사각형을 삼각형으로 바꿔봅시다.</p>
-<pre class="prettyprint"><code>// 삼각형을 정의한 값들로 버퍼 채우기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 삼각형을 정의한 값들로 버퍼 채우기
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -252,7 +252,7 @@ function setGeometry(gl) {
   );
 }
 </code></pre><p>그리고 꼭지점 3개만 그립니다.</p>
-<pre class="prettyprint"><code>// scene 그리기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// scene 그리기
 function drawScene() {
   ...
   // geometry 그리기
@@ -262,7 +262,7 @@ function drawScene() {
   gl.drawArrays(primitiveType, offset, count);
 }
 </code></pre><p>다음으로 vertex shader에서 fragment shader로 데이터를 넘기기 위해 <em>varying</em>을 선언합니다.</p>
-<pre class="prettyprint"><code>varying vec4 v_color;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">varying vec4 v_color;
 ...
 void main() {
   // 위치에 행렬 곱하기
@@ -274,7 +274,7 @@ void main() {
 *  v_color = gl_Position * 0.5 + 0.5;
 }
 </code></pre><p>그런 다음 fragment shader에 같은 <em>varying</em>을 선언합니다.</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 *varying vec4 v_color;
 
@@ -359,7 +359,7 @@ table.vertex_table {
 <p>또한 vertex shader에 더 많은 데이터를 넘길 수 있고 그것을 fragment shader에 전달할 수 있습니다.
 예를들어 2가지 색을 가진 삼각형 2개로 이루어진 사각형을 그린다고 합시다.
 이를 위해 vertex shader에 또다른 attribute를 추가하면 더 많은 데이터를 넘기고 그 데이터를 fragment shader에 직접 전달할 수 있습니다.</p>
-<pre class="prettyprint"><code>attribute vec2 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_position;
 +attribute vec4 a_color;
 ...
 varying vec4 v_color;
@@ -370,7 +370,7 @@ void main() {
 *  v_color = a_color;
 }
 </code></pre><p>이제 WebGL이 사용할 수 있게 색상들을 제공해야 합니다.</p>
-<pre class="prettyprint"><code>// vertex 데이터가 필요한 곳 탐색
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// vertex 데이터가 필요한 곳 탐색
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 ...
@@ -406,7 +406,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +  );
 +}
 </code></pre><p>렌더링할 때 색상 attribute 설정</p>
-<pre class="prettyprint"><code>+gl.enableVertexAttribArray(colorLocation);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+gl.enableVertexAttribArray(colorLocation);
 +
 +// 색상 buffer 할당
 +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
@@ -426,7 +426,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +    offset
 +);
 </code></pre><p>그리고 삼각형 2개의 꼭지점 6개를 계산하도록 count를 조정</p>
-<pre class="prettyprint"><code>// geometry 그리기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// geometry 그리기
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
 *var count = 6;
@@ -442,7 +442,7 @@ gl.drawArrays(primitiveType, offset, count);
 하지만 varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보간됩니다.
 이건 각 삼각형의 vertex 3개에 모두 같은 색상을 사용했기 때문인데요.
 만약에 각각의 색상을 다르게 하면 보간이 되는 것을 볼 수 있습니다.</p>
-<pre class="prettyprint"><code>// 사각형을 만드는 삼각형 2개의 색상으로 buffer 채우기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 사각형을 만드는 삼각형 2개의 색상으로 buffer 채우기
 function setColors(gl) {
   // 모든 vertex를 다른 색으로 만들기
   gl.bufferData(
@@ -469,24 +469,24 @@ function setColors(gl) {
 <a href="webgl-image-processing.html">이미지 처리 예제</a>를 살펴보면 texture 좌료를 전달하기 위해 추가적인 attribute를 전달하는 것을 볼 수 있습니다,</p>
 <h2 id="buffer-attribute-">buffer와 attribute 명령은 어떤 일을 하나요?</h2>
 <p>Buffer는 vertex 데이터를 GPU로 가져오는 방법입니다.
-<code>gl.createBuffer</code>는 buffer를 생성합니다.
-<code>gl.bindBuffer</code>는 해당 buffer를 작업할 buffer로 설정합니다.
-<code>gl.bufferData</code>는 데이터를 buffer로 복사합니다.
+<code class="notranslate" translate="no">gl.createBuffer</code>는 buffer를 생성합니다.
+<code class="notranslate" translate="no">gl.bindBuffer</code>는 해당 buffer를 작업할 buffer로 설정합니다.
+<code class="notranslate" translate="no">gl.bufferData</code>는 데이터를 buffer로 복사합니다.
 보통 초기화할 때 위 작업들이 이루어집니다.</p>
 <p>Buffer에 데이터가 있으면 WebGL에 어떻게 데이터를 가져오고 vertex shader의 attribute에 제공할지 알려줘야 합니다.</p>
 <p>이를 위해, 먼저 WebGL에게 어디에 attribute를 할당했는지 물어봐야 합니다.
 예를들어 위 코드에서 우리는</p>
-<pre class="prettyprint"><code>// vertex 데이터가 어디로 가야하는지 탐색
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// vertex 데이터가 어디로 가야하는지 탐색
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 </code></pre><p>이것도 보통 초기화할 때 수행됩니다.</p>
 <p>attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실행해야 하는데요.</p>
-<pre class="prettyprint"><code>gl.enableVertexAttribArray(location);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enableVertexAttribArray(location);
 </code></pre><p>이 명령어는 WebGL에게 buffer에서 데이터 받으라고 알려줍니다.</p>
-<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
 </code></pre><p>이 명령어는 buffer를 ARRAY_BUFFER bind point에 할당합니다.
 이건 WebGL 내부에 있는 전역 변수입니다.</p>
-<pre class="prettyprint"><code>gl.vertexAttribPointer(
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.vertexAttribPointer(
     location,
     numComponents,
     typeOfData,
@@ -495,7 +495,7 @@ var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
     offsetIntoBuffer
 );
 </code></pre><p>그리고 이 명령어는 WebGL에게 현재 ARRAY_BUFFER bind point에 할당된 buffer에서 데이터를 가져오고,
-vertex 당 구성 요소들이 몇 개인지 (1 - 4), 어떤 데이터 종류인지 (<code>BYTE</code>, <code>FLOAT</code>, <code>INT</code>, <code>UNSIGNED_SHORT</code>, etc...),
+vertex 당 구성 요소들이 몇 개인지 (1 - 4), 어떤 데이터 종류인지 (<code class="notranslate" translate="no">BYTE</code>, <code class="notranslate" translate="no">FLOAT</code>, <code class="notranslate" translate="no">INT</code>, <code class="notranslate" translate="no">UNSIGNED_SHORT</code>, etc...),
 한 데이터 조각에서 다음으로 건너가는데 몇 바이트를 넘어야 하는지 나타내는 stride, buffer에서 데이터까지의 거리를 나타내는 offset 등을 알려줍니다.</p>
 <p>구성 요소의 수는 항상 1에서 4사이 입니다.</p>
 <p>만약 데이터의 type 당 버퍼 한 개를 쓴다면 stride와 offset는 항상 0일 수 있습니다.

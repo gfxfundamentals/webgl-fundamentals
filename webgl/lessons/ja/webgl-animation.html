@@ -221,7 +221,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ということを「継続的にやる」必要がある。
 実際のところ、これはWebGLに限定した話ではない。</p>
 <p>以前書いたサンプルのひとつを例としてアニメーションを実装するとしたら、このようになる。</p>
-<pre class="prettyprint"><code>*var fieldOfViewRadians = degToRad(60);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*var fieldOfViewRadians = degToRad(60);
 *var rotationSpeed = 1.2;
 
 *requestAnimationFrame(drawScene);
@@ -243,7 +243,7 @@ function drawScene() {
 
 </p>
 <p>一見よさそうに見えるが、このやり方には隠れた問題がある。
-上のコードでは<code>rotationSpeed / 60.0</code>としている。
+上のコードでは<code class="notranslate" translate="no">rotationSpeed / 60.0</code>としている。
 60.0で割っているのは、ブラウザがrequestAnimationFrameの処理を1秒あたり60回実行できることを
 想定しているためである。一般的なブラウザ環境はこの想定を満たしているはずだ。</p>
 <p>しかし、この想定が常に有効とは限らない。
@@ -270,13 +270,13 @@ function drawScene() {
 <p>アニメーションを「フレームレート非依存にする」ということは、
 「あるフレームと次のフレームの間にかかる時間」を計算して、
 その時間を元に「画面に表示される物体をどれくらい動かすか」を計算する、ということである。</p>
-<p>まず、この時間を知る必要がある。幸いなことに<code>requestAnimationFrame</code>を使えば、
+<p>まず、この時間を知る必要がある。幸いなことに<code class="notranslate" translate="no">requestAnimationFrame</code>を使えば、
 この時間を「ページをロードしてからコールバックするまでにかかった時間」として知ることができる。</p>
 <p>私は時間を秒単位で扱うのがわかりやすいと思うが、
-<code>requestAnimationFrame</code>は時間をミリ秒(1秒の1/1000)単位で扱うので、
+<code class="notranslate" translate="no">requestAnimationFrame</code>は時間をミリ秒(1秒の1/1000)単位で扱うので、
 これに0.001を掛けている。</p>
 <p>以上のことから、フレームとフレームの間の小さな経過時間(deltaTime)はこのようにして求められる。</p>
-<pre class="prettyprint"><code>*var then = 0;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*var then = 0;
 
 requestAnimationFrame(drawScene);
 
@@ -290,15 +290,15 @@ requestAnimationFrame(drawScene);
 *  then = now;
 
    ...
-</code></pre><p>「フーレム間に何秒かかったか」が<code>deltaTime</code>として得られたので、次はこれを元にして
+</code></pre><p>「フーレム間に何秒かかったか」が<code class="notranslate" translate="no">deltaTime</code>として得られたので、次はこれを元にして
 画面上で「『1秒あたりどの程度(何単位)』動くべきか」について考えることができる。
-今回の場合「1秒あたり、<code>rotationSpeed</code>を、1.2単位動かす」ことにしている。
+今回の場合「1秒あたり、<code class="notranslate" translate="no">rotationSpeed</code>を、1.2単位動かす」ことにしている。
 動きの単位は好きなように決めればよいが、
 今回は「1秒あたり1ラジアン回転する動きを1単位とする」ことにしたので、
 1.2なら「1秒あたり1.2ラジアン回転する」、という意味になる。
 1.2ラジアンは1/5回転に相当するので、表現を変えれば「一回りに5秒ほどかけて回転する」という意味になる。
 フレームレートに関わらず「一回りに5秒ほどかけて回転する」のである。</p>
-<pre class="prettyprint"><code>*    rotation[1] += rotationSpeed * deltaTime;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*    rotation[1] += rotationSpeed * deltaTime;
 </code></pre><p>以上を実装した結果がこれである。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation.html"></iframe>
@@ -313,23 +313,23 @@ requestAnimationFrame(drawScene);
 <div class="webgl_bottombar">
 <h3>setIntervalやsetTimeoutは禁止！</h3>
 <p>過去にJavaScriptでアニメーションするプログラムを書いた経験がある読者は、
-描画関数を呼び出す際に<code>setInterval</code>や<code>setTimeout</code>といったAPIを
+描画関数を呼び出す際に<code class="notranslate" translate="no">setInterval</code>や<code class="notranslate" translate="no">setTimeout</code>といったAPIを
 使ったことがあると思う。
 </p><p>
 アニメーションを実現する目的では、
-<code>setInterval</code>と<code>setTimeout</code>には共通した問題がふたつある。
+<code class="notranslate" translate="no">setInterval</code>と<code class="notranslate" translate="no">setTimeout</code>には共通した問題がふたつある。
 ひとつめは、これらのAPIは「ブラウザの描画と関係なく実行される」という点である。
 これらのAPIは、ブラウザがフレームを書き始めるタイミングと関係なく実行されるので、
 ユーザー環境のマシンと同期のしようがないない。
-<code>setInterval</code>や<code>setTimeout</code>を使って秒間60フレームの想定で
+<code class="notranslate" translate="no">setInterval</code>や<code class="notranslate" translate="no">setTimeout</code>を使って秒間60フレームの想定で
 描画しようとしているのにマシンが別のフレームレートで動作していた場合、
 「同期ずれ」が起こる可能性がある。
 </p><p>
-もうひとつの問題は「ブラウザは<code>setInterval</code>や<code>setTimeout</code>が
+もうひとつの問題は「ブラウザは<code class="notranslate" translate="no">setInterval</code>や<code class="notranslate" translate="no">setTimeout</code>が
 どういう目的で使用されているか知ることができない」という点である。
 これらのAPIを使う限り「選択したタブが最前面にない」などの理由でページが非表示になっていても、
 コードが実行中であっても、ブラウザはそのことを知ることができない。
-<code>setInterval</code>や<code>setTimeout</code>が
+<code class="notranslate" translate="no">setInterval</code>や<code class="notranslate" translate="no">setTimeout</code>が
 メール受信や新規Tweetの確認のような「非表示の状況でも実行し続けてほしい用途」
 で使われているかも知れない。が、ブラウザーはそれを知ることができない。
 「新規メッセージを確認する」のは数秒に1回実行するのが適切だろうが、
@@ -337,7 +337,7 @@ requestAnimationFrame(drawScene);
 同様に「非表示状態のタブ上のページでアニメーションを実行し続ける」のは適切ではない。
 ユーザーのマシンにDoS攻撃をするようなものである。
 </p><p>
-<code>requestAnimationFrame</code>はこのふたつの問題を解決する。
+<code class="notranslate" translate="no">requestAnimationFrame</code>はこのふたつの問題を解決する。
 このAPIを使えば画面の同期に合わせてアニメーションが描画されるし、
 ページが表示されていない時はそもそも実行されない。
 </p>

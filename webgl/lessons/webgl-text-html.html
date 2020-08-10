@@ -226,7 +226,7 @@ that stays in the same position.</p>
 them overlap.</p>
 <p>For example: First make a container and put both a canvas and some HTML to
 be overlaid inside the container.</p>
-<pre class="prettyprint"><code>&lt;div class=&quot;container&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;div class=&quot;container&quot;&gt;
   &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
   &lt;div id=&quot;overlay&quot;&gt;
     &lt;div&gt;Time: &lt;span id=&quot;time&quot;&gt;&lt;/span&gt;&lt;/div&gt;
@@ -234,7 +234,7 @@ be overlaid inside the container.</p>
   &lt;/div&gt;
 &lt;/div&gt;
 </code></pre><p>Next setup the CSS so that the canvas and the HTML overlap</p>
-<pre class="prettyprint"><code>.container {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">.container {
     position: relative;
 }
 #overlay {
@@ -244,7 +244,7 @@ be overlaid inside the container.</p>
 }
 </code></pre><p>Now look up those elements at init time and create or lookup the areas you want to
 change.</p>
-<pre class="prettyprint"><code>// look up the elements we want to affect
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// look up the elements we want to affect
 var timeElement = document.querySelector(&quot;#time&quot;);
 var angleElement = document.querySelector(&quot;#angle&quot;);
 
@@ -256,7 +256,7 @@ var angleNode = document.createTextNode(&quot;&quot;);
 timeElement.appendChild(timeNode);
 angleElement.appendChild(angleNode);
 </code></pre><p>Finally update the nodes when rendering</p>
-<pre class="prettyprint"><code>function drawScene() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
     ...
 
     // convert rotation from radians to degrees
@@ -277,10 +277,10 @@ angleElement.appendChild(angleNode);
 </p>
 <p>Notice how I put spans inside the divs specifically for the parts I wanted to change. I&#39;m making the
 assumption here that that&#39;s faster than just using the divs with no spans and saying something like</p>
-<pre class="prettyprint"><code>timeNode.value = &quot;Time &quot; + clock.toFixed(2);
-</code></pre><p>Also I&#39;m using text nodes by calling <code>node = document.createTextNode()</code>
-and later <code>node.nodeValue = someMsg</code>.  I could also use
-<code>someElement.innerHTML = someHTML</code>.  That would be more flexible because
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">timeNode.value = &quot;Time &quot; + clock.toFixed(2);
+</code></pre><p>Also I&#39;m using text nodes by calling <code class="notranslate" translate="no">node = document.createTextNode()</code>
+and later <code class="notranslate" translate="no">node.nodeValue = someMsg</code>.  I could also use
+<code class="notranslate" translate="no">someElement.innerHTML = someHTML</code>.  That would be more flexible because
 you could insert arbitrary HTML strings though it might be slightly slower
 since the browser has to create and destroy nodes each time you set it.
 Which is better is up to you.</p>
@@ -304,12 +304,12 @@ You get all that essentially for free by using HTML.</p>
 something you&#39;re rendering.  We can do that in HTML as well.</p>
 <p>In this case we&#39;ll again make a container with the canvas and another
 container for our moving HTML</p>
-<pre class="prettyprint"><code>&lt;div class=&quot;container&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;div class=&quot;container&quot;&gt;
   &lt;canvas id=&quot;canvas&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
   &lt;div id=&quot;divcontainer&quot;&gt;&lt;/div&gt;
 &lt;/div&gt;
 </code></pre><p>And we&#39;ll setup the CSS</p>
-<pre class="prettyprint"><code>.container {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">.container {
     position: relative;
     overflow: none;
     width: 400px;
@@ -330,16 +330,16 @@ container for our moving HTML</p>
 .floating-div {
     position: absolute;
 }
-</code></pre><p>The <code>position: absolute;</code> part makes the <code>#divcontainer</code> be positioned in
-absolute terms relative to the first parent with another <code>position:
-relative</code> or <code>position: absolute</code> style.  In this case that&#39;s the
-container that both the canvas and the <code>#divcontainer</code> are in.</p>
-<p>The <code>left: 0px; top: 0px</code> makes the <code>#divcontainer</code> align with everything.
-The <code>z-index: 10</code> makes it float over the canvas.  And the <code>overflow:
+</code></pre><p>The <code class="notranslate" translate="no">position: absolute;</code> part makes the <code class="notranslate" translate="no">#divcontainer</code> be positioned in
+absolute terms relative to the first parent with another <code class="notranslate" translate="no">position:
+relative</code> or <code class="notranslate" translate="no">position: absolute</code> style.  In this case that&#39;s the
+container that both the canvas and the <code class="notranslate" translate="no">#divcontainer</code> are in.</p>
+<p>The <code class="notranslate" translate="no">left: 0px; top: 0px</code> makes the <code class="notranslate" translate="no">#divcontainer</code> align with everything.
+The <code class="notranslate" translate="no">z-index: 10</code> makes it float over the canvas.  And the <code class="notranslate" translate="no">overflow:
 hidden</code> makes its children get clipped.</p>
-<p>Finally <code>.floating-div</code> will be used for the positionable div we create.</p>
+<p>Finally <code class="notranslate" translate="no">.floating-div</code> will be used for the positionable div we create.</p>
 <p>So now we need to look up the divcontainer, create a div and append it.</p>
-<pre class="prettyprint"><code>// look up the divcontainer
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// look up the divcontainer
 var divContainerElement = document.querySelector(&quot;#divcontainer&quot;);
 
 // make the div
@@ -355,7 +355,7 @@ div.appendChild(textNode);
 // add it to the divcontainer
 divContainerElement.appendChild(div);
 </code></pre><p>Now we can position the div by setting its style.</p>
-<pre class="prettyprint"><code>div.style.left = Math.floor(x) + &quot;px&quot;;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">div.style.left = Math.floor(x) + &quot;px&quot;;
 div.style.top  = Math.floor(y) + &quot;px&quot;;
 textNode.nodeValue = clock.toFixed(2);
 </code></pre><p>Here&#39;s an example where we&#39;re just bounding the div around.</p>
@@ -374,7 +374,7 @@ We pass all of that to our shader and it multiplies vertices in local
 space and converts them to clip space.  We can do all the math ourselves in
 JavaScript as well.  Then we can multiply clip space (-1 to +1) into pixels
 and use that to position the div.</p>
-<pre class="prettyprint"><code>gl.drawArrays(...);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.drawArrays(...);
 
 // We just got through computing a matrix to draw our
 // F in 3D.

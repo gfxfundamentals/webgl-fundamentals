@@ -216,9 +216,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <a href="webgl-less-code-more-fun.html">less code more fun</a>
 as it uses the library mentioned there so as to
 unclutter the example. If you don&#39;t understand
-when a function named <code>webglUtils.setBuffersAndAttributes</code>
+when a function named <code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code>
 what it means to set the buffers and attributes, or when
-a function named <code>webglUtils.setUniforms</code> what it means
+a function named <code class="notranslate" translate="no">webglUtils.setUniforms</code> what it means
 to set uniforms, etc... then you should probably to go further back and
 <a href="webgl-fundamentals.html">read the fundamentals</a>.</p>
 <p>Let&#39;s say you wanted to draw multiple views of the
@@ -238,17 +238,17 @@ This is great for situation where our views don&#39;t overlap. Even
 better there is no double rendering like the solution above.</p>
 <p>In the <a href="webgl-fundamentals.html">very first article</a> it&#39;s mentioned
 that we set how WebGL converts from clip space to pixel space by calling</p>
-<pre class="prettyprint"><code class="lang-js">gl.viewport(left, bottom, width, height);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.viewport(left, bottom, width, height);
 </code></pre>
-<p>The most common thing is to set to those to <code>0</code>, <code>0</code>, <code>gl.canvas.width</code>, and <code>gl.canvas.height</code>
+<p>The most common thing is to set to those to <code class="notranslate" translate="no">0</code>, <code class="notranslate" translate="no">0</code>, <code class="notranslate" translate="no">gl.canvas.width</code>, and <code class="notranslate" translate="no">gl.canvas.height</code>
 respectively to cover the entire canvas.</p>
 <p>Instead we can set them to a portion of the canvas and they&#39;ll make it
 so we only draw to that portion of the canvas. 
 WebGL clips vertices in clip space.
-As we mentioned before we set <code>gl_Position</code> in our vertex shader to values that go from -1 to +1 in x, y, z.
+As we mentioned before we set <code class="notranslate" translate="no">gl_Position</code> in our vertex shader to values that go from -1 to +1 in x, y, z.
 WebGL clips the triangles and lines we pass to that range. After the clipping happens then
-the <code>gl.viewport</code> settings are applied so for example if we used</p>
-<pre class="prettyprint"><code class="lang-js">gl.viewport(
+the <code class="notranslate" translate="no">gl.viewport</code> settings are applied so for example if we used</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.viewport(
    10,   // left
    20,   // bottom
    30,   // width
@@ -263,7 +263,7 @@ value of +1 corresponds to a pixel x = 40 (a left of 10 plus a width of 30)
 <p>The vertex and fragment shaders are the same as the ones used in the articles on
 <a href="webgl-3d-orthographic.html">orthographic</a> and <a href="webgl-3d-perspective.html">perspective</a>
 projection.</p>
-<pre class="prettyprint"><code class="lang-glsl">// vertex shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// vertex shader
 attribute vec4 a_position;
 attribute vec4 a_color;
 
@@ -279,7 +279,7 @@ void main() {
   v_color = a_color;
 }
 </code></pre>
-<pre class="prettyprint"><code class="lang-glsl">// fragment shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// fragment shader
 precision mediump float;
 
 // Passed in from the vertex shader.
@@ -291,7 +291,7 @@ void main() {
 </code></pre>
 <p>Then at init time we need to create the program and
 the buffers for the &#39;F&#39;</p>
-<pre class="prettyprint"><code class="lang-js">// setup GLSL programs
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup GLSL programs
 // compiles shaders, links program, looks up locations
 const programInfo = webglUtils.createProgramInfo(gl, [&quot;vertex-shader-3d&quot;, &quot;fragment-shader-3d&quot;]);
 
@@ -300,7 +300,7 @@ const bufferInfo = primitives.create3DFBufferInfo(gl);
 </code></pre>
 <p>And to draw let&#39;s make a function we can pass a projection matrix,
 a camera matrix, and a world matrix</p>
-<pre class="prettyprint"><code class="lang-js">function drawScene(projectionMatrix, cameraMatrix, worldMatrix) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function drawScene(projectionMatrix, cameraMatrix, worldMatrix) {
   // Make a view matrix from the camera matrix.
   const viewMatrix = m4.inverse(cameraMatrix);
 
@@ -325,7 +325,7 @@ a camera matrix, and a world matrix</p>
 }
 </code></pre>
 <p>and then let&#39;s call that function to draw the F.</p>
-<pre class="prettyprint"><code class="lang-js">function degToRad(d) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function degToRad(d) {
   return d * Math.PI / 180;
 }
 
@@ -376,8 +376,8 @@ except we&#39;re using <a href="webgl-less-code-more-fun.html">our library</a> t
 
 </p>
 <p>Now let&#39;s make it draw 2 views of the &#39;F&#39; side by side
-by using <code>gl.viewport</code></p>
-<pre class="prettyprint"><code class="lang-js">function render() {
+by using <code class="notranslate" translate="no">gl.viewport</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render() {
   webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
 -  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -443,15 +443,15 @@ we change the projection matrix.</p>
 
 </p>
 <p>Let&#39;s clear both sides to different colors</p>
-<p>First, in <code>drawScene</code> lets call <code>gl.clear</code></p>
-<pre class="prettyprint"><code class="lang-js">  function drawScene(projectionMatrix, cameraMatrix, worldMatrix) {
+<p>First, in <code class="notranslate" translate="no">drawScene</code> lets call <code class="notranslate" translate="no">gl.clear</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  function drawScene(projectionMatrix, cameraMatrix, worldMatrix) {
 +    // Clear the canvas AND the depth buffer.
 +    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     ...
 </code></pre>
-<p>Then let&#39;s set clear colors before calling <code>drawScene</code></p>
-<pre class="prettyprint"><code class="lang-js">  const {width, height} = gl.canvas;
+<p>Then let&#39;s set clear colors before calling <code class="notranslate" translate="no">drawScene</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  const {width, height} = gl.canvas;
   const leftWidth = width / 2 | 0;
 
   // draw on left with orthographic camera
@@ -474,18 +474,18 @@ we change the projection matrix.</p>
 
 </p>
 <p>Oops, what happened? Why is there nothing on the left?</p>
-<p>It turns out <code>gl.clear</code> does not look at the <code>viewport</code>
+<p>It turns out <code class="notranslate" translate="no">gl.clear</code> does not look at the <code class="notranslate" translate="no">viewport</code>
 settings. To fix this we can use the <em>scissor test</em>.
 The scissor test lets use define a rectangle. Anything
 outside that rectangle will not be affected if the scissor
 test is enabled.</p>
 <p>The scissor test is off by default. We can enable it
 by calling </p>
-<pre class="prettyprint"><code>gl.enable(gl.SCISSOR_TEST);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enable(gl.SCISSOR_TEST);
 </code></pre><p>Like the viewport it defaults to the initial size of the canvas
 but we can set with same parameters as the viewport by calling
-<code>gl.scissor</code> as in</p>
-<pre class="prettyprint"><code class="lang-js">gl.scissor(
+<code class="notranslate" translate="no">gl.scissor</code> as in</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.scissor(
    10,   // left
    20,   // bottom
    30,   // width
@@ -493,7 +493,7 @@ but we can set with same parameters as the viewport by calling
 );
 </code></pre>
 <p>So let&#39;s add those in</p>
-<pre class="prettyprint"><code class="lang-js">function render() {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render() {
   webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
   gl.enable(gl.CULL_FACE);
@@ -537,7 +537,7 @@ for a game an you want to show 3D models of each head in a list so the
 user can select one.
 Or let&#39;s say you wanted to make an e-commerce site and show
 3d models of each product down the page at the same time.</p>
-<p>The most obvious way to do this would be to put a <code>&lt;canvas&gt;</code>
+<p>The most obvious way to do this would be to put a <code class="notranslate" translate="no">&lt;canvas&gt;</code>
 each place you want to show an item. Unfortunately you&#39;d run into a
 bunch of issues.</p>
 <p>First, Each canvas would require a different WebGL context
@@ -550,8 +550,8 @@ as you create a webgl context on the 9th canvas the first
 canvas will lose its context.</p>
 <p>We can work around these issues by making just 1 large canvas
 that covers the entire window. We&#39;ll then put a placeholder
-<code>&lt;div&gt;</code> each place we want to draw an item. We can use
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect"><code>element.getBoundingClientRect</code></a>
+<code class="notranslate" translate="no">&lt;div&gt;</code> each place we want to draw an item. We can use
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect"><code class="notranslate" translate="no">element.getBoundingClientRect</code></a>
 to find out where to set the viewport and scissor to
 draw in that area.</p>
 <p>This will solve both problems mentioned above. We&#39;ll only
@@ -560,13 +560,13 @@ run into the context limit.</p>
 <p>Let&#39;s make an example.</p>
 <p>First let&#39;s make a canvas that goes in the background with some content
 that goes in front. First the HTML</p>
-<pre class="prettyprint"><code class="lang-html">&lt;body&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;body&gt;
   &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
   &lt;div id=&quot;content&quot;&gt;&lt;/div&gt;
 &lt;/body&gt;
 </code></pre>
 <p>Then the CSS</p>
-<pre class="prettyprint"><code class="lang-css">body {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">body {
   margin: 0;
 }
 #content {
@@ -582,8 +582,8 @@ that goes in front. First the HTML</p>
 }
 </code></pre>
 <p>Now let&#39;s make a few things to draw. <a href="webgl-less-code-more-fun.html">Remember</a> 
-that a <code>BufferInfo</code> is just a list of buffers by name and the settings need to set their attributes</p>
-<pre class="prettyprint"><code class="lang-js">// create buffers and fill with data for various things.
+that a <code class="notranslate" translate="no">BufferInfo</code> is just a list of buffers by name and the settings need to set their attributes</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// create buffers and fill with data for various things.
 const bufferInfos = [
   primitives.createCubeBufferInfo(
       gl,
@@ -610,7 +610,7 @@ const bufferInfos = [
 <p>Now let&#39;s make 100 html items. For each one we&#39;ll create a container div
 and inside will be a view and a label. The view is just an empty div
 where we want to draw the item.</p>
-<pre class="prettyprint"><code class="lang-js">function createElem(type, parent, className) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function createElem(type, parent, className) {
   const elem = document.createElement(type);
   parent.appendChild(elem);
   if (className) {
@@ -649,7 +649,7 @@ for (let i = 0; i &lt; numItems; ++i) {
 }
 </code></pre>
 <p>Let&#39;s style these items as follows</p>
-<pre class="prettyprint"><code class="lang-css">.item {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">.item {
   display: inline-block;
   margin: 1em;
   padding: 1em;
@@ -663,13 +663,13 @@ for (let i = 0; i &lt; numItems; ++i) {
   border: 1px solid black;
 }
 </code></pre>
-<p>The <code>items</code> array has a <code>bufferInfo</code>, a <code>color</code> and an <code>element</code>
+<p>The <code class="notranslate" translate="no">items</code> array has a <code class="notranslate" translate="no">bufferInfo</code>, a <code class="notranslate" translate="no">color</code> and an <code class="notranslate" translate="no">element</code>
 for each item. We loop over all the items one at a time and call
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect"><code>element.getBoundingClientRect</code></a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect"><code class="notranslate" translate="no">element.getBoundingClientRect</code></a>
 and use the rectangle returned to see if that element intersects
 with the canvas. If it does we set the viewport and scissor to
 match and then draw that object.</p>
-<pre class="prettyprint"><code class="lang-js">function render(time) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render(time) {
   time *= 0.001;  // convert to seconds
 
   webglUtils.resizeCanvasToDisplaySize(gl.canvas);
@@ -723,7 +723,7 @@ requestAnimationFrame(render);
 </code></pre>
 <p>I made the code above use a <a href="webgl-animation.html">requestAnimationFrame loop</a>
 so I could animate the objects. I also passed which bufferInfo to draw
-to <code>drawScene</code>. The shader is just using the normals as colors to keep
+to <code class="notranslate" translate="no">drawScene</code>. The shader is just using the normals as colors to keep
 the shaders simple. If I added <a href="webgl-3d-lighting-spot.html">lighting</a>
 the code would get much more complicated.</p>
 <p><div class="webgl_example_container">
@@ -737,8 +737,8 @@ As long as you set the viewport and scissor correctly and then set up
 your projection matrix to match the aspect of the area it should work.</p>
 <p>One other notable thing about the code is we&#39;re moving the canvas
 with this line</p>
-<pre class="prettyprint"><code>gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
-</code></pre><p>Why? We could instead set the canvas to <code>position: fixed;</code> in which case
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
+</code></pre><p>Why? We could instead set the canvas to <code class="notranslate" translate="no">position: fixed;</code> in which case
 it would not scroll with the page. The difference would be subtle.
 The browser tries to scroll the page as smooth as possible. That might be
 faster than we can draw our objects. Because of this we have 2 options.</p>
@@ -765,7 +765,7 @@ being able to see multiple views is useful for understanding.</p>
 are referenced by their edges. So for example if we had
 a canvas that was 3x2 pixels big and we set the viewport
 as</p>
-<pre class="prettyprint"><code>
+<pre class="prettyprint"><code class="notranslate" translate="no">
 gl.viewport(
   0, // left
   0, // bottom

@@ -215,7 +215,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>Technically you don&#39;t need anything other than a web browser to do WebGL
 development. Go to <a href="https://jsfiddle.net/greggman/8djzyjL3/">jsfiddle.net</a> or <a href="https://jsbin.com">jsbin.com</a>
 or <a href="https://codepen.io/greggman/pen/YGQjVV">codepen.io</a> and just start applying the lessons here.</p>
-<p>On all of them you can reference external scripts by adding a <code>&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;</code>
+<p>On all of them you can reference external scripts by adding a <code class="notranslate" translate="no">&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;</code>
 tag pair if you want to use external scripts.</p>
 <p>Still, there are limits. WebGL has stronger restrictions than Canvas2D for loading images
 which means you can&#39;t easily access images from around the web for your WebGL work.
@@ -238,24 +238,24 @@ servers are actually extremely simple</a>.</p>
 
 </p>
 <p>Just point it at the folder where you unzipped the files, click &quot;Start&quot;, then go to
-in your browser <a href="http://localhost:8080/webgl/"><code>http://localhost:8080/webgl/</code></a> and choose
+in your browser <a href="http://localhost:8080/webgl/"><code class="notranslate" translate="no">http://localhost:8080/webgl/</code></a> and choose
 a sample.</p>
 <p>If you prefer the command line, another way is to use <a href="https://nodejs.org">node.js</a>.
 Download it, install it, then open a command prompt / console / terminal window. If you&#39;re on Windows the installer
 will add a special &quot;Node Command Prompt&quot; so use that.</p>
-<p>Then install <a href="https://github.com/greggman/servez-cli"><code>servez</code></a> by typing</p>
-<pre class="prettyprint"><code>npm -g install servez
+<p>Then install <a href="https://github.com/greggman/servez-cli"><code class="notranslate" translate="no">servez</code></a> by typing</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">npm -g install servez
 </code></pre><p>If you&#39;re on OSX use</p>
-<pre class="prettyprint"><code>sudo npm -g install servez
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">sudo npm -g install servez
 </code></pre><p>Once you&#39;ve done that type</p>
-<pre class="prettyprint"><code>servez path/to/folder/where/you/unzipped/files
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">servez path/to/folder/where/you/unzipped/files
 </code></pre><p>It should print something like</p>
 <p><div class="webgl_image ">
   <img class="" src="/webgl/lessons/resources/servez-response.png">
 </div>
 
 </p>
-<p>Then in your browser go to <a href="http://localhost:8080/webgl/"><code>http://localhost:8080/webgl/</code></a>.</p>
+<p>Then in your browser go to <a href="http://localhost:8080/webgl/"><code class="notranslate" translate="no">http://localhost:8080/webgl/</code></a>.</p>
 <p>If you don&#39;t specify a path then servez will serve the current folder.</p>
 <h2 id="using-your-browsers-developer-tools">Using your Browsers Developer Tools</h2>
 <p>Most browser have extensive developer tools built in.</p>
@@ -276,7 +276,7 @@ an error message. Read the error message closely and you should get a clue where
 <h2 id="webgl-helpers">WebGL Helpers</h2>
 <p><a href="https://greggman.github.io/webgl-helpers/">Here</a> are some scripts you might find
 useful. In particular just add this to your page before your other scripts</p>
-<pre class="prettyprint"><code>&lt;script src=&quot;https://greggman.github.io/webgl-helpers/webgl-gl-error-check.js&quot;&gt;&lt;/script&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script src=&quot;https://greggman.github.io/webgl-helpers/webgl-gl-error-check.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>and your program will throw an exception if it gets a WebGL error and if you&#39;re lucky
 print more info.</p>
 <p>There are various WebGL Inspectors. 
@@ -289,7 +289,7 @@ print more info.</p>
 <p>Note: <a href="https://github.com/BabylonJS/Spector.js/blob/master/readme.md">READ THE DOCS</a>!</p>
 <p>The extension version of spector.js captures frames. What this is means is it only
 works if your WebGL app successfully initializes itself and then renders in a
-<code>requestAnimationFrame</code> loop. You click the &quot;record&quot; button and it captures
+<code class="notranslate" translate="no">requestAnimationFrame</code> loop. You click the &quot;record&quot; button and it captures
 all the WebGL API calls for one &quot;frame&quot;.</p>
 <p>This means without some work it won&#39;t help you find issues during initialization.</p>
 <p>To workaround that there are 2 methods.</p>
@@ -302,10 +302,10 @@ all the WebGL API calls for one &quot;frame&quot;.</p>
 app. If your app doesn&#39;t animate then just add a few fake frames. Example:</p>
 </li>
 </ol>
-<pre class="prettyprint"><code class="lang-html">&lt;button type=&quot;button&quot;&gt;start&lt;/button&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;button type=&quot;button&quot;&gt;start&lt;/button&gt;
 &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
 </code></pre>
-<pre class="prettyprint"><code class="lang-js">function main() {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
   const canvas = document.querySelector(&quot;#canvas&quot;);
@@ -335,7 +335,7 @@ main();
 <p>Now you can click &quot;record&quot; in the spector.js extension, then click &quot;start&quot; in your page
 and spector will record your initialization.</p>
 <p>Safari also has a similar built in feature that has <a href="https://stackoverflow.com/questions/62446483/debugging-in-webgl">similar issues with similar workarounds</a>. </p>
-<p>When I use a helper like this I&#39;ll often click on a draw call, and check the uniforms. If I see a bunch of <code>NaN</code> (NaN = Not a Number) then I can usually track down the code that set that uniform and find the bug.</p>
+<p>When I use a helper like this I&#39;ll often click on a draw call, and check the uniforms. If I see a bunch of <code class="notranslate" translate="no">NaN</code> (NaN = Not a Number) then I can usually track down the code that set that uniform and find the bug.</p>
 <h2 id="inspect-the-code">Inspect the Code</h2>
 <p>Also always remember you can inspect the code. You can usually just pick view source</p>
 <p><div class="webgl_image ">

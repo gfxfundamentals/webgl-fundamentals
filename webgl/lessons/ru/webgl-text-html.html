@@ -225,7 +225,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 CSS, чтобы текст расположился сверху.</p>
 <p>Например, сделаем контейнер, куда поместим и canvas, и HTML, который
 наложится поверх canvas.</p>
-<pre class="prettyprint"><code>&lt;div class=&quot;container&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;div class=&quot;container&quot;&gt;
   &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
   &lt;div id=&quot;overlay&quot;&gt;
     &lt;div&gt;Time: &lt;span id=&quot;time&quot;&gt;&lt;/span&gt;&lt;/div&gt;
@@ -233,7 +233,7 @@ CSS, чтобы текст расположился сверху.</p>
   &lt;/div&gt;
 &lt;/div&gt;
 </code></pre><p>Далее добавим CSS, чтобы canvas и HTML пересекались друг с другом.</p>
-<pre class="prettyprint"><code>.container {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">.container {
     position: relative;
 }
 #overlay {
@@ -243,7 +243,7 @@ CSS, чтобы текст расположился сверху.</p>
 }
 </code></pre><p>Теперь при инициализации получим ссылки на эти HTML-элементы,
 чтобы в дальнейшем мы могли их менять.</p>
-<pre class="prettyprint"><code>// получаем ссылки на элементы DOM
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// получаем ссылки на элементы DOM
 var timeElement = document.querySelector(&quot;#time&quot;);
 var angleElement = document.querySelector(&quot;#angle&quot;);
 
@@ -255,7 +255,7 @@ var angleNode = document.createTextNode(&quot;&quot;);
 timeElement.appendChild(timeNode);
 angleElement.appendChild(angleNode);
 </code></pre><p>Наконец, обновляем текстовые узлы при рендеринге</p>
-<pre class="prettyprint"><code>function drawScene() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
     ...
 
     // преобразуем значение поворота из радиан в градусы
@@ -277,10 +277,10 @@ angleElement.appendChild(angleNode);
 <p>Обратите внимание, как я поместил элементы span внутрь элементов div для фрагментов,
 которые я хочу изменить. Полагаю, что это быстрее по сравнению с использованием
 только элементов div без span и написания чего-то вроде</p>
-<pre class="prettyprint"><code>timeNode.value = &quot;Time &quot; + clock.toFixed(2);
-</code></pre><p>Также я использую текстовые узлы через вызов <code>node = document.createTextNode()</code>,
-затем присваиваю значение через <code>node.nodeValue = someMsg</code>. Я мог бы использовать
-<code>someElement.innerHTML = someHTML</code>. Такой подход был бы более гибким, потому
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">timeNode.value = &quot;Time &quot; + clock.toFixed(2);
+</code></pre><p>Также я использую текстовые узлы через вызов <code class="notranslate" translate="no">node = document.createTextNode()</code>,
+затем присваиваю значение через <code class="notranslate" translate="no">node.nodeValue = someMsg</code>. Я мог бы использовать
+<code class="notranslate" translate="no">someElement.innerHTML = someHTML</code>. Такой подход был бы более гибким, потому
 что он позволяет использовать произвольный HTML, однако, он будет работать
 немного медленнее, так как браузеру необходимо создавать и уничтожать узлы
 при каждой смене содержимого. Что выбрать - решать вам.</p>
@@ -304,12 +304,12 @@ WebGL работает в браузере. Не забывайте исполь
 относительно сцены. Мы также можем сделать это с помощью HTML.</p>
 <p>Для этой задачи мы снова будем использовать контейнер с canvas и
 ещё одним контейнером для смещающегося элемента HTML.</p>
-<pre class="prettyprint"><code>&lt;div class=&quot;container&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;div class=&quot;container&quot;&gt;
   &lt;canvas id=&quot;canvas&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
   &lt;div id=&quot;divcontainer&quot;&gt;&lt;/div&gt;
 &lt;/div&gt;
 </code></pre><p>Настроим CSS</p>
-<pre class="prettyprint"><code>.container {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">.container {
     position: relative;
     overflow: none;
     width: 400px;
@@ -330,17 +330,17 @@ WebGL работает в браузере. Не забывайте исполь
 .floating-div {
     position: absolute;
 }
-</code></pre><p>Стиль <code>position: absolute;</code> позволяет задавать положение элементу
-<code>#divcontainer</code> относительно первого родителя со стилем <code>position: relative</code>
-или <code>position: absolute</code>. В этом случае им является контейнер, в котором
-находятся и canvas, и <code>#divcontainer</code>.</p>
-<p>Стиль <code>left: 0px; top: 0px</code> выравнивает <code>#divcontainer</code> относительно
-всего остального. <code>z-index: 10</code> выводит контейнер на передний план
-перед canvas. А <code>overflow: hidden</code> обрезает дочерние элементы, которые
+</code></pre><p>Стиль <code class="notranslate" translate="no">position: absolute;</code> позволяет задавать положение элементу
+<code class="notranslate" translate="no">#divcontainer</code> относительно первого родителя со стилем <code class="notranslate" translate="no">position: relative</code>
+или <code class="notranslate" translate="no">position: absolute</code>. В этом случае им является контейнер, в котором
+находятся и canvas, и <code class="notranslate" translate="no">#divcontainer</code>.</p>
+<p>Стиль <code class="notranslate" translate="no">left: 0px; top: 0px</code> выравнивает <code class="notranslate" translate="no">#divcontainer</code> относительно
+всего остального. <code class="notranslate" translate="no">z-index: 10</code> выводит контейнер на передний план
+перед canvas. А <code class="notranslate" translate="no">overflow: hidden</code> обрезает дочерние элементы, которые
 не помещаются в контейнер.</p>
-<p>Наконец, <code>.floating-div</code> будет использован для плавающего элемента div.</p>
+<p>Наконец, <code class="notranslate" translate="no">.floating-div</code> будет использован для плавающего элемента div.</p>
 <p>Нам осталось получить ссылку на divcontainer, создать div и добавить его.</p>
-<pre class="prettyprint"><code>// получаем ссылку на divcontainer
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// получаем ссылку на divcontainer
 var divContainerElement = document.querySelector(&quot;#divcontainer&quot;);
 
 // создаём div
@@ -356,7 +356,7 @@ div.appendChild(textNode);
 // добавляем элемент в divcontainer
 divContainerElement.appendChild(div);
 </code></pre><p>Теперь мы можем позиционировать div через стили.</p>
-<pre class="prettyprint"><code>div.style.left = Math.floor(x) + &quot;px&quot;;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">div.style.left = Math.floor(x) + &quot;px&quot;;
 div.style.top  = Math.floor(y) + &quot;px&quot;;
 textNode.nodeValue = clock.toFixed(2);
 </code></pre><p>И у нас получился пример с div, отскакивающим от стен.</p>
@@ -376,7 +376,7 @@ textNode.nodeValue = clock.toFixed(2);
 всю математику через JavaScript. Затем мы сможем перевести координаты из
 пространства отсечения (от -1 до +1) в пиксели, которые в свою очередь
 сможем использовать для позиционирования div.</p>
-<pre class="prettyprint"><code>gl.drawArrays(...);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.drawArrays(...);
 
 // мы только что вычислили матрицу для отрисовки буквы F в 3D
 

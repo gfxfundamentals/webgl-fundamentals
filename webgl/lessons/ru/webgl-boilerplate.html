@@ -223,7 +223,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 необходимо скомпилировать и скомпоновать. В 99% случаев этот процесс будет
 одинаковым в каждой программе WebGL.</p>
 <p>Вот шаблон для компиляции шейдера.</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * Создание и компиляция шейдера
  *
  * @param {!WebGLRenderingContext} gl Контекст WebGL
@@ -251,7 +251,7 @@ function compileShader(gl, shaderSource, shaderType) {
   return shader;
 }
 </code></pre><p>И шаблон кода для компоновки 2 шейдеров в программу</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * Создаём программу из 2 шейдеров
  *
  * @param {!WebGLRenderingContext) gl Контекст WebGL
@@ -284,7 +284,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 будет одинаковым.</p>
 <p>Мне нравится хранить код шейдеров тегах &lt;script&gt;. Их так легче
 редактировать. Поэтому я использую следующий код:</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * Создание шейдера из содержимого тега
  *
  * @param {!WebGLRenderingContext} gl Контекст WebGL
@@ -317,10 +317,10 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
   return compileShader(gl, shaderSource, opt_shaderType);
 };
 </code></pre><p>Теперь для компиляции шейдера мне нужно лишь</p>
-<pre class="prettyprint"><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
 </code></pre><p>Обычно я захожу немного дальше и создаю функцию для компиляции двух шейдеров
 из тега скрипта, прикрепления их к программе и их компоновки</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * Создание программы из 2 тегов скриптов
  *
  * @param {!WebGLRenderingContext} gl Контекст WebGL
@@ -338,9 +338,9 @@ function createProgramFromScripts(
 </code></pre><p>Кроме того практически в каждой программе WebGL я использую код для изменения
 размера canvas. Вы можете <a href="webgl-resizing-the-canvas.html">посмотреть реализацию функции здесь</a>.</p>
 <p>Во всех примерах эти две фунцкии подключаются через</p>
-<pre class="prettyprint"><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>и используются следующим образом</p>
-<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var program = webglUtils.createProgramFromScripts(
   gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...
@@ -349,27 +349,27 @@ webglUtils.resizeCanvasToMatchDisplaySize(canvas);
 </code></pre><p>Мне кажется, что лучше не загромождать примеры одним и тем же кодом, если
 он используется описанным в этой статье способом.</p>
 <p>Это практически и весь мой необходимый минимум шаблона кода WebGL.
-<a href="../../resources/webgl-utils.js">Код <code>webgl-utils.js</code> вы сможете найти здесь</a>.
+<a href="../../resources/webgl-utils.js">Код <code class="notranslate" translate="no">webgl-utils.js</code> вы сможете найти здесь</a>.
 Если вам нужно что-то более структурированное, посмотрите на <a href="https://twgljs.org">TWGL.js</a>.</p>
 <p>Оставшаяся часть, которая делает WebGL сложным, - это настройка всех входных
 переменных шейдера. Посмотрите на статью <a href="webgl-how-it-works.html">как работает WebGL</a>.</p>
 <p>Также предлагаю прочесть <a href="webgl-less-code-more-fun.html">Меньше кода, больше веселья</a> и взглянуть на <a href="https://twgljs.org">TWGL</a>.</p>
 <p>Обратите внимание, что есть ещё несколько скриптов, предназначенных для схожих целей.</p>
 <ul>
-<li><p><a href="../../resources/webgl-lessons-ui.js"><code>webgl-lessons-ui.js</code></a></p>
+<li><p><a href="../../resources/webgl-lessons-ui.js"><code class="notranslate" translate="no">webgl-lessons-ui.js</code></a></p>
 <p>Код, обновляющий сцену согласно слайдерам. Не хотелось захламлять подобным
 кодом статьи, поэтому код вынесен в отдельный файл.</p>
 </li>
-<li><p><a href="../../resources/lessons-helper.js"><code>lessons-helper.js</code></a></p>
+<li><p><a href="../../resources/lessons-helper.js"><code class="notranslate" translate="no">lessons-helper.js</code></a></p>
 <p>Этот скрипт нужен только для webglfundmentals.org. Он помогает в выводе сообщений об
 ошибках при использовании в редакторе.</p>
 </li>
-<li><p><a href="../../resources/m3.js"><code>m3.js</code></a></p>
+<li><p><a href="../../resources/m3.js"><code class="notranslate" translate="no">m3.js</code></a></p>
 <p>Набор функций для 2D-математики. Они создавались, начиная с первой статьи о математике матриц.
 Поначалу они были прямо в коде статей, но со временем начали занимать слишком много места,
 поэтому в дальнейшем они подключаются через указанный скрипт.</p>
 </li>
-<li><p><a href="../../resources/m4.js"><code>m4.js</code></a></p>
+<li><p><a href="../../resources/m4.js"><code class="notranslate" translate="no">m4.js</code></a></p>
 <p>Набор функций для 3D-математики. Они создавались, начиная с первой статьи о 3D.
 Поначалу они были прямо в коде статей, но со временем начали занимать слишком много места,
 поэтому после второй статьи о 3D они подключаются через указанный скрипт.</p>

@@ -224,7 +224,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 다시 F를 사용할 거지만 이번엔 3D &#39;F&#39; 입니다.</p>
 <p>먼저 해야할 일은 3D를 제어하도록 vertex shader를 수정하는 건데요.
 여기 기존 vertex shader가 있습니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -235,7 +235,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>그리고 이게 새로운 것인데</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -246,10 +246,10 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>더 간단해졌습니다!
-2D와 마찬가지로 <code>x</code>와 <code>y</code>를 제공하고 <code>z</code>를 1로 설정했습니다.
-3D에서는 <code>x</code>, <code>y</code>, 그리고 <code>z</code>가 제공되어야 하고 <code>w</code>가 1이어야 하지만 <code>w</code>의 기본값이 1이라는 사실을 이용합시다.</p>
+2D와 마찬가지로 <code class="notranslate" translate="no">x</code>와 <code class="notranslate" translate="no">y</code>를 제공하고 <code class="notranslate" translate="no">z</code>를 1로 설정했습니다.
+3D에서는 <code class="notranslate" translate="no">x</code>, <code class="notranslate" translate="no">y</code>, 그리고 <code class="notranslate" translate="no">z</code>가 제공되어야 하고 <code class="notranslate" translate="no">w</code>가 1이어야 하지만 <code class="notranslate" translate="no">w</code>의 기본값이 1이라는 사실을 이용합시다.</p>
 <p>그런 다음 3D 데이터를 제공해야 합니다.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
   // attribute에게 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 알려줍니다.
 *  var size = 3;          // 반복마다 세 구성 요소
@@ -300,7 +300,7 @@ function setGeometry(gl) {
 }
 </code></pre><p>다음으로 모든 행렬 함수를 2D에서 3D로 바꿔야 합니다.</p>
 <p>여기 m3.translation, m3.rotation, 그리고 m3.scaling의 2D 버전입니다.</p>
-<pre class="prettyprint"><code>var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
   translation: function translation(tx, ty) {
     return [
       1, 0, 0,
@@ -328,7 +328,7 @@ function setGeometry(gl) {
   },
 };
 </code></pre><p>그리고 여기 업데이트된 3D 버전입니다.</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   translation: function(tx, ty, tz) {
     return [
        1,  0,  0,  0,
@@ -410,7 +410,7 @@ function setGeometry(gl) {
 <iframe class="external_diagram" src="../resources/axis-diagram.html" style="width: 540px; height: 280px;"></iframe>
 
 <p>마찬가지로 단순한 함수들을 만들어 봅시다.</p>
-<pre class="prettyprint"><code>  translate: function(m, tx, ty, tz) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  translate: function(m, tx, ty, tz) {
     return m4.multiply(m, m4.translation(tx, ty, tz));
   },
 
@@ -431,7 +431,7 @@ function setGeometry(gl) {
   },
 </code></pre><p>또한 투영 함수를 업데이트해야 합니다.
 이게 기존 것이고</p>
-<pre class="prettyprint"><code>  projection: function (width, height) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  projection: function (width, height) {
     // 참고: 이 행렬은 Y축을 뒤집으므로 0이 상단입니다.
     return [
       2 / width, 0, 0,
@@ -442,7 +442,7 @@ function setGeometry(gl) {
 }
 </code></pre><p>픽셀에서 clip 공간으로 변환되었습니다.
 3D로 확장하기 위한 첫 번째 시도는</p>
-<pre class="prettyprint"><code>  projection: function(width, height, depth) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  projection: function(width, height, depth) {
     // 참고: 이 행렬은 Y축을 뒤집으므로 0이 상단입니다.
     return [
        2 / width, 0, 0, 0,
@@ -453,9 +453,9 @@ function setGeometry(gl) {
   },
 </code></pre><p>X와 Y를 픽셀에서 clip 공간으로 변환해줘야 했던 것처럼, Z도 동일한 작업을 해줘야 합니다.
 이 경우에는 Z축 픽셀 단위도 만들고 있는데요.
-저는 <code>depth</code>에 대해 <code>width</code>와 비슷한 값을 넘길 것이므로 공간은 0에서 <code>width</code>의 픽셀 너비와, 0에서 <code>height</code>의 픽셀 높이가 되지만, <code>depth</code>는 <code>-depth / 2</code>에서 <code>+depth / 2</code>가 됩니다.</p>
+저는 <code class="notranslate" translate="no">depth</code>에 대해 <code class="notranslate" translate="no">width</code>와 비슷한 값을 넘길 것이므로 공간은 0에서 <code class="notranslate" translate="no">width</code>의 픽셀 너비와, 0에서 <code class="notranslate" translate="no">height</code>의 픽셀 높이가 되지만, <code class="notranslate" translate="no">depth</code>는 <code class="notranslate" translate="no">-depth / 2</code>에서 <code class="notranslate" translate="no">+depth / 2</code>가 됩니다.</p>
 <p>마지막으로 행렬을 계산하는 코드를 업데이트 해줘야 합니다.</p>
-<pre class="prettyprint"><code>  // 행렬 계산
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 행렬 계산
 *  var matrix = m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400);
 *  matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
 *  matrix = m4.xRotate(matrix, rotation[0]);
@@ -482,7 +482,7 @@ function setGeometry(gl) {
 사각형 당 삼각형 2개 그리고 삼각형 당 꼭지점 3개인 사각형 16개는 96개의 꼭지점이 있습니다.
 이것들 전부를 보고 싶다면 예제의 출처를 봐주세요.</p>
 <p>우리는 더 많은 점들을 그려야 하므로</p>
-<pre class="prettyprint"><code>    // geometry 그리기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    // geometry 그리기
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
 *    var count = 16 * 6;
@@ -498,7 +498,7 @@ function setGeometry(gl) {
 이제 각 사각형 별로 다른 색을 입혀봅시다.
 이를 위해 vertex shader에 다른 attribute를 추가하고 varying으로 vertex shader에서 fragment shader로 전달할겁니다.</p>
 <p>여기 새로운 vertex shader 입니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -515,7 +515,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>그리고 fragment shader에서 그 색을 써야 하는데</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +// vertex shader로부터 전달
@@ -526,7 +526,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>색상을 제공하기 위해 attribute 위치를 찾고, 다른 버퍼와 attribute를 설정해서 색상을 지정해야 합니다.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 
   ...
@@ -560,7 +560,7 @@ function setColors(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>그런 다음 렌더링할 때 색상 attribute에게 색상 버퍼에서 색상 얻는 방법을 알려줘야 하는데</p>
-<pre class="prettyprint"><code>// 색상 attribute 활성화
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 색상 attribute 활성화
 gl.enableVertexAttribArray(colorLocation);
 
 // 색상 버퍼 할당
@@ -600,8 +600,8 @@ gl.vertexAttribPointer(
 <p><img src="../resources/triangle-winding.svg" class="webgl_center" width="400" /></p>
 <p>WebGL은 정면 혹은 후면 삼각형만 그릴 수 있습니다.</p>
 <p>이 기능을 활성화시킬 수 있는데 다음과 같이</p>
-<pre class="prettyprint"><code>  gl.enable(gl.CULL_FACE);
-</code></pre><p>이걸 <code>drawScene</code> 함수에 넣읍시다.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.enable(gl.CULL_FACE);
+</code></pre><p>이걸 <code class="notranslate" translate="no">drawScene</code> 함수에 넣읍시다.
 이 기능을 켜면, WebGL은 기본적으로 뒷면의 삼각형을 &quot;culling&quot; 하는데요.
 이 경우 &quot;Culling&quot;은 &quot;not drawing&quot;을 말하는 멋진 단어입니다.</p>
 <p>참고로 WebGL에서 삼각형이 시계 혹은 반시계 방향으로 진행되는지는 clip 공간에서 해당 삼각형의 꼭지점에 따라 달라지는데요.
@@ -623,11 +623,11 @@ CULL_FACE가 비활성화되었으므로 시계 방향(앞)과 반시계 방향(
 다행히 이걸 고치는 것은 쉽습니다.
 그저 뒷면을 찾아 꼭지점 2개를 교환하면 됩니다.
 예를들어 뒷면 삼각형 하나가 있다면</p>
-<pre class="prettyprint"><code>           1,   2,   3,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">           1,   2,   3,
           40,  50,  60,
          700, 800, 900,
 </code></pre><p>그냥 마지막 꼭지점 2개를 앞으로 오도록 교환해주면 됩니다.</p>
-<pre class="prettyprint"><code>           1,   2,   3,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">           1,   2,   3,
          700, 800, 900,
           40,  50,  60,
 </code></pre><p>모든 후면 삼각형을 고치면 문제가 발생하는데</p>
@@ -650,9 +650,9 @@ WebGL이 색상 픽셀을 그리기 전에 해당 depth 픽셀을 검사합니�
 아니면 fragment shader의 색상을 가진 새로운 색상 픽셀들을 모두 그리고 새로운 depth 값으로 depth 픽셀을 그립니다.
 즉, 다른 픽셀들 뒤에 있는 픽셀들은 그려지지 않을겁니다.</p>
 <p>다음과 같이 culling 기능을 켜기만 하면 이 기능을 사용할 수 있습니다.</p>
-<pre class="prettyprint"><code>  gl.enable(gl.DEPTH_TEST);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.enable(gl.DEPTH_TEST);
 </code></pre><p>또한 그리기 전에 depth 버퍼를 1.0으로 초기화해야 합니다.</p>
-<pre class="prettyprint"><code>  // 화면 그리기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 화면 그리기
   function drawScene() {
     ...
 
@@ -668,9 +668,9 @@ WebGL이 색상 픽셀을 그리기 전에 해당 depth 픽셀을 검사합니�
 
 </p>
 <p>한가지 사소한 일이 있는데요.
-대부분의 3D 수학 라이브러리에는 clip 공간에서 픽셀 공간으로 변환을 수행하는 <code>projection</code> 함수가 없습니다.
-오히려 일반적으로 <code>ortho</code>나 <code>orthographic</code>이라고 불리는 함수가 이렇게 있는데</p>
-<pre class="prettyprint"><code>var m4 = {
+대부분의 3D 수학 라이브러리에는 clip 공간에서 픽셀 공간으로 변환을 수행하는 <code class="notranslate" translate="no">projection</code> 함수가 없습니다.
+오히려 일반적으로 <code class="notranslate" translate="no">ortho</code>나 <code class="notranslate" translate="no">orthographic</code>이라고 불리는 함수가 이렇게 있는데</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   orthographic: function(left, right, bottom, top, near, far) {
     return [
       2 / (right - left), 0, 0, 0,
@@ -683,10 +683,10 @@ WebGL이 색상 픽셀을 그리기 전에 해당 depth 픽셀을 검사합니�
       1,
     ];
   }
-</code></pre><p>너비, 높이, 그리고 깊이만을 매개변수로 가지는 우리의 단순한 <code>projection</code> 함수와 달리
+</code></pre><p>너비, 높이, 그리고 깊이만을 매개변수로 가지는 우리의 단순한 <code class="notranslate" translate="no">projection</code> 함수와 달리
 좀 더 일반적인 orthographic projection 함수는 더 많은 유연성을 제공하기 위해 left, right, bottom, top, near, 그리고 far을 전달할 수 있습니다.
 원래 projection 함수와 똑같이 사용하기 위해서는 호출을 다음과 같이</p>
-<pre class="prettyprint"><code>var left = 0;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var left = 0;
 var right = gl.canvas.clientWidth;
 var bottom = gl.canvas.clientHeight;
 var top = 0;

@@ -222,7 +222,7 @@ no data using fragment shaders.</p>
 <p>We&#39;ll start with a simple solid color shader
 with no math using the code <a href="webgl-fundamentals.html">from the very first article</a>.</p>
 <p>A simple vertex shader</p>
-<pre class="prettyprint"><code class="lang-js">const vs = `
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const vs = `
   // an attribute will receive data from a buffer
   attribute vec4 a_position;
 
@@ -236,7 +236,7 @@ with no math using the code <a href="webgl-fundamentals.html">from the very firs
 `;
 </code></pre>
 <p>and a simple fragment shader </p>
-<pre class="prettyprint"><code class="lang-js">const fs = `
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const fs = `
   precision highp float;
   void main() {
     // gl_FragColor is a special variable a fragment shader
@@ -247,7 +247,7 @@ with no math using the code <a href="webgl-fundamentals.html">from the very firs
 `;
 </code></pre>
 <p>Then we need to compile and link the shaders and look up position attribute location.</p>
-<pre class="prettyprint"><code class="lang-js">function main() {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function main() {
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
   const canvas = document.querySelector(&quot;#canvas&quot;);
@@ -264,7 +264,7 @@ with no math using the code <a href="webgl-fundamentals.html">from the very firs
 </code></pre>
 <p>and fill out a buffer with 2 triangles that make a rectangle in clip space that
 goes from -1 to +1 in x and y to cover the canvas.</p>
-<pre class="prettyprint"><code class="lang-js">  // Create a buffer to put three 2d clip space points in
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  // Create a buffer to put three 2d clip space points in
   const positionBuffer = gl.createBuffer();
 
   // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
@@ -281,7 +281,7 @@ goes from -1 to +1 in x and y to cover the canvas.</p>
   ]), gl.STATIC_DRAW);
 </code></pre>
 <p>And then we draw</p>
-<pre class="prettyprint"><code class="lang-js">  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
   // Tell WebGL how to convert from clip space to pixels
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -322,10 +322,10 @@ goes from -1 to +1 in x and y to cover the canvas.</p>
 color by providing a color for each vertex. In <a href="webgl-3d-textures.html">the article on textures</a>
 we added more color by supplying textures and texture coordinates.
 So how do we get something more than a solid color with out any more data? 
-WebGL provides a variable called <code>gl_FragCoord</code> that is equal to the <strong>pixel</strong>
+WebGL provides a variable called <code class="notranslate" translate="no">gl_FragCoord</code> that is equal to the <strong>pixel</strong>
 coordinate of the pixel currently being drawn.</p>
 <p>So let&#39;s change our fragment shader to use that to compute a color</p>
-<pre class="prettyprint"><code class="lang-js">const fs = `
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const fs = `
   precision highp float;
   void main() {
     // gl_FragColor is a special variable a fragment shader
@@ -336,10 +336,10 @@ coordinate of the pixel currently being drawn.</p>
   }
 `;
 </code></pre>
-<p>Like we mentioned above <code>gl_FragCoord</code> is a <strong>pixel</strong> coordinate so it will
+<p>Like we mentioned above <code class="notranslate" translate="no">gl_FragCoord</code> is a <strong>pixel</strong> coordinate so it will
 count across and up the canvas. By dividing by 50 we&#39;ll get a value that goes
-from 0 to 1 from as <code>gl_FragCoord</code> goes from 0 to 50. By using <code>fract</code> we&#39;ll
-keep just the <em>fract</em>ional part so for example when <code>gl_FragCoord</code> is 75.
+from 0 to 1 from as <code class="notranslate" translate="no">gl_FragCoord</code> goes from 0 to 50. By using <code class="notranslate" translate="no">fract</code> we&#39;ll
+keep just the <em>fract</em>ional part so for example when <code class="notranslate" translate="no">gl_FragCoord</code> is 75.
 75 / 50 = 1.5, fract(1.5) = 0.5 so we&#39;ll get a value that goes from 0 to 1
 every 50 pixels.</p>
 <p><div class="webgl_example_container">
@@ -353,10 +353,10 @@ and every 50 pixels up green goes from 0 to 1.</p>
 <p>With our setup now we could make more complex math for a fancier image.
 but we have one problem in that we have no idea how large the canvas is
 so we&#39;d have to hard code for a specific size. We can solve that problem
-by passing in the size of the canvas and then divide <code>gl_FragCoord</code> by
+by passing in the size of the canvas and then divide <code class="notranslate" translate="no">gl_FragCoord</code> by
 the size to give us a value that goes from 0 to 1 across and up the canvas
 regardless of size.</p>
-<pre class="prettyprint"><code class="lang-js">const fs = `
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const fs = `
   precision highp float;
 
 +  uniform vec2 u_resolution;
@@ -371,7 +371,7 @@ regardless of size.</p>
 `;
 </code></pre>
 <p>and look up and set the uniform</p>
-<pre class="prettyprint"><code class="lang-js">// look up where the vertex data needs to go.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// look up where the vertex data needs to go.
 const positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 
 +// look up uniform locations
@@ -398,7 +398,7 @@ of resolution</p>
 
 </p>
 <p>Let&#39;s also pass in the mouse position in pixel coordinates.</p>
-<pre class="prettyprint"><code class="lang-js">const fs = `
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const fs = `
   precision highp float;
 
   uniform vec2 u_resolution;
@@ -414,12 +414,12 @@ of resolution</p>
 `;
 </code></pre>
 <p>And then we need to look up the uniform location,</p>
-<pre class="prettyprint"><code class="lang-js">// look up uniform locations
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// look up uniform locations
 const resolutionLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 +const mouseLocation = gl.getUniformLocation(program, &quot;u_mouse&quot;);
 </code></pre>
 <p>track the mouse,</p>
-<pre class="prettyprint"><code class="lang-js">let mouseX = 0;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">let mouseX = 0;
 let mouseY = 0;
 
 function setMousePosition(e) {
@@ -432,11 +432,11 @@ function setMousePosition(e) {
 canvas.addEventListener(&#39;mousemove&#39;, setMousePosition);
 </code></pre>
 <p>and set the uniform.</p>
-<pre class="prettyprint"><code class="lang-js">gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
 +gl.uniform2f(mouseLocation, mouseX, mouseY);
 </code></pre>
 <p>We also need to change the code so we render when the mouse position changes</p>
-<pre class="prettyprint"><code class="lang-js">function setMousePosition(e) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function setMousePosition(e) {
   const rect = canvas.getBoundingClientRect();
   mouseX = e.clientX - rect.left;
   mouseY = rect.height - (e.clientY - rect.top) - 1;  // bottom is 0 in WebGL
@@ -457,7 +457,7 @@ canvas.addEventListener(&#39;mousemove&#39;, setMousePosition);
 +render();
 </code></pre>
 <p>and while we&#39;re at it lets handle touch too</p>
-<pre class="prettyprint"><code class="lang-js">canvas.addEventListener(&#39;mousemove&#39;, setMousePosition);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">canvas.addEventListener(&#39;mousemove&#39;, setMousePosition);
 +canvas.addEventListener(&#39;touchstart&#39;, (e) =&gt; {
 +  e.preventDefault();
 +}, {passive: false});
@@ -476,7 +476,7 @@ canvas.addEventListener(&#39;mousemove&#39;, setMousePosition);
 <p>The final major piece is we want to be able to animate something so we pass in one
 more thing, a time value we can use to add to our computations.</p>
 <p>For example if we did this</p>
-<pre class="prettyprint"><code class="lang-js">const fs = `
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const fs = `
   precision highp float;
 
   uniform vec2 u_resolution;
@@ -494,7 +494,7 @@ more thing, a time value we can use to add to our computations.</p>
 </code></pre>
 <p>And now the blue channel will pulse to the time. We just need to 
 look up the uniform, and set it in a <a href="webgl-animation.html">requestAnimationFrame loop</a>.</p>
-<pre class="prettyprint"><code class="lang-js">// look up uniform locations
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// look up uniform locations
 const resolutionLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 const mouseLocation = gl.getUniformLocation(program, &quot;u_mouse&quot;);
 +const timeLocation = gl.getUniformLocation(program, &quot;u_time&quot;);
@@ -525,7 +525,7 @@ const mouseLocation = gl.getUniformLocation(program, &quot;u_mouse&quot;);
 -render();
 </code></pre>
 <p>Also we no longer need to render on mousemove since we&#39;re rendering continuously.</p>
-<pre class="prettyprint"><code class="lang-js">let mouseX = 0;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">let mouseX = 0;
 let mouseY = 0;
 canvas.addEventListener(&#39;mousemove&#39;, (e) =&gt; {
   const rect = canvas.getBoundingClientRect();
@@ -541,16 +541,16 @@ canvas.addEventListener(&#39;mousemove&#39;, (e) =&gt; {
 </div>
 
 </p>
-<p>So now with all of that we can take a shader from <a href="https://shadertoy.com">Shadertoy.com</a>. Shadertoy shaders you provide a function called <code>mainImage</code> in this form</p>
-<pre class="prettyprint"><code class="lang-glsl">void mainImage(out vec4 fragColor, in vec2 fragCoord)
+<p>So now with all of that we can take a shader from <a href="https://shadertoy.com">Shadertoy.com</a>. Shadertoy shaders you provide a function called <code class="notranslate" translate="no">mainImage</code> in this form</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {    
 }
 </code></pre>
-<p>Where your job is to set <code>fragColor</code> just like you&#39;d normally set <code>gl_FragColor</code> and
-<code>fragCoord</code> is the same as <code>gl_FragCoord</code>. Adding this extra function lets Shadertoy
+<p>Where your job is to set <code class="notranslate" translate="no">fragColor</code> just like you&#39;d normally set <code class="notranslate" translate="no">gl_FragColor</code> and
+<code class="notranslate" translate="no">fragCoord</code> is the same as <code class="notranslate" translate="no">gl_FragCoord</code>. Adding this extra function lets Shadertoy
 impose a little more structure as well as do some extra work before or after calling
-<code>mainImage</code>. For us to use it we just need to call it like this</p>
-<pre class="prettyprint"><code class="lang-glsl">precision highp float;
+<code class="notranslate" translate="no">mainImage</code>. For us to use it we just need to call it like this</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision highp float;
 
 uniform vec2 u_resolution;
 uniform vec2 u_mouse;
@@ -562,8 +562,8 @@ void main() {
   mainImage(gl_FragColor, gl_FragCoord.xy);
 }
 </code></pre>
-<p>Except that Shadertoy uses the uniform names <code>iResolution</code>, <code>iMouse</code> and <code>iTime</code> so let&#39;s rename them.</p>
-<pre class="prettyprint"><code class="lang-glsl">precision highp float;
+<p>Except that Shadertoy uses the uniform names <code class="notranslate" translate="no">iResolution</code>, <code class="notranslate" translate="no">iMouse</code> and <code class="notranslate" translate="no">iTime</code> so let&#39;s rename them.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision highp float;
 
 -uniform vec2 u_resolution;
 -uniform vec2 u_mouse;
@@ -579,7 +579,7 @@ void main() {
 }
 </code></pre>
 <p>and look them up by the new names</p>
-<pre class="prettyprint"><code class="lang-js">// look up uniform locations
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// look up uniform locations
 -const resolutionLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 -const mouseLocation = gl.getUniformLocation(program, &quot;u_mouse&quot;);
 -const timeLocation = gl.getUniformLocation(program, &quot;u_time&quot;);
@@ -588,7 +588,7 @@ void main() {
 +const timeLocation = gl.getUniformLocation(program, &quot;iTime&quot;);
 </code></pre>
 <p>Taking <a href="https://www.shadertoy.com/view/3l23Rh">this shadertoy shader</a> and pasting it
-in our shader above where it says <code>//---insert shadertoy code here--</code> gives us...</p>
+in our shader above where it says <code class="notranslate" translate="no">//---insert shadertoy code here--</code> gives us...</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-shadertoy.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-shadertoy.html" target="_blank">click here to open in a separate window</a>
@@ -647,10 +647,10 @@ uniforms Shadertoy provides </p>
 <tr><td><b>float</b></td><td><b>iSampleRate</b></td><td>image / buffer / sound</td><td>The sound sample rate (typically 44100)</td></tr>
 </tbody></table></div>
 
-<p>Notice <code>iMouse</code> and <code>iResolution</code> are actually supposed to be
-a <code>vec4</code> and a <code>vec3</code> respectively so you may need to adjust
+<p>Notice <code class="notranslate" translate="no">iMouse</code> and <code class="notranslate" translate="no">iResolution</code> are actually supposed to be
+a <code class="notranslate" translate="no">vec4</code> and a <code class="notranslate" translate="no">vec3</code> respectively so you may need to adjust
 those to match.</p>
-<p><code>iChannel</code> are textures so if the shader needs them you&#39;ll need
+<p><code class="notranslate" translate="no">iChannel</code> are textures so if the shader needs them you&#39;ll need
 to provide <a href="webgl-3d-textures.html">textures</a>.</p>
 <p>Shadertoy also lets you use multiple shaders to render to
 offscreen textures so if a shader needs those you&#39;ll need to setup
@@ -670,7 +670,7 @@ the techniques used in these kinds of shader 2 good resources are
 <h3>Pixel Coordinates</h3>
 <p>Pixel coordinates in WebGL
 are referenced by their edges. So for example if we had a canvas that was 3x2 pixels big then
-the value for <code>gl_FragCoord</code> at the pixel 2
+the value for <code class="notranslate" translate="no">gl_FragCoord</code> at the pixel 2
 from the left and 1 from the bottom
 would be 2.5, 1.5
 </p>

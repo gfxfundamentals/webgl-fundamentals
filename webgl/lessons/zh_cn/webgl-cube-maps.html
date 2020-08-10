@@ -223,7 +223,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 根据法向量的朝向选取立方体6个面中的一个，这个面的像素用来采样生成颜色。</p>
 <p>这六个面通过他们相对于立方体中心的方向被引用。
 它们是</p>
-<pre class="prettyprint"><code>gl.TEXTURE_CUBE_MAP_POSITIVE_X
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_POSITIVE_X
 gl.TEXTURE_CUBE_MAP_NEGATIVE_X
 gl.TEXTURE_CUBE_MAP_POSITIVE_Y
 gl.TEXTURE_CUBE_MAP_NEGATIVE_Y
@@ -231,7 +231,7 @@ gl.TEXTURE_CUBE_MAP_POSITIVE_Z
 gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
 </code></pre><p>我们来做一个简单的例子，我们会使用二维canvas来生成6个面的图片</p>
 <p>这是填充画布纯色中心文字的代码</p>
-<pre class="prettyprint"><code>function generateFace(ctx, faceColor, textColor, text) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function generateFace(ctx, faceColor, textColor, text) {
   const {width, height} = ctx.canvas;
   ctx.fillStyle = faceColor;
   ctx.fillRect(0, 0, width, height);
@@ -242,7 +242,7 @@ gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
   ctx.fillText(text, width / 2, height / 2);
 }
 </code></pre><p>这是调用它生成6个图片的代码</p>
-<pre class="prettyprint"><code>// 获取二维上下文
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 获取二维上下文
 /** @type {Canvas2DRenderingContext} */
 const ctx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
 
@@ -276,7 +276,7 @@ faceInfos.forEach((faceInfo) =&gt; {
 </p>
 <p>现在我们将其应用在立方体上。 我们会使用 <a href="webgl-3d-textures.html">三维纹理</a>中使用纹理图集的代码。</p>
 <p>首先我们修改着色器来使用立方体纹理</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 
 uniform mat4 u_matrix;
 
@@ -300,9 +300,9 @@ void main() {
 
 </p>
 <p>我们已经不使用纹理坐标所以我们可以移除所有和设定纹理坐标相关的代码了。</p>
-<p>在片段着色器中我们需要用<code>samplerCube</code> 代替 <code>sampler2D</code>  用 <code>textureCube</code> 代替<code>texture2D</code>。<code>textureCube</code> 需要vec3 方向值
+<p>在片段着色器中我们需要用<code class="notranslate" translate="no">samplerCube</code> 代替 <code class="notranslate" translate="no">sampler2D</code>  用 <code class="notranslate" translate="no">textureCube</code> 代替<code class="notranslate" translate="no">texture2D</code>。<code class="notranslate" translate="no">textureCube</code> 需要vec3 方向值
 所以我们传递单位化的法向量。 因为法向量是varing会被插值，我们需要单位化它。</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // 从顶点着色器传入。
 varying vec3 v_normal;
@@ -314,7 +314,7 @@ void main() {
    gl_FragColor = textureCube(u_texture, normalize(v_normal));
 }
 </code></pre><p>之后, 在JavaScript中我们需要设置纹理</p>
-<pre class="prettyprint"><code>// 生成纹理。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 生成纹理。
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
@@ -348,16 +348,16 @@ gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 </code></pre><p>需要注意的事情：</p>
 <ul>
-<li><p>我们使用 <code>gl.TEXTURE_CUBE_MAP</code> 代替 <code>gl.TEXTURE_2D</code>。</p>
+<li><p>我们使用 <code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP</code> 代替 <code class="notranslate" translate="no">gl.TEXTURE_2D</code>。</p>
 <p>这告诉WebGL生成一个立方体纹理而不是二维纹理。</p>
 </li>
 <li><p>用特殊的目标上传到纹理的每个面。</p>
-<p><code>gl.TEXTURE_CUBE_MAP_POSITIVE_X</code>,
-<code>gl.TEXTURE_CUBE_MAP_NEGATIVE_X</code>,
-<code>gl.TEXTURE_CUBE_MAP_POSITIVE_Y</code>,
-<code>gl.TEXTURE_CUBE_MAP_NEGATIVE_Y</code>,
-<code>gl.TEXTURE_CUBE_MAP_POSITIVE_Z</code>, 和
-<code>gl.TEXTURE_CUBE_MAP_NEGATIVE_Z</code>.</p>
+<p><code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_POSITIVE_X</code>,
+<code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_NEGATIVE_X</code>,
+<code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_POSITIVE_Y</code>,
+<code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_NEGATIVE_Y</code>,
+<code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_POSITIVE_Z</code>, 和
+<code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_NEGATIVE_Z</code>.</p>
 </li>
 <li><p>每个面都是正方形。上面的例子是 128x128的。</p>
 <p>立方体纹理需要正方形纹理。

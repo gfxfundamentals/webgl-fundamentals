@@ -215,7 +215,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>WebGL을 개발하기 위해 웹 브라우저 이외에 기술적으로 아무것도 필요가 없습니다.</p>
 <p><a href="https://jsfiddle.net/greggman/8djzyjL3/">jsfiddle.net</a>이나 <a href="https://jsbin.com">jsbin.com</a>
 혹은 <a href="https://codepen.io/greggman/pen/YGQjVV">codepen.io</a>에 가서 여기 있는 학습서들을 적용하면 됩니다.</p>
-<p>외부 스크립트를 참조하려면 <code>&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;</code> 태그 쌍을 추가해서 외부 스크립트를 참조할 수 있습니다.</p>
+<p>외부 스크립트를 참조하려면 <code class="notranslate" translate="no">&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;</code> 태그 쌍을 추가해서 외부 스크립트를 참조할 수 있습니다.</p>
 <p>여전히, 한계는 있는데요.
 WebGL은 이미지를 로딩하는데 Canvas2D보다 더 강력한 제한이 있습니다.
 즉 작업을 위해 웹에서 이미지에 쉽게 접근할 수 없다는 것을 의미합니다.
@@ -238,23 +238,23 @@ WebGL은 이미지를 로딩하는데 Canvas2D보다 더 강력한 제한이 있
 </div>
 
 </p>
-<p>그저 압축 해제한 폴더를 가르키고, &quot;시작&quot;을 누른 다음, 브라우저(<a href="http://localhost:8080/webgl/"><code>http://localhost:8080/webgl/</code></a>)로 들어가서 예제를 선택하세요.</p>
+<p>그저 압축 해제한 폴더를 가르키고, &quot;시작&quot;을 누른 다음, 브라우저(<a href="http://localhost:8080/webgl/"><code class="notranslate" translate="no">http://localhost:8080/webgl/</code></a>)로 들어가서 예제를 선택하세요.</p>
 <p>만약 명령어를 선호한다면, 또 다른 방법으로 <a href="https://nodejs.org">node.js</a>를 사용하세요.
 내려받고, 설치하고, 명령어 창(prompt / console / terminal)을 열면 됩니다.
 Windows라면 설치 관리자가 특별한 &quot;Node Command Prompt&quot;를 추가해주니 그걸 사용하세요.</p>
-<p>그런 다음 <a href="https://github.com/greggman/servez-cli"><code>servez</code></a>를 입력해서 설치합니다</p>
-<pre class="prettyprint"><code>npm -g install servez
+<p>그런 다음 <a href="https://github.com/greggman/servez-cli"><code class="notranslate" translate="no">servez</code></a>를 입력해서 설치합니다</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">npm -g install servez
 </code></pre><p>만약 OS X를 사용한다면</p>
-<pre class="prettyprint"><code>sudo npm -g install servez
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">sudo npm -g install servez
 </code></pre><p>해당 과정을 완료하면</p>
-<pre class="prettyprint"><code>servez path/to/folder/where/you/unzipped/files
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">servez path/to/folder/where/you/unzipped/files
 </code></pre><p>이렇게 출력될 겁니다</p>
 <p><div class="webgl_image ">
   <img class="" src="/webgl/lessons/resources/servez-response.png">
 </div>
 
 </p>
-<p>그런 다음 브라우저에서 <a href="http://localhost:8080/webgl/"><code>http://localhost:8080/webgl/</code></a>로 접속하세요.</p>
+<p>그런 다음 브라우저에서 <a href="http://localhost:8080/webgl/"><code class="notranslate" translate="no">http://localhost:8080/webgl/</code></a>로 접속하세요.</p>
 <p>경로를 지정하지 않으면 servez가 현재 폴더를 제공합니다.</p>
 <h2 id="-">브라우저 개발자 도구 사용하기</h2>
 <p>대부분의 브라우저는 광범위한 개발자 도구를 내장하고 있습니다.</p>
@@ -282,14 +282,14 @@ Windows라면 설치 관리자가 특별한 &quot;Node Command Prompt&quot;를 �
 
 </p>
 <p><a href="https://hacks.mozilla.org/2014/03/introducing-the-canvas-debugger-in-firefox-developer-tools/">Firefox도 비슷한 것이 있는데요</a>.
-<code>about:flags</code>가 활성화되어야 하고 <a href="https://www.mozilla.org/en-US/firefox/developer/">Firefox Developer Edition</a>이 필요할 수도 있습니다.</p>
+<code class="notranslate" translate="no">about:flags</code>가 활성화되어야 하고 <a href="https://www.mozilla.org/en-US/firefox/developer/">Firefox Developer Edition</a>이 필요할 수도 있습니다.</p>
 <p>도움이 될 수도 아닐 수도 있습니다.
 대부분은 애니메이션 표본을 위해 설계되었으며 프레임을 캡처하여 해당 프레임을 만든 모든 WebGL 호출을 볼 수 있는데요.
 이미 무언가가 동작하고 있거나 동작하다가 고장난 경우라면 굉장히 유용합니다.
 하지만 잡을 수 없는 초기화 중에 발생하는 문제나 매 프레임마다 그리는 애니메이션을 사용하지 않을 경우 그리 좋지 않은데요.
 그럼에도 불구하고 상당히 유용할 수 있습니다.
 저는 종종 그리는 호출을 클릭하고 uniform을 확인합니다.
-<code>NaN</code> (NaN = Not a Number) 여러 개를 볼 수 있다면 보통 uniform을 설정하는 코드를 추적하고 버그를 찾을 수 있습니다.</p>
+<code class="notranslate" translate="no">NaN</code> (NaN = Not a Number) 여러 개를 볼 수 있다면 보통 uniform을 설정하는 코드를 추적하고 버그를 찾을 수 있습니다.</p>
 <h2 id="-">코드 분석</h2>
 <p>또한 항상 코드를 검사할 수 있다는 걸 기억하세요.
 대개 코드 보기를 선택할 수 있습니다.</p>

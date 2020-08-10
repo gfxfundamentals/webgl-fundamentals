@@ -247,7 +247,7 @@ abs(3.333 - 6.666) = 3.333
 クリップ空間でZが+1〜-1になるので簡単にZで割れる。
 Zは補正係数を掛けると調整出来るようになる。</p>
 <p>じゃあ、やってみょう！最初に頂点シェーダーを更新して、頂点位置を補正係数に掛けたZで割る。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;  // 補正係数
 ...
@@ -264,9 +264,9 @@ void main() {
 　　...
 }
 &lt;/script&gt;
-</code></pre><p>クリップ空間のZが-1〜+1なので、１を足して、<code>zToDivideBy</code>は0〜+2*fudgeFactorになる。</p>
-<p><code>fudgeFactor</code>を設定出来るように更新しなきゃ。</p>
-<pre class="prettyprint"><code>  ...
+</code></pre><p>クリップ空間のZが-1〜+1なので、１を足して、<code class="notranslate" translate="no">zToDivideBy</code>は0〜+2*fudgeFactorになる。</p>
+<p><code class="notranslate" translate="no">fudgeFactor</code>を設定出来るように更新しなきゃ。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
 
   ...
@@ -293,9 +293,9 @@ void main() {
 <p><img class="webgl_center" src="../resources/orthographic-vs-perspective.png" /></p>
 <div class="webgl_center">正投影対透視投影</div>
 
-<p>実は、WebGLが<code>gl_Position</code>を割り当てた値を自動的にWで割っている。</p>
-<p>簡単に確認したければ、頂点シェーダーで手動でXとYを割る代わりに<code>gl_Position.w</code>を<code>zToDivideBy</code>に割り当てる。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<p>実は、WebGLが<code class="notranslate" translate="no">gl_Position</code>を割り当てた値を自動的にWで割っている。</p>
+<p>簡単に確認したければ、頂点シェーダーで手動でXとYを割る代わりに<code class="notranslate" translate="no">gl_Position.w</code>を<code class="notranslate" translate="no">zToDivideBy</code>に割り当てる。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -360,7 +360,7 @@ z_out = z_in;
 w_out = z_in;
 </pre></div>
 
-<p><code>w_in</code>はいつも１になっているので、シェーダーと同じように１を足すことも出来る。</p>
+<p><code class="notranslate" translate="no">w_in</code>はいつも１になっているので、シェーダーと同じように１を足すことも出来る。</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 1, 0, 0, 0,
 0, 1, 0, 0,
@@ -368,7 +368,7 @@ w_out = z_in;
 0, 0, 0, 1,
 </pre></div>
 
-<p>それで<code>w_out</code>の計算式がこうなる。</p>
+<p>それで<code class="notranslate" translate="no">w_out</code>の計算式がこうなる。</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = x_in * 0 +
         y_in * 0 +
@@ -376,12 +376,12 @@ w_out = x_in * 0 +
         w_in * 1 ;
 </pre></div>
 
-<p>いつも<code>w_in</code>=1.0なので実はこうなる。</p>
+<p>いつも<code class="notranslate" translate="no">w_in</code>=1.0なので実はこうなる。</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in + 1;
 </pre></div>
 
-<p>最後に補正係数の<code>fudgeFactor</code>に掛けることも追加出来る。</p>
+<p>最後に補正係数の<code class="notranslate" translate="no">fudgeFactor</code>に掛けることも追加出来る。</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 1, 0, 0, 0,
 0, 1, 0, 0,
@@ -404,7 +404,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>さあ、また行列しか使ってない形に戻そう。</p>
 <p>まず頂点シェーダーを前の単純な形に戻す。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -414,7 +414,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>次に、Z &rarr; Wの行列作成関数を作ろう。</p>
-<pre class="prettyprint"><code>function makeZToWMatrix(fudgeFactor) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function makeZToWMatrix(fudgeFactor) {
   return [
     1, 0, 0, 0,
     0, 1, 0, 0,
@@ -423,7 +423,7 @@ void main() {
   ];
 }
 </code></pre><p>そして、その行列を含むように更新する。</p>
-<pre class="prettyprint"><code>    ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ...
     // Compute the matrices
 *    var matrix = makeZToWMatrix(fudgeFactor);
 *    matrix = m4.multiply(matrix, m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400));
@@ -449,9 +449,9 @@ void main() {
 この消えているところはZが−１以下になっている場合である。</p>
 <p>その問題を解決する数学を細かく説明出来るけど、二次元の投影行列数学と同じように<a href="https://stackoverflow.com/a/28301213/128511">答えを導き出すこと出来るだろう</a>。Zをとって、何かを足して、何かにスケールすると、
 どの値の範囲からも-1〜+1出来る。</p>
-<p>それら全部を一つの行列で出来る。その上、補正係数の<code>fudgeFactor</code>は<code>fieldOfView</code>という視野も同じ行列で決められる。</p>
+<p>それら全部を一つの行列で出来る。その上、補正係数の<code class="notranslate" translate="no">fudgeFactor</code>は<code class="notranslate" translate="no">fieldOfView</code>という視野も同じ行列で決められる。</p>
 <p>これはその行列の関数である。</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   perspective: function(fieldOfViewInRadians, aspect, near, far) {
     var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
     var rangeInv = 1.0 / (near - far);
@@ -466,9 +466,9 @@ void main() {
 
   ...
 </code></pre><p>この行列で全ての変換が出来る。三次元単位はクリップ空間にする。好きな視野、
-好きなZ空間にもする。目、またカメラは0,0,0にあるとする。<code>zNear</code>というZの近い境界と<code>fieldOfView</code>の視野で
-<code>Z=-zNear</code>の頂点のZは<code>-1</code>になって、中心点から<code>fieldOfView</code>の上半分と下半分の頂点のYはそれぞれ+1か-1になる。頂点のX
-は<code>aspect</code>というキャンバスの比較率で計算する。最後に、Zが<code>-zFar</code>の頂点は<code>Z = 1</code>になる。</p>
+好きなZ空間にもする。目、またカメラは0,0,0にあるとする。<code class="notranslate" translate="no">zNear</code>というZの近い境界と<code class="notranslate" translate="no">fieldOfView</code>の視野で
+<code class="notranslate" translate="no">Z=-zNear</code>の頂点のZは<code class="notranslate" translate="no">-1</code>になって、中心点から<code class="notranslate" translate="no">fieldOfView</code>の上半分と下半分の頂点のYはそれぞれ+1か-1になる。頂点のX
+は<code class="notranslate" translate="no">aspect</code>というキャンバスの比較率で計算する。最後に、Zが<code class="notranslate" translate="no">-zFar</code>の頂点は<code class="notranslate" translate="no">Z = 1</code>になる。</p>
 <p>この行列の働き方のダイヤグラムである。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  400px; height: 600px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Ffrustum-diagram.html"></iframe>
@@ -477,13 +477,13 @@ void main() {
 
 </p>
 <p>このトップがない四角錐は錘台(すいだい）と呼ばれる。この行列はその錘台の空間からクリップ空間に変換する。
-<code>zNear</code>は前面を定義して、<code>zFar</code>は裏面を定義する。<code>zNear</code>を23にすると回転している立方体がクリップされる。
-<code>zFar</code>を24にすると立方体の後ろの方がクリップされることも見える。</p>
+<code class="notranslate" translate="no">zNear</code>は前面を定義して、<code class="notranslate" translate="no">zFar</code>は裏面を定義する。<code class="notranslate" translate="no">zNear</code>を23にすると回転している立方体がクリップされる。
+<code class="notranslate" translate="no">zFar</code>を24にすると立方体の後ろの方がクリップされることも見える。</p>
 <p>あと一つだけ問題が残っている。この行列は原点(0,0,0)から-Zの方に上は＋Yで見ている。今までの投影行列と違う。
 この行列を使う為に図形をビューの前に移動しなければいけない。</p>
 <p>「F」を移動したらいい。前は45,150,0だったが、-150,0,-360を移動しよう。</p>
-<p>前は<code>m4.projection</code>を呼び出したが、今回<code>m4.perspective</code>を呼び出す。</p>
-<pre class="prettyprint"><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+<p>前は<code class="notranslate" translate="no">m4.projection</code>を呼び出したが、今回<code class="notranslate" translate="no">m4.perspective</code>を呼び出す。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
 var zFar = 2000;
 var matrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
@@ -511,10 +511,10 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 </p>
 <p>
 
-今までのサンプルの<code>m4.projection</code>関数はピクセル空間からクリップ空間に変換行列を作った。
+今までのサンプルの<code class="notranslate" translate="no">m4.projection</code>関数はピクセル空間からクリップ空間に変換行列を作った。
 その時ピクセル空間は400x300ピクセル（例）になった。三次元ならピクセル単位はあまり意味がない。
-新しい錘台の投影行列は<code>zNear</code>で空間の縦が2単位と横は2掛け<code>aspect</code>単位になる。
-「F」図形の縦は150単位で、ビューが<code>zNear</code>では2単位しか見えないので原点から遠く移動しないと見えない。
+新しい錘台の投影行列は<code class="notranslate" translate="no">zNear</code>で空間の縦が2単位と横は2掛け<code class="notranslate" translate="no">aspect</code>単位になる。
+「F」図形の縦は150単位で、ビューが<code class="notranslate" translate="no">zNear</code>では2単位しか見えないので原点から遠く移動しないと見えない。
 </p>
 <p>
 

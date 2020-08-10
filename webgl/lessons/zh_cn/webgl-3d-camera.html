@@ -214,8 +214,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>此文上接WebGL系列文章，从<a href="webgl-fundamentals.html">基础概念</a>开始，
 上一篇是<a href="webgl-3d-perspective.html">三维透视投影</a>，如果没读过请从那里开始。</p>
-<p>在上篇文章中我们将 F 移动到了视锥中，原因是 <code>m4.perspective</code>
-默认将相机放在了原点(0, 0, 0)并且视锥的范围是 <code>-zNear</code> 到 <code>-zFar</code>。</p>
+<p>在上篇文章中我们将 F 移动到了视锥中，原因是 <code class="notranslate" translate="no">m4.perspective</code>
+默认将相机放在了原点(0, 0, 0)并且视锥的范围是 <code class="notranslate" translate="no">-zNear</code> 到 <code class="notranslate" translate="no">-zFar</code>。</p>
 <p>将物体移动到视场中可能并不是正确的方法，在实际生活中通常是移动相机去拍摄建筑物。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
@@ -248,7 +248,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 就可以计算出它的逆矩阵，利用这个逆矩阵可以不动相机，将物体从相反的方向移动到相机前。</p>
 <p>让我们来做一个三维场景，像上图一样有一圈 &#39;F&#39; 。</p>
 <p>首先，由于5个物体使用的是同一个投影矩阵，所以我们将投影矩阵的计算放在循环外</p>
-<pre class="prettyprint"><code>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">
 // 计算投影矩阵
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
@@ -262,23 +262,23 @@ var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 </div>
 
 </p>
-<pre class="prettyprint"><code>var numFs = 5;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var numFs = 5;
 var radius = 200;
 
 // 计算相机的矩阵
 var cameraMatrix = m4.yRotation(cameraAngleRadians);
 cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 </code></pre><p>然后通过相机矩阵计算“视图矩阵”，视图矩阵是将所有物体以相反于相机的方向运动，
-尽管相机还是在原点但是相对关系是期望的。我们可以使用 <code>inverse</code> 方法计算逆矩阵（
+尽管相机还是在原点但是相对关系是期望的。我们可以使用 <code class="notranslate" translate="no">inverse</code> 方法计算逆矩阵（
 完全对立的转换矩阵），在这个例子中提供的是绕原点转动的矩阵，
 它的逆矩阵是移动相机以外的所有物体，好像相机在原点一样。</p>
-<pre class="prettyprint"><code>// 通过相机矩阵计算视图矩阵
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 通过相机矩阵计算视图矩阵
 var viewMatrix = m4.inverse(cameraMatrix);
 </code></pre><p>现在将视图矩阵和投影矩阵结合在一起</p>
-<pre class="prettyprint"><code>// 计算组合矩阵
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 计算组合矩阵
 var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </code></pre><p>最后绘制一圈 F，将每个 F 乘以视图投影矩阵，然后旋转和向外平移 radius 个单位。</p>
-<pre class="prettyprint"><code>for (var ii = 0; ii &lt; numFs; ++ii) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">for (var ii = 0; ii &lt; numFs; ++ii) {
   var angle = ii * Math.PI * 2 / numFs;
   var x = Math.cos(angle) * radius;
   var y = Math.sin(angle) * radius
@@ -296,7 +296,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
   var count = 16 * 6;
   gl.drawArrays(primitiveType, offset, count);
 }
-</code></pre><p>看！一个绕 F 旋转的相机。拖动 <code>cameraAngle</code> 滑块移动相机。</p>
+</code></pre><p>看！一个绕 F 旋转的相机。拖动 <code class="notranslate" translate="no">cameraAngle</code> 滑块移动相机。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html" target="_blank">点此在新窗口中浏览</a>
@@ -309,12 +309,12 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 这时计算会变的相当复杂。</p>
 <p>幸好这有一个简单的方法，我们可以同时定义相机位置和朝向，然后矩阵就可以将相机放在那，
 基于矩阵这个工作就会变得非常简单。</p>
-<p>首先我们需要知道相机的期望位置，将它叫做 <code>cameraPosition</code>，
-然后需要知道看向或对准的目标位置，将它叫做 <code>target</code>。
-如果将 <code>target</code> 减去 <code>cameraPosition</code> 就会得到相机的朝向，
-将它叫做 <code>zAxis</code>。由于我们知道相机看向的是 -Z 方向，
-所以可以用另一种方式相减  <code>cameraPosition - target</code>，
-将结果单位化后直接赋给矩阵的 <code>z</code> 区域。</p>
+<p>首先我们需要知道相机的期望位置，将它叫做 <code class="notranslate" translate="no">cameraPosition</code>，
+然后需要知道看向或对准的目标位置，将它叫做 <code class="notranslate" translate="no">target</code>。
+如果将 <code class="notranslate" translate="no">target</code> 减去 <code class="notranslate" translate="no">cameraPosition</code> 就会得到相机的朝向，
+将它叫做 <code class="notranslate" translate="no">zAxis</code>。由于我们知道相机看向的是 -Z 方向，
+所以可以用另一种方式相减  <code class="notranslate" translate="no">cameraPosition - target</code>，
+将结果单位化后直接赋给矩阵的 <code class="notranslate" translate="no">z</code> 区域。</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 |    |    |    |    |
@@ -343,25 +343,25 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 换句话说，如果你有一个向量指向东南方，一个向量指向上方，
 叉乘后会得到一个指向西南方或东北方的矢量，因为这两个矢量都和东南方和上方垂直。
 相乘的顺序不同的到结果相反。</p>
-<p>在任何情况下我们可以通过叉乘<span class="z-axis"><code>zAxis</code></span>
-和<span style="color: gray;"><code>up</code></span> 得到相机的<span class="x-axis">xAxis</span>。</p>
+<p>在任何情况下我们可以通过叉乘<span class="z-axis"><code class="notranslate" translate="no">zAxis</code></span>
+和<span style="color: gray;"><code class="notranslate" translate="no">up</code></span> 得到相机的<span class="x-axis">xAxis</span>。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
   <div class="webgl_center"><span style='color:gray;'>up</span> 叉乘 <span class='z-axis'>zAxis</span> = <span class='x-axis'>xAxis</span></div>
 </div>
 
 </p>
-<p>现在我们有了 <span class="x-axis"><code>xAxis</code></span> ，
-可以叉乘 <span class="z-axis"><code>zAxis</code></span> 和 <span class="x-axis"><code>xAxis</code></span>
-的到相机的 <span class="y-axis"><code>yAxis</code></span>。</p>
+<p>现在我们有了 <span class="x-axis"><code class="notranslate" translate="no">xAxis</code></span> ，
+可以叉乘 <span class="z-axis"><code class="notranslate" translate="no">zAxis</code></span> 和 <span class="x-axis"><code class="notranslate" translate="no">xAxis</code></span>
+的到相机的 <span class="y-axis"><code class="notranslate" translate="no">yAxis</code></span>。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
   <div class="webgl_center"><span class='z-axis'>zAxis</span> 叉乘 <span class='x-axis'>xAxis</span> = <span class='y-axis'>yAxis</span></div>
 </div>
 
 </p>
-<p>现在将三个轴插入矩阵中，会给我们提供一个从 <code>cameraPosition</code> 指向 <code>target</code>
-的转换，只需要再加上 <code>position</code></p>
+<p>现在将三个轴插入矩阵中，会给我们提供一个从 <code class="notranslate" translate="no">cameraPosition</code> 指向 <code class="notranslate" translate="no">target</code>
+的转换，只需要再加上 <code class="notranslate" translate="no">position</code></p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 | <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">x axis</span>
@@ -375,17 +375,17 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </pre></div>
 
 <p>这是计算叉乘的代码</p>
-<pre class="prettyprint"><code>function cross(a, b) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function cross(a, b) {
   return [a[1] * b[2] - a[2] * b[1],
           a[2] * b[0] - a[0] * b[2],
           a[0] * b[1] - a[1] * b[0]];
 }
 </code></pre><p>这是向量相减的代码</p>
-<pre class="prettyprint"><code>function subtractVectors(a, b) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function subtractVectors(a, b) {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 </code></pre><p>这是单位化向量的代码</p>
-<pre class="prettyprint"><code>function normalize(v) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function normalize(v) {
   var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
   // 确定不会除以 0
   if (length &gt; 0.00001) {
@@ -395,7 +395,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
   }
 }
 </code></pre><p>这是计算“朝向”矩阵的代码</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   lookAt: function(cameraPosition, target, up) {
     var zAxis = normalize(
         subtractVectors(cameraPosition, target));
@@ -413,7 +413,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
     ];
   }
 </code></pre><p>这是在移动过程中朝向某个确切的 &#39;F&#39; 的用法。</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
   // 计算第一个 F 的位置
   var fPosition = [radius, 0, 0];
@@ -448,22 +448,22 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 <p>拖动滑块观察相机是如何追踪单个 &#39;F&#39; 的。</p>
 <p>你也可以对其他东西使用“lookAt”方法而不只是相机。通常是让角色视线跟着某人，
 将炮塔指向目标，让物体沿着路径移动。你可以算出物体当前在路径上的位置和不久后的位置，
-然后将这两个值放入 <code>lookAt</code> 方法，可以让物体沿着路径移动并且朝着路径的方向。</p>
+然后将这两个值放入 <code class="notranslate" translate="no">lookAt</code> 方法，可以让物体沿着路径移动并且朝着路径的方向。</p>
 <p>接下来让我们<a href="webgl-animation.html">学习动画</a>。</p>
 <div class="webgl_bottombar">
 <h3>lookAt 标准</h3>
 <p>
 
-大多数三维数学库都有<code>lookAt</code>方法，通常它是用于计算“视图矩阵”
+大多数三维数学库都有<code class="notranslate" translate="no">lookAt</code>方法，通常它是用于计算“视图矩阵”
 而不是“相机矩阵”。换句话说这个矩阵将所有物体移动到相机前而不是将相机移动到物体前。
 
 </p>
 <p>
 
 我发现它并不好用，前面指出，一个 lookAt 方法有很多用处，
-当你需要视图矩阵的时候只需要调用<code>inverse</code>方法，
+当你需要视图矩阵的时候只需要调用<code class="notranslate" translate="no">inverse</code>方法，
 但当你想要让角色跟随另一个角色或者炮台跟随目标的时候，
-在我看来<code>lookAt</code>方法返回世界坐标中的朝向和位置转换会好一些。
+在我看来<code class="notranslate" translate="no">lookAt</code>方法返回世界坐标中的朝向和位置转换会好一些。
 
 </p>
 <div class="webgl_example_container">

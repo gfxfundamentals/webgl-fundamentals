@@ -219,14 +219,14 @@ using WebGL that seemed too small to have their own article.</p>
 <h1 id="taking-a-screenshot-of-the-canvas">Taking A Screenshot of the Canvas</h1>
 <p>In the browser there are effectively 2 functions that will take a screenshot.
 The old one 
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL"><code>canvas.toDataURL</code></a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL"><code class="notranslate" translate="no">canvas.toDataURL</code></a>
 and the new better one 
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob"><code>canvas.toBlob</code></a></p>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob"><code class="notranslate" translate="no">canvas.toBlob</code></a></p>
 <p>So you&#39;d think it would be easy to take a screenshot by just adding some code like</p>
-<pre class="prettyprint"><code class="lang-html">&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 +&lt;button id=&quot;screenshot&quot; type=&quot;button&quot;&gt;Save...&lt;/button&gt;
 </code></pre>
-<pre class="prettyprint"><code class="lang-js">const elem = document.querySelector(&#39;#screenshot&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const elem = document.querySelector(&#39;#screenshot&#39;);
 elem.addEventListener(&#39;click&#39;, () =&gt; {
   canvas.toBlob((blob) =&gt; {
     saveBlob(blob, `screencapture-${canvas.width}x${canvas.height}.png`);
@@ -264,9 +264,9 @@ will clear a WebGL canvas&#39;s drawing buffer after you&#39;ve drawn to it.</p>
 <p>There are 3 solutions.</p>
 <ol>
 <li><p>call your rendering code just before capturing</p>
-<p>The code we used as a <code>drawScene</code> function. It would be best to make that
+<p>The code we used as a <code class="notranslate" translate="no">drawScene</code> function. It would be best to make that
 code not change any state and then we could call it to render for capturing.</p>
-<pre class="prettyprint"><code class="lang-js">elem.addEventListener(&#39;click&#39;, () =&gt; {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">elem.addEventListener(&#39;click&#39;, () =&gt; {
 +  drawScene();
   canvas.toBlob((blob) =&gt; {
     saveBlob(blob, `screencapture-${canvas.width}x${canvas.height}.png`);
@@ -277,14 +277,14 @@ code not change any state and then we could call it to render for capturing.</p>
 <li><p>call the capturing code in our render loop</p>
 <p>In this case we&#39;d just set a flag that we want to capture and then
 in the rendering loop actually do the capture</p>
-<pre class="prettyprint"><code class="lang-js">let needCapture = false;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">let needCapture = false;
 elem.addEventListener(&#39;click&#39;, () =&gt; {
    needCapture = true;
 });
 </code></pre>
-<p>and then in our render loop, which is current implemented in <code>drawScene</code>,
+<p>and then in our render loop, which is current implemented in <code class="notranslate" translate="no">drawScene</code>,
 somewhere after everything has been drawn</p>
-<pre class="prettyprint"><code class="lang-js">function drawScene(time) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function drawScene(time) {
   ...
 
 +  if (needCapture) {
@@ -298,8 +298,8 @@ somewhere after everything has been drawn</p>
 }
 </code></pre>
 </li>
-<li><p>Set <code>preserveDrawingBuffer: true</code> when creating the WebGL context</p>
-<pre class="prettyprint"><code class="lang-js"> const gl = someCanvas.getContext(&#39;webgl&#39;, {preserveDrawingBuffer: true});
+<li><p>Set <code class="notranslate" translate="no">preserveDrawingBuffer: true</code> when creating the WebGL context</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js"> const gl = someCanvas.getContext(&#39;webgl&#39;, {preserveDrawingBuffer: true});
 </code></pre>
 <p> This makes webgl not clear the canvas after compositing the canvas with the
  rest of the page but prevents certain <em>possible</em> optimizations.</p>
@@ -307,7 +307,7 @@ somewhere after everything has been drawn</p>
 </ol>
 <p>I&#39;d pick #1 above. For this particular example first I&#39;d separate the parts of
 the code that update state from the parts that draw.</p>
-<pre class="prettyprint"><code class="lang-js">  var then = 0;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  var then = 0;
 
 -  requestAnimationFrame(drawScene);
 +  requestAnimationFrame(renderLoop);
@@ -350,8 +350,8 @@ the code that update state from the parts that draw.</p>
 -    requestAnimationFrame(drawScene);
   }
 </code></pre>
-<p>and now we can just call <code>drawScene</code> before capturing</p>
-<pre class="prettyprint"><code class="lang-js">elem.addEventListener(&#39;click&#39;, () =&gt; {
+<p>and now we can just call <code class="notranslate" translate="no">drawScene</code> before capturing</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">elem.addEventListener(&#39;click&#39;, () =&gt; {
 +  drawScene();
   canvas.toBlob((blob) =&gt; {
     saveBlob(blob, `screencapture-${canvas.width}x${canvas.height}.png`);
@@ -371,16 +371,16 @@ See <a href="webgl-and-alpha.html">this article</a> for a few details.</p>
 <p><a id="preservedrawingbuffer" data-toc="Prevent the Canvas Being Cleared"></a></p>
 <h1 id="preventing-the-canvas-being-cleared">Preventing the canvas being cleared</h1>
 <p>Let&#39;s say you wanted to let the user paint with an animated
-object. You need to pass in <code>preserveDrawingBuffer: true</code> when
+object. You need to pass in <code class="notranslate" translate="no">preserveDrawingBuffer: true</code> when
 you create the webgl context. This prevents the browser from
 clearing the canvas. </p>
 <p>Taking the last example from <a href="webgl-animation.html">the article on animation</a></p>
-<pre class="prettyprint"><code class="lang-js">var canvas = document.querySelector(&quot;#canvas&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var canvas = document.querySelector(&quot;#canvas&quot;);
 -var gl = canvas.getContext(&quot;webgl&quot;);
 +var gl = canvas.getContext(&quot;webgl&quot;, {preserveDrawingBuffer: true});
 </code></pre>
-<p>and change the call to <code>gl.clear</code> so it only clears the depth buffer</p>
-<pre class="prettyprint"><code>-// Clear the canvas AND the depth buffer.
+<p>and change the call to <code class="notranslate" translate="no">gl.clear</code> so it only clears the depth buffer</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-// Clear the canvas AND the depth buffer.
 -gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 +// Clear the depth buffer.
 +gl.clear(gl.DEPTH_BUFFER_BIT);
@@ -405,29 +405,29 @@ the user turns their phone and the browser switches from portrait to landscape.<
 you want but often you&#39;d like some canvas to just be a part of a larger page and
 you&#39;d like it so if the user clicks on the canvas the canvas gets keyboard input.
 A canvas can&#39;t normally get keyboard input though. To fix that set the
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/tabIndex"><code>tabindex</code></a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/tabIndex"><code class="notranslate" translate="no">tabindex</code></a>
 of the canvas to 0 or more. Eg.</p>
-<pre class="prettyprint"><code class="lang-html">&lt;canvas tabindex=&quot;0&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas tabindex=&quot;0&quot;&gt;&lt;/canvas&gt;
 </code></pre>
-<p>This ends up causing a new issue though. Anything that has a <code>tabindex</code> set
+<p>This ends up causing a new issue though. Anything that has a <code class="notranslate" translate="no">tabindex</code> set
 will get highlighted when it has the focus. To fix that set its focus CSS outline
 to none</p>
-<pre class="prettyprint"><code class="lang-css">canvas:focus {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">canvas:focus {
   outline:none;
 }
 </code></pre>
 <p>To demonstrate here are 3 canvases </p>
-<pre class="prettyprint"><code class="lang-html">&lt;canvas id=&quot;c1&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas id=&quot;c1&quot;&gt;&lt;/canvas&gt;
 &lt;canvas id=&quot;c2&quot; tabindex=&quot;0&quot;&gt;&lt;/canvas&gt;
 &lt;canvas id=&quot;c3&quot; tabindex=&quot;1&quot;&gt;&lt;/canvas&gt;
 </code></pre>
 <p>and some css just for the last canvas </p>
-<pre class="prettyprint"><code class="lang-css">#c3:focus {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">#c3:focus {
     outline: none;
 }
 </code></pre>
 <p>Let&#39;s attach the same event listeners to all of them</p>
-<pre class="prettyprint"><code class="lang-js">document.querySelectorAll(&#39;canvas&#39;).forEach((canvas) =&gt; {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">document.querySelectorAll(&#39;canvas&#39;).forEach((canvas) =&gt; {
   const ctx = canvas.getContext(&#39;2d&#39;);
 
   function draw(str) {
@@ -467,9 +467,9 @@ canvas has both solutions applied.</p>
 a webpage.</p>
 <p>There are 2 obvious ways.</p>
 <ul>
-<li>Set the canvas CSS <code>position</code> to <code>fixed</code> as in</li>
+<li>Set the canvas CSS <code class="notranslate" translate="no">position</code> to <code class="notranslate" translate="no">fixed</code> as in</li>
 </ul>
-<pre class="prettyprint"><code class="lang-css">#canvas {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">#canvas {
  position: fixed;
  left: 0;
  top: 0;
@@ -477,25 +477,25 @@ a webpage.</p>
  ...
 }
 </code></pre>
-<p>and set <code>z-index</code> to -1.</p>
+<p>and set <code class="notranslate" translate="no">z-index</code> to -1.</p>
 <p>A small disadvantage to this solution is your JavaScript must integrate with the page
 and if you have a complex page then you need to make sure none of the JavaScript in your
 webgl code conflicts with the JavaScript doing other things in the page.</p>
 <ul>
-<li>Use an <code>iframe</code></li>
+<li>Use an <code class="notranslate" translate="no">iframe</code></li>
 </ul>
 <p>This is the solution used on <a href="/">the front page of this site</a>.</p>
 <p>In your webpage just insert an iframe, for example</p>
-<pre class="prettyprint"><code class="lang-html">&lt;iframe id=&quot;background&quot; src=&quot;background.html&quot;&gt;&lt;/iframe&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;iframe id=&quot;background&quot; src=&quot;background.html&quot;&gt;&lt;/iframe&gt;
 &lt;div&gt;
   Your content goes here.
 &lt;/div&gt;
 </code></pre>
 <p>Then style the iframe to fill the window and be in the background
 which is basically the same code as we used above for the canvas
-except we also need to set <code>border</code> to <code>none</code> since iframes have
+except we also need to set <code class="notranslate" translate="no">border</code> to <code class="notranslate" translate="no">none</code> since iframes have
 a border by default.</p>
-<pre class="prettyprint"><code class="lang-css">#background {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">#background {
     position: fixed;
     width: 100vw;
     height: 100vh;

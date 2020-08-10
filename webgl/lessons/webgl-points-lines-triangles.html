@@ -218,66 +218,66 @@ that 99% of WebGL programs do. But, for the sake
 of completeness let&#39;s go over a few other cases.</p>
 <p>As mentioned in <a href="webgl-fundamentals.html">the first article</a>
 WebGL draws points, lines, and triangles. It does this
-when we call <code>gl.drawArrays</code> or <code>gl.drawElements</code>.
+when we call <code class="notranslate" translate="no">gl.drawArrays</code> or <code class="notranslate" translate="no">gl.drawElements</code>.
 We provide a vertex shader what outputs clip space
 coordinates and then, based on the first argument
-to <code>gl.drawArrays</code> or <code>gl.drawElements</code> WebGL will
+to <code class="notranslate" translate="no">gl.drawArrays</code> or <code class="notranslate" translate="no">gl.drawElements</code> WebGL will
 draw points, lines, or triangles.</p>
-<p>The valid values for the first argument to <code>gl.drawArrays</code>
-and <code>gl.drawElements</code> are</p>
+<p>The valid values for the first argument to <code class="notranslate" translate="no">gl.drawArrays</code>
+and <code class="notranslate" translate="no">gl.drawElements</code> are</p>
 <ul>
-<li><p><code>POINTS</code></p>
+<li><p><code class="notranslate" translate="no">POINTS</code></p>
 <p> For each clip space vertex output by the vertex shader draw a square
  centered over that point. The size of the square is
- specified by setting a special variable <code>gl_PointSize</code>
+ specified by setting a special variable <code class="notranslate" translate="no">gl_PointSize</code>
  inside the vertex shader to the size we want for this square in pixels.</p>
 <p> Note: The maximum (and minimum) size that square can be
  is implementation dependent which you can query with</p>
-<pre class="prettyprint"><code>  const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
 </code></pre><p> Also see another issue <a href="webgl-drawing-without-data.html#pointsissues">here</a>.</p>
 </li>
-<li><p><code>LINES</code></p>
+<li><p><code class="notranslate" translate="no">LINES</code></p>
 <p> For each 2 clip space vertices output by the vertex shader
  draw a line connecting the 2 points. If we had points A,B,C,D,E,F then
  we&#39;d get 3 lines.</p>
  <div class="webgl_center"><img src="resources/gl-lines.svg" style="width: 400px;"></div>
 
 <p> The spec says we can set the thickness of this line
- by calling <code>gl.lineWidth</code> and specifying a width in pixels. 
+ by calling <code class="notranslate" translate="no">gl.lineWidth</code> and specifying a width in pixels. 
  In reality though the maximum
  width is implementation dependent and for the majority
  of implementations the maximum width is 1.</p>
-<pre class="prettyprint"><code>  const [minSize, maxSize] = gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  const [minSize, maxSize] = gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE);
 </code></pre><blockquote>
 <p>This is mostly because values &gt; 1 have been deprecated
  in core Desktop OpenGL.</p>
 </blockquote>
 </li>
-<li><p><code>LINE_STRIP</code></p>
+<li><p><code class="notranslate" translate="no">LINE_STRIP</code></p>
 <p> For each clip space vertex output by the vertex shader
  draw a line from the previous point output by the vertex
  shader.</p>
 <p> So, if you output clip space vertices A,B,C,D,E,F you&#39;ll get 5 lines.</p>
  <div class="webgl_center"><img src="resources/gl-line-strip.svg" style="width: 400px;"></div>
 </li>
-<li><p><code>LINE_LOOP</code></p>
-<p> This is the same as <code>LINE_STRIP</code> example one more line
+<li><p><code class="notranslate" translate="no">LINE_LOOP</code></p>
+<p> This is the same as <code class="notranslate" translate="no">LINE_STRIP</code> example one more line
  is drawn from the last point to the first point.</p>
  <div class="webgl_center"><img src="resources/gl-line-loop.svg" style="width: 400px;"></div>
 </li>
-<li><p><code>TRIANGLES</code></p>
+<li><p><code class="notranslate" translate="no">TRIANGLES</code></p>
 <p> For every 3 clip space vertices output by the vertex shader
  draw a triangle from the 3 points. This is the most used mode.</p>
  <div class="webgl_center"><img src="resources/gl-triangles.svg" style="width: 400px;"></div>
 </li>
-<li><p><code>TRIANGLE_STRIP</code></p>
+<li><p><code class="notranslate" translate="no">TRIANGLE_STRIP</code></p>
 <p> For each clip space vertex output by the vertex shader
  draw a triangle from the last 3 vertices.  In other words
  If you output 6 points A,B,C,D,E,F then 4 triangles will be
  drawn. A,B,C then B,C,D then C,D,E then D,E,F</p>
  <div class="webgl_center"><img src="resources/gl-triangle-strip.svg" style="width: 400px;"></div>
 </li>
-<li><p><code>TRIANGLE_FAN</code></p>
+<li><p><code class="notranslate" translate="no">TRIANGLE_FAN</code></p>
 <p> For each clip space vertex output by the vertex shader
  draw a triangle from the first vertex and the last 2
  vertices. In other words if you output 6 points A,B,C,D,E,F
@@ -288,34 +288,34 @@ and <code>gl.drawElements</code> are</p>
 </li>
 </ul>
 <p>I&#39;m sure some others will disagree but in my experience
-<code>TRIANGLE_FAN</code> and <code>TRIANGLE_STRIP</code> are best avoided.
+<code class="notranslate" translate="no">TRIANGLE_FAN</code> and <code class="notranslate" translate="no">TRIANGLE_STRIP</code> are best avoided.
 They fit only a few exceptional cases and the extra code
 for handling those cases is not worth just doing everything
 in triangles in the first place. In particular maybe you
 have tools to build normals or generate texture coordinates
 or do any other number of things with vertex data. By
-sticking to just <code>TRIANGLES</code> your functions will just work.
-As soon as you start adding in <code>TRIANGLE_FAN</code> and <code>TRIANGLE_STRIP</code> 
+sticking to just <code class="notranslate" translate="no">TRIANGLES</code> your functions will just work.
+As soon as you start adding in <code class="notranslate" translate="no">TRIANGLE_FAN</code> and <code class="notranslate" translate="no">TRIANGLE_STRIP</code> 
 you need more functions to handle more cases.
 You&#39;re free to disagree and do whatever you want.
 I&#39;m just saying that&#39;s my experience and the experience of
 a few AAA game devs I&#39;ve asked.</p>
-<p>Similarly <code>LINE_LOOP</code> and <code>LINE_STRIP</code> are not so useful
+<p>Similarly <code class="notranslate" translate="no">LINE_LOOP</code> and <code class="notranslate" translate="no">LINE_STRIP</code> are not so useful
 and have similar issues.
-Like <code>TRIANGLE_FAN</code> and <code>TRIANGLE_STRIP</code> the situations
+Like <code class="notranslate" translate="no">TRIANGLE_FAN</code> and <code class="notranslate" translate="no">TRIANGLE_STRIP</code> the situations
 to use them are rare. For example you might think you
 want to draw 4 connected lines each made from 4 points. </p>
 <div class="webgl_center"><img src="resources/4-lines-4-points.svg" style="width: 400px;" align="center"></div>
 
-<p>If you use <code>LINE_STRIP</code> you&#39;d need to make 4 calls to <code>gl.drawArrays</code>
+<p>If you use <code class="notranslate" translate="no">LINE_STRIP</code> you&#39;d need to make 4 calls to <code class="notranslate" translate="no">gl.drawArrays</code>
 and more calls to setup the attributes for each line where as if you
-just use <code>LINES</code> then you can insert all the points needed to draw
-all 4 sets of lines with a single call to <code>gl.drawArrays</code>. That will
+just use <code class="notranslate" translate="no">LINES</code> then you can insert all the points needed to draw
+all 4 sets of lines with a single call to <code class="notranslate" translate="no">gl.drawArrays</code>. That will
 be much much faster.</p>
-<p>Further, <code>LINES</code> can be great to use for debugging or simple
+<p>Further, <code class="notranslate" translate="no">LINES</code> can be great to use for debugging or simple
 effects but given their 1 pixel width limit on most platforms
 it&#39;s often the wrong solution. If you want to draw a grid for a graph or
-show the outlines of polygons in a 3d modeling program using <code>LINES</code>
+show the outlines of polygons in a 3d modeling program using <code class="notranslate" translate="no">LINES</code>
 might be great but if you want to draw structured graphics like
 SVG or Adobe Illustrator then it won&#39;t work and you have
 to <a href="https://mattdesl.svbtle.com/drawing-lines-is-hard">render your lines some other way, usually from triangles</a>.</p>

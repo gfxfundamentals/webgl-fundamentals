@@ -215,12 +215,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>Este artigo é uma continuação de <a href="webgl-text-html.html">artigos anteriores do WebGL sobre desenho de texto</a>. Se você não os leu, sugiro que você comece lá e trabalhe de volta.</p>
 <p>Em vez de usar elementos HTML para texto, também podemos usar outra tela, mas com um contexto 2D. Sem perfis é apenas um palpite de que isso seria mais rápido do que usar o DOM. Claro que também é menos flexível. Você não possui todo o estilo sofisticado do CSS. Mas, não há elementos HTML para criar e acompanhar.</p>
 <p>Semelhante aos outros exemplos, fazemos um recipiente, mas desta vez colocamos 2 telas nele.</p>
-<pre class="prettyprint"><code>&lt;div class=&quot;container&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;div class=&quot;container&quot;&gt;
   &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
   &lt;canvas id=&quot;text&quot;&gt;&lt;/canvas&gt;
 &lt;/div&gt;
 </code></pre><p>Em seguida, configure o CSS para que a tela e o HTML se sobrepnham</p>
-<pre class="prettyprint"><code>.container {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">.container {
     position: relative;
 }
 
@@ -231,19 +231,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     z-index: 10;
 }
 </code></pre><p>Agora procure a tela de texto no tempo de inicialização e crie um contexto 2D para isso.</p>
-<pre class="prettyprint"><code>// look up the text canvas.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// look up the text canvas.
 var textCanvas = document.querySelector(&quot;#text&quot;);
 
 // make a 2D context for it
 var ctx = textCanvas.getContext(&quot;2d&quot;);
 </code></pre><p>Ao desenhar, assim como o WebGL, precisamos limpar a tela 2D em cada quadro.</p>
-<pre class="prettyprint"><code>function drawScene() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
     ...
 
     // Clear the 2D canvas
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-</code></pre><p>E então chamamos <code>fillText</code> para desenhar texto</p>
-<pre class="prettyprint"><code>    ctx.fillText(someMsg, pixelX, pixelY);
+</code></pre><p>E então chamamos <code class="notranslate" translate="no">fillText</code> para desenhar texto</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ctx.fillText(someMsg, pixelX, pixelY);
 </code></pre><p>E aqui está o exemplo:</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-html-canvas2d.html"></iframe>
@@ -254,7 +254,7 @@ var ctx = textCanvas.getContext(&quot;2d&quot;);
 <p>Por que o texto é menor? Porque esse é o tamanho padrão para o Canvas 2D.
 Se você quiser outros tamanhos [confira a API Canvas 2D] <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_text">https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_text</a>).</p>
 <p>Outra razão para usar o Canvas 2D é fácil desenhar outras coisas. Por exemplo, vamos adicionar uma seta</p>
-<pre class="prettyprint"><code>// draw an arrow and text.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// draw an arrow and text.
 
 // save all the canvas settings
 ctx.save();

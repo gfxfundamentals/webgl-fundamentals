@@ -243,7 +243,7 @@ add in that code as well.</p>
 that draws 200 things.</p>
 <p>To it let&#39;s add a framebuffer with attached texture and depth buffer from
 the last example in <a href="webgl-render-to-texture.html">the article on rendering to a texture</a>.</p>
-<pre class="prettyprint"><code class="lang-js">// Create a texture to render to
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Create a texture to render to
 const targetTexture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -289,7 +289,7 @@ call it to resize them to match the size of the
 canvas.</p>
 <p>In our rendering code if the canvas changes size
 we&#39;ll adjust the texture and renderbuffer to match.</p>
-<pre class="prettyprint"><code class="lang-js">function drawScene(time) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function drawScene(time) {
   time *= 0.0005;
 
 -  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
@@ -304,7 +304,7 @@ we&#39;ll adjust the texture and renderbuffer to match.</p>
 sample renders using vertex colors but we need
 one we can set to a solid color to render with ids.
 So first here is our second shader</p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- vertex shader --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- vertex shader --&gt;
 &lt;script id=&quot;pick-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
   attribute vec4 a_position;
 
@@ -328,7 +328,7 @@ So first here is our second shader</p>
 </code></pre>
 <p>And we need to compile, link and look up the locations
 using our <a href="webgl-less-code-more-fun.html">helpers</a>.</p>
-<pre class="prettyprint"><code class="lang-js">// setup GLSL programs
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup GLSL programs
 const programInfo = webglUtils.createProgramInfo(
     gl, [&quot;3d-vertex-shader&quot;, &quot;3d-fragment-shader&quot;]);
 +const pickingProgramInfo = webglUtils.createProgramInfo(
@@ -339,7 +339,7 @@ twice. Once with whatever shader we assigned to
 them and again with the shader we just wrote
 so let&#39;s extract the code that currently renders
 all the objects into a function.</p>
-<pre class="prettyprint"><code class="lang-js">function drawObjects(objectsToDraw, overrideProgramInfo) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function drawObjects(objectsToDraw, overrideProgramInfo) {
   objectsToDraw.forEach(function(object) {
     const programInfo = overrideProgramInfo || object.programInfo;
     const bufferInfo = object.bufferInfo;
@@ -357,12 +357,12 @@ all the objects into a function.</p>
   });
 }
 </code></pre>
-<p><code>drawObjects</code> takes an optional <code>overrideProgramInfo</code>
+<p><code class="notranslate" translate="no">drawObjects</code> takes an optional <code class="notranslate" translate="no">overrideProgramInfo</code>
 we can pass in to use our picking shader instead of
 the object&#39;s assigned shader.</p>
 <p>Let&#39;s call it, once to draw into the texture with
 ids and again to draw the scene to the canvas.</p>
-<pre class="prettyprint"><code class="lang-js">// Draw the scene.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Draw the scene.
 function drawScene(time) {
   time *= 0.0005;
 
@@ -400,9 +400,9 @@ function drawScene(time) {
   requestAnimationFrame(drawScene);
 }
 </code></pre>
-<p>Our picking shader needs <code>u_id</code> set to an id so let&#39;s
+<p>Our picking shader needs <code class="notranslate" translate="no">u_id</code> set to an id so let&#39;s
 add that to our uniform data where we setup our objects.</p>
-<pre class="prettyprint"><code class="lang-js">// Make infos for each object for each object.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Make infos for each object for each object.
 const baseHue = rand(0, 360);
 const numObjects = 200;
 for (let ii = 0; ii &lt; numObjects; ++ii) {
@@ -433,7 +433,7 @@ for (let ii = 0; ii &lt; numObjects; ++ii) {
 <p>This will work because our <a href="webgl-less-code-more-fun.html">helper library</a>
 handles applying uniforms for us.</p>
 <p>We had to split ids across R, G, B, and A. Because our
-texture&#39;s format/type is <code>gl.RGBA</code>, <code>gl.UNSIGNED_BYTE</code>
+texture&#39;s format/type is <code class="notranslate" translate="no">gl.RGBA</code>, <code class="notranslate" translate="no">gl.UNSIGNED_BYTE</code>
 we get 8 bits per channel. 8 bits only represent 256 values
 but by splitting the id across 4 channels we get 32bits total
 which is &gt; 4 billion values.</p>
@@ -442,7 +442,7 @@ which is &gt; 4 billion values.</p>
 <p>Now let&#39;s highlight the object under the mouse.</p>
 <p>First we need some code to get a canvas relative
 mouse position.</p>
-<pre class="prettyprint"><code class="lang-js">// mouseX and mouseY are in CSS display space relative to canvas
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// mouseX and mouseY are in CSS display space relative to canvas
 let mouseX = -1;
 let mouseY = -1;
 
@@ -454,19 +454,19 @@ gl.canvas.addEventListener(&#39;mousemove&#39;, (e) =&gt; {
    mouseY = e.clientY - rect.top;
 });
 </code></pre>
-<p>Note that with the code above <code>mouseX</code> and <code>mouseY</code>
+<p>Note that with the code above <code class="notranslate" translate="no">mouseX</code> and <code class="notranslate" translate="no">mouseY</code>
 are in CSS pixels in display space. That means
 they are in the space the canvas is displayed,
 not the space of how many pixels are in the canvas.
 In other words if you had a canvas like this</p>
-<pre class="prettyprint"><code class="lang-html">&lt;canvas width=&quot;11&quot; height=&quot;22&quot; style=&quot;width:33px; height:44px;&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas width=&quot;11&quot; height=&quot;22&quot; style=&quot;width:33px; height:44px;&quot;&gt;&lt;/canvas&gt;
 </code></pre>
-<p>then <code>mouseX</code> will go from 0 to 33 across the canvas and
-<code>mouseY</code> will go from 0 to 44 across the canvas. See <a href="webgl-resizing-the-canvas.html">this</a>
+<p>then <code class="notranslate" translate="no">mouseX</code> will go from 0 to 33 across the canvas and
+<code class="notranslate" translate="no">mouseY</code> will go from 0 to 44 across the canvas. See <a href="webgl-resizing-the-canvas.html">this</a>
 for more info.</p>
 <p>Now that we have a mouse position let&#39;s add some code
 look up the pixel under the mouse</p>
-<pre class="prettyprint"><code class="lang-js">const pixelX = mouseX * gl.canvas.width / gl.canvas.clientWidth;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const pixelX = mouseX * gl.canvas.width / gl.canvas.clientWidth;
 const pixelY = gl.canvas.height - mouseY * gl.canvas.height / gl.canvas.clientHeight - 1;
 const data = new Uint8Array(4);
 gl.readPixels(
@@ -479,22 +479,22 @@ gl.readPixels(
     data);             // typed array to hold result
 const id = data[0] + (data[1] &lt;&lt; 8) + (data[2] &lt;&lt; 16) + (data[3] &lt;&lt; 24);
 </code></pre>
-<p>The code above that is computing <code>pixelX</code> and <code>pixelY</code> is converting
-from <code>mouseX</code> and <code>mouseY</code> in display space to pixel in the the canvas
-space. In other words, given the example above where <code>mouseX</code> went from
-0 to 33 and <code>mouseY</code> went from 0 to 44. <code>pixelX</code> will go from 0 to 11
-and <code>pixelY</code> will go from 0 to 22.</p>
-<p>In our actual code we&#39;re using our utility function <code>resizeCanvasToDisplaySize</code>
+<p>The code above that is computing <code class="notranslate" translate="no">pixelX</code> and <code class="notranslate" translate="no">pixelY</code> is converting
+from <code class="notranslate" translate="no">mouseX</code> and <code class="notranslate" translate="no">mouseY</code> in display space to pixel in the the canvas
+space. In other words, given the example above where <code class="notranslate" translate="no">mouseX</code> went from
+0 to 33 and <code class="notranslate" translate="no">mouseY</code> went from 0 to 44. <code class="notranslate" translate="no">pixelX</code> will go from 0 to 11
+and <code class="notranslate" translate="no">pixelY</code> will go from 0 to 22.</p>
+<p>In our actual code we&#39;re using our utility function <code class="notranslate" translate="no">resizeCanvasToDisplaySize</code>
 and we&#39;re making our texture the same size as the canvas so the display
 size and the canvas size match but at least we&#39;re prepared for the case
 where they do not match.</p>
 <p>Now that we have an id, to actually highlight the selected object
 let&#39;s change the color we&#39;re using to render it to the canvas.
-The shader we were using has a <code>u_colorMult</code>
+The shader we were using has a <code class="notranslate" translate="no">u_colorMult</code>
 uniform we can use so if an object is under the mouse we&#39;ll look it up,
-save off its <code>u_colorMult</code> value, replace it with a selection color,
+save off its <code class="notranslate" translate="no">u_colorMult</code> value, replace it with a selection color,
 and restore it.</p>
-<pre class="prettyprint"><code class="lang-js">// mouseX and mouseY are in CSS display space relative to canvas
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// mouseX and mouseY are in CSS display space relative to canvas
 let mouseX = -1;
 let mouseY = -1;
 +let oldPickNdx = -1;
@@ -560,20 +560,20 @@ under the mouse. To do this we use a frustum
 who&#39;s math will cover just the space for that
 1 pixel.</p>
 <p>Until now, for 3D we&#39;ve been using a function called
-<code>perspective</code> that takes as input a field of view, an aspect, and a
+<code class="notranslate" translate="no">perspective</code> that takes as input a field of view, an aspect, and a
 near and far value for the z-planes and makes a
 perspective projection matrix that converts from the
 frustum defined by those values to clip space.</p>
 <p>Most 3D math libraries have another function called
-<code>frustum</code> that takes 6 values, the left, right, top,
+<code class="notranslate" translate="no">frustum</code> that takes 6 values, the left, right, top,
 and bottom values for the near z-plane and then the
 z-near and z-far values for the z-planes and generates
 a perspective matrix defined by those values.</p>
 <p>Using that we can generate a perspective matrix for
 the one pixel under the mouse</p>
 <p>First we compute the edges and size of what our near plane <em>would be</em>
-if we were to use the <code>perspective</code> function</p>
-<pre class="prettyprint"><code class="lang-js">// compute the rectangle the near plane of our frustum covers
+if we were to use the <code class="notranslate" translate="no">perspective</code> function</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// compute the rectangle the near plane of our frustum covers
 const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 const top = Math.tan(fieldOfViewRadians * 0.5) * near;
 const bottom = -top;
@@ -582,13 +582,13 @@ const right = aspect * top;
 const width = Math.abs(right - left);
 const height = Math.abs(top - bottom);
 </code></pre>
-<p>So <code>left</code>, <code>right</code>, <code>width</code>, and <code>height</code> are the
+<p>So <code class="notranslate" translate="no">left</code>, <code class="notranslate" translate="no">right</code>, <code class="notranslate" translate="no">width</code>, and <code class="notranslate" translate="no">height</code> are the
 size and position of the near plane. Now on that
 plane we can compute the size and position of the
 one pixel under the mouse and pass that to the
-<code>frustum</code> function to generate a projection matrix
+<code class="notranslate" translate="no">frustum</code> function to generate a projection matrix
 that covers just that 1 pixel</p>
-<pre class="prettyprint"><code class="lang-js">// compute the portion of the near plane covers the 1 pixel
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// compute the portion of the near plane covers the 1 pixel
 // under the mouse.
 const pixelX = mouseX * gl.canvas.width / gl.canvas.clientWidth;
 const pixelY = gl.canvas.height - mouseY * gl.canvas.height / gl.canvas.clientHeight - 1;
@@ -608,13 +608,13 @@ const projectionMatrix = m4.frustum(
     far);
 </code></pre>
 <p>To use this we need to make some changes. As it now our shader
-just takes <code>u_matrix</code> which means in order to draw with a different
+just takes <code class="notranslate" translate="no">u_matrix</code> which means in order to draw with a different
 projection matrix we&#39;d need to recompute the matrices for every object
 twice each frame, once with our normal projection matrix for drawing
 to the canvas and again for this 1 pixel projection matrix.</p>
 <p>We can remove that responsibility from JavaScript by moving that
 multiplication to the vertex shaders.</p>
-<pre class="prettyprint"><code class="lang-html">&lt;!-- vertex shader --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- vertex shader --&gt;
 &lt;script id=&quot;3d-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 attribute vec4 a_color;
@@ -654,9 +654,9 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre>
-<p>Then we can make our JavaScript <code>viewProjectionMatrix</code> shared
+<p>Then we can make our JavaScript <code class="notranslate" translate="no">viewProjectionMatrix</code> shared
 among all the objects.</p>
-<pre class="prettyprint"><code class="lang-js">const objectsToDraw = [];
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const objectsToDraw = [];
 const objects = [];
 +const viewProjectionMatrix = m4.identity();
 
@@ -685,7 +685,7 @@ for (let ii = 0; ii &lt; numObjects; ++ii) {
 </code></pre>
 <p>And where we compute the matrices for each object we no longer need
 to include the view projection matrix</p>
-<pre class="prettyprint"><code class="lang-js">-function computeMatrix(viewProjectionMatrix, translation, xRotation, yRotation) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-function computeMatrix(viewProjectionMatrix, translation, xRotation, yRotation) {
 -  let matrix = m4.translate(viewProjectionMatrix,
 +function computeMatrix(translation, xRotation, yRotation) {
 +  let matrix = m4.translation(
@@ -707,7 +707,7 @@ objects.forEach(function(object) {
 });
 </code></pre>
 <p>We&#39;ll create just a 1x1 pixel texture and depth buffer</p>
-<pre class="prettyprint"><code class="lang-js">setFramebufferAttachmentSizes(1, 1);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">setFramebufferAttachmentSizes(1, 1);
 
 ...
 
@@ -725,7 +725,7 @@ function drawScene(time) {
 <p>Then before rendering the off screen ids we&#39;ll set the view projection
 using our 1 pixel projection matrix and then when drawing to the canvas
 we&#39;ll use the original projection matrix</p>
-<pre class="prettyprint"><code class="lang-js">-// Compute the projection matrix
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-// Compute the projection matrix
 -const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 -const projectionMatrix =
 -    m4.perspective(fieldOfViewRadians, aspect, 1, 2000);

@@ -225,7 +225,7 @@ texture 좌표는 texture 크기에 관계없이 0.0에서 1.0사이가 됩니�
 varying은 값이 변할 수 있기 때문에 varying이라고 불립니다.
 WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 vertex shader에서 제공한 값을 보간합니다.</p>
 <p><a href="webgl-fundamentals.html">이전 글의 마지막에 다룬 vertex shader를</a> 사용해서 texture 좌표 전달을 위한 속성을 추가하고 그걸 fragment shader로 전달해야 합니다.</p>
-<pre class="prettyprint"><code>attribute vec2 a_texCoord;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_texCoord;
 ...
 varying vec2 v_texCoord;
 
@@ -236,7 +236,7 @@ void main() {
   v_texCoord = a_texCoord;
 }
 </code></pre><p>그런 다음 texture의 색상을 찾기 위해 fragment shader를 제공합니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // texture
@@ -253,7 +253,7 @@ void main() {
 </code></pre><p>마지막으로 이미지를 로드하고, texture를 생성한 다음 이미지를 texture로 복사해야 하는데요.
 브라우저에서 이미지를 비동기적으로 로딩하기 때문에 texture 로드를 기다리기 위해 코드를 변경해야 합니다.
 일단 로드되면 그릴겁니다.</p>
-<pre class="prettyprint"><code>function main() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function main() {
   var image = new Image();
   image.src = &quot;http://someimage/on/our/server&quot;;  // 같은 도메인이여야 합니다!!!
   image.onload = function() {
@@ -310,7 +310,7 @@ function render(image) {
 </p>
 <p>너무 과하지 않게 이미지를 조작해봅시다.
 빨강과 파랑을 바꾸는 건 어떨까요?</p>
-<pre class="prettyprint"><code>...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 ...
 </code></pre><p>이제 빨강과 파랑이 바뀝니다.</p>
@@ -321,9 +321,9 @@ gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 
 </p>
 <p>만약 실제로 다른 픽셀들을 보는 이미지 처리를 원한다면 어떻게 해야 할까요?
-WebGL은 0.0에서 1.0사이 좌표를 가진 texture를 참조하므로 간단한 식(<code>onePixel = 1.0 / textureSize</code>)으로 1픽셀 당 얼마나 이동해야 하는지 계산할 수 있습니다.</p>
+WebGL은 0.0에서 1.0사이 좌표를 가진 texture를 참조하므로 간단한 식(<code class="notranslate" translate="no">onePixel = 1.0 / textureSize</code>)으로 1픽셀 당 얼마나 이동해야 하는지 계산할 수 있습니다.</p>
 <p>이건 texture에서 각 픽셀의 왼쪽/오른쪽 픽셀을 평균화하는 fragment shader 입니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // texture
@@ -346,7 +346,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>그런 다음 JavaScript에서 texture 크기를 전달해야 합니다.</p>
-<pre class="prettyprint"><code>...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 
 var textureSizeLocation = gl.getUniformLocation(program, &quot;u_textureSize&quot;);
 
@@ -370,7 +370,7 @@ convolution kernel은 렌더링할 때 각 항목이 주위의 픽셀 8개에 �
 <a href="https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html">여기에 꽤 좋은 글이 있습니다</a>.
 그리고 <a href="https://www.codeproject.com/KB/graphics/ImageConvolution.aspx">여기 C++로 직접 작성하면 어떤지 실제 코드를 보여주는 또 다른 글입니다</a>.</p>
 <p>우리는 shader에서 작업을 수행하므로 여기 새로운 fragment shader가 있습니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // texture
@@ -400,7 +400,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>JavaScript에서 convolution kernel과 가중치를 제공해줘야 합니다.</p>
-<pre class="prettyprint"><code> function computeKernelWeight(kernel) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> function computeKernelWeight(kernel) {
    var weight = kernel.reduce(function(prev, curr) {
      return prev + curr;
    });
@@ -430,7 +430,7 @@ drop down 목록을 사용해서 다른 커널을 선택해보세요.</p>
 <p>이 글로 WebGL에서 이미지 처리가 제법 간단하다고 확신하셨기를 바랍니다.
 다음에는 <a href="webgl-image-processing-continued.html">이미지에 하나 이상의 효과 적용하는 방법을</a> 살펴보겠습니다.</p>
 <div class="webgl_bottombar">
-<h3><code>u_image</code>가 설정되지 않습니다. 어떻게 동작하나요?</h3>
+<h3><code class="notranslate" translate="no">u_image</code>가 설정되지 않습니다. 어떻게 동작하나요?</h3>
 <p>
 Uniform은 0이 기본 값이므로 u_image는 기본 값으로 texture unit 0을 사용합니다.
 Texture unit 0도 default active texture 이므로 bindTexture를 호출하면 texture가 texture unit 0에 할당됩니다.
@@ -447,7 +447,7 @@ var u_imageLoc = gl.getUniformLocation(program, "u_image");
 gl.uniform1i(u_imageLoc, textureUnitIndex);
 </pre>
 <p>
-다른 unit을 설정하기 위해 <code>gl.activeTexture</code>를 호출하고 원하는 unit에 texture를 할당합니다.
+다른 unit을 설정하기 위해 <code class="notranslate" translate="no">gl.activeTexture</code>를 호출하고 원하는 unit에 texture를 할당합니다.
 예를 들어
 </p>
 <pre class="prettyprint showlinemods">
@@ -464,8 +464,8 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
 <p>
 모든 WebGL 구현체들은 fragment shader에서 최소한 texture unit 8개를 지원해야 하지만 vertex shader에서는 0만 지원해야 하는데요.
-따라서 8개 이상을 사용하려면 <code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 얼마나 많은지 확인해야 합니다.
-만약 vertex shader에서 texture를 사용하고 싶다면 <code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 얼마나 많이 쓸 수 있는지 찾아야 합니다.
+따라서 8개 이상을 사용하려면 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 얼마나 많은지 확인해야 합니다.
+만약 vertex shader에서 texture를 사용하고 싶다면 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 얼마나 많이 쓸 수 있는지 찾아야 합니다.
 99% 이상의 기기들이 vertex shader에서 최소 4개 이상의 texture unit을 지원합니다.
 </p>
 </div>

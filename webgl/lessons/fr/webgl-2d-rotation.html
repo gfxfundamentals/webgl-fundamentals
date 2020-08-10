@@ -226,7 +226,7 @@ D&#39;abord je voudrais introduire la notion de cercle trigonométrique ou cercl
 <p>Si vous vous souvenez de cours autour de la classe de CE1 vous savez que ce qu&#39;on multiplie par 1 reste pareil : 123 * 1 = 123. Plutôt simple n&#39;est-ce pas ? Hé bien un cercle trigonométrique, avec un rayon de 1, est aussi une forme de 1. C&#39;est un 1 qui tourne. Donc on peut multiplier quelque chose par ce cercle unitaire, et d&#39;une certaine façon c&#39;est comme multiplier par 1, sauf qu&#39;en plus deux trois trucs se passent et ça tourne :)</p>
 <p>On va prendre ces valeurs X et Y de n&#39;importe quel point sur le cercle trigonométrique et on va multiplier notre géométrie avec elles depuis notre <a href="webgl-2d-translation.html">exemple précédent</a>.</p>
 <p>Voilà le nouveau shader</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -242,7 +242,7 @@ void main() {
   // Ajoute la translation
   vec2 position = positionTournee + u_translation;
 </code></pre><p>Et on change le javascript pour envoyer ces deux valeurs :</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var emplacementRotation = gl.getUniformLocation(programme, &quot;u_rotation&quot;);
   ...
   var rotation = [0, 1];
@@ -269,7 +269,7 @@ void main() {
 
 </p>
 <p>Pourquoi ça fonctionne ? Regardez les opérations :</p>
-<pre class="prettyprint"><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </code></pre><p>Disons que vous avez un rectangle et que vous voulez le tourner. Avant, le coin en haut à droite est à (3,9). Choisissons un point sur le cercle qui soit à 30 degrés plus loin dans le sens des aiguilles d&#39;une montre, depuis disons, midi.</p>
 <p><img src="../../resources/rotate-30.png" class="webgl_center" /></p>
@@ -291,15 +291,15 @@ rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 
 <p>Vous voyez que pendant qu&#39;on bouge le point dans le sens des aiguilles d&#39;une montre X devient plus grand et Y plus petit. Si on dépasse 90 degrés X deviendrait plus petit et Y redeviendrait plus grand. C&#39;est ce qui nous donne la rotation. </p>
 <p>Il y a un autre nom pour les points sur un cercle trigonométrique. On les appelle sinus et cosinus. Pour n&#39;importe quel angle on peut juste regarder le sinus et le cosinus comme ceci :</p>
-<pre class="prettyprint"><code>function indiqueSinusEtCosinusPourLAngle(angleEnDegres) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function indiqueSinusEtCosinusPourLAngle(angleEnDegres) {
   var angleEnRadians = angleEnDegres * Math.PI / 180;
   var s = Math.sin(angleEnRadians);
   var c = Math.cos(angleEnRadians);
   console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
 }
-</code></pre><p>Si vous copiez et collez ce code dans la console du navigateur et tapez <code>indiqueSinusEtCosinusPourLAngle(30)</code> vous verrez qu&#39;il indique <code>s = 0.49 c = 0.87</code> (note: j&#39;ai arrondi les nombres).</p>
+</code></pre><p>Si vous copiez et collez ce code dans la console du navigateur et tapez <code class="notranslate" translate="no">indiqueSinusEtCosinusPourLAngle(30)</code> vous verrez qu&#39;il indique <code class="notranslate" translate="no">s = 0.49 c = 0.87</code> (note: j&#39;ai arrondi les nombres).</p>
 <p>Si vous mettez tout ça ensemble vous pouvez tourner votre géométrie de n&#39;importe quel angle. Mettez juste les valeurs de sinus et de cosinus de l&#39;angle de rotation que vous voulez.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var angleEnRadians = angleEnDegres * Math.PI / 180;
   rotation[0] = Math.sin(angleEnRadians);
   rotation[1] = Math.cos(angleEnRadians);
@@ -319,7 +319,7 @@ Les radians sont l'unité de mesure utilisée avec les cercles, les rotations et
 Vous savez peut-être que faire des calculs avec des mètres est plus simple qu'avec des unités de mesure impériales : comment passer d'un pouce à un pied ou à un mille ? Pas simple. Dans le système métrique, un millimètre vaut un millième d'un mètre. Un centimètre vaut 10 millimètres. C'est simple et c'est faisable de tête.
 </p>
 <p>
-C'est pareil entre radians et degrés. Les degrés rendent les calculs compliqués. Les radians les rendent plus faciles. Il y a 360 degrés dans un cercle mais il y a seulement 2π radians. Un tour complet vaut 2π radians. Un demi-tour vaut 1π radian. Un quart de tour 1/4 * 2π radian, donc 90 degrés valent 1/2π radians. Donc si vous voulez tourner quelque chose de 90 degrés utilisez simplement <code>Math.PI / 2</code>. Si vous voulez tourner de 45 degrés utilisez <code>Math.PI / 4</code> etc.
+C'est pareil entre radians et degrés. Les degrés rendent les calculs compliqués. Les radians les rendent plus faciles. Il y a 360 degrés dans un cercle mais il y a seulement 2π radians. Un tour complet vaut 2π radians. Un demi-tour vaut 1π radian. Un quart de tour 1/4 * 2π radian, donc 90 degrés valent 1/2π radians. Donc si vous voulez tourner quelque chose de 90 degrés utilisez simplement <code class="notranslate" translate="no">Math.PI / 2</code>. Si vous voulez tourner de 45 degrés utilisez <code class="notranslate" translate="no">Math.PI / 4</code> etc.
 </p>
 <p>
 Presque tous les champs des mathématiques qui utilisent des angles, des cercles ou des rotations sont beaucoup plus simples avec des radians. Donc laissez-leur une chance. Utilisez les radians et pas les degrés, à part dans les interfaces utilisateur.

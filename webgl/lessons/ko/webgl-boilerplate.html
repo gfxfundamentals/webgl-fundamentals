@@ -221,7 +221,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 이 함수 두 개는 컴파일되고 연결되어야 합니다.
 해당 처리는 모든 WebGL program 시간의 99%와 같습니다.</p>
 <p>여기 shader를 컴파일 하기 위한 boilerplate 코드입니다.</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * Shader 생성 및 컴파일
  *
  * @param {!WebGLRenderingContext} gl은 WebGL Context
@@ -249,7 +249,7 @@ function compileShader(gl, shaderSource, shaderType) {
   return shader;
 }
 </code></pre><p>그리고 program에 두 shader를 연결하기 위한 boilerplate 코드</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * 두 shader로 program 생성합니다.
  *
  * @param {!WebGLRenderingContext) gl은 WebGL Context
@@ -282,7 +282,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 하지만 대부분의 WebGL program에서 이런 코드 몇 줄은 거의 비슷합니다.</p>
 <p>저는 shader를 javascript가 아닌 &lt;script&gt; tag에 저장하는 것을 선호하는데요.
 이렇게 하면 코드를 수정하기 쉽게 만들어 주므로 이런 식으로 코드를 작성합니다.</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * script tag의 내용으로 shader 생성
  *
  * @param {!WebGLRenderingContext) gl은 WebGL Context
@@ -317,9 +317,9 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
   return compileShader(gl, shaderSource, opt_shaderType);
 };
 </code></pre><p>이제 shader를 컴파일할 수 있습니다.</p>
-<pre class="prettyprint"><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
 </code></pre><p>보통은 한 걸음 더 나아가서 script tag에서 shader 두 개를 컴파일하고 프로그램에 첨부하고 연결하는 함수를 만들겁니다.</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * script tag 2개로 program 생성
  *
  * @param {!WebGLRenderingContext} gl은 WebGL Context
@@ -336,36 +336,36 @@ function createProgramFromScripts(gl, shaderScriptIds) {
 </code></pre><p>거의 모든 WebGL program에서 사용하는 다른 코드는 canvas의 크기를 조정하는 코드입니다.
 <a href="webgl-resizing-the-canvas.html">여기에서 이 함수가 구현된 방법을</a> 볼 수 있습니다.</p>
 <p>모든 예제는 이 두 가지 함수를 포함하고 있습니다.</p>
-<pre class="prettyprint"><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>그리고 이렇게 사용합니다.</p>
-<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var program = webglUtils.createProgramFromScripts(gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...
 
 webglUtils.resizeCanvasToMatchDisplaySize(canvas);
 </code></pre><p>특정한 예제에 대해 다룰 때는 같은 코드 여러 줄을 묶어서 예제를 복잡하게 하지 않는 것이 최고입니다.</p>
 <p>여기까지가 WebGL boilerplate의 minimum set 입니다.
-<a href="../../resources/webgl-utils.js"><code>webgl-utils.js</code></a> 코드는 여기서 찾으실 수 있구요.
+<a href="../../resources/webgl-utils.js"><code class="notranslate" translate="no">webgl-utils.js</code></a> 코드는 여기서 찾으실 수 있구요.
 좀 더 정리된 것을 원하신다면 <a href="https://twgljs.org">TWGL.js</a>를 확인해주세요.</p>
 <p>WebGL을 복잡하게 보이게 만드는 나머지 부분은 shader로 보내는 모든 입력을 설정하는 겁니다.</p>
 <p><a href="webgl-how-it-works.html">작동 원리</a>를 봐주세요.</p>
 <p>또한 <a href="webgl-less-code-more-fun.html">코드는 적게 재미는 더</a>를 읽고 <a href="https://twgljs.org">TWGL</a>를 확인하는 걸 권장합니다.</p>
 <p>참고로 우리가 그것을 추가하는 것과 비슷한 이유로 몇 가지 script가 더 있습니다.</p>
 <ul>
-<li><p><a href="../../resources/webgl-lessons-ui.js"><code>webgl-lessons-ui.js</code></a></p>
+<li><p><a href="../../resources/webgl-lessons-ui.js"><code class="notranslate" translate="no">webgl-lessons-ui.js</code></a></p>
 <p>슬라이더를 드래그할 때 갱신되는 표시 값이 있는 슬라이더를 설정하는 코드를 제공합니다.
 다시 이 코드를 사용해서 모든 파일을 복잡하게 만들고 싶지 않았습니다.</p>
 </li>
-<li><p><a href="../../resources/lessons-helper.js"><code>lessons-helper.js</code></a></p>
+<li><p><a href="../../resources/lessons-helper.js"><code class="notranslate" translate="no">lessons-helper.js</code></a></p>
 <p>이 script는 webglfundmentals.org를 제외하고는 필요하지 않습니다.
 live editor에서 다른 것들과 함께 사용하면 화면에 에러 메세지 출력하는 것을 도와줍니다.</p>
 </li>
-<li><p><a href="../../resources/m3.js"><code>m3.js</code></a></p>
+<li><p><a href="../../resources/m3.js"><code class="notranslate" translate="no">m3.js</code></a></p>
 <p>이건 2d 수학 함수들의 묶음입니다.
 행렬 수학에 대한 첫 번째 글부터 시작해서 inline으로 만들어졌습니다.
 하지만 너무 복잡하기 때문에 몇몇 예제에서만 이 script가 포함됩니다.</p>
 </li>
-<li><p><a href="../../resources/m4.js"><code>m4.js</code></a></p>
+<li><p><a href="../../resources/m4.js"><code class="notranslate" translate="no">m4.js</code></a></p>
 <p>이건 3d 수학 함수들의 묶음입니다.
 3d에 대한 첫 번째 글부터 시작해서 inline으로 만들어졌습니다.
 하지만 너무 복잡하기 때문에 3d에 대한 두 번째 글 이후부터 이 script가 포함됩니다.</p>

@@ -260,7 +260,7 @@ abs(3.333 - 6.666) = 3.333
 <p>Попробуем это на практике. Сначала изменим вершинный шейдер, чтобы в
 нём происходило деление на Z, которое предварительно было умножено на
 &quot;fudgeFactor&quot;.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
 ...
@@ -276,10 +276,10 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Обратите внимание, что из-за того, что Z находится в пространстве
-отсечения от -1 до +1, я добавил 1, чтобы получить <code>zToDivideBy</code>
+отсечения от -1 до +1, я добавил 1, чтобы получить <code class="notranslate" translate="no">zToDivideBy</code>
 в интервале от 0 до +2 * fudgeFactor</p>
 <p>Код также нуждается в редактировании для использования fudgeFactor.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
 
   ...
@@ -311,8 +311,8 @@ void main() {
 <p>Более того, оказывается, что WebGL принимает переданные в вершинном шейдере
 значения x,y,z,w и делит их на w автоматически.</p>
 <p>Мы можем воспользоваться этим очень легко, достаточно не выполнять деление
-в шейдере самим, а передать <code>zToDivideBy</code> в <code>gl_Position.w</code>.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+в шейдере самим, а передать <code class="notranslate" translate="no">zToDivideBy</code> в <code class="notranslate" translate="no">gl_Position.w</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
 ...
@@ -380,7 +380,7 @@ w_out = z_in;
 </pre></div>
 
 <p>Мы можем добавить 1, которая у нас была раньше, с помощью матрицы,
-так как нам известно, что <code>w_in</code> всегда равняется 1.0.</p>
+так как нам известно, что <code class="notranslate" translate="no">w_in</code> всегда равняется 1.0.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 1, 0, 0, 0,
 0, 1, 0, 0,
@@ -396,7 +396,7 @@ w_out = x_in * 0 +
         w_in * 1 ;
 </pre></div>
 
-<p>а так как <code>w_in</code> = 1.0, то можно записать</p>
+<p>а так как <code class="notranslate" translate="no">w_in</code> = 1.0, то можно записать</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in + 1;
 </pre></div>
@@ -424,7 +424,7 @@ w_out = z_in * fudgeFactor + 1;
 
 <p>Теперь изменим программу снова, чтобы использовать только матрицы.</p>
 <p>Сначала вернём обратно простой вершинный шейдер.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
 void main() {
@@ -434,7 +434,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Теперь сделаем функцию создания матрицы Z &rarr; W</p>
-<pre class="prettyprint"><code>function makeZToWMatrix(fudgeFactor) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function makeZToWMatrix(fudgeFactor) {
   return [
     1, 0, 0, 0,
     0, 1, 0, 0,
@@ -443,7 +443,7 @@ void main() {
   ];
 }
 </code></pre><p>и изменим код, чтобы матрица использовалась</p>
-<pre class="prettyprint"><code>    ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ...
     // Задаём матрицы
 *    var matrix = makeZToWMatrix(fudgeFactor);
 *    matrix = m4.multiply(matrix, m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400));
@@ -475,10 +475,10 @@ WebGL отсекает Z от -1 до +1, как он отсекал ранее 
 число, масштабировать на некоторую величину, и мы сможем привести любой
 диапазон к значениям от -1 до +1.</p>
 <p>Хорошая новость в том, что все эти шаги можно сделать в 1 матрице. Более
-того, вместо <code>fudgeFactor</code> мы используем <code>fieldOfView</code>, и у нас сразу
+того, вместо <code class="notranslate" translate="no">fudgeFactor</code> мы используем <code class="notranslate" translate="no">fieldOfView</code>, и у нас сразу
 будут все нужные значения.</p>
 <p>Ниже приводится функция создания матрицы.</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   perspective: function(fieldOfViewInRadians, aspect, near, far) {
     var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
     var rangeInv = 1.0 / (near - far);
@@ -496,13 +496,13 @@ WebGL отсекает Z от -1 до +1, как он отсекал ранее 
 единицы в пространство отсечения, сделает возможным передачу угла для
 пересчёта его в поля зрения, а также позволит нам выбрать значение
 отсечения по координате Z. Предполагается, что в начале координат
-(0, 0, 0) есть <em>наблюдатель</em> или <em>камера</em>, а на основании <code>zNear</code> и
-<code>fieldOfView</code> происходит вычисление, чтобы <code>zNear</code> совпадало со значением
-<code>Z = -1</code>, а точки в <code>zNear</code>, на половину значения <code>fieldOfView</code> выше или ниже
-центра, совпадали с <code>Y = -1</code> и <code>Y = 1</code> соответственно. Значение X вычисляется
-просто через умножение на <code>aspect</code>. Обычно ему устанавливается значение
-<code>width / height</code> видимой области. Наконец, происходит вычисление, насколько
-нужно масштабировать объекты по Z, чтобы область zFar заканчивалась на <code>Z = 1</code>.</p>
+(0, 0, 0) есть <em>наблюдатель</em> или <em>камера</em>, а на основании <code class="notranslate" translate="no">zNear</code> и
+<code class="notranslate" translate="no">fieldOfView</code> происходит вычисление, чтобы <code class="notranslate" translate="no">zNear</code> совпадало со значением
+<code class="notranslate" translate="no">Z = -1</code>, а точки в <code class="notranslate" translate="no">zNear</code>, на половину значения <code class="notranslate" translate="no">fieldOfView</code> выше или ниже
+центра, совпадали с <code class="notranslate" translate="no">Y = -1</code> и <code class="notranslate" translate="no">Y = 1</code> соответственно. Значение X вычисляется
+просто через умножение на <code class="notranslate" translate="no">aspect</code>. Обычно ему устанавливается значение
+<code class="notranslate" translate="no">width / height</code> видимой области. Наконец, происходит вычисление, насколько
+нужно масштабировать объекты по Z, чтобы область zFar заканчивалась на <code class="notranslate" translate="no">Z = 1</code>.</p>
 <p>Вот схема работы матрицы в действии.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  400px; height: 600px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Ffrustum-diagram.html"></iframe>
@@ -512,10 +512,10 @@ WebGL отсекает Z от -1 до +1, как он отсекал ранее 
 </p>
 <p>Фигура, которая выглядит как 4-сторонний конус, внутри которой вращаются
 3 куба, называется &quot;фрустум&quot;. Матрица конвертирует пространство внутри
-фрустума в пространство отсечения. <code>zNear</code> определяет, где будет происходить
-отсечение на фронтальной плоскости, <code>zFar</code> определяет место отсечения на
-задней плоскости. Установите <code>zNear</code> в значение 23 и вы увидите, что передняя
-часть вращающихся кубов отрезалось. Установите <code>zFar</code> в значение 24, и
+фрустума в пространство отсечения. <code class="notranslate" translate="no">zNear</code> определяет, где будет происходить
+отсечение на фронтальной плоскости, <code class="notranslate" translate="no">zFar</code> определяет место отсечения на
+задней плоскости. Установите <code class="notranslate" translate="no">zNear</code> в значение 23 и вы увидите, что передняя
+часть вращающихся кубов отрезалось. Установите <code class="notranslate" translate="no">zFar</code> в значение 24, и
 задняя часть кубов отсечётся таким же образом.</p>
 <p>У нас осталась всего одна проблема. Матрица предполагает, что наблюдатель
 находится в 0,0,0 и смотрит в направлении отрицательного значения Z, а
@@ -524,9 +524,9 @@ WebGL отсекает Z от -1 до +1, как он отсекал ранее 
 наши объекты впереди камеры.</p>
 <p>Мы могли бы сделать это, переместив нашу букву F. Ранее отрисовка
 происходила в (45, 150, 0). Давайте сместим её в (-150, 0, -360).</p>
-<p>Для этого нам нужно просто заменить прошлый вызов <code>m4.projection</code>
-на новый <code>m4.perspective</code>.</p>
-<pre class="prettyprint"><code>var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+<p>Для этого нам нужно просто заменить прошлый вызов <code class="notranslate" translate="no">m4.projection</code>
+на новый <code class="notranslate" translate="no">m4.perspective</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
 var zFar = 2000;
 var matrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
@@ -556,11 +556,11 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 </p>
 <p>
 
-Причина в том, что до последнего примера наша функция <code>m4.projection</code>
+Причина в том, что до последнего примера наша функция <code class="notranslate" translate="no">m4.projection</code>
 выполняла проецирование из пикселей в пространство отсечения. Это означает, что
 область отображения была размером 400x300 пикселей. Использование 'пикселей' на
 самом деле не несёт в себе смысла в 3D. Новая проекция задаёт фрустум, где область
-представляет собой <code>zNear</code> высотой 2 единицы и шириной 2 * aspect единицы.
+представляет собой <code class="notranslate" translate="no">zNear</code> высотой 2 единицы и шириной 2 * aspect единицы.
 Так как наша 'F' имеет высоту 150 единиц, а область отображения занимает всего 2
 единицы в zNear, нам нужно отодвинуть букву достаточно далеко от начала координат,
 чтобы целиком увидеть её.

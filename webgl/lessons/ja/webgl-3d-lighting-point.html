@@ -227,9 +227,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 表面の法線ベクトルと表面位置から光源位置への法線ベクトルの内積を計算すると表面位置ごとに違う値が出る。</p>
 <p>それをしよう！</p>
 <p>最初に光源の位置が要る。</p>
-<pre class="prettyprint"><code>uniform vec3 u_lightWorldPosition;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec3 u_lightWorldPosition;
 </code></pre><p>そしてオブジェクト表面ワールド位置の計算する方法が必要である。そのために座標位置をワールド行列に掛ける。</p>
-<pre class="prettyprint"><code>uniform mat4 u_world;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform mat4 u_world;
 
 ...
 
@@ -237,9 +237,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 </code></pre><p>そして、表面から光源位置のベクトルを計算出来る。それは前の計算に似てるけど、
 今回全部の表面位置で計算する。</p>
-<pre class="prettyprint"><code>v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 </code></pre><p>シェーダーはこうなっている。</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 +uniform vec3 u_lightWorldPosition;
@@ -267,7 +267,7 @@ void main() {
 +  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 }
 </code></pre><p>ピクセルシェーダーで表面〜光源ベクトルは単位ベクトルになってないので正規化しなければいけない。</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // 頂点シェーダーに渡された。
 varying vec3 v_normal;
@@ -292,15 +292,15 @@ void main() {
   // 色部分だけ光源に掛けよう（アルファ/透明の部分を無視）
   gl_FragColor.rgb *= light;
 }
-</code></pre><p><code>u_world</code>と<code>u_lightWorldPosition</code>のロケーションを調べなきゃ。</p>
-<pre class="prettyprint"><code>-  var reverseLightDirectionLocation =
+</code></pre><p><code class="notranslate" translate="no">u_world</code>と<code class="notranslate" translate="no">u_lightWorldPosition</code>のロケーションを調べなきゃ。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-  var reverseLightDirectionLocation =
 -      gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
 +  var lightWorldPositionLocation =
 +      gl.getUniformLocation(program, &quot;u_lightWorldPosition&quot;);
 +  var worldLocation =
 +      gl.getUniformLocation(program, &quot;u_world&quot;);
 </code></pre><p>そして設定する。</p>
-<pre class="prettyprint"><code>  // 行列を設定する。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 行列を設定する。
 +  gl.uniformMatrix4fv(
 +      worldLocation, false,
 +      worldMatrix);
@@ -345,7 +345,7 @@ void main() {
 </p>
 <p>まずビュー/目/カメラの位置をシェーダーに渡さなければいけない。それでオブジェクトの表面から
 ビューの法線を計算して、ピクセルシェーダーを渡す。</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform vec3 u_lightWorldPosition;
@@ -380,7 +380,7 @@ void main() {
 }
 </code></pre><p>次にピクセルシェーダーで表面〜ビュー法線ベクトルを表面〜光源法線ベクトルの間の真ん中の法線を計算しなきゃ。
 出来たら、真ん中の法線とオブジェクト法線の内積の計算で、光源が目に反射しているかどうか判断出来る。</p>
-<pre class="prettyprint"><code>// 頂点シェーダーから渡された。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 頂点シェーダーから渡された。
 varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 +varying vec3 v_surfaceToView;
@@ -408,8 +408,8 @@ void main() {
 +  // 反射の影響をただ色に足す。
 +  gl_FragColor.rgb += specular;
 }
-</code></pre><p>最後に<code>u_viewWorldPosition</code>を調べて、設定する。</p>
-<pre class="prettyprint"><code>var lightWorldPositionLocation =
+</code></pre><p>最後に<code class="notranslate" translate="no">u_viewWorldPosition</code>を調べて、設定する。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var lightWorldPositionLocation =
     gl.getUniformLocation(program, &quot;u_lightWorldPosition&quot;);
 +var viewWorldPositionLocation =
 +    gl.getUniformLocation(program, &quot;u_viewWorldPosition&quot;);
@@ -441,8 +441,8 @@ var cameraMatrix = makeLookAt(camera, target, up);
 </p>
 <p>赤い線がグラフの上の方に近づけば近づくほどハイライトが明るくなる。
 ある数を累乗すると明るくなる部分が縮まってくる。</p>
-<p>それを<code>shininess</code>と呼んでシェーダーに追加しよう。</p>
-<pre class="prettyprint"><code>uniform vec4 u_color;
+<p>それを<code class="notranslate" translate="no">shininess</code>と呼んでシェーダーに追加しよう。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec4 u_color;
 +uniform float u_shininess;
 
 ...
@@ -455,7 +455,7 @@ var cameraMatrix = makeLookAt(camera, target, up);
 </code></pre><p>内積はマイナスになる時がある。マイナス値をにある数を累乗すると虚数になってしまう。
 なので、内積がマイナスになりそうならspecularを0.0に残す。</p>
 <p>勿論ロケーションを調べて設定しなきゃ</p>
-<pre class="prettyprint"><code>+var shininessLocation = gl.getUniformLocation(program, &quot;u_shininess&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+var shininessLocation = gl.getUniformLocation(program, &quot;u_shininess&quot;);
 
 ...
 
@@ -469,8 +469,8 @@ gl.uniform1f(shininessLocation, shininess);
 
 </p>
 <p>最後に照明の色についてである</p>
-<p>今までFの色を<code>light</code>に掛けていた。それに、照明の色を定義すれば色のついた光にすることも出来る。</p>
-<pre class="prettyprint"><code>uniform vec4 u_color;
+<p>今までFの色を<code class="notranslate" translate="no">light</code>に掛けていた。それに、照明の色を定義すれば色のついた光にすることも出来る。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec4 u_color;
 uniform float u_shininess;
 +uniform vec3 u_lightColor;
 +uniform vec3 u_specularColor;
@@ -484,12 +484,12 @@ uniform float u_shininess;
 *  gl_FragColor.rgb += specular * u_specularColor;
 }
 </code></pre><p>そして勿論。。。</p>
-<pre class="prettyprint"><code>+  var lightColorLocation =
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+  var lightColorLocation =
 +      gl.getUniformLocation(program, &quot;u_lightColor&quot;);
 +  var specularColorLocation =
 +      gl.getUniformLocation(program, &quot;u_specularColor&quot;);
 </code></pre><p>そして</p>
-<pre class="prettyprint"><code>// 光源の色を設定する
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 光源の色を設定する
 +  gl.uniform3fv(lightColorLocation, m4.normalize([1, 0.6, 0.6]));  // 赤光源
 // 反射色を設定する
 +  gl.uniform3fv(specularColorLocation, m4.normalize([1, 0.6, 0.6]));  // 赤光源

@@ -223,7 +223,7 @@ zapewniające przekształcenie współrzędnych przestrzeni obcinania i cieniowa
 (ang. <em>fragment / pixel shader</em>) pozwalające określać kolor pikseli.</p>
 <p>Współrzędne przestrzeni obcinania zawsze przebiegają przedział od -1 do 1 bez względu na to jakiego rozmiaru
 jest Twoje płótno. Poniżej jest prosty przykład pokazujący WebGL w jego najprostszej formie.</p>
-<pre class="prettyprint"><code>// Pobierz kontekst WebGL
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Pobierz kontekst WebGL
 var canvas = document.querySelector(&quot;#canvas&quot;);
 var gl = canvas.getContext(&quot;experimental-webgl&quot;);
 
@@ -254,7 +254,7 @@ gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 // rysuj
 gl.drawArrays(gl.TRIANGLES, 0, 6);
 </code></pre><p>Poniżej są oba cieniowania</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 void main() {
@@ -284,7 +284,7 @@ dla rasteryzacji</em>.</p>
 <p>W zakresie 2D prawdopodobnie wolałbyś pracować raczej z pikselami niż przestrzenią obcinania więc
 zmieńmy cieniowanie tak, żebyśmy mogli pracować z prostokątami w pikselach i mieli
 zapewnioną ich konwersję do przestrzeni obcinania.  Poniżej jest nowe cieniowanie wierzchołków</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -303,7 +303,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Teraz możemy zmienić nasze dane z przestrzeni obcinania na piksele</p>
-<pre class="prettyprint"><code>// ustaw rozdzielczość
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// ustaw rozdzielczość
 var resolutionLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
 
@@ -327,7 +327,7 @@ wierzchołem ma współrzędne 0,0 (uwaga tłum.: liczby zmiennopozycyjne zapisu
 a przecinkiem oddzielamy elementy wektora, co jest zgodne z zapisem tych wartości w kodzie programu).
 Aby móc stosować zapis bardziej tradycyjny dla API grafiki 2d
 poprostu odwracamy współrzędną y.</p>
-<pre class="prettyprint"><code>*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>I teraz nasz prostokąt jest tam, gdzie go oczekujemy.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-top-left.html"></iframe>
@@ -339,7 +339,7 @@ poprostu odwracamy współrzędną y.</p>
 będziemy mogli wywołać funkcję dla prostokątów o różnych rozmairach.  Przy tej okazji
 uczynimy kolor modyfikowalnym.</p>
 <p>Po pierwsze zmodyfikujemy cieniowanie fragmentów by uwzględniało kolor podany na wejściu.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +uniform vec4 u_color;
@@ -349,7 +349,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>A poniżej jest nowy kod rysujący 50 prostokątów w losowych miejscach i losowych kolorach.</p>
-<pre class="prettyprint"><code>  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
   ...
   // Stwórz bufor
   var buffer = gl.createBuffer();
@@ -411,9 +411,9 @@ obrotach i skalowaniu wtedy <a href="webgl-2d-translation.html">przejdź tu</a>.
 <div class="webgl_bottombar">
 <h3>Co oznacza type="x-shader/x-vertex" i type="x-shader/x-fragment" ?</h3>
 <p>
-Znacznik <code>&lt;script&gt;</code> domyślnie przechowuje w swoim wnętrzu JavaScript.
-Możesz nie podawać typu lub możesz go podać jako <code>type="javascript"</code> lub
-<code>type="text/javascript"</code> i przeglądarka będzie interpretować
+Znacznik <code class="notranslate" translate="no">&lt;script&gt;</code> domyślnie przechowuje w swoim wnętrzu JavaScript.
+Możesz nie podawać typu lub możesz go podać jako <code class="notranslate" translate="no">type="javascript"</code> lub
+<code class="notranslate" translate="no">type="text/javascript"</code> i przeglądarka będzie interpretować
 zawartość jako JavaScript. Jeśli włożysz tam coś innego przeglądarka zignoruje
 zawartość znacznika script.
 </p>
@@ -423,12 +423,12 @@ możemy stworzyć nasz własny typ i w naszym kodzie JavaScript odwoływać się
 kiedy skompilować dane cieniowanie jako cieniowanie wierzchołków lub cieniowanie fragmentów.
 </p>
 <p>
-W tym przypadku funkcja <code>createProgramFromScripts</code> szuka
-skryptu o określonycj identyfikatorach i sprawdza ich atrybut <code>type</code>, żeby
+W tym przypadku funkcja <code class="notranslate" translate="no">createProgramFromScripts</code> szuka
+skryptu o określonycj identyfikatorach i sprawdza ich atrybut <code class="notranslate" translate="no">type</code>, żeby
 zadecydoać o typie tworzonego cieniowania.
 </p>
 <p>
-Funkcja <code>createProgramFromScripts</code> jest częścią <a href="webgl-boilerplate.html">szablonu</a>,
+Funkcja <code class="notranslate" translate="no">createProgramFromScripts</code> jest częścią <a href="webgl-boilerplate.html">szablonu</a>,
 którego prawie każdy program WebGL potrzebuje.
 </p>
 </div>

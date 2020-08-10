@@ -224,7 +224,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 是因为它的值有很多个，WebGL会用顶点着色器中值的进行插值，然后传给对应像素执行的片断着色器。</p>
 <p>接着用<a href="webgl-fundamentals.html">上篇文章中最后一个顶点着色器</a>，
 我们需要添加一个属性，用它接收纹理坐标然后传给片断着色器。</p>
-<pre class="prettyprint"><code>attribute vec2 a_texCoord;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_texCoord;
 ...
 varying vec2 v_texCoord;
 
@@ -235,7 +235,7 @@ void main() {
    v_texCoord = a_texCoord;
 }
 </code></pre><p>然后用片断着色器寻找纹理上对应的颜色</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 纹理
@@ -252,7 +252,7 @@ void main() {
 </code></pre><p>最后我们需要加载一个图像，创建一个纹理然后将图像复制到纹理中。
 由于浏览器中的图片是异步加载的，所以我们需要重新组织一下代码，
 等待纹理加载，一旦加载完成就开始绘制。</p>
-<pre class="prettyprint"><code>function main() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function main() {
   var image = new Image();
   image.src = &quot;http://someimage/on/our/server&quot;;  // 必须在同一域名下
   image.onload = function() {
@@ -303,7 +303,7 @@ function render(image) {
 
 </p>
 <p>这个图片没什么特别的，让我们来对它进行一些操作。把红和蓝调换位置如何？</p>
-<pre class="prettyprint"><code>...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 ...
 </code></pre><p>现在红色和蓝色调换位置了。</p>
@@ -315,9 +315,9 @@ gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 </p>
 <p>如果我们的图像处理需要其他像素的颜色值怎么办？
 由于WebGL的纹理坐标范围是 0.0 到 1.0 ， 那我们可以简单计算出移动一个像素对应的距离，
-<code>onePixel = 1.0 / textureSize</code>。</p>
+<code class="notranslate" translate="no">onePixel = 1.0 / textureSize</code>。</p>
 <p>这个片断着色器将每个像素的值设置为与左右像素的均值。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 纹理
@@ -339,7 +339,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>我们需要在JavaScript中传入纹理的大小。</p>
-<pre class="prettyprint"><code>...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 
 var textureSizeLocation = gl.getUniformLocation(program, &quot;u_textureSize&quot;);
 
@@ -363,7 +363,7 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 <a href="https://docs.gimp.org/2.6/en/plug-in-convmatrix.html">这有一个不错的相关文章</a>，
 <a href="https://www.codeproject.com/KB/graphics/ImageConvolution.aspx">这里是C++实现的一些具体代码</a>。</p>
 <p>我们将在片断着色器中计算卷积，所以创建一个新的片断着色器。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // 纹理
@@ -394,7 +394,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>在JavaScript中我们需要提供卷积内核和它的权重</p>
-<pre class="prettyprint"><code> function computeKernelWeight(kernel) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> function computeKernelWeight(kernel) {
    var weight = kernel.reduce(function(prev, curr) {
        return prev + curr;
    });
@@ -423,7 +423,7 @@ void main() {
 <p>我想这篇文章应该回答了“为什么WebGL处理图像非常简单”。
 接下来我们将实现<a href="webgl-image-processing-continued.html">如何对一个图像同时施加多个效果</a>。</p>
 <div class="webgl_bottombar">
-<h3>为什么<code>u_image</code>没有设置还能正常运行？</h3>
+<h3>为什么<code class="notranslate" translate="no">u_image</code>没有设置还能正常运行？</h3>
 <p>
 
 全局变量默认为 0 所以 u_image 默认使用纹理单元 0 。
@@ -443,7 +443,7 @@ var u_imageLoc = gl.getUniformLocation(
 gl.uniform1i(u_imageLoc, textureUnitIndex);
 </pre>
 <p>
-为了将纹理设置在不同的单元你可以调用<code>gl.activeTexture</code>。
+为了将纹理设置在不同的单元你可以调用<code class="notranslate" translate="no">gl.activeTexture</code>。
 例如
 </p>
 <pre class="prettyprint showlinemods">
@@ -462,8 +462,8 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
 <p>
 所有支持WebGL的环境，在片断着色器中至少有8个纹理单元，顶点着色器中可以是0个。
-所以如果你使用超过8个纹理单元就应该调用<code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>
-查看单元个数，或者调用<code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>
+所以如果你使用超过8个纹理单元就应该调用<code class="notranslate" translate="no">gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>
+查看单元个数，或者调用<code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>
 查看顶点着色器中可以用几个纹理单元。超过 99% 的机器在顶点着色器中至少有4个纹理单元。
 </p>
 </div>

@@ -227,7 +227,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 по-прежнему будем использовать &#39;F&#39;, но на этот раз это будет &#39;F&#39; в 3D.</p>
 <p>Первым делом нам нужно поменять вершинный шейдер для работы в 3D.
 Вот старый вершинный шейдер:</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -238,7 +238,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>А вот новый:</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 *attribute vec4 a_position;
 
 *uniform mat4 u_matrix;
@@ -248,12 +248,12 @@ void main() {
 *  gl_Position = u_matrix * a_position;
 }
 &lt;/script&gt;
-</code></pre><p>Он стал даже проще! Если в 2D-пространстве мы передавали <code>x</code> и <code>y</code>,
-а <code>z</code> устанавливали в 1, в 3D мы мы передаём <code>x</code>, <code>y</code> и <code>z</code>. Ещё нам
-нужно, чтобы <code>w</code> равнялось единице, но здесь мы воспользуемся тем, что
-для атрибута <code>w</code> значение по умолчанию как раз равно 1.</p>
+</code></pre><p>Он стал даже проще! Если в 2D-пространстве мы передавали <code class="notranslate" translate="no">x</code> и <code class="notranslate" translate="no">y</code>,
+а <code class="notranslate" translate="no">z</code> устанавливали в 1, в 3D мы мы передаём <code class="notranslate" translate="no">x</code>, <code class="notranslate" translate="no">y</code> и <code class="notranslate" translate="no">z</code>. Ещё нам
+нужно, чтобы <code class="notranslate" translate="no">w</code> равнялось единице, но здесь мы воспользуемся тем, что
+для атрибута <code class="notranslate" translate="no">w</code> значение по умолчанию как раз равно 1.</p>
 <p>Теперь нам нужно передать 3D-данные.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
   // Указываем атрибуту, как получать данные от positionBuffer (ARRAY_BUFFER)
 *  var size = 3;          // 3 компоненты на итерацию
@@ -299,7 +299,7 @@ function setGeometry(gl) {
 }
 </code></pre><p>Теперь нам нужно поменять все функции по работе с матрицами из 2D в 3D.</p>
 <p>Вот предыдущие 2D-версии функций m3.translation, m3.rotation и m3.scaling.</p>
-<pre class="prettyprint"><code>var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
   translation: function translation(tx, ty) {
     return [
       1, 0, 0,
@@ -327,7 +327,7 @@ function setGeometry(gl) {
   },
 };
 </code></pre><p>А вот обновлённые версии функций для 3D.</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   translation: function(tx, ty, tz) {
     return [
        1,  0,  0,  0,
@@ -409,7 +409,7 @@ function setGeometry(gl) {
 <iframe class="external_diagram" src="../resources/axis-diagram.html" style="width: 540px; height: 240px;"></iframe>
 
 <p>Подобным образом мы сделаем упрощённые функции.</p>
-<pre class="prettyprint"><code>  translate: function(m, tx, ty, tz) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  translate: function(m, tx, ty, tz) {
     return m4.multiply(m, m4.translation(tx, ty, tz));
   },
 
@@ -429,7 +429,7 @@ function setGeometry(gl) {
     return m4.multiply(m, m4.scaling(sx, sy, sz));
   },
 </code></pre><p>Нам также нужно изменить проекционную функцию. Старая функция:</p>
-<pre class="prettyprint"><code>  projection: function (width, height) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  projection: function (width, height) {
     // Эта матрица переворачивает Y, чтобы 0 был наверху
     return [
       2 / width, 0, 0,
@@ -440,7 +440,7 @@ function setGeometry(gl) {
 }
 </code></pre><p>которая преобразует пиксели в пространство отсечения. Для нашей
 первой попытки перехода к 3D попробуем следующее:</p>
-<pre class="prettyprint"><code>  projection: function(width, height, depth) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  projection: function(width, height, depth) {
     // Эта матрица переворачивает Y, чтобы 0 был наверху
     return [
        2 / width, 0, 0, 0,
@@ -450,12 +450,12 @@ function setGeometry(gl) {
     ];
   },
 </code></pre><p>Не забываем конвертировать координату Z из пикселей в пространство отсечения,
-как мы делали с координатами X и Y. Мы передаём значение <code>depth</code> для Z по
-аналогии с <code>width</code>, и наше пространство будет 0 пикселей шириной по <code>width</code>,
-0 пикселей высотой по <code>height</code> и от <code>-depth / 2</code> до <code>+depth / 2</code> пикселей
-глубиной по <code>depth</code>.</p>
+как мы делали с координатами X и Y. Мы передаём значение <code class="notranslate" translate="no">depth</code> для Z по
+аналогии с <code class="notranslate" translate="no">width</code>, и наше пространство будет 0 пикселей шириной по <code class="notranslate" translate="no">width</code>,
+0 пикселей высотой по <code class="notranslate" translate="no">height</code> и от <code class="notranslate" translate="no">-depth / 2</code> до <code class="notranslate" translate="no">+depth / 2</code> пикселей
+глубиной по <code class="notranslate" translate="no">depth</code>.</p>
 <p>Наконец, нам нужно изменить код для вычисления матриц.</p>
-<pre class="prettyprint"><code>  // Задаём матрицы
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Задаём матрицы
 *  var matrix = m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400);
 *  matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
 *  matrix = m4.xRotate(matrix, rotation[0]);
@@ -482,7 +482,7 @@ function setGeometry(gl) {
 на каждый и 3 вершины на каждый треугольник - в сумме 96 вершин. Если хотите
 увидеть их все - посмотрите на исходный код примера.</p>
 <p>Итак, нам нужно нарисовать больше вершин.</p>
-<pre class="prettyprint"><code>    // Отрисовка геометрии
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    // Отрисовка геометрии
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
 *    var count = 16 * 6;
@@ -499,7 +499,7 @@ function setGeometry(gl) {
 атрибут в вершинный шейдер и заведём varying-переменную для передачи значения
 из вершинного во фрагментный шейдер.</p>
 <p>Вот новый вершинный шейдер:</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 +attribute vec4 a_color;
 
@@ -516,7 +516,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Во фрагментном шейдере нам нужно использовать переданный цвет.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 +// Передаётся из вершинного шейдера
@@ -528,7 +528,7 @@ void main() {
 &lt;/script&gt;
 </code></pre><p>Нам нужно получить ссылку на атрибут для передачи цветов, установить буфер и
 заполнить этот буфер данными цвета.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 
   ...
@@ -563,7 +563,7 @@ function setColors(gl) {
 }
 </code></pre><p>Затем при рендеринге мы описываем, как атрибут цвета будет получать
 данные из буфера цветов.</p>
-<pre class="prettyprint"><code>// Включаем атрибут цвета
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Включаем атрибут цвета
 gl.enableVertexAttribArray(colorLocation);
 
 // Привязываем буфер цветов
@@ -603,8 +603,8 @@ gl.vertexAttribPointer(
 <p>В WebGL есть возможность отрисовывать только треугольники лицевой
 стороны или только треугольники тыльной стороны. Мы можем включить
 эту опцию через</p>
-<pre class="prettyprint"><code>  gl.enable(gl.CULL_FACE);
-</code></pre><p>Мы поместим этот код в функцию <code>drawScene</code>. С этой включённой опцией
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.enable(gl.CULL_FACE);
+</code></pre><p>Мы поместим этот код в функцию <code class="notranslate" translate="no">drawScene</code>. С этой включённой опцией
 WebGL &quot;отбраковывает&quot; треугольники с тыльной стороной. Под &quot;отбраковкой&quot;
 здесь можно понимать &quot;не отрисовывать&quot;.</p>
 <p>Следует заметить, что WebGL решает, повёрнут ли треугольник тыльной или
@@ -631,11 +631,11 @@ CULL_FACE, как только треугольники с лицевой сто
 появляются с другой стороны. К счастью, это легко исправить. Нам нужно
 найти треугольники с тыльной стороной и поменять им 2 вершины местами.
 Например, если треугольник с тыльной стороной объявлен так:</p>
-<pre class="prettyprint"><code>           1,   2,   3,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">           1,   2,   3,
           40,  50,  60,
          700, 800, 900,
 </code></pre><p>нам просто нужно переставить 2 вершины, чтобы сделать его сторону лицевой:</p>
-<pre class="prettyprint"><code>           1,   2,   3,
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">           1,   2,   3,
          700, 800, 900,
           40,  50,  60,
 </code></pre><p>Исправив все треугольники с тыльной стороной, мы получим</p>
@@ -665,9 +665,9 @@ CULL_FACE, как только треугольники с лицевой сто
 шейдера, <em>И</em> пиксель глубины с новым значением глубины. Это означает, что
 пиксели, которые находятся позади других пикселей, не будут отрисовываться.</p>
 <p>Мы можем включить эту опцию почти так же просто, как мы включали CULL_FACE</p>
-<pre class="prettyprint"><code>  gl.enable(gl.DEPTH_TEST);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.enable(gl.DEPTH_TEST);
 </code></pre><p>А ещё нам нужно очистить буфер глубины обратно в 1.0 перед отрисовкой.</p>
-<pre class="prettyprint"><code>  // Отрисовка сцены
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Отрисовка сцены
   function drawScene() {
     ...
 
@@ -684,9 +684,9 @@ CULL_FACE, как только треугольники с лицевой сто
 </p>
 <p>Вот это настоящее 3D!</p>
 <p>Одна небольшая деталь. В большинстве библиотек с 3D-математикой отсутствует
-функция <code>projection</code>, которая преобразовывает пиксели в пространство отсечения.
-Обычно есть функция <code>ortho</code> или <code>orthographic</code>, которая выглядит примерно так:</p>
-<pre class="prettyprint"><code>var m4 = {
+функция <code class="notranslate" translate="no">projection</code>, которая преобразовывает пиксели в пространство отсечения.
+Обычно есть функция <code class="notranslate" translate="no">ortho</code> или <code class="notranslate" translate="no">orthographic</code>, которая выглядит примерно так:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   orthographic: function(left, right, bottom, top, near, far) {
     return [
       2 / (right - left), 0, 0, 0,
@@ -699,11 +699,11 @@ CULL_FACE, как только треугольники с лицевой сто
       1,
     ];
   }
-</code></pre><p>В отличие от нашей упрощённой функции <code>projection</code>, в которой были лишь ширина, высота и
+</code></pre><p>В отличие от нашей упрощённой функции <code class="notranslate" translate="no">projection</code>, в которой были лишь ширина, высота и
 глубина, в более распространённой ортографической функции мы можем передать левую, правую,
 нижнюю, верхнюю, а также переднюю и заднюю плоскость, что даёт нам большую гибкость. Чтобы
 заменить нашу предыдущую функцию, напишем следующий код:</p>
-<pre class="prettyprint"><code>var left = 0;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var left = 0;
 var right = gl.canvas.clientWidth;
 var bottom = gl.canvas.clientHeight;
 var top = 0;

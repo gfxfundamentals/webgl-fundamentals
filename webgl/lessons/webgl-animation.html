@@ -221,7 +221,7 @@ If you haven&#39;t read those please view them first.</p>
 to animate something in JavaScript you need to change something
 over time and draw again.</p>
 <p>We can take one of our previous samples and animate it as follows.</p>
-<pre class="prettyprint"><code>*var fieldOfViewRadians = degToRad(60);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*var fieldOfViewRadians = degToRad(60);
 *var rotationSpeed = 1.2;
 
 *requestAnimationFrame(drawScene);
@@ -243,7 +243,7 @@ function drawScene() {
 
 </p>
 <p>There&#39;s a subtle problem though. The code above has a
-<code>rotationSpeed / 60.0</code>. We divided by 60.0 because we assumed the browser
+<code class="notranslate" translate="no">rotationSpeed / 60.0</code>. We divided by 60.0 because we assumed the browser
 will respond to requestAnimationFrame 60 times a second which is pretty common.</p>
 <p>That&#39;s not actually a valid assumption though. Maybe the user is on a low-powered
 device like an old smartphone. Or maybe the user is running some heavy program in
@@ -268,13 +268,13 @@ running at 1/8 the frame rate it is keeping up with the middle one running at fu
 speed.</p>
 <p>The way to make animation frame rate independent is to compute how much time it took
 between frames and use that to calculate how much to animate this frame.</p>
-<p>First off we need to get the time. Fortunately <code>requestAnimationFrame</code> passes
+<p>First off we need to get the time. Fortunately <code class="notranslate" translate="no">requestAnimationFrame</code> passes
 us the time since the page was loaded when it calls us.</p>
-<p>I find it easiest if we get the time in seconds but since the <code>requestAnimationFrame</code>
+<p>I find it easiest if we get the time in seconds but since the <code class="notranslate" translate="no">requestAnimationFrame</code>
 passes us the time in milliseconds (1000ths of a second) we need to multiply by 0.001
 to get seconds.</p>
 <p>So, we can then compute the delta time like this</p>
-<pre class="prettyprint"><code>*var then = 0;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*var then = 0;
 
 requestAnimationFrame(drawScene);
 
@@ -288,12 +288,12 @@ requestAnimationFrame(drawScene);
 *  then = now;
 
    ...
-</code></pre><p>Once we have the <code>deltaTime</code> in seconds then all our calculations can be in how
+</code></pre><p>Once we have the <code class="notranslate" translate="no">deltaTime</code> in seconds then all our calculations can be in how
 many units per second we want something to happen. In this case
-<code>rotationSpeed</code> is 1.2 which means we want to rotate 1.2 radians per second.
+<code class="notranslate" translate="no">rotationSpeed</code> is 1.2 which means we want to rotate 1.2 radians per second.
 That&#39;s about 1/5 of a turn or in other words it will take about 5 seconds to
 turn around completely regardless of the frame rate.</p>
-<pre class="prettyprint"><code>*    rotation[1] += rotationSpeed * deltaTime;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*    rotation[1] += rotationSpeed * deltaTime;
 </code></pre><p>Here&#39;s that one working.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation.html"></iframe>
@@ -309,27 +309,27 @@ that are getting a very different experience than you planned.</p>
 <div class="webgl_bottombar">
 <h3>Don't use setInterval or setTimeout!</h3>
 <p>If you've been programming animation in JavaScript in the past
-you might have used either <code>setInterval</code> or <code>setTimeout</code> to get your
+you might have used either <code class="notranslate" translate="no">setInterval</code> or <code class="notranslate" translate="no">setTimeout</code> to get your
 drawing function to be called.
 </p><p>
-The problems with using <code>setInterval</code> or <code>setTimeout</code> to do animation
-are two fold. First off both <code>setInterval</code> and <code>setTimeout</code> have no relation
+The problems with using <code class="notranslate" translate="no">setInterval</code> or <code class="notranslate" translate="no">setTimeout</code> to do animation
+are two fold. First off both <code class="notranslate" translate="no">setInterval</code> and <code class="notranslate" translate="no">setTimeout</code> have no relation
 to the browser displaying anything. They aren't synced to when the browser is
 going to draw a new frame and so can be out of sync with the user's machine.
-If you use <code>setInterval</code> or <code>setTimeout</code> and assume 60 frames
+If you use <code class="notranslate" translate="no">setInterval</code> or <code class="notranslate" translate="no">setTimeout</code> and assume 60 frames
 a second and the user's machine is actually running some other frame rate you'll
 be out of sync with their machine.
 </p><p>
-The other problem is the browser has no idea why you're using <code>setInterval</code> or
-<code>setTimeout</code>. So for example, even when your page is not visible,
+The other problem is the browser has no idea why you're using <code class="notranslate" translate="no">setInterval</code> or
+<code class="notranslate" translate="no">setTimeout</code>. So for example, even when your page is not visible,
 like when it's not the front tab, the browser still has to execute your code.
-Maybe you're using <code>setTimeout</code> or <code>setInterval</code> to check
+Maybe you're using <code class="notranslate" translate="no">setTimeout</code> or <code class="notranslate" translate="no">setInterval</code> to check
 for new mail or tweets. There's no way for the browser to know. That's fine if
 you're just checking every few seconds for new messages but it's not fine if
 you're trying to draw 1000 objects in WebGL. You'll be effectively DOSing the
 user's machine with your invisible tab drawing stuff they can't even see.
 </p><p>
-<code>requestAnimationFrame</code> solves both of these issues. It calls you at just the
+<code class="notranslate" translate="no">requestAnimationFrame</code> solves both of these issues. It calls you at just the
 right time to sync your animation with the screen and it also only calls you if
 your tab is visible.
 </p>

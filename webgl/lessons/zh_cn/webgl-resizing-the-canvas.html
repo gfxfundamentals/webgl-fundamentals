@@ -217,19 +217,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 这个表示画布中有多少个像素。另一是画布显示的尺寸，
 CSS决定画布显示的尺寸。</p>
 <p>你可以通过两种方式设置画布的 drawingbuffer尺寸。一种是使用HTML</p>
-<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>另一种是使用JavaScript</p>
-<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
 </code></pre><p>JavaScript</p>
-<pre class="prettyprint"><code>var canvas = document.querySelector(&quot;#c&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var canvas = document.querySelector(&quot;#c&quot;);
 canvas.width = 400;
 canvas.height = 300;
 </code></pre><p>如果你没有使用CSS影响到画布的显示尺寸，画布的显示尺寸则和 drawingbuffer 尺寸相同。
 所以在上述两个例子中画布的 drawingbuffer 尺寸和显示尺寸都是 400x300。</p>
 <p>在下方的例子中画布的显示尺寸是 400x300，drawingbuffer 是 10x15</p>
-<pre class="prettyprint"><code>&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>或者像这样</p>
-<pre class="prettyprint"><code>&lt;style&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;style&gt;
 #c {
   width: 400px;
   height: 300px;
@@ -246,7 +246,7 @@ canvas.height = 300;
 <p>为什么它被模糊了？因为浏览器得到 10x15 像素的画布，将它拉伸到 400x300 像素，
 然后在拉伸的过程中进行了插值。</p>
 <p>假设我们想让画布填充满窗口该怎么做？首先使用CSS让浏览器将画布铺满窗口，例如</p>
-<pre class="prettyprint"><code>&lt;html&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;html&gt;
   &lt;head&gt;
     &lt;style&gt;
       /* 移除边界 */
@@ -267,9 +267,9 @@ canvas.height = 300;
   &lt;/body&gt;
 &lt;/html&gt;
 </code></pre><p>现在只需要将 drawingbuffer 的尺寸设置为为浏览器拉伸后的画布尺寸。
-我们可以使用 <code>clientWidth</code> 和 <code>clientHeight</code> 属性，这个属性是所有HTML元素都有的属性，
+我们可以使用 <code class="notranslate" translate="no">clientWidth</code> 和 <code class="notranslate" translate="no">clientHeight</code> 属性，这个属性是所有HTML元素都有的属性，
 可以让JavaScript获取元素显示的尺寸。</p>
-<pre class="prettyprint"><code>function resize(canvas) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function resize(canvas) {
   // 获取浏览器中画布的显示尺寸
   var displayWidth  = canvas.clientWidth;
   var displayHeight = canvas.clientHeight;
@@ -284,7 +284,7 @@ canvas.height = 300;
   }
 }
 </code></pre><p>大多数WebGL应用是<a href="webgl-animation.html">变化</a>的，所以我们需要在绘制之前调用这个方法调画布为期望的大小。</p>
-<pre class="prettyprint"><code>function drawScene() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
    resize(gl.canvas);
 
    ...
@@ -296,12 +296,12 @@ canvas.height = 300;
 
 </p>
 <p>哪里出问题了？为什么这个线没有覆盖整个区域？</p>
-<p>原因是当我们重置画布尺寸的时候还需要调用<code>gl.viewport</code>设置视域，
-<code>gl.viewport</code>告诉WebGL如何将裁剪空间（-1 到 +1）中的点转换到像素空间，
+<p>原因是当我们重置画布尺寸的时候还需要调用<code class="notranslate" translate="no">gl.viewport</code>设置视域，
+<code class="notranslate" translate="no">gl.viewport</code>告诉WebGL如何将裁剪空间（-1 到 +1）中的点转换到像素空间，
 也就是画布内。当你第一次创建WebGL上下文的时候WebGL会设置视域大小和画布大小匹配，
 但是在那之后就需要你自己设置。当你改变画布大小就需要告诉WebGL新的视域设置。</p>
 <p>让我们来修改代码处理这个问题。由于WebGL上下文引用了画布，所以直接传递它的尺寸。</p>
-<pre class="prettyprint"><code>function drawScene() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
    resize(gl.canvas);
 
 +   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -328,7 +328,7 @@ WebGL没办法知道你的意图所以就不能自动帮你设置视域。</p>
 对于文字和大多数CSS样式浏览器会自动绘制HD-DPI图形，但是对于WebGL，
 由于你来控制绘制图形，所以取决于你想绘制一般分辨率还是“HD-DPI”品质。
 </p>
-<p>为了实现这个我们需要获得<code>window.devicePixelRatio</code>的值，
+<p>为了实现这个我们需要获得<code class="notranslate" translate="no">window.devicePixelRatio</code>的值，
 这个值告诉我们1个CSS像素对应多少个实际像素。
 我们可以修改 resize 方法处理这种情况。</p>
 <pre class="prettyprint">
@@ -359,8 +359,8 @@ function resize(gl) {
 
 
 <p>是否需要根据HD-DPI做调整取决于你自己。
-在 iPhone4 或 iPhone5 上 <code>window.devicePixelRatio</code> 的值是 <code>2</code>,
-意味着你要绘制 4 倍的像素个数。我确定在 iPhone6Plus 上那个值是 <code>3</code>，
+在 iPhone4 或 iPhone5 上 <code class="notranslate" translate="no">window.devicePixelRatio</code> 的值是 <code class="notranslate" translate="no">2</code>,
+意味着你要绘制 4 倍的像素个数。我确定在 iPhone6Plus 上那个值是 <code class="notranslate" translate="no">3</code>，
 意味着 9 倍的像素个数。这样就会拖慢你的应用，
 实际上在游戏中常用的优化是绘制比显示数量要小的像素个数，
 让GPU缩放它们。这其实取决于你的目的，如果你想绘制用于打印的图形，

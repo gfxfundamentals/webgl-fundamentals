@@ -232,7 +232,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 それは「回転する１」である。「何かに１を掛ける」と「同じ数字になる」ように、「何かに単位円を掛ける」と「魔法のように回転する」。</p>
 <p><a href="webgl-2d-translation.html">前回のサンプル</a>の図形頂点を単位円のXとYに掛けよう！</p>
 <p>これは更新された頂点シェーダーである。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -248,7 +248,7 @@ void main() {
   // 移動距離を足す
 *  vec2 position = rotatedPosition + u_translation;
 </code></pre><p>そしてJavaScriptをその２つの値を設定出来るように更新する。</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
 
@@ -284,7 +284,7 @@ void main() {
 
 </p>
 <p>何でこういう結果が出るか？よろしい、計算式を見て下さい。</p>
-<pre class="prettyprint"><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </code></pre><p>回転したい四角形があることを想像しよう。回転する前は右上の頂点は(3.0, 9.0)である。
 単位円の円周上、真上から右回り30度の位置を選ぼう。</p>
@@ -310,18 +310,18 @@ Xが小さくなって、Yが大きくなって行く。そのパターンで回
 <p>「単位円の円周上の位置」には別の名前がある。
 それは正弦(sine)と余弦(cosine)と呼ばれている。
 どんな角度でもその角度の正弦と余弦はこのように調べられる。</p>
-<pre class="prettyprint"><code>function printSineAndCosineForAnAngle(angleInDegrees) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function printSineAndCosineForAnAngle(angleInDegrees) {
   var angleInRadians = angleInDegrees * Math.PI / 180;
   var s = Math.sin(angleInRadians);
   var c = Math.cos(angleInRadians);
   console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
 }
 </code></pre><p>このコードをJavaScriptコンーソルにコピー＆ペーストして、そして
-<code>printSineAndCosineForAngle(30)</code>を入力したら<code>s = 0.49 c = 0.87</code>が
+<code class="notranslate" translate="no">printSineAndCosineForAngle(30)</code>を入力したら<code class="notranslate" translate="no">s = 0.49 c = 0.87</code>が
 表示される(note:値は四捨五入した)。</p>
 <p>これらを組み合わせたら、どんな図形をどんな角度にでも回転出来るようになる。
-<code>rotation</code>を希望の角度の正弦と余弦に設定するだけである.</p>
-<pre class="prettyprint"><code>  ...
+<code class="notranslate" translate="no">rotation</code>を希望の角度の正弦と余弦に設定するだけである.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var angleInRadians = angleInDegrees * Math.PI / 180;
   rotation[0] = Math.sin(angleInRadians);
   rotation[1] = Math.cos(angleInRadians);
@@ -356,7 +356,7 @@ Xが小さくなって、Yが大きくなって行く。そのパターンで回
 円を「度」で計ると360度になるが、
 ラジアンで計ると2πラジアンになる。
 一周は2πラジアンである。半周は1πラジアンである。1/4周は1/2πラジアンである。
-90度回転したければ<code>Math.PI * 0.5</code>を使えばいいし、45度なら<code>Math.PI * 0.25</code>を使えばいい。
+90度回転したければ<code class="notranslate" translate="no">Math.PI * 0.5</code>を使えばいいし、45度なら<code class="notranslate" translate="no">Math.PI * 0.25</code>を使えばいい。
 </p>
 <p>
 角度の計算では、ほとんどの場合ラジアンを使えば簡単になる。これからは、ラジアンで考えてみよう！

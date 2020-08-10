@@ -310,9 +310,9 @@ nouveauY = y * sy;
 
 <p>Et c&#39;est pareil que ce qu&#39;on avait dans <a href="webgl-2d-scale.html">l&#39;article sur le changement d&#39;échelle</a> !</p>
 <p>Maintenant je parie que vous fixez toujours l&#39;écran en pensant &quot;Alors quoi ?! C&#39;est quoi le truc ?&quot; Ca a l&#39;air d&#39;un beaucoup plus gros boulot pour faire ce qu&#39;on faisait déjà.</p>
-<p>C&#39;est là que la magie arrive. Il se trouve qu&#39;on peut multiplier des matrices ensemble. Et qu&#39;on peut appliquer toutes les transformations d&#39;un coup. Imaginons qu&#39;on a une fonction, <code>multiplierMatrices</code>, qui prend deux matrices, les multiplie et retourne la matrice finale.</p>
+<p>C&#39;est là que la magie arrive. Il se trouve qu&#39;on peut multiplier des matrices ensemble. Et qu&#39;on peut appliquer toutes les transformations d&#39;un coup. Imaginons qu&#39;on a une fonction, <code class="notranslate" translate="no">multiplierMatrices</code>, qui prend deux matrices, les multiplie et retourne la matrice finale.</p>
 <p>Pour rendre les choses plus claires faisons des fonctions pour fabriquer des matrices pour le déplacement, la rotation et l&#39;échelle :</p>
-<pre class="prettyprint"><code>function deplacer(tx, ty) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function deplacer(tx, ty) {
   return [
     1, 0, 0,
     0, 1, 0,
@@ -338,7 +338,7 @@ function changerEchelle(sx, sy) {
   ];
 }
 </code></pre><p>Maintenant changeons le shader. Le shader actuel est :</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -359,7 +359,7 @@ void main() {
   vec2 position = positionTournee + u_deplacement;
   ...
 </code></pre><p>Notre nouveau shader va être beaucoup plus simple</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -370,7 +370,7 @@ void main() {
   vec2 position = (u_matrice * vec3(a_position, 1)).xy;
   ...
 </code></pre><p>Et voilà comment on l&#39;utilise :</p>
-<pre class="prettyprint"><code>  // Rend la scène
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Rend la scène
   function rendreScene() {
     // Efface le canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -398,7 +398,7 @@ void main() {
 
 </p>
 <p>Mais, vous vous demandez peut-être encore, alors quoi ? Ca n&#39;a pas l&#39;air plus pratique. Mais maintenant si on veut changer l&#39;ordre des transformations on n&#39;a pas besoin d&#39;écrire un nouveau shader. On a juste à changer l&#39;ordre de nos fonctions. </p>
-<pre class="prettyprint"><code>    ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ...
     // Multiplie les matrices
     var matrice = multiplierMatrices(matriceDeplacement, matriceRotation);
     matrice = multiplierMatrices(matrice, matriceEchelle);
@@ -411,7 +411,7 @@ void main() {
 
 </p>
 <p>Pouvoir multiplier par des matrices comme ça est particulièrement important dans les hiérarchies d&#39;animation comme des bras sur un corps, des lunes autour d&#39;une planète autour d&#39;un soleil, ou les branches d&#39;un arbre. Pour un exemple simple avec une animation hiérarchique dessinons notre &quot;F&quot; cinq fois mais chaque fois, partons de la matrice du F précédent. </p>
-<pre class="prettyprint"><code>  // Rend la scène
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Rend la scène
   function rendreScene() {
     // Efface le canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -437,14 +437,14 @@ void main() {
       gl.drawArrays(gl.TRIANGLES, 0, 18);
     }
   }
-</code></pre><p>Pour faire ça on a eu besoin de la fonction <code>matriceIdentite</code>, qui retourne une matrice identité. Une matrice identité est une matrice qui représente &quot;1.0&quot;, c&#39;est-à-dire qu&#39;en la multipliant, il ne se passe rien. Tout comme</p>
+</code></pre><p>Pour faire ça on a eu besoin de la fonction <code class="notranslate" translate="no">matriceIdentite</code>, qui retourne une matrice identité. Une matrice identité est une matrice qui représente &quot;1.0&quot;, c&#39;est-à-dire qu&#39;en la multipliant, il ne se passe rien. Tout comme</p>
 <div class="webgl_center">X * 1 = X</div>
 
 <p>de même</p>
 <div class="webgl_center">matriceX * identite = matriceX</div>
 
 <p>Voilà le code pour faire une matrice identité :</p>
-<pre class="prettyprint"><code>function matriceIdentite() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function matriceIdentite() {
   return [
     1, 0, 0,
     0, 1, 0,
@@ -460,7 +460,7 @@ void main() {
 </p>
 <p>Voyons un autre exemple. Jusque là dans tous les exemples notre &quot;F&quot; tourne autour de son coin gauche. C&#39;est parce que les opérations qu&#39;on a utilisées faisaient des rotations autour de l&#39;origine et que ce coin gauche, c&#39;est l&#39;origine (0,0).</p>
 <p>Mais maintenant, parce qu&#39;on sait faire des opérations matricielles on peut choisir un ordre d&#39;application des transformations et déplacer l&#39;origine avant le reste des opérations :</p>
-<pre class="prettyprint"><code>    // créé une matrice qui va déplacer l&#39;origine du F vers son centre :
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    // créé une matrice qui va déplacer l&#39;origine du F vers son centre :
     var matriceDeplacementOrigine = deplacer(-50, -75);
     ...
 
@@ -477,7 +477,7 @@ void main() {
 </p>
 <p>Avec cette technique vous pouvez tourner et changer d&#39;échelle depuis n&#39;importe quel point. Maintenant vous savez comment Photoshop ou Flash vous laissent changer un centre de rotation.</p>
 <p>Allons plus loin dans cette folie. Si on revient au premier article <a href="webgl-fundamentals.html">WebGL - Les bases</a> vous vous rappelez peut-être qu&#39;on avait un code dans nos shaders pour convertir des coordonnées d&#39;écran aux coordonnées d&#39;espace de projection (clipspace). Ca ressemblait à ça :</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   // convertit le rectangle de l&#39;espace des pixels à 0.0 &gt; 1.0
   vec2 zeroAUn = position / u_resolution;
 
@@ -489,7 +489,7 @@ void main() {
 
   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>Si vous regardez chaque étape, en fait, &quot;convertit le rectangle de l&#39;espace des pixels à 0.0 &gt; 1.0&quot;, est un changement d&#39;échelle. Pareil pour la seconde étape. La troisième est un déplacement et la dernière un changement d&#39;échelle par -1. On peut du coup faire ceci dans une matrice qu&#39;on envoie au shader. On pourrait faire deux matrices d&#39;échelle, une pour l&#39;échelle 1.0 / résolution, une autre pour l&#39;échelle 2.0, une troisième pour le déplacement (-1.0,-1.0) et une quatrième pour changer l&#39;échelle Y à -1.0, enfin multiplier tout ça. Mais à la place, parce que les maths c&#39;est sensé être simple, on va juste écrire une fonction qui retourne une matrice de &#39;projection&#39; pour une résolution donnée directement.</p>
-<pre class="prettyprint"><code>function projeter2D(largeur, hauteur) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function projeter2D(largeur, hauteur) {
   // Note: Cette matrice inverse l&#39;axe Y, il regarde vers le bas
   return [
     2 / largeur, 0, 0,
@@ -498,7 +498,7 @@ void main() {
   ];
 }
 </code></pre><p>Maintenant on peut simplifier le shader davantage. Voici le nouveau shader de vertex :</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;shader-de-vertex-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrice;
@@ -509,7 +509,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>Et en javascript il reste à multiplier par la matrice de projection :</p>
-<pre class="prettyprint"><code>  // Rend la scène
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Rend la scène
   function rendreScene() {
     ...
     // Calcule les matrices
@@ -532,9 +532,9 @@ void main() {
 </p>
 <p>J&#39;espère que ces posts aident à démystifier les matrices. <a href="webgl-3d-orthographic.html">On peut passer à la 3D</a>. En 3D les matrices suivent les mêmes principes. J&#39;ai démarré avec la 2D pour rendre ça plus facile à comprendre. </p>
 <div class="webgl_bottombar">
-<h3>Que signifient <code>clientWidth</code> et <code>clientHeight</code>?</h3>
-<p>Jusqu'à maintenant quand je faisais référence aux dimensions du canvas j'utilisais <code>canvas.width</code> et <code>canvas.height</code>
-mais dans <code>projeter2D</code> j'ai préféré <code>canvas.clientWidth</code> et <code>canvas.clientHeight</code>. Pourquoi ?</p>
+<h3>Que signifient <code class="notranslate" translate="no">clientWidth</code> et <code class="notranslate" translate="no">clientHeight</code>?</h3>
+<p>Jusqu'à maintenant quand je faisais référence aux dimensions du canvas j'utilisais <code class="notranslate" translate="no">canvas.width</code> et <code class="notranslate" translate="no">canvas.height</code>
+mais dans <code class="notranslate" translate="no">projeter2D</code> j'ai préféré <code class="notranslate" translate="no">canvas.clientWidth</code> et <code class="notranslate" translate="no">canvas.clientHeight</code>. Pourquoi ?</p>
 <p>Les matrices de projection ont besoin de connaître les dimensions du canvas pour créer un espace de projection qui ne déforme pas l'objet. 
 Mais, dans le navigateur, il y a deux types de pixels qu'on doit gérer. Le premier est le nombre de pixels dans le canvas. Par exemple un canvas défini comme ça </p>
 <pre class="prettyprint">
@@ -561,21 +561,21 @@ Par exemple si on a le canvas suivant, avec ce style appliqué :</p>
 </pre>
 <p>Le canvas va être affiché dans tout son contenant parent, quel que soit sa propre taille, 400x300 ou une autre.</p>
 <p>Voici deux exemples qui définissent la taille d'affichage CSS pour étirer le canvas sur toute la page. Le premier utilise 
-<code>canvas.width</code> et <code>canvas.height</code>. Ouvrez-le dans une nouvelle fenêtre et redimensionnez-là. Le <code>F</code> n'a plus le bon aspect, il est déformé.</p>
+<code class="notranslate" translate="no">canvas.width</code> et <code class="notranslate" translate="no">canvas.height</code>. Ouvrez-le dans une nouvelle fenêtre et redimensionnez-là. Le <code class="notranslate" translate="no">F</code> n'a plus le bon aspect, il est déformé.</p>
 <div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-width-height.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-width-height.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 
-<p>Dans le second exemple on utilise <code>canvas.clientWidth</code> et <code>canvas.clientHeight</code>. <code>canvas.clientWidth</code> et <code>canvas.clientHeight</code> reprennent la taille avec laquelle le canvas est effectivement affiché dans le navigateur donc dans ce cas, même s'il n'a toujours que 400x300 pixels, puisqu'on définit l'aspect en se basant sur l'aspect réel du canvas, le <code>F</code> n'est plus déformé.</p>
+<p>Dans le second exemple on utilise <code class="notranslate" translate="no">canvas.clientWidth</code> et <code class="notranslate" translate="no">canvas.clientHeight</code>. <code class="notranslate" translate="no">canvas.clientWidth</code> et <code class="notranslate" translate="no">canvas.clientHeight</code> reprennent la taille avec laquelle le canvas est effectivement affiché dans le navigateur donc dans ce cas, même s'il n'a toujours que 400x300 pixels, puisqu'on définit l'aspect en se basant sur l'aspect réel du canvas, le <code class="notranslate" translate="no">F</code> n'est plus déformé.</p>
 <div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-clientwidth-clientheight.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-clientwidth-clientheight.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
 </div>
 
 
-<p>La plupart des applis qui permettent le redimensionnement du canvas essaient de vérifier si <code>canvas.clientWidth</code> et <code>canvas.clientHeight</code> valent <code>canvas.width</code> et <code>canvas.height</code> parce qu'ils veulent qu'un pixel du canvas vale un pixel sur l'écran. Mais comme on l'a vu plus haut, ce n'est pas toujours le cas. Donc, dans la plupart des cas, c'est plus correct de calculer une matrice de projection en calculant l'aspect depuis <code>canvas.clientHeight</code> et <code>canvas.clientWidth</code>.
+<p>La plupart des applis qui permettent le redimensionnement du canvas essaient de vérifier si <code class="notranslate" translate="no">canvas.clientWidth</code> et <code class="notranslate" translate="no">canvas.clientHeight</code> valent <code class="notranslate" translate="no">canvas.width</code> et <code class="notranslate" translate="no">canvas.height</code> parce qu'ils veulent qu'un pixel du canvas vale un pixel sur l'écran. Mais comme on l'a vu plus haut, ce n'est pas toujours le cas. Donc, dans la plupart des cas, c'est plus correct de calculer une matrice de projection en calculant l'aspect depuis <code class="notranslate" translate="no">canvas.clientHeight</code> et <code class="notranslate" translate="no">canvas.clientWidth</code>.
 </p>
 </div>
 

@@ -219,17 +219,17 @@ about how it works. Basically what you do is use some kind of depth or distance
 from the camera calculation in your shaders to make the color more or less the
 fog color.</p>
 <p>In other words you start with a basic equation like this</p>
-<pre class="prettyprint"><code class="lang-glsl">gl_FragColor = mix(originalColor, fogColor, fogAmount);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">gl_FragColor = mix(originalColor, fogColor, fogAmount);
 </code></pre>
-<p>Where <code>fogAmount</code> is a value from 0 to 1. The <code>mix</code> function mixes the first 2
-values. When <code>fogAmount</code> is 0 <code>mix</code> returns <code>originalColor</code>. Then <code>fogAmount</code> is
-1 <code>mix</code> returns <code>fogColor</code>. In between 0 and 1 you get a percentage of both
-colors. You could implement <code>mix</code> yourself like this</p>
-<pre class="prettyprint"><code class="lang-glsl">gl_FragColor = originalColor + (fogColor - originalColor) * fogAmount;
+<p>Where <code class="notranslate" translate="no">fogAmount</code> is a value from 0 to 1. The <code class="notranslate" translate="no">mix</code> function mixes the first 2
+values. When <code class="notranslate" translate="no">fogAmount</code> is 0 <code class="notranslate" translate="no">mix</code> returns <code class="notranslate" translate="no">originalColor</code>. Then <code class="notranslate" translate="no">fogAmount</code> is
+1 <code class="notranslate" translate="no">mix</code> returns <code class="notranslate" translate="no">fogColor</code>. In between 0 and 1 you get a percentage of both
+colors. You could implement <code class="notranslate" translate="no">mix</code> yourself like this</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">gl_FragColor = originalColor + (fogColor - originalColor) * fogAmount;
 </code></pre>
 <p>Let&#39;s make a shader that does this. We&#39;ll use a textured cube from <a href="webgl-3d-textures.html">the article on textures</a>.</p>
 <p>Let&#39;s add the mixing to the fragment shader</p>
-<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec2 v_texcoord;
@@ -246,11 +246,11 @@ void main() {
 }
 </code></pre>
 <p>Then at init time we need to look up the new uniform locations</p>
-<pre class="prettyprint"><code class="lang-js">var fogColorLocation = gl.getUniformLocation(program, &quot;u_fogColor&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var fogColorLocation = gl.getUniformLocation(program, &quot;u_fogColor&quot;);
 var fogAmountLocation = gl.getUniformLocation(program, &quot;u_fogAmount&quot;);
 </code></pre>
 <p>and at render time set them</p>
-<pre class="prettyprint"><code class="lang-js">var fogColor = [0.8, 0.9, 1, 1];
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var fogColor = [0.8, 0.9, 1, 1];
 var settings = {
   fogAmount: .5,
 };
@@ -290,9 +290,9 @@ the -z axis so if we just look at the z position after multiplying by the world
 and view matrices we&#39;ll have a value that represents how far away something is
 from the z plane of the camera.</p>
 <p>Let&#39;s change the vertex shader to pass that data to the fragment shader so we
-can use it compute a fog amount. To do that let&#39;s split <code>u_matrix</code> into 2 parts.
+can use it compute a fog amount. To do that let&#39;s split <code class="notranslate" translate="no">u_matrix</code> into 2 parts.
 A projection matrix and a worldView matrix.</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 -uniform mat4 u_matrix;
@@ -320,7 +320,7 @@ void main() {
 <p>Now in the fragment shader we want it to work that if the depth is less than
 some value, don&#39;t mix any fog (fogAmount = 0). If the depth is greater than some
 value then 100% fog (fogAmount = 1). Between those 2 values mix the colors.</p>
-<p>We could write code to do that but GLSL has a function, <code>smoothstep</code> that does
+<p>We could write code to do that but GLSL has a function, <code class="notranslate" translate="no">smoothstep</code> that does
 just that. You give it the min value, the max value, and the value to test. If
 the test value is less than or equal to the min value it returns 0. If the test
 value is greater than or equal to the max value it returns 1. If test is between
@@ -328,7 +328,7 @@ those 2 values it returns something between 0 and 1 in proportion to where the
 test value is between min and max.</p>
 <p>So, it should be pretty easy to use that in our fragment shader to compute a fog
 amount</p>
-<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec2 v_texcoord;
@@ -351,7 +351,7 @@ void main() {
 }
 </code></pre>
 <p>and of course we need to look up all these uniforms at init time</p>
-<pre class="prettyprint"><code class="lang-js">// lookup uniforms
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// lookup uniforms
 +var projectionLocation = gl.getUniformLocation(program, &quot;u_projection&quot;);
 +var worldViewLocation = gl.getUniformLocation(program, &quot;u_worldView&quot;);
 var textureLocation = gl.getUniformLocation(program, &quot;u_texture&quot;);
@@ -360,7 +360,7 @@ var fogColorLocation = gl.getUniformLocation(program, &quot;u_fogColor&quot;);
 +var fogFarLocation = gl.getUniformLocation(program, &quot;u_fogFar&quot;);
 </code></pre>
 <p>and set them at render time </p>
-<pre class="prettyprint"><code class="lang-js">var fogColor = [0.8, 0.9, 1, 1];
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var fogColor = [0.8, 0.9, 1, 1];
 var settings = {
 -  fogAmount: .5,
 +  fogNear: 1.1,
@@ -409,7 +409,7 @@ function drawScene(time) {
 -  gl.uniform1f(fogAmountLocation, settings.fogAmount);
 </code></pre>
 <p>While we&#39;re at it lets draw 40 cubes into the distance to make it easier to see the fog.</p>
-<pre class="prettyprint"><code class="lang-js">var settings = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var settings = {
   fogNear: 1.1,
   fogFar: 2.0,
 +  xOff: 1.1,
@@ -437,13 +437,13 @@ for (let i = 0; i &lt;= numCubes; ++i) {
 </div>
 
 </p>
-<p>Note: We didn&#39;t add any code to make sure <code>fogNear</code> is less then or equal to
-<code>fogFar</code> which are arguably invalid settings so be sure to set both
+<p>Note: We didn&#39;t add any code to make sure <code class="notranslate" translate="no">fogNear</code> is less then or equal to
+<code class="notranslate" translate="no">fogFar</code> which are arguably invalid settings so be sure to set both
 appropriately.</p>
 <p>As I mentioned above it&#39;s feels like a trick to me. It works because the fog
 color we&#39;re fading to matches the background color. Change the background color
 and the illusion disappears.</p>
-<pre class="prettyprint"><code class="lang-js">-gl.clearColor(...fogColor);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-gl.clearColor(...fogColor);
 +gl.clearColor(1, 0, 0, 1);  // red
 </code></pre>
 <p>gets us</p>
@@ -474,7 +474,7 @@ same for all cubes</p>
 
 <p>To do this we just need to pass the vertex position in view space from the
 vertex shader to the fragment shader</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 uniform mat4 u_worldView;
@@ -501,7 +501,7 @@ void main() {
 }
 </code></pre>
 <p>and then in the fragment shader we can use the position to compute the distance</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec2 v_texcoord;
@@ -534,13 +534,13 @@ void main() {
 color gets applied linearly between near and far. Like many things in the real
 world fog apparently works exponentially. It gets thicker with the square of the
 distance from the viewer. A common equation for exponential fog is</p>
-<pre class="prettyprint"><code class="lang-glsl">#define LOG2 1.442695
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">#define LOG2 1.442695
 
 fogAmount = 1. - exp2(-fogDensity * fogDensity * fogDistance * fogDistance * LOG2));
 fogAmount = clamp(fogAmount, 0., 1.);
 </code></pre>
 <p>To use this we&#39;d change the fragment shader to something like</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec2 v_texcoord;
@@ -573,7 +573,7 @@ void main() {
 
 </p>
 <p>One thing to notice about density based fog is there are no near and far settings. It might be more realistic but it also might not fit your aesthetic needs. Which one you prefer is an artistic decision.</p>
-<p>There are many other ways to compute fog. On a low powered GPU you might just use <code>gl_FragCoord.z</code>. <code>gl_FragCoord</code> is a global variable that WebGL sets. The <code>x</code> and <code>y</code> components are the coordinate of the pixel being drawn. The <code>z</code> coordinate is the depth of that pixel from 0 to 1. While not directly translatable into distance you can still get something that looks like fog by picking some values between 0 and 1 for near and far. Nothing has to be passed from the vertex shader to the fragment shader and no distance calculations are needed so this is one way to make a cheap fog effect on a low powered GPU.</p>
+<p>There are many other ways to compute fog. On a low powered GPU you might just use <code class="notranslate" translate="no">gl_FragCoord.z</code>. <code class="notranslate" translate="no">gl_FragCoord</code> is a global variable that WebGL sets. The <code class="notranslate" translate="no">x</code> and <code class="notranslate" translate="no">y</code> components are the coordinate of the pixel being drawn. The <code class="notranslate" translate="no">z</code> coordinate is the depth of that pixel from 0 to 1. While not directly translatable into distance you can still get something that looks like fog by picking some values between 0 and 1 for near and far. Nothing has to be passed from the vertex shader to the fragment shader and no distance calculations are needed so this is one way to make a cheap fog effect on a low powered GPU.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-fog-depth-based-gl_FragCoord.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-fog-depth-based-gl_FragCoord.html" target="_blank">click here to open in a separate window</a>

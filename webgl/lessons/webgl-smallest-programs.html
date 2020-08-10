@@ -231,7 +231,7 @@ to help you see the bigger picture rather than just the common patterns.
 </ol>
 <h2 id="just-clearing">Just clearing</h2>
 <p>Here&#39;s the smallest WebGL program that actually does something</p>
-<pre class="prettyprint"><code class="lang-js">const gl = document.querySelector(&#39;canvas&#39;).getContext(&#39;webgl&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const gl = document.querySelector(&#39;canvas&#39;).getContext(&#39;webgl&#39;);
 gl.clearColor(1, 0, 0, 1);  // red
 gl.clear(gl.COLOR_BUFFER_BIT);
 </code></pre>
@@ -242,24 +242,24 @@ Let&#39;s say it&#39;s just like the example in <a href="webgl-render-to-texture
 You&#39;re rendering 1 or more 3D things into a texture then rending that result onto a cube.</p>
 <p>You&#39;re not seeing anything. Well, as a simple test, stop rendering to the texture with
 shaders are just clear the texture to a known color.</p>
-<pre class="prettyprint"><code class="lang-js">gl.bindFramebuffer(gl.FRAMEBUFFER, framebufferWithTexture)
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.bindFramebuffer(gl.FRAMEBUFFER, framebufferWithTexture)
 gl.clearColor(1, 0, 1, 1);  // magenta
 gl.clear(gl.COLOR_BUFFER_BIT);
 </code></pre>
 <p>Now render with the texture from the framebuffer. Does your cube turn magenta? If not
 then your issue is not the rendering to the texture part it&#39;s something else.</p>
-<h2 id="using-the-scissor_test-and-gl-clear-">Using the <code>SCISSOR_TEST</code> and <code>gl.clear</code></h2>
-<p>The <code>SCISSOR_TEST</code> clips both drawing and clearing to some sub rectangle of the canvas (or current framebuffer).</p>
+<h2 id="using-the-scissor_test-and-gl-clear-">Using the <code class="notranslate" translate="no">SCISSOR_TEST</code> and <code class="notranslate" translate="no">gl.clear</code></h2>
+<p>The <code class="notranslate" translate="no">SCISSOR_TEST</code> clips both drawing and clearing to some sub rectangle of the canvas (or current framebuffer).</p>
 <p>You enable the scissor test with</p>
-<pre class="prettyprint"><code class="lang-js">gl.enable(gl.SCISSOR_TEST);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.enable(gl.SCISSOR_TEST);
 </code></pre>
 <p>and then you set the scissor rectangle in pixels relative to the bottom left corner. It uses the same parameters
-as <code>gl.viewport</code>.</p>
-<pre class="prettyprint"><code class="lang-js">gl.scissor(x, y, width, height);
+as <code class="notranslate" translate="no">gl.viewport</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.scissor(x, y, width, height);
 </code></pre>
-<p>Using that can draw rectangles using the <code>SCISSOR_TEST</code> and <code>gl.clear</code>.</p>
+<p>Using that can draw rectangles using the <code class="notranslate" translate="no">SCISSOR_TEST</code> and <code class="notranslate" translate="no">gl.clear</code>.</p>
 <p>Example</p>
-<pre class="prettyprint"><code class="lang-js">const gl = document.querySelector(&#39;#c&#39;).getContext(&#39;webgl&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const gl = document.querySelector(&#39;#c&#39;).getContext(&#39;webgl&#39;);
 
 gl.enable(gl.SCISSOR_TEST);
 
@@ -294,7 +294,7 @@ function rand(min, max) {
 </p>
 <p>Not saying that particular one is all that useful but still
 it&#39;s good to know.</p>
-<h2 id="using-one-large-gl-points-">Using one large <code>gl.POINTS</code></h2>
+<h2 id="using-one-large-gl-points-">Using one large <code class="notranslate" translate="no">gl.POINTS</code></h2>
 <p>As most of the examples show, the most common thing to do in WebGL
 is create buffers. Put vertex data in those buffers. Create
 shaders with attributes. Set up the attributes to pull data from
@@ -303,13 +303,13 @@ used by your shaders.</p>
 <p>But sometimes you just want to test. Let&#39;s say you want just see
 something draw.</p>
 <p>How about this set of shaders</p>
-<pre class="prettyprint"><code class="lang-glsl">// vertex shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// vertex shader
 void main() {
   gl_Position = vec4(0, 0, 0, 1);  // center
   gl_PointSize = 120.0;
 }
 </code></pre>
-<pre class="prettyprint"><code class="lang-glsl">// fragment shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// fragment shader
 precision mediump float;
 
 void main() {
@@ -317,7 +317,7 @@ void main() {
 }
 </code></pre>
 <p>And here&#39;s the code to use it</p>
-<pre class="prettyprint"><code class="lang-js">// setup GLSL program
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup GLSL program
 const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
 
 gl.useProgram(program);
@@ -339,20 +339,20 @@ point in the middle of the canvas.</p>
 There is a <a href="https://bugs.webkit.org/show_bug.cgi?id=197592">bug filed here</a>. Please consider <strong>politely</strong> asking them to fix this issue. The more people
 that ask the more likely it will get fixed.</p>
 </blockquote>
-<p>About <code>gl.POINTS</code>: When you pass <code>gl.POINTS</code> to <code>gl.drawArrays</code> you&#39;re also
-required to set <code>gl_PointSize</code> in your vertex shader to a size in pixels. It&#39;s
+<p>About <code class="notranslate" translate="no">gl.POINTS</code>: When you pass <code class="notranslate" translate="no">gl.POINTS</code> to <code class="notranslate" translate="no">gl.drawArrays</code> you&#39;re also
+required to set <code class="notranslate" translate="no">gl_PointSize</code> in your vertex shader to a size in pixels. It&#39;s
 important to note that different GPU/Drivers have a different maximum point size
 you can use. You can query that maximum size with</p>
-<pre class="prettyprint"><code>const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
 </code></pre><p>The WebGL spec only requires a max size of 1.0. Fortunately
 <a href="https://webglstats.com/webgl/parameter/ALIASED_POINT_SIZE_RANGE">most if not all GPUs and drivers support a larger size</a>.</p>
-<p>After you set <code>gl_PointSize</code> then when the vertex shader exits, whatever value you set on <code>gl_Position</code> is converted
+<p>After you set <code class="notranslate" translate="no">gl_PointSize</code> then when the vertex shader exits, whatever value you set on <code class="notranslate" translate="no">gl_Position</code> is converted
 to screen/canvas space in pixels, then a square is generated around that position that is +/- gl_PointSize / 2 in all 4 directions.</p>
 <p>Okay, I can hear you thinking so what, who wants to draw a single point.</p>
 <p>Well, points automatically get free <a href="webgl-3d-textures.html">texture coordinates</a>. They are available in the fragment
-shader with the special variable <code>gl_PointCoord</code>. So, let&#39;s draw a texture on that point.</p>
+shader with the special variable <code class="notranslate" translate="no">gl_PointCoord</code>. So, let&#39;s draw a texture on that point.</p>
 <p>First let&#39;s change the fragment shader.</p>
-<pre class="prettyprint"><code class="lang-glsl">// fragment shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// fragment shader
 precision mediump float;
 
 +uniform sampler2D tex;
@@ -364,7 +364,7 @@ void main() {
 </code></pre>
 <p>Now to keep it simple let&#39;s make a texture with raw data like we covered in
 <a href="webgl-data-textures.html">the article on data textures</a>.</p>
-<pre class="prettyprint"><code class="lang-js">// 2x2 pixel data
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 2x2 pixel data
 const pixels = new Uint8Array([
   0xFF, 0x00, 0x00, 0xFF,  // red
   0x00, 0xFF, 0x00, 0xFF,  // green
@@ -403,10 +403,10 @@ show the image on the point? We rendered to a texture and then
 we want to view the texture. Normally we&#39;d setup some geometry
 via buffers and attributes but we can render the texture just
 by showing it on this single point.</p>
-<h2 id="using-multiple-single-points-">Using Multiple Single <code>POINTS</code></h2>
+<h2 id="using-multiple-single-points-">Using Multiple Single <code class="notranslate" translate="no">POINTS</code></h2>
 <p>Another simple change to the example above. We can change the vertex
 shader to this</p>
-<pre class="prettyprint"><code class="lang-glsl">// vertex shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// vertex shader
 
 +attribute vec4 position;
 
@@ -416,10 +416,10 @@ void main() {
   gl_PointSize = 120.0;
 }
 </code></pre>
-<p>attributes have a default value of <code>0, 0, 0, 1</code> so with just that
+<p>attributes have a default value of <code class="notranslate" translate="no">0, 0, 0, 1</code> so with just that
 change the examples above would still continue to work. But, now
 we gain the ability to set the position if we want.</p>
-<pre class="prettyprint"><code class="lang-js">+const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">+const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
 const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
 
 ...
@@ -436,7 +436,7 @@ const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
 +}
 </code></pre>
 <p>Before we run it lets make the point smaller</p>
-<pre class="prettyprint"><code class="lang-glsl">// vertex shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// vertex shader
 
 attribute vec4 position;
 +uniform float size;
@@ -449,7 +449,7 @@ void main() {
 </code></pre>
 <p>And lets make it so we can set the color of the point.
 (note: I switched back to the code without a texture).</p>
-<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 +uniform vec4 color;
 
@@ -459,13 +459,13 @@ void main() {
 }
 </code></pre>
 <p>and we need to lookup the color location</p>
-<pre class="prettyprint"><code class="lang-js">// setup GLSL program
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup GLSL program
 const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
 const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
 +const colorLoc = gl.getUniformLocation(program, &#39;color&#39;);
 </code></pre>
 <p>And use them</p>
-<pre class="prettyprint"><code>gl.useProgram(program);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.useProgram(program);
 
 const numPoints = 5;
 for (let i = 0; i &lt; numPoints; ++i) {

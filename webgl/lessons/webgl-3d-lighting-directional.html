@@ -266,13 +266,13 @@ facing.</p>
 positive x being <span style="color: red;">red</span>, up being
 <span style="color: green;">green</span> and positive z being
 <span style="color: blue;">blue</span>.</p>
-<p>So, let&#39;s go add normals to our <code>F</code> from <a href="webgl-3d-camera.html">our previous
-examples</a> so we can light it.  Since the <code>F</code> is
+<p>So, let&#39;s go add normals to our <code class="notranslate" translate="no">F</code> from <a href="webgl-3d-camera.html">our previous
+examples</a> so we can light it.  Since the <code class="notranslate" translate="no">F</code> is
 very boxy and its faces are aligned to the x, y, or z axis it will be
-pretty easy.  Things that are facing forward have the normal <code>0, 0, 1</code>.
-Things that are facing away are <code>0, 0, -1</code>.  Facing left is <code>-1, 0, 0</code>,
-Facing right is <code>1, 0, 0</code>.  Up is <code>0, 1, 0</code> and down is <code>0, -1, 0</code>.</p>
-<pre class="prettyprint"><code>function setNormals(gl) {
+pretty easy.  Things that are facing forward have the normal <code class="notranslate" translate="no">0, 0, 1</code>.
+Things that are facing away are <code class="notranslate" translate="no">0, 0, -1</code>.  Facing left is <code class="notranslate" translate="no">-1, 0, 0</code>,
+Facing right is <code class="notranslate" translate="no">1, 0, 0</code>.  Up is <code class="notranslate" translate="no">0, 1, 0</code> and down is <code class="notranslate" translate="no">0, -1, 0</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function setNormals(gl) {
   var normals = new Float32Array([
           // left column front
           0, 0, 1,
@@ -405,7 +405,7 @@ Facing right is <code>1, 0, 0</code>.  Up is <code>0, 1, 0</code> and down is <c
 }
 </code></pre><p>and set them up. While we&#39;re at it let&#39;s remove the vertex colors
 so it&#39;s easier to see the lighting.</p>
-<pre class="prettyprint"><code>// look up where the vertex data needs to go.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// look up where the vertex data needs to go.
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 -var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 +var normalLocation = gl.getAttribLocation(program, &quot;a_normal&quot;);
@@ -426,7 +426,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +// Put normals data into buffer
 +setNormals(gl);
 </code></pre><p>And at render time</p>
-<pre class="prettyprint"><code>-// Turn on the color attribute
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-// Turn on the color attribute
 -gl.enableVertexAttribArray(colorLocation);
 -
 -// Bind the color buffer.
@@ -458,7 +458,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 </code></pre><p>Now we need to make our shaders use them</p>
 <p>First the vertex shader we just pass the normals through to
 the fragment shader</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 -attribute vec4 a_color;
 +attribute vec3 a_normal;
 
@@ -479,7 +479,7 @@ void main() {
 }
 </code></pre><p>And the fragment shader we&#39;ll do the math using the dot product
 of the direction of the light and the normal</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // Passed in from the vertex shader.
 -varying vec4 v_color;
@@ -502,14 +502,14 @@ void main() {
 +   // by the light
 +   gl_FragColor.rgb *= light;
 }
-</code></pre><p>Then we need to lookup the locations of <code>u_color</code> and <code>u_reverseLightDirection</code>.</p>
-<pre class="prettyprint"><code>  // lookup uniforms
+</code></pre><p>Then we need to lookup the locations of <code class="notranslate" translate="no">u_color</code> and <code class="notranslate" translate="no">u_reverseLightDirection</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // lookup uniforms
   var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
 +  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 +  var reverseLightDirectionLocation =
 +      gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
 </code></pre><p>and we need to set them</p>
-<pre class="prettyprint"><code>  // Set the matrix.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Set the matrix.
   gl.uniformMatrix4fv(matrixLocation, false, worldViewProjectionMatrix);
 
 +  // Set the color to use
@@ -517,11 +517,11 @@ void main() {
 +
 +  // set the light direction.
 +  gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0.5, 0.7, 1]));
-</code></pre><p><code>normalize</code>, which we went over before, will make whatever values we put in there
+</code></pre><p><code class="notranslate" translate="no">normalize</code>, which we went over before, will make whatever values we put in there
 into a unit vector. The specific values in the sample are
-<code>x = 0.5</code> which is positive <code>x</code> means the light is on the right pointing left.
-<code>y = 0.7</code> which is positive <code>y</code> means the light is above pointing down.
-<code>z = 1</code> which is positive <code>z</code> means the light is in front pointing into the scene.
+<code class="notranslate" translate="no">x = 0.5</code> which is positive <code class="notranslate" translate="no">x</code> means the light is on the right pointing left.
+<code class="notranslate" translate="no">y = 0.7</code> which is positive <code class="notranslate" translate="no">y</code> means the light is above pointing down.
+<code class="notranslate" translate="no">z = 1</code> which is positive <code class="notranslate" translate="no">z</code> means the light is in front pointing into the scene.
 the relative values means the the direction is mostly pointing into the scene
 and pointing more down then right.</p>
 <p>And here it is</p>
@@ -536,12 +536,12 @@ but the lighting isn&#39;t changing. As the F rotates we want whatever part
 is facing the direction of the light to be the brightest.</p>
 <p>To fix this we need to re-orient the normals as the object is re-oriented.
 Like we did for positions we can multiply the normals by some matrix.  The
-most obvious matrix would be the <code>world</code> matrix.  As it is right now we&#39;re
-only passing in 1 matrix called <code>u_matrix</code>.  Let&#39;s change it to pass in 2
-matrices.  One called <code>u_world</code> which will be the world matrix.  Another
-called <code>u_worldViewProjection</code> which will be what we&#39;re currently passing
-in as <code>u_matrix</code></p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+most obvious matrix would be the <code class="notranslate" translate="no">world</code> matrix.  As it is right now we&#39;re
+only passing in 1 matrix called <code class="notranslate" translate="no">u_matrix</code>.  Let&#39;s change it to pass in 2
+matrices.  One called <code class="notranslate" translate="no">u_world</code> which will be the world matrix.  Another
+called <code class="notranslate" translate="no">u_worldViewProjection</code> which will be what we&#39;re currently passing
+in as <code class="notranslate" translate="no">u_matrix</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 *uniform mat4 u_worldViewProjection;
@@ -556,17 +556,17 @@ void main() {
 *  // orient the normals and pass to the fragment shader
 *  v_normal = mat3(u_world) * a_normal;
 }
-</code></pre><p>Notice we are multiplying <code>a_normal</code> by <code>mat3(u_world)</code>. That&#39;s
+</code></pre><p>Notice we are multiplying <code class="notranslate" translate="no">a_normal</code> by <code class="notranslate" translate="no">mat3(u_world)</code>. That&#39;s
 because normals are a direction so we don&#39;t care about translation.
 The orientation portion of the matrix is only in the top 3x3
 area of the matrix.</p>
 <p>Now we have to look those uniforms up</p>
-<pre class="prettyprint"><code>  // lookup uniforms
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // lookup uniforms
 *  var worldViewProjectionLocation =
 *      gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 +  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 </code></pre><p>And we have to change the code that updates them</p>
-<pre class="prettyprint"><code>*// Set the matrices
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*// Set the matrices
 *gl.uniformMatrix4fv(
 *    worldViewProjectionLocation, false,
 *    worldViewProjectionMatrix);
@@ -580,8 +580,8 @@ area of the matrix.</p>
 </p>
 <p>Rotate the F and notice which ever side is facing the light direction gets lit.</p>
 <p>There is one problem which I don&#39;t know how to show directly so I&#39;m
-going to show it in a diagram. We&#39;re multiplying the <code>normal</code> by
-the <code>u_world</code> matrix to re-orient the normals.
+going to show it in a diagram. We&#39;re multiplying the <code class="notranslate" translate="no">normal</code> by
+the <code class="notranslate" translate="no">u_world</code> matrix to re-orient the normals.
 What happens if we scale the world matrix?
 It turns out we get the wrong normals.</p>
 <p><div class="webgl_diagram_container">
@@ -610,9 +610,9 @@ based on the other visualizations it&#39;s clear using the worldInverseTranspose
 is correct.</p>
 <p>To implement this in our example let&#39;s change the code like this.  First
 we&#39;ll update the shader.  Technically we could just update the value of
-<code>u_world</code> but it&#39;s best if we rename things so they&#39;re named what they
+<code class="notranslate" translate="no">u_world</code> but it&#39;s best if we rename things so they&#39;re named what they
 actually are otherwise it will get confusing.</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform mat4 u_worldViewProjection;
@@ -628,11 +628,11 @@ void main() {
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 </code></pre><p>Then we need to look that up</p>
-<pre class="prettyprint"><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 +  var worldInverseTransposeLocation =
 +      gl.getUniformLocation(program, &quot;u_worldInverseTranspose&quot;);
 </code></pre><p>And we need to compute and set it</p>
-<pre class="prettyprint"><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
 var worldInverseMatrix = m4.inverse(worldMatrix);
 var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
@@ -645,7 +645,7 @@ gl.uniformMatrix4fv(
 +    worldInverseTransposeLocation, false,
 +    worldInverseTransposeMatrix);
 </code></pre><p>and here&#39;s the code to transpose a matrix</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   transpose: function(m) {
     return [
       m[0], m[4], m[8], m[12],
@@ -676,14 +676,14 @@ v_normal = mat3(u_worldInverseTranspose) * a_normal;
 <pre class="prettyprint">
 v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
 </pre>
-<p>Because we set <code>w</code> to 0 before multiplying that would
+<p>Because we set <code class="notranslate" translate="no">w</code> to 0 before multiplying that would
 end up multiplying the translation from the matrix by 0 effectively removing it. I think that's
 the more common way to do it. The mat3 way looked cleaner to me but
 I've often done it this way too.</p>
-<p>Yet another solution would be to make <code>u_worldInverseTranspose</code> a <code>mat3</code>.
+<p>Yet another solution would be to make <code class="notranslate" translate="no">u_worldInverseTranspose</code> a <code class="notranslate" translate="no">mat3</code>.
 There are 2 reasons not to do that. One is we might have
-other needs for the full <code>u_worldInverseTranspose</code> so passing the entire
-<code>mat4</code> means we can use with for those other needs.
+other needs for the full <code class="notranslate" translate="no">u_worldInverseTranspose</code> so passing the entire
+<code class="notranslate" translate="no">mat4</code> means we can use with for those other needs.
 Another is that all of our matrix functions in JavaScript
 make 4x4 matrices. Making a whole other set for 3x3 matrices
 or even converting from 4x4 to 3x3 is work we'd rather

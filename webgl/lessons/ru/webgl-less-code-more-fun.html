@@ -213,7 +213,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson">
     <div class="lesson-main">
       <p>Прим. переводчика:
-В оригинале игра слов <code>Less Code, More Fun</code>, <code>Fun</code> - сокращение слова функция,
+В оригинале игра слов <code class="notranslate" translate="no">Less Code, More Fun</code>, <code class="notranslate" translate="no">Fun</code> - сокращение слова функция,
 что намекает на рефакторинг проведенный в этом разделе.</p>
 <p>Эта статья продолжает серию, которая начинается с <a href="webgl-fundamentals.html">Основ WebGL</a>.
 Если вы ещё не читали предыдущие статьи, предлагаю прочесть по крайней мере первую
@@ -226,7 +226,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Рассмотрим <a href="webgl-boilerplate.html">обычный шаблон кода WebGL компиляции шейдерных
 программ</a>. У нас есть следующие шейдеры.</p>
 <p>Вершинный шейдер:</p>
-<pre class="prettyprint"><code>uniform mat4 u_worldViewProjection;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform mat4 u_worldViewProjection;
 uniform vec3 u_lightWorldPos;
 uniform mat4 u_world;
 uniform mat4 u_viewInverse;
@@ -251,7 +251,7 @@ void main() {
   gl_Position = v_position;
 }
 </code></pre><p>Фрагментный шейдер:</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 varying vec4 v_position;
 varying vec2 v_texCoord;
@@ -289,7 +289,7 @@ void main() {
 }
 </code></pre><p>Вам бы предстояло написать примерно следующий код для получения ссылок
 на переменные и установки всех значений:</p>
-<pre class="prettyprint"><code>// При инициализации
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// При инициализации
 var u_worldViewProjectionLoc   = gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 var u_lightWorldPosLoc         = gl.getUniformLocation(program, &quot;u_lightWorldPos&quot;);
 var u_worldLoc                 = gl.getUniformLocation(program, &quot;u_world&quot;);
@@ -359,7 +359,7 @@ WebGL все uniform-переменные и ссылки на них, а зат
 их значения. В дальнейшем мы можем использовать объекты JavaScript, чтобы
 код был проще. На словах всё выглядит очень запутанным, перейдём к коду и
 проясним ситуацию.</p>
-<pre class="prettyprint"><code>// При инициализации
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// При инициализации
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -398,7 +398,7 @@ gl.drawArrays(...);
 он стал проще и понятнее.</p>
 <p>Мы можем даже использовать несколько объектов JavaScript, если вам
 это удобнее. Например:</p>
-<pre class="prettyprint"><code>// При инициализации
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// При инициализации
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
@@ -472,10 +472,10 @@ objects.forEach(function(object) {
 
 </p>
 <p>Хорошо, идём дальше. В приведённом выше фрагменте кода мы создали буферы и
-поместили их в переменную <code>attribs</code>. Но код, который эти буферы инициализирует,
+поместили их в переменную <code class="notranslate" translate="no">attribs</code>. Но код, который эти буферы инициализирует,
 не приведён. Если бы вы хотели создать координаты, нормали и текстурные
 координаты, вы бы написали примерно следующий код.</p>
-<pre class="prettyprint"><code>// один треугольник
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// один треугольник
 var positions = [0, -10, 0, 10, 10, 0, -10, 10, 0];
 var texcoords = [0.5, 0, 1, 1, 0, 1];
 var normals   = [0, 0, 1, 0, 0, 1, 0, 0, 1];
@@ -492,7 +492,7 @@ var normalBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 </code></pre><p>Очень похоже на шаблон, давайте упростим его тоже.</p>
-<pre class="prettyprint"><code>// Один треугольник
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Один треугольник
 var arrays = {
    position: { numComponents: 3, data: [0, -10, 0, 10, 10, 0, -10, 10, 0], },
    texcoord: { numComponents: 2, data: [0.5, 0, 1, 1, 0, 1],               },
@@ -501,7 +501,7 @@ var arrays = {
 
 var bufferInfo = createBufferInfoFromArrays(gl, arrays);
 </code></pre><p>Намного короче! Теперь при рендеринге мы можем сделать следующее:</p>
-<pre class="prettyprint"><code>// Устанавливаем значения всем буферам и атрибутам
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Устанавливаем значения всем буферам и атрибутам
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
@@ -515,10 +515,10 @@ gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 </div>
 
 </p>
-<p>Это также будет работать, даже когда у нас будут индексы. <code>webglUtils.setBuffersAndAttributes</code>
-установит все атрибуты и привяжет <code>ELEMENT_ARRAY_BUFFER</code> к <code>indices</code>, после чего
-можно вызывать <code>gl.drawElements</code>.</p>
-<pre class="prettyprint"><code>// прямоугольник с индексами
+<p>Это также будет работать, даже когда у нас будут индексы. <code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code>
+установит все атрибуты и привяжет <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code> к <code class="notranslate" translate="no">indices</code>, после чего
+можно вызывать <code class="notranslate" translate="no">gl.drawElements</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// прямоугольник с индексами
 var arrays = {
    position: { numComponents: 3, data: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0], },
    texcoord: { numComponents: 2, data: [0, 0, 0, 1, 1, 0, 1, 1],                 },
@@ -527,8 +527,8 @@ var arrays = {
 };
 
 var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
-</code></pre><p>и при отрисовке мы будем вызывать <code>gl.drawElements</code> вместо <code>gl.drawArrays</code>.</p>
-<pre class="prettyprint"><code>// Устанавливаем все необходимые буферы и атрибуты
+</code></pre><p>и при отрисовке мы будем вызывать <code class="notranslate" translate="no">gl.drawElements</code> вместо <code class="notranslate" translate="no">gl.drawArrays</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Устанавливаем все необходимые буферы и атрибуты
 webglUtils.setBuffersAndAttributes(gl, attribSetters, bufferInfo);
 
 ...
@@ -542,8 +542,8 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 </div>
 
 </p>
-<p>В сущности, <code>createBufferInfoFromArrays</code> создаёт примерно такой объект:</p>
-<pre class="prettyprint"><code> bufferInfo = {
+<p>В сущности, <code class="notranslate" translate="no">createBufferInfoFromArrays</code> создаёт примерно такой объект:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> bufferInfo = {
    numElements: 4,        // количество элементов
    indices: WebGLBuffer,  // при отсутствии индексов этого свойства не будет
    attribs: {
@@ -552,14 +552,14 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
      a_texcoord: { buffer: WebGLBuffer, numComponents: 2, },
    },
  };
-</code></pre><p>Затем <code>webglUtils.setBuffersAndAttributes</code> использует этот объект для
+</code></pre><p>Затем <code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code> использует этот объект для
 инициализации всех буферов и атрибутов.</p>
 <p>Наконец, мы можем пойти ещё дальше (на мой взгляд, даже слишком далеко).
-Исходя из того, что <code>position</code> почти всегда содержит 3 компонента
-(x, y, z), <code>texcoords</code> практически всегда состоит из 2 компонентов,
+Исходя из того, что <code class="notranslate" translate="no">position</code> почти всегда содержит 3 компонента
+(x, y, z), <code class="notranslate" translate="no">texcoords</code> практически всегда состоит из 2 компонентов,
 индексы из 3, нормали тоже из 3, мы можем дать программе возможность
 угадать количество компонентов.</p>
-<pre class="prettyprint"><code>// прямоугольник с индексами
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// прямоугольник с индексами
 var arrays = {
    position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
    texcoord: [0, 0, 0, 1, 1, 0, 1, 1],
@@ -582,18 +582,18 @@ var arrays = {
 нравится, когда программа настолько простая, насколько это возможно.</p>
 <p>А почему бы нам не посмотреть на атрибуты в программе шейдера для определения
 количества компонентов? Всё потому, что из буфера приходит 3 компонента
-x, y, z), но в шейдере используется <code>vec4</code>. Для атрибутов шейдер устанавливает
-<code>w = 1</code> автоматически. А это значит, что мы не можем определить намерение
+x, y, z), но в шейдере используется <code class="notranslate" translate="no">vec4</code>. Для атрибутов шейдер устанавливает
+<code class="notranslate" translate="no">w = 1</code> автоматически. А это значит, что мы не можем определить намерение
 пользователя, так как размерность в шейдере может не соответствовать количеству
 компонентов, которые передаются из буфера.</p>
 <p>Поищем другие повторяющиеся фрагменты кода. Например, этот.</p>
-<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var program = webglUtils.createProgramFromScripts(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 </code></pre><p>Его можно упростить в одну строчку</p>
-<pre class="prettyprint"><code>var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
 </code></pre><p>которая в результате вернет следующий объект</p>
-<pre class="prettyprint"><code>programInfo = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">programInfo = {
    program: WebGLProgram,  // скомпилированная программа
    uniformSetters: ...,    // результат работы функции webglUtils.createUniformSetters,
    attribSetters: ...,     // результат работы функции createAttribSetters,
@@ -614,9 +614,9 @@ var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 всех этапов станет излишней и будет лишь отвлекать от основной идеи, поэтому
 в дальнейших статьях порой будет использоваться рассматриваемый стиль.</p>
 <p>Вы можете использовать подобный стиль и в своих проектах. Функции
-<code>createUniformSetters</code>, <code>createAttributeSetters</code>, <code>createBufferInfoFromArrays</code>,
-<code>setUniforms</code> и <code>setBuffersAndAttributes</code> содержатся в файле
-<a href="https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code>webgl-utils.js</code></a>
+<code class="notranslate" translate="no">createUniformSetters</code>, <code class="notranslate" translate="no">createAttributeSetters</code>, <code class="notranslate" translate="no">createBufferInfoFromArrays</code>,
+<code class="notranslate" translate="no">setUniforms</code> и <code class="notranslate" translate="no">setBuffersAndAttributes</code> содержатся в файле
+<a href="https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code class="notranslate" translate="no">webgl-utils.js</code></a>
 и используются во всех примерах этой статьи. Если вам нужно что-то более
 систематизированное, обратите внимание на <a href="https://twgljs.org">TWGL.js</a>.</p>
 <p>Далее у нас <a href="webgl-drawing-multiple-things.html">отрисовка нескольких объектов</a>.</p>
@@ -677,16 +677,16 @@ void main() {
 *  gl_FragColor = vec4(0,1,0,1);  // &lt;!--- просто зелёный цвет
 }
 </pre>
-<p>Обратите внимание, что я всего лишь добавил строку, которая задаёт <code>gl_FragColor</code>
+<p>Обратите внимание, что я всего лишь добавил строку, которая задаёт <code class="notranslate" translate="no">gl_FragColor</code>
 в качестве постоянного цвета. Большая часть драйверов поймёт, что ни одна из предыдущих строк
 не влияет на результат, и поэтому при оптимизации не будет использовать uniform-переменные.
-При следующем запуске программы при вызове <code>createUniformSetters</code> функция не создаст
-сеттер для <code>u_ambient</code> и код прямого доступа к переменной
-<code>uniformSetters.u_ambient()</code> прервёт выполнение с ошибкой</p>
+При следующем запуске программы при вызове <code class="notranslate" translate="no">createUniformSetters</code> функция не создаст
+сеттер для <code class="notranslate" translate="no">u_ambient</code> и код прямого доступа к переменной
+<code class="notranslate" translate="no">uniformSetters.u_ambient()</code> прервёт выполнение с ошибкой</p>
 <pre class="prettyprint">
 TypeError: undefined is not a function
 </pre>
-<p>В <code>setUniforms</code> такой проблемы нет, так как устанавливаются только
+<p>В <code class="notranslate" translate="no">setUniforms</code> такой проблемы нет, так как устанавливаются только
 те uniform-переменные, которые существуют.</p>
 </div>
 

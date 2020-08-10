@@ -220,7 +220,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 所以它们是一种自定义语言，目的是能够在GPU上良好运行。
 这两个方法需要编译并链接在一起，而这个过程在 99% 的WbgGL应用中是一样的。</p>
 <p>这是编译着色器的样板代码。</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * 创建并编译一个着色器
  *
  * @param {!WebGLRenderingContext} gl WebGL上下文。
@@ -249,7 +249,7 @@ function compileShader(gl, shaderSource, shaderType) {
   return shader;
 }
 </code></pre><p>这是链接 2 个着色器到一个着色程序中的代码</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * 从 2 个着色器中创建一个程序
  *
  * @param {!WebGLRenderingContext) gl WebGL上下文。
@@ -281,7 +281,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 而且这几行代码在几乎所有的WebGL程序中都是相似的。</p>
 <p>我喜欢把着色器代码放在非 JavaScript 代码的 &lt;script&gt; 标签中，
 这样很容易编辑，使用的时候可以这样做</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * 用 script 标签的内容创建着色器
  *
  * @param {!WebGLRenderingContext} gl WebGL上下文。
@@ -315,9 +315,9 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
   return compileShader(gl, shaderSource, opt_shaderType);
 };
 </code></pre><p>现在编译着色器只需要</p>
-<pre class="prettyprint"><code>var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
 </code></pre><p>我通常会更进一步，使用一个方法编译两个着色器，附加到程序并链接到程序。</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * 通过两个 script 标签创建程序。
  *
  * @param {!WebGLRenderingContext} gl WebGL上下文。
@@ -334,9 +334,9 @@ function createProgramFromScripts(
 </code></pre><p>另一几乎在我所有WebGL应用中都会使用的代码是重置画布大小。
 你可以<a href="webgl-resizing-the-canvas.html">在这里看看那个方法是如何实现的</a>。</p>
 <p>所有示例中使用的这两个方法都在</p>
-<pre class="prettyprint"><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>里，并且像这样使用</p>
-<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var program = webglUtils.createProgramFromScripts(
   gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...
@@ -344,25 +344,25 @@ function createProgramFromScripts(
 webglUtils.resizeCanvasToMatchDisplaySize(canvas);
 </code></pre><p>这样做就可以剔除大量和示例无关的代码，突出示例想要表达的内容。</p>
 <p>这是我最小的一套WebGL样板代码。
-<a href="../../resources/webgl-utils.js">你可以在 <code>webgl-utils.js</code> 中找到源码</a>。
+<a href="../../resources/webgl-utils.js">你可以在 <code class="notranslate" translate="no">webgl-utils.js</code> 中找到源码</a>。
 如果你想要更有组织的代码。可以查看<a href="https://twgljs.org">TWGL.js</a>。</p>
 <p>其余的让WebGL显得比较复杂的部分就是设置着色器的输入，可以看看是
 <a href="webgl-how-it-works.html">如何实现的</a>。</p>
 <p>我还建议你看看<a href="webgl-less-code-more-fun.html">码少趣多</a>和
 <a href="https://twgljs.org">TWGL</a>。</p>
 <ul>
-<li><p><a href="../../resources/webgl-lessons-ui.js"><code>webgl-lessons-ui.js</code></a></p>
+<li><p><a href="../../resources/webgl-lessons-ui.js"><code class="notranslate" translate="no">webgl-lessons-ui.js</code></a></p>
 <p>这个代码提供了含有数值的滑块，并更够在拖拽时更新数值。
 同样的，我只是不想在示例代码中参杂太多不相干代码。</p>
 </li>
-<li><p><a href="../../resources/lessons-helper.js"><code>lessons-helper.js</code></a></p>
+<li><p><a href="../../resources/lessons-helper.js"><code class="notranslate" translate="no">lessons-helper.js</code></a></p>
 <p>这个代码在 webglfundmentals.org 以外不是必须的，它只是能够在在线编辑器中提供合适的错误提示。</p>
 </li>
-<li><p><a href="../../resources/m3.js"><code>m3.js</code></a></p>
+<li><p><a href="../../resources/m3.js"><code class="notranslate" translate="no">m3.js</code></a></p>
 <p>这是一个二维数学库，在讲到矩阵式需要用到，本来是将它们写在代码中的，但是考虑到无关代码较多，
 就整合到一个脚本文件中了。</p>
 </li>
-<li><p><a href="../../resources/m4.js"><code>m4.js</code></a></p>
+<li><p><a href="../../resources/m4.js"><code class="notranslate" translate="no">m4.js</code></a></p>
 <p>这是一个三维数学库，它们在三维的文章中使用，同样的由于代码较多，为保证示例代码显示明确，
 就将它们写在一个文件中了。</p>
 </li>

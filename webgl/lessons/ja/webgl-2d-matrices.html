@@ -323,9 +323,9 @@ newY = y * sy;
 <p><a href="webgl-2d-scale.html">拡大/縮小サンプル</a>と同じである。</p>
 <p>まだ「前より大変じゃないが！複雑でどういう意味があるの？」と思っているだろう。</p>
 <p>ここで魔法のようなことが起こる。複数行列を掛け合わせたら全部の変換に適用出来る。
-<code>m3.multiply</code>という２つの行列を掛けて、結果の返り値を戻る関数があるとしよう。</p>
+<code class="notranslate" translate="no">m3.multiply</code>という２つの行列を掛けて、結果の返り値を戻る関数があるとしよう。</p>
 <p>分かり易くするために移動、回転、拡大の行列の制作関数を作ろう。</p>
-<pre class="prettyprint"><code>var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
   // 移動行列
   translation: function(tx, ty) {
     return [
@@ -356,7 +356,7 @@ newY = y * sy;
   },
 };
 </code></pre><p>シェーダーを変更しよう。前回のシェーダーはこれである。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -377,7 +377,7 @@ void main() {
   vec2 position = rotatedPosition + u_translation;
   ...
 </code></pre><p>新しいシェーダーはそれよりずいぶん簡単である。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -388,7 +388,7 @@ void main() {
   vec2 position = (u_matrix * vec3(a_position, 1)).xy;
   ...
 </code></pre><p>そして、このように使う。</p>
-<pre class="prettyprint"><code>  // シーンを描画する。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // シーンを描画する。
   function drawScene() {
 
     ,,,
@@ -422,7 +422,7 @@ void main() {
 </p>
 <p>まだ「で？それは便利か？」と思っているだろう？でも、順番を変更したければシェーダーを更新しなくていい。
 だだ計算式だけ更新したらいい。</p>
-<pre class="prettyprint"><code>    ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ...
     // 行列を掛ける。
     var matrix = m3.multiply(scaleMatrix, rotationMatrix);
     matrix = m3.multiply(matrix, translationMatrix);
@@ -437,7 +437,7 @@ void main() {
 <p>人体の腕とか、太陽の周りを回っている惑星を回っている月とか、木の枝などの階層的なアニメーション
 のためにこのように行列を適用することは特に重要である。例えば、階層的なアニメーションの例として、
 「F」を５回描画して、「F」ごとに前の「F」の行列から始めよう。</p>
-<pre class="prettyprint"><code>  // シーンを描画する。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // シーンを描画する。
   function drawScene() {
     // キャンバスをクリアーする。
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -466,7 +466,7 @@ void main() {
       gl.drawArrays(primitiveType, offset, count);
     }
   }
-</code></pre><p>そのために<code>m3.identity</code>という単位行列の作成する関数を追加した。単位行列は
+</code></pre><p>そのために<code class="notranslate" translate="no">m3.identity</code>という単位行列の作成する関数を追加した。単位行列は
 「1.0」と同じように何かに掛けても何も変わらない。このようなことで</p>
 <div class="webgl_center">X * 1 = X</div>
 
@@ -474,7 +474,7 @@ void main() {
 <div class="webgl_center">matrixX * identity = matrixX</div>
 
 <p>単位行列の作成コードはここにある。</p>
-<pre class="prettyprint"><code>var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
   identity function() {
     return [
       1, 0, 0,
@@ -495,7 +495,7 @@ void main() {
 今までのサンプルは全て、「F」の左上角を軸として回転している（上にある順番を変えたサンプル以外）。
 それは、使っている計算式は原点軸を中心として周りを回転するものだから。「F」の左上の頂点は原点(0,0)にある。</p>
 <p>だが今は、行列数学を使っているから行列掛ける順番を選べる。それで原点を移動出来る。</p>
-<pre class="prettyprint"><code>    // 「F」の原点に「F」の真ん中に移動する行列を作成する。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    // 「F」の原点に「F」の真ん中に移動する行列を作成する。
     var moveOriginMatrix = m3.translation(-50, -75);
     ...
 
@@ -514,7 +514,7 @@ void main() {
 フォトショップがどういうふうに好きな点で回転する機能を作ったか分かるようになって来た！</p>
 <p>もっとクレージにしよう！最初の記事「WebGLの基本」を思い出したら、このピクセル空間からクリップ空間に
 計算しているシェーダーコードがあった。</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 　// positionはピクセルから0〜1に
   vec2 zeroToOne = position / u_resolution;
 
@@ -531,7 +531,7 @@ void main() {
 渡す行列で出来る。ーつの1.0/resolutionの縮小変換行列を作成して、もう一つ2.0に拡大行列を作成して、
 「-1,-1」で移動行列作成して、Yに-１をサイズ拡大縮小行列を作成して、全部掛け合わせることが出来るが、
 その数学は簡単なのでその結果の行列を作る関数を作ろう。</p>
-<pre class="prettyprint"><code>var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
   projection: function(width, height) {
     // Note: Y軸で０は上の方にするためYを弾く行列
     return [
@@ -543,7 +543,7 @@ void main() {
 
   ...
 </code></pre><p>そうすれば、シェーダーコードをもっと単純化出来る。これは最新のシェーダーの全て</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform mat3 u_matrix;
@@ -554,7 +554,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>そしてJavaScriptで行列をprojection行列に掛けることが必要である。</p>
-<pre class="prettyprint"><code>  // シーンを描画する。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // シーンを描画する。
   function drawScene() {
     ...
 
@@ -581,7 +581,7 @@ void main() {
 </p>
 <p>次の記事へ行く前にもちょっと単純化しよう。複数行列を作成して、その後お互いに掛けることは珍しくないけど、
 作成しながら掛けることも通常の方法である。このような関数を作ろう。</p>
-<pre class="prettyprint"><code>var m3 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
 
   ...
 
@@ -601,7 +601,7 @@ void main() {
 
 };
 </code></pre><p>その関数を使ったら前にある行列計算コード７行をこのような４行にできる。</p>
-<pre class="prettyprint"><code>// 行列を計算する。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 行列を計算する。
 var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
 matrix = m3.translate(matrix, translation[0], translation[1]);
 matrix = m3.rotate(matrix, angleInRadians);
@@ -614,9 +614,9 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
 </p>
 <p>もう一つのこと、。。。上記の頭で話したように順番が大事だ。最初のサンプルで</p>
-<pre class="prettyprint"><code>移動 * 回転 * 拡大
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">移動 * 回転 * 拡大
 </code></pre><p>その後これがあった。</p>
-<pre class="prettyprint"><code>拡大 * 回転 * 移動
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">拡大 * 回転 * 移動
 </code></pre><p>その２つの方法の違いを見た。</p>
 <p>行列数学の考える方法はこのようである。クリップ空間から始まる。行列ごとに行列を適用するとその空間が変更される。</p>
 <p>ステップ1:  行列無し(それとも単位行列)</p>
@@ -630,7 +630,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 <p>白い部分はキャンバスで、青い部分はキャンバス以外である。
 これはクリップ空間。シェーダーに与える座標はクリップ空間で与える。</p>
 </blockquote>
-<p>ステップ2:  <code>matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)</code>;</p>
+<p>ステップ2:  <code class="notranslate" translate="no">matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight)</code>;</p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=1"></iframe>
@@ -641,7 +641,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 <p>ピクセル空間になった。 X=0〜400,Y=0〜300で、0,0は左上である。
 座標はピクセル空間で与えなければいけない。フラッシュは+1＝上から＋1＝下Y軸を繰り返する時である。</p>
 </blockquote>
-<p>ステップ3:  <code>matrix = m3.translate(matrix, tx, ty);</code></p>
+<p>ステップ3:  <code class="notranslate" translate="no">matrix = m3.translate(matrix, tx, ty);</code></p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=2"></iframe>
@@ -651,7 +651,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 </p>
 <p>原点は「tx, ty」になった。（空間は移動された。)</p>
 </blockquote>
-<p>ステップ4:  <code>matrix = m3.rotate(matrix, rotationInRadians);</code></p>
+<p>ステップ4:  <code class="notranslate" translate="no">matrix = m3.rotate(matrix, rotationInRadians);</code></p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=3"></iframe>
@@ -661,7 +661,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 </p>
 <p>空間は「tx, ty」を中心に回転された。</p>
 </blockquote>
-<p>ステップ5:  <code>matrix = m3.scale(matrix, sx, sy);</code></p>
+<p>ステップ5:  <code class="notranslate" translate="no">matrix = m3.scale(matrix, sx, sy);</code></p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=4"></iframe>
@@ -671,14 +671,14 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 </p>
 <p>「tx, ty」を中心に回転された空間は拡大された。</p>
 </blockquote>
-<p>ステップ6:  シェーダーで<code>gl_Position = matrix * position;</code>にした。その<code>position</code>の座標はその最後の空間にある。</p>
+<p>ステップ6:  シェーダーで<code class="notranslate" translate="no">gl_Position = matrix * position;</code>にした。その<code class="notranslate" translate="no">position</code>の座標はその最後の空間にある。</p>
 <p>この行列説明は分かり易かったかな〜〜〜。まだ二次元のことに興味があれば<a href="webgl-2d-drawimage.html">キャンバスAPIのdrawImage関数を再作成の記事</a>はお奨めである。そして<a href="webgl-2d-matrix-stack.html">キャンバスの二次元行列スタックを再作成</a>という記事も。</p>
 <p>それでは、次は<a href="webgl-3d-orthographic.html">三次元へ進もう</a>。三次元の行列数学の原則は２次元と同じである。
 二次元の方が分かり易いのでそこから始めた。</p>
 <div class="webgl_bottombar">
-<h3><code>clientWidth</code>と<code>clientHeight</code>は何?</h3>
-<p>今までキャンバスのサイズを参照した時<code>canvas.width</code>と<code>canvas.height</code>
-を使ったが、上記で<code>m3.projection</code>を呼び出した時その変わりに<code>canvas.clientWidth</code>と <code>canvas.clientHeight</code>を使った。なぜだろう?</p>
+<h3><code class="notranslate" translate="no">clientWidth</code>と<code class="notranslate" translate="no">clientHeight</code>は何?</h3>
+<p>今までキャンバスのサイズを参照した時<code class="notranslate" translate="no">canvas.width</code>と<code class="notranslate" translate="no">canvas.height</code>
+を使ったが、上記で<code class="notranslate" translate="no">m3.projection</code>を呼び出した時その変わりに<code class="notranslate" translate="no">canvas.clientWidth</code>と <code class="notranslate" translate="no">canvas.clientHeight</code>を使った。なぜだろう?</p>
 <p>投影行列はクリップ空間（−１〜＋１）からピクセル空間の変換であるが、ブラウザでピクセル空間が２つある。
 一つはキャンバスの解像度である。例えばこのように定義されたキャンバス</p>
 <pre class="prettyprint">
@@ -704,22 +704,22 @@ CSSで表示サイズを定義する。例えばこのようにキャンバス�
 </pre>
 <p>キャンバスはウインドウサイズと同じサイズで表示される。それはほとんど400x300じゃないだろう。</p>
 <p>ここにキャンバスの表示サイズをページと同じサイズにするサンプルが2つである。最初のサンプルは
-<code>canvas.width</code>と<code>canvas.height</code>。別のウインドを開いて、ウインドのサイズを変更してみよう。「F」の縦横の比率がよくないことに注目して、</p>
+<code class="notranslate" translate="no">canvas.width</code>と<code class="notranslate" translate="no">canvas.height</code>。別のウインドを開いて、ウインドのサイズを変更してみよう。「F」の縦横の比率がよくないことに注目して、</p>
 <div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-width-height.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-width-height.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 
-<p>この二番目のサンプルで<code>canvas.clientWidth</code>と<code>canvas.clientHeight</code>を使う。 <code>canvas.clientWidth</code>と<code>canvas.clientHeight</code>はブラウザに実際に表示されているサイズである。それを使うと「F」の縦横比率がよくなる。</p>
+<p>この二番目のサンプルで<code class="notranslate" translate="no">canvas.clientWidth</code>と<code class="notranslate" translate="no">canvas.clientHeight</code>を使う。 <code class="notranslate" translate="no">canvas.clientWidth</code>と<code class="notranslate" translate="no">canvas.clientHeight</code>はブラウザに実際に表示されているサイズである。それを使うと「F」の縦横比率がよくなる。</p>
 <div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-clientwidth-clientheight.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-clientwidth-clientheight.html" target="_blank">クリックして別のウインドウを開く</a>
 </div>
 
 
-<p>ウインドのサイズに合わせるアプリは<code>canvas.width</code>と<code>canvas.height</code>を
-<code>canvas.clientWidth</code>と<code>canvas.clientHeight</code>に設定する。表示しているピクセルごとに一つのキャンバスピクセルにして欲しいから。でも上記のサンプルを見て、それは一般的なケースではない。なので、投影行列の場合<code>canvas.clientHeight</code>と<code>canvas.clientWidth</code>を使う方がもっと正しいかも。
+<p>ウインドのサイズに合わせるアプリは<code class="notranslate" translate="no">canvas.width</code>と<code class="notranslate" translate="no">canvas.height</code>を
+<code class="notranslate" translate="no">canvas.clientWidth</code>と<code class="notranslate" translate="no">canvas.clientHeight</code>に設定する。表示しているピクセルごとに一つのキャンバスピクセルにして欲しいから。でも上記のサンプルを見て、それは一般的なケースではない。なので、投影行列の場合<code class="notranslate" translate="no">canvas.clientHeight</code>と<code class="notranslate" translate="no">canvas.clientWidth</code>を使う方がもっと正しいかも。
 </p>
 </div>
 

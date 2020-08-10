@@ -212,28 +212,28 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>In WebGL you pass a format/type pair to <code>readPixels</code>. For a given
+      <p>In WebGL you pass a format/type pair to <code class="notranslate" translate="no">readPixels</code>. For a given
 texture internal format (attached to a framebuffer), only 2 combinations
 of format/type are valid.</p>
 <p>From the spec:</p>
 <blockquote>
-<p>For normalized fixed-point rendering surfaces, the combination format <code>RGBA</code> and type
-<code>UNSIGNED_BYTE</code> is accepted. For signed integer rendering surfaces, the combination
-format <code>RGBA_INTEGER</code> and type <code>INT</code> is accepted. For unsigned integer
-rendering surfaces, the combination format <code>RGBA_INTEGER</code> and type <code>UNSIGNED_INT</code>
+<p>For normalized fixed-point rendering surfaces, the combination format <code class="notranslate" translate="no">RGBA</code> and type
+<code class="notranslate" translate="no">UNSIGNED_BYTE</code> is accepted. For signed integer rendering surfaces, the combination
+format <code class="notranslate" translate="no">RGBA_INTEGER</code> and type <code class="notranslate" translate="no">INT</code> is accepted. For unsigned integer
+rendering surfaces, the combination format <code class="notranslate" translate="no">RGBA_INTEGER</code> and type <code class="notranslate" translate="no">UNSIGNED_INT</code>
 is accepted.</p>
 </blockquote>
 <p>The second combination is implementation defined
 <span style="color:red;">which probably means you shouldn&#39;t use it in WebGL if you want your code to be portable</span>.
 You can ask what the format/type combination is by querying</p>
-<pre class="prettyprint"><code class="lang-js">// assuming a framebuffer is bound with the texture to read attached
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// assuming a framebuffer is bound with the texture to read attached
 const format = gl.getParameter(gl.IMPLEMENTATION_COLOR_READ_FORMAT);
 const type = gl.getParameter(gl.IMPLEMENTATION_COLOR_READ_TYPE);
 </code></pre>
 <p>Also note what texture formats that are renderable, meaning you can attach them to a framebuffer and render to them,
-are also somewhat implementation defined. WebGL1 requires only one combination to be renderable, <code>RGBA</code>/<code>UNSIGNED_BYTE</code>.
-All others are optional (<code>LUMINANCE</code> for example) and some
-are can be made renderable by extension, <code>RGBA</code>/<code>FLOAT</code> for example.</p>
+are also somewhat implementation defined. WebGL1 requires only one combination to be renderable, <code class="notranslate" translate="no">RGBA</code>/<code class="notranslate" translate="no">UNSIGNED_BYTE</code>.
+All others are optional (<code class="notranslate" translate="no">LUMINANCE</code> for example) and some
+are can be made renderable by extension, <code class="notranslate" translate="no">RGBA</code>/<code class="notranslate" translate="no">FLOAT</code> for example.</p>
 <p><strong>The table below is live</strong>. You may notice that it gives different results depending on the machine, OS, GPU, or even
 browser. I know on my machine Chrome and Firefox give different results for some of the implementation defined values.</p>
 <div class="webgl_center" data-diagram="formats"></div>

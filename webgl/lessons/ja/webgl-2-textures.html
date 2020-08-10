@@ -233,24 +233,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 という方法である。今回はこの方法で実装することにする。</p>
 <p>まず、以前の講義で作ったサンプルの「１枚の画像をロードする部分」を切り出して、
 関数として再定義しておこう。
-「<code>Image</code>オブジェクトを生成」、「画像のURLをセット」、
+「<code class="notranslate" translate="no">Image</code>オブジェクトを生成」、「画像のURLをセット」、
 「ロード完了時に実行されるコールバック関数を設定」、という手順になる。
 特別なことはしていない。</p>
-<pre class="prettyprint"><code>function loadImage(url, callback) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function loadImage(url, callback) {
   var image = new Image();
   image.src = url;
   image.onload = callback;
   return image;
 }
-</code></pre><p>ではこの<code>loadImage</code>を利用して、複数の画像に対応した関数<code>loadImages</code>を定義しよう。
-<code>loadImages</code>は、「URLの配列を受け取って」、「画像の配列を生成」する。</p>
+</code></pre><p>ではこの<code class="notranslate" translate="no">loadImage</code>を利用して、複数の画像に対応した関数<code class="notranslate" translate="no">loadImages</code>を定義しよう。
+<code class="notranslate" translate="no">loadImages</code>は、「URLの配列を受け取って」、「画像の配列を生成」する。</p>
 <p>ロードすべき画像の数は、URLの配列から得られる。
-これを、<code>imagesToLoad</code>としている。
-<code>loadImage</code>に渡すコールバック関数<code>onImageLoad</code>を定義する。
-<code>onImageLoad</code>では、<code>imagesToLoad</code>をデクリメント(値を1減らす)し、
-<code>imagesToLoad</code>の値が0になった時点、つまり画像が全てロードされた時点で
-<code>loadImages</code>のコールバック関数に画像の配列を渡して呼び出す。</p>
-<pre class="prettyprint"><code>function loadImages(urls, callback) {
+これを、<code class="notranslate" translate="no">imagesToLoad</code>としている。
+<code class="notranslate" translate="no">loadImage</code>に渡すコールバック関数<code class="notranslate" translate="no">onImageLoad</code>を定義する。
+<code class="notranslate" translate="no">onImageLoad</code>では、<code class="notranslate" translate="no">imagesToLoad</code>をデクリメント(値を1減らす)し、
+<code class="notranslate" translate="no">imagesToLoad</code>の値が0になった時点、つまり画像が全てロードされた時点で
+<code class="notranslate" translate="no">loadImages</code>のコールバック関数に画像の配列を渡して呼び出す。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function loadImages(urls, callback) {
   var images = [];
   var imagesToLoad = urls.length;
 
@@ -268,8 +268,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     images.push(image);
   }
 }
-</code></pre><p><code>loadImages</code>は次のようなコードで呼び出される。</p>
-<pre class="prettyprint"><code>function main() {
+</code></pre><p><code class="notranslate" translate="no">loadImages</code>は次のようなコードで呼び出される。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function main() {
   loadImages([
     &quot;resources/leaves.jpg&quot;,
     &quot;resources/star.jpg&quot;,
@@ -277,7 +277,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 }
 </code></pre><p>次はシェーダー側を複数テクスチャに対応する。
 今回は２枚の画像をそれぞれ表示するのではなく、画素ひとつひとつを乗算するような処理にしておこう。</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // ロードされたテクスチャ
@@ -294,7 +294,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>WebGL textureオブジェクトを２つ、生成する。</p>
-<pre class="prettyprint"><code>  // 「テクスチャー」を２つ生成する
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 「テクスチャー」を２つ生成する
   var textures = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
     var texture = gl.createTexture();
@@ -314,7 +314,7 @@ void main() {
   }
 </code></pre><p>WebGLには「テクスチャへの参照の配列」のようなものがある。これは「テクスチャユニット」と呼ばれる。
 シェーダーの各sampler変数が、それぞれ何番のテクスチャユニットを使用するか指定する。</p>
-<pre class="prettyprint"><code>  // シェーダーで定義されているsampler変数のロケーションを取得する。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // シェーダーで定義されているsampler変数のロケーションを取得する。
   var u_image0Location = gl.getUniformLocation(program, &quot;u_image0&quot;);
   var u_image1Location = gl.getUniformLocation(program, &quot;u_image1&quot;);
 
@@ -324,7 +324,7 @@ void main() {
   gl.uniform1i(u_image0Location, 0);  // texture unit 0
   gl.uniform1i(u_image1Location, 1);  // texture unit 1
 </code></pre><p>各テクスチャを、それぞれのテクスチャユニットにバインドする。</p>
-<pre class="prettyprint"><code>  // 各テクスチャユニットが、どのテクスチャを使用するかセットする。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 各テクスチャユニットが、どのテクスチャを使用するかセットする。
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
@@ -355,7 +355,7 @@ void main() {
 に対して操作を行う。</p>
 <p>喩えとして、「WebGLの仕組みをJavaScriptで表現する」としたら
 こんな感じのコードになる。</p>
-<pre class="prettyprint"><code>var getContext = function() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var getContext = function() {
   var textureUnits = [
     { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
     { TEXTURE_2D: ??, TEXTURE_CUBE_MAP: ?? },
@@ -394,22 +394,22 @@ void main() {
 </code></pre><p>２点目は、テクスチャユニットの指定方法が二種類あるという点である。
 シェーダーではテクスチャユニットの指定の際、「テクスチャユニットの番号」を使う。
 これを意識していれば、以下の２行の意味は明らかだろう。</p>
-<pre class="prettyprint"><code>  gl.uniform1i(u_image0Location, 0);  // texture unit 0
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.uniform1i(u_image0Location, 0);  // texture unit 0
   gl.uniform1i(u_image1Location, 1);  // texture unit 1
 </code></pre><p>uniformのセットを行なう際は、このように「0から始まる整数値」で指定するのに対し、
 gl.activeTextureではgl.TEXTURE0やgl.TEXTURE1といった「定義済みの定数」
 で指定する。この点には注意が必要である。</p>
-<pre class="prettyprint"><code>  gl.activeTexture(gl.TEXTURE0);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </code></pre><p>幸いこれらの定数は連番の整数値として定義されているので、下のような書き方ができる。</p>
-<pre class="prettyprint"><code>  gl.activeTexture(gl.TEXTURE0 + 0);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.activeTexture(gl.TEXTURE0 + 0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE0 + 1);
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 </code></pre><p>こんな書き方もできる。</p>
-<pre class="prettyprint"><code>  for (var ii = 0; ii &lt; 2; ++ii) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  for (var ii = 0; ii &lt; 2; ++ii) {
     gl.activeTexture(gl.TEXTURE0 + ii);
     gl.bindTexture(gl.TEXTURE_2D, textures[ii]);
   }

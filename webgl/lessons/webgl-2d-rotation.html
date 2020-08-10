@@ -240,7 +240,7 @@ rotate.</p>
 and we&#39;ll multiply our geometry by them from <a href="webgl-2d-translation.html">our previous
 sample</a>.</p>
 <p>Here are the updates to our shader.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -256,7 +256,7 @@ void main() {
   // Add in the translation.
 *  vec2 position = rotatedPosition + u_translation;
 </code></pre><p>And we update the JavaScript so that we can pass those 2 values in.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
 
@@ -292,7 +292,7 @@ sliders to translate.</p>
 
 </p>
 <p>Why does it work? Well, look at the math.</p>
-<pre class="prettyprint"><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </code></pre><p>Let&#39;s say you have a rectangle and you want to rotate it.  Before you
 start rotating it the top right corner is at 3.0, 9.0.  Let&#39;s pick a point
@@ -321,19 +321,19 @@ bigger.  That pattern gives us rotation.</p>
 <p>There&#39;s another name for the points on a unit circle.  They&#39;re called the
 sine and cosine.  So for any given angle we can just look up the sine and
 cosine like this.</p>
-<pre class="prettyprint"><code>function printSineAndCosineForAnAngle(angleInDegrees) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function printSineAndCosineForAnAngle(angleInDegrees) {
   var angleInRadians = angleInDegrees * Math.PI / 180;
   var s = Math.sin(angleInRadians);
   var c = Math.cos(angleInRadians);
   console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
 }
 </code></pre><p>If you copy and paste the code into your JavaScript console and type
-<code>printSineAndCosignForAngle(30)</code> you see it prints <code>s = 0.49 c = 0.87</code>
+<code class="notranslate" translate="no">printSineAndCosignForAngle(30)</code> you see it prints <code class="notranslate" translate="no">s = 0.49 c = 0.87</code>
 (note: I rounded off the numbers.)</p>
 <p>If you put it all together you can rotate your geometry to any angle you
 desire.  Just set the rotation to the sine and cosine of the angle you
 want to rotate to.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var angleInRadians = angleInDegrees * Math.PI / 180;
   rotation[0] = Math.sin(angleInRadians);
   rotation[1] = Math.cos(angleInRadians);
@@ -356,7 +356,7 @@ Radians are a unit of measurement used with circles, rotation and angles. Just l
 You're probably aware that math with metric measurements is easier than math with imperial measurements. To go from inches to feet we divide by 12. To go from inches to yards we divide by 36. I don't know about you but I can't divide by 36 in my head. With metric it's much easier. To go from millimeters to centimeters we multiply by 10. To go from millimeters to meters we multiply by 1000. I <strong>can</strong> multiply by 1000 in my head.
 </p>
 <p>
-Radians vs degrees are similar. Degrees make the math hard. Radians make the math easy. There are 360 degrees in a circle but there are only 2π radians. So a full turn is 2π radians. A half turn is 1π radian. A 1/4 turn, ie 90 degrees is 1/2π radians. So if you want to rotate something 90 degrees just use <code>Math.PI * 0.5</code>. If you want to rotate it 45 degrees use <code>Math.PI * 0.25</code> etc.
+Radians vs degrees are similar. Degrees make the math hard. Radians make the math easy. There are 360 degrees in a circle but there are only 2π radians. So a full turn is 2π radians. A half turn is 1π radian. A 1/4 turn, ie 90 degrees is 1/2π radians. So if you want to rotate something 90 degrees just use <code class="notranslate" translate="no">Math.PI * 0.5</code>. If you want to rotate it 45 degrees use <code class="notranslate" translate="no">Math.PI * 0.25</code> etc.
 </p>
 <p>
 Nearly all math involving angles, circles or rotation works very simply if you start thinking in radians. So give it try. Use radians, not degrees except in UI displays.

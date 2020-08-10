@@ -249,11 +249,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>注意到正方体在每个顶角有 3 个法向量。 这是因为需要 3 个法向量去描述相邻的每个面的朝向。</p>
 <p>这里的法向量是基于他们的方向着色的，正 x 方向为<span style="color: red;">红色</span>，
 上方向为<span style="color: green;">绿色</span>，正 z 方向为<span style="color: blue;">蓝色</span>。</p>
-<p>让我们来给<a href="webgl-3d-camera.html">上节</a>中的 <code>F</code> 添加法向量。
-由于 <code>F</code> 非常规则并且朝向都是 x, y, z轴，所以非常简单。正面的的部分法向量为 <code>0, 0, 1</code>，
-背面的部分法向量为 <code>0, 0, -1</code>，左面为 <code>-1, 0, 0</code>，右面为 <code>1, 0, 0</code>，上面为 <code>0, 1, 0</code>，
-然后底面为 <code>0, -1, 0</code>。</p>
-<pre class="prettyprint"><code>function setNormals(gl) {
+<p>让我们来给<a href="webgl-3d-camera.html">上节</a>中的 <code class="notranslate" translate="no">F</code> 添加法向量。
+由于 <code class="notranslate" translate="no">F</code> 非常规则并且朝向都是 x, y, z轴，所以非常简单。正面的的部分法向量为 <code class="notranslate" translate="no">0, 0, 1</code>，
+背面的部分法向量为 <code class="notranslate" translate="no">0, 0, -1</code>，左面为 <code class="notranslate" translate="no">-1, 0, 0</code>，右面为 <code class="notranslate" translate="no">1, 0, 0</code>，上面为 <code class="notranslate" translate="no">0, 1, 0</code>，
+然后底面为 <code class="notranslate" translate="no">0, -1, 0</code>。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function setNormals(gl) {
   var normals = new Float32Array([
           // 正面左竖
           0, 0, 1,
@@ -385,7 +385,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   gl.bufferData(gl.ARRAY_BUFFER, normals, gl.STATIC_DRAW);
 }
 </code></pre><p>在代码中使用它们，先移除顶点颜色以便观察光照效果。</p>
-<pre class="prettyprint"><code>// 找顶点着色器中的属性
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 找顶点着色器中的属性
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 -var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 +var normalLocation = gl.getAttribLocation(program, &quot;a_normal&quot;);
@@ -406,7 +406,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +// 将法向量存入缓冲
 +setNormals(gl);
 </code></pre><p>在渲染的时候</p>
-<pre class="prettyprint"><code>-// 启用颜色属性
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-// 启用颜色属性
 -gl.enableVertexAttribArray(colorLocation);
 -
 -// 绑定颜色缓冲
@@ -437,7 +437,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +    normalLocation, size, type, normalize, stride, offset)
 </code></pre><p>现在让着色器使用它</p>
 <p>首先在顶点着色器中只将法向量传递给片断着色器</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 -attribute vec4 a_color;
 +attribute vec3 a_normal;
 
@@ -457,7 +457,7 @@ void main() {
 +  v_normal = a_normal;
 }
 </code></pre><p>然后在片断着色器中将法向量和光照方向点乘</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // 从顶点着色器中传入的值
 -varying vec4 v_color;
@@ -478,14 +478,14 @@ void main() {
 +   // 将颜色部分（不包括 alpha）和 光照相乘
 +   gl_FragColor.rgb *= light;
 }
-</code></pre><p>然后找到 <code>u_color</code> 和 <code>u_reverseLightDirection</code> 的位置。</p>
-<pre class="prettyprint"><code>  // 寻找全局变量
+</code></pre><p>然后找到 <code class="notranslate" translate="no">u_color</code> 和 <code class="notranslate" translate="no">u_reverseLightDirection</code> 的位置。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 寻找全局变量
   var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
 +  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 +  var reverseLightDirectionLocation =
 +      gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
 </code></pre><p>为它们赋值</p>
-<pre class="prettyprint"><code>  // 设置矩阵
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 设置矩阵
   gl.uniformMatrix4fv(matrixLocation, false, worldViewProjectionMatrix);
 
 +  // 设置使用的颜色
@@ -493,9 +493,9 @@ void main() {
 +
 +  // 设置光线方向
 +  gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0.5, 0.7, 1]));
-</code></pre><p>我们之前用到的 <code>normalize</code> 会将原向量转换为单位向量。
-例子中的 <code>x = 0.5</code> 说明光线是从右往左照，<code>y = 0.7</code> 说明光线从上方往下照，
-<code>z = 1</code> 说明光线从在场景前方。对应的值表示光源大多指向场景，在靠右方和上方一点的位置。</p>
+</code></pre><p>我们之前用到的 <code class="notranslate" translate="no">normalize</code> 会将原向量转换为单位向量。
+例子中的 <code class="notranslate" translate="no">x = 0.5</code> 说明光线是从右往左照，<code class="notranslate" translate="no">y = 0.7</code> 说明光线从上方往下照，
+<code class="notranslate" translate="no">z = 1</code> 说明光线从在场景前方。对应的值表示光源大多指向场景，在靠右方和上方一点的位置。</p>
 <p>这是结果</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-directional.html"></iframe>
@@ -506,11 +506,11 @@ void main() {
 <p>如果你旋转了 F 就会发现，F 虽然旋转了但是光照没变，
 我们希望随着 F 的旋转正面总是被照亮的。</p>
 <p>为了解决这个问题就需要在物体重定向时重定向法向量，
-和位置一样我们也可以将向量和矩阵相乘，这个矩阵显然是 <code>world</code> 矩阵，
-现在我们只传了一个矩阵 <code>u_matrix</code>，所以先来改成传递两个矩阵，
-一个叫做 <code>u_world</code> 的世界矩阵，另一个叫做 <code>u_worldViewProjection</code>
-也就是我们现在的 <code>u_matrix</code>。</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+和位置一样我们也可以将向量和矩阵相乘，这个矩阵显然是 <code class="notranslate" translate="no">world</code> 矩阵，
+现在我们只传了一个矩阵 <code class="notranslate" translate="no">u_matrix</code>，所以先来改成传递两个矩阵，
+一个叫做 <code class="notranslate" translate="no">u_world</code> 的世界矩阵，另一个叫做 <code class="notranslate" translate="no">u_worldViewProjection</code>
+也就是我们现在的 <code class="notranslate" translate="no">u_matrix</code>。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 *uniform mat4 u_worldViewProjection;
@@ -525,16 +525,16 @@ void main() {
 *  // 重定向法向量并传递给片断着色器
 *  v_normal = mat3(u_world) * a_normal;
 }
-</code></pre><p>注意到我们将 <code>a_normal</code> 与 <code>mat3(u_world)</code> 相乘，
+</code></pre><p>注意到我们将 <code class="notranslate" translate="no">a_normal</code> 与 <code class="notranslate" translate="no">mat3(u_world)</code> 相乘，
 那是因为法向量是方向所以不用关心位移，
 矩阵的左上 3x3 部分才是控制姿态的。</p>
 <p>找到全局变量</p>
-<pre class="prettyprint"><code>  // 寻找全局变量
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 寻找全局变量
 *  var worldViewProjectionLocation =
 *      gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 +  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 </code></pre><p>然后更新它们</p>
-<pre class="prettyprint"><code>*// 设置矩阵
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*// 设置矩阵
 *gl.uniformMatrix4fv(
 *    worldViewProjectionLocation, false,
 *    worldViewProjectionMatrix);
@@ -548,7 +548,7 @@ void main() {
 </p>
 <p>旋转后就会发现面对 F 的面总是被照亮的。</p>
 <p>这里有一个问题我不知道如何表述所以就用图解展示。
-我们用 <code>normal</code> 和 <code>u_world</code> 相乘去重定向法向量，
+我们用 <code class="notranslate" translate="no">normal</code> 和 <code class="notranslate" translate="no">u_world</code> 相乘去重定向法向量，
 如果世界矩阵被缩放了怎么办？事实是会得到错误的法向量。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 600px; height: 300px;" src="/webgl/lessons/resources/normals-scaled.html"></iframe>
@@ -566,9 +566,9 @@ void main() {
 法向量和表面<strong>没有</strong>保持垂直关系，而右边的（世界矩阵求逆并转置）
 一直保持垂直。最后一种模式是将它们渲染成红色，你会发现两个球体的光照结果相差非常大，
 基于可视化的结果可以得出使用世界矩阵求逆转置是对的。</p>
-<p>修改代码让示例使用这种矩阵，首先更新着色器，理论上我们可以直接更新 <code>u_world</code>
+<p>修改代码让示例使用这种矩阵，首先更新着色器，理论上我们可以直接更新 <code class="notranslate" translate="no">u_world</code>
 的值，但是最好将它重命名以表示它真正的含义，防止混淆。</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform mat4 u_worldViewProjection;
@@ -584,11 +584,11 @@ void main() {
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 </code></pre><p>然后找到它</p>
-<pre class="prettyprint"><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 +  var worldInverseTransposeLocation =
 +      gl.getUniformLocation(program, &quot;u_worldInverseTranspose&quot;);
 </code></pre><p>更新它</p>
-<pre class="prettyprint"><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
 var worldInverseMatrix = m4.inverse(worldMatrix);
 var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
@@ -601,7 +601,7 @@ gl.uniformMatrix4fv(
 +    worldInverseTransposeLocation, false,
 +    worldInverseTransposeMatrix);
 </code></pre><p>这是转置的代码</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   transpose: function(m) {
     return [
       m[0], m[4], m[8], m[12],
@@ -630,11 +630,11 @@ v_normal = mat3(u_worldInverseTranspose) * a_normal;
 <pre class="prettyprint">
 v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
 </pre>
-<p>由于 <code>w</code> 在相乘前被赋值为 0，所以在相乘后负责平移的部分与 0 相乘被移除了。
+<p>由于 <code class="notranslate" translate="no">w</code> 在相乘前被赋值为 0，所以在相乘后负责平移的部分与 0 相乘被移除了。
 我认为这可能是更常用的方式，mat3 的做法只是对我来说更简洁但我经常用前一种方法。</p>
-<p>当然另一种解决方案是将<code>u_worldInverseTranspose</code>直接构造成<code>mat3</code>。
-这有两个不能这么做的理由，第一个是我们可能需要一个完整的 <code>u_worldInverseTranspose</code>
-对象传递一个<code>mat4</code>给还要给其他地方使用，另一个是我们在JavaScript中的所有矩阵方法都是针对 4x4 的矩阵，如果没有其他特别的需求，没有必要构造一个3x3的矩阵，或者是把 4x4 转换成 3x3 。</p>
+<p>当然另一种解决方案是将<code class="notranslate" translate="no">u_worldInverseTranspose</code>直接构造成<code class="notranslate" translate="no">mat3</code>。
+这有两个不能这么做的理由，第一个是我们可能需要一个完整的 <code class="notranslate" translate="no">u_worldInverseTranspose</code>
+对象传递一个<code class="notranslate" translate="no">mat4</code>给还要给其他地方使用，另一个是我们在JavaScript中的所有矩阵方法都是针对 4x4 的矩阵，如果没有其他特别的需求，没有必要构造一个3x3的矩阵，或者是把 4x4 转换成 3x3 。</p>
 </div>
 
     </div>

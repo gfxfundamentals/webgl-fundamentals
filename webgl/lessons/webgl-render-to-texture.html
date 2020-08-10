@@ -221,7 +221,7 @@ In this article we&#39;ll render to textures using WebGL. Note this topic
 was covered tersely under <a href="webgl-image-processing-continued.html">image processing</a> but
 let&#39;s cover it in more detail.</p>
 <p>Rendering to a texture is pretty simple. We create a texture of a certain size</p>
-<pre class="prettyprint"><code>// create to render to
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// create to render to
 const targetTextureWidth = 256;
 const targetTextureHeight = 256;
 const targetTexture = gl.createTexture();
@@ -244,14 +244,14 @@ gl.bindTexture(gl.TEXTURE_2D, targetTexture);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 }
-</code></pre><p>Notice how <code>data</code> is <code>null</code>. We don&#39;t need to supply any data. We just need WebGL to
+</code></pre><p>Notice how <code class="notranslate" translate="no">data</code> is <code class="notranslate" translate="no">null</code>. We don&#39;t need to supply any data. We just need WebGL to
 allocate the texture.</p>
 <p>Next we create a framebuffer. A framebuffer is just a collection of attachments. Attachments
 are either textures or renderbuffers. We&#39;ve gone over textures before. Renderbuffers are very similar
 to textures but they support formats and options that textures don&#39;t support. Also, unlike a texture
 you can&#39;t directly use a renderbuffer as input to a shader.</p>
 <p>Let&#39;s create a framebuffer and attach our texture</p>
-<pre class="prettyprint"><code>// Create and bind the framebuffer
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Create and bind the framebuffer
 const fb = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
@@ -260,13 +260,13 @@ const attachmentPoint = gl.COLOR_ATTACHMENT0;
 gl.framebufferTexture2D(
     gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 </code></pre><p>Just like textures and buffers, after we create the framebuffer we need to
-bind it to the <code>FRAMEBUFFER</code> bind point. After that all functions related to
+bind it to the <code class="notranslate" translate="no">FRAMEBUFFER</code> bind point. After that all functions related to
 framebuffers reference whatever framebuffer is bound there.</p>
-<p>With our framebuffer bound, anytime we call <code>gl.clear</code>, <code>gl.drawArrays</code>, or <code>gl.drawElements</code> WebGL
+<p>With our framebuffer bound, anytime we call <code class="notranslate" translate="no">gl.clear</code>, <code class="notranslate" translate="no">gl.drawArrays</code>, or <code class="notranslate" translate="no">gl.drawElements</code> WebGL
 would render to our texture instead of the canvas.</p>
 <p>Let&#39;s take our previous rendering code and make it a function so we can call it twice.
 Once to render to the texture and again to render to the canvas.</p>
-<pre class="prettyprint"><code>function drawCube(aspect) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawCube(aspect) {
   // Tell it to use our program (pair of shaders)
   gl.useProgram(program);
 
@@ -330,10 +330,10 @@ Once to render to the texture and again to render to the canvas.</p>
   // Draw the geometry.
   gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
 }
-</code></pre><p>Note that we need to pass in the <code>aspect</code> for computing our projection matrix
+</code></pre><p>Note that we need to pass in the <code class="notranslate" translate="no">aspect</code> for computing our projection matrix
 because our target texture has a different aspect than the canvas.</p>
 <p>Here&#39;s how we call it</p>
-<pre class="prettyprint"><code>// Draw the scene.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Draw the scene.
 function drawScene(time) {
 
   ...
@@ -383,18 +383,18 @@ function drawScene(time) {
 </div>
 
 </p>
-<p>It&#39;s <strong>EXTREMELY IMPORTANT</strong> to remember to call <code>gl.viewport</code> and set it to
+<p>It&#39;s <strong>EXTREMELY IMPORTANT</strong> to remember to call <code class="notranslate" translate="no">gl.viewport</code> and set it to
 the size of the thing your rendering to. In this case the first time we&#39;re
 rendering to the texture so we set the viewport to cover the texture. The 2nd
 time we&#39;re rendering to the canvas so we set the viewport to cover the canvas.</p>
 <p>Similarly when we compute a projection matrix
 we need to use the correct aspect for thing we&#39;re rendering to. I have lost countless
 hours of debugging wondering why something is rendering funny or not rendering
-at all only to finally discover that I forgot one or both calling <code>gl.viewport</code>
+at all only to finally discover that I forgot one or both calling <code class="notranslate" translate="no">gl.viewport</code>
 and computing the correct aspect. It&#39;s so easy to forget that I now try to never call
-<code>gl.bindFramebuffer</code> in my own code directly. Instead I make a function that does both
+<code class="notranslate" translate="no">gl.bindFramebuffer</code> in my own code directly. Instead I make a function that does both
 something like</p>
-<pre class="prettyprint"><code>function bindFramebufferAndSetViewport(fb, width, height) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function bindFramebufferAndSetViewport(fb, width, height) {
    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
    gl.viewport(0, 0, width, height);
 }
@@ -413,7 +413,7 @@ draw on the canvas you&#39;ll notice they correctly intersect each other. That&#
 has no depth buffer but our canvas does.</p>
 <p><img class="webgl_center" src="resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" /></p>
 <p>To add a depth buffer we need to create a one and attach it to our framebuffer.</p>
-<pre class="prettyprint"><code>// create a depth renderbuffer
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// create a depth renderbuffer
 const depthBuffer = gl.createRenderbuffer();
 gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
 
@@ -433,14 +433,14 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 <a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS">According to the spec</a>
 the only guaranteed combinations of attachments are:</p>
 <ul>
-<li><code>COLOR_ATTACHMENT0</code> = <code>RGBA/UNSIGNED_BYTE</code> texture</li>
-<li><code>COLOR_ATTACHMENT0</code> = <code>RGBA/UNSIGNED_BYTE</code> texture + <code>DEPTH_ATTACHMENT</code> = <code>DEPTH_COMPONENT16</code> renderbuffer</li>
-<li><code>COLOR_ATTACHMENT0</code> = <code>RGBA/UNSIGNED_BYTE</code> texture + <code>DEPTH_STENCIL_ATTACHMENT</code> = <code>DEPTH_STENCIL</code> renderbuffer</li>
+<li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> texture</li>
+<li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> texture + <code class="notranslate" translate="no">DEPTH_ATTACHMENT</code> = <code class="notranslate" translate="no">DEPTH_COMPONENT16</code> renderbuffer</li>
+<li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> texture + <code class="notranslate" translate="no">DEPTH_STENCIL_ATTACHMENT</code> = <code class="notranslate" translate="no">DEPTH_STENCIL</code> renderbuffer</li>
 </ul>
 <p>For any other combinations you must check if the user&#39;s system/gpu/driver/browser supports that combination.
 To check you make your framebuffer, create and attach the attachments, then call</p>
-<pre class="prettyprint"><code>var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-</code></pre><p>If the status is <code>FRAMEBUFFER_COMPLETE</code> then that combination of attachments works for that user.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+</code></pre><p>If the status is <code class="notranslate" translate="no">FRAMEBUFFER_COMPLETE</code> then that combination of attachments works for that user.
 Otherwise it does not work and you&#39;ll have to do something else like tell the user they are out of luck
 or fallback to some other method.</p>
 <p>If you haven&#39;t yet check out <a href="webgl-less-code-more-fun.html">simplifying WebGL with less code more fun</a>.</p>

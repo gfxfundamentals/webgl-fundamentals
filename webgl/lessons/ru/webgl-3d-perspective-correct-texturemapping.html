@@ -235,7 +235,7 @@ WebGL отрисует треугольник. Во время отрисовк�
 треугольник в пространстве отсечения, где не было никакой математики. Мы просто
 передавали координаты в пространстве отсечения в простой вершинный шейдер, который
 выглядел следующим образом:</p>
-<pre class="prettyprint"><code>  // атрибут, который будет получать данные из буфера
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // атрибут, который будет получать данные из буфера
   attribute vec4 a_position;
 
   // все шейдеры имеют функцию main
@@ -246,7 +246,7 @@ WebGL отрисует треугольник. Во время отрисовк�
     gl_Position = a_position;
   }
 </code></pre><p>Был у нас и простой фрагментный шейдер, который отображал один и тот же цвет.</p>
-<pre class="prettyprint"><code>  // фрагментные шейдеры не имеют точности по умолчанию, поэтому нам необходимо её
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // фрагментные шейдеры не имеют точности по умолчанию, поэтому нам необходимо её
   // указать. mediump подойдёт для большинства случаев. Он означает &quot;средняя точность&quot;
   precision mediump float;
 
@@ -256,8 +256,8 @@ WebGL отрисует треугольник. Во время отрисовк�
     gl_FragColor = vec4(1, 0, 0.5, 1); // вернёт красновато-фиолетовый
   }
 </code></pre><p>Итак, отобразим 2 треугольника в пространстве отсечения. Мы передадим
-данные <code>X</code>, <code>Y</code>, <code>Z</code> и <code>W</code> для каждой вершины.</p>
-<pre class="prettyprint"><code>var positions = [
+данные <code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code>, <code class="notranslate" translate="no">Z</code> и <code class="notranslate" translate="no">W</code> для каждой вершины.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positions = [
   -.8, -.8, 0, 1,  // первый треугольник первого прямоугольника
    .8, -.8, 0, 1,
   -.8, -.2, 0, 1,
@@ -282,7 +282,7 @@ WebGL отрисует треугольник. Во время отрисовк�
 <p>Теперь добавим некоторую varying-переменную с плавающей точкой.
 Передадим её напрямую из вершинного шейдера во фрагментный
 шейдер.</p>
-<pre class="prettyprint"><code>  attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  attribute vec4 a_position;
 +  attribute float a_brightness;
 
 +  varying float v_brightness;
@@ -294,7 +294,7 @@ WebGL отрисует треугольник. Во время отрисовк�
 +    v_brightness = a_brightness;
   }
 </code></pre><p>Во фрагментном шейдере используем varying-переменную для получения цвета.</p>
-<pre class="prettyprint"><code>  precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  precision mediump float;
 
 +  // интерполированная переменная из вершинного шейдера
 +  varying float v_brightness;  
@@ -306,7 +306,7 @@ WebGL отрисует треугольник. Во время отрисовк�
 создадим буфер и поместим в него какие-нибудь значения - одно значение
 на одну вершину. Для вершин слева мы установим яркость в значение 0,
 а для правых вершин - в значение 1.</p>
-<pre class="prettyprint"><code>  // создаём буфер и помещаем в него 12 значений яркости
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // создаём буфер и помещаем в него 12 значений яркости
   var brightnessBuffer = gl.createBuffer();
 
   // привязываем буфер к ARRAY_BUFFER (можно сказать, что ARRAY_BUFFER = brightnessBuffer)
@@ -329,12 +329,12 @@ WebGL отрисует треугольник. Во время отрисовк�
   ];
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(brightness), gl.STATIC_DRAW);
-</code></pre><p>Затем получаем ссылку на атрибут <code>a_brightness</code> во время инициализации</p>
-<pre class="prettyprint"><code>  // сюда пойдут данные для вершин
+</code></pre><p>Затем получаем ссылку на атрибут <code class="notranslate" translate="no">a_brightness</code> во время инициализации</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // сюда пойдут данные для вершин
   var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +  var brightnessAttributeLocation = gl.getAttribLocation(program, &quot;a_brightness&quot;);
 </code></pre><p>и устанавливаем значение атрибута при отрисовке</p>
-<pre class="prettyprint"><code>  // включаем атрибут
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // включаем атрибут
   gl.enableVertexAttribArray(brightnessAttributeLocation);
 
   // привязываем буфер
@@ -349,8 +349,8 @@ WebGL отрисует треугольник. Во время отрисовк�
   gl.vertexAttribPointer(
       brightnessAttributeLocation, size, type, normalize, stride, offset);
 </code></pre><p>И теперь при отрисовке мы получим два прямоугольника, которые имеют чёрный
-цвет слева, где <code>brightness</code> равна нулю, и красный цвет справа, где
-<code>brightness</code> равна 1. Внутри прямоугольников цвет будет плавно переходить
+цвет слева, где <code class="notranslate" translate="no">brightness</code> равна нулю, и красный цвет справа, где
+<code class="notranslate" translate="no">brightness</code> равна 1. Внутри прямоугольников цвет будет плавно переходить
 от чёрного к красному (интерполяция varying-переменной).</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying.html"></iframe>
@@ -359,12 +359,12 @@ WebGL отрисует треугольник. Во время отрисовк�
 
 </p>
 <p>Идём дальше. Из <a href="webgl-3d-perspective.html">статьи о перспективе</a> мы знаем, что WebGL
-принимает значение, которое мы поместили в <code>gl_Position</code>, и делит это значение
-на <code>gl_Position.w</code>.</p>
-<p>Ранее в вершинах мы передавали <code>1</code> для <code>W</code>, но с нашим знанием о том,
-что WebGL разделит все значения на <code>W</code>, мы можем сделать нечто подобное
+принимает значение, которое мы поместили в <code class="notranslate" translate="no">gl_Position</code>, и делит это значение
+на <code class="notranslate" translate="no">gl_Position.w</code>.</p>
+<p>Ранее в вершинах мы передавали <code class="notranslate" translate="no">1</code> для <code class="notranslate" translate="no">W</code>, но с нашим знанием о том,
+что WebGL разделит все значения на <code class="notranslate" translate="no">W</code>, мы можем сделать нечто подобное
 и получить идентичный результат:</p>
-<pre class="prettyprint"><code>  var mult = 20;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  var mult = 20;
   var positions = [
       -.8,  .8, 0, 1,  // первый треугольник первого прямоугольника
        .8,  .8, 0, 1,
@@ -380,9 +380,9 @@ WebGL отрисует треугольник. Во время отрисовк�
        .8 * mult, -.2 * mult, 0, mult,
        .8 * mult, -.8 * mult, 0, mult,
   ];
-</code></pre><p>В отрывке кода выше мы умножаем <code>X</code> и <code>Y</code> всех правых точек второго
-прямоугольника на <code>mult</code>, а затем устанавливаем параметру <code>W</code> значение
-<code>mult</code>. WebGL разделит все значения на <code>W</code>, поэтому в итоге мы должны
+</code></pre><p>В отрывке кода выше мы умножаем <code class="notranslate" translate="no">X</code> и <code class="notranslate" translate="no">Y</code> всех правых точек второго
+прямоугольника на <code class="notranslate" translate="no">mult</code>, а затем устанавливаем параметру <code class="notranslate" translate="no">W</code> значение
+<code class="notranslate" translate="no">mult</code>. WebGL разделит все значения на <code class="notranslate" translate="no">W</code>, поэтому в итоге мы должны
 получить то же самое, так ведь?</p>
 <p>Взглянем на результат.</p>
 <p><div class="webgl_example_container">
@@ -392,13 +392,13 @@ WebGL отрисует треугольник. Во время отрисовк�
 
 </p>
 <p>Мы видим, что два прямоугольника отрисовались в том же месте, где были до
-этого. Это значит, что <code>X * MULT / MULT(W)</code> по-прежнему равно <code>X</code>, то же
-самое справедливо и для <code>Y</code>. Но цвет довольно сильно изменился. Что произошло?</p>
-<p>Оказывается, что WebGL использует <code>W</code> для перспективной коррекции текстуры,
+этого. Это значит, что <code class="notranslate" translate="no">X * MULT / MULT(W)</code> по-прежнему равно <code class="notranslate" translate="no">X</code>, то же
+самое справедливо и для <code class="notranslate" translate="no">Y</code>. Но цвет довольно сильно изменился. Что произошло?</p>
+<p>Оказывается, что WebGL использует <code class="notranslate" translate="no">W</code> для перспективной коррекции текстуры,
 а точнее для перспективной коррекции интерполяции значений varying-переменных.</p>
 <p>Для большей наглядности давайте изменим шейдер</p>
-<pre class="prettyprint"><code>gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // красный
-</code></pre><p>Умножая <code>v_brightness</code> на 10, мы получим значение от 0 до 10. Функция <code>fract</code>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // красный
+</code></pre><p>Умножая <code class="notranslate" translate="no">v_brightness</code> на 10, мы получим значение от 0 до 10. Функция <code class="notranslate" translate="no">fract</code>
 оставит только дробную часть, которая будет переходить от 0 до 1, от 0 до 1,
 от 0 до 1 - и так 10 раз.</p>
 <p><div class="webgl_example_container">
@@ -410,16 +410,16 @@ WebGL отрисует треугольник. Во время отрисовк�
 <p>Теперь нам легко увидеть перспективу.</p>
 <p>Линейная интерполяция от одного значения до другого описывается
 следующей формулой:</p>
-<pre class="prettyprint"><code> result = (1 - t) * a + t * b
-</code></pre><p>где <code>t</code> изменяется от 0 до 1 и представляет собой определённое положение
-между <code>a</code> и <code>b</code>. Значение 0 соответствует <code>a</code>, а 1 соответствует <code>b</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a + t * b
+</code></pre><p>где <code class="notranslate" translate="no">t</code> изменяется от 0 до 1 и представляет собой определённое положение
+между <code class="notranslate" translate="no">a</code> и <code class="notranslate" translate="no">b</code>. Значение 0 соответствует <code class="notranslate" translate="no">a</code>, а 1 соответствует <code class="notranslate" translate="no">b</code>.</p>
 <p>Однако, для varying-переменных WebGL использует следующую формулу</p>
-<pre class="prettyprint"><code> result = (1 - t) * a / aW + t * b / bW
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a / aW + t * b / bW
           -----------------------------
              (1 - t) / aW + t / bW
-</code></pre><p>Здесь <code>aW</code> - это <code>W</code>, установленное в значение <code>gl_Position.w</code>, когда
-varying-переменная равна <code>a</code>. А <code>bW</code> - это значение <code>W</code>, установленное в
-значение <code>gl_Position.w</code>, когда varying-переменная равна <code>b</code>.</p>
+</code></pre><p>Здесь <code class="notranslate" translate="no">aW</code> - это <code class="notranslate" translate="no">W</code>, установленное в значение <code class="notranslate" translate="no">gl_Position.w</code>, когда
+varying-переменная равна <code class="notranslate" translate="no">a</code>. А <code class="notranslate" translate="no">bW</code> - это значение <code class="notranslate" translate="no">W</code>, установленное в
+значение <code class="notranslate" translate="no">gl_Position.w</code>, когда varying-переменная равна <code class="notranslate" translate="no">b</code>.</p>
 <p>Так ли всё это важно? Взглянем на простой куб с текстурой, на котором мы
 закончили <a href="webgl-3d-textures.html">статью о текстурах</a>. UV-координаты принимают
 значения от 0 до 1 на каждой стороне. Используется текстура размером 4х4 пикселя.</p>
@@ -430,8 +430,8 @@ varying-переменная равна <code>a</code>. А <code>bW</code> - э�
 
 </p>
 <p>Теперь изменим вершинный шейдер в этом примере таким образом, чтобы мы
-самостоятельно выполняли деление на <code>W</code>. Нам нужно добавить всего 1 строку:</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+самостоятельно выполняли деление на <code class="notranslate" translate="no">W</code>. Нам нужно добавить всего 1 строку:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -448,8 +448,8 @@ void main() {
   // передаём текстурные координаты во фрагментный шейдер
   v_texcoord = a_texcoord;
 }
-</code></pre><p>Деление на <code>W</code> означает, что конечное значение <code>gl_Position.w</code>
-будет равно 1. Значения <code>X</code>, <code>Y</code> и <code>Z</code> будут такими же, как если
+</code></pre><p>Деление на <code class="notranslate" translate="no">W</code> означает, что конечное значение <code class="notranslate" translate="no">gl_Position.w</code>
+будет равно 1. Значения <code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code> и <code class="notranslate" translate="no">Z</code> будут такими же, как если
 бы WebGL выполнял деление за нас. Посмотрим на результат.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-non-perspective-correct-cube.html"></iframe>
@@ -458,30 +458,30 @@ void main() {
 
 </p>
 <p>В итоге мы получили тот же 3D-куб, но текстуры заметно исказились.
-Дело в том, что если не передать <code>W</code>, WebGL не сможет выполнить
+Дело в том, что если не передать <code class="notranslate" translate="no">W</code>, WebGL не сможет выполнить
 перспективную коррекцию наложения текстуры. Точнее, WebGL не сможет
 корректно выполнить перспективную интерполяцию varying-переменных.</p>
 <p>Как вы помните из <a href="webgl-3d-perspective.html">статьи о матрицах перспективы</a>,
-значение <code>W</code> было нашим значением <code>Z</code>. При <code>W</code> равном <code>1</code> мы в итоге получаем
+значение <code class="notranslate" translate="no">W</code> было нашим значением <code class="notranslate" translate="no">Z</code>. При <code class="notranslate" translate="no">W</code> равном <code class="notranslate" translate="no">1</code> мы в итоге получаем
 линейную интерполяцию. То есть если взять уравнение выше</p>
-<pre class="prettyprint"><code> result = (1 - t) * a / aW + t * b / bW
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a / aW + t * b / bW
           -----------------------------
              (1 - t) / aW + t / bW
-</code></pre><p>и заменить все <code>W</code> на 1</p>
-<pre class="prettyprint"><code> result = (1 - t) * a / 1 + t * b / 1
+</code></pre><p>и заменить все <code class="notranslate" translate="no">W</code> на 1</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a / 1 + t * b / 1
           ---------------------------
              (1 - t) / 1 + t / 1
 </code></pre><p>учитывая, что деление на 1 можно отбросить</p>
-<pre class="prettyprint"><code> result = (1 - t) * a + t * b
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a + t * b
           -------------------
              (1 - t) + t
-</code></pre><p>далее <code>(1 - t) + t</code> упрощается до <code>1</code> и весь знаменатель уходит, у нас остаётся лишь</p>
-<pre class="prettyprint"><code> result = (1 - t) * a + t * b
+</code></pre><p>далее <code class="notranslate" translate="no">(1 - t) + t</code> упрощается до <code class="notranslate" translate="no">1</code> и весь знаменатель уходит, у нас остаётся лишь</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a + t * b
 </code></pre><p>что в точности повторяет уравнение линейной интерполяции, приведённое выше.</p>
 <p>Надеюсь, теперь стало понятно, почему WebGL использует матрицы 4х4 и вектора из
-четырёх элементов <code>X</code>, <code>Y</code>, <code>Z</code> и <code>W</code>. Значения <code>X</code> и <code>Y</code> делятся на <code>W</code> и мы
-получаем координаты пространства отсечения. Значение <code>Z</code> делится на <code>W</code>, в результате
-чего также получается координата по оси Z в пространстве отсечения. А <code>W</code> используется
+четырёх элементов <code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code>, <code class="notranslate" translate="no">Z</code> и <code class="notranslate" translate="no">W</code>. Значения <code class="notranslate" translate="no">X</code> и <code class="notranslate" translate="no">Y</code> делятся на <code class="notranslate" translate="no">W</code> и мы
+получаем координаты пространства отсечения. Значение <code class="notranslate" translate="no">Z</code> делится на <code class="notranslate" translate="no">W</code>, в результате
+чего также получается координата по оси Z в пространстве отсечения. А <code class="notranslate" translate="no">W</code> используется
 при интерполяции значений varying-переменных и обеспечивает перспективную коррекцию
 при наложении текстур.</p>
 <div class="webgl_bottombar">

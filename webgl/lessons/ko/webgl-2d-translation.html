@@ -221,13 +221,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <a href="webgl-fundamentals.html">첫 번째 게시물</a>에 있는 예제 코드를 사용하면 setRectangle에 전달된 값을 변경하는 것 만으로 쉽게 사각형을 이동할 수 있었죠?
 여기 <a href="webgl-fundamentals.html">이전 예제</a>에 기반한 예제가 있습니다.</p>
 <p>먼저 사각형의 이동, 넓이, 높이 그리고 색상을 가지는 변수를 만들어봅시다.</p>
-<pre class="prettyprint"><code>  var translation = [0, 0];
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  var translation = [0, 0];
   var width = 100;
   var height = 30;
   var color = [Math.random(), Math.random(), Math.random(), 1];
 </code></pre><p>그런 다음 전부 다시 그리는 함수를 만듭니다.
 이동 값을 갱신한 후에 이 함수를 호출할 겁니다.</p>
-<pre class="prettyprint"><code>  // 화면 그리기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 화면 그리기
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -277,7 +277,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     var count = 6;
     gl.drawArrays(primitiveType, offset, count);
   }
-</code></pre><p>아래의 예제에서 <code>translation[0]</code>과 <code>translation[1]</code>을 갱신하고 변경할 때마다 <code>drawScene</code>을 호출하는 슬라이더 몇 개를 첨부했는데요.
+</code></pre><p>아래의 예제에서 <code class="notranslate" translate="no">translation[0]</code>과 <code class="notranslate" translate="no">translation[1]</code>을 갱신하고 변경할 때마다 <code class="notranslate" translate="no">drawScene</code>을 호출하는 슬라이더 몇 개를 첨부했는데요.
 사각형을 이동시키기 위해 슬라이더를 드래그해봅시다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-translate.html"></iframe>
@@ -289,8 +289,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 하지만 더 복잡한 모양으로 똑같은 일을 하는 걸 상상해보세요.</p>
 <p>이처럼 삼각형 6개로 구성된 &#39;F&#39;를 그려야 한다고 가정해봅시다.</p>
 <p><img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
-<p>이제 현재 코드에 맞춰서 <code>setRectangle</code>을 이렇게 변경해야합니다.</p>
-<pre class="prettyprint"><code>// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
+<p>이제 현재 코드에 맞춰서 <code class="notranslate" translate="no">setRectangle</code>을 이렇게 변경해야합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -330,7 +330,7 @@ function setGeometry(gl, x, y) {
 <p>보다 더 간단한 방법이 있는데요.
 geometry를 업로드하고 shader에서 이동하면 됩니다.</p>
 <p>여기 새로운 shader가 있습니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -345,7 +345,7 @@ void main() {
    ...
 </code></pre><p>그리고 코드를 조금 재구성할 건데요.
 하나는 geometry를 한 번만 설정해도 된다는 겁니다.</p>
-<pre class="prettyprint"><code>// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -376,8 +376,8 @@ function setGeometry(gl) {
       ]),
       gl.STATIC_DRAW);
 }
-</code></pre><p>그러면 우리가 원하는 이동을 해서 그리기 전에 <code>u_translation</code>을 갱신시키기만 하면 됩니다.</p>
-<pre class="prettyprint"><code>  ...
+</code></pre><p>그러면 우리가 원하는 이동을 해서 그리기 전에 <code class="notranslate" translate="no">u_translation</code>을 갱신시키기만 하면 됩니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var translationLocation = gl.getUniformLocation(program, &quot;u_translation&quot;);
 
@@ -406,8 +406,8 @@ function setGeometry(gl) {
 *    var count = 18;
     gl.drawArrays(primitiveType, offset, count);
   }
-</code></pre><p><code>setGeometry</code>는 한 번만 호출된다는 걸 알아두세요.
-더 이상 <code>drawScene</code> 안에 있지 않습니다.</p>
+</code></pre><p><code class="notranslate" translate="no">setGeometry</code>는 한 번만 호출된다는 걸 알아두세요.
+더 이상 <code class="notranslate" translate="no">drawScene</code> 안에 있지 않습니다.</p>
 <p>그리고 여기 예제가 있습니다.
 다시, 이동 값을 갱신시키기 위해 슬라이더를 드래그해보세요.</p>
 <p><div class="webgl_example_container">

@@ -217,9 +217,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 你也应了解纹理和纹理坐标，如果不清楚可以看看<a href="webgl-3d-textures.html">WebGL 三维纹理</a>。</p>
 <p>实现大多数二维游戏只需要一个方法去绘制一个图像，当然也有一些二维游戏用线等技术做一些有趣的东西，
 但是如果你有绘制二维图像的方法，基本上可以做大多数二维游戏。</p>
-<p>画布有一个非常灵活的二维接口叫做 <code>drawImage</code>，用于绘制图像。
+<p>画布有一个非常灵活的二维接口叫做 <code class="notranslate" translate="no">drawImage</code>，用于绘制图像。
 它有三个版本</p>
-<pre class="prettyprint"><code>ctx.drawImage(image, dstX, dstY);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">ctx.drawImage(image, dstX, dstY);
 ctx.drawImage(image, dstX, dstY, dstWidth, dstHeight);
 ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
                      dstX, dstY, dstWidth, dstHeight);
@@ -227,16 +227,16 @@ ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
 像本站第一篇文章那样。将顶点传送到GPU是一个比较耗时的操作（尽管某些情况下比较快）。</p>
 <p>这就是WebGL发挥作用的地方，讲究富有创造性地编写着色器和使用它们去解决问题。</p>
 <p>让我们从第一个版本开始</p>
-<pre class="prettyprint"><code>ctx.drawImage(image, x, y);
-</code></pre><p>它可以在 <code>x, y</code> 位置处绘制一个原始大小的图像，为了实现相似的功能，
-WebGL需要上传<code>x, y</code>, <code>x + width, y</code>, <code>x, y + height</code>, 和
-<code>x + width, y + height</code> 对应的顶点，当绘制不同的图像或不同的位置时就创建不同的顶点集合。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">ctx.drawImage(image, x, y);
+</code></pre><p>它可以在 <code class="notranslate" translate="no">x, y</code> 位置处绘制一个原始大小的图像，为了实现相似的功能，
+WebGL需要上传<code class="notranslate" translate="no">x, y</code>, <code class="notranslate" translate="no">x + width, y</code>, <code class="notranslate" translate="no">x, y + height</code>, 和
+<code class="notranslate" translate="no">x + width, y + height</code> 对应的顶点，当绘制不同的图像或不同的位置时就创建不同的顶点集合。</p>
 <p>一个更常用的方式是只使用一个单位矩形，我们上传一个长度为 1 个单位的正方形，
 然后使用<a href="webgl-2d-matrices.html">矩阵运算</a>缩放和平移单位矩形，
 以达到期望的大小和位置。</p>
 <p>这是代码。</p>
 <p>首先需要一个简单的顶点着色器</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -248,7 +248,7 @@ void main() {
    v_texcoord = a_texcoord;
 }
 </code></pre><p>和一个简单的片断着色器</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 varying vec2 v_texcoord;
 
@@ -258,7 +258,7 @@ void main() {
    gl_FragColor = texture2D(u_texture, v_texcoord);
 }
 </code></pre><p>然后轮到方法</p>
-<pre class="prettyprint"><code>// 不同于图像，纹理没有对应的长和宽，
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 不同于图像，纹理没有对应的长和宽，
 // 我们将向纹理传递长和宽
 function drawImage(tex, texWidth, texHeight, dstX, dstY) {
   gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -293,7 +293,7 @@ function drawImage(tex, texWidth, texHeight, dstX, dstY) {
   gl.drawArrays(gl.TRIANGLES, 0, 6);
 }
 </code></pre><p>我们来加载一些图像用于纹理</p>
-<pre class="prettyprint"><code>// 穿件一个纹理信息 { width: w, height: h, texture: tex }
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 穿件一个纹理信息 { width: w, height: h, texture: tex }
 // 纹理起初为 1x1 像素，当图像加载完成后更新大小
 function loadImageAndCreateTextureInfo(url) {
   var tex = gl.createTexture();
@@ -327,7 +327,7 @@ var textureInfos = [
   loadImageAndCreateTextureInfo(&#39;resources/keyboard.jpg&#39;),
 ];
 </code></pre><p>绘制到随机位置</p>
-<pre class="prettyprint"><code>var drawInfos = [];
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var drawInfos = [];
 var numToDraw = 9;
 var speed = 60;
 for (var ii = 0; ii &lt; numToDraw; ++ii) {
@@ -392,11 +392,11 @@ requestAnimationFrame(render);
 </div>
 
 </p>
-<p>处理 <code>drawImage</code> 方法的第二个版本</p>
-<pre class="prettyprint"><code>ctx.drawImage(image, dstX, dstY, dstWidth, dstHeight);
-</code></pre><p>没什么特别的地方，只是用 <code>dstWidth</code> 和 <code>dstHeight</code> 代替了
-<code>texWidth</code> 和 <code>texHeight</code>。</p>
-<pre class="prettyprint"><code>*function drawImage(
+<p>处理 <code class="notranslate" translate="no">drawImage</code> 方法的第二个版本</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">ctx.drawImage(image, dstX, dstY, dstWidth, dstHeight);
+</code></pre><p>没什么特别的地方，只是用 <code class="notranslate" translate="no">dstWidth</code> 和 <code class="notranslate" translate="no">dstHeight</code> 代替了
+<code class="notranslate" translate="no">texWidth</code> 和 <code class="notranslate" translate="no">texHeight</code>。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*function drawImage(
 *    tex, texWidth, texHeight,
 *    dstX, dstY, dstWidth, dstHeight) {
 +  if (dstWidth === undefined) {
@@ -440,15 +440,15 @@ requestAnimationFrame(render);
 </div>
 
 </p>
-<p>这很简单，但是 <code>drawImage</code> 的第三个版本呢？</p>
-<pre class="prettyprint"><code>ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
+<p>这很简单，但是 <code class="notranslate" translate="no">drawImage</code> 的第三个版本呢？</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
                      dstX, dstY, dstWidth, dstHeight);
 </code></pre><p>为了实现选择部分纹理，就需要操控纹理坐标。纹理坐标的工作原理在
 <a href="webgl-3d-textures.html">这篇文章</a>中讲到，在那篇文章中我们手工创建纹理坐标，
 是一个非常常见的方式，但是我们也可以在运行时创建，然后使用矩阵简单的修改纹理坐标。</p>
 <p>让我们给顶点着色器添加一个纹理坐标矩阵，
 然后将纹理坐标和矩阵相乘。</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
 uniform mat4 u_matrix;
@@ -461,11 +461,11 @@ void main() {
 *   v_texcoord = (u_textureMatrix * vec4(a_texcoord, 0, 1)).xy;
 }
 </code></pre><p>现在我们要找到纹理矩阵的位置</p>
-<pre class="prettyprint"><code>var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
 +var textureMatrixLocation = gl.getUniformLocation(program, &quot;u_textureMatrix&quot;);
-</code></pre><p>在 <code>drawImage</code> 方法中需要设置它，用于选择我们需要的部分。
+</code></pre><p>在 <code class="notranslate" translate="no">drawImage</code> 方法中需要设置它，用于选择我们需要的部分。
 我们知道纹理坐标是一个单位矩形所以可以简单的修改，就像对位置的处理一样。</p>
-<pre class="prettyprint"><code>*function drawImage(
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*function drawImage(
 *    tex, texWidth, texHeight,
 *    srcX, srcY, srcWidth, srcHeight,
 *    dstX, dstY, dstWidth, dstHeight) {
@@ -534,9 +534,9 @@ void main() {
 </div>
 
 </p>
-<p>不同于画布的二维接口，WebGL对 <code>drawImage</code> 的情况做了更多的处理。</p>
-<p>一个是我们可以给源或者目标宽高传递负值，负的 <code>srcWidth</code> 会选择 <code>srcX</code>
-左边的像素，负的 <code>dstWidth</code> 会将图像绘制在 <code>dstX</code> 的左边，
+<p>不同于画布的二维接口，WebGL对 <code class="notranslate" translate="no">drawImage</code> 的情况做了更多的处理。</p>
+<p>一个是我们可以给源或者目标宽高传递负值，负的 <code class="notranslate" translate="no">srcWidth</code> 会选择 <code class="notranslate" translate="no">srcX</code>
+左边的像素，负的 <code class="notranslate" translate="no">dstWidth</code> 会将图像绘制在 <code class="notranslate" translate="no">dstX</code> 的左边，
 在画布的二维接口中报错是好一点的情况，坏一点时会出现 udefined。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-drawimage-04.html"></iframe>
@@ -547,7 +547,7 @@ void main() {
 <p>另一个是我们使用矩阵就可以实现<a href="webgl-2d-matrices.html">任何矩阵运算可以实现的效果</a>。</p>
 <p>例如绕纹理中心旋转纹理坐标。</p>
 <p>修改纹理坐标的矩阵代码</p>
-<pre class="prettyprint"><code>*  // 像二维投影矩阵那样将坐标从纹理空间转换到像素空间
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*  // 像二维投影矩阵那样将坐标从纹理空间转换到像素空间
 *  var texMatrix = m4.scaling(1 / texWidth, 1 / texHeight, 1);
 *
 *  // 选择一个旋转中心
@@ -569,9 +569,9 @@ void main() {
 </div>
 
 </p>
-<p>可以看出一个问题，在旋转的过程中会看到超出边缘的纹理，由于设置的是 <code>CLAMP_TO_EDGE</code> 所以得到重复的边缘。</p>
-<p>我们可以在着色器中丢弃超出 0 到 1 范围的纹理，<code>discard</code> 将会立即退出着色器，不写入像素。</p>
-<pre class="prettyprint"><code>precision mediump float;
+<p>可以看出一个问题，在旋转的过程中会看到超出边缘的纹理，由于设置的是 <code class="notranslate" translate="no">CLAMP_TO_EDGE</code> 所以得到重复的边缘。</p>
+<p>我们可以在着色器中丢弃超出 0 到 1 范围的纹理，<code class="notranslate" translate="no">discard</code> 将会立即退出着色器，不写入像素。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 varying vec2 v_texcoord;
 
@@ -594,7 +594,7 @@ void main() {
 
 </p>
 <p>或者你想的话也可以对超出的部分使用纯色</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 varying vec2 v_texcoord;
 

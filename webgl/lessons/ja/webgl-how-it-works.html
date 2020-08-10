@@ -221,7 +221,7 @@ WebGLの話を進めるに当たって、WebGLやGPUが、実際には
 ２点目は、「１つ目の処理の結果」を元に「ピクセルを描画する」ことである。</p>
 <h2 id="-">頂点シェーダーの位置づけと役割</h2>
 <p>WebGLのコードで、</p>
-<pre class="prettyprint"><code>var primitiveType = gl.TRIANGLES;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var primitiveType = gl.TRIANGLES;
 var offset = 0;
 var count = 9;
 gl.drawArrays(primitiveType, offset, count);
@@ -233,10 +233,10 @@ GPUに対する命令である。</p>
 あなたが<a href="webgl-shaders-and-glsl.html">GLSL言語</a>で書いた関数である。
 頂点シェーダーは、元となる頂点１つにつき１回呼び出される。
 頂点シェーダーでは、呼び出しに使われた「元となる頂点情報」に対応する「クリップ空間上の値」を、
-何らかの計算をして求め、その値を特別な変数である「<code>gl_Position</code>」に書き込む。
+何らかの計算をして求め、その値を特別な変数である「<code class="notranslate" translate="no">gl_Position</code>」に書き込む。
 GPUはその結果を取り出して、GPUが内部的に管理している専用の領域に保存する。</p>
 <h2 id="-">ラスタライズ</h2>
-<p>保存されたデータは、今回のコードでは<code>drawArrays</code>呼び出しの際に「<code>TRIANGLES</code>」を指定したので、
+<p>保存されたデータは、今回のコードでは<code class="notranslate" translate="no">drawArrays</code>呼び出しの際に「<code class="notranslate" translate="no">TRIANGLES</code>」を指定したので、
 GPUは上記の処理を頂点３つ分繰り返すたびに、そこで得られた「クリップ空間上の値」
 ３つを使って三角形(triangle)を構成する。
 これによって、「三角形の頂点」を画面上のどのピクセルに対応付ければ良いかが割り出され、
@@ -246,7 +246,7 @@ GPUは上記の処理を頂点３つ分繰り返すたびに、そこで得ら�
 <p>GPUは、そうして描かれることになったピクセル一つ一つに対して、
 あなたが提供したフラグメントシェーダーを呼び出して、
 「そのピクセルはどんな色であるか」質問する。
-フラグメントシェーダーは、特別な変数<code>gl_FragColor</code>に値をセットしてこの質問に回答
+フラグメントシェーダーは、特別な変数<code class="notranslate" translate="no">gl_FragColor</code>に値をセットしてこの質問に回答
 しなければならない。</p>
 <p>ラスタライズとフラグメントシェーダーの仕組みは興味深いものであるが、ご存知のように
 前回の講義で用意したサンプルプログラムでは
@@ -260,7 +260,7 @@ GPUは上記の処理を頂点３つ分繰り返すたびに、そこで得ら�
 頂点シェーダーからフラグメントシェーダーに、そのまま、渡してみることにしよう。</p>
 <p>今回は簡単な三角形を1つだけ描くことする。<a href="webgl-2d-matrices.html">前回のプログラム</a>
 で長方形を描いていたところを、三角形を描くように書き換える。</p>
-<pre class="prettyprint"><code>// 三角形を定義する頂点のデータをバッファにセットする
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 三角形を定義する頂点のデータをバッファにセットする
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -271,7 +271,7 @@ function setGeometry(gl) {
       gl.STATIC_DRAW);
 }
 </code></pre><p>頂点数が3つになったので、シェーダーの呼び出し部分のcountも3に合わせる。</p>
-<pre class="prettyprint"><code>// シーン(scene)を描画する
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// シーン(scene)を描画する
 function drawScene() {
   ...
   // 形状(geometry)を描画する
@@ -282,7 +282,7 @@ function drawScene() {
 }
 </code></pre><p>頂点シェーダーで、フラグメントシェーダーに渡すべきデータを
 <em>varying</em>変数として宣言する。</p>
-<pre class="prettyprint"><code>*varying vec4 v_color;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*varying vec4 v_color;
 ...
 void main() {
   // 座標データを行列で乗算する
@@ -294,7 +294,7 @@ void main() {
 *  v_color = gl_Position * 0.5 + 0.5;
 }
 </code></pre><p>同じ<em>varying</em>変数を、フラグメントシェーダーでも宣言する。</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 *varying vec4 v_color;
 
@@ -394,7 +394,7 @@ table.vertex_table td {
 フラグメントシェーダーに別のデータを送る。</p>
 <p>まず頂点シェーダーがデータを受け取れるように、新たなattributeを追加する。
 そしてその内容を、そのままフラグメントシェーダーに渡すようする。</p>
-<pre class="prettyprint"><code>attribute vec2 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_position;
 +attribute vec4 a_color;
 ...
 varying vec4 v_color;
@@ -405,7 +405,7 @@ void main() {
 *  v_color = a_color;
 }
 </code></pre><p>使いたい色のデータをWebGLに与える。</p>
-<pre class="prettyprint"><code>  // 頂点データの書き込み先となる、シェーダーのattributeのロケーションを得る。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 頂点データの書き込み先となる、シェーダーのattributeのロケーションを得る。
   var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +  var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
   ...
@@ -440,7 +440,7 @@ void main() {
 +      gl.STATIC_DRAW);
 +}
 </code></pre><p>レンダリングのタイミングで、色データのattributeをセットする。</p>
-<pre class="prettyprint"><code>+gl.enableVertexAttribArray(colorLocation);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+gl.enableVertexAttribArray(colorLocation);
 +
 +// colorBufferをバインドする。
 +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
@@ -455,7 +455,7 @@ void main() {
 +gl.vertexAttribPointer(
 +    colorLocation, size, type, normalize, stride, offset)
 </code></pre><p>シェーダーを呼び出す部分では、三角形２つ＝６頂点なのでcountを6に変更する。</p>
-<pre class="prettyprint"><code>// Draw the geometry.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Draw the geometry.
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
 *var count = 6;
@@ -472,7 +472,7 @@ gl.drawArrays(primitiveType, offset, count);
 今回は各三角形の３つの頂点に同じ色を指定したため、各三角形は単色になっている。
 ３頂点に別の色を指定して、頂点間で補間される様子を見たいなら
 こんな風に変更すればよい。</p>
-<pre class="prettyprint"><code>// 長方形を構成する２つの三角形の色のデータを
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 長方形を構成する２つの三角形の色のデータを
 // バッファに書き込む。
 function setColors(gl) {
 * // 各頂点の色はランダム。
@@ -503,9 +503,9 @@ function setColors(gl) {
 <h2 id="-attribute-">「バッファ」や「各attribute関係の関数」は何をしているのか？</h2>
 <p>「バッファ」とは、GPUが「頂点データや各頂点と１対１で結びついたデータ」を
 取り込むための仕組みである。
-<code>gl.createBuffer</code>はバッファを生成する。
-<code>gl.bindBuffer</code>は、操作対象のバッファを指定する。
-<code>gl.bufferData</code>は、バッファにデータをコピーする。
+<code class="notranslate" translate="no">gl.createBuffer</code>はバッファを生成する。
+<code class="notranslate" translate="no">gl.bindBuffer</code>は、操作対象のバッファを指定する。
+<code class="notranslate" translate="no">gl.bufferData</code>は、バッファにデータをコピーする。
 これは通常、初期化のタイミングで行なわれる。</p>
 <p>「バッファにデータを入れる」ことができたら、
 次は、「バッファからデータを取り出す手順」、
@@ -513,18 +513,18 @@ function setColors(gl) {
 <p>シェーダーのコード中でattribute変数が宣言されていると、WebGLは、
 各attributeに対して自動的にロケーション(location)を割り当てる。
 まず、それがどこなのかをWebGLに対して尋ねる。上の例では</p>
-<pre class="prettyprint"><code>// 頂点データの書き込み先となる、シェーダーのattributeのロケーションを得る。
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 頂点データの書き込み先となる、シェーダーのattributeのロケーションを得る。
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 </code></pre><p>の部分がこれに当たる。通常、この処理も初期化のタイミングで行なう。</p>
 <p>attributeのロケーションが得られたら、描画する直前のタイミングで３つのコマンドを実行する。</p>
-<pre class="prettyprint"><code>gl.enableVertexAttribArray(location);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enableVertexAttribArray(location);
 </code></pre><p>１つめのコマンドは、WebGLに「データはバッファから渡す」と伝えるためのものである。</p>
-<pre class="prettyprint"><code>gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
-</code></pre><p>２つめのコマンドは、「バッファ」を「<code>ARRAY_BUFFER</code>バインドポイント」に
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
+</code></pre><p>２つめのコマンドは、「バッファ」を「<code class="notranslate" translate="no">ARRAY_BUFFER</code>バインドポイント」に
 バインドする(バインド(bind)は「結びつける」といった意味である)。
-<code>ARRAY_BUFFER</code>は、WebGLが内部で定義しているグローバル変数である。</p>
-<pre class="prettyprint"><code>gl.vertexAttribPointer(
+<code class="notranslate" translate="no">ARRAY_BUFFER</code>は、WebGLが内部で定義しているグローバル変数である。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.vertexAttribPointer(
     location,
     numComponents,
     typeOfData,
@@ -534,7 +534,7 @@ var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 </code></pre><p>３つめのコマンドは、「現在ARRAY_BUFFERバインドポイントに結びつけられているバッファ
 からデータを取得する」ように、WebGLに対して命令するもので、「numComponents：１つの
 頂点に対していくつコンポーネントがあるか(1個～4個)」、「typeOfData：データの型
-(<code>BYTE</code>, <code>FLOAT</code>, <code>INT</code>, <code>UNSIGNED_SHORT</code>など)はどれか」、
+(<code class="notranslate" translate="no">BYTE</code>, <code class="notranslate" translate="no">FLOAT</code>, <code class="notranslate" translate="no">INT</code>, <code class="notranslate" translate="no">UNSIGNED_SHORT</code>など)はどれか」、
 「strideToNextPieceOfData：次のデータまで何バイトあるか」、
 「offsetIntoBuffer：オフセット」といった、データ取得に必要な情報が添えられる。</p>
 <p>numComponentsは常に１個から４個である。</p>

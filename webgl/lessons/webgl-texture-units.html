@@ -220,13 +220,13 @@ as well as <a href="webgl-3d-textures.html">WebGL Textures</a></p>
 <h2 id="texture-units">Texture Units</h2>
 <p>In WebGL there are textures. Textures are most often 2D arrays of data you can pass to a shader.
 In the shader you declare a <em>uniform sampler</em> like this</p>
-<pre class="prettyprint"><code class="lang-glsl">uniform sampler2D someTexture;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">uniform sampler2D someTexture;
 </code></pre>
-<p>But how does the shader know which texture to use for <code>someTexture</code>?</p>
+<p>But how does the shader know which texture to use for <code class="notranslate" translate="no">someTexture</code>?</p>
 <p>That&#39;s where texture units come in. Texture units are a <strong>global array</strong> of
 references to textures. You can imagine if WebGL was written in JavaScript
 it would have some global state that looks like this</p>
-<pre class="prettyprint"><code class="lang-js">const gl = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const gl = {
   activeTextureUnit: 0,
   textureUnits: [
     { TEXTURE_2D: null, TEXTURE_CUBE_MAP: null, },
@@ -241,9 +241,9 @@ it would have some global state that looks like this</p>
   ];
 }
 </code></pre>
-<p>You can see above <code>textureUnits</code> is an array. You assign a texture to one of the <em>bind points</em> in that array
-of texture units. Let&#39;s assign <code>ourTexture</code> to texture unit 5.</p>
-<pre class="prettyprint"><code class="lang-js">// at init time
+<p>You can see above <code class="notranslate" translate="no">textureUnits</code> is an array. You assign a texture to one of the <em>bind points</em> in that array
+of texture units. Let&#39;s assign <code class="notranslate" translate="no">ourTexture</code> to texture unit 5.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// at init time
 const ourTexture = gl.createTexture();
 // insert code it init texture here.
 
@@ -255,11 +255,11 @@ gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 </code></pre>
 <p>You then tell the shader which texture unit you bound the texture to by calling </p>
-<pre class="prettyprint"><code class="lang-js">gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 </code></pre>
-<p>If <code>activeTexture</code> and <code>bindTexture</code> WebGL functions were implemented in JavaScript they&#39;d look
+<p>If <code class="notranslate" translate="no">activeTexture</code> and <code class="notranslate" translate="no">bindTexture</code> WebGL functions were implemented in JavaScript they&#39;d look
 something like:</p>
-<pre class="prettyprint"><code class="lang-js">// PSEUDO CODE!!!
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// PSEUDO CODE!!!
 gl.activeTexture = function(unit) {
   gl.activeTextureUnit = unit - gl.TEXTURE0;  // convert to 0 based index
 };
@@ -269,10 +269,10 @@ gl.bindTexture = function(target, texture) {
   textureUnit[target] = texture;
 }:
 </code></pre>
-<p>You can even imagine how other texture functions work. They all take a <code>target</code>
-like <code>gl.texImage2D(target, ...)</code> or <code>gl.texParameteri(target)</code>. Those would
+<p>You can even imagine how other texture functions work. They all take a <code class="notranslate" translate="no">target</code>
+like <code class="notranslate" translate="no">gl.texImage2D(target, ...)</code> or <code class="notranslate" translate="no">gl.texParameteri(target)</code>. Those would
 be implemented something like</p>
-<pre class="prettyprint"><code class="lang-js">// PSEUDO CODE!!!
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// PSEUDO CODE!!!
 gl.texImage2D = function(target, level, internalFormat, width, height, border, format, type, data) {
   const textureUnit = gl.textureUnits[gl.activeTextureUnit];
   const texture = textureUnit[target];
@@ -285,34 +285,34 @@ gl.texParameteri = function(target, pname, value) {
   texture[pname] = value; 
 }
 </code></pre>
-<p>It should be clear from the example pseudo code above <code>gl.activeTexture</code> sets an
+<p>It should be clear from the example pseudo code above <code class="notranslate" translate="no">gl.activeTexture</code> sets an
 internal global variable inside WebGL to an index of the array of texture units.
-From that point on, all the other texture functions take a <code>target</code>, the first
+From that point on, all the other texture functions take a <code class="notranslate" translate="no">target</code>, the first
 argument in every texture function, that references the bind point of the
 current texture unit.</p>
 <h2 id="maximum-texture-units">Maximum Texture Units</h2>
 <p>WebGL requires an implementation to support at least 8 texture units. You can query how many
 are supported with</p>
-<pre class="prettyprint"><code class="lang-js">const maxTextureUnits = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxTextureUnits = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 </code></pre>
 <p>Note that vertex shaders and fragment shaders might have different limits
 on how many units each can use. You can query the limits for each with</p>
-<pre class="prettyprint"><code class="lang-js">const maxVertexShaderTextureUnits = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxVertexShaderTextureUnits = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
 const maxFragmentShaderTextureUnits = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
 </code></pre>
 <p>Let&#39;s say </p>
-<pre class="prettyprint"><code class="lang-js">maxTextureUnits = 8
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">maxTextureUnits = 8
 maxVertexShaderTextureUnits = 4
 maxFragmentShaderTextureUnits = 8
 </code></pre>
 <p>This means if you use for example 2 texture units in your vertex shader
 there are only 6 left to use in your fragment shader since the combined
 maximum is 8.</p>
-<p>One other thing to note is that WebGL allows <code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>
+<p>One other thing to note is that WebGL allows <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>
 to return 0!!! In other words, <strong>it&#39;s possible some devices don&#39;t support using textures in
 vertex shaders at all</strong>. Fortunately <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">that situation appears to be rare</a>
 but if you do decide to use some textures in a vertex shader you probably want to
-check <code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code> actually supports enough
+check <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code> actually supports enough
 for your needs and notify the user if not.</p>
 
     </div>

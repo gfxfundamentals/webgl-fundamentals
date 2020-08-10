@@ -225,7 +225,7 @@ GPUの特性を活かすため、これらの関数はGPU専用の言語で記�
 <p>これらの関数をコンパイル、リンクするという手順は必ず行います。
 また、そのためのコードはほとんどのWebGLアプリケーションで共通です。</p>
 <p>これは、「シェーダーをコンパイルする」ためのコードのひな型(Boilerplate code)です。</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * シェーダーを生成、コンパイルする。
  *
  * @param {!WebGLRenderingContext} gl WebGLコンテキスト。
@@ -254,7 +254,7 @@ function compileShader(gl, shaderSource, shaderType) {
   return shader;
 }
 </code></pre><p>そしてこれは「2つのシェーダーをプログラムにリンクする」コードのひな型です。</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * 2つのシェーダーからプログラムを生成する。
  *
  * @param {!WebGLRenderingContext) gl WebGLコンテキスト。
@@ -288,7 +288,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 しかし、ここに挙げた短いコードは、「ほとんど全てのWebGLプログラムで共通」です。</p>
 <p>私は、シェーダーのコードを&lt;script&gt;タグを使って書く方法を好んで使っています。
 この方法を使う場合、以下のようなコードで処理することになります。</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * script要素に書かれた内容からシェーダーを生成する。
  *
  * @param {!WebGLRenderingContext} gl WebGLコンテキスト。
@@ -322,10 +322,10 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
   return compileShader(gl, shaderSource, opt_shaderType);
 };
 </code></pre><p>以下のコードでシェーダーをコンパイルできます。</p>
-<pre class="prettyprint"><code>var shader = createShaderFromScript(gl, &quot;someScriptTagId&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var shader = createShaderFromScript(gl, &quot;someScriptTagId&quot;);
 </code></pre><p>私がよく使うのは、さらに一歩踏み込んで「二つのシェーダーをそれぞれの書かれた
 script要素から読み込んでコンパイルし、プログラムにアタッチ、リンクまで行う関数」です。</p>
-<pre class="prettyprint"><code>/**
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * 二つのscript要素を使ってWebGLProgramを生成する。
  *
  * @param {!WebGLRenderingContext} gl WebGLコンテキスト。
@@ -345,11 +345,11 @@ function createProgramFromScripts(
 このコードの実装内容については<a href="webgl-resizing-the-canvas.html">このドキュメント</a>
 で紹介しています。</p>
 <h2 id="-">ひな形コードの利用</h2>
-<p>以上、２つのひな形コードは<code>webgl-utils.js</code>として一つにまとめてあります。
+<p>以上、２つのひな形コードは<code class="notranslate" translate="no">webgl-utils.js</code>として一つにまとめてあります。
 これを利用するには、</p>
-<pre class="prettyprint"><code>&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
 </code></pre><p>といったコードで取り込んだ上で、以下のようなコードで呼び出します。</p>
-<pre class="prettyprint"><code>var program = webglUtils.createProgramFromScripts(
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var program = webglUtils.createProgramFromScripts(
   gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
 ...
@@ -360,7 +360,7 @@ webglUtils.resizeCanvasToMatchDisplaySize(canvas);
 「そのサンプルが何のために書かれたサンプルなのか判りにくく
 なってしまう」のは本末転倒で、避けるべきであるとと思います。</p>
 <p>以上で、私の「最小のWebGLひな型コード(boilerplate code)」のおおまかな紹介を終わります。
-<a href="../../resources/webgl-utils.js"><code>webgl-utils.js</code>のコードはここにあります</a>。</p>
+<a href="../../resources/webgl-utils.js"><code class="notranslate" translate="no">webgl-utils.js</code>のコードはここにあります</a>。</p>
 <p>さらにしっかり構成されたライブラリに興味があるようでしたら<a href="https://twgljs.org">TWGL.js</a>
 をチェックしてください。</p>
 <p>WebGLを複雑に見せているもう一つの要素は「シェーダーにデータを渡す手順」です。
@@ -370,23 +370,23 @@ webglUtils.resizeCanvasToMatchDisplaySize(canvas);
 <a href="https://twgljs.org">TWGL</a>も参考になるはずです。</p>
 <p>以上のほかにも、同様の理由で作られたスクリプトがあるので紹介しておきます。</p>
 <ul>
-<li><p><a href="../../resources/webgl-lessons-ui.js"><code>webgl-lessons-ui.js</code></a></p>
+<li><p><a href="../../resources/webgl-lessons-ui.js"><code class="notranslate" translate="no">webgl-lessons-ui.js</code></a></p>
 <p>このスクリプトは、スライダを使って数値をセットしたり視覚化したりするためのものです。
 講義の中でよく使う機能なのでこのファイルにまとめました。</p>
 </li>
-<li><p><a href="../../resources/lessons-helper.js"><code>lessons-helper.js</code></a></p>
+<li><p><a href="../../resources/lessons-helper.js"><code class="notranslate" translate="no">lessons-helper.js</code></a></p>
 <p>このスクリプトは、webglfundmentals.org以外では必要ないでしょう。
 ほかのものに埋め込まれたlive editor上で使うと、エラーメッセージを
 画面に表示することができます。</p>
 </li>
-<li><p><a href="../../resources/m3.js"><code>m3.js</code></a></p>
+<li><p><a href="../../resources/m3.js"><code class="notranslate" translate="no">m3.js</code></a></p>
 <p>このスクリプトには、二次元を扱う計算関連の関数が多数定義されています。
 これらの関数は、このサイトの行列計算の最初の講義で作り始め、いくつかの章の中で
 追加していったものです。
 より応用的な話題を扱う章では、同じものを一から書くのは話が複雑になるだけなので
 このスクリプトにまとめて使っています。</p>
 </li>
-<li><p><a href="../../resources/m4.js"><code>m4.js</code></a></p>
+<li><p><a href="../../resources/m4.js"><code class="notranslate" translate="no">m4.js</code></a></p>
 <p>このスクリプトには、三次元を扱う計算関連の関数が多数定義されています。
 これらの関数は、このサイトの３Ｄ関連の講義の中で作ったものです。
 ３Ｄ関連の２番目の記事からは、このスクリプトを利用しています。</p>

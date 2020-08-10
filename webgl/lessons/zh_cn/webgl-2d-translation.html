@@ -220,12 +220,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 用<a href="webgl-fundamentals.html">第一篇文章</a>中的代码，你可以改变传递给 setRectangle
 的值，移动矩形的位置。这里有个例子基于<a href="webgl-fundamentals.html">前一个例子</a>。</p>
 <p>首先我们来定义一些变量存储矩形的平移，宽，高和颜色。</p>
-<pre class="prettyprint"><code>  var translation = [0, 0];
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  var translation = [0, 0];
   var width = 100;
   var height = 30;
   var color = [Math.random(), Math.random(), Math.random(), 1];
 </code></pre><p>然后定义一个方法重绘所有东西，我们可以在更新变换之后调用这个方法。</p>
-<pre class="prettyprint"><code>  // 绘制场景
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 绘制场景
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -268,8 +268,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     var count = 6;
     gl.drawArrays(primitiveType, offset, count);
   }
-</code></pre><p>在下方的例子中，我添加了一对滑块，当它们值改变时会更新<code>translation[0]</code> 和 <code>translation[1]</code>
-并且调用<code>drawScene</code>方法。拖动滑块来平移矩形。</p>
+</code></pre><p>在下方的例子中，我添加了一对滑块，当它们值改变时会更新<code class="notranslate" translate="no">translation[0]</code> 和 <code class="notranslate" translate="no">translation[1]</code>
+并且调用<code class="notranslate" translate="no">drawScene</code>方法。拖动滑块来平移矩形。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-translate.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle-translate.html" target="_blank">点此在新窗口中浏览</a>
@@ -279,8 +279,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>到目前为止还不错！但是想象一下如果对一个更复杂的图形做类似操作怎么办。</p>
 <p>假设我们想绘制一个由六个三角形组成的 ‘F’ ，像这样</p>
 <p><img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
-<p>接着当前的代码我们需要修改<code>setRectangle</code>，像这样</p>
-<pre class="prettyprint"><code>// 在缓冲存储构成 &#39;F&#39; 的值
+<p>接着当前的代码我们需要修改<code class="notranslate" translate="no">setRectangle</code>，像这样</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 在缓冲存储构成 &#39;F&#39; 的值
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -318,7 +318,7 @@ function setGeometry(gl, x, y) {
 将会有很复杂的代码。最重要的是，每次绘制JavaScript都要更新所有点。</p>
 <p>这里有个简单的方式，上传几何体然后在着色器中进行平移。</p>
 <p>这是新的着色器</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -332,7 +332,7 @@ void main() {
 *   vec2 zeroToOne = position / u_resolution;
    ...
 </code></pre><p>重构一下代码，首先我们只需要设置一次几何体。</p>
-<pre class="prettyprint"><code>// 在缓冲存储构成 &#39;F&#39; 的值
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 在缓冲存储构成 &#39;F&#39; 的值
 function setGeometry(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -363,8 +363,8 @@ function setGeometry(gl) {
       ]),
       gl.STATIC_DRAW);
 }
-</code></pre><p>然后我们只需要在绘制前更新<code>u_translation</code>为期望的平移量。</p>
-<pre class="prettyprint"><code>  ...
+</code></pre><p>然后我们只需要在绘制前更新<code class="notranslate" translate="no">u_translation</code>为期望的平移量。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var translationLocation = gl.getUniformLocation(
 +             program, &quot;u_translation&quot;);
@@ -393,7 +393,7 @@ function setGeometry(gl) {
 *    var count = 18;
     gl.drawArrays(primitiveType, offset, count);
   }
-</code></pre><p>注意到<code>setGeometry</code>只调用了一次，它不在<code>drawScene</code>内部了。</p>
+</code></pre><p>注意到<code class="notranslate" translate="no">setGeometry</code>只调用了一次，它不在<code class="notranslate" translate="no">drawScene</code>内部了。</p>
 <p>这里是那个例子，同样的，拖动滑块来更新平移量。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-translate-better.html"></iframe>

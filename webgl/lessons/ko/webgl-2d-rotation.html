@@ -236,7 +236,7 @@ X와 Y는 원 위에 있는 점의 위치를 나타내는데요.
 그러므로 &quot;unit circle&quot;에 어떤 값으로 곱할 수 있고 마법이 일어나서 회전하는 걸 제외하고는 1을 곱하는 것과 마찬가지입니다.</p>
 <p>unit circle 위에 있는 어떤 점에서 X와 Y의 값을 가져와서 <a href="webgl-2d-translation.html">이전 예제</a>의 geometry에 곱하려고 하는데요.</p>
 <p>shader에 다시 작성한 내용은 다음과 같습니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
 uniform vec2 u_resolution;
@@ -252,7 +252,7 @@ void main() {
   // 이동 추가
 *  vec2 position = rotatedPosition + u_translation;
 </code></pre><p>그리고 JavaScript를 재작성하면 두 값을 전달할 수 있습니다.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
 
@@ -289,7 +289,7 @@ void main() {
 </p>
 <p>왜 동작할까요?
 음, 수식을 봅시다.</p>
-<pre class="prettyprint"><code>rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </code></pre><p>사각형이 하나 있고 그걸 회전시키고 싶다고 해봅시다.
 회전시키기 전 우측 상단 모서리는 3.0, 9.0 인데요.
@@ -317,17 +317,17 @@ unit circle 위에 12시부터 시계 방향 30도 간격으로 점을 찍어봅
 <p>unit circle 위에 있는 점들은 또 다른 이름을 가지고 있는데요.
 바로 sine 그리고 cosine 입니다.
 그래서 주어진 어떤 각에 대해 우리는 이처럼 sine과 cosine을 찾을 수 있습니다.</p>
-<pre class="prettyprint"><code>function printSineAndCosineForAnAngle(angleInDegrees) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function printSineAndCosineForAnAngle(angleInDegrees) {
   var angleInRadians = angleInDegrees * Math.PI / 180;
   var s = Math.sin(angleInRadians);
   var c = Math.cos(angleInRadians);
   console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
 }
-</code></pre><p>JavaScript console에 코드를 복사 붙여넣고 <code>printSineAndCosignForAngle(30)</code>라고 치면 <code>s = 0.49 c = 0.87</code>라는 출력을 볼 수 있습니다.
+</code></pre><p>JavaScript console에 코드를 복사 붙여넣고 <code class="notranslate" translate="no">printSineAndCosignForAngle(30)</code>라고 치면 <code class="notranslate" translate="no">s = 0.49 c = 0.87</code>라는 출력을 볼 수 있습니다.
 (참고로 저는 반올림했습니다)</p>
 <p>모든 것을 함께 넣으면 도형을 원하는 각도로 회전할 수 있습니다.
 그저 회전하려는 각도의 sine과 cosine으로 rotation을 설정하면 됩니다. </p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var angleInRadians = angleInDegrees * Math.PI / 180;
   rotation[0] = Math.sin(angleInRadians);
   rotation[1] = Math.cos(angleInRadians);
@@ -364,8 +364,8 @@ Degree는 수학을 어렵게 만들고 Radian은 수학을 쉽게 만듭니다.
 원에는 360도가 있지만 radian으로는 2π만 있습니다.
 따라서 한바퀴는 2π radian이고 반바퀴는 1π radian입니다.
 1/4바퀴는 90도면서 1/2π radian 이죠.
-그러니 어떤 것을 90도 회전하고 싶다면 <code>Math.PI * 0.5</code>를 쓰세요.
-만약 45도로 회전하고 싶다면 <code>Math.PI * 0.25</code> 등으로 쓸 수 있습니다.
+그러니 어떤 것을 90도 회전하고 싶다면 <code class="notranslate" translate="no">Math.PI * 0.5</code>를 쓰세요.
+만약 45도로 회전하고 싶다면 <code class="notranslate" translate="no">Math.PI * 0.25</code> 등으로 쓸 수 있습니다.
 </p>
 <p>
 각도, 원 또는 회전을 포함하는 거의 모든 수학은 radian으로 생각하기 시작하면 매우 간단하게 동작합니다.

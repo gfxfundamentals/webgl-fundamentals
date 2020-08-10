@@ -221,7 +221,7 @@ to the vertex shader where the programmer provides code to convert them to clip 
 <p>The word <strong>traditionally</strong> is important. It&#39;s only a <strong>tradition</strong>
 to do it this way. It is in no way a requirement. WebGL doesn&#39;t
 care how we do it, it only cares that our vertex shaders
-assign clip space coordinates to <code>gl_Position</code>.</p>
+assign clip space coordinates to <code class="notranslate" translate="no">gl_Position</code>.</p>
 <p>Let&#39;s draw a texture mapped cube using code like the examples in <a href="webgl-3d-textures.html">the article on textures</a>. 
 We&#39;re told we need at least 24 unique vertices. This is because even though there are only 8 corner
 positions the same corner gets used on 3 different faces of the
@@ -233,7 +233,7 @@ texture coordinates 1,1 but the right face&#39;s use of corner 3 needs texture c
 0,1. The top face would need different texture coordinates as well.</p>
 <p>This is usually accomplished by expanding from 8 corner positions
 to 24 vertices</p>
-<pre class="prettyprint"><code class="lang-js">  // front
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  // front
   { pos: [-1, -1,  1], uv: [0, 1], }, // 0
   { pos: [ 1, -1,  1], uv: [1, 1], }, // 1
   { pos: [-1,  1,  1], uv: [0, 0], }, // 2
@@ -270,7 +270,7 @@ via attributes.</p>
 <p>But do we really need to do it this way? What if
 we wanted to actually have just the 8 corners
 and 4 texture coordinates. Something like</p>
-<pre class="prettyprint"><code class="lang-js">positions = [
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">positions = [
   -1, -1,  1,  // 0
    1, -1,  1,  // 1
   -1,  1,  1,  // 2
@@ -289,7 +289,7 @@ uvs = [
 </code></pre>
 <p>And then for each of the 24 vertices we&#39;d specify which of those
 to use.</p>
-<pre class="prettyprint"><code class="lang-js">positionIndexUVIndex = [
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">positionIndexUVIndex = [
   // front
   0, 1, // 0
   1, 3, // 1
@@ -328,7 +328,7 @@ each to their own textures. First we&#39;ll check for and enable
 floating point textures as this will make it easy
 to put our positions in the texture. Otherwise
 we&#39;d need to encode them in some other way.</p>
-<pre class="prettyprint"><code class="lang-js">const gl = canvas.getContext(&quot;webgl&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const gl = canvas.getContext(&quot;webgl&quot;);
 if (!gl) {
   return;
 }
@@ -340,7 +340,7 @@ if (!gl) {
 </code></pre>
 <p>Then we&#39;ll put the data into a textures like
 we covered in <a href="webgl-data-textures.html">the article on data textures</a>.</p>
-<pre class="prettyprint"><code class="lang-js">function makeDataTexture(gl, data, numComponents) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function makeDataTexture(gl, data, numComponents) {
   // expand the data to 4 values per pixel.
   const numElements = data.length / numComponents;
   const expandedData = new Float32Array(numElements * 4);
@@ -376,10 +376,10 @@ we covered in <a href="webgl-data-textures.html">the article on data textures</a
 const positionTexture = makeDataTexture(gl, positions, 3);
 const texcoordTexture = makeDataTexture(gl, uvs, 2);
 </code></pre>
-<p>Since textures have up to 4 values per pixel <code>makeDataTexture</code>
+<p>Since textures have up to 4 values per pixel <code class="notranslate" translate="no">makeDataTexture</code>
 expands whatever data we give it to 4 values per pixel. </p>
 <p>Next we need up load the position and texcoord indices to a buffer.</p>
-<pre class="prettyprint"><code class="lang-js">// Create a buffer for the position and UV indices
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Create a buffer for the position and UV indices
 const positionIndexUVIndexBuffer = gl.createBuffer();
 // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
 gl.bindBuffer(gl.ARRAY_BUFFER, positionIndexUVIndexBuffer);
@@ -389,7 +389,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positionIndexUVIndex), gl.STATIC
 <p>Even though we only need 24 vertices we still need draw 6 faces, 12 triangles
 each, 3 vertices per triangle for 36 vertices. To tell it which 6 vertices
 to use for each face we&#39;ll use <a href="webgl-indexed-vertices.html">vertex indices</a>.</p>
-<pre class="prettyprint"><code class="lang-js">const indices = [
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const indices = [
    0,  1,  2,   2,  1,  3,  // front
    4,  5,  6,   6,  5,  7,  // right
    8,  9, 10,  10,  9, 11,  // back
@@ -405,8 +405,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW)
 </code></pre>
 <p>As we want to draw an image on the cube itself we need a 3rd texture
 with that image. Let&#39;s just make another 4x4 data texture with a checkerboard.
-We&#39;ll use <code>gl.LUMINANCE</code> as the format since then we only need one byte per pixel.</p>
-<pre class="prettyprint"><code class="lang-js">// Create a checker texture.
+We&#39;ll use <code class="notranslate" translate="no">gl.LUMINANCE</code> as the format since then we only need one byte per pixel.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Create a checker texture.
 const checkerTexture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, checkerTexture);
 // Fill the texture with a 4x4 gray checkerboard.
@@ -433,24 +433,24 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 </code></pre>
 <p>On to the vertex shader... We can look up a pixel from the texture like
 this</p>
-<pre class="prettyprint"><code class="lang-glsl">vec4 texelFetch(sampler2D tex, vec2 texSize, vec2 pixelCoord) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">vec4 texelFetch(sampler2D tex, vec2 texSize, vec2 pixelCoord) {
   vec2 uv = (pixelCoord + 0.5) / texSize;
   return texture2D(tex, uv);
 }
 </code></pre>
 <p>So given an integer pixel coordinate and the size of the texture in pixels the
-code above will pull out a pixel value. If you&#39;re curious why the <code>+ 0.5</code> see <a href="webgl-skinning.html">the
+code above will pull out a pixel value. If you&#39;re curious why the <code class="notranslate" translate="no">+ 0.5</code> see <a href="webgl-skinning.html">the
 article on skinning</a>.</p>
-<p>Using the <code>texelFetch</code> function we can take a 1D array index
+<p>Using the <code class="notranslate" translate="no">texelFetch</code> function we can take a 1D array index
 and lookup a value out of a 2D texture like this</p>
-<pre class="prettyprint"><code class="lang-glsl">vec4 getValueByIndexFromTexture(sampler2D tex, vec2 texSize, float index) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">vec4 getValueByIndexFromTexture(sampler2D tex, vec2 texSize, float index) {
   float col = mod(index, texSize.x);
   float row = floor(index / texSize.x);
   return texelFetch(tex, texSize, vec2(col, row));
 }
 </code></pre>
 <p>So given those 2 functions here is our shader</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute vec2 positionAndTexcoordIndices;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec2 positionAndTexcoordIndices;
 
 uniform sampler2D positionTexture;
 uniform vec2 positionTextureSize;
@@ -490,13 +490,13 @@ void main() {
 </code></pre>
 <p>At the bottom it&#39;s effectively the same shader we used
 in <a href="webgl-3d-textures.html">the article on textures</a>.
-We multiply a <code>position</code> by <code>u_matrix</code> and we output
-a texcoord to <code>v_texcoord</code> to pass on the fragment shader.</p>
+We multiply a <code class="notranslate" translate="no">position</code> by <code class="notranslate" translate="no">u_matrix</code> and we output
+a texcoord to <code class="notranslate" translate="no">v_texcoord</code> to pass on the fragment shader.</p>
 <p>The difference is only in how we get the position and
 texcoord. We&#39;re using the indices passed in and getting
 those values from their respective textures.</p>
 <p>To use the shader we need to lookup all the locations</p>
-<pre class="prettyprint"><code class="lang-js">// setup GLSL program
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup GLSL program
 const program = webglUtils.createProgramFromScripts(gl, [&quot;vertex-shader-3d&quot;, &quot;fragment-shader-3d&quot;]);
 
 +// look up where the vertex data needs to go.
@@ -512,7 +512,7 @@ const program = webglUtils.createProgramFromScripts(gl, [&quot;vertex-shader-3d&
 +const u_textureLoc = gl.getUniformLocation(program, &quot;u_texture&quot;);
 </code></pre>
 <p>At render time we setup the attributes</p>
-<pre class="prettyprint"><code class="lang-js">// Tell it to use our program (pair of shaders)
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Tell it to use our program (pair of shaders)
 gl.useProgram(program);
 
 +// Bind the positionIndexUVIndex buffer.
@@ -536,12 +536,12 @@ gl.useProgram(program);
 <p>Note the size is 2, since there is 1 position index and 1 texcoord
 index per vertex.</p>
 <p>We then setup our vertex indices</p>
-<pre class="prettyprint"><code class="lang-js">// Set our indices
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Set our indices
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 </code></pre>
 <p>Then we need to bind all 3 textures and setup all the
 uniforms</p>
-<pre class="prettyprint"><code class="lang-js">// Set the matrix.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Set the matrix.
 gl.uniformMatrix4fv(matrixLoc, false, matrix);
 
 // put the position texture on texture unit 0
@@ -567,7 +567,7 @@ gl.bindTexture(gl.TEXTURE_2D, checkerTexture);
 gl.uniform1i(u_textureLoc, 2);
 </code></pre>
 <p>And finally draw</p>
-<pre class="prettyprint"><code class="lang-js">// Draw the geometry.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Draw the geometry.
 gl.drawElements(gl.TRIANGLES, 6 * 6, gl.UNSIGNED_SHORT, 0);
 </code></pre>
 <p>And we get a textured cube using only 8 positions and
@@ -582,7 +582,7 @@ gl.drawElements(gl.TRIANGLES, 6 * 6, gl.UNSIGNED_SHORT, 0);
 textures for the positions and texture coordinates.
 Textures can only be so wide. <a href="https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE">How wide is machine
 specific</a> which you can query with </p>
-<pre class="prettyprint"><code class="lang-js">const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
 </code></pre>
 <p>If we wanted to handle more data than that we&#39;d need
 to pick some texture size that fits our data, and spread
@@ -592,9 +592,9 @@ padding the last row to make a rectangle.</p>
 one for positions, one for texture coordinates.
 There is no reason we couldn&#39;t put both data in the
 same texture either interleaved</p>
-<pre class="prettyprint"><code>pos,uv,pos,uv,pos,uv...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">pos,uv,pos,uv,pos,uv...
 </code></pre><p>or in different places in the texture</p>
-<pre class="prettyprint"><code>pos,pos,pos,...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">pos,pos,pos,...
 uv, uv, uv,...
 </code></pre><p>We&#39;d just have to change the math in the vertex shader
 that computes how to pull them out of the texture.</p>
@@ -602,9 +602,9 @@ that computes how to pull them out of the texture.</p>
 The answer is &quot;it depends&quot;. Depending on the GPU this
 might be slower than the more traditional way.</p>
 <p>The point of this article was to point out yet again,
-WebGL doesn&#39;t care how you set <code>gl_Position</code> with
+WebGL doesn&#39;t care how you set <code class="notranslate" translate="no">gl_Position</code> with
 clip space coordinates nor does it care how you set
-<code>gl_FragColor</code>. All it cares is that you set them.
+<code class="notranslate" translate="no">gl_FragColor</code>. All it cares is that you set them.
 Textures are really just 2D arrays of random access
 data.</p>
 <p>When you have a problem you want to solve in WebGL

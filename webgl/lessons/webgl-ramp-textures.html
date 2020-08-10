@@ -222,7 +222,7 @@ we covered how we can use the <em>dot product</em> to compute the angle between
 of the light to the normal of the surface of our model. This provided
 the cosine of the angle between the 2 vectors. The cosine is a value from -1 to +1
 and we used it as a direct multiplier to our color.</p>
-<pre class="prettyprint"><code class="lang-glsl">float light = dot(normal, u_reverseLightDirection);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">float light = dot(normal, u_reverseLightDirection);
 
 gl_FragColor = u_color;
 gl_FragColor.rgb *= light;
@@ -230,7 +230,7 @@ gl_FragColor.rgb *= light;
 <p>This darkens the color to more it faces away from the light.</p>
 <p>What if instead of using that dot product directly we
 used it to look up a value from a 1 dimensional texture?</p>
-<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec3 v_normal;
@@ -262,9 +262,9 @@ void main() {
 +  gl_FragColor *= rampColor;
 }
 </code></pre>
-<p>We need to make a texture. Let&#39;s start with a 2x1 texture. We&#39;ll use the <code>LUMINANCE</code>
+<p>We need to make a texture. Let&#39;s start with a 2x1 texture. We&#39;ll use the <code class="notranslate" translate="no">LUMINANCE</code>
 format which gives us a monochrome texture using only 1 byte per texel.</p>
-<pre class="prettyprint"><code class="lang-js">var tex = gl.createTexture();
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 gl.texImage2D(
     gl.TEXTURE_2D,     // target
@@ -283,9 +283,9 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 </code></pre>
 <p>The colors of the 2 pixels above are dark gray (90) and white (255).
 We also set the texture parameters so there will be no filtering.</p>
-<p>Modifying the sample for the new texture we need to lookup the <code>u_ramp</code>
+<p>Modifying the sample for the new texture we need to lookup the <code class="notranslate" translate="no">u_ramp</code>
 uniform</p>
-<pre class="prettyprint"><code class="lang-js">var worldViewProjectionLocation = gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var worldViewProjectionLocation = gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 var worldInverseTransposeLocation = gl.getUniformLocation(program, &quot;u_worldInverseTranspose&quot;);
 var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 +var rampLocation = gl.getUniformLocation(program, &quot;u_ramp&quot;);
@@ -293,13 +293,13 @@ var reverseLightDirectionLocation =
     gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
 </code></pre>
 <p>and we need to set up the texture when rendering</p>
-<pre class="prettyprint"><code class="lang-js">// bind the texture to active texture unit 0
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// bind the texture to active texture unit 0
 gl.activeTexture(gl.TEXTURE0 + 0);
 gl.bindTexture(gl.TEXTURE_2D, tex);
 // tell the shader that u_ramp should use the texture on texture unit 0
 gl.uniform1i(rampLocation, 0);
 </code></pre>
-<p>I swapped out the data for a 3D <code>F</code> from the light sample with data
+<p>I swapped out the data for a 3D <code class="notranslate" translate="no">F</code> from the light sample with data
 for a low-polygon head. Running it we get this</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-ramp-texture.html"></iframe>
@@ -308,15 +308,15 @@ for a low-polygon head. Running it we get this</p>
 
 </p>
 <p>If you rotate the model you&#39;ll see it looks similar to <a href="https://en.wikipedia.org/wiki/Cel_shading">toon shading</a></p>
-<p>In the example above we set the texture filtering to <code>NEAREST</code> which means
+<p>In the example above we set the texture filtering to <code class="notranslate" translate="no">NEAREST</code> which means
 we just pick the nearest texel from the texture for our color. There are only
 2 texels so if the surface is facing away from the light we get the first color
 (dark gray) and if the surface is facing the toward the light we get the second
-color (white). That color is multiplied with <code>gl_FragColor</code> just like <code>light</code> used
+color (white). That color is multiplied with <code class="notranslate" translate="no">gl_FragColor</code> just like <code class="notranslate" translate="no">light</code> used
 to be.</p>
-<p>Thinking about it if we switch to <code>LINEAR</code> filtering we <em>should</em> get the same
+<p>Thinking about it if we switch to <code class="notranslate" translate="no">LINEAR</code> filtering we <em>should</em> get the same
 result as before using the texture. Let&#39;s try it.</p>
-<pre class="prettyprint"><code class="lang-js">-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 -gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 +gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 +gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -331,18 +331,18 @@ result as before using the texture. Let&#39;s try it.</p>
 <div class="webgl_center"><img src="resources/ramp-vs-light.png" style="width: 598px;"></div>
 
 <p>We can see they are not the same. What&#39;s up?</p>
-<p><code>LINEAR</code> filtering blends between pixels. If we zoom in on a 2 pixel texture
+<p><code class="notranslate" translate="no">LINEAR</code> filtering blends between pixels. If we zoom in on a 2 pixel texture
 with linear filtering we&#39;ll see the issue</p>
 <div class="webgl_center"><img src="resources/linear-texture-interpolation.svg" style="width: 500px;"></div>
 <div class="webgl_center">texture coordinate range for ramp</div>
 
 <p>There&#39;s a half a pixel on each side with no interpolation. Imagine if the texture had
-set <code>TEXTURE_WRAP_S</code> to <code>REPEAT</code>. We&#39;d then expect the left most half of a red pixel to
+set <code class="notranslate" translate="no">TEXTURE_WRAP_S</code> to <code class="notranslate" translate="no">REPEAT</code>. We&#39;d then expect the left most half of a red pixel to
 linearly blend toward green as though the green repeated to the left. But what&#39;s on
-the left is more red since we are using <code>CLAMP_TO_EDGE</code>.</p>
+the left is more red since we are using <code class="notranslate" translate="no">CLAMP_TO_EDGE</code>.</p>
 <p>To really get a ramp we just want to choose values from that center range. We can
 do that with a little math in our shader</p>
-<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec3 v_normal;
@@ -382,13 +382,13 @@ void main() {
 <p>Above we&#39;re basically scaling our uv coordinate so it goes from 0 to 1 over
 1 less than the width of the texture. Then adding half a pixel and converting
 back to normalized texture coordinates.</p>
-<p>We need to lookup the location of <code>u_rampSize</code></p>
-<pre class="prettyprint"><code class="lang-js">var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
+<p>We need to lookup the location of <code class="notranslate" translate="no">u_rampSize</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 var rampLocation = gl.getUniformLocation(program, &quot;u_ramp&quot;);
 +var rampSizeLocation = gl.getUniformLocation(program, &quot;u_rampSize&quot;);
 </code></pre>
 <p>And we need to set it at render time</p>
-<pre class="prettyprint"><code class="lang-js">// bind the texture to active texture unit 0
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// bind the texture to active texture unit 0
 gl.activeTexture(gl.TEXTURE0 + 0);
 gl.bindTexture(gl.TEXTURE_2D, tex);
 // tell the shader that u_ramp should use the texture on texture unit 0
@@ -397,7 +397,7 @@ gl.uniform1i(rampLocation, 0);
 </code></pre>
 <p>Before we run it let&#39;s add a flag so we can compare with and without the
 ramp texture</p>
-<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec3 v_normal;
@@ -439,12 +439,12 @@ void main() {
 }
 </code></pre>
 <p>We&#39;ll look up the location of that uniform too.</p>
-<pre class="prettyprint"><code class="lang-js">var rampLocation = gl.getUniformLocation(program, &quot;u_ramp&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var rampLocation = gl.getUniformLocation(program, &quot;u_ramp&quot;);
 var rampSizeLocation = gl.getUniformLocation(program, &quot;u_rampSize&quot;);
 +var useRampTextureLocation = gl.getUniformLocation(program, &quot;u_useRampTexture&quot;);
 </code></pre>
 <p>and set it</p>
-<pre class="prettyprint"><code class="lang-js">var data = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var data = {
   useRampTexture: true,
 };
 
@@ -469,7 +469,7 @@ gl.uniform2fv(rampSizeLocation, [2, 1]);
 <p>Clicking the &quot;useRampTexture&quot; checkbox we see no change as the two techniques
 now match.</p>
 <blockquote>
-<p>note: I don&#39;t normally recommend using a conditional like <code>u_useRampTexture</code>
+<p>note: I don&#39;t normally recommend using a conditional like <code class="notranslate" translate="no">u_useRampTexture</code>
 in a shader. Instead I recommend making 2 shader programs, one that uses normal lighting
 and one that uses the ramp texture. Unfortunately since the code is not using
 something like <a href="webgl-less-code-more-fun.html">out helper library</a> it would
@@ -479,11 +479,11 @@ the point of this article so in this case I decided to use a conditional.
 In general though I try avoid conditionals to select features in shaders and
 instead create different shaders for different features.</p>
 </blockquote>
-<p>Note: This math is only important if we&#39;re using <code>LINEAR</code> filtering. If we&#39;re using <code>NEAREST</code>
+<p>Note: This math is only important if we&#39;re using <code class="notranslate" translate="no">LINEAR</code> filtering. If we&#39;re using <code class="notranslate" translate="no">NEAREST</code>
 filtering we want the original math.</p>
 <p>Now that we know the ramp math is correct let&#39;s make a bunch of different ramp
 textures.</p>
-<pre class="prettyprint"><code class="lang-js">+// make a 256 array where elements 0 to 127
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">+// make a 256 array where elements 0 to 127
 +// go from 64 to 191 and elements 128 to 255
 +// are all 255.
 +const smoothSolid = new Array(256).fill(255);
@@ -544,11 +544,11 @@ textures.</p>
 +  ramp.size = [width, 1];
 +});
 </code></pre>
-<p>and let&#39;s make the shader so we can handle both <code>NEAREST</code> and <code>LINEAR</code>. Like I mentioned
+<p>and let&#39;s make the shader so we can handle both <code class="notranslate" translate="no">NEAREST</code> and <code class="notranslate" translate="no">LINEAR</code>. Like I mentioned
 above I don&#39;t generally use boolean if statements in shaders but if the difference is
 simple and I can do it without an conditional then I&#39;ll consider using one shader.
-To do that here we can add a float uniform <code>u_linearAdjust</code> that we&#39;ll set to 0.0 or 1.0</p>
-<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+To do that here we can add a float uniform <code class="notranslate" translate="no">u_linearAdjust</code> that we&#39;ll set to 0.0 or 1.0</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec3 v_normal;
@@ -594,13 +594,13 @@ void main() {
 }
 </code></pre>
 <p>at init time look up the location</p>
-<pre class="prettyprint"><code class="lang-js">var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 var rampLocation = gl.getUniformLocation(program, &quot;u_ramp&quot;);
 var rampSizeLocation = gl.getUniformLocation(program, &quot;u_rampSize&quot;);
 +var linearAdjustLocation = gl.getUniformLocation(program, &quot;u_linearAdjust&quot;);
 </code></pre>
 <p>and at render time pick one of the textures</p>
-<pre class="prettyprint"><code class="lang-js">var data = {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var data = {
   ramp: 0,
 };
 
@@ -635,7 +635,7 @@ gl.uniform1i(rampLocation, 0);
 <p>Try the different ramp textures and you&#39;ll see lots of strange effects.
 This is one way make a generic adjusting shader. You could make a shader
 that does 2 color toon shading by setting 2 colors and a threshold like this.</p>
-<pre class="prettyprint"><code class="lang-js">uniform vec4 color1;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">uniform vec4 color1;
 uniform vec4 color2;
 uniform float threshold;
 
@@ -653,10 +653,10 @@ you&#39;d need to write another shader. With a ramp texture you can just
 provide a different texture. Further, notice above, even if you want a 2 step
 toon shader you can still adjust where the step happens just by putting more or less
 data in your texture. For example a texture with</p>
-<pre class="prettyprint"><code>[dark, light]
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">[dark, light]
 </code></pre><p>Gives you a 2 step texture where it splits in the middle between facing toward or away
 the light. But a texture like</p>
-<pre class="prettyprint"><code>[dark, dark, dark, light, light]
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">[dark, dark, dark, light, light]
 </code></pre><p>Would give move the split to the 60% mark between facing away and facing toward the
 light all without having to change the shader.</p>
 <p>This specific example of using a ramp texture for toon shading or strange effects

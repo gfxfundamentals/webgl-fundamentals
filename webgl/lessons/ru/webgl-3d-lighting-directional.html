@@ -264,13 +264,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 является <span style="color: green;">зелёным</span>, а положительное
 значение z становится <span style="color: blue;">синим</span>.</p>
 <p>Добавим нормали к <a href="webgl-3d-camera.html">нашему предыдущему примеру</a>
-для создания освещения. Так как буква <code>F</code> очень угловатая и все грани
+для создания освещения. Так как буква <code class="notranslate" translate="no">F</code> очень угловатая и все грани
 выровнены по осям x, y или z, это будет очень просто. Грани, смотрящие
-вперёд, будут иметь нормали <code>0, 0, 1</code>. Грани, направленные назад, будут
-иметь нормали <code>0, 0, -1</code>. Направленные влево грани получат нормали
-<code>-1, 0, 0</code>, направленные вправо - <code>1, 0, 0</code>, вверх - <code>0, 1, 0</code>, а вниз
-<code>0, -1, 0</code>.</p>
-<pre class="prettyprint"><code>function setNormals(gl) {
+вперёд, будут иметь нормали <code class="notranslate" translate="no">0, 0, 1</code>. Грани, направленные назад, будут
+иметь нормали <code class="notranslate" translate="no">0, 0, -1</code>. Направленные влево грани получат нормали
+<code class="notranslate" translate="no">-1, 0, 0</code>, направленные вправо - <code class="notranslate" translate="no">1, 0, 0</code>, вверх - <code class="notranslate" translate="no">0, 1, 0</code>, а вниз
+<code class="notranslate" translate="no">0, -1, 0</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function setNormals(gl) {
   var normals = new Float32Array([
           // лицо левого столба
           0, 0, 1,
@@ -403,7 +403,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 }
 </code></pre><p>Для того, чтобы можно было лучше рассмотреть освещение, уберём
 цвета в вершинах.</p>
-<pre class="prettyprint"><code>// получаем ссылки на атрибуты
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// получаем ссылки на атрибуты
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 -var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 +var normalLocation = gl.getAttribLocation(program, &quot;a_normal&quot;);
@@ -424,7 +424,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +// Записываем данные в буфер
 +setNormals(gl);
 </code></pre><p>И при рендеринге</p>
-<pre class="prettyprint"><code>-// Включаем атрибут цвета
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-// Включаем атрибут цвета
 -gl.enableVertexAttribArray(colorLocation);
 -
 -// Привязываем буфер цвета
@@ -455,7 +455,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +    normalLocation, size, type, normalize, stride, offset)
 </code></pre><p>Теперь нужно использовать эти данные в шейдерах.</p>
 <p>Сначала в вершинном шейдере нам нужно передать нормали во фрагментный шейдер.</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 -attribute vec4 a_color;
 +attribute vec3 a_normal;
 
@@ -476,7 +476,7 @@ void main() {
 }
 </code></pre><p>А во фрагментном шейдере выполним скалярное умножение направления
 света и нормали.</p>
-<pre class="prettyprint"><code>precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // Передаются из вершинного шейдера
 -varying vec4 v_color;
@@ -499,14 +499,14 @@ void main() {
 +   // освещения
 +   gl_FragColor.rgb *= light;
 }
-</code></pre><p>Затем получаем ссылку на <code>u_color</code> и <code>u_reverseLightDirection</code>.</p>
-<pre class="prettyprint"><code>  // получаем ссылку на uniform-переменные
+</code></pre><p>Затем получаем ссылку на <code class="notranslate" translate="no">u_color</code> и <code class="notranslate" translate="no">u_reverseLightDirection</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // получаем ссылку на uniform-переменные
   var matrixLocation = gl.getUniformLocation(program, &quot;u_matrix&quot;);
 +  var colorLocation = gl.getUniformLocation(program, &quot;u_color&quot;);
 +  var reverseLightDirectionLocation =
 +      gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
 </code></pre><p>и задаём им значения</p>
-<pre class="prettyprint"><code>  // Задаём значение матрицы
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Задаём значение матрицы
   gl.uniformMatrix4fv(matrixLocation, false, worldViewProjectionMatrix);
 
 +  // Устанавливаем цвет
@@ -514,11 +514,11 @@ void main() {
 +
 +  // Задаём направление света
 +  gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0.5, 0.7, 1]));
-</code></pre><p>Функция <code>normalize</code>, которую мы рассматривали ранее, преобразует любое переданное в
+</code></pre><p>Функция <code class="notranslate" translate="no">normalize</code>, которую мы рассматривали ранее, преобразует любое переданное в
 неё значение в единичный вектор. В рассмотренном примере используются следующие значения:
-<code>x = 0.5</code>, положительное значение <code>x</code> означает, что свет находится справа и направлен влево;
-<code>y = 0.7</code>, положительное значение <code>y</code> означает, что свет находится сверху и направлен вниз;
-<code>z = 1</code>, положительное значение <code>z</code> означает, что свет находится впереди и указывает на сцену.
+<code class="notranslate" translate="no">x = 0.5</code>, положительное значение <code class="notranslate" translate="no">x</code> означает, что свет находится справа и направлен влево;
+<code class="notranslate" translate="no">y = 0.7</code>, положительное значение <code class="notranslate" translate="no">y</code> означает, что свет находится сверху и направлен вниз;
+<code class="notranslate" translate="no">z = 1</code>, положительное значение <code class="notranslate" translate="no">z</code> означает, что свет находится впереди и указывает на сцену.
 Относительные значения задают направление света главным образом на сцену -
 сильнее вниз и немного меньше влево.</p>
 <p>И вот результат.</p>
@@ -532,11 +532,11 @@ void main() {
 Но самыми яркими должны быть те части, которые направлены на камеру.</p>
 <p>Для того, чтобы исправить эту ситуацию, нам нужно переориентировать нормали
 при изменении положения объекта. Как и в случае с вершинами, мы можем умножить
-нормали на матрицу. Наиболее очевидным выбором будет <code>мировая</code> матрица.
-Сейчас мы передаём одну матрицу <code>u_matrix</code>. А будем передавать 2 матрицы.
-Одна, <code>u_world</code>, будет мировой матрицей. Другая, <code>u_worldViewProjection</code>,
-будет выполнять роль прежней <code>u_matrix</code>.</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+нормали на матрицу. Наиболее очевидным выбором будет <code class="notranslate" translate="no">мировая</code> матрица.
+Сейчас мы передаём одну матрицу <code class="notranslate" translate="no">u_matrix</code>. А будем передавать 2 матрицы.
+Одна, <code class="notranslate" translate="no">u_world</code>, будет мировой матрицей. Другая, <code class="notranslate" translate="no">u_worldViewProjection</code>,
+будет выполнять роль прежней <code class="notranslate" translate="no">u_matrix</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 *uniform mat4 u_worldViewProjection;
@@ -551,16 +551,16 @@ void main() {
 *  // Направляем нормали и передаём во фрагментный шейдер
 *  v_normal = mat3(u_world) * a_normal;
 }
-</code></pre><p>Заметьте, что мы умножаем <code>a_normal</code> на <code>mat3(u_world)</code>. Нормали -
+</code></pre><p>Заметьте, что мы умножаем <code class="notranslate" translate="no">a_normal</code> на <code class="notranslate" translate="no">mat3(u_world)</code>. Нормали -
 это направления, поэтому нам не важен перенос. Направление занимает
 лишь верхнюю часть 3х3 матрицы.</p>
 <p>Теперь получим ссылки на эти uniform-переменные</p>
-<pre class="prettyprint"><code>  // получаем ссылки на uniform-переменные
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // получаем ссылки на uniform-переменные
 *  var worldViewProjectionLocation =
 *      gl.getUniformLocation(program, &quot;u_worldViewProjection&quot;);
 +  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 </code></pre><p>Затем обновим код, который их устанавливает.</p>
-<pre class="prettyprint"><code>*// Задаём значения матрицам
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*// Задаём значения матрицам
 *gl.uniformMatrix4fv(
 *    worldViewProjectionLocation, false,
 *    worldViewProjectionMatrix);
@@ -574,8 +574,8 @@ void main() {
 </p>
 <p>Теперь при повороте F подсвечиваются те грани, которые направлены на наблюдателя.</p>
 <p>Существует одна проблема, которую я не могу показать на демо, поэтому
-покажу на картинке. Для переориентации нормалей мы умножаем <code>normal</code> на
-матрицу <code>u_world</code>. Но что произойдёт при масштабировании мировой матрицы?
+покажу на картинке. Для переориентации нормалей мы умножаем <code class="notranslate" translate="no">normal</code> на
+матрицу <code class="notranslate" translate="no">u_world</code>. Но что произойдёт при масштабировании мировой матрицы?
 Ответ - мы получим неверные нормали.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 600px; height: 300px;" src="/webgl/lessons/resources/normals-scaled.html"></iframe>
@@ -603,9 +603,9 @@ void main() {
 транспонированной от мировой матрицы.</p>
 <p>В соответствии с вышеизложенным изменим код нашего примера. Для начала
 обновим код шейдера. Технически мы могли бы просто обновить значение
-<code>u_world</code>, но лучше нам переименовать переменные, чтобы они отражали
+<code class="notranslate" translate="no">u_world</code>, но лучше нам переименовать переменные, чтобы они отражали
 своё предназначение и чтобы мы не запутывались.</p>
-<pre class="prettyprint"><code>attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
 uniform mat4 u_worldViewProjection;
@@ -621,11 +621,11 @@ void main() {
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 </code></pre><p>Получаем ссылки на переменные</p>
-<pre class="prettyprint"><code>-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-  var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
 +  var worldInverseTransposeLocation =
 +      gl.getUniformLocation(program, &quot;u_worldInverseTranspose&quot;);
 </code></pre><p>А затем вычисляем значения и устанавливаем их переменным</p>
-<pre class="prettyprint"><code>var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var worldViewProjectionMatrix = m4.multiply(viewProjectionMatrix, worldMatrix);
 var worldInverseMatrix = m4.inverse(worldMatrix);
 var worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
@@ -638,7 +638,7 @@ gl.uniformMatrix4fv(
 +    worldInverseTransposeLocation, false,
 +    worldInverseTransposeMatrix);
 </code></pre><p>Теперь код транспонирования матрицы</p>
-<pre class="prettyprint"><code>var m4 = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   transpose: function(m) {
     return [
       m[0], m[4], m[8], m[12],
@@ -670,14 +670,14 @@ v_normal = mat3(u_worldInverseTranspose) * a_normal;
 <pre class="prettyprint">
 v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
 </pre>
-<p>Установка <code>w</code> в значение 0 пред умножением приведёт к
+<p>Установка <code class="notranslate" translate="no">w</code> в значение 0 пред умножением приведёт к
 умножению значения переноса из матрицы на 0, то есть уберёт его. Думаю,
 что это более распространённый подход. Просто мне кажется, что mat3
 выглядит аккуратней, хотя я использовал и другой подход тоже.</p>
-<p>Ещё можно использовать тип <code>mat3</code> для <code>u_worldInverseTranspose</code>.
+<p>Ещё можно использовать тип <code class="notranslate" translate="no">mat3</code> для <code class="notranslate" translate="no">u_worldInverseTranspose</code>.
 Но есть 2 причины, почему так делать не следует. Во-первых, нам может
-понадобиться полная версия <code>u_worldInverseTranspose</code>, то есть
-в некоторых случаях нам нужна <code>mat4</code>. Во-вторых, все функции
+понадобиться полная версия <code class="notranslate" translate="no">u_worldInverseTranspose</code>, то есть
+в некоторых случаях нам нужна <code class="notranslate" translate="no">mat4</code>. Во-вторых, все функции
 JavaScript работают с матрицами 4x4. Делать второй набор функций для работы
 с матрицами 3x3 или даже конвертировать матрицы 4x4 в 3x3 (и всё только
 для того, чтобы покрыть этот единственный случай) - это не целесообразно.

@@ -215,19 +215,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>This article assumes you&#39;ve at least read
 <a href="webgl-fundamentals.html">the article on fundamentals</a>. If
 you have not read that yet you should probably start there.</p>
-<p>This is a short article to cover <code>gl.drawElements</code>. There are 2
-basic drawing functions in WebGL. <code>gl.drawArrays</code> and <code>gl.drawElements</code>.
+<p>This is a short article to cover <code class="notranslate" translate="no">gl.drawElements</code>. There are 2
+basic drawing functions in WebGL. <code class="notranslate" translate="no">gl.drawArrays</code> and <code class="notranslate" translate="no">gl.drawElements</code>.
 Most of the articles on the site that explicitly call one or the other
-call <code>gl.drawArrays</code> as it&#39;s the most straight forward.</p>
-<p><code>gl.drawElements</code> on the other hand uses a buffer filled with
+call <code class="notranslate" translate="no">gl.drawArrays</code> as it&#39;s the most straight forward.</p>
+<p><code class="notranslate" translate="no">gl.drawElements</code> on the other hand uses a buffer filled with
 vertex indices and draws based on that.</p>
 <p>Let&#39;s take the example that draws rectangles from
 <a href="webgl-fundamentals.html">the first article</a> and make it use
-<code>gl.drawElements</code></p>
+<code class="notranslate" translate="no">gl.drawElements</code></p>
 <p>In that code we created a rectangle from 2 triangles, 3 vertices
 each for a total of 6 vertices. </p>
 <p>Here was our code that provided 6 vertex positions</p>
-<pre class="prettyprint"><code class="lang-js">  var x1 = x;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  var x1 = x;
   var x2 = x + width;
   var y1 = y;
   var y2 = y + height;
@@ -241,7 +241,7 @@ each for a total of 6 vertices. </p>
   ]), gl.STATIC_DRAW);
 </code></pre>
 <p>We can instead use data for 4 vertices</p>
-<pre class="prettyprint"><code class="lang-js">  var x1 = x;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  var x1 = x;
   var x2 = x + width;
   var y1 = y;
   var y2 = y + height;
@@ -255,9 +255,9 @@ each for a total of 6 vertices. </p>
 <p>But, then we need to add another buffer with indices because WebGL still
 requires that to draw 2 triangles we must tell it to draw 6 vertices in total.</p>
 <p>To do this we create another buffer but we use a different binding point.
-Instead of the <code>ARRAY_BUFFER</code> binding point we use the <code>ELEMENT_ARRAY_BUFFER</code>
+Instead of the <code class="notranslate" translate="no">ARRAY_BUFFER</code> binding point we use the <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code>
 binding point which is always used for indices.</p>
-<pre class="prettyprint"><code class="lang-js">// create the buffer
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// create the buffer
 const indexBuffer = gl.createBuffer();
 
 // make this buffer the current &#39;ELEMENT_ARRAY_BUFFER&#39;
@@ -276,14 +276,14 @@ gl.bufferData(
 </code></pre>
 <p>Like all data in WebGL we need a specific representation for the 
 indices. We convert the indices to unsigned 16 bit integers with
-<code>new Uint16Array(indices)</code> and then upload them to the buffer.</p>
+<code class="notranslate" translate="no">new Uint16Array(indices)</code> and then upload them to the buffer.</p>
 <p>At draw time we need to bind whatever buffer holds the indices we
 want to use.</p>
-<pre class="prettyprint"><code class="lang-js">  // bind the buffer containing the indices
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  // bind the buffer containing the indices
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 </code></pre>
-<p>And then draw with <code>drawElements</code></p>
-<pre class="prettyprint"><code class="lang-js">// Draw the rectangle.
+<p>And then draw with <code class="notranslate" translate="no">drawElements</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Draw the rectangle.
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
 var count = 6;
@@ -310,11 +310,11 @@ same position is used 3 times, once for each face a vertex touches, you&#39;d st
 need to repeat the position, once for each different face, each with a different
 associated color. That would mean you&#39;d need 24 vertices for a cube, 4 for each
 side and then 36 indices to draw the required 12 triangles.</p>
-<p>Note that valid types for <code>indexType</code> above in WebGL1 are only <code>gl.UNSIGNED_BYTE</code>
-where you can only have indices from 0 to 255, and, <code>gl.UNSIGNED_SHORT</code> where
-the maximum index is 65535. There is an extension, <code>OES_element_index_uint</code> you can
-check for and enable which allows <code>gl.UNSIGNED_INT</code> and indices up to 4294967296.</p>
-<pre class="prettyprint"><code class="lang-js">const ext = gl.getExtension(&#39;OES_element_index_uint&#39;);
+<p>Note that valid types for <code class="notranslate" translate="no">indexType</code> above in WebGL1 are only <code class="notranslate" translate="no">gl.UNSIGNED_BYTE</code>
+where you can only have indices from 0 to 255, and, <code class="notranslate" translate="no">gl.UNSIGNED_SHORT</code> where
+the maximum index is 65535. There is an extension, <code class="notranslate" translate="no">OES_element_index_uint</code> you can
+check for and enable which allows <code class="notranslate" translate="no">gl.UNSIGNED_INT</code> and indices up to 4294967296.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const ext = gl.getExtension(&#39;OES_element_index_uint&#39;);
 if (!ext) {
   // fall back to using gl.UNSIGNED_SHORT or tell the user they are out of luck
 }
@@ -322,7 +322,7 @@ if (!ext) {
 <p>According to WebGLStats <a href="https://webglstats.com/webgl/extension/OES_element_index_uint">nearly all devices support this extension</a>.</p>
 <div class="webgl_bottombar">
 <p>
-Note: Above we bind the <code>indexBuffer</code> to the <code>ELEMENT_ARRAY_BUFFER</code> binding point when
+Note: Above we bind the <code class="notranslate" translate="no">indexBuffer</code> to the <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code> binding point when
 putting the indices in the buffer then we bind it again later. Why bind it twice?
 </p>
 <p>

@@ -218,11 +218,11 @@ of how attribute state is setup in WebGL. There is <a href="webgl-texture-units.
 and <a href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">WebGL Shaders and GLSL</a>. </p>
 <h2 id="attributes">Attributes</h2>
 <p>In WebGL attributes are inputs to a vertex shader that get their data from buffers.
-WebGL will execute a user supplied vertex shader N times when either <code>gl.drawArrays</code> or <code>gl.drawElements</code> is called. 
+WebGL will execute a user supplied vertex shader N times when either <code class="notranslate" translate="no">gl.drawArrays</code> or <code class="notranslate" translate="no">gl.drawElements</code> is called. 
 For each iteration the attributes define how to pull the data out of the buffers bound to them 
 and supply them to the attributes inside the vertex shader.</p>
 <p>If they were implemented in JavaScript they would look something like this</p>
-<pre class="prettyprint"><code class="lang-js">// pseudo code
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// pseudo code
 const gl = {
   arrayBuffer: null,
   vertexArray: {
@@ -241,8 +241,8 @@ const gl = {
 }
 </code></pre>
 <p>As you can see above there are 8 attributes.</p>
-<p>When you call <code>gl.enableVertexAttribArray(location)</code> or <code>gl.disableVertexAttribArray</code> you can think of it like this</p>
-<pre class="prettyprint"><code class="lang-js">// pseudo code
+<p>When you call <code class="notranslate" translate="no">gl.enableVertexAttribArray(location)</code> or <code class="notranslate" translate="no">gl.disableVertexAttribArray</code> you can think of it like this</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// pseudo code
 gl.enableVertexAttribArray = function(location) {
   const attrib = gl.vertexArray.attributes[location];
   attrib.enable = true;
@@ -254,9 +254,9 @@ gl.disableVertexAttribArray = function(location) {
 };
 </code></pre>
 <p>In other words location directly refers to the index of an attribute.</p>
-<p>Similarly <code>gl.vertexAttribPointer</code> is used to set almost all the rest
+<p>Similarly <code class="notranslate" translate="no">gl.vertexAttribPointer</code> is used to set almost all the rest
 of an attribute&#39;s settings. It would be implemented something like this</p>
-<pre class="prettyprint"><code class="lang-js">// pseudo code
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// pseudo code
 gl.vertexAttribPointer = function(location, size, type, normalize, stride, offset) {
   const attrib = gl.vertexArray.attributes[location];
   attrib.size = size;
@@ -267,11 +267,11 @@ gl.vertexAttribPointer = function(location, size, type, normalize, stride, offse
   attrib.buffer = gl.arrayBuffer;  // !!!! &lt;-----
 };
 </code></pre>
-<p>Notice that when we call <code>gl.vertexAttribPointer</code> that <code>attrib.buffer</code> 
-is set to whatever the current <code>gl.arrayBuffer</code> is set to. 
-<code>gl.arrayBuffer</code> in the pseudo code above would be set by 
-calling <code>gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer)</code>.</p>
-<pre class="prettyprint"><code class="lang-js">// pseudo code
+<p>Notice that when we call <code class="notranslate" translate="no">gl.vertexAttribPointer</code> that <code class="notranslate" translate="no">attrib.buffer</code> 
+is set to whatever the current <code class="notranslate" translate="no">gl.arrayBuffer</code> is set to. 
+<code class="notranslate" translate="no">gl.arrayBuffer</code> in the pseudo code above would be set by 
+calling <code class="notranslate" translate="no">gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer)</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// pseudo code
 gl.bindBuffer = function(target, buffer) {
   switch (target) {
     case ARRAY_BUFFER:
@@ -284,7 +284,7 @@ gl.bindBuffer = function(target, buffer) {
 };
 </code></pre>
 <p>So, next up we have vertex shaders. In vertex shader you declare attributes. Example:</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute vec4 position;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 position;
 attribute vec2 texcoord;
 attribute vec3 normal;
 
@@ -295,64 +295,64 @@ void main() {
 }
 </code></pre>
 <p>When you link a vertex shader with a fragment shader by calling
-<code>gl.linkProgram(someProgram)</code> WebGL (the driver/GPU/browser) decide on their own
+<code class="notranslate" translate="no">gl.linkProgram(someProgram)</code> WebGL (the driver/GPU/browser) decide on their own
 which index/location to use for each attribute. Unless you manually assign
 locations (see below) you have no idea which ones they&#39;re going to pick. It&#39;s up
 to the browser/driver/GPU. So, you have to ask it which attribute did you use
 for position, texcoord, and normal?. You do this by calling
-<code>gl.getAttribLocation</code></p>
-<pre class="prettyprint"><code class="lang-js">const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
+<code class="notranslate" translate="no">gl.getAttribLocation</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
 const texcoordLoc = gl.getAttribLocation(program, &#39;texcoord&#39;);
 const normalLoc = gl.getAttribLocation(program, &#39;normal&#39;);
 </code></pre>
-<p>Let&#39;s say <code>positionLoc</code> = <code>5</code>. That means when the vertex shader executes (when
-you call <code>gl.drawArrays</code> or<code>gl.drawElements</code>) the vertex shader expects you to
+<p>Let&#39;s say <code class="notranslate" translate="no">positionLoc</code> = <code class="notranslate" translate="no">5</code>. That means when the vertex shader executes (when
+you call <code class="notranslate" translate="no">gl.drawArrays</code> or<code class="notranslate" translate="no">gl.drawElements</code>) the vertex shader expects you to
 have setup attribute 5 with the correct type, size, offset, stride, buffer etc.</p>
 <p>Note that BEFORE you link the program you can choose the locations by calling
-<code>gl.bindAttribLocation(program, location, nameOfAttribute)</code>. Example:</p>
-<pre class="prettyprint"><code class="lang-js">// Tell `gl.linkProgram` to assign `position` to use attribute #7
+<code class="notranslate" translate="no">gl.bindAttribLocation(program, location, nameOfAttribute)</code>. Example:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Tell `gl.linkProgram` to assign `position` to use attribute #7
 gl.bindAttribLocation(program, 7, &#39;position&#39;);
 </code></pre>
 <h2 id="full-attribute-state">Full Attribute State</h2>
 <p>Missing from the description above is that each attribute also has a default
 value. It is left out above because it is uncommon to use it.</p>
-<pre class="prettyprint"><code class="lang-js">attributes: [
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
    　divisor: 0, value: [0, 0, 0, 1], },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
    　divisor: 0, value: [0, 0, 0, 1], },
    ..
 </code></pre>
-<p>You can set each attribute&#39;s value with the various <code>gl.vertexAttribXXX</code>
-functions. The value is used when <code>enable</code> is false. When enable is true data for
+<p>You can set each attribute&#39;s value with the various <code class="notranslate" translate="no">gl.vertexAttribXXX</code>
+functions. The value is used when <code class="notranslate" translate="no">enable</code> is false. When enable is true data for
 the attribute is pulled from the assigned buffer.</p>
 <p><a id="vaos"></a></p>
 <h2 id="vertex-array-objects-vao-s">Vertex Array Objects (VAO)s</h2>
-<p>WebGL has an extension, <code>OES_vertex_array_object</code></p>
-<p>In the diagram above the <code>OES_vertex_array_object</code> extension lets you create and
-replace the <code>vertexArray</code>. In other words</p>
-<pre class="prettyprint"><code class="lang-js">const vao = ext.createVertexArrayOES();
+<p>WebGL has an extension, <code class="notranslate" translate="no">OES_vertex_array_object</code></p>
+<p>In the diagram above the <code class="notranslate" translate="no">OES_vertex_array_object</code> extension lets you create and
+replace the <code class="notranslate" translate="no">vertexArray</code>. In other words</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const vao = ext.createVertexArrayOES();
 </code></pre>
-<p>creates the object you see attached to <code>gl.vertexArray</code> in the <em>pseudo code</em>
-above. Calling <code>ext.bindVertexArrayOES(vao)</code> assigns your created vertex array
+<p>creates the object you see attached to <code class="notranslate" translate="no">gl.vertexArray</code> in the <em>pseudo code</em>
+above. Calling <code class="notranslate" translate="no">ext.bindVertexArrayOES(vao)</code> assigns your created vertex array
 object as the current vertex array.</p>
-<pre class="prettyprint"><code class="lang-js">// pseudo code
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// pseudo code
 ext.bindVertexArrayOES = function(vao) {
   gl.vertexArray = vao ? vao : defaultVAO;
 };
 </code></pre>
-<p>This lets you set all of the attributes and the <code>ELEMENT_ARRAY_BUFFER</code> in the
+<p>This lets you set all of the attributes and the <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code> in the
 current VAO so that when you want to draw a particular shape it&#39;s one call to
-<code>ext.bindVertexArrayOES</code> to effectively setup
+<code class="notranslate" translate="no">ext.bindVertexArrayOES</code> to effectively setup
 all attributes where as without the extension it would be up to one call to both
-<code>gl.bindBuffer</code>, <code>gl.vertexAttribPointer</code> (and possibly
-<code>gl.enableVertexAttribArray</code>) <strong>per attribute</strong>.</p>
+<code class="notranslate" translate="no">gl.bindBuffer</code>, <code class="notranslate" translate="no">gl.vertexAttribPointer</code> (and possibly
+<code class="notranslate" translate="no">gl.enableVertexAttribArray</code>) <strong>per attribute</strong>.</p>
 <p>You can see it&#39;s arguably a good thing to use vertex array objects. 
 To use them though often requires more organization. For example let&#39;s stay you want to 
-draw a cube with <code>gl.TRIANGLES</code> with one shader and then again with <code>gl.LINES</code>
+draw a cube with <code class="notranslate" translate="no">gl.TRIANGLES</code> with one shader and then again with <code class="notranslate" translate="no">gl.LINES</code>
 with a different shader. Let&#39;s say when you draw with triangles you use
 normals for lighting so you declare attributes in your shader like this:</p>
-<pre class="prettyprint"><code class="lang-glsl">// lighting-shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// lighting-shader
 // shader for cube drawn with triangles
 
 attribute vec4 a_position;
@@ -364,25 +364,25 @@ attribute vec3 a_normal;
 do something similar to the first shaders on <a href="webgl-fundamentals.html">the first page</a> of these
 tutorials. You declare a uniform for color. That means in your
 vertex shader you only need position</p>
-<pre class="prettyprint"><code class="lang-glsl">// solid-shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// solid-shader
 // shader for cube with lines
 
 attribute vec4 a_position;
 </code></pre>
 <p>We have no idea what attribute locations will be decided for each shader.
 Let&#39;s assume for lighting-shader above the locations are</p>
-<pre class="prettyprint"><code>a_position location = 1
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">a_position location = 1
 a_normal location = 0
 </code></pre><p>and for the solid-shader which only has one attribute it&#39;s</p>
-<pre class="prettyprint"><code>a_position location = 0
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">a_position location = 0
 </code></pre><p>It&#39;s clear when switching shaders we&#39;ll need to setup our attributes differently.
-One shader expects <code>a_position</code>&#39;s data to appear on attribute 0. The other shader
+One shader expects <code class="notranslate" translate="no">a_position</code>&#39;s data to appear on attribute 0. The other shader
 expects it to appear on attribute 1.</p>
 <p>Resetting up the attributes is extra work. Worse, the entire point of using a
 vertex array object is to save us not having to do that work. To fix this issue
 we&#39;d bind the locations before linking the shader programs. </p>
 <p>We&#39;d tell WebGL</p>
-<pre class="prettyprint"><code class="lang-js">gl.bindAttribLocation(solidProgram, 0, &#39;a_position&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.bindAttribLocation(solidProgram, 0, &#39;a_position&#39;);
 gl.bindAttribLocation(lightingProgram, 0, &#39;a_position&#39;);
 gl.bindAttribLocation(lightingProgram, 1, &#39;a_normal&#39;);
 </code></pre>
@@ -392,7 +392,7 @@ Now we can use the same VAO for both shaders. </p>
 <p>WebGL requires that at least 8 attributes are supported but a particular
 computer/browser/implementation/driver can support more. You can find out
 how many are supported by calling</p>
-<pre class="prettyprint"><code class="lang-js">const maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 </code></pre>
 <p>If you decide to use more than 8 you probably want to check how
 many are actually supported and inform the user if their

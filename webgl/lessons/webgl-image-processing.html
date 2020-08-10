@@ -229,7 +229,7 @@ shader as it draws each pixel using the fragment shader.</p>
 <p>Using <a href="webgl-fundamentals.html">the vertex shader from the end of the previous post</a>
 we need to add an attribute to pass in texture coordinates and then pass those
 on to the fragment shader.</p>
-<pre class="prettyprint"><code>attribute vec2 a_texCoord;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_texCoord;
 ...
 varying vec2 v_texCoord;
 
@@ -240,7 +240,7 @@ void main() {
    v_texCoord = a_texCoord;
 }
 </code></pre><p>Then we supply a fragment shader to look up colors from the texture.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // our texture
@@ -258,7 +258,7 @@ void main() {
 the texture. Because we are in a browser images load asynchronously so we
 have to re-arrange our code a little to wait for the texture to load. Once
 it loads we&#39;ll draw it.</p>
-<pre class="prettyprint"><code>function main() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function main() {
   var image = new Image();
   image.src = &quot;http://someimage/on/our/server&quot;;  // MUST BE SAME DOMAIN!!!
   image.onload = function() {
@@ -310,7 +310,7 @@ up in couple of minutes</a>.</p>
 
 </p>
 <p>Not too exciting so let&#39;s manipulate that image. How about just swapping red and blue?</p>
-<pre class="prettyprint"><code>...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 ...
 </code></pre><p>And now red and blue are swapped.</p>
@@ -323,10 +323,10 @@ gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 <p>What if we want to do image processing that actually looks at other pixels?
 Since WebGL references textures in texture coordinates which go from 0.0 to 1.0
 then we can calculate how much to move for 1 pixel with the simple math
-<code>onePixel = 1.0 / textureSize</code>.</p>
+<code class="notranslate" translate="no">onePixel = 1.0 / textureSize</code>.</p>
 <p>Here&#39;s a fragment shader that averages the left and right pixels of each pixel
 in the texture.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // our texture
@@ -348,7 +348,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>We then need to pass in the size of the texture from JavaScript.</p>
-<pre class="prettyprint"><code>...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 
 var textureSizeLocation = gl.getUniformLocation(program, &quot;u_textureSize&quot;);
 
@@ -375,7 +375,7 @@ And <a href="https://www.codeproject.com/KB/graphics/ImageConvolution.aspx">here
 hand in C++</a>.</p>
 <p>In our case we&#39;re going to do that work in the shader so here&#39;s the new fragment
 shader.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 // our texture
@@ -406,7 +406,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>In JavaScript we need to supply a convolution kernel and its weight</p>
-<pre class="prettyprint"><code> function computeKernelWeight(kernel) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> function computeKernelWeight(kernel) {
    var weight = kernel.reduce(function(prev, curr) {
        return prev + curr;
    });
@@ -435,7 +435,7 @@ void main() {
 <p>I hope this article has convinced you image processing in WebGL is pretty simple.
 Next up I&#39;ll go over <a href="webgl-image-processing-continued.html">how to apply more than one effect to the image</a>.</p>
 <div class="webgl_bottombar">
-<h3><code>u_image</code> is never set. How does that work?</h3>
+<h3><code class="notranslate" translate="no">u_image</code> is never set. How does that work?</h3>
 <p>
 Uniforms default to 0 so u_image defaults to using texture unit 0.
 Texture unit 0 is also the default active texture so calling bindTexture
@@ -456,7 +456,7 @@ var u_imageLoc = gl.getUniformLocation(
 gl.uniform1i(u_imageLoc, textureUnitIndex);
 </pre>
 <p>
-To set textures on different units you call <code>gl.activeTexture</code> and then
+To set textures on different units you call <code class="notranslate" translate="no">gl.activeTexture</code> and then
 bind the texture you want on that unit. Example
 </p>
 <pre class="prettyprint showlinemods">
@@ -477,8 +477,8 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 All WebGL implementations are required to support at least 8 texture units
 in fragment shaders but only 0 in vertex shaders. So if you want to use
 more than 8 you should check how many there are by calling
-<code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code> or if you want to use
-textures in a vertex shader call <code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>
+<code class="notranslate" translate="no">gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code> or if you want to use
+textures in a vertex shader call <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>
 to find out how many you can use. Over 99% of machines support at least 4
 texture units in vertex shaders.
 </p>

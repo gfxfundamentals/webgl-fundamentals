@@ -240,7 +240,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 вспомнить, что мы умножали матрицы для выполнения переноса, поворота и
 масштабирования объектов. А структура графа сцены позволяет помочь с выбором
 матрицы, которую необходимо применить к тому или иному объекту.</p>
-<p>Обычно каждый <code>узел</code> в графе сцены представляет собой <em>локальное пространство</em>.
+<p>Обычно каждый <code class="notranslate" translate="no">узел</code> в графе сцены представляет собой <em>локальное пространство</em>.
 При использовании верной матрицы объекты <em>локального пространства</em> могут
 игнорировать всё, что находится выше по графу. Другими словами, Луну должно
 заботить только вращение вокруг Земли. Вращение вокруг Солнца - это уже не
@@ -256,11 +256,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 затем построить орбиту вокруг Земли, это просто. Граф сцены сам позаботится о
 том, что Земля вращается вокруг Солнца. Это происходит за счёт обхода по узлам
 графа и за счёт умножения матриц при обходе.</p>
-<pre class="prettyprint"><code>worldMatrix = greatGrandParent * grandParent * parent * self(localMatrix)
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">worldMatrix = greatGrandParent * grandParent * parent * self(localMatrix)
 </code></pre><p>На конкретном примере нашей вселенной получится</p>
-<pre class="prettyprint"><code>worldMatrixForMoon = galaxyMatrix * starMatrix * planetMatrix * moonMatrix;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">worldMatrixForMoon = galaxyMatrix * starMatrix * planetMatrix * moonMatrix;
 </code></pre><p>Мы можем очень просто добиться такого поведения через рекурсивную функцию</p>
-<pre class="prettyprint"><code>function computeWorldMatrix(currentNode, parentWorldMatrix) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function computeWorldMatrix(currentNode, parentWorldMatrix) {
     // вычисляем нашу мировую матрицу через умножение
     // локальной матрицы на мировую матрицу родителя
     var worldMatrix = m4.multiply(parentWorldMatrix, currentNode.localMatrix);
@@ -272,20 +272,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 }
 </code></pre><p>Обозначим терминологию, которая достаточно распространена для графа сцены в 3D.</p>
 <ul>
-<li><p><code>localMatrix</code>: Локальная матрица текущей вершины. Она преобразует саму
+<li><p><code class="notranslate" translate="no">localMatrix</code>: Локальная матрица текущей вершины. Она преобразует саму
 вершину и её потомков в локальное пространство с центром в этой вершине.</p>
 </li>
-<li><p><code>worldMatrix</code>: Для данной вершины всё, что находится в локальном пространстве,
+<li><p><code class="notranslate" translate="no">worldMatrix</code>: Для данной вершины всё, что находится в локальном пространстве,
 преобразовывается в пространство корневой вершины графа сцены. Другими словами,
 всё помещается в мировое пространство. Если мы вычислим worldMatrix для
 Луны, мы получим эту причудливую орбиту, которую вы видели на картинке выше.</p>
 </li>
 </ul>
-<p>Граф сцены сделать достаточно просто. Определим объект <code>Node</code>. Есть несметное
+<p>Граф сцены сделать достаточно просто. Определим объект <code class="notranslate" translate="no">Node</code>. Есть несметное
 количество путей для организации графа сцены, и я не могу сказать, какой из
 них лучший. Наиболее распространён способ, когда у вас есть необязательное поле
 для хранения объектов, которые будут добавляться на сцену.</p>
-<pre class="prettyprint"><code>var node = {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var node = {
    localMatrix: ...,  // локальная матрица данной вершины
    worldMatrix: ...,  // мировая матрица данной вершины
    children: [],      // массив дочерних элементов
@@ -295,13 +295,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 текстуры и другие подобные вещи, так как это отвлечёт нас от основной темы.
 Для начала обзаведёмся функциями для управления вершинами. Первое, что нам
 понадобится - класс вершины.</p>
-<pre class="prettyprint"><code>var Node = function() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var Node = function() {
   this.children = [];
   this.localMatrix = m4.identity();
   this.worldMatrix = m4.identity();
 };
 </code></pre><p>Создадим сеттер для родителя вершины.</p>
-<pre class="prettyprint"><code>Node.prototype.setParent = function(parent) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">Node.prototype.setParent = function(parent) {
   // открепляемся от текущего родителя
   if (this.parent) {
     var ndx = this.parent.children.indexOf(this);
@@ -320,7 +320,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 положения вершины в иерархии. Если мы начнём с родителя и рекурсивно обойдём
 всех потомков, мы получим их мировые матрицы. Если математика матриц вам
 непонятна, <a href="webgl-2d-matrices.html">советую начать со статьи про неё</a>.</p>
-<pre class="prettyprint"><code>Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
   if (parentWorldMatrix) {
     // матрица была передана, поэтому выполняем умножение
     // и сохраняем результат в `this.worldMatrix`
@@ -341,9 +341,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 пропорции в значениях расстояний между объектами, иначе объекты не
 поместятся на экране. У нас будет простая сферическая модель жёлтого цвета
 для Солнца, зелёно-голубая сфера для Земли и серая сфера для Луны.
-Если <code>drawInfo</code>, <code>bufferInfo</code> и <code>programInfo</code> вам незнакомы, рекомендую
+Если <code class="notranslate" translate="no">drawInfo</code>, <code class="notranslate" translate="no">bufferInfo</code> и <code class="notranslate" translate="no">programInfo</code> вам незнакомы, рекомендую
 <a href="webgl-drawing-multiple-things.html">ознакомиться с предыдущей статьёй</a>.</p>
-<pre class="prettyprint"><code>// создаём все вершины
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// создаём все вершины
 var sunNode = new Node();
 sunNode.localMatrix = m4.translation(0, 0, 0);  // в центре - Солнце
 sunNode.drawInfo = {
@@ -377,11 +377,11 @@ moonNode.drawInfo = {
   bufferInfo: sphereBufferInfo,
 };
 </code></pre><p>Установим связи между узлами.</p>
-<pre class="prettyprint"><code>// connect the celestial objects
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// connect the celestial objects
 moonNode.setParent(earthNode);
 earthNode.setParent(sunNode);
 </code></pre><p>Снова создадим список объектов и список объектов для отрисовки.</p>
-<pre class="prettyprint"><code>var objects = [
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var objects = [
   sunNode,
   earthNode,
   moonNode,
@@ -394,16 +394,16 @@ var objectsToDraw = [
 ];
 </code></pre><p>При рендеринге будем обновлять локальную матрицу каждого объекта,
 слегка поворачивая его.</p>
-<pre class="prettyprint"><code>// обновляем локальную матрицу каждого объекта
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// обновляем локальную матрицу каждого объекта
 m4.multiply(m4.yRotation(0.01), sunNode.localMatrix  , sunNode.localMatrix);
 m4.multiply(m4.yRotation(0.01), earthNode.localMatrix, earthNode.localMatrix);
 m4.multiply(m4.yRotation(0.01), moonNode.localMatrix , moonNode.localMatrix);
 </code></pre><p>После того, как локальные матрицы обновлены, мы обновим все
 мировые матрицы.</p>
-<pre class="prettyprint"><code>sunNode.updateWorldMatrix();
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">sunNode.updateWorldMatrix();
 </code></pre><p>Наконец, мы получили мировые матрицы, и нам нужно умножить их для получения
 <a href="webgl-3d-perspective.html">матрицы worldViewProjection</a> для каждого объекта.</p>
-<pre class="prettyprint"><code>// получаем все матрицы для рендеринга
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// получаем все матрицы для рендеринга
 objects.forEach(function(object) {
   object.drawInfo.uniforms.u_matrix = m4.multiply(viewProjectionMatrix, object.worldMatrix);
 });
@@ -416,7 +416,7 @@ objects.forEach(function(object) {
 
 </p>
 <p>Все объекты у нас получились одного размера. Попробуем сделать Землю больше.</p>
-<pre class="prettyprint"><code>// Землю расположим в 100 единицах от Солнца
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Землю расположим в 100 единицах от Солнца
 earthNode.localMatrix = m4.translation(100, 0, 0);
 // делаем Землю в два раза больше
 earthNode.localMatrix = m4.scale(earthNode.localMatrix, 2, 2, 2);
@@ -428,13 +428,13 @@ earthNode.localMatrix = m4.scale(earthNode.localMatrix, 2, 2, 2);
 </p>
 <p>Ой, Луна тоже стала больше. Можно, конечно, вручную сделать Луну меньше.
 Но лучшим решением будет добавление вершин в наш граф сцены. Вместо</p>
-<pre class="prettyprint"><code>  Солнце
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  Солнце
    |
   Земля
    |
   Луна
 </code></pre><p>У нас будет</p>
-<pre class="prettyprint"><code> СолнечнаяСистема
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> СолнечнаяСистема
    |    |
    |   Солнце
    |
@@ -448,14 +448,14 @@ earthNode.localMatrix = m4.scale(earthNode.localMatrix, 2, 2, 2);
 </code></pre><p>Это позволит Земле по-прежнему вращаться в солнечной системе, но
 теперь при изменении угла вращения Солнца или его масштаба это никак не
 скажется на Земле. Аналогично Земля может вращаться независимо от Луны.
-Создадим вершины для <code>solarSystem</code>, <code>earthOrbit</code> и <code>moonOrbit</code>.</p>
-<pre class="prettyprint"><code>var solarSystemNode = new Node();
+Создадим вершины для <code class="notranslate" translate="no">solarSystem</code>, <code class="notranslate" translate="no">earthOrbit</code> и <code class="notranslate" translate="no">moonOrbit</code>.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var solarSystemNode = new Node();
 var earthOrbitNode = new Node();
 earthOrbitNode.localMatrix = m4.translation(100, 0, 0);  // Землю расположим в 100 единицах от Солнца
 var moonOrbitNode = new Node();
 moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // Луну расположим в 20 единицах от Земли
 </code></pre><p>Эти расстояния до орбиты больше не нужны в старых вершинах</p>
-<pre class="prettyprint"><code>var earthNode = new Node();
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var earthNode = new Node();
 -// Землю расположим в 100 единицах от Солнца
 -earthNode.localMatrix = m4.translation(100, 0, 0);
 -// делаем Землю в два раза больше
@@ -465,14 +465,14 @@ moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // Луну распол�
 var moonNode = new Node();
 -moonNode.localMatrix = m4.translation(20, 0, 0);  // Луну расположим в 20 единицах от Земли
 </code></pre><p>Теперь связи между ними выглядят так</p>
-<pre class="prettyprint"><code>// соединяем небесные объекты
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// соединяем небесные объекты
 sunNode.setParent(solarSystemNode);
 earthOrbitNode.setParent(solarSystemNode);
 earthNode.setParent(earthOrbitNode);
 moonOrbitNode.setParent(earthOrbitNode);
 moonNode.setParent(moonOrbitNode);
 </code></pre><p>Теперь нам нужно обновить орбиты</p>
-<pre class="prettyprint"><code>// обновляем локальную матрицу каждого объекта
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// обновляем локальную матрицу каждого объекта
 -m4.multiply(m4.yRotation(0.01), sunNode.localMatrix  , sunNode.localMatrix);
 -m4.multiply(m4.yRotation(0.01), earthNode.localMatrix, earthNode.localMatrix);
 -m4.multiply(m4.yRotation(0.01), moonNode.localMatrix , moonNode.localMatrix);
@@ -491,7 +491,7 @@ moonNode.setParent(moonOrbitNode);
 </p>
 <p>Вы также могли заметить, что Солнце и Земля более не вращаются вместе, они независимы.</p>
 <p>Сделаем ещё несколько улучшений</p>
-<pre class="prettyprint"><code>-sunNode.localMatrix = m4.translation(0, 0, 0);  // Солнце в центре
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-sunNode.localMatrix = m4.translation(0, 0, 0);  // Солнце в центре
 +sunNode.localMatrix = m4.scaling(5, 5, 5);
 
 ...
@@ -514,12 +514,12 @@ matrixMultiply(sunNode.localMatrix, m4.yRotation(0.005), sunNode.localMatrix);
 </div>
 
 </p>
-<p>Сейчас у нас есть <code>localMatrix</code>, и каждый кадр мы её изменяем. Однако,
+<p>Сейчас у нас есть <code class="notranslate" translate="no">localMatrix</code>, и каждый кадр мы её изменяем. Однако,
 здесь кроется небольшая проблема - каждый кадр мы накапливаем ошибку.
 Есть способ для устранения этой ошибки, который называется <em>ортонормализация
 матрицы</em>, но даже он не всегда помогает. Представим, что мы масштабируем до
-нуля, а затем обратно. Возьмём только значение <code>x</code></p>
-<pre class="prettyprint"><code>x = 246;       // кадр #0, x = 246
+нуля, а затем обратно. Возьмём только значение <code class="notranslate" translate="no">x</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">x = 246;       // кадр #0, x = 246
 
 scale = 1;
 x = x * scale  // кадр #1, x = 246
@@ -536,9 +536,9 @@ x = x * scale  // кадр #4, x = 0  ОЙ!
 scale = 1;
 x = x * scale  // кадр #5, x = 0  ОЙ!
 </code></pre><p>Мы потеряли своё значение. Можно исправить ситуацию через добавление ещё одного
-класса, который обновляет матрицу из других значений. Определим <code>Node</code>, чтобы у
-него был <code>source</code>. Если он существует, попросим <code>source</code> дать нам локальную матрицу.</p>
-<pre class="prettyprint"><code>*var Node = function(source) {
+класса, который обновляет матрицу из других значений. Определим <code class="notranslate" translate="no">Node</code>, чтобы у
+него был <code class="notranslate" translate="no">source</code>. Если он существует, попросим <code class="notranslate" translate="no">source</code> дать нам локальную матрицу.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*var Node = function(source) {
   this.children = [];
   this.localMatrix = m4.identity();
   this.worldMatrix = m4.identity();
@@ -555,7 +555,7 @@ Node.prototype.updateWorldMatrix = function(matrix) {
   ...
 </code></pre><p>Теперь создадим источник (source). Обычно источник определяет перенос,
 поворот и масштабирование примерно следующим образом</p>
-<pre class="prettyprint"><code>var TRS = function() {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var TRS = function() {
   this.translation = [0, 0, 0];
   this.rotation = [0, 0, 0];
   this.scale = [1, 1, 1];
@@ -576,7 +576,7 @@ TRS.prototype.getMatrix = function(dst) {
   return dst;
 };
 </code></pre><p>Теперь можно использовать источник</p>
-<pre class="prettyprint"><code>// при инициализации создаём вершину с источником
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// при инициализации создаём вершину с источником
 var someTRS  = new TRS();
 var someNode = new Node(someTRS);
 
@@ -602,7 +602,7 @@ someTRS.rotation[2] += elapsedTime;
 пальцем, чтобы сэкономить время (как художника, так и процессора/видеокарты)
 и память.</p>
 <p>Так или иначе, посмотрите на парня из блоков, которого я смастерил. В нём
-используется источник <code>TRS</code>, о котором я говорил выше. Искусство и анимация
+используется источник <code class="notranslate" translate="no">TRS</code>, о котором я говорил выше. Искусство и анимация
 от программиста, это победа! :P</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-scene-graph-block-guy.html"></iframe>
@@ -613,21 +613,21 @@ someTRS.rotation[2] += elapsedTime;
 <p>На какую бы 3D-библиотеку вы не взглянули, в ней вы найдёте похожий граф сцены.</p>
 <div class="webgl_bottombar">
 <h3>SetParent против AddChild / RemoveChild</h3>
-<p>Многие графы сцены содержат функции <code>node.addChild</code> и <code>node.removeChild</code>,
-но я использую функцию <code>node.setParent</code>. Какой из этих подходов лучше - дело
-вкуса, однако я приведу одну причину, когда <code>setParent</code> лучше, чем <code>addChild</code> -
+<p>Многие графы сцены содержат функции <code class="notranslate" translate="no">node.addChild</code> и <code class="notranslate" translate="no">node.removeChild</code>,
+но я использую функцию <code class="notranslate" translate="no">node.setParent</code>. Какой из этих подходов лучше - дело
+вкуса, однако я приведу одну причину, когда <code class="notranslate" translate="no">setParent</code> лучше, чем <code class="notranslate" translate="no">addChild</code> -
 при его использовании невозможно написать следующий неоднозначный код.</p>
 <pre class="prettyprint">
     someParent.addChild(someNode);
     ...
     someOtherParent.addChild(someNode);
 </pre>
-<p>Что означает этот код? Что <code>someNode</code> добавляется и в <code>someParent</code>,
-и в <code>someOtherParent</code>? Но в большинстве графов сцены это невозможно. Тогда при выполнении
-этого кода должна возникнуть ошибка <code>ОШИБКА: Родитель уже задан</code>? Или же <code>someNode</code>
-магическим образом открепится от родителя <code>someParent</code> и прикрепится к родителю
-<code>someOtherParent</code>? Из названия функции <code>addChild</code> нам это остаётся непонятным.</p>
-<p>В <code>setParent</code> такой проблемы нет.</p>
+<p>Что означает этот код? Что <code class="notranslate" translate="no">someNode</code> добавляется и в <code class="notranslate" translate="no">someParent</code>,
+и в <code class="notranslate" translate="no">someOtherParent</code>? Но в большинстве графов сцены это невозможно. Тогда при выполнении
+этого кода должна возникнуть ошибка <code class="notranslate" translate="no">ОШИБКА: Родитель уже задан</code>? Или же <code class="notranslate" translate="no">someNode</code>
+магическим образом открепится от родителя <code class="notranslate" translate="no">someParent</code> и прикрепится к родителю
+<code class="notranslate" translate="no">someOtherParent</code>? Из названия функции <code class="notranslate" translate="no">addChild</code> нам это остаётся непонятным.</p>
+<p>В <code class="notranslate" translate="no">setParent</code> такой проблемы нет.</p>
 <pre class="prettyprint">
     someNode.setParent(someParent);
     ...

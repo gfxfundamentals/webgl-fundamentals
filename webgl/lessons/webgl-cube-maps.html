@@ -227,7 +227,7 @@ Depending on the direction the normal points one of the 6 faces of the cube
 is selected and then within that face the pixels are sampled to produce a color.</p>
 <p>The 6 faces are referenced by their direction from the center of the cube.
 They are</p>
-<pre class="prettyprint"><code class="lang-js">gl.TEXTURE_CUBE_MAP_POSITIVE_X
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.TEXTURE_CUBE_MAP_POSITIVE_X
 gl.TEXTURE_CUBE_MAP_NEGATIVE_X
 gl.TEXTURE_CUBE_MAP_POSITIVE_Y
 gl.TEXTURE_CUBE_MAP_NEGATIVE_Y
@@ -237,7 +237,7 @@ gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
 <p>Let&#39;s make a simple example, we&#39;ll use a 2D canvas to make the images used in
 each of the 6 faces.</p>
 <p>Here&#39;s some code to fill a canvas with a color and a centered message</p>
-<pre class="prettyprint"><code class="lang-js">function generateFace(ctx, faceColor, textColor, text) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function generateFace(ctx, faceColor, textColor, text) {
   const {width, height} = ctx.canvas;
   ctx.fillStyle = faceColor;
   ctx.fillRect(0, 0, width, height);
@@ -249,7 +249,7 @@ each of the 6 faces.</p>
 }
 </code></pre>
 <p>And here&#39;s some code to call it to generate 6 images</p>
-<pre class="prettyprint"><code class="lang-js">// Get A 2D context
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Get A 2D context
 /** @type {Canvas2DRenderingContext} */
 const ctx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
 
@@ -285,7 +285,7 @@ faceInfos.forEach((faceInfo) =&gt; {
 <p>Now let&#39;s apply that to a cube. We&#39;ll start with the code
 from the texture atlas example <a href="webgl-3d-textures.html">in the previous article</a>.</p>
 <p>First off let&#39;s change the shaders to use a cube map</p>
-<pre class="prettyprint"><code class="lang-glsl">attribute vec4 a_position;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 
 uniform mat4 u_matrix;
 
@@ -319,10 +319,10 @@ vertex for each face.</p>
 </p>
 <p>Since we&#39;re not using texture coordinates we can remove all code related to
 setting up the texture coordinates.</p>
-<p>In the fragment shader we need to use a <code>samplerCube</code> instead of a <code>sampler2D</code><br>and use <code>textureCube</code> instead of <code>texture2D</code>. <code>textureCube</code> takes a vec3 direction
+<p>In the fragment shader we need to use a <code class="notranslate" translate="no">samplerCube</code> instead of a <code class="notranslate" translate="no">sampler2D</code><br>and use <code class="notranslate" translate="no">textureCube</code> instead of <code class="notranslate" translate="no">texture2D</code>. <code class="notranslate" translate="no">textureCube</code> takes a vec3 direction
 so we pass the normalized normal. Since the normal is a varying and will be interpolated
 we need to normalize it again.</p>
-<pre class="prettyprint"><code class="lang-glsl">precision mediump float;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 // Passed in from the vertex shader.
 varying vec3 v_normal;
@@ -335,7 +335,7 @@ void main() {
 }
 </code></pre>
 <p>Then, in the JavaScript we need to setup the texture</p>
-<pre class="prettyprint"><code class="lang-js">// Create a texture.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Create a texture.
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
@@ -370,16 +370,16 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 </code></pre>
 <p>Things to notice above:</p>
 <ul>
-<li><p>We are using <code>gl.TEXTURE_CUBE_MAP</code> instead of <code>gl.TEXTURE_2D</code>.</p>
+<li><p>We are using <code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP</code> instead of <code class="notranslate" translate="no">gl.TEXTURE_2D</code>.</p>
 <p>This tells WebGL to make a cube map instead of a 2D texture.</p>
 </li>
 <li><p>To upload each face of the texture we use special targets.</p>
-<p><code>gl.TEXTURE_CUBE_MAP_POSITIVE_X</code>,
-<code>gl.TEXTURE_CUBE_MAP_NEGATIVE_X</code>,
-<code>gl.TEXTURE_CUBE_MAP_POSITIVE_Y</code>,
-<code>gl.TEXTURE_CUBE_MAP_NEGATIVE_Y</code>,
-<code>gl.TEXTURE_CUBE_MAP_POSITIVE_Z</code>, and
-<code>gl.TEXTURE_CUBE_MAP_NEGATIVE_Z</code>.</p>
+<p><code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_POSITIVE_X</code>,
+<code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_NEGATIVE_X</code>,
+<code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_POSITIVE_Y</code>,
+<code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_NEGATIVE_Y</code>,
+<code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_POSITIVE_Z</code>, and
+<code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_NEGATIVE_Z</code>.</p>
 </li>
 <li><p>Each face is a square. Above they are 128x128.</p>
 <p>Cubemaps are required to have square textures.

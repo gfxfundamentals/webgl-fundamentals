@@ -234,7 +234,7 @@ WebGL과 OpenGL에서, Framebuffer는 좋은 이름이 아닙니다.
 WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어떤 종류의 buffer도 아닌데요.
 하지만, texture를 framebuffer에 첨부해서 해당 texture로 렌더링할 수 있습니다.</p>
 <p>먼저 <a href="webgl-image-processing.html">오래된 texture 생성 코드</a>를 함수로 바꿔봅시다</p>
-<pre class="prettyprint"><code>  function createAndSetupTexture(gl) {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -251,7 +251,7 @@ WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어
   var originalImageTexture = createAndSetupTexture(gl);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 </code></pre><p>그리고 2개 이상의 c 만드는 함수를 사용해서 framebuffer 2개에 첨부합니다.</p>
-<pre class="prettyprint"><code>  // texture 2개를 만들고 framebuffer에 첨부합니다.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // texture 2개를 만들고 framebuffer에 첨부합니다.
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
@@ -286,7 +286,7 @@ WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어
     );
   }
 </code></pre><p>이제 kernel 집합을 만든 다음 적용할 목록을 만들어봅시다.</p>
-<pre class="prettyprint"><code>  // 여러 convolution kernel 정의
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 여러 convolution kernel 정의
   var kernels = {
     normal: [
       0, 0, 0,
@@ -318,7 +318,7 @@ WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어
     &quot;unsharpen&quot;
   ];
 </code></pre><p>그리고 마지막으로 렌더링할 texture를 주고 받으면서, 하나씩 적용합니다.</p>
-<pre class="prettyprint"><code>  // 원본 이미지로 시작
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 원본 이미지로 시작
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
   // texture에 이미지를 그리는 동안 y축 뒤집지 않기
@@ -367,9 +367,9 @@ WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어
 
 </p>
 <p>넘어가야 할 몇 가지가 있는데요.</p>
-<p><code>null</code>을 넘긴 <code>gl.bindFramebuffer</code>를 호출하는 건 WebGL에게 framebuffer 중 하나 대신에 canvas에 렌더링하고 싶다는 걸 알려줍니다.</p>
+<p><code class="notranslate" translate="no">null</code>을 넘긴 <code class="notranslate" translate="no">gl.bindFramebuffer</code>를 호출하는 건 WebGL에게 framebuffer 중 하나 대신에 canvas에 렌더링하고 싶다는 걸 알려줍니다.</p>
 <p>WebGL은 <a href="webgl-fundamentals.html">clip 공간</a>에서 다시 픽셀로 변환해줘야 하는데요.
-이건 <code>gl.viewport</code>의 설정에 따라 수행됩니다.
+이건 <code class="notranslate" translate="no">gl.viewport</code>의 설정에 따라 수행됩니다.
 렌더링할 framebuffer는 canvas 크기와 다르기 때문에 framebuffer texture를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 canvas를 렌더링할 때 다시 설정합니다.</p>
 <p>최종적으로 렌더링할 때 <a href="webgl-fundamentals.html">원본 예제</a>에서 Y 좌표로 뒤집었는데요.
 그 이유는 WebGL이 0,0이 전통적인 2D에서 왼쪽 상단인 것과 달리 왼쪽 하단으로 canvas를 표시하기 때문입니다.</p>
@@ -377,7 +377,7 @@ WebGL/OpenGL Framebuffer는 실제로 상태의 모음(첨부 목록)일 뿐 어
 왜냐하면 framebuffer는 보여지지 않기 때문에, 어느 부분이 상단/하단인지는 관계가 없습니다.
 중요한 건 framebuffer에서 픽셀 0,0이 우리 계산의 0,0에 상응한다는 겁니다.
 이것을 해결하기 위해 shader에 하나 이상의 입력을 추가해서 뒤집을지 말지를 설정할 수 있습니다.</p>
-<pre class="prettyprint"><code>&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_flipY;
 ...
@@ -391,7 +391,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre><p>그런 다음 렌더링할 때 설정할 수 있습니다.</p>
-<pre class="prettyprint"><code>  ...
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
   var flipYLocation = gl.getUniformLocation(program, &quot;u_flipY&quot;);
 

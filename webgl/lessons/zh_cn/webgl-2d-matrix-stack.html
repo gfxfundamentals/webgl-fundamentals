@@ -214,16 +214,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>此文上接<a href="webgl-2d-drawimage.html">WebGL二维DrawImage</a>，
 如果没读建议从<a href="webgl-2d-drawimage.html">那里开始</a>。</p>
-<p>上篇文章中实现了画布的二维 <code>drawImage</code> 接口，包括可以自定义源矩形和目标矩形。</p>
+<p>上篇文章中实现了画布的二维 <code class="notranslate" translate="no">drawImage</code> 接口，包括可以自定义源矩形和目标矩形。</p>
 <p>还没有实现的是从任意点旋转或/和缩放，我么可以增加参数来实现，
 最少需要一个中心点，旋转角和 x , y 方向缩放量。幸运的是有更普遍和好用的方式，
-画布的二维接口中使用的是一个矩阵栈，它有<code>save</code>, <code>restore</code>, <code>translate</code>,
-<code>rotate</code>, 和 <code>scale</code>方法。</p>
+画布的二维接口中使用的是一个矩阵栈，它有<code class="notranslate" translate="no">save</code>, <code class="notranslate" translate="no">restore</code>, <code class="notranslate" translate="no">translate</code>,
+<code class="notranslate" translate="no">rotate</code>, 和 <code class="notranslate" translate="no">scale</code>方法。</p>
 <p>实现矩阵栈其实很简单，我们创建一个存放矩阵的栈，使用<a href="webgl-2d-matrices.html">之前创建的方法</a>
 生成平移，旋转，缩放矩阵，放在栈中，创建一个方法每次和最顶部的矩阵相乘。</p>
 <p>这是实现。</p>
-<p>首先是构造器和 <code>save</code>, <code>restore</code> 方法。</p>
-<pre class="prettyprint"><code>function MatrixStack() {
+<p>首先是构造器和 <code class="notranslate" translate="no">save</code>, <code class="notranslate" translate="no">restore</code> 方法。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function MatrixStack() {
   this.stack = [];
 
   // 因为栈是空的，需要放入一个初始化矩阵
@@ -244,7 +244,7 @@ MatrixStack.prototype.save = function() {
   this.stack.push(this.getCurrentMatrix());
 };
 </code></pre><p>还需要一个方法获取或设置栈顶的矩阵</p>
-<pre class="prettyprint"><code>// 获取当前矩阵（栈顶的矩阵）
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 获取当前矩阵（栈顶的矩阵）
 MatrixStack.prototype.getCurrentMatrix = function() {
   return this.stack[this.stack.length - 1].slice();
 };
@@ -253,8 +253,8 @@ MatrixStack.prototype.getCurrentMatrix = function() {
 MatrixStack.prototype.setCurrentMatrix = function(m) {
   return this.stack[this.stack.length - 1] = m;
 };
-</code></pre><p>最后使用之前的矩阵方法实现 <code>translate</code>, <code>rotate</code>, 和 <code>scale</code>。</p>
-<pre class="prettyprint"><code>// 平移当前矩阵
+</code></pre><p>最后使用之前的矩阵方法实现 <code class="notranslate" translate="no">translate</code>, <code class="notranslate" translate="no">rotate</code>, 和 <code class="notranslate" translate="no">scale</code>。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 平移当前矩阵
 MatrixStack.prototype.translate = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.translate(m, x, y, z));
@@ -271,9 +271,9 @@ MatrixStack.prototype.scale = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.scale(m, x, y, z));
 };
-</code></pre><p>注意我们使用的是三维矩阵方法，需要在平移时设置 <code>z</code> 为 <code>0</code>，缩放时设置 <code>z</code> 为 <code>1</code>。
-由于我用惯了二维接口，经常忘记设置 <code>z</code> 值，所以就让 <code>z</code> 为可选参数。</p>
-<pre class="prettyprint"><code>// 平移当前矩阵
+</code></pre><p>注意我们使用的是三维矩阵方法，需要在平移时设置 <code class="notranslate" translate="no">z</code> 为 <code class="notranslate" translate="no">0</code>，缩放时设置 <code class="notranslate" translate="no">z</code> 为 <code class="notranslate" translate="no">1</code>。
+由于我用惯了二维接口，经常忘记设置 <code class="notranslate" translate="no">z</code> 值，所以就让 <code class="notranslate" translate="no">z</code> 为可选参数。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 平移当前矩阵
 MatrixStack.prototype.translate = function(x, y, z) {
 +  if (z === undefined) {
 +    z = 0;
@@ -292,8 +292,8 @@ MatrixStack.prototype.scale = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.scale(m, x, y, z));
 };
-</code></pre><p>使用<a href="webgl-2d-drawimage.html">上一节中实现的 <code>drawImage</code></a>这些代码</p>
-<pre class="prettyprint"><code>// 将坐标从像素空间转换到裁剪空间
+</code></pre><p>使用<a href="webgl-2d-drawimage.html">上一节中实现的 <code class="notranslate" translate="no">drawImage</code></a>这些代码</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 将坐标从像素空间转换到裁剪空间
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 // 将矩形平移到 dstX, dstY
@@ -303,9 +303,9 @@ matrix = m4.translate(matrix, dstX, dstY, 0);
 // from 1 unit to texWidth, texHeight units
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>只需要创建一个矩阵栈</p>
-<pre class="prettyprint"><code>var matrixStack = new MatrixStack();
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var matrixStack = new MatrixStack();
 </code></pre><p>然后将栈顶的矩阵乘起来</p>
-<pre class="prettyprint"><code>// 将坐标从像素空间转换到裁剪空间
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 将坐标从像素空间转换到裁剪空间
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 +// 将原点移动到栈顶矩阵代表的转换
@@ -321,7 +321,7 @@ matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 例如二维画布默认原点 (0,0) 为左上角。</p>
 <p>如果我们将原点移动到中心然后在绘制在 0,0 点，它的起点就是画布的中心</p>
 <p>让我们使用<a href="webgl-2d-drawimage.html">之前的例子</a>画一个图像</p>
-<pre class="prettyprint"><code>var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var textureInfo = loadImageAndCreateTextureInfo(&#39;resources/star.jpg&#39;);
 
 function draw(time) {
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -345,10 +345,10 @@ function draw(time) {
 </div>
 
 </p>
-<p>你可以看到，即使我们给 <code>drawImage</code> 传的 <code>0, 0</code>，由于使用了 <code>matrixStack.translate</code>
+<p>你可以看到，即使我们给 <code class="notranslate" translate="no">drawImage</code> 传的 <code class="notranslate" translate="no">0, 0</code>，由于使用了 <code class="notranslate" translate="no">matrixStack.translate</code>
 将原点移动到画布的中心，图像画在中心，并绕中心转动。</p>
 <p>让我们将原点移动到图像中间</p>
-<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 +matrixStack.translate(textureInfo.width / -2, textureInfo.height / -2);
 </code></pre><p>现在图像就在画布中心绕图像中心旋转。</p>
@@ -359,7 +359,7 @@ matrixStack.rotateZ(time);
 
 </p>
 <p>让我们在每个角画一个旋转的图像</p>
-<pre class="prettyprint"><code>matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">matrixStack.translate(gl.canvas.width / 2, gl.canvas.height / 2);
 matrixStack.rotateZ(time);
 
 +matrixStack.save();
@@ -453,21 +453,21 @@ matrixStack.rotateZ(time);
 </div>
 
 </p>
-<p>仔细想想使用不同的矩阵栈方法<code>translate</code>, <code>rotateZ</code>, 和 <code>scale</code>
+<p>仔细想想使用不同的矩阵栈方法<code class="notranslate" translate="no">translate</code>, <code class="notranslate" translate="no">rotateZ</code>, 和 <code class="notranslate" translate="no">scale</code>
 变换原点的过程中，决定旋转中心的的方式是
 <strong>在调用 drawImage 绘制某个部分前我应该将如何移动才能将旋转中心移动到之前的原点？</strong>。</p>
-<p>换句话说如果我们有一个 400x300 的画布，我调用 <code>matrixStack.translate(220, 150)</code>，
-在这时原点在 220, 50，所有的绘制都是相对于这一点，如果用 <code>0, 0</code> 调用 <code>drawImage</code>
+<p>换句话说如果我们有一个 400x300 的画布，我调用 <code class="notranslate" translate="no">matrixStack.translate(220, 150)</code>，
+在这时原点在 220, 50，所有的绘制都是相对于这一点，如果用 <code class="notranslate" translate="no">0, 0</code> 调用 <code class="notranslate" translate="no">drawImage</code>
 这里就是图像绘制的地方。</p>
 <p><img class="webgl_center" width="400" src="../resources/matrixstack-before.svg" /></p>
-<p>假设我想让旋转中心在右下角，在这种情况下就将原点移动到哪里调用 <code>drawImage</code>
+<p>假设我想让旋转中心在右下角，在这种情况下就将原点移动到哪里调用 <code class="notranslate" translate="no">drawImage</code>
 才会将旋转中心也就是右下角移动到之前的原点？
-纹理的右下角对应的坐标应该是 <code>-textureWidth, -textureHeight</code>，
-所以使用 <code>0, 0</code> 调用 <code>drawImage</code> 时右下角应该在之前的原点。</p>
+纹理的右下角对应的坐标应该是 <code class="notranslate" translate="no">-textureWidth, -textureHeight</code>，
+所以使用 <code class="notranslate" translate="no">0, 0</code> 调用 <code class="notranslate" translate="no">drawImage</code> 时右下角应该在之前的原点。</p>
 <p><img class="webgl_center" width="400" src="../resources/matrixstack-after.svg" /></p>
-<p>在矩阵栈上之前的的任何操作是无关的，我们在调用 <code>drawImage</code> 之前做了一系列移动旋转或缩放，
+<p>在矩阵栈上之前的的任何操作是无关的，我们在调用 <code class="notranslate" translate="no">drawImage</code> 之前做了一系列移动旋转或缩放，
 只和当前时刻相关的原点有关，是新的原点，如果在栈前没有东西的话我们只需要决定将它移动到哪里。
-（一个好点的方法是从 <code>drawImage</code> 开始往上看，先平移到旋转中心，再缩放，再旋转，再移动到中间图像的某一角，
+（一个好点的方法是从 <code class="notranslate" translate="no">drawImage</code> 开始往上看，先平移到旋转中心，再缩放，再旋转，再移动到中间图像的某一角，
 其中每个操作的原点只和前一步有关）。</p>
 <p>你可能发现矩阵栈和<a href="webgl-scene-graph.html">场景图</a>十分相似，
 场景图有树和节点，遍历数将每个节点和它的父节点的矩阵相乘，

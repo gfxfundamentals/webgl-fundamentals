@@ -221,11 +221,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 а именно не содержит компонентов менеджера окон операционной системы,
 поэтому прозрачность здесь не важна.</p>
 <p>WebGL смешивается браузером с веб-страницей, и по умолчанию используется
-предумноженная прозрачность, как в случае с .png в теге <code>&lt;img&gt;</code> с
+предумноженная прозрачность, как в случае с .png в теге <code class="notranslate" translate="no">&lt;img&gt;</code> с
 прозрачностью и теге canvas 2D.</p>
 <p>Есть несколько способов, как сделать WebGL более похожим на OpenGL.</p>
 <h3 id="-1-webgl-">#1) Сказать WebGL, что вам не нужна предумноженная прозрачность</h3>
-<pre class="prettyprint"><code>gl = canvas.getContext(&quot;webgl&quot;, {
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl = canvas.getContext(&quot;webgl&quot;, {
   premultipliedAlpha: false  // отключаем предумноженную прозрачность
 });
 </code></pre><p>Значение по умолчанию - true.</p>
@@ -236,10 +236,10 @@ HTML-элемента под canvas (цвет фона самого canavs, цв
 <p>Действительно хороший способ узнать, есть ли у вас проблемы с прозрачностью -
 установить цвет фона элемента canvas в ярко красный. Вы сразу же разберётесь,
 что происходит.</p>
-<pre class="prettyprint"><code>&lt;canvas style=&quot;background: red;&quot;&gt;&lt;canvas&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas style=&quot;background: red;&quot;&gt;&lt;canvas&gt;
 </code></pre><p>Также вы можете установить чёрный цвет, чтобы скрыть проблемы прозрачности.</p>
 <h3 id="-2-webgl-">#2) Сказать WebGL, что вам не нужна прозрачность во вторичном буфере.</h3>
-<pre class="prettyprint"><code>gl = canvas.getContext(&quot;webgl&quot;, { alpha: false }};
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl = canvas.getContext(&quot;webgl&quot;, { alpha: false }};
 </code></pre><p>Поведение в этом случае будет напоминать OpenGL, так как вторичный буфер
 будет состоять лишь из RGB. Возможно, это лучший вариант, так как хороший
 браузер может увидеть, что у вас нет прозрачности и сможет оптимизировать
@@ -249,7 +249,7 @@ HTML-элемента под canvas (цвет фона самого canavs, цв
 приложений из известных мне использовали прозрачность во вторичном буфере.
 Я думаю, что, возможно, эта опция должна быть по умолчанию.</p>
 <h3 id="-3-">#3) Очищать прозрачность в конце рендеринга</h3>
-<pre class="prettyprint"><code>..
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">..
 renderScene();
 ..
 // устанавливаем значение прозрачности для вторичного буфера в 1.0
@@ -264,7 +264,7 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 используют прозрачность для композитных эффектов, может запросить её. Остальные
 получат лучшую производительность и меньше сюрпризов.</p>
 <h3 id="-4-">#4) Очистить прозрачность в самом начале, а затем не отрисовывать в неё</h3>
-<pre class="prettyprint"><code>// очищаем вторичный буфер при инициализации
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// очищаем вторичный буфер при инициализации
 gl.clearColor(1,1,1,1);
 gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -278,25 +278,25 @@ gl.colorMask(true, true, true, false);
 значения как есть из PNG-файла со значениями цветов без предумножения. В
 своей работе с OpenGL я использовал такой же подход, так как в нём нет потерь,
 в то время как предумножение происходит с потерями.</p>
-<pre class="prettyprint"><code>1, 0.5, 0.5, 0  // RGBA
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">1, 0.5, 0.5, 0  // RGBA
 </code></pre><p>Это допустимое значение при отсутствии предумножения, вто время как при
-использовании предумножения значение становится невозможным, так как <code>a = 0</code>
-означает, что <code>r</code>, <code>g</code> и <code>b</code> тоже будут равны нулю.</p>
+использовании предумножения значение становится невозможным, так как <code class="notranslate" translate="no">a = 0</code>
+означает, что <code class="notranslate" translate="no">r</code>, <code class="notranslate" translate="no">g</code> и <code class="notranslate" translate="no">b</code> тоже будут равны нулю.</p>
 <p>При желании вы можете включить предумноженную прозрачность в WebGL. Этого
-можно добиться установкой <code>UNPACK_PREMULTIPLY_ALPHA_WEBGL</code> в значение true:</p>
-<pre class="prettyprint"><code>gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+можно добиться установкой <code class="notranslate" translate="no">UNPACK_PREMULTIPLY_ALPHA_WEBGL</code> в значение true:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 </code></pre><p>По умолчанию предумножение отсутствует.</p>
 <p>Стоит отметить, что большинство (если не все) реализации Canvas 2D работают
 с предумноженной прозрачностью. Это значит, что при передаче их в WebGL и
-при значении <code>UNPACK_PREMULTIPLY_ALPHA_WEBGL</code> равном false WebGL будет
+при значении <code class="notranslate" translate="no">UNPACK_PREMULTIPLY_ALPHA_WEBGL</code> равном false WebGL будет
 конвертировать значение обратно в значения без предумножения.</p>
 <h3 id="-6-">#6) Настройка смешивания для работы с предумноженной прозрачностью</h3>
 <p>Практически все приложения на OpenGL, которые я написал, использовали</p>
-<pre class="prettyprint"><code>gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>Это работает в случае текстур без предумноженной прозрачности.</p>
 <p>Если же вам захочется работать с текстурами с предумноженной прозрачностью,
 вам, вероятно, подойдёт</p>
-<pre class="prettyprint"><code>gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>Вот и все методы, о которых мне известно. Если вы знаете другие - пишите в комментариях.</p>
 
     </div>
