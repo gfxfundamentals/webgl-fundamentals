@@ -107,6 +107,14 @@ A collection of links to random questions and/or answers about topics related to
 * [I get invalid type error when calling readPixels](https://stackoverflow.com/questions/61984296/i-get-invalid-type-error-when-trying-to-call-readpixels)
 * [How to optimize rendering a UI](https://stackoverflow.com/questions/62330231/webgl-2d-rendering-images-too-heavy)
 
+---
+
+* [How can I compute for 500 points which of 1000 line segments is nearest to each point?](https://stackoverflow.com/questions/63491296/calculating-point-to-line-distance-in-glsl#)
+* [How can I move the perspective vanishing point from the center of the canvas?](https://stackoverflow.com/questions/63509029/in-webgl-can-i-use-a-matrix-to-draw-an-object-offset-in-screen-space)
+* [Is there the notion of a generalized vertex and fragment shader?](https://stackoverflow.com/questions/63322361/is-there-the-notion-of-a-generalized-vertex-and-fragment-shader)
+* [How to determine the average brightness in a scene?](https://stackoverflow.com/questions/10163434/how-do-i-determine-the-average-scene-brightness-in-webgl)
+* [What is the local origin of a 3D model?](https://stackoverflow.com/questions/62557253/why-is-this-set-of-f-rotating-in-this-locus)
+
 ## WebGL2
 
 * [Accessing textures by pixel coordinate in WebGL2](https://stackoverflow.com/questions/54100955)
