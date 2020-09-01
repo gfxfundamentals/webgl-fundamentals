@@ -1,16 +1,18 @@
+"use strict";
+
 module.exports = {
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
   },
   "parserOptions": {
-    "ecmaVersion": 9
+    "ecmaVersion": 9,
   },
   "plugins": [
     "eslint-plugin-html",
     "eslint-plugin-optional-comma-spacing",
     "eslint-plugin-one-variable-per-var",
-    "eslint-plugin-require-trailing-comma"
+    "eslint-plugin-require-trailing-comma",
   ],
   "extends": "eslint:recommended",
   "rules": {
@@ -83,7 +85,7 @@ module.exports = {
     "semi": [2, "always"],
     "strict": [2, "global"],
     "space-before-function-paren": [2, "never"],
-    "keyword-spacing": [1, {"before": true, "after": true, "overrides": {}} ]
+    "keyword-spacing": [1, {"before": true, "after": true, "overrides": {}} ],
   },
   "overrides": [
     {
@@ -101,7 +103,7 @@ module.exports = {
         "no-unused-vars": 2,
         "require-trailing-comma/require-trailing-comma": [2],
         "strict": ["error", "function"],
-      }
+      },
     },
     {
       "files": [
@@ -117,7 +119,7 @@ module.exports = {
         "no-unused-vars": 2,
         "require-trailing-comma/require-trailing-comma": [2],
         "strict": ["error", "function"],
-      }
-    }
-  ]
+      },
+    },
+  ],
 };
