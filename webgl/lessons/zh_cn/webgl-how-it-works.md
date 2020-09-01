@@ -155,7 +155,7 @@ table.vertex_table td {
 
 利用这三个值进行插值后传进每个像素运行的片断着色器中。
 
-{{{diagram url="resources/fragment-shader-anim.html" caption="v_color is interpolated between v0, v1 and v2" }}}
+{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color is interpolated between v0, v1 and v2" }}}
 
 想要给片断着色器传值，我们可以先把值传递给顶点着色器然后再传给片断着色器。
 让我们来画一个由两个不同颜色三角形组成的矩形。我们需要给顶点着色器添加一个属性值，

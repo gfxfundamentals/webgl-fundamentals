@@ -199,7 +199,7 @@ table.vertex_table td {
 v_colorに書き込まれたこれら３つの値は、補間され、
 描かれるピクセルごとにフラグメントシェーダーに渡される。
 
-{{{diagram url="resources/fragment-shader-anim.html" caption="v_colorは頂点v0, v1, v2の間で補間される" }}}
+{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_colorは頂点v0, v1, v2の間で補間される" }}}
 
 以上で「頂点シェーダー経由でフラグメントシェーダーにデータを渡す」ことができた。
 

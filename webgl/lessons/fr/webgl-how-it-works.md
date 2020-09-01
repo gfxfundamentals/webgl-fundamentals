@@ -166,7 +166,7 @@ v_couleur qu'on a déclarées.
 Ces 3 valeurs écrites dans v_couleur sont ensuite interpolées et passées au 
 shader de fragment pour chaque pixel.
 
-{{{diagram url="resources/fragment-shader-anim.html" caption="v_couleur est interpolé entre v0, v1 et v2" }}}
+{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_couleur est interpolé entre v0, v1 et v2" }}}
 
 On peut aussi envoyer plus de données au shader de vertex et les 
 transmettre ensuite au shader de fragment. Par exemple, dessinons un rectangle, 

@@ -115,6 +115,10 @@ A collection of links to random questions and/or answers about topics related to
 * [How to determine the average brightness in a scene?](https://stackoverflow.com/questions/10163434/how-do-i-determine-the-average-scene-brightness-in-webgl)
 * [What is the local origin of a 3D model?](https://stackoverflow.com/questions/62557253/why-is-this-set-of-f-rotating-in-this-locus)
 
+---
+
+* [How to figure out how much GPU work to do without crashing WebGL](https://stackoverflow.com/questions/63546457/maximize-webgl2-usage-without-overloading-it).
+
 ## WebGL2
 
 * [Accessing textures by pixel coordinate in WebGL2](https://stackoverflow.com/questions/54100955)

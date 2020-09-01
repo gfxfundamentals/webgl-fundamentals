@@ -166,7 +166,7 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
 
 그런 다음 v_color에 작성된 값 3개가 보간되어 각 픽셀의 fragment shader로 전달됩니다.
 
-{{{diagram url="resources/fragment-shader-anim.html" caption="v_color is interpolated between v0, v1 and v2" }}}
+{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color is interpolated between v0, v1 and v2" }}}
 
 또한 vertex shader에 더 많은 데이터를 넘길 수 있고 그것을 fragment shader에 전달할 수 있습니다.
 예를들어 2가지 색을 가진 삼각형 2개로 이루어진 사각형을 그린다고 합시다.

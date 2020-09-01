@@ -12,7 +12,7 @@ TOC: WebGL 纹理映射的透视纠正
 绘制这个三角形的每个像素都会调用片断着色器获得像素颜色，
 在三个顶点之间的点会得到差之后的可变量。
 
-{{{diagram url="resources/fragment-shader-anim.html" caption="v_color is interpolated between v0, v1 and v2" }}}
+{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color is interpolated between v0, v1 and v2" }}}
 
 回到我们的[第一篇文章](webgl-fundamentals.html)，在裁剪空间中绘制一个三角形，
 没有数学运算，只是传入裁剪空间坐标到一个简单的顶点着色器，像这样
