@@ -5,12 +5,28 @@
 <meta charset="utf-8">
 <link type="text/css" href="webgl-lessons.css" rel="stylesheet" />
 <style>
+html, body {
+  height: 100%;
+  margin: 0;
+}
+#canvas {
+  width: 100%;
+  height: calc(100% - 100px);
+  display: block;
+}
+.iframe #canvas {
+  height: 100%;  
+}
 @media (prefers-color-scheme: dark) {
   canvas { 
     background: #444;
   }
 }
 </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+</body>
 <script src="lesson-utils.js"></script>
 <!--
 for most samples webgl-utils only provides shader compiling/linking and
@@ -23,7 +39,8 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
 <script>
 "use strict";
 
-window.onload = main
+/* eslint prefer-const: "error" */
+/* eslint no-var: "error" */
 
 function getTime() {
   return (new Date()).getTime() * 0.001;
@@ -56,34 +73,34 @@ const darkMatcher = window.matchMedia("(prefers-color-scheme: dark)");
 
 
 function main() {
-  var canvas = document.querySelector("#canvas");
-  var ctx = get2DContext(canvas);
+  const canvas = document.querySelector("#canvas");
+  const ctx = get2DContext(canvas);
   ctx.lineWidth = 1;
-  var pixelSize = 6;
-  var lineHeight = 14;
+  const pixelSize = 6;
+  const lineHeight = 14;
 
-  var triangle = [
+  const triangle = [
     { pos: [25,  0], color: [0.5   , 0.75 , 0.5], textOffset: [-2, -0.5] },
     { pos: [50, 35], color: [0.875 , 0.085, 0.5], textOffset: [-10.5, 3] },
-    { pos: [0,  30], color: [0.0625, 0.17 , 0.5], textOffset: [-2, 5] }
+    { pos: [0,  30], color: [0.0625, 0.17 , 0.5], textOffset: [-2, 5] },
   ];
 
-  var numPixelsToDraw = 0;
-  var triangleInfo = {
-    numPixels: 0
+  let numPixelsToDraw = 0;
+  let triangleInfo = {
+    numPixels: 0,
   };
-  var frameRate = 1 / 60;
-  var then = getTime();
-  var delay = 0;
-  var dirty = false;
-  var resetTimer = 0;
+  const frameRate = 1 / 60;
+  let then = getTime();
+  let delay = 0;
+  let dirty = false;
+  const resetTimer = 0;
   let isDarkMode;
 
   function render() {
     isDarkMode = darkMatcher.matches;
     const colors = isDarkMode ? darkColors : lightColors;
-    var now = getTime();
-    var elapsedTime = now - then;
+    const now = getTime();
+    const elapsedTime = now - then;
     then = now;
 
     delay -= elapsedTime;
@@ -94,9 +111,21 @@ function main() {
 
     if (dirty) {
       dirty = false;
-      webglUtils.resizeCanvasToDisplaySize(canvas);
+      webglUtils.resizeCanvasToDisplaySize(canvas, window.devicePixelRatio);
 
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      {
+        const {width, height} = canvas;
+        const sw = width / 400;
+        const sh = height / 300;
+        const scale = Math.min(sw, sh);
+        const w = width - 400 * scale;
+        const h = height - 300 * scale;
+        ctx.translate(w / 2, h / 2);
+        ctx.scale(scale, scale);
+      }
+
 
       ctx.font = "8pt monospace";
 
@@ -106,8 +135,8 @@ function main() {
       ++numPixelsToDraw;
 
       ctx.fillStyle = colors.base;
-      for (var ii = 0; ii < triangle.length; ++ii) {
-        var tri = triangle[ii];
+      for (let ii = 0; ii < triangle.length; ++ii) {
+        const tri = triangle[ii];
         ctx.fillText(
             "v" + ii + ": " + makeColorString(tri.color),
             (tri.pos[0] + tri.textOffset[0]) * pixelSize,
@@ -135,9 +164,9 @@ function main() {
   }
 
   function drawArrow(x1, y1, x2, y2, width, stem, tip) {
-    var dy = y1 - y2;
-    var dx = x1 - x2;
-    var len = Math.sqrt(dx * dx + dy * dy);
+    const dy = y1 - y2;
+    const dx = x1 - x2;
+    const len = Math.sqrt(dx * dx + dy * dy);
     ctx.save();
     ctx.fillStyle = "#ff40ff";
     ctx.lineStyle = "black";
@@ -145,11 +174,11 @@ function main() {
     ctx.rotate(Math.atan2(dy, dx) + Math.PI / 2);
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    var h = width * 0.5;
-    var b = len - (width * tip);
+    const h = width * 0.5;
+    const b = len - (width * tip);
     ctx.lineTo(h, 0);
     ctx.lineTo(h, b);
-    var o = width * stem;
+    const o = width * stem;
     ctx.lineTo(o, b);
     ctx.lineTo(0, len);
     ctx.lineTo(-o, b);
@@ -162,14 +191,14 @@ function main() {
   }
 
   function drawTriangle(triangle, numPixelsToDraw) {
-    var results = { };
-    var numPixelsDrawn = 0;
+    const results = { };
+    let numPixelsDrawn = 0;
     ctx.strokeStyle = "black";
 
     // find the highest and lowest points.
-    var highNdx = 0;
-    var lowNdx = 0;
-    for (var ii = 1; ii < 3; ++ii) {
+    let highNdx = 0;
+    let lowNdx = 0;
+    for (let ii = 1; ii < 3; ++ii) {
       if (triangle[ii].pos[1] < triangle[highNdx].pos[1]) {
         highNdx = ii;
       }
@@ -179,57 +208,57 @@ function main() {
     }
 
     // deduce the mid point.
-    var midNdx = 3 - (highNdx + lowNdx);
+    const midNdx = 3 - (highNdx + lowNdx);
 
     function computeDelta(val0, val1) {
-      var delta = [];
-      for (var ii = 0; ii < val0.length; ++ii) {
+      const delta = [];
+      for (let ii = 0; ii < val0.length; ++ii) {
         delta.push(val0[ii] - val1[ii]);
       }
       return delta;
     }
 
     function computeStep(val, steps) {
-      var step = [];
-      for (var ii = 0; ii < val.length; ++ii) {
+      const step = [];
+      for (let ii = 0; ii < val.length; ++ii) {
         step.push(steps ? val[ii] / steps : 0);
       }
       return step;
     }
 
     function add(val, add) {
-      for (var ii = 0; ii < val.length; ++ii) {
+      for (let ii = 0; ii < val.length; ++ii) {
         val[ii] += add[ii];
       }
     }
 
-    var delta0 = computeDelta(triangle[lowNdx].pos, triangle[highNdx].pos);
-    var delta1 = computeDelta(triangle[midNdx].pos, triangle[highNdx].pos);
-    var delta2 = computeDelta(triangle[lowNdx].pos, triangle[midNdx].pos);
+    const delta0 = computeDelta(triangle[lowNdx].pos, triangle[highNdx].pos);
+    const delta1 = computeDelta(triangle[midNdx].pos, triangle[highNdx].pos);
+    const delta2 = computeDelta(triangle[lowNdx].pos, triangle[midNdx].pos);
 
-    var x0 = triangle[highNdx].pos[0];
-    var x1 = triangle[highNdx].pos[0];
-    var y  = triangle[highNdx].pos[1];
+    let x0 = triangle[highNdx].pos[0];
+    let x1 = triangle[highNdx].pos[0];
+    let y  = triangle[highNdx].pos[1];
 
-    var varyingA = triangle[highNdx].color.slice(0);
-    var varyingB = triangle[highNdx].color.slice(0);
-    var vdelta0 = computeDelta(triangle[lowNdx].color, triangle[highNdx].color);
-    var vdelta1 = computeDelta(triangle[midNdx].color, triangle[highNdx].color);
-    var vdelta2 = computeDelta(triangle[lowNdx].color, triangle[midNdx].color);
+    const varyingA = triangle[highNdx].color.slice(0);
+    const varyingB = triangle[highNdx].color.slice(0);
+    const vdelta0 = computeDelta(triangle[lowNdx].color, triangle[highNdx].color);
+    const vdelta1 = computeDelta(triangle[midNdx].color, triangle[highNdx].color);
+    const vdelta2 = computeDelta(triangle[lowNdx].color, triangle[midNdx].color);
 
-    var midY = triangle[midNdx].pos[1];
-    var lowY = triangle[lowNdx].pos[1];
+    const midY = triangle[midNdx].pos[1];
+    const lowY = triangle[lowNdx].pos[1];
 
-    var slope0 = delta0[0] / delta0[1];
-    var slope1 = delta1[0] / delta1[1];
-    var slope2 = delta2[0] / delta2[1];
+    const slope0 = delta0[0] / delta0[1];
+    let slope1 = delta1[0] / delta1[1];
+    const slope2 = delta2[0] / delta2[1];
 
-    var vstepA = computeStep(vdelta0, (lowY - y));
-    var vstepB = computeStep(vdelta1, (midY - y));
-    var vstepC = computeStep(vdelta2, (lowY - midY));
+    const vstepA = computeStep(vdelta0, (lowY - y));
+    let vstepB = computeStep(vdelta1, (midY - y));
+    const vstepC = computeStep(vdelta2, (lowY - midY));
 
-    var endY = midY;
-    for (var ii = 0; ii < 2; ++ii) {
+    let endY = midY;
+    for (let ii = 0; ii < 2; ++ii) {
       do {
         drawSpan(x0, x1, y, varyingA, varyingB);
         x0 += slope0;
@@ -250,18 +279,18 @@ function main() {
       x0 = Math.floor(x0);
       x1 = Math.floor(x1);
       if (x0 > x1) {
-        var t = x0;
-        var x0 = x1;
-        var x1 = t;
+        let t = x0;
+        x0 = x1;
+        x1 = t;
         t = colorA;
         colorA = colorB;
         colorB = t;
       }
 
-      var delta = computeDelta(colorB, colorA);
-      var step = computeStep(delta, (x1 - x0));
-      var color = colorA.slice(0);
-      for (var x = x0; x <= x1; ++x) {
+      const delta = computeDelta(colorB, colorA);
+      const step = computeStep(delta, (x1 - x0));
+      const color = colorA.slice(0);
+      for (let x = x0; x <= x1; ++x) {
         drawPixel(x, y, color);
         add(color, step);
       }
@@ -288,9 +317,7 @@ function main() {
 
   render();
 }
+
+main();
 </script>
-</head>
-<body>
-<canvas width="400" height="300" id="canvas"></canvas>
-</body>
 </html>
