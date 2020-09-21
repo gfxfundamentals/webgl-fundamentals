@@ -1205,7 +1205,7 @@ function addVertex(vert) {
       if (index !== undefined) {
         webglVertexData[i].push(...objVertexData[i][index]);
       }
-    }
+    });
   }
   webglIndices.push(vertexIndex);
 }
