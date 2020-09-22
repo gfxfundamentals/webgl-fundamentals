@@ -312,7 +312,7 @@ const positionLoc = gl.getAttribLocation(program, 'position');
 
 And use them
 
-```
+```js
 gl.useProgram(program);
 
 const numPoints = 5;
