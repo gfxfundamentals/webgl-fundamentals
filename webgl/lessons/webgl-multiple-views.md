@@ -589,7 +589,7 @@ your projection matrix to match the aspect of the area it should work.
 One other notable thing about the code is we're moving the canvas
 with this line
 
-```
+```js
 gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
 ```
 
@@ -614,6 +614,20 @@ faster than we can draw our objects. Because of this we have 2 options.
    <img src="resources/multi-view-fixed.gif" style="border: 1px solid black; width: 266px;" class="webgl_center">
 
    This is the solution used above
+
+If you want to handle horizontal scrolling just change this line
+
+```js
+gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
+```
+
+to this
+
+```js
+gl.canvas.style.transform = `translateX(${window.scrollX} translateY(${window.scrollY}px)`;
+```
+
+{{{example url="../webgl-multiple-views-items-horizontal-scroll.html"}}}
 
 Hopefully this article gave you some ideas how to draw multiple views.
 We'll use these techniques in a few future articles where
