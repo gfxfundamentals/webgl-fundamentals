@@ -415,7 +415,7 @@ body {
 #canvas {
   position: absolute;
   top: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   z-index: -1;
   display: block;
@@ -543,7 +543,7 @@ function render(time) {
     const width  = rect.right - rect.left;
     const height = rect.bottom - rect.top;
     const left   = rect.left;
-    const bottom = gl.canvas.clientHeight - rect.bottom - 1;
+    const bottom = gl.canvas.clientHeight - rect.bottom;
 
     gl.viewport(left, bottom, width, height);
     gl.scissor(left, bottom, width, height);
