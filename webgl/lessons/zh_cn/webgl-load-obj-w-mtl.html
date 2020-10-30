@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-load-obj-w-mtl.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,78 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Load Obj with Mtl" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to parse an .MTL file" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Load Obj with Mtl" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html" />
-<meta name="twitter:description" content="How to parse an .MTL file" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="如何解析 .MTL 文件">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-load-obj-w-mtl_zh-cn.jpg">
+
+<meta property="og:title" content="WebGL 加载带 Mtl 的 Obj">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-load-obj-w-mtl_zh-cn.jpg">
+<meta property="og:description" content="如何解析 .MTL 文件">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 加载带 Mtl 的 Obj">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">
+<meta name="twitter:description" content="如何解析 .MTL 文件">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-load-obj-w-mtl_zh-cn.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-load-obj-w-mtl_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 加载带 Mtl 的 Obj",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Load Obj with Mtl</title>
+<title>WebGL 加载带 Mtl 的 Obj</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-load-obj-w-mtl.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-load-obj-w-mtl.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-load-obj-w-mtl.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-load-obj-w-mtl.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-load-obj-w-mtl.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-load-obj-w-mtl.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-load-obj-w-mtl.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -163,12 +218,803 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Load Obj with Mtl</h1>
+    <h1>WebGL 加载带 Mtl 的 Obj</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-load-obj-w-mtl.html">英文原版地址</a></p>
+      <p>在 <a href="webgl-load-obj.html">上一篇文章中</a> 中，我们解析了 .obj 文件。
+在这篇文章中，让我们解析它的补充文件： .mtl 材质文件。</p>
+<p><strong>免责申明</strong> 该 .mtl 解析器不会面面俱到或者完美，也不保证能够处理所有 .mtl 文件。
+这只是一个练习。如果你使用该程序并遇到问题，下面的链接可能会对你有帮助。</p>
+<p>我们加载了我在 <a href="https://sketchfab.com">Sketchfab</a> 上找到的，由 <a href="https://sketchfab.com/haytonm">haytonm</a> 创建的 <a href="http://creativecommons.org/licenses/by/4.0">CC-BY 4.0</a> <a href="https://sketchfab.com/3d-models/chair-aa2acddb218646a59ece132bf95aa558">椅子</a>。</p>
+<div class="webgl_center"><img src="../../resources/models/chair/chair.jpg" style="width: 452px;"></div>
+
+<p>它有一个相应的 .mtl 文件，看起来是这样：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"># Blender MTL File: &#39;None&#39;
+# Material Count: 11
+
+newmtl D1blinn1SG
+Ns 323.999994
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl D1lambert2SG
+Ns 323.999994
+Ka 1.000000 1.000000 1.000000
+Kd 0.020000 0.020000 0.020000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl D1lambert3SG
+Ns 323.999994
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+
+... 更多类似的 8 个材质
+</code></pre><p>查看 <a href="http://paulbourke.net/dataformats/mtl/">对 .mtl 文件格式的描述</a>，
+我们可以看到以关键词 <code class="notranslate" translate="no">newmtl</code> 和给定名字开头的新材质，下面是该材质的所有设置。
+每行都以关键词开始，这和 .obj 文件类似，所以我们可以用类似的方法来开始解析。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function parseMTL(text) {
+  const materials = {};
+  let material;
+
+  const keywords = {
+    newmtl(parts, unparsedArgs) {
+      material = {};
+      materials[unparsedArgs] = material;
+    },
+  };
+
+  const keywordRE = /(\w*)(?: )*(.*)/;
+  const lines = text.split(&#39;\n&#39;);
+  for (let lineNo = 0; lineNo &lt; lines.length; ++lineNo) {
+    const line = lines[lineNo].trim();
+    if (line === &#39;&#39; || line.startsWith(&#39;#&#39;)) {
+      continue;
+    }
+    const m = keywordRE.exec(line);
+    if (!m) {
+      continue;
+    }
+    const [, keyword, unparsedArgs] = m;
+    const parts = line.split(/\s+/).slice(1);
+    const handler = keywords[keyword];
+    if (!handler) {
+      console.warn(&#39;unhandled keyword:&#39;, keyword);
+      continue;
+    }
+    handler(parts, unparsedArgs);
+  }
+
+  return materials;
+}
+</code></pre>
+<p>接着，我们只需要为每个关键词 添加对应的方法。文档指出：</p>
+<ul>
+<li><code class="notranslate" translate="no">Ns</code> 是 <a href="webgl-3d-lighting-point.html">关于点光源的文章</a> 中提到的镜面光泽设置</li>
+<li><code class="notranslate" translate="no">Ka</code> 是材质的环境光</li>
+<li><code class="notranslate" translate="no">Kd</code> 是散射光，这是在 <a href="webgl-3d-lighting-point.html">关于点光源的文章</a> 中的颜色</li>
+<li><code class="notranslate" translate="no">Ks</code> 是镜面光</li>
+<li><code class="notranslate" translate="no">Ke</code> 是放射光</li>
+<li><code class="notranslate" translate="no">Ni</code> 是光学密度。我们这里不使用</li>
+<li><code class="notranslate" translate="no">d</code> 代表“溶解”，代表透明度</li>
+<li><code class="notranslate" translate="no">illum</code> 指定了材质的光照模型。文档中列出了 11 种类型。我们先忽略它</li>
+</ul>
+<p>我在犹豫是否要保持这些名字的原样。我想一个数学人喜欢简短的名字。
+但是大多数代码风格指南都喜欢描述性的名字，所以我决定这么做。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function parseMTL(text) {
+  const materials = {};
+  let material;
+
+  const keywords = {
+    newmtl(parts, unparsedArgs) {
+      material = {};
+      materials[unparsedArgs] = material;
+    },
++    Ns(parts)     { material.shininess      = parseFloat(parts[0]); },
++    Ka(parts)     { material.ambient        = parts.map(parseFloat); },
++    Kd(parts)     { material.diffuse        = parts.map(parseFloat); },
++    Ks(parts)     { material.specular       = parts.map(parseFloat); },
++    Ke(parts)     { material.emissive       = parts.map(parseFloat); },
++    Ni(parts)     { material.opticalDensity = parseFloat(parts[0]); },
++    d(parts)      { material.opacity        = parseFloat(parts[0]); },
++    illum(parts)  { material.illum          = parseInt(parts[0]); },
+  };
+
+  ...
+
+  return materials;
+}
+</code></pre>
+<p>我也在犹豫要不要推测每个 .mtl 文件的路径，或者手动指定。
+我们可以这样做：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 伪代码 - 手动指定 .obj 文件和 .mtl 文件的路径
+const obj = downloadAndParseObj(pathToOBJFile);
+const materials = downloadAndParseMtl(pathToMTLFile);
+</code></pre><p>或者这样:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 伪代码 - 根据 .obj 文件推测 .mtl 文件的的路径
+const obj = downloadAndParseObj(pathToOBJFile);
+const materials = downloadAndParseMtl(pathToOBJFile, obj);
+</code></pre><p>我选择后者，但是我也不确定是好是坏。
+根据文档，一个 .obj 文件可以包含多个 .mtl 文件的引用。
+我从没见过这样的例子，但我想文档的作者是这么做的。</p>
+<p>并且，我也没有见过 .mtl 文件与 .obj 文件命名不同的。
+换句话说，如果 .obj 文件是 <code class="notranslate" translate="no">bananas.obj</code>，那么 .mtl 文件几乎总是 <code class="notranslate" translate="no">bananas.mtl</code>。</p>
+<p>也就是说，规范指出 .mtl 文件是在 .obj 文件中指定的，
+所以我决定试着计算 .mtl 文件的路径。</p>
+<p>从 <a href="webgl-load-obj.html">上一篇文章</a> 的代码开始,
+我们将 .obj 文件的 URL 提取出来，然后构建 .obj 相关的 .mtl 文件的 URL。
+最后，我们将它们全部加载，连接起来（因为它们都是文本文件），然后传给解析器。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-const response = await fetch(&#39;resources/models/chair/chair.obj&#39;);
++const objHref = &#39;resources/models/chair/chair.obj&#39;;
++const response = await fetch(objHref);
+const text = await response.text();
+const obj = parseOBJ(text);
++const baseHref = new URL(objHref, window.location.href);
++const matTexts = await Promise.all(obj.materialLibs.map(async filename =&gt; {
++  const matHref = new URL(filename, baseHref).href;
++  const response = await fetch(matHref);
++  return await response.text();
++}));
++const materials = parseMTL(matTexts.join(&#39;\n&#39;));
+</code></pre>
+<p>现在，我们来使用材质。
+首先，当我们在设置每个部分的时候，我们需要使用从 .obj 文件中提取出来的材质名称，
+然后从刚才加载的材质中查找。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-const parts = obj.geometries.map(({data}) =&gt; {
++const parts = obj.geometries.map(({material, data}) =&gt; {
+
+  ...
+
+  // create a buffer for each array by calling
+  // gl.createBuffer, gl.bindBuffer, gl.bufferData
+  const bufferInfo = webglUtils.createBufferInfoFromArrays(gl, data);
+  return {
+-    material: {
+-      u_diffuse: [1, 1, 1, 1],
+-    },
++    material: materials[material],
+    bufferInfo,
+  };
+});
+</code></pre>
+<p>当我们在渲染时，我们需要传不止一组全局变量值。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render(time) {
+
+  ...
+
+  for (const {bufferInfo, material} of parts) {
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    webglUtils.setBuffersAndAttributes(gl, meshProgramInfo, bufferInfo);
+    // calls gl.uniform
+    webglUtils.setUniforms(meshProgramInfo, {
+      u_world,
+-      u_diffuse: material.u_diffuse,
+-    });
++    }, material);
+    // calls gl.drawArrays or gl.drawElements
+    webglUtils.drawBufferInfo(gl, bufferInfo);
+  }
+
+  requestAnimationFrame(render);
+}
+</code></pre>
+<p>然后我们需要修改着色器。
+因为材质有镜面设置，我们添加像 <a href="webgl-3d-lighting-point.html">关于点光源的文章</a> 中一样的镜面计算，
+除了一点不同，我们计算镜面光是根据方向光源，而不是点光源。</p>
+<p><code class="notranslate" translate="no">ambient</code> 和 <code class="notranslate" translate="no">emissive</code> 可能需要解释一下。
+<code class="notranslate" translate="no">ambient</code> 是材质在无方向光源下的反射颜色。
+如果我们想看到它，我们可以乘上 <code class="notranslate" translate="no">u_ambientLight</code> 并设置黑色以外的颜色。这像把东西冲洗干净。</p>
+<p><code class="notranslate" translate="no">emissive</code> 是材质自身发光的颜色，与所有光照无关，所以我们只要加上它就好。
+如果你想有块地方发光，你可能会用到 <code class="notranslate" translate="no">emissive</code>。</p>
+<p>这是新的着色器。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const vs = `
+attribute vec4 a_position;
+attribute vec3 a_normal;
+attribute vec4 a_color;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
++uniform vec3 u_viewWorldPosition;
+
+varying vec3 v_normal;
++varying vec3 v_surfaceToView;
+varying vec4 v_color;
+
+void main() {
+-  gl_Position = u_projection * u_view * a_position;
++  vec4 worldPostion = u_world * a_position;
++  gl_Position = u_projection * u_view * worldPosition;
++  v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
+  v_normal = mat3(u_world) * a_normal;
+  v_color = a_color;
+}
+`;
+
+const fs = `
+precision highp float;
+
+varying vec3 v_normal;
++varying vec3 v_surfaceToView;
+varying vec4 v_color;
+
+-uniform vec4 u_diffuse;
++uniform vec3 diffuse;
++uniform vec3 ambient;
++uniform vec3 emissive;
++uniform vec3 specular;
++uniform float shininess;
++uniform float opacity;
+uniform vec3 u_lightDirection;
++uniform vec3 u_ambientLight;
+
+void main () {
+  vec3 normal = normalize(v_normal);
+
++  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
++  vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
+
+  float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
++  float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
+
+-  vec4 diffuse = u_diffuse * v_color;
++  vec3 effectiveDiffuse = diffuse * v_color.rgb;
++  float effectiveOpacity = opacity * v_color.a;
+
+-  gl_FragColor = vec4(diffuse.rgb * fakeLight, diffuse.a);
++  gl_FragColor = vec4(
++      emissive +
++      ambient * u_ambientLight +
++      effectiveDiffuse * fakeLight +
++      specular * pow(specularLight, shininess),
++      effectiveOpacity);
+}
+`;
+</code></pre>
+<p>这样，我们得到了和上面图片看起来差不多的效果。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-load-obj-w-mtl-no-textures.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-load-obj-w-mtl-no-textures.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>让我们来加载 .mtl 文件中引用纹理的 .obj 文件。</p>
+<p>我发现了由 <a href="https://www.blendswap.com/user/ahedov">ahedov</a> 创建的的 <a href="https://www.blendswap.com/blends/view/69174">CC-BY-NC 3.0 风车 3D 模型</a>。</p>
+<div class="webgl_center"><img src="../../resources/models/windmill/windmill-obj.jpg"></div>
+
+<p>它的 .mtl 文件看起来是这样的：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"># Blender MTL File: &#39;windmill_001.blend&#39;
+# Material Count: 2
+
+newmtl Material
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd windmill_001_lopatky_COL.jpg
+map_Bump windmill_001_lopatky_NOR.jpg
+
+newmtl windmill
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd windmill_001_base_COL.jpg
+map_Bump windmill_001_base_NOR.jpg
+map_Ns windmill_001_base_SPEC.jpg
+</code></pre><p>我们可以看到 <code class="notranslate" translate="no">map_Kd</code>，<code class="notranslate" translate="no">map_Bump</code> 和 <code class="notranslate" translate="no">map_Ns</code> 都指定了图片文件。
+让我们把它们加入到我们的 .mtl 解析器。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function parseMapArgs(unparsedArgs) {
+  // TODO: 处理可选项
+  return unparsedArgs;
+}
+
+function parseMTL(text) {
+  const materials = {};
+  let material;
+
+  const keywords = {
+    newmtl(parts, unparsedArgs) {
+      material = {};
+      materials[unparsedArgs] = material;
+    },
+    Ns(parts)       { material.shininess      = parseFloat(parts[0]); },
+    Ka(parts)       { material.ambient        = parts.map(parseFloat); },
+    Kd(parts)       { material.diffuse        = parts.map(parseFloat); },
+    Ks(parts)       { material.specular       = parts.map(parseFloat); },
+    Ke(parts)       { material.emissive       = parts.map(parseFloat); },
++    map_Kd(parts, unparsedArgs)   { material.diffuseMap = parseMapArgs(unparsedArgs); },
++    map_Ns(parts, unparsedArgs)   { material.specularMap = parseMapArgs(unparsedArgs); },
++    map_Bump(parts, unparsedArgs) { material.normalMap = parseMapArgs(unparsedArgs); },
+    Ni(parts)       { material.opticalDensity = parseFloat(parts[0]); },
+    d(parts)        { material.opacity        = parseFloat(parts[0]); },
+    illum(parts)    { material.illum          = parseInt(parts[0]); },
+  };
+
+  ...
+</code></pre>
+<p>注意：我写了 <code class="notranslate" translate="no">parseMapArgs</code>，因为根据 <a href="http://paulbourke.net/dataformats/mtl">这份规范</a>，
+还有很多额外的可选项我们没有在这个文件中看到。我们需要重构我的代码才能使用它们。
+但现在我们只处理带空格的文件名，不处理可选项。</p>
+<p>为了加载所有的纹理，我们会使用来自 <a href="webgl-3d-textures.html">关于纹理的文章</a> 的代码，稍作修改。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function create1PixelTexture(gl, pixel) {
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(pixel));
+  return texture;
+}
+
+function createTexture(gl, url) {
+  const texture = create1PixelTexture(gl, [128, 192, 255, 255]);
+  // 异步加载图片
+  const image = new Image();
+  image.src = url;
+  image.addEventListener(&#39;load&#39;, function () {
+    // 图片加载完成后复制到纹理
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+    // 检查图片在每个维度都为 2 的幂
+    if (isPowerOf2(image.width) &amp;&amp; isPowerOf2(image.height)) {
+      // Yes, it&#39;s a power of 2. Generate mips.
+      gl.generateMipmap(gl.TEXTURE_2D);
+    } else {
+      // No, it&#39;s not a power of 2. Turn of mips and set wrapping to clamp to edge
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    }
+  });
+  return texture;
+}
+</code></pre>
+<p>两个材质可能引用同一张图片，所以我们将所以的纹理根据名字保存在对象中，这样就不用加载两次了。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const textures = {};
+
+// 为材质加载纹理
+for (const material of Object.values(materials)) {
+  Object.entries(material)
+    .filter(([key]) =&gt; key.endsWith(&#39;Map&#39;))
+    .forEach(([key, filename]) =&gt; {
+      let texture = textures[filename];
+      if (!texture) {
+        const textureHref = new URL(filename, baseHref).href;
+        texture = createTexture(gl, textureHref);
+        textures[filename] = texture;
+      }
+      material[key] = texture;
+    });
+}
+</code></pre>
+<p>上面的代码遍历了每个材质的每个属性。
+如果属性以 <code class="notranslate" translate="no">&quot;Map&quot;</code> 结尾，就创建相对 URL，创建纹理，然后分配回材质。
+我们将异步的加载图片到纹理中。</p>
+<p>我们也会放一个单独的白像素纹理，给那些没有引用纹理的材质。
+这样我们就可以使用同一个着色器了。
+否则，我们需要不同的着色器，一个处理带纹理的材质，一个处理不带纹理的。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-const textures = {};
++const textures = {
++  defaultWhite: create1PixelTexture(gl, [255, 255, 255, 255]),
++};
+</code></pre>
+<p>我们也给材质的其它参数设置默认值：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">+const defaultMaterial = {
++  diffuse: [1, 1, 1],
++  diffuseMap: textures.defaultWhite,
++  ambient: [0, 0, 0],
++  specular: [1, 1, 1],
++  shininess: 400,
++  opacity: 1,
++};
+
+const parts = obj.geometries.map(({material, data}) =&gt; {
+
+  ...
+
+  // create a buffer for each array by calling
+  // gl.createBuffer, gl.bindBuffer, gl.bufferData
+  const bufferInfo = webglUtils.createBufferInfoFromArrays(gl, data);
+  return {
+-    material: materials[material],
++    material: {
++      ...defaultMaterial,
++      ...materials[material],
++    },
+    bufferInfo,
+  };
+});
+</code></pre>
+<p>要使用纹理，我们要修改着色器。我们一个一个来处理。我们先来使用漫反射贴图。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const vs = `
+attribute vec4 a_position;
+attribute vec3 a_normal;
++attribute vec2 a_texcoord;
+attribute vec4 a_color;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+uniform vec3 u_viewWorldPosition;
+
+varying vec3 v_normal;
+varying vec3 v_surfaceToView;
++varying vec2 v_texcoord;
+varying vec4 v_color;
+
+void main() {
+  vec4 worldPosition = u_world * a_position;
+  gl_Position = u_projection * u_view * worldPosition;
+  v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
+  v_normal = mat3(u_world) * a_normal;
++  v_texcoord = a_texcoord;
+  v_color = a_color;
+}
+`;
+
+const fs = `#version 300 es
+precision highp float;
+
+varying vec3 v_normal;
+varying vec3 v_surfaceToView;
++varying vec2 v_texcoord;
+varying vec4 v_color;
+
+uniform vec3 diffuse;
++uniform sampler2D diffuseMap;
+uniform vec3 ambient;
+uniform vec3 emissive;
+uniform vec3 specular;
+uniform float shininess;
+uniform float opacity;
+uniform vec3 u_lightDirection;
+uniform vec3 u_ambientLight;
+
+void main () {
+  vec3 normal = normalize(v_normal);
+
+  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
+  vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
+
+  float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
+  float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
+
+-  vec3 effectiveDiffuse = diffuse.rgb * v_color.rgb;
+-  float effectiveOpacity = v_color.a * opacity;
++  vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
++  vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * v_color.rgb;
++  float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;
+
+  gl_FragColor = vec4(
+      emissive +
+      ambient * u_ambientLight +
+      effectiveDiffuse * fakeLight +
+      specular * pow(specularLight, shininess),
+      effectiveOpacity);
+}
+`;
+</code></pre>
+<p>我们有纹理啦！</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-load-obj-w-mtl-w-textures.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-load-obj-w-mtl-w-textures.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>回头看 .mtl 文件，我们看到 <code class="notranslate" translate="no">map_Ks</code> 基本是黑白的纹理，它指定了特定表面的光泽度，
+或者也可以说是多少镜面反射的效果。</p>
+<div class="webgl_center"><img src="../../resources/models/windmill/windmill_001_base_SPEC.jpg" style="width: 512px;"></div>
+
+<p>为了使用它，只需要更新着色器，因为我们已经加载了全部的纹理。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const fs = `
+precision highp float;
+
+varying vec3 v_normal;
+varying vec3 v_surfaceToView;
+varying vec2 v_texcoord;
+varying vec4 v_color;
+
+uniform vec3 diffuse;
+uniform sampler2D diffuseMap;
+uniform vec3 ambient;
+uniform vec3 emissive;
+uniform vec3 specular;
++uniform sampler2D specularMap;
+uniform float shininess;
+uniform float opacity;
+uniform vec3 u_lightDirection;
+uniform vec3 u_ambientLight;
+
+void main () {
+  vec3 normal = normalize(v_normal);
+
+  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
+  vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
+
+  float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
+  float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
++  vec4 specularMapColor = texture2D(specularMap, v_texcoord);
++  vec3 effectiveSpecular = specular * specularMapColor.rgb;
+
+  vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
+  vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * v_color.rgb;
+  float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;
+
+  gl_FragColor = vec4(
+      emissive +
+      ambient * u_ambientLight +
+      effectiveDiffuse * fakeLight +
+-      specular * pow(specularLight, shininess),
++      effectiveSpecular * pow(specularLight, shininess),
+      effectiveOpacity);
+}
+`;
+</code></pre>
+<p>我们也给没有高光贴图的材质设置默认值：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const defaultMaterial = {
+  diffuse: [1, 1, 1],
+  diffuseMap: textures.defaultWhite,
+  ambient: [0, 0, 0],
+  specular: [1, 1, 1],
++  specularMap: textures.defaultWhite,
+  shininess: 400,
+  opacity: 1,
+};
+</code></pre>
+<p>根据 .mtl 文件中的材质设置，很难看到什么效果。
+让我们来修改下镜面设置，这样就好了</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// hack the materials so we can see the specular map
+Object.values(materials).forEach((m) =&gt; {
+  m.shininess = 25;
+  m.specular = [3, 2, 1];
+});
+</code></pre>
+<p>这样，只有窗和叶片被设置成反射高光了。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-load-obj-w-mtl-w-specular-map.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-load-obj-w-mtl-w-specular-map.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>我很奇怪叶片被设置成了反光。
+如果你检查 .mtl 文件，你会发现光泽度 <code class="notranslate" translate="no">Ns</code> 被设置成了 0.0，也就是几乎不反光。
+但同时，所有材质的 <code class="notranslate" translate="no">illum</code> 被设置成了 1。根据文档，照度模型为 1 意味着：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">颜色 = KaIa + Kd { SUM j=1...ls, (N * Lj)Ij }
+</code></pre><p>更通俗的说：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">颜色 = 环境色 * 环境光 + 漫反射色 * 光照计算和
+</code></pre><p>你可以看到并没有用到镜面反射，但文件里却有镜面贴图！¯_(ツ)_/¯
+镜面高光需要照度模型为 2 或以上。
+这是我的一些关于 .obj/.mtl 文件的经验，你总是需要对材质做一些手动调整。
+如何解决这些问题取决于你。你可有编辑 .mtl 文件，或者添加代码。
+而我们现在会添加一些代码。</p>
+<p>最后一个 .mtl 文件使用贴图的是凹凸贴图： <code class="notranslate" translate="no">map_Bump</code>。
+这又是一个可以看出 .obj/.mtl 文件古早的地方。
+引用的只是法线贴图，并不是凹凸贴图。</p>
+<div class="webgl_center"><img src="../../resources/models/windmill/windmill_001_base_NOR.jpg" style="width: 512px;"></div>
+
+<p>.mtl 文件中并没有选项指定将凹凸贴图用作法线贴图。
+我们可以启发性的假设文件名中有个 &#39;nor&#39; 呢？
+或者我们可以假设 2020 及以后，所有 <code class="notranslate" translate="no">map_Bump</code> 引用的文件都是法线贴图，
+因为我不确定在过去的几年中看到过 .obj 文件中引用的确实是凹凸贴图。
+我们先沿着这个假设做把。</p>
+<p>我们会用到来自 <a href="webgl-3d-lighting-normal-mapping.html">关于法线贴图的文章</a> 的代码来生成切线。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const parts = obj.geometries.map(({material, data}) =&gt; {
+  ...
+
++  // 如果数据满足，生成切线
++  if (data.texcoord &amp;&amp; data.normal) {
++    data.tangent = generateTangents(data.position, data.texcoord);
++  } else {
++    // 没有切线
++    data.tangent = { value: [1, 0, 0] };
++  }
+
+  // create a buffer for each array by calling
+  // gl.createBuffer, gl.bindBuffer, gl.bufferData
+  const bufferInfo = twgl.createBufferInfoFromArrays(gl, data);
+  const vao = twgl.createVAOFromBufferInfo(gl, meshProgramInfo, bufferInfo);
+  return {
+    material: {
+      ...defaultMaterial,
+      ...materials[material],
+    },
+    bufferInfo,
+    vao,
+  };
+});
+</code></pre>
+<p>同样的，为没有法线贴图的材质添加默认值：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const textures = {
+  defaultWhite: create1PixelTexture(gl, [255, 255, 255, 255]),
++  defaultNormal: create1PixelTexture(gl, [127, 127, 255, 0]),
+};
+
+...
+
+const defaultMaterial = {
+  diffuse: [1, 1, 1],
+  diffuseMap: textures.defaultWhite,
++  normalMap: textures.defaultNormal,
+  ambient: [0, 0, 0],
+  specular: [1, 1, 1],
+  specularMap: textures.defaultWhite,
+  shininess: 400,
+  opacity: 1,
+};
+...
+</code></pre>
+<p>然后我们需要将 <a href="webgl-3d-lighting-normal-mapping.html">关于法线贴图的文章</a> 中对着色器的修改合并：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const vs = `
+attribute vec4 a_position;
+attribute vec3 a_normal;
++attribute vec3 a_tangent;
+attribute vec2 a_texcoord;
+attribute vec4 a_color;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+uniform vec3 u_viewWorldPosition;
+
+varying vec3 v_normal;
++varying vec3 v_tangent;
+varying vec3 v_surfaceToView;
+varying vec2 v_texcoord;
+varying vec4 v_color;
+
+void main() {
+  vec4 worldPosition = u_world * a_position;
+  gl_Position = u_projection * u_view * worldPosition;
+  v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
+
+-  v_normal = mat3(u_world) * a_normal;
++  mat3 normalMat = mat3(u_world);
++  v_normal = normalize(normalMat * a_normal);
++  v_tangent = normalize(normalMat * a_tangent);
+
+  v_texcoord = a_texcoord;
+  v_color = a_color;
+}
+`;
+
+const fs = `
+precision highp float;
+
+varying vec3 v_normal;
++varying vec3 v_tangent;
+varying vec3 v_surfaceToView;
+varying vec2 v_texcoord;
+varying vec4 v_color;
+
+uniform vec3 diffuse;
+uniform sampler2D diffuseMap;
+uniform vec3 ambient;
+uniform vec3 emissive;
+uniform vec3 specular;
+uniform sampler2D specularMap;
+uniform float shininess;
+uniform sampler2D normalMap;
+uniform float opacity;
+uniform vec3 u_lightDirection;
+uniform vec3 u_ambientLight;
+
+void main () {
+  vec3 normal = normalize(v_normal);
++  vec3 tangent = normalize(v_tangent);
++  vec3 bitangent = normalize(cross(normal, tangent));
++
++  mat3 tbn = mat3(tangent, bitangent, normal);
++  normal = texture2D(normalMap, v_texcoord).rgb * 2. - 1.;
++  normal = normalize(tbn * normal);
+
+  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
+  vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
+
+  float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
+  float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
+  vec4 specularMapColor = texture2D(specularMap, v_texcoord);
+  vec3 effectiveSpecular = specular * specularMapColor.rgb;
+
+  vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
+  vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * v_color.rgb;
+  float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;
+
+  gl_FragColor = vec4(
+      emissive +
+      ambient * u_ambientLight +
+      effectiveDiffuse * fakeLight +
+      effectiveSpecular * pow(specularLight, shininess),
+      effectiveOpacity);// * 0.0 + vec4(normal * 0.5 + 0.5 + effectiveSpecular * pow(specularLight, shininess), 1);
+}
+`;
+</code></pre>
+<p>这样，我们就得到了法线贴图。注意：我移近了摄像头，这样能看的更清楚。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-load-obj-w-mtl-w-normal-maps.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-load-obj-w-mtl-w-normal-maps.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>我确信我们还可以支持更多的 .mtl 文件的的特性。
+比如 <code class="notranslate" translate="no">refl</code> 关键词指定了反射贴图，也就是 <a href="webgl-environment-maps.html">环境贴图</a>。
+同样还有很多 <code class="notranslate" translate="no">map_</code> 加各种选项参数的关键词。比如：</p>
+<ul>
+<li><code class="notranslate" translate="no">-clamp on | off</code> 指定纹理是否重复</li>
+<li><code class="notranslate" translate="no">-mm base gain</code> 指定纹理值的偏移和倍数</li>
+<li><code class="notranslate" translate="no">-o u v w</code> 指定纹理座标的偏移。可以像 <a href="webgl-2d-drawimage.html">关于 drawImage 的文章</a> 中那样放进纹理矩阵中来使用</li>
+<li><code class="notranslate" translate="no">-s u v w</code> 指定纹理座标的缩放。像上面一样，这些需要放进纹理矩阵中</li>
+</ul>
+<p>我不知道有多少 .mtl 文件使用了这些设置，或用了多少。
+例如，要支持 <code class="notranslate" translate="no">-o</code> 和 <code class="notranslate" translate="no">-s</code>，我们就要假设所有的贴图都有区别，并支持全部的纹理。
+这就需要我们为每个纹理传不同的纹理矩阵，
+而这又需要我们从顶点着色器为每个纹理传不同的纹理座标到片段着色器，
+或者在片段着色器中进行纹理矩阵乘法（而不是传统方法那样在顶点着色器中做）。</p>
+<p>更重要的是，如果支持所有特性，会让着色器变得又大又复杂。
+上面的代码是一种 <em>超级着色器</em> 的样子，一个试图处理所有情况的着色器。
+通过传默认值来让它正常工作。
+例如，我们将 <code class="notranslate" translate="no">diffuseMap</code> 默认设置成白色纹理，这样如果我们加载了没有纹理的模型，也可以显示出来。
+漫反射的颜色会被乘上白色，也就是 1.0，所以我们就能得到漫反射颜色。
+类似的，我们将顶点颜色默认设置为白色。</p>
+<p>这是一种常用的方式。如果它效果不错，满足了你的要求，就没有理由去改动它。
+更常见的做法是生成一个可以开/关这些特性的着色器。
+如果没有顶点颜色，就通过操作字符串，生成一个着色器，着色器里没有 <code class="notranslate" translate="no">a_color</code> 属性和其它相关代码。
+类似的，如果一个材质没有漫反射贴图，就生成一个没有 <code class="notranslate" translate="no">uniform sampler2D diffuseMap</code> 的着色器，并移除相关代码。
+如果不包含任何贴图，就不需要纹理座标，我们就可以把它们全部移除。</p>
+<p>如果将这些组合都加上，可能会有 1000 多种着色器。
+我们上面有的特性就有：</p>
+<ul>
+<li>漫反射贴图 有/无</li>
+<li>镜面贴图 有/无</li>
+<li>法线贴图 有/无</li>
+<li>顶点颜色 有/无</li>
+<li>环境贴图 有/无 （我们不支持，但 .mtl 文件中有）</li>
+<li>反射贴图 有/无 （我们不支持，但 .mtl 文件中有）</li>
+</ul>
+<p>仅这些就有 64 种组合。如果再加上 1 到 4 种光线（点光源、方向光源等），那么就会有 8192 种可能的着色器组合。</p>
+<p>管理这些就会有很多工作。这就是为什么很多人选择像 <a href="https://threejs.org">three.js</a> 这样的 3D 引擎而不是自己开发的原因。
+但至少这篇文章介绍了一些展示任意 3D 内容的相关的知识。</p>
+<div class="webgl_bottombar">
+<h3>尽可能避免在着色器中使用条件语句</h3>
+<p>通常的建议是避免在着色器中使用条件语句。比如我们可能写这样的代码</p>
+<pre class="prettyprint"><code class="notranslate" translate="no">
+uniform bool hasDiffuseMap;
+uniform vec4 diffuse;
+uniform sampler2D diffuseMap
+
+...
+vec4 effectiveDiffuse = diffuse;
+if (hasDiffuseMap) {
+effectiveDiffuse \*= texture2D(diffuseMap, texcoord);
+}
+...
+</code></pre>
+
+<p>这样的条件语句一般是不鼓励的，因为依赖于 GPU 或者驱动，它们没有很好的性能。</p>
+<p>当没有纹理时我们用一个 1x1 像素的白点纹理，这样就不用考虑条件语句了。</p>
+<p>或者，使用不同的着色器。一个带有该特性，一个没有，根据情况选择使用正确的着色器。</p>
+</div>
 
     </div>
     <div class="lesson-sidebar">
@@ -184,7 +1030,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>基础概念</li>
+        <div id="toc">
+          <ul>  <li>基础概念</li>
         <ul>
           <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
@@ -225,7 +1072,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <ul>
           <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-load-obj.html">WebGL 加载 .obj 文件</a></li>
-<li><a href="/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">WebGL 加载带 .mtl 的 .obj 文件</a></li>
         </ul>
   <li>纹理</li>
         <ul>
@@ -318,6 +1165,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
 </ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 加载带 Mtl 的 Obj';
+            var disqus_title = 'WebGL 加载带 Mtl 的 Obj';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
