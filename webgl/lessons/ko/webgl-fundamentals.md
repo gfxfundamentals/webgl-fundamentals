@@ -1,29 +1,30 @@
 Title: WebGL 기초
 Description: 기초부터 시작하는 WebGL 첫 강의
-TOC: WebGL 기초
+TOC: 기초
 
 
-WebGL은 종종 3D API로 치부되는데요.
-사람들은 "WebGL을 사용해서 *멋진 3D*를 만들어야지!"라고 생각합니다.
-하지만 사실 WebGL은 그저 Rasterization 엔진일 뿐입니다.
-당신이 작성한 코드를 이용해 점, 선, 삼각형 등을 그리죠.
-WebGL로 원하는 결과물을 얻기 위해서는 점, 선, 삼각형을 그리는 코드를 잘 이용해야 합니다.
+WebGL은 종종 3D API로 치부됩니다.
+사람들은 "WebGL이랑 *magic*을 사용해서 멋진 3d를 만들거야"라고 생각하는데요.
+실제로 WebGL은 [rasterization engine](webgl-2d-vs-3d-library.html)일 뿐입니다.
+당신이 제공한 코드를 기반으로 점, 선, 삼각형 등을 그리죠.
+WebGL이 원하는 작업을 수행하도록 하는 건 [점, 선, 심긱형](webgl-points-lines-triangles.html)을 사용한 코드를 제공하는 것에 달려있습니다.
 
 WebGL은 컴퓨터에 있는 GPU에서 실행됩니다.
-따라서 GPU에서 실행되는 코드를 작성해야 하는데, 이 코드는 함수 쌍 형태로 제공됩니다.
-각각 Vertex Shader와 Fragment Shader라고 불리며 C/C++처럼 엄격한 Type을 가지는 [GLSL](webgl-shaders-and-glsl.html)로 작성되어 있습니다.
-그리고 이 두 개를 합쳐서 *Shader Program*이라고 부릅니다.
+따라서 GPU에서 실행되는 코드를 제공해야 하는데요.
+해당 코드는 함수 쌍 형태로 제공해야 합니다.
+이 두 함수는 vertex shader와 fragment shader로 불리고 C/C++처럼 엄격한 Type을 가지는 [GLSL](webgl-shaders-and-glsl.html)로 작성되어 있는데요.
+이 두 개를 합쳐서 *program*이라고 부릅니다.
 
-Vertex Shader의 역할은 Vertex 위치들을 계산하는 겁니다.
-출력 위치에 따라서 WebGL은 점, 선, 삼각형을 포함한 다양한 종류의 Primitive를 Rasterization 할 수 있습니다.
-이 Primitive들을 rasterization하면 Fragment Shader 함수를 두 번째로 호출합니다.
-Fragment Shader의 역할은 현재 그려진 Primitive의 모든 화소에 색을 계산하는 겁니다.
+vertex shader의 역할은 vertex 위치를 계산하는 겁니다.
+함수가 출력하는 위치를 기반으로 WebGL은 [점, 선, 삼각형](webgl-points-lines-triangles.html)을 포함한 다양한 종류의 primitive들을 rasterization 할 수 있죠.
+rasterization 할 때 primitive들은 fragment shader라 불리는 두 번째 사용자 제공 함수를 호출하는데요.
+fragment shader의 역할은 현재 그려지는 각 primitive 화소의 색상을 계산하는 겁니다.
 
-대부분의 WebGL API는 함수 쌍 실행을 위한 상태 설정에 관한 것입니다.
-당신이 원하는 것을 그리기 위해서는 여러 상태를 설정하고 GPU에서 Shader를 실행하는 `gl.drawArrays` 또는 `gl.drawElements`을 실행해야 합니다.
+대부분의 WebGL API는 이런 함수 쌍 실행을 위한 [상태 설정](resources/webgl-state-diagram.html)에 관한 것입니다.
+당신이 원하는 것을 그리기 위해서는 여러 상태를 설정하고 GPU에서 shader를 실행하는 `gl.drawArrays`나 `gl.drawElements`를 호출해서 함수 쌍을 실행해야 합니다.
 
-함수들이 접근해야 하는 모든 데이터는 GPU에 제공되어야 하는데요.
-Shader가 데이터를 받는 방법에는 4가지가 있습니다.
+이런 함수가 접근하기 원하는 모든 데이터는 GPU에 제공되어야 하는데요.
+shader가 데이터를 받을 수 있는 4가지 방법이 있습니다.
 
 
 1. Attribute와 Buffer
