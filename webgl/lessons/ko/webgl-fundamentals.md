@@ -27,33 +27,32 @@ fragment shader의 역할은 현재 그려지는 각 primitive 화소의 색상�
 shader가 데이터를 받을 수 있는 4가지 방법이 있습니다.
 
 
-1. Attribute와 Buffer
+1. Attributes & Buffers
 
-   Buffer는 GPU에 올리는 2진 데이터 배열입니다.
-   일반적으로 Buffer는 위치, 법선, Texture 좌표, Vertex 색상 등을 포함하지만 당신이 원하는 것을 자유롭게 넣어도 됩니다.
+   buffer는 GPU에 올리는 2진 데이터 배열입니다.
+   일반적으로 buffer는 위치, 법선, 텍스처 좌표, vertex 색상 등을 포함하지만 당신이 원하는 것을 자유롭게 넣어도 됩니다.
 
-   Attribute는 어떻게 Buffer에서 데이터를 가져오고 Vertex Shader에 제공할지 방법을 지정하는데 사용됩니다.
+   attribute는 buffer에서 데이터를 가져오고 vertex shader에 제공하는 방법을 지정하는데 사용됩니다.
    예를 들어 3개의 32bit 부동 소수점으로 각각의 위치를 buffer에 넣을 수 있는데요.
-   특정한 Attribute에게 어느 Buffer에서 위치를 가져올지, 어떤 데이터 형식을 가져와야 하는지 (3개의 32bit 부동 소수점),
-   Buffer의 어디에서 offset이 시작되는지 그리고 한 위치에서 다음 위치로 얼마나 많은 바이트를 이동시킬 것인지 알려줘야 합니다.
+   특정한 attribute에게 어느 buffer에서 위치를 가져올지, 어떤 유형의 데이터를 가져와야 하는지 (3개의 32bit 부동 소수점), buffer의 어느 위치에서 offset이 시작되는지, 그리고 한 위치에서 다음으로 갈 때 몇 바이트를 이동시킬 것인지 알려줘야 합니다.
    
-   Buffer는 무작위로 접근할 수 없는데요.
-   대신에 Vertex Shader가 지정한 횟수만큼 실행됩니다.
-   그리고 실행될 때마다 지정된 다음 buffer 값이 Attribute에 할당됩니다.
+   buffer는 무작위로 접근할 수 없습니다.
+   대신에 vertex shader가 지정한 횟수만큼 실행되는데요.
+   실행될 때마다 지정된 각 buffer에서 다음 값을 가져와서 attribute에 할당합니다.
 
-2. Uniform
+2. Uniforms
 
-   Uniform은 Shader Program을 실행하기 전에 선언하는 유용한 전역 변수입니다.
+   uniform은 shader program을 실행하기 전에 설정하는 사실상 전역 변수입니다.
 
-3. Texture
+3. Textures
 
-   Texture는 Shader Program이 무작위로 접근할 수 있는 데이터 배열입니다.
-   일반적으로 Texture에 들어가는 것은 대부분 이미지 데이터지만 색상 이외에 다른 것도 쉽게 넣을 수 있습니다.
+   텍스처는 shader program에서 무작위로 접근할 수 있는 데이터 배열입니다.
+   텍스처에 넣는 대부분은 이미지 데이터지만 텍스처는 데이터일 뿐이며 색상 이외의 것도 쉽게 담을 수 있습니다.
 
-4. Varying
+4. Varyings
 
-   Varying는 Vertex Shader가 Fragment Shader에 데이터를 넘기는 방법입니다.
-   렌더링 되는 점, 선 또는 삼각형에 따라 Vertex Shader의 Varying 값은 Fragment Shader를 실행하는 동안 보간됩니다.
+   varying은 vertex shader가 fragment shader에 데이터를 넘기는 방법입니다.
+   렌더링 되는 점, 선 또는 삼각형에 따라 vertex shader에 의해 설정된 varying의 값은 fragment shader를 실행하는 동안 보간됩니다.
 
 ## WebGL Hello World
 
