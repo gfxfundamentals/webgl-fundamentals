@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-texture-units.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,78 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Texture Units" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="What are texture units in WebGL?" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-texture-units.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Texture Units" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-texture-units.html" />
-<meta name="twitter:description" content="What are texture units in WebGL?" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="WebGL 中的纹理单元是什么？">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-texture-units_zh-cn.jpg">
+
+<meta property="og:title" content="WebGL 纹理单元">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-texture-units_zh-cn.jpg">
+<meta property="og:description" content="WebGL 中的纹理单元是什么？">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-texture-units.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 纹理单元">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-texture-units.html">
+<meta name="twitter:description" content="WebGL 中的纹理单元是什么？">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-texture-units_zh-cn.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-texture-units.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-texture-units_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-texture-units.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-texture-units.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 纹理单元",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-texture-units.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Texture Units</title>
+<title>WebGL 纹理单元</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-texture-units.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-texture-units.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-texture-units.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-texture-units.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-texture-units.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-texture-units.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-texture-units.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-texture-units.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -163,12 +218,103 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Texture Units</h1>
+    <h1>WebGL 纹理单元</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-texture-units.html">英文原版地址</a></p>
+      <p>这篇文章是想形象的介绍如何在 WebGL 中设置纹理单元。
+有一篇类似的文章 <a href="webgl-attributes.html">关于属性</a>。</p>
+<p>作为前置要求，你可能需要先阅读 <a href="webgl-how-it-works.html">WebGL 是如何工作的</a> 和 <a href="webgl-shaders-and-glsl.html">WebGL 着色器和 GLSL</a>，
+以及 <a href="webgl-3d-textures.html">WebGL 纹理</a>。</p>
+<h2 id="-">纹理单元</h2>
+<p>在 WebGL 中有纹理。纹理通常是二维矩阵数据，可以传给着色器使用。
+在着色器中，你会像这样声明 <em>均匀采样器</em>：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">uniform sampler2D someTexture;
+</code></pre>
+<p>但着色器怎么知道 <code class="notranslate" translate="no">someTexture</code> 使用了哪个纹理？</p>
+<p>这就是需要纹理单元的地方。
+纹理单元是引用纹理的 <strong>全局数组</strong>。你可以想象如果写成 JavaScript 它会有一些看起来像这样的全局状态：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const gl = {
+  activeTextureUnit: 0,
+  textureUnits: [
+    { TEXTURE_2D: null, TEXTURE_CUBE_MAP: null, },
+    { TEXTURE_2D: null, TEXTURE_CUBE_MAP: null, },
+    { TEXTURE_2D: null, TEXTURE_CUBE_MAP: null, },
+    { TEXTURE_2D: null, TEXTURE_CUBE_MAP: null, },
+    { TEXTURE_2D: null, TEXTURE_CUBE_MAP: null, },
+    { TEXTURE_2D: null, TEXTURE_CUBE_MAP: null, },
+    { TEXTURE_2D: null, TEXTURE_CUBE_MAP: null, },
+    { TEXTURE_2D: null, TEXTURE_CUBE_MAP: null, },
+    { TEXTURE_2D: null, TEXTURE_CUBE_MAP: null, },
+  ];
+}
+</code></pre>
+<p>从上面可以看到 <code class="notranslate" translate="no">textureUnits</code> 是数组。你将纹理分配给纹理单元数组中的一个 <em>绑定点</em>。
+假设将 <code class="notranslate" translate="no">ourTexture</code> 分配给纹理单元 5：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 初始化时
+const ourTexture = gl.createTexture();
+// 插入初始化纹理的代码
+
+...
+
+// 渲染时
+const indexOfTextureUnit = 5;
+gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
+gl.bindTexture(gl.TEXTURE_2D, ourTexture);
+</code></pre>
+<p>然后通过调用下面代码，告诉着色器你将纹理绑定到了哪个纹理单元：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
+</code></pre>
+<p>如果用 JavaScript 实现 WebGL 的 <code class="notranslate" translate="no">activeTexture</code> 和 <code class="notranslate" translate="no">bindTexture</code> 函数，看起来会是这样：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 伪代码！！！
+gl.activeTexture = function(unit) {
+  gl.activeTextureUnit = unit - gl.TEXTURE0;  // 转成从 0 开始的索引
+};
+
+gl.bindTexture = function(target, texture) {
+  const textureUnit = gl.textureUnits[gl.activeTextureUnit];
+  textureUnit[target] = texture;
+}:
+</code></pre>
+<p>你甚至可以想象其它有关纹理的函数是如何工作的。
+它们都需要拿到 <code class="notranslate" translate="no">target</code>，就像 <code class="notranslate" translate="no">gl.texImage2D(target, ...)</code> 或 <code class="notranslate" translate="no">gl.texParameteri(target)</code>。
+实现起来像这样：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 伪代码！！！
+gl.texImage2D = function(target, level, internalFormat, width, height, border, format, type, data) {
+  const textureUnit = gl.textureUnits[gl.activeTextureUnit];
+  const texture = textureUnit[target];
+  texture.mips[level] = convertDataToInternalFormat(internalFormat, width, height, format, type, data);
+}
+
+gl.texParameteri = function(target, pname, value) {
+  const textureUnit = gl.textureUnits[gl.activeTextureUnit];
+  const texture = textureUnit[target];
+  texture[pname] = value; 
+}
+</code></pre>
+<p>通过上面的伪代码应该可以知道，<code class="notranslate" translate="no">gl.activeTexture</code> 将一个 WebGL 内的内部全局变量设置成了纹理单元数组的一个索引。
+从这以后，所有其它有关纹理单元的函数，都需要一个 <code class="notranslate" translate="no">target</code>(所有纹理单元函数的第一个参数)，引用了当前纹理单元的绑定点。</p>
+<h2 id="-">最大纹理单元数量</h2>
+<p>WebGL 要求实现支持至少 8 个纹理单元。你可以通过下面代码查询支持的数量：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxTextureUnits = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
+</code></pre>
+<p>注意顶点着色器和片段着色器对于可以使用的单元数量有着不同的限制。
+可以通过下面代码查询：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxVertexShaderTextureUnits = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
+const maxFragmentShaderTextureUnits = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+</code></pre>
+<p>假设：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">maxTextureUnits = 8
+maxVertexShaderTextureUnits = 4
+maxFragmentShaderTextureUnits = 8
+</code></pre>
+<p>这意味这，例如，如果你有两个纹理单元被用在顶点着色器中，那么还剩 6 个可以使用在片段着色器中，
+因为最多能使用的纹理单元只有 8 个。</p>
+<p>另一个需要注意的事是，WebGL 允许 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code> 返回 0！！！
+也就是说，<strong>有可能设备不支持在顶点着色器中使用纹理</strong>。
+幸运的是 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">这种情况很少见</a>。
+不过，如果你决定在顶点着色器中使用一些纹理，你需要先检查 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code> 是否支持你的需求，
+如果不支持，通知用户。</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -184,7 +330,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>基础概念</li>
+        <div id="toc">
+          <ul>  <li>基础概念</li>
         <ul>
           <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
@@ -309,15 +456,40 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li>Reference</li>
         <ul>
           <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">WebGL 属性</a></li>
-<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">Texture Units</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">WebGL 纹理单元</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-readpixels.html">WebGL readPixels</a></li>
-<li><a href="/webgl/lessons/zh_cn/webgl-references.html">References</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-references.html">WebGL 参考</a></li>
         </ul></ul>
 <ul>
   <li><a href="/docs/">API 帮助文档</a></li>
   <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
 </ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 纹理单元';
+            var disqus_title = 'WebGL 纹理单元';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
