@@ -204,7 +204,7 @@ var canvas = document.querySelector("#canvas");
 
 and change the call to `gl.clear` so it only clears the depth buffer
 
-```
+```js
 -// Clear the canvas AND the depth buffer.
 -gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 +// Clear the depth buffer.
