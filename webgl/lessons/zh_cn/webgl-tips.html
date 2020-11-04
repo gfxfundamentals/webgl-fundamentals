@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-tips.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,78 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Tips" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="Small issues that might trip you up with WebGL" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-tips.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Tips" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-tips.html" />
-<meta name="twitter:description" content="Small issues that might trip you up with WebGL" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="WebGL 中可能绊倒你的小问题">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-tips_zh-cn.jpg">
+
+<meta property="og:title" content="WebGL 小技巧">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-tips_zh-cn.jpg">
+<meta property="og:description" content="WebGL 中可能绊倒你的小问题">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-tips.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 小技巧">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-tips.html">
+<meta name="twitter:description" content="WebGL 中可能绊倒你的小问题">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-tips_zh-cn.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-tips.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-tips_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-tips.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-tips.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 小技巧",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-tips.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Tips</title>
+<title>WebGL 小技巧</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-tips.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-tips.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-tips.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-tips.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-tips.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-tips.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-tips.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-tips.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -163,12 +218,289 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Tips</h1>
+    <h1>WebGL 小技巧</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-tips.html">英文原版地址</a></p>
+      <p>这篇文章是一些在使用 WebGL 过程中可能遇到的小问题合集。</p>
+<hr>
+<p><a id="screenshot" data-toc="截屏"></a></p>
+<h1 id="-">从画布中截屏</h1>
+<p>在浏览器中，有 2 个有效的截屏函数。
+旧的是 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL"><code class="notranslate" translate="no">canvas.toDataURL</code></a>，
+更好更新的是 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob"><code class="notranslate" translate="no">canvas.toBlob</code></a></p>
+<p>所以你可能以为加一些下面的代码就可以很容易的截图：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
++&lt;button id=&quot;screenshot&quot; type=&quot;button&quot;&gt;Save...&lt;/button&gt;
+</code></pre>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const elem = document.querySelector(&#39;#screenshot&#39;);
+elem.addEventListener(&#39;click&#39;, () =&gt; {
+  canvas.toBlob((blob) =&gt; {
+    saveBlob(blob, `screencapture-${canvas.width}x${canvas.height}.png`);
+  });
+});
+
+const saveBlob = (function() {
+  const a = document.createElement(&#39;a&#39;);
+  document.body.appendChild(a);
+  a.style.display = &#39;none&#39;;
+  return function saveData(blob, fileName) {
+     const url = window.URL.createObjectURL(blob);
+     a.href = url;
+     a.download = fileName;
+     a.click();
+  };
+}());
+</code></pre>
+<p>这里有个来自 <a href="webgl-animation.html">关于动画的文章</a> 的例子，用上面的代码和一些 CSS 来放置按键。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-tips-screenshot-bad.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-tips-screenshot-bad.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>然后我的到了下面的截图</p>
+<div class="webgl_center"><img src="../resources/screencapture-398x298.png"></div>
+
+<p>是的，就是一张空白图片。</p>
+<p>上面的代码有可能正常工作，取决于你的浏览器/操作系统。
+但一般来说，它不会正常工作。</p>
+<p>这问题的原因，是因为为了性能和兼容性，当完成绘制后，浏览器默认会清除 WebGL 画布的绘制缓存。</p>
+<p>有 3 种解决方法。</p>
+<ol>
+<li><p>在截图前调用渲染代码</p>
+<p> 假设我们使用的绘制代码是 <code class="notranslate" translate="no">drawScene</code> 函数。
+ 最好不要对它有所改动，然后在截图前调用它进行渲染。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js"> elem.addEventListener(&#39;click&#39;, () =&gt; {
+ +  drawScene();
+   canvas.toBlob((blob) =&gt; {
+     saveBlob(blob, `screencapture-${canvas.width}x${canvas.height}.png`);
+   });
+ });
+</code></pre>
+</li>
+<li><p>在渲染循环中调用截图代码</p>
+<p> 在这种情况下，当我们想要截图时，设置标志位，然后在渲染循环中去进行截图。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js"> let needCapture = false;
+ elem.addEventListener(&#39;click&#39;, () =&gt; {
+    needCapture = true;
+ });
+</code></pre>
+<p> 然后在渲染循环中（当前是在 <code class="notranslate" translate="no">drawScene</code> 中实现的），所有内容都完成绘制后：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js"> function drawScene(time) {
+   ...
+
+ +  if (needCapture) {
+ +    needCapture = false;
+ +    canvas.toBlob((blob) =&gt; {
+ +      saveBlob(blob, `screencapture-${canvas.width}x${canvas.height}.png`);
+ +    });
+ +  }
+
+   ...
+ }
+</code></pre>
+</li>
+<li><p>创建 WebGL context 时设置 <code class="notranslate" translate="no">preserveDrawingBuffer: true</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js"> const gl = someCanvas.getContext(&#39;webgl&#39;, {preserveDrawingBuffer: true});
+</code></pre>
+<p> 这让 WebGL 在将画布和页面其它内容合成后不清除画布，防止 <em>可能</em> 的优化。</p>
+</li>
+</ol>
+<p>我会选上面的 #1。在这个特定的例子中，我会将更新状态的代码从绘制部分中抽取出来。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  var then = 0;
+
+-  requestAnimationFrame(drawScene);
++  requestAnimationFrame(renderLoop);
+
++  function renderLoop(now) {
++    // 转换成秒
++    now *= 0.001;
++    // 当前时间减去之前时间
++    var deltaTime = now - then;
++    // 为下一帧记住当前时间
++    then = now;
++
++    // 每一帧都增加一点旋转
++    rotation[1] += rotationSpeed * deltaTime;
++
++    drawScene();
++
++    // 为下一帧再次调用 renderLoop
++    requestAnimationFrame(renderLoop);
++  }
+
+  // 绘制场景
++  function drawScene() {
+- function drawScene(now) {
+-    // 转换成秒
+-    now *= 0.001;
+-    // 当前时间减去之前时间
+-    var deltaTime = now - then;
+-    // 为下一帧记住当前时间
+-    then = now;
+-
+-    // 每一帧都增加一点旋转
+-    rotation[1] += rotationSpeed * deltaTime;
+
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+    ...
+
+-    // 为下一帧再次调用 drawScene
+-    requestAnimationFrame(drawScene);
+  }
+</code></pre>
+<p>现在我们可以在截图前调用 <code class="notranslate" translate="no">drawScene</code> 了。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">elem.addEventListener(&#39;click&#39;, () =&gt; {
++  drawScene();
+  canvas.toBlob((blob) =&gt; {
+    saveBlob(blob, `screencapture-${canvas.width}x${canvas.height}.png`);
+  });
+});
+</code></pre>
+<p>现在应该可以正常工作了。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-tips-screenshot-good.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-tips-screenshot-good.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>如果你检查截图，会发现背景是透明的。
+看 <a href="webgl-and-alpha.html">这篇文章</a> 获取一些细节。</p>
+<p><a id="preservedrawingbuffer" data-toc="防止画布被清空"></a></p>
+<h1 id="-">防止画布被清空</h1>
+<p>假设你想让用户绘制动画物体，当你创建 WebGL context 时需要设置 <code class="notranslate" translate="no">preserveDrawingBuffer: true</code>。
+这防止浏览器清空画布。</p>
+<p>像 <a href="webgl-animation.html">关于动画的文章</a> 的例子。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var canvas = document.querySelector(&quot;#canvas&quot;);
+-var gl = canvas.getContext(&quot;webgl&quot;);
++var gl = canvas.getContext(&quot;webgl&quot;, {preserveDrawingBuffer: true});
+</code></pre>
+<p>然后改成调用 <code class="notranslate" translate="no">gl.clear</code>，这样只会清除深度信息缓存。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-// 清除画布和深度信息的缓存
+-gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
++// 清除深度信息的缓存
++gl.clear(gl.DEPTH_BUFFER_BIT);
+</code></pre>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-tips-preservedrawingbuffer.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-tips-preservedrawingbuffer.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>注意，如果你真的想写一个绘制程序，上面的方法不是一个好的方案，因为只要改变分辨率，浏览器就会清空画布。
+修改的分辨率是基于显示大小的，当窗口大小改变时，显示大小也会改变。
+这包括当用户下载文件时，即使不在一个窗口浏览器添加了一个状态栏。
+也包括了用户旋转了手机，浏览器从竖屏切换到了横屏。</p>
+<p>如果你真在想要写个绘制程序，你最好 <a href="webgl-render-to-texture.html">渲染到纹理</a>。</p>
+<hr>
+<p><a id="tabindex" data-toc="在画布中获取键盘输入"></a></p>
+<h1 id="-">获取键盘输入</h1>
+<p>如果你在做一个整页/全屏的 WebGL 应用，那你可以做任何你想做的。
+但通常情况会是大的页面中有一块画布，当用户点击画布时，画布可以获取键盘输入。
+但一般来说画布无法获取键盘输入。
+解决方法是将画布的 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/tabIndex"><code class="notranslate" translate="no">tabindex</code></a> 设置成 0 或者更大。例如：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas tabindex=&quot;0&quot;&gt;&lt;/canvas&gt;
+</code></pre>
+<p>但这会造成新的问题。任何有 <code class="notranslate" translate="no">tabindex</code> 设置的元素在聚焦时都会高亮。
+要解决这个问题，在 CSS 中将它的聚焦轮廓设成 none</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">canvas:focus {
+  outline: none;
+}
+</code></pre>
+<p>举个例子，这里有 3 个画布：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas id=&quot;c1&quot;&gt;&lt;/canvas&gt;
+&lt;canvas id=&quot;c2&quot; tabindex=&quot;0&quot;&gt;&lt;/canvas&gt;
+&lt;canvas id=&quot;c3&quot; tabindex=&quot;1&quot;&gt;&lt;/canvas&gt;
+</code></pre>
+<p>设置最后一个画布:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">#c3:focus {
+  outline: none;
+}
+</code></pre>
+<p>对它们挂上同样的事件监听：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">document.querySelectorAll(&#39;canvas&#39;).forEach((canvas) =&gt; {
+  const ctx = canvas.getContext(&#39;2d&#39;);
+
+  function draw(str) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.textAlign = &#39;center&#39;;
+    ctx.textBaseline = &#39;middle&#39;;
+    ctx.fillText(str, canvas.width / 2, canvas.height / 2);
+  }
+  draw(canvas.id);
+
+  canvas.addEventListener(&#39;focus&#39;, () =&gt; {
+    draw(&#39;has focus press a key&#39;);
+  });
+
+  canvas.addEventListener(&#39;blur&#39;, () =&gt; {
+    draw(&#39;lost focus&#39;);
+  });
+
+  canvas.addEventListener(&#39;keydown&#39;, (e) =&gt; {
+    draw(`keyCode: ${e.keyCode}`);
+  });
+});
+</code></pre>
+<p>观察到第一个画布无法获取键盘输入。
+第二个画布可以获取键盘输入，但是被高亮了。
+第三个画布既获取了键盘输入，又没有被高亮。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-tips-tabindex.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-tips-tabindex.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<hr>
+<p><a id="html-background" data-toc="将 WebGL 作为 HTML 的背景"></a></p>
+<h1 id="-webgl-">将 WebGL 动画作为背景</h1>
+<p>一个常被问到的问题是，如何将 WebGL 动画用作网页的背景。</p>
+<p>有 2 种方法：</p>
+<ul>
+<li>将画布的 CSS 属性 <code class="notranslate" translate="no">position</code> 设置成 <code class="notranslate" translate="no">fixed</code></li>
+</ul>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">#canvas {
+ position: fixed;
+ left: 0;
+ top: 0;
+ z-index: -1;
+ ...
+}
+</code></pre>
+<p>并将 <code class="notranslate" translate="no">z-index</code> 设置成 -1。</p>
+<p>这么做的缺点是，你的 JavaScript 代码必须嵌入在页面中，
+并且如果你的页面很复杂，需要确保 WebGL 代码中的 JavaScript 和页面中的 JavaScript 不冲突。</p>
+<ul>
+<li>使用 <code class="notranslate" translate="no">iframe</code></li>
+</ul>
+<p>这是这个 <a href="/">网站主页</a> 使用的方案。</p>
+<p>在你的网页中插入一个 iframe，例如：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;iframe id=&quot;background&quot; src=&quot;background.html&quot;&gt;&lt;/iframe&gt;
+&lt;div&gt;
+  这里是你的内容
+&lt;/div&gt;
+</code></pre>
+<p>然后给 iframe 设置样式，填满窗口并且作为背景。
+代码几乎和上面设置画布一样，除了将 <code class="notranslate" translate="no">border</code> 设置成 <code class="notranslate" translate="no">none</code>，因为 iframe 默认有边框。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">#background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    border: none;
+    pointer-events: none;
+}
+</code></pre>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-tips-html-background.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-tips-html-background.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -184,7 +516,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>基础概念</li>
+        <div id="toc">
+          <ul>  <li>基础概念</li>
         <ul>
           <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
@@ -299,10 +632,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-precision-issues.html">Precision Issues</a></li>
-<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#screenshot">Taking a screenshot</a></li>
-<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#preservedrawingbuffer">Prevent the Canvas Being Cleared</a></li>
-<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
-<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#html-background">Use WebGL as Background in HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#screenshot">截屏</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#preservedrawingbuffer">防止画布被清空</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#tabindex">在画布中获取键盘输入</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#html-background">将 WebGL 作为 HTML 的背景</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">Cross Platform Issues</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-qna.html">Questions and Answers</a></li>
         </ul>
@@ -318,6 +651,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
 </ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 小技巧';
+            var disqus_title = 'WebGL 小技巧';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>

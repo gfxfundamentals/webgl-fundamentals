@@ -390,11 +390,12 @@ clearing the canvas. </p>
 +var gl = canvas.getContext(&quot;webgl&quot;, {preserveDrawingBuffer: true});
 </code></pre>
 <p>and change the call to <code class="notranslate" translate="no">gl.clear</code> so it only clears the depth buffer</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-// Clear the canvas AND the depth buffer.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-// Clear the canvas AND the depth buffer.
 -gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 +// Clear the depth buffer.
 +gl.clear(gl.DEPTH_BUFFER_BIT);
-</code></pre><p><div class="webgl_example_container">
+</code></pre>
+<p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-tips-preservedrawingbuffer.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-tips-preservedrawingbuffer.html" target="_blank">click here to open in a separate window</a>
 </div>
