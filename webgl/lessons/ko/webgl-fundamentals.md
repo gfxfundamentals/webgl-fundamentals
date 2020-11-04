@@ -56,30 +56,30 @@ shader가 데이터를 받을 수 있는 4가지 방법이 있습니다.
 
 ## WebGL Hello World
 
-WebGL은 오직 2가지(clip 공간 좌표와 색상)만 관여합니다.
-WebGL을 사용하는 프로그래머가 할 일은 이 2가지를 작성하는 겁니다.
+WebGL은 clip 공간 좌표와 색상, 오직 2가지만 신경을 쓰는데요.
+프로그래머로서 WebGL을 사용하는 당신의 역할은 이 2가지를 작성하는 겁니다.
+이를 위해 2개의 "shader"를 제공해야 하는데요.
+clip 공간 좌표를 제공하는 vertex shader, 그리고 색상을 제공하는 fragment shader 입니다.
 
-이를 위해 2개의 "Shader"를 제공합니다.
-Vertex Shader는 clip 공간 좌표를 제공하고 Fragment Shader는 색상을 제공하죠.
-
-clip 공간 좌표는 canvas 크기에 상관없이 항상 -1에서 +1까지 사용합니다.
+clip 공간 좌표는 canvas 크기에 상관없이 항상 -1에서 +1까지입니다.
 
 <div class="webgl_center"><img src="resources/clipspace.svg" style="width: 400px"></div>
 
-여기에 WebGL을 보여주는 간단한 WebGL 예제가 있는데요.
+여기 WebGL을 보여주는 가장 간단한 형태의 예제가 있습니다.
 
-Vertex Shader부터 시작해봅시다.
+vertex shader부터 시작해봅시다.
 
-    // Attribute는 Buffer로부터 데이터를 받습니다.
+    // attribute는 buffer에서 데이터를 받음
     attribute vec4 a_position;
 
-    // 모든 shader는 main 함수를 가지고 있습니다.
+    // 모든 shader는 main 함수를 가짐
     void main() {
-      // gl_Position은 Vertex Shader가 설정을 담당하는 특수 변수입니다.
+
+      // gl_Position은 vertex shader가 설정을 담당하는 특수 변수
       gl_Position = a_position;
     }
 
-실행될 때, GLSL 대신에 JavaScript로 작성된 것이라면 이렇게 쓰일 것입니다.
+실행될 때, 모든 것이 GLSL 대신에 JavaScript로 작성된다면 이렇게 사용될 것이라 상상할 수 있습니다.
 
     // *** PSEUDO CODE!! ***
 
@@ -95,7 +95,7 @@ Vertex Shader부터 시작해봅시다.
       var stride = 4;
       var size = 4;
       for (var i = 0; i < count; ++i) {
-        // positionBuffer의 다음 값 4개를 a_position 속성에 복사합니다.
+        // 다음 값 4개를 positionBuffer에서 a_position attribute로 복사
         const start = offset + i * stride;
         attributes.a_position = positionBuffer.slice(start, start + size);
         runVertexShader();
@@ -104,54 +104,54 @@ Vertex Shader부터 시작해봅시다.
       }
     }
 
-실제로는 `positionBuffer`가 2진 데이터(아래 참조)로 변환되기 때문에 그렇게 간단하지 않습니다.
-이렇게 하면 Buffer에서 가져오는 데이터는 실제 계산과 약간 다르지만, 이걸로 Vertex Shader가 어떻게 실행되는지 알 수 있습니다.
+실제로는 `positionBuffer`가 2진 데이터(아래 참조)로 변환되어야 하기 때문에 그렇게 간단하지 않고, 따라서 buffer에서 데이터를 가져오기 위한 실제 계산은 약간 다를 수 있지만, 이걸로 vertex shader가 어떻게 실행되는지 알 수 있기를 바랍니다.
 
-다음으로 필요한 것은 Fragment Shader 입니다.
+다음은 fragment shader기 필요합니다.
 
-    // Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
-    // mediump(중간 정도 정밀도)은 기본값으로 좋습니다.
+    // fragment shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선택해야 합니다.
+    // mediump은 좋은 기본값인데요. "중간 정밀도"를 의미합니다.
     precision mediump float;
 
     void main() {
-      // gl_FragColor는 Fragment Shader의 설정을 담당하는 특수 변수입니다.
-      gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은-보라색 반환
+      // gl_FragColor는 fragment shader가 설정을 담당하는 특수 변수
+      gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
     }
 
-위에서 우리는 `gl_FragColor`을 빨강 1, 초록 0, 파랑 0.5, 투명도 1인 `1, 0, 0.5, 1`로 설정했는데요.
-WebGL에서 색상은 0에서 1까지 사용합니다.
+위에서 우리는 `gl_FragColor`를 빨강 1, 초록 0, 파랑 0.5, 투명도 1인 `1, 0, 0.5, 1`로 설정했는데요.
+WebGL에서 색상은 0에서 1까지입니다.
 
-이제 두 Shader 함수를 작성해서 WebGL을 시작할 수 있습니다.
+이제 두 shader 함수를 작성했으니 WebGL을 시작해봅시다.
 
 먼저 HTML canvas 요소가 필요합니다.
 
      <canvas id="c"></canvas>
 
-그러면 JavaScript에서 찾을 수 있습니다.
+그런 다음 JavaScript에서 그걸 찾을 수 있습니다.
 
      var canvas = document.querySelector("#c");
 
-이제 WebGLRenderingContext을 만들 수 있습니다.
+이제 우리는 WebGLRenderingContext를 만들 수 있습니다.
 
      var gl = canvas.getContext("webgl");
      if (!gl) {
-       // webgl을 쓸 수 없어요!
+       // webgl이 없어요!
        ...
      }
 
-Shader를 컴파일해서 GPU에 넣어야 하므로 우선 문자열로 가져와야 합니다.
-JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 수 있습니다.
-예를 들어, 여러 줄의 template 문자열을 연결한 걸 AJAX를 이용해 내려받을 수 있겠죠.
-또는 이 경우, JavaScript type이 아닌 script 태그를 넣어야 합니다.
+이제 shader들을 컴파일해서 GPU에 할당해야 하므로 먼저 문자열로 가져와야 합니다.
+일반적으로 JavaScript에서 문자열을 만드는 어떠한 방법으로도 GLSL 문자열을 만들 수 있는데요.
+문자열을 연결할 수도, AJAX를 이용해 다운로드받을 수도, 여러 줄의 템플릿 문자열을 사용할 수도 있죠.
+이 경우에는, JavaScript type이 아닌 script 태그 안에 넣습니다.
 
     <script id="vertex-shader-2d" type="notjs">
 
-      // Attribute는 Buffer로부터 데이터를 받습니다.
+      // attribute는 buffer에서 데이터를 받음
       attribute vec4 a_position;
 
-      // 모든 shader는 main 함수를 가지고 있습니다.
+      // 모든 shader는 main 함수를 가짐
       void main() {
-        // gl_Position은 Vertex Shader가 설정을 담당하는 특수 변수입니다.
+
+        // gl_Position은 vertex shader가 설정을 담당하는 특수 변수
         gl_Position = a_position;
       }
 
@@ -159,21 +159,21 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
 
     <script id="fragment-shader-2d" type="notjs">
 
-      // Fragment Shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선언해야 합니다.
-      // mediump(중간 정도 정밀도)은 기본값으로 좋습니다.
+      // fragment shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선택해야 합니다.
+      // mediump은 좋은 기본값인데요. "중간 정밀도"를 의미합니다.
       precision mediump float;
 
       void main() {
-        // gl_FragColor는 Fragment Shader의 설정을 담당하는 특수 변수입니다.
-        gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은-보라색 반환
+        // gl_FragColor는 fragment shader가 설정을 담당하는 특수 변수
+        gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
       }
 
     </script>
 
-사실 대부분의 3D 엔진은 다양한 종류의 template, concatenation 등을 사용하여 GLSL Shader를 바로 생성합니다.
-하지만 이 사이트에 있는 예제들은 runtime에서 GLSL 생성해야 할 만큼 복잡하지 않습니다.
+사실 대부분의 3D 엔진은 다양한 종류의 template, concatenation 등을 사용하여 GLSL Shader를 바로 생성하는데요.
+이 사이트에 있는 예제들은 runtime에 GLSL을 생성해야 할 만큼 복잡하진 않습니다.
 
-다음으로 Shader를 만들고, GLSL을 올리고, Shader를 컴파일하는 함수가 필요합니다.
+다음은 shader를 만들고, GLSL을 업로드하고, shader를 컴파일할 함수가 필요합니다.
 참고로 함수의 이름을 보면 어떤 일을 하는지 명확하기 때문에 주석을 작성하지 않았습니다.
 
     function createShader(gl, type, source) {
@@ -190,7 +190,7 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
       gl.deleteShader(shader);
     }
 
-이제 우리는 두 Shader를 만드는 함수를 호출할 수 있습니다.
+이제 두 shader를 만드는 함수를 호출할 수 있습니다
 
     var vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
     var fragmentShaderSource = document.querySelector("#fragment-shader-2d").text;
@@ -198,7 +198,7 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 
-다음으로 두 Shader를 *program*으로 *link*해야 합니다.
+그런 다음 두 shader를 *program*으로 *link*해야 합니다
 
     function createProgram(gl, vertexShader, fragmentShader) {
       var program = gl.createProgram();
@@ -215,33 +215,32 @@ JavaScript에서 문자열을 만드는 방법으로 GLSL 문자열을 만들 �
       gl.deleteProgram(program);
     }
 
-그리고 호출합니다.
+그리고 호출합니다
 
     var program = createProgram(gl, vertexShader, fragmentShader);
 
-GPU에 GLSL Program을 만들었고 이제 데이터를 제공해줘야 합니다.
-대부분의 WebGL API는 GLSL Program에 데이터 제공을 위한 상태 설정에 관한 것입니다.
-
-이 경우 우리는 그저 GLSL Program에 Attribute인 `a_position`을 입력하면 됩니다.
-먼저 해야 할 일은 우리가 방금 작성한 Program의 Attribute 위치를 찾는 것인데요.
+이제 GPU에 GLSL Program을 만들었으니 데이터를 제공해줘야 하는데요.
+WebGL API의 대부분은 GLSL program에 데이터를 제공하기 위한 상태 설정에 관한 것입니다.
+이 경우 GLSL program에 대한 우리의 유일한 입력은 attribute인 `a_position`인데요.
+먼저 해야 할 일은 우리가 방금 작성한 program의 attribute 위치를 찾는 것입니다.
 
     var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
 
-Attribute(또는 uniform) 위치를 찾는 것은 Render Loop가 아니라 초기화 과정에서 해야 합니다.
+attribute 위치(그리고 uniform 위치) 위치를 찾는 것은 render loop가 아니라 초기화하는 동안 해야 합니다.
 
-Attribute는 buffer로부터 데이터를 가져오기 때문에 버퍼를 생성해야 합니다.
+attribute는 buffer로부터 데이터를 가져오므로 버퍼를 생성해야 합니다.
 
     var positionBuffer = gl.createBuffer();
 
-전역 bind point로 WebGL의 많은 자원을 조작할 수 있습니다.
-bind point를 WebGL 내부의 전역 변수라고 생각하시면 됩니다.
+WebGL은 global bind point에 있는 많은 WebGL 자원을 조작하게 해주는데요.
+bind point는 WebGL 안에 있는 내부 전역 변수라고 생각하시면 됩니다.
 먼저 bind point에 자원을 할당합시다.
 그러면 모든 함수가 bind point를 통해 자원을 참조합니다.
-자, point buffer를 할당해봅시다.
+자 position buffer를 할당해봅시다.
 
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-이제 bind point를 통해 buffer를 참조해서 데이터를 넣을 수 있습니다.
+이제 bind point를 통해 그걸 참조해서 buffer에 데이터를 넣을 수 있습니다.
 
     // 2d point 3개
     var positions = [
@@ -255,19 +254,19 @@ bind point를 WebGL 내부의 전역 변수라고 생각하시면 됩니다.
       gl.STATIC_DRAW
     );
 
-여기까지 한 것들을 정리해보겠습니다.
-먼저 JavaScript 배열인 `positions`가 있습니다.
-반면에 WebGL은 강력한 type을 가지는 데이터 필요하므로 `new Float32Array(positions)`는 새로운 32bit 부동 소수점 배열을 생성해서 `positions`의 값을 복사합니다.
-그다음 `gl.bufferData`는 데이터를 GPU의 `positionBuffer`로 복사합니다.
-위에서 `ARRAY_BUFFER` bind point로 할당했기 때문에 position buffer를 사용합니다.
+여기까지 많은 것들이 있었는데요.
+첫 번째로 JavaScript 배열인 `positions`가 있습니다.
+반면에 WebGL은 강력한 type을 가지는 데이터가 필요하므로 `new Float32Array(positions)` 부분은 새로운 32bit 부동 소수점 배열을 생성하고 `positions`에서 값을 복사합니다.
+그런 다음 `gl.bufferData`는 데이터를 GPU의 `positionBuffer`로 복사합니다.
+위에서 `ARRAY_BUFFER` bind point로 할당했기 때문에 position buffer를 사용히고 있습니다.
 
-마지막 매개변수, `gl.STATIC_DRAW`는 WebGL에게 데이터를 어떻게 사용할지 알려줍니다.
-WebGL은 확정된 것들을 이용해서 최적화하려고 합니다.
-`gl.STATIC_DRAW`는 WebGL에 데이터가 많이 바뀌지는 않을 것 같다고 알려줍니다.
+마지막 매개변수, `gl.STATIC_DRAW`는 데이터를 어떻게 쓸지 WebGL에게 알려주는데요.
+WebGL은 그 힌트를 사용해서 특정 항목들을 최적화할 수 있습니다.
+`gl.STATIC_DRAW`는 이 데이터가 많이 바뀌지 않을 것 같다고 WebGL에게 알려줍니다.
 
 지금까지 작성한 것은 *초기화 코드*입니다.
-이 코드는 페이지가 로드될 때 한 번 실행됩니다.
-아래부터는 render/draw 할 때마다 실행되는 *렌더링 코드*입니다.
+이 코드는 우리가 페이지를 로드할 때 한 번 실행되는데요.
+아래부터는 *렌더링 코드* 또는 render/draw를 원할 때마다 실행되는 코드입니다.
 
 ## Rendering
 
