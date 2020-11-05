@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-indexed-vertices.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,78 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Indexed Vertices" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to use gl.drawElements" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-indexed-vertices.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Indexed Vertices" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-indexed-vertices.html" />
-<meta name="twitter:description" content="How to use gl.drawElements" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="如何使用 gl.drawElements">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-indexed-vertices_zh-cn.jpg">
+
+<meta property="og:title" content="WebGL 顶点索引">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-indexed-vertices_zh-cn.jpg">
+<meta property="og:description" content="如何使用 gl.drawElements">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-indexed-vertices.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 顶点索引">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-indexed-vertices.html">
+<meta name="twitter:description" content="如何使用 gl.drawElements">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-indexed-vertices_zh-cn.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-indexed-vertices.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-indexed-vertices_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-indexed-vertices.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-indexed-vertices.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 顶点索引",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-indexed-vertices.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Indexed Vertices</title>
+<title>WebGL 顶点索引</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-indexed-vertices.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -163,12 +218,117 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Indexed Vertices</h1>
+    <h1>WebGL 顶点索引</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-indexed-vertices.html">英文原版地址</a></p>
+      <p>这篇文章假设你至少阅读了 <a href="webgl-fundamentals.html">关于基础的文章</a>。
+如果你没有读过，你应该从那里开始。</p>
+<p>这是一篇短文，介绍 <code class="notranslate" translate="no">gl.drawElements</code>。在 WebGL 中有两个基本的绘制函数。
+<code class="notranslate" translate="no">gl.drawArrays</code> 和 <code class="notranslate" translate="no">gl.drawElements</code>。
+这个网站的文章中，大部分是调用 <code class="notranslate" translate="no">gl.drawArrays</code> 的。</p>
+<p><code class="notranslate" translate="no">gl.drawElements</code> 需要一个填充了顶点索引的缓存，然后以此来绘制。</p>
+<p>举个例子，我们根据 <a href="webgl-fundamentals.html">第一篇文章</a> 来绘制一个矩形，但使用 <code class="notranslate" translate="no">gl.drawElements</code>。</p>
+<p>在那里的代码中，我们用两个三角形构建了一个矩形，每个三角形 3 个顶点，一共 6 个顶点。</p>
+<p>这是提供 6 个顶点的代码：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  var x1 = x;
+  var x2 = x + width;
+  var y1 = y;
+  var y2 = y + height;
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+     x1, y1,   // 顶点 0
+     x2, y1,   // 顶点 1
+     x1, y2,   // 顶点 2
+     x1, y2,   // 顶点 3
+     x2, y1,   // 顶点 4
+     x2, y2,   // 顶点 5
+  ]), gl.STATIC_DRAW);
+</code></pre>
+<p>我们可以使用 4 个顶点来代替：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  var x1 = x;
+  var x2 = x + width;
+  var y1 = y;
+  var y2 = y + height;
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+     x1, y1,  // 顶点 0
+     x2, y1,  // 顶点 1
+     x1, y2,  // 顶点 2
+     x2, y2,  // 顶点 3
+  ]), gl.STATIC_DRAW);
+</code></pre>
+<p>但是，我们还需要添加一个存放索引的缓存。
+因为 WebGL 必须要 6 个顶点来绘制两个三角形。</p>
+<p>为了这么做，我们需要创建另一个缓存，但使用不同的绑定点。
+我们使用 <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code> 而不是 <code class="notranslate" translate="no">ARRAY_BUFFER</code>，它使用来存放索引的。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 创建缓存
+const indexBuffer = gl.createBuffer();
+
+// 将这个缓存设置为当前 `ELEMENT_ARRAY_BUFFER`
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+// 填充数据
+const indices = [
+  0, 1, 2,   // 第一个三角形
+  2, 1, 3,   // 第二个三角形
+]
+gl.bufferData(
+    gl.ELEMENT_ARRAY_BUFFER,
+    new Uint16Array(indices),
+    gl.STATIC_DRAW
+);
+</code></pre>
+<p>像其它所有 WebGL 中的数据一样，我们需要指定索引的类型。
+我们将用 <code class="notranslate" translate="no">new Uint16Array(indices)</code> 将索引转换成无符号 16 位整型，然后传到缓存。</p>
+<p>在绘制时，我们需要绑定想要使用索引的缓存。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  // 绑定包含索引的缓存
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+</code></pre>
+<p>然后使用 <code class="notranslate" translate="no">drawElements</code> 绘制:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 绘制矩形
+var primitiveType = gl.TRIANGLES;
+var offset = 0;
+var count = 6;
+-gl.drawArrays(primitiveType, offset, count);
++var indexType = gl.UNSIGNED_SHORT;
++gl.drawElements(primitiveType, count, indexType, offset);
+</code></pre>
+<p>我们得到了和之前一样的结果，但是只提供了 4 个顶点的数据，而不是 6 个。
+尽管我们还是得告诉 WebGL 绘制 6 个顶点，但通过索引我们复用了 4 个顶点的数据。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangles-indexed.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangles-indexed.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>是否使用这样使用数据取决与你。</p>
+<p>值得注意的是，顶点索引不用来绘制含 8 个顶点位置的立方体，
+因为通常你会将其它数据关联到每个顶点上，取决与顶点被用的那个面，数据会不一样。
+例如，你想给立方体的每个面不一样的颜色，你需要提供每个位置的颜色。
+所以，尽管每个顶点被用了 3 次，每个面访问顶点时都需要重复位置信息，每个面关联的不同颜色。
+这意味着你需要 24 个顶点来绘制立方体，每个面 4 个，36 个索引来绘制需要的 12 个三角形。</p>
+<p>注意，在 WebGL1 中上面 <code class="notranslate" translate="no">indexType</code> 的有效类型只有 <code class="notranslate" translate="no">gl.UNSIGNED_BYTE</code>，只能提供 0 到 255 的索引。
+而 <code class="notranslate" translate="no">gl.UNSIGNED_SHORT</code> 最大索引是 65535。
+有个扩展，你可以看看 <code class="notranslate" translate="no">OES_element_index_uint</code>，开启它，可以使用 <code class="notranslate" translate="no">gl.UNSIGNED_INT</code>，最大索引到 4294967296。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">cosnt ext = gl.getExtension(&#39;OES_element_index_uint&#39;);
+if (!ext) {
+  // 回退使用 gl.UNSIGNED_SHORT 或者告诉用户
+}
+</code></pre>
+<p>根据 WebGLStats <a href="https://webglstats.com/webgl/extension/OES_element_index_uint">几乎所有设备都支持这个扩展</a>。</p>
+<div class="webgl-bottombar">
+<p>
+注意：上面我们在将索引存放到缓存时，将 <code class="notranslate" translate="no">indexBuffer</code> 绑定到 <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code>，
+后面我们又绑定了一次。为什么要绑定两次？
+</p>
+<p>
+这只是展示一种模式。
+通常，你会绘制不止一样东西，所以你会有多个索引缓存，每个需要绘制的东西一个缓存。
+在初始化时，创建这些缓存，放入数据。
+在渲染时，绘制前需要绑定正确的缓存。
+所以，上面的代码只是遵循了这个模式，尽管它只绘制了一个东西。
+</p>
+</div>
+
 
     </div>
     <div class="lesson-sidebar">
@@ -184,7 +344,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>基础概念</li>
+        <div id="toc">
+          <ul>  <li>基础概念</li>
         <ul>
           <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
@@ -282,7 +443,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </ul>
   <li>Optimization</li>
         <ul>
-          <li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+          <li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">顶点索引 （gl.drawElements)</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-instanced-drawing.html">实例化绘制</a></li>
         </ul>
   <li>杂项</li>
@@ -318,6 +479,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
 </ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 顶点索引';
+            var disqus_title = 'WebGL 顶点索引';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
