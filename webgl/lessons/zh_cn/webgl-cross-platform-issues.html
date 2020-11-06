@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-cross-platform-issues.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,78 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Cross Platform Issues" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="Things to be aware of when trying to make your WebGL app work everywhere." />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cross-platform-issues.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Cross Platform Issues" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cross-platform-issues.html" />
-<meta name="twitter:description" content="Things to be aware of when trying to make your WebGL app work everywhere." />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="当想要 WebGL 应用在各个平台正常运行时应该注意的事。">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cross-platform-issues_zh-cn.jpg">
+
+<meta property="og:title" content="WebGL 跨平台相关问题">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cross-platform-issues_zh-cn.jpg">
+<meta property="og:description" content="当想要 WebGL 应用在各个平台正常运行时应该注意的事。">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 跨平台相关问题">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">
+<meta name="twitter:description" content="当想要 WebGL 应用在各个平台正常运行时应该注意的事。">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cross-platform-issues_zh-cn.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cross-platform-issues.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cross-platform-issues_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cross-platform-issues.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cross-platform-issues.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 跨平台相关问题",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cross-platform-issues.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Cross Platform Issues</title>
+<title>WebGL 跨平台相关问题</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -163,12 +218,249 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Cross Platform Issues</h1>
+    <h1>WebGL 跨平台相关问题</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-cross-platform-issues.html">英文原版地址</a></p>
+      <p>对于不是所有 WebGL 程序都能跑在所有设备或者浏览器上，我并不是很意外。
+单就 WebGL2，至少 2020 年 7 月，<a href="#safari">在 Safari 上并不是完全支持</a>。</p>
+<p>这些是我能先想到的，你可能会遇到的问题列表</p>
+<h2 id="-">性能</h2>
+<p>一块高端的 GPU 可能会比低端的 GPU 快 100 倍。
+我唯一能想到的方法，就是将开发目标朝向低端硬件，
+或者像 PC 桌面应用那样，给用户选项：选择性能或高保真。</p>
+<h2 id="-">内存</h2>
+<p>类似的，高端 GPU 可能会有 12 GB 到 24 GB 的 RAM，但低端 GPU 可能少于 1 GB。
+（我比较大了，所以有点惊讶，低端 = 1 GB，因为我开始编程时，机器内存只有 16 KB 到 64 KB。）</p>
+<h2 id="-">设备限制</h2>
+<p>WebGL 有很多最低支持的特性，但你的设备可能支持的特性 > 那个最低支持。
+这意味着应用可能在支持更少的设备上不能运行。</p>
+<p>例子包括：</p>
+<ul>
+<li><p>允许的最大纹理尺寸</p>
+<p>2048 或者 4096 看起来很合理。
+至少在 2020 年 <a href="https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE">99% 的设备支持 4096 但只有 50% 的设备支持 &gt; 4096</a>。</p>
+<p>注意：最大纹理尺寸是 GPU 能处理的最大维度。
+它并不意味着 GPU 有足够的内存给该维度的正方形（对于 2D 纹理）或立方体（对于 3D 纹理）。
+比如有些 GPU 有最大内存 16384. 但一个 3D 纹理，每个面 16384，一共就需要 16 TB 的内存！！！</p>
+</li>
+<li><p>在单个程序中顶点属性的最大数量</p>
+<p>在 WebGL1 中，最多支持数量是 8。在 WebGL2 中是 16。
+如果你使用的比这多，你的代码不会正常运行。</p>
+</li>
+<li><p>最大全局向量数量</p>
+<p>顶点着色器和片段着色器有着不同的数量。</p>
+<p>在 WebGL1 中，顶点着色器是 128，片段着色器是 16。
+在 WebGL2 中，顶点着色器是 256，片段着色器是 224。</p>
+<p>注意，全局变量可以被封装起来，所以上面的数字是能被使用的 <code class="notranslate" translate="no">vec4</code> 的数量。
+理论上你可以使用 4 倍数量的 <code class="notranslate" translate="no">float</code> 类型的全局变量。
+这里有个算法用来填充它们。
+你可以想象一个有 4 个列的数组，一行就是上面最大全局向量的一个。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  +-+-+-+-+
+  | | | | |   &lt;- 一个 vec4
+  | | | | |   |
+  | | | | |   |
+  | | | | |   V
+  | | | | |   最大全局向量行数
+  | | | | |
+  | | | | |
+  | | | | |
+  ...
+</code></pre><p>一个 <code class="notranslate" translate="no">mat4</code> 就是 4 个 <code class="notranslate" translate="no">vec4</code>。然后 <code class="notranslate" translate="no">vec3</code> 会填充接下来的空间。
+然后是 <code class="notranslate" translate="no">vec2</code>，后面跟着 <code class="notranslate" translate="no">float</code>。想象一下我们有 1 个 <code class="notranslate" translate="no">mat4</code>，2 个 <code class="notranslate" translate="no">vec3</code>，2 个 <code class="notranslate" translate="no">vec2</code> 和 3 个 <code class="notranslate" translate="no">float</code>：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  +-+-+-+-+
+  |m|m|m|m|   &lt;- mat4 占 4 行
+  |m|m|m|m|
+  |m|m|m|m|
+  |m|m|m|m|
+  |3|3|3| |   &lt;- 2 个 vec3 占 2 行
+  |3|3|3| |
+  |2|2|2|2|   &lt;- 2 个 vec2 合并成 1 行
+  |f|f|f| |   &lt;- 3 个 float 占一行
+  ...
+</code></pre><p>进一步，全局变量数组都是竖着的，所以举个例子，如果允许的最大全局向量数是 16，
+那你就不能有长度为 17、类型为 <code class="notranslate" translate="no">float</code> 的数组。
+事实上，如果你有单个 <code class="notranslate" translate="no">vec4</code>，它会占用整行，这样就只剩 15 行。
+这意味着你可有创建的最大数组只能包含 15 个元素。</p>
+<p>我的建议是不要完美的去计算。尽管规范指出了上面的算法，但这有太多的组合需要在所有驱动上进行测试。
+只要注意你接近限制了就可以。</p>
+<p>注意：变量和属性不能被封装。</p>
+</li>
+<li><p>最大变量向量的数量</p>
+<p>WebGL 中最少是 8。WebGL2 中最少是 16。</p>
+<p>如果你使用了大于上面的值，你的代码在最低支持的机器上不会工作。</p>
+</li>
+<li><p>最大纹理单元数量</p>
+<p>这里有 3 个值：</p>
+<ol>
+<li>有多少纹理单元</li>
+<li>顶点着色器能引用多少纹理单元</li>
+<li>片段着色器能引用多少纹理单元</li>
+</ol>
+<table class="tabular-data">
+  <thead>
+    <tr><th></th><th>WebGL1</th><th>WebGL2</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>最低支持的最多纹理单元数量</td><td>8</td><td>32</td></tr>
+    <tr><td>顶点着色器能引用的最低支持的最多纹理单元数量</td><th style="color: red;">0!</td><td>16</td></tr>
+    <tr><td>片段着色器能引用的最低支持的最多纹理单元数量</td><td>8</td><td>16</td></tr>
+  </tbody>
+</table>
+
+<p>注意在 WebGL1 中，顶点着色器中的 <strong>0</strong>。显然 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">~97% 的设备支持的数量至少是 4</a>。
+所以，你需要对此进行检查，然后告诉用户你的应用不会工作或者回退使用其它着色器。</p>
+</li>
+</ul>
+<p>还有其它限制。使用下面值，调用 <code class="notranslate" translate="no">gl.getParameter</code> 进行查找：</p>
+<div class="webgl_center">
+<table class="tabular-data">
+  <tbody>
+    <tr><td>MAX_TEXTURE_SIZE                </td><td>最大纹理尺寸</td></tr>
+    <tr><td>MAX_VERTEX_ATTRIBS              </td><td>可以使用属性数量</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>顶点着色器可以使用 vec4 数量</td></tr>
+    <tr><td>MAX_VARYING_VECTORS             </td><td>可以使用变量数量</td></tr>
+    <tr><td>MAX_COMBINED_TEXTURE_IMAGE_UNITS</td><td>存在的纹理单元数量</td></tr>
+    <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>顶点着色器可以引用纹理单元数量</td></tr>
+    <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>片段着色器可以引用纹理单元数量</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>片段着色器可以使用 vec4 数量</td></tr>
+    <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>立方体贴图最大尺寸</td></tr>
+    <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>renderbuffer 最大尺寸</td></tr>
+    <tr><td>MAX_VIEWPORT_DIMS               </td><td>viewport 最大尺寸</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>这不是完整的列表。例如，没有最大点数量，线最大宽度，
+但你应该假设最大线宽为 1.0，点只在简单的 demo 中有用，不需要关心。<a href="#points-lines-viewport-scissor-behavior">关于裁剪的问题</a>。</p>
+<p>WebGL2 添加了一些。比较常用的是：</p>
+<div class="webgl_center">
+<table class="tabular-data">
+  <tbody>
+    <tr><td>MAX_3D_TEXTURE_SIZE                </td><td>3D 纹理最大尺寸</td></tr>
+    <tr><td>MAX_DRAW_BUFFERS              </td><td>可使用的颜色附件数量</td></tr>
+    <tr><td>MAX_ARRAY_TEXTURE_LAYERS      </td><td>2D 纹理数组中最大层数</td></tr>
+    <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS             </td><td>使用转换反馈时可输出至单独缓存的变量数量</td></tr>
+    <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>一次性输出至单个缓冲的变量数量</td></tr>
+    <tr><td>MAX_COMBINED_UNIFORM_BLOCKS  </td><td>全部可使用全局变量块数量</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS         </td><td>顶点着色器可使用全局变量块数量</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS    </td><td>片段着色器可使用全局变量块数量</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="-">色深缓存分辨率</h2>
+<p>一些老的移动设备使用 16 位的色深缓存。据我所知，99% 的设备使用 24 位色深，所以你可能不需要担心这个。</p>
+<h2 id="readpixels-">readPixels 格式/类型组合</h2>
+<p>只有一些特定组合的格式/类型能保证工作。其它组合是可选的。
+<a href="webgl-readpixels.html">这篇文章</a> 中涵盖了这部分内容。</p>
+<h2 id="-">帧缓存附件组合</h2>
+<p>帧缓存可以有 1 个或多个纹理或渲染缓存作为附件。</p>
+<p>在 WebGL1 中，只有 3 中组合的附件可以保证工作。</p>
+<ol>
+<li>单个格式为 <code class="notranslate" translate="no">RGBA</code>，类型为 <code class="notranslate" translate="no">UNSIGNED_BYTE</code> 的纹理作为 <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code></li>
+<li>格式为 <code class="notranslate" translate="no">RGBA</code>，类型为 <code class="notranslate" translate="no">UNSIGNED_BYTE</code> 的纹理作为 <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> 和
+格式为 <code class="notranslate" translate="no">DEPTH_COMPONENT</code> 的渲染缓存作为 <code class="notranslate" translate="no">DEPTH_ATTACHMENT</code></li>
+<li>格式为 <code class="notranslate" translate="no">RGBA</code>，类型为 <code class="notranslate" translate="no">UNSIGNED_BYTE</code> 的纹理作为 <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> 和
+格式为 <code class="notranslate" translate="no">DEPTH_STENCIL</code> 的渲染缓存作为 <code class="notranslate" translate="no">DEPTH_STENCIL_ATTACHMENT</code></li>
+</ol>
+<p>其它的所有组合取决于代码实现，可以通过调用 <code class="notranslate" translate="no">gl.checkFramebufferStatus</code> 检查是否返回 <code class="notranslate" translate="no">FRAMEBUFFER_COMPLETE</code>。</p>
+<p>WebGL2 保证了可以写更多的格式，但还是有着 <strong>任意组合都可能失败</strong> 的限制。
+你最好打赌如果附上了多于 1 个颜色附件，它们的格式是一致的。</p>
+<h2 id="-">扩展</h2>
+<p>很多 WebGL1 和 WebGL2 中的特性是可选的。
+有个 <code class="notranslate" translate="no">getExtension</code> 的 API，如果扩展不存在就会失败。
+所以你要检查是否失败，而不是盲目的认为它会成功。</p>
+<p>在 WebGL1 和 WebGL2 中，最可能缺失的扩展应该是 <code class="notranslate" translate="no">OES_texture_float_linear</code>，
+它能够过滤纹理中 float 类型的点，也就是能够支持将 <code class="notranslate" translate="no">TEXTURE_MIN_FILTER</code> 和 <code class="notranslate" translate="no">TEXTURE_MAX_FILTER</code> 设置成任何数（除了 <code class="notranslate" translate="no">NEAREST</code>)。
+很多移动设备不支持这个扩展。</p>
+<p>在 WebGL1 中，另一个经常缺失的扩展是 <code class="notranslate" translate="no">WEBGL_draw_buffers</code>。
+该扩展的功能是向帧缓存附上多于 1 个的颜色附件。
+目前大概 70% 的桌面支持，没有智能手机支持（这是错的）。
+基本上只要能运行 WebGL2 的设备就能支持 WebGL1 中的 <code class="notranslate" translate="no">WEBGL_draw_buffers</code>，但这却依然是个问题。
+如果你页面需要一次性渲染多个纹理，那么目前你可能需要一个高端 GPU。
+无论如何，你还是需要检查用户设备的支持性，如果不支持，提供一个友好的解释。</p>
+<p>对于 WebGL1，下面的 3 个扩展几乎是普遍支持的。所以如果它们缺失了，你需要告知用户你的页面不会正常工作，
+因为用户的设备过于老旧，无论如何页面都不能很好的运行。</p>
+<p>它们是：
+<code class="notranslate" translate="no">ANGLE_instance_arrays</code> (能够使用 <a href="webgl-instanced-drawing.html">实例化绘制</a>）,
+<code class="notranslate" translate="no">OES_vertex_array_object</code> (能够将所有属性状态存储在一个对象中，这样就能在一次函数调用中将所有状态传过去，看 <a href="webgl-attributes.html">这篇文章</a>），
+和 <code class="notranslate" translate="no">OES_element_index_unit</code> （能够在 <a href="webgl-indexed-vertices.html"><code class="notranslate" translate="no">drawElements</code></a> 中使用 32 位索引）</p>
+<h2 id="-">属性位置</h2>
+<p>有个常见的 bug 是，不查找属性位置。例如，你有这样一个顶点着色器：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 position;
+attribute vec2 texcoord;
+
+uniform mat4 matrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+   gl_Position = matrix * position;
+   v_texcoord = texcoord;
+}
+</code></pre>
+<p>代码假设 <code class="notranslate" translate="no">position</code> 是属性 0，<code class="notranslate" translate="no">texcoord</code> 是属性 1，但这是没有保证的。
+所以这段代码在你这儿可以正常，在别人那儿不会。
+尽管你不是故意这么做的，但通过代码中的错误，当以一种方式查找位置时工作，另一种方式时不工作。这通常是一个 bug。</p>
+<p>有 3 种解决方法：</p>
+<ol>
+<li>总是查找位置</li>
+<li>在调用 <code class="notranslate" translate="no">gl.linkProgram</code> 前，调用 <code class="notranslate" translate="no">gl.bindAttribLocation</code> 来分配位置</li>
+<li><p>（只对 WebGL2）在着色器中设置位置：</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">#version 300es
+layout(location = 0) vec4 position;
+layout(location = 1) vec2 texcoord;
+...
+</code></pre>
+<p>方案 2 看起来最 <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">D.R.Y.</a>，
+而方案 3 最 <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself#DRY_vs_WET_solutions">W.E.T.</a>，
+除非你在渲染时生成纹理。</p>
+</li>
+</ol>
+<h2 id="glsl-">GLSL 未定义行为</h2>
+<p>有一些 GLSL 函数有未定义行为。例如，如果 <code class="notranslate" translate="no">x &lt; 0</code>，那么 <code class="notranslate" translate="no">pow(x, y)</code> 返回未定义。
+在 <a href="webgl-3d-lighting-spot.html">关于点光源的文章底部</a> 中一个长列表。</p>
+<h2 id="-">着色器精度问题</h2>
+<p>2020 年，这里最大的问题是，如果在着色器中使用 <code class="notranslate" translate="no">mediump</code> 或者 <code class="notranslate" translate="no">lowp</code>，
+那么在桌面端 GPU 会使用 <code class="notranslate" translate="no">highp</code>，但在移动端就是 <code class="notranslate" translate="no">mediump</code> 或者 <code class="notranslate" translate="no">lowp</code>。
+所以你在桌面端开发时不会注意到任何问题。</p>
+<p>看 <a href="webgl-precision-issues.html">这篇文章获取更多细节</a>。</p>
+<h2 id="-">点、线、视窗、裁剪行为</h2>
+<p>在 WebGL 中，<code class="notranslate" translate="no">POINTS</code> 和 <code class="notranslate" translate="no">LINES</code> 的最大尺寸是 1。实际上现在这是对 <code class="notranslate" translate="no">LINES</code> 的限制（线宽）。
+当点的中心在视窗外时，点是否会被截去，由实现来定义。看 <a href="webgl-drawing-without-data.html#pointissues">这篇文章</a> 的底部。</p>
+<p>类似的，视窗是否只截去顶点，还是所有像素，是没有定义的。
+裁剪总是截去像素，所以如果视窗尺寸小于你在绘制对象大小，打开裁剪测试并设置裁剪大小。</p>
+<h2 id="safari-bugs">Safari Bugs</h2>
+<p>相比于其它浏览器，Safari 有更多的 bug。Apple 看起来也没有兴趣修复它们。</p>
+<p>这里有一些多年未被修复的 bug 列表：</p>
+<ul>
+<li><p>toDataURL (and just guessing toBlob) returns upside down result if premultipledAlpha = false (4yrs old)
+<a href="https://bugs.webkit.org/show_bug.cgi?id=156129">bug</a></p>
+</li>
+<li><p>preserveDrawingBuffer=true wrongly double-buffers on current iOS (4yrs old)
+<a href="https://bugs.webkit.org/show_bug.cgi?id=159608">bug</a></p>
+</li>
+<li><p><code class="notranslate" translate="no">OES_texture_float</code> implementation must support non-ArrayBufferView entry points (10yrs old)
+<a href="https://bugs.webkit.org/show_bug.cgi?id=51015">bug</a></p>
+</li>
+<li><p>readPixels generates INVALID_ENUM for RGBA/UNSIGNED_BYTE (3yrs old)
+<a href="https://bugs.webkit.org/show_bug.cgi?id=170341">bug</a></p>
+</li>
+<li><p>Changes to a WebGL canvas and to layer transforms are not always synchronized (3yrs old)
+<a href="https://bugs.webkit.org/show_bug.cgi?id=172969">bug</a></p>
+</li>
+<li><p>PNG textures with zero alpha channel have wrong rgb colors (4yrs old)
+<a href="https://bugs.webkit.org/show_bug.cgi?id=165297">bug</a></p>
+</li>
+<li><p>Safari doesn&#39;t handle common no attribute use case (1yr old)
+<a href="https://bugs.webkit.org/show_bug.cgi?id=197592">bug</a></p>
+</li>
+<li><p><a id="safari"></a>注意，在 Safari 中开启 WebGL2 的方法，只要在着色器中加入 <code class="notranslate" translate="no">#version 300 es</code>。
+其它 80 多个 WebGL2 的 API 并没有被实现，至少到 2020 七月。
+<a href="https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/canvas/WebGL2RenderingContext.cpp">查看来源</a>，搜索 “not implemented”。</p>
+</li>
+</ul>
 
     </div>
     <div class="lesson-sidebar">
@@ -184,7 +476,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>基础概念</li>
+        <div id="toc">
+          <ul>  <li>基础概念</li>
         <ul>
           <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
@@ -303,7 +596,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/zh_cn/webgl-tips.html#preservedrawingbuffer">防止画布被清空</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-tips.html#tabindex">在画布中获取键盘输入</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-tips.html#html-background">将 WebGL 作为 HTML 的背景</a></li>
-<li><a href="/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">Cross Platform Issues</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">WebGL 跨平台相关问题</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-qna.html">Questions and Answers</a></li>
         </ul>
   <li>Reference</li>
@@ -318,6 +611,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
 </ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 跨平台相关问题';
+            var disqus_title = 'WebGL 跨平台相关问题';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
