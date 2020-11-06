@@ -18,21 +18,21 @@ vertex shader와 fragment shader는 shader program(또는 그냥 program)에 함
 ## Vertex Shader
 
 Vertex Shader의 역할은 clip 공간 좌표를 생성하는 겁니다.
-항상 다음과 같은 양식을 따르는데
+항상 다음과 같은 양식을 취하는데
 
     void main() {
       gl_Position = doMathToMakeClipspaceCoordinates
     }
 
-shader는 각 vertex 마다 한 번씩 호출됩니다.
-호출될 때마다 특수 변수, `gl_Position`에 어떤 clip 공간 좌표를 설정해줘야 합니다.
+shader는 각 vertex 당 한 번씩 호출되는데요.
+호출될 때마다 특수 전역 변수 `gl_Position`을 일부 clip 공간 좌표로 설정해줘야 합니다.
 
-Vertex shader는 데이터가 필요합니다.
-데이터를 얻을 수 있는 방법에는 3가지가 있는데요.
+vertex shader는 데이터가 필요한데요.
+3가지 방법으로 데이터를 얻을 수 있습니다.
 
-1.  [Attribute](#attribute) (buffer에서 데이터를 가져옴)
-2.  [Uniform](#uniform) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
-3.  [Texture](#vertex-shader-texture) (pixel/texel의 데이터)
+1.  [Attributes](#attributes) (buffer에서 가져온 데이터)
+2.  [Uniforms](#uniforms) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
+3.  [Textures](#textures-in-vertex-shaders) (pixel/texel의 데이터)
 
 ### Attribute
 
