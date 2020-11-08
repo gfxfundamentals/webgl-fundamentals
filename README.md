@@ -100,7 +100,35 @@ This is template for the table of contents for the language.
 It is included on both the index and on each article. The only
 parts not auto-generated are the links ending links which
 you can translate if you want to.
-The build system will create a placeholder for every English article for which there is no corresponding article in that langauge. It will be filled the `missing` message from above.
+The build system will create a placeholder for every English article for which there is no corresponding article in that language. It will be filled the `missing` message from above.
+
+#### `lang.css`
+
+This is included if and only if it exists. I'd strongly prefer not to have to
+use it. In particular I don't want people to get into arguments about fonts
+but basically it's a way to choose the fonts per language. You should set
+the variables that are absolutely needed. Example
+
+```css
+/* lessons/ko/lang.css */
+
+/* Only comment in overrides as absolutely necessary! */
+:root {
+  --article-font-family: "best font for korean article text";
+  --headline-font-family: "best font for korean headlines";
+  /* a block of code */
+  /* --code-block-font-family: "Lucida Console", Monaco, monospace; */
+  /* a word in a sentence */
+  /* --code-font-family: monospace; */
+}
+```
+
+Notice 2 settings are not changed. It seems unlikely to me that code would
+need a different font per language.
+
+PS: While we're here, I love code fonts with ligatures but the seem like a bad
+idea for a tutorial site because the ligatures hide the actual characters needed
+so please don't ask for or use a ligature code font here.
 
 #### Translation notes
 
