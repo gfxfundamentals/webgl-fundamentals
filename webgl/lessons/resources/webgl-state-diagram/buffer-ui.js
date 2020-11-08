@@ -182,7 +182,7 @@ export function createFramebufferDisplay(parent, name /*, webglObject */) {
       }
 
       const oldAttachmentInfo = oldAttachmentInfos.get(attachmentPoint);
-      if (oldAttachmentInfo && attachment !== oldAttachmentInfo.attachment) {
+      if (!oldAttachmentInfo || attachment !== oldAttachmentInfo.attachment) {
         flashSelfAndExpanderIfClosed(tr);
       }
       newAttachmentInfos.set(attachmentPoint, {attachment, level, face: rawFace});
