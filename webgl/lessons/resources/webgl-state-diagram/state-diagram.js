@@ -17,6 +17,7 @@ import {
   getWebGLObjectInfoOrDefaultVAO,
   setDefaultTFOInfo,
   getWebGLObjectInfoOrDefaultTFO,
+  setCanvasInfo,
 } from './context-wrapper.js';
 import {
   expand,
@@ -117,6 +118,16 @@ export default function main({webglVersion, examples}) {
 
   document.body.addEventListener('click', showHint);
 
+  const canvasElem = document.querySelector('#canvas');
+  canvasElem.classList.add('window-content');
+  const canvasDraggable = makeDraggable(canvasElem);
+  const canvasInfo = {
+    ui: {
+      elem: canvasElem,
+    },
+  };
+  setCanvasInfo(canvasInfo);
+
   const defaultTFOInfo = {
   };
   if (globals.isWebGL2) {
@@ -130,8 +141,8 @@ export default function main({webglVersion, examples}) {
   setDefaultVAOInfo(defaultVAOInfo);
 
   globals.globalUI = createGlobalUI(document.querySelector('#global-state'));
-  const canvasDraggable = makeDraggable(document.querySelector('#canvas'));
   moveToFront(defaultVAOInfo.ui.elem.parentElement);
+
 
   function getUIById(id) {
     const [base, part] = id.split('.');
