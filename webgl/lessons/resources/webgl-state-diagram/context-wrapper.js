@@ -15,6 +15,12 @@ export function setDefaultTFOInfo(vaoInfo) {
   defaultTFOInfo = vaoInfo;
 }
 
+let canvasInfo;
+export function setCanvasInfo(_canvasInfo) {
+  canvasInfo = _canvasInfo;
+}
+
+export const getWebGLObjectInfoOrCanvas = v => v ? webglObjects.get(v) : canvasInfo;
 export const getWebGLObjectInfoOrDefaultVAO = v => v ? webglObjects.get(v) : defaultVAOInfo;
 export const getWebGLObjectInfoOrDefaultTFO = v => v ? webglObjects.get(v) : defaultTFOInfo;
 

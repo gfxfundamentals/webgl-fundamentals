@@ -1,37 +1,38 @@
 Title: WebGL Shader 그리고 GLSL
-Description: Shader와 GLSL이 뭔가요?
-TOC: WebGL 셰이더와 GLSL
+Description: Shader는 뭐고 GLSL은 뭘까?
+TOC: Shader 그리고 GLSL
 
 
-이 글은 [WebGL 기초](webgl-fundamentals.html)에서 이어지는 글입니다.
-WebGL이 어떻게 동작하는지에 대해 읽어보신 적 없다면 [이걸 먼저 읽어주세요](webgl-how-it-works.html).
+이 글은 [WebGL 기초](webgl-fundamentals.html)에서 이어집니다.
+[WebGL 작동 원리](webgl-how-it-works.html)에 대해서 읽지 않았다면 먼저 읽어보는 게 좋습니다.
 
-우린 Shader와 GLSL에 대해서 얘기했지만 구체적인 세부 내용은 말하지 않았습니다.
-예제로 충분하길 바라지만 이번에 좀 더 명확하게 만들기 위해 노력해봅시다.
+shader와 GLSL에 대해 언급했었지만 정말로 구체적인 세부 사항은 알려주지 않았습니다.
+예제로 충분하길 바라지만 혹시 모르니 좀 더 명확하게 해봅시다.
 
-[작동 원리](webgl-how-it-works.html)에서 언급했듯이 WebGL은 뭔가를 그릴 때 항상 shader 2개를 필요로 합니다.
-바로 *vertex shader*와 *fragment shader*입니다. 그리고 각각의 shader는 *함수*입니다.
-vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)에 연결되는데요.
-일반적인 WebGL 앱은 많은 shader program을 가지고 있습니다.
+[작동 원리](webgl-how-it-works.html)에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 shader를 필요로 하는데요.
+*vertex shader*와 *fragment shader*입니다.
+각각의 shader는 *함수*인데요.
+vertex shader와 fragment shader는 shader program(또는 그냥 program)에 함께 연결됩니다.
+일반적인 WebGL 앱은 많은 shader program을 가집니다.
 
 ## Vertex Shader
 
 Vertex Shader의 역할은 clip 공간 좌표를 생성하는 겁니다.
-항상 다음과 같은 양식을 따르는데
+항상 다음과 같은 양식을 취하는데
 
     void main() {
       gl_Position = doMathToMakeClipspaceCoordinates
     }
 
-shader는 각 vertex 마다 한 번씩 호출됩니다.
-호출될 때마다 특수 변수, `gl_Position`에 어떤 clip 공간 좌표를 설정해줘야 합니다.
+shader는 각 vertex 당 한 번씩 호출되는데요.
+호출될 때마다 특수 전역 변수 `gl_Position`을 일부 clip 공간 좌표로 설정해줘야 합니다.
 
-Vertex shader는 데이터가 필요합니다.
-데이터를 얻을 수 있는 방법에는 3가지가 있는데요.
+vertex shader는 데이터가 필요한데요.
+3가지 방법으로 데이터를 얻을 수 있습니다.
 
-1.  [Attribute](#attribute) (buffer에서 데이터를 가져옴)
-2.  [Uniform](#uniform) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
-3.  [Texture](#vertex-shader-texture) (pixel/texel의 데이터)
+1.  [Attributes](#attributes) (buffer에서 가져온 데이터)
+2.  [Uniforms](#uniforms) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
+3.  [Textures](#textures-in-vertex-shaders) (pixel/texel의 데이터)
 
 ### Attribute
 

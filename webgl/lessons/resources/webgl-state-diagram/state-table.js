@@ -10,6 +10,7 @@ import {
   formatWebGLObjectOrDefaultVAO,
   formatWebGLObjectOrDefaultTFO,
   getWebGLObjectInfo,
+  getWebGLObjectInfoOrCanvas,
   getWebGLObjectInfoOrDefaultVAO,
   getWebGLObjectInfoOrDefaultTFO,
 } from './context-wrapper.js';
@@ -76,7 +77,9 @@ export function updateStateTable(statesInfo, parent, queryFn, initial) {
                 ? getWebGLObjectInfoOrDefaultVAO(raw)
                 : (formatter === formatWebGLObjectOrDefaultTFO)
                    ? getWebGLObjectInfoOrDefaultTFO(raw)
-                   : null;
+                   : (formatter === formatWebGLObjectOrCanvas)
+                     ? getWebGLObjectInfoOrCanvas(raw)
+                     : null;
         if (targetInfo && !targetInfo.deleted) {
           elemToArrowMap.set(
               cell,
