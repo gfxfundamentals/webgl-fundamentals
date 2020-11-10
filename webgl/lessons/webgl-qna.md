@@ -118,6 +118,8 @@ A collection of links to random questions and/or answers about topics related to
 ---
 
 * [How to figure out how much GPU work to do without crashing WebGL](https://stackoverflow.com/questions/63546457/maximize-webgl2-usage-without-overloading-it).
+* [Why does WebGL take more memory than Canvas 2D](https://stackoverflow.com/questions/64673758/why-webgl-canvas-context-use-much-more-memory-than-2d-canvas)
+* [How to combine more text drawing into fewer draw calls](https://stackoverflow.com/questions/64618329/webgl-opengl-text-labeling-animated-instanced-shapes)
 
 ## WebGL2
 
