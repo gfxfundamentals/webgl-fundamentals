@@ -11,7 +11,6 @@
 <div class="description">
   Closest Line
 </div>
-<canvas id="canvas"></canvas>
 </body>
 <!--
 for most samples webgl-utils only provides shader compiling/linking and
@@ -103,7 +102,7 @@ void main() {
 
   // Get A WebGL context
   /** @type {HTMLCanvasElement} */
-  const canvas = document.querySelector("#canvas");
+  const canvas = document.createElement("canvas");
   const gl = canvas.getContext("webgl");
   if (!gl) {
     return;
@@ -234,8 +233,14 @@ void main() {
 
     // get a view of the pixels as 32bit unsigned integers
     const results = new Uint32Array(pixels.buffer);
-    console.log('result:', results);
+    log('result:', results);
   }
+}
+
+function log(...args) {
+  const elem = document.createElement('pre');
+  elem.textContent = args.join(' ');
+  document.body.appendChild(elem);
 }
 
 main();
