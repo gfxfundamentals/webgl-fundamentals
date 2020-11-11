@@ -314,7 +314,7 @@ void main() {
 }
 ```
 
-需要注意的一点是，纹理中像素的纹理坐标是从它们的边缘计算的。像我们在[纹理](webgl-3d-textures.html)的文章中提到的纹理坐标从0到1。0是最左边缘的像素，1是最右边缘的像素。如果你有宽度为3像素的纹理，那就像这样。
+<a id="texel-coords"></a>需要注意的一点是，纹理中像素的纹理坐标是从它们的边缘计算的。像我们在[纹理](webgl-3d-textures.html)的文章中提到的纹理坐标从0到1。0是最左边缘的像素，1是最右边缘的像素。如果你有宽度为3像素的纹理，那就像这样。
 
 <div class="webgl_center"><img src="resources/texel-coords.svg" style="width: 400px;"></div>
 

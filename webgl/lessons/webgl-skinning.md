@@ -378,7 +378,7 @@ void main() {
 }
 ```
 
-One thing to note is the texture coordinates for the pixels in a texture or texels are
+<a id="texel-coords"></a>One thing to note is the texture coordinates for the pixels in a texture or texels are
 computed from their edges. As we went over in [the article on textures](webgl-3d-textures.html)
 texture coordinates go from 0 to 1 across the texture. It turns out 0 is the left edge of the left most
 pixel and 1 is the right edge of the right most pixel. If you had a 3 pixel wide texture then
