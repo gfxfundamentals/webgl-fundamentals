@@ -264,6 +264,12 @@ void main() {
     alert('Need OES_texture_float');
     return;
   }
+  // check we can render to floating point textures
+  const ext2 = gl.getExtension('WEBGL_color_buffer_float');
+  if (!ext2) {
+    alert('Need WEBGL_color_buffer_float');
+    return;
+  }
   // check we can use textures in a vertex shader
   if (gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS) < 2) {
     alert('Can not use textures in vertex shaders');

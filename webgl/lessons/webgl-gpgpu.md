@@ -370,6 +370,21 @@ void main() {
 }
 ```
 
+The function `getValueFrom2DTextureAs1DArray` is basically our array accessor
+function. That means these 2 lines
+
+```glsl
+  vec4 v1 = getValueFrom2DTextureAs1DArray(srcTex, srcDimensions, dstIndex * 2.0);
+  vec4 v2 = getValueFrom2DTextureAs1DArray(srcTex, srcDimensions, dstIndex * 2.0 + 1.0);
+```
+
+Effectively mean this
+
+```glsl
+  vec4 v1 = srcTexAs1DArray[dstIndex * 2.0];
+  vec4 v2 = setTexAs1DArray[dstIndex * 2.0 + 1.0];
+```
+
 In our JavaScript we need to lookup the location of `dstDimensions`
 
 ```js
@@ -448,11 +463,14 @@ positions and velocities in textures then we can use the GPGPU techniques
 above to update the particle positions in a shader
 
 Before we get started, to make it easy, we want to use floating point
-textures. Those are an optional feature of WebGL. Desktop can render
+textures. Those are an optional feature of WebGL. Most devices can
+read floating point textures. Desktops can render
 to floating point textures but most smartphones can not.
 
 Also in order to support pulling vertices we need to check vertex shaders can use
-textures which is also an optional feature.
+textures which is also an optional feature. We should probably check exactly
+how many are supported. In this case we will only need to use one texture
+in the vertex shader so we just check that a least 1 is supported.
 
 ```js
 // Get A WebGL context
@@ -1061,10 +1079,10 @@ We should get the expected result of `[1, 3]`
 
 Reading data back from the GPU is slow. Let's say we wanted to
 visualize the results. It would be pretty easy to read those results
-and draw them using canvas2D but but how about with WebGL? Let's use
+and draw them using canvas2D but how about with WebGL? Let's use
 the data as is and draw the results?
 
-First, drawing the points is relatively easy. Like in the examples
+First, drawing the points is relatively easy. Like in the particle example
 above we pass in an id for each point to the vertex shader
 and use that to get points. Let's draw each point in a different
 color so we can highlight the closest line in the same color.
@@ -1108,8 +1126,8 @@ void main() {
 ```
 
 Rather than passing in colors we generate them using `hsv2rgb` and passing it
-a hue from to 0 to 1. For 500 lines there would
-be no easy way to tell lines apart but for around 10 lines we should be
+a hue from to 0 to 1. For 500 points there would
+be no easy way to tell lines apart but for around 10 points we should be
 able to distinguish them.
 
 We pass the generated color to a simple fragment shader
@@ -1656,6 +1674,28 @@ is happening on the GPU
 
   I don't have a solution to offer. Only a warning that depending on what you're
   trying to do you may run into that issue.
+
+* Mobile devices don't generally support rendering to floating point textures
+
+  There are no easy solutions here. One solution is you can try to
+  encode floating point values into RGBA/UNSIGNED_BYTE values. In the shader
+  when you read a value from the texture you need to convert back to
+  floating point and when you output a color you need to re-encode it
+  back into RGBA/UNSIGNED_BYTE. See [this](https://stackoverflow.com/a/63830492/128511)
+
+  But, for example, if we were to use this in the particle or closest line
+  examples above they would require significant changes. The code above
+  is able to pull out a position (3 values, x, y, z) with just one lookup
+  but now we'd need to do 3 lookups. The code above is also able to write
+  a new 3 value position `gl_FragColor = newPosition` but now we'd only be 
+  able to write 1 value. We'd either have to try to use `WEBGL_draw_buffers`
+  to let us write out 3 values to 3 different textures (yet more work)
+  or we'd have to adjust the shader to run 3 times, once for each of X, Y, and Z
+
+  One other solution is some mobile devices support rendering to half floats.
+  The problem with half floats are they have very little precision so while
+  they are useful for some problems they aren't nearly as generally useful
+  as normal 32bit floating point values.
 
 I hope these examples helped you understand the key idea of GPGPU in WebGL
 is just the fact that WebGL reads from and writes to 2D textures which are
