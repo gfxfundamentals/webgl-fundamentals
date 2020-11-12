@@ -548,6 +548,15 @@ void main() {
   gl_FragColor = v1 + v2;
 }
 </code></pre>
+<p>The function <code class="notranslate" translate="no">getValueFrom2DTextureAs1DArray</code> is basically our array accessor
+function. That means these 2 lines</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">  vec4 v1 = getValueFrom2DTextureAs1DArray(srcTex, srcDimensions, dstIndex * 2.0);
+  vec4 v2 = getValueFrom2DTextureAs1DArray(srcTex, srcDimensions, dstIndex * 2.0 + 1.0);
+</code></pre>
+<p>Effectively mean this</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">  vec4 v1 = srcTexAs1DArray[dstIndex * 2.0];
+  vec4 v2 = setTexAs1DArray[dstIndex * 2.0 + 1.0];
+</code></pre>
 <p>In our JavaScript we need to lookup the location of <code class="notranslate" translate="no">dstDimensions</code></p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
 const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
@@ -605,10 +614,13 @@ we covered storing positions in textures. If we store both the
 positions and velocities in textures then we can use the GPGPU techniques
 above to update the particle positions in a shader</p>
 <p>Before we get started, to make it easy, we want to use floating point
-textures. Those are an optional feature of WebGL. Desktop can render
+textures. Those are an optional feature of WebGL. Most devices can
+read floating point textures. Desktops can render
 to floating point textures but most smartphones can not.</p>
 <p>Also in order to support pulling vertices we need to check vertex shaders can use
-textures which is also an optional feature.</p>
+textures which is also an optional feature. We should probably check exactly
+how many are supported. In this case we will only need to use one texture
+in the vertex shader so we just check that a least 1 is supported.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Get A WebGL context
 /** @type {HTMLCanvasElement} */
 const canvas = document.querySelector(&quot;#canvas&quot;);
@@ -1145,9 +1157,9 @@ gl.drawArrays(gl.TRIANGLES, 0, 6);  // draw the clip space quad so we get one re
 <p>We should get the expected result of <code class="notranslate" translate="no">[1, 3]</code></p>
 <p>Reading data back from the GPU is slow. Let&#39;s say we wanted to
 visualize the results. It would be pretty easy to read those results
-and draw them using canvas2D but but how about with WebGL? Let&#39;s use
+and draw them using canvas2D but how about with WebGL? Let&#39;s use
 the data as is and draw the results?</p>
-<p>First, drawing the points is relatively easy. Like in the examples
+<p>First, drawing the points is relatively easy. Like in the particle example
 above we pass in an id for each point to the vertex shader
 and use that to get points. Let&#39;s draw each point in a different
 color so we can highlight the closest line in the same color.</p>
@@ -1188,8 +1200,8 @@ void main() {
 `;
 </code></pre>
 <p>Rather than passing in colors we generate them using <code class="notranslate" translate="no">hsv2rgb</code> and passing it
-a hue from to 0 to 1. For 500 lines there would
-be no easy way to tell lines apart but for around 10 lines we should be
+a hue from to 0 to 1. For 500 points there would
+be no easy way to tell lines apart but for around 10 points we should be
 able to distinguish them.</p>
 <p>We pass the generated color to a simple fragment shader</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const drawClosestPointsLinesFS = `
@@ -1653,6 +1665,25 @@ GPU than a top end PC. Other than doing your own timing there is no way to
 know for sure how much work you can give a GPU before its &quot;too slow&quot;</p>
 <p>I don&#39;t have a solution to offer. Only a warning that depending on what you&#39;re
 trying to do you may run into that issue.</p>
+</li>
+<li><p>Mobile devices don&#39;t generally support rendering to floating point textures</p>
+<p>There are no easy solutions here. One solution is you can try to
+encode floating point values into RGBA/UNSIGNED_BYTE values. In the shader
+when you read a value from the texture you need to convert back to
+floating point and when you output a color you need to re-encode it
+back into RGBA/UNSIGNED_BYTE. See <a href="https://stackoverflow.com/a/63830492/128511">this</a></p>
+<p>But, for example, if we were to use this in the particle or closest line
+examples above they would require significant changes. The code above
+is able to pull out a position (3 values, x, y, z) with just one lookup
+but now we&#39;d need to do 3 lookups. The code above is also able to write
+a new 3 value position <code class="notranslate" translate="no">gl_FragColor = newPosition</code> but now we&#39;d only be 
+able to write 1 value. We&#39;d either have to try to use <code class="notranslate" translate="no">WEBGL_draw_buffers</code>
+to let us write out 3 values to 3 different textures (yet more work)
+or we&#39;d have to adjust the shader to run 3 times, once for each of X, Y, and Z</p>
+<p>One other solution is some mobile devices support rendering to half floats.
+The problem with half floats are they have very little precision so while
+they are useful for some problems they aren&#39;t nearly as generally useful
+as normal 32bit floating point values.</p>
 </li>
 </ul>
 <p>I hope these examples helped you understand the key idea of GPGPU in WebGL
