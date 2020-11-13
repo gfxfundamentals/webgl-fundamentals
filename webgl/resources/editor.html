@@ -86,7 +86,7 @@ iframe {
     background: white;
 }
 .result .console .log {
-    white-space: pre;
+    white-space: pre-line;
 }
 .other>div,
 .other>div>div {
@@ -109,6 +109,26 @@ iframe {
     border-right-color: transparent;
     border-radius: 50%;
 }
+.dialog {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dialog>div {
+  background: #444;
+  color: white;
+  padding: 1em;
+  outline: none;
+}
+.dialog p {
+  margin-left: 0.25em;
+}
 @keyframes rotate {
     0%    { transform: rotate(0deg); }
     100%  { transform: rotate(360deg); }
@@ -117,7 +137,7 @@ iframe {
 .tabs>div {
     padding: 0.125em;
 }
-.panebuttons>button {
+button {
     padding: 0.5em;
     border: none;
     background: #AAA;
@@ -126,7 +146,10 @@ iframe {
     width: 5em;
     cursor: pointer;
 }
-.panebuttons>button:focus {
+button:hover {
+  background-color: orange;
+}
+button:focus {
     outline: none;
 }
 .panelogo {
@@ -182,14 +205,13 @@ iframe {
 </style>
 </head>
 <body>
-<div class="frame">
+<div class="frame notranslate">
     <div class="tabs">
         <div class="panebuttons">
             <button class="button-js">JS</button>
             <button class="button-html">HTML</button>
             <button class="button-css">CSS</button>
-            <button class="button-codepen">Codepen</button>
-            <button class="button-jsfiddle">JSFiddle</button>
+            <button class="button-export">Export</button>
             <button class="button-result">Result</button>
             <button class="button-run">Run</button>
             <button class="button-fullscreen">&nbsp;</button>
@@ -210,6 +232,14 @@ iframe {
           </div>
         </div>
     </div>
+</div>
+<div class="dialog export" style="display: none;">
+  <div tabindex="-1">
+    <p>Export To: </p>
+    <button class="button-jsgist">jsGist</button>
+    <button class="button-codepen">Codepen</button>
+    <button class="button-jsfiddle">JSFiddle</button>
+  </div>
 </div>
 </body>
 <script src="/monaco-editor/min/vs/loader.js"></script>

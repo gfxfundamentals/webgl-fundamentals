@@ -362,8 +362,8 @@ function makeBlobURLsForSources(scriptInfo) {
       scriptInfo.numLinesBeforeScript = 0;
       if (scriptInfo.isWorker) {
         const extra = `self.lessonSettings = ${JSON.stringify(lessonSettings)};
-importScripts('${dirname(scriptInfo.fqURL)}/resources/webgl-debug-helper.js');
-importScripts('${dirname(scriptInfo.fqURL)}/resources/lessons-worker-helper.js')`;
+import '${dirname(scriptInfo.fqURL)}/resources/webgl-debug-helper.js';
+import '${dirname(scriptInfo.fqURL)}/resources/lessons-worker-helper.js';`;
         scriptInfo.numLinesBeforeScript = extra.split('\n').length;
         text = `${extra}\n${text}`;
       }
@@ -478,27 +478,32 @@ function makeScriptsForWorkers(scriptInfo) {
   }
 
   const scripts = makeScriptsForWorkersImpl(scriptInfo);
-  const mainScript = scripts.pop().text;
-  if (!scripts.length) {
+  if (scripts.length === 1) {
     return {
-      js: mainScript,
+      js: scripts[0].text,
       html: '',
     };
   }
 
-  const workerName = scripts[scripts.length - 1].name;
+  // scripts[last]      = main script
+  // scripts[last - 1]  = worker
+  const mainScriptInfo = scripts[scripts.length - 1];
+  const workerScriptInfo = scripts[scripts.length - 2];
+  const workerName = workerScriptInfo.name;
+  mainScriptInfo.text = mainScriptInfo.text.split(`'${workerName}'`).join('getWorkerBlob()');
   const html = scripts.map((nameText) => {
     const {name, text} = nameText;
-    return `<script id="${name}" type="x-worker">\n${text}\n</script>`;
+    return `<script id="${name}" type="x-worker">\n${text}\n</script>\n`;
   }).join('\n');
   const init = `
 
 
 
 // ------
-// Creates Blobs for the Worker Scripts so things can be self contained for snippets/JSFiddle/Codepen
+// Creates Blobs for the Scripts so things can be self contained for snippets/JSFiddle/Codepen
+// even though they are using workers
 //
-function getWorkerBlob() {
+(function() {
   const idsToUrls = [];
   const scriptElements = [...document.querySelectorAll('script[type=x-worker]')];
   for (const scriptElement of scriptElements) {
@@ -511,11 +516,14 @@ function getWorkerBlob() {
     const id = scriptElement.id;
     idsToUrls.push({id, url});
   }
-  return idsToUrls.pop().url;
-}
+  window.getWorkerBlob = function() {
+    return idsToUrls.pop().url;
+  };
+  import(window.getWorkerBlob());
+}());
 `;
   return {
-    js: mainScript.split(`'${workerName}'`).join('getWorkerBlob()') + init,
+    js: init,
     html,
   };
 }
@@ -586,6 +594,59 @@ function openInJSFiddle() {
   window.frameElement.ownerDocument.body.removeChild(elem);
 }
 
+function openInJSGist() {
+  const comment = `// ${g.title}
+// from ${g.url}
+
+
+`;
+  getSourcesFromEditor();
+  const scripts = makeScriptsForWorkers(g.rootScriptInfo);
+  const gist = {
+    name: g.title,
+    settings: {},
+    files: [
+      { name: 'index.html', content: scripts.html + fixHTMLForCodeSite(htmlParts.html.sources[0].source), },
+      { name: 'index.css', content: htmlParts.css.sources[0].source, },
+      { name: 'index.js', content: comment + fixJSForCodeSite(scripts.js), },
+    ],
+  };
+
+  window.open('https://jsgist.org/?newGist=true', '_blank');
+  const send = (e) => {
+    e.source.postMessage({type: 'newGist', data: gist}, '*');
+  };
+  window.addEventListener('message', send, {once: true});
+}
+
+document.querySelectorAll('.dialog').forEach(dialogElem => {
+  dialogElem.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.style.display = 'none';
+    }
+  });
+  dialogElem.addEventListener('keydown', function(e) {
+    console.log(e.keyCode);
+    if (e.keyCode === 27) {
+      this.style.display = 'none';
+    }
+  })
+});
+const exportDialogElem = document.querySelector('.export');
+
+function openExport() {
+  exportDialogElem.style.display = '';
+  exportDialogElem.firstElementChild.focus();
+}
+
+function closeExport(fn) {
+  return () => {
+    exportDialogElem.style.display = 'none';
+    fn();
+  };
+}
+document.querySelector('.button-export').addEventListener('click', openExport);
+
 function selectFile(info, ndx, fileDivs) {
   if (info.editors.length <= 1) {
     return;
@@ -643,8 +704,9 @@ function setupEditor() {
   g.iframe = document.querySelector('.result>iframe');
   g.other = document.querySelector('.panes .other');
 
-  document.querySelector('.button-codepen').addEventListener('click', openInCodepen);
-  document.querySelector('.button-jsfiddle').addEventListener('click', openInJSFiddle);
+  document.querySelector('.button-codepen').addEventListener('click', closeExport(openInCodepen));
+  document.querySelector('.button-jsfiddle').addEventListener('click', closeExport(openInJSFiddle));
+  document.querySelector('.button-jsgist').addEventListener('click', closeExport(openInJSGist));
 
   g.result = document.querySelector('.panes .result');
   g.resultButton = document.querySelector('.button-result');
@@ -655,7 +717,7 @@ function setupEditor() {
   g.result.style.display = 'none';
   toggleResultPane();
 
-  if (window.innerWidth > 1200) {
+  if (window.innerWidth >= 1000) {
     toggleSourcePane(htmlParts.js.button);
   }
 
