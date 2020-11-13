@@ -1328,7 +1328,7 @@ Again it was originally a mess of colors. The image above is what it looked like
 after it was fixed. That's pretty much what you'd expect to see for weights for
 the killer whale. Rings of color around each bone.
 
-The bug had to do with how `webgl.createBufferInfoFromArrays` was figuring out
+The bug had to do with how `webglUtils.createBufferInfoFromArrays` was figuring out
 the number of components. There were cases where it ignored the one specified,
 tried to guess, and guessed wrong. Once the bug was fixed then I removed those
 changes to the shaders. Note that I left them in the code above commented out if
