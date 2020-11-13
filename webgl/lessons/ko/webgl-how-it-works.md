@@ -1,13 +1,13 @@
 Title: WebGL 작동 원리
-Description: WebGL은 실제로 어떻게 작동하나요?
-TOC: WebGL 작동 원리
+Description: WebGL이 실제로 하는 일
+TOC: 작동 원리
 
 
-이건 [WebGL Fundamentals](webgl-fundamentals.html)에서 이어지는 글입니다.
-이어서 하기 전에 WebGL과 GPU가 실제로 기본적인 수준에서 어떤 걸 하는지 얘기해봅시다.
-기본적으로 GPU에는 2가지 부분이 있습니다.
-첫 번째는 vertex(또는 데이터 스트림)를 clip 공간의 vertex로 처리합니다.
-두 번째는 처음한 것을 기반으로 픽셀을 그립니다.
+이건 [WebGL 기초](webgl-fundamentals.html)에서 이어지는 글입니다.
+이어서 하기 전에 WebGL과 GPU가 실제로 무엇을 하는지 기본적인 수준에서 얘기해봅시다.
+GPU에는 기본적으로 2가지 부분이 있는데요.
+첫 번째 부분은 vertex(또는 데이터 스트림)를 clip 공간의 vertex로 처리합니다.
+두 번째 부분은 첫 번째 부분을 기반으로 픽셀을 그립니다.
 
 호출할 때
 
@@ -16,30 +16,29 @@ TOC: WebGL 작동 원리
     var count = 9;
     gl.drawArrays(primitiveType, offset, count);
 
-여기서 9는 "vertex 9개 처리"를 의미하므로 vertex 9개가 처리됩니다.
+9는 "vertex 9개 처리"를 의미하므로 여기에서 9개의 vertex들이 처리되고 있습니다.
 
 <img src="resources/vertex-shader-anim.gif" class="webgl_center" />
 
-왼쪽에는 당신이 제공한 데이터가 있습니다.
+왼쪽은 당신이 제공한 데이터입니다.
 vertex shader는 [GLSL](webgl-shaders-and-glsl.html)로 작성하는 함수인데요.
 이 함수는 각 vertex마다 한 번씩 호출됩니다.
-몇몇 수학적 계산을 하고 현재 vertex의 clip 공간 값을 가진 특수 변수 `gl_Position`를 선언합니다.
-GPU는 이 값을 내부적으로 저장합니다.
+몇 가지 계산을 하고 현재 vertex의 clip 공간 값으로 특수 변수 `gl_Position`를 선언하는데요.
+GPU는 이 값을 가져와서 내부에 저장합니다.
 
-`삼각형`을 그린다고 가정하면, 첫 부분에서 꼭지점 3개를 생성할 때마다 GPU는 이걸 이용해 삼각형을 만듭니다.
-어떤 픽셀이 삼각형의 점 3개에 해당하는지 확인하고, 삼각형을 rasterization(="픽셀에 그리기") 하는데요.
-각 픽셀마다 fragment shader를 호출해서 어떤 색상으로 할지 묻습니다.
-fragment shader는 특수 변수 `gl_FragColor`를 픽셀에 필요한 색상으로 설정해야 합니다.
+`삼각형`을 그린다고 가정하면, 첫 번째 부분에서 vertex 3개를 생성할 때마다 GPU는 이걸 사용해 삼각형을 만드는데요.
+어떤 픽셀이 삼각형의 점 3개에 해당하는지 확인한 다음, 삼각형을 rasterize(="픽셀로 그리기") 합니다.
+각 픽셀마다 fragment shader를 호출해서 어떤 색상으로 만들지 묻는데요.
+fragment shader는 특수 변수 `gl_FragColor`를 해당 픽셀에 원하는 색상으로 설정해야 합니다.
 
-모든 것들이 흥미롭지만 예제에서 볼 수 있듯이 fragment shader는 픽셀당 아주 적은 정보를 가지고 있습니다.
-운 좋게도 우리는 더 많은 정보를 fragment shader에 넘길 수 있습니다.
-vertex shader에서 fragment shader로 전달하고자 하는 각 값에 “varying”을 정의하는건데요.
+전부 흥미롭지만 지금까지 예제에서 볼 수 있듯이 fragment shader는 픽셀당 아주 적은 정보를 가지고 있습니다.
+다행히 더 많은 정보를 전달할 수 있는데요.
+vertex shader에서 fragment shader로 전달하려는 각 값마다 “varying”을 정의하는겁니다.
 
 간단한 예시로, 우리가 직접 계산한 clip 공간 좌표를 vertex shader에서 fragment shader로 전달해봅시다.
 
-
-간단하게 삼각형을 그려볼 건데요.
-[이전 예제](webgl-2d-matrices.html)에서 계속해서 사각형을 삼각형으로 바꿔봅시다.
+간단하 삼각형을 그릴 건데요.
+[이전 예제](webgl-2d-matrices.html)에 이어서 사각형을 삼각형으로 바꿔봅시다.
 
     // 삼각형을 정의한 값들로 버퍼 채우기
     function setGeometry(gl) {
@@ -54,7 +53,7 @@ vertex shader에서 fragment shader로 전달하고자 하는 각 값에 “vary
       );
     }
 
-그리고 꼭지점 3개만 그립니다.
+그리고 3개의 vertex만 그리면 됩니다.
 
     // scene 그리기
     function drawScene() {
@@ -66,21 +65,21 @@ vertex shader에서 fragment shader로 전달하고자 하는 각 값에 “vary
       gl.drawArrays(primitiveType, offset, count);
     }
 
-다음으로 vertex shader에서 fragment shader로 데이터를 넘기기 위해 *varying*을 선언합니다.
+다음으로 fragment shader로 데이터를 전달하기 위해 vertex shader에 *varying*을 선언합니다.
 
-    varying vec4 v_color;
+    *varying vec4 v_color;
     ...
     void main() {
       // 위치에 행렬 곱하기
       gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 
       // clip 공간에서 색상 공간으로 변환
-      // clip 공간은 -1.0에서 +1.0까지 입니다.
-      // 색상 공간은 0.0부터 1.0까지 입니다.
+      // clip 공간은 -1.0에서 +1.0까지
+      // 색상 공간은 0.0에서 1.0까지
     *  v_color = gl_Position * 0.5 + 0.5;
     }
 
-그런 다음 fragment shader에 같은 *varying*을 선언합니다.
+그런 다음 fragment shader에 동일한 *varying*을 선언합니다.
 
     precision mediump float;
 
@@ -90,25 +89,25 @@ vertex shader에서 fragment shader로 전달하고자 하는 각 값에 “vary
     *  gl_FragColor = v_color;
     }
 
-WebGL은 vertex shader의 varying을 같은 이름을 가진 fragment shader의 varying으로 연결할 겁니다.
+WebGL은 vertex shader의 varying을 이름과 타입이 같은 fragment shader의 varying으로 연결할 겁니다.
 
-여기 실제 버전입니다.
+여기 작동하는 버전입니다.
 
 {{{example url="../webgl-2d-triangle-with-position-for-color.html" }}}
 
-삼각형을 이동, 회전 그리고 크기 조정해보세요.
-참고로 색상은 clip 공간에서 계산되므로 삼각형과 함께 움직이지 않습니다.
-그래서 삼각형의 색상은 배경에 상대적입니다.
+삼각형을 이동시키고, 회전하고 크기를 바꿔보세요.
+참고로 색상은 clip 공간에서 계산되므로 삼각형과 함께 움직이지 않는데요.
+이들은 색상은 배경에 상대적입니다.
 
-자 이제 생각해봅시다.
-우리는 오직 꼭지점 3개만 계산했습니다.
-vertex shader는 3번만 호출되기 때문에 3개의 색을 계산하지만 삼각형은 다양한 색상을 사용합니다.
+이제 생각해봅시다.
+우리는 vertex 3개만을 계산했습니다.
+vertex shader는 3번만 호출되므로 3개의 색상만을 계산하지만 삼각형은 여러 색상인데요.
 이게 *varying*이라고 불리는 이유입니다.
 
-WebGL은 각 vertex를 계산한 값 3개를 가져오고 삼각형을 rasterization 할 때 vertex에 대해 계산한 값 사이를 보간합니다.
-그리고 각 픽셀마다 fragment shader를 해당 픽셀이 보간된 값과 함께 호출합니다.
+WebGL은 각 vertex를 계산한 3개의 값을 가져오고 삼각형을 rasterize 할 때 계산된 vertex들 사이를 보간하는데요.
+각 픽셀마다 해당 픽셀에 대해 보간된 값으로 fragment shader를 호출합니다.
 
-위 예제에서 우리는 vertex 3개로 시작했습니다.
+위 예제에서는 3개의 vertex로 시작하는데요.
 
 <style>
 table.vertex_table {
@@ -133,44 +132,44 @@ table.vertex_table td {
 </style>
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="2">Vertex</th></tr>
+<tr><th colspan="2">Vertices</th></tr>
 <tr><td>0</td><td>-100</td></tr>
 <tr><td>150</td><td>125</td></tr>
 <tr><td>-175</td><td>100</td></tr>
 </table>
 </div>
 
-vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip 공간으로 변환하는데요.
-이동, 회전 그리고 크기 조정의 기본값은 이동 = (x:200, y:150), 회전 = 0, 크기 조정 = 1이므로 실제로는 이동만 합니다.
-주어진 backbuffer는 400x300이고 vertex shader는 행렬을 적용한 뒤 다음과 같은 clip 공간 vertex 3개를 계산합니다.
+vertex shader는 이동, 회전, 크기 조정에 행렬을 적용하고 clip 공간으로 변환합니다.
+이동, 회전 그리고 크기 조정의 기본값은 translation = 200, 150, rotation = 0, scale = 1,1이므로 실제로는 이동만 하는데요.
+400x300인 backbuffer가 주어지면 vertex shader는 행렬을 적용한 뒤 다음과 같은 3개의 clip 공간 vertex를 계산합니다.
 
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="3">gl_Position에 작성된 값</th></tr>
+<tr><th colspan="3">gl_Position에 작성된 값들</th></tr>
 <tr><td>0.000</td><td>0.660</td></tr>
 <tr><td>0.750</td><td>-0.830</td></tr>
 <tr><td>-0.875</td><td>-0.660</td></tr>
 </table>
 </div>
 
-또한 색상 공간으로 변환하고 이것들을 우리가 선언한 *varying* v_color에 작성합니다.
+또한 이걸 색상 공간으로 변환하고 이것들을 우리가 선언한 *varying* v_color에 작성합니다.
 
 <div class="hcenter">
 <table class="vertex_table">
-<tr><th colspan="3">v_color에 작성된 값</th></tr>
+<tr><th colspan="3">v_color에 작성된 값들</th></tr>
 <tr><td>0.5000</td><td>0.830</td><td>0.5</td></tr>
 <tr><td>0.8750</td><td>0.086</td><td>0.5</td></tr>
 <tr><td>0.0625</td><td>0.170</td><td>0.5</td></tr>
 </table>
 </div>
 
-그런 다음 v_color에 작성된 값 3개가 보간되어 각 픽셀의 fragment shader로 전달됩니다.
+v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragment shader로 전달됩니다.
 
-{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color is interpolated between v0, v1 and v2" }}}
+{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color는 v0, v1 그리고 v2 사이에서 보간됩니다" }}}
 
-또한 vertex shader에 더 많은 데이터를 넘길 수 있고 그것을 fragment shader에 전달할 수 있습니다.
-예를들어 2가지 색을 가진 삼각형 2개로 이루어진 사각형을 그린다고 합시다.
-이를 위해 vertex shader에 또다른 attribute를 추가하면 더 많은 데이터를 넘기고 그 데이터를 fragment shader에 직접 전달할 수 있습니다.
+또한 더 많은 데이터를 vertex shader에 전달한 다음 fragment shader에 전달할 수 있습니다.
+예를들어 2가지 색상을 가진 삼각형 2개로 이루어진 사각형을 그린다고 해봅시다.
+이를 위해 vertex shader에 또다른 attribute를 추가하면 더 많은 데이터를 전달할 수 있고 그 데이터를 fragment shader에 직접 전달할 수 있습니다.
 
     attribute vec2 a_position;
     +attribute vec4 a_color;
@@ -179,26 +178,26 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
 
     void main() {
       ...
-      // 색상을 attribute에서 varying으로 복사
+      // attribute에서 varying으로 색상 복사
     *  v_color = a_color;
     }
 
-이제 WebGL이 사용할 수 있게 색상들을 제공해야 합니다.
+이제 WebGL이 사용할 색상을 제공해줘야 합니다.
 
     // vertex 데이터가 필요한 곳 탐색
     var positionLocation = gl.getAttribLocation(program, "a_position");
     +var colorLocation = gl.getAttribLocation(program, "a_color");
     ...
-    +// 색상용 buffer 생성
+    +// 색상을 위한 buffer 생성
     +var colorBuffer = gl.createBuffer();
     +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     +// 색상 설정
     +setColors(gl);
     ...
 
-    +// 사각형을 만들 두 삼각형의 색상으로 buffer 채우기
+    +// 사각형을 만드는 두 삼각형의 색상으로 buffer 채우기
     +function setColors(gl) {
-    +  // Pick 2 random colors.
+    +  // 2가지 
     +  var r1 = Math.random();
     +  var b1 = Math.random();
     +  var g1 = Math.random();
@@ -208,16 +207,16 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     +  var g2 = Math.random();
     +
     +  gl.bufferData(
-    +      gl.ARRAY_BUFFER,
-    +      new Float32Array([
-    +        r1, b1, g1, 1,
-    +        r1, b1, g1, 1,
-    +        r1, b1, g1, 1,
-    +        r2, b2, g2, 1,
-    +        r2, b2, g2, 1,
-    +        r2, b2, g2, 1
-    +      ]),
-    +      gl.STATIC_DRAW
+    +    gl.ARRAY_BUFFER,
+    +    new Float32Array([
+    +      r1, b1, g1, 1,
+    +      r1, b1, g1, 1,
+    +      r1, b1, g1, 1,
+    +      r2, b2, g2, 1,
+    +      r2, b2, g2, 1,
+    +      r2, b2, g2, 1
+    +    ]),
+    +    gl.STATIC_DRAW
     +  );
     +}
 
@@ -229,11 +228,11 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     +// 색상 buffer 할당
     +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     +
-    +// 색상 attribute에게 colorBuffer(ARRAY_BUFFER)의 데이터를 가져오는 방법 알려줌
-    +var size = 4;          // 반복마다 4개 구성요소
+    +// 색상 attribute에게 colorBuffer(ARRAY_BUFFER)의 데이터를 가져오는 방법 지시
+    +var size = 4;          // 반복마다 4개의 구성 요소
     +var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
-    +var normalize = false; // 데이터 정규화하지 않기
-    +var stride = 0;        // 0 = 각 반복마다 size * sizeof(type) 앞으로 이동해 다음 위치 얻기
+    +var normalize = false; // 데이터 정규화 안 함
+    +var stride = 0;        // 0 = 다음 위치를 구하기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
     +var offset = 0;        // buffer의 처음부터 시작
     +gl.vertexAttribPointer(
     +    colorLocation,
@@ -244,7 +243,7 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     +    offset
     +);
 
-그리고 삼각형 2개의 꼭지점 6개를 계산하도록 count를 조정
+그리고 삼각형 2개의 꼭지점 6개를 계산하기 위해 count를 조정
 
     // geometry 그리기
     var primitiveType = gl.TRIANGLES;
@@ -252,7 +251,7 @@ vertex shader는 행렬을 이동, 회전, 크기 조절에 적용하고 clip �
     *var count = 6;
     gl.drawArrays(primitiveType, offset, count);
 
-여기 결과물입니다.
+그리고 여기 결과물입니다.
 
 {{{example url="../webgl-2d-rectangle-with-2-colors.html" }}}
 
