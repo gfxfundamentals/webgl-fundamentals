@@ -255,25 +255,25 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
 
 {{{example url="../webgl-2d-rectangle-with-2-colors.html" }}}
 
-단색 삼각형 2개가 그려지는걸 알 수 있는데요.
-하지만 varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보간됩니다.
-이건 각 삼각형의 vertex 3개에 모두 같은 색상을 사용했기 때문인데요.
-만약에 각각의 색상을 다르게 하면 보간이 되는 것을 볼 수 있습니다.
+2개의 단색 삼각형이라는 점에 주목해봅시다.
+varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보간되고 있는데요.
+이건 각 삼각형의 vertex 3개에 모두 같은 색상을 사용했기 때문입니다.
+만약 각각의 색상을 다르게 만들면 보간된 것을 볼 수 있습니다.
 
     // 사각형을 만드는 삼각형 2개의 색상으로 buffer 채우기
     function setColors(gl) {
-      // 모든 vertex를 다른 색으로 만들기
+      // 모든 vertex를 다른 색상으로 만들기
       gl.bufferData(
-          gl.ARRAY_BUFFER,
-    *      new Float32Array([
-    *        Math.random(), Math.random(), Math.random(), 1,
-    *        Math.random(), Math.random(), Math.random(), 1,
-    *        Math.random(), Math.random(), Math.random(), 1,
-    *        Math.random(), Math.random(), Math.random(), 1,
-    *        Math.random(), Math.random(), Math.random(), 1,
-    *        Math.random(), Math.random(), Math.random(), 1
-    *      ]),
-          gl.STATIC_DRAW
+        gl.ARRAY_BUFFER,
+    *    new Float32Array([
+    *      Math.random(), Math.random(), Math.random(), 1,
+    *      Math.random(), Math.random(), Math.random(), 1,
+    *      Math.random(), Math.random(), Math.random(), 1,
+    *      Math.random(), Math.random(), Math.random(), 1,
+    *      Math.random(), Math.random(), Math.random(), 1,
+    *      Math.random(), Math.random(), Math.random(), 1
+    *    ]),
+        gl.STATIC_DRAW
       );
     }
 
@@ -281,20 +281,20 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
 
 {{{example url="../webgl-2d-rectangle-with-random-colors.html" }}}
 
-그다지 흥미롭지는 않지만 하나 이상의 attribute를 사용하고 vertex shader에서 fragment shader로 데이터를 넘기는 방법을 보여줍니다.
-[이미지 처리 예제](webgl-image-processing.html)를 살펴보면 texture 좌료를 전달하기 위해 추가적인 attribute를 전달하는 것을 볼 수 있습니다,
+그다지 흥미롭지는 않지만 2개 이상의 attribute를 사용하고 vertex shader에서 fragment shader로 데이터 전달하는 걸 보여주는데요.
+[이미지 처리 예제](webgl-image-processing.html)를 살펴보면 texture 좌표를 전달하기 위해 마찬가지로 추가적인 attribute를 사용하는 것을 볼 수 있습니다.
 
 ##buffer와 attribute 명령은 어떤 일을 하나요?
 
-Buffer는 vertex 데이터를 GPU로 가져오는 방법입니다.
+buffer는 vertex와 각 vertex의 다른 데이터를 GPU로 가져오는 방법입니다.
 `gl.createBuffer`는 buffer를 생성합니다.
 `gl.bindBuffer`는 해당 buffer를 작업할 buffer로 설정합니다.
 `gl.bufferData`는 데이터를 buffer로 복사합니다.
-보통 초기화할 때 위 작업들이 이루어집니다.
+이건 보통 초기화할 때 수행되는데요.
 
-Buffer에 데이터가 있으면 WebGL에 어떻게 데이터를 가져오고 vertex shader의 attribute에 제공할지 알려줘야 합니다.
+buffer에 데이터가 있으면 WebGL에게 어떻게 데이터를 가져오고 vertex shader의 attribute에 제공할지 알려줘야 합니다.
 
-이를 위해, 먼저 WebGL에게 어디에 attribute를 할당했는지 물어봐야 합니다.
+이를 위해, 먼저 WebGL에게 attribute를 할당한 위치를 물어봐야 합니다.
 예를들어 위 코드에서 우리는
 
     // vertex 데이터가 어디로 가야하는지 탐색
@@ -307,37 +307,39 @@ attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실�
 
     gl.enableVertexAttribArray(location);
 
-이 명령어는 WebGL에게 buffer에서 데이터 받으라고 알려줍니다.
+이 명령어는 WebGL에게 buffer에서 데이터를 제공하기 원한다고 말해줍니다.
 
     gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
 
 
-이 명령어는 buffer를 ARRAY_BUFFER bind point에 할당합니다.
+이 명령어는 ARRAY_BUFFER bind point에 buffer를 할당하는데요.
 이건 WebGL 내부에 있는 전역 변수입니다.
 
     gl.vertexAttribPointer(
-        location,
-        numComponents,
-        typeOfData,
-        normalizeFlag,
-        strideToNextPieceOfData,
-        offsetIntoBuffer
+      location,
+      numComponents,
+      typeOfData,
+      normalizeFlag,
+      strideToNextPieceOfData,
+      offsetIntoBuffer
     );
 
-그리고 이 명령어는 WebGL에게 현재 ARRAY_BUFFER bind point에 할당된 buffer에서 데이터를 가져오고,
-vertex 당 구성 요소들이 몇 개인지 (1 - 4), 어떤 데이터 종류인지 (`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...),
-한 데이터 조각에서 다음으로 건너가는데 몇 바이트를 넘어야 하는지 나타내는 stride, buffer에서 데이터까지의 거리를 나타내는 offset 등을 알려줍니다.
+그리고 이 명령어는 현재 ARRAY_BUFFER bind point에 바인딩된 buffer에서 데이터를 가져오기 위해,
+vertex 당 얼마나 많은 구성 요소들(1 - 4)이 있는지,
+데이터 종류(`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...)는 무엇인지,
+데이터의 한 부분에서 다음 부분을 가져오기 위해 몇 바이트를 건너뛰어야 하는지를 의미하는 stride,
+그리고 buffer에서 우리 데이터가 얼마나 멀리 있는지에 대한 offset 등을 WebGL에게 알려줍니다.
 
-구성 요소의 수는 항상 1에서 4사이 입니다.
+구성 요소의 숫자는 항상 1에서 4까지 입니다.
 
-만약 데이터의 type 당 버퍼 한 개를 쓴다면 stride와 offset는 항상 0일 수 있습니다.
-stride가 0이면 "type 크기와 같은 stride 사용"을 의미합니다.
-offset이 0이면 "buffer의 시작점에서 시작"을 의미합니다.
-0이 아닌 다른 값을 설정하면 성능 면에서 이점이 있지만 WebGL을 한계까지 몰아붙일게 아니라면 그만한 가치가 없습니다.
+만약 데이터의 type마다 1개의 buffer를 쓴다면 stride와 offset은 항상 0일 수 있는데요.
+stride가 0인 것은 "type 크기에 맞는 stride 사용"을 의미합니다.
+offset이 0인 것은 "buffer의 처음부터 시작"을 의미합니다.
+0 이외의 다른 값으로 설정하는 것은 더 복잡하고 성능 면에서 어느 정도 이점이 있긴 하지만 WebGL을 한계까지 몰아붙이기 위한 게 아니라면 복잡함을 감수할만한 가치는 없을 것 같습니다.
 
-buffer와 attribute에 대해 정리되셨기 바랍니다.
+buffer와 attribute가 정리되셨기를 바랍니다.
 
-다음 시간에는 [shader와 GLSL](webgl-shaders-and-glsl.html)를 살펴보겠습니다.
+다음은 [shader와 GLSL](webgl-shaders-and-glsl.html)을 살펴보겠습니다.
 
 <div class="webgl_bottombar">
 <h3>vertexAttribPointer의 normalizeFlag가 뭔가요?</h3>
