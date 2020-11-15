@@ -197,7 +197,7 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
 
     +// 사각형을 만드는 두 삼각형의 색상으로 buffer 채우기
     +function setColors(gl) {
-    +  // 2가지 
+    +  // 2개의 무작위 색상 선택
     +  var r1 = Math.random();
     +  var b1 = Math.random();
     +  var g1 = Math.random();
@@ -260,7 +260,7 @@ varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보�
 이건 각 삼각형의 vertex 3개에 모두 같은 색상을 사용했기 때문입니다.
 만약 각각의 색상을 다르게 만들면 보간된 것을 볼 수 있습니다.
 
-    // 사각형을 만드는 삼각형 2개의 색상으로 buffer 채우기
+    // 사각형을 만드는 두 삼각형의 색상으로 buffer 채우기
     function setColors(gl) {
       // 모든 vertex를 다른 색상으로 만들기
       gl.bufferData(
@@ -341,35 +341,35 @@ buffer와 attribute가 정리되셨기를 바랍니다.
 
 다음은 [shader와 GLSL](webgl-shaders-and-glsl.html)을 살펴보겠습니다.
 
-<div class="webgl_bottombar">
-<h3>vertexAttribPointer의 normalizeFlag가 뭔가요?</h3>
+<div class="webgl_bottombar"><h3>vertexAttribPointer에서 normalizeFlag가 뭔가요?</h3>
 <p>
-normalize flag는 부동 소수점이 아닌 자료형을 위한 flag 입니다.
-만약 false를 넘기면 값은 각자 가지고 있는 자료형으로 해석됩니다.
+normalize flag는 부동 소수점이 아닌 모든 type을 위한 것인데요.
+false를 넘기면 값은 해당 type으로 해석됩니다.
 BYTE는 -128에서 127까지, UNSIGNED_BYTE는 0부터 255까지, SHORT는 -32768부터 32767까지 등등...
 </p>
 <p>
-normalize flag를 true로 설정하면 BYTE(-128 ~ 127)는 -1에서 +1.0사이로, UNSIGNED_BYTE(0 ~ 255)는 0.0에서 +1.0사이로 바뀝니다.
-정규화된 SHORT도 -1.0에서 +1.0사이로 바뀌며 BYTE보다 더 많은 해상도를 가지고 있습니다.
+normalize flag를 true로 설정하면 BYTE(-128 ~ 127) 값은 -1.0에서 +1.0사이로 나타내고, UNSIGNED_BYTE(0 ~ 255)는 0.0에서 +1.0사이가 됩니다.
+정규화된 SHORT도 -1.0에서 +1.0사이가 되며 BYTE보다 더 높은 해상도를 가집니다.
 </p>
 <p>
-정규화된 데이터의 주 용도는 색상입니다.
-대부분의 경우 색상은 0.0에서 1.0까지 가능합니다.
-빨강, 초록, 파랑 그리고 alpha를 모두 소수점으로 사용하면 각 vertex 당 색상은 16byte를 사용합니다.
-만약 복잡한 geometry가 있는 경우 더 많은 byte를 추가할 수 있습니다.
-대신에 색상을 0은 0.0이 되고 255는 1.0이 되는 UNSIGNED_BYTE로 변환해야 합니다.
+정규화된 데이터의 가장 일반적인 용도는 색상입니다.
+대부분의 경우 색상은 0.0에서 1.0사이 인데요.
+빨강, 초록, 파랑 그리고 투명도 모두 소수점을 쓰면 각 색상의 vertex마다 16byte를 사용합니다.
+만약 복잡한 geometry가 있는 경우 많은 byte를 추가할 수 있습니다.
+대신에 0은 0.0이 되고 255는 1.0이 되는 UNSIGNED_BYTE로 색상을 변환해야 하는데요.
+그러면 각 vertex의 색상마다 4 byte만 써서, 75%를 아낄 수 있습니다.
 </p>
 <p>
 이렇게 하도록 코드를 수정해봅시다.
-WebGL에 색상을 추출하는 방법을 알려줄 때 우리는
+WebGL에게 사용할 색상을 추출하는 방법을 지시할 때
 </p>
 <pre class="prettyprint showlinemods">
-// colorBuffer에서 데이터를 가져오는 방법을 색상 attribute에게 알림 (ARRAY_BUFFER)
-var size = 4;                 // 반복마다 구성 요소 4개
+// colorBuffer(ARRAY_BUFFER)에서 데이터를 어떻게 가져올지 color attribute에 지시
+var size = 4;                 // 반복마다 4개의 구성 요소
 *var type = gl.UNSIGNED_BYTE;  // 데이터는 8bit unsigned byte
 *var normalize = true;         // 데이터 정규화
-var stride = 0;               // 0 = 각 반복마다 size * sizeof(type) 앞으로 이동해 다음 위치 얻기
-var offset = 0;               // buffer의 시작점에서 시작
+var stride = 0;               // 0 = 다음 위치를 구하기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
+var offset = 0;               // buffer의 처음부터 시작
 gl.vertexAttribPointer(
     colorLocation,
     size,
@@ -379,33 +379,32 @@ gl.vertexAttribPointer(
     offset
 );
 </pre>
-<p>그리고 buffer를 색상으로 채울 때 우리는</p>
+<p>그리고 사용할 색상으로 buffer를 채울 때</p>
 <pre class="prettyprint showlinemods">
-// 사각형을 만드는 삼각형 2개의 색상으로 buffer 채우기
+// 사각형을 만드는 두 삼각형의 색상으로 buffer 채우기
 function setColors(gl) {
-  // 무작위 색상 2개 선택
-  // 0에서 255.99999사이 값은 Uint8Array에 저장될 때 끝이 잘립니다.
-  var r1 = Math.random() * 256;
-  var b1 = Math.random() * 256;
-  var g1 = Math.random() * 256;
-  var r2 = Math.random() * 256;
-  var b2 = Math.random() * 256;
-  var g2 = Math.random() * 256;
+  // 2개의 무작위 색상 선택
+  var r1 = Math.random() * 256; // 0에서
+  var b1 = Math.random() * 256; // 255.99999사이
+  var g1 = Math.random() * 256; // 값은
+  var r2 = Math.random() * 256; // Uint8Array에
+  var b2 = Math.random() * 256; // 저장될 때
+  var g2 = Math.random() * 256; // 잘림
 
   gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Uint8Array([
-        r1, b1, g1, 255,
-        r1, b1, g1, 255,
-        r1, b1, g1, 255,
-        r2, b2, g2, 255,
-        r2, b2, g2, 255,
-        r2, b2, g2, 255
-      ]), // Uint8Array
-      gl.STATIC_DRAW
+    gl.ARRAY_BUFFER,
+    new Uint8Array([   // Uint8Array
+      r1, b1, g1, 255,
+      r1, b1, g1, 255,
+      r1, b1, g1, 255,
+      r2, b2, g2, 255,
+      r2, b2, g2, 255,
+      r2, b2, g2, 255
+    ]),
+    gl.STATIC_DRAW
   );
 }
 </pre>
-<p>여기 예제가 있습니다.</p>
+<p>여기 그 샘플이 있습니다.</p>
 {{{example url="../webgl-2d-rectangle-with-2-byte-colors.html" }}}
 </div>
