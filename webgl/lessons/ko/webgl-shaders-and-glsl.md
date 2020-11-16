@@ -4,15 +4,15 @@ TOC: Shader 그리고 GLSL
 
 
 이 글은 [WebGL 기초](webgl-fundamentals.html)에서 이어집니다.
-[WebGL 작동 원리](webgl-how-it-works.html)에 대해서 읽지 않았다면 먼저 읽어보는 게 좋습니다.
+[WebGL 작동 원리](webgl-how-it-works.html)를 읽지 않았다면 먼저 읽어보는 게 좋습니다.
 
-shader와 GLSL에 대해 언급했었지만 정말로 구체적인 세부 사항은 알려주지 않았습니다.
-예제로 충분하길 바라지만 혹시 모르니 좀 더 명확하게 해봅시다.
+shader와 GLSL에 대해 언급했지만 실제로 구체적인 세부 사항은 다루지 않았는데요.
+예제로 충분하셨길 바라지만 혹시 모르니 좀 더 명확하게 해봅시다.
 
 [작동 원리](webgl-how-it-works.html)에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 shader를 필요로 하는데요.
 *vertex shader*와 *fragment shader*입니다.
 각각의 shader는 *함수*인데요.
-vertex shader와 fragment shader는 shader program(또는 그냥 program)에 함께 연결됩니다.
+vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)으로 연결됩니다.
 일반적인 WebGL 앱은 많은 shader program을 가집니다.
 
 ## Vertex Shader
