@@ -18,14 +18,14 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
 ## Vertex Shader
 
 Vertex Shader의 역할은 clip 공간 좌표를 생성하는 겁니다.
-항상 다음과 같은 양식을 취하는데
+항상 이런 형식을 취하는데
 
     void main() {
       gl_Position = doMathToMakeClipspaceCoordinates
     }
 
-shader는 각 vertex 당 한 번씩 호출되는데요.
-호출될 때마다 특수 전역 변수 `gl_Position`을 일부 clip 공간 좌표로 설정해줘야 합니다.
+shader는 vertex마다 한 번씩 호출되는데요.
+호출될 때마다 특수 전역 변수, `gl_Position`을 일부 clip 공간 좌표로 설정해야 합니다.
 
 vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.
@@ -36,32 +36,32 @@ vertex shader는 데이터가 필요한데요.
 
 ### Attribute
 
-가장 일반적인 방법은 buffer와 *attribute*를 사용하는 겁니다.
+가장 일반적인 방법은 buffer와 *attribute*를 통하여 하는 겁니다.
 [작동 원리](webgl-how-it-works.html)에서 buffer와 attribute를 다뤘는데요.
 buffer를 만들고,
 
     var buf = gl.createBuffer();
 
-buffer에 데이터를 넣습니다.
+이 buffer에 데이터를 넣고
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 
-그러면, 초기화할 때 주어진 shader program으로 attribute의 위치를 찾습니다.
+그런 다음, 만든 shader program을 통해 초기화 시 attribute의 위치를 찾고
 
     var positionLoc = gl.getAttribLocation(someShaderProgram, "a_position");
 
-그리고 렌더링할 때 WebGL에게 attribute 안에 있는 buffer에서 데이터를 어떻게 가져올지 알려줍니다.
+그리고 렌더링할 때 WebGL에게 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하고
 
-    // attribute의 buffer에서 데이터 가져오기 활성화
+    // 이 attribute에 대한 buffer에서 데이터 가져오기 활성화
     gl.enableVertexAttribArray(positionLoc);
 
     var numComponents = 3;  // (x, y, z)
-    var type = gl.FLOAT;    // 32bit 부동 소수점
-    var normalize = false;  // 값 원본 그댜로 보존
-    var offset = 0;         // buffer의 시작점에서 시작
-    var stride = 0;         // 다음 vertex로 가기 위해 이동해야할 byte 수
-                            // 0 = 자료형과 numComponents에 따른 적절한 폭 사용 
+    var type = gl.FLOAT;    // 32bit 부동 소수점 값
+    var normalize = false;  // 값 원본 그대로 유지
+    var offset = 0;         // buffer의 처음부터 시작
+    var stride = 0;         // 다음 vertex로 가기 위해 이동하는 byte 수
+                            // 0 = type과 numComponents에 맞는 stride 사용 
     gl.vertexAttribPointer(
         positionLoc,
         numComponents,
@@ -71,7 +71,7 @@ buffer에 데이터를 넣습니다.
         offset
     );
 
-[WebGL 기초](webgl-fundamentals.html)에서 우리는 shader에 수학을 사용할 수 없고 직접 데이터를 넘길 수 있다는 것을 봤습니다
+[WebGL 기초](webgl-fundamentals.html)에서 우리는 shader에서 수식없이 직접 데이터를 전달할 수 있다는 것을 봤습니다.
 
     attribute vec4 a_position;
 
@@ -81,12 +81,12 @@ buffer에 데이터를 넣습니다.
 
 buffer에 clip 공간 vertex를 넣으면 동작할 겁니다. 
 
-Attribute는 자료형으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, 그리고 `mat4`를 사용할 수 있습니다.
+attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, 그리고 `mat4`를 사용할 수 있습니다.
 
 ### Uniform
 
-shader의 경우 uniform은 draw가 호출될 때 모든 vertex에서 동일하게 유지되는 전달 값입니다.
-간단한 예로 위 vertex shader에 offset을 추가할 수 있습니다.
+shader uniform은 그리기 호출의 모든 vertex에 대해 똑같이 유지되며 shader에게 전달되는 값입니다.
+간단한 예로 위 vertex shader에 offset을 추가할 수 있는데
 
     attribute vec4 a_position;
     +uniform vec4 u_offset;
@@ -95,22 +95,22 @@ shader의 경우 uniform은 draw가 호출될 때 모든 vertex에서 동일하�
       gl_Position = a_position + u_offset;
     }
 
-이제 모든 vertex마다 특정한 값으로 offset을 지정할 수 있습니다.
-먼저 초기화 시 uniform의 위치를 찾아야합니다.
+그리고 이제 모든 vertex를 일정량만큼 offset 할 수 있습니다.
+먼저 초기화 시 uniform의 위치를 찾아야 하는데
 
     var offsetLoc = gl.getUniformLocation(someProgram, "u_offset");
 
-그런 다음 그리기 전에 uniform을 설정합니다.
+그런 다음 그리기 전에 uniform을 설정하면
 
-    gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 우측 절반으로 offset 지정
+    gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 우측 절반으로 offset
 
 참고로 uniform은 개별 shader program에 속합니다.
-만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면 uniform은 둘 다 고유한 위치와 자체 값을 가집니다.
-`gl.uniform???`을 호출하면 *현재 program*의 uniform만 설정됩니다.
-현재 program은 `gl.useProgram`에 넘긴 마지막 program 입니다.
+만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면 두 uniform 모두 고유한 위치와 값을 가지는데요.
+`gl.uniform???`을 호출하면 *현재 program*의 uniform만 설정합니다.
+현재 program은 `gl.useProgram`에 전달한 마지막 program 입니다.
 
-Uniform은 여러 자료형을 가질 수 있는데요.
-각각의 자료형에 대해 해당 함수를 호출하여 설정해야 합니다.
+uniform은 여러 type을 가질 수 있는데요.
+각 type마다 설정을 위해 해당하는 함수를 호출해야 합니다.
 
     gl.uniform1f (floatUniformLoc, v);                 // float
     gl.uniform1fv(floatUniformLoc, [v]);               // float 또는 float 배열
@@ -140,24 +140,24 @@ Uniform은 여러 자료형을 가질 수 있는데요.
     gl.uniform1i (samplerCubeUniformLoc, v);           // samplerCube (texture)
     gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 또는 samplerCube 배열
 
-`bool`, `bvec2`, `bvec3`, 그리고 `bvec4`도 있는데요.
+`bool`, `bvec2`, `bvec3`, 그리고 `bvec4` type도 있는데요.
 `gl.uniform?f?` 또는 `gl.uniform?i?` 함수를 사용합니다.
 
-참고로 배열은 배열의 모든 uniform을 한번에 설정할 수 있습니다.
+배열의 경우 배열의 모든 uniform을 한번에 설정할 수 있습니다.
 예를들어
 
     // shader
     uniform vec2 u_someVec2[3];
 
-    // JavaScript에서 초기화 시
+    // 초기화 시 JavaScript
     var someVec2Loc = gl.getUniformLocation(someProgram, "u_someVec2");
 
     // 렌더링할 때
-    gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // set the entire array of u_someVec2
+    gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // u_someVec2의 전체 배열 설정
 
-하지만 배열의 요소를 개밸적으로 설정하고 싶다면 각 요소의 위치를 개별적으로 찾아야 합니다.
+하지만 배열의 개별 요소를 설정하고 싶다면 각 요소의 위치를 개별적으로 찾아야 합니다.
 
-    // JavaScript에서 초기화할 때
+    // 초기화 시 JavaScript
     var someVec2Element0Loc = gl.getUniformLocation(someProgram, "u_someVec2[0]");
     var someVec2Element1Loc = gl.getUniformLocation(someProgram, "u_someVec2[1]");
     var someVec2Element2Loc = gl.getUniformLocation(someProgram, "u_someVec2[2]");
@@ -175,7 +175,7 @@ Uniform은 여러 자료형을 가질 수 있는데요.
     };
     uniform SomeStruct u_someThing;
 
-각 필드를 개별적으로 찾을 수 있습니다.
+각 field를 개별적으로 찾아야 하는데
 
     var someThingActiveLoc = gl.getUniformLocation(someProgram, "u_someThing.active");
     var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, "u_someThing.someVec2");
