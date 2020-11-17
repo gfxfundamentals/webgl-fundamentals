@@ -42,8 +42,8 @@ Rendering to a texture is pretty simple. We create a texture of a certain size
 Notice how `data` is `null`. We don't need to supply any data. We just need WebGL to
 allocate the texture.
 
-Next we create a framebuffer. A framebuffer is just a collection of attachments. Attachments
-are either textures or renderbuffers. We've gone over textures before. Renderbuffers are very similar
+Next we create a framebuffer. [A framebuffer is just a collection of attachments](webgl-framebuffers.html). 
+Attachments are either textures or renderbuffers. We've gone over textures before. Renderbuffers are very similar
 to textures but they support formats and options that textures don't support. Also, unlike a texture
 you can't directly use a renderbuffer as input to a shader.
 
