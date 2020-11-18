@@ -531,8 +531,10 @@ are the same size. Further, we're generating new positions into a texture
 so we know our destination texture is also the same size
 as our source which means we can use `texDimensions` for all 3 textures.
 
-And similar to the article on [pulling-vertices](webgl-pulling-vertices.html)
-here is a vertex shader that pulls positions from a texture based on a vertex id.
+In the shader below we use a vertex id, something we covered in
+[the article on drawing without data](webgl-drawing-without-data.html).
+Using that id we pull positions out of the textures (our arrays) 
+similar to the article on [pulling-vertices](webgl-pulling-vertices.html).
 
 ```glsl
 attribute float id;
@@ -1104,6 +1106,8 @@ vec4 getAs1D(sampler2D tex, vec2 dimensions, float index) {
   return texture2D(tex, texcoord);
 }
 
+// converts hue, saturation, and value each in the 0 to 1 range
+// to rgb.  c = color, c.x = hue, c.y = saturation, c.z = value
 vec3 hsv2rgb(vec3 c) {
   c = vec3(c.x, clamp(c.yz, 0.0, 1.0));
   vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
@@ -1198,6 +1202,8 @@ vec4 getAs1D(sampler2D tex, vec2 dimensions, float index) {
   return texture2D(tex, texcoord);
 }
 
+// converts hue, saturation, and value each in the 0 to 1 range
+// to rgb.  c = color, c.x = hue, c.y = saturation, c.z = value
 vec3 hsv2rgb(vec3 c) {
   c = vec3(c.x, clamp(c.yz, 0.0, 1.0));
   vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
