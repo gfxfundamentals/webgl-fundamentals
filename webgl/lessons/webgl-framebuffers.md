@@ -1,7 +1,7 @@
-
 Title: WebGL Framebuffers
 Description: What are framebuffers in WebGL?
 TOC: Framebuffers
+
 
 This article is meant to try to give you a mental image
 of what a framebuffer is in WebGL. Framebuffers come up
