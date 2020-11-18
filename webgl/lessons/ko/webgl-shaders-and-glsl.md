@@ -260,7 +260,7 @@ texture에서 나오는 데이터는 [수많은 설정에 따라](webgl-3d-textu
 
     gl.uniform1i(someSamplerLoc, unit);
 
-### Varying
+### Varyings
 
 varying은 [동작 원리](webgl-how-it-works.html)에 다룬 vertex shader에서 fragment shader로 값을 전달하는 방법입니다.
 
@@ -299,20 +299,19 @@ fragment shader
 
 ## GLSL
 
-GLSL는 Graphics Library Shader Language의 약자입니다.
-Shader가 바로 이것으로 작성되는데요.
-JavaScript에서는 흔히 볼 수 없는 특별한 고유 기능이 있습니다.
-그래픽을 rasterization 하기 위해서 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
-그래서 예를들어 `vec2`, `vec3`, 그리고 `vec4` 같은 자료형이 있습니다.
-이 자료형들은 각각 2개, 3개, 그리고 4개의 값을 가집니다.
-마찬가지로 행렬 2x2, 3x3, 그리고 4x4를 나타내는 `mat2`, `mat3` 그리고 `mat4`도 있습니다.
-scalar를 `vec`과 곱하는 것을 할 수 있습니다.
+GLSL는 Graphics Library Shader Language의 약자인데요.
+shader가 작성되는 언어입니다.
+이건 JavaScript에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
+그래픽을 rasterize 하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
+예를들어 각각 2개의 값, 3개의 값, 그리고 4개의 값을 나타내는 `vec2`, `vec3`, 그리고 `vec4` 같은 type들이 내장되어 있습니다.
+마찬가지로 2x2, 3x3, 그리고 4x4 행렬을 나타내는 `mat2`, `mat3` 그리고 `mat4`가 있는데요.
+`vec`에 scalar를 곱하는 것 같은 작업을 수행할 수 있습니다.
 
     vec4 a = vec4(1, 2, 3, 4);
     vec4 b = a * 2.0;
-    // 이제 b는 vec4(2, 4, 6, 8);
+    // 현재 b는 vec4(2, 4, 6, 8);
 
-마찬가지로 행렬 곱샘과 vector에 행렬 곱셈을 할 수 있습니다.
+마찬가지로 행렬 곱셈과 벡터 대 행렬 곱셈을 할 수 있는데
 
     mat4 a = ???
     mat4 b = ???
@@ -321,8 +320,7 @@ scalar를 `vec`과 곱하는 것을 할 수 있습니다.
     vec4 v = ???
     vec4 y = c * v;
 
-또한 vec의 일부를 선택하는 다양한 방법이 있는데요.
-
+또한 vec의 부분에 대한 다양한 선택자가 있습니다.
 vec4를 보면
 
     vec4 v;
@@ -332,11 +330,11 @@ vec4를 보면
 *   `v.z`는 `v.p`와 `v.b`와 `v[2]`와 같습니다.
 *   `v.w`는 `v.q`와 `v.a`와 `v[3]`과 같습니다.
 
-vec 구성요소들을 *swizzle* 할 수 있기 때문에 구성요소를 교체하거나 반복할 수 있습니다.
+vec 구성 요소들을 *swizzle* 할 수 있는데 이는 구성 요소를 교환하거나 반복할 수 있다는 걸 뜻합니다.
 
     v.yyyy
 
-이건 다음과 같습니다
+이건 다음과 같고
 
     vec4(v.y, v.y, v.y, v.y)
 
@@ -344,17 +342,15 @@ vec 구성요소들을 *swizzle* 할 수 있기 때문에 구성요소를 교체
 
     v.bgra
 
-이것도 다음과 같습니다
+이건 다음과 같으며
 
     vec4(v.b, v.g, v.r, v.a)
 
-vec 또는 mat를 만들 때 한 번에 여러 부분을 제공할 수 있습니다.
-
-예를들면
+vec 또는 mat을 만들 때 한 번에 여러 부분을 공급할 수 있습니다. 예를들면
 
     vec4(v.rgb, 1)
 
-이건 다음과 같습니다
+이건 다음과 같고
 
     vec4(v.r, v.g, v.b, 1)
 
@@ -362,44 +358,44 @@ vec 또는 mat를 만들 때 한 번에 여러 부분을 제공할 수 있습니
 
     vec4(1)
 
-이것도 다음과 같습니다
+이건 다음과 같은데
 
     vec4(1, 1, 1, 1)
 
-GLSL은 매우 엄격한 자료형입니다
+한 가지 주의해야할 점은 GLSL의 type이 매우 엄격하다는 겁니다.
 
-    float f = 1;  // ERROR 1은 int이고 float에 int를 할당할 수 없습니다.
+    float f = 1;  // ERROR 1은 int입니다. float에는 int를 할당할 수 없습니다.
 
-올바른 방법은 이것들입니다
+올바른 방법은 다음 중 하나인데
 
     float f = 1.0;      // float 사용
-    float f = float(1)  // float에 integer를 cast
+    float f = float(1)  // integer를 float로 cast
 
-위 예제에서 `vec4(v.rgb, 1)`는 `vec4`가 내부에서 `float(1)`로 cast 되기 때문에 `1`에 대해 문제를 제기하지 않습니다.
+위 예제의 `vec4(v.rgb, 1)`는 `vec4`가 내부에서 `float(1)`처럼 cast하기 때문에 `1`에 대해 문제가 발생하지 않습니다.
 
-GLSL은 많은 기능을 내장하고 있는데요.
-대부분이 여러 구성요소에서 동시에 작동합니다.
-예를들어
+GLSL은 많은 내장 함수들을 가지고 있는데요.
+대부분은 여러 구성요소에서 한 번에 작동합니다.
+예를 들어
 
     T sin(T angle)
 
 T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
-만약 `vec4`를 넘겨주면 각 구성요소의 sine(`vec4`)를 얻습니다.
+만약 `vec4`를 전달하면 각 구성요소의 sine인 `vec4`를 돌려받습니다.
 다시 말해 `v`가 `vec4`라면
 
     vec4 s = sin(v);
 
-이건 다음과 같습니다
+이건 다음과 같고
 
     vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 
-가끔은 매개변수 하나가 부동 소수점이고 나머지는 `T`가 되는데요.
-말인즉슨 모든 구성요소에 부동 소수점이 적용된다는 걸 뜻합니다.
+가끔은 한 매개변수가 부동 소수점이고 나머지는 `T`가 됩니다.
+이는 모든 구성요소에 부동 소수점이 적용된다는 걸 뜻하는데요.
 예를들어 `v1`과 `v2`가 `vec4`이고 `f`는 부동 소수점이라면
 
     vec4 m = mix(v1, v2, f);
 
-이건 다음과 같습니다
+이건 다음과 같으며
 
     vec4 m = vec4(
         mix(v1.x, v2.x, f),
@@ -409,18 +405,17 @@ T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
     );
 
 [WebGL Reference Card](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf)의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
-만약 정말로 자세한 정보를 보고 싶다면 [GLSL 사양](https://www.khronos.org/files/opengles_shading_language.pdf)을 봐주세요.
+만약 정말 무미건조하고 장황한 것을 좋아한다면 [GLSL 사양](https://www.khronos.org/files/opengles_shading_language.pdf)에 도전해볼 수 있습니다.
 
-## 총정리
+## Putting it all together
 
-그게 바로 이 모든 글들의 핵심입니다.
-WebGL은 다양한 shader를 생성하고, 데이터를 vertex에 제공한 다음 `gl.drawArrays` 또는 `gl.drawElements`를 호출합니다.
-그리고 WebGL이 vertex마다 현재 vertex shader를 호출하여 각 vertex를 처리하고 픽셀마다 현재 fragment shdaer를 호출하여 각 픽셀들을 렌더링하는 것에 대한 겁니다.
+이게 바로 이 모든 글들의 핵심입니다.
+WebGL은 다양한 shader를 생성하고, 데이터를 이 shader에 공급한 뒤 `gl.drawArrays` 또는 `gl.drawElements`를 호출하여 WebGL이 vertex를 처리하도록 각 vertex에 대한 현재 vertex shader를 호출한 뒤 각 픽셀에 대한 현재 fragment shader를 호출하여 픽셀을 렌더링하는 것에 대한 모든 겁니다.
 
-실제로 shader를 생성하려면 몇 줄의 코드가 필요합니다.
-이 코드들은 대부분의 WebGL program에서 동작하므로 한 번 작성하면 꽤 많이 생략할 수 있습니다.
-[GLSL shader를 컴파일하고 shader program에 연결하는 방법은 여기에서 다룹니다](webgl-boilerplate.html).
+실제로 shader를 생성하려면 여러 줄의 코드가 필요합니다.
+이 코드들은 대부분의 WebGL program에서 똑같기 때문에 한 번 작성한 후에는 거의 생략할 수 있습니다.
+GLSL shader를 컴파일하고 shader program에 연결하는 방법은 [여기](webgl-boilerplate.html)에서 다룹니다.
 
-만약 여기서 시작한다면 2가지 방향으로 갈 수 있습니다.
-이미지 처리에 관심이 있다면 [2D 이미지 처리 방법](webgl-image-processing.html)을 봐주세요.
-translation, rotation, scale 그리고 3D를 공부하는데 흥미가 있다면 [여기서 시작해주세요](webgl-2d-translation.html).
+여기서 막 시작했다면 두 가지 방향으로 갈 수 있는데요.
+이미지 처리에 관심있다면 [2D 이미지 처리 방법](webgl-image-processing.html)을 알려드리겠습니다.
+이동, 회전, 크기 조정 그리고 최종적으로 3D를 공부하는데 관심있다면 [여기](webgl-2d-translation.html)에서 시작해주세요.
