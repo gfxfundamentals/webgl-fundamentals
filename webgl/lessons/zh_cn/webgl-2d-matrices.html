@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-2d-matrices.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="用简单易懂的方式讲解矩阵运算的用法">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrices_zh-cn.jpg">
+
+<meta property="og:title" content="WebGL 二维矩阵">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrices_zh-cn.jpg">
+<meta property="og:description" content="用简单易懂的方式讲解矩阵运算的用法">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrices.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 二维矩阵">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrices.html">
+<meta name="twitter:description" content="用简单易懂的方式讲解矩阵运算的用法">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrices_zh-cn.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrices.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-matrices_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrices.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrices.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 二维矩阵",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrices.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL 二维矩阵</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-2d-matrices.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-2d-matrices.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-2d-matrices.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-matrices.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-2d-matrices.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-2d-matrices.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-2d-matrices.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-2d-matrices.html">
+
+
+
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-2d-matrices.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2d-matrices.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-2d-matrices.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2d-matrices.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2d-matrices.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2d-matrices.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2d-matrices.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2d-matrices.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub a {
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub a::before,#forkongithub a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub a::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+@media (max-width: 900px) {
+    #forkongithub a{
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 二维矩阵</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>此文上接一系列文章，先<a href="webgl-fundamentals.html">从基础概念开始</a>，上一篇是
+<a href="webgl-2d-scale.html">物体缩放</a>。</p>
+<p>之前的三篇文章讲了如何对二维物体进行<a href="webgl-2d-translation.html">平移</a>，
+<a href="webgl-2d-rotation.html">旋转</a>，和 <a href="webgl-2d-scale.html">缩放</a>。
+每种变换都改变了着色器并且这些变换还受先后顺序影响。在
+<a href="webgl-2d-scale.html">前例</a>中我们先缩放，再旋转，最后平移，如果执行顺序不同
+结果也不同。</p>
+<p>例如这是缩放 2, 1 ，旋转30度，然后平移 100, 0 的结果。</p>
+<p><img src="../../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" /></p>
+<p>这是平移 100, 0 ，旋转30度，然后缩放 2, 1 的结果。</p>
+<p><img src="../../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" /></p>
+<p>结果截然不同，更糟的是，针对第二种情况中的转换顺序，需要写一个新的着色器。</p>
+<p>有些比我聪明的人可能已经想到了矩阵，对于二维我们使用 3x3 的矩阵，
+3x3 的矩阵就像是有9个格子的格网。</p>
+<p><style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style></p>
+<div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
+
+<p>在计算的时候我们将位置坐标沿着矩阵列的方向依次相乘再将结果加起来。
+我们的位置信息只有两个值， x 和 y 。但是要进行运算需要三个值，
+所以我们将第三个值赋值为 1 。</p>
+<p>在这个例子中结果将是</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/>
+<tr><td class="glocal-right">newX&nbsp;=&nbsp;</td><td>x&nbsp;*&nbsp;</td><td class="glocal-border">1.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x&nbsp;*&nbsp;</td><td class="glocal-border">2.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td>x&nbsp;*&nbsp;</td><td class="glocal-border">3.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">4.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">5.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y&nbsp;*&nbsp;</td><td class="glocal-border">6.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>1&nbsp;*&nbsp;</td><td>7.0</td><td>&nbsp;</td><td></td><td>1&nbsp;*&nbsp;</td><td>8.0</td><td>&nbsp;&nbsp;</td><td></td><td>1&nbsp;*&nbsp;</td><td>9.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>你可能会想“这样做有什么意义？”，好吧，假设我们要进行平移，
+平移的量为 tx 和 ty ，然后定义一个这样的矩阵</p>
+<div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>1.0</td><td>0.0</td></tr><tr><td>tx</td><td>ty</td><td>1.0</td></tr></table></div>
+
+<p>然后计算结果</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">1.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr><tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">1.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>tx</td><td>&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>ty</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>如果你还记得线性代数的知识，我们可以删除和 0 相乘的部分，
+和 1 相乘相当于没变，所以简化后为</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">&nbsp;+</td><td></td><td>y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>tx</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>ty</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>或者更简洁</p>
+<pre class="webgl_center">
+newX = x + tx;
+newY = y + ty;
+</pre>
+
+<p>其他的就不用关心了。这个看起来和<a href="webgl-2d-translation.html">平移例子中的代码</a>有些相似。</p>
+<p>同样的来实现旋转，在旋转章节提到过，旋转只需要和旋转角对应的正弦和余弦值</p>
+<pre class="webgl_center">
+s = Math.sin(angleToRotateInRadians);
+c = Math.cos(angleToRotateInRadians);
+</pre>
+
+<p>然后我们创建一个这样的矩阵</p>
+<div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>c</td><td>-s</td><td>0.0</td></tr><tr><td>s</td><td>c</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
+
+<p>使用矩阵后得到</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">c</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">-s</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">s</td><td class="glocal-left">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">c</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>遮住没有意义的部分（和 0 或 1 相乘的部分）</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">c</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">-s</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">s</td><td class="glocal-left glocal-blk">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">c</td><td class="glocal-left glocal-blk">&nbsp;+&nbsp;</td><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>然后得到简化版</p>
+<pre class="webgl_center">
+newX = x *  c + y * s;
+newY = x * -s + y * c;
+</pre>
+
+<p>正是我们在<a href="webgl-2d-rotation.html">旋转例子</a>中得到的结果。</p>
+<p>最后是缩放，我们将两个缩放因子叫做 sx 和 sy 。</p>
+<p>然后创建一个这样的矩阵</p>
+<div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>sx</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>sy</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
+
+<p>使用矩阵后得到</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">sx</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">sy</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
+<tr><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>实际上是</p>
+<div class="glocal-center"><table class="glocal-center-content">
+<col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
+<tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">sx</td><td class="glocal-left glocal-blk">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">sy</td><td class="glocal-left glocal-blk">&nbsp;+&nbsp;</td><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
+<tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
+
+<p>简化后</p>
+<pre class="webgl_center">
+newX = x * sx;
+newY = y * sy;
+</pre>
+
+<p>和<a href="webgl-2d-scale.html">缩放例子</a>相似。</p>
+<p>现在你可能还会想“那又怎样，有什么意义？”，
+好像花了更多精力做之前做过的事情。</p>
+<p>现在开始有趣的部分了，相乘后他们可以用一个矩阵代表三个变换，
+假定有一个方法<code class="notranslate" translate="no">m3.multiply</code>可以将两个矩阵相乘并返回结果。</p>
+<p>为了方便讲解，我们先创建平移，旋转和缩放矩阵。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
+  translation: function(tx, ty) {
+    return [
+      1, 0, 0,
+      0, 1, 0,
+      tx, ty, 1,
+    ];
+  },
+
+  rotation: function(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+    return [
+      c,-s, 0,
+      s, c, 0,
+      0, 0, 1,
+    ];
+  },
+
+  scaling: function(sx, sy) {
+    return [
+      sx, 0, 0,
+      0, sy, 0,
+      0, 0, 1,
+    ];
+  },
+};
+</code></pre><p>现在该修改着色器了，原来的着色器像这样</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
+
+uniform vec2 u_resolution;
+uniform vec2 u_translation;
+uniform vec2 u_rotation;
+uniform vec2 u_scale;
+
+void main() {
+  // 缩放
+  vec2 scaledPosition = a_position * u_scale;
+
+  // 旋转
+  vec2 rotatedPosition = vec2(
+     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
+     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
+
+  // 平移
+  vec2 position = rotatedPosition + u_translation;
+  ...
+</code></pre><p>新着色器就简单多了。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
+
+uniform vec2 u_resolution;
+uniform mat3 u_matrix;
+
+void main() {
+  // 将位置乘以矩阵
+  vec2 position = (u_matrix * vec3(a_position, 1)).xy;
+  ...
+</code></pre><p>这是使用的方法</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 绘制场景
+  function drawScene() {
+
+    ,,,
+
+    // 计算矩阵
+    var translationMatrix = m3.translation(translation[0], translation[1]);
+    var rotationMatrix = m3.rotation(angleInRadians);
+    var scaleMatrix = m3.scaling(scale[0], scale[1]);
+
+    // 矩阵相乘
+    var matrix = m3.multiply(translationMatrix, rotationMatrix);
+    matrix = m3.multiply(matrix, scaleMatrix);
+
+    // 设置矩阵
+    gl.uniformMatrix3fv(matrixLocation, false, matrix);
+
+    // 绘制图形
+    gl.drawArrays(gl.TRIANGLES, 0, 18);
+  }
+</code></pre><p>这个例子用的新代码，滑块没变，还是对应平移，旋转和缩放，
+但是他们在着色器中做的事情是相似的。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>可能你还会问，那又怎样？看起来没什么特别好的地方。
+但是，如果现在我们想改变转换顺序的话，就不需要重写一个着色器了，只需要改变一下数学运算。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ...
+    // 矩阵相乘
+    var matrix = m3.multiply(scaleMatrix, rotationMatrix);
+    matrix = m3.multiply(matrix, translationMatrix);
+    ...
+</code></pre><p>这是对应的版本。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-trs.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-trs.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>像这样的矩阵相乘对层级变换至关重要，比如身体的手臂部分运动，
+月球属于绕太阳转动的地球的一部分，或者树上的树枝。
+写一个简单的层级运动的例子，我们来画5个 &#39;F&#39; ，并且每个 &#39;F&#39; 
+都以前一个的矩阵为基础。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 绘制场景
+  function drawScene() {
+    // 清空画布
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // 计算矩阵
+    var translationMatrix = m3.translation(translation[0], translation[1]);
+    var rotationMatrix = m3.rotation(angleInRadians);
+    var scaleMatrix = m3.scaling(scale[0], scale[1]);
+
+    // 初始矩阵
+    var matrix = m3.identity();
+
+    for (var i = 0; i &lt; 5; ++i) {
+      // 矩阵相乘
+      matrix = m3.multiply(matrix, translationMatrix);
+      matrix = m3.multiply(matrix, rotationMatrix);
+      matrix = m3.multiply(matrix, scaleMatrix);
+
+      // 设置矩阵
+      gl.uniformMatrix3fv(matrixLocation, false, matrix);
+
+      // 绘制图形
+      gl.drawArrays(gl.TRIANGLES, 0, 18);
+    }
+  }
+</code></pre><p>在这个例子中用到了一个新方法， <code class="notranslate" translate="no">m3.identity</code>，
+这个方法创建一个单位矩阵。单位矩阵就像 1.0 一样，
+和它相乘的矩阵不会变化，就像</p>
+<div class="webgl_center">X * 1 = X</div>
+
+<p>同样的</p>
+<div class="webgl_center">matrixX * identity = matrixX</div>
+
+<p>这是创建单位矩阵的代码。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
+  identity function() {
+    return [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1,
+    ];
+  },
+
+  ...
+</code></pre><p>这是5个 F 。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-hierarchical.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-hierarchical.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>再看一个例子，之前的每个例子中 &#39;F&#39; 都是绕着它的左上角旋转
+（当然，改变转换顺序的那个例子除外）。
+这是因为我们总是绕原点旋转，而 &#39;F&#39; 的原点就是左上角，也就是 (0, 0) 。</p>
+<p>现在我们可以使用矩阵运算，并且自定义转换的顺序。所以让我们改变旋转的中心</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    // 创建一个矩阵，可以将原点移动到 &#39;F&#39; 的中心
+    var moveOriginMatrix = m3.translation(-50, -75);
+    ...
+
+    // 矩阵相乘
+    var matrix = m3.multiply(translationMatrix, rotationMatrix);
+    matrix = m3.multiply(matrix, scaleMatrix);
+    matrix = m3.multiply(matrix, moveOriginMatrix);
+</code></pre><p>这是结果，注意到 F 现在绕中心旋转和缩放了。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-center-f.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-center-f.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>通过这种方式你可以绕任意点旋转和缩放，
+所以现在你可能知道为什么PhotoShop或Flash可以让你移动旋转中心。</p>
+<p>还可以做更有趣的事情，如果你回想第一篇文章<a href="webgl-fundamentals.html">WebGL 基础概念</a>，
+可能会记得在着色器中我们将像素坐标转换到裁剪空间，这是当时的代码</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
+  // 从像素坐标转换到 0.0 到 1.0
+  vec2 zeroToOne = position / u_resolution;
+
+  // 再把 0-&gt;1 转换 0-&gt;2
+  vec2 zeroToTwo = zeroToOne * 2.0;
+
+  // 把 0-&gt;2 转换到 -1-&gt;+1 (裁剪空间)
+  vec2 clipSpace = zeroToTwo - 1.0;
+
+  gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+</code></pre><p>逐步观察，首先，“从像素坐标转换到 0.0 到 1.0”，
+事实上是一个缩放变换，第二步也是缩放变换，接着是一个平移和一个 Y 
+为 -1 的缩放。我们可以将这些操作放入一个矩阵传给着色器，
+创建两个缩放矩阵，一个缩放 1.0/分辨率，另一个缩放 2.0 ，
+第三个平移  -1.0,-1.0 然后第四个将 Y 缩放 -1。
+然后将他们乘在一起，由于运算很简单，所以我们就直接定义一个 <code class="notranslate" translate="no">projection</code>
+方法，根据分辨率直接生成矩阵。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
+  projection: function(width, height) {
+    // 注意：这个矩阵翻转了 Y 轴，所以 0 在上方
+    return [
+      2 / width, 0, 0,
+      0, -2 / height, 0,
+      -1, 1, 1
+    ];
+  },
+
+  ...
+</code></pre><p>现在可以简化着色器，这是新的着色器。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec2 a_position;
+
+uniform mat3 u_matrix;
+
+void main() {
+  // 使位置和矩阵相乘
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+}
+&lt;/script&gt;
+</code></pre><p>在JavaScript中需要乘上投影矩阵</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 绘制场景
+  function drawScene() {
+    ...
+
+    // 计算矩阵
+    var projectionMatrix = m3.projection(
+        gl.canvas.clientWidth, gl.canvas.clientHeight);
+
+    ...
+
+    // 矩阵相乘
+    var matrix = m3.multiply(projectionMatrix, translationMatrix);
+    matrix = m3.multiply(matrix, rotationMatrix);
+    matrix = m3.multiply(matrix, scaleMatrix);
+
+    ...
+  }
+</code></pre><p>这里还去除了设置分辨率的代码，通过使用矩阵，
+我们就把着色器中 6-7 步的操作在一步中完成。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-with-projection.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-with-projection.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>在继续之前我们可以先简化一下操作，虽然先创建一些矩阵再将它们相乘很常见，
+但是按照我们的顺序依次操作矩阵也比较常见，比较高效的做法是创建这样的方法</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
+
+  ...
+
+  translate: function(m, tx, ty) {
+    return m3.multiply(m, m3.translation(tx, ty));
+  },
+
+  rotate: function(m, angleInRadians) {
+    return m3.multiply(m, m3.rotation(angleInRadians));
+  },
+
+  scale: function(m, sx, sy) {
+    return m3.multiply(m, m3.scaling(sx, sy));
+  },
+
+  ...
+
+};
+</code></pre><p>这能够让我们将 7 行的矩阵代码转换成 4 行</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 计算矩阵
+var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
+matrix = m3.translate(matrix, translation[0], translation[1]);
+matrix = m3.rotate(matrix, angleInRadians);
+matrix = m3.scale(matrix, scale[0], scale[1]);
+</code></pre><p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-matrix-transform-simpler-functions.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-matrix-transform-simpler-functions.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>最后一件事，我们之前使用了多种矩阵顺序。第一例中使用</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">translation * rotation * scale // 平移 * 旋转 * 缩放
+</code></pre><p>第二例中使用</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">scale * rotation * translation // 缩放 * 旋转 * 平移
+</code></pre><p>然后观察了它们的区别。</p>
+<p>这有两种方式解读矩阵运算，给定这样一个表达式</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">projectionMat * translationMat * rotationMat * scaleMat * position
+</code></pre><p>第一种可能是多数人觉得比较自然的方式，从右向左解释</p>
+<p>首先将位置乘以缩放矩阵获得缩放后的位置</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">scaledPosition = scaleMat * position
+</code></pre><p>然后将缩放后的位置和旋转矩阵相乘得到缩放旋转位置</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedScaledPosition = rotationMat * scaledPosition
+</code></pre><p>然后将缩放旋转位置和平移矩阵相乘得到缩放旋转平移位置</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
+</code></pre><p>最后和投影矩阵相乘得到裁剪空间中的坐标</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
+</code></pre><p>第二种方式是从左往右解释，在这个例子中每一个矩阵改变的都是画布的<strong>坐标空间</strong>，
+画布的起始空间是裁剪空间的范围(-1 到 +1)，矩阵从左到右改变着画布所在的空间。</p>
+<p>第一步：没有矩阵（或者单位矩阵）</p>
+<blockquote>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=0"></iframe>
+  <div class="webgl_center">裁剪空间</div>
+</div>
+
+</p>
+<p>白色区域是画布，蓝色是画布以外，我们正在裁剪空间中。
+传递到这里的点需要在裁剪空间内。</p>
+</blockquote>
+<p>第二步：<code class="notranslate" translate="no">matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);</code></p>
+<blockquote>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=1"></iframe>
+  <div class="webgl_center">from clip space to pixel space</div>
+</div>
+
+</p>
+<p>现在我们在像素空间，X 范围是 0 到 400 ，Y 范围是 0 到 300，0,0 点在左上角。
+传递到这里的点需要在像素空间内，你看到的闪烁是 Y 轴上下颠倒的原因。</p>
+</blockquote>
+<p>第三步：<code class="notranslate" translate="no">matrix = m3.translate(matrix, tx, ty);</code></p>
+<blockquote>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=2"></iframe>
+  <div class="webgl_center">move origin to tx, ty</div>
+</div>
+
+</p>
+<p>原点被移动到了 tx, ty (150, 100)，所以空间移动了。</p>
+</blockquote>
+<p>第四步：<code class="notranslate" translate="no">matrix = m3.rotate(matrix, rotationInRadians);</code></p>
+<blockquote>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=3"></iframe>
+  <div class="webgl_center">rotate 33 degrees</div>
+</div>
+
+</p>
+<p>空间绕 tx, ty 旋转</p>
+</blockquote>
+<p>第五步：<code class="notranslate" translate="no">matrix = m3.scale(matrix, sx, sy);</code></p>
+<blockquote>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=4"></iframe>
+</div>
+
+</p>
+<p>之前的旋转空间中心在 tx, ty ，x 方向缩放 2 ，y 方向缩放 1.5</p>
+</blockquote>
+<p>在着色器中执行<code class="notranslate" translate="no">gl_Position = matrix * position;</code>，<code class="notranslate" translate="no">position</code>被直接转换到这个空间。</p>
+<p>选一个你容易接受的方式去理解吧。</p>
+<p>希望此系列文章向你揭秘了矩阵运算，如果你还想深入学习二维我建议你看看
+<a href="webgl-2d-drawimage.html">响应式画布绘制二维图片</a>，然后接着阅读
+<a href="webgl-2d-matrix-stack.html">响应式画布的二维矩阵堆</a>。</p>
+<p>否则接下来<a href="webgl-3d-orthographic.html">我们将进入三维部分</a>。
+三维矩阵运算遵循相似的原则和用法，从二维讲起是为了便于理解。</p>
+<p>另外，如果你想精通矩阵运算<a href="https://www.youtube.com/watch?v=kjBOesZCoqc&amp;list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">就看看这个神奇的视频</a>吧！</p>
+<div class="webgl_bottombar">
+<h3><code class="notranslate" translate="no">clientWidth</code> 和 <code class="notranslate" translate="no">clientHeight</code>是什么？</h3>
+<p>在此之前每当我使用画布的大小时都用的<code class="notranslate" translate="no">canvas.width</code>和<code class="notranslate" translate="no">canvas.height</code>，但是这篇文章中使用<code class="notranslate" translate="no">m3.projection</code>时却用了<code class="notranslate" translate="no">canvas.clientWidth</code> 和 <code class="notranslate" translate="no">canvas.clientHeight</code>，为什么？</p>
+<p>投影矩阵是将坐标在裁剪空间(各方向单位为 -1 到 +1 )和像素空间之间进行转换。但是在浏览器中，有两种类型的像素空间，一种是画布本身的表现的像素个数，所以例子中画布是这样定义的。</p>
+<pre class="prettyprint">
+  &lt;canvas width="400" height="300"&gt;&lt;/canvas&gt;
+</pre>
+<p>或者像这样定义</p>
+<pre class="prettyprint">
+  var canvas = document.createElement("canvas");
+  canvas.width = 400;
+  canvas.height = 300;
+</pre>
+<p>两种都包含一个400像素宽300像素高的图像，但是这个大小和浏览器显示的 400×300 像素的画布是有区别的，CSS决定画布在浏览器中占用的实际像素个数。例如我们定义一个这样的画布。</p>
+<pre class="prettyprint"><!>
+  &lt;style&gt;
+  canvas {
+    width: 100vw;
+    height: 100vh;
+  }
+  &lt;/style&gt;
+  ...
+  &lt;canvas width="400" height="300">&lt;/canvas&gt;
+</pre>
+<p>画布的大小将会和他所在的容器一样大，很可能不是 400×300 。</p>
+<p>这有两个例子，都设置画布大小为 100%，所以画布会被拉伸到页面大小。第一个例子使用<code class="notranslate" translate="no">canvas.width</code> 和 <code class="notranslate" translate="no">canvas.height</code>，在新窗口中打开，然后改变窗口大小，会发现 'F' 的比例失调，变得扭曲了。</p>
+<div class="webgl_example_container">
+  <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-width-height.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-width-height.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+
+<p>第二个例子使用<code class="notranslate" translate="no">canvas.clientWidth</code> 和 <code class="notranslate" translate="no">canvas.clientHeight</code>，<code class="notranslate" translate="no">canvas.clientWidth</code> 和 <code class="notranslate" translate="no">canvas.clientHeight</code>返回的是画布在浏览器中实际显示的大小，所以在这个例子中，即使画布还是 400x300 像素，但是长宽比是按照画布实际大小设置的，最终<code class="notranslate" translate="no">F</code>看起来始终正常。</p>
+<div class="webgl_example_container">
+  <iframe class="webgl_example" style="width:  500px; height: 150px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-canvas-clientwidth-clientheight.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-canvas-clientwidth-clientheight.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+
+<p>大多数程序在画布大小改变时都会保持<code class="notranslate" translate="no">canvas.width</code> 和 <code class="notranslate" translate="no">canvas.height</code> 与
+<code class="notranslate" translate="no">canvas.clientWidth</code> 和 <code class="notranslate" translate="no">canvas.clientHeight</code> 一致，因为他们希望屏幕一像素对应绘制一像素。但是我们之前看到，那并不是唯一的选择，也就是说在大多数情况下正确的做法是用<code class="notranslate" translate="no">canvas.clientHeight</code> 和 <code class="notranslate" translate="no">canvas.clientWidth</code>来计算长宽比。</p>
+</div>
+
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-2d-matrices.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-2d-matrices.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-2d-matrices.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-2d-matrices.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-2d-matrices.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-2d-matrices.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-2d-matrices.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-2d-matrices.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj.html">WebGL 加载 .obj 文件</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">WebGL 加载带 .mtl 的 .obj 文件</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-sprites.html">精灵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+  <li>GPGPU</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-gpgpu.html">GPGPU</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">WebGL 最小的程序</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Optimization</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">顶点索引 （gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-instanced-drawing.html">实例化绘制</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">WebGL 点、线和三角</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL 矩阵 vs 数学中的矩阵</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#screenshot">截屏</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#preservedrawingbuffer">防止画布被清空</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#tabindex">在画布中获取键盘输入</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#html-background">将 WebGL 作为 HTML 的背景</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">WebGL 跨平台相关问题</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">WebGL 属性</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">WebGL 纹理单元</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-framebuffers.html">Framebuffers</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-readpixels.html">WebGL readPixels</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-references.html">WebGL 参考</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 二维矩阵';
+            var disqus_title = 'WebGL 二维矩阵';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTagName('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+}());
+</script>
+
+
+</html>
+
+
+

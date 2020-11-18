@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/ru/webgl-shaders-and-glsl.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Что такое шейдеры и GLSL">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-shaders-and-glsl_ru.jpg">
+
+<meta property="og:title" content="Шейдеры и GLSL в WebGL">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-shaders-and-glsl_ru.jpg">
+<meta property="og:description" content="Что такое шейдеры и GLSL">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ru/webgl-shaders-and-glsl.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="Шейдеры и GLSL в WebGL">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ru/webgl-shaders-and-glsl.html">
+<meta name="twitter:description" content="Что такое шейдеры и GLSL">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-shaders-and-glsl_ru.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-shaders-and-glsl.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-shaders-and-glsl_ru.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-shaders-and-glsl.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ru/webgl-shaders-and-glsl.html",
+      "inLanguage":"ru",
+      "name":"Шейдеры и GLSL в WebGL",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ru/webgl-shaders-and-glsl.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>Шейдеры и GLSL в WebGL</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-shaders-and-glsl.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-shaders-and-glsl.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-shaders-and-glsl.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-shaders-and-glsl.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-shaders-and-glsl.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-shaders-and-glsl.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">
+
+
+
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-shaders-and-glsl.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-shaders-and-glsl.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-shaders-and-glsl.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-shaders-and-glsl.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-shaders-and-glsl.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-shaders-and-glsl.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-shaders-and-glsl.html" selected>Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">оглавление</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/ru/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub a {
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub a::before,#forkongithub a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub a::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+@media (max-width: 900px) {
+    #forkongithub a{
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>Шейдеры и GLSL в WebGL</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>Это продолжение <a href="webgl-fundamentals.html">основ WebGL</a>.
+Если вы не читали, как работает WebGL, возможно вы захотите сначала <a href="webgl-how-it-works.html">прочитать об этом</a>.</p>
+<p>Мы уже упоминали о шейдерах и GLSL, но ни разу не рассматривали их подробно.
+Наверное, я надеялся, что всё будет понятно из примеров, но давайте сделаем эту
+тему ещё понятнее, чтобы ничего не пропустить.</p>
+<p>Как говорилось в статье <a href="webgl-how-it-works.html">как работает WebGL</a>, для WebGL требуется 2 шейдера
+при каждой отрисовке: <em>вершинный шейдер</em> и <em>фрагментный шейдер</em>. Каждый шейдер - это <em>функция</em>.
+Вершинный и фрагментный шейдеры объединены в шейдерную программу (или просто программу). Обычно
+приложение на WebGL содержит множество шейдерных программ.</p>
+<h2 id="-">Вершинный шейдер</h2>
+<p>Задача вершинного шейдера - генерировать координаты пространства отсечения. Он всегда имеет вид</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">void main() {
+   gl_Position = doMathToMakeClipspaceCoordinates
+}
+</code></pre><p>(doMathToMakeClipspaceCoordinates - выполнить математику для получения координат пространства отсечения, прим. пер.)</p>
+<p>Ваш шейдер вызывается один раз для каждой вершины. И при каждом вызове вам нужно установить
+специальной переменной <code class="notranslate" translate="no">gl_Position</code> значение координат пространства отсечения.</p>
+<p>Вершинным шейдерам нужны данные. Есть 3 способа, которыми их можно получить.</p>
+<ol>
+<li><a href="#attributes">Атрибуты</a> (данные берутся из буфера)</li>
+<li><a href="#uniforms">Uniform-переменные</a> (значения, постоянные для всех вершин на протяжении одного вызова отрисовки)</li>
+<li><a href="#textures-in-vertex-shaders">Текстуры</a> (данные из пикселей/текселей)</li>
+</ol>
+<h3 id="attributes">Атрибуты</h3>
+
+<p>Наиболее используемый способ - через буферы и <em>атрибуты</em>.
+Статья <a href="webgl-how-it-works.html">как работает WebGL</a> посвящена
+буферам и атрибутам. Вы создаёте буфер</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var buf = gl.createBuffer();
+</code></pre><p>записываете в него данные</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
+</code></pre><p>Затем при инициализации вы получаете ссылку на атрибут в указанной шейдерной программе</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
+</code></pre><p>а во время рендеринга указываете WebGL, как нужно перенести данные из буфера в атрибут</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// включить получение данных из буфера для этого атрибута
+gl.enableVertexAttribArray(positionLoc);
+
+var numComponents = 3;  // (x, y, z)
+var type = gl.FLOAT;    // 32-битные числа с плавающей точкой
+var normalize = false;  // оставлять значения как есть
+var offset = 0;         // начинать с начала буфера
+var stride = 0;         // сколько байтов до следующей вершины
+                        // 0 = использовать подходящий шаг для этого типа и для numComponents
+
+gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
+</code></pre><p>В статье <a href="webgl-fundamentals.html">как работает WebGL</a> мы рассматривали, что
+можно не выполнять какой-либо математики и просто передать данные напрямую.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
+
+void main() {
+   gl_Position = a_position;
+}
+</code></pre><p>Если мы заполним буфер координатами пространства отсечения, это сработает.</p>
+<p>Атрибуты могут использовать типы <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code>, <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code> и <code class="notranslate" translate="no">mat4</code></p>
+<h3 id="uniforms">Uniform-переменные</h3>
+
+<p>С точки зрения шейдера uniform-переменные - это значения, постоянные для всех
+вершин на протяжении одного вызова отрисовки. В качестве простого примера рассмотрим,
+как можно сделать смещение в вершинном шейдере:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
++uniform vec4 u_offset;
+
+void main() {
+   gl_Position = a_position + u_offset;
+}
+</code></pre><p>И теперь мы можем сместить все вершины на определённое значение. Для начала получим
+ссылку на uniform-переменную во время инициализации</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
+</code></pre><p>И затем перед отрисовкой установим значение uniform-переменной</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // сместить все вершины вправо на полэкрана
+</code></pre><p>Обратите внимание, что uniform-переменные принадлежат конкретной шейдерной программе. Если у
+вас есть несколько шейдерных программ, в которых объявлены uniform-переменные с одинаковым
+именем, каждая из переменных будет иметь собственную ссылку и собственное значение. При вызове
+<code class="notranslate" translate="no">gl.uniform???</code> устанавливается значение uniform-переменной <em>текущей программы</em>. Текущая программа -
+это та, которая была установлена последней через <code class="notranslate" translate="no">gl.useProgram</code>.</p>
+<p>Uniform-переменные могут быть многих типов. Для каждого типа вам нужно вызвать
+соответствующую функцию для установки значения.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform1f (floatUniformLoc, v);                 // для float
+gl.uniform1fv(floatUniformLoc, [v]);               // для float или массива float
+gl.uniform2f (vec2UniformLoc,  v0, v1);            // для vec2
+gl.uniform2fv(vec2UniformLoc,  [v0, v1]);          // для vec2 или массива vec2
+gl.uniform3f (vec3UniformLoc,  v0, v1, v2);        // для vec3
+gl.uniform3fv(vec3UniformLoc,  [v0, v1, v2]);      // для vec3 или массива vec3
+gl.uniform4f (vec4UniformLoc,  v0, v1, v2, v4);    // для vec4
+gl.uniform4fv(vec4UniformLoc,  [v0, v1, v2, v4]);  // для vec4 или массива vec4
+
+gl.uniformMatrix2fv(mat2UniformLoc, false, [ массив из 4 элементов  ])  // для mat2 или массива mat2
+gl.uniformMatrix3fv(mat3UniformLoc, false, [ массив из 9 элементов  ])  // для mat3 или массива mat3
+gl.uniformMatrix4fv(mat4UniformLoc, false, [ массив из 16 элементов ])  // для mat4 или массива mat4
+
+gl.uniform1i (intUniformLoc,   v);                 // для int
+gl.uniform1iv(intUniformLoc,   [v]);               // для int или массива int
+gl.uniform2i (ivec2UniformLoc, v0, v1);            // для ivec2
+gl.uniform2iv(ivec2UniformLoc, [v0, v1]);          // для ivec2 или массива ivec2
+gl.uniform3i (ivec3UniformLoc, v0, v1, v2);        // для ivec3
+gl.uniform3iv(ivec3UniformLoc, [v0, v1, v2]);      // для ivec3 или массива ivec3
+gl.uniform4i (ivec4UniformLoc, v0, v1, v2, v4);    // для ivec4
+gl.uniform4iv(ivec4UniformLoc, [v0, v1, v2, v4]);  // для ivec4 или массива ivec4
+
+gl.uniform1i (sampler2DUniformLoc,   v);           // для sampler2D (текстуры)
+gl.uniform1iv(sampler2DUniformLoc, [v]);           // для sampler2D или массива sampler2D
+
+gl.uniform1i (samplerCubeUniformLoc,   v);         // для samplerCube (текстуры)
+gl.uniform1iv(samplerCubeUniformLoc, [v]);         // для samplerCube или массива samplerCube
+</code></pre><p>Есть ещё типы <code class="notranslate" translate="no">bool</code>, <code class="notranslate" translate="no">bvec2</code>, <code class="notranslate" translate="no">bvec3</code> и <code class="notranslate" translate="no">bvec4</code>. Они используют либо функцию
+<code class="notranslate" translate="no">gl.uniform?f?</code>, либо <code class="notranslate" translate="no">gl.uniform?i?</code>.</p>
+<p>Отметим, что для массива вы можете установить все значения за один раз. Например,</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// в шейдере
+uniform vec2 u_someVec2[3];
+
+// в JavaScript при инициализации
+var someVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2&quot;);
+
+// во время отрисовки
+gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // установить все значения массива u_someVec2
+</code></pre><p>Но если вам нужно устанавливать значения элементам массива отдельно, вам нужно
+получить ссылку на каждый элемент отдельно:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// в JavaScript при инициализации
+var someVec2Element0Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[0]&quot;);
+var someVec2Element1Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[1]&quot;);
+var someVec2Element2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[2]&quot;);
+
+// во время отрисовки
+gl.uniform2fv(someVec2Element0Loc, [1, 2]);  // устанавливаем 0
+gl.uniform2fv(someVec2Element1Loc, [3, 4]);  // устанавливаем 1
+gl.uniform2fv(someVec2Element2Loc, [5, 6]);  // устанавливаем 2
+</code></pre><p>Таким же образом при использовании структуры</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">struct SomeStruct {
+  bool active;
+  vec2 someVec2;
+};
+uniform SomeStruct u_someThing;
+</code></pre><p>вам нужно получать ссылку на каждое поле отдельно</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
+var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
+</code></pre><h3 id="textures-in-vertex-shaders">Текстуры в вершинном шейдере</h3>
+
+<p>Смотри <a href="#textures-in-fragment-shaders">Текстуры во фрагментном шейдере</a>.</p>
+<h2 id="-">Фрагментный шейдер</h2>
+<p>Задача фрагментного шейдера - устанавливать цвет для текущего пикселя при растеризации.
+Он всегда выглядит следующим образом:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
+
+void main() {
+   gl_FragColor = doMathToMakeAColor;
+}
+</code></pre><p>(doMathToMakeAColor - выполнить математику для получения цвета, прим. пер.)</p>
+<p>Фрагментный шейдер вызывается один раз для каждого пикселя. Каждый раз при его вызове
+вам нужно установить специальную глобальную переменную <code class="notranslate" translate="no">gl_FragColor</code> для установки цвета.</p>
+<p>Фрагментному шейдеру тоже нужны данные. И также есть 3 способа, которыми их можно получить.</p>
+<ol>
+<li><a href="#uniforms-in-fragment-shaders">Uniform-переменные</a> (значения, постоянные для всех вершин на протяжении одного вызова отрисовки)</li>
+<li><a href="#textures-in-fragment-shaders">Текстуры</a> (данные из пикселя/текселя)</li>
+<li><a href="#varyings">Varying-переменные</a> (данные передаются из вершинного шейдера и интерполируются)</li>
+</ol>
+<h3 id="uniforms-in-fragment-shaders">Uniform-переменные во фрагментном шейдере</h3>
+
+<p>Смотри <a href="#uniforms">Uniform-переменные в шейдере</a>.</p>
+<h3 id="textures-in-fragment-shaders">Текстуры во фрагментном шейдере</h3>
+
+<p>Для получения в шейдере значения из текстуры мы создаём uniform-переменную <code class="notranslate" translate="no">sampler2D</code>
+и используем функцию из GLSL по названию <code class="notranslate" translate="no">texture2D</code> для получения значения из неё.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
+
+uniform sampler2D u_texture;
+
+void main() {
+   vec2 texcoord = vec2(0.5, 0.5)  // получение значение из центра текстуры
+   gl_FragColor = texture2D(u_texture, texcoord);
+}
+</code></pre><p>Какие именно данные приходят из текстуры - <a href="webgl-3d-textures.html">зависит от многих настроек</a>.
+Как минимум нам нужно создать текстуру и поместить в неё данные:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var tex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, tex);
+var level = 0;
+var width = 2;
+var height = 1;
+var data = new Uint8Array([
+    255, 0, 0, 255,     // красный пиксель
+    0, 255, 0, 255      // зелёный пиксель
+]);
+gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+</code></pre><p>Во время инициализации получаем ссылку на uniform-переменную в шейдерной программе</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
+</code></pre><p>При рендеринге необходимо привязать её к текстурному блоку</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var unit = 5;  // выбираем текстурный блок
+gl.activeTexture(gl.TEXTURE0 + unit);
+gl.bindTexture(gl.TEXTURE_2D, tex);
+</code></pre><p>И указать шейдеру, к какому блоку мы привязали текстуру</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform1i(someSamplerLoc, unit);
+</code></pre><h3 id="varyings">Varying-переменные</h3>
+
+<p>С помощью varying-переменных можно передать значение из вершинного шейдера во фрагментный
+шейдер, что мы рассмотрели в <a href="webgl-how-it-works.html">Как работает WebGL</a>.</p>
+<p>Для использования variyng-переменной нам нужно определить её и в вершинном, и во фрагментном
+шейдере. В каждой вершине в коде вершинного шейдера установится значение varying-переменной.
+При отрисовке пикселей WebGL интерполирует эти значения и передаст соответствующую
+varying-переменную во фрагментный шейдер.</p>
+<p>Вершинный шейдер:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
+
+uniform vec4 u_offset;
+
++varying vec4 v_positionWithOffset;
+
+void main() {
+  gl_Position = a_position + u_offset;
++  v_positionWithOffset = a_position + u_offset;
+}
+</code></pre><p>Фрагментный шейдер:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
+
++varying vec4 v_positionWithOffset;
+
+void main() {
++  // конвертация из координат пространства отсечения (-1 &lt;-&gt; +1) в цвет (0 -&gt; 1).
++  vec4 color = v_positionWithOffset * 0.5 + 0.5
++  gl_FragColor = color;
+}
+</code></pre><p>Пример выше по сути не имеет смысла. Обычно незачем напрямую копировать значения координат
+во фрагментный шейдер и создавать на их основе цвета. Однако это работает, и мы получаем
+свои цвета и свой пример.</p>
+<h2 id="glsl">GLSL</h2>
+<p>GLSL означает Graphics Library Shader Language (язык программирования шейдеров графической
+библиотеки). То есть это язык, на котором написаны шейдеры. Он имеет несколько особенностей,
+которые совсем не типичны для JavaScript. Он разработан для выполнения математики, которая
+обычно требуется для выполнения растеризации графики. Поэтому язык содержит встроенные типы
+данных вроде <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code> и <code class="notranslate" translate="no">vec4</code>, которые представляют 2 значения, 3 значения и 4 значения
+соответственно. Также имеются <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code> и <code class="notranslate" translate="no">mat4</code> для матриц 2х2, 3х3 и 4х4. Вы можете
+выполнять такие операции, как умножение <code class="notranslate" translate="no">vec</code> на скалярное значение.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 a = vec4(1, 2, 3, 4);
+vec4 b = a * 2.0;
+// b теперь стало vec4(2, 4, 6, 8);
+</code></pre><p>Аналогичным образом можно умножать матрицы или вектор на матрицу.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">mat4 a = ???
+mat4 b = ???
+mat4 c = a * b;
+
+vec4 v = ???
+vec4 y = c * v;
+</code></pre><p>В языке также содержатся разнообразные конструкции, позволяющие получать разные
+компоненты типа vec. Например, для vec4:</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 v;
+</code></pre><ul>
+<li><code class="notranslate" translate="no">v.x</code> то же, что и <code class="notranslate" translate="no">v.s</code> или <code class="notranslate" translate="no">v.r</code> или <code class="notranslate" translate="no">v[0]</code>.</li>
+<li><code class="notranslate" translate="no">v.y</code> то же, что и <code class="notranslate" translate="no">v.t</code> или <code class="notranslate" translate="no">v.g</code> или <code class="notranslate" translate="no">v[1]</code>.</li>
+<li><code class="notranslate" translate="no">v.z</code> то же, что и <code class="notranslate" translate="no">v.p</code> или <code class="notranslate" translate="no">v.b</code> или <code class="notranslate" translate="no">v[2]</code>.</li>
+<li><code class="notranslate" translate="no">v.w</code> то же, что и <code class="notranslate" translate="no">v.q</code> или <code class="notranslate" translate="no">v.a</code> или <code class="notranslate" translate="no">v[3]</code>.</li>
+</ul>
+<p>Или можно вообще устроить <em>коктейль</em> из компонентов, в результате чего
+можно поменять местами или продублировать компоненты. Например,</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v.yyyy
+</code></pre><p>то же самое, что и</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.y, v.y, v.y, v.y)
+</code></pre><p>Или</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v.bgra
+</code></pre><p>то же, что и</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.b, v.g, v.r, v.a)
+</code></pre><p>При создании vec или mat можно передать несколько компонентов за раз. Например,</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.rgb, 1)
+</code></pre><p>то же самое, что и</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.r, v.g, v.b, 1)
+</code></pre><p>Также</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(1)
+</code></pre><p>то же самое, что и</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(1, 1, 1, 1)
+</code></pre><p>Одна вещь, о которую вы вероятней всего споткнётесь, это то,
+что GLSL - очень строго типизированный язык.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">float f = 1;  // ОШИБКА! 1 имеет тип int. Нельзя присвоить int типу float
+</code></pre><p>Вот корректный способ выполнить присваивание</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">float f = 1.0;      // использовать формат float
+float f = float(1)  // привести integer к float
+</code></pre><p>В примере выше <code class="notranslate" translate="no">vec4(v.rgb, 1)</code> не ругается на <code class="notranslate" translate="no">1</code>, потому что <code class="notranslate" translate="no">vec4</code> приводит значения -
+точно так же, как и <code class="notranslate" translate="no">float(1)</code>.</p>
+<p>GLSL содержит набор встроенных функций. Многие из них работают сразу с несклькими
+компонентами. Например,</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">T sin(T angle)
+</code></pre><p>означает, что T может быть <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code> или <code class="notranslate" translate="no">vec4</code>. Если передать <code class="notranslate" translate="no">vec4</code>,
+вернётся тоже <code class="notranslate" translate="no">vec4</code> и это будет синус каждого компонента. Другими словами, если <code class="notranslate" translate="no">v</code>
+имеет тип <code class="notranslate" translate="no">vec4</code>, то</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 s = sin(v);
+</code></pre><p>будет аналогичным следующей записи</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
+</code></pre><p>Иногда один аргумент имеет тип float, остальные - тип <code class="notranslate" translate="no">T</code>. Это означает, что float
+будет применён ко всем компонентам. Например, если <code class="notranslate" translate="no">v1</code> и <code class="notranslate" translate="no">v2</code> имеют тип <code class="notranslate" translate="no">vec4</code> и
+<code class="notranslate" translate="no">f</code> - тип float, тогда</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 m = mix(v1, v2, f);
+</code></pre><p>будет равносильно следующей записи</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 m = vec4(
+  mix(v1.x, v2.x, f),
+  mix(v1.y, v2.y, f),
+  mix(v1.z, v2.z, f),
+  mix(v1.w, v2.w, f));
+</code></pre><p>Вы можете посмотреть список всех функций GLSL на последней странице
+<a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">справочника WebGL</a>.
+Если же вам нравится сухое и подробное изложение, можете попробовать почитать
+<a href="https://www.khronos.org/files/opengles_shading_language.pdf">спецификацию GLSL</a>.</p>
+<h2 id="-">Складываем всё воедино</h2>
+<p>В этом и смысл всей серии статей. WebGL - по большей части создание различных шейдеров,
+передача данных этим шейдерам, а затем вызов <code class="notranslate" translate="no">gl.drawArrays</code> или <code class="notranslate" translate="no">gl.drawElements</code>, чтобы
+WebGL обработал вершины через вызов текущего вершинного шейдера для каждой вершины, а затем
+отобразил каждый пиксель через вызов фрагментного шейдера для каждого пикселя.</p>
+<p>Вообще, код шейдера занимает несколько строк кода. И так как эти строки практически одинаковые
+в большинстве WebGL-приложений, а также потому, что написав их однажды, вы можете не уделять им
+больше внимания, посмотрите <a href="webgl-boilerplate.html">как компилировать шейдеры и привязывать их к шейдерной программе</a>.</p>
+<p>Если вы только что нашли эту статью, можете продолжать изучение по двум направлениям.
+Если вам интересна обработка изображений, я покажу, <a href="webgl-image-processing.html">как выполнить обработку 2D-изображения</a>.
+Если вам интересно узнать о переносе, повороте, масштабе и в конце концов 3D, тогда
+<a href="webgl-2d-translation.html">начните здесь</a>.</p>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-shaders-and-glsl.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-shaders-and-glsl.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-shaders-and-glsl.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-shaders-and-glsl.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-shaders-and-glsl.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-shaders-and-glsl.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-shaders-and-glsl.html" selected>Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Основы</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-fundamentals.html">Основы WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-how-it-works.html">Как работает WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-shaders-and-glsl.html">Шейдеры и GLSL в WebGL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>Обработка изображений</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-image-processing.html">Обработка изображений в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-image-processing-continued.html">Продолжаем обработку изображений в WebGL</a></li>
+        </ul>
+  <li>Математика переноса, поворота и масштабирования в 2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-2d-translation.html">2D-перенос в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-rotation.html">2D-поворот в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-scale.html">2D-масштабирование в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-matrices.html">2D-матрицы в WebGL</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-orthographic.html">WebGL 3D - Ортогональ</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-perspective.html">WebGL 3D - Перспектива</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-camera.html">WebGL 3D - Камеры</a></li>
+        </ul>
+  <li>Освещение</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-lighting-directional.html">WebGL 3D - Направленное освещение</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-lighting-point.html">WebGL 3D - Точечное освещение</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-lighting-spot.html">WebGL 3D - Прожектор</a></li>
+        </ul>
+  <li>Структура и устройство</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-less-code-more-fun.html">WebGL - Меньше кода, больше веселья</a></li>
+<li><a href="/webgl/lessons/ru/webgl-drawing-multiple-things.html">WebGL - Отрисовка нескольких объектов</a></li>
+<li><a href="/webgl/lessons/ru/webgl-scene-graph.html">WebGL - Графы сцены</a></li>
+        </ul>
+  <li>Геометрия</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-geometry-lathe.html">WebGL 3D - Создание модели</a></li>
+<li><a href="/webgl/lessons/ru/webgl-load-obj.html">Loading .obj files</a></li>
+<li><a href="/webgl/lessons/ru/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+        </ul>
+  <li>Текстуры</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-3d-textures.html">WebGL 3D - Текстуры</a></li>
+<li><a href="/webgl/lessons/ru/webgl-data-textures.html">WebGL - Данные для текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2-textures.html">WebGL - Использование 2 и более текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-cors-permission.html">WebGL - Кросс-доменные изображения</a></li>
+<li><a href="/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html">WebGL 3D - Перспективная коррекция текстур</a></li>
+<li><a href="/webgl/lessons/ru/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Рендеринг в текстуру</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-render-to-texture.html">WebGL - Рендеринг в текстуру</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Приёмы</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-2d-drawimage.html">WebGL 2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-matrix-stack.html">WebGL 2D - Стек матриц</a></li>
+<li><a href="/webgl/lessons/ru/webgl-sprites.html">Sprites</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/ru/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/ru/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/ru/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/ru/webgl-fog.html">Fog</a></li>
+<li><a href="/webgl/lessons/ru/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>Текст</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-text-html.html">WebGL текст - HTML</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-canvas2d.html">WebGL текст - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-texture.html">WebGL текст - Используем текстуру</a></li>
+<li><a href="/webgl/lessons/ru/webgl-text-glyphs.html">WebGL текст - Используем глиф-текстуру</a></li>
+        </ul>
+  <li>Текстуры</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+  <li>GPGPU</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-gpgpu.html">GPGPU</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/ru/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/ru/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/ru/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Optimization</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/ru/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+        </ul>
+  <li>Разное</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-setup-and-installation.html">WebGL Установка и настройка</a></li>
+<li><a href="/webgl/lessons/ru/webgl-boilerplate.html">Шаблон WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-resizing-the-canvas.html">Изменение размера Canvas в WebGL</a></li>
+<li><a href="/webgl/lessons/ru/webgl-animation.html">WebGL - Анимация</a></li>
+<li><a href="/webgl/lessons/ru/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/ru/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ru/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ru/webgl-and-alpha.html">WebGL и прозрачность</a></li>
+<li><a href="/webgl/lessons/ru/webgl-2d-vs-3d-library.html">WebGL - 2D и 3D библиотеки</a></li>
+<li><a href="/webgl/lessons/ru/webgl-anti-patterns.html">WebGL - Антипаттерны</a></li>
+<li><a href="/webgl/lessons/ru/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/ru/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/ru/webgl-tips.html#screenshot">Taking a screenshot</a></li>
+<li><a href="/webgl/lessons/ru/webgl-tips.html#preservedrawingbuffer">Prevent the Canvas Being Cleared</a></li>
+<li><a href="/webgl/lessons/ru/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
+<li><a href="/webgl/lessons/ru/webgl-tips.html#html-background">Use WebGL as Background in HTML</a></li>
+<li><a href="/webgl/lessons/ru/webgl-cross-platform-issues.html">Cross Platform Issues</a></li>
+<li><a href="/webgl/lessons/ru/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/ru/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/ru/webgl-texture-units.html">Texture Units</a></li>
+<li><a href="/webgl/lessons/ru/webgl-framebuffers.html">Framebuffers</a></li>
+<li><a href="/webgl/lessons/ru/webgl-readpixels.html">readPixels</a></li>
+<li><a href="/webgl/lessons/ru/webgl-references.html">References</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Документация по вспомогательным функциям</a></li>
+  <li><a href="https://twgljs.org">TWGL, лёгкая библиотека-помощник для WebGL</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Вопросы? <a href="https://stackoverflow.com/questions/tagged/webgl">Спросите на stackoverflow</a>.</div>
+        <div>Нашли ошибку? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Создайте задачу на github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'Шейдеры и GLSL в WebGL';
+            var disqus_title = 'Шейдеры и GLSL в WebGL';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTagName('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+}());
+</script>
+
+
+</html>
+
+
+

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/fr/webgl-3d-lighting-point.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Comment implémenter les lumières-point en WebGL">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-lighting-point_fr.jpg">
+
+<meta property="og:title" content="WebGL 3D - Les lumières-point">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-lighting-point_fr.jpg">
+<meta property="og:description" content="Comment implémenter les lumières-point en WebGL">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-lighting-point.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 3D - Les lumières-point">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-lighting-point.html">
+<meta name="twitter:description" content="Comment implémenter les lumières-point en WebGL">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-lighting-point_fr.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-lighting-point.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-lighting-point_fr.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-lighting-point.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-lighting-point.html",
+      "inLanguage":"fr",
+      "name":"WebGL 3D - Les lumières-point",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-lighting-point.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL 3D - Les lumières-point</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">
+
+
+
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-3d-lighting-point.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-lighting-point.html" selected>Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-lighting-point.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-lighting-point.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-lighting-point.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-lighting-point.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-lighting-point.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">Table des Matières</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/fr/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub a {
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub a::before,#forkongithub a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub a::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+@media (max-width: 900px) {
+    #forkongithub a{
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 3D - Les lumières-point</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>Cet article est la suite de <a href="webgl-3d-lighting-directional.html">WebGL 3D - L&#39;éclairage directionnel</a>. Si vous ne l&#39;avez pas lu vous préférez peut-être démarrer par là.</p>
+<p>Dans le dernier article on a vu l&#39;éclairage directionnel, dans lequel la lumière vient de façon homogène d&#39;une même direction. On indique cette direction avant le rendu. </p>
+<p>Et si au lieu d&#39;une direction on choisissait un point dans l&#39;espace et qu&#39;on déduisait la direction de n&#39;importe quel endroit de la surface d&#39;un objet dans notre shader ? Ca nous donnerait une lumière-point.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/point-lighting.html"></iframe>
+</div>
+
+</p>
+<p>Si vous tournez la surface vous voyez que chaque point reçoit la lumière avec un angle différent. Le produit scalaire entre la normale de la surface et la direction de la lumière nous donnera donc une valeur différente pour chaque point de la surface.</p>
+<p>Codons ça !</p>
+<p>D&#39;abord on a besoin de la position de la lumière.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec3 u_positionGlobaleLumiere;
+</code></pre><p>Et on a besoin de calculer la position de la surface dans l&#39;espace global. Pour ça on peut multiplier nos positions par la matrice globale donc... </p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform mat4 u_globale;
+
+...
+
+// calcule la position globale de la surface
+vec3 positionSurfaceGlobale = (u_globale * a_position).xyz;
+</code></pre><p>Et on peut calculer un vecteur de la surface à la lumière, soit la direction, sauf que cette fois elle est calculée pour chaque point.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v_surfaceVersLumiere = u_positionLumiere - positionSurfaceGlobale;
+</code></pre><p>Voilà tout ça en place :</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
+attribute vec3 a_normale;
+
++uniform vec3 u_positionGlobaleLumiere;
+
++uniform mat4 u_globale;
+uniform mat4 u_projectionGlobaleVue;
+uniform mat4 u_globaleInverseTransposee;
+
+varying vec3 v_normale;
+
++varying vec3 v_surfaceVersLumiere;
+
+void main() {
+  // Multiplie la position par la matrice
+  gl_Position = u_projectionGlobaleVue * a_position;
+
+  // Oriente la normale et la transmet au shader de fragment
+  v_normale = mat3(u_globaleInverseTransposee) * a_normale;
+
++  // Calcule la position globale de la surface
++  vec3 positionSurfaceGlobale = (u_globale * a_position).xyz;
++
++  // Calcule le vecteur de la surface à la lumière
++  // et le transmet au shader de fragment
++  v_surfaceVersLumiere = u_positionGlobaleLumiere - positionSurfaceGlobale;
+}
+</code></pre><p>Maintenant dans le shader de fragment il nous faut normaliser ce vecteur de direction de la lumière puisqu&#39;il n&#39;est pas unitaire. On pourrait le normaliser dans le shader de vertex mais comme il est interpolé entre les deux shaders, puisque c&#39;est une varying, il faudrait quand-même le re-normaliser ensuite. </p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
+
+// Reçu depuis le shader de vertex
+varying vec3 v_normale;
++varying vec3 v_surfaceVersLumiere;
+
+-uniform vec3 u_directionInverseDeLaLumiere;
+uniform vec4 u_couleur;
+
+void main() {
+  // Comme v_normale est une varying elle est interpolée
+  // elle ne sera pas forcément normalisée. En la normalisant
+  // elle sera à nouveau un vecteur unitaire
+  vec3 normale = normalize(v_normale);
+
+  vec3 directionSurfaceVersLumiere = normalize(v_surfaceVersLumiere);
+
+  -float lumiere = dot(normale, u_directionInverseDeLaLumiere);
+  +float lumiere = dot(normale, directionSurfaceVersLumiere);
+
+  gl_FragColor = u_couleur;
+
+  // Multiplie seulement la partie colorée (pas le cannal alpha)
+  // par la lumière
+  gl_FragColor.rgb *= lumiere;
+}
+</code></pre><p>On crée les pointeurs pour <code class="notranslate" translate="no">u_globale</code> et <code class="notranslate" translate="no">u_positionGlobaleLumiere</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-  var emplacementDirectionInverseLumiere =
+-      gl.getUniformLocation(programme, &quot;u_directionInverseDeLaLumiere&quot;);
++  var emplacementPositionGlobaleLumiere =
++      gl.getUniformLocation(programme, &quot;u_positionGlobaleLumiere&quot;);
++  var emplacementGlobale =
++      gl.getUniformLocation(programme, &quot;u_globale&quot;);
+</code></pre><p>On indique leurs valeurs au programme</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Transmet les matrices au programme actif
++  gl.uniformMatrix4fv(
++      emplacementGlobale, false,
++      matriceGlobale);
+  gl.uniformMatrix4fv(
+      emplacementProjectionGlobaleVue, false,
+      matriceProjectionGlobaleVue);
+
+  ...
+
+-  // Transmet la direction de la lumière au programme actif
+-  gl.uniform3fv(emplacementDirectionInverseLumiere, normaliser([0.5, 0.7, 1]));
++  // Transmet la position de la lumière au programme actif
++  gl.uniform3fv(emplacementPositionGlobaleLumiere, [20, 30, 50]);
+</code></pre><p>Voilà !</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p>Maintenant qu&#39;on a notre lumière point on peut ajouter quelque chose qu&#39;on appelle l&#39;éclairage spéculaire. </p>
+<p>Si on regarde un objet dans le vrai monde, s&#39;il est vaguement brillant et qu&#39;il reflète une lumière directement dans notre direction, ça fait comme un miroir</p>
+<p><img class="webgl_center" src="../resources/specular-highlights.jpg" /></p>
+<p>On peut simuler cet effet en calculant si la lumière se reflète dans notre direction. Le <em>produit scalaire</em> va là aussi nous aider.</p>
+<p>Que doit-on faire ? Réfléchissons. La lumière se réfléchit avec le même angle par lequel elle atteint la surface. Donc si la direction entre la surface et la lumière est la réflexion exacte de la direction de la surface à l&#39;observateur alors la réflexion est maximale.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/surface-reflection.html"></iframe>
+</div>
+
+</p>
+<p>Si on connaît la direction de la surface à la lumière (ce qu&#39;on vient de voir). Et si on connaît la direction de la surface à l&#39;observateur/camera, qu&#39;on peut calculer, alors on peut ajouter ces deux vecteurs et les normaliser pour avoir le <code class="notranslate" translate="no">vecteurIntermediaire</code> qui est le vecteur entre les deux. Si le vecteurIntermediaire et la normale de la surface concordent alors la réflexion est maximale. Et comment dire de combien ils sont identiques ? Avec le <em>produit scalaire</em> comme on a fait avant. 1 = ce sont les mêmes, ils vont dans la même direction, 0 = ils sont perpendiculaires, -1 = ils sont opposés.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/specular-lighting.html"></iframe>
+</div>
+
+</p>
+<p>Premièrement on doit transmettre la position de la caméra, calculer le vecteur entre la surface et la caméra et le transmettre au shader de fragment.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
+attribute vec3 a_normale;
+
+uniform vec3 u_positionGlobaleLumiere;
++uniform vec3 u_positionGlobaleVue;
+
+uniform mat4 u_globale;
+uniform mat4 u_projectionGlobaleVue;
+uniform mat4 u_globaleInverseTransposee;
+
+varying vec3 v_normale;
+
+varying vec3 v_surfaceVersLumiere;
++varying vec3 v_surfaceVersCamera;
+
+void main() {
+  // Multiplie la position par la matrice
+  gl_Position = u_projectionGlobaleVue * a_position;
+
+  // Oriente la normale et la transmet au shader de fragment
+  v_normale = mat3(u_globaleInverseTransposee) * a_normale;
+
+  // calcule la position globale de la surface
+  vec3 positionSurfaceGlobale = (u_globale * a_position).xyz;
+
+  // Calcule le vecteur de la surface à la lumière
+  // et le transmet au shader de fragment
+  v_surfaceVersLumiere = u_positionGlobaleLumiere - positionSurfaceGlobale;
+
++  // Calcule le vecteur de la surface à la caméra
++  // et le transmet au shader de fragment
++  v_surfaceVersCamera = u_positionGlobaleVue - positionSurfaceGlobale;
+}
+</code></pre><p>Ensuite dans le shader de fragment il nous faut calculer le <code class="notranslate" translate="no">vecteurIntermediaire</code> entre les vecteurs surfaceVersCamera et surfaceVersLumiere. Ensuite on peut prendre le produit vectoriel entre le <code class="notranslate" translate="no">vecteurIntermediaire</code> et la normale pour trouver le facteur de réflexion</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Reçu du shader de vertex
+varying vec3 v_normale;
+varying vec3 v_surfaceVersLumiere;
++varying vec3 v_surfaceVersCamera;
+
+uniform vec4 u_couleur;
+
+void main() {
+  // Comme v_normale est une varying elle est interpolée
+  // elle ne sera pas forcément normalisée. En la normalisant
+  // elle sera à nouveau un vecteur unitaire
+  vec3 normale = normalize(v_normale);
+
++  vec3 directionSurfaceVersLumiere = normalize(v_surfaceVersLumiere);
++  vec3 surfaceToViewDirection = normalize(v_surfaceVersCamera);
++  vec3 vecteurIntermediaire = normalize(directionSurfaceVersLumiere + surfaceToViewDirection);
+
+  float lumiere = dot(normale, directionSurfaceVersLumiere);
++  float specular = dot(normale, vecteurIntermediaire);
+
+  gl_FragColor = u_couleur;
+
+  // Multiplie seulement la partie colorée (pas le cannal alpha)
+  // par la lumière
+  gl_FragColor.rgb *= lumiere;
+
++  // On ajoute l&#39;éclairage spéculaire
++  gl_FragColor.rgb += specular;
+}
+</code></pre><p>Reste à créer les emplacements <code class="notranslate" translate="no">u_positionGlobaleVue</code> et renseigner leurs valeurs dans le programme</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var emplacementPositionGlobaleLumiere =
+    gl.getUniformLocation(programme, &quot;u_positionGlobaleLumiere&quot;);
++var emplacementPositionGlobaleVue =
++    gl.getUniformLocation(programme, &quot;u_positionGlobaleVue&quot;);
+
+...
+
+// Calcule la matrice caméra
+var camera = [100, 150, 200];
+var cible = [0, 35, 0];
+var vertical = [0, 1, 0];
+var matriceCamera = regarderVers(camera, cible, vertical);
+
++// Indique la position caméra au programme
++gl.uniform3fv(emplacementPositionGlobaleVue, camera);
+</code></pre><p>Résultat</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point-specular.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-specular.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p><strong>ET PAN CA BRILLE !</strong></p>
+<p>On peut jouer sur la brillance en ajoutant un exposant au produit scalaire. Ca changera l&#39;éclairage spéculaire d&#39;un aspect linéaire à un aspect exponentiel.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example noborder" style="width: 300px; height: 300px;" src="/webgl/lessons/resources/power-graph.html"></iframe>
+</div>
+
+</p>
+<p>Plus la ligne rouge est proche du haut du graphique plus l&#39;aspect spéculaire va être important. En augmentant la puissance la portée de la brillance est modifiée.</p>
+<p>Appelons ce facteur <code class="notranslate" translate="no">brillance</code> (shininess en anglais) et ajoutons-le au shader.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec4 u_couleur;
++uniform float u_brillance;
+
+...
+
+-  float speculaire = dot(normale, vecteurIntermediaire);
++  float speculaire = 0.0;
++  if (lumiere &gt; 0.0) {
++    speculaire = pow(dot(normale, vecteurIntermediaire), u_brillance);
++  }
+</code></pre><p>Le produit scalaire peut être négatif. Certaines puissances ne sont pas définies sur les nombres négatifs. On vérifie donc sa valeur pour le mettre à zéro s&#39;il est négatif.</p>
+<p>Bien sûr on doit créer le pointeur et renseigner sa valeur dans le programme</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+var emplacementBrillance = gl.getUniformLocation(programme, &quot;u_brillance&quot;);
+
+...
+
+// Indique la brillance au programme
+gl.uniform1f(emplacementBrillance, brillance);
+</code></pre><p>Résultat</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point-specular-power.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-specular-power.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p>Une dernière chose que je souhaite mentionner dans cet article, ce sont les couleurs des lumières. </p>
+<p>Jusque là on a utilisé <code class="notranslate" translate="no">lumiere</code> pour multiplier la couleur qu&#39;on donne au F. On peut fournir une couleur de lumière aussi si on veut des lumières colorées.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec4 u_couleur;
+uniform float u_brillance;
++uniform vec3 u_couleurLumiere;
++uniform vec3 u_couleurSpeculaire;
+
+...
+
+  // Multiplie seulement la partie colorée (pas le cannal alpha)
+  // par la lumière
+*  gl_FragColor.rgb *= light * u_couleurLumiere;
+
+  // Ajoute l&#39;éclairage spéculaire
+*  gl_FragColor.rgb += specular * u_couleurSpeculaire;
+}
+</code></pre><p>et bien sûr</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+  var emplacementCouleurLumiere =
++      gl.getUniformLocation(programme, &quot;u_couleurLumiere&quot;);
++  var emplacementCouleurSpeculaire =
++      gl.getUniformLocation(programme, &quot;u_couleurSpeculaire&quot;);
+</code></pre><p>et</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Indique la couleur de la lumière au programme
++  gl.uniform3fv(emplacementCouleurLumiere, normaliser([1, 0.6, 0.6]));  // lumiere rouge
+// Indique la couleur de l&#39;éclairage spéculaire au programme
++  gl.uniform3fv(emplacementCouleurSpeculaire, normaliser([1, 0.6, 0.6]));  // lumiere rouge
+</code></pre><p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point-color.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-color.html" target="_blank">Cliquer ici pour ouvrir dans une nouvelle fenêtre</a>
+</div>
+
+</p>
+<p>Par quoi on continue ??</p>
+<div class="webgl_bottombar">
+<h3>Pourquoi <code class="notranslate" translate="no">pow(nombreNegatif, puissance)</code> n'est pas défini ?</h3>
+<p>Quest-ce que ça veut dire ?</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(5, 2)</pre></div>
+<p>Vous pouvez voir ça comme</p>
+<div class="webgl_center"><pre class="glocal-center-content">5 * 5 = 25</pre></div>
+<p>Et si on faisait :</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(5, 3)</pre></div>
+<p>C'est comme si c'était</p>
+<div class="webgl_center"><pre class="glocal-center-content">5 * 5 * 5 = 125</pre></div>
+<p>Ok, et maintenant</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2)</pre></div>
+<p>Ca pourrait être</p>
+<div class="webgl_center"><pre class="glocal-center-content">-5 * -5 = 25</pre></div>
+<p>Et</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(-5, 3)</pre></div>
+<p>Qui est</p>
+<div class="webgl_center"><pre class="glocal-center-content">-5 * -5 * -5 = -125</pre></div>
+<p>Comme vous le savez, multiplier un nombre négatif par un autre nombre négatif forme un nombre positif. Remultiplier par un nombre négatif reforme un nombre négatif.</p>
+<p>Ok alors qu'est-ce que ça veut dire ?</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2.5)</pre></div>
+<p>Comment on décide quel est le résultat de ça, positif ou négatif ? Je ne suis pas un matheux mais on ne peut pas vraiment choisir donc c'est non défini.</p>
+</div>
+
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-3d-lighting-point.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-lighting-point.html" selected>Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-lighting-point.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-lighting-point.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-lighting-point.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-lighting-point.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-lighting-point.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html" >简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>Les bases</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-fundamentals.html">WebGL - Les bases</a></li>
+<li><a href="/webgl/lessons/fr/webgl-how-it-works.html">WebGL - Comment ça marche</a></li>
+<li><a href="/webgl/lessons/fr/webgl-shaders-and-glsl.html">WebGL - Shaders et GLSL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>Traitement d'image</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-image-processing.html">Image Processing</a></li>
+<li><a href="/webgl/lessons/fr/webgl-image-processing-continued.html">Image Processing Continued</a></li>
+        </ul>
+  <li>2D : translation, rotation, échelle, matrices</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-2d-translation.html">WebGL 2D - Translation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-rotation.html">WebGL 2D - Rotation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-scale.html">WebGL 2D - Echelle</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-matrices.html">WebGL 2D - Matrices</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-orthographic.html">WebGL 3D - Projection orthographique</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-perspective.html">WebGL 3D - La perspective</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-camera.html">WebGL 3D - Les caméras</a></li>
+        </ul>
+  <li>Lumières</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-lighting-directional.html">WebGL 3D - Lumière directionnelle</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-lighting-point.html">WebGL 3D - Lumière-point</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+        </ul>
+  <li>Structure et Organisation</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+<li><a href="/webgl/lessons/fr/webgl-drawing-multiple-things.html">Drawing Multiple Things</a></li>
+<li><a href="/webgl/lessons/fr/webgl-scene-graph.html">WebGL - Graphes de scène</a></li>
+        </ul>
+  <li>Geometry</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+<li><a href="/webgl/lessons/fr/webgl-load-obj.html">Loading .obj files</a></li>
+<li><a href="/webgl/lessons/fr/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+        </ul>
+  <li>Divers</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-3d-textures.html">Textures</a></li>
+<li><a href="/webgl/lessons/fr/webgl-data-textures.html">Data Textures</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2-textures.html">Using 2 or More Textures</a></li>
+<li><a href="/webgl/lessons/fr/webgl-cors-permission.html">Cross Origin Images</a></li>
+<li><a href="/webgl/lessons/fr/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/fr/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Rendering To A Texture</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-render-to-texture.html">Render to Texture</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Techniques</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-2d-drawimage.html">2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+<li><a href="/webgl/lessons/fr/webgl-sprites.html">Sprites</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/fr/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/fr/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/fr/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/fr/webgl-fog.html">Fog</a></li>
+<li><a href="/webgl/lessons/fr/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>Texte</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-text-html.html">Text - HTML</a></li>
+<li><a href="/webgl/lessons/fr/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/fr/webgl-text-texture.html">Text - Using a Texture</a></li>
+<li><a href="/webgl/lessons/fr/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
+        </ul>
+  <li>Divers</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+  <li>GPGPU</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-gpgpu.html">GPGPU</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/fr/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/fr/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/fr/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Optimization</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/fr/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+        </ul>
+  <li>Divers</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-setup-and-installation.html">Setup And Installation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-boilerplate.html">Boilerplate</a></li>
+<li><a href="/webgl/lessons/fr/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
+<li><a href="/webgl/lessons/fr/webgl-animation.html">Animation</a></li>
+<li><a href="/webgl/lessons/fr/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/fr/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/fr/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/fr/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/fr/webgl-2d-vs-3d-library.html">2D vs 3D libraries</a></li>
+<li><a href="/webgl/lessons/fr/webgl-anti-patterns.html">Anti-Patterns</a></li>
+<li><a href="/webgl/lessons/fr/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/fr/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/fr/webgl-tips.html#screenshot">Taking a screenshot</a></li>
+<li><a href="/webgl/lessons/fr/webgl-tips.html#preservedrawingbuffer">Prevent the Canvas Being Cleared</a></li>
+<li><a href="/webgl/lessons/fr/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
+<li><a href="/webgl/lessons/fr/webgl-tips.html#html-background">Use WebGL as Background in HTML</a></li>
+<li><a href="/webgl/lessons/fr/webgl-cross-platform-issues.html">Cross Platform Issues</a></li>
+<li><a href="/webgl/lessons/fr/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/fr/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/fr/webgl-texture-units.html">Texture Units</a></li>
+<li><a href="/webgl/lessons/fr/webgl-framebuffers.html">Framebuffers</a></li>
+<li><a href="/webgl/lessons/fr/webgl-readpixels.html">readPixels</a></li>
+<li><a href="/webgl/lessons/fr/webgl-references.html">References</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Aide pour la doc de l'API</a></li>
+  <li><a href="https://twgljs.org">TWGL, une librairie de base pour WebGL</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>Une question ? <a href="https://stackoverflow.com/questions/tagged/webgl">Demander sur stackoverflow</a>.</div>
+        <div>Un problème ? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">Signaler sur github</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D - Les lumières-point';
+            var disqus_title = 'WebGL 3D - Les lumières-point';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTagName('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+}());
+</script>
+
+
+</html>
+
+
+

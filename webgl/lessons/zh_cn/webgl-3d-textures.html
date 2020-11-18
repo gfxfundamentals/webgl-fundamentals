@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-3d-textures.md. Do not edited directly -->
+<!--
+Copyright 2012, Gregg Tavares.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="WebGL中如何使用纹理">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-textures_zh-cn.jpg">
+
+<meta property="og:title" content="WebGL 三维纹理">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-textures_zh-cn.jpg">
+<meta property="og:description" content="WebGL中如何使用纹理">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-textures.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 三维纹理">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-textures.html">
+<meta name="twitter:description" content="WebGL中如何使用纹理">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-textures_zh-cn.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-textures.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-textures_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-textures.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-textures.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 三维纹理",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-textures.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
+
+
+<title>WebGL 三维纹理</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-3d-textures.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-textures.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-textures.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-textures.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-3d-textures.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-3d-textures.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-3d-textures.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-textures.html">
+
+
+
+
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-3d-textures.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-textures.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-textures.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-textures.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-textures.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-textures.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-textures.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-textures.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub a {
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(150px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub a::before,#forkongithub a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub a::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+@media (max-width: 900px) {
+    #forkongithub a{
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub a{
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>WebGL 三维纹理</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>此文上接一系列WebGL文章，从<a href="webgl-fundamentals.html">基础概念</a>开始，
+上一篇讲的是<a href="webgl-animation.html">动画</a>。</p>
+<p>在WebGL中如何使用纹理？你可能会从<a href="webgl-image-processing.html">二维图像处理的文章</a>
+中得到启发，如果我们讲的再深入一点可能更好理解。</p>
+<p>首先需要调整着色器以便使用纹理，这里是顶点着色器的修改部分，
+我们需要传递纹理坐标，在这个例子中直接将它们传到片断着色器中。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
+*attribute vec2 a_texcoord;
+
+uniform mat4 u_matrix;
+
+*varying vec2 v_texcoord;
+
+void main() {
+  // 将位置和矩阵相乘
+  gl_Position = u_matrix * a_position;
+
+*  // 传递纹理坐标到片断着色器
+*  v_texcoord = a_texcoord;
+}
+</code></pre><p>在片断着色器中声明一个 sampler2D 类型的全局变量，可以让我们引用一个纹理，
+然后使用从顶点着色器传入的纹理坐标调用 <code class="notranslate" translate="no">texture2D</code> 方法，
+在纹理上找到对应的颜色。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
+
+// 从顶点着色器中传入的值
+*varying vec2 v_texcoord;
+
+*// 纹理
+*uniform sampler2D u_texture;
+
+void main() {
+*   gl_FragColor = texture2D(u_texture, v_texcoord);
+}
+</code></pre><p>我们需要设置纹理坐标</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 找到顶点坐标中的属性
+var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
+*var texcoordLocation = gl.getAttribLocation(program, &quot;a_texcoords&quot;);
+
+...
+
+*// 为纹理坐标创建一个缓冲
+var buffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+*gl.enableVertexAttribArray(texcoordLocation);
+*
+*// 以浮点型格式传递纹理坐标
+*gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+*
+*// 设置纹理坐标
+*setTexcoords(gl);
+</code></pre><p>如你所见，我们将图像映射到 &#39;F&#39; 中的每个矩形面上。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*// 为 F 设置纹理坐标缓冲
+*function setTexcoords(gl) {
+*  gl.bufferData(
+*      gl.ARRAY_BUFFER,
+*      new Float32Array([
+*        // 正面左竖
+*        0, 0,
+*        0, 1,
+*        1, 0,
+*        0, 1,
+*        1, 1,
+*        1, 0,
+*
+*        // 正面上横
+*        0, 0,
+*        0, 1,
+*        1, 0,
+*        0, 1,
+*        1, 1,
+*        1, 0,
+* ...
+*       ]),
+*       gl.STATIC_DRAW);
+</code></pre><p>我们还需要一个纹理，我们可以从头做一个但在这个例子中就直接加载一个图像把，
+因为那可能是常用的做法。</p>
+<p>这是我们将要使用的图像</p>
+<p><img class="webgl_center" src="../../resources/f-texture.png" /></p>
+<p>一颗赛艇的图像！事实上使用一个带有 &#39;F&#39; 的图像能够在结果中清楚的分辨出纹理的方向。</p>
+<p>加载图像的过程是异步的，我们请求图像资源后浏览器需要一段时间去下载。
+通常有两种处理方法，一种是等纹理下载完成后再开始绘制，另一种是在图像加载前使用生成的纹理，
+这种方式可以立即启动渲染，一旦图像下载完成就拷贝到纹理。我们将使用下方的方法。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*// 创建一个纹理
+*var texture = gl.createTexture();
+*gl.bindTexture(gl.TEXTURE_2D, texture);
+*
+*// 用 1x1 个蓝色像素填充纹理
+*gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+*              new Uint8Array([0, 0, 255, 255]));
+*
+*// 异步加载图像
+*var image = new Image();
+*image.src = &quot;resources/f-texture.png&quot;;
+*image.addEventListener(&#39;load&#39;, function() {
+*  // 现在图像加载完成，拷贝到纹理中
+*  gl.bindTexture(gl.TEXTURE_2D, texture);
+*  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+*  gl.generateMipmap(gl.TEXTURE_2D);
+*});
+</code></pre><p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-textures.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-textures.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>如果我只想使用一部分图像覆盖 &#39;F&#39; 的正面怎么办，纹理是通过“纹理坐标”来引用的，
+纹理坐标 0.0 到 1.0 对应纹理从左到右，0.0 到 1.0 对应第一个像素所在行到最后一行。
+注意我没有使用上或者下，上下在纹理坐标空间中是没有意义的，因为绘制一些东西后再重定向后，
+是没有上下的概念的，主要是依据传递给WebGL的纹理数据，纹理数据的开头对应纹理坐标 0, 0，
+结尾对应纹理坐标 1, 1</p>
+<p><img class="webgl_center noinvertdark" width="405" src="../resources/texture-coordinates-diagram.svg" /></p>
+<p>我将纹理载入到Photoshop中得到一些点的坐标。</p>
+<p><img class="webgl_center" width="256" height="256" src="../../resources/f-texture-pixel-coords.png" /></p>
+<p>可以像这样将像素坐标转换到纹理坐标</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">texcoordX = pixelCoordX / (width  - 1)
+texcoordY = pixelCoordY / (height - 1)
+</code></pre><p>这是正面的纹理坐标</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 正面左竖
+ 38 / 255,  44 / 255,
+ 38 / 255, 223 / 255,
+113 / 255,  44 / 255,
+ 38 / 255, 223 / 255,
+113 / 255, 223 / 255,
+113 / 255,  44 / 255,
+
+// 正面上横
+113 / 255, 44 / 255,
+113 / 255, 85 / 255,
+218 / 255, 44 / 255,
+113 / 255, 85 / 255,
+218 / 255, 85 / 255,
+218 / 255, 44 / 255,
+
+// 正面中横
+113 / 255, 112 / 255,
+113 / 255, 151 / 255,
+203 / 255, 112 / 255,
+113 / 255, 151 / 255,
+203 / 255, 151 / 255,
+203 / 255, 112 / 255,
+</code></pre><p>对背面也使用相同的纹理坐标，得到这样的结果。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-textures-texture-coords-mapped.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-textures-texture-coords-mapped.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>并不是非常好看，但是希望这样能展示出纹理坐标的用法。
+如果你使用代码生成几何体（立方体，球体，等等），
+通常情况下计算期望的纹理坐标也是比较容易的。
+另一方面如果通过软件例如 Blender, Maya, 3D Studio Max 制作几何体，
+那么你的美术（或者你自己）就会用软件调整纹理坐标。</p>
+<p>如果纹理坐标再 0.0 到 1.0 之外会怎样？WebGL默认会重复纹理，
+0.0 到 1.0 是一份纹理的“拷贝”，1.0 到 2.0 是另外一份拷贝，
+-4.0 到 -3.0 也是另外一份拷贝。让我们在一个平面上使用这些纹理坐标。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> -3, -1,
+  2, -1,
+ -3,  4,
+ -3,  4,
+  2, -1,
+  2,  4,
+</code></pre><p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-textures-repeat-clamp.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-textures-repeat-clamp.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>你可以使用<code class="notranslate" translate="no">CLAMP_TO_EDGE</code>告诉WebGL再某个方向不需要重复，例如</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+</code></pre><p>点击上方示例中的按钮，观察结果。</p>
+<p>你可能注意到在加载纹理时调用了 <code class="notranslate" translate="no">gl.generateMipmap</code>，那是干什么的？</p>
+<p>假设我们有这样一个 16×16 像素的纹理。</p>
+<p><img class="webgl_center" src="../resources/mip-low-res-enlarged.png" style="border: 2px solid black;" /></p>
+<p>假设我们要将它绘制在屏幕的 2×2 个像素上，那么这 4 个像素应该使用什么颜色？
+这里有 256 个像素可以选择，如果在Photoshop中将 16×16 的图像缩放到 2×2，
+它会将每个角 8×8 的像素的平均值赋给这四个像素。不幸的是绘制 64 个像素再求平均在 GPU
+中是非常慢的。假设你有一个 2048x2084 像素的纹理想要绘制成 2x2 个像素，
+就需要对 1024x1024 或 100 万个像素求平均 4 次，这需要很多运算同时速度要快。</p>
+<p>事实上 GPU 使用的是一个纹理贴图（mipmap），纹理贴图是一个逐渐缩小的图像集合，
+每一个是前一个的四分之一大小，16×16 纹理的纹理贴图看起来像这样。</p>
+<p><img class="webgl_center noinvertdark nobg" src="../resources/mipmap-low-res-enlarged.png" /></p>
+<p>通常每个子图都是前一级的双线性插值，这就是 <code class="notranslate" translate="no">gl.generateMipmap</code> 做的事情，
+它根据原始图像创建所有的缩小级别，你也可以自己提供缩小级别的图像。</p>
+<p>现在如果你想将 16x16 像素的纹理绘制到屏幕的 2×2 个像素上，
+WebGL会从创建的贴图中找到从之前级别贴图插值出的 2×2 贴图来使用。</p>
+<p>你可以为纹理选择不同的贴图筛选条件来控制WebGL的插值，
+一共有这 6 种模式</p>
+<ul>
+<li><code class="notranslate" translate="no">NEAREST</code> = 从最大的贴图中选择 1 个像素</li>
+<li><code class="notranslate" translate="no">LINEAR</code> = 从最大的贴图中选择4个像素然后混合</li>
+<li><code class="notranslate" translate="no">NEAREST_MIPMAP_NEAREST</code> = 选择最合适的贴图，然后从上面找到一个像素</li>
+<li><code class="notranslate" translate="no">LINEAR_MIPMAP_NEAREST</code> = 选择最合适的贴图，然后取出 4 个像素进行混合</li>
+<li><code class="notranslate" translate="no">NEAREST_MIPMAP_LINEAR</code> = 选择最合适的两个贴图，从每个上面选择 1 个像素然后混合</li>
+<li><code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code> = 选择最合适的两个贴图，从每个上选择 4 个像素然后混合</li>
+</ul>
+<p>你可以通过这两个例子看到贴图的重要性，第一个显示的是使用 <code class="notranslate" translate="no">NEAREST</code> 或 <code class="notranslate" translate="no">LINEAR</code>，
+只从最大的体贴图上选择像素，当物体运动时就会出现抖动。由于每个像素都从最大的图上选择，
+随着位置和大小的改变，可能会在不同的时间选择不同的像素，从而出现抖动。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-textures-mips.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-textures-mips.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>观察发现左边和中间的抖动会多于右边。
+由于右边的使用多级贴图并且混合颜色，绘制的越小WebGL挑选的像素离原图关系越远。
+相反的中间的小图虽然使用了 <code class="notranslate" translate="no">LINEAR</code> 混合 4 个像素的颜色，但这 4 个像素是从大图中选出来，
+不同的选择会有较大的差别，所以还是抖动明显。右下角的图保持颜色一致是从右中图中挑选的像素。</p>
+<p>第二个例子显示了一些深入屏幕中的多边形。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-textures-mips-tri-linear.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-textures-mips-tri-linear.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>6 个深入屏幕的横梁使用的是之前 6 种不同的筛选模式。左上使用的是 <code class="notranslate" translate="no">NEAREST</code>，
+你会感受到明显的块状感；中上使用的是 <code class="notranslate" translate="no">LINEAR</code> 也没有好到哪里去；
+右上使用的是 <code class="notranslate" translate="no">NEAREST_MIPMAP_NEAREST</code> ，点击图像切换纹理，每个贴图都是不同的颜色，
+就可以清除的看出它使用的是哪个贴图；左下使用的是 <code class="notranslate" translate="no">LINEAR_MIPMAP_NEAREST</code>，
+意思是挑选最合适贴图种的 4 个像素进行混合，你会发现贴图切换的部分非常突兀；
+中下使用的是 <code class="notranslate" translate="no">NEAREST_MIPMAP_LINEAR</code>，也就是找到最合适的两个贴图各取一点进行混合，
+如果仔细看会发现仍然有块状感，尤其是水平方向；右下使用的是 <code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code>，
+也就是选出最合适的两个贴图各取 4 个点进行混合。</p>
+<p><img class="webgl_center noinvertdark nobg" src="../resources/different-colored-mips.png" /></p>
+<div class="webgl_center">不同颜色的贴图</div>
+
+<p>你可能会想既然理论上 <code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code> 是最好的选择为什么还要有其他选择，
+一个原因是 <code class="notranslate" translate="no">LINEAR_MIPMAP_LINEAR</code> 是最慢的，读 8 个像素比读 1 个像素慢一些，
+在现代的 GPU 上如果一次使用一个贴图可能没什么问题，但是现在的游戏可能一次就需要 2
+到 4 个贴图，4 贴图 * 8 像素每贴图 = 绘制每个像素需要读取 32 个像素，那就会慢很多了。
+另一个原因是如果想实现特定的效果，比如做一些<strong>复古</strong>的东西可能就需要使用 <code class="notranslate" translate="no">NEAREST</code>。
+贴图也占用内存，事实上它占用额外 33% 的内存，那是非常多的内存，
+尤其是使用很大的纹理例如想要在游戏的标题屏幕上绘制的东西。如果你不会绘制比最大的贴图要小的东西，
+为什么要把内存浪费在贴图上，直接使用 <code class="notranslate" translate="no">NEAREST</code> 或 <code class="notranslate" translate="no">LINEAR</code> 就只使用第一个贴图。</p>
+<p>设置筛选器可以调用 <code class="notranslate" translate="no">gl.texParameter</code></p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+</code></pre><p><code class="notranslate" translate="no">TEXTURE_MIN_FILTER</code> 是当绘制的比最大贴图小的时候。
+<code class="notranslate" translate="no">TEXTURE_MAG_FILTER</code> 是绘制的比最大的贴图大的时候。
+对于 <code class="notranslate" translate="no">TEXTURE_MAG_FILTER</code> 只有 <code class="notranslate" translate="no">NEAREST</code> 和 <code class="notranslate" translate="no">LINEAR</code> 两个可选设置。</p>
+<p>假设我们想使用这个纹理。</p>
+<p><img class="webgl_center" src="../../resources/keyboard.jpg" /></p>
+<p>这是结果。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-textures-bad-npot.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-textures-bad-npot.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>为什么键盘的纹理没有出现？那是因为WebGL限制了纹理的维度必须是2的整数次幂，
+2 的幂有 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 等等。
+&#39;F&#39; 纹理是 256 × 256，256 是 2 的幂。键盘纹理是 320x240，都不是 2 的幂，
+所以显示纹理失败，在着色器种当 <code class="notranslate" translate="no">texture2D</code> 被调用的时候由于纹理没有正确设置，
+就会使用颜色 (0, 0, 0, 1) 也就是黑色。如果打开 JavaScript 控制台或者浏览器控制台，
+根据浏览器不同可能会显示不同的错误信息，像这样</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2
+   or not all the same size
+WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
+   It maybe non-power-of-2 and have incompatible texture filtering or
+   is not &#39;texture complete&#39;.
+</code></pre><p>解决这个问题只需要将包裹模式设置为 <code class="notranslate" translate="no">CLAMP_TO_EDGE</code> 并且通过设置过滤器为 <code class="notranslate" translate="no">LINEAR</code> or <code class="notranslate" translate="no">NEAREST</code>
+来关闭贴图映射。</p>
+<p>让我们来更新图像加载的代码解决这个问题，首先需要一个方法判断一个数是不是 2 的幂。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function isPowerOf2(value) {
+  return (value &amp; (value - 1)) == 0;
+}
+</code></pre><p>我不准备深入讲解二进制运算，以及它的的原理。有了它后，就可以这样使用。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 异步加载图像
+var image = new Image();
+image.src = &quot;resources/keyboard.jpg&quot;;
+image.addEventListener(&#39;load&#39;, function() {
+  // 现在有了图像，拷贝到纹理
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+
+*  // 检查每个维度是否是 2 的幂
+*  if (isPowerOf2(image.width) &amp;&amp; isPowerOf2(image.height)) {
+*     // 是 2 的幂，一般用贴图
+     gl.generateMipmap(gl.TEXTURE_2D);
+*  } else {
+*     // 不是 2 的幂，关闭贴图并设置包裹模式为到边缘
+*     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+*     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+*     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+*  }
+}
+</code></pre><p>这是结果</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-textures-good-npot.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-textures-good-npot.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>一个常见的问题是“如何为立方体的每个面设置不同的图像？”，假设我们有 6 个这样的图片。</p>
+<div class="webgl_table_div_center">
+<table class="webgl_table_center">
+<tr><td><img src="../resources/noodles-01.jpg" /></td><td><img src="../resources/noodles-02.jpg" /></td><td><img src="../resources/noodles-03.jpg" /></td></tr>
+<tr><td><img src="../resources/noodles-04.jpg" /></td><td><img src="../resources/noodles-05.jpg" /></td><td><img src="../resources/noodles-06.jpg" /></td></tr>
+</table>
+</div>
+
+<p>脑中出现了 3 个答案</p>
+<p>1) 制作一个复杂的着色器，引用 6 个纹理，传入一些额外的顶点信息表明使用的纹理是什么。<strong>不要这样做！</strong>
+稍微一想就知道你要写一大堆不同的着色器应用于不同面数量的图形之类。</p>
+<p>2) 绘制 6 个面代替立方体，这是常用的解决办法，不错但是只能用在简单的图形例如立方体。
+如果有一个包含 1000 个方形的图形就要绘制 1000 个面，会非常慢。</p>
+<p>3) 我敢说，<strong>最好的方法</strong>就是将图像放在一个纹理中，然后利用纹理坐标映射不同的图像到每个面，
+这是很多高性能应用（读作<strong>游戏</strong>）使用的技术。例如我们将所有的图像放入这样一个纹理中</p>
+<p><img class="webgl_center" src="../../resources/noodles.jpg" /></p>
+<p>然后为立方体的每个面设置不同的纹理坐标。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    // 选择左下图
+    0   , 0  ,
+    0   , 0.5,
+    0.25, 0  ,
+    0   , 0.5,
+    0.25, 0.5,
+    0.25, 0  ,
+    // 选择中下图
+    0.25, 0  ,
+    0.5 , 0  ,
+    0.25, 0.5,
+    0.25, 0.5,
+    0.5 , 0  ,
+    0.5 , 0.5,
+    // 选择中右图
+    0.5 , 0  ,
+    0.5 , 0.5,
+    0.75, 0  ,
+    0.5 , 0.5,
+    0.75, 0.5,
+    0.75, 0  ,
+    // 选择左上图
+    0   , 0.5,
+    0.25, 0.5,
+    0   , 1  ,
+    0   , 1  ,
+    0.25, 0.5,
+    0.25, 1  ,
+    // 选择中上图
+    0.25, 0.5,
+    0.25, 1  ,
+    0.5 , 0.5,
+    0.25, 1  ,
+    0.5 , 1  ,
+    0.5 , 0.5,
+    // 选择右上图
+    0.5 , 0.5,
+    0.75, 0.5,
+    0.5 , 1  ,
+    0.5 , 1  ,
+    0.75, 0.5,
+    0.75, 1  ,
+</code></pre><p>然后得到</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-textures-texture-atlas.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-textures-texture-atlas.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>这种将多个图像通过一个纹理提供的方法通常被叫做<strong>纹理图集</strong>，
+它是最好的方式，因为只需要加载一个贴图，着色器也会因为只用一个贴图而保持简单，
+不同于多个平面需要多次调用绘制，这样只需要调用一次绘制。</p>
+<p>你可能还想知道关于纹理的其他重要内容，一个是<a href="webgl-2-textures.html">如何一次使用多个纹理</a>，
+另一个是<a href="webgl-cors-permission.html">如何使用其他域名下的图像</a>，还有一个是
+<a href="webgl-3d-perspective-correct-texturemapping.html">纹理映射的透视纠正</a>，
+讲的是一些值得注意的小细节。</p>
+<p>接下来讲的是<a href="webgl-data-textures.html">利用 JavaScript 向纹理提供数据</a>，
+或者你也可以看看<a href="webgl-less-code-more-fun.html">WenGL代码简化</a>。</p>
+<div class="webgl_bottombar">
+<h3>UVs vs. 纹理坐标</h3>
+<p>纹理坐标经常被简写为 texture coords，texcoords 或 UVs(发音为 Ew-Vees)，
+我不知道术语 UVs 是从哪来的，除了一点那就是顶点位置使用 <code class="notranslate" translate="no">x, y, z, w</code>，
+所以对于纹理坐标他们决定使用<code class="notranslate" translate="no">s, t, u, v</code>，好让你清楚使用的两个类型的区别。
+有了这些你可能会想它应该读作 Es-Tees，因为纹理包裹的设置被叫做
+ <code class="notranslate" translate="no">TEXTURE_WRAP_S</code> 和 <code class="notranslate" translate="no">TEXTURE_WRAP_T</code>，
+ 但是出于某些原因我的图形相关的同事都叫它 Ew-Vees。
+</p>
+<p>所以现在你就知道了如果有人说 UVs 其实就是再说纹理坐标。</p>
+</div>
+
+
+
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-3d-textures.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-3d-textures.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-3d-textures.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-3d-textures.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-3d-textures.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-3d-textures.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-3d-textures.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-3d-textures.html" selected>简体中文</a>
+</select>
+
+
+        <div id="toc">
+          <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj.html">WebGL 加载 .obj 文件</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">WebGL 加载带 .mtl 的 .obj 文件</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-sprites.html">精灵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+  <li>GPGPU</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-gpgpu.html">GPGPU</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">WebGL 最小的程序</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Optimization</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">顶点索引 （gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-instanced-drawing.html">实例化绘制</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">WebGL 点、线和三角</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL 矩阵 vs 数学中的矩阵</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#screenshot">截屏</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#preservedrawingbuffer">防止画布被清空</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#tabindex">在画布中获取键盘输入</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#html-background">将 WebGL 作为 HTML 的背景</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">WebGL 跨平台相关问题</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">WebGL 属性</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">WebGL 纹理单元</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-framebuffers.html">Framebuffers</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-readpixels.html">WebGL readPixels</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-references.html">WebGL 参考</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 三维纹理';
+            var disqus_title = 'WebGL 三维纹理';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTagName('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+}());
+</script>
+
+
+</html>
+
+
+
