@@ -34,7 +34,7 @@ vertex shader는 데이터가 필요한데요.
 2.  [Uniforms](#uniforms) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
 3.  [Textures](#textures-in-vertex-shaders) (pixel/texel의 데이터)
 
-### Attribute
+### Attributes
 
 가장 일반적인 방법은 buffer와 *attribute*를 통하여 하는 겁니다.
 [작동 원리](webgl-how-it-works.html)에서 buffer와 attribute를 다뤘는데요.
@@ -83,7 +83,7 @@ buffer에 clip 공간 vertex를 넣으면 동작할 겁니다.
 
 attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, 그리고 `mat4`를 사용할 수 있습니다.
 
-### Uniform
+### Uniforms
 
 shader uniform은 그리기 호출의 모든 vertex에 대해 똑같이 유지되며 shader에게 전달되는 값입니다.
 간단한 예로 위 vertex shader에 offset을 추가할 수 있는데
@@ -180,14 +180,14 @@ uniform은 여러 type을 가질 수 있는데요.
     var someThingActiveLoc = gl.getUniformLocation(someProgram, "u_someThing.active");
     var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, "u_someThing.someVec2");
 
-### Vertex-Shader-Texture
+### Textures in Vertex Shaders
 
-[Fragment Shader의 Texture](#fragment-shader-texture)를 봐주세요.
+[Fragment Shader의 Texture](#textures-in-fragment-shaders)를 봐주세요.
 
 ## Fragment Shader
 
-Fragment Shader의 역할은 rasterization 되는 현재 픽셀의 색상을 제공하는 것 입니다.
-항상 다음과 같은 양식을 따르는데
+Fragment Shader의 역할은 rasterize 되는 현재 픽셀의 색상을 제공하는 것입니다.
+항상 이런 형식을 취하는데
 
     precision mediump float;
 
@@ -195,35 +195,35 @@ Fragment Shader의 역할은 rasterization 되는 현재 픽셀의 색상을 제
       gl_FragColor = doMathToMakeAColor;
     }
 
-Fragment Shader는 각 픽셀마다 한 번씩 호출됩니다.
-호출될 때마다 특수 변수, `gl_FragColor`를 어떤 색상으로 설정해줘야 합니다.
+fragment shader는 각 픽셀마다 한 번씩 호출되는데요.
+호출될 때마다 특수 전역 변수, `gl_FragColor`를 어떤 색상으로 설정해줘야 합니다.
 
-Fragment Shader는 데이터를 필요합니다.
-데이터를 받을 수 있는 방법에는 3가지가 있는데요.
+fragment shader는 데이터가 필요한데요.
+3가지 방법으로 데이터를 얻을 수 있습니다.
 
-1.  [Uniform](#fragment-shader-uniform) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
-2.  [Texture](#fragment-shader-texture) (pixel/texel의 데이터)
-3.  [Varying](#varying) (vertex shader에서 전달되고 보간된 데이터)
+1.  [Uniforms](#uniforms) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
+2.  [Textures](#textures-in-fragment-shaders) (pixel/texel의 데이터)
+3.  [Varyings](#varyings) (vertex shader에서 전달되고 보간된 데이터)
 
-### Fragment-Shader-Uniform
+### Uniforms in Fragment Shaders
 
-[Shader의 Uniform](#uniform)을 봐주세요.
+[Shader의 Uniform](#uniforms)을 봐주세요.
 
-### Fragment-Shader-Texture
+### Textures in Fragment Shaders
 
-Shader의 texture에서 값을 얻으려면 `sampler2D` uniform을 생성하고 GLSL 함수 `texture2D`를 사용해서 값을 추출해야 합니다.
+shader의 texture에서 값을 가져오면 `sampler2D` uniform을 생성하고 값을 추출하기 위해 GLSL 함수 `texture2D`를 사용합니다.
 
     precision mediump float;
 
     uniform sampler2D u_texture;
 
     void main() {
-      vec2 texcoord = vec2(0.5, 0.5)  // texture 중간에 있는 값 얻기
+      vec2 texcoord = vec2(0.5, 0.5)  // texture 중간에서 값 가져오기
       gl_FragColor = texture2D(u_texture, texcoord);
     }
 
-Texture에서 나오는 데이터는 [많은 설정에 따라](webgl-3d-textures.html) 달라집니다.
-최소한 texture에 데이터를 생성하고 넣어야 하는데, 예를들어
+texture에서 나오는 데이터는 [수많은 설정에 따라](webgl-3d-textures.html) 달라집니다.
+최소한 texture의 데이터를 생성하고 넣어야 하는데, 예를들어
 
     var tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -246,29 +246,29 @@ Texture에서 나오는 데이터는 [많은 설정에 따라](webgl-3d-textures
         data
     );
 
-초기화할 때 shader program에 있는 uniform 위치를 찾습니다.
+초기화 시 shader program의 uniform 위치를 찾고
 
     var someSamplerLoc = gl.getUniformLocation(someProgram, "u_texture");
 
-렌더링할 때 texture unit에 texture를 할당합니다.
+렌더링할 때 texture unit에 texture를 할당하며
 
     var unit = 5;  // texture unit 선택
     gl.activeTexture(gl.TEXTURE0 + unit);
     gl.bindTexture(gl.TEXTURE_2D, tex);
 
-그리고 texture를 할당한 unit을 shader에게 알려줍니다. 
+그리고 texture를 할당한 unit을 shader에게 알려주는데
 
     gl.uniform1i(someSamplerLoc, unit);
 
 ### Varying
 
-Varying은 [동작 원리](webgl-how-it-works.html)에 다룬 vertex shader에서 fragment shader로 값을 넘기는 방법입니다.
+varying은 [동작 원리](webgl-how-it-works.html)에 다룬 vertex shader에서 fragment shader로 값을 전달하는 방법입니다.
 
-Varying을 사용하려면 vertex 및 fragment shader에서 일치하는 varying을 선언해야 합니다.
-Vertex Shader의 vertex마다 어떤 값으로 varying을 설정합니다.
-WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader에 해당하는 varying으로 전달합니다.
+varying을 사용하려면 vertex와 fragment shader 양쪽에 일치하는 varying을 선언해야 하는데요.
+각 vertex마다 vertex shader의 varying을 어떤 값으로 설정해줍니다.
+WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader에서 대응하는 varying으로 전달할 겁니다.
 
-Vertex Shader
+vertex shader
 
     attribute vec4 a_position;
 
@@ -281,21 +281,21 @@ Vertex Shader
     +  v_positionWithOffset = a_position + u_offset;
     }
 
-Fragment Shader
+fragment shader
 
     precision mediump float;
 
     +varying vec4 v_positionWithOffset;
 
     void main() {
-    +  // clip 공간에서 (-1 <-> +1) 색상 공간으로 (0 -> 1) 변환.
+    +  // clip 공간에서 (-1 <-> +1) 색상 공간으로 (0 -> 1) 변환
     +  vec4 color = v_positionWithOffset * 0.5 + 0.5
     +  gl_FragColor = color;
     }
 
-위 예제는 대게 말도 안되는 예제입니다.
-일반적으로 clip 공간 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
-그런데도 불구하고 위 코드는 동작하고 생삭을 만들어냅니다.
+위 예제는 대부분 말도 안되는 예제입니다.
+일반적으로는 clip 공간 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
+그럼에도 불구하고 작동하며 색상을 만들어냅니다.
 
 ## GLSL
 
