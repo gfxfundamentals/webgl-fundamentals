@@ -674,8 +674,10 @@ void main() {
 are the same size. Further, we&#39;re generating new positions into a texture
 so we know our destination texture is also the same size
 as our source which means we can use <code class="notranslate" translate="no">texDimensions</code> for all 3 textures.</p>
-<p>And similar to the article on <a href="webgl-pulling-vertices.html">pulling-vertices</a>
-here is a vertex shader that pulls positions from a texture based on a vertex id.</p>
+<p>In the shader below we use a vertex id, something we covered in
+<a href="webgl-drawing-without-data.html">the article on drawing without data</a>.
+Using that id we pull positions out of the textures (our arrays) 
+similar to the article on <a href="webgl-pulling-vertices.html">pulling-vertices</a>.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute float id;
 uniform sampler2D positionTex;
 uniform vec2 texDimensions;
@@ -1179,6 +1181,8 @@ vec4 getAs1D(sampler2D tex, vec2 dimensions, float index) {
   return texture2D(tex, texcoord);
 }
 
+// converts hue, saturation, and value each in the 0 to 1 range
+// to rgb.  c = color, c.x = hue, c.y = saturation, c.z = value
 vec3 hsv2rgb(vec3 c) {
   c = vec3(c.x, clamp(c.yz, 0.0, 1.0));
   vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
@@ -1263,6 +1267,8 @@ vec4 getAs1D(sampler2D tex, vec2 dimensions, float index) {
   return texture2D(tex, texcoord);
 }
 
+// converts hue, saturation, and value each in the 0 to 1 range
+// to rgb.  c = color, c.x = hue, c.y = saturation, c.z = value
 vec3 hsv2rgb(vec3 c) {
   c = vec3(c.x, clamp(c.yz, 0.0, 1.0));
   vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
