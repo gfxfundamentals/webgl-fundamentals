@@ -1,27 +1,42 @@
-<!-- Licensed under a BSD license. See license.html for license -->
+// Licensed under a BSD license. See license.html for license
+/* eslint-disable strict */
+/* global settings, contributors */
 (function($){
-var log = function(msg) {
-  return;
-};
 
 function getQueryParams() {
-  var params = {};
-  if (window.location.search) {
-    window.location.search.substring(1).split("&").forEach(function(pair) {
-      var keyValue = pair.split("=").map(function (kv) {
-        return decodeURIComponent(kv);
-      });
-      params[keyValue[0]] = keyValue[1];
-    });
-  }
-  return params;
+  return Object.fromEntries(new URLSearchParams(window.location.search).entries());
 }
 
-$(document).ready(function($){
-  var g_imgs = { };
+//
+function replaceParams(str, subs) {
+  return str.replace(/\${(\w+)}/g, function(m, key) {
+    return subs[key];
+  });
+}
+
+function showContributors() {
+  // contribTemplate: 'Thank you 
+  // <a href="${html_url}">
+  // <img src="${avatar_url}">${login}<a/>
+  //  for <a href="https://github.com/${owner}/${repo}/commits?author=${login}">${contributions} contributions</a>',
+  try {
+    const subs = {...settings, ...contributors[Math.random() * contributors.length | 0]};
+    const template = settings.contribTemplate;
+    const html = replaceParams(template, subs);
+    const parent = document.querySelector('#forkongithub>div');
+    const div = document.createElement('div');
+    div.className = 'contributors';
+    div.innerHTML = html;
+    parent.appendChild(div);
+  } catch (e) {
+    console.error(e);
+  }
+}
+showContributors();
+
+$(document).ready(function($) {
   var linkImgs = function(bigHref) {
     return function() {
-      var src = this.src;
       var a = document.createElement('a');
       a.href = bigHref;
       a.title = this.alt;
@@ -50,7 +65,7 @@ $(document).ready(function($){
   $('pre>code')
      .unwrap()
      .replaceWith(function() {
-       return $('<pre class="prettyprint showlinemods">' + this.innerHTML + '</pre>')
+       return $('<pre class="prettyprint showlinemods">' + this.innerHTML + '</pre>');
      });
   if (window.prettyPrint) {
     window.prettyPrint();
