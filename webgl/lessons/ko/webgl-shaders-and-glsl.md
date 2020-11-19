@@ -30,11 +30,11 @@ shader는 vertex마다 한 번씩 호출되는데요.
 vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.
 
-1.  [Attributes](#attributes) (buffer에서 가져온 데이터)
-2.  [Uniforms](#uniforms) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
-3.  [Textures](#textures-in-vertex-shaders) (pixel/texel의 데이터)
+1.  [Attributes](#attribute) (buffer에서 가져온 데이터)
+2.  [Uniforms](#uniform) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
+3.  [Textures](#vertex-shader의-texture) (pixel/texel의 데이터)
 
-### Attributes
+### Attribute
 
 가장 일반적인 방법은 buffer와 *attribute*를 통하여 하는 겁니다.
 [작동 원리](webgl-how-it-works.html)에서 buffer와 attribute를 다뤘는데요.
@@ -83,7 +83,7 @@ buffer에 clip 공간 vertex를 넣으면 동작할 겁니다.
 
 attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, 그리고 `mat4`를 사용할 수 있습니다.
 
-### Uniforms
+### Uniform
 
 shader uniform은 그리기 호출의 모든 vertex에 대해 똑같이 유지되며 shader에게 전달되는 값입니다.
 간단한 예로 위 vertex shader에 offset을 추가할 수 있는데
@@ -180,9 +180,9 @@ uniform은 여러 type을 가질 수 있는데요.
     var someThingActiveLoc = gl.getUniformLocation(someProgram, "u_someThing.active");
     var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, "u_someThing.someVec2");
 
-### Textures in Vertex Shaders
+### Vertex Shader의 Texture
 
-[Fragment Shader의 Texture](#textures-in-fragment-shaders)를 봐주세요.
+[Fragment Shader의 Texture](#fragment-shader의-texture)를 봐주세요.
 
 ## Fragment Shader
 
@@ -201,15 +201,15 @@ fragment shader는 각 픽셀마다 한 번씩 호출되는데요.
 fragment shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.
 
-1.  [Uniforms](#uniforms) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
-2.  [Textures](#textures-in-fragment-shaders) (pixel/texel의 데이터)
-3.  [Varyings](#varyings) (vertex shader에서 전달되고 보간된 데이터)
+1.  [Uniforms](#uniform) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
+2.  [Textures](#fragment-shader의-texture) (pixel/texel의 데이터)
+3.  [Varyings](#varying) (vertex shader에서 전달되고 보간된 데이터)
 
-### Uniforms in Fragment Shaders
+### Fragment Shader의 Uniform
 
-[Shader의 Uniform](#uniforms)을 봐주세요.
+[Shader의 Uniform](#uniform)을 봐주세요.
 
-### Textures in Fragment Shaders
+### Fragment Shader의 Texture
 
 shader의 texture에서 값을 가져오면 `sampler2D` uniform을 생성하고 값을 추출하기 위해 GLSL 함수 `texture2D`를 사용합니다.
 
@@ -260,7 +260,7 @@ texture에서 나오는 데이터는 [수많은 설정에 따라](webgl-3d-textu
 
     gl.uniform1i(someSamplerLoc, unit);
 
-### Varyings
+### Varying
 
 varying은 [동작 원리](webgl-how-it-works.html)에 다룬 vertex shader에서 fragment shader로 값을 전달하는 방법입니다.
 
@@ -407,7 +407,7 @@ T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
 [WebGL Reference Card](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf)의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
 만약 정말 무미건조하고 장황한 것을 좋아한다면 [GLSL 사양](https://www.khronos.org/files/opengles_shading_language.pdf)에 도전해볼 수 있습니다.
 
-## Putting it all together
+## 총정리
 
 이게 바로 이 모든 글들의 핵심입니다.
 WebGL은 다양한 shader를 생성하고, 데이터를 이 shader에 공급한 뒤 `gl.drawArrays` 또는 `gl.drawElements`를 호출하여 WebGL이 vertex를 처리하도록 각 vertex에 대한 현재 vertex shader를 호출한 뒤 각 픽셀에 대한 현재 fragment shader를 호출하여 픽셀을 렌더링하는 것에 대한 모든 겁니다.

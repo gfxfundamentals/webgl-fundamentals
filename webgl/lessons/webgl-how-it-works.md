@@ -292,7 +292,7 @@ attribute and passing data from a vertex shader to a fragment shader.  If
 you check out [the image processing examples](webgl-image-processing.html)
 you'll see they also use an extra attribute to pass in texture coordinates.
 
-##What do these buffer and attribute commands do?
+## What do these buffer and attribute commands do?
 
 Buffers are the way of getting vertex and other per vertex data onto the
 GPU.  `gl.createBuffer` creates a buffer.

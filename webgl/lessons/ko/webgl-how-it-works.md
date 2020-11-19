@@ -284,7 +284,7 @@ varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보�
 그다지 흥미롭지는 않지만 2개 이상의 attribute를 사용하고 vertex shader에서 fragment shader로 데이터 전달하는 걸 보여주는데요.
 [이미지 처리 예제](webgl-image-processing.html)를 살펴보면 texture 좌표를 전달하기 위해 마찬가지로 추가적인 attribute를 사용하는 것을 볼 수 있습니다.
 
-##buffer와 attribute 명령은 어떤 일을 하나요?
+## buffer와 attribute 명령은 어떤 일을 하나요?
 
 buffer는 vertex와 각 vertex의 다른 데이터를 GPU로 가져오는 방법입니다.
 `gl.createBuffer`는 buffer를 생성합니다.
