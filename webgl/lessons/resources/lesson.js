@@ -35,51 +35,56 @@ function showContributors() {
 showContributors();
 
 $(document).ready(function($) {
-  var linkImgs = function(bigHref) {
+  const linkImgs = function(bigHref) {
     return function() {
-      var a = document.createElement('a');
+      const a = document.createElement('a');
       a.href = bigHref;
       a.title = this.alt;
       a.className = this.className;
       a.setAttribute('align', this.align);
       this.setAttribute('align', '');
       this.className = '';
-      this.style.border = "0px";
+      this.style.border = '0px';
       return a;
     };
   };
-  var linkSmallImgs = function(ext) {
+  const linkSmallImgs = function(ext) {
     return function() {
-      var src = this.src;
+      const src = this.src;
       return linkImgs(src.substr(0, src.length - 7) + ext);
     };
   };
-  var linkBigImgs = function() {
-    var src = $(this).attr("big");
+  const linkBigImgs = function() {
+    const src = $(this).attr('big');
     return linkImgs(src);
   };
   $('img[big$=".jpg"]').wrap(linkBigImgs);
-  $('img[src$="-sm.jpg"]').wrap(linkSmallImgs(".jpg"));
-  $('img[src$="-sm.gif"]').wrap(linkSmallImgs(".gif"));
-  $('img[src$="-sm.png"]').wrap(linkSmallImgs(".png"));
+  $('img[src$="-sm.jpg"]').wrap(linkSmallImgs('.jpg'));
+  $('img[src$="-sm.gif"]').wrap(linkSmallImgs('.gif'));
+  $('img[src$="-sm.png"]').wrap(linkSmallImgs('.png'));
   $('pre>code')
      .unwrap()
      .replaceWith(function() {
-       return $('<pre class="prettyprint showlinemods">' + this.innerHTML + '</pre>');
-     });
+      return $('<pre class="prettyprint showlinemods notranslate" translate="no">' + this.innerHTML + '</pre>');
+    });
   if (window.prettyPrint) {
     window.prettyPrint();
   }
+  $('span[class=com]')
+    .addClass('translate yestranslate')
+    .attr('translate', 'yes');
 
-  var params = getQueryParams();
+  const params = getQueryParams();
   if (params.doubleSpace || params.doublespace) {
-    document.body.className = document.body.className + " doubleSpace";
+    document.body.className = document.body.className + ' doubleSpace';
   }
 
-  $(".language").on('change', function() {
+  $('.language').on('change', function() {
     window.location.href = this.value;
   });
 
 });
 }(jQuery));
 
+// ios needs this to allow touch events in an iframe
+window.addEventListener('touchstart', {});
