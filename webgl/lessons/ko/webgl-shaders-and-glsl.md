@@ -30,9 +30,9 @@ shader는 vertex마다 한 번씩 호출되는데요.
 vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.
 
-1.  [Attributes](#attribute) (buffer에서 가져온 데이터)
-2.  [Uniforms](#uniform) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
-3.  [Textures](#vertex-shader의-texture) (pixel/texel의 데이터)
+1.  [Attribute](#attribute) (buffer에서 가져온 데이터)
+2.  [Uniform](#uniform) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
+3.  [Texture](#vertex-shader-texture) (pixel/texel의 데이터)
 
 ### Attribute
 
@@ -182,7 +182,7 @@ uniform은 여러 type을 가질 수 있는데요.
 
 ### Vertex Shader의 Texture
 
-[Fragment Shader의 Texture](#fragment-shader의-texture)를 봐주세요.
+[Fragment Shader의 Texture](#fragment-shader-texture)를 봐주세요.
 
 ## Fragment Shader
 
@@ -201,9 +201,9 @@ fragment shader는 각 픽셀마다 한 번씩 호출되는데요.
 fragment shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.
 
-1.  [Uniforms](#uniform) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
-2.  [Textures](#fragment-shader의-texture) (pixel/texel의 데이터)
-3.  [Varyings](#varying) (vertex shader에서 전달되고 보간된 데이터)
+1.  [Uniform](#uniform) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
+2.  [Texture](#fragment-shader-texture) (pixel/texel의 데이터)
+3.  [Varying](#varying) (vertex shader에서 전달되고 보간된 데이터)
 
 ### Fragment Shader의 Uniform
 
