@@ -232,15 +232,14 @@ drop down 목록을 사용해서 다른 커널을 선택해보세요.
 다음으로 [이미지에 하나 이상의 효과 적용하는 방법](webgl-image-processing-continued.html)을 살펴보겠습니다.
 
 <div class="webgl_bottombar">
-<h3><code>u_image</code>가 설정되지 않습니다. 어떻게 동작하나요?</h3>
+<h3><code>u_image</code>는 설정되지 않습니다. 이건 어떻게 동작하나요?</h3>
 <p>
-Uniform은 0이 기본 값이므로 u_image는 기본 값으로 texture unit 0을 사용합니다.
-Texture unit 0도 default active texture 이므로 bindTexture를 호출하면 texture가 texture unit 0에 할당됩니다.
+uniform은 0이 기본 값이므로 u_image는 기본적으로 texture unit 0을 사용합니다.
+texture unit 0도 default active texture 이므로 bindTexture를 호출하면 texture가 texture unit 0에 할당됩니다.
 </p>
 <p>
-WebGL은 일련의 texture unit을 가집니다.
-각 sampler uniform이 참조하는 texture unit은 해당 sampler uniform의 위치를 탐색하여 설정됩니다.
-그런 다음 참조할 texture unit의 index를 설정합니다.
+WebGL은 texture unit의 배열을 가지는데요.
+각 sampler uniform이 참조하는 texture unit을 설정하기 위해 해당 sampler uniform의 위치를 탐색한 다음 참조할 texture unit의 index로 설정합니다.
 </p>
 <p>예제:</p>
 <pre class="prettyprint showlinemods">
@@ -249,25 +248,24 @@ var u_imageLoc = gl.getUniformLocation(program, "u_image");
 gl.uniform1i(u_imageLoc, textureUnitIndex);
 </pre>
 <p>
-다른 unit을 설정하기 위해 <code>gl.activeTexture</code>를 호출하고 원하는 unit에 texture를 할당합니다.
-예를 들어
+다른 unit에 texture를 설정하려면 <code>gl.activeTexture</code>를 호출하고 원하는 unit에 texture를 할당하면 됩니다.
+예시로
 </p>
 <pre class="prettyprint showlinemods">
-// someTexture를 texture unit 6에 할당
+// texture unit 6에 someTexture 할당
 gl.activeTexture(gl.TEXTURE6);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
-<p>이것도 동작합니다.</p>
+<p>이것도 동작하는데</p>
 <pre class="prettyprint showlinemods">
 var textureUnitIndex = 6; // texture unit 6 사용
-// someTexture를 texture unit 6에 할당
+// texture unit 6에 someTexture 할당
 gl.activeTexture(gl.TEXTURE0 + textureUnitIndex);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
 <p>
-모든 WebGL 구현체들은 fragment shader에서 최소한 texture unit 8개를 지원해야 하지만 vertex shader에서는 0만 지원해야 하는데요.
-따라서 8개 이상을 사용하려면 <code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 얼마나 많은지 확인해야 합니다.
-만약 vertex shader에서 texture를 사용하고 싶다면 <code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 얼마나 많이 쓸 수 있는지 찾아야 합니다.
+모든 WebGL 구현체들은 fragment shader에서 최소 8개의 texture unit을 지원해야 하지만 vertex shader에서는 0뿐 입니다.
+따라서 8개 이상을 사용하려면 <code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 몇 개가 있는지 확인해야 하고 vertex shader에서 texture를 사용하고 싶다면 <code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 몇 개를 사용할 수 있는지 알아보세요.
 99% 이상의 기기들이 vertex shader에서 최소 4개 이상의 texture unit을 지원합니다.
 </p>
 </div>
