@@ -271,13 +271,12 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </div>
 
 <div class="webgl_bottombar">
-<h3>GLSL에서 변수의 접두어(a_, u_, v_)가 뭔가요?</h3>
+<h3>GLSL의 변수에서 a_, u_, 그리고 v_ 접두사는 뭔가요?</h3>
 <p>
-그건 단순히 명명 규칙입니다.
-꼭 필요한 것은 아니지만 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어 주는데요.
-a_는 buffer에서 제공되는 데이터의 attribute 입니다.
-u_는 shader에 입력하는 uniform 입니다.
-v_는  vertex shader에서 fragment shader로 전달된 값이면서 그려진 각 픽셀의 꼭지점 사이에 보간된(또는 변화된) 값인 varying 입니다.
-자세한 내용은 <a href="webgl-how-it-works.html">동작 원리</a>를 봐주세요.
+그건 단순 명명 규칙입니다.
+필수는 아니지만 저에게는 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어줬는데요.
+a_는 buffer에서 제공되는 데이터인 attribute입니다.
+u_는 shader에 입력하는 uniform이고, v_는  vertex shader에서 fragment shader로 전달되고 그려진 각 픽셀의 vertex 사이에 보간(또는 가변)된 값인 varying입니다.
+더 자세한 내용은 <a href="webgl-how-it-works.html">동작 원리</a>를 봐주세요.
 </p>
 </div>
