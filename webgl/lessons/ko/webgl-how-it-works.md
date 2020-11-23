@@ -37,7 +37,7 @@ vertex shader에서 fragment shader로 전달하려는 각 값마다 “varying�
 
 간단한 예시로, 우리가 직접 계산한 clip 공간 좌표를 vertex shader에서 fragment shader로 전달해봅시다.
 
-간단하 삼각형을 그릴 건데요.
+간단한 삼각형을 그려볼 건데요.
 [이전 예제](webgl-2d-matrices.html)에 이어서 사각형을 삼각형으로 바꿔봅시다.
 
     // 삼각형을 정의한 값들로 버퍼 채우기
