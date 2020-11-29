@@ -139,8 +139,8 @@ table.vertex_table td {
 </table>
 </div>
 
-vertex shader는 이동, 회전, 크기 조정에 행렬을 적용하고 clip 공간으로 변환합니다.
-이동, 회전 그리고 크기 조정의 기본값은 translation = 200, 150, rotation = 0, scale = 1,1이므로 실제로는 이동만 하는데요.
+vertex shader는 translation, rotation, scale에 행렬을 적용하고 clip 공간으로 변환합니다.
+translation, rotation, 그리고 scale의 기본값은 translation = 200, 150, rotation = 0, scale = 1,1이므로 실제로는 이동만 하는데요.
 400x300인 backbuffer가 주어지면 vertex shader는 행렬을 적용한 뒤 다음과 같은 3개의 clip 공간 vertex를 계산합니다.
 
 <div class="hcenter">
