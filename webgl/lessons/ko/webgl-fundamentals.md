@@ -312,20 +312,14 @@ WebGL에게 실행할 shader program을 알려줍니다.
     // position buffer 할당
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-    // attribute에 positionBuffer(ARRAY_BUFFER) 데이터 꺼내오는 방법을 지시
+    // positionBuffer(ARRAY_BUFFER)의 데이터 꺼내오는 방법을 attribute에 지시
     var size = 2;          // 반복마다 2개의 구성 요소
     var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 구하기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
     var offset = 0;        // buffer의 처음부터 시작
     gl.vertexAttribPointer(
-      positionAttributeLocation,
-      size,
-      type,
-      normalize,
-      stride,
-      offset
-    );
+      positionAttributeLocation, size, type, normalize, stride, offset);
 
 `gl.vertexAttribPointer`의 숨겨진 부분은 현재 `ARRAY_BUFFER`를 attribute에 할당한다는 겁니다.
 다시 말해 이제 이 attribute는 `positionBuffer`에 바인딩됩니다.

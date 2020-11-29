@@ -10,12 +10,12 @@ TOC: 2D Translation
 이 글은 [WebGL 기초](webgl-fundamentals.html)로 시작하는 시리즈의 연장입니다.
 아직 읽지 않았다면 적어도 첫 번째 글을 먼저 읽고, 다시 여기로 돌아오는 게 좋습니다.
 
-이동은 기본적으로 무언가가 "움직이는 것"을 의미하는 멋진 수학적 명칭인데요.
+translation은 기본적으로 무언가를 "움직이는 걸" 의미하는 멋진 수학적 명칭인데요.
 문장을 영어에서 일본어로 옮기는 것도 맞지만 이 경우 기하학적 이동을 말합니다.
-[첫 번째 게시물](webgl-fundamentals.html)에 있는 예제 코드를 사용하면 setRectangle에 전달된 값을 변경하는 것 만으로 쉽게 사각형을 이동할 수 있었죠?
-여기 [이전 예제](webgl-fundamentals.html)에 기반한 예제가 있습니다.
+[첫 번째 포스트](webgl-fundamentals.html)에서 끝낸 샘플 코드를 사용하면 setRectangle에 전달되는 값을 변경하는 것 만으로 쉽게 사각형을 이동할 수 있었죠?
+다음은 [이전 샘플](webgl-fundamentals.html)에 기반한 샘플입니다.
 
-먼저 사각형의 이동, 넓이, 높이 그리고 색상을 가지는 변수를 만들어봅시다.
+먼저 사각형의 translation, 너비, 높이 그리고 색상을 담을 변수를 만들면
 
 ```
   var translation = [0, 0];
@@ -24,22 +24,22 @@ TOC: 2D Translation
   var color = [Math.random(), Math.random(), Math.random(), 1];
 ```
 
-그런 다음 전부 다시 그리는 함수를 만듭니다.
-이동 값을 갱신한 후에 이 함수를 호출할 겁니다.
+그런 다음 전부 다시 그리는 함수를 만들어봅시다.
+translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
 
 ```
-  // 화면 그리기
+  // scene 그리기
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-    // WebGL에게 clip 공간에서 픽셀로 변환하는 방법을 알려줍니다.
+    // clip 공간에서 픽셀로 변환하는 방법을 WebGL에 지시
     // Tell WebGL how to convert from clip space to pixels
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-    // Canvas 지우기
+    // canvas 지우기
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Program(shader 쌍)을 사용하는 방법을 알려줍니다.
+    // program(shader 쌍)을 사용하도록 지시
     gl.useProgram(program);
 
     // attribute 활성화
@@ -51,20 +51,14 @@ TOC: 2D Translation
     // 사각형 설정
     setRectangle(gl, translation[0], translation[1], width, height);
 
-    // attribute에게 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 알려줍니다.
-    var size = 2;          // 반복마다 두 구성 요소
+    // positionBuffer(ARRAY_BUFFER) 데이터 꺼내오는 방법을 attribute에 지시
+    var size = 2;          // 반복마다 2개의 구성 요소
     var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
-    var normalize = false; // 데이터 정규화 하지 않기
-    var stride = 0;        // 0 = 반복할 때마다 size * sizeof(type)만큼 다음 위치로 이동
-    var offset = 0;        // 버퍼의 처음부터 시작
+    var normalize = false; // 데이터 정규화 안 함
+    var stride = 0;        // 0 = 다음 위치를 구하기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
+    var offset = 0;        // buffer의 처음부터 시작
     gl.vertexAttribPointer(
-        positionLocation,
-        size,
-        type,
-        normalize,
-        stride,
-        offset
-    );
+      positionLocation, size, type, normalize, stride, offset);
 
     // 해상도 설정
     gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
