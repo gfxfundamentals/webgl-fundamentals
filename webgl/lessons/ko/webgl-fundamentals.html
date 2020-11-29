@@ -259,9 +259,9 @@ fragment shader의 역할은 현재 그려지는 각 primitive 화소의 색상�
 <p>이런 함수가 접근하기 원하는 모든 데이터는 GPU에 제공되어야 하는데요.
 shader가 데이터를 받을 수 있는 4가지 방법이 있습니다.</p>
 <ol>
-<li><p>Attributes &amp; Buffers</p>
+<li><p>Attribute &amp; Buffer</p>
 <p>buffer는 GPU에 올리는 2진 데이터 배열입니다.
-일반적으로 buffer는 위치, 법선, 텍스처 좌표, vertex 색상 등을 포함하지만 당신이 원하는 것을 자유롭게 넣어도 됩니다.</p>
+일반적으로 buffer는 위치, 법선, texture 좌표, vertex 색상 등을 포함하지만 당신이 원하는 것을 자유롭게 넣어도 됩니다.</p>
 <p>attribute는 buffer에서 데이터를 가져오고 vertex shader에 제공하는 방법을 지정하는데 사용됩니다.
 예를 들어 3개의 32bit 부동 소수점으로 각각의 위치를 buffer에 넣을 수 있는데요.
 특정한 attribute에게 어느 buffer에서 위치를 가져올지, 어떤 유형의 데이터를 가져와야 하는지 (3개의 32bit 부동 소수점), buffer의 어느 위치에서 offset이 시작되는지, 그리고 한 위치에서 다음으로 갈 때 몇 바이트를 이동시킬 것인지 알려줘야 합니다.</p>
@@ -269,14 +269,14 @@ shader가 데이터를 받을 수 있는 4가지 방법이 있습니다.</p>
 대신에 vertex shader가 지정한 횟수만큼 실행되는데요.
 실행될 때마다 지정된 각 buffer에서 다음 값을 가져와서 attribute에 할당합니다.</p>
 </li>
-<li><p>Uniforms</p>
+<li><p>Uniform</p>
 <p>uniform은 shader program을 실행하기 전에 설정하는 사실상 전역 변수입니다.</p>
 </li>
-<li><p>Textures</p>
-<p>텍스처는 shader program에서 무작위로 접근할 수 있는 데이터 배열입니다.
-텍스처에 넣는 대부분은 이미지 데이터지만 텍스처는 데이터일 뿐이며 색상 이외의 것도 쉽게 담을 수 있습니다.</p>
+<li><p>Texture</p>
+<p>texture는 shader program에서 무작위로 접근할 수 있는 데이터 배열입니다.
+texture에 넣는 대부분은 이미지 데이터지만 texture는 데이터일 뿐이며 색상 이외의 것도 쉽게 담을 수 있습니다.</p>
 </li>
-<li><p>Varyings</p>
+<li><p>Varying</p>
 <p>varying은 vertex shader가 fragment shader에 데이터를 넘기는 방법입니다.
 렌더링 되는 점, 선 또는 삼각형에 따라 vertex shader에 의해 설정된 varying의 값은 fragment shader를 실행하는 동안 보간됩니다.</p>
 </li>
@@ -482,20 +482,14 @@ gl.useProgram(program);
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// position buffer 할당
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-// attribute에 positionBuffer(ARRAY_BUFFER) 데이터 꺼내오는 방법을 지시
+// positionBuffer(ARRAY_BUFFER)의 데이터 꺼내오는 방법을 attribute에 지시
 var size = 2;          // 반복마다 2개의 구성 요소
 var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
 var normalize = false; // 데이터 정규화 안 함
 var stride = 0;        // 0 = 다음 위치를 구하기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;        // buffer의 처음부터 시작
 gl.vertexAttribPointer(
-  positionAttributeLocation,
-  size,
-  type,
-  normalize,
-  stride,
-  offset
-);
+  positionAttributeLocation, size, type, normalize, stride, offset);
 </code></pre><p><code class="notranslate" translate="no">gl.vertexAttribPointer</code>의 숨겨진 부분은 현재 <code class="notranslate" translate="no">ARRAY_BUFFER</code>를 attribute에 할당한다는 겁니다.
 다시 말해 이제 이 attribute는 <code class="notranslate" translate="no">positionBuffer</code>에 바인딩됩니다.
 이건 <code class="notranslate" translate="no">ARRAY_BUFFER</code> bind point에 다른 것들을 자유롭게 할당할 수 있다는 걸 의미하는데요.
@@ -716,7 +710,7 @@ WebGL API 자체는 rasterizer에 불과하며 개념적으로 꽤 단순합니�
 <p>계속하기 전에 <em>대부분의</em> 애플리케이션은 <code class="notranslate" translate="no">setRectangle</code>에서 했던 것처럼 buffer의 데이터를 업데이트하는 것이 일반적이지 않다는 것을 말하고 싶습니다.
 이 예제를 사용했던 것은 픽셀 좌표를 입력으로 보여주고 GLSL에서 간단한 계산을 하는 것을 보여주기 때문에 설명하기에 가장 쉬운 방법이라고 생각했기 때문입니다. 
 이게 틀린 것은 아니고, 올바르게 하는 많은 사례가 있지만, WebGL에서 <a href="webgl-2d-translation.html">사물을 배치하고, 방향을 조정하고, 크기를 조정하는 일반적인 방법</a>을 찾으려면 계속 읽어야합니다.</p>
-<p>웹 개발이 처음이든 WebGL 개발 방법에 대한 몇 가지 팁을 보려면 <a href="webgl-setup-and-installation.html">설정 및 설치</a>를 확인해주세요.</p>
+<p>웹 개발이 처음이든 WebGL 개발 방법에 대한 몇 가지 tip을 보려면 <a href="webgl-setup-and-installation.html">설정 및 설치</a>를 확인해주세요.</p>
 <p>WebGL을 100% 처음 배우고 GLSL이나 shader가 뭔지 혹은 GPU가 뭔지 모르겠다면 <a href="webgl-how-it-works.html">WebGL이 실제로 작동하는 원리 기초</a>를 확인해주세요.
 WebGL 작동 방식을 이해하는 또 다른 방법으로 <a href="/webgl/lessons/resources/webgl-state-diagram.html">대화형 상태 다이어그램</a>을 보실 수도 있습니다.</p>
 <p>여기있는 대부분의 예제에서 사용된 <a href="webgl-boilerplate.html">boilerplate 코드</a>도 간략하게 읽어보세요.
@@ -780,9 +774,9 @@ type을 넣지 않거나 <code class="notranslate" translate="no">type="javascri
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D 이동, 회전, 크기 조정, 행렬 수학</li>
+  <li>2D translation, rotation, scale, 행렬 수학</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">WebGL 2D 이동</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">WebGL 2D 회전</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-scale.html">WebGL 2D 크기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">WebGL 2D 행렬</a></li>
@@ -811,7 +805,7 @@ type을 넣지 않거나 <code class="notranslate" translate="no">type="javascri
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>텍스처</li>
+  <li>Texture</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Textures</a></li>
@@ -820,7 +814,7 @@ type을 넣지 않거나 <code class="notranslate" translate="no">type="javascri
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>텍스처로 렌더링</li>
+  <li>Texture로 렌더링</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
         </ul>
@@ -852,7 +846,7 @@ type을 넣지 않거나 <code class="notranslate" translate="no">type="javascri
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>텍스처</li>
+  <li>Texture</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>
@@ -861,7 +855,7 @@ type을 넣지 않거나 <code class="notranslate" translate="no">type="javascri
           <li><a href="/webgl/lessons/ko/webgl-gpgpu.html">GPGPU</a></li>
         </ul>
         </ul>
-  <li>팁</li>
+  <li>Tip</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">Smallest Programs</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">Drawing Without Data</a></li>
@@ -873,7 +867,7 @@ type을 넣지 않거나 <code class="notranslate" translate="no">type="javascri
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
 <li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
         </ul>
-  <li>기타</li>
+  <li>Misc</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">WebGL 설치</a></li>
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">WebGL Boilerplate</a></li>
