@@ -74,65 +74,66 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
   }
 ```
 
-아래의 예제에서 `translation[0]`과 `translation[1]`을 갱신하고 변경할 때마다 `drawScene`을 호출하는 슬라이더 몇 개를 첨부했는데요.
-사각형을 이동시키기 위해 슬라이더를 드래그해봅시다.
+아래 예제에 `translation[0]`과 `translation[1]`을 갱신하고 변경할 때마다 `drawScene`을 호출하는 슬라이더 두 개를 첨부했습니다.
+사각형을 움직이려면 슬라이더를 드래그해보세요.
 
 {{{example url="../webgl-2d-rectangle-translate.html" }}}
 
 지금까지는 그럭저럭 잘 됐습니다.
-하지만 더 복잡한 모양으로 똑같은 일을 하는 걸 상상해보세요.
+하지만 더 복잡한 모양으로 똑같은 일을 하고 싶다고 상상해보세요.
 
-이처럼 삼각형 6개로 구성된 'F'를 그려야 한다고 가정해봅시다.
+이처럼 삼각형 6개로 구성된 'F'를 그리고 싶다고 가정해봅시다.
 
 <img src="../resources/polygon-f.svg" width="200" height="270" class="webgl_center">
 
-이제 현재 코드에 맞춰서 `setRectangle`을 이렇게 변경해야합니다.
+음, 현재 코드에 따라 `setRectangle`을 이런 식으로 변경해야 합니다.
 
 ```
-// 문자 'F'를 정의하는 값들로 버퍼 채우기
+// 문자 'F'를 정의하는 값들로 buffer 채우기
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
   var thickness = 30;
   gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([
-          // 왼쪽 열
-          x, y,
-          x + thickness, y,
-          x, y + height,
-          x, y + height,
-          x + thickness, y,
-          x + thickness, y + height,
+    gl.ARRAY_BUFFER,
+    new Float32Array([
+      // 좌측 열
+      x, y,
+      x + thickness, y,
+      x, y + height,
+      x, y + height,
+      x + thickness, y,
+      x + thickness, y + height,
 
-          // top rung
-          x + thickness, y,
-          x + width, y,
-          x + thickness, y + thickness,
-          x + thickness, y + thickness,
-          x + width, y,
-          x + width, y + thickness,
+      // 상단 가로 획
+      x + thickness, y,
+      x + width, y,
+      x + thickness, y + thickness,
+      x + thickness, y + thickness,
+      x + width, y,
+      x + width, y + thickness,
 
-          // middle rung
-          x + thickness, y + thickness * 2,
-          x + width * 2 / 3, y + thickness * 2,
-          x + thickness, y + thickness * 3,
-          x + thickness, y + thickness * 3,
-          x + width * 2 / 3, y + thickness * 2,
-          x + width * 2 / 3, y + thickness * 3,
-      ]),
-      gl.STATIC_DRAW);
+      // 중간 가로 획
+      x + thickness, y + thickness * 2,
+      x + width * 2 / 3, y + thickness * 2,
+      x + thickness, y + thickness * 3,
+      x + thickness, y + thickness * 3,
+      x + width * 2 / 3, y + thickness * 2,
+      x + width * 2 / 3, y + thickness * 3,
+    ]),
+    gl.STATIC_DRAW
+  );
 }
 ```
 
-확장하기에는 그다지 좋지 않다는 걸 보실 수 있을텐데요.
-수백 또는 수천 줄의 매우 복잡한 형상을 그리려면 제법 복잡한 코드를 작성해야 합니다.
-이것 뿐만 아니라, JavaScript를 그릴 때마다 모든 점들을 갱신해야 합니다.
+확장하기에는 좋지 않겠다는 걸 눈치채셨을 겁니다.
+수백 또는 수천 개의 선으로 매우 복잡한 geometry를 그리려면 제법 복잡한 코드를 작성해야 하는데요.
+또한, 그릴 때마다 JavaScript는 모든 점들을 갱신해야 합니다.
 
-보다 더 간단한 방법이 있는데요.
-geometry를 업로드하고 shader에서 이동하면 됩니다.
+더 간단한 방법이 있는데요.
+geometry를 업로드하고 shader에서 translation을 수행하면 됩니다.
 
-여기 새로운 shader가 있습니다.
+여기 새로운 shader가 있는데
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -142,52 +143,53 @@ uniform vec2 u_resolution;
 +uniform vec2 u_translation;
 
 void main() {
-*   // Add in the translation.
-*   vec2 position = a_position + u_translation;
+*  // translation에 추가
+*  vec2 position = a_position + u_translation;
 
-   // convert the rectangle from pixels to 0.0 to 1.0
-*   vec2 zeroToOne = position / u_resolution;
-   ...
+  // 사각형을 픽셀에서 0.0에서 1.0사이로 변환
+*  vec2 zeroToOne = position / u_resolution;
+  ...
 ```
 
-그리고 코드를 조금 재구성할 건데요.
-하나는 geometry를 한 번만 설정해도 된다는 겁니다.
+그리고 코드를 조금 재구성할 겁니다.
+우선 geometry를 한 번만 설정해도 되는데요.
 
 ```
 // 문자 'F'를 정의하는 값들로 버퍼 채우기
 function setGeometry(gl) {
   gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([
-          // 왼쪽 열
-          0, 0,
-          30, 0,
-          0, 150,
-          0, 150,
-          30, 0,
-          30, 150,
+    gl.ARRAY_BUFFER,
+    new Float32Array([
+      // 왼쪽 열
+      0, 0,
+      30, 0,
+      0, 150,
+      0, 150,
+      30, 0,
+      30, 150,
 
-          // top rung
-          30, 0,
-          100, 0,
-          30, 30,
-          30, 30,
-          100, 0,
-          100, 30,
+      // 상단 가로 획
+      30, 0,
+      100, 0,
+      30, 30,
+      30, 30,
+      100, 0,
+      100, 30,
 
-          // middle rung
-          30, 60,
-          67, 60,
-          30, 90,
-          30, 90,
-          67, 60,
-          67, 90,
-      ]),
-      gl.STATIC_DRAW);
+      // 중간 가로 획
+      30, 60,
+      67, 60,
+      30, 90,
+      30, 90,
+      67, 60,
+      67, 90,
+    ]),
+    gl.STATIC_DRAW
+  );
 }
 ```
 
-그러면 우리가 원하는 이동을 해서 그리기 전에 `u_translation`을 갱신시키기만 하면 됩니다.
+그런 다음 원하는 translation으로 그리기 전에 `u_translation`을 갱신시키기만 하면 됩니다.
 
 ```
   ...
@@ -198,19 +200,19 @@ function setGeometry(gl) {
 
   // 위치들을 넣을 버퍼 생성
   var positionBuffer = gl.createBuffer();
-  // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+  // ARRAY_BUFFER(ARRAY_BUFFER = positionBuffer로 생각)에 할당
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-+  // 버퍼에 geometry 넣기
++  // buffer에 geometry 데이터 넣기
 +  setGeometry(gl);
 
   ...
 
-  // 화면 그리기
+  // scene 그리기
   function drawScene() {
 
     ...
 
-+    // 이동 설정
++    // translation 설정
 +    gl.uniform2fv(translationLocation, translation);
 
     // 사각형 그리기
@@ -221,20 +223,20 @@ function setGeometry(gl) {
   }
 ```
 
-`setGeometry`는 한 번만 호출된다는 걸 알아두세요.
+`setGeometry`는 한 번만 호출된다는 점에 주목하세요.
 더 이상 `drawScene` 안에 있지 않습니다.
 
-그리고 여기 예제가 있습니다.
-다시, 이동 값을 갱신시키기 위해 슬라이더를 드래그해보세요.
+그리고 여기 해당 예제입니다.
+다시 한 번, translation을 갱신시키기 위해 슬라이더를 드래그해보세요.
 
 {{{example url="../webgl-2d-geometry-translate-better.html" }}}
 
-이제 그릴 때, WebGL이 거의 모든 걸 하고 있습니다.
-우리가 하는 것은 이동 값을 설정하고 그려달라고 요청하는 것이 전부입니다.
-geometry에 수십만 개의 점들이 있더라도 주요 코드는 그대로 유지되죠.
+이제 그릴 때, WebGL이 거의 모든 작업을 수행하고 있습니다.
+translation을 설정하고 그려달라고 요청하는 게 우리가 하는 전부입니다.
+심지어 geometry에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지되죠.
 
-원한다면 [위의 복잡한 JavaScript를 사용해서 모든 점들을 갱신하는 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
+원한다면 [모든 점들을 갱신하기 위해 위의 복잡한 JavaScript를 사용하는 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
 
-여기 있는게 너무 흔한 예제가 아니었기를 바랍니다.
-다른 한편으로는 결국 이 작업을 하는 훨씬 더 좋은 방법으로 나아갈 것이기 때문에 계속 읽어주세요.
-다음 글에서는 [회전에 대해 알아보겠습니다](webgl-2d-rotation.html).
+이 예제가 너무 뻔하지 않았기를 바랍니다.
+다른 한편으로 결국 이 작업을 수행하는 훨씬 더 좋은 방법을 얻게 될 것이므로 계속 읽어주세요.
+[다음 글](webgl-2d-rotation.html)에서 우리는 rotation으로 넘어가겠습니다.
