@@ -228,20 +228,14 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
     +// 색상 buffer 할당
     +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     +
-    +// 색상 attribute에게 colorBuffer(ARRAY_BUFFER)의 데이터를 가져오는 방법 지시
+    +// colorBuffer(ARRAY_BUFFER)의 데이터를 가져오는 방법을 색상 attribute에 지시
     +var size = 4;          // 반복마다 4개의 구성 요소
     +var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     +var normalize = false; // 데이터 정규화 안 함
     +var stride = 0;        // 0 = 다음 위치를 구하기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
     +var offset = 0;        // buffer의 처음부터 시작
     +gl.vertexAttribPointer(
-    +    colorLocation,
-    +    size,
-    +    type,
-    +    normalize,
-    +    stride,
-    +    offset
-    +);
+    +  colorLocation, size, type, normalize, stride, offset);
 
 그리고 삼각형 2개의 꼭지점 6개를 계산하기 위해 count를 조정
 

@@ -61,15 +61,9 @@ buffer를 만들고,
     var normalize = false;  // 값 원본 그대로 유지
     var offset = 0;         // buffer의 처음부터 시작
     var stride = 0;         // 다음 vertex로 가기 위해 이동하는 byte 수
-                            // 0 = type과 numComponents에 맞는 stride 사용 
-    gl.vertexAttribPointer(
-        positionLoc,
-        numComponents,
-        type,
-        false,
-        stride,
-        offset
-    );
+                            // 0 = type과 numComponents에 맞는 stride 사용
+
+    gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 
 [WebGL 기초](webgl-fundamentals.html)에서 우리는 shader에서 수식없이 직접 데이터를 전달할 수 있다는 것을 봤습니다.
 
@@ -234,17 +228,7 @@ texture에서 나오는 데이터는 [수많은 설정에 따라](webgl-3d-textu
       255, 0, 0, 255,   // 빨강 pixel
       0, 255, 0, 255,   // 초록 pixel
     ]);
-    gl.texImage2D(
-        gl.TEXTURE_2D,
-        level,
-        gl.RGBA,
-        width,
-        height,
-        0,
-        gl.RGBA,
-        gl.UNSIGNED_BYTE,
-        data
-    );
+    gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
 
 초기화 시 shader program의 uniform 위치를 찾고
 
