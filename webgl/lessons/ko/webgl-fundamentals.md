@@ -27,10 +27,10 @@ fragment shader의 역할은 현재 그려지는 각 primitive 화소의 색상�
 shader가 데이터를 받을 수 있는 4가지 방법이 있습니다.
 
 
-1. Attributes & Buffers
+1. Attribute & Buffer
 
    buffer는 GPU에 올리는 2진 데이터 배열입니다.
-   일반적으로 buffer는 위치, 법선, 텍스처 좌표, vertex 색상 등을 포함하지만 당신이 원하는 것을 자유롭게 넣어도 됩니다.
+   일반적으로 buffer는 위치, 법선, texture 좌표, vertex 색상 등을 포함하지만 당신이 원하는 것을 자유롭게 넣어도 됩니다.
 
    attribute는 buffer에서 데이터를 가져오고 vertex shader에 제공하는 방법을 지정하는데 사용됩니다.
    예를 들어 3개의 32bit 부동 소수점으로 각각의 위치를 buffer에 넣을 수 있는데요.
@@ -40,16 +40,16 @@ shader가 데이터를 받을 수 있는 4가지 방법이 있습니다.
    대신에 vertex shader가 지정한 횟수만큼 실행되는데요.
    실행될 때마다 지정된 각 buffer에서 다음 값을 가져와서 attribute에 할당합니다.
 
-2. Uniforms
+2. Uniform
 
    uniform은 shader program을 실행하기 전에 설정하는 사실상 전역 변수입니다.
 
-3. Textures
+3. Texture
 
-   텍스처는 shader program에서 무작위로 접근할 수 있는 데이터 배열입니다.
-   텍스처에 넣는 대부분은 이미지 데이터지만 텍스처는 데이터일 뿐이며 색상 이외의 것도 쉽게 담을 수 있습니다.
+   texture는 shader program에서 무작위로 접근할 수 있는 데이터 배열입니다.
+   texture에 넣는 대부분은 이미지 데이터지만 texture는 데이터일 뿐이며 색상 이외의 것도 쉽게 담을 수 있습니다.
 
-4. Varyings
+4. Varying
 
    varying은 vertex shader가 fragment shader에 데이터를 넘기는 방법입니다.
    렌더링 되는 점, 선 또는 삼각형에 따라 vertex shader에 의해 설정된 varying의 값은 fragment shader를 실행하는 동안 보간됩니다.
@@ -574,7 +574,7 @@ WebGL API 자체는 rasterizer에 불과하며 개념적으로 꽤 단순합니�
 이 예제를 사용했던 것은 픽셀 좌표를 입력으로 보여주고 GLSL에서 간단한 계산을 하는 것을 보여주기 때문에 설명하기에 가장 쉬운 방법이라고 생각했기 때문입니다. 
 이게 틀린 것은 아니고, 올바르게 하는 많은 사례가 있지만, WebGL에서 [사물을 배치하고, 방향을 조정하고, 크기를 조정하는 일반적인 방법](webgl-2d-translation.html)을 찾으려면 계속 읽어야합니다.
 
-웹 개발이 처음이든 WebGL 개발 방법에 대한 몇 가지 팁을 보려면 [설정 및 설치](webgl-setup-and-installation.html)를 확인해주세요.
+웹 개발이 처음이든 WebGL 개발 방법에 대한 몇 가지 tip을 보려면 [설정 및 설치](webgl-setup-and-installation.html)를 확인해주세요.
 
 WebGL을 100% 처음 배우고 GLSL이나 shader가 뭔지 혹은 GPU가 뭔지 모르겠다면 [WebGL이 실제로 작동하는 원리 기초](webgl-how-it-works.html)를 확인해주세요.
 WebGL 작동 방식을 이해하는 또 다른 방법으로 [대화형 상태 다이어그램](/webgl/lessons/resources/webgl-state-diagram.html)을 보실 수도 있습니다.

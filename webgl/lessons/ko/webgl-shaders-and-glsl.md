@@ -418,4 +418,4 @@ GLSL shader를 컴파일하고 shader program에 연결하는 방법은 [여기]
 
 여기서 막 시작했다면 두 가지 방향으로 갈 수 있는데요.
 이미지 처리에 관심있다면 [2D 이미지 처리 방법](webgl-image-processing.html)을 알려드리겠습니다.
-이동, 회전, 크기 조정 그리고 최종적으로 3D를 공부하는데 관심있다면 [여기](webgl-2d-translation.html)에서 시작해주세요.
+translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관심있다면 [여기](webgl-2d-translation.html)에서 시작해주세요.
