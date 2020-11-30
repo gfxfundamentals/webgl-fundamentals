@@ -948,7 +948,7 @@ uniform vec2 pointsTexDimensions;
 uniform sampler2D linesTex;
 uniform vec2 linesTexDimensions;
 
-vec4 getValueFrom2DTextureAs1DArray(sampler2D tex, vec2 dimensions, float index) {
+vec4 getAs1D(sampler2D tex, vec2 dimensions, float index) {
   float y = floor(index / dimensions.x);
   float x = mod(index, dimensions.x);
   vec2 texcoord = (vec2(x, y) + 0.5) / dimensions;
