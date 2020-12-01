@@ -154,31 +154,33 @@ JavaScript console에 코드를 복사 및 붙여넣고 `printSineAndCosignForAn
 
 <div class="webgl_bottombar"><h3>radian이 뭔가요?</h3>
 <p>
-Radian 원, 회전 그리고 각도에 사용되는 측정 단위입니다.
-마치 거리를 inche, yard, meters 등으로 측정할 수 있는 것처럼 우리는 각도를 degree나 radian으로 측정할 수 있습니다.
+radian은 원, 회전 그리고 각도에 사용되는 측정 단위입니다.
+마치 거리를 inche, yard, meter 등으로 측정할 수 있는 것처럼 우리는 각도를 degree나 radian으로 측정할 수 있습니다.
 </p>
 <p>
-아마 imperial 측정법보다 metric 측정법이 더 쉽다는 걸 아실텐데요.
-inche에서 feet으로 가려면 12로 나눠야 합니다.
-inche에서 yard으로 가려면 36로 나눠야 합니다.
-당신은 모르겠지만 저는 암산으로 36으로 나누지 못합니다.
-metric 측정법이 훨씬 쉽죠.
-millimeter에서 centimeter로 가려면 10으로 나눠야 합니다.
-millimeter에서 meter로 가려면 1000으로 곱해야 합니다.
-저는 암산으로 1000은 <strong>곱할 수 있어요</strong>.
+아마 미터법 측정을 사용하는 수학이 영국식 측정을 사용하는 수학보다 더 쉽다는 걸 아실텐데요.
+inche에서 feet으로 바꾸려면 12로 나눕니다.
+inche에서 yard로 바꾸려면 36으로 나누고요.
+당신은 어떨지 모르지만 저는 암산으로 36을 나누지 못합니다.
+미터법을 사용하면 훨씬 쉽죠.
+millimeter에서 centimeter로 바꾸려면 10으로 곱합니다.
+millimeter에서 meter로 바꾸려면 1000으로 곱하고요.
+<strong>암산</strong>으로 1000은 곱할 수 있습니다.
 </p>
 <p>
-Radian vs degree 둘은 비슷합니다.
-Degree는 수학을 어렵게 만들고 Radian은 수학을 쉽게 만듭니다.
-원에는 360도가 있지만 radian으로는 2π만 있습니다.
-따라서 한바퀴는 2π radian이고 반바퀴는 1π radian입니다.
-1/4바퀴는 90도면서 1/2π radian 이죠.
-그러니 어떤 것을 90도 회전하고 싶다면 <code>Math.PI * 0.5</code>를 쓰세요.
-만약 45도로 회전하고 싶다면 <code>Math.PI * 0.25</code> 등으로 쓸 수 있습니다.
+radian vs degree 둘은 비슷한데요.
+degree는 수학을 어렵게 만듭니다.
+radian는 수학을 쉽게 만들고요.
+원에는 360도가 있지만 radian은 2π뿐입니다.
+따라서 한 바퀴는 2π radian이죠.
+반 바퀴는 1π radian입니다.
+1/4바퀴는, 90도면서 1/2π radian이고요.
+그러니 어떤 걸 90도 회전하고 싶다면 <code>Math.PI * 0.5</code>라고 쓰면 됩니다.
+45도로 회전하고 싶다면 <code>Math.PI * 0.25</code> 등으로 쓸 수 있죠.
 </p>
 <p>
-각도, 원 또는 회전을 포함하는 거의 모든 수학은 radian으로 생각하기 시작하면 매우 간단하게 동작합니다.
-그러니 한 번 시도해보세요.
-UI display를 제외하고 degree가 아닌 radian을 사용해보세요. 
+각도, 원 또는 회전과 관련된 거의 모든 수학은 radian으로 생각하기 시작하면 매우 간단하게 동작합니다.
+그러니 시도해보세요.
+UI 화면을 제외하고 나머지는 degree가 아닌 radian을 사용해보세요.
 </p>
 </div>
