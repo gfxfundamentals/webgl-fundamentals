@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-framebuffers.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,79 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Framebuffers" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="What are framebuffers in WebGL?" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-framebuffers.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Framebuffers" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-framebuffers.html" />
-<meta name="twitter:description" content="What are framebuffers in WebGL?" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="WebGL 中的帧缓冲是什么？">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-framebuffers_zh-cn.jpg">
+
+<meta property="og:title" content="WebGL 帧缓冲">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-framebuffers_zh-cn.jpg">
+<meta property="og:description" content="WebGL 中的帧缓冲是什么？">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-framebuffers.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 帧缓冲">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-framebuffers.html">
+<meta name="twitter:description" content="WebGL 中的帧缓冲是什么？">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-framebuffers_zh-cn.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-framebuffers.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-framebuffers_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-framebuffers.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-framebuffers.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 帧缓冲",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-framebuffers.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Framebuffers</title>
+<title>WebGL 帧缓冲</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-framebuffers.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-framebuffers.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-framebuffers.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-framebuffers.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-framebuffers.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-framebuffers.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-framebuffers.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-framebuffers.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,12 +235,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Framebuffers</h1>
+    <h1>WebGL 帧缓冲</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-framebuffers.html">英文原版地址</a></p>
+      <p>本文旨在尝试让你对 WebGL 中的帧缓冲有一个心理印象。帧缓冲的出现是为了让你可以 <a href="webgl-render-to-texture.html">渲染到纹理</a>。</p>
+<p>一个帧缓冲只是一个 <em>attachments 的集合</em>。仅此而已！它是用来允许渲染到纹理或渲染到渲染缓冲中的。</p>
+<p>你可以认为一个帧缓冲对象是这样的</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">class Framebuffer {
+  constructor() {
+    this.attachments = new Map();  // 按 attachment point 排列的 attachments
+  }
+}
+</code></pre>
+<p>而 <code class="notranslate" translate="no">WebGLRenderingContext</code> (即 <code class="notranslate" translate="no">gl</code> 对象) 就像这样</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 伪代码
+gl = {
+  framebuffer: defaultFramebufferForCanvas,
+}
+</code></pre>
+<p>帧缓冲有 2 个 绑定点。它们可以这样设置</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.bindFramebuffer(target, framebuffer) {
+  framebuffer = framebuffer || defaultFramebufferForCanvas; // 如果是 null 则使用 canvas
+  switch (target) {
+    case: gl.FRAMEBUFFER:
+      this.framebufferBinding = framebuffer;
+      break;
+    default:
+      ... error ...
+  }
+}
+</code></pre>
+<p>你可以通过 2 个函数添加 attachments 到一个帧缓冲，<code class="notranslate" translate="no">framebufferTexture2D</code> 和 <code class="notranslate" translate="no">framebufferRenderbuffer</code>。</p>
+<p>我们可以想象它们的实现是这样的</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 伪代码
+gl._getFramebufferByTarget(target) {
+  switch (target) {
+    case gl.FRAMEBUFFER:
+      return this.framebufferBinding;
+  }
+}
+gl.framebufferTexture2D(target, attachmentPoint, texTarget, texture, mipLevel) {
+  const framebuffer = this._getFramebufferByTarget(target);
+  framebuffer.attachments.set(attachmentPoint, {
+    texture, texTarget, mipLevel,
+  });
+}
+gl.framebufferRenderbuffer(target, attachmentPoint, renderbufferTarget, renderbuffer) {
+  const framebuffer = this._getFramebufferByTarget(target);
+  framebuffer.attachments.set(attachmentPoint, {
+    renderbufferTarget, renderbuffer
+  });
+}
+</code></pre>
+<p>如果你开启了 <a href="https://www.khronos.org/registry/webgl/extensions/WEBGL_draw_buffers/"><code class="notranslate" translate="no">WEBGL_draw_buffers</code></a>
+扩展，那么一个 <code class="notranslate" translate="no">Framebuffer</code> 在概念上会扩展为</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">class Framebuffer {
+  constructor() {
+    this.attachments = new Map();
++    this.drawBuffers = [gl.COLOR_ATTACHMENT0, gl.NONE, gl.NONE, gl.NONE, ...];
+  }
+}
+</code></pre>
+<p>你可以用 <code class="notranslate" translate="no">gl.drawBuffers</code> 设置绘制缓冲数组，我们可以将它想象成是这样实现的</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 伪代码
+ext.drawBuffersWebGL(drawBuffers) {
+  const framebuffer = gl._getFramebufferByTarget(gl.FRAMEBUFFER);
+  for (let i = 0; i &gt; maxDrawBuffers; ++i) {
+    framebuffer.drawBuffers[i] = i &lt; drawBuffers.length
+        ? drawBuffers[i]
+        : gl.NONE
+  }
+}
+</code></pre>
+<p>重要的是一个 <em>帧缓冲</em> 只是一个 attachments 的简单集合。复杂的是这些 attachments 的限制以及这些 attachments 的有效组合。例如，一个浮点型的纹理 attachment 默认是不能被渲染的。可以使用扩展来开启，例如 <code class="notranslate" translate="no">WEBGL_color_buffer_float</code>。类似地，如果有多个 attachments，那么它们宽高必须是一样的。</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -200,7 +324,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>基础概念</li>
+        <div id="toc">
+          <ul>  <li>基础概念</li>
         <ul>
           <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
@@ -330,7 +455,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <ul>
           <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">WebGL 属性</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">WebGL 纹理单元</a></li>
-<li><a href="/webgl/lessons/zh_cn/webgl-framebuffers.html">Framebuffers</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-framebuffers.html">WebGL 帧缓冲</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-readpixels.html">WebGL readPixels</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-references.html">WebGL 参考</a></li>
         </ul></ul>
@@ -339,13 +464,46 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
 </ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 帧缓冲';
+            var disqus_title = 'WebGL 帧缓冲';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
