@@ -1,36 +1,36 @@
-Title: WebGL 2D 회전
+Title: WebGL 2D Rotation
 Description: 2D에서 회전하는 방법
-TOC: WebGL 2D 회전
+TOC: 2D Rotation
 
+이 포스트는 WebGL 관련 시리즈의 연장입니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [geometry translation](webgl-2d-translation.html)에 관한 것이었습니다.
 
-이 글은 WebGL 관련 시리즈에서 이어지는 글입니다.
-첫 번째는 [기초로 시작했고](webgl-fundamentals.html) 이전에는 [geometry 이동에 대해](webgl-2d-translation.html) 다뤘습니다.
+솔직히 이걸 어떻게 설명해야 할지 모르겠지만 뭐 어때요, 시도는 해봅시다.
 
-이걸 제가 잘 설명할 수 있을지는 모르겠지만 뭐 어때요, 시도는 해봅시다.
-
-먼저 "unit circle" 이라고 불리는 것을 소개하려고 하는데요.
-중학교 수학을 기억해본다면(저처럼 졸지 마세요!) 원은 반지름을 가집니다.
+먼저 "unit circle" 이라고 불리는 걸 소개하려고 하는데요.
+중학교 수학을 기억해보면(저처럼 졸지 마세요!) 원은 반지름을 가집니다.
 원의 반지름은 원의 중심에서 가장자리까지의 거리인데요.
-"unit circle"은 반지름이 1.0인 원입니다.
+unit circle은 반지름이 1.0인 원입니다.
 
 여기 unit circle 입니다.
 
 {{{diagram url="../unit-circle.html" width="300" height="300" }}}
 
 참고로 파란색 핸들을 원 주위로 드래그하면 X와 Y의 위치가 변경됩니다.
-X와 Y는 원 위에 있는 점의 위치를 나타내는데요.
-상단에서 Y는 1이고 X는 0이며, 우측에서 X는 1이고 Y는 0입니다.
+이것들은 원 위에 있는 점의 위치를 나타내는데요.
+상단에서 Y는 1이고 X는 0입니다.
+우측에서 X는 1이고 Y는 0입니다.
 
-3학년 기초 수학을 기억해본다면 뭔가에 1을 곱해도 값은 똑같이 유지됩니다.
-그래서 123 * 1 = 123 입니다.
-굉장히 기본적이죠?
-음, 반지름이 1.0인 원 unit circle 또한 1의 형태입니다.
-회전할 때도 1입니다.
-그러므로 "unit circle"에 어떤 값으로 곱할 수 있고 마법이 일어나서 회전하는 걸 제외하고는 1을 곱하는 것과 마찬가지입니다.
+3학년 기초 수학을 기억해보면 뭔가에 1을 곱해도 값은 그대로 유지됩니다.
+그래서 123 * 1 = 123 인데요.
+아주 기본적이죠?
+음, unit circle, 반지름이 1.0인 원도 1의 형태입니다.
+회전하는 1입니다.
+그래서 무언가를 unit circle에 곱할 수 있으며 마법이 일어나서 물체가 회전하는 걸 제외하면 1을 곱하는 것과 같습니다.
 
-unit circle 위에 있는 어떤 점에서 X와 Y의 값을 가져와서 [이전 예제](webgl-2d-translation.html)의 geometry에 곱하려고 하는데요.
+unit circle의 어느 지점에서 X와 Y값을 가져와서 [이전 샘플](webgl-2d-translation.html)의 geometry에 곱할 겁니다.
 
-shader에 다시 작성한 내용은 다음과 같습니다.
+여기 업데이트한 shader입니다.
 
     <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
@@ -45,10 +45,10 @@ shader에 다시 작성한 내용은 다음과 같습니다.
     +     a_position.x * u_rotation.y + a_position.y * u_rotation.x,
     +     a_position.y * u_rotation.y - a_position.x * u_rotation.x);
 
-      // 이동 추가
+      // translation 추가
     *  vec2 position = rotatedPosition + u_translation;
 
-그리고 JavaScript를 재작성하면 두 값을 전달할 수 있습니다.
+그리고 JavaScript를 업데이트해서 두 값을 전달할 수 있습니다.
 
       ...
 
@@ -60,25 +60,25 @@ shader에 다시 작성한 내용은 다음과 같습니다.
 
       ...
 
-      // 화면 그리기
+      // scene 그리기
       function drawScene() {
 
         ...
 
-        // 이동 설정
+        // translation 설정
         gl.uniform2fv(translationLocation, translation);
 
-    +    // 회전 설정
+    +    // rotation 설정
     +    gl.uniform2fv(rotationLocation, rotation);
 
         // geometry 그리기
         var primitiveType = gl.TRIANGLES;
         var offset = 0;
-        var count = 18;  // 6 triangles in the 'F', 3 points per triangle
+        var count = 18;  // 'F'의 삼각형 6개, 삼각형마다 점 3개
         gl.drawArrays(primitiveType, offset, count);
       }
 
-그리고 이게 결과입니다.
+그리고 여기 결과물입니다.
 원 위에 있는 핸들을 드래그해서 회전시키거나 슬라이더를 드래그해서 이동시켜보세요.
 
 {{{example url="../webgl-2d-geometry-rotation.html" }}}
@@ -90,40 +90,40 @@ shader에 다시 작성한 내용은 다음과 같습니다.
     rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 
 사각형이 하나 있고 그걸 회전시키고 싶다고 해봅시다.
-회전시키기 전 우측 상단 모서리는 3.0, 9.0 인데요.
-unit circle 위에 12시부터 시계 방향 30도 간격으로 점을 찍어봅시다.
+회전을 시작하기 전 우측 상단 모서리는 3.0, 9.0 인데요.
+unit circle의 12시에서 시계 방향 30도 지점을 선택해봅시다.
 
 <img src="../resources/rotate-30.png" class="webgl_center" />
 
-원의 위치는 0.50 그리고 0.87 입니다.
+원의 위치는 0.50와 0.87에 있는데
 
 <pre class="webgl_center">
    3.0 * 0.87 + 9.0 * 0.50 = 7.1
    9.0 * 0.87 - 3.0 * 0.50 = 6.3
 </pre>
 
-이게 바로 우리가 필요로 하는겁니다.
+그게 우리가 필요로 하는 곳이며
 
 <img src="../resources/rotation-drawing.svg" width="500" class="webgl_center"/>
 
-시계방향으로 60도 또한 동일합니다. 
+시계방향 60도 또한 동일하게
 
 <img src="../resources/rotate-60.png" class="webgl_center" />
 
-원의 위치는 0.87 그리고 0.50 입니다.
+원의 위치는 0.87과 0.50에 있고
 
 <pre class="webgl_center">
    3.0 * 0.50 + 9.0 * 0.87 = 9.3
    9.0 * 0.50 - 3.0 * 0.87 = 1.9
 </pre>
 
-우리는 점을 오른쪽 시계 방향으로 돌릴 때 X는 값이 커지고 Y는 작아지는 것을 볼 수 있습니다.
-만약 90도를 넘어가면 X는 다시 작아지고 Y는 점점 커질 것 입니다.
-이 패턴은 우리에게 회전이 가능하도록 해줍니다.
+점을 오른쪽 시계 방향으로 돌리면 X값은 커지고 Y는 작아지는 걸 볼 수 있습니다.
+계속 돌려서 90도를 넘으면 X는 다시 작아지고 Y는 커지는데요.
+이 패턴은 회전을 하도록 해줍니다.
 
-unit circle 위에 있는 점들은 또 다른 이름을 가지고 있는데요.
-바로 sine 그리고 cosine 입니다.
-그래서 주어진 어떤 각에 대해 우리는 이처럼 sine과 cosine을 찾을 수 있습니다.
+unit circle의 점은 또 다른 이름이 있습니다.
+이를 sine과 cosine이라고 하는데요.
+따라서 주어진 각도에 대해 sine과 cosine을 이렇게 찾을 수 있습니다.
 
     function printSineAndCosineForAnAngle(angleInDegrees) {
       var angleInRadians = angleInDegrees * Math.PI / 180;
@@ -132,26 +132,25 @@ unit circle 위에 있는 점들은 또 다른 이름을 가지고 있는데요.
       console.log("s = " + s + " c = " + c);
     }
 
-JavaScript console에 코드를 복사 붙여넣고 `printSineAndCosignForAngle(30)`라고 치면 `s = 0.49 c = 0.87`라는 출력을 볼 수 있습니다.
-(참고로 저는 반올림했습니다)
+JavaScript console에 코드를 복사 및 붙여넣고 `printSineAndCosignForAngle(30)`라고 치면 `s = 0.49 c = 0.87`이 출력됩니다. (참고: 숫자는 반올림했습니다.)
 
-모든 것을 함께 넣으면 도형을 원하는 각도로 회전할 수 있습니다.
-그저 회전하려는 각도의 sine과 cosine으로 rotation을 설정하면 됩니다. 
+전부 합치면 geometry를 원하는 각도로 회전할 수 있습니다.
+그저 돌리고 싶은 각도의 sine과 cosine으로 rotation을 설정하면 됩니다. 
 
       ...
       var angleInRadians = angleInDegrees * Math.PI / 180;
       rotation[0] = Math.sin(angleInRadians);
       rotation[1] = Math.cos(angleInRadians);
 
-다음은 각도 설정이 있는 버전입니다.
+다음은 각도 설정만 있는 버전입니다.
 슬라이더를 드래그해서 이동하거나 회전시켜보세요.
 
 {{{example url="../webgl-2d-geometry-rotation-angle.html" }}}
 
-이게 어떤 의미인지 이해되셨으면 좋겠습니다.
-이건 회전시키는 일반적인 방법이 아니므로 계속해서 글 2개를 더 읽어주세요.
-다음으로 다룰 것은 간단한 건데요.
-[바로 크기입니다](webgl-2d-scale.html).
+이해가 되셨기를 바랍니다.
+이건 회전을 수행하는 일반적인 방법이 아니지만 2개의 글에서 더 다룰 것이므로 계속 읽어주세요.
+다음은 더 간단한 건데요.
+[Scale](webgl-2d-scale.html)입니다.
 
 <div class="webgl_bottombar"><h3>radian이 뭔가요?</h3>
 <p>
