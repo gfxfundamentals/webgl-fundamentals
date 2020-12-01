@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-rotation_ko.jpg">
 
-<meta property="og:title" content="WebGL 2D 회전">
+<meta property="og:title" content="WebGL 2D Rotation">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-rotation_ko.jpg">
 <meta property="og:description" content="2D에서 회전하는 방법">
@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 2D 회전">
+<meta name="twitter:title" content="WebGL 2D Rotation">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-rotation.html">
 <meta name="twitter:description" content="2D에서 회전하는 방법">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-rotation_ko.jpg">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-rotation.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-rotation.html",
       "inLanguage":"ko",
-      "name":"WebGL 2D 회전",
+      "name":"WebGL 2D Rotation",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL 2D 회전</title>
+<title>WebGL 2D Rotation</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,17 +236,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 2D 회전</h1>
+    <h1>WebGL 2D Rotation</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>이 글은 WebGL 관련 시리즈에서 이어지는 글입니다.
-첫 번째는 <a href="webgl-fundamentals.html">기초로 시작했고</a> 이전에는 <a href="webgl-2d-translation.html">geometry 이동에 대해</a> 다뤘습니다.</p>
-<p>이걸 제가 잘 설명할 수 있을지는 모르겠지만 뭐 어때요, 시도는 해봅시다.</p>
-<p>먼저 &quot;unit circle&quot; 이라고 불리는 것을 소개하려고 하는데요.
-중학교 수학을 기억해본다면(저처럼 졸지 마세요!) 원은 반지름을 가집니다.
+      <p>이 포스트는 WebGL 관련 시리즈의 연장입니다.
+첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고 이전에는 <a href="webgl-2d-translation.html">geometry translation</a>에 관한 것이었습니다.</p>
+<p>솔직히 이걸 어떻게 설명해야 할지 모르겠지만 뭐 어때요, 시도는 해봅시다.</p>
+<p>먼저 &quot;unit circle&quot; 이라고 불리는 걸 소개하려고 하는데요.
+중학교 수학을 기억해보면(저처럼 졸지 마세요!) 원은 반지름을 가집니다.
 원의 반지름은 원의 중심에서 가장자리까지의 거리인데요.
-&quot;unit circle&quot;은 반지름이 1.0인 원입니다.</p>
+unit circle은 반지름이 1.0인 원입니다.</p>
 <p>여기 unit circle 입니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 300px; height: 300px;" src="/webgl/lessons/../unit-circle.html"></iframe>
@@ -254,16 +254,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 </p>
 <p>참고로 파란색 핸들을 원 주위로 드래그하면 X와 Y의 위치가 변경됩니다.
-X와 Y는 원 위에 있는 점의 위치를 나타내는데요.
-상단에서 Y는 1이고 X는 0이며, 우측에서 X는 1이고 Y는 0입니다.</p>
-<p>3학년 기초 수학을 기억해본다면 뭔가에 1을 곱해도 값은 똑같이 유지됩니다.
-그래서 123 * 1 = 123 입니다.
-굉장히 기본적이죠?
-음, 반지름이 1.0인 원 unit circle 또한 1의 형태입니다.
-회전할 때도 1입니다.
-그러므로 &quot;unit circle&quot;에 어떤 값으로 곱할 수 있고 마법이 일어나서 회전하는 걸 제외하고는 1을 곱하는 것과 마찬가지입니다.</p>
-<p>unit circle 위에 있는 어떤 점에서 X와 Y의 값을 가져와서 <a href="webgl-2d-translation.html">이전 예제</a>의 geometry에 곱하려고 하는데요.</p>
-<p>shader에 다시 작성한 내용은 다음과 같습니다.</p>
+이것들은 원 위에 있는 점의 위치를 나타내는데요.
+상단에서 Y는 1이고 X는 0입니다.
+우측에서 X는 1이고 Y는 0입니다.</p>
+<p>3학년 기초 수학을 기억해보면 뭔가에 1을 곱해도 값은 그대로 유지됩니다.
+그래서 123 * 1 = 123 인데요.
+아주 기본적이죠?
+음, unit circle, 반지름이 1.0인 원도 1의 형태입니다.
+회전하는 1입니다.
+그래서 무언가를 unit circle에 곱할 수 있으며 마법이 일어나서 물체가 회전하는 걸 제외하면 1을 곱하는 것과 같습니다.</p>
+<p>unit circle의 어느 지점에서 X와 Y값을 가져와서 <a href="webgl-2d-translation.html">이전 샘플</a>의 geometry에 곱할 겁니다.</p>
+<p>여기 업데이트한 shader입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
@@ -277,9 +278,9 @@ void main() {
 +     a_position.x * u_rotation.y + a_position.y * u_rotation.x,
 +     a_position.y * u_rotation.y - a_position.x * u_rotation.x);
 
-  // 이동 추가
+  // translation 추가
 *  vec2 position = rotatedPosition + u_translation;
-</code></pre><p>그리고 JavaScript를 재작성하면 두 값을 전달할 수 있습니다.</p>
+</code></pre><p>그리고 JavaScript를 업데이트해서 두 값을 전달할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
@@ -290,24 +291,24 @@ void main() {
 
   ...
 
-  // 화면 그리기
+  // scene 그리기
   function drawScene() {
 
     ...
 
-    // 이동 설정
+    // translation 설정
     gl.uniform2fv(translationLocation, translation);
 
-+    // 회전 설정
++    // rotation 설정
 +    gl.uniform2fv(rotationLocation, rotation);
 
     // geometry 그리기
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
-    var count = 18;  // 6 triangles in the &#39;F&#39;, 3 points per triangle
+    var count = 18;  // &#39;F&#39;의 삼각형 6개, 삼각형마다 점 3개
     gl.drawArrays(primitiveType, offset, count);
   }
-</code></pre><p>그리고 이게 결과입니다.
+</code></pre><p>그리고 여기 결과물입니다.
 원 위에 있는 핸들을 드래그해서 회전시키거나 슬라이더를 드래그해서 이동시켜보세요.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-rotation.html"></iframe>
@@ -320,46 +321,45 @@ void main() {
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </code></pre><p>사각형이 하나 있고 그걸 회전시키고 싶다고 해봅시다.
-회전시키기 전 우측 상단 모서리는 3.0, 9.0 인데요.
-unit circle 위에 12시부터 시계 방향 30도 간격으로 점을 찍어봅시다.</p>
+회전을 시작하기 전 우측 상단 모서리는 3.0, 9.0 인데요.
+unit circle의 12시에서 시계 방향 30도 지점을 선택해봅시다.</p>
 <p><img src="../../resources/rotate-30.png" class="webgl_center" /></p>
-<p>원의 위치는 0.50 그리고 0.87 입니다.</p>
+<p>원의 위치는 0.50와 0.87에 있는데</p>
 <pre class="webgl_center">
    3.0 * 0.87 + 9.0 * 0.50 = 7.1
    9.0 * 0.87 - 3.0 * 0.50 = 6.3
 </pre>
 
-<p>이게 바로 우리가 필요로 하는겁니다.</p>
+<p>그게 우리가 필요로 하는 곳이며</p>
 <p><img src="../../resources/rotation-drawing.svg" width="500" class="webgl_center"/></p>
-<p>시계방향으로 60도 또한 동일합니다. </p>
+<p>시계방향 60도 또한 동일하게</p>
 <p><img src="../../resources/rotate-60.png" class="webgl_center" /></p>
-<p>원의 위치는 0.87 그리고 0.50 입니다.</p>
+<p>원의 위치는 0.87과 0.50에 있고</p>
 <pre class="webgl_center">
    3.0 * 0.50 + 9.0 * 0.87 = 9.3
    9.0 * 0.50 - 3.0 * 0.87 = 1.9
 </pre>
 
-<p>우리는 점을 오른쪽 시계 방향으로 돌릴 때 X는 값이 커지고 Y는 작아지는 것을 볼 수 있습니다.
-만약 90도를 넘어가면 X는 다시 작아지고 Y는 점점 커질 것 입니다.
-이 패턴은 우리에게 회전이 가능하도록 해줍니다.</p>
-<p>unit circle 위에 있는 점들은 또 다른 이름을 가지고 있는데요.
-바로 sine 그리고 cosine 입니다.
-그래서 주어진 어떤 각에 대해 우리는 이처럼 sine과 cosine을 찾을 수 있습니다.</p>
+<p>점을 오른쪽 시계 방향으로 돌리면 X값은 커지고 Y는 작아지는 걸 볼 수 있습니다.
+계속 돌려서 90도를 넘으면 X는 다시 작아지고 Y는 커지는데요.
+이 패턴은 회전을 하도록 해줍니다.</p>
+<p>unit circle의 점은 또 다른 이름이 있습니다.
+이를 sine과 cosine이라고 하는데요.
+따라서 주어진 각도에 대해 sine과 cosine을 이렇게 찾을 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function printSineAndCosineForAnAngle(angleInDegrees) {
   var angleInRadians = angleInDegrees * Math.PI / 180;
   var s = Math.sin(angleInRadians);
   var c = Math.cos(angleInRadians);
   console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
 }
-</code></pre><p>JavaScript console에 코드를 복사 붙여넣고 <code class="notranslate" translate="no">printSineAndCosignForAngle(30)</code>라고 치면 <code class="notranslate" translate="no">s = 0.49 c = 0.87</code>라는 출력을 볼 수 있습니다.
-(참고로 저는 반올림했습니다)</p>
-<p>모든 것을 함께 넣으면 도형을 원하는 각도로 회전할 수 있습니다.
-그저 회전하려는 각도의 sine과 cosine으로 rotation을 설정하면 됩니다. </p>
+</code></pre><p>JavaScript console에 코드를 복사 및 붙여넣고 <code class="notranslate" translate="no">printSineAndCosignForAngle(30)</code>라고 치면 <code class="notranslate" translate="no">s = 0.49 c = 0.87</code>이 출력됩니다. (참고: 숫자는 반올림했습니다.)</p>
+<p>전부 합치면 geometry를 원하는 각도로 회전할 수 있습니다.
+그저 돌리고 싶은 각도의 sine과 cosine으로 rotation을 설정하면 됩니다. </p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var angleInRadians = angleInDegrees * Math.PI / 180;
   rotation[0] = Math.sin(angleInRadians);
   rotation[1] = Math.cos(angleInRadians);
-</code></pre><p>다음은 각도 설정이 있는 버전입니다.
+</code></pre><p>다음은 각도 설정만 있는 버전입니다.
 슬라이더를 드래그해서 이동하거나 회전시켜보세요.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-rotation-angle.html"></iframe>
@@ -367,38 +367,40 @@ unit circle 위에 12시부터 시계 방향 30도 간격으로 점을 찍어봅
 </div>
 
 </p>
-<p>이게 어떤 의미인지 이해되셨으면 좋겠습니다.
-이건 회전시키는 일반적인 방법이 아니므로 계속해서 글 2개를 더 읽어주세요.
-다음으로 다룰 것은 간단한 건데요.
-<a href="webgl-2d-scale.html">바로 크기입니다</a>.</p>
+<p>이해가 되셨기를 바랍니다.
+이건 회전을 수행하는 일반적인 방법이 아니지만 2개의 글에서 더 다룰 것이므로 계속 읽어주세요.
+다음은 더 간단한 건데요.
+<a href="webgl-2d-scale.html">Scale</a>입니다.</p>
 <div class="webgl_bottombar"><h3>radian이 뭔가요?</h3>
 <p>
-Radian 원, 회전 그리고 각도에 사용되는 측정 단위입니다.
-마치 거리를 inche, yard, meters 등으로 측정할 수 있는 것처럼 우리는 각도를 degree나 radian으로 측정할 수 있습니다.
+radian은 원, 회전 그리고 각도에 사용되는 측정 단위입니다.
+마치 거리를 inche, yard, meter 등으로 측정할 수 있는 것처럼 우리는 각도를 degree나 radian으로 측정할 수 있습니다.
 </p>
 <p>
-아마 imperial 측정법보다 metric 측정법이 더 쉽다는 걸 아실텐데요.
-inche에서 feet으로 가려면 12로 나눠야 합니다.
-inche에서 yard으로 가려면 36로 나눠야 합니다.
-당신은 모르겠지만 저는 암산으로 36으로 나누지 못합니다.
-metric 측정법이 훨씬 쉽죠.
-millimeter에서 centimeter로 가려면 10으로 나눠야 합니다.
-millimeter에서 meter로 가려면 1000으로 곱해야 합니다.
-저는 암산으로 1000은 <strong>곱할 수 있어요</strong>.
+아마 미터법 측정을 사용하는 수학이 영국식 측정을 사용하는 수학보다 더 쉽다는 걸 아실텐데요.
+inche에서 feet으로 바꾸려면 12로 나눕니다.
+inche에서 yard로 바꾸려면 36으로 나누고요.
+당신은 어떨지 모르지만 저는 암산으로 36을 나누지 못합니다.
+미터법을 사용하면 훨씬 쉽죠.
+millimeter에서 centimeter로 바꾸려면 10으로 곱합니다.
+millimeter에서 meter로 바꾸려면 1000으로 곱하고요.
+<strong>암산</strong>으로 1000은 곱할 수 있습니다.
 </p>
 <p>
-Radian vs degree 둘은 비슷합니다.
-Degree는 수학을 어렵게 만들고 Radian은 수학을 쉽게 만듭니다.
-원에는 360도가 있지만 radian으로는 2π만 있습니다.
-따라서 한바퀴는 2π radian이고 반바퀴는 1π radian입니다.
-1/4바퀴는 90도면서 1/2π radian 이죠.
-그러니 어떤 것을 90도 회전하고 싶다면 <code class="notranslate" translate="no">Math.PI * 0.5</code>를 쓰세요.
-만약 45도로 회전하고 싶다면 <code class="notranslate" translate="no">Math.PI * 0.25</code> 등으로 쓸 수 있습니다.
+radian vs degree 둘은 비슷한데요.
+degree는 수학을 어렵게 만듭니다.
+radian는 수학을 쉽게 만들고요.
+원에는 360도가 있지만 radian은 2π뿐입니다.
+따라서 한 바퀴는 2π radian이죠.
+반 바퀴는 1π radian입니다.
+1/4바퀴는, 90도면서 1/2π radian이고요.
+그러니 어떤 걸 90도 회전하고 싶다면 <code class="notranslate" translate="no">Math.PI * 0.5</code>라고 쓰면 됩니다.
+45도로 회전하고 싶다면 <code class="notranslate" translate="no">Math.PI * 0.25</code> 등으로 쓸 수 있죠.
 </p>
 <p>
-각도, 원 또는 회전을 포함하는 거의 모든 수학은 radian으로 생각하기 시작하면 매우 간단하게 동작합니다.
-그러니 한 번 시도해보세요.
-UI display를 제외하고 degree가 아닌 radian을 사용해보세요. 
+각도, 원 또는 회전과 관련된 거의 모든 수학은 radian으로 생각하기 시작하면 매우 간단하게 동작합니다.
+그러니 시도해보세요.
+UI 화면을 제외하고 나머지는 degree가 아닌 radian을 사용해보세요.
 </p>
 </div>
 
@@ -432,7 +434,7 @@ UI display를 제외하고 degree가 아닌 radian을 사용해보세요.
   <li>2D translation, rotation, scale, 행렬 수학</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">WebGL 2D 회전</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-scale.html">WebGL 2D 크기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">WebGL 2D 행렬</a></li>
         </ul>
@@ -572,8 +574,8 @@ UI display를 제외하고 degree가 아닌 radian을 사용해보세요.
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 2D 회전';
-            var disqus_title = 'WebGL 2D 회전';
+            var disqus_identifier = 'WebGL 2D Rotation';
+            var disqus_title = 'WebGL 2D Rotation';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {
