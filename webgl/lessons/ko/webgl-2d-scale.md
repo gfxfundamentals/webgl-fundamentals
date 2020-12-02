@@ -1,15 +1,15 @@
-Title: WebGL 2D 크기
+Title: WebGL 2D Scale
 Description: 2D에서 크기 조정하는 방법
-TOC: WebGL 2D 크기
+TOC: 2D Scale
 
 
-이 글은 WebGL 관련 시리즈에서 이어지는 글입니다.
-첫 번째는 [기초로 시작했고](webgl-fundamentals.html) 이전에는 [geometry 회전에 대해](webgl-2d-rotation.html) 다뤘습니다.
+이 포스트는 WebGL 관련 시리즈의 연장입니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [geometry rotation](webgl-2d-rotation.html)에 관한 것이었습니다.
 
-크기 조정은 [이동만큼이나](webgl-2d-translation.html) 쉽습니다.
+scale은 [translation](webgl-2d-translation.html)만큼이나 쉽습니다.
 
-원하는 크기로 위치 값을 곱하면 되는데요.
-이건 [이전 예제를](webgl-2d-rotation.html) 수정한 겁니다.
+원하는 scale에 위치를 곱하면 되는데요.
+[이전 예제](webgl-2d-rotation.html)에서 변경된 사항들은 다음과 같습니다.
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -29,11 +29,11 @@ void main() {
 *     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
 *     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
 
-  // 추가 이동
+  // translation 추가
   vec2 position = rotatedPosition + u_translation;
 ```
 
-그리고 그릴 때 크기를 조정하기 위해 필요한 JavaScript를 추가합니다.
+그리고 그릴 때 크기 조정하기 위해 필요한 JavaScript를 추가합니다.
 
 ```
   ...
@@ -46,41 +46,41 @@ void main() {
 
   ...
 
-  // 화면 그리기
+  // scene 그리기
   function drawScene() {
 
     ...
 
-    // 이동 설정
+    // translation 설정
     gl.uniform2fv(translationLocation, translation);
 
-    // 회전 설정
+    // rotation 설정
     gl.uniform2fv(rotationLocation, rotation);
 
-+    // 크기 설정
++    // scale 설정
 +    gl.uniform2fv(scaleLocation, scale);
 
     // geometry 그리기
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
-    var count = 18;  // 'F'에 삼각형 6개, 삼각형마다 점 3개
+    var count = 18;  // 'F'의 삼각형 6개, 삼각형마다 점 3개
     gl.drawArrays(primitiveType, offset, count);
   }
 ```
 
-그러면 이제 크기를 가집니다.
+그러면 이제 scale을 가지고 있습니다.
 슬라이더를 드래그해보세요.
 
 {{{example url="../webgl-2d-geometry-scale.html" }}}
 
-한 가지 알아두셔야 할 점은 음수로 크기를 조정하면 geometry가 뒤집힌다는 겁니다.
+한 가지 주목할만한 점은 음수로 크기를 조정하면 geometry가 뒤집힌다는 겁니다.
 
-지난 세 글이 [이동](webgl-2d-translation.html), [회전](webgl-2d-rotation.html) 그리고 크기를 이해하는데 도움이 되셨기 바랍니다.
+지난 3개의 글이 [translation](webgl-2d-translation.html), [rotation](webgl-2d-rotation.html) 그리고 scale을 이해하는데 도움이 되셨기를 바랍니다.
 
-다음에는 이 세 가지를 훨씬 간단하고 유용한 형태로 합쳐주는 [행렬의 마법을](webgl-2d-matrices.html) 살펴보겠습니다.
+다음에는 이 3가지 모두를 훨씬 간단하고 더 유용한 형태로 결합하는 [행렬](webgl-2d-matrices.html)의 마법을 살펴보겠습니다.
 
 <div class="webgl_bottombar">
-<h3>왜 'F' 인가요?</h3>
+<h3>왜 'F'인가요?</h3>
 <p>
 처음에 누군가가 texture에 'F'를 사용하는 것을 봤습니다.
 'F' 자체는 중요하지 않습니다.
