@@ -619,6 +619,88 @@ function openInJSGist() {
   window.addEventListener('message', send, {once: true});
 }
 
+/*
+
+<!-- begin snippet: js hide: false console: true babel: false -->
+
+<!-- language: lang-js -->
+
+    console.log();
+
+<!-- language: lang-css -->
+
+    h1 { color: red; }
+
+<!-- language: lang-html -->
+
+    <h1>foo</h1>  
+
+<!-- end snippet -->
+
+*/
+
+function indent4(s) {
+  return s.split('\n').map(s => `    ${s}`).join('\n');
+}
+
+function openInStackOverflow() {
+  const comment = `// ${g.title}
+// from ${g.url}
+
+
+`;
+  getSourcesFromEditor();
+  const scripts = makeScriptsForWorkers(g.rootScriptInfo);
+  const mainHTML = scripts.html + fixHTMLForCodeSite(htmlParts.html.sources[0].source);
+  const mainJS = comment + fixJSForCodeSite(scripts.js);
+  const mainCSS = htmlParts.css.sources[0].source;
+  const asModule = true;
+  // Three.js wants us to use modules but Stack Overflow doesn't support them
+  const text = asModule
+    ? `
+<!-- begin snippet: js hide: false console: true babel: false -->
+
+<!-- language: lang-js -->
+
+<!-- language: lang-css -->
+
+${indent4(mainCSS)}
+
+<!-- language: lang-html -->
+
+${indent4(mainHTML)}
+    <script type="module">
+${indent4(mainJS)}
+    </script>
+
+<!-- end snippet -->
+`
+    : `
+<!-- begin snippet: js hide: false console: true babel: false -->
+
+<!-- language: lang-js -->
+
+${indent4(mainJS)}
+
+<!-- language: lang-css -->
+
+${indent4(mainCSS)}
+
+<!-- language: lang-html -->
+
+${indent4(mainHTML)}
+
+<!-- end snippet -->
+`;
+  const dialogElem = document.querySelector('.copy-dialog');
+  dialogElem.style.display = '';
+  const copyAreaElem = dialogElem.querySelector('.copy-area');
+  copyAreaElem.textContent = text;
+  const linkElem = dialogElem.querySelector('a');
+  const tags = lessonEditorSettings.tags.filter(f => !f.endsWith('.org')).join(' ');
+  linkElem.href = `https://stackoverflow.com/questions/ask?&tags=javascript ${tags}`;
+}
+
 document.querySelectorAll('.dialog').forEach(dialogElem => {
   dialogElem.addEventListener('click', function(e) {
     if (e.target === this) {
@@ -707,6 +789,7 @@ function setupEditor() {
   document.querySelector('.button-codepen').addEventListener('click', closeExport(openInCodepen));
   document.querySelector('.button-jsfiddle').addEventListener('click', closeExport(openInJSFiddle));
   document.querySelector('.button-jsgist').addEventListener('click', closeExport(openInJSGist));
+  document.querySelector('.button-stackoverflow').addEventListener('click', closeExport(openInStackOverflow));
 
   g.result = document.querySelector('.panes .result');
   g.resultButton = document.querySelector('.button-result');

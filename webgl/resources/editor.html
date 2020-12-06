@@ -129,6 +129,25 @@ iframe {
 .dialog p {
   margin-left: 0.25em;
 }
+.dialog a {
+  color: lightseagreen;
+}
+.dialog a:hover {
+  color: orange;
+}
+/* ---- */
+.export .export-buttons {
+  display: flex;
+}
+/* ---- */
+.copy-dialog .copy-area {
+  height: 8em;
+  overflow: auto;
+  user-select: all;
+  background: #222;
+  padding: 0.5em;
+}
+/* ---- */
 @keyframes rotate {
     0%    { transform: rotate(0deg); }
     100%  { transform: rotate(360deg); }
@@ -236,9 +255,18 @@ button:focus {
 <div class="dialog export" style="display: none;">
   <div tabindex="-1">
     <p>Export To: </p>
-    <button class="button-jsgist">jsGist</button>
-    <button class="button-codepen">Codepen</button>
-    <button class="button-jsfiddle">JSFiddle</button>
+    <div class="export-buttons">
+      <button class="button-jsgist">jsGist</button>
+      <button class="button-codepen">Codepen</button>
+      <button class="button-jsfiddle">JSFiddle</button>
+      <button class="button-stackoverflow">Stack Overflow</button>
+    </div>
+  </div>
+</div>
+<div class="dialog copy-dialog" style="display: none;">
+  <div tabindex="-1">
+    <p>Copy and paste the text below into a <a href="" target="_blank">stack overflow question</a>.</p>
+    <pre class="copy-area"></pre>
   </div>
 </div>
 </body>
