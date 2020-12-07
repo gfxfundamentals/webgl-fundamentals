@@ -654,7 +654,7 @@ function openInStackOverflow() {
   const mainHTML = scripts.html + fixHTMLForCodeSite(htmlParts.html.sources[0].source);
   const mainJS = comment + fixJSForCodeSite(scripts.js);
   const mainCSS = htmlParts.css.sources[0].source;
-  const asModule = true;
+  const asModule = /\bimport\b/.test(mainJS);
   // Three.js wants us to use modules but Stack Overflow doesn't support them
   const text = asModule
     ? `
