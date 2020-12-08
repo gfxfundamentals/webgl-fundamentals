@@ -1,15 +1,25 @@
 Title: WebGL 2D 행렬
-Description: 행렬 수학이 어떻게 동작하는지 지침서에 간단하고 쉽게 설명되어 있습니다.
-TOC: WebGL 2D 행렬
+Description: 행렬 수학이 어떻게 동작하는지 간단하고 따라하기 쉬운 방향으로 설명되어 있습니다.
+TOC: 2D 행렬
 
 
-이 글은 WebGL 관련 시리즈에서 이어지는 글입니다.
-첫 번째는 [기초로 시작했고](webgl-fundamentals.html) 이전에는 [geometry 크기 조정에 대해](webgl-2d-translation.html) 다뤘습니다.
+이 포스트는 WebGL 관련 시리즈의 연장입니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [scaling 2D geometry](webgl-2d-scale.html)에 관한 것이었습니다.
 
-지난 세 글에서 우리는 geometry [이동](webgl-2d-translation.html), [회전](webgl-2d-rotation.html), 그리고 [크기 조정](webgl-2d-scale.html)하는 방법에 대해 살펴봤습니다.
-이동, 회전 그리고 크기는 각각 '변형'의 한 종류로 간주되는데요.
-각각의 변형들은 shader 변경을 필요로 하고 3개 변형은 각각의 순서에 의존적입니다.
-[이전 예제](webgl-2d-scale.html)에서 우리는 크기를 조정하고, 회전시키고, 이동시켰는데요.
+<div class="webgl_bottombar">
+<h3>Math vs Programming vs WebGL</h3>
+<p>
+시작하기 전에, 선형 대수나 행렬로 작업한 경험이 있다면 계속하기 전에 <a href="webgl-matrix-vs-math.html"><b>이 글</b></a>을 읽어주세요.
+</p>
+<p>
+행렬에 대한 경험이 거의 또는 전혀 없다면 위의 링크를 건너뛰고 계속 읽으셔도 됩니다.
+</p>
+</div>
+
+지난 3개의 포스트에서 우리는 [geometry translation](webgl-2d-translation.html), [geometry rotation](webgl-2d-rotation.html), 그리고 [scale geometry](webgl-2d-scale.html)하는 방법을 살펴봤습니다.
+translation, rotation 그리고 scale은 각각 'transformation'의 한 종류로 간주되는데요.
+각각의 transformation은 shader의 변경이 필요하고 3개의 transformation은 각각 순서에 따라 달라집니다.
+[이전 예제](webgl-2d-scale.html)에서 우리는 크기를 조정하고, 회전한 다음, 이동했는데요.
 만약 다른 순서로 적용한다면 다른 결과를 얻게 될 겁니다.
 
 예를들어 (2, 1) 크기 조정, 30도 회전, 그리고  (100, 0) 이동하면 이렇게 됩니다.
