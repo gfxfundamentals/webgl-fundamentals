@@ -22,28 +22,28 @@ translation, rotation 그리고 scale은 각각 'transformation'의 한 종류�
 [이전 예제](webgl-2d-scale.html)에서 우리는 크기를 조정하고, 회전한 다음, 이동했는데요.
 만약 다른 순서로 적용한다면 다른 결과를 얻게 될 겁니다.
 
-예를들어 (2, 1) 크기 조정, 30도 회전, 그리고  (100, 0) 이동하면 이렇게 됩니다.
+예를 들어 2, 1의 scale, 30도 rotation, 그리고 100, 0의 translation을 하면 이렇게 됩니다.
 
 <img src="../resources/f-scale-rotation-translation.svg" class="webgl_center" width="400" />
 
-그리고 (100, 0) 이동, 30도 회전, 그리고 (2, 1) 크기 조정하면 이렇게 됩니다.
+또 100, 0의 translation, 30도 rotation, 그리고 2, 1의 scale을 하면 이렇게 됩니다.
 
 <img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
 
 결과는 완전히 다릅니다.
-심지어 두 번째 예제가 필요하다면 원하는 새로운 순서로 이동, 회전, 크기를 적용한 다른 shader를 작성해야 합니다.
+심지어 더 안 좋은 점은, 두 번째 예제가 필요하다면 우리가 원하는 새로운 순서로 translation, rotation, 그리고 scale을 적용한 다른 shader를 작성해야 한다는 겁니다.
 
-음, 저보다 더 똑똑한 사람들은 행렬 수학으로 모든 것을 똑같이 할 수 있다는 것을 밝혀 냈습니다.
-2D의 경우 우리는 3x3 행렬을 사용하는데요.
-3x3 행렬은 상자 9개가 있는 grid 같습니다.
+음, 저보다 훨씬 더 똑똑한 사람들은 행렬 수학으로 동일한 모든 작업을 할 수 있다는 걸 밝혀냈는데요.
+2D의 경우 3x3 행렬을 사용합니다.
+3x3 행렬은 상자 9개가 있는 grid와 같은데:
 
 <style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
-계산하기 위해서 우리는 행렬의 열 아래로 위치를 곱하고 결과 값을 더합니다.
-위치들은 x 그리고 y 2개의 값 밖에 가지지 않는데, 이 계산을 하기 위해서는 3개의 값이 필요하므로 세 번째 값에 1을 써줍시다.
+계산하기 위해서 위치를 행렬의 열에 곱하고 결과를 합산하는데요.
+위치는 x 그리고 y, 2개의 값만을 가지지만, 계산을 하기 위해서는 3개의 값이 필요하므로 세 번째 값에 1을 사용할 겁니다
 
-이 경우 결과는 이렇게 될 겁니다
+이 경우 결과는 이렇게 되는데
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col class="glocal-b"/>
@@ -52,21 +52,21 @@ translation, rotation 그리고 scale은 각각 'transformation'의 한 종류�
 <tr><td></td><td>1&nbsp;*&nbsp;</td><td>7.0</td><td>&nbsp;</td><td></td><td>1&nbsp;*&nbsp;</td><td>8.0</td><td>&nbsp;&nbsp;</td><td></td><td>1&nbsp;*&nbsp;</td><td>9.0</td><td>&nbsp;</td></tr></table></div>
 
 아마 저걸 보고 "그래서 요점이 뭔데?"라고 생각하실 겁니다.
-음, 이동을 한다고 가정해봅시다.
-원하는 이동 양을 tx와 ty라고 부를거구요.
-이렇게 행렬을 만들어보면
+음, translation을 한다고 가정해봅시다.
+우리가 원하는 translation 양을 tx와 ty라고 부를거구요.
+이렇게 행렬을 만들고
 
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>1.0</td><td>0.0</td></tr><tr><td>tx</td><td>ty</td><td>1.0</td></tr></table></div>
 
-그리고 이제 확인해보면
+이제 확인해보면
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
 <tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">1.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td>x</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr><tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">1.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
 <tr><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>tx</td><td>&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>ty</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>1.0</td><td>&nbsp;</td></tr></table></div>
 
-만약 대수학을 기억한다면, 0을 곱함으로 어떤 것이든 지울 수 있다는 것을 아실겁니다.
-1을 곱하면 아무것도 변하지 않으므로 어떻게 되는지 간단하게 본다면
+대수을 기억한다면, 어느 곳이든 0으로 곱해서 지울 수 있다는 것을 아실겁니다.
+1을 곱하면 아무런 효과가 없으므로 어떻게 되는지 간단하게 본다면
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
@@ -74,7 +74,7 @@ translation, rotation 그리고 scale은 각각 'transformation'의 한 종류�
 <tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">&nbsp;+</td><td></td><td>y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
 <tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>tx</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>ty</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
 
-또는 더 간결하게
+혹은 더 간결하게
 
 <pre class="webgl_center">
 newX = x + tx;
@@ -82,21 +82,21 @@ newY = y + ty;
 </pre>
 
 그리고 추가적으로 우리가 신경 쓸 것은 없습니다.
-놀랍게도 [이동 예제의 이동 코드](webgl-2d-translation.html)와 비슷합니다.
+이건 [translation 예제의 translation 코드](webgl-2d-translation.html)와 놀라울 정도로 비슷합니다.
 
 마찬가지로 회전을 해봅시다.
-회전을 다룬 글에서 강조한 것처럼 회전하고자 하는 각도의 sine과 cosine만 필요하므로
+rotation 포스트에서 강조한 했듯이 회전하고자 하는 각도의 sine과 cosine이 필요하므로
 
 <pre class="webgl_center">
 s = Math.sin(angleToRotateInRadians);
 c = Math.cos(angleToRotateInRadians);
 </pre>
 
-그리고 이런 식으로 행렬을 만들고
+그리고 이렇게 행렬을 만들고
 
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>c</td><td>-s</td><td>0.0</td></tr><tr><td>s</td><td>c</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
 
-행렬을 적용하면 이렇게 되고
+행렬을 적용하면 이렇게 되며
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
@@ -104,7 +104,7 @@ c = Math.cos(angleToRotateInRadians);
 <tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">s</td><td class="glocal-left">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">c</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
 <tr><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>1.0</td><td>&nbsp;</td></tr></table></div>
 
-0s와 1s로 곱한 것을 모두 검게 칠하면
+0과 1로 곱한 것들을 모두 검게 칠하고
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
@@ -112,23 +112,23 @@ c = Math.cos(angleToRotateInRadians);
 <tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">s</td><td class="glocal-left glocal-blk">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">c</td><td class="glocal-left glocal-blk">&nbsp;+&nbsp;</td><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
 <tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
 
-그리고 더 간결하게는
+그리고 단순화하면
 
 <pre class="webgl_center">
 newX = x *  c + y * s;
 newY = x * -s + y * c;
 </pre>
 
-[회전 예제](webgl-2d-rotation.html)와 완전히 똑같습니다.
+이게 바로 [rotation 샘플](webgl-2d-rotation.html)에 있는 것입니다.
 
-그리고 마지막으로 크기 조정입니다.
-두 크기 인자를 sx와 sy라고 부를 것이며
+그리고 마지막으로 scale입니다.
+2개의 scale 인수를 sx와 sy라고 부를 것이며
 
-그리고 이런 행렬을 만들면
+그리고 이런 행렬을 만들어
 
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>sx</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>sy</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
 
-적용했을 때 이렇게 됩니다
+행렬을 적용하면 이렇게 되며
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
@@ -136,7 +136,7 @@ newY = x * -s + y * c;
 <tr><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td class="glocal-left">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">sy</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">0.0</td><td>&nbsp;+</td></tr>
 <tr><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td>&nbsp;*&nbsp;</td><td>1.0</td><td>&nbsp;</td></tr></table></div>
 
-이는 실제로 아래와 같습니다
+실제로는
 
 <div class="glocal-center"><table class="glocal-center-content">
 <col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/>
@@ -144,14 +144,14 @@ newY = x * -s + y * c;
 <tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-left glocal-blk">&nbsp;+</td><td></td><td>y</td><td>&nbsp;*&nbsp;</td><td class="glocal-border">sy</td><td class="glocal-left glocal-blk">&nbsp;+&nbsp;</td><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr>
 <tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">0.0</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
 
-좀 더 간결하게는
+단순화한 건
 
 <pre class="webgl_center">
 newX = x * sx;
 newY = y * sy;
 </pre>
 
-이건 [크기 조정 예제](webgl-2d-scale.html)와 똑같습니다.
+이건 [scaling 샘플](webgl-2d-scale.html)과 동일합니다.
 
 아마 아직 "그래서 뭐요? 뭘 말하고 싶은데요?"라고 생각하시는 분이 있을지 모르겠습니다.
 그냥 이미 하고 있었던 것과 똑같은 것을 하기 위해서 많은 작업을 하는 것처럼 보입니다.
