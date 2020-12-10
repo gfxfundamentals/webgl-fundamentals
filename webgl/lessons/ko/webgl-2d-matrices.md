@@ -153,106 +153,151 @@ newY = y * sy;
 
 이건 [scaling 샘플](webgl-2d-scale.html)과 동일합니다.
 
-아마 아직 "그래서 뭐요? 뭘 말하고 싶은데요?"라고 생각하시는 분이 있을지 모르겠습니다.
-그냥 이미 하고 있었던 것과 똑같은 것을 하기 위해서 많은 작업을 하는 것처럼 보입니다.
+아마 아직 "그래서 뭐요? 요점이 뭔데요?"라고 생각하고 계실 것 같습니다.
+그냥 우리가 이미 하고 있던 동일한 것들을 수행하기 위한 여러 작업처럼 보입니다
 
-이제 마법이 들어올 차례입니다.
-행렬을 모두 곱하고 모든 변환을 한 번에 적용할 수 있다는 것은 밝혀졌는데요.
-두 행렬을 가져와서 곱한 결과를 반환하는 함수, `m3.multiply`가 있다고 가정해보겠습니다.
+여기가 마법이 들어오는 곳입니다.
+행렬을 함께 곱하고 모든 transformation을 한 번에 적용할 수 있는데요.
+두 행렬을 받아서, 곱하고 결과를 반환하는, 함수 `m3.multiply`가 있다고 가정해봅시다.
 
-더 명확하게 하기 위해 이동, 회전 그리고 크기 조정을 위한 행렬을 만드는 함수를 만들어봅시다.
+```js
+var m3 = {
+  multiply: function(a, b) {
+    var a00 = a[0 * 3 + 0];
+    var a01 = a[0 * 3 + 1];
+    var a02 = a[0 * 3 + 2];
+    var a10 = a[1 * 3 + 0];
+    var a11 = a[1 * 3 + 1];
+    var a12 = a[1 * 3 + 2];
+    var a20 = a[2 * 3 + 0];
+    var a21 = a[2 * 3 + 1];
+    var a22 = a[2 * 3 + 2];
+    var b00 = b[0 * 3 + 0];
+    var b01 = b[0 * 3 + 1];
+    var b02 = b[0 * 3 + 2];
+    var b10 = b[1 * 3 + 0];
+    var b11 = b[1 * 3 + 1];
+    var b12 = b[1 * 3 + 2];
+    var b20 = b[2 * 3 + 0];
+    var b21 = b[2 * 3 + 1];
+    var b22 = b[2 * 3 + 2];
 
-    var m3 = {
-      translation: function(tx, ty) {
-        return [
-          1, 0, 0,
-          0, 1, 0,
-          tx, ty, 1,
-        ];
-      },
+    return [
+      b00 * a00 + b01 * a10 + b02 * a20,
+      b00 * a01 + b01 * a11 + b02 * a21,
+      b00 * a02 + b01 * a12 + b02 * a22,
+      b10 * a00 + b11 * a10 + b12 * a20,
+      b10 * a01 + b11 * a11 + b12 * a21,
+      b10 * a02 + b11 * a12 + b12 * a22,
+      b20 * a00 + b21 * a10 + b22 * a20,
+      b20 * a01 + b21 * a11 + b22 * a21,
+      b20 * a02 + b21 * a12 + b22 * a22,
+    ];
+  }
+}
+```
 
-      rotation: function(angleInRadians) {
-        var c = Math.cos(angleInRadians);
-        var s = Math.sin(angleInRadians);
-        return [
-          c,-s, 0,
-          s, c, 0,
-          0, 0, 1,
-        ];
-      },
+더 명확하게 하기 위해 translation, rotation 그리고 scale을 위한 행렬을 만드는 함수를 만들어봅시다.
 
-      scaling: function(sx, sy) {
-        return [
-          sx, 0, 0,
-          0, sy, 0,
-          0, 0, 1,
-        ];
-      },
-    };
+```js
+var m3 = {
+  translation: function(tx, ty) {
+    return [
+      1, 0, 0,
+      0, 1, 0,
+      tx, ty, 1,
+    ];
+  },
+
+  rotation: function(angleInRadians) {
+    var c = Math.cos(angleInRadians);
+    var s = Math.sin(angleInRadians);
+    return [
+      c,-s, 0,
+      s, c, 0,
+      0, 0, 1,
+    ];
+  },
+
+  scaling: function(sx, sy) {
+    return [
+      sx, 0, 0,
+      0, sy, 0,
+      0, 0, 1,
+    ];
+  },
+};
+```
 
 이제 shader를 바꿔봅시다.
 기존 shader는 이렇게 되어 있는데
 
-    <script id="vertex-shader-2d" type="x-shader/x-vertex">
-    attribute vec2 a_position;
+```html
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
+attribute vec2 a_position;
 
-    uniform vec2 u_resolution;
-    uniform vec2 u_translation;
-    uniform vec2 u_rotation;
-    uniform vec2 u_scale;
+uniform vec2 u_resolution;
+uniform vec2 u_translation;
+uniform vec2 u_rotation;
+uniform vec2 u_scale;
 
-    void main() {
-      // 위치 크기 조정
-      vec2 scaledPosition = a_position * u_scale;
+void main() {
+  // position에 scale 적용
+  vec2 scaledPosition = a_position * u_scale;
 
-      // 위치 회전
-      vec2 rotatedPosition = vec2(
-         scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
-         scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
+  // position에 rotation 적용
+  vec2 rotatedPosition = vec2(
+     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
+     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
 
-      // 이동 추가
-      vec2 position = rotatedPosition + u_translation;
-      ...
+  // translation 추가
+  vec2 position = rotatedPosition + u_translation;
+  ...
+```
 
-새로운 shader는 훨씬 간단합니다.
+새로운 shader는 훨씬 더 간단해질 겁니다.
 
-    <script id="vertex-shader-2d" type="x-shader/x-vertex">
-    attribute vec2 a_position;
+```html
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
+attribute vec2 a_position;
 
-    uniform vec2 u_resolution;
-    uniform mat3 u_matrix;
+uniform vec2 u_resolution;
+uniform mat3 u_matrix;
 
-    void main() {
-      // 행렬에 위치 곱하기
-      vec2 position = (u_matrix * vec3(a_position, 1)).xy;
-      ...
+void main() {
+  // position에 행렬 곱하기
+  vec2 position = (u_matrix * vec3(a_position, 1)).xy;
+  ...
+```
 
 그리고 어떻게 사용하냐면
 
-      // 화면 그리기
-      function drawScene() {
+```js
+// scene 그리기
+function drawScene() {
 
-        ,,,
+  ,,,
 
-        // 행렬 계산
-        var translationMatrix = m3.translation(translation[0], translation[1]);
-        var rotationMatrix = m3.rotation(angleInRadians);
-        var scaleMatrix = m3.scaling(scale[0], scale[1]);
+  // 행렬 계산
+  var translationMatrix = m3.translation(translation[0], translation[1]);
+  var rotationMatrix = m3.rotation(angleInRadians);
+  var scaleMatrix = m3.scaling(scale[0], scale[1]);
 
-        // 행렬 곱하기
-        var matrix = m3.multiply(translationMatrix, rotationMatrix);
-        matrix = m3.multiply(matrix, scaleMatrix);
+  // 행렬 곱하기
+  var matrix = m3.multiply(translationMatrix, rotationMatrix);
+  matrix = m3.multiply(matrix, scaleMatrix);
 
-        // 행렬 설정
-        gl.uniformMatrix3fv(matrixLocation, false, matrix);
+  // 행렬 설정
+  gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
-        // 사각형 그리기
-        gl.drawArrays(gl.TRIANGLES, 0, 18);
-      }
+  // 사각형 그리기
+  gl.drawArrays(gl.TRIANGLES, 0, 18);
+}
+```
 
-새로운 코드를 사용한 예제인데요.
-슬라이더는 똑같이, 이동, 회전 그리고 크기 조정입니다.
-하지만 shader에서 사용되는 방법은 훨씬 더 간단합니다.
+여기 새로운 코드를 사용한 샘플입니다.
+슬라이더는 동일하게, translation, rotation 그리고 scale인데요.
+하지만 shader에서 사용되는 방식은 훨씬 더 간단해졌습니다.
 
 {{{example url="../webgl-2d-geometry-matrix-transform.html" }}}
 
