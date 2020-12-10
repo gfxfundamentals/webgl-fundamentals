@@ -282,7 +282,7 @@ void main() {
   // Multiply the position by the matrix.
   vec2 position = (u_matrix * vec3(a_position, 1)).xy;
   ...
- ```
+```
 
 And here's how we use it
 
