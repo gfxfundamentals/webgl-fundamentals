@@ -503,7 +503,7 @@ void main() {
 
 <p>여기 단위 행렬을 만드는 코드입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m3 = {
-  identity function() {
+  identity: function() {
     return [
       1, 0, 0,
       0, 1, 0,
@@ -521,7 +521,7 @@ void main() {
 </p>
 <p>예제를 한 가지 더 봐봅시다.
 지금까지 모든 예제에서 &#39;F&#39;의 왼쪽 모서리를 기준으로 회전시켰는데요(예제를 제외하고는 위의 순서를 뒤집었음).
-이것은 우리가 사용하는 수학이 항상 원점을 기준으로 회전하고 &#39;F&#39;의 왼쪽 상단 모서리(0, 0)가 원점에 있기 때문입니다. </p>
+이것은 우리가 사용하는 수학이 항상 원점을 기준으로 회전하고 &#39;F&#39;의 왼쪽 상단 모서리(0, 0)가 원점에 있기 때문입니다.</p>
 <p>하지만 이제, 행렬 수학을 할 수 있고 변환이 적용되는 순서를 적용할 수 있기 때문에 원점을 옮길 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    // &#39;F&#39;의 원점을 중심으로 옮길 행렬 만들기
     var moveOriginMatrix = m3.translation(-50, -75);
@@ -711,7 +711,7 @@ canvas는 clipspace(-1 ~ +1)로 나타내는 각 방향에서 시작합니다.
 </div>
 
 </p>
-<p>공간이 tx, ty를 중심으로 회전했습니다. </p>
+<p>공간이 tx, ty를 중심으로 회전했습니다.</p>
 </blockquote>
 <p>5단계:  <code class="notranslate" translate="no">matrix = m3.scale(matrix, sx, sy);</code></p>
 <blockquote>
@@ -720,7 +720,7 @@ canvas는 clipspace(-1 ~ +1)로 나타내는 각 방향에서 시작합니다.
 </div>
 
 </p>
-<p>이전에 tx, ty을 중심으로 회전된 공간은 x는 2로, y는 1.5로 크기 조정되었습니다. </p>
+<p>이전에 tx, ty을 중심으로 회전된 공간은 x는 2로, y는 1.5로 크기 조정되었습니다.</p>
 </blockquote>
 <p>shader에서 우리는 <code class="notranslate" translate="no">gl_Position = matrix * position;</code>을 실행합니다.
 <code class="notranslate" translate="no">position</code> 값은 최종 공간에서 효과적으로 나타납니다.</p>
