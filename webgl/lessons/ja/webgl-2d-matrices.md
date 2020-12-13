@@ -7,7 +7,7 @@ TOC: 二次元での行列数学
 [WebGLの基本で始まった](webgl-fundamentals.html)。そして、前回の記事は
 [二次元図形の拡大と縮小についての記事である](webgl-2d-scale.html)。
 
-前回の３つの記事で図形の[移動](webgl-2d-translation.html), 
+前回の３つの記事で図形の[移動](webgl-2d-translation.html),
 [回転](webgl-2d-rotation.html), と [拡大と縮小](webgl-2d-scale.html)について取り上げた。
 移動、回転、拡大/縮小は全部変換である。
 変換ごとにシェーダーの編集が必要であった。その上変換順番もお互いに依存していた。
@@ -304,7 +304,7 @@ newY = y * sy;
 単位行列の作成コードはここにある。
 
     var m3 = {
-      identity function() {
+      identity: function() {
         return [
           1, 0, 0,
           0, 1, 0,

@@ -316,7 +316,7 @@ newY = y * sy;
 Вот код, создающий единичную матрицу
 
     var m3 = {
-      identity function() {
+      identity: function() {
         return [
           1, 0, 0,
           0, 1, 0,

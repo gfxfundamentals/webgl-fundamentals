@@ -304,7 +304,7 @@ newY = y * sy;
 여기 단위 행렬을 만드는 코드입니다.
 
     var m3 = {
-      identity function() {
+      identity: function() {
         return [
           1, 0, 0,
           0, 1, 0,
@@ -320,7 +320,7 @@ newY = y * sy;
 
 예제를 한 가지 더 봐봅시다.
 지금까지 모든 예제에서 'F'의 왼쪽 모서리를 기준으로 회전시켰는데요(예제를 제외하고는 위의 순서를 뒤집었음).
-이것은 우리가 사용하는 수학이 항상 원점을 기준으로 회전하고 'F'의 왼쪽 상단 모서리(0, 0)가 원점에 있기 때문입니다. 
+이것은 우리가 사용하는 수학이 항상 원점을 기준으로 회전하고 'F'의 왼쪽 상단 모서리(0, 0)가 원점에 있기 때문입니다.
 
 하지만 이제, 행렬 수학을 할 수 있고 변환이 적용되는 순서를 적용할 수 있기 때문에 원점을 옮길 수 있습니다.
 
@@ -523,13 +523,13 @@ canvas는 clipspace(-1 ~ +1)로 나타내는 각 방향에서 시작합니다.
 
 > {{{diagram url="resources/matrix-space-change.html?stage=3" caption="rotate 33 degrees" }}}
 >
-> 공간이 tx, ty를 중심으로 회전했습니다. 
+> 공간이 tx, ty를 중심으로 회전했습니다.
 
 5단계:  `matrix = m3.scale(matrix, sx, sy);`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=4" capture="scale the space" }}}
 >
-> 이전에 tx, ty을 중심으로 회전된 공간은 x는 2로, y는 1.5로 크기 조정되었습니다. 
+> 이전에 tx, ty을 중심으로 회전된 공간은 x는 2로, y는 1.5로 크기 조정되었습니다.
 
 shader에서 우리는 `gl_Position = matrix * position;`을 실행합니다.
 `position` 값은 최종 공간에서 효과적으로 나타납니다.
