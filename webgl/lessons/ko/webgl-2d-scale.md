@@ -1,5 +1,5 @@
 Title: WebGL 2D Scale
-Description: 2D에서 크기 조정하는 방법
+Description: 2D에서 scale하는 방법
 TOC: 2D Scale
 
 
@@ -21,7 +21,7 @@ uniform vec2 u_rotation;
 +uniform vec2 u_scale;
 
 void main() {
-+  // 위치 크기 조정
++  // 위치 scale
 +  vec2 scaledPosition = a_position * u_scale;
 
   // 위치 회전
@@ -33,7 +33,7 @@ void main() {
   vec2 position = rotatedPosition + u_translation;
 ```
 
-그리고 그릴 때 크기 조정하기 위해 필요한 JavaScript를 추가합니다.
+그리고 그릴 때 scale하기 위해 필요한 JavaScript를 추가합니다.
 
 ```
   ...
