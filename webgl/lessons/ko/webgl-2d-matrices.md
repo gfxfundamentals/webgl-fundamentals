@@ -301,54 +301,58 @@ function drawScene() {
 
 {{{example url="../webgl-2d-geometry-matrix-transform.html" }}}
 
-아직도 이렇게 물어볼 수 있는데, 그래서 뭐?
-그다지 이점이 많지는 않아 보이는데요.
-하지만, 이제 순서를 변경하려면 새로운 shader를 작성하지 않아도 됩니다.
+그래도, 물어볼 수 있는데, 그래서 뭐요?
+그다지 이점이 많아 보이지 않는데요.
+하지만, 이제 순서를 변경하려는 경우 새로운 shader를 작성하지 않아도 됩니다.
 그냥 수식만 바꿔주면 되죠.
 
-        ...
-        // 행렬 곱하기
-        var matrix = m3.multiply(scaleMatrix, rotationMatrix);
-        matrix = m3.multiply(matrix, translationMatrix);
-        ...
+```js
+...
+// 행렬 곱하기
+var matrix = m3.multiply(scaleMatrix, rotationMatrix);
+matrix = m3.multiply(matrix, translationMatrix);
+...
+```
 
 해당 버전입니다.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-trs.html" }}}
 
 이와 같은 행렬을 적용할 수 있다는 것은 신체의 팔, 태양 주변에 있는 행성의 위성, 또는 나무의 가지같은 계층적 애니메이션에 특히 중요합니다.
-계층적 애니메이션의 간단한 예제로 'F'를 5번 그리지만 그릴 때마다 이전 'F'의 행렬에서 시작해봅시다.
+계층적 애니메이션의 간단한 예제로 'F'를 5번 그리지만 매번 이전 'F'의 행렬로 시작해봅시다.
 
-      // 화면 그리기
-      function drawScene() {
-        // Canvas 지우기
-        gl.clear(gl.COLOR_BUFFER_BIT);
+```js
+// scene 그리기
+function drawScene() {
+  // canvas 지우기
+  gl.clear(gl.COLOR_BUFFER_BIT);
 
-        // 행렬 계산
-        var translationMatrix = m3.translation(translation[0], translation[1]);
-        var rotationMatrix = m3.rotation(angleInRadians);
-        var scaleMatrix = m3.scaling(scale[0], scale[1]);
+  // 행렬 계산
+  var translationMatrix = m3.translation(translation[0], translation[1]);
+  var rotationMatrix = m3.rotation(angleInRadians);
+  var scaleMatrix = m3.scaling(scale[0], scale[1]);
 
-        // 행렬 시작
-        var matrix = m3.identity();
+  // 행렬 시작
+  var matrix = m3.identity();
 
-        for (var i = 0; i < 5; ++i) {
-          // 행렬 곱하기
-          matrix = m3.multiply(matrix, translationMatrix);
-          matrix = m3.multiply(matrix, rotationMatrix);
-          matrix = m3.multiply(matrix, scaleMatrix);
+  for (var i = 0; i < 5; ++i) {
+    // 행렬 곱하기
+    matrix = m3.multiply(matrix, translationMatrix);
+    matrix = m3.multiply(matrix, rotationMatrix);
+    matrix = m3.multiply(matrix, scaleMatrix);
 
-          // 행렬 설정
-          gl.uniformMatrix3fv(matrixLocation, false, matrix);
+    // 행렬 설정
+    gl.uniformMatrix3fv(matrixLocation, false, matrix);
 
-          // geometry 그리기
-          gl.drawArrays(gl.TRIANGLES, 0, 18);
-        }
-      }
+    // geometry 그리기
+    gl.drawArrays(gl.TRIANGLES, 0, 18);
+  }
+}
+```
 
-이것을 하기 위해 단위 행렬을 만드는 함수, `m3.identity`를 도입했습니다.
-단위 행렬은 1.0을 대표할 수 있는 행렬로 항등자를 곱해도 아무것도 일어나지 않습니다.
-이것처럼
+이를 위해 단위 행렬을 만드는 함수, `m3.identity`를 도입했습니다.
+단위 행렬은 효과적으로 1.0을 나타내는 행렬로 항등식를 곱해도 아무것도 일어나지 않습니다.
+이렇게
 
 <div class="webgl_center">X * 1 = X</div>
 
@@ -358,38 +362,41 @@ function drawScene() {
 
 여기 단위 행렬을 만드는 코드입니다.
 
-    var m3 = {
-      identity: function() {
-        return [
-          1, 0, 0,
-          0, 1, 0,
-          0, 0, 1,
-        ];
-      },
+```js
+var m3 = {
+  identity function() {
+    return [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1,
+    ];
+  },
+  ...
+```
 
-      ...
-
-여기 F 5개가 있습니다.
+여기 5개의 F입니다.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-hierarchical.html" }}}
 
 예제를 한 가지 더 봐봅시다.
-지금까지 모든 예제에서 'F'의 왼쪽 모서리를 기준으로 회전시켰는데요(예제를 제외하고는 위의 순서를 뒤집었음).
-이것은 우리가 사용하는 수학이 항상 원점을 기준으로 회전하고 'F'의 왼쪽 상단 모서리(0, 0)가 원점에 있기 때문입니다.
+지금까지 모든 샘플에서 'F'는 왼쪽 상단 모서리를 기준으로 회전했는데요(예제를 제외하고는 위의 순서를 반대로 했음).
+이건 우리가 사용하는 수식이 항상 원점을 기준으로 회전하고 'F'의 왼쪽 상단 모서리(0, 0)가 원점에 있기 때문입니다.
 
-하지만 이제, 행렬 수학을 할 수 있고 변환이 적용되는 순서를 적용할 수 있기 때문에 원점을 옮길 수 있습니다.
+하지만 이제, 행렬 수학을 할 수 있고 transform이 적용되는 순서를 선택할 수 있기 때문에 원점을 이동할 수 있습니다.
 
-        // 'F'의 원점을 중심으로 옮길 행렬 만들기
-        var moveOriginMatrix = m3.translation(-50, -75);
-        ...
+```js
+// 'F'의 원점을 중심으로 이동할 행렬 만들기
+var moveOriginMatrix = m3.translation(-50, -75);
+...
 
-        // 행렬 곱하기
-        var matrix = m3.multiply(translationMatrix, rotationMatrix);
-        matrix = m3.multiply(matrix, scaleMatrix);
-        matrix = m3.multiply(matrix, moveOriginMatrix);
+// 행렬 곱하기
+var matrix = m3.multiply(translationMatrix, rotationMatrix);
+matrix = m3.multiply(matrix, scaleMatrix);
+matrix = m3.multiply(matrix, moveOriginMatrix);
+```
 
-여기 그 예제입니다.
-참고로 F는 중심을 기준으로 회전 및 크기 조정됩니다.
+여기 해당 샘플입니다.
+참고로 F는 중심을 기준으로 회전하고 scale됩니다.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-center-f.html" }}}
 

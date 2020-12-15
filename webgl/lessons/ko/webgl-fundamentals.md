@@ -578,7 +578,7 @@ WebGL 작동 방식을 이해하는 또 다른 방법으로 [대화형 상태 �
 
 그게 아니라면 여기에서 2가지 방향으로 갈 수 있습니다.
 이미지 처리에 관심이 있다면 [2D 이미지 처리 방법](webgl-image-processing.html)을 보시면 됩니다.
-위치, 회전, 그리고 크기 조정 그리고 궁극적으로 3D에 대해 배우고 싶다면 [여기](webgl-2d-translation.html)부터 시작하시면 됩니다.
+위치, 회전, 그리고 scale 그리고 궁극적으로 3D에 대해 배우고 싶다면 [여기](webgl-2d-translation.html)부터 시작하시면 됩니다.
 
 <div class="webgl_bottombar">
 <h3>type="notjs"가 어떤 의미인가요?</h3>
