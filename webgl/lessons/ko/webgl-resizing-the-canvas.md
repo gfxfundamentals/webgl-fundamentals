@@ -111,7 +111,7 @@ canvas 크기 설정하는데 canvas 크기에 영향을 주는 CSS가 없다면
 왜 선이 전체를 감싸고 있지 않을까요?
 
 그 이유는 canvas 크기 조정할 때 viewport를 설정하기 위해 `gl.viewport`를 호출해야 합니다.
-`gl.viewport`는 WebGL에게 clip 공간(-1 ~ +1)에서 픽셀로 변환하고 canvas 내에서 그걸 작동시키는 방법을 알려줍니다.
+`gl.viewport`는 WebGL에게 clip space(-1 ~ +1)에서 픽셀로 변환하고 canvas 내에서 그걸 작동시키는 방법을 알려줍니다.
 WebGL context를 처음 만들 때 WebGL은 canvas와 같은 크기로 viewport를 설정하지만 이후에는 사용자가 설정합니다.
 만약 canvas 크기를 변경한다면 WebGL에게 새로운 viewport 설정을 알려줘야 합니다.
 

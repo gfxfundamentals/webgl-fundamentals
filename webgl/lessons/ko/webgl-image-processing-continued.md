@@ -167,7 +167,7 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(첨부 목록)일 뿐이며 
 
 <code>null</code>을 넘긴 <code>gl.bindFramebuffer</code>를 호출하는 건 framebuffer 중 하나 대신에 canvas에 렌더링하고 싶다는 걸 WebGL에게 알려줍니다.
 
-WebGL은 [clip 공간](webgl-fundamentals.html)에서 다시 픽셀로 변환해야 하는데요.
+WebGL은 [clip space](webgl-fundamentals.html)에서 다시 픽셀로 변환해야 하는데요.
 이건 <code>gl.viewport</code>의 설정에 따라 수행됩니다.
 렌더링할 framebuffer는 canvas 크기와 다르기 때문에 framebuffer texture를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 canvas를 렌더링할 때 다시 설정해야 합니다.
 

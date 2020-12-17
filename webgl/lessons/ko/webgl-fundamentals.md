@@ -56,12 +56,12 @@ shader가 데이터를 받을 수 있는 4가지 방법이 있습니다.
 
 ## WebGL Hello World
 
-WebGL은 clip 공간 좌표와 색상, 오직 2가지만 신경을 쓰는데요.
+WebGL은 clip space 좌표와 색상, 오직 2가지만 신경을 쓰는데요.
 프로그래머로서 WebGL을 사용하는 당신의 역할은 이 2가지를 작성하는 겁니다.
 이를 위해 2개의 "shader"를 제공해야 하는데요.
-clip 공간 좌표를 제공하는 vertex shader, 그리고 색상을 제공하는 fragment shader 입니다.
+clip space 좌표를 제공하는 vertex shader, 그리고 색상을 제공하는 fragment shader 입니다.
 
-clip 공간 좌표는 canvas 크기에 상관없이 항상 -1에서 +1까지입니다.
+clip space 좌표는 canvas 크기에 상관없이 항상 -1에서 +1까지입니다.
 
 <div class="webgl_center"><img src="resources/clipspace.svg" style="width: 400px"></div>
 
@@ -283,12 +283,12 @@ CSS가 크기를 결정하게 한 다음 일치하도록 조정함으로써 이 
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-`gl_Position`으로 설정할 clip 공간 값을 화면 공간으로 불리는 픽셀로 어떻게 변환하는지 WebGL에게 알려줘야 하는데요.
+`gl_Position`으로 설정할 clip space 값을 화면 공간으로 불리는 픽셀로 어떻게 변환하는지 WebGL에게 알려줘야 하는데요.
 이를 위해 `gl.viewport`를 호출해서 현재 canvas 크기를 전달해야 합니다.
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-이는 WebGL에 -1 <-> +1 clip 공간을, x는 0 <-> `gl.canvas.width`로, y는 0 <-> `gl.canvas.height`로 매핑시켜줍니다.
+이는 WebGL에 -1 <-> +1 clip space를, x는 0 <-> `gl.canvas.width`로, y는 0 <-> `gl.canvas.height`로 매핑시켜줍니다.
 
 canvas를 지워봅시다.
 `0, 0, 0, 0`은 각각 빨강, 초록, 파랑, 투명도이므로 이러면 canvas를 투명하게 만듭니다.
@@ -349,20 +349,20 @@ count가 3이기 때문에 vertex shader를 세 번 실행할 겁니다.
 마지막에는 남아있는 2개의 값으로 설정됩니다.
 
 `primitiveType`을 `gl.TRIANGLES`로 설정했기 때문에, vertex shader가 3번 실행될 때마다 WebGL은 `gl_Position`에 설정한 3개의 값에 따라 삼각형을 그리는데요.
-canvas 크기에 상관없이 이 값들은 -1에서 1사이의 clip 공간 좌표 안에 있습니다.
+canvas 크기에 상관없이 이 값들은 -1에서 1사이의 clip space 좌표 안에 있습니다.
 
-vertex shader는 단순히 positionBuffer 값을 `gl_Position`에 복사하기 때문에 삼각형은 clip 공간 좌표에 그려지는데
+vertex shader는 단순히 positionBuffer 값을 `gl_Position`에 복사하기 때문에 삼각형은 clip space 좌표에 그려지는데
 
         0, 0,
         0, 0.5,
       0.7, 0,
 
-canvas 크기가 400x300이라면 이런 식으로 clip 공간을 화면 공간으로 변환합니다
+canvas 크기가 400x300이라면 이런 식으로 clip space를 화면 공간으로 변환합니다
 
-     clip 공간       화면 공간
-       0, 0     ->   200, 150
-       0, 0.5   ->   200, 225
-     0.7, 0     ->   340, 150
+    clip space       screen space
+       0, 0       ->   200, 150
+       0, 0.5     ->   200, 225
+     0.7, 0       ->   340, 150
 
 이제 WebGL은 삼각형을 렌더링할 겁니다.
 그리려는 모든 픽셀에 대해 WebGL은 fragment shader를 호출하는데요.
@@ -374,17 +374,17 @@ canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127
 {{{example url="../webgl-fundamentals.html" }}}
 
 위 경우 vertex shader는 데이터를 직접 전달하는 것 외에는 아무것도 하지 않는 걸 볼 수 있는데요.
-위치 데이터가 이미 clip 공간에 있으므로 할 일이 없습니다.
-*WebGL은 rasterization API에 불과하기에 만약 당신이 3D를 원한다면 3D에서 clip 공간으로 변환하는 shader를 작성해야 합니다.*
+위치 데이터가 이미 clip space에 있으므로 할 일이 없습니다.
+*WebGL은 rasterization API에 불과하기에 만약 당신이 3D를 원한다면 3D에서 clip space으로 변환하는 shader를 작성해야 합니다.*
 
 아마 삼각형이 중앙에서 시작해서 우측 상단으로 가는 이유가 궁금하실텐데요.
-`x`의 clip 공간은 -1부터 +1까지 입니다.
+`x`의 clip space는 -1부터 +1까지 입니다.
 즉 0이 중앙이고 양수 값이 우측이라는 걸 의미합니다.
 
-상단에 있는 이유는, clip 공간에서 -1은 하단에 있고 +1은 상단에 있기 때문인데요.
+상단에 있는 이유는, clip space에서 -1은 하단에 있고 +1은 상단에 있기 때문인데요.
 즉 0이 중앙이고 양수가 중앙보다 위에 있다는 걸 의미합니다.
 
-2D의 경우 clip 공간보다는 픽셀 단위로 작업하는 것이 좋으니 위치를 픽셀 단위로 제공하고 clip 공간으로 변환할 수 있도록 shader를 바꿔봅시다.
+2D의 경우 clip space보다는 픽셀 단위로 작업하는 것이 좋으니 위치를 픽셀 단위로 제공하고 clip space로 변환할 수 있도록 shader를 바꿔봅시다.
 여기 새로운 vertex shader 입니다.
 
     <script id="vertex-shader-2d" type="notjs">
@@ -401,7 +401,7 @@ canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127
     +    // 0->1에서 0->2로 변환
     +    vec2 zeroToTwo = zeroToOne * 2.0;
     +
-    +    // 0->2에서 -1->+1로 변환 (clip 공간)
+    +    // 0->2에서 -1->+1로 변환 (clip space)
     +    vec2 clipSpace = zeroToTwo - 1.0;
     +
     *    gl_Position = vec4(clipSpace, 0, 1);
@@ -419,9 +419,9 @@ canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127
     var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
 
 나머지는 주석을 보면 명확한데요.
-`u_resolution`을 canvas의 해상도로 설정함으로써 shader는 픽셀 좌표로 제공한 `positionBuffer`에 넣은 위치를 가져와 clip 공간으로 변환합니다.
+`u_resolution`을 canvas의 해상도로 설정함으로써 shader는 픽셀 좌표로 제공한 `positionBuffer`에 넣은 위치를 가져와 clip space로 변환합니다.
 
-이제 우리는 위치 값들을 clip 공간에서 픽셀로 바꿀 수 있습니다.
+이제 우리는 위치 값들을 clip space에서 픽셀로 바꿀 수 있습니다.
 이번에는 각각 3개의 점으로 이루어진 삼각형 두 개로 만드는 사각형을 그려볼 겁니다.
 
     var positions = [
@@ -462,9 +462,9 @@ canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127
 
 다시 사각형이 해당 영역의 하단 근처에 있음을 눈치채셨을 겁니다.
 WebGL은 양수 Y를 위로, 음수 Y를 아래로 간주하는데요.
-clip 공간에서 좌측 하단 구석은 -1,-1 입니다.
+clip space에서 좌측 하단 구석은 -1,-1 입니다.
 우린 아직 어떤 부호도 바꾸지 않았으므로 현재 0, 0은 좌측 하단 구석이 되는데요.
-2D 그래픽 API를 사용되는 전통적인 좌측 상단 구석이 되도록 clip 공간 y좌표를 뒤집어서 사용할 수 있습니다.
+2D 그래픽 API를 사용되는 전통적인 좌측 상단 구석이 되도록 clip space y좌표를 뒤집어서 사용할 수 있습니다.
 
     *gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
