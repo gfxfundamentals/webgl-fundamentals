@@ -401,24 +401,25 @@ matrix = m3.multiply(matrix, moveOriginMatrix);
 
 {{{example url="../webgl-2d-geometry-matrix-transform-center-f.html" }}}
 
-이 기술을 사용하면 어떤 지점에서든 회전 혹은 크기 조정을 할 수 있습니다.
+이 기술을 사용하면 어떤 지점에서든 회전이나 scale을 할 수 있는데요.
+이제 Photoshop이나 Flash에서 어떻게 회전점을 이동시키는지 알게 되었습니다.
 
-이제 Photoshop이나 Flash에서 어떻게 회전점을 이동시키는지 알 수 있습니다.
+이제 더 끝내주는 걸 해봅시다.
+첫 번째 글인 [WebGL 기초](webgl-fundamentals.html)로 돌아가 보면 shader에 픽셀을 clip space로 변환하는 코드가 있다는 걸 기억하실 겁니다.
 
-이제 더 미친 짓을 해볼텐데요.
-첫 번째 글인 [WebGL 기초](webgl-fundamentals.html)로 돌아가 본다면 shader 안에 픽셀을 clip 공간으로 변환하는 코드가 있다는 것을 기억하실 겁니다.
+```js
+...
+// 사각형을 픽셀에서 0.0에서 1.0사이로 변환
+vec2 zeroToOne = position / u_resolution;
 
-      ...
-      // 사각형의 픽셀을 0.0에서 1.0사이로 변환
-      vec2 zeroToOne = position / u_resolution;
+// 0->1에서 0->2로 변환
+vec2 zeroToTwo = zeroToOne * 2.0;
 
-      // 0->1에서 0->2로 변환
-      vec2 zeroToTwo = zeroToOne * 2.0;
+// 0->2에서 -1->+1로 변환 (clip space)
+vec2 clipSpace = zeroToTwo - 1.0;
 
-      // 0->2에서 -1->+1로 변환 (clipspace)
-      vec2 clipSpace = zeroToTwo - 1.0;
-
-      gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+```
 
 이 단계를 차례대로 살펴보자면, 첫 단계, "픽셀을 0.0에서 1.0사이로 변환", 이건 실제로 크기 조정 작업입니다.
 두 번째 역시 크기 조정 작업입니다.
@@ -565,8 +566,8 @@ canvas는 clipspace(-1 ~ +1)로 나타내는 각 방향에서 시작합니다.
 
 > {{{diagram url="resources/matrix-space-change.html?stage=0" caption="clip space" }}}
 >
-> 흰색 영역은 canvas 입니다. 파랑색은 canvas 바깥입니다. 우리는 clip 공간에 있습니다.
-> 전단된 위치가 clip 공간 안에 있어야 합니다.
+> 흰색 영역은 canvas 입니다. 파랑색은 canvas 바깥입니다. 우리는 clip space에 있습니다.
+> 전단된 위치가 clip space 안에 있어야 합니다.
 
 2단계:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
 

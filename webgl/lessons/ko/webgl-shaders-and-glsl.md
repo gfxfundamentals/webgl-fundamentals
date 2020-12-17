@@ -17,7 +17,7 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
 
 ## Vertex Shader
 
-Vertex Shader의 역할은 clip 공간 좌표를 생성하는 겁니다.
+Vertex Shader의 역할은 clip space 좌표를 생성하는 겁니다.
 항상 이런 형식을 취하는데
 
     void main() {
@@ -25,7 +25,7 @@ Vertex Shader의 역할은 clip 공간 좌표를 생성하는 겁니다.
     }
 
 shader는 vertex마다 한 번씩 호출되는데요.
-호출될 때마다 특수 전역 변수, `gl_Position`을 일부 clip 공간 좌표로 설정해야 합니다.
+호출될 때마다 특수 전역 변수, `gl_Position`을 일부 clip space 좌표로 설정해야 합니다.
 
 vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.
@@ -73,7 +73,7 @@ buffer를 만들고,
       gl_Position = a_position;
     }
 
-buffer에 clip 공간 vertex를 넣으면 동작할 겁니다. 
+buffer에 clip space vertex를 넣으면 동작할 겁니다. 
 
 attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, 그리고 `mat4`를 사용할 수 있습니다.
 
@@ -272,13 +272,13 @@ fragment shader
     +varying vec4 v_positionWithOffset;
 
     void main() {
-    +  // clip 공간에서 (-1 <-> +1) 색상 공간으로 (0 -> 1) 변환
+    +  // clip space에서 (-1 <-> +1) 색상 공간으로 (0 -> 1) 변환
     +  vec4 color = v_positionWithOffset * 0.5 + 0.5
     +  gl_FragColor = color;
     }
 
 위 예제는 대부분 말도 안되는 예제입니다.
-일반적으로는 clip 공간 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
+일반적으로는 clip space 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
 그럼에도 불구하고 작동하며 색상을 만들어냅니다.
 
 ## GLSL

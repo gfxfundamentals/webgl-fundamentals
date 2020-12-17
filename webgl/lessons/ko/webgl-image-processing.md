@@ -10,7 +10,7 @@ WebGL에서 이미지 처리는 쉽습니다.
 혹시 읽지 않았다면 [그곳](webgl-fundamentals.html)에 먼저 가보는 것이 좋습니다.
 
 WebGL에서 이미지를 그리기 위해서 우리는 texture를 사용해야 하는데요.
-픽셀 대신 렌더링할 때 WebGL이 clip 공간 좌표를 유추하는 것과 마찬가지로, texture를 읽을 때 WebGL은 texture 좌표를 유추합니다.
+픽셀 대신 렌더링할 때 WebGL이 clip space 좌표를 유추하는 것과 마찬가지로, texture를 읽을 때 WebGL은 texture 좌표를 유추합니다.
 texture 좌표는 texture 크기에 상관없이 0.0에서 1.0사이가 됩니다.
 
 단 하나의 직사각형(정확히는, 2개의 삼각형)만 그리기 때문에 직사각형의 각 점이 texture의 어느 위치에 해당하지는지 WebGL에게 알려줘야 합니다.
