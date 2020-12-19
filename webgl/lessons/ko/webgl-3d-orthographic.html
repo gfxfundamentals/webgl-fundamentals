@@ -244,7 +244,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 첫 번째는 <a href="webgl-fundamentals.html">기초로 시작했고</a> 이전에는 <a href="webgl-2d-matrices.html">2D 행렬에 대해</a> 다뤘습니다.
 혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
 <p>마지막 글에서 우리는 2D 행렬이 어떻게 동작하는지 살펴봤습니다.
-translation, rotation, scale, 그리고 심지어 픽셀에서 clip 공간으로 투영하는 것은 모두 1 행렬 그리고 마법같은 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
+translation, rotation, scale, 그리고 심지어 픽셀에서 clip space로 투영하는 것은 모두 1 행렬 그리고 마법같은 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
 거기서 3D를 수행하는 것은 하나의 작은 단계일 뿐입니다.</p>
 <p>이전 2D 예제에서는 3x3 행렬을 곱한 2D 점(x, y)들을 가졌었는데요.
 3D를 수행하기 위해서는 3D 점(x, y, z)들과 4x4 행렬이 필요합니다.</p>
@@ -468,7 +468,7 @@ function setGeometry(gl) {
     ];
   },
 }
-</code></pre><p>픽셀에서 clip 공간으로 변환되었습니다.
+</code></pre><p>픽셀에서 clip space로 변환되었습니다.
 3D로 확장하기 위한 첫 번째 시도는</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  projection: function(width, height, depth) {
     // 참고: 이 행렬은 Y축을 뒤집으므로 0이 상단입니다.
@@ -479,7 +479,7 @@ function setGeometry(gl) {
       -1, 1, 0, 1,
     ];
   },
-</code></pre><p>X와 Y를 픽셀에서 clip 공간으로 변환해줘야 했던 것처럼, Z도 동일한 작업을 해줘야 합니다.
+</code></pre><p>X와 Y를 픽셀에서 clip space로 변환해줘야 했던 것처럼, Z도 동일한 작업을 해줘야 합니다.
 이 경우에는 Z축 픽셀 단위도 만들고 있는데요.
 저는 <code class="notranslate" translate="no">depth</code>에 대해 <code class="notranslate" translate="no">width</code>와 비슷한 값을 넘길 것이므로 공간은 0에서 <code class="notranslate" translate="no">width</code>의 픽셀 너비와, 0에서 <code class="notranslate" translate="no">height</code>의 픽셀 높이가 되지만, <code class="notranslate" translate="no">depth</code>는 <code class="notranslate" translate="no">-depth / 2</code>에서 <code class="notranslate" translate="no">+depth / 2</code>가 됩니다.</p>
 <p>마지막으로 행렬을 계산하는 코드를 업데이트 해줘야 합니다.</p>
@@ -632,7 +632,7 @@ gl.vertexAttribPointer(
 </code></pre><p>이걸 <code class="notranslate" translate="no">drawScene</code> 함수에 넣읍시다.
 이 기능을 켜면, WebGL은 기본적으로 뒷면의 삼각형을 &quot;culling&quot; 하는데요.
 이 경우 &quot;Culling&quot;은 &quot;not drawing&quot;을 말하는 멋진 단어입니다.</p>
-<p>참고로 WebGL에서 삼각형이 시계 혹은 반시계 방향으로 진행되는지는 clip 공간에서 해당 삼각형의 꼭지점에 따라 달라지는데요.
+<p>참고로 WebGL에서 삼각형이 시계 혹은 반시계 방향으로 진행되는지는 clip space에서 해당 삼각형의 꼭지점에 따라 달라지는데요.
 즉, WebGL은 vertex shader에서 점들에 수식을 적용한 후에 삼각형이 앞면인지 후면인지 파악합니다.
 이 말은 시계 방향 삼각형이 X축 -1로 축척되거나 180도 회전하여 반시계 삼각형이 된다는 뜻입니다.
 CULL_FACE가 비활성화되었으므로 시계 방향(앞)과 반시계 방향(뒤) 삼각형을 모두 볼 수 있었습니다.
@@ -696,7 +696,7 @@ WebGL이 색상 픽셀을 그리기 전에 해당 depth 픽셀을 검사합니�
 
 </p>
 <p>한가지 사소한 일이 있는데요.
-대부분의 3D 수학 라이브러리에는 clip 공간에서 픽셀 공간으로 변환을 수행하는 <code class="notranslate" translate="no">projection</code> 함수가 없습니다.
+대부분의 3D 수학 라이브러리에는 clip space에서 픽셀 공간으로 변환을 수행하는 <code class="notranslate" translate="no">projection</code> 함수가 없습니다.
 오히려 일반적으로 <code class="notranslate" translate="no">ortho</code>나 <code class="notranslate" translate="no">orthographic</code>이라고 불리는 함수가 이렇게 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   orthographic: function(left, right, bottom, top, near, far) {
@@ -804,7 +804,7 @@ x와 y는 전달했고 z는 1이 필요했지만 z의 기본 값은 0이므로 �
           <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D Scale</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">WebGL 2D 행렬</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">2D 행렬</a></li>
         </ul>
   <li>3D</li>
         <ul>

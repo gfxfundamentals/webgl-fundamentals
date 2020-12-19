@@ -243,7 +243,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>이건 <a href="webgl-fundamentals.html">WebGL 기초</a>에서 이어지는 글입니다.
 이어서 하기 전에 WebGL과 GPU가 실제로 무엇을 하는지 기본적인 수준에서 얘기해봅시다.
 GPU에는 기본적으로 2가지 부분이 있는데요.
-첫 번째 부분은 vertex(또는 데이터 스트림)를 clip 공간의 vertex로 처리합니다.
+첫 번째 부분은 vertex(또는 데이터 스트림)를 clip space의 vertex로 처리합니다.
 두 번째 부분은 첫 번째 부분을 기반으로 픽셀을 그립니다.</p>
 <p>호출할 때</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var primitiveType = gl.TRIANGLES;
@@ -255,7 +255,7 @@ gl.drawArrays(primitiveType, offset, count);
 <p>왼쪽은 당신이 제공한 데이터입니다.
 vertex shader는 <a href="webgl-shaders-and-glsl.html">GLSL</a>로 작성하는 함수인데요.
 이 함수는 각 vertex마다 한 번씩 호출됩니다.
-몇 가지 계산을 하고 현재 vertex의 clip 공간 값으로 특수 변수 <code class="notranslate" translate="no">gl_Position</code>를 선언하는데요.
+몇 가지 계산을 하고 현재 vertex의 clip space 값으로 특수 변수 <code class="notranslate" translate="no">gl_Position</code>를 선언하는데요.
 GPU는 이 값을 가져와서 내부에 저장합니다.</p>
 <p><code class="notranslate" translate="no">삼각형</code>을 그린다고 가정하면, 첫 번째 부분에서 vertex 3개를 생성할 때마다 GPU는 이걸 사용해 삼각형을 만드는데요.
 어떤 픽셀이 삼각형의 점 3개에 해당하는지 확인한 다음, 삼각형을 rasterize(=&quot;픽셀로 그리기&quot;) 합니다.
@@ -264,7 +264,7 @@ fragment shader는 특수 변수 <code class="notranslate" translate="no">gl_Fra
 <p>전부 흥미롭지만 지금까지 예제에서 볼 수 있듯이 fragment shader는 픽셀당 아주 적은 정보를 가지고 있습니다.
 다행히 더 많은 정보를 전달할 수 있는데요.
 vertex shader에서 fragment shader로 전달하려는 각 값마다 “varying”을 정의하는겁니다.</p>
-<p>간단한 예시로, 우리가 직접 계산한 clip 공간 좌표를 vertex shader에서 fragment shader로 전달해봅시다.</p>
+<p>간단한 예시로, 우리가 직접 계산한 clip space 좌표를 vertex shader에서 fragment shader로 전달해봅시다.</p>
 <p>간단한 삼각형을 그려볼 건데요.
 <a href="webgl-2d-matrices.html">이전 예제</a>에 이어서 사각형을 삼각형으로 바꿔봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 삼각형을 정의한 값들로 버퍼 채우기
@@ -296,8 +296,8 @@ void main() {
   // 위치에 행렬 곱하기
   gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 
-  // clip 공간에서 색상 공간으로 변환
-  // clip 공간은 -1.0에서 +1.0까지
+  // clip space에서 색상 공간으로 변환
+  // clip space는 -1.0에서 +1.0까지
   // 색상 공간은 0.0에서 1.0까지
 *  v_color = gl_Position * 0.5 + 0.5;
 }
@@ -318,7 +318,7 @@ void main() {
 
 </p>
 <p>삼각형을 이동시키고, 회전하고 크기를 바꿔보세요.
-참고로 색상은 clip 공간에서 계산되므로 삼각형과 함께 움직이지 않는데요.
+참고로 색상은 clip space에서 계산되므로 삼각형과 함께 움직이지 않는데요.
 이들은 색상은 배경에 상대적입니다.</p>
 <p>이제 생각해봅시다.
 우리는 vertex 3개만을 계산했습니다.
@@ -355,9 +355,9 @@ table.vertex_table {
 </table>
 </div>
 
-<p>vertex shader는 translation, rotation, scale에 행렬을 적용하고 clip 공간으로 변환합니다.
+<p>vertex shader는 translation, rotation, scale에 행렬을 적용하고 clip space로 변환합니다.
 translation, rotation, 그리고 scale의 기본값은 translation = 200, 150, rotation = 0, scale = 1,1이므로 실제로는 이동만 하는데요.
-400x300인 backbuffer가 주어지면 vertex shader는 행렬을 적용한 뒤 다음과 같은 3개의 clip 공간 vertex를 계산합니다.</p>
+400x300인 backbuffer가 주어지면 vertex shader는 행렬을 적용한 뒤 다음과 같은 3개의 clip space vertex를 계산합니다.</p>
 <div class="hcenter">
 <table class="vertex_table">
 <tr><th colspan="3">gl_Position에 작성된 값들</th></tr>
@@ -633,7 +633,7 @@ function setColors(gl) {
           <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D Scale</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">WebGL 2D 행렬</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">2D 행렬</a></li>
         </ul>
   <li>3D</li>
         <ul>

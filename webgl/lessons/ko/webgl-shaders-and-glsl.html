@@ -250,13 +250,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)으로 연결됩니다.
 일반적인 WebGL 앱은 많은 shader program을 가집니다.</p>
 <h2 id="vertex-shader">Vertex Shader</h2>
-<p>Vertex Shader의 역할은 clip 공간 좌표를 생성하는 겁니다.
+<p>Vertex Shader의 역할은 clip space 좌표를 생성하는 겁니다.
 항상 이런 형식을 취하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">void main() {
   gl_Position = doMathToMakeClipspaceCoordinates
 }
 </code></pre><p>shader는 vertex마다 한 번씩 호출되는데요.
-호출될 때마다 특수 전역 변수, <code class="notranslate" translate="no">gl_Position</code>을 일부 clip 공간 좌표로 설정해야 합니다.</p>
+호출될 때마다 특수 전역 변수, <code class="notranslate" translate="no">gl_Position</code>을 일부 clip space 좌표로 설정해야 합니다.</p>
 <p>vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.</p>
 <ol>
@@ -292,7 +292,7 @@ gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 void main() {
   gl_Position = a_position;
 }
-</code></pre><p>buffer에 clip 공간 vertex를 넣으면 동작할 겁니다. </p>
+</code></pre><p>buffer에 clip space vertex를 넣으면 동작할 겁니다. </p>
 <p>attribute는 type으로 <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code>, <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, 그리고 <code class="notranslate" translate="no">mat4</code>를 사용할 수 있습니다.</p>
 <h3 id="uniform">Uniform</h3>
 <p>shader uniform은 그리기 호출의 모든 vertex에 대해 똑같이 유지되며 shader에게 전달되는 값입니다.
@@ -445,12 +445,12 @@ void main() {
 +varying vec4 v_positionWithOffset;
 
 void main() {
-+  // clip 공간에서 (-1 &lt;-&gt; +1) 색상 공간으로 (0 -&gt; 1) 변환
++  // clip space에서 (-1 &lt;-&gt; +1) 색상 공간으로 (0 -&gt; 1) 변환
 +  vec4 color = v_positionWithOffset * 0.5 + 0.5
 +  gl_FragColor = color;
 }
 </code></pre><p>위 예제는 대부분 말도 안되는 예제입니다.
-일반적으로는 clip 공간 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
+일반적으로는 clip space 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
 그럼에도 불구하고 작동하며 색상을 만들어냅니다.</p>
 <h2 id="glsl">GLSL</h2>
 <p>GLSL는 Graphics Library Shader Language의 약자인데요.
@@ -566,7 +566,7 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
           <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D Scale</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">WebGL 2D 행렬</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">2D 행렬</a></li>
         </ul>
   <li>3D</li>
         <ul>
