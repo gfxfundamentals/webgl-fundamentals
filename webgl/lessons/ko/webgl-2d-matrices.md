@@ -420,73 +420,80 @@ vec2 clipSpace = zeroToTwo - 1.0;
 gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 ```
 
-이 단계를 차례대로 살펴보자면, 첫 단계, "픽셀을 0.0에서 1.0사이로 변환", 이건 실제로 크기 조정 작업입니다.
-두 번째 역시 크기 조정 작업입니다.
-다음은 이동하고 마지막으로 Y축을 -1로 크기 조정합니다.
-실제로 shader에 전달하는 행렬로 모든 것을 할 수 있습니다.
-우리는 2개의 크기 조정 행렬을 만들 수 있는데,
-하나는 1.0/resolution 크기 조정,
-다른 하나는 2.0 크기 조정이며,
-세 번째는 -1.0,-1.0으로 이동이고,
-네 번째는 Y축을 -1로 크기 조정한 뒤 모든 것을 곱하는 대신에,
-수식이 간단하기 때문에 주어진 해상도에 대해 'projection' 행렬을 만드는 함수를 바로 만들어 봅시다.
+이 단계들을 차례대로 살펴보자면, 첫 단계, "픽셀을 0.0에서 1.0사이로 변환", 이건 실제 scale 작업입니다.
+두 번째 역시 scale 작업입니다.
+다음은 translation이고 마지막으로 Y를 -1로 scale 하는데요.
+실제로 shader에 전달하는 행렬로 모든 걸 수행할 수 있습니다.
+2개의 scale 행렬을 만들 수 있는데,
+하나는 1.0/resolution으로 scale하는 것이고,
+다른 하나는 2.0으로 scale하는 것이며,
+세 번째는 -1.0,-1.0으로 translation하고,
+네 번째는 Y를 -1로 scale한 뒤 모든 함께 곱하지만,
+그 대신 수식이 간단하기 때문에,
+직접 주어진 해상도에 대한 'projection' 행렬을 만드는 함수를 바로 만들어 봅시다.
 
-    var m3 = {
-      projection: function(width, height) {
-        // 참고: 이 행렬은 Y축을 뒤집어서 0이 상단에 있도록 합니다.
-        return [
-          2 / width, 0, 0,
-          0, -2 / height, 0,
-          -1, 1, 1
-        ];
-      },
+```js
+var m3 = {
+  projection: function(width, height) {
+    // 참고: 이 행렬은 Y축을 뒤집어서 0이 상단에 있도록 합니다.
+    return [
+      2 / width, 0, 0,
+      0, -2 / height, 0,
+      -1, 1, 1
+    ];
+  },
 
-      ...
+  ...
+```
 
 이제 shader를 더 단순하게 할 수 있습니다.
 여기 완전히 새로운 vertex shader 입니다.
 
-    <script id="vertex-shader-2d" type="x-shader/x-vertex">
-    attribute vec2 a_position;
+```html
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
+attribute vec2 a_position;
 
-    uniform mat3 u_matrix;
+uniform mat3 u_matrix;
 
-    void main() {
-      // Multiply the position by the matrix.
-      gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
-    }
-    </script>
+void main() {
+  // position에 행렬 곱하기
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+}
+</script>
+```
 
 그리고 JavaScript에서는 projection 행렬로 곱해야 하는데
 
-      // 화면 그리기
-      function drawScene() {
-        ...
+```js
+// scene 그리기
+function drawScene() {
+  ...
 
-        // 행렬 계산
-        var projectionMatrix = m3.projection(
-            gl.canvas.clientWidth, gl.canvas.clientHeight);
+  // 행렬 계산
+  var projectionMatrix = m3.projection(
+      gl.canvas.clientWidth, gl.canvas.clientHeight);
 
-        ...
+  ...
 
-        // 행렬 곱하기
-        var matrix = m3.multiply(projectionMatrix, translationMatrix);
-        matrix = m3.multiply(matrix, rotationMatrix);
-        matrix = m3.multiply(matrix, scaleMatrix);
+  // 행렬 곱하기
+  var matrix = m3.multiply(projectionMatrix, translationMatrix);
+  matrix = m3.multiply(matrix, rotationMatrix);
+  matrix = m3.multiply(matrix, scaleMatrix);
 
-        ...
-      }
+  ...
+}
+```
 
-또한 해상도를 설정하는 코드를 삭제했습니다.
-마지막 단계에서 우리는 행렬 수학의 마법으로 6-7단계의 다소 복잡한 shader를 고작 1단계의 아주 간단한 shader로 바꿨습니다.
+또한 해상도를 설정하는 코드를 삭제했는데요.
+이 마지막 단계에서 우리는 행렬 수학의 마법 덕분에 6-7단계의 다소 복잡한 shader를 고작 1단계의 아주 간단한 shader로 바꿨습니다.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-with-projection.html" }}}
 
-계속하기 전에 조금만 더 단순하게 해봅시다.
-다양한 행렬을 생성하고 개별적으로 곱하는 것이 일반적이지만 생성할 때마다 곱하는 것도 일반적인 방법입니다.
+계속 진행하기 전에 조금 더 단순하게 해봅시다.
+다양한 행렬을 생성하고 따로 곱하는 것이 일반적이지만 생성할 때마다 곱하는 것도 일반적인 방법입니다.
 이처럼 효율적으로 함수를 정의할 수 있고
 
-```
+```js
 var m3 = {
 
   ...
@@ -508,10 +515,10 @@ var m3 = {
 };
 ```
 
-이렇게 하면 행렬 7줄을 위 코드 4줄로 바꿀 수 있는데
+위의 행렬 코드 7줄을 이렇게 4줄로 바꿀 수 있는데
 
-```
-// Compute the matrix
+```js
+// 행렬 계산
 var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
 matrix = m3.translate(matrix, translation[0], translation[1]);
 matrix = m3.rotate(matrix, angleInRadians);
@@ -522,7 +529,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
 {{{example url="../webgl-2d-geometry-matrix-transform-simpler-functions.html" }}}
 
-마지막으로 하나, 우리는 위에서 순서 문제를 봤습니다.
+마지막으로 하나, 우리는 위의 순서 문제를 봤습니다.
 첫 번째 예제에서는
 
     translation * rotation * scale
@@ -534,65 +541,65 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 우리는 저것들이 어떻게 다른지 봤습니다.
 
 행렬을 보는 두 가지 방법이 있는데요.
-표현식을 감안할 때
+주어진 표현식은
 
     projectionMat * translationMat * rotationMat * scaleMat * position
 
-많은 사람들이 자연스럽게 찾는 첫 번째 방법은 오른쪽에서 시작하여 왼쪽으로 계산하는 겁니다.
+많은 사람들이 자연스럽게 찾는 첫 번째 방법은 오른쪽에서 시작하여 왼쪽으로 작업하는 겁니다.
 
-먼저 위치 값에 크기 조정 행렬을 곱해서 scaledPosition을 얻습니다.
+먼저 scaledPosition을 얻기 위해 position에 scale 행렬을 곱하고
 
     scaledPosition = scaleMat * position
 
-그런 다음 scaledPosition에 회전 행렬을 곱해서 rotatedScaledPosition을 얻습니다.
+그런 다음 rotatedScaledPosition을 얻기 위해 scaledPosition에 rotation 행렬을 곱하며
 
     rotatedScaledPosition = rotationMat * scaledPosition
 
-그런 다음 rotatedScaledPositon에 이동 행렬을 곱해서 translatedRotatedScaledPosition을 얻습니다.
+다음으로 translatedRotatedScaledPosition를 얻기 위해 rotatedScaledPositon에 translation 행렬을 곱한 뒤
 
     translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
 
-그리고 마지막으로 그걸 projection 행렬에 곱해서 clipspace 위치를 얻습니다.
+마지막으로 clip space 위치를 얻기 위해 projection 행렬에 곱합니다
 
     clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 
-두 번째 방법은 행렬을 왼쪽에서 오른쪽으로 읽는 겁니다.
-이 경우 각각의 행렬은 canvas가 나타내는 *공간*을 변경합니다.
-canvas는 clipspace(-1 ~ +1)로 나타내는 각 방향에서 시작합니다.
-왼쪽에서 오른쪽으로 적용된 각 행렬은 canvas가 나타내는 공간을 변경합니다.
+두 번째 방법은 행렬을 왼쪽에서 오른쪽으로 읽는 건데요.
+이 경우 각각의 행렬은 canvas에 표시되는 *space*를 변경합니다.
+canvas는 각 방향에서 clip space(-1 ~ +1)를 나타내는 것으로 시작하는데요.
+왼쪽에서 오른쪽으로 적용된 각 행렬은 canvas에 표시되는 space를 변경합니다.
 
 1단계: 행렬 없음 (혹은 단위 행렬)
 
 > {{{diagram url="resources/matrix-space-change.html?stage=0" caption="clip space" }}}
 >
 > 흰색 영역은 canvas 입니다. 파랑색은 canvas 바깥입니다. 우리는 clip space에 있습니다.
-> 전단된 위치가 clip space 안에 있어야 합니다.
+> 전달된 위치는 clip space에 있어야 합니다.
 
 2단계:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
 
-> {{{diagram url="resources/matrix-space-change.html?stage=1" caption="from clip space to pixel space" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=1" caption="clip space에서 pixel space로" }}}
 >
-> 이제 우리는 픽셀 공간에 있습니다. X = 0 ~ 400, Y = 0 ~ 300, 왼쪽 상단은 0,0 입니다.
-> 이 행렬을 사용하여 전달된 위치는 픽셀 공간 안에 있어야 합니다.
-> 공간이 +Y = 상단에서 +Y = 하단으로 뒤집힐 때 확 지나가는 것을 볼 수 있습니다.
+> 이제 우리는 pixel space에 있습니다. X = 0에서 400, Y = 0에서 300, 왼쪽 상단은 0,0 입니다.
+> 이 행렬을 사용하여 전달된 위치는 픽셀 pixel space에 있어야 합니다.
+> space가 양수 Y = 상단에서 양수 Y = 하단으로 뒤집힐 때의 순간을 보실 수 있습니다.
 
 3단계:  `matrix = m3.translate(matrix, tx, ty);`
 
-> {{{diagram url="resources/matrix-space-change.html?stage=2" caption="move origin to tx, ty" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=2" caption="원점을 tx, ty로 이동" }}}
 >
-> 원점은 이제 tx, ty (150, 100)로 이동되었습니다. 공간도 이동했습니다.
+> 원점은 이제 tx, ty (150, 100)로 이동됐습니다. space도 이동했습니다.
 
 4단계:  `matrix = m3.rotate(matrix, rotationInRadians);`
 
-> {{{diagram url="resources/matrix-space-change.html?stage=3" caption="rotate 33 degrees" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=3" caption="33도 회전" }}}
 >
-> 공간이 tx, ty를 중심으로 회전했습니다.
+> space가 tx, ty를 중심으로 회전됐습니다. 
 
 5단계:  `matrix = m3.scale(matrix, sx, sy);`
 
-> {{{diagram url="resources/matrix-space-change.html?stage=4" capture="scale the space" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=4" caption="space를 scale" }}}
 >
-> 이전에 tx, ty을 중심으로 회전된 공간은 x는 2로, y는 1.5로 크기 조정되었습니다.
+> 이전에 tx, ty을 중심으로 회전된 space는 x는 2, y는 1.5로 scale 되었습니다.
 
 shader에서 우리는 `gl_Position = matrix * position;`을 실행합니다.
 `position` 값은 최종 공간에서 효과적으로 나타납니다.
