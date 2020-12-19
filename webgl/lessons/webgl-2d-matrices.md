@@ -616,7 +616,7 @@ Step 4:  `matrix = m3.rotate(matrix, rotationInRadians);`
 
 Step 5:  `matrix = m3.scale(matrix, sx, sy);`
 
-> {{{diagram url="resources/matrix-space-change.html?stage=4" capture="scale the space" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=4" caption="scale the space" }}}
 >
 > The previously rotated space with its center at tx, ty has been scaled 2 in x, 1.5 in y
 
