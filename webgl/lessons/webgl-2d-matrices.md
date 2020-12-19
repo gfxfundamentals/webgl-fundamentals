@@ -11,7 +11,7 @@ This post is a continuation of a series of posts about WebGL.  The first
 <h3>Math vs Programming vs WebGL</h3>
 <p>
 Before we get started, if you have previously studied linear algebra or in general
-have experience working with matrices then 
+have experience working with matrices then
 <a href="webgl-matrix-vs-math.html"><b>please read this article before
 continuing below.</b></a>.
 </p>
@@ -381,7 +381,7 @@ Here's the code to make an identity matrix.
 
 ```js
 var m3 = {
-  identity function() {
+  identity: function() {
     return [
       1, 0, 0,
       0, 1, 0,
