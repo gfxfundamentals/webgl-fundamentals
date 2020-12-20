@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/zh_cn/webgl-visualizing-the-camera.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,79 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Visualizing the Camera" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to draw a camera frustum" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Visualizing the Camera" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html" />
-<meta name="twitter:description" content="How to draw a camera frustum" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="如何绘制一个相机视椎体">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-visualizing-the-camera_zh-cn.jpg">
+
+<meta property="og:title" content="WebGL 可视化相机">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-visualizing-the-camera_zh-cn.jpg">
+<meta property="og:description" content="如何绘制一个相机视椎体">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 可视化相机">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">
+<meta name="twitter:description" content="如何绘制一个相机视椎体">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-visualizing-the-camera_zh-cn.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-visualizing-the-camera_zh-cn.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html",
+      "inLanguage":"zh-cn",
+      "name":"WebGL 可视化相机",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Visualizing the Camera</title>
+<title>WebGL 可视化相机</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,12 +235,423 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Visualizing the Camera</h1>
+    <h1>WebGL 可视化相机</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
-<p><a href="/webgl/lessons/webgl-visualizing-the-camera.html">英文原版地址</a></p>
+      <p>本文假设你已经读过 <a href="webgl-multiple-views.html">多个视角的文章</a> 了。如果你还没有读过，请 <a href="webgl-multiple-views.html">先去阅读</a>。</p>
+<p>本文还假设你已经读过 <a href="webgl-less-code-more-fun.html">码少趣多</a>，因为本文使用到了那里提到的库，以便使得本文的例子更整洁。如果你不明白 <code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code> 函数是设置 buffers 和 attributes 的，或者不明白 <code class="notranslate" translate="no">webglUtils.setUniforms</code> 函数是设置 uniforms 的，等等之类的函数你都不能理解，那么你可能要往回 <a href="webgl-fundamentals.html">读读基础</a>。</p>
+<p>将相机能看到什么进行可视化通常是非常有用的，即可视化相机的视椎体。这也是非常容易的。如 <a href="webgl-3d-orthographic.html">正交</a> 投影和 <a href="webgl-3d-perspective.html">透视</a> 投影所说的那样，那些投影矩阵将某些空间的坐标转换为范围在 -1 到 +1 的裁剪空间。一个相机矩阵只是一个在世界空间中表示相机位置和方位的矩阵。</p>
+<p>所以，如果要可视化相机的话，第一件要做的事就很显然了。如果我们只是使用相机矩阵去绘制某些东西，我们就可以得到一个代表相机的物体。复杂的地方在于相机并不能看到它本身，但是，如果使用 <a href="webgl-multiple-views.html">多个视角</a> 中的技术，我们就可以拥有 2 个视角。对于每个视角，我们会使用不同的相机。第 2 个视角会看向第 1 个视角，因此第 2 个视角能够看到我们正在绘制的这个物体，这个物体表示的是第 1 个视角中的相机。</p>
+<p>首先，让我们创建一些表示相机的数据。让我们创建一个立方体，然后在立方体的末端添加一个圆锥。我们会使用线段来绘制这个物体。我们会使用 <a href="webgl-indexed-vertices.html">索引</a> 来连接顶点。</p>
+<p><a href="webgl-3d-camera.html">相机</a> 看向的是 -Z 方向，所以，让我们把立方体和圆锥放到 +Z 这边，而圆锥的开口方向是 -Z 方向。</p>
+<p>首先的是立方体的线框</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 为一个相机创建几何
+function createCameraBufferInfo(gl) {
+  // 首先，让我们添加一个立方体。它的范围是 1 到 3，
+  // 因为相机看向的是 -Z 方向，所以我们想要相机在 Z = 0 处开始
+  const positions = [
+    -1, -1,  1,  // 立方体的顶点
+     1, -1,  1,
+    -1,  1,  1,
+     1,  1,  1,
+    -1, -1,  3,
+     1, -1,  3,
+    -1,  1,  3,
+     1,  1,  3,
+  ];
+  const indices = [
+    0, 1, 1, 3, 3, 2, 2, 0, // 立方体的索引
+    4, 5, 5, 7, 7, 6, 6, 4,
+    0, 4, 1, 5, 3, 7, 2, 6,
+  ];
+  return webglUtils.createBufferInfoFromArrays(gl, {
+    position: positions,
+    indices,
+  });
+}
+</code></pre>
+<p>然后，让我们添加圆锥的的线框</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 为一个相机创建几何
+function createCameraBufferInfo(gl) {
+  // 首先，让我们添加一个立方体。它的范围是 1 到 3，
+  // 因为相机看向的是 -Z 方向，所以我们想要相机在 Z = 0 处开始。
++  // 我们会把一个圆锥放到该立方体的前面，
++  // 且该圆锥的开口方向朝 -Z 方向。
+  const positions = [
+    -1, -1,  1,  // 立方体的顶点
+     1, -1,  1,
+    -1,  1,  1,
+     1,  1,  1,
+    -1, -1,  3,
+     1, -1,  3,
+    -1,  1,  3,
+     1,  1,  3,
++     0,  0,  1,  // 圆锥的尖头
+  ];
+  const indices = [
+    0, 1, 1, 3, 3, 2, 2, 0, // 立方体的索引
+    4, 5, 5, 7, 7, 6, 6, 4,
+    0, 4, 1, 5, 3, 7, 2, 6,
+  ];
++  // 添加圆锥的片段
++  const numSegments = 6;
++  const coneBaseIndex = positions.length / 3; 
++  const coneTipIndex =  coneBaseIndex - 1;
++  for (let i = 0; i &lt; numSegments; ++i) {
++    const u = i / numSegments;
++    const angle = u * Math.PI * 2;
++    const x = Math.cos(angle);
++    const y = Math.sin(angle);
++    positions.push(x, y, 0);
++    // 从圆锥尖头到圆锥边缘的线段
++    indices.push(coneTipIndex, coneBaseIndex + i);
++    // 从圆锥边缘一点到圆锥边缘下一点的线段
++    indices.push(coneBaseIndex + i, coneBaseIndex + (i + 1) % numSegments);
++  }
+  return webglUtils.createBufferInfoFromArrays(gl, {
+    position: positions,
+    indices,
+  });
+}
+</code></pre>
+<p>最后，让我们添加一个缩放比例，因为我们的 F 高 150 个单位长度，而这个相机的尺寸是 2 到 3 个单位长度，所以它在我们的 F 旁边会很小。当我们绘制它的时候，我们可以将它乘以一个缩放矩阵，使其缩放一定的比例，或者我们也可以像下面这样直接对数据本身进行缩放。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-function createCameraBufferInfo(gl) {
++function createCameraBufferInfo(gl, scale = 1) {
+  // 首先，让我们添加一个立方体。它的范围是 1 到 3，
+  // 因为相机看向的是 -Z 方向，所以我们想要相机在 Z = 0 处开始。
+  // 我们会把一个圆锥放到该立方体的前面，
+  // 且该圆锥的开口方向朝 -Z 方向。
+  const positions = [
+    -1, -1,  1,  // 立方体的顶点
+     1, -1,  1,
+    -1,  1,  1,
+     1,  1,  1,
+    -1, -1,  3,
+     1, -1,  3,
+    -1,  1,  3,
+     1,  1,  3,
+     0,  0,  1,  // 圆锥的尖头
+  ];
+  const indices = [
+    0, 1, 1, 3, 3, 2, 2, 0, // 立方体的索引
+    4, 5, 5, 7, 7, 6, 6, 4,
+    0, 4, 1, 5, 3, 7, 2, 6,
+  ];
+  // 添加圆锥的片段
+  const numSegments = 6;
+  const coneBaseIndex = positions.length / 3; 
+  const coneTipIndex =  coneBaseIndex - 1;
+  for (let i = 0; i &lt; numSegments; ++i) {
+    const u = i / numSegments;
+    const angle = u * Math.PI * 2;
+    const x = Math.cos(angle);
+    const y = Math.sin(angle);
+    positions.push(x, y, 0);
+    // 从圆锥尖头到圆锥边缘的线段
+    indices.push(coneTipIndex, coneBaseIndex + i);
+    // 从圆锥边缘一点到圆锥边缘下一点的线段
+    indices.push(coneBaseIndex + i, coneBaseIndex + (i + 1) % numSegments);
+  }
++  positions.forEach((v, ndx) =&gt; {
++    positions[ndx] *= scale;
++  });
+  return webglUtils.createBufferInfoFromArrays(gl, {
+    position: positions,
+    indices,
+  });
+}
+</code></pre>
+<p>我们现在的着色器程序绘制的是顶点的颜色。让我们创建另一个绘制纯色的着色器程序。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;script id=&quot;solid-color-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec4 a_position;
+
+uniform mat4 u_matrix;
+
+void main() {
+  // 将 position 乘以矩阵
+  gl_Position = u_matrix * a_position;
+}
+&lt;/script&gt;
+&lt;!-- fragment shader --&gt;
+&lt;script id=&quot;solid-color-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+precision mediump float;
+
+uniform vec4 u_color;
+
+void main() {
+  gl_FragColor = u_color;
+}
+&lt;/script&gt;
+</code></pre>
+<p>现在，让我们使用它们来绘制一个场景，该场景内有一个相机看着另一个场景。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 设置 GLSL 程序
+// 编译着色器、链接程序、查找 locations
+-const programInfo = webglUtils.createProgramInfo(gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
++const vertexColorProgramInfo = webglUtils.createProgramInfo(gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
++const solidColorProgramInfo = webglUtils.createProgramInfo(gl, [&#39;solid-color-vertex-shader&#39;, &#39;solid-color-fragment-shader&#39;]);
+
+// 为一个 3D 的 &#39;F&#39; 创建 buffers 并用数据来填充
+const fBufferInfo = primitives.create3DFBufferInfo(gl);
+
+...
+
++const cameraScale = 20;
++const cameraBufferInfo = createCameraBufferInfo(gl, cameraScale);
+
+...
+
+const settings = {
+  rotation: 150,  // 以角度为单位
++  cam1FieldOfView: 60,  // 以角度为单位
++  cam1PosX: 0,
++  cam1PosY: 0,
++  cam1PosZ: -200,
+};
+
+
+function render() {
+  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+  gl.enable(gl.CULL_FACE);
+  gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.SCISSOR_TEST);
+
+  // 我们要把视角分成 2 个
+  const effectiveWidth = gl.canvas.clientWidth / 2;
+  const aspect = effectiveWidth / gl.canvas.clientHeight;
+  const near = 1;
+  const far = 2000;
+
+  // 计算一个透视投影矩阵
+  const perspectiveProjectionMatrix =
+-      m4.perspective(fieldOfViewRadians), aspect, near, far);
++      m4.perspective(degToRad(settings.cam1FieldOfView), aspect, near, far);
+
+  // 使用 look at 计算相机的矩阵
+-  const cameraPosition = [0, 0, -75];
++  const cameraPosition = [
++      settings.cam1PosX, 
++      settings.cam1PosY,
++      settings.cam1PosZ,
++  ];
+  const target = [0, 0, 0];
+  const up = [0, 1, 0];
+  const cameraMatrix = m4.lookAt(cameraPosition, target, up);
+
+  let worldMatrix = m4.yRotation(degToRad(settings.rotation));
+  worldMatrix = m4.xRotate(worldMatrix, degToRad(settings.rotation));
+  // 使 F 围绕着它的原点
+  worldMatrix = m4.translate(worldMatrix, -35, -75, -5);
+
+  const {width, height} = gl.canvas;
+  const leftWidth = width / 2 | 0;
+
+  // draw on the left with orthographic camera
+  // 使用正交相机绘制在左边
+  gl.viewport(0, 0, leftWidth, height);
+  gl.scissor(0, 0, leftWidth, height);
+  gl.clearColor(1, 0.8, 0.8, 1);
+
+  drawScene(perspectiveProjectionMatrix, cameraMatrix, worldMatrix);
+
+  // 使用透视相机绘制在右边
+  const rightWidth = width - leftWidth;
+  gl.viewport(leftWidth, 0, rightWidth, height);
+  gl.scissor(leftWidth, 0, rightWidth, height);
+  gl.clearColor(0.8, 0.8, 1, 1);
+
+  // 计算第二个投影矩阵和第二个相机
++  const perspectiveProjectionMatrix2 =
++      m4.perspective(degToRad(60), aspect, near, far);
++
++  // 使用 look at 计算相机的矩阵
++  const cameraPosition2 = [-600, 400, -400];
++  const target2 = [0, 0, 0];
++  const cameraMatrix2 = m4.lookAt(cameraPosition2, target2, up);
+
+-  drawScene(perspectiveProjectionMatrix, cameraMatrix, worldMatrix);
++  drawScene(perspectiveProjectionMatrix2, cameraMatrix2, worldMatrix);
+
++  // 绘制代表第一个相机的物体
++  {
++    // 从第 2 个相机矩阵中创建一个视图矩阵
++    const viewMatrix = m4.inverse(cameraMatrix2);
++
++    let mat = m4.multiply(perspectiveProjectionMatrix2, viewMatrix);
++    // 使用第一个相机的矩阵作为表示相机的物体的世界矩阵
++    mat = m4.multiply(mat, cameraMatrix);
++
++    gl.useProgram(solidColorProgramInfo.program);
++
++    // ------ 绘制表示相机的物体 --------
++
++    // 设置所有需要的 attributes
++    webglUtils.setBuffersAndAttributes(gl, solidColorProgramInfo, cameraBufferInfo);
++
++    // 设置 uniforms
++    webglUtils.setUniforms(solidColorProgramInfo, {
++      u_matrix: mat,
++      u_color: [0, 0, 0, 1],
++    });
++
++    webglUtils.drawBufferInfo(gl, cameraBufferInfo, gl.LINES);
++  }
+}
+render();
+</code></pre>
+<p>现在，我们可以在右边的场景内看到用来渲染左边场景的相机了。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-visualize-camera.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-visualize-camera.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>让我们再绘制一些东西来表示相机的视椎体。</p>
+<p>因为视椎体表示的是将某一空间的坐标转换到裁剪空间的转换，这样我们就可以创建一个表示裁剪空间的立方体，然后使用投影矩阵的逆矩阵把该立方体放置到场景内。</p>
+<p>首先，我们需要一个裁剪空间的立方体线框。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function createClipspaceCubeBufferInfo(gl) {
+  // 首先，让我们添加一个立方体。它的范围是 1 到 3，
+  // 因为相机看向的是 -Z 方向，所以我们想要相机在 Z = 0 处开始。
+  // 我们会把一个圆锥放到该立方体的前面，
+  // 且该圆锥的开口方向朝 -Z 方向。
+  const positions = [
+    -1, -1, -1,  // 立方体的顶点
+     1, -1, -1,
+    -1,  1, -1,
+     1,  1, -1,
+    -1, -1,  1,
+     1, -1,  1,
+    -1,  1,  1,
+     1,  1,  1,
+  ];
+  const indices = [
+    0, 1, 1, 3, 3, 2, 2, 0, // 立方体的索引
+    4, 5, 5, 7, 7, 6, 6, 4,
+    0, 4, 1, 5, 3, 7, 2, 6,
+  ];
+  return webglUtils.createBufferInfoFromArrays(gl, {
+    position: positions,
+    indices,
+  });
+}
+</code></pre>
+<p>然后我们创建一个立方体并绘制它</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const cameraScale = 20;
+const cameraBufferInfo = createCameraBufferInfo(gl, cameraScale);
+
++const clipspaceCubeBufferInfo = createClipspaceCubeBufferInfo(gl);
+
+...
+
+  // 绘制表示第一个相机的物体
+  {
+    // 从相机矩阵中创建一个视图矩阵
+    const viewMatrix = m4.inverse(cameraMatrix2);
+
+    let mat = m4.multiply(perspectiveProjectionMatrix2, viewMatrix);
+    // 使用第一个相机的矩阵作为表示相机的物体的世界矩阵
+    mat = m4.multiply(mat, cameraMatrix);
+
+    gl.useProgram(solidColorProgramInfo.program);
+
+    // ------ 绘制表示相机的物体 --------
+
+    // 设置所有需要的 attributes
+    webglUtils.setBuffersAndAttributes(gl, solidColorProgramInfo, cameraBufferInfo);
+
+    // 设置 uniforms
+    webglUtils.setUniforms(solidColorProgramInfo, {
+      u_matrix: mat,
+      u_color: [0, 0, 0, 1],
+    });
+
+    webglUtils.drawBufferInfo(gl, cameraBufferInfo, gl.LINES);
+
++    // ----- 绘制视椎体 -------
++
++    mat = m4.multiply(mat, m4.inverse(perspectiveProjectionMatrix));
++
++    // 设置所有需要的 attributes
++    webglUtils.setBuffersAndAttributes(gl, solidColorProgramInfo, clipspaceCubeBufferInfo);
++
++    // 设置 uniforms
++    webglUtils.setUniforms(solidColorProgramInfo, {
++      u_matrix: mat,
++      u_color: [0, 0, 0, 1],
++    });
++
++    webglUtils.drawBufferInfo(gl, clipspaceCubeBufferInfo, gl.LINES);
+  }
+}
+</code></pre>
+<p>让我们修改一下，以便我们可以调整第一个相机的近平面和远平面设置</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const settings = {
+  rotation: 150,  // 以角度为单位
+  cam1FieldOfView: 60,  // 以角度为单位
+  cam1PosX: 0,
+  cam1PosY: 0,
+  cam1PosZ: -200,
++  cam1Near: 30,
++  cam1Far: 500,
+};
+
+...
+
+  // 计算一个透视投影矩阵
+  const perspectiveProjectionMatrix =
+      m4.perspective(degToRad(settings.cam1FieldOfView),
+      aspect,
+-      near,
+-      far);
++      settings.cam1Near,
++      settings.cam1Far);
+</code></pre>
+<p>现在我们可以同时看到视椎体了。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-visualize-camera-with-frustum.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-visualize-camera-with-frustum.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>如果你调整近平面或远平面或视场角，则它们会裁剪那个 F，你可以看到表示视椎体的物体匹配上了。</p>
+<p>无论我们为左边的相机使用的是透视投影还是正交投影，它都能正常工作，因为一个投影矩阵总是会转换为裁剪空间，所以投影矩阵的逆矩阵总是会把我们传入的 +1 到 -1 立方体进行适当的扭曲。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const settings = {
+  rotation: 150,  // 以角度为单位
+  cam1FieldOfView: 60,  // 以角度为单位
+  cam1PosX: 0,
+  cam1PosY: 0,
+  cam1PosZ: -200,
+  cam1Near: 30,
+  cam1Far: 500,
++  cam1Ortho: true,
++  cam1OrthoUnits: 120,
+};
+
+...
+
+// 计算一个投影矩阵
+const perspectiveProjectionMatrix = settings.cam1Ortho
+    ? m4.orthographic(
+        -settings.cam1OrthoUnits * aspect,  // left
+         settings.cam1OrthoUnits * aspect,  // right
+        -settings.cam1OrthoUnits,           // bottom
+         settings.cam1OrthoUnits,           // top
+         settings.cam1Near,
+         settings.cam1Far)
+    : m4.perspective(degToRad(settings.cam1FieldOfView),
+        aspect,
+        settings.cam1Near,
+        settings.cam1Far);
+</code></pre>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-visualize-camera-with-orthographic.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-visualize-camera-with-orthographic.html" target="_blank">点此在新窗口中浏览</a>
+</div>
+
+</p>
+<p>那些使用 3D 建模软件（例如 <a href="https://blender.org">Blender</a>）或者带有场景编辑工具的游戏引擎（例如 <a href="https://unity.com">Unity</a> 或 <a href="https://godotengine.org/">Godot</a>）的人应该对这种可视化非常熟悉。</p>
+<p>这种可视化对于 debugging 也非常有用。</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -200,7 +667,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>基础概念</li>
+        <div id="toc">
+          <ul>  <li>基础概念</li>
         <ul>
           <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
@@ -313,7 +781,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">WebGL 点、线和三角</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
-<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">可视化相机</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
 <li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
@@ -339,13 +807,46 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
 </ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>有关于WebGL的疑问? <a href="https://stackoverflow.com/questions/tagged/webgl">在Stackoverflow提问</a>。</div>
+        <div>有意见或建议? <a href="https://github.com/vinci-mz/webgl-fundamentals/issues">在GitHub上提issue</a>。</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 可视化相机';
+            var disqus_title = 'WebGL 可视化相机';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
