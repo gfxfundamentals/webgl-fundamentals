@@ -601,53 +601,53 @@ canvas는 각 방향에서 clip space(-1 ~ +1)를 나타내는 것으로 시작�
 >
 > 이전에 tx, ty을 중심으로 회전된 space는 x는 2, y는 1.5로 scale 되었습니다.
 
-shader에서 우리는 `gl_Position = matrix * position;`을 실행합니다.
-`position` 값은 최종 공간에서 효과적으로 나타납니다.
+shader에서 우리는 `gl_Position = matrix * position;`을 실행하는데요.
+`position` 값은 마지막 space에서 유효합니다.
 
 이해하기 더 쉽다고 느껴지는 방법을 사용하시면 됩니다.
 
-이 글이 행렬 수학을 이해하는데 도움이 되었기를 바랍니다.
-2D를 계속 공부하고 싶다면 [Canvas 2D drawImage 함수 재작성](webgl-2d-drawimage.html)을 확인하고 [Canvas 2D 행렬 Stack 재생성](webgl-2d-matrix-stack.html)을 봐주세요.
+이 포스트가 행렬 수학을 이해하는데 도움이 되었기를 바랍니다.
+2D를 계속 하고 싶다면 [Canvas 2D의 drawImage 함수 재작성](webgl-2d-drawimage.html)과 [Canvas 2D의 행렬 Stack 재작성](webgl-2d-matrix-stack.html)을 봐주세요.
 
-그게 아니라면 다음은 [3D로 이동합니다](webgl-3d-orthographic.html).
-3D에서 행렬 수학은 동일한 원칙과 사용법을 따릅니다.
+그게 아니라면 다음은 [3D](webgl-3d-orthographic.html)로 넘어갑니다.
+3D에서 행렬 수학은 동일한 원리과 사용법을 따르는데요.
 2D부터 시작해서 이해하기 쉽도록 만들었습니다.
-또한, 정말 행렬 수학 전문가가 되고 싶다면 [이 놀라운 영상을 확인하세요](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab).
+
+또한, 정말 행렬 수학의 전문가가 되고 싶다면 [이 놀라운 영상](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)을 확인하세요.
 
 <div class="webgl_bottombar">
 <h3><code>clientWidth</code>와 <code>clientHeight</code>가 뭔가요?</h3>
 <p>
-지금까지는 canvas의 넓이를 참고할 때마다 <code>canvas.width</code>와 <code>canvas.height</code>를 사용했습니다.
-하지만 위에서 <code>m3.projection</code>를 호출할 때는 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>를 사용했습니다.
+지금까지는 canvas의 넓이를 참조할 때마다 <code>canvas.width</code>와 <code>canvas.height</code>를 사용했지만 위에서 <code>m3.projection</code>를 호출할 때는 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>를 사용했습니다.
 왜일까요?
 </p>
 <p>
-Projection 행렬은 clipspace(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련있습니다.
-하지만, 브라우저에는, 두 가지 유형의 픽셀이 있는데요.
-하나는 canvas 자체의 픽셀 수 입니다.
-예를 들자면 이렇게 정의된 canvas가 있습니다.
+Projection 행렬은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
+하지만, 브라우저에는, 우리가 다루는 두 가지 유형의 픽셀이 있는데요.
+하나는 canvas 자체의 픽셀 수입니다.
+예를 들어 이렇게 정의된 canvas가 있습니다.
 </p>
 <pre class="prettyprint">
   &lt;canvas width="400" height="300"&gt;&lt;/canvas&gt;
 </pre>
-<p>혹은 이렇게 정의된</p>
+<p>또는 이렇게 정의되어</p>
 <pre class="prettyprint">
   var canvas = document.createElement("canvas");
   canvas.width = 400;
   canvas.height = 300;
 </pre>
 <p>
-둘 다 너비 400픽셀과 높이 300픽셀인 이미지를 포함합니다.
-하지만, 이 크기는 실제로 브라우저에서 400x300 픽셀의 canvas를 표시하는 크기와는 별도인데요.
+둘 다 너비가 400픽셀이고 높이가 300픽셀인 이미지를 포함합니다.
+하지만, 이 크기는 실제로 브라우저가 400x300 픽셀의 canvas를 표시하는 크기와는 다른데요.
 CSS는 canvas가 표시되는 크기를 정의합니다.
-예를들어 이렇게 canvas를 만든다고 해봅시다.
+예를 들어 이렇게 canvas를 만든다고 해봅시다.
 </p>
-<pre class="prettyprint"><!>
+<pre class="prettyprint">
   &lt;style&gt;
-  canvas {
-    width: 100vw;
-    height: 100vh;
-  }
+    canvas {
+      width: 100vw;
+      height: 100vh;
+    }
   &lt;/style&gt;
   ...
   &lt;canvas width="400" height="300">&lt;/canvas&gt;
@@ -657,23 +657,21 @@ CSS는 canvas가 표시되는 크기를 정의합니다.
 400x300은 아닌 것 같군요.
 </p>
 <p>
-여기 canvas의 표시 크기를 100%로 설정해서 canvas가 페이지를 꽉 채우도록 펼쳐지는 두 예제가 있습니다.
+여기 canvas의 CSS 표시 크기를 100%로 설정해서 canvas가 페이지를 채우도록 늘어나는 두 예제가 있습니다.
 첫 번째는 <code>canvas.width</code>와 <code>canvas.height</code>를 사용하는 겁니다.
 새로운 창을 열고 창 크기를 조절해보세요.
-'F'가 어떻게 틀린 모양을 가지는지 확인해봅시다.
-왜곡되는데요.
+'F'가 맞는 모양을 가지지 않는지 확인해봅시다.
+왜곡되고 있는데요.
 </p>
 {{{example url="../webgl-canvas-width-height.html" width="500" height="150" }}}
 <p>
-두 번째 예제에서는 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>를 사용할 겁니다.
-<code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>는 canvas가 실제 브라우저에서 표시되는 크기를 알려줍니다.
-그래서 이 경우, canvas는 여전히 400x300 픽셀이지만 크기에 따라 가로 세로 비율을 정의하고 있으므로 <code>F</code>는 항상 올바르게 보입니다.
+두 번째 예제에서는 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>를 사용합니다.
+<code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>는 canvas가 실제 브라우저에서 표시되는 크기를 알려주기 때문에, 이 경우 canvas는 여전히 400x300 픽셀이지만 canvas가 표시되는 크기에 따라 종횡비를 정의하고 있으므로 <code>F</code>는 항상 올바르게 보입니다.
 </p>
 {{{example url="../webgl-canvas-clientwidth-clientheight.html" width="500" height="150" }}}
 <p>
-Canvas 크기를 조절할 수 있는 대부분의 앱은 <code>canvas.width</code>와 <code>canvas.height</code>를  <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>에 맞추려고 하는데요.
-왜냐하면 브라우저에서 표시하는 각 픽셀에 대해 하나의 canvas 픽셀이 있어야 하기 때문입니다.
-하지만, 위에서 보았듯이, 그건 유일한 선택지가 아닙니다.
+canvas의 크기를 조절할 수 있는 대부분의 앱은 <code>canvas.width</code>와 <code>canvas.height</code>를 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>에 맞추려고 하는데 그 이유는 브라우저에 표시되는 각 픽셀에 대해 canvas에 하나의 픽셀이 있기를 원하기 때문입니다.
+하지만, 위에서 보았듯이, 그게 유일한 선택지는 아닙니다.
 말인즉슨, 거의 모든 경우, <code>canvas.clientHeight</code>와 <code>canvas.clientWidth</code>를 사용해서 projection 행렬의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
 </p>
 </div>
