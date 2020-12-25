@@ -4,7 +4,7 @@ TOC: 기초
 
 
 WebGL은 종종 3D API로 치부됩니다.
-사람들은 "WebGL이랑 *magic*을 사용해서 멋진 3d를 만들거야"라고 생각하는데요.
+사람들은 "WebGL을 사용해서 멋진 3d를 만들거야"라고 생각하는데요.
 실제로 WebGL은 [rasterization engine](webgl-2d-vs-3d-library.html)일 뿐입니다.
 당신이 제공한 코드를 기반으로 점, 선, 삼각형 등을 그리죠.
 WebGL이 원하는 작업을 수행하도록 하는 건 [점, 선, 심긱형](webgl-points-lines-triangles.html)을 사용한 코드를 제공하는 것에 달려있습니다.
