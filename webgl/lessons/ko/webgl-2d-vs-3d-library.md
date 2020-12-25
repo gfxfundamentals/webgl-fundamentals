@@ -175,15 +175,13 @@ WebGL은 depth sorting을 훨씬 더 쉽게 만드는 depth buffer를 가지고 
 물론 x,y,z,w를 제공하고 렌더링하기 전에 W로 나누지만 그건 WebGL을 3D 라이브러리로 한정하기엔 충분하지 않습니다.
 3D 라이브러리에서 3D 데이터를 제공하면, 라이브러리는 3D에서 clip space point를 계산합니다.
 
-I hope you at least understand where I'm coming from when I say WebGL is not a 3D library. => 🤔
-제가 WebGL이 3D 라이브러리가 아니라고 말할 때 적어도 제가 어디서 왔는지 이해하기를 바랍니다.
-<!-- TODO: 위쪽 물어보고 추가 커밋 -->
+제가 WebGL이 3D 라이브러리가 아니라고 말할 때 저의 관점을 조금이나마 이해하셨길 바랍니다.
 또한 3D 라이브러리는 3D를 처리해야 한다는 걸 깨달으셨길 바랍니다.
 OpenGL이 그렇습니다.
 Three.js가 그렇습니다.
 OpenGL ES 2.0과 WebGL은 아닙니다.
-Therefore they arguably don't belong in the same broad category of "3D libraries".
+따라서 이들은 "3D 라이브러리"라는 동일한 범주에 속하지 않습니다.
 
-The point of all of this is to give a developer that is new to WebGL an understanding of WebGL at its core.
-Knowing that WebGL is not a 3D library and that they have to provide all the knowledge themselves lets them know what's next for them and whether they want to pursue that 3D math knowledge or instead choose a 3D library to handle it for them.
-It also removes much of the mystery of how it works.
+이 모든 것의 요점은 WebGL이 처음인 개발자에게 WebGL 핵심에 대한 이해를 제공하는 겁니다.
+WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 한다는 걸 알면, 다음 단계는 무엇인지 그리고 3D 수학 지식 추구할지 아니면 3D 라이브러리를 선택하여 처리할지 알 수 있습니다.
+또한 어떻게 작동하는지에 대한 수많은 수수께끼를 없애줍니다.
