@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-points-lines-triangles.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Points, Lines, and Triangles" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="Details on drawing Points, Lines, and Triangles" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-points-lines-triangles.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Points, Lines, and Triangles" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-points-lines-triangles.html" />
-<meta name="twitter:description" content="Details on drawing Points, Lines, and Triangles" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="Details on drawing Points, Lines, and Triangles">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-points-lines-triangles_ko.jpg">
+
+<meta property="og:title" content="WebGL 점, 선, 그리고 삼각형">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-points-lines-triangles_ko.jpg">
+<meta property="og:description" content="Details on drawing Points, Lines, and Triangles">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-points-lines-triangles.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 점, 선, 그리고 삼각형">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-points-lines-triangles.html">
+<meta name="twitter:description" content="Details on drawing Points, Lines, and Triangles">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-points-lines-triangles_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-points-lines-triangles.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-points-lines-triangles_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-points-lines-triangles.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-points-lines-triangles.html",
+      "inLanguage":"ko",
+      "name":"WebGL 점, 선, 그리고 삼각형",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-points-lines-triangles.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Points, Lines, and Triangles</title>
+<title>WebGL 점, 선, 그리고 삼각형</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,13 +236,79 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Points, Lines, and Triangles</h1>
+    <h1>WebGL 점, 선, 그리고 삼각형</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-points-lines-triangles.html">여기</a>에 있습니다.</p>
+      <p>이 사이트의 대부분은 삼각형으로 모든 걸 그리는데요.
+이건 WebGL 프로그램의 99%가 하는 일반적인 일입니다.
+하지만, 완벽을 기하기 위해 몇 가지 다른 경우를 살펴 봅시다.</p>
+<p><a href="webgl-fundamentals.html">첫 번째 글</a>에서 언급했듯이 WebGL은 점, 선, 그리고 삼각형을 그립니다.
+<code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>를 호출할 때 이를 수행하는데요.
+clip space 좌표를 출력하는 vertex shader를 제공한 다음, <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>의 첫 번째 전달인자를 기반으로 WebGL은 점, 선, 또는 삼각형을 그립니다.</p>
+<p><code class="notranslate" translate="no">gl.drawArrays</code>와 <code class="notranslate" translate="no">gl.drawElements</code>의 첫 번째 전달인자로 유효한 값들은</p>
+<ul>
+<li><p><code class="notranslate" translate="no">POINTS</code></p>
+<p> vertex shader가 출력하는 각 clip space vertex에 대해 해당 점의 중앙에 정사각형을 그립니다.
+ 정사각형의 크기는 vertex shader 내부의 특별 변수 <code class="notranslate" translate="no">gl_PointSize</code>에 픽셀 단위로 원하는 크기를 설정하여 지정합니다.</p>
+<p> 참고: 정사각형이 될 수 있는 최대(그리고 최소) 크기는 쿼리할 수 있는 구현에 따라 다른데</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
+</code></pre><p> <a href="webgl-drawing-without-data.html#pointsissues">여기</a>에서 다른 이슈도 확인하세요.</p>
+</li>
+<li><p><code class="notranslate" translate="no">LINES</code></p>
+<p> vertex shader가 출력하는 각 2개의 clip space vertex에 대해 두 점을 연결하는 선을 그립니다.
+ 점 A,B,C,D,E,F가 있다면 3개의 선이 표시됩니다.</p>
+ <div class="webgl_center"><img src="../resources/gl-lines.svg" style="width: 400px;"></div>
+
+<p> 스펙에 따르면 <code class="notranslate" translate="no">gl.lineWidth</code>를 호출하고 픽셀 단위로 너비를 지정하여 선의 두께를 설정할 수 있습니다.
+ 실제로 최대 너비는 구현에 따라 다르지만 대부분의 구현에서 최대 너비는 1입니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  const [minSize, maxSize] = gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE);
+</code></pre><p> 이는 주로 핵심 데스크탑 OpenGL에서 1보다 큰 값이 더 이상 사용되지 않기 때문입니다.</p>
+</li>
+<li><p><code class="notranslate" translate="no">LINE_STRIP</code></p>
+<p> vertex shader가 출력하는 각 clip space vertex에 대해 vertex shader가 출력한 이전 포인트에서 선을 그립니다.</p>
+<p> 따라서, clip space vertex A,B,C,D,E,F를 출력하면 5개의 선이 표시됩니다.</p>
+ <div class="webgl_center"><img src="../resources/gl-line-strip.svg" style="width: 400px;"></div>
+</li>
+<li><p><code class="notranslate" translate="no">LINE_LOOP</code></p>
+<p> 이건 <code class="notranslate" translate="no">LINE_STRIP</code> 예제와 같지만 마지막 점에서 첫 번째 점으로 한 줄 더 그려집니다.</p>
+ <div class="webgl_center"><img src="../resources/gl-line-loop.svg" style="width: 400px;"></div>
+</li>
+<li><p><code class="notranslate" translate="no">TRIANGLES</code></p>
+<p> vertex shader가 출력하는 3개의 clip space vertex마다 점 3개로 삼각형을 그립니다.
+ 이게 가장 많이 사용되는 모드입니다.</p>
+ <div class="webgl_center"><img src="../resources/gl-triangles.svg" style="width: 400px;"></div>
+</li>
+<li><p><code class="notranslate" translate="no">TRIANGLE_STRIP</code></p>
+<p> vertex shader가 출력하는 각 clip space vertex에 대해 마지막 vertex 3개로 삼각형을 그립니다.
+ 다시 말해 6개의 점 A,B,C,D,E,F를 출력하면 삼각형 4개가 그려집니다.
+ A,B,C 다음 B,C,D 다음 C,D,E 다음 D,E,F</p>
+ <div class="webgl_center"><img src="../resources/gl-triangle-strip.svg" style="width: 400px;"></div>
+</li>
+<li><p><code class="notranslate" translate="no">TRIANGLE_FAN</code></p>
+<p> vertex shader가 출력하는 각 clip space vertex에 대해 첫 번째 vertex와 마지막 vertex 2개로 삼각형을 그립니다.
+ 다시 말해 6개의 점 A,B,C,D,E,F를 출력하면 삼각형 4개가 그려집니다.
+ A,B,C 다음 A,C,D 다음 A,D,E 다음 마지막으로 A,E,F</p>
+ <div class="webgl_center"><img src="../resources/gl-triangle-fan.svg" style="width: 400px;"></div>
+
+</li>
+</ul>
+<p>다른 사람들은 동의하지 않겠지만 저의 경험상 <code class="notranslate" translate="no">TRIANGLE_FAN</code>과 <code class="notranslate" translate="no">TRIANGLE_STRIP</code>은 피하는 게 가장 좋습니다.
+몇 가지 예외적인 경우에만 적합하고 이런 경우를 처리하기 위한 추가 코드는 애당초 삼각형만으로 모든 걸 처리할 가치가 없는데요.
+특히 법선을 만들거나 texture 좌표를 생성하거나 vertex 데이터로 다른 많은 작업을 수행하는 도구가 있을 수 있습니다.
+<code class="notranslate" translate="no">TRIANGLES</code>만을 고수하면 함수는 작동하는데요.
+<code class="notranslate" translate="no">TRIANGLE_FAN</code>과 <code class="notranslate" translate="no">TRIANGLE_STRIP</code>을 추가하기 시작하면 더 많은 경우를 처리하기 위한 함수들이 더 필요해집니다.
+여러분은 동의하지 않고 원하는 방식을 하실 수도 있습니다.
+그저 제 경험과 제가 물어본 몇몇 AAA 게임 개발자들의 경험을 말씀드리는 겁니다.</p>
+<p>마찬가지로 <code class="notranslate" translate="no">LINE_LOOP</code>와 <code class="notranslate" translate="no">LINE_STRIP</code>는 유용하지 않고 비슷한 이슈를 가지고 있습니다.
+<code class="notranslate" translate="no">TRIANGLE_FAN</code>과 <code class="notranslate" translate="no">TRIANGLE_STRIP</code>처럼 이것들을 사용하는 상황은 드문데요.
+예를 들어 각각 4개의 점으로 만들어진 연결된 선 4개를 그리고 싶다고 생각할 수 있습니다.</p>
+<div class="webgl_center"><img src="../resources/4-lines-4-points.svg" style="width: 400px;"></div>
+
+<p><code class="notranslate" translate="no">LINE_STRIP</code>을 쓴다면 <code class="notranslate" translate="no">gl.drawArrays</code> 호출 4번과 각 라인에 대한 attribute를 설정하기 위해 더 많은 호출을 해야 하지만 <code class="notranslate" translate="no">LINES</code>만 사용하면 <code class="notranslate" translate="no">gl.drawArrays</code> 단일 호출로 선 4개를 모두 그리기 위해 필요한 모든 점을 삽입할 수 있습니다.
+그게 훨씬 빠를 겁니다.</p>
+<p>추가로, <code class="notranslate" translate="no">LINES</code>는 디버깅이나 간단한 효과에 사용하기는 좋지만 대부분의 플랫폼에서 너비 제한이 1픽셀임을 고려해 볼 때 잘못된 솔루션인 경우가 많습니다.
+그래프의 grid를 그리거나 3D 모델링 프로그램에서 polygon의 윤곽선을 표시하려면 <code class="notranslate" translate="no">LINES</code>를 사용하는 것이 좋지만 SVG나 Adobe Illustrator처럼 구조화된 그래픽을 그리려면 이 방식은 작동하지 않으며, 일반적으로 삼각형에서 <a href="https://mattdesl.svbtle.com/drawing-lines-is-hard">다른 방식</a>으로 선을 렌더링해야 합니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +324,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -312,7 +436,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">WebGL Boilerplate</a></li>
 <li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">WebGL Canvas 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">Animation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 그리고 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL and Alpha</a></li>
@@ -341,13 +465,51 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>질문은? <a href="https://stackoverflow.com/questions/tagged/webgl">Stackoverflow</a>에서 물어봐주세요.</div>
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 점, 선, 그리고 삼각형';
+            var disqus_title = 'WebGL 점, 선, 그리고 삼각형';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
