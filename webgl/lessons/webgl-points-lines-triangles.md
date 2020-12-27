@@ -92,7 +92,7 @@ and `gl.drawElements` are
    then 4 triangles will be drawn. A,B,C then A,C,D then
    A,D,E and finally A,E,F
 
-   <div class="webgl_center"><img src="resources/gl-triangle-fan.svg" style="width: 400px;" align="center"></div>
+   <div class="webgl_center"><img src="resources/gl-triangle-fan.svg" style="width: 400px;"></div>
 
 I'm sure some others will disagree but in my experience
 `TRIANGLE_FAN` and `TRIANGLE_STRIP` are best avoided.
@@ -114,10 +114,10 @@ Like `TRIANGLE_FAN` and `TRIANGLE_STRIP` the situations
 to use them are rare. For example you might think you
 want to draw 4 connected lines each made from 4 points. 
 
-<div class="webgl_center"><img src="resources/4-lines-4-points.svg" style="width: 400px;" align="center"></div>
+<div class="webgl_center"><img src="resources/4-lines-4-points.svg" style="width: 400px;"></div>
 
 If you use `LINE_STRIP` you'd need to make 4 calls to `gl.drawArrays`
-and more calls to setup the attributes for each line where as if you
+and more calls to setup the attributes for each line whereas if you
 just use `LINES` then you can insert all the points needed to draw
 all 4 sets of lines with a single call to `gl.drawArrays`. That will
 be much much faster.
