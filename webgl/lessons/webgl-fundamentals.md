@@ -532,7 +532,6 @@ And here's the new code that draws 50 rectangles in random places and random col
     }
 
     // Fills the buffer with the values that define a rectangle.
-
     function setRectangle(gl, x, y, width, height) {
       var x1 = x;
       var x2 = x + width;

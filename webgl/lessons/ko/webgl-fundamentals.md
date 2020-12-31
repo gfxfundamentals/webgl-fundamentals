@@ -5,7 +5,7 @@ TOC: 기초
 
 WebGL은 종종 3D API로 치부됩니다.
 사람들은 "WebGL을 사용해서 멋진 3d를 만들거야"라고 생각하는데요.
-실제로 WebGL은 [rasterization engine](webgl-2d-vs-3d-library.html)일 뿐입니다.
+사실 WebGL은 [rasterization engine](webgl-2d-vs-3d-library.html)일 뿐입니다.
 당신이 제공한 코드를 기반으로 점, 선, 삼각형 등을 그리죠.
 WebGL이 원하는 작업을 수행하도록 하는 건 [점, 선, 심긱형](webgl-points-lines-triangles.html)을 사용한 코드를 제공하는 것에 달려있습니다.
 
@@ -24,7 +24,7 @@ fragment shader의 역할은 현재 그려지는 각 primitive 화소의 색상�
 당신이 원하는 것을 그리기 위해서는 여러 상태를 설정하고 GPU에서 shader를 실행하는 `gl.drawArrays`나 `gl.drawElements`를 호출해서 함수 쌍을 실행해야 합니다.
 
 이런 함수가 접근하기 원하는 모든 데이터는 GPU에 제공되어야 하는데요.
-shader가 데이터를 받을 수 있는 4가지 방법이 있습니다.
+shader가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.
 
 
 1. Attribute & Buffer
@@ -38,7 +38,7 @@ shader가 데이터를 받을 수 있는 4가지 방법이 있습니다.
    
    buffer는 무작위로 접근할 수 없습니다.
    대신에 vertex shader가 지정한 횟수만큼 실행되는데요.
-   실행될 때마다 지정된 각 buffer에서 다음 값을 가져와서 attribute에 할당합니다.
+   실행될 때마다 지정된 각 buffer에서 다음 값을 가져와 attribute에 할당합니다.
 
 2. Uniform
 
@@ -104,9 +104,9 @@ vertex shader부터 시작해봅시다.
       }
     }
 
-실제로는 `positionBuffer`가 2진 데이터(아래 참조)로 변환되어야 하기 때문에 그렇게 간단하지 않고, 따라서 buffer에서 데이터를 가져오기 위한 실제 계산은 약간 다를 수 있지만, 이걸로 vertex shader가 어떻게 실행되는지 알 수 있기를 바랍니다.
+실제로는 `positionBuffer`가 2진 데이터(아래 참조)로 변환되어야 하기 때문에 그렇게 간단하지 않아서 buffer에서 데이터를 가져오기 위한 실제 계산은 약간 다를 수 있지만 이걸로 vertex shader가 어떻게 실행되는지 아셨기를 바랍니다.
 
-다음은 fragment shader기 필요합니다.
+다음은 fragment shader기 필요한데
 
     // fragment shader는 기본 정밀도를 가지고 있지 않기 때문에 하나를 선택해야 합니다.
     // mediump은 좋은 기본값인데요. "중간 정밀도"를 의미합니다.
@@ -122,15 +122,15 @@ WebGL에서 색상은 0에서 1까지입니다.
 
 이제 두 shader 함수를 작성했으니 WebGL을 시작해봅시다.
 
-먼저 HTML canvas 요소가 필요합니다.
+먼저 HTML canvas 요소가 필요하고
 
      <canvas id="c"></canvas>
 
-그런 다음 JavaScript에서 그걸 찾을 수 있습니다.
+그런 다음 JavaScript에서 찾을 수 있으며
 
      var canvas = document.querySelector("#c");
 
-이제 우리는 WebGLRenderingContext를 만들 수 있습니다.
+이제 WebGLRenderingContext를 만들 수 있는데
 
      var gl = canvas.getContext("webgl");
      if (!gl) {
@@ -171,7 +171,7 @@ WebGL에서 색상은 0에서 1까지입니다.
     </script>
 
 사실 대부분의 3D 엔진은 다양한 종류의 template, concatenation 등을 사용하여 GLSL Shader를 바로 생성하는데요.
-이 사이트에 있는 예제들은 runtime에 GLSL을 생성해야 할 만큼 복잡하진 않습니다.
+이 사이트에 있는 예제들은 runtime에 GLSL을 생성해야 할 만큼 복잡하지 않습니다.
 
 다음은 shader를 만들고, GLSL을 업로드하고, shader를 컴파일할 함수가 필요합니다.
 참고로 함수의 이름을 보면 어떤 일을 하는지 명확하기 때문에 주석을 작성하지 않았습니다.
@@ -190,7 +190,7 @@ WebGL에서 색상은 0에서 1까지입니다.
       gl.deleteShader(shader);
     }
 
-이제 두 shader를 만드는 함수를 호출할 수 있습니다
+이제 두 shader를 만드는 함수를 호출할 수 있고
 
     var vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
     var fragmentShaderSource = document.querySelector("#fragment-shader-2d").text;
@@ -198,7 +198,7 @@ WebGL에서 색상은 0에서 1까지입니다.
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 
-그런 다음 두 shader를 *program*으로 *link*해야 합니다
+그런 다음 두 shader를 *program*으로 *link*해야 하며
 
     function createProgram(gl, vertexShader, fragmentShader) {
       var program = gl.createProgram();
@@ -215,20 +215,20 @@ WebGL에서 색상은 0에서 1까지입니다.
       gl.deleteProgram(program);
     }
 
-그리고 호출합니다
+그리고 호출하는데
 
     var program = createProgram(gl, vertexShader, fragmentShader);
 
-이제 GPU에 GLSL Program을 만들었으니 데이터를 제공해줘야 하는데요.
-WebGL API의 대부분은 GLSL program에 데이터를 제공하기 위한 상태 설정에 관한 것입니다.
-이 경우 GLSL program에 대한 우리의 유일한 입력은 attribute인 `a_position`인데요.
-먼저 해야 할 일은 우리가 방금 작성한 program의 attribute 위치를 찾는 것입니다.
+이제 GPU에 GLSL Program을 만들었으니 데이터를 제공해줘야 합니다.
+WebGL API의 대부분은 GLSL program에 데이터를 제공하기 위한 상태 설정에 관한 건데요.
+이 경우 GLSL program에 대한 유일한 입력은 attribute인 `a_position`입니다.
+먼저 해야 할 일은 우리가 방금 작성한 program의 attribute 위치를 찾는건데
 
     var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
 
 attribute 위치(그리고 uniform 위치) 위치를 찾는 것은 render loop가 아니라 초기화하는 동안 해야 합니다.
 
-attribute는 buffer로부터 데이터를 가져오므로 버퍼를 생성해야 합니다.
+attribute는 buffer로부터 데이터를 가져오므로 버퍼를 생성해야 하는데
 
     var positionBuffer = gl.createBuffer();
 
@@ -240,7 +240,7 @@ bind point는 WebGL 안에 있는 내부 전역 변수라고 생각하시면 됩
 
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-이제 bind point를 통해 그걸 참조해서 buffer에 데이터를 넣을 수 있습니다.
+이제 bind point를 통해 해당 buffer를 참조해서 데이터를 넣을 수 있는데
 
     // 2d point 3개
     var positions = [
@@ -272,18 +272,18 @@ WebGL은 그 힌트를 사용해서 특정 항목들을 최적화할 수 있습�
 
 그리기 전에 canvas 크기를 디스플레이 크기에 맞게 조절해야 합니다.
 이미지같은 canvas는 2가지 크기를 가지는데요.
-실제로 그 안에 있는 픽셀 수와 개별적으로 표시되는 크기입니다.
+실제로 그 안에 있는 픽셀 수와 이와 별개로 표시되는 크기입니다.
 CSS는 canvas가 표시되는 크기를 결정하는데요.
-다른 어떤 방법보다 훨씬 더 유연하기 때문에 **항상 CSS로 원하는 canvas 크기를 설정해야 합니다.**
+이게 다른 방법들보다 훨씬 더 유연하기 때문에 항상 **CSS로 원하는 canvas 크기를 설정**해야 합니다.
 
 canvas의 픽셀 수를 표시되는 크기와 일치하도록 만들기 위해 저는 [여기](webgl-resizing-the-canvas.html)에서 읽을 수 있는 도우미 함수를 쓰고 있습니다.
 
 여기 있는 대부분의 예제는 자체 창에서 실행할 경우 canvas 크기가 400x300 픽셀이지만 이 페이지에 있는 것처럼 iframe 내부라면 사용 가능한 공간을 채우기 위해 늘어나는데요.
-CSS가 크기를 결정하게 한 다음 일치하도록 조정함으로써 이 두 가지 경우 모두를 쉽게 처리할 수 있습니다.
+CSS가 크기를 결정하게 한 다음 일치하도록 조정함으로써 두 가지 경우 모두 쉽게 처리할 수 있습니다.
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-`gl_Position`으로 설정할 clip space 값을 화면 공간으로 불리는 픽셀로 어떻게 변환하는지 WebGL에게 알려줘야 하는데요.
+`gl_Position`으로 설정할 clip space 값을 어떻게 screen space라고 불리는 픽셀로 변환하는지 WebGL에게 알려줘야 하는데요.
 이를 위해 `gl.viewport`를 호출해서 현재 canvas 크기를 전달해야 합니다.
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -291,7 +291,7 @@ CSS가 크기를 결정하게 한 다음 일치하도록 조정함으로써 이 
 이는 WebGL에 -1 <-> +1 clip space를, x는 0 <-> `gl.canvas.width`로, y는 0 <-> `gl.canvas.height`로 매핑시켜줍니다.
 
 canvas를 지워봅시다.
-`0, 0, 0, 0`은 각각 빨강, 초록, 파랑, 투명도이므로 이러면 canvas를 투명하게 만듭니다.
+`0, 0, 0, 0`은 각각 빨강, 초록, 파랑, 투명도이므로 이 경우 canvas를 투명하게 만듭니다.
 
     // canvas 지우기
     gl.clearColor(0, 0, 0, 0);
@@ -299,7 +299,7 @@ canvas를 지워봅시다.
 
 WebGL에게 실행할 shader program을 알려줍니다.
 
-    // 우리의 program(shader 쌍) 사용 지시
+    // program(shader 쌍) 사용 지시
     gl.useProgram(program);
 
 다음으로 위에서 설정한 버퍼에서 데이터를 가져와서 shader의 attribute에 제공하는 방법을 WebGL에 알려줘야 합니다.
@@ -321,7 +321,7 @@ WebGL에게 실행할 shader program을 알려줍니다.
     gl.vertexAttribPointer(
       positionAttributeLocation, size, type, normalize, stride, offset);
 
-`gl.vertexAttribPointer`의 숨겨진 부분은 현재 `ARRAY_BUFFER`를 attribute에 할당한다는 겁니다.
+`gl.vertexAttribPointer`의 숨겨진 부분은 현재의 `ARRAY_BUFFER`를 attribute에 할당한다는 겁니다.
 다시 말해 이제 이 attribute는 `positionBuffer`에 바인딩됩니다.
 이건 `ARRAY_BUFFER` bind point에 다른 것들을 자유롭게 할당할 수 있다는 걸 의미하는데요.
 attribute는 계속해서 `positionBuffer`를 사용합니다.
@@ -357,7 +357,7 @@ vertex shader는 단순히 positionBuffer 값을 `gl_Position`에 복사하기 �
         0, 0.5,
       0.7, 0,
 
-canvas 크기가 400x300이라면 이런 식으로 clip space를 화면 공간으로 변환합니다
+canvas 크기가 400x300이라면 이런 식으로 clip space를 screen space로 변환하고
 
     clip space       screen space
        0, 0       ->   200, 150
@@ -367,7 +367,7 @@ canvas 크기가 400x300이라면 이런 식으로 clip space를 화면 공간�
 이제 WebGL은 삼각형을 렌더링할 겁니다.
 그리려는 모든 픽셀에 대해 WebGL은 fragment shader를 호출하는데요.
 fragment shader는 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
-canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127, 255]`를 값으로 쓴다는 걸 의미합니다.
+canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127, 255]` 값을 쓴다는 걸 의미합니다.
 
 여기 라이브 버전이 있습니다.
 
@@ -375,7 +375,7 @@ canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127
 
 위 경우 vertex shader는 데이터를 직접 전달하는 것 외에는 아무것도 하지 않는 걸 볼 수 있는데요.
 위치 데이터가 이미 clip space에 있으므로 할 일이 없습니다.
-*WebGL은 rasterization API에 불과하기에 만약 당신이 3D를 원한다면 3D에서 clip space으로 변환하는 shader를 작성해야 합니다.*
+*WebGL은 rasterization API에 불과하기 때문에에 만약 당신이 3D를 원한다면 3D를 clip space로 변환하는 shader를 작성해야 합니다.*
 
 아마 삼각형이 중앙에서 시작해서 우측 상단으로 가는 이유가 궁금하실텐데요.
 `x`의 clip space는 -1부터 +1까지 입니다.
@@ -453,8 +453,6 @@ canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127
     *var count = 6;
     gl.drawArrays(primitiveType, offset, count);
 
-자 여기 해당 코드입니다
-
 참고: 이 예제와 앞으로 나오는 모든 예제들은 shader를 컴파일하고 연결하는 함수가 포함된 [`webgl-utils.js`](/webgl/resources/webgl-utils.js)를 사용합니다.
 [boilerplate](webgl-boilerplate.html) 코드로 예제를 복잡하게 할 필요는 없을 것 같습니다.
 
@@ -464,9 +462,9 @@ canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127
 WebGL은 양수 Y를 위로, 음수 Y를 아래로 간주하는데요.
 clip space에서 좌측 하단 구석은 -1,-1 입니다.
 우린 아직 어떤 부호도 바꾸지 않았으므로 현재 0, 0은 좌측 하단 구석이 되는데요.
-2D 그래픽 API를 사용되는 전통적인 좌측 상단 구석이 되도록 clip space y좌표를 뒤집어서 사용할 수 있습니다.
+2D 그래픽 API에서 사용되는 전통적인 좌측 상단 구석이 되도록 clip space y좌표를 뒤집어서 사용할 수 있습니다.
 
-    *gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+    *  gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
 이제 우리가 예상한 위치에 사각형이 있습니다.
 
@@ -524,7 +522,6 @@ clip space에서 좌측 하단 구석은 -1,-1 입니다.
     }
 
     // 사각형을 정의한 값들로 buffer 채우기
-
     function setRectangle(gl, x, y, width, height) {
       var x1 = x;
       var x2 = x + width;
@@ -553,10 +550,10 @@ clip space에서 좌측 하단 구석은 -1,-1 입니다.
 
 {{{example url="../webgl-2d-rectangles.html" }}}
 
-WebGL이 실제로는 아주 단순한 API라고 보셨기를 바랍니다.
+WebGL이 사실은 아주 단순한 API였다고 보셨기를 바랍니다.
 네, 단순하다는 말은 아마 틀릴지도 모르지만 하는 일은 단순합니다.
-그저 사용자가 제공한 두 함수인 vertex shader와 fragment shader를 실행시키고 삼각형, 선, 점들을 그릴 뿐입니다.
-3D를 작업하면서 더 복잡해질 수 있지만, 그 복잡함은 프로그래머에 의해 더 복잡한 shaders의 형태로 추가됩니다.
+그저 사용자가 제공한 두 함수 vertex shader와 fragment shader를 실행시키고 삼각형, 선, 점들을 그릴 뿐입니다.
+3D를 작업하면서 더 복잡해질 수 있지만, 그 복잡함은 프로그래머에 의해 더 복잡한 shader의 형태로 추가됩니다.
 WebGL API 자체는 rasterizer에 불과하며 개념적으로 꽤 단순합니다.
 
 우리는 데이터를 attribute와 2개의 uniform에 제공하는 방법을 보여주는 작은 예제를 다뤘는데요.
@@ -564,11 +561,11 @@ WebGL API 자체는 rasterizer에 불과하며 개념적으로 꽤 단순합니�
 이 글의 서두에서 *varying*과 *texture*도 언급했었는데요.
 이것들은 다음 수업에서 소개하겠습니다.
 
-계속하기 전에 *대부분의* 애플리케이션은 `setRectangle`에서 했던 것처럼 buffer의 데이터를 업데이트하는 것이 일반적이지 않다는 것을 말하고 싶습니다.
-이 예제를 사용했던 것은 픽셀 좌표를 입력으로 보여주고 GLSL에서 간단한 계산을 하는 것을 보여주기 때문에 설명하기에 가장 쉬운 방법이라고 생각했기 때문입니다. 
-이게 틀린 것은 아니고, 올바르게 하는 많은 사례가 있지만, WebGL에서 [사물을 배치하고, 방향을 조정하고, 크기를 조정하는 일반적인 방법](webgl-2d-translation.html)을 찾으려면 계속 읽어야합니다.
+계속하기 전에 *대부분의* 어플리케이션은 `setRectangle`에서 했던 것처럼 buffer의 데이터를 갱신하는 게 일반적이지 않다는 걸 말하고 싶습니다.
+이 예제를 사용한 것은 픽셀 좌표를 입력으로 보여주고 GLSL에서 간단히 계산하는 걸 보여주기 때문에 설명하기에 가장 쉬운 방법이라고 생각했기 때문입니다. 
+이게 틀리다는 건 아니며, 올바른 방법인 경우도 많지만, WebGL에서 [위치, 방향, 크기를 조정](webgl-2d-translation.html)하는 좀 더 일반적인 방법을 찾으려면 계속 읽으십시오.
 
-웹 개발이 처음이든 WebGL 개발 방법에 대한 몇 가지 tip을 보려면 [설정 및 설치](webgl-setup-and-installation.html)를 확인해주세요.
+웹 개발이 처음이든 아니든 WebGL 개발 방법에 대한 몇 가지 tip을 보려면 [설정 및 설치](webgl-setup-and-installation.html)를 확인해주세요.
 
 WebGL을 100% 처음 배우고 GLSL이나 shader가 뭔지 혹은 GPU가 뭔지 모르겠다면 [WebGL이 실제로 작동하는 원리 기초](webgl-how-it-works.html)를 확인해주세요.
 WebGL 작동 방식을 이해하는 또 다른 방법으로 [대화형 상태 다이어그램](/webgl/lessons/resources/webgl-state-diagram.html)을 보실 수도 있습니다.
@@ -578,7 +575,7 @@ WebGL 작동 방식을 이해하는 또 다른 방법으로 [대화형 상태 �
 
 그게 아니라면 여기에서 2가지 방향으로 갈 수 있습니다.
 이미지 처리에 관심이 있다면 [2D 이미지 처리 방법](webgl-image-processing.html)을 보시면 됩니다.
-위치, 회전, 그리고 scale 그리고 궁극적으로 3D에 대해 배우고 싶다면 [여기](webgl-2d-translation.html)부터 시작하시면 됩니다.
+translation, rotation, scale 그리고 궁극적으로 3D에 대해 배우고 싶다면 [여기](webgl-2d-translation.html)부터 시작하시면 됩니다.
 
 <div class="webgl_bottombar">
 <h3>type="notjs"가 어떤 의미인가요?</h3>
@@ -604,7 +601,7 @@ type을 넣지 않거나 <code>type="javascript"</code> 또는 <code>type="text/
     }
   `;
 </pre>
-<p>Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 동작하는데요.
+<p>multiline template literal은 WebGL을 지원하는 모든 브라우저에서 동작하는데요.
 안타깝게도 정말 오래된 브라우저에서는 동작하지 않으니 이런 브라우저들을 위한 fallback을 지원한다면 multiline template literal을 사용하지 않거나 <a href="https://babeljs.io/">transpiler</a>를 사용해야 합니다.
 </p>
 </div>
