@@ -1,48 +1,46 @@
-Title: WebGL 설치
+Title: WebGL 설정 및 설치
 Description: WebGL 개발 방법
-TOC: WebGL 설치
+TOC: 설정 및 설치
 
 
-WebGL을 개발하기 위해 웹 브라우저 이외에 기술적으로 아무것도 필요가 없습니다.
-
+기술적으로 WebGL 개발을 하기 위해서 웹 브라우저 이외에는 아무것도 필요가 없습니다.
 [jsfiddle.net](https://jsfiddle.net/greggman/8djzyjL3/)이나 [jsbin.com](https://jsbin.com)
-혹은 [codepen.io](https://codepen.io/greggman/pen/YGQjVV)에 가서 여기 있는 학습서들을 적용하면 됩니다.
+혹은 [codepen.io](https://codepen.io/greggman/pen/YGQjVV)에 가서 여기 있는 강의들을 적용하기 시작하면 됩니다.
 
-외부 스크립트를 참조하려면 `<script src="..."></script>` 태그 쌍을 추가해서 외부 스크립트를 참조할 수 있습니다.
+위 페이지들에서 외부 스크립트를 사용하고 싶다면 `<script src="..."></script>` 태그 쌍을 추가해서 외부 스크립트를 참조할 수 있습니다.
 
-여전히, 한계는 있는데요.
-WebGL은 이미지를 로딩하는데 Canvas2D보다 더 강력한 제한이 있습니다.
-즉 작업을 위해 웹에서 이미지에 쉽게 접근할 수 없다는 것을 의미합니다.
-게다가 모든 것을 로컬에서 처리하는 것이 더 빠릅니다.
+그럼에도 불구하고, 한계는 있는데요.
+WebGL은 이미지를 로딩에 Canvas2D보다 더 강력한 제약이 있는데 이는 WebGL 작업을 위해 웹에서 이미지에 쉽게 접근할 수 없다는 걸 의미합니다.
+게다가 로컬에서 모든 작업을 처리하는 게 더 빠릅니다.
 
-이 사이트의 예제를 실행하고 수정한다고 가정해봅시다.
-제일 먼저 해야할 일은 사이트를 내려받는 것 인데요.
-[여기서 내려받을 수 있습니다](https://github.com/gfxfundamentals/webgl-fundamentals/).
+이 사이트의 예제를 실행하고 수정하고 싶다고 가정해봅시다.
+먼저 해야 할 일은 사이트를 다운로드하는 건데요.
+[여기](https://github.com/gfxfundamentals/webgl-fundamentals/)에서 다운로드할 수 있습니다.
 
 {{{image url="resources/download-webglfundamentals.gif" }}}
 
-특정 폴더에 파일의 압축을 풉니다.
+그리고 파일의 압축을 풀어주세요.
 
-## 작고 간단한 웹 서버 사용하기
+## 작고 간단하고 쉬운 웹 서버 사용
 
 다음으로 작은 웹 서버 하나를 설치해야 합니다.
-"웹 서버"라는 말이 무섭게 들릴 수도 있지만 [사실 웹 서버는 굉장히 간단합니다](https://games.greggman.com/game/saving-and-loading-files-in-a-web-page/).
+"웹 서버"라는 말이 무섭게 들릴 수 있다는 걸 알지만 사실 [웹 서버](https://games.greggman.com/game/saving-and-loading-files-in-a-web-page/)는 굉장히 간단합니다.
 
-여기 [Servez](https://greggman.github.io/servez)라는 매우 간단한 인터페이스가 있습니다.
+여기 [Servez](https://greggman.github.io/servez)라고 불리는 아주 간단한 인터페이스가 있습니다.
 
 {{{image url="resources/servez.gif" }}}
 
-그저 압축 해제한 폴더를 가르키고, "시작"을 누른 다음, 브라우저([`http://localhost:8080/webgl/`](http://localhost:8080/webgl/))로 들어가서 예제를 선택하세요.
+그저 압축 해제한 폴더를 가르키고, "시작"을 누른 다음, 브라우저 주소 [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/)로 가서 예제를 선택하세요.
 
-만약 명령어를 선호한다면, 또 다른 방법으로 [node.js](https://nodejs.org)를 사용하세요.
-내려받고, 설치하고, 명령어 창(prompt / console / terminal)을 열면 됩니다.
-Windows라면 설치 관리자가 특별한 "Node Command Prompt"를 추가해주니 그걸 사용하세요.
+만약 명령어를 선호한다면, 또 다른 방법은 [node.js](https://nodejs.org)를 사용하는 겁니다.
+다운로드하고, 설치하고, command prompt / console / terminal window를 열어주세요.
+Windows라면 설치 프로그램이 특별한 "Node Command Prompt"를 추가해주니 그걸 사용하면 됩니다.
 
-그런 다음 [`servez`](https://github.com/greggman/servez-cli)를 입력해서 설치합니다
+그런 다음 [`servez`](https://github.com/greggman/servez-cli)를 설치하고
 
     npm -g install servez
 
-만약 OS X를 사용한다면
+OS X를 사용한다면
 
     sudo npm -g install servez
 
@@ -50,59 +48,116 @@ Windows라면 설치 관리자가 특별한 "Node Command Prompt"를 추가해�
 
     servez path/to/folder/where/you/unzipped/files
 
-이렇게 출력될 겁니다
+이런 식으로 출력되어야 하고
 
 {{{image url="resources/servez-response.png" }}}
 
-그런 다음 브라우저에서 [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/)로 접속하세요.
+다음으로 브라우저에서 [`http://localhost:8080/webgl/`](http://localhost:8080/webgl/)로 접속하세요.
 
-경로를 지정하지 않으면 servez가 현재 폴더를 제공합니다.
+만약 path를 지정하지 않으면 servez가 현재 폴더를 serve할 겁니다.
 
-## 브라우저 개발자 도구 사용하기
+## 브라우저 개발자 도구 사용
 
-대부분의 브라우저는 광범위한 개발자 도구를 내장하고 있습니다.
+대부분의 브라우저는 광범위한 개발자 도구가 내장되어 있습니다.
 
 {{{image url="resources/chrome-devtools.png" }}}
 
-[Chrome 문서는 여기 있고](https://developers.google.com/web/tools/chrome-devtools/), [Firefox는 여기 있습니다](https://developer.mozilla.org/en-US/docs/Tools).
+Chrome 문서는 [여기](https://developers.google.com/web/tools/chrome-devtools/)에 있고, Firefox는 [여기](https://developer.mozilla.org/en-US/docs/Tools)에 있습니다.
 
-저것들을 어떻게 사용하는지 배우십시오.
-만약 배울게 없다면 JavaScript 콘솔을 항상 확인하세요.
-문제가 있는 경우 종종 오류 메세지가 표시되는데요.
-오류 메세지를 자세히 읽고 문제가 있는 곳을 찾아야 합니다.
+그것들을 어떻게 사용하는지 배워보세요.
+별 다른 게 없다면 JavaScript 콘솔을 항상 확인하세요.
+문제가 있는 경우 종종 에러 메세지가 표시되는데요.
+에러 메세지를 자세히 읽으면 어디에 문제가 있는지 단서를 얻을 수 있습니다.
 
 {{{image url="resources/javascript-console.gif" }}}
 
 ## WebGL Helper
 
-다양한 WebGL Inspector/Helper가 있는데요.
+[여기](https://greggman.github.io/webgl-helpers/)에 유용할 수 있는 몇 가지 스크립트가 있는데요.
+다른 스크립트들보다 먼저 페이지에 추가해야 합니다.
 
-[다음은 Chrome 용 프로그램입니다](https://benvanik.github.io/WebGL-Inspector/).
+```
+<script src="https://greggman.github.io/webgl-helpers/webgl-gl-error-check.js"></script>
+```
 
-{{{image url="https://benvanik.github.io/WebGL-Inspector/images/screenshots/1-Trace.gif" }}}
+그리고 WebGL 에러를 발생하면 프로그램은 예외를 던지고 운이 좋으면 더 많은 정보가 출력됩니다.
 
-[Firefox도 비슷한 것이 있는데요](https://hacks.mozilla.org/2014/03/introducing-the-canvas-debugger-in-firefox-developer-tools/).
-`about:flags`가 활성화되어야 하고 [Firefox Developer Edition](https://www.mozilla.org/en-US/firefox/developer/)이 필요할 수도 있습니다.
+다양한 WebGL Inspector가 있는데요.
+다음은 [Chrome 및 Firefox 전용](https://spector.babylonjs.com/)입니다.
 
-도움이 될 수도 아닐 수도 있습니다.
-대부분은 애니메이션 표본을 위해 설계되었으며 프레임을 캡처하여 해당 프레임을 만든 모든 WebGL 호출을 볼 수 있는데요.
-이미 무언가가 동작하고 있거나 동작하다가 고장난 경우라면 굉장히 유용합니다.
-하지만 잡을 수 없는 초기화 중에 발생하는 문제나 매 프레임마다 그리는 애니메이션을 사용하지 않을 경우 그리 좋지 않은데요.
-그럼에도 불구하고 상당히 유용할 수 있습니다.
-저는 종종 그리는 호출을 클릭하고 uniform을 확인합니다.
-`NaN` (NaN = Not a Number) 여러 개를 볼 수 있다면 보통 uniform을 설정하는 코드를 추적하고 버그를 찾을 수 있습니다.
+{{{image url="https://camo.githubusercontent.com/5bbc9caf2fc0ecc2eebf615fa8348146b37b08fe/68747470733a2f2f73706563746f72646f632e626162796c6f6e6a732e636f6d2f70696374757265732f7469746c652e706e67" }}}
 
-## 코드 분석
+참고: [문서](https://github.com/BabylonJS/Spector.js/blob/master/readme.md)를 읽어주세요!
+
+spector.js의 extension 버전은 프레임을 캡처합니다.
+이건 WebGL 앱이 성공적으로 초기화되고 `requestAnimationFrame` loop에서 렌더링되는 경우에만 작동한다는 걸 의미하는데요.
+"record" 버튼을 클릭하면 하나의 "frame"에 대한 모든 WebGL API 호출을 캡처합니다.
+
+이건 약간의 작업 없이는 초기화 중에 문제를 찾는데 도움이 되지 않는다는 걸 의미하는데요.
+
+해당 문제를 해결하기 위한 두 가지 방법이 있습니다.
+
+1. extension이 아닌 라이브러리로 사용합니다.
+
+   [문서](https://github.com/BabylonJS/Spector.js/blob/master/readme.md)를 참고하세요. 이 방법으로 "지금 WebGL API 명령어를 캡쳐해!"라고 지시할 수 있습니다.
+
+2. 버튼을 클릭할 때까지 시작되지 않도록 앱을 변경합니다.
+
+   이렇게 하면 extension에 가서 "record"를 선택한 다음 앱을 시작할 수 있습니다. 앱이 애니메이션되지 않는다면 가짜 프레임을 몇 개 추가하면 됩니다. 예제:
+
+```html
+<button type="button">start</button>
+<canvas id="canvas"></canvas>
+```
+
+```js
+function main() {
+  // WebGL context 얻기
+  /** @type {HTMLCanvasElement} */
+  const canvas = document.querySelector("#canvas");
+  const gl = canvas.getContext("webgl");
+  if (!gl) {
+    return;
+  }
+
+  const startElem = document.querySelector('button');
+  startElem.addEventListener('click', start, {once: true});
+
+  function start() {
+    // spector는 rAF 이벤트 내부만 캡처하기 때문에 rAF에서 초기화 실행
+    requestAnimationFrame(() => {
+      // 모든 초기화 수행
+      init(gl);
+    });
+    // spector가 볼 수 있도록 더 많은 프레임 만들기
+    requestAnimationFrame(() => {});
+    requestAnimationFrame(() => {});
+    requestAnimationFrame(() => {});
+  }
+}
+
+main();
+```
+
+이제 spector.js extension에서 "record"를 클릭한 다음, 페이지에서 "start"를 클릭하면 spector가 초기화를 기록합니다.
+
+Safari에도 [유사한 문제와 해결 방법](https://stackoverflow.com/questions/62446483/debugging-in-webgl)을 가진 기능이 내장되어 있습니다.
+
+이런 helper를 사용할 때 저는 draw call을 자주 클릭하고, uniform을 확인합니다.
+`NaN`(NaN = Not a Number)이 많이 보이면 일반적으로 uniform을 설정하는 코드를 추적해서 버그를 찾을 수 있습니다.
+
+## 코드 검사
 
 또한 항상 코드를 검사할 수 있다는 걸 기억하세요.
-대개 코드 보기를 선택할 수 있습니다.
+일반적으로 view source를 선택할 수 있고
 
 {{{image url="resources/view-source.gif" }}}
 
-페이지를 오른쪽 클릭 할 수 없거나 source가 별도의 파일에 있는 경우에도 devtools에서 항상 source를 볼 수 있습니다.
+페이지를 우클릭할 수 없거나 source가 별도 파일인 경우에도 항상 개발자 도구에서 source를 볼 수 있는데
 
 {{{image url="resources/devtools-source.gif" }}}
 
 ## 시작하기
 
-시작하는데 도움이 되셨기를 바랍니다. [이제 강의로 돌아갑시다](index.html).
+시작하는데 도움이 되셨기를 바랍니다.
+이제 [강의](index.html)로 돌아갑시다.
