@@ -23,15 +23,15 @@ GPU에는 기본적으로 2가지 부분이 있는데요.
 왼쪽은 당신이 제공한 데이터입니다.
 vertex shader는 [GLSL](webgl-shaders-and-glsl.html)로 작성하는 함수인데요.
 이 함수는 각 vertex마다 한 번씩 호출됩니다.
-몇 가지 계산을 하고 현재 vertex의 clip space 값으로 특수 변수 `gl_Position`를 선언하는데요.
+몇 가지 계산을 하고 현재 vertex의 clip space 값으로 특수 변수 `gl_Position`를 선언하죠.
 GPU는 이 값을 가져와서 내부에 저장합니다.
 
-`삼각형`을 그린다고 가정하면, 첫 번째 부분에서 vertex 3개를 생성할 때마다 GPU는 이걸 사용해 삼각형을 만드는데요.
-어떤 픽셀이 삼각형의 점 3개에 해당하는지 확인한 다음, 삼각형을 rasterize(="픽셀로 그리기") 합니다.
-각 픽셀마다 fragment shader를 호출해서 어떤 색상으로 만들지 묻는데요.
+`삼각형`을 그린다고 가정하면, 첫 번째 부분에서 vertex 3개를 생성할 때마다 GPU는 이걸 사용해 삼각형을 만듭니다.
+어떤 픽셀이 삼각형의 점 3개에 해당하는지 확인한 다음, 삼각형을 rasterize(="픽셀로 그리기") 하는데요.
+각 픽셀마다 fragment shader를 호출해서 어떤 색상으로 만들지 묻습니다.
 fragment shader는 특수 변수 `gl_FragColor`를 해당 픽셀에 원하는 색상으로 설정해야 합니다.
 
-전부 흥미롭지만 지금까지 예제에서 볼 수 있듯이 fragment shader는 픽셀당 아주 적은 정보를 가지고 있습니다.
+전부 흥미롭지만 지금까지 예제에서 볼 수 있듯이 fragment shader는 각 픽셀마다 아주 적은 정보를 가지고 있습니다.
 다행히 더 많은 정보를 전달할 수 있는데요.
 vertex shader에서 fragment shader로 전달하려는 각 값마다 “varying”을 정의하는겁니다.
 
@@ -91,13 +91,13 @@ vertex shader에서 fragment shader로 전달하려는 각 값마다 “varying�
 
 WebGL은 vertex shader의 varying을 이름과 타입이 같은 fragment shader의 varying으로 연결할 겁니다.
 
-여기 작동하는 버전입니다.
+다음은 작동하는 버전입니다.
 
 {{{example url="../webgl-2d-triangle-with-position-for-color.html" }}}
 
-삼각형을 이동시키고, 회전하고 크기를 바꿔보세요.
+삼각형을 이동시키고, 크기를 바꾸고 회전시켜보세요.
 참고로 색상은 clip space에서 계산되므로 삼각형과 함께 움직이지 않는데요.
-이들은 색상은 배경에 상대적입니다.
+이것들은 배경에 상대적입니다.
 
 이제 생각해봅시다.
 우리는 vertex 3개만을 계산했습니다.
@@ -167,8 +167,8 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
 
 {{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color는 v0, v1 그리고 v2 사이에서 보간됩니다" }}}
 
-또한 더 많은 데이터를 vertex shader에 전달한 다음 fragment shader에 전달할 수 있습니다.
-예를들어 2가지 색상을 가진 삼각형 2개로 이루어진 사각형을 그린다고 해봅시다.
+또한 더 많은 데이터를 vertex shader에 전달해서 fragment shader에 전달할 수 있습니다.
+예를 들어 2가지 색상을 가진 삼각형 2개로 이루어진 사각형을 그린다고 해봅시다.
 이를 위해 vertex shader에 또다른 attribute를 추가하면 더 많은 데이터를 전달할 수 있고 그 데이터를 fragment shader에 직접 전달할 수 있습니다.
 
     attribute vec2 a_position;
@@ -252,7 +252,7 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
 2개의 단색 삼각형이라는 점에 주목해봅시다.
 varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보간되고 있는데요.
 이건 각 삼각형의 vertex 3개에 모두 같은 색상을 사용했기 때문입니다.
-만약 각각의 색상을 다르게 만들면 보간된 것을 볼 수 있습니다.
+만약 각각의 색상을 다르게 만들면 보간된 걸 볼 수 있습니다.
 
     // 사각형을 만드는 두 삼각형의 색상으로 buffer 채우기
     function setColors(gl) {
@@ -275,7 +275,7 @@ varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보�
 
 {{{example url="../webgl-2d-rectangle-with-random-colors.html" }}}
 
-그다지 흥미롭지는 않지만 2개 이상의 attribute를 사용하고 vertex shader에서 fragment shader로 데이터 전달하는 걸 보여주는데요.
+그다지 흥미롭지는 않지만 2개 이상의 attribute를 사용하고 데이터를 vertex shader에서 fragment shader로 전달하는 걸 보여주는데요.
 [이미지 처리 예제](webgl-image-processing.html)를 살펴보면 texture 좌표를 전달하기 위해 마찬가지로 추가적인 attribute를 사용하는 것을 볼 수 있습니다.
 
 ## buffer와 attribute 명령은 어떤 일을 하나요?
@@ -284,12 +284,12 @@ buffer는 vertex와 각 vertex의 다른 데이터를 GPU로 가져오는 방법
 `gl.createBuffer`는 buffer를 생성합니다.
 `gl.bindBuffer`는 해당 buffer를 작업할 buffer로 설정합니다.
 `gl.bufferData`는 데이터를 buffer로 복사합니다.
-이건 보통 초기화할 때 수행되는데요.
+이건 보통 초기화할 때 수행됩니다.
 
-buffer에 데이터가 있으면 WebGL에게 어떻게 데이터를 가져오고 vertex shader의 attribute에 제공할지 알려줘야 합니다.
+buffer에 데이터가 있으면 어떻게 데이터를 가져오고 vertex shader의 attribute에 제공할지 WebGL에게 알려줘야 합니다.
 
-이를 위해, 먼저 WebGL에게 attribute를 할당한 위치를 물어봐야 합니다.
-예를들어 위 코드에서 우리는
+이를 위해, 먼저 WebGL에게 attribute를 할당한 위치를 물어봐야 하는데요.
+예를 들어 위 코드에서 우리는
 
     // vertex 데이터가 어디로 가야하는지 탐색
     var positionLocation = gl.getAttribLocation(program, "a_position");
@@ -297,14 +297,13 @@ buffer에 데이터가 있으면 WebGL에게 어떻게 데이터를 가져오고
 
 이것도 보통 초기화할 때 수행됩니다.
 
-attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실행해야 하는데요.
+attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실행해야 합니다.
 
     gl.enableVertexAttribArray(location);
 
-이 명령어는 WebGL에게 buffer에서 데이터를 제공하기 원한다고 말해줍니다.
+이 명령어는 WebGL에게 buffer에서 데이터를 공급하기 원한다고 알려줍니다.
 
     gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
-
 
 이 명령어는 ARRAY_BUFFER bind point에 buffer를 할당하는데요.
 이건 WebGL 내부에 있는 전역 변수입니다.
@@ -319,26 +318,27 @@ attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실�
     );
 
 그리고 이 명령어는 현재 ARRAY_BUFFER bind point에 바인딩된 buffer에서 데이터를 가져오기 위해,
-vertex 당 얼마나 많은 구성 요소들(1 - 4)이 있는지,
-데이터 종류(`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...)는 무엇인지,
+vertex마다 얼마나 많은 component(1 - 4)가 있는지,
+data type(`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...)은 무엇인지,
 데이터의 한 부분에서 다음 부분을 가져오기 위해 몇 바이트를 건너뛰어야 하는지를 의미하는 stride,
 그리고 buffer에서 우리 데이터가 얼마나 멀리 있는지에 대한 offset 등을 WebGL에게 알려줍니다.
 
 구성 요소의 숫자는 항상 1에서 4까지 입니다.
 
 만약 데이터의 type마다 1개의 buffer를 쓴다면 stride와 offset은 항상 0일 수 있는데요.
-stride가 0인 것은 "type 크기에 맞는 stride 사용"을 의미합니다.
-offset이 0인 것은 "buffer의 처음부터 시작"을 의미합니다.
-0 이외의 다른 값으로 설정하는 것은 더 복잡하고 성능 면에서 어느 정도 이점이 있긴 하지만 WebGL을 한계까지 몰아붙이기 위한 게 아니라면 복잡함을 감수할만한 가치는 없을 것 같습니다.
+stride가 0이면 "type 크기에 맞는 stride 사용"을 의미합니다.
+offset이 0이면 "buffer의 처음부터 시작"을 의미합니다.
+0 이외의 다른 값으로 설정하는 건 더욱 복잡하고 성능 면에서 어느 정도 이점이 있긴 하지만 WebGL을 한계까지 몰아붙이기 위한 게 아니라면 복잡함을 감수할만한 가치는 없을 것 같습니다.
 
 buffer와 attribute가 정리되셨기를 바랍니다.
 
 다음은 [shader와 GLSL](webgl-shaders-and-glsl.html)을 살펴보겠습니다.
 
-<div class="webgl_bottombar"><h3>vertexAttribPointer에서 normalizeFlag가 뭔가요?</h3>
+<div class="webgl_bottombar">
+<h3>vertexAttribPointer에서 normalizeFlag가 뭔가요?</h3>
 <p>
 normalize flag는 부동 소수점이 아닌 모든 type을 위한 것인데요.
-false를 넘기면 값은 해당 type으로 해석됩니다.
+false를 넘기면 해당 값의 type으로 해석됩니다.
 BYTE는 -128에서 127까지, UNSIGNED_BYTE는 0부터 255까지, SHORT는 -32768부터 32767까지 등등...
 </p>
 <p>
@@ -351,7 +351,7 @@ normalize flag를 true로 설정하면 BYTE(-128 ~ 127) 값은 -1.0에서 +1.0�
 빨강, 초록, 파랑 그리고 투명도 모두 소수점을 쓰면 각 색상의 vertex마다 16byte를 사용합니다.
 만약 복잡한 geometry가 있는 경우 많은 byte를 추가할 수 있습니다.
 대신에 0은 0.0이 되고 255는 1.0이 되는 UNSIGNED_BYTE로 색상을 변환해야 하는데요.
-그러면 각 vertex의 색상마다 4 byte만 써서, 75%를 아낄 수 있습니다.
+그러면 각 vertex의 색상마다 4byte만 써서, 75%를 아낄 수 있습니다.
 </p>
 <p>
 이렇게 하도록 코드를 수정해봅시다.
@@ -365,12 +365,12 @@ var size = 4;                 // 반복마다 4개의 구성 요소
 var stride = 0;               // 0 = 다음 위치를 구하기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;               // buffer의 처음부터 시작
 gl.vertexAttribPointer(
-    colorLocation,
-    size,
-    type,
-    normalize,
-    stride,
-    offset
+  colorLocation,
+  size,
+  type,
+  normalize,
+  stride,
+  offset
 );
 </pre>
 <p>그리고 사용할 색상으로 buffer를 채울 때</p>
