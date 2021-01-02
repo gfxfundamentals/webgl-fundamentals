@@ -36,22 +36,22 @@ vertex shader는 데이터가 필요한데요.
 
 ### Attribute
 
-가장 일반적인 방법은 buffer와 *attribute*를 통하여 하는 겁니다.
+가장 일반적인 방법은 buffer와 *attribute*를 통하는 겁니다.
 [작동 원리](webgl-how-it-works.html)에서 buffer와 attribute를 다뤘는데요.
 buffer를 만들고,
 
     var buf = gl.createBuffer();
 
-이 buffer에 데이터를 넣고
+이 buffer에 데이터를 넣은 뒤
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 
-그런 다음, 만든 shader program을 통해 초기화 시 attribute의 위치를 찾고
+만든 shader program을 통해 초기화 시 attribute의 위치를 찾고
 
     var positionLoc = gl.getAttribLocation(someShaderProgram, "a_position");
 
-그리고 렌더링할 때 WebGL에게 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하고
+렌더링할 때 WebGL에게 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하는데
 
     // 이 attribute에 대한 buffer에서 데이터 가져오기 활성화
     gl.enableVertexAttribArray(positionLoc);
@@ -65,7 +65,7 @@ buffer를 만들고,
 
     gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 
-[WebGL 기초](webgl-fundamentals.html)에서 우리는 shader에서 수식없이 직접 데이터를 전달할 수 있다는 것을 봤습니다.
+[WebGL 기초](webgl-fundamentals.html)에서 우리는 shader에서 수식 없이 직접 데이터를 전달할 수 있다는 걸 봤습니다.
 
     attribute vec4 a_position;
 
@@ -138,7 +138,7 @@ uniform은 여러 type을 가질 수 있는데요.
 `gl.uniform?f?` 또는 `gl.uniform?i?` 함수를 사용합니다.
 
 배열의 경우 배열의 모든 uniform을 한번에 설정할 수 있습니다.
-예를들어
+예를 들어
 
     // shader
     uniform vec2 u_someVec2[3];
@@ -180,7 +180,7 @@ uniform은 여러 type을 가질 수 있는데요.
 
 ## Fragment Shader
 
-Fragment Shader의 역할은 rasterize 되는 현재 픽셀의 색상을 제공하는 것입니다.
+Fragment Shader의 역할은 rasterize되는 현재 픽셀의 색상을 제공하는 것입니다.
 항상 이런 형식을 취하는데
 
     precision mediump float;
@@ -216,8 +216,8 @@ shader의 texture에서 값을 가져오면 `sampler2D` uniform을 생성하고 
       gl_FragColor = texture2D(u_texture, texcoord);
     }
 
-texture에서 나오는 데이터는 [수많은 설정에 따라](webgl-3d-textures.html) 달라집니다.
-최소한 texture의 데이터를 생성하고 넣어야 하는데, 예를들어
+texture에서 나오는 데이터는 [수많은 설정](webgl-3d-textures.html)에 따라 달라집니다.
+최소한 texture의 데이터를 생성하고 넣어야 하는데, 예를 들어
 
     var tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -240,7 +240,7 @@ texture에서 나오는 데이터는 [수많은 설정에 따라](webgl-3d-textu
     gl.activeTexture(gl.TEXTURE0 + unit);
     gl.bindTexture(gl.TEXTURE_2D, tex);
 
-그리고 texture를 할당한 unit을 shader에게 알려주는데
+texture를 할당한 unit을 shader에게 알려주는데
 
     gl.uniform1i(someSamplerLoc, unit);
 
@@ -249,7 +249,7 @@ texture에서 나오는 데이터는 [수많은 설정에 따라](webgl-3d-textu
 varying은 [동작 원리](webgl-how-it-works.html)에 다룬 vertex shader에서 fragment shader로 값을 전달하는 방법입니다.
 
 varying을 사용하려면 vertex와 fragment shader 양쪽에 일치하는 varying을 선언해야 하는데요.
-각 vertex마다 vertex shader의 varying을 어떤 값으로 설정해줍니다.
+각 vertex마다 vertex shader의 varying을 어떤 값으로 설정합니다.
 WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader에서 대응하는 varying으로 전달할 겁니다.
 
 vertex shader
@@ -286,8 +286,8 @@ fragment shader
 GLSL는 Graphics Library Shader Language의 약자인데요.
 shader가 작성되는 언어입니다.
 이건 JavaScript에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
-그래픽을 rasterize 하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
-예를들어 각각 2개의 값, 3개의 값, 그리고 4개의 값을 나타내는 `vec2`, `vec3`, 그리고 `vec4` 같은 type들이 내장되어 있습니다.
+그래픽을 rasterize하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
+예를 들어 각각 2개의 값, 3개의 값, 그리고 4개의 값을 나타내는 `vec2`, `vec3`, 그리고 `vec4` 같은 type들이 내장되어 있습니다.
 마찬가지로 2x2, 3x3, 그리고 4x4 행렬을 나타내는 `mat2`, `mat3` 그리고 `mat4`가 있는데요.
 `vec`에 scalar를 곱하는 것 같은 작업을 수행할 수 있습니다.
 
@@ -295,7 +295,7 @@ shader가 작성되는 언어입니다.
     vec4 b = a * 2.0;
     // 현재 b는 vec4(2, 4, 6, 8);
 
-마찬가지로 행렬 곱셈과 벡터 대 행렬 곱셈을 할 수 있는데
+마찬가지로 행렬 곱셈과 벡터 대 행렬 곱셈을 할 수 있고
 
     mat4 a = ???
     mat4 b = ???
@@ -304,7 +304,7 @@ shader가 작성되는 언어입니다.
     vec4 v = ???
     vec4 y = c * v;
 
-또한 vec의 부분에 대한 다양한 선택자가 있습니다.
+또한 vec 부분에 대한 다양한 선택자가 있습니다.
 vec4를 보면
 
     vec4 v;
@@ -330,7 +330,7 @@ vec 구성 요소들을 *swizzle* 할 수 있는데 이는 구성 요소를 교�
 
     vec4(v.b, v.g, v.r, v.a)
 
-vec 또는 mat을 만들 때 한 번에 여러 부분을 공급할 수 있습니다. 예를들면
+vec 또는 mat을 만들 때 한 번에 여러 부분을 공급할 수 있습니다. 예를 들어
 
     vec4(v.rgb, 1)
 
@@ -369,23 +369,23 @@ T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
 
     vec4 s = sin(v);
 
-이건 다음과 같고
+이건 다음과 같은데
 
     vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 
 가끔은 한 매개변수가 부동 소수점이고 나머지는 `T`가 됩니다.
 이는 모든 구성요소에 부동 소수점이 적용된다는 걸 뜻하는데요.
-예를들어 `v1`과 `v2`가 `vec4`이고 `f`는 부동 소수점이라면
+예를 들어 `v1`과 `v2`가 `vec4`이고 `f`는 부동 소수점이라면
 
     vec4 m = mix(v1, v2, f);
 
 이건 다음과 같으며
 
     vec4 m = vec4(
-        mix(v1.x, v2.x, f),
-        mix(v1.y, v2.y, f),
-        mix(v1.z, v2.z, f),
-        mix(v1.w, v2.w, f)
+      mix(v1.x, v2.x, f),
+      mix(v1.y, v2.y, f),
+      mix(v1.z, v2.z, f),
+      mix(v1.w, v2.w, f)
     );
 
 [WebGL Reference Card](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf)의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
