@@ -265,16 +265,16 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
 <li><a href="#vertex-shader-texture">Texture</a> (pixel/texel의 데이터)</li>
 </ol>
 <h3 id="attribute">Attribute</h3>
-<p>가장 일반적인 방법은 buffer와 <em>attribute</em>를 통하여 하는 겁니다.
+<p>가장 일반적인 방법은 buffer와 <em>attribute</em>를 통하는 겁니다.
 <a href="webgl-how-it-works.html">작동 원리</a>에서 buffer와 attribute를 다뤘는데요.
 buffer를 만들고,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var buf = gl.createBuffer();
-</code></pre><p>이 buffer에 데이터를 넣고</p>
+</code></pre><p>이 buffer에 데이터를 넣은 뒤</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
-</code></pre><p>그런 다음, 만든 shader program을 통해 초기화 시 attribute의 위치를 찾고</p>
+</code></pre><p>만든 shader program을 통해 초기화 시 attribute의 위치를 찾고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
-</code></pre><p>그리고 렌더링할 때 WebGL에게 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하고</p>
+</code></pre><p>렌더링할 때 WebGL에게 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 attribute에 대한 buffer에서 데이터 가져오기 활성화
 gl.enableVertexAttribArray(positionLoc);
 
@@ -286,7 +286,7 @@ var stride = 0;         // 다음 vertex로 가기 위해 이동하는 byte 수
                         // 0 = type과 numComponents에 맞는 stride 사용
 
 gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
-</code></pre><p><a href="webgl-fundamentals.html">WebGL 기초</a>에서 우리는 shader에서 수식없이 직접 데이터를 전달할 수 있다는 것을 봤습니다.</p>
+</code></pre><p><a href="webgl-fundamentals.html">WebGL 기초</a>에서 우리는 shader에서 수식 없이 직접 데이터를 전달할 수 있다는 걸 봤습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 
 void main() {
@@ -344,7 +344,7 @@ gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 또는 sampler
 </code></pre><p><code class="notranslate" translate="no">bool</code>, <code class="notranslate" translate="no">bvec2</code>, <code class="notranslate" translate="no">bvec3</code>, 그리고 <code class="notranslate" translate="no">bvec4</code> type도 있는데요.
 <code class="notranslate" translate="no">gl.uniform?f?</code> 또는 <code class="notranslate" translate="no">gl.uniform?i?</code> 함수를 사용합니다.</p>
 <p>배열의 경우 배열의 모든 uniform을 한번에 설정할 수 있습니다.
-예를들어</p>
+예를 들어</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// shader
 uniform vec2 u_someVec2[3];
 
@@ -375,7 +375,7 @@ var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.
 </code></pre><h3 id="vertex-shader-texture">Vertex Shader의 Texture</h3>
 <p><a href="#fragment-shader-texture">Fragment Shader의 Texture</a>를 봐주세요.</p>
 <h2 id="fragment-shader">Fragment Shader</h2>
-<p>Fragment Shader의 역할은 rasterize 되는 현재 픽셀의 색상을 제공하는 것입니다.
+<p>Fragment Shader의 역할은 rasterize되는 현재 픽셀의 색상을 제공하는 것입니다.
 항상 이런 형식을 취하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
@@ -403,8 +403,8 @@ void main() {
   vec2 texcoord = vec2(0.5, 0.5)  // texture 중간에서 값 가져오기
   gl_FragColor = texture2D(u_texture, texcoord);
 }
-</code></pre><p>texture에서 나오는 데이터는 <a href="webgl-3d-textures.html">수많은 설정에 따라</a> 달라집니다.
-최소한 texture의 데이터를 생성하고 넣어야 하는데, 예를들어</p>
+</code></pre><p>texture에서 나오는 데이터는 <a href="webgl-3d-textures.html">수많은 설정</a>에 따라 달라집니다.
+최소한 texture의 데이터를 생성하고 넣어야 하는데, 예를 들어</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 var level = 0;
@@ -421,12 +421,12 @@ gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIG
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var unit = 5;  // texture unit 선택
 gl.activeTexture(gl.TEXTURE0 + unit);
 gl.bindTexture(gl.TEXTURE_2D, tex);
-</code></pre><p>그리고 texture를 할당한 unit을 shader에게 알려주는데</p>
+</code></pre><p>texture를 할당한 unit을 shader에게 알려주는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform1i(someSamplerLoc, unit);
 </code></pre><h3 id="varying">Varying</h3>
 <p>varying은 <a href="webgl-how-it-works.html">동작 원리</a>에 다룬 vertex shader에서 fragment shader로 값을 전달하는 방법입니다.</p>
 <p>varying을 사용하려면 vertex와 fragment shader 양쪽에 일치하는 varying을 선언해야 하는데요.
-각 vertex마다 vertex shader의 varying을 어떤 값으로 설정해줍니다.
+각 vertex마다 vertex shader의 varying을 어떤 값으로 설정합니다.
 WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader에서 대응하는 varying으로 전달할 겁니다.</p>
 <p>vertex shader</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
@@ -456,21 +456,21 @@ void main() {
 <p>GLSL는 Graphics Library Shader Language의 약자인데요.
 shader가 작성되는 언어입니다.
 이건 JavaScript에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
-그래픽을 rasterize 하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
-예를들어 각각 2개의 값, 3개의 값, 그리고 4개의 값을 나타내는 <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, 그리고 <code class="notranslate" translate="no">vec4</code> 같은 type들이 내장되어 있습니다.
+그래픽을 rasterize하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
+예를 들어 각각 2개의 값, 3개의 값, 그리고 4개의 값을 나타내는 <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, 그리고 <code class="notranslate" translate="no">vec4</code> 같은 type들이 내장되어 있습니다.
 마찬가지로 2x2, 3x3, 그리고 4x4 행렬을 나타내는 <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code> 그리고 <code class="notranslate" translate="no">mat4</code>가 있는데요.
 <code class="notranslate" translate="no">vec</code>에 scalar를 곱하는 것 같은 작업을 수행할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 a = vec4(1, 2, 3, 4);
 vec4 b = a * 2.0;
 // 현재 b는 vec4(2, 4, 6, 8);
-</code></pre><p>마찬가지로 행렬 곱셈과 벡터 대 행렬 곱셈을 할 수 있는데</p>
+</code></pre><p>마찬가지로 행렬 곱셈과 벡터 대 행렬 곱셈을 할 수 있고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">mat4 a = ???
 mat4 b = ???
 mat4 c = a * b;
 
 vec4 v = ???
 vec4 y = c * v;
-</code></pre><p>또한 vec의 부분에 대한 다양한 선택자가 있습니다.
+</code></pre><p>또한 vec 부분에 대한 다양한 선택자가 있습니다.
 vec4를 보면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 v;
 </code></pre><ul>
@@ -487,7 +487,7 @@ vec4를 보면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v.bgra
 </code></pre><p>이건 다음과 같으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.b, v.g, v.r, v.a)
-</code></pre><p>vec 또는 mat을 만들 때 한 번에 여러 부분을 공급할 수 있습니다. 예를들면</p>
+</code></pre><p>vec 또는 mat을 만들 때 한 번에 여러 부분을 공급할 수 있습니다. 예를 들어</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.rgb, 1)
 </code></pre><p>이건 다음과 같고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.r, v.g, v.b, 1)
@@ -509,18 +509,18 @@ float f = float(1)  // integer를 float로 cast
 만약 <code class="notranslate" translate="no">vec4</code>를 전달하면 각 구성요소의 sine인 <code class="notranslate" translate="no">vec4</code>를 돌려받습니다.
 다시 말해 <code class="notranslate" translate="no">v</code>가 <code class="notranslate" translate="no">vec4</code>라면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 s = sin(v);
-</code></pre><p>이건 다음과 같고</p>
+</code></pre><p>이건 다음과 같은데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 </code></pre><p>가끔은 한 매개변수가 부동 소수점이고 나머지는 <code class="notranslate" translate="no">T</code>가 됩니다.
 이는 모든 구성요소에 부동 소수점이 적용된다는 걸 뜻하는데요.
-예를들어 <code class="notranslate" translate="no">v1</code>과 <code class="notranslate" translate="no">v2</code>가 <code class="notranslate" translate="no">vec4</code>이고 <code class="notranslate" translate="no">f</code>는 부동 소수점이라면</p>
+예를 들어 <code class="notranslate" translate="no">v1</code>과 <code class="notranslate" translate="no">v2</code>가 <code class="notranslate" translate="no">vec4</code>이고 <code class="notranslate" translate="no">f</code>는 부동 소수점이라면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 m = mix(v1, v2, f);
 </code></pre><p>이건 다음과 같으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 m = vec4(
-    mix(v1.x, v2.x, f),
-    mix(v1.y, v2.y, f),
-    mix(v1.z, v2.z, f),
-    mix(v1.w, v2.w, f)
+  mix(v1.x, v2.x, f),
+  mix(v1.y, v2.y, f),
+  mix(v1.z, v2.z, f),
+  mix(v1.w, v2.w, f)
 );
 </code></pre><p><a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">WebGL Reference Card</a>의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
 만약 정말 무미건조하고 장황한 것을 좋아한다면 <a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL 사양</a>에 도전해볼 수 있습니다.</p>
@@ -656,9 +656,9 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
         </ul>
   <li>Misc</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">WebGL 설치</a></li>
-<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">WebGL Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">WebGL Canvas 크기 조정</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
+<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">Animation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 그리고 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
@@ -681,7 +681,7 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
 <li><a href="/webgl/lessons/ko/webgl-texture-units.html">Texture Units</a></li>
 <li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffers</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
-<li><a href="/webgl/lessons/ko/webgl-references.html">References</a></li>
+<li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
         </ul></ul>
 <ul>
   <li><a href="/docs/">도우미 API 문서</a></li>
