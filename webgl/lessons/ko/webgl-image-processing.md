@@ -10,7 +10,7 @@ WebGL에서 이미지 처리는 쉽습니다.
 혹시 읽지 않았다면 [그곳](webgl-fundamentals.html)에 먼저 가보는 것이 좋습니다.
 
 WebGL에서 이미지를 그리기 위해서 우리는 texture를 사용해야 하는데요.
-픽셀 대신 렌더링할 때 WebGL이 clip space 좌표를 유추하는 것과 마찬가지로, texture를 읽을 때 WebGL은 texture 좌표를 유추합니다.
+렌더링할 때 WebGL이 픽셀 대신 clip space 좌표를 유추하는 것과 마찬가지로, texture를 읽을 때 WebGL은 texture 좌표를 유추합니다.
 texture 좌표는 texture 크기에 상관없이 0.0에서 1.0사이가 됩니다.
 
 단 하나의 직사각형(정확히는, 2개의 삼각형)만 그리기 때문에 직사각형의 각 점이 texture의 어느 위치에 해당하지는지 WebGL에게 알려줘야 합니다.
@@ -48,9 +48,9 @@ WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 vertex shader�
     }
     </script>
 
-마지막으로 이미지를 로드하고, texture를 생성하고 이미지를 texture로 복사해야 하는데요.
-브라우저에서 이미지를 비동기적으로 로드하기 때문에 texture 로드를 기다리도록 코드를 약간 변경해야 합니다.
-로드를 하자마자 그리도록 할 겁니다.
+마지막으로 이미지를 불러오고, texture를 생성하고, 이미지를 texture로 복사해야 하는데요.
+브라우저에서 이미지를 비동기적으로 불러오기 때문에 texture 로드를 기다리도록 코드를 약간 변경해야 합니다.
+불러오자마자 그리도록 할 겁니다.
 
     function main() {
       var image = new Image();
@@ -71,15 +71,16 @@ WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 vertex shader�
       var texCoordBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
       gl.bufferData(
-          gl.ARRAY_BUFFER,
-          new Float32Array([
-            0.0,  0.0,
-            1.0,  0.0,
-            0.0,  1.0,
-            0.0,  1.0,
-            1.0,  0.0,
-            1.0,  1.0]),
-          gl.STATIC_DRAW
+        gl.ARRAY_BUFFER,
+        new Float32Array([
+          0.0,  0.0,
+          1.0,  0.0,
+          0.0,  1.0,
+          0.0,  1.0,
+          1.0,  0.0,
+          1.0,  1.0
+        ]),
+        gl.STATIC_DRAW
       );
       gl.enableVertexAttribArray(texCoordLocation);
       gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
@@ -101,7 +102,7 @@ WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 vertex shader�
 
 그리고 여기 WebGL에서 렌더링된 이미지입니다.
 참고: 로컬에서 실행하는 경우 WebGL에서 이미지를 로드할 수 있도록 간단한 웹 서버가 필요합니다.
-몇 분 안에 설정하는 방법은 [여기](webgl-setup-and-installation.html)를 봐주세요.
+설정하는 방법은 [여기](webgl-setup-and-installation.html)를 봐주세요.
 
 {{{example url="../webgl-2d-image.html" }}}
 
@@ -228,7 +229,7 @@ drop down 목록을 사용해서 다른 커널을 선택해보세요.
 
 {{{example url="../webgl-2d-image-3x3-convolution.html" }}}
 
-이 글로 WebGL에서 이미지 처리는 꽤 간단하다고 확신하셨기를 바랍니다.
+이 글이 WebGL에서 이미지 처리는 꽤 간단하다는 확신을 주었기를 바랍니다.
 다음으로 [이미지에 하나 이상의 효과 적용하는 방법](webgl-image-processing-continued.html)을 살펴보겠습니다.
 
 <div class="webgl_bottombar">
@@ -276,7 +277,7 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 그건 단순 명명 규칙입니다.
 필수는 아니지만 저에게는 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어줬는데요.
 a_는 buffer에서 제공되는 데이터인 attribute입니다.
-u_는 shader에 입력하는 uniform이고, v_는  vertex shader에서 fragment shader로 전달되고 그려진 각 픽셀의 vertex 사이에 보간(또는 가변)된 값인 varying입니다.
+u_는 shader에 입력하는 uniform이고, v_는  vertex shader에서 fragment shader로 전달되고 그려진 각 픽셀에 대해 vertex 사이가 보간(또는 가변)된 값인 varying입니다.
 더 자세한 내용은 <a href="webgl-how-it-works.html">동작 원리</a>를 봐주세요.
 </p>
 </div>
