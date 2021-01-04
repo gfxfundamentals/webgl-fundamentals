@@ -74,7 +74,7 @@ the browser to stretch the canvas to fill the window with CSS. Example
             height: 100%;
             display: block;
           }
-        <style>
+        </style>
       </head>
       <body>
         <canvas id="c"></canvas>
@@ -103,8 +103,8 @@ function resizeCanvasToDisplaySize(canvas) {
   const displayHeight = canvas.clientHeight;
 
   // Check if the canvas is not the same size.
-  const needResize = canvas.width  != displayWidth || 
-                     canvas.height != displayHeight;
+  const needResize = canvas.width  !== displayWidth ||
+                     canvas.height !== displayHeight;
 
   if (needResize) {
     // Make the canvas the same size
@@ -112,7 +112,7 @@ function resizeCanvasToDisplaySize(canvas) {
     canvas.height = displayHeight;
   }
 
-  return needResize
+  return needResize;
 }
 ```
 
@@ -466,18 +466,20 @@ size of the window like the line example above. Here's an example using the patt
 
 {{{example url="../webgl-resize-the-canvas-comparison-fullwindow.html"}}}
 
-You'll notice if you zoom and resize **this page* it will fail with `getBoundingClientRect`.
+You'll notice if you zoom and resize *this page* it will fail with `getBoundingClientRect`.
 This is because the canvas is not the full window, it's in an iframe. Open the example
 in a separate window and it will work.
 
-Which solution you use is up to you. For me, 99% of the time I don't use devicePixelRatio.
-It makes my pages slow and except for a few graphics pros most people won't notice a difference.
+Which solution you use is up to you. For me, 99% of the time I don't use
+`devicePixelRatio`. It makes my pages slow and except for a few graphics pros most
+people won't notice a difference. On this site there are a few diagrams where it's
+used it but majority of examples do not.
 
 If you look at many WebGL programs they handle resizing or setting the size of the canvas in many different ways.
 If you're curious <a href="webgl-anti-patterns.html">here are some of the reasons</a> I think the way described above, letting the the browser choosing the display sizes vs CSS and then
 looking what size it choose is preferable.
 
-<!-- just to shut up to build that this link used to exist
+<!-- just to shut up the build that this link used to exist
      and still exists in older translations -->
 <a href="webgl-animation.html"></a>
 

@@ -179,13 +179,16 @@ function main() {
     const [displayWidth, displayHeight] = canvasToDisplaySizeMap.get(canvas);
 
     // Check if the canvas is not the same size.
-    if (canvas.width  !== displayWidth ||
-        canvas.height !== displayHeight) {
+    const needResize = canvas.width  !== displayWidth ||
+                       canvas.height !== displayHeight;
 
+    if (needResize) {
       // Make the canvas the same size
       canvas.width  = displayWidth;
       canvas.height = displayHeight;
     }
+
+    return needResize;
   }
 }
 
