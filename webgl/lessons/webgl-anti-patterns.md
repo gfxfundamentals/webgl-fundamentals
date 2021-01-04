@@ -35,7 +35,7 @@ This is a list of anti patterns for WebGL. Anti patterns are things you should a
 
     **What to do instead:**
 
-    Why make more work for yourself? The WebGL context has it's canvas available
+    Why make more work for yourself? The WebGL context has its canvas available
     and that has a size.
 
     <pre class="prettyprint">
