@@ -264,8 +264,13 @@ will be wrong unless you set them again.</p>
 and likely think <code class="notranslate" translate="no">gl.viewportWidth</code> and <code class="notranslate" translate="no">gl.viewportHeight</code> are part of the WebGL
 spec, confusing them for months.</p>
 <p><strong>What to do instead:</strong></p>
-<p>Why make more work for yourself? The WebGL context has its width and height
-directly on it. Just use that.</p>
+<p>Why make more work for yourself? The WebGL context has it&#39;s canvas available
+and that has a size.</p>
+<pre class="prettyprint">
+gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+</pre>
+
+<p>The context also has its width and height directly on it.</p>
 <pre class="prettyprint">
 // When you need to set the viewport to match the size of the canvas's
 // drawingBuffer this will always be correct
@@ -278,7 +283,7 @@ and <code class="notranslate" translate="no">gl.canvas.height</code> will not. <
 <li><p><a id="canvaswidth"></a>Using <code class="notranslate" translate="no">canvas.width</code> and <code class="notranslate" translate="no">canvas.height</code> for aspect ratio</p>
 <p>Often code uses <code class="notranslate" translate="no">canvas.width</code> and <code class="notranslate" translate="no">canvas.height</code> for aspect ratio like this</p>
 <pre class="prettyprint">
-var aspect = canvas.width / canvas.height;
+const aspect = canvas.width / canvas.height;
 perspective(fieldOfView, aspect, zNear, zFar);
 </pre>
 
@@ -290,13 +295,13 @@ displayed. CSS controls the size the canvas is displayed.</p>
 size your canvas is actually being displayed on the screen. Using those values
 you&#39;ll always get the correct aspect ratio regardless of your CSS settings.</p>
 <pre class="prettyprint">
-var aspect = canvas.clientWidth / canvas.clientHeight;
+const aspect = canvas.clientWidth / canvas.clientHeight;
 perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 </pre>
 
-<p>Here are examples of a canvas that&#39;s the same size (<code class="notranslate" translate="no">width=&quot;400&quot; height=&quot;300&quot;</code>)
+<p>Here are examples of a canvas who&#39;s drawingbuffers are the same size (<code class="notranslate" translate="no">width=&quot;400&quot; height=&quot;300&quot;</code>)
 but using CSS we&#39;ve told the browser to display the canvas a different size.
-Notice the samples all display the &#39;F&#39; in the correct aspect ratio.</p>
+Notice the samples both display the &#39;F&#39; in the correct aspect ratio.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 150px; height: 200px;" src="/webgl/lessons/../webgl-canvas-clientwidth-clientheight.html"></iframe>
 </div>
@@ -392,7 +397,7 @@ event.</p>
 so it just works for most cases. For WebGL apps that constantly draw every frame
 the solution is to check if you need to resize every time you draw like this</p>
 <pre class="prettyprint">
-function resize() {
+function resizeCanvasToDisplaySize() {
   var width = gl.canvas.clientWidth;
   var height = gl.canvas.clientHeight;
   if (gl.canvas.width != width ||
@@ -403,7 +408,7 @@ function resize() {
 }
 
 function render() {
-   resize();
+   resizeCanvasToDisplaySize();
    drawStuff();
    requestAnimationFrame(render);
 }
@@ -422,36 +427,11 @@ here&#39;s an editor with a sizable editing area.</p>
 <p>There would be no resize events for this case nor any other where the canvas gets resized
 based on the size of other dynamic elements on the page.</p>
 <p>For WebGL apps that don&#39;t re-draw every frame the code above is still correct, you&#39;ll just need
-to trigger a re-draw in every case where the canvas can possibly get resized. One easy way to do
-that would be to setup a requestAnimationFrame loop like this.</p>
+to trigger a re-draw in every case where the canvas can possibly get resized. One easy way to use a <code class="notranslate" translate="no">ResizeObserver</code></p>
 <pre class="prettyprint">
-function resize() {
-  var width = gl.canvas.clientWidth;
-  var height = gl.canvas.clientHeight;
-  if (gl.canvas.width != width ||
-      gl.canvas.height != height) {
-     gl.canvas.width = width;
-     gl.canvas.height = height;
-     return true;
-  }
-  return false;
-}
-
-var needToRender = true;  // draw at least once
-function checkRender() {
-   if (resize() || needToRender) {
-     needToRender = false;
-     drawStuff();
-   }
-   requestAnimationFrame(checkRender);
-}
-checkRender();
+const resizeObserver = new ResizeObserver(render);
+resizeObserver.observe(gl.canvas, {box: 'content-box'});
 </pre>
-
-<p>This would only draw if the canvas has been resized or if <code class="notranslate" translate="no">needToRender</code> is true.
-This would handle the resize case for apps that don&#39;t render the scene every frame.
-Just set <code class="notranslate" translate="no">needToRender</code> any time you&#39;ve changed something in the scene and you want
-the scene to be rendered incorporating your changes.</p>
 </li>
 <li><p><a id="properties"></a>Adding properties to <code class="notranslate" translate="no">WebGLObject</code>s</p>
 <p><code class="notranslate" translate="no">WebGLObject</code>s are the various types of resources in WebGL like a <code class="notranslate" translate="no">WebGLBuffer</code>
@@ -551,7 +531,7 @@ been hitting this limit.</p>
 So, if you want to handle these cases use <code class="notranslate" translate="no">gl.drawingBufferWidth</code> and <code class="notranslate" translate="no">gl.drawingBufferHeight</code> as
 shown in #1 above. For most apps if you follow the best practices above things will just work. Be aware
 though if you are doing calculations that need to know the actual size of the drawingbuffer you need
-to take that into account. Examples off the top of my head, picking, in other words converting from
+to take that into account. Examples off the top of my head, [picking](webgl-picking.html), in other words converting from
 mouse coordinates into canvas pixel coordinates. Another would be any kind of post processing
 effects that want to know the actual size of the drawingbuffer.
 </p>

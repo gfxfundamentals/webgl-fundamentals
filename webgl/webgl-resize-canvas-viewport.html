@@ -85,7 +85,7 @@ function main() {
   function drawScene(now) {
     now *= 0.001; // convert to seconds
 
-    resize(gl.canvas);
+    resizeCanvasToDisplaySize(gl.canvas);
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
@@ -137,7 +137,7 @@ function main() {
     requestAnimationFrame(drawScene);
   }
 
-  function resize(canvas) {
+  function resizeCanvasToDisplaySize(canvas) {
     // Lookup the size the browser is displaying the canvas.
     var displayWidth  = canvas.clientWidth;
     var displayHeight = canvas.clientHeight;
