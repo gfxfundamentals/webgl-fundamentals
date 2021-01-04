@@ -90,14 +90,14 @@ module.exports = {
   "overrides": [
     {
       "files": [
-       "resources/**/*.js",
-       "lessons/resources/**/*.js",
+        "webgl-load-obj-w-loader.html",
+        "lessons/resources/**/webgl-state-diagram-*.js",
+        "**/*.module.js",
       ],
-      /*
       "parserOptions": {
+        "ecmaVersion": 9,
         "sourceType": "module",
       },
-      */
       "rules": {
         "optional-comma-spacing/optional-comma-spacing": [2, {"after": true}],
         "no-unused-vars": 2,
@@ -107,13 +107,14 @@ module.exports = {
     },
     {
       "files": [
-        "webgl-load-obj-w-loader.html",
-        "lessons/resources/**/webgl-state-diagram-*.js",
+       "resources/**/*.js",
+       "lessons/resources/**/*.js",
       ],
+      /*
       "parserOptions": {
-        "ecmaVersion": 9,
         "sourceType": "module",
       },
+      */
       "rules": {
         "optional-comma-spacing/optional-comma-spacing": [2, {"after": true}],
         "no-unused-vars": 2,
