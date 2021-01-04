@@ -1,0 +1,185 @@
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Canvas Resize Method Comparison</title>
+<style>
+   html,
+   body {
+     height: 100%;
+     margin: 0;
+     background-color: white;
+     font-family: monospace;
+     font-size: 16px;
+   }
+   #ui {
+     position: absolute;
+     left: 10px;
+     top: 10px;
+   }
+   #ui-inner {
+     padding: 1em;
+     background: #000;
+     color: white;
+     z-index: 2;
+   }
+   canvas {
+     width: 100%;
+     height: 100%;
+     display: block;
+   }
+   pre {
+     margin: 0.5em 0 0 0;
+   }
+</style>
+</head>
+<body>
+  <canvas></canvas>
+  <div id="ui">
+    <div id="ui-inner">
+      <div><input type="radio" name="method" id="m0"><label for="m0">use round(clientWidth * dpr)</label></div>
+      <div><input type="radio" name="method" id="m1"><label for="m1">use round(getBoundingRect * dpr)</label></div>
+      <div><input type="radio" name="method" id="m2" checked><label for="m2">use ResizeObserver</label></div>
+      <div id="warning" style="color: red; display: none">(warning: no support for device-pixel-content-box)</div>
+      <pre id="info"></pre>
+    </div>
+  </div>
+</body>
+<script>
+'use strict';
+
+const patterns = (() => {
+  const ctx = document.createElement('canvas').getContext('2d');
+  ctx.canvas.width = 2;
+  ctx.canvas.height = 2;
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, 2, 2);
+  ctx.fillStyle = '#FFF';
+  ctx.fillRect(0, 0, 2, 1);
+  const p1 = ctx.createPattern(ctx.canvas, 'repeat');
+  ctx.fillRect(0, 0, 2, 2);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, 1, 2);
+  const p2 = ctx.createPattern(ctx.canvas, 'repeat');
+  return [p1, p2];
+})();
+
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+let drawCount = 0;
+const drawFn = (displayWidth, displayHeight) => {
+  canvas.width = displayWidth;
+  canvas.height = displayHeight;
+  ctx.fillStyle = patterns[0];
+  ctx.fillRect(0, 0, displayWidth / 2, displayHeight);
+  ctx.fillStyle = patterns[1];
+  ctx.fillRect(Math.round(displayWidth / 2), 0, displayWidth / 2, displayHeight);
+  ctx.fillStyle = ++drawCount % 2 ? 'red' : 'yellow';
+  ctx.fillRect(0, 0, 10, 10);
+};
+
+const canvasToDisplaySizeMap = new Map([[canvas, [300, 150]]]);
+
+const methods = {
+  m0: () => {
+    const dpr = window.devicePixelRatio;
+    const displayWidth = Math.round(canvas.clientWidth * dpr);
+    const displayHeight = Math.round(canvas.clientHeight * dpr);
+    drawFn(displayWidth, displayHeight);
+  },
+  m1: () => {
+    const dpr = window.devicePixelRatio;
+    const {width, height} = canvas.getBoundingClientRect();
+    const displayWidth = Math.round(width * dpr);
+    const displayHeight = Math.round(height * dpr);
+    drawFn(displayWidth, displayHeight);
+  },
+  m2: () => {
+    const [displayWidth, displayHeight] = canvasToDisplaySizeMap.get(canvas);
+    drawFn(displayWidth, displayHeight);
+  },
+};
+
+document.querySelectorAll('input').forEach(elem => {
+  elem.addEventListener('change', resizeAndDraw);
+});
+
+const round = v => Math.round(v).toString().padStart(4);
+const pad = v => v.toString().padEnd(18);
+
+function resizeAndDraw() {
+  const dpr = window.devicePixelRatio;
+
+  // attempt to keep the info box readable
+  // even as we zoom in/out
+  document.body.style.fontSize = `${18 / dpr}px`;
+  document.querySelectorAll('input').forEach(elem => {
+    elem.style.height = elem.style.width = `${18 / dpr}px`;
+  });
+
+  let id;
+  document.querySelectorAll('input').forEach(elem => {
+    if (elem.checked) {
+      id = elem.id;
+    }
+  });
+
+  const {width, height} = canvas.getBoundingClientRect();
+  const [observerWidth, observerHeight] = canvasToDisplaySizeMap.get(canvas);
+  document.querySelector('#info').textContent = `devicePixelRatio: ${dpr}
+
+${id}              | round(*dpr), raw
+----------------+------------+-------
+clientWidth     | ${round(canvas.clientWidth * dpr)}, ${canvas.clientWidth}
+clientHeight    | ${round(canvas.clientHeight * dpr)}, ${canvas.clientHeight}
+gbcr().width    | ${round(width * dpr)}, ${pad(width)}
+gbcr().height   | ${round(height * dpr)}, ${pad(height)}
+observer.width  | ${round(observerWidth)}
+observer.height | ${round(observerHeight)}`;
+
+  methods[id]();
+}
+resizeAndDraw();
+
+function onResize(entries) {
+  for (const entry of entries) {
+    let width;
+    let height;
+    let dpr = window.devicePixelRatio;
+    if (entry.devicePixelContentBoxSize) {
+      // NOTE: Only this path gives the correct answer
+      // The other paths are an imperfect fallback
+      // for browsers that don't provide anyway to do this
+      width = entry.devicePixelContentBoxSize[0].inlineSize;
+      height = entry.devicePixelContentBoxSize[0].blockSize;
+      dpr = 1; // it's already in width and height
+    } else if (entry.contentBoxSize) {
+      if (entry.contentBoxSize[0]) {
+        width = entry.contentBoxSize[0].inlineSize;
+        height = entry.contentBoxSize[0].blockSize;
+      } else {
+        // legacy
+        width = entry.contentBoxSize.inlineSize;
+        height = entry.contentBoxSize.blockSize;
+      }
+    } else {
+      // legacy
+      width = entry.contentRect.width;
+      height = entry.contentRect.height;
+    }
+    const displayWidth = Math.round(width * dpr);
+    const displayHeight = Math.round(height * dpr);
+    canvasToDisplaySizeMap.set(entry.target, [displayWidth, displayHeight]);
+    resizeAndDraw();
+  }
+}
+
+const resizeObserver = new ResizeObserver(onResize);
+resizeObserver.observe(canvas, {box: 'content-box'});
+document.querySelector('#warning').style.display = '';
+</script>
+</html>
+
+
