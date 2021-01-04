@@ -294,7 +294,7 @@ the browser to stretch the canvas to fill the window with CSS. Example</p>
         height: 100%;
         display: block;
       }
-    &lt;style&gt;
+    &lt;/style&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
@@ -318,8 +318,8 @@ its drawingbuffer size to match.</p>
   const displayHeight = canvas.clientHeight;
 
   // Check if the canvas is not the same size.
-  const needResize = canvas.width  != displayWidth || 
-                     canvas.height != displayHeight;
+  const needResize = canvas.width  !== displayWidth ||
+                     canvas.height !== displayHeight;
 
   if (needResize) {
     // Make the canvas the same size
@@ -327,7 +327,7 @@ its drawingbuffer size to match.</p>
     canvas.height = displayHeight;
   }
 
-  return needResize
+  return needResize;
 }
 </code></pre>
 <p>Let&#39;s call this function just before we render
@@ -645,15 +645,17 @@ size of the window like the line example above. Here&#39;s an example using the 
 </div>
 
 </p>
-<p>You&#39;ll notice if you zoom and resize <em>*this page</em> it will fail with <code class="notranslate" translate="no">getBoundingClientRect</code>.
+<p>You&#39;ll notice if you zoom and resize <em>this page</em> it will fail with <code class="notranslate" translate="no">getBoundingClientRect</code>.
 This is because the canvas is not the full window, it&#39;s in an iframe. Open the example
 in a separate window and it will work.</p>
-<p>Which solution you use is up to you. For me, 99% of the time I don&#39;t use devicePixelRatio.
-It makes my pages slow and except for a few graphics pros most people won&#39;t notice a difference.</p>
+<p>Which solution you use is up to you. For me, 99% of the time I don&#39;t use
+<code class="notranslate" translate="no">devicePixelRatio</code>. It makes my pages slow and except for a few graphics pros most
+people won&#39;t notice a difference. On this site there are a few diagrams where it&#39;s
+used it but majority of examples do not.</p>
 <p>If you look at many WebGL programs they handle resizing or setting the size of the canvas in many different ways.
 If you&#39;re curious <a href="webgl-anti-patterns.html">here are some of the reasons</a> I think the way described above, letting the the browser choosing the display sizes vs CSS and then
 looking what size it choose is preferable.</p>
-<!-- just to shut up to build that this link used to exist
+<!-- just to shut up the build that this link used to exist
      and still exists in older translations -->
 <p><a href="webgl-animation.html"></a></p>
 <script type="module" src="resources/webgl-resizing-the-canvas.module.js"></script>
