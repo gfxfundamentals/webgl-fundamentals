@@ -4,15 +4,15 @@ TOC: 이미지 처리 심화
 
 
 이 글은 [WebGL 이미지 처리](webgl-image-processing.html)에서 이어지는 글입니다.
-아직 읽지 않았다면 [거기서부터 시작하는 게](webgl-image-processing.html) 좋습니다.
+아직 읽지 않았다면 [그곳](webgl-image-processing.html)부터 시작하는 게 좋습니다.
 
-이미지 처리에 대해 다음으로 가장 분명한 의문은 어떻게 여러 효과를 적용할까요?
+이미지 처리에 대해 다음으로 가장 궁금한 점은 어떻게 여러 효과를 적용할까요?
 
 음, 즉석으로 shader를 생성할 수 있긴 합니다.
 사용자가 쓰고자 하는 효과를 선택하는 UI를 제공한 다음 모든 효과를 수행하는 shader를 생성하는 건데요.
 항상 가능한 건 아니지만 이 기술은 종종 [실기간 그래픽 효과](https://www.youtube.com/watch?v=cQUn0Zeh-0Q)를 만드는 데 사용됩니다.
 
-더 유연한 방법은 texture 2개를 더 사용하고 각 texture를 차례대로 렌더링하여, 앞뒤로 주고 받으면서 매번 다음 효과를 적용하는 겁니다.
+더 유연한 방법은 texture 2개를 더 사용하고 각 texture를 차례대로 렌더링하여, 주고 받으면서 매번 다음 효과를 적용하는 겁니다.
 
 <blockquote>
 <pre>
@@ -25,11 +25,11 @@ Texture 2      -> [Normal]      -> Canvas
 </blockquote>
 
 이렇게 하기 위해 우리는 framebuffer를 만들어야 하는데요.
-WebGL과 OpenGL에서, Framebuffer는 사실 안 좋은 이름입니다.
+WebGL과 OpenGL에서, 사실 Framebuffer는 좋지 않은 이름입니다.
 WebGL/OpenGL Framebuffer는 정말로 상태 모음(첨부 목록)일 뿐이며 실제로 어떤 종류의 buffer도 아닌데요.
 하지만, texture를 framebuffer에 첨부해서 해당 texture로 렌더링할 수 있습니다.
 
-먼저 [오래된 texture 생성 코드](webgl-image-processing.html)를 함수로 바꾸면
+먼저 [예전의 texture 생성 코드](webgl-image-processing.html)를 함수로 바꾸면
 
 ```
   function createAndSetupTexture(gl) {
@@ -50,7 +50,7 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(첨부 목록)일 뿐이며 
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 ```
 
-그리고 이제 함수를 사용하여 texture를 2개 더 만들고 2개의 framebuffer에 첨부합니다.
+그리고 이제 함수를 사용하여 texture를 2개 더 만들고 framebuffer 2개에 첨부합니다.
 
 ```
   // texture 2개를 만들고 framebuffer에 첨부합니다.
@@ -158,12 +158,12 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(첨부 목록)일 뿐이며 
 ```
 
 여기 좀 더 유연한 UI와 함께 작동하는 버전이 있습니다.
-그것들을 켜기 위해 효과를 체크해보세요.
-적용 방법을 재정렬하기 위해서는 효과를 드래그하면 됩니다.
+효과를 켜기 위해 체크해보세요.
+어떻게 적용할 지 재정렬하기 위해서는 효과를 드래그하면 됩니다.
 
 {{{example url="../webgl-2d-image-processing.html" }}}
 
-살펴봐야 할 몇 가지가 있는데요.
+살펴봐야 할 게 몇 가지 있습니다.
 
 <code>null</code>을 넘긴 <code>gl.bindFramebuffer</code>를 호출하는 건 framebuffer 중 하나 대신에 canvas에 렌더링하고 싶다는 걸 WebGL에게 알려줍니다.
 
@@ -171,7 +171,7 @@ WebGL은 [clip space](webgl-fundamentals.html)에서 다시 픽셀로 변환해�
 이건 <code>gl.viewport</code>의 설정에 따라 수행됩니다.
 렌더링할 framebuffer는 canvas 크기와 다르기 때문에 framebuffer texture를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 canvas를 렌더링할 때 다시 설정해야 합니다.
 
-마지막으로 [원본 예제](webgl-fundamentals.html)에서 렌더링할 때 Y 좌표를 뒤집었는데 WebGL이 0,0을 더 전통적인 2D 왼쪽 상단 대신 왼쪽 하단 모서리로 canvas에 표시하기 때문입니다.
+마지막으로 [원본 예제](webgl-fundamentals.html)에서 렌더링할 때 Y 좌표를 뒤집었는데, 이는 WebGL이 0,0을 2D에서 더 전통적인 왼쪽 상단 대신 왼쪽 하단 모서리로 canvas에 표시하기 때문입니다.
 이건 framebuffer에 렌더링할 때는 필요가 없는데요.
 framebuffer는 표시되지 않기 때문에, 어느 부분이 상단 그리고 하단인지는 관계가 없습니다.
 중요한 건 framebuffer에서 픽셀 0,0이 우리가 계산한 0,0에 해당한다는 겁니다.
@@ -218,8 +218,8 @@ void main() {
 또 다른 것으로는 밝기와 대비가 있는데요.
 하나는 반전용, 다른 하나는 레벨 조절용 등입니다.
 GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를 갱신하려면 코드를 변경해야 하는데요.
-해당 예제 작성을 고려했지만 각각의 매개변수가 있는 여러 GLSL program은 뒤엉키지 않도록 주요 리펙토링이 필요함을 의미하기 때문에 연습하기 좋은 것 같아 남겨뒀습니다.
+해당 예제 작성을 고려했지만 각각의 매개변수가 있는 여러 GLSL program은 뒤엉키지 않도록 주요 리펙토링이 필요하기 때문에 연습하기 좋은 것 같아 남겨뒀습니다.
 
-이것과 앞선 예제들이 WebGL을 좀 더 접근하기 쉽게 보이도록 만들었기를 바라며 2D로 시작하는 게 WebGL을 좀 더 이해하기 쉽게 만드는 데 도움이 됐길 바랍니다.
-시간이 있으면 [WebGL이 실제로 수행하는 작업에 대한 더 자세한 내용](webgl-how-it-works.html)은 물론 3D를 수행하는 방법에 대해서 [몇 가지 글](webgl-2d-translation.html)을 더 써보겠습니다.
+이것과 앞선 예제들이 WebGL을 좀 더 접근하기 쉽게 보이도록 만들었기를 바라며 2D로 시작하는 게 WebGL을 좀 더 이해하기 쉽게 만드는 데 도움이 되었기를 바랍니다.
+시간이 있으면 [WebGL이 실제로 수행하는 작업](webgl-how-it-works.html)에 대한 더 자세한 내용은 물론 3D를 수행하는 방법에 대해서 [몇 가지 글](webgl-2d-translation.html)을 더 써보겠습니다.
 다음 단계로 [2개 이상의 texture 사용법](webgl-2-textures.html)을 배워보세요.
