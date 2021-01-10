@@ -5,7 +5,7 @@ TOC: 2D Translation
 
 3D로 넘어가기 전에 잠시 2D를 사용해봅시다.
 끝까지 함께 해주세요.
-어떤 분들에게는 이 글이 굉장히 당연하겠지만 몇 가지 글들의 요점을 써보려고 합니다.
+어떤 분들에게는 이 글이 굉장히 당연하겠지만 몇몇 글들의 요점을 써보려고 합니다.
 
 이 글은 [WebGL 기초](webgl-fundamentals.html)로 시작하는 시리즈의 연장입니다.
 아직 읽지 않았다면 적어도 첫 번째 글을 먼저 읽고, 다시 여기로 돌아오는 게 좋습니다.
@@ -33,7 +33,6 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
     // clip space에서 픽셀로 변환하는 방법을 WebGL에 지시
-    // Tell WebGL how to convert from clip space to pixels
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // canvas 지우기
@@ -80,7 +79,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
 {{{example url="../webgl-2d-rectangle-translate.html" }}}
 
 지금까지는 그럭저럭 잘 됐습니다.
-하지만 더 복잡한 모양으로 똑같은 일을 하고 싶다고 상상해보세요.
+하지만 더 복잡한 모양으로 똑같이 하고 싶다고 상상해보세요.
 
 이처럼 삼각형 6개로 구성된 'F'를 그리고 싶다고 가정해봅시다.
 
@@ -126,11 +125,11 @@ function setGeometry(gl, x, y) {
 }
 ```
 
-확장하기에는 좋지 않겠다는 걸 눈치채셨을 겁니다.
-수백 또는 수천 개의 선으로 매우 복잡한 geometry를 그리려면 제법 복잡한 코드를 작성해야 하는데요.
-또한, 그릴 때마다 JavaScript는 모든 점들을 갱신해야 합니다.
+확장하기에 좋지 않겠다는 걸 눈치채셨을 겁니다.
+수백 수천 개의 선으로 이루어진 아주 복잡한 geometry를 그리려면 꽤 복잡한 코드를 작성해야 하는데요.
+또한, JavaScript는 그릴 때마다 모든 점들을 갱신해야 합니다.
 
-더 간단한 방법이 있는데요.
+더 간단한 방법이 있습니다.
 geometry를 업로드하고 shader에서 translation을 수행하면 됩니다.
 
 여기 새로운 shader가 있는데
@@ -151,8 +150,8 @@ void main() {
   ...
 ```
 
-그리고 코드를 조금 재구성할 겁니다.
-우선 geometry를 한 번만 설정해도 되는데요.
+그리고 코드를 조금 재구성할 텐데요.
+우선 geometry를 한 번만 설정해도 됩니다.
 
 ```
 // 문자 'F'를 정의하는 값들로 버퍼 채우기
@@ -223,7 +222,7 @@ function setGeometry(gl) {
   }
 ```
 
-`setGeometry`는 한 번만 호출된다는 점에 주목하세요.
+`setGeometry`가 한 번만 호출된다는 점에 주목하세요.
 더 이상 `drawScene` 안에 있지 않습니다.
 
 그리고 여기 해당 예제입니다.
@@ -232,11 +231,11 @@ function setGeometry(gl) {
 {{{example url="../webgl-2d-geometry-translate-better.html" }}}
 
 이제 그릴 때, WebGL이 거의 모든 작업을 수행하고 있습니다.
-translation을 설정하고 그려달라고 요청하는 게 우리가 하는 전부입니다.
-심지어 geometry에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지되죠.
+translation을 설정하고 그려달라고 요청하는 게 우리가 하는 전부죠.
+심지어 geometry에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지됩니다.
 
-원한다면 [모든 점들을 갱신하기 위해 위의 복잡한 JavaScript를 사용하는 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
+원한다면 모든 점들을 갱신하기 위해 위의 [복잡한 JavaScript를 사용하는 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
 
-이 예제가 너무 뻔하지 않았기를 바랍니다.
-다른 한편으로 결국 이 작업을 수행하는 훨씬 더 좋은 방법을 얻게 될 것이므로 계속 읽어주세요.
+너무 뻔한 예제가 아니었기를 바랍니다.
+다른 한편으로 이걸 수행하는 훨씬 더 좋은 방법을 다룰 것이므로 계속 읽어주세요.
 [다음 글](webgl-2d-rotation.html)에서 우리는 rotation으로 넘어가겠습니다.
