@@ -68,7 +68,7 @@ void main() {
   }
 ```
 
-그러면 이제 scale을 가지고 있습니다.
+그러면 이제 scale이 있습니다.
 슬라이더를 드래그해보세요.
 
 {{{example url="../webgl-2d-geometry-scale.html" }}}
@@ -77,12 +77,12 @@ void main() {
 
 지난 3개의 글이 [translation](webgl-2d-translation.html), [rotation](webgl-2d-rotation.html) 그리고 scale을 이해하는데 도움이 되셨기를 바랍니다.
 
-다음에는 이 3가지 모두를 훨씬 간단하고 더 유용한 형태로 결합하는 [행렬](webgl-2d-matrices.html)의 마법을 살펴보겠습니다.
+다음에는 이 3가지 모두를 훨씬 간단하고 더 유용한 형태로 결합하는 [행렬](webgl-2d-matrices.html)을 살펴보겠습니다.
 
 <div class="webgl_bottombar">
 <h3>왜 'F'인가요?</h3>
 <p>
-처음에 누군가가 texture에 'F'를 사용하는 걸 봤는데요.
+처음에 누군가가 'F'를 texture에 쓰는 걸 봤는데요.
 'F' 자체는 중요하지 않습니다.
 중요한 건 어느 방향에서든 orientation을 알 수 있다는 겁니다.
 예를 들어 하트 ❤나 삼각형 △을 사용한다면 그게 수평으로 뒤집혔는지 알 수 없습니다.
