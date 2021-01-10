@@ -7,30 +7,30 @@ TOC: 2D Rotation
 
 솔직히 이걸 어떻게 설명해야 할지 모르겠지만 뭐 어때요, 시도는 해봅시다.
 
-먼저 "unit circle" 이라고 불리는 걸 소개하려고 하는데요.
-중학교 수학을 기억해보면(저처럼 졸지 마세요!) 원은 반지름을 가집니다.
-원의 반지름은 원의 중심에서 가장자리까지의 거리인데요.
+먼저 "unit circle"이라 불리는 걸 소개하려고 합니다.
+중학교 수학을 기억해보면(저처럼 졸지 마세요!) 원은 반지름을 가지는데요.
+원의 반지름은 원의 중심에서 가장자리까지의 거리입니다.
 unit circle은 반지름이 1.0인 원입니다.
 
-여기 unit circle 입니다.
+다음은 unit circle 입니다.
 
 {{{diagram url="../unit-circle.html" width="300" height="300" }}}
 
 참고로 파란색 핸들을 원 주위로 드래그하면 X와 Y의 위치가 변경됩니다.
 이것들은 원 위에 있는 점의 위치를 나타내는데요.
-상단에서 Y는 1이고 X는 0입니다.
-우측에서 X는 1이고 Y는 0입니다.
+위쪽일 때 Y는 1이고 X는 0입니다.
+오른쪽일 때 X는 1이고 Y는 0입니다.
 
 3학년 기초 수학을 기억해보면 뭔가에 1을 곱해도 값은 그대로 유지됩니다.
-그래서 123 * 1 = 123 인데요.
+그래서 123 * 1 = 123 입니다.
 아주 기본적이죠?
-음, unit circle, 반지름이 1.0인 원도 1의 형태입니다.
+음, unit circle, 반지름이 1.0인 원도 1의 형태인데요.
 회전하는 1입니다.
-그래서 무언가를 unit circle에 곱할 수 있으며 마법이 일어나서 물체가 회전하는 걸 제외하면 1을 곱하는 것과 같습니다.
+그래서 무언가를 unit circle에 곱할 수 있으며 이는 1을 곱하는 것과 같습니다.
 
 unit circle의 어느 지점에서 X와 Y값을 가져와서 [이전 샘플](webgl-2d-translation.html)의 geometry에 곱할 겁니다.
 
-여기 업데이트한 shader입니다.
+다음은 shader 업데이트입니다.
 
     <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
@@ -83,7 +83,7 @@ unit circle의 어느 지점에서 X와 Y값을 가져와서 [이전 샘플](web
 
 {{{example url="../webgl-2d-geometry-rotation.html" }}}
 
-왜 동작할까요?
+왜 작동하는 걸까요?
 음, 수식을 봅시다.
 
     rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
@@ -119,7 +119,7 @@ unit circle의 12시에서 시계 방향 30도 지점을 선택해봅시다.
 
 점을 오른쪽 시계 방향으로 돌리면 X값은 커지고 Y는 작아지는 걸 볼 수 있습니다.
 계속 돌려서 90도를 넘으면 X는 다시 작아지고 Y는 커지는데요.
-이 패턴은 회전을 하도록 해줍니다.
+이 패턴은 회전이 가능하게 해줍니다.
 
 unit circle의 점은 또 다른 이름이 있습니다.
 이를 sine과 cosine이라고 하는데요.
@@ -149,8 +149,7 @@ JavaScript console에 코드를 복사 및 붙여넣고 `printSineAndCosignForAn
 
 이해가 되셨기를 바랍니다.
 이건 회전을 수행하는 일반적인 방법이 아니지만 2개의 글에서 더 다룰 것이므로 계속 읽어주세요.
-다음은 더 간단한 건데요.
-[Scale](webgl-2d-scale.html)입니다.
+다음은 더 간단한 [Scale](webgl-2d-scale.html)입니다.
 
 <div class="webgl_bottombar"><h3>radian이 뭔가요?</h3>
 <p>
@@ -171,7 +170,7 @@ millimeter에서 meter로 바꾸려면 1000으로 곱하고요.
 radian vs degree 둘은 비슷한데요.
 degree는 수학을 어렵게 만듭니다.
 radian는 수학을 쉽게 만들고요.
-원에는 360도가 있지만 radian은 2π뿐입니다.
+원에는 360도가 있지만 radian은 2π뿐 입니다.
 따라서 한 바퀴는 2π radian이죠.
 반 바퀴는 1π radian입니다.
 1/4바퀴는, 90도면서 1/2π radian이고요.
