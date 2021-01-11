@@ -4,7 +4,7 @@ TOC: 2D 행렬
 
 
 이 포스트는 WebGL 관련 시리즈의 연장입니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [scaling 2D geometry](webgl-2d-scale.html)에 관한 것이었습니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [2D geometry scale](webgl-2d-scale.html)에 관한 것이었습니다.
 
 <div class="webgl_bottombar">
 <h3>Math vs Programming vs WebGL</h3>
@@ -16,9 +16,9 @@ TOC: 2D 행렬
 </p>
 </div>
 
-지난 3개의 포스트에서 우리는 [geometry translation](webgl-2d-translation.html), [geometry rotation](webgl-2d-rotation.html), 그리고 [scale geometry](webgl-2d-scale.html)하는 방법을 살펴봤습니다.
+지난 3개의 포스트에서 우리는 [geometry translation](webgl-2d-translation.html), [geometry rotation](webgl-2d-rotation.html), 그리고 [geometry scale](webgl-2d-scale.html)에 대해 살펴봤습니다.
 translation, rotation 그리고 scale은 각각 'transformation'의 한 종류로 간주되는데요.
-각각의 transformation은 shader의 변경이 필요하고 3개의 transformation은 각각 순서에 따라 달라집니다.
+각각의 transformation은 shader의 변경이 필요하고 3개의 transformation은 각각의 순서에 따라 달라집니다.
 [이전 예제](webgl-2d-scale.html)에서 우리는 크기를 조정하고, 회전한 다음, 이동했는데요.
 만약 다른 순서로 적용한다면 다른 결과를 얻게 될 겁니다.
 
@@ -119,12 +119,12 @@ newX = x *  c + y * s;
 newY = x * -s + y * c;
 </pre>
 
-이게 바로 [rotation 샘플](webgl-2d-rotation.html)에 있는 것입니다.
+이게 바로 [rotation 샘플](webgl-2d-rotation.html)에 있는 겁니다.
 
 그리고 마지막으로 scale입니다.
-2개의 scale 인수를 sx와 sy라고 부를 것이며
+2개의 scale 인수를 sx와 sy라고 명명하고
 
-그리고 이런 행렬을 만들어
+이런 행렬을 만들어
 
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>sx</td><td>0.0</td><td>0.0</td></tr><tr><td>0.0</td><td>sy</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
 
@@ -151,13 +151,13 @@ newX = x * sx;
 newY = y * sy;
 </pre>
 
-이건 [scaling 샘플](webgl-2d-scale.html)과 동일합니다.
+이건 [scale 샘플](webgl-2d-scale.html)과 동일합니다.
 
 아마 아직 "그래서 뭐요? 요점이 뭔데요?"라고 생각하고 계실 것 같습니다.
 그냥 우리가 이미 하고 있던 동일한 것들을 수행하기 위한 여러 작업처럼 보입니다
 
 여기가 마법이 들어오는 곳입니다.
-행렬을 함께 곱하고 모든 transformation을 한 번에 적용할 수 있는데요.
+행렬을 함께 곱하고 모든 transformation을 한 번에 적용하는거죠.
 두 행렬을 받아서, 곱하고 결과를 반환하는, 함수 `m3.multiply`가 있다고 가정해봅시다.
 
 ```js
@@ -374,7 +374,7 @@ var m3 = {
   ...
 ```
 
-여기 5개의 F입니다.
+다음은 5개의 F입니다.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-hierarchical.html" }}}
 
@@ -400,7 +400,7 @@ matrix = m3.multiply(matrix, moveOriginMatrix);
 
 {{{example url="../webgl-2d-geometry-matrix-transform-center-f.html" }}}
 
-이 기술을 사용하면 어떤 지점에서든 회전이나 scale을 할 수 있는데요.
+이 기술을 사용하면 어떤 지점에서든 rotation이나 scale을 할 수 있는데요.
 이제 Photoshop이나 Flash에서 어떻게 회전점을 이동시키는지 알게 되었습니다.
 
 이제 더 끝내주는 걸 해봅시다.
@@ -423,14 +423,14 @@ gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 이 단계들을 차례대로 살펴보자면, 첫 단계, "픽셀을 0.0에서 1.0사이로 변환", 이건 실제 scale 작업입니다.
 두 번째 역시 scale 작업입니다.
 다음은 translation이고 마지막으로 Y를 -1로 scale 하는데요.
-실제로 shader에 전달하는 행렬로 모든 걸 수행할 수 있습니다.
+실제로 우리가 shader에 전달한 행렬로 모든 걸 수행할 수 있습니다.
 2개의 scale 행렬을 만들 수 있는데,
 하나는 1.0/resolution으로 scale하는 것이고,
 다른 하나는 2.0으로 scale하는 것이며,
 세 번째는 -1.0,-1.0으로 translation하고,
-네 번째는 Y를 -1로 scale한 뒤 모든 함께 곱하지만,
+네 번째는 Y를 -1로 scale한 뒤 모든 값을 함께 곱하지만,
 그 대신 수식이 간단하기 때문에,
-직접 주어진 해상도에 대한 'projection' 행렬을 만드는 함수를 바로 만들어 봅시다.
+직접 주어진 해상도에 대한 'projection' 행렬을 생성하는 함수를 바로 만들어 봅시다.
 
 ```js
 var m3 = {
@@ -515,7 +515,7 @@ var m3 = {
 };
 ```
 
-위의 행렬 코드 7줄을 이렇게 4줄로 바꿀 수 있는데
+위의 행렬 코드 7줄을 이렇게 4줄로 바꿀 수 있으며
 
 ```js
 // 행렬 계산
@@ -545,7 +545,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
     projectionMat * translationMat * rotationMat * scaleMat * position
 
-많은 사람들이 자연스럽게 찾는 첫 번째 방법은 오른쪽에서 시작하여 왼쪽으로 작업하는 겁니다.
+많은 사람들이 자연스럽게 찾는 첫 방법은 오른쪽에서 시작하여 왼쪽으로 계산하는 겁니다.
 
 먼저 scaledPosition을 얻기 위해 position에 scale 행렬을 곱하고
 
@@ -559,7 +559,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
     translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
 
-마지막으로 clip space 위치를 얻기 위해 projection 행렬에 곱합니다
+마지막으로 clip space 위치를 얻기 위해 projection 행렬에 곱하는데
 
     clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 
@@ -580,7 +580,7 @@ canvas는 각 방향에서 clip space(-1 ~ +1)를 나타내는 것으로 시작�
 > {{{diagram url="resources/matrix-space-change.html?stage=1" caption="clip space에서 pixel space로" }}}
 >
 > 이제 우리는 pixel space에 있습니다. X = 0에서 400, Y = 0에서 300, 왼쪽 상단은 0,0 입니다.
-> 이 행렬을 사용하여 전달된 위치는 픽셀 pixel space에 있어야 합니다.
+> 이 행렬을 사용하여 전달된 위치는 pixel space에 있어야 합니다.
 > space가 양수 Y = 상단에서 양수 Y = 하단으로 뒤집힐 때의 순간을 보실 수 있습니다.
 
 3단계:  `matrix = m3.translate(matrix, tx, ty);`
@@ -607,7 +607,7 @@ shader에서 우리는 `gl_Position = matrix * position;`을 실행하는데요.
 이해하기 더 쉽다고 느껴지는 방법을 사용하시면 됩니다.
 
 이 포스트가 행렬 수학을 이해하는데 도움이 되었기를 바랍니다.
-2D를 계속 하고 싶다면 [Canvas 2D의 drawImage 함수 재작성](webgl-2d-drawimage.html)과 [Canvas 2D의 행렬 Stack 재작성](webgl-2d-matrix-stack.html)을 봐주세요.
+2D를 계속 하고 싶다면 [Canvas 2D의 drawImage 함수 재현](webgl-2d-drawimage.html)과 [Canvas 2D의 행렬 Stack 재현](webgl-2d-matrix-stack.html)을 봐주세요.
 
 그게 아니라면 다음은 [3D](webgl-3d-orthographic.html)로 넘어갑니다.
 3D에서 행렬 수학은 동일한 원리과 사용법을 따르는데요.
