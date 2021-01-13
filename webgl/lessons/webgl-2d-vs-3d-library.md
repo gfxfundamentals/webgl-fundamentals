@@ -189,6 +189,11 @@ you provide a x,y,z,w and it divides by W before rendering but that's
 hardly enough to qualify WebGL as a 3D library. In the 3D libraries you
 supply 3D data, the libraries take care of calculating clip space points from 3D.
 
+To give a few more points of reference, [emscripten](https://emscripten.org/) provides old OpenGL emulation on top of WebGL. That code is [here](https://github.com/emscripten-core/emscripten/blob/master/src/library_glemu.js).
+If you browse through the code you'll see much of it is generating
+shaders to emulate the old 3D parts of OpenGL that were removed in OpenGL ES 2.0. You can see the same in [Regal](https://github.com/p3/regal/blob/184c62b7d7761481609ef1c1484ada659ae181b9/src/regal/RegalIff.cpp), a project NVidia started to emulate old OpenGL with 3D included in modern OpenGL without 3D included. Yet one more example, [here are the shaders three.js uses](https://gist.github.com/greggman/41d93c00649cba78abdbfc1231c9158c) to
+provide 3D. You can see a lot is going on. All of that as well as the code to support it is supplied by three.js, not WebGL
+
 I hope you at least understand where I'm coming from when I say WebGL is
 not a 3D library. I hope you'll also realize that a 3D library should
 handle the 3D for you. OpenGL did. Three.js does. OpenGL ES 2.0 and WebGL
