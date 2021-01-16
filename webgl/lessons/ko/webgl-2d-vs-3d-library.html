@@ -406,6 +406,13 @@ WebGL은 depth sorting을 훨씬 더 쉽게 만드는 depth buffer를 가지고 
 그리려는 걸 나타내는 clip space 좌표를 제공해야 하죠.
 물론 x,y,z,w를 제공하고 렌더링하기 전에 W로 나누지만 그건 WebGL을 3D 라이브러리로 한정하기엔 충분하지 않습니다.
 3D 라이브러리에서 3D 데이터를 제공하면, 라이브러리는 3D에서 clip space point를 계산합니다.</p>
+<p>몇 가지 참고 사항을 더 드리기 위해, <a href="https://emscripten.org/">emscripten</a>은 WebGL 위에서 오래된 OpenGL 에뮬레이션을 제공합니다.
+해당 코드는 <a href="https://github.com/emscripten-core/emscripten/blob/master/src/library_glemu.js">여기</a>에 있는데요.
+코드를 살펴보면 OpenGL ES 2.0에서 제거된 OpenGL의 오래된 3D 부분을 에뮬레이트하기 위해 shader를 생성하는 경우가 많습니다.
+3D가 포함되지 않은 최신 OpenGL에서 3D가 포함된 오래된 OpenGL을 에뮬레이트하기 위해 NVidia가 시작한 프로젝트, <a href="https://github.com/p3/regal/blob/184c62b7d7761481609ef1c1484ada659ae181b9/src/regal/RegalIff.cpp">Regal</a>에서 동일한 걸 볼 수 있습니다.
+또 하나의 예로, <a href="https://gist.github.com/greggman/41d93c00649cba78abdbfc1231c9158c">여기</a> three.js가 3D를 제공하기 위해 사용하는 shader가 있습니다.
+많은 것들이 진행되고 있음을 알 수 있는데요.
+이 모든 것들 뿐만이 아니라 이를 지원하는 코드는 WebGL이 아닌 라이브러리에서 제공합니다.</p>
 <p>제가 WebGL이 3D 라이브러리가 아니라고 말할 때 저의 관점을 조금이나마 이해하셨길 바랍니다.
 또한 3D 라이브러리는 3D를 처리해야 한다는 걸 깨달으셨길 바랍니다.
 OpenGL이 그렇습니다.
@@ -559,7 +566,7 @@ WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 �
         </ul>
   <li>참고</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attributes</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
 <li><a href="/webgl/lessons/ko/webgl-texture-units.html">Texture Units</a></li>
 <li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixel</a></li>
