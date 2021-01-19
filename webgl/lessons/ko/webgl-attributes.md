@@ -3,10 +3,10 @@ Description: WebGL의 attribute는 뭔가요?
 TOC: Attribute
 
 
-이 글은 WebGL에서 attribute 상태가 어떻게 설정되는지에 대한 대략적인 이미지를 제공할 겁니다.
+이 글은 WebGL에서 attribute 상태가 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
 texture unit에 관한 [비슷한 글](webgl-texture-units.html)이 있습니다.
 
-전제 조건으로 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL Shaders 그리고 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)을 읽어보시길 바랍니다.
+이 글을 읽기 전에 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL Shaders 그리고 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)을 읽어보시길 바랍니다.
 
 ## Attribute
 
@@ -71,8 +71,8 @@ gl.vertexAttribPointer = function(location, size, type, normalize, stride, offse
 };
 ```
 
-참고로 `gl.vertexAttribPointer`를 호출할 때 `attrib.buffer`는 현재 `gl.arrayBuffer`가 설정된 값으로 설정됩니다.
-위의 의사 코드에서 `gl.arrayBuffer`는 `gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer)`를 호출하여 설정되는데요.
+참고로 `gl.vertexAttribPointer`를 호출할 때 `attrib.buffer`는 현재 `gl.arrayBuffer`가 설정된 값으로 설정되는데요.
+위 의사 코드에서 `gl.arrayBuffer`는 `gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer)`를 호출하여 설정됩니다.
 
 ```js
 // 의사 코드
@@ -89,7 +89,7 @@ gl.bindBuffer = function(target, buffer) {
 ```
 
 자, 다음은 vertex shader 입니다.
-vertex shader에서 당신은 attribute를 선언합니다.
+vertex shader에서는 attribute를 선언합니다.
 예를 들어:
 
 ```glsl
@@ -117,7 +117,7 @@ const normalLoc = gl.getAttribLocation(program, 'normal');
 ```
 
 `positionLoc` = `5`라고 해봅시다.
-이건 vertex shader가 실행될 때(`gl.drawArrays`나 `gl.drawElements`를 호출할 때) vertex shader는 당신이 알맞은 type, size, offset, stride, buffer 등으로 attribute 5를 설정할 것이라 생각한다는 걸 의미합니다.
+이건 vertex shader가 실행될 때(`gl.drawArrays`나 `gl.drawElements`를 호출할 때) vertex shader는 당신이 알맞은 type, size, offset, stride, buffer 등으로 attribute 5를 설정할 것이라 예상한다는 걸 의미합니다.
 
 참고로 program을 연결하기 전에는 `gl.bindAttribLocation(program, location, nameOfAttribute)`을 호출하여 location을 선택할 수 있습니다.
 예제:
@@ -169,10 +169,10 @@ ext.bindVertexArrayOES = function(vao) {
 
 이렇게 하면 현재 VAO의 모든 attribute와 `ELEMENT_ARRAY_BUFFER`를 설정할 수 있으므로 특정한 모양을 그리고 싶을 때 `ext.bindVertexArrayOES` 호출 한 번으로 모든 attribute를 효과적으로 설정하는 반면 extension이 없으면 **attribute마다** `gl.bindBuffer`, `gl.vertexAttribPointer` 모두 최대 한 번씩 호출할 수 있습니다.
 
-vertex array object를 사용하는 게 좋다는 것을 알 수 있습니다.
-그것들을 사용하려면 종종 더 많은 organization이 필요한데요.
+vertex array object를 사용하는 게 확실히 좋다는 걸 보실 수 있을텐데요.
+이것들을 사용하려면 종종 더 많은 organization이 합니다.
 예를 들어 하나의 shader와 `gl.TRIANGLES`로 큐브를 그리고 다른 shader와 `gl.LINES`로 다시 그리고 싶다고 해봅시다.
-삼각형으로 그릴 때 조명에 normal을 사용하여 다음과 같이 shader에 attribute를 선언한다고 가정하면:
+삼각형으로 그릴 때 조명에 normal을 사용하여 아래처럼 shader에 attribute를 선언한다고 가정하면:
 
 ```glsl
 // lighting-shader
@@ -203,17 +203,17 @@ a_position location = 1
 a_normal location = 0
 ```
 
-그리고 attribute 한 개만 가지는 solid-shader의 경우
+그리고 attribute를 한 개만 가지는 solid-shader의 경우
 
 ```
 a_position location = 0
 ```
 
-shader를 전환할 때 attribute를 다르게 설정해야 한다는 건 명확합니다.
-한 shader는 `a_position`의 데이터가 attribute 0에 나타날 것이라 예상하죠.
+shader를 전환할 때 attribute를 다르게 설정해야 한다는 건 분명합니다.
+어떤 shader는 `a_position`의 데이터가 attribute 0에 나타날 것이라 예상하죠.
 다른 shader는 attribute 1에 나타날 것이라 예상합니다.
 
-attribute를 재설정 건 추가 작업입니다.
+attribute 재설정은 추가 작업입니다.
 더 나쁜 건, vertex array object 사용하는 것의 요점은 해당 작업을 할 필요가 없다는 겁니다.
 이 이슈를 고치기 위해 shader program을 연결하기 전에 location을 할당하겠습니다.
 
@@ -224,16 +224,16 @@ gl.bindAttribLocation(lightingProgram, 1, 'a_normal');
 ```
 
 **gl.linkProgram을 호출하기 전입니다.**
-이건 shader를 연결할 때 할당할 location을 WebGL에 알려주는데요.
+이건 shader를 연결할 때 WebGL에게 할당할 location을 알려주는데요.
 이제 양쪽 shader에서 동일한 VAO를 사용할 수 있습니다.
 
 ## Maximum Attribute
 
-WebGL은 적어도 8개의 attribute가 지원되어야 하지만 특정 computer/browser/implementation/driver는 더 많이 지원할 수 있습니다.
+WebGL은 적어도 8개의 attribute가 지원되어야 하지만 특정 computer / browser / implementation / driver는 더 많이 지원할 수 있습니다.
 아래 호출을 통해 얼마나 많이 지원되는지 확인할 수 있는데
 
 ```js
 const maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 ```
 
-8개보다 많이 사용하기로 결정했다면 실제로 얼마나 지원되는지 확인하고 컴퓨터가 가진 게 충분하지 않다면 사용자에게 알리거나 더 간단한 shader로 fallback하는 게 좋습니다.
+8개보다 많이 사용하기로 결정했다면 실제로 얼마나 지원되는지 확인하고 컴퓨터가 충분히 가지고 있지 않다면 사용자에게 알리거나 더 간단한 shader로 fallback하는 게 좋습니다.
