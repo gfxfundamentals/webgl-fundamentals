@@ -136,7 +136,7 @@ WebGL은 0.0에서 1.0까지인 texture 좌표에서 texture를 참조하기 때
       // texture 좌표의 1픽셀 계산
       vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
 
-      // 좌측, 중앙, 그리고 우측 픽셀 평균화
+      // 좌측, 중앙, 우측 픽셀 평균화
       gl_FragColor = (
         texture2D(u_image, v_texCoord) +
         texture2D(u_image, v_texCoord + vec2(onePixel.x, 0.0)) +
@@ -272,7 +272,7 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </div>
 
 <div class="webgl_bottombar">
-<h3>GLSL의 변수에서 a_, u_, 그리고 v_ 접두사는 뭔가요?</h3>
+<h3>GLSL의 변수에서 a_, u_, v_ 접두사는 뭔가요?</h3>
 <p>
 그건 단순 명명 규칙입니다.
 필수는 아니지만 저에게는 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어줬는데요.

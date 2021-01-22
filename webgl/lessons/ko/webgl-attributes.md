@@ -6,7 +6,7 @@ TOC: Attribute
 이 글은 WebGL에서 attribute 상태가 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
 texture unit에 관한 [비슷한 글](webgl-texture-units.html)이 있습니다.
 
-이 글을 읽기 전에 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL Shaders 그리고 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)을 읽어보시길 바랍니다.
+이 글을 읽기 전에 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL Shader와 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)을 읽어보시길 바랍니다.
 
 ## Attribute
 
@@ -107,7 +107,7 @@ void main() {
 `gl.linkProgram(someProgram)`를 호출하여 vertex shader와 fragment shader를 연결할 때 WebGL(driver/GPU/browser)은 각 attribute에 사용할 index/location를 자체적으로 결정하는데요.
 수동(아래 참조)으로 location을 지정하지 않는 한 어떤 위치를 선택할지 알 수 없습니다.
 오직 browser/driver/GPU에 달려있죠.
-따라서 position, texcoord, 그리고 normal에 어떤 attribute를 사용했는지 물어봐야 합니다.
+따라서 position, texcoord, normal에 어떤 attribute를 사용했는지 물어봐야 합니다.
 `gl.getAttribLocation`을 호출하면 되는데
 
 ```js

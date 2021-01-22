@@ -1,24 +1,24 @@
 Title: WebGL - Orthographic 3D
-Description: 정사영으로 시작하는 WebGL에서 3D 하는 방법
-TOC: WebGL - Orthographic 3D
+Description: 직교 투영으로 시작하는 WebGL에서 3D를 수행하는 방법
+TOC: Orthographic 3D
 
 
-이 글은 WebGL 관련 시리즈에서 이어지는 글입니다.
-첫 번째는 [기초로 시작했고](webgl-fundamentals.html) 이전에는 [2D 행렬에 대해](webgl-2d-matrices.html) 다뤘습니다.
+이 포스트는 WebGL 관련 시리즈의 연장입니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [2D 행렬](webgl-2d-matrices.html)에 관한 것이었습니다.
 혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
-마지막 글에서 우리는 2D 행렬이 어떻게 동작하는지 살펴봤습니다.
-translation, rotation, scale, 그리고 심지어 픽셀에서 clip space로 투영하는 것은 모두 1 행렬 그리고 마법같은 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
-거기서 3D를 수행하는 것은 하나의 작은 단계일 뿐입니다.
+마지막 포스트에서 우리는 2D 행렬이 어떻게 동작하는지 살펴봤습니다.
+translation, rotation, scale, 그리고 pixel에서 clip space로 투영하는 것까지 하나의 행렬과 마법같은 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
+3D를 수행하기 위해 거기에서 한 걸음만 더 나아가면 됩니다.
 
-이전 2D 예제에서는 3x3 행렬을 곱한 2D 점(x, y)들을 가졌었는데요.
-3D를 수행하기 위해서는 3D 점(x, y, z)들과 4x4 행렬이 필요합니다.
+이전 2D 예제에서는 3x3 행렬을 곱한 2D point(x, y)를 가졌었는데요.
+3D를 수행하기 위해서는 3D point(x, y, z)와 4x4 행렬이 필요합니다.
 
 마지막 예제를 가져와서 3D로 바꿔봅시다.
-다시 F를 사용할 거지만 이번엔 3D 'F' 입니다.
+다시 F를 사용할 거지만 이번엔 3D 'F'입니다.
 
-먼저 해야할 일은 3D를 제어하도록 vertex shader를 수정하는 건데요.
-여기 기존 vertex shader가 있습니다.
+먼저 해야할 일은 3D를 다루기 위해 vertex shader를 수정하는 건데요.
+다음은 기존 vertex shader 입니다.
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -27,7 +27,7 @@ attribute vec2 a_position;
 uniform mat3 u_matrix;
 
 void main() {
-  // 행렬에 위치 값 곱하기
+  // matrix에 position 곱하기
   gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 }
 </script>
@@ -42,17 +42,16 @@ void main() {
 *uniform mat4 u_matrix;
 
 void main() {
-  // 행렬에 위치 값 곱하기
+  // matrix에 position 곱하기
 *  gl_Position = u_matrix * a_position;
 }
 </script>
 ```
 
-더 간단해졌습니다!
-2D와 마찬가지로 `x`와 `y`를 제공하고 `z`를 1로 설정했습니다.
-3D에서는 `x`, `y`, 그리고 `z`가 제공되어야 하고 `w`가 1이어야 하지만 `w`의 기본값이 1이라는 사실을 이용합시다.
+한층 더 간단해졌습니다!
+2d에서 `x`와 `y`를 제공한 뒤 `z`를 1로 설정하듯이, 3d에서는 `x`, `y`, `z`를 제공하고 `w`가 1이어야 하지만, `w`의 기본값이 1이라는 사실을 활용합시다.
 
-그런 다음 3D 데이터를 제공해야 합니다.
+다음으로 3D 데이터를 제공해야 합니다.
 
 ```
   ...
@@ -108,7 +107,7 @@ function setGeometry(gl) {
 
 다음으로 모든 행렬 함수를 2D에서 3D로 바꿔야 합니다.
 
-여기 m3.translation, m3.rotation, 그리고 m3.scaling의 2D 버전입니다.
+여기 m3.translation, m3.rotation, m3.scaling의 2D 버전입니다.
 
 ```
 var m3 = {
@@ -561,8 +560,8 @@ WebGL이 색상 픽셀을 그리기 전에 해당 depth 픽셀을 검사합니�
         ];
       }
 
-너비, 높이, 그리고 깊이만을 매개변수로 가지는 우리의 단순한 `projection` 함수와 달리
-좀 더 일반적인 orthographic projection 함수는 더 많은 유연성을 제공하기 위해 left, right, bottom, top, near, 그리고 far을 전달할 수 있습니다.
+너비, 높이, 깊이만을 매개변수로 가지는 우리의 단순한 `projection` 함수와 달리
+좀 더 일반적인 orthographic projection 함수는 더 많은 유연성을 제공하기 위해 left, right, bottom, top, near, far을 전달할 수 있습니다.
 원래 projection 함수와 똑같이 사용하기 위해서는 호출을 다음과 같이
 
     var left = 0;

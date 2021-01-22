@@ -1,6 +1,6 @@
-Title: WebGL Shader 그리고 GLSL
+Title: WebGL Shader와 GLSL
 Description: Shader는 뭐고 GLSL은 뭘까?
-TOC: Shader 그리고 GLSL
+TOC: Shader와 GLSL
 
 
 이 글은 [WebGL 기초](webgl-fundamentals.html)에서 이어집니다.
@@ -75,7 +75,7 @@ buffer를 만들고,
 
 buffer에 clip space vertex를 넣으면 동작할 겁니다. 
 
-attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, 그리고 `mat4`를 사용할 수 있습니다.
+attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`를 사용할 수 있습니다.
 
 ### Uniform
 
@@ -134,7 +134,7 @@ uniform은 여러 type을 가질 수 있는데요.
     gl.uniform1i (samplerCubeUniformLoc, v);           // samplerCube (texture)
     gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 또는 samplerCube 배열
 
-`bool`, `bvec2`, `bvec3`, 그리고 `bvec4` type도 있는데요.
+`bool`, `bvec2`, `bvec3`, `bvec4` type도 있는데요.
 `gl.uniform?f?` 또는 `gl.uniform?i?` 함수를 사용합니다.
 
 배열의 경우 배열의 모든 uniform을 한번에 설정할 수 있습니다.
@@ -287,8 +287,8 @@ GLSL는 Graphics Library Shader Language의 약자인데요.
 shader가 작성되는 언어입니다.
 이건 JavaScript에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
 그래픽을 rasterize하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
-예를 들어 각각 2개의 값, 3개의 값, 그리고 4개의 값을 나타내는 `vec2`, `vec3`, 그리고 `vec4` 같은 type들이 내장되어 있습니다.
-마찬가지로 2x2, 3x3, 그리고 4x4 행렬을 나타내는 `mat2`, `mat3` 그리고 `mat4`가 있는데요.
+예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 `vec2`, `vec3`, `vec4` 같은 type들이 내장되어 있습니다.
+마찬가지로 2x2, 3x3, 4x4 행렬을 나타내는 `mat2`, `mat3`, `mat4`가 있는데요.
 `vec`에 scalar를 곱하는 것 같은 작업을 수행할 수 있습니다.
 
     vec4 a = vec4(1, 2, 3, 4);

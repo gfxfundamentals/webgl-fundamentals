@@ -1,6 +1,6 @@
-Title: WebGL 점, 선, 그리고 삼각형
+Title: WebGL 점, 선, 삼각형
 Description: Details on drawing Points, Lines, and Triangles
-TOC: 점, 선, 그리고 삼각형
+TOC: 점, 선, 삼각형
 
 
 이 사이트의 대부분은 삼각형으로 모든 걸 그리는데요.
