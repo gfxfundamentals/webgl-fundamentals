@@ -16,8 +16,8 @@ TOC: 2D 행렬
 </p>
 </div>
 
-지난 3개의 포스트에서 우리는 [geometry translation](webgl-2d-translation.html), [geometry rotation](webgl-2d-rotation.html), 그리고 [geometry scale](webgl-2d-scale.html)에 대해 살펴봤습니다.
-translation, rotation 그리고 scale은 각각 'transformation'의 한 종류로 간주되는데요.
+지난 3개의 포스트에서 우리는 [geometry translation](webgl-2d-translation.html), [geometry rotation](webgl-2d-rotation.html), [geometry scale](webgl-2d-scale.html)에 대해 살펴봤습니다.
+translation, rotation, scale은 각각 'transformation'의 한 종류로 간주되는데요.
 각각의 transformation은 shader의 변경이 필요하고 3개의 transformation은 각각의 순서에 따라 달라집니다.
 [이전 예제](webgl-2d-scale.html)에서 우리는 크기를 조정하고, 회전한 다음, 이동했는데요.
 만약 다른 순서로 적용한다면 다른 결과를 얻게 될 겁니다.
@@ -31,7 +31,7 @@ translation, rotation 그리고 scale은 각각 'transformation'의 한 종류�
 <img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
 
 결과는 완전히 다릅니다.
-심지어 더 안 좋은 점은, 두 번째 예제가 필요하다면 우리가 원하는 새로운 순서로 translation, rotation, 그리고 scale을 적용한 다른 shader를 작성해야 한다는 겁니다.
+심지어 더 안 좋은 점은, 두 번째 예제가 필요하다면 우리가 원하는 새로운 순서로 translation, rotation, scale을 적용한 다른 shader를 작성해야 한다는 겁니다.
 
 음, 저보다 훨씬 더 똑똑한 사람들은 행렬 수학으로 동일한 모든 작업을 할 수 있다는 걸 밝혀냈는데요.
 2D의 경우 3x3 행렬을 사용합니다.
@@ -41,7 +41,7 @@ translation, rotation 그리고 scale은 각각 'transformation'의 한 종류�
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
 계산하기 위해서 위치를 행렬의 열에 곱하고 결과를 합산하는데요.
-위치는 x 그리고 y, 2개의 값만을 가지지만, 계산을 하기 위해서는 3개의 값이 필요하므로 세 번째 값에 1을 사용할 겁니다
+위치는 x와 y, 2개의 값만을 가지지만, 계산을 하기 위해서는 3개의 값이 필요하므로 세 번째 값에 1을 사용할 겁니다
 
 이 경우 결과는 이렇게 되는데
 
@@ -197,7 +197,7 @@ var m3 = {
 }
 ```
 
-더 명확하게 하기 위해 translation, rotation 그리고 scale을 위한 행렬을 만드는 함수를 만들어봅시다.
+더 명확하게 하기 위해 translation, rotation, scale을 위한 행렬을 만드는 함수를 만들어봅시다.
 
 ```js
 var m3 = {
@@ -296,7 +296,7 @@ function drawScene() {
 ```
 
 여기 새로운 코드를 사용한 샘플입니다.
-슬라이더는 동일하게, translation, rotation 그리고 scale인데요.
+슬라이더는 동일하게, translation, rotation, scale인데요.
 하지만 shader에서 사용되는 방식은 훨씬 더 간단해졌습니다.
 
 {{{example url="../webgl-2d-geometry-matrix-transform.html" }}}

@@ -75,7 +75,7 @@ void main() {
 
 한 가지 주목할만한 점은 음수로 크기를 조정하면 geometry가 뒤집힌다는 겁니다.
 
-지난 3개의 글이 [translation](webgl-2d-translation.html), [rotation](webgl-2d-rotation.html) 그리고 scale을 이해하는데 도움이 되셨기를 바랍니다.
+지난 3개의 글이 [translation](webgl-2d-translation.html), [rotation](webgl-2d-rotation.html), scale을 이해하는데 도움이 되셨기를 바랍니다.
 
 다음에는 이 3가지 모두를 훨씬 간단하고 더 유용한 형태로 결합하는 [행렬](webgl-2d-matrices.html)을 살펴보겠습니다.
 

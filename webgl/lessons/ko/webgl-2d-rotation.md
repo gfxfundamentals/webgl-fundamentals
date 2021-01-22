@@ -153,7 +153,7 @@ JavaScript console에 코드를 복사 및 붙여넣고 `printSineAndCosignForAn
 
 <div class="webgl_bottombar"><h3>radian이 뭔가요?</h3>
 <p>
-radian은 원, 회전 그리고 각도에 사용되는 측정 단위입니다.
+radian은 원, 회전, 각도에 사용되는 측정 단위입니다.
 마치 거리를 inche, yard, meter 등으로 측정할 수 있는 것처럼 우리는 각도를 degree나 radian으로 측정할 수 있습니다.
 </p>
 <p>

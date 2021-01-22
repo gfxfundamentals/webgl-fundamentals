@@ -45,7 +45,7 @@ gl.bindFramebuffer(target, framebuffer) {
 }
 ```
 
-`framebufferTexture2D`, 그리고 `framebufferRenderbuffer`, 두 함수를 통해 attachment를 framebuffer에 추가할 수 있습니다.
+`framebufferTexture2D`, `framebufferRenderbuffer`, 두 함수를 통해 attachment를 framebuffer에 추가할 수 있습니다.
 
 구현이 이런식으로 되어 있을 것이라 상상할 수 있는데
 

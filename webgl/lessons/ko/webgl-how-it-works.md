@@ -140,7 +140,7 @@ table.vertex_table td {
 </div>
 
 vertex shader는 translation, rotation, scale에 행렬을 적용하고 clip space로 변환합니다.
-translation, rotation, 그리고 scale의 기본값은 translation = 200, 150, rotation = 0, scale = 1,1이므로 실제로는 이동만 하는데요.
+translation, rotation, scale의 기본값은 translation = 200, 150, rotation = 0, scale = 1,1이므로 실제로는 이동만 하는데요.
 400x300인 backbuffer가 주어지면 vertex shader는 행렬을 적용한 뒤 다음과 같은 3개의 clip space vertex를 계산합니다.
 
 <div class="hcenter">
@@ -165,7 +165,7 @@ translation, rotation, 그리고 scale의 기본값은 translation = 200, 150, r
 
 v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragment shader로 전달됩니다.
 
-{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color는 v0, v1 그리고 v2 사이에서 보간됩니다" }}}
+{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color는 v0, v1, v2 사이에서 보간됩니다" }}}
 
 또한 더 많은 데이터를 vertex shader에 전달해서 fragment shader에 전달할 수 있습니다.
 예를 들어 2가지 색상을 가진 삼각형 2개로 이루어진 사각형을 그린다고 해봅시다.
@@ -348,7 +348,7 @@ normalize flag를 true로 설정하면 BYTE(-128 ~ 127) 값은 -1.0에서 +1.0�
 <p>
 정규화된 데이터의 가장 일반적인 용도는 색상입니다.
 대부분의 경우 색상은 0.0에서 1.0사이 인데요.
-빨강, 초록, 파랑 그리고 투명도 모두 소수점을 쓰면 각 색상의 vertex마다 16byte를 사용합니다.
+빨강, 초록, 파랑, 투명도 모두 소수점을 쓰면 각 색상의 vertex마다 16byte를 사용합니다.
 만약 복잡한 geometry가 있는 경우 많은 byte를 추가할 수 있습니다.
 대신에 0은 0.0이 되고 255는 1.0이 되는 UNSIGNED_BYTE로 색상을 변환해야 하는데요.
 그러면 각 vertex의 색상마다 4byte만 써서, 75%를 아낄 수 있습니다.

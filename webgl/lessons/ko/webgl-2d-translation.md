@@ -15,7 +15,7 @@ translation은 기본적으로 무언가를 "움직이는 걸" 의미하는 멋�
 [첫 번째 포스트](webgl-fundamentals.html)에서 끝낸 샘플 코드를 사용하면 setRectangle에 전달되는 값을 변경하는 것 만으로 쉽게 사각형을 이동할 수 있었죠?
 다음은 [이전 샘플](webgl-fundamentals.html)에 기반한 샘플입니다.
 
-먼저 사각형의 translation, 너비, 높이 그리고 색상을 담을 변수를 만들면
+먼저 사각형의 translation, 너비, 높이, 색상을 담을 변수를 만들면
 
 ```
   var translation = [0, 0];
