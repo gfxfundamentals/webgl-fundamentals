@@ -368,7 +368,7 @@ And here's that sample.
 The first problem we have is that our geometry is a flat F which makes it
 hard to see any 3D.  To fix that let's expand the geometry to 3D.  Our
 current F is made of 3 rectangles, 2 triangles each.  To make it 3D will
-require a total of 16 rectangles.  the 3 rectangles on the front, 3 on the
+require a total of 16 rectangles.  The 3 rectangles on the front, 3 on the
 back, 1 on the left, 4 on the right, 2 on the tops, 3 on the bottoms.
 
 <img class="webgl_center noinvertdark" width="300" src="resources/3df.svg" />
@@ -454,7 +454,7 @@ function setColors(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
       new Uint8Array([
-          // left column front
+        // left column front
         200,  70, 120,
         200,  70, 120,
         200,  70, 120,
@@ -462,7 +462,7 @@ function setColors(gl) {
         200,  70, 120,
         200,  70, 120,
 
-          // top rung front
+        // top rung front
         200,  70, 120,
         200,  70, 120,
         ...
@@ -488,7 +488,7 @@ var normalize = true;         // normalize the data (convert from 0-255 to 0-1)
 var stride = 0;               // 0 = move forward size * sizeof(type) each iteration to get the next position
 var offset = 0;               // start at the beginning of the buffer
 gl.vertexAttribPointer(
-    colorLocation, size, type, normalize, stride, offset)
+    colorLocation, size, type, normalize, stride, offset);
 
 ```
 
