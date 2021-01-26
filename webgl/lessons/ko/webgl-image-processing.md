@@ -13,7 +13,7 @@ WebGL에서 이미지를 그리기 위해서 우리는 texture를 사용해야 �
 렌더링할 때 WebGL이 픽셀 대신 clip space 좌표를 유추하는 것과 마찬가지로, texture를 읽을 때 WebGL은 texture 좌표를 유추합니다.
 texture 좌표는 texture 크기에 상관없이 0.0에서 1.0사이가 됩니다.
 
-단 하나의 직사각형(정확히는, 2개의 삼각형)만 그리기 때문에 직사각형의 각 점이 texture의 어느 위치에 해당하지는지 WebGL에게 알려줘야 합니다.
+단 하나의 사각형(정확히는, 2개의 삼각형)만 그리기 때문에 사각형의 각 점이 texture의 어느 위치에 해당하지는지 WebGL에게 알려줘야 합니다.
 'varying'이라고 불리는 특수 변수를 이용해서 이 정보를 vertex shader에서 fragment shader로 전달해야 하는데요.
 이건 변하기 때문에 varying이라고 불립니다.
 WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 vertex shader에 제공한 값을 보간합니다.
