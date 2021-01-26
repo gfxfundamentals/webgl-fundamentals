@@ -389,7 +389,7 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
 렌더링할 framebuffer는 canvas 크기와 다르기 때문에 framebuffer texture를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 canvas를 렌더링할 때 다시 설정해야 합니다.</p>
 <p>마지막으로 <a href="webgl-fundamentals.html">원본 예제</a>에서 렌더링할 때 Y 좌표를 뒤집었는데, 이는 WebGL이 0,0을 2D에서 더 전통적인 왼쪽 상단 대신 왼쪽 하단 모서리로 canvas에 표시하기 때문입니다.
 이건 framebuffer에 렌더링할 때는 필요가 없는데요.
-framebuffer는 표시되지 않기 때문에, 어느 부분이 상단 그리고 하단인지는 관계가 없습니다.
+framebuffer는 표시되지 않기 때문에, 어느 부분이 상단 혹은 하단인지는 관계가 없습니다.
 중요한 건 framebuffer에서 픽셀 0,0이 우리가 계산한 0,0에 해당한다는 겁니다.
 이걸 해결하기 위해 shader에 입력 하나를 더 추가해서 뒤집을지 말지 설정 가능하도록 만들었습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
@@ -421,7 +421,7 @@ void main() {
   gl.uniform1f(flipYLocation, -1);
 </code></pre><p>여러 효과를 얻을 수 있는 단일 GLSL program을 사용하여 예제를 단순하게 유지했습니다.
 완전한 이미지 처리를 수행하려면 많은 GLSL program이 필요한데요.
-색조, 채도 그리고 휘도 조정을 위한 프로그램입니다.
+색조, 채도, 휘도 조정을 위한 프로그램입니다.
 또 다른 것으로는 밝기와 대비가 있는데요.
 하나는 반전용, 다른 하나는 레벨 조절용 등입니다.
 GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를 갱신하려면 코드를 변경해야 하는데요.
@@ -449,7 +449,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 그리고 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
@@ -466,7 +466,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">WebGL - Orthographic 3D</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">Orthographic 3D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
         </ul>
@@ -556,7 +556,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
 <li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">Animation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 그리고 삼각형</a></li>
+<li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL and Alpha</a></li>

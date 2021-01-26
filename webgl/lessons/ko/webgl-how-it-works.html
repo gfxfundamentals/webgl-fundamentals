@@ -356,7 +356,7 @@ table.vertex_table {
 </div>
 
 <p>vertex shader는 translation, rotation, scale에 행렬을 적용하고 clip space로 변환합니다.
-translation, rotation, 그리고 scale의 기본값은 translation = 200, 150, rotation = 0, scale = 1,1이므로 실제로는 이동만 하는데요.
+translation, rotation, scale의 기본값은 translation = 200, 150, rotation = 0, scale = 1,1이므로 실제로는 이동만 하는데요.
 400x300인 backbuffer가 주어지면 vertex shader는 행렬을 적용한 뒤 다음과 같은 3개의 clip space vertex를 계산합니다.</p>
 <div class="hcenter">
 <table class="vertex_table">
@@ -380,7 +380,7 @@ translation, rotation, 그리고 scale의 기본값은 translation = 200, 150, r
 <p>v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragment shader로 전달됩니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 600px; height: 400px;" src="/webgl/lessons/resources/fragment-shader-anim.html"></iframe>
-  <div class="webgl_center">v_color는 v0, v1 그리고 v2 사이에서 보간됩니다</div>
+  <div class="webgl_center">v_color는 v0, v1, v2 사이에서 보간됩니다</div>
 </div>
 
 </p>
@@ -443,7 +443,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +var size = 4;          // 반복마다 4개의 구성 요소
 +var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
 +var normalize = false; // 데이터 정규화 안 함
-+var stride = 0;        // 0 = 다음 위치를 구하기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
++var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 +var offset = 0;        // buffer의 처음부터 시작
 +gl.vertexAttribPointer(
 +  colorLocation, size, type, normalize, stride, offset);
@@ -542,7 +542,7 @@ normalize flag를 true로 설정하면 BYTE(-128 ~ 127) 값은 -1.0에서 +1.0�
 <p>
 정규화된 데이터의 가장 일반적인 용도는 색상입니다.
 대부분의 경우 색상은 0.0에서 1.0사이 인데요.
-빨강, 초록, 파랑 그리고 투명도 모두 소수점을 쓰면 각 색상의 vertex마다 16byte를 사용합니다.
+빨강, 초록, 파랑, 투명도 모두 소수점을 쓰면 각 색상의 vertex마다 16byte를 사용합니다.
 만약 복잡한 geometry가 있는 경우 많은 byte를 추가할 수 있습니다.
 대신에 0은 0.0이 되고 255는 1.0이 되는 UNSIGNED_BYTE로 색상을 변환해야 하는데요.
 그러면 각 vertex의 색상마다 4byte만 써서, 75%를 아낄 수 있습니다.
@@ -556,7 +556,7 @@ WebGL에게 사용할 색상을 추출하는 방법을 지시할 때
 var size = 4;                 // 반복마다 4개의 구성 요소
 *var type = gl.UNSIGNED_BYTE;  // 데이터는 8bit unsigned byte
 *var normalize = true;         // 데이터 정규화
-var stride = 0;               // 0 = 다음 위치를 구하기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
+var stride = 0;               // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;               // buffer의 처음부터 시작
 gl.vertexAttribPointer(
   colorLocation,
@@ -621,7 +621,7 @@ function setColors(gl) {
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 그리고 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
@@ -638,7 +638,7 @@ function setColors(gl) {
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">WebGL - Orthographic 3D</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">Orthographic 3D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
         </ul>
@@ -728,7 +728,7 @@ function setColors(gl) {
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
 <li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">Animation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 그리고 삼각형</a></li>
+<li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL and Alpha</a></li>

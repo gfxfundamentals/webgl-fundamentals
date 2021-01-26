@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-shaders-and-glsl_ko.jpg">
 
-<meta property="og:title" content="WebGL Shader 그리고 GLSL">
+<meta property="og:title" content="WebGL Shader와 GLSL">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-shaders-and-glsl_ko.jpg">
 <meta property="og:description" content="Shader는 뭐고 GLSL은 뭘까?">
@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL Shader 그리고 GLSL">
+<meta name="twitter:title" content="WebGL Shader와 GLSL">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-shaders-and-glsl.html">
 <meta name="twitter:description" content="Shader는 뭐고 GLSL은 뭘까?">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-shaders-and-glsl_ko.jpg">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-shaders-and-glsl.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-shaders-and-glsl.html",
       "inLanguage":"ko",
-      "name":"WebGL Shader 그리고 GLSL",
+      "name":"WebGL Shader와 GLSL",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL Shader 그리고 GLSL</title>
+<title>WebGL Shader와 GLSL</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,7 +236,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Shader 그리고 GLSL</h1>
+    <h1>WebGL Shader와 GLSL</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
@@ -293,7 +293,7 @@ void main() {
   gl_Position = a_position;
 }
 </code></pre><p>buffer에 clip space vertex를 넣으면 동작할 겁니다. </p>
-<p>attribute는 type으로 <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code>, <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, 그리고 <code class="notranslate" translate="no">mat4</code>를 사용할 수 있습니다.</p>
+<p>attribute는 type으로 <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code>, <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>를 사용할 수 있습니다.</p>
 <h3 id="uniform">Uniform</h3>
 <p>shader uniform은 그리기 호출의 모든 vertex에 대해 똑같이 유지되며 shader에게 전달되는 값입니다.
 간단한 예로 위 vertex shader에 offset을 추가할 수 있는데</p>
@@ -341,7 +341,7 @@ gl.uniform1iv(sampler2DUniformLoc, [v]);           // sampler2D 또는 sampler2D
 
 gl.uniform1i (samplerCubeUniformLoc, v);           // samplerCube (texture)
 gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 또는 samplerCube 배열
-</code></pre><p><code class="notranslate" translate="no">bool</code>, <code class="notranslate" translate="no">bvec2</code>, <code class="notranslate" translate="no">bvec3</code>, 그리고 <code class="notranslate" translate="no">bvec4</code> type도 있는데요.
+</code></pre><p><code class="notranslate" translate="no">bool</code>, <code class="notranslate" translate="no">bvec2</code>, <code class="notranslate" translate="no">bvec3</code>, <code class="notranslate" translate="no">bvec4</code> type도 있는데요.
 <code class="notranslate" translate="no">gl.uniform?f?</code> 또는 <code class="notranslate" translate="no">gl.uniform?i?</code> 함수를 사용합니다.</p>
 <p>배열의 경우 배열의 모든 uniform을 한번에 설정할 수 있습니다.
 예를 들어</p>
@@ -457,8 +457,8 @@ void main() {
 shader가 작성되는 언어입니다.
 이건 JavaScript에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
 그래픽을 rasterize하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
-예를 들어 각각 2개의 값, 3개의 값, 그리고 4개의 값을 나타내는 <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, 그리고 <code class="notranslate" translate="no">vec4</code> 같은 type들이 내장되어 있습니다.
-마찬가지로 2x2, 3x3, 그리고 4x4 행렬을 나타내는 <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code> 그리고 <code class="notranslate" translate="no">mat4</code>가 있는데요.
+예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code> 같은 type들이 내장되어 있습니다.
+마찬가지로 2x2, 3x3, 4x4 행렬을 나타내는 <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>가 있는데요.
 <code class="notranslate" translate="no">vec</code>에 scalar를 곱하는 것 같은 작업을 수행할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 a = vec4(1, 2, 3, 4);
 vec4 b = a * 2.0;
@@ -553,7 +553,7 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 그리고 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
@@ -570,7 +570,7 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">WebGL - Orthographic 3D</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">Orthographic 3D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
         </ul>
@@ -660,7 +660,7 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
 <li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">Animation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 그리고 삼각형</a></li>
+<li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL and Alpha</a></li>
@@ -704,8 +704,8 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL Shader 그리고 GLSL';
-            var disqus_title = 'WebGL Shader 그리고 GLSL';
+            var disqus_identifier = 'WebGL Shader와 GLSL';
+            var disqus_title = 'WebGL Shader와 GLSL';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {
