@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-3d-perspective.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 3D Perspective" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to display perspective in 3D in WebGL" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 3D Perspective" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html" />
-<meta name="twitter:description" content="How to display perspective in 3D in WebGL" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="WebGL에서 3D로 perspective를 표시하는 방법">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ko.jpg">
+
+<meta property="og:title" content="WebGL 3D Perspective">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ko.jpg">
+<meta property="og:description" content="WebGL에서 3D로 perspective를 표시하는 방법">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 3D Perspective">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html">
+<meta name="twitter:description" content="WebGL에서 3D로 perspective를 표시하는 방법">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html",
+      "inLanguage":"ko",
+      "name":"WebGL 3D Perspective",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
 <title>WebGL 3D Perspective</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-perspective.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-perspective.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-3d-perspective.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-3d-perspective.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-3d-perspective.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-perspective.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -183,9 +240,350 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-3d-perspective.html">여기</a>에 있습니다.</p>
+      <p>이 포스트는 WebGL 관련 시리즈의 연장입니다.
+첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고 이전에는 <a href="webgl-3d-orthographic.html">3D 기초</a>에 관한 것이었습니다.
+혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
+<p>지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 perspective도 가지지 않았는데요.
+&quot;orthographic&quot;이라 불리는 방법을 사용했지만 이건 사람들이 &quot;3D&quot;를 말할 때 일반적으로 원하는 게 아닙니다.</p>
+<p>대신에 perspective를 추가해야 합니다.
+perspective란 뭘까요?
+기본적으로 더 멀리 있는 것들이 더 작게 보이는 기능입니다.</p>
+<p><img class="webgl_center noinvertdark" width="500" src="../resources/perspective-example.svg" /></p>
+<p>위 예시를 보면 더 멀리 있는 것들이 더 작게 그려지는 걸 볼 수 있습니다.
+현재 샘플을 감안할 때 더 멀리 있는 것들이 더 작게 보이도록 만드는 쉬운 방법은 clip space의 X와 Y를 Z로 나누는 겁니다.</p>
+<p>(10, 15)에서 (20,15)까지 10만큼 긴 선이 있다고 생각해보세요.
+현재 샘플에서 이건 10픽셀의 길이로 그려질 겁니다.
+하지만 Z로 나눈다면 예를 들어 Z가 1인 경우</p>
+<pre class="webgl_center">
+10 / 1 = 10
+20 / 1 = 20
+abs(10-20) = 10
+</pre>
+
+<p>길이는 10픽셀이 되고, Z가 2라고 한다면</p>
+<pre class="webgl_center">
+10 / 2 = 5
+20 / 2 = 10
+abs(5 - 10) = 5
+</pre>
+
+<p>길이는 5픽셀이 됩니다. Z = 3의 경우에는</p>
+<pre class="webgl_center">
+10 / 3 = 3.333
+20 / 3 = 6.666
+abs(3.333 - 6.666) = 3.333
+</pre>
+
+<p>Z가 증가할수록, 멀어질수록, 더 작게 그려지는 걸 볼 수 있습니다.
+clip space에서 나누면 Z가 더 작은 숫자(-1에서 +1)이기 때문에 더 나은 결과를 얻을 수 있는데요.
+나누기 전에 Z를 fudgeFactor와 곱하면 주어진 거리에 따라 얼마나 작게 할지 조정할 수 있습니다.</p>
+<p>한 번 해봅시다.
+먼저 &quot;fudgeFactor&quot;를 곱한 뒤 Z로 나누도록 vertex shader를 수정합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+...
++uniform float u_fudgeFactor;
+...
+void main() {
+  // matrix로 position 곱하기
+  vec4 position = u_matrix * a_position;
+
++  // 나누려는 z 조정
++  float zToDivideBy = 1.0 + position.z * u_fudgeFactor;
+
+*  // x와 y를 z로 나누기
+*  gl_Position = vec4(position.xy / zToDivideBy, position.zw);
+}
+&lt;/script&gt;
+</code></pre><p>참고로, Z가 -1에서 +1까지인 clip space에 있기 때문에 0에서 +2 * fudgeFactor까지인 <code class="notranslate" translate="no">zToDivideBy</code>를 얻기 위해 1을 더했습니다.</p>
+<p>또한 fudgeFactor를 설정할 수 있도록 코드를 업데이트해야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
+  var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
+
+  ...
+  var fudgeFactor = 1;
+  ...
+  function drawScene() {
+    ...
+    // fudgeFactor 설정
+    gl.uniform1f(fudgeLocation, fudgeFactor);
+
+    // geometry 그리기
+    var primitiveType = gl.TRIANGLES;
+    var offset = 0;
+    var count = 16 * 6;
+    gl.drawArrays(primitiveType, offset, count);
+</code></pre><p>그리고 여기 결과입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>알아보기 힘들다면 Z로 나누는 코드를 추가하기 전 어떤 모습이었는지 보기 위해 &quot;fudgeFactor&quot; 슬라이더를 1.0에서 0.0으로 드래그해보세요.</p>
+<p><img class="webgl_center" src="../resources/orthographic-vs-perspective.png" /></p>
+<div class="webgl_center">orthographic vs perspective</div>
+
+<p>WebGL은 vertex shader의 <code class="notranslate" translate="no">gl_Position</code>에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.</p>
+<p>이는 shader를 변경하여 직접 나누는 대신 <code class="notranslate" translate="no">gl_Position.w</code>에 <code class="notranslate" translate="no">zToDivideBy</code>를 넣어서 쉽게 증명할 수 있는데요.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+...
+uniform float u_fudgeFactor;
+...
+void main() {
+  // matrix로 position 곱하기
+  vec4 position = u_matrix * a_position;
+
+  // 나누려는 z 조정
+  float zToDivideBy = 1.0 + position.z * u_fudgeFactor;
+
+  // x, y, z를 zToDivideBy로 나누기
+*  gl_Position = vec4(position.xyz, zToDivideBy);
+
+  // fragment shader로 color 전달
+  v_color = a_color;
+}
+&lt;/script&gt;
+</code></pre><p>그리고 얼마나 정확하게 동일한지 봅시다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-w.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-w.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>WebGL이 자동으로 W로 나눈다는 사실이 유용한 이유는 뭘까요? 
+왜냐하면 이제, 더 많은 행렬을 사용하여, z를 w에 복사하기 위해 또 다른 행렬을 사용할 수 있기 때문입니다.</p>
+<p>이런 행렬이</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, 1,
+0, 0, 0, 0,
+</pre></div>
+
+<p>z를 w에 복사할 겁니다. 각 열을 다음과 같이 볼 수 있으며</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+x_out = x_in * 1 +
+        y_in * 0 +
+        z_in * 0 +
+        w_in * 0 ;
+
+y_out = x_in * 0 +
+        y_in * 1 +
+        z_in * 0 +
+        w_in * 0 ;
+
+z_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 0 ;
+
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 0 ;
+</pre></div>
+
+<p>이를 단순화하면</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+x_out = x_in;
+y_out = y_in;
+z_out = z_in;
+w_out = z_in;
+</pre></div>
+
+<p>우리는 <code class="notranslate" translate="no">w_in</code>이 항상 1.0이라는 걸 알기 때문에 이전에 가졌던 +1을 이 행렬에 더할 수 있습니다.</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, 1,
+0, 0, 0, 1,
+</pre></div>
+
+<p>다음과 같이 W 계산을 바뀌고</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * 1 +
+        w_in * 1 ;
+</pre></div>
+
+<p><code class="notranslate" translate="no">w_in</code> = 1.0임을 알기 때문에</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = z_in + 1;
+</pre></div>
+
+<p>마지막으로 행렬이 다음과 같으면 fudgeFactor을 다시 사용할 수 있는데</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+1, 0, 0, 0,
+0, 1, 0, 0,
+0, 0, 1, fudgeFactor,
+0, 0, 0, 1,
+</pre></div>
+
+<p>이게 의미하는 건</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = x_in * 0 +
+        y_in * 0 +
+        z_in * fudgeFactor +
+        w_in * 1 ;
+</pre></div>
+
+<p>그리고 단순화해서</p>
+<div class="webgl_math_center"><pre class="webgl_math">
+w_out = z_in * fudgeFactor + 1;
+</pre></div>
+
+<p>자, 행렬만 사용하도록 다시 프로그램을 수정해봅시다.</p>
+<p>먼저 vertex shader를 되돌려 놓으면</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+uniform mat4 u_matrix;
+
+void main() {
+  // matrix로 position 곱하기
+  gl_Position = u_matrix * a_position;
+  ...
+}
+&lt;/script&gt;
+</code></pre><p>다음으로 Z &rarr; W 행렬을 만드는 함수를 만들어 봅시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function makeZToWMatrix(fudgeFactor) {
+  return [
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, fudgeFactor,
+    0, 0, 0, 1,
+  ];
+}
+</code></pre><p>그리고 그걸 사용하도록 코드를 변경할 겁니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ...
+    // 행렬 계산
+*    var matrix = makeZToWMatrix(fudgeFactor);
+*    matrix = m4.multiply(matrix, m4.projection(gl.canvas.clientWidth, gl.canvas.clientHeight, 400));
+    matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
+    matrix = m4.xRotate(matrix, rotation[0]);
+    matrix = m4.yRotate(matrix, rotation[1]);
+    matrix = m4.zRotate(matrix, rotation[2]);
+    matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
+
+    ...
+</code></pre><p>그리고 다시 말하지만 정확하게 동일합니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-w-matrix.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-w-matrix.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>모든 건 기본적으로 Z로 나누는 게 perspective를 제공하고 WebGL이 편리하게 Z로 나눠준다는 걸 보여주기 위한 겁니다.</p>
+<p>하지만 여전히 몇 가지 문제가 있습니다.
+예를 들어 Z를 -100 정도로 설정하면 아래 애니메이션같은 걸 보게 될텐데</p>
+<p><img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" /></p>
+<p>어떻게 된거죠?
+F가 일찍 사라지는 이유는 뭘까요?
+WebGL은 X와 Y 혹은 +1에서 -1까지 자르는 것처럼 Z도 제한하는데요.
+여기서 우리가 보고 있는 건 Z &lt; -1 입니다.</p>
+<p>이를 해결하기 위해 수학에 대한 자세한 설명을 할 수도 있지만 <a href="https://stackoverflow.com/a/28301213/128511">2D projection을 했던 것과 같은 방법</a>으로 도출할 수도 있습니다.
+Z를 가져오고 약간을 더하고 어느정도 scale해야 하며, 원하는 범위를 -1에서 +1사이로 다시 매핑할 수 있습니다.</p>
+<p>멋진 점은 이 모든 단계를 하나의 행렬로 수행할 수 있다는 겁니다.
+더 좋은 건, <code class="notranslate" translate="no">fudgeFactor</code>보다는 <code class="notranslate" translate="no">fieldOfView</code>를 결정하고 올바른 값을 계산할 겁니다.</p>
+<p>다음은 행렬을 만드는 함수입니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
+  perspective: function(fieldOfViewInRadians, aspect, near, far) {
+    var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
+    var rangeInv = 1.0 / (near - far);
+
+    return [
+      f / aspect, 0, 0, 0,
+      0, f, 0, 0,
+      0, 0, (near + far) * rangeInv, -1,
+      0, 0, near * far * rangeInv * 2, 0
+    ];
+  },
+
+  ...
+</code></pre><p>이 행렬이 모든 변환을 수행할 겁니다.
+단위가 clip space 안에 있도록 조정되고, 수식을 수행하여 각도별로 시야를 선택할 수 있고 Z-clipping space를 선택할 수 있는데요.
+원점(0, 0, 0)에 <em>눈</em> 혹은 <em>카메라</em>가 있다고 가정하고 <code class="notranslate" translate="no">zNear</code>와 <code class="notranslate" translate="no">fieldOfView</code>가 주어지면 <code class="notranslate" translate="no">Z = -1</code>이 되도록 <code class="notranslate" translate="no">zNear</code>에 있는 항목에 필요한 값을 계산하며 중앙에서 <code class="notranslate" translate="no">fieldOfView</code>의 절반만큼 위 혹은 아래인 <code class="notranslate" translate="no">zNear</code>에 있는 항목은 각각 <code class="notranslate" translate="no">Y = -1</code>과 <code class="notranslate" translate="no">Y = 1</code>로 끝납니다
+전달된 <code class="notranslate" translate="no">aspect</code>로 곱하여 X에 사용할 값을 계산합니다.
+일반적으로 디스플레이 영역의 <code class="notranslate" translate="no">width / height</code>에 설정합니다.
+마지막으로, <code class="notranslate" translate="no">Z = 1</code>이 되도록 zFar에 있는 항목을 얼마나 scale 할지 알아냅니다.</p>
+<p>다음은 실행중인 행렬의 다이어그램입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style="width:  400px; height: 600px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Ffrustum-diagram.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../frustum-diagram.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>내부에서 큐브가 회전하고 있는 4면 원뿔 모양을 &quot;절두체&quot;라고 합니다.
+행렬은 절두체 안에 있는 공간을 가져와서 clip space로 변환하는데요.
+<code class="notranslate" translate="no">zNear</code>는 물체의 앞쪽이 잘리는 곳을 정의하고 <code class="notranslate" translate="no">zFar</code>는 물체의 뒤쪽이 잘리는 곳을 정의합니다.
+<code class="notranslate" translate="no">zNear</code>를 23으로 설정하면 회전하는 큐브의 앞면이 잘리는 걸 볼 수 있죠.
+<code class="notranslate" translate="no">zFar</code>를 24로 설정하면 큐브의 뒷면이 잘리는 걸 볼 수 있습니다.</p>
+<p>이제 남은 문제는 단 하나입니다.
+이 행렬은 0,0,0에 뷰어가 있다고 가정하고, -Z 방향으로 보고 있고 +Y가 위쪽이라고 가정하는데요.
+지금까지의 행렬은 다른 방식으로 작업을 수행했습니다.</p>
+<p>이걸 보이게 하려면 절두체 안으로 옮겨야 합니다.
+F를 움직여서 해당 작업을 할 수 있는데요.
+기존에는 (45, 150, 0)에 그리고 있었습니다.
+(-150, 0, -360)로 옮기고 오른쪽이 위로 보이도록 rotation을 설정합시다.</p>
+<p>이제, 이를 사용하려면 <code class="notranslate" translate="no">m4.projection</code>에 대한 기존 호출을 <code class="notranslate" translate="no">m4.perspective</code>에 대한 호출로 바꾸면 되는데</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+var zNear = 1;
+var zFar = 2000;
+var matrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
+matrix = m4.translate(matrix, translation[0], translation[1], translation[2]);
+matrix = m4.xRotate(matrix, rotation[0]);
+matrix = m4.yRotate(matrix, rotation[1]);
+matrix = m4.zRotate(matrix, rotation[2]);
+matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
+</code></pre><p>그리고 여기 있습니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-matrix.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-matrix.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>다시 행렬 곱셉으로 돌아가서 시야각을 확보하고 Z space를 선택할 수 있습니다.
+아직 끝나지 않았지만 글이 너무 길어지고 있군요.
+다음은, <a href="webgl-3d-camera.html">camera]</a>입니다.</p>
+<div class="webgl_bottombar">
+<h3>Why did we move the F so far in Z (-360)?</h3>
+
+<p>
+In the other samples we had the F at (45, 150, 0) but in the last sample it's been moved to (-150, 0, -360).
+Why did it need to be moved so far away?
+</p>
+
+<p>
+The reason is up until this last sample our <code class="notranslate" translate="no">m4.projection</code> function has made a projection from pixels to clip space.
+That means the area we were displaying represented 400x300 pixels.
+Using 'pixels' really doesn't make sense in 3D. 
+</p>
+
+<p>
+In other words if we tried to draw with the F at 0,0,0 and not rotated we'd get this
+</p>
+
+<div class="webgl_center"><img src="../resources/f-big-and-wrong-side.svg" style="width: 500px;"></div>
+
+<p>
+The F has its top left front corner at the origin.
+The projection looks toward negative Z but our F is built in positive Z.
+The projection has positive Y up but our F is built with positive Z down.
+</p>
+
+<p>
+Our new projection only sees what's in the blue frustum.
+With -zNear = 1 and with a field of view of 60 degrees then at Z = -1 the frustum is only 1.154 units tall and 1.154 * aspect units wide. At Z = -2000 (-zFar) its 2309 units tall.
+Since our F is 150 units big and the view can only see 1.154 units when something is at <code class="notranslate" translate="no">-zNear</code> we need to move it pretty far away from the origin to see all of it.
+</p>
+
+
+<p>
+Moving it -360 units in Z moves in inside the frustum. We also rotated it to be right side up.
+</p>
+
+<div class="webgl_center"><img src="../resources/f-right-side.svg" style="width: 500px;"><div>not to scale</div></div>
+
+<p></div></p>
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +599,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -341,13 +740,51 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>질문은? <a href="https://stackoverflow.com/questions/tagged/webgl">Stackoverflow</a>에서 물어봐주세요.</div>
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D Perspective';
+            var disqus_title = 'WebGL 3D Perspective';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {

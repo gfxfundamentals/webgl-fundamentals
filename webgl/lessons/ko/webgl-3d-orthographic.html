@@ -244,7 +244,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고 이전에는 <a href="webgl-2d-matrices.html">2D 행렬</a>에 관한 것이었습니다.
 혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
 <p>마지막 포스트에서 우리는 2D 행렬이 어떻게 동작하는지 살펴봤습니다.
-translation, rotation, scale, 그리고 pixel에서 clip space로 투영하는 것까지 하나의 행렬과 마법같은 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
+translation, rotation, scale, 그리고 pixel에서 clip space로 투영하는 것까지 하나의 행렬과 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
 3D를 수행하기 위해 거기에서 한 걸음만 더 나아가면 됩니다.</p>
 <p>이전 2D 예제에서는 3x3 행렬을 곱한 2D point(x, y)를 가졌었는데요.
 3D를 수행하기 위해서는 3D point(x, y, z)와 4x4 행렬이 필요합니다.</p>
@@ -293,32 +293,32 @@ void main() {
 // 문자 &#39;F&#39;를 정의하는 값으로 buffer 채우기
 function setGeometry(gl) {
   gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([
-          // 왼쪽 열
-            0,   0,  0,
-           30,   0,  0,
-            0, 150,  0,
-            0, 150,  0,
-           30,   0,  0,
-           30, 150,  0,
+    gl.ARRAY_BUFFER,
+    new Float32Array([
+      // 왼쪽 열
+        0,   0,  0,
+        30,   0,  0,
+        0, 150,  0,
+        0, 150,  0,
+        30,   0,  0,
+        30, 150,  0,
 
-          // 상단 가로 획
-           30,   0,  0,
-          100,   0,  0,
-           30,  30,  0,
-           30,  30,  0,
-          100,   0,  0,
-          100,  30,  0,
+      // 상단 가로 획
+        30,   0,  0,
+      100,   0,  0,
+        30,  30,  0,
+        30,  30,  0,
+      100,   0,  0,
+      100,  30,  0,
 
-          // 중간 가로 획
-           30,  60,  0,
-           67,  60,  0,
-           30,  90,  0,
-           30,  90,  0,
-           67,  60,  0,
-           67,  90,  0]),
-      gl.STATIC_DRAW);
+      // 중간 가로 획
+        30,  60,  0,
+        67,  60,  0,
+        30,  90,  0,
+        30,  90,  0,
+        67,  60,  0,
+        67,  90,  0]),
+    gl.STATIC_DRAW);
 }
 </code></pre><p>다음으로 모든 행렬 함수를 2D에서 3D로 바꿔야 합니다.</p>
 <p>다음은 m3.translation, m3.rotation, m3.scaling의 2D 버전입니다.</p>
@@ -405,11 +405,11 @@ function setGeometry(gl) {
     ];
   },
 };
-</code></pre><p>참고로 이제 rotation 함수 3개를 가집니다.
+</code></pre><p>참고로 이제 3개의 rotation 함수를 가집니다.
 2D에서는 Z축을 중심으로만 회전했기 때문에 하나만 필요했는데요.
 이제 3D를 수행하기 위해 X축과 Y축을 중심으로도 잘 회전되길 원하실 겁니다.
 보면 아시겠지만 모든 게 굉장히 비슷한데요.
-이걸 해결하면 이전처럼 단순화할 수 있는데</p>
+이걸 해결하면 이전처럼 단순화할 수 있으며</p>
 <p>Z 회전</p>
 <div class="webgl_center">
 <div>newX = x *  c + y * s;</div>
@@ -431,7 +431,7 @@ function setGeometry(gl) {
 <p>위 식들은 이런 회전을 제공합니다.</p>
 <iframe class="external_diagram" src="../resources/axis-diagram.html" style="width: 540px; height: 280px;"></iframe>
 
-<p>마찬가지로 단순화 된 함수들을 만들어 보면</p>
+<p>마찬가지로 단순화된 함수들을 만들어 보면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  translate: function(m, tx, ty, tz) {
     return m4.multiply(m, m4.translation(tx, ty, tz));
   },
@@ -549,13 +549,13 @@ function setGeometry(gl) {
 </div>
 
 </p>
-<p>우리가 가진 첫 번째 문제는 geometry가 3D로 보기 힘들게 만드는 평평한 F라는 겁니다.
+<p>첫 번째 문제로 geometry가 3D로 보기 어려운 평평한 F입니다.
 이걸 고치기 위해 geometry를 3D로 확장해봅시다.
 현재 F는 삼각형 2개로 이루어진 사각형 3개로 만들어져 있습니다.
 이걸 3D로 만들기 위해서는 총 16개의 사각형이 필요한데요.
 사각형이 앞쪽에 3개, 뒤쪽에 3개, 왼쪽에 1개, 오른쪽에 4개, 위쪽에 2개, 아래쪽에 3개 입니다.</p>
 <p><img class="webgl_center nodarkinvert" width="300" src="../resources/3df.svg" /></p>
-<p>여기 나와있는 목록 중 상당 수 입니다.
+<p>여기 나열하자니 꽤 많군요.
 사각형마다 2개의 삼각형 그리고 삼각형마다 3개의 vertex가 있는 사각형 16개는 96개의 vertex를 가집니다.
 이들 전부를 보고 싶다면 샘플의 소스를 봐주세요.</p>
 <p>더 많은 vertex를 그려야 하므로</p>
@@ -571,7 +571,7 @@ function setGeometry(gl) {
 </div>
 
 </p>
-<p>슬라이더를 움직여서 이걸 3D라고 말하기는 꽤 힘든데요.
+<p>슬라이더를 움직여서 이걸 3D라고 부르기는 꽤 힘든데요.
 각 사각형에 다른 색상을 칠해봅시다.
 이를 위해 vertex shader에 또 다른 attribute와 이걸 vertex shader에서 fragment shader로 전달하기 위한 varying을 추가할 겁니다.</p>
 <p>다음은 새로운 vertex shader이고</p>
@@ -615,26 +615,26 @@ void main() {
 
 
   ...
-// &#39;F&#39;의 색상으로 buffer 채우기
 
+// &#39;F&#39;의 색상으로 buffer 채우기
 function setColors(gl) {
   gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Uint8Array([
-        // 왼쪽 열 앞쪽
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
+    gl.ARRAY_BUFFER,
+    new Uint8Array([
+      // 왼쪽 열 앞쪽
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
 
-        // 상단 획 앞쪽
-        200,  70, 120,
-        200,  70, 120,
-        ...
-        ...
-      gl.STATIC_DRAW);
+      // 상단 획 앞쪽
+      200,  70, 120,
+      200,  70, 120,
+      ...
+      ...
+    gl.STATIC_DRAW);
 }
 </code></pre><p>그런 다음 렌더링할 때 color buffer에서 색상을 가져오는 방법을 color attribute에 알려줘야 하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// color attribute 활성화
@@ -659,16 +659,16 @@ gl.vertexAttribPointer(
 
 </p>
 <p>엥, 이게 뭐야?
-음, 3D &#39;F&#39;의 앞면, 뒷면, 옆면 등 다양한 부분들이 geometry 데이터에 나타난 순서대로 그려진 것으로 보이는데요.</p>
+음, 3D &#39;F&#39;의 앞면, 뒷면, 옆면 등 다양한 부분들이 geometry 데이터에 나타난 순서대로 그려지고 있는데요.</p>
 <p><img class="webgl_center" style="background-color: transparent;" width="163" height="190" src="../resources/polygon-drawing-order.gif" /></p>
 <p><span style="background: rgb(200, 70, 120); color: white; padding: 0.25em">붉은 부분</span>은 &#39;F&#39;의 <strong>앞부분</strong>이지만 데이터의 첫 부분이기 때문에 먼저 그려지고 그 뒤에 있는 다른 삼각형들은 이걸 덮어서 그려집니다.
 예를 들어 <span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">보라색 부분</span>은 사실 &#39;F&#39;의 뒷부분인데요.
 데이터에서 두 번째로 나오기 때문에 두 번째로 그려집니다.</p>
-<p>WebGL의 삼각형은 앞면과 뒷면의 개념을 가지고 있는데요.
+<p>WebGL의 삼각형은 앞면과 뒷면의 개념을 가지고 있습니다.
 기본적으로 삼각형 앞면은 반시계 방향으로 진행하는 vertex를 가집니다.
 삼각형 뒷면은 시계 방향으로 진행하는 vertex를 가집니다.</p>
 <p><img src="../resources/triangle-winding.svg" class="webgl_center" width="400" /></p>
-<p>WebGL은 삼각형의 앞면 혹은 뒷면만 그릴 수 있습니다.
+<p>WebGL은 삼각형의 앞면 혹은 뒷면만 그릴 수도 있습니다.
 이 코드로 해당 기능을 켤 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.enable(gl.CULL_FACE);
 </code></pre><p>이걸 <code class="notranslate" translate="no">drawScene</code> 함수에 넣어줍시다.
@@ -679,7 +679,7 @@ gl.vertexAttribPointer(
 이건 X에서 -1로 scale되거나 180도 회전한 시계 방향 삼각형이 반시계 방향 삼각형이 된다는 걸 의미하는데요.
 CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷면) 삼각형을 모두 볼 수 있었습니다.
 이제 그걸 켰기 때문에, scale이나 rotation 혹은 어떤 이유로든 앞면 삼각형이 뒤집히면, WebGL은 그리지 않을겁니다.
-3D에서 무언가를 회전시킬 때 일반적으로 당신을 향하는 삼각형이 앞면으로 간주되길 원하기 때문에 제법 좋은 기능입니다.</p>
+3D에서 무언가를 회전시킬 때 일반적으로 당신을 향하는 삼각형이 앞면으로 간주되길 원하기 때문에 꽤 괜찮은 기능입니다.</p>
 <p>CULL_FACE를 켜면 얻는 결과인데</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-step4.html"></iframe>
@@ -691,7 +691,7 @@ CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷�
 알고보니, 다수가 잘못된 방향을 향하고 있습니다.
 회전하고 다른 방향에서 바라보면 나타나는 걸 볼 수 있는데요.
 다행히도 쉽게 고칠 수 있습니다.
-뒤집혀 있는 걸 찾아 vertex들 중 2개를 교환하면 되는데요.
+뒤집혀 있는 걸 찾아 vertex들 중 2개를 교환하면 되죠.
 예를 들어 뒤집힌 삼각형 하나가 있다면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">           1,   2,   3,
           40,  50,  60,
@@ -707,8 +707,8 @@ CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷�
 </div>
 
 </p>
-<p>나아졌지만 아직 한 가지 문제가 더 남아있는데요.
-모든 삼각형이 올바른 방향을 향하고 뒷면이 culling된 경우에도 뒤에 있어야 하는 삼각형이 앞에 있어야 하는 삼각형 위에 그려지는 곳들이 있습니다.</p>
+<p>나아졌지만 아직 한 가지 문제가 더 남아있습니다.
+모든 삼각형이 올바른 방향을 향하고 뒷면이 culling된 경우에도 뒤에 있어야 하는 삼각형이 앞에 있어야 하는 삼각형 위에 그려지는 곳들이 있는데요.</p>
 <p>DEPTH BUFFER를 입력해봅시다.</p>
 <p>때때로 Z-Buffer라고 불리는 depth buffer는 <em>depth</em> pixel의 사각형인데, 각 color pixel에 대한 depth pixel은 이미지를 만드는데 사용됩니다.
 WebGL은 각 color pixel을 그리기 때문에 depth pixel도 그릴 수 있는데요.
@@ -721,7 +721,7 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
 말인즉슨, 다른 픽셀 뒤에 있는 픽셀은 그려지지 않는다는 걸 의미합니다.</p>
 <p>이렇게 culling을 켰던 것처럼 간단하게 이 기능을 사용할 수 있으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.enable(gl.DEPTH_TEST);
-</code></pre><p>그리기 시작하기 전에 depth 버퍼를 1.0으로 초기화해야 합니다.</p>
+</code></pre><p>그리는 걸 시작하기 전에 depth 버퍼를 1.0으로 초기화해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // scene 그리기
   function drawScene() {
     ...
@@ -754,8 +754,8 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
       1,
     ];
   }
-</code></pre><p>width, height, depth 매개변수를 가지는 위의 단순한 <code class="notranslate" translate="no">projection</code> 함수와 달리, 더 일반적인 orthographic projection 함수는 더 많은 유연성을 제공하는 left, right, bottom, top, near, far을 전달할 수 있습니다.
-원래 쓰던 projection 함수와 동일하게 쓰기 위해서는 이렇게 호출하며</p>
+</code></pre><p>width, height, depth 등의 매개변수를 가지는 위의 단순한 <code class="notranslate" translate="no">projection</code> 함수와 달리, 더 일반적인 orthographic projection 함수는 더 많은 유연성을 제공하는 left, right, bottom, top, near, far 등을 전달할 수 있습니다.
+원래 쓰던 projection 함수와 동일하게 쓰기 위해서는 이렇게 호출할 수 있으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var left = 0;
 var right = gl.canvas.clientWidth;
 var bottom = gl.canvas.clientHeight;
@@ -763,11 +763,11 @@ var top = 0;
 var near = 400;
 var far = -400;
 var matrix = m4.orthographic(left, right, bottom, top, near, far);
-</code></pre><p>다음 포스트에서는 <a href="webgl-3d-perspective.html">원근감을 가지도록 만드는 방법</a>에 대해 살펴보겠습니다.</p>
+</code></pre><p>다음 포스트에서는 <a href="webgl-3d-perspective.html">perspective를 가지도록 만드는 방법</a>에 대해 살펴보겠습니다.</p>
 <div class="webgl_bottombar">
 <h3>왜 attribute가 vec4인데 gl.vertexAttribPointer의 size는 3인가요?</h3>
 <p>
-꼼꼼히 보시는 분들은 우리가 2개의 attribute를 정의했다는 걸 알아차리셨을 겁니다.
+꼼꼼히 보시는 분들은 2개의 attribute를 다음과 같이 정의했다는 점에 주목하셨을텐데
 </p>
 <pre class="prettyprint showlinemods">
 attribute vec4 a_position;
