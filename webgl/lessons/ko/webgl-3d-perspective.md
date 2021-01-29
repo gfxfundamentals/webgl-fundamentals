@@ -4,7 +4,7 @@ TOC: 3D Perspective
 
 
 이 포스트는 WebGL 관련 시리즈의 연장입니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [3D 기초](webgl-2d-matrices.html)에 관한 것이었습니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [3D 기초](webgl-3d-orthographic.html)에 관한 것이었습니다.
 혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
 지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 perspective도 가지지 않았는데요.
