@@ -8,7 +8,7 @@ TOC: Orthographic 3D
 혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
 마지막 포스트에서 우리는 2D 행렬이 어떻게 동작하는지 살펴봤습니다.
-translation, rotation, scale, 그리고 pixel에서 clip space로 투영하는 것까지 하나의 행렬과 마법같은 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
+translation, rotation, scale, 그리고 pixel에서 clip space로 투영하는 것까지 하나의 행렬과 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
 3D를 수행하기 위해 거기에서 한 걸음만 더 나아가면 됩니다.
 
 이전 2D 예제에서는 3x3 행렬을 곱한 2D point(x, y)를 가졌었는데요.
@@ -71,32 +71,32 @@ void main() {
 // 문자 'F'를 정의하는 값으로 buffer 채우기
 function setGeometry(gl) {
   gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([
-          // 왼쪽 열
-            0,   0,  0,
-           30,   0,  0,
-            0, 150,  0,
-            0, 150,  0,
-           30,   0,  0,
-           30, 150,  0,
+    gl.ARRAY_BUFFER,
+    new Float32Array([
+      // 왼쪽 열
+        0,   0,  0,
+        30,   0,  0,
+        0, 150,  0,
+        0, 150,  0,
+        30,   0,  0,
+        30, 150,  0,
 
-          // 상단 가로 획
-           30,   0,  0,
-          100,   0,  0,
-           30,  30,  0,
-           30,  30,  0,
-          100,   0,  0,
-          100,  30,  0,
+      // 상단 가로 획
+        30,   0,  0,
+      100,   0,  0,
+        30,  30,  0,
+        30,  30,  0,
+      100,   0,  0,
+      100,  30,  0,
 
-          // 중간 가로 획
-           30,  60,  0,
-           67,  60,  0,
-           30,  90,  0,
-           30,  90,  0,
-           67,  60,  0,
-           67,  90,  0]),
-      gl.STATIC_DRAW);
+      // 중간 가로 획
+        30,  60,  0,
+        67,  60,  0,
+        30,  90,  0,
+        30,  90,  0,
+        67,  60,  0,
+        67,  90,  0]),
+    gl.STATIC_DRAW);
 }
 ```
 
@@ -194,11 +194,11 @@ var m4 = {
 };
 ```
 
-참고로 이제 rotation 함수 3개를 가집니다.
+참고로 이제 3개의 rotation 함수를 가집니다.
 2D에서는 Z축을 중심으로만 회전했기 때문에 하나만 필요했는데요.
 이제 3D를 수행하기 위해 X축과 Y축을 중심으로도 잘 회전되길 원하실 겁니다.
 보면 아시겠지만 모든 게 굉장히 비슷한데요.
-이걸 해결하면 이전처럼 단순화할 수 있는데
+이걸 해결하면 이전처럼 단순화할 수 있으며
 
 Z 회전
 
@@ -225,7 +225,7 @@ X 회전
 
 <iframe class="external_diagram" src="resources/axis-diagram.html" style="width: 540px; height: 280px;"></iframe>
 
-마찬가지로 단순화 된 함수들을 만들어 보면
+마찬가지로 단순화된 함수들을 만들어 보면
 
 ```
   translate: function(m, tx, ty, tz) {
@@ -360,7 +360,7 @@ X와 Y를 pixel에서 clip space로 변환해야 했던 것처럼, Z도 동일�
 
 {{{example url="../webgl-3d-step1.html" }}}
 
-우리가 가진 첫 번째 문제는 geometry가 3D로 보기 힘들게 만드는 평평한 F라는 겁니다.
+첫 번째 문제로 geometry가 3D로 보기 어려운 평평한 F입니다.
 이걸 고치기 위해 geometry를 3D로 확장해봅시다.
 현재 F는 삼각형 2개로 이루어진 사각형 3개로 만들어져 있습니다.
 이걸 3D로 만들기 위해서는 총 16개의 사각형이 필요한데요.
@@ -368,7 +368,7 @@ X와 Y를 pixel에서 clip space로 변환해야 했던 것처럼, Z도 동일�
 
 <img class="webgl_center nodarkinvert" width="300" src="resources/3df.svg" />
 
-여기 나와있는 목록 중 상당 수 입니다.
+여기 나열하자니 꽤 많군요.
 사각형마다 2개의 삼각형 그리고 삼각형마다 3개의 vertex가 있는 사각형 16개는 96개의 vertex를 가집니다.
 이들 전부를 보고 싶다면 샘플의 소스를 봐주세요.
 
@@ -386,7 +386,7 @@ X와 Y를 pixel에서 clip space로 변환해야 했던 것처럼, Z도 동일�
 
 {{{example url="../webgl-3d-step2.html" }}}
 
-슬라이더를 움직여서 이걸 3D라고 말하기는 꽤 힘든데요.
+슬라이더를 움직여서 이걸 3D라고 부르기는 꽤 힘든데요.
 각 사각형에 다른 색상을 칠해봅시다.
 이를 위해 vertex shader에 또 다른 attribute와 이걸 vertex shader에서 fragment shader로 전달하기 위한 varying을 추가할 겁니다.
 
@@ -441,26 +441,26 @@ void main() {
 
 
   ...
-// 'F'의 색상으로 buffer 채우기
 
+// 'F'의 색상으로 buffer 채우기
 function setColors(gl) {
   gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Uint8Array([
-        // 왼쪽 열 앞쪽
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
-        200,  70, 120,
+    gl.ARRAY_BUFFER,
+    new Uint8Array([
+      // 왼쪽 열 앞쪽
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
+      200,  70, 120,
 
-        // 상단 획 앞쪽
-        200,  70, 120,
-        200,  70, 120,
-        ...
-        ...
-      gl.STATIC_DRAW);
+      // 상단 획 앞쪽
+      200,  70, 120,
+      200,  70, 120,
+      ...
+      ...
+    gl.STATIC_DRAW);
 }
 ```
 
@@ -488,7 +488,7 @@ gl.vertexAttribPointer(
 {{{example url="../webgl-3d-step3.html" }}}
 
 엥, 이게 뭐야?
-음, 3D 'F'의 앞면, 뒷면, 옆면 등 다양한 부분들이 geometry 데이터에 나타난 순서대로 그려진 것으로 보이는데요.
+음, 3D 'F'의 앞면, 뒷면, 옆면 등 다양한 부분들이 geometry 데이터에 나타난 순서대로 그려지고 있는데요.
 
 <img class="webgl_center" style="background-color: transparent;" width="163" height="190" src="resources/polygon-drawing-order.gif" />
 
@@ -496,13 +496,13 @@ gl.vertexAttribPointer(
 예를 들어 <span style="background: rgb(80, 70, 200); color: white; padding: 0.25em">보라색 부분</span>은 사실 'F'의 뒷부분인데요.
 데이터에서 두 번째로 나오기 때문에 두 번째로 그려집니다.
 
-WebGL의 삼각형은 앞면과 뒷면의 개념을 가지고 있는데요.
+WebGL의 삼각형은 앞면과 뒷면의 개념을 가지고 있습니다.
 기본적으로 삼각형 앞면은 반시계 방향으로 진행하는 vertex를 가집니다.
 삼각형 뒷면은 시계 방향으로 진행하는 vertex를 가집니다.
 
 <img src="resources/triangle-winding.svg" class="webgl_center" width="400" />
 
-WebGL은 삼각형의 앞면 혹은 뒷면만 그릴 수 있습니다.
+WebGL은 삼각형의 앞면 혹은 뒷면만 그릴 수도 있습니다.
 이 코드로 해당 기능을 켤 수 있는데
 
 ```
@@ -518,7 +518,7 @@ WebGL은 삼각형의 앞면 혹은 뒷면만 그릴 수 있습니다.
 이건 X에서 -1로 scale되거나 180도 회전한 시계 방향 삼각형이 반시계 방향 삼각형이 된다는 걸 의미하는데요.
 CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷면) 삼각형을 모두 볼 수 있었습니다.
 이제 그걸 켰기 때문에, scale이나 rotation 혹은 어떤 이유로든 앞면 삼각형이 뒤집히면, WebGL은 그리지 않을겁니다.
-3D에서 무언가를 회전시킬 때 일반적으로 당신을 향하는 삼각형이 앞면으로 간주되길 원하기 때문에 제법 좋은 기능입니다.
+3D에서 무언가를 회전시킬 때 일반적으로 당신을 향하는 삼각형이 앞면으로 간주되길 원하기 때문에 꽤 괜찮은 기능입니다.
 
 CULL_FACE를 켜면 얻는 결과인데
 
@@ -528,7 +528,7 @@ CULL_FACE를 켜면 얻는 결과인데
 알고보니, 다수가 잘못된 방향을 향하고 있습니다.
 회전하고 다른 방향에서 바라보면 나타나는 걸 볼 수 있는데요.
 다행히도 쉽게 고칠 수 있습니다.
-뒤집혀 있는 걸 찾아 vertex들 중 2개를 교환하면 되는데요.
+뒤집혀 있는 걸 찾아 vertex들 중 2개를 교환하면 되죠.
 예를 들어 뒤집힌 삼각형 하나가 있다면
 
 ```
@@ -549,8 +549,8 @@ CULL_FACE를 켜면 얻는 결과인데
 
 {{{example url="../webgl-3d-step5.html" }}}
 
-나아졌지만 아직 한 가지 문제가 더 남아있는데요.
-모든 삼각형이 올바른 방향을 향하고 뒷면이 culling된 경우에도 뒤에 있어야 하는 삼각형이 앞에 있어야 하는 삼각형 위에 그려지는 곳들이 있습니다.
+나아졌지만 아직 한 가지 문제가 더 남아있습니다.
+모든 삼각형이 올바른 방향을 향하고 뒷면이 culling된 경우에도 뒤에 있어야 하는 삼각형이 앞에 있어야 하는 삼각형 위에 그려지는 곳들이 있는데요.
 
 DEPTH BUFFER를 입력해봅시다.
 
@@ -570,7 +570,7 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
   gl.enable(gl.DEPTH_TEST);
 ```
 
-그리기 시작하기 전에 depth 버퍼를 1.0으로 초기화해야 합니다.
+그리는 걸 시작하기 전에 depth 버퍼를 1.0으로 초기화해야 합니다.
 
 ```
   // scene 그리기
@@ -607,8 +607,8 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
         ];
       }
 
-width, height, depth 매개변수를 가지는 위의 단순한 `projection` 함수와 달리, 더 일반적인 orthographic projection 함수는 더 많은 유연성을 제공하는 left, right, bottom, top, near, far을 전달할 수 있습니다.
-원래 쓰던 projection 함수와 동일하게 쓰기 위해서는 이렇게 호출하며
+width, height, depth 등의 매개변수를 가지는 위의 단순한 `projection` 함수와 달리, 더 일반적인 orthographic projection 함수는 더 많은 유연성을 제공하는 left, right, bottom, top, near, far 등을 전달할 수 있습니다.
+원래 쓰던 projection 함수와 동일하게 쓰기 위해서는 이렇게 호출할 수 있으며
 
     var left = 0;
     var right = gl.canvas.clientWidth;
@@ -618,12 +618,12 @@ width, height, depth 매개변수를 가지는 위의 단순한 `projection` 함
     var far = -400;
     var matrix = m4.orthographic(left, right, bottom, top, near, far);
 
-다음 포스트에서는 [원근감을 가지도록 만드는 방법](webgl-3d-perspective.html)에 대해 살펴보겠습니다.
+다음 포스트에서는 [perspective를 가지도록 만드는 방법](webgl-3d-perspective.html)에 대해 살펴보겠습니다.
 
 <div class="webgl_bottombar">
 <h3>왜 attribute가 vec4인데 gl.vertexAttribPointer의 size는 3인가요?</h3>
 <p>
-꼼꼼히 보시는 분들은 우리가 2개의 attribute를 정의했다는 걸 알아차리셨을 겁니다.
+꼼꼼히 보시는 분들은 2개의 attribute를 다음과 같이 정의했다는 점에 주목하셨을텐데
 </p>
 <pre class="prettyprint showlinemods">
 attribute vec4 a_position;
