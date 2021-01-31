@@ -476,8 +476,9 @@ people won't notice a difference. On this site there are a few diagrams where it
 used it but majority of examples do not.
 
 If you look at many WebGL programs they handle resizing or setting the size of the canvas in many different ways.
-If you're curious <a href="webgl-anti-patterns.html">here are some of the reasons</a> I think the way described above, letting the the browser choosing the display sizes vs CSS and then
-looking what size it choose is preferable.
+I think it's arguable the best way is to let the browser chose the size to display canvas with CSS and then looking up what size it chose and adjusting
+the number of pixels in the canvas in response.
+If you're curious <a href="webgl-anti-patterns.html">here are some of the reasons</a> I think the way described above is the preferable way.
 
 <!-- just to shut up the build that this link used to exist
      and still exists in older translations -->
