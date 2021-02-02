@@ -177,7 +177,7 @@ to actual pixels on your monitor. For example here's your browser's current sett
 
 > <div>devicePixelRatio = <span data-diagram="dpr"></span></div>
 
-If you're on a desktop or laptop try pressing <kbd>ctrl</kbd>+<kbd>+</kbd> and <kbd>ctrl</kbd>+<kbd>-</kbd> to zoom in and out (<kbd>⌘</kbd>+<kbd>+</kbd> and <kbd>⌘</kbd>+<kbd>-</kbd> on Mac). You should see the number change.
+If you're on a desktop or laptop try pressing <kbd>ctrl</kbd>+<kbd>+</kbd> and <kbd>ctrl</kbd>+<kbd>-</kbd> to zoom in and out (<kbd>⌘</kbd>+<kbd>+</kbd> and <kbd>⌘</kbd>+<kbd>-</kbd> on Mac). You should see the number change except in Safari.
 
 So if we want the number of pixels in the canvas to match the number of pixels actually used to display it
 the seemingly obvious solution would be to multiply `clientWidth` and `clientHeight` by the `devicePixelRatio` like this:
@@ -461,8 +461,9 @@ less pixels than are displayed and let the GPU scale them up. It really depends 
 a graph for printing you might want to support HD-DPI. If you're making a game you might not or you might want to give the
 user the option to turn support on or off if their system is not fast enough to draw so many pixels.
 
-One other caveat is, at least in January 2021 the `round(getBoundingClientRect * devicePixelRatio)` works on all modern browsers **IF and ONLY IF** the canvas is the full
-size of the window like the line example above. Here's an example using the patterns
+One other caveat is, at least in January 2021 the `round(getBoundingClientRect * devicePixelRatio)` works on most modern browsers **IF and ONLY IF** the canvas is the full
+size of the window like the line example above. The exception is Safari where it doesn't work if the user's zoom level is not 100%.
+Here's an example using the patterns
 
 {{{example url="../webgl-resize-the-canvas-comparison-fullwindow.html"}}}
 
