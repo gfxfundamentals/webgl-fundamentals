@@ -627,7 +627,7 @@ to this
 gl.canvas.style.transform = `translateX(${window.scrollX} translateY(${window.scrollY}px)`;
 ```
 
-{{{example url="../webgl-multiple-views-items-horizontal-scroll.html"}}}
+{{{example url="../webgl-multiple-views-items-horizontal-scrolling.html"}}}
 
 Hopefully this article gave you some ideas how to draw multiple views.
 We'll use these techniques in a few future articles where
