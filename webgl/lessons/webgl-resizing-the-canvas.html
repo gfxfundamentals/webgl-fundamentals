@@ -385,7 +385,7 @@ to actual pixels on your monitor. For example here&#39;s your browser&#39;s curr
 <div>devicePixelRatio = <span data-diagram="dpr"></span></div>
 
 </blockquote>
-<p>If you&#39;re on a desktop or laptop try pressing <kbd>ctrl</kbd>+<kbd>+</kbd> and <kbd>ctrl</kbd>+<kbd>-</kbd> to zoom in and out (<kbd>⌘</kbd>+<kbd>+</kbd> and <kbd>⌘</kbd>+<kbd>-</kbd> on Mac). You should see the number change.</p>
+<p>If you&#39;re on a desktop or laptop try pressing <kbd>ctrl</kbd>+<kbd>+</kbd> and <kbd>ctrl</kbd>+<kbd>-</kbd> to zoom in and out (<kbd>⌘</kbd>+<kbd>+</kbd> and <kbd>⌘</kbd>+<kbd>-</kbd> on Mac). You should see the number change except in Safari.</p>
 <p>So if we want the number of pixels in the canvas to match the number of pixels actually used to display it
 the seemingly obvious solution would be to multiply <code class="notranslate" translate="no">clientWidth</code> and <code class="notranslate" translate="no">clientHeight</code> by the <code class="notranslate" translate="no">devicePixelRatio</code> like this:</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">function resizeCanvasToDisplaySize(canvas) {
@@ -637,8 +637,9 @@ means you&#39;ll be drawing 9 times as many pixels. On A Samsung Galaxy S8 that 
 less pixels than are displayed and let the GPU scale them up. It really depends on what your needs are. If you&#39;re drawing
 a graph for printing you might want to support HD-DPI. If you&#39;re making a game you might not or you might want to give the
 user the option to turn support on or off if their system is not fast enough to draw so many pixels.</p>
-<p>One other caveat is, at least in January 2021 the <code class="notranslate" translate="no">round(getBoundingClientRect * devicePixelRatio)</code> works on all modern browsers <strong>IF and ONLY IF</strong> the canvas is the full
-size of the window like the line example above. Here&#39;s an example using the patterns</p>
+<p>One other caveat is, at least in January 2021 the <code class="notranslate" translate="no">round(getBoundingClientRect * devicePixelRatio)</code> works on most modern browsers <strong>IF and ONLY IF</strong> the canvas is the full
+size of the window like the line example above. The exception is Safari where it doesn&#39;t work if the user&#39;s zoom level is not 100%.
+Here&#39;s an example using the patterns</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-the-canvas-comparison-fullwindow.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-resize-the-canvas-comparison-fullwindow.html" target="_blank">click here to open in a separate window</a>
