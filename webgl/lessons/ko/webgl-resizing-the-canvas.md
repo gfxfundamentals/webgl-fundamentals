@@ -52,7 +52,7 @@ JavaScript
 그건 브라우저가 10x15 픽셀 canvas를 가져와서 400x300 픽셀로 늘이고 일반적으로 늘릴 때 filtering하기 때문입니다.
 
 그럼, 예를 들어, canvas로 창을 꽉 채우고 싶다면 어떻게 해야 할까요?
-음, 우선 브라우저가 CSS로 캔버스를 늘려 창을 채우게 할 수 있습니다.
+음, 우선 브라우저가 CSS로 canvas를 늘려 창을 채우게 할 수 있습니다.
 
     <html>
       <head>
@@ -135,7 +135,7 @@ WebGL context를 처음 만들 때 WebGL은 canvas와 같은 크기로 viewport�
 WebGL은 당신의 의도를 알 수 없으므로 자동으로 viewport를 설정할 수 없습니다.
 
 많은 WebGL program을 살펴보면 다양한 방법으로 canvas 크기 조정이나 설정을 처리하는데요.
-브라우저가 CSS로 캔버스를 표시할 크기를 선택하게 한 다음 해당 크기를 찾아보고 이에 대응하여 캔버스의 픽셀 수를 조정하는 게 가장 좋은 방법이라고 생각합니다.
+브라우저가 CSS로 canvas를 표시할 크기를 선택하게 한 다음 해당 크기를 찾아보고 이에 대응하여 canvas의 픽셀 수를 조정하는 게 가장 좋은 방법이라고 생각합니다.
 여기에 관심이 있다면 <a href="webgl-anti-patterns.html">위에서 설명한 방법이 바람직하다고 생각한 이유</a>를 봐주세요.
 
 <div class="webgl_bottombar">

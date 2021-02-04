@@ -1,4 +1,4 @@
-제목: WebGL 기초
+Title: WebGL 기초
 
 처음부터 배우는 WebGL
 
