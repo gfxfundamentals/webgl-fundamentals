@@ -350,8 +350,8 @@ function drawScene() {
 }
 ```
 
-이를 위해 단위 행렬을 만드는 함수, `m3.identity`를 도입했습니다.
-단위 행렬은 효과적으로 1.0을 나타내는 행렬로 항등식를 곱해도 아무것도 일어나지 않습니다.
+이를 위해 identity matrix를 만드는 함수, `m3.identity`를 도입했습니다.
+identity matrix는 효과적으로 1.0을 나타내는 행렬이므로 identity를 곱해도 아무 일도 일어나지 않습니다.
 이렇게
 
 <div class="webgl_center">X * 1 = X</div>
@@ -360,7 +360,7 @@ function drawScene() {
 
 <div class="webgl_center">matrixX * identity = matrixX</div>
 
-여기 단위 행렬을 만드는 코드입니다.
+여기 identity matrix를 만드는 코드입니다.
 
 ```js
 var m3 = {
