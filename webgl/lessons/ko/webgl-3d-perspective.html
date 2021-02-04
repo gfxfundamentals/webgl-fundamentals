@@ -251,7 +251,7 @@ perspective란 뭘까요?
 <p><img class="webgl_center noinvertdark" width="500" src="../resources/perspective-example.svg" /></p>
 <p>위 예시를 보면 더 멀리 있는 것들이 더 작게 그려지는 걸 볼 수 있습니다.
 현재 샘플을 감안할 때 더 멀리 있는 것들이 더 작게 보이도록 만드는 쉬운 방법은 clip space의 X와 Y를 Z로 나누는 겁니다.</p>
-<p>(10, 15)에서 (20,15)까지 10만큼 긴 선이 있다고 생각해보세요.
+<p>(10, 15)에서 (20,15)까지 길이가 10인 선이 있다고 생각해보세요.
 현재 샘플에서 이건 10픽셀의 길이로 그려질 겁니다.
 하지만 Z로 나눈다면 예를 들어 Z가 1인 경우</p>
 <pre class="webgl_center">
@@ -294,7 +294,7 @@ void main() {
 *  gl_Position = vec4(position.xy / zToDivideBy, position.zw);
 }
 &lt;/script&gt;
-</code></pre><p>참고로, Z가 -1에서 +1까지인 clip space에 있기 때문에 0에서 +2 * fudgeFactor까지인 <code class="notranslate" translate="no">zToDivideBy</code>를 얻기 위해 1을 더했습니다.</p>
+</code></pre><p>참고로, Z가 -1에서 +1인 clip space에 있기 때문에 0에서 +2 * fudgeFactor인 <code class="notranslate" translate="no">zToDivideBy</code>를 얻기 위해 1을 더했습니다.</p>
 <p>또한 fudgeFactor를 설정할 수 있도록 코드를 업데이트해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
@@ -343,7 +343,7 @@ void main() {
   v_color = a_color;
 }
 &lt;/script&gt;
-</code></pre><p>그리고 얼마나 정확하게 동일한지 봅시다.</p>
+</code></pre><p>그리고 얼마나 정확하게 일치하는지 봅시다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-w.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-w.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -351,7 +351,7 @@ void main() {
 
 </p>
 <p>WebGL이 자동으로 W로 나눈다는 사실이 유용한 이유는 뭘까요? 
-왜냐하면 이제, 더 많은 행렬을 사용하여, z를 w에 복사하기 위해 또 다른 행렬을 사용할 수 있기 때문입니다.</p>
+왜냐하면 이제 더 많은 행렬을 사용하여, z를 w에 복사하기 위해 또 다른 행렬을 사용할 수 있기 때문입니다.</p>
 <p>이런 행렬이</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 1, 0, 0, 0,
@@ -391,7 +391,7 @@ z_out = z_in;
 w_out = z_in;
 </pre></div>
 
-<p>우리는 <code class="notranslate" translate="no">w_in</code>이 항상 1.0이라는 걸 알기 때문에 이전에 가졌던 +1을 이 행렬에 더할 수 있습니다.</p>
+<p>우리는 <code class="notranslate" translate="no">w_in</code>이 항상 1.0이라는 걸 알기 때문에 이전에 가졌던 +1을 이 행렬에 추가할 수 있습니다.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 1, 0, 0, 0,
 0, 1, 0, 0,
@@ -399,7 +399,7 @@ w_out = z_in;
 0, 0, 0, 1,
 </pre></div>
 
-<p>다음과 같이 W 계산을 바뀌고</p>
+<p>다음과 같이 W 계산이 바뀌고</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = x_in * 0 +
         y_in * 0 +
@@ -465,14 +465,14 @@ void main() {
     matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 
     ...
-</code></pre><p>그리고 다시 말하지만 정확하게 동일합니다.</p>
+</code></pre><p>그리고 다시 말하지만 정확하게 일치합니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-perspective-w-matrix.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-perspective-w-matrix.html" target="_blank">새 창을 열려면 여기를 클릭</a>
 </div>
 
 </p>
-<p>모든 건 기본적으로 Z로 나누는 게 perspective를 제공하고 WebGL이 편리하게 Z로 나눠준다는 걸 보여주기 위한 겁니다.</p>
+<p>기본적으로 모든 내용들은 Z로 나누는 게 perspective를 준다는 것과 WebGL이 편리하게 Z로 나누는 걸 보여주기 위한 겁니다.</p>
 <p>하지만 여전히 몇 가지 문제가 있습니다.
 예를 들어 Z를 -100 정도로 설정하면 아래 애니메이션같은 걸 보게 될텐데</p>
 <p><img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" /></p>
@@ -483,7 +483,7 @@ WebGL은 X와 Y 혹은 +1에서 -1까지 자르는 것처럼 Z도 제한하는�
 <p>이를 해결하기 위해 수학에 대한 자세한 설명을 할 수도 있지만 <a href="https://stackoverflow.com/a/28301213/128511">2D projection을 했던 것과 같은 방법</a>으로 도출할 수도 있습니다.
 Z를 가져오고 약간을 더하고 어느정도 scale해야 하며, 원하는 범위를 -1에서 +1사이로 다시 매핑할 수 있습니다.</p>
 <p>멋진 점은 이 모든 단계를 하나의 행렬로 수행할 수 있다는 겁니다.
-더 좋은 건, <code class="notranslate" translate="no">fudgeFactor</code>보다는 <code class="notranslate" translate="no">fieldOfView</code>를 결정하고 올바른 값을 계산할 겁니다.</p>
+더 좋은 건, <code class="notranslate" translate="no">fudgeFactor</code>보다는 <code class="notranslate" translate="no">fieldOfView</code>로 결정하고 이를 위해 올바른 값을 계산할 것이라는 겁니다.</p>
 <p>다음은 행렬을 만드는 함수입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   perspective: function(fieldOfViewInRadians, aspect, near, far) {
@@ -500,11 +500,11 @@ Z를 가져오고 약간을 더하고 어느정도 scale해야 하며, 원하는
 
   ...
 </code></pre><p>이 행렬이 모든 변환을 수행할 겁니다.
-단위가 clip space 안에 있도록 조정되고, 수식을 수행하여 각도별로 시야를 선택할 수 있고 Z-clipping space를 선택할 수 있는데요.
-원점(0, 0, 0)에 <em>눈</em> 혹은 <em>카메라</em>가 있다고 가정하고 <code class="notranslate" translate="no">zNear</code>와 <code class="notranslate" translate="no">fieldOfView</code>가 주어지면 <code class="notranslate" translate="no">Z = -1</code>이 되도록 <code class="notranslate" translate="no">zNear</code>에 있는 항목에 필요한 값을 계산하며 중앙에서 <code class="notranslate" translate="no">fieldOfView</code>의 절반만큼 위 혹은 아래인 <code class="notranslate" translate="no">zNear</code>에 있는 항목은 각각 <code class="notranslate" translate="no">Y = -1</code>과 <code class="notranslate" translate="no">Y = 1</code>로 끝납니다
-전달된 <code class="notranslate" translate="no">aspect</code>로 곱하여 X에 사용할 값을 계산합니다.
-일반적으로 디스플레이 영역의 <code class="notranslate" translate="no">width / height</code>에 설정합니다.
-마지막으로, <code class="notranslate" translate="no">Z = 1</code>이 되도록 zFar에 있는 항목을 얼마나 scale 할지 알아냅니다.</p>
+단위가 clip space 안에 있도록 조정되며, 각도별로 시야각을 선택할 수 있고 Z-clipping space를 선택할 수 있게 되는데요.
+원점(0, 0, 0)에 <em>눈</em>이나 <em>카메라</em>가 있다고 가정하고 <code class="notranslate" translate="no">zNear</code>와 <code class="notranslate" translate="no">fieldOfView</code>가 주어지면 <code class="notranslate" translate="no">zNear</code>의 항목이 <code class="notranslate" translate="no">Z = -1</code>이 되도록 필요한 값을 계산하며 중심에서 위나 아래로 <code class="notranslate" translate="no">fieldOfView</code>의 절반인 <code class="notranslate" translate="no">zNear</code>의 항목은 각각 <code class="notranslate" translate="no">Y = -1</code>과 <code class="notranslate" translate="no">Y = 1</code>로 끝납니다.
+전달된 <code class="notranslate" translate="no">aspect</code>를 곱하여 X에 사용할 값을 계산합니다.
+일반적으로 디스플레이 영역의 <code class="notranslate" translate="no">width / height</code>로 설정합니다.
+마지막으로, <code class="notranslate" translate="no">zFar</code>의 항목이 <code class="notranslate" translate="no">Z = 1</code>이 되도록 Z로 얼마나 scale할지 알아냅니다.</p>
 <p>다음은 실행중인 행렬의 다이어그램입니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style="width:  400px; height: 600px;" src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Ffrustum-diagram.html"></iframe>
@@ -518,7 +518,7 @@ Z를 가져오고 약간을 더하고 어느정도 scale해야 하며, 원하는
 <code class="notranslate" translate="no">zNear</code>를 23으로 설정하면 회전하는 큐브의 앞면이 잘리는 걸 볼 수 있죠.
 <code class="notranslate" translate="no">zFar</code>를 24로 설정하면 큐브의 뒷면이 잘리는 걸 볼 수 있습니다.</p>
 <p>이제 남은 문제는 단 하나입니다.
-이 행렬은 0,0,0에 뷰어가 있다고 가정하고, -Z 방향으로 보고 있고 +Y가 위쪽이라고 가정하는데요.
+이 행렬은 0,0,0에 viewer가 있다고 가정하고 -Z 방향으로 바라보며 +Y가 위를 향하고 있다고 가정하는데요.
 지금까지의 행렬은 다른 방식으로 작업을 수행했습니다.</p>
 <p>이걸 보이게 하려면 절두체 안으로 옮겨야 합니다.
 F를 움직여서 해당 작업을 할 수 있는데요.
@@ -543,45 +543,46 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 </p>
 <p>다시 행렬 곱셉으로 돌아가서 시야각을 확보하고 Z space를 선택할 수 있습니다.
 아직 끝나지 않았지만 글이 너무 길어지고 있군요.
-다음은, <a href="webgl-3d-camera.html">camera]</a>입니다.</p>
+다음은, <a href="webgl-3d-camera.html">카메라</a>입니다.</p>
 <div class="webgl_bottombar">
-<h3>Why did we move the F so far in Z (-360)?</h3>
+<h3>지금까지 F를 Z(-360)에서 움직인 이유가 뭔가요?</h3>
 
 <p>
-In the other samples we had the F at (45, 150, 0) but in the last sample it's been moved to (-150, 0, -360).
-Why did it need to be moved so far away?
+다른 샘플에서는 F가 (45, 150, 0)에 있지만 마지막 샘플에서는 (-150, 0, -360)으로 옮겨졌습니다.
+왜 그렇게 멀리 옮겨야 했을까요?
 </p>
 
 <p>
-The reason is up until this last sample our <code class="notranslate" translate="no">m4.projection</code> function has made a projection from pixels to clip space.
-That means the area we were displaying represented 400x300 pixels.
-Using 'pixels' really doesn't make sense in 3D. 
+그 이유는 마지막 샘플까지 <code class="notranslate" translate="no">m4.projection</code> 함수가 pixel에서 clip space로 projection을 만들었기 때문입니다.
+이는 우리가 표시하고 있던 영역이 400x300 픽셀을 나타냈다는 걸 의미하는데요.
+3D에서 '픽셀'을 사용하는 건 정말 의미가 없습니다.
 </p>
 
 <p>
-In other words if we tried to draw with the F at 0,0,0 and not rotated we'd get this
+즉 0,0,0에서 F를 그리려고 했지만 회전하지 않는다면
 </p>
 
 <div class="webgl_center"><img src="../resources/f-big-and-wrong-side.svg" style="width: 500px;"></div>
 
 <p>
-The F has its top left front corner at the origin.
-The projection looks toward negative Z but our F is built in positive Z.
-The projection has positive Y up but our F is built with positive Z down.
+F는 원점에 왼쪽 상단 앞 모서리가 있게 됩니다.
+projection은 -Z를 향하지만 F는 +Z로 만들어졌죠.
+projection은 +Y가 위를 향하지만 F는 +Z가 아래를 향합니다.
 </p>
 
 <p>
-Our new projection only sees what's in the blue frustum.
-With -zNear = 1 and with a field of view of 60 degrees then at Z = -1 the frustum is only 1.154 units tall and 1.154 * aspect units wide. At Z = -2000 (-zFar) its 2309 units tall.
-Since our F is 150 units big and the view can only see 1.154 units when something is at <code class="notranslate" translate="no">-zNear</code> we need to move it pretty far away from the origin to see all of it.
+새로운 projection은 파란 절두체 안에 있는 것만 볼 수 있습니다.
+-zNear = 1 그리고 60도의 시야각일 때 Z = -1에서 절두체는 절두체의 높이는 1.154이고 너비는 1.154 * aspect 입니다.
+Z = -2000 (-zFar)에서 높이는 2309 입니다.
+F가 크기가 150이고 <code class="notranslate" translate="no">-zNear</code>에 무언가가 있을 때 view는 1.154만 볼 수 있기 때문에 모든 걸 보려면 원점에서 꽤 멀리 이동해야 합니다.
 </p>
-
 
 <p>
-Moving it -360 units in Z moves in inside the frustum. We also rotated it to be right side up.
+Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
+또한 오른쪽이 위쪽에 오도록 회전했습니다.
 </p>
 
-<div class="webgl_center"><img src="../resources/f-right-side.svg" style="width: 500px;"><div>not to scale</div></div>
+<div class="webgl_center"><img src="../resources/f-right-side.svg" style="width: 500px;"><div>Scale 없음</div></div>
 
 <p></div></p>
 
@@ -724,7 +725,7 @@ Moving it -360 units in Z moves in inside the frustum. We also rotated it to be 
 <li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">Use WebGL as Background in HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform Issues</a></li>
-<li><a href="/webgl/lessons/ko/webgl-qna.html">Questions and Answers</a></li>
+<li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>
         <ul>
