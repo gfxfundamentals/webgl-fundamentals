@@ -134,7 +134,8 @@ WebGL context를 처음 만들 때 WebGL은 canvas와 같은 크기로 viewport�
 가령 framebuffer로 렌더링하거나 다른 viewport 크기가 필요한 다른 작업을 수행할 수 있는데요.
 WebGL은 당신의 의도를 알 수 없으므로 자동으로 viewport를 설정할 수 없습니다.
 
-많은 WebGL program을 살펴보면 다양한 방법으로 canvas 크기 조정이나 설정을 처리합니다.
+많은 WebGL program을 살펴보면 다양한 방법으로 canvas 크기 조정이나 설정을 처리하는데요.
+브라우저가 CSS로 캔버스를 표시할 크기를 선택하게 한 다음 해당 크기를 찾아보고 이에 대응하여 캔버스의 픽셀 수를 조정하는 게 가장 좋은 방법이라고 생각합니다.
 여기에 관심이 있다면 <a href="webgl-anti-patterns.html">위에서 설명한 방법이 바람직하다고 생각한 이유</a>를 봐주세요.
 
 <div class="webgl_bottombar">
