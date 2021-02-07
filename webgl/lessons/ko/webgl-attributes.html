@@ -244,9 +244,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 texture unit에 관한 <a href="webgl-texture-units.html">비슷한 글</a>이 있습니다.</p>
 <p>이 글을 읽기 전에 <a href="webgl-how-it-works.html">WebGL 작동 원리</a>와 <a href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">WebGL Shader와 GLSL</a>을 읽어보시길 바랍니다.</p>
 <h2 id="attribute">Attribute</h2>
-<p>WebGL의 attribute는 buffer에서 데이터를 가져오는 vertex shader에 대한 입력 값입니다.
+<p>WebGL의 attribute는 버퍼에서 데이터를 가져오는 vertex shader에 대한 입력 값입니다.
 WebGL은 <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>가 호출될 때 사용자가 제공한 vertex shader를 N번 실행하는데요.
-각 반복마다 attribute는 바인딩된 buffer에서 데이터를 가져와 vertex shader 내부의 attribute에 제공하는 방법을 정의합니다.</p>
+각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 vertex shader 내부의 attribute에 제공하는 방법을 정의합니다.</p>
 <p>JavaScript로 구현되었다면 이런식으로</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 const gl = {
@@ -348,7 +348,7 @@ gl.bindAttribLocation(program, 7, &#39;position&#39;);
 </code></pre>
 <p>다양한 <code class="notranslate" translate="no">gl.vertexAttribXXX</code> 함수로 각 attribute의 값을 설정할 수 있습니다.
 그 값은 <code class="notranslate" translate="no">enable</code>이 false일 때 사용되는데요.
-enable이 true면 attribute의 데이터는 할당된 buffer에서 가져옵니다.</p>
+enable이 true면 attribute의 데이터는 할당된 버퍼에서 가져옵니다.</p>
 <p><a id="vaos"></a></p>
 <h2 id="vertex-array-object-vao-">Vertex Array Object (VAO)</h2>
 <p>WebGL에는 <code class="notranslate" translate="no">OES_vertex_array_object</code>라는 extension이 있습니다.</p>

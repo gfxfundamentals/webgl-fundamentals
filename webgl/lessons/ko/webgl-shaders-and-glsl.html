@@ -260,28 +260,28 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
 <p>vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.</p>
 <ol>
-<li><a href="#attribute">Attribute</a> (buffer에서 가져온 데이터)</li>
+<li><a href="#attribute">Attribute</a> (버퍼에서 가져온 데이터)</li>
 <li><a href="#uniform">Uniform</a> (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)</li>
 <li><a href="#vertex-shader-texture">Texture</a> (pixel/texel의 데이터)</li>
 </ol>
 <h3 id="attribute">Attribute</h3>
-<p>가장 일반적인 방법은 buffer와 <em>attribute</em>를 통하는 겁니다.
-<a href="webgl-how-it-works.html">작동 원리</a>에서 buffer와 attribute를 다뤘는데요.
-buffer를 만들고,</p>
+<p>가장 일반적인 방법은 버퍼와 <em>attribute</em>를 통하는 겁니다.
+<a href="webgl-how-it-works.html">작동 원리</a>에서 버퍼와 attribute를 다뤘는데요.
+버퍼를 만들고,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var buf = gl.createBuffer();
-</code></pre><p>이 buffer에 데이터를 넣은 뒤</p>
+</code></pre><p>이 버퍼에 데이터를 넣은 뒤</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 </code></pre><p>만든 shader program을 통해 초기화 시 attribute의 위치를 찾고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
-</code></pre><p>렌더링할 때 WebGL에게 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하는데</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 attribute에 대한 buffer에서 데이터 가져오기 활성화
+</code></pre><p>렌더링할 때 WebGL에게 해당 버퍼에서 attribute로 데이터를 어떻게 가져올지 지시하는데</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 attribute에 대한 버퍼에서 데이터 가져오기 활성화
 gl.enableVertexAttribArray(positionLoc);
 
 var numComponents = 3;  // (x, y, z)
 var type = gl.FLOAT;    // 32bit 부동 소수점 값
 var normalize = false;  // 값 원본 그대로 유지
-var offset = 0;         // buffer의 처음부터 시작
+var offset = 0;         // 버퍼의 처음부터 시작
 var stride = 0;         // 다음 vertex로 가기 위해 이동하는 byte 수
                         // 0 = type과 numComponents에 맞는 stride 사용
 
@@ -292,7 +292,7 @@ gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 void main() {
   gl_Position = a_position;
 }
-</code></pre><p>buffer에 clip space vertex를 넣으면 동작할 겁니다. </p>
+</code></pre><p>버퍼에 clip space vertex를 넣으면 동작할 겁니다. </p>
 <p>attribute는 type으로 <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code>, <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>를 사용할 수 있습니다.</p>
 <h3 id="uniform">Uniform</h3>
 <p>shader uniform은 그리기 호출의 모든 vertex에 대해 똑같이 유지되며 shader에게 전달되는 값입니다.
@@ -523,7 +523,7 @@ float f = float(1)  // integer를 float로 cast
   mix(v1.w, v2.w, f)
 );
 </code></pre><p><a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">WebGL Reference Card</a>의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
-만약 정말 무미건조하고 장황한 것을 좋아한다면 <a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL 사양</a>에 도전해볼 수 있습니다.</p>
+만약 정말 무미건조하고 장황한 것을 좋아한다면 <a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL 명세서</a>에 도전해볼 수 있습니다.</p>
 <h2 id="-">총정리</h2>
 <p>이게 바로 이 모든 글들의 핵심입니다.
 WebGL은 다양한 shader를 생성하고, 데이터를 이 shader에 공급한 뒤 <code class="notranslate" translate="no">gl.drawArrays</code> 또는 <code class="notranslate" translate="no">gl.drawElements</code>를 호출하여 WebGL이 vertex를 처리하도록 각 vertex에 대한 현재 vertex shader를 호출한 뒤 각 픽셀에 대한 현재 fragment shader를 호출하여 픽셀을 렌더링하는 것에 대한 모든 겁니다.</p>

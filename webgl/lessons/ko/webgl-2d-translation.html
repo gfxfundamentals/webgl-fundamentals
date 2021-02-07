@@ -283,7 +283,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.</p>
     var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-    var offset = 0;        // buffer의 처음부터 시작
+    var offset = 0;        // 버퍼의 처음부터 시작
     gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset);
 
@@ -312,7 +312,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.</p>
 <p>이처럼 삼각형 6개로 구성된 &#39;F&#39;를 그리고 싶다고 가정해봅시다.</p>
 <p><img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
 <p>음, 현재 코드에 따라 <code class="notranslate" translate="no">setRectangle</code>을 이런 식으로 변경해야 합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 buffer 채우기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -411,7 +411,7 @@ function setGeometry(gl) {
   var positionBuffer = gl.createBuffer();
   // ARRAY_BUFFER(ARRAY_BUFFER = positionBuffer로 생각)에 할당
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-+  // buffer에 geometry 데이터 넣기
++  // 버퍼에 geometry 데이터 넣기
 +  setGeometry(gl);
 
   ...
