@@ -188,14 +188,14 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
     var positionLocation = gl.getAttribLocation(program, "a_position");
     +var colorLocation = gl.getAttribLocation(program, "a_color");
     ...
-    +// 색상을 위한 buffer 생성
+    +// 색상을 위한 버퍼 생성
     +var colorBuffer = gl.createBuffer();
     +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     +// 색상 설정
     +setColors(gl);
     ...
 
-    +// 사각형을 만드는 두 삼각형의 색상으로 buffer 채우기
+    +// 사각형을 만드는 두 삼각형의 색상으로 버퍼 채우기
     +function setColors(gl) {
     +  // 2개의 무작위 색상 선택
     +  var r1 = Math.random();
@@ -225,7 +225,7 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
 
     +gl.enableVertexAttribArray(colorLocation);
     +
-    +// 색상 buffer 할당
+    +// color buffer 할당
     +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     +
     +// colorBuffer(ARRAY_BUFFER)의 데이터를 가져오는 방법을 색상 attribute에 지시
@@ -233,7 +233,7 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
     +var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     +var normalize = false; // 데이터 정규화 안 함
     +var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-    +var offset = 0;        // buffer의 처음부터 시작
+    +var offset = 0;        // 버퍼의 처음부터 시작
     +gl.vertexAttribPointer(
     +  colorLocation, size, type, normalize, stride, offset);
 
@@ -254,7 +254,7 @@ varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보�
 이건 각 삼각형의 vertex 3개에 모두 같은 색상을 사용했기 때문입니다.
 만약 각각의 색상을 다르게 만들면 보간된 걸 볼 수 있습니다.
 
-    // 사각형을 만드는 두 삼각형의 색상으로 buffer 채우기
+    // 사각형을 만드는 두 삼각형의 색상으로 버퍼 채우기
     function setColors(gl) {
       // 모든 vertex를 다른 색상으로 만들기
       gl.bufferData(
@@ -278,15 +278,15 @@ varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보�
 그다지 흥미롭지는 않지만 2개 이상의 attribute를 사용하고 데이터를 vertex shader에서 fragment shader로 전달하는 걸 보여주는데요.
 [이미지 처리 예제](webgl-image-processing.html)를 살펴보면 texture 좌표를 전달하기 위해 마찬가지로 추가적인 attribute를 사용하는 것을 볼 수 있습니다.
 
-## buffer와 attribute 명령은 어떤 일을 하나요?
+## 버퍼와 Attribute 명령은 어떤 일을 하나요?
 
-buffer는 vertex와 각 vertex의 다른 데이터를 GPU로 가져오는 방법입니다.
-`gl.createBuffer`는 buffer를 생성합니다.
-`gl.bindBuffer`는 해당 buffer를 작업할 buffer로 설정합니다.
-`gl.bufferData`는 데이터를 buffer로 복사합니다.
+버퍼는 vertex와 각 vertex의 다른 데이터를 GPU로 가져오는 방법입니다.
+`gl.createBuffer`는 버퍼를 생성합니다.
+`gl.bindBuffer`는 해당 버퍼를 작업할 버퍼로 설정합니다.
+`gl.bufferData`는 데이터를 버퍼로 복사합니다.
 이건 보통 초기화할 때 수행됩니다.
 
-buffer에 데이터가 있으면 어떻게 데이터를 가져오고 vertex shader의 attribute에 제공할지 WebGL에게 알려줘야 합니다.
+버퍼에 데이터가 있으면 어떻게 데이터를 가져오고 vertex shader의 attribute에 제공할지 WebGL에게 알려줘야 합니다.
 
 이를 위해, 먼저 WebGL에게 attribute를 할당한 위치를 물어봐야 하는데요.
 예를 들어 위 코드에서 우리는
@@ -301,11 +301,11 @@ attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실�
 
     gl.enableVertexAttribArray(location);
 
-이 명령어는 WebGL에게 buffer에서 데이터를 공급하기 원한다고 알려줍니다.
+이 명령어는 WebGL에게 버퍼에서 데이터를 공급하기 원한다고 알려줍니다.
 
     gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
 
-이 명령어는 ARRAY_BUFFER bind point에 buffer를 할당하는데요.
+이 명령어는 ARRAY_BUFFER bind point에 버퍼를 할당하는데요.
 이건 WebGL 내부에 있는 전역 변수입니다.
 
     gl.vertexAttribPointer(
@@ -317,20 +317,20 @@ attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실�
       offsetIntoBuffer
     );
 
-그리고 이 명령어는 현재 ARRAY_BUFFER bind point에 바인딩된 buffer에서 데이터를 가져오기 위해,
+그리고 이 명령어는 현재 ARRAY_BUFFER bind point에 바인딩된 버퍼에서 데이터를 가져오기 위해,
 vertex마다 얼마나 많은 component(1 - 4)가 있는지,
 data type(`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...)은 무엇인지,
 데이터의 한 부분에서 다음 부분을 가져오기 위해 몇 바이트를 건너뛰어야 하는지를 의미하는 stride,
-그리고 buffer에서 우리 데이터가 얼마나 멀리 있는지에 대한 offset 등을 WebGL에게 알려줍니다.
+그리고 버퍼에서 우리 데이터가 얼마나 멀리 있는지에 대한 offset 등을 WebGL에게 알려줍니다.
 
 구성 요소의 숫자는 항상 1에서 4까지 입니다.
 
-만약 데이터의 type마다 1개의 buffer를 쓴다면 stride와 offset은 항상 0일 수 있는데요.
+만약 데이터의 type마다 1개의 버퍼를 쓴다면 stride와 offset은 항상 0일 수 있는데요.
 stride가 0이면 "type 크기에 맞는 stride 사용"을 의미합니다.
-offset이 0이면 "buffer의 처음부터 시작"을 의미합니다.
+offset이 0이면 "버퍼의 처음부터 시작"을 의미합니다.
 0 이외의 다른 값으로 설정하는 건 더욱 복잡하고 성능 면에서 어느 정도 이점이 있긴 하지만 WebGL을 한계까지 몰아붙이기 위한 게 아니라면 복잡함을 감수할만한 가치는 없을 것 같습니다.
 
-buffer와 attribute가 정리되셨기를 바랍니다.
+버퍼와 attribute가 정리되셨기를 바랍니다.
 
 다음은 [shader와 GLSL](webgl-shaders-and-glsl.html)을 살펴보겠습니다.
 
@@ -363,7 +363,7 @@ var size = 4;                 // 반복마다 4개의 구성 요소
 *var type = gl.UNSIGNED_BYTE;  // 데이터는 8bit unsigned byte
 *var normalize = true;         // 데이터 정규화
 var stride = 0;               // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-var offset = 0;               // buffer의 처음부터 시작
+var offset = 0;               // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(
   colorLocation,
   size,
@@ -373,9 +373,9 @@ gl.vertexAttribPointer(
   offset
 );
 </pre>
-<p>그리고 사용할 색상으로 buffer를 채울 때</p>
+<p>그리고 사용할 색상으로 버퍼를 채울 때</p>
 <pre class="prettyprint showlinemods">
-// 사각형을 만드는 두 삼각형의 색상으로 buffer 채우기
+// 사각형을 만드는 두 삼각형의 색상으로 버퍼 채우기
 function setColors(gl) {
   // 2개의 무작위 색상 선택
   var r1 = Math.random() * 256; // 0에서

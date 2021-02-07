@@ -61,14 +61,14 @@ void main() {
   var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
   var normalize = false; // 데이터 정규화 안 함
   var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-  var offset = 0;        // buffer의 처음부터 시작
+  var offset = 0;        // 버퍼의 처음부터 시작
   gl.vertexAttribPointer(
       positionAttributeLocation, size, type, normalize, stride, offset);
 
   ...
 
-// 현재 ARRAY_BUFFER buffer 채우기
-// 문자 'F'를 정의하는 값으로 buffer 채우기
+// 현재 ARRAY_BUFFER 버퍼 채우기
+// 문자 'F'를 정의하는 값으로 버퍼 채우기
 function setGeometry(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
@@ -433,16 +433,16 @@ void main() {
   var colorLocation = gl.getAttribLocation(program, "a_color");
 
   ...
-  // 색상용 buffer 생성
+  // 색상용 버퍼 생성
   var colorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  // buffer에 색상 넣기
+  // 버퍼에 색상 넣기
   setColors(gl);
 
 
   ...
 
-// 'F'의 색상으로 buffer 채우기
+// 'F'의 색상으로 버퍼 채우기
 function setColors(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
@@ -478,7 +478,7 @@ var size = 3;                 // 반복마다 3개의 구성 요소
 var type = gl.UNSIGNED_BYTE;  // 데이터는 부호없는 8bit 값
 var normalize = true;         // 데이터 정규화 (0-255에서 0-1로 전환)
 var stride = 0;               // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-var offset = 0;               // buffer의 처음부터 시작
+var offset = 0;               // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(
     colorLocation, size, type, normalize, stride, offset);
 ```
@@ -636,7 +636,7 @@ var size = 3;          // 반복마다 3개의 구성 요소
 var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
 var normalize = false; // 데이터 정규화 안 함
 var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-var offset = 0;        // buffer의 처음부터 시작
+var offset = 0;        // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(
     positionAttributeLocation, size, type, normalize, stride, offset);
 
@@ -646,12 +646,12 @@ var size = 3;          // 반복마다 3개의 구성 요소
 var type = gl.UNSIGNED_BYTE;   // 데이터는 8bit unsigned byte
 var normalize = true;  // 데이터 정규화 (0-255에서 0-1로 전환)
 var stride = 0;        // 0 = 다음 색상을 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-var offset = 0;        // buffer의 처음부터 시작
+var offset = 0;        // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(
     colorAttributeLocation, size, type, normalize, stride, offset);
 </pre>
 <p>
-각각의 '3'은 vertex shader의 반복마다 각 attribute의 buffer에서 3개의 값만 가져오라는 걸 말합니다.
+각각의 '3'은 vertex shader의 반복마다 각 attribute의 버퍼에서 3개의 값만 가져오라는 걸 말합니다.
 이게 동작하는 이유는 vertex shader에서 입력하지 않는 값에 대해서 WebGL이 기본 값을 제공하기 때문인데요.
 기본 값은 0, 0, 0, 1로 x = 0, y = 0, z= 0, w = 1 입니다.
 이게 기존 vertex shader에서 명시적으로 1을 입력해줘야 했던 이유입니다.

@@ -276,7 +276,7 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 <p>
 그건 단순 명명 규칙입니다.
 필수는 아니지만 저에게는 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어줬는데요.
-a_는 buffer에서 제공되는 데이터인 attribute입니다.
+a_는 버퍼에서 제공되는 데이터인 attribute입니다.
 u_는 shader에 입력하는 uniform이고, v_는  vertex shader에서 fragment shader로 전달되고 그려진 각 픽셀에 대해 vertex 사이가 보간(또는 가변)된 값인 varying입니다.
 더 자세한 내용은 <a href="webgl-how-it-works.html">동작 원리</a>를 봐주세요.
 </p>

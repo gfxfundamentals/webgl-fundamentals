@@ -55,7 +55,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
     var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-    var offset = 0;        // buffer의 처음부터 시작
+    var offset = 0;        // 버퍼의 처음부터 시작
     gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset);
 
@@ -88,7 +88,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
 음, 현재 코드에 따라 `setRectangle`을 이런 식으로 변경해야 합니다.
 
 ```
-// 문자 'F'를 정의하는 값들로 buffer 채우기
+// 문자 'F'를 정의하는 값들로 버퍼 채우기
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -201,7 +201,7 @@ function setGeometry(gl) {
   var positionBuffer = gl.createBuffer();
   // ARRAY_BUFFER(ARRAY_BUFFER = positionBuffer로 생각)에 할당
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-+  // buffer에 geometry 데이터 넣기
++  // 버퍼에 geometry 데이터 넣기
 +  setGeometry(gl);
 
   ...

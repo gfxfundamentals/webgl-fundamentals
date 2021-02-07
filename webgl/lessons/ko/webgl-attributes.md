@@ -10,9 +10,9 @@ texture unit에 관한 [비슷한 글](webgl-texture-units.html)이 있습니다
 
 ## Attribute
 
-WebGL의 attribute는 buffer에서 데이터를 가져오는 vertex shader에 대한 입력 값입니다.
+WebGL의 attribute는 버퍼에서 데이터를 가져오는 vertex shader에 대한 입력 값입니다.
 WebGL은 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용자가 제공한 vertex shader를 N번 실행하는데요.
-각 반복마다 attribute는 바인딩된 buffer에서 데이터를 가져와 vertex shader 내부의 attribute에 제공하는 방법을 정의합니다.
+각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 vertex shader 내부의 attribute에 제공하는 방법을 정의합니다.
 
 JavaScript로 구현되었다면 이런식으로
 
@@ -143,7 +143,7 @@ attributes: [
 
 다양한 `gl.vertexAttribXXX` 함수로 각 attribute의 값을 설정할 수 있습니다.
 그 값은 `enable`이 false일 때 사용되는데요.
-enable이 true면 attribute의 데이터는 할당된 buffer에서 가져옵니다.
+enable이 true면 attribute의 데이터는 할당된 버퍼에서 가져옵니다.
 
 <a id="vaos"></a>
 ## Vertex Array Object (VAO)

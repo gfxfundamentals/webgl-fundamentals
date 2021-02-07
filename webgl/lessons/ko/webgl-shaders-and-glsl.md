@@ -30,19 +30,19 @@ shader는 vertex마다 한 번씩 호출되는데요.
 vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.
 
-1.  [Attribute](#attribute) (buffer에서 가져온 데이터)
+1.  [Attribute](#attribute) (버퍼에서 가져온 데이터)
 2.  [Uniform](#uniform) (단일 그리기 호출의 모든 vertex에 대해 동일하게 유지하는 값)
 3.  [Texture](#vertex-shader-texture) (pixel/texel의 데이터)
 
 ### Attribute
 
-가장 일반적인 방법은 buffer와 *attribute*를 통하는 겁니다.
-[작동 원리](webgl-how-it-works.html)에서 buffer와 attribute를 다뤘는데요.
-buffer를 만들고,
+가장 일반적인 방법은 버퍼와 *attribute*를 통하는 겁니다.
+[작동 원리](webgl-how-it-works.html)에서 버퍼와 attribute를 다뤘는데요.
+버퍼를 만들고,
 
     var buf = gl.createBuffer();
 
-이 buffer에 데이터를 넣은 뒤
+이 버퍼에 데이터를 넣은 뒤
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
@@ -51,15 +51,15 @@ buffer를 만들고,
 
     var positionLoc = gl.getAttribLocation(someShaderProgram, "a_position");
 
-렌더링할 때 WebGL에게 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하는데
+렌더링할 때 WebGL에게 해당 버퍼에서 attribute로 데이터를 어떻게 가져올지 지시하는데
 
-    // 이 attribute에 대한 buffer에서 데이터 가져오기 활성화
+    // 이 attribute에 대한 버퍼에서 데이터 가져오기 활성화
     gl.enableVertexAttribArray(positionLoc);
 
     var numComponents = 3;  // (x, y, z)
     var type = gl.FLOAT;    // 32bit 부동 소수점 값
     var normalize = false;  // 값 원본 그대로 유지
-    var offset = 0;         // buffer의 처음부터 시작
+    var offset = 0;         // 버퍼의 처음부터 시작
     var stride = 0;         // 다음 vertex로 가기 위해 이동하는 byte 수
                             // 0 = type과 numComponents에 맞는 stride 사용
 
@@ -73,7 +73,7 @@ buffer를 만들고,
       gl_Position = a_position;
     }
 
-buffer에 clip space vertex를 넣으면 동작할 겁니다. 
+버퍼에 clip space vertex를 넣으면 동작할 겁니다. 
 
 attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`를 사용할 수 있습니다.
 
@@ -389,7 +389,7 @@ T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
     );
 
 [WebGL Reference Card](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf)의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
-만약 정말 무미건조하고 장황한 것을 좋아한다면 [GLSL 사양](https://www.khronos.org/files/opengles_shading_language.pdf)에 도전해볼 수 있습니다.
+만약 정말 무미건조하고 장황한 것을 좋아한다면 [GLSL 명세서](https://www.khronos.org/files/opengles_shading_language.pdf)에 도전해볼 수 있습니다.
 
 ## 총정리
 
