@@ -34,7 +34,7 @@ gl = {
 
 ```js
 gl.bindFramebuffer(target, framebuffer) {
-  framebuffer = framebuffer || defaultFramebufferForCanvas; // null이면 canvas 사용
+  framebuffer = framebuffer || defaultFramebufferForCanvas; // null이면 캔버스 사용
   switch (target) {
     case: gl.FRAMEBUFFER:
       this.framebufferBinding = framebuffer;

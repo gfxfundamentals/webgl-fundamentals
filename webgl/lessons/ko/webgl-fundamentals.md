@@ -61,7 +61,7 @@ WebGL은 clip space 좌표와 색상, 오직 2가지만 신경을 쓰는데요.
 이를 위해 2개의 "shader"를 제공해야 하는데요.
 Clip space 좌표를 제공하는 vertex shader, 그리고 색상을 제공하는 fragment shader 입니다.
 
-Clip space 좌표는 canvas 크기에 상관없이 항상 -1에서 +1까지입니다.
+Clip space 좌표는 캔버스 크기에 상관없이 항상 -1에서 +1까지입니다.
 
 <div class="webgl_center"><img src="resources/clipspace.svg" style="width: 400px"></div>
 
@@ -270,30 +270,30 @@ WebGL은 그 힌트를 사용해서 특정 항목들을 최적화할 수 있습�
 
 ## 렌더링
 
-그리기 전에 canvas 크기를 디스플레이 크기에 맞게 조절해야 합니다.
-이미지같은 canvas는 2가지 크기를 가지는데요.
+그리기 전에 캔버스 크기를 디스플레이 크기에 맞게 조절해야 합니다.
+이미지같은 캔버스는 2가지 크기를 가지는데요.
 실제로 그 안에 있는 픽셀 수와 이와 별개로 표시되는 크기입니다.
-CSS는 canvas가 표시되는 크기를 결정하는데요.
-이게 다른 방법들보다 훨씬 더 유연하기 때문에 항상 **CSS로 원하는 canvas 크기를 설정**해야 합니다.
+CSS는 캔버스가 표시되는 크기를 결정하는데요.
+이게 다른 방법들보다 훨씬 더 유연하기 때문에 항상 **CSS로 원하는 캔버스 크기를 설정**해야 합니다.
 
-canvas의 픽셀 수를 표시되는 크기와 일치하도록 만들기 위해 저는 [여기](webgl-resizing-the-canvas.html)에서 읽을 수 있는 도우미 함수를 쓰고 있습니다.
+캔버스의 픽셀 수를 표시되는 크기와 일치하도록 만들기 위해 저는 [여기](webgl-resizing-the-canvas.html)에서 읽을 수 있는 도우미 함수를 쓰고 있습니다.
 
-여기 있는 대부분의 예제는 자체 창에서 실행할 경우 canvas 크기가 400x300 픽셀이지만 이 페이지에 있는 것처럼 iframe 내부라면 사용 가능한 공간을 채우기 위해 늘어나는데요.
+여기 있는 대부분의 예제는 자체 창에서 실행할 경우 캔버스 크기가 400x300 픽셀이지만 이 페이지에 있는 것처럼 iframe 내부라면 사용 가능한 공간을 채우기 위해 늘어나는데요.
 CSS가 크기를 결정하게 한 다음 일치하도록 조정함으로써 두 가지 경우 모두 쉽게 처리할 수 있습니다.
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
 `gl_Position`으로 설정할 clip space 값을 어떻게 screen space라고 불리는 픽셀로 변환하는지 WebGL에게 알려줘야 하는데요.
-이를 위해 `gl.viewport`를 호출해서 현재 canvas 크기를 전달해야 합니다.
+이를 위해 `gl.viewport`를 호출해서 현재 캔버스 크기를 전달해야 합니다.
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
 이는 WebGL에 -1 <-> +1 clip space를, x는 0 <-> `gl.canvas.width`로, y는 0 <-> `gl.canvas.height`로 매핑시켜줍니다.
 
-canvas를 지워봅시다.
-`0, 0, 0, 0`은 각각 빨강, 초록, 파랑, 투명도이므로 이 경우 canvas를 투명하게 만듭니다.
+캔버스를 지워봅시다.
+`0, 0, 0, 0`은 각각 빨강, 초록, 파랑, 투명도이므로 이 경우 캔버스를 투명하게 만듭니다.
 
-    // canvas 지우기
+    // 캔버스 지우기
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -349,7 +349,7 @@ count가 3이기 때문에 vertex shader를 세 번 실행할 겁니다.
 마지막에는 남아있는 2개의 값으로 설정됩니다.
 
 `primitiveType`을 `gl.TRIANGLES`로 설정했기 때문에, vertex shader가 3번 실행될 때마다 WebGL은 `gl_Position`에 설정한 3개의 값에 따라 삼각형을 그리는데요.
-canvas 크기에 상관없이 이 값들은 -1에서 1사이의 clip space 좌표 안에 있습니다.
+캔버스 크기에 상관없이 이 값들은 -1에서 1사이의 clip space 좌표 안에 있습니다.
 
 vertex shader는 단순히 positionBuffer 값을 `gl_Position`에 복사하기 때문에 삼각형은 clip space 좌표에 그려지는데
 
@@ -357,7 +357,7 @@ vertex shader는 단순히 positionBuffer 값을 `gl_Position`에 복사하기 �
         0, 0.5,
       0.7, 0,
 
-canvas 크기가 400x300이라면 이런 식으로 clip space를 screen space로 변환하고
+캔버스 크기가 400x300이라면 이런 식으로 clip space를 screen space로 변환하고
 
     clip space       screen space
        0, 0       ->   200, 150
@@ -367,7 +367,7 @@ canvas 크기가 400x300이라면 이런 식으로 clip space를 screen space로
 이제 WebGL은 삼각형을 렌더링할 겁니다.
 그리려는 모든 픽셀에 대해 WebGL은 fragment shader를 호출하는데요.
 fragment shader는 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
-canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127, 255]` 값을 쓴다는 걸 의미합니다.
+캔버스는 채널당 8bit이기 때문에 이는 WebGL이 캔버스에 `[255, 0, 127, 255]` 값을 사용한다는 걸 의미합니다.
 
 여기 라이브 버전이 있습니다.
 
@@ -419,7 +419,7 @@ canvas는 채널당 8bit이기 때문에 이는 WebGL이 canvas에 `[255, 0, 127
     var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
 
 나머지는 주석을 보면 명확한데요.
-`u_resolution`을 canvas의 해상도로 설정함으로써 shader는 픽셀 좌표로 제공한 `positionBuffer`에 넣은 위치를 가져와 clip space로 변환합니다.
+`u_resolution`을 캔버스의 해상도로 설정함으로써 shader는 픽셀 좌표로 제공한 `positionBuffer`에 넣은 위치를 가져와 clip space로 변환합니다.
 
 이제 우리는 위치 값들을 clip space에서 픽셀로 바꿀 수 있습니다.
 이번에는 각각 3개의 점으로 이루어진 삼각형 두 개로 만드는 사각형을 그려볼 겁니다.

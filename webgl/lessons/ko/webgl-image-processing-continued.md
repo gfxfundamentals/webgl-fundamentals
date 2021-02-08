@@ -132,8 +132,8 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
     gl.bindTexture(gl.TEXTURE_2D, textures[ii % 2]);
   }
 
-  // 마지막으로 결과를 canvas에 그립니다.
-  gl.uniform1f(flipYLocation, -1);  // canvas y축 뒤집기 필요
+  // 마지막으로 결과를 캔버스에 그립니다.
+  gl.uniform1f(flipYLocation, -1);  // 캔버스 y축 뒤집기 필요
   setFramebuffer(null, canvas.width, canvas.height);
   drawWithKernel("normal");
 
@@ -165,13 +165,13 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
 
 살펴봐야 할 게 몇 가지 있습니다.
 
-<code>null</code>을 넘긴 <code>gl.bindFramebuffer</code>를 호출하는 건 framebuffer 중 하나 대신에 canvas에 렌더링하고 싶다는 걸 WebGL에게 알려줍니다.
+<code>null</code>을 넘긴 <code>gl.bindFramebuffer</code>를 호출하는 건 framebuffer 중 하나 대신에 캔버스에 렌더링하고 싶다는 걸 WebGL에게 알려줍니다.
 
 WebGL은 [clip space](webgl-fundamentals.html)에서 다시 픽셀로 변환해야 하는데요.
 이건 <code>gl.viewport</code>의 설정에 따라 수행됩니다.
-렌더링할 framebuffer는 canvas 크기와 다르기 때문에 framebuffer texture를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 canvas를 렌더링할 때 다시 설정해야 합니다.
+렌더링할 framebuffer는 캔버스 크기와 다르기 때문에 framebuffer texture를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 캔버스를 렌더링할 때 다시 설정해야 합니다.
 
-마지막으로 [원본 예제](webgl-fundamentals.html)에서 렌더링할 때 Y 좌표를 뒤집었는데, 이는 WebGL이 0,0을 2D에서 더 전통적인 왼쪽 상단 대신 왼쪽 하단 모서리로 canvas에 표시하기 때문입니다.
+마지막으로 [원본 예제](webgl-fundamentals.html)에서 렌더링할 때 Y 좌표를 뒤집었는데, 이는 WebGL이 0,0을 2D에서 더 전통적인 왼쪽 상단 대신 왼쪽 하단 모서리로 캔버스에 표시하기 때문입니다.
 이건 framebuffer에 렌더링할 때는 필요가 없는데요.
 framebuffer는 표시되지 않기 때문에, 어느 부분이 상단 혹은 하단인지는 관계가 없습니다.
 중요한 건 framebuffer에서 픽셀 0,0이 우리가 계산한 0,0에 해당한다는 겁니다.

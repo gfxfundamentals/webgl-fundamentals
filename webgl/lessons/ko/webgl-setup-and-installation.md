@@ -141,7 +141,7 @@ main();
 
 이제 spector.js extension에서 "record"를 클릭한 다음, 페이지에서 "start"를 클릭하면 spector가 초기화를 기록합니다.
 
-Safari에도 [유사한 문제와 해결 방법](https://stackoverflow.com/questions/62446483/debugging-in-webgl)을 가진 기능이 내장되어 있습니다.
+사파리에도 [유사한 문제와 해결 방법](https://stackoverflow.com/questions/62446483/debugging-in-webgl)을 가진 기능이 내장되어 있습니다.
 
 이런 helper를 사용할 때 저는 draw call을 자주 클릭하고, uniform을 확인합니다.
 `NaN`(NaN = Not a Number)이 많이 보이면 일반적으로 uniform을 설정하는 코드를 추적해서 버그를 찾을 수 있습니다.

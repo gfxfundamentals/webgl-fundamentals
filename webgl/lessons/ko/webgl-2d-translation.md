@@ -28,14 +28,14 @@ translation은 기본적으로 무언가를 "움직이는 걸" 의미하는 멋�
 translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
 
 ```
-  // scene 그리기
+  // 장면 그리기
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
     // clip space에서 픽셀로 변환하는 방법을 WebGL에 지시
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-    // canvas 지우기
+    // 캔버스 지우기
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // program(shader 쌍)을 사용하도록 지시
@@ -206,7 +206,7 @@ function setGeometry(gl) {
 
   ...
 
-  // scene 그리기
+  // 장면 그리기
   function drawScene() {
 
     ...

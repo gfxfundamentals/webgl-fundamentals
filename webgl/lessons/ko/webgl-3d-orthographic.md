@@ -573,11 +573,11 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
 그리는 걸 시작하기 전에 depth 버퍼를 1.0으로 초기화해야 합니다.
 
 ```
-  // scene 그리기
+  // 장면 그리기
   function drawScene() {
     ...
 
-    // canvas와 depth buffer 초기화
+    // 캔버스와 depth buffer 초기화
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     ...

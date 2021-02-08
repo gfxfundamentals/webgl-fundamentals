@@ -273,7 +273,7 @@ void main() {
 그리고 어떻게 사용하냐면
 
 ```js
-// scene 그리기
+// 장면 그리기
 function drawScene() {
 
   ,,,
@@ -322,9 +322,9 @@ matrix = m3.multiply(matrix, translationMatrix);
 계층적 애니메이션의 간단한 예제로 'F'를 5번 그리지만 매번 이전 'F'의 행렬로 시작해봅시다.
 
 ```js
-// scene 그리기
+// 장면 그리기
 function drawScene() {
-  // canvas 지우기
+  // 캔버스 지우기
   gl.clear(gl.COLOR_BUFFER_BIT);
 
   // 행렬 계산
@@ -465,7 +465,7 @@ void main() {
 그리고 JavaScript에서는 projection 행렬로 곱해야 하는데
 
 ```js
-// scene 그리기
+// 장면 그리기
 function drawScene() {
   ...
 
@@ -564,15 +564,15 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
     clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 
 두 번째 방법은 행렬을 왼쪽에서 오른쪽으로 읽는 건데요.
-이 경우 각각의 행렬은 canvas에 표시되는 *space*를 변경합니다.
-canvas는 각 방향에서 clip space(-1 ~ +1)를 나타내는 것으로 시작하는데요.
-왼쪽에서 오른쪽으로 적용된 각 행렬은 canvas에 표시되는 space를 변경합니다.
+이 경우 각각의 행렬은 캔버스에 표시되는 *space*를 변경합니다.
+캔버스는 각 방향에서 clip space(-1 ~ +1)를 나타내는 것으로 시작하는데요.
+왼쪽에서 오른쪽으로 적용된 각 행렬은 캔버스에 표시되는 space를 변경합니다.
 
 1단계: 행렬 없음 (혹은 단위 행렬)
 
 > {{{diagram url="resources/matrix-space-change.html?stage=0" caption="clip space" }}}
 >
-> 흰색 영역은 canvas 입니다. 파랑색은 canvas 바깥입니다. 우리는 clip space에 있습니다.
+> 흰색 영역은 캔버스입니다. 파랑색은 캔버스 바깥입니다. 우리는 clip space에 있습니다.
 > 전달된 위치는 clip space에 있어야 합니다.
 
 2단계:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
@@ -618,14 +618,14 @@ shader에서 우리는 `gl_Position = matrix * position;`을 실행하는데요.
 <div class="webgl_bottombar">
 <h3><code>clientWidth</code>와 <code>clientHeight</code>가 뭔가요?</h3>
 <p>
-지금까지는 canvas의 넓이를 참조할 때마다 <code>canvas.width</code>와 <code>canvas.height</code>를 사용했지만 위에서 <code>m3.projection</code>를 호출할 때는 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>를 사용했습니다.
+지금까지는 캔버스의 넓이를 참조할 때마다 <code>canvas.width</code>와 <code>canvas.height</code>를 사용했지만 위에서 <code>m3.projection</code>를 호출할 때는 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>를 사용했습니다.
 왜일까요?
 </p>
 <p>
 Projection 행렬은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
 하지만, 브라우저에는, 우리가 다루는 두 가지 유형의 픽셀이 있는데요.
-하나는 canvas 자체의 픽셀 수입니다.
-예를 들어 이렇게 정의된 canvas가 있습니다.
+하나는 캔버스 자체의 픽셀 수입니다.
+예를 들어 이렇게 정의된 캔버스가 있습니다.
 </p>
 <pre class="prettyprint">
   &lt;canvas width="400" height="300"&gt;&lt;/canvas&gt;
@@ -638,9 +638,9 @@ Projection 행렬은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시
 </pre>
 <p>
 둘 다 너비가 400픽셀이고 높이가 300픽셀인 이미지를 포함합니다.
-하지만, 이 크기는 실제로 브라우저가 400x300 픽셀의 canvas를 표시하는 크기와는 다른데요.
-CSS는 canvas가 표시되는 크기를 정의합니다.
-예를 들어 이렇게 canvas를 만든다고 해봅시다.
+하지만, 이 크기는 실제로 브라우저가 400x300 픽셀의 캔버스를 표시하는 크기와는 다른데요.
+CSS는 캔버스가 표시되는 크기를 정의합니다.
+예를 들어 이렇게 캔버스를 만든다고 해봅시다.
 </p>
 <pre class="prettyprint">
   &lt;style&gt;
@@ -653,11 +653,11 @@ CSS는 canvas가 표시되는 크기를 정의합니다.
   &lt;canvas width="400" height="300">&lt;/canvas&gt;
 </pre>
 <p>
-컨테이너의 크기에 상관없이 canvas가 표시될 겁니다.
+컨테이너의 크기에 상관없이 캔버스가 표시될 겁니다.
 400x300은 아닌 것 같군요.
 </p>
 <p>
-여기 canvas의 CSS 표시 크기를 100%로 설정해서 canvas가 페이지를 채우도록 늘어나는 두 예제가 있습니다.
+여기 캔버스의 CSS 표시 크기를 100%로 설정해서 캔버스가 페이지를 채우도록 늘어나는 두 예제가 있습니다.
 첫 번째는 <code>canvas.width</code>와 <code>canvas.height</code>를 사용하는 겁니다.
 새로운 창을 열고 창 크기를 조절해보세요.
 'F'가 맞는 모양을 가지지 않는지 확인해봅시다.
@@ -666,11 +666,11 @@ CSS는 canvas가 표시되는 크기를 정의합니다.
 {{{example url="../webgl-canvas-width-height.html" width="500" height="150" }}}
 <p>
 두 번째 예제에서는 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>를 사용합니다.
-<code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>는 canvas가 실제 브라우저에서 표시되는 크기를 알려주기 때문에, 이 경우 canvas는 여전히 400x300 픽셀이지만 canvas가 표시되는 크기에 따라 종횡비를 정의하고 있으므로 <code>F</code>는 항상 올바르게 보입니다.
+<code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>는 캔버스가 실제 브라우저에서 표시되는 크기를 알려주기 때문에, 이 경우 캔버스는 여전히 400x300 픽셀이지만 캔버스가 표시되는 크기에 따라 종횡비를 정의하고 있으므로 <code>F</code>는 항상 올바르게 보입니다.
 </p>
 {{{example url="../webgl-canvas-clientwidth-clientheight.html" width="500" height="150" }}}
 <p>
-canvas의 크기를 조절할 수 있는 대부분의 앱은 <code>canvas.width</code>와 <code>canvas.height</code>를 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>에 맞추려고 하는데 그 이유는 브라우저에 표시되는 각 픽셀에 대해 canvas에 하나의 픽셀이 있기를 원하기 때문입니다.
+캔버스의 크기를 조절할 수 있는 대부분의 앱은 <code>canvas.width</code>와 <code>canvas.height</code>를 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>에 맞추려고 하는데 그 이유는 브라우저에 표시되는 각 픽셀에 대해 캔버스에 하나의 픽셀이 있기를 원하기 때문입니다.
 하지만, 위에서 보았듯이, 그게 유일한 선택지는 아닙니다.
 말인즉슨, 거의 모든 경우, <code>canvas.clientHeight</code>와 <code>canvas.clientWidth</code>를 사용해서 projection 행렬의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
 </p>

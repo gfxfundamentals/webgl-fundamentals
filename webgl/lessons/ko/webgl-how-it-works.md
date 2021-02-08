@@ -55,7 +55,7 @@ vertex shader에서 fragment shader로 전달하려는 각 값마다 “varying�
 
 그리고 3개의 vertex만 그리면 됩니다.
 
-    // scene 그리기
+    // 장면 그리기
     function drawScene() {
       ...
       // geometry 그리기

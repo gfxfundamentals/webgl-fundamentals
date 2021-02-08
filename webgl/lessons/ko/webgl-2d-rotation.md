@@ -60,7 +60,7 @@ unit circle의 어느 지점에서 X와 Y값을 가져와서 [이전 샘플](web
 
       ...
 
-      // scene 그리기
+      // 장면 그리기
       function drawScene() {
 
         ...

@@ -110,7 +110,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 ---
 
 * [1000개의 선분 중 각 점에 가장 가까운 500개의 점을 계산하려면 어떻게 해야 하나요?](https://stackoverflow.com/questions/63491296/calculating-point-to-line-distance-in-glsl#)
-* [Canvas의 중앙에서 원근 소실점을 움직이려면 어떻게 해야 하나요?](https://stackoverflow.com/questions/63509029/in-webgl-can-i-use-a-matrix-to-draw-an-object-offset-in-screen-space)
+* [캔버스의 중앙에서 원근 소실점을 움직이려면 어떻게 해야 하나요?](https://stackoverflow.com/questions/63509029/in-webgl-can-i-use-a-matrix-to-draw-an-object-offset-in-screen-space)
 * [일반화된 vertex 및 fragment shader의 개념이 있나요?](https://stackoverflow.com/questions/63322361/is-there-the-notion-of-a-generalized-vertex-and-fragment-shader)
 * [scene의 평균 밝기를 어떻게 결정하나요?](https://stackoverflow.com/questions/10163434/how-do-i-determine-the-average-scene-brightness-in-webgl)
 * [3D 모델의 원점은 뭔가요?](https://stackoverflow.com/questions/62557253/why-is-this-set-of-f-rotating-in-this-locus)

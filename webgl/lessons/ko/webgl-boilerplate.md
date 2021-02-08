@@ -135,7 +135,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
       return createProgram(gl, vertexShader, fragmentShader);
     }
 
-거의 모든 WebGL program에서 사용하는 다른 코드는 canvas의 크기를 조정하는 코드입니다.
+거의 모든 WebGL program에서 사용하는 다른 코드는 캔버스의 크기를 조정하는 코드입니다.
 [여기](webgl-resizing-the-canvas.html)에서 해당 함수가 어떻게 구현됐는지 볼 수 있습니다.
 
 모든 예제는 이 두 가지 함수를 있고

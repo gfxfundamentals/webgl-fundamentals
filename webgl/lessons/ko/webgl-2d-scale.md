@@ -46,7 +46,7 @@ void main() {
 
   ...
 
-  // scene 그리기
+  // 장면 그리기
   function drawScene() {
 
     ...

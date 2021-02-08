@@ -6,7 +6,7 @@ TOC: readPixel
 WebGL에서는 format/type 쌍을 `readPixels`에 전달합니다.
 주어진 texture 내부 format(framebuffer에 첨부된)의 경우, 단 2개의 format/type 조합만 유효합니다
 
-spec을 보면:
+명세서을 보면:
 
 > normalized fixed-point rendering surface의 경우, format `RGBA`와 type `UNSIGNED_BYTE` 조합이 유효합니다.
 signed integer rendering surface의 경우, format `RGBA_INTEGER`와 type `INT` 조합이 유효합니다.

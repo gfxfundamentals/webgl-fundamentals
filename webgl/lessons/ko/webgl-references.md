@@ -37,13 +37,13 @@ TOC: 참고 자료
 
 * [regl](https://regl.party/): stateless functional WebGL 라이브러리
 
-## Spec
+## 명세서
 
-* [WebGL](https://www.khronos.org/registry/webgl/specs/latest/1.0/): WebGL spec
+* [WebGL](https://www.khronos.org/registry/webgl/specs/latest/1.0/): WebGL 명세서
 
-* [OpenGL ES 2.0](https://www.khronos.org/registry/OpenGL/specs/es/2.0/es_full_spec_2.0.pdf): WebGL의 기반이 되는 spec
+* [OpenGL ES 2.0](https://www.khronos.org/registry/OpenGL/specs/es/2.0/es_full_spec_2.0.pdf): WebGL의 기반이 되는 명세서
 
-* [GLSL ES 1.0](https://www.khronos.org/files/opengles_shading_language.pdf): WebGL용 shader 언어 spec
+* [GLSL ES 1.0](https://www.khronos.org/files/opengles_shading_language.pdf): WebGL용 shader 언어 명세서
 
 ## Fun
 

@@ -6,14 +6,14 @@ TOC: #
 
 ---
 
-<a id="screenshot" data-toc="Screenshot 찍기"></a>
+<a id="screenshot" data-toc="스크린샷 찍기"></a>
 
-# Canvas Screenshot 찍기
+# 캔버스 스크린샷 찍기
 
 브라우저에는 screenshot을 찍는 2개의 함수가 있는데요.
 오래된 함수인 [`canvas.toDataURL`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL)과 좀 더 나은 새로운 함수인 [`canvas.toBlob`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)입니다.
 
-그래서 이렇게 약간의 코드를 추가하여 screenshot을 쉽게 찍을 수 있을 것이라 생각하실텐데
+그래서 이렇게 약간의 코드를 추가하여 스크린샷을 쉽게 찍을 수 있을 것이라 생각하실텐데
 
 ```html
 <canvas id="c"></canvas>
@@ -45,7 +45,7 @@ const saveBlob = (function() {
 
 {{{example url="../webgl-tips-screenshot-bad.html"}}}
 
-시도해보면 이런 screenshot을 얻게 되는데
+시도해보면 이런 스크린샷을 얻게 되는데
 
 <div class="webgl_center"><img src="resources/screencapture-398x298.png"></div>
 
@@ -105,7 +105,7 @@ const saveBlob = (function() {
     const gl = someCanvas.getContext('webgl', {preserveDrawingBuffer: true});
     ```
 
-    이건 나머지 페이지와 합성 후 webgl이 canvas를 지우지 않게 만들지만 일부 *가능한* 최적화를 막습니다.
+    이건 나머지 페이지와 합성 후 WebGL이 캔버스를 지우지 않게 만들지만 일부 *가능한* 최적화를 막습니다.
 
 저는 위의 #1을 선택하겠습니다.
 이 특정 예제를 위해 먼저 상태 업데이트하는 코드 부분을 그리는 부분에서 분리합니다.
@@ -133,7 +133,7 @@ const saveBlob = (function() {
 +    requestAnimationFrame(renderLoop);
 +  }
 
-  // Scene 그리기
+  // 장면 그리기
 +  function drawScene() {
 - function drawScene(now) {
 -    // 초 단위로 변환
@@ -175,13 +175,13 @@ elem.addEventListener('click', () => {
 
 ---
 
-<a id="preservedrawingbuffer" data-toc="Canvas 지우기 방지"></a>
+<a id="preservedrawingbuffer" data-toc="캔버스 지우기 방지"></a>
 
-# Canvas 지우기 방지
+# 캔버스 지우기 방지
 
 사용자가 애니메이션 개체로 그리도록 하고 싶다고 해봅시다.
 먼저 webgl context를 만들 때 `preserveDrawingBuffer: true`를 전달해야 합니다.
-이는 브라우저가 canvas를 지우는 걸 방지합니다.
+이는 브라우저가 캔버스를 지우는 걸 방지합니다.
 
 [애니메이션에 관한 글](webgl-animation.html)의 마지막 예제를 가져오고
 
@@ -194,15 +194,15 @@ var canvas = document.querySelector("#canvas");
 `gl.clear` 호출을 수정해서 depth buffer만 지우는데
 
 ```js
--// Clear the canvas AND the depth buffer.
+-// 캔버스와 the depth buffer 지우기
 -gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-+// Clear the depth buffer.
++// depth buffer 지우기
 +gl.clear(gl.DEPTH_BUFFER_BIT);
 ```
 
 {{{example url="../webgl-tips-preservedrawingbuffer.html" }}}
 
-참고로 진지하게 드로잉 프로그램을 만든다면 해상도가 바뀔 때마다 브라우저가 canvas를 지우므로 이는 해결책이 될 수 없습니다.
+참고로 진지하게 드로잉 프로그램을 만든다면 해상도가 바뀔 때마다 브라우저가 캔버스를 지우므로 이는 해결책이 될 수 없습니다.
 우리는 디스플레이 크기에 따라 해상도를 변경하고 있는데요.
 창 크기가 변경되면 디스플레이 크기도 변경됩니다.
 사용자가 파일을 다운로드할 때, 브라우저가 상태 표시줄을 추가할 때, 심지어 다른 탭에 있을 때도 포함될 수 있습니다.
@@ -212,13 +212,13 @@ var canvas = document.querySelector("#canvas");
 
 ---
 
-<a id="tabindex" data-toc="Canvas 키보드 입력"></a>
+<a id="tabindex" data-toc="캔버스 키보드 입력"></a>
 
 # 키보드 입력 받기
 
-전체 페이지 / 전체 화면 webgl 앱을 만드는 경우 원하는 건 뭐든지 할 수 있지만 종종 canvas가 더 큰 페이지의 일부가 되길 원하고 사용자가 canvas를 클릭하면 canvas가 키보드 입력을 받게 하고 싶을 겁니다.
-일반적으로 canvas는 키보드 입력을 받을 수 없습니다.
-이를 수정하기 위해 canvas의 [`tabindex`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/tabIndex)를 0 이상으로 설정하세요.
+전체 페이지 / 전체 화면 webgl 앱을 만드는 경우 원하는 건 뭐든지 할 수 있지만 종종 캔버스가 더 큰 페이지의 일부가 되길 원하고 사용자가 캔버스를 클릭하면 캔버스가 키보드 입력을 받게 하고 싶을 겁니다.
+일반적으로 캔버스는 키보드 입력을 받을 수 없습니다.
+이를 수정하기 위해 캔버스의 [`tabindex`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/tabIndex)를 0 이상으로 설정하세요.
 
 ```html
 <canvas tabindex="0"></canvas>
@@ -234,7 +234,7 @@ canvas:focus {
 }
 ```
 
-증명을 위해 3개의 canvas를 만들고
+증명을 위해 3개의 캔버스를 만들고
 
 ```html
 <canvas id="c1"></canvas>
@@ -242,7 +242,7 @@ canvas:focus {
 <canvas id="c3" tabindex="1"></canvas>
 ```
 
-마지막 canvas에 대한 css를 추가한 뒤
+마지막 캔버스에 대한 css를 추가한 뒤
 
 ```css
 #c3:focus {
@@ -278,9 +278,9 @@ document.querySelectorAll('canvas').forEach((canvas) => {
 });
 ```
 
-참고로 첫 번째 canvas는 키보드 입력을 받을 수 없습니다.
-두 번째 canvas에서는 할 수 있지만 하이라이팅이 됩니다.
-세 번째 canvas는 두 해결책이 모두 적용되었습니다.
+참고로 첫 번째 캔버스는 키보드 입력을 받을 수 없습니다.
+두 번째 캔버스에서는 할 수 있지만 하이라이팅이 됩니다.
+세 번째 캔버스는 두 해결책이 모두 적용되었습니다.
 
 {{{example url="../webgl-tips-tabindex.html"}}}
 
@@ -323,7 +323,7 @@ document.querySelectorAll('canvas').forEach((canvas) => {
 </div>
 ```
 
-그런 다음 iframe이 창을 가득 채우고, iframe이 기본적으로 테두리를 가지기 때문에 `border`를 `none`으로 설정해야 한다는 걸 제외하면, 위에서 canvas에 사용한 것과 동일한 코드로 뒤에 있도록 style을 설정합니다.
+그런 다음 iframe이 창을 가득 채우고, iframe이 기본적으로 테두리를 가지기 때문에 `border`를 `none`으로 설정해야 한다는 걸 제외하면, 위에서 캔버스에 사용한 것과 동일한 코드로 뒤에 있도록 style을 설정합니다.
 
 ```css
 #background {
