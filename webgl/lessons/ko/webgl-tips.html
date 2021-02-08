@@ -242,11 +242,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>이 글은 WebGL을 사용할 때 발생할 수 있지만 별도로 분리하기에는 너무 작은 이슈 모음입니다.</p>
 <hr>
-<p><a id="screenshot" data-toc="Screenshot 찍기"></a></p>
-<h1 id="canvas-screenshot-">Canvas Screenshot 찍기</h1>
+<p><a id="screenshot" data-toc="스크린샷 찍기"></a></p>
+<h1 id="-">캔버스 스크린샷 찍기</h1>
 <p>브라우저에는 screenshot을 찍는 2개의 함수가 있는데요.
 오래된 함수인 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL"><code class="notranslate" translate="no">canvas.toDataURL</code></a>과 좀 더 나은 새로운 함수인 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob"><code class="notranslate" translate="no">canvas.toBlob</code></a>입니다.</p>
-<p>그래서 이렇게 약간의 코드를 추가하여 screenshot을 쉽게 찍을 수 있을 것이라 생각하실텐데</p>
+<p>그래서 이렇게 약간의 코드를 추가하여 스크린샷을 쉽게 찍을 수 있을 것이라 생각하실텐데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 +&lt;button id=&quot;screenshot&quot; type=&quot;button&quot;&gt;Save...&lt;/button&gt;
 </code></pre>
@@ -276,7 +276,7 @@ const saveBlob = (function() {
 </div>
 
 </p>
-<p>시도해보면 이런 screenshot을 얻게 되는데</p>
+<p>시도해보면 이런 스크린샷을 얻게 되는데</p>
 <div class="webgl_center"><img src="../resources/screencapture-398x298.png"></div>
 
 <p>네, 그냥 빈 이미지입니다.</p>
@@ -320,7 +320,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 <li><p>WebGL context를 만들 때 <code class="notranslate" translate="no">preserveDrawingBuffer: true</code>로 설정</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js"> const gl = someCanvas.getContext(&#39;webgl&#39;, {preserveDrawingBuffer: true});
 </code></pre>
-<p> 이건 나머지 페이지와 합성 후 webgl이 canvas를 지우지 않게 만들지만 일부 <em>가능한</em> 최적화를 막습니다.</p>
+<p> 이건 나머지 페이지와 합성 후 WebGL이 캔버스를 지우지 않게 만들지만 일부 <em>가능한</em> 최적화를 막습니다.</p>
 </li>
 </ol>
 <p>저는 위의 #1을 선택하겠습니다.
@@ -347,7 +347,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 +    requestAnimationFrame(renderLoop);
 +  }
 
-  // Scene 그리기
+  // 장면 그리기
 +  function drawScene() {
 - function drawScene(now) {
 -    // 초 단위로 변환
@@ -386,20 +386,20 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 <p>실제로 캡처된 이미지를 확인해보면 배경이 투명한 걸 보실 수 있는데요.
 자세한 내용은 <a href="webgl-and-alpha.html">이 글</a>을 참고해주세요.</p>
 <hr>
-<p><a id="preservedrawingbuffer" data-toc="Canvas 지우기 방지"></a></p>
-<h1 id="canvas-">Canvas 지우기 방지</h1>
+<p><a id="preservedrawingbuffer" data-toc="캔버스 지우기 방지"></a></p>
+<h1 id="-">캔버스 지우기 방지</h1>
 <p>사용자가 애니메이션 개체로 그리도록 하고 싶다고 해봅시다.
 먼저 webgl context를 만들 때 <code class="notranslate" translate="no">preserveDrawingBuffer: true</code>를 전달해야 합니다.
-이는 브라우저가 canvas를 지우는 걸 방지합니다.</p>
+이는 브라우저가 캔버스를 지우는 걸 방지합니다.</p>
 <p><a href="webgl-animation.html">애니메이션에 관한 글</a>의 마지막 예제를 가져오고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">var canvas = document.querySelector(&quot;#canvas&quot;);
 -var gl = canvas.getContext(&quot;webgl&quot;);
 +var gl = canvas.getContext(&quot;webgl&quot;, {preserveDrawingBuffer: true});
 </code></pre>
 <p><code class="notranslate" translate="no">gl.clear</code> 호출을 수정해서 depth buffer만 지우는데</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-// Clear the canvas AND the depth buffer.
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-// 캔버스와 the depth buffer 지우기
 -gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-+// Clear the depth buffer.
++// depth buffer 지우기
 +gl.clear(gl.DEPTH_BUFFER_BIT);
 </code></pre>
 <p><div class="webgl_example_container">
@@ -408,18 +408,18 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 </div>
 
 </p>
-<p>참고로 진지하게 드로잉 프로그램을 만든다면 해상도가 바뀔 때마다 브라우저가 canvas를 지우므로 이는 해결책이 될 수 없습니다.
+<p>참고로 진지하게 드로잉 프로그램을 만든다면 해상도가 바뀔 때마다 브라우저가 캔버스를 지우므로 이는 해결책이 될 수 없습니다.
 우리는 디스플레이 크기에 따라 해상도를 변경하고 있는데요.
 창 크기가 변경되면 디스플레이 크기도 변경됩니다.
 사용자가 파일을 다운로드할 때, 브라우저가 상태 표시줄을 추가할 때, 심지어 다른 탭에 있을 때도 포함될 수 있습니다.
 또한 사용자가 휴대 전화를 돌려서 브라우저가 세로 모드에서 가로 모드로 전환되는 경우도 포함됩니다.</p>
 <p>정말로 드로잉 프로그램을 만들고 싶다면 <a href="webgl-render-to-texture.html">texture로 렌더링</a>해야 합니다.</p>
 <hr>
-<p><a id="tabindex" data-toc="Canvas 키보드 입력"></a></p>
+<p><a id="tabindex" data-toc="캔버스 키보드 입력"></a></p>
 <h1 id="-">키보드 입력 받기</h1>
-<p>전체 페이지 / 전체 화면 webgl 앱을 만드는 경우 원하는 건 뭐든지 할 수 있지만 종종 canvas가 더 큰 페이지의 일부가 되길 원하고 사용자가 canvas를 클릭하면 canvas가 키보드 입력을 받게 하고 싶을 겁니다.
-일반적으로 canvas는 키보드 입력을 받을 수 없습니다.
-이를 수정하기 위해 canvas의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/tabIndex"><code class="notranslate" translate="no">tabindex</code></a>를 0 이상으로 설정하세요.</p>
+<p>전체 페이지 / 전체 화면 webgl 앱을 만드는 경우 원하는 건 뭐든지 할 수 있지만 종종 캔버스가 더 큰 페이지의 일부가 되길 원하고 사용자가 캔버스를 클릭하면 캔버스가 키보드 입력을 받게 하고 싶을 겁니다.
+일반적으로 캔버스는 키보드 입력을 받을 수 없습니다.
+이를 수정하기 위해 캔버스의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/tabIndex"><code class="notranslate" translate="no">tabindex</code></a>를 0 이상으로 설정하세요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas tabindex=&quot;0&quot;&gt;&lt;/canvas&gt;
 </code></pre>
 <p>이로 인해 새로운 이슈가 발생합니다.
@@ -429,12 +429,12 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
   outline:none;
 }
 </code></pre>
-<p>증명을 위해 3개의 canvas를 만들고</p>
+<p>증명을 위해 3개의 캔버스를 만들고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas id=&quot;c1&quot;&gt;&lt;/canvas&gt;
 &lt;canvas id=&quot;c2&quot; tabindex=&quot;0&quot;&gt;&lt;/canvas&gt;
 &lt;canvas id=&quot;c3&quot; tabindex=&quot;1&quot;&gt;&lt;/canvas&gt;
 </code></pre>
-<p>마지막 canvas에 대한 css를 추가한 뒤</p>
+<p>마지막 캔버스에 대한 css를 추가한 뒤</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-css">#c3:focus {
     outline: none;
 }
@@ -464,9 +464,9 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
   });
 });
 </code></pre>
-<p>참고로 첫 번째 canvas는 키보드 입력을 받을 수 없습니다.
-두 번째 canvas에서는 할 수 있지만 하이라이팅이 됩니다.
-세 번째 canvas는 두 해결책이 모두 적용되었습니다.</p>
+<p>참고로 첫 번째 캔버스는 키보드 입력을 받을 수 없습니다.
+두 번째 캔버스에서는 할 수 있지만 하이라이팅이 됩니다.
+세 번째 캔버스는 두 해결책이 모두 적용되었습니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-tips-tabindex.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-tips-tabindex.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -501,7 +501,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
   Your content goes here.
 &lt;/div&gt;
 </code></pre>
-<p>그런 다음 iframe이 창을 가득 채우고, iframe이 기본적으로 테두리를 가지기 때문에 <code class="notranslate" translate="no">border</code>를 <code class="notranslate" translate="no">none</code>으로 설정해야 한다는 걸 제외하면, 위에서 canvas에 사용한 것과 동일한 코드로 뒤에 있도록 style을 설정합니다.</p>
+<p>그런 다음 iframe이 창을 가득 채우고, iframe이 기본적으로 테두리를 가지기 때문에 <code class="notranslate" translate="no">border</code>를 <code class="notranslate" translate="no">none</code>으로 설정해야 한다는 걸 제외하면, 위에서 캔버스에 사용한 것과 동일한 코드로 뒤에 있도록 style을 설정합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-css">#background {
     position: fixed;
     width: 100vw;
@@ -644,7 +644,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">Animation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
@@ -654,11 +654,11 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">Precision Issues</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas 지우기 방지</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">Canvas 키보드 입력</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform Issues</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">크로스 플랫폼 이슈</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>

@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="WebGL Canvas 크기 조정 및 관련 문제 해결법">
+<meta name="description" content="WebGL 캔버스 크기 조정 및 관련 문제 해결법">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-resizing-the-canvas_ko.jpg">
 
-<meta property="og:title" content="WebGL Canvas 크기 조정">
+<meta property="og:title" content="WebGL 캔버스 크기 조정">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-resizing-the-canvas_ko.jpg">
-<meta property="og:description" content="WebGL Canvas 크기 조정 및 관련 문제 해결법">
+<meta property="og:description" content="WebGL 캔버스 크기 조정 및 관련 문제 해결법">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL Canvas 크기 조정">
+<meta name="twitter:title" content="WebGL 캔버스 크기 조정">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html">
-<meta name="twitter:description" content="WebGL Canvas 크기 조정 및 관련 문제 해결법">
+<meta name="twitter:description" content="WebGL 캔버스 크기 조정 및 관련 문제 해결법">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-resizing-the-canvas_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html",
       "inLanguage":"ko",
-      "name":"WebGL Canvas 크기 조정",
+      "name":"WebGL 캔버스 크기 조정",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL Canvas 크기 조정</title>
+<title>WebGL 캔버스 크기 조정</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,17 +236,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Canvas 크기 조정</h1>
+    <h1>WebGL 캔버스 크기 조정</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>Canvas 크기를 바꾸기 위해 알아야 할 것들이 있습니다.</p>
-<p>모든 canvas는 두 가지 크기를 가지고 있습니다.
+      <p>캔버스 크기를 바꾸기 위해 알아야 할 것들이 있습니다.</p>
+<p>모든 캔버스는 두 가지 크기를 가지고 있습니다.
 먼저 drawingbuffer라는 크기인데요.
-이건 canvas에 있는 픽셀 수입니다.
-두 번째 크기는 canvas가 표시되는 크기인데요.
-CSS는 canvas가 표시되는 크기를 결정합니다.</p>
-<p>두 가지 방법으로 canvas의 drawingbuffer를 설정할 수 있는데요.
+이건 캔버스에 있는 픽셀 수입니다.
+두 번째 크기는 캔버스가 표시되는 크기인데요.
+CSS는 캔버스가 표시되는 크기를 결정합니다.</p>
+<p>두 가지 방법으로 캔버스의 drawingbuffer를 설정할 수 있는데요.
 하나는 HTML을 이용해서</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>다른 방법은 JavaScript를 이용하는</p>
@@ -255,9 +255,9 @@ CSS는 canvas가 표시되는 크기를 결정합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var canvas = document.querySelector(&quot;#c&quot;);
 canvas.width = 400;
 canvas.height = 300;
-</code></pre><p>만약 canvas의 표시 크기에 영향을 주는 CSS가 없다면 표시 크기는 drawingbuffer와 동일한 크기가 되는데요.
-위 두 예제에서 canvas의 drawingbuffer는 400x300이며 표시 크기 또한 400x300이 됩니다.</p>
-<p>다음은 페이지에 400x300 픽셀로 표시되고 drawingbuffer가 10x15 픽셀인 canvas의 예제인데</p>
+</code></pre><p>만약 캔버스의 표시 크기에 영향을 주는 CSS가 없다면 표시 크기는 drawingbuffer와 동일한 크기가 되는데요.
+위 두 예제에서 캔버스의 drawingbuffer는 400x300이며 표시 크기 또한 400x300이 됩니다.</p>
+<p>다음은 페이지에 400x300 픽셀로 표시되고 drawingbuffer가 10x15 픽셀인 캔버스의 예제인데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>혹은 이 예제처럼</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;style&gt;
@@ -267,7 +267,7 @@ canvas.height = 300;
 }
 &lt;/style&gt;
 &lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot;&gt;&lt;/canvas&gt;
-</code></pre><p>만약 canvas에 단일 픽셀 너비의 회전하는 선을 그리면 이런 걸 볼 수 있는데</p>
+</code></pre><p>만약 캔버스에 단일 픽셀 너비의 회전하는 선을 그리면 이런 걸 볼 수 있는데</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-10x15-canvas-400x300-css.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-10x15-canvas-400x300-css.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -275,9 +275,9 @@ canvas.height = 300;
 
 </p>
 <p>왜 이렇게 흐릿할까요?
-그건 브라우저가 10x15 픽셀 canvas를 가져와서 400x300 픽셀로 늘이고 일반적으로 늘릴 때 filtering하기 때문입니다.</p>
-<p>그럼, 예를 들어, canvas로 창을 꽉 채우고 싶다면 어떻게 해야 할까요?
-음, 우선 브라우저가 CSS로 canvas를 늘려 창을 채우게 할 수 있습니다.</p>
+그건 브라우저가 10x15 픽셀의 캔버스를 가져와서 400x300 픽셀로 늘이고 일반적으로 늘릴 때 filtering하기 때문입니다.</p>
+<p>그럼, 예를 들어, 캔버스로 창을 꽉 채우고 싶다면 어떻게 해야 할까요?
+음, 우선 브라우저가 CSS로 캔버스를 늘려 창을 채우게 할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;html&gt;
   &lt;head&gt;
     &lt;style&gt;
@@ -286,7 +286,7 @@ canvas.height = 300;
         border: 0;
         background-color: white;
       }
-      /* canvas를 viewport 크기로 만들기 */
+      /* 캔버스를 viewport 크기로 만들기 */
       canvas {
         width: 100vw;
         height: 100vh;
@@ -298,23 +298,23 @@ canvas.height = 300;
     &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-</code></pre><p>이제 브라우저가 canvas를 늘린 크기와 일치하는 drawingbuffer를 만들어야 하는데요.
+</code></pre><p>이제 브라우저가 캔버스를 늘린 크기와 일치하는 drawingbuffer를 만들어야 하는데요.
 HTML의 모든 요소가 가진 <code class="notranslate" translate="no">clientWidth</code>와 <code class="notranslate" translate="no">clientHeight</code>를 사용하면 해당 요소가 표시되는 크기를 JavaScript로 확인할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function resize(canvas) {
-  // 브라우저가 canvas를 표시하고 있는 크기 탐색
+  // 브라우저가 캔버스를 표시하고 있는 크기 탐색
   var displayWidth  = canvas.clientWidth;
   var displayHeight = canvas.clientHeight;
 
-  // canvas가 같은 크기가 아닌지 확인
+  // 캔버스가 같은 크기가 아닌지 확인
   if (canvas.width  != displayWidth ||
       canvas.height != displayHeight) {
 
-    // canvas를 동일한 크기로 만들기
+    // 캔버스를 동일한 크기로 만들기
     canvas.width  = displayWidth;
     canvas.height = displayHeight;
   }
 }
-</code></pre><p>대부분의 WebGL 앱들은 <a href="webgl-animation.html">애니메이션</a>되므로 렌더링 전에 이 함수를 호출하여 그리기 직전에 항상 canvas를 원하는 크기로 조정하겠습니다.</p>
+</code></pre><p>대부분의 WebGL 앱들은 <a href="webgl-animation.html">애니메이션</a>되므로 렌더링 전에 이 함수를 호출하여 그리기 직전에 항상 캔버스를 원하는 크기로 조정하겠습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
   resize(gl.canvas);
 
@@ -329,12 +329,12 @@ HTML의 모든 요소가 가진 <code class="notranslate" translate="no">clientW
 </p>
 <p>뭐가 잘못됐죠?
 왜 선이 전체 영역을 덮지 않을까요?</p>
-<p>그 이유는 canvas를 크기 조정할 때 viewport를 설정하기 위해 <code class="notranslate" translate="no">gl.viewport</code>를 호출해야 하기 때문입니다.
-<code class="notranslate" translate="no">gl.viewport</code>는 WebGL에게 clip space(-1 ~ +1)에서 픽셀로 변환하는 방법과 canvas 내에서 그걸 작동시키는 위치를 알려줍니다.
-WebGL context를 처음 만들 때 WebGL은 canvas와 같은 크기로 viewport를 설정하지만 이후에는 사용자가 설정합니다.
-만약 canvas 크기를 변경한다면 WebGL에게 새로운 viewport 설정을 알려줘야 합니다.</p>
+<p>그 이유는 캔버스를 크기 조정할 때 viewport를 설정하기 위해 <code class="notranslate" translate="no">gl.viewport</code>를 호출해야 하기 때문입니다.
+<code class="notranslate" translate="no">gl.viewport</code>는 WebGL에게 clip space(-1 ~ +1)에서 픽셀로 변환하는 방법과 캔버스 내에서 그걸 작동시키는 위치를 알려줍니다.
+WebGL context를 처음 만들 때 WebGL은 캔버스와 같은 크기로 viewport를 설정하지만 이후에는 사용자가 설정합니다.
+만약 캔버스 크기를 변경한다면 WebGL에게 새로운 viewport 설정을 알려줘야 합니다.</p>
 <p>이걸 처리하기 위해 코드를 바꿔봅시다.
-덧붙이자면, WebGL context가 canvas에 대한 참조를 가지므로 resize로 전달해보겠습니다.</p>
+덧붙이자면, WebGL context가 캔버스에 대한 참조를 가지므로 resize로 전달해보겠습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
   resize(gl.canvas);
 
@@ -349,17 +349,17 @@ WebGL context를 처음 만들 때 WebGL은 canvas와 같은 크기로 viewport�
 
 </p>
 <p>별도의 창에서 열고, 창 크기를 바꿔도, 항상 창을 꽉 채웁니다.</p>
-<p>이렇게 물어보실 수 있는데, 왜 canvas 크기를 변경할 때 WebGL이 자동으로 viewport를 설정해주지 않나요?
+<p>이렇게 물어보실 수 있는데, 왜 캔버스 크기를 변경할 때 WebGL이 자동으로 viewport를 설정해주지 않나요?
 그 이유는 viewport를 어떻게 혹은 왜 사용하는지 모르기 때문입니다.
 가령 framebuffer로 렌더링하거나 다른 viewport 크기가 필요한 다른 작업을 수행할 수 있는데요.
 WebGL은 당신의 의도를 알 수 없으므로 자동으로 viewport를 설정할 수 없습니다.</p>
-<p>많은 WebGL program을 살펴보면 다양한 방법으로 canvas 크기 조정이나 설정을 처리하는데요.
-브라우저가 CSS로 canvas를 표시할 크기를 선택하게 한 다음 해당 크기를 찾아보고 이에 대응하여 canvas의 픽셀 수를 조정하는 게 가장 좋은 방법이라고 생각합니다.
+<p>많은 WebGL program을 살펴보면 다양한 방법으로 캔버스 크기 조정이나 설정을 처리하는데요.
+브라우저가 CSS로 캔버스를 표시할 크기를 선택하게 한 다음 해당 크기를 찾아보고 이에 대응하여 캔버스의 픽셀 수를 조정하는 게 가장 좋은 방법이라고 생각합니다.
 여기에 관심이 있다면 <a href="webgl-anti-patterns.html">위에서 설명한 방법이 바람직하다고 생각한 이유</a>를 봐주세요.</p>
 <div class="webgl_bottombar">
 <h3>Retina 혹은 HD-DPI 디스플레이는 어떻게 처리하나요?</h3>
 <p>
-CSS나 Canvas에서 크기를 픽셀로 지정하면 실제 픽셀일 수도 아닐 수도 있는 CSS 픽셀이라고 부릅니다.
+CSS나 캔버스에서 크기를 픽셀로 지정하면 실제 픽셀일 수도 아닐 수도 있는 CSS 픽셀이라고 부릅니다.
 대부분의 최신 스마트폰은 high-definition DPI display (HD-DPI)라고 부르거나 애플에서 "Retina Display"라고 부르는 디스플레이를 가지고 있습니다.
 브라우저는 글자와 대부분의 CSS 스타일링을 자동으로 HD-DPI 그래픽으로 렌더링하지만, WebGL로 그래픽을 그릴 때 "HD-DPI" 품질을 원한다면 더 높은 해상도로 렌더링해야 합니다.
 </p>
@@ -372,16 +372,16 @@ resize 함수를 수정하여 이렇게 처리할 수 있습니다.
 function resize(gl) {
   var realToCSSPixels = window.devicePixelRatio;
 
-  // 브라우저가 CSS 픽셀로 canvas를 표시하는 크기를 탐색하고
+  // 브라우저가 CSS 픽셀로 캔버스를 표시하는 크기를 탐색하고
   // drawingbuffer를 device 픽셀로 일치시키는데 필요한 크기를 계산합니다.
   var displayWidth  = Math.floor(gl.canvas.clientWidth  * realToCSSPixels);
   var displayHeight = Math.floor(gl.canvas.clientHeight * realToCSSPixels);
 
-  // canvas가 같은 크기가 아닌지 확인
+  // 캔버스가 같은 크기가 아닌지 확인
   if (gl.canvas.width  !== displayWidth ||
       gl.canvas.height !== displayHeight) {
 
-    // canvas를 동일한 크기로 만들기
+    // 캔버스를 동일한 크기로 만들기
     gl.canvas.width  = displayWidth;
     gl.canvas.height = displayHeight;
   }
@@ -532,7 +532,7 @@ Samsung Galaxy S8에서 이 값은 <code class="notranslate" translate="no">5</c
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">Animation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
@@ -542,11 +542,11 @@ Samsung Galaxy S8에서 이 값은 <code class="notranslate" translate="no">5</c
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">Precision Issues</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas 지우기 방지</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">Canvas 키보드 입력</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform Issues</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">크로스 플랫폼 이슈</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>
@@ -578,8 +578,8 @@ Samsung Galaxy S8에서 이 값은 <code class="notranslate" translate="no">5</c
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL Canvas 크기 조정';
-            var disqus_title = 'WebGL Canvas 크기 조정';
+            var disqus_identifier = 'WebGL 캔버스 크기 조정';
+            var disqus_title = 'WebGL 캔버스 크기 조정';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

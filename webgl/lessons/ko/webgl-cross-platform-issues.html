@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-cross-platform-issues.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Cross Platform Issues" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="Things to be aware of when trying to make your WebGL app work everywhere." />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-cross-platform-issues.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Cross Platform Issues" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-cross-platform-issues.html" />
-<meta name="twitter:description" content="Things to be aware of when trying to make your WebGL app work everywhere." />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="WebGL 앱이 어디서나 작동하도록 만들기 위해 알아야 할 사항들입니다.">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cross-platform-issues_ko.jpg">
+
+<meta property="og:title" content="WebGL 크로스 플랫폼 이슈">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cross-platform-issues_ko.jpg">
+<meta property="og:description" content="WebGL 앱이 어디서나 작동하도록 만들기 위해 알아야 할 사항들입니다.">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-cross-platform-issues.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 크로스 플랫폼 이슈">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-cross-platform-issues.html">
+<meta name="twitter:description" content="WebGL 앱이 어디서나 작동하도록 만들기 위해 알아야 할 사항들입니다.">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cross-platform-issues_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-cross-platform-issues.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cross-platform-issues_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-cross-platform-issues.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-cross-platform-issues.html",
+      "inLanguage":"ko",
+      "name":"WebGL 크로스 플랫폼 이슈",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-cross-platform-issues.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Cross Platform Issues</title>
+<title>WebGL 크로스 플랫폼 이슈</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-cross-platform-issues.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,13 +236,238 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Cross Platform Issues</h1>
+    <h1>WebGL 크로스 플랫폼 이슈</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-cross-platform-issues.html">여기</a>에 있습니다.</p>
+      <p>모든 WebGL 프로그램이 모든 기기 혹은 브라우저에서 작동하지 않아도 충격으로 다가오지 않을 겁니다.
+WebGL2의 경우, 적어도 2020년 7월 현재, <a href="#safari">사파리</a>에서 지원되지 않습니다.</p>
+<p>다음은 제 머릿속에 있는 발생 가능한 대부분의 이슈 목록입니다.</p>
+<h2 id="-">성능</h2>
+<p>고사양 GPU는 저사양 GPU보다 100배 더 빠르게 돌아갈 수 있습니다.
+제가 아는 유일한 방법은 저사양을 기준으로 하거나, 대부분의 데스크탑 PC 앱처럼 성능이나 품질을 선택할 수 있는 옵션을 사용자에게 제공하는 겁니다.</p>
+<h2 id="-">메모리</h2>
+<p>비슷하게 고사양 GPU는 12에서 24기가의 램을 가질 수 있는 반면 저사양 GPU는 1기가보다 적을 수 있습니다. (제가 나이가 많아서 16k에서 64k의 메모리를 가진 컴퓨터로 프로그래밍을 시작했기 때문에 저사양 = 1기가인 것이 저에겐 놀랍습니다 😜)</p>
+<h2 id="-">기기 제한</h2>
+<p>WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최소 범위보다 많이 지원할 수 있으며 이는 더 적게 지원하는 다른 기기에서 실패한다는 걸 의미합니다.</p>
+<p>예제:</p>
+<ul>
+<li><p>허용되는 최대 texture 크기</p>
+<p>2048이나 4096은 합리적인 제한으로 보입니다.
+적어도 2020년 현재 <a href="https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE">99%의 기기들이 4096를 지원하지만 50%만이 4096 이상을 지원</a>합니다.</p>
+<p>참고: 최대 texture 크기는 GPU가 처리할 수 있는 최대 크기입니다.
+이건 GPU가 해당 크기를 제곱(2D texture용)하거나 세제곱(3D texture용)하는데 충분한 메모리가 있다는 뜻이 아닌데요.
+예를 들어 일부 GPU는 16384의 최대 크기를 가집니다.
+하지만 각 면이 16384인 3D texture는 16TB의 메모리를 필요로 합니다!!!</p>
+</li>
+<li><p>단일 프로그램의 vertex attribute 최대 개수</p>
+<p>WebGL1에서 지원되는 최소값은 8입니다.
+WebGL2는 16입니다.
+그 이상을 사용하고 있다면 최소값만 지원하는 컴퓨터에서 코드가 실패할 겁니다.</p>
+</li>
+<li><p>Uniform vector의 최대 개수</p>
+<p>vertex shader와 fragment shader에 따로따로 지정됩니다.</p>
+<p>WebGL1에서는 vertex shader에 128개 그리고 fragment shader에 16개입니다.
+WebGL2에서는 vertex shader에 256개 그리고 fragment shader에 224개입니다.</p>
+<p>참고로 uniform은 &quot;패킹&quot;될 수 있음으로 위 숫자는 사용할 수 있는 <code class="notranslate" translate="no">vec4</code>의 개수인데요.
+이론적으로는 <code class="notranslate" translate="no">float</code> uniform 개수의 4배를 가질 수 있습니다.
+하지만 그것들을 끼워 맞추는 알고리즘이 있는데요.
+위의 최대 uniform vector 각각에 대해 한 행, 4개의 열이 있는 배열로 공간을 상상할 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">   +-+-+-+-+
+   | | | | |   &lt;- vec4 1개
+   | | | | |   |
+   | | | | |   |
+   | | | | |   V
+   | | | | |   최대 uniform vector 행
+   | | | | |
+   | | | | |  
+   | | | | |
+   ...
+</code></pre><p>먼저 <code class="notranslate" translate="no">vec4</code>는 <code class="notranslate" translate="no">mat4</code>가 4개의 <code class="notranslate" translate="no">vec4</code>로 할당됩니다.
+다음으로 <code class="notranslate" translate="no">vec3</code>는 공간 왼쪽에 넣습니다.
+그런 다음 <code class="notranslate" translate="no">vec2</code>에 이어 <code class="notranslate" translate="no">float</code>가 따라옵니다.
+그래서 <code class="notranslate" translate="no">mat4</code> 1개, <code class="notranslate" translate="no">vec3</code> 2개, <code class="notranslate" translate="no">vec2</code> 2개, <code class="notranslate" translate="no">float</code> 3개가 있다고 상상해 보면</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">   +-+-+-+-+
+   |m|m|m|m|   &lt;- mat4는 4개의 행을 가짐
+   |m|m|m|m|
+   |m|m|m|m|
+   |m|m|m|m|
+   |3|3|3| |   &lt;- vec3 2개는 행 2개를 가짐
+   |3|3|3| |
+   |2|2|2|2|   &lt;- vec2 2개는 행 1개로 압축 가능
+   |f|f|f| |   &lt;- float 3개는 행 1개에 들어감
+   ...
+</code></pre><p>게다가, uniform 배열은 항상 수직이므로 예를 들어 허용되는 uniform vector 최대값이 16개면 요소 17개의 <code class="notranslate" translate="no">float</code> 배열을 가질 수 없고 실제로 전체 행을 차지하는 단일 <code class="notranslate" translate="no">vec4</code>가 있는 경우 15개의 행만 남으며 이는 가질 수 있는 가장 큰 배열이 15개의 요소가 된다는 걸 의미합니다.</p>
+<p>제 조언은 완벽한 패킹을 기대하지 말라는 겁니다.
+비록 명세서에는 위 알고리즘을 통과해야 한다고 나와 있지만 모든 드라이버를 통과하는지 테스트하기엔 조합이 너무 많습니다.
+그냥 한도에 가까워지고 있는지 확인해주세요.</p>
+<p>참고: varying과 attribute는 패킹할 수 없습니다.</p>
+</li>
+<li><p>Varying vector 최대값</p>
+<p>WebGL1의 최소값은 8입니다.
+WebGL2는 16입니다.</p>
+<p>그 이상을 사용한다면 최소값만 지원하는 컴퓨터에서 코드가 실패할 겁니다.</p>
+</li>
+<li><p>Texture unit 최대값</p>
+<p>여기에는 3가지 값이 있습니다.</p>
+<ol>
+<li>Texture unit 개수</li>
+<li>Vertex shader가 참조할 수 있는 texture unit 개수</li>
+<li>Fragment shader가 참조할 수 있는 texture unit 개수</li>
+</ol>
+<table class="tabular-data">
+  <thead>
+    <tr><th></th><th>WebGL1</th><th>WebGL2</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>존재하는 texture unit 최소값</td><td>8</td><td>32</td></tr>
+    <tr><td>Vertex shader가 참조할 수 있는 texture unit 최소값</td><th style="color: red;">0!</td><td>16</td></tr>
+    <tr><td>Fragment shader가 참조할 수 있는 texture unit 최소값</td><td>8</td><td>16</td></tr>
+  </tbody>
+</table>
+
+<p>WebGL1에서 vertex shader에 대한 값이 <strong>0</strong>임을 주의해야 합니다.
+참고로 너무 낙담하지 않아도 괜찮은데요.
+<a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">모든 장치의 약 97%가 최소 4개를 지원</a>합니다.
+그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 shader로 fallback할 수 있는지 확인하는 게 좋습니다.</p>
+</li>
+</ul>
+<p>다른 제한도 있는데요.
+이를 조회하기 위해 다음의 값으로 <code class="notranslate" translate="no">gl.getParameter</code>를 호출합니다.</p>
+<div class="webgl_center">
+<table class="tabular-data">
+  <tbody>
+    <tr><td>MAX_TEXTURE_SIZE                </td><td>Texture 최대 크기</td></tr>
+    <tr><td>MAX_VERTEX_ATTRIBS              </td><td>가질 수 있는 attribute 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>Vertex shader가 가질 수 있는 vec4 uniform 개수</td></tr>
+    <tr><td>MAX_VARYING_VECTORS             </td><td>가지고 있는 varying 개수</td></tr>
+    <tr><td>MAX_COMBINED_TEXTURE_IMAGE_UNITS</td><td>존재하는 texture unit 개수</td></tr>
+    <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>Vertex shader가 참조할 수 있는 texture unit 개수</td></tr>
+    <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>Fragment shader가 참조할 수 있는 texture unit 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>Fragment shader가 가질 수 있는 vec4 uniform 개수</td></tr>
+    <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>Cubemap 최대 크기</td></tr>
+    <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>Renderbuffer 최대 크기</td></tr>
+    <tr><td>MAX_VIEWPORT_DIMS               </td><td>Viewport 최대 크기</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>이건 전체 목록이 아닌데요.
+최대 점 크기와 최대 선 두께 등이 있지만 기본적으로 최대 선 두께는 1.0이고 POINTS는 <a href="#points-lines-viewport-scissor-behavior">클리핑 이슈</a>를 신경쓰지 않아도 되는 간단한 데모에서만 유용하다고 가정해야 합니다.</p>
+<p>WebGL2는 몇 가지 더 추가합니다.
+몇 가지 일반적인 것들은</p>
+<div class="webgl_center">
+<table class="tabular-data">
+  <tbody>
+    <tr><td>MAX_3D_TEXTURE_SIZE                          </td><td>3D texture 최대 크기</td></tr>
+    <tr><td>MAX_DRAW_BUFFERS                             </td><td>가질 수 있는 color attachment 개수</td></tr>
+    <tr><td>MAX_ARRAY_TEXTURE_LAYERS                     </td><td>2D texture 배열의 최대 레이어</td></tr>
+    <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS      </td><td>Transform feedback을 사용할 때 별도의 버퍼로 출력할 수 있는 varying 개수</td></tr>
+    <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>모든 걸 단일 버퍼로 보낼 때 출력할 수 있는 varying 개수</td></tr>
+    <tr><td>MAX_COMBINED_UNIFORM_BLOCKS                  </td><td>종합적으로 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>Vertex shader가 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>Fragment shader가 사용할 수 있는 uniform block 개수</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="depth-buffer-">Depth Buffer 해상도</h2>
+<p>정말 오래된 몇몇 기기들은 16bit depth buffer를 사용합니다.
+그렇지 않은, 99%의 기기들은 24bit depth buffer를 사용하므로 걱정하지 않아도 됩니다.</p>
+<h2 id="readpixels-format-type-">readPixels format/type 조합</h2>
+<p>특정 format/type 조합만 작동이 보장됩니다.
+다른 조합들은 선택적인데요.
+이 내용은 <a href="webgl-readpixels.html">이 글</a>에서 다룹니다.</p>
+<h2 id="framebuffer-attachment-">framebuffer attachment 조합</h2>
+<p>Framebuffer는 texture와 renderbuffer의 attachment를 하나 이상 가질 수 있습니다.</p>
+<p>WebGL1에서는 3개의 attachment 조합만 동작이 보장됩니다.</p>
+<ol>
+<li>단일 format = <code class="notranslate" translate="no">RGBA</code>, type = <code class="notranslate" translate="no">UNSIGNED_BYTE</code>, texture = <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code></li>
+<li>format = <code class="notranslate" translate="no">RGBA</code>, type = <code class="notranslate" translate="no">UNSIGNED_BYTE</code>, texture = <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> 그리고 format = <code class="notranslate" translate="no">DEPTH_COMPONENT</code>, <code class="notranslate" translate="no">DEPTH_ATTACHMENT</code>로 연결된 renderbuffer</li>
+<li>format = <code class="notranslate" translate="no">RGBA</code>, type = <code class="notranslate" translate="no">UNSIGNED_BYTE</code>, texture = <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> 그리고 format = <code class="notranslate" translate="no">DEPTH_STENCIL</code>, <code class="notranslate" translate="no">DEPTH_STENCIL_ATTACHMENT</code>로 연결된 renderbuffer </li>
+</ol>
+<p>다른 모든 조합은 <code class="notranslate" translate="no">gl.checkFramebufferStatus</code>를 호출하여 <code class="notranslate" translate="no">FRAMEBUFFER_COMPLETE</code>를 반환했는지 확인하는 구현에 따라 달라집니다.</p>
+<p>WebGL2는 더 많은 format을 쓸 수 있도록 보장하지만 <strong>어떤 조합이 실패할 수 있다</strong>는 한계는 여전한데요.
+1개보다 많이 첨부한다면 모든 color attachment가 같은 format일 경우가 가장 안전한 방법일 수 있습니다.</p>
+<h2 id="extension">Extension</h2>
+<p>WebGL1과 WebGL2의 많은 기능들이 선택적인데요.
+<code class="notranslate" translate="no">getExtension</code>라는 API가 갖는 요점은 extension이 존재하지 않으면 실패할 수 있으므로 실패를 확인하고 맹목적으로 성공할 것이라 가정하지 말아야 합니다.</p>
+<p>아마 WebGL1과 WebGL2에서 가장 흔하게 누락되는 extension은 floating point texture를 필터링할 수 있는 <code class="notranslate" translate="no">OES_texture_float_linear</code>인데, 이는 <code class="notranslate" translate="no">TEXTURE_MIN_FILTER</code>와 <code class="notranslate" translate="no">TEXTURE_MAX_FILTER</code>를 <code class="notranslate" translate="no">NEAREST</code>를 제외한 모든 항목으로 설정하도록 지원하는 기능을 의미합니다.
+많은 모바일 기기들이 이걸 지원하지 않습니다.</p>
+<p>WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 color attachment를 framebuffer로 첨부할 수 있는 기능인 <code class="notranslate" translate="no">WEBGL_draw_buffers</code>이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
+기본적으로 WebGL2를 실행할 수 있는 모든 기기는 WebGL1에서 <code class="notranslate" translate="no">WEBGL_draw_buffers</code>도 지원해야 하지만, 여전히 이슈가 됩니다.
+여러 texture를 한 번에 렌더링해야 한다면 고사양 GPU로도 시간이 필요할 수 있습니다.
+그래도 사용자 기기가 지원하는지 확인하고, 지원하지 않는다면 친절한 설명을 제공해야 합니다.</p>
+<p>WebGL1의 경우 다음의 3개의 extension이 거의 보편적으로 지원되는 것처럼 보이므로 사용자에게 이들이 누락되면 페이지가 작동하지 않을 것이라 경고하고 싶을 수 있지만 사용자가 페이지를 제대로 실행하지 못 할만큼 아주 오래된 기기를 가지고 있을 수 있습니다.</p>
+<p><code class="notranslate" translate="no">ANGLE_instance_arrays</code>(<a href="webgl-instanced-drawing.html">instanced drawing</a>에 사용하는 기능), <code class="notranslate" translate="no">OES_vertex_array_object</code>(단일 함수 호출로 모든 상태를 바꿀 수 있도록 모든 <a href="webgl-attributes.html">attribute</a> 상태를 객체에 저장하는 기능), <code class="notranslate" translate="no">OES_element_index_uint</code>(<a href="webgl-indexed-vertices.html"><code class="notranslate" translate="no">drawElements</code></a>로 <code class="notranslate" translate="no">UNSIGNED_INT</code> 32bit 인덱스를 사용하는 기능)</p>
+<h2 id="attribute-location">attribute location</h2>
+<p>버그는 attribute location을 찾지 못하는 겁니다.
+예를 들어 이런 vertex shader가 있다면</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 position;
+attribute vec2 texcoord;
+
+uniform mat4 matrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+   gl_Position = matrix * position;
+   v_texcoord = texcoord;
+}
+</code></pre>
+<p>코드는 <code class="notranslate" translate="no">position</code>이 attribute 0 그리고 <code class="notranslate" translate="no">texcoord</code>는 attribute 1이 될 것이라 가정하지만 이는 보장되지 않습니다.
+그래서 당신은 작동되지만 다른 사람은 실패할 수 있죠.
+의도적으로 하지 않았지만 코드의 오류로 인해 location은 일반 통행이고 다른 것들은 아닐 때 작동한다는 점은 종종 버그가 될 수 있습니다.</p>
+<p>3가지 해결법이 있습니다.</p>
+<ol>
+<li>항상 location을 탐색</li>
+<li><code class="notranslate" translate="no">gl.linkProgram</code> 호출 전에 <code class="notranslate" translate="no">gl.bindAttribLocation</code>을 호출하여 location 할당</li>
+<li><p>WebGL2 한정, 다음과 같이 shader에서 location을 설정</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">#version 300 es
+layout(location = 0) vec4 position;
+latout(location = 1) vec2 texcoord;
+...
+</code></pre>
+</li>
+</ol>
+<p>해결법 2가 가장 <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">D.R.Y</a>하게 보이지만, 런타임에 texture를 생성하지 않는다면 해결법 3이 가장 <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself#DRY_vs_WET_solutions">W.E.T</a>하게 보입니다.</p>
+<h2 id="glsl-undefined-">GLSL undefined 동작</h2>
+<p>여러 GLSL 함수는 undefined 동작을 가집니다.
+예를 들어 <code class="notranslate" translate="no">pow(x, y)</code>는 <code class="notranslate" translate="no">x &lt; 0</code>일 경우 undefined입니다.
+<a href="webgl-3d-lighting-spot.html">spot lighting</a>에 대한 글의 하단에 더 긴 목록이 있습니다</p>
+<h2 id="shader-">Shader 정밀도 이슈</h2>
+<p>2020년 여기서 가장 큰 이슈는 shader에서 <code class="notranslate" translate="no">mediump</code>나 <code class="notranslate" translate="no">lowp</code>를 사용하면 데스크탑의 GPU는 <code class="notranslate" translate="no">highp</code>를 사용하지만 모바일은 <code class="notranslate" translate="no">mediump</code>나 <code class="notranslate" translate="no">lowp</code>가 되는 것이므로 데스크탑으로 개발할 때는 어떤 이슈도 눈치채지 못 할 겁니다.</p>
+<p>자세한 내용은 <a href="webgl-precision-issues.html">이 글</a>을 봐주세요.</p>
+<h2 id="points-lines-viewport-scissor-">Points, Lines, Viewport, Scissor 동작</h2>
+<p>WebGL의 <code class="notranslate" translate="no">POINTS</code>와 <code class="notranslate" translate="no">LINES</code>는 최대 크기 1을 가질 수 있고 현재 가장 일반적인 제한인 <code class="notranslate" translate="no">LINES</code>의 경우입니다.
+또한 중심이 viewport 외부에 있을 때 점이 클리핑되는지 여부는 구현에 정의됩니다.
+<a href="webgl-drawing-without-data.html#pointissues">이 글의 하단</a>을 봐주세요.</p>
+<p>마찬가지로, viewport가 vertex만 클리핑하는지 혹은 pixel도 클리핑하는지 여부는 정의되지 않았습니다.
+Scissor는 항상 pixel을 클리핑하므로 scissor 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.</p>
+<h2 id="-">사파리 버그</h2>
+<p>사파리는 다른 현대 브라우저들보다 많은 WebGL 버그를 가지고 있으며 애플은 이들을 고치는 데 전혀 관심이 없는 걸로 보입니다.</p>
+<p>몇 년간 고쳐지지 않은 버그의 일부 목록</p>
+<ul>
+<li><p>toDataURL(그리고 toBlob)이 premultipledAlpha = false인 경우 거꾸로 결과를 반환하는 <a href="https://bugs.webkit.org/show_bug.cgi?id=156129">버그</a> (4년 전)</p>
+</li>
+<li><p>현재 iOS에서 preserveDrawingBuffer = true일 때 잘못된 double-buffer <a href="https://bugs.webkit.org/show_bug.cgi?id=159608">버그</a> (4년 전)</p>
+</li>
+<li><p><code class="notranslate" translate="no">OES_texture_float</code> 구현이 non-ArrayBufferView entry point를 지원해야 하는 <a href="https://bugs.webkit.org/show_bug.cgi?id=51015">버그</a> (10년 전)</p>
+</li>
+<li><p>readPixels가 RGBA/UNSIGNED_BYTE에 대해 INVALID_ENUM를 생성하는 <a href="https://bugs.webkit.org/show_bug.cgi?id=170341">버그</a> (3년 전)</p>
+</li>
+<li><p>WebGL 캔버스와 레이어 변환에 대한 변경 사항이 항상 동기화되지 않는 <a href="https://bugs.webkit.org/show_bug.cgi?id=172969">버그</a> (3년 전)</p>
+</li>
+<li><p>알파 채널이 없는 PNG texture가 잘못된 rgb 색상을 가지는 <a href="https://bugs.webkit.org/show_bug.cgi?id=165297">버그</a> (4년 전)</p>
+</li>
+<li><p>사파리가 일반적인 attribute 없이 쓰는 경우를 처리하지 않는 <a href="https://bugs.webkit.org/show_bug.cgi?id=197592">버그</a> (1년 전) </p>
+</li>
+<li><p><a id="safari"></a>
+또한 사파리에는 WebGL2를 활성화하는 옵션이 있지만 <code class="notranslate" translate="no">#version 300 es</code> shader를 허용하는 게 전부입니다.
+다른 80개 이상의 모든 WebGL2 api 함수는 적어도 2020년 7월 기준 구현되어 있지 않습니다.
+<a href="https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/canvas/WebGL2RenderingContext.cpp">Source</a>를 보고 &quot;not implemented&quot;를 검색해보세요.</p>
+</li>
+</ul>
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +483,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -310,7 +593,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">Animation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
@@ -320,11 +603,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">Precision Issues</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas 지우기 방지</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">Canvas 키보드 입력</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform Issues</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">크로스 플랫폼 이슈</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>
@@ -341,13 +624,51 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>질문은? <a href="https://stackoverflow.com/questions/tagged/webgl">Stackoverflow</a>에서 물어봐주세요.</div>
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 크로스 플랫폼 이슈';
+            var disqus_title = 'WebGL 크로스 플랫폼 이슈';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
