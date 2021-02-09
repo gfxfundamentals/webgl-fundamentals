@@ -1,6 +1,6 @@
-Title: WebGL readPixel
-Description: readPixel의 세부 사항
-TOC: readPixel
+Title: WebGL readPixels
+Description: readPixels의 세부 사항
+TOC: readPixels
 
 
 WebGL에서는 format/type 쌍을 `readPixels`에 전달합니다.
