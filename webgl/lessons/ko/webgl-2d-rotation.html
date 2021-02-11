@@ -243,11 +243,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>이 포스트는 WebGL 관련 시리즈의 연장입니다.
 첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고 이전에는 <a href="webgl-2d-translation.html">geometry translation</a>에 관한 것이었습니다.</p>
 <p>솔직히 이걸 어떻게 설명해야 할지 모르겠지만 뭐 어때요, 시도는 해봅시다.</p>
-<p>먼저 &quot;unit circle&quot;이라 불리는 걸 소개하려고 합니다.
+<p>먼저 &quot;단위원&quot;이라 불리는 걸 소개하려고 합니다.
 중학교 수학을 기억해보면(저처럼 졸지 마세요!) 원은 반지름을 가지는데요.
 원의 반지름은 원의 중심에서 가장자리까지의 거리입니다.
-unit circle은 반지름이 1.0인 원입니다.</p>
-<p>다음은 unit circle 입니다.</p>
+단위원은 반지름이 1.0인 원입니다.</p>
+<p>이게 바로 단위원입니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 300px; height: 300px;" src="/webgl/lessons/../unit-circle.html"></iframe>
 </div>
@@ -260,10 +260,10 @@ unit circle은 반지름이 1.0인 원입니다.</p>
 <p>3학년 기초 수학을 기억해보면 뭔가에 1을 곱해도 값은 그대로 유지됩니다.
 그래서 123 * 1 = 123 입니다.
 아주 기본적이죠?
-음, unit circle, 반지름이 1.0인 원도 1의 형태인데요.
+음, 단위원, 반지름이 1.0인 원도 1의 형태인데요.
 회전하는 1입니다.
-그래서 무언가를 unit circle에 곱할 수 있으며 이는 1을 곱하는 것과 같습니다.</p>
-<p>unit circle의 어느 지점에서 X와 Y값을 가져와서 <a href="webgl-2d-translation.html">이전 샘플</a>의 geometry에 곱할 겁니다.</p>
+그래서 무언가를 단위원에 곱할 수 있으며 이는 1을 곱하는 것과 같습니다.</p>
+<p>단위원의 어느 지점에서 X와 Y값을 가져와서 <a href="webgl-2d-translation.html">이전 샘플</a>의 geometry에 곱할 겁니다.</p>
 <p>다음은 shader 업데이트입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
@@ -322,7 +322,7 @@ void main() {
 rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 </code></pre><p>사각형이 하나 있고 그걸 회전시키고 싶다고 해봅시다.
 회전을 시작하기 전 우측 상단 모서리는 3.0, 9.0 인데요.
-unit circle의 12시에서 시계 방향 30도 지점을 선택해봅시다.</p>
+단위원의 12시에서 시계 방향 30도 지점을 선택해봅시다.</p>
 <p><img src="../../resources/rotate-30.png" class="webgl_center" /></p>
 <p>원의 위치는 0.50와 0.87에 있는데</p>
 <pre class="webgl_center">
@@ -343,7 +343,7 @@ unit circle의 12시에서 시계 방향 30도 지점을 선택해봅시다.</p>
 <p>점을 오른쪽 시계 방향으로 돌리면 X값은 커지고 Y는 작아지는 걸 볼 수 있습니다.
 계속 돌려서 90도를 넘으면 X는 다시 작아지고 Y는 커지는데요.
 이 패턴은 회전이 가능하게 해줍니다.</p>
-<p>unit circle의 점은 또 다른 이름이 있습니다.
+<p>단위원의 점은 또 다른 이름이 있습니다.
 이를 sine과 cosine이라고 하는데요.
 따라서 주어진 각도에 대해 sine과 cosine을 이렇게 찾을 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function printSineAndCosineForAnAngle(angleInDegrees) {
@@ -536,7 +536,7 @@ UI 화면을 제외하고 나머지는 degree가 아닌 radian을 사용해보�
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
-<li><a href="/webgl/lessons/ko/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 이슈</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
