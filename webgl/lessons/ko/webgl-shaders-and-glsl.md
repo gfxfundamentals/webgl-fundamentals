@@ -57,7 +57,7 @@ vertex shader는 데이터가 필요한데요.
     gl.enableVertexAttribArray(positionLoc);
 
     var numComponents = 3;  // (x, y, z)
-    var type = gl.FLOAT;    // 32bit 부동 소수점 값
+    var type = gl.FLOAT;    // 32비트 부동 소수점 값
     var normalize = false;  // 값 원본 그대로 유지
     var offset = 0;         // 버퍼의 처음부터 시작
     var stride = 0;         // 다음 vertex로 가기 위해 이동하는 byte 수

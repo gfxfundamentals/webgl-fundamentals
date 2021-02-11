@@ -125,5 +125,5 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [WebGL2에서 픽셀 좌표로 texture 접근하기](https://stackoverflow.com/questions/54100955)
 * [어떻게 모든 uniform과 uniformBlock을 얻을 수 있나요](https://stackoverflow.com/questions/60933510/webgl2-0-how-i-can-get-all-uniforms-except-uniformbuffer-item)
-* [어떻게 16bit 데이터의 16bit 히스토그램을 만들 수 있나요](https://stackoverflow.com/questions/58015221/how-to-create-a-histogram-in-webgl2-using-16-bit-data/)
+* [어떻게 16비트 데이터의 16비트 히스토그램을 만들 수 있나요](https://stackoverflow.com/questions/58015221/how-to-create-a-histogram-in-webgl2-using-16-bit-data/)
 * [particle 위치를 처리하는 방법](https://stackoverflow.com/questions/56780278/how-to-keep-coordination-between-particles-and-which-texture-pixel-contains-each/)

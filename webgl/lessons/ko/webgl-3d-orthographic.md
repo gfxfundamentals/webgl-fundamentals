@@ -58,7 +58,7 @@ void main() {
 
   // attribute에 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
 *  var size = 3;          // 반복마다 3개의 구성 요소
-  var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
+  var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점
   var normalize = false; // 데이터 정규화 안 함
   var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
   var offset = 0;        // 버퍼의 처음부터 시작
@@ -475,7 +475,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 
 // colorBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
 var size = 3;                 // 반복마다 3개의 구성 요소
-var type = gl.UNSIGNED_BYTE;  // 데이터는 부호없는 8bit 값
+var type = gl.UNSIGNED_BYTE;  // 데이터는 부호없는 8비트 값
 var normalize = true;         // 데이터 정규화 (0-255에서 0-1로 전환)
 var stride = 0;               // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;               // 버퍼의 처음부터 시작
@@ -633,7 +633,7 @@ attribute vec4 a_color;
 <pre class="prettyprint showlinemods">
 // attribute에 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
 var size = 3;          // 반복마다 3개의 구성 요소
-var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
+var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점
 var normalize = false; // 데이터 정규화 안 함
 var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;        // 버퍼의 처음부터 시작
@@ -643,7 +643,7 @@ gl.vertexAttribPointer(
 ...
 // attribute에 colorBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
 var size = 3;          // 반복마다 3개의 구성 요소
-var type = gl.UNSIGNED_BYTE;   // 데이터는 8bit unsigned byte
+var type = gl.UNSIGNED_BYTE;   // 데이터는 8비트 부호없는 바이트
 var normalize = true;  // 데이터 정규화 (0-255에서 0-1로 전환)
 var stride = 0;        // 0 = 다음 색상을 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;        // 버퍼의 처음부터 시작

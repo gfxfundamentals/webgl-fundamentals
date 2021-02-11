@@ -166,8 +166,8 @@ WebGL2는 몇 가지 더 추가합니다.
 
 ## Depth Buffer 해상도
 
-정말 오래된 몇몇 기기들은 16bit depth buffer를 사용합니다.
-그렇지 않은, 99%의 기기들은 24bit depth buffer를 사용하므로 걱정하지 않아도 됩니다.
+정말 오래된 몇몇 기기들은 16비트 depth buffer를 사용합니다.
+그렇지 않은, 99%의 기기들은 24비트 depth buffer를 사용하므로 걱정하지 않아도 됩니다.
 
 ## readPixels format/type 조합
 
@@ -205,7 +205,7 @@ WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 color at
 
 WebGL1의 경우 다음의 3개의 extension이 거의 보편적으로 지원되는 것처럼 보이므로 사용자에게 이들이 누락되면 페이지가 작동하지 않을 것이라 경고하고 싶을 수 있지만 사용자가 페이지를 제대로 실행하지 못 할만큼 아주 오래된 기기를 가지고 있을 수 있습니다.
 
-`ANGLE_instance_arrays`([instanced drawing](webgl-instanced-drawing.html)에 사용하는 기능), `OES_vertex_array_object`(단일 함수 호출로 모든 상태를 바꿀 수 있도록 모든 [attribute](webgl-attributes.html) 상태를 객체에 저장하는 기능), `OES_element_index_uint`([`drawElements`](webgl-indexed-vertices.html)로 `UNSIGNED_INT` 32bit 인덱스를 사용하는 기능)
+`ANGLE_instance_arrays`([instanced drawing](webgl-instanced-drawing.html)에 사용하는 기능), `OES_vertex_array_object`(단일 함수 호출로 모든 상태를 바꿀 수 있도록 모든 [attribute](webgl-attributes.html) 상태를 객체에 저장하는 기능), `OES_element_index_uint`([`drawElements`](webgl-indexed-vertices.html)로 `UNSIGNED_INT` 32비트 인덱스를 사용하는 기능)
 
 ## attribute location
 
@@ -268,7 +268,7 @@ Scissor는 항상 pixel을 클리핑하므로 scissor 테스트를 켜고, 그�
 
 ## 사파리 버그
 
-사파리는 다른 현대 브라우저들보다 많은 WebGL 버그를 가지고 있으며 애플은 이들을 고치는 데 전혀 관심이 없는 걸로 보입니다.
+사파리는 다른 최신 브라우저들보다 많은 WebGL 버그를 가지고 있으며 애플은 이들을 고치는 데 전혀 관심이 없는 걸로 보입니다.
 
 몇 년간 고쳐지지 않은 버그의 일부 목록
 

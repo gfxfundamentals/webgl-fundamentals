@@ -52,7 +52,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
 
     // attribute에 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
     var size = 2;          // 반복마다 2개의 구성 요소
-    var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
+    var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
     var offset = 0;        // 버퍼의 처음부터 시작

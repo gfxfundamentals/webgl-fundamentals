@@ -33,8 +33,8 @@ shader가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.
    일반적으로 버퍼는 위치, 법선, texture 좌표, vertex 색상 등을 포함하지만 당신이 원하는 것을 자유롭게 넣어도 됩니다.
 
    Attribute는 버퍼에서 데이터를 가져오고 vertex shader에 제공하는 방법을 지정하는데 사용됩니다.
-   예를 들어 3개의 32bit 부동 소수점으로 각각의 위치를 버퍼에 넣을 수 있는데요.
-   특정한 attribute에게 어느 버퍼에서 위치를 가져올지, 어떤 유형의 데이터를 가져와야 하는지 (3개의 32bit 부동 소수점), 버퍼의 어느 위치에서 offset이 시작되는지, 그리고 한 위치에서 다음으로 갈 때 몇 바이트를 이동시킬 것인지 알려줘야 합니다.
+   예를 들어 3개의 32비트 부동 소수점으로 각각의 위치를 버퍼에 넣을 수 있는데요.
+   특정한 attribute에게 어느 버퍼에서 위치를 가져올지, 어떤 유형의 데이터를 가져와야 하는지 (3개의 32비트 부동 소수점), 버퍼의 어느 위치에서 offset이 시작되는지, 그리고 한 위치에서 다음으로 갈 때 몇 바이트를 이동시킬 것인지 알려줘야 합니다.
    
    버퍼는 무작위로 접근할 수 없습니다.
    대신에 vertex shader가 지정한 횟수만큼 실행되는데요.
@@ -256,7 +256,7 @@ bind point는 WebGL 안에 있는 내부 전역 변수라고 생각하시면 됩
 
 여기까지 많은 것들이 있었는데요.
 첫 번째로 JavaScript 배열인 `positions`가 있습니다.
-반면에 WebGL은 강력한 type을 가지는 데이터가 필요하므로 `new Float32Array(positions)` 부분은 새로운 32bit 부동 소수점 배열을 생성하고 `positions`에서 값을 복사합니다.
+반면에 WebGL은 강력한 type을 가지는 데이터가 필요하므로 `new Float32Array(positions)` 부분은 새로운 32비트 부동 소수점 배열을 생성하고 `positions`에서 값을 복사합니다.
 그런 다음 `gl.bufferData`는 데이터를 GPU의 `positionBuffer`로 복사합니다.
 위에서 `ARRAY_BUFFER` bind point로 할당했기 때문에 position buffer를 사용히고 있습니다.
 
@@ -314,7 +314,7 @@ WebGL에게 실행할 shader program을 알려줍니다.
 
     // positionBuffer(ARRAY_BUFFER)의 데이터 꺼내오는 방법을 attribute에 지시
     var size = 2;          // 반복마다 2개의 구성 요소
-    var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
+    var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
     var offset = 0;        // 버퍼의 처음부터 시작
@@ -367,7 +367,7 @@ vertex shader는 단순히 positionBuffer 값을 `gl_Position`에 복사하기 �
 이제 WebGL은 삼각형을 렌더링할 겁니다.
 그리려는 모든 픽셀에 대해 WebGL은 fragment shader를 호출하는데요.
 fragment shader는 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
-캔버스는 채널당 8bit이기 때문에 이는 WebGL이 캔버스에 `[255, 0, 127, 255]` 값을 사용한다는 걸 의미합니다.
+캔버스는 채널당 8비트이기 때문에 이는 WebGL이 캔버스에 `[255, 0, 127, 255]` 값을 사용한다는 걸 의미합니다.
 
 여기 라이브 버전이 있습니다.
 

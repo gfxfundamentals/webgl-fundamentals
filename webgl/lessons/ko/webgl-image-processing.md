@@ -197,7 +197,7 @@ convolution kernel은 행렬의 각 항목이 렌더링하는 픽셀 주변에 �
         texture2D(u_image, v_texCoord + onePixel * vec2( 1,  1)) * u_kernel[8] ;
 
       // 합계를 가중치로 나누지만 rgb만을 사용
-      // alpha는 1.0으로 설정
+      // 알파는 1.0으로 설정
       gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1.0);
     }
     </script>
