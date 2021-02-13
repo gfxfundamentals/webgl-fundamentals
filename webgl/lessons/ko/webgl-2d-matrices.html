@@ -594,7 +594,7 @@ matrix = m3.multiply(matrix, moveOriginMatrix);
 <p>이 기술을 사용하면 어떤 지점에서든 rotation이나 scale을 할 수 있는데요.
 이제 Photoshop이나 Flash에서 어떻게 회전점을 이동시키는지 알게 되었습니다.</p>
 <p>이제 더 끝내주는 걸 해봅시다.
-첫 번째 글인 <a href="webgl-fundamentals.html">WebGL 기초</a>로 돌아가 보면 shader에 픽셀을 clip space로 변환하는 코드가 있다는 걸 기억하실 겁니다.</p>
+첫 번째 글인 <a href="webgl-fundamentals.html">WebGL 기초</a>로 돌아가 보면 shader에 픽셀을 클립 공간으로 변환하는 코드가 있다는 걸 기억하실 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">...
 // 사각형을 픽셀에서 0.0에서 1.0사이로 변환
 vec2 zeroToOne = position / u_resolution;
@@ -602,7 +602,7 @@ vec2 zeroToOne = position / u_resolution;
 // 0-&gt;1에서 0-&gt;2로 변환
 vec2 zeroToTwo = zeroToOne * 2.0;
 
-// 0-&gt;2에서 -1-&gt;+1로 변환 (clip space)
+// 0-&gt;2에서 -1-&gt;+1로 변환 (클립 공간)
 vec2 clipSpace = zeroToTwo - 1.0;
 
 gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
@@ -617,7 +617,7 @@ gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 세 번째는 -1.0,-1.0으로 translation하고,
 네 번째는 Y를 -1로 scale한 뒤 모든 값을 함께 곱하지만,
 그 대신 수식이 간단하기 때문에,
-직접 주어진 해상도에 대한 &#39;projection&#39; 행렬을 생성하는 함수를 바로 만들어 봅시다.</p>
+직접 주어진 해상도에 대한 &#39;투영&#39; 행렬을 생성하는 함수를 바로 만들어 봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">var m3 = {
   projection: function(width, height) {
     // 참고: 이 행렬은 Y축을 뒤집어서 0이 상단에 있도록 합니다.
@@ -643,7 +643,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre>
-<p>그리고 JavaScript에서는 projection 행렬로 곱해야 하는데</p>
+<p>그리고 자바스크립트에서는 투영 행렬로 곱해야 하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 장면 그리기
 function drawScene() {
   ...
@@ -723,34 +723,34 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedScaledPosition = rotationMat * scaledPosition
 </code></pre><p>다음으로 translatedRotatedScaledPosition를 얻기 위해 rotatedScaledPositon에 translation 행렬을 곱한 뒤</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
-</code></pre><p>마지막으로 clip space 위치를 얻기 위해 projection 행렬에 곱하는데</p>
+</code></pre><p>마지막으로 클립 공간의 위치를 얻기 위해 투영 행렬에 곱하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 </code></pre><p>두 번째 방법은 행렬을 왼쪽에서 오른쪽으로 읽는 건데요.
 이 경우 각각의 행렬은 캔버스에 표시되는 <em>space</em>를 변경합니다.
-캔버스는 각 방향에서 clip space(-1 ~ +1)를 나타내는 것으로 시작하는데요.
+캔버스는 각 방향에서 클립 공간(-1 ~ +1)을 나타내는 것으로 시작하는데요.
 왼쪽에서 오른쪽으로 적용된 각 행렬은 캔버스에 표시되는 space를 변경합니다.</p>
 <p>1단계: 행렬 없음 (혹은 단위 행렬)</p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=0"></iframe>
-  <div class="webgl_center">clip space</div>
+  <div class="webgl_center">클립 공간</div>
 </div>
 
 </p>
-<p>흰색 영역은 캔버스입니다. 파랑색은 캔버스 바깥입니다. 우리는 clip space에 있습니다.
-전달된 위치는 clip space에 있어야 합니다.</p>
+<p>흰색 영역은 캔버스입니다. 파랑색은 캔버스 바깥입니다. 우리는 클립 공간에 있습니다.
+전달된 위치는 클립 공간에 있어야 합니다.</p>
 </blockquote>
 <p>2단계:  <code class="notranslate" translate="no">matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);</code></p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=1"></iframe>
-  <div class="webgl_center">clip space에서 pixel space로</div>
+  <div class="webgl_center">클립 공간에서 픽셀 공간으로</div>
 </div>
 
 </p>
-<p>이제 우리는 pixel space에 있습니다. X = 0에서 400, Y = 0에서 300, 왼쪽 상단은 0,0 입니다.
-이 행렬을 사용하여 전달된 위치는 pixel space에 있어야 합니다.
-space가 양수 Y = 상단에서 양수 Y = 하단으로 뒤집힐 때의 순간을 보실 수 있습니다.</p>
+<p>이제 우리는 픽셀 공간에 있습니다. X = 0에서 400, Y = 0에서 300, 왼쪽 상단은 0,0 입니다.
+이 행렬을 사용하여 전달된 위치는 픽셀 공간에 있어야 합니다.
+공간이 양수 Y = 상단에서 양수 Y = 하단으로 뒤집힐 때의 순간을 보실 수 있습니다.</p>
 </blockquote>
 <p>3단계:  <code class="notranslate" translate="no">matrix = m3.translate(matrix, tx, ty);</code></p>
 <blockquote>
@@ -798,7 +798,7 @@ space가 양수 Y = 상단에서 양수 Y = 하단으로 뒤집힐 때의 순간
 왜일까요?
 </p>
 <p>
-Projection 행렬은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
+투영 행렬은 클립 공간(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
 하지만, 브라우저에는, 우리가 다루는 두 가지 유형의 픽셀이 있는데요.
 하나는 캔버스 자체의 픽셀 수입니다.
 예를 들어 이렇게 정의된 캔버스가 있습니다.
@@ -858,7 +858,7 @@ CSS는 캔버스가 표시되는 크기를 정의합니다.
 <p>
 캔버스의 크기를 조절할 수 있는 대부분의 앱은 <code class="notranslate" translate="no">canvas.width</code>와 <code class="notranslate" translate="no">canvas.height</code>를 <code class="notranslate" translate="no">canvas.clientWidth</code>와 <code class="notranslate" translate="no">canvas.clientHeight</code>에 맞추려고 하는데 그 이유는 브라우저에 표시되는 각 픽셀에 대해 캔버스에 하나의 픽셀이 있기를 원하기 때문입니다.
 하지만, 위에서 보았듯이, 그게 유일한 선택지는 아닙니다.
-말인즉슨, 거의 모든 경우, <code class="notranslate" translate="no">canvas.clientHeight</code>와 <code class="notranslate" translate="no">canvas.clientWidth</code>를 사용해서 projection 행렬의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
+말인즉슨, 거의 모든 경우, <code class="notranslate" translate="no">canvas.clientHeight</code>와 <code class="notranslate" translate="no">canvas.clientWidth</code>를 사용해서 투영 행렬의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
 </p>
 </div>
 
@@ -898,8 +898,8 @@ CSS는 캔버스가 표시되는 크기를 정의합니다.
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">Orthographic 3D</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">직교 3D</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
         </ul>
   <li>조명</li>
@@ -994,7 +994,7 @@ CSS는 캔버스가 표시되는 크기를 정의합니다.
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL and Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
-<li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 이슈</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>

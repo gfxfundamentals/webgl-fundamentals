@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-orthographic_ko.jpg">
 
-<meta property="og:title" content="WebGL - Orthographic 3D">
+<meta property="og:title" content="WebGL - 직교 3D">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-orthographic_ko.jpg">
 <meta property="og:description" content="직교 투영으로 시작하는 WebGL에서 3D를 수행하는 방법">
@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL - Orthographic 3D">
+<meta name="twitter:title" content="WebGL - 직교 3D">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-orthographic.html">
 <meta name="twitter:description" content="직교 투영으로 시작하는 WebGL에서 3D를 수행하는 방법">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-orthographic_ko.jpg">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-orthographic.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-orthographic.html",
       "inLanguage":"ko",
-      "name":"WebGL - Orthographic 3D",
+      "name":"WebGL - 직교 3D",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL - Orthographic 3D</title>
+<title>WebGL - 직교 3D</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,7 +236,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL - Orthographic 3D</h1>
+    <h1>WebGL - 직교 3D</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
@@ -244,7 +244,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고 이전에는 <a href="webgl-2d-matrices.html">2D 행렬</a>에 관한 것이었습니다.
 혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
 <p>마지막 포스트에서 우리는 2D 행렬이 어떻게 동작하는지 살펴봤습니다.
-translation, rotation, scale, 그리고 pixel에서 clip space로 투영하는 것까지 하나의 행렬과 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
+translation, rotation, scale, 그리고 픽셀에서 클립 공간으로 투영하는 것까지 하나의 행렬과 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
 3D를 수행하기 위해 거기에서 한 걸음만 더 나아가면 됩니다.</p>
 <p>이전 2D 예제에서는 3x3 행렬을 곱한 2D point(x, y)를 가졌었는데요.
 3D를 수행하기 위해서는 3D point(x, y, z)와 4x4 행렬이 필요합니다.</p>
@@ -506,7 +506,7 @@ function setGeometry(gl) {
     ];
   },
 </code></pre>
-<p>또한 projection 함수를 업데이트해야 합니다.
+<p>또한 투영 함수를 업데이트해야 합니다.
 다음은 기존 코드로</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  projection: function (width, height) {
     // 참고: 이 행렬은 Y축을 뒤집으므로 0이 상단입니다.
@@ -517,7 +517,7 @@ function setGeometry(gl) {
     ];
   },
 }
-</code></pre><p>pixel에서 clip space로 변환되었습니다.
+</code></pre><p>pixel에서 클립 공간으로 변환되었습니다.
 3D로 확장하기 위한 첫 시도를 해보면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  projection: function(width, height, depth) {
     // 참고: 이 행렬은 Y축을 뒤집으므로 0이 상단입니다.
@@ -528,7 +528,7 @@ function setGeometry(gl) {
       -1, 1, 0, 1,
     ];
   },
-</code></pre><p>X와 Y를 pixel에서 clip space로 변환해야 했던 것처럼, Z도 동일한 작업을 수행해야 합니다.
+</code></pre><p>X와 Y를 pixel에서 클립 공간으로 변환해야 했던 것처럼, Z도 동일한 작업을 수행해야 합니다.
 이 경우에는 Z축 픽셀 단위도 만들게 되는데요.
 <code class="notranslate" translate="no">depth</code>에 <code class="notranslate" translate="no">width</code>와 유사한 값을 전달하므로, 공간은 0에서 <code class="notranslate" translate="no">width</code>의 픽셀 너비와, 0에서 <code class="notranslate" translate="no">height</code>의 픽셀 높이가 되지만, <code class="notranslate" translate="no">depth</code>는 <code class="notranslate" translate="no">-depth / 2</code>에서 <code class="notranslate" translate="no">+depth / 2</code>가 됩니다.</p>
 <p>마지막으로 행렬을 계산하는 코드를 업데이트해야 합니다.</p>
@@ -674,7 +674,7 @@ gl.vertexAttribPointer(
 </code></pre><p>이걸 <code class="notranslate" translate="no">drawScene</code> 함수에 넣어줍시다.
 해당 기능을 켜면, WebGL은 기본적으로 삼각형 뒷면을 &quot;culling&quot;으로 설정하는데요.
 이 경우 &quot;culling&quot;은 &quot;그리지 않음&quot;을 의미하는 단어입니다.</p>
-<p>참고로 WebGL에서 삼각형이 시계 혹은 반시계 방향으로 진행되는지는 clip space에 있는 해당 삼각형의 vertex에 따라 달라집니다.
+<p>참고로 WebGL에서 삼각형이 시계 혹은 반시계 방향으로 진행되는지는 클립 공간에 있는 해당 삼각형의 vertex에 따라 달라집니다.
 즉, WebGL은 vertex shader에서 vertex에 수식을 적용한 후에 삼각형이 앞면인지 뒷면인지 파악합니다.
 이건 X에서 -1로 scale되거나 180도 회전한 시계 방향 삼각형이 반시계 방향 삼각형이 된다는 걸 의미하는데요.
 CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷면) 삼각형을 모두 볼 수 있었습니다.
@@ -713,7 +713,7 @@ CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷�
 <p>때때로 Z-Buffer라고 불리는 depth buffer는 <em>depth</em> pixel의 사각형인데, 각 color pixel에 대한 depth pixel은 이미지를 만드는데 사용됩니다.
 WebGL은 각 color pixel을 그리기 때문에 depth pixel도 그릴 수 있는데요.
 이건 Z축에 대해 vertex shader에서 반환한 값을 기반으로 합니다.
-X와 Y를 clip space로 변환해야 했던 것처럼, Z도 clip space(-1에서 +1)에 있습니다.
+X와 Y를 클립 공간으로 변환해야 했던 것처럼, Z도 클립 공간(-1에서 +1)에 있습니다.
 해당 값은 depth space 값(0에서 +1)으로 변환됩니다.
 WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하는데요.
 그릴 픽셀의 depth 값이 대응하는 depth pixel의 값보다 클 경우 WebGL은 새로운 color pixel을 그리지 않습니다.
@@ -739,7 +739,7 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
 </p>
 <p>3D를 얻게 됩니다!</p>
 <p>한 가지 사소한 게 남았는데요.
-대부분의 3D 수학 라이브러리에는 clip space에서 pixel space로의 변환을 수행하는 <code class="notranslate" translate="no">projection</code> 함수가 없습니다.
+대부분의 3D 수학 라이브러리에는 클립 공간에서 픽셀 공간으로 변환을 수행하는 <code class="notranslate" translate="no">투영</code> 함수가 없습니다.
 그보다는 보통 <code class="notranslate" translate="no">ortho</code>나 <code class="notranslate" translate="no">orthographic</code>이라 불리는 함수가 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   orthographic: function(left, right, bottom, top, near, far) {
@@ -754,8 +754,8 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
       1,
     ];
   }
-</code></pre><p>width, height, depth 등의 매개변수를 가지는 위의 단순한 <code class="notranslate" translate="no">projection</code> 함수와 달리, 더 일반적인 orthographic projection 함수는 더 많은 유연성을 제공하는 left, right, bottom, top, near, far 등을 전달할 수 있습니다.
-원래 쓰던 projection 함수와 동일하게 쓰기 위해서는 이렇게 호출할 수 있으며</p>
+</code></pre><p>width, height, depth 등의 매개변수를 가지는 위의 단순한 <code class="notranslate" translate="no">투영</code> 함수와 달리, 더 일반적인 직교 투영 함수는 더 많은 유연성을 제공하는 left, right, bottom, top, near, far 등을 전달할 수 있습니다.
+원래 쓰던 투영 함수와 동일하게 쓰기 위해서는 이렇게 호출할 수 있으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var left = 0;
 var right = gl.canvas.clientWidth;
 var bottom = gl.canvas.clientHeight;
@@ -763,7 +763,7 @@ var top = 0;
 var near = 400;
 var far = -400;
 var matrix = m4.orthographic(left, right, bottom, top, near, far);
-</code></pre><p>다음 포스트에서는 <a href="webgl-3d-perspective.html">perspective를 가지도록 만드는 방법</a>에 대해 살펴보겠습니다.</p>
+</code></pre><p>다음 포스트에서는 <a href="webgl-3d-perspective.html">원근을 가지도록 만드는 방법</a>에 대해 살펴보겠습니다.</p>
 <div class="webgl_bottombar">
 <h3>왜 attribute가 vec4인데 gl.vertexAttribPointer의 size는 3인가요?</h3>
 <p>
@@ -840,8 +840,8 @@ x와 y는 전달했고 z는 1이 필요했지만 z의 기본 값은 0이므로 �
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">Orthographic 3D</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">직교 3D</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
         </ul>
   <li>조명</li>
@@ -936,7 +936,7 @@ x와 y는 전달했고 z는 1이 필요했지만 z의 기본 값은 0이므로 �
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL and Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
-<li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 이슈</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
@@ -974,8 +974,8 @@ x와 y는 전달했고 z는 1이 필요했지만 z의 기본 값은 0이므로 �
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL - Orthographic 3D';
-            var disqus_title = 'WebGL - Orthographic 3D';
+            var disqus_identifier = 'WebGL - 직교 3D';
+            var disqus_title = 'WebGL - 직교 3D';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

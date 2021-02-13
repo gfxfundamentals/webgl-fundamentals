@@ -249,9 +249,9 @@ CSS는 캔버스가 표시되는 크기를 결정합니다.</p>
 <p>두 가지 방법으로 캔버스의 drawingbuffer를 설정할 수 있는데요.
 하나는 HTML을 이용해서</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
-</code></pre><p>다른 방법은 JavaScript를 이용하는</p>
+</code></pre><p>다른 방법은 자바스크립트를 이용하는</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
-</code></pre><p>JavaScript</p>
+</code></pre><p>자바스크립트</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var canvas = document.querySelector(&quot;#c&quot;);
 canvas.width = 400;
 canvas.height = 300;
@@ -299,7 +299,7 @@ canvas.height = 300;
   &lt;/body&gt;
 &lt;/html&gt;
 </code></pre><p>이제 브라우저가 캔버스를 늘린 크기와 일치하는 drawingbuffer를 만들어야 하는데요.
-HTML의 모든 요소가 가진 <code class="notranslate" translate="no">clientWidth</code>와 <code class="notranslate" translate="no">clientHeight</code>를 사용하면 해당 요소가 표시되는 크기를 JavaScript로 확인할 수 있습니다.</p>
+HTML의 모든 요소가 가진 <code class="notranslate" translate="no">clientWidth</code>와 <code class="notranslate" translate="no">clientHeight</code>를 사용하면 해당 요소가 표시되는 크기를 자바스크립트로 확인할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function resize(canvas) {
   // 브라우저가 캔버스를 표시하고 있는 크기 탐색
   var displayWidth  = canvas.clientWidth;
@@ -330,7 +330,7 @@ HTML의 모든 요소가 가진 <code class="notranslate" translate="no">clientW
 <p>뭐가 잘못됐죠?
 왜 선이 전체 영역을 덮지 않을까요?</p>
 <p>그 이유는 캔버스를 크기 조정할 때 viewport를 설정하기 위해 <code class="notranslate" translate="no">gl.viewport</code>를 호출해야 하기 때문입니다.
-<code class="notranslate" translate="no">gl.viewport</code>는 WebGL에게 clip space(-1 ~ +1)에서 픽셀로 변환하는 방법과 캔버스 내에서 그걸 작동시키는 위치를 알려줍니다.
+<code class="notranslate" translate="no">gl.viewport</code>는 WebGL에게 클립 공간(-1 ~ +1)에서 픽셀로 변환하는 방법과 캔버스 내에서 그걸 작동시키는 위치를 알려줍니다.
 WebGL context를 처음 만들 때 WebGL은 캔버스와 같은 크기로 viewport를 설정하지만 이후에는 사용자가 설정합니다.
 만약 캔버스 크기를 변경한다면 WebGL에게 새로운 viewport 설정을 알려줘야 합니다.</p>
 <p>이걸 처리하기 위해 코드를 바꿔봅시다.
@@ -444,8 +444,8 @@ Samsung Galaxy S8에서 이 값은 <code class="notranslate" translate="no">5</c
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">Orthographic 3D</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">직교 3D</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
         </ul>
   <li>조명</li>
@@ -540,7 +540,7 @@ Samsung Galaxy S8에서 이 값은 <code class="notranslate" translate="no">5</c
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL and Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
-<li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 이슈</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
