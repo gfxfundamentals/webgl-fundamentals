@@ -150,7 +150,7 @@ struct Vec4 {
 };
 ```
 
-and we could create a matrix4x4 from 4 of them
+and we could create a matrix 4x4 from 4 of them
 
 ```c++
 // C++
