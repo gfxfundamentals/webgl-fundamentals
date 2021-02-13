@@ -22,7 +22,7 @@ uniform sampler2D someTexture;
 
 그게 texture unit이 관여하는 부분입니다.
 Texture unit은 texture에 대한 참조의 **전역 배열**입니다.
-WebGL이 JavaScript로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데
+WebGL이 자바스크립트로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데
 
 ```js
 const gl = {
@@ -64,7 +64,7 @@ gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 ```
 
-`activeTexture` 및 `bindTexture` WebGL 함수가 JavaScript로 구현된다면 
+`activeTexture` 및 `bindTexture` WebGL 함수가 자바스크립트로 구현된다면 
 
 ```js
 // 의사 코드!!!

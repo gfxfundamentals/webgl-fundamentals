@@ -1,23 +1,23 @@
-Title: WebGL 3D Perspective
-Description: WebGL에서 3D로 perspective를 표시하는 방법
-TOC: 3D Perspective
+Title: WebGL 3D 원근
+Description: WebGL에서 3D로 원근을 표시하는 방법
+TOC: 3D 원근
 
 
 이 포스트는 WebGL 관련 시리즈의 연장입니다.
 첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [3D 기초](webgl-3d-orthographic.html)에 관한 것이었습니다.
 혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
-지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 perspective도 가지지 않았는데요.
-"orthographic"이라 불리는 방법을 사용했지만 이건 사람들이 "3D"를 말할 때 일반적으로 원하는 게 아닙니다.
+지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 원근도 가지지 않았는데요.
+"직교"라 불리는 방법을 사용했지만 이건 사람들이 "3D"를 말할 때 일반적으로 원하는 게 아닙니다.
 
-대신에 perspective를 추가해야 합니다.
-perspective란 뭘까요?
+대신에 원근을 추가해야 합니다.
+원근이란 뭘까요?
 기본적으로 더 멀리 있는 것들이 더 작게 보이는 기능입니다.
 
 <img class="webgl_center noinvertdark" width="500" src="resources/perspective-example.svg" />
 
 위 예시를 보면 더 멀리 있는 것들이 더 작게 그려지는 걸 볼 수 있습니다.
-현재 샘플을 감안할 때 더 멀리 있는 것들이 더 작게 보이도록 만드는 쉬운 방법은 clip space의 X와 Y를 Z로 나누는 겁니다.
+현재 샘플을 감안할 때 더 멀리 있는 것들이 더 작게 보이도록 만드는 쉬운 방법은 클립 공간의 X와 Y를 Z로 나누는 겁니다.
 
 (10, 15)에서 (20,15)까지 길이가 10인 선이 있다고 생각해보세요.
 현재 샘플에서 이건 10픽셀의 길이로 그려질 겁니다.
@@ -46,7 +46,7 @@ abs(3.333 - 6.666) = 3.333
 </pre>
 
 Z가 증가할수록, 멀어질수록, 더 작게 그려지는 걸 볼 수 있습니다.
-clip space에서 나누면 Z가 더 작은 숫자(-1에서 +1)이기 때문에 더 나은 결과를 얻을 수 있는데요.
+클립 공간에서 나누면 Z가 더 작은 숫자(-1에서 +1)이기 때문에 더 나은 결과를 얻을 수 있는데요.
 나누기 전에 Z를 fudgeFactor와 곱하면 주어진 거리에 따라 얼마나 작게 할지 조정할 수 있습니다.
 
 한 번 해봅시다.
@@ -70,7 +70,7 @@ void main() {
 </script>
 ```
 
-참고로, Z가 -1에서 +1인 clip space에 있기 때문에 0에서 +2 * fudgeFactor인 `zToDivideBy`를 얻기 위해 1을 더했습니다.
+참고로, Z가 -1에서 +1인 클립 공간에 있기 때문에 0에서 +2 * fudgeFactor인 `zToDivideBy`를 얻기 위해 1을 더했습니다.
 
 또한 fudgeFactor를 설정할 수 있도록 코드를 업데이트해야 합니다.
 
@@ -100,7 +100,7 @@ void main() {
 알아보기 힘들다면 Z로 나누는 코드를 추가하기 전 어떤 모습이었는지 보기 위해 "fudgeFactor" 슬라이더를 1.0에서 0.0으로 드래그해보세요.
 
 <img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
-<div class="webgl_center">orthographic vs perspective</div>
+<div class="webgl_center">직교 vs 원근</div>
 
 WebGL은 vertex shader의 `gl_Position`에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.
 
@@ -273,7 +273,7 @@ function makeZToWMatrix(fudgeFactor) {
 
 {{{example url="../webgl-3d-perspective-w-matrix.html" }}}
 
-기본적으로 모든 내용들은 Z로 나누는 게 perspective를 준다는 것과 WebGL이 편리하게 Z로 나누는 걸 보여주기 위한 겁니다.
+기본적으로 모든 내용들은 Z로 나누는 게 원근을 준다는 것과 WebGL이 편리하게 Z로 나누는 걸 보여주기 위한 겁니다.
 
 하지만 여전히 몇 가지 문제가 있습니다.
 예를 들어 Z를 -100 정도로 설정하면 아래 애니메이션같은 걸 보게 될텐데
@@ -285,7 +285,7 @@ F가 일찍 사라지는 이유는 뭘까요?
 WebGL은 X와 Y 혹은 +1에서 -1까지 자르는 것처럼 Z도 제한하는데요.
 여기서 우리가 보고 있는 건 Z < -1 입니다.
 
-이를 해결하기 위해 수학에 대한 자세한 설명을 할 수도 있지만 [2D projection을 했던 것과 같은 방법](https://stackoverflow.com/a/28301213/128511)으로 도출할 수도 있습니다.
+이를 해결하기 위해 수학에 대한 자세한 설명을 할 수도 있지만 [2D 투영을 했던 것과 같은 방법](https://stackoverflow.com/a/28301213/128511)으로 도출할 수도 있습니다.
 Z를 가져오고 약간을 더하고 어느정도 scale해야 하며, 원하는 범위를 -1에서 +1사이로 다시 매핑할 수 있습니다.
 
 멋진 점은 이 모든 단계를 하나의 행렬로 수행할 수 있다는 겁니다.
@@ -311,7 +311,7 @@ var m4 = {
 ```
 
 이 행렬이 모든 변환을 수행할 겁니다.
-단위가 clip space 안에 있도록 조정되며, 각도별로 시야각을 선택할 수 있고 Z-clipping space를 선택할 수 있게 되는데요.
+단위가 클립 공간 안에 있도록 조정되며, 각도별로 시야각을 선택할 수 있고 Z-clipping space를 선택할 수 있게 되는데요.
 원점(0, 0, 0)에 *눈*이나 *카메라*가 있다고 가정하고 `zNear`와 `fieldOfView`가 주어지면 `zNear`의 항목이 `Z = -1`이 되도록 필요한 값을 계산하며 중심에서 위나 아래로 `fieldOfView`의 절반인 `zNear`의 항목은 각각 `Y = -1`과 `Y = 1`로 끝납니다.
 전달된 `aspect`를 곱하여 X에 사용할 값을 계산합니다.
 일반적으로 디스플레이 영역의 `width / height`로 설정합니다.
@@ -322,7 +322,7 @@ var m4 = {
 {{{example url="../frustum-diagram.html" width="400" height="600" }}}
 
 내부에서 큐브가 회전하고 있는 4면 원뿔 모양을 "절두체"라고 합니다.
-행렬은 절두체 안에 있는 공간을 가져와서 clip space로 변환하는데요.
+행렬은 절두체 안에 있는 공간을 가져와서 클립 공간으로 변환하는데요.
 `zNear`는 물체의 앞쪽이 잘리는 곳을 정의하고 `zFar`는 물체의 뒤쪽이 잘리는 곳을 정의합니다.
 `zNear`를 23으로 설정하면 회전하는 큐브의 앞면이 잘리는 걸 볼 수 있죠.
 `zFar`를 24로 설정하면 큐브의 뒷면이 잘리는 걸 볼 수 있습니다.
@@ -367,7 +367,7 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 </p>
 
 <p>
-그 이유는 마지막 샘플까지 <code>m4.projection</code> 함수가 pixel에서 clip space로 projection을 만들었기 때문입니다.
+그 이유는 마지막 샘플까지 <code>m4.projection</code> 함수가 픽셀에서 클립 공간로 투영을 만들었기 때문입니다.
 이는 우리가 표시하고 있던 영역이 400x300 픽셀을 나타냈다는 걸 의미하는데요.
 3D에서 '픽셀'을 사용하는 건 정말 의미가 없습니다.
 </p>
@@ -380,12 +380,12 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 
 <p>
 F는 원점에 왼쪽 상단 앞 모서리가 있게 됩니다.
-projection은 -Z를 향하지만 F는 +Z로 만들어졌죠.
-projection은 +Y가 위를 향하지만 F는 +Z가 아래를 향합니다.
+투영은 -Z를 향하지만 F는 +Z로 만들어졌죠.
+투영은 +Y가 위를 향하지만 F는 +Z가 아래를 향합니다.
 </p>
 
 <p>
-새로운 projection은 파란 절두체 안에 있는 것만 볼 수 있습니다.
+새로운 투영은 파란 절두체 안에 있는 것만 볼 수 있습니다.
 -zNear = 1 그리고 60도의 시야각일 때 Z = -1에서 절두체는 절두체의 높이는 1.154이고 너비는 1.154 * aspect 입니다.
 Z = -2000 (-zFar)에서 높이는 2309 입니다.
 F가 크기가 150이고 <code>-zNear</code>에 무언가가 있을 때 view는 1.154만 볼 수 있기 때문에 모든 걸 보려면 원점에서 꽤 멀리 이동해야 합니다.

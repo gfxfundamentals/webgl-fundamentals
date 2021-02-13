@@ -46,7 +46,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 ---
 
 * [gl.finish()를 사용하여 webgl에서 렌더링 시간을 측정하는 게 가능한가요?](https://stackoverflow.com/questions/20798294)
-* [javascript에서 효율적인 particle 시스템은? (WebGL)](https://stackoverflow.com/questions/15215968)
+* [자바스크립트에서 효율적인 particle 시스템은? (WebGL)](https://stackoverflow.com/questions/15215968)
 * [JS에서 GLSL로 struct 배열의 값 설정하기](https://stackoverflow.com/questions/8202173)
 * [drawing buffer를 fade하는 방법](https://stackoverflow.com/questions/38402546)
 * [pseudo-3D 효과를 만들기 위해 depth map으로 2D 이미지 그리기](https://stackoverflow.com/questions/44372487)

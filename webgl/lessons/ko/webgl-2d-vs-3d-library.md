@@ -171,9 +171,9 @@ WebGL은 depth sorting을 훨씬 더 쉽게 만드는 depth buffer를 가지고 
 수학 라이브러리인거죠.
 수학이 1D, 2D, 3D인 것에 상관없이 수식에 사용하는데요.
 하지만 궁극적으로, WebGL은 rasterization만 합니다.
-그리려는 걸 나타내는 clip space 좌표를 제공해야 하죠.
+그리려는 걸 나타내는 클립 공간 좌표를 제공해야 하죠.
 물론 x,y,z,w를 제공하고 렌더링하기 전에 W로 나누지만 그건 WebGL을 3D 라이브러리로 한정하기엔 충분하지 않습니다.
-3D 라이브러리에서 3D 데이터를 제공하면, 라이브러리는 3D에서 clip space point를 계산합니다.
+3D 라이브러리에서 3D 데이터를 제공하면, 라이브러리는 3D에서 클립 공간 point를 계산합니다.
 
 몇 가지 참고 사항을 더 드리기 위해, [emscripten](https://emscripten.org/)은 WebGL 위에서 오래된 OpenGL 에뮬레이션을 제공합니다.
 해당 코드는 [여기](https://github.com/emscripten-core/emscripten/blob/master/src/library_glemu.js)에 있는데요.

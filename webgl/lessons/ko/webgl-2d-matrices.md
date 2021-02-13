@@ -404,7 +404,7 @@ matrix = m3.multiply(matrix, moveOriginMatrix);
 이제 Photoshop이나 Flash에서 어떻게 회전점을 이동시키는지 알게 되었습니다.
 
 이제 더 끝내주는 걸 해봅시다.
-첫 번째 글인 [WebGL 기초](webgl-fundamentals.html)로 돌아가 보면 shader에 픽셀을 clip space로 변환하는 코드가 있다는 걸 기억하실 겁니다.
+첫 번째 글인 [WebGL 기초](webgl-fundamentals.html)로 돌아가 보면 shader에 픽셀을 클립 공간으로 변환하는 코드가 있다는 걸 기억하실 겁니다.
 
 ```js
 ...
@@ -414,7 +414,7 @@ vec2 zeroToOne = position / u_resolution;
 // 0->1에서 0->2로 변환
 vec2 zeroToTwo = zeroToOne * 2.0;
 
-// 0->2에서 -1->+1로 변환 (clip space)
+// 0->2에서 -1->+1로 변환 (클립 공간)
 vec2 clipSpace = zeroToTwo - 1.0;
 
 gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
@@ -430,7 +430,7 @@ gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 세 번째는 -1.0,-1.0으로 translation하고,
 네 번째는 Y를 -1로 scale한 뒤 모든 값을 함께 곱하지만,
 그 대신 수식이 간단하기 때문에,
-직접 주어진 해상도에 대한 'projection' 행렬을 생성하는 함수를 바로 만들어 봅시다.
+직접 주어진 해상도에 대한 '투영' 행렬을 생성하는 함수를 바로 만들어 봅시다.
 
 ```js
 var m3 = {
@@ -462,7 +462,7 @@ void main() {
 </script>
 ```
 
-그리고 JavaScript에서는 projection 행렬로 곱해야 하는데
+그리고 자바스크립트에서는 투영 행렬로 곱해야 하는데
 
 ```js
 // 장면 그리기
@@ -559,29 +559,29 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
     translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
 
-마지막으로 clip space 위치를 얻기 위해 projection 행렬에 곱하는데
+마지막으로 클립 공간의 위치를 얻기 위해 투영 행렬에 곱하는데
 
     clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 
 두 번째 방법은 행렬을 왼쪽에서 오른쪽으로 읽는 건데요.
 이 경우 각각의 행렬은 캔버스에 표시되는 *space*를 변경합니다.
-캔버스는 각 방향에서 clip space(-1 ~ +1)를 나타내는 것으로 시작하는데요.
+캔버스는 각 방향에서 클립 공간(-1 ~ +1)을 나타내는 것으로 시작하는데요.
 왼쪽에서 오른쪽으로 적용된 각 행렬은 캔버스에 표시되는 space를 변경합니다.
 
 1단계: 행렬 없음 (혹은 단위 행렬)
 
-> {{{diagram url="resources/matrix-space-change.html?stage=0" caption="clip space" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=0" caption="클립 공간" }}}
 >
-> 흰색 영역은 캔버스입니다. 파랑색은 캔버스 바깥입니다. 우리는 clip space에 있습니다.
-> 전달된 위치는 clip space에 있어야 합니다.
+> 흰색 영역은 캔버스입니다. 파랑색은 캔버스 바깥입니다. 우리는 클립 공간에 있습니다.
+> 전달된 위치는 클립 공간에 있어야 합니다.
 
 2단계:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
 
-> {{{diagram url="resources/matrix-space-change.html?stage=1" caption="clip space에서 pixel space로" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=1" caption="클립 공간에서 픽셀 공간으로" }}}
 >
-> 이제 우리는 pixel space에 있습니다. X = 0에서 400, Y = 0에서 300, 왼쪽 상단은 0,0 입니다.
-> 이 행렬을 사용하여 전달된 위치는 pixel space에 있어야 합니다.
-> space가 양수 Y = 상단에서 양수 Y = 하단으로 뒤집힐 때의 순간을 보실 수 있습니다.
+> 이제 우리는 픽셀 공간에 있습니다. X = 0에서 400, Y = 0에서 300, 왼쪽 상단은 0,0 입니다.
+> 이 행렬을 사용하여 전달된 위치는 픽셀 공간에 있어야 합니다.
+> 공간이 양수 Y = 상단에서 양수 Y = 하단으로 뒤집힐 때의 순간을 보실 수 있습니다.
 
 3단계:  `matrix = m3.translate(matrix, tx, ty);`
 
@@ -622,7 +622,7 @@ shader에서 우리는 `gl_Position = matrix * position;`을 실행하는데요.
 왜일까요?
 </p>
 <p>
-Projection 행렬은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
+투영 행렬은 클립 공간(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
 하지만, 브라우저에는, 우리가 다루는 두 가지 유형의 픽셀이 있는데요.
 하나는 캔버스 자체의 픽셀 수입니다.
 예를 들어 이렇게 정의된 캔버스가 있습니다.
@@ -672,6 +672,6 @@ CSS는 캔버스가 표시되는 크기를 정의합니다.
 <p>
 캔버스의 크기를 조절할 수 있는 대부분의 앱은 <code>canvas.width</code>와 <code>canvas.height</code>를 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>에 맞추려고 하는데 그 이유는 브라우저에 표시되는 각 픽셀에 대해 캔버스에 하나의 픽셀이 있기를 원하기 때문입니다.
 하지만, 위에서 보았듯이, 그게 유일한 선택지는 아닙니다.
-말인즉슨, 거의 모든 경우, <code>canvas.clientHeight</code>와 <code>canvas.clientWidth</code>를 사용해서 projection 행렬의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
+말인즉슨, 거의 모든 경우, <code>canvas.clientHeight</code>와 <code>canvas.clientWidth</code>를 사용해서 투영 행렬의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
 </p>
 </div>

@@ -10,7 +10,7 @@ WebGL에서 이미지 처리는 쉽습니다.
 혹시 읽지 않았다면 [그곳](webgl-fundamentals.html)에 먼저 가보는 것이 좋습니다.
 
 WebGL에서 이미지를 그리기 위해서 우리는 texture를 사용해야 하는데요.
-렌더링할 때 WebGL이 픽셀 대신 clip space 좌표를 유추하는 것과 마찬가지로, texture를 읽을 때 WebGL은 texture 좌표를 유추합니다.
+렌더링할 때 WebGL이 픽셀 대신 클립 공간 좌표를 유추하는 것과 마찬가지로, texture를 읽을 때 WebGL은 texture 좌표를 유추합니다.
 texture 좌표는 texture 크기에 상관없이 0.0에서 1.0사이가 됩니다.
 
 단 하나의 사각형(정확히는, 2개의 삼각형)만 그리기 때문에 사각형의 각 점이 texture의 어느 위치에 해당하지는지 WebGL에게 알려줘야 합니다.
@@ -145,7 +145,7 @@ WebGL은 0.0에서 1.0까지인 texture 좌표에서 texture를 참조하기 때
     }
     </script>
 
-그런 다음 JavaScript에서 texture의 크기를 전달해야 합니다.
+그런 다음 자바스크립트에서 texture의 크기를 전달해야 합니다.
 
     ...
 
@@ -202,7 +202,7 @@ convolution kernel은 행렬의 각 항목이 렌더링하는 픽셀 주변에 �
     }
     </script>
 
-JavaScript에서 convolution kernel과 가중치를 제공해줘야 하고
+자바스크립트에서 convolution kernel과 가중치를 제공해줘야 하고
 
      function computeKernelWeight(kernel) {
        var weight = kernel.reduce(function(prev, curr) {

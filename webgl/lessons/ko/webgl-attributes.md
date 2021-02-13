@@ -14,7 +14,7 @@ WebGL의 attribute는 버퍼에서 데이터를 가져오는 vertex shader에 �
 WebGL은 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용자가 제공한 vertex shader를 N번 실행하는데요.
 각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 vertex shader 내부의 attribute에 제공하는 방법을 정의합니다.
 
-JavaScript로 구현되었다면 이런식으로
+자바스크립트로 구현되었다면 이런식으로
 
 ```js
 // 의사 코드

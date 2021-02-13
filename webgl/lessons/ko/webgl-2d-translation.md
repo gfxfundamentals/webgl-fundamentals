@@ -32,7 +32,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-    // clip space에서 픽셀로 변환하는 방법을 WebGL에 지시
+    // 클립 공간에서 픽셀로 변환하는 방법을 WebGL에 지시
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // 캔버스 지우기
@@ -127,7 +127,7 @@ function setGeometry(gl, x, y) {
 
 확장하기에 좋지 않겠다는 걸 눈치채셨을 겁니다.
 수백 수천 개의 선으로 이루어진 아주 복잡한 geometry를 그리려면 꽤 복잡한 코드를 작성해야 하는데요.
-또한, JavaScript는 그릴 때마다 모든 점들을 갱신해야 합니다.
+또한, 자바스크립트는 그릴 때마다 모든 점들을 갱신해야 합니다.
 
 더 간단한 방법이 있습니다.
 geometry를 업로드하고 shader에서 translation을 수행하면 됩니다.
@@ -234,7 +234,7 @@ function setGeometry(gl) {
 translation을 설정하고 그려달라고 요청하는 게 우리가 하는 전부죠.
 심지어 geometry에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지됩니다.
 
-원한다면 모든 점들을 갱신하기 위해 위의 [복잡한 JavaScript를 사용하는 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
+원한다면 모든 점들을 갱신하기 위해 위의 [복잡한 자바스크립트를 사용하는 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
 
 너무 뻔한 예제가 아니었기를 바랍니다.
 다른 한편으로 이걸 수행하는 훨씬 더 좋은 방법을 다룰 것이므로 계속 읽어주세요.

@@ -16,11 +16,11 @@ CSS는 캔버스가 표시되는 크기를 결정합니다.
 
     <canvas id="c" width="400" height="300"></canvas>
 
-다른 방법은 JavaScript를 이용하는
+다른 방법은 자바스크립트를 이용하는
 
     <canvas id="c" ></canvas>
 
-JavaScript
+자바스크립트
 
     var canvas = document.querySelector("#c");
     canvas.width = 400;
@@ -76,7 +76,7 @@ JavaScript
     </html>
 
 이제 브라우저가 캔버스를 늘린 크기와 일치하는 drawingbuffer를 만들어야 하는데요.
-HTML의 모든 요소가 가진 `clientWidth`와 `clientHeight`를 사용하면 해당 요소가 표시되는 크기를 JavaScript로 확인할 수 있습니다.
+HTML의 모든 요소가 가진 `clientWidth`와 `clientHeight`를 사용하면 해당 요소가 표시되는 크기를 자바스크립트로 확인할 수 있습니다.
 
     function resize(canvas) {
       // 브라우저가 캔버스를 표시하고 있는 크기 탐색
@@ -109,7 +109,7 @@ HTML의 모든 요소가 가진 `clientWidth`와 `clientHeight`를 사용하면 
 왜 선이 전체 영역을 덮지 않을까요?
 
 그 이유는 캔버스를 크기 조정할 때 viewport를 설정하기 위해 `gl.viewport`를 호출해야 하기 때문입니다.
-`gl.viewport`는 WebGL에게 clip space(-1 ~ +1)에서 픽셀로 변환하는 방법과 캔버스 내에서 그걸 작동시키는 위치를 알려줍니다.
+`gl.viewport`는 WebGL에게 클립 공간(-1 ~ +1)에서 픽셀로 변환하는 방법과 캔버스 내에서 그걸 작동시키는 위치를 알려줍니다.
 WebGL context를 처음 만들 때 WebGL은 캔버스와 같은 크기로 viewport를 설정하지만 이후에는 사용자가 설정합니다.
 만약 캔버스 크기를 변경한다면 WebGL에게 새로운 viewport 설정을 알려줘야 합니다.
 

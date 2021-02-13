@@ -17,7 +17,7 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
 
 ## Vertex Shader
 
-Vertex Shader의 역할은 clip space 좌표를 생성하는 겁니다.
+Vertex Shader의 역할은 클립 공간 좌표를 생성하는 겁니다.
 항상 이런 형식을 취하는데
 
     void main() {
@@ -25,7 +25,7 @@ Vertex Shader의 역할은 clip space 좌표를 생성하는 겁니다.
     }
 
 shader는 vertex마다 한 번씩 호출되는데요.
-호출될 때마다 특수 전역 변수, `gl_Position`을 일부 clip space 좌표로 설정해야 합니다.
+호출될 때마다 특수 전역 변수, `gl_Position`을 일부 클립 공간 좌표로 설정해야 합니다.
 
 vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.
@@ -73,7 +73,7 @@ vertex shader는 데이터가 필요한데요.
       gl_Position = a_position;
     }
 
-버퍼에 clip space vertex를 넣으면 동작할 겁니다. 
+버퍼에 클립 공간 vertex를 넣으면 동작할 겁니다. 
 
 attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`를 사용할 수 있습니다.
 
@@ -143,7 +143,7 @@ uniform은 여러 type을 가질 수 있는데요.
     // shader
     uniform vec2 u_someVec2[3];
 
-    // 초기화 시 JavaScript
+    // 초기화 시 자바스크립트
     var someVec2Loc = gl.getUniformLocation(someProgram, "u_someVec2");
 
     // 렌더링할 때
@@ -151,7 +151,7 @@ uniform은 여러 type을 가질 수 있는데요.
 
 하지만 배열의 개별 요소를 설정하고 싶다면 각 요소의 위치를 개별적으로 찾아야 합니다.
 
-    // 초기화 시 JavaScript
+    // 초기화 시 자바스크립트
     var someVec2Element0Loc = gl.getUniformLocation(someProgram, "u_someVec2[0]");
     var someVec2Element1Loc = gl.getUniformLocation(someProgram, "u_someVec2[1]");
     var someVec2Element2Loc = gl.getUniformLocation(someProgram, "u_someVec2[2]");
@@ -272,20 +272,20 @@ fragment shader
     +varying vec4 v_positionWithOffset;
 
     void main() {
-    +  // clip space에서 (-1 <-> +1) 색상 공간으로 (0 -> 1) 변환
+    +  // 클립 공간에서 (-1 <-> +1) 색상 공간으로 (0 -> 1) 변환
     +  vec4 color = v_positionWithOffset * 0.5 + 0.5
     +  gl_FragColor = color;
     }
 
 위 예제는 대부분 말도 안되는 예제입니다.
-일반적으로는 clip space 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
+일반적으로는 클립 공간 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
 그럼에도 불구하고 작동하며 색상을 만들어냅니다.
 
 ## GLSL
 
 GLSL는 Graphics Library Shader Language의 약자인데요.
 shader가 작성되는 언어입니다.
-이건 JavaScript에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
+이건 자바스크립트에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
 그래픽을 rasterize하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
 예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 `vec2`, `vec3`, `vec4` 같은 type들이 내장되어 있습니다.
 마찬가지로 2x2, 3x3, 4x4 행렬을 나타내는 `mat2`, `mat3`, `mat4`가 있는데요.

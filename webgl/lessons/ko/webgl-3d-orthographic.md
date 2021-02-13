@@ -1,6 +1,6 @@
-Title: WebGL - Orthographic 3D
+Title: WebGL - 직교 3D
 Description: 직교 투영으로 시작하는 WebGL에서 3D를 수행하는 방법
-TOC: Orthographic 3D
+TOC: 직교 3D
 
 
 이 포스트는 WebGL 관련 시리즈의 연장입니다.
@@ -8,7 +8,7 @@ TOC: Orthographic 3D
 혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
 마지막 포스트에서 우리는 2D 행렬이 어떻게 동작하는지 살펴봤습니다.
-translation, rotation, scale, 그리고 pixel에서 clip space로 투영하는 것까지 하나의 행렬과 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
+translation, rotation, scale, 그리고 픽셀에서 클립 공간으로 투영하는 것까지 하나의 행렬과 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
 3D를 수행하기 위해 거기에서 한 걸음만 더 나아가면 됩니다.
 
 이전 2D 예제에서는 3x3 행렬을 곱한 2D point(x, y)를 가졌었는데요.
@@ -307,7 +307,7 @@ X 회전
   },
 ```
 
-또한 projection 함수를 업데이트해야 합니다.
+또한 투영 함수를 업데이트해야 합니다.
 다음은 기존 코드로
 
 ```
@@ -322,7 +322,7 @@ X 회전
 }
 ```
 
-pixel에서 clip space로 변환되었습니다.
+pixel에서 클립 공간으로 변환되었습니다.
 3D로 확장하기 위한 첫 시도를 해보면
 
 ```
@@ -337,7 +337,7 @@ pixel에서 clip space로 변환되었습니다.
   },
 ```
 
-X와 Y를 pixel에서 clip space로 변환해야 했던 것처럼, Z도 동일한 작업을 수행해야 합니다.
+X와 Y를 pixel에서 클립 공간으로 변환해야 했던 것처럼, Z도 동일한 작업을 수행해야 합니다.
 이 경우에는 Z축 픽셀 단위도 만들게 되는데요.
 `depth`에 `width`와 유사한 값을 전달하므로, 공간은 0에서 `width`의 픽셀 너비와, 0에서 `height`의 픽셀 높이가 되지만, `depth`는 `-depth / 2`에서 `+depth / 2`가 됩니다.
 
@@ -513,7 +513,7 @@ WebGL은 삼각형의 앞면 혹은 뒷면만 그릴 수도 있습니다.
 해당 기능을 켜면, WebGL은 기본적으로 삼각형 뒷면을 "culling"으로 설정하는데요.
 이 경우 "culling"은 "그리지 않음"을 의미하는 단어입니다.
 
-참고로 WebGL에서 삼각형이 시계 혹은 반시계 방향으로 진행되는지는 clip space에 있는 해당 삼각형의 vertex에 따라 달라집니다.
+참고로 WebGL에서 삼각형이 시계 혹은 반시계 방향으로 진행되는지는 클립 공간에 있는 해당 삼각형의 vertex에 따라 달라집니다.
 즉, WebGL은 vertex shader에서 vertex에 수식을 적용한 후에 삼각형이 앞면인지 뒷면인지 파악합니다.
 이건 X에서 -1로 scale되거나 180도 회전한 시계 방향 삼각형이 반시계 방향 삼각형이 된다는 걸 의미하는데요.
 CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷면) 삼각형을 모두 볼 수 있었습니다.
@@ -557,7 +557,7 @@ DEPTH BUFFER를 입력해봅시다.
 때때로 Z-Buffer라고 불리는 depth buffer는 *depth* pixel의 사각형인데, 각 color pixel에 대한 depth pixel은 이미지를 만드는데 사용됩니다.
 WebGL은 각 color pixel을 그리기 때문에 depth pixel도 그릴 수 있는데요.
 이건 Z축에 대해 vertex shader에서 반환한 값을 기반으로 합니다.
-X와 Y를 clip space로 변환해야 했던 것처럼, Z도 clip space(-1에서 +1)에 있습니다.
+X와 Y를 클립 공간으로 변환해야 했던 것처럼, Z도 클립 공간(-1에서 +1)에 있습니다.
 해당 값은 depth space 값(0에서 +1)으로 변환됩니다.
 WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하는데요.
 그릴 픽셀의 depth 값이 대응하는 depth pixel의 값보다 클 경우 WebGL은 새로운 color pixel을 그리지 않습니다.
@@ -590,7 +590,7 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
 3D를 얻게 됩니다!
 
 한 가지 사소한 게 남았는데요.
-대부분의 3D 수학 라이브러리에는 clip space에서 pixel space로의 변환을 수행하는 `projection` 함수가 없습니다.
+대부분의 3D 수학 라이브러리에는 클립 공간에서 픽셀 공간으로 변환을 수행하는 `투영` 함수가 없습니다.
 그보다는 보통 `ortho`나 `orthographic`이라 불리는 함수가 있는데
 
     var m4 = {
@@ -607,8 +607,8 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
         ];
       }
 
-width, height, depth 등의 매개변수를 가지는 위의 단순한 `projection` 함수와 달리, 더 일반적인 orthographic projection 함수는 더 많은 유연성을 제공하는 left, right, bottom, top, near, far 등을 전달할 수 있습니다.
-원래 쓰던 projection 함수와 동일하게 쓰기 위해서는 이렇게 호출할 수 있으며
+width, height, depth 등의 매개변수를 가지는 위의 단순한 `투영` 함수와 달리, 더 일반적인 직교 투영 함수는 더 많은 유연성을 제공하는 left, right, bottom, top, near, far 등을 전달할 수 있습니다.
+원래 쓰던 투영 함수와 동일하게 쓰기 위해서는 이렇게 호출할 수 있으며
 
     var left = 0;
     var right = gl.canvas.clientWidth;
@@ -618,7 +618,7 @@ width, height, depth 등의 매개변수를 가지는 위의 단순한 `projecti
     var far = -400;
     var matrix = m4.orthographic(left, right, bottom, top, near, far);
 
-다음 포스트에서는 [perspective를 가지도록 만드는 방법](webgl-3d-perspective.html)에 대해 살펴보겠습니다.
+다음 포스트에서는 [원근을 가지도록 만드는 방법](webgl-3d-perspective.html)에 대해 살펴보겠습니다.
 
 <div class="webgl_bottombar">
 <h3>왜 attribute가 vec4인데 gl.vertexAttribPointer의 size는 3인가요?</h3>

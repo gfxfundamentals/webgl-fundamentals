@@ -9,13 +9,13 @@ TOC: 점, 선, 삼각형
 
 [첫 번째 글](webgl-fundamentals.html)에서 언급했듯이 WebGL은 점, 선, 그리고 삼각형을 그립니다.
 `gl.drawArrays`나 `gl.drawElements`를 호출할 때 이를 수행하는데요.
-clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArrays`나 `gl.drawElements`의 첫 번째 전달인자를 기반으로 WebGL은 점, 선, 또는 삼각형을 그립니다.
+클립 공간 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArrays`나 `gl.drawElements`의 첫 번째 전달인자를 기반으로 WebGL은 점, 선, 또는 삼각형을 그립니다.
 
 `gl.drawArrays`와 `gl.drawElements`의 첫 번째 전달인자로 유효한 값들은
 
 * `POINTS`
 
-   vertex shader가 출력하는 각 clip space vertex에 대해 해당 점의 중앙에 정사각형을 그립니다.
+   Vertex shader가 출력하는 각 클립 공간 vertex에 대해 해당 점의 중앙에 정사각형을 그립니다.
    정사각형의 크기는 vertex shader 내부의 특별 변수 `gl_PointSize`에 픽셀 단위로 원하는 크기를 설정하여 지정합니다.
 
    참고: 정사각형이 될 수 있는 최대(그리고 최소) 크기는 쿼리할 수 있는 구현에 따라 다른데
@@ -26,7 +26,7 @@ clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 
 * `LINES`
 
-   vertex shader가 출력하는 각 2개의 clip space vertex에 대해 두 점을 연결하는 선을 그립니다.
+   Vertex shader가 출력하는 각 2개의 클립 공간 vertex에 대해 두 점을 연결하는 선을 그립니다.
    점 A,B,C,D,E,F가 있다면 3개의 선이 표시됩니다.
 
    <div class="webgl_center"><img src="resources/gl-lines.svg" style="width: 400px;"></div>
@@ -40,9 +40,9 @@ clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 
 * `LINE_STRIP`
 
-   vertex shader가 출력하는 각 clip space vertex에 대해 vertex shader가 출력한 이전 포인트에서 선을 그립니다.
+   Vertex shader가 출력하는 각 클립 공간 vertex에 대해 vertex shader가 출력한 이전 포인트에서 선을 그립니다.
 
-   따라서, clip space vertex A,B,C,D,E,F를 출력하면 5개의 선이 표시됩니다.
+   따라서, 클립 공간 vertex A,B,C,D,E,F를 출력하면 5개의 선이 표시됩니다.
 
    <div class="webgl_center"><img src="resources/gl-line-strip.svg" style="width: 400px;"></div>
 
@@ -54,14 +54,14 @@ clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 
 * `TRIANGLES`
 
-   vertex shader가 출력하는 3개의 clip space vertex마다 점 3개로 삼각형을 그립니다.
+   Vertex shader가 출력하는 3개의 클립 공간 vertex마다 점 3개로 삼각형을 그립니다.
    이게 가장 많이 사용되는 모드입니다.
 
    <div class="webgl_center"><img src="resources/gl-triangles.svg" style="width: 400px;"></div>
 
 * `TRIANGLE_STRIP`
 
-   vertex shader가 출력하는 각 clip space vertex에 대해 마지막 vertex 3개로 삼각형을 그립니다.
+   Vertex shader가 출력하는 각 클립 공간 vertex에 대해 마지막 vertex 3개로 삼각형을 그립니다.
    다시 말해 6개의 점 A,B,C,D,E,F를 출력하면 삼각형 4개가 그려집니다.
    A,B,C 다음 B,C,D 다음 C,D,E 다음 D,E,F
 
@@ -69,7 +69,7 @@ clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 
 * `TRIANGLE_FAN`
 
-   vertex shader가 출력하는 각 clip space vertex에 대해 첫 번째 vertex와 마지막 vertex 2개로 삼각형을 그립니다.
+   Vertex shader가 출력하는 각 클립 공간 vertex에 대해 첫 번째 vertex와 마지막 vertex 2개로 삼각형을 그립니다.
    다시 말해 6개의 점 A,B,C,D,E,F를 출력하면 삼각형 4개가 그려집니다.
    A,B,C 다음 A,C,D 다음 A,D,E 다음 마지막으로 A,E,F
 
