@@ -303,7 +303,7 @@ attached to framebuffers](webgl-render-to-texture.html)).
 ## Texture Formats
 
 Textures are another place where the spec says the actual precision
-used can be greater then the precision requested.
+used can be greater than the precision requested.
 
 As an example you can ask for 16 bit, 4bits per channel texture like this
 

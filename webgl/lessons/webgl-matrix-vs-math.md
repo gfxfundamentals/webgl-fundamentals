@@ -42,7 +42,7 @@ And columns go down.
 
 <div class="webgl_center"><img src="resources/spreadsheet-column.png" style="width: 808px; filter: brightness(0.9);" class="nobg"></div>
 
-So, when we make a 3x3 of 4x4 matrix in JavaScript for WebGL we make them like this
+So, when we make a 3x3 or 4x4 matrix in JavaScript for WebGL we make them like this
 
 ```js
 const m3x3 = [
