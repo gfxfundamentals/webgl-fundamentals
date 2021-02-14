@@ -243,28 +243,28 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>이건 <a href="webgl-fundamentals.html">WebGL 기초</a>에서 이어지는 글입니다.
 대부분의 WebGL 강의들은 모든걸 한 번에 다루기 때문에 배우기 복잡해 보이기도 하는데요.
 가능한 한 그것을 피하기 위해 더 작게 나눠보려고 합니다.</p>
-<p>WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 fragment shader, 두 가지 작은 함수가 있다는 겁니다.
+<p>WebGL을 복잡해 보이도록 만드는 것들 중 하나는 버텍스 셰이더와 프래그먼트 셰이더, 두 가지 작은 함수가 있다는 겁니다.
 이 두 함수는 일반적으로 최대 속도가 나오는 GPU에서 실행되는데요.
 그렇기 때문에 GPU에서 수행할 수 있는 언어, 커스텀 언어로 작성됩니다.
 이 두 함수는 컴파일되고 연결되어야 하는데요.
 해당 처리는 모든 WebGL program에서 99% 동일합니다.</p>
-<p>다음은 shader를 컴파일 하는 boilerplate 코드입니다.</p>
+<p>다음은 셰이더를 컴파일 하는 boilerplate 코드입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
- * Shader 생성 및 컴파일
+ * 셰이더 생성 및 컴파일
  *
  * @param {!WebGLRenderingContext} gl은 WebGL Context
- * @param {string} shaderSource는 shader의 GLSL source 코드
- * @param {number} shaderType은 shader의 type, VERTEX_SHADER 또는 FRAGMENT_SHADER
- * @return {!WebGLShader} shader
+ * @param {string} shaderSource는 셰이더의 GLSL source 코드
+ * @param {number} shaderType은 셰이더의 type, VERTEX_SHADER 또는 FRAGMENT_SHADER
+ * @return {!WebGLShader} 셰이더
  */
 function compileShader(gl, shaderSource, shaderType) {
-  // Shader 객체 생성
+  // 셰이더 객체 생성
   var shader = gl.createShader(shaderType);
 
-  // shader source 코드 설정
+  // 셰이더 소스 코드 설정
   gl.shaderSource(shader, shaderSource);
 
-  // shader 컴파일
+  // 셰이더 컴파일
   gl.compileShader(shader);
 
   // 컴파일 여부 확인
@@ -276,20 +276,20 @@ function compileShader(gl, shaderSource, shaderType) {
 
   return shader;
 }
-</code></pre><p>그리고 program에 두 shader를 연결하는 boilerplate 코드인데</p>
+</code></pre><p>그리고 program에 두 셰이더를 연결하는 boilerplate 코드인데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
- * 두 shader로 program 생성합니다.
+ * 두 셰이더로 program 생성합니다.
  *
  * @param {!WebGLRenderingContext) gl은 WebGL Context
- * @param {!WebGLShader} vertexShader는 vertex shader
- * @param {!WebGLShader} fragmentShader는 fragment shader
+ * @param {!WebGLShader} vertexShader는 버텍스 셰이더
+ * @param {!WebGLShader} fragmentShader는 프래그먼트 셰이더
  * @return {!WebGLProgram} program
  */
 function createProgram(gl, vertexShader, fragmentShader) {
   // program 생성
   var program = gl.createProgram();
 
-  // shader 할당
+  // 셰이더 할당
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
 
@@ -308,19 +308,19 @@ function createProgram(gl, vertexShader, fragmentShader) {
 </code></pre><p>물론 오류를 처리하는 방법은 다를 수 있습니다.
 예외를 던지는 것이 오류를 처리하는 최고의 방법은 아니죠.
 그럼에도 불구하고 거의 모든 WebGL program에서 이 코드는 거의 비슷합니다.</p>
-<p>저는 shader를 자바스크립트가 아닌 &lt;script&gt; tag에 저장하는 걸 좋아하는데요.
+<p>저는 셰이더를 자바스크립트가 아닌 &lt;script&gt; tag에 저장하는 걸 좋아하는데요.
 이 방식은 코드를 수정하기 쉽게 만들주기 때문에 저는 이렇게 코드를 작성합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
- * script tag의 내용으로 shader 생성
+ * 스크립트 태그의 내용으로 셰이더 생성
  *
  * @param {!WebGLRenderingContext) gl은 WebGL Context
  * @param {string} scriptId는 script tag의 id
- * @param {string} opt_shaderType는 생성할 shader의 type
+ * @param {string} opt_shaderType는 생성할 셰이더의 type
  *                 전달되지 않으면 script tag의 type 속성 사용
- * @return {!WebGLShader} A shader.
+ * @return {!WebGLShader} 셰이더
  */
 function createShaderFromScript(gl, scriptId, opt_shaderType) {
-  // id로 script tag 탐색
+  // id로 스크립트 태그 탐색
   var shaderScript = document.getElementById(scriptId);
 
   if (!shaderScript) {
@@ -343,15 +343,15 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
 
   return compileShader(gl, shaderSource, opt_shaderType);
 };
-</code></pre><p>이제 shader를 컴파일할 수 있는데</p>
+</code></pre><p>이제 셰이더를 컴파일할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
-</code></pre><p>한 걸음 더 나아가서 script tag에서 두 shader를 컴파일하며, 프로그램에 첨부하고 연결하는 함수를 만들겁니다.</p>
+</code></pre><p>한 걸음 더 나아가서 script tag에서 두 셰이더를 컴파일하며, 프로그램에 첨부하고 연결하는 함수를 만들겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * 두 script tag에서 program 생성
  *
  * @param {!WebGLRenderingContext} gl은 WebGL Context
- * @param {string[]} shaderScriptId는 shader용 script tag의 id 배열입니다.
- *                   첫 번째는 vertex shader, 두 번째는 fragment shader라고 가정합니다.
+ * @param {string[]} shaderScriptId는 셰이더용 스크립트 태그의 id 배열입니다.
+ *                   첫 번째는 버텍스 셰이더, 두 번째는 프래그먼트 셰이더라고 가정합니다.
  * @return {!WebGLProgram} program
  */
 function createProgramFromScripts(gl, shaderScriptIds) {
@@ -373,7 +373,7 @@ webglUtils.resizeCanvasToMatchDisplaySize(canvas);
 <p>여기까지가 최소한의 WebGL boilerplate 코드 모음입니다.
 <code class="notranslate" translate="no">webgl-utils.js</code> 코드는 <a href="../../resources/webgl-utils.js">여기</a>에서 찾으실 수 있습니다.
 좀 더 정리된 것을 원하신다면 <a href="https://twgljs.org">TWGL.js</a>를 확인해주세요.</p>
-<p>WebGL을 복잡하게 보이게 만드는 나머지 부분은 shader에 모든 입력을 설정하는 겁니다.
+<p>WebGL을 복잡하게 보이게 만드는 나머지 부분은 셰이더에 모든 입력을 설정하는 겁니다.
 이건 <a href="webgl-how-it-works.html">작동 원리</a>를 봐주세요.</p>
 <p>또한 <a href="webgl-less-code-more-fun.html">Less Code, More Fun</a>를 읽고 <a href="https://twgljs.org">TWGL</a>를 확인하는 걸 추천합니다.</p>
 <p>참고로 비슷한 이유로 추가하는 몇 가지 script가 더 있습니다.</p>
@@ -415,7 +415,7 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader와 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더 및 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
@@ -432,8 +432,8 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">직교 3D</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교법</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근법</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
         </ul>
   <li>조명</li>
@@ -454,7 +454,7 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Textures</a></li>
@@ -463,7 +463,7 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>Texture 렌더링</li>
+  <li>텍스처 렌더링</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
         </ul>
@@ -495,7 +495,7 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>
@@ -525,7 +525,7 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 및 알파</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>

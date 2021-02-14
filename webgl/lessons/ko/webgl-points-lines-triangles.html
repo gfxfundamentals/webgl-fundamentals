@@ -245,18 +245,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 하지만, 완벽을 기하기 위해 몇 가지 다른 경우를 살펴 봅시다.</p>
 <p><a href="webgl-fundamentals.html">첫 번째 글</a>에서 언급했듯이 WebGL은 점, 선, 그리고 삼각형을 그립니다.
 <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>를 호출할 때 이를 수행하는데요.
-클립 공간 좌표를 출력하는 vertex shader를 제공한 다음, <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>의 첫 번째 전달인자를 기반으로 WebGL은 점, 선, 또는 삼각형을 그립니다.</p>
+클립 공간 좌표를 출력하는 버텍스 셰이더를 제공한 다음, <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>의 첫 번째 전달인자를 기반으로 WebGL은 점, 선, 또는 삼각형을 그립니다.</p>
 <p><code class="notranslate" translate="no">gl.drawArrays</code>와 <code class="notranslate" translate="no">gl.drawElements</code>의 첫 번째 전달인자로 유효한 값들은</p>
 <ul>
 <li><p><code class="notranslate" translate="no">POINTS</code></p>
-<p> Vertex shader가 출력하는 각 클립 공간 vertex에 대해 해당 점의 중앙에 정사각형을 그립니다.
- 정사각형의 크기는 vertex shader 내부의 특별 변수 <code class="notranslate" translate="no">gl_PointSize</code>에 픽셀 단위로 원하는 크기를 설정하여 지정합니다.</p>
+<p> 버텍스 셰이더가 출력하는 각 클립 공간 정점에 대해 해당 점의 중앙에 정사각형을 그립니다.
+ 정사각형의 크기는 버텍스 셰이더 내부의 특별 변수 <code class="notranslate" translate="no">gl_PointSize</code>에 픽셀 단위로 원하는 크기를 설정하여 지정합니다.</p>
 <p> 참고: 정사각형이 될 수 있는 최대(그리고 최소) 크기는 쿼리할 수 있는 구현에 따라 다른데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
 </code></pre><p> <a href="webgl-drawing-without-data.html#pointsissues">여기</a>에서 다른 이슈도 확인하세요.</p>
 </li>
 <li><p><code class="notranslate" translate="no">LINES</code></p>
-<p> Vertex shader가 출력하는 각 2개의 클립 공간 vertex에 대해 두 점을 연결하는 선을 그립니다.
+<p> 버텍스 셰이더가 출력하는 각 2개의 클립 공간 정점에 대해 두 점을 연결하는 선을 그립니다.
  점 A,B,C,D,E,F가 있다면 3개의 선이 표시됩니다.</p>
  <div class="webgl_center"><img src="../resources/gl-lines.svg" style="width: 400px;"></div>
 
@@ -266,8 +266,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </code></pre><p> 이는 주로 핵심 데스크탑 OpenGL에서 1보다 큰 값이 더 이상 사용되지 않기 때문입니다.</p>
 </li>
 <li><p><code class="notranslate" translate="no">LINE_STRIP</code></p>
-<p> Vertex shader가 출력하는 각 클립 공간 vertex에 대해 vertex shader가 출력한 이전 포인트에서 선을 그립니다.</p>
-<p> 따라서, 클립 공간 vertex A,B,C,D,E,F를 출력하면 5개의 선이 표시됩니다.</p>
+<p> 버텍스 셰이더가 출력하는 각 클립 공간 정점에 대해 버텍스 셰이더가 출력한 이전 포인트에서 선을 그립니다.</p>
+<p> 따라서, 클립 공간 정점 A,B,C,D,E,F를 출력하면 5개의 선이 표시됩니다.</p>
  <div class="webgl_center"><img src="../resources/gl-line-strip.svg" style="width: 400px;"></div>
 </li>
 <li><p><code class="notranslate" translate="no">LINE_LOOP</code></p>
@@ -275,18 +275,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  <div class="webgl_center"><img src="../resources/gl-line-loop.svg" style="width: 400px;"></div>
 </li>
 <li><p><code class="notranslate" translate="no">TRIANGLES</code></p>
-<p> Vertex shader가 출력하는 3개의 클립 공간 vertex마다 점 3개로 삼각형을 그립니다.
+<p> 버텍스 셰이더가 출력하는 3개의 클립 공간 정점마다 점 3개로 삼각형을 그립니다.
  이게 가장 많이 사용되는 모드입니다.</p>
  <div class="webgl_center"><img src="../resources/gl-triangles.svg" style="width: 400px;"></div>
 </li>
 <li><p><code class="notranslate" translate="no">TRIANGLE_STRIP</code></p>
-<p> Vertex shader가 출력하는 각 클립 공간 vertex에 대해 마지막 vertex 3개로 삼각형을 그립니다.
+<p> 버텍스 셰이더가 출력하는 각 클립 공간 정점에 대해 마지막 정점 3개로 삼각형을 그립니다.
  다시 말해 6개의 점 A,B,C,D,E,F를 출력하면 삼각형 4개가 그려집니다.
  A,B,C 다음 B,C,D 다음 C,D,E 다음 D,E,F</p>
  <div class="webgl_center"><img src="../resources/gl-triangle-strip.svg" style="width: 400px;"></div>
 </li>
 <li><p><code class="notranslate" translate="no">TRIANGLE_FAN</code></p>
-<p> Vertex shader가 출력하는 각 클립 공간 vertex에 대해 첫 번째 vertex와 마지막 vertex 2개로 삼각형을 그립니다.
+<p> 버텍스 셰이더가 출력하는 각 클립 공간 정점에 대해 첫 번째 정점과 마지막 정점 2개로 삼각형을 그립니다.
  다시 말해 6개의 점 A,B,C,D,E,F를 출력하면 삼각형 4개가 그려집니다.
  A,B,C 다음 A,C,D 다음 A,D,E 다음 마지막으로 A,E,F</p>
  <div class="webgl_center"><img src="../resources/gl-triangle-fan.svg" style="width: 400px;"></div>
@@ -295,7 +295,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </ul>
 <p>다른 사람들은 동의하지 않겠지만 저의 경험상 <code class="notranslate" translate="no">TRIANGLE_FAN</code>과 <code class="notranslate" translate="no">TRIANGLE_STRIP</code>은 피하는 게 가장 좋습니다.
 몇 가지 예외적인 경우에만 적합하고 이런 경우를 처리하기 위한 추가 코드는 애당초 삼각형만으로 모든 걸 처리할 가치가 없는데요.
-특히 법선을 만들거나 texture 좌표를 생성하거나 vertex 데이터로 다른 많은 작업을 수행하는 도구가 있을 수 있습니다.
+특히 법선을 만들거나 텍스처 좌표를 생성하거나 정점 데이터로 다른 많은 작업을 수행하는 도구가 있을 수 있습니다.
 <code class="notranslate" translate="no">TRIANGLES</code>만을 고수하면 함수는 작동하는데요.
 <code class="notranslate" translate="no">TRIANGLE_FAN</code>과 <code class="notranslate" translate="no">TRIANGLE_STRIP</code>을 추가하기 시작하면 더 많은 경우를 처리하기 위한 함수들이 더 필요해집니다.
 여러분은 동의하지 않고 원하는 방식을 하실 수도 있습니다.
@@ -329,7 +329,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader와 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더 및 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
@@ -346,8 +346,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">직교 3D</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교법</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근법</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
         </ul>
   <li>조명</li>
@@ -368,7 +368,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Textures</a></li>
@@ -377,7 +377,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>Texture 렌더링</li>
+  <li>텍스처 렌더링</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
         </ul>
@@ -409,7 +409,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>
@@ -439,7 +439,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 및 알파</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>

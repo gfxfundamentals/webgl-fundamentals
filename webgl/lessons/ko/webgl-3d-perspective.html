@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ko.jpg">
 
-<meta property="og:title" content="WebGL 3D 원근">
+<meta property="og:title" content="WebGL 3D 원근법">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ko.jpg">
 <meta property="og:description" content="WebGL에서 3D로 원근을 표시하는 방법">
@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 3D 원근">
+<meta name="twitter:title" content="WebGL 3D 원근법">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html">
 <meta name="twitter:description" content="WebGL에서 3D로 원근을 표시하는 방법">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ko.jpg">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html",
       "inLanguage":"ko",
-      "name":"WebGL 3D 원근",
+      "name":"WebGL 3D 원근법",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL 3D 원근</title>
+<title>WebGL 3D 원근법</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,7 +236,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 3D 원근</h1>
+    <h1>WebGL 3D 원근법</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
@@ -278,7 +278,7 @@ abs(3.333 - 6.666) = 3.333
 클립 공간에서 나누면 Z가 더 작은 숫자(-1에서 +1)이기 때문에 더 나은 결과를 얻을 수 있는데요.
 나누기 전에 Z를 fudgeFactor와 곱하면 주어진 거리에 따라 얼마나 작게 할지 조정할 수 있습니다.</p>
 <p>한 번 해봅시다.
-먼저 &quot;fudgeFactor&quot;를 곱한 뒤 Z로 나누도록 vertex shader를 수정합니다.</p>
+먼저 &quot;fudgeFactor&quot;를 곱한 뒤 Z로 나누도록 버텍스 셰이더를 수정합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
@@ -321,10 +321,10 @@ void main() {
 </p>
 <p>알아보기 힘들다면 Z로 나누는 코드를 추가하기 전 어떤 모습이었는지 보기 위해 &quot;fudgeFactor&quot; 슬라이더를 1.0에서 0.0으로 드래그해보세요.</p>
 <p><img class="webgl_center" src="../resources/orthographic-vs-perspective.png" /></p>
-<div class="webgl_center">직교 vs 원근</div>
+<div class="webgl_center">직교법 vs 원근법</div>
 
-<p>WebGL은 vertex shader의 <code class="notranslate" translate="no">gl_Position</code>에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.</p>
-<p>이는 shader를 변경하여 직접 나누는 대신 <code class="notranslate" translate="no">gl_Position.w</code>에 <code class="notranslate" translate="no">zToDivideBy</code>를 넣어서 쉽게 증명할 수 있는데요.</p>
+<p>WebGL은 버텍스 셰이더의 <code class="notranslate" translate="no">gl_Position</code>에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.</p>
+<p>이는 셰이더를 변경하여 직접 나누는 대신 <code class="notranslate" translate="no">gl_Position.w</code>에 <code class="notranslate" translate="no">zToDivideBy</code>를 넣어서 쉽게 증명할 수 있는데요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_fudgeFactor;
@@ -339,7 +339,7 @@ void main() {
   // x, y, z를 zToDivideBy로 나누기
 *  gl_Position = vec4(position.xyz, zToDivideBy);
 
-  // fragment shader로 color 전달
+  // 프래그먼트 셰이더로 color 전달
   v_color = a_color;
 }
 &lt;/script&gt;
@@ -434,7 +434,7 @@ w_out = z_in * fudgeFactor + 1;
 </pre></div>
 
 <p>자, 행렬만 사용하도록 다시 프로그램을 수정해봅시다.</p>
-<p>먼저 vertex shader를 되돌려 놓으면</p>
+<p>먼저 버텍스 셰이더를 되돌려 놓으면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
@@ -605,7 +605,7 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader와 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더 및 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
@@ -622,8 +622,8 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">직교 3D</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교법</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근법</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
         </ul>
   <li>조명</li>
@@ -644,7 +644,7 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Textures</a></li>
@@ -653,7 +653,7 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>Texture 렌더링</li>
+  <li>텍스처 렌더링</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
         </ul>
@@ -685,7 +685,7 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>
@@ -715,7 +715,7 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 및 알파</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
@@ -756,8 +756,8 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 3D 원근';
-            var disqus_title = 'WebGL 3D 원근';
+            var disqus_identifier = 'WebGL 3D 원근법';
+            var disqus_title = 'WebGL 3D 원근법';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {
