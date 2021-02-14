@@ -2,6 +2,7 @@ Title: WebGL 2D Rotation
 Description: 2D에서 회전하는 방법
 TOC: 2D Rotation
 
+
 이 포스트는 WebGL 관련 시리즈의 연장입니다.
 첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [geometry translation](webgl-2d-translation.html)에 관한 것이었습니다.
 
@@ -30,7 +31,7 @@ TOC: 2D Rotation
 
 단위원의 어느 지점에서 X와 Y값을 가져와서 [이전 샘플](webgl-2d-translation.html)의 geometry에 곱할 겁니다.
 
-다음은 shader 업데이트입니다.
+다음은 셰이더 업데이트입니다.
 
     <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
@@ -158,12 +159,12 @@ radian은 원, 회전, 각도에 사용되는 측정 단위입니다.
 </p>
 <p>
 아마 미터법 측정을 사용하는 수학이 영국식 측정을 사용하는 수학보다 더 쉽다는 걸 아실텐데요.
-inche에서 feet으로 바꾸려면 12로 나눕니다.
-inche에서 yard로 바꾸려면 36으로 나누고요.
+인치에서 피트로 바꾸려면 12로 나눕니다.
+인치에서 야드로 바꾸려면 36으로 나누고요.
 당신은 어떨지 모르지만 저는 암산으로 36을 나누지 못합니다.
 미터법을 사용하면 훨씬 쉽죠.
-millimeter에서 centimeter로 바꾸려면 10으로 곱합니다.
-millimeter에서 meter로 바꾸려면 1000으로 곱하고요.
+밀리미터에서 센티미터로 바꾸려면 10으로 곱합니다.
+밀리미터에서 미터로 바꾸려면 1000으로 곱하고요.
 <strong>암산</strong>으로 1000은 곱할 수 있습니다.
 </p>
 <p>
@@ -183,3 +184,4 @@ radian는 수학을 쉽게 만들고요.
 UI 화면을 제외하고 나머지는 degree가 아닌 radian을 사용해보세요.
 </p>
 </div>
+

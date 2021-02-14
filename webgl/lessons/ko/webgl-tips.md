@@ -2,6 +2,7 @@ Title: WebGL Tip
 Description: WebGL에서 발생할 수 있는 작은 이슈들
 TOC: #
 
+
 이 글은 WebGL을 사용할 때 발생할 수 있지만 별도로 분리하기에는 너무 작은 이슈 모음입니다.
 
 ---
@@ -208,7 +209,7 @@ var canvas = document.querySelector("#canvas");
 사용자가 파일을 다운로드할 때, 브라우저가 상태 표시줄을 추가할 때, 심지어 다른 탭에 있을 때도 포함될 수 있습니다.
 또한 사용자가 휴대 전화를 돌려서 브라우저가 세로 모드에서 가로 모드로 전환되는 경우도 포함됩니다.
 
-정말로 드로잉 프로그램을 만들고 싶다면 [texture로 렌더링](webgl-render-to-texture.html)해야 합니다.
+정말로 드로잉 프로그램을 만들고 싶다면 [텍스처로 렌더링](webgl-render-to-texture.html)해야 합니다.
 
 ---
 
@@ -339,3 +340,4 @@ document.querySelectorAll('canvas').forEach((canvas) => {
 ```
 
 {{{example url="../webgl-tips-html-background.html"}}}
+

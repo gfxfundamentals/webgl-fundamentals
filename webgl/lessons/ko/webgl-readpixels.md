@@ -4,7 +4,7 @@ TOC: readPixels
 
 
 WebGL에서는 format/type 쌍을 `readPixels`에 전달합니다.
-주어진 texture 내부 format(framebuffer에 첨부된)의 경우, 단 2개의 format/type 조합만 유효합니다
+주어진 텍스처 내부 format(framebuffer에 첨부된)의 경우, 단 2개의 format/type 조합만 유효합니다
 
 명세서을 보면:
 
@@ -16,7 +16,7 @@ unsigned integer rendering surface의 경우, format `RGBA_INTEGER`와 type `UNS
 format/type 조합이 뭔지 물어볼 수 있는데
 
 ```js
-// 첨부된 읽기 texture와 함께 framebuffer가 바인딩되어 있다고 가정
+// 첨부된 읽기 텍스처와 함께 framebuffer가 바인딩되어 있다고 가정
 const format = gl.getParameter(gl.IMPLEMENTATION_COLOR_READ_FORMAT);
 const type = gl.getParameter(gl.IMPLEMENTATION_COLOR_READ_TYPE);
 ```
@@ -33,3 +33,4 @@ WebGL1은 렌더링할 수 있는 `RGBA`/`UNSIGNED_BYTE` 조합, 하나만을 �
 
 <script src="../resources/twgl-full.min.js"></script>
 <script src="resources/webgl-readpixels.js"></script>
+

@@ -2,6 +2,7 @@ Title: WebGL 크로스 플랫폼 이슈
 Description: WebGL 앱이 어디서나 작동하도록 만들기 위해 알아야 할 사항들입니다.
 TOC: 크로스 플랫폼 이슈
 
+
 모든 WebGL 프로그램이 모든 기기 혹은 브라우저에서 작동하지 않아도 충격으로 다가오지 않을 겁니다.
 WebGL2의 경우, 적어도 2020년 7월 현재, [사파리](#safari)에서 지원되지 않습니다.
 
@@ -22,15 +23,15 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 
 예제:
 
-* 허용되는 최대 texture 크기
+* 허용되는 최대 텍스처 크기
 
   2048이나 4096은 합리적인 제한으로 보입니다.
   적어도 2020년 현재 [99%의 기기들이 4096를 지원하지만 50%만이 4096 이상을 지원](https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE)합니다.
 
-  참고: 최대 texture 크기는 GPU가 처리할 수 있는 최대 크기입니다.
-  이건 GPU가 해당 크기를 제곱(2D texture용)하거나 세제곱(3D texture용)하는데 충분한 메모리가 있다는 뜻이 아닌데요.
+  참고: 최대 텍스처 크기는 GPU가 처리할 수 있는 최대 크기입니다.
+  이건 GPU가 해당 크기를 제곱(2D 텍스처용)하거나 세제곱(3D 텍스처용)하는데 충분한 메모리가 있다는 뜻이 아닌데요.
   예를 들어 일부 GPU는 16384의 최대 크기를 가집니다.
-  하지만 각 면이 16384인 3D texture는 16TB의 메모리를 필요로 합니다!!!
+  하지만 각 면이 16384인 3D 텍스처는 16TB의 메모리를 필요로 합니다!!!
 
 * 단일 프로그램의 vertex attribute 최대 개수
 
@@ -40,10 +41,10 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 
 * Uniform vector의 최대 개수
 
-  vertex shader와 fragment shader에 따로따로 지정됩니다.
+  버텍스 셰이더와 프래그먼트 셰이더에 따로따로 지정됩니다.
 
-  WebGL1에서는 vertex shader에 128개 그리고 fragment shader에 16개입니다.
-  WebGL2에서는 vertex shader에 256개 그리고 fragment shader에 224개입니다.
+  WebGL1에서는 버텍스 셰이더에 128개 그리고 프래그먼트 셰이더에 16개입니다.
+  WebGL2에서는 버텍스 셰이더에 256개 그리고 프래그먼트 셰이더에 224개입니다.
 
   참고로 uniform은 "패킹"될 수 있음으로 위 숫자는 사용할 수 있는 `vec4`의 개수인데요.
   이론적으로는 `float` uniform 개수의 4배를 가질 수 있습니다.
@@ -103,8 +104,8 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
   여기에는 3가지 값이 있습니다.
 
   1. Texture unit 개수
-  2. Vertex shader가 참조할 수 있는 texture unit 개수
-  3. Fragment shader가 참조할 수 있는 texture unit 개수
+  2. 버텍스 셰이더가 참조할 수 있는 texture unit 개수
+  3. 프래그먼트 셰이더가 참조할 수 있는 texture unit 개수
 
   <table class="tabular-data">
     <thead>
@@ -112,15 +113,15 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
     </thead>
     <tbody>
       <tr><td>존재하는 texture unit 최소값</td><td>8</td><td>32</td></tr>
-      <tr><td>Vertex shader가 참조할 수 있는 texture unit 최소값</td><th style="color: red;">0!</td><td>16</td></tr>
-      <tr><td>Fragment shader가 참조할 수 있는 texture unit 최소값</td><td>8</td><td>16</td></tr>
+      <tr><td>버텍스 셰이더가 참조할 수 있는 texture unit 최소값</td><th style="color: red;">0!</td><td>16</td></tr>
+      <tr><td>프래그먼트 셰이더가 참조할 수 있는 texture unit 최소값</td><td>8</td><td>16</td></tr>
     </tbody>
   </table>
 
-  WebGL1에서 vertex shader에 대한 값이 **0**임을 주의해야 합니다.
+  WebGL1에서 버텍스 셰이더에 대한 값이 **0**임을 주의해야 합니다.
   참고로 너무 낙담하지 않아도 괜찮은데요.
   [모든 장치의 약 97%가 최소 4개를 지원](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)합니다.
-  그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 shader로 fallback할 수 있는지 확인하는 게 좋습니다.
+  그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 셰이더로 fallback할 수 있는지 확인하는 게 좋습니다.
 
 다른 제한도 있는데요.
 이를 조회하기 위해 다음의 값으로 `gl.getParameter`를 호출합니다.
@@ -128,14 +129,14 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 <div class="webgl_center">
 <table class="tabular-data">
   <tbody>
-    <tr><td>MAX_TEXTURE_SIZE                </td><td>Texture 최대 크기</td></tr>
+    <tr><td>MAX_TEXTURE_SIZE                </td><td>텍스처 최대 크기</td></tr>
     <tr><td>MAX_VERTEX_ATTRIBS              </td><td>가질 수 있는 attribute 개수</td></tr>
-    <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>Vertex shader가 가질 수 있는 vec4 uniform 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>버텍스 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
     <tr><td>MAX_VARYING_VECTORS             </td><td>가지고 있는 varying 개수</td></tr>
     <tr><td>MAX_COMBINED_TEXTURE_IMAGE_UNITS</td><td>존재하는 texture unit 개수</td></tr>
-    <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>Vertex shader가 참조할 수 있는 texture unit 개수</td></tr>
-    <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>Fragment shader가 참조할 수 있는 texture unit 개수</td></tr>
-    <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>Fragment shader가 가질 수 있는 vec4 uniform 개수</td></tr>
+    <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>버텍스 셰이더가 참조할 수 있는 texture unit 개수</td></tr>
+    <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>프래그먼트 셰이더가 참조할 수 있는 texture unit 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>프래그먼트 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
     <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>Cubemap 최대 크기</td></tr>
     <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>Renderbuffer 최대 크기</td></tr>
     <tr><td>MAX_VIEWPORT_DIMS               </td><td>Viewport 최대 크기</td></tr>
@@ -152,14 +153,14 @@ WebGL2는 몇 가지 더 추가합니다.
 <div class="webgl_center">
 <table class="tabular-data">
   <tbody>
-    <tr><td>MAX_3D_TEXTURE_SIZE                          </td><td>3D texture 최대 크기</td></tr>
+    <tr><td>MAX_3D_TEXTURE_SIZE                          </td><td>3D 텍스처 최대 크기</td></tr>
     <tr><td>MAX_DRAW_BUFFERS                             </td><td>가질 수 있는 color attachment 개수</td></tr>
-    <tr><td>MAX_ARRAY_TEXTURE_LAYERS                     </td><td>2D texture 배열의 최대 레이어</td></tr>
+    <tr><td>MAX_ARRAY_TEXTURE_LAYERS                     </td><td>2D 텍스처 배열의 최대 레이어</td></tr>
     <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS      </td><td>Transform feedback을 사용할 때 별도의 버퍼로 출력할 수 있는 varying 개수</td></tr>
     <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>모든 걸 단일 버퍼로 보낼 때 출력할 수 있는 varying 개수</td></tr>
     <tr><td>MAX_COMBINED_UNIFORM_BLOCKS                  </td><td>종합적으로 사용할 수 있는 uniform block 개수</td></tr>
-    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>Vertex shader가 사용할 수 있는 uniform block 개수</td></tr>
-    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>Fragment shader가 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>버텍스 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>프래그먼트 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
   </tbody>
 </table>
 </div>
@@ -177,7 +178,7 @@ WebGL2는 몇 가지 더 추가합니다.
 
 ## framebuffer attachment 조합
 
-Framebuffer는 texture와 renderbuffer의 attachment를 하나 이상 가질 수 있습니다.
+Framebuffer는 텍스처와 renderbuffer의 attachment를 하나 이상 가질 수 있습니다.
 
 WebGL1에서는 3개의 attachment 조합만 동작이 보장됩니다.
 
@@ -200,7 +201,7 @@ WebGL1과 WebGL2의 많은 기능들이 선택적인데요.
 
 WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 color attachment를 framebuffer로 첨부할 수 있는 기능인 `WEBGL_draw_buffers`이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
 기본적으로 WebGL2를 실행할 수 있는 모든 기기는 WebGL1에서 `WEBGL_draw_buffers`도 지원해야 하지만, 여전히 이슈가 됩니다.
-여러 texture를 한 번에 렌더링해야 한다면 고사양 GPU로도 시간이 필요할 수 있습니다.
+여러 텍스처를 한 번에 렌더링해야 한다면 고사양 GPU로도 시간이 필요할 수 있습니다.
 그래도 사용자 기기가 지원하는지 확인하고, 지원하지 않는다면 친절한 설명을 제공해야 합니다.
 
 WebGL1의 경우 다음의 3개의 extension이 거의 보편적으로 지원되는 것처럼 보이므로 사용자에게 이들이 누락되면 페이지가 작동하지 않을 것이라 경고하고 싶을 수 있지만 사용자가 페이지를 제대로 실행하지 못 할만큼 아주 오래된 기기를 가지고 있을 수 있습니다.
@@ -210,7 +211,7 @@ WebGL1의 경우 다음의 3개의 extension이 거의 보편적으로 지원되
 ## attribute location
 
 버그는 attribute location을 찾지 못하는 겁니다.
-예를 들어 이런 vertex shader가 있다면
+예를 들어 이런 버텍스 셰이더가 있다면
 
 ```glsl
 attribute vec4 position;
@@ -234,7 +235,7 @@ void main() {
 
 1. 항상 location을 탐색
 2. `gl.linkProgram` 호출 전에 `gl.bindAttribLocation`을 호출하여 location 할당
-3. WebGL2 한정, 다음과 같이 shader에서 location을 설정
+3. WebGL2 한정, 다음과 같이 셰이더에서 location을 설정
 
    ```glsl
    #version 300 es
@@ -243,7 +244,7 @@ void main() {
    ...
    ```
 
-해결법 2가 가장 [D.R.Y](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)하게 보이지만, 런타임에 texture를 생성하지 않는다면 해결법 3이 가장 [W.E.T](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself#DRY_vs_WET_solutions)하게 보입니다.
+해결법 2가 가장 [D.R.Y](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)하게 보이지만, 런타임에 텍스처를 생성하지 않는다면 해결법 3이 가장 [W.E.T](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself#DRY_vs_WET_solutions)하게 보입니다.
 
 ## GLSL undefined 동작
 
@@ -251,9 +252,9 @@ void main() {
 예를 들어 `pow(x, y)`는 `x < 0`일 경우 undefined입니다.
 [spot lighting](webgl-3d-lighting-spot.html)에 대한 글의 하단에 더 긴 목록이 있습니다
 
-## Shader 정밀도 이슈
+## 셰이더 정밀도 이슈
 
-2020년 여기서 가장 큰 이슈는 shader에서 `mediump`나 `lowp`를 사용하면 데스크탑의 GPU는 `highp`를 사용하지만 모바일은 `mediump`나 `lowp`가 되는 것이므로 데스크탑으로 개발할 때는 어떤 이슈도 눈치채지 못 할 겁니다.
+2020년 여기서 가장 큰 이슈는 셰이더에서 `mediump`나 `lowp`를 사용하면 데스크탑의 GPU는 `highp`를 사용하지만 모바일은 `mediump`나 `lowp`가 되는 것이므로 데스크탑으로 개발할 때는 어떤 이슈도 눈치채지 못 할 겁니다.
 
 자세한 내용은 [이 글](webgl-precision-issues.html)을 봐주세요.
 
@@ -263,7 +264,7 @@ WebGL의 `POINTS`와 `LINES`는 최대 크기 1을 가질 수 있고 현재 가�
 또한 중심이 viewport 외부에 있을 때 점이 클리핑되는지 여부는 구현에 정의됩니다.
 [이 글의 하단](webgl-drawing-without-data.html#pointissues)을 봐주세요.
 
-마찬가지로, viewport가 vertex만 클리핑하는지 혹은 pixel도 클리핑하는지 여부는 정의되지 않았습니다.
+마찬가지로, viewport가 정점만 클리핑하는지 혹은 픽셀도 클리핑하는지 여부는 정의되지 않았습니다.
 Scissor는 항상 pixel을 클리핑하므로 scissor 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.
 
 ## 사파리 버그
@@ -282,11 +283,12 @@ Scissor는 항상 pixel을 클리핑하므로 scissor 테스트를 켜고, 그�
 
 * WebGL 캔버스와 레이어 변환에 대한 변경 사항이 항상 동기화되지 않는 [버그](https://bugs.webkit.org/show_bug.cgi?id=172969) (3년 전)
 
-* 알파 채널이 없는 PNG texture가 잘못된 rgb 색상을 가지는 [버그](https://bugs.webkit.org/show_bug.cgi?id=165297) (4년 전)
+* 알파 채널이 없는 PNG 텍스처가 잘못된 rgb 색상을 가지는 [버그](https://bugs.webkit.org/show_bug.cgi?id=165297) (4년 전)
 
 * 사파리가 일반적인 attribute 없이 쓰는 경우를 처리하지 않는 [버그](https://bugs.webkit.org/show_bug.cgi?id=197592) (1년 전) 
 
 * <a id="safari"></a>
-  또한 사파리에는 WebGL2를 활성화하는 옵션이 있지만 `#version 300 es` shader를 허용하는 게 전부입니다.
+  또한 사파리에는 WebGL2를 활성화하는 옵션이 있지만 `#version 300 es` 셰이더를 허용하는 게 전부입니다.
   다른 80개 이상의 모든 WebGL2 api 함수는 적어도 2020년 7월 기준 구현되어 있지 않습니다.
   [Source](https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/canvas/WebGL2RenderingContext.cpp)를 보고 "not implemented"를 검색해보세요.
+

@@ -7,8 +7,8 @@ TOC: 정밀도 이슈
 
 ## `lowp`, `mediump`, `highp`
 
-이 사이트의 [첫 번째 글](webgl-fundamentals.html)에서 우린 vertex shader와 fragment shader를 만들었습니다.
-Fragment shader를 만들 때 지나가는 말로 fragment shader는 기본 정밀도를 가지지 않으므로 한 줄을 추가해서 설정해야 한다고 언급했었는데
+이 사이트의 [첫 번째 글](webgl-fundamentals.html)에서 우린 버텍스 셰이더와 프래그먼트 셰이더를 만들었습니다.
+프래그먼트 셰이더를 만들 때 지나가는 말로 프래그먼트 셰이더는 기본 정밀도를 가지지 않으므로 한 줄을 추가해서 설정해야 한다고 언급했었는데
 
 ```glsl
 precision mediump float;
@@ -48,29 +48,29 @@ WebGL에서 대부분의 숫자는 32비트에 불과한데요.
 이상적으로는 모든 곳에 `highp`를 사용해 이 이슈를 완전히 무시할 수도 있지만 불행히도 현실적이지 않습니다.
 2가지 문제가 있는데요.
 
-1. 대부분의 구형 또는 저렴한 스마트폰같은 일부 기기들은 fragment shader에서 `highp`를 지원하지 않습니다.
+1. 대부분의 구형 또는 저렴한 스마트폰같은 일부 기기들은 프래그먼트 셰이더에서 `highp`를 지원하지 않습니다.
 
-   이 문제는 fragment shader에서 `highp`를 사용하도록 선언하고 사용자가 `highp`를 지원하지 않는 기기에서 페이지를 로드하면 shader는 컴파일에 실패할 겁니다.
+   이 문제는 프래그먼트 셰이더에서 `highp`를 사용하도록 선언하고 사용자가 `highp`를 지원하지 않는 기기에서 페이지를 로드하면 셰이더는 컴파일에 실패할 겁니다.
 
    반대로 어디에서나 사용할 수 있는 `mediump`는 [point light](webgl-3d-lighting-point.html)같은 일반적인 것들에 대해 충분히 해상도가 높지 않습니다.
 
 2. 실제로 `lowp`에 9비트를 쓰고 `mediump`애 16비트를 쓰는 장치에서는 보통 `highp`보다 빠릅니다. 훨씬 빠른 경우가 더 많습니다.
 
 마지막으로, `Uint8Array`나 `Uint16Array`와 같은 값과 달리, `lowp` 또는 `mediump` 값이나 심지어 `highp` 값도 더 높은 정밀도(더 많은 비트)를 사용할 수 있습니다.
-예를 들어 데스크탑 GPU에서 shader에 `mediump`를 넣었다면 아직 내부적으로 32비트를 사용할 가능성이 높은데요.
-이건 shader를 테스트하기 여럽게 만드는 문제를 야기합니다.
-실제로 shader가 `lowp`나 `mediump`와 함께 올바르게 작동하는지 보기 위해서는 실제로 `lowp`에 8비트를 쓰고 `highp`에 16비트를 쓰는 기기에서 테스트해야 합니다.
+예를 들어 데스크탑 GPU에서 셰이더에 `mediump`를 넣었다면 아직 내부적으로 32비트를 사용할 가능성이 높은데요.
+이건 셰이더를 테스트하기 여럽게 만드는 문제를 야기합니다.
+실제로 셰이더가 `lowp`나 `mediump`와 함께 올바르게 작동하는지 보기 위해서는 실제로 `lowp`에 8비트를 쓰고 `highp`에 16비트를 쓰는 기기에서 테스트해야 합니다.
 
 그래서 어떻게 해야 할까요?
 
 음 하나는 그냥 `highp`를 사용하고 이에 대해 걱정하지 않을 수 있습니다.
 `highp`를 지원하지 않는 기기를 가진 사용자는 아마 페이지를 잘 실행시킬 수 없는 오래되고 느린 기기를 가져서 목표 고객이 아닐 수 있습니다.
 
-또 다른 쉬운 방법은 `highp`를 기본 값으로 하되 기기에서 `highp`를 지원하지 않는 경우 `mediump`로 fallback하는 겁니다.
-Fragment shader에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용하면 됩니다.
+또 다른 쉬운 방법은 `highp`를 기본값으로 하되 기기에서 `highp`를 지원하지 않는 경우 `mediump`로 fallback하는 겁니다.
+프래그먼트 셰이더에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용하면 됩니다.
 
 ```glsl
-// fragment shader 일부
+// 프래그먼트 셰이더 일부
 #ifdef GL_FRAGMENT_PRECISION_HIGH
   precision highp float;
 #else
@@ -80,16 +80,16 @@ Fragment shader에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용
 ...
 ```
 
-이제 shader의 내용에 따라 이상한 렌더링 아티팩트가 발생할 수 있지만 기기에서 `highp`를 지원하지 않아도 shader를 컴파일할 겁니다.
+이제 셰이더의 내용에 따라 이상한 렌더링 아티팩트가 발생할 수 있지만 기기에서 `highp`를 지원하지 않아도 셰이더를 컴파일할 겁니다.
 
-다른 옵션은 `mediump`만 필요하도록 필요하도록 fragment shader를 작성해볼 수 있습니다.
+다른 옵션은 `mediump`만 필요하도록 필요하도록 프래그먼트 셰이더를 작성해볼 수 있습니다.
 실제로 성공했는지 확인하려면 실제 `mediump`를 지원하는 기기에서 테스트해야 합니다.
 
-또 다른 옵션은 기기가 `mediump`만 지원하는 경우 다른 shader를 사용하는 겁니다.
+또 다른 옵션은 기기가 `mediump`만 지원하는 경우 다른 셰이더를 사용하는 겁니다.
 위에서 point light는 `mediump`로 문제될 수 있다고 언급했었는데요.
-이는 [point lights](webgl-3d-lighting-point.html), 특히 반사 하이라이트 계산이, world 혹은 view 공간의 값을 fragment shader로 전달하고, 이 값들이 `mediump` 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
+이는 [point lights](webgl-3d-lighting-point.html), 특히 반사 하이라이트 계산이, world 혹은 view 공간의 값을 프래그먼트 셰이더로 전달하고, 이 값들이 `mediump` 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
 따라서, `mediump` 장치에서는 반사 하이라이트를 생략할 수도 있습니다.
-예를 들어 [point light에 대한 글](webgl-3d-lighting-point.html)에 있는 point light shader는 기기에서 `mediump`만 지원하는 경우 하이라이트를 제거하도록 수정되었습니다.
+예를 들어 [point light에 대한 글](webgl-3d-lighting-point.html)에 있는 point light 셰이더는 기기에서 `mediump`만 지원하는 경우 하이라이트를 제거하도록 수정되었습니다.
 
 ```glsl
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -98,7 +98,7 @@ Fragment shader에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용
   precision mediump float;
 #endif
 
-// vertex shader에서 전달됩니다.
+// 버텍스 셰이더에서 전달됩니다.
 varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 varying vec3 v_surfaceToView;
@@ -135,15 +135,15 @@ void main() {
 ```
 
 참고: 이것만으로는 충분하지 않습니다.
-Vertex shader에는
+버텍스 셰이더에는
 
 ```glsl
-  // 조명에 대한 표면의 벡터를 계산하고 fragment shader로 전달
+  // 조명에 대한 표면의 벡터를 계산하고 프래그먼트 셰이더로 전달
   v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 ```
 
 조명이 표면에서 1000단위 떨어져 있다고 해봅시다.
-그런 다음 fragment shader와 이 줄에 도달하는데
+그런 다음 프래그먼트 셰이더와 이 줄에 도달하는데
 
 ```glsl
   vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
@@ -159,11 +159,10 @@ Vertex shader에는
 x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 1000000은 `mediump`의 범위를 벗어납니다.
 
-한 가지 해결법은 vertex shader에서 정규화하는 겁니다.
+한 가지 해결법은 버텍스 셰이더에서 정규화하는 겁니다.
 
 ```
-  // compute the vector of the surface to the light
-  // and pass it to the fragment shader
+  // 조명에 대한 표면의 벡터를 계산하고 프래그먼트 셰이더에 전달
 #ifdef GL_FRAGMENT_PRECISION_HIGH
   v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 #else
@@ -173,7 +172,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 
 이제 `v_surfaceToLight`에 할당된 값들은 `mediump`의 범위인 -1과 +1사이입니다.
 
-참고로 vertex shader에서의 정규화는 실제로 동일한 결과를 제공하지 않지만 나란히 비교하지 않는 한 아무도 눈치채지 못할 정도로 충분히 만족할만 합니다.
+참고로 버텍스 셰이더에서의 정규화는 실제로 동일한 결과를 제공하지 않지만 나란히 비교하지 않는 한 아무도 눈치채지 못할 정도로 충분히 만족할만 합니다.
 
 `normalize`, `length`, `distance`, `dot`과 같은 함수들은 모두 값이 너무 크면 `mediump`의 범위를 벗어나는 이슈가 있습니다.
 
@@ -183,33 +182,33 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 비교적 최신의 스마트폰 대부분에서 `highp`를 사용할 수 있지만, `mediump`는 더 빠르게 실행됩니다.
 다시 말하지만, 이건 더 낮은 정밀도인 `mediump`를 실제로 지원하는 기기에만 해당됩니다.
 대부분의 데스크탑이 하듯이 `mediump`에 대해 `highp`로 같은 정밀도를 사용하기로 선택했다면 속도에는 차이가 없지만, 앱이 모바일에서 왜 느릴까 고민하고 다른 사항들을 배제한 경우 `highp`를 지원하는 기기에서도 `mediump`를 사용해볼 수 있습니다.
-사실 위 모든 사항들 없이도 `mediump`를 사용하도록 shader를 설정하고 모바일에서 더 빠르게 실행되는지 확인해볼 수 있습니다.
+사실 위 모든 사항들 없이도 `mediump`를 사용하도록 셰이더를 설정하고 모바일에서 더 빠르게 실행되는지 확인해볼 수 있습니다.
 그렇게 한다면 어떤 렌더링 이슈가 해결될 수 있습니다.
 그렇게 하지 않는다면 아마 신경 쓸 이유가 없을 겁니다.
 
 ## `highp` 및 `mediump` 정밀도 지원 감지
 
 이건 비교적 쉬울 것 같네요.
-`gl.getShaderPrecisionFormat`을 호출하여, shader type인 `VERTEX_SHADER`나 `FRAGMENT_SHADER`를 전달하고, `LOW_FLOAT`, `MEDIUM_FLOAT`, `HIGH_FLOAT`, `LOW_INT`, `MEDIUM_INT`, `HIGH_INT` 중 하나를 전달하면, [정밀도 정보를 반환](../webgl-precision-lowp-mediump-highp.html)합니다.
+`gl.getShaderPrecisionFormat`을 호출하여, 셰이더 type인 `VERTEX_SHADER`나 `FRAGMENT_SHADER`를 전달하고, `LOW_FLOAT`, `MEDIUM_FLOAT`, `HIGH_FLOAT`, `LOW_INT`, `MEDIUM_INT`, `HIGH_INT` 중 하나를 전달하면, [정밀도 정보를 반환](../webgl-precision-lowp-mediump-highp.html)합니다.
 
 불행히도 사파리는 여기에 버그가 있어, 최소한 2020년 4월 기준 이 방법은 아이폰에서 실패할 겁니다.
 
-그래서 모든 장치에서 `highp`를 지원하는 지원하는지 확인하기 위해, `highp`를 사용하는 fragment shader를 만들어, 컴파일하고, 연결하고, 에러를 확인하면 됩니다.
+그래서 모든 장치에서 `highp`를 지원하는 지원하는지 확인하기 위해, `highp`를 사용하는 프래그먼트 셰이더를 만들어, 컴파일하고, 연결하고, 에러를 확인하면 됩니다.
 실패한다면 `highp`가 지원되지 않는 겁니다.
-참고로 vertex shader와 연결해야 합니다.
-명세서에는 연결 시간에 에러가 발견되는 한 에러를 반환하기 위해 컴파일할 필요가 없으므로, shader를 컴파일하고 `COMPILE_STATUS`를 확인하는 것만으로는 컴파일이 실제로 성공했는지 혹은 실패했는지 알 수 없습니다.
+참고로 버텍스 셰이더와 연결해야 합니다.
+명세서에는 연결 시간에 에러가 발견되는 한 에러를 반환하기 위해 컴파일할 필요가 없으므로, 셰이더를 컴파일하고 `COMPILE_STATUS`를 확인하는 것만으로는 컴파일이 실제로 성공했는지 혹은 실패했는지 알 수 없습니다.
 연결하고 `LINK_STATUS`를 확인해야 합니다.
 
 `mediump`이 정말로 고정밀도가 아니라 중간 정밀도인지 확인하기 위해서는 렌더 테스트를 해야합니다.
-기본적으로 `mediump`를 사용하는 shader를 만들고 `highp`에서는 작동하지만 `mediump`에서는 실패하는 몇 가지 계산을 한 뒤 결과를 확인하면 되는데요.
+기본적으로 `mediump`를 사용하는 셰이더를 만들고 `highp`에서는 작동하지만 `mediump`에서는 실패하는 몇 가지 계산을 한 뒤 결과를 확인하면 되는데요.
 결과가 정확하다면 driver/gpu/device가 `mediump`에 `highp`를 사용하는 겁니다.
 결과가 부정확하다면 `mediump`는 `mediump`인 겁니다.
 
-다음은 fragment shader의 `mediump`이 실제로 `mediump`인지 확인하는 예제이고
+다음은 프래그먼트 셰이더의 `mediump`이 실제로 `mediump`인지 확인하는 예제이고
 
 {{{example url="../webgl-precision-check-fragment-shader.html"}}}
 
-다음은 vertex shader의 `mediump`이 실제로 `mediump`인지 확인하는 예제인데
+다음은 버텍스 셰이더의 `mediump`이 실제로 `mediump`인지 확인하는 예제인데
 
 {{{example url="../webgl-precision-check-vertex-shader.html"}}}
 
@@ -221,7 +220,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 2014년 아이폰6+는 `mediump`에 대해 16비트를 사용하지만 `lowp`에도 16비트를 사용합니다.
 `lowp`에 대해 9비트를 사용하는 기기를 사용한 적이 있는지 없어서 어떤 이슈가 발생하는지 확실하지 않습니다. 
 
-이 글을 통해서 우리는 fragment shader의 기본 정밀도를 지정했습니다.
+이 글을 통해서 우리는 프래그먼트 셰이더의 기본 정밀도를 지정했습니다.
 또한 어떤 개별 변수의 정밀도라도 지정할 수 있는데요.
 예를 들어
 
@@ -253,13 +252,13 @@ const bitsInCanvas =
 참고: 2020년에 어떤 기기 어떤 브라우저에서 실제로 16비트 캔버스를 사용하는지 알 수 없습니다.
 2011년 WebGL이 출시되었을 때 파이어폭스가 모바일 기기에서 속도를 높이기 위해 16비트 캔버스를 실험했던 걸로 알고 있습니다.
 이는 일반적으로 이미지 이외의 항목에 대해 캔버스에서 픽셀을 읽는 경우를 제외하고는 무시할 수 있습니다. 
-또한, 캔버스가 16비트라고 하더라도 32비트 렌더 대상([framebuffer에 첨부된 texture](webgl-render-to-texture.html))을 만들 수 있습니다.
+또한, 캔버스가 16비트라고 하더라도 32비트 렌더 대상([framebuffer에 첨부된 텍스처](webgl-render-to-texture.html))을 만들 수 있습니다.
 
 ## Texture Format
 
-Texture는 명세서에서 실제 사용된 정밀도는 요청된 정밀도보다 더 클 수 있다고 말하는 또 다른 것입니다.
+텍스처는 명세서에서 실제 사용된 정밀도는 요청된 정밀도보다 더 클 수 있다고 말하는 또 다른 것입니다.
 
-예를 들어 다음과 같이 채널당 4비트씩, 16비트 texture를 요청할 수 있는데 
+예를 들어 다음과 같이 채널당 4비트씩, 16비트 텍스처를 요청할 수 있는데 
 
 ```
 gl.texImage2D(
@@ -279,16 +278,16 @@ gl.texImage2D(
 대부분의 데스크탑이 이걸 수행하고 대부분의 모바일 GPU는 하지 않는다고 알고 있습니다.
 
 테스트할 수 있는데요.
-먼저 위처럼 채널당 4비트인 texture를 요청할 겁니다.
+먼저 위처럼 채널당 4비트인 텍스처를 요청할 겁니다.
 그런 다음 0대 1의 그래디언트으로 [렌더링](webgl-render-to-texture.html)할 겁니다.
 
-다음으로 해당 texture를 캔버스에 렌더링할 건데요.
-Texture가 내부적으로 채널당 4비트라면 그려진 그래디언트에 16단계의 색상만 있을 겁니다.
-Texture가 실제로 채널당 8비트라면 256단계의 색상을 보게 될 겁니다.
+다음으로 해당 텍스처를 캔버스에 렌더링할 건데요.
+텍스처가 내부적으로 채널당 4비트라면 그려진 그래디언트에 16단계의 색상만 있을 겁니다.
+텍스처가 실제로 채널당 8비트라면 256단계의 색상을 보게 될 겁니다.
 
 {{{example url="../webgl-precision-textures.html"}}}
 
-제 스마트폰에서 실행하면 texture가 채널당 4비트를 사용(또는 다른 채널은 테스트하지 않았으므로 빨간색 한정 4비트)하고 있음을 알 수 있습니다.
+제 스마트폰에서 실행하면 텍스처가 채널당 4비트를 사용(또는 다른 채널은 테스트하지 않았으므로 빨간색 한정 4비트)하고 있음을 알 수 있습니다.
 
 <div class="webgl_center"><img src="resources/mobile-4-4-4-4-texture-no-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
 
@@ -307,5 +306,6 @@ gl.disable(gl.DITHER);
 
 <div class="webgl_center"><img src="resources/mobile-4-4-4-4-texture-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
 
-당장 생각나는 이게 실제로 일어나는 유일한 방법은 렌더링 대상으로 더 낮은 비트 해상도 format texture를 사용하고 실제로 texture가 그렇게 낮은 해상도의 장치에서 테스트하지 않았을 경우입니다.
+당장 생각나는 이게 실제로 일어나는 유일한 방법은 렌더링 대상으로 더 낮은 비트 해상도 format texture를 사용하고 실제로 텍스처가 그렇게 낮은 해상도의 장치에서 테스트하지 않았을 경우입니다.
 데스크탑에서만 테스트했다면 이를 야기하는 이슈가 발생하지 않을 수 있습니다.
+

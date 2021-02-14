@@ -6,19 +6,19 @@ TOC: Texture Unit
 이 글은 WebGL에서 texture unit이 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
 attribute에 관한 [비슷한 글](webgl-attributes.html)이 있습니다.
 
-이 글을 읽기 전에 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL Shader와 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)뿐 아니라 [WebGL Texture](webgl-3d-textures.html)도 읽어보시길 바랍니다.
+이 글을 읽기 전에 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL 셰이더 및 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)뿐 아니라 [WebGL 텍스처](webgl-3d-textures.html)도 읽어보시길 바랍니다.
 
 ## Texture Unit
 
-WebGL에는 texture가 있습니다.
-Texture는 대부분 shader에 전달할 수 있는 데이터의 2D 배열인데요.
-Shader에서 이렇게 *uniform sampler*를 선언하면
+WebGL에는 텍스처가 있습니다.
+텍스처는 대부분 셰이더에 전달할 수 있는 데이터의 2D 배열인데요.
+셰이더에서 이렇게 *uniform sampler*를 선언하면
 
 ```glsl
 uniform sampler2D someTexture;
 ```
 
-하지만 shader는 `someTexture`에 사용할 texture를 어떻게 아는 걸까요?
+하지만 셰이더는 `someTexture`에 사용할 텍스처를 어떻게 아는 걸까요?
 
 그게 texture unit이 관여하는 부분입니다.
 Texture unit은 texture에 대한 참조의 **전역 배열**입니다.
@@ -42,7 +42,7 @@ const gl = {
 ```
 
 위에서 `textureUnits`가 배열인 걸 볼 수 있는데요.
-해당 texture unit 배열에서 *bind point* 중 하나를 texture에 할당합니다.
+해당 texture unit 배열에서 *bind point* 중 하나를 텍스처에 할당합니다.
 `ourTexture`를 texture unit 5에 할당해봅시다.
 
 ```js
@@ -58,7 +58,7 @@ gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 ```
 
-그런 다음 아래와 같이 호출하여 texture를 바인딩한 texture unit을 shader에 알리는데
+그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 texture unit을 셰이더에 알리는데
 
 ```js
 gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
@@ -78,7 +78,7 @@ gl.bindTexture = function(target, texture) {
 }:
 ```
 
-다른 texture 함수가 어떻게 작동하는지도 상상할 수 있습니다.
+다른 텍스처 함수가 어떻게 작동하는지도 상상할 수 있습니다.
 `gl.texImage2D(target, ...)`나 `gl.texParameteri(target)`처럼 모두 `target`을 받는데요.
 이들은 다음과 같이 구현될 것이며
 
@@ -98,7 +98,7 @@ gl.texParameteri = function(target, pname, value) {
 ```
 
 위 예제 의사 코드에서 `gl.activeTexture`가 WebGL 안에 있는 내부 전역 변수를 texture unit 배열 인덱스로 설정해야 하는 건 명확합니다.
-해당 시점부터, 다른 모든 texture 함수는 `target`을 받고, 모든 texture 함수의 첫 매개 변수이며, 현재 texture unit의 바인딩 포인트를 참조합니다.
+해당 시점부터, 다른 모든 텍스처 함수는 `target`을 받고, 모든 텍스처 함수의 첫 매개 변수이며, 현재 texture unit의 바인딩 포인트를 참조합니다.
 
 ## 최대 Texture Unit
 
@@ -109,7 +109,7 @@ WebGL은 적어도 8개의 texture unit을 지원하는 구현이 필요합니�
 const maxTextureUnits = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 ```
 
-참고로 vertex shader와 fragment shader는 각각 사용할 수 있는 unit 수에 대한 제한이 다를 수 있습니다.
+참고로 버텍스 셰이더와 프래그먼트 셰이더는 각각 사용할 수 있는 unit 수에 대한 제한이 다를 수 있습니다.
 각각의 제한을 쿼리할 수 있는데
 
 ```js
@@ -125,8 +125,9 @@ maxVertexShaderTextureUnits = 4
 maxFragmentShaderTextureUnits = 8
 ```
 
-이 말은 예를 들어 vertex shader에서 2개의 texture unit을 사용한다면 합쳐진 최대값은 8이기 때문에 fragment shader에서 사용할 수 있는 건 6개만 남는다는 걸 의미합니다.
+이 말은 예를 들어 버텍스 셰이더에서 2개의 texture unit을 사용한다면 합쳐진 최대값은 8이기 때문에 프래그먼트 셰이더에서 사용할 수 있는 건 6개만 남는다는 걸 의미합니다.
 
 또 하나 주목해야 할 점은 WebGL이 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`가 0을 반환하는 걸 허용한다는 겁니다.
-다시 말해, **일부 기기는 vertex shader에서의 texture 사용을 전혀 지원하지 않을 수 있습니다.**
-다행히 [그런 상황](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)은 드물지만 vertex shader에서 texture를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`로 확인하고 아니라면 사용자에게 알려야 합니다.
+다시 말해, **일부 기기는 버텍스 셰이더에서의 텍스처 사용을 전혀 지원하지 않을 수 있습니다.**
+다행히 [그런 상황](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)은 드물지만 버텍스 셰이더에서 텍스처를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`로 확인하고 아니라면 사용자에게 알려야 합니다.
+

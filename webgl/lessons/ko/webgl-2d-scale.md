@@ -6,7 +6,7 @@ TOC: 2D Scale
 이 포스트는 WebGL 관련 시리즈의 연장입니다.
 첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [geometry rotation](webgl-2d-rotation.html)에 관한 것이었습니다.
 
-scale은 [translation](webgl-2d-translation.html)만큼이나 쉽습니다.
+Scale은 [translation](webgl-2d-translation.html)만큼이나 쉽습니다.
 
 원하는 scale에 위치를 곱하면 되는데요.
 [이전 예제](webgl-2d-rotation.html)에서 변경된 사항들은 다음과 같습니다.
@@ -82,7 +82,7 @@ void main() {
 <div class="webgl_bottombar">
 <h3>왜 'F'인가요?</h3>
 <p>
-처음에 누군가가 'F'를 texture에 쓰는 걸 봤는데요.
+처음에 누군가가 'F'를 텍스처로 쓰는 걸 봤는데요.
 'F' 자체는 중요하지 않습니다.
 중요한 건 어느 방향에서든 orientation을 알 수 있다는 겁니다.
 예를 들어 하트 ❤나 삼각형 △을 사용한다면 그게 수평으로 뒤집혔는지 알 수 없습니다.
@@ -95,3 +95,4 @@ F의 orientation은 바로 인지할 수 있습니다.
 orientation을 알 수 있는 어떤 모양이라도 괜찮으며, 저는 처음 이 아이디어를 접했을 때부터 'F'를 사용해왔습니다. 
 </p>
 </div>
+

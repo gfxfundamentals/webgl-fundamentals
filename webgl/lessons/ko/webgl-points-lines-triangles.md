@@ -9,14 +9,14 @@ TOC: 점, 선, 삼각형
 
 [첫 번째 글](webgl-fundamentals.html)에서 언급했듯이 WebGL은 점, 선, 그리고 삼각형을 그립니다.
 `gl.drawArrays`나 `gl.drawElements`를 호출할 때 이를 수행하는데요.
-클립 공간 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArrays`나 `gl.drawElements`의 첫 번째 전달인자를 기반으로 WebGL은 점, 선, 또는 삼각형을 그립니다.
+클립 공간 좌표를 출력하는 버텍스 셰이더를 제공한 다음, `gl.drawArrays`나 `gl.drawElements`의 첫 번째 전달인자를 기반으로 WebGL은 점, 선, 또는 삼각형을 그립니다.
 
 `gl.drawArrays`와 `gl.drawElements`의 첫 번째 전달인자로 유효한 값들은
 
 * `POINTS`
 
-   Vertex shader가 출력하는 각 클립 공간 vertex에 대해 해당 점의 중앙에 정사각형을 그립니다.
-   정사각형의 크기는 vertex shader 내부의 특별 변수 `gl_PointSize`에 픽셀 단위로 원하는 크기를 설정하여 지정합니다.
+   버텍스 셰이더가 출력하는 각 클립 공간 정점에 대해 해당 점의 중앙에 정사각형을 그립니다.
+   정사각형의 크기는 버텍스 셰이더 내부의 특별 변수 `gl_PointSize`에 픽셀 단위로 원하는 크기를 설정하여 지정합니다.
 
    참고: 정사각형이 될 수 있는 최대(그리고 최소) 크기는 쿼리할 수 있는 구현에 따라 다른데
 
@@ -26,7 +26,7 @@ TOC: 점, 선, 삼각형
 
 * `LINES`
 
-   Vertex shader가 출력하는 각 2개의 클립 공간 vertex에 대해 두 점을 연결하는 선을 그립니다.
+   버텍스 셰이더가 출력하는 각 2개의 클립 공간 정점에 대해 두 점을 연결하는 선을 그립니다.
    점 A,B,C,D,E,F가 있다면 3개의 선이 표시됩니다.
 
    <div class="webgl_center"><img src="resources/gl-lines.svg" style="width: 400px;"></div>
@@ -40,9 +40,9 @@ TOC: 점, 선, 삼각형
 
 * `LINE_STRIP`
 
-   Vertex shader가 출력하는 각 클립 공간 vertex에 대해 vertex shader가 출력한 이전 포인트에서 선을 그립니다.
+   버텍스 셰이더가 출력하는 각 클립 공간 정점에 대해 버텍스 셰이더가 출력한 이전 포인트에서 선을 그립니다.
 
-   따라서, 클립 공간 vertex A,B,C,D,E,F를 출력하면 5개의 선이 표시됩니다.
+   따라서, 클립 공간 정점 A,B,C,D,E,F를 출력하면 5개의 선이 표시됩니다.
 
    <div class="webgl_center"><img src="resources/gl-line-strip.svg" style="width: 400px;"></div>
 
@@ -54,14 +54,14 @@ TOC: 점, 선, 삼각형
 
 * `TRIANGLES`
 
-   Vertex shader가 출력하는 3개의 클립 공간 vertex마다 점 3개로 삼각형을 그립니다.
+   버텍스 셰이더가 출력하는 3개의 클립 공간 정점마다 점 3개로 삼각형을 그립니다.
    이게 가장 많이 사용되는 모드입니다.
 
    <div class="webgl_center"><img src="resources/gl-triangles.svg" style="width: 400px;"></div>
 
 * `TRIANGLE_STRIP`
 
-   Vertex shader가 출력하는 각 클립 공간 vertex에 대해 마지막 vertex 3개로 삼각형을 그립니다.
+   버텍스 셰이더가 출력하는 각 클립 공간 정점에 대해 마지막 정점 3개로 삼각형을 그립니다.
    다시 말해 6개의 점 A,B,C,D,E,F를 출력하면 삼각형 4개가 그려집니다.
    A,B,C 다음 B,C,D 다음 C,D,E 다음 D,E,F
 
@@ -69,7 +69,7 @@ TOC: 점, 선, 삼각형
 
 * `TRIANGLE_FAN`
 
-   Vertex shader가 출력하는 각 클립 공간 vertex에 대해 첫 번째 vertex와 마지막 vertex 2개로 삼각형을 그립니다.
+   버텍스 셰이더가 출력하는 각 클립 공간 정점에 대해 첫 번째 정점과 마지막 정점 2개로 삼각형을 그립니다.
    다시 말해 6개의 점 A,B,C,D,E,F를 출력하면 삼각형 4개가 그려집니다.
    A,B,C 다음 A,C,D 다음 A,D,E 다음 마지막으로 A,E,F
 
@@ -77,7 +77,7 @@ TOC: 점, 선, 삼각형
 
 다른 사람들은 동의하지 않겠지만 저의 경험상 `TRIANGLE_FAN`과 `TRIANGLE_STRIP`은 피하는 게 가장 좋습니다.
 몇 가지 예외적인 경우에만 적합하고 이런 경우를 처리하기 위한 추가 코드는 애당초 삼각형만으로 모든 걸 처리할 가치가 없는데요.
-특히 법선을 만들거나 texture 좌표를 생성하거나 vertex 데이터로 다른 많은 작업을 수행하는 도구가 있을 수 있습니다.
+특히 법선을 만들거나 텍스처 좌표를 생성하거나 정점 데이터로 다른 많은 작업을 수행하는 도구가 있을 수 있습니다.
 `TRIANGLES`만을 고수하면 함수는 작동하는데요.
 `TRIANGLE_FAN`과 `TRIANGLE_STRIP`을 추가하기 시작하면 더 많은 경우를 처리하기 위한 함수들이 더 필요해집니다.
 여러분은 동의하지 않고 원하는 방식을 하실 수도 있습니다.
@@ -94,3 +94,4 @@ TOC: 점, 선, 삼각형
 
 추가로, `LINES`는 디버깅이나 간단한 효과에 사용하기는 좋지만 대부분의 플랫폼에서 너비 제한이 1픽셀임을 고려해 볼 때 잘못된 솔루션인 경우가 많습니다.
 그래프의 grid를 그리거나 3D 모델링 프로그램에서 polygon의 윤곽선을 표시하려면 `LINES`를 사용하는 것이 좋지만 SVG나 Adobe Illustrator처럼 구조화된 그래픽을 그리려면 이 방식은 작동하지 않으며, 일반적으로 삼각형에서 [다른 방식](https://mattdesl.svbtle.com/drawing-lines-is-hard)으로 선을 렌더링해야 합니다.
+

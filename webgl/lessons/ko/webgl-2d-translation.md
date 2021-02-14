@@ -10,7 +10,7 @@ TOC: 2D Translation
 이 글은 [WebGL 기초](webgl-fundamentals.html)로 시작하는 시리즈의 연장입니다.
 아직 읽지 않았다면 적어도 첫 번째 글을 먼저 읽고, 다시 여기로 돌아오는 게 좋습니다.
 
-translation은 기본적으로 무언가를 "움직이는 걸" 의미하는 멋진 수학적 명칭인데요.
+Translation은 기본적으로 무언가를 "움직이는 걸" 의미하는 멋진 수학적 명칭인데요.
 문장을 영어에서 일본어로 옮기는 것도 맞지만 이 경우 기하학적 이동을 말합니다.
 [첫 번째 포스트](webgl-fundamentals.html)에서 끝낸 샘플 코드를 사용하면 setRectangle에 전달되는 값을 변경하는 것 만으로 쉽게 사각형을 이동할 수 있었죠?
 다음은 [이전 샘플](webgl-fundamentals.html)에 기반한 샘플입니다.
@@ -38,7 +38,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
     // 캔버스 지우기
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // program(shader 쌍)을 사용하도록 지시
+    // program(셰이더 쌍)을 사용하도록 지시
     gl.useProgram(program);
 
     // attribute 활성화
@@ -130,9 +130,9 @@ function setGeometry(gl, x, y) {
 또한, 자바스크립트는 그릴 때마다 모든 점들을 갱신해야 합니다.
 
 더 간단한 방법이 있습니다.
-geometry를 업로드하고 shader에서 translation을 수행하면 됩니다.
+geometry를 업로드하고 셰이더에서 translation을 수행하면 됩니다.
 
-여기 새로운 shader가 있는데
+여기 새로운 셰이더가 있는데
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -239,3 +239,4 @@ translation을 설정하고 그려달라고 요청하는 게 우리가 하는 �
 너무 뻔한 예제가 아니었기를 바랍니다.
 다른 한편으로 이걸 수행하는 훨씬 더 좋은 방법을 다룰 것이므로 계속 읽어주세요.
 [다음 글](webgl-2d-rotation.html)에서 우리는 rotation으로 넘어가겠습니다.
+

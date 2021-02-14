@@ -1,6 +1,6 @@
-Title: WebGL 3D 원근
+Title: WebGL 3D 원근법
 Description: WebGL에서 3D로 원근을 표시하는 방법
-TOC: 3D 원근
+TOC: 3D 원근법
 
 
 이 포스트는 WebGL 관련 시리즈의 연장입니다.
@@ -50,7 +50,7 @@ Z가 증가할수록, 멀어질수록, 더 작게 그려지는 걸 볼 수 있�
 나누기 전에 Z를 fudgeFactor와 곱하면 주어진 거리에 따라 얼마나 작게 할지 조정할 수 있습니다.
 
 한 번 해봅시다.
-먼저 "fudgeFactor"를 곱한 뒤 Z로 나누도록 vertex shader를 수정합니다.
+먼저 "fudgeFactor"를 곱한 뒤 Z로 나누도록 버텍스 셰이더를 수정합니다.
 
 ```
 <script id="vertex-shader-3d" type="x-shader/x-vertex">
@@ -100,11 +100,11 @@ void main() {
 알아보기 힘들다면 Z로 나누는 코드를 추가하기 전 어떤 모습이었는지 보기 위해 "fudgeFactor" 슬라이더를 1.0에서 0.0으로 드래그해보세요.
 
 <img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
-<div class="webgl_center">직교 vs 원근</div>
+<div class="webgl_center">직교법 vs 원근법</div>
 
-WebGL은 vertex shader의 `gl_Position`에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.
+WebGL은 버텍스 셰이더의 `gl_Position`에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.
 
-이는 shader를 변경하여 직접 나누는 대신 `gl_Position.w`에 `zToDivideBy`를 넣어서 쉽게 증명할 수 있는데요.
+이는 셰이더를 변경하여 직접 나누는 대신 `gl_Position.w`에 `zToDivideBy`를 넣어서 쉽게 증명할 수 있는데요.
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -121,7 +121,7 @@ void main() {
   // x, y, z를 zToDivideBy로 나누기
 *  gl_Position = vec4(position.xyz, zToDivideBy);
 
-  // fragment shader로 color 전달
+  // 프래그먼트 셰이더로 color 전달
   v_color = a_color;
 }
 </script>
@@ -226,7 +226,7 @@ w_out = z_in * fudgeFactor + 1;
 
 자, 행렬만 사용하도록 다시 프로그램을 수정해봅시다.
 
-먼저 vertex shader를 되돌려 놓으면
+먼저 버텍스 셰이더를 되돌려 놓으면
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -399,3 +399,4 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
 <div class="webgl_center"><img src="resources/f-right-side.svg" style="width: 500px;"><div>Scale 없음</div></div>
 
 </div>
+

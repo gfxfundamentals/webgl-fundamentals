@@ -4,11 +4,11 @@ TOC: Framebuffer
 
 
 이 글은 WebGL에서 framebuffer가 무엇인지에 대한 대략적인 이미지를 제공할 겁니다.
-framebuffer는 [texture로 렌더링](webgl-render-to-texture.html)할 때 언급되는데요.
+framebuffer는 [텍스처로 렌더링](webgl-render-to-texture.html)할 때 언급되는데요.
 
 framebuffer는 *attachment 모음*일 뿐입니다.
 그게 전부에요!
-texture와 renderbuffer로 렌더링하는데 사용되죠.
+텍스처와 renderbuffer로 렌더링하는데 사용되죠.
 
 이런식으로 framebuffer 객체를 생각하실 수 있으며
 
@@ -101,3 +101,4 @@ ext.drawBuffersWebGL(drawBuffers) {
 예를 들어 부동 소수점 texture attachment는 기본적으로 렌더링될 수 없습니다.
 extension은 `WEBGL_color_buffer_float`같은 걸 활성화할 수 있습니다.
 마찬가지로 2개 이상의 attachment가 있다면 모두 동일한 넓이여야 합니다.
+

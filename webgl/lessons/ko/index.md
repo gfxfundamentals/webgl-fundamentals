@@ -1,5 +1,6 @@
 Title: WebGL 기초
 
+
 처음부터 배우는 WebGL
 
 WebGL의 기본 원리부터 알려주는 글 모음입니다.
@@ -10,9 +11,9 @@ WebGL의 기본 원리부터 알려주는 글 모음입니다.
 
 {{{include "webgl/lessons/ko/toc.html"}}}
 
-
 <!--
 
 {{{table_of_contents}}}
 
 -->
+

@@ -1,4 +1,4 @@
-Title: WebGL - Rasterization vs 3D 라이브러리
+Title: WebGL - 래스터화 vs 3D 라이브러리
 Description: 왜 WebGL은 3D 라이브러리가 아니며 그것이 중요한 이유
 TOC: 2D vs 3D 라이브러리
 
@@ -6,13 +6,13 @@ TOC: 2D vs 3D 라이브러리
 이 포스트는 WebGL 관련 시리즈의 부수적인 주제입니다.
 첫 번째는 [기초](webgl-fundamentals.html)부터 시작했는데
 
-WebGL이 rasterization API이고 3D API가 아니라는 제 주장이 일부 사람들의 신경을 건드렸기 때문에 이걸 작성하고 있습니다.
-저는 WebGL을 rasterization API라고 불렀고 왜 그들이 위협을 느끼는지 혹은 무엇이 그렇게 화나게 만드는지 모르겠습니다.
+WebGL이 래스터화 API이고 3D API가 아니라는 제 주장이 일부 사람들의 신경을 건드렸기 때문에 이걸 작성하고 있습니다.
+저는 WebGL을 래스터화 API라고 불렀고 왜 그들이 위협을 느끼는지 혹은 무엇이 그렇게 화나게 만드는지 모르겠습니다.
 
 틀림없이 모든 건 관점의 문제일 겁니다.
 나는 칼이 식기류라고 말할 수 있고, 다른 누군가는 칼이 도구라고 말할 수 있지만 또 다른 사람은 칼이 무기라고 말할 수 있습니다.
 
-WebGL의 경우 rasterization API라고 부르는 게 중요하다고 생각한 이유가 있는데 구체적으로는 WebGL을 사용해 3D로 무언가를 그리기 위해 필요한 3D 수학 지식의 양 때문입니다.
+WebGL의 경우 래스터화 API라고 부르는 게 중요하다고 생각한 이유가 있는데 구체적으로는 WebGL을 사용해 3D로 무언가를 그리기 위해 필요한 3D 수학 지식의 양 때문입니다.
 
 저는 3D 라이브러리라고 부르는 모든 것이 당신을 위한 3D 영역을 수행해야 한다고 생각하는데요.
 라이브러리에 3D 데이터, material 매개 변수, 조명을 제공할 수 있어야 하며 3D를 그릴 수 있어야 합니다.
@@ -161,25 +161,25 @@ WebGL에 유입되는 사용자들은 "오, 3D 라이브러리다. 멋지다. �
 {{{example url="resources/3d-in-webgl.html" }}}
 
 코드를 살펴보면 지식량의 측면이나 코드조차도 큰 차이가 없음을 볼 수 있습니다.
-최종적으로 Canvas 버전은 vertex를 반복하고, 우리가 제공한 수식을 수행하며 2D로 일부 선을 그립니다.
+최종적으로 캔버스 버전은 정점을 반복하고, 우리가 제공한 수식을 수행하며 2D로 일부 선을 그립니다.
 WebGL 버전은 우리가 제공한 수식이 GLSL에 있고 GPU에 의해 실행된다는 걸 제외하면 동일한 작업을 수행합니다.
 
-마지막 데모의 요점은 WebGL이 Canvas 2D와 유사한, rasterization 엔진일 뿐이라는 걸 효과적으로 보여주는 겁니다.
+마지막 데모의 요점은 WebGL이 Canvas 2D와 유사한, 래스터화 엔진일 뿐이라는 걸 효과적으로 보여주는 겁니다.
 물론 WebGL은 3D를 구현하는데 도움이 되는 기능들을 가지고 있는데요.
 WebGL은 depth sorting을 훨씬 더 쉽게 만드는 depth buffer를 가지고 있습니다.
 또한 3D 수학을 처리하는데 유용한 수학 함수들이 내장되어 있지만 3D로 만드는 건 없습니다.
 수학 라이브러리인거죠.
 수학이 1D, 2D, 3D인 것에 상관없이 수식에 사용하는데요.
-하지만 궁극적으로, WebGL은 rasterization만 합니다.
+하지만 궁극적으로, WebGL은 래스터화만 합니다.
 그리려는 걸 나타내는 클립 공간 좌표를 제공해야 하죠.
 물론 x,y,z,w를 제공하고 렌더링하기 전에 W로 나누지만 그건 WebGL을 3D 라이브러리로 한정하기엔 충분하지 않습니다.
 3D 라이브러리에서 3D 데이터를 제공하면, 라이브러리는 3D에서 클립 공간 point를 계산합니다.
 
 몇 가지 참고 사항을 더 드리기 위해, [emscripten](https://emscripten.org/)은 WebGL 위에서 오래된 OpenGL 에뮬레이션을 제공합니다.
 해당 코드는 [여기](https://github.com/emscripten-core/emscripten/blob/master/src/library_glemu.js)에 있는데요.
-코드를 살펴보면 OpenGL ES 2.0에서 제거된 OpenGL의 오래된 3D 부분을 에뮬레이트하기 위해 shader를 생성하는 경우가 많습니다.
+코드를 살펴보면 OpenGL ES 2.0에서 제거된 OpenGL의 오래된 3D 부분을 에뮬레이트하기 위해 셰이더를 생성하는 경우가 많습니다.
 3D가 포함되지 않은 최신 OpenGL에서 3D가 포함된 오래된 OpenGL을 에뮬레이트하기 위해 NVidia가 시작한 프로젝트, [Regal](https://github.com/p3/regal/blob/184c62b7d7761481609ef1c1484ada659ae181b9/src/regal/RegalIff.cpp)에서 동일한 걸 볼 수 있습니다.
-또 하나의 예로, [여기](https://gist.github.com/greggman/41d93c00649cba78abdbfc1231c9158c) three.js가 3D를 제공하기 위해 사용하는 shader가 있습니다.
+또 하나의 예로, [여기](https://gist.github.com/greggman/41d93c00649cba78abdbfc1231c9158c) three.js가 3D를 제공하기 위해 사용하는 셰이더가 있습니다.
 많은 것들이 진행되고 있음을 알 수 있는데요.
 이 모든 것들 뿐만이 아니라 이를 지원하는 코드는 WebGL이 아닌 라이브러리에서 제공합니다.
 
@@ -193,3 +193,4 @@ OpenGL ES 2.0과 WebGL은 아닙니다.
 이 모든 것의 요점은 WebGL이 처음인 개발자에게 WebGL 핵심에 대한 이해를 제공하는 겁니다.
 WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 한다는 걸 알면, 다음 단계는 무엇인지 그리고 3D 수학 지식 추구할지 아니면 3D 라이브러리를 선택하여 처리할지 알 수 있습니다.
 또한 어떻게 작동하는지에 대한 수많은 수수께끼를 없애줍니다.
+

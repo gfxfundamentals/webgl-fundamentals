@@ -17,8 +17,8 @@ TOC: 2D 행렬
 </div>
 
 지난 3개의 포스트에서 우리는 [geometry translation](webgl-2d-translation.html), [geometry rotation](webgl-2d-rotation.html), [geometry scale](webgl-2d-scale.html)에 대해 살펴봤습니다.
-translation, rotation, scale은 각각 'transformation'의 한 종류로 간주되는데요.
-각각의 transformation은 shader의 변경이 필요하고 3개의 transformation은 각각의 순서에 따라 달라집니다.
+translation, rotation, scale은 각각 '변환'의 한 종류로 간주되는데요.
+각각의 변환은 셰이더의 변경이 필요하고 3개의 변환은 각각의 순서에 따라 달라집니다.
 [이전 예제](webgl-2d-scale.html)에서 우리는 크기를 조정하고, 회전한 다음, 이동했는데요.
 만약 다른 순서로 적용한다면 다른 결과를 얻게 될 겁니다.
 
@@ -31,7 +31,7 @@ translation, rotation, scale은 각각 'transformation'의 한 종류로 간주�
 <img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
 
 결과는 완전히 다릅니다.
-심지어 더 안 좋은 점은, 두 번째 예제가 필요하다면 우리가 원하는 새로운 순서로 translation, rotation, scale을 적용한 다른 shader를 작성해야 한다는 겁니다.
+심지어 더 안 좋은 점은, 두 번째 예제가 필요하다면 우리가 원하는 새로운 순서로 translation, rotation, scale을 적용한 다른 셰이더를 작성해야 한다는 겁니다.
 
 음, 저보다 훨씬 더 똑똑한 사람들은 행렬 수학으로 동일한 모든 작업을 할 수 있다는 걸 밝혀냈는데요.
 2D의 경우 3x3 행렬을 사용합니다.
@@ -157,7 +157,7 @@ newY = y * sy;
 그냥 우리가 이미 하고 있던 동일한 것들을 수행하기 위한 여러 작업처럼 보입니다
 
 여기가 마법이 들어오는 곳입니다.
-행렬을 함께 곱하고 모든 transformation을 한 번에 적용하는거죠.
+행렬을 함께 곱하고 모든 변환을 한 번에 적용하는거죠.
 두 행렬을 받아서, 곱하고 결과를 반환하는, 함수 `m3.multiply`가 있다고 가정해봅시다.
 
 ```js
@@ -229,8 +229,8 @@ var m3 = {
 };
 ```
 
-이제 shader를 바꿔봅시다.
-기존 shader는 이렇게 되어 있는데
+이제 셰이더를 바꿔봅시다.
+기존 셰이더는 이렇게 되어 있는데
 
 ```html
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -255,7 +255,7 @@ void main() {
   ...
 ```
 
-새로운 shader는 훨씬 더 간단해질 겁니다.
+새로운 셰이더는 훨씬 더 간단해질 겁니다.
 
 ```html
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -297,13 +297,13 @@ function drawScene() {
 
 여기 새로운 코드를 사용한 샘플입니다.
 슬라이더는 동일하게, translation, rotation, scale인데요.
-하지만 shader에서 사용되는 방식은 훨씬 더 간단해졌습니다.
+하지만 셰이더에서 사용되는 방식은 훨씬 더 간단해졌습니다.
 
 {{{example url="../webgl-2d-geometry-matrix-transform.html" }}}
 
 그래도, 물어볼 수 있는데, 그래서 뭐요?
 그다지 이점이 많아 보이지 않는데요.
-하지만, 이제 순서를 변경하려는 경우 새로운 shader를 작성하지 않아도 됩니다.
+하지만, 이제 순서를 변경하려는 경우 새로운 셰이더를 작성하지 않아도 됩니다.
 그냥 수식만 바꿔주면 되죠.
 
 ```js
@@ -404,7 +404,7 @@ matrix = m3.multiply(matrix, moveOriginMatrix);
 이제 Photoshop이나 Flash에서 어떻게 회전점을 이동시키는지 알게 되었습니다.
 
 이제 더 끝내주는 걸 해봅시다.
-첫 번째 글인 [WebGL 기초](webgl-fundamentals.html)로 돌아가 보면 shader에 픽셀을 클립 공간으로 변환하는 코드가 있다는 걸 기억하실 겁니다.
+첫 번째 글인 [WebGL 기초](webgl-fundamentals.html)로 돌아가 보면 셰이더에 픽셀을 클립 공간으로 변환하는 코드가 있다는 걸 기억하실 겁니다.
 
 ```js
 ...
@@ -423,7 +423,7 @@ gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 이 단계들을 차례대로 살펴보자면, 첫 단계, "픽셀을 0.0에서 1.0사이로 변환", 이건 실제 scale 작업입니다.
 두 번째 역시 scale 작업입니다.
 다음은 translation이고 마지막으로 Y를 -1로 scale 하는데요.
-실제로 우리가 shader에 전달한 행렬로 모든 걸 수행할 수 있습니다.
+실제로 우리가 셰이더에 전달한 행렬로 모든 걸 수행할 수 있습니다.
 2개의 scale 행렬을 만들 수 있는데,
 하나는 1.0/resolution으로 scale하는 것이고,
 다른 하나는 2.0으로 scale하는 것이며,
@@ -446,8 +446,8 @@ var m3 = {
   ...
 ```
 
-이제 shader를 더 단순하게 할 수 있습니다.
-여기 완전히 새로운 vertex shader 입니다.
+이제 셰이더를 더 단순하게 할 수 있습니다.
+여기 완전히 새로운 버텍스 셰이더 입니다.
 
 ```html
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -485,7 +485,7 @@ function drawScene() {
 ```
 
 또한 해상도를 설정하는 코드를 삭제했는데요.
-이 마지막 단계에서 우리는 행렬 수학의 마법 덕분에 6-7단계의 다소 복잡한 shader를 고작 1단계의 아주 간단한 shader로 바꿨습니다.
+이 마지막 단계에서 우리는 행렬 수학의 마법 덕분에 6-7단계의 다소 복잡한 셰이더를 고작 1단계의 아주 간단한 셰이더로 바꿨습니다.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-with-projection.html" }}}
 
@@ -601,7 +601,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 >
 > 이전에 tx, ty을 중심으로 회전된 space는 x는 2, y는 1.5로 scale 되었습니다.
 
-shader에서 우리는 `gl_Position = matrix * position;`을 실행하는데요.
+셰이더에서 우리는 `gl_Position = matrix * position;`을 실행하는데요.
 `position` 값은 마지막 space에서 유효합니다.
 
 이해하기 더 쉽다고 느껴지는 방법을 사용하시면 됩니다.
@@ -675,3 +675,4 @@ CSS는 캔버스가 표시되는 크기를 정의합니다.
 말인즉슨, 거의 모든 경우, <code>canvas.clientHeight</code>와 <code>canvas.clientWidth</code>를 사용해서 투영 행렬의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
 </p>
 </div>
+
