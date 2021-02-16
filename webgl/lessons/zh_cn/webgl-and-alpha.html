@@ -257,16 +257,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 比如红色，你会很容易知道发生了什么。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas style=&quot;background: red;&quot;&gt;&lt;canvas&gt;
 </code></pre><p>你也可以设置成黑色，用来隐藏你的阿尔法通道问题。</p>
-<h3 id="-2-webgl-">#2) 告诉WebGL你不想在后背缓冲中使用阿尔法通道</h3>
+<h3 id="-2-webgl-">#2) 告诉WebGL你不想在后备缓冲中使用阿尔法通道</h3>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl = canvas.getContext(&quot;webgl&quot;, { alpha: false }};
-</code></pre><p>这样就很像OpenGL，因为后背缓冲只有RGB。这可能是最好的方式，因为好点的浏览器知道你没有阿尔法，
-并优化WebGL的混合方式。这也意味着后背缓冲中没有阿尔法通道，如果出于某些原因想在后背缓冲中使用阿尔法通道就不太合适了。
-我知道的只有极少数应用在后背缓冲中使用阿尔法通道，所以我认为这个设置应该成为默认设置。</p>
+</code></pre><p>这样就很像OpenGL，因为后备缓冲只有RGB。这可能是最好的方式，因为好点的浏览器知道你没有阿尔法，
+并优化WebGL的混合方式。这也意味着后备缓冲中没有阿尔法通道，如果出于某些原因想在后备缓冲中使用阿尔法通道就不太合适了。
+我知道的只有极少数应用在后备缓冲中使用阿尔法通道，所以我认为这个设置应该成为默认设置。</p>
 <h3 id="-3-">#3) 在渲染结束后清除阿尔法通道</h3>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">..
 renderScene();
 ..
-// 设置后背缓冲的阿尔法为 1.0
+// 设置后备缓冲的阿尔法为 1.0
 gl.clearColor(1, 1, 1, 1);
 gl.colorMask(false, false, false, true);
 gl.clear(gl.COLOR_BUFFER_BIT);
@@ -275,7 +275,7 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 似乎大多数WebGL库都将使用这个默认设置。少数想用阿尔法通道的开发者会请求这个特性，
 其他的会得到一些优化。</p>
 <h3 id="-4-">#4) 清除一次阿尔法通道不再渲染</h3>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 在初始化阶段，清楚后背缓冲
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 在初始化阶段，清楚后备缓冲
 gl.clearColor(1,1,1,1);
 gl.clear(gl.COLOR_BUFFER_BIT);
 
