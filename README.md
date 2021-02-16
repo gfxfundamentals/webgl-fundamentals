@@ -63,7 +63,7 @@ Current fields are
       link: 'https://webglfundamentals.org/webgl/lessons/ja',  // replace `ja` with country code
 
       // html that appears after the article and before the comments
-      commentSectionHeader: '<div>Questions? <a href="https://stackoverflow.com/questions/tagged/webgl">Ask on stackoverflow</a>.</div>\n        <div>Issue/Bug? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>',
+      commentSectionHeader: '<div>Issue/Bug? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Create an issue on github</a>.</div>',
 
       // markdown that appears for untranslated articles
       missing: "Sorry this article has not been translated yet. [Translations Welcome](https://github.com/gfxfundamentals/webgl-fundamentals)! 😄\n\n[Here's the original English article for now]({{{origLink}}}).",
@@ -222,13 +222,10 @@ Will build the site as though only articles with `rotation` in their filename ex
 
 *   lighting
     *   normal maps
-    *   shadow maps
 *   geometry
     *   plane, cube, sphere, cone, disc, torus
         *   lines vs triangles
-        *   indexed vs non
         *   vertex colors
-    *   .obj
     *   other
     *   pre-process (don't load .obj, .dae, .fbx etc at runtime)
     *   pre-optimize (texture atlas, sizes, combine meshes, etc...)
@@ -248,7 +245,7 @@ Will build the site as though only articles with `rotation` in their filename ex
                 *   attribute out of range
                 *   check your framebuffers
                 *   check your extensions
-        *   make shorter samples (MCVE) See https://meta.stackoverflow.com/a/349790/128511
+        *   make shorter samples (MCVE)
             *   remove any code you don't need
             *   get rid of CSS
             *   get rid of HTML
@@ -270,16 +267,12 @@ Will build the site as though only articles with `rotation` in their filename ex
     *   color mapping/tone mapping
 *   Creative coding
     *   color palettes
-    *   indexed everything
     *   tilemaps
     *   generated geometry
     *   histogram
     *   particles
     *   toon/ramp shading
     *   procedural textures
-    *   vsa
-    *   screen shaders (shadertoy)
-        *   https://stackoverflow.com/questions/4638317/how-to-implement-this-rotating-spiral-in-webgl
 *   code organization
     *   scene graph
         *   putting lights and camera in scene graph
