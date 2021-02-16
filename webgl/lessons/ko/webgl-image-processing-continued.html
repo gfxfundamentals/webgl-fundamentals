@@ -241,12 +241,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson">
     <div class="lesson-main">
       <p>이 글은 <a href="webgl-image-processing.html">WebGL 이미지 처리</a>에서 이어지는 글입니다.
-아직 읽지 않았다면 <a href="webgl-image-processing.html">그곳</a>부터 시작하는 게 좋습니다.</p>
+아직 읽지 않았다면 <a href="webgl-image-processing.html">거기</a>부터 시작하는 게 좋습니다.</p>
 <p>이미지 처리에 대해 다음으로 가장 궁금한 점은 어떻게 여러 효과를 적용할까요?</p>
-<p>음, 즉석으로 셰이더를 생성할 수 있긴 합니다.
-사용자가 쓰고자 하는 효과를 선택하는 UI를 제공한 다음 모든 효과를 수행하는 셰이더를 생성하는 건데요.
+<p>음, 즉석으로 shader를 생성할 수 있긴 합니다.
+사용자가 쓰고자 하는 효과를 선택하는 UI를 제공한 다음 모든 효과를 수행하는 shader를 생성하는 건데요.
 항상 가능한 건 아니지만 이 기술은 종종 <a href="https://www.youtube.com/watch?v=cQUn0Zeh-0Q">실기간 그래픽 효과</a>를 만드는 데 사용됩니다.</p>
-<p>더 유연한 방법은 텍스처 2개를 더 사용하고 각 텍스처를 차례대로 렌더링하여, 주고 받으면서 매번 다음 효과를 적용하는 겁니다.</p>
+<p>더 유연한 방법은 texture 2개를 더 사용하고 각 texture를 차례대로 렌더링하여, 주고 받으면서 매번 다음 효과를 적용하는 겁니다.</p>
 <blockquote>
 <pre>
 Original Image -> [Blur]        -> Texture 1
@@ -260,13 +260,13 @@ Texture 2      -> [Normal]      -> Canvas
 <p>이렇게 하기 위해 우리는 framebuffer를 만들어야 하는데요.
 WebGL과 OpenGL에서, 사실 Framebuffer는 좋지 않은 이름입니다.
 WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이며 실제로 어떤 종류의 버퍼도 아닌데요.
-하지만, 텍스처를 framebuffer에 첨부해서 해당 텍스처로 렌더링할 수 있습니다.</p>
-<p>먼저 <a href="webgl-image-processing.html">예전의 텍스처 생성 코드</a>를 함수로 바꾸면</p>
+하지만, texture를 framebuffer에 첨부해서 해당 texture로 렌더링할 수 있습니다.</p>
+<p>먼저 <a href="webgl-image-processing.html">예전의 texture 생성 코드</a>를 함수로 바꾸면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
-    // 텍스처를 설정하여 어떤 크기의 이미지도 렌더링할 수 있도록 하고 픽셀로 작업합니다.
+    // texture를 설정하여 어떤 크기의 이미지도 렌더링할 수 있도록 하고 픽셀로 작업합니다.
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -275,18 +275,18 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
     return texture;
   }
 
-  // 텍스처를 만들고 이미지를 넣습니다.
+  // texture를 만들고 이미지를 넣습니다.
   var originalImageTexture = createAndSetupTexture(gl);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-</code></pre><p>그리고 이제 함수를 사용하여 텍스처를 2개 더 만들고 framebuffer 2개에 첨부합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 텍스처 2개를 만들고 framebuffer에 첨부합니다.
+</code></pre><p>그리고 이제 함수를 사용하여 texture를 2개 더 만들고 framebuffer 2개에 첨부합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // texture 2개를 만들고 framebuffer에 첨부합니다.
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
     var texture = createAndSetupTexture(gl);
     textures.push(texture);
 
-    // 이미지와 같은 크기로 텍스처 만들기
+    // 이미지와 같은 크기로 texture 만들기
     gl.texImage2D(
       gl.TEXTURE_2D, 0, gl.RGBA, image.width, image.height, 0,
       gl.RGBA, gl.UNSIGNED_BYTE, null);
@@ -296,7 +296,7 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
     framebuffers.push(fbo);
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
-    // 텍스처 첨부
+    // texture 첨부
     gl.framebufferTexture2D(
       gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
   }
@@ -332,11 +332,11 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
     &quot;gaussianBlur&quot;,
     &quot;unsharpen&quot;
   ];
-</code></pre><p>그리고 마지막으로 각각을 적용하고, 렌더링할 텍스처도 주고 받으면</p>
+</code></pre><p>그리고 마지막으로 각각을 적용하고, 렌더링할 texture도 주고 받으면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 원본 이미지로 시작
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
-  // 텍스처에 그리는 동안 이미지 y축 뒤집지 않기
+  // texture에 그리는 동안 이미지 y축 뒤집지 않기
   gl.uniform1f(flipYLocation, 1);
 
   // 적용하고 싶은 각 효과를 반복합니다.
@@ -346,7 +346,7 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
 
     drawWithKernel(effectsToApply[ii]);
 
-    // 다음 그리기를 위해, 방금 렌더링한 텍스처를 사용합니다.
+    // 다음 그리기를 위해, 방금 렌더링한 texture를 사용합니다.
     gl.bindTexture(gl.TEXTURE_2D, textures[ii % 2]);
   }
 
@@ -359,7 +359,7 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
     // 이걸 우리가 렌더링할 framebuffer로 만듭니다.
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
-    // 셰이더에게 framebuffer의 해상도를 알려줍니다.
+    // shader에게 framebuffer의 해상도를 알려줍니다.
     gl.uniform2f(resolutionLocation, width, height);
 
     // WebGL에게 framebuffer에 필요한 viewport 설정을 알려줍니다.
@@ -386,12 +386,12 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
 <p><code class="notranslate" translate="no">null</code>을 넘긴 <code class="notranslate" translate="no">gl.bindFramebuffer</code>를 호출하는 건 framebuffer 중 하나 대신에 캔버스에 렌더링하고 싶다는 걸 WebGL에게 알려줍니다.</p>
 <p>WebGL은 <a href="webgl-fundamentals.html">클립 공간</a>에서 다시 픽셀로 변환해야 하는데요.
 이건 <code class="notranslate" translate="no">gl.viewport</code>의 설정에 따라 수행됩니다.
-렌더링할 framebuffer는 캔버스 크기와 다르기 때문에 framebuffer 텍스처를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 캔버스를 렌더링할 때 다시 설정해야 합니다.</p>
+렌더링할 framebuffer는 캔버스 크기와 다르기 때문에 framebuffer texture를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 캔버스를 렌더링할 때 다시 설정해야 합니다.</p>
 <p>마지막으로 <a href="webgl-fundamentals.html">원본 예제</a>에서 렌더링할 때 Y 좌표를 뒤집었는데, 이는 WebGL이 0,0을 2D에서 더 전통적인 왼쪽 상단 대신 왼쪽 하단 모서리로 캔버스에 표시하기 때문입니다.
 이건 framebuffer에 렌더링할 때는 필요가 없는데요.
 framebuffer는 표시되지 않기 때문에, 어느 부분이 상단 혹은 하단인지는 관계가 없습니다.
 중요한 건 framebuffer에서 픽셀 0,0이 우리가 계산한 0,0에 해당한다는 겁니다.
-이걸 해결하기 위해 셰이더에 입력 하나를 더 추가해서 뒤집을지 말지 설정 가능하도록 만들었습니다.</p>
+이걸 해결하기 위해 shader에 입력 하나를 더 추가해서 뒤집을지 말지 설정 가능하도록 만들었습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 uniform float u_flipY;
@@ -428,7 +428,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
 해당 예제 작성을 고려했지만 각각의 매개변수가 있는 여러 GLSL program은 뒤엉키지 않도록 주요 리펙토링이 필요하기 때문에 연습하기 좋은 것 같아 남겨뒀습니다.</p>
 <p>이것과 앞선 예제들이 WebGL을 좀 더 접근하기 쉽게 보이도록 만들었기를 바라며 2D로 시작하는 게 WebGL을 좀 더 이해하기 쉽게 만드는 데 도움이 되었기를 바랍니다.
 시간이 있으면 <a href="webgl-how-it-works.html">WebGL이 실제로 수행하는 작업</a>에 대한 더 자세한 내용은 물론 3D를 수행하는 방법에 대해서 <a href="webgl-2d-translation.html">몇 가지 글</a>을 더 써보겠습니다.
-다음 단계로 <a href="webgl-2-textures.html">2개 이상의 텍스처 사용법</a>을 배워보세요.</p>
+다음 단계로 <a href="webgl-2-textures.html">2개 이상의 texture 사용법</a>을 배워보세요.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -449,7 +449,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
@@ -488,7 +488,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>텍스처</li>
+  <li>Texture</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Textures</a></li>
@@ -497,7 +497,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>텍스처 렌더링</li>
+  <li>Texture 렌더링</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
         </ul>
@@ -529,7 +529,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>텍스처</li>
+  <li>Texture</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>
@@ -559,7 +559,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 및 알파</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
@@ -582,7 +582,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
 <ul>
   <li><a href="/docs/">도우미 API 문서</a></li>
   <li><a href="https://twgljs.org">TWGL, 가벼운 WebGL 라이브러리</a></li>
-  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
         </div>

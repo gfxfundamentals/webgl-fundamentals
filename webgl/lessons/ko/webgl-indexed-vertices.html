@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-indexed-vertices.md. Do not edited directly -->
 <!--
 Copyright 2012, Gregg Tavares.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Gregg Tavares. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of Gregg Tavares. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Indexed Vertices" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to use gl.drawElements" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-indexed-vertices.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Indexed Vertices" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-indexed-vertices.html" />
-<meta name="twitter:description" content="How to use gl.drawElements" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="gl.drawElements를 사용하는 방법">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-indexed-vertices_ko.jpg">
+
+<meta property="og:title" content="WebGL Indexed Vertices">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-indexed-vertices_ko.jpg">
+<meta property="og:description" content="gl.drawElements를 사용하는 방법">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-indexed-vertices.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL Indexed Vertices">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-indexed-vertices.html">
+<meta name="twitter:description" content="gl.drawElements를 사용하는 방법">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-indexed-vertices_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-indexed-vertices.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-indexed-vertices_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-indexed-vertices.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-indexed-vertices.html",
+      "inLanguage":"ko",
+      "name":"WebGL Indexed Vertices",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-indexed-vertices.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
 <title>WebGL Indexed Vertices</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-indexed-vertices.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-indexed-vertices.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -183,9 +240,111 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-indexed-vertices.html">여기</a>에 있습니다.</p>
+      <p>이 글은 최소한 <a href="webgl-fundamentals.html">기초에 대한 글</a>을 읽었다고 가정합니다.
+아직 읽지 않았다면 <a href="webgl-fundamentals.html">거기</a>부터 시작해야 합니다.</p>
+<p>이건 <code class="notranslate" translate="no">gl.drawElements</code>를 다루는 짧은 글입니다.
+WebGL에는 2가지 기본 드로잉 함수가 있는데요.
+<code class="notranslate" translate="no">gl.drawArrays</code>와 <code class="notranslate" translate="no">gl.drawElements</code>입니다.
+하나 혹은 또 다른 걸 명시적으로 호출하는 사이트 글의 대부분은 가장 복잡하지 않기 때문에 <code class="notranslate" translate="no">gl.drawArrays</code>를 호출합니다.</p>
+<p>반면에 <code class="notranslate" translate="no">gl.drawElements</code>는 정점 색인으로 채워진 버퍼를 사용하고 이를 기반으로 그립니다.</p>
+<p><a href="webgl-fundamentals.html">첫 글</a>에서 사각형을 그리는 예제를 가져와서 <code class="notranslate" translate="no">gl.drawElements</code>를 사용하도록 만들어봅시다.</p>
+<p>해당 코드에서 각 3개의 정점을 가진 삼각형 2개, 총 6개의 정점으로 사각형을 만들었습니다.</p>
+<p>다음은 6개의 정점 위치를 제공하는 코드입니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  var x1 = x;
+  var x2 = x + width;
+  var y1 = y;
+  var y2 = y + height;
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    x1, y1,  // 정점 0
+    x2, y1,  // 정점 1
+    x1, y2,  // 정점 2
+    x1, y2,  // 정점 3
+    x2, y1,  // 정점 4
+    x2, y2,  // 정점 5
+  ]), gl.STATIC_DRAW);
+</code></pre>
+<p>대신에 4개의 정점 데이터를 사용할 수도 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  var x1 = x;
+  var x2 = x + width;
+  var y1 = y;
+  var y2 = y + height;
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    x1, y1,  // 정점 0
+    x2, y1,  // 정점 1
+    x1, y2,  // 정점 2
+    x2, y2,  // 정점 3
+  ]), gl.STATIC_DRAW);
+</code></pre>
+<p>하지만, 여전히 삼각형 2개를 그리려면 총 6개의 정점을 그리도록 WebGL에 지시해야 하기 때문에 색인을 사용하는 다른 버퍼를 추가해야 합니다.</p>
+<p>이를 위해 또 다른 버퍼를 생성하지만 다른 바인딩 포인트를 사용하는데요.
+<code class="notranslate" translate="no">ARRAY_BUFFER</code> 바인딩 포인트 대신에 항상 색인에 사용되는 <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code> 바인딩 포인트를 사용합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 버퍼 생성
+const indexBuffer = gl.createBuffer();
+
+// 이 버퍼를 현재 &#39;ELEMENT_ARRAY_BUFFER&#39;로 만들기
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+// 현재 요소 배열 버퍼를 데이터로 채우기
+const indices = [
+  0, 1, 2,   // 첫 번째 삼각형
+  2, 1, 3,   // 두 번째 삼각형
+];
+gl.bufferData(
+  gl.ELEMENT_ARRAY_BUFFER,
+  new Uint16Array(indices),
+  gl.STATIC_DRAW
+);
+</code></pre>
+<p>WebGL에 있는 모든 데이터처럼 색인에 대한 특정한 표현이 필요합니다.
+<code class="notranslate" translate="no">new Uint16Array(indices)</code>를 사용하여 색인을 부호없는 16비트 정수로 변환한 뒤 버퍼에 업로드합니다.</p>
+<p>그릴 때 사용하고자 하는 색인을 담고있는 버퍼를 바인딩해야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  // 색인을 포함하는 버퍼 할당
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+</code></pre>
+<p>그런 다음 <code class="notranslate" translate="no">drawElements</code>를 사용하여 그립니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 사각형 그리기
+var primitiveType = gl.TRIANGLES;
+var offset = 0;
+var count = 6;
+-gl.drawArrays(primitiveType, offset, count);
++var indexType = gl.UNSIGNED_SHORT;
++gl.drawElements(primitiveType, count, indexType, offset);
+</code></pre>
+<p>이전과 동일한 결과를 얻었지만 6개 대신에 4개의 정점 데이터를 제공하면 됩니다.
+여전히 WebGL에 정점 6개를 그리라고 요청해야 하지만 색인을 통해 4개의 정점 데이터를 재사용할 수 있습니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangles-indexed.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangles-indexed.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>색인된 데이터를 사용할지 색인되지 않은 데이터를 사용할지 여부는 당신에게 달려있습니다.</p>
+<p>일반적으로 정점 위치가 사용되는 면에 따라 다른 데이터를 각 정점에 연결하고 싶어 하기 때문에, 색인된 정점은 보통 8개의 정점 위치를 가지는 입방체를 만들 수 없다는 점에 유의해야 합니다.
+예를 들어 입방체의 각 면에 다른 색상을 주고 싶다면 위치와 함께 해당 색상을 제공해야 합니다.
+따라서 정점에 닿는 각 면에 한 번씩 동일한 위치가 세 번 사용되더라도, 각자 다른 색상이 결합된 각 면마다 한 번씩 위치를 반복해야 합니다.
+이는 입방체의 각 면에 4개씩 총 24개의 정점이, 필요한 12개의 삼각형을 그리려면 36개의 색인이 필요하다는 걸 의미합니다.</p>
+<p>WebGL1에서 위의 <code class="notranslate" translate="no">indexType</code>에 유효한 타입은 색인을 0에서 255까지만 가질 수 있는 <code class="notranslate" translate="no">gl.UNSIGNED_BYTE</code>와 최대 색인이 65535인 <code class="notranslate" translate="no">gl.UNSIGNED_SHORT</code>임에 주의하세요.
+<code class="notranslate" translate="no">gl.UNSIGNED_INT</code>와 최대 4294967296까지 색인을 허용하는 <code class="notranslate" translate="no">OES_element_index_uint</code> extension이 있는지 확인하고 활성화할 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const ext = gl.getExtension(&#39;OES_element_index_uint&#39;);
+if (!ext) {
+  // gl.UNSIGNED_SHORT 사용으로 되돌아 가거나 사용자에게 알림
+}
+</code></pre>
+<p><a href="https://webglstats.com/webgl/extension/OES_element_index_uint">WebGLStats</a>에 따르면 거의 모든 기기에서 이 extension을 지원합니다.</p>
+<div class="webgl_bottombar">
+<p>
+참고: 위에서 색인을 버퍼에 넣을 때 <code class="notranslate" translate="no">indexBuffer</code>를 <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code> 바인딩 포인트로 바인딩한 다음 나중에 다시 바인딩합니다.
+왜 두 번 바인딩할까요?
+</p>
+<p>
+이건 오로지 패턴을 보여주기 위한 겁니다.
+일반적으로 하나 이상의 항목을 그리므로, 그리려는 각 항목에 대해 하나씩, 여러 색인 버퍼가 있는데요.
+초기화할 때 이러한 버퍼를 만들고 데이터를 넣습니다.
+렌더링할 때, 각 개별 항목을 그리기 전에 올바른 버퍼를 바인딩해야 합니다.
+따라서, 여기에 있는 코드는 한 가지 항목이라 할지라도 해당 패턴을 따릅니다.
+</p>
+</div>
+
 
     </div>
     <div class="lesson-sidebar">
@@ -201,11 +360,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
@@ -244,7 +404,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>텍스처</li>
+  <li>Texture</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Textures</a></li>
@@ -253,7 +413,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>텍스처 렌더링</li>
+  <li>Texture 렌더링</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
         </ul>
@@ -285,7 +445,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>텍스처</li>
+  <li>Texture</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>
@@ -315,7 +475,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 및 알파</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
@@ -338,16 +498,53 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <ul>
   <li><a href="/docs/">도우미 API 문서</a></li>
   <li><a href="https://twgljs.org">TWGL, 가벼운 WebGL 라이브러리</a></li>
-  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL Indexed Vertices';
+            var disqus_title = 'WebGL Indexed Vertices';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {

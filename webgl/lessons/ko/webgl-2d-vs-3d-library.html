@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-vs-3d-library_ko.jpg">
 
-<meta property="og:title" content="WebGL - 래스터화 vs 3D 라이브러리">
+<meta property="og:title" content="WebGL - Rasterization vs 3D 라이브러리">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-vs-3d-library_ko.jpg">
 <meta property="og:description" content="왜 WebGL은 3D 라이브러리가 아니며 그것이 중요한 이유">
@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL - 래스터화 vs 3D 라이브러리">
+<meta name="twitter:title" content="WebGL - Rasterization vs 3D 라이브러리">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-vs-3d-library.html">
 <meta name="twitter:description" content="왜 WebGL은 3D 라이브러리가 아니며 그것이 중요한 이유">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-vs-3d-library_ko.jpg">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-vs-3d-library.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-vs-3d-library.html",
       "inLanguage":"ko",
-      "name":"WebGL - 래스터화 vs 3D 라이브러리",
+      "name":"WebGL - Rasterization vs 3D 라이브러리",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL - 래스터화 vs 3D 라이브러리</title>
+<title>WebGL - Rasterization vs 3D 라이브러리</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,17 +236,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL - 래스터화 vs 3D 라이브러리</h1>
+    <h1>WebGL - Rasterization vs 3D 라이브러리</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
       <p>이 포스트는 WebGL 관련 시리즈의 부수적인 주제입니다.
 첫 번째는 <a href="webgl-fundamentals.html">기초</a>부터 시작했는데</p>
-<p>WebGL이 래스터화 API이고 3D API가 아니라는 제 주장이 일부 사람들의 신경을 건드렸기 때문에 이걸 작성하고 있습니다.
-저는 WebGL을 래스터화 API라고 불렀고 왜 그들이 위협을 느끼는지 혹은 무엇이 그렇게 화나게 만드는지 모르겠습니다.</p>
+<p>WebGL이 rasterization API이고 3D API가 아니라는 제 주장이 일부 사람들의 신경을 건드렸기 때문에 이걸 작성하고 있습니다.
+저는 WebGL을 rasterization API라고 불렀고 왜 그들이 위협을 느끼는지 혹은 무엇이 그렇게 화나게 만드는지 모르겠습니다.</p>
 <p>틀림없이 모든 건 관점의 문제일 겁니다.
 나는 칼이 식기류라고 말할 수 있고, 다른 누군가는 칼이 도구라고 말할 수 있지만 또 다른 사람은 칼이 무기라고 말할 수 있습니다.</p>
-<p>WebGL의 경우 래스터화 API라고 부르는 게 중요하다고 생각한 이유가 있는데 구체적으로는 WebGL을 사용해 3D로 무언가를 그리기 위해 필요한 3D 수학 지식의 양 때문입니다.</p>
+<p>WebGL의 경우 rasterization API라고 부르는 게 중요하다고 생각한 이유가 있는데 구체적으로는 WebGL을 사용해 3D로 무언가를 그리기 위해 필요한 3D 수학 지식의 양 때문입니다.</p>
 <p>저는 3D 라이브러리라고 부르는 모든 것이 당신을 위한 3D 영역을 수행해야 한다고 생각하는데요.
 라이브러리에 3D 데이터, material 매개 변수, 조명을 제공할 수 있어야 하며 3D를 그릴 수 있어야 합니다.
 WebGL(그리고 OpenGL ES 2.0+)은 모두 3D를 그리는데 사용되지만 이 설명에는 맞지 않습니다.</p>
@@ -254,7 +254,7 @@ WebGL(그리고 OpenGL ES 2.0+)은 모두 3D를 그리는데 사용되지만 이
 C++을 &quot;word processor&quot;라고 부르진 않지만 word processor가 C++로 작성될 수는 있습니다.
 비슷하게 WebGL은 기본적으로 3D 그래픽을 그리지 않습니다.
 WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만 그 자체로 3D 그래픽을 수행하진 않습니다.</p>
-<p>추가 예제 제공을 위해, 조명과 함께 3D로 큐브를 그려야한다고 가정해봅시다.</p>
+<p>추가 예제 제공을 위해, 조명과 함께 3D로 입방체를 그려야한다고 가정해봅시다.</p>
 <p>이를 표시하기 위한 three.js의 코드인데</p>
 <pre class="prettyprint showlinemods">
   // WebGL 설정
@@ -269,10 +269,10 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
   camera.position.z = 400;
   camera.updateProjectionMatrix();
 
-  // scene 만들기
+  // 장면 만들기
   scene = new THREE.Scene();
 
-  // 큐브 만들기
+  // 입방체 만들기
   var geometry = new THREE.BoxGeometry(200, 200, 200);
 
   // material 만들기
@@ -305,7 +305,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
 </div>
 
 </p>
-<p>다음은 조명 2개와 함께 큐브를 표시하는 OpenGL(ES 아님)의 유사한 코드입니다.</p>
+<p>다음은 조명 2개와 함께 입방체를 표시하는 OpenGL(ES 아님)의 유사한 코드입니다.</p>
 <pre class="prettyprint showlinemods">
   // 설정
   glViewport(0, 0, width, height);
@@ -333,7 +333,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
   glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 ...
 
-  // 큐브 그리기
+  // 입방체 그리기
   static int count = 0;
   ++count;
 
@@ -354,7 +354,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
 
   /*
   ...
-  ... 큐브의 다섯 면 더 반복
+  ... 입방체의 다섯 면 더 반복
   ...
   */
 
@@ -368,7 +368,7 @@ WebGL이 필요한 코드를 작성하진 않을 겁니다.
 필요한 줄 수에 관한 게 아닙니다.
 필요한 <strong>지식</strong>의 양에 관한 것입니다.
 두 3D 라이브러리에서 3D를 처리해주는데요.
-당신은 카메라 위치, 시야, 조명 두 개, 큐브를 제공합니다.
+당신은 카메라 위치, 시야, 조명 두 개, 입방체를 제공합니다.
 나머지는 그들이 모두 처리하죠.
 다시 말해: 그들은 3D 라이브러리입니다.</p>
 <p>반면에 WebGL은 행렬 수학, 정규화된 좌표, 절두체, 벡터 곱, 스칼라 곱, varying 보간, 조명 반사 계산, 이외에도 수개월 또는 수년이 걸리는 모든 걸 이해해야 합니다.</p>
@@ -379,14 +379,14 @@ OpenGL ES 2.0+ 또는 WebGL에는 해당되지 않습니다.</p>
 <p>WebGL을 3D 라이브러리라고 부르는 건 잘못된 것 같습니다.
 WebGL에 유입되는 사용자들은 &quot;오, 3D 라이브러리다. 멋지다. 이걸로 3D를 할 수 있을 거야&quot;라고 생각하고 아니오라는 힘든 방법을 알아내는데, 전혀 그렇지 않습니다.</p>
 <p>우리는 한 걸음 더 나아갈 수도 있는데요.
-다음은 캔버스로 wireframe 큐브를 그립니다.</p>
+다음은 캔버스로 wireframe 입방체를 그립니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/resources%2F3d-in-canvas.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/resources/3d-in-canvas.html" target="_blank">새 창을 열려면 여기를 클릭</a>
 </div>
 
 </p>
-<p>그리고 여기는 WebGL로 wireframe 큐브를 그립니다.</p>
+<p>그리고 여기는 WebGL로 wireframe 입방체를 그립니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/resources%2F3d-in-webgl.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/resources/3d-in-webgl.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -396,7 +396,7 @@ WebGL에 유입되는 사용자들은 &quot;오, 3D 라이브러리다. 멋지�
 <p>코드를 살펴보면 지식량의 측면이나 코드조차도 큰 차이가 없음을 볼 수 있습니다.
 최종적으로 캔버스 버전은 정점을 반복하고, 우리가 제공한 수식을 수행하며 2D로 일부 선을 그립니다.
 WebGL 버전은 우리가 제공한 수식이 GLSL에 있고 GPU에 의해 실행된다는 걸 제외하면 동일한 작업을 수행합니다.</p>
-<p>마지막 데모의 요점은 WebGL이 Canvas 2D와 유사한, 래스터화 엔진일 뿐이라는 걸 효과적으로 보여주는 겁니다.
+<p>마지막 데모의 요점은 WebGL이 Canvas 2D와 유사한, rasterization 엔진일 뿐이라는 걸 효과적으로 보여주는 겁니다.
 물론 WebGL은 3D를 구현하는데 도움이 되는 기능들을 가지고 있는데요.
 WebGL은 depth sorting을 훨씬 더 쉽게 만드는 depth buffer를 가지고 있습니다.
 또한 3D 수학을 처리하는데 유용한 수학 함수들이 내장되어 있지만 3D로 만드는 건 없습니다.
@@ -408,9 +408,9 @@ WebGL은 depth sorting을 훨씬 더 쉽게 만드는 depth buffer를 가지고 
 3D 라이브러리에서 3D 데이터를 제공하면, 라이브러리는 3D에서 클립 공간 point를 계산합니다.</p>
 <p>몇 가지 참고 사항을 더 드리기 위해, <a href="https://emscripten.org/">emscripten</a>은 WebGL 위에서 오래된 OpenGL 에뮬레이션을 제공합니다.
 해당 코드는 <a href="https://github.com/emscripten-core/emscripten/blob/master/src/library_glemu.js">여기</a>에 있는데요.
-코드를 살펴보면 OpenGL ES 2.0에서 제거된 OpenGL의 오래된 3D 부분을 에뮬레이트하기 위해 셰이더를 생성하는 경우가 많습니다.
+코드를 살펴보면 OpenGL ES 2.0에서 제거된 OpenGL의 오래된 3D 부분을 에뮬레이트하기 위해 shader를 생성하는 경우가 많습니다.
 3D가 포함되지 않은 최신 OpenGL에서 3D가 포함된 오래된 OpenGL을 에뮬레이트하기 위해 NVidia가 시작한 프로젝트, <a href="https://github.com/p3/regal/blob/184c62b7d7761481609ef1c1484ada659ae181b9/src/regal/RegalIff.cpp">Regal</a>에서 동일한 걸 볼 수 있습니다.
-또 하나의 예로, <a href="https://gist.github.com/greggman/41d93c00649cba78abdbfc1231c9158c">여기</a> three.js가 3D를 제공하기 위해 사용하는 셰이더가 있습니다.
+또 하나의 예로, <a href="https://gist.github.com/greggman/41d93c00649cba78abdbfc1231c9158c">여기</a> three.js가 3D를 제공하기 위해 사용하는 shader가 있습니다.
 많은 것들이 진행되고 있음을 알 수 있는데요.
 이 모든 것들 뿐만이 아니라 이를 지원하는 코드는 WebGL이 아닌 라이브러리에서 제공합니다.</p>
 <p>제가 WebGL이 3D 라이브러리가 아니라고 말할 때 저의 관점을 조금이나마 이해하셨길 바랍니다.
@@ -442,7 +442,7 @@ WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 �
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
@@ -481,7 +481,7 @@ WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 �
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>텍스처</li>
+  <li>Texture</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Textures</a></li>
@@ -490,7 +490,7 @@ WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 �
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>텍스처 렌더링</li>
+  <li>Texture 렌더링</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
         </ul>
@@ -522,7 +522,7 @@ WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 �
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>텍스처</li>
+  <li>Texture</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>
@@ -552,7 +552,7 @@ WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 �
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 및 알파</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
@@ -575,7 +575,7 @@ WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 �
 <ul>
   <li><a href="/docs/">도우미 API 문서</a></li>
   <li><a href="https://twgljs.org">TWGL, 가벼운 WebGL 라이브러리</a></li>
-  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
         </div>
@@ -592,8 +592,8 @@ WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 �
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL - 래스터화 vs 3D 라이브러리';
-            var disqus_title = 'WebGL - 래스터화 vs 3D 라이브러리';
+            var disqus_identifier = 'WebGL - Rasterization vs 3D 라이브러리';
+            var disqus_title = 'WebGL - Rasterization vs 3D 라이브러리';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

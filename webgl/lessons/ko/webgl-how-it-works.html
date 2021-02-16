@@ -253,18 +253,18 @@ gl.drawArrays(primitiveType, offset, count);
 </code></pre><p>9는 &quot;정점 9개 처리&quot;를 의미하므로 여기에서 9개의 정점이 처리되고 있습니다.</p>
 <p><img src="../resources/vertex-shader-anim.gif" class="webgl_center" /></p>
 <p>왼쪽은 당신이 제공한 데이터입니다.
-버텍스 셰이더는 <a href="webgl-shaders-and-glsl.html">GLSL</a>로 작성하는 함수인데요.
+Vertex shader는 <a href="webgl-shaders-and-glsl.html">GLSL</a>로 작성하는 함수인데요.
 이 함수는 각 정점마다 한 번씩 호출됩니다.
 몇 가지 계산을 하고 현재 정점의 클립 공간 값으로 특수 변수 <code class="notranslate" translate="no">gl_Position</code>를 선언하죠.
 GPU는 이 값을 가져와서 내부에 저장합니다.</p>
 <p><code class="notranslate" translate="no">삼각형</code>을 그린다고 가정하면, 첫 번째 부분에서 정점 3개를 생성할 때마다 GPU는 이걸 사용해 삼각형을 만듭니다.
-어떤 픽셀이 삼각형의 점 3개에 해당하는지 확인한 다음, 삼각형을 래스터화(=&quot;픽셀로 그리기&quot;) 하는데요.
-각 픽셀마다 프래그먼트 셰이더를 호출해서 어떤 색상으로 만들지 묻습니다.
-프래그먼트 셰이더는 특수 변수 <code class="notranslate" translate="no">gl_FragColor</code>를 해당 픽셀에 원하는 색상으로 설정해야 합니다.</p>
-<p>전부 흥미롭지만 지금까지 예제에서 볼 수 있듯이 프래그먼트 셰이더는 각 픽셀마다 아주 적은 정보를 가지고 있습니다.
+어떤 픽셀이 삼각형의 점 3개에 해당하는지 확인한 다음, 삼각형을 래스터화(=&quot;픽셀로 그리기&quot;)하는데요.
+각 픽셀마다 fragment shader를 호출해서 어떤 색상으로 만들지 묻습니다.
+Fragment shader는 특수 변수 <code class="notranslate" translate="no">gl_FragColor</code>를 해당 픽셀에 원하는 색상으로 설정해야 합니다.</p>
+<p>전부 흥미롭지만 지금까지 예제에서 볼 수 있듯이 fragment shader는 각 픽셀마다 아주 적은 정보를 가지고 있습니다.
 다행히 더 많은 정보를 전달할 수 있는데요.
-버텍스 셰이더에서 프래그먼트 셰이더로 전달하려는 각 값마다 “varying”을 정의하는겁니다.</p>
-<p>간단한 예시로, 우리가 직접 계산한 클립 공간 좌표를 버텍스 셰이더에서 프래그먼트 셰이더로 전달해봅시다.</p>
+Vertex shader에서 fragment shader로 전달하려는 각 값마다 “varying”을 정의하는겁니다.</p>
+<p>간단한 예시로, 우리가 직접 계산한 클립 공간 좌표를 vertex shader에서 fragment shader로 전달해봅시다.</p>
 <p>간단한 삼각형을 그려볼 건데요.
 <a href="webgl-2d-matrices.html">이전 예제</a>에 이어서 사각형을 삼각형으로 바꿔봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 삼각형을 정의한 값들로 버퍼 채우기
@@ -289,7 +289,7 @@ function drawScene() {
   var count = 3;
   gl.drawArrays(primitiveType, offset, count);
 }
-</code></pre><p>다음으로 프래그먼트 셰이더로 데이터를 전달하기 위해 버텍스 셰이더에 <em>varying</em>을 선언합니다.</p>
+</code></pre><p>다음으로 fragment shader로 데이터를 전달하기 위해 vertex shader에 <em>varying</em>을 선언합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*varying vec4 v_color;
 ...
 void main() {
@@ -301,7 +301,7 @@ void main() {
   // 색상 공간은 0.0에서 1.0까지
 *  v_color = gl_Position * 0.5 + 0.5;
 }
-</code></pre><p>그런 다음 프래그먼트 셰이더에 동일한 <em>varying</em>을 선언합니다.</p>
+</code></pre><p>그런 다음 fragment shader에 동일한 <em>varying</em>을 선언합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 *varying vec4 v_color;
@@ -309,7 +309,7 @@ void main() {
 void main() {
 *  gl_FragColor = v_color;
 }
-</code></pre><p>WebGL은 버텍스 셰이더의 varying을 이름과 타입이 같은 프래그먼트 셰이더의 varying으로 연결할 겁니다.</p>
+</code></pre><p>WebGL은 vertex shader의 varying을 이름과 타입이 같은 fragment shader의 varying으로 연결할 겁니다.</p>
 <p>다음은 작동하는 버전입니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-triangle-with-position-for-color.html"></iframe>
@@ -322,10 +322,10 @@ void main() {
 이것들은 배경에 상대적입니다.</p>
 <p>이제 생각해봅시다.
 우리는 정점 3개만을 계산했습니다.
-버텍스 셰이더는 3번만 호출되므로 3개의 색상만을 계산하지만 삼각형은 여러 색상인데요.
+Vertex shader는 3번만 호출되므로 3개의 색상만을 계산하지만 삼각형은 여러 색상인데요.
 이게 <em>varying</em>이라고 불리는 이유입니다.</p>
 <p>WebGL은 각 정점을 계산한 3개의 값을 가져오고 삼각형을 래스터화할 때 계산된 정점들 사이를 보간하는데요.
-각 픽셀마다 해당 픽셀에 대해 보간된 값으로 프래그먼트 셰이더를 호출합니다.</p>
+각 픽셀마다 해당 픽셀에 대해 보간된 값으로 fragment shader를 호출합니다.</p>
 <p>위 예제에서는 3개의 정점으로 시작하는데요.</p>
 <p><style>
 table.vertex_table {
@@ -355,9 +355,9 @@ table.vertex_table {
 </table>
 </div>
 
-<p>버텍스 셰이더는 translation, rotation, scale에 행렬을 적용하고 클립 공간으로 변환합니다.
+<p>Vertex shader는 translation, rotation, scale에 행렬을 적용하고 클립 공간으로 변환합니다.
 translation, rotation, scale의 기본값은 translation = 200, 150, rotation = 0, scale = 1,1이므로 실제로는 이동만 하는데요.
-400x300인 backbuffer가 주어지면 버텍스 셰이더는 행렬을 적용한 뒤 다음과 같은 3개의 클립 공간 정점을 계산합니다.</p>
+400x300인 backbuffer가 주어지면 vertex shader는 행렬을 적용한 뒤 다음과 같은 3개의 클립 공간 정점을 계산합니다.</p>
 <div class="hcenter">
 <table class="vertex_table">
 <tr><th colspan="3">gl_Position에 작성된 값들</th></tr>
@@ -377,16 +377,16 @@ translation, rotation, scale의 기본값은 translation = 200, 150, rotation = 
 </table>
 </div>
 
-<p>v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 프래그먼트 셰이더로 전달됩니다.</p>
+<p>v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragment shader로 전달됩니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 600px; height: 400px;" src="/webgl/lessons/resources/fragment-shader-anim.html"></iframe>
   <div class="webgl_center">v_color는 v0, v1, v2 사이에서 보간됩니다</div>
 </div>
 
 </p>
-<p>또한 더 많은 데이터를 버텍스 셰이더에 전달해서 프래그먼트 셰이더에 전달할 수 있습니다.
+<p>또한 더 많은 데이터를 vertex shader에 전달해서 fragment shader에 전달할 수 있습니다.
 예를 들어 2가지 색상을 가진 삼각형 2개로 이루어진 사각형을 그린다고 해봅시다.
-이를 위해 버텍스 셰이더에 또다른 attribute를 추가하면 더 많은 데이터를 전달할 수 있고 그 데이터를 프래그먼트 셰이더에 직접 전달할 수 있습니다.</p>
+이를 위해 vertex shader에 또다른 attribute를 추가하면 더 많은 데이터를 전달할 수 있고 그 데이터를 fragment shader에 직접 전달할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_position;
 +attribute vec4 a_color;
 ...
@@ -487,15 +487,15 @@ function setColors(gl) {
 </div>
 
 </p>
-<p>그다지 흥미롭지는 않지만 2개 이상의 attribute를 사용하고 데이터를 버텍스 셰이더에서 프래그먼트 셰이더로 전달하는 걸 보여주는데요.
-<a href="webgl-image-processing.html">이미지 처리 예제</a>를 살펴보면 텍스처 좌표를 전달하기 위해 마찬가지로 추가적인 attribute를 사용하는 것을 볼 수 있습니다.</p>
+<p>그다지 흥미롭지는 않지만 2개 이상의 attribute를 사용하고 데이터를 vertex shader에서 fragment shader로 전달하는 걸 보여주는데요.
+<a href="webgl-image-processing.html">이미지 처리 예제</a>를 살펴보면 texture 좌표를 전달하기 위해 마찬가지로 추가적인 attribute를 사용하는 것을 볼 수 있습니다.</p>
 <h2 id="-attribute-">버퍼와 Attribute 명령은 어떤 일을 하나요?</h2>
 <p>버퍼는 정점과 각 정점의 다른 데이터를 GPU로 가져오는 방법입니다.
 <code class="notranslate" translate="no">gl.createBuffer</code>는 버퍼를 생성합니다.
 <code class="notranslate" translate="no">gl.bindBuffer</code>는 해당 버퍼를 작업할 버퍼로 설정합니다.
 <code class="notranslate" translate="no">gl.bufferData</code>는 데이터를 버퍼로 복사합니다.
 이건 보통 초기화할 때 수행됩니다.</p>
-<p>버퍼에 데이터가 있으면 어떻게 데이터를 가져오고 버텍스 셰이더의 attribute에 제공할지 WebGL에게 알려줘야 합니다.</p>
+<p>버퍼에 데이터가 있으면 어떻게 데이터를 가져오고 vertex shader의 attribute에 제공할지 WebGL에게 알려줘야 합니다.</p>
 <p>이를 위해, 먼저 WebGL에게 attribute를 할당한 위치를 물어봐야 하는데요.
 예를 들어 위 코드에서 우리는</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 정점 데이터가 어디로 가야하는지 탐색
@@ -527,7 +527,7 @@ stride가 0이면 &quot;type 크기에 맞는 stride 사용&quot;을 의미합�
 offset이 0이면 &quot;버퍼의 처음부터 시작&quot;을 의미합니다.
 0 이외의 다른 값으로 설정하는 건 더욱 복잡하고 성능 면에서 어느 정도 이점이 있긴 하지만 WebGL을 한계까지 몰아붙이기 위한 게 아니라면 복잡함을 감수할만한 가치는 없을 것 같습니다.</p>
 <p>버퍼와 attribute가 정리되셨기를 바랍니다.</p>
-<p>다음은 <a href="webgl-shaders-and-glsl.html">셰이더 및 GLSL</a>을 살펴보겠습니다.</p>
+<p>다음은 <a href="webgl-shaders-and-glsl.html">Shader 및 GLSL</a>을 살펴보겠습니다.</p>
 <div class="webgl_bottombar">
 <h3>vertexAttribPointer에서 normalizeFlag가 뭔가요?</h3>
 <p>
@@ -622,7 +622,7 @@ function setColors(gl) {
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
@@ -661,7 +661,7 @@ function setColors(gl) {
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>텍스처</li>
+  <li>Texture</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Textures</a></li>
@@ -670,7 +670,7 @@ function setColors(gl) {
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>텍스처 렌더링</li>
+  <li>Texture 렌더링</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
         </ul>
@@ -702,7 +702,7 @@ function setColors(gl) {
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>텍스처</li>
+  <li>Texture</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>
@@ -732,7 +732,7 @@ function setColors(gl) {
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 및 알파</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti-Patterns</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
@@ -755,7 +755,7 @@ function setColors(gl) {
 <ul>
   <li><a href="/docs/">도우미 API 문서</a></li>
   <li><a href="https://twgljs.org">TWGL, 가벼운 WebGL 라이브러리</a></li>
-  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
         </div>
