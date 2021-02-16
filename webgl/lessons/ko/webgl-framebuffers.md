@@ -4,11 +4,11 @@ TOC: Framebuffer
 
 
 이 글은 WebGL에서 framebuffer가 무엇인지에 대한 대략적인 이미지를 제공할 겁니다.
-framebuffer는 [텍스처로 렌더링](webgl-render-to-texture.html)할 때 언급되는데요.
+framebuffer는 [texture로 렌더링](webgl-render-to-texture.html)할 때 언급되는데요.
 
 framebuffer는 *attachment 모음*일 뿐입니다.
 그게 전부에요!
-텍스처와 renderbuffer로 렌더링하는데 사용되죠.
+texture와 renderbuffer로 렌더링하는데 사용되죠.
 
 이런식으로 framebuffer 객체를 생각하실 수 있으며
 

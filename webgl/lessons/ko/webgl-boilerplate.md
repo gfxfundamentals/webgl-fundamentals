@@ -7,30 +7,30 @@ TOC: Boilerplate
 대부분의 WebGL 강의들은 모든걸 한 번에 다루기 때문에 배우기 복잡해 보이기도 하는데요.
 가능한 한 그것을 피하기 위해 더 작게 나눠보려고 합니다.
 
-WebGL을 복잡해 보이도록 만드는 것들 중 하나는 버텍스 셰이더와 프래그먼트 셰이더, 두 가지 작은 함수가 있다는 겁니다.
+WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 fragment shader, 두 가지 작은 함수가 있다는 겁니다.
 이 두 함수는 일반적으로 최대 속도가 나오는 GPU에서 실행되는데요.
 그렇기 때문에 GPU에서 수행할 수 있는 언어, 커스텀 언어로 작성됩니다.
 이 두 함수는 컴파일되고 연결되어야 하는데요.
 해당 처리는 모든 WebGL program에서 99% 동일합니다.
 
-다음은 셰이더를 컴파일 하는 boilerplate 코드입니다.
+다음은 shader를 컴파일 하는 boilerplate 코드입니다.
 
     /**
-     * 셰이더 생성 및 컴파일
+     * shader 생성 및 컴파일
      *
      * @param {!WebGLRenderingContext} gl은 WebGL Context
-     * @param {string} shaderSource는 셰이더의 GLSL source 코드
-     * @param {number} shaderType은 셰이더의 type, VERTEX_SHADER 또는 FRAGMENT_SHADER
-     * @return {!WebGLShader} 셰이더
+     * @param {string} shaderSource는 shader의 GLSL source 코드
+     * @param {number} shaderType은 shader의 type, VERTEX_SHADER 또는 FRAGMENT_SHADER
+     * @return {!WebGLShader} shader
      */
     function compileShader(gl, shaderSource, shaderType) {
-      // 셰이더 객체 생성
+      // shader 객체 생성
       var shader = gl.createShader(shaderType);
 
-      // 셰이더 소스 코드 설정
+      // shader 소스 코드 설정
       gl.shaderSource(shader, shaderSource);
 
-      // 셰이더 컴파일
+      // shader 컴파일
       gl.compileShader(shader);
 
       // 컴파일 여부 확인
@@ -43,21 +43,21 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 버텍스 셰이�
       return shader;
     }
 
-그리고 program에 두 셰이더를 연결하는 boilerplate 코드인데
+그리고 program에 두 shader를 연결하는 boilerplate 코드인데
 
     /**
-     * 두 셰이더로 program 생성합니다.
+     * 두 shader로 program 생성합니다.
      *
      * @param {!WebGLRenderingContext) gl은 WebGL Context
-     * @param {!WebGLShader} vertexShader는 버텍스 셰이더
-     * @param {!WebGLShader} fragmentShader는 프래그먼트 셰이더
+     * @param {!WebGLShader} vertexShader는 vertex shader
+     * @param {!WebGLShader} fragmentShader는 fragment shader
      * @return {!WebGLProgram} program
      */
     function createProgram(gl, vertexShader, fragmentShader) {
       // program 생성
       var program = gl.createProgram();
 
-      // 셰이더 할당
+      // shader 할당
       gl.attachShader(program, vertexShader);
       gl.attachShader(program, fragmentShader);
 
@@ -78,17 +78,17 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 버텍스 셰이�
 예외를 던지는 것이 오류를 처리하는 최고의 방법은 아니죠.
 그럼에도 불구하고 거의 모든 WebGL program에서 이 코드는 거의 비슷합니다.
 
-저는 셰이더를 자바스크립트가 아닌 &lt;script&gt; tag에 저장하는 걸 좋아하는데요.
+저는 shader를 자바스크립트가 아닌 &lt;script&gt; tag에 저장하는 걸 좋아하는데요.
 이 방식은 코드를 수정하기 쉽게 만들주기 때문에 저는 이렇게 코드를 작성합니다.
 
     /**
-     * 스크립트 태그의 내용으로 셰이더 생성
+     * 스크립트 태그의 내용으로 shader 생성
      *
      * @param {!WebGLRenderingContext) gl은 WebGL Context
      * @param {string} scriptId는 script tag의 id
-     * @param {string} opt_shaderType는 생성할 셰이더의 type
+     * @param {string} opt_shaderType는 생성할 shader의 type
      *                 전달되지 않으면 script tag의 type 속성 사용
-     * @return {!WebGLShader} 셰이더
+     * @return {!WebGLShader} shader
      */
     function createShaderFromScript(gl, scriptId, opt_shaderType) {
       // id로 스크립트 태그 탐색
@@ -115,18 +115,18 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 버텍스 셰이�
       return compileShader(gl, shaderSource, opt_shaderType);
     };
 
-이제 셰이더를 컴파일할 수 있는데
+이제 shader를 컴파일할 수 있는데
 
     var shader = compileShaderFromScript(gl, "someScriptTagId");
 
-한 걸음 더 나아가서 script tag에서 두 셰이더를 컴파일하며, 프로그램에 첨부하고 연결하는 함수를 만들겁니다.
+한 걸음 더 나아가서 script tag에서 두 shader를 컴파일하며, 프로그램에 첨부하고 연결하는 함수를 만들겁니다.
 
     /**
      * 두 script tag에서 program 생성
      *
      * @param {!WebGLRenderingContext} gl은 WebGL Context
-     * @param {string[]} shaderScriptId는 셰이더용 스크립트 태그의 id 배열입니다.
-     *                   첫 번째는 버텍스 셰이더, 두 번째는 프래그먼트 셰이더라고 가정합니다.
+     * @param {string[]} shaderScriptId는 shader용 스크립트 태그의 id 배열입니다.
+     *                   첫 번째는 vertex shader, 두 번째는 fragment shader라고 가정합니다.
      * @return {!WebGLProgram} program
      */
     function createProgramFromScripts(gl, shaderScriptIds) {
@@ -156,7 +156,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 버텍스 셰이�
 `webgl-utils.js` 코드는 [여기](../resources/webgl-utils.js)에서 찾으실 수 있습니다.
 좀 더 정리된 것을 원하신다면 [TWGL.js](https://twgljs.org)를 확인해주세요.
 
-WebGL을 복잡하게 보이게 만드는 나머지 부분은 셰이더에 모든 입력을 설정하는 겁니다.
+WebGL을 복잡하게 보이게 만드는 나머지 부분은 shader에 모든 입력을 설정하는 겁니다.
 이건 <a href="webgl-how-it-works.html">작동 원리</a>를 봐주세요.
 
 또한 [Less Code, More Fun](webgl-less-code-more-fun.html)를 읽고 [TWGL](https://twgljs.org)를 확인하는 걸 추천합니다.

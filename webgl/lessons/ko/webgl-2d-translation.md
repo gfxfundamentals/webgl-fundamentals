@@ -38,7 +38,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
     // 캔버스 지우기
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // program(셰이더 쌍)을 사용하도록 지시
+    // program(shader 쌍)을 사용하도록 지시
     gl.useProgram(program);
 
     // attribute 활성화
@@ -130,9 +130,9 @@ function setGeometry(gl, x, y) {
 또한, 자바스크립트는 그릴 때마다 모든 점들을 갱신해야 합니다.
 
 더 간단한 방법이 있습니다.
-geometry를 업로드하고 셰이더에서 translation을 수행하면 됩니다.
+geometry를 업로드하고 shader에서 translation을 수행하면 됩니다.
 
-여기 새로운 셰이더가 있는데
+여기 새로운 shader가 있는데
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">

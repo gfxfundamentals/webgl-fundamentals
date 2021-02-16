@@ -4,15 +4,15 @@ TOC: Attribute
 
 
 이 글은 WebGL에서 attribute 상태가 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
-texture unit에 관한 [비슷한 글](webgl-texture-units.html)이 있습니다.
+Texture unit에 관한 [비슷한 글](webgl-texture-units.html)이 있습니다.
 
-이 글을 읽기 전에 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL 셰이더 및 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)을 읽어보시길 바랍니다.
+이 글을 읽기 전에 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL Shader 및 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)을 읽어보시길 바랍니다.
 
 ## Attribute
 
-WebGL의 attribute는 버퍼에서 데이터를 가져오는 버텍스 셰이더에 대한 입력 값입니다.
-WebGL은 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용자가 제공한 버텍스 셰이더를 N번 실행하는데요.
-각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 버텍스 셰이더 내부의 attribute에 제공하는 방법을 정의합니다.
+WebGL의 attribute는 버퍼에서 데이터를 가져오는 vertex shader에 대한 입력 값입니다.
+WebGL은 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용자가 제공한 vertex shader를 N번 실행하는데요.
+각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 vertex shader 내부의 attribute에 제공하는 방법을 정의합니다.
 
 자바스크립트로 구현되었다면 이런식으로
 
@@ -88,8 +88,8 @@ gl.bindBuffer = function(target, buffer) {
 };
 ```
 
-자, 다음은 버텍스 셰이더입니다.
-버텍스 셰이더에서는 attribute를 선언합니다.
+자, 다음은 vertex shader입니다.
+Vertex shader에서는 attribute를 선언합니다.
 예를 들어:
 
 ```glsl
@@ -104,7 +104,7 @@ void main() {
 }
 ```
 
-`gl.linkProgram(someProgram)`를 호출하여 버텍스 셰이더와 프래그먼트 셰이더를 연결할 때 WebGL(driver/GPU/browser)은 각 attribute에 사용할 index/location를 자체적으로 결정하는데요.
+`gl.linkProgram(someProgram)`를 호출하여 vertex shader와 fragment shader를 연결할 때 WebGL(driver/GPU/browser)은 각 attribute에 사용할 index/location를 자체적으로 결정하는데요.
 수동(아래 참조)으로 location을 지정하지 않는 한 어떤 위치를 선택할지 알 수 없습니다.
 오직 browser/driver/GPU에 달려있죠.
 따라서 position, texcoord, normal에 어떤 attribute를 사용했는지 물어봐야 합니다.
@@ -117,7 +117,7 @@ const normalLoc = gl.getAttribLocation(program, 'normal');
 ```
 
 `positionLoc` = `5`라고 해봅시다.
-이건 버텍스 셰이더가 실행될 때(`gl.drawArrays`나 `gl.drawElements`를 호출할 때) 버텍스 셰이더는 당신이 알맞은 type, size, offset, stride, buffer 등으로 attribute 5를 설정할 것이라 예상한다는 걸 의미합니다.
+이건 vertex shader가 실행될 때(`gl.drawArrays`나 `gl.drawElements`를 호출할 때) vertex shader는 당신이 알맞은 type, size, offset, stride, buffer 등으로 attribute 5를 설정할 것이라 예상한다는 걸 의미합니다.
 
 참고로 program을 연결하기 전에는 `gl.bindAttribLocation(program, location, nameOfAttribute)`을 호출하여 location을 선택할 수 있습니다.
 예제:
@@ -171,12 +171,12 @@ ext.bindVertexArrayOES = function(vao) {
 
 vertex array object를 사용하는 게 확실히 좋다는 걸 보실 수 있을텐데요.
 이것들을 사용하려면 종종 더 많은 organization이 합니다.
-예를 들어 하나의 셰이더와 `gl.TRIANGLES`로 큐브를 그리고 다른 셰이더와 `gl.LINES`로 다시 그리고 싶다고 해봅시다.
-삼각형으로 그릴 때 조명에 normal을 사용하여 아래처럼 셰이더에 attribute를 선언한다고 가정하면:
+예를 들어 하나의 shader와 `gl.TRIANGLES`로 입방체를 그리고 다른 shader와 `gl.LINES`로 다시 그리고 싶다고 해봅시다.
+삼각형으로 그릴 때 조명에 normal을 사용하여 아래처럼 shader에 attribute를 선언한다고 가정하면:
 
 ```glsl
 // lighting-shader
-// 삼각형으로 그려진 큐브의 셰이더
+// 삼각형으로 그려진 입방체의 shader
 
 attribute vec4 a_position;
 attribute vec3 a_normal;
@@ -184,18 +184,18 @@ attribute vec3 a_normal;
 
 그런 다음 [조명에 관한 첫 번째 글](webgl-3d-lighting-directional.html)에서 다룬 것처럼 position과 normal을 사용합니다.
 
-조명을 원하지 않는 선의 경우, 단색이 필요하므로 튜토리얼 [첫 페이지](webgl-fundamentals.html)에 있는 첫 번째 셰이더와 비슷한 작업을 수행합니다.
+조명을 원하지 않는 선의 경우, 단색이 필요하므로 튜토리얼 [첫 페이지](webgl-fundamentals.html)에 있는 첫 번째 shader와 비슷한 작업을 수행합니다.
 color에 대한 uniform을 선언하는데요.
-이건 버텍스 셰이더에서 position만 필요함을 뜻합니다.
+이건 vertex shader에서 position만 필요함을 뜻합니다.
 
 ```glsl
 // solid-shader
-// 선으로 이루어진 큐브용 셰이더
+// 선으로 이루어진 입방체용 shader
 
 attribute vec4 a_position;
 ```
 
-각 셰이더의 attribute가 어떤 location으로 결정될지 알 수 없습니다.
+각 shader의 attribute가 어떤 location으로 결정될지 알 수 없습니다.
 위 lighting-shader의 location으로 가정해보면
 
 ```
@@ -209,13 +209,13 @@ a_normal location = 0
 a_position location = 0
 ```
 
-셰이더를 전환할 때 attribute를 다르게 설정해야 한다는 건 분명합니다.
-어떤 셰이더는 `a_position`의 데이터가 attribute 0에 나타날 것이라 예상하죠.
-다른 셰이더는 attribute 1에 나타날 것이라 예상합니다.
+Shader를 전환할 때 attribute를 다르게 설정해야 한다는 건 분명합니다.
+어떤 shader는 `a_position`의 데이터가 attribute 0에 나타날 것이라 예상하죠.
+다른 shader는 attribute 1에 나타날 것이라 예상합니다.
 
 attribute 재설정은 추가 작업입니다.
 더 나쁜 건, vertex array object 사용하는 것의 요점은 해당 작업을 할 필요가 없다는 겁니다.
-이 이슈를 고치기 위해 셰이더 program을 연결하기 전에 location을 할당하겠습니다.
+이 이슈를 고치기 위해 shader program을 연결하기 전에 location을 할당하겠습니다.
 
 ```js
 gl.bindAttribLocation(solidProgram, 0, 'a_position');
@@ -224,8 +224,8 @@ gl.bindAttribLocation(lightingProgram, 1, 'a_normal');
 ```
 
 **gl.linkProgram을 호출하기 전입니다.**
-이건 셰이더를 연결할 때 WebGL에게 할당할 location을 알려주는데요.
-이제 양쪽 셰이더에서 동일한 VAO를 사용할 수 있습니다.
+이건 shader를 연결할 때 WebGL에게 할당할 location을 알려주는데요.
+이제 양쪽 shader에서 동일한 VAO를 사용할 수 있습니다.
 
 ## Maximum Attribute
 
@@ -236,5 +236,5 @@ WebGL은 적어도 8개의 attribute가 지원되어야 하지만 특정 compute
 const maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 ```
 
-8개보다 많이 사용하기로 결정했다면 실제로 얼마나 지원되는지 확인하고 컴퓨터가 충분히 가지고 있지 않다면 사용자에게 알리거나 더 간단한 셰이더로 fallback하는 게 좋습니다.
+8개보다 많이 사용하기로 결정했다면 실제로 얼마나 지원되는지 확인하고 컴퓨터가 충분히 가지고 있지 않다면 사용자에게 알리거나 더 간단한 shader로 fallback하는 게 좋습니다.
 

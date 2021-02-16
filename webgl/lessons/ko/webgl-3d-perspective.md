@@ -50,7 +50,7 @@ Z가 증가할수록, 멀어질수록, 더 작게 그려지는 걸 볼 수 있�
 나누기 전에 Z를 fudgeFactor와 곱하면 주어진 거리에 따라 얼마나 작게 할지 조정할 수 있습니다.
 
 한 번 해봅시다.
-먼저 "fudgeFactor"를 곱한 뒤 Z로 나누도록 버텍스 셰이더를 수정합니다.
+먼저 "fudgeFactor"를 곱한 뒤 Z로 나누도록 vertex shader를 수정합니다.
 
 ```
 <script id="vertex-shader-3d" type="x-shader/x-vertex">
@@ -102,9 +102,9 @@ void main() {
 <img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
 <div class="webgl_center">직교법 vs 원근법</div>
 
-WebGL은 버텍스 셰이더의 `gl_Position`에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.
+WebGL은 vertex shader의 `gl_Position`에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.
 
-이는 셰이더를 변경하여 직접 나누는 대신 `gl_Position.w`에 `zToDivideBy`를 넣어서 쉽게 증명할 수 있는데요.
+이는 shader를 변경하여 직접 나누는 대신 `gl_Position.w`에 `zToDivideBy`를 넣어서 쉽게 증명할 수 있는데요.
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -121,7 +121,7 @@ void main() {
   // x, y, z를 zToDivideBy로 나누기
 *  gl_Position = vec4(position.xyz, zToDivideBy);
 
-  // 프래그먼트 셰이더로 color 전달
+  // fragment shader로 color 전달
   v_color = a_color;
 }
 </script>
@@ -226,7 +226,7 @@ w_out = z_in * fudgeFactor + 1;
 
 자, 행렬만 사용하도록 다시 프로그램을 수정해봅시다.
 
-먼저 버텍스 셰이더를 되돌려 놓으면
+먼저 vertex shader를 되돌려 놓으면
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -321,11 +321,11 @@ var m4 = {
 
 {{{example url="../frustum-diagram.html" width="400" height="600" }}}
 
-내부에서 큐브가 회전하고 있는 4면 원뿔 모양을 "절두체"라고 합니다.
+내부에서 입방체가 회전하고 있는 4면 원뿔 모양을 "절두체"라고 합니다.
 행렬은 절두체 안에 있는 공간을 가져와서 클립 공간으로 변환하는데요.
 `zNear`는 물체의 앞쪽이 잘리는 곳을 정의하고 `zFar`는 물체의 뒤쪽이 잘리는 곳을 정의합니다.
-`zNear`를 23으로 설정하면 회전하는 큐브의 앞면이 잘리는 걸 볼 수 있죠.
-`zFar`를 24로 설정하면 큐브의 뒷면이 잘리는 걸 볼 수 있습니다.
+`zNear`를 23으로 설정하면 회전하는 입방체의 앞면이 잘리는 걸 볼 수 있죠.
+`zFar`를 24로 설정하면 입방체의 뒷면이 잘리는 걸 볼 수 있습니다.
 
 이제 남은 문제는 단 하나입니다.
 이 행렬은 0,0,0에 viewer가 있다고 가정하고 -Z 방향으로 바라보며 +Y가 위를 향하고 있다고 가정하는데요.

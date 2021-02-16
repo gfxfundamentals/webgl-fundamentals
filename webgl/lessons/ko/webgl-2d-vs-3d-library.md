@@ -1,4 +1,4 @@
-Title: WebGL - 래스터화 vs 3D 라이브러리
+Title: WebGL - Rasterization vs 3D 라이브러리
 Description: 왜 WebGL은 3D 라이브러리가 아니며 그것이 중요한 이유
 TOC: 2D vs 3D 라이브러리
 
@@ -6,13 +6,13 @@ TOC: 2D vs 3D 라이브러리
 이 포스트는 WebGL 관련 시리즈의 부수적인 주제입니다.
 첫 번째는 [기초](webgl-fundamentals.html)부터 시작했는데
 
-WebGL이 래스터화 API이고 3D API가 아니라는 제 주장이 일부 사람들의 신경을 건드렸기 때문에 이걸 작성하고 있습니다.
-저는 WebGL을 래스터화 API라고 불렀고 왜 그들이 위협을 느끼는지 혹은 무엇이 그렇게 화나게 만드는지 모르겠습니다.
+WebGL이 rasterization API이고 3D API가 아니라는 제 주장이 일부 사람들의 신경을 건드렸기 때문에 이걸 작성하고 있습니다.
+저는 WebGL을 rasterization API라고 불렀고 왜 그들이 위협을 느끼는지 혹은 무엇이 그렇게 화나게 만드는지 모르겠습니다.
 
 틀림없이 모든 건 관점의 문제일 겁니다.
 나는 칼이 식기류라고 말할 수 있고, 다른 누군가는 칼이 도구라고 말할 수 있지만 또 다른 사람은 칼이 무기라고 말할 수 있습니다.
 
-WebGL의 경우 래스터화 API라고 부르는 게 중요하다고 생각한 이유가 있는데 구체적으로는 WebGL을 사용해 3D로 무언가를 그리기 위해 필요한 3D 수학 지식의 양 때문입니다.
+WebGL의 경우 rasterization API라고 부르는 게 중요하다고 생각한 이유가 있는데 구체적으로는 WebGL을 사용해 3D로 무언가를 그리기 위해 필요한 3D 수학 지식의 양 때문입니다.
 
 저는 3D 라이브러리라고 부르는 모든 것이 당신을 위한 3D 영역을 수행해야 한다고 생각하는데요.
 라이브러리에 3D 데이터, material 매개 변수, 조명을 제공할 수 있어야 하며 3D를 그릴 수 있어야 합니다.
@@ -23,7 +23,7 @@ C++을 "word processor"라고 부르진 않지만 word processor가 C++로 작�
 비슷하게 WebGL은 기본적으로 3D 그래픽을 그리지 않습니다.
 WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만 그 자체로 3D 그래픽을 수행하진 않습니다.
 
-추가 예제 제공을 위해, 조명과 함께 3D로 큐브를 그려야한다고 가정해봅시다.
+추가 예제 제공을 위해, 조명과 함께 3D로 입방체를 그려야한다고 가정해봅시다.
 
 이를 표시하기 위한 three.js의 코드인데
 
@@ -40,10 +40,10 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
   camera.position.z = 400;
   camera.updateProjectionMatrix();
 
-  // scene 만들기
+  // 장면 만들기
   scene = new THREE.Scene();
 
-  // 큐브 만들기
+  // 입방체 만들기
   var geometry = new THREE.BoxGeometry(200, 200, 200);
 
   // material 만들기
@@ -73,7 +73,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
 
 {{{example url="resources/three-js-cube-with-lights.html" }}}
 
-다음은 조명 2개와 함께 큐브를 표시하는 OpenGL(ES 아님)의 유사한 코드입니다.
+다음은 조명 2개와 함께 입방체를 표시하는 OpenGL(ES 아님)의 유사한 코드입니다.
 
 <pre class="prettyprint showlinemods">
   // 설정
@@ -102,7 +102,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
   glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 ...
 
-  // 큐브 그리기
+  // 입방체 그리기
   static int count = 0;
   ++count;
 
@@ -123,7 +123,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
 
   /*
   ...
-  ... 큐브의 다섯 면 더 반복
+  ... 입방체의 다섯 면 더 반복
   ...
   */
 
@@ -137,7 +137,7 @@ WebGL이 필요한 코드를 작성하진 않을 겁니다.
 필요한 줄 수에 관한 게 아닙니다.
 필요한 **지식**의 양에 관한 것입니다.
 두 3D 라이브러리에서 3D를 처리해주는데요.
-당신은 카메라 위치, 시야, 조명 두 개, 큐브를 제공합니다.
+당신은 카메라 위치, 시야, 조명 두 개, 입방체를 제공합니다.
 나머지는 그들이 모두 처리하죠.
 다시 말해: 그들은 3D 라이브러리입니다.
 
@@ -152,11 +152,11 @@ WebGL을 3D 라이브러리라고 부르는 건 잘못된 것 같습니다.
 WebGL에 유입되는 사용자들은 "오, 3D 라이브러리다. 멋지다. 이걸로 3D를 할 수 있을 거야"라고 생각하고 아니오라는 힘든 방법을 알아내는데, 전혀 그렇지 않습니다.
 
 우리는 한 걸음 더 나아갈 수도 있는데요.
-다음은 캔버스로 wireframe 큐브를 그립니다.
+다음은 캔버스로 wireframe 입방체를 그립니다.
 
 {{{example url="resources/3d-in-canvas.html" }}}
 
-그리고 여기는 WebGL로 wireframe 큐브를 그립니다.
+그리고 여기는 WebGL로 wireframe 입방체를 그립니다.
 
 {{{example url="resources/3d-in-webgl.html" }}}
 
@@ -164,7 +164,7 @@ WebGL에 유입되는 사용자들은 "오, 3D 라이브러리다. 멋지다. �
 최종적으로 캔버스 버전은 정점을 반복하고, 우리가 제공한 수식을 수행하며 2D로 일부 선을 그립니다.
 WebGL 버전은 우리가 제공한 수식이 GLSL에 있고 GPU에 의해 실행된다는 걸 제외하면 동일한 작업을 수행합니다.
 
-마지막 데모의 요점은 WebGL이 Canvas 2D와 유사한, 래스터화 엔진일 뿐이라는 걸 효과적으로 보여주는 겁니다.
+마지막 데모의 요점은 WebGL이 Canvas 2D와 유사한, rasterization 엔진일 뿐이라는 걸 효과적으로 보여주는 겁니다.
 물론 WebGL은 3D를 구현하는데 도움이 되는 기능들을 가지고 있는데요.
 WebGL은 depth sorting을 훨씬 더 쉽게 만드는 depth buffer를 가지고 있습니다.
 또한 3D 수학을 처리하는데 유용한 수학 함수들이 내장되어 있지만 3D로 만드는 건 없습니다.
@@ -177,9 +177,9 @@ WebGL은 depth sorting을 훨씬 더 쉽게 만드는 depth buffer를 가지고 
 
 몇 가지 참고 사항을 더 드리기 위해, [emscripten](https://emscripten.org/)은 WebGL 위에서 오래된 OpenGL 에뮬레이션을 제공합니다.
 해당 코드는 [여기](https://github.com/emscripten-core/emscripten/blob/master/src/library_glemu.js)에 있는데요.
-코드를 살펴보면 OpenGL ES 2.0에서 제거된 OpenGL의 오래된 3D 부분을 에뮬레이트하기 위해 셰이더를 생성하는 경우가 많습니다.
+코드를 살펴보면 OpenGL ES 2.0에서 제거된 OpenGL의 오래된 3D 부분을 에뮬레이트하기 위해 shader를 생성하는 경우가 많습니다.
 3D가 포함되지 않은 최신 OpenGL에서 3D가 포함된 오래된 OpenGL을 에뮬레이트하기 위해 NVidia가 시작한 프로젝트, [Regal](https://github.com/p3/regal/blob/184c62b7d7761481609ef1c1484ada659ae181b9/src/regal/RegalIff.cpp)에서 동일한 걸 볼 수 있습니다.
-또 하나의 예로, [여기](https://gist.github.com/greggman/41d93c00649cba78abdbfc1231c9158c) three.js가 3D를 제공하기 위해 사용하는 셰이더가 있습니다.
+또 하나의 예로, [여기](https://gist.github.com/greggman/41d93c00649cba78abdbfc1231c9158c) three.js가 3D를 제공하기 위해 사용하는 shader가 있습니다.
 많은 것들이 진행되고 있음을 알 수 있는데요.
 이 모든 것들 뿐만이 아니라 이를 지원하는 코드는 WebGL이 아닌 라이브러리에서 제공합니다.
 
