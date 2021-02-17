@@ -1030,7 +1030,7 @@ function getAccessorTypedArrayAndStride(gl, gltf, accessorIndex) {
 
 需要注意的是上面的代码我们用硬编码的WebGL常量制作了一个表。这是我们第一次这样做。常量不会改变，所以这是安全的。
 
-现在我们有了蒙皮，我们可以返回并将它门添加到引用它们的节点。
+现在我们有了蒙皮，我们可以返回并将它们添加到引用它们的节点。
 
 ```
 // 给蒙皮节点添加SkinRenderers

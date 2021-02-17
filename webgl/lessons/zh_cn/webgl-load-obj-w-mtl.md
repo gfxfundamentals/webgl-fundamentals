@@ -420,7 +420,7 @@ function createTexture(gl, url) {
 }
 ```
 
-两个材质可能引用同一张图片，所以我们将所以的纹理根据名字保存在对象中，这样就不用加载两次了。
+两个材质可能引用同一张图片，所以我们将所有的纹理根据名字保存在对象中，这样就不用加载两次了。
 
 ```js
 const textures = {};
@@ -661,11 +661,11 @@ Object.values(materials).forEach((m) => {
 你可以看到并没有用到镜面反射，但文件里却有镜面贴图！¯\_(ツ)\_/¯
 镜面高光需要照度模型为 2 或以上。
 这是我的一些关于 .obj/.mtl 文件的经验，你总是需要对材质做一些手动调整。
-如何解决这些问题取决于你。你可有编辑 .mtl 文件，或者添加代码。
+如何解决这些问题取决于你。你可以编辑 .mtl 文件，或者添加代码。
 而我们现在会添加一些代码。
 
 最后一个 .mtl 文件使用贴图的是凹凸贴图： `map_Bump`。
-这又是一个可以看出 .obj/.mtl 文件古早的地方。
+这又是一个可以看出 .obj/.mtl 文件古老的地方。
 引用的只是法线贴图，并不是凹凸贴图。
 
 <div class="webgl_center"><img src="../resources/models/windmill/windmill_001_base_NOR.jpg" style="width: 512px;"></div>
