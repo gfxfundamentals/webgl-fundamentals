@@ -367,7 +367,7 @@
     const name = glEnums[value];
     return (name !== undefined)
         ? `gl.${name}`
-        : `/*UNKNOWN WebGL ENUM*/ 0x${value.toString(16)}`;
+        : `/*UNKNOWN WebGL ENUM*/ ${typeof value === 'number' ? `0x${value.toString(16)}` : value}`;
   }
 
   /**
