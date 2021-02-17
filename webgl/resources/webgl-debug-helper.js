@@ -398,6 +398,10 @@
       return 'null';
     } else if (value === undefined) {
       return 'undefined';
+    } else if (Array.isArray(value)) {
+      return `[${value.toString()}]`;
+    } else if (typeof value.length === 'number' && value.buffer && value.buffer instanceof ArrayBuffer) {
+      return `${value.constructor.name}(${value.length})`;
     } else {
       return value.toString();
     }
