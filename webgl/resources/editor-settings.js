@@ -44,6 +44,11 @@ function fixSourceLinks(url, source) {
   const prefix = getPrefix(url);
 
   function addPrefix(url) {
+    if (url.startsWith('//')) {
+      // this issue here is we're passing this to a blob
+      // with just // it becomes blob://
+      return `${window.location.protocol}${url}`;
+    }
     return url.indexOf('://') < 0 && url[0] !== '?' ? (prefix + url) : url;
   }
   function makeLinkFQedQuote(match, p1, url, p2) {
