@@ -125,7 +125,7 @@ void main() {
 
 example
 
-{{{example url="../webgl-qna-webgl-qna-how-to-draw-correctly-textured-trapezoid-polygons-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-draw-correctly-textured-trapezoid-polygons-example-1.html"}}}
 
 
 

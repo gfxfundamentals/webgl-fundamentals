@@ -33,13 +33,13 @@ There are possibly multiple reasons
 
 The browser chooses the amount but checking 
 
-{{{example url="../webgl-qna-webgl-qna-why-does-webgl-take-more-memory-than-canvas-2d-example-1.html"}}}
+{{{example url="../webgl-qna-why-does-webgl-take-more-memory-than-canvas-2d-example-1.html"}}}
 
 On my machine a 300x150 canvas is actually 1200x600 because that's [how a GPU's built in antialiasing works](https://mynameismjp.wordpress.com/2012/10/24/msaa-overview/)
 
 You can turn off anti-aliasing by passing in `antialias: false` when creating the context
 
-{{{example url="../webgl-qna-webgl-qna-why-does-webgl-take-more-memory-than-canvas-2d-example-2.html"}}}
+{{{example url="../webgl-qna-why-does-webgl-take-more-memory-than-canvas-2d-example-2.html"}}}
 
 ### WebGL is double buffered
 

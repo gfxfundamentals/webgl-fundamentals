@@ -58,7 +58,7 @@ So, in short, I have these questions:
 
 You might be able to use the [`EXT_disjoint_timer_query_webgl2`](https://www.khronos.org/registry/webgl/extensions/EXT_disjoint_timer_query_webgl2/)? 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-figure-out-how-much-gpu-work-to-do-without-crashing-webgl-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-figure-out-how-much-gpu-work-to-do-without-crashing-webgl-example-1.html"}}}
 
 On my 2014 Macbook Pro Dual GPU (Intel/Nvidia), first off, even though I request high-performance Chrome gives me low-power meaning it's using the Intel integrated GPU.
 

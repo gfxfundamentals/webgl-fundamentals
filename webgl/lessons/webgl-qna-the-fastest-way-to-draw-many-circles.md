@@ -26,27 +26,27 @@ The fastest way might depend on the GPU and lots of other factors like how you'r
 
 First lets just draw textured quads with no blending. First off I always seem to get inconsistent perf from WebGL but in my tests on my GPU I get 20k-30k quads at 60fps in this 300x150 canvas using instancing
 
-{{{example url="../webgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-1.html"}}}
+{{{example url="../webgl-qna-the-fastest-way-to-draw-many-circles-example-1.html"}}}
 
 And I get the same perf at 60fps using repeated to geometry instead of instancing. That's surprising to me because 7-8yrs ago when I tested repeated geometry was 20-30% faster. Whether that's because of having a better GPU now or a better driver or what I have no idea.
 
-{{{example url="../webgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-2.html"}}}
+{{{example url="../webgl-qna-the-fastest-way-to-draw-many-circles-example-2.html"}}}
 
 Next thing would be textures or computing a circle in the fragment shader.
 
-{{{example url="../webgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-3.html"}}}
+{{{example url="../webgl-qna-the-fastest-way-to-draw-many-circles-example-3.html"}}}
 
 I get no measureable difference. Trying your circle function
 
 
-{{{example url="../webgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-4.html"}}}
+{{{example url="../webgl-qna-the-fastest-way-to-draw-many-circles-example-4.html"}}}
 
 I again get no measurable difference. Note: like I said above I get wildly inconsistent results in WebGL. When I ran the first test I got 28k at 60fps. When I ran the second I got 23k. I was surprised since I expected the 2nd to be faster so I ran the first again and only got 23k. The last one I got 29k and was again surprise but then I went back and did the previous and got 29k. Basically that means testing timing in WebGL is nearly impossible. There are so many moving parts given everything is multi-process that getting constant results seems impossible.
 
 
 Could try discard
 
-{{{example url="../webgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-5.html"}}}
+{{{example url="../webgl-qna-the-fastest-way-to-draw-many-circles-example-5.html"}}}
 
 Given the inconsistent timing I can't be sure but my impression is discard is slower. IIRC discard is slow because without discard the GPU knows even before it executes the fragment shader that it's going to update the z-buffer where as with discard it doesn't know until after the shader executes and that that difference means certain things can't be optimized as well.
 

@@ -56,7 +56,7 @@ In WebGL2 you'd change the code to use `texelFetch` and unsigned integers
 
 example of 4 models drawn with 1 draw call. For each model the model matrix and color are stored in the texture.
 
-{{{example url="../webgl-qna-webgl-qna-drawing-many-different-models-in-a-single-draw-call-example-1.html"}}}
+{{{example url="../webgl-qna-drawing-many-different-models-in-a-single-draw-call-example-1.html"}}}
 
 Here's 2000 models in one draw call
 

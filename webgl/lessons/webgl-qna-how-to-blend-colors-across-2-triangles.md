@@ -37,19 +37,19 @@ One is to use a 2x2 texture with linear sampling. You have to do some extra math
 
 Above is a 4 pixel texture stretched to 14 by 6. Sampling happens between pixels so only this center area will get the gradient. Outside that area would be sampled with pixels outside the texture so using [CLAMP_TO_EDGE](https://webglfundamentals.org/webgl/lessons/webgl-3d-textures.html) or on the opposite side of the texture using REPEAT.
 
-{{{example url="../webgl-qna-webgl-qna-how-to-blend-colors-across-2-triangles-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-blend-colors-across-2-triangles-example-1.html"}}}
 
 Note: to see what I mean about the extra math needed for the texture coordinates here is the same example without the extra math
 
-{{{example url="../webgl-qna-webgl-qna-how-to-blend-colors-across-2-triangles-example-2.html"}}}
+{{{example url="../webgl-qna-how-to-blend-colors-across-2-triangles-example-2.html"}}}
 
 Also of course, rather than do the math in the fragment shader we could fix the texture coordinates in JavaScript
 
-{{{example url="../webgl-qna-webgl-qna-how-to-blend-colors-across-2-triangles-example-3.html"}}}
+{{{example url="../webgl-qna-how-to-blend-colors-across-2-triangles-example-3.html"}}}
 
 Another way is to do the interpolation yourself based on those corners (which is effectively doing what the texture sampler is doing in the previous example, bi-linear interpolation of the 4 colors).
 
-{{{example url="../webgl-qna-webgl-qna-how-to-blend-colors-across-2-triangles-example-4.html"}}}
+{{{example url="../webgl-qna-how-to-blend-colors-across-2-triangles-example-4.html"}}}
 
 
 

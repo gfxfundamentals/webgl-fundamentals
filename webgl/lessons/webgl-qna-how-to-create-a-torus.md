@@ -101,7 +101,7 @@ If it was me, rather than loop based on the angles I'd loop based on the loops a
 
 So here's another version
 
-{{{example url="../webgl-qna-webgl-qna-how-to-create-a-torus-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-create-a-torus-example-1.html"}}}
 
 
 

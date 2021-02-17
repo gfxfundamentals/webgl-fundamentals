@@ -33,7 +33,7 @@ One way would be to use the stencil test. You'd set webgl so that the stencil st
 
 First an example that draws 2 sets of 2 overlapping triangles with blending on. The pairs will get darker where they overlap
 
-{{{example url="../webgl-qna-webgl-qna-don-t-blend-a-polygon-that-crosses-itself-example-1.html"}}}
+{{{example url="../webgl-qna-don-t-blend-a-polygon-that-crosses-itself-example-1.html"}}}
 
 Then the same example with the stencil test on
 
@@ -77,7 +77,7 @@ gl.clear(gl.STENCIL_BUFFER_BIT);
 
 Example
 
-{{{example url="../webgl-qna-webgl-qna-don-t-blend-a-polygon-that-crosses-itself-example-2.html"}}}
+{{{example url="../webgl-qna-don-t-blend-a-polygon-that-crosses-itself-example-2.html"}}}
 
 Another solution you could also use the depth test if you're drawing 2D stuff. The default depth test only draws if the depth is `gl.LESS` than the current depth so just turning the depth test on and setting a different depth between draws would also work if the depth of the triangles is the same. You could compute a different depth value for each thing you draw, you'd need to look up the bit resolution of the depth buffer. Or, you could use `gl.polygonOffset`
 
@@ -95,7 +95,7 @@ for (let i = 0; i < numThingsToDraw; ++i) {
 
 example
 
-{{{example url="../webgl-qna-webgl-qna-don-t-blend-a-polygon-that-crosses-itself-example-3.html"}}}
+{{{example url="../webgl-qna-don-t-blend-a-polygon-that-crosses-itself-example-3.html"}}}
 
 
 

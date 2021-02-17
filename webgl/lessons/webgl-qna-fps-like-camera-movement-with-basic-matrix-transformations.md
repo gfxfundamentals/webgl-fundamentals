@@ -25,7 +25,7 @@ This is not a deal breaker for what i'm doing, but i want to know. Is this the b
 
 WebGL cameras generally point down the -Z axis so to move in the direction the camera is facing you just add the camera's Z axis (elements 8, 9, 10) to the position of the camera multiplied by some velocity.
 
-{{{example url="../webgl-qna-webgl-qna-fps-like-camera-movement-with-basic-matrix-transformations-example-1.html"}}}
+{{{example url="../webgl-qna-fps-like-camera-movement-with-basic-matrix-transformations-example-1.html"}}}
 
 
 

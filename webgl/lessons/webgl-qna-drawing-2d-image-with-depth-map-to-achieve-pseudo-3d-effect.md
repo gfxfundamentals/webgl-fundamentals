@@ -51,17 +51,17 @@ First you need the original image
 
 and you then apply a sine wave distortion.
 
-{{{example url="../webgl-qna-webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect-example-1.html"}}}
+{{{example url="../webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect-example-1.html"}}}
 
 Then they also load a texture of multiple maps. This texture was created by hand in photoshop (or other image editing program). The green channel is how much to multiply the distortion by. The greener the more distortion.
 
 ![](http://i.imgur.com/W9QazjL.jpg)
 
-{{{example url="../webgl-qna-webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect-example-2.html"}}}
+{{{example url="../webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect-example-2.html"}}}
 
 Next there's an offset for the mouse multplied by another hand drawn map. This map is the red channel of the image above where the more red it is the more the mouse offset is applied. The map kind of represents depth. Since we need stuff in the front to move opposite of stuff in the back we need to convert that channel from 0 to 1 to -.5 to +.5 in the shader 
 
-{{{example url="../webgl-qna-webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect-example-3.html"}}}
+{{{example url="../webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect-example-3.html"}}}
 
 Finally, (not in the tutorial but in the sample) it loads a blurred version of the original image (blurred in some image editing program like photoshop)
 
@@ -71,7 +71,7 @@ It might be hard to see it's blurred since the blurring is subtle.
 
 The sample then uses the blurred image the more distorted things are
 
-{{{example url="../webgl-qna-webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect-example-4.html"}}}
+{{{example url="../webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect-example-4.html"}}}
 
 The finally big difference is rather than use a simple sine wave for distortion the shader on that sample is computing something slight more complicated.
 

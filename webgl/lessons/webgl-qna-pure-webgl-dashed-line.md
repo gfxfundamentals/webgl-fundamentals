@@ -47,7 +47,7 @@ Unfortunately it won't work with indexed geometry (the most common type?). In ot
 
 If those limitations are good for you does this answer you question?
 
-{{{example url="../webgl-qna-webgl-qna-pure-webgl-dashed-line-example-1.html"}}}
+{{{example url="../webgl-qna-pure-webgl-dashed-line-example-1.html"}}}
 
 Note: [Here's an article that might help explain how varyings work][2]
 

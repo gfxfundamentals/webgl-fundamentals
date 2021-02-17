@@ -22,11 +22,11 @@ One way to kind of maybe solve this issue is to draw the image in parts. How you
 
 Here's a fairly standard style WebGL simple sample that draws a cube using a typical `perspective` function
 
-{{{example url="../webgl-qna-webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-1.html"}}}
 
 And here's the same code rendering at 400x200 in eight 100x100 parts using a typical `frustum` function instead of `perspective`
 
-{{{example url="../webgl-qna-webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-2.html"}}}
+{{{example url="../webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-2.html"}}}
 
 If you run the snippet above you'll see it's generating 8 images
 
@@ -96,7 +96,7 @@ Or if you just want to display them the browser will probably do better with 16x
 
 Example:
 
-{{{example url="../webgl-qna-webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-3.html"}}}
+{{{example url="../webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-3.html"}}}
 
 If you want the user to be able to download a 16386x16386 image instead of 256 1024x1024 images then yet one more solution is to use the part rendering code above and for each row (or rows) of images write their data to a blobs to manually generate a PNG. [This blog post](https://medium.com/the-guardian-mobile-innovation-lab/generating-images-in-javascript-without-using-the-canvas-api-77f3f4355fad) covers manually generating PNGs from data  and [this answer suggests how to do it for very large data](https://stackoverflow.com/a/51247740/128511).
 

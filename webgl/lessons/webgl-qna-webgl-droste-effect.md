@@ -77,7 +77,7 @@ To do what you want you need 2 textures since you can not read from and write to
 * Draw Cube with TextureA to TextureB
 * Draw TextureB to Canvas
 
-{{{example url="../webgl-qna-webgl-qna-webgl-droste-effect-example-1.html"}}}
+{{{example url="../webgl-qna-webgl-droste-effect-example-1.html"}}}
 
 As for the canvas and its 2 buffers, no it is not possible to directly use them as textures. You can call `gl.copyTexImage2D` or `gl.copyTexSubImage2D` top copy a portion of the canvas to a texture though so that is another solution. It's less flexible and I believe slower than the framebuffer method
 

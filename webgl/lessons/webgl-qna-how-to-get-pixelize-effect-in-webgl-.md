@@ -18,11 +18,11 @@ Here's a sample. It's using [TWGL](http://twgljs.org) which is not a framework, 
 
 If you're new to webgl [I'd suggest starting here](http://webglfundamentals.org)
 
-{{{example url="../webgl-qna-webgl-qna-how-to-get-pixelize-effect-in-webgl--example-1.html"}}}
+{{{example url="../webgl-qna-how-to-get-pixelize-effect-in-webgl--example-1.html"}}}
 
 It's also common to render to a texture (like above) but a higher resolution texture, then filter it down using a shaders, mips, and/or linear filtering. The advantage being you'll get more anti-aliasing 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-get-pixelize-effect-in-webgl--example-2.html"}}}
+{{{example url="../webgl-qna-how-to-get-pixelize-effect-in-webgl--example-2.html"}}}
 
 ---
 
@@ -42,7 +42,7 @@ In 2020 possibly the easiest thing you can do is just make a canvas the resoluti
     "></canvas>
 ```
 
-{{{example url="../webgl-qna-webgl-qna-how-to-get-pixelize-effect-in-webgl--example-3.html"}}}
+{{{example url="../webgl-qna-how-to-get-pixelize-effect-in-webgl--example-3.html"}}}
 
 
 

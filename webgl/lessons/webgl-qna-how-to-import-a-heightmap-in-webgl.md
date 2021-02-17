@@ -181,7 +181,7 @@ You basically just make a grid of points and change the Z values.
 
 First a flat grid
 
-{{{example url="../webgl-qna-webgl-qna-how-to-import-a-heightmap-in-webgl-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-import-a-heightmap-in-webgl-example-1.html"}}}
 
 Grid with height map. 
 
@@ -191,13 +191,13 @@ Here's a gray scale image we can use as a height map
 
 Read it by loading a img, drawing to a 2D canvas, calling getImageData. Then just read the red values for height.
 
-{{{example url="../webgl-qna-webgl-qna-how-to-import-a-heightmap-in-webgl-example-2.html"}}}
+{{{example url="../webgl-qna-how-to-import-a-heightmap-in-webgl-example-2.html"}}}
 
 Then instead of making a grid of lines make a grid of triangles. There's lots of ways to do that. You could put 2 triangle per grid square. This code put's 4. You also need to generate normals. I copied the code to generate normals from [this article](https://webglfundamentals.org/webgl/lessons/webgl-3d-geometry-lathe.html) which is fairly generic normal generating code.  Being a grid you could make a grid specific normal generator which would be faster since being a grid you know which vertices are shared.
 
 This code is also using [twgl](https://twgljs.org) because WebGL is too verbose but it should be clear how to do it in plain WebGL from reading the names of the twgl functions.
 
-{{{example url="../webgl-qna-webgl-qna-how-to-import-a-heightmap-in-webgl-example-3.html"}}}
+{{{example url="../webgl-qna-how-to-import-a-heightmap-in-webgl-example-3.html"}}}
 
 
 

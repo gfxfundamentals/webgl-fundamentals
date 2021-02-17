@@ -12,11 +12,11 @@ Three ideas come to mind.
 
 1. You can render to a texture via a framebuffer over many frames, when you're done you render that texture to the canvas.
 
-{{{example url="../webgl-qna-webgl-qna-rendering-slowly-over-time-example-1.html"}}}
+{{{example url="../webgl-qna-rendering-slowly-over-time-example-1.html"}}}
 
 2. You can make 2 canvases. A webgl canvas that is not in the DOM. You render to it over many frames and when you're done you draw it to a 2D canvas with `ctx.drawImage(webglCanvas, ...)`  This is basically the same as #1 except you're letting the browser "render that texture to a canvas" part
 
-{{{example url="../webgl-qna-webgl-qna-rendering-slowly-over-time-example-2.html"}}}
+{{{example url="../webgl-qna-rendering-slowly-over-time-example-2.html"}}}
 
 
 3. You can use [OffscreenCanvas](https://developers.google.com/web/updates/2018/08/offscreen-canvas) and render in a worker. This has only shipped in Chrome though.

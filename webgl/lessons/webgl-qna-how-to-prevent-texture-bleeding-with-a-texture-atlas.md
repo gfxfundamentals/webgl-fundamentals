@@ -114,7 +114,7 @@ Sprite CDGH's coords are
 
 The best way to see the difference is to draw 2 sprites large using both techniques, the unpadded and the padded.
 
-{{{example url="../webgl-qna-webgl-qna-how-to-prevent-texture-bleeding-with-a-texture-atlas-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-prevent-texture-bleeding-with-a-texture-atlas-example-1.html"}}}
 
 
 

@@ -68,11 +68,11 @@ void main() {
 
 But the thing is that would already draw the texture transparently without using the stencil.
 
-{{{example url="../webgl-qna-webgl-qna-how-to-use-a-2d-sprite-s-transparency-as-a-mask-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-use-a-2d-sprite-s-transparency-as-a-mask-example-1.html"}}}
 
 Otherwise if you really want to use the stencil now that the code is discarding some pixels it should work and your code was correct. note the  code below doesn't clear the stencil because it defaults to being cleared every frame
 
-{{{example url="../webgl-qna-webgl-qna-how-to-use-a-2d-sprite-s-transparency-as-a-mask-example-2.html"}}}
+{{{example url="../webgl-qna-how-to-use-a-2d-sprite-s-transparency-as-a-mask-example-2.html"}}}
 
 Let me also point out that that this is also probably better done using alpha blending, passing both textures into a single shader and passing in another matrix or other uniforms to apply one texture's alpha ot the other. This would be more flexible as you could can blend across all values of 0 to 1 where as with the stencil you can only mask 0 or 1 period.
 

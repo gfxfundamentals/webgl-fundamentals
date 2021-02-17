@@ -59,14 +59,14 @@ textColor = texture2D(glyphTexture,
 
 Or something like that. I have no idea how slow it would be
 
-{{{example url="../webgl-qna-webgl-qna-how-to-combine-more-text-drawing-into-fewer-draw-calls-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-combine-more-text-drawing-into-fewer-draw-calls-example-1.html"}}}
 
 note that if the glyphs were different sizes it seems like it would get extremely slow, at least off the top of my head, the only way to find each glyph as you draw a quad would be to loop over all the glyphs in the message for every pixel.
 
 On the other hand, you could build a mesh of glyphs similar to [the article](https://webgl2fundamentals.org/webgl/lessons/webgl-text-glyphs.html), for each message, for every glyph in that message, add a per vertex message id or message uv that you use to look up offsets or matrices from a texture. In this way you can move every message independently but make it all happen in a single draw call. This would
 allow non-monospaced glyphs. As an example of storing positions or matrices in a texture see [this article on skinning](https://webglfundamentals.org/webgl/lessons/webgl-skinning.html). It stores bone matrices in a texture.
 
-{{{example url="../webgl-qna-webgl-qna-how-to-combine-more-text-drawing-into-fewer-draw-calls-example-2.html"}}}
+{{{example url="../webgl-qna-how-to-combine-more-text-drawing-into-fewer-draw-calls-example-2.html"}}}
 
 Also see https://stackoverflow.com/a/54720138/128511
 

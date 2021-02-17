@@ -34,7 +34,7 @@ any help would be great!
 
 Displaying FPSs is pretty simple and has really nothing to do with WebGL other than it's common to want to know. Here's a small FPS display
 
-{{{example url="../webgl-qna-webgl-qna-recording-fps-in-webgl-example-1.html"}}}
+{{{example url="../webgl-qna-recording-fps-in-webgl-example-1.html"}}}
 
 Use requestAnimationFrame for animation because that's what it's for. Browsers can sync to the screen refresh to give you buttery smooth animation. They can also stop processing if your page is not visible. setTimeout on the other hand is not designed for animation, will not be synchronised to the browser's page drawing.
 
@@ -44,7 +44,7 @@ You should probably not use `Date.now()` for computing FPS as `Date.now()` only 
 
 It's also common to average the FPS across frames.
 
-{{{example url="../webgl-qna-webgl-qna-recording-fps-in-webgl-example-2.html"}}}
+{{{example url="../webgl-qna-recording-fps-in-webgl-example-2.html"}}}
 
 
 

@@ -100,7 +100,7 @@ You also need to make sure both textures are using `gl.NEAREST` for filtering si
 
 Here's a working example:
 
-{{{example url="../webgl-qna-webgl-qna-emulating-palette-based-graphics-in-webgl-example-1.html"}}}
+{{{example url="../webgl-qna-emulating-palette-based-graphics-in-webgl-example-1.html"}}}
 
 To animate just update the image and then re-upload it into the texture
 
@@ -109,7 +109,7 @@ To animate just update the image and then re-upload it into the texture
 
 Example:
 
-{{{example url="../webgl-qna-webgl-qna-emulating-palette-based-graphics-in-webgl-example-2.html"}}}
+{{{example url="../webgl-qna-emulating-palette-based-graphics-in-webgl-example-2.html"}}}
 
 Of course that assumes your goal is to do the animation on the CPU by manipulating pixels. Otherwise you can use any normal webgl techniques to manipulate texture coordinates or whatever.
 
@@ -120,7 +120,7 @@ You can also update the palette similarly for palette animation. Just modify the
 
 Example:
 
-{{{example url="../webgl-qna-webgl-qna-emulating-palette-based-graphics-in-webgl-example-3.html"}}}
+{{{example url="../webgl-qna-emulating-palette-based-graphics-in-webgl-example-3.html"}}}
 
 Slightly related is this tile shader example
 http://blog.tojicode.com/2012/07/sprite-tile-maps-on-gpu.html

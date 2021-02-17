@@ -77,7 +77,7 @@ Any tips/advice/tutorials are much appreciated!
 
 Is there any reason to do this in WebGL? Sure, you can do stuff like that in WebGL but you could also do it in 2D canvas
 
-{{{example url="../webgl-qna-webgl-qna-create-image-warping-effect-in-webgl-example-1.html"}}}
+{{{example url="../webgl-qna-create-image-warping-effect-in-webgl-example-1.html"}}}
 
 I have no idea what their exact formula is but apparently the technique is inspired by something called [slit scan](https://www.google.co.jp/search?q=slitscan).
 
@@ -85,7 +85,7 @@ Doing it in WebGL would probably allow more crazy warping because you could easi
 
 Here's a twgl version
 
-{{{example url="../webgl-qna-webgl-qna-create-image-warping-effect-in-webgl-example-2.html"}}}
+{{{example url="../webgl-qna-create-image-warping-effect-in-webgl-example-2.html"}}}
 
 
 

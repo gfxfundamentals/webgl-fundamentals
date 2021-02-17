@@ -28,7 +28,7 @@ const altFormat = gl.getParameter(gl.IMPLEMENTATION_COLOR_READ_FORMAT);
 const altType = gl.getParameter(gl.IMPLEMENTATION_COLOR_READ_TYPE);
 ```
 
-{{{example url="../webgl-qna-webgl-qna-i-get-invalid-type-error-when-calling-readpixels-example-1.html"}}}
+{{{example url="../webgl-qna-i-get-invalid-type-error-when-calling-readpixels-example-1.html"}}}
 
 The code above makes a RGBA/FLOAT texture and attached it to a framebuffer then checks the alternate format/type combo to read it. On Chrome it gets RGBA/UNSIGNED_BYTE, on Firefox it gets RGBA/FLOAT. Both are valid responses since the alternate combo is **implementation dependent**.
 

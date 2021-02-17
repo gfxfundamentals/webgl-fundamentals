@@ -32,7 +32,7 @@ As you walk across the quad for each pixel you lookup in the tilemap texture whi
 
 Note that unlike traditional tilemaps the ids of each tile is the X,Y coordinate of the tile in the tile texture. In other words if your tile texture has 16x8 tiles across and you want your map to show the tile 7 over and 4 down then the id of that tile is 7,4 (first byte 7, second byte 4) where as in a traditional CPU based system the tile id would probably be 4*16+7 or 71 (the 71st tile). You could add code to the shader to do more traditional indexing but since the shader has to convert the id into 2d texture coords it just seemed easier to use 2d ids.    
 
-{{{example url="../webgl-qna-webgl-qna-webgl-2d-tilemaps-example-1.html"}}}
+{{{example url="../webgl-qna-webgl-2d-tilemaps-example-1.html"}}}
 
 
 

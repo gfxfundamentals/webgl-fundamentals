@@ -14,7 +14,7 @@ The most common way to color a triangle is to [use a texture](https://webglfunda
 
 Further, any solution you come up with will likely be fairly inflexible where as using a texture (the most common way to color something) gives you a ton of flexibiltity. For example you might make a fragment shader that lets you pick 1 new color in the middle of the triangle. 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-control-the-color-between-vertices-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-control-the-color-between-vertices-example-1.html"}}}
 
 Later you decide want 2 colors, one 1/3rd of the way from the first point down the line from the first point to the mid point of the other 2 points and another 2/3rd down that line. You'll need to write a completely new shader. If you'd used a texture you'd just change the texture.
 

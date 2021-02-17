@@ -78,7 +78,7 @@ Note if all you want is a ray in world space, not position space then you'd use
       const invMat = m4.inverse(viewProjection);
 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-get-the-3d-coordinates-of-a-mouse-click-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-get-the-3d-coordinates-of-a-mouse-click-example-1.html"}}}
 
 As for WebGL info there is some [here](https://webglfundamentals.org)
 

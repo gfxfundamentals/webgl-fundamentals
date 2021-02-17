@@ -79,7 +79,7 @@ and now we can draw something else (the larger triangle) and it will only draw w
 
 Example:
 
-{{{example url="../webgl-qna-webgl-qna-how-to-use-the-stencil-buffer-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-use-the-stencil-buffer-example-1.html"}}}
 
 
 

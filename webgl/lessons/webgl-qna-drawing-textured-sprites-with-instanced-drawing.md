@@ -104,7 +104,7 @@ Here's a sample drawing multiple sprites from a sprite sheet using instanced dra
 
 Note if it was me I'd use a matrix for each instance [like this example](https://webglfundamentals.org/webgl/lessons/webgl-instanced-drawing.html) but I thought the code would be simpler using offset and scale here.
 
-{{{example url="../webgl-qna-webgl-qna-drawing-textured-sprites-with-instanced-drawing-example-1.html"}}}
+{{{example url="../webgl-qna-drawing-textured-sprites-with-instanced-drawing-example-1.html"}}}
 
 note I'm not skipping instances but if you want to skip instances then you need to set the offset passed to `gl.vertexAttribPointer` for each instanced attribute. For example in the code above if you wanted to draw instances 7 to 29 it would be
 

@@ -27,7 +27,7 @@ Maybe this is not best way when have uniformBuffer block in shader with opengles
 You can get all uniforms and which blocks they are in by calling `gl.getActiveUniform` and `gl.getActiveUniforms`. `gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS)` returns the number of uniforms. You then create an array of indices to pass to `gl.getActiveUniforms` and pass it `gl.UNIFORM_BLOCK_INDEX`. -1 = not in a block.
 
 
-{{{example url="../webgl-qna-webgl-qna-how-can-i-get-all-the-uniforms-and-uniformblocks-example-1.html"}}}
+{{{example url="../webgl-qna-how-can-i-get-all-the-uniforms-and-uniformblocks-example-1.html"}}}
 
 Other questions related to using uniform blocks 
 

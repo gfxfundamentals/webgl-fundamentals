@@ -62,15 +62,15 @@ Point E has a single normal facing perpendicular the plane but if you move Point
 
 You'll need to compute new normals in the fragment shader either by using standard derivatives.
 
-{{{example url="../webgl-qna-webgl-qna-drawing-a-heightmap-example-1.html"}}}
+{{{example url="../webgl-qna-drawing-a-heightmap-example-1.html"}}}
 
 or by looking at multiple points on the displacement map or 
 
-{{{example url="../webgl-qna-webgl-qna-drawing-a-heightmap-example-2.html"}}}
+{{{example url="../webgl-qna-drawing-a-heightmap-example-2.html"}}}
 
 Note that rather than compute a normal from 3 samples of the texture you could probably precompute them at init time by going over the height map and generating a normal map. You could supply that as 3 channels of the same texture. Like say RGB = normal and A = height
 
-{{{example url="../webgl-qna-webgl-qna-drawing-a-heightmap-example-3.html"}}}
+{{{example url="../webgl-qna-drawing-a-heightmap-example-3.html"}}}
 
 
 

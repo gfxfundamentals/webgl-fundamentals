@@ -12,12 +12,12 @@ http://uber.github.io/deck.gl/#/examples/custom-layers/trip-routes
 
 you can pass in UV coordinates for lines or generate one then use that to color the line. Pass in time to scroll something like
 
-{{{example url="../webgl-qna-webgl-qna-how-to-achieve-moving-line-with-trail-effects-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-achieve-moving-line-with-trail-effects-example-1.html"}}}
 
 Of course you can also use a texture instead of code for the colors
 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-achieve-moving-line-with-trail-effects-example-2.html"}}}
+{{{example url="../webgl-qna-how-to-achieve-moving-line-with-trail-effects-example-2.html"}}}
 
 
 

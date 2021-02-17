@@ -20,19 +20,19 @@ You can read individual pixels/texels from a texture in WebGL2 with `texelFetch`
 
 For example, compute the average color of a texture by reading each pixel
 
-{{{example url="../webgl-qna-webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2-example-1.html"}}}
+{{{example url="../webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2-example-1.html"}}}
 
 notes: since the canvas is RGBA8 can only get integer result. Could change to some float format but that would complicate the example which is not about rendering it's about `texelFetch`.
 
 Of course just by changing the data from R8 to RGBA8 we can do 4 arrays as once if we interleave the values
 
-{{{example url="../webgl-qna-webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2-example-2.html"}}}
+{{{example url="../webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2-example-2.html"}}}
 
 To do more requires figuring out some way to arrange the data and use an input to the fragment shader to figure out where the data is. For example we again interleave the data, 5 arrays so the data goes 0,1,2,3,4,0,1,2,3,4,0,1,2,3,4.
 
 Let's go back to R8 and do 5 separate arrays. We need to draw 5 pixels. We can tell which pixel is being drawn by looking at `gl_FragCoord`. We can use that to offset which pixels we look at and pass in how many to skip.
 
-{{{example url="../webgl-qna-webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2-example-3.html"}}}
+{{{example url="../webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2-example-3.html"}}}
 
 
 

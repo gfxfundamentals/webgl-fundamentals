@@ -30,7 +30,7 @@ The first one, like you mentioned, you make a mesh (grid) of vertices that draw 
 
 here's an example: It's only displacing a single vertex a random amount instead of something more predictable. Finally I'm just saving the time at which the displacement should fade out by, then in the shader I do a simple linear lerp (could use a fancier lerp for a bounce or something). This is so pretty much everything happens in the shader.
 
-{{{example url="../webgl-qna-webgl-qna-creating-a-smudge-liquify-effect-example-1.html"}}}
+{{{example url="../webgl-qna-creating-a-smudge-liquify-effect-example-1.html"}}}
 
 For the second one instead of displacing vertices you make a displacement texture, over time you reset that displacement back to 0 
 
@@ -53,11 +53,11 @@ Instead you want to displace the vertex coords with a displacement, something li
 
 Here's the sample linked above being used for displacement
 
-{{{example url="../webgl-qna-webgl-qna-creating-a-smudge-liquify-effect-example-2.html"}}}
+{{{example url="../webgl-qna-creating-a-smudge-liquify-effect-example-2.html"}}}
 
 So all that's left is to make it draw under the mouse instead of at random
 
-{{{example url="../webgl-qna-webgl-qna-creating-a-smudge-liquify-effect-example-3.html"}}}
+{{{example url="../webgl-qna-creating-a-smudge-liquify-effect-example-3.html"}}}
 
 
 Getting the exact effect of your second example looks like it's running the displacement through some kind of noise function. You could use something like the [WebGL Inspector](https://benvanik.github.io/WebGL-Inspector/) or the [Shader Editor](https://github.com/spite/ShaderEditorExtension) to look inside the shaders and see what they're doing.

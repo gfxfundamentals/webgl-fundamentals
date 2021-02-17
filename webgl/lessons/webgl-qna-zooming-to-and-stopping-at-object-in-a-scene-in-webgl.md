@@ -48,7 +48,7 @@ Now either put the camera there using some lookAt function
 
 Or lerp between where the camera currently is to it's new desired position
 
-{{{example url="../webgl-qna-webgl-qna-zooming-to-and-stopping-at-object-in-a-scene-in-webgl-example-1.html"}}}
+{{{example url="../webgl-qna-zooming-to-and-stopping-at-object-in-a-scene-in-webgl-example-1.html"}}}
 
 
   [1]: http://i.stack.imgur.com/0axue.png

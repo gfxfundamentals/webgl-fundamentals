@@ -49,7 +49,7 @@ clipHeight = gl_PointSize / canvasHeight
 Also remember that +Y is up in WebGL
 
 
-{{{example url="../webgl-qna-webgl-qna-get-the-size-of-a-point-for-collision-checking-example-1.html"}}}
+{{{example url="../webgl-qna-get-the-size-of-a-point-for-collision-checking-example-1.html"}}}
 
 Also remember that positions in WebGL are edges not pixels. If you have a 2x2 canvas the center of the bottom left pixel in clip space is -0.5, -0.5
 

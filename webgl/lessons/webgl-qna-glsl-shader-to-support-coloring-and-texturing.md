@@ -128,7 +128,7 @@ Is no different than
 
 Just trying your shader it seems to work as is which suggests the issue is not your shader but some other part of your code.
 
-{{{example url="../webgl-qna-webgl-qna-glsl-shader-to-support-coloring-and-texturing-example-1.html"}}}
+{{{example url="../webgl-qna-glsl-shader-to-support-coloring-and-texturing-example-1.html"}}}
 
 
 

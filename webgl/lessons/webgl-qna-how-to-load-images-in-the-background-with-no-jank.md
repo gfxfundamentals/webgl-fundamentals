@@ -24,11 +24,11 @@ A better API IMO would have allowed you to tell ImageBitmap what format you want
 
 In any case, here's a test. If you uncheck "update texture" then it's still downloading and decoding textures but it's just not calling `gl.texImage2D` to upload the texture. In that case I see no jank (not proof that's the issue but that's where I think it is)
 
-{{{example url="../webgl-qna-webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-1.html"}}}
 
 I'm pretty sure the only way you could maybe guarentee no jank is to decode the images yourself in a worker, transfer to the main thread as an arraybuffer, and upload to WebGL a few rows a frame with `gl.bufferSubData`. 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-2.html"}}}
+{{{example url="../webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-2.html"}}}
 
 Note: I don't know that this will work either. Several places that are scary and browser implementation defined
 
@@ -46,7 +46,7 @@ Note: I don't know that this will work either. Several places that are scary and
 
 For 4, If it's an issue it could be solved, by allocating the largest image size texture and then copying smaller textures into a rectangular area. Assuming that's an issue
 
-{{{example url="../webgl-qna-webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-3.html"}}}
+{{{example url="../webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-3.html"}}}
 
 note the jpeg decoder is slow. If you find or make a faster one please post a comment
 

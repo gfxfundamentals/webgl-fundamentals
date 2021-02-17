@@ -47,7 +47,7 @@ http://webglfundamentals.org/webgl/lessons/webgl-image-processing-continued.html
 
 Here's an example using [twgl](http://twgljs.org) since I'm too lazy for straight WebGL
 
-{{{example url="../webgl-qna-webgl-qna-how-to-fade-the-drawing-buffer-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-fade-the-drawing-buffer-example-1.html"}}}
 
 
 

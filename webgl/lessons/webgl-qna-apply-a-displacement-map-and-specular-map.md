@@ -246,11 +246,11 @@ fColor = vec4( (diffuse + specular) + ambient, fColor.a);
 
 You add the specular, not multiply by it.
 
-{{{example url="../webgl-qna-webgl-qna-apply-a-displacement-map-and-specular-map-example-1.html"}}}
+{{{example url="../webgl-qna-apply-a-displacement-map-and-specular-map-example-1.html"}}}
 
 So now we can add in the specular map
 
-{{{example url="../webgl-qna-webgl-qna-apply-a-displacement-map-and-specular-map-example-2.html"}}}
+{{{example url="../webgl-qna-apply-a-displacement-map-and-specular-map-example-2.html"}}}
 
 Then you should argably not use lots of boolean conditionals on your shader. Either make different shaders for find a way to do it without the booleans. So for example we don't need
 
@@ -292,7 +292,7 @@ uniform float maxDot;
 
 If `maxDot` is zero we'll get a normal dot product. If `maxDot` is one we get no lighting.
 
-{{{example url="../webgl-qna-webgl-qna-apply-a-displacement-map-and-specular-map-example-3.html"}}}
+{{{example url="../webgl-qna-apply-a-displacement-map-and-specular-map-example-3.html"}}}
 
 As for the displacement, displacement only works on vertices so you need a lot of vertices in your sphere to be able to see any displacement
 

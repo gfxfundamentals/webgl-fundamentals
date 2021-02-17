@@ -18,17 +18,17 @@ I’m confused about your confusion
 
 Here’s a simple JavaScript only particle system. Each particle starts at a random location and moves in a random direction
 
-{{{example url="../webgl-qna-webgl-qna-how-to-process-particle-positions-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-process-particle-positions-example-1.html"}}}
 
 Here’s the same particle system still in JavaScript but running more like WebGL runs. I don’t know if this will be more or less confusing. The important points are the code that updates the particle positions called `fragmentShader` doesn’t get to choose what it’s updating. It just updates `gl.outColor`. It also has no inputs except `gl.fragCoord` and `gl.currentProgram.uniforms`.  currentParticleState is an array of 4 value arrays where as before it was an array of objects with a position property.  particleParameters is also just an array of 4 value arrays instead of an array of objects with a velocity value. This is to simulate the fact that these would be textures in real WebGL so any meaning like `position` or `velocity` is lost.
 
 The code that actually draws the particles is irrelevant.
 
-{{{example url="../webgl-qna-webgl-qna-how-to-process-particle-positions-example-2.html"}}}
+{{{example url="../webgl-qna-how-to-process-particle-positions-example-2.html"}}}
 
 Here’s the same code in actual WebGL
 
-{{{example url="../webgl-qna-webgl-qna-how-to-process-particle-positions-example-3.html"}}}
+{{{example url="../webgl-qna-how-to-process-particle-positions-example-3.html"}}}
 
 
 

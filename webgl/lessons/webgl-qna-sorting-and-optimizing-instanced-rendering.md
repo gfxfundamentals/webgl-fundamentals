@@ -38,7 +38,7 @@ The buffer for that attribute has to be filled out every frame if you want to ch
 
 The result is drawing 2000 independent objects from 4 different models in 1 draw call. Effectively we made our own instancing that is more flexible than standard instancing. Pulling data from textures like this is likely slower than not but 1 draw call and 2 data uploads is likely faster than 2000 draw calls + all the extra calls for uniforms (though I didn't test so maybe it's slower)
 
-{{{example url="../webgl-qna-webgl-qna-sorting-and-optimizing-instanced-rendering-example-1.html"}}}
+{{{example url="../webgl-qna-sorting-and-optimizing-instanced-rendering-example-1.html"}}}
 
 A few notes:
 

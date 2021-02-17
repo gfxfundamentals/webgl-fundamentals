@@ -129,7 +129,7 @@ Note that zoom is the opposite of scale. If zoom = 2 then I want everything to a
 
 Example:
 
-{{{example url="../webgl-qna-webgl-qna-how-to-implement-zoom-from-mouse-in-2d-webgl-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-implement-zoom-from-mouse-in-2d-webgl-example-1.html"}}}
 
 note that I included camera.rotation just to make sure things worked if rotated. They seem to. [Here's one with zoom, pan, and rotate](https://jsfiddle.net/greggman/mdpxw3n6/)
 

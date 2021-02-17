@@ -190,7 +190,7 @@ Hopefully that made sense.
 
 So I spent a little time working up a Three.js example, partly to learn Three.js. The sample is here.
 
-{{{example url="../webgl-qna-webgl-qna-show-a-night-view-vs-a-day-view-on-a-3d-earth-sphere-example-1.html"}}}
+{{{example url="../webgl-qna-show-a-night-view-vs-a-day-view-on-a-3d-earth-sphere-example-1.html"}}}
 
 The shader I used is this
 

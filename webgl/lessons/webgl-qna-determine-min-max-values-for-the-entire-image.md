@@ -52,14 +52,14 @@ In pseudo code.
     
 Now the last framebuffer as a 1x1 pixel texture with the max value in it. 
 
-{{{example url="../webgl-qna-webgl-qna-determine-min-max-values-for-the-entire-image-example-1.html"}}}
+{{{example url="../webgl-qna-determine-min-max-values-for-the-entire-image-example-1.html"}}}
 
 
 Also if you have `WEBGL_draw_buffers` support you do both min and max at the same time writing to 2 different framebuffer attachments
 
 
 
-{{{example url="../webgl-qna-webgl-qna-determine-min-max-values-for-the-entire-image-example-2.html"}}}
+{{{example url="../webgl-qna-determine-min-max-values-for-the-entire-image-example-2.html"}}}
 
 Now that you have the answer you can pass it to another shader to "contrastify" your texture
 
@@ -90,7 +90,7 @@ If you just want to pass in the textures without reading them out then
 
 I don't know if one is better than the other. I'd assume reading from a texture is slower than reading from a uniform but for a shader this small the performance difference might be minimal
 
-{{{example url="../webgl-qna-webgl-qna-determine-min-max-values-for-the-entire-image-example-3.html"}}}
+{{{example url="../webgl-qna-determine-min-max-values-for-the-entire-image-example-3.html"}}}
 
 As for monochrome just change the src textures to `gl.LUMINANCE` 
 

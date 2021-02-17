@@ -49,7 +49,7 @@ function createShader(texWidth, texHeight) {
 ```
 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-determine-the-average-brightness-in-a-scene--example-1.html"}}}
+{{{example url="../webgl-qna-how-to-determine-the-average-brightness-in-a-scene--example-1.html"}}}
 
 the only problem with this solution is that it can't be parallelized by the GPU AFAIK so (2) I might test doing something similar to generating mipmaps where I say make a shader that does 16x16 pixels and target it to generate a smaller texture and repeat until I get to 1x1. I'd have to test to see if that's actually faster and what size cell 2x2, 4x4, 16x16 etc is best.
 
@@ -58,7 +58,7 @@ Finally, if possible, like the example above, if I don't actually need the resul
 Note that in WebGL2 you wouldn't have to generate a different shader per size as WebGL2, or rather GLSL ES 3.0 you can have loops that are not based on constant values.
 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-determine-the-average-brightness-in-a-scene--example-2.html"}}}
+{{{example url="../webgl-qna-how-to-determine-the-average-brightness-in-a-scene--example-2.html"}}}
 
 
 

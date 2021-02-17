@@ -50,7 +50,7 @@ you'll need a projection matrix that matches the aspect ratio of the new viewpor
 Remember to put the viewport back to the full canvas to render the rest of the scene.
 
 
-{{{example url="../webgl-qna-webgl-qna-how-can-i-move-the-perspective-vanishing-point-from-the-center-of-the-canvas--example-1.html"}}}
+{{{example url="../webgl-qna-how-can-i-move-the-perspective-vanishing-point-from-the-center-of-the-canvas--example-1.html"}}}
 
 
 
@@ -100,7 +100,7 @@ So to draw your gizmo set call something like
       gizmoCenterX, gizmoCenterY);
 ```
 
-{{{example url="../webgl-qna-webgl-qna-how-can-i-move-the-perspective-vanishing-point-from-the-center-of-the-canvas--example-2.html"}}}
+{{{example url="../webgl-qna-how-can-i-move-the-perspective-vanishing-point-from-the-center-of-the-canvas--example-2.html"}}}
 
 
 

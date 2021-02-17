@@ -31,7 +31,7 @@ Iv searched MDN but don't understand how to incorporate this, iv also looked at 
 Shadertoy does not provide FFT as a float. It provides FFT data as a texture
 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-get-audio-data-into-a-shader-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-get-audio-data-into-a-shader-example-1.html"}}}
 
 
 

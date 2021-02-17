@@ -39,7 +39,7 @@ on mouse move
 The brush is feathered by drawing a rgba(0,0,0,0) to rgba(0,0,0,1) radial gradient over it using `globalCompositeOperation = 'destination-out'`.  
 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-make-a-smudge-brush-tool-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-make-a-smudge-brush-tool-example-1.html"}}}
 
 
 

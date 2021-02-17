@@ -25,7 +25,7 @@ Thanks for any help!
 
 WebGL defaults to being transparent. Here's a sample
 
-{{{example url="../webgl-qna-webgl-qna-how-to-make-webgl-canvas-transparent-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-make-webgl-canvas-transparent-example-1.html"}}}
 
 Note that the browser assumes the pixels in the canvas represent PRE-MULTIPLIED-ALPHA values. That means for example if you changed the clear color to (1, 0, 0, 0.5) you'd get something you don't see anywhere else in HTML.
 
@@ -35,7 +35,7 @@ If the pixels in WebGL are 1,0,0,0.5 that makes no sense to the browser and you'
 
 See for example 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-make-webgl-canvas-transparent-example-2.html"}}}
+{{{example url="../webgl-qna-how-to-make-webgl-canvas-transparent-example-2.html"}}}
 
 Notice the black text has become red even though you'd think an alpha of 0.5 = 50% of the black text and 50% of the red WebGL canvas. That's because the red has not been pre-multiplied.
 
@@ -45,7 +45,7 @@ You can solve this by making sure the values you create in WebGL represent pre-m
 
 Now the 1,0,0,0.5 pixels work again. Example: 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-make-webgl-canvas-transparent-example-3.html"}}}
+{{{example url="../webgl-qna-how-to-make-webgl-canvas-transparent-example-3.html"}}}
 
 Which way you do this is up to your application. Many GL programs expect non-premultiplied alpha where as all other parts of HTML5 expect premultlipled alpha so WebGL gives you both options.
 

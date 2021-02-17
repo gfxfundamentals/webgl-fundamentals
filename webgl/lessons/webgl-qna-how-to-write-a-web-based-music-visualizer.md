@@ -12,7 +12,7 @@ Making something audio reactive is pretty simple. [Here's an open source site wi
 
 As for how to do it you basically use the [Web Audio API]() to stream the music and use its AnalyserNode to get audio data out.
 
-{{{example url="../webgl-qna-webgl-qna-how-to-write-a-web-based-music-visualizer-example-1.html"}}}
+{{{example url="../webgl-qna-how-to-write-a-web-based-music-visualizer-example-1.html"}}}
 
 Then it's just up to you to draw something creative.
 

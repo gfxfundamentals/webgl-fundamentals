@@ -59,7 +59,7 @@ The sample above uses a constant texture coord just to keep it simple but of cou
 
 Here's a sample: 
 
-{{{example url="../webgl-qna-webgl-qna-how-to-bind-an-array-of-textures-to-a-webgl-shader-uniform--example-1.html"}}}
+{{{example url="../webgl-qna-how-to-bind-an-array-of-textures-to-a-webgl-shader-uniform--example-1.html"}}}
 
 
 

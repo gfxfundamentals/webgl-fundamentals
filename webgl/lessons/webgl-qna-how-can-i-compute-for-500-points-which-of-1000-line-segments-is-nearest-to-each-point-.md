@@ -105,7 +105,7 @@ If that's what you're asking then put all the points in a floating point texture
 
 I'm only going to guess though that in general this is better solved with some spatial structure that somehow makes it so you don't have to check every line with every point but something like the code above should work and be very parallel. Each result will be computed by another GPU core.
 
-{{{example url="../webgl-qna-webgl-qna-how-can-i-compute-for-500-points-which-of-1000-line-segments-is-nearest-to-each-point--example-1.html"}}}
+{{{example url="../webgl-qna-how-can-i-compute-for-500-points-which-of-1000-line-segments-is-nearest-to-each-point--example-1.html"}}}
 
 If you use WebGL2 then you can use `texelFetch` so `getPoint` becomes
 
@@ -141,7 +141,7 @@ Otherwise, the output of the vertex shader determines which pixels (which array 
 
 In fact here's a version of the above code, no GLSL, just JavaScript, but the JavaScript re-structured to look more like GLSL.
 
-{{{example url="../webgl-qna-webgl-qna-how-can-i-compute-for-500-points-which-of-1000-line-segments-is-nearest-to-each-point--example-2.html"}}}
+{{{example url="../webgl-qna-how-can-i-compute-for-500-points-which-of-1000-line-segments-is-nearest-to-each-point--example-2.html"}}}
 
 
 
