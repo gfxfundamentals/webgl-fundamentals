@@ -250,15 +250,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>One way to kind of maybe solve this issue is to draw the image in parts. How you do that will depend on your app. If you&#39;re using a fairly standard perspective matrix for all your rendering you can use slightly different math to render any portion of the view. Most 3d math libraries have a <code class="notranslate" translate="no">perspective</code> function and most of them also have a corresponding <code class="notranslate" translate="no">frustum</code> function that is slightly more flexible.</p>
 <p>Here&#39;s a fairly standard style WebGL simple sample that draws a cube using a typical <code class="notranslate" translate="no">perspective</code> function</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-1.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-1.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-render-large-scale-images-like-32000x32000-example-1.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-1.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
 <p>And here&#39;s the same code rendering at 400x200 in eight 100x100 parts using a typical <code class="notranslate" translate="no">frustum</code> function instead of <code class="notranslate" translate="no">perspective</code></p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-2.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-2.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-render-large-scale-images-like-32000x32000-example-2.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-2.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
@@ -311,8 +311,8 @@ for (let y = 0; y &lt; totalHeight; y += partHeight) {
 <p>Or if you just want to display them the browser will probably do better with 16x16 1024x1024 images than one 16kx16k image. In that case you probably want to call <code class="notranslate" translate="no">canvas.toBlob</code> instead of using dataURLs and then call <code class="notranslate" translate="no">URL.createObjectURL</code> for each blob. That way you won&#39;t have these giant dataURL strings sitting around.</p>
 <p>Example:</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-3.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-3.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-render-large-scale-images-like-32000x32000-example-3.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-how-to-render-large-scale-images-like-32000x32000-example-3.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>

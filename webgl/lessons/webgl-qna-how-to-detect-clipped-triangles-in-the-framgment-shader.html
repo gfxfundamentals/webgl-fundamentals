@@ -247,15 +247,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>You can&#39;t directly access vertices in a fragment shader. The only data a fragment shader gets by default is the screen coordinate (canvas/framebuffer coord) and depth buffer value for the current pixel being rasterized. All other data you have to pass in.  </p>
 <p>Of the top of my head, in the vertex shader you could compute if a vertex is clipped and pass that info on to the fragment shaders as a varying. You&#39;d pass 0 if not clipped and 1 if clipped. varyings get interpolated so if in the fragment shader the varying is &gt; 0 then one of the vertices was clipped.</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader-example-1.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader-example-1.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader-example-1.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader-example-1.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
 <p>There are probably more efficient ways like pass all vertices of a triangle to the vertex shader and if any one of them is clipped set all vertices to be clipped so that triangle is not even rasterized.</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader-example-2.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader-example-2.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader-example-2.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader-example-2.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>

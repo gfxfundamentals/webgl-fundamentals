@@ -249,37 +249,37 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>The fastest way might depend on the GPU and lots of other factors like how you&#39;re drawing the circles, 2D, 3D, are you blending them, are you using the z-buffer, etc... but in general, less triangles is faster than more, and less pixels is faster than more. So...., all we can really do is try.</p>
 <p>First lets just draw textured quads with no blending. First off I always seem to get inconsistent perf from WebGL but in my tests on my GPU I get 20k-30k quads at 60fps in this 300x150 canvas using instancing</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-1.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-1.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-the-fastest-way-to-draw-many-circles-example-1.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-the-fastest-way-to-draw-many-circles-example-1.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
 <p>And I get the same perf at 60fps using repeated to geometry instead of instancing. That&#39;s surprising to me because 7-8yrs ago when I tested repeated geometry was 20-30% faster. Whether that&#39;s because of having a better GPU now or a better driver or what I have no idea.</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-2.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-2.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-the-fastest-way-to-draw-many-circles-example-2.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-the-fastest-way-to-draw-many-circles-example-2.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
 <p>Next thing would be textures or computing a circle in the fragment shader.</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-3.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-3.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-the-fastest-way-to-draw-many-circles-example-3.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-the-fastest-way-to-draw-many-circles-example-3.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
 <p>I get no measureable difference. Trying your circle function</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-4.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-4.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-the-fastest-way-to-draw-many-circles-example-4.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-the-fastest-way-to-draw-many-circles-example-4.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
 <p>I again get no measurable difference. Note: like I said above I get wildly inconsistent results in WebGL. When I ran the first test I got 28k at 60fps. When I ran the second I got 23k. I was surprised since I expected the 2nd to be faster so I ran the first again and only got 23k. The last one I got 29k and was again surprise but then I went back and did the previous and got 29k. Basically that means testing timing in WebGL is nearly impossible. There are so many moving parts given everything is multi-process that getting constant results seems impossible.</p>
 <p>Could try discard</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-5.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-the-fastest-way-to-draw-many-circles-example-5.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-the-fastest-way-to-draw-many-circles-example-5.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-the-fastest-way-to-draw-many-circles-example-5.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>

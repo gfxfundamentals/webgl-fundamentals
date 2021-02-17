@@ -251,15 +251,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>A better API IMO would have allowed you to tell ImageBitmap what format you want and where you want it (CPU, GPU). That way the browser could prep the image asynchonously and have it require no heavy work when done.</p>
 <p>In any case, here&#39;s a test. If you uncheck &quot;update texture&quot; then it&#39;s still downloading and decoding textures but it&#39;s just not calling <code class="notranslate" translate="no">gl.texImage2D</code> to upload the texture. In that case I see no jank (not proof that&#39;s the issue but that&#39;s where I think it is)</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-1.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-1.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-load-images-in-the-background-with-no-jank-example-1.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-1.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
 <p>I&#39;m pretty sure the only way you could maybe guarentee no jank is to decode the images yourself in a worker, transfer to the main thread as an arraybuffer, and upload to WebGL a few rows a frame with <code class="notranslate" translate="no">gl.bufferSubData</code>. </p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-2.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-2.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-load-images-in-the-background-with-no-jank-example-2.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-2.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
@@ -279,8 +279,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>1, 2, 3, and 5 could all be solved by decoding <a href="https://github.com/notmasteryet/jpgjs">jpg</a>, <a href="https://github.com/arian/pngjs">png</a> the image yourself though it really sucks the browser has the code to decode the image it&#39;s just you can&#39;t access the decoding code in any useful way.</p>
 <p>For 4, If it&#39;s an issue it could be solved, by allocating the largest image size texture and then copying smaller textures into a rectangular area. Assuming that&#39;s an issue</p>
 <p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-3.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-3.html" target="_blank">click here to open in a separate window</a>
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-load-images-in-the-background-with-no-jank-example-3.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-how-to-load-images-in-the-background-with-no-jank-example-3.html" target="_blank">click here to open in a separate window</a>
 </div>
 
 </p>
