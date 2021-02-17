@@ -425,17 +425,6 @@
     return argStrs.join(', ');
   }
 
-  function makePropertyWrapper(wrapper, original, propertyName) {
-    wrapper.__defineGetter__(propertyName, function() {  // eslint-disable-line
-      return original[propertyName];
-    });
-    // TODO(gmane): this needs to handle properties that take more than
-    // one value?
-    wrapper.__defineSetter__(propertyName, function(value) {  // eslint-disable-line
-      original[propertyName] = value;
-    });
-  }
-
   /**
    * Given a WebGL context returns a wrapped context that calls
    * gl.getError after every command and calls a function if the
@@ -455,13 +444,12 @@
    */
   function makeDebugContext(ctx, options) {
     options = options || {};
-    const errCtx = options.errCtx || ctx;
     const onFunc = options.funcFunc;
     const sharedState = options.sharedState || {
       numDrawCallsRemaining: options.maxDrawCalls || -1,
       wrappers: {},
+      restoreFns: [],
     };
-    options.sharedState = sharedState;
 
     const errorFunc = options.errorFunc || function(err, functionName, args) {
       console.error(`WebGL error ${glEnumToString(err)} in ${functionName}(${glFunctionArgsToString(functionName, args)})`);  /* eslint-disable-line no-console */
@@ -470,19 +458,10 @@
     // Holds booleans for each GL error so after we get the error ourselves
     // we can still return it to the client app.
     const glErrorShadow = { };
-    const wrapper = {};
 
     function removeChecks() {
-      Object.keys(sharedState.wrappers).forEach(function(name) {
-        const pair = sharedState.wrappers[name];
-        const wrapper = pair.wrapper;
-        const orig = pair.orig;
-        for (const propertyName in wrapper) {
-          if (typeof wrapper[propertyName] === 'function') {
-            wrapper[propertyName] = orig[propertyName].bind(orig);
-          }
-        }
-      });
+      sharedState.restoreFns.forEach(fn => fn());
+      sharedState.restoreFns = [];
     }
 
     function checkMaxDrawCalls() {
@@ -498,56 +477,51 @@
     // Makes a function that calls a WebGL function and then calls getError.
     function makeErrorWrapper(ctx, functionName) {
       const check = functionName.substring(0, 4) === 'draw' ? checkMaxDrawCalls : noop;
-      return function() {
+      const origFn = ctx[functionName];
+      const newFn = function(...args) {
         if (onFunc) {
-          onFunc(functionName, arguments);
+          onFunc(functionName, args);
         }
-        const result = ctx[functionName].apply(ctx, arguments);
-        const err = errCtx.getError();
+        const result = origFn.call(this, ...args);
+        const err = sharedState.getError();
         if (err !== 0) {
           glErrorShadow[err] = true;
-          errorFunc(err, functionName, arguments);
+          errorFunc(err, functionName, args);
         }
         check();
         return result;
       };
+      ctx[functionName] = newFn;
+      sharedState.restoreFns.unshift(function() {
+        ctx[functionName] = origFn;
+      });
     }
 
-    function makeGetExtensionWrapper(ctx, wrapped) {
-      return function() {
-        const extensionName = arguments[0];
+    function makeGetExtensionWrapper(ctx) {
+      const origFn = ctx.getExtension;
+      ctx.getExtension = function(extensionName) {
         let ext = sharedState.wrappers[extensionName];
         if (!ext) {
-          ext = wrapped.apply(ctx, arguments);
+          ext = origFn.call(this, extensionName);
           if (ext) {
-            const origExt = ext;
-            ext = makeDebugContext(ext, Object.assign({}, options, {errCtx: ctx}));
-            sharedState.wrappers[extensionName] = { wrapper: ext, orig: origExt };
-            addEnumsForContext(origExt, extensionName);
+            ext = makeDebugContext(ext, {...options, sharedState});
+            sharedState.wrappers[extensionName] = ext;
+            addEnumsForContext(ext, extensionName);
           }
         }
         return ext;
       };
+      sharedState.restoreFns.unshift(function() {
+        ctx.getExtension = origFn;
+      });
     }
 
-    // Make a an object that has a copy of every property of the WebGL context
-    // but wraps all functions.
-    for (const propertyName in ctx) {
-      if (typeof ctx[propertyName] === 'function') {
-        if (propertyName !== 'getExtension') {
-          wrapper[propertyName] = makeErrorWrapper(ctx, propertyName);
-        } else {
-          const wrapped = makeErrorWrapper(ctx, propertyName);
-          wrapper[propertyName] = makeGetExtensionWrapper(ctx, wrapped);
-        }
-      } else {
-        makePropertyWrapper(wrapper, ctx, propertyName);
-      }
-    }
-
-    // Override the getError function with one that returns our saved results.
-    if (wrapper.getError) {
-      wrapper.getError = function() {
+    function makeGetErrorWrapper(ctx) {
+      const origFn = ctx.getError;
+      sharedState.getError = function() {
+        return origFn.call(ctx);
+      };
+      ctx.getError = function() {
         for (const err of Object.keys(glErrorShadow)) {
           if (glErrorShadow[err]) {
             glErrorShadow[err] = false;
@@ -556,14 +530,34 @@
         }
         return ctx.NO_ERROR;
       };
+      sharedState.restoreFns.unshift(function() {
+        ctx.getError = origFn;
+      });
     }
 
-    if (wrapper.bindBuffer) {
-      sharedState.wrappers['webgl'] = { wrapper: wrapper, orig: ctx };
+    // Make a an object that has a copy of every property of the WebGL context
+    // but wraps all functions.
+    for (const propertyName in ctx) {
+      if (typeof ctx[propertyName] === 'function') {
+        switch (propertyName) {
+          case 'getExtension':
+            makeGetExtensionWrapper(ctx);
+            break;
+          case 'getError':
+            makeGetErrorWrapper(ctx);
+            break;
+          default:
+            makeErrorWrapper(ctx, propertyName);
+        }
+      }
+    }
+
+    if (ctx.bindBuffer) {
+      sharedState.wrappers['webgl'] = ctx;
       addEnumsForContext(ctx, ctx.bindBufferBase ? 'WebGL2' : 'WebGL');
     }
 
-    return wrapper;
+    return ctx;
   }
 
   return {
