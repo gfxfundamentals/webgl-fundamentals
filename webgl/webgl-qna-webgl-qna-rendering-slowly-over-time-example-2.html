@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<div id="info"></div>
+<script src="https://twgljs.org/dist/4.x/twgl.min.js"></script>
+
+
+</body>
+<script>
+
+const ctx = document.querySelector('canvas').getContext('2d');
+const gl = document.createElement('canvas').getContext('webgl');
+const vs = `
+attribute vec4 position;
+attribute vec2 texcoord;
+varying vec2 v_texcoord;
+void main() {
+  gl_Position = position;
+  v_texcoord = texcoord;
+}
+`;
+const fs = `
+precision highp float;
+uniform sampler2D tex;
+varying vec2 v_texcoord;
+void main() {
+  gl_FragColor = texture2D(tex, v_texcoord);
+}
+`;
+
+// compile shader, link program, look up locations
+const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+const infoElem = document.querySelector('#info');
+
+const numDrawSteps = 16;
+let drawStep = 0;
+let time = 0;
+
+// draw over several frames. Return true when ready
+function draw() {  
+  if (drawStep == 0) {
+    // on the first step clear and record time
+    gl.disable(gl.SCISSOR_TEST);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT  | gl.DEPTH_BUFFER_BIT);
+    time = performance.now() * 0.001;
+  }
+  
+
+  // this represents drawing something. 
+  gl.enable(gl.SCISSOR_TEST);
+  
+  const halfWidth = gl.canvas.width / 2;
+  const halfHeight = gl.canvas.height / 2;
+  
+  const a = time * 0.1 + drawStep
+  const x = Math.cos(a      ) * halfWidth + halfWidth;
+  const y = Math.sin(a * 1.3) * halfHeight + halfHeight;
+
+  gl.scissor(x, y, 16, 16);
+  gl.clearColor(
+     drawStep / 16,
+     drawStep / 6 % 1,
+     drawStep / 3 % 1,
+     1);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  
+  drawStep = (drawStep + 1) % numDrawSteps;
+  return drawStep === 0;
+}
+
+let frameCount = 0;
+function render() {
+  ++frameCount;
+  infoElem.textContent = frameCount;
+  
+  if (draw()) {
+    // draw to canvas
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.drawImage(gl.canvas, 0, 0);
+  }
+  
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

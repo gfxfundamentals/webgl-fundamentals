@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<div>fps: <span id="fps"></span></div>
+
+
+
+</body>
+<script>
+
+const fpsElem = document.querySelector("#fps");
+
+let then = 0;
+function render(now) {
+  now *= 0.001;                          // convert to seconds
+  const deltaTime = now - then;          // compute time since last frame
+  then = now;                            // remember time for next frame
+  const fps = 1 / deltaTime;             // compute frames per second
+  fpsElem.textContent = fps.toFixed(1);  // update fps display
+  
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+
+</script>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; display: block; }
+
+
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<div>click to start</div>
+<script src="https://twgljs.org/dist/4.x/twgl.min.js"></script>
+
+
+</body>
+<script>
+
+"use strict";
+
+window.addEventListener('click', start);  
+
+function start() {
+  window.removeEventListener('click', start);
+  // make a Web Audio Context
+  const context = new AudioContext();
+  const analyser = context.createAnalyser();
+
+  // Make a buffer to receive the audio data
+  const numPoints = analyser.frequencyBinCount;
+  const audioDataArray = new Uint8Array(numPoints);
+  
+  const vs = `
+  attribute vec4 position;
+  void main() {
+    gl_Position = position;
+  }
+  `;
+
+  const fs = `
+  precision mediump float;
+  uniform vec2 resolution;
+  uniform sampler2D audioData;
+  void main() {
+    vec2 uv = gl_FragCoord.xy / resolution;
+    float fft = texture2D(audioData, vec2(uv.x * 0.25, 0)).r;
+    gl_FragColor = vec4(uv * pow(fft, 5.0), 0, 1);
+  }
+  `;
+
+  const gl = document.querySelector("canvas").getContext("webgl");
+  // compiles shaders, link program, look up locations
+  const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+  
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(
+     gl.TEXTURE_2D, 
+     0,            // level
+     gl.LUMINANCE, // internal format
+     numPoints,    // width
+     1,            // height
+     0,            // border
+     gl.LUMINANCE, // format
+     gl.UNSIGNED_BYTE,  // type
+     null);  
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+  const arrays = {
+    position: {
+      numComponents: 2,
+      data: [
+        -1, -1,
+         1, -1,
+        -1,  1,
+        -1,  1,
+         1, -1,
+         1,  1,
+      ],
+    }
+  };
+  // calls gl.createBuffer, gl.bindBuffer, gl.bufferData
+  const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
+
+  function render() {
+    gl.useProgram(programInfo.program);
+
+    // get the current audio data
+    analyser.getByteFrequencyData(audioDataArray);
+
+    // upload the audio data to the texture
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texSubImage2D(
+       gl.TEXTURE_2D, 
+       0,            // level
+       0,            // x
+       0,            // y
+       numPoints,    // width
+       1,            // height
+       gl.LUMINANCE, // format
+       gl.UNSIGNED_BYTE,  // type
+       audioDataArray);       
+
+    // calls gl.enableVertexAttribArray, gl.bindBuffer, gl.vertexAttribPointer
+    twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+    // calls gl.activeTexture, gl.bindTexture, gl.uniform
+    twgl.setUniforms(programInfo, {
+      audioData: tex,
+      resolution: [gl.canvas.width, gl.canvas.height],
+    });
+    // calls gl.drawArrays or gl.drawElements
+    twgl.drawBufferInfo(gl, bufferInfo);
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+
+  // Make a audio node
+  const audio = new Audio();
+  audio.loop = true;
+  audio.autoplay = true;
+
+  // this line is only needed if the music you are trying to play is on a
+  // different server than the page trying to play it.
+  // It asks the server for permission to use the music. If the server says "no"
+  // then you will not be able to play the music
+  // Note if you are using music from the same domain 
+  // **YOU MUST REMOVE THIS LINE** or your server must give permission.
+  audio.crossOrigin = "anonymous";
+
+  // call `handleCanplay` when it music can be played
+  audio.addEventListener('canplay', handleCanplay);
+  audio.src = "https://twgljs.org/examples/sounds/DOCTOR%20VOX%20-%20Level%20Up.mp3";
+  audio.load();
+
+
+  function handleCanplay() {
+    // connect the audio element to the analyser node and the analyser node
+    // to the main Web Audio context
+    const source = context.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(context.destination);
+  }
+}
+
+
+</script>

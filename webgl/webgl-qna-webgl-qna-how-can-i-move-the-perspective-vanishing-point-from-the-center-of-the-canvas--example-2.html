@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { margin: 0; }
+canvas { width: 100vw; height: 100vh; display: block; background: #CDE; }
+
+
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix.js"></script>
+
+
+</body>
+<script>
+
+const vs = `
+attribute vec4 position;
+uniform mat4 u_worldViewProjection;
+void main() {
+  gl_Position = u_worldViewProjection * position;
+}
+`;
+
+const fs = `
+precision mediump float;
+void main() {
+  gl_FragColor = vec4(vec3(0), 1);
+}
+`
+
+const gl = document.querySelector("canvas").getContext("webgl");
+const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+const bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+  position: [
+    -1, -1, -1,
+     1, -1, -1,
+     1,  1, -1,
+    -1,  1, -1,
+    -1, -1,  1,
+     1, -1,  1,
+     1,  1,  1,
+    -1,  1,  1,
+  ],
+  indices: {
+    numComponents: 2,
+    data: [
+      0, 1,
+      1, 2,
+      2, 3,
+      3, 0,
+      4, 5,
+      5, 6,
+      6, 7,
+      7, 4,
+      0, 4,
+      1, 5,
+      2, 6,
+      3, 7,
+    ],
+  },
+});
+
+function perspectiveWithCenter(
+    fieldOfView, width, height, near, far, centerX = 0, centerY = 0) {
+  const aspect = width / height;
+
+  // compute the top and bottom of the near plane of the view frustum
+  const top = Math.tan(fieldOfView * 0.5) * near;
+  const bottom = -top;
+
+  // compute the left and right of the near plane of the view frustum
+  const left = aspect * bottom;
+  const right = aspect * top;
+
+  // compute width and height of the near plane of the view frustum
+  const nearWidth = right - left;
+  const nearHeight = top - bottom;
+
+  // convert the offset from canvas units to near plane units
+  const offX = centerX * nearWidth / width;
+  const offY = centerY * nearHeight / height;
+
+  const m = mat4.create();
+  mat4.frustum(
+        m,
+        left + offX,
+        right + offX,
+        bottom + offY,
+        top + offY,
+        near,
+        far);
+  return m;
+}
+
+function render(time) {
+  time *= 0.001;
+  twgl.resizeCanvasToDisplaySize(gl.canvas);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+  const fov = 90 * Math.PI / 180;
+  const zNear = 0.5;
+  const zFar = 100;
+  const projection = perspectiveWithCenter(
+      fov, gl.canvas.clientWidth, gl.canvas.clientHeight, zNear, zFar);
+  const eye = [0, 0, 10];
+  const target = [0, 0, 0];
+  const up = [0, 1, 0];
+  const view = mat4.lookAt(mat4.create(), eye, target, up);
+
+  drawCube([-8, 0, 0], projection, view);
+  drawCube([-4, 0, 0], projection, view);
+  drawCube([ 0, 0, 0], projection, view);
+  drawCube([ 4, 0, 0], projection, view);
+  drawCube([ 8, 0, 0], projection, view);
+
+  const gizmoCenterX = -gl.canvas.clientWidth  / 2 + 50;
+  const gizmoCenterY =  gl.canvas.clientHeight / 2 - 50;
+  const offsetProjection = perspectiveWithCenter(
+      fov, gl.canvas.clientWidth, gl.canvas.clientHeight, zNear, zFar,
+      gizmoCenterX, gizmoCenterY);
+  drawCube([ 0, 0, 0], offsetProjection, view);
+
+  function drawCube(translation, projection, view) {
+    const viewProjection = mat4.multiply(mat4.create(), projection, view);
+    const world = mat4.multiply(
+       mat4.create(),
+       mat4.fromTranslation(mat4.create(), translation),
+       mat4.fromRotation(mat4.create(), time, [0.42, 0.56, 0.70]));
+    const worldViewProjection = mat4.multiply(mat4.create(), viewProjection, world);
+
+    gl.useProgram(programInfo.program);
+    twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+    twgl.setUniforms(programInfo, {
+      u_worldViewProjection: worldViewProjection,
+    });
+    twgl.drawBufferInfo(gl, bufferInfo, gl.LINES);
+  }
+  
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

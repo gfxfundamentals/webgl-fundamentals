@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+const vs = `
+attribute vec4 position;
+attribute vec4 position1;  // second vertex for triangle
+attribute vec4 position2;  // third vertex for triangle
+uniform mat4 matrix;
+
+bool vertexClipped(vec4 clipspace) {
+  return any(lessThan(clipspace.xyz, -clipspace.www)) ||
+         any(greaterThan(clipspace.xyz, clipspace.www));
+}
+
+void main() {
+  gl_Position = matrix * position;
+  vec4 clipPosition1 = matrix * position1;
+  vec4 clipPosition2 = matrix * position2;
+  
+  bool clipped = vertexClipped(gl_Position) ||
+                 vertexClipped(clipPosition1) ||
+                 vertexClipped(clipPosition2);
+                 
+  if (clipped) {
+     gl_Position = vec4(vec3(2), 1); // some offscreen value
+  }
+}
+`;
+
+const fs = `
+precision highp float;
+void main() {
+  gl_FragColor = gl_FrontFacing ? vec4(1, 0, 0, 1) : vec4(0, 0, 1, 1);
+}
+`;
+
+const m4 = twgl.m4;
+const gl = document.querySelector('canvas').getContext('webgl');
+
+// compile shaders, link program, look up locations
+const prgInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+const verts = twgl.primitives.deindexVertices(twgl.primitives.createSphereVertices(1, 8, 8));
+// copy the positions
+const position1 = new Float32Array(verts.position);
+const position2 = new Float32Array(verts.position);
+// shift the positions so we can pass all 3 vertices for each triangle
+// to the vertex shader for each iteration
+for (let i = 0; i < position1.length; i += 9) {
+  { 
+     // 0, 1, 2 => 1, 2, 0
+     const temp = position1.slice(i, i + 3);
+     position1.set(position1.slice(i + 3, i + 9), i);
+     position1.set(temp, i + 6);
+  }
+  {
+     // 0, 1, 2 => 2, 0, 1
+     const temp = position2.slice(i + 6, i + 9);
+     position2.set(position2.slice(i + 0, i + 6), i + 3);
+     position2.set(temp, i);
+  }  
+}
+verts.position1 = position1;
+verts.position2 = position2;
+
+// calls gl.createBuffer, gl.bindBuffer, gl.bufferData for each of
+// position, normals, texcoord, indices of a sphere.
+const bufferInfo = twgl.createBufferInfoFromArrays(gl, verts);
+
+function render(time) {
+  twgl.resizeCanvasToDisplaySize(gl.canvas);
+  gl.enable(gl.DEPTH_TEST);
+
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+  // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer for each attribute
+  twgl.setBuffersAndAttributes(gl, prgInfo, bufferInfo);
+
+  gl.useProgram(prgInfo.program);
+
+  const fov = 60 * Math.PI / 180;
+  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const near = 0.1;
+  const far = 5.0;
+  const mat = m4.perspective(fov, aspect, near, far);
+  m4.translate(mat, [
+      Math.sin(time / 1200), 
+      Math.sin(time / 1300), 
+      Math.sin(time / 1400) - 1.8,
+  ], mat);
+  m4.rotateX(mat, time / 1000, mat);
+  m4.rotateY(mat, time / 1100, mat);
+
+  // calls gl.uniform
+  twgl.setUniforms(prgInfo, {
+    matrix: mat, 
+  });
+
+  // calls gl.drawArrays or gl.drawElements
+  twgl.drawBufferInfo(gl, bufferInfo);
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

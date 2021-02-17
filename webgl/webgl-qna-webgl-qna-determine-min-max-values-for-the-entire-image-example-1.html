@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<script id="vs" type="not-js">
+attribute vec4 position;
+
+void main() {
+  gl_Position = position;
+}
+</script>
+<script id="max-fs" type="not-js">
+precision mediump float;
+
+#define CELL_SIZE $(cellSize)s
+
+uniform sampler2D u_texture;
+uniform vec2 u_srcResolution;  
+uniform vec2 u_dstResolution;  
+
+void main() {
+  // compute the first pixel the source cell
+  vec2 srcPixel = floor(gl_FragCoord.xy) * float(CELL_SIZE);
+  
+  // one pixel in source
+  vec2 onePixel = vec2(1) / u_srcResolution;
+  
+  // uv for first pixel in cell. +0.5 for center of pixel
+  vec2 uv = (srcPixel + 0.5) * onePixel;
+    
+  vec4 maxColor = vec4(0);
+  for (int y = 0; y < CELL_SIZE; ++y) {
+    for (int x = 0; x < CELL_SIZE; ++x) {
+      maxColor = max(maxColor, texture2D(u_texture, uv + vec2(x, y) * onePixel)); 
+    }
+  }
+
+  gl_FragColor = maxColor;
+}
+</script>
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+
+
+</body>
+<script>
+
+"use strict";
+
+var cellSize = 2;
+
+// make a texture as our source
+var ctx = document.createElement("canvas").getContext("2d");
+ctx.fillStyle = "rgb(12, 34, 56)";
+ctx.fillRect(20, 30, 1, 1);
+ctx.fillStyle = "rgb(254, 243, 232)";
+ctx.fillRect(270, 140, 1, 1);
+
+var canvas = document.createElement("canvas");
+var m4 = twgl.m4;
+var gl = canvas.getContext("webgl");
+var fsSrc = document.getElementById("max-fs").text.replace("$(cellSize)s", cellSize);
+var programInfo = twgl.createProgramInfo(gl, ["vs", fsSrc]);
+
+var unitQuadBufferInfo = twgl.primitives.createXYQuadBufferInfo(gl);
+var framebufferInfo = twgl.createFramebufferInfo(gl);
+
+var srcTex = twgl.createTexture(gl, { 
+  src: ctx.canvas, 
+  min: gl.NEAREST, 
+  mag: gl.NEAREST,
+  wrap: gl.CLAMP_TO_EDGE,
+});
+
+var framebuffers = [];
+var w = ctx.canvas.width;
+var h = ctx.canvas.height;
+while (w > 1 || h > 1) {
+  w = Math.max(1, (w + cellSize - 1) / cellSize | 0);
+  h = Math.max(1, (h + cellSize - 1) / cellSize | 0);
+  // creates a framebuffer and creates and attaches an RGBA/UNSIGNED texture 
+  var fb = twgl.createFramebufferInfo(gl, [
+    { min: gl.NEAREST, max: gl.NEAREST, wrap: gl.CLAMP_TO_EDGE },
+  ], w, h);
+  framebuffers.push(fb);
+}
+
+var uniforms = {
+  u_srcResolution: [ctx.canvas.width, ctx.canvas.height],
+  u_texture: srcTex,
+};
+
+gl.useProgram(programInfo.program);
+twgl.setBuffersAndAttributes(gl, programInfo, unitQuadBufferInfo);
+
+var w = ctx.canvas.width;
+var h = ctx.canvas.height;
+framebuffers.forEach(function(fbi, ndx) {
+  w = Math.max(1, (w + cellSize - 1) / cellSize | 0);
+  h = Math.max(1, (h + cellSize - 1) / cellSize | 0);
+  uniforms.u_dstResolution = [w, h];
+  twgl.bindFramebufferInfo(gl, fbi);
+  twgl.setUniforms(programInfo, uniforms);
+  twgl.drawBufferInfo(gl, unitQuadBufferInfo);
+  
+  uniforms.u_texture = fbi.attachments[0];
+  uniforms.u_srcResolution = [w, h];
+});
+
+var p = new Uint8Array(4);
+gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, p);
+log("max: ", p[0], p[1], p[2]);
+
+
+function log() {
+  var elem = document.createElement("pre");
+  elem.appendChild(document.createTextNode(Array.prototype.join.call(arguments, " ")));
+  document.body.appendChild(elem);
+}
+
+
+</script>

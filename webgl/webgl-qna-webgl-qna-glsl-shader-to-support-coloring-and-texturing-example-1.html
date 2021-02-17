@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/2.x/twgl-full.min.js"></script>
+<script id="fs" type="not-js">
+precision mediump float;
+uniform sampler2D uSampler;
+varying vec2 vTextureCoord;
+varying vec4 vColor;
+uniform bool uUseTexture;
+void main(void) {
+    vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+    vec4 texColor = vec4(textureColor.rgb, textureColor.a);
+    vec4 vertexColor = vColor; 
+    if (!uUseTexture){
+        gl_FragColor = vertexColor;
+    }
+    else{
+        gl_FragColor = texColor; 
+    }
+}
+</script>
+<script id="vs" type="not-js">
+    attribute vec3 aVertexPosition;
+    attribute vec3 aVertexNormal;
+    attribute vec2 aTextureCoord;
+    attribute vec4 aVertexColor;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform mat3 uNMatrix;
+
+    varying vec2 vTextureCoord;
+    varying vec4 vColor;
+
+
+    void main(void){
+        vec4 mvPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+        gl_Position = uPMatrix * mvPosition;
+        vTextureCoord = aTextureCoord;
+        vColor = aVertexColor;}
+</script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+var gl = document.querySelector("canvas").getContext("webgl");
+var m4 = twgl.m4;
+
+var arrays = {
+  aVertexPosition: [
+    -1, -1, 0,
+     1, -1, 0,
+    -1,  1, 0,
+     1,  1, 0,
+  ],
+  aVertexNormal: [
+     0,  0,  1,
+     0,  0,  1,
+     0,  0,  1,
+     0,  0,  1,
+  ],
+  aTextureCoord: [
+     0,  0, 
+     1,  0,
+     0,  1,
+     1,  1,
+  ],
+  aVertexColor: [
+     1, 0, 0, 1,
+     0, 1, 0, 1,
+     0, 0, 1, 1,
+     1, 0, 1, 1,
+  ],
+  indices: [
+    0, 1, 2,
+    2, 1, 3,
+  ],
+};
+    
+var tex = twgl.createTexture(gl, {
+  format: gl.LUMINANCE,
+  mag: gl.NEAREST,
+  src: [224, 64, 128, 192],
+});
+var bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
+var programInfo = twgl.createProgramInfo(gl, ['vs', 'fs']);
+gl.useProgram(programInfo.program);
+twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+for (var i = 0; i < 2; ++i) {
+  twgl.setUniforms(programInfo, {
+    uMVMatrix: m4.identity(),
+    uPMatrix: m4.scale(m4.translation([i === 0 ? -0.5 : 0.5, 0, 0]), [0.5, 1, 1]),
+    uNMatrix: m4.identity(),
+    uSampler: tex,
+    uUseTexture: i === 1,
+  });
+  twgl.drawBufferInfo(gl, bufferInfo);
+}
+
+
+</script>

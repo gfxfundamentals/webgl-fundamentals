@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body {
+  margin: 0;
+}
+canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+const m4 = twgl.m4;
+const gl = document.querySelector("canvas").getContext("webgl");
+const vs = `
+attribute vec4 position;
+attribute vec3 displacement;
+
+uniform mat4 u_matrix;
+uniform float u_time;
+uniform float u_timeToGoBack;
+
+varying vec2 v_texcoord;
+
+void main() {
+  // because position goes -1 <-> 1 we can just use
+  // it for texture coords
+  v_texcoord = position.xy * .5 + .5;  
+
+  // displacement.z is the time at which it should be undisplaced
+  float displaceTime = displacement.z - u_time;
+  float lerp = clamp(displaceTime / u_timeToGoBack, 0., 1.);
+  vec2 displace = displacement.xy * lerp;
+
+  gl_Position = u_matrix * (position + vec4(displace, 0, 0));
+}
+`;
+const fs = `
+precision mediump float;
+
+uniform sampler2D texture;
+
+varying vec2 v_texcoord;
+
+void main() {
+  gl_FragColor = texture2D(texture, v_texcoord);
+}
+`;
+
+const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+// create a grid of points in a -1 to +1 quad
+const positions = [];
+const displacements = [];
+const indices = [];
+
+const res = 100;
+for (var y = 0; y < res; ++y) {
+  var v = (y / (res - 1)) * 2 - 1;
+  for (var x = 0; x < res; ++x) {
+    var u = (x / (res - 1)) * 2 - 1;
+    
+    positions.push(u, v);
+    displacements.push(0, 0, 0);
+  }  
+}
+
+for (var y = 0; y < res - 1; ++y) {
+  var off0 = (y + 0) * res;
+  var off1 = (y + 1) * res;
+  for (var x = 0; x < res - 1; ++x) {
+    indices.push(
+      off0 + x + 0, off0 + x + 1, off1 + x + 0,
+      off1 + x + 0, off0 + x + 1, off1 + x + 1
+    );
+  }  
+}
+
+// create buffers and fills them in.
+// (calls gl.createBuffer and gl.bufferData for each array)
+const bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+  position: { numComponents: 2, data: positions, },
+  displacement: { numComponents: 3, data: displacements, },
+  indices: indices,
+});
+
+// this will be replaced when the image has loaded;
+var img = { width: 1, height: 1 };
+
+const tex = twgl.createTexture(gl, {
+  src: 'https://farm6.staticflickr.com/5078/14032935559_8c13e9b181_z_d.jpg',
+  crossOrigin: '',
+}, function(err, texture, source) {
+  img = source;                               
+});
+
+var currentTime = 0;
+var currentMatrix;
+const timeToGoBack = 2; // in seconds;
+    
+function render(time) {
+  time *= 0.001;  // convert to seconds
+  
+  currentTime = time;
+  
+  twgl.resizeCanvasToDisplaySize(gl.canvas);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  gl.useProgram(programInfo.program);
+  
+  var aspect = img.width / img.height;
+  var mat = m4.ortho(0, gl.canvas.clientWidth, gl.canvas.clientHeight, 0, -1, 1);
+  mat = m4.translate(mat, [gl.canvas.clientWidth / 2, gl.canvas.clientHeight / 2, 0]);
+  mat = m4.scale(mat, [img.width * .25, img.height * .25, 1]);
+
+  currentMatrix = mat;
+  
+  // calls gl.bindBuffer, gl.vertexAttribPointer to setup
+  // attributes
+  twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+  
+  twgl.setUniforms(programInfo, {
+    u_matrix: mat,
+    u_texture: tex, 
+    u_time: currentTime,
+    u_timeToGoBack: timeToGoBack,
+  });
+  
+  gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+const displace = new Float32Array(3);
+    
+gl.canvas.addEventListener('mousemove', function(event, target) {
+  target = target || event.target;
+  const rect = target.getBoundingClientRect();
+
+  const rx = event.clientX - rect.left;
+  const ry = event.clientY - rect.top;
+
+  const x = rx * target.width  / target.clientWidth;
+  const y = ry * target.height / target.clientHeight;
+  
+  // reverse project the mouse onto the image
+  var rmat = m4.inverse(currentMatrix);
+  var s = m4.transformPoint(
+    rmat, [x / target.width * 2 - 1, y / target.height * 2 - 1, 0]);
+  
+  // s is now a point in the space of `position`
+
+  // lets just move closest point?
+  var gx = Math.round((s[0] * .5 + .5) * res);
+  var gy = Math.round((s[1] * .5 + .5) * res);
+  
+  gx = clamp(gx, 0, res - 1);
+  gy = clamp(gy, 0, res - 1);
+  
+  const offset = ((res - gy - 1) * res + gx) * 3 * 4;
+  
+  displace[0] = rand(-.1, .1);
+  displace[1] = rand(-.1, .1);
+  displace[2] = currentTime + timeToGoBack;
+   
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.attribs.displacement.buffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER, offset, displace);
+});
+    
+function rand(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function clamp(v, min, max) {
+  return Math.max(min, Math.min(max, v));
+}
+
+
+</script>

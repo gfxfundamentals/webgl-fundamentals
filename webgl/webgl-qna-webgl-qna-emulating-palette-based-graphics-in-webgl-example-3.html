@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/twgl.min.js"></script>
+<script id="vshader" type="whatever">
+    attribute vec4 a_position;
+    varying vec2 v_texcoord;
+    void main() {
+      gl_Position = a_position;
+    
+      // assuming a unit quad for position we
+      // can just use that for texcoords. Flip Y though so we get the top at 0
+      v_texcoord = a_position.xy * vec2(0.5, -0.5) + 0.5;
+    }    
+</script>
+<script id="fshader" type="whatever">
+precision mediump float;
+varying vec2 v_texcoord;
+uniform sampler2D u_image;
+uniform sampler2D u_palette;
+    
+void main() {
+    float index = texture2D(u_image, v_texcoord).a * 255.0;
+    gl_FragColor = texture2D(u_palette, vec2((index + 0.5) / 256.0, 0.5));
+}
+</script>
+<canvas id="c" width="256" height="256"></canvas>
+
+
+</body>
+<script>
+
+var canvas = document.getElementById("c");
+var gl = canvas.getContext("webgl");
+
+// Note: createProgramFromScripts will call bindAttribLocation
+// based on the index of the attibute names we pass to it.
+var program = twgl.createProgramFromScripts(
+    gl, 
+    ["vshader", "fshader"], 
+    ["a_position", "a_textureIndex"]);
+gl.useProgram(program);
+var imageLoc = gl.getUniformLocation(program, "u_image");
+var paletteLoc = gl.getUniformLocation(program, "u_palette");
+// tell it to use texture units 0 and 1 for the image and palette
+gl.uniform1i(imageLoc, 0);
+gl.uniform1i(paletteLoc, 1);
+
+// Setup a unit quad
+var positions = [
+      1,  1,  
+     -1,  1,  
+     -1, -1,  
+      1,  1,  
+     -1, -1,  
+      1, -1,  
+];
+var vertBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, vertBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+gl.enableVertexAttribArray(0);
+gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+// Setup a palette.
+var palette = new Uint8Array(256 * 4);
+
+// I'm lazy so just setting 4 colors in palette
+function setPalette(index, r, g, b, a) {
+    palette[index * 4 + 0] = r;
+    palette[index * 4 + 1] = g;
+    palette[index * 4 + 2] = b;
+    palette[index * 4 + 3] = a;
+}
+setPalette(1, 255, 0, 0, 255); // red
+setPalette(2, 0, 255, 0, 255); // green
+setPalette(3, 0, 0, 255, 255); // blue
+
+// make palette texture and upload palette
+gl.activeTexture(gl.TEXTURE1);
+var paletteTex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, paletteTex);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 256, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, palette);
+
+// Make image. Just going to make something 8x8
+var width = 8;
+var height = 8;
+var image = new Uint8Array([
+    0,0,1,1,1,1,0,0,
+    0,1,0,0,0,0,1,0,
+    1,0,0,0,0,0,0,1,
+    1,0,2,0,0,2,0,1,
+    1,0,0,0,0,0,0,1,
+    1,0,3,3,3,3,0,1,
+    0,1,0,0,0,0,1,0,
+    0,0,1,1,1,1,0,0,
+]);
+    
+// make image textures and upload image
+gl.activeTexture(gl.TEXTURE0);
+var imageTex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, imageTex);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.ALPHA, width, height, 0, gl.ALPHA, gl.UNSIGNED_BYTE, image);
+    
+var frameCounter = 0;
+function render() {  
+  ++frameCounter;
+    
+  // skip 3 of 4 frames so the animation is not too fast
+  if ((frameCounter & 3) == 0) {
+    // rotate the 3 palette colors
+    var tempR = palette[4 + 0];
+    var tempG = palette[4 + 1];
+    var tempB = palette[4 + 2];
+    var tempA = palette[4 + 3];
+    setPalette(1, palette[2 * 4 + 0], palette[2 * 4 + 1], palette[2 * 4 + 2], palette[2 * 4 + 3]);
+    setPalette(2, palette[3 * 4 + 0], palette[3 * 4 + 1], palette[3 * 4 + 2], palette[3 * 4 + 3]);
+    setPalette(3, tempR, tempG, tempB, tempA);
+
+    // re-upload palette
+    gl.activeTexture(gl.TEXTURE1);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 256, 1, 0, gl.RGBA,
+                  gl.UNSIGNED_BYTE, palette);
+    
+    gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2);
+  }
+  requestAnimationFrame(render);
+}
+render();
+
+
+</script>

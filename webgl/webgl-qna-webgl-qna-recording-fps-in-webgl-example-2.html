@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { font-family: monospace; }
+
+
+
+</style>
+</head>
+<body>
+
+<div>        fps: <span id="fps"></span></div>
+<div>average fps: <span id="avg"></span></div>
+
+
+
+</body>
+<script>
+
+const fpsElem = document.querySelector("#fps");
+const avgElem = document.querySelector("#avg");
+
+const frameTimes = [];
+let   frameCursor = 0;
+let   numFrames = 0;   
+const maxFrames = 20;
+let   totalFPS = 0;
+
+let then = 0;
+function render(now) {
+  now *= 0.001;                          // convert to seconds
+  const deltaTime = now - then;          // compute time since last frame
+  then = now;                            // remember time for next frame
+  const fps = 1 / deltaTime;             // compute frames per second
+  
+  fpsElem.textContent = fps.toFixed(1);  // update fps display
+  
+  // add the current fps and remove the oldest fps
+  totalFPS += fps - (frameTimes[frameCursor] || 0);
+  
+  // record the newest fps
+  frameTimes[frameCursor++] = fps;
+  
+  // needed so the first N frames, before we have maxFrames, is correct.
+  numFrames = Math.max(numFrames, frameCursor);
+  
+  // wrap the cursor
+  frameCursor %= maxFrames;
+    
+  const averageFPS = totalFPS / numFrames;
+
+  avgElem.textContent = averageFPS.toFixed(1);  // update avg display
+  
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

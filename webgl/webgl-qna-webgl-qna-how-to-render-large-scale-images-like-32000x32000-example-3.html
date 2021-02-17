@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+img { border: 1px solid red; }
+div { white-space: nowrap; }
+body { line-height: 0 }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+
+
+</body>
+<script>
+
+"use strict";
+
+const vs = `
+uniform mat4 u_worldViewProjection;
+
+attribute vec4 position;
+attribute vec3 normal;
+
+varying vec3 v_normal;
+
+void main() {
+  v_normal = normal;
+  gl_Position = u_worldViewProjection * position;
+}
+`;
+const fs = `
+precision mediump float;
+
+varying vec3 v_normal;
+
+void main() {
+  gl_FragColor = vec4(v_normal * .5 + .5, 1);
+}
+`;
+
+const m4 = twgl.m4;
+const gl = document.createElement("canvas").getContext("webgl");
+const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+const bufferInfo = twgl.primitives.createCubeBufferInfo(gl, 2);
+
+// size to render
+const totalWidth = 16384;
+const totalHeight = 16385;
+const partWidth = 1024;
+const partHeight = 1024;
+
+// this fov is for the totalHeight
+const fov = 30 * Math.PI / 180;
+const aspect = totalWidth / totalHeight;
+const zNear = 0.5;
+const zFar = 10;
+
+const eye = [1, 4, -6];
+const target = [0, 0, 0];
+const up = [0, 1, 0];
+
+// since the camera doesn't change let's compute it just once
+const camera = m4.lookAt(eye, target, up);
+const view = m4.inverse(camera);
+const world = m4.rotationY(Math.PI * .33);
+
+const imgRows = []; // this is only to insert in order
+for (let y = 0; y < totalHeight; y += partHeight) {
+  const imgRow = [];
+  imgRows.push(imgRow)
+  for (let x = 0; x < totalWidth; x += partWidth) {
+    renderPortion(totalWidth, totalHeight, x, y, partWidth, partHeight);
+    const img = new Image();
+    gl.canvas.toBlob((blob) => {
+      img.src = URL.createObjectURL(blob);
+    });
+    imgRow.push(img);
+  }
+}
+
+// because webgl goes positive up we're generating the rows
+// bottom first
+imgRows.reverse().forEach((imgRow) => {
+  const div = document.createElement('div');
+  imgRow.forEach(div.appendChild.bind(div));
+  document.body.appendChild(div);
+});
+
+function renderPortion(totalWidth, totalHeight, partX, partY, partWidth, partHeight) {
+  gl.canvas.width = partWidth;
+  gl.canvas.height = partHeight;
+  
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  
+  gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.CULL_FACE);
+  gl.clearColor(0.2, 0.2, 0.2, 1);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  // corners at zNear for tital image
+  const zNearTotalTop = Math.tan(fov) * 0.5 * zNear;
+  const zNearTotalBottom = -zNearTotalTop;
+  const zNearTotalLeft = zNearTotalBottom * aspect;
+  const zNearTotalRight = zNearTotalTop * aspect;
+  
+  // width, height at zNear for total image
+  const zNearTotalWidth = zNearTotalRight - zNearTotalLeft;
+  const zNearTotalHeight = zNearTotalTop - zNearTotalBottom;
+  
+  const zNearPartLeft = zNearTotalLeft + partX * zNearTotalWidth / totalWidth;   const zNearPartRight = zNearTotalLeft + (partX + partWidth) * zNearTotalWidth / totalWidth;
+  const zNearPartBottom = zNearTotalBottom + partY * zNearTotalHeight / totalHeight;
+  const zNearPartTop = zNearTotalBottom + (partY + partHeight) * zNearTotalHeight / totalHeight;
+
+  const projection = m4.frustum(zNearPartLeft, zNearPartRight, zNearPartBottom, zNearPartTop, zNear, zFar);
+  const viewProjection = m4.multiply(projection, view);
+
+  gl.useProgram(programInfo.program);
+  twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+  twgl.setUniforms(programInfo, {
+    u_worldViewProjection: m4.multiply(viewProjection, world),
+  });
+  twgl.drawBufferInfo(gl, bufferInfo);
+}
+
+
+</script>

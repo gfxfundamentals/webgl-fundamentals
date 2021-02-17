@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+
+
+</body>
+<script>
+
+async function main() {
+  const gl = document.querySelector('canvas').getContext('webgl');
+  const ext = gl.getExtension('OES_texture_float');
+  if (!ext) {
+    alert('need OES_texture_float');
+    return;
+  }
+  twgl.addExtensionsToContext(gl);
+
+  function convertToGlyphIndex(c) {
+    c = c.toUpperCase();
+    if (c >= 'A' && c <= 'Z') {
+      return c.charCodeAt(0) - 0x41;
+    } else if (c >= '0' && c <= '9') {
+      return c.charCodeAt(0) - 0x30 + 26;
+    } else {
+      return 255;
+    }
+  }
+
+  const messages = [
+    'pinapple',
+    'grape',
+    'banana',
+    'strawberry',
+  ];
+
+  const glyphImg = await loadImage("https://webglfundamentals.org/webgl/resources/8x8-font.png");
+
+  const glyphTex = twgl.createTexture(gl, {
+    src: glyphImg,
+    minMag: gl.NEAREST,
+  });
+  // being lazy about size, making them all the same.
+  const glyphsAcross = 8;
+  const glyphsDown = 5;
+  const glyphWidth = glyphImg.width / glyphsAcross;
+  const glyphHeight = glyphImg.height / glyphsDown;
+  const glyphUWidth = glyphWidth / glyphImg.width;
+  const glyphVHeight = glyphHeight / glyphImg.height;
+
+  // too lazy to pack these in a texture in a more compact way
+  // so just put one message per row
+  const positions = [];
+  const texcoords = [];
+  const messageIds = [];
+  const matrixData = new Float32Array(messages.length * 16);
+  const msgMatrices = [];
+  const quadPositions = [
+     -1, -1,
+      1, -1,
+     -1,  1,
+     -1,  1,
+      1, -1,
+      1,  1,
+  ];
+  const quadTexcoords = [
+      0,  1,
+      1,  1,
+      0,  0,
+      0,  0,
+      1,  1,
+      1,  0,
+  ];
+  messages.forEach((message, id) => {
+    msgMatrices.push(matrixData.subarray(id * 16, (id + 1) * 16));
+    
+    for (let i = 0; i < message.length; ++i) {
+      const c = convertToGlyphIndex(message[i]);
+      const u = (c % glyphsAcross) * glyphUWidth;
+      const v = (c / glyphsAcross | 0) * glyphVHeight;
+      for (let j = 0; j < 6; ++j) {
+        const offset = j * 2;
+        positions.push(
+          quadPositions[offset    ] * 0.5 + i - message.length / 2,
+          quadPositions[offset + 1] * 0.5,
+        );
+        texcoords.push(
+          u + quadTexcoords[offset    ] * glyphUWidth,
+          v + quadTexcoords[offset + 1] * glyphVHeight,
+        );
+        messageIds.push(id);
+      }
+    }
+  });
+
+  const matrixTex = twgl.createTexture(gl, {
+    src: matrixData,
+    type: gl.FLOAT,
+    width: 4,
+    height: messages.length,
+    minMag: gl.NEAREST,
+    wrap: gl.CLAMP_TO_EDGE,
+  });
+
+  const vs = `
+attribute vec4 position;
+attribute vec2 texcoord;
+attribute float messageId;
+
+uniform sampler2D matrixTex;
+uniform vec2 matrixTexSize;
+uniform mat4 viewProjection;
+
+varying vec2 v_texcoord;
+
+void main() {
+  vec2 uv = (vec2(0, messageId) + 0.5) / matrixTexSize;
+  mat4 model = mat4(
+    texture2D(matrixTex, uv),
+    texture2D(matrixTex, uv + vec2(1.0 / matrixTexSize.x, 0)),
+    texture2D(matrixTex, uv + vec2(2.0 / matrixTexSize.x, 0)),
+    texture2D(matrixTex, uv + vec2(3.0 / matrixTexSize.x, 0)));
+  gl_Position = viewProjection * model * position;
+  v_texcoord = texcoord;
+}
+`;
+
+  const fs = `
+precision highp float;
+
+varying vec2 v_texcoord;
+uniform sampler2D glyphTex;
+
+void main() {
+  vec4 glyphColor = texture2D(glyphTex, v_texcoord);
+
+  // do some math here for a circle
+  // TBD
+
+  if (glyphColor.a < 0.1) discard;
+
+  gl_FragColor = glyphColor;
+}
+`;
+
+  const prgInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+  const bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+    position: {
+      numComponents: 2,
+      data: positions,
+    },
+    texcoord: texcoords,
+    messageId: {
+      numComponents: 1,
+      data: messageIds
+    },
+  });
+
+  gl.clearColor(0, 0, 1, 1);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  gl.useProgram(prgInfo.program);
+  
+  const m4 = twgl.m4;
+  const viewProjection = m4.ortho(0, gl.canvas.width, 0, gl.canvas.height, -1, 1);
+  msgMatrices.forEach((mat, i) => {
+    m4.translation([80 + i * 30, 30 + i * 25, 0], mat);
+    m4.scale(mat, [16, 16, 1], mat)
+  });
+  
+  // update the matrices
+  gl.bindTexture(gl.TEXTURE_2D, matrixTex);
+  gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 4, messages.length, gl.RGBA, gl.FLOAT, matrixData);
+  
+  twgl.setBuffersAndAttributes(gl, prgInfo, bufferInfo);
+  twgl.setUniformsAndBindTextures(prgInfo, {
+    viewProjection,
+    matrixTex,
+    matrixTexSize: [4, messages.length],
+    glyphTex,
+  });
+  gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2);
+}
+
+function loadImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onerror = reject;
+    img.onload = () => resolve(img);
+    img.src = url;
+  });
+}
+main();
+
+
+</script>

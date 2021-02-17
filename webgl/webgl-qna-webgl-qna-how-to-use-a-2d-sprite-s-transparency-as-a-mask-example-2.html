@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { 
+ background: url(https://i.imgur.com/v38pV.jpg) no-repeat center center;
+  background-size: cover; 
+}
+
+
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+
+
+</body>
+<script>
+
+const m4 = twgl.m4;
+const gl = document.querySelector('canvas').getContext('webgl', {stencil: true});
+
+const vs = `
+attribute vec4 position;
+attribute vec2 texcoord;
+
+uniform mat4 u_matrix;
+
+varying vec2 v_texcoord;
+void main() {
+  gl_Position = u_matrix * position;
+  v_texcoord = texcoord;
+}
+`;
+
+const fs = `
+precision highp float;
+
+varying vec2 v_texcoord;
+
+uniform sampler2D u_texture;
+uniform float u_alphaTest;
+
+void main() {
+  vec4 color = texture2D(u_texture, v_texcoord);
+  if (color.a < u_alphaTest) {
+    discard;  // don't draw this pixel
+  }
+  gl_FragColor = color;
+}
+`;
+
+// compile shaders, link program, look up locations
+const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+// make buffers for positions and texcoords for a plane
+// calls gl.createBuffer, gl.bindBuffer, gl.bufferData
+const bufferInfo = twgl.primitives.createXYQuadBufferInfo(gl);
+
+const starTexture = makeSpriteTexture(gl, '✱', 128);
+const bugTexture = makeSpriteTexture(gl, '', 128);
+
+function render(time) {
+  time *= 0.001;  // convert to seconds
+  
+  gl.useProgram(programInfo.program);
+  
+  // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+  twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+  
+  const mat = m4.ortho(-150, 150, 75, -75, -1, 1);
+  m4.translate(mat, [Math.cos(time) * 20, 0, 0], mat);
+  m4.scale(mat, [64, 64, 1], mat);
+
+  gl.enable(gl.STENCIL_TEST);
+  // set the stencil to 1 everwhere we draw a pixel
+  gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+  gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
+  // don't render pixels
+  gl.colorMask(false, false, false, false);
+
+  // calls gl.activeTexture, gl.bindTexture, gl.uniformXXX
+  twgl.setUniformsAndBindTextures(programInfo, {
+      u_texture: starTexture,
+      u_alphaTest: 0.5,
+      u_matrix: mat,
+  });
+
+  // calls gl.drawArrays or gl.drawElements
+  twgl.drawBufferInfo(gl, bufferInfo);
+  
+  // only draw if the stencil = 1
+  gl.stencilFunc(gl.EQUAL, 1, 0xFF);
+  gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+  
+  // render pixels
+  gl.colorMask(true, true, true, true);
+
+  m4.ortho(-150, 150, 75, -75, -1, 1, mat);
+  m4.translate(mat, [0, Math.cos(time * 1.1) * 20, 0], mat);
+  m4.scale(mat, [64, 64, 1], mat);
+
+  // calls gl.activeTexture, gl.bindTexture, gl.uniformXXX
+  twgl.setUniformsAndBindTextures(programInfo, {
+      u_texture: bugTexture,
+      u_alphaTest: 0,  // draw all pixels (but stencil will prevent some)
+      u_matrix: mat,
+  });
+
+  // calls gl.drawArrays or gl.drawElements
+  twgl.drawBufferInfo(gl, bufferInfo);
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+// just so we don't have to download an image
+// we'll make our own using a canvas and the 2D API
+function makeSpriteTexture(gl, str, size) {
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  ctx.font = `${size * 3 / 4}px sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(str, size / 2, size / 2);
+  
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(
+      gl.TEXTURE_2D,
+      0, // mip level
+      gl.RGBA,  // internal format
+      gl.RGBA,  // format
+      gl.UNSIGNED_BYTE, // type,
+      canvas);
+  // let's assume we used power of 2 dimensions
+  gl.generateMipmap(gl.TEXTURE_2D);
+  return tex;
+}
+
+
+</script>

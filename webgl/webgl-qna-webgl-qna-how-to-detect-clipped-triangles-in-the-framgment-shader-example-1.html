@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+const vs = `
+attribute vec4 position;
+uniform mat4 matrix;
+varying float clipped;
+
+void main() {
+  gl_Position = matrix * position;
+  clipped = (
+      any(lessThan(gl_Position.xyz, -gl_Position.www)) ||
+      any(greaterThan(gl_Position.xyz, gl_Position.www))
+    ) ? 1.0
+      : 0.0;
+}
+`;
+
+const fs = `
+precision highp float;
+varying float clipped;
+void main() {
+  if (clipped > 0.0) {
+    discard;
+  }
+  gl_FragColor = gl_FrontFacing ? vec4(1, 0, 0, 1) : vec4(0, 0, 1, 1);
+}
+`;
+
+const m4 = twgl.m4;
+const gl = document.querySelector('canvas').getContext('webgl');
+
+// compile shaders, link program, look up locations
+const prgInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+// calls gl.createBuffer, gl.bindBuffer, gl.bufferData for each of
+// position, normals, texcoord, indices of a sphere.
+const bufferInfo = twgl.primitives.createSphereBufferInfo(gl, 1, 8, 8);
+
+function render(time) {
+  twgl.resizeCanvasToDisplaySize(gl.canvas);
+  gl.enable(gl.DEPTH_TEST);
+
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+  // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer for each attribute
+  twgl.setBuffersAndAttributes(gl, prgInfo, bufferInfo);
+
+  gl.useProgram(prgInfo.program);
+
+  const fov = 60 * Math.PI / 180;
+  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const near = 0.1;
+  const far = 5.0;
+  const mat = m4.perspective(fov, aspect, near, far);
+  m4.translate(mat, [
+      Math.sin(time / 1200), 
+      Math.sin(time / 1300), 
+      Math.sin(time / 1400) - 1.8,
+  ], mat);
+  m4.rotateX(mat, time / 1000, mat);
+  m4.rotateY(mat, time / 1100, mat);
+
+  // calls gl.uniform
+  twgl.setUniforms(prgInfo, {
+    matrix: mat, 
+  });
+
+  // calls gl.drawArrays or gl.drawElements
+  twgl.drawBufferInfo(gl, bufferInfo);
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

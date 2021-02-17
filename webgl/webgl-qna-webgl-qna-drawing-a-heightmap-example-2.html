@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas id="canvas"></canvas>
+
+
+</body>
+<script>
+
+function main() {
+  const gl = document.querySelector('canvas').getContext('webgl');
+
+  const m4 = twgl.m4;
+  const vs = `
+  attribute vec4 position;
+  attribute vec2 texcoord;
+
+  uniform sampler2D displacementMap;
+  uniform mat4 projection;
+  uniform mat4 view;
+  uniform mat4 model;
+
+  varying vec2 v_texcoord;
+
+  void main() {
+    float displacementScale = 10.0;
+    float displacement = texture2D(displacementMap, texcoord).r * displacementScale;
+    vec4 displacedPosition = position + vec4(0, displacement, 0, 0);
+    gl_Position = projection * view * model * displacedPosition;
+    v_texcoord = texcoord;
+  }  
+  `;
+
+  const fs = `
+  precision highp float;
+
+  varying vec2 v_texcoord;
+
+  uniform sampler2D displacementMap;
+
+  void main() {
+    // should make this a uniform so it's shared
+    float displacementScale = 10.0;
+    
+    // I'm sure there is a better way to compute
+    // what this offset should be
+    float offset = 0.01;
+    
+    vec2 uv0 = v_texcoord;
+    vec2 uv1 = v_texcoord + vec2(offset, 0);
+    vec2 uv2 = v_texcoord + vec2(0, offset);
+    
+    float h0 = texture2D(displacementMap, uv0).r;
+    float h1 = texture2D(displacementMap, uv1).r;
+    float h2 = texture2D(displacementMap, uv2).r;
+    
+    vec3 p0 = vec3(uv0, h0 * displacementScale);
+    vec3 p1 = vec3(uv1, h1 * displacementScale);
+    vec3 p2 = vec3(uv2, h2 * displacementScale);
+    
+    vec3 v0 = p1 - p0;
+    vec3 v1 = p2 - p0;
+    
+    vec3 normal = normalize(cross(v1, v0));
+    
+    // just hard code lightDir and color
+    // to make it easy
+    vec3 lightDir = normalize(vec3(1, -3, 2));
+    float light = dot(lightDir, normal);
+    vec3 color = vec3(0.3, 1, 0.1);
+    
+    gl_FragColor = vec4(color * (light * 0.5 + 0.5), 1);
+  }
+  `;
+
+  // compile shader, link, look up locations
+  const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+  // make some vertex data
+  // calls gl.createBuffer, gl.bindBuffer, gl.bufferData for each array
+  const bufferInfo = twgl.primitives.createPlaneBufferInfo(
+      gl,
+      96,  // width
+      64,  // height
+      96,  // quads across
+      64,  // quads down
+  );
+
+  const tex = twgl.createTexture(gl, {
+    src: 'https://threejsfundamentals.org/threejs/resources/images/heightmap-96x64.png',
+    minMag: gl.LINEAR,
+    wrap: gl.CLAMP_TO_EDGE,
+  });
+
+  function render(time) {
+    time *= 0.001;  // seconds
+
+    twgl.resizeCanvasToDisplaySize(gl.canvas);
+
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+
+    const fov = 60 * Math.PI / 180;
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const near = 0.1;
+    const far = 200;
+    const projection = m4.perspective(fov, aspect, near, far);
+
+    const eye = [Math.cos(time) * 30, 10, Math.sin(time) * 30];
+    const target = [0, 0, 0];
+    const up = [0, 1, 0];
+    const camera = m4.lookAt(eye, target, up);
+    const view = m4.inverse(camera);
+    const model = m4.identity();
+
+    gl.useProgram(programInfo.program);
+
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+
+    // calls gl.activeTexture, gl.bindTexture, gl.uniformXXX
+    twgl.setUniformsAndBindTextures(programInfo, {
+      projection,
+      view,
+      model,
+      displacementMap: tex,
+    });
+
+    // calls gl.drawArrays or gl.drawElements
+    twgl.drawBufferInfo(gl, bufferInfo);
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+}
+main();
+
+
+</script>

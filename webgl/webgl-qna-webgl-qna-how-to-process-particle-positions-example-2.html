@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; }
+
+
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+
+
+</body>
+<script>
+
+'use strict';
+
+const ctx = document.querySelector('canvas').getContext('2d')
+const {width, height} = ctx.canvas;
+
+const numParticles = 128;
+const particleParameters = [];  // info that does not change
+let currentParticleState = [];  // info that does change
+let nextParticleState = [];     // computed from currentState
+
+for (let i = 0; i < numParticles; ++i) {
+  particleParameters.push(
+    [rand(-100, 100), rand(-100, 100)],
+  );
+  currentParticleState.push(
+    [rand(0, width), rand(0, height)],
+  );
+  nextParticleState.push(
+    [0, 0],
+  );
+}
+
+
+function rand(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function euclideanModulo(n, m) {
+  return (( n % m) + m) % m;
+}
+
+
+const gl = {
+  fragCoord: [0, 0, 0, 0],
+  outColor: [0, 0, 0, 0],
+  currentProgram: null,
+  currentFramebuffer: null,
+  
+  bindFramebuffer(fb) {
+    this.currentFramebuffer = fb;
+  },
+  
+  createProgram(vs, fs) {
+    return {
+      vertexShader: vs,  // not using
+      fragmentShader: fs,
+      uniforms: {
+      },
+    }
+  },
+  
+  useProgram(p) {
+    this.currentProgram = p;
+  },
+  
+  uniform(name, value) {
+    this.currentProgram.uniforms[name] = value;
+  },
+  
+  draw(count) {
+    for (let i = 0; i < count; ++i) {
+      this.fragCoord[0] = i + .5;
+      this.currentProgram.fragmentShader();
+      this.currentFramebuffer[i][0] = this.outColor[0];
+      this.currentFramebuffer[i][1] = this.outColor[1];
+      this.currentFramebuffer[i][2] = this.outColor[2];
+      this.currentFramebuffer[i][3] = this.outColor[3];
+    }
+  },
+};
+
+
+// just to make it look more like GLSL
+function texelFetch(sampler, index) {
+  return sampler[index];
+}
+
+// notice this function has no inputs except
+// `gl.fragCoord` and `gl.currentProgram.uniforms`
+// and it just writes to `gl.outColor`. It doesn't
+// get to choose where to write. That is handled
+// by `gl.draw`
+function fragmentShader() {
+  // to make the code below more readable
+  const {
+    resolution, 
+    deltaTime,
+    currentState,
+    particleParams,
+  } = gl.currentProgram.uniforms;
+  
+  const i = Math.floor(gl.fragCoord[0]);
+  const curPos = texelFetch(currentState, i);
+  const data = texelFetch(particleParameters, i);
+    
+  gl.outColor[0] = euclideanModulo(curPos[0] + data[0] * deltaTime, resolution[0]);
+  gl.outColor[1] = euclideanModulo(curPos[1] + data[1] * deltaTime, resolution[1]);
+}
+
+
+const prg = gl.createProgram(null, fragmentShader);
+
+let then = 0;
+function render(now) {
+  now *= 0.001;  // convert to seconds
+  const deltaTime = now - then;
+  then = now;
+
+  gl.bindFramebuffer(nextParticleState);
+  gl.useProgram(prg);
+  gl.uniform('deltaTime', deltaTime);
+  gl.uniform('currentState', currentParticleState);
+  gl.uniform('particleParameters', particleParameters);
+  gl.uniform('resolution', [width, height]);
+  gl.draw(numParticles);
+  
+  const t = nextParticleState;
+  nextParticleState = currentParticleState;
+  currentParticleState = t;
+
+  // not relavant!!!
+  ctx.clearRect(0, 0, width, height);
+  for (let i = 0; i < numParticles; ++i) {
+    const [x, y] = currentParticleState[i];
+    ctx.fillRect(x - 1, y - 1, 3, 3);
+  }
+  
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

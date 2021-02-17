@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { margin: 0; }
+canvas { width: 100vw; height: 100vh; display: block; }
+
+
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<!-- vertex shader -->
+<script id="vs" type="f">
+attribute vec2 position;
+attribute vec2 texcoord;
+
+uniform mat3 u_matrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+   gl_Position = vec4(u_matrix * vec3(position, 1), 1);
+   v_texcoord = texcoord;
+}
+</script>
+<!-- fragment shader -->
+<script id="fs" type="f">
+precision mediump float;
+
+uniform float u_time;
+uniform float u_distortionAmount;
+uniform float u_distortionRange;
+uniform vec2 u_mouse;
+
+// our textures
+uniform sampler2D u_originalImage;
+uniform sampler2D u_mapImage;
+
+// the texcoords passed in from the vertex shader.
+varying vec2 v_texcoord;
+
+void main() {
+   vec4 depthDistortion = texture2D(u_mapImage, v_texcoord);
+   float distortionMult = depthDistortion.g;     // just green channel
+   float parallaxMult = 0.5 - depthDistortion.r; // just red channel
+   
+   vec2 distortion = vec2(
+      sin(u_time + v_texcoord.y * u_distortionRange), 0) * u_distortionAmount  * distortionMult;
+   vec2 parallax = u_mouse * parallaxMult;
+      
+   vec4 color0 = texture2D(u_originalImage, v_texcoord + distortion + parallax);
+   gl_FragColor = color0;
+}
+</script>
+<script src="https://twgljs.org/dist/3.x/twgl-full.min.js"></script>
+<script src="https://webglfundamentals.org/webgl/resources/m3.js"></script>
+
+
+</body>
+<script>
+
+"use strict";
+
+function main() {
+  // Get A WebGL context
+  /** @type {HTMLCanvasElement} */
+  const canvas = document.getElementById("canvas");
+  const gl = canvas.getContext("webgl");
+  if (!gl) {
+    return;
+  }
+
+  let originalImage = { width: 1, height: 1 }; // replaced after loading
+  const originalTexture = twgl.createTexture(gl, {
+    src: "https://i.imgur.com/xKYRSwu.jpg", 
+    crossOrigin: '',
+  }, (err, texture, source) => {
+    originalImage = source;
+  });
+  
+  const mapTexture = twgl.createTexture(gl, {
+    src: "https://i.imgur.com/W9QazjL.jpg", crossOrigin: '',
+  });
+
+  // compile shaders, link program, lookup location
+  const programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
+
+  // calls gl.createBuffer, gl.bindBuffer, gl.bufferData for a quad
+  const bufferInfo = twgl.primitives.createXYQuadBufferInfo(gl);
+
+  const mouse = [0, 0];
+  document.addEventListener('mousemove', (event) => {
+    mouse[0] = (event.clientX / gl.canvas.clientWidth  * 2 - 1) * 0.05;
+    mouse[1] = (event.clientY / gl.canvas.clientHeight * 2 - 1) * 0.05;
+  });
+  
+  requestAnimationFrame(render);
+  
+  function render(time) {
+    time *= 0.001;  // seconds
+    
+    twgl.resizeCanvasToDisplaySize(gl.canvas);
+
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    gl.useProgram(programInfo.program);
+
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+
+    const canvasAspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const imageAspect = originalImage.width / originalImage.height;
+    const mat = m3.scaling(imageAspect / canvasAspect, -1);
+    
+    // calls gl.activeTexture, gl.bindTexture, gl.uniformXXX
+    twgl.setUniforms(programInfo, {
+      u_matrix: mat,
+      u_originalImage: originalTexture,
+      u_mapImage: mapTexture,
+      u_distortionAmount: 0.003,  // .3%
+      u_distortionRange: 100,
+      u_time: time * 10,
+      u_mouse: mouse,
+    });
+
+    // calls gl.drawArrays or gl.drawElements
+    twgl.drawBufferInfo(gl, bufferInfo);
+    
+    requestAnimationFrame(render);
+  }
+}
+
+main();
+
+
+</script>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/3.x/twgl-full.min.js"></script>
+<canvas 
+    width="32"
+    height="32"
+    style="
+        width: 128px;
+        height: 128px;
+        image-rendering: crisp-edges; /* for firefox */
+        image-rendering: pixelated;   /* for everything else */
+    "></canvas>
+
+
+</body>
+<script>
+
+const vs = `
+attribute vec4 position;
+uniform mat4 u_matrix;
+
+void main() {
+   gl_Position = u_matrix * position;
+}
+`;
+const fs = `
+void main() {
+  gl_FragColor = vec4(0, 0, 0, 1); // black
+}
+`;
+
+const vs2 = `
+attribute vec4 position;
+attribute vec2 texcoord;
+
+uniform mat4 u_matrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+   gl_Position = u_matrix * position;
+   v_texcoord = texcoord;
+}
+`;
+const fs2 = `
+precision mediump float;
+varying vec2 v_texcoord;
+uniform sampler2D u_texture;
+void main() {
+  gl_FragColor = texture2D(u_texture, v_texcoord);
+}
+`;
+
+"use strict";
+const m4 = twgl.m4;
+const gl = document.querySelector("canvas").getContext("webgl", {
+  antialias: false,
+});
+// compiles shaders, links program, looks up locations
+const cubeProgramInfo = twgl.createProgramInfo(gl, [vs, fs]);
+const texProgramInfo = twgl.createProgramInfo(gl, [vs2, fs2]);
+
+const cubeArrays = {
+  position: [
+    1, 1, -1, 1, 1, 1, 1, -1, 1, 1, -1, -1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1],
+  indices:  [
+    0, 1, 1, 2, 2, 3, 3, 0, 
+    4, 5, 5, 6, 6, 7, 7, 4, 
+    8, 9, 9, 10, 10, 11, 11, 8,
+    12, 13, 13, 14, 14, 15, 15, 12,
+  ],
+};
+const quadArrays = {
+  position: {
+    numComponents: 2,
+    data: [
+      0, 0,
+      1, 0,
+      0, 1,
+      0, 1,
+      1, 0,
+      1, 1,
+    ],
+  },
+};
+// calls gl.createBuffer, gl.bindBuffer, gl.bufferData for each array
+const cubeBufferInfo = twgl.createBufferInfoFromArrays(gl, cubeArrays);
+
+function render(time) {
+  time *= 0.001;
+
+  // draw cube
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  {    
+    const fov = 30 * Math.PI / 180;
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const zNear = 0.5;
+    const zFar = 40;
+    const projection = m4.perspective(fov, aspect, zNear, zFar);
+    const eye = [1, 4, -7];
+    const target = [0, 0, 0];
+    const up = [0, 1, 0];
+
+    const camera = m4.lookAt(eye, target, up);
+    const view = m4.inverse(camera);
+    const viewProjection = m4.multiply(projection, view);
+    const world = m4.rotationY(time);
+
+    gl.useProgram(cubeProgramInfo.program);
+    
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    twgl.setBuffersAndAttributes(gl, cubeProgramInfo, cubeBufferInfo);
+    // calls gl.uniformXXX
+    twgl.setUniforms(cubeProgramInfo, {
+      u_matrix: m4.multiply(viewProjection, world),
+    });
+    // calls gl.drawArrays or gl.drawElements
+    twgl.drawBufferInfo(gl, cubeBufferInfo, gl.LINES);
+  }
+  
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

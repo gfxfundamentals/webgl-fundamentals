@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { margin: 0; }
+canvas { width: 100vw; height: 100vh; display: block; }
+
+
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+
+
+</body>
+<script>
+
+"use strict";
+
+const vs = `
+uniform mat4 u_world;
+uniform mat4 u_viewProjection;
+
+attribute vec4 position;
+attribute vec2 texcoord;
+attribute vec4 color;
+
+varying vec4 v_position;
+varying vec2 v_texcoord;
+varying vec4 v_color;
+
+void main() {
+  v_texcoord = texcoord;
+  v_color = color;
+  gl_Position = u_viewProjection * u_world * position;
+}
+`;
+
+const fs = `
+precision mediump float;
+
+varying vec2 v_texcoord;
+varying vec4 v_color;
+
+uniform sampler2D tex;
+
+void main() {
+  gl_FragColor = texture2D(tex, v_texcoord) * v_color;
+}
+`;
+
+const m4 = twgl.m4;
+const gl = document.querySelector("#c").getContext("webgl");
+
+// compiles shaders, links, looks up locations
+const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+const cubeArrays = twgl.primitives.createCubeVertices(1);
+cubeArrays.color = {value: [0.2, 0.3, 1, 1]};
+// calls gl.createBuffer, gl.bindBuffer, gl.bufferData
+// for each array
+const cubeBufferInfo = twgl.createBufferInfoFromArrays(gl, cubeArrays);
+
+const numLines = 50;
+const positions = new Float32Array(numLines * 3 * 2);
+const colors = new Float32Array(numLines * 4 * 2);
+// calls gl.createBuffer, gl.bindBuffer, gl.bufferData
+// for each array
+const linesBufferInfo = twgl.createBufferInfoFromArrays(gl, {
+  position: positions,
+  color: colors,
+  texcoord: { value: [0, 0], },
+});
+
+const tex = twgl.createTexture(gl, {
+  minMag: gl.NEAREST,
+  format: gl.LUMINANCE,
+  src: [
+    255, 192,
+    192, 255,
+  ],
+});
+
+let clipX = 0;
+let clipY = 0;
+let lineNdx = 0;
+
+function render(time) {
+  time *= 0.001;
+  twgl.resizeCanvasToDisplaySize(gl.canvas);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+  gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.CULL_FACE);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  const fov = 30 * Math.PI / 180;
+  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const zNear = 1;
+  const zFar = 10;
+  const projection = m4.perspective(fov, aspect, zNear, zFar);
+
+  const eye = [Math.cos(time), Math.sin(time), 6];
+  const target = [0, 0, 0];
+  const up = [0, 1, 0];
+  const camera = m4.lookAt(eye, target, up);
+  
+  const view = m4.inverse(camera);
+  const viewProjection = m4.multiply(projection, view);
+  const world = m4.rotateX(m4.rotationY(1), 1);
+
+  gl.useProgram(programInfo.program);
+  // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+  twgl.setBuffersAndAttributes(gl, programInfo, cubeBufferInfo);
+  twgl.setUniformsAndBindTextures(programInfo, {
+    tex,
+    u_world: world,
+    u_viewProjection: viewProjection,
+    color: [0.2, 0.3, 1, 1],
+  });
+  // calls gl.drawArrays or gl.drawElements
+  twgl.drawBufferInfo(gl, cubeBufferInfo);
+
+  // add a line in world space
+  const invMat = m4.inverse(viewProjection);
+  const start = m4.transformPoint(invMat, [clipX, clipY, -1]);
+  const end   = m4.transformPoint(invMat, [clipX, clipY,  1]);
+  const poffset = lineNdx * 3 * 2;
+  const coffset = lineNdx * 4 * 2;
+  const color = [Math.random(), Math.random(), Math.random(), 1];
+  positions.set(start, poffset);
+  positions.set(end, poffset + 3);
+  colors.set(color, coffset);
+  colors.set(color, coffset + 4);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, linesBufferInfo.attribs.position.buffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER, 0, positions);
+  gl.bindBuffer(gl.ARRAY_BUFFER, linesBufferInfo.attribs.color.buffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER, 0, colors);
+
+  lineNdx = (lineNdx + 1) % numLines;  
+
+  // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+  twgl.setBuffersAndAttributes(gl, programInfo, linesBufferInfo);
+  twgl.setUniformsAndBindTextures(programInfo, {
+    tex,
+    u_world: m4.identity(),
+    u_viewProjection: viewProjection,
+    color: [1, 0, 0, 1],
+  });
+  // calls gl.drawArrays or gl.drawElements
+  twgl.drawBufferInfo(gl, linesBufferInfo, gl.LINES);
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+gl.canvas.addEventListener('mousemove', (e) => {
+   const canvas = gl.canvas;
+   const rect = canvas.getBoundingClientRect();
+   const x = e.clientX - rect.left;
+   const y = e.clientY - rect.top;
+
+   clipX = x / rect.width  *  2 - 1;
+   clipY = y / rect.height * -2 + 1;
+});
+
+
+</script>

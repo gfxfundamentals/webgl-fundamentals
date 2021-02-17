@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; }
+
+
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+
+
+</body>
+<script>
+
+'use strict';
+
+const ctx = document.querySelector('canvas').getContext('2d')
+const {width, height} = ctx.canvas;
+
+const numParticles = 128;
+const particleParameters = [];  // info that does not change
+let currentParticleState = [];  // info that does change
+let nextParticleState = [];     // computed from currentState
+
+for (let i = 0; i < numParticles; ++i) {
+  particleParameters.push({
+    velocity: [rand(-100, 100), rand(-100, 100)],
+  });
+  currentParticleState.push({
+    position: [rand(0, width), rand(0, height)],
+  });
+  nextParticleState.push({
+    position: [0, 0],
+  });
+}
+
+
+function rand(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function euclideanModulo(n, m) {
+  return (( n % m) + m) % m;
+}
+
+let then = 0;
+function render(now) {
+  now *= 0.001;  // convert to seconds
+  const deltaTime = now - then;
+  then = now;
+
+  for (let i = 0; i < numParticles; ++i) {
+    const curPos = currentParticleState[i].position;
+    const nxtPos = nextParticleState[i].position;
+    const data = particleParameters[i];
+    
+    nxtPos[0] = euclideanModulo(curPos[0] + data.velocity[0] * deltaTime, width);
+    nxtPos[1] = euclideanModulo(curPos[1] + data.velocity[1] * deltaTime, height);    
+  }
+  
+  const t = nextParticleState;
+  nextParticleState = currentParticleState;
+  currentParticleState = t;
+
+  ctx.clearRect(0, 0, width, height);
+  for (let i = 0; i < numParticles; ++i) {
+    const [x, y] = currentParticleState[i].position;
+    ctx.fillRect(x - 1, y - 1, 3, 3);
+  }
+  
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

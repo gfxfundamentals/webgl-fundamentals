@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; margin: 5px; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas id="js"></canvas>
+
+
+
+</body>
+<script>
+
+const v3 = twgl.v3;
+
+function main() {
+  
+  const r = max => Math.random() * max;
+  const hsl = (h, s, l) => `hsl(${h * 360},${s * 100 | 0}%,${l * 100 | 0}%)`;
+
+  function createPoints(numPoints) {
+    const points = [];
+    for (let i = 0; i < numPoints; ++i) {
+      points.push(r(300), r(150), 0, 0);  // RGBA
+    }
+    return points;
+  }
+
+  function distanceFromPointToLineSquared(a, b, c) {
+    const ba = v3.subtract(a, b);
+    const bc = v3.subtract(c, b);
+    const dot = v3.dot(ba, bc);
+    const lenSq = v3.lengthSq(bc);
+    let param = 0;
+    if (lenSq !== 0) {
+      param = Math.min(1, Math.max(0, dot / lenSq));
+    }
+    const r = v3.add(b, v3.mulScalar(bc, param));
+    return v3.distanceSq(a, r);
+  }
+
+  const aPoints = createPoints(6);
+  const bPoints = createPoints(15);
+  const cPoints = createPoints(15);
+  
+  const gl_FragCoord = {};
+  let gl_FragColor;
+  
+  const aValues = aPoints;
+  const aDimensions = {}; // N/A
+  const bValues = bPoints;
+  const bDimensions = {}; // N/A
+  const cValues = cPoints;
+  const cDimensions = {}; // N/A
+  const outputDimensions = {x: aPoints.length / 4, y: 1 };
+  
+  function getPoint(sampler, dimension, ndx) {
+    return sampler.slice(ndx * 4, ndx * 4 + 3);
+  }
+  
+  function javaScriptFragmentShader() {
+    // gl_FragCoord is the coordinate of the pixel that is being set by the fragment shader.
+    // It is the center of the pixel so the bottom left corner pixel will be (0.5, 0.5).
+    // the pixel to the left of that is (1.5, 0.5), The pixel above that is (0.5, 1.5), etc...
+    // so we can compute back into a linear index 
+    const ndx = Math.floor(gl_FragCoord.y) * outputDimensions.x + Math.floor(gl_FragCoord.x); 
+    
+    // find the closest points
+    let minDist = 10000000.0; 
+    let minIndex = -1.0;
+    const a = getPoint(aValues, aDimensions, ndx);
+    for (let i = 0; i < bPoints.length / 4; ++i) {
+      const b = getPoint(bValues, bDimensions, i);
+      const c = getPoint(cValues, cDimensions, i);
+      const dist = distanceFromPointToLineSquared(a, b, c);
+      if (dist < minDist) {
+        minDist = dist;
+        minIndex = i;
+      }
+    }
+    
+    // convert to 8bit color. The canvas defaults to RGBA 8bits per channel
+    // so take our integer index (minIndex) and convert to float values that
+    // will end up as the same 32bit index when read via readPixels as
+    // 32bit values.
+    gl_FragColor = [
+      minIndex % 256.0,
+      Math.floor(minIndex / 256.0) % 256.0,
+      Math.floor(minIndex / (256.0 * 256.0)) % 256.0,
+      Math.floor(minIndex / (256.0 * 256.0 * 256.0)),
+    ].map(v => v / 255.0);
+  }
+  
+  // do it in JS to check
+  {
+    // compute closest lines to points
+    
+    const closest = [];
+    const width = aPoints.length / 4;
+    const height = 1;
+    
+    // WebGL drawing each pixel
+    for (let y = 0; y < height; ++y) {
+      for (let x = 0; x < width; ++x) {
+        gl_FragCoord.x = x + 0.5;  // because pixels represent a rectangle one unit wide in pixel space
+        gl_FragCoord.y = y + 0.5;  // so the center of each pixel in the middle of that rectangle
+        javaScriptFragmentShader();
+        const index = gl_FragColor[0] * 255 +
+                      gl_FragColor[1] * 255 * 256 +
+                      gl_FragColor[2] * 255 * 256 * 256 +
+                      gl_FragColor[3] * 255 * 256 * 256 * 256;
+        closest.push(index);
+      }
+    }
+
+    drawResults(document.querySelector('#js'), closest);
+  }
+
+  function drawResults(canvas, closest) {
+    const ctx = canvas.getContext('2d');
+    
+    // draw the lines
+    ctx.beginPath();
+    for (let j = 0; j < bPoints.length; j += 4) {
+      const b = bPoints.slice(j, j + 2);
+      const c = cPoints.slice(j, j + 2);
+      ctx.moveTo(...b);
+      ctx.lineTo(...c);
+    }
+    ctx.strokeStyle = '#888';
+    ctx.stroke();
+    
+    // draw the points and closest lines
+    for (let i = 0; i < aPoints.length; i += 4) {
+      const a = aPoints.slice(i, i + 2);
+      const ndx = closest[i / 4] * 4;
+      const b = bPoints.slice(ndx, ndx + 2);
+      const c = cPoints.slice(ndx, ndx + 2);
+      const color = hsl(i / aPoints.length, 1, 0.4);
+      ctx.fillStyle = color;
+      ctx.strokeStyle = color;
+      ctx.fillRect(a[0] - 2, a[1] - 2, 5, 5);
+      ctx.beginPath();
+      ctx.moveTo(...b);
+      ctx.lineTo(...c);
+      ctx.stroke();
+    }
+  }
+
+}
+main();
+
+
+</script>
