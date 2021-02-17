@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; }
+
+
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<script src="https://twgljs.org/dist/4.x/twgl.min.js"></script>
+
+
+</body>
+<script>
+
+const gl = document.querySelector('canvas').getContext('webgl');
+
+const tl = [254/255, 217/255, 138/255];
+const tr = [252/255, 252/255, 252/255];
+const bl = [ 18/255, 139/255, 184/255];
+const br = [203/255,  79/255, 121/255];
+
+const vs = `
+attribute vec4 position;
+attribute vec2 texcoord;
+varying vec2 v_texcoord;
+void main() {
+  gl_Position = position;
+  v_texcoord = texcoord;
+}
+`;
+
+const fs = `
+precision mediump float;
+varying vec2 v_texcoord;
+uniform vec3 tl;
+uniform vec3 tr;
+uniform vec3 bl;
+uniform vec3 br;
+
+void main() {
+  vec3 l = mix(bl, tl, v_texcoord.t);
+  vec3 r = mix(br, tr, v_texcoord.t);
+  vec3 c = mix(l, r, v_texcoord.s);
+  gl_FragColor = vec4(c, 1);
+}
+`;
+
+const program = twgl.createProgram(gl, [vs, fs]);
+const positionLoc = gl.getAttribLocation(program, 'position');
+const texcoordLoc = gl.getAttribLocation(program, 'texcoord');
+
+const tlLoc = gl.getUniformLocation(program, 'tl');
+const trLoc = gl.getUniformLocation(program, 'tr');
+const blLoc = gl.getUniformLocation(program, 'bl');
+const brLoc = gl.getUniformLocation(program, 'br');
+
+function createBufferAndSetupAttribute(loc, data) {
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(
+      loc,
+      2,  // 2 elements per iteration
+      gl.FLOAT,  // type of data in buffer
+      false,  // normalize
+      0,  // stride
+      0,  // offset
+  );
+}
+
+createBufferAndSetupAttribute(positionLoc, [
+  -1, -1,
+   1, -1,
+  -1,  1,
+  -1,  1,
+   1, -1,
+   1,  1,
+]);
+createBufferAndSetupAttribute(texcoordLoc, [
+   0,  0,
+   1,  0,
+   0,  1,
+   0,  1,
+   1,  0,
+   1,  1,
+]);
+
+gl.useProgram(program);
+gl.uniform3fv(tlLoc, tl);
+gl.uniform3fv(trLoc, tr);
+gl.uniform3fv(blLoc, bl);
+gl.uniform3fv(brLoc, br);
+gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+
+</script>

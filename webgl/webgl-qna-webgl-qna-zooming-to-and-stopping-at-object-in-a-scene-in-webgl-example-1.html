@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body {
+  margin: 0;
+}
+canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+
+</style>
+</head>
+<body>
+
+<script src="//twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/chroma-js/0.6.3/chroma.min.js"></script>
+<canvas id="c"></canvas>
+<script id="vs" type="notjs">
+uniform mat4 u_worldViewProjection;
+uniform vec3 u_lightWorldPos;
+uniform mat4 u_world;
+uniform mat4 u_viewInverse;
+uniform mat4 u_worldInverseTranspose;
+
+attribute vec4 a_position;
+attribute vec3 a_normal;
+attribute vec2 a_texcoord;
+
+varying vec4 v_position;
+varying vec2 v_texCoord;
+varying vec3 v_normal;
+varying vec3 v_surfaceToLight;
+varying vec3 v_surfaceToView;
+
+void main() {
+  v_texCoord = a_texcoord;
+  v_position = (u_worldViewProjection * a_position);
+  v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
+  v_surfaceToLight = u_lightWorldPos - (u_world * a_position).xyz;
+  v_surfaceToView = (u_viewInverse[3] - (u_world * a_position)).xyz;
+  gl_Position = v_position;
+}
+  </script>
+  <script id="fs" type="notjs">
+precision mediump float;
+
+varying vec4 v_position;
+varying vec2 v_texCoord;
+varying vec3 v_normal;
+varying vec3 v_surfaceToLight;
+varying vec3 v_surfaceToView;
+
+uniform vec4 u_lightColor;
+uniform vec4 u_diffuseMult;
+uniform sampler2D u_diffuse;
+uniform vec4 u_specular;
+uniform float u_shininess;
+uniform float u_specularFactor;
+
+vec4 lit(float l ,float h, float m) {
+  return vec4(1.0,
+              abs(l),//max(l, 0.0),
+              (l > 0.0) ? pow(max(0.0, h), m) : 0.0,
+              1.0);
+}
+
+void main() {
+  vec4 diffuseColor = texture2D(u_diffuse, v_texCoord) * u_diffuseMult;
+  vec3 a_normal = normalize(v_normal);
+  vec3 surfaceToLight = normalize(v_surfaceToLight);
+  vec3 surfaceToView = normalize(v_surfaceToView);
+  vec3 halfVector = normalize(surfaceToLight + surfaceToView);
+  vec4 litR = lit(dot(a_normal, surfaceToLight),
+                    dot(a_normal, halfVector), u_shininess);
+  vec4 outColor = vec4((
+  u_lightColor * (diffuseColor * litR.y +
+                u_specular * litR.z * u_specularFactor)).rgb,
+      diffuseColor.a);
+  gl_FragColor = outColor;
+}
+  </script>
+
+
+</body>
+<script>
+
+var m4 = twgl.m4;
+    var v3 = twgl.v3;
+    twgl.setAttributePrefix("a_");
+    var gl = twgl.getWebGLContext(document.getElementById("c"));
+    var programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
+
+    var shapes = [
+      twgl.primitives.createCubeBufferInfo(gl, 2),
+      twgl.primitives.createSphereBufferInfo(gl, 1, 24, 12),
+      twgl.primitives.createTruncatedConeBufferInfo(gl, 1, 0, 2, 24, 1),
+    ];
+
+    function rand(min, max) {
+      return min + Math.random() * (max - min);
+    }
+
+    function easeInOut(t, start, end) {
+      var c = end - start;
+      if ((t /= 0.5) < 1) {
+        return c / 2 * t * t + start;
+      } else {
+        return -c / 2 * ((--t) * (t - 2) - 1) + start;
+      }
+    }
+
+    // Shared values
+    var lightWorldPosition = [1, 8, -10];
+    var lightColor = [1, 1, 1, 1];
+    var camera = m4.identity();
+    var view = m4.identity();
+    var viewProjection = m4.identity();
+    var targetNdx = 0;
+    var targetTimer = 0;
+    var zoomTimer = 0;
+    var eye = v3.copy([1, 4, -60]);
+    var target = v3.copy([0, 0, 0]);
+    var up = [0, 1, 0];
+    var zoomScale = 1.4;
+    var zoomDuration = 2;
+    var targetChangeInterval = 3;
+    var oldEye;
+    var oldTarget;
+    var newEye;
+    var newTarget;
+
+    var tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([
+      255,255,255,255,
+      192,192,192,255,
+      192,192,192,255,
+      255,255,255,255]));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+    var objects = [];
+    var drawObjects = [];
+    var numObjects = 100;
+    var baseHue = rand(0, 360);
+    for (var ii = 0; ii < numObjects; ++ii) {
+      var uniforms = {
+        u_lightWorldPos: lightWorldPosition,
+        u_lightColor: lightColor,
+        u_diffuseMult: chroma.hsv((baseHue + rand(0, 60)) % 360, 0.4, 0.8).gl(),
+        u_specular: [1, 1, 1, 1],
+        u_shininess: 50,
+        u_specularFactor: 1,
+        u_diffuse: tex,
+        u_viewInverse: camera,
+        u_world: m4.identity(),
+        u_worldInverseTranspose: m4.identity(),
+        u_worldViewProjection: m4.identity(),
+      };
+      drawObjects.push({
+        programInfo: programInfo,
+        bufferInfo: shapes[ii % shapes.length],
+        uniforms: uniforms,
+      });
+      objects.push({
+        translation: [rand(-50, 50), rand(-50, 50), rand(-50, 50)],
+        scale: rand(1, 5),
+        size: 2,
+        xSpeed: rand(0.2, 0.7),
+        zSpeed: rand(0.2, 0.7),
+        uniforms: uniforms,
+      });
+    }
+
+    var then = Date.now() * 0.001;
+
+    function render() {
+      twgl.resizeCanvasToDisplaySize(gl.canvas);
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+      gl.enable(gl.DEPTH_TEST);
+      gl.enable(gl.CULL_FACE);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+      var time = Date.now() * 0.001;
+      var elapsed = time - then;
+      then = time;
+
+      var radius = 6;
+      var fovy = 30 * Math.PI / 180;
+      var projection = m4.perspective(fovy, gl.canvas.clientWidth / gl.canvas.clientHeight, 0.5, 200);
+
+      targetTimer -= elapsed;
+      if (targetTimer <= 0) {
+        targetTimer = targetChangeInterval;
+        zoomTimer = 0;
+        targetNdx = (targetNdx + 1) % objects.length;
+        oldEye = v3.copy(eye);
+        oldTarget = v3.copy(target);
+        var targetObj = objects[targetNdx];
+        newTarget = targetObj.translation;
+        var halfSize = targetObj.size * targetObj.scale * zoomScale * 0.5;
+        var distance = halfSize / Math.tan(fovy * 0.5);
+        var direction = v3.normalize(v3.subtract(eye, newTarget));
+        newEye = v3.add(newTarget, v3.mulScalar(direction, distance));
+      }
+
+      zoomTimer += elapsed;
+      var lerp = easeInOut(Math.min(1, zoomTimer / zoomDuration), 0, 1);
+      eye = v3.lerp(oldEye, newEye, lerp);
+      target = v3.lerp(oldTarget, newTarget, lerp);
+
+      m4.lookAt(eye, target, up, camera);
+      m4.inverse(camera, view);
+      m4.multiply(projection, view, viewProjection);
+
+      objects.forEach(function(obj, ndx) {
+        var uni = obj.uniforms;
+        var world = uni.u_world;
+        m4.identity(world);
+        m4.translate(world, obj.translation, world);
+        m4.rotateX(world, time * obj.xSpeed, world);
+        m4.rotateZ(world, time * obj.zSpeed, world);
+        m4.scale(world, [obj.scale, obj.scale, obj.scale], world);
+        m4.transpose(m4.inverse(world, uni.u_worldInverseTranspose), uni.u_worldInverseTranspose);
+        m4.multiply(viewProjection, uni.u_world, uni.u_worldViewProjection);
+      });
+
+      twgl.drawObjectList(gl, drawObjects);
+
+      requestAnimationFrame(render);
+    }
+    render();
+
+
+</script>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { margin: 0 }
+canvas { display: block; width: 100vw; height: 100vh; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+"use strict";
+const loc_aPosition = 3;
+const loc_aNormal = 5;
+const loc_aTexture = 7;
+const VSHADER_SOURCE =
+`#version 300 es
+layout(location=${loc_aPosition}) in vec4 aPosition;
+layout(location=${loc_aNormal}) in vec3 aNormal;
+layout(location=${loc_aTexture}) in vec2 aTexCoord;
+
+
+uniform mat4 uMvpMatrix;
+uniform mat4 uModelMatrix;    // Model matrix
+uniform mat4 uNormalMatrix;   // Transformation matrix of the normal
+
+uniform sampler2D displacementMap;
+
+out vec2 vTexCoord;
+out vec3 vNormal;
+out vec3 vPosition;
+
+void main() 
+{
+
+  float disp;
+
+  disp = texture(displacementMap, aTexCoord).r; 
+  vec4 displace = aPosition;
+
+  float displaceFactor = 0.1;
+  float displaceBias = 0.0;
+
+  displace.xyz += (displaceFactor * disp - displaceBias) * aNormal;
+  gl_Position = uMvpMatrix * displace;
+
+  // Calculate the vertex position in the world coordinate
+  vPosition = vec3(uModelMatrix * aPosition);
+
+  vNormal = normalize(mat3(uNormalMatrix) * aNormal);
+  vTexCoord = aTexCoord;
+
+}`;
+
+// Fragment shader program
+const FSHADER_SOURCE =
+`#version 300 es
+precision highp float;
+
+uniform vec3 uLightColor;     // Light color
+uniform vec3 uLightPosition;  // Position of the light source
+uniform vec3 uAmbientLight;   // Ambient light color
+
+uniform sampler2D surfaceColor;
+uniform sampler2D bumpMap;
+uniform sampler2D specularMap;
+
+uniform float maxDot;
+
+in vec3 vNormal;
+in vec3 vPosition;
+in vec2 vTexCoord;
+out vec4 fColor;
+
+
+vec2 dHdxy_fwd(sampler2D bumpMap, vec2 UV, float bumpScale)
+{
+    vec2 dSTdx  = dFdx( UV );
+        vec2 dSTdy  = dFdy( UV );
+        float Hll   = bumpScale * texture( bumpMap, UV ).x;
+        float dBx   = bumpScale * texture( bumpMap, UV + dSTdx ).x - Hll;
+        float dBy   = bumpScale * texture( bumpMap, UV + dSTdy ).x - Hll;
+        return vec2( dBx, dBy );
+}
+
+vec3 pertubNormalArb(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy)
+{
+    vec3 vSigmaX = vec3( dFdx( surf_pos.x ), dFdx( surf_pos.y ), dFdx( surf_pos.z ) );
+        vec3 vSigmaY = vec3( dFdy( surf_pos.x ), dFdy( surf_pos.y ), dFdy( surf_pos.z ) );
+        vec3 vN = surf_norm;        // normalized
+        vec3 R1 = cross( vSigmaY, vN );
+        vec3 R2 = cross( vN, vSigmaX );
+        float fDet = dot( vSigmaX, R1 );
+        fDet *= ( float( gl_FrontFacing ) * 2.0 - 1.0 );
+        vec3 vGrad = sign( fDet ) * ( dHdxy.x * R1 + dHdxy.y * R2 );
+        return normalize( abs( fDet ) * surf_norm - vGrad );
+}
+
+
+
+void main() 
+{
+    vec2 dHdxy;
+    vec3 bumpNormal;
+    float bumpness = 1.0;
+    fColor = texture(surfaceColor, vTexCoord);
+    dHdxy = dHdxy_fwd(bumpMap, vTexCoord, bumpness);
+
+    // Normalize the normal because it is interpolated and not 1.0 in length any more
+    vec3 normal = normalize(vNormal);
+
+    // Calculate the light direction and make its length 1.
+    vec3 lightDirection = normalize(uLightPosition - vPosition);
+
+    // The dot product of the light direction and the orientation of a surface (the normal)
+    float nDotL;
+    nDotL = max(dot(lightDirection, normal), maxDot);
+
+
+
+    // Calculate the final color from diffuse reflection and ambient reflection
+    vec3 diffuse = uLightColor * fColor.rgb * nDotL;
+    vec3 ambient = uAmbientLight * fColor.rgb;
+    float specularFactor = texture(specularMap, vTexCoord).r; //Extracting the color information from the image
+
+
+
+
+    vec3 diffuseBump;
+    bumpNormal = pertubNormalArb(vPosition, normal, dHdxy);
+    diffuseBump = min(diffuse + dot(bumpNormal, lightDirection), 1.1);
+
+    vec3 specular = vec3(0.0);
+    float shiness = 12.0;
+    vec3 lightSpecular = vec3(1.0);
+
+    vec3 v = normalize(-vPosition); // EyePosition
+    vec3 r = reflect(-lightDirection, bumpNormal); // Reflect from the surface
+    specular = lightSpecular * specularFactor * pow(dot(r, v), shiness);
+
+    //Update Final Color
+    fColor = vec4( (diffuse * diffuseBump + specular) + ambient, fColor.a); // Specular
+}`;
+
+function main() {
+  const m4 = twgl.m4;
+  const gl = document.querySelector('canvas').getContext('webgl2');
+  if (!gl) { return alert('need webgl2'); }
+
+  const prgInfo = twgl.createProgramInfo(gl, [VSHADER_SOURCE, FSHADER_SOURCE]);
+  const verts = twgl.primitives.createSphereVertices(1, 40, 40);
+  // calls gl.createBuffer, gl.bindBuffer, gl.bufferData for each array
+  const bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+    aPosition: verts.position,
+    aNormal: verts.normal,
+    aTexCoord: verts.texcoord,
+    indices: verts.indices,
+  });
+  
+  const textures = twgl.createTextures(gl, {
+    zero: { src: new Uint8Array([0, 0, 0, 0])},
+    earthSpecular: { src: 'https://i.imgur.com/JlIJu5V.jpg' },
+    earthColor: { src: 'https://i.imgur.com/eCpD7bM.jpg' },
+    earthBump: { src: 'https://i.imgur.com/LzFNOP8.jpg' },
+    sunColor: { src: 'https://i.imgur.com/gl8zBLI.jpg', },
+    moonColor: { src: 'https://i.imgur.com/oLiU4fm.jpg', },
+    moonBump: { src: 'https://i.imgur.com/bDnjW8C.jpg', },
+  });
+  
+  function render(time) {
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer for each attribute
+    twgl.setBuffersAndAttributes(gl, prgInfo, bufferInfo);
+
+    twgl.resizeCanvasToDisplaySize(gl.canvas);
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    gl.useProgram(prgInfo.program);
+
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const fov = 60 * Math.PI / 180 / aspect;
+    const near = 0.1;
+    const far = 20.0;
+    const viewProjection = m4.perspective(fov, aspect, near, far);
+    m4.translate(viewProjection, [0, 0, -6], viewProjection);
+
+    draw([0, 0, 0], {
+       displacementMap: textures.earthBump,
+       bumpMap: textures.earthBump,
+       surfaceColor: textures.earthColor,
+       specularMap: textures.earthSpecular,
+       maxDot: 0,
+       uAmbientLight: [0, 0, 0],
+     });
+    draw([-2.2, 0, 0], {
+       displacementMap: textures.zero,
+       bumpMap: textures.zero,
+       surfaceColor: textures.sunColor,
+       specularMap: textures.zero,
+       maxDot: 1,
+       uAmbientLight: [0, 0, 0],
+     });
+    draw([2.2, 0, 0], {
+       displacementMap: textures.moonBump,
+       bumpMap: textures.moonBump,
+       surfaceColor: textures.moonColor,
+       specularMap: textures.zero,
+       maxDot: 0,
+       uAmbientLight: [0, 0, 0],
+     });
+
+    function draw(translation, uniforms) {
+       const model = m4.translation(translation);
+       m4.rotateY(model, time / 1000, model);
+
+      // calls gl.activeTexture, gl.bindTexture, gl.uniform
+      twgl.setUniforms(prgInfo, {
+        uMvpMatrix: m4.multiply(viewProjection, model),
+        uModelMatrix: model,    // Model matrix
+        uNormalMatrix: m4.transpose(m4.inverse(model)),   // Transformation matrix of the normal
+        uLightColor: [1, 1, 1],     // Light color
+        uLightPosition: [2, 2, 10], // Position of the light source
+        uAmbientLight: [1, 0, 0],   // Ambient light color
+      });
+      twgl.setUniforms(prgInfo, uniforms);
+
+      // calls gl.drawArrays or gl.drawElements
+      twgl.drawBufferInfo(gl, bufferInfo);
+    }
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+}
+main();
+
+
+</script>

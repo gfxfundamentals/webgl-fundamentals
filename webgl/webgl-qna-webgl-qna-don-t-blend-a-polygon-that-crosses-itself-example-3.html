@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+function main() {
+  const m4 = twgl.m4;
+  const gl = document
+      .querySelector('canvas')
+      .getContext('webgl');
+  
+  const vs = `
+  attribute vec4 position;
+  uniform mat4 matrix;
+  void main() {
+    gl_Position = matrix * position;
+  }
+  `;
+  
+  const fs = `
+  precision mediump float;
+  uniform vec4 color;
+  void main() {
+    gl_FragColor = color;
+  }
+  `;
+  
+  // compile shader, link program, look up locations
+  const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+  gl.useProgram(programInfo.program);
+  
+  // create a buffer and put data in it
+  const bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+    position: {
+      numComponents: 2,
+      data: [
+        -0.5, -0.2,
+         0.5, -0.2,
+         0.5,  0.2,
+         
+        -0.2, -0.5,
+        -0.2,  0.5,
+         0.2,  0.5,
+      ],
+    },
+  });
+  
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+  
+  gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.POLYGON_OFFSET_FILL);
+  
+  // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+  twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+  
+  // calls gl.uniform??
+  twgl.setUniforms(programInfo, {
+    color: [0.5, 0, 0, 0.5],
+    matrix: m4.identity(),
+  });
+  
+  // calls gl.drawArrays or gl.drawElements
+  twgl.drawBufferInfo(gl, bufferInfo);
+
+  gl.polygonOffset(0, -1);
+  
+  twgl.setUniforms(programInfo, {
+    color: [0, 0, 0.5, 0.5],
+    matrix: m4.rotateZ(
+        m4.translation([-0.1, 0.2, 0.0]),
+        Math.PI * 1.2),
+  });
+  twgl.drawBufferInfo(gl, bufferInfo);
+}
+main();
+
+
+</script>

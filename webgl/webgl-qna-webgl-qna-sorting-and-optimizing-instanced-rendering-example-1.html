@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { margin: 0; }
+canvas { width: 100vw; height: 100vh; display: block; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+const m4 = twgl.m4;
+const v3 = twgl.v3;
+const gl = document.querySelector('canvas').getContext('webgl');
+const ext = gl.getExtension('OES_texture_float');
+if (!ext) {
+  alert('need OES_texture_float');
+}
+
+const COMMON_STUFF = `
+#define TEXTURE_WIDTH 5.0
+#define MATRIX_ROW_0_OFFSET ((0. + 0.5) / TEXTURE_WIDTH)
+#define MATRIX_ROW_1_OFFSET ((1. + 0.5) / TEXTURE_WIDTH)
+#define MATRIX_ROW_2_OFFSET ((2. + 0.5) / TEXTURE_WIDTH)
+#define MATRIX_ROW_3_OFFSET ((3. + 0.5) / TEXTURE_WIDTH)
+#define COLOR_OFFSET        ((4. + 0.5) / TEXTURE_WIDTH)
+`;
+
+const vs = `
+attribute vec2 perVertexData;
+
+uniform float perObjectDataTextureHeight;  // NOTE: in WebGL2 use textureSize()
+uniform sampler2D perObjectDataTexture;
+
+uniform vec2 vertexDataTextureSize;  // NOTE: in WebGL2 use textureSize()
+uniform sampler2D vertexDataTexture;
+
+uniform mat4 projection;
+uniform mat4 view;
+
+varying vec3 v_normal;
+varying float v_objectId;
+
+${COMMON_STUFF}
+
+void main() {
+  float vertexId = perVertexData.x;
+ float objectId = perVertexData.y;
+
+  v_objectId = objectId;  // pass to fragment shader
+
+  float objectOffset = (objectId + 0.5) / perObjectDataTextureHeight;
+
+  // note: in WebGL2 better to use texelFetch
+  mat4 model = mat4(
+    texture2D(perObjectDataTexture, vec2(MATRIX_ROW_0_OFFSET, objectOffset)),
+    texture2D(perObjectDataTexture, vec2(MATRIX_ROW_1_OFFSET, objectOffset)),
+    texture2D(perObjectDataTexture, vec2(MATRIX_ROW_2_OFFSET, objectOffset)),
+    texture2D(perObjectDataTexture, vec2(MATRIX_ROW_3_OFFSET, objectOffset)));
+    
+  
+  // note: in WebGL2 better to use texelFetch
+  // note: vertexId will be even numbers since there are 2 pieces of data
+  //       per vertex, position and normal.
+  vec2 colRow = vec2(mod(vertexId, vertexDataTextureSize.x),
+                     floor(vertexId / vertexDataTextureSize.x)) + 0.5;
+  vec2 baseUV = colRow / vertexDataTextureSize;
+  vec4 position = texture2D(vertexDataTexture, baseUV);
+  vec3 normal = texture2D(vertexDataTexture, baseUV + vec2(1) / vertexDataTextureSize).xyz;
+  
+  gl_Position = projection * view * model * position;
+  v_normal = mat3(view) * mat3(model) * normal;
+}
+`;
+
+const fs = `
+precision highp float;
+
+varying vec3 v_normal;
+varying float v_objectId;
+
+uniform float perObjectDataTextureHeight;
+uniform sampler2D perObjectDataTexture;
+uniform vec3 lightDirection;
+
+${COMMON_STUFF}
+
+void main() {
+  float objectOffset = (v_objectId + 0.5) / perObjectDataTextureHeight;
+
+  // maybe we should look this up in the vertex shader
+  vec4 color = texture2D(perObjectDataTexture, vec2(COLOR_OFFSET, objectOffset));
+  
+  float l = dot(lightDirection, normalize(v_normal)) * .5 + .5;
+  
+  gl_FragColor = vec4(color.rgb * l, color.a);
+}
+`;
+
+// compile shader, link, look up locations
+const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+// make some vertex data
+const modelVerts = [
+  twgl.primitives.createSphereVertices(1, 6, 4),
+  twgl.primitives.createCubeVertices(1, 1, 1),
+  twgl.primitives.createCylinderVertices(1, 1, 10, 1),
+  twgl.primitives.createTorusVertices(1, .2, 16, 8),
+].map(twgl.primitives.deindexVertices);
+const modelVertexCounts = [];
+const modelVertexOffsets = [];
+{
+ let offset = 0;
+  modelVerts.forEach((verts) => {
+    let vertexCount = verts.position.length / 3;
+    modelVertexCounts.push(vertexCount);
+    modelVertexOffsets.push(offset);
+    offset += vertexCount;  
+  });
+}
+// merge all the vertices into one
+const arrays = twgl.primitives.concatVertices(modelVerts);
+
+// copy arrays into texture.
+function copyPositionsAndNormalsIntoTexture(arrays) {
+  const maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+  const numVerts = arrays.position.length / 3;
+  const numPixels = numVerts * 2;  // each vertex will have position and normal
+  const numPixelsNeeded = ((numPixels + maxTextureSize - 1) / maxTextureSize | 0) * maxTextureSize;
+  const data = new Float32Array(numPixelsNeeded * 4); // RGBA
+  for (let i = 0; i < numVerts; ++i) {
+    const src = i * 3;
+  const dst = i * 2 * 4;
+  data[dst    ] = arrays.position[src    ];
+  data[dst + 1] = arrays.position[src + 1];
+  data[dst + 2] = arrays.position[src + 2];
+    data[dst + 3] = 1;
+  data[dst + 4] = arrays.normal[src    ];
+  data[dst + 5] = arrays.normal[src + 1];
+  data[dst + 6] = arrays.normal[src + 2];
+    data[dst + 7] = 1;
+  }
+  const height = numPixelsNeeded / maxTextureSize;
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, maxTextureSize, height, 0, gl.RGBA, gl.FLOAT, data);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  return {
+    texture,
+    size: [maxTextureSize, height],
+  };
+}
+
+const vertexDataTextureInfo = copyPositionsAndNormalsIntoTexture(arrays);
+
+let numTotalVerts = 0;
+const numObjects = 2000;
+const objects = [];
+for (let i = 0; i < numObjects; ++i) {
+  const modelId = r() * modelVerts.length | 0; 
+  numTotalVerts += modelVertexCounts[modelId];
+  objects.push({
+    modelId,
+    objectId: i,
+  });
+}
+
+// for every vertex we need 2 pieces of data
+// 1. An objectId (used to look up per object data)
+// 2. An vertexID (used to look up the vertex)
+const perVertexData = new Uint16Array(numTotalVerts * 2);
+// calls gl.createBuffer, gl.bindBuffer, gl.bufferData
+const bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+  perVertexData: {
+   numComponents: 2,
+    data: perVertexData,
+  },
+});
+
+const perObjectDataTexture = gl.createTexture();
+const perObjectDataTextureWidth = 5; // 4x4 matrix, 4x1 color
+gl.bindTexture(gl.TEXTURE_2D, perObjectDataTexture);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, perObjectDataTextureWidth, numObjects, 0, gl.RGBA, gl.FLOAT, null);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+// this data is for the texture, one row per model
+// first 4 pixels are the model matrix, 5 pixel is the color
+const perObjectData = new Float32Array(perObjectDataTextureWidth * numObjects * 4);
+const stride = perObjectDataTextureWidth * 4;
+const modelOffset = 0;
+const colorOffset = 16;
+
+// set the colors at init time
+for (let objectId = 0; objectId < numObjects; ++objectId) {
+  perObjectData.set([r(), r(), r(), 1], objectId * stride + colorOffset);
+}
+
+function r() {
+  return Math.random();
+}
+
+const RANDOM_RANGE = Math.pow(2, 32);
+let seed = 0;
+function pseudoRandom() {
+  return (seed =
+          (134775813 * seed + 1) %
+          RANDOM_RANGE) / RANDOM_RANGE;
+}
+
+function resetPseudoRandom() {
+  seed = 0;
+}
+
+
+function render(time) {
+  time *= 0.001;  // seconds
+  
+  twgl.resizeCanvasToDisplaySize(gl.canvas);
+  
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.CULL_FACE);
+
+  const fov = Math.PI * 0.25;
+  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const near = 0.1;
+  const far = 20;
+  const projection = m4.perspective(fov, aspect, near, far);
+  
+  const eye = [0, 0, 15];
+  const target = [0, 0, 0];
+  const up = [0, 1, 0];
+  const camera = m4.lookAt(eye, target, up);
+  const view = m4.inverse(camera);
+
+  // set the matrix for each object in the texture data
+  resetPseudoRandom();
+  const mat = m4.identity();
+  for (let objectId = 0; objectId < numObjects; ++objectId) {
+    // of course you'd probably store translation, rotation, etc per object in objects[]
+    const t = time * (0.3 + pseudoRandom() * 0.1) + pseudoRandom() * Math.PI * 2;
+    
+    m4.identity(mat);
+    m4.rotateX(mat, t * 0.93, mat);
+    m4.rotateY(mat, t * 0.87, mat);
+    m4.translate(mat, [
+      1 + pseudoRandom() * 3,
+      1 + pseudoRandom() * 3,
+      1 + pseudoRandom() * 3,
+    ], mat);
+    m4.rotateZ(mat, t * 1.17, mat);
+    
+    perObjectData.set(mat, objectId * stride);
+  }
+  
+  // set the per vertex data. (sort objects before this line)
+  {
+    let offset = 0;
+    for (const obj of objects) {
+     const numVerts = modelVertexCounts[obj.modelId];
+      const vertOffset = modelVertexOffsets[obj.modelId];
+      for (let v = 0; v < numVerts; ++v) {
+       perVertexData[offset++] = (vertOffset + v) * 2;  // 2 is because 2 pixels per vertex, one for position, one for normal
+        perVertexData[offset++] = obj.objectId; 
+      }
+    }
+  }
+  // upload the per vertex data
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.attribs.perVertexData.buffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER, 0, perVertexData);
+  
+  // upload the texture data
+  gl.bindTexture(gl.TEXTURE_2D, perObjectDataTexture);
+  gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, perObjectDataTextureWidth, numObjects, 
+                   gl.RGBA, gl.FLOAT, perObjectData);
+  
+  gl.useProgram(programInfo.program);
+  
+  // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+  twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+  
+  // calls gl.activeTexture, gl.bindTexture, gl.uniformXXX
+  twgl.setUniforms(programInfo, {
+    lightDirection: v3.normalize([1, 2, 3]),
+    perObjectDataTexture,
+    perObjectDataTextureHeight: numObjects,
+    vertexDataTexture: vertexDataTextureInfo.texture,
+    vertexDataTextureSize: vertexDataTextureInfo.size,
+    projection,
+    view,
+  });  
+  
+  // calls gl.drawArrays or gl.drawElements
+  twgl.drawBufferInfo(gl, bufferInfo);
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

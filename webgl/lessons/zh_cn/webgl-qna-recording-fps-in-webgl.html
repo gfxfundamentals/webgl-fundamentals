@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/zh_cn/langinfo.hanson. Do not edited directly -->
+<!--
+Copyright 2021 GFXFundamentals.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of GFXFundamentals. nor the names of his
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="Recording FPS in WebGL" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="Recording FPS in WebGL" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-qna-recording-fps-in-webgl.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="Recording FPS in WebGL" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-qna-recording-fps-in-webgl.html" />
+<meta name="twitter:description" content="Recording FPS in WebGL" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+
+
+<title>Recording FPS in WebGL</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-qna-recording-fps-in-webgl.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-qna-recording-fps-in-webgl.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-qna-recording-fps-in-webgl.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-qna-recording-fps-in-webgl.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-qna-recording-fps-in-webgl.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-qna-recording-fps-in-webgl.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-qna-recording-fps-in-webgl.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-qna-recording-fps-in-webgl.html" selected>简体中文</a>
+</select>
+
+
+    <a href="#toc">目录</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/zh_cn/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub>div {
+    background: #000;
+    color: #fff;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 1.3rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 400px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(200px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a {
+  text-decoration: none;
+  color: #fff;
+}
+#forkongithub>div:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub .contributors {
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.2);
+  line-height: 1.2;
+  padding: 0.1em;
+}
+#forkongithub>div::before,#forkongithub>div::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub>div::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+#forkongithub img {
+  width: 1em;
+  height: 1em;
+  border-radius: 100%;
+  vertical-align: middle;
+}
+
+@media (max-width: 900px) {
+    #forkongithub>div {
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub>div {
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><div><div><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div></div></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>Recording FPS in WebGL</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>还没有简体中文版翻译哦  (~￣△￣)~</p>
+<p><a href="/webgl/lessons/webgl-qna-recording-fps-in-webgl.html">英文原版地址</a></p>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-qna-recording-fps-in-webgl.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-qna-recording-fps-in-webgl.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-qna-recording-fps-in-webgl.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-qna-recording-fps-in-webgl.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-qna-recording-fps-in-webgl.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-qna-recording-fps-in-webgl.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-qna-recording-fps-in-webgl.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-qna-recording-fps-in-webgl.html" selected>简体中文</a>
+</select>
+
+
+        <ul>  <li>基础概念</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-fundamentals.html">WebGL 基础概念</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-how-it-works.html">WebGL 工作原理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shaders-and-glsl.html">WebGL 着色器和GLSL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>图像处理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-image-processing.html">WebGL 图像处理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-image-processing-continued.html">WebGL 进一步处理图像</a></li>
+        </ul>
+  <li>二维平移，旋转，缩放和矩阵运算</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-translation.html">WebGL 二维平移</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-rotation.html">WebGL 二维旋转</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-scale.html">WebGL 二维缩放</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrices.html">WebGL 二维矩阵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-orthographic.html">WebGL 三维正射投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective.html">WebGL 三维透视投影</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-camera.html">WebGL 三维相机</a></li>
+        </ul>
+  <li>光照</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-directional.html">WebGL 三维方向光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">WebGL 三维点光源</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-lighting-spot.html">WebGL 三维聚光灯</a></li>
+        </ul>
+  <li>组织和重构</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-less-code-more-fun.html">WebGL 码少趣多</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-multiple-things.html">WebGL 绘制多个物体</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-scene-graph.html">WebGL 场景图</a></li>
+        </ul>
+  <li>几何</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-geometry-lathe.html">WebGL 三维几何加工</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj.html">WebGL 加载 .obj 文件</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-load-obj-w-mtl.html">WebGL 加载带 .mtl 的 .obj 文件</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-3d-textures.html">WebGL 三维纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-data-textures.html">WebGL 数据纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2-textures.html">WebGL 使用多个纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cors-permission.html">WebGL 跨域图像</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">WebGL 纹理映射的透视纠正</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-planar-projection-mapping.html">平面的和透视的投影映射</a></li>
+        </ul>
+  <li>渲染到纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-render-to-texture.html">WebGL 渲染到纹理</a></li>
+        </ul>
+  <li>Shadows</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-shadows.html">阴影</a></li>
+        </ul>
+  <li>技术</li>
+        <ul>
+            <li>二维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-2d-drawimage.html">WebGL 二维DrawImage</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-matrix-stack.html">WebGL 二维矩阵栈</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-sprites.html">精灵</a></li>
+        </ul>
+  <li>三维</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-cube-maps.html">WebGL 立方体贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-environment-maps.html">WebGL 环境贴图</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skybox.html">WebGL 天空盒</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-skinning.html">WebGL 蒙皮</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-fog.html">WebGL 雾</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>文字</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-text-html.html">WebGL 文字 - HTML</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-canvas2d.html">WebGL 文字 - 二维Canvas</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-texture.html">WebGL 文字 - 使用纹理</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-text-glyphs.html">WebGL 文字 - 使用字形纹理</a></li>
+        </ul>
+  <li>纹理</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+  <li>GPGPU</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-gpgpu.html">GPGPU</a></li>
+        </ul>
+        </ul>
+  <li>Tips</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-smallest-programs.html">WebGL 最小的程序</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Optimization</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-indexed-vertices.html">顶点索引 （gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-instanced-drawing.html">实例化绘制</a></li>
+        </ul>
+  <li>杂项</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-setup-and-installation.html">WebGL 设置和安装</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-boilerplate.html">WebGL 样板</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">WebGL 重置画布尺寸</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-animation.html">WebGL 动画</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">WebGL 点、线和三角</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">可视化相机</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-and-alpha.html">WebGL 和阿尔法通道</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-2d-vs-3d-library.html">WebGL 2D vs 3D 库</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-anti-patterns.html">WebGL 错误模式</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-matrix-vs-math.html">WebGL 矩阵 vs 数学中的矩阵</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#screenshot">截屏</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#preservedrawingbuffer">防止画布被清空</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#tabindex">在画布中获取键盘输入</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-tips.html#html-background">将 WebGL 作为 HTML 的背景</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-cross-platform-issues.html">WebGL 跨平台相关问题</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Reference</li>
+        <ul>
+          <li><a href="/webgl/lessons/zh_cn/webgl-attributes.html">WebGL 属性</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-texture-units.html">WebGL 纹理单元</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-framebuffers.html">WebGL 帧缓冲</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-readpixels.html">WebGL readPixels</a></li>
+<li><a href="/webgl/lessons/zh_cn/webgl-references.html">WebGL 参考</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">API 帮助文档</a></li>
+  <li><a href="https://twgljs.org">TWGL, 一个轻量级WebGL辅助库</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">GitHub</a></li>
+</ul>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+(function() {
+  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+      return;
+  }
+
+  function addScript(src, fn) {
+    const script = document.createElement('script');
+    const firstScript = document.getElementsByTagName('script')[0];
+    script.async = true;
+    script.defer = true;
+    if (fn) {
+      script.addEventListener('load', fn);
+    }
+    script.src = src;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  }
+
+  addScript('//cdn.webglstats.com/stat.js');
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59804936-1', 'auto');
+  ga('send', 'pageview');
+}());
+</script>
+
+
+</html>
+
+
+

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl.min.js"></script>
+
+
+</body>
+<script>
+
+const vs = `#version 300 es
+
+// NOTE: We need to mark these as mediump to match
+// the fragment shader (or of course we could mark
+// the fragment shader's uniform block to highp)
+//
+layout(std140) uniform u_testBlock
+{
+    mediump vec4 foo;
+    mediump vec3 bar;
+};
+
+void main() {
+  gl_Position = foo;
+}
+`;
+const fs = `#version 300 es
+precision mediump float;
+
+layout(std140) uniform u_testBlock
+{
+    vec4 foo;
+    vec3 bar;
+};
+
+uniform vec2 blat;
+
+out vec4 theColor;
+
+void main() {
+  theColor = vec4(bar + vec3(blat, 0), 1);
+}
+`;
+
+function main() {
+  const gl = document.createElement("canvas").getContext("webgl2");
+  if (!gl) {
+    return alert("ERROR: need WebGL 2 support");
+  }
+  const program = twgl.createProgram(gl, [vs, fs]);
+
+
+  const numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+  const indices = [...Array(numUniforms).keys()];
+  const blockIndices = gl.getActiveUniforms(program, indices, gl.UNIFORM_BLOCK_INDEX);
+    const offsets = gl.getActiveUniforms(program, indices, gl.UNIFORM_OFFSET);
+
+  for (let ii = 0; ii < numUniforms; ++ii) {
+    const uniformInfo = gl.getActiveUniform(program, ii);
+    if (isBuiltIn(uniformInfo)) {
+        continue;
+    }
+    const {name, type, size} = uniformInfo;
+    const blockIndex = blockIndices[ii];
+    const offset = offsets[ii];
+    console.log(
+       name, size, glEnumToString(gl, type),
+       blockIndex, offset);
+  }
+}
+
+function isBuiltIn(info) {
+  const name = info.name;
+  return name.startsWith("gl_") || name.startsWith("webgl_");
+}
+
+function glEnumToString(gl, value) {
+  const keys = [];
+  for (const key in gl) {
+    if (gl[key] === value) {
+      keys.push(key);
+    }
+  }
+  return keys.length ? keys.join(' | ') : `0x${value.toString(16)}`;
+}
+
+main();
+
+
+
+</script>

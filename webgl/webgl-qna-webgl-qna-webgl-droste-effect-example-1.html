@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { margin: 0; }
+canvas { width: 100vw; height: 100vh; display: block; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+"use strict";
+
+function main() {
+  const m4 = twgl.m4;
+  const gl = document.querySelector('canvas').getContext('webgl')
+
+  const vs = `
+  attribute vec4 position;
+  attribute vec2 texcoord;
+  uniform mat4 u_matrix;
+  varying vec2 v_texcoord;
+  void main() {
+    gl_Position = u_matrix * position;
+    v_texcoord = texcoord;
+  }
+  `;
+  
+  const fs = `
+  precision mediump float;
+  varying vec2 v_texcoord;
+  uniform sampler2D u_tex;
+  void main() {
+    gl_FragColor = texture2D(u_tex, v_texcoord);
+  }
+  `;
+  
+  // compile shaders, link program, look up locations
+  const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+  // gl.createBuffer, gl.bufferData for positions and texcoords of a cube
+  const cubeBufferInfo = twgl.primitives.createCubeBufferInfo(gl, 1);
+  // gl.createBuffer, gl.bufferData for positions and texcoords of a quad
+  const quadBufferInfo = twgl.primitives.createXYQuadBufferInfo(gl, 2);
+
+  // all the normal stuff for setting up a texture
+  const imageTexture = twgl.createTexture(gl, {
+    src: 'https://i.imgur.com/ZKMnXce.png',
+  });
+
+  function makeFramebufferAndTexture(gl, width, height) {
+    const framebuffer = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+    
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D,
+       0,       // level
+       gl.RGBA, // internal format
+       width,
+       height,
+       0,       // border
+       gl.RGBA, // format
+       gl.UNSIGNED_BYTE, // type
+       null,    // data (no data needed)
+    );
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    
+    gl.framebufferTexture2D(
+       gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
+       gl.TEXTURE_2D, texture, 0 /* level */);
+  
+    // note: depending on what you're rendering you might want to atttach
+    // a depth renderbuffer or depth texture. See linked article
+    
+    return {
+      framebuffer,
+      texture,
+      width,
+      height,
+    };
+  }
+  
+  function bindFramebufferAndSetViewport(gl, fbi) {
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbi ? fbi.framebuffer : null);
+    const {width, height} = fbi || gl.canvas;
+    gl.viewport(0, 0, width, height);
+  }
+
+  let fbiA = makeFramebufferAndTexture(gl, 512, 512);
+  let fbiB = makeFramebufferAndTexture(gl, 512, 512);
+  
+  function drawImageAndPreviousFrameToTextureB() {
+    bindFramebufferAndSetViewport(gl, fbiB);
+    
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    // for each attribute
+    twgl.setBuffersAndAttributes(gl, programInfo, quadBufferInfo);
+
+    // calls gl.activeTexture, gl.bindTexture, gl.uniform 
+    twgl.setUniforms(programInfo, {
+      u_tex: imageTexture,
+      u_matrix: m4.identity(),
+    });
+
+    // calls gl.drawArrays or gl.drawElements
+    twgl.drawBufferInfo(gl, quadBufferInfo);
+    
+    // ---------
+    
+    // draw previous cube texture into current cube texture
+    {
+      twgl.setUniforms(programInfo, {
+        u_tex: fbiA.texture,
+        u_matrix: m4.scaling([0.8, 0.8, 1]),
+      });
+      twgl.drawBufferInfo(gl, quadBufferInfo);
+    }
+  }    
+    
+  function drawTexturedCubeToTextureA(time) {
+    // ---------   
+    // draw cube to "new" dstFB using srcFB.texture on cube
+    bindFramebufferAndSetViewport(gl, fbiA);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    
+    twgl.setBuffersAndAttributes(gl, programInfo, cubeBufferInfo);
+    
+    {
+      const fov = 60 * Math.PI / 180;
+      const aspect = fbiA.width / fbiA.height;
+      const near = 0.1;
+      const far = 100;
+      let mat = m4.perspective(fov, aspect, near, far); 
+      mat = m4.translate(mat, [0, 0, -2]);
+      mat = m4.rotateX(mat, time);
+      mat = m4.rotateY(mat, time * 0.7);
+
+      twgl.setUniforms(programInfo, {
+        u_tex: fbiB.texture,
+        u_matrix: mat,
+      });
+    }
+    
+    twgl.drawBufferInfo(gl, cubeBufferInfo);
+  }
+  
+  function drawTextureAToCanvas() {
+    // --------
+    // draw dstFB.texture to canvas
+    bindFramebufferAndSetViewport(gl, null);
+    
+    twgl.setBuffersAndAttributes(gl, programInfo, quadBufferInfo);
+    
+    {
+      const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+      const near = -1;
+      const far = 1;
+      let mat = m4.ortho(-aspect, aspect, -1, 1, near, far);
+
+      twgl.setUniforms(programInfo, {
+        u_tex: fbiA.texture,
+        u_matrix: mat,
+      });
+    }
+    
+    twgl.drawBufferInfo(gl, quadBufferInfo);
+  }  
+  
+  function render(time) {
+    time *= 0.001; // convert to seconds;
+    
+    twgl.resizeCanvasToDisplaySize(gl.canvas);
+    
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    
+    // there's only one shader program so let's set it here
+    gl.useProgram(programInfo.program);
+  
+    drawImageAndPreviousFrameToTextureB();
+    drawTexturedCubeToTextureA(time);
+    drawTextureAToCanvas();
+  
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+}
+
+main();
+
+
+</script>

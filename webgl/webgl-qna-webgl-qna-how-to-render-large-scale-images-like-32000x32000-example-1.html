@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+
+
+</body>
+<script>
+
+"use strict";
+
+const vs = `
+uniform mat4 u_worldViewProjection;
+
+attribute vec4 position;
+attribute vec3 normal;
+
+varying vec3 v_normal;
+
+void main() {
+  v_normal = normal;
+  gl_Position = u_worldViewProjection * position;
+}
+`;
+const fs = `
+precision mediump float;
+
+varying vec3 v_normal;
+
+void main() {
+  gl_FragColor = vec4(v_normal * .5 + .5, 1);
+}
+`;
+
+const m4 = twgl.m4;
+const gl = document.querySelector("canvas").getContext("webgl");
+const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+const bufferInfo = twgl.primitives.createCubeBufferInfo(gl, 2);
+
+twgl.resizeCanvasToDisplaySize(gl.canvas);
+gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+gl.enable(gl.DEPTH_TEST);
+gl.enable(gl.CULL_FACE);
+gl.clearColor(0.2, 0.2, 0.2, 1);
+gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+const fov = 30 * Math.PI / 180;
+const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+const zNear = 0.5;
+const zFar = 10;
+const projection = m4.perspective(fov, aspect, zNear, zFar);
+const eye = [1, 4, -6];
+const target = [0, 0, 0];
+const up = [0, 1, 0];
+
+const camera = m4.lookAt(eye, target, up);
+const view = m4.inverse(camera);
+const viewProjection = m4.multiply(projection, view);
+const world = m4.rotationY(Math.PI * .33);
+
+gl.useProgram(programInfo.program);
+twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+twgl.setUniforms(programInfo, {
+  u_worldViewProjection: m4.multiply(viewProjection, world),
+});
+twgl.drawBufferInfo(gl, bufferInfo);
+
+
+
+</script>

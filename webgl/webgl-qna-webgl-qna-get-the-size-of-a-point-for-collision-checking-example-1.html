@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { margin: 40px; }
+canvas { border: 1px solid black; }
+
+
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+
+
+</body>
+<script>
+
+const gl = document.querySelector('canvas').getContext('webgl');
+const vs =`
+attribute vec4 position;
+attribute float pointSize;
+attribute vec4 color;
+
+varying vec4 v_color;
+
+void main() {
+  gl_Position = position;
+  gl_PointSize = pointSize;
+  v_color = color;
+}
+`;
+
+const fs = `
+precision mediump float;
+varying vec4 v_color;
+void main() {
+  gl_FragColor = v_color;
+}
+`;
+
+const prg = twgl.createProgram(gl, [vs, fs]);
+
+const posLoc = gl.getAttribLocation(prg, 'position');
+const sizeLoc = gl.getAttribLocation(prg, 'pointSize');
+const colorLoc = gl.getAttribLocation(prg, 'color');
+
+const numPoints = 12;
+const points = [];
+for (let i = 0; i < numPoints; ++i) {
+  points.push({
+    x: r(-1, 1),
+    y: r(-1, 1),
+   color: [0, r(0, 1), r(0, 1), 1],
+   size: r(15, 55),
+  });
+}
+
+function r(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+let px = -10;
+let py = -10;
+function render() {
+  gl.useProgram(prg);
+  
+  // convert mouse to clipspace
+  const cx = px / gl.canvas.width  *  2 - 1;
+  const cy = py / gl.canvas.height * -2 + 1;
+
+  for (const point of points) {
+    const {x, y, color, size} = point;
+    // size to clip size
+    const halfClipWidth = size / gl.canvas.width;
+    const halfClipHeight = size / gl.canvas.height;
+    
+    const left   = x - halfClipWidth;
+    const right  = x + halfClipWidth;
+    const top    = y + halfClipHeight;
+    const bottom = y - halfClipHeight;
+    
+    const hit = cx >= left && cx <= right &&
+                cy >= bottom && cy <= top;    
+    
+    gl.vertexAttrib2f(posLoc, x, y);
+    gl.vertexAttrib1f(sizeLoc, size);
+    gl.vertexAttrib4fv(colorLoc, hit ? [1, 0, 0, 1] : color);
+    gl.drawArrays(gl.POINTS, 0, 1);
+  }
+}
+
+render();
+
+gl.canvas.addEventListener('mousemove', (e) => {
+  const rect = gl.canvas.getBoundingClientRect();
+  px = (e.clientX - rect.left) * gl.canvas.width / gl.canvas.clientWidth;
+  py = (e.clientY - rect.top) * gl.canvas.height / gl.canvas.clientHeight;
+  render();
+});
+  
+
+
+
+</script>

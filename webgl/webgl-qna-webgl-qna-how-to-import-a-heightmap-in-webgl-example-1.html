@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { margin: 0; }
+canvas { width: 100vw; height: 100vh; display: block; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+const gl = document.querySelector('canvas').getContext('webgl');
+const vs = `
+attribute vec4 position;
+uniform mat4 matrix;
+void main() {
+  gl_Position = matrix * position;
+}
+`;
+const fs = `
+precision highp float;
+void main() {
+  gl_FragColor = vec4(0, 1, 0, 1);
+}
+`;
+
+const program = twgl.createProgram(gl, [vs, fs]);
+const positionLoc = gl.getAttribLocation(program, 'position');
+const matrixLoc = gl.getUniformLocation(program, 'matrix');
+
+const gridWidth = 40;
+const gridDepth = 40;
+const gridPoints = [];
+for (let z = 0; z <= gridDepth; ++z) {
+  for (let x = 0; x <= gridWidth; ++x) {
+    gridPoints.push(x, 0, z);
+  }
+}
+
+const gridIndices = [];
+const rowStride = gridWidth + 1;
+// x lines
+for (let z = 0; z <= gridDepth; ++z) {
+  const rowOff = z * rowStride;
+  for (let x = 0; x < gridWidth; ++x) {
+    gridIndices.push(rowOff + x, rowOff + x + 1);
+  }
+}
+// z lines
+for (let x = 0; x <= gridWidth; ++x) {
+  for (let z = 0; z < gridDepth; ++z) {
+    const rowOff = z * rowStride;
+    gridIndices.push(rowOff + x, rowOff + x + rowStride);
+  }
+}
+
+const positionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(gridPoints), gl.STATIC_DRAW);
+
+const indexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(gridIndices), gl.STATIC_DRAW);
+
+twgl.resizeCanvasToDisplaySize(gl.canvas);
+gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+const m4 = twgl.m4;
+const projection = m4.perspective(
+  60 * Math.PI / 180,   // field of view
+  gl.canvas.clientWidth / gl.canvas.clientHeight, // aspect
+  0.1,  // near
+  100,  // far
+);
+const cameraPosition = [-gridWidth / 8, 10, -gridDepth / 8];
+const target = [gridWidth / 2, -10, gridDepth / 2];
+const up = [0, 1, 0];
+const camera = m4.lookAt(cameraPosition, target, up);
+const view = m4.inverse(camera);
+const mat = m4.multiply(projection, view);
+
+gl.enableVertexAttribArray(positionLoc);
+gl.vertexAttribPointer(
+    positionLoc,  // location
+    3,            // size
+    gl.FLOAT,     // type
+    false,        // normalize
+    0,            // stride
+    0,            // offset
+);
+
+gl.useProgram(program);
+gl.uniformMatrix4fv(matrixLoc, false, mat);
+
+const numVertices = (gridWidth * 2 * (gridDepth + 1)) +
+                    (gridDepth * 2 * (gridWidth + 1));
+gl.drawElements(
+    gl.LINES,           // primitive type
+    numVertices,        //
+    gl.UNSIGNED_SHORT,  // type of indices
+    0,                  // offset
+);
+
+
+
+</script>

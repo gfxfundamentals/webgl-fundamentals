@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas {
+  display: block;
+  image-rendering: pixelated;
+  padding: 5px;
+}
+.zoom {
+  zoom: 4;
+}
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<pre>left  : rect from centers using unpadded texture
+middle: rect from edges using padded texture
+right : rect from edges using unpadded texture (bleeding)
+ (note the red at the bottom left edge)</pre>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+const numSprites = 3;
+const spriteSize = 16;
+const m4 = twgl.m4;
+const gl = document.querySelector('canvas').getContext('webgl');
+
+const spriteElem = makeSprites();
+log('sprites');
+document.body.appendChild(spriteElem);
+const paddedSpriteElem = padSprites(spriteElem);
+log('padded sprites');
+document.body.appendChild(paddedSpriteElem);
+
+const unpaddedTex = twgl.createTexture(gl, {src: spriteElem, wrap: gl.CLAMP_TO_EDGE, minMax: gl.LINEAR});
+const paddedTex = twgl.createTexture(gl, {src: paddedSpriteElem, wrap: gl.CLAMP_TO_EDGE, minMax: gl.LINEAR});
+
+const vs = `
+attribute vec4 position;
+attribute vec2 texcoord;
+varying vec2 v_texcoord;
+uniform mat4 matrix;
+void main() {
+  gl_Position = matrix * position;
+  v_texcoord = texcoord;
+}
+`;
+
+const fs = `
+precision highp float;
+varying vec2 v_texcoord;
+uniform sampler2D tex;
+void main() {
+  gl_FragColor = texture2D(tex, v_texcoord);
+}
+`;
+
+const program = twgl.createProgram(gl, [vs, fs]);
+gl.useProgram(program);
+
+const ploc = gl.getAttribLocation(program, 'position');
+const tloc = gl.getAttribLocation(program, 'texcoord');
+const mloc = gl.getUniformLocation(program, 'matrix');
+// no need to look up 'tex' as we're only using 1 texture and uniforms default
+// to 0 so it will use texture unit 0, the default
+
+const pbuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, pbuf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 1, 1, 1, 0, 0, 1, 0]), gl.STATIC_DRAW);
+gl.enableVertexAttribArray(ploc);
+gl.vertexAttribPointer(ploc, 2, gl.FLOAT, false, 0, 0);
+
+const tbuf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, tbuf);
+gl.enableVertexAttribArray(tloc);
+gl.vertexAttribPointer(tloc, 2, gl.FLOAT, false, 0, 0);
+
+const ibuf = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuf);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array([0, 1, 2, 2, 1, 3]), gl.STATIC_DRAW);
+
+gl.clearColor(0, 0, 0, 1);
+gl.clear(gl.COLOR_BUFFER_BIT);
+
+// un paddded using rect from centers
+{
+   const spriteId = 1;
+   const texWidth = spriteElem.width;
+   const texHeight = spriteElem.height;
+   const x = spriteId * spriteSize;
+   const y = 0;
+   const p0x = (x + 0.5) / texWidth;
+   const p0y = (y + 0.5) / texHeight;
+   const p1x = (x + spriteSize - 1 + 0.5) / texWidth;
+   const p1y = (y + spriteSize - 1 + 0.5) / texHeight;
+   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+     p0x, p0y,
+     p1x, p0y,
+     p0x, p1y,
+     p1x, p1y,
+   ]), gl.STATIC_DRAW);
+   gl.bindTexture(gl.TEXTURE_2D, unpaddedTex);
+   
+   let m = m4.ortho(0, gl.canvas.width, 0, gl.canvas.height, -1, 1);
+   m = m4.translate(m, [2, 5, 0]);
+   m = m4.scale(m, [96, 96, 1]);
+   gl.uniformMatrix4fv(mloc, false, m);
+   gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0);
+}
+
+// paddded using rect from edges
+{
+   const spriteId = 1;
+   const texWidth = paddedSpriteElem.width;
+   const texHeight = paddedSpriteElem.height;
+   const x = spriteId * (spriteSize + 2);
+   const y = 0;
+   const p0x = (x) / texWidth;
+   const p0y = (y) / texHeight;
+   const p1x = (x + spriteSize) / texWidth;
+   const p1y = (y + spriteSize) / texHeight;
+   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+     p0x, p0y,
+     p1x, p0y,
+     p0x, p1y,
+     p1x, p1y,
+   ]), gl.STATIC_DRAW);
+   gl.bindTexture(gl.TEXTURE_2D, paddedTex);
+   
+   let m = m4.ortho(0, gl.canvas.width, 0, gl.canvas.height, -1, 1);
+   m = m4.translate(m, [102, 5, 0]);
+   m = m4.scale(m, [96, 96, 1]);
+   gl.uniformMatrix4fv(mloc, false, m);
+   gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0);
+}
+
+// unpaddded using rect from edges (bleeding)
+{
+   const spriteId = 1;
+   const texWidth = spriteElem.width;
+   const texHeight = spriteElem.height;
+   const x = spriteId * spriteSize;
+   const y = 0;
+   const p0x = (x) / texWidth;
+   const p0y = (y) / texHeight;
+   const p1x = (x + spriteSize) / texWidth;
+   const p1y = (y + spriteSize) / texHeight;
+   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+     p0x, p0y,
+     p1x, p0y,
+     p0x, p1y,
+     p1x, p1y,
+   ]), gl.STATIC_DRAW);
+   gl.bindTexture(gl.TEXTURE_2D, unpaddedTex);
+   
+   let m = m4.ortho(0, gl.canvas.width, 0, gl.canvas.height, -1, 1);
+   m = m4.translate(m, [202, 5, 0]);
+   m = m4.scale(m, [96, 96, 1]);
+   gl.uniformMatrix4fv(mloc, false, m);
+   gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0);
+}
+
+function padSprites(elem) {
+  const canvas = document.createElement('canvas');
+  canvas.className = 'zoom';
+  canvas.width = numSprites * spriteSize + (2 * numSprites - 1);
+  canvas.height = spriteSize;
+  const ctx = canvas.getContext('2d');
+  let dstX = 0;
+  const offsets = [
+    // corners
+    [-1, -1],
+    [ 1, -1],
+    [-1,  1],
+    [ 1,  1],
+    // edges
+    [-1,  0],
+    [ 1,  0],
+    [ 0, -1],
+    [ 0,  1],
+    // middle
+    [ 0,  0],
+  ];
+  for (let i = 0; i < numSprites; ++i) {
+    const srcX = i * spriteSize;
+    for (const offset of offsets) {
+      ctx.drawImage(
+        elem,
+        srcX, 0, spriteSize, spriteSize,
+        dstX + offset[0], offset[1], spriteSize, spriteSize,
+      );    
+    }
+    dstX += spriteSize + 2;
+  }
+  return canvas;
+}
+
+function makeSprites() {
+  const canvas = document.createElement('canvas');
+  canvas.width = numSprites * spriteSize;
+  canvas.height = spriteSize;
+  canvas.className = 'zoom';
+  const ctx = canvas.getContext('2d');
+  ctx.font = '12px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (let i = 0; i < numSprites; ++i) {
+    const x = spriteSize * i;
+    const h = i / numSprites;
+    ctx.fillStyle = hsl(h, 1, 0.4);
+    ctx.fillRect(x, 0, spriteSize, spriteSize);
+    ctx.fillStyle = hsl(h, 1, 0.85);
+    for (let j = 0; j < spriteSize; j += 4) {
+      ctx.fillRect(x + j, 0, 2, 2);
+      ctx.fillRect(x, j, 2, 2);
+      ctx.fillRect(x + j, spriteSize - 2, 2, 2);
+      ctx.fillRect(x + spriteSize - 2, j, 2, 2);
+    }
+    ctx.fillStyle = hsl(h + 0.5, 1, 0.5);
+    ctx.fillRect(x + 1, 1, spriteSize - 2, spriteSize - 2);
+    ctx.fillStyle = hsl(h, 1, 0.5);
+    ctx.fillText(String.fromCharCode(65 + i), x + spriteSize / 2, spriteSize / 2);
+  }
+  return canvas;
+}
+
+function hsl(h, s, l) {
+  return `hsl(${h * 360},${s * 100}%,${l * 100}%)`;
+}
+
+function log(...args) {
+  const elem = document.createElement('pre');
+  elem.textContent = [...args].join(' ');
+  document.body.appendChild(elem);
+}
+
+
+</script>

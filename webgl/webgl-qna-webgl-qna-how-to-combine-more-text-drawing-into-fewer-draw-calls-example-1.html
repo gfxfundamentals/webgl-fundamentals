@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<script src="https://twgljs.org/dist/4.x/twgl.min.js"></script>
+
+
+</body>
+<script>
+
+async function main() {
+  const gl = document.querySelector('canvas').getContext('webgl');
+  twgl.addExtensionsToContext(gl);
+
+  function convertToGlyphIndex(c) {
+    c = c.toUpperCase();
+    if (c >= 'A' && c <= 'Z') {
+      return c.charCodeAt(0) - 0x41;
+    } else if (c >= '0' && c <= '9') {
+      return c.charCodeAt(0) - 0x30 + 26;
+    } else {
+      return 255;
+    }
+  }
+
+  const messages = [
+    'pinapple',
+    'grape',
+    'banana',
+    'strawberry',
+  ];
+  
+  const glyphImg = await loadImage("https://webglfundamentals.org/webgl/resources/8x8-font.png");
+
+  const glyphTex = twgl.createTexture(gl, {
+    src: glyphImg,
+    minMag: gl.NEAREST,
+  });
+  // being lazy about size, making them all the same.
+  const glyphsAcross = 8;
+
+  // too lazy to pack these in a texture in a more compact way
+  // so just put one message per row
+  const longestMsg = Math.max(...messages.map(m => m.length));
+  const messageData = new Uint8Array(longestMsg * messages.length * 4);
+  messages.forEach((message, row) => {
+    for (let i = 0; i < message.length; ++i) {
+      const c = convertToGlyphIndex(message[i]);
+      const offset = (row * longestMsg + i) * 4; 
+      const u = c % glyphsAcross;
+      const v = c / glyphsAcross | 0;
+      messageData[offset + 0] = u;
+      messageData[offset + 1] = v;
+    }
+  });
+
+  const messageTex = twgl.createTexture(gl, {
+    src: messageData,
+    width: longestMsg,
+    height: messages.length,
+    minMag: gl.NEAREST,
+  });
+
+  const vs = `
+  attribute vec4 position;  // a centered quad (-1 + 1)
+  attribute vec2 texcoord;
+  attribute float messageLength;  // instanced
+  attribute vec4 center;          // instanced
+  attribute vec2 messageUV;       // instanced
+
+  uniform vec2 glyphDrawSize;
+
+  varying vec2 v_texcoord;
+  varying vec2 v_messageUV;
+  varying float v_messageLength;
+
+  void main() {
+    vec2 size = vec2(messageLength * glyphDrawSize.x, glyphDrawSize.y);
+    gl_Position = position * vec4(size, 1, 0) + center;
+    v_texcoord = texcoord;
+    v_messageUV = messageUV;
+    v_messageLength = messageLength;
+  }
+  `;
+
+  const fs = `
+  precision highp float;
+
+  varying vec2 v_texcoord;
+  varying vec2 v_messageUV;
+  varying float v_messageLength;
+
+  uniform sampler2D messageTex;
+  uniform vec2 messageTexSize;
+
+  uniform sampler2D glyphTex;
+  uniform vec2 glyphTexSize;
+
+  uniform vec2 glyphSize;
+
+  void main() {
+    vec2 msgUV = v_messageUV + vec2(v_texcoord.x * v_messageLength / messageTexSize.x, 0);
+    vec2 glyphOffset = texture2D(messageTex, msgUV).xy * 255.0;
+    vec2 glyphsAcrossDown = glyphTexSize / glyphSize;
+    vec2 glyphUVOffset = glyphOffset / glyphsAcrossDown;
+    vec2 glyphUV = fract(v_texcoord * vec2(v_messageLength, 1)) * glyphSize / glyphTexSize;
+
+    vec4 glyphColor = texture2D(glyphTex, glyphUVOffset + glyphUV);
+
+    // do some math here for a circle
+    // TBD
+
+    if (glyphColor.a < 0.1) discard;
+
+    gl_FragColor = glyphColor;
+  }
+  `;
+
+  const prgInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+  const bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+    position: {
+      numComponents: 2,
+      data: [
+        -1, -1,
+         1, -1,
+        -1,  1,
+        -1,  1,
+         1, -1,
+         1,  1,
+      ],
+    },
+    texcoord: [
+       0, 1,
+       1, 1,
+       0, 0,
+       0, 0,
+       1, 1,
+       1, 0,
+    ],
+    center: {
+      numComponents: 2,
+      divisor: 1,
+      data: [
+        -0.4, 0.1,
+        -0.3, -0.5,
+         0.6, 0,
+         0.1, 0.5,
+      ],
+    },
+    messageLength: {
+      numComponents: 1,
+      divisor: 1,
+      data: messages.map(m => m.length),
+    },
+    messageUV: {
+      numComponents: 2, 
+      divisor: 1,
+      data: messages.map((m, i) => [0, i / messages.length]).flat(),
+    },
+  });
+  
+  gl.clearColor(0, 0, 1, 1);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  gl.useProgram(prgInfo.program);
+
+  twgl.setBuffersAndAttributes(gl, prgInfo, bufferInfo);
+  twgl.setUniformsAndBindTextures(prgInfo, {
+    glyphDrawSize: [16 / gl.canvas.width, 16 / gl.canvas.height],
+    messageTex,
+    messageTexSize: [longestMsg, messages.length],
+    glyphTex,
+    glyphTexSize: [glyphImg.width, glyphImg.height],
+    glyphSize: [8, 8],
+  });
+  // ext.drawArraysInstancedANGLE(gl.TRIANGLES, 0, 6, messages.length);
+  gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, messages.length);
+}
+
+function loadImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onerror = reject;
+    img.onload = () => resolve(img);
+    img.src = url;
+  });
+}
+main();
+
+
+</script>

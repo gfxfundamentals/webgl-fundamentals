@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://webglfundamentals.org/webgl/resources/webgl-utils.js"></script>
+<script id="vshader" type="whatever">
+    attribute vec4 a_position;
+    attribute float a_textureIndex;
+    varying float v_textureIndex;
+    void main() {
+      gl_Position = a_position;
+      v_textureIndex = a_textureIndex;
+    }    
+</script>
+<script id="fshader" type="whatever">
+#define numTextures 4
+precision mediump float;
+varying float v_textureIndex;
+uniform sampler2D u_textures[numTextures];
+    
+vec4 getSampleFromArray(sampler2D textures[4], int ndx, vec2 uv) {
+    vec4 color = vec4(0);
+    for (int i = 0; i < numTextures; ++i) {
+      vec4 c = texture2D(u_textures[i], uv);
+      if (i == ndx) {
+        color += c;
+      }
+    }
+    return color;
+}
+    
+void main() {
+    gl_FragColor = getSampleFromArray(u_textures, int(v_textureIndex + 0.5), vec2(0.5, 0.5));
+}
+</script>
+<canvas id="c" width="300" height="300"></canvas>
+
+
+
+
+</body>
+<script>
+
+var canvas = document.getElementById("c");
+var gl = canvas.getContext('webgl');
+
+// Note: createProgramFromScripts will call bindAttribLocation
+// based on the index of the attibute names we pass to it.
+var program = webglUtils.createProgramFromScripts(
+    gl, 
+    ["vshader", "fshader"], 
+    ["a_position", "a_textureIndex"]);
+gl.useProgram(program);
+var textureLoc = gl.getUniformLocation(program, "u_textures[0]");
+// Tell the shader to use texture units 0 to 3
+gl.uniform1iv(textureLoc, [0, 1, 2, 3]);
+
+var positions = [
+      1,  1,  
+     -1,  1,  
+     -1, -1,  
+      1,  1,  
+     -1, -1,  
+      1, -1,  
+];
+    
+var textureIndex = [
+    0, 1, 2, 3, 0, 1,
+];
+
+var vertBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, vertBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+gl.enableVertexAttribArray(0);
+gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+var vertBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, vertBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(textureIndex), gl.STATIC_DRAW);
+gl.enableVertexAttribArray(1);
+gl.vertexAttribPointer(1, 1, gl.UNSIGNED_BYTE, false, 0, 0);
+
+var colors = [
+    [0, 0, 255, 255],
+    [0, 255, 0, 255],
+    [255, 0, 0, 255],
+    [0, 255, 255, 255],
+];
+
+// make 4 textures
+colors.forEach(function(color, ndx) {
+    gl.activeTexture(gl.TEXTURE0 + ndx);
+    var tex = gl.createTexture();
+   gl.bindTexture(gl.TEXTURE_2D, tex);
+   gl.texImage2D(
+      gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
+      gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(color));
+});
+
+
+gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2);
+
+
+
+</script>

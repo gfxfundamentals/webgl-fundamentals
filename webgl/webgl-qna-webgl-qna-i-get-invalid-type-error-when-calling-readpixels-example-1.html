@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+undefined
+</body>
+<script>
+
+const gl = document.createElement('canvas').getContext('webgl');
+showAltFormat('canvas');
+
+const ext1 = gl.getExtension('OES_texture_float');
+const ext2 = gl.getExtension('WEBGL_color_buffer_float');
+if (ext1 && ext2) {
+  const fb = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
+                gl.RGBA, gl.FLOAT, null);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+  showAltFormat('float rgba fb');
+}
+
+function showAltFormat(msg) {
+  const altFormat = gl.getParameter(gl.IMPLEMENTATION_COLOR_READ_FORMAT);
+  const altType = gl.getParameter(gl.IMPLEMENTATION_COLOR_READ_TYPE);
+  console.log(msg, 'readPixel alternate format/type combo', glEnumToString(gl, altFormat), glEnumToString(gl, altType));
+}
+
+function glEnumToString(gl, value) {
+  const keys = [];
+  for (const key in gl) {
+    if (gl[key] === value) {
+      keys.push(key);
+    }
+  }
+  return keys.length ? keys.join(' | ') : `0x${value.toString(16)}`;
+}
+
+
+</script>

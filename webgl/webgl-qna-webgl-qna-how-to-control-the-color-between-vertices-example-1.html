@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+const gl = document.querySelector('canvas').getContext('webgl');
+
+const vs = `
+attribute vec4 position;
+attribute vec4 color;
+attribute vec3 corner;
+
+varying vec4 v_color;
+varying vec3 v_corner;
+
+void main() {
+  gl_Position = position;
+  v_color = color;
+  v_corner = corner;
+}
+`;
+
+const fs = `
+precision highp float;
+
+varying vec4 v_color;
+varying vec3 v_corner;
+
+// could be a uniform
+const vec4 centerColor = vec4(0, 1, 0, 1);
+
+void main() {
+  vec3 center = vec3(1.0 / 3.0);
+  float edge = distance(center, v_corner) / 0.75;
+  gl_FragColor = mix(centerColor, v_color, edge);
+}
+`;
+
+const prg = twgl.createProgram(gl, [vs, fs]);
+const posLoc = gl.getAttribLocation(prg, 'position');
+const colorLoc = gl.getAttribLocation(prg, 'color');
+const cornerLoc = gl.getAttribLocation(prg, 'corner');
+
+function createBufferAndSetupAttribute(gl, loc, data) {
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+  // normally these would happen at render time
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 3, gl.FLOAT, false, 0, 0);
+}
+
+createBufferAndSetupAttribute(gl, posLoc, [
+  0,  1, 0,
+  1, -1, 0,
+ -1, -1, 0,
+]);
+createBufferAndSetupAttribute(gl, colorLoc, [
+  1, 0, 0,
+  1, 0, 1,
+  0, 0, 1,
+]);
+createBufferAndSetupAttribute(gl, cornerLoc, [
+  1, 0, 0,
+  0, 1, 0,
+  0, 0, 1,
+]);
+
+gl.useProgram(prg);
+gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+
+
+</script>

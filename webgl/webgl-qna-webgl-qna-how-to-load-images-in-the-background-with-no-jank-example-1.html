@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; margin: 2px; }
+#ui { position: absolute; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<div id="ui"><input type="checkbox" id="update" checked><label for="update">Update Texture</label></div>
+<canvas id="webgl"></canvas>
+<canvas id="graph"></canvas>
+
+
+</body>
+<script>
+
+const m4 = twgl.m4;
+const gl = document.querySelector('#webgl').getContext('webgl');
+const ctx = document.querySelector('#graph').getContext('2d');
+
+let update = true;
+document.querySelector('#update').addEventListener('change', function() {
+  update = this.checked;
+});
+
+const vs = `
+attribute vec4 position;
+uniform mat4 matrix;
+varying vec2 v_texcoord;
+void main() {
+  gl_Position = matrix * position;
+  v_texcoord = position.xy;
+}
+`
+
+const fs = `
+precision mediump float;
+varying vec2 v_texcoord;
+uniform sampler2D tex;
+void main() {
+  gl_FragColor = texture2D(tex, v_texcoord);
+}
+`;
+
+const program = twgl.createProgram(gl, [vs, fs]);
+const posLoc = gl.getAttribLocation(program, 'position');
+const matLoc = gl.getUniformLocation(program, 'matrix');
+
+const buf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+  0, 0,
+  1, 0,
+  0, 1,
+  0, 1,
+  1, 0,
+  1, 1,
+]), gl.STATIC_DRAW);
+
+gl.enableVertexAttribArray(posLoc);
+gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+const tex = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, tex);
+gl.texImage2D(
+    gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+    new Uint8Array([0, 0, 255, 255]));
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+const m = m4.identity();
+let frameCount = 0;
+let previousTime = 0;
+let imgNdx = 0;
+let imgAspect = 1;
+
+const imageUrls = [
+  'https://i.imgur.com/KjUybBD.png',
+  'https://i.imgur.com/AyOufBk.jpg',
+  'https://i.imgur.com/UKBsvV0.jpg',
+  'https://i.imgur.com/TSiyiJv.jpg',
+];
+
+async function loadNextImage() {
+  const url = `${imageUrls[imgNdx]}?cachebust=${performance.now()}`;
+  imgNdx = (imgNdx + 1) % imageUrls.length;
+  const res = await fetch(url, {mode: 'cors'});
+  const blob = await res.blob();
+  const bitmap = await createImageBitmap(blob, {
+    premultiplyAlpha: 'none',
+    colorSpaceConversion: 'none',
+  });
+  if (update) {
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bitmap);
+    imgAspect = bitmap.width / bitmap.height;
+  }
+  setTimeout(loadNextImage, 1000);
+}
+loadNextImage();
+
+function render(currentTime) {
+  const deltaTime = currentTime - previousTime;
+  previousTime = currentTime;
+  
+  {
+    const {width, height} = ctx.canvas;
+    const x = frameCount % width;
+    const y = 1000 / deltaTime / 60 * height / 2;
+    ctx.fillStyle = frameCount % (width * 2) < width ? 'red' : 'blue';
+    ctx.clearRect(x, 0, 1, height);
+    ctx.fillRect(x, y, 1, height);
+    ctx.clearRect(0, 0, 30, 15);
+    ctx.fillText((1000 / deltaTime).toFixed(1), 2, 10);
+  }
+
+  gl.useProgram(program);
+  const dispAspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  m4.scaling([1 / dispAspect, 1, 1], m);
+  m4.rotateZ(m, currentTime * 0.001, m);
+  m4.scale(m, [imgAspect, 1, 1], m);
+  m4.translate(m, [-0.5, -0.5, 0], m);
+  gl.uniformMatrix4fv(matLoc, false, m);
+  gl.drawArrays(gl.TRIANGLES, 0, 6);
+  
+  ++frameCount;
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

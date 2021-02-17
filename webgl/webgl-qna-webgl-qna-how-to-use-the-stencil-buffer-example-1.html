@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+const m4 = twgl.m4;
+const gl = document.querySelector('canvas').getContext('webgl', {stencil: true});
+
+const vs = `
+attribute vec4 position;
+uniform mat4 matrix;
+void main() {
+  gl_Position = matrix * position;
+}
+`;
+
+const fs = `
+precision mediump float;
+uniform vec4 color;
+void main() {
+  gl_FragColor = color;
+}
+`;
+
+const program = twgl.createProgram(gl, [vs, fs]);
+const posLoc = gl.getAttribLocation(program, 'position');
+const matLoc = gl.getUniformLocation(program, 'matrix');
+const colorLoc = gl.getUniformLocation(program, 'color');
+
+const buf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+   0, -1,
+   1,  1,
+  -1,  1,
+]), gl.STATIC_DRAW);
+
+gl.enableVertexAttribArray(posLoc);
+gl.vertexAttribPointer(
+    posLoc,    // attribute location
+    2,         // 2 value per vertex
+    gl.FLOAT,  // 32bit floating point values
+    false,     // don't normalize
+    0,         // stride (0 = base on type and size)
+    0,         // offset into buffer
+);
+
+// clear the stencil to 0 (the default)
+gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+
+gl.useProgram(program);
+
+// turn on the stencil
+gl.enable(gl.STENCIL_TEST);
+
+// Set the stencil test so it always passes
+// and the reference to 1
+gl.stencilFunc(
+   gl.ALWAYS,    // the test
+   1,            // reference value
+   0xFF,         // mask
+);
+// Set it so we replace with the reference value (1)
+gl.stencilOp(
+   gl.KEEP,     // what to do if the stencil test fails
+   gl.KEEP,     // what to do if the depth test fails
+   gl.REPLACE,  // what to do if both tests pass
+);
+
+// draw a white small triangle
+gl.uniform4fv(colorLoc, [1, 1, 1, 1]); // white
+gl.uniformMatrix4fv(matLoc, false, m4.scaling([0.2, 0.2, 1]));
+gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+
+// Set the test that the stencil must = 0
+gl.stencilFunc(
+   gl.EQUAL,     // the test
+   0,            // reference value
+   0xFF,         // mask
+);
+// don't change the stencil buffer on draw
+gl.stencilOp(
+   gl.KEEP,     // what to do if the stencil test fails
+   gl.KEEP,     // what to do if the depth test fails
+   gl.KEEP,  // what to do if both tests pass
+);
+
+// draw a large green triangle
+gl.uniform4fv(colorLoc, [0, 1, 0, 1]); // green
+gl.uniformMatrix4fv(matLoc, false, m4.scaling([0.9, -0.9, 1]));
+gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+
+</script>

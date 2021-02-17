@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { margin: 0; }
+canvas { display: block; width: 100vw; height: 100vh; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas></canvas>
+
+
+</body>
+<script>
+
+var vs = `
+attribute vec4 position;
+
+uniform mat4 u_matrix;
+
+void main() {
+  gl_Position = u_matrix * position;
+}
+`;
+
+var fs = `
+precision mediump float;
+
+uniform vec4 u_color;
+
+void main() {
+  gl_FragColor = u_color;
+}
+`;
+var vsQuad = `
+attribute vec4 position;
+attribute vec2 texcoord;
+
+varying vec2 v_texcoord;
+
+void main() {
+  gl_Position = position;
+  v_texcoord = texcoord;
+}
+`;
+var fsFade = `
+precision mediump float;
+
+varying vec2 v_texcoord;
+
+uniform sampler2D u_texture;
+uniform float u_mixAmount;
+
+const float kEpsilon = 2./256.;
+
+void main() {
+  // convert color from 0.->1. to -1. -> +1. so we can go adjust toward zero
+  vec4 color = texture2D(u_texture, v_texcoord) * 2. - 1.;
+
+  // figure out how much to adjust 
+  vec4 adjust = -color * u_mixAmount;
+
+  // If the adjustment is too small (because the texture is only 8bits)
+  // the adjust the minimum amount.
+  // Could also solve this by using floating point textures
+  adjust = mix(adjust, sign(color) * -kEpsilon, step(abs(adjust), vec4(kEpsilon)));
+
+  // adjust it
+  color += adjust;
+
+  // write it back converting back to 0 -> 1
+  gl_FragColor = color * .5 + .5;
+}
+`;
+var fsDisplace = `
+precision mediump float;
+
+varying vec2 v_texcoord;
+
+uniform sampler2D u_texture;
+uniform sampler2D u_displacementTexture;
+uniform vec2 u_displacementRange;
+
+void main() {
+
+  // assuming the displacement texture is the same size as 
+  // the main texture you can use the same texture coords
+
+  // first look up the displacement and convert to -1 <-> 1 range
+  // we're only using the R and G channels which will become U and V
+  // displacements to our texture coordinates
+  vec2 displacement = texture2D(u_displacementTexture, v_texcoord).rg * 2. - 1.;
+
+  vec2 uv = v_texcoord + displacement * u_displacementRange;
+
+  gl_FragColor = texture2D(u_texture, uv);
+}
+`;
+
+var $ = document.querySelector.bind(document);
+
+var mixAmount = 0.03;
+
+var gl = $("canvas").getContext("webgl");
+var m4 = twgl.m4;
+var programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+var fadeProgramInfo = twgl.createProgramInfo(gl, [vsQuad, fsFade]);
+var displaceProgramInfo = twgl.createProgramInfo(gl, [vsQuad, fsDisplace]);
+
+// this will be replaced when the image has loaded;
+var img = { width: 1, height: 1 };
+
+const tex = twgl.createTexture(gl, {
+  src: 'https://farm6.staticflickr.com/5078/14032935559_8c13e9b181_z_d.jpg',
+  crossOrigin: '',
+  flipY: true,
+}, function(err, texture, source) {
+  img = source;                               
+});
+
+// Creates a -1 to +1 quad
+var quadBufferInfo = twgl.primitives.createXYQuadBufferInfo(gl);
+
+// Creates 2 RGBA texture + depth framebuffers
+var fadeAttachments = [
+  { format: gl.RGBA, min: gl.NEAREST, max: gl.NEAREST, wrap: gl.CLAMP_TO_EDGE, },
+  { format: gl.DEPTH_STENCIL },
+];
+var fadeFbi1 = twgl.createFramebufferInfo(gl, fadeAttachments);
+var fadeFbi2 = twgl.createFramebufferInfo(gl, fadeAttachments);
+
+function drawThing(gl, x, y, rotation, scale, color) {
+  var matrix = m4.ortho(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
+  matrix = m4.translate(matrix, [x, y, 0]);
+  matrix = m4.rotateZ(matrix, rotation);
+  matrix = m4.scale(matrix, [scale, scale, 1]);
+
+  gl.useProgram(programInfo.program);
+  twgl.setBuffersAndAttributes(gl, programInfo, quadBufferInfo);
+  twgl.setUniforms(programInfo, {
+    u_matrix: matrix,
+    u_color: color,
+  });
+  twgl.drawBufferInfo(gl, quadBufferInfo);
+}
+
+function rand(min, max) {
+  if (max === undefined) {
+    max = min;
+    min = 0;
+  }
+  return min + Math.random() * (max - min);
+}
+
+function render(time) {
+  if (twgl.resizeCanvasToDisplaySize(gl.canvas)) {
+    // set the clear color to 0.5 which is 0 displacement
+    // for our shader
+    gl.clearColor(0.5, 0.5, 0.5, 0.5);
+    // resize the framebuffer's attachments so their the
+    // same size as the canvas
+    twgl.resizeFramebufferInfo(gl, fadeFbi1, fadeAttachments);
+    // clear the color buffer to 0.5
+    twgl.bindFramebufferInfo(gl, fadeFbi1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    // resize the 2nd framebuffer's attachments so their the
+    // same size as the canvas
+    twgl.resizeFramebufferInfo(gl, fadeFbi2, fadeAttachments);
+    // clear the color buffer to 0.5
+    twgl.bindFramebufferInfo(gl, fadeFbi2);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+  }
+  
+  // fade by copying from fadeFbi1 into fabeFbi2 using mixAmount.
+  // fadeFbi2 will contain mix(fadeFb1, u_fadeColor, u_mixAmount)
+  twgl.bindFramebufferInfo(gl, fadeFbi2);
+
+  gl.useProgram(fadeProgramInfo.program);
+  twgl.setBuffersAndAttributes(gl, fadeProgramInfo, quadBufferInfo);
+  twgl.setUniforms(fadeProgramInfo, {
+    u_texture: fadeFbi1.attachments[0],
+    u_mixAmount: mixAmount,
+  });
+  twgl.drawBufferInfo(gl, quadBufferInfo);
+
+  // now draw new stuff to fadeFb2. Notice we don't clear!
+  twgl.bindFramebufferInfo(gl, fadeFbi2);
+
+  var x = rand(gl.canvas.width);
+  var y = rand(gl.canvas.height);
+  var rotation = rand(Math.PI);
+  var scale = rand(10, 20);
+  var color = [rand(1), rand(1), rand(1), 1];
+  drawThing(gl, x, y, rotation, scale, color);
+
+
+  // now use fadeFbi2 as a displacement while drawing tex to the canvas
+  twgl.bindFramebufferInfo(gl, null);
+
+  gl.useProgram(displaceProgramInfo.program);
+  twgl.setBuffersAndAttributes(gl, displaceProgramInfo, quadBufferInfo);
+  twgl.setUniforms(displaceProgramInfo, {
+    u_texture: tex,
+    u_displacementTexture: fadeFbi2.attachments[0],
+    u_displacementRange: [0.1, 0.1],
+  });
+  twgl.drawBufferInfo(gl, quadBufferInfo);
+
+  // swap the variables so we render to the opposite textures next time
+  var temp = fadeFbi1;
+  fadeFbi1 = fadeFbi2;
+  fadeFbi2 = temp;
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

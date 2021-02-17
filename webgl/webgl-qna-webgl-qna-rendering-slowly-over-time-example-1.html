@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<div id="info"></div>
+<script src="https://twgljs.org/dist/4.x/twgl.min.js"></script>
+
+
+</body>
+<script>
+
+const gl = document.querySelector('canvas').getContext('webgl');
+const vs = `
+attribute vec4 position;
+attribute vec2 texcoord;
+varying vec2 v_texcoord;
+void main() {
+  gl_Position = position;
+  v_texcoord = texcoord;
+}
+`;
+const fs = `
+precision highp float;
+uniform sampler2D tex;
+varying vec2 v_texcoord;
+void main() {
+  gl_FragColor = texture2D(tex, v_texcoord);
+}
+`;
+
+// compile shader, link program, look up locations
+const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+
+// gl.createBuffer, gl.bindBuffer, gl.bufferData
+const bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+  position: {
+    numComponents: 2,
+    data: [
+      -1, -1,
+       1, -1,
+      -1,  1,
+      -1,  1,
+       1, -1,
+       1,  1,
+    ],
+  },
+  texcoord: {
+    numComponents: 2,
+    data: [
+       0,  0,
+       1,  0,
+       0,  1,
+       0,  1,
+       1,  0,
+       1,  1,
+    ],  
+  },
+});
+
+// create a framebuffer with a texture and depth buffer
+// same size as canvas
+// gl.createTexture, gl.texImage2D, gl.createFramebuffer
+// gl.framebufferTexture2D
+const framebufferInfo = twgl.createFramebufferInfo(gl);
+
+const infoElem = document.querySelector('#info');
+
+const numDrawSteps = 16;
+let drawStep = 0;
+let time = 0;
+
+// draw over several frames. Return true when ready
+function draw() {
+  // draw to texture
+  // gl.bindFrambuffer, gl.viewport
+  twgl.bindFramebufferInfo(gl, framebufferInfo);
+  
+  if (drawStep == 0) {
+    // on the first step clear and record time
+    gl.disable(gl.SCISSOR_TEST);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT  | gl.DEPTH_BUFFER_BIT);
+    time = performance.now() * 0.001;
+  }
+  
+
+  // this represents drawing something. 
+  gl.enable(gl.SCISSOR_TEST);
+  
+  const halfWidth = framebufferInfo.width / 2;
+  const halfHeight = framebufferInfo.height / 2;
+  
+  const a = time * 0.1 + drawStep
+  const x = Math.cos(a      ) * halfWidth + halfWidth;
+  const y = Math.sin(a * 1.3) * halfHeight + halfHeight;
+
+  gl.scissor(x, y, 16, 16);
+  gl.clearColor(
+     drawStep / 16,
+     drawStep / 6 % 1,
+     drawStep / 3 % 1,
+     1);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  
+  drawStep = (drawStep + 1) % numDrawSteps;
+  return drawStep === 0;
+}
+
+let frameCount = 0;
+function render() {
+  ++frameCount;
+  infoElem.textContent = frameCount;
+  
+  if (draw()) {
+    // draw to canvas
+    // gl.bindFramebuffer, gl.viewport
+    twgl.bindFramebufferInfo(gl, null);
+    
+    gl.disable(gl.DEPTH_TEST);
+    gl.disable(gl.BLEND);
+    gl.disable(gl.SCISSOR_TEST);
+    
+    gl.useProgram(programInfo.program);
+    
+    // gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+    
+    // gl.uniform...
+    twgl.setUniformsAndBindTextures(programInfo, {
+      tex: framebufferInfo.attachments[0],
+    });
+    
+    // draw the quad
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+  
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

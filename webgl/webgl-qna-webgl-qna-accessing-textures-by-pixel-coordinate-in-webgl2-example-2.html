@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+undefined
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl.min.js"></script>
+
+
+</body>
+<script>
+
+const vs = `#version 300 es
+void main() {
+  gl_Position = vec4(0, 0, 0, 1);
+  gl_PointSize = 1.0;
+}
+`;
+
+const fs = `#version 300 es
+precision highp float;
+uniform sampler2D tex;
+out vec4 outColor;
+void main() {
+  int level = 0;
+  ivec2 size = textureSize(tex, level);
+  vec4 color = vec4(0);
+  for (int y = 0; y < size.y; ++y) {
+    for (int x = 0; x < size.x; ++x) {
+      color += texelFetch(tex, ivec2(x, y), level);
+    }
+  }
+  outColor = color / float(size.x * size.y);
+}
+`;
+
+function main() {
+  const gl = document.createElement('canvas').getContext('webgl2');
+  if (!gl) {
+    return alert('need webgl2');
+  }
+  const prg = twgl.createProgram(gl, [vs, fs]);
+  
+  gl.canvas.width = 1;
+  gl.canvas.height = 1;
+  gl.viewport(0, 0, 1, 1);
+
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  // so we don't need mips
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  // so we can pass a non multiple of 4 bytes
+  gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+  
+  const values = new Uint8Array([
+     10, 100, 200, 1,
+     12, 150, 231, 9,
+     50, 129, 290, 3,
+     45, 141, 300, 2,
+     12, 123, 212, 4,
+  ]);
+  const width = 1;
+  const height = values.length / 4;
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, values);
+  
+  gl.useProgram(prg);
+  gl.drawArrays(gl.POINTS, 0, 1);
+  
+  const gpuAverages = new Uint8Array(4);
+  gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, gpuAverages);
+  
+  let jsAverages = [0, 0, 0, 0];
+  for (let i = 0; i < height; ++i) {
+    for (let j = 0; j < 4; ++j) {
+      jsAverages[j] += values[i * 4 + j];
+    }
+  }
+  jsAverages = jsAverages.map(v => v / height);
+  
+  console.log('gpuAverage:', gpuAverages.join(', '));
+  console.log('jsAverage:', jsAverages.join(', '));
+}
+
+main();
+
+
+</script>

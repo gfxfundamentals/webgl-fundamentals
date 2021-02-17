@@ -83,6 +83,10 @@ $(document).ready(function($) {
     window.location.href = this.value;
   });
 
+  $('a[data-href]').on('click', function() {
+    window.location.href = this.dataset.href;
+  });
+
 });
 }(jQuery));
 

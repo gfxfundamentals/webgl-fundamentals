@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body {
+  background: #444;
+}
+canvas {
+  border: 1px solid black;
+  display: block;
+}
+
+
+</style>
+</head>
+<body>
+
+<canvas></canvas>
+<button type="button">start</button>
+<span style="color: #FF0">■ max brightness</span>
+<span style="color: #F80">■ min brightness, </span>
+<span style="color: #F0F">■ average brightness, </span>
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+
+
+</body>
+<script>
+
+const startElem = document.querySelector('button');
+startElem.addEventListener('click', main, {once: true});
+
+function createShader(texWidth, texHeight) {
+  return `
+  precision mediump float;
+  uniform sampler2D tex;
+
+  void main() {
+    vec2 size = vec2(${texWidth}, ${texHeight});
+    float totalBrightness = 0.0;
+    float minBrightness = 1.0;
+    float maxBrightness = 0.0;
+    for (int y = 0; y < ${texHeight}; ++y) {
+      for (int x = 0; x < ${texWidth}; ++x) {
+        vec4 color = texture2D(tex, (vec2(x, y) + 0.5) / size);
+        vec3 adjusted = color.rgb * vec3(0.2126, 0.7152, 0.0722);
+        float brightness = adjusted.r + adjusted.g + adjusted.b;
+        totalBrightness += brightness;
+        minBrightness = min(brightness, minBrightness);
+        maxBrightness = max(brightness, maxBrightness);
+      }
+    }
+    float averageBrightness = totalBrightness / (size.x * size.y);
+    gl_FragColor = vec4(averageBrightness, minBrightness, maxBrightness, 0);
+  }
+  `;
+}
+
+const prgs = {}
+function getAverageProgram(gl, width, height) {
+  const id = `${width}x${height}`;
+  const prg = prgs[id];
+  if (prg) {
+    return prg;
+  }
+  const vs = `
+  attribute vec4 position;
+  void main() {
+    gl_Position = position;
+  }
+  `;
+  const fs = createShader(width, height);
+  // compile shaders, link program, look up uniforms
+  const newPrg = twgl.createProgramInfo(gl, [vs, fs]);
+  prgs[id] = newPrg;
+  return newPrg;
+}
+
+
+function main() {
+  const gl = document.querySelector('canvas').getContext('webgl');
+  
+  let updateTexture = false;
+  const video = document.createElement('video');
+  video.crossOrigin = 'anonymous';
+  video.loop = true;
+  video.src = 'https://webglsamples.org/color-adjust/sample-video.mp4';
+  if (video.requestVideoFrameCallback) {
+    function update() {
+      draw();
+      video.requestVideoFrameCallback(update);
+    };
+    video.requestVideoFrameCallback(update);
+  } else {
+    function update() {
+      if (video.currentTime > 0) {
+        draw();
+      }
+      requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+  video.volume = 0;
+  video.play();
+  
+  // create a 1x1 pixel RGBA/UNSIGNED_BYTE framebuffer
+  const fbi = twgl.createFramebufferInfo(gl, [
+    { internalForamt: gl.RGBA },
+  ], 1, 1);
+  
+  const tVS = `
+  attribute vec4 position;
+  attribute vec2 texcoord;
+  varying vec2 v_texcoord;
+  void main() {
+    gl_Position = position;
+    v_texcoord = texcoord;
+  }
+  `;
+  const tFS = `
+  precision mediump float;
+  uniform sampler2D tex;
+  varying vec2 v_texcoord;
+  void main() {
+    gl_FragColor = texture2D(tex, v_texcoord);
+  }
+  `;
+  // compile shaders, link program, look up uniforms
+  const textureProgInfo = twgl.createProgramInfo(gl, [tVS, tFS]);
+  
+  const avgMinMaxVS = `
+  attribute float id;
+  varying float v_id;
+  uniform sampler2D avgMinMaxTex;
+  void main() {
+    vec4 avgMinMax = texture2D(avgMinMaxTex, vec2(0.5));
+    float v = id < 1.0
+       ? avgMinMax.x
+       : id < 2.0
+          ? avgMinMax.y
+          : avgMinMax.z;
+    gl_Position = vec4(1. - (id + 1.0) / 10., v * 2. - 1., 0, 1);
+    gl_PointSize = 10.0;
+    v_id = id;
+  }
+  `;
+  const avgMinMaxFS = `
+  precision mediump float;
+  varying float v_id;
+  void main() {
+    gl_FragColor = vec4(1., v_id / 2., 1. - v_id / 2., 1);
+  }
+  `;
+  // compile shaders, link program, look up uniforms
+  const avgMinMaxPrgInfo = twgl.createProgramInfo(gl, [avgMinMaxVS, avgMinMaxFS]);
+  
+  const planeBufferInfo = twgl.primitives.createXYQuadBufferInfo(gl);
+  const idBufferInfo = twgl.createBufferInfoFromArrays(gl, {
+    id: {
+      data: [0, 1, 2],
+      numComponents: 1,
+    },
+  });
+  
+  const videoTex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, videoTex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+  function draw() {
+    // copy video to texture
+    gl.bindTexture(gl.TEXTURE_2D, videoTex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video);
+    
+    // --- [ compute average, min, max to single pixel ] ---
+    
+    const averagePrgInfo = getAverageProgram(gl, video.videoWidth, video.videoHeight);
+    gl.useProgram(averagePrgInfo.program);
+    
+    // calls gl.bindFramebuffer and gl.viewport
+    twgl.bindFramebufferInfo(gl, fbi);
+    
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    twgl.setBuffersAndAttributes(gl, averagePrgInfo, planeBufferInfo);
+    
+    // calls gl.drawArrays or gl.drawElements
+    twgl.drawBufferInfo(gl, planeBufferInfo);
+    
+    // --- [ draw video to texture ] ---
+    
+    // calls gl.bindFramebuffer and gl.viewport
+    twgl.bindFramebufferInfo(gl, null);
+    
+    gl.useProgram(textureProgInfo.program);
+    
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    twgl.setBuffersAndAttributes(gl, textureProgInfo, planeBufferInfo);
+    
+    // calls gl.drawArrays or gl.drawElements
+    twgl.drawBufferInfo(gl, planeBufferInfo);
+    
+    // -- [ draw 3 points showing avg, min, max] ---
+    
+    gl.useProgram(avgMinMaxPrgInfo.program);
+
+    gl.bindTexture(gl.TEXTURE_2D, fbi.attachments[0]);
+    
+    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    twgl.setBuffersAndAttributes(gl, avgMinMaxPrgInfo, idBufferInfo);    
+
+    // calls gl.drawArrays or gl.drawElements
+    twgl.drawBufferInfo(gl, idBufferInfo, gl.POINTS);
+  }
+}
+
+
+</script>

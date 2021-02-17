@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+pre { margin: 0; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+
+
+</body>
+<script>
+
+function main() {
+  const gl = document.createElement('canvas').getContext('webgl2', {
+    powerPreference: 'high-performance',
+  });
+  log(`powerPreference: ${gl.getContextAttributes().powerPreference}\n\n`);
+  if (!gl) {
+    log('need WebGL2');
+    return;
+  }
+  const ext = gl.getExtension('EXT_disjoint_timer_query_webgl2');
+  if (!ext) {
+    log('need EXT_disjoint_timer_query_webgl2');
+    return;
+  }
+
+  const vs = `#version 300 es
+  in vec4 position;
+  void main() {
+    gl_Position = position;
+  }
+  `;
+
+  const fs = `#version 300 es
+  precision highp float;
+  uniform sampler2D tex;
+  out vec4 fragColor;
+  void main() {
+    const int across = 100;
+    const int up = 100;
+    vec2 size = vec2(textureSize(tex, 0));
+    vec4 sum = vec4(0);
+    for (int y = 0; y < up; ++y) {
+      for (int x = 0; x < across; ++x) {
+        vec2 start = gl_FragCoord.xy + vec2(x, y);
+        vec2 uv = (mod(start, size) + 0.5) / size;
+        uv = texture(tex, uv).xy;
+        uv = texture(tex, uv).xy;
+        uv = texture(tex, uv).xy;
+        uv = texture(tex, uv).xy;
+        uv = texture(tex, uv).xy;
+        uv = texture(tex, uv).xy;
+        uv = texture(tex, uv).xy;
+        sum += texture(tex, uv);
+      }
+    }  
+    fragColor = sum / float(across * up);
+  }
+  `;
+
+  const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+  const bufferInfo = twgl.primitives.createXYQuadBufferInfo(gl);
+
+  const pixels = new Uint8Array(1024 * 1024 * 4);
+  for (let i = 0; i < pixels.length; ++i) {
+    pixels[i] = Math.random() * 256;
+  }
+  // creates a 1024x1024 RGBA texture.
+  const tex = twgl.createTexture(gl, {src: pixels});
+
+  gl.useProgram(programInfo.program);
+  twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+
+  const waitFrame = _ => new Promise(resolve => requestAnimationFrame(resolve));
+
+  const widthHeightFromIndex = i => {
+    const height = 2 ** (i / 2 | 0);
+    const width = height * (i % 2 + 1);
+    return { width, height };
+  };
+
+  async function getSizeThatRunsUnderLimit(gl, limitMs) {
+    log('size        time in milliseconds');
+    log('--------------------------------');
+    for (let i = 0; i < 32; ++i) {
+      const {width, height} = widthHeightFromIndex(i);
+      const timeElapsedMs = await getTimeMsForSize(gl, width, height);
+      const dims = `${width}x${height}`;
+      log(`${dims.padEnd(11)} ${timeElapsedMs.toFixed(1).padStart(6)}`);
+      if (timeElapsedMs > limitMs) {
+        return widthHeightFromIndex(i - 1);
+      }
+    }
+  }
+
+  (async () => {
+    const limit = 1000 / 20;
+    const {width, height} = await getSizeThatRunsUnderLimit(gl, limit);
+    log('--------------------------------');
+    log(`use ${width}x${height}`);
+  })();
+
+  async function getTimeMsForSize(gl, width, height) {
+    gl.canvas.width = width;
+    gl.canvas.height = height;
+    gl.viewport(0, 0, width, height);
+
+    // prime the GPU/driver
+    // this is voodoo but if I don't do this
+    // all the numbers come out bad. Even with
+    // this the first test seems to fail with
+    // a large number intermittently
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+
+    for (;;) {
+      const query = gl.createQuery();
+      gl.beginQuery(ext.TIME_ELAPSED_EXT, query);
+
+      gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+
+      gl.endQuery(ext.TIME_ELAPSED_EXT);
+      gl.flush();
+
+      for (;;) {
+        await waitFrame();
+
+        const available = gl.getQueryParameter(query, gl.QUERY_RESULT_AVAILABLE);
+        if (available) {
+          break;
+        }
+      }
+
+      const disjoint = gl.getParameter(ext.GPU_DISJOINT_EXT);    
+      if (!disjoint) {
+        const timeElapsed = gl.getQueryParameter(query, gl.QUERY_RESULT); 
+        gl.deleteQuery(query);
+        return timeElapsed / (10 ** 6);  // return milliseconds
+      }
+
+      gl.deleteQuery(query);
+    }
+  }
+}
+
+main();
+
+function log(...args) {
+  const elem = document.createElement('pre');
+  elem.textContent = args.join(' ');
+  document.body.appendChild(elem);
+}
+
+
+</script>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+canvas { border: 1px solid black; margin: 2px; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/4.x/twgl-full.min.js"></script>
+<canvas id="webgl"></canvas>
+<canvas id="graph"></canvas>
+
+
+</body>
+<script>
+
+const m4 = twgl.m4;
+const gl = document.querySelector('#webgl').getContext('webgl');
+const ctx = document.querySelector('#graph').getContext('2d');
+
+const vs = `
+attribute vec4 position;
+uniform mat4 matrix;
+varying vec2 v_texcoord;
+void main() {
+  gl_Position = matrix * position;
+  v_texcoord = position.xy;
+}
+`
+
+const fs = `
+precision mediump float;
+varying vec2 v_texcoord;
+uniform sampler2D tex;
+void main() {
+  gl_FragColor = texture2D(tex, v_texcoord);
+}
+`;
+
+const program = twgl.createProgram(gl, [vs, fs]);
+const posLoc = gl.getAttribLocation(program, 'position');
+const matLoc = gl.getUniformLocation(program, 'matrix');
+
+const buf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+  0, 0,
+  1, 0,
+  0, 1,
+  0, 1,
+  1, 0,
+  1, 1,
+]), gl.STATIC_DRAW);
+
+gl.enableVertexAttribArray(posLoc);
+gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+function createTexture(gl) {
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(
+      gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+      new Uint8Array([0, 0, 255, 255]));
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  return tex;
+}
+
+let drawingTex = createTexture(gl);
+let loadingTex = createTexture(gl);
+
+const m = m4.identity();
+let frameCount = 0;
+let previousTime = 0;
+
+const workerScript = `
+importScripts(
+    // from https://github.com/eugeneware/jpeg-js
+    'https://greggman.github.io/doodles/js/JPG-decoder.js',
+    // from https://github.com/photopea/UPNG.js
+    'https://greggman.github.io/doodles/js/UPNG.js',
+);
+
+let imgNdx = 0;
+let imgAspect = 1;
+
+const imageUrls = [
+  'https://i.imgur.com/KjUybBD.png',
+  'https://i.imgur.com/AyOufBk.jpg',
+  'https://i.imgur.com/UKBsvV0.jpg',
+  'https://i.imgur.com/TSiyiJv.jpg',
+];
+
+function decodePNG(arraybuffer) {
+  return UPNG.decode(arraybuffer)
+}
+
+function decodeJPG(arrayBuffer) {
+  return decode(new Uint8Array(arrayBuffer), true);
+}
+
+const decoders = {
+  'image/png': decodePNG,
+  'image/jpeg': decodeJPG,
+  'image/jpg': decodeJPG,
+};
+
+async function loadNextImage() {
+  const url = \`\${imageUrls[imgNdx]}?cachebust=\${performance.now()}\`;
+  imgNdx = (imgNdx + 1) % imageUrls.length;
+  const res = await fetch(url, {mode: 'cors'});
+  const arrayBuffer = await res.arrayBuffer();
+  const type = res.headers.get('Content-Type');
+  let decoder = decoders[type];
+  if (!decoder) {
+    console.error('unknown image type:', type);
+  }
+  const imgData = decoder(arrayBuffer);
+  postMessage({
+    width: imgData.width,
+    height: imgData.height,
+    arrayBuffer: imgData.data.buffer,
+  }, [imgData.data.buffer]);
+}
+
+onmessage = loadNextImage;
+`;
+const blob = new Blob([workerScript], {type: 'application/javascript'});
+const worker = new Worker(URL.createObjectURL(blob));
+let imgAspect = 1;
+worker.onmessage = async(e) => {
+  const {width, height, arrayBuffer} = e.data;
+  
+  gl.bindTexture(gl.TEXTURE_2D, loadingTex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);  
+  
+  const maxRows = 20;
+  for (let y = 0; y < height; y += maxRows) {
+    const rows = Math.min(maxRows, height - y);
+    gl.bindTexture(gl.TEXTURE_2D, loadingTex);
+    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, y, width, rows, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(arrayBuffer, y * width * 4, rows * width * 4));  
+    await waitRAF();
+  }
+  const temp = loadingTex;
+  loadingTex = drawingTex;
+  drawingTex = temp;
+  imgAspect = width / height;
+  await waitMS(1000);
+  worker.postMessage('');
+};
+worker.postMessage('');
+
+function waitRAF() {
+  return new Promise(resolve => requestAnimationFrame(resolve));
+}
+
+function waitMS(ms = 0) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function render(currentTime) {
+  const deltaTime = currentTime - previousTime;
+  previousTime = currentTime;
+  
+  {
+    const {width, height} = ctx.canvas;
+    const x = frameCount % width;
+    const y = 1000 / deltaTime / 60 * height / 2;
+    ctx.fillStyle = frameCount % (width * 2) < width ? 'red' : 'blue';
+    ctx.clearRect(x, 0, 1, height);
+    ctx.fillRect(x, y, 1, height);
+    ctx.clearRect(0, 0, 30, 15);
+    ctx.fillText((1000 / deltaTime).toFixed(1), 2, 10);
+  }
+
+  gl.useProgram(program);
+  const dispAspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  m4.scaling([1 / dispAspect, 1, 1], m);
+  m4.rotateZ(m, currentTime * 0.001, m);
+  m4.scale(m, [imgAspect, 1, 1], m);
+  m4.translate(m, [-0.5, -0.5, 0], m);
+  gl.bindTexture(gl.TEXTURE_2D, drawingTex);
+  gl.uniformMatrix4fv(matLoc, false, m);
+  gl.drawArrays(gl.TRIANGLES, 0, 6);
+  
+  ++frameCount;
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+
+body { margin: 0; }
+canvas { width: 100vw; height: 100vh; display: block; }
+.top { position: absolute; left: 5px; top: 5px; color: white; }
+
+
+</style>
+</head>
+<body>
+
+<script src="https://twgljs.org/dist/twgl.min.js"></script>
+<canvas></canvas>
+<div class="top">click to switch effects</div>
+
+
+</body>
+<script>
+
+var vs = `
+attribute vec4 position;
+
+varying vec2 v_texcoord;
+
+void main() {
+  gl_Position = position;
+  v_texcoord = position.xy * .5 + .5;
+}
+`;
+
+var fs1 = `
+precision mediump float;
+
+uniform float time;
+uniform sampler2D tex;
+
+varying vec2 v_texcoord;
+
+float upDown(float v) {
+  return sin(v) * .5 + .5;
+}
+
+void main() {
+  float t1 = time;
+  float t2 = time * 0.37;
+
+  float v = v_texcoord.y;
+
+  float off1 = sin((v + 0.5) * mix(1., 6., upDown(t1))) * .2;
+  float off2 = sin((v + 0.5) * mix(1., 3., upDown(t2))) * .2;
+  float off = off1 + off2;
+
+  // like the canvas2d example if off = 0 then the image will just
+  // be flattly stretched down the canvas. "off" is an offset in
+  // texture coordinates of which part of the source image to use
+  // for the current destination. 
+ 
+  // In the canvas example off was in pixels since in +1 means use the
+  // src image 1 pixel lower than we would have used and -1 = one pixel higher
+
+  // In shaders we work in texture coords which go from 0 to 1 regardless
+  // of the size of the texture. So for example if the texture was 100 pixels
+  // tall then off = 0.01 would offset by 1 pixel. We didn't pass in
+  // the size of the canvas nor the size of the texture but of course we
+  // we could if we thought that was important.
+
+  vec2 uv = vec2(
+     v_texcoord.x,
+     1. - (v + off));
+
+  gl_FragColor = texture2D(tex, uv);
+}
+`;
+
+var fs2 = `
+precision mediump float;
+
+uniform float time;
+uniform sampler2D tex;
+
+varying vec2 v_texcoord;
+
+float upDown(float v) {
+  return sin(v) * .5 + .5;
+}
+
+#define PI radians(180.)
+
+mat2 rot(float a) {
+  float c = cos(a);
+  float s = sin(a); 
+  return mat2(c, s, -s, c);
+}
+
+float bounce(float v) {
+  v = fract(v * .2);
+  return mix(v, 2. - v, step(1., v));
+}
+
+void main() {
+  float t1 = time;
+  float t2 = time * 0.37;
+  float t3 = time * 0.1;
+  float t4 = time * 1.23;
+
+  vec2 tc = rot(time * 0.1) * (v_texcoord - 0.25) ;
+  vec2 xy = fract(tc * mix(.5, 3., upDown(t4))) * 2. - 1.;
+  float a  = fract(abs(atan(xy.x, xy.y)) / PI + t3);
+  float r  = bounce(length(xy) + t1);
+
+  r = pow(r, mix(0.2, 1., upDown(t2)));
+  
+  vec2 uv = vec2(a, r);
+
+  gl_FragColor = texture2D(tex, uv);
+}
+`;
+
+var gl = document.querySelector("canvas").getContext("webgl");
+var programInfo1 = twgl.createProgramInfo(gl, [vs, fs1]);
+var programInfo2 = twgl.createProgramInfo(gl, [vs, fs2]);
+var bufferInfo = twgl.createBufferInfoFromArrays(gl, {
+  position: {
+    numComponents: 2,
+    data: [
+      -1, -1, 
+       1, -1,
+      -1,  1,
+      -1,  1,
+       1, -1,
+       1,  1,
+    ],
+  },
+});
+      
+var texture = twgl.createTexture(gl, { 
+  src: "https://i.imgur.com/v38pV.jpg",
+  crossOrigin: '',
+});
+
+var uniforms = {
+  tex: texture,
+  time: 0,
+};
+  
+var programIndex = 0;
+var programInfos = [
+  programInfo1,
+  programInfo2,
+];
+    
+function nextProgram() {
+  programIndex = (programIndex + 1) % programInfos.length;
+}
+window.addEventListener('keydown', nextProgram);
+window.addEventListener('mousedown', nextProgram);
+window.addEventListener('touchstart', nextProgram);
+  
+      
+function render(time) {
+  uniforms.time = time * 0.001;
+
+  twgl.resizeCanvasToDisplaySize(gl.canvas);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+  var programInfo = programInfos[programIndex];
+  gl.useProgram(programInfo.program);
+      
+  twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+  twgl.setUniforms(programInfo, uniforms);
+  twgl.drawBufferInfo(gl, gl.TRIANGLES, bufferInfo);
+      
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+
+</script>
