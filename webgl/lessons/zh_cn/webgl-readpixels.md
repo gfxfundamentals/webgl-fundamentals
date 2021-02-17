@@ -9,7 +9,7 @@ TOC: WebGL readPixels
 
 > 对于归一化的固定点渲染的表面，格式 `RGBA` 和类型 `UNSIGNED_BYTE` 是可用的。
 对于有符号整型渲染的表面，格式 `RGBA_INTEGER` 和类型 `INT` 是可用的。
-对于无符号整型选举的表面，格式 `RGBA_INTEGER` 和类型 `UNSIGNED_INT` 是可用的。
+对于无符号整型渲染的表面，格式 `RGBA_INTEGER` 和类型 `UNSIGNED_INT` 是可用的。
 
 其中第二种组合取决于具体实现，<span style="color: red;">这意味着如果你想要你的代码具有可移植性，你不应该使用它</span>。
 可以通过下面的代码查询格式/类型的组合：
