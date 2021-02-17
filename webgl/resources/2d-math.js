@@ -1,5 +1,5 @@
 /*
- * Copyright 2012, Gregg Tavares.
+ * Copyright 2021 GFXFundamentals.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -12,7 +12,7 @@
  * copyright notice, this list of conditions and the following disclaimer
  * in the documentation and/or other materials provided with the
  * distribution.
- *     * Neither the name of Gregg Tavares. nor the names of his
+ *     * Neither the name of GFXFundamentals. nor the names of his
  * contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission.
  *
