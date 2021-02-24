@@ -302,7 +302,7 @@ stretch that window across both monitors. Your code tries to set the <code>canva
 <ol>
 <li>
  <p>Throw an exception.</p>
- <p>That seems bad. Most web apps won't be checking for it and the app wil crash.
+ <p>That seems bad. Most web apps won't be checking for it and the app will crash.
  If the app had user data in it the user just lost their data</p>
 </li>
 <li>
