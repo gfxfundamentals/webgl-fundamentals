@@ -167,7 +167,7 @@ WebGL2는 몇 가지 더 추가합니다.
 
 ## Depth Buffer 해상도
 
-정말 오래된 몇몇 기기들은 16비트 depth buffer를 사용합니다.
+정말 오래된 일부 기기들은 16비트 depth buffer를 사용합니다.
 그렇지 않은, 99%의 기기들은 24비트 depth buffer를 사용하므로 걱정하지 않아도 됩니다.
 
 ## readPixels format/type 조합

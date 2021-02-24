@@ -3,7 +3,7 @@ Description: WebGL alpha가 OpenGL alpha와 다른 점
 TOC: WebGL Alpha
 
 
-WebGL이 backbuffer(ie, 캔버스)에서 alpha를 처리하는 방법에 이슈가 있는 몇몇 OpenGL 개발자들을 발견했어서, alpha와 관련하여 WebGL과 OpenGL의 차이점을 살펴보는 것도 좋을 것이라 생각했습니다.
+WebGL이 backbuffer(ie, 캔버스)에서 alpha를 처리하는 방법에 이슈가 있는 일부 OpenGL 개발자들을 발견했어서, alpha와 관련하여 WebGL과 OpenGL의 차이점을 살펴보는 것도 좋을 것이라 생각했습니다.
 
 OpenGL과 WebGL의 가장 큰 차이점으로 OpenGL은 어떤 것과도 합성되지 않거나, 실제로 OS 윈도우 매니저에 의해 어떤 것도 합성되지 않은, backbuffer에 렌더링하므로 alpha가 무언인지는 중요하지 않습니다.
 

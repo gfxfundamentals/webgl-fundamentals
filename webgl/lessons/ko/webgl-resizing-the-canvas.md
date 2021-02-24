@@ -30,7 +30,7 @@ CSS는 캔버스가 표시되는 크기를 결정합니다.
 만약 캔버스의 표시 크기에 영향을 주는 CSS가 없다면 표시 크기는 drawingbuffer와 동일한 크기가 되는데요.
 위 두 예제에서 캔버스의 drawingbuffer는 400x300이며 표시 크기 또한 400x300이 됩니다.
 
-다음은 페이지에 400x300 픽셀로 표시되고 drawingbuffer가 10x15 픽셀인 캔버스의 예제인데
+다음은 페이지에 400x300px로 표시되고 drawingbuffer가 10x15px인 캔버스의 예제인데
 
     <canvas id="c" width="10" height="15" style="width: 400px; height: 300px;"></canvas>
 
@@ -49,7 +49,7 @@ CSS는 캔버스가 표시되는 크기를 결정합니다.
 {{{example url="../webgl-10x15-canvas-400x300-css.html" }}}
 
 왜 이렇게 흐릿할까요?
-그건 브라우저가 10x15 픽셀의 캔버스를 가져와서 400x300 픽셀로 늘이고 일반적으로 늘릴 때 filtering하기 때문입니다.
+그건 브라우저가 10x15px의 캔버스를 가져와서 400x300px로 늘이고 일반적으로 늘릴 때 filtering하기 때문입니다.
 
 그럼, 예를 들어, 캔버스로 창을 꽉 채우고 싶다면 어떻게 해야 할까요?
 음, 우선 브라우저가 CSS로 캔버스를 늘려 창을 채우게 할 수 있습니다.
@@ -147,15 +147,15 @@ CSS나 캔버스에서 크기를 픽셀로 지정하면 실제 픽셀일 수도 
 </p>
 <p>
 이를 위해 <code>window.devicePixelRatio</code> 값을 확인할 수 있습니다.
-이 값은 몇 개의 실제 픽셀이 1 CSS 픽셀과 같은지 알려주는데요.
+이 값은 몇 개의 실제 픽셀이 1 CSS pixel과 같은지 알려주는데요.
 resize 함수를 수정하여 이렇게 처리할 수 있습니다.
 </p>
 <pre class="prettyprint">
 function resize(gl) {
   var realToCSSPixels = window.devicePixelRatio;
 
-  // 브라우저가 CSS 픽셀로 캔버스를 표시하는 크기를 탐색하고
-  // drawingbuffer를 device 픽셀로 일치시키는데 필요한 크기를 계산합니다.
+  // 브라우저가 CSS pixel로 캔버스를 표시하는 크기를 탐색하고
+  // drawingbuffer를 device pixel로 일치시키는데 필요한 크기를 계산합니다.
   var displayWidth  = Math.floor(gl.canvas.clientWidth  * realToCSSPixels);
   var displayHeight = Math.floor(gl.canvas.clientHeight * realToCSSPixels);
 
