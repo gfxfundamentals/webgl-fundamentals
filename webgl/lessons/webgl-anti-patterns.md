@@ -293,11 +293,13 @@ GPUs have a limit on how big a rectangle of pixels (texture, renderbuffer) they 
 size is the next power of 2 larger than whatever a common monitor resolution was at the time the GPU was
 made. For example if the GPU was designed to support 1280x1024 screens it might have a size limit of 2048.
 If it was designed for 2560x1600 screens it might have a limit of 4096.
-</p><p>
+</p>
+<p>
 That seems reasonable but what happens if you have multiple monitors? Let's say I have a GPU with a limit
 of 2048 but I have two 1920x1080 monitors. The user opens a browser window with a WebGL page, they then
 stretch that window across both monitors. Your code tries to set the <code>canvas.width</code> to
 <code>canvas.clientWidth</code> which in this case is 3840. What should happen?
+</p>
 <p>Off the top of my head there are only 3 options</p>
 <ol>
 <li>
