@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-animation.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of GFXFundamentals. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL - Animation" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to do animation in WebGL" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-animation.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL - Animation" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-animation.html" />
-<meta name="twitter:description" content="How to do animation in WebGL" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="How to do animation in WebGL">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-animation_ko.jpg">
+
+<meta property="og:title" content="WebGL - Animation">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-animation_ko.jpg">
+<meta property="og:description" content="How to do animation in WebGL">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-animation.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL - Animation">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-animation.html">
+<meta name="twitter:description" content="How to do animation in WebGL">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-animation_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-animation.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-animation_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-animation.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-animation.html",
+      "inLanguage":"ko",
+      "name":"WebGL - Animation",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-animation.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
 <title>WebGL - Animation</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-animation.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-animation.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-animation.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-animation.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-animation.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-animation.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-animation.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-animation.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -183,9 +240,112 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-animation.html">여기</a>에 있습니다.</p>
+      <p>이 포스트는 WebGL 관련 시리즈의 연장입니다.
+첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고 이전에는 <a href="webgl-3d-camera.html">3D 카메라</a>에 관한 것이었습니다.
+아직 읽지 않았다면 해당 글들을 먼저 봐주세요.</p>
+<p>WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할까요?</p>
+<p>사실 이건 WebGL에 국한되지 않지만 일반적으로 JavaScript로 무언가에 애니메이션을 적용하고 싶다면 시간이 지남에 따라 무언가를 수정하고 다시 그려야 합니다.</p>
+<p>이전 샘플들 중 하나를 가져와 다음과 같이 애니메이션을 적용할 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*var fieldOfViewRadians = degToRad(60);
+*var rotationSpeed = 1.2;
+
+*requestAnimationFrame(drawScene);
+
+// 장면 그리기
+function drawScene() {
+*  // 프레임마다 조금씩 회전
+*  rotation[1] += rotationSpeed / 60.0;
+
+  ...
+*  // 다음 프레임에서 다시 drawScene 호출
+*  requestAnimationFrame(drawScene);
+}
+</code></pre><p>그리고 결과입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation-not-frame-rate-independent.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-animation-not-frame-rate-independent.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>그런데 애매한 문제가 있습니다.
+위 코드에는 <code class="notranslate" translate="no">rotationSpeed / 60.0</code>이 있는데요.
+일반적으로 브라우저가 초당 60번씩 requestAnimationFrame에 응답할 것이라 가정했기 때문에 60.0으로 나눴습니다.</p>
+<p>그런데 사실 이는 유효한 가정이 아닌데요.
+사용자가 오래된 스마트폰처럼 저전력 기기를 사용할 수 있습니다.
+또는 사용자가 백그라운드에서 무거운 프로그램을 실행 중일 수도 있죠.
+브라우저가 초당 60프레임으로 표시되지 않는 데에는 여러 가지 이유가 있습니다.
+2020년에는 모든 컴퓨터가 초당 240프레임으로 실행될 수도 있습니다.
+사용자가 게이머여서 초당 90프레임으로 실행되는 CRT 모니터를 가졌을 수도 있겠죠.</p>
+<p>이 예제에서 문제점을 보실 수 있습니다.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/../webgl-animation-frame-rate-issues.html"></iframe>
+</div>
+
+</p>
+<p>위 예제에서 모든 &#39;F&#39;를 같은 속도로 회전시키고 싶습니다.
+가운데에 있는 &#39;F&#39;는 최대 속도로 작동하며 프레임률에 독립적입니다.
+왼쪽과 오른쪽에 있는 &#39;F&#39;는 브라우저가 현재 컴퓨터 최대 속도의 1/8로 실행되는 경우를 시뮬레이션합니다.
+왼쪽은 프레임률에 <strong>비독립적</strong>입니다.
+오른쪽은 프레임률에 <strong>독립적</strong>입니다.</p>
+<p>왼쪽에 있는 것은 프레임률이 느릴 수 있다는 걸 고려하지 않았기 때문에 따라오지 못 한다는 점에 주목하세요.
+오른쪽에 있는 것은 비록 1/8의 프레임률로 실행되지만 최대 속도로 실행되는 가운데에 있는 걸 따라가고 있습니다.</p>
+<p>애니메이션을 프레임률에 독립적으로 만드는 방법은 프레임 간에 소요된 시간을 계산하고, 이를 사용하여 이 프레임을 얼마나 애니메이션 할지 계산하는 겁니다.</p>
+<p>먼저 시간이 필요합니다.
+다행히도 <code class="notranslate" translate="no">requestAnimationFrame</code>은 페이지가 로드된 이후에 호출하면 시간을 보내줍니다. </p>
+<p>초 단위로 시간을 얻는 것이 가장 좋지만 <code class="notranslate" translate="no">requestAnimationFrame</code>이 밀리초(1/1000초) 단위로 시간을 전달하기 때문에 초 단위를 얻기 위해 0.001로 곱해야 합니다.</p>
+<p>따라서, 다음과 같이 델타 시간을 계산할 수 있는데</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*var then = 0;
+
+requestAnimationFrame(drawScene);
+
+// 장면 그리기
+*function drawScene(now) {
+*  // 시간을 초단위로 변환
+*  now *= 0.001;
+*  // 현재 시간에서 이전 시간 빼기
+*  var deltaTime = now - then;
+*  // 다음 프레임을 위해 현재 시간 저장
+*  then = now;
+
+   ...
+</code></pre><p>초 단위의 <code class="notranslate" translate="no">deltaTime</code>이 있으면 모든 계산은 초당 어떤 일이 일어나길 원하는 단위 수가 될 수 있습니다.
+이 경우 <code class="notranslate" translate="no">rotationSpeed</code>는 1.2고 이는 초당 1.2radian씩 회전한다는 걸 의미합니다.
+이는 1/5 회전, 즉 프레임률에 상관없이 완전히 회전하는데 5초가 걸립니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*    rotation[1] += rotationSpeed * deltaTime;
+</code></pre><p>다음은 실제로 작동하는 샘플입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-animation.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-animation.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>느린 컴퓨터가 아니라면 이 페이지 상단에 있는 것과 차이점은 없을 테지만, 애니메이션을 프레임률에 독립적으로 만들지 않는다면 사용자는 의도한 것과 상당히 다른 경험을 얻게 될 겁니다.</p>
+<p>다음은 <a href="webgl-3d-textures.html">texture를 적용하는 방법</a>입니다.</p>
+<div class="webgl_bottombar">
+<h3>setInterval나 setTimeout을 사용하지 마세요!</h3>
+<p>
+과거에 자바스크립트로 애니메이션을 프로그래밍한 적이 있다면 <code class="notranslate" translate="no">setInterval</code>나 <code class="notranslate" translate="no">setTimeout</code>을 사용하여 그리기 함수를 호출했을 겁니다.
+</p>
+<p>
+<code class="notranslate" translate="no">setInterval</code>와 <code class="notranslate" translate="no">setTimeout</code>을 사용한 애니메이션 수행에 따른 문제는 두 가지입니다.
+우선 <code class="notranslate" translate="no">setInterval</code>와 <code class="notranslate" translate="no">setTimeout</code>은 무언가를 표시하는 것에 대해 브라우저와 아무 관련이 없습니다.
+브라우저가 새로운 프레임을 그릴 때 동기화되지 않으므로 사용자의 컴퓨터와 싱크가 맞지 않을 수 있습니다.
+<code class="notranslate" translate="no">setInterval</code>나 <code class="notranslate" translate="no">setTimeout</code>를 사용하고, 초당 60프레임이라 가정하며, 실제로 사용자의 컴퓨터가 다른 프레임률로 실행한다면, 컴퓨터와 싱크가 맞지 않을 겁니다.
+</p>
+<p>
+또 다른 문제는 브라우저가 <code class="notranslate" translate="no">setInterval</code>나 <code class="notranslate" translate="no">setTimeout</code>을 사용하는 이유를 모른다는 겁니다.
+예를 들어, 활성 탭이 아닐 때처럼, 페이지가 보이지 않는 경우에도, 브라우저는 여전히 코드를 실행해야 합니다.
+새 메일이나 트윗을 확인하기 위해 <code class="notranslate" translate="no">setTimeout</code>이나 <code class="notranslate" translate="no">setInterval</code>를 사용하고 있을 수 있는데요.
+브라우저가 알 수 있는 방법이 없습니다.
+새 메세지에 대해 몇 초마다 확인하는 건 괜찮지만 WebGL에서 1000개의 객체를 그린다면 문제가 생길 수 있습니다.
+보이지 않는 탭에 볼 수도 없는 걸 그려서 사용자의 컴퓨터를 사실상 DOSing 하게 될 겁니다.
+</p>
+<p>
+<code class="notranslate" translate="no">requestAnimationFrame</code>은 이러한 이슈들을 해결합니다.
+이 함수는 적시에 호출하여 화면과 애니메이션을 동기화시키며, 탭이 보이는 경우에만 호출합니다.
+</p>
+</div>
+
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +361,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -341,13 +502,50 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL - Animation';
+            var disqus_title = 'WebGL - Animation';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {

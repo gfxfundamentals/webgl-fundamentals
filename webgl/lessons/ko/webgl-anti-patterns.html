@@ -482,62 +482,62 @@ var programInfo = {
 <p>이게 인터넷에서 본 코드에서 WebGL 안티 패턴이라고 생각하는 것들입니다.
 피해야 하는 이유를 설명하고 쉽고 유용한 해결책을 드렸기를 바랍니다.</p>
 <div class="webgl_bottombar">
-  <a id="drawingbuffer"></a>
-  <h3>drawingBufferWidth와 drawingBufferHeight는 뭔가요?</h3>
-  <p>
-    GPU에는 지원할 수 있는 픽셀 사각형(texture, renderbuffer)의 크기에 대한 제한이 있습니다.
-    Often this size is the next power of 2 larger than whatever a common monitor resolution was at the time the GPU was made.
-    예를 들어 GPU가 1280x1024 화면을 지원하도록 설계되었다면 2048의 크기 제한을 있을 수 있습니다.
-    2560x1600 화면을 지원하도록 설계되었다면 4096의 제한을 가질 겁니다.
-  </p>
-  <p>
-    합리적으로 보이지만 여러 모니터를 가지고 있다면 어떻게 될까요?
-    GPU가 2048의 제한을 가지고 있지만 2개의 1920x1080 모니터가 있다고 가정해봅시다.
-    사용자는 WebGL 페이지가 있는 브라우저 창을 연 다음, 두 모니터에 걸쳐서 창을 확장합니다.
-    코드는 <code class="notranslate" translate="no">canvas.width</code>를 이 경우 3840인 <code class="notranslate" translate="no">canvas.clientWidth</code>로 설정하려고 합니다.
-    어떻게 해야?
-  </p>
-  <p>머릿속에 떠오르는 세 가지 선택지가 있습니다.</p>
-  <ol>
-    <li>
-      <p>예외 처리</p>
-      <p>
-        안 좋은 것 같습니다.
-        대부분의 웹 앱은 이를 확인하지 않으며 앱은 충돌이 발생할 겁니다.
-        만약 앱이 사용자 데이터를 가지고 있다면 사용자는 데이터를 잃어버리겠죠.
-      </p>
-    </li>
-    <li>
-      <p>캔버스 크기를 GPU 한도로 제한</p>
-      <p>
-        이 해결책의 문제점은 코드는 캔버스가 요청한 크기로 될 것이라 예상하고, UI의 다른 부분들과 페이지에 있는 요소들이 적절한 위치에 있을 것이라 생각하기 때문에, 충돌로 이어지거나 웹 페이지를 엉망으로 만들 수 있습니다.
-      </p>
-    </li>
-    <li>
-      <p>캔버스는 사용자가 요청한 크기로 하지만 drawingbuffer 제한 설정</p>
-      <p>
-        이게 WebGL이 사용하는 해결책입니다.
-        코드가 올바르게 작성되었다면 사용자가 알아차릴 수 있는 유일한 것은 캔버스의 이미지가 약간 조정된다는 겁니다.
-        그렇지 않으면 그냥 동작합니다.
-        최악의 경우 제대로 작업을 수행하지 않는 대다수 WebGL 프로그램은 화면이 약간 표시되지 않지만, 사용자가 창의 크기를 조정하면 정상으로 돌아올 겁니다. 
-      </p>
-    </li>
-  </ol>
-  <p>
-    대다수의 사람이 여러 대의 모니터를 가지고 있지는 않으므로 이 이슈는 드물게 발생합니다.
-    아니면 적어도 예전에는 그랬겠죠.
-    2015년 1월 기준, 크롬과 사파리는 캔버스 크기가 4096로 하드 코딩된 제한이 있습니다.
-    애플의 5K iMac은 그 제한을 넘어섰습니다.
-    이로 인해 많은 WebGL 앱에서 이상한 화면이 생겼는데요.
-    마찬가지로 많은 사람들이 설치 작업을 위해 여러 모니터로 WebGL을 사용하기 시작했으며 한계에 도달했습니다.
-  </p>
-  <p>
-    따라서 이런 경우를 처리하고 싶다면 위의 #1에서 보여드린 <code class="notranslate" translate="no">gl.drawingBufferWidth</code>와 <code class="notranslate" translate="no">gl.drawingBufferHeight</code>를 사용하세요.
-    대부분의 앱에서 위 모범 사례를 따르면 제대로 작동할 겁니다.
-    drawingBuffer의 실제 크기를 알아야 하는 계산을 수행한다면 이를 고려해야 하는데요. 
-    머리속에 떠오르는 예제는, [picking](webgl-picking.html), 즉 마우스 좌표를 캔버스 픽셀 좌표롤 변환하는 겁니다.
-    다른 하나는 drawingbuffer의 실제 크기를 알아야 하는 모든 종류의 후처리 효과입니다.
-  </p>
+<a id="drawingbuffer"></a>
+<h3>drawingBufferWidth와 drawingBufferHeight는 뭔가요?</h3>
+<p>
+GPU에는 지원할 수 있는 픽셀 사각형(texture, renderbuffer)의 크기에 대한 제한이 있습니다.
+Often this size is the next power of 2 larger than whatever a common monitor resolution was at the time the GPU was made.
+예를 들어 GPU가 1280x1024 화면을 지원하도록 설계되었다면 2048의 크기 제한을 있을 수 있습니다.
+2560x1600 화면을 지원하도록 설계되었다면 4096의 제한을 가질 겁니다.
+</p>
+<p>
+합리적으로 보이지만 여러 모니터를 가지고 있다면 어떻게 될까요?
+GPU가 2048의 제한을 가지고 있지만 2개의 1920x1080 모니터가 있다고 가정해봅시다.
+사용자는 WebGL 페이지가 있는 브라우저 창을 연 다음, 두 모니터에 걸쳐서 창을 확장합니다.
+코드는 <code class="notranslate" translate="no">canvas.width</code>를 이 경우 3840인 <code class="notranslate" translate="no">canvas.clientWidth</code>로 설정하려고 합니다.
+어떻게 해야 할까요?
+</p>
+<p>머릿속에 떠오르는 세 가지 선택지가 있습니다.</p>
+<ol>
+<li>
+<p>예외 처리</p>
+<p>
+안 좋은 것 같습니다.
+대부분의 웹 앱은 이를 확인하지 않으며 앱은 충돌이 발생할 겁니다.
+만약 앱이 사용자 데이터를 가지고 있다면 사용자는 데이터를 잃어버리겠죠.
+</p>
+</li>
+<li>
+<p>캔버스 크기를 GPU 한도로 제한</p>
+<p>
+이 해결책의 문제점은 코드는 캔버스가 요청한 크기로 될 것이라 예상하고, UI의 다른 부분들과 페이지에 있는 요소들이 적절한 위치에 있을 것이라 생각하기 때문에, 충돌로 이어지거나 웹 페이지를 엉망으로 만들 수 있습니다.
+</p>
+</li>
+<li>
+<p>캔버스는 사용자가 요청한 크기로 하지만 drawingbuffer 제한 설정</p>
+<p>
+이게 WebGL이 사용하는 해결책입니다.
+코드가 올바르게 작성되었다면 사용자가 알아차릴 수 있는 유일한 것은 캔버스의 이미지가 약간 조정된다는 겁니다.
+그렇지 않으면 그냥 동작합니다.
+최악의 경우 제대로 작업을 수행하지 않는 대다수 WebGL 프로그램은 화면이 약간 표시되지 않지만, 사용자가 창의 크기를 조정하면 정상으로 돌아올 겁니다. 
+</p>
+</li>
+</ol>
+<p>
+대다수의 사람이 여러 대의 모니터를 가지고 있지는 않으므로 이 이슈는 드물게 발생합니다.
+아니면 적어도 예전에는 그랬겠죠.
+2015년 1월 기준, 크롬과 사파리는 캔버스 크기가 4096로 하드 코딩된 제한이 있습니다.
+애플의 5K iMac은 그 제한을 넘어섰습니다.
+이로 인해 많은 WebGL 앱에서 이상한 화면이 생겼는데요.
+마찬가지로 많은 사람들이 설치 작업을 위해 여러 모니터로 WebGL을 사용하기 시작했으며 한계에 도달했습니다.
+</p>
+<p>
+따라서 이런 경우를 처리하고 싶다면 위의 #1에서 보여드린 <code class="notranslate" translate="no">gl.drawingBufferWidth</code>와 <code class="notranslate" translate="no">gl.drawingBufferHeight</code>를 사용하세요.
+대부분의 앱에서 위 모범 사례를 따르면 제대로 작동할 겁니다.
+drawingBuffer의 실제 크기를 알아야 하는 계산을 수행한다면 이를 고려해야 하는데요. 
+머리속에 떠오르는 예제는, [picking](webgl-picking.html), 즉 마우스 좌표를 캔버스 픽셀 좌표롤 변환하는 겁니다.
+다른 하나는 drawingbuffer의 실제 크기를 알아야 하는 모든 종류의 후처리 효과입니다.
+</p>
 </div>
 
 
