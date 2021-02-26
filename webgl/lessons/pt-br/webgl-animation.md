@@ -103,7 +103,8 @@ como quando não é a aba da frente, o navegador ainda precisa executar seu cód
 Talvez você esteja usando <code> setTimeout </ code> ou <code> setInterval </ code> para verificar
 para novas mensagens ou tweets. Não há como saber para o navegador. Tudo bem se
 você está apenas a verificar cada poucos segundos para novas mensagens, mas não está bom se
-você está tentando desenhar 1000 objetos no WebGL. Você estará efetivamente a DOS
+você está tentando desenhar 1000 objetos no WebGL. Você estará efetivamente a
+<a target="_blank" href="https://pt.wikipedia.org/wiki/Ataque_de_nega%C3%A7%C3%A3o_de_servi%C3%A7o">DOS</a>
 máquina do usuário com o seu desenho de tabulação invisível que eles nem conseguem ver.
 </ p> <p>
 <code> requestAnimationFrame </ code> resolve esses dois problemas. Chama você apenas

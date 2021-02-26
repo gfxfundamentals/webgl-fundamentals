@@ -127,8 +127,9 @@ like when it's not the front tab, the browser still has to execute your code.
 Maybe you're using <code>setTimeout</code> or <code>setInterval</code> to check
 for new mail or tweets. There's no way for the browser to know. That's fine if
 you're just checking every few seconds for new messages but it's not fine if
-you're trying to draw 1000 objects in WebGL. You'll be effectively DOSing the
-user's machine with your invisible tab drawing stuff they can't even see.
+you're trying to draw 1000 objects in WebGL. You'll be effectively
+<a target="_blank" href="https://en.wikipedia.org/wiki/Denial-of-service_attack">DOSing</a>
+the user's machine with your invisible tab drawing stuff they can't even see.
 </p><p>
 <code>requestAnimationFrame</code> solves both of these issues. It calls you at just the
 right time to sync your animation with the screen and it also only calls you if
