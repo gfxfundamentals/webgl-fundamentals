@@ -304,7 +304,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
   ]), gl.STATIC_DRAW);
 const numVertices = 12;
 </code></pre>
-<p>Let&#39;s draw 5 instances. We&#39;ll make 5 matrixes and 5 colors for
+<p>Let&#39;s draw 5 instances. We&#39;ll make 5 matrices and 5 colors for
 each instance.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const numInstances = 5;
 const matrices = [
@@ -461,7 +461,7 @@ const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 <p>Now, we need a buffer hold the matrices at will get applied
 to the attribute. Since a buffer is best updated in one
 <em>chuck</em> we&#39;ll put all of our matrices in the same <code class="notranslate" translate="no">Float32Array</code></p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup matrixes, one per instance
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup matrices, one per instance
 const numInstances = 5;
 +// make a typed array with one view per matrix
 +const matrixData = new Float32Array(numInstances * 16);
@@ -484,7 +484,7 @@ for (let i = 0; i &lt; numInstances; ++i) {
       numFloatsForView));
 }
 </code></pre>
-<p>This way when we want to reference the data for all the matrixes
+<p>This way when we want to reference the data for all the matrices
 we can use <code class="notranslate" translate="no">matrixData</code> but when we want any individual matrix
 we can use <code class="notranslate" translate="no">matrices[ndx]</code>.</p>
 <p>We also need to create a buffer on the GPU for this data.
