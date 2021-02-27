@@ -83,7 +83,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 const numVertices = 12;
 ```
 
-Let's draw 5 instances. We'll make 5 matrixes and 5 colors for
+Let's draw 5 instances. We'll make 5 matrices and 5 colors for
 each instance.
 
 ```js
@@ -263,7 +263,7 @@ to the attribute. Since a buffer is best updated in one
 *chuck* we'll put all of our matrices in the same `Float32Array`
 
 ```js
-// setup matrixes, one per instance
+// setup matrices, one per instance
 const numInstances = 5;
 +// make a typed array with one view per matrix
 +const matrixData = new Float32Array(numInstances * 16);
@@ -290,7 +290,7 @@ for (let i = 0; i < numInstances; ++i) {
 }
 ```
 
-This way when we want to reference the data for all the matrixes
+This way when we want to reference the data for all the matrices
 we can use `matrixData` but when we want any individual matrix
 we can use `matrices[ndx]`.
 

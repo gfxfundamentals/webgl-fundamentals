@@ -213,7 +213,7 @@ for (var i = 0; i < numBones; ++i) {
 }
 ```
 
-And then some code to manipulate the bone matrixes. We'll just rotate
+And then some code to manipulate the bone matrices. We'll just rotate
 them in a hierarchy like the bones of a finger.
 
 ```
