@@ -65,7 +65,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 * [스스로 교차하는 polygon을 혼합하지 마세요](webgl-qna-don-t-blend-a-polygon-that-crosses-itself.html)
 * [Fragment shader에서 잘린 삼각형을 감지하는 방법](webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader.html)
 * [많은 원을 그리는 가장 빠른 방법](webgl-qna-the-fastest-way-to-draw-many-circles.html)
-* [instance 렌더링 정렬 및 최적화](webgl-qna-sorting-and-optimizing-instanced-rendering.html)
+* [instanced rendering 정렬 및 최적화](webgl-qna-sorting-and-optimizing-instanced-rendering.html)
 * [이미지에 alpha 채널이 있는지 확인하는 방법](webgl-qna-how-to-tell-if-an-image-has-an-alpha-channel.html)
 
 ---
@@ -80,7 +80,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [stencil buffer를 사용하는 방법](webgl-qna-how-to-use-the-stencil-buffer.html)
 * [heightmap 그리기](webgl-qna-drawing-a-heightmap.html)
-* [instance 그리기로 texture가 있는 sprite 그리기](webgl-qna-drawing-textured-sprites-with-instanced-drawing.html)
+* [instanced drawing으로 texture가 있는 sprite 그리기](webgl-qna-drawing-textured-sprites-with-instanced-drawing.html)
 * [다량의 큰 이미지 그리기 최적화](webgl-qna-optimize-drawing-lots-of-large-images.html)
 * [시간이 지남에 따라 느리게 렌더링](webgl-qna-rendering-slowly-over-time.html)
 
@@ -126,6 +126,6 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [WebGL2에서 픽셀 좌표로 texture 접근하기](webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2.html)
 * [어떻게 모든 uniform과 uniformBlock을 얻을 수 있나요](webgl-qna-how-can-i-get-all-the-uniforms-and-uniformblocks.html)
-* [어떻게 16비트 데이터의 16비트 히스토그램을 만들 수 있나요](webgl-qna-how-can-i-create-a-16bit-historgram-of-16bit-data.html)
+* [어떻게 16bit 데이터의 16bit 히스토그램을 만들 수 있나요](webgl-qna-how-can-i-create-a-16bit-historgram-of-16bit-data.html)
 * [particle 위치를 처리하는 방법](webgl-qna-how-to-process-particle-positions.html)
 

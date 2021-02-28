@@ -230,7 +230,7 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
     +
     +// colorBuffer(ARRAY_BUFFER)의 데이터를 가져오는 방법을 색상 attribute에 지시
     +var size = 4;          // 반복마다 4개의 구성 요소
-    +var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점
+    +var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     +var normalize = false; // 데이터 정규화 안 함
     +var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
     +var offset = 0;        // 버퍼의 처음부터 시작
@@ -320,7 +320,7 @@ attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실�
 그리고 이 명령어는 현재 ARRAY_BUFFER bind point에 바인딩된 버퍼에서 데이터를 가져오기 위해,
 정점마다 얼마나 많은 component(1 - 4)가 있는지,
 data type(`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...)은 무엇인지,
-데이터의 한 부분에서 다음 부분을 가져오기 위해 몇 바이트를 건너뛰어야 하는지를 의미하는 stride,
+데이터의 한 부분에서 다음 부분을 가져오기 위해 몇 byte를 건너뛰어야 하는지를 의미하는 stride,
 그리고 버퍼에서 우리 데이터가 얼마나 멀리 있는지에 대한 offset 등을 WebGL에게 알려줍니다.
 
 구성 요소의 숫자는 항상 1에서 4까지 입니다.
@@ -360,7 +360,7 @@ WebGL에게 사용할 색상을 추출하는 방법을 지시할 때
 <pre class="prettyprint showlinemods">
 // colorBuffer(ARRAY_BUFFER)에서 데이터를 어떻게 가져올지 color attribute에 지시
 var size = 4;                 // 반복마다 4개의 구성 요소
-*var type = gl.UNSIGNED_BYTE;  // 데이터는 8비트 부호없는 바이트
+*var type = gl.UNSIGNED_BYTE;  // 데이터는 8bit 부호없는 byte
 *var normalize = true;         // 데이터 정규화
 var stride = 0;               // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;               // 버퍼의 처음부터 시작
