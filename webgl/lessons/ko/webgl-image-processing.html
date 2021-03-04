@@ -246,7 +246,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 이 글은 <a href="webgl-fundamentals.html">WebGL 기초</a>에서 이어집니다.
 혹시 읽지 않았다면 <a href="webgl-fundamentals.html">거기</a>에 먼저 가보는 것이 좋습니다.</p>
 <p>WebGL에서 이미지를 그리기 위해서 우리는 texture를 사용해야 하는데요.
-렌더링할 때 WebGL이 픽셀 대신 클립 공간 좌표를 유추하는 것과 마찬가지로, texture를 읽을 때 WebGL은 texture 좌표를 유추합니다.
+렌더링할 때 WebGL이 픽셀 대신 clip space 좌표를 유추하는 것과 마찬가지로, texture를 읽을 때 WebGL은 texture 좌표를 유추합니다.
 Texture 좌표는 texture 크기에 상관없이 0.0에서 1.0사이가 됩니다.</p>
 <p>단 하나의 사각형(정확히는, 2개의 삼각형)만 그리기 때문에 사각형의 각 점이 texture의 어느 위치에 해당하지는지 WebGL에게 알려줘야 합니다.
 &#39;varying&#39;이라고 불리는 특수 변수를 이용해서 이 정보를 vertex shader에서 fragment shader로 전달해야 하는데요.
@@ -374,7 +374,7 @@ void main() {
   ) / 3.0;
 }
 &lt;/script&gt;
-</code></pre><p>그런 다음 자바스크립트에서 texture의 크기를 전달해야 합니다.</p>
+</code></pre><p>그런 다음 javascript에서 texture의 크기를 전달해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
 
 var textureSizeLocation = gl.getUniformLocation(program, &quot;u_textureSize&quot;);
@@ -429,7 +429,7 @@ void main() {
   gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1.0);
 }
 &lt;/script&gt;
-</code></pre><p>자바스크립트에서 convolution kernel과 가중치를 제공해줘야 하고</p>
+</code></pre><p>javascript에서 convolution kernel과 가중치를 제공해줘야 하고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> function computeKernelWeight(kernel) {
    var weight = kernel.reduce(function(prev, curr) {
      return prev + curr;
@@ -503,7 +503,7 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 <p>
 그건 단순 명명 규칙입니다.
 필수는 아니지만 저에게는 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어줬는데요.
-a_는 버퍼에서 제공되는 데이터인 attribute입니다.
+a_는 buffer에서 제공되는 데이터인 attribute입니다.
 u_는 shader에 입력하는 uniform이고, v_는  vertex shader에서 fragment shader로 전달되고 그려진 각 픽셀에 대해 정점 사이가 보간(또는 가변)된 값인 varying입니다.
 더 자세한 내용은 <a href="webgl-how-it-works.html">동작 원리</a>를 봐주세요.
 </p>

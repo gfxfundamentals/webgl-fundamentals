@@ -256,11 +256,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   var color = [Math.random(), Math.random(), Math.random(), 1];
 </code></pre><p>그런 다음 전부 다시 그리는 함수를 만들어봅시다.
 translation을 갱신한 후에 이 함수를 호출할 수 있습니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 장면 그리기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // scene 그리기
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-    // 클립 공간에서 픽셀로 변환하는 방법을 WebGL에 지시
+    // clip space에서 픽셀로 변환하는 방법을 WebGL에 지시
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // 캔버스 지우기
@@ -279,11 +279,11 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.</p>
     setRectangle(gl, translation[0], translation[1], width, height);
 
     // attribute에 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
-    var size = 2;          // 반복마다 2개의 구성 요소
+    var size = 2;          // 반복마다 2개의 component
     var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-    var offset = 0;        // 버퍼의 처음부터 시작
+    var offset = 0;        // buffer의 처음부터 시작
     gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset);
 
@@ -312,7 +312,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.</p>
 <p>이처럼 삼각형 6개로 구성된 &#39;F&#39;를 그리고 싶다고 가정해봅시다.</p>
 <p><img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
 <p>음, 현재 코드에 따라 <code class="notranslate" translate="no">setRectangle</code>을 이런 식으로 변경해야 합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 buffer 채우기
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -349,7 +349,7 @@ function setGeometry(gl, x, y) {
 }
 </code></pre><p>확장하기에 좋지 않겠다는 걸 눈치채셨을 겁니다.
 수백 수천 개의 선으로 이루어진 아주 복잡한 geometry를 그리려면 꽤 복잡한 코드를 작성해야 하는데요.
-또한, 자바스크립트는 그릴 때마다 모든 점들을 갱신해야 합니다.</p>
+또한, javascript는 그릴 때마다 모든 점들을 갱신해야 합니다.</p>
 <p>더 간단한 방법이 있습니다.
 geometry를 업로드하고 shader에서 translation을 수행하면 됩니다.</p>
 <p>여기 새로운 shader가 있는데</p>
@@ -368,7 +368,7 @@ void main() {
   ...
 </code></pre><p>그리고 코드를 조금 재구성할 텐데요.
 우선 geometry를 한 번만 설정해도 됩니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 buffer 채우기
 function setGeometry(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
@@ -407,16 +407,16 @@ function setGeometry(gl) {
 
   ...
 
-  // 위치들을 넣을 버퍼 생성
+  // 위치들을 넣을 buffer 생성
   var positionBuffer = gl.createBuffer();
   // ARRAY_BUFFER(ARRAY_BUFFER = positionBuffer로 생각)에 할당
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-+  // 버퍼에 geometry 데이터 넣기
++  // buffer에 geometry 데이터 넣기
 +  setGeometry(gl);
 
   ...
 
-  // 장면 그리기
+  // scene 그리기
   function drawScene() {
 
     ...
@@ -443,7 +443,7 @@ function setGeometry(gl) {
 <p>이제 그릴 때, WebGL이 거의 모든 작업을 수행하고 있습니다.
 translation을 설정하고 그려달라고 요청하는 게 우리가 하는 전부죠.
 심지어 geometry에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지됩니다.</p>
-<p>원한다면 모든 점들을 갱신하기 위해 위의 <a href="../../webgl-2d-geometry-translate.html">복잡한 자바스크립트를 사용하는 버전</a>과 비교할 수 있습니다.</p>
+<p>원한다면 모든 점들을 갱신하기 위해 위의 <a href="../../webgl-2d-geometry-translate.html">복잡한 javascript를 사용하는 버전</a>과 비교할 수 있습니다.</p>
 <p>너무 뻔한 예제가 아니었기를 바랍니다.
 다른 한편으로 이걸 수행하는 훨씬 더 좋은 방법을 다룰 것이므로 계속 읽어주세요.
 <a href="webgl-2d-rotation.html">다음 글</a>에서 우리는 rotation으로 넘어가겠습니다.</p>

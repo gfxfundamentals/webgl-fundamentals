@@ -244,7 +244,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고 이전에는 <a href="webgl-2d-matrices.html">2D 행렬</a>에 관한 것이었습니다.
 혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
 <p>마지막 포스트에서 우리는 2D 행렬이 어떻게 동작하는지 살펴봤습니다.
-translation, rotation, scale, 그리고 픽셀에서 클립 공간으로 투영하는 것까지 하나의 행렬과 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
+translation, rotation, scale, 그리고 픽셀에서 clip space으로 투영하는 것까지 하나의 행렬과 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
 3D를 수행하기 위해 거기에서 한 걸음만 더 나아가면 됩니다.</p>
 <p>이전 2D 예제에서는 3x3 행렬을 곱한 2D point(x, y)를 가졌었는데요.
 3D를 수행하기 위해서는 3D point(x, y, z)와 4x4 행렬이 필요합니다.</p>
@@ -279,18 +279,18 @@ void main() {
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
   // attribute에 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
-*  var size = 3;          // 반복마다 3개의 구성 요소
+*  var size = 3;          // 반복마다 3개의 component
   var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
   var normalize = false; // 데이터 정규화 안 함
   var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-  var offset = 0;        // 버퍼의 처음부터 시작
+  var offset = 0;        // buffer의 처음부터 시작
   gl.vertexAttribPointer(
       positionAttributeLocation, size, type, normalize, stride, offset);
 
   ...
 
-// 현재 ARRAY_BUFFER 버퍼 채우기
-// 문자 &#39;F&#39;를 정의하는 값으로 버퍼 채우기
+// 현재 ARRAY_BUFFER buffer 채우기
+// 문자 &#39;F&#39;를 정의하는 값으로 buffer 채우기
 function setGeometry(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
@@ -517,7 +517,7 @@ function setGeometry(gl) {
     ];
   },
 }
-</code></pre><p>pixel에서 클립 공간으로 변환되었습니다.
+</code></pre><p>pixel에서 clip space으로 변환되었습니다.
 3D로 확장하기 위한 첫 시도를 해보면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  projection: function(width, height, depth) {
     // 참고: 이 행렬은 Y축을 뒤집으므로 0이 상단입니다.
@@ -528,7 +528,7 @@ function setGeometry(gl) {
       -1, 1, 0, 1,
     ];
   },
-</code></pre><p>X와 Y를 pixel에서 클립 공간으로 변환해야 했던 것처럼, Z도 동일한 작업을 수행해야 합니다.
+</code></pre><p>X와 Y를 pixel에서 clip space으로 변환해야 했던 것처럼, Z도 동일한 작업을 수행해야 합니다.
 이 경우에는 Z축 픽셀 단위도 만들게 되는데요.
 <code class="notranslate" translate="no">depth</code>에 <code class="notranslate" translate="no">width</code>와 유사한 값을 전달하므로, 공간은 0에서 <code class="notranslate" translate="no">width</code>의 픽셀 너비와, 0에서 <code class="notranslate" translate="no">height</code>의 픽셀 높이가 되지만, <code class="notranslate" translate="no">depth</code>는 <code class="notranslate" translate="no">-depth / 2</code>에서 <code class="notranslate" translate="no">+depth / 2</code>가 됩니다.</p>
 <p>마지막으로 행렬을 계산하는 코드를 업데이트해야 합니다.</p>
@@ -607,16 +607,16 @@ void main() {
   var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 
   ...
-  // 색상용 버퍼 생성
+  // 색상용 buffer 생성
   var colorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  // 버퍼에 색상 넣기
+  // buffer에 색상 넣기
   setColors(gl);
 
 
   ...
 
-// &#39;F&#39;의 색상으로 버퍼 채우기
+// &#39;F&#39;의 색상으로 buffer 채우기
 function setColors(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
@@ -644,11 +644,11 @@ gl.enableVertexAttribArray(colorLocation);
 gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 
 // colorBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
-var size = 3;                 // 반복마다 3개의 구성 요소
+var size = 3;                 // 반복마다 3개의 component
 var type = gl.UNSIGNED_BYTE;  // 데이터는 부호없는 8bit 값
 var normalize = true;         // 데이터 정규화 (0-255에서 0-1로 전환)
 var stride = 0;               // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-var offset = 0;               // 버퍼의 처음부터 시작
+var offset = 0;               // buffer의 처음부터 시작
 gl.vertexAttribPointer(
     colorLocation, size, type, normalize, stride, offset);
 </code></pre><p>이제 이걸 얻게 됩니다.</p>
@@ -674,7 +674,7 @@ gl.vertexAttribPointer(
 </code></pre><p>이걸 <code class="notranslate" translate="no">drawScene</code> 함수에 넣어줍시다.
 해당 기능을 켜면, WebGL은 기본적으로 삼각형 뒷면을 &quot;culling&quot;으로 설정하는데요.
 이 경우 &quot;culling&quot;은 &quot;그리지 않음&quot;을 의미하는 단어입니다.</p>
-<p>참고로 WebGL에서 삼각형이 시계 혹은 반시계 방향으로 진행되는지는 클립 공간에 있는 해당 삼각형의 정점에 따라 달라집니다.
+<p>참고로 WebGL에서 삼각형이 시계 혹은 반시계 방향으로 진행되는지는 clip space에 있는 해당 삼각형의 정점에 따라 달라집니다.
 즉, WebGL은 vertex shader에서 정점에 수식을 적용한 후에 삼각형이 앞면인지 뒷면인지 파악합니다.
 이건 X에서 -1로 scale되거나 180도 회전한 시계 방향 삼각형이 반시계 방향 삼각형이 된다는 걸 의미하는데요.
 CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷면) 삼각형을 모두 볼 수 있었습니다.
@@ -713,7 +713,7 @@ CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷�
 <p>때때로 Z-Buffer라고 불리는 depth buffer는 <em>depth</em> pixel의 사각형인데, 각 color pixel에 대한 depth pixel은 이미지를 만드는데 사용됩니다.
 WebGL은 각 color pixel을 그리기 때문에 depth pixel도 그릴 수 있는데요.
 이건 Z축에 대해 vertex shader에서 반환한 값을 기반으로 합니다.
-X와 Y를 클립 공간으로 변환해야 했던 것처럼, Z도 클립 공간(-1에서 +1)에 있습니다.
+X와 Y를 clip space으로 변환해야 했던 것처럼, Z도 clip space(-1에서 +1)에 있습니다.
 해당 값은 depth space 값(0에서 +1)으로 변환됩니다.
 WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하는데요.
 그릴 픽셀의 depth 값이 대응하는 depth pixel의 값보다 클 경우 WebGL은 새로운 color pixel을 그리지 않습니다.
@@ -721,8 +721,8 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
 말인즉슨, 다른 픽셀 뒤에 있는 픽셀은 그려지지 않는다는 걸 의미합니다.</p>
 <p>이렇게 culling을 켰던 것처럼 간단하게 이 기능을 사용할 수 있으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.enable(gl.DEPTH_TEST);
-</code></pre><p>그리는 걸 시작하기 전에 depth 버퍼를 1.0으로 초기화해야 합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 장면 그리기
+</code></pre><p>그리는 걸 시작하기 전에 depth buffer를 1.0으로 초기화해야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // scene 그리기
   function drawScene() {
     ...
 
@@ -739,7 +739,7 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
 </p>
 <p>3D를 얻게 됩니다!</p>
 <p>한 가지 사소한 게 남았는데요.
-대부분의 3D 수학 라이브러리에는 클립 공간에서 픽셀 공간으로 변환을 수행하는 <code class="notranslate" translate="no">투영</code> 함수가 없습니다.
+대부분의 3D 수학 라이브러리에는 clip space에서 픽셀 공간으로 변환을 수행하는 <code class="notranslate" translate="no">투영</code> 함수가 없습니다.
 그보다는 보통 <code class="notranslate" translate="no">ortho</code>나 <code class="notranslate" translate="no">orthographic</code>이라 불리는 함수가 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var m4 = {
   orthographic: function(left, right, bottom, top, near, far) {
@@ -776,26 +776,26 @@ attribute vec4 a_color;
 <p>둘 다 'vec4'지만 사용하는 buffer에서 데이터 가져오는 방법을 WebGL에 알려줄 때</p>
 <pre class="prettyprint showlinemods">
 // attribute에 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
-var size = 3;          // 반복마다 3개의 구성 요소
+var size = 3;          // 반복마다 3개의 component
 var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
 var normalize = false; // 데이터 정규화 안 함
 var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-var offset = 0;        // 버퍼의 처음부터 시작
+var offset = 0;        // buffer의 처음부터 시작
 gl.vertexAttribPointer(
     positionAttributeLocation, size, type, normalize, stride, offset);
 
 ...
 // attribute에 colorBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
-var size = 3;          // 반복마다 3개의 구성 요소
+var size = 3;          // 반복마다 3개의 component
 var type = gl.UNSIGNED_BYTE;   // 데이터는 8bit 부호없는 byte
 var normalize = true;  // 데이터 정규화 (0-255에서 0-1로 전환)
 var stride = 0;        // 0 = 다음 색상을 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-var offset = 0;        // 버퍼의 처음부터 시작
+var offset = 0;        // buffer의 처음부터 시작
 gl.vertexAttribPointer(
     colorAttributeLocation, size, type, normalize, stride, offset);
 </pre>
 <p>
-각각의 '3'은 vertex shader의 반복마다 각 attribute의 버퍼에서 3개의 값만 가져오라는 걸 말합니다.
+각각의 '3'은 vertex shader의 반복마다 각 attribute의 buffer에서 3개의 값만 가져오라는 걸 말합니다.
 이게 동작하는 이유는 vertex shader에서 입력하지 않는 값에 대해서 WebGL이 기본값을 제공하기 때문인데요.
 기본값은 0, 0, 0, 1로 x = 0, y = 0, z= 0, w = 1 입니다.
 이게 기존 vertex shader에서 명시적으로 1을 입력해줘야 했던 이유입니다.

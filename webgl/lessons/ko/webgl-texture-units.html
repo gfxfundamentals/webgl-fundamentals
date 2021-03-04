@@ -252,7 +252,7 @@ Shader에서 이렇게 <em>uniform sampler</em>를 선언하면</p>
 <p>하지만 shader는 <code class="notranslate" translate="no">someTexture</code>에 사용할 texture를 어떻게 아는 걸까요?</p>
 <p>그게 texture unit이 관여하는 부분입니다.
 Texture unit은 texture에 대한 참조의 <strong>전역 배열</strong>입니다.
-WebGL이 자바스크립트로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데</p>
+WebGL이 javascript로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const gl = {
   activeTextureUnit: 0,
   textureUnits: [
@@ -285,7 +285,7 @@ gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 <p>그런 다음 아래와 같이 호출하여 texture를 바인딩한 texture unit을 shader에 알리는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 </code></pre>
-<p><code class="notranslate" translate="no">activeTexture</code> 및 <code class="notranslate" translate="no">bindTexture</code> WebGL 함수가 자바스크립트로 구현된다면 </p>
+<p><code class="notranslate" translate="no">activeTexture</code> 및 <code class="notranslate" translate="no">bindTexture</code> WebGL 함수가 javascript로 구현된다면 </p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드!!!
 gl.activeTexture = function(unit) {
   gl.activeTextureUnit = unit - gl.TEXTURE0;  // 0 기반 인덱스로 변환

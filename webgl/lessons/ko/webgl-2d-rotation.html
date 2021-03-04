@@ -280,7 +280,7 @@ void main() {
 
   // translation 추가
 *  vec2 position = rotatedPosition + u_translation;
-</code></pre><p>그리고 자바스크립트를 업데이트해서 두 값을 전달할 수 있습니다.</p>
+</code></pre><p>그리고 javascript를 업데이트해서 두 값을 전달할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var rotationLocation = gl.getUniformLocation(program, &quot;u_rotation&quot;);
@@ -291,7 +291,7 @@ void main() {
 
   ...
 
-  // 장면 그리기
+  // scene 그리기
   function drawScene() {
 
     ...
@@ -352,7 +352,7 @@ rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
   var c = Math.cos(angleInRadians);
   console.log(&quot;s = &quot; + s + &quot; c = &quot; + c);
 }
-</code></pre><p>자바스크립트 콘솔에 코드를 복사 및 붙여넣고 <code class="notranslate" translate="no">printSineAndCosignForAngle(30)</code>라고 치면 <code class="notranslate" translate="no">s = 0.49 c = 0.87</code>이 출력됩니다. (참고: 숫자는 반올림했습니다.)</p>
+</code></pre><p>javascript 콘솔에 코드를 복사 및 붙여넣고 <code class="notranslate" translate="no">printSineAndCosignForAngle(30)</code>라고 치면 <code class="notranslate" translate="no">s = 0.49 c = 0.87</code>이 출력됩니다. (참고: 숫자는 반올림했습니다.)</p>
 <p>전부 합치면 geometry를 원하는 각도로 회전할 수 있습니다.
 그저 돌리고 싶은 각도의 sine과 cosine으로 rotation을 설정하면 됩니다. </p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
