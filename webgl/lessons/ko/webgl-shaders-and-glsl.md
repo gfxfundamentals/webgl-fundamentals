@@ -17,7 +17,7 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
 
 ## Vertex shader
 
-Vertex shader의 역할은 클립 공간 좌표를 생성하는 겁니다.
+Vertex shader의 역할은 clip space 좌표를 생성하는 겁니다.
 항상 이런 형식을 취하는데
 
     void main() {
@@ -25,24 +25,24 @@ Vertex shader의 역할은 클립 공간 좌표를 생성하는 겁니다.
     }
 
 Shader는 정점마다 한 번씩 호출되는데요.
-호출될 때마다 특수 전역 변수, `gl_Position`을 일부 클립 공간 좌표로 설정해야 합니다.
+호출될 때마다 특수 전역 변수, `gl_Position`을 일부 clip space 좌표로 설정해야 합니다.
 
 Vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.
 
-1.  [Attribute](#attribute) (버퍼에서 가져온 데이터)
+1.  [Attribute](#attribute) (buffer에서 가져온 데이터)
 2.  [Uniform](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지하는 값)
 3.  [Texture](#vertex-shader-texture) (pixel/texel의 데이터)
 
 ### Attribute
 
-가장 일반적인 방법은 버퍼와 *attribute*를 통하는 겁니다.
-[작동 원리](webgl-how-it-works.html)에서 버퍼와 attribute를 다뤘는데요.
-버퍼를 만들고,
+가장 일반적인 방법은 buffer와 *attribute*를 통하는 겁니다.
+[작동 원리](webgl-how-it-works.html)에서 buffer와 attribute를 다뤘는데요.
+buffer를 만들고,
 
     var buf = gl.createBuffer();
 
-이 버퍼에 데이터를 넣은 뒤
+이 buffer에 데이터를 넣은 뒤
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
@@ -51,15 +51,15 @@ Vertex shader는 데이터가 필요한데요.
 
     var positionLoc = gl.getAttribLocation(someShaderProgram, "a_position");
 
-렌더링할 때 WebGL에게 해당 버퍼에서 attribute로 데이터를 어떻게 가져올지 지시하는데
+렌더링할 때 WebGL에게 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하는데
 
-    // 이 attribute에 대한 버퍼에서 데이터 가져오기 활성화
+    // 이 attribute에 대한 buffer에서 데이터 가져오기 활성화
     gl.enableVertexAttribArray(positionLoc);
 
     var numComponents = 3;  // (x, y, z)
     var type = gl.FLOAT;    // 32bit 부동 소수점 값
     var normalize = false;  // 값 원본 그대로 유지
-    var offset = 0;         // 버퍼의 처음부터 시작
+    var offset = 0;         // buffer의 처음부터 시작
     var stride = 0;         // 다음 정점으로 가기 위해 이동하는 byte 수
                             // 0 = type과 numComponents에 맞는 stride 사용
 
@@ -73,7 +73,7 @@ Vertex shader는 데이터가 필요한데요.
       gl_Position = a_position;
     }
 
-버퍼에 클립 공간 정점을 넣으면 동작할 겁니다. 
+buffer에 clip space 정점을 넣으면 동작할 겁니다. 
 
 attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`를 사용할 수 있습니다.
 
@@ -143,7 +143,7 @@ uniform은 여러 type을 가질 수 있는데요.
     // shader
     uniform vec2 u_someVec2[3];
 
-    // 초기화 시 자바스크립트
+    // 초기화 시 javascript
     var someVec2Loc = gl.getUniformLocation(someProgram, "u_someVec2");
 
     // 렌더링할 때
@@ -151,7 +151,7 @@ uniform은 여러 type을 가질 수 있는데요.
 
 하지만 배열의 개별 요소를 설정하고 싶다면 각 요소의 위치를 개별적으로 찾아야 합니다.
 
-    // 초기화 시 자바스크립트
+    // 초기화 시 javascript
     var someVec2Element0Loc = gl.getUniformLocation(someProgram, "u_someVec2[0]");
     var someVec2Element1Loc = gl.getUniformLocation(someProgram, "u_someVec2[1]");
     var someVec2Element2Loc = gl.getUniformLocation(someProgram, "u_someVec2[2]");
@@ -272,20 +272,20 @@ Fragment shader
     +varying vec4 v_positionWithOffset;
 
     void main() {
-    +  // 클립 공간에서 (-1 <-> +1) 색상 공간으로 (0 -> 1) 변환
+    +  // clip space에서 (-1 <-> +1) 색상 공간으로 (0 -> 1) 변환
     +  vec4 color = v_positionWithOffset * 0.5 + 0.5
     +  gl_FragColor = color;
     }
 
 위 예제는 대부분 말도 안되는 예제입니다.
-일반적으로는 클립 공간 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
+일반적으로는 clip space 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
 그럼에도 불구하고 작동하며 색상을 만들어냅니다.
 
 ## GLSL
 
 GLSL는 Graphics Library Shader Language의 약자인데요.
 Shader가 작성되는 언어입니다.
-이건 자바스크립트에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
+이건 javascript에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
 그래픽을 래스터화하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
 예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 `vec2`, `vec3`, `vec4` 같은 type들이 내장되어 있습니다.
 마찬가지로 2x2, 3x3, 4x4 행렬을 나타내는 `mat2`, `mat3`, `mat4`가 있는데요.
@@ -314,7 +314,7 @@ vec4를 보면
 *   `v.z`는 `v.p`와 `v.b`와 `v[2]`와 같습니다.
 *   `v.w`는 `v.q`와 `v.a`와 `v[3]`과 같습니다.
 
-vec 구성 요소들을 *swizzle* 할 수 있는데 이는 구성 요소를 교환하거나 반복할 수 있다는 걸 뜻합니다.
+vec component들을 *swizzle* 할 수 있는데 이는 component를 교환하거나 반복할 수 있다는 걸 뜻합니다.
 
     v.yyyy
 

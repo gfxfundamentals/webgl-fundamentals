@@ -273,7 +273,7 @@ void main() {
 그리고 어떻게 사용하냐면
 
 ```js
-// 장면 그리기
+// scene 그리기
 function drawScene() {
 
   ,,,
@@ -322,7 +322,7 @@ matrix = m3.multiply(matrix, translationMatrix);
 계층적 애니메이션의 간단한 예제로 'F'를 5번 그리지만 매번 이전 'F'의 행렬로 시작해봅시다.
 
 ```js
-// 장면 그리기
+// scene 그리기
 function drawScene() {
   // 캔버스 지우기
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -404,7 +404,7 @@ matrix = m3.multiply(matrix, moveOriginMatrix);
 이제 Photoshop이나 Flash에서 어떻게 회전점을 이동시키는지 알게 되었습니다.
 
 이제 더 끝내주는 걸 해봅시다.
-첫 번째 글인 [WebGL 기초](webgl-fundamentals.html)로 돌아가 보면 shader에 픽셀을 클립 공간으로 변환하는 코드가 있다는 걸 기억하실 겁니다.
+첫 번째 글인 [WebGL 기초](webgl-fundamentals.html)로 돌아가 보면 shader에 픽셀을 clip space으로 변환하는 코드가 있다는 걸 기억하실 겁니다.
 
 ```js
 ...
@@ -414,7 +414,7 @@ vec2 zeroToOne = position / u_resolution;
 // 0->1에서 0->2로 변환
 vec2 zeroToTwo = zeroToOne * 2.0;
 
-// 0->2에서 -1->+1로 변환 (클립 공간)
+// 0->2에서 -1->+1로 변환 (clip space)
 vec2 clipSpace = zeroToTwo - 1.0;
 
 gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
@@ -462,10 +462,10 @@ void main() {
 </script>
 ```
 
-그리고 자바스크립트에서는 투영 행렬로 곱해야 하는데
+그리고 javascript에서는 투영 행렬로 곱해야 하는데
 
 ```js
-// 장면 그리기
+// scene 그리기
 function drawScene() {
   ...
 
@@ -559,25 +559,25 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
     translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
 
-마지막으로 클립 공간의 위치를 얻기 위해 투영 행렬에 곱하는데
+마지막으로 clip space의 위치를 얻기 위해 투영 행렬에 곱하는데
 
     clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 
 두 번째 방법은 행렬을 왼쪽에서 오른쪽으로 읽는 건데요.
 이 경우 각각의 행렬은 캔버스에 표시되는 *space*를 변경합니다.
-캔버스는 각 방향에서 클립 공간(-1 ~ +1)을 나타내는 것으로 시작하는데요.
+캔버스는 각 방향에서 clip space(-1 ~ +1)을 나타내는 것으로 시작하는데요.
 왼쪽에서 오른쪽으로 적용된 각 행렬은 캔버스에 표시되는 space를 변경합니다.
 
 1단계: 행렬 없음 (혹은 단위 행렬)
 
-> {{{diagram url="resources/matrix-space-change.html?stage=0" caption="클립 공간" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=0" caption="clip space" }}}
 >
-> 흰색 영역은 캔버스입니다. 파랑색은 캔버스 바깥입니다. 우리는 클립 공간에 있습니다.
-> 전달된 위치는 클립 공간에 있어야 합니다.
+> 흰색 영역은 캔버스입니다. 파랑색은 캔버스 바깥입니다. 우리는 clip space에 있습니다.
+> 전달된 위치는 clip space에 있어야 합니다.
 
 2단계:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
 
-> {{{diagram url="resources/matrix-space-change.html?stage=1" caption="클립 공간에서 픽셀 공간으로" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=1" caption="clip space에서 픽셀 공간으로" }}}
 >
 > 이제 우리는 픽셀 공간에 있습니다. X = 0에서 400, Y = 0에서 300, 왼쪽 상단은 0,0 입니다.
 > 이 행렬을 사용하여 전달된 위치는 픽셀 공간에 있어야 합니다.
@@ -622,8 +622,8 @@ Shader에서 우리는 `gl_Position = matrix * position;`을 실행하는데요.
 왜일까요?
 </p>
 <p>
-투영 행렬은 클립 공간(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
-하지만, 브라우저에는, 우리가 다루는 두 가지 유형의 픽셀이 있는데요.
+투영 행렬은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
+하지만, 브라우저에는, 우리가 다루는 두 가지 type의 픽셀이 있는데요.
 하나는 캔버스 자체의 픽셀 수입니다.
 예를 들어 이렇게 정의된 캔버스가 있습니다.
 </p>

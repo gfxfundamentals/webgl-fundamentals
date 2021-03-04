@@ -47,7 +47,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 ---
 
 * [gl.finish()를 사용하여 webgl에서 렌더링 시간을 측정하는 게 가능한가요?](webgl-qna-is-it-possible-to-measure-rendering-time-in-webgl-using-gl-finish---.html)
-* [자바스크립트에서 효율적인 particle 시스템은? (WebGL)](webgl-qna-efficient-particle-system-in-javascript---webgl-.html)
+* [javascript에서 효율적인 particle 시스템은? (WebGL)](webgl-qna-efficient-particle-system-in-javascript---webgl-.html)
 * [JS에서 GLSL로 struct 배열의 값 설정하기](webgl-qna-setting-the-values-of-a-struct-array-from-js-to-glsl.html)
 * [drawing buffer를 fade하는 방법](webgl-qna-how-to-fade-the-drawing-buffer.html)
 * [pseudo-3D 효과를 만들기 위해 depth map으로 2D 이미지 그리기](webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect.html)
@@ -104,7 +104,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [vertex attrib 0이 비활성화된다는 경고를 끌 수 있나요?](webgl-qna-can-i-mute-the-warning-about-vertex-attrib-0-being-disabled-.html)
 * [smudge 브러시 도구를 만드는 방법](webgl-qna-how-to-make-a-smudge-brush-tool.html)
-* [readPixels로 단일 구성 요소를 읽는 방법](webgl-qna-how-to-read-a-single-component-with-readpixels.html)
+* [readPixels로 단일 component를 읽는 방법](webgl-qna-how-to-read-a-single-component-with-readpixels.html)
 * [readPixels를 호출할 때 invalid type error가 발생합니다](webgl-qna-i-get-invalid-type-error-when-calling-readpixels.html)
 * [UI 렌더링을 최적화하는 방법](webgl-qna-how-to-optimize-rendering-a-ui.html)
 

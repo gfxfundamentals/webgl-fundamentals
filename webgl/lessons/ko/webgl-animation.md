@@ -18,7 +18,7 @@ WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할
 
     *requestAnimationFrame(drawScene);
 
-    // 장면 그리기
+    // scene 그리기
     function drawScene() {
     *  // 프레임마다 조금씩 회전
     *  rotation[1] += rotationSpeed / 60.0;
@@ -69,7 +69,7 @@ WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할
 
     requestAnimationFrame(drawScene);
 
-    // 장면 그리기
+    // scene 그리기
     *function drawScene(now) {
     *  // 시간을 초단위로 변환
     *  now *= 0.001;
@@ -97,7 +97,7 @@ WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할
 <div class="webgl_bottombar">
 <h3>setInterval나 setTimeout을 사용하지 마세요!</h3>
 <p>
-과거에 자바스크립트로 애니메이션을 프로그래밍한 적이 있다면 <code>setInterval</code>나 <code>setTimeout</code>을 사용하여 그리기 함수를 호출했을 겁니다.
+과거에 javascript로 애니메이션을 프로그래밍한 적이 있다면 <code>setInterval</code>나 <code>setTimeout</code>을 사용하여 그리기 함수를 호출했을 겁니다.
 </p>
 <p>
 <code>setInterval</code>와 <code>setTimeout</code>을 사용한 애니메이션 수행에 따른 문제는 두 가지입니다.

@@ -31,7 +31,7 @@ TOC: 참고 자료
 
 * [twgl](https://twgljs.org): WebGL을 덜 장황하게 만들도록 도와주는 라이브러리
 
-* [three.js](https://threejs.org): 가장 인기있는 자바스크립트 3D 라이브러리
+* [three.js](https://threejs.org): 가장 인기있는 javascript 3D 라이브러리
 
 * [PlayCanvas](https://playcanvas.com/) 게임 편집기가 있는 WebGL 게임 엔진
 

@@ -49,7 +49,7 @@ TOC: 2D Rotation
       // translation 추가
     *  vec2 position = rotatedPosition + u_translation;
 
-그리고 자바스크립트를 업데이트해서 두 값을 전달할 수 있습니다.
+그리고 javascript를 업데이트해서 두 값을 전달할 수 있습니다.
 
       ...
 
@@ -61,7 +61,7 @@ TOC: 2D Rotation
 
       ...
 
-      // 장면 그리기
+      // scene 그리기
       function drawScene() {
 
         ...
@@ -133,7 +133,7 @@ TOC: 2D Rotation
       console.log("s = " + s + " c = " + c);
     }
 
-자바스크립트 콘솔에 코드를 복사 및 붙여넣고 `printSineAndCosignForAngle(30)`라고 치면 `s = 0.49 c = 0.87`이 출력됩니다. (참고: 숫자는 반올림했습니다.)
+javascript 콘솔에 코드를 복사 및 붙여넣고 `printSineAndCosignForAngle(30)`라고 치면 `s = 0.49 c = 0.87`이 출력됩니다. (참고: 숫자는 반올림했습니다.)
 
 전부 합치면 geometry를 원하는 각도로 회전할 수 있습니다.
 그저 돌리고 싶은 각도의 sine과 cosine으로 rotation을 설정하면 됩니다. 

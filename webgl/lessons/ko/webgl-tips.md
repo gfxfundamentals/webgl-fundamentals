@@ -134,7 +134,7 @@ const saveBlob = (function() {
 +    requestAnimationFrame(renderLoop);
 +  }
 
-  // 장면 그리기
+  // scene 그리기
 +  function drawScene() {
 - function drawScene(now) {
 -    // 초 단위로 변환
@@ -309,7 +309,7 @@ document.querySelectorAll('canvas').forEach((canvas) => {
 
 그리고 `z-index`를 -1로 설정합니다.
 
-이 해결책의 사소한 단점은 자바스크립트가 페이지와 통합되어야 하고 복잡한 페이지라면 webgl code의 자바스크립트가 페이지에서 다른 작업을 수행하는 자바스크립트와 충돌하지 않도록 해야 한다는 겁니다.
+이 해결책의 사소한 단점은 javascript가 페이지와 통합되어야 하고 복잡한 페이지라면 webgl code의 javascript가 페이지에서 다른 작업을 수행하는 javascript와 충돌하지 않도록 해야 한다는 겁니다.
 
 * `iframe` 사용
 

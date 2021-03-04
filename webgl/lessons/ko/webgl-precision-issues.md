@@ -18,12 +18,12 @@ precision mediump float;
 
 `lowp`, `mediump`, `highp`는 정밀도 설정입니다.
 이 경우 정밀도는 값을 저장하는데 얼마나 많은 bit가 사용되는지를 의미하는데요.
-자바스크립트에서 숫자의 경우 64bit를 사용합니다.
+javascript에서 숫자의 경우 64bit를 사용합니다.
 WebGL에서 대부분의 숫자는 32bit에 불과한데요.
 더 적은 bit = 더 빠름, 더 많은 bit = 더 정확하고 더 넓은 범위입니다.
 
 이걸 잘 설명할 수 있을지 모르겠습니다.
-정밀도 이슈의 다른 예시로 [double vs float](https://www.google.com/search?q=double+vs+float)를 찾아볼 수도 있지만 이를 설명하는 한 가지 방법은 byte와 short 또는 자바스크립트의 `Uint8Array` vs `Uint16Array`의 차이와 같다는 겁니다.
+정밀도 이슈의 다른 예시로 [double vs float](https://www.google.com/search?q=double+vs+float)를 찾아볼 수도 있지만 이를 설명하는 한 가지 방법은 byte와 short 또는 javascript의 `Uint8Array` vs `Uint16Array`의 차이와 같다는 겁니다.
 
 * `Uint8Array`는 부호없는 8bit 정수 배열입니다. 8bit는 0에서 255까지 2<sup>8</sup>개의 값을 포함할 수 있습니다.
 * `Uint16Array`는 부호없는 16bit 정수 배열입니다. 16bit는 0에서 65535까지 2<sup>16</sup>개의 값을 포함할 수 있습니다.

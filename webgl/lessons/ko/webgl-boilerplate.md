@@ -78,7 +78,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
 예외를 던지는 것이 오류를 처리하는 최고의 방법은 아니죠.
 그럼에도 불구하고 거의 모든 WebGL program에서 이 코드는 거의 비슷합니다.
 
-저는 shader를 자바스크립트가 아닌 &lt;script&gt; tag에 저장하는 걸 좋아하는데요.
+저는 shader를 javascript가 아닌 &lt;script&gt; tag에 저장하는 걸 좋아하는데요.
 이 방식은 코드를 수정하기 쉽게 만들주기 때문에 저는 이렇게 코드를 작성합니다.
 
     /**

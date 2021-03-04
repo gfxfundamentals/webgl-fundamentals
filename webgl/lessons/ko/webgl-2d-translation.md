@@ -28,11 +28,11 @@ Translation은 기본적으로 무언가를 "움직이는 걸" 의미하는 멋�
 translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
 
 ```
-  // 장면 그리기
+  // scene 그리기
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-    // 클립 공간에서 픽셀로 변환하는 방법을 WebGL에 지시
+    // clip space에서 픽셀로 변환하는 방법을 WebGL에 지시
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // 캔버스 지우기
@@ -51,11 +51,11 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
     setRectangle(gl, translation[0], translation[1], width, height);
 
     // attribute에 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
-    var size = 2;          // 반복마다 2개의 구성 요소
+    var size = 2;          // 반복마다 2개의 component
     var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-    var offset = 0;        // 버퍼의 처음부터 시작
+    var offset = 0;        // buffer의 처음부터 시작
     gl.vertexAttribPointer(
       positionLocation, size, type, normalize, stride, offset);
 
@@ -88,7 +88,7 @@ translation을 갱신한 후에 이 함수를 호출할 수 있습니다.
 음, 현재 코드에 따라 `setRectangle`을 이런 식으로 변경해야 합니다.
 
 ```
-// 문자 'F'를 정의하는 값들로 버퍼 채우기
+// 문자 'F'를 정의하는 값들로 buffer 채우기
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -127,7 +127,7 @@ function setGeometry(gl, x, y) {
 
 확장하기에 좋지 않겠다는 걸 눈치채셨을 겁니다.
 수백 수천 개의 선으로 이루어진 아주 복잡한 geometry를 그리려면 꽤 복잡한 코드를 작성해야 하는데요.
-또한, 자바스크립트는 그릴 때마다 모든 점들을 갱신해야 합니다.
+또한, javascript는 그릴 때마다 모든 점들을 갱신해야 합니다.
 
 더 간단한 방법이 있습니다.
 geometry를 업로드하고 shader에서 translation을 수행하면 됩니다.
@@ -154,7 +154,7 @@ void main() {
 우선 geometry를 한 번만 설정해도 됩니다.
 
 ```
-// 문자 'F'를 정의하는 값들로 버퍼 채우기
+// 문자 'F'를 정의하는 값들로 buffer 채우기
 function setGeometry(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
@@ -197,16 +197,16 @@ function setGeometry(gl) {
 
   ...
 
-  // 위치들을 넣을 버퍼 생성
+  // 위치들을 넣을 buffer 생성
   var positionBuffer = gl.createBuffer();
   // ARRAY_BUFFER(ARRAY_BUFFER = positionBuffer로 생각)에 할당
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-+  // 버퍼에 geometry 데이터 넣기
++  // buffer에 geometry 데이터 넣기
 +  setGeometry(gl);
 
   ...
 
-  // 장면 그리기
+  // scene 그리기
   function drawScene() {
 
     ...
@@ -234,7 +234,7 @@ function setGeometry(gl) {
 translation을 설정하고 그려달라고 요청하는 게 우리가 하는 전부죠.
 심지어 geometry에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지됩니다.
 
-원한다면 모든 점들을 갱신하기 위해 위의 [복잡한 자바스크립트를 사용하는 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
+원한다면 모든 점들을 갱신하기 위해 위의 [복잡한 javascript를 사용하는 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
 
 너무 뻔한 예제가 아니었기를 바랍니다.
 다른 한편으로 이걸 수행하는 훨씬 더 좋은 방법을 다룰 것이므로 계속 읽어주세요.

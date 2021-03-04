@@ -38,7 +38,7 @@ TOC: WebGL 행렬 vs 수학 행렬
 
 <div class="webgl_center"><img src="resources/spreadsheet-column.png" style="width: 808px; filter: brightness(0.9);" class="nobg"></div>
 
-따라서, 자바스크립트에서 WebGL용 3x3 혹은 4x4 행렬을 만들 때 이렇게 만들어야 하는데
+따라서, javascript에서 WebGL용 3x3 혹은 4x4 행렬을 만들 때 이렇게 만들어야 하는데
 
 ```js
 const m3x3 = [

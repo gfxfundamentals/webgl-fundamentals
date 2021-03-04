@@ -10,11 +10,11 @@ Texture unit에 관한 [비슷한 글](webgl-texture-units.html)이 있습니다
 
 ## Attribute
 
-WebGL의 attribute는 버퍼에서 데이터를 가져오는 vertex shader에 대한 입력 값입니다.
+WebGL의 attribute는 buffer에서 데이터를 가져오는 vertex shader에 대한 입력 값입니다.
 WebGL은 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용자가 제공한 vertex shader를 N번 실행하는데요.
-각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 vertex shader 내부의 attribute에 제공하는 방법을 정의합니다.
+각 반복마다 attribute는 바인딩된 buffer에서 데이터를 가져와 vertex shader 내부의 attribute에 제공하는 방법을 정의합니다.
 
-자바스크립트로 구현되었다면 이런식으로
+javascript로 구현되었다면 이런식으로
 
 ```js
 // 의사 코드
@@ -143,7 +143,7 @@ attributes: [
 
 다양한 `gl.vertexAttribXXX` 함수로 각 attribute의 값을 설정할 수 있습니다.
 그 값은 `enable`이 false일 때 사용되는데요.
-enable이 true면 attribute의 데이터는 할당된 버퍼에서 가져옵니다.
+enable이 true면 attribute의 데이터는 할당된 buffer에서 가져옵니다.
 
 <a id="vaos"></a>
 ## Vertex Array Object (VAO)
@@ -171,12 +171,12 @@ ext.bindVertexArrayOES = function(vao) {
 
 vertex array object를 사용하는 게 확실히 좋다는 걸 보실 수 있을텐데요.
 이것들을 사용하려면 종종 더 많은 organization이 합니다.
-예를 들어 하나의 shader와 `gl.TRIANGLES`로 입방체를 그리고 다른 shader와 `gl.LINES`로 다시 그리고 싶다고 해봅시다.
+예를 들어 하나의 shader와 `gl.TRIANGLES`로 cube를 그리고 다른 shader와 `gl.LINES`로 다시 그리고 싶다고 해봅시다.
 삼각형으로 그릴 때 조명에 normal을 사용하여 아래처럼 shader에 attribute를 선언한다고 가정하면:
 
 ```glsl
 // lighting-shader
-// 삼각형으로 그려진 입방체의 shader
+// 삼각형으로 그려진 cube의 shader
 
 attribute vec4 a_position;
 attribute vec3 a_normal;
@@ -190,7 +190,7 @@ color에 대한 uniform을 선언하는데요.
 
 ```glsl
 // solid-shader
-// 선으로 이루어진 입방체용 shader
+// 선으로 이루어진 cube용 shader
 
 attribute vec4 a_position;
 ```
