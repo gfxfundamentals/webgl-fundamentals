@@ -241,11 +241,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson">
     <div class="lesson-main">
       <p>이 글은 <a href="webgl-fundamentals.html">WebGL 기초</a>에서 이어집니다.
-<a href="webgl-how-it-works.html">WebGL 작동 원리</a>를 읽지 않았다면 먼저 읽어보는 게 좋습니다.</p>
+<a href="webgl-how-it-works.html">WebGL 작동 원리</a>를 읽지 않았다면 먼저 읽어보는 게 좋습니다.</p>
 <p>Shader와 GLSL에 대해 언급했지만 실제로 구체적인 세부 사항은 다루지 않았는데요.
-예제로 충분하셨길 바라지만 혹시 모르니 좀 더 명확하게 해봅시다.</p>
-<p><a href="webgl-how-it-works.html">작동 원리</a>에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 shader를 필요로 하는데요.
-<em>vertex shader</em>와 <em>fragment shader</em>입니다.
+예제로 충분하면 좋겠지만 혹시 모르니 좀 더 명료하게 해봅시다.</p>
+<p><a href="webgl-how-it-works.html">작동 원리</a>에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 shader를 필요로 합니다.
+바로 <em>vertex shader</em>와 <em>fragment shader</em>죠.
 각각의 shader는 <em>함수</em>인데요.
 vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)으로 연결됩니다.
 일반적인 WebGL 앱은 많은 shader program을 가집니다.</p>
@@ -256,32 +256,32 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
   gl_Position = doMathToMakeClipspaceCoordinates
 }
 </code></pre><p>Shader는 정점마다 한 번씩 호출되는데요.
-호출될 때마다 특수 전역 변수, <code class="notranslate" translate="no">gl_Position</code>을 일부 clip space 좌표로 설정해야 합니다.</p>
+호출될 때마다 특수 전역 변수, <code class="notranslate" translate="no">gl_Position</code>을 어떤 clip space 좌표로 설정해야 합니다.</p>
 <p>Vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.</p>
 <ol>
 <li><a href="#attribute">Attribute</a> (buffer에서 가져온 데이터)</li>
-<li><a href="#uniform">Uniform</a> (단일 그리기 호출의 모든 정점에 대해 동일하게 유지하는 값)</li>
+<li><a href="#uniform">Uniform</a> (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)</li>
 <li><a href="#vertex-shader-texture">Texture</a> (pixel/texel의 데이터)</li>
 </ol>
 <h3 id="attribute">Attribute</h3>
 <p>가장 일반적인 방법은 buffer와 <em>attribute</em>를 통하는 겁니다.
-<a href="webgl-how-it-works.html">작동 원리</a>에서 buffer와 attribute를 다뤘는데요.
-buffer를 만들고,</p>
+<a href="webgl-how-it-works.html">작동 원리</a>에서 buffer와 attribute를 다뤘었죠.
+Buffer를 만들고,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var buf = gl.createBuffer();
 </code></pre><p>이 buffer에 데이터를 넣은 뒤</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 </code></pre><p>만든 shader program을 통해 초기화 시 attribute의 위치를 찾고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
-</code></pre><p>렌더링할 때 WebGL에게 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하는데</p>
+</code></pre><p>렌더링할 때 WebGL에 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 attribute에 대한 buffer에서 데이터 가져오기 활성화
 gl.enableVertexAttribArray(positionLoc);
 
 var numComponents = 3;  // (x, y, z)
 var type = gl.FLOAT;    // 32bit 부동 소수점 값
 var normalize = false;  // 값 원본 그대로 유지
-var offset = 0;         // buffer의 처음부터 시작
+var offset = 0;         // Buffer의 처음부터 시작
 var stride = 0;         // 다음 정점으로 가기 위해 이동하는 byte 수
                         // 0 = type과 numComponents에 맞는 stride 사용
 
@@ -292,11 +292,11 @@ gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 void main() {
   gl_Position = a_position;
 }
-</code></pre><p>buffer에 clip space 정점을 넣으면 동작할 겁니다. </p>
-<p>attribute는 type으로 <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code>, <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>를 사용할 수 있습니다.</p>
+</code></pre><p>Clip space 정점을 buffer에 넣으면 동작할 겁니다. </p>
+<p>Attribute는 type으로 <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code>, <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>를 사용할 수 있습니다.</p>
 <h3 id="uniform">Uniform</h3>
-<p>Shader uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지되며 shader에게 전달되는 값입니다.
-간단한 예로 위 vertex shader에 offset을 추가할 수 있는데</p>
+<p>Shader uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지되며 shader에 전달되는 값입니다.
+간단한 예로 위 vertex shader에 offset을 추가할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 +uniform vec4 u_offset;
 
@@ -304,14 +304,14 @@ void main() {
   gl_Position = a_position + u_offset;
 }
 </code></pre><p>그리고 이제 모든 정점을 일정량만큼 offset 할 수 있습니다.
-먼저 초기화 시 uniform의 위치를 찾아야 하는데</p>
+먼저 초기화 시 uniform의 위치를 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
-</code></pre><p>그런 다음 그리기 전에 uniform을 설정하면</p>
+</code></pre><p>그런 다음 그리기 전에 uniform을 설정합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 우측 절반으로 offset
 </code></pre><p>참고로 uniform은 개별 shader program에 속합니다.
-만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면 두 uniform 모두 고유한 위치와 값을 가지는데요.
-<code class="notranslate" translate="no">gl.uniform???</code>을 호출하면 <em>현재 program</em>의 uniform만 설정합니다.
-현재 program은 <code class="notranslate" translate="no">gl.useProgram</code>에 전달한 마지막 program 입니다.</p>
+만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면, 두 uniform 모두 고유한 위치와 값을 가지는데요.
+<code class="notranslate" translate="no">gl.uniform???</code>을 호출하면 <em>current program</em>의 uniform만 설정합니다.
+Current program은 <code class="notranslate" translate="no">gl.useProgram</code>에 전달한 마지막 program 입니다.</p>
 <p>uniform은 여러 type을 가질 수 있는데요.
 각 type마다 설정을 위해 해당하는 함수를 호출해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform1f (floatUniformLoc, v);                 // float
@@ -343,8 +343,7 @@ gl.uniform1i (samplerCubeUniformLoc, v);           // samplerCube (texture)
 gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 또는 samplerCube 배열
 </code></pre><p><code class="notranslate" translate="no">bool</code>, <code class="notranslate" translate="no">bvec2</code>, <code class="notranslate" translate="no">bvec3</code>, <code class="notranslate" translate="no">bvec4</code> type도 있는데요.
 <code class="notranslate" translate="no">gl.uniform?f?</code> 또는 <code class="notranslate" translate="no">gl.uniform?i?</code> 함수를 사용합니다.</p>
-<p>배열의 경우 배열의 모든 uniform을 한번에 설정할 수 있습니다.
-예를 들어</p>
+<p>배열의 경우 배열의 모든 uniform을 한번에 설정할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// shader
 uniform vec2 u_someVec2[3];
 
@@ -369,7 +368,7 @@ gl.uniform2fv(someVec2Element2Loc, [5, 6]);  // 요소 2 설정
   vec2 someVec2;
 };
 uniform SomeStruct u_someThing;
-</code></pre><p>각 field를 개별적으로 찾아야 하는데</p>
+</code></pre><p>각 field를 개별적으로 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
 var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
 </code></pre><h3 id="vertex-shader-texture">Vertex shader의 texture</h3>
@@ -387,8 +386,8 @@ void main() {
 <p>Fragment shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.</p>
 <ol>
-<li><a href="#uniform">Uniform</a> (단일 그리기 호출의 모든 정점에 대해 동일하게 유지하는 값)</li>
-<li><a href="#fragment-shader-texture">Texture</a> (픽셀/텍셀의 데이터)</li>
+<li><a href="#uniform">Uniform</a> (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)</li>
+<li><a href="#fragment-shader-texture">Texture</a> (pixel/texel의 데이터)</li>
 <li><a href="#varying">Varying</a> (vertex shader에서 전달되고 보간된 데이터)</li>
 </ol>
 <h3 id="fragment-shader-uniform">Fragment shader의 Uniform</h3>
@@ -400,7 +399,7 @@ void main() {
 uniform sampler2D u_texture;
 
 void main() {
-  vec2 texcoord = vec2(0.5, 0.5)  // texture 중간에서 값 가져오기
+  vec2 texcoord = vec2(0.5, 0.5)  // Texture 중앙에서 값 가져오기
   gl_FragColor = texture2D(u_texture, texcoord);
 }
 </code></pre><p>Texture에서 나오는 데이터는 <a href="webgl-3d-textures.html">수많은 설정</a>에 따라 달라집니다.
@@ -411,21 +410,21 @@ var level = 0;
 var width = 2;
 var height = 1;
 var data = new Uint8Array([
-  255, 0, 0, 255,   // 빨강 pixel
-  0, 255, 0, 255,   // 초록 pixel
+  255, 0, 0, 255,   // 빨강 픽셀
+  0, 255, 0, 255,   // 초록 픽셀
 ]);
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
-</code></pre><p>초기화 시 shader program의 uniform 위치를 찾고</p>
+</code></pre><p>초기화 시 shader program의 uniform 위치를 찾으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
-</code></pre><p>렌더링할 때 texture unit에 texture를 할당하며</p>
+</code></pre><p>렌더링할 때 texture unit에 texture를 할당하고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var unit = 5;  // texture unit 선택
 gl.activeTexture(gl.TEXTURE0 + unit);
 gl.bindTexture(gl.TEXTURE_2D, tex);
-</code></pre><p>Texture를 할당한 unit을 shader에게 알려주는데</p>
+</code></pre><p>Texture를 바인딩한 unit을 shader에 알려줍니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform1i(someSamplerLoc, unit);
 </code></pre><h3 id="varying">Varying</h3>
-<p>varying은 <a href="webgl-how-it-works.html">동작 원리</a>에 다룬 vertex shader에서 fragment shader로 값을 전달하는 방법입니다.</p>
-<p>varying을 사용하려면 vertex와 fragment shader 양쪽에 일치하는 varying을 선언해야 하는데요.
+<p>Varying은 <a href="webgl-how-it-works.html">동작 원리</a>에 다룬 vertex shader에서 fragment shader로 값을 전달하는 방법입니다.</p>
+<p>Varying을 사용하려면 vertex shader와 fragment shader 양쪽에 일치하는 varying을 선언해야 하는데요.
 각 정점마다 vertex shader의 varying을 어떤 값으로 설정합니다.
 WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader에서 대응하는 varying으로 전달할 겁니다.</p>
 <p>Vertex shader</p>
@@ -445,32 +444,32 @@ void main() {
 +varying vec4 v_positionWithOffset;
 
 void main() {
-+  // clip space에서 (-1 &lt;-&gt; +1) 색상 공간으로 (0 -&gt; 1) 변환
++  // clip space에서 (-1 &lt;-&gt; +1) color space로 (0 -&gt; 1) 변환
 +  vec4 color = v_positionWithOffset * 0.5 + 0.5
 +  gl_FragColor = color;
 }
-</code></pre><p>위 예제는 대부분 말도 안되는 예제입니다.
+</code></pre><p>위 예제는 대개 말도 안되는 예제입니다.
 일반적으로는 clip space 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
 그럼에도 불구하고 작동하며 색상을 만들어냅니다.</p>
 <h2 id="glsl">GLSL</h2>
-<p>GLSL는 Graphics Library Shader Language의 약자인데요.
+<p>GLSL은 Graphics Library Shader Language의 약자인데요.
 Shader가 작성되는 언어입니다.
 이건 javascript에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
 그래픽을 래스터화하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
 예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code> 같은 type들이 내장되어 있습니다.
-마찬가지로 2x2, 3x3, 4x4 행렬을 나타내는 <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>가 있는데요.
-<code class="notranslate" translate="no">vec</code>에 scalar를 곱하는 것 같은 작업을 수행할 수 있습니다.</p>
+마찬가지로 2x2, 3x3, 4x4 행렬을 나타내는 <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>가 있습니다.
+<code class="notranslate" translate="no">vec</code>에 스칼라를 곱하는 것 같은 작업을 수행할 수도 있죠.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 a = vec4(1, 2, 3, 4);
 vec4 b = a * 2.0;
 // 현재 b는 vec4(2, 4, 6, 8);
-</code></pre><p>마찬가지로 행렬 곱셈과 벡터 대 행렬 곱셈을 할 수 있고</p>
+</code></pre><p>마찬가지로 행렬 곱셈과 벡터 대 행렬 곱셈을 할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">mat4 a = ???
 mat4 b = ???
 mat4 c = a * b;
 
 vec4 v = ???
 vec4 y = c * v;
-</code></pre><p>또한 vec 부분에 대한 다양한 선택자가 있습니다.
+</code></pre><p>또한 vec 부분에 대한 다양한 선택자가 있는데요.
 vec4를 보면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 v;
 </code></pre><ul>
@@ -479,7 +478,7 @@ vec4를 보면</p>
 <li><code class="notranslate" translate="no">v.z</code>는 <code class="notranslate" translate="no">v.p</code>와 <code class="notranslate" translate="no">v.b</code>와 <code class="notranslate" translate="no">v[2]</code>와 같습니다.</li>
 <li><code class="notranslate" translate="no">v.w</code>는 <code class="notranslate" translate="no">v.q</code>와 <code class="notranslate" translate="no">v.a</code>와 <code class="notranslate" translate="no">v[3]</code>과 같습니다.</li>
 </ul>
-<p>vec component들을 <em>swizzle</em> 할 수 있는데 이는 component를 교환하거나 반복할 수 있다는 걸 뜻합니다.</p>
+<p>vec 컴포넌트를 <em>swizzling</em> 할 수 있는데 이는 컴포넌트를 교환하거나 반복할 수 있다는 걸 뜻합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v.yyyy
 </code></pre><p>이건 다음과 같고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.y, v.y, v.y, v.y)
@@ -487,7 +486,8 @@ vec4를 보면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v.bgra
 </code></pre><p>이건 다음과 같으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.b, v.g, v.r, v.a)
-</code></pre><p>vec 또는 mat을 만들 때 한 번에 여러 부분을 공급할 수 있습니다. 예를 들어</p>
+</code></pre><p>vec이나 mat을 만들 때 한 번에 여러 부분을 제공할 수도 있습니다.
+예를 들어</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.rgb, 1)
 </code></pre><p>이건 다음과 같고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.r, v.g, v.b, 1)
@@ -496,26 +496,26 @@ vec4를 보면</p>
 </code></pre><p>이건 다음과 같은데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(1, 1, 1, 1)
 </code></pre><p>한 가지 주의해야할 점은 GLSL의 type이 매우 엄격하다는 겁니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">float f = 1;  // ERROR 1은 int입니다. float에는 int를 할당할 수 없습니다.
-</code></pre><p>올바른 방법은 다음 중 하나인데</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">float f = 1;  // ERROR: 1은 int입니다. float에는 int를 할당할 수 없습니다.
+</code></pre><p>올바른 방법은 다음 중 하나입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">float f = 1.0;      // float 사용
 float f = float(1)  // integer를 float로 cast
 </code></pre><p>위 예제의 <code class="notranslate" translate="no">vec4(v.rgb, 1)</code>는 <code class="notranslate" translate="no">vec4</code>가 내부에서 <code class="notranslate" translate="no">float(1)</code>처럼 cast하기 때문에 <code class="notranslate" translate="no">1</code>에 대해 문제가 발생하지 않습니다.</p>
 <p>GLSL은 많은 내장 함수들을 가지고 있는데요.
-대부분은 여러 구성요소에서 한 번에 작동합니다.
+대부분은 여러 컴포넌트에서 한 번에 작동합니다.
 예를 들어</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">T sin(T angle)
 </code></pre><p>T는 <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code> 또는 <code class="notranslate" translate="no">vec4</code>가 될 수 있음을 뜻합니다.
-만약 <code class="notranslate" translate="no">vec4</code>를 전달하면 각 구성요소의 sine인 <code class="notranslate" translate="no">vec4</code>를 돌려받습니다.
+만약 <code class="notranslate" translate="no">vec4</code>를 전달하면 각 컴포넌트의 sine인 <code class="notranslate" translate="no">vec4</code>를 돌려받습니다.
 다시 말해 <code class="notranslate" translate="no">v</code>가 <code class="notranslate" translate="no">vec4</code>라면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 s = sin(v);
-</code></pre><p>이건 다음과 같은데</p>
+</code></pre><p>이건 다음과 같습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 </code></pre><p>가끔은 한 매개변수가 부동 소수점이고 나머지는 <code class="notranslate" translate="no">T</code>가 됩니다.
-이는 모든 구성요소에 부동 소수점이 적용된다는 걸 뜻하는데요.
+이는 모든 컴포넌트에 부동 소수점이 적용된다는 걸 뜻하는데요.
 예를 들어 <code class="notranslate" translate="no">v1</code>과 <code class="notranslate" translate="no">v2</code>가 <code class="notranslate" translate="no">vec4</code>이고 <code class="notranslate" translate="no">f</code>는 부동 소수점이라면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 m = mix(v1, v2, f);
-</code></pre><p>이건 다음과 같으며</p>
+</code></pre><p>이건 다음과 같습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 m = vec4(
   mix(v1.x, v2.x, f),
   mix(v1.y, v2.y, f),
@@ -523,15 +523,15 @@ float f = float(1)  // integer를 float로 cast
   mix(v1.w, v2.w, f)
 );
 </code></pre><p><a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">WebGL Reference Card</a>의 마지막 페이지에서 모든 GLSL 함수 목록을 볼 수 있습니다.
-만약 정말 무미건조하고 장황한 것을 좋아한다면 <a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL 명세서</a>에 도전해볼 수 있습니다.</p>
+만약 정말 재미없고 장황한 걸 좋아한다면 <a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL 명세서</a>에 도전해볼 수 있습니다.</p>
 <h2 id="-">총정리</h2>
 <p>이게 바로 이 모든 글들의 핵심입니다.
-WebGL은 다양한 shader를 생성하고, 데이터를 이 shader에 공급한 뒤 <code class="notranslate" translate="no">gl.drawArrays</code> 또는 <code class="notranslate" translate="no">gl.drawElements</code>를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 현재 vertex shader를 호출한 뒤 각 픽셀에 대한 현재 fragment shader를 호출하여 픽셀을 렌더링하는 것에 대한 모든 겁니다.</p>
+WebGL은 다양한 shader를 생성하고, 데이터를 이 shader에 제공한 다음, <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 current vertex shader를 호출한 뒤, 각 픽셀에 대한 current fragment shader를 호출하여 픽셀을 렌더링하는 것에 관한 모든 것입니다.</p>
 <p>실제로 shader를 생성하려면 여러 줄의 코드가 필요합니다.
 이 코드들은 대부분의 WebGL program에서 똑같기 때문에 한 번 작성한 후에는 거의 생략할 수 있습니다.
 GLSL shader를 컴파일하고 shader program에 연결하는 방법은 <a href="webgl-boilerplate.html">여기</a>에서 다룹니다.</p>
-<p>여기서 막 시작했다면 두 가지 방향으로 갈 수 있는데요.
-이미지 처리에 관심있다면 <a href="webgl-image-processing.html">2D 이미지 처리 방법</a>을 알려드리겠습니다.
+<p>여기에서 막 시작했다면 두 가지 방향으로 갈 수 있는데요.
+이미지 처리에 관심있다면 <a href="webgl-image-processing.html">2D 이미지 처리 방법</a>을 보여드리겠습니다.
 translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관심있다면 <a href="webgl-2d-translation.html">여기</a>에서 시작해주세요.</p>
 
     </div>
@@ -596,7 +596,7 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Textures</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2-textures.html">Using 2 or More Textures</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 Texture 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Images</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
