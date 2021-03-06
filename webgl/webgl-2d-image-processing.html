@@ -11,7 +11,8 @@
   font-size: x-small;
 }
 table {
-    border-collapse: collapse;
+  border-collapse: collapse;
+  pointer-events: auto;
 }
 .tDnD_whileDrag {
   background-color: #daf !important;
@@ -342,7 +343,7 @@ function render(image) {
   }
   table.appendChild(tbody);
   ui.appendChild(table);
-  $("#ui table").tableDnD({onDrop: drawEffects});
+  $(table).tableDnD({onDrop: drawEffects});
 
   drawEffects();
 
