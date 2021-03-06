@@ -224,7 +224,7 @@ gl.bindAttribLocation(lightingProgram, 1, 'a_normal');
 ```
 
 **gl.linkProgram을 호출하기 전입니다.**
-이건 shader를 연결할 때 WebGL에게 할당할 location을 알려주는데요.
+이건 shader를 연결할 때 WebGL에 할당할 location을 알려주는데요.
 이제 양쪽 shader에서 동일한 VAO를 사용할 수 있습니다.
 
 ## Maximum Attribute

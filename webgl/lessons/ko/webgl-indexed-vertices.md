@@ -74,7 +74,7 @@ gl.bufferData(
 ```
 
 WebGL에 있는 모든 데이터처럼 색인에 대한 특정한 표현이 필요합니다.
-`new Uint16Array(indices)`를 사용하여 색인을 부호없는 16bit 정수로 변환한 뒤 buffer에 업로드합니다.
+`new Uint16Array(indices)`를 사용하여 색인을 unsigned 16bit integer로 변환한 뒤 buffer에 업로드합니다.
 
 그릴 때 사용하고자 하는 색인을 담고있는 buffer를 바인딩해야 합니다.
 
@@ -107,7 +107,7 @@ var count = 6;
 따라서 정점에 닿는 각 면에 한 번씩 동일한 위치가 세 번 사용되더라도, 각자 다른 색상이 결합된 각 면마다 한 번씩 위치를 반복해야 합니다.
 이는 cube의 각 면에 4개씩 총 24개의 정점이, 필요한 12개의 삼각형을 그리려면 36개의 색인이 필요하다는 걸 의미합니다.
 
-WebGL1에서 위의 `indexType`에 유효한 타입은 색인을 0에서 255까지만 가질 수 있는 `gl.UNSIGNED_BYTE`와 최대 색인이 65535인 `gl.UNSIGNED_SHORT`임에 주의하세요.
+WebGL1에서 위의 `indexType`에 유효한 type은 색인을 0에서 255까지만 가질 수 있는 `gl.UNSIGNED_BYTE`와 최대 색인이 65535인 `gl.UNSIGNED_SHORT`임에 주의하세요.
 `gl.UNSIGNED_INT`와 최대 4294967296까지 색인을 허용하는 `OES_element_index_uint` extension이 있는지 확인하고 활성화할 수 있습니다.
 
 ```js

@@ -25,9 +25,9 @@ WebGL에서 대부분의 숫자는 32bit에 불과한데요.
 이걸 잘 설명할 수 있을지 모르겠습니다.
 정밀도 이슈의 다른 예시로 [double vs float](https://www.google.com/search?q=double+vs+float)를 찾아볼 수도 있지만 이를 설명하는 한 가지 방법은 byte와 short 또는 javascript의 `Uint8Array` vs `Uint16Array`의 차이와 같다는 겁니다.
 
-* `Uint8Array`는 부호없는 8bit 정수 배열입니다. 8bit는 0에서 255까지 2<sup>8</sup>개의 값을 포함할 수 있습니다.
-* `Uint16Array`는 부호없는 16bit 정수 배열입니다. 16bit는 0에서 65535까지 2<sup>16</sup>개의 값을 포함할 수 있습니다.
-* `Uint32Array`는 부호없는 32bit 정수 배열입니다. 32bit는 0에서 4294967295까지 2<sup>32</sup>개의 값을 포함할 수 있습니다.
+* `Uint8Array`는 unsigned 8bit integer 배열입니다. 8bit는 0에서 255까지 2<sup>8</sup>개의 값을 포함할 수 있습니다.
+* `Uint16Array`는 unsigned 16bit integer 배열입니다. 16bit는 0에서 65535까지 2<sup>16</sup>개의 값을 포함할 수 있습니다.
+* `Uint32Array`는 unsigned 32bit integer 배열입니다. 32bit는 0에서 4294967295까지 2<sup>32</sup>개의 값을 포함할 수 있습니다.
 
 `lowp`, `mediump`, `highp`도 비슷합니다.
 

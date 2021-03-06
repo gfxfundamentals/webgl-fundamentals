@@ -17,7 +17,7 @@ WebGL은 컴퓨터에 있는 GPU에서 실행됩니다.
 
 Vertex shader의 역할은 정점 위치를 계산하는 겁니다.
 WebGL은 함수가 출력하는 위치를 기반으로 [점, 선, 삼각형](webgl-points-lines-triangles.html)을 포함한 다양한 종류의 primitive를 래스터화할 수 있는데요.
-래스터화할 때 primitive는 fragment shader라 불리는 두 번째 사용자 제공 함수를 호출합니다.
+래스터화할 때 primitive는 fragment shader라 불리는 두 번째 사용자 작성 함수를 호출합니다.
 Fragment shader의 역할은 현재 그려지는 primitive의 각 픽셀에 대한 색상을 계산하는 겁니다.
 
 대부분의 WebGL API는 이러한 함수 쌍을 실행하기 위한 [상태 설정](resources/webgl-state-diagram.html)에 관한 것입니다.
@@ -145,7 +145,7 @@ WebGL에서 색상은 0에서 1까지입니다.
 
     <script id="vertex-shader-2d" type="notjs">
 
-      // Attribute는 buffer에서 데이터를 받음
+      // attribute는 buffer에서 데이터를 받음
       attribute vec4 a_position;
 
       // 모든 shader는 main 함수를 가짐
@@ -313,11 +313,11 @@ CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 �
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
     // positionBuffer(ARRAY_BUFFER)의 데이터를 꺼내오는 방법을 attribute에 지시
-    var size = 2;          // 반복마다 2개의 component
+    var size = 2;          // 반복마다 2개의 컴포넌트
     var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-    var offset = 0;        // buffer의 처음부터 시작
+    var offset = 0;        // Buffer의 처음부터 시작
     gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
 
 `gl.vertexAttribPointer`의 숨겨진 부분은 현재 바인딩된 `ARRAY_BUFFER`를 attribute에 할당한다는 겁니다.
@@ -434,7 +434,7 @@ Fragment shader는 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 사용할 program을 설정한 뒤 우리가 만든 uniform의 값을 설정할 수 있습니다.
-`gl.useProgram`은 위의 `gl.bindBuffer`처럼 현재 program을 설정하는데요.
+`gl.useProgram`은 위의 `gl.bindBuffer`처럼 current program을 설정하는데요.
 이후 모든 `gl.uniformXXX` 함수는 현재 설정된 program의 uniform을 설정합니다.
 
     gl.useProgram(program);

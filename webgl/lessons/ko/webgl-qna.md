@@ -104,7 +104,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [vertex attrib 0이 비활성화된다는 경고를 끌 수 있나요?](webgl-qna-can-i-mute-the-warning-about-vertex-attrib-0-being-disabled-.html)
 * [smudge 브러시 도구를 만드는 방법](webgl-qna-how-to-make-a-smudge-brush-tool.html)
-* [readPixels로 단일 component를 읽는 방법](webgl-qna-how-to-read-a-single-component-with-readpixels.html)
+* [readPixels로 단일 컴포넌트를 읽는 방법](webgl-qna-how-to-read-a-single-component-with-readpixels.html)
 * [readPixels를 호출할 때 invalid type error가 발생합니다](webgl-qna-i-get-invalid-type-error-when-calling-readpixels.html)
 * [UI 렌더링을 최적화하는 방법](webgl-qna-how-to-optimize-rendering-a-ui.html)
 

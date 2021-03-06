@@ -21,7 +21,7 @@ uniform sampler2D someTexture;
 하지만 shader는 `someTexture`에 사용할 texture를 어떻게 아는 걸까요?
 
 그게 texture unit이 관여하는 부분입니다.
-Texture unit은 texture에 대한 참조의 **전역 배열**입니다.
+Texture unit은 texture에 대한 레퍼런스 **전역 배열**입니다.
 WebGL이 javascript로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데
 
 ```js
@@ -69,7 +69,7 @@ gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 ```js
 // 의사 코드!!!
 gl.activeTexture = function(unit) {
-  gl.activeTextureUnit = unit - gl.TEXTURE0;  // 0 기반 인덱스로 변환
+  gl.activeTextureUnit = unit - gl.TEXTURE0;  // 0 기반 index로 변환
 };
 
 gl.bindTexture = function(target, texture) {
@@ -97,7 +97,7 @@ gl.texParameteri = function(target, pname, value) {
 }
 ```
 
-위 예제 의사 코드에서 `gl.activeTexture`가 WebGL 안에 있는 내부 전역 변수를 texture unit 배열 인덱스로 설정해야 하는 건 명확합니다.
+위 예제 의사 코드에서 `gl.activeTexture`가 WebGL 안에 있는 내부 전역 변수를 texture unit 배열 index로 설정해야 하는 건 명확합니다.
 해당 시점부터, 다른 모든 texture 함수는 `target`을 받고, 모든 texture 함수의 첫 매개 변수이며, 현재 texture unit의 바인딩 포인트를 참조합니다.
 
 ## 최대 Texture Unit

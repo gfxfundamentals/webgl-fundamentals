@@ -5,7 +5,7 @@ TOC: 3D 직교법
 
 이 포스트는 WebGL 관련 시리즈의 연장입니다.
 첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [2D 행렬](webgl-2d-matrices.html)에 관한 것이었습니다.
-혹시 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
+아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
 마지막 포스트에서 우리는 2D 행렬이 어떻게 동작하는지 살펴봤습니다.
 translation, rotation, scale, 그리고 픽셀에서 clip space으로 투영하는 것까지 하나의 행렬과 행렬 수학으로 처리할 수 있는 방법에 대해 얘기했었는데요.
@@ -57,7 +57,7 @@ void main() {
   ...
 
   // attribute에 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
-*  var size = 3;          // 반복마다 3개의 component
+*  var size = 3;          // 반복마다 3개의 컴포넌트
   var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
   var normalize = false; // 데이터 정규화 안 함
   var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
@@ -474,8 +474,8 @@ gl.enableVertexAttribArray(colorLocation);
 gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 
 // colorBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
-var size = 3;                 // 반복마다 3개의 component
-var type = gl.UNSIGNED_BYTE;  // 데이터는 부호없는 8bit 값
+var size = 3;                 // 반복마다 3개의 컴포넌트
+var type = gl.UNSIGNED_BYTE;  // 데이터는 unsigned 8bit 값
 var normalize = true;         // 데이터 정규화 (0-255에서 0-1로 전환)
 var stride = 0;               // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;               // buffer의 처음부터 시작
@@ -632,7 +632,7 @@ attribute vec4 a_color;
 <p>둘 다 'vec4'지만 사용하는 buffer에서 데이터 가져오는 방법을 WebGL에 알려줄 때</p>
 <pre class="prettyprint showlinemods">
 // attribute에 positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
-var size = 3;          // 반복마다 3개의 component
+var size = 3;          // 반복마다 3개의 컴포넌트
 var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
 var normalize = false; // 데이터 정규화 안 함
 var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
@@ -642,8 +642,8 @@ gl.vertexAttribPointer(
 
 ...
 // attribute에 colorBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 지시
-var size = 3;          // 반복마다 3개의 component
-var type = gl.UNSIGNED_BYTE;   // 데이터는 8bit 부호없는 byte
+var size = 3;          // 반복마다 3개의 컴포넌트
+var type = gl.UNSIGNED_BYTE;   // 데이터는 8bit unsigned byte
 var normalize = true;  // 데이터 정규화 (0-255에서 0-1로 전환)
 var stride = 0;        // 0 = 다음 색상을 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;        // buffer의 처음부터 시작

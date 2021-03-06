@@ -275,7 +275,7 @@ gl.bufferData(gl.ARRAY_BUFFER, matrixData.byteLength, gl.DYNAMIC_DRAW);
 ```
 
 `gl.DYNAMIC_DRAW`를 마지막 매개 변수로 전달했음에 주목하세요.
-이건 WebGL에게 이 데이터가 자주 바뀔 것이라는 *hint*입니다.
+이건 WebGL에 이 데이터가 자주 바뀔 것이라는 *hint*입니다.
 
 다음으로 buffer에도 색상이 필요합니다.
 최소한 이 예제에서, 이 데이터는 바뀌지 않을 것이므로, 데이터를 업로드하기만 하면 됩니다.
