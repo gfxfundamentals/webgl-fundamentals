@@ -464,8 +464,8 @@
         // Generate a vertex based on its spherical coordinates
         const u = x / subdivisionsAxis;
         const v = y / subdivisionsHeight;
-        const theta = longRange * u;
-        const phi = latRange * v;
+        const theta = longRange * u + opt_startLongitudeInRadians;
+        const phi = latRange * v + opt_startLatitudeInRadians;
         const sinTheta = Math.sin(theta);
         const cosTheta = Math.cos(theta);
         const sinPhi = Math.sin(phi);
