@@ -437,7 +437,8 @@
       opt_startLatitudeInRadians,
       opt_endLatitudeInRadians,
       opt_startLongitudeInRadians,
-      opt_endLongitudeInRadians) {
+      opt_endLongitudeInRadians,
+      opt_capEnds = false) {
     if (subdivisionsAxis <= 0 || subdivisionsHeight <= 0) {
       throw Error('subdivisionAxis and subdivisionHeight must be > 0');
     }
@@ -453,7 +454,9 @@
     // We are going to generate our sphere by iterating through its
     // spherical coordinates and generating 2 triangles for each quad on a
     // ring of the sphere.
-    const numVertices = (subdivisionsAxis + 1) * (subdivisionsHeight + 1);
+    const numVertices = (subdivisionsAxis + 1) * (subdivisionsHeight + 1) + (opt_capEnds
+        ? (subdivisionsHeight + 1) * 2
+        : 0);
     const positions = webglUtils.createAugmentedTypedArray(3, numVertices);
     const normals   = webglUtils.createAugmentedTypedArray(3, numVertices);
     const texCoords = webglUtils.createAugmentedTypedArray(2 , numVertices);
@@ -480,7 +483,12 @@
     }
 
     const numVertsAround = subdivisionsAxis + 1;
-    const indices = webglUtils.createAugmentedTypedArray(3, subdivisionsAxis * subdivisionsHeight * 2, Uint16Array);
+    const indices = webglUtils.createAugmentedTypedArray(
+        3,
+        subdivisionsAxis * subdivisionsHeight * 2 + (opt_capEnds
+            ? subdivisionsHeight * 2
+            : 0),
+        Uint16Array);
     for (let x = 0; x < subdivisionsAxis; x++) {
       for (let y = 0; y < subdivisionsHeight; y++) {
         // Make triangle 1 of quad.
@@ -494,6 +502,42 @@
             (y + 1) * numVertsAround + x,
             (y + 0) * numVertsAround + x + 1,
             (y + 1) * numVertsAround + x + 1);
+      }
+    }
+
+    if (opt_capEnds) {
+      for (let x = 0; x <= 1; x++) {
+        for (let y = 0; y <= subdivisionsHeight; y++) {
+          const u = x;
+          const v = y / subdivisionsHeight;
+          const theta = longRange * u + opt_startLongitudeInRadians;
+          const phi = latRange * v + opt_startLatitudeInRadians;
+          const sinTheta = Math.sin(theta);
+          const cosTheta = Math.cos(theta);
+          const sinPhi = Math.sin(phi);
+          const cosPhi = Math.cos(phi);
+          const ux = cosTheta * sinPhi;
+          const uy = cosPhi;
+          const uz = sinTheta * sinPhi;
+          positions.push(radius * ux, radius * uy, radius * uz);
+          texCoords.push(0.5 - ux * 0.5, 0.5 - uy * 0.5);
+        }
+      }
+      for (let x = 0; x <= 1; x++) {
+        const base = numVertsAround * (subdivisionsHeight + 1) + subdivisionsHeight * x;
+        for (let y = 0; y < subdivisionsHeight; y++) {
+          indices.push(
+            base,
+            base + y + 1 + x,
+            base + y + 2 - x);
+          const p1 = positions.subarray((base    ) * 3, (base + 1) * 3);
+          const p2 = positions.subarray((base + 1 + x) * 3, (base + 2 + x) * 3);
+          const p3 = positions.subarray((base + 2 - x) * 3, (base + 3 - x) * 3);
+          const d1 = m4.subtractVectors(p2, p1);
+          const d2 = m4.subtractVectors(p3, p1);
+          const norm = m4.cross(d1, d2);
+          normals.push(...norm, ...norm, ...norm);
+        }
       }
     }
 
