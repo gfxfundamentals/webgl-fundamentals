@@ -37,14 +37,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="WebGL에서 카메라가 동작하는 방법">
+<meta name="description" content="WebGL에서 카메라가 작동하는 방식">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-camera_ko.jpg">
 
 <meta property="og:title" content="WebGL 3D - 카메라">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-camera_ko.jpg">
-<meta property="og:description" content="WebGL에서 카메라가 동작하는 방법">
+<meta property="og:description" content="WebGL에서 카메라가 작동하는 방식">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-camera.html">
 
 <meta name="twitter:card" content="summary_large_image">
@@ -53,7 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:domain" content="webglfundamentals.org">
 <meta name="twitter:title" content="WebGL 3D - 카메라">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-camera.html">
-<meta name="twitter:description" content="WebGL에서 카메라가 동작하는 방법">
+<meta name="twitter:description" content="WebGL에서 카메라가 작동하는 방식">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-camera_ko.jpg">
 
 <script type="application/ld+json">
@@ -240,67 +240,55 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>이번 게시물도 WebGL의 대한 연속된 포스팅 입니다. 
-처음엔 &quot;webgl-fundamental.html&quot; 진행했고, 이전 포스팅은 3D 원근 투영이 였습니다.
-아직 읽어보지 않았다면 그것부터 읽어 보십시요.</p>
-<p>지난 포스팅에서 우리는 F를 절두체 안에 이동시켜야 했습니다.
-왜냐하면 &#39;m4.perspective&#39; 함수가 그것을 원점에 위치할것이라 기대했기 때문입니다.
-절두체 안의 물체는 절두체 내부 -zNear ~ -zFar 에 있습니다.</p>
-<p>물체를 view의 앞에 이동시키는 것은 올바른 방법이 아니지 않습니까?
-실제 세상에서는 건물의 사진을 찍을때 너는 카메라를 들고 이동합니다. </p>
+      <p>이 포스트는 WebGL 관련 시리즈의 연장입니다.
+첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고 이전에는 <a href="webgl-3d-perspective.html">3D 원근 투영</a>에 관한 것이었습니다.
+아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
+<p><code class="notranslate" translate="no">m4.perspective</code> 함수는 F가 원점(0, 0, 0)에 있으리라 생각하고, 절두체의 객체는 원점 앞 <code class="notranslate" translate="no">-zNear</code>에서 <code class="notranslate" translate="no">-zFar</code>까지 있기 때문에, 지난 포스트에서 우리는 F를 절두체 앞으로 옮겨야 했습니다.</p>
+<p>View 앞의 물체를 움직이는 건 좋은 방법이 아닌 것 같습니다.
+현실에서는 보통 건물의 사진을 찍기 위해 카메라를 움직이죠.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
-  <div class="webgl_center">moving the camera to the objects</div>
+  <div class="webgl_center">카메라를 객체로 이동</div>
 </div>
 
 </p>
-<p>너는 보통 카메라 앞으로 건물을 이동시키지 않습니다.</p>
+<p>보통은 카메라 앞으로 건물을 움직이지 않습니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=1"></iframe>
-  <div class="webgl_center">moving the objects to the camera</div>
+  <div class="webgl_center">객체를 카메라로 이동</div>
 </div>
 
 </p>
-<p>그러나 우리의 지난 포스팅에서 우리는 -Z축 앞에 원점으로부터 물체가 있기를
-요구하는 투영법을 생각했습니다.
-우리가 원하는 것을 달성하기 위해서는 카메라를 원점으로 이동합니다.
-그리고 나머지들을 적절한 양만큼 이동합니다.
-그래서 카메라와 상대거리 만큼 동일한 위치에 있게 합니다.</p>
+<p>하지만 지난 포스트에서 우리는 -Z축의 원점 앞에 있도록 하는 투영법을 찾아냈습니다.
+이를 위해 하고 싶은 것은 원점으로 카메라를 옮기고 다른 모든 걸 적절하게 이동하여 <em>카메라를 기준으로 동일한 위치</em>에 있도록 하는 겁니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=2"></iframe>
-  <div class="webgl_center">moving the objects to the view</div>
+  <div class="webgl_center">객체를 view로 이동</div>
 </div>
 
 </p>
-<p>우리는 카메라 앞으로 world 공간을 효과적으로 움직일 필요가 있습니다.
-가장 쉬운 방법은 역행렬을 사용하는 것입니다.
-일반적인 경우는 역행렬 계산하는 수학은 복잡하지만 개념적으로 쉽습니다.
-반대&#39;역&#39;는 다른값을 부정하는데 사용하는 값입니다.
-예를들어 X에서 123으로 변환하는 역행렬은 X에서 -123으로 변환하는 행렬 입니다.
-5로 크기변환되는 역행렬은 5/1 또는 0.2로 크기변환 되는 행렬 입니다.
-X축으로 30도 만큼 회전하는 역행렬은 X축으로 -30도 회전하는 행렬입니다.</p>
-<p>이 시점까지 우리는 이동,회전, 크기변환을 &#39;F&#39;의 방향과 위치를 영향을 주는데 사용 했습니다. 
-모든 행렬의 곱셈 이후에는 어떻게 F가 원점으로 특정 지점까지 움직이는 지,
-우리가 원하는 크기와 방향을 하나의 행렬을 가집니다.
-우리는 카메라에도 똑같이 할 수 있습니다.
-이 시점까지 어떻게 원점으로 부터 우리가 원하는 지점까지 카메라를 이동하고 회전하는
-방법을 말해주는 행렬이 있으면, 우리는 이동, 회전 전부 반대 방향으로 하는 
-역행렬을 계산할수 있습니다.
-그래서 카메라는 (0,0,0)에 있도록 위치하고, 우리는 모든것을 카메라 앞에 이동했습니다.</p>
-<p>위의 그림과 같이 &#39;F&#39;의 회전을 3D scene을 만들어 봅시다.</p>
-<p>먼저, 우리는 &#39;F&#39;를 5개를 그릴 것입니다. 
-그리고 그것들은 반복문 밖에서 계산될 동일한  투영 행렬을 사용 한다. </p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">
-// Compute the projection matrix
+<p>카메라 앞의 월드를 효율적으로 움직여야 하는데요.
+가장 쉬운 방법은 &quot;inverse&quot; 행렬을 사용하는 겁니다.
+일반적인 경우에 역행렬을 계산하는 수식은 복잡하지만 개념적으로는 쉽습니다.
+&quot;역&quot;은 어떤 값의 정반대로 사용하는 값입니다.
+예를 들어 X에서 123으로 translate하는 행렬의 역은 X에서 -123으로 translate하는 행렬입니다.
+5로 scale하는 행렬의 역은 1/5이나 0.2로 scale하는 행렬입니다.
+X축을 중심으로 30&deg; rotate하는 행렬의 역은 X축을 중심으로 -30&deg; rotate하는 행렬이 됩니다.</p>
+<p>지금까지 &#39;F&#39;의 위치와 orientation에 영향을 주기 위한 translation, rotation, scale을 사용했습니다.
+모든 행렬을 곱한 후 &#39;F&#39;를 원점에서 원하는 위치, 크기, orientation으로 움직이는 방법을 나타내는 단일 행렬이 생기는데요.
+카메라에서도 똑같이 할 수 있습니다.
+카메라를 원점에서 원하는 위치로 이동하고 회전하는 방법을 알려주는 행렬이 있으면, 다른 모든 것을 정반대의 결과로 이동하고 회전하는 방법을 알려주는 행렬인 역행렬을 계산할 수 있으므로, 카메라는 (0, 0, 0)에 있도록 하고 모든 걸 그 앞으로 옮길 겁니다.</p>
+<p>위 다이어그램처럼 &#39;F&#39;가 선회하는 3D scene을 만들어봅시다.</p>
+<p>우선 5개를 그리고 있고 모두 동일한 투영 행렬을 사용하기 때문에 loop 바깥에서 계산할 겁니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 투영 행렬 계산
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var zNear = 1;
 var zFar = 2000;
 var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 </code></pre>
-<p>다음으로 우리는 카메라 행렬을 계산할것이다. 
-이 행렬은 카메라의 위치와 방향을 월드좌표계에 나타낸다.
-아래 코드는 원점 반경 * 1.5 거리를 중심으로 카메라를 회전시키고
-원점을 바라보게 만듭니다.</p>
+<p>다음으로 카메라 행렬을 계산할 겁니다.
+행렬은 월드에서 카메라의 위치와 orientation을 나타냅니다.
+아래 코드는 카메라가 원점을 중심으로 radius * 1.5의 거리에서 원점을 바라보며 회전하는 행렬을 만듭니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=3"></iframe>
   <div class="webgl_center">camera movement</div>
@@ -310,70 +298,64 @@ var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">var numFs = 5;
 var radius = 200;
 
-// Compute a matrix for the camera
+// 카메라에 대한 행렬 계산
 var cameraMatrix = m4.yRotation(cameraAngleRadians);
 cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 </code></pre>
-<p>우리는 카메라 행렬에서 뷰 행렬으로 계산 합니다.
-&#39;뷰 행렬&#39;은 마치 카메라의 원점이 (0,0,0) 있는 것 처럼
-모든것을 카메라의 반대편으로 효과적으로 이동을 시키는 행렬 입니다.
-우리는 &quot;역&quot;을 사용함으로써 역행렬을 계산할수 있는데, (제공된 행렬의 정반대를 수행하는 행렬)
-이런 경우는 제공된 행렬은 카메라를 다른 지점, 원점에 상대적인 방향으로 이동합니다.
-이 역행렬은 모든것을 이동시켜서 카메라를 원점에 있도록 만듭니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Make a view matrix from the camera matrix.
+<p>그런 다음 카메라 행렬에서 &quot;view 행렬&quot;을 계산합니다.
+&quot;View 행렬&quot;은 마치 카메라가 원점(0,0,0)에 있는 것처럼, 사실상 카메라를 기준으로 하도록 카메라의 정반대로 모든 걸 움직이는 행렬입니다.
+역행렬(제공된 행렬의 정반대를 수행하는 행렬)을 계산하는 <code class="notranslate" translate="no">inverse</code> 함수를 사용하여 이를 수행할 수 있습니다.
+이 경우 제공된 행렬은 원점을 기준으로 카메라를 어떤 위치와 orientation으로 움직입니다.
+그 반대는 다른 모든 걸 옮겨서 카메라가 원점에 있도록 하는 행렬입니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 카메라 행렬에서 view 행렬 만들기
 var viewMatrix = m4.inverse(cameraMatrix);
 </code></pre>
-<p>이제 우리는 뷰와 투영 행렬을 뷰 투영 행렬로 합칩니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Compute a view projection matrix
+<p>이제 view와 투영 행렬을 view 투영 행렬로 합칩니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// View 투영 행렬 계산
 var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </code></pre>
-<p>마침내 우리는 F의 원을 그립니다. 
-각 F는 우리는 뷰 투영 행렬로 시작해서, 반지름 단위로 이동하고 회전합니다.</p>
+<p>마지막으로 F의 원을 그립니다.
+각 F에 대해 view 투영 행렬로 시작한 다음, 반경 단위로 회전하고 이동합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">for (var ii = 0; ii &lt; numFs; ++ii) {
-  var angle = ii * Math.PI * 2 / numFs;
+  var angle = (ii * Math.PI * 2) / numFs;
   var x = Math.cos(angle) * radius;
-  var y = Math.sin(angle) * radius
+  var y = Math.sin(angle) * radius;
 
-  // starting with the view projection matrix
-  // compute a matrix for the F
+  // View 투영 행렬로 시작하여 F에 대한 행렬 계산
   var matrix = m4.translate(viewProjectionMatrix, x, 0, y);
 
-  // Set the matrix.
+  // 행렬 설정
   gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-  // Draw the geometry.
+  // Geometry 그리기
   var primitiveType = gl.TRIANGLES;
   var offset = 0;
   var count = 16 * 6;
   gl.drawArrays(primitiveType, offset, count);
 }
 </code></pre>
-<p>그리고 짜잔! &#39;F&#39;의 원을 주변으로 카메라가 회전 합니다.
-&#39;카메라각도&#39; 슬라이더 항목을 드래그 하여 카메라를 움직여보자.</p>
+<p>그리고 짜잔!
+카메라가 F의 원을 돌고 있습니다.
+<code class="notranslate" translate="no">cameraAngle</code>을 드래그하여 카메라를 움직여보세요.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera.html" target="_blank">새 창을 열려면 여기를 클릭</a>
 </div>
 
 </p>
-<p>이것도 괜찮지만, 회전과 변환을 사용해서 카메라를 당신이 원하는 위치에 
-이동하는 것은 항상 쉬운것은 아닙니다.
-예를들어 만약 우리가 카메라를 특정 지점에 항상 가리키게 하려면, 
-카메라가 &#39;F&#39; 주위를 돌면서 특정 &#39;F&#39;의 지점을 가리키게 하는 방법을 계산하는 것은
-꽤 미친 수학이 필요 합니다.</p>
-<p>다행히 더 쉬운 방법이 있습니다. 카메라를 원하는 위치와 가리키는 대상을
-결정한 다음 거기에 카메라를 배치할 행렬을 계산 할수 있습니다.
-이러한 방법으로 행렬이 동작하는 방법은 놀랄도록 쉽습니다.</p>
-<p>먼저 우리는 원하는 카메라를 위치를 알 필요가 있습니다.
-우리는 이것을 &#39;cameraPosition&#39;으로 부를 것 입니다.
-그런 다음 우리는 우리가 보거나 겨냥하고 싶은 것의 위치를 알아야 합니다.
-우리는 그것을 &#39;target&#39;으로 부를 것 입니다.
-만약 우리가 &#39;cameraPosition&#39; 에서 &#39;target&#39;을 빼면 &#39;target&#39;에 도달하기 위해
-카메라가 가야할 방향을 가리키는 벡터가 생깁니다.
-이를 &#39;zAxis&#39;라고 합시다.
--z 방향의 카메라 포인트를 우리는 알고 있기 때문에, 우리는 &#39;cameraPosition&#39; - &#39;target&#39;을 
-뺄수 있습니다.
-우리는 결과는 정규화 하고 그것을 행렬에 &#39;z&#39; 부분에 복사합니다.</p>
+<p>전부 괜찮아 보이지만 rotate와 translate를 사용하여 항상 카메라를 원하는 곳으로 움직이고 보고 싶은 방향을 향하게 하는 것은 쉽지 않습니다.
+예를 들어 카메라가 F 중에 특정 하나를 가리키도록 하려면, &#39;F&#39;의 원이 회전하는 동안 카메라가 해당 &#39;F&#39;를 가리키도록 회전하는 방법을 계산하기 위해 꽤 어려운 수식이 필요합니다.</p>
+<p>다행히 더 쉬운 방법이 있습니다.
+원하는 카메라 위치와 가리킬 대상을 결정한 다음, 그곳에 카메라를 배치하는 행렬을 계산할 수 있습니다.
+행렬이 작동하는 방식에 따라 이 작업은 놀라울 정도로 쉽습니다.</p>
+<p>먼저 원하는 카메라 위치를 알아야 합니다.
+이를 <code class="notranslate" translate="no">cameraPosition</code>이라 부를겁니다.
+그런 다음 보고 싶거나 목표로 하고 싶은 것의 위치를 알아야 합니다.
+이건 <code class="notranslate" translate="no">target</code>이라 부를겁니다.
+<code class="notranslate" translate="no">cameraPosition</code>에서 <code class="notranslate" translate="no">target</code>을 빼면 대상에 도달하기 위해 카메라가 이동해야 하는 방향을 가리키는 벡터가 생깁니다.
+이걸 <code class="notranslate" translate="no">zAxis</code>라 부릅시다.
+Since we know the camera points in the -Z direction we can subtract the other way <code class="notranslate" translate="no">cameraPosition - target</code>.
+결과를 정규화하고 행렬의 <code class="notranslate" translate="no">z</code>부분으로 직접 복사합니다.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 |    |    |    |    |
@@ -386,78 +368,75 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 +----+----+----+----+
 </pre></div>
 
-<p>행렬의 부분은 Z축을 나타냅니다. 이런 경우 카메라의 Z축 입니다.
-벡터를 정규화 한다는 것은 벡터를 1.0으로 나타내는 것을 의미합니다.
-만약 당신이 2D rotation article로 돌아간다면,
-우리는 그곳에서 단위 원과 2D 회전에 대해 도움이 되는지에 대해 살펴보았다.
-3D에서는 우리는 구의 단위가 필요하고, 정규화된 벡터는 구의 한점을 나타낸다.</p>
+<p>행렬의 이 부분은 Z축을 나타냅니다.
+이 경우에는 카메라의 Z축입니다.
+벡터 정규화는 벡터를 1.0을 나타내는 벡터로 만드는 걸 의미합니다.
+<a href="webgl-2d-rotation.html">2D Rotation</a>으로 돌아가보면 단위원이 2D 회전에 어떻게 도움이 되는지 말했었는데요.
+3D에서는 단위구가 필요하고 정규화된 벡터는 단위구의 한 점을 나타냅니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=0"></iframe>
-  <div class="webgl_center">the <span class='z-axis'>z axis</span></div>
+  <div class="webgl_center"><span class='z-axis'>Z축</span></div>
 </div>
 
 </p>
-<p>그래도 정보가 충분치 않습니다. 하나의 벡터가 우리에게 구체위에 있는 지점을 
-제공하지만, 다른 지점을 가리키는 방향은 무엇입니까 ?
-우리는 행렬의 다른 부분들을 채울 필요합니다. 특별히 x축과 y축 부분 입니다.
-우리는 이러한 3 방향이 서로 직각인것을 알고 있습니다.
-우리는 또한 일반적으로 카메라를 똑바로 가리키지 않는다는 것도 알고 있습니다.
-주어진 대로, 만약 우리가 어느 방향이 위인지 알고 있다면, 이러한 경우 (0, 1, 0)
-우리는 &quot;외적&quot;으로 불리는 것을 행렬을 위한 X축, Y축 계산하는데 사용할수 있습니다.</p>
-<p>나는 수학적 용어에서 외적이 무엇을 의미하는지 모릅니다.
-내가 아는 것은 만약 당신이 2개의 단위벡터가 있고, 그것들의 외적을 계산하면
-그 2개의 벡터에 수직인 벡터를 얻을수 있다.
-즉 당신은 남동쪽을 가리키는 벡터가 있고,  그리고 위를 가리키는 벡터가 있고,
-그리고 2 벡터가 직각이기 대문에
-너는 외적을 계산해보면 남동쪽 혹은 북동쪽을 가리키는 벡터를 얻는다.
-외적을 계산하는 순서에 따라 반대의 답을 얻을 것이다.</p>
-<p>이러한 경우 우리는 <span class="z-axis"><code class="notranslate" translate="no">zAxis</code></span> 그리고
-<span style="color: gray;"><code class="notranslate" translate="no">위</code></span> 의 외적을 계산한다면 우리는 카메라의 대한 <span class="x-axis">xAxis</span><br>를 얻을 것이다.</p>
+<p>그래도 정보가 충분하지 않습니다.
+단일 벡터만으로도 단위구의 한 점을 제공하지만, 해당 점에서 사물이 향하는 orientation은 뭘까요?
+이를 알기 위해서는 행렬의 다른 부분을 채워야 합니다.
+특히 X축과 Y축 부분이요.
+우리는 일반적으로 이 세 부분이 서로 수직임을 알고있습니다.
+또한 &quot;일반적으로&quot; 카메라를 똑바로 향하지 않는다는 것도 알죠.
+이를 고려해서 이 경우 (0,1,0)인 위쪽이 어느 쪽인지 안다면, 행렬에 대한 X축과 Y축을 계산하기 위해 그것과 &quot;가위곱&quot;을 사용할 수 있습니다.</p>
+<p>수학적 용어로 가위곱이 무엇을 의미하는지는 모르겠습니다.
+제가 아는 건 2개의 단위 벡터가 있고 이들을 가위곱으로 계산하면, 이 두 벡터에 수직인 벡터를 얻는다는 겁니다.
+다시 말해 남동쪽을 가리키는 벡터와 위쪽을 가리키는 벡터를 가위곱하면, 남동쪽과 위쪽에 수직인 두 벡터이기 때문에, 남서쪽이나 북동쪽을 가리키는 벡터를 얻게 됩니다.
+계산하는 순서에 따라 반대의 결과를 얻게 될 겁니다.</p>
+<p>하여튼 <span class="z-axis"><code class="notranslate" translate="no">zAxis</code></span>와 <span style="color: gray;"><code class="notranslate" translate="no">up</code></span>의 가위곱을 계산하면 카메라의 <span class="x-axis">xAxis</span>를 얻을 수 있습니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=1"></iframe>
-  <div class="webgl_center"><span style='color:gray;'>up</span> cross <span class='z-axis'>zAxis</span> = <span class='x-axis'>xAxis</span></div>
+  <div class="webgl_center"><span style='color:gray;'>up</span> x <span class='z-axis'>zAxis</span> = <span class='x-axis'>xAxis</span></div>
 </div>
 
 </p>
-<p>이제 우리는 <span class="x-axis"><code class="notranslate" translate="no">xAxis</code></span> 이 생겼으므로  <span class="z-axis"><code class="notranslate" translate="no">zAxis</code></span> 과 <span class="x-axis"><code class="notranslate" translate="no">xAxis</code></span>
-을 외적하여 카메라의  <span class="y-axis"><code class="notranslate" translate="no">yAxis</code></span>을 얻을 수 있습니다.</p>
+<p>그리고 이제 <span class="x-axis"><code class="notranslate" translate="no">xAxis</code></span>가 있으니 <span class="z-axis"><code class="notranslate" translate="no">zAxis</code></span>와 <span class="x-axis"><code class="notranslate" translate="no">xAxis</code></span>를 가위곱해서 카메라의 <span class="y-axis"><code class="notranslate" translate="no">yAxis</code></span>를 얻을 수 있습니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/cross-product-diagram.html?mode=2"></iframe>
-  <div class="webgl_center"><span class='z-axis'>zAxis</span> cross <span class='x-axis'>xAxis</span> = <span class='y-axis'>yAxis</span></div>
+  <div class="webgl_center"><span class='z-axis'>zAxis</span> x <span class='x-axis'>xAxis</span> = <span class='y-axis'>yAxis</span></div>
 </div>
 
 </p>
-<p>이제 우리가 해야하는 것은 3개의 축을 행렬에 연결하는 것이다.
-이것은 우리에게 &#39;cameraPoistion&#39; 에서 &#39;target&#39; 으로 향하는 행렬을 제공한다.
-우리는 단지 위치만 추가해주면 된다.</p>
+<p>이제 남은 일은 3개의 축을 행렬로 연결하는 겁니다.
+이는 <code class="notranslate" translate="no">cameraPosition</code>에서 <code class="notranslate" translate="no">target</code>을 가리키는 무언가를 향하는 행렬을 제공하는데요.
+<code class="notranslate" translate="no">position</code>만 추가하면 됩니다.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
-| <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">x axis</span>
+| <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">x축</span>
 +----+----+----+----+
-| <span class="y-axis">Yx</span> | <span class="y-axis">Yy</span> | <span class="y-axis">Yz</span> |  0 |  <- <span class="y-axis">y axis</span>
+| <span class="y-axis">Yx</span> | <span class="y-axis">Yy</span> | <span class="y-axis">Yz</span> |  0 |  <- <span class="y-axis">y축</span>
 +----+----+----+----+
-| <span class="z-axis">Zx</span> | <span class="z-axis">Zy</span> | <span class="z-axis">Zz</span> |  0 |  <- <span class="z-axis">z axis</span>
+| <span class="z-axis">Zx</span> | <span class="z-axis">Zy</span> | <span class="z-axis">Zz</span> |  0 |  <- <span class="z-axis">z축</span>
 +----+----+----+----+
-| Tx | Ty | Tz |  1 |  <- camera position
+| Tx | Ty | Tz |  1 |  <- 카메라 위치
 +----+----+----+----+
 </pre></div>
 
-<p>여기에 2벡터를 외적하는 코드가 있다.</p>
+<p>두 벡터의 가위곱을 계산하는 코드</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">function cross(a, b) {
-  return [a[1] * b[2] - a[2] * b[1],
-          a[2] * b[0] - a[0] * b[2],
-          a[0] * b[1] - a[1] * b[0]];
+  return [
+    a[1] * b[2] - a[2] * b[1],
+    a[2] * b[0] - a[0] * b[2],
+    a[0] * b[1] - a[1] * b[0],
+  ];
 }
 </code></pre>
-<p>여기에 두 벡터를 빼는 코드가 있다.</p>
+<p>두 벡터를 뺄셈하는 코드</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">function subtractVectors(a, b) {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 </code></pre>
-<p>여기에 벡터를 정규화 하는 코드가 있다. (단위 벡터로 만든다)</p>
+<p>벡터를 정규화하는 코드 (단위 벡터로 만듦)</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">function normalize(v) {
   var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-  // make sure we don&#39;t divide by 0.
+  // 0으로 나뉘지 않도록 하기
   if (length &gt; 0.00001) {
     return [v[0] / length, v[1] / length, v[2] / length];
   } else {
@@ -465,7 +444,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
   }
 }
 </code></pre>
-<p>여기에 &quot;lookat&quot; 행렬을 계산하는 코드가 있다.</p>
+<p>&quot;lookAt&quot; 행렬을 계산하는 코드</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">var m4 = {
   lookAt: function(cameraPosition, target, up) {
     var zAxis = normalize(
@@ -484,19 +463,17 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
     ];
   }
 </code></pre>
-<p>그리고 여기에 우리가 어떻게 카메라 지점을 특정 &#39;F&#39;에 가리키도록 하는 방법이 있다.
-마치 우리가 이동하는 것 처럼.</p>
+<p>다음은 카메라를 움직일 때 특정 &#39;F&#39;를 가리키도록 만드는 방법입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">  ...
 
-  // Compute the position of the first F
+  // 첫 번째 F의 위치 계산
   var fPosition = [radius, 0, 0];
 
-  // Use matrix math to compute a position on a circle where
-  // the camera is
+  // 원에서 카메라가 있는 위치를 계산하는 행렬 수학 사용
   var cameraMatrix = m4.yRotation(cameraAngleRadians);
   cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 
-  // Get the camera&#39;s position from the matrix we computed
+  // 계산한 행렬에서 카메라의 위치 얻기
   var cameraPosition = [
     cameraMatrix[12],
     cameraMatrix[13],
@@ -505,50 +482,40 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
   var up = [0, 1, 0];
 
-  // Compute the camera&#39;s matrix using look at.
+  // lookAt을 사용하여 카메라의 행렬 계산
   var cameraMatrix = m4.lookAt(cameraPosition, fPosition, up);
 
-  // Make a view matrix from the camera matrix.
+  // 카메라 행렬로 view 행렬 만들기
   var viewMatrix = m4.inverse(cameraMatrix);
 
   ...
 </code></pre>
-<p>여기 결과 다.</p>
+<p>그리고 여기 결과입니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-camera-look-at.html" target="_blank">새 창을 열려면 여기를 클릭</a>
 </div>
 
 </p>
-<p>슬라이더를 드래고 하고 어떻게 &#39;F&#39;를 카메라가 찾는방법을 확인한다.</p>
-<p>카메라 이외에도 &quot;lookAt&quot; 행렬을 사용을 할 수 있습니다.
-흔한 사용은 캐릭터의 얼굴이 누군가를 향하게 만드는 것 입니다.
-터렛에 타겟에 목표로 합니다.
-물체가 길을 따라가도록 합니다. 너는 경로의 위치를 계산 합니다.
-그런 다음 당신이 계산하는 것은  앞으로의 움직임이 될것 입니다
-&quot;lookAt&quot; 함수에 위 두 값을 연결하시오.
-그러면 너의 물체가 길을 따라가고
-길에 방향을 향하게 하는 행렬을 얻을 것 입니다.</p>
-<p>Let&#39;s <a href="webgl-animation.html">learn about animation next</a>.</p>
+<p>슬라이더를 드래그해서 카메라가 어떻게 &#39;F&#39;를 따라가는지 확인해보세요.</p>
+<p>참고로 카메라 이외에도 &quot;lookAt&quot; 수식을 사용할 수 있습니다.
+일반적인 용도는 누군가를 따라가는 캐릭터의 머리를 만드는 겁니다.
+목표를 겨냥하는 포탑을 만들 수 있고, 개체가 경로를 따라가게 만들 수도 있는데요.
+먼저 경로상에 대상이 있는 위치를 계산합니다.
+그런 다음 잠시 후에 경로상에 대상이 어디에 있는지 계산합니다.
+두 값을 <code class="notranslate" translate="no">lookAt</code> 함수로 연결하면 개체가 경로를 따라가고 경로를 향하도록 하는 행렬을 얻을 수 있습니다.</p>
+<p>다음은 <a href="webgl-animation.html">애니메이션</a>에 대해 배워보겠습니다.</p>
 <div class="webgl_bottombar">
-<h3>lookAt standards</h3>
+<h3>lookAt 표준</h3>
 <p>
-
-대부분의 3D 수학 라이브러리는 <code class="notranslate" translate="no">lookAt</code> 기능이 있습니다.
-종종 그것은 특별히 "camera matrix"가 아닌 "view matrix" 만들기 위해서 디자인 됩니다.
-다른 말로, 카메라만 단순히 움직이는 행렬이 아닌 
-카메라 앞에 모든것을 움직이는 행렬을 만듭니다.
-
+대부분의 3D 수학 라이브러리는 <code class="notranslate" translate="no">lookAt</code> 함수를 가지고 있습니다.
+종종 "카메라 행렬"이 아닌 "view 행렬"를 만들기 위해 설계된 함수들이 있는데요.
+다시 말해 카메라 자체를 움직이는 행렬이 아니라 카메라 앞에 있는 모든 걸 움직이는 행렬을 만듭니다.
 </p>
 <p>
-
-나는 덜 유용하다고 생각 합니다. 지적 했듯이, lookAt 기능은 많이 사용됩니다.
-뷰 행렬이 필요하다면 <code class="notranslate" translate="no">inverse</code>를 쉽게 호출할수 있지만
-몇몇 캐릭터의 머리가 다른 캐릭터나 혹은 목표에 겨냥하고 있는 터렛을 따라가게 
-만들때 <code class="notranslate" translate="no">lookAt</code> 기능을 당신은 사용하고 있습니다.
-만일 <code class="notranslate" translate="no">lookAt</code> 기능이 월드 공간에서 물체의 위치나 방향을 정하는 행렬을 제공하면
-훨씬 유용할것이다.
-
+저는 이게 덜 유용하다고 생각합니다.
+lookAt 함수는 많은 용도로 사용되는데요.
+View 행렬이 필요할 때 <code class="notranslate" translate="no">inverse</code>를 호출하기 쉽긴 하지만, 어떤 캐릭터의 머리가 다른 캐릭터를 따라가게 하거나 어떤 포탑이 목표를 겨냥하게 만들기 위해 <code class="notranslate" translate="no">lookAt</code>을 사용한다면, <code class="notranslate" translate="no">lookAt</code>이 world space에서 개체의 방향과 위치를 지정하는 행렬을 반환하는 경우에 훨씬 더 유용합니다.
 </p>
 <div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at-heads.html"></iframe>
@@ -557,6 +524,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
 
 </div>
+
 
     </div>
     <div class="lesson-sidebar">
@@ -596,7 +564,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교법</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근법</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D 카메라</a></li>
         </ul>
   <li>조명</li>
         <ul>

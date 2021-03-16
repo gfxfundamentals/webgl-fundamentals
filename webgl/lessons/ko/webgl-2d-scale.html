@@ -243,7 +243,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>이 포스트는 WebGL 관련 시리즈의 연장입니다.
 첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고 이전에는 <a href="webgl-2d-rotation.html">geometry rotation</a>에 관한 것이었습니다.</p>
 <p>Scale은 <a href="webgl-2d-translation.html">translation</a>만큼이나 쉽습니다.</p>
-<p>원하는 scale에 위치를 곱하면 되는데요.
+<p>원하는 scale로 위치를 곱하면 되는데요.
 <a href="webgl-2d-rotation.html">이전 예제</a>에서 변경된 사항들은 다음과 같습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
@@ -254,15 +254,15 @@ uniform vec2 u_rotation;
 +uniform vec2 u_scale;
 
 void main() {
-+  // 위치 scale
++  // 위치 scale하기
 +  vec2 scaledPosition = a_position * u_scale;
 
   // 위치 회전
   vec2 rotatedPosition = vec2(
-*     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
-*     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
+*    scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
+*    scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
 
-  // translation 추가
+  // Translation 추가
   vec2 position = rotatedPosition + u_translation;
 </code></pre><p>그리고 그릴 때 scale하기 위해 필요한 javascript를 추가합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
@@ -275,27 +275,27 @@ void main() {
 
   ...
 
-  // scene 그리기
+  // Scene 그리기
   function drawScene() {
 
     ...
 
-    // translation 설정
+    // Translation 설정
     gl.uniform2fv(translationLocation, translation);
 
-    // rotation 설정
+    // Rotation 설정
     gl.uniform2fv(rotationLocation, rotation);
 
-+    // scale 설정
++    // Scale 설정
 +    gl.uniform2fv(scaleLocation, scale);
 
-    // geometry 그리기
+    // Geometry 그리기
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     var count = 18;  // &#39;F&#39;의 삼각형 6개, 삼각형마다 점 3개
     gl.drawArrays(primitiveType, offset, count);
   }
-</code></pre><p>그러면 이제 scale이 있습니다.
+</code></pre><p>그러면 이제 scale을 가집니다.
 슬라이더를 드래그해보세요.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-scale.html"></iframe>
@@ -303,7 +303,7 @@ void main() {
 </div>
 
 </p>
-<p>한 가지 주목할만한 점은 음수로 크기를 조정하면 geometry가 뒤집힌다는 겁니다.</p>
+<p>한 가지 주목할만한 점은 음수로 scale하면 geometry가 뒤집힌다는 겁니다.</p>
 <p>지난 3개의 글이 <a href="webgl-2d-translation.html">translation</a>, <a href="webgl-2d-rotation.html">rotation</a>, scale을 이해하는데 도움이 되셨기를 바랍니다.</p>
 <p>다음에는 이 3가지 모두를 훨씬 간단하고 더 유용한 형태로 결합하는 <a href="webgl-2d-matrices.html">행렬</a>을 살펴보겠습니다.</p>
 <div class="webgl_bottombar">
@@ -318,9 +318,7 @@ void main() {
 F의 orientation은 바로 인지할 수 있습니다.
 </p>
 <img src="../../resources/f-orientation.svg" class="webgl_center"/>
-<p>
-orientation을 알 수 있는 어떤 모양이라도 괜찮으며, 저는 처음 이 아이디어를 접했을 때부터 'F'를 사용해왔습니다. 
-</p>
+<p>Orientation을 알 수 있는 어떤 모양이라도 괜찮으며, 저는 처음 이 아이디어를 접했을 때부터 'F'를 사용해왔습니다. </p>
 </div>
 
 
@@ -362,7 +360,7 @@ orientation을 알 수 있는 어떤 모양이라도 괜찮으며, 저는 처음
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교법</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근법</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D Cameras</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D 카메라</a></li>
         </ul>
   <li>조명</li>
         <ul>
