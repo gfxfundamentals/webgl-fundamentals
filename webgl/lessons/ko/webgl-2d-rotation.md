@@ -25,13 +25,13 @@ TOC: 2D Rotation
 3학년 기초 수학을 기억해보면 뭔가에 1을 곱해도 값은 그대로 유지됩니다.
 그래서 123 * 1 = 123 입니다.
 아주 기본적이죠?
-음, 단위원, 반지름이 1.0인 원도 1의 형태인데요.
+단위원, 반지름이 1.0인 원도 1의 형태인데요.
 회전하는 1입니다.
 그래서 무언가를 단위원에 곱할 수 있으며 이는 1을 곱하는 것과 같습니다.
 
 단위원의 어느 지점에서 X와 Y값을 가져와서 [이전 샘플](webgl-2d-translation.html)의 geometry에 곱할 겁니다.
 
-다음은 shader 업데이트입니다.
+다음은 shader 변경 사항입니다.
 
     <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;
@@ -46,7 +46,7 @@ TOC: 2D Rotation
     +     a_position.x * u_rotation.y + a_position.y * u_rotation.x,
     +     a_position.y * u_rotation.y - a_position.x * u_rotation.x);
 
-      // translation 추가
+      // Translation 추가
     *  vec2 position = rotatedPosition + u_translation;
 
 그리고 javascript를 업데이트해서 두 값을 전달할 수 있습니다.
@@ -61,18 +61,18 @@ TOC: 2D Rotation
 
       ...
 
-      // scene 그리기
+      // Scene 그리기
       function drawScene() {
 
         ...
 
-        // translation 설정
+        // Translation 설정
         gl.uniform2fv(translationLocation, translation);
 
-    +    // rotation 설정
+    +    // Rotation 설정
     +    gl.uniform2fv(rotationLocation, rotation);
 
-        // geometry 그리기
+        // Geometry 그리기
         var primitiveType = gl.TRIANGLES;
         var offset = 0;
         var count = 18;  // 'F'의 삼각형 6개, 삼각형마다 점 3개
@@ -85,13 +85,13 @@ TOC: 2D Rotation
 {{{example url="../webgl-2d-geometry-rotation.html" }}}
 
 왜 작동하는 걸까요?
-음, 수식을 봅시다.
+수식을 봅시다.
 
     rotatedX = a_position.x * u_rotation.y + a_position.y * u_rotation.x;
     rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 
 사각형이 하나 있고 그걸 회전시키고 싶다고 해봅시다.
-회전을 시작하기 전 우측 상단 모서리는 3.0, 9.0 인데요.
+회전을 시작하기 전 우측 상단 모서리는 3.0, 9.0 입니다.
 단위원의 12시에서 시계 방향 30도 지점을 선택해봅시다.
 
 <img src="../resources/rotate-30.png" class="webgl_center" />
@@ -123,7 +123,7 @@ TOC: 2D Rotation
 이 패턴은 회전이 가능하게 해줍니다.
 
 단위원의 점은 또 다른 이름이 있습니다.
-이를 sine과 cosine이라고 하는데요.
+이를 sine과 cosine이라고 합니다.
 따라서 주어진 각도에 대해 sine과 cosine을 이렇게 찾을 수 있습니다.
 
     function printSineAndCosineForAnAngle(angleInDegrees) {
@@ -133,7 +133,7 @@ TOC: 2D Rotation
       console.log("s = " + s + " c = " + c);
     }
 
-javascript 콘솔에 코드를 복사 및 붙여넣고 `printSineAndCosignForAngle(30)`라고 치면 `s = 0.49 c = 0.87`이 출력됩니다. (참고: 숫자는 반올림했습니다.)
+Javascript console에 코드를 복사하고 `printSineAndCosignForAngle(30)`이라고 치면 `s = 0.49 c = 0.87`이 출력됩니다. (참고: 숫자는 반올림했습니다.)
 
 전부 합치면 geometry를 원하는 각도로 회전할 수 있습니다.
 그저 돌리고 싶은 각도의 sine과 cosine으로 rotation을 설정하면 됩니다. 
@@ -152,9 +152,9 @@ javascript 콘솔에 코드를 복사 및 붙여넣고 `printSineAndCosignForAng
 이건 회전을 수행하는 일반적인 방법이 아니지만 2개의 글에서 더 다룰 것이므로 계속 읽어주세요.
 다음은 더 간단한 [Scale](webgl-2d-scale.html)입니다.
 
-<div class="webgl_bottombar"><h3>radian이 뭔가요?</h3>
+<div class="webgl_bottombar"><h3>Radian이 뭔가요?</h3>
 <p>
-radian은 원, 회전, 각도에 사용되는 측정 단위입니다.
+Radian은 원, 회전, 각도에 사용되는 측정 단위입니다.
 마치 거리를 inche, yard, meter 등으로 측정할 수 있는 것처럼 우리는 각도를 degree나 radian으로 측정할 수 있습니다.
 </p>
 <p>

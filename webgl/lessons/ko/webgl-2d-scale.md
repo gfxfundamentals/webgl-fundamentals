@@ -8,7 +8,7 @@ TOC: 2D Scale
 
 Scale은 [translation](webgl-2d-translation.html)만큼이나 쉽습니다.
 
-원하는 scale에 위치를 곱하면 되는데요.
+원하는 scale로 위치를 곱하면 되는데요.
 [이전 예제](webgl-2d-rotation.html)에서 변경된 사항들은 다음과 같습니다.
 
 ```
@@ -21,15 +21,15 @@ uniform vec2 u_rotation;
 +uniform vec2 u_scale;
 
 void main() {
-+  // 위치 scale
++  // 위치 scale하기
 +  vec2 scaledPosition = a_position * u_scale;
 
   // 위치 회전
   vec2 rotatedPosition = vec2(
-*     scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
-*     scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
+*    scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
+*    scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
 
-  // translation 추가
+  // Translation 추가
   vec2 position = rotatedPosition + u_translation;
 ```
 
@@ -46,21 +46,21 @@ void main() {
 
   ...
 
-  // scene 그리기
+  // Scene 그리기
   function drawScene() {
 
     ...
 
-    // translation 설정
+    // Translation 설정
     gl.uniform2fv(translationLocation, translation);
 
-    // rotation 설정
+    // Rotation 설정
     gl.uniform2fv(rotationLocation, rotation);
 
-+    // scale 설정
++    // Scale 설정
 +    gl.uniform2fv(scaleLocation, scale);
 
-    // geometry 그리기
+    // Geometry 그리기
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     var count = 18;  // 'F'의 삼각형 6개, 삼각형마다 점 3개
@@ -68,12 +68,12 @@ void main() {
   }
 ```
 
-그러면 이제 scale이 있습니다.
+그러면 이제 scale을 가집니다.
 슬라이더를 드래그해보세요.
 
 {{{example url="../webgl-2d-geometry-scale.html" }}}
 
-한 가지 주목할만한 점은 음수로 크기를 조정하면 geometry가 뒤집힌다는 겁니다.
+한 가지 주목할만한 점은 음수로 scale하면 geometry가 뒤집힌다는 겁니다.
 
 지난 3개의 글이 [translation](webgl-2d-translation.html), [rotation](webgl-2d-rotation.html), scale을 이해하는데 도움이 되셨기를 바랍니다.
 
@@ -91,8 +91,6 @@ void main() {
 F의 orientation은 바로 인지할 수 있습니다.
 </p>
 <img src="../resources/f-orientation.svg" class="webgl_center"/>
-<p>
-orientation을 알 수 있는 어떤 모양이라도 괜찮으며, 저는 처음 이 아이디어를 접했을 때부터 'F'를 사용해왔습니다. 
-</p>
+<p>Orientation을 알 수 있는 어떤 모양이라도 괜찮으며, 저는 처음 이 아이디어를 접했을 때부터 'F'를 사용해왔습니다. </p>
 </div>
 
