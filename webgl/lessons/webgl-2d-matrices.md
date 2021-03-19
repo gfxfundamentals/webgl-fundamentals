@@ -88,10 +88,10 @@ what's happening
 
 or more succinctly
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 newX = x + tx;
 newY = y + ty;
-</pre>
+</pre></div>
 
 And extra we don't really care about.  That looks surprisingly like [the
 translation code from our translation example](webgl-2d-translation.html).
@@ -99,10 +99,10 @@ translation code from our translation example](webgl-2d-translation.html).
 Similarly let's do rotation.  Like we pointed out in the rotation post we
 just need the sine and cosine of the angle at which we want to rotate, so
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 s = Math.sin(angleToRotateInRadians);
 c = Math.cos(angleToRotateInRadians);
-</pre>
+</pre></div>
 
 And we build a matrix like this
 

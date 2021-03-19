@@ -64,20 +64,20 @@ TOC: 二次元での行列数学
 
 それとももっと簡潔に
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 newX = x + tx;
 newY = y + ty;
-</pre>
+</pre></div>
 
 「extra」の部分を無視していい。これは[移動サンプル](webgl-2d-translation.html)の移動のし方に結構似てるだろう？
 
 同じように回転もしよう。 回転の記事で書いたように回転角度の正弦(sine)
 と余弦(cosine)しか要らない。。。
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 s = Math.sin(angleToRotateInRadians);
 c = Math.cos(angleToRotateInRadians);
-</pre>
+</pre></div>
 
 そしてこのように行列を作る。
 

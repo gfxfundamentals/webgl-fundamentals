@@ -63,19 +63,19 @@ TOC: WebGL 二维矩阵
 
 或者更简洁
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 newX = x + tx;
 newY = y + ty;
-</pre>
+</pre></div>
 
 其他的就不用关心了。这个看起来和[平移例子中的代码](webgl-2d-translation.html)有些相似。
 
 同样的来实现旋转，在旋转章节提到过，旋转只需要和旋转角对应的正弦和余弦值
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 s = Math.sin(angleToRotateInRadians);
 c = Math.cos(angleToRotateInRadians);
-</pre>
+</pre></div>
 
 然后我们创建一个这样的矩阵
 

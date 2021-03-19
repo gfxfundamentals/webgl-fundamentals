@@ -53,19 +53,19 @@ Si vous avez quelques souvenirs d'algèbre, on peut supprimer les termes multipl
 
 c'est-à-dire :
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 nouveauX = x + tx;
 nouveauY = y + ty;
-</pre>
+</pre></div>
 
 Et l'extra on s'en fiche. Etonnament, ça revient au <a href="webgl-2d-translation.html">code de notre exemple sur les translations</a>.
 
 Passons aux rotations. Comme on a vu dans le post sur les rotations on a juste besoin du sinus et du cosinus de l'angle de rotation, donc
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 s = Math.sin(angleEnRadian);
 c = Math.cos(angleEnRadian);
-</pre>
+</pre></div>
 
 Et on écrit une matrice comme celle-ci
 

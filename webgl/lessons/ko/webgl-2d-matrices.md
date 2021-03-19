@@ -61,10 +61,10 @@ Translation을 한다고 가정해봅시다.
 
 혹은 더 간결하게
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 newX = x + tx;
 newY = y + ty;
-</pre>
+</pre></div>
 
 그리고 추가적으로 우리가 신경 쓸 것은 없습니다.
 이건 [translation 예제의 translation 코드](webgl-2d-translation.html)와 놀라울 정도로 비슷합니다.
@@ -72,10 +72,10 @@ newY = y + ty;
 마찬가지로 회전을 해봅시다.
 Rotation 포스트에서 강조한 것처럼 회전하고자 하는 각도의 sine과 cosine이 필요합니다.
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 s = Math.sin(angleToRotateInRadians);
 c = Math.cos(angleToRotateInRadians);
-</pre>
+</pre></div>
 
 그리고 이렇게 행렬을 만들고
 

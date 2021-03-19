@@ -73,10 +73,10 @@ TOC: 2D-матрицы в WebGL
 
 Или более лаконично
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 newX = x + tx;
 newY = y + ty;
-</pre>
+</pre></div>
 
 На extra можно не обращать внимания. Результат удивительно похож на код,
 который [мы использовали в статье про 2D-перенос](webgl-2d-translation.html).
@@ -84,10 +84,10 @@ newY = y + ty;
 Аналогичным образом сделаем поворот. Как мы выяснили в статье про 2D-поворот, нам
 нужны значения синуса и косинуса угла, на который мы хотим выполнить поворот, поэтому
 
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 s = Math.sin(angleToRotateInRadians);
 c = Math.cos(angleToRotateInRadians);
-</pre>
+</pre></div>
 
 И у нас получится такая матрица
 
