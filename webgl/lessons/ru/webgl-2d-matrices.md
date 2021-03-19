@@ -33,7 +33,7 @@ TOC: 2D-матрицы в WebGL
 с помощью матриц. Для 2D мы используем матрицу 3х3. Матрицу 3х3
 можно представить в виде таблицы с 9 ячейками.
 
-<style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style>
+<link href="resources/webgl-2d-matrices.css" rel="stylesheet">
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
 Для вычисления нам нужно умножить положение на колонку матрицы и сложить

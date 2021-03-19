@@ -27,7 +27,7 @@ TOC: 二次元での行列数学
 私よりずいぶん頭がいい人のお陰で、それを全部行列数学で出来る方法を開発した。
 二次元の場合3x3の行列を使う。3x3行列は9個のグリッドのようなことである。
 
-<style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style>
+<link href="resources/webgl-2d-matrices.css" rel="stylesheet">
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
 行列数学で計算するためにpositionを行列の桁に掛けて、結果を加える。

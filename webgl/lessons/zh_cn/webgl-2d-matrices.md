@@ -25,7 +25,7 @@ TOC: WebGL 二维矩阵
 有些比我聪明的人可能已经想到了矩阵，对于二维我们使用 3x3 的矩阵，
 3x3 的矩阵就像是有9个格子的格网。
 
-<style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style>
+<link href="resources/webgl-2d-matrices.css" rel="stylesheet">
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
 在计算的时候我们将位置坐标沿着矩阵列的方向依次相乘再将结果加起来。

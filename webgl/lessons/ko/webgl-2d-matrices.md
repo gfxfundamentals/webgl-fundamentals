@@ -33,7 +33,7 @@ Translation, Rotation, Scale은 각각 '변환'의 한 종류로 간주되는데
 2D의 경우 3x3 행렬을 사용합니다.
 3x3 행렬은 상자 9개가 있는 grid와 같은데:
 
-<style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style>
+<link href="resources/webgl-2d-matrices.css" rel="stylesheet">
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
 계산하기 위해서 위치를 행렬의 열에 곱하고 결과를 합산합니다.
