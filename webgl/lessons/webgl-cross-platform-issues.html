@@ -240,8 +240,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson">
     <div class="lesson-main">
       <p>I probably comes as no shock that not all WebGL programs work on all devices or
-browser. For one WebGL2, at least as of July 2020, <a href="#safari">is not supported at all in
-Safari</a>.</p>
+browser. For one WebGL2, at least as of March 2021, is not supported in
+Safari except behind a flag (Safari 14)</p>
 <p>Here&#39;s a list of most of the issues you might run into off the top of my head</p>
 <h2 id="performance">Performance</h2>
 <p>A top end GPU probably runs 100x faster than a low-end GPU. The only way around
@@ -389,10 +389,10 @@ optional. This is covered in <a href="webgl-readpixels.html">this article</a>.</
 <p>Framebuffers can have 1 or more attachments of textures and renderbuffers.</p>
 <p>In WebGL1 only 3 combinations of attachments are guaranteed to work.</p>
 <ol>
-<li>a single format = <code class="notranslate" translate="no">RGBA</code>, type= = <code class="notranslate" translate="no">UNSIGNED_BYTE</code> texture as <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code></li>
-<li>a format = <code class="notranslate" translate="no">RGBA</code>, type= = <code class="notranslate" translate="no">UNSIGNED_BYTE</code> texture as <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> and a
+<li>a single format = <code class="notranslate" translate="no">RGBA</code>, type = <code class="notranslate" translate="no">UNSIGNED_BYTE</code> texture as <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code></li>
+<li>a format = <code class="notranslate" translate="no">RGBA</code>, type = <code class="notranslate" translate="no">UNSIGNED_BYTE</code> texture as <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> and a
 format = <code class="notranslate" translate="no">DEPTH_COMPONENT</code> renderbuffer attached as <code class="notranslate" translate="no">DEPTH_ATTACHMENT</code></li>
-<li>a format = <code class="notranslate" translate="no">RGBA</code>, type= = <code class="notranslate" translate="no">UNSIGNED_BYTE</code> texture as <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> and a
+<li>a format = <code class="notranslate" translate="no">RGBA</code>, type = <code class="notranslate" translate="no">UNSIGNED_BYTE</code> texture as <code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> and a
 format = <code class="notranslate" translate="no">DEPTH_STENCIL</code> renderbuffer attached as <code class="notranslate" translate="no">DEPTH_STENCIL_ATTACHMENT</code></li>
 </ol>
 <p>All other combinations are up to the implementation which you check by calling
@@ -478,39 +478,6 @@ center is outside the viewport is implementation defined. See the bottom of
 undefined. The scissor always clips pixels so turn on the scissor test and set
 the scissor size if you set the viewport smaller than the thing you&#39;re drawing
 to and you&#39;re drawing LINES or POINTS.</p>
-<h2 id="safari-bugs">Safari Bugs</h2>
-<p>Safari has more WebGL bugs than any other modern browser and Apple seems to
-have zero interest in fixing any of them.</p>
-<p>Here&#39;s a short list of some bugs unfixed for years</p>
-<ul>
-<li><p>toDataURL (and just guessing toBlob) returns upside down result if premultipledAlpha = false (4yrs old)
-<a href="https://bugs.webkit.org/show_bug.cgi?id=156129">bug</a></p>
-</li>
-<li><p>preserveDrawingBuffer=true wrongly double-buffers on current iOS (4yrs old)
-<a href="https://bugs.webkit.org/show_bug.cgi?id=159608">bug</a></p>
-</li>
-<li><p><code class="notranslate" translate="no">OES_texture_float</code> implementation must support non-ArrayBufferView entry points (10yrs old)
-<a href="https://bugs.webkit.org/show_bug.cgi?id=51015">bug</a></p>
-</li>
-<li><p>readPixels generates INVALID_ENUM for RGBA/UNSIGNED_BYTE (3yrs old)
-<a href="https://bugs.webkit.org/show_bug.cgi?id=170341">bug</a></p>
-</li>
-<li><p>Changes to a WebGL canvas and to layer transforms are not always synchronized (3yrs old)
-<a href="https://bugs.webkit.org/show_bug.cgi?id=172969">bug</a></p>
-</li>
-<li><p>PNG textures with zero alpha channel have wrong rgb colors (4yrs old)
-<a href="https://bugs.webkit.org/show_bug.cgi?id=165297">bug</a></p>
-</li>
-<li><p>Safari doesn&#39;t handle common no attribute use case (1yr old)
-<a href="https://bugs.webkit.org/show_bug.cgi?id=197592">bug</a></p>
-</li>
-<li><p><a id="safari"></a>Also note that while there is an option to enable WebGL2 in Safari
-all it does is allow <code class="notranslate" translate="no">#version 300 es</code> shaders. All other 80+ WebGL2
-api functions are unimplemented, at least as of July 2020.
-<a href="https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/canvas/WebGL2RenderingContext.cpp">See the source</a>
-and search for &quot;not implemented&quot;.</p>
-</li>
-</ul>
 
     </div>
     <div class="lesson-sidebar">

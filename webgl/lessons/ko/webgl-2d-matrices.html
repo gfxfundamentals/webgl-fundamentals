@@ -262,7 +262,7 @@ Translation, Rotation, Scale은 각각 &#39;변환&#39;의 한 종류로 간주�
 <p>저보다 훨씬 더 똑똑한 사람들은 행렬 수학으로 동일한 모든 작업을 할 수 있다는 걸 밝혀냈는데요.
 2D의 경우 3x3 행렬을 사용합니다.
 3x3 행렬은 상자 9개가 있는 grid와 같은데:</p>
-<p><style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style></p>
+<p><link href="../resources/webgl-2d-matrices.css" rel="stylesheet"></p>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
 <p>계산하기 위해서 위치를 행렬의 열에 곱하고 결과를 합산합니다.
@@ -284,19 +284,19 @@ Translation을 한다고 가정해봅시다.
 <div class="glocal-center"><table class="glocal-center-content"><col/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><col/><col class="glocal-sp"/><col/><col/><col class="glocal-b"/><tr><td>newX&nbsp;=&nbsp;</td><td>x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left">&nbsp;+</td><td class="glocal-right">newY&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">&nbsp;+</td><td class="glocal-right">extra&nbsp;=&nbsp;</td><td class="glocal-blk">x</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr><tr><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk glocal-left">&nbsp;+</td><td></td><td>y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">1.0</td><td class="glocal-left">&nbsp;+&nbsp;</td><td></td><td class="glocal-blk">y</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk glocal-border">0.0</td><td class="glocal-blk">&nbsp;+</td></tr><tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>tx</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>ty</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
 
 <p>혹은 더 간결하게</p>
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 newX = x + tx;
 newY = y + ty;
-</pre>
+</pre></div>
 
 <p>그리고 추가적으로 우리가 신경 쓸 것은 없습니다.
 이건 <a href="webgl-2d-translation.html">translation 예제의 translation 코드</a>와 놀라울 정도로 비슷합니다.</p>
 <p>마찬가지로 회전을 해봅시다.
 Rotation 포스트에서 강조한 것처럼 회전하고자 하는 각도의 sine과 cosine이 필요합니다.</p>
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 s = Math.sin(angleToRotateInRadians);
 c = Math.cos(angleToRotateInRadians);
-</pre>
+</pre></div>
 
 <p>그리고 이렇게 행렬을 만들고</p>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>c</td><td>-s</td><td>0.0</td></tr><tr><td>s</td><td>c</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>

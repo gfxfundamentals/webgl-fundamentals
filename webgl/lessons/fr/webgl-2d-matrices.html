@@ -248,7 +248,7 @@ Par exemple, voici la suite de transformations suivantes : échelle de (2,1), ro
 <p><img src="../../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" /></p>
 <p>Les résultats sont complètement différents. Pire, si on veut aboutir au second exemple il nous faut écrire un autre shader qui applique les transformations dans l&#39;ordre qu&#39;on souhaite.</p>
 <p>Eh bien, des personnes plus futées que moi ont réalisé qu&#39;on peut faire la même chose avec des matrices. Pour la 2D on utilise une matrice carrée d&#39;ordre 3 (3x3). Une matrice 3x3 est comme une grille de 9 cases :</p>
-<p><style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style></p>
+<p><link href="../resources/webgl-2d-matrices.css" rel="stylesheet"></p>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
 <p>Pour trouver le résultat d&#39;une transformation matricielle on dispose les composantes du vecteur à la verticale devant la matrice et pour chaque colonne, on multiplie les valeurs des composantes à leur niveau. Comme en 2D on a deux composantes x et y, et que les colonnes ont 3 valeurs, on ajoute une composante à la position, de valeur 1.</p>
@@ -276,17 +276,17 @@ Par exemple, voici la suite de transformations suivantes : échelle de (2,1), ro
 <tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>tx</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>ty</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
 
 <p>c&#39;est-à-dire :</p>
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 nouveauX = x + tx;
 nouveauY = y + ty;
-</pre>
+</pre></div>
 
 <p>Et l&#39;extra on s&#39;en fiche. Etonnament, ça revient au <a href="webgl-2d-translation.html">code de notre exemple sur les translations</a>.</p>
 <p>Passons aux rotations. Comme on a vu dans le post sur les rotations on a juste besoin du sinus et du cosinus de l&#39;angle de rotation, donc</p>
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 s = Math.sin(angleEnRadian);
 c = Math.cos(angleEnRadian);
-</pre>
+</pre></div>
 
 <p>Et on écrit une matrice comme celle-ci</p>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>c</td><td>-s</td><td>0.0</td></tr><tr><td>s</td><td>c</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>

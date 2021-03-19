@@ -261,7 +261,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>И вот одни умные люди выяснили, что можно сделать всю математику
 с помощью матриц. Для 2D мы используем матрицу 3х3. Матрицу 3х3
 можно представить в виде таблицы с 9 ячейками.</p>
-<p><style>.glocal-center { text-align: center; } .glocal-center-content { margin-left: auto; margin-right: auto; } .glocal-mat td, .glocal-b { border: 1px solid black; text-align: left;} .glocal-mat td { text-align: center; } .glocal-border { border: 1px solid black; } .glocal-sp { text-align: right !important;  width: 8em;} .glocal-blk { color: black; background-color: black; } .glocal-left { text-align: left; } .glocal-right { text-align: right; }</style></p>
+<p><link href="../resources/webgl-2d-matrices.css" rel="stylesheet"></p>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
 
 <p>Для вычисления нам нужно умножить положение на колонку матрицы и сложить
@@ -295,19 +295,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <tr><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>tx</td><td>&nbsp;</td><td></td><td class="glocal-blk">1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td>ty</td><td>&nbsp;&nbsp;</td><td></td><td>1</td><td class="glocal-blk">&nbsp;*&nbsp;</td><td class="glocal-blk">1.0</td><td>&nbsp;</td></tr></table></div>
 
 <p>Или более лаконично</p>
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 newX = x + tx;
 newY = y + ty;
-</pre>
+</pre></div>
 
 <p>На extra можно не обращать внимания. Результат удивительно похож на код,
 который <a href="webgl-2d-translation.html">мы использовали в статье про 2D-перенос</a>.</p>
 <p>Аналогичным образом сделаем поворот. Как мы выяснили в статье про 2D-поворот, нам
 нужны значения синуса и косинуса угла, на который мы хотим выполнить поворот, поэтому</p>
-<pre class="webgl_center">
+<div class="webgl_center"><pre class="webgl_math">
 s = Math.sin(angleToRotateInRadians);
 c = Math.cos(angleToRotateInRadians);
-</pre>
+</pre></div>
 
 <p>И у нас получится такая матрица</p>
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>c</td><td>-s</td><td>0.0</td></tr><tr><td>s</td><td>c</td><td>0.0</td></tr><tr><td>0.0</td><td>0.0</td><td>1.0</td></tr></table></div>
