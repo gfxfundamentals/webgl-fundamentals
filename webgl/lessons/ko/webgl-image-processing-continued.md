@@ -14,15 +14,13 @@ TOC: 이미지 처리 심화
 
 더 유연한 방법은 texture 2개를 더 사용하고, 각 texture를 차례대로 렌더링하여, 주고 받으면서 매번 다음 효과를 적용하는 겁니다.
 
-<blockquote>
-<pre>
+<div class="webgl_center"><pre>
 Original Image -> [Blur]        -> Texture 1
 Texture 1      -> [Sharpen]     -> Texture 2
 Texture 2      -> [Edge Detect] -> Texture 1
 Texture 1      -> [Blur]        -> Texture 2
 Texture 2      -> [Normal]      -> Canvas
-</pre>
-</blockquote>
+</pre></div>
 
 이렇게 하기 위해 우리는 framebuffer를 만들어야 하는데요.
 WebGL과 OpenGL에서 Framebuffer는 사실 좋지 않은 이름입니다.

@@ -20,12 +20,12 @@ TOC: WebGLにおける画像処理。続き
 より柔軟なやり方として、
 「２枚のテクスチャを交互に使って、次々に別のエフェクトをかけていく」方法がある。
 
-<blockquote><pre>
+<div class="webgl_center"><pre>
 元画像         -&gt; [ぼかし(Blur)]          -&gt; Texture 1
 Texture 1      -&gt; [シャープ(Sharpen)]     -&gt; Texture 2
 Texture 2      -&gt; [輪郭検出(Edge Detect)] -&gt; Texture 1
 Texture 1      -&gt; [ぼかし(Blur)]          -&gt; Texture 2
-Texture 2      -&gt; [Normal]                -&gt; Canvas</pre></blockquote>
+Texture 2      -&gt; [Normal]                -&gt; Canvas</pre></div>
 
 これを実現するためには「フレームバッファ」を使う必要がある。
 WebGLやOpenGLの「フレームバッファ」は、フレームバッファという呼び名に反して
