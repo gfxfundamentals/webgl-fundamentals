@@ -189,10 +189,10 @@ Framebuffers can have 1 or more attachments of textures and renderbuffers.
 
 In WebGL1 only 3 combinations of attachments are guaranteed to work.
 
-1. a single format = `RGBA`, type= = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0`
-2. a format = `RGBA`, type= = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0` and a
+1. a single format = `RGBA`, type = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0`
+2. a format = `RGBA`, type = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0` and a
    format = `DEPTH_COMPONENT` renderbuffer attached as `DEPTH_ATTACHMENT`
-3. a format = `RGBA`, type= = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0` and a
+3. a format = `RGBA`, type = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0` and a
    format = `DEPTH_STENCIL` renderbuffer attached as `DEPTH_STENCIL_ATTACHMENT`
 
 All other combinations are up to the implementation which you check by calling
