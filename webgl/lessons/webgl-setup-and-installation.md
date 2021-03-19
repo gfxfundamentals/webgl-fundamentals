@@ -72,18 +72,23 @@ an error message. Read the error message closely and you should get a clue where
 
 {{{image url="resources/javascript-console.gif" }}}
 
-## WebGL Helpers
+## WebGL Lint
 
-
-[Here](https://greggman.github.io/webgl-helpers/) are some scripts you might find
-useful. In particular just add this to your page before your other scripts
+[Here](https://greggman.github.io/webgl-lint/) is a script to check for several
+webgl errors. Just add this to your page before your other scripts
 
 ```
-<script src="https://greggman.github.io/webgl-helpers/webgl-gl-error-check.js"></script>
+<script src="https://greggman.github.io/webgl-lint/webgl-lint.js"></script>
 ```
 
 and your program will throw an exception if it gets a WebGL error and if you're lucky
 print more info.
+
+[You can also add names to your webgl resources](https://github.com/greggman/webgl-lint#naming-your-webgl-objects-buffers-textures-programs-etc)
+(buffer, textures, shaders, programs, ...) so that when you get an error message it
+will include the names of the resources relevant to the error.
+
+## Extensions
 
 There are various WebGL Inspectors. 
 [Here's one for Chrome and Firefox](https://spector.babylonjs.com/).
