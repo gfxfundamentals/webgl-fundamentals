@@ -70,7 +70,7 @@ Vertex shader에서 fragment shader로 전달하려는 각 값에 대해 “vary
     *varying vec4 v_color;
     ...
     void main() {
-      // 위치에 행렬 곱하기
+      // 위치를 행렬로 곱하기
       gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 
       // clip space에서 color space로 변환

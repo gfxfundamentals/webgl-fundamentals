@@ -172,7 +172,7 @@ ext.bindVertexArrayOES = function(vao) {
 vertex array object를 사용하는 게 확실히 좋다는 걸 보실 수 있을텐데요.
 이것들을 사용하려면 종종 더 많은 organization이 합니다.
 예를 들어 하나의 shader와 `gl.TRIANGLES`로 cube를 그리고 다른 shader와 `gl.LINES`로 다시 그리고 싶다고 해봅시다.
-삼각형으로 그릴 때 조명에 normal을 사용하여 아래처럼 shader에 attribute를 선언한다고 가정하면:
+삼각형으로 그릴 때 조명에 법선을 사용하여 아래처럼 shader에 attribute를 선언한다고 가정하면:
 
 ```glsl
 // lighting-shader
@@ -182,7 +182,7 @@ attribute vec4 a_position;
 attribute vec3 a_normal;
 ```
 
-그런 다음 [조명에 관한 첫 번째 글](webgl-3d-lighting-directional.html)에서 다룬 것처럼 position과 normal을 사용합니다.
+그런 다음 [조명에 관한 첫 번째 글](webgl-3d-lighting-directional.html)에서 다룬 것처럼 위치와 법선을 사용합니다.
 
 조명을 원하지 않는 선의 경우, 단색이 필요하므로 튜토리얼 [첫 페이지](webgl-fundamentals.html)에 있는 첫 번째 shader와 비슷한 작업을 수행합니다.
 color에 대한 uniform을 선언하는데요.

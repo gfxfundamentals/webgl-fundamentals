@@ -30,7 +30,7 @@ Shader가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.
 1. Attribute & Buffer
 
    Buffer는 GPU에 업로드하는 2진 데이터 배열입니다.
-   일반적으로 buffer는 위치, normal, texture 좌표, 정점 색상 등을 포함하지만 원하는 걸 자유롭게 넣어도 됩니다.
+   일반적으로 buffer는 위치, 법선, texture 좌표, 정점 색상 등을 포함하지만 원하는 걸 자유롭게 넣어도 됩니다.
 
    Attribute는 buffer에서 데이터를 가져오고 vertex shader에 제공하는 방법을 지정하는데 사용됩니다.
    예를 들어 위치당 3개의 32bit 부동 소수점으로 위치를 buffer에 넣을 수 있는데요.

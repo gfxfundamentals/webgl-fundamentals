@@ -152,18 +152,18 @@ Since we know the camera points in the -Z direction we can subtract the other wa
 특히 X축과 Y축 부분이요.
 우리는 일반적으로 이 세 부분이 서로 수직임을 알고있습니다.
 또한 "일반적으로" 카메라를 똑바로 향하지 않는다는 것도 알죠.
-이를 고려해서 이 경우 (0,1,0)인 위쪽이 어느 쪽인지 안다면, 행렬에 대한 X축과 Y축을 계산하기 위해 그것과 "가위곱"을 사용할 수 있습니다.
+이를 고려해서 이 경우 (0,1,0)인 위쪽이 어느 쪽인지 안다면, 행렬에 대한 X축과 Y축을 계산하기 위해 그것과 "벡터곱"을 사용할 수 있습니다.
 
-수학적 용어로 가위곱이 무엇을 의미하는지는 모르겠습니다.
-제가 아는 건 2개의 단위 벡터가 있고 이들을 가위곱으로 계산하면, 이 두 벡터에 수직인 벡터를 얻는다는 겁니다.
-다시 말해 남동쪽을 가리키는 벡터와 위쪽을 가리키는 벡터를 가위곱하면, 남동쪽과 위쪽에 수직인 두 벡터이기 때문에, 남서쪽이나 북동쪽을 가리키는 벡터를 얻게 됩니다.
+수학적 용어로 벡터곱이 무엇을 의미하는지는 모르겠습니다.
+제가 아는 건 2개의 단위 벡터가 있고 이들을 벡터곱으로 계산하면, 이 두 벡터에 수직인 벡터를 얻는다는 겁니다.
+다시 말해 남동쪽을 가리키는 벡터와 위쪽을 가리키는 벡터를 벡터곱하면, 남동쪽과 위쪽에 수직인 두 벡터이기 때문에, 남서쪽이나 북동쪽을 가리키는 벡터를 얻게 됩니다.
 계산하는 순서에 따라 반대의 결과를 얻게 될 겁니다.
 
-하여튼 <span class="z-axis">`zAxis`</span>와 <span style="color: gray;">`up`</span>의 가위곱을 계산하면 카메라의 <span class="x-axis">xAxis</span>를 얻을 수 있습니다.
+하여튼 <span class="z-axis">`zAxis`</span>와 <span style="color: gray;">`up`</span>의 벡터곱을 계산하면 카메라의 <span class="x-axis">xAxis</span>를 얻을 수 있습니다.
 
 {{{diagram url="resources/cross-product-diagram.html?mode=1" caption="<span style='color:gray;'>up</span> x <span class='z-axis'>zAxis</span> = <span class='x-axis'>xAxis</span>" }}}
 
-그리고 이제 <span class="x-axis">`xAxis`</span>가 있으니 <span class="z-axis">`zAxis`</span>와 <span class="x-axis">`xAxis`</span>를 가위곱해서 카메라의 <span class="y-axis">`yAxis`</span>를 얻을 수 있습니다.
+그리고 이제 <span class="x-axis">`xAxis`</span>가 있으니 <span class="z-axis">`zAxis`</span>와 <span class="x-axis">`xAxis`</span>를 벡터곱해서 카메라의 <span class="y-axis">`yAxis`</span>를 얻을 수 있습니다.
 
 {{{diagram url="resources/cross-product-diagram.html?mode=2" caption="<span class='z-axis'>zAxis</span> x <span class='x-axis'>xAxis</span> = <span class='y-axis'>yAxis</span>"}}}
 
@@ -183,7 +183,7 @@ Since we know the camera points in the -Z direction we can subtract the other wa
 +----+----+----+----+
 </pre></div>
 
-두 벡터의 가위곱을 계산하는 코드
+두 벡터의 벡터곱을 계산하는 코드
 
 ```js
 function cross(a, b) {

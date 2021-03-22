@@ -27,7 +27,7 @@ attribute vec2 a_position;
 uniform mat3 u_matrix;
 
 void main() {
-  // 위치에 행렬 곱하기
+  // 위치를 행렬로 곱하기
   gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 }
 </script>
@@ -42,7 +42,7 @@ void main() {
 *uniform mat4 u_matrix;
 
 void main() {
-  // 위치에 행렬 곱하기
+  // 위치를 행렬로 곱하기
 *  gl_Position = u_matrix * a_position;
 }
 </script>
@@ -402,7 +402,7 @@ uniform mat4 u_matrix;
 +varying vec4 v_color;
 
 void main() {
-  // 위치에 행렬 곱하기
+  // 위치를 행렬로 곱하기
   gl_Position = u_matrix * a_position;
 
 +  // Fragment shader로 색상 전달
@@ -467,10 +467,10 @@ function setColors(gl) {
 그런 다음 렌더링할 때 color buffer에서 색상을 가져오는 방법을 color attribute에 알려줘야 합니다.
 
 ```
-// Color attribute 활성화
+// color attribute 활성화
 gl.enableVertexAttribArray(colorLocation);
 
-// Color buffer 할당
+// color buffer 할당
 gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 
 // colorBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
