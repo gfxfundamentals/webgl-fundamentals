@@ -234,6 +234,7 @@ Uniform-переменные могут быть многих типов. Для
         0, 255, 0, 255      // зелёный пиксель
     ]);
     gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
 Во время инициализации получаем ссылку на uniform-переменную в шейдерной программе
 

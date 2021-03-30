@@ -266,6 +266,7 @@ uniformが配列として定義されている場合は、その値を一度に�
        0, 255, 0, 255,   // 緑のピクセル
     ]);
     gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
 初期化時、シェーダープログラムで定義したuniformのロケーションを取得しておく。
 

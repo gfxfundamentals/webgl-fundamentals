@@ -228,6 +228,7 @@ Texture에서 나오는 데이터는 [수많은 설정](webgl-3d-textures.html)�
       0, 255, 0, 255,   // 초록 픽셀
     ]);
     gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
 초기화 시 shader program의 uniform 위치를 찾으며
 

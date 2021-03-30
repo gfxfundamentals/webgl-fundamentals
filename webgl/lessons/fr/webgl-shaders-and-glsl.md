@@ -216,6 +216,7 @@ Au minimum on a besoin de créer et envoyer des données dans la texture, par ex
     var hauteur = 1;
     var donnees = new Uint8Array([255, 0, 0, 255, 0, 255, 0, 255]);
     gl.texImage2D(gl.TEXTURE_2D, niveau, gl.RGBA, largeur, hauteur, 0, gl.RGBA, gl.UNSIGNED_BYTE, donnees);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
 Ensuite on regarde l'emplacement de la uniform dans le programme
 
