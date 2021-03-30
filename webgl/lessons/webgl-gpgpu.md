@@ -141,7 +141,7 @@ mapDst(dst, multBy2(src));
 
 ## In WebGL textures are 2D arrays.
 
-Let's assume our `dst` array represents a 3x2 texture
+Let's assume our `dst` array represents a 2x3 texture
 
 ```js
 let gl_FragColor;
@@ -173,7 +173,7 @@ function mapDst(dst, across, up, fn) {
 
 const src = [1, 2, 3, 4, 5, 6];
 const dst = new Array(6);    // to simulate that in WebGL we have to allocate a texture
-mapDst(dst, 2, 3, multBy2(src));
+mapDst(dst, 2, 3, multBy2(src, 2));
 
 // dst is now [2, 4, 6, 8, 10, 12];
 ```
