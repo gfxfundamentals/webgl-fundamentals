@@ -228,6 +228,9 @@ At a minimum we need to create and put data in the texture, for example
        0, 255, 0, 255,   // a green pixel
     ]);
     gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+
+And set the texture's filtering
+
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
 At initialization time look up the uniform location in the shader program
