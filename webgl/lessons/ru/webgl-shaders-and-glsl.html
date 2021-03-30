@@ -422,6 +422,7 @@ var data = new Uint8Array([
     0, 255, 0, 255      // зелёный пиксель
 ]);
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 </code></pre><p>Во время инициализации получаем ссылку на uniform-переменную в шейдерной программе</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
 </code></pre><p>При рендеринге необходимо привязать её к текстурному блоку</p>

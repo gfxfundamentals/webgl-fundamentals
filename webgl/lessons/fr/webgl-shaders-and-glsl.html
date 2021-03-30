@@ -401,6 +401,7 @@ var largeur = 2;
 var hauteur = 1;
 var donnees = new Uint8Array([255, 0, 0, 255, 0, 255, 0, 255]);
 gl.texImage2D(gl.TEXTURE_2D, niveau, gl.RGBA, largeur, hauteur, 0, gl.RGBA, gl.UNSIGNED_BYTE, donnees);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 </code></pre><p>Ensuite on regarde l&#39;emplacement de la uniform dans le programme</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var emplacementDeMonSampler = gl.getUniformLocation(programme, &quot;u_texture&quot;);
 </code></pre><p>WebGL demande de la relier à une unité de texture</p>

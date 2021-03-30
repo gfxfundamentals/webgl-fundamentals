@@ -446,6 +446,7 @@ var data = new Uint8Array([
    0, 255, 0, 255,   // 緑のピクセル
 ]);
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 </code></pre><p>初期化時、シェーダープログラムで定義したuniformのロケーションを取得しておく。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
 </code></pre><p>描画時には、テクスチャーを「テクスチャーユニット」のひとつにバインドし、</p>

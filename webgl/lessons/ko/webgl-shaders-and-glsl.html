@@ -414,6 +414,7 @@ var data = new Uint8Array([
   0, 255, 0, 255,   // 초록 픽셀
 ]);
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 </code></pre><p>초기화 시 shader program의 uniform 위치를 찾으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
 </code></pre><p>렌더링할 때 texture unit에 texture를 할당하고</p>
