@@ -524,14 +524,14 @@ And now we have a circle of 20 circles.
 
 {{{example url="../webgl-no-data-triangles-circles.html"}}}
 
-And of course we could apply the the same things we did
+And of course we could apply the same things we did
 above to make a rain of circles. That probably has no
 point so I'm not going to go through it but it does show
 making triangles in the vertex shader with no data.
 
 The above technique could be used for making rectangles
 or squares instead, then generating UV coordinates,
-passing those the the fragment shader and texture mapping
+passing those the fragment shader and texture mapping
 our generated geometry. This might be good for 
 falling snowflakes or leaves that actually flip around in 3D
 by applying the 3D techniques we used in the articles

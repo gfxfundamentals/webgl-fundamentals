@@ -3,7 +3,7 @@ Description: The difference between WebGL conventions and Math conventions.
 TOC: WebGL Matrices vs Math Matrices
 
 
-This is article is an aside from the the various articles that talk about
+This is article is an aside from the various articles that talk about
 matrices in particular [the article that introduces matrices](webgl-2d-matrices.html) but also
 [the article that introduces 3D](webgl-3d-orthographic.html), [the article on perspective projection](webgl-3d-perspective.html),
 and [the article on cameras](webgl-3d-camera.html).

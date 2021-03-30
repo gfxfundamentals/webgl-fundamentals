@@ -47,7 +47,7 @@ A skinned vertex is effectively computed like this
 As you can see it's like were computing 4 different positions for each vertex and then blending them back into one by applying the weights.
 
 Assuming you stored the bones matrices in a uniform array, and you
-passed in the the weights and which bone each weight applies to as
+passed in the weights and which bone each weight applies to as
 attributes you might do something like
 
     attribute vec4 a_position;
@@ -69,7 +69,7 @@ the origin (0,0,0) on the floor just between their feet.
 
 Now imagine you put a matrix/bone/joint at their head and you want to use
 that for bone for skinning.  To keep it simple imagine you just set the
-weights so the the vertices of the head have a weight of 1.0 for the head
+weights so the vertices of the head have a weight of 1.0 for the head
 bone and no other joints influence those vertices.
 
 <div class="webgl_center"><img src="resources/bone-head-setup.svg" style="width: 500px;"></div>

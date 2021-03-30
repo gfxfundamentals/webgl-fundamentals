@@ -22,8 +22,7 @@ A Vertex Shader's job is to generate clip space coordinates. It always takes the
        gl_Position = doMathToMakeClipspaceCoordinates
     }
 
-Your shader is called once per vertex. Each time it's called you are required to set the
-the special global variable, `gl_Position` to some clip space coordinates.
+Your shader is called once per vertex. Each time it's called you are required to set the special global variable, `gl_Position` to some clip space coordinates.
 
 Vertex shaders need data. They can get that data in 3 ways.
 
@@ -398,8 +397,7 @@ If you like really dry and verbose stuff you can try
 
 That's the point of this entire series of posts. WebGL is all about creating various shaders, supplying
 the data to those shaders and then calling `gl.drawArrays` or `gl.drawElements` to have WebGL process
-the vertices by calling the current vertex shader for each vertex and then render pixels by calling the
-the current fragment shader for each pixel.
+the vertices by calling the current vertex shader for each vertex and then render pixels by calling the current fragment shader for each pixel.
 
 Actually creating the shaders requires several lines of code. Since those lines are the same in
 most WebGL programs and since once written you can pretty much ignore them. [How to compile GLSL shaders

@@ -200,7 +200,7 @@
     "Note: m3.multiply's multiplication order is reversed.",
     "In other words m3.multiply(a, b) needs to be m3.multiply(b, a)",
     "In math terms the old multiply multiplied the 2nd argument on the left of the first.",
-    "The new one multiplies the 2nd argument on the right of the the first.",
+    "The new one multiplies the 2nd argument on the right of the first.",
   ].join("\n"));
 
   return {

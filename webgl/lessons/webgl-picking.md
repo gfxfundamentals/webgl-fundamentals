@@ -314,7 +314,7 @@ const id = data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24);
 ```
 
 The code above that is computing `pixelX` and `pixelY` is converting
-from `mouseX` and `mouseY` in display space to pixel in the the canvas
+from `mouseX` and `mouseY` in display space to pixel in the canvas
 space. In other words, given the example above where `mouseX` went from
 0 to 33 and `mouseY` went from 0 to 44. `pixelX` will go from 0 to 11
 and `pixelY` will go from 0 to 22.

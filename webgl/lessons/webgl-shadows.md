@@ -449,8 +449,7 @@ is supposed to be no shadow? These patterns
 are called *shadow acne*. They come from the fact that the
 depth data stored in the depth texture has been quantized both
 in that it's a texture, a grid of pixels, it was projected from the
-point of view of the light but we're comparing it to values from the
-the point of view of the camera. That means the grid of values in the
+point of view of the light but we're comparing it to values from the point of view of the camera. That means the grid of values in the
 depth map is not aligned with our camera and
 so when we compute `currentDepth` there are times when one value
 will be slightly more or slightly less than `projectedDepth`.

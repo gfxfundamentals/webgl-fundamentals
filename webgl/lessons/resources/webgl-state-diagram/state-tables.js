@@ -887,7 +887,7 @@ export function getStateTables(isWebGL2) {
         setter: 'scissor',
         formatter: formatUniformValue,
         help: `
-        The dimensions of the scissor test. If the the scissor test is enabled
+        The dimensions of the scissor test. If the scissor test is enabled
         then WebGL will not rendered pixels outside the scissor box.
 
         ---js

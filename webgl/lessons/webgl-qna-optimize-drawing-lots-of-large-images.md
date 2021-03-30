@@ -30,7 +30,7 @@ Some things you can do.
 
 3. Make sure you're using mips if the textures are larger than the size they're being drawn.
 
-   It's slower to draw a 2x2 quad using a 1024x1024 texture without mips than with. The reason is without mips the GPU has to jump a long way between pixels which is likely to be a cache mish. With mips it will grab the the appropriate mip level and pixels next to each other will be in the cache.
+   It's slower to draw a 2x2 quad using a 1024x1024 texture without mips than with. The reason is without mips the GPU has to jump a long way between pixels which is likely to be a cache mish. With mips it will grab the appropriate mip level and pixels next to each other will be in the cache.
 
 As an example on my late 2018 Macbook Air with Intel UHD Graphics 617 I can only draw about 5 million pixels per frame at 60fps in WebGL.
 

@@ -343,7 +343,7 @@ into a unit vector. The specific values in the sample are
 `x = 0.5` which is positive `x` means the light is on the right pointing left.
 `y = 0.7` which is positive `y` means the light is above pointing down.
 `z = 1` which is positive `z` means the light is in front pointing into the scene.
-the relative values means the the direction is mostly pointing into the scene
+the relative values means the direction is mostly pointing into the scene
 and pointing more down then right.
 
 And here it is
