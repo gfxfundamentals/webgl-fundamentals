@@ -3,8 +3,8 @@ Description: 2D에서 scale하는 방법
 TOC: 2D Scale
 
 
-이 포스트는 WebGL 관련 시리즈의 연장입니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [geometry rotation](webgl-2d-rotation.html)에 관한 것이었습니다.
+이 포스트는 WebGL 관련 시리즈에서 이어집니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [geometry rotation](webgl-2d-rotation.html)에 관한 것이었습니다.
 
 Scale은 [translation](webgl-2d-translation.html)만큼이나 쉽습니다.
 

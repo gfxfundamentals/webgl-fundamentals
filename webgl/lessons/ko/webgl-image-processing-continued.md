@@ -4,7 +4,7 @@ TOC: 이미지 처리 심화
 
 
 이 글은 [WebGL 이미지 처리](webgl-image-processing.html)에서 이어지는 글입니다.
-아직 읽지 않았다면 [그곳](webgl-image-processing.html)부터 시작하는 게 좋습니다.
+아직 읽지 않았다면 [거기](webgl-image-processing.html)부터 시작하는 게 좋습니다.
 
 이미지 처리에 대해 다음으로 가장 궁금한 점은 어떻게 여러 효과를 적용할까요?
 

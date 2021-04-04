@@ -3,8 +3,8 @@ Description: WebGL에서 애니메이션을 수행하는 방법
 TOC: 애니메이션
 
 
-이 포스트는 WebGL 관련 시리즈의 연장입니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [3D 카메라](webgl-3d-camera.html)에 관한 것이었습니다.
+이 포스트는 WebGL 관련 시리즈에서 이어집니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [3D 카메라](webgl-3d-camera.html)에 관한 것이었습니다.
 아직 읽지 않았다면 해당 글들을 먼저 봐주세요.
 
 WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할까요?

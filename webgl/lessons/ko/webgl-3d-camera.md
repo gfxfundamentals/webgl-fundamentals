@@ -3,8 +3,8 @@ Description: WebGL에서 카메라가 작동하는 방식
 TOC: 3D 카메라
 
 
-이 포스트는 WebGL 관련 시리즈의 연장입니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [3D 원근 투영](webgl-3d-perspective.html)에 관한 것이었습니다.
+이 포스트는 WebGL 관련 시리즈에서 이어집니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [3D 원근 투영](webgl-3d-perspective.html)에 관한 것이었습니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
 `m4.perspective` 함수는 F가 원점(0, 0, 0)에 있으리라 생각하고, 절두체의 객체는 원점 앞 `-zNear`에서 `-zFar`까지 있기 때문에, 지난 포스트에서 우리는 F를 절두체 앞으로 옮겨야 했습니다.

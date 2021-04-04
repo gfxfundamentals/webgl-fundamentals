@@ -3,8 +3,8 @@ Description: 직교 투영으로 시작하는 WebGL에서 3D를 수행하는 방
 TOC: 3D 직교법
 
 
-이 포스트는 WebGL 관련 시리즈의 연장입니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [2D 행렬](webgl-2d-matrices.html)에 관한 것이었습니다.
+이 포스트는 WebGL 관련 시리즈에서 이어집니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [2D 행렬](webgl-2d-matrices.html)에 관한 것이었습니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
 마지막 포스트에서 우리는 2D 행렬이 어떻게 동작하는지 살펴봤습니다.

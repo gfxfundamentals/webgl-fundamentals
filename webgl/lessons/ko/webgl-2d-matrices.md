@@ -3,8 +3,8 @@ Description: 행렬 수학이 어떻게 동작하는지 간단하고 따라하�
 TOC: 2D 행렬
 
 
-이 포스트는 WebGL 관련 시리즈의 연장입니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [2D geometry scale](webgl-2d-scale.html)에 관한 것이었습니다.
+이 포스트는 WebGL 관련 시리즈에서 이어집니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [2D geometry scale](webgl-2d-scale.html)에 관한 것이었습니다.
 
 <div class="webgl_bottombar">
 <h3>Math vs Programming vs WebGL</h3>

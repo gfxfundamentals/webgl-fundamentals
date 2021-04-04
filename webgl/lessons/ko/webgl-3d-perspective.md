@@ -3,8 +3,8 @@ Description: WebGL에서 3D로 원근을 표시하는 방법
 TOC: 3D 원근법
 
 
-이 포스트는 WebGL 관련 시리즈의 연장입니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [3D 기초](webgl-3d-orthographic.html)에 관한 것이었습니다.
+이 포스트는 WebGL 관련 시리즈에서 이어집니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [3D 기초](webgl-3d-orthographic.html)에 관한 것이었습니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
 지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 원근도 가지지 않았는데요.

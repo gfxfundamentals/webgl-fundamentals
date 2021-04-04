@@ -3,8 +3,8 @@ Description: WebGL에서 2개 이상의 Texture를 사용하는 방법
 TOC: 2개 이상의 Texture 사용
 
 
-이 글은 [WebGL 이미지 처리](webgl-image-processing.html)의 연장입니다.
-아직 읽지 않았다면 [그곳](webgl-image-processing.html)부터 시작하는 게 좋습니다.
+이 글은 [WebGL 이미지 처리](webgl-image-processing.html)에서 이어집니다.
+아직 읽지 않았다면 [거기](webgl-image-processing.html)부터 시작하는 게 좋습니다.
 
 "어떻게 2개 이상의 texture를 사용할 수 있나요?"라는 질문에 답하기 좋은 시점인 것 같군요
 

@@ -8,7 +8,7 @@ WebGL에서 이미지 처리는 쉽습니다.
 아래를 보시죠.
 <!--more-->
 이 글은 [WebGL 기초](webgl-fundamentals.html)에서 이어집니다.
-아직 읽지 않았다면 [그곳](webgl-fundamentals.html)부터 가보는 것이 좋습니다.
+아직 읽지 않았다면 [거기](webgl-fundamentals.html)부터 가보는 게 좋습니다.
 
 WebGL에서 이미지를 그리기 위해서는 texture를 사용해야 하는데요.
 렌더링할 때 WebGL이 픽셀 대신 clip space 좌표를 유추하는 것과 마찬가지로, texture를 읽을 때 WebGL은 texture 좌표를 유추합니다.

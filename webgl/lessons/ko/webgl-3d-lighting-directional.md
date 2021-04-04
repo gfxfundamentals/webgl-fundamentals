@@ -4,8 +4,8 @@ TOC: Directional Lighting
 
 
 이 글은 WebGL 관련 시리즈의 한 부분으로, 첫 번째는 [WebGL 기초](webgl-fundamentals.html)였습니다.
-또한 이 글은 [WebGL 3D 카메라](webgl-3d-camera.html)의 연장입니다.
-아직 읽지 않았다면 [그곳](webgl-3d-camera.html)부터 시작하는 게 좋습니다.
+또한 이 글은 [WebGL 3D 카메라](webgl-3d-camera.html)에서 이어집니다.
+아직 읽지 않았다면 [거기](webgl-3d-camera.html)부터 시작하는 게 좋습니다.
 
 조명을 구현하는 방법에는 여러 가지가 있습니다.
 아마 가장 간단한 건 *directional lighting*일 겁니다.
@@ -492,7 +492,7 @@ v_normal = (u_worldInverseTranspose * vec4(a_normal, 0)).xyz;
 <p>
 곱하기 전에 <code>w</code>를 0으로 설정했기 때문에, 사실상 0을 제거하여 행렬에서 translation을 곱하게 됩니다.
 저는 그게 더 일반적인 방법이라고 생각합니다.
-mat3 방식이 더 깨끗해 보였지만 종종 이런 방식으로 해왔습니다.
+mat3 방식이 더 깔끔해 보였지만 종종 이런 방식으로 해왔습니다.
 </p>
 <p>
 또 다른 해결책은 <code>u_worldInverseTranspose</code>를 <code>mat3</code>로 만드는 겁니다.

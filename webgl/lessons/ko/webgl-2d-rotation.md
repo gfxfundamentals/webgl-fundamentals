@@ -3,8 +3,8 @@ Description: 2D에서 회전하는 방법
 TOC: 2D Rotation
 
 
-이 포스트는 WebGL 관련 시리즈의 연장입니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고 이전에는 [geometry translation](webgl-2d-translation.html)에 관한 것이었습니다.
+이 포스트는 WebGL 관련 시리즈에서 이어집니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [geometry translation](webgl-2d-translation.html)에 관한 것이었습니다.
 
 솔직히 이걸 어떻게 설명해야 할지 모르겠지만 뭐 어때요, 시도는 해봅시다.
 
