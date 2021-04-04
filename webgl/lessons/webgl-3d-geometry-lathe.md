@@ -743,7 +743,7 @@ to `lit` to see what the object would look like with lighting, the reason we nee
 We learned if you want to make 3D data **USE A 3D MODELING PACKAGE!!!** 😝
 
 To do anything really useful you'd likely need a real [UV editor](https://www.google.com/search?q=uv+editor).
-Dealing the the caps as well is something a 3D editor would help with. Instead of using
+Dealing with the caps as well is something a 3D editor would help with. Instead of using
 a limited set of options when lathing you'd use other features of the editor
 to add caps and generate easier UVs for the caps. 3d editors also support [extruding faces](https://www.google.com/search?q=extruding+model)
 and [extruding along a path](https://www.google.com/search?q=extruding+along+a+path) which if you take

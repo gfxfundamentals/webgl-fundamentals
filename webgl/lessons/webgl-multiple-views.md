@@ -624,7 +624,7 @@ gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
 to this
 
 ```js
-gl.canvas.style.transform = `translateX(${window.scrollX} translateY(${window.scrollY}px)`;
+gl.canvas.style.transform = `translateX(${window.scrollX}px) translateY(${window.scrollY}px)`;
 ```
 
 {{{example url="../webgl-multiple-views-items-horizontal-scrolling.html"}}}
