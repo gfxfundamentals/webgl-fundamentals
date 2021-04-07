@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-3d-lighting-point.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of GFXFundamentals. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 3D - Point Lighting" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to implement point lighting in WebGL" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-lighting-point.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 3D - Point Lighting" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-lighting-point.html" />
-<meta name="twitter:description" content="How to implement point lighting in WebGL" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="WebGL에서 point lighting을 구현하는 방법">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-lighting-point_ko.jpg">
+
+<meta property="og:title" content="WebGL 3D - Point Lighting">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-lighting-point_ko.jpg">
+<meta property="og:description" content="WebGL에서 point lighting을 구현하는 방법">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-lighting-point.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 3D - Point Lighting">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-lighting-point.html">
+<meta name="twitter:description" content="WebGL에서 point lighting을 구현하는 방법">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-lighting-point_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-lighting-point.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-lighting-point_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-lighting-point.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-lighting-point.html",
+      "inLanguage":"ko",
+      "name":"WebGL 3D - Point Lighting",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-lighting-point.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
 <title>WebGL 3D - Point Lighting</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-3d-lighting-point.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-lighting-point.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -183,9 +240,325 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-3d-lighting-point.html">여기</a>에 있습니다.</p>
+      <p>이 글은 <a href="webgl-3d-lighting-directional.html">WebGL 3D Directional Lighting</a>에서 이어집니다.
+아직 읽지 않았다면 <a href="webgl-3d-lighting-directional.html">거기</a>부터 시작하는 게 좋습니다.</p>
+<p>마지막 글에서 우리는 같은 방향에서 빛이 균일하게 들어오는 directional lighting을 살펴 봤는데요.
+렌더링 전에 해당 방향을 설정했었습니다.</p>
+<p>조명의 방향을 설정하는 대신 3D 공간의 한 점을 선택하고 shader에서 모델 표면의 임의의 지점에서 방향을 계산하면 어떨까요?</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/point-lighting.html"></iframe>
+</div>
+
+</p>
+<p>위 표면을 회전시키면 표면의 각 지점이 가지는 <em>surface -&gt; light</em> 벡터가 어떻게 다른지 알 수 있는데요.
+표면 법선과 표면에서 조명을 향하는 각 벡터의 스칼라곱을 구하면, 표면의 각 지점에서 다른 값을 얻을 수 있습니다.</p>
+<p>먼저 조명 위치가 필요합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec3 u_lightWorldPosition;
+</code></pre><p>그리고 표면의 world position을 계산하는 방법이 필요한데요.
+이를 위해 위치에 world matrix를 곱할 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform mat4 u_world;
+
+...
+
+// 표면의 world position 계산
+vec3 surfaceWorldPosition = (u_world * a_position).xyz;
+</code></pre><p>그리고 표면에서 조명까지의 벡터를 계산할 수 있습니다.
+이번엔 표면의 모든 위치에서 한 지점까지의 벡터를 계산합시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+</code></pre><p>다음은 컨텍스트의 전부입니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
+attribute vec3 a_normal;
+
++uniform vec3 u_lightWorldPosition;
+
++uniform mat4 u_world;
+uniform mat4 u_worldViewProjection;
+uniform mat4 u_worldInverseTranspose;
+
+varying vec3 v_normal;
+
++varying vec3 v_surfaceToLight;
+
+void main() {
+  // 위치를 행렬로 곱하기
+  gl_Position = u_worldViewProjection * a_position;
+
+  // 법선의 방향을 정하고 fragment shader로 전달
+  v_normal = mat3(u_worldInverseTranspose) * a_normal;
+
++  // 표면의 world position 계산
++  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
++
++  // surface -&gt; light 벡터를 계산하고 fragment shader로 전달
++  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+}
+</code></pre><p>surface -&gt; light 벡터는 단위 벡터가 아니기 때문에 fragment shader에서 정규화해야 합니다.
+참고로 vertex shader에서 정규화할 수 있었지만 <code class="notranslate" translate="no">varying</code>이기 때문에 위치 사이를 선형적으로 보간하기 때문에 완전한 단위 벡터가 아니게 됩니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
+
+// Vertex shader에서 전달됩니다.
+varying vec3 v_normal;
++varying vec3 v_surfaceToLight;
+
+-uniform vec3 u_reverseLightDirection;
+uniform vec4 u_color;
+
+void main() {
+  // v_normal은 varying이기 때문에 보간되므로 단위 벡터가 아닙니다.
+  // 정규화하면 다시 단위 벡터가 됩니다.
+  vec3 normal = normalize(v_normal);
+
+  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
+
+-  float light = dot(normal, u_reverseLightDirection);
++  float light = dot(normal, surfaceToLightDirection);
+
+  gl_FragColor = u_color;
+
+  // 색상 부분(alpha 제외)에만 light 곱하기
+  gl_FragColor.rgb *= light;
+}
+</code></pre><p>그런 다음 <code class="notranslate" translate="no">u_world</code>와 <code class="notranslate" translate="no">u_lightWorldPosition</code>의 위치를 찾아야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-  var reverseLightDirectionLocation =
+-      gl.getUniformLocation(program, &quot;u_reverseLightDirection&quot;);
++  var lightWorldPositionLocation =
++      gl.getUniformLocation(program, &quot;u_lightWorldPosition&quot;);
++  var worldLocation =
++      gl.getUniformLocation(program, &quot;u_world&quot;);
+</code></pre><p>그리고 그것들을 설정합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 행렬 설정
++  gl.uniformMatrix4fv(
++    worldLocation,
++    false,
++    worldMatrix
++  );
+  gl.uniformMatrix4fv(
+    worldViewProjectionLocation,
+    false,
+    worldViewProjectionMatrix
+  );
+
+  ...
+
+-  // 조명 방향 설정
+-  gl.uniform3fv(reverseLightDirectionLocation, m4.normalize([0.5, 0.7, 1]));
++  // 조명 위치 설정
++  gl.uniform3fv(lightWorldPositionLocation, [20, 30, 50]);
+</code></pre><p>그리고 여기 결과 입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>이제 반사광 강조를 추가할 수 있습니다.</p>
+<p>현실의 물체를 보면 먼 곳에서 조명이 비칠 때 거울처럼 빛을 반사하는데요.</p>
+<p><img class="webgl_center" src="../resources/specular-highlights.jpg" /></p>
+<p>해당 효과는 빛이 눈에 반사되는지 계산하여 시뮬레이션할 수 있습니다.
+다시 <em>스칼라곱</em>을 구합니다.</p>
+<p>무엇을 확인해야 할까요?
+생각해봅시다.
+빛은 표면에 부딪히는 각도와 동일한 각도로 반사되는데, surface -&gt; light 방향이 surface -&gt; eye 방향과 정확히 반전이라면 완벽한 반사각입니다.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/surface-reflection.html"></iframe>
+</div>
+
+</p>
+<p>모델의 표면에서 조명을 향하는 방향을 알고, 표면에서 view/eye/camera를 향하는 방향을 안다면, 이 두 벡터를 더하고 정규화해서, 이들 사이 중간에 있는 <code class="notranslate" translate="no">halfVector</code>를 계산할 수 있습니다.
+<code class="notranslate" translate="no">halfVector</code>와 surface normal이 일치한다면 빛을 view/eye/camera로 반사하기에 완벽한 각도입니다.
+그럼 어떻게 일치하는지 알 수 있을까요?
+이전에 했던 것처럼 <em>스칼라곱</em>을 구하면 됩니다.
+(1 = 일치, 0 = 수직, -1 = 반대)</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/specular-lighting.html"></iframe>
+</div>
+
+</p>
+<p>먼저 view/camera/eye의 위치를 전달하고, surface -&gt; view 벡터를 계산한 다음 fragment shader로 전달해야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
+attribute vec3 a_normal;
+
+uniform vec3 u_lightWorldPosition;
++uniform vec3 u_viewWorldPosition;
+
+uniform mat4 u_world;
+uniform mat4 u_worldViewProjection;
+uniform mat4 u_worldInverseTranspose;
+
+varying vec3 v_normal;
+
+varying vec3 v_surfaceToLight;
++varying vec3 v_surfaceToView;
+
+void main() {
+  // 위치를 행렬로 곱하기
+  gl_Position = u_worldViewProjection * a_position;
+
+  // 법선의 방향을 정하고 fragment shader로 전달
+  v_normal = mat3(u_worldInverseTranspose) * a_normal;
+
+  // 표면의 world position 계산
+  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
+
+  // surface -&gt; light 벡터를 계산하고 fragment shader로 전달
+  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+
++  // surface -&gt; view/camera 벡터를 계산하고 fragment shader로 전달
++  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
+}
+</code></pre><p>다음으로 fragment shader에서 surface -&gt; view 벡터와 surface -&gt; light 벡터 사이의 <code class="notranslate" translate="no">halfVector</code>를 계산해야 합니다.
+그런 다음 <code class="notranslate" translate="no">halfVector</code>와 법선의 스칼라곱을 구하여, 빛이 view로 반사되는지 확인할 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Vertex shader에서 전달됩니다.
+varying vec3 v_normal;
+varying vec3 v_surfaceToLight;
++varying vec3 v_surfaceToView;
+
+uniform vec4 u_color;
+
+void main() {
+  // v_normal이 varying이기 때문에 보간되므로 단위 벡터가 아닙니다.
+  // 정규화하면 다시 단위 벡터가 됩니다.
+  vec3 normal = normalize(v_normal);
+
++  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
++  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
++  vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
+
+  float light = dot(normal, surfaceToLightDirection);
++  float specular = dot(normal, halfVector);
+
+  gl_FragColor = u_color;
+
+  // 색상 부분(alpha 제외)에만 light 곱하기
+  gl_FragColor.rgb *= light;
+
++  // Specular 더하기
++  gl_FragColor.rgb += specular;
+}
+</code></pre><p>마지막으로 <code class="notranslate" translate="no">u_viewWorldPosition</code>을 찾아 설정해야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var lightWorldPositionLocation =
+    gl.getUniformLocation(program, &quot;u_lightWorldPosition&quot;);
++var viewWorldPositionLocation =
++    gl.getUniformLocation(program, &quot;u_viewWorldPosition&quot;);
+
+...
+
+// 카메라 행렬 계산
+var camera = [100, 150, 200];
+var target = [0, 35, 0];
+var up = [0, 1, 0];
+var cameraMatrix = makeLookAt(camera, target, up);
+
++// camera/view position 설정
++gl.uniform3fv(viewWorldPositionLocation, camera);
+</code></pre><p>그리고 여기 결과입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point-specular.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-specular.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p><strong>으악 너무 밝아!</strong></p>
+<p>스칼라곱을 거듭 제곱해서 밝기를 수정할 수 있습니다.
+이는 반사되는 가장 밝은 부분을 linear falloff에서 exponential falloff로 더 작게 만듭니다.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example noborder" style="width: 300px; height: 300px;" src="/webgl/lessons/resources/power-graph.html"></iframe>
+</div>
+
+</p>
+<p>빨간 선이 그래프 위쪽에 가까울수록 반사광이 추가되어 더 밝아집니다.
+반대로 <code class="notranslate" translate="no">power</code>를 높이면 밝아지는 범위가 오른쪽으로 축소되죠.</p>
+<p>이걸 <code class="notranslate" translate="no">shininess</code>라고 명명하고 shader에 추가합시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec4 u_color;
++uniform float u_shininess;
+
+...
+
+-  float specular = dot(normal, halfVector);
++  float specular = 0.0;
++  if (light &gt; 0.0) {
++    specular = pow(dot(normal, halfVector), u_shininess);
++  }
+</code></pre><p>스칼라곱은 음수가 될 수 있습니다.
+하지만 음수를 거듭 제곱하는 건 WebGL에 정의되어 있지 않은데요.
+그러니 스칼라곱이 음수가 된다면 specular를 0.0으로 남겨둡시다.</p>
+<p>물론 위치를 찾고 설정해야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+var shininessLocation = gl.getUniformLocation(program, &quot;u_shininess&quot;);
+
+...
+
+// Shininess 설정
+gl.uniform1f(shininessLocation, shininess);
+</code></pre><p>그리고 여기 결과입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point-specular-power.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-specular-power.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>마지막으로 이 글에서 다루고 싶은 건 조명 색상입니다.</p>
+<p>지금까지 F에 전달하는 색상을 곱하기 위해 <code class="notranslate" translate="no">light</code>를 사용했는데요.
+색상을 가진 조명을 원한다면 조명 색상을 제공할 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec4 u_color;
+uniform float u_shininess;
++uniform vec3 u_lightColor;
++uniform vec3 u_specularColor;
+
+...
+
+  // 색상 부분(alpha 제외)에만 light 곱하기
+*  gl_FragColor.rgb *= light * u_lightColor;
+
+  // Specular 더하기
+*  gl_FragColor.rgb += specular * u_specularColor;
+}
+</code></pre><p>그리고 당연히</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+  var lightColorLocation =
++      gl.getUniformLocation(program, &quot;u_lightColor&quot;);
++  var specularColorLocation =
++      gl.getUniformLocation(program, &quot;u_specularColor&quot;);
+</code></pre><p>그리고</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 조명 색상 설정
++  gl.uniform3fv(lightColorLocation, m4.normalize([1, 0.6, 0.6]));  // 빨간 조명
+// 반사광 색상 설정
++  gl.uniform3fv(specularColorLocation, m4.normalize([1, 0.6, 0.6]));  // 빨간 조명
+</code></pre><p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-lighting-point-color.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-3d-lighting-point-color.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>다음은 <a href="webgl-3d-lighting-spot.html">spot lighting</a>입니다.</p>
+<div class="webgl_bottombar">
+<h3>왜 <code class="notranslate" translate="no">pow(negative, power)</code>는 정의되어 있지 않나요?</h3>
+<p>이게 무슨 뜻일까요?</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(5, 2)</pre></div>
+<p>이렇게 볼 수 있고</p>
+<div class="webgl_center"><pre class="glocal-center-content">5 * 5 = 25</pre></div>
+<p>이건</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(5, 3)</pre></div>
+<p>이렇게 볼 수 있죠.</p>
+<div class="webgl_center"><pre class="glocal-center-content">5 * 5 * 5 = 125</pre></div>
+<p>그럼 이건 어떤가요?</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2)</pre></div>
+<p>이렇게 될 수 있으며</p>
+<div class="webgl_center"><pre class="glocal-center-content">-5 * -5 = 25</pre></div>
+<p>그리고</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(-5, 3)</pre></div>
+<p>다음과 같이 볼 수 있겠죠.</p>
+<div class="webgl_center"><pre class="glocal-center-content">-5 * -5 * -5 = -125</pre></div>
+<p>
+아시다시피 음수를 음수로 곱하면 양수를 만듭니다.
+다시 음수로 곱하면 음수를 만드는데요.
+</p>
+<p>그럼 이게 의미하는 것이 뭘까요?</p>
+<div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2.5)</pre></div>
+<p>
+결과가 양수인지 음수인지 어떻게 결정할까요?
+그건 <a href="https://betterexplained.com/articles/a-visual-intuitive-guide-to-imaginary-numbers/">허수</a>의 영역입니다.
+</p>
+</div>
+
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +574,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -341,13 +715,50 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D - Point Lighting';
+            var disqus_title = 'WebGL 3D - Point Lighting';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
