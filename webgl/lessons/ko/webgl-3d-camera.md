@@ -23,7 +23,7 @@ View 앞의 물체를 움직이는 건 좋은 방법이 아닌 것 같습니다.
 
 {{{diagram url="resources/camera-move-camera.html?mode=2" caption="객체를 view로 이동" }}}
 
-카메라 앞의 월드를 효율적으로 움직여야 하는데요.
+카메라 앞의 world를 효율적으로 움직여야 하는데요.
 가장 쉬운 방법은 "inverse" 행렬을 사용하는 겁니다.
 일반적인 경우에 역행렬을 계산하는 수식은 복잡하지만 개념적으로는 쉽습니다.
 "역"은 어떤 값의 정반대로 사용하는 값입니다.
@@ -49,7 +49,7 @@ var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 ```
 
 다음으로 카메라 행렬을 계산할 겁니다.
-행렬은 월드에서 카메라의 위치와 orientation을 나타냅니다.
+행렬은 world에서 카메라의 위치와 orientation을 나타냅니다.
 아래 코드는 카메라가 원점을 중심으로 radius \* 1.5의 거리에서 원점을 바라보며 회전하는 행렬을 만듭니다.
 
 {{{diagram url="resources/camera-move-camera.html?mode=3" caption="camera movement" }}}

@@ -292,7 +292,7 @@ void main() {
 
 *   gl_FragColor = u_color;
 
-+   // 색상 부분(알파 제외)에만 빛을 곱하기
++   // 색상 부분(alpha 제외)에만 light 곱하기
 +   gl_FragColor.rgb *= light;
 }
 ```
