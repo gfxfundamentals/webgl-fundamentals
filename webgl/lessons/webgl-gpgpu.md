@@ -1722,3 +1722,10 @@ for machine learning), or similarly to how we did math to treat 2D arrays
 as 1D arrays we could also write math to treat 2D arrays as 3D arrays
 and use that for things like fluid simulations.
 
+---
+
+Since we made some particles via GPGPU there is [this wonderful video](https://www.youtube.com/watch?v=X-iSQQgOd1A) which in its second half
+uses compute shaders to do a "slime" simulation.
+
+Using the techniques above <a href="https://jsgist.org/?src=c4e91cff94b0543a7c4287f18c06a78b">here it is translated into WebGL</a>.
+
