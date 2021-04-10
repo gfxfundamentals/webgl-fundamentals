@@ -204,7 +204,7 @@ void main() {
 precision mediump float;
 
 -uniform vec4 color;
-+// vertex shader에서 전달
++// Vertex shader에서 전달됩니다.
 +varying vec4 v_color;
 
 void main() {

@@ -339,7 +339,7 @@ surface -> light 벡터는 단위 벡터가 아니기 때문에 fragment shader�
 아시다시피 음수를 음수로 곱하면 양수를 만듭니다.
 다시 음수로 곱하면 음수를 만드는데요.
 </p>
-<p>그럼 이게 의미하는 것이 뭘까요?</p>
+<p>그럼 이게 의미하는 건 뭘까요?</p>
 <div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2.5)</pre></div>
 <p>
 결과가 양수인지 음수인지 어떻게 결정할까요?
