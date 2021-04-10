@@ -404,7 +404,7 @@ either inside the spotlight or not and things just turn black.</p>
 an inner limit and an outer limit.
 If we&#39;re inside the inner limit then use 1.0. If we&#39;re outside the outer
 limit then use 0.0. If we&#39;re between the inner limit and the outer limit
-then lerp between 1.0 and 0.0.</p>
+then linearly interpolate between 1.0 and 0.0.</p>
 <p>Here&#39;s one way we could do this</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-uniform float u_limit;          // in dot space
 +uniform float u_innerLimit;     // in dot space
@@ -434,7 +434,7 @@ need to make sure in our JavaScript that <code class="notranslate" translate="no
 <code class="notranslate" translate="no">u_outerLimit</code>. (note: the example code does not do this).</p>
 <p>GLSL also has a function we could use to slightly simplify this. It&#39;s
 called <code class="notranslate" translate="no">smoothstep</code> and like <code class="notranslate" translate="no">step</code> it returns a value from 0 to 1 but
-it takes both an lower and upper bound and lerps between 0 and 1 between
+it takes both an lower and upper bound and interpolates between 0 and 1 between
 those bounds.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> smoothstep(lowerBound, upperBound, value)
 </code></pre><p>Let&#39;s do that</p>
