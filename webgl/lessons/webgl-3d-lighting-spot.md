@@ -190,7 +190,7 @@ To fix this we could use 2 limits instead of one,
 an inner limit and an outer limit.
 If we're inside the inner limit then use 1.0. If we're outside the outer
 limit then use 0.0. If we're between the inner limit and the outer limit
-then lerp between 1.0 and 0.0.
+then linearly interpolate between 1.0 and 0.0.
 
 Here's one way we could do this
 
@@ -225,7 +225,7 @@ need to make sure in our JavaScript that `u_innerLimit` is never equal to
 
 GLSL also has a function we could use to slightly simplify this. It's
 called `smoothstep` and like `step` it returns a value from 0 to 1 but
-it takes both an lower and upper bound and lerps between 0 and 1 between
+it takes both an lower and upper bound and interpolates between 0 and 1 between
 those bounds.
 
      smoothstep(lowerBound, upperBound, value)
