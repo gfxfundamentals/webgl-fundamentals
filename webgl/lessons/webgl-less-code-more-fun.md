@@ -413,8 +413,8 @@ Which returns something like
 
     programInfo = {
        program: WebGLProgram,  // program we just compiled
-       uniformSetters: ...,    // setters as returned from webglUtils.createUniformSetters,
-       attribSetters: ...,     // setters as returned from createAttribSetters,
+       uniformSetters: ...,    // setters as returned from webglUtils.createUniformSetters
+       attribSetters: ...,     // setters as returned from webglUtils.createAttribSetters
     }
 
 And that's yet one more minor simplification.  This will come in handy
