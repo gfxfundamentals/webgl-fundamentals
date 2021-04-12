@@ -271,13 +271,13 @@ WebGL이 javascript로 작성되었다면 다음과 같은 전역 상태를 가�
 <p>위에서 <code class="notranslate" translate="no">textureUnits</code>가 배열인 걸 볼 수 있는데요.
 해당 texture unit 배열에서 <em>bind point</em> 중 하나를 texture에 할당합니다.
 <code class="notranslate" translate="no">ourTexture</code>를 texture unit 5에 할당해봅시다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 초기화 시점
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 초기화할 때
 const ourTexture = gl.createTexture();
 // 여기에 texture 초기화 코드를 삽입하세요.
 
 ...
 
-// 렌더링 시점
+// 렌더링할 때
 const indexOfTextureUnit = 5;
 gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
