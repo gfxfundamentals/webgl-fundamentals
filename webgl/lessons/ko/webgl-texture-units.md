@@ -46,13 +46,13 @@ const gl = {
 `ourTexture`를 texture unit 5에 할당해봅시다.
 
 ```js
-// 초기화 시점
+// 초기화할 때
 const ourTexture = gl.createTexture();
 // 여기에 texture 초기화 코드를 삽입하세요.
 
 ...
 
-// 렌더링 시점
+// 렌더링할 때
 const indexOfTextureUnit = 5;
 gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
