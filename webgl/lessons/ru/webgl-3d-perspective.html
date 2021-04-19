@@ -800,11 +800,12 @@ const settings = {
       return;
   }
 
-  function addScript(src, fn) {
+  function addScript(src, type, fn) {
     const script = document.createElement('script');
     const firstScript = document.getElementsByTagName('script')[0];
     script.async = true;
     script.defer = true;
+    script.type = type || 'javascript';
     if (fn) {
       script.addEventListener('load', fn);
     }
@@ -812,7 +813,7 @@ const settings = {
     firstScript.parentNode.insertBefore(script, firstScript);
   }
 
-  addScript('//cdn.webglstats.com/stat.js');
+  addScript('//gpustats.org/stats.js', 'module');
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
