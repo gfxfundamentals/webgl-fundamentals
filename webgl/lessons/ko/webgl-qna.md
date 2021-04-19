@@ -120,7 +120,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [WebGL 충돌없이 GPU가 얼마나 많은 작업을 수행하는지 알아내는 방법](webgl-qna-how-to-figure-out-how-much-gpu-work-to-do-without-crashing-webgl.html).
 * [WebGL이 Canvas 2D보다 더 많은 메모리를 차지하는 이유](webgl-qna-why-does-webgl-take-more-memory-than-canvas-2d.html)
-* [더 많은 글자 그리기를 더 적은 호출로 합치는 방법](webgl-qna-how-to-combine-more-text-drawing-into-fewer-draw-calls.html)
+* [더 많은 텍스트 그리기를 더 적은 호출로 합치는 방법](webgl-qna-how-to-combine-more-text-drawing-into-fewer-draw-calls.html)
 
 ## WebGL2
 

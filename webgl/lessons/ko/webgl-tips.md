@@ -72,9 +72,9 @@ const saveBlob = (function() {
     });
     ```
 
-2.  Render loop에서 캡처 코드를 호출
+2.  렌더링 루프에서 캡처 코드를 호출
 
-    이 경우 캡처하길 원한다는 플래그를 설정하고 rendering loop에서 실제로 캡처를 하면 되는데
+    이 경우 캡처하길 원한다는 플래그를 설정하고 렌더링 루프에서 실제로 캡처를 하면 되는데
 
     ```js
     let needCapture = false;
@@ -83,7 +83,7 @@ const saveBlob = (function() {
     });
     ```
 
-    그리고 현재 `drawScene`에 구현된 render loop에서 모든 게 그려진 뒤에
+    그리고 현재 `drawScene`에 구현된 렌더링 루프에서 모든 게 그려진 뒤에
 
     ```js
     function drawScene(time) {

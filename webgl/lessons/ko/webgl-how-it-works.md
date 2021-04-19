@@ -317,7 +317,7 @@ Attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실�
 
 그리고 이 명령어는 현재 ARRAY_BUFFER bind point에 바인딩된 buffer에서 데이터를 가져오기 위해,
 정점마다 얼마나 많은 컴포넌트(1 - 4)가 있는지,
-data type(`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, etc...)은 무엇인지,
+data type(`BYTE`, `FLOAT`, `INT`, `UNSIGNED_SHORT`, 등등...)은 무엇인지,
 stride는 한 데이터에서 다음 데이터를 가져오기 위해 몇 byte를 건너뛰어야 하는지,
 offset은 buffer에서 데이터가 얼마나 멀리 있는지 등을 WebGL에 알려줍니다.
 

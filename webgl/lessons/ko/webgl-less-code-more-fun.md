@@ -1,6 +1,6 @@
-Title: WebGL - Less Code, More Fun
+Title: WebGL - 코드는 적게, 재미는 더
 Description: WebGL 프로그래밍을 덜 장황하게 만드는 방법
-TOC: Less Code, More Fun
+TOC: 코드는 적게, 재미는 더
 
 
 이 포스트는 WebGL 관련 시리즈에서 이어집니다.
@@ -289,8 +289,8 @@ objects.forEach(function(object) {
 {{{example url="../webgl-less-code-more-fun.html" }}}
 
 조금 더 나아가 봅시다.
-위 코드에서 우리가 생성한 버퍼로 변수 `attribs`를 설정했습니다.
-이러한 버퍼를 설정하는 코드는 보이지 않는데요.
+위 코드에서 우리가 생성한 buffer로 변수 `attribs`를 설정했습니다.
+이러한 buffer를 설정하는 코드는 보이지 않는데요.
 예를 들어 position, normal, texture 좌표를 만들고 싶다면 다음과 같은 코드가 필요할 겁니다.
 
     // 단일 삼각형

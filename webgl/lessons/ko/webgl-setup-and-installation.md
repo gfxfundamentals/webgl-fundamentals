@@ -90,7 +90,7 @@ Chrome 문서는 [여기](https://developers.google.com/web/tools/chrome-devtool
 참고: [문서](https://github.com/BabylonJS/Spector.js/blob/master/readme.md)를 읽어주세요!
 
 spector.js의 extension 버전은 프레임을 캡처합니다.
-이건 WebGL 앱이 성공적으로 초기화되고 `requestAnimationFrame` loop에서 렌더링되는 경우에만 작동한다는 걸 의미하는데요.
+이건 WebGL 앱이 성공적으로 초기화되고 `requestAnimationFrame` 루프에서 렌더링되는 경우에만 작동한다는 걸 의미하는데요.
 "record" 버튼을 클릭하면 하나의 "frame"에 대한 모든 WebGL API 호출을 캡처합니다.
 
 이건 약간의 작업 없이는 초기화 중에 문제를 찾는데 도움이 되지 않는다는 걸 의미하는데요.

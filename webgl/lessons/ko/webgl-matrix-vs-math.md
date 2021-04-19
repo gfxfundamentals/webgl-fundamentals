@@ -15,7 +15,7 @@ TOC: WebGL 행렬 vs 수학 행렬
 >
 >    *동의어*:	pillar, post, pole, upright, vertical, ...
 >
-> 2. 페이지나 글자의 수직 분할.
+> 2. 페이지나 텍스트의 수직 분할.
 
 > ## row
 > /rō/
@@ -24,7 +24,7 @@ TOC: WebGL 행렬 vs 수학 행렬
 > * 테이블에 있는 항목들의 수평선.
 
 소프트웨어에서 예시를 볼 수 있습니다.
-예를 들어 제 글자 편집기는 줄과 열을 표시하는데, 열은 이미 사용되었기 때문에 이 경우 줄은 행의 다른 단어입니다.
+예를 들어 제 텍스트 편집기는 줄과 열을 표시하는데, 열은 이미 사용되었기 때문에 이 경우 줄은 행의 다른 단어입니다.
 
 <div class="webgl_center"><img src="resources/editor-lines-and-columns.gif" class="gman-border-bshadow" style="width: 372px;"></div>
 
