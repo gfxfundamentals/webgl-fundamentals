@@ -1,6 +1,6 @@
-Title: WebGL 캔버스 크기 조정
-Description: WebGL 캔버스 크기 조정 및 관련 문제 해결법
-TOC: 캔버스 크기 조정
+Title: WebGL Canvas 크기 조정
+Description: WebGL Canvas 크기 조정 및 관련 문제 해결법
+TOC: Canvas 크기 조정
 
 
 캔버스 크기를 바꾸기 위해 알아야 할 것들이 있습니다.

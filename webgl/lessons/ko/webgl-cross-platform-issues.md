@@ -1,6 +1,6 @@
-Title: WebGL 크로스 플랫폼 이슈
+Title: WebGL Cross Platform 문제
 Description: WebGL 앱이 어디서나 작동하도록 만들기 위해 알아야 할 사항들입니다.
-TOC: 크로스 플랫폼 이슈
+TOC: Cross Platform 문제
 
 
 모든 WebGL 프로그램이 모든 기기 혹은 브라우저에서 작동하지 않아도 충격으로 다가오지 않을 겁니다.

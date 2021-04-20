@@ -1,6 +1,6 @@
-Title: WebGL - 코드는 적게, 재미는 더
+Title: WebGL - Less Code, More Fun
 Description: WebGL 프로그래밍을 덜 장황하게 만드는 방법
-TOC: 코드는 적게, 재미는 더
+TOC: Less Code, More Fun
 
 
 이 포스트는 WebGL 관련 시리즈에서 이어집니다.

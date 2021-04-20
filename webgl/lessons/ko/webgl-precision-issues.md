@@ -1,6 +1,6 @@
-Title: WebGL 정밀도 이슈
-Description: WebGL의 정밀도 이슈
-TOC: 정밀도 이슈
+Title: WebGL 정밀도 문제
+Description: WebGL의 정밀도 문제
+TOC: 정밀도 문제
 
 
 이 글은 WebGL의 다양한 정밀도 이슈에 관한 겁니다.
