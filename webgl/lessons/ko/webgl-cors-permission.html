@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-cors-permission.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of GFXFundamentals. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL - Cross Origin Images" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="Using images across domains" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-cors-permission.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL - Cross Origin Images" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-cors-permission.html" />
-<meta name="twitter:description" content="Using images across domains" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="도메인 간의 이미지 사용">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cors-permission_ko.jpg">
+
+<meta property="og:title" content="WebGL - Cross Origin Image">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cors-permission_ko.jpg">
+<meta property="og:description" content="도메인 간의 이미지 사용">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-cors-permission.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL - Cross Origin Image">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-cors-permission.html">
+<meta name="twitter:description" content="도메인 간의 이미지 사용">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cors-permission_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-cors-permission.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cors-permission_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-cors-permission.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-cors-permission.html",
+      "inLanguage":"ko",
+      "name":"WebGL - Cross Origin Image",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-cors-permission.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL - Cross Origin Images</title>
+<title>WebGL - Cross Origin Image</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-cors-permission.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-cors-permission.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-cors-permission.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-cors-permission.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-cors-permission.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-cors-permission.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-cors-permission.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-cors-permission.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,13 +236,124 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL - Cross Origin Images</h1>
+    <h1>WebGL - Cross Origin Image</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-cors-permission.html">여기</a>에 있습니다.</p>
+      <p>이 글은 WebGL 관련 시리즈 중 하나입니다.
+아직 읽지 않았다면 <a href="webgl-fundamentals.html">이전 글</a>부터 시작하는 게 좋습니다.</p>
+<p>WebGL에서는 texture로 사용하기 위해 이미지를 다운로드한 다음 GPU에 업로드하는 것이 일반적입니다.
+이를 수행하는 여러 샘플들이 있는데요.
+예를 들어 <a href="webgl-image-processing.html">이미지 처리</a>에 관한 글, <a href="webgl-3d-textures.html">texture</a>에 관한 글, <a href="webgl-2d-drawimage.html">2D drawImage 구현</a>에 관한 글 등이 있습니다.</p>
+<p>일반적으로 이렇게 이미지를 다운로드합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Texture 정보 { width: w, height: h, texture: tex } 생성합니다.
+// Texture는 1x1 픽셀로 시작하고 이미지가 로드되면 업데이트됩니다.
+function loadImageAndCreateTextureInfo(url) {
+  var tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  // Texture를 1x1 파랑 픽셀로 채우기
+  gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,
+    gl.RGBA,
+    1,
+    1,
+    0,
+    gl.RGBA,
+    gl.UNSIGNED_BYTE,
+    new Uint8Array([0, 0, 255, 255])
+  );
+
+  // 모든 이미지가 2의 거듭 제곱이 아니라고 가정
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+  var textureInfo = {
+    width: 1,   // 로드될 때까지 크기를 모름
+    height: 1,
+    texture: tex,
+  };
+  var img = new Image();
+  img.addEventListener(&#39;load&#39;, function() {
+    textureInfo.width = img.width;
+    textureInfo.height = img.height;
+
+    gl.bindTexture(gl.TEXTURE_2D, textureInfo.texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+  });
+  img.src = url;
+
+  return textureInfo;
+}
+</code></pre><p>문제는 이미지에 개인 데이터(에를 들어 캡차, 서명, 노출 사진, ...)가 있을 수 있다는 겁니다.
+웹 페이지에는 페이지를 직접 제어하지 않는 광고와 기타 요소들이 있으므로 브라우저는 이러한 개인 이미지를 볼 수 없도록 해야 합니다.</p>
+<p>이미지가 브라우저에 표시되더라도 스크립트는 이미지 내부의 데이터를 볼 수 없기 때문에 <code class="notranslate" translate="no">&lt;img src=&quot;private.jpg&quot;&gt;</code>만 사용하는 것은 괜찮습니다.
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">Canvas2D API</a>에는 이미지 내부를 보는 방법이 있는데요.
+먼저 캔버스에 이미지를 그립니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">ctx.drawImage(someImg, 0, 0);
+</code></pre><p>그런 다음 데이터를 가져옵니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var data = ctx.getImageData(0, 0, width, heigh);
+</code></pre><p>하지만 다른 도메인에서 가져와 그린 이미지라면 브라우저는 캔버스를 <em>오염</em>되었다고 표시하고 <code class="notranslate" translate="no">ctx.getImageData</code>를 호출할 때 보안 오류가 발생합니다.</p>
+<p>WebGL은 한 단계 더 나아가야 합니다.
+WebGL에서 <code class="notranslate" translate="no">gl.readPixels</code>는 <code class="notranslate" translate="no">ctx.getImageData</code>와 같은 호출이니 막으면 충분하지 않냐고 생각하겠지만, 픽셀을 직접 읽을 수 없더라도 이미지의 색상에 따라 실행이 더 오래 걸리는 shader를 만들 수 있는데요.
+해당 정보를 사용하여 간접적으로 이미지 내부를 살펴보고 이미지의 내용을 확인하기 위해 타이밍을 사용할 수 있습니다.</p>
+<p>따라서 WebGL은 같은 도메인이 아닌 모든 이미지를 금지합니다.
+예를 들어 다음은 다른 도메인의 texture로 회전하는 사각형을 그리는 샘플인데요.
+Texture가 로드되지 않고 오류가 발생합니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-cors-permission-bad.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-cors-permission-bad.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>어떻게 이를 해결할까요?</p>
+<h2 id="cors">CORS</h2>
+<p>CORS = Cross Origin Resource Sharing.
+CORS는 웹 페이지에 이미지 사용 권한을 이미지 서버에 요청하는 방법입니다.</p>
+<p>이를 위해 <code class="notranslate" translate="no">crossOrigin</code> 속성을 무언가로 설정한 다음, 브라우저가 서버에서 이미지를 가져오려고 시도할 때, 동일한 도메인이 아니라면, 브라우저는 CORS 권한을 요청합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
++    img.crossOrigin = &quot;&quot;;   // CORS 권한 요청
+    img.src = url;
+</code></pre><p><code class="notranslate" translate="no">crossOrigin</code>에 설정할 수 있는 값에는 3가지가 있습니다.
+하나는 &quot;권한을 요청하지 않음&quot;을 의미하는 기본값인 <code class="notranslate" translate="no">undefined</code>입니다.
+다른 하나는 권한을 요청하지만 추가 정보를 보내지 않음을 의미하는 <code class="notranslate" translate="no">&quot;anonymous&quot;</code>입니다.
+마지막은 서버가 권한을 부여할지 말지 결정하기 위해 살펴보는 cookie와 기타 정보 전송을 의미하는 <code class="notranslate" translate="no">&quot;use-credentials&quot;</code>입니다.
+그 외 다른 값으로 <code class="notranslate" translate="no">crossOrigin</code>을 설정하면 <code class="notranslate" translate="no">anonymous</code>로 설정한 것과 같습니다.</p>
+<p>왜 항상 권한을 확인하지 않을까요?
+그 이유는 권한 요청은 2개의 HTTP 요청을 필요로 해서 요청하지 않는 것보다 느리기 때문입니다.
+만약 동일한 도메인이거나 img tag 혹은 canvas2d를 제외한 모든 것에 이미지를 사용하지 않는다면 속도가 느려지지 않게 하기 위해 <code class="notranslate" translate="no">crossOrigin</code>을 설정하고 싶지 않을 겁니다.</p>
+<p>로드하려는 이미지가 동일한 origin에 있는지 확인하고 그렇다면 <code class="notranslate" translate="no">crossOrigin</code> 속성을 설정하는 함수를 만들 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function requestCORSIfNotSameOrigin(img, url) {
+  if ((new URL(url, window.location.href)).origin !== window.location.origin) {
+    img.crossOrigin = &quot;&quot;;
+  }
+}
+</code></pre><p>그리고 이렇게 사용할 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">...
++requestCORSIfNotSameOrigin(img, url);
+img.src = url;
+</code></pre><p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-cors-permission-good.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-cors-permission-good.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>권한을 요청한다고 해서 권한이 부여되는 것은 아닙니다.
+이는 서버에 달려있습니다.
+Github page, flickr.com, imgur.com 등은 권한을 부여하지만, 대부분의 웹 사이트는 그렇지 않습니다.
+권한을 부여하기 위해 서버는 이미지를 보낼 때 특정 헤더를 보냅니다.</p>
+<p>서버가 권한을 부여하는 것으로는 충분하지 않다는 점에 유의해야 합니다.
+만약 다른 도메인의 이미지라면 <code class="notranslate" translate="no">crossOrigin</code> 속성을 설정해야 하고 그렇지 않으면 서버가 올바른 헤더를 보내도 이미지를 사용할 수 없습니다.</p>
+<div class="webgl_bottombar">
+<h3>Apache에 CORS 권한 부여</h3>
+<p>Apache로 웹 사이트를 운영하고 mod_rewrite 플러그인이 설치되어 있다면 putting으로 전체적인 CORS 지원을 허용할 수 있습니다.</p>
+<pre class="prettyprint">
+    Header set Access-Control-Allow-Origin "*"
+</pre>
+<p>적당한 <code class="notranslate" translate="no">.htaccess</code> 파일에 설정하면 됩니다.</p>
+</div>
+
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +369,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -249,7 +418,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 Texture 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Images</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
@@ -341,13 +510,50 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL - Cross Origin Image';
+            var disqus_title = 'WebGL - Cross Origin Image';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
