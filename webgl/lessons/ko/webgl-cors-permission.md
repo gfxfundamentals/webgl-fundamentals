@@ -97,10 +97,6 @@ CORS는 웹 페이지에 이미지 사용 권한을 이미지 서버에 요청�
 마지막은 서버가 권한을 부여할지 말지 결정하기 위해 살펴보는 cookie와 기타 정보 전송을 의미하는 `"use-credentials"`입니다.
 그 외 다른 값으로 `crossOrigin`을 설정하면 `anonymous`로 설정한 것과 같습니다.
 
-왜 항상 권한을 확인하지 않을까요?
-그 이유는 권한 요청은 2개의 HTTP 요청을 필요로 해서 요청하지 않는 것보다 느리기 때문입니다.
-만약 동일한 도메인이거나 img tag 혹은 canvas2d를 제외한 모든 것에 이미지를 사용하지 않는다면 속도가 느려지지 않게 하기 위해 `crossOrigin`을 설정하고 싶지 않을 겁니다.
-
 로드하려는 이미지가 동일한 origin에 있는지 확인하고 그렇다면 `crossOrigin` 속성을 설정하는 함수를 만들 수 있습니다.
 
     function requestCORSIfNotSameOrigin(img, url) {
