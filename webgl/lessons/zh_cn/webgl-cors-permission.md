@@ -91,10 +91,6 @@ CORS = Cross Origin Resource Sharing（跨域资源共享）。是一种网页�
 表示发送 cookies 和其他可能需要的信息，服务器通过这些信息决定是否授予许可。
 如果 `crossOrign` 设置为其他任意值则相当于 `"anonymous"`。
 
-那我们为什么不总是查看许可呢？因为请求许可需要 2 个HTTP请求，比不请求要慢一些，
-如果我们知道都在同一域名下，就不需要请求许可。或者只对需要跨域资源的 img 标签或
-canvas2d 设置 `crossOrigin` 属性，这样就不用让图像请求变慢。
-
 我们可以定义一个方法，当图像资源在其他域名下时就设置 `crossOrigin` 属性。
 
     function requestCORSIfNotSameOrigin(img, url) {
