@@ -317,10 +317,6 @@ image from the server, if it&#39;s not the same domain, the browser will ask for
 The last is <code class="notranslate" translate="no">&quot;use-credentials&quot;</code> which means send cookies and other info the server might look at to decide
 whether or not it give permission. If <code class="notranslate" translate="no">crossOrigin</code> is set to any other value it&#39;s the same as setting
 it to <code class="notranslate" translate="no">anonymous</code>.</p>
-<p>Why don&#39;t we just always see that permission? Because asking for permission takes 2 HTTP requests so it&#39;s
-slower than not asking. If we know we&#39;re on the same domain or we know we won&#39;t use the image for anything
-except img tags and or canvas2d then we don&#39;t want to set <code class="notranslate" translate="no">crossOrigin</code> because it
-will make things slower.</p>
 <p>We can make a function that checks if the image we&#39;re trying to load is on the same origin and if
 so sets the <code class="notranslate" translate="no">crossOrigin</code> attribute.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function requestCORSIfNotSameOrigin(img, url) {

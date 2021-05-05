@@ -326,10 +326,6 @@ function loadImageAndCreateTextureInfo(url) {
 но не отправлять дополнительную информацию&quot;. Последнее значение - <code class="notranslate" translate="no">use-credentials</code>, означающее &quot;отправлять
 куки и другую информацию, по которой сервер сможет определить, стоит ли давать разрешения или нет&quot;. При
 установке любого другого значения сервер будет считать, что установлено значение <code class="notranslate" translate="no">anonymous</code>.</p>
-<p>Почему бы нам всегда не запрашивать разрешение? Потому что запрос разрешения требует двух HTTP-запросов,
-поэтому он медленнее. Если мы знаем, что мы находимся на том же домене, или мы не планируем использовать
-изображение для чего-то помимо тега img, нам не нужно устанавливать <code class="notranslate" translate="no">crossOrigin</code>, так как он замедлит
-получение ресурса.</p>
 <p>Мы можем написать функцию, которая проверит, находится ли наше изображение
 на том же домене, и в зависимости от этого установит атрибут <code class="notranslate" translate="no">crossOrigin</code>.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function requestCORSIfNotSameOrigin(img, url) {
