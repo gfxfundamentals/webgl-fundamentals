@@ -9,7 +9,7 @@ This article also uses concepts covered in [the article on lighting](webgl-3d-li
 If you have not read those articles already you might want to read them first.
 
 An *environment map* represents the environment of the objects you're drawing.
-If the you're drawing an outdoor scene it would represent the outdoors. If
+If you're drawing an outdoor scene it would represent the outdoors. If
 you're drawing people on a stage it would represent the venue. If you're drawing
 an outer space scene it would be the stars. We can implement an environment map
 with a cube map if we have 6 images that show the environment from a point in
