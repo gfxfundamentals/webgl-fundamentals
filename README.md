@@ -100,13 +100,13 @@ This is template for the table of contents for the language.
 It is included on both the index and on each article. The only
 parts not auto-generated are the links ending links which
 you can translate if you want to.
-The build system will create a placeholder for every English article for which there is no corresponding article in that language. It will be filled the `missing` message from above.
+The build system will create a placeholder for every English article for which there is no corresponding article in that language. It will be filled with the `missing` message from above.
 
 #### `lang.css`
 
 This is included if and only if it exists. I'd strongly prefer not to have to
 use it. In particular I don't want people to get into arguments about fonts
-but basically it's a way to choose the fonts per language. You should set
+but basically it's a way to choose the fonts per language. You should only set
 the variables that are absolutely needed. Example
 
 ```css
@@ -126,15 +126,15 @@ the variables that are absolutely needed. Example
 Notice 2 settings are not changed. It seems unlikely to me that code would
 need a different font per language.
 
-PS: While we're here, I love code fonts with ligatures but the seem like a bad
+PS: While we're here, I love code fonts with ligatures but they seem like a bad
 idea for a tutorial site because the ligatures hide the actual characters needed
 so please don't ask for or use a ligature code font here.
 
 #### Translation notes
 
-The build process will make a placeholder html file for each article has an english .md file in
+The build process will make a placeholder html file for each article that has an English .md file in
 `webgl/lessons` but no corresponding .md file for the language. This is to make it easy to include
-links in one article that links to another article but that other article has not yet been translated.
+links in an article that links to another article but that other article has not yet been translated.
 This way you don't have to go back and fix already translated articles. Just translate one article
 at a time and leave the links as is. They'll link to placeholders until someone translates the missing
 articles.
@@ -185,7 +185,7 @@ Which means you can localize the labels like this
 {{{diagram url="resources/directional-lighting.html?lightDir=光線方向&surface1=オブジェクト&surface2=表面方向&dot=dot(光線反対方向,表面方向)%20%3D%20&ui-rotation=角度" caption="方向を回転してみて" width="500" height="400"}}}
 ```
 
-For testing reference the sample directly in your browser. For example
+For testing, reference the sample directly in your browser. For example
 
 [`http://localhost:8080/webgl/lessons/resources/directional-lighting.html?lightDir=光線方向&surface1=オブジェクト&surface2=表面方向&dot=dot(光線反対方向,表面方向)%20%3D%20&ui-rotation=角度`](https://webglfundamentals.org/webgl/lessons/resources/directional-lighting.html?lightDir=光線方向&surface1=オブジェクト&surface2=表面方向&dot=dot(光線反対方向,表面方向)%20%3D%20&ui-rotation=角度)
 
@@ -196,6 +196,7 @@ The site is built into the `out` folder
 Steps
 
     git clone https://github.com/gfxfundamentals/webgl-fundamentals.git
+    cd webgl-fundamentals
     npm install
     npm run build
     npm start
@@ -205,7 +206,9 @@ now open your browser to `http://localhost:8080`
 ### Continuous build
 
 You can run `npm run watch` after you've built to get continuous building.
-Only the article .md files and files that are normally copied are supported.
+Only the article .md files and files that are normally copied are watched.
+The index files (the top page with the table of contents) is not regenerated
+nor does changing a template rebuild all the articles.
 
 #### Build options
 
