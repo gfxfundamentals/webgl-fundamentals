@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="WebGL에서 3D로 원근을 표시하는 방법">
+<meta name="description" content="WebGL에서 3D로 perspective를 나타내는 방법">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ko.jpg">
 
-<meta property="og:title" content="WebGL 3D 원근법">
+<meta property="og:title" content="WebGL 3D Perspective">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ko.jpg">
-<meta property="og:description" content="WebGL에서 3D로 원근을 표시하는 방법">
+<meta property="og:description" content="WebGL에서 3D로 perspective를 나타내는 방법">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 3D 원근법">
+<meta name="twitter:title" content="WebGL 3D Perspective">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html">
-<meta name="twitter:description" content="WebGL에서 3D로 원근을 표시하는 방법">
+<meta name="twitter:description" content="WebGL에서 3D로 perspective를 나타내는 방법">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective.html",
       "inLanguage":"ko",
-      "name":"WebGL 3D 원근법",
+      "name":"WebGL 3D Perspective",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL 3D 원근법</title>
+<title>WebGL 3D Perspective</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,17 +236,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 3D 원근법</h1>
+    <h1>WebGL 3D Perspective</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
       <p>이 포스트는 WebGL 관련 시리즈에서 이어집니다.
 첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고, 이전에는 <a href="webgl-3d-orthographic.html">3D 기초</a>에 관한 것이었습니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
-<p>지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 원근도 가지지 않았는데요.
-&quot;직교&quot;라 불리는 방법을 사용했는데 이건 사람들이 &quot;3D&quot;를 말할 때 일반적으로 원하는 게 아닙니다.</p>
-<p>대신에 원근을 추가해야 합니다.
-원근이란 뭘까요?
+<p>지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 perspective도 가지지 않았는데요.
+&quot;Orthographic&quot;이라 불리는 방법을 사용했는데 이건 사람들이 &quot;3D&quot;를 말할 때 일반적으로 원하는 게 아닙니다.</p>
+<p>대신에 perspective를 추가해야 합니다.
+Perspective가 뭘까요?
 기본적으로 더 멀리 있는 것들이 더 작게 보이는 기능입니다.</p>
 <p><img class="webgl_center noinvertdark" width="500" src="../resources/perspective-example.svg" /></p>
 <p>위 예시를 보면 더 멀리 있는 것들이 더 작게 그려지는 걸 볼 수 있습니다.
@@ -321,7 +321,7 @@ void main() {
 </p>
 <p>알아보기 힘들다면 Z로 나누는 코드를 추가하기 전 어떤 모습이었는지 보기 위해 &quot;fudgeFactor&quot; 슬라이더를 1.0에서 0.0으로 드래그해보세요.</p>
 <p><img class="webgl_center" src="../resources/orthographic-vs-perspective.png" /></p>
-<div class="webgl_center">직교법 vs 원근법</div>
+<div class="webgl_center">orthographic vs perspective</div>
 
 <p>WebGL은 vertex shader의 <code class="notranslate" translate="no">gl_Position</code>에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.</p>
 <p>이는 shader를 변경하여 직접 나누는 대신, <code class="notranslate" translate="no">gl_Position.w</code>에 <code class="notranslate" translate="no">zToDivideBy</code>를 넣어서 쉽게 증명할 수 있습니다.</p>
@@ -472,13 +472,13 @@ void main() {
 </div>
 
 </p>
-<p>기본적으로 모든 내용들은 Z로 나누는 게 원근을 준다는 것과 WebGL이 편리하게 Z로 나누는 작업을 해준다는 걸 보여주기 위한 겁니다.</p>
+<p>기본적으로 모든 내용들은 Z로 나누는 게 perspective를 준다는 것과 WebGL이 편리하게 Z로 나누는 작업을 해준다는 걸 보여주기 위한 겁니다.</p>
 <p>하지만 여전히 몇 가지 문제가 있습니다.
 예를 들어 Z를 -100 정도로 설정하면 아래와 같은 애니메이션을 보게 됩니다.</p>
 <p><img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" /></p>
 <p>어떻게 된거죠?
 F가 일찍 사라지는 이유는 뭘까요?
-WebGL은 X와 Y 혹은 +1에서 -1까지 자르는 것처럼 Z도 제한하는데요.
+WebGL은 X와 Y 혹은 +1에서 -1까지 클리핑하는 것처럼 Z도 클리핑하는데요.
 여기서 우리가 보고 있는 건 Z &lt; -1 입니다.</p>
 <p>이를 해결하기 위해 수학에 대한 자세한 설명을 할 수도 있지만 <a href="https://stackoverflow.com/a/28301213/128511">2D 투영을 했던 것과 같은 방법</a>으로 도출할 수도 있습니다.
 Z를 가져오고, 약간을 더하고, 어느정도 크기를 조정해야 하며, 원하는 범위를 -1에서 +1사이로 다시 매핑할 수 있습니다.</p>
@@ -566,7 +566,7 @@ F는 원점에 왼쪽 상단 앞 모서리가 있게 됩니다.
 새로운 투영은 파란 절두체 안에 있는 것만 볼 수 있습니다.
 -zNear = 1 그리고 60도의 시야각일 때 Z = -1에서 절두체의 높이는 1.154이고 너비는 1.154 * aspect 입니다.
 Z = -2000 (-zFar)에서 높이는 2309입니다.
-F의 크기가 150이고, <code class="notranslate" translate="no">-zNear</code>에 무언가가 있을 때 view는 1.154만 볼 수 있기 때문에, 모든 걸 보려면 원점에서 꽤 멀리 이동해야 합니다.
+F의 크기가 150이고, <code class="notranslate" translate="no">-zNear</code>에 무언가가 있을 때 뷰는 1.154만 볼 수 있기 때문에, 모든 걸 보려면 원점에서 꽤 멀리 이동해야 합니다.
 </p>
 <p>
 Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
@@ -612,8 +612,8 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교법</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근법</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D Orthographic</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D 카메라</a></li>
         </ul>
   <li>조명</li>
@@ -703,7 +703,7 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
 <li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
-<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 보기, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
@@ -745,8 +745,8 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 3D 원근법';
-            var disqus_title = 'WebGL 3D 원근법';
+            var disqus_identifier = 'WebGL 3D Perspective';
+            var disqus_title = 'WebGL 3D Perspective';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {
