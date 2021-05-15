@@ -111,7 +111,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 ---
 
 * [1000개의 선분 중 각 점에 가장 가까운 500개의 점을 계산하려면 어떻게 해야 하나요?](webgl-qna-how-can-i-compute-for-500-points-which-of-1000-line-segments-is-nearest-to-each-point-.html)
-* [캔버스의 중앙에서 원근 소실점을 움직이려면 어떻게 해야 하나요?](webgl-qna-how-can-i-move-the-perspective-vanishing-point-from-the-center-of-the-canvas-.html)
+* [캔버스의 중앙에서 perspective 소실점을 움직이려면 어떻게 해야 하나요?](webgl-qna-how-can-i-move-the-perspective-vanishing-point-from-the-center-of-the-canvas-.html)
 * [일반화된 vertex 및 fragment shader의 개념이 있나요?](webgl-qna-is-there-the-notion-of-a-generalized-vertex-and-fragment-shader-.html)
 * [Scene의 평균 밝기를 어떻게 결정하나요?](webgl-qna-how-to-determine-the-average-brightness-in-a-scene-.html)
 * [3D 모델의 원점은 뭔가요?](webgl-qna-what-is-the-local-origin-of-a-3d-model-.html)

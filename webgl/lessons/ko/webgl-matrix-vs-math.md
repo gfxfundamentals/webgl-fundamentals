@@ -3,7 +3,7 @@ Description: WebGL 규칙과 수학 규칙의 차이점
 TOC: WebGL 행렬 vs 수학 행렬
 
 
-이 글은 행렬을 이야기하는 다양한 글, 특히 [행렬을 소개하는 글](webgl-2d-matrices.html)뿐만 아니라 [3D를 소개하는 글](webgl-3d-orthographic.html), [원근 투영에 관한 글](webgl-3d-perspective.html), [카메라에 관한 글](webgl-3d-camera.html)과는 별개입니다.
+이 글은 행렬을 이야기하는 다양한 글, 특히 [행렬을 소개하는 글](webgl-2d-matrices.html)뿐만 아니라 [3D를 소개하는 글](webgl-3d-orthographic.html), [perspective projection에 관한 글](webgl-3d-perspective.html), [카메라에 관한 글](webgl-3d-camera.html)과는 별개입니다.
 
 프로그래밍에서는 일반적으로 행은 좌에서 우로 이동하고, 열은 위아래로 이동합니다.
 

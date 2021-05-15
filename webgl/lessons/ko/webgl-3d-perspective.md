@@ -1,17 +1,17 @@
-Title: WebGL 3D 원근법
-Description: WebGL에서 3D로 원근을 표시하는 방법
-TOC: 3D 원근법
+Title: WebGL 3D Perspective
+Description: WebGL에서 3D로 perspective를 나타내는 방법
+TOC: 3D Perspective
 
 
 이 포스트는 WebGL 관련 시리즈에서 이어집니다.
 첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [3D 기초](webgl-3d-orthographic.html)에 관한 것이었습니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
-지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 원근도 가지지 않았는데요.
-"직교"라 불리는 방법을 사용했는데 이건 사람들이 "3D"를 말할 때 일반적으로 원하는 게 아닙니다.
+지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 perspective도 가지지 않았는데요.
+"Orthographic"이라 불리는 방법을 사용했는데 이건 사람들이 "3D"를 말할 때 일반적으로 원하는 게 아닙니다.
 
-대신에 원근을 추가해야 합니다.
-원근이란 뭘까요?
+대신에 perspective를 추가해야 합니다.
+Perspective가 뭘까요?
 기본적으로 더 멀리 있는 것들이 더 작게 보이는 기능입니다.
 
 <img class="webgl_center noinvertdark" width="500" src="resources/perspective-example.svg" />
@@ -100,7 +100,7 @@ void main() {
 알아보기 힘들다면 Z로 나누는 코드를 추가하기 전 어떤 모습이었는지 보기 위해 "fudgeFactor" 슬라이더를 1.0에서 0.0으로 드래그해보세요.
 
 <img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
-<div class="webgl_center">직교법 vs 원근법</div>
+<div class="webgl_center">orthographic vs perspective</div>
 
 WebGL은 vertex shader의 `gl_Position`에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.
 
@@ -273,7 +273,7 @@ function makeZToWMatrix(fudgeFactor) {
 
 {{{example url="../webgl-3d-perspective-w-matrix.html" }}}
 
-기본적으로 모든 내용들은 Z로 나누는 게 원근을 준다는 것과 WebGL이 편리하게 Z로 나누는 작업을 해준다는 걸 보여주기 위한 겁니다.
+기본적으로 모든 내용들은 Z로 나누는 게 perspective를 준다는 것과 WebGL이 편리하게 Z로 나누는 작업을 해준다는 걸 보여주기 위한 겁니다.
 
 하지만 여전히 몇 가지 문제가 있습니다.
 예를 들어 Z를 -100 정도로 설정하면 아래와 같은 애니메이션을 보게 됩니다.
@@ -282,7 +282,7 @@ function makeZToWMatrix(fudgeFactor) {
 
 어떻게 된거죠?
 F가 일찍 사라지는 이유는 뭘까요?
-WebGL은 X와 Y 혹은 +1에서 -1까지 자르는 것처럼 Z도 제한하는데요.
+WebGL은 X와 Y 혹은 +1에서 -1까지 클리핑하는 것처럼 Z도 클리핑하는데요.
 여기서 우리가 보고 있는 건 Z < -1 입니다.
 
 이를 해결하기 위해 수학에 대한 자세한 설명을 할 수도 있지만 [2D 투영을 했던 것과 같은 방법](https://stackoverflow.com/a/28301213/128511)으로 도출할 수도 있습니다.
@@ -380,7 +380,7 @@ F는 원점에 왼쪽 상단 앞 모서리가 있게 됩니다.
 새로운 투영은 파란 절두체 안에 있는 것만 볼 수 있습니다.
 -zNear = 1 그리고 60도의 시야각일 때 Z = -1에서 절두체의 높이는 1.154이고 너비는 1.154 * aspect 입니다.
 Z = -2000 (-zFar)에서 높이는 2309입니다.
-F의 크기가 150이고, <code>-zNear</code>에 무언가가 있을 때 view는 1.154만 볼 수 있기 때문에, 모든 걸 보려면 원점에서 꽤 멀리 이동해야 합니다.
+F의 크기가 150이고, <code>-zNear</code>에 무언가가 있을 때 뷰는 1.154만 볼 수 있기 때문에, 모든 걸 보려면 원점에서 꽤 멀리 이동해야 합니다.
 </p>
 <p>
 Z단위로 -360 움직이면 절두체의 내부로 이동합니다.

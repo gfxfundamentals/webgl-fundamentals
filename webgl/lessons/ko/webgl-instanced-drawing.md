@@ -10,7 +10,7 @@ WebGL은 *instanced drawing*이라는 기능을 가지고 있습니다.
 
 먼저 동일한 항목의 여러 instance를 그리는 예제부터 만들어 봅시다.
 
-[직교 투영](webgl-3d-orthographic.html)에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 shader로 시작합니다.
+[Orthographic projection](webgl-3d-orthographic.html)에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 shader로 시작합니다.
 
 ```html
 <!-- vertex shader -->
@@ -190,7 +190,7 @@ void main() {
   // 위치를 행렬로 곱하기
   gl_Position = matrix * a_position;
 
-+  // fragment shader로 정점 색상 전달
++  // Fragment shader로 정점 색상 전달
 +  v_color = color;
 }
 </script>
@@ -232,13 +232,13 @@ const positionLoc = gl.getAttribLocation(program, 'a_position');
 buffer는 하나의 *chuck*에서 가장 잘 업데이트되기 때문에 모든 행렬을 동일한 `Float32Array`에 넣을 겁니다.
 
 ```js
-// instance 당 하나씩, 행렬 설정
+// Instance당 하나씩, 행렬 설정
 const numInstances = 5;
-+// 행렬당 하나의 view로 typed array 만들기
++// 행렬당 하나의 뷰로 typed array 만들기
 +const matrixData = new Float32Array(numInstances * 16);
 ```
 
-그런 다음 각 행렬에 대해 하나씩, `Float32Array` view를 만들 겁니다.
+그런 다음 각 행렬에 대해 하나씩, `Float32Array` 뷰를 만들 겁니다.
 
 ```js
 -const matrices = [
@@ -323,7 +323,7 @@ matrices.forEach((mat, ndx) => {
 });
 ```
 
-행렬 라이브러리가 선택적 대상 행렬을 사용하고, 행렬은 `Float32Array` view로 동일하게 더 큰 `Float32Array`일 뿐이기 때문에, 완료되면 모든 행렬 데이터는 GPU에 직접 업로드할 준비가 끝납니다.
+행렬 라이브러리가 선택적 대상 행렬을 사용하고, 행렬은 `Float32Array` 뷰로 동일하게 더 큰 `Float32Array`일 뿐이기 때문에, 완료되면 모든 행렬 데이터는 GPU에 직접 업로드할 준비가 끝납니다.
 
 ```js
 // 새로운 행렬 데이터 업로드
@@ -392,9 +392,9 @@ ext.drawArraysInstancedANGLE(
 
 말할 필요도 없다고 느껴지지만 하긴 저는 너무 많이 했기 때문에 당연한 것일 수도 있습니다.
 위 코드는 캔버스적인 측면을 고려하지 않았는데요.
-[투영 행렬](webgl-3d-orthographic.html)이나 [view 행렬](webgl-3d-camera.html)을 사용하지 않습니다.
+[Projection matrix](webgl-3d-orthographic.html)이나 [view matrix](webgl-3d-camera.html)를 사용하지 않습니다.
 오로지 instanced drawing을 보여주기 위한 것입니다.
-투영이나 view 행렬을 원한다면 JavaScript에 계산을 추가할 수 있습니다.
+Projection matrix나 view matrix를 원한다면 JavaScript에 계산을 추가할 수 있습니다.
 이는 JavaScript의 작업이 더 많아짐을 의미합니다.
 좀 더 확실한 방법은 1개 혹은 2개 이상의 uniform을 vertex shader에 추가하는 겁니다.
 
@@ -414,7 +414,7 @@ void main() {
 -  gl_Position = matrix * a_position;
 +  gl_Position = projection * view * matrix * a_position;
 
-  // fragment shader로 정점 색상 전달
+  // Fragment shader로 정점 색상 전달
   v_color = color;
 }
 </script>
@@ -435,7 +435,7 @@ const matrixLoc = gl.getAttribLocation(program, 'matrix');
 ```js
 gl.useProgram(program);
 
-+// 모든 instance에 공유되므로 view 및 투영 행렬 설정
++// 모든 instance에 공유되므로 view 및 projection matrix 설정
 +const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 +gl.uniformMatrix4fv(projectionLoc, false, m4.orthographic(-aspect, aspect, -1, 1, -1, 1));
 +gl.uniformMatrix4fv(viewLoc, false, m4.zRotation(time * .1));

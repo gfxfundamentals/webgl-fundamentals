@@ -1,6 +1,6 @@
-Title: WebGL - 3D 직교법
-Description: 직교 투영으로 시작하는 WebGL에서 3D를 수행하는 방법
-TOC: 3D 직교법
+Title: WebGL - 3D Orthographic
+Description: Orthographic projection으로 시작하는 WebGL에서 3D를 수행하는 방법
+TOC: 3D Orthographic
 
 
 이 포스트는 WebGL 관련 시리즈에서 이어집니다.
@@ -606,7 +606,7 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
         ];
       }
 
-width, height, depth 등의 매개변수를 가지는 위의 단순한 `투영` 함수와 달리, 좀 더 일반적인 직교 투영 함수는 더 많은 유연성을 제공하는 left, right, bottom, top, near, far 등을 전달할 수 있는데요.
+width, height, depth 등의 매개변수를 가지는 위의 단순한 `투영` 함수와 달리, 좀 더 일반적인 orthographic projection 함수는 더 많은 유연성을 제공하는 left, right, bottom, top, near, far 등을 전달할 수 있는데요.
 원래 쓰던 투영 함수와 동일하게 쓰기 위해서는 이렇게 호출할 수 있습니다.
 
     var left = 0;
@@ -617,7 +617,7 @@ width, height, depth 등의 매개변수를 가지는 위의 단순한 `투영` 
     var far = -400;
     var matrix = m4.orthographic(left, right, bottom, top, near, far);
 
-다음 포스트에서는 [원근을 가지도록 만드는 방법](webgl-3d-perspective.html)에 대해 살펴보겠습니다.
+다음 포스트에서는 [perspective를 가지도록 만드는 방법](webgl-3d-perspective.html)에 대해 살펴보겠습니다.
 
 <div class="webgl_bottombar">
 <h3>왜 attribute가 vec4인데 gl.vertexAttribPointer의 size는 3인가요?</h3>

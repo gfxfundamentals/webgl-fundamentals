@@ -87,7 +87,7 @@ Fragment shader에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용
 
 또 다른 옵션은 기기가 `mediump`만 지원하는 경우 다른 shader를 사용하는 겁니다.
 위에서 point light는 `mediump`로 문제될 수 있다고 언급했었는데요.
-이는 [point lights](webgl-3d-lighting-point.html), 특히 반사 하이라이트 계산이, world 혹은 view 공간의 값을 fragment shader로 전달하고, 이 값들이 `mediump` 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
+이는 [point lights](webgl-3d-lighting-point.html), 특히 반사 하이라이트 계산이, world 혹은 view space의 값을 fragment shader로 전달하고, 이 값들이 `mediump` 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
 따라서, `mediump` 장치에서는 반사 하이라이트를 생략할 수도 있습니다.
 예를 들어 [point light에 대한 글](webgl-3d-lighting-point.html)에 있는 point light shader는 기기에서 `mediump`만 지원하는 경우 하이라이트를 제거하도록 수정되었습니다.
 

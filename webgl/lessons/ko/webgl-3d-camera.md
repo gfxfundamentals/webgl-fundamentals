@@ -4,12 +4,12 @@ TOC: 3D 카메라
 
 
 이 포스트는 WebGL 관련 시리즈에서 이어집니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [3D 원근 투영](webgl-3d-perspective.html)에 관한 것이었습니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [3D perspective projection](webgl-3d-perspective.html)에 관한 것이었습니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
 `m4.perspective` 함수는 F가 원점(0, 0, 0)에 있으리라 생각하고, 절두체의 객체는 원점 앞 `-zNear`에서 `-zFar`까지 있기 때문에, 지난 포스트에서 우리는 F를 절두체 앞으로 옮겨야 했습니다.
 
-View 앞의 물체를 움직이는 건 좋은 방법이 아닌 것 같습니다.
+뷰 앞의 물체를 움직이는 건 좋은 방법이 아닌 것 같습니다.
 현실에서는 보통 건물의 사진을 찍기 위해 카메라를 움직이죠.
 
 {{{diagram url="resources/camera-move-camera.html?mode=0" caption="카메라를 객체로 이동" }}}
@@ -21,7 +21,7 @@ View 앞의 물체를 움직이는 건 좋은 방법이 아닌 것 같습니다.
 하지만 지난 포스트에서 우리는 -Z축의 원점 앞에 있도록 하는 투영법을 찾아냈습니다.
 이를 위해 하고 싶은 것은 원점으로 카메라를 옮기고 다른 모든 걸 적절하게 이동하여 *카메라를 기준으로 동일한 위치*에 있도록 하는 겁니다.
 
-{{{diagram url="resources/camera-move-camera.html?mode=2" caption="객체를 view로 이동" }}}
+{{{diagram url="resources/camera-move-camera.html?mode=2" caption="객체를 뷰로 이동" }}}
 
 카메라 앞의 world를 효율적으로 움직여야 하는데요.
 가장 쉬운 방법은 "inverse" 행렬을 사용하는 겁니다.
@@ -63,26 +63,26 @@ var cameraMatrix = m4.yRotation(cameraAngleRadians);
 cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 ```
 
-그런 다음 카메라 행렬에서 "view 행렬"을 계산합니다.
-"View 행렬"은 마치 카메라가 원점(0,0,0)에 있는 것처럼, 사실상 카메라를 기준으로 하도록 카메라의 정반대로 모든 걸 움직이는 행렬입니다.
+그런 다음 카메라 행렬에서 "view matrix"를 계산합니다.
+"View matrix"는 마치 카메라가 원점(0,0,0)에 있는 것처럼, 사실상 카메라를 기준으로 하도록 카메라의 정반대로 모든 걸 움직이는 행렬입니다.
 역행렬(제공된 행렬의 정반대를 수행하는 행렬)을 계산하는 `inverse` 함수를 사용하여 이를 수행할 수 있습니다.
 이 경우 제공된 행렬은 원점을 기준으로 카메라를 어떤 위치와 orientation으로 움직입니다.
 그 반대는 다른 모든 걸 옮겨서 카메라가 원점에 있도록 하는 행렬입니다.
 
 ```js
-// 카메라 행렬에서 view 행렬 만들기
+// Camera matrix로 view matrix 만들기
 var viewMatrix = m4.inverse(cameraMatrix);
 ```
 
-이제 view와 투영 행렬을 view 투영 행렬로 합칩니다.
+이제 view matrix와 projection matrix를 view projection matrix로 합칩니다.
 
 ```js
-// View 투영 행렬 계산
+// View projection matrix 계산
 var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 ```
 
 마지막으로 F의 원을 그립니다.
-각 F에 대해 view 투영 행렬로 시작한 다음, 반경 단위로 회전하고 이동합니다.
+각 F에 대해 view projection matrix로 시작한 다음, 반경 단위로 회전하고 이동합니다.
 
 ```js
 for (var ii = 0; ii < numFs; ++ii) {
@@ -90,7 +90,7 @@ for (var ii = 0; ii < numFs; ++ii) {
   var x = Math.cos(angle) * radius;
   var y = Math.sin(angle) * radius;
 
-  // View 투영 행렬로 시작하여 F에 대한 행렬 계산
+  // View projection matrix로 시작하여 F에 대한 행렬 계산
   var matrix = m4.translate(viewProjectionMatrix, x, 0, y);
 
   // 행렬 설정
@@ -263,7 +263,7 @@ var m4 = {
   // lookAt을 사용하여 카메라의 행렬 계산
   var cameraMatrix = m4.lookAt(cameraPosition, fPosition, up);
 
-  // 카메라 행렬로 view 행렬 만들기
+  // Camera matrix로 view matrix 만들기
   var viewMatrix = m4.inverse(cameraMatrix);
 
   ...
@@ -288,13 +288,13 @@ var m4 = {
 <h3>lookAt 표준</h3>
 <p>
 대부분의 3D 수학 라이브러리는 <code>lookAt</code> 함수를 가지고 있습니다.
-종종 "카메라 행렬"이 아닌 "view 행렬"를 만들기 위해 설계된 함수들이 있는데요.
+종종 "camera matrix"이 아닌 "view matrix"를 만들기 위해 설계된 함수들이 있는데요.
 다시 말해 카메라 자체를 움직이는 행렬이 아니라 카메라 앞에 있는 모든 걸 움직이는 행렬을 만듭니다.
 </p>
 <p>
 저는 이게 덜 유용하다고 생각합니다.
 lookAt 함수는 많은 용도로 사용되는데요.
-View 행렬이 필요할 때 <code>inverse</code>를 호출하기 쉽긴 하지만, 어떤 캐릭터의 머리가 다른 캐릭터를 따라가게 하거나 어떤 포탑이 목표를 겨냥하게 만들기 위해 <code>lookAt</code>을 사용한다면, <code>lookAt</code>이 world space에서 개체의 방향과 위치를 지정하는 행렬을 반환하는 경우에 훨씬 더 유용합니다.
+View matrix가 필요할 때 <code>inverse</code>를 호출하기 쉽긴 하지만, 어떤 캐릭터의 머리가 다른 캐릭터를 따라가게 하거나 어떤 포탑이 목표를 겨냥하게 만들기 위해 <code>lookAt</code>을 사용한다면, <code>lookAt</code>이 world space에서 개체의 방향과 위치를 지정하는 행렬을 반환하는 경우에 훨씬 더 유용합니다.
 </p>
 {{{example url="../webgl-3d-camera-look-at-heads.html" }}}
 </div>
