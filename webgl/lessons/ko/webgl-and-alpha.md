@@ -58,7 +58,7 @@ Backbuffer는 RGB만 있기 때문에 이는 좀 더 OpenGL처럼 작동하게 �
 
 ### #4) Alpha를 한 번 지우고 더 이상 렌더링하지 않기
 
-    // 초기화할 때, back buffer 지우기
+    // 초기화할 때, backbuffer 지우기
     gl.clearColor(1,1,1,1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 

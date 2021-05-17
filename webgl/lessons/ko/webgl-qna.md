@@ -7,7 +7,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [WebGL Droste 효과](webgl-qna-webgl-droste-effect.html)
 * [WebGL의 gl_PointSize 제한 해결](webgl-qna-working-around-gl_pointsize-limitations-webgl.html)
-* [WebGL에서 3D texture를 시뮬레이션하는 방법](webgl-qna-how-to-simulate-a-3d-texture-in-webgl.html)
+* [WebGL에서 3D 텍스처를 시뮬레이션하는 방법](webgl-qna-how-to-simulate-a-3d-texture-in-webgl.html)
 * [32000x32000처럼 큰 크기의 이미지를 렌더링하는 방법](webgl-qna-how-to-render-large-scale-images-like-32000x32000.html)
 * [WebGL에서 팔레트 기반의 그래픽 에뮬레이션](webgl-qna-emulating-palette-based-graphics-in-webgl.html)
 
@@ -16,12 +16,12 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 * [GPU의 vertex 및 fragment 처리에 대한 부하를 표시하는 간단한 방법이 있나요?](webgl-qna-a-simple-way-to-show-the-load-on-the-gpu-s-vertex-and-fragment-processing-.html)
 * [WebGL에서 두꺼운 선을 그리는 방법](https://mattdesl.svbtle.com/drawing-lines-is-hard)
 * [기본 행렬 변환으로 FPS같은 카메라 움직임](webgl-qna-fps-like-camera-movement-with-basic-matrix-transformations.html)
-* [WebGL에서 texture와 함께 색상도 사용할 수 있나요?](webgl-qna-how-to-use-texture--and-color-also-in-webgl-.html)
+* [WebGL에서 텍스처와 함께 색상도 사용할 수 있나요?](webgl-qna-how-to-use-texture--and-color-also-in-webgl-.html)
 * [coloring과 texturing를 지원하기 위한 GLSL shader](webgl-qna-glsl-shader-to-support-coloring-and-texturing.html)
 
 ---
 
-* [어떻게 texture 배열을 WebGL shader uniform에 바인딩하나요?](webgl-qna-how-to-bind-an-array-of-textures-to-a-webgl-shader-uniform-.html)
+* [어떻게 텍스처 배열을 WebGL shader uniform에 바인딩하나요?](webgl-qna-how-to-bind-an-array-of-textures-to-a-webgl-shader-uniform-.html)
 * [일괄 처리 시 각 sprite의 alpha 값 전달하기](webgl-qna-passing-in-per-sprite-alpha-values-when-batching.html)
 * [이 GLSL fragment shader가 뭘 하는지 설명해주실 수 있는 분 있나요?](webgl-qna-can-anyone-explain-what-this-glsl-fragment-shader-is-doing-.html)
 * [WebGL 2D tilemap](webgl-qna-webgl-2d-tilemaps.html)
@@ -55,7 +55,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 ---
 
 * [Trail 효과로 움직이는 선을 만드는 방법](webgl-qna-how-to-achieve-moving-line-with-trail-effects.html)
-* [Texture가 있는 trapezoid polygon을 그리는 올바른 방법](webgl-qna-how-to-draw-correctly-textured-trapezoid-polygons.html)
+* [텍스처가 있는 trapezoid polygon을 그리는 올바른 방법](webgl-qna-how-to-draw-correctly-textured-trapezoid-polygons.html)
 * [Tex 이미지 TEXTURE_2D 레벨 0에서 느린 초기화 발생](webgl-qna-tex-image-texture_2d-level-0-is-incurring-lazy-initialization.html)
 * [2D WebGL에서 마우스로 확대/축소를 구현하는 방법](webgl-qna-how-to-implement-zoom-from-mouse-in-2d-webgl.html)
 * [torus를 만드는 방법](webgl-qna-how-to-create-a-torus.html)
@@ -80,7 +80,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [stencil buffer를 사용하는 방법](webgl-qna-how-to-use-the-stencil-buffer.html)
 * [heightmap 그리기](webgl-qna-drawing-a-heightmap.html)
-* [instanced drawing으로 texture가 있는 sprite 그리기](webgl-qna-drawing-textured-sprites-with-instanced-drawing.html)
+* [instanced drawing으로 텍스처가 있는 sprite 그리기](webgl-qna-drawing-textured-sprites-with-instanced-drawing.html)
 * [다량의 큰 이미지 그리기 최적화](webgl-qna-optimize-drawing-lots-of-large-images.html)
 * [시간이 지남에 따라 느리게 렌더링](webgl-qna-rendering-slowly-over-time.html)
 
@@ -89,12 +89,12 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 * [충돌 확인을 위한 point의 크기 가져오기](webgl-qna-get-the-size-of-a-point-for-collision-checking.html)
 * [마우스 클릭의 3d 좌표를 얻는 방법](webgl-qna-how-to-get-the-3d-coordinates-of-a-mouse-click.html)
 * [두 삼각형을 가로질러 색상을 혼합하는 방법](webgl-qna-how-to-blend-colors-across-2-triangles.html)
-* [Texture를 데이터로 사용하는 방법](webgl-qna-how-to-use-textures-as-data.html)
+* [텍스처를 데이터로 사용하는 방법](webgl-qna-how-to-use-textures-as-data.html)
 * [2d sprite의 투명도를 mask로 사용하는 방법](webgl-qna-how-to-use-a-2d-sprite-s-transparency-as-a-mask.html)
 
 ---
 
-* [Texture atlas로 texture 번짐을 방지하는 방법](webgl-qna-how-to-prevent-texture-bleeding-with-a-texture-atlas.html)
+* [Texture atlas로 텍스처 번짐을 방지하는 방법](webgl-qna-how-to-prevent-texture-bleeding-with-a-texture-atlas.html)
 * [정점 사이의 색상을 제어하는 방법](webgl-qna-how-to-control-the-color-between-vertices.html)
 * [fisheye skybox shader를 만드는 방법](webgl-qna-how-to-make-fisheye-skybox-shader.html)
 * [Visual Studio Code에서 WebGL에 대한 코드 자동 완성을 하는 방법](webgl-qna-how-to-get-code-completion-for-webgl-in-visual-studio-code.html)
@@ -124,7 +124,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 ## WebGL2
 
-* [WebGL2에서 픽셀 좌표로 texture 접근하기](webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2.html)
+* [WebGL2에서 픽셀 좌표로 텍스처 접근하기](webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2.html)
 * [어떻게 모든 uniform과 uniformBlock을 얻을 수 있나요](webgl-qna-how-can-i-get-all-the-uniforms-and-uniformblocks.html)
 * [어떻게 16bit 데이터의 16bit 히스토그램을 만들 수 있나요](webgl-qna-how-can-i-create-a-16bit-historgram-of-16bit-data.html)
 * [particle 위치를 처리하는 방법](webgl-qna-how-to-process-particle-positions.html)

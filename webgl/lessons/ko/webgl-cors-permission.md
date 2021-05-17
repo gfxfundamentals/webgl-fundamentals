@@ -6,18 +6,18 @@ TOC: Cross Origin Image
 이 글은 WebGL 관련 시리즈 중 하나입니다.
 아직 읽지 않았다면 [이전 글](webgl-fundamentals.html)부터 시작하는 게 좋습니다.
 
-WebGL에서는 texture로 사용하기 위해 이미지를 다운로드한 다음 GPU에 업로드하는 것이 일반적입니다.
+WebGL에서는 텍스처로 사용하기 위해 이미지를 다운로드한 다음 GPU에 업로드하는 것이 일반적입니다.
 이를 수행하는 여러 샘플들이 있는데요.
-예를 들어 [이미지 처리](webgl-image-processing.html)에 관한 글, [texture](webgl-3d-textures.html)에 관한 글, [2D drawImage 구현](webgl-2d-drawimage.html)에 관한 글 등이 있습니다.
+예를 들어 [이미지 처리](webgl-image-processing.html)에 관한 글, [텍스처](webgl-3d-textures.html)에 관한 글, [2D drawImage 구현](webgl-2d-drawimage.html)에 관한 글 등이 있습니다.
 
 일반적으로 이렇게 이미지를 다운로드합니다.
 
-    // Texture 정보 { width: w, height: h, texture: tex } 생성합니다.
-    // Texture는 1x1 픽셀로 시작하고 이미지가 로드되면 업데이트됩니다.
+    // 텍스처 정보 { width: w, height: h, texture: tex } 생성합니다.
+    // 텍스처는 1x1 픽셀로 시작하고 이미지가 로드되면 업데이트됩니다.
     function loadImageAndCreateTextureInfo(url) {
       var tex = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, tex);
-      // Texture를 1x1 파랑 픽셀로 채우기
+      // 텍스처를 1x1 파랑 픽셀로 채우기
       gl.texImage2D(
         gl.TEXTURE_2D,
         0,
@@ -73,8 +73,8 @@ WebGL에서 `gl.readPixels`는 `ctx.getImageData`와 같은 호출이니 막으�
 해당 정보를 사용하여 간접적으로 이미지 내부를 살펴보고 이미지의 내용을 확인하기 위해 타이밍을 사용할 수 있습니다.
 
 따라서 WebGL은 같은 도메인이 아닌 모든 이미지를 금지합니다.
-예를 들어 다음은 다른 도메인의 texture로 회전하는 사각형을 그리는 샘플인데요.
-Texture가 로드되지 않고 오류가 발생합니다.
+예를 들어 다음은 다른 도메인의 텍스처로 회전하는 사각형을 그리는 샘플인데요.
+텍스처가 로드되지 않고 오류가 발생합니다.
 
 {{{example url="../webgl-cors-permission-bad.html" }}}
 

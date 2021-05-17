@@ -61,7 +61,7 @@ TOC: 2D Rotation
 
       ...
 
-      // Scene 그리기
+      // 장면 그리기
       function drawScene() {
 
         ...

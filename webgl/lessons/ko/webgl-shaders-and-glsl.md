@@ -30,7 +30,7 @@ Shader는 정점마다 한 번씩 호출되는데요.
 Vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.
 
-1.  [Attribute](#attribute) (buffer에서 가져온 데이터)
+1.  [Attribute](#attribute) (버퍼에서 가져온 데이터)
 2.  [Uniform](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)
 3.  [Texture](#vertex-shader-texture) (pixel/texel의 데이터)
 
@@ -38,11 +38,11 @@ Vertex shader는 데이터가 필요한데요.
 
 가장 일반적인 방법은 buffer와 *attribute*를 통하는 겁니다.
 [작동 원리](webgl-how-it-works.html)에서 buffer와 attribute를 다뤘었죠.
-Buffer를 만들고,
+버퍼를 만들고,
 
     var buf = gl.createBuffer();
 
-이 buffer에 데이터를 넣은 뒤
+이 버퍼에 데이터를 넣은 뒤
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
@@ -51,15 +51,15 @@ Buffer를 만들고,
 
     var positionLoc = gl.getAttribLocation(someShaderProgram, "a_position");
 
-렌더링할 때 WebGL에 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하는데
+렌더링할 때 WebGL에 해당 버퍼에서 attribute로 데이터를 어떻게 가져올지 지시하는데
 
-    // 이 attribute에 대한 buffer에서 데이터 가져오기 활성화
+    // 이 attribute에 대한 버퍼에서 데이터 가져오기 활성화
     gl.enableVertexAttribArray(positionLoc);
 
     var numComponents = 3;  // (x, y, z)
     var type = gl.FLOAT;    // 32bit 부동 소수점 값
     var normalize = false;  // 값 원본 그대로 유지
-    var offset = 0;         // Buffer의 처음부터 시작
+    var offset = 0;         // 버퍼의 처음부터 시작
     var stride = 0;         // 다음 정점으로 가기 위해 이동하는 byte 수
                             // 0 = type과 numComponents에 맞는 stride 사용
 
@@ -73,7 +73,7 @@ Buffer를 만들고,
       gl_Position = a_position;
     }
 
-Clip space 정점을 buffer에 넣으면 동작할 겁니다. 
+Clip space 정점을 버퍼에 넣으면 동작할 겁니다. 
 
 Attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`를 사용할 수 있습니다.
 
@@ -173,9 +173,9 @@ uniform은 여러 type을 가질 수 있는데요.
     var someThingActiveLoc = gl.getUniformLocation(someProgram, "u_someThing.active");
     var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, "u_someThing.someVec2");
 
-### Vertex shader의 texture
+### Vertex shader의 텍스처
 
-[Fragment shader의 texture](#fragment-shader-texture)를 봐주세요.
+[Fragment shader의 텍스처](#fragment-shader-texture)를 봐주세요.
 
 ## Fragment shader
 
@@ -202,21 +202,21 @@ Fragment shader는 데이터가 필요한데요.
 
 [Shader의 Uniform](#uniform)을 봐주세요.
 
-### Fragment shader의 texture
+### Fragment shader의 텍스처
 
-Shader의 texture에서 값을 가져오면 `sampler2D` uniform을 생성하고 값을 추출하기 위해 GLSL 함수 `texture2D`를 사용합니다.
+Shader의 텍스처에서 값을 가져오면 `sampler2D` uniform을 생성하고 값을 추출하기 위해 GLSL 함수 `texture2D`를 사용합니다.
 
     precision mediump float;
 
     uniform sampler2D u_texture;
 
     void main() {
-      vec2 texcoord = vec2(0.5, 0.5)  // Texture 중앙에서 값 가져오기
+      vec2 texcoord = vec2(0.5, 0.5)  // 텍스처 중앙에서 값 가져오기
       gl_FragColor = texture2D(u_texture, texcoord);
     }
 
-Texture에서 나오는 데이터는 [수많은 설정](webgl-3d-textures.html)에 따라 달라집니다.
-최소한 texture의 데이터를 생성하고 넣어야 하는데, 예를 들어
+텍스처에서 나오는 데이터는 [수많은 설정](webgl-3d-textures.html)에 따라 달라집니다.
+최소한 텍스처의 데이터를 생성하고 넣어야 하는데, 예를 들어
 
     var tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -234,13 +234,13 @@ Texture에서 나오는 데이터는 [수많은 설정](webgl-3d-textures.html)�
 
     var someSamplerLoc = gl.getUniformLocation(someProgram, "u_texture");
 
-렌더링할 때 texture unit에 texture를 할당하고
+렌더링할 때 texture unit에 텍스처를 할당하고
 
     var unit = 5;  // texture unit 선택
     gl.activeTexture(gl.TEXTURE0 + unit);
     gl.bindTexture(gl.TEXTURE_2D, tex);
 
-Texture를 바인딩한 unit을 shader에 알려줍니다.
+텍스처를 바인딩한 unit을 shader에 알려줍니다.
 
     gl.uniform1i(someSamplerLoc, unit);
 

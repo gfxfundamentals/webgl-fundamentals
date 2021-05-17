@@ -23,7 +23,7 @@ C++을 "word processor"라고 부르진 않지만 word processor가 C++로 작�
 비슷하게 WebGL은 기본적으로 3D 그래픽을 그리지 않습니다.
 WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만 그 자체로 3D 그래픽을 수행하진 않습니다.
 
-추가 예제 제공을 위해, 조명과 함께 3D로 cube를 그려야 한다고 가정해봅시다.
+추가 예제 제공을 위해, 조명과 함께 3D로 큐브를 그려야 한다고 가정해봅시다.
 
 이를 표시하기 위한 three.js의 코드입니다.
 
@@ -40,10 +40,10 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
   camera.position.z = 400;
   camera.updateProjectionMatrix();
 
-  // Scene 만들기
+  // 장면 만들기
   scene = new THREE.Scene();
 
-  // Cube 만들기
+  // 큐브 만들기
   var geometry = new THREE.BoxGeometry(200, 200, 200);
 
   // Material 만들기
@@ -73,7 +73,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
 
 {{{example url="resources/three-js-cube-with-lights.html" }}}
 
-다음은 조명 2개와 함께 cube를 표시하는 OpenGL(ES 아님) 코드입니다.
+다음은 조명 2개와 함께 큐브를 표시하는 OpenGL(ES 아님) 코드입니다.
 
 <pre class="prettyprint showlinemods">
   // 설정
@@ -102,7 +102,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
   glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 ...
 
-  // Cube 그리기
+  // 큐브 그리기
   static int count = 0;
   ++count;
 
@@ -123,7 +123,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
 
   /*
   ...
-  ... Cube의 다섯 면 더 반복
+  ... 큐브의 다섯 면 더 반복
   ...
   */
 
@@ -137,7 +137,7 @@ WebGL에 대해 필요한 코드를 작성하진 않을 겁니다.
 필요한 줄 수에 관한 게 아닙니다.
 필요한 **지식**의 양에 관한 것입니다.
 두 3D 라이브러리에서 3D를 처리해주는데요.
-당신은 카메라 위치, 시야, 한 쌍의 조명, cube를 제공합니다.
+당신은 카메라 위치, 시야, 한 쌍의 조명, 큐브를 제공합니다.
 나머지는 이들이 모두 처리하죠.
 다시 말해 이들은 3D 라이브러리입니다.
 

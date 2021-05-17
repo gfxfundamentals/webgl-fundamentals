@@ -1,17 +1,17 @@
-Title: WebGL 3D - Data Texture
-Description: Texture에 데이터 제공하기
-TOC: Data Texture
+Title: WebGL 3D - 데이터 텍스처
+Description: 텍스처에 데이터 제공하기
+TOC: 데이터 텍스처
 
 
 이 포스트는 WebGL 관련 시리즈에서 이어집니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [texture](webgl-3d-textures.html)에 관한 것이었습니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [텍스처](webgl-3d-textures.html)에 관한 것이었습니다.
 
-지난 포스트에서 texture가 작동하는 방법과 이를 적용하는 방법에 대해 살펴봤습니다.
-다운로드된 이미지로 texture를 생성했는데요.
+지난 포스트에서 텍스처가 작동하는 방법과 이를 적용하는 방법에 대해 살펴봤습니다.
+다운로드된 이미지로 텍스처를 생성했는데요.
 이번 글에서는 이미지 대신 JavaScript에서 직접 데이터를 생성할 겁니다.
 
-JavaScript에서 texture 데이터를 생성하는 것은 굉장히 간단합니다.
-기본적으로 WebGL1은 texture의 몇 가지 type만 지원하는데
+JavaScript에서 텍스처 데이터를 생성하는 것은 굉장히 간단합니다.
+기본적으로 WebGL1은 텍스처의 몇 가지 type만 지원하는데
 
 <div class="webgl_center">
   <table class="tabular-data tabular-data1">
@@ -31,14 +31,14 @@ JavaScript에서 texture 데이터를 생성하는 것은 굉장히 간단합니
   </table>
 </div>
 
-3x2 pixel `LUMINANCE` texture를 생성해봅시다.
-`LUMINANCE` texture이기 때문에 픽셀 당 1개의 값만 있고 각각의 R, G, B 채널로 반복됩니다.
+3x2 pixel `LUMINANCE` 텍스처를 생성해봅시다.
+`LUMINANCE` 텍스처이기 때문에 픽셀 당 1개의 값만 있고 각각의 R, G, B 채널로 반복됩니다.
 
 [지난 글](webgl-3d-textures.html)에서 샘플을 가져올 겁니다.
-먼저 큐브의 각 면에 전체 texture를 사용하기 위해 texture 좌표를 수정합시다.
+먼저 큐브의 각 면에 전체 텍스처를 사용하기 위해 텍스처 좌표를 수정합시다.
 
 ```
-// 큐브의 texture 좌표로 buffer 채우기
+// 큐브의 텍스처 좌표로 버퍼 채우기
 function setTexcoords(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -53,14 +53,14 @@ function setTexcoords(gl) {
         ...
 ```
 
-그런 다음 texture 생성 코드를 수정하는데
+그런 다음 텍스처 생성 코드를 수정하는데
 
 ```
-// Texture 생성
+// 텍스처 생성
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
 
--// 1x1 파란색 픽셀로 texture 채우기
+-// 1x1 파란색 픽셀로 텍스처 채우기
 -gl.texImage2D(
 -  gl.TEXTURE_2D,
 -  0,
@@ -73,7 +73,7 @@ gl.bindTexture(gl.TEXTURE_2D, texture);
 -  new Uint8Array([0, 0, 255, 255])
 -);
 
-// 3x2 픽셀로 texture 채우기
+// 3x2 픽셀로 텍스처 채우기
 const level = 0;
 const internalFormat = gl.LUMINANCE;
 const width = 3;
@@ -142,7 +142,7 @@ WebGL에서 정렬된 데이터와 비정렬 데이터 사이의 속도 차이�
 
 {{{example url="../webgl-data-texture-3x2.html" }}}
 
-이 부분은 덮어두고 [texture 렌더링](webgl-render-to-texture.html)으로 넘어갑시다.
+이 부분은 덮어두고 [텍스처 렌더링](webgl-render-to-texture.html)으로 넘어갑시다.
 
 <div class="webgl_bottombar">
 <h3>Pixel vs Texel</h3>

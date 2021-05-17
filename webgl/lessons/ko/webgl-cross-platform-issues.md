@@ -23,15 +23,15 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 
 예제:
 
-* 허용되는 최대 texture 크기
+* 허용되는 최대 텍스처 크기
 
   2048이나 4096은 합리적인 제한으로 보입니다.
   적어도 2020년 현재 [99%의 기기들이 4096를 지원하지만 50%만이 4096 이상을 지원](https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE)합니다.
 
-  참고: 최대 texture 크기는 GPU가 처리할 수 있는 최대 크기입니다.
-  이건 GPU가 해당 크기를 제곱(2D texture용)하거나 세제곱(3D texture용)하는데 충분한 메모리가 있다는 뜻이 아닌데요.
+  참고: 최대 텍스처 크기는 GPU가 처리할 수 있는 최대 크기입니다.
+  이건 GPU가 해당 크기를 제곱(2D 텍스처용)하거나 세제곱(3D 텍스처용)하는데 충분한 메모리가 있다는 뜻이 아닌데요.
   예를 들어 일부 GPU는 16384의 최대 크기를 가집니다.
-  하지만 각 면이 16384인 3D texture는 16TB의 메모리를 필요로 합니다!!!
+  하지만 각 면이 16384인 3D 텍스처는 16TB의 메모리를 필요로 합니다!!!
 
 * 단일 프로그램의 vertex attribute 최대 개수
 
@@ -129,7 +129,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 <div class="webgl_center">
 <table class="tabular-data">
   <tbody>
-    <tr><td>MAX_TEXTURE_SIZE                </td><td>texture 최대 크기</td></tr>
+    <tr><td>MAX_TEXTURE_SIZE                </td><td>텍스처 최대 크기</td></tr>
     <tr><td>MAX_VERTEX_ATTRIBS              </td><td>가질 수 있는 attribute 개수</td></tr>
     <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>vertex shader가 가질 수 있는 vec4 uniform 개수</td></tr>
     <tr><td>MAX_VARYING_VECTORS             </td><td>가지고 있는 varying 개수</td></tr>
@@ -137,9 +137,9 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
     <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>vertex shader가 참조할 수 있는 texture unit 개수</td></tr>
     <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>fragment shader가 참조할 수 있는 texture unit 개수</td></tr>
     <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>fragment shader가 가질 수 있는 vec4 uniform 개수</td></tr>
-    <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>Cubemap 최대 크기</td></tr>
-    <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>Renderbuffer 최대 크기</td></tr>
-    <tr><td>MAX_VIEWPORT_DIMS               </td><td>Viewport 최대 크기</td></tr>
+    <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>cubemap 최대 크기</td></tr>
+    <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>renderbuffer 최대 크기</td></tr>
+    <tr><td>MAX_VIEWPORT_DIMS               </td><td>viewport 최대 크기</td></tr>
   </tbody>
 </table>
 </div>
@@ -153,14 +153,14 @@ WebGL2는 몇 가지 더 추가합니다.
 <div class="webgl_center">
 <table class="tabular-data">
   <tbody>
-    <tr><td>MAX_3D_TEXTURE_SIZE                          </td><td>3D texture 최대 크기</td></tr>
+    <tr><td>MAX_3D_TEXTURE_SIZE                          </td><td>3D 텍스처 최대 크기</td></tr>
     <tr><td>MAX_DRAW_BUFFERS                             </td><td>가질 수 있는 color attachment 개수</td></tr>
-    <tr><td>MAX_ARRAY_TEXTURE_LAYERS                     </td><td>2D texture 배열의 최대 레이어</td></tr>
-    <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS      </td><td>Transform feedback을 사용할 때 별도의 buffer로 출력할 수 있는 varying 개수</td></tr>
-    <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>모든 걸 단일 buffer로 보낼 때 출력할 수 있는 varying 개수</td></tr>
+    <tr><td>MAX_ARRAY_TEXTURE_LAYERS                     </td><td>2D 텍스처 배열의 최대 레이어</td></tr>
+    <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS      </td><td>transform feedback을 사용할 때 별도의 버퍼로 출력할 수 있는 varying 개수</td></tr>
+    <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>모든 걸 단일 버퍼로 보낼 때 출력할 수 있는 varying 개수</td></tr>
     <tr><td>MAX_COMBINED_UNIFORM_BLOCKS                  </td><td>종합적으로 사용할 수 있는 uniform block 개수</td></tr>
-    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>Vertex shader가 사용할 수 있는 uniform block 개수</td></tr>
-    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>Fragment shader가 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>vertex shader가 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>fragment shader가 사용할 수 있는 uniform block 개수</td></tr>
   </tbody>
 </table>
 </div>
@@ -201,7 +201,7 @@ WebGL1과 WebGL2의 많은 기능들이 선택적인데요.
 
 WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 color attachment를 framebuffer로 첨부할 수 있는 기능인 `WEBGL_draw_buffers`이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
 기본적으로 WebGL2를 실행할 수 있는 모든 기기는 WebGL1에서 `WEBGL_draw_buffers`도 지원해야 하지만, 여전히 이슈가 됩니다.
-여러 texture를 한 번에 렌더링해야 한다면 고사양 GPU로도 시간이 필요할 수 있습니다.
+여러 텍스처를 한 번에 렌더링해야 한다면 고사양 GPU로도 시간이 필요할 수 있습니다.
 그래도 사용자 기기가 지원하는지 확인하고, 지원하지 않는다면 친절한 설명을 제공해야 합니다.
 
 WebGL1의 경우 다음의 3개의 extension이 거의 보편적으로 지원되는 것처럼 보이므로 사용자에게 이들이 누락되면 페이지가 작동하지 않을 것이라 경고하고 싶을 수 있지만 사용자가 페이지를 제대로 실행하지 못 할만큼 아주 오래된 기기를 가지고 있을 수 있습니다.
@@ -244,7 +244,7 @@ void main() {
    ...
    ```
 
-해결법 2가 가장 [D.R.Y](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)하게 보이지만, 런타임에 texture를 생성하지 않는다면 해결법 3이 가장 [W.E.T](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself#DRY_vs_WET_solutions)하게 보입니다.
+해결법 2가 가장 [D.R.Y](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)하게 보이지만, 런타임에 텍스처를 생성하지 않는다면 해결법 3이 가장 [W.E.T](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself#DRY_vs_WET_solutions)하게 보입니다.
 
 ## GLSL undefined 동작
 
@@ -283,7 +283,7 @@ Scissor는 항상 pixel을 클리핑하므로 scissor 테스트를 켜고, 그�
 
 * WebGL 캔버스와 레이어 변환에 대한 변경 사항이 항상 동기화되지 않는 [버그](https://bugs.webkit.org/show_bug.cgi?id=172969) (3년 전)
 
-* Alpha 채널이 없는 PNG texture가 잘못된 rgb 색상을 가지는 [버그](https://bugs.webkit.org/show_bug.cgi?id=165297) (4년 전)
+* Alpha 채널이 없는 PNG 텍스처가 잘못된 rgb 색상을 가지는 [버그](https://bugs.webkit.org/show_bug.cgi?id=165297) (4년 전)
 
 * 사파리가 일반적인 attribute 없이 쓰는 경우를 처리하지 않는 [버그](https://bugs.webkit.org/show_bug.cgi?id=197592) (1년 전) 
 

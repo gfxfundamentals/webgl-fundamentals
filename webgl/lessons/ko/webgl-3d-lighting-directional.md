@@ -201,18 +201,18 @@ function setNormals(gl) {
 
     ...
 
-    -// 색상을 넣을 buffer 생성
+    -// 색상을 넣을 버퍼 생성
     -var colorBuffer = gl.createBuffer();
     -// ARRAY_BUFFER에 바인딩 (ARRAY_BUFFER = colorBuffer라고 생각)
     -gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    -// Buffer에 geometry 데이터 넣기
+    -// 버퍼에 geometry 데이터 넣기
     -setColors(gl);
 
-    +// 법선을 넣을 buffer 생성
+    +// 법선 데이터를 넣을 버퍼 생성
     +var normalBuffer = gl.createBuffer();
     +// ARRAY_BUFFER에 바인딩 (think of it as ARRAY_BUFFER = normalBuffer)
     +gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-    +// 법선 데이터를 buffer에 넣기
+    +// 법선 데이터를 버퍼에 넣기
     +setNormals(gl);
 
 그리고 렌더링할 때
@@ -229,7 +229,7 @@ function setNormals(gl) {
 -var type = gl.UNSIGNED_BYTE;  // 데이터는 unsigned 8bit 값
 -var normalize = true;         // 데이터 정규화 (0-255에서 0-1로 전환)
 -var stride = 0;               // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
--var offset = 0;               // Buffer의 처음부터 시작
+-var offset = 0;               // 버퍼의 처음부터 시작
 -gl.vertexAttribPointer(colorLocation, size, type, normalize, stride, offset)
 
 +// normal attribute 활성화
@@ -238,12 +238,12 @@ function setNormals(gl) {
 +// normal buffer 바인딩
 +gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 +
-+// // normalBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
++// normalBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
 +var size = 3;          // 반복마다 3개의 컴포넌트
 +var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
 +var normalize = false; // 데이터 정규화 (0-255에서 0-1로 전환)
 +var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-+var offset = 0;        // Buffer의 처음부터 시작
++var offset = 0;        // 버퍼의 처음부터 시작
 +gl.vertexAttribPointer(normalLocation, size, type, normalize, stride, offset)
 ```
 

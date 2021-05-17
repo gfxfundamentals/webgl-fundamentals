@@ -241,7 +241,7 @@ GLSL의 여러 함수들이 어떤 값들에 대해 정의되지 않았습니다
 </p>
 <p>
 이를 주의하지 않으면 shader가 컴퓨터에 따라 다른 결과를 얻을 수 있습니다.
-<a href="https://www.khronos.org/files/opengles_shading_language.pdf">스펙의 섹션 8</a>에는 모든 내장 함수의 기능과 더불어 정의되지 않은 동작이 있는지 나열되어 있습니다.
+<a href="https://www.khronos.org/files/opengles_shading_language.pdf">명세서의 섹션 8</a>에는 모든 내장 함수의 기능과 더불어 정의되지 않은 동작이 있는지 나열되어 있습니다.
 </p>
 <p>
 다음은 정의되지 않은 동작 목록입니다.

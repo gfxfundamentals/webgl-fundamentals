@@ -7,11 +7,11 @@ TOC: 다중 보기, 다중 캔버스
 `webglUtils.setBuffersAndAttributes` 함수가 buffer와 attribute를 설정하는 것이나, `webglUtils.setUniforms` 함수가 uniform을 설정하는 게 무슨 의미인지 모르겠다면, 뒤로 돌아가서 [WebGL 기초](webgl-fundamentals.html)를 먼저 읽어주세요.
 
 같은 장면의 여러 뷰를 그리고 싶다면, 어떻게 할 수 있을까요?
-한 가지 방법은 [texture](webgl-render-to-texture.html)로 렌더링한 다음 해당 texture를 캔버스에 그리는 겁니다.
+한 가지 방법은 [텍스처](webgl-render-to-texture.html)로 렌더링한 다음 해당 텍스처를 캔버스에 그리는 겁니다.
 이건 확실히 유효한 방법이고 이렇게 하는 것이 맞을 때도 있습니다.
-하지만 texture를 할당하고, 물체를 렌더링한 다음, texture를 캔버스에 렌더링해야 합니다.
+하지만 텍스처를 할당하고, 물체를 렌더링한 다음, 텍스처를 캔버스에 렌더링해야 합니다.
 이는 사실상 이중 렌더링을 의미하는데요.
-예를 들어 레이싱 게임에서 뷰를 백미러에 렌더링하고 싶을 때, 차 뒤에 있는 걸 texture에 렌더링한 다음, 해당 texture를 사용해 백미러를 그립니다.
+예를 들어 레이싱 게임에서 뷰를 백미러에 렌더링하고 싶을 때, 차 뒤에 있는 걸 텍스처에 렌더링한 다음, 해당 텍스처를 사용해 백미러를 그립니다.
 
 또 다른 방법은 viewport를 설정하고 scissor test를 켜는 겁니다.
 이건 view가 겹치지 않는 상황에 즐겨 쓰이는데요.

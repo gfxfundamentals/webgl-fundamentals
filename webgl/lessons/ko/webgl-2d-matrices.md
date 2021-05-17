@@ -242,7 +242,7 @@ void main() {
 그리고 어떻게 사용하냐면
 
 ```js
-// scene 그리기
+// 장면 그리기
 function drawScene() {
 
   ,,,
@@ -292,7 +292,7 @@ matrix = m3.multiply(matrix, translationMatrix);
 계층적 애니메이션의 간단한 예제로 'F'를 5번 그리지만 매번 이전의 'F' 행렬로 시작해봅시다.
 
 ```js
-// Scene 그리기
+// 장면 그리기
 function drawScene() {
   // 캔버스 지우기
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -434,7 +434,7 @@ void main() {
 그리고 javascript에서는 투영 행렬로 곱해야 합니다.
 
 ```js
-// Scene 그리기
+// 장면 그리기
 function drawScene() {
   ...
 

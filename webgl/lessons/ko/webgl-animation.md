@@ -18,7 +18,7 @@ WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할
 
     *requestAnimationFrame(drawScene);
 
-    // scene 그리기
+    // 장면 그리기
     function drawScene() {
     *  // 프레임마다 조금씩 회전
     *  rotation[1] += rotationSpeed / 60.0;
@@ -69,7 +69,7 @@ WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할
 
     requestAnimationFrame(drawScene);
 
-    // scene 그리기
+    // 장면 그리기
     *function drawScene(now) {
     *  // 시간을 초단위로 변환
     *  now *= 0.001;
@@ -92,7 +92,7 @@ WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할
 
 느린 컴퓨터가 아니라면 이 페이지 상단에 있는 것과 차이점은 없을 테지만, 애니메이션을 프레임률에 독립적으로 만들지 않는다면 사용자는 의도한 것과 상당히 다른 경험을 얻게 될 겁니다.
 
-다음은 [texture를 적용하는 방법](webgl-3d-textures.html)입니다.
+다음은 [텍스처를 적용하는 방법](webgl-3d-textures.html)입니다.
 
 <div class="webgl_bottombar">
 <h3>setInterval나 setTimeout을 사용하지 마세요!</h3>

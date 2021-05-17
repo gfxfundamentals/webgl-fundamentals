@@ -39,7 +39,7 @@ TOC: 여러 물체 그리기
     }
 
 WebGL은 두 번째 방법으로 동작하는데요.
-`gl.createBuffer`, `gl.bufferData`, `gl.createTexture`, `gl.texImage2D`와 같은 함수들은 buffer(vertex)와 texture(color, etc..) 데이터를 WebGL에 업로드 해줍니다.
+`gl.createBuffer`, `gl.bufferData`, `gl.createTexture`, `gl.texImage2D`와 같은 함수들은 버퍼(vertex)와 텍스처(color, etc..) 데이터를 WebGL에 업로드 해줍니다.
 `gl.createProgram`, `gl.createShader`, `gl.compileShader`, `gl.linkProgram`과 같은 함수들은 GLSL shader를 만들어 줍니다.
 그 외 WebGL의 거의 모든 함수들은 이러한 전역 변수나 *상태*를 설정하여 최종적으로 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용됩니다.
 
@@ -48,8 +48,8 @@ WebGL은 두 번째 방법으로 동작하는데요.
 초기화할 때
 
 *   모든 shader와 program을 만들고 위치 탐색
-*   Buffer를 생성하고 정점 데이터 업로드
-*   Texture를 생성하고 texture 데이터 업로드
+*   버퍼를 생성하고 정점 데이터 업로드
+*   텍스처를 생성하고 텍스처 데이터 업로드
 
 렌더링할 때
 
@@ -61,13 +61,13 @@ WebGL은 두 번째 방법으로 동작하는데요.
         *   각각의 attribute에 대해 `gl.bindBuffer`, `gl.vertexAttribPointer`, `gl.enableVertexAttribArray` 호출
     *   그리려는 것에 대한 uniform 설정
         *   각각의 uniform에 대한 `gl.uniformXXX` 호출
-        *   `gl.activeTexture`와 `gl.bindTexture`를 호출하여 texture unit에 texture 할당
+        *   `gl.activeTexture`와 `gl.bindTexture`를 호출하여 texture unit에 텍스처 할당
     *   `gl.drawArrays` 혹은 `gl.drawElements` 호출
 
 기본적으로 이렇습니다.
 해당 작업을 해내기 위해 어떻게 코드를 구성하냐는 당신에게 달려있습니다.
 
-Texture 데이터(또한 정점 데이터) 업로드같은 일부 작업은 인터넷으로 다운로드가 끝날 때까지 기다려야 하기 때문에 비동기적으로 발생할 수 있습니다.
+텍스처 데이터(또한 정점 데이터) 업로드같은 일부 작업은 인터넷으로 다운로드가 끝날 때까지 기다려야 하기 때문에 비동기적으로 발생할 수 있습니다.
 
 3가지 물체를 그리는 간단한 앱을 만들어봅시다.
 큐브와 구체 그리고 원뿔입니다.
@@ -273,8 +273,8 @@ Texture 데이터(또한 정점 데이터) 업로드같은 일부 작업은 인�
         lastUsedProgramInfo = programInfo;
         gl.useProgram(programInfo.program);
 
-        // 프로그램이 사용하는 buffer만 바인딩하기 때문에 프로그램이 바뀔 때마다 buffer를 다시 바인딩해야 합니다.
-        // 따라서 2개의 프로그램이 동일한 bufferInfo를 사용하지만 첫 번째 buffer가 position만 사용하면 두 번째 buffer로 전환할 때 attribute 중 일부는 활성화되지 않을 겁니다.
+        // 프로그램이 사용하는 버퍼만 바인딩하기 때문에 프로그램이 바뀔 때마다 버퍼를 다시 바인딩해야 합니다.
+        // 따라서 2개의 프로그램이 동일한 bufferInfo를 사용하지만 첫 번째 버퍼가 position만 사용하면 두 번째 버퍼로 전환할 때 attribute 중 일부는 활성화되지 않을 겁니다.
         bindBuffers = true;
       }
 
@@ -308,7 +308,7 @@ Texture 데이터(또한 정점 데이터) 업로드같은 일부 작업은 인�
     // 각 객체에 대한 uniform
     var numObjects = 200;
     for (var ii = 0; ii < numObjects; ++ii) {
-      // Shape 선택
+      // shape 선택
       var bufferInfo = shapes[rand(0, shapes.length) | 0];
 
       // 객체 만들기
@@ -366,7 +366,7 @@ Overlay나 후처리 효과처럼 다른 것들에 대한 별도의 목록이 �
 
 어떤 shader만으로는 어떤 geometry들은 그릴 수 없다는 점에 유의해야 합니다.
 예를 들어 법선이 필요한 shader는 법선이 없는 geometry에서 작동하지 않을 겁니다.
-마찬가지로 texture가 필요한 shader는 texture 없이는 작동하지 않습니다.
+마찬가지로 텍스처가 필요한 shader는 텍스처 없이는 작동하지 않습니다.
 
 이 모든 걸 처리하기 때문에 [Three.js](https://threejs.org)같은 3D 라이브러리를 선택하는 것이 좋습니다.
 몇 가지 geometry를 만들고, 어떻게 렌더링하고 싶은지 three.js에 지시하면, 런타임에 필요한 것들을 처리하기 위해 shader를 생성합니다.

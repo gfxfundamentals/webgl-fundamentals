@@ -53,7 +53,7 @@ const colorLoc = gl.getUniformLocation(program, 'color');
 const matrixLoc = gl.getUniformLocation(program, 'matrix');
 ```
 
-그런 다음 buffer를 통해 위치에 대한 데이터를 제공해야 합니다.
+그런 다음 버퍼를 통해 위치에 대한 데이터를 제공해야 합니다.
 
 ```js
 const positionBuffer = gl.createBuffer();
@@ -110,11 +110,11 @@ function render(time) {
   gl.enableVertexAttribArray(positionLoc);
   gl.vertexAttribPointer(
     positionLoc,  // 위치
-    2,            // 크기 (반복마다 buffer에서 가져오는 값의 개수)
-    gl.FLOAT,     // buffer의 데이터 type
+    2,            // 크기 (반복마다 버퍼에서 가져오는 값의 개수)
+    gl.FLOAT,     // buffer data type
     false,        // 정규화
     0,            // stride (0 = 위 크기와 type으로 계산)
-    0,            // buffer의 offset
+    0,            // buffer offset
   );
 
   matrices.forEach((mat, ndx) => {
@@ -151,10 +151,10 @@ Shader가 더 복잡하다면, [spot lighting](webgl-3d-lighting-spot.html)의 s
 
 Instancing은 이러한 호출을 줄이는 방법입니다.
 이는 동일한 항목을 몇 번 그려야 하는지 WebGL에 알려주는 방식으로 작동합니다.
-각 attribute에 대해 vertex shader가 호출될 때마다 해당 attribute를 할당된 buffer에서 *다음 값*으로 진행할지(기본값), 또는 일반적으로 N이 1인 모든 N instance만 진행할지 지정합니다.
+각 attribute에 대해 vertex shader가 호출될 때마다 해당 attribute를 할당된 버퍼에서 *다음 값*으로 진행할지(기본값), 또는 일반적으로 N이 1인 모든 N instance만 진행할지 지정합니다.
 
 예를 들어 uniform에서 `matrix`와 `color`를 제공하는 대신, `attribute`를 통해 제공할 수 있는데요.
-각 instance의 행렬과 색상을 buffer에 넣고, attribute가 해당 buffer에서 데이터를 가져오도록 설정한 다음, instance당 한 번만 다음 값으로 진행하도록 WebGL에 지시할 겁니다.
+각 instance의 행렬과 색상을 버퍼에 넣고, attribute가 해당 버퍼에서 데이터를 가져오도록 설정한 다음, instance당 한 번만 다음 값으로 진행하도록 WebGL에 지시할 겁니다.
 
 해봅시다!
 
@@ -228,8 +228,8 @@ const positionLoc = gl.getAttribLocation(program, 'a_position');
 +const matrixLoc = gl.getAttribLocation(program, 'matrix');
 ```
 
-이제, attribute에 적용될 행렬을 넣을 buffer가 필요합니다.
-buffer는 하나의 *chuck*에서 가장 잘 업데이트되기 때문에 모든 행렬을 동일한 `Float32Array`에 넣을 겁니다.
+이제, attribute에 적용될 행렬을 넣을 버퍼가 필요합니다.
+버퍼는 하나의 *chuck*에서 가장 잘 업데이트되기 때문에 모든 행렬을 동일한 `Float32Array`에 넣을 겁니다.
 
 ```js
 // Instance당 하나씩, 행렬 설정
@@ -264,20 +264,20 @@ for (let i = 0; i < numInstances; ++i) {
 
 이렇게 하면 모든 행렬에 대한 데이터를 참조하고 싶을 때 `matrixData`를 사용할 수 있고, 어느 개별적인 행렬을 원한다면 `matrices[ndx]`를 사용할 수 있습니다.
 
-또한 이 데이터를 위해 GPU에 buffer를 생성해야 합니다.
-이 시점에서는 buffer를 할당하기만 하면 되며, 데이터를 제공할 필요는 없으므로, `gl.bufferData`에 대한 두 번째 매개 변수는 buffer를 할당하는 크기입니다.
+또한 이 데이터를 위해 GPU에 버퍼를 생성해야 합니다.
+이 시점에서는 버퍼를 할당하기만 하면 되며, 데이터를 제공할 필요는 없으므로, `gl.bufferData`에 대한 두 번째 매개 변수는 버퍼를 할당하는 크기입니다.
 
 ```js
 const matrixBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, matrixBuffer);
-// buffer 할당
+// 버퍼 할당
 gl.bufferData(gl.ARRAY_BUFFER, matrixData.byteLength, gl.DYNAMIC_DRAW);
 ```
 
 `gl.DYNAMIC_DRAW`를 마지막 매개 변수로 전달했음에 주목하세요.
 이건 WebGL에 이 데이터가 자주 바뀔 것이라는 *hint*입니다.
 
-다음으로 buffer에도 색상이 필요합니다.
+다음으로 버퍼에도 색상이 필요합니다.
 최소한 이 예제에서, 이 데이터는 바뀌지 않을 것이므로, 데이터를 업로드하기만 하면 됩니다.
 
 ```js
@@ -288,7 +288,7 @@ gl.bufferData(gl.ARRAY_BUFFER, matrixData.byteLength, gl.DYNAMIC_DRAW);
 -  [ 1, 0, 1, 1, ],  // 자주색
 -  [ 0, 1, 1, 1, ],  // 청록색
 -];
-+// instance 당 하나씩, 행렬 설정
++// Instance당 하나씩, 행렬 설정
 +const colorBuffer = gl.createBuffer();
 +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 +gl.bufferData(gl.ARRAY_BUFFER,
@@ -344,11 +344,11 @@ for (let i = 0; i < 4; ++i) {
   const offset = i * 16;  // row당 4float, float당 4byte
   gl.vertexAttribPointer(
     loc,              // 위치
-    4,                // 크기 (반복마다 buffer에서 가져오는 값의 개수)
-    gl.FLOAT,         // buffer의 데이터 type
+    4,                // 크기 (반복마다 버퍼에서 가져오는 값의 개수)
+    gl.FLOAT,         // buffer data type
     false,            // 정규화
-    bytesPerMatrix,   // stride, 다음 값 set를 가져오기 위해 이동할 byte 수
-    offset,           // buffer의 offset
+    bytesPerMatrix,   // stride, 다음 값 세트를 가져오기 위해 진행할 num byte
+    offset,           // buffer offset
   );
   // 이 줄은 각 1개의 instance에 대해서만 attribute가 변경됨을 나타냄
   ext.vertexAttribDivisorANGLE(loc, 1);

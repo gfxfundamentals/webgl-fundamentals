@@ -143,7 +143,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
 gl.enableVertexAttribArray(a_texcoordLoc);
 gl.vertexAttribPointer(a_texcoordLoc, texcoordNumComponents, gl.FLOAT, 0, 0);
 
-// 사용할 texture 설정
+// 사용할 텍스처 설정
 gl.activeTexture(gl.TEXTURE0 + diffuseTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, diffuseTexture);
 
@@ -289,8 +289,8 @@ objects.forEach(function(object) {
 {{{example url="../webgl-less-code-more-fun.html" }}}
 
 조금 더 나아가 봅시다.
-위 코드에서 우리가 생성한 buffer로 변수 `attribs`를 설정했습니다.
-이러한 buffer를 설정하는 코드는 보이지 않는데요.
+위 코드에서 우리가 생성한 버퍼로 변수 `attribs`를 설정했습니다.
+이러한 버퍼를 설정하는 코드는 보이지 않는데요.
 예를 들어 position, normal, texture 좌표를 만들고 싶다면 다음과 같은 코드가 필요할 겁니다.
 
     // 단일 삼각형
@@ -393,14 +393,14 @@ objects.forEach(function(object) {
 
 개인적으로 해당 스타일을 좋아하진 않는데요.
 잘못 추측하면 버그가 생길 수 있기 때문입니다.
-예를 들어 texcoord attribute에 texture 좌표 세트를 추가로 붙이고 싶을 수 있는데 이걸 2개로 추측해 잘못 동작할 겁니다.
+예를 들어 texcoord attribute에 텍스처 좌표 세트를 추가로 붙이고 싶을 수 있는데 이걸 2개로 추측해 잘못 동작할 겁니다.
 물론 잘못 추측하면 위 예제처럼 지정하면 됩니다.
 하지만 추측 코드가 사람들의 프로그램을 망가뜨릴 수 있어 걱정하는 것 같습니다.
 원하는 방법을 사용하시면 됩니다.
 일부 사람들은 가능한 한 단순하다고 생각하게 되는 걸 좋아합니다.
 
 Shader program의 attribute를 보고 컴포넌트 수를 알아내는 건 어떨까요?
-Buffer에서 3개의 컴포넌트(x, y, z)를 제공하는 게 일반적이지만 shader에서는 `vec4`를 사용하는데요.
+버퍼에서 3개의 컴포넌트(x, y, z)를 제공하는 게 일반적이지만 shader에서는 `vec4`를 사용하는데요.
 WebGL은 attribute에 대해 자동으로 `w = 1`을 설정합니다.
 이는 사용자가 shader에 선언한 것이 제공한 컴포넌트 수와 일치하지 않을 수 있으므로 사용자의 의도를 쉽게 알 수 없음을 의미합니다.
 

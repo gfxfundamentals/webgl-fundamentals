@@ -12,7 +12,7 @@ TOC: 이미지 처리 심화
 사용자가 쓰고자 하는 효과를 선택하는 UI를 제공한 다음 모든 효과를 수행하는 shader를 생성하는 겁니다.
 항상 가능한 건 아니지만 이 기술은 종종 [실기간 그래픽 효과](https://www.youtube.com/watch?v=cQUn0Zeh-0Q)를 만드는 데 사용됩니다.
 
-더 유연한 방법은 texture 2개를 더 사용하고, 각 texture를 차례대로 렌더링하여, 주고 받으면서 매번 다음 효과를 적용하는 겁니다.
+더 유연한 방법은 텍스처 2개를 더 사용하고, 각 텍스처를 차례대로 렌더링하여, 주고 받으면서 매번 다음 효과를 적용하는 겁니다.
 
 <div class="webgl_center"><pre>
 Original Image -> [Blur]        -> Texture 1
@@ -23,18 +23,18 @@ Texture 2      -> [Normal]      -> Canvas
 </pre></div>
 
 이렇게 하기 위해 우리는 framebuffer를 만들어야 하는데요.
-WebGL과 OpenGL에서 Framebuffer는 사실 좋지 않은 이름입니다.
-WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이며 실제로 어떤 종류의 buffer도 아닌데요.
-하지만 texture를 framebuffer에 첨부해서 해당 texture로 렌더링할 수 있습니다.
+WebGL과 OpenGL에서 framebuffer는 사실 좋지 않은 이름입니다.
+WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이며 실제로 어떤 종류의 버퍼도 아닌데요.
+하지만 텍스처를 framebuffer에 첨부해서 해당 텍스처로 렌더링할 수 있습니다.
 
-먼저 원래 사용하던 [texture 생성 코드](webgl-image-processing.html)를 함수로 바꿉니다.
+먼저 원래 사용하던 [텍스처 생성 코드](webgl-image-processing.html)를 함수로 바꿉니다.
 
 ```
   function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
-    // Texture를 설정하여 어떤 크기의 이미지도 렌더링할 수 있도록 하고 픽셀로 작업합니다.
+    // 텍스처를 설정하여 어떤 크기의 이미지도 렌더링할 수 있도록 하고 픽셀로 작업합니다.
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -43,22 +43,22 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
     return texture;
   }
 
-  // Texture를 만들고 이미지를 넣습니다.
+  // 텍스처를 만들고 이미지를 넣습니다.
   var originalImageTexture = createAndSetupTexture(gl);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 ```
 
-그리고 이제 함수를 사용하여 texture를 2개 더 만들고 framebuffer 2개에 첨부합니다.
+그리고 이제 함수를 사용하여 텍스처를 2개 더 만들고 framebuffer 2개에 첨부합니다.
 
 ```
-  // Texture 2개를 만들고 framebuffer에 첨부합니다.
+  // 텍스처 2개를 만들고 framebuffer에 첨부합니다.
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii < 2; ++ii) {
     var texture = createAndSetupTexture(gl);
     textures.push(texture);
 
-    // 이미지와 같은 크기로 texture 만들기
+    // 이미지와 같은 크기로 텍스처 만들기
     gl.texImage2D(
       gl.TEXTURE_2D,
       0,
@@ -71,12 +71,12 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
       null
     );
 
-    // Framebuffer 생성
+    // framebuffer 생성
     var fbo = gl.createFramebuffer();
     framebuffers.push(fbo);
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
-    // Texture 첨부
+    // 텍스처 첨부
     gl.framebufferTexture2D(
       gl.FRAMEBUFFER,
       gl.COLOR_ATTACHMENT0,
@@ -123,13 +123,13 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
   ];
 ```
 
-그리고 마지막으로 각각을 적용하고, 렌더링할 texture도 주고 받으면 됩니다.
+그리고 마지막으로 각각을 적용하고, 렌더링할 텍스처도 주고 받으면 됩니다.
 
 ```
   // 원본 이미지로 시작
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
-  // Texture에 그리는 동안 이미지 y축 뒤집지 않기
+  // 텍스처에 그리는 동안 이미지 y축 뒤집지 않기
   gl.uniform1f(flipYLocation, 1);
 
   // 적용하고 싶은 각 효과를 반복합니다.
@@ -139,7 +139,7 @@ WebGL/OpenGL Framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
 
     drawWithKernel(effectsToApply[ii]);
 
-    // 다음 그리기를 위해, 방금 렌더링한 texture를 사용합니다.
+    // 다음 그리기를 위해, 방금 렌더링한 텍스처를 사용합니다.
     gl.bindTexture(gl.TEXTURE_2D, textures[ii % 2]);
   }
 
@@ -233,5 +233,5 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개 변수를
 
 이것과 앞선 예제들이 WebGL을 좀 더 접근하기 쉽게 보이도록 만들었기를 바라며, 2D로 시작한 것이 WebGL을 좀 더 이해하기 쉽게 만드는 데에 도움이 되었기를 바랍니다.
 시간이 있으면 [WebGL이 실제로 수행하는 작업](webgl-how-it-works.html)에 대한 더 자세한 내용은 물론, [3D를 수행하는 방법](webgl-2d-translation.html)에 대해서 몇 가지 글을 더 써보겠습니다.
-다음 단계로 [2개 이상의 texture 사용법](webgl-2-textures.html)을 배워보세요.
+다음 단계로 [2개 이상의 텍스처 사용법](webgl-2-textures.html)을 배워보세요.
 

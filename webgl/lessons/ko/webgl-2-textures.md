@@ -1,12 +1,12 @@
-Title: WebGL 2개 이상의 Texture 사용
-Description: WebGL에서 2개 이상의 Texture를 사용하는 방법
-TOC: 2개 이상의 Texture 사용
+Title: WebGL 2개 이상의 텍스처 사용
+Description: WebGL에서 2개 이상의 텍스처를 사용하는 방법
+TOC: 2개 이상의 텍스처 사용
 
 
 이 글은 [WebGL 이미지 처리](webgl-image-processing.html)에서 이어집니다.
 아직 읽지 않았다면 [거기](webgl-image-processing.html)부터 시작하는 게 좋습니다.
 
-"어떻게 2개 이상의 texture를 사용할 수 있나요?"라는 질문에 답하기 좋은 시점인 것 같군요
+"어떻게 2개 이상의 텍스처를 사용할 수 있나요?"라는 질문에 답하기 좋은 시점인 것 같군요.
 
 꽤 간단합니다.
 하나의 이미지를 그리고 2개의 이미지로 업데이트하는 첫 번째 shader에 대한 [몇 가지 수업](webgl-image-processing.html)으로 돌아가 봅시다.
@@ -16,7 +16,7 @@ TOC: 2개 이상의 Texture 사용
 이미지는 비동기적으로 로드되기 때문에 익숙해지는 데에 약간의 시간이 걸릴 수 있습니다.
 
 기본적으로 처리할 수 있는 2가지 방법이 있습니다.
-Texture 없이 실행되고 texture가 로드되면 program이 업데이트하도록 코드를 구조화할 수 있는데요.
+텍스처 없이 실행되고 텍스처가 로드되면 program이 업데이트하도록 코드를 구조화할 수 있는데요.
 이후의 글을 위해 해당 method를 저장해두겠습니다.
 
 이 경우 그리기 전에 모든 이미지가 로드되는 걸 기다릴 겁니다.
@@ -71,14 +71,14 @@ function main() {
 }
 ```
 
-다음으로 2개의 texture를 사용하도록 shader를 수정합니다.
-이 경우 하나의 texture에 다른 texture를 곱할 겁니다.
+다음으로 2개의 텍스처를 사용하도록 shader를 수정합니다.
+이 경우 하나의 텍스처에 다른 텍스처를 곱할 겁니다.
 
 ```
 <script id="fragment-shader-2d" type="x-shader/x-fragment">
 precision mediump float;
 
-// Texture
+// 텍스처
 uniform sampler2D u_image0;
 uniform sampler2D u_image1;
 
@@ -93,10 +93,10 @@ void main() {
 </script>
 ```
 
-2개의 WebGL texture 객체를 생성해야 합니다.
+2개의 WebGL 텍스처 객체를 생성해야 합니다.
 
 ```
-  // 2개의 texture 생성
+  // 2개의 텍스처 생성
   var textures = [];
   for (var ii = 0; ii < 2; ++ii) {
     var texture = gl.createTexture();
@@ -108,16 +108,16 @@ void main() {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-    // Texture에 이미지 업로드
+    // 텍스처에 이미지 업로드
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[ii]);
 
-    // Texture 배열에 texture 추가
+    // 텍스처 배열에 텍스처 추가
     textures.push(texture);
   }
 ```
 
 WebGL에는 "texture unit"이라는 것이 있습니다.
-이는 texture에 대한 레퍼런스 배열이라 생각할 수 있습니다.
+이는 텍스처에 대한 레퍼런스 배열이라 생각할 수 있습니다.
 각 sampler에 대해 사용할 texture unit을 shader에 알려줍니다.
 
 ```
@@ -132,10 +132,10 @@ WebGL에는 "texture unit"이라는 것이 있습니다.
   gl.uniform1i(u_image1Location, 1);  // texture unit 1
 ```
 
-그런 다음 texture를 각각의 texture unit에 할당해야 합니다.
+그런 다음 텍스처를 각각의 texture unit에 할당해야 합니다.
 
 ```
-  // 특정 texture를 사용하도록 각각의 texture unit 설정
+  // 특정 텍스처를 사용하도록 각각의 texture unit 설정
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
@@ -153,11 +153,11 @@ WebGL에는 "texture unit"이라는 것이 있습니다.
 
 몇 가지 살펴봐야 할 것이 있습니다.
 
-Texture unit을 생각하는 간단한 방법: 모든 texture 함수는 "active texture unit"에서 작동한다.
+Texture unit을 생각하는 간단한 방법: 모든 텍스처 함수는 "active texture unit"에서 작동한다.
 "active texture unit"은 작업하려는 texture unit의 전역 변수입니다.
 각 texture unit은 2가지 target을 가지는데요.
 TEXTURE_2D target과 TEXTURE_CUBE_MAP target입니다.
-모든 texture 함수는 current active texture unit에서 지정된 target과 함께 작동합니다.
+모든 텍스처 함수는 current active texture unit에서 지정된 target과 함께 작동합니다.
 JavaScript로 WebGL을 구현한다면 다음과 같을 겁니다.
 
 ```
@@ -180,7 +180,7 @@ var getContext = function() {
   };
 
   var bindTexture = function(target, texture) {
-    // active texture unit의 target에 대한 texture 설정
+    // active texture unit의 target에 대한 텍스처 설정
     textureUnits[activeTextureUnit][target] = texture;
   };
 
@@ -235,5 +235,5 @@ Shader는 index를 texture unit으로 가져옵니다.
   }
 ```
 
-이 글이 WebGL의 단일 그리기 호출에서 여러 texture를 사용하는 방법을 설명하는 데에 도움이 되길 바랍니다.
+이 글이 WebGL의 단일 그리기 호출에서 여러 텍스처를 사용하는 방법을 설명하는 데에 도움이 되길 바랍니다.
 

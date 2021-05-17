@@ -29,16 +29,16 @@ Shader가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.
 
 1. Attribute & Buffer
 
-   Buffer는 GPU에 업로드하는 2진 데이터 배열입니다.
-   일반적으로 buffer는 위치, 법선, texture 좌표, 정점 색상 등을 포함하지만 원하는 걸 자유롭게 넣어도 됩니다.
+   버퍼는 GPU에 업로드하는 2진 데이터 배열입니다.
+   일반적으로 버퍼는 위치, 법선, 텍스처 좌표, 정점 색상 등을 포함하지만 원하는 걸 자유롭게 넣어도 됩니다.
 
-   Attribute는 buffer에서 데이터를 가져오고 vertex shader에 제공하는 방법을 지정하는데 사용됩니다.
-   예를 들어 위치당 3개의 32bit 부동 소수점으로 위치를 buffer에 넣을 수 있는데요.
-   특정한 attribute에게 어느 buffer에서 위치를 가져올지, 어떤 type의 데이터를 가져와야 하는지 (3개의 32bit 부동 소수점), buffer의 offset이 어느 위치에서 시작되는지, 한 위치에서 다음으로 갈 때 몇 byte를 이동시킬 것인지 알려줘야 합니다.
+   Attribute는 버퍼에서 데이터를 가져오고 vertex shader에 제공하는 방법을 지정하는데 사용됩니다.
+   예를 들어 위치당 3개의 32bit 부동 소수점으로 위치를 버퍼에 넣을 수 있는데요.
+   특정한 attribute에게 어느 버퍼에서 위치를 가져올지, 어떤 type의 데이터를 가져와야 하는지 (3개의 32bit 부동 소수점), 버퍼의 offset이 어느 위치에서 시작되는지, 한 위치에서 다음으로 갈 때 몇 byte를 이동시킬 것인지 알려줘야 합니다.
    
-   Buffer는 무작위로 접근할 수 없습니다.
+   버퍼는 무작위로 접근할 수 없습니다.
    대신에 vertex shader가 지정한 횟수만큼 실행되는데요.
-   실행될 때마다 지정된 buffer에서 다음 값을 가져와 attribute에 할당합니다.
+   실행될 때마다 지정된 버퍼에서 다음 값을 가져와 attribute에 할당합니다.
 
 2. Uniform
 
@@ -46,8 +46,8 @@ Shader가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.
 
 3. Texture
 
-   Texture는 shader program에서 무작위로 접근할 수 있는 데이터 배열입니다.
-   Texture에 넣는 대부분은 이미지 데이터지만 texture는 데이터일 뿐이며 색상 이외의 것도 쉽게 담을 수 있습니다.
+   텍스처는 shader program에서 무작위로 접근할 수 있는 데이터 배열입니다.
+   텍스처에 넣는 대부분은 이미지 데이터지만 텍스처는 데이터일 뿐이며 색상 이외의 것도 쉽게 담을 수 있습니다.
 
 4. Varying
 
@@ -69,7 +69,7 @@ Clip space 좌표는 캔버스 크기에 상관없이 항상 -1에서 +1까지�
 
 Vertex shader부터 시작해봅시다.
 
-    // Attribute는 buffer에서 데이터를 받음
+    // Attribute는 버퍼에서 데이터를 받음
     attribute vec4 a_position;
 
     // 모든 shader는 main 함수를 가짐
@@ -228,7 +228,7 @@ WebGL의 주요 API는 GLSL program에 데이터를 제공하기 위한 상태 �
 
 Attribute 위치(그리고 uniform 위치) 위치를 찾는 것은 렌더링할 때가 아니라 초기화하는 동안 해야 합니다.
 
-Attribute는 buffer로부터 데이터를 가져오므로 buffer를 생성해야 합니다.
+Attribute는 버퍼로부터 데이터를 가져오므로 버퍼를 생성해야 합니다.
 
     var positionBuffer = gl.createBuffer();
 
@@ -240,7 +240,7 @@ bind point는 WebGL 안에 있는 내부 전역 변수라고 생각하시면 되
 
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-이제 bind point를 통해 해당 buffer를 참조해서 데이터를 넣을 수 있습니다.
+이제 bind point를 통해 해당 버퍼를 참조해서 데이터를 넣을 수 있습니다.
 
     // 2D point 3개
     var positions = [
@@ -302,7 +302,7 @@ CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 �
     // program(shader 쌍) 사용 지시
     gl.useProgram(program);
 
-다음으로 위에서 설정한 buffer에서 데이터를 가져와 shader의 attribute에 제공하는 방법을 WebGL에 알려줘야 하는데요.
+다음으로 위에서 설정한 버퍼에서 데이터를 가져와 shader의 attribute에 제공하는 방법을 WebGL에 알려줘야 하는데요.
 우선 attribute를 활성화해야 합니다.
 
     gl.enableVertexAttribArray(positionAttributeLocation);
@@ -317,7 +317,7 @@ CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 �
     var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-    var offset = 0;        // Buffer의 처음부터 시작
+    var offset = 0;        // 버퍼의 처음부터 시작
     gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
 
 `gl.vertexAttribPointer`의 숨겨진 부분은 현재 바인딩된 `ARRAY_BUFFER`를 attribute에 할당한다는 겁니다.
@@ -519,14 +519,14 @@ Clip space에서 좌측 하단 모서리는 -1,-1이 되죠.
       return Math.floor(Math.random() * range);
     }
 
-    // 사각형을 정의한 값들로 buffer 채우기
+    // 사각형을 정의한 값들로 버퍼 채우기
     function setRectangle(gl, x, y, width, height) {
       var x1 = x;
       var x2 = x + width;
       var y1 = y;
       var y2 = y + height;
 
-      // 참고: gl.bufferData(gl.ARRAY_BUFFER, ...)는 `ARRAY_BUFFER` bind point에 바인딩된 buffer에 영향을 주지만 지금까지는 하나의 buffer만 있었습니다. 두 개 이상이라면 원하는 buffer를 `ARRAY_BUFFER`에 먼저 할당해야 합니다.
+      // 참고: gl.bufferData(gl.ARRAY_BUFFER, ...)는 `ARRAY_BUFFER` bind point에 바인딩된 버퍼에 영향을 주지만 지금까지는 하나의 버퍼만 있었습니다. 두 개 이상이라면 원하는 버퍼를 `ARRAY_BUFFER`에 먼저 할당해야 합니다.
       gl.bufferData(
         gl.ARRAY_BUFFER,
         new Float32Array([
@@ -556,7 +556,7 @@ Attribute와 uniform 2개에 데이터를 제공하는 방법을 보여주는 �
 이 글의 서두에서 *varying*과 *texture*도 언급했었는데요.
 이것들은 다음 수업에서 소개하겠습니다.
 
-계속하기 전에 *대부분의* 어플리케이션은 `setRectangle`에서 했던 것처럼, buffer의 데이터를 갱신하는 게 일반적이지 않다는 걸 말하고 싶습니다.
+계속하기 전에 *대부분의* 어플리케이션은 `setRectangle`에서 했던 것처럼, 버퍼의 데이터를 갱신하는 게 일반적이지 않다는 걸 말하고 싶습니다.
 이 예제를 사용한 것은 픽셀 좌표를 입력으로 보여주고, GLSL에서 간단히 계산하는 걸 보여주기 때문에, 설명하기에 가장 쉬운 방법이라고 생각했기 때문입니다. 
 이게 틀리다는 것은 아니며, 올바른 방법인 경우도 많지만, WebGL에서 [위치, 방향, 크기를 조정](webgl-2d-translation.html)하는 좀 더 일반적인 방법을 찾으려면 계속 읽어주세요.
 

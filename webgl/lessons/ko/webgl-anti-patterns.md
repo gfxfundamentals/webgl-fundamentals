@@ -27,7 +27,7 @@ TOC: Anti Pattern
     이제 캔버스의 크기를 바꿀 때마다 2개의 속성을 갱신해줘야 하기 때문에 객관적으로 나쁩니다.
     예를 들어 사용자가 창의 크기를 조정할 때 캔버스의 크기를 바꾼다면 `gl.viewportWidth`와 `gl.viewportHeight`는 다시 설정해주지 않는 한 잘못된 값이 됩니다.
 
-    어느 새로운 프로그래머가 코드를 훑어보고 `gl.viewportWidth`와 `gl.viewportHeight`를 WebGL 스펙의 일부라고 생각해 수개월동안 혼란스럽게 할 수 있기 때문에 주관적으로도 나쁘다고 생각합니다.
+    어느 새로운 프로그래머가 코드를 훑어보고 `gl.viewportWidth`와 `gl.viewportHeight`를 WebGL 명세서의 일부라고 생각해 수개월동안 혼란스럽게 할 수 있기 때문에 주관적으로도 나쁘다고 생각합니다.
 
     **대신 할 일:**
 

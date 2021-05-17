@@ -199,7 +199,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 명세서에는 연결 시간에 에러가 발견되는 한 에러를 반환하기 위해 컴파일할 필요가 없으므로, shader를 컴파일하고 `COMPILE_STATUS`를 확인하는 것만으로는 컴파일이 실제로 성공했는지 혹은 실패했는지 알 수 없습니다.
 연결하고 `LINK_STATUS`를 확인해야 합니다.
 
-`mediump`이 정말로 고정밀도가 아니라 중간 정밀도인지 확인하기 위해서는 렌더 테스트를 해야합니다.
+`mediump`이 정말로 고정밀도가 아니라 중간 정밀도인지 확인하기 위해서는 렌더 테스트를 해야 합니다.
 기본적으로 `mediump`를 사용하는 shader를 만들고 `highp`에서는 작동하지만 `mediump`에서는 실패하는 몇 가지 계산을 한 뒤 결과를 확인하면 되는데요.
 결과가 정확하다면 driver/gpu/device가 `mediump`에 `highp`를 사용하는 겁니다.
 결과가 부정확하다면 `mediump`는 `mediump`인 겁니다.
@@ -252,13 +252,13 @@ const bitsInCanvas =
 참고: 2020년에 어떤 기기 어떤 브라우저에서 실제로 16bit 캔버스를 사용하는지 알 수 없습니다.
 2011년 WebGL이 출시되었을 때 파이어폭스가 모바일 기기에서 속도를 높이기 위해 16bit 캔버스를 실험했던 걸로 알고 있습니다.
 이는 일반적으로 이미지 이외의 항목에 대해 캔버스에서 픽셀을 읽는 경우를 제외하고는 무시할 수 있습니다. 
-또한, 캔버스가 16bit라고 하더라도 32bit 렌더 대상([framebuffer에 첨부된 texture](webgl-render-to-texture.html))을 만들 수 있습니다.
+또한, 캔버스가 16bit라고 하더라도 32bit 렌더 대상([framebuffer에 첨부된 텍스처](webgl-render-to-texture.html))을 만들 수 있습니다.
 
 ## Texture Format
 
-Texture는 명세서에서 실제 사용된 정밀도는 요청된 정밀도보다 더 클 수 있다고 말하는 또 다른 것입니다.
+텍스처는 명세서에서 실제 사용된 정밀도는 요청된 정밀도보다 더 클 수 있다고 말하는 또 다른 것입니다.
 
-예를 들어 다음과 같이 채널당 4bit씩, 16bit texture를 요청할 수 있는데 
+예를 들어 다음과 같이 채널당 4bit씩, 16bit 텍스처를 요청할 수 있는데 
 
 ```
 gl.texImage2D(
@@ -278,16 +278,16 @@ gl.texImage2D(
 대부분의 데스크탑이 이걸 수행하고 대부분의 모바일 GPU는 하지 않는다고 알고 있습니다.
 
 테스트할 수 있는데요.
-먼저 위처럼 채널당 4bit인 texture를 요청할 겁니다.
+먼저 위처럼 채널당 4bit인 텍스처를 요청할 겁니다.
 그런 다음 0대 1의 그래디언트으로 [렌더링](webgl-render-to-texture.html)할 겁니다.
 
-다음으로 해당 texture를 캔버스에 렌더링할 건데요.
-Texture가 내부적으로 채널당 4bit라면 그려진 그래디언트에 16단계의 색상만 있을 겁니다.
-Texture가 실제로 채널당 8bit라면 256단계의 색상을 보게 될 겁니다.
+다음으로 해당 텍스처를 캔버스에 렌더링할 건데요.
+텍스처가 내부적으로 채널당 4bit라면 그려진 그래디언트에 16단계의 색상만 있을 겁니다.
+텍스처가 실제로 채널당 8bit라면 256단계의 색상을 보게 될 겁니다.
 
 {{{example url="../webgl-precision-textures.html"}}}
 
-제 스마트폰에서 실행하면 texture가 채널당 4bit를 사용(또는 다른 채널은 테스트하지 않았으므로 빨간색 한정 4bit)하고 있음을 알 수 있습니다.
+제 스마트폰에서 실행하면 텍스처가 채널당 4bit를 사용(또는 다른 채널은 테스트하지 않았으므로 빨간색 한정 4bit)하고 있음을 알 수 있습니다.
 
 <div class="webgl_center"><img src="resources/mobile-4-4-4-4-texture-no-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
 
@@ -306,6 +306,6 @@ gl.disable(gl.DITHER);
 
 <div class="webgl_center"><img src="resources/mobile-4-4-4-4-texture-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
 
-당장 생각나는 이게 실제로 일어나는 유일한 방법은 렌더링 대상으로 더 낮은 bit 해상도 format texture를 사용하고 실제로 texture가 그렇게 낮은 해상도의 장치에서 테스트하지 않았을 경우입니다.
+당장 생각나는 이게 실제로 일어나는 유일한 방법은 렌더링 대상으로 더 낮은 bit 해상도 format texture를 사용하고 실제로 텍스처가 그렇게 낮은 해상도의 장치에서 테스트하지 않았을 경우입니다.
 데스크탑에서만 테스트했다면 이를 야기하는 이슈가 발생하지 않을 수 있습니다.
 
