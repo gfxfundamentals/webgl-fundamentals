@@ -254,7 +254,7 @@ WebGL과 OpenGL ES 2.0+는 모두 3D를 그리는데 사용되지만 이 설명�
 C++을 &quot;word processor&quot;라고 부르진 않지만 word processor가 C++로 작성될 수는 있습니다.
 비슷하게 WebGL은 기본적으로 3D 그래픽을 그리지 않습니다.
 WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만 그 자체로 3D 그래픽을 수행하진 않습니다.</p>
-<p>추가 예제 제공을 위해, 조명과 함께 3D로 cube를 그려야 한다고 가정해봅시다.</p>
+<p>추가 예제 제공을 위해, 조명과 함께 3D로 큐브를 그려야 한다고 가정해봅시다.</p>
 <p>이를 표시하기 위한 three.js의 코드입니다.</p>
 <pre class="prettyprint showlinemods">
   // WebGL 설정
@@ -269,10 +269,10 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
   camera.position.z = 400;
   camera.updateProjectionMatrix();
 
-  // Scene 만들기
+  // 장면 만들기
   scene = new THREE.Scene();
 
-  // Cube 만들기
+  // 큐브 만들기
   var geometry = new THREE.BoxGeometry(200, 200, 200);
 
   // Material 만들기
@@ -305,7 +305,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
 </div>
 
 </p>
-<p>다음은 조명 2개와 함께 cube를 표시하는 OpenGL(ES 아님) 코드입니다.</p>
+<p>다음은 조명 2개와 함께 큐브를 표시하는 OpenGL(ES 아님) 코드입니다.</p>
 <pre class="prettyprint showlinemods">
   // 설정
   glViewport(0, 0, width, height);
@@ -333,7 +333,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
   glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 ...
 
-  // Cube 그리기
+  // 큐브 그리기
   static int count = 0;
   ++count;
 
@@ -354,7 +354,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
 
   /*
   ...
-  ... Cube의 다섯 면 더 반복
+  ... 큐브의 다섯 면 더 반복
   ...
   */
 
@@ -368,7 +368,7 @@ WebGL에 대해 필요한 코드를 작성하진 않을 겁니다.
 필요한 줄 수에 관한 게 아닙니다.
 필요한 <strong>지식</strong>의 양에 관한 것입니다.
 두 3D 라이브러리에서 3D를 처리해주는데요.
-당신은 카메라 위치, 시야, 한 쌍의 조명, cube를 제공합니다.
+당신은 카메라 위치, 시야, 한 쌍의 조명, 큐브를 제공합니다.
 나머지는 이들이 모두 처리하죠.
 다시 말해 이들은 3D 라이브러리입니다.</p>
 <p>반면에 WebGL은 행렬 수학, 정규화된 좌표, 절두체, 벡터 곱, 스칼라 곱, varying 보간, 조명 반사 계산, 이외에도 수개월 또는 수년이 걸리는 모든 걸 이해해야 합니다.</p>
@@ -481,18 +481,18 @@ WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 �
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
-<li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Texture</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>Texture 렌더링</li>
+  <li>텍스처 렌더링</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">텍스처 렌더링</a></li>
         </ul>
   <li>그림자</li>
         <ul>
@@ -522,7 +522,7 @@ WebGL은 3D 라이브러리가 아니고 모든 지식을 직접 제공해야 �
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>

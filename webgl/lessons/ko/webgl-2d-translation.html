@@ -256,7 +256,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   var color = [Math.random(), Math.random(), Math.random(), 1];
 </code></pre><p>그런 다음 전부 다시 그리는 함수를 만들어봅시다.
 Translation을 업데이트한 후에 이 함수를 호출할 수 있습니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Scene 그리기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 장면 그리기
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -266,13 +266,13 @@ Translation을 업데이트한 후에 이 함수를 호출할 수 있습니다.<
     // 캔버스 지우기
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Program(shader 쌍)을 사용하도록 지시
+    // program(shader 쌍) 사용 지시
     gl.useProgram(program);
 
-    // Attribute 활성화
+    // position attribute 활성화
     gl.enableVertexAttribArray(positionLocation);
 
-    // Position buffer 할당
+    // position buffer 할당
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
     // 사각형 설정
@@ -283,7 +283,7 @@ Translation을 업데이트한 후에 이 함수를 호출할 수 있습니다.<
     var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-    var offset = 0;        // Buffer의 처음부터 시작
+    var offset = 0;        // 버퍼의 처음부터 시작
     gl.vertexAttribPointer(positionLocation, size, type, normalize, stride, offset);
 
     // 해상도 설정
@@ -311,7 +311,7 @@ Translation을 업데이트한 후에 이 함수를 호출할 수 있습니다.<
 <p>이처럼 삼각형 6개로 구성된 &#39;F&#39;를 그리고 싶다고 가정해봅시다.</p>
 <p><img src="../../resources/polygon-f.svg" width="200" height="270" class="webgl_center"></p>
 <p>우선 현재 코드에 따라 <code class="notranslate" translate="no">setRectangle</code>을 이런 식으로 변경해야 합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 buffer 채우기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
 function setGeometry(gl, x, y) {
   var width = 100;
   var height = 150;
@@ -367,7 +367,7 @@ void main() {
   ...
 </code></pre><p>그리고 코드를 조금 재구성할 겁니다.
 우선 geometry는 한 번만 설정하면 됩니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 buffer 채우기
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
 function setGeometry(gl) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
@@ -406,16 +406,16 @@ function setGeometry(gl) {
 
   ...
 
-  // 위치를 넣을 buffer 생성
+  // 위치를 넣을 버퍼 생성
   var positionBuffer = gl.createBuffer();
   // ARRAY_BUFFER에 할당 (ARRAY_BUFFER = positionBuffer로 생각)
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-+  // Buffer에 geometry 데이터 넣기
++  // 버퍼에 geometry 데이터 넣기
 +  setGeometry(gl);
 
   ...
 
-  // Scene 그리기
+  // 장면 그리기
   function drawScene() {
 
     ...
@@ -505,18 +505,18 @@ Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 �
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
-<li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Texture</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>Texture 렌더링</li>
+  <li>텍스처 렌더링</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">텍스처 렌더링</a></li>
         </ul>
   <li>그림자</li>
         <ul>
@@ -546,7 +546,7 @@ Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 �
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>

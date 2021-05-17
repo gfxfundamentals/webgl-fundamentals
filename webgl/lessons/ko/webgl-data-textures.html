@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Texture에 데이터 제공하기">
+<meta name="description" content="텍스처에 데이터 제공하기">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-data-textures_ko.jpg">
 
-<meta property="og:title" content="WebGL 3D - Data Texture">
+<meta property="og:title" content="WebGL 3D - 데이터 텍스처">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-data-textures_ko.jpg">
-<meta property="og:description" content="Texture에 데이터 제공하기">
+<meta property="og:description" content="텍스처에 데이터 제공하기">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-data-textures.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 3D - Data Texture">
+<meta name="twitter:title" content="WebGL 3D - 데이터 텍스처">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-data-textures.html">
-<meta name="twitter:description" content="Texture에 데이터 제공하기">
+<meta name="twitter:description" content="텍스처에 데이터 제공하기">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-data-textures_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-data-textures.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-data-textures.html",
       "inLanguage":"ko",
-      "name":"WebGL 3D - Data Texture",
+      "name":"WebGL 3D - 데이터 텍스처",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL 3D - Data Texture</title>
+<title>WebGL 3D - 데이터 텍스처</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,17 +236,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 3D - Data Texture</h1>
+    <h1>WebGL 3D - 데이터 텍스처</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
       <p>이 포스트는 WebGL 관련 시리즈에서 이어집니다.
-첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고, 이전에는 <a href="webgl-3d-textures.html">texture</a>에 관한 것이었습니다.</p>
-<p>지난 포스트에서 texture가 작동하는 방법과 이를 적용하는 방법에 대해 살펴봤습니다.
-다운로드된 이미지로 texture를 생성했는데요.
+첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고, 이전에는 <a href="webgl-3d-textures.html">텍스처</a>에 관한 것이었습니다.</p>
+<p>지난 포스트에서 텍스처가 작동하는 방법과 이를 적용하는 방법에 대해 살펴봤습니다.
+다운로드된 이미지로 텍스처를 생성했는데요.
 이번 글에서는 이미지 대신 JavaScript에서 직접 데이터를 생성할 겁니다.</p>
-<p>JavaScript에서 texture 데이터를 생성하는 것은 굉장히 간단합니다.
-기본적으로 WebGL1은 texture의 몇 가지 type만 지원하는데</p>
+<p>JavaScript에서 텍스처 데이터를 생성하는 것은 굉장히 간단합니다.
+기본적으로 WebGL1은 텍스처의 몇 가지 type만 지원하는데</p>
 <div class="webgl_center">
   <table class="tabular-data tabular-data1">
     <thead>
@@ -265,11 +265,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </table>
 </div>
 
-<p>3x2 pixel <code class="notranslate" translate="no">LUMINANCE</code> texture를 생성해봅시다.
-<code class="notranslate" translate="no">LUMINANCE</code> texture이기 때문에 픽셀 당 1개의 값만 있고 각각의 R, G, B 채널로 반복됩니다.</p>
+<p>3x2 pixel <code class="notranslate" translate="no">LUMINANCE</code> 텍스처를 생성해봅시다.
+<code class="notranslate" translate="no">LUMINANCE</code> 텍스처이기 때문에 픽셀 당 1개의 값만 있고 각각의 R, G, B 채널로 반복됩니다.</p>
 <p><a href="webgl-3d-textures.html">지난 글</a>에서 샘플을 가져올 겁니다.
-먼저 큐브의 각 면에 전체 texture를 사용하기 위해 texture 좌표를 수정합시다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 큐브의 texture 좌표로 buffer 채우기
+먼저 큐브의 각 면에 전체 텍스처를 사용하기 위해 텍스처 좌표를 수정합시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 큐브의 텍스처 좌표로 버퍼 채우기
 function setTexcoords(gl) {
   gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -282,12 +282,12 @@ function setTexcoords(gl) {
         0, 1,
         1, 1,
         ...
-</code></pre><p>그런 다음 texture 생성 코드를 수정하는데</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Texture 생성
+</code></pre><p>그런 다음 텍스처 생성 코드를 수정하는데</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 텍스처 생성
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, texture);
 
--// 1x1 파란색 픽셀로 texture 채우기
+-// 1x1 파란색 픽셀로 텍스처 채우기
 -gl.texImage2D(
 -  gl.TEXTURE_2D,
 -  0,
@@ -300,7 +300,7 @@ gl.bindTexture(gl.TEXTURE_2D, texture);
 -  new Uint8Array([0, 0, 255, 255])
 -);
 
-// 3x2 픽셀로 texture 채우기
+// 3x2 픽셀로 텍스처 채우기
 const level = 0;
 const internalFormat = gl.LUMINANCE;
 const width = 3;
@@ -362,7 +362,7 @@ gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
 </div>
 
 </p>
-<p>이 부분은 덮어두고 <a href="webgl-render-to-texture.html">texture 렌더링</a>으로 넘어갑시다.</p>
+<p>이 부분은 덮어두고 <a href="webgl-render-to-texture.html">텍스처 렌더링</a>으로 넘어갑시다.</p>
 <div class="webgl_bottombar">
 <h3>Pixel vs Texel</h3>
 <p>
@@ -435,18 +435,18 @@ Texel은 Texture Element의 줄임말이죠.
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
-<li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Texture</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>Texture 렌더링</li>
+  <li>텍스처 렌더링</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">텍스처 렌더링</a></li>
         </ul>
   <li>그림자</li>
         <ul>
@@ -476,7 +476,7 @@ Texel은 Texture Element의 줄임말이죠.
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>
@@ -546,8 +546,8 @@ Texel은 Texture Element의 줄임말이죠.
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 3D - Data Texture';
-            var disqus_title = 'WebGL 3D - Data Texture';
+            var disqus_identifier = 'WebGL 3D - 데이터 텍스처';
+            var disqus_title = 'WebGL 3D - 데이터 텍스처';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

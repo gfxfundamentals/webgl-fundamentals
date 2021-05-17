@@ -270,15 +270,15 @@ function drawCircle() {
   ...
 }
 </code></pre><p>WebGL은 두 번째 방법으로 동작하는데요.
-<code class="notranslate" translate="no">gl.createBuffer</code>, <code class="notranslate" translate="no">gl.bufferData</code>, <code class="notranslate" translate="no">gl.createTexture</code>, <code class="notranslate" translate="no">gl.texImage2D</code>와 같은 함수들은 buffer(vertex)와 texture(color, etc..) 데이터를 WebGL에 업로드 해줍니다.
+<code class="notranslate" translate="no">gl.createBuffer</code>, <code class="notranslate" translate="no">gl.bufferData</code>, <code class="notranslate" translate="no">gl.createTexture</code>, <code class="notranslate" translate="no">gl.texImage2D</code>와 같은 함수들은 버퍼(vertex)와 텍스처(color, etc..) 데이터를 WebGL에 업로드 해줍니다.
 <code class="notranslate" translate="no">gl.createProgram</code>, <code class="notranslate" translate="no">gl.createShader</code>, <code class="notranslate" translate="no">gl.compileShader</code>, <code class="notranslate" translate="no">gl.linkProgram</code>과 같은 함수들은 GLSL shader를 만들어 줍니다.
 그 외 WebGL의 거의 모든 함수들은 이러한 전역 변수나 <em>상태</em>를 설정하여 최종적으로 <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>가 호출될 때 사용됩니다.</p>
 <p>전형적인 WebGL 프로그램은 기본적으로 이런 구조를 따릅니다.</p>
 <p>초기화할 때</p>
 <ul>
 <li>모든 shader와 program을 만들고 위치 탐색</li>
-<li>Buffer를 생성하고 정점 데이터 업로드</li>
-<li>Texture를 생성하고 texture 데이터 업로드</li>
+<li>버퍼를 생성하고 정점 데이터 업로드</li>
+<li>텍스처를 생성하고 텍스처 데이터 업로드</li>
 </ul>
 <p>렌더링할 때</p>
 <ul>
@@ -292,7 +292,7 @@ function drawCircle() {
 </li>
 <li>그리려는 것에 대한 uniform 설정<ul>
 <li>각각의 uniform에 대한 <code class="notranslate" translate="no">gl.uniformXXX</code> 호출</li>
-<li><code class="notranslate" translate="no">gl.activeTexture</code>와 <code class="notranslate" translate="no">gl.bindTexture</code>를 호출하여 texture unit에 texture 할당</li>
+<li><code class="notranslate" translate="no">gl.activeTexture</code>와 <code class="notranslate" translate="no">gl.bindTexture</code>를 호출하여 texture unit에 텍스처 할당</li>
 </ul>
 </li>
 <li><code class="notranslate" translate="no">gl.drawArrays</code> 혹은 <code class="notranslate" translate="no">gl.drawElements</code> 호출</li>
@@ -301,7 +301,7 @@ function drawCircle() {
 </ul>
 <p>기본적으로 이렇습니다.
 해당 작업을 해내기 위해 어떻게 코드를 구성하냐는 당신에게 달려있습니다.</p>
-<p>Texture 데이터(또한 정점 데이터) 업로드같은 일부 작업은 인터넷으로 다운로드가 끝날 때까지 기다려야 하기 때문에 비동기적으로 발생할 수 있습니다.</p>
+<p>텍스처 데이터(또한 정점 데이터) 업로드같은 일부 작업은 인터넷으로 다운로드가 끝날 때까지 기다려야 하기 때문에 비동기적으로 발생할 수 있습니다.</p>
 <p>3가지 물체를 그리는 간단한 앱을 만들어봅시다.
 큐브와 구체 그리고 원뿔입니다.</p>
 <p>큐브, 구체, 원뿔 데이터를 계산하는 방법에 대해 자세히 설명하진 않겠습니다.
@@ -494,8 +494,8 @@ objectsToDraw.forEach(function(object) {
     lastUsedProgramInfo = programInfo;
     gl.useProgram(programInfo.program);
 
-    // 프로그램이 사용하는 buffer만 바인딩하기 때문에 프로그램이 바뀔 때마다 buffer를 다시 바인딩해야 합니다.
-    // 따라서 2개의 프로그램이 동일한 bufferInfo를 사용하지만 첫 번째 buffer가 position만 사용하면 두 번째 buffer로 전환할 때 attribute 중 일부는 활성화되지 않을 겁니다.
+    // 프로그램이 사용하는 버퍼만 바인딩하기 때문에 프로그램이 바뀔 때마다 버퍼를 다시 바인딩해야 합니다.
+    // 따라서 2개의 프로그램이 동일한 bufferInfo를 사용하지만 첫 번째 버퍼가 position만 사용하면 두 번째 버퍼로 전환할 때 attribute 중 일부는 활성화되지 않을 겁니다.
     bindBuffers = true;
   }
 
@@ -527,7 +527,7 @@ var objects = [];
 // 각 객체에 대한 uniform
 var numObjects = 200;
 for (var ii = 0; ii &lt; numObjects; ++ii) {
-  // Shape 선택
+  // shape 선택
   var bufferInfo = shapes[rand(0, shapes.length) | 0];
 
   // 객체 만들기
@@ -583,7 +583,7 @@ Overlay나 후처리 효과처럼 다른 것들에 대한 별도의 목록이 �
 하지만 이는 최악의 경우 vs 최고의 경우이며, 대부분의 프로그램은 더 많은 걸 수행하므로, 특별한 경우를 제외하고는 전부 고려할만한 가치가 없습니다.</p>
 <p>어떤 shader만으로는 어떤 geometry들은 그릴 수 없다는 점에 유의해야 합니다.
 예를 들어 법선이 필요한 shader는 법선이 없는 geometry에서 작동하지 않을 겁니다.
-마찬가지로 texture가 필요한 shader는 texture 없이는 작동하지 않습니다.</p>
+마찬가지로 텍스처가 필요한 shader는 텍스처 없이는 작동하지 않습니다.</p>
 <p>이 모든 걸 처리하기 때문에 <a href="https://threejs.org">Three.js</a>같은 3D 라이브러리를 선택하는 것이 좋습니다.
 몇 가지 geometry를 만들고, 어떻게 렌더링하고 싶은지 three.js에 지시하면, 런타임에 필요한 것들을 처리하기 위해 shader를 생성합니다.
 Unity3D, Unreal, Source, Crytek 등 거의 모든 3D 엔진들이 이를 수행합니다.
@@ -654,18 +654,18 @@ Unity3D, Unreal, Source, Crytek 등 거의 모든 3D 엔진들이 이를 수행�
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
-<li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Texture</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>Texture 렌더링</li>
+  <li>텍스처 렌더링</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">텍스처 렌더링</a></li>
         </ul>
   <li>그림자</li>
         <ul>
@@ -695,7 +695,7 @@ Unity3D, Unreal, Source, Crytek 등 거의 모든 3D 엔진들이 이를 수행�
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>

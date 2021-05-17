@@ -242,16 +242,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>이 글은 WebGL에서 texture unit이 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
 attribute에 관한 <a href="webgl-attributes.html">비슷한 글</a>이 있습니다.</p>
-<p>이 글을 읽기 전에 <a href="webgl-how-it-works.html">WebGL 작동 원리</a>와 <a href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">WebGL Shader 및 GLSL</a>뿐 아니라 <a href="webgl-3d-textures.html">WebGL texture</a>도 읽어보시길 바랍니다.</p>
+<p>이 글을 읽기 전에 <a href="webgl-how-it-works.html">WebGL 작동 원리</a>와 <a href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">WebGL Shader 및 GLSL</a>뿐 아니라 <a href="webgl-3d-textures.html">WebGL 텍스처</a>도 읽어보시길 바랍니다.</p>
 <h2 id="texture-unit">Texture Unit</h2>
-<p>WebGL에는 texture가 있습니다.
-Texture는 대부분 shader에 전달할 수 있는 데이터의 2D 배열인데요.
+<p>WebGL에는 텍스처가 있습니다.
+텍스처는 대부분 shader에 전달할 수 있는 데이터의 2D 배열인데요.
 Shader에서 이렇게 <em>uniform sampler</em>를 선언하면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">uniform sampler2D someTexture;
 </code></pre>
-<p>하지만 shader는 <code class="notranslate" translate="no">someTexture</code>에 사용할 texture를 어떻게 아는 걸까요?</p>
+<p>하지만 shader는 <code class="notranslate" translate="no">someTexture</code>에 사용할 텍스처를 어떻게 아는 걸까요?</p>
 <p>그게 texture unit이 관여하는 부분입니다.
-Texture unit은 texture에 대한 레퍼런스 <strong>전역 배열</strong>입니다.
+Texture unit은 텍스처에 대한 레퍼런스 <strong>전역 배열</strong>입니다.
 WebGL이 javascript로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const gl = {
   activeTextureUnit: 0,
@@ -269,11 +269,11 @@ WebGL이 javascript로 작성되었다면 다음과 같은 전역 상태를 가�
 }
 </code></pre>
 <p>위에서 <code class="notranslate" translate="no">textureUnits</code>가 배열인 걸 볼 수 있는데요.
-해당 texture unit 배열에서 <em>bind point</em> 중 하나를 texture에 할당합니다.
+해당 texture unit 배열에서 <em>bind point</em> 중 하나를 텍스처에 할당합니다.
 <code class="notranslate" translate="no">ourTexture</code>를 texture unit 5에 할당해봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 초기화할 때
 const ourTexture = gl.createTexture();
-// 여기에 texture 초기화 코드를 삽입하세요.
+// 여기에 텍스처 초기화 코드를 삽입하세요.
 
 ...
 
@@ -282,7 +282,7 @@ const indexOfTextureUnit = 5;
 gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 </code></pre>
-<p>그런 다음 아래와 같이 호출하여 texture를 바인딩한 texture unit을 shader에 알리는데</p>
+<p>그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 texture unit을 shader에 알리는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 </code></pre>
 <p><code class="notranslate" translate="no">activeTexture</code> 및 <code class="notranslate" translate="no">bindTexture</code> WebGL 함수가 javascript로 구현된다면 </p>
@@ -296,7 +296,7 @@ gl.bindTexture = function(target, texture) {
   textureUnit[target] = texture;
 }:
 </code></pre>
-<p>다른 texture 함수가 어떻게 작동하는지도 상상할 수 있습니다.
+<p>다른 텍스처 함수가 어떻게 작동하는지도 상상할 수 있습니다.
 <code class="notranslate" translate="no">gl.texImage2D(target, ...)</code>나 <code class="notranslate" translate="no">gl.texParameteri(target)</code>처럼 모두 <code class="notranslate" translate="no">target</code>을 받는데요.
 이들은 다음과 같이 구현될 것이며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드!!!
@@ -313,7 +313,7 @@ gl.texParameteri = function(target, pname, value) {
 }
 </code></pre>
 <p>위 예제 의사 코드에서 <code class="notranslate" translate="no">gl.activeTexture</code>가 WebGL 안에 있는 내부 전역 변수를 texture unit 배열 index로 설정해야 하는 건 명확합니다.
-해당 시점부터, 다른 모든 texture 함수는 <code class="notranslate" translate="no">target</code>을 받고, 모든 texture 함수의 첫 매개 변수이며, 현재 texture unit의 바인딩 포인트를 참조합니다.</p>
+해당 시점부터, 다른 모든 텍스처 함수는 <code class="notranslate" translate="no">target</code>을 받고, 모든 텍스처 함수의 첫 매개 변수이며, 현재 texture unit의 바인딩 포인트를 참조합니다.</p>
 <h2 id="-texture-unit">최대 Texture Unit</h2>
 <p>WebGL은 적어도 8개의 texture unit을 지원하는 구현이 필요합니다.
 얼마나 많이 지원되는지 쿼리할 수 있는데</p>
@@ -331,8 +331,8 @@ maxFragmentShaderTextureUnits = 8
 </code></pre>
 <p>이 말은 예를 들어 vertex shader에서 2개의 texture unit을 사용한다면 합쳐진 최대값은 8이기 때문에 fragment shader에서 사용할 수 있는 건 6개만 남는다는 걸 의미합니다.</p>
 <p>또 하나 주목해야 할 점은 WebGL이 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>가 0을 반환하는 걸 허용한다는 겁니다.
-다시 말해, <strong>일부 기기는 vertex shader에서의 texture 사용을 전혀 지원하지 않을 수 있습니다.</strong>
-다행히 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">그런 상황</a>은 드물지만 vertex shader에서 texture를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>로 확인하고 아니라면 사용자에게 알려야 합니다.</p>
+다시 말해, <strong>일부 기기는 vertex shader에서의 텍스처 사용을 전혀 지원하지 않을 수 있습니다.</strong>
+다행히 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">그런 상황</a>은 드물지만 vertex shader에서 텍스처를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>로 확인하고 아니라면 사용자에게 알려야 합니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -392,18 +392,18 @@ maxFragmentShaderTextureUnits = 8
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
-<li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Texture</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>Texture 렌더링</li>
+  <li>텍스처 렌더링</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">텍스처 렌더링</a></li>
         </ul>
   <li>그림자</li>
         <ul>
@@ -433,7 +433,7 @@ maxFragmentShaderTextureUnits = 8
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>

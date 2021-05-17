@@ -430,18 +430,18 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 
 ...
 
--// 색상을 넣을 buffer 생성
+-// 색상을 넣을 버퍼 생성
 -var colorBuffer = gl.createBuffer();
 -// ARRAY_BUFFER에 바인딩 (ARRAY_BUFFER = colorBuffer라고 생각)
 -gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
--// Buffer에 geometry 데이터 넣기
+-// 버퍼에 geometry 데이터 넣기
 -setColors(gl);
 
-+// 법선을 넣을 buffer 생성
++// 법선 데이터를 넣을 버퍼 생성
 +var normalBuffer = gl.createBuffer();
 +// ARRAY_BUFFER에 바인딩 (think of it as ARRAY_BUFFER = normalBuffer)
 +gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-+// 법선 데이터를 buffer에 넣기
++// 법선 데이터를 버퍼에 넣기
 +setNormals(gl);
 </code></pre><p>그리고 렌더링할 때</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">-// color attribute 활성화
@@ -455,7 +455,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 -var type = gl.UNSIGNED_BYTE;  // 데이터는 unsigned 8bit 값
 -var normalize = true;         // 데이터 정규화 (0-255에서 0-1로 전환)
 -var stride = 0;               // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
--var offset = 0;               // Buffer의 처음부터 시작
+-var offset = 0;               // 버퍼의 처음부터 시작
 -gl.vertexAttribPointer(colorLocation, size, type, normalize, stride, offset)
 
 +// normal attribute 활성화
@@ -464,12 +464,12 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +// normal buffer 바인딩
 +gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 +
-+// // normalBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
++// normalBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
 +var size = 3;          // 반복마다 3개의 컴포넌트
 +var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
 +var normalize = false; // 데이터 정규화 (0-255에서 0-1로 전환)
 +var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
-+var offset = 0;        // Buffer의 처음부터 시작
++var offset = 0;        // 버퍼의 처음부터 시작
 +gl.vertexAttribPointer(normalLocation, size, type, normalize, stride, offset)
 </code></pre><p>이제 shader가 이걸 사용하도록 만들어야 합니다.</p>
 <p>먼저 vertex shader를 통해 fragment shader로 normal을 전달합니다.</p>
@@ -746,18 +746,18 @@ mat3 방식이 더 깔끔해 보였지만 종종 이런 방식으로 해왔습�
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
-<li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Texture</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>Texture 렌더링</li>
+  <li>텍스처 렌더링</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">텍스처 렌더링</a></li>
         </ul>
   <li>그림자</li>
         <ul>
@@ -787,7 +787,7 @@ mat3 방식이 더 깔끔해 보였지만 종종 이런 방식으로 해왔습�
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>

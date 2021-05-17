@@ -260,28 +260,28 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
 <p>Vertex shader는 데이터가 필요한데요.
 3가지 방법으로 데이터를 얻을 수 있습니다.</p>
 <ol>
-<li><a href="#attribute">Attribute</a> (buffer에서 가져온 데이터)</li>
+<li><a href="#attribute">Attribute</a> (버퍼에서 가져온 데이터)</li>
 <li><a href="#uniform">Uniform</a> (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)</li>
 <li><a href="#vertex-shader-texture">Texture</a> (pixel/texel의 데이터)</li>
 </ol>
 <h3 id="attribute">Attribute</h3>
 <p>가장 일반적인 방법은 buffer와 <em>attribute</em>를 통하는 겁니다.
 <a href="webgl-how-it-works.html">작동 원리</a>에서 buffer와 attribute를 다뤘었죠.
-Buffer를 만들고,</p>
+버퍼를 만들고,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var buf = gl.createBuffer();
-</code></pre><p>이 buffer에 데이터를 넣은 뒤</p>
+</code></pre><p>이 버퍼에 데이터를 넣은 뒤</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 </code></pre><p>만든 shader program을 통해 초기화 시 attribute의 위치를 찾고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
-</code></pre><p>렌더링할 때 WebGL에 해당 buffer에서 attribute로 데이터를 어떻게 가져올지 지시하는데</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 attribute에 대한 buffer에서 데이터 가져오기 활성화
+</code></pre><p>렌더링할 때 WebGL에 해당 버퍼에서 attribute로 데이터를 어떻게 가져올지 지시하는데</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 attribute에 대한 버퍼에서 데이터 가져오기 활성화
 gl.enableVertexAttribArray(positionLoc);
 
 var numComponents = 3;  // (x, y, z)
 var type = gl.FLOAT;    // 32bit 부동 소수점 값
 var normalize = false;  // 값 원본 그대로 유지
-var offset = 0;         // Buffer의 처음부터 시작
+var offset = 0;         // 버퍼의 처음부터 시작
 var stride = 0;         // 다음 정점으로 가기 위해 이동하는 byte 수
                         // 0 = type과 numComponents에 맞는 stride 사용
 
@@ -292,7 +292,7 @@ gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 void main() {
   gl_Position = a_position;
 }
-</code></pre><p>Clip space 정점을 buffer에 넣으면 동작할 겁니다. </p>
+</code></pre><p>Clip space 정점을 버퍼에 넣으면 동작할 겁니다. </p>
 <p>Attribute는 type으로 <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code>, <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>를 사용할 수 있습니다.</p>
 <h3 id="uniform">Uniform</h3>
 <p>Shader uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지되며 shader에 전달되는 값입니다.
@@ -371,8 +371,8 @@ uniform SomeStruct u_someThing;
 </code></pre><p>각 field를 개별적으로 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
 var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
-</code></pre><h3 id="vertex-shader-texture">Vertex shader의 texture</h3>
-<p><a href="#fragment-shader-texture">Fragment shader의 texture</a>를 봐주세요.</p>
+</code></pre><h3 id="vertex-shader-">Vertex shader의 텍스처</h3>
+<p><a href="#fragment-shader-texture">Fragment shader의 텍스처</a>를 봐주세요.</p>
 <h2 id="fragment-shader">Fragment shader</h2>
 <p>Fragment shader의 역할은 래스터화되는 현재 픽셀의 색상을 제공하는 것입니다.
 항상 이런 형식을 취하는데</p>
@@ -392,18 +392,18 @@ void main() {
 </ol>
 <h3 id="fragment-shader-uniform">Fragment shader의 Uniform</h3>
 <p><a href="#uniform">Shader의 Uniform</a>을 봐주세요.</p>
-<h3 id="fragment-shader-texture">Fragment shader의 texture</h3>
-<p>Shader의 texture에서 값을 가져오면 <code class="notranslate" translate="no">sampler2D</code> uniform을 생성하고 값을 추출하기 위해 GLSL 함수 <code class="notranslate" translate="no">texture2D</code>를 사용합니다.</p>
+<h3 id="fragment-shader-">Fragment shader의 텍스처</h3>
+<p>Shader의 텍스처에서 값을 가져오면 <code class="notranslate" translate="no">sampler2D</code> uniform을 생성하고 값을 추출하기 위해 GLSL 함수 <code class="notranslate" translate="no">texture2D</code>를 사용합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 uniform sampler2D u_texture;
 
 void main() {
-  vec2 texcoord = vec2(0.5, 0.5)  // Texture 중앙에서 값 가져오기
+  vec2 texcoord = vec2(0.5, 0.5)  // 텍스처 중앙에서 값 가져오기
   gl_FragColor = texture2D(u_texture, texcoord);
 }
-</code></pre><p>Texture에서 나오는 데이터는 <a href="webgl-3d-textures.html">수많은 설정</a>에 따라 달라집니다.
-최소한 texture의 데이터를 생성하고 넣어야 하는데, 예를 들어</p>
+</code></pre><p>텍스처에서 나오는 데이터는 <a href="webgl-3d-textures.html">수많은 설정</a>에 따라 달라집니다.
+최소한 텍스처의 데이터를 생성하고 넣어야 하는데, 예를 들어</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 var level = 0;
@@ -417,11 +417,11 @@ gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIG
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 </code></pre><p>초기화 시 shader program의 uniform 위치를 찾으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
-</code></pre><p>렌더링할 때 texture unit에 texture를 할당하고</p>
+</code></pre><p>렌더링할 때 texture unit에 텍스처를 할당하고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var unit = 5;  // texture unit 선택
 gl.activeTexture(gl.TEXTURE0 + unit);
 gl.bindTexture(gl.TEXTURE_2D, tex);
-</code></pre><p>Texture를 바인딩한 unit을 shader에 알려줍니다.</p>
+</code></pre><p>텍스처를 바인딩한 unit을 shader에 알려줍니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform1i(someSamplerLoc, unit);
 </code></pre><h3 id="varying">Varying</h3>
 <p>Varying은 <a href="webgl-how-it-works.html">동작 원리</a>에 다룬 vertex shader에서 fragment shader로 값을 전달하는 방법입니다.</p>
@@ -593,18 +593,18 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">Loading .obj files</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
-<li><a href="/webgl/lessons/ko/webgl-data-textures.html">Data Texture</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
-  <li>Texture 렌더링</li>
+  <li>텍스처 렌더링</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">Render to Texture</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-render-to-texture.html">텍스처 렌더링</a></li>
         </ul>
   <li>그림자</li>
         <ul>
@@ -634,7 +634,7 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
-  <li>Texture</li>
+  <li>텍스처</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
         </ul>
