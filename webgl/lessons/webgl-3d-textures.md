@@ -195,7 +195,7 @@ will adjust texture coordinates in those packages.
 
 So what happens if we use texture coordinates outside the 0.0 to 1.0
 range.  By default WebGL repeats the texture.  0.0 to 1.0 is one 'copy' of
-the texture.  1.0 to 2.0 is another copy.  even -4.0 to -3.0 is yet
+the texture.  1.0 to 2.0 is another copy.  Even -4.0 to -3.0 is yet
 another copy.  Let's display a plane using these texture coordinates.
 
      -3, -1,
@@ -205,7 +205,7 @@ another copy.  Let's display a plane using these texture coordinates.
       2, -1,
       2,  4,
 
-and here it is
+And here it is
 
 {{{example url="../webgl-3d-textures-repeat-clamp.html" }}}
 
@@ -427,7 +427,7 @@ like this
 
 <img class="webgl_center" src="../resources/noodles.jpg" />
 
-and then use a different set of texture coordinates for each face of the cube.
+And then use a different set of texture coordinates for each face of the cube.
 
         // select the top left image
         0   , 0  ,
