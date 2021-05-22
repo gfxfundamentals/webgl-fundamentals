@@ -78,7 +78,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
 여기 해당 코드입니다.
 정점 색상을 곱하기 위해 `u_colorMult`를 추가한 걸 제외하고는 [perspective 예제](webgl-3d-perspective.html)와 같은 간단한 shader입니다.
 
-    // Vertex shader에서 전달됩니다.
+    // Vertex shader에서 전달
     varying vec4 v_color;
 
     uniform vec4 u_colorMult;

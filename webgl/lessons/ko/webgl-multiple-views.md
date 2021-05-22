@@ -72,7 +72,7 @@ void main() {
 // fragment shader
 precision mediump float;
 
-// Vertex shader에서 전달됩니다.
+// Vertex shader에서 전달
 varying vec4 v_color;
 
 void main() {

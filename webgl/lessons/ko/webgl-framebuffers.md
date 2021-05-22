@@ -98,7 +98,7 @@ ext.drawBuffersWebGL(drawBuffers) {
 
 중요한 건 *framebuffer*는 단순한 attachment 모음이라는 겁니다.
 문제는 attachment가 될 수 있는 것들과 작동하는 조합에 대한 제한인데요.
-예를 들어 부동 소수점 texture attachment는 기본적으로 렌더링될 수 없습니다.
+예를 들어 floating point texture attachment는 기본적으로 렌더링될 수 없습니다.
 extension은 `WEBGL_color_buffer_float`같은 걸 활성화할 수 있습니다.
 마찬가지로 2개 이상의 attachment가 있다면 모두 동일한 넓이여야 합니다.
 

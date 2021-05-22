@@ -213,7 +213,7 @@ var canvas = document.querySelector("#canvas");
 
 ---
 
-<a id="tabindex" data-toc="Canvas 키보드 입력"></a>
+<a id="tabindex" data-toc="캔버스 키보드 입력"></a>
 
 # 키보드 입력 받기
 

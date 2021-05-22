@@ -98,7 +98,7 @@ Fragment shader에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용
   precision mediump float;
 #endif
 
-// Vertex shader에서 전달됩니다.
+// Vertex shader에서 전달
 varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 varying vec3 v_surfaceToView;

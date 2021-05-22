@@ -229,7 +229,7 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
     +
     +// colorBuffer(ARRAY_BUFFER)의 데이터를 가져오는 방법을 색상 attribute에 지시
     +var size = 4;          // 반복마다 4개의 컴포넌트
-    +var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
+    +var type = gl.FLOAT;   // 데이터는 32bit float
     +var normalize = false; // 데이터 정규화 안 함
     +var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
     +var offset = 0;        // 버퍼의 처음부터 시작
@@ -337,8 +337,8 @@ WebGL의 작동 방식을 이해하는 또다른 방법으로 [대화형 상태 
 <div class="webgl_bottombar">
 <h3>vertexAttribPointer에서 normalizeFlag는 뭔가요?</h3>
 <p>
-normalize flag는 부동 소수점이 아닌 모든 type을 위한 것인데요.
-false를 넘기면 해당 값의 type으로 해석됩니다.
+Normalize flag는 부동 소수점이 아닌 모든 type을 위한 것인데요.
+False를 넘기면 해당 값의 type으로 해석됩니다.
 BYTE는 -128에서 127까지, UNSIGNED_BYTE는 0부터 255까지, SHORT는 -32768부터 32767까지 등등...
 </p>
 <p>

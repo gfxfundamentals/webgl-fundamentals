@@ -240,7 +240,7 @@ function setNormals(gl) {
 +
 +// normalBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
 +var size = 3;          // 반복마다 3개의 컴포넌트
-+var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
++var type = gl.FLOAT;   // 데이터는 32bit float
 +var normalize = false; // 데이터 정규화 (0-255에서 0-1로 전환)
 +var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 +var offset = 0;        // 버퍼의 처음부터 시작
@@ -276,7 +276,7 @@ function setNormals(gl) {
 ```
 precision mediump float;
 
-// Vertex shader에서 전달됩니다.
+// Vertex shader에서 전달
 -varying vec4 v_color;
 +varying vec3 v_normal;
 

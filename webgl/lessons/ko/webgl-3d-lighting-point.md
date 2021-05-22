@@ -69,7 +69,7 @@ surface -> light 벡터는 단위 벡터가 아니기 때문에 fragment shader�
 
     precision mediump float;
 
-    // Vertex shader에서 전달됩니다.
+    // Vertex shader에서 전달
     varying vec3 v_normal;
     +varying vec3 v_surfaceToLight;
 
@@ -190,7 +190,7 @@ surface -> light 벡터는 단위 벡터가 아니기 때문에 fragment shader�
 다음으로 fragment shader에서 surface -> view 벡터와 surface -> light 벡터 사이의 `halfVector`를 계산해야 합니다.
 그런 다음 `halfVector`와 법선의 스칼라곱을 구하여, 빛이 뷰로 반사되는지 확인할 수 있습니다.
 
-    // Vertex shader에서 전달됩니다.
+    // Vertex shader에서 전달
     varying vec3 v_normal;
     varying vec3 v_surfaceToLight;
     +varying vec3 v_surfaceToView;

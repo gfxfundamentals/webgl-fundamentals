@@ -11,7 +11,7 @@ WebGL 프로그램을 사용하려면 컴파일하고 연결해야 하는 shader
 이 입력들은 uniform과 attribute라 불리는데, 이들의 위치를 찾는데 필요한 코드는 장황하고 지루할 수 있습니다.
 
 Shader program을 컴파일하고 연결하는 [전형적인 WebGL boilerplate 코드](webgl-boilerplate.html)가 있다고 가정합시다.
-주어진 shader 세트는 이렇습니다.
+주어진 shader set은 이렇습니다.
 
 Vertex shader:
 

@@ -89,7 +89,7 @@ function drawCube(aspect) {
 
   // positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 position attribute에 지시
   var size = 3;          // 반복마다 3개의 컴포넌트
-  var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
+  var type = gl.FLOAT;   // 데이터는 32bit float
   var normalize = false; // 데이터 정규화 안 함
   var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
   var offset = 0;        // 버퍼의 처음부터 시작
@@ -104,7 +104,7 @@ function drawCube(aspect) {
 
   // texcoordBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 texcoord attribute에 지시
   var size = 2;          // 반복마다 2개의 컴포넌트
-  var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
+  var type = gl.FLOAT;   // 데이터는 32bit float
   var normalize = false; // 데이터 정규화 안 함
   var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
   var offset = 0;        // 버퍼의 처음부터 시작

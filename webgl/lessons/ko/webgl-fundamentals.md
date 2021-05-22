@@ -33,7 +33,7 @@ Shader가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.
    일반적으로 버퍼는 위치, 법선, 텍스처 좌표, 정점 색상 등을 포함하지만 원하는 걸 자유롭게 넣어도 됩니다.
 
    Attribute는 버퍼에서 데이터를 가져오고 vertex shader에 제공하는 방법을 지정하는데 사용됩니다.
-   예를 들어 위치당 3개의 32bit 부동 소수점으로 위치를 버퍼에 넣을 수 있는데요.
+   예를 들어 위치당 3개의 32bit float로 위치를 버퍼에 넣을 수 있는데요.
    특정한 attribute에게 어느 버퍼에서 위치를 가져올지, 어떤 type의 데이터를 가져와야 하는지 (3개의 32bit 부동 소수점), 버퍼의 offset이 어느 위치에서 시작되는지, 한 위치에서 다음으로 갈 때 몇 byte를 이동시킬 것인지 알려줘야 합니다.
    
    버퍼는 무작위로 접근할 수 없습니다.
@@ -314,7 +314,7 @@ CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 �
 
     // positionBuffer(ARRAY_BUFFER)의 데이터를 꺼내오는 방법을 attribute에 지시
     var size = 2;          // 반복마다 2개의 컴포넌트
-    var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
+    var type = gl.FLOAT;   // 데이터는 32bit float
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
     var offset = 0;        // 버퍼의 처음부터 시작
@@ -329,7 +329,7 @@ Attribute는 계속해서 `positionBuffer`를 사용합니다.
 
     attribute vec4 a_position;
 
-`vec4`는 4개의 부동 소수점 값입니다.
+`vec4`는 4개의 float 값입니다.
 Javascript에서 `a_position = {x: 0, y: 0, z: 0, w: 0}`와 같이 생각할 수 있습니다.
 위에서 `size = 2`로 설정했는데요.
 Attribute의 기본값은 `0, 0, 0, 1`이므로 이 attribute는 buffer에서 처음 2개의 값(x 및 y)을 가져옵니다.

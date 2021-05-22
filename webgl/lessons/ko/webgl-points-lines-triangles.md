@@ -93,5 +93,5 @@ Clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 그게 훨씬 빠를 겁니다.
 
 추가로 `LINES`는 디버깅이나 간단한 효과에 사용하기는 좋지만, 대부분의 플랫폼에서 너비 제한이 1px임을 고려해 볼 때 잘못된 해결책인 경우가 많습니다.
-그래프의 grid를 그리거나 3D 모델링 프로그램에서 polygon의 윤곽선을 표시하려면 `LINES`를 사용하는 것이 좋지만, SVG나 Adobe Illustrator처럼 구조화된 그래픽을 그리려면 이 방식은 작동하지 않으며, 보통은 삼각형에서 [다른 방식](https://mattdesl.svbtle.com/drawing-lines-is-hard)으로 선을 렌더링해야 합니다.
+그래프의 grid를 그리거나 3D 모델링 프로그램에서 폴리곤의 윤곽선을 표시하려면 `LINES`를 사용하는 것이 좋지만, SVG나 Adobe Illustrator처럼 구조화된 그래픽을 그리려면 이 방식은 작동하지 않으며, 보통은 삼각형에서 [다른 방식](https://mattdesl.svbtle.com/drawing-lines-is-hard)으로 선을 렌더링해야 합니다.
 

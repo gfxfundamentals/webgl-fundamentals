@@ -55,14 +55,14 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 ---
 
 * [Trail 효과로 움직이는 선을 만드는 방법](webgl-qna-how-to-achieve-moving-line-with-trail-effects.html)
-* [텍스처가 있는 trapezoid polygon을 그리는 올바른 방법](webgl-qna-how-to-draw-correctly-textured-trapezoid-polygons.html)
+* [텍스처가 있는 사다리꼴 폴리곤을 그리는 올바른 방법](webgl-qna-how-to-draw-correctly-textured-trapezoid-polygons.html)
 * [Tex 이미지 TEXTURE_2D 레벨 0에서 느린 초기화 발생](webgl-qna-tex-image-texture_2d-level-0-is-incurring-lazy-initialization.html)
 * [2D WebGL에서 마우스로 확대/축소를 구현하는 방법](webgl-qna-how-to-implement-zoom-from-mouse-in-2d-webgl.html)
 * [torus를 만드는 방법](webgl-qna-how-to-create-a-torus.html)
 
 ---
 
-* [스스로 교차하는 polygon을 혼합하지 마세요](webgl-qna-don-t-blend-a-polygon-that-crosses-itself.html)
+* [스스로 교차하는 폴리곤을 블렌딩하지 마세요](webgl-qna-don-t-blend-a-polygon-that-crosses-itself.html)
 * [Fragment shader에서 잘린 삼각형을 감지하는 방법](webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader.html)
 * [많은 원을 그리는 가장 빠른 방법](webgl-qna-the-fastest-way-to-draw-many-circles.html)
 * [instanced rendering 정렬 및 최적화](webgl-qna-sorting-and-optimizing-instanced-rendering.html)
@@ -88,7 +88,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [충돌 확인을 위한 point의 크기 가져오기](webgl-qna-get-the-size-of-a-point-for-collision-checking.html)
 * [마우스 클릭의 3d 좌표를 얻는 방법](webgl-qna-how-to-get-the-3d-coordinates-of-a-mouse-click.html)
-* [두 삼각형을 가로질러 색상을 혼합하는 방법](webgl-qna-how-to-blend-colors-across-2-triangles.html)
+* [두 삼각형을 가로질러 색상을 블렌딩하는 방법](webgl-qna-how-to-blend-colors-across-2-triangles.html)
 * [텍스처를 데이터로 사용하는 방법](webgl-qna-how-to-use-textures-as-data.html)
 * [2d sprite의 투명도를 mask로 사용하는 방법](webgl-qna-how-to-use-a-2d-sprite-s-transparency-as-a-mask.html)
 
