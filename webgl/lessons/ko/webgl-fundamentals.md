@@ -108,7 +108,7 @@ Vertex shader부터 시작해봅시다.
 
 다음으로 fragment shader가 필요합니다.
 
-    // Fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
+    // fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
     // mediump은 좋은 기본값으로 "중간 정밀도"를 의미합니다.
     precision mediump float;
 
@@ -318,7 +318,14 @@ CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 �
     var normalize = false; // 데이터 정규화 안 함
     var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
     var offset = 0;        // 버퍼의 처음부터 시작
-    gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
+    gl.vertexAttribPointer(
+      positionAttributeLocation,
+      size,
+      type,
+      normalize,
+      stride,
+      offset
+    );
 
 `gl.vertexAttribPointer`의 숨겨진 부분은 현재 바인딩된 `ARRAY_BUFFER`를 attribute에 할당한다는 겁니다.
 다시 말해 이 attribute는 이제 `positionBuffer`에 바인딩됩니다.

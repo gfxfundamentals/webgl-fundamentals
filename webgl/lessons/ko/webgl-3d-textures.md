@@ -4,7 +4,7 @@ TOC: 텍스처
 
 
 이 포스트는 WebGL 관련 시리즈에서 이어집니다.
-첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [애니메이션](webgl-2d-scale.html)에 관한 것이었습니다.
+첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [애니메이션](webgl-animation.html)에 관한 것이었습니다.
 
 WebGL에서 어떻게 텍스처를 적용할까요?
 [이미지 처리](webgl-image-processing.html)에 대한 글을 읽으면 방법을 알 수 있지만 자세히 살펴보면 이해하기 더 쉬울 겁니다.
@@ -463,7 +463,7 @@ WebGL이 "texture complete"여야 하는데요.
 먼저 [texture unit state 작동 방식](webgl-texture-units.html)입니다.
 그리고 [한 번에 2개 이상의 텍스처를 사용하는 방법](webgl-2-textures.html)입니다.
 또 다른 것은 [다른 도메인의 이미지를 사용하는 방법](webgl-cors-permission.html)이 있습니다.
-마지막으로 어찌보면 사소하지만 알아두면 좋은 [perspective correct texture mapping](webgl-3d-perspective-correct-texturemapping.html)입니다.
+마지막으로 어찌보면 사소하지만 알아두면 좋은 [원근 교정 텍스처 매핑](webgl-3d-perspective-correct-texturemapping.html)입니다.
 
 다음은 [JavaScript에서 텍스처에 데이터를 제공하는 방법](webgl-data-textures.html)입니다.
 또는 WebGL 단순화에 대한 [less code more fun](webgl-less-code-more-fun.html)을 확인할 수도 있습니다.
@@ -475,6 +475,6 @@ Texture coordinate는 종종 texture coords, texcoords, UV로 줄여집니다.
 저는 vertex position이 <code>x, y, z, w</code>를 사용한다는 것을 제외하고 UV(Ew-Vee)라는 용어가 어디서 왔는지는 모르기 때문에, texture coordinate에 대해 <code>s, t, u, v</code>를 사용하여 둘 중 어느 걸 참조하는지 명확하게 하기로 결정하였습니다.
 그럼 Es-Tee로 불릴 것 같고 실제로 texture wrap 설정을 보면 <code>TEXTURE_WRAP_S</code>와 <code>TEXTURE_WRAP_T</code>지만 어떤 이유로든 제가 그래픽스 분야에서 일하는 동안 사람들은 Ew-Vee라고 불렀습니다.
 </p>
-<p>따라서 누군가가 UV라고 말하면 texture coordinate에 대해 이야기하는 겁니다.</p>
+<p>따라서 누군가가 UV라고 말하면 텍스처 좌표에 대해 이야기하는 겁니다.</p>
 </div>
 
