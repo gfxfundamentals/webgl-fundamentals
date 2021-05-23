@@ -263,7 +263,7 @@ Shader가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.</
 <p>버퍼는 GPU에 업로드하는 2진 데이터 배열입니다.
 일반적으로 버퍼는 위치, 법선, 텍스처 좌표, 정점 색상 등을 포함하지만 원하는 걸 자유롭게 넣어도 됩니다.</p>
 <p>Attribute는 버퍼에서 데이터를 가져오고 vertex shader에 제공하는 방법을 지정하는데 사용됩니다.
-예를 들어 위치당 3개의 32bit 부동 소수점으로 위치를 버퍼에 넣을 수 있는데요.
+예를 들어 위치당 3개의 32bit float로 위치를 버퍼에 넣을 수 있는데요.
 특정한 attribute에게 어느 버퍼에서 위치를 가져올지, 어떤 type의 데이터를 가져와야 하는지 (3개의 32bit 부동 소수점), 버퍼의 offset이 어느 위치에서 시작되는지, 한 위치에서 다음으로 갈 때 몇 byte를 이동시킬 것인지 알려줘야 합니다.</p>
 <p>버퍼는 무작위로 접근할 수 없습니다.
 대신에 vertex shader가 지정한 횟수만큼 실행되는데요.
@@ -325,7 +325,7 @@ drawArrays(..., offset, count) {
 }
 </code></pre><p>실제로는 <code class="notranslate" translate="no">positionBuffer</code>가 2진 데이터(아래 참조)로 변환되어야 하기 때문에 그렇게 간단하지 않으므로, buffer에서 데이터를 가져오기 위한 실제 계산은 약간 다를 수 있지만, 이걸로 vertex shader가 어떻게 실행되는지 알 수 있기를 바랍니다.</p>
 <p>다음으로 fragment shader가 필요합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
 // mediump은 좋은 기본값으로 &quot;중간 정밀도&quot;를 의미합니다.
 precision mediump float;
 
@@ -484,18 +484,25 @@ gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
 // positionBuffer(ARRAY_BUFFER)의 데이터를 꺼내오는 방법을 attribute에 지시
 var size = 2;          // 반복마다 2개의 컴포넌트
-var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점
+var type = gl.FLOAT;   // 데이터는 32bit float
 var normalize = false; // 데이터 정규화 안 함
 var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;        // 버퍼의 처음부터 시작
-gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
+gl.vertexAttribPointer(
+  positionAttributeLocation,
+  size,
+  type,
+  normalize,
+  stride,
+  offset
+);
 </code></pre><p><code class="notranslate" translate="no">gl.vertexAttribPointer</code>의 숨겨진 부분은 현재 바인딩된 <code class="notranslate" translate="no">ARRAY_BUFFER</code>를 attribute에 할당한다는 겁니다.
 다시 말해 이 attribute는 이제 <code class="notranslate" translate="no">positionBuffer</code>에 바인딩됩니다.
 이건 <code class="notranslate" translate="no">ARRAY_BUFFER</code> bind point에 다른 것들을 자유롭게 할당할 수 있다는 걸 의미하는데요.
 Attribute는 계속해서 <code class="notranslate" translate="no">positionBuffer</code>를 사용합니다.</p>
 <p>참고로 GLSL vertex shader 관점에서 <code class="notranslate" translate="no">a_position</code> attribute는 <code class="notranslate" translate="no">vec4</code>입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
-</code></pre><p><code class="notranslate" translate="no">vec4</code>는 4개의 부동 소수점 값입니다.
+</code></pre><p><code class="notranslate" translate="no">vec4</code>는 4개의 float 값입니다.
 Javascript에서 <code class="notranslate" translate="no">a_position = {x: 0, y: 0, z: 0, w: 0}</code>와 같이 생각할 수 있습니다.
 위에서 <code class="notranslate" translate="no">size = 2</code>로 설정했는데요.
 Attribute의 기본값은 <code class="notranslate" translate="no">0, 0, 0, 1</code>이므로 이 attribute는 buffer에서 처음 2개의 값(x 및 y)을 가져옵니다.
@@ -805,7 +812,7 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
         </ul>
   <li>텍스처</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">Textures</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
@@ -869,7 +876,7 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 보기, 다중 캔버스</a></li>
@@ -881,7 +888,7 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 문제</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas Clear 방지</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">Canvas 키보드 입력</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform 문제</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
