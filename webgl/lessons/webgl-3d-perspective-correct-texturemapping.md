@@ -290,7 +290,7 @@ Dividing by 1 does nothing so we can simplify to this
               -------------------
                  (1 - t) + t
 
-`(1 - t) + t` when `t` goes from 0 to 1 is the same as `1`. For example
+`(1 - t) + t` is the same as `1`. For example
 if `t` was `.7` we'd get `(1 - .7) + .7` which is `.3 + .7` which is `1`. In other words we can remove the bottom so we're left with
 
      result = (1 - t) * a + t * b
