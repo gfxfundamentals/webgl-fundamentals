@@ -298,7 +298,7 @@ void main() {
 }
 ```
 
-To compute the projected texture coordinates we'll make a
+To compute the projected texture coordinates we'll make
 a matrix that represents a 3D space oriented and positioned
 in a certain direction just like the camera from [the article on visualizing the camera](webgl-visualizing-the-camera.html). 
 We'll then project the world positions
@@ -426,7 +426,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 }
 ```
 
-and with that we get a projected texture.
+And with that we get a projected texture.
 
 {{{example url="../webgl-planar-projection.html"}}}
 
