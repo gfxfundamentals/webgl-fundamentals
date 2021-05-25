@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/webgl-resizing-the-canvas.md. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,17 +8,15 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-*   Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
-
-*   Redistributions in binary form must reproduce the above
-    copyright notice, this list of conditions and the following disclaimer
-    in the documentation and/or other materials provided with the
-    distribution.
-
-*   Neither the name of GFXFundamentals. nor the names of his
-    contributors may be used to endorse or promote products derived from
-    this software without specific prior written permission.
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of GFXFundamentals. nor the names of his
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -36,80 +34,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL Resizing the Canvas." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="How to resize a WebGL canvas and the issues involved" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html" />
 
-<meta name="description" content="WebGL 캔버스 크기 조정 및 관련 문제 해결법">
-<meta name="keywords" content="webgl graphics">
-<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-resizing-the-canvas_ko.jpg">
-
-<meta property="og:title" content="WebGL 캔버스 크기 조정">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-resizing-the-canvas_ko.jpg">
-<meta property="og:description" content="WebGL 캔버스 크기 조정 및 관련 문제 해결법">
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@greggman">
-<meta name="twitter:creator" content="@greggman">
-<meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 캔버스 크기 조정">
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html">
-<meta name="twitter:description" content="WebGL 캔버스 크기 조정 및 관련 문제 해결법">
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-resizing-the-canvas_ko.jpg">
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@graph":[
-    {
-      "@type":"WebSite",
-      "@id":"https://webglfundamentals.org/#website",
-      "url":"https://webglfundamentals.org/",
-      "name":"WebglFundamentals"
-    },
-    {
-      "@type":"ImageObject",
-      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html#primaryimage",
-      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-resizing-the-canvas_ko.jpg",
-      "width":1200,
-      "height":630
-    },
-    {
-      "@type":"WebPage",
-      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html#webpage",
-      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html",
-      "inLanguage":"ko",
-      "name":"WebGL 캔버스 크기 조정",
-      "keywords":"webgl graphics programming",
-      "isPartOf":{
-        "@id":"https://webglfundamentals.org/#website"
-      },
-      "primaryImageOfPage":{
-        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html#primaryimage"
-      }
-    }
-  ]
-}
-</script>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL Resizing the Canvas." />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html" />
+<meta name="twitter:description" content="How to resize a WebGL canvas and the issues involved" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 캔버스 크기 조정</title>
+<title>WebGL Resizing the Canvas.</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/lang.css">
-<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
-
-  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html">
-  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-resizing-the-canvas.html">
-  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-resizing-the-canvas.html">
-  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-resizing-the-canvas.html">
-  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-resizing-the-canvas.html">
-  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-resizing-the-canvas.html">
-  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-resizing-the-canvas.html">
-  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-resizing-the-canvas.html">
-
-
-
-
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
 <body>
 <div class="webgl_navbar">
@@ -236,430 +179,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 캔버스 크기 조정</h1>
+    <h1>WebGL Resizing the Canvas.</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>캔버스 크기를 바꾸기 위해 알아야 할 것들이 있습니다.</p>
-<p>모든 캔버스는 두 가지 크기를 가지고 있습니다.
-먼저 drawingbuffer라는 크기인데요.
-이건 캔버스에 있는 픽셀 수입니다.
-두 번째 크기는 캔버스가 표시되는 크기인데요.
-CSS는 캔버스가 표시되는 크기를 결정합니다.</p>
-<p>두 가지 방법으로 캔버스의 drawingbuffer를 설정할 수 있습니다.
-하나는 HTML을 이용하는 겁니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
-</code></pre><p>다른 방법은 JavaScript를 이용합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; &gt;&lt;/canvas&gt;
-</code></pre><p>JavaScript</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var canvas = document.querySelector(&quot;#c&quot;);
-canvas.width = 400;
-canvas.height = 300;
-</code></pre><p>만약 캔버스의 표시 크기에 영향을 주는 CSS가 없다면 표시 크기는 drawingbuffer와 동일한 크기가 되는데요.
-위 두 예제에서 캔버스의 drawingbuffer는 400x300이며 표시 크기 또한 400x300이 됩니다.</p>
-<p>다음은 페이지에 400x300px로 표시되고 drawingbuffer가 10x15px인 캔버스의 예제입니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot; style=&quot;width: 400px; height: 300px;&quot;&gt;&lt;/canvas&gt;
-</code></pre><p>혹은 예를 들어 이렇게</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;style&gt;
-#c {
-  width: 400px;
-  height: 300px;
-}
-&lt;/style&gt;
-&lt;canvas id=&quot;c&quot; width=&quot;10&quot; height=&quot;15&quot;&gt;&lt;/canvas&gt;
-</code></pre><p>해당 캔버스에 단일 픽셀 너비의 회전하는 선을 그리면 이런 걸 볼 수 있습니다.</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-10x15-canvas-400x300-css.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-10x15-canvas-400x300-css.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>왜 이렇게 흐릿할까요?
-그건 브라우저가 10x15px의 캔버스를 가져와서 400x300px로 늘이고, 일반적으로 늘릴 때 텍스처 필터링을 하기 때문입니다.</p>
-<p>그럼 예를 들어 캔버스로 창을 꽉 채우고 싶다면 어떻게 해야 할까요?
-우선 브라우저가 CSS로 캔버스를 늘려 창을 채우게 할 수 있습니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;html&gt;
-  &lt;head&gt;
-    &lt;style&gt;
-      /* border 제거 */
-      body {
-        border: 0;
-        background-color: white;
-      }
-      /* 캔버스를 viewport 크기로 만들기 */
-      canvas {
-        width: 100vw;
-        height: 100vh;
-        display: block;
-      }
-    &lt;style&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
-</code></pre><p>이제 브라우저가 캔버스를 늘린 크기와 일치하는 drawingbuffer를 만들어야 하는데요.
-This is unfortunately a complicated topic. Let&#39;s go over some different methods</p>
-<h2 id="use-clientwidth-and-clientheight-">Use <code class="notranslate" translate="no">clientWidth</code> and <code class="notranslate" translate="no">clientHeight</code></h2>
-<p>This is the easiest way.
-<code class="notranslate" translate="no">clientWidth</code> and <code class="notranslate" translate="no">clientHeight</code> are properties every element in HTML has that tell us
-the size of the element in CSS pixels. </p>
-<blockquote>
-<p>Note: The client rect includes any CSS padding so if you&#39;re using <code class="notranslate" translate="no">clientWidth</code>
-and/or <code class="notranslate" translate="no">clientHeight</code> it&#39;s best not to put any padding on your canvas element.</p>
-</blockquote>
-<p>Using JavaScript we can check what size that element is being displayed and then adjust
-its drawingbuffer size to match.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function resizeCanvasToDisplaySize(canvas) {
-  // Lookup the size the browser is displaying the canvas in CSS pixels.
-  const displayWidth  = canvas.clientWidth;
-  const displayHeight = canvas.clientHeight;
-
-  // Check if the canvas is not the same size.
-  const needResize = canvas.width  !== displayWidth ||
-                     canvas.height !== displayHeight;
-
-  if (needResize) {
-    // Make the canvas the same size
-    canvas.width  = displayWidth;
-    canvas.height = displayHeight;
-  }
-
-  return needResize;
-}
-</code></pre>
-<p>Let&#39;s call this function just before we render
-so it will always adjust the canvas to our desired size just before drawing.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function drawScene() {
-   resizeCanvasToDisplaySize(gl.canvas);
-
-   ...
-</code></pre>
-<p>And here&#39;s that</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-canvas.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-resize-canvas.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>Hey, something is wrong? Why is the line not covering the entire area?</p>
-<p>The reason is when we resize the canvas we also need to call <code class="notranslate" translate="no">gl.viewport</code> to set the viewport.
-<code class="notranslate" translate="no">gl.viewport</code> tells WebGL how to convert from clip space (-1 to +1) back to pixels and where to do
-it within the canvas. When you first create the WebGL context WebGL will set the viewport to match the size
-of the canvas but after that it&#39;s up to you to set it. If you change the size of the canvas
-you need to tell WebGL a new viewport setting.</p>
-<p>Let&#39;s change the code to handle this. On top of that, since the WebGL context has a
-reference to the canvas let&#39;s pass that into resize.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
-   resizeCanvasToDisplaySize(gl.canvas);
-
-+   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-   ...
-</code></pre><p>Now it&#39;s working.</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-canvas-viewport.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-resize-canvas-viewport.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>Open that in a separate window, size the window, notice it always fills the window.</p>
-<p>I can hear you asking, <em>why doesn&#39;t WebGL set the viewport for us automatically
-when we change the size of the canvas?</em> The reason is it doesn&#39;t know how or why
-you are using the viewport. You could be <a href="webgl-render-to-texture.html">rendering to a framebuffer</a>
-or doing something else that requires a different viewport size. WebGL has no
-way of knowing your intent so it can&#39;t automatically set the viewport for you.</p>
-<hr>
-<h2 id="handling-devicepixelratio-and-zoom">Handling <code class="notranslate" translate="no">devicePixelRatio</code> and Zoom</h2>
-<p>Why is that not the end of it? Well, This is where it gets complicated. </p>
-<p>The first thing to understand is that most sizes in the browser are in CSS pixel
-units. This is an attempt to make the sizes device independent. So for example
-at the top of this article we set the canvas&#39;s display size to 400x300 CSS
-pixels. Depending on if the user has an HD-DPI display, or is zoomed in or
-zoomed out, or has an OS zoom level set, how many actual pixels that becomes on
-the monitor will be different.</p>
-<p><code class="notranslate" translate="no">window.devicePixelRatio</code> will tell us in general, the ratio of CSS pixels
-to actual pixels on your monitor. For example here&#39;s your browser&#39;s current setting</p>
-<blockquote>
-<div>devicePixelRatio = <span data-diagram="dpr"></span></div>
-
-</blockquote>
-<p>If you&#39;re on a desktop or laptop try pressing <kbd>ctrl</kbd>+<kbd>+</kbd> and <kbd>ctrl</kbd>+<kbd>-</kbd> to zoom in and out (<kbd>⌘</kbd>+<kbd>+</kbd> and <kbd>⌘</kbd>+<kbd>-</kbd> on Mac). You should see the number change except in Safari.</p>
-<p>So if we want the number of pixels in the canvas to match the number of pixels actually used to display it
-the seemingly obvious solution would be to multiply <code class="notranslate" translate="no">clientWidth</code> and <code class="notranslate" translate="no">clientHeight</code> by the <code class="notranslate" translate="no">devicePixelRatio</code> like this:</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function resizeCanvasToDisplaySize(canvas) {
-  // Lookup the size the browser is displaying the canvas in CSS pixels.
--  const displayWidth  = canvas.clientWidth;
--  const displayHeight = canvas.clientHeight;
-+  const dpr = window.devicePixelRatio;
-+  const displayWidth  = Math.round(canvas.clientWidth * dpr);
-+  const displayHeight = Math.round(canvas.clientHeight * dpr);
-
-  // Check if the canvas is not the same size.
-  const needResize = canvas.width  != displayWidth || 
-                     canvas.height != displayHeight;
-
-  if (needResize) {
-    // Make the canvas the same size
-    canvas.width  = displayWidth;
-    canvas.height = displayHeight;
-  }
-
-  return needResize;
-}
-</code></pre>
-<p>We need to call <code class="notranslate" translate="no">Math.round</code> (or <code class="notranslate" translate="no">Math.ceil</code>, or <code class="notranslate" translate="no">Math.floor</code> or <code class="notranslate" translate="no">| 0</code>) to get the number
-to an integer because <code class="notranslate" translate="no">canvas.width</code> and <code class="notranslate" translate="no">canvas.height</code> are always in integers so
-our comparison might fail if <code class="notranslate" translate="no">devicePixelRatio</code> is not an integer which is common, especially
-if the user&#39;s zooms.</p>
-<blockquote>
-<p>Note: Whether to use <code class="notranslate" translate="no">Math.floor</code> or <code class="notranslate" translate="no">Math.ceil</code> or <code class="notranslate" translate="no">Math.round</code> is not defined by the HTML
-spec. It&#39;s up to the browser. 🙄</p>
-</blockquote>
-<p>In any case, this will <strong>not</strong> actually work. The new problem is that given a <code class="notranslate" translate="no">devicePixelRatio</code> that is not 1.0
-the CSS size the canvas needs to be to fill a given area might not be an integer value
-but <code class="notranslate" translate="no">clientWidth</code> and <code class="notranslate" translate="no">clientHeight</code> are defined as integers. Let&#39;s say the window is
-999 actual device pixels wide your devicePixelRatio = 2.0 and you ask for 100% size canvas.
-There&#39;s no integer CSS size * 2.0 that = 999.</p>
-<p>The next solution is to use
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect"><code class="notranslate" translate="no">getBoundingClientRect()</code></a>.
-It returns a <a href="https://developer.mozilla.org/en-US/docs/Web/API/DOMRect"><code class="notranslate" translate="no">DOMRect</code></a> 
-that has a <code class="notranslate" translate="no">width</code> and <code class="notranslate" translate="no">height</code>. It&#39;s the same
-client rect as represented by <code class="notranslate" translate="no">clientWidth</code> and <code class="notranslate" translate="no">clientHeight</code> but it is not required
-to be an integer.</p>
-<p>Below is a purple <code class="notranslate" translate="no">&lt;canvas&gt;</code> that&#39;s set to <code class="notranslate" translate="no">width: 100%</code> of its container. Zoom out a few times to 75% or 60%
-and you may see its <code class="notranslate" translate="no">clientWidth</code> and its <code class="notranslate" translate="no">getBoundingClientRect().width</code> diverge. </p>
-<blockquote>
-<div data-diagram="getBoundingClientRect"></div>
-
-</blockquote>
-<p>On my machines I get these readings</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">Windows 10, zoom level 75%, Chrome
-clientWidth: 700
-getBoundingClientRect().width = 700.0000610351562
-
-MacOS, zoom level 90%, Chrome
-clientWidth: 700
-getBoundingClientRect().width = 700.0000610351562
-
-MacOS, zoom level -1, Safari (safari does not show the zoom level)
-clientWidth: 700
-getBoundingClientRect().width = 699.9999389648438
-
-Firefox, both Windows and MacOS all zoom levels
-clientWidth: 700
-getBoundingClientRect().width = 700
-</code></pre><p>Note: Firefox showed 700 in this particular setup but with enough various test I&#39;ve
-seen it give a non-integer result from <code class="notranslate" translate="no">getBoundingClientRect</code> for example make the window
-thin so that the 100% canvas is smaller than 700 and you might get a non-integer result
-on Firefox.</p>
-<p>So, given that we could try using <code class="notranslate" translate="no">getBoundingClientRect</code>.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function resizeCanvasToDisplaySize(canvas) {
-  // Lookup the size the browser is displaying the canvas in CSS pixels.
-  const dpr = window.devicePixelRatio;
--  const displayWidth  = Math.round(canvas.clientWidth * dpr);
--  const displayHeight = Math.round(canvas.clientHeight * dpr);
-+  const {width, height} = canvas.getBoundingClientRect();
-+  const displayWidth  = Math.round(width * dpr);
-+  const displayHeight = Math.round(height * dpr);
-
-  // Check if the canvas is not the same size.
-  const needResize = canvas.width  != displayWidth || 
-                     canvas.height != displayHeight;
-
-  if (needResize) {
-    // Make the canvas the same size
-    canvas.width  = displayWidth;
-    canvas.height = displayHeight;
-  }
-
-  return needResize;
-}
-</code></pre>
-<p>So are we done? Unfortunately no. It turns out that <code class="notranslate" translate="no">canvas.getBoundingClientRect()</code> can
-not always return the exact correct size. The reason is complicated but it has to do with
-the way the browser decides to draw things. Some parts are decided at the HTML level
-and some parts are decided later at the &quot;compositor&quot; level (the part that actually draws).
-<code class="notranslate" translate="no">getBoundingClientRect()</code> happens at the HTML level but certain things happen after that
-which could affect what size the canvas is actually drawn.</p>
-<p>I think an example is the HTML part works in the abstract and the compositor
-works in the concrete. So lets say you have a window that&#39;s 999 device pixels
-wide and a devicePixelRatio of 2.0. You make two elements side by side that are
-<code class="notranslate" translate="no">width: 50%</code>. So HTML computes each one should be 499.5 device pixels. But when it
-actually comes time to draw the compositor can&#39;t draw 499.5 pixels so one
-element gets 499 and the other gets 500. Which one gets or loses a pixel is
-undefined by any specs.</p>
-<p>The solution the browser vendors came up with is to use the
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver"><code class="notranslate" translate="no">ResizeObserver</code> API</a>
-and provide the actual size used via the <code class="notranslate" translate="no">devicePixelContextBoxSize</code> property of
-the entries it provides.
-It returns the actual number of device pixels that were used. Note it&#39;s called the
-<code class="notranslate" translate="no">ContentBox</code> not the <code class="notranslate" translate="no">ClientBox</code> which means it&#39;s the actual part of the
-canvas element showing the <em>content</em> of the canvas so it doesn&#39;t include the padding like
-the <code class="notranslate" translate="no">clientWidth</code>, <code class="notranslate" translate="no">clientHeight</code> and <code class="notranslate" translate="no">getBoundingClientRect</code>, a nice benefit.</p>
-<p>It&#39;s returned this way because the result is asynchronous. The &quot;compositor&quot; mentioned
-above runs asynchronously from the page. It can figure out the size it&#39;s actually going to use and then send you that size <em>out of band</em>.</p>
-<p>Unfortunately while the <code class="notranslate" translate="no">ResizeObserver</code> is available in all modern browser the
-<code class="notranslate" translate="no">devicePixelContentBoxSize</code> is only available in Chrome/Edge so far. Here&#39;s how
-to use it.</p>
-<p>We create a <code class="notranslate" translate="no">ResizeObserver</code> and we pass it a function to call anytime any elements
-we&#39;re observing change size. In our case that&#39;s our canvas.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const resizeObserver = new ResizeObserver(onResize);
-resizeObserver.observe(canvas, {box: &#39;content-box&#39;});
-</code></pre>
-<p>The code above creates a <code class="notranslate" translate="no">ResizeObserver</code> that will call the function <code class="notranslate" translate="no">onResize</code>
-(below) when an element we observe changes size. We tell it to <code class="notranslate" translate="no">observe</code> our
-canvas. We tell it to observe when the <code class="notranslate" translate="no">content-box</code> changes size. This is
-important and a little confusing. We could ask it to tell us when the
-<code class="notranslate" translate="no">device-pixel-content-box</code> changes size but let&#39;s imagine we have a canvas that
-is some percentage size of the window like the common 100% of our line example
-above. In that case our canvas will always be the same number of device pixels
-regardless of zoom level. The window hasn&#39;t changed size when we zoom so there&#39;s
-still the same number of device pixels. On the otherhand the <code class="notranslate" translate="no">content-box</code> will
-change as we zoom because it&#39;s measured in CSS pixels and so as we zoom, more or
-less CSS pixels fit in the number of device pixels.</p>
-<p>If we don&#39;t care about the zoom level then we could just observe <code class="notranslate" translate="no">device-pixel-content-box</code>.
-It will throw an error if it&#39;s not supported so we&#39;d do something like this</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const resizeObserver = new ResizeObserver(onResize);
-try {
-  // only call us of the number of device pixels changed
-  resizeObserver.observe(canvas, {box: &#39;device-pixel-content-box&#39;});
-} catch (ex) {
-  // device-pixel-content-box is not supported so fallback to this
-  resizeObserver.observe(canvas, {box: &#39;content-box&#39;});
-}
-</code></pre>
-<p>The <code class="notranslate" translate="no">onResize</code> function will be called with an array of <a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserverEntry"><code class="notranslate" translate="no">ResizeObserverEntry</code>s</a>. One for each thing
-that changed size. We&#39;ll record the size in a map so that we can handle more than
-one element.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// init with the default canvas size
-const canvasToDisplaySizeMap = new Map([[canvas, [300, 150]]]);
-
-function onResize(entries) {
-  for (const entry of entries) {
-    let width;
-    let height;
-    let dpr = window.devicePixelRatio;
-    if (entry.devicePixelContentBoxSize) {
-      // NOTE: Only this path gives the correct answer
-      // The other paths are imperfect fallbacks
-      // for browsers that don&#39;t provide anyway to do this
-      width = entry.devicePixelContentBoxSize[0].inlineSize;
-      height = entry.devicePixelContentBoxSize[0].blockSize;
-      dpr = 1; // it&#39;s already in width and height
-    } else if (entry.contentBoxSize) {
-      if (entry.contentBoxSize[0]) {
-        width = entry.contentBoxSize[0].inlineSize;
-        height = entry.contentBoxSize[0].blockSize;
-      } else {
-        width = entry.contentBoxSize.inlineSize;
-        height = entry.contentBoxSize.blockSize;
-      }
-    } else {
-      width = entry.contentRect.width;
-      height = entry.contentRect.height;
-    }
-    const displayWidth = Math.round(width * dpr);
-    const displayHeight = Math.round(height * dpr);
-    canvasToDisplaySizeMap.set(entry.target, [displayWidth, displayHeight]);
-  }
-}
-</code></pre>
-<p>That&#39;s kind of a mess. You can see the API shipped at least 3 different versions
-before supporting <code class="notranslate" translate="no">devicePixelContentBoxSize</code> 😂</p>
-<p>Now we&#39;ll change our resize function to use this data</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function resizeCanvasToDisplaySize(canvas) {
--  // Lookup the size the browser is displaying the canvas in CSS pixels.
--  const dpr = window.devicePixelRatio;
--  const {width, height} = canvas.getBoundingClientRect();
--  const displayWidth  = Math.round(width * dpr);
--  const displayHeight = Math.round(height * dpr);
-+  // Get the size the browser is displaying the canvas in device pixels.
-+ const [displayWidth, displayHeight] = canvasToDisplaySizeMap.get(canvas);
-
-  // Check if the canvas is not the same size.
-  const needResize = canvas.width  != displayWidth || 
-                     canvas.height != displayHeight;
-
-  if (needResize) {
-    // Make the canvas the same size
-    canvas.width  = displayWidth;
-    canvas.height = displayHeight;
-  }
-
-  return needResize;
-}
-</code></pre>
-<p>Here&#39;s an example using this code</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-canvas-hd-dpi.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-resize-canvas-hd-dpi.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>It may be difficult to see any difference. If you have an HD-DPI display
-like your smartphone or all Macs since 2019 or maybe a 4k monitor then this
-line should be thinner than the line of the previous example.</p>
-<p>Otherwise, if you zoom in (I suggest you open the example in a new window), as you zoom
-in the line should stay the same resolution where as if you zoom in on the previous example
-the line will get thicker and lower-resolution since it&#39;s not adjusting to the <code class="notranslate" translate="no">devicePixelRatio</code>.</p>
-<p>Just as a test here are all 3 methods above just using a simple canvas 2d.
-To keep it simple it does not use WebGL. Instead it uses Canvas 2D and makes 2 patterns, a 2x2 pixel vertical black and white pattern and a 2x2 pixel horizontal black and white
-pattern. It draws the horizontal pattern ▤ on the left and the vertical pattern ▥
-on the right.</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-the-canvas-comparison.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-resize-the-canvas-comparison.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>Resize this window, or better, open it in a new window and zoom in an out using
-the keys mentioned above. At different zoom levels resize the window, and notice
-only the bottom one works in all cases (in Chrome/Edge). Note the higher your
-device&#39;s <code class="notranslate" translate="no">devicePixelRatio</code> the harder it may be to see problems. What you
-should see is an unvarying pattern on left and on the right. If you see harsh
-patterns or you see differing darkness like a gradient then it&#39;s not working.
-Since it will only work in Chrome/Edge you&#39;ll need to try it there to see it
-work.</p>
-<p>Also note, some OSes (MacOS) provide an OS level scaling option that is mostly
-hidden from apps. In this case you&#39;ll see a slight pattern on the bottom example
-(assuming your in Chrome/Edge) but it will be a regular pattern.</p>
-<p>This brings up the issue that there is no good solution on the other browsers but, do you
-need a real solution? The majority of WebGL apps do something like draw some things in 3D
-with textures and or lighting on them. As such it&#39;s often not noticeable to either use
-the top solution where we ignored <code class="notranslate" translate="no">devicePixelRatio</code> or to use <code class="notranslate" translate="no">clientWidth</code>, <code class="notranslate" translate="no">clientHeight</code>
-or <code class="notranslate" translate="no">getBoundingClientRect()</code> * <code class="notranslate" translate="no">devicePixelRatio</code> and not worry about it past that.</p>
-<p>Further, blindly using <code class="notranslate" translate="no">devicePixelRatio</code> can really slow down your performance.
-On iPhoneX or iPhone11 <code class="notranslate" translate="no">window.devicePixelRatio</code> is <code class="notranslate" translate="no">3</code> which
-means you&#39;ll be drawing 9 times as many pixels. On A Samsung Galaxy S8 that value is <code class="notranslate" translate="no">4</code> which means you&#39;d be drawing
-16 times as many pixels. That can really slow down your program. In fact it&#39;s a common optimization in games to actually render
-less pixels than are displayed and let the GPU scale them up. It really depends on what your needs are. If you&#39;re drawing
-a graph for printing you might want to support HD-DPI. If you&#39;re making a game you might not or you might want to give the
-user the option to turn support on or off if their system is not fast enough to draw so many pixels.</p>
-<p>One other caveat is, at least in January 2021 the <code class="notranslate" translate="no">round(getBoundingClientRect * devicePixelRatio)</code> works on most modern browsers <strong>IF and ONLY IF</strong> the canvas is the full
-size of the window like the line example above. The exception is Safari where it doesn&#39;t work if the user&#39;s zoom level is not 100%.
-Here&#39;s an example using the patterns</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-resize-the-canvas-comparison-fullwindow.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-resize-the-canvas-comparison-fullwindow.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>You&#39;ll notice if you zoom and resize <em>this page</em> it will fail with <code class="notranslate" translate="no">getBoundingClientRect</code>.
-This is because the canvas is not the full window, it&#39;s in an iframe. Open the example
-in a separate window and it will work.</p>
-<p>Which solution you use is up to you. For me, 99% of the time I don&#39;t use
-<code class="notranslate" translate="no">devicePixelRatio</code>. It makes my pages slow and except for a few graphics pros most
-people won&#39;t notice a difference. On this site there are a few diagrams where it&#39;s
-used it but majority of examples do not.</p>
-<p>If you look at many WebGL programs they handle resizing or setting the size of the canvas in many different ways.
-I think it&#39;s arguable the best way is to let the browser chose the size to display canvas with CSS and then looking up what size it chose and adjusting
-the number of pixels in the canvas in response.
-If you&#39;re curious <a href="webgl-anti-patterns.html">here are some of the reasons</a> I think the way described above is the preferable way.</p>
-<!-- just to shut up the build that this link used to exist
-     and still exists in older translations -->
-<p><a href="webgl-animation.html"></a></p>
-<script type="module" src="../resources/webgl-resizing-the-canvas.module.js"></script>
-
+      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
+<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
+<p>영어 원문은 <a href="/webgl/lessons/webgl-resizing-the-canvas.html">여기</a>에 있습니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -675,8 +201,7 @@ If you&#39;re curious <a href="webgl-anti-patterns.html">here are some of the re
 </select>
 
 
-        <div id="toc">
-          <ul>  <li>기초</li>
+        <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -725,7 +250,7 @@ If you&#39;re curious <a href="webgl-anti-patterns.html">here are some of the re
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
   <li>텍스처 렌더링</li>
@@ -785,10 +310,10 @@ If you&#39;re curious <a href="webgl-anti-patterns.html">here are some of the re
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
-<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 보기, 다중 캔버스</a></li>
+<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
@@ -816,50 +341,13 @@ If you&#39;re curious <a href="webgl-anti-patterns.html">here are some of the re
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
-        </div>
-    </div>
-    <div class="lesson-comments">
-        
-    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
-    <div class="lesson-comment-notes">
-      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
-    </div>
-  
-
-        <div id="disqus_thread"></div>
-        <script>
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 캔버스 크기 조정';
-            var disqus_title = 'WebGL 캔버스 크기 조정';
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-                    return;
-                }
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
-<script>
-const settings = {
-  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
-  owner: "gfxfundamentals",
-  repo: "webgl-fundamentals",
-};
-</script>
-<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {

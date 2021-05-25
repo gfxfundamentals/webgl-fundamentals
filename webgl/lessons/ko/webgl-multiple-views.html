@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/webgl-multiple-views.md. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,17 +8,15 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-*   Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
-
-*   Redistributions in binary form must reproduce the above
-    copyright notice, this list of conditions and the following disclaimer
-    in the documentation and/or other materials provided with the
-    distribution.
-
-*   Neither the name of GFXFundamentals. nor the names of his
-    contributors may be used to endorse or promote products derived from
-    this software without specific prior written permission.
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of GFXFundamentals. nor the names of his
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -36,80 +34,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="WebGL Multiple Views, Multiple Canvases" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="Drawing multiple views" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-multiple-views.html" />
 
-<meta name="description" content="여러 뷰 그리기">
-<meta name="keywords" content="webgl graphics">
-<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-multiple-views_ko.jpg">
-
-<meta property="og:title" content="WebGL 다중 보기, 다중 캔버스">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-multiple-views_ko.jpg">
-<meta property="og:description" content="여러 뷰 그리기">
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-multiple-views.html">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@greggman">
-<meta name="twitter:creator" content="@greggman">
-<meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 다중 보기, 다중 캔버스">
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-multiple-views.html">
-<meta name="twitter:description" content="여러 뷰 그리기">
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-multiple-views_ko.jpg">
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@graph":[
-    {
-      "@type":"WebSite",
-      "@id":"https://webglfundamentals.org/#website",
-      "url":"https://webglfundamentals.org/",
-      "name":"WebglFundamentals"
-    },
-    {
-      "@type":"ImageObject",
-      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-multiple-views.html#primaryimage",
-      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-multiple-views_ko.jpg",
-      "width":1200,
-      "height":630
-    },
-    {
-      "@type":"WebPage",
-      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-multiple-views.html#webpage",
-      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-multiple-views.html",
-      "inLanguage":"ko",
-      "name":"WebGL 다중 보기, 다중 캔버스",
-      "keywords":"webgl graphics programming",
-      "isPartOf":{
-        "@id":"https://webglfundamentals.org/#website"
-      },
-      "primaryImageOfPage":{
-        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-multiple-views.html#primaryimage"
-      }
-    }
-  ]
-}
-</script>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="WebGL Multiple Views, Multiple Canvases" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-multiple-views.html" />
+<meta name="twitter:description" content="Drawing multiple views" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
 
 
-<title>WebGL 다중 보기, 다중 캔버스</title>
+<title>WebGL Multiple Views, Multiple Canvases</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/lang.css">
-<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
-
-  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-multiple-views.html">
-  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-multiple-views.html">
-  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-multiple-views.html">
-  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-multiple-views.html">
-  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-multiple-views.html">
-  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-multiple-views.html">
-  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-multiple-views.html">
-  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-multiple-views.html">
-
-
-
-
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
 </head>
 <body>
 <div class="webgl_navbar">
@@ -236,571 +179,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 다중 보기, 다중 캔버스</h1>
+    <h1>WebGL Multiple Views, Multiple Canvases</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>이 글은 예제를 정리하기 위해 <a href="webgl-less-code-more-fun.html">less code more fun</a>에서 언급된 라이브러리를 사용합니다.
-<code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code> 함수가 buffer와 attribute를 설정하는 것이나, <code class="notranslate" translate="no">webglUtils.setUniforms</code> 함수가 uniform을 설정하는 게 무슨 의미인지 모르겠다면, 뒤로 돌아가서 <a href="webgl-fundamentals.html">WebGL 기초</a>를 먼저 읽어주세요.</p>
-<p>같은 장면의 여러 뷰를 그리고 싶다면, 어떻게 할 수 있을까요?
-한 가지 방법은 <a href="webgl-render-to-texture.html">텍스처</a>로 렌더링한 다음 해당 텍스처를 캔버스에 그리는 겁니다.
-이건 확실히 유효한 방법이고 이렇게 하는 것이 맞을 때도 있습니다.
-하지만 텍스처를 할당하고, 물체를 렌더링한 다음, 텍스처를 캔버스에 렌더링해야 합니다.
-이는 사실상 이중 렌더링을 의미하는데요.
-예를 들어 레이싱 게임에서 뷰를 백미러에 렌더링하고 싶을 때, 차 뒤에 있는 걸 텍스처에 렌더링한 다음, 해당 텍스처를 사용해 백미러를 그립니다.</p>
-<p>또 다른 방법은 viewport를 설정하고 scissor test를 켜는 겁니다.
-이건 view가 겹치지 않는 상황에 즐겨 쓰이는데요.
-심지어 위의 방법과 같은 이중 렌더링이 없습니다.</p>
-<p><a href="webgl-fundamentals.html">첫 번째 글</a>에서 WebGL이 다음과 같은 호출을 통해 clip space에서 pixel space로 변환하는 방법을 설정한다고 언급했습니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.viewport(left, bottom, width, height);
-</code></pre>
-<p>가장 일반적인 건 캔버스 전체를 덮기 위해 각각 <code class="notranslate" translate="no">0</code>, <code class="notranslate" translate="no">0</code>, <code class="notranslate" translate="no">gl.canvas.width</code>, <code class="notranslate" translate="no">gl.canvas.height</code>로 설정하는 겁니다.</p>
-<p>전체 대신에 캔버스 일부를 설정할 수도 있으며 캔버스의 해당 부분만 그리게 됩니다.
-WebGL은 clip space에서 정점을 클리핑합니다.
-이전에 언급한 것처럼 vertex shader의 <code class="notranslate" translate="no">gl_Position</code>을 x, y, z에 대해 -1에서 +1사이의 값으로 설정하는데요.
-WebGL은 해당 범위로 전달하는 삼각형과 선들을 클리핑합니다.
-클리핑이 발생한 다음 <code class="notranslate" translate="no">gl.viewport</code> 설정이 적용됩니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.viewport(
-   10,   // left
-   20,   // bottom
-   30,   // width
-   40,   // height
-);
-</code></pre>
-<p>그러면 clip space의 x = -1이 pixel의 x = 10에 대응하고, clip space의 +1이 pixel의 x = 40에 대응합니다.
-(사실 이건 지나치게 단순화한 것으로, 자세한 내용은 <a href="#pixel-coords">아래</a>를 봐주세요.)</p>
-<p>따라서 클리핑 이후에 삼각형을 그리면 viewport 내부에 딱 맞게 보일겁니다.</p>
-<p><a href="webgl-3d-perspective.html">이전 글</a>의 &#39;F&#39;를 그려봅시다.</p>
-<p>Vertex shader와 fragment shader는 
-The vertex and fragment shaders are the same as the ones used in the articles on <a href="webgl-3d-orthographic.html">orthographic</a> and <a href="webgl-3d-perspective.html">perspective</a> projection.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// vertex shader
-attribute vec4 a_position;
-attribute vec4 a_color;
-
-uniform mat4 u_matrix;
-
-varying vec4 v_color;
-
-void main() {
-  // 위치를 행렬로 곱하기
-  gl_Position = u_matrix * a_position;
-
-  // Fragment shader로 정점 색상 전달
-  v_color = a_color;
-}
-</code></pre>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// fragment shader
-precision mediump float;
-
-// Vertex shader에서 전달
-varying vec4 v_color;
-
-void main() {
-  gl_FragColor = v_color;
-}
-</code></pre>
-<p>Then at init time we need to create the program and the buffers for the &#39;F&#39;</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// setup GLSL programs compiles shaders, links program, looks up locations
-const programInfo = webglUtils.createProgramInfo(gl, [&quot;vertex-shader-3d&quot;, &quot;fragment-shader-3d&quot;]);
-
-// create buffers and fill with data for a 3D &#39;F&#39;
-const bufferInfo = primitives.create3DFBufferInfo(gl);
-</code></pre>
-<p>And to draw let&#39;s make a function we can pass a projection matrix,
-a camera matrix, and a world matrix</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function drawScene(projectionMatrix, cameraMatrix, worldMatrix) {
-  // Make a view matrix from the camera matrix.
-  const viewMatrix = m4.inverse(cameraMatrix);
-
-  // multiply them together to make a worldViewProjection matrix.
-  let mat = m4.multiply(projectionMatrix, viewMatrix);
-  mat = m4.multiply(mat, worldMatrix);
-
-  gl.useProgram(programInfo.program);
-
-  // ------ Draw the F --------
-
-  // Setup all the needed attributes.
-  webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
-
-  // Set the uniforms
-  webglUtils.setUniforms(programInfo, {
-    u_matrix: mat,
-  });
-
-  // calls gl.drawArrays or gl.drawElements
-  webglUtils.drawBufferInfo(gl, bufferInfo);
-}
-</code></pre>
-<p>and then let&#39;s call that function to draw the F.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function degToRad(d) {
-  return d * Math.PI / 180;
-}
-
-const settings = {
-  rotation: 150,  // in degrees
-};
-const fieldOfViewRadians = degToRad(120);
-
-function render() {
-  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-
-  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-  gl.enable(gl.CULL_FACE);
-  gl.enable(gl.DEPTH_TEST);
-
-  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-  const near = 1;
-  const far = 2000;
-
-  // Compute a perspective projection matrix
-  const perspectiveProjectionMatrix =
-      m4.perspective(fieldOfViewRadians, aspect, near, far);
-
-  // Compute the camera&#39;s matrix using look at.
-  const cameraPosition = [0, 0, -75];
-  const target = [0, 0, 0];
-  const up = [0, 1, 0];
-  const cameraMatrix = m4.lookAt(cameraPosition, target, up);
-
-  // rotate the F in world space
-  let worldMatrix = m4.yRotation(degToRad(settings.rotation));
-  worldMatrix = m4.xRotate(worldMatrix, degToRad(settings.rotation));
-  // center the &#39;F&#39; around its origin
-  worldMatrix = m4.translate(worldMatrix, -35, -75, -5);
-
-  drawScene(perspectiveProjectionMatrix, cameraMatrix, worldMatrix);
-}
-render();
-</code></pre>
-<p>This is basically the same as the final example from 
-<a href="webgl-3d-perspective.html">the article on perspective</a>
-except we&#39;re using <a href="webgl-less-code-more-fun.html">our library</a> to keep the code simpler.</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-multiple-views-one-view.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-multiple-views-one-view.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>Now let&#39;s make it draw 2 views of the &#39;F&#39; side by side
-by using <code class="notranslate" translate="no">gl.viewport</code></p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render() {
-  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-
--  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-  gl.enable(gl.CULL_FACE);
-  gl.enable(gl.DEPTH_TEST);
-
-  // we&#39;re going to split the view in 2
--  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-+  const effectiveWidth = gl.canvas.clientWidth / 2;
-+  const aspect = effectiveWidth / gl.canvas.clientHeight;
-  const near = 1;
-  const far = 2000;
-
-  // Compute a perspective projection matrix
-  const perspectiveProjectionMatrix =
-      m4.perspective(fieldOfViewRadians, aspect, near, far);
-
-+  // Compute an orthographic projection matrix
-+  const halfHeightUnits = 120;
-+  const orthographicProjectionMatrix = m4.orthographic(
-+      -halfHeightUnits * aspect,  // left
-+       halfHeightUnits * aspect,  // right
-+      -halfHeightUnits,           // bottom
-+       halfHeightUnits,           // top
-+       -75,                       // near
-+       2000);                     // far
-
-  // Compute the camera&#39;s matrix using look at.
-  const cameraPosition = [0, 0, -75];
-  const target = [0, 0, 0];
-  const up = [0, 1, 0];
-  const cameraMatrix = m4.lookAt(cameraPosition, target, up);
-
-  let worldMatrix = m4.yRotation(degToRad(settings.rotation));
-  worldMatrix = m4.xRotate(worldMatrix, degToRad(settings.rotation));
-  // center the &#39;F&#39; around its origin
-  worldMatrix = m4.translate(worldMatrix, -35, -75, -5);
-
-+  const {width, height} = gl.canvas;
-+  const leftWidth = width / 2 | 0;
-+
-+  // draw on the left with orthographic camera
-+  gl.viewport(0, 0, leftWidth, height);
-+
-+  drawScene(orthographicProjectionMatrix, cameraMatrix, worldMatrix);
-
-+  // draw on the right with perspective camera
-+  const rightWidth = width - leftWidth;
-+  gl.viewport(leftWidth, 0, rightWidth, height);
-
-  drawScene(perspectiveProjectionMatrix, cameraMatrix, worldMatrix);
-}
-</code></pre>
-<p>You can see above first we set the viewport to cover the left
-half of the canvas, draw, then we set it to cover the right half and
-draw. Otherwise we&#39;re drawing the same thing on both sides except
-we change the projection matrix.</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-multiple-views.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-multiple-views.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>Let&#39;s clear both sides to different colors</p>
-<p>First, in <code class="notranslate" translate="no">drawScene</code> lets call <code class="notranslate" translate="no">gl.clear</code></p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  function drawScene(projectionMatrix, cameraMatrix, worldMatrix) {
-+    // Clear the canvas AND the depth buffer.
-+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    ...
-</code></pre>
-<p>Then let&#39;s set clear colors before calling <code class="notranslate" translate="no">drawScene</code></p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  const {width, height} = gl.canvas;
-  const leftWidth = width / 2 | 0;
-
-  // draw on left with orthographic camera
-  gl.viewport(0, 0, leftWidth, height);
-+  gl.clearColor(1, 0, 0, 1);  // red
-
-  drawScene(orthographicProjectionMatrix, cameraMatrix, worldMatrix);
-
-  // draw on left with orthographic camera
-  const rightWidth = width - leftWidth;
-  gl.viewport(leftWidth, 0, rightWidth, height);
-  gl.clearColor(0, 0, 1, 1);  // blue
-
-+  drawScene(perspectiveProjectionMatrix, cameraMatrix, worldMatrix);
-</code></pre>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-multiple-views-clear-issue.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-multiple-views-clear-issue.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>Oops, what happened? Why is there nothing on the left?</p>
-<p>It turns out <code class="notranslate" translate="no">gl.clear</code> does not look at the <code class="notranslate" translate="no">viewport</code>
-settings. To fix this we can use the <em>scissor test</em>.
-The scissor test lets use define a rectangle. Anything
-outside that rectangle will not be affected if the scissor
-test is enabled.</p>
-<p>The scissor test is off by default. We can enable it
-by calling </p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enable(gl.SCISSOR_TEST);
-</code></pre><p>Like the viewport it defaults to the initial size of the canvas
-but we can set with same parameters as the viewport by calling
-<code class="notranslate" translate="no">gl.scissor</code> as in</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.scissor(
-   10,   // left
-   20,   // bottom
-   30,   // width
-   40,   // height
-);
-</code></pre>
-<p>So let&#39;s add those in</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render() {
-  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-
-  gl.enable(gl.CULL_FACE);
-  gl.enable(gl.DEPTH_TEST);
-+  gl.enable(gl.SCISSOR_TEST);
-
-  ...
-
-  const {width, height} = gl.canvas;
-  const leftWidth = width / 2 | 0;
-
-  // draw on left with orthographic camera
-  gl.viewport(0, 0, leftWidth, height);
-+  gl.scissor(0, 0, leftWidth, height);
-  gl.clearColor(1, 0, 0, 1);  // red
-
-  drawScene(orthographicProjectionMatrix, cameraMatrix, worldMatrix);
-
-  // draw on left with orthographic camera
-  const rightWidth = width - leftWidth;
-  gl.viewport(leftWidth, 0, rightWidth, height);
-+  gl.scissor(leftWidth, 0, rightWidth, height);
-  gl.clearColor(0, 0, 1, 1);  // blue
-
-  drawScene(perspectiveProjectionMatrix, cameraMatrix, worldMatrix);
-}
-</code></pre>
-<p>and now it should work.</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-multiple-views-clear-fixed.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-multiple-views-clear-fixed.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>Of course you&#39;re not limited to drawing the same scene
-You can draw whatever you want in each view.</p>
-<h2 id="drawing-multiple-canvases">Drawing Multiple Canvases</h2>
-<p>This is a good solution for simulating multiple canvases.
-Let&#39;s say you wanted to make character selection screen
-for a game an you want to show 3D models of each head in a list so the
-user can select one.
-Or let&#39;s say you wanted to make an e-commerce site and show
-3d models of each product down the page at the same time.</p>
-<p>The most obvious way to do this would be to put a <code class="notranslate" translate="no">&lt;canvas&gt;</code>
-each place you want to show an item. Unfortunately you&#39;d run into a
-bunch of issues.</p>
-<p>First, Each canvas would require a different WebGL context
-WebGL contexts can not share resources so you&#39;d have
-to compile shaders for each canvas, load textures for
-each canvas, upload geometry for each canvas.</p>
-<p>Another issue is most browsers have a limit on how many simultaneous canvases
-they support. For many it&#39;s as low as 8. That means as soon
-as you create a webgl context on the 9th canvas the first
-canvas will lose its context.</p>
-<p>We can work around these issues by making just 1 large canvas
-that covers the entire window. We&#39;ll then put a placeholder
-<code class="notranslate" translate="no">&lt;div&gt;</code> each place we want to draw an item. We can use
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect"><code class="notranslate" translate="no">element.getBoundingClientRect</code></a>
-to find out where to set the viewport and scissor to
-draw in that area.</p>
-<p>This will solve both problems mentioned above. We&#39;ll only
-have one webgl context so we can share resources and we won&#39;t
-run into the context limit.</p>
-<p>Let&#39;s make an example.</p>
-<p>First let&#39;s make a canvas that goes in the background with some content
-that goes in front. First the HTML</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;body&gt;
-  &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
-  &lt;div id=&quot;content&quot;&gt;&lt;/div&gt;
-&lt;/body&gt;
-</code></pre>
-<p>Then the CSS</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-css">body {
-  margin: 0;
-}
-#content {
-  margin: 10px;
-}
-#canvas {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: -1;
-  display: block;
-}
-</code></pre>
-<p>Now let&#39;s make a few things to draw. <a href="webgl-less-code-more-fun.html">Remember</a> 
-that a <code class="notranslate" translate="no">BufferInfo</code> is just a list of buffers by name and the settings need to set their attributes</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// create buffers and fill with data for various things.
-const bufferInfos = [
-  primitives.createCubeBufferInfo(
-      gl,
-      1,  // width
-      1,  // height
-      1,  // depth
-  ),
-  primitives.createSphereBufferInfo(
-      gl,
-      0.5,  // radius
-      8,    // subdivisions around
-      6,    // subdivisions down
-  ),
-  primitives.createTruncatedConeBufferInfo(
-      gl,
-      0.5,  // bottom radius
-      0,    // top radius
-      1,    // height
-      6,    // subdivisions around
-      1,    // subdivisions down
-  ),
-];
-</code></pre>
-<p>Now let&#39;s make 100 html items. For each one we&#39;ll create a container div
-and inside will be a view and a label. The view is just an empty div
-where we want to draw the item.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function createElem(type, parent, className) {
-  const elem = document.createElement(type);
-  parent.appendChild(elem);
-  if (className) {
-    elem.className = className;
-  }
-  return elem;
-}
-
-function randArrayElement(array) {
-  return array[Math.random() * array.length | 0];
-}
-
-function rand(min, max) {
-  if (max === undefined) {
-    max = min;
-    min = 0;
-  }
-  return Math.random() * (max - min) + min;
-}
-
-const contentElem = document.querySelector(&#39;#content&#39;);
-const items = [];
-const numItems = 100;
-for (let i = 0; i &lt; numItems; ++i) {
-  const outerElem = createElem(&#39;div&#39;, contentElem, &#39;item&#39;);
-  const viewElem = createElem(&#39;div&#39;, outerElem, &#39;view&#39;);
-  const labelElem = createElem(&#39;div&#39;, outerElem, &#39;label&#39;);
-  labelElem.textContent = `Item ${i + 1}`;
-  const bufferInfo = randArrayElement(bufferInfos);
-  const color = [rand(1), rand(1), rand(1), 1];
-  items.push({
-    bufferInfo,
-    color,
-    element: viewElem,
-  });
-}
-</code></pre>
-<p>Let&#39;s style these items as follows</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-css">.item {
-  display: inline-block;
-  margin: 1em;
-  padding: 1em;
-}
-.label {
-  margin-top: 0.5em;
-}
-.view {
-  width: 250px;
-  height: 250px;
-  border: 1px solid black;
-}
-</code></pre>
-<p>The <code class="notranslate" translate="no">items</code> array has a <code class="notranslate" translate="no">bufferInfo</code>, a <code class="notranslate" translate="no">color</code> and an <code class="notranslate" translate="no">element</code>
-for each item. We loop over all the items one at a time and call
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect"><code class="notranslate" translate="no">element.getBoundingClientRect</code></a>
-and use the rectangle returned to see if that element intersects
-with the canvas. If it does we set the viewport and scissor to
-match and then draw that object.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render(time) {
-  time *= 0.001;  // convert to seconds
-
-  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-
-  gl.enable(gl.CULL_FACE);
-  gl.enable(gl.DEPTH_TEST);
-  gl.enable(gl.SCISSOR_TEST);
-
-  // move the canvas to top of the current scroll position
-  gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
-
-  for (const {bufferInfo, element, color} of items) {
-    const rect = element.getBoundingClientRect();
-    if (rect.bottom &lt; 0 || rect.top  &gt; gl.canvas.clientHeight ||
-        rect.right  &lt; 0 || rect.left &gt; gl.canvas.clientWidth) {
-      continue;  // it&#39;s off screen
-    }
-
-    const width  = rect.right - rect.left;
-    const height = rect.bottom - rect.top;
-    const left   = rect.left;
-    const bottom = gl.canvas.clientHeight - rect.bottom;
-
-    gl.viewport(left, bottom, width, height);
-    gl.scissor(left, bottom, width, height);
-    gl.clearColor(...color);
-
-    const aspect = width / height;
-    const near = 1;
-    const far = 2000;
-
-    // Compute a perspective projection matrix
-    const perspectiveProjectionMatrix =
-        m4.perspective(fieldOfViewRadians, aspect, near, far);
-
-    // Compute the camera&#39;s matrix using look at.
-    const cameraPosition = [0, 0, -2];
-    const target = [0, 0, 0];
-    const up = [0, 1, 0];
-    const cameraMatrix = m4.lookAt(cameraPosition, target, up);
-
-    // rotate the item
-    const rTime = time * 0.2;
-    const worldMatrix = m4.xRotate(m4.yRotation(rTime), rTime);
-
-    drawScene(perspectiveProjectionMatrix, cameraMatrix, worldMatrix, bufferInfo);
-  }
-  requestAnimationFrame(render);
-}
-requestAnimationFrame(render);
-</code></pre>
-<p>I made the code above use a <a href="webgl-animation.html">requestAnimationFrame loop</a>
-so I could animate the objects. I also passed which bufferInfo to draw
-to <code class="notranslate" translate="no">drawScene</code>. The shader is just using the normals as colors to keep
-the shaders simple. If I added <a href="webgl-3d-lighting-spot.html">lighting</a>
-the code would get much more complicated.</p>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-multiple-views-items.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-multiple-views-items.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>Of course you could draw whole 3D scenes or whatever for each item.
-As long as you set the viewport and scissor correctly and then set up
-your projection matrix to match the aspect of the area it should work.</p>
-<p>One other notable thing about the code is we&#39;re moving the canvas
-with this line</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
-</code></pre>
-<p>Why? We could instead set the canvas to <code class="notranslate" translate="no">position: fixed;</code> in which case
-it would not scroll with the page. The difference would be subtle.
-The browser tries to scroll the page as smooth as possible. That might be
-faster than we can draw our objects. Because of this we have 2 options.</p>
-<ol>
-<li><p>Use a fixed position canvas</p>
-<p>In this case if we can&#39;t update fast enough the HTML in front of the canvas will scroll but the canvas itself
-won&#39;t so for a few moments they will be out of sync</p>
-<p><img src="../resources/multi-view-skew.gif" style="border: 1px solid black; width: 266px;" class="webgl_center"></p>
-</li>
-<li><p>Move the canvas under the content</p>
-<p>In this case if we can&#39;t update fast enough the canvas will scroll in sync
-with the HTML but new areas where we want stuff drawn will be blank until we get
-a chance to draw.</p>
-<p><img src="../resources/multi-view-fixed.gif" style="border: 1px solid black; width: 266px;" class="webgl_center"></p>
-<p>This is the solution used above</p>
-</li>
-</ol>
-<p>If you want to handle horizontal scrolling just change this line</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
-</code></pre>
-<p>to this</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateX(${window.scrollX}px) translateY(${window.scrollY}px)`;
-</code></pre>
-<p><div class="webgl_example_container">
-  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-multiple-views-items-horizontal-scrolling.html"></iframe>
-  <a class="webgl_center" href="/webgl/lessons/../webgl-multiple-views-items-horizontal-scrolling.html" target="_blank">새 창을 열려면 여기를 클릭</a>
-</div>
-
-</p>
-<p>Hopefully this article gave you some ideas how to draw multiple views.
-We&#39;ll use these techniques in a few future articles where
-being able to see multiple views is useful for understanding.</p>
-<div class="webgl_bottombar" id="pixel-coords">
-<h3>Pixel Coordinates</h3>
-<p>Pixel coordinates in WebGL
-are referenced by their edges. So for example if we had
-a canvas that was 3x2 pixels big and we set the viewport
-as</p>
-<pre class="prettyprint"><code class="notranslate" translate="no">
-gl.viewport(
-  0, // left
-  0, // bottom
-  3, // width
-  2, // height
-);
-</code></pre>
-<p>Then we're really defining this rectangle that surrounds 3x2 pixels</p>
-<div class="webgl_center"><img src="../resources/webgl-pixels.svg" style="width: 500px;"></div>
-<p>That means a clip space value of X = -1.0 corresponds to the left edge of this rectangle
-and a clip space value of X = 1.0 corresponds to the right. Above I said X = -1.0 corresponds to the left most pixel
-but really to corresponds to the left edge</p>
-</div>
-
+      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
+<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
+<p>영어 원문은 <a href="/webgl/lessons/webgl-multiple-views.html">여기</a>에 있습니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -816,8 +201,7 @@ but really to corresponds to the left edge</p>
 </select>
 
 
-        <div id="toc">
-          <ul>  <li>기초</li>
+        <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -866,7 +250,7 @@ but really to corresponds to the left edge</p>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
   <li>텍스처 렌더링</li>
@@ -926,10 +310,10 @@ but really to corresponds to the left edge</p>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
-<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 보기, 다중 캔버스</a></li>
+<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
@@ -957,50 +341,13 @@ but really to corresponds to the left edge</p>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
-        </div>
-    </div>
-    <div class="lesson-comments">
-        
-    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
-    <div class="lesson-comment-notes">
-      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
-    </div>
-  
-
-        <div id="disqus_thread"></div>
-        <script>
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 다중 보기, 다중 캔버스';
-            var disqus_title = 'WebGL 다중 보기, 다중 캔버스';
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-                    return;
-                }
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
-<script>
-const settings = {
-  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
-  owner: "gfxfundamentals",
-  repo: "webgl-fundamentals",
-};
-</script>
-<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {

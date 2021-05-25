@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of GFXFundamentals. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL 3D Perspective Correct Texture Mapping" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="What&#x27;s special about W" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL 3D Perspective Correct Texture Mapping" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html" />
-<meta name="twitter:description" content="What&#x27;s special about W" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="W의 특별한 점">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective-correct-texturemapping_ko.jpg">
+
+<meta property="og:title" content="WebGL 3D 원근 교정 텍스처 매핑">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective-correct-texturemapping_ko.jpg">
+<meta property="og:description" content="W의 특별한 점">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 3D 원근 교정 텍스처 매핑">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">
+<meta name="twitter:description" content="W의 특별한 점">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective-correct-texturemapping_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-perspective-correct-texturemapping_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html",
+      "inLanguage":"ko",
+      "name":"WebGL 3D 원근 교정 텍스처 매핑",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL 3D Perspective Correct Texture Mapping</title>
+<title>WebGL 3D 원근 교정 텍스처 매핑</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-3d-perspective-correct-texturemapping.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-3d-perspective-correct-texturemapping.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-3d-perspective-correct-texturemapping.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-3d-perspective-correct-texturemapping.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-3d-perspective-correct-texturemapping.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-3d-perspective-correct-texturemapping.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,13 +236,274 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 3D Perspective Correct Texture Mapping</h1>
+    <h1>WebGL 3D 원근 교정 텍스처 매핑</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html">여기</a>에 있습니다.</p>
+      <p>이 포스트는 WebGL 관련 시리즈에서 이어집니다.
+첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했습니다.
+이 글은 원근 교정 텍스처 매핑을 다룹니다.
+이걸 이해하기 위해서는 <a href="webgl-3d-perspective.html">perspective projection</a>과 <a href="webgl-3d-textures.html">텍스처</a>에 대해 읽어야 할 겁니다.
+또한 <a href="webgl-how-it-works.html">varying과 그 기능</a>에 대해 알아야 하지만 여기서 간략하게 설명하겠습니다.</p>
+<p>&quot;<a href="webgl-how-it-works.html">동작 원리</a>&quot;에서 varying이 어떻게 작동하는지 다뤘는데요.
+Vertex shader는 varying을 선언하고 어떤 값으로 설정할 수 있습니다.
+Vertex shader가 3번 호출되면 WebGL은 삼각형을 그립니다.
+해당 삼각형을 그리는 동안 모든 픽셀에 대해 fragment shader를 호출하고 해당 픽셀을 어떤 색상으로 만들지 묻습니다.
+삼각형의 정점 3개 사이에서 3개의 값 사이를 보간한 varying을 전달할 겁니다.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 600px; height: 400px;" src="/webgl/lessons/resources/fragment-shader-anim.html"></iframe>
+  <div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
+</div>
+
+</p>
+<p><a href="webgl-fundamentals.html">첫 번째 글</a>로 돌아가보면 우리는 clip space에서 삼각형을 그렸는데요.
+다음과 같이 간단한 vertex shader에 clip space 좌표를 전달했습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Attribute는 버퍼에서 데이터를 받음
+  attribute vec4 a_position;
+
+  // 모든 shader는 main 함수를 가짐
+  void main() {
+
+    // gl_Position은 vertex shader가 설정을 담당하는 특수 변수
+    gl_Position = a_position;
+  }
+</code></pre><p>일정한 색상으로 그리는 간단한 fragment shader가 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
+  // mediump은 좋은 기본값으로 &quot;중간 정밀도&quot;를 의미합니다.
+  precision mediump float;
+
+  void main() {
+    // gl_FragColor는 fragment shader가 설정을 담당하는 특수 변수
+    gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
+  }
+</code></pre><p>Clip space에 2개의 사각형을 그리도록 만들어봅시다.
+각 정점의 <code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code>, <code class="notranslate" translate="no">Z</code>, <code class="notranslate" translate="no">W</code>인 데이터를 전달할 겁니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positions = [
+  -.8, -.8, 0, 1,  // 1번째 사각형의 1번째 삼각형
+   .8, -.8, 0, 1,
+  -.8, -.2, 0, 1,
+  -.8, -.2, 0, 1,  // 1번째 사각형의 2번째 삼각형
+   .8, -.8, 0, 1,
+   .8, -.2, 0, 1,
+
+  -.8,  .2, 0, 1,  // 2번째 사각형의 1번째 삼각형
+   .8,  .2, 0, 1,
+  -.8,  .8, 0, 1,
+  -.8,  .8, 0, 1,  // 2번째 사각형의 2번째 삼각형
+   .8,  .2, 0, 1,
+   .8,  .8, 0, 1,
+];
+</code></pre><p>여기 결과입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>Varying float 하나를 추가해봅시다.
+해당 varying을 vertex shader에서 fragment shader로 전달할 겁니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  attribute vec4 a_position;
++  attribute float a_brightness;
+
++  varying float v_brightness;
+
+  void main() {
+    gl_Position = a_position;
+
++    // Fragment shader로 밝기 전달
++    v_brightness = a_brightness;
+  }
+</code></pre><p>Fragment shader에서는 해당 varying을 사용하여 색상을 설정할 겁니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  precision mediump float;
+
++  // Vertex shader에서 전달받아 보간
++  varying float v_brightness;  
+
+  void main() {
+*    gl_FragColor = vec4(v_brightness, 0, 0, 1);  // 빨강
+  }
+</code></pre><p>Varying의 데이터를 제공해야 하므로 버퍼를 만들어 데이터를 넣을 겁니다.
+정점 당 하나의 값을 가집니다.
+왼쪽을 0으로 오른쪽은 1로 정점에 대한 밝기 값을 설정합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 버퍼를 생성하고 12개의 밝기 값 넣기
+  var brightnessBuffer = gl.createBuffer();
+
+  // ARRAY_BUFFER에 바인딩 (ARRAY_BUFFER = brightnessBuffer)
+  gl.bindBuffer(gl.ARRAY_BUFFER, brightnessBuffer);
+
+  var brightness = [
+    0,  // 1번째 사각형의 1번째 삼각형
+    1, 
+    0, 
+    0,  // 1번째 사각형의 2번째 삼각형
+    1, 
+    1, 
+
+    0,  // 2번째 사각형의 1번째 삼각형
+    1, 
+    0, 
+    0,  // 2번째 사각형의 2번째 삼각형
+    1, 
+    1, 
+  ];
+
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(brightness), gl.STATIC_DRAW);
+</code></pre><p>또한 초기화할 때 <code class="notranslate" translate="no">a_brightness</code> attribute의 위치를 찾아야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 정점 데이터가 어디로 가야하는지 탐색
+  var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
++  var brightnessAttributeLocation = gl.getAttribLocation(program, &quot;a_brightness&quot;);
+</code></pre><p>그리고 렌더링할 때 해당 attribute를 설정합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Attribute 활성화
+  gl.enableVertexAttribArray(brightnessAttributeLocation);
+
+  // 위치 버퍼 바인딩
+  gl.bindBuffer(gl.ARRAY_BUFFER, brightnessBuffer);
+
+  // brightnessBuffer의 데이터를 가져오는 방법을 attribute에 지시 (ARRAY_BUFFER)
+  var size = 1;          // 반복마다 1개의 컴포넌트
+  var type = gl.FLOAT;   // 데이터는 32bit float
+  var normalize = false; // 데이터 정규화 안 함
+  var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
+  var offset = 0;        // 버퍼의 처음부터 시작
+  gl.vertexAttribPointer(
+    brightnessAttributeLocation,
+    size,
+    type,
+    normalize,
+    stride,
+    offset
+  );
+</code></pre><p>그리고 이제 렌더링할 때 <code class="notranslate" translate="no">brightness</code>가 0인 왼쪽은 검은색이고 <code class="notranslate" translate="no">brightness</code>가 1인 오른쪽은 빨간색인 사각형 2개를 얻으며, <code class="notranslate" translate="no">brightness</code> 사이의 영역은 삼각형을 가로질러 보간되거나 변화합니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles-with-varying.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p><a href="webgl-3d-perspective.html">Perspective에 대한 글</a>에서 WebGL은 우리가 입력한 <code class="notranslate" translate="no">gl_Position</code>을 가져와 <code class="notranslate" translate="no">gl_Position.w</code>로 나눕니다.</p>
+<p>위의 정점들에는 <code class="notranslate" translate="no">W</code>에 <code class="notranslate" translate="no">1</code>을 제공했지만 WebGL이 <code class="notranslate" translate="no">W</code>로 나누는 걸 알고 있기 때문에 다음과 같이 할 수 있으며 동일한 결과를 얻습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  var mult = 20;
+  var positions = [
+      -.8,  .8, 0, 1,  // 1번째 사각형의 1번째 삼각형
+       .8,  .8, 0, 1,
+      -.8,  .2, 0, 1,
+      -.8,  .2, 0, 1,  // 1번째 사각형의 2번째 삼각형
+       .8,  .8, 0, 1,
+       .8,  .2, 0, 1,
+
+      -.8       , -.2       , 0,    1,  // 2번째 사각형의 1번째 삼각형
+       .8 * mult, -.2 * mult, 0, mult,
+      -.8       , -.8       , 0,    1,
+      -.8       , -.8       , 0,    1,  // 2번째 사각형의 2번째 삼각형
+       .8 * mult, -.2 * mult, 0, mult,
+       .8 * mult, -.8 * mult, 0, mult,
+  ];
+</code></pre><p>위에서 두 번째 사각형의 오른쪽에 있는 모든 점에 대해 <code class="notranslate" translate="no">X</code>와 <code class="notranslate" translate="no">Y</code>에 <code class="notranslate" translate="no">mult</code>를 곱한 것을 알 수 있지만, <code class="notranslate" translate="no">W</code>를 <code class="notranslate" translate="no">mult</code>로 설정하는 것도 볼 수 있습니다.
+WebGL이 <code class="notranslate" translate="no">W</code>로 나누기 때문에 똑같은 결과를 얻을 수 있겠죠?</p>
+<p>음 여기 결과입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying-non-1-w.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles-with-varying-non-1-w.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>두 사각형은 이전과 같은 곳에 그려졌습니다.
+이건 <code class="notranslate" translate="no">X * MULT / MULT(W)</code>가 여전히 <code class="notranslate" translate="no">X</code>이고 <code class="notranslate" translate="no">Y</code>에 대해 동일하다는 걸 증명합니다.
+하지만 색상이 다릅니다.
+무슨 일이 일어난 걸까요?</p>
+<p>WebGL은 <code class="notranslate" translate="no">W</code>를 사용하여 원근 교정 텍스처 매핑을 구현하거나 varying의 원근 교정 보간을 수행합니다.</p>
+<p>실제로 이걸 더 쉽게 볼 수 있도록 fragment shader를 해킹해봅시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // 빨강
+</code></pre><p><code class="notranslate" translate="no">v_brightness</code>를 10으로 곱하면 값을 0에서 10사이로 만듭니다.
+<code class="notranslate" translate="no">fract</code>는 소수 부분만 유지하므로 0에서 1사이, 0에서 1사이, 0에서 1사이, 10번이 됩니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-clipspace-rectangles-with-varying-non-1-w-repeat.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-clipspace-rectangles-with-varying-non-1-w-repeat.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>이제 perspective를 쉽게 볼 수 있습니다.</p>
+<p>하나의 값에서 또 다른 값으로 선형 보간하는 것은 이런 공식이 됩니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a + t * b
+</code></pre><p>여기서 <code class="notranslate" translate="no">t</code>는 <code class="notranslate" translate="no">a</code>와 <code class="notranslate" translate="no">b</code>사이의 위치를 나타내는 0에서 1사이의 값입니다.
+<code class="notranslate" translate="no">a</code>가 0이고 <code class="notranslate" translate="no">b</code>가 1입니다.</p>
+<p>Varying의 경우 WebGL은 이 공식을 사용합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a / aW + t * b / bW
+          -----------------------------
+             (1 - t) / aW + t / bW
+</code></pre><p>여기서 <code class="notranslate" translate="no">aW</code>는 varying이 <code class="notranslate" translate="no">a</code>로 설정된 경우 <code class="notranslate" translate="no">gl_Position.w</code>에 설정된 <code class="notranslate" translate="no">W</code>이며, <code class="notranslate" translate="no">bW</code> varying이 <code class="notranslate" translate="no">b</code>로 설정된 경우 <code class="notranslate" translate="no">gl_Position.w</code>에 설정된 <code class="notranslate" translate="no">W</code>입니다.</p>
+<p>그게 왜 중요할까요?
+음 여기 <a href="webgl-3d-textures.html">텍스처에 대한 글</a>에서 만들었던 간단한 텍스처 큐브가 있습니다.
+UV 좌표를 양쪽에 0에서 1로 조정했고 4x4 픽셀 텍스처를 사용하고 있습니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-perspective-correct-cube.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-perspective-correct-cube.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>이제 해당 예제를 가져와 vertex shader를 변경하여 우리가 직접 <code class="notranslate" translate="no">W</code>로 나눠봅시다.
+한 줄만 추가하면 됩니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
+attribute vec2 a_texcoord;
+
+uniform mat4 u_matrix;
+
+varying vec2 v_texcoord;
+
+void main() {
+  // 위치를 행렬로 곱하기
+  gl_Position = u_matrix * a_position;
+
++  // 수동으로 W 나누기
++  gl_Position /= gl_Position.w;
+
+  // fragment shader로 texcoord 전달
+  v_texcoord = a_texcoord;
+}
+</code></pre><p><code class="notranslate" translate="no">W</code>로 나누는 것은 <code class="notranslate" translate="no">gl_Position.w</code>가 결국 1이 됨을 의미합니다.
+<code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code>, <code class="notranslate" translate="no">Z</code>는 WebGL이 자동으로 분할했던 것처럼 나올 겁니다.
+음 여기 결과입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-non-perspective-correct-cube.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-non-perspective-correct-cube.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>여전히 3D 큐브를 얻게 되지만 텍스처가 뒤틀리고 있습니다.
+이는 이전처럼 <code class="notranslate" translate="no">W</code>를 전달하지 않으면 WebGL이 원근 교정 텍스처 매핑을 할 수 없기 때문입니다.
+좀 더 정확하게는 WebGL이 varying의 원근 교정 보간을 수행할 수 없습니다.</p>
+<p><a href="webgl-3d-perspective.html">Perspective matrix</a>에서 <code class="notranslate" translate="no">Z</code>가 <code class="notranslate" translate="no">W</code>였던 걸 떠올려보면, <code class="notranslate" translate="no">W</code>가 <code class="notranslate" translate="no">1</code>인 경우 WebGL은 선형 보간을 수행합니다.
+실제로 위의 방정식을 가져와 봅시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a / aW + t * b / bW
+          -----------------------------
+             (1 - t) / aW + t / bW
+</code></pre><p>그리고 모든 <code class="notranslate" translate="no">W</code>를 1로 변경합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a / 1 + t * b / 1
+          ---------------------------
+             (1 - t) / 1 + t / 1
+</code></pre><p>1로 나누는 것은 아무 영향이 없으므로 이렇게 단순화할 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a + t * b
+          -------------------
+             (1 - t) + t
+</code></pre><p><code class="notranslate" translate="no">(1 - t) + t</code>는 <code class="notranslate" translate="no">1</code>과 같습니다.
+예를 들어 <code class="notranslate" translate="no">t</code>가 <code class="notranslate" translate="no">.7</code>이면, <code class="notranslate" translate="no">(1 - .7) + .7</code>이 되고, 이건 <code class="notranslate" translate="no">.3 + .7</code>이며, 이는 곧 <code class="notranslate" translate="no">1</code>입니다.
+즉 분모를 지울 수 있기 때문에 이렇게 남게 됩니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a + t * b
+</code></pre><p>이는 위의 선형 보간 방정식과 동일합니다.</p>
+<p>이제 왜 WebGL이 4x4 행렬과 <code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code>, <code class="notranslate" translate="no">Z</code>, <code class="notranslate" translate="no">W</code>가 있는 4개의 벡터를 사용하는지 이해가 되셨으면 좋겠습니다.
+<code class="notranslate" translate="no">X</code>와 <code class="notranslate" translate="no">Y</code>는 <code class="notranslate" translate="no">W</code>로 나누어 clipspace 좌표를 얻습니다.
+<code class="notranslate" translate="no">W</code>로 나누는 <code class="notranslate" translate="no">Z</code>도 clipspace 좌표를 얻으며, <code class="notranslate" translate="no">W</code>는 varying의 보간 중에 계속 사용되고 원근 교정 텍스처 매핑 기능을 제공합니다.</p>
+<div class="webgl_bottombar">
+<h3>1990년대 중반 게임 콘솔</h3>
+<p>
+PlayStation 1과 같은 시대의 일부 게임 콘솔들은 원근 교정 텍스처 매핑을 하지 않았습니다.
+위 결과를 보면 왜 그렇게 보였는지 알 수 있습니다.
+</p>
+<div class="webgl_center"><img src="../resources/ridge-racer-01.png" style="max-width: 500px;" /></div>
+<p></p>
+<div class="webgl_center"><img src="../resources/ridge-racer-02.png" style="max-width: 500px;" /></div>
+</div>
+
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +519,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -250,7 +569,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
         </ul>
   <li>텍스처 렌더링</li>
@@ -310,10 +629,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
 <li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
-<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 보기, 다중 캔버스</a></li>
+<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
@@ -341,13 +660,50 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 3D 원근 교정 텍스처 매핑';
+            var disqus_title = 'WebGL 3D 원근 교정 텍스처 매핑';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
