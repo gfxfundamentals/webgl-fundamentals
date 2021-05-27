@@ -12,7 +12,7 @@ la première partie.
 
 Quand vous appelez
 
-    gl.drawArrays(gl.TRIANGLE, 0, 9);
+    gl.drawArrays(gl.TRIANGLES, 0, 9);
 
 Le 9 ici signifie "il y a 9 vertices à traiter" donc voilà 9 vertices rendus.
 
