@@ -102,7 +102,7 @@ const planeBufferInfo = primitives.createPlaneBufferInfo(
 );
 ```
 
-and the code to make an 8x8 pixel checkerboard texture
+And the code to make an 8x8 pixel checkerboard texture
 using techniques we covered in [the article on data textures](webgl-data-textures.html).
 
 ```js
@@ -368,7 +368,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
   // use the inverse of this world matrix to make
   // a matrix that will transform other positions
-  // to be relative this this world space.
+  // to be relative this world space.
   const textureMatrix = m4.inverse(textureWorldMatrix);
 
   // set uniforms that are the same for both the sphere and plane
@@ -419,7 +419,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
   // use the inverse of this world matrix to make
   // a matrix that will transform other positions
-  // to be relative this this world space.
+  // to be relative this world space.
   const textureMatrix = m4.inverse(textureWorldMatrix);
 
   ...
@@ -615,7 +615,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
   // use the inverse of this world matrix to make
   // a matrix that will transform other positions
-  // to be relative this this world space.
+  // to be relative this world space.
 -  const textureMatrix = m4.inverse(textureWorldMatrix);
 +  const textureMatrix = m4.multiply(
 +      textureProjectionMatrix,
@@ -642,7 +642,7 @@ drawing the lines
 +    textureWorldMatrix, m4.inverse(textureProjectionMatrix));
 ```
 
-and with that we get
+And with that we get
 
 {{{example url="../webgl-planar-projection-with-projection-matrix-0-to-1.html"}}}
 
@@ -717,7 +717,7 @@ const textureProjectionMatrix = settings.perspective
 
 -// use the inverse of this world matrix to make
 -// a matrix that will transform other positions
--// to be relative this this world space.
+-// to be relative this world space.
 -const textureMatrix = m4.multiply(
 -    textureProjectionMatrix,
 -    m4.inverse(textureWorldMatrix));
@@ -728,7 +728,7 @@ const textureProjectionMatrix = settings.perspective
 +textureMatrix = m4.multiply(textureMatrix, textureProjectionMatrix);
 +// use the inverse of this world matrix to make
 +// a matrix that will transform other positions
-+// to be relative this this world space.
++// to be relative this world space.
 +textureMatrix = m4.multiply(
 +    textureMatrix,
 +    m4.inverse(textureWorldMatrix));

@@ -276,7 +276,7 @@ function render() {
 +  textureMatrix = m4.multiply(textureMatrix, lightProjectionMatrix);
   // use the inverse of this world matrix to make
   // a matrix that will transform other positions
-  // to be relative this this world space.
+  // to be relative this world space.
   textureMatrix = m4.multiply(
       textureMatrix,
 -      m4.inverse(textureWorldMatrix));
