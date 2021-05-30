@@ -324,7 +324,7 @@ const planeBufferInfo = primitives.createPlaneBufferInfo(
     1,   // subdivisions down
 );
 </code></pre>
-<p>and the code to make an 8x8 pixel checkerboard texture
+<p>And the code to make an 8x8 pixel checkerboard texture
 using techniques we covered in <a href="webgl-data-textures.html">the article on data textures</a>.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// make a 8x8 checkerboard texture
 const checkerboardTexture = gl.createTexture();
@@ -569,7 +569,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
   // use the inverse of this world matrix to make
   // a matrix that will transform other positions
-  // to be relative this this world space.
+  // to be relative this world space.
   const textureMatrix = m4.inverse(textureWorldMatrix);
 
   // set uniforms that are the same for both the sphere and plane
@@ -616,7 +616,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
   // use the inverse of this world matrix to make
   // a matrix that will transform other positions
-  // to be relative this this world space.
+  // to be relative this world space.
   const textureMatrix = m4.inverse(textureWorldMatrix);
 
   ...
@@ -798,7 +798,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
   // use the inverse of this world matrix to make
   // a matrix that will transform other positions
-  // to be relative this this world space.
+  // to be relative this world space.
 -  const textureMatrix = m4.inverse(textureWorldMatrix);
 +  const textureMatrix = m4.multiply(
 +      textureProjectionMatrix,
@@ -820,7 +820,7 @@ drawing the lines</p>
 +const mat = m4.multiply(
 +    textureWorldMatrix, m4.inverse(textureProjectionMatrix));
 </code></pre>
-<p>and with that we get</p>
+<p>And with that we get</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-planar-projection-with-projection-matrix-0-to-1.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-planar-projection-with-projection-matrix-0-to-1.html" target="_blank">click here to open in a separate window</a>
@@ -892,7 +892,7 @@ const textureProjectionMatrix = settings.perspective
 
 -// use the inverse of this world matrix to make
 -// a matrix that will transform other positions
--// to be relative this this world space.
+-// to be relative this world space.
 -const textureMatrix = m4.multiply(
 -    textureProjectionMatrix,
 -    m4.inverse(textureWorldMatrix));
@@ -903,7 +903,7 @@ const textureProjectionMatrix = settings.perspective
 +textureMatrix = m4.multiply(textureMatrix, textureProjectionMatrix);
 +// use the inverse of this world matrix to make
 +// a matrix that will transform other positions
-+// to be relative this this world space.
++// to be relative this world space.
 +textureMatrix = m4.multiply(
 +    textureMatrix,
 +    m4.inverse(textureWorldMatrix));
