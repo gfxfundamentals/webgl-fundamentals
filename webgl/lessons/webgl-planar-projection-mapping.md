@@ -624,7 +624,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
 Note there is both an option to use a perspective or and orthographic projection matrix.
 
-We also need to use that projection matrix matrix when
+We also need to use that projection matrix when
 drawing the lines
 
 ```js
