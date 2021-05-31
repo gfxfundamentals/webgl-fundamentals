@@ -564,7 +564,7 @@ of an object being rendered we're seeing what part of the texture
 would be projected there and then looking up the color at that part
 of the texture.
 
-Since we mentioned movie projectors above how would would we simulate
+Since we mentioned movie projectors above how would we simulate
 a movie projector? Basically we can just multiply in a projection matrix
 
 ```js
