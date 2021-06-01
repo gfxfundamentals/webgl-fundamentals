@@ -419,9 +419,9 @@ var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 </code></pre><p>이제 GPU에 GLSL Program을 만들었으니 데이터를 제공해줘야 합니다.
 WebGL의 주요 API는 GLSL program에 데이터를 제공하기 위한 상태 설정에 관한 것인데요.
 이 경우 GLSL program에 대한 유일한 입력은 attribute인 <code class="notranslate" translate="no">a_position</code>입니다.
-먼저 해야 할 일은 방금 생성된 program에 대한 attribute의 위치를 찾는 겁니다.</p>
+먼저 해야 할 일은 방금 생성된 program에 대한 attribute의 location를 찾는 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
-</code></pre><p>Attribute 위치(그리고 uniform 위치) 위치를 찾는 것은 렌더링할 때가 아니라 초기화하는 동안 해야 합니다.</p>
+</code></pre><p>Attribute location(그리고 uniform location)을 찾는 것은 렌더링할 때가 아니라 초기화하는 동안 해야 합니다.</p>
 <p>Attribute는 버퍼로부터 데이터를 가져오므로 버퍼를 생성해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionBuffer = gl.createBuffer();
 </code></pre><p>WebGL은 global bind point에 있는 많은 WebGL 자원을 조작하게 해줍니다.
@@ -817,7 +817,7 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
-<li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+<li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
   <li>텍스처 렌더링</li>
         <ul>

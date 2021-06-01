@@ -495,13 +495,13 @@ function setColors(gl) {
 <code class="notranslate" translate="no">gl.bufferData</code>는 데이터를 버퍼로 복사합니다.
 이건 보통 초기화할 때 수행됩니다.</p>
 <p>버퍼에 데이터가 있으면 어떻게 데이터를 가져오고 vertex shader의 attribute에 제공할지 WebGL에 알려줘야 합니다.</p>
-<p>이를 위해, 먼저 attribute를 할당한 위치를 WebGL에 물어봐야 하는데요.
+<p>이를 위해, 먼저 attribute를 할당한 location을 WebGL에 물어봐야 하는데요.
 예를 들어 위 코드에서 우리는</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 정점 데이터가 어디로 가야하는지 탐색
 var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 var colorLocation = gl.getAttribLocation(program, &quot;a_color&quot;);
 </code></pre><p>이것도 보통 초기화할 때 수행됩니다.</p>
-<p>Attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실행해야 합니다.</p>
+<p>Attribute의 location을 알게 되면 그리기 전에 3가지 명령어를 실행해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enableVertexAttribArray(location);
 </code></pre><p>이 명령어는 버퍼에서 데이터를 공급하기 원한다고 WebGL에 알려줍니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer);
@@ -661,7 +661,7 @@ function setColors(gl) {
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
-<li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+<li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
   <li>텍스처 렌더링</li>
         <ul>

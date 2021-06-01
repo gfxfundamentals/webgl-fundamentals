@@ -612,7 +612,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre>
-<p>그리고 javascript에서는 투영 행렬로 곱해야 합니다.</p>
+<p>그리고 javascript에서는 projection matrix로 곱해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 장면 그리기
 function drawScene() {
   ...
@@ -691,7 +691,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedScaledPosition = rotationMat * scaledPosition
 </code></pre><p>다음으로 translatedRotatedScaledPosition를 얻기 위해 rotatedScaledPositon에 translation 행렬을 곱한 뒤</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
-</code></pre><p>마지막으로 clip space의 위치를 얻기 위해 투영 행렬에 곱하는데</p>
+</code></pre><p>마지막으로 clip space의 위치를 얻기 위해 projection matrix에 곱하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 </code></pre><p>두 번째 방법은 행렬을 왼쪽에서 오른쪽으로 읽는 건데요.
 이 경우 각각의 행렬은 캔버스에 표시되는 <em>space</em>를 변경합니다.
@@ -754,7 +754,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 <code class="notranslate" translate="no">position</code> 값은 마지막 space에서 유효합니다.</p>
 <p>이해하기 더 쉽다고 느껴지는 방법을 사용하시면 됩니다.</p>
 <p>이 포스트가 행렬 수학을 이해하는데 도움이 되었기를 바랍니다.
-2D를 계속 하고 싶다면 <a href="webgl-2d-drawimage.html">Canvas 2D의 drawImage 함수 재현</a>과 <a href="webgl-2d-matrix-stack.html">Canvas 2D의 행렬 Stack 재현</a>을 봐주세요.</p>
+2D를 계속 하고 싶다면 <a href="webgl-2d-drawimage.html">Canvas 2D의 drawImage 함수 재현</a>과 <a href="webgl-2d-matrix-stack.html">Canvas 2D의 행렬 스택 재현</a>을 봐주세요.</p>
 <p>그게 아니라면 다음은 <a href="webgl-3d-orthographic.html">3D</a>로 넘어갑니다.
 3D에서 행렬 수학은 동일한 원리과 사용법을 따르는데요.
 2D부터 시작해서 이해하기 쉽도록 만들었습니다.</p>
@@ -766,7 +766,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 왜일까요?
 </p>
 <p>
-투영 행렬은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
+Projection matrix은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
 하지만 브라우저에는 두 가지 type의 픽셀이 있는데요.
 하나는 캔버스 자체의 픽셀 수입니다.
 예를 들어 이렇게 정의된 캔버스가 있습니다.
@@ -826,7 +826,7 @@ CSS는 캔버스가 표시되는 크기를 정의합니다.
 <p>
 캔버스의 크기를 조절할 수 있는 대부분의 앱은 <code class="notranslate" translate="no">canvas.width</code>와 <code class="notranslate" translate="no">canvas.height</code>를 <code class="notranslate" translate="no">canvas.clientWidth</code>와 <code class="notranslate" translate="no">canvas.clientHeight</code>에 맞추려고 하는데, 그 이유는 브라우저에 표시되는 각 픽셀에 대해 캔버스에 하나의 픽셀이 있기를 원하기 때문입니다.
 위에서 보셨듯이 그게 유일한 선택지는 아닙니다.
-하지만 거의 모든 경우에 <code class="notranslate" translate="no">canvas.clientHeight</code>와 <code class="notranslate" translate="no">canvas.clientWidth</code>를 사용해서 투영 행렬의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
+하지만 거의 모든 경우에 <code class="notranslate" translate="no">canvas.clientHeight</code>와 <code class="notranslate" translate="no">canvas.clientWidth</code>를 사용해서 projection matrix의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
 </p>
 </div>
 
@@ -896,7 +896,7 @@ CSS는 캔버스가 표시되는 크기를 정의합니다.
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
-<li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+<li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
   <li>텍스처 렌더링</li>
         <ul>

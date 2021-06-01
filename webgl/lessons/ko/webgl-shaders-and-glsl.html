@@ -272,7 +272,7 @@ vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)
 </code></pre><p>이 버퍼에 데이터를 넣은 뒤</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
-</code></pre><p>만든 shader program을 통해 초기화 시 attribute의 위치를 찾고</p>
+</code></pre><p>만든 shader program을 통해 초기화 시 attribute의 location을 찾고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
 </code></pre><p>렌더링할 때 WebGL에 해당 버퍼에서 attribute로 데이터를 어떻게 가져올지 지시하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 attribute에 대한 버퍼에서 데이터 가져오기 활성화
@@ -304,12 +304,12 @@ void main() {
   gl_Position = a_position + u_offset;
 }
 </code></pre><p>그리고 이제 모든 정점을 일정량만큼 offset 할 수 있습니다.
-먼저 초기화 시 uniform의 위치를 찾아야 합니다.</p>
+먼저 초기화 시 uniform의 location을 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var offsetLoc = gl.getUniformLocation(someProgram, &quot;u_offset&quot;);
 </code></pre><p>그런 다음 그리기 전에 uniform을 설정합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 우측 절반으로 offset
 </code></pre><p>참고로 uniform은 개별 shader program에 속합니다.
-만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면, 두 uniform 모두 고유한 위치와 값을 가지는데요.
+만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면, 두 uniform 모두 고유한 location과 값을 가지는데요.
 <code class="notranslate" translate="no">gl.uniform???</code>을 호출하면 <em>current program</em>의 uniform만 설정합니다.
 Current program은 <code class="notranslate" translate="no">gl.useProgram</code>에 전달한 마지막 program 입니다.</p>
 <p>uniform은 여러 type을 가질 수 있는데요.
@@ -352,7 +352,7 @@ var someVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2&quot;);
 
 // 렌더링할 때
 gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // u_someVec2의 전체 배열 설정
-</code></pre><p>하지만 배열의 개별 요소를 설정하고 싶다면 각 요소의 위치를 개별적으로 찾아야 합니다.</p>
+</code></pre><p>하지만 배열의 개별 요소를 설정하고 싶다면 각 요소의 location을 개별적으로 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 초기화 시 javascript
 var someVec2Element0Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[0]&quot;);
 var someVec2Element1Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[1]&quot;);
@@ -415,7 +415,7 @@ var data = new Uint8Array([
 ]);
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-</code></pre><p>초기화 시 shader program의 uniform 위치를 찾으며</p>
+</code></pre><p>초기화 시 shader program의 uniform location을 찾으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
 </code></pre><p>렌더링할 때 texture unit에 텍스처를 할당하고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var unit = 5;  // texture unit 선택
@@ -600,7 +600,7 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
-<li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+<li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
   <li>텍스처 렌더링</li>
         <ul>

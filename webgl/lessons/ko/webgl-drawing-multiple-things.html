@@ -273,10 +273,10 @@ function drawCircle() {
 <code class="notranslate" translate="no">gl.createBuffer</code>, <code class="notranslate" translate="no">gl.bufferData</code>, <code class="notranslate" translate="no">gl.createTexture</code>, <code class="notranslate" translate="no">gl.texImage2D</code>와 같은 함수들은 버퍼(vertex)와 텍스처(color, etc..) 데이터를 WebGL에 업로드 해줍니다.
 <code class="notranslate" translate="no">gl.createProgram</code>, <code class="notranslate" translate="no">gl.createShader</code>, <code class="notranslate" translate="no">gl.compileShader</code>, <code class="notranslate" translate="no">gl.linkProgram</code>과 같은 함수들은 GLSL shader를 만들어 줍니다.
 그 외 WebGL의 거의 모든 함수들은 이러한 전역 변수나 <em>상태</em>를 설정하여 최종적으로 <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>가 호출될 때 사용됩니다.</p>
-<p>전형적인 WebGL 프로그램은 기본적으로 이런 구조를 따릅니다.</p>
+<p>전형적인 WebGL program은 기본적으로 이런 구조를 따릅니다.</p>
 <p>초기화할 때</p>
 <ul>
-<li>모든 shader와 program을 만들고 위치 탐색</li>
+<li>모든 shader와 program을 만들고 location 탐색</li>
 <li>버퍼를 생성하고 정점 데이터 업로드</li>
 <li>텍스처를 생성하고 텍스처 데이터 업로드</li>
 </ul>
@@ -285,7 +285,7 @@ function drawCircle() {
 <li>Viewport와 전역 상태를 지우고 설정
 (depth testing 활성화, culling 활성화, 등등..)</li>
 <li>그리려는 각각에 대해<ul>
-<li>그려야 하는 프로그램에 대해 <code class="notranslate" translate="no">gl.useProgram</code> 호출</li>
+<li>그려야 하는 program에 대해 <code class="notranslate" translate="no">gl.useProgram</code> 호출</li>
 <li>그리려는 것에 대한 attribute 설정<ul>
 <li>각각의 attribute에 대해 <code class="notranslate" translate="no">gl.bindBuffer</code>, <code class="notranslate" translate="no">gl.vertexAttribPointer</code>, <code class="notranslate" translate="no">gl.enableVertexAttribArray</code> 호출</li>
 </ul>
@@ -399,8 +399,8 @@ gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 </div>
 
 </p>
-<p>한 가지 주목할 점은 shader 프로그램이 하나뿐이므로 <code class="notranslate" translate="no">gl.useProgram</code>을 한 번만 호출한다는 겁니다.
-만약 다른 shader 프로그램을 가지고 있다면 각 프로그램을 사용하기 전에 <code class="notranslate" translate="no">gl.useProgram</code>을 호출해야 합니다.</p>
+<p>한 가지 주목할 점은 shader program이 하나뿐이므로 <code class="notranslate" translate="no">gl.useProgram</code>을 한 번만 호출한다는 겁니다.
+만약 다른 shader program을 가지고 있다면 각 program을 사용하기 전에 <code class="notranslate" translate="no">gl.useProgram</code>을 호출해야 합니다.</p>
 <p>이 또한 단순화하기 좋은데요.
 실질적으로 갖춰야 할 3가지 주요 사항은 아래와 같습니다.</p>
 <ol>
@@ -479,7 +479,7 @@ objectsToDraw.forEach(function(object) {
 
 </p>
 <p>몇 가지 기본적인 최적화가 있는데요.
-그리려는 프로그램이 이전에 그렸던 프로그램과 같다면 <code class="notranslate" translate="no">gl.useProgram</code>을 호출할 필요가 없습니다.
+그리려는 program이 이전에 그렸던 program과 같다면 <code class="notranslate" translate="no">gl.useProgram</code>을 호출할 필요가 없습니다.
 마찬가지로 이전에 그렸던 것과 동일한 shape/geometry/vertice을 그린다면 다시 설정할 필요가 없겠죠.</p>
 <p>따라서 다음과 같이 최적화할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var lastUsedProgramInfo = null;
@@ -494,8 +494,8 @@ objectsToDraw.forEach(function(object) {
     lastUsedProgramInfo = programInfo;
     gl.useProgram(programInfo.program);
 
-    // 프로그램이 사용하는 버퍼만 바인딩하기 때문에 프로그램이 바뀔 때마다 버퍼를 다시 바인딩해야 합니다.
-    // 따라서 2개의 프로그램이 동일한 bufferInfo를 사용하지만 첫 번째 버퍼가 position만 사용하면 두 번째 버퍼로 전환할 때 attribute 중 일부는 활성화되지 않을 겁니다.
+    // Program이 사용하는 버퍼만 바인딩하기 때문에 program이 바뀔 때마다 버퍼를 다시 바인딩해야 합니다.
+    // 따라서 2개의 program이 동일한 bufferInfo를 사용하지만 첫 번째 버퍼가 position만 사용하면 두 번째 버퍼로 전환할 때 attribute 중 일부는 활성화되지 않을 겁니다.
     bindBuffers = true;
   }
 
@@ -580,7 +580,7 @@ Overlay나 후처리 효과처럼 다른 것들에 대한 별도의 목록이 �
 <p>여기 <a href="../../webgl-multiple-objects-list-optimized-sorted.html" target="_blank">정렬된 예제</a>입니다.
 제 컴퓨터에서는 비정렬일 때 ~31fps, 정렬일 때 ~37fps이 나옵니다.
 거의 20% 향상되었네요.
-하지만 이는 최악의 경우 vs 최고의 경우이며, 대부분의 프로그램은 더 많은 걸 수행하므로, 특별한 경우를 제외하고는 전부 고려할만한 가치가 없습니다.</p>
+하지만 이는 최악의 경우 vs 최고의 경우이며, 대부분의 program은 더 많은 걸 수행하므로, 특별한 경우를 제외하고는 전부 고려할만한 가치가 없습니다.</p>
 <p>어떤 shader만으로는 어떤 geometry들은 그릴 수 없다는 점에 유의해야 합니다.
 예를 들어 법선이 필요한 shader는 법선이 없는 geometry에서 작동하지 않을 겁니다.
 마찬가지로 텍스처가 필요한 shader는 텍스처 없이는 작동하지 않습니다.</p>
@@ -661,7 +661,7 @@ Unity3D, Unreal, Source, Crytek 등 거의 모든 3D 엔진들이 이를 수행�
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
-<li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+<li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
   <li>텍스처 렌더링</li>
         <ul>
