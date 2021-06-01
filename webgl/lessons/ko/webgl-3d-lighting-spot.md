@@ -99,7 +99,7 @@ void main() {
 }
 ```
 
-당연히 추가한 uniform의 위치를 찾아야 합니다.
+당연히 추가한 uniform의 location을 찾아야 합니다.
 
 ```
   var lightDirection = [?, ?, ?];

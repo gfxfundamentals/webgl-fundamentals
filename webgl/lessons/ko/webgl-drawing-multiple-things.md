@@ -43,11 +43,11 @@ WebGL은 두 번째 방법으로 동작하는데요.
 `gl.createProgram`, `gl.createShader`, `gl.compileShader`, `gl.linkProgram`과 같은 함수들은 GLSL shader를 만들어 줍니다.
 그 외 WebGL의 거의 모든 함수들은 이러한 전역 변수나 *상태*를 설정하여 최종적으로 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용됩니다.
 
-전형적인 WebGL 프로그램은 기본적으로 이런 구조를 따릅니다.
+전형적인 WebGL program은 기본적으로 이런 구조를 따릅니다.
 
 초기화할 때
 
-*   모든 shader와 program을 만들고 위치 탐색
+*   모든 shader와 program을 만들고 location 탐색
 *   버퍼를 생성하고 정점 데이터 업로드
 *   텍스처를 생성하고 텍스처 데이터 업로드
 
@@ -56,7 +56,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
 *   Viewport와 전역 상태를 지우고 설정
     (depth testing 활성화, culling 활성화, 등등..)
 *   그리려는 각각에 대해
-    *   그려야 하는 프로그램에 대해 `gl.useProgram` 호출
+    *   그려야 하는 program에 대해 `gl.useProgram` 호출
     *   그리려는 것에 대한 attribute 설정
         *   각각의 attribute에 대해 `gl.bindBuffer`, `gl.vertexAttribPointer`, `gl.enableVertexAttribArray` 호출
     *   그리려는 것에 대한 uniform 설정
@@ -172,8 +172,8 @@ WebGL은 두 번째 방법으로 동작하는데요.
 
 {{{example url="../webgl-multiple-objects-manual.html" }}}
 
-한 가지 주목할 점은 shader 프로그램이 하나뿐이므로 `gl.useProgram`을 한 번만 호출한다는 겁니다.
-만약 다른 shader 프로그램을 가지고 있다면 각 프로그램을 사용하기 전에 `gl.useProgram`을 호출해야 합니다.
+한 가지 주목할 점은 shader program이 하나뿐이므로 `gl.useProgram`을 한 번만 호출한다는 겁니다.
+만약 다른 shader program을 가지고 있다면 각 program을 사용하기 전에 `gl.useProgram`을 호출해야 합니다.
 
 이 또한 단순화하기 좋은데요.
 실질적으로 갖춰야 할 3가지 주요 사항은 아래와 같습니다.
@@ -256,7 +256,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
 {{{example url="../webgl-multiple-objects-list.html" }}}
 
 몇 가지 기본적인 최적화가 있는데요.
-그리려는 프로그램이 이전에 그렸던 프로그램과 같다면 `gl.useProgram`을 호출할 필요가 없습니다.
+그리려는 program이 이전에 그렸던 program과 같다면 `gl.useProgram`을 호출할 필요가 없습니다.
 마찬가지로 이전에 그렸던 것과 동일한 shape/geometry/vertice을 그린다면 다시 설정할 필요가 없겠죠.
 
 따라서 다음과 같이 최적화할 수 있습니다.
@@ -273,8 +273,8 @@ WebGL은 두 번째 방법으로 동작하는데요.
         lastUsedProgramInfo = programInfo;
         gl.useProgram(programInfo.program);
 
-        // 프로그램이 사용하는 버퍼만 바인딩하기 때문에 프로그램이 바뀔 때마다 버퍼를 다시 바인딩해야 합니다.
-        // 따라서 2개의 프로그램이 동일한 bufferInfo를 사용하지만 첫 번째 버퍼가 position만 사용하면 두 번째 버퍼로 전환할 때 attribute 중 일부는 활성화되지 않을 겁니다.
+        // Program이 사용하는 버퍼만 바인딩하기 때문에 program이 바뀔 때마다 버퍼를 다시 바인딩해야 합니다.
+        // 따라서 2개의 program이 동일한 bufferInfo를 사용하지만 첫 번째 버퍼가 position만 사용하면 두 번째 버퍼로 전환할 때 attribute 중 일부는 활성화되지 않을 겁니다.
         bindBuffers = true;
       }
 
@@ -362,7 +362,7 @@ Overlay나 후처리 효과처럼 다른 것들에 대한 별도의 목록이 �
 여기 <a href="../webgl-multiple-objects-list-optimized-sorted.html" target="_blank">정렬된 예제</a>입니다.
 제 컴퓨터에서는 비정렬일 때 ~31fps, 정렬일 때 ~37fps이 나옵니다.
 거의 20% 향상되었네요.
-하지만 이는 최악의 경우 vs 최고의 경우이며, 대부분의 프로그램은 더 많은 걸 수행하므로, 특별한 경우를 제외하고는 전부 고려할만한 가치가 없습니다.
+하지만 이는 최악의 경우 vs 최고의 경우이며, 대부분의 program은 더 많은 걸 수행하므로, 특별한 경우를 제외하고는 전부 고려할만한 가치가 없습니다.
 
 어떤 shader만으로는 어떤 geometry들은 그릴 수 없다는 점에 유의해야 합니다.
 예를 들어 법선이 필요한 shader는 법선이 없는 geometry에서 작동하지 않을 겁니다.

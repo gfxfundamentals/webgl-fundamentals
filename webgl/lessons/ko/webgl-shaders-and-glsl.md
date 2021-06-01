@@ -47,7 +47,7 @@ Vertex shader는 데이터가 필요한데요.
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 
-만든 shader program을 통해 초기화 시 attribute의 위치를 찾고
+만든 shader program을 통해 초기화 시 attribute의 location을 찾고
 
     var positionLoc = gl.getAttribLocation(someShaderProgram, "a_position");
 
@@ -90,7 +90,7 @@ Shader uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지�
     }
 
 그리고 이제 모든 정점을 일정량만큼 offset 할 수 있습니다.
-먼저 초기화 시 uniform의 위치를 찾아야 합니다.
+먼저 초기화 시 uniform의 location을 찾아야 합니다.
 
     var offsetLoc = gl.getUniformLocation(someProgram, "u_offset");
 
@@ -99,7 +99,7 @@ Shader uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지�
     gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 우측 절반으로 offset
 
 참고로 uniform은 개별 shader program에 속합니다.
-만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면, 두 uniform 모두 고유한 위치와 값을 가지는데요.
+만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면, 두 uniform 모두 고유한 location과 값을 가지는데요.
 `gl.uniform???`을 호출하면 *current program*의 uniform만 설정합니다.
 Current program은 `gl.useProgram`에 전달한 마지막 program 입니다.
 
@@ -148,7 +148,7 @@ uniform은 여러 type을 가질 수 있는데요.
     // 렌더링할 때
     gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // u_someVec2의 전체 배열 설정
 
-하지만 배열의 개별 요소를 설정하고 싶다면 각 요소의 위치를 개별적으로 찾아야 합니다.
+하지만 배열의 개별 요소를 설정하고 싶다면 각 요소의 location을 개별적으로 찾아야 합니다.
 
     // 초기화 시 javascript
     var someVec2Element0Loc = gl.getUniformLocation(someProgram, "u_someVec2[0]");
@@ -230,7 +230,7 @@ Shader의 텍스처에서 값을 가져오면 `sampler2D` uniform을 생성하�
     gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
-초기화 시 shader program의 uniform 위치를 찾으며
+초기화 시 shader program의 uniform location을 찾으며
 
     var someSamplerLoc = gl.getUniformLocation(someProgram, "u_texture");
 

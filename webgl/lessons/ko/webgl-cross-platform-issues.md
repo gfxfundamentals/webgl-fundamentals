@@ -3,7 +3,7 @@ Description: WebGL 앱이 어디서나 작동하도록 만들기 위해 알아�
 TOC: Cross Platform 문제
 
 
-모든 WebGL 프로그램이 모든 기기 혹은 브라우저에서 작동하지 않아도 충격으로 다가오지 않을 겁니다.
+모든 WebGL program이 모든 기기 혹은 브라우저에서 작동하지 않아도 충격으로 다가오지 않을 겁니다.
 WebGL2의 경우, 적어도 2020년 7월 현재, [사파리](#safari)에서 지원되지 않습니다.
 
 다음은 제 머릿속에 있는 발생 가능한 대부분의 이슈 목록입니다.
@@ -33,7 +33,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
   예를 들어 일부 GPU는 16384의 최대 크기를 가집니다.
   하지만 각 면이 16384인 3D 텍스처는 16TB의 메모리를 필요로 합니다!!!
 
-* 단일 프로그램의 vertex attribute 최대 개수
+* 단일 program의 vertex attribute 최대 개수
 
   WebGL1에서 지원되는 최소값은 8입니다.
   WebGL2는 16입니다.
@@ -246,9 +246,9 @@ void main() {
 
 해결법 2가 가장 [D.R.Y](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)하게 보이지만, 런타임에 텍스처를 생성하지 않는다면 해결법 3이 가장 [W.E.T](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself#DRY_vs_WET_solutions)하게 보입니다.
 
-## GLSL undefined 동작
+## GLSL 정의되지 않은 동작
 
-여러 GLSL 함수는 undefined 동작을 가집니다.
+여러 GLSL 함수는 정의되지 않은 동작을 가집니다.
 예를 들어 `pow(x, y)`는 `x < 0`일 경우 undefined입니다.
 [spot lighting](webgl-3d-lighting-spot.html)에 대한 글의 하단에 더 긴 목록이 있습니다
 

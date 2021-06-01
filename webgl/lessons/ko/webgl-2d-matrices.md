@@ -431,7 +431,7 @@ void main() {
 </script>
 ```
 
-그리고 javascript에서는 투영 행렬로 곱해야 합니다.
+그리고 javascript에서는 projection matrix로 곱해야 합니다.
 
 ```js
 // 장면 그리기
@@ -527,7 +527,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
     translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
 
-마지막으로 clip space의 위치를 얻기 위해 투영 행렬에 곱하는데
+마지막으로 clip space의 위치를 얻기 위해 projection matrix에 곱하는데
 
     clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 
@@ -575,7 +575,7 @@ Shader에서 `gl_Position = matrix * position;`을 실행하는데요.
 이해하기 더 쉽다고 느껴지는 방법을 사용하시면 됩니다.
 
 이 포스트가 행렬 수학을 이해하는데 도움이 되었기를 바랍니다.
-2D를 계속 하고 싶다면 [Canvas 2D의 drawImage 함수 재현](webgl-2d-drawimage.html)과 [Canvas 2D의 행렬 Stack 재현](webgl-2d-matrix-stack.html)을 봐주세요.
+2D를 계속 하고 싶다면 [Canvas 2D의 drawImage 함수 재현](webgl-2d-drawimage.html)과 [Canvas 2D의 행렬 스택 재현](webgl-2d-matrix-stack.html)을 봐주세요.
 
 그게 아니라면 다음은 [3D](webgl-3d-orthographic.html)로 넘어갑니다.
 3D에서 행렬 수학은 동일한 원리과 사용법을 따르는데요.
@@ -590,7 +590,7 @@ Shader에서 `gl_Position = matrix * position;`을 실행하는데요.
 왜일까요?
 </p>
 <p>
-투영 행렬은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
+Projection matrix은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
 하지만 브라우저에는 두 가지 type의 픽셀이 있는데요.
 하나는 캔버스 자체의 픽셀 수입니다.
 예를 들어 이렇게 정의된 캔버스가 있습니다.
@@ -640,7 +640,7 @@ CSS는 캔버스가 표시되는 크기를 정의합니다.
 <p>
 캔버스의 크기를 조절할 수 있는 대부분의 앱은 <code>canvas.width</code>와 <code>canvas.height</code>를 <code>canvas.clientWidth</code>와 <code>canvas.clientHeight</code>에 맞추려고 하는데, 그 이유는 브라우저에 표시되는 각 픽셀에 대해 캔버스에 하나의 픽셀이 있기를 원하기 때문입니다.
 위에서 보셨듯이 그게 유일한 선택지는 아닙니다.
-하지만 거의 모든 경우에 <code>canvas.clientHeight</code>와 <code>canvas.clientWidth</code>를 사용해서 투영 행렬의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
+하지만 거의 모든 경우에 <code>canvas.clientHeight</code>와 <code>canvas.clientWidth</code>를 사용해서 projection matrix의 종횡비를 계산하는 것이 기술적으로 더 정확합니다.
 </p>
 </div>
 

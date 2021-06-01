@@ -241,7 +241,7 @@ Texture unit 0도 default active texture 이므로 bindTexture를 호출하면 �
 </p>
 <p>
 WebGL은 texture unit의 배열을 가지는데요.
-각 sampler uniform이 참조하는 texture unit을 설정하기 위해, 해당 sampler uniform의 위치를 탐색한 다음, 참조할 texture unit의 index로 설정합니다.
+각 sampler uniform이 참조하는 texture unit을 설정하기 위해, 해당 sampler uniform의 location을 탐색한 다음, 참조할 texture unit의 index로 설정합니다.
 </p>
 <p>예제:</p>
 <pre class="prettyprint showlinemods">

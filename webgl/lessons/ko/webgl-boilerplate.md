@@ -119,7 +119,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
 
     var shader = compileShaderFromScript(gl, "someScriptTagId");
 
-한 걸음 더 나아가서 script tag에서 두 shader를 컴파일하며, 프로그램에 첨부하고 연결하는 함수를 만들겁니다.
+한 걸음 더 나아가서 script tag에서 두 shader를 컴파일하며, program에 첨부하고 연결하는 함수를 만들겁니다.
 
     /**
      * 두 script tag에서 program 생성

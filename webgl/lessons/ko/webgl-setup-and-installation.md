@@ -80,7 +80,7 @@ Chrome 문서는 [여기](https://developers.google.com/web/tools/chrome-devtool
 <script src="https://greggman.github.io/webgl-helpers/webgl-gl-error-check.js"></script>
 ```
 
-그리고 WebGL 에러를 발생하면 프로그램은 예외를 던지고 운이 좋으면 더 많은 정보가 출력됩니다.
+그리고 WebGL 에러를 발생하면 program은 예외를 던지고 운이 좋으면 더 많은 정보가 출력됩니다.
 
 다양한 WebGL Inspector가 있는데요.
 다음은 [Chrome 및 Firefox 전용](https://spector.babylonjs.com/)입니다.

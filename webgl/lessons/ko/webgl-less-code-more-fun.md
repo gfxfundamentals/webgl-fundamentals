@@ -7,8 +7,8 @@ TOC: Less Code, More Fun
 첫 번째는 [기초](webgl-fundamentals.html)로 시작했는데요.
 아직 읽지 않았다면 해당 글을 먼저 읽어주세요.
 
-WebGL 프로그램을 사용하려면 컴파일하고 연결해야 하는 shader program을 작성한 다음 shader program에 대한 입력들의 위치를 찾아야 합니다.
-이 입력들은 uniform과 attribute라 불리는데, 이들의 위치를 찾는데 필요한 코드는 장황하고 지루할 수 있습니다.
+WebGL program을 사용하려면 컴파일하고 연결해야 하는 shader program을 작성한 다음 shader program에 대한 입력들의 location을 찾아야 합니다.
+이 입력들은 uniform과 attribute라 불리는데, 이들의 location을 찾는데 필요한 코드는 장황하고 지루할 수 있습니다.
 
 Shader program을 컴파일하고 연결하는 [전형적인 WebGL boilerplate 코드](webgl-boilerplate.html)가 있다고 가정합시다.
 주어진 shader set은 이렇습니다.
@@ -417,16 +417,16 @@ WebGL은 attribute에 대해 자동으로 `w = 1`을 설정합니다.
 이런 걸 반환하는데
 
     programInfo = {
-       program: WebGLProgram,  // 컴파일한 프로그램
+       program: WebGLProgram,  // 컴파일한 program
        uniformSetters: ...,    // webglUtils.createUniformSetters에서 반환된 setters
        attribSetters: ...,     // webglUtils.createAttribSetters에서 반환된 setters
     }
 
-여러 프로그램을 사용하기 시작하면 setter가 연결된 프로그램과 함께 자동으로 유지되기 때문에 상당히 유용합니다.
+여러 program을 사용하기 시작하면 setter가 연결된 program과 함께 자동으로 유지되기 때문에 상당히 유용합니다.
 
 {{{example url="../webgl-less-code-more-fun-quad-programinfo.html" }}}
 
-아무튼 이건 저의 WebGL 프로그램 작성 스타일입니다.
+아무튼 이건 저의 WebGL program 작성 스타일입니다.
 처음엔 사람들이 무엇이 WebGL이고 무엇이 저의 스타일인지 혼동하지 않도록 하기 위해서, 이 튜토리얼의 강의에서는 표준 **verbose** 방식을 사용해야 겠다고 생각했었는데요.
 하지만 어느 지점에서 모든 과정을 보여주는 것이 요점을 방해하는 경우가 있기 때문에 앞으로 일부 강의에서는 이 스타일을 사용할 겁니다.
 
@@ -507,7 +507,7 @@ void main() {
 참고로 <code>gl_FragColor</code>를 상수 색상으로 설정하는 한 라인을 추가했습니다.
 대부분의 드라이버는 파일의 이전 라인이 실제 결과에 기여하지 않음을 알 수 있는데요.
 따라서 모든 uniform을 최적화할 겁니다.
-다음에 프로그램을 실행할 때 <code>createUniformSetters</code>를 호출하면 <code>u_ambient</code>에 대한 setter를 생성하지 않으므로 <code>uniformSetters.u_ambient()</code>를 직접 호출하는 위 코드는 실패합니다.
+다음에 program을 실행할 때 <code>createUniformSetters</code>를 호출하면 <code>u_ambient</code>에 대한 setter를 생성하지 않으므로 <code>uniformSetters.u_ambient()</code>를 직접 호출하는 위 코드는 실패합니다.
 </p>
 <pre class="prettyprint">
 TypeError: undefined is not a function

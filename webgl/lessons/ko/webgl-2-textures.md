@@ -121,7 +121,7 @@ WebGL에는 "texture unit"이라는 것이 있습니다.
 각 sampler에 대해 사용할 texture unit을 shader에 알려줍니다.
 
 ```
-  // Sampler 위치 탐색
+  // Sampler location 탐색
   var u_image0Location = gl.getUniformLocation(program, "u_image0");
   var u_image1Location = gl.getUniformLocation(program, "u_image1");
 

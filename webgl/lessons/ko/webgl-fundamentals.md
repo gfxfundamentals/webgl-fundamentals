@@ -222,11 +222,11 @@ WebGL에서 색상은 0에서 1까지입니다.
 이제 GPU에 GLSL Program을 만들었으니 데이터를 제공해줘야 합니다.
 WebGL의 주요 API는 GLSL program에 데이터를 제공하기 위한 상태 설정에 관한 것인데요.
 이 경우 GLSL program에 대한 유일한 입력은 attribute인 `a_position`입니다.
-먼저 해야 할 일은 방금 생성된 program에 대한 attribute의 위치를 찾는 겁니다.
+먼저 해야 할 일은 방금 생성된 program에 대한 attribute의 location를 찾는 겁니다.
 
     var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
 
-Attribute 위치(그리고 uniform 위치) 위치를 찾는 것은 렌더링할 때가 아니라 초기화하는 동안 해야 합니다.
+Attribute location(그리고 uniform location)을 찾는 것은 렌더링할 때가 아니라 초기화하는 동안 해야 합니다.
 
 Attribute는 버퍼로부터 데이터를 가져오므로 버퍼를 생성해야 합니다.
 

@@ -286,7 +286,7 @@ varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보�
 
 버퍼에 데이터가 있으면 어떻게 데이터를 가져오고 vertex shader의 attribute에 제공할지 WebGL에 알려줘야 합니다.
 
-이를 위해, 먼저 attribute를 할당한 위치를 WebGL에 물어봐야 하는데요.
+이를 위해, 먼저 attribute를 할당한 location을 WebGL에 물어봐야 하는데요.
 예를 들어 위 코드에서 우리는
 
     // 정점 데이터가 어디로 가야하는지 탐색
@@ -295,7 +295,7 @@ varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보�
 
 이것도 보통 초기화할 때 수행됩니다.
 
-Attribute의 위치를 알게 되면 그리기 전에 3가지 명령어를 실행해야 합니다.
+Attribute의 location을 알게 되면 그리기 전에 3가지 명령어를 실행해야 합니다.
 
     gl.enableVertexAttribArray(location);
 

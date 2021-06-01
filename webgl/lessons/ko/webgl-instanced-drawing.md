@@ -43,7 +43,7 @@ void main() {
 Vertex shader는 각 정점을 [해당 글](webgl-3d-orthographic.html)에서 다룬 상당히 유연한 배열인 단일 행렬로 곱합니다.
 Fragment shader는 uniform을 통해 전달한 색상을 사용합니다.
 
-그리기 위해서는 shader를 컴파일하고 서로 연결한 다음 attribute와 uniform의 위치를 찾아야 합니다.
+그리기 위해서는 shader를 컴파일하고 서로 연결한 다음 attribute와 uniform의 location을 찾아야 합니다.
 
 ```js
 const program = webglUtils.createProgramFromScripts(gl, ['vertex-shader-3d', 'fragment-shader-3d']);
@@ -97,7 +97,7 @@ const colors = [
 ];
 ```
 
-그리기 위해서는 먼저 shader 프로그램을 사용해서, attribute를 설정하고, 5개의 instance를 반복한 다음, 각각에 대한 새로운 행렬을 계산하고, 행렬의 uniform과 색상을 설정 후 그립니다.
+그리기 위해서는 먼저 shader program을 사용해서, attribute를 설정하고, 5개의 instance를 반복한 다음, 각각에 대한 새로운 행렬을 계산하고, 행렬의 uniform과 색상을 설정 후 그립니다.
 
 ```js
 function render(time) {
@@ -109,7 +109,7 @@ function render(time) {
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.enableVertexAttribArray(positionLoc);
   gl.vertexAttribPointer(
-    positionLoc,  // 위치
+    positionLoc,  // location
     2,            // 크기 (반복마다 버퍼에서 가져오는 값의 개수)
     gl.FLOAT,     // buffer data type
     false,        // 정규화
@@ -216,7 +216,7 @@ void main() {
 
 Attribute는 vertex shader에서만 작동하므로 vertex shader의 attribute에서 색상을 가져와서 varying을 통해 fragment shader로 전달해야 합니다.
 
-다음으로 해당 attribute의 위치를 찾아야 합니다.
+다음으로 해당 attribute의 location을 찾아야 합니다.
 
 ```js
 const program = webglUtils.createProgramFromScripts(gl, ['vertex-shader-3d', 'fragment-shader-3d']);
@@ -343,7 +343,7 @@ for (let i = 0; i < 4; ++i) {
   // stride과 offset에 유의
   const offset = i * 16;  // row당 4float, float당 4byte
   gl.vertexAttribPointer(
-    loc,              // 위치
+    loc,              // location
     4,                // 크기 (반복마다 버퍼에서 가져오는 값의 개수)
     gl.FLOAT,         // buffer data type
     false,            // 정규화
@@ -420,7 +420,7 @@ void main() {
 </script>
 ```
 
-그런 다음 초기화할 때 위치를 찾고
+그런 다음 초기화할 때 location을 찾고
 
 ```js
 const positionLoc = gl.getAttribLocation(program, 'a_position');
