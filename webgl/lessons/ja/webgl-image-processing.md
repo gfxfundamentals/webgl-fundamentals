@@ -5,8 +5,8 @@ TOC: WebGLにおける画像処理
 
 WebGLでは、画像の加工処理は簡単である。どれくらい簡単か？まずは続きを読んで頂きたい。
 <!--more-->
-この記事は、「[WebGLの基礎](webgl-fundamentals.html)」の続きである。
-あらかじめ「[WebGLの基礎](webgl-fundamentals.html)」を読むことをお勧めする。
+この記事は、「[WebGLの基本](webgl-fundamentals.html)」の続きである。
+あらかじめ「[WebGLの基本](webgl-fundamentals.html)」を読むことをお勧めする。
 
 WebGLで画像を描くには「テクスチャー」を使う必要がある。
 WebGLでは、レンダリングする際に「ピクセル」ではなく「クリッピング空間座標」を使用したが、
