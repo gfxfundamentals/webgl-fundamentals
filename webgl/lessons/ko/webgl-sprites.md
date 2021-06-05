@@ -7,7 +7,7 @@ TOC: Sprite
 
 Sprite는 이미 다뤘지만, "sprite"라고 부르지 않았습니다.
 
-[텍스처로 글자를 그리는 방법](webgl-text-texture.html)이 sprite에 대한 글인데요.
+[텍스처로 텍스트를 그리는 방법](webgl-text-texture.html)이 sprite에 대한 글인데요.
 Text image를 sprite image로 바꾸면 sprite 입니다.
 
 관련된 글은 [WebGL에서 Canvas 2D의 `drawImage` 함수를 재현하는 글](webgl-2d-drawimage.html)과 [행렬 스택에 대한 글](webgl-2d-matrix-stack.html)입니다.
