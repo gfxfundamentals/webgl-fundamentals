@@ -57,7 +57,7 @@ MatrixStack.prototype.getCurrentMatrix = function() {
   return this.stack[this.stack.length - 1].slice();
 };
 
-// Lets us set the current matrix
+// Let's us set the current matrix
 MatrixStack.prototype.setCurrentMatrix = function(m) {
   return this.stack[this.stack.length - 1] = m;
 };
@@ -90,7 +90,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
 Note we're using the 3d matrix math functions.  We could just use `0` for
 `z` on translation and `1` for `z` on scale but I find that I'm so used to
 using the 2d functions from Canvas 2d that I often forget to specify `z`
-an then the code breaks so let's make `z` optional
+and then the code breaks so let's make `z` optional
 
 ```
 // Translates the current matrix
@@ -135,7 +135,7 @@ We just need to create a matrix stack
 var matrixStack = new MatrixStack();
 ```
 
-and multiply in the top matrix from our stack in
+And multiply in the top matrix from our stack in
 
 ```
 // this matrix will convert from pixels to clip space
@@ -314,7 +314,7 @@ with `0, 0` this is where the image will be drawn.
 
 <img class="webgl_center" width="400" src="resources/matrixstack-before.svg" />
 
-Lets say we want the center of rotation to be the bottom right.  In that
+Let's say we want the center of rotation to be the bottom right.  In that
 case where would be have to move the origin so that when we call
 `drawImage` the point we want to be the center of rotation is at the
 current origin?  For the bottom right of the texture that would be
