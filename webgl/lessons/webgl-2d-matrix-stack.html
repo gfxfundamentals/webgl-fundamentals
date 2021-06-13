@@ -282,7 +282,7 @@ MatrixStack.prototype.getCurrentMatrix = function() {
   return this.stack[this.stack.length - 1].slice();
 };
 
-// Lets us set the current matrix
+// Let&#39;s us set the current matrix
 MatrixStack.prototype.setCurrentMatrix = function(m) {
   return this.stack[this.stack.length - 1] = m;
 };
@@ -308,7 +308,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
 </code></pre><p>Note we&#39;re using the 3d matrix math functions.  We could just use <code class="notranslate" translate="no">0</code> for
 <code class="notranslate" translate="no">z</code> on translation and <code class="notranslate" translate="no">1</code> for <code class="notranslate" translate="no">z</code> on scale but I find that I&#39;m so used to
 using the 2d functions from Canvas 2d that I often forget to specify <code class="notranslate" translate="no">z</code>
-an then the code breaks so let&#39;s make <code class="notranslate" translate="no">z</code> optional</p>
+and then the code breaks so let&#39;s make <code class="notranslate" translate="no">z</code> optional</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Translates the current matrix
 MatrixStack.prototype.translate = function(x, y, z) {
 +  if (z === undefined) {
@@ -341,7 +341,7 @@ matrix = m4.translate(matrix, dstX, dstY, 0);
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>We just need to create a matrix stack</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var matrixStack = new MatrixStack();
-</code></pre><p>and multiply in the top matrix from our stack in</p>
+</code></pre><p>And multiply in the top matrix from our stack in</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// this matrix will convert from pixels to clip space
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
@@ -506,7 +506,7 @@ previous origin?</em></p>
 150 and all drawing will be relative that point.  If we call <code class="notranslate" translate="no">drawImage</code>
 with <code class="notranslate" translate="no">0, 0</code> this is where the image will be drawn.</p>
 <p><img class="webgl_center" width="400" src="resources/matrixstack-before.svg" /></p>
-<p>Lets say we want the center of rotation to be the bottom right.  In that
+<p>Let&#39;s say we want the center of rotation to be the bottom right.  In that
 case where would be have to move the origin so that when we call
 <code class="notranslate" translate="no">drawImage</code> the point we want to be the center of rotation is at the
 current origin?  For the bottom right of the texture that would be
