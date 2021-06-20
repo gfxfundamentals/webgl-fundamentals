@@ -541,9 +541,9 @@ Fragment shader는 <code class="notranslate" translate="no">gl_FragColor</code>�
 <p>위 경우 vertex shader는 데이터를 직접 전달하는 것 외에는 아무것도 하지 않는 걸 볼 수 있는데요.
 위치 데이터가 이미 clip space에 있으므로 할 일이 없습니다.
 <em>WebGL은 rasterization API에 불과하기 때문에 3D를 원한다면 3D를 clip space로 변환하는 shader를 작성해야 합니다.</em></p>
-<p>아마 삼각형이 중앙에서 시작해서 우측 상단으로 가는 이유가 궁금하실텐데요.
+<p>아마 삼각형이 중앙에서 시작해서 오른쪽 상단으로 가는 이유가 궁금하실텐데요.
 <code class="notranslate" translate="no">x</code>의 clip space는 -1부터 +1까지 입니다.
-즉 0이 중앙이고 양수 값이 우측이라는 걸 의미합니다.</p>
+즉 0이 중앙이고 양수 값이 오른쪽이라는 걸 의미합니다.</p>
 <p>상단에 있는 이유는 clip space에서 -1은 하단에 있고 +1은 상단에 있기 때문입니다.
 즉 0이 중앙이고 양수가 중앙보다 위에 있다는 걸 의미합니다.</p>
 <p>2D의 경우 clip space보다는 픽셀로 작업하는 것이 좋으니, 위치를 픽셀로 제공하고 clip space로 변환할 수 있도록 shader를 바꿔봅시다.
@@ -611,11 +611,11 @@ gl.drawArrays(primitiveType, offset, count);
 </div>
 
 </p>
-<p>사각형이 좌측 하단 근처에 있는 걸 알 수 있는데요.
+<p>사각형이 왼쪽 하단 근처에 있는 걸 알 수 있는데요.
 WebGL은 양수 Y를 위쪽으로, 음수 Y를 아래쪽으로 간주합니다.
-Clip space에서 좌측 하단 모서리는 -1,-1이 되죠.
-아직 어떤 부호도 바꾸지 않았기 때문에 현재 수식에서 0,0은 좌측 하단 모서리가 됩니다.
-이를 2D 그래픽 API에서 보다 전통적으로 사용되는 좌측 상단 모서리가 되도록 clip space y좌표를 뒤집을 수 있습니다.</p>
+Clip space에서 왼쪽 하단 모서리는 -1,-1이 되죠.
+아직 어떤 부호도 바꾸지 않았기 때문에 현재 수식에서 0,0은 왼쪽 하단 모서리가 됩니다.
+이를 2D 그래픽 API에서 보다 전통적으로 사용되는 왼쪽 상단 모서리가 되도록 clip space y좌표를 뒤집을 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*  gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>이제 우리가 예상한 위치에 사각형이 있습니다.</p>
 <p><div class="webgl_example_container">
@@ -832,7 +832,7 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
             <li>2D</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
 <li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
         </ul>
   <li>3D</li>

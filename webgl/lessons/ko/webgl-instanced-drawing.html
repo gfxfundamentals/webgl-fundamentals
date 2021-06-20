@@ -458,13 +458,13 @@ for (let i = 0; i &lt; numInstances; ++i) {
 </code></pre>
 <p>이렇게 하면 모든 행렬에 대한 데이터를 참조하고 싶을 때 <code class="notranslate" translate="no">matrixData</code>를 사용할 수 있고, 어느 개별적인 행렬을 원한다면 <code class="notranslate" translate="no">matrices[ndx]</code>를 사용할 수 있습니다.</p>
 <p>또한 이 데이터를 위해 GPU에 버퍼를 생성해야 합니다.
-이 시점에서는 버퍼를 할당하기만 하면 되며, 데이터를 제공할 필요는 없으므로, <code class="notranslate" translate="no">gl.bufferData</code>에 대한 두 번째 매개 변수는 버퍼를 할당하는 크기입니다.</p>
+이 시점에서는 버퍼를 할당하기만 하면 되며, 데이터를 제공할 필요는 없으므로, <code class="notranslate" translate="no">gl.bufferData</code>에 대한 두 번째 매개변수는 버퍼를 할당하는 크기입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const matrixBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, matrixBuffer);
 // 버퍼 할당
 gl.bufferData(gl.ARRAY_BUFFER, matrixData.byteLength, gl.DYNAMIC_DRAW);
 </code></pre>
-<p><code class="notranslate" translate="no">gl.DYNAMIC_DRAW</code>를 마지막 매개 변수로 전달했음에 주목하세요.
+<p><code class="notranslate" translate="no">gl.DYNAMIC_DRAW</code>를 마지막 매개변수로 전달했음에 주목하세요.
 이건 WebGL에 이 데이터가 자주 바뀔 것이라는 <em>hint</em>입니다.</p>
 <p>다음으로 버퍼에도 색상이 필요합니다.
 최소한 이 예제에서, 이 데이터는 바뀌지 않을 것이므로, 데이터를 업로드하기만 하면 됩니다.</p>
@@ -691,7 +691,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
             <li>2D</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
 <li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
         </ul>
   <li>3D</li>

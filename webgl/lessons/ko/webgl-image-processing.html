@@ -352,7 +352,7 @@ gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 </p>
 <p>실제로 다른 픽셀을 보는 이미지 처리는 어떻게 해야 할까요?
 WebGL은 0.0에서 1.0까지인 텍스처 좌표에서 텍스처를 참조하기 때문에 간단한 수식(<code class="notranslate" translate="no">onePixel = 1.0 / textureSize</code>)으로 1px을 위해 얼마나 이동해야 하는지 계산할 수 있습니다.</p>
-<p>다음은 텍스처에 있는 각 픽셀의 좌측과 우측의 픽셀을 평균화하는 fragment shader입니다.</p>
+<p>다음은 텍스처에 있는 각 픽셀의 왼쪽과 오른쪽의 픽셀을 평균화하는 fragment shader입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -367,7 +367,7 @@ void main() {
   // 텍스처 좌표의 1px 계산
   vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
 
-  // 좌측, 중앙, 우측 픽셀 평균화
+  // 왼쪽, 중앙, 오른쪽 픽셀 평균화
   gl_FragColor = (
     texture2D(u_image, v_texCoord) +
     texture2D(u_image, v_texCoord + vec2(onePixel.x, 0.0)) +
@@ -590,7 +590,7 @@ u_는 shader에 입력하는 uniform이고, v_는  vertex shader에서 fragment 
             <li>2D</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
 <li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
         </ul>
   <li>3D</li>
