@@ -96,7 +96,7 @@ Shader uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지�
 
 그런 다음 그리기 전에 uniform을 설정합니다.
 
-    gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 우측 절반으로 offset
+    gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 오른쪽 절반으로 offset
 
 참고로 uniform은 개별 shader program에 속합니다.
 만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면, 두 uniform 모두 고유한 location과 값을 가지는데요.

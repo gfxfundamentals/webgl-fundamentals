@@ -28,7 +28,7 @@ TOC: WebGL 행렬 vs 수학 행렬
 
 <div class="webgl_center"><img src="resources/editor-lines-and-columns.gif" class="gman-border-bshadow" style="width: 372px;"></div>
 
-좌측 하단 영역에 있는 상태 바가 줄과 열을 표시합니다.
+왼쪽 하단 영역에 있는 상태 바가 줄과 열을 표시합니다.
 
 스프레드시트 소프트웨어에서는 행이 가로로 진행하고
 

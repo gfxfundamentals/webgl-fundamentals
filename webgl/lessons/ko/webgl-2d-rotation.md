@@ -91,7 +91,7 @@ TOC: 2D Rotation
     rotatedY = a_position.y * u_rotation.y - a_position.x * u_rotation.x;
 
 사각형이 하나 있고 그걸 회전시키고 싶다고 해봅시다.
-회전을 시작하기 전 우측 상단 모서리는 3.0, 9.0 입니다.
+회전을 시작하기 전 오른쪽 상단 모서리는 3.0, 9.0 입니다.
 단위원의 12시에서 시계 방향 30도 지점을 선택해봅시다.
 
 <img src="../resources/rotate-30.png" class="webgl_center" />

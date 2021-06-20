@@ -95,7 +95,7 @@ function setGeometry(gl, x, y) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
     new Float32Array([
-      // 좌측 열
+      // 왼쪽 열
       x, y,
       x + thickness, y,
       x, y + height,

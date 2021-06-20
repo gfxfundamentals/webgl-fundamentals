@@ -121,7 +121,7 @@ WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 vertex shader�
 실제로 다른 픽셀을 보는 이미지 처리는 어떻게 해야 할까요?
 WebGL은 0.0에서 1.0까지인 텍스처 좌표에서 텍스처를 참조하기 때문에 간단한 수식(<code>onePixel = 1.0 / textureSize</code>)으로 1px을 위해 얼마나 이동해야 하는지 계산할 수 있습니다.
 
-다음은 텍스처에 있는 각 픽셀의 좌측과 우측의 픽셀을 평균화하는 fragment shader입니다.
+다음은 텍스처에 있는 각 픽셀의 왼쪽과 오른쪽의 픽셀을 평균화하는 fragment shader입니다.
 
     <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
@@ -137,7 +137,7 @@ WebGL은 0.0에서 1.0까지인 텍스처 좌표에서 텍스처를 참조하기
       // 텍스처 좌표의 1px 계산
       vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
 
-      // 좌측, 중앙, 우측 픽셀 평균화
+      // 왼쪽, 중앙, 오른쪽 픽셀 평균화
       gl_FragColor = (
         texture2D(u_image, v_texCoord) +
         texture2D(u_image, v_texCoord + vec2(onePixel.x, 0.0)) +

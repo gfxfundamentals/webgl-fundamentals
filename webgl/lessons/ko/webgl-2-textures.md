@@ -102,7 +102,7 @@ void main() {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
-    // 어떤 크기의 이미지도 렌더할 수 있도록 매개 변수 설정
+    // 어떤 크기의 이미지도 렌더할 수 있도록 매개변수 설정
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);

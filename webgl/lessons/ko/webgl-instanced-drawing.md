@@ -265,7 +265,7 @@ for (let i = 0; i < numInstances; ++i) {
 이렇게 하면 모든 행렬에 대한 데이터를 참조하고 싶을 때 `matrixData`를 사용할 수 있고, 어느 개별적인 행렬을 원한다면 `matrices[ndx]`를 사용할 수 있습니다.
 
 또한 이 데이터를 위해 GPU에 버퍼를 생성해야 합니다.
-이 시점에서는 버퍼를 할당하기만 하면 되며, 데이터를 제공할 필요는 없으므로, `gl.bufferData`에 대한 두 번째 매개 변수는 버퍼를 할당하는 크기입니다.
+이 시점에서는 버퍼를 할당하기만 하면 되며, 데이터를 제공할 필요는 없으므로, `gl.bufferData`에 대한 두 번째 매개변수는 버퍼를 할당하는 크기입니다.
 
 ```js
 const matrixBuffer = gl.createBuffer();
@@ -274,7 +274,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, matrixBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, matrixData.byteLength, gl.DYNAMIC_DRAW);
 ```
 
-`gl.DYNAMIC_DRAW`를 마지막 매개 변수로 전달했음에 주목하세요.
+`gl.DYNAMIC_DRAW`를 마지막 매개변수로 전달했음에 주목하세요.
 이건 WebGL에 이 데이터가 자주 바뀔 것이라는 *hint*입니다.
 
 다음으로 버퍼에도 색상이 필요합니다.
