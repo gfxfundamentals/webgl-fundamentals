@@ -169,7 +169,7 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragmen
 
 또한 더 많은 데이터를 vertex shader에 전달해서 fragment shader에 전달할 수 있습니다.
 예를 들어 2가지 색상을 가진 삼각형 2개로 이루어진 사각형을 그린다고 해봅시다.
-이를 위해 vertex shader에 또다른 attribute를 추가하면, 더 많은 데이터를 전달할 수 있고, 그 데이터를 fragment shader에 직접 전달할 수 있습니다.
+이를 위해 vertex shader에 또 다른 attribute를 추가하면, 더 많은 데이터를 전달할 수 있고, 그 데이터를 fragment shader에 직접 전달할 수 있습니다.
 
     attribute vec2 a_position;
     +attribute vec4 a_color;
@@ -330,7 +330,7 @@ offset이 0이면 "버퍼의 처음부터 시작"을 의미합니다.
 
 buffer와 attribute가 정리되셨기를 바랍니다.
 
-WebGL의 작동 방식을 이해하는 또다른 방법으로 [대화형 상태 다이어그램](/webgl/lessons/resources/webgl-state-diagram.html)을 살펴보실 수 있습니다.
+WebGL의 작동 방식을 이해하는 또 다른 방법으로 [대화형 상태 다이어그램](/webgl/lessons/resources/webgl-state-diagram.html)을 살펴보실 수 있습니다.
 
 다음은 [Shader 및 GLSL](webgl-shaders-and-glsl.html)을 살펴보겠습니다.
 

@@ -54,7 +54,7 @@ void main() {
 // fragment shader
 precision mediump float;
 
-// Vertex shader에서 전달됨
+// Vertex shader에서 전달
 varying vec2 v_texcoord;
 
 uniform vec4 u_colorMult;
@@ -258,7 +258,7 @@ const imageTexture = loadImageTexture('resources/f-texture.png');
 ```glsl
 precision mediump float;
 
-// Vertex shader에서 전달됨
+// Vertex shader에서 전달
 varying vec2 v_texcoord;
 +varying vec4 v_projectedTexcoord;
 
