@@ -307,7 +307,7 @@ cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 역행렬(제공된 행렬의 정반대를 수행하는 행렬)을 계산하는 <code class="notranslate" translate="no">inverse</code> 함수를 사용하여 이를 수행할 수 있습니다.
 이 경우 제공된 행렬은 원점을 기준으로 카메라를 어떤 위치와 orientation으로 움직입니다.
 그 반대는 다른 모든 걸 옮겨서 카메라가 원점에 있도록 하는 행렬입니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Camera matrix로 view matrix 만들기
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// camera matrix로 view matrix 만들기
 var viewMatrix = m4.inverse(cameraMatrix);
 </code></pre>
 <p>이제 view matrix와 projection matrix를 view projection matrix로 합칩니다.</p>
@@ -473,7 +473,7 @@ Since we know the camera points in the -Z direction we can subtract the other wa
   var cameraMatrix = m4.yRotation(cameraAngleRadians);
   cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 
-  // 계산한 행렬에서 카메라의 위치 얻기
+  // 계산한 행렬에서 카메라의 위치 가져오기
   var cameraPosition = [
     cameraMatrix[12],
     cameraMatrix[13],
@@ -485,7 +485,7 @@ Since we know the camera points in the -Z direction we can subtract the other wa
   // lookAt을 사용하여 카메라의 행렬 계산
   var cameraMatrix = m4.lookAt(cameraPosition, fPosition, up);
 
-  // Camera matrix로 view matrix 만들기
+  // camera matrix로 view matrix 만들기
   var viewMatrix = m4.inverse(cameraMatrix);
 
   ...
@@ -612,7 +612,7 @@ View matrix가 필요할 때 <code class="notranslate" translate="no">inverse</c
   <li>3D</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skybox.html">Skyboxes</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">Skinning</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">Fog</a></li>

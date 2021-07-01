@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-environment-maps.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of GFXFundamentals. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Environment Maps (reflections)" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to implement environment maps." />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Environment Maps (reflections)" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html" />
-<meta name="twitter:description" content="How to implement environment maps." />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="환경맵을 구현하는 방법">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-environment-maps_ko.jpg">
+
+<meta property="og:title" content="WebGL 환경맵 (반사)">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-environment-maps_ko.jpg">
+<meta property="og:description" content="환경맵을 구현하는 방법">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 환경맵 (반사)">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html">
+<meta name="twitter:description" content="환경맵을 구현하는 방법">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-environment-maps_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-environment-maps_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html",
+      "inLanguage":"ko",
+      "name":"WebGL 환경맵 (반사)",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Environment Maps (reflections)</title>
+<title>WebGL 환경맵 (반사)</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-environment-maps.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-environment-maps.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-environment-maps.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-environment-maps.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-environment-maps.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-environment-maps.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-environment-maps.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,13 +236,263 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Environment Maps (reflections)</h1>
+    <h1>WebGL 환경맵 (반사)</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-environment-maps.html">여기</a>에 있습니다.</p>
+      <p>이 글은 WebGL 관련 시리즈의 일부입니다.
+첫 글은 <a href="webgl-fundamentals.html">기초</a>로 시작했는데요.
+이 글은 <a href="webgl-cube-maps.html">큐브맵에 관한 글</a>에서 이어집니다.
+또한 <a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>에서 다룬 개념을 사용합니다.
+아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
+<p><em>환경맵</em>은 그리는 객체의 환경을 나타내는데요.
+야외 장면을 그리는 경우 야외를 표현합니다.
+무대의 사람을 그린다면 장소를 표현하게 됩니다.
+우주 장면을 그리면 별이 될 겁니다.
+장소의 한 지점에서 환경을 보여주는 6개의 이미지가 있다면 큐브맵으로 환경맵을 구현할 수 있습니다.</p>
+<p>다음은 캘리포니아 마운틴 뷰에 있는 컴퓨터 역사 박물관 로비의 환경맵입니다.</p>
+<div class="webgl_center">
+  <img src="../../resources/images/computer-history-museum/pos-x.jpg" style="width: 128px" class="border">
+  <img src="../../resources/images/computer-history-museum/neg-x.jpg" style="width: 128px" class="border">
+  <img src="../../resources/images/computer-history-museum/pos-y.jpg" style="width: 128px" class="border">
+</div>
+<div class="webgl_center">
+  <img src="../../resources/images/computer-history-museum/neg-y.jpg" style="width: 128px" class="border">
+  <img src="../../resources/images/computer-history-museum/pos-z.jpg" style="width: 128px" class="border">
+  <img src="../../resources/images/computer-history-museum/neg-z.jpg" style="width: 128px" class="border">
+</div>
+
+<p><a href="webgl-cube-maps.html">이전 글의 코드</a>를 기반으로 생성한 이미지 대신에 이미지 6개를 불러옵시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 텍스처 생성
+var texture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+
+const faceInfos = [
+  {
+    target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, 
+    url: &#39;resources/images/computer-history-museum/pos-x.jpg&#39;,
+  },
+  {
+    target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 
+    url: &#39;resources/images/computer-history-museum/neg-x.jpg&#39;,
+  },
+  {
+    target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 
+    url: &#39;resources/images/computer-history-museum/pos-y.jpg&#39;,
+  },
+  {
+    target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 
+    url: &#39;resources/images/computer-history-museum/neg-y.jpg&#39;,
+  },
+  {
+    target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 
+    url: &#39;resources/images/computer-history-museum/pos-z.jpg&#39;,
+  },
+  {
+    target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 
+    url: &#39;resources/images/computer-history-museum/neg-z.jpg&#39;,
+  },
+];
+faceInfos.forEach((faceInfo) =&gt; {
+  const {target, url} = faceInfo;
+
+  // 캔버스를 큐브맵 면에 업로드
+  const level = 0;
+  const internalFormat = gl.RGBA;
+  const width = 512;
+  const height = 512;
+  const format = gl.RGBA;
+  const type = gl.UNSIGNED_BYTE;
+
+  // 즉시 렌더링될 수 있도록 각 면을 설정
+  gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
+
+  // 비동기적으로 이미지 로드
+  const image = new Image();
+  image.src = url;
+  image.addEventListener(&#39;load&#39;, function() {
+    // 이제 이미지를 불러왔고 이를 텍스처에 업로드
+    gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+    gl.texImage2D(target, level, internalFormat, format, type, image);
+    gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+  });
+});
+gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+</code></pre>
+<p>모든 면에 대해 <code class="notranslate" translate="no">texImage2D</code>에 <code class="notranslate" translate="no">null</code>을 전달하여 512x512의 비어있는 이미지로 초기화합니다.
+큐브맵은 6개의 면을 가져야 하며, 6개의 면은 모두 동일한 크기의 사각형이여야 합니다.
+텍스처가 아니라면 렌더링되지 않을 겁니다.
+하지만 우리는 이미지 6개를 로딩하고 있습니다.
+즉시 렌더링을 시작하고 싶으므로 6개의 면을 모두 할당한 다음 이미지 로딩을 시작합니다.
+각 이미지가 로드되면 알맞은 면으로 업로드한 다음 mipmap을 다시 생성합니다.
+다시 말해 즉시 렌더링할 수 있고, 이미지가 다운로드되면 큐브맵의 면들이 한 번에 하나씩 이미지로 채워지며, 6개가 모두 로드되지 않아도 렌더링할 수 있습니다.</p>
+<p>하지만 이미지를 로딩하는 것만으로는 부족합니다.
+<a href="webgl-3d-lighting-point.html">조명</a>처럼 약간의 수식이 필요합니다.</p>
+<p>이 경우 눈/카메라에서 객체의 표면까지의 벡터가 주어지면, 그려지는 각 fragment가 해당 표면에서 반사되는 방향을 알고 싶습니다.
+그러면 해당 방향을 사용하여 큐브맵의 색상을 가져올 수 있습니다.</p>
+<p>반사에 대한 공식은 다음과 같습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">reflectionDir = eyeToSurfaceDir – 
+    2 ∗ dot(surfaceNormal, eyeToSurfaceDir) ∗ surfaceNormal
+</code></pre><p><a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>을 떠올려보면 두 벡터의 스칼라곱은 두 벡터 사이 각도의 cosine을 반환합니다.
+벡터를 추가하면 새로운 벡터가 생기므로 평평한 표면을 수직으로 보는 눈을 예제를 들어봅시다.</p>
+<div class="webgl_center"><img src="../resources/reflect-180-01.svg" style="width: 400px"></div>
+
+<p>위의 공식을 시각화해봅시다.
+먼저 정확히 반대 방향을 가리키는 두 벡터의 스칼라곱은 -1이므로 다음과 같이 시각적으로 나타낼 수 있습니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-180-02.svg" style="width: 400px"></div>
+
+<p>이 스칼라곱을 <span style="color:black; font-weight:bold;">eyeToSurfaceDir</span>과 반사 공식의 <span style="color:green;">법선</span>에 연결하면 이렇게 됩니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-180-03.svg" style="width: 400px"></div>
+
+<p>-2를 -1로 곱하면 +2가 됩니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-180-04.svg" style="width: 400px"></div>
+
+<p>따라서 벡터를 연결하여 더하면 <span style="color: red">반사된 벡터</span>가 됩니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-180-05.svg" style="width: 400px"></div>
+
+<p>위에서 하나는 눈에서 완전히 반대되고, 다른 하나는 반사가 눈 쪽을 곧장 향하는 2개의 벡터를 볼 수 있습니다.
+원래 다이어그램으로 돌아가보면 예상한 것과 정확히 일치합니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-180-06.svg" style="width: 400px"></div>
+
+<p>표면을 오른쪽으로 45도 회전시켜 보겠습니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-45-01.svg" style="width: 400px"></div>
+
+<p>135도 떨어진 두 벡터의 스칼라곱은 -0.707입니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-45-02.svg" style="width: 400px"></div>
+
+<p>그리고 공식에 전부 연결합니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-45-03.svg" style="width: 400px"></div>
+
+<p>다시 두 음수를 곱하면 양수가 되지만 이제 <span style="color: green">벡터</span>는 30% 더 짧아집니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-45-04.svg" style="width: 400px"></div>
+
+<p>그리고 벡터를 더하면 <span style="color: red">반사된 벡터</span>가 됩니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-45-05.svg" style="width: 400px"></div>
+
+<p>원래 다이어그램에 다시 넣어보면 잘 맞는 것 같습니다.</p>
+<div class="webgl_center"><img src="../resources/reflect-45-06.svg" style="width: 400px"></div>
+
+<p><span style="color: red">반사된 방향</span>을 이용하여 큐브맵을 보고 물체의 표면을 채색합니다.</p>
+<p>다음은 surface의 rotation을 설정하고 방정식의 다양한 부분을 볼 수 있는 다이어그램입니다.
+또한 반사 벡터가 큐브맵의 다른 면을 가리켜서 표면 색상에 영향을 주는 것도 볼 수 있습니다.</p>
+<p><div class="webgl_diagram_container">
+  <iframe class="webgl_example " style="width: 400px; height: 400px;" src="/webgl/lessons/resources/environment-mapping.html"></iframe>
+</div>
+
+</p>
+<p>이제 반사가 어떻게 작동하는지 알고, 큐브맵에서 값을 찾기 위해 사용할 수 있으므로, shader를 변경해봅시다.</p>
+<p>먼저 vertex shader에서 정점의 world position과 world oriented normal을 계산하고 이를 fragment shader에 varying으로 전달할 겁니다.
+이는 <a href="webgl-3d-lighting-spot.html">spotlight에 대한 글</a>에서 했던 것과 유사합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
+attribute vec3 a_normal;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+
+varying vec3 v_worldPosition;
+varying vec3 v_worldNormal;
+
+void main() {
+  // 위치를 행렬로 곱하기
+  gl_Position = u_projection * u_view * u_world * a_position;
+
+  // View position을 fragment shader로 보내기
+  v_worldPosition = (u_world * a_position).xyz;
+
+  // 법선의 방향을 정하고 fragment shader로 전달
+  v_worldNormal = mat3(u_world) * a_normal;
+}
+</code></pre>
+<p>그런 다음 fragment shader에서 <code class="notranslate" translate="no">worldNormal</code>이 정점 사이의 표면을 가로질러 보간되므로 정규화합니다.
+카메라의 world position을 전달하고 표면의 world position에서 이를 빼면 <code class="notranslate" translate="no">eyeToSurfaceDir</code>이 됩니다.</p>
+<p>마지막으로 위에서 살펴본 공식을 구현하는 GLSL 내장 함수 <code class="notranslate" translate="no">reflect</code>를 사용합니다.
+그리고 결과를 이용하여 큐브맵에서 색상을 가져옵니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision highp float;
+
+// Vertex shader에서 전달
+varying vec3 v_worldPosition;
+varying vec3 v_worldNormal;
+
+// 텍스처
+uniform samplerCube u_texture;
+
+// 카메라의 위치
+uniform vec3 u_worldCameraPosition;
+
+void main() {
+  vec3 worldNormal = normalize(v_worldNormal);
+  vec3 eyeToSurfaceDir = normalize(v_worldPosition - u_worldCameraPosition);
+  vec3 direction = reflect(eyeToSurfaceDir,worldNormal);
+
+  gl_FragColor = textureCube(u_texture, direction);
+}
+</code></pre>
+<p>또한 이 예제를 위해 실제 법선이 필요한데요.
+실제 법선으로 큐브의 면이 평평하게 보이도록 합니다.
+이전 예제에서 큐브맵의 작동을 보기 위해 큐브의 위치를 수정했지만, 이 경우에는 <a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>에서 다룬 것처럼 큐브에 대한 실제 법선이 필요합니다.</p>
+<p>초기화할 때</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 법선을 넣을 버퍼 생성
+var normalBuffer = gl.createBuffer();
+// ARRAY_BUFFER에 바인딩 (ARRAY_BUFFER = normalBuffer)
+gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+// 법선 데이터를 버퍼에 넣기
+setNormals(gl);
+</code></pre>
+<p>렌더링할 때</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 법선 버퍼 바인딩
+gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+
+// Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
+var size = 3;          // 반복마다 3개의 컴포넌트
+var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점 값
+var normalize = false; // 데이터 정규화 (0-255에서 0-1로 전환)
+var stride = 0;        // 0 = 다음 위치를 가져오기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
+var offset = 0;        // 버퍼의 처음부터 시작
+gl.vertexAttribPointer(normalLocation, size, type, normalize, stride, offset);
+</code></pre>
+<p>물론 초기화할 때 uniform location을 찾아야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">var projectionLocation = gl.getUniformLocation(program, &quot;u_projection&quot;);
+var viewLocation = gl.getUniformLocation(program, &quot;u_view&quot;);
+var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
+var textureLocation = gl.getUniformLocation(program, &quot;u_texture&quot;);
+var worldCameraPositionLocation = gl.getUniformLocation(program, &quot;u_worldCameraPosition&quot;);
+</code></pre>
+<p>그리고 렌더링할 때 이들을 설정합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// projection matrix 계산
+var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
+gl.uniformMatrix4fv(projectionLocation, false, projectionMatrix);
+
+var cameraPosition = [0, 0, 2];
+var target = [0, 0, 0];
+var up = [0, 1, 0];
+// lookAt을 사용하여 카메라의 행렬 계산
+var cameraMatrix = m4.lookAt(cameraPosition, target, up);
+
+// camera matrix로 view matrix 만들기
+var viewMatrix = m4.inverse(cameraMatrix);
+
+var worldMatrix = m4.xRotation(modelXRotationRadians);
+worldMatrix = m4.yRotate(worldMatrix, modelYRotationRadians);
+
+// Uniform 설정
+gl.uniformMatrix4fv(projectionLocation, false, projectionMatrix);
+gl.uniformMatrix4fv(viewLocation, false, viewMatrix);
+gl.uniformMatrix4fv(worldLocation, false, worldMatrix);
+gl.uniform3fv(worldCameraPositionLocation, cameraPosition);
+
+// u_texture에 texture unit 0을 사용하도록 shader에 지시
+gl.uniform1i(textureLocation, 0);
+</code></pre>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-environment-map.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-environment-map.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>다음은 <a href="webgl-skybox.html">skybox에 cubemap을 사용하는 방법</a>을 보여드리겠습니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +508,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -272,7 +580,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li>3D</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skybox.html">Skyboxes</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">Skinning</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">Fog</a></li>
@@ -341,13 +649,50 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 환경맵 (반사)';
+            var disqus_title = 'WebGL 환경맵 (반사)';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
