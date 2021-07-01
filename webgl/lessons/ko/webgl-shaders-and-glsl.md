@@ -28,7 +28,7 @@ Shader는 정점마다 한 번씩 호출되는데요.
 호출될 때마다 특수 전역 변수, `gl_Position`을 어떤 clip space 좌표로 설정해야 합니다.
 
 Vertex shader는 데이터가 필요한데요.
-3가지 방법으로 데이터를 얻을 수 있습니다.
+3가지 방법으로 데이터를 가져올 수 있습니다.
 
 1.  [Attribute](#attribute) (버퍼에서 가져온 데이터)
 2.  [Uniform](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)
@@ -192,7 +192,7 @@ Fragment shader는 각 픽셀마다 한 번씩 호출되는데요.
 호출될 때마다 특수 전역 변수, `gl_FragColor`를 어떤 색상으로 설정해줘야 합니다.
 
 Fragment shader는 데이터가 필요한데요.
-3가지 방법으로 데이터를 얻을 수 있습니다.
+3가지 방법으로 데이터를 가져올 수 있습니다.
 
 1.  [Uniform](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)
 2.  [Texture](#fragment-shader-texture) (pixel/texel의 데이터)

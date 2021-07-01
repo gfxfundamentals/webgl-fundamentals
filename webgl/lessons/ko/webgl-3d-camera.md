@@ -70,7 +70,7 @@ cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 그 반대는 다른 모든 걸 옮겨서 카메라가 원점에 있도록 하는 행렬입니다.
 
 ```js
-// Camera matrix로 view matrix 만들기
+// camera matrix로 view matrix 만들기
 var viewMatrix = m4.inverse(cameraMatrix);
 ```
 
@@ -251,7 +251,7 @@ var m4 = {
   var cameraMatrix = m4.yRotation(cameraAngleRadians);
   cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 
-  // 계산한 행렬에서 카메라의 위치 얻기
+  // 계산한 행렬에서 카메라의 위치 가져오기
   var cameraPosition = [
     cameraMatrix[12],
     cameraMatrix[13],
@@ -263,7 +263,7 @@ var m4 = {
   // lookAt을 사용하여 카메라의 행렬 계산
   var cameraMatrix = m4.lookAt(cameraPosition, fPosition, up);
 
-  // Camera matrix로 view matrix 만들기
+  // camera matrix로 view matrix 만들기
   var viewMatrix = m4.inverse(cameraMatrix);
 
   ...

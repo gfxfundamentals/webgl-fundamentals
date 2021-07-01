@@ -47,7 +47,7 @@ function generateFace(ctx, faceColor, textColor, text) {
 그리고 여기 6개의 이미지를 생성하기 위해 호출하는 코드입니다.
 
 ```js
-// 2D Context 얻기
+// 2D Context 가져오기
 /** @type {Canvas2DRenderingContext} */
 const ctx = document.createElement("canvas").getContext("2d");
 
@@ -135,7 +135,7 @@ void main() {
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
-// 2D Context 얻기
+// 2D Context 가져오기
 /** @type {Canvas2DRenderingContext} */
 const ctx = document.createElement("canvas").getContext("2d");
 

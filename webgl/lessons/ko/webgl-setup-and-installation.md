@@ -112,7 +112,7 @@ spector.js의 extension 버전은 프레임을 캡처합니다.
 
 ```js
 function main() {
-  // WebGL context 얻기
+  // WebGL Context 가져오기
   /** @type {HTMLCanvasElement} */
   const canvas = document.querySelector("#canvas");
   const gl = canvas.getContext("webgl");

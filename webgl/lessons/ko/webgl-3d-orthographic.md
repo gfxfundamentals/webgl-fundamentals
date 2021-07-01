@@ -60,7 +60,7 @@ void main() {
 *  var size = 3;          // 반복마다 3개의 컴포넌트
   var type = gl.FLOAT;   // 데이터는 32bit float
   var normalize = false; // 데이터 정규화 안 함
-  var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
+  var stride = 0;        // 0 = 다음 위치를 가져오기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
   var offset = 0;        // 버퍼의 처음부터 시작
   gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
 
@@ -477,12 +477,12 @@ gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 var size = 3;                 // 반복마다 3개의 컴포넌트
 var type = gl.UNSIGNED_BYTE;  // 데이터는 unsigned 8bit 값
 var normalize = true;         // 데이터 정규화 (0-255에서 0-1로 전환)
-var stride = 0;               // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
+var stride = 0;               // 0 = 다음 위치를 가져오기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;               // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(colorLocation, size, type, normalize, stride, offset);
 ```
 
-이제 이걸 얻게 됩니다.
+이제 이런 결과를 얻게 됩니다.
 
 {{{example url="../webgl-3d-step3.html" }}}
 
@@ -632,7 +632,7 @@ attribute vec4 a_color;
 var size = 3;          // 반복마다 3개의 컴포넌트
 var type = gl.FLOAT;   // 데이터는 32bit float
 var normalize = false; // 데이터 정규화 안 함
-var stride = 0;        // 0 = 다음 위치를 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
+var stride = 0;        // 0 = 다음 위치를 가져오기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;        // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
 
@@ -641,7 +641,7 @@ gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride,
 var size = 3;                 // 반복마다 3개의 컴포넌트
 var type = gl.UNSIGNED_BYTE;  // 데이터는 8bit unsigned byte
 var normalize = true;         // 데이터 정규화 (0-255에서 0-1로 전환)
-var stride = 0;               // 0 = 다음 색상을 얻기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
+var stride = 0;               // 0 = 다음 색상을 가져오기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;               // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(colorAttributeLocation, size, type, normalize, stride, offset);
 </pre>
