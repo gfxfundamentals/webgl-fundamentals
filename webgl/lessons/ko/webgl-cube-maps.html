@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="WebGL에서 큐브맵을 사용하는 방법">
+<meta name="description" content="WebGL에서 cubemap을 사용하는 방법">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cube-maps_ko.jpg">
 
-<meta property="og:title" content="WebGL 큐브맵">
+<meta property="og:title" content="WebGL Cubemap">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cube-maps_ko.jpg">
-<meta property="og:description" content="WebGL에서 큐브맵을 사용하는 방법">
+<meta property="og:description" content="WebGL에서 cubemap을 사용하는 방법">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-cube-maps.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 큐브맵">
+<meta name="twitter:title" content="WebGL Cubemap">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-cube-maps.html">
-<meta name="twitter:description" content="WebGL에서 큐브맵을 사용하는 방법">
+<meta name="twitter:description" content="WebGL에서 cubemap을 사용하는 방법">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-cube-maps_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-cube-maps.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-cube-maps.html",
       "inLanguage":"ko",
-      "name":"WebGL 큐브맵",
+      "name":"WebGL Cubemap",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL 큐브맵</title>
+<title>WebGL Cubemap</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,7 +236,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 큐브맵</h1>
+    <h1>WebGL Cubemap</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
@@ -246,9 +246,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 또한 <a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>에서 다룬 개념을 사용합니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
 <p><a href="webgl-3d-textures.html">이전 글</a>에서는 텍스처를 사용하는 방법, 텍스처를 가로지르는 0부터 1까지의 텍스처 좌표로 참조하는 방법, mip을 사용하여 선택적으로 필터링하는 방법 등을 다뤘습니다.</p>
-<p><em>큐브맵</em>은 또 다른 종류의 텍스처입니다.
+<p><em>Cubemap</em>은 또 다른 종류의 텍스처입니다.
 큐브의 여섯 면을 나타내는 6개의 면으로 구성됩니다.
-2차원을 가지는 전통적인 텍스처 좌표 대신에, 큐브맵은 법선, 즉 3D 방향을 사용합니다.
+2차원을 가지는 전통적인 텍스처 좌표 대신에, cubemap은 법선, 즉 3D 방향을 사용합니다.
 법선이 가리키는 방향에 따라 큐브의 여섯 면 중 하나가 선택되고 해당 면 내에서 픽셀이 샘플링되어 색상을 생기게 합니다.</p>
 <p>6개의 면은 큐브의 중심에서의 방향으로 참조됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.TEXTURE_CUBE_MAP_POSITIVE_X
@@ -307,7 +307,7 @@ faceInfos.forEach((faceInfo) =&gt; {
 </p>
 <p>이제 그걸 큐브에 적용해봅시다.
 <a href="webgl-3d-textures.html">이전 글</a>의 텍스처 아틀라스 예제 코드에서 시작할 겁니다.</p>
-<p>먼저 큐브맵을 사용하도록 shader를 수정합시다.</p>
+<p>먼저 cubemap을 사용하도록 shader를 수정합시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 
 uniform mat4 u_matrix;
@@ -374,7 +374,7 @@ faceInfos.forEach((faceInfo) =&gt; {
   const {target, faceColor, textColor, text} = faceInfo;
   generateFace(ctx, faceColor, textColor, text);
 
-  // 큐브맵 면에 캔버스 업로드
+  // Cubemap의 면에 캔버스 업로드
   const level = 0;
   const internalFormat = gl.RGBA;
   const format = gl.RGBA;
@@ -387,7 +387,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 <p>위에서 주의해야 할 사항:</p>
 <ul>
 <li><p><code class="notranslate" translate="no">gl.TEXTURE_2D</code> 대신에 <code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP</code>을 사용합니다.</p>
-<p>이는 2D 텍스처 대신 큐브맵을 만들라고 WebGL에 지시합니다.</p>
+<p>이는 2D 텍스처 대신 cubemap을 만들라고 WebGL에 지시합니다.</p>
 </li>
 <li><p>텍스처의 각 면을 업로드하기 위해 특별한 대상을 사용합니다.</p>
 <p><code class="notranslate" translate="no">gl.TEXTURE_CUBE_MAP_POSITIVE_X</code>,
@@ -399,7 +399,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 </li>
 <li><p>각 면은 사각형입니다.
 위에서 크기는 128x128입니다.</p>
-<p>큐브맵은 사각형 텍스처가 필요합니다.
+<p>Cubemap은 사각형 텍스처가 필요합니다.
 그리고 2D 텍스처처럼 두 차원에서 2의 거듭 제곱이 아니면 필터링하거나 mip을 사용할 수 없습니다.
 이 경우에는 2의 거듭 제곱(128)이기 때문에 mip을 생성하고 필터링을 활성화하여 mip을 사용합니다.</p>
 </li>
@@ -410,10 +410,10 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 </div>
 
 </p>
-<p>큐브맵을 사용하여 큐브에 텍스처를 사용하는 것은 큐브맵의 일반적인 사용 용도가 <strong>아닙니다</strong>.
+<p>Cubemap을 사용하여 큐브에 텍스처를 사용하는 것은 cubemap의 일반적인 사용 용도가 <strong>아닙니다</strong>.
 큐브에 텍스처를 사용하는 <em>올바른</em> 혹은 보다 일반적인 방법은 이전에 언급한 <a href="webgl-3d-textures.html">텍스처 아틀라스</a>를 사용하는 겁니다.</p>
-<p>오늘은 큐브맵이 무엇이고 어떻게 설정하며 큐브맵의 용도는 무엇인지 배웠습니다.
-아마 큐브맵이 사용되는 가장 일반적인 용도는 <a href="webgl-environment-maps.html"><em>environment map</em></a>일 겁니다.</p>
+<p>오늘은 cubemap이 무엇이고 어떻게 설정하며 cubemap의 용도는 무엇인지 배웠습니다.
+아마 cubemap이 사용되는 가장 일반적인 용도는 <a href="webgl-environment-maps.html"><em>environment map</em></a>일 겁니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -500,8 +500,8 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skybox.html">Skyboxes</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">Skinning</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">Fog</a></li>
@@ -584,8 +584,8 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 큐브맵';
-            var disqus_title = 'WebGL 큐브맵';
+            var disqus_identifier = 'WebGL Cubemap';
+            var disqus_title = 'WebGL Cubemap';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

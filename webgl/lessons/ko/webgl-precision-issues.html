@@ -274,8 +274,8 @@ WebGL에서 대부분의 숫자는 32bit에 불과한데요.
 그래서 예를 들어, 색상에 대한 계산을 위해 <code class="notranslate" translate="no">lowp</code>를 사용한다면 밴딩이 나타날 수 있는데요.
 실제로 어떤 값이 표현될 수 있는지 알아보지 않아도, 색상이 0에서 1사이인 걸 알고 있습니다.
 <code class="notranslate" translate="no">lowp</code>가 -2에서 +2고 512개의 고유값만 표현할 수 있다면 128개의 값만이 0에서 1사이에 맞는 것 같습니다.
-또한 4/128을 가지고 있고 1/512를 더하려고 한다면, 1/512는 <code class="notranslate" translate="no">lowp</code>로 표현될 수 없기 때문에 사실상 0이므로 아무일도 일어나지 않을 겁니다.
-이상적으로는 모든 곳에 <code class="notranslate" translate="no">highp</code>를 사용해 이 이슈를 완전히 무시할 수도 있지만 불행히도 현실적이지 않습니다.
+또한 4/128을 가지고 있고 1/512를 더하려고 한다면, 1/512는 <code class="notranslate" translate="no">lowp</code>로 표현될 수 없기 때문에 사실상 0이므로 아무일도 일어나지 않을 겁니다.</p>
+<p>이상적으로는 모든 곳에 <code class="notranslate" translate="no">highp</code>를 사용해 이 이슈를 완전히 무시할 수도 있지만 불행히도 현실적이지 않습니다.
 2가지 문제가 있는데요.</p>
 <ol>
 <li><p>대부분의 구형 또는 저렴한 스마트폰같은 일부 기기들은 fragment shader에서 <code class="notranslate" translate="no">highp</code>를 지원하지 않습니다.</p>
@@ -462,7 +462,7 @@ lowp float foo;              // variable
 대부분의 데스크탑이 이걸 수행하고 대부분의 모바일 GPU는 하지 않는다고 알고 있습니다.</p>
 <p>테스트할 수 있는데요.
 먼저 위처럼 채널당 4bit인 텍스처를 요청할 겁니다.
-그런 다음 0대 1의 그래디언트으로 <a href="webgl-render-to-texture.html">렌더링</a>할 겁니다.</p>
+그런 다음 0대 1의 gradient로 <a href="webgl-render-to-texture.html">렌더링</a>할 겁니다.</p>
 <p>다음으로 해당 텍스처를 캔버스에 렌더링할 건데요.
 텍스처가 내부적으로 채널당 4bit라면 그려진 그래디언트에 16단계의 색상만 있을 겁니다.
 텍스처가 실제로 채널당 8bit라면 256단계의 색상을 보게 될 겁니다.</p>
@@ -573,8 +573,8 @@ lowp float foo;              // variable
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skybox.html">Skyboxes</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">Skinning</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">Fog</a></li>
