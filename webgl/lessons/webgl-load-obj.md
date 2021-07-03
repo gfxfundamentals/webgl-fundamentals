@@ -1134,7 +1134,7 @@ As for parsing and using materials [see the next article](webgl-load-obj-w-mtl.h
 ### The loader above is incomplete
 
 You can go [read more about the .obj format](http://paulbourke.net/dataformats/obj/).
-The are tons of features the code above doesn't support. Also, the code has
+There are tons of features the code above doesn't support. Also, the code has
 not been tested on very many .obj files so maybe there are lurking bugs. That said, I 
 suspect the majority of .obj files online only use the features shown above so I suspect
 it's probably a useful example.
