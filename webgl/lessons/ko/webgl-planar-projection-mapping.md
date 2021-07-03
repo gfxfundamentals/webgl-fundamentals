@@ -6,7 +6,7 @@ TOC: 평면 및 원근 투영 매핑
 이 글은 예제를 정리하기 위해 [less code more fun](webgl-less-code-more-fun.html)에서 언급된 라이브러리를 사용합니다.
 `webglUtils.setBuffersAndAttributes` 함수가 buffer와 attribute를 설정하는 것이나, `webglUtils.setUniforms` 함수가 uniform을 설정하는 게 무슨 의미인지 모르겠다면, 뒤로 돌아가서 [WebGL 기초](webgl-fundamentals.html)를 먼저 읽어주세요.
 
-또한 [perspective](webgl-3d-perspective.html), [카메라](webgl-3d-camera.html), [텍스처](webgl-3d-textures.html), [카메라 시각화](webgl-visualizing-the-camera.html)에 대한 글을 읽었다고 가정하므로 읽지 않았다면 먼저 거기에서 시작해야 합니다.
+또한 [perspective](webgl-3d-perspective.html), [카메라](webgl-3d-camera.html), [텍스처](webgl-3d-textures.html), [카메라 시각화](webgl-visualizing-the-camera.html)에 대한 글을 읽었다고 가정하기 때문에 읽지 않았다면 먼저 읽어주세요.
 
 투영 매핑은 영사기가 스크린을 향하게 하고 영화를 투사하는 것과 같은 의미로 "projecting" 방법입니다.
 영사기는 투시면을 투사하는데요.
@@ -167,7 +167,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 }
 ```
 
-우리는 이 코드는 `render` 함수에서 다음과 같이 사용할 수 있습니다.
+우리는 이 코드는 `render` 함수에서 이렇게 사용할 수 있습니다.
 
 ```js
 const settings = {

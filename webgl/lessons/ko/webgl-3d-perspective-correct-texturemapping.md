@@ -15,7 +15,7 @@ Vertex shader가 3번 호출되면 WebGL은 삼각형을 그립니다.
 해당 삼각형을 그리는 동안 모든 픽셀에 대해 fragment shader를 호출하고 해당 픽셀을 어떤 색상으로 만들지 묻습니다.
 삼각형의 정점 3개 사이에서 3개의 값 사이를 보간한 varying을 전달할 겁니다.
 
-{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color is interpolated between v0, v1 and v2" }}}
+{{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color는 v0, v1, v2 사이에서 보간" }}}
 
 [첫 번째 글](webgl-fundamentals.html)로 돌아가보면 우리는 clip space에서 삼각형을 그렸는데요.
 다음과 같이 간단한 vertex shader에 clip space 좌표를 전달했습니다.
@@ -153,7 +153,7 @@ Varying의 데이터를 제공해야 하므로 버퍼를 만들어 데이터를 
   );
 ```
 
-그리고 이제 렌더링할 때 `brightness`가 0인 왼쪽은 검은색이고 `brightness`가 1인 오른쪽은 빨간색인 사각형 2개를 얻으며, `brightness` 사이의 영역은 삼각형을 가로질러 보간되거나 변화합니다.
+그리고 이제 렌더링할 때 `brightness`가 0인 왼쪽은 검은색이고 `brightness`가 1인 오른쪽은 빨간색인 사각형 2개를 얻으며, `brightness` 사이의 영역은 삼각형을 가로질러 보간됩니다.
 
 {{{example url="../webgl-clipspace-rectangles-with-varying.html" }}}
 

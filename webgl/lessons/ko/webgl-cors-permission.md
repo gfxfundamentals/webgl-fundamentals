@@ -80,7 +80,7 @@ WebGL에서 `gl.readPixels`는 `ctx.getImageData`와 같은 호출이니 막으�
 
 어떻게 이를 해결할까요?
 
-## CORS
+## CORS 입력
 
 CORS = Cross Origin Resource Sharing.
 CORS는 웹 페이지에 이미지 사용 권한을 이미지 서버에 요청하는 방법입니다.

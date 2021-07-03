@@ -1,5 +1,5 @@
 Title: WebGL 3D - 데이터 텍스처
-Description: 텍스처에 데이터 제공하기
+Description: 텍스처에 데이터 공급하기
 TOC: 데이터 텍스처
 
 
@@ -97,7 +97,7 @@ gl.texImage2D(
   data
 );
 
-// 필터링을 설정했으므로 mips가 필요없고 필터링되지 않습니다.
+// 필터링을 설정했으므로 mip은 필요없으며 필터링되지 않습니다.
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -138,11 +138,9 @@ WebGL에서 정렬된 데이터와 비정렬 데이터 사이의 속도 차이�
 이렇게 하면 포팅된 앱이 패딩된 행을 제공하는 경우 변경없이 작동될 겁니다.
 동시에 새 앱에서 항상 `1`로 설정한 다음 끝낼 수 있습니다.
 
-해당 세트로 모든 게 작동해야 합니다.
-
 {{{example url="../webgl-data-texture-3x2.html" }}}
 
-이 부분은 덮어두고 [텍스처 렌더링](webgl-render-to-texture.html)으로 넘어갑시다.
+이 부분을 다뤘으니 이제 [텍스처 렌더링](webgl-render-to-texture.html)으로 넘어갑시다.
 
 <div class="webgl_bottombar">
 <h3>Pixel vs Texel</h3>

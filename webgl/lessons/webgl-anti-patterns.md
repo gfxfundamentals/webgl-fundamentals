@@ -337,8 +337,3 @@ effects that want to know the actual size of the drawingbuffer.
 </p>
 </div>
 
-
-
-
-
-

@@ -57,7 +57,6 @@ MatrixStack.prototype.getCurrentMatrix = function() {
 MatrixStack.prototype.setCurrentMatrix = function(m) {
   return this.stack[this.stack.length - 1] = m;
 };
-
 ```
 
 마지막으로 이전의 행렬 함수를 이용하여`translate`, `rotate`, `scale`을 구현해야 합니다.
@@ -107,7 +106,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
 };
 ```
 
-이전 강의의 [`drawImage`](webgl-2d-drawimage.html)에 이런 라인들이 있었습니다.
+이전 강의인 [`drawImage`](webgl-2d-drawimage.html)에 이런 코드들이 있었습니다.
 
 ```
 // 이 행렬은 pixel에서 clip space로 변환합니다.
@@ -116,7 +115,7 @@ var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 // 이 행렬은 쿼드를 dstX,dstY로 이동시킵니다.
 matrix = m4.translate(matrix, dstX, dstY, 0);
 
-// 이 행렬은 1단위 쿼드를 1단위에서 texWidth,texHeight 단위로 크기 조정합니다.
+// 이 행렬은 1단위 쿼드를 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 ```
 
@@ -138,7 +137,7 @@ var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 // 이 행렬은 쿼드를 dstX,dstY로 이동시킵니다.
 matrix = m4.translate(matrix, dstX, dstY, 0);
 
-// 이 행렬은 1단위 쿼드를 1단위에서 texWidth,texHeight 단위로 크기 조정합니다.
+// 이 행렬은 1단위 쿼드를 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 ```
 
@@ -235,7 +234,7 @@ matrixStack.rotateZ(time);
 +  matrixStack.translate(textureInfo.width / 2, textureInfo.height / -2);
 +  matrixStack.rotateZ(Math.sin(time * 2.3));
 +  matrixStack.scale(0.2, 0.2);
-+  // 이제 그리려는 이미지의 왼쪽 하단 모서리가 필요합니다.
++  // 이제 그리려는 이미지의 오른쪽 하단 모서리가 필요합니다.
 +  matrixStack.translate(0, -textureInfo.height);
 +
 +  drawImage(
@@ -274,7 +273,7 @@ matrixStack.rotateZ(time);
 +  matrixStack.rotateZ(Math.sin(time * 2.5));
 +  matrixStack.scale(0.2, 0.2);
 +  // 이제 그리려는 이미지의 왼쪽 상단 모서리가 필요합니다.
-+  matrixStack.translate(0, 0);  // 0,0은 이 라인이 실제로 아무것도 하지 않음을 의미
++  matrixStack.translate(0, 0);  // 0,0은 이 라인이 실제로는 아무것도 하지 않음을 의미
 +
 +  drawImage(
 +    textureInfo.texture,

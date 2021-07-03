@@ -41,7 +41,7 @@ TOC: Anti Pattern
     컨텍스트도 너비와 높이를 가지고 있습니다.
 
     <pre class="prettyprint">
-    // 캔버스 drawingBuffer의 크기와 크기가 일치하도록 viewport를 설정해야 할 때 이는 항상 정확합니다
+    // 캔버스 drawingBuffer의 크기와 크기가 일치하도록 viewport를 설정하면 이는 항상 정확합니다
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     </pre>
 

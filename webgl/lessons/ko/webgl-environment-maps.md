@@ -1,21 +1,21 @@
-Title: WebGL 환경맵 (반사)
-Description: 환경맵을 구현하는 방법
-TOC: 환경맵
+Title: WebGL Environment Map (반사)
+Description: Environment map을 구현하는 방법
+TOC: Environment Map
 
 
 이 글은 WebGL 관련 시리즈의 일부입니다.
 첫 글은 [기초](webgl-fundamentals.html)로 시작했는데요.
-이 글은 [큐브맵에 관한 글](webgl-cube-maps.html)에서 이어집니다.
+이 글은 [cubemap에 관한 글](webgl-cube-maps.html)에서 이어집니다.
 또한 [조명에 대한 글](webgl-3d-lighting-directional.html)에서 다룬 개념을 사용합니다.
-아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
+아직 읽지 않으셨다면 해당 글을 먼저 읽어주세요.
 
-*환경맵*은 그리는 객체의 환경을 나타내는데요.
+*Environment map*은 그리는 객체의 환경을 나타내는데요.
 야외 장면을 그리는 경우 야외를 표현합니다.
 무대의 사람을 그린다면 장소를 표현하게 됩니다.
 우주 장면을 그리면 별이 될 겁니다.
-장소의 한 지점에서 환경을 보여주는 6개의 이미지가 있다면 큐브맵으로 환경맵을 구현할 수 있습니다.
+장소의 한 지점에서 환경을 보여주는 6개의 이미지가 있다면 cubemap으로 environment map을 구현할 수 있습니다.
 
-다음은 캘리포니아 마운틴 뷰에 있는 컴퓨터 역사 박물관 로비의 환경맵입니다.
+다음은 캘리포니아 마운틴 뷰에 있는 컴퓨터 역사 박물관 로비의 environment map입니다.
 
 <div class="webgl_center">
   <img src="../resources/images/computer-history-museum/pos-x.jpg" style="width: 128px" class="border">
@@ -64,7 +64,7 @@ const faceInfos = [
 faceInfos.forEach((faceInfo) => {
   const {target, url} = faceInfo;
 
-  // 캔버스를 큐브맵 면에 업로드
+  // 캔버스를 cubemap 면에 업로드
   const level = 0;
   const internalFormat = gl.RGBA;
   const width = 512;
@@ -90,18 +90,18 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 ```
 
 모든 면에 대해 `texImage2D`에 `null`을 전달하여 512x512의 비어있는 이미지로 초기화합니다.
-큐브맵은 6개의 면을 가져야 하며, 6개의 면은 모두 동일한 크기의 사각형이여야 합니다.
+Cubemap은 6개의 면을 가져야 하며, 6개의 면은 모두 동일한 크기의 사각형이여야 합니다.
 텍스처가 아니라면 렌더링되지 않을 겁니다.
 하지만 우리는 이미지 6개를 로딩하고 있습니다.
 즉시 렌더링을 시작하고 싶으므로 6개의 면을 모두 할당한 다음 이미지 로딩을 시작합니다.
 각 이미지가 로드되면 알맞은 면으로 업로드한 다음 mipmap을 다시 생성합니다.
-다시 말해 즉시 렌더링할 수 있고, 이미지가 다운로드되면 큐브맵의 면들이 한 번에 하나씩 이미지로 채워지며, 6개가 모두 로드되지 않아도 렌더링할 수 있습니다.
+다시 말해 즉시 렌더링할 수 있고, 이미지가 다운로드되면 cubemap의 면이 한 번에 하나씩 이미지로 채워지며, 6개가 모두 로드되지 않아도 렌더링할 수 있습니다.
 
 하지만 이미지를 로딩하는 것만으로는 부족합니다.
 [조명](webgl-3d-lighting-point.html)처럼 약간의 수식이 필요합니다.
 
 이 경우 눈/카메라에서 객체의 표면까지의 벡터가 주어지면, 그려지는 각 fragment가 해당 표면에서 반사되는 방향을 알고 싶습니다.
-그러면 해당 방향을 사용하여 큐브맵의 색상을 가져올 수 있습니다.
+그러면 해당 방향을 사용하여 cubemap의 색상을 가져올 수 있습니다.
 
 반사에 대한 공식은 다음과 같습니다.
 
@@ -159,14 +159,14 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 
 <div class="webgl_center"><img src="resources/reflect-45-06.svg" style="width: 400px"></div>
 
-<span style="color: red">반사된 방향</span>을 이용하여 큐브맵을 보고 물체의 표면을 채색합니다.
+<span style="color: red">반사된 방향</span>을 이용하여 cubemap을 보고 물체의 표면을 채색합니다.
 
 다음은 surface의 rotation을 설정하고 방정식의 다양한 부분을 볼 수 있는 다이어그램입니다.
-또한 반사 벡터가 큐브맵의 다른 면을 가리켜서 표면 색상에 영향을 주는 것도 볼 수 있습니다.
+또한 반사 벡터가 cubemap의 다른 면을 가리켜서 표면 색상에 영향을 주는 것도 볼 수 있습니다.
 
 {{{diagram url="resources/environment-mapping.html" width="400" height="400" }}}
 
-이제 반사가 어떻게 작동하는지 알고, 큐브맵에서 값을 찾기 위해 사용할 수 있으므로, shader를 변경해봅시다.
+이제 반사가 어떻게 작동하는지 알고, cubemap에서 값을 찾기 위해 사용할 수 있으므로, shader를 변경해봅시다.
 
 먼저 vertex shader에서 정점의 world position과 world oriented normal을 계산하고 이를 fragment shader에 varying으로 전달할 겁니다.
 이는 [spotlight에 대한 글](webgl-3d-lighting-spot.html)에서 했던 것과 유사합니다.
@@ -198,7 +198,7 @@ void main() {
 카메라의 world position을 전달하고 표면의 world position에서 이를 빼면 `eyeToSurfaceDir`이 됩니다.
 
 마지막으로 위에서 살펴본 공식을 구현하는 GLSL 내장 함수 `reflect`를 사용합니다.
-그리고 결과를 이용하여 큐브맵에서 색상을 가져옵니다.
+그리고 결과를 이용하여 cubemap에서 색상을 가져옵니다.
 
 ```glsl
 precision highp float;
@@ -224,7 +224,7 @@ void main() {
 
 또한 이 예제를 위해 실제 법선이 필요한데요.
 실제 법선으로 큐브의 면이 평평하게 보이도록 합니다.
-이전 예제에서 큐브맵의 작동을 보기 위해 큐브의 위치를 수정했지만, 이 경우에는 [조명에 대한 글](webgl-3d-lighting-directional.html)에서 다룬 것처럼 큐브에 대한 실제 법선이 필요합니다.
+이전 예제에서 cubemap의 작동을 보기 위해 큐브의 위치를 수정했지만, 이 경우에는 [조명에 대한 글](webgl-3d-lighting-directional.html)에서 다룬 것처럼 큐브에 대한 실제 법선이 필요합니다.
 
 초기화할 때
 
