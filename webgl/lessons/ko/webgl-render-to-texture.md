@@ -121,7 +121,7 @@ function drawCube(aspect) {
   var up = [0, 1, 0];
   var target = [0, 0, 0];
 
-  // lookAt을 사용하여 카메라의 행렬 계산
+  // lookAt을 사용하여 카메라 행렬 계산
   var cameraMatrix = m4.lookAt(cameraPosition, target, up);
 
   // camera matrix로 view matrix 만들기

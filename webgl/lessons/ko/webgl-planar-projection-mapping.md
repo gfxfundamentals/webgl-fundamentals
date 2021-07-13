@@ -193,7 +193,7 @@ function render() {
   const projectionMatrix =
       m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
-  // lookAt을 사용하여 카메라의 행렬 계산
+  // lookAt을 사용하여 카메라 행렬 계산
   const cameraPosition = [settings.cameraX, settings.cameraY, 7];
   const target = [0, 0, 0];
   const up = [0, 1, 0];
@@ -407,7 +407,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 텍스처가 들어있는 공간을 보기 힘들 수도 있을 것 같습니다.
 시각화를 돕기 위해 wireframe cube를 추가해봅시다.
 
-먼저 별도의 shader 세트가 필요합니다.
+먼저 별도의 shader set이 필요합니다.
 이 shader는 텍스처 없이, 단색만 그릴 수 있습니다.
 
 ```html
