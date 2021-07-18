@@ -240,7 +240,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>WebGL이 backbuffer(ie, 캔버스)에서 alpha를 처리하는 방법에 이슈가 있는 일부 OpenGL 개발자들을 발견했어서, alpha와 관련하여 WebGL과 OpenGL의 차이점을 살펴보는 것도 좋을 것이라 생각했습니다.</p>
+      <p>WebGL이 backbuffer(ie, 캔버스)에서 alpha를 처리하는 방법에 문제를 겪는 일부 OpenGL 개발자들을 발견해서, alpha와 관련하여 WebGL과 OpenGL의 차이점을 살펴보는 것도 좋을 것이라 생각했습니다.</p>
 <p>OpenGL과 WebGL의 가장 큰 차이점으로 OpenGL은 어떤 것과도 합성되지 않거나, 실제로 OS 윈도우 매니저에 의해 어떤 것도 합성되지 않은, backbuffer에 렌더링하므로 alpha가 무언인지는 중요하지 않습니다.</p>
 <p>WebGL은 브라우저에 의해 웹 페이지와 합성되고 기본값으로 투명도가 있는 .png <code class="notranslate" translate="no">&lt;img&gt;</code> 태그와 2D 캔버스 태그와 동일한 pre-multiplied alpha를 사용합니다.</p>
 <p>WebGL은 이걸 좀 더 OpenGL처럼 만들기 위한 여러 방법을 가지고 있습니다.</p>
@@ -250,10 +250,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 });
 </code></pre><p>기본값은 true입니다.</p>
 <p>물론 결과는 캔버스 아래에 있는 배경색(캔버스의 배경색, 캔버스 컨테이너의 배경색, 페이지의 배경색, 캔버스가 z-index &gt; 0일 경우 캔버스 뒤에 있는 항목, 등등...)으로 페이지 위에 합성되는데, 말인즉슨 색상 CSS가 웹 페이지의 해당 영역을 정의합니다.</p>
-<p>Alpha 이슈가 있는지 찾는 정말 좋은 방법은 캔버스의 배경을 빨강같은 밝은 색상으로 설정하는 겁니다.
+<p>Alpha 문제가 있는지 찾는 정말 좋은 방법은 캔버스의 배경을 빨강같은 밝은 색상으로 설정하는 겁니다.
 무슨 일이 일어나고 있는지 바로 보실 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas style=&quot;background: red;&quot;&gt;&lt;canvas&gt;
-</code></pre><p>또한 alpha 이슈를 숨겨주는 검은색으로 설정할 수도 있습니다.</p>
+</code></pre><p>또한 alpha 문제를 숨겨주는 검은색으로 설정할 수도 있습니다.</p>
 <h3 id="-2-webgl-backbuffer-alpha-">#2) WebGL에 backbuffer에서 alpha를 원하지 않는다고 알림</h3>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl = canvas.getContext(&quot;webgl&quot;, { alpha: false }};
 </code></pre><p>Backbuffer는 RGB만 있기 때문에 이는 좀 더 OpenGL처럼 작동하게 만들어 줍니다.
@@ -399,7 +399,7 @@ pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으
         </ul>
   <li>Text</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-text-html.html">Text - HTML</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>

@@ -298,7 +298,7 @@ Translation을 업데이트한 후에 이 함수를 호출할 수 있습니다.<
     var count = 6;
     gl.drawArrays(primitiveType, offset, count);
   }
-</code></pre><p>아래 예제에 <code class="notranslate" translate="no">translation[0]</code>과 <code class="notranslate" translate="no">translation[1]</code>을 갱신하고 변경할 때마다 <code class="notranslate" translate="no">drawScene</code>을 호출하는 슬라이더 두 개를 첨부했습니다.
+</code></pre><p>아래 예제에 <code class="notranslate" translate="no">translation[0]</code>과 <code class="notranslate" translate="no">translation[1]</code>을 업데이트하고 변경할 때마다 <code class="notranslate" translate="no">drawScene</code>을 호출하는 슬라이더 두 개를 첨부했습니다.
 사각형을 움직이려면 슬라이더를 드래그해보세요.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle-translate.html"></iframe>
@@ -348,7 +348,7 @@ function setGeometry(gl, x, y) {
 }
 </code></pre><p>확장하기에 좋지 않겠다는 걸 눈치채셨을 겁니다.
 수백 수천 개의 선으로 이루어진 아주 복잡한 geometry를 그리려면 꽤 복잡한 코드를 작성해야 합니다.
-또한 javascript는 그릴 때마다 모든 점들을 갱신해야 하는데요.</p>
+또한 javascript는 그릴 때마다 모든 점들을 업데이트해야 하는데요.</p>
 <p>더 간단한 방법이 있습니다.
 Geometry를 업로드하고 shader에서 translation을 수행하면 됩니다.</p>
 <p>다음은 새로운 shader 입니다.</p>
@@ -399,7 +399,7 @@ function setGeometry(gl) {
     gl.STATIC_DRAW
   );
 }
-</code></pre><p>그런 다음 원하는 translation으로 그리기 전에 <code class="notranslate" translate="no">u_translation</code>을 갱신하면 됩니다.</p>
+</code></pre><p>그런 다음 원하는 translation으로 그리기 전에 <code class="notranslate" translate="no">u_translation</code>을 업데이트하면 됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var translationLocation = gl.getUniformLocation(program, &quot;u_translation&quot;);
@@ -432,7 +432,7 @@ function setGeometry(gl) {
 </code></pre><p><code class="notranslate" translate="no">setGeometry</code>가 한 번만 호출된다는 점에 주목하세요.
 더 이상 <code class="notranslate" translate="no">drawScene</code> 안에 있지 않습니다.</p>
 <p>그리고 여기 해당 예제입니다.
-다시 한 번 translation을 갱신하기 위해 슬라이더를 드래그해보세요.</p>
+다시 한 번 translation을 업데이트하기 위해 슬라이더를 드래그해보세요.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-translate-better.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-translate-better.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -442,7 +442,7 @@ function setGeometry(gl) {
 <p>이제 그릴 때 WebGL이 거의 모든 걸 수행하고 있습니다.
 Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 전부죠.
 심지어 geometry에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지됩니다.</p>
-<p>원한다면 모든 점들을 갱신하는 위의 <a href="../../webgl-2d-geometry-translate.html">복잡한 javascript를 사용한 버전</a>과 비교할 수 있습니다.</p>
+<p>원한다면 모든 점들을 업데이트하는 위의 <a href="../../webgl-2d-geometry-translate.html">복잡한 javascript를 사용한 버전</a>과 비교할 수 있습니다.</p>
 <p>너무 뻔한 예제가 아니었기를 바랍니다.
 다른 한편으로 이걸 수행하는 훨씬 더 좋은 방법을 다룰 것이므로 계속 읽어주세요.
 다음 글에서는 <a href="webgl-2d-rotation.html">Rotation</a>으로 넘어가겠습니다.</p>
@@ -541,7 +541,7 @@ Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 �
         </ul>
   <li>Text</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-text-html.html">Text - HTML</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>

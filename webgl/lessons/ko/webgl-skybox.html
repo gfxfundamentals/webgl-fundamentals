@@ -37,14 +37,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Skybox로 하늘 표시!">
+<meta name="description" content="Skybox로 하늘 보여주기!">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-skybox_ko.jpg">
 
 <meta property="og:title" content="WebGL SkyBox">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-skybox_ko.jpg">
-<meta property="og:description" content="Skybox로 하늘 표시!">
+<meta property="og:description" content="Skybox로 하늘 보여주기!">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-skybox.html">
 
 <meta name="twitter:card" content="summary_large_image">
@@ -53,7 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:domain" content="webglfundamentals.org">
 <meta name="twitter:title" content="WebGL SkyBox">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-skybox.html">
-<meta name="twitter:description" content="Skybox로 하늘 표시!">
+<meta name="twitter:description" content="Skybox로 하늘 보여주기!">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-skybox_ko.jpg">
 
 <script type="application/ld+json">
@@ -246,9 +246,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p><em>Skybox</em>는 모든 방향에서 하늘처럼 보이거나 수평선을 포함하여 아주 멀리 있는 것처럼 보이게 하는 텍스처로 구성된 박스입니다.
 방에 일어나 있고 각각의 벽에 포스터가 있다고 상상해보면, 하늘을 보여주는 포스터로 천장을 덮을 수 있고, 땅을 보여주는 포스터를 바닥에 추가할 수 있는데, 이게 skybox입니다.</p>
 <p>많은 3D 게임들이 큰 큐브를 만들고 하늘에 텍스처를 입히는 방식으로 이를 수행합니다.</p>
-<p>이 방식은 동작하지만 이슈가 있습니다.
+<p>이 방식은 잘 동작하지만 몇 가지 문제가 있습니다.
 한 가지는 카메라가 향하고 있는 방향이 어디든 여러 방향에서 봐야하는 큐브가 있다는 겁니다.
-당신은 모든 게 멀리 그려지길 바라겠지만 큐브의 모서리가 clipping plane 바깥으로 나가길 원하진 않을 텐데요.
+여러분은 모든 게 멀리 그려지길 바라겠지만 큐브의 모서리가 clipping plane 바깥으로 나가길 원하진 않을 텐데요.
 해당 문제를 복잡하게 하는 것은 성능 상의 이유로, GPU가 <a href="webgl-3d-orthographic.html">depth buffer test</a>를 사용하여 테스트가 실패할 픽셀의 그리기를 건너뛸 수 있기 때문에, 멀리 있는 것보다 가까이 있는 것을 먼저 그리려는 겁니다.
 따라서 이상적으로는 depth buffer test를 키고 마지막에 skybox를 그려야 겠지만, 실제로 박스를 쓰는 경우 카메라가 다른 방향에서 보기 때문에, 박스의 모서리가 측면보다 멀리 떨어져 문제가 발생합니다.</p>
 <div class="webgl_center"><img src="../resources/skybox-issues.svg" style="width: 500px"></div>
@@ -266,9 +266,9 @@ View projection matrix의 역행렬을 사용하여, 카메라가 쿼드의 각 
 function setGeometry(gl) {
   var positions = new Float32Array(
     [
-      -1, -1, 
-       1, -1, 
-      -1,  1, 
+      -1, -1,
+       1, -1,
+      -1,  1,
       -1,  1,
        1, -1,
        1,  1,
@@ -313,7 +313,7 @@ void main() {
 </code></pre>
 <p>마지막으로 uniform location을 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">var skyboxLocation = gl.getUniformLocation(program, &quot;u_skybox&quot;);
-var viewDirectionProjectionInverseLocation = 
+var viewDirectionProjectionInverseLocation =
     gl.getUniformLocation(program, &quot;u_viewDirectionProjectionInverse&quot;);
 </code></pre>
 <p>그리고 이것들을 설정합니다.</p>
@@ -336,15 +336,15 @@ viewMatrix[12] = 0;
 viewMatrix[13] = 0;
 viewMatrix[14] = 0;
 
-var viewDirectionProjectionMatrix = 
+var viewDirectionProjectionMatrix =
     m4.multiply(projectionMatrix, viewMatrix);
-var viewDirectionProjectionInverseMatrix = 
+var viewDirectionProjectionInverseMatrix =
     m4.inverse(viewDirectionProjectionMatrix);
 
 // uniform 설정
 gl.uniformMatrix4fv(
   viewDirectionProjectionInverseLocation,
-  false, 
+  false,
   viewDirectionProjectionInverseMatrix
 );
 
@@ -380,7 +380,7 @@ const skyboxProgramInfo = webglUtils.createProgramInfo(
     gl, [&quot;skybox-vertex-shader&quot;, &quot;skybox-fragment-shader&quot;]);
 </code></pre>
 <p>정점 데이터로 버퍼를 설정합니다.
-<code class="notranslate" translate="no">primitives</code> 라이브러리에는 이미 이 데이터를 제공하는 함수가 있으므로 이를 사용할 수 있습니다.</p>
+<code class="notranslate" translate="no">primitives</code> 라이브러리에는 이미 이런 데이터를 제공하는 함수가 있으므로 이를 사용할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 버퍼를 생성하고 정점 데이터로 채우기
 const cubeBufferInfo = primitives.createCubeBufferInfo(gl, 1);
 const quadBufferInfo = primitives.createXYQuadBufferInfo(gl);
@@ -407,7 +407,7 @@ viewDirectionMatrix[14] = 0;
 
 var viewDirectionProjectionMatrix = m4.multiply(
     projectionMatrix, viewDirectionMatrix);
-var viewDirectionProjectionInverseMatrix = 
+var viewDirectionProjectionInverseMatrix =
     m4.inverse(viewDirectionProjectionMatrix);
 </code></pre>
 <p>그런 다음 큐브를 먼저 그립니다.</p>
@@ -544,7 +544,7 @@ Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방�
         </ul>
   <li>Text</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-text-html.html">Text - HTML</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>

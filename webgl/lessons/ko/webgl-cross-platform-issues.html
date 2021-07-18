@@ -242,7 +242,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>모든 WebGL program이 모든 기기 혹은 브라우저에서 작동하지 않아도 충격으로 다가오지 않을 겁니다.
 WebGL2의 경우, 적어도 2020년 7월 현재, <a href="#safari">사파리</a>에서 지원되지 않습니다.</p>
-<p>다음은 제 머릿속에 있는 발생 가능한 대부분의 이슈 목록입니다.</p>
+<p>다음은 제 머릿속에 있는 발생 가능한 대부분의 문제입니다.</p>
 <h2 id="-">성능</h2>
 <p>고사양 GPU는 저사양 GPU보다 100배 더 빠르게 돌아갈 수 있습니다.
 제가 아는 유일한 방법은 저사양을 기준으로 하거나, 대부분의 데스크탑 PC 앱처럼 성능이나 품질을 선택할 수 있는 옵션을 사용자에게 제공하는 겁니다.</p>
@@ -353,7 +353,7 @@ WebGL2는 16입니다.</p>
 </div>
 
 <p>이건 전체 목록이 아닌데요.
-최대 점 크기와 최대 선 두께 등이 있지만 기본적으로 최대 선 두께는 1.0이고 POINTS는 <a href="#points-lines-viewport-scissor-behavior">클리핑 이슈</a>를 신경쓰지 않아도 되는 간단한 데모에서만 유용하다고 가정해야 합니다.</p>
+최대 점 크기와 최대 선 두께 등이 있지만 기본적으로 최대 선 두께는 1.0이고 POINTS는 <a href="#points-lines-viewport-scissor-behavior">clipping issue</a>를 신경쓰지 않아도 되는 간단한 데모에서만 유용하다고 가정해야 합니다.</p>
 <p>WebGL2는 몇 가지 더 추가합니다.
 몇 가지 일반적인 것들은</p>
 <div class="webgl_center">
@@ -395,7 +395,7 @@ WebGL2는 16입니다.</p>
 <p>아마 WebGL1과 WebGL2에서 가장 흔하게 누락되는 extension은 floating point texture를 필터링할 수 있는 <code class="notranslate" translate="no">OES_texture_float_linear</code>인데, 이는 <code class="notranslate" translate="no">TEXTURE_MIN_FILTER</code>와 <code class="notranslate" translate="no">TEXTURE_MAX_FILTER</code>를 <code class="notranslate" translate="no">NEAREST</code>를 제외한 모든 항목으로 설정하도록 지원하는 기능을 의미합니다.
 많은 모바일 기기들이 이걸 지원하지 않습니다.</p>
 <p>WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 color attachment를 framebuffer로 첨부할 수 있는 기능인 <code class="notranslate" translate="no">WEBGL_draw_buffers</code>이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
-기본적으로 WebGL2를 실행할 수 있는 모든 기기는 WebGL1에서 <code class="notranslate" translate="no">WEBGL_draw_buffers</code>도 지원해야 하지만, 여전히 이슈가 됩니다.
+기본적으로 WebGL2를 실행할 수 있는 모든 기기는 WebGL1에서 <code class="notranslate" translate="no">WEBGL_draw_buffers</code>도 지원해야 하지만 여전히 문제가 있는데요.
 여러 텍스처를 한 번에 렌더링해야 한다면 고사양 GPU로도 시간이 필요할 수 있습니다.
 그래도 사용자 기기가 지원하는지 확인하고, 지원하지 않는다면 친절한 설명을 제공해야 합니다.</p>
 <p>WebGL1의 경우 다음의 3개의 extension이 거의 보편적으로 지원되는 것처럼 보이므로 사용자에게 이들이 누락되면 페이지가 작동하지 않을 것이라 경고하고 싶을 수 있지만 사용자가 페이지를 제대로 실행하지 못 할만큼 아주 오래된 기기를 가지고 있을 수 있습니다.</p>
@@ -416,7 +416,7 @@ void main() {
 }
 </code></pre>
 <p>코드는 <code class="notranslate" translate="no">position</code>이 attribute 0 그리고 <code class="notranslate" translate="no">texcoord</code>는 attribute 1이 될 것이라 가정하지만 이는 보장되지 않습니다.
-그래서 당신은 작동되지만 다른 사람은 실패할 수 있죠.
+그래서 여러분은 작동되지만 다른 사람은 실패할 수 있죠.
 의도적으로 하지 않았지만 코드의 오류로 인해 location은 일반 통행이고 다른 것들은 아닐 때 작동한다는 점은 종종 버그가 될 수 있습니다.</p>
 <p>3가지 해결법이 있습니다.</p>
 <ol>
@@ -435,15 +435,15 @@ latout(location = 1) vec2 texcoord;
 <p>여러 GLSL 함수는 정의되지 않은 동작을 가집니다.
 예를 들어 <code class="notranslate" translate="no">pow(x, y)</code>는 <code class="notranslate" translate="no">x &lt; 0</code>일 경우 undefined입니다.
 <a href="webgl-3d-lighting-spot.html">spot lighting</a>에 대한 글의 하단에 더 긴 목록이 있습니다</p>
-<h2 id="shader-">Shader 정밀도 이슈</h2>
-<p>2020년 여기서 가장 큰 이슈는 shader에서 <code class="notranslate" translate="no">mediump</code>나 <code class="notranslate" translate="no">lowp</code>를 사용하면 데스크탑의 GPU는 <code class="notranslate" translate="no">highp</code>를 사용하지만 모바일은 <code class="notranslate" translate="no">mediump</code>나 <code class="notranslate" translate="no">lowp</code>가 되는 것이므로 데스크탑으로 개발할 때는 어떤 이슈도 눈치채지 못 할 겁니다.</p>
+<h2 id="shader-">Shader 정밀도 문제</h2>
+<p>2020년 여기서 가장 큰 문제는 shader에서 <code class="notranslate" translate="no">mediump</code>나 <code class="notranslate" translate="no">lowp</code>를 사용하면 데스크탑의 GPU는 <code class="notranslate" translate="no">highp</code>를 사용하지만 모바일은 <code class="notranslate" translate="no">mediump</code>나 <code class="notranslate" translate="no">lowp</code>가 되는 것이므로 데스크탑으로 개발할 때는 어떤 문제도 알아차리지 못 할 겁니다.</p>
 <p>자세한 내용은 <a href="webgl-precision-issues.html">이 글</a>을 봐주세요.</p>
 <h2 id="points-lines-viewport-scissor-">Points, Lines, Viewport, Scissor 동작</h2>
 <p>WebGL의 <code class="notranslate" translate="no">POINTS</code>와 <code class="notranslate" translate="no">LINES</code>는 최대 크기 1을 가질 수 있고 현재 가장 일반적인 제한인 <code class="notranslate" translate="no">LINES</code>의 경우입니다.
-또한 중심이 viewport 외부에 있을 때 점이 클리핑되는지 여부는 구현에 정의됩니다.
+또한 중심이 viewport 외부에 있을 때 point의 clipping 여부는 구현에 정의됩니다.
 <a href="webgl-drawing-without-data.html#pointissues">이 글의 하단</a>을 봐주세요.</p>
-<p>마찬가지로, viewport가 정점만 클리핑하는지 혹은 픽셀도 클리핑하는지 여부는 정의되지 않았습니다.
-Scissor는 항상 pixel을 클리핑하므로 scissor 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.</p>
+<p>마찬가지로, viewport가 정점만 clipping을 하는지 혹은 픽셀도 clipping을 하는지 여부는 정의되지 않았습니다.
+Scissor는 항상 pixel clipping을 하므로 scissor 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.</p>
 <h2 id="-">사파리 버그</h2>
 <p>사파리는 다른 최신 브라우저들보다 많은 WebGL 버그를 가지고 있으며 애플은 이들을 고치는 데 전혀 관심이 없는 걸로 보입니다.</p>
 <p>몇 년간 고쳐지지 않은 버그의 일부 목록</p>
@@ -563,7 +563,7 @@ Scissor는 항상 pixel을 클리핑하므로 scissor 테스트를 켜고, 그�
         </ul>
   <li>Text</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-text-html.html">Text - HTML</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>

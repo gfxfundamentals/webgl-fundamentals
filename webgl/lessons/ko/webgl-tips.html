@@ -37,14 +37,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="WebGL에서 발생할 수 있는 작은 이슈들">
+<meta name="description" content="WebGL에서 발생할 수 있는 사소한 문제들">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-tips_ko.jpg">
 
 <meta property="og:title" content="WebGL Tip">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-tips_ko.jpg">
-<meta property="og:description" content="WebGL에서 발생할 수 있는 작은 이슈들">
+<meta property="og:description" content="WebGL에서 발생할 수 있는 사소한 문제들">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-tips.html">
 
 <meta name="twitter:card" content="summary_large_image">
@@ -53,7 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:domain" content="webglfundamentals.org">
 <meta name="twitter:title" content="WebGL Tip">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-tips.html">
-<meta name="twitter:description" content="WebGL에서 발생할 수 있는 작은 이슈들">
+<meta name="twitter:description" content="WebGL에서 발생할 수 있는 사소한 문제들">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-tips_ko.jpg">
 
 <script type="application/ld+json">
@@ -240,7 +240,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>이 글은 WebGL을 사용할 때 발생할 수 있지만 별도로 분리하기에는 너무 작은 이슈 모음입니다.</p>
+      <p>이 글은 WebGL을 사용할 때 발생할 수 있지만 별도로 분리하기에는 너무 사소한 문제들의 모음입니다.</p>
 <hr>
 <p><a id="screenshot" data-toc="Screenshot 찍기"></a></p>
 <h1 id="canvas-screenshot-">Canvas Screenshot 찍기</h1>
@@ -281,7 +281,7 @@ const saveBlob = (function() {
 
 <p>네, 그냥 빈 이미지입니다.</p>
 <p>브라우저/OS에 따라 작동할 수도 있지만 아마 일반적으로는 작동하지 않을 겁니다.</p>
-<p>해당 이슈는 성능과 호환성 이유로, 기본적으로 브라우저는 WebGL canvas에 그린 뒤 drawing buffer를 지우는데요.</p>
+<p>해당 문제는 성능과 호환성 이유로, 기본적으로 브라우저는 WebGL canvas에 그린 뒤 drawing buffer를 지우는데요.</p>
 <p>3가지 해결법이 있습니다.</p>
 <ol>
 <li><p>캡처 직전에 렌더링 코드 호출</p>
@@ -324,7 +324,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 </li>
 </ol>
 <p>저는 위의 #1을 선택하겠습니다.
-이 특정 예제를 위해 먼저 상태를 갱신하는 코드 부분을 그리는 부분에서 분리합니다.</p>
+이 특정 예제를 위해 먼저 상태를 업데이트하는 코드 부분을 그리는 부분에서 분리합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">  var then = 0;
 
 -  requestAnimationFrame(drawScene);
@@ -422,7 +422,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 이를 수정하기 위해 캔버스의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/tabIndex"><code class="notranslate" translate="no">tabindex</code></a>를 0 이상으로 설정하세요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas tabindex=&quot;0&quot;&gt;&lt;/canvas&gt;
 </code></pre>
-<p>이로 인해 새로운 이슈가 발생합니다.
+<p>이로 인해 새로운 문제가 발생합니다.
 <code class="notranslate" translate="no">tabindex</code>가 설정된 모든 항목은 포커스될 때 하이라이팅이 되는데요.
 이를 수정하기 위해 focus CSS outline을 none으로 설정하고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-css">canvas:focus {
@@ -614,7 +614,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
         </ul>
   <li>Text</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-text-html.html">Text - HTML</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
