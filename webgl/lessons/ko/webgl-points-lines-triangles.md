@@ -22,7 +22,7 @@ Clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 
         const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
 
-   [여기](webgl-drawing-without-data.html#pointsissues)에서 다른 이슈도 확인하세요.
+   [여기](webgl-drawing-without-data.html#pointsissues)에서 다른 문제도 확인하세요.
 
 * `LINES`
 
@@ -83,7 +83,7 @@ Clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 여러분은 이에 동의하지 않고 원하는 방식을 하실 수도 있습니다.
 그저 제 경험과 제가 물어본 일부 AAA 게임 개발자들의 경험을 말씀드리는 겁니다.
 
-마찬가지로 `LINE_LOOP`와 `LINE_STRIP`은 유용하지 않고 비슷한 이슈를 가지고 있습니다.
+마찬가지로 `LINE_LOOP`와 `LINE_STRIP`은 유용하지 않고 비슷한 문제를 가지고 있습니다.
 `TRIANGLE_FAN`과 `TRIANGLE_STRIP`처럼 이것들을 사용하는 상황은 드문데요.
 예를 들어 각각 4개의 점으로 만들어진 연결된 선 4개를 그리고 싶다고 생각할 수 있습니다.
 

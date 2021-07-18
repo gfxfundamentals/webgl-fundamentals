@@ -27,7 +27,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
       // shader 객체 생성
       var shader = gl.createShader(shaderType);
 
-      // shader 소스 코드 설정
+      // shader source 코드 설정
       gl.shaderSource(shader, shaderSource);
 
       // shader 컴파일
@@ -165,7 +165,7 @@ WebGL을 복잡하게 보이게 만드는 나머지 부분은 shader에 모든 �
 
 *   [`webgl-lessons-ui.js`](../resources/webgl-lessons-ui.js)
 
-    이건 슬라이더를 드래그할 때 갱신되는 표시 값이 있는 슬라이더를 설정하는 코드를 제공합니다.
+    이건 슬라이더를 드래그할 때 업데이트되는 표시 값이 있는 슬라이더를 설정하는 코드를 제공합니다.
     다시 이 코드를 사용해서 모든 파일을 어지럽히고 싶지 않아서 한 곳에 뒀습니다.
 
 *   [`lessons-helper.js`](../resources/lessons-helper.js)

@@ -6,7 +6,7 @@ TOC: Cross Platform 문제
 모든 WebGL program이 모든 기기 혹은 브라우저에서 작동하지 않아도 충격으로 다가오지 않을 겁니다.
 WebGL2의 경우, 적어도 2020년 7월 현재, [사파리](#safari)에서 지원되지 않습니다.
 
-다음은 제 머릿속에 있는 발생 가능한 대부분의 이슈 목록입니다.
+다음은 제 머릿속에 있는 발생 가능한 대부분의 문제입니다.
 
 ## 성능
 
@@ -145,7 +145,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 </div>
 
 이건 전체 목록이 아닌데요.
-최대 점 크기와 최대 선 두께 등이 있지만 기본적으로 최대 선 두께는 1.0이고 POINTS는 [클리핑 이슈](#points-lines-viewport-scissor-behavior)를 신경쓰지 않아도 되는 간단한 데모에서만 유용하다고 가정해야 합니다.
+최대 점 크기와 최대 선 두께 등이 있지만 기본적으로 최대 선 두께는 1.0이고 POINTS는 [clipping issue](#points-lines-viewport-scissor-behavior)를 신경쓰지 않아도 되는 간단한 데모에서만 유용하다고 가정해야 합니다.
 
 WebGL2는 몇 가지 더 추가합니다.
 몇 가지 일반적인 것들은
@@ -200,7 +200,7 @@ WebGL1과 WebGL2의 많은 기능들이 선택적인데요.
 많은 모바일 기기들이 이걸 지원하지 않습니다.
 
 WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 color attachment를 framebuffer로 첨부할 수 있는 기능인 `WEBGL_draw_buffers`이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
-기본적으로 WebGL2를 실행할 수 있는 모든 기기는 WebGL1에서 `WEBGL_draw_buffers`도 지원해야 하지만, 여전히 이슈가 됩니다.
+기본적으로 WebGL2를 실행할 수 있는 모든 기기는 WebGL1에서 `WEBGL_draw_buffers`도 지원해야 하지만 여전히 문제가 있는데요.
 여러 텍스처를 한 번에 렌더링해야 한다면 고사양 GPU로도 시간이 필요할 수 있습니다.
 그래도 사용자 기기가 지원하는지 확인하고, 지원하지 않는다면 친절한 설명을 제공해야 합니다.
 
@@ -228,7 +228,7 @@ void main() {
 ```
 
 코드는 `position`이 attribute 0 그리고 `texcoord`는 attribute 1이 될 것이라 가정하지만 이는 보장되지 않습니다.
-그래서 당신은 작동되지만 다른 사람은 실패할 수 있죠.
+그래서 여러분은 작동되지만 다른 사람은 실패할 수 있죠.
 의도적으로 하지 않았지만 코드의 오류로 인해 location은 일반 통행이고 다른 것들은 아닐 때 작동한다는 점은 종종 버그가 될 수 있습니다.
 
 3가지 해결법이 있습니다.
@@ -252,20 +252,20 @@ void main() {
 예를 들어 `pow(x, y)`는 `x < 0`일 경우 undefined입니다.
 [spot lighting](webgl-3d-lighting-spot.html)에 대한 글의 하단에 더 긴 목록이 있습니다
 
-## Shader 정밀도 이슈
+## Shader 정밀도 문제
 
-2020년 여기서 가장 큰 이슈는 shader에서 `mediump`나 `lowp`를 사용하면 데스크탑의 GPU는 `highp`를 사용하지만 모바일은 `mediump`나 `lowp`가 되는 것이므로 데스크탑으로 개발할 때는 어떤 이슈도 눈치채지 못 할 겁니다.
+2020년 여기서 가장 큰 문제는 shader에서 `mediump`나 `lowp`를 사용하면 데스크탑의 GPU는 `highp`를 사용하지만 모바일은 `mediump`나 `lowp`가 되는 것이므로 데스크탑으로 개발할 때는 어떤 문제도 알아차리지 못 할 겁니다.
 
 자세한 내용은 [이 글](webgl-precision-issues.html)을 봐주세요.
 
 ## Points, Lines, Viewport, Scissor 동작
 
 WebGL의 `POINTS`와 `LINES`는 최대 크기 1을 가질 수 있고 현재 가장 일반적인 제한인 `LINES`의 경우입니다.
-또한 중심이 viewport 외부에 있을 때 점이 클리핑되는지 여부는 구현에 정의됩니다.
+또한 중심이 viewport 외부에 있을 때 point의 clipping 여부는 구현에 정의됩니다.
 [이 글의 하단](webgl-drawing-without-data.html#pointissues)을 봐주세요.
 
-마찬가지로, viewport가 정점만 클리핑하는지 혹은 픽셀도 클리핑하는지 여부는 정의되지 않았습니다.
-Scissor는 항상 pixel을 클리핑하므로 scissor 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.
+마찬가지로, viewport가 정점만 clipping을 하는지 혹은 픽셀도 clipping을 하는지 여부는 정의되지 않았습니다.
+Scissor는 항상 pixel clipping을 하므로 scissor 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.
 
 ## 사파리 버그
 

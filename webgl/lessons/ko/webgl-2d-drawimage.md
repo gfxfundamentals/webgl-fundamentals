@@ -431,7 +431,7 @@ Shader 내에서 0부터 1의 범위를 벗어난 픽셀을 버리면 해결할 
 {{{example url="../webgl-2d-drawimage-07.html" }}}
 
 한계란 없습니다.
-모든 것은 shader의 창의적인 사용에 달려있습니다.
+모든 것은 shader를 얼마나 창의적으로 사용하느냐에 달려있습니다.
 
 다음에는 [Canvas 2D의 행렬 스택을 구현](webgl-2d-matrix-stack.html)하겠습니다.
 

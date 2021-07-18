@@ -1,5 +1,5 @@
 Title: WebGL SkyBox
-Description: Skybox로 하늘 표시!
+Description: Skybox로 하늘 보여주기!
 TOC: Skybox
 
 
@@ -12,9 +12,9 @@ TOC: Skybox
 
 많은 3D 게임들이 큰 큐브를 만들고 하늘에 텍스처를 입히는 방식으로 이를 수행합니다.
 
-이 방식은 동작하지만 이슈가 있습니다.
+이 방식은 잘 동작하지만 몇 가지 문제가 있습니다.
 한 가지는 카메라가 향하고 있는 방향이 어디든 여러 방향에서 봐야하는 큐브가 있다는 겁니다.
-당신은 모든 게 멀리 그려지길 바라겠지만 큐브의 모서리가 clipping plane 바깥으로 나가길 원하진 않을 텐데요.
+여러분은 모든 게 멀리 그려지길 바라겠지만 큐브의 모서리가 clipping plane 바깥으로 나가길 원하진 않을 텐데요.
 해당 문제를 복잡하게 하는 것은 성능 상의 이유로, GPU가 [depth buffer test](webgl-3d-orthographic.html)를 사용하여 테스트가 실패할 픽셀의 그리기를 건너뛸 수 있기 때문에, 멀리 있는 것보다 가까이 있는 것을 먼저 그리려는 겁니다.
 따라서 이상적으로는 depth buffer test를 키고 마지막에 skybox를 그려야 겠지만, 실제로 박스를 쓰는 경우 카메라가 다른 방향에서 보기 때문에, 박스의 모서리가 측면보다 멀리 떨어져 문제가 발생합니다.
 
@@ -38,9 +38,9 @@ View projection matrix의 역행렬을 사용하여, 카메라가 쿼드의 각 
 function setGeometry(gl) {
   var positions = new Float32Array(
     [
-      -1, -1, 
-       1, -1, 
-      -1,  1, 
+      -1, -1,
+       1, -1,
+      -1,  1,
       -1,  1,
        1, -1,
        1,  1,
@@ -97,7 +97,7 @@ void main() {
 
 ```js
 var skyboxLocation = gl.getUniformLocation(program, "u_skybox");
-var viewDirectionProjectionInverseLocation = 
+var viewDirectionProjectionInverseLocation =
     gl.getUniformLocation(program, "u_viewDirectionProjectionInverse");
 ```
 
@@ -123,15 +123,15 @@ viewMatrix[12] = 0;
 viewMatrix[13] = 0;
 viewMatrix[14] = 0;
 
-var viewDirectionProjectionMatrix = 
+var viewDirectionProjectionMatrix =
     m4.multiply(projectionMatrix, viewMatrix);
-var viewDirectionProjectionInverseMatrix = 
+var viewDirectionProjectionInverseMatrix =
     m4.inverse(viewDirectionProjectionMatrix);
 
 // uniform 설정
 gl.uniformMatrix4fv(
   viewDirectionProjectionInverseLocation,
-  false, 
+  false,
   viewDirectionProjectionInverseMatrix
 );
 
@@ -173,7 +173,7 @@ const skyboxProgramInfo = webglUtils.createProgramInfo(
 ```
 
 정점 데이터로 버퍼를 설정합니다.
-`primitives` 라이브러리에는 이미 이 데이터를 제공하는 함수가 있으므로 이를 사용할 수 있습니다.
+`primitives` 라이브러리에는 이미 이런 데이터를 제공하는 함수가 있으므로 이를 사용할 수 있습니다.
 
 ```js
 // 버퍼를 생성하고 정점 데이터로 채우기
@@ -205,7 +205,7 @@ viewDirectionMatrix[14] = 0;
 
 var viewDirectionProjectionMatrix = m4.multiply(
     projectionMatrix, viewDirectionMatrix);
-var viewDirectionProjectionInverseMatrix = 
+var viewDirectionProjectionInverseMatrix =
     m4.inverse(viewDirectionProjectionMatrix);
 ```
 

@@ -513,7 +513,7 @@ void main() {
 TypeError: undefined is not a function
 </pre>
 <p>
-<code>setUniforms</code>는 해당 이슈를 해결하는데요.
+<code>setUniforms</code>는 해당 문제를 해결해주는데요.
 실제로 존재하는 uniform만 설정합니다.
 </p>
 </div>

@@ -114,7 +114,7 @@ WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할
 보이지 않는 탭에 볼 수도 없는 걸 그려서 사용자의 컴퓨터에 사실상 <a target="_blank" href="https://ko.wikipedia.org/wiki/%EC%84%9C%EB%B9%84%EC%8A%A4_%EA%B1%B0%EB%B6%80_%EA%B3%B5%EA%B2%A9">DoS 공격</a>을 하게 될 겁니다.
 </p>
 <p>
-<code>requestAnimationFrame</code>은 이러한 이슈들을 해결합니다.
+<code>requestAnimationFrame</code>은 이러한 문제를 해결합니다.
 이 함수는 적시에 호출하여 화면과 애니메이션을 동기화시키며, 탭이 보이는 경우에만 호출합니다.
 </p>
 </div>

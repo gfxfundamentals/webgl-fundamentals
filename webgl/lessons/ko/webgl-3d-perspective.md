@@ -282,7 +282,7 @@ function makeZToWMatrix(fudgeFactor) {
 
 어떻게 된거죠?
 F가 일찍 사라지는 이유는 뭘까요?
-WebGL은 X와 Y 혹은 +1에서 -1까지 클리핑하는 것처럼 Z도 클리핑하는데요.
+WebGL은 X와 Y 혹은 +1에서 -1까지 clipping을 하는 것처럼 Z도 clipping을 하는데요.
 여기서 우리가 보고 있는 건 Z < -1 입니다.
 
 이를 해결하기 위해 수학에 대한 자세한 설명을 할 수도 있지만 [2D 투영을 했던 것과 같은 방법](https://stackoverflow.com/a/28301213/128511)으로 도출할 수도 있습니다.

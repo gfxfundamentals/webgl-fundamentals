@@ -117,7 +117,7 @@ const normalLoc = gl.getAttribLocation(program, 'normal');
 ```
 
 `positionLoc` = `5`라고 해봅시다.
-이건 vertex shader가 실행될 때(`gl.drawArrays`나 `gl.drawElements`를 호출할 때) vertex shader는 당신이 알맞은 type, size, offset, stride, buffer 등으로 attribute 5를 설정할 것이라 예상한다는 걸 의미합니다.
+이건 vertex shader가 실행될 때(`gl.drawArrays`나 `gl.drawElements`를 호출할 때) vertex shader는 여러분이 알맞은 type, size, offset, stride, buffer 등으로 attribute 5를 설정할 것이라 예상한다는 걸 의미합니다.
 
 참고로 program을 연결하기 전에는 `gl.bindAttribLocation(program, location, nameOfAttribute)`을 호출하여 location을 선택할 수 있습니다.
 예제:
@@ -215,7 +215,7 @@ Shader를 전환할 때 attribute를 다르게 설정해야 한다는 건 분명
 
 attribute 재설정은 추가 작업입니다.
 더 나쁜 건, vertex array object 사용하는 것의 요점은 해당 작업을 할 필요가 없다는 겁니다.
-이 이슈를 고치기 위해 shader program을 연결하기 전에 location을 할당하겠습니다.
+이 문제를 고치기 위해 shader program을 연결하기 전에 location을 할당하겠습니다.
 
 ```js
 gl.bindAttribLocation(solidProgram, 0, 'a_position');

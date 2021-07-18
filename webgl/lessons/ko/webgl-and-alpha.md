@@ -3,7 +3,7 @@ Description: WebGL alpha가 OpenGL alpha와 다른 점
 TOC: WebGL Alpha
 
 
-WebGL이 backbuffer(ie, 캔버스)에서 alpha를 처리하는 방법에 이슈가 있는 일부 OpenGL 개발자들을 발견했어서, alpha와 관련하여 WebGL과 OpenGL의 차이점을 살펴보는 것도 좋을 것이라 생각했습니다.
+WebGL이 backbuffer(ie, 캔버스)에서 alpha를 처리하는 방법에 문제를 겪는 일부 OpenGL 개발자들을 발견해서, alpha와 관련하여 WebGL과 OpenGL의 차이점을 살펴보는 것도 좋을 것이라 생각했습니다.
 
 OpenGL과 WebGL의 가장 큰 차이점으로 OpenGL은 어떤 것과도 합성되지 않거나, 실제로 OS 윈도우 매니저에 의해 어떤 것도 합성되지 않은, backbuffer에 렌더링하므로 alpha가 무언인지는 중요하지 않습니다.
 
@@ -21,12 +21,12 @@ WebGL은 이걸 좀 더 OpenGL처럼 만들기 위한 여러 방법을 가지고
 
 물론 결과는 캔버스 아래에 있는 배경색(캔버스의 배경색, 캔버스 컨테이너의 배경색, 페이지의 배경색, 캔버스가 z-index > 0일 경우 캔버스 뒤에 있는 항목, 등등...)으로 페이지 위에 합성되는데, 말인즉슨 색상 CSS가 웹 페이지의 해당 영역을 정의합니다.
 
-Alpha 이슈가 있는지 찾는 정말 좋은 방법은 캔버스의 배경을 빨강같은 밝은 색상으로 설정하는 겁니다.
+Alpha 문제가 있는지 찾는 정말 좋은 방법은 캔버스의 배경을 빨강같은 밝은 색상으로 설정하는 겁니다.
 무슨 일이 일어나고 있는지 바로 보실 수 있습니다.
 
     <canvas style="background: red;"><canvas>
 
-또한 alpha 이슈를 숨겨주는 검은색으로 설정할 수도 있습니다.
+또한 alpha 문제를 숨겨주는 검은색으로 설정할 수도 있습니다.
 
 ### #2) WebGL에 backbuffer에서 alpha를 원하지 않는다고 알림
 

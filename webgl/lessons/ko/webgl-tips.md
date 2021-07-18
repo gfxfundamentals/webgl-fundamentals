@@ -1,9 +1,9 @@
 Title: WebGL Tip
-Description: WebGL에서 발생할 수 있는 작은 이슈들
+Description: WebGL에서 발생할 수 있는 사소한 문제들
 TOC: #
 
 
-이 글은 WebGL을 사용할 때 발생할 수 있지만 별도로 분리하기에는 너무 작은 이슈 모음입니다.
+이 글은 WebGL을 사용할 때 발생할 수 있지만 별도로 분리하기에는 너무 사소한 문제들의 모음입니다.
 
 ---
 
@@ -54,7 +54,7 @@ const saveBlob = (function() {
 
 브라우저/OS에 따라 작동할 수도 있지만 아마 일반적으로는 작동하지 않을 겁니다.
 
-해당 이슈는 성능과 호환성 이유로, 기본적으로 브라우저는 WebGL canvas에 그린 뒤 drawing buffer를 지우는데요.
+해당 문제는 성능과 호환성 이유로, 기본적으로 브라우저는 WebGL canvas에 그린 뒤 drawing buffer를 지우는데요.
 
 3가지 해결법이 있습니다.
 
@@ -109,7 +109,7 @@ const saveBlob = (function() {
     이건 나머지 페이지와 합성 후 WebGL이 캔버스를 지우지 않게 만들지만 일부 *가능한* 최적화를 막습니다.
 
 저는 위의 #1을 선택하겠습니다.
-이 특정 예제를 위해 먼저 상태를 갱신하는 코드 부분을 그리는 부분에서 분리합니다.
+이 특정 예제를 위해 먼저 상태를 업데이트하는 코드 부분을 그리는 부분에서 분리합니다.
 
 ```js
   var then = 0;
@@ -225,7 +225,7 @@ var canvas = document.querySelector("#canvas");
 <canvas tabindex="0"></canvas>
 ```
 
-이로 인해 새로운 이슈가 발생합니다.
+이로 인해 새로운 문제가 발생합니다.
 `tabindex`가 설정된 모든 항목은 포커스될 때 하이라이팅이 되는데요.
 이를 수정하기 위해 focus CSS outline을 none으로 설정하고
 

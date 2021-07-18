@@ -7,7 +7,7 @@ TOC: 장면 그래프
 이전에는 [여러 사물 그리기](webgl-drawing-multiple-things.html)에 관한 것이었습니다. 
 아직 읽지 않았다면 거기부터 시작하는 게 좋습니다.
 
-장면 그래프는 트리의 각 노드가 행렬을 생성하는 트리 구조입니다.
+장면 그래프는 tree의 각 node가 행렬을 생성하는 tree 구조입니다.
 흠, 이건 쓸모있는 정의가 아니네요.
 몇 가지 예제가 더 유용할 것 같습니다.
 
@@ -39,7 +39,7 @@ TOC: 장면 그래프
 
 장면 그래프로 달을 지구의 자식으로 만들면 지구의 궤도를 선회합니다.
 그리고 장면 그래프는 지구가 태양을 선회한다는 사실을 처리하는데요.
-노드를 탐색하다가 행렬을 곱하여 이를 수행합니다.
+Node를 탐색하다가 행렬을 곱하여 이를 수행합니다.
 
     worldMatrix = greatGrandParent * grandParent * parent * self(localMatrix)
 
@@ -61,10 +61,10 @@ TOC: 장면 그래프
 
 이는 3D 장면 그래프에서 굉장히 일반적인 용어를 가져온 겁니다.
 
-*   `localMatrix`: 현재 노드에 대한 local matrix 입니다.
+*   `localMatrix`: 현재 node에 대한 local matrix 입니다.
     원점에서 자신과 함께 local space의 자식들을 변형시킵니다.
 
-*   `worldMatrix`: 주어진 노드의 local space에 있는 걸 가져와 장면 그래프의 root node space로 변환합니다.
+*   `worldMatrix`: 주어진 node의 local space에 있는 걸 가져와 장면 그래프의 root node space로 변환합니다.
     다시 말해 world에 배치합니다.
     달에 대해 worldMatrix를 계산하면 위에서 본 궤도를 얻게 될 겁니다.
 
@@ -74,15 +74,15 @@ TOC: 장면 그래프
 가장 일반적인 방법은 그리는 사물의 선택적 필드를 가지는 겁니다.
 
     var node = {
-       localMatrix: ...,  // 노드에 대한 "local" matrix
-       worldMatrix: ...,  // 노드에 대한 "world" matrix
+       localMatrix: ...,  // node에 대한 "local" matrix
+       worldMatrix: ...,  // node에 대한 "world" matrix
        children: [],      // 자식 배열
-       thingToDraw: ??,   // 노드에서 그리는 요소
+       thingToDraw: ??,   // node에서 그리는 요소
     };
 
 태양계 장면 그래프를 만들어 봅시다.
 멋진 텍스처나 예제를 복잡하게 만들 수 있는 것은 사용하지 않겠습니다.
-먼저 노드 관리를 도와줄 몇 가지 함수를 만들어 보려고 하는데요.
+먼저 node 관리를 도와줄 몇 가지 함수를 만들어 보려고 하는데요.
 우선 node class를 만듭니다.
 
     var Node = function() {
@@ -91,7 +91,7 @@ TOC: 장면 그래프
       this.worldMatrix = m4.identity();
     };
 
-노드의 부모를 설정하는 방법을 제공합니다.
+Node의 부모를 설정하는 방법을 제공합니다.
 
     Node.prototype.setParent = function(parent) {
       // 부모에서 자식 제거
@@ -134,7 +134,7 @@ TOC: 장면 그래프
 하나의 구체 모형만 사용하고 태양은 황색, 지구는 청록색, 달은 회색으로 칠할 겁니다.
 `drawInfo`, `bufferInfo`, `programInfo`가 익숙하지 않다면 [이전 글](webgl-drawing-multiple-things.html)을 봐주세요.
 
-    // 모든 노드 만들기
+    // 모든 node 만들기
     var sunNode = new Node();
     sunNode.localMatrix = m4.translation(0, 0, 0);  // 중앙에 태양
     sunNode.drawInfo = {
@@ -168,7 +168,7 @@ TOC: 장면 그래프
       bufferInfo: sphereBufferInfo,
     };
 
-이제 노드를 만들었으니 이들을 연결합시다.
+이제 node를 만들었으니 이들을 연결합시다.
 
     // 천체 연결
     moonNode.setParent(earthNode);
@@ -195,7 +195,7 @@ TOC: 장면 그래프
     m4.multiply(m4.yRotation(0.01), earthNode.localMatrix, earthNode.localMatrix);
     m4.multiply(m4.yRotation(0.01), moonNode.localMatrix , moonNode.localMatrix);
 
-이제 local matrix가 갱신되었으니 모든 world matrix를 업데이트할 겁니다.
+이제 local matrix가 업데이트되었으니 모든 world matrix를 업데이트할 겁니다.
 
     sunNode.updateWorldMatrix();
 
@@ -222,7 +222,7 @@ TOC: 장면 그래프
 
 이런 달도 커졌군요.
 이를 고치기 위해 수동으로 달을 축소할 수 있습니다.
-하지만 더 좋은 해결책은 장면 그래프에 노드를 더 추가하는 겁니다.
+하지만 더 좋은 해결책은 장면 그래프에 node를 더 추가하는 겁니다.
 아래 장면 그래프 대신에
 
       sun
@@ -247,7 +247,7 @@ TOC: 장면 그래프
 
 이렇게 하면 지구는 태양계 주변을 돌지만, 태양만 개별적으로 회전하고 크기 조정할 수 있으며, 지구에는 영향을 주지 않습니다.
 마찬가지로 지구는 달과 별도로 회전할 수 있습니다.
-`solarSystem`, `earthOrbit` `moonOrbit`에 대한 노드를 만들어 봅시다.
+`solarSystem`, `earthOrbit` `moonOrbit`에 대한 node 만들어 봅시다.
 
     var solarSystemNode = new Node();
     var earthOrbitNode = new Node();
@@ -255,7 +255,7 @@ TOC: 장면 그래프
     var moonOrbitNode = new Node();
     moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // 달은 지구로부터 100unit
 
-이러한 궤도 거리는 기존 노드에서 제거되었습니다.
+이러한 궤도 거리는 기존 node에서 제거되었습니다.
 
     var earthNode = new Node();
     -// 지구는 태양으로부터 100unit
@@ -400,7 +400,7 @@ TOC: 장면 그래프
 
 {{{diagram url="resources/person-diagram.html" height="400" }}}
 
-손가락과 발가락에 얼마나 많은 관절을 추가할지는 당신에게 달려있습니다.
+손가락과 발가락에 얼마나 많은 관절을 추가할지는 여러분이 정하면 되는데요
 관절이 많아질수록 애니메이션을 계산하는데 더 많은 연산이 필요하고, 모든 관절 정보를 제공하기 위해 더 많은 애니메이션 데이터가 필요합니다.
 버추어 파이터처럼 오래된 게임들은 약 15개의 관절을 가졌습니다.
 2000년대 초반부터 중반까지의 게임들은 30~70개의 관절을 가졌죠.
@@ -408,7 +408,7 @@ TOC: 장면 그래프
 손 애니메이션을 구현하려는 많은 게임들은 엄지 손가락 하나 그리고 4개의 손가락을 하나의 큰 손가락으로 애니메이션하여 시간(CPU/GPU/Artist의 시간)과 메모리를 절약합니다.
 
 어쨌든 여기 제가 해킹한 블록맨이 있습니다.
-각 노드에 대해 위에서 언급한 `TRS` source를 사용하고 있습니다.
+각 node에 대해 위에서 언급한 `TRS` source를 사용하고 있습니다.
 
 {{{example url="../webgl-scene-graph-block-guy.html" }}}
 

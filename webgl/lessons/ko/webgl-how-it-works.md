@@ -20,7 +20,7 @@ GPU에는 기본적으로 2가지 부분이 있는데요.
 
 <img src="resources/vertex-shader-anim.gif" class="webgl_center" />
 
-왼쪽은 당신이 제공한 데이터입니다.
+왼쪽은 여러분이 제공한 데이터입니다.
 Vertex shader는 [GLSL](webgl-shaders-and-glsl.html)로 작성하는 함수인데요.
 이 함수는 각 정점마다 한 번씩 호출됩니다.
 몇 가지 계산을 하고 현재 정점의 clip space 값으로 특수 변수 `gl_Position`을 설정하죠.

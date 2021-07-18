@@ -72,7 +72,7 @@ Translation을 업데이트한 후에 이 함수를 호출할 수 있습니다.
   }
 ```
 
-아래 예제에 `translation[0]`과 `translation[1]`을 갱신하고 변경할 때마다 `drawScene`을 호출하는 슬라이더 두 개를 첨부했습니다.
+아래 예제에 `translation[0]`과 `translation[1]`을 업데이트하고 변경할 때마다 `drawScene`을 호출하는 슬라이더 두 개를 첨부했습니다.
 사각형을 움직이려면 슬라이더를 드래그해보세요.
 
 {{{example url="../webgl-2d-rectangle-translate.html" }}}
@@ -126,7 +126,7 @@ function setGeometry(gl, x, y) {
 
 확장하기에 좋지 않겠다는 걸 눈치채셨을 겁니다.
 수백 수천 개의 선으로 이루어진 아주 복잡한 geometry를 그리려면 꽤 복잡한 코드를 작성해야 합니다.
-또한 javascript는 그릴 때마다 모든 점들을 갱신해야 하는데요.
+또한 javascript는 그릴 때마다 모든 점들을 업데이트해야 하는데요.
 
 더 간단한 방법이 있습니다.
 Geometry를 업로드하고 shader에서 translation을 수행하면 됩니다.
@@ -187,7 +187,7 @@ function setGeometry(gl) {
 }
 ```
 
-그런 다음 원하는 translation으로 그리기 전에 `u_translation`을 갱신하면 됩니다.
+그런 다음 원하는 translation으로 그리기 전에 `u_translation`을 업데이트하면 됩니다.
 
 ```
   ...
@@ -225,7 +225,7 @@ function setGeometry(gl) {
 더 이상 `drawScene` 안에 있지 않습니다.
 
 그리고 여기 해당 예제입니다.
-다시 한 번 translation을 갱신하기 위해 슬라이더를 드래그해보세요.
+다시 한 번 translation을 업데이트하기 위해 슬라이더를 드래그해보세요.
 
 {{{example url="../webgl-2d-geometry-translate-better.html" }}}
 
@@ -233,7 +233,7 @@ function setGeometry(gl) {
 Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 전부죠.
 심지어 geometry에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지됩니다.
 
-원한다면 모든 점들을 갱신하는 위의 [복잡한 javascript를 사용한 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
+원한다면 모든 점들을 업데이트하는 위의 [복잡한 javascript를 사용한 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
 
 너무 뻔한 예제가 아니었기를 바랍니다.
 다른 한편으로 이걸 수행하는 훨씬 더 좋은 방법을 다룰 것이므로 계속 읽어주세요.

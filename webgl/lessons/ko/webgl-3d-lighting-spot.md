@@ -13,7 +13,7 @@ TOC: Spot Lighting
 조명을 제공한 표면의 색상에 곱하기 위해 해당 값을 사용했습니다.
 
 Spot lighting은 아주 약간 달라집니다.
-사실 지금까지 우리가 했던 것에 대해 창의적으로 생각해보면 당신만의 해결책을 도출할 수 있을 겁니다.
+사실 지금까지 우리가 했던 것에 대해 창의적으로 생각해보면 여러분만의 해결책을 도출할 수 있을 겁니다.
 
 Point light는 해당 지점에서 모든 방향으로 진행하는 빛을 가지는 지점이라고 상상할 수 있습니다.
 Spot light를 만들기 위해서는 해당 지점에서 spotlight의 방향을 선택하면 됩니다.
@@ -225,12 +225,11 @@ GLSL에는 이를 약간 단순화하기 위해 사용할 수 있는 함수도 �
 
 <img class="webgl_center invertdark" src="resources/linear-vs-hermite.png" />
 
-이 차이점을 중요하게 생각할지는 당신에게 달려있습니다.
-It's up to you if you think the difference matters.
+이 차이점을 중요하게 생각할지는 여러분이 선택하시면 됩니다.
 
 한 가지 유의해야 할 다른 점은 `smoothstep` 함수는 `lowerBound`가 `upperBound`보다 크거나 같으면 정의되지 않은 결과를 가진다는 겁니다.
-값이 같은 건 우리가 위에서 했던 것과 동일한 이슈입니다.
-`lowerBound`가 `upperBound`보다 큰 건 정의되지 않은 새로운 이슈지만 절대 true가 아니어야 하는 spotlight를 목적으로 합니다.
+값이 같은 건 우리가 위에서 했던 것과 동일한 문제입니다.
+`lowerBound`가 `upperBound`보다 큰 건 정의되지 않은 새로운 문제지만 절대 true가 아니어야 하는 spotlight를 목적으로 합니다.
 
 <div class="webgl_bottombar">
 <h3>GLSL에서 정의되지 않은 동작을 주의하세요</h3>

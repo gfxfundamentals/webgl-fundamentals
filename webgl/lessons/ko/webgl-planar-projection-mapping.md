@@ -694,7 +694,7 @@ const textureProjectionMatrix = settings.perspective
 
 그래서 텍스처를 평면으로 투영하는 것의 장점이 뭘까요?
 
-하나는 당신이 원하기 때문이죠, 하하.
+하나는 여러분이 원하기 때문이죠, 하하.
 대부분의 3D 모델링 패키지는 텍스처를 평면으로 투영하는 기능을 제공합니다.
 
 또 하나는 decal입니다.
