@@ -182,7 +182,7 @@ And we could keep going. I'm hoping the examples above helps you see that GPGPU 
 is pretty simple conceptually. Let's actually do the above in WebGL.
 
 To understand the following code you will, at a minimum, need to have read
-"[the article on fundamentals](webgl-fundamentals.org)", probably the article on 
+"[the article on fundamentals](//webglfundamentals.org)", probably the article on 
 "[How It Works](webgl-how-it-works)", and "[the article on textures](webgl-3d-textures.html).
 
 ```js
