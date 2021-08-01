@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-text-canvas2d.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of GFXFundamentals. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Text - Canvas 2D" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to display text using a 2D canvas that is in sync with WebGL" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-text-canvas2d.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Text - Canvas 2D" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-text-canvas2d.html" />
-<meta name="twitter:description" content="How to display text using a 2D canvas that is in sync with WebGL" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="WebGL과 동기화된 2D Canvas를 사용하여 텍스트를 표시하는 방법">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-text-canvas2d_ko.jpg">
+
+<meta property="og:title" content="WebGL 텍스트 - Canvas 2D">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-text-canvas2d_ko.jpg">
+<meta property="og:description" content="WebGL과 동기화된 2D Canvas를 사용하여 텍스트를 표시하는 방법">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-text-canvas2d.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 텍스트 - Canvas 2D">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-text-canvas2d.html">
+<meta name="twitter:description" content="WebGL과 동기화된 2D Canvas를 사용하여 텍스트를 표시하는 방법">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-text-canvas2d_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-text-canvas2d.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-text-canvas2d_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-text-canvas2d.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-text-canvas2d.html",
+      "inLanguage":"ko",
+      "name":"WebGL 텍스트 - Canvas 2D",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-text-canvas2d.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Text - Canvas 2D</title>
+<title>WebGL 텍스트 - Canvas 2D</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-text-canvas2d.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-text-canvas2d.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-text-canvas2d.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-text-canvas2d.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-text-canvas2d.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-text-canvas2d.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-text-canvas2d.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-text-canvas2d.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,13 +236,92 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Text - Canvas 2D</h1>
+    <h1>WebGL 텍스트 - Canvas 2D</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-text-canvas2d.html">여기</a>에 있습니다.</p>
+      <p>이 글은 <a href="webgl-text-html.html">텍스트를 그리기에 대한 이전 WebGL 글</a>에서 이어집니다.
+아직 읽지 않았다면 거기부터 읽고 다시 돌아오는 걸 추천합니다.</p>
+<p>텍스트에 HTML 요소를 사용하는 대신에 또 다른 캔버스를 2D Context로 사용할 수도 있는데요.
+프로파일링 없이는 이게 DOM을 사용하는 것보다 빠를 것이라고 추측할 뿐입니다.
+물론 유연성도 떨어집니다.
+그리고 모든 CSS 스타일링을 사용할 수 없습니다.
+하지만 HTML 요소를 만들고 추적해야할 필요는 없어지죠.</p>
+<p>다른 예제와 비슷하게 컨테이너를 만들지만 이번에는 캔버스 2개를 넣습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;div class=&quot;container&quot;&gt;
+  &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
+  &lt;canvas id=&quot;text&quot;&gt;&lt;/canvas&gt;
+&lt;/div&gt;
+</code></pre><p>다음으로 캔버스와 HTML이 겹치도록 CSS를 설정합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">.container {
+    position: relative;
+}
+
+#text {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 10;
+}
+</code></pre><p>이제 초기화할 때 텍스트 캔버스를 찾고 2D Context를 생성합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 텍스트 캔버스 탐색
+var textCanvas = document.querySelector(&quot;#text&quot;);
+
+// 2D Context 만들기
+var ctx = textCanvas.getContext(&quot;2d&quot;);
+</code></pre><p>그릴 때, WebGL처럼, 프레임마다 2D Canvas를 지워야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawScene() {
+    ...
+
+    // 2D Canvas 지우기
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+</code></pre><p>그런 다음 <code class="notranslate" translate="no">fillText</code>를 호출하여 텍스트를 그립니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    ctx.fillText(someMsg, pixelX, pixelY);
+</code></pre><p>그리고 여기 해당 예제입니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-html-canvas2d.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-html-canvas2d.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>왜 텍스트가 더 작을까요?
+이는 Canvas 2D의 기본 크기 때문입니다.
+다른 크기로 원하시면 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_text">Canvas 2D API</a>를 확인해주세요.</p>
+<p>Canvas 2D를 사용하는 또 다른 이유는 다른 것을 그리기 쉽기 때문입니다.
+예를 들어 화살표를 추가해봅시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 화살표와 텍스트 그리기
+
+// 모든 캔버스 설정 저장
+ctx.save();
+
+// 0,0이 F의 앞면 우측 상단에 있도록 캔버스의 원점 이동
+ctx.translate(pixelX, pixelY);
+
+// 화살표 그리기
+ctx.beginPath();
+ctx.moveTo(10, 5);
+ctx.lineTo(0, 0);
+ctx.lineTo(5, 10);
+ctx.moveTo(0, 0);
+ctx.lineTo(15, 15);
+ctx.stroke();
+
+// 텍스트 그리기
+ctx.fillText(someMessage, 20, 20);
+
+// 이전 설정으로 캔버스 복원
+ctx.restore();
+</code></pre><p>여기서 Canvas 2D <a href="webgl-2d-matrix-stack.html">행렬 스택</a>의 translate 함수을 활용하므로, 화살표를 그릴 때 어떤 추가적인 계산도 필요하지 않습니다.
+원점에 그리기만 하면 <code class="notranslate" translate="no">translate</code>가 해당 원점을 F의 모서리로 옮겨줍니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-html-canvas2d-arrows.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-text-html-canvas2d-arrows.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>이 내용은 Canvas 2D 사용을 다루는데요.
+더 알고 싶다면 <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">Canvas 2D API</a>를 확인해주세요.
+다음은 <a href="webgl-text-texture.html">WebGL에서 실제로 텍스트를 렌더링</a>할 겁니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +337,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
@@ -281,7 +418,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li>Text</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
-<li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
@@ -341,13 +478,50 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 텍스트 - Canvas 2D';
+            var disqus_title = 'WebGL 텍스트 - Canvas 2D';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
