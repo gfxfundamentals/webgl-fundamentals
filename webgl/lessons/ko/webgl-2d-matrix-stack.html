@@ -326,10 +326,10 @@ MatrixStack.prototype.scale = function(x, y, z) {
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 행렬은 pixel에서 clip space로 변환합니다.
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
-// 이 행렬은 쿼드를 dstX,dstY로 이동시킵니다.
+// 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
 matrix = m4.translate(matrix, dstX, dstY, 0);
 
-// 이 행렬은 1단위 쿼드를 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
+// 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기를 조정합니다.
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>우리는 행렬 스택을 생성하기만 하면 됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var matrixStack = new MatrixStack();
@@ -340,10 +340,10 @@ var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 +// 이 행렬은 원점을 current matrix stack에 해당하는 곳으로 이동시킵니다.
 +matrix = m4.multiply(matrix, matrixStack.getCurrentMatrix());
 
-// 이 행렬은 쿼드를 dstX,dstY로 이동시킵니다.
+// 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
 matrix = m4.translate(matrix, dstX, dstY, 0);
 
-// 이 행렬은 1단위 쿼드를 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
+// 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기를 조정합니다.
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>그리고 이제 Canvas 2D API를 사용하는 것과 동일한 방법으로 사용할 수 있습니다.</p>
 <p>행렬 스택을 사용하는 방법에 대해 모르는 경우 원점을 이동하고 방향을 지정하는 것이라 생각하시면 됩니다.
@@ -599,7 +599,7 @@ matrixStack.rotateZ(time);
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
-<li><a href="/webgl/lessons/ko/webgl-text-texture.html">Text - Using a Texture</a></li>
+<li><a href="/webgl/lessons/ko/webgl-text-texture.html">텍스트 - 텍스처 사용</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
         </ul>
   <li>텍스처</li>
