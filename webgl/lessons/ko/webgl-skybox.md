@@ -24,17 +24,17 @@ TOC: Skybox
 
 일반적인 해결책은 depth test를 끄고 skybox를 먼저 그리는 거지만, 장면에서 나중에 다룰 픽셀을 그리지 않는 depth buffer test는 이점이 없습니다.
 
-큐브를 사용하는 대신에 캔버스 전체를 덮고 [cubemap](webgl-cube-maps.html)을 사용하는 쿼드를 그려봅시다.
-일반적으로 3D 공간에서 쿼드를 투영하기 위해 view projection matrix를 사용하는데요.
+큐브를 사용하는 대신에 캔버스 전체를 덮고 [cubemap](webgl-cube-maps.html)을 사용하는 사각형을 그려봅시다.
+일반적으로 3D 공간에서 사각형을 투영하기 위해 view projection matrix를 사용하는데요.
 이 경우에는 정반대로 하려고 합니다.
-View projection matrix의 역행렬을 사용하여, 카메라가 쿼드의 각 픽셀을 바라보는 방향을 가져오려고 하는데요.
+View projection matrix의 역행렬을 사용하여, 카메라가 사각형의 각 픽셀을 바라보는 방향을 가져오려고 하는데요.
 이는 cubemap을 바라보는 방향을 알려줄 겁니다.
 
 [Environment Map 예제](webgl-environment-maps.html)를 가져와 여기서 사용하지 않을 법선 관련 코드를 모두 제거했습니다.
-그런 다음 쿼드가 필요합니다.
+그런 다음 사각형이 필요합니다.
 
 ```js
-// 쿼드를 정의하는 값으로 버퍼 채우기
+// 사각형을 정의하는 값으로 버퍼 채우기
 function setGeometry(gl) {
   var positions = new Float32Array(
     [
@@ -49,7 +49,7 @@ function setGeometry(gl) {
 }
 ```
 
-이 쿼드는 이미 clip space에 있으므로 캔버스를 채울 겁니다.
+이 사각형은 이미 clip space에 있으므로 캔버스를 채울 겁니다.
 정점마다 2개의 값만 있기 때문에 attribute를 설정하는 코드를 수정해야 합니다.
 
 ```js
@@ -63,7 +63,7 @@ var offset = 0;        // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(positionLocation, size, type, normalize, stride, offset)
 ```
 
-다음으로 vertex shader의 경우 `gl_Position`을 쿼드 정점으로 설정합니다.
+다음으로 vertex shader의 경우 `gl_Position`을 사각형의 정점으로 설정합니다.
 위치가 clip space에 있고, 캔버스 전체를 덮도록 설정되어 있으므로, 어떤 행렬 계산도 필요하지 않습니다.
 픽셀이 가장 깊은 depth를 가지도록 `gl_Position.z`를 1로 설정합니다.
 그리고 position을 fragment shader로 전달하는데요.
@@ -231,7 +231,7 @@ webglUtils.drawBufferInfo(gl, cubeBufferInfo);
 ```js
 // skybox 그리기
 
-// 쿼드가 1.0에서 depth test를 통과하도록 만들기
+// 사각형이 1.0에서 depth test를 통과하도록 만들기
 gl.depthFunc(gl.LEQUAL);
 
 gl.useProgram(skyboxProgramInfo.program);

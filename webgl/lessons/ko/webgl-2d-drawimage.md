@@ -32,9 +32,9 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
 이건 이미지와 같은 크기로 `x, y` 위치에 이미지를 그리는데요.
 비슷한 WebGL 기반의 함수를 만들기 위해 `x, y`, `x + width, y`, `x, y + height`, `x + width, y + height`에 대한 정점을 업로드한 다음, 다른 위치에 다른 이미지를 그릴 때 다른 정점 세트를 생성합니다.
 
-하지만 더 일반적인 방법은 단위 쿼드를 사용하는 겁니다.
+하지만 더 일반적인 방법은 단위 사각형을 사용하는 겁니다.
 1단위 크기의 사각형 하나를 업로드합니다.
-그런 다음 [행렬 수학](webgl-2d-matrices.html)을 사용하여 해당 단위 쿼드를 크기 조정하고 이동시켜 원하는 위치에 있도록 합니다.
+그런 다음 [행렬 수학](webgl-2d-matrices.html)을 사용하여 해당 단위 사각형의 크기를 조정하고 이동시켜 원하는 위치에 있도록 합니다.
 
 먼저 간단한 vertex shader가 필요합니다.
 
@@ -82,10 +82,10 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 이 행렬은 pixel에서 clip space로 변환합니다.
       var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
-      // 이 행렬은 쿼드를 dstX,dstY로 이동시킵니다.
+      // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
       matrix = m4.translate(matrix, dstX, dstY, 0);
 
-      // 이 행렬은 1단위 쿼드를 1단위에서 texWidth,texHeight 단위로 크기 조정합니다.
+      // 이 행렬은 사각형을 1단위에서 texWidth,texHeight 단위로 크기를 조정합니다.
       matrix = m4.scale(matrix, texWidth, texHeight, 1);
 
       // 행렬 설정
@@ -94,7 +94,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // texture unit 0에서 텍스처를 가져오도록 shader에 지시
       gl.uniform1i(textureLocation, 0);
 
-      // 쿼드 그리기 (삼각형 2개, 정점 6개)
+      // 사각형 그리기 (삼각형 2개, 정점 6개)
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
 
@@ -224,10 +224,10 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 이 행렬은 pixel에서 clip space로 변환합니다.
       var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
-    *  // 이 행렬은 1단위 쿼드를 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
+    *  // 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
     *  var scaleMatrix = m4.scaling(dstWidth, dstHeight, 1);
 
-      // 이 행렬은 쿼드를 dstX,dstY로 이동시킵니다.
+      // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
       var translationMatrix = m4.translation(dstX, dstY, 0);
 
       // 모두 함께 곱합니다.
@@ -240,7 +240,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // texture unit 0에서 텍스처를 가져오도록 shader에 지시
       gl.uniform1i(textureLocation, 0);
 
-      // 쿼드 그리기 (삼각형 2개, 정점 6개)
+      // 사각형 그리기 (삼각형 2개, 정점 6개)
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
 
@@ -279,7 +279,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
     +var textureMatrixLocation = gl.getUniformLocation(program, "u_textureMatrix");
 
 그리고 `drawImage` 안에서 원하는 텍스처 부분을 선택하도록 설정해야 하는데요.
-텍스처 좌표도 사실상 단위 쿼드이므로 위치에 대해 작업한 것과 비슷합니다.
+텍스처 좌표도 사실상 단위 사각형이므로 위치에 대해 작업한 것과 비슷합니다.
 
     *function drawImage(
     *    tex, texWidth, texHeight,
@@ -315,10 +315,10 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 이 행렬은 pixel에서 clip space로 변환합니다.
       var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
-      // 이 행렬은 1단위 쿼드를 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
+      // 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
       var scaleMatrix = m4.scaling(dstWidth, dstHeight, 1);
 
-      // 이 행렬은 쿼드를 dstX,dstY로 이동시킵니다.
+      // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
       var translationMatrix = m4.translation(dstX, dstY, 0);
 
       // 모두 함께 곱합니다.
@@ -328,7 +328,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 행렬 설정
       gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-    +  // 텍스처 좌표가 0부터 1까지고 이미 단위 쿼드이기 때문에, 단위 쿼드를 축소하여 텍스처 영역을 선택할 수 있습니다.
+    +  // 텍스처 좌표가 0부터 1까지이고 이미 단위 사각형이기 때문에, 단위 사각형를 축소하여 텍스처 영역을 선택할 수 있습니다.
     +  var texMatrix = m4.translation(srcX / texWidth, srcY / texHeight, 0);
     +  texMatrix = m4.scale(texMatrix, srcWidth / texWidth, srcHeight / texHeight, 1);
     +
@@ -338,7 +338,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // texture unit 0에서 텍스처를 가져오도록 shader에 지시
       gl.uniform1i(textureLocation, 0);
 
-      // 쿼드 그리기 (삼각형 2개, 정점 6개)
+      // 사각형 그리기 (삼각형 2개, 정점 6개)
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
 
@@ -442,7 +442,7 @@ Shader 내에서 0부터 1의 범위를 벗어난 픽셀을 버리면 해결할 
 WebGL은 제공하는 기능의 창의적인 사용이 전부기 때문에 오히려 더 창의적인 방법을 권장하고 싶습니다.
 </p>
 <p>
-아마 위치에 단위 쿼드를 사용하고 이러한 단위 쿼드의 위치가 텍스처 좌표와 정확히 일치한다는 걸 눈치채셨을 겁니다.
+아마 위치에 단위 사각형을 사용하고 이러한 단위 사각형의 위치가 텍스처 좌표와 정확히 일치한다는 걸 눈치채셨을 겁니다.
 따라서 위치를 텍스처 좌표처럼 사용할 수 있습니다.
 </p>
 <pre class="prettyprint showlinemods">

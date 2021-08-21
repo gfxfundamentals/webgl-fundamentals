@@ -112,10 +112,10 @@ MatrixStack.prototype.scale = function(x, y, z) {
 // 이 행렬은 pixel에서 clip space로 변환합니다.
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
-// 이 행렬은 쿼드를 dstX,dstY로 이동시킵니다.
+// 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
 matrix = m4.translate(matrix, dstX, dstY, 0);
 
-// 이 행렬은 1단위 쿼드를 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
+// 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기를 조정합니다.
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 ```
 
@@ -134,10 +134,10 @@ var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 +// 이 행렬은 원점을 current matrix stack에 해당하는 곳으로 이동시킵니다.
 +matrix = m4.multiply(matrix, matrixStack.getCurrentMatrix());
 
-// 이 행렬은 쿼드를 dstX,dstY로 이동시킵니다.
+// 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
 matrix = m4.translate(matrix, dstX, dstY, 0);
 
-// 이 행렬은 1단위 쿼드를 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
+// 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기를 조정합니다.
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 ```
 
