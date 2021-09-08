@@ -133,7 +133,7 @@ const some4x4TranslationMatrix = [
 Now it matches the math definition. Comparing to the example above, if we want the Z axis all we need to do is
 
 ```js
-const zAxis = some4x4Matrix.slice(9, 11);
+const zAxis = some4x4Matrix.slice(8, 11);
 ```
 
 For those familiar with C++, OpenGL itself requires the 16 values of a 4x4

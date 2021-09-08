@@ -134,7 +134,7 @@ const some4x4TranslationMatrix = [
 위의 예제와 비교하여, Z축을 원한다면 해야할 일은
 
 ```js
-const zAxis = some4x4Matrix.slice(9, 11);
+const zAxis = some4x4Matrix.slice(8, 11);
 ```
 
 C++에 익숙한 사용자들을 위해, OpenGL 자체는 4x4 행렬의 16개의 값이 메모리에서 연속되어야 하므로, C++에서는 `Vec4` 구조체나 클래스를 만들 수 있고

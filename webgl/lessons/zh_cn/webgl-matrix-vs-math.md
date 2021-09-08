@@ -131,7 +131,7 @@ const some4x4TranslationMatrix = [
 现在它和数学定义一样了。和上面的例子比较，如果我们想要获取 z 轴，只需要：
 
 ```js
-const zAxis = some4x4Matrix.slice(9, 11);
+const zAxis = some4x4Matrix.slice(8, 11);
 ```
 
 对于熟悉 C++ 的人，OpenGL 要求 4x4 矩阵中的 16 个值在内存中是连续的，
