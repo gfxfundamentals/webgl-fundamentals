@@ -389,7 +389,7 @@ result = dst
 <p><img class="webgl_center" src="../resources/text-zbuffer-issue.png" /></p>
 <p>무슨 일이 일어난 걸까요?
 현재 F를 그린 다음 텍스트를 그리고, 다음 F와 텍스트 그리기를 반복하고 있는데요.
-<a href="webgl-3d-orthographic.html">Depth buffer</a>가 있기 때문에, F의 텍스트를 그릴 때 블렌딩으로 일부 픽셀이 배경색을 유지하더라도, depth buffer는 여전히 갱신됩니다.
+<a href="webgl-3d-orthographic.html">Depth buffer</a>가 있기 때문에, F의 텍스트를 그릴 때 블렌딩으로 일부 픽셀이 배경색을 유지하더라도, depth buffer는 여전히 업데이트됩니다.
 다음 F를 그릴 때 F의 일부가 이전에 그려진 텍스트의 픽셀 뒤에 있다면 그려지지 않을 겁니다.</p>
 <p>GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직면했습니다.
 <strong>바로 투명도 문제입니다.</strong></p>
@@ -518,7 +518,7 @@ var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
 </div>
 
 </p>
-<p>각 F에 다른 텍스트를 그리고 싶다면 F마다 새로운 텍스처를 만들고 F의 text uniform을 갱신해야 합니다.</p>
+<p>각 F에 다른 텍스트를 그리고 싶다면 F마다 새로운 텍스처를 만들고 F의 text uniform을 업데이트해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 각 F마다 하나씩, 텍스트 텍스처 생성
 var textTextures = [
   &quot;anna&quot;,   // 0
@@ -618,8 +618,8 @@ textUniforms.u_color = colors[ndx];
 </p>
 <p>이 기술은 실제로 대부분의 브라우저가 GPU 가속 시 사용하는 기술입니다.
 HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, 해당 컨텐츠가 변경되지 않는 한, 스크롤할 때 텍스처를 다시 렌더링할 수 있습니다.
-물론 매번 갱신한다면 텍스처를 다시 생성하고 다시 GPU에 업로드하는 작업이 상대적으로 느리기 때문에 약간 느려질 수도 있습니다.</p>
-<p><a href="webgl-text-glyphs.html">다음 글</a>에서는 자주 갱신되는 경우에 더 좋은 기술을 살펴보겠습니다.</p>
+물론 매번 업데이트하면 텍스처를 다시 생성하고 다시 GPU에 업로드하는 작업이 상대적으로 느리기 때문에 약간 느려질 수도 있습니다.</p>
+<p><a href="webgl-text-glyphs.html">다음 글</a>에서는 업데이트가 자주 일어나는 경우에 더 좋은 기술을 살펴보겠습니다.</p>
 <div class="webgl_bottombar">
 <h3>픽셀화 없이 텍스트 크기 조정</h3>
 <p>
@@ -754,7 +754,7 @@ HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, �
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">텍스트 - 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
+<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - Glyph Texture 사용</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
