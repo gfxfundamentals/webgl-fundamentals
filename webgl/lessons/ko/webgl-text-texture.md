@@ -182,7 +182,7 @@ Blend 함수에서 source는 `SRC_ALPHA`로, dest는 `ONE_MINUS_SRC_ALPHA`로 �
 
 무슨 일이 일어난 걸까요?
 현재 F를 그린 다음 텍스트를 그리고, 다음 F와 텍스트 그리기를 반복하고 있는데요.
-[Depth buffer](webgl-3d-orthographic.html)가 있기 때문에, F의 텍스트를 그릴 때 블렌딩으로 일부 픽셀이 배경색을 유지하더라도, depth buffer는 여전히 갱신됩니다.
+[Depth buffer](webgl-3d-orthographic.html)가 있기 때문에, F의 텍스트를 그릴 때 블렌딩으로 일부 픽셀이 배경색을 유지하더라도, depth buffer는 여전히 업데이트됩니다.
 다음 F를 그릴 때 F의 일부가 이전에 그려진 텍스트의 픽셀 뒤에 있다면 그려지지 않을 겁니다.
 
 GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직면했습니다.
@@ -327,7 +327,7 @@ Current program과 attribute의 설정을 루프 외부로 옮겼는데, 동일�
 
 {{{example url="../webgl-text-texture-consistent-scale.html" }}}
 
-각 F에 다른 텍스트를 그리고 싶다면 F마다 새로운 텍스처를 만들고 F의 text uniform을 갱신해야 합니다.
+각 F에 다른 텍스트를 그리고 싶다면 F마다 새로운 텍스처를 만들고 F의 text uniform을 업데이트해야 합니다.
 
     // 각 F마다 하나씩, 텍스트 텍스처 생성
     var textTextures = [
@@ -435,9 +435,9 @@ Current program과 attribute의 설정을 루프 외부로 옮겼는데, 동일�
 
 이 기술은 실제로 대부분의 브라우저가 GPU 가속 시 사용하는 기술입니다.
 HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, 해당 컨텐츠가 변경되지 않는 한, 스크롤할 때 텍스처를 다시 렌더링할 수 있습니다.
-물론 매번 갱신한다면 텍스처를 다시 생성하고 다시 GPU에 업로드하는 작업이 상대적으로 느리기 때문에 약간 느려질 수도 있습니다.
+물론 매번 업데이트하면 텍스처를 다시 생성하고 다시 GPU에 업로드하는 작업이 상대적으로 느리기 때문에 약간 느려질 수도 있습니다.
 
-[다음 글](webgl-text-glyphs.html)에서는 자주 갱신되는 경우에 더 좋은 기술을 살펴보겠습니다.
+[다음 글](webgl-text-glyphs.html)에서는 업데이트가 자주 일어나는 경우에 더 좋은 기술을 살펴보겠습니다.
 
 <div class="webgl_bottombar">
 <h3>픽셀화 없이 텍스트 크기 조정</h3>
