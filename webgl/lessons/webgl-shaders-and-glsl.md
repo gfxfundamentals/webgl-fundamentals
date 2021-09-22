@@ -60,7 +60,7 @@ and at render time tell WebGL how to pull data out of those buffers and into the
     var stride = 0;         // how many bytes to move to the next vertex
                             // 0 = use the correct stride for type and numComponents
 
-    gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
+    gl.vertexAttribPointer(positionLoc, numComponents, type, normalize, stride, offset);
 
 In [WebGL fundamentals](webgl-fundamentals.html) we showed that we can do no math
 in the shader and just pass the data directly through.
