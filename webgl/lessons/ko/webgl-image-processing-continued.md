@@ -87,7 +87,7 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
   }
 ```
 
-이제 kernel 집합을 만든 다음 적용할 목록을 만들어봅시다.
+이제 kernel set을 만든 다음 적용할 목록을 만들어봅시다.
 
 ```
   // 여러 convolution kernel 정의

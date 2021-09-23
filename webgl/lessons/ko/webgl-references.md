@@ -33,7 +33,7 @@ TOC: 참고 자료
 
 * [three.js](https://threejs.org): 가장 인기있는 javascript 3D 라이브러리
 
-* [PlayCanvas](https://playcanvas.com/) 게임 편집기가 있는 WebGL 게임 엔진
+* [PlayCanvas](https://playcanvas.com/) 게임 에디터가 있는 WebGL 게임 엔진
 
 * [regl](https://regl.party/): stateless functional WebGL 라이브러리
 

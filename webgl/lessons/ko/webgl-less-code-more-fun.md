@@ -336,7 +336,7 @@ objects.forEach(function(object) {
 
 {{{example url="../webgl-less-code-more-fun-triangle.html" }}}
 
-색인이 있는 경웨도 잘 동작합니다.
+인덱스가 있는 경우에도 잘 동작합니다.
 `webglUtils.setBuffersAndAttributes`는 모든 attribute를 설정하고 `indices`로 `ELEMENT_ARRAY_BUFFER`를 설정하므로 `gl.drawElements`를 호출할 수 있습니다.
 
     // Indexed quad
