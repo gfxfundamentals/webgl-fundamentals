@@ -1122,17 +1122,15 @@ depth textures, only depth renderbuffers, that means there is no guarantee
 that using a depth texture will ever work, at least according to the spec.
 </p>
 <p>In practice it appears that most drivers themselves work with just a depth
-texture attached and no other attachments. Unfortunately Safari, at least as of
-February 2020, does not allow that combination to work. It requires there be a
+texture attached and no other attachments. Unfortunately Safari pre version 15 does not allow that combination to work. It requires there be a
 color attachment as well, most likely it requires an <code class="notranslate" translate="no">RGBA</code>/<code class="notranslate" translate="no">UNSIGNED_BYTE</code>
 color attachment. The fact that it fails without it is within the specs above.
 </p>
 <p>All that is the long way of saying we need the unused color texture to work
-in Safari. It also sadly means there's still no guarantee that things will work
+in old Safari. It also sadly means there's still no guarantee that things will work
 across all drivers/gpus/browsers. Fortunately it appears that combination does
 work everywhere. Also fortunately OpenGL ES 3.0 on which <a href="https://webgl2fundamentals.org">WebGL2</a>
-is based changed the spec and requires many more combinations to just work. Unfortunately
-as of February 2020 <a href="https://webgl2fundamentals.org/webgl/lessons/webgl-getting-webgl2.html">Safari does not support WebGL2</a>.
+is based changed the spec and requires many more combinations to just work.
 So, in WebGL1, we need to add the unused color texture and then cross our fingers. 😭
 </p>
 </div>
