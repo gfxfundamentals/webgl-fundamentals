@@ -148,6 +148,7 @@ function onResize(entries) {
     let width;
     let height;
     let dpr = window.devicePixelRatio;
+    let dprSupport = false;
     if (entry.devicePixelContentBoxSize) {
       // NOTE: Only this path gives the correct answer
       // The other paths are an imperfect fallback
@@ -155,6 +156,7 @@ function onResize(entries) {
       width = entry.devicePixelContentBoxSize[0].inlineSize;
       height = entry.devicePixelContentBoxSize[0].blockSize;
       dpr = 1; // it's already in width and height
+      dprSupport = true;
     } else if (entry.contentBoxSize) {
       if (entry.contentBoxSize[0]) {
         width = entry.contentBoxSize[0].inlineSize;
@@ -173,12 +175,14 @@ function onResize(entries) {
     const displayHeight = Math.round(height * dpr);
     canvasToDisplaySizeMap.set(entry.target, [displayWidth, displayHeight]);
     resizeAndDraw();
+    if (!dprSupport) {
+      document.querySelector('#warning').style.display = '';
+    }
   }
 }
 
 const resizeObserver = new ResizeObserver(onResize);
 resizeObserver.observe(canvas, {box: 'content-box'});
-document.querySelector('#warning').style.display = '';
 </script>
 </html>
 
