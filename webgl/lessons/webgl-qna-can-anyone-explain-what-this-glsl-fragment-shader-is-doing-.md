@@ -131,14 +131,14 @@ As long as we convert the value to something from 0 to 1 we can see the result
 
 for example going down to line 14
 
- d=200.0+cos(f*g/2.0)*18.0+cos(e*g)*7.0;
+    d=200.0+cos(f*g/2.0)*18.0+cos(e*g)*7.0;
 
 Since we know it goes from 200 +/- 18 +/- 7 that's 175 + 225 so convert that to 0 to 1 with
 
- d=200.0+cos(f*g/2.0)*18.0+cos(e*g)*7.0;
-        float tmp = (d - 175.0) / 50.0;
-        gl_FragColor = vec4(tmp, 0, 0, 1);
-        return;
+    d=200.0+cos(f*g/2.0)*18.0+cos(e*g)*7.0;
+    float tmp = (d - 175.0) / 50.0;
+    gl_FragColor = vec4(tmp, 0, 0, 1);
+    return;
 
 will give you some idea what it's doing.
 

@@ -47,7 +47,7 @@ Following the [image processing tutorials](https://webglfundamentals.org/webgl/l
 
 First you need the original image
 
-![original image](https://i.imgur.com/xKYRSwu.jpg)
+<div class="webgl_center"><img src="https://i.imgur.com/xKYRSwu.jpg" style="width: 600px;"></div>
 
 and you then apply a sine wave distortion.
 
@@ -55,7 +55,7 @@ and you then apply a sine wave distortion.
 
 Then they also load a texture of multiple maps. This texture was created by hand in photoshop (or other image editing program). The green channel is how much to multiply the distortion by. The greener the more distortion.
 
-![](http://i.imgur.com/W9QazjL.jpg)
+<div class="webgl_center"><img src="http://i.imgur.com/W9QazjL.jpg" style="width: 600px;"></div>
 
 {{{example url="../webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect-example-2.html"}}}
 
@@ -65,7 +65,7 @@ Next there's an offset for the mouse multplied by another hand drawn map. This m
 
 Finally, (not in the tutorial but in the sample) it loads a blurred version of the original image (blurred in some image editing program like photoshop)
 
-![](http://i.imgur.com/Zw7mMLX.jpg)
+<div class="webgl_center"><img src="http://i.imgur.com/Zw7mMLX.jpg" style="width: 600px;"></div>
 
 It might be hard to see it's blurred since the blurring is subtle.
 

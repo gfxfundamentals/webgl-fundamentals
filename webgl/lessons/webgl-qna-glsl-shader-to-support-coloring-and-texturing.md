@@ -14,8 +14,9 @@ get location:
 
 when drawing I change the value like this:
 
-  var uUseTexture=false;
-  gl.uniform1f(shaderProgram.useTextureUniform, uUseTexture);
+    var uUseTexture=false;
+    gl.uniform1f(shaderProgram.useTextureUniform, uUseTexture);
+
 And the GLSL itself:
 
 fragment:
@@ -28,36 +29,37 @@ fragment:
     void main(void) {
         vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
         vec4 texColor = vec4(textureColor.rgb, textureColor.a);
-  vec4 vertexColor = vColor; 
-  if (!uUseTexture){
-   gl_FragColor = vertexColor;
-  }
-  else{
-   gl_FragColor = texColor; 
-  }
+        vec4 vertexColor = vColor; 
+        if (!uUseTexture){
+           gl_FragColor = vertexColor;
+        }
+        else {
+         gl_FragColor = texColor; 
+        }
     }
 
 vertex:
    
 
-        attribute vec3 aVertexPosition;
-        attribute vec3 aVertexNormal;
-        attribute vec2 aTextureCoord;
-     attribute vec4 aVertexColor;
+    attribute vec3 aVertexPosition;
+    attribute vec3 aVertexNormal;
+    attribute vec2 aTextureCoord;
+    attribute vec4 aVertexColor;
      
-        uniform mat4 uMVMatrix;
-        uniform mat4 uPMatrix;
-        uniform mat3 uNMatrix;
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform mat3 uNMatrix;
    
-        varying vec2 vTextureCoord;
-     varying vec4 vColor;
+    varying vec2 vTextureCoord;
+    varying vec4 vColor;
      
      
-        void main(void){
-            vec4 mvPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
-            gl_Position = uPMatrix * mvPosition;
-            vTextureCoord = aTextureCoord;
-      vColor = aVertexColor;}
+    void main(void) {
+      vec4 mvPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+      gl_Position = uPMatrix * mvPosition;
+      vTextureCoord = aTextureCoord;
+      vColor = aVertexColor;
+    }
 
 ## Answer:
 
