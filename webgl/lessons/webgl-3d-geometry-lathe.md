@@ -807,8 +807,8 @@ function getVertIndex(position) {
 </pre>
 <p>It worked! It got rid of the seam. Unfortunately it took several seconds to run and
 made the interface unusable. This is because it's a O^2 solution. If you slide the sliders
-for the most vertices you can generate ~20000 vertices. For an O^2 that's up to 300 million iterations
-that have to happen.
+for the most vertices(distance/divisions) in example above you can generate ~114000 vertices.
+For an O^2 that's up to 12 billion iterations that have to happen.
 </p>
 <p>I searched the net for a easy solution. I didn't find one. I thought about putting all the points
 in an <a href="https://en.wikipedia.org/wiki/Octree">octree</a> to make finding matching points
