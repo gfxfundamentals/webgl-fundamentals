@@ -793,7 +793,7 @@ O^2일 경우 최대 3억 번의 반복이 발생합니다.
 <p>
 나머지 연산 덕분에 <code>endAngle</code>이 <code>Math.PI * 2</code>일 때 <code>angle</code>은 0이 되고 이는 <code>startAngle</code>과 동일합니다
 경계선이 없어졌네요.
-문제가 해결습니다!
+문제가 해결되었습니다!
 </p>
 <p>
 그래도 여전히 <code>distance</code>를 0.001로 <code>divisions</code>를 60으로 설정하면 mesh를 다시 계산하는 데 거의 1초가 걸립니다.

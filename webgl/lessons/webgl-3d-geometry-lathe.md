@@ -824,7 +824,7 @@ And the new code like this
 <pre class="prettyprint">
   const angle = lerp(startAngle, endAngle, u) % (Math.PI * 2);
 </pre>
-<p>Because of the module the <code>angle</code> when <code>endAngle</code> is <code>Math.PI * 2</code> becomes 0
+<p>Because of the modulo the <code>angle</code> when <code>endAngle</code> is <code>Math.PI * 2</code> becomes 0
 and so it's the same as the start. The seam went away. Problem solved!</p>
 <p>Still, even with the change if you set <code>distance</code> to 0.001
 and <code>divisions</code> to 60 it takes nearly a second on my machine to recompute the mesh. While
