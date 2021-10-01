@@ -176,7 +176,7 @@ vertex array object를 사용하는 게 확실히 좋다는 걸 보실 수 있�
 
 ```glsl
 // lighting-shader
-// 삼각형으로 그려진 큐브의 shader
+// 삼각형으로 그려진 큐브의 Shader
 
 attribute vec4 a_position;
 attribute vec3 a_normal;

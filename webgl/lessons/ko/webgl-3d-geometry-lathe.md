@@ -10,7 +10,7 @@ TOC: Geometry - Lathe
 어떤 사람이 WebGL에서 볼링핀 모양을 만드는 방법을 물어봤습니다.
 *똑똑한* 대답은 "[Blender](https://blender.org), [Maya](https://www.autodesk.com/products/maya/overview), [3D Studio Max](https://www.autodesk.com/products/3ds-max/overview), [Cinema 4D](https://www.maxon.net/en/products/cinema-4d/overview/)처럼 3D 모델링 패키지를 사용하세요" 입니다.
 이를 사용하여 볼링핀을 모델링하고, 추출한 다음, 데이터를 읽습니다.
-[OBJ 형식](https://en.wikipedia.org/wiki/Wavefront_.obj_file)은 비교적 간단합니다.
+[OBJ 포맷](https://en.wikipedia.org/wiki/Wavefront_.obj_file)은 비교적 간단합니다.
 
 하지만 모델링 패키지를 만들고 싶다면 어떻게 해야 할까요?
 
@@ -772,8 +772,8 @@ function getVertIndex(position) {
 경계선이 없어졌네요.
 하지만 실행에 몇 초가 걸리고 인터페이스를 사용할 수 없게 되었습니다.
 이는 O^2 해결법이기 때문인데요.
-최대 정점에 대한 슬라이더를 움직여보면 정점을 20000개까지 생성할 수 있습니다.
-O^2일 경우 최대 3억 번의 반복이 발생합니다.
+distance는 낮고, divisions은 높게, 최대 정점에 관한 슬라이더를 움직여보면, 정점을 114000개까지 생성할 수 있습니다.
+O^2일 경우 최대 12조에 가까운 반복이 발생합니다.
 </p>
 <p>
 인터넷에서 쉬운 해결책을 찾아봤지만 찾지 못했습니다.

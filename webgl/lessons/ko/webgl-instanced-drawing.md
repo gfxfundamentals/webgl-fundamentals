@@ -146,7 +146,7 @@ requestAnimationFrame(render);
 {{{example url="../webgl-instanced-drawing-not-instanced.html"}}}
 
 `gl.uniform4v`, `gl.uniformMatrix4fv`, `gl.drawArrays`를 각각 5번 호출하여 총 15번의 WebGL 호출을 가지는데요.
-Shader가 더 복잡하다면, [spot lighting](webgl-3d-lighting-spot.html)의 shader처럼, 6번의 `gl.uniformXXX` 호출과 한 번의 `gl.drawArrays` 호출로, 객체당 최소 7번의 호출을 가집니다.
+Shader가 더 복잡하다면, [스포트라이트](webgl-3d-lighting-spot.html)의 shader처럼, 6번의 `gl.uniformXXX` 호출과 한 번의 `gl.drawArrays` 호출로, 객체당 최소 7번의 호출을 가집니다.
 400개의 객체를 그린다면 2800 WebGL 호출이 될 겁니다.
 
 Instancing은 이러한 호출을 줄이는 방법입니다.

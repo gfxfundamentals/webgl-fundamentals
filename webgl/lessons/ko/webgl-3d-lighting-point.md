@@ -1,12 +1,12 @@
-Title: WebGL 3D - Point Lighting
-Description: WebGL에서 point lighting을 구현하는 방법
-TOC: Point Lighting
+Title: WebGL 3D - 점 조명
+Description: WebGL에서 점 조명을 구현하는 방법
+TOC: 점 조명
 
 
-이 글은 [WebGL 3D Directional Lighting](webgl-3d-lighting-directional.html)에서 이어집니다.
+이 글은 [WebGL 3D 방향성 조명](webgl-3d-lighting-directional.html)에서 이어집니다.
 아직 읽지 않았다면 [거기](webgl-3d-lighting-directional.html)부터 시작하는 게 좋습니다.
 
-마지막 글에서 우리는 같은 방향에서 빛이 균일하게 들어오는 directional lighting을 살펴 봤는데요.
+마지막 글에서 우리는 같은 방향에서 빛이 균일하게 들어오는 방향성 조명을 살펴 봤는데요.
 렌더링 전에 해당 방향을 설정했었습니다.
 
 조명의 방향을 설정하는 대신 3D 공간의 한 점을 선택하고 shader에서 모델 표면의 임의의 지점에서 방향을 계산하면 어떨까요?
@@ -315,7 +315,7 @@ surface -> light 벡터는 단위 벡터가 아니기 때문에 fragment shader�
 
 {{{example url="../webgl-3d-lighting-point-color.html" }}}
 
-다음은 [spot lighting](webgl-3d-lighting-spot.html)입니다.
+다음은 [스포트라이트](webgl-3d-lighting-spot.html)입니다.
 
 <div class="webgl_bottombar">
 <h3>왜 <code>pow(negative, power)</code>는 정의되어 있지 않나요?</h3>

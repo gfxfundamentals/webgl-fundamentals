@@ -1,6 +1,6 @@
-Title: WebGL 3D - Directional Lighting
-Description: WebGL에서 directional lighting을 구현하는 방법
-TOC: Directional Lighting
+Title: WebGL 3D - 방향성 조명
+Description: WebGL에서 방향성 조명을 구현하는 방법
+TOC: 방향성 조명
 
 
 이 글은 WebGL 관련 시리즈의 한 부분으로, 첫 번째는 [WebGL 기초](webgl-fundamentals.html)였습니다.
@@ -8,13 +8,13 @@ TOC: Directional Lighting
 아직 읽지 않았다면 [거기](webgl-3d-camera.html)부터 시작하는 게 좋습니다.
 
 조명을 구현하는 방법에는 여러 가지가 있습니다.
-아마 가장 간단한 건 *directional lighting*일 겁니다.
+아마 가장 간단한 건 *방향성 조명*일 겁니다.
 
-Directional lighting은 빛이 한 방향에서 균일하게 들어온다고 가정합니다.
-맑은 날의 태양이 종종 directional light로 여겨지는데요.
+방향성 조명은 빛이 한 방향에서 균일하게 들어온다고 가정합니다.
+맑은 날의 태양이 종종 방향성 조명으로 여겨지는데요.
 너무 멀리 있어서 빛살이 물체의 표면 모두를 평행하게 비추는 걸로 간주될 수 있습니다.
 
-실제로 directional lighting을 계산하는 건 굉장히 쉽습니다.
+실제로 방향성 조명을 계산하는 것은 굉장히 쉽습니다.
 빛이 어떤 방향으로 가고 있는지 알고 물체의 표면이 향하는 방향을 알면, 두 방향의 *스칼라곱*을 구할 수 있고 두 방향 사이의 각도에 대한 cosine을 얻을 수 있습니다.
 
 {{{diagram url="resources/dot-product.html" caption="점을 드래그해보세요"}}}
@@ -476,8 +476,7 @@ var m4 = {
 {{{example url="../webgl-3d-lighting-directional-worldinversetranspose.html" }}}
 
 조명에 대한 첫 걸음이 명쾌했기를 바랍니다.
-다음은 
-Next up [point lighting](webgl-3d-lighting-point.html).
+다음은 [점 조명](webgl-3d-lighting-point.html)입니다.
 
 <div class="webgl_bottombar">
 <h3>mat3(u_worldInverseTranspose) * a_normal 대안</h3>

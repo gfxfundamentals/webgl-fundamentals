@@ -53,7 +53,7 @@ WebGL에서 대부분의 숫자는 32bit에 불과한데요.
 
    이 문제는 fragment shader에서 `highp`를 사용하도록 선언하고 사용자가 `highp`를 지원하지 않는 기기에서 페이지를 로드하면 shader는 컴파일에 실패할 겁니다.
 
-   반대로 어디에서나 사용할 수 있는 `mediump`는 [point light](webgl-3d-lighting-point.html)같은 일반적인 것들에 대해 충분히 해상도가 높지 않습니다.
+   반대로 어디에서나 사용할 수 있는 `mediump`는 [점 조명](webgl-3d-lighting-point.html)같은 일반적인 것에 대해 충분히 해상도가 높지 않습니다.
 
 2. 실제로 `lowp`에 9bit를 쓰고 `mediump`애 16bit를 쓰는 장치에서는 보통 `highp`보다 빠릅니다. 훨씬 빠른 경우가 더 많습니다.
 
@@ -87,10 +87,10 @@ Fragment shader에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용
 실제로 성공했는지 확인하려면 실제 `mediump`를 지원하는 기기에서 테스트해야 합니다.
 
 또 다른 옵션은 기기가 `mediump`만 지원하는 경우 다른 shader를 사용하는 겁니다.
-위에서 point light는 `mediump`로 문제될 수 있다고 언급했었는데요.
-이는 [point lights](webgl-3d-lighting-point.html), 특히 반사 하이라이트 계산이, world 혹은 view space의 값을 fragment shader로 전달하고, 이 값들이 `mediump` 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
+위에서 점 조명은 `mediump`로 문제될 수 있다고 언급했었는데요.
+이는 [점 조명](webgl-3d-lighting-point.html), 특히 반사 하이라이트 계산이, world 혹은 view space의 값을 fragment shader로 전달하고, 이 값들이 `mediump` 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
 따라서, `mediump` 장치에서는 반사 하이라이트를 생략할 수도 있습니다.
-예를 들어 [point light에 대한 글](webgl-3d-lighting-point.html)에 있는 point light shader는 기기에서 `mediump`만 지원하는 경우 하이라이트를 제거하도록 수정되었습니다.
+예를 들어 [점 조명에 대한 글](webgl-3d-lighting-point.html)에 있는 point light shader는 기기에서 `mediump`만 지원하는 경우 하이라이트를 제거하도록 수정되었습니다.
 
 ```glsl
 #ifdef GL_FRAGMENT_PRECISION_HIGH

@@ -12,7 +12,7 @@ TOC: 그림자
 
 * [직교 투영](webgl-3d-orthographic.html)
 * [원근 투영](webgl-3d-perspective.html)
-* [스팟 조명 효과](webgl-3d-lighting-spot.html)
+* [스포트라이트 효과](webgl-3d-lighting-spot.html)
 * [텍스처](webgl-3d-textures.html)
 * [텍스처에 렌더링하기](webgl-render-to-texture.html)
 * [투영 맵핑](webgl-planar-projection-mapping.html)
@@ -489,8 +489,8 @@ function drawScene(projectionMatrix, cameraMatrix, textureMatrix, programInfo, /
 
 바이어스 값을 바꿔보면 패턴이 나타나는 위치와 시점에 영향을 주는 것을 알 수 있습니다.
 
-코드를 완성하기 위해 [스팟 조명 효과](webgl-3d-lighting-spot.html)의 
-스팟 조명 계산 코드를 추가하도록 하겠습니다.
+코드를 완성하기 위해 [스포트라이트 효과](webgl-3d-lighting-spot.html)의 
+스포트라이트 계산 코드를 추가하도록 하겠습니다.
 
 먼저 [이 글](webgl-3d-lighting-spot.html)의 정점 셰이더에서 
 필요한 부분을 가져다 붙입시다.
@@ -663,7 +663,7 @@ function render() {
 }
 ```
 
-설정된 uniform 값들을 되짚어 봅시다. [스팟 조명에 관한 글](webgl-3d-lighting-spot.html)을 떠올려보면 innerLimit와 outerLimit은 내적 공간(코사인 공간)의 값이고 
+설정된 uniform 값들을 되짚어 봅시다. [스포트라이트에 관한 글](webgl-3d-lighting-spot.html)을 떠올려보면 innerLimit와 outerLimit은 내적 공간(코사인 공간)의 값이고 
 조명의 방향을 따라서 뻗어나가는 형식이기 때문에 시야각의 절반만 필요합니다.
 [카메라에 관한 글](webgl-3d-camera.html)에서 4x4 행렬의 세 번째 행이 Z축인 것을 
 기억하시면 `lightWorldMatrix`로부터 세 번째 행의 앞 세개 값을 가져오면 그것이 조명의 -Z방향이라는 것을 알 수 있습니다.
@@ -702,7 +702,7 @@ function render() {
     });
 ```
 
-이제 스팟 조면과 그림자를 얻었습니다.
+이제 스포트라이트와 그림자를 얻었습니다.
 
 {{{example url="../webgl-shadows-w-spot-light.html" }}}
 

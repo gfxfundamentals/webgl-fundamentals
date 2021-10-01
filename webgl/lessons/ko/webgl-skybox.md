@@ -248,7 +248,7 @@ webglUtils.drawBufferInfo(gl, quadBufferInfo);
 {{{example url="../webgl-skybox-plus-environment-map.html" }}}
 
 지난 3개의 글이 cubemap을 활용하는 방법을 알려줬길 바랍니다.
-예를 들어 [컴퓨팅 조명](webgl-3d-lighting-spot.html)에서 코드를 가져와, environment map의 결과와 결합하여, 자동차 후드나 광택이 있는 바닥을 만드는 게 일반적입니다.
+예를 들어 [계산된 조명](webgl-3d-lighting-spot.html)에서 코드를 가져와, environment map의 결과와 결합하여, 자동차 후드나 광택이 있는 바닥을 만드는 게 일반적입니다.
 Cubemap을 사용하여 조명을 계산하는 기술도 있습니다.
 Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방정식에 입력하여 사용한다는 점을 제외하면 environment map과 동일합니다.
 

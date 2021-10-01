@@ -1,33 +1,33 @@
-Title: WebGL 3D - Spot Lighting
-Description: WebGL에서 spot light를 구현하는 방법
-TOC: Spot Lighting
+Title: WebGL 3D - 스포트라이트
+Description: WebGL에서 스포트라이트를 구현하는 방법
+TOC: 스포트라이트
 
 
-이 글은 [WebGL 3D Point Lighting](webgl-3d-lighting-point.html)에서 이어집니다.
+이 글은 [WebGL 3D 점 조명](webgl-3d-lighting-point.html)에서 이어집니다.
 아직 읽지 않았다면 [거기](webgl-3d-lighting-point.html)부터 시작하는 게 좋습니다.
 
-지난 글에서 우리는 조명에서 물체 표면의 모든 지점까지의 방향을 계산하는 point lighting을 다뤘습니다.
-그런 다음 [directional lighting](webgl-3d-lighting-directional.html)에서 했던 것과 동일하게 표면 법선(표면이 향하는 방향)과 조명 방향의 스칼라곱을 구했는데요.
+지난 글에서 우리는 조명에서 물체 표면의 모든 지점까지의 방향을 계산하는 점 조명을 다뤘습니다.
+그런 다음 [방향성 조명](webgl-3d-lighting-directional.html)에서 했던 것과 동일하게 표면 법선(표면이 향하는 방향)과 조명 방향의 스칼라곱을 구했는데요.
 이는 두 방향이 일치해서 완전히 밝아져야 하는 경우 1이 됩니다.
 두 방향이 수직이면 0이고 반대면 -1이 되죠.
 조명을 제공한 표면의 색상에 곱하기 위해 해당 값을 사용했습니다.
 
-Spot lighting은 아주 약간 달라집니다.
+스포트라이트는 아주 약간 달라집니다.
 사실 지금까지 우리가 했던 것에 대해 창의적으로 생각해보면 여러분만의 해결책을 도출할 수 있을 겁니다.
 
-Point light는 해당 지점에서 모든 방향으로 진행하는 빛을 가지는 지점이라고 상상할 수 있습니다.
-Spot light를 만들기 위해서는 해당 지점에서 spotlight의 방향을 선택하면 됩니다.
-그러면 빛이 진행하는 모든 방향에 대해 해당 방향과 우리가 선택한 spotlight 방향의 스칼라곱을 구할 수 있습니다.
+점 조명은 해당 지점에서 모든 방향으로 진행하는 빛을 가지는 지점이라고 상상할 수 있습니다.
+스포트라이트를 만들기 위해서는 해당 지점에서 스포트라이트의 방향을 선택하면 됩니다.
+그러면 빛이 진행하는 모든 방향에 대해 해당 방향과 우리가 선택한 스포트라이트 방향의 스칼라곱을 구할 수 있습니다.
 임의의 limit를 정하고 해당 limit 내에 있다면 빛나게 됩니다.
 해당 limit 내에 없다면 빛나지 않습니다.
 
 {{{diagram url="resources/spot-lighting.html" width="500" height="400" className="noborder" }}}
 
 위 다이어그램에서 광선이 모든 방향으로 진행되고 방향에 대한 스칼라곱이 표시되는 것을 볼 수 있습니다.
-또한 spotlight의 방향인 특정 *방향*을 가집니다.
+또한 스포트라이트의 방향인 특정 *방향*을 가집니다.
 그리고 limit(각도)를 설정하는데요.
 Limit로 *dot limit*를 계산하고, limit의 cosine을 구합니다.
-각 광선의 방향에 대한 spotlight 선택 방향의 스칼라곱이 dot limit를 초과하면 조명이 작동합니다.
+각 광선의 방향에 대한 스포트라이트 선택 방향의 스칼라곱이 dot limit를 초과하면 조명이 작동합니다.
 
 다른 방법으로 말하기 위해, limit가 20도라고 가정해봅시다.
 이걸 radian으로 변환하고 cosine을 적용해서 -1에서 1사이의 값으로 만들 수 있는데요.
@@ -124,7 +124,7 @@ void main() {
 
 몇 가지 주의할 사항: 위에서 `u_lightDirection`를 음수화하고 있습니다.
 그리고 비교하고 있는 두 방향이 일치할 때 같은 방향을 가리키길 원합니다.
-즉 surfaceToLightDirection을 spotlight의 반대 방향과 비교해야 합니다.
+즉 surfaceToLightDirection을 스포트라이트의 반대 방향과 비교해야 합니다.
 여러 가지 다른 방법으로 이를 수행할 수 있습니다.
 Uniform을 설정할 때 음수 방향을 전달할 수 있는데요.
 하지만 uniform을 `u_reverseLightDirection`이나 `u_negativeLightDirection` 대신 `u_lightDirection`이라 부르는 것이 덜 혼란스러울 것 같습니다.
@@ -153,7 +153,7 @@ JavaScript에서는 이렇게 작성할 수 있습니다.
 
 ```
   float dotFromDirection = dot(surfaceToLightDirection, -u_lightDirection);
-  // Spotlight 안에 있다면 inLight는 1이 되고 아니라면 0이 될 겁니다.
+  // 스포트라이트 안에 있다면 inLight는 1이 되고 아니라면 0이 될 겁니다.
   float inLight = step(u_limit, dotFromDirection);
   float light = inLight * dot(normal, surfaceToLightDirection);
   float specular = inLight * pow(dot(normal, halfVector), u_shininess);
@@ -163,8 +163,8 @@ JavaScript에서는 이렇게 작성할 수 있습니다.
 
 {{{example url="../webgl-3d-lighting-spot-using-step.html" }}}
 
-한 가지 다른 점은 현재 spotlight는 굉장히 가혹하다는 겁니다.
-Spotlight 안에 있거나 그렇지 않으며 물체는 그냥 검은색으로 변합니다.
+한 가지 다른 점은 현재 스포트라이트는 굉장히 가혹하다는 겁니다.
+스포트라이트 안에 있거나 그렇지 않으며 물체는 그냥 검은색으로 변합니다.
 
 이를 고치기 위해 1개 대신 2개의 limit을 사용할 수 있는데, inner limit과 outer limit입니다.
 Inner limit 안에 있다면 1.0을 사용합니다.
@@ -193,7 +193,7 @@ Inner limit과 outer limit 사이에 있다면 1.0과 0.0사이로 선형 보간
 
 {{{example url="../webgl-3d-lighting-spot-falloff.html" }}}
 
-이제 좀 더 spotlight처럼 보이네요!
+이제 좀 더 스포트라이트처럼 보이네요!
 
 한 가지 주의해야 할 것은 `u_innerLimit`과 `u_outerLimit`이 같으면 `limitRange`는 0.0이 됩니다.
 우리는 `limitRange`로 나누고 있고 0으로 나누는 것은 잘못되었거나 정의되지 않았습니다.
@@ -229,7 +229,7 @@ GLSL에는 이를 약간 단순화하기 위해 사용할 수 있는 함수도 �
 
 한 가지 유의해야 할 다른 점은 `smoothstep` 함수는 `lowerBound`가 `upperBound`보다 크거나 같으면 정의되지 않은 결과를 가진다는 겁니다.
 값이 같은 건 우리가 위에서 했던 것과 동일한 문제입니다.
-`lowerBound`가 `upperBound`보다 큰 건 정의되지 않은 새로운 문제지만 절대 true가 아니어야 하는 spotlight를 목적으로 합니다.
+`lowerBound`가 `upperBound`보다 큰 건 정의되지 않은 새로운 문제지만 절대 true가 아니어야 하는 스포트라이트를 목적으로 합니다.
 
 <div class="webgl_bottombar">
 <h3>GLSL에서 정의되지 않은 동작을 주의하세요</h3>

@@ -250,7 +250,7 @@ void main() {
 
 여러 GLSL 함수는 정의되지 않은 동작을 가집니다.
 예를 들어 `pow(x, y)`는 `x < 0`일 경우 undefined입니다.
-[spot lighting](webgl-3d-lighting-spot.html)에 대한 글의 하단에 더 긴 목록이 있습니다
+[스포트라이트](webgl-3d-lighting-spot.html)에 대한 글의 하단에 더 긴 목록이 있습니다
 
 ## Shader 정밀도 문제
 
