@@ -248,7 +248,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <ul>
 <li><a href="webgl-3d-orthographic.html">직교 투영</a></li>
 <li><a href="webgl-3d-perspective.html">원근 투영</a></li>
-<li><a href="webgl-3d-lighting-spot.html">스팟 조명 효과</a></li>
+<li><a href="webgl-3d-lighting-spot.html">스포트라이트 효과</a></li>
 <li><a href="webgl-3d-textures.html">텍스처</a></li>
 <li><a href="webgl-render-to-texture.html">텍스처에 렌더링하기</a></li>
 <li><a href="webgl-planar-projection-mapping.html">투영 맵핑</a></li>
@@ -689,8 +689,8 @@ function drawScene(projectionMatrix, cameraMatrix, textureMatrix, programInfo, /
 
 </p>
 <p>바이어스 값을 바꿔보면 패턴이 나타나는 위치와 시점에 영향을 주는 것을 알 수 있습니다.</p>
-<p>코드를 완성하기 위해 <a href="webgl-3d-lighting-spot.html">스팟 조명 효과</a>의 
-스팟 조명 계산 코드를 추가하도록 하겠습니다.</p>
+<p>코드를 완성하기 위해 <a href="webgl-3d-lighting-spot.html">스포트라이트 효과</a>의 
+스포트라이트 계산 코드를 추가하도록 하겠습니다.</p>
 <p>먼저 <a href="webgl-3d-lighting-spot.html">이 글</a>의 정점 셰이더에서 
 필요한 부분을 가져다 붙입시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
@@ -852,7 +852,7 @@ function render() {
   ...
 }
 </code></pre>
-<p>설정된 uniform 값들을 되짚어 봅시다. <a href="webgl-3d-lighting-spot.html">스팟 조명에 관한 글</a>을 떠올려보면 innerLimit와 outerLimit은 내적 공간(코사인 공간)의 값이고 
+<p>설정된 uniform 값들을 되짚어 봅시다. <a href="webgl-3d-lighting-spot.html">스포트라이트에 관한 글</a>을 떠올려보면 innerLimit와 outerLimit은 내적 공간(코사인 공간)의 값이고 
 조명의 방향을 따라서 뻗어나가는 형식이기 때문에 시야각의 절반만 필요합니다.
 <a href="webgl-3d-camera.html">카메라에 관한 글</a>에서 4x4 행렬의 세 번째 행이 Z축인 것을 
 기억하시면 <code class="notranslate" translate="no">lightWorldMatrix</code>로부터 세 번째 행의 앞 세개 값을 가져오면 그것이 조명의 -Z방향이라는 것을 알 수 있습니다.
@@ -887,7 +887,7 @@ lightWorldPosition과 viewWorldPosition(카메라의 월드공간 위치)을 유
       u_world: mat,
     });
 </code></pre>
-<p>이제 스팟 조면과 그림자를 얻었습니다.</p>
+<p>이제 스포트라이트와 그림자를 얻었습니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-shadows-w-spot-light.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-shadows-w-spot-light.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -1137,9 +1137,9 @@ So, in WebGL1, we need to add the unused color texture and then cross our finger
         </ul>
   <li>조명</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-lighting-directional.html">Directional Lighting</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-lighting-point.html">Point Lighting</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-lighting-directional.html">방향성 조명</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-lighting-point.html">점 조명</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-lighting-spot.html">스포트라이트</a></li>
         </ul>
   <li>구조와 구성</li>
         <ul>
@@ -1151,7 +1151,7 @@ So, in WebGL1, we need to add the unused color texture and then cross our finger
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
   <li>텍스처</li>
         <ul>

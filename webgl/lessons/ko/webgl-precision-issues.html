@@ -280,7 +280,7 @@ WebGL에서 대부분의 숫자는 32bit에 불과한데요.
 <ol>
 <li><p>대부분의 구형 또는 저렴한 스마트폰같은 일부 기기들은 fragment shader에서 <code class="notranslate" translate="no">highp</code>를 지원하지 않습니다.</p>
 <p>이 문제는 fragment shader에서 <code class="notranslate" translate="no">highp</code>를 사용하도록 선언하고 사용자가 <code class="notranslate" translate="no">highp</code>를 지원하지 않는 기기에서 페이지를 로드하면 shader는 컴파일에 실패할 겁니다.</p>
-<p>반대로 어디에서나 사용할 수 있는 <code class="notranslate" translate="no">mediump</code>는 <a href="webgl-3d-lighting-point.html">point light</a>같은 일반적인 것들에 대해 충분히 해상도가 높지 않습니다.</p>
+<p>반대로 어디에서나 사용할 수 있는 <code class="notranslate" translate="no">mediump</code>는 <a href="webgl-3d-lighting-point.html">점 조명</a>같은 일반적인 것에 대해 충분히 해상도가 높지 않습니다.</p>
 </li>
 <li><p>실제로 <code class="notranslate" translate="no">lowp</code>에 9bit를 쓰고 <code class="notranslate" translate="no">mediump</code>애 16bit를 쓰는 장치에서는 보통 <code class="notranslate" translate="no">highp</code>보다 빠릅니다. 훨씬 빠른 경우가 더 많습니다.</p>
 </li>
@@ -307,10 +307,10 @@ Fragment shader에서 <code class="notranslate" translate="no">GL_FRAGMENT_PRECI
 <p>다른 옵션은 <code class="notranslate" translate="no">mediump</code>만 필요하도록 필요하도록 fragment shader를 작성해볼 수 있습니다.
 실제로 성공했는지 확인하려면 실제 <code class="notranslate" translate="no">mediump</code>를 지원하는 기기에서 테스트해야 합니다.</p>
 <p>또 다른 옵션은 기기가 <code class="notranslate" translate="no">mediump</code>만 지원하는 경우 다른 shader를 사용하는 겁니다.
-위에서 point light는 <code class="notranslate" translate="no">mediump</code>로 문제될 수 있다고 언급했었는데요.
-이는 <a href="webgl-3d-lighting-point.html">point lights</a>, 특히 반사 하이라이트 계산이, world 혹은 view space의 값을 fragment shader로 전달하고, 이 값들이 <code class="notranslate" translate="no">mediump</code> 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
+위에서 점 조명은 <code class="notranslate" translate="no">mediump</code>로 문제될 수 있다고 언급했었는데요.
+이는 <a href="webgl-3d-lighting-point.html">점 조명</a>, 특히 반사 하이라이트 계산이, world 혹은 view space의 값을 fragment shader로 전달하고, 이 값들이 <code class="notranslate" translate="no">mediump</code> 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
 따라서, <code class="notranslate" translate="no">mediump</code> 장치에서는 반사 하이라이트를 생략할 수도 있습니다.
-예를 들어 <a href="webgl-3d-lighting-point.html">point light에 대한 글</a>에 있는 point light shader는 기기에서 <code class="notranslate" translate="no">mediump</code>만 지원하는 경우 하이라이트를 제거하도록 수정되었습니다.</p>
+예를 들어 <a href="webgl-3d-lighting-point.html">점 조명에 대한 글</a>에 있는 point light shader는 기기에서 <code class="notranslate" translate="no">mediump</code>만 지원하는 경우 하이라이트를 제거하도록 수정되었습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">#ifdef GL_FRAGMENT_PRECISION_HIGH
   precision highp float;
 #else
@@ -530,9 +530,9 @@ lowp float foo;              // variable
         </ul>
   <li>조명</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-lighting-directional.html">Directional Lighting</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-lighting-point.html">Point Lighting</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-lighting-directional.html">방향성 조명</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-lighting-point.html">점 조명</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-lighting-spot.html">스포트라이트</a></li>
         </ul>
   <li>구조와 구성</li>
         <ul>
@@ -544,7 +544,7 @@ lowp float foo;              // variable
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
