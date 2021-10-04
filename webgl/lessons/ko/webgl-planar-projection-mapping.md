@@ -26,7 +26,7 @@ TOC: 평면 및 원근 투영 매핑
 먼저 평면과 구체를 그리는 간단한 장면을 만들어 보겠습니다.
 양쪽 모두 간단한 8x8 체커 보드 텍스처를 사용할 겁니다.
 
-Shader는 다양한 행렬이 분리되어 있으므로 JavaScript에서 함께 곱할 필요가 없다는 걸 제외하면 [텍스처에 대한 글](webgl-3d-textures.html)의 shader와 유사합니다.
+셰이더는 다양한 행렬이 분리되어 있으므로 JavaScript에서 함께 곱할 필요가 없다는 걸 제외하면 [텍스처에 대한 글](webgl-3d-textures.html)의 셰이더와 유사합니다.
 
 ```glsl
 // vertex shader
@@ -69,7 +69,7 @@ void main() {
 
 ```js
 // GLSL program 설정
-// shader 컴파일, program 연결, location 탐색
+// 셰이더 컴파일, program 연결, location 탐색
 const textureProgramInfo = webglUtils.createProgramInfo(gl, ['vertex-shader-3d', 'fragment-shader-3d']);
 
 const sphereBufferInfo = primitives.createSphereBufferInfo(
@@ -407,8 +407,8 @@ function drawScene(projectionMatrix, cameraMatrix) {
 텍스처가 들어있는 공간을 보기 힘들 수도 있을 것 같습니다.
 시각화를 돕기 위해 wireframe cube를 추가해봅시다.
 
-먼저 별도의 shader set이 필요합니다.
-이 shader는 텍스처 없이, 단색만 그릴 수 있습니다.
+먼저 별도의 셰이더 세트가 필요합니다.
+이 셰이더는 텍스처 없이, 단색만 그릴 수 있습니다.
 
 ```html
 <script id="color-vertex-shader" type="x-shader/x-vertex">
@@ -436,7 +436,7 @@ void main() {
 </script>
 ```
 
-그런 다음 이 shader도 컴파일하고 연결해야 합니다.
+그런 다음 이 셰이더도 컴파일하고 연결해야 합니다.
 
 ```js
 // GLSL program 설정
@@ -699,13 +699,13 @@ const textureProjectionMatrix = settings.perspective
 
 또 하나는 decal입니다.
 Decal은 표면에 페인트 얼룩이나 폭발 흔적을 붙이는 방법입니다.
-일반적으로 decal은 위와 같은 shader를 통해 작동하지 않습니다.
+일반적으로 decal은 위와 같은 셰이더를 통해 작동하지 않습니다.
 대신에 decal을 적용하려는 모델의 geometry를 검토하는 함수를 작성하는데요.
-JavaScript의 shader 예제에 있는 `inRange` 확인과 동일하게, 각 삼각형에 대해 decal이 적용될 영역의 내부에 있는지 확인합니다.
+JavaScript의 셰이더 예제에 있는 `inRange` 확인과 동일하게, 각 삼각형에 대해 decal이 적용될 영역의 내부에 있는지 확인합니다.
 범위 내에 있는 각 삼각형에 대해 투영된 텍스처 좌표를 사용하여 새로운 geometry에 추가합니다.
 그런 다음 해당 decal을 그려야 하는 목록에 추가하면 되죠.
 
-Geometry를 생성은 적절한 방법이며, 그렇지 않으면 2개, 3개, 4개의 다른 shader가 필요하고 너무 복잡해져서 GPU shader texture limit에 도달하게 됩니다.
+Geometry를 생성은 적절한 방법이며, 그렇지 않으면 2개, 3개, 4개의 다른 셰이더가 필요하고 너무 복잡해져서 GPU 셰이더 텍스처 제한에 도달하게 됩니다.
 
 또 다른 것은 현실 세계의 [투영 매핑](https://en.wikipedia.org/wiki/Projection_mapping)을 시뮬레이션하는 겁니다.
 영상을 투사할 3D 모델을 만든 다음 영상을 텍스처로 사용하는 것을 제외하고는 위와 같은 코드를 사용하여 투사합니다.

@@ -8,8 +8,8 @@ TOC: 이미지 처리 심화
 
 이미지 처리에 대해 다음으로 가장 궁금한 점은 어떻게 여러 효과를 적용할까요?
 
-음, 즉석으로 shader를 생성할 수 있긴 합니다.
-사용자가 쓰고자 하는 효과를 선택하는 UI를 제공한 다음 모든 효과를 수행하는 shader를 생성하는 겁니다.
+음, 즉석으로 셰이더를 생성할 수 있긴 합니다.
+사용자가 쓰고자 하는 효과를 선택하는 UI를 제공한 다음 모든 효과를 수행하는 셰이더를 생성하는 겁니다.
 항상 가능한 건 아니지만 이 기술은 종종 [실기간 그래픽 효과](https://www.youtube.com/watch?v=cQUn0Zeh-0Q)를 만드는 데 사용됩니다.
 
 더 유연한 방법은 텍스처 2개를 더 사용하고, 각 텍스처를 차례대로 렌더링하여, 주고 받으면서 매번 다음 효과를 적용하는 겁니다.
@@ -152,7 +152,7 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
     // 이걸 렌더링할 framebuffer로 만듭니다.
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
-    // Framebuffer의 해상도를 shader에 알려줍니다.
+    // Framebuffer의 해상도를 셰이더에 알려줍니다.
     gl.uniform2f(resolutionLocation, width, height);
 
     // WebGL에 framebuffer에 필요한 viewport 설정을 알려줍니다.
@@ -186,7 +186,7 @@ WebGL은 [clip space](webgl-fundamentals.html)에서 다시 픽셀로 변환해�
 이건 framebuffer에 렌더링할 때는 필요가 없는데요.
 Framebuffer는 표시되지 않기 때문에, 어느 부분이 상단 혹은 하단인지는 관계가 없습니다.
 중요한 건 framebuffer에서 픽셀 0,0이 우리가 계산한 0,0에 해당한다는 겁니다.
-이걸 해결하기 위해 shader에 입력 하나를 더 추가해서 뒤집을지 말지 설정 가능하도록 만들었습니다.
+이걸 해결하기 위해 셰이더에 입력 하나를 더 추가해서 뒤집을지 말지 설정 가능하도록 만들었습니다.
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">

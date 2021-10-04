@@ -247,7 +247,7 @@ function setNormals(gl) {
 +gl.vertexAttribPointer(normalLocation, size, type, normalize, stride, offset)
 ```
 
-이제 shader가 이걸 사용하도록 만들어야 합니다.
+이제 셰이더가 이걸 사용하도록 만들어야 합니다.
 
 먼저 vertex shader를 통해 fragment shader로 normal을 전달합니다.
 
@@ -410,7 +410,7 @@ Scale이 극단적일 때 왼쪽의 법선(world)이 구의 표면에 수직으�
 애매한 문제이기 때문에 어느 것이 맞다고 말하기는 힘들지만, 다른 시각화로 비교해봤을 때 worldInverseTranspose를 사용하는 것이 맞다는 건 분명합니다.
 
 예제에서 이를 구현하기 위해 이렇게 코드를 수정해봅시다.
-먼저 shader를 업데이트할 겁니다.
+먼저 셰이더를 업데이트할 겁니다.
 기술적으로는 `u_world`의 값만 업데이트할 수 있지만 혼란스러울 수 있기 때문에 실제 이름으로 바꿔주는 게 가장 좋습니다.
 
 ```
@@ -480,7 +480,7 @@ var m4 = {
 
 <div class="webgl_bottombar">
 <h3>mat3(u_worldInverseTranspose) * a_normal 대안</h3>
-<p>위 shader에는 이런 줄이 있습니다.</p>
+<p>위 셰이더에는 이런 줄이 있습니다.</p>
 <pre class="prettyprint">
 v_normal = mat3(u_worldInverseTranspose) * a_normal;
 </pre>

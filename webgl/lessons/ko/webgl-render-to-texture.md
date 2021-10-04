@@ -55,7 +55,7 @@ TOC: 텍스처 렌더링
 Attachment는 텍스처나 renderbuffer입니다.
 이전에 텍스처에 대해 살펴봤는데요.
 Renderbuffer는 텍스처와 매우 유사하지만 텍스처가 지원하지 않는 format과 option을 지원합니다.
-또한 텍스처와 달리 shader에 대한 입력으로 renderbuffer를 직접 사용할 수 없습니다.
+또한 텍스처와 달리 셰이더에 대한 입력으로 renderbuffer를 직접 사용할 수 없습니다.
 
 Framebuffer를 생성하고 텍스처에 첨부해봅시다.
 
@@ -78,7 +78,7 @@ Framebuffer이 바인딩된 상태에서 `gl.clear`, `gl.drawArrays`, `gl.drawEl
 
 ```
 function drawCube(aspect) {
-  // program(shader 쌍) 사용 지시
+  // program(셰이더 쌍) 사용 지시
   gl.useProgram(program);
 
   // position attribute 활성화
@@ -135,7 +135,7 @@ function drawCube(aspect) {
   // 행렬 설정
   gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-  // u_texture에 대해 texture unit 0을 사용하도록 shader에 지시
+  // u_texture에 대해 texture unit 0을 사용하도록 셰이더에 지시
   gl.uniform1i(textureLocation, 0);
 
   // Geometry 그리기

@@ -10,7 +10,7 @@ WebGL은 *instanced drawing*이라는 기능을 가지고 있습니다.
 
 먼저 동일한 항목의 여러 instance를 그리는 예제부터 만들어 봅시다.
 
-[Orthographic projection](webgl-3d-orthographic.html)에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 shader로 시작합니다.
+[Orthographic projection](webgl-3d-orthographic.html)에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 셰이더로 시작합니다.
 
 ```html
 <!-- vertex shader -->
@@ -146,7 +146,7 @@ requestAnimationFrame(render);
 {{{example url="../webgl-instanced-drawing-not-instanced.html"}}}
 
 `gl.uniform4v`, `gl.uniformMatrix4fv`, `gl.drawArrays`를 각각 5번 호출하여 총 15번의 WebGL 호출을 가지는데요.
-Shader가 더 복잡하다면, [스포트라이트](webgl-3d-lighting-spot.html)의 shader처럼, 6번의 `gl.uniformXXX` 호출과 한 번의 `gl.drawArrays` 호출로, 객체당 최소 7번의 호출을 가집니다.
+셰이더가 더 복잡하다면, [스포트라이트](webgl-3d-lighting-spot.html)의 셰이더처럼, 6번의 `gl.uniformXXX` 호출과 한 번의 `gl.drawArrays` 호출로, 객체당 최소 7번의 호출을 가집니다.
 400개의 객체를 그린다면 2800 WebGL 호출이 될 겁니다.
 
 Instancing은 이러한 호출을 줄이는 방법입니다.
@@ -174,7 +174,7 @@ if (!gl) {
 +}
 ```
 
-다음은 `matrix`와 `color`에 대해 uniform 대신 attribute를 사용하도록 shader를 수정할 겁니다.
+다음은 `matrix`와 `color`에 대해 uniform 대신 attribute를 사용하도록 셰이더를 수정할 겁니다.
 
 ```html
 <!-- vertex shader -->

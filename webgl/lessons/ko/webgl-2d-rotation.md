@@ -31,7 +31,7 @@ TOC: 2D Rotation
 
 단위원의 어느 지점에서 X와 Y값을 가져와서 [이전 샘플](webgl-2d-translation.html)의 geometry에 곱할 겁니다.
 
-다음은 shader 변경 사항입니다.
+다음은 셰이더 변경 사항입니다.
 
     <script id="vertex-shader-2d" type="x-shader/x-vertex">
     attribute vec2 a_position;

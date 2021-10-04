@@ -9,7 +9,7 @@ TOC: 점 조명
 마지막 글에서 우리는 같은 방향에서 빛이 균일하게 들어오는 방향성 조명을 살펴 봤는데요.
 렌더링 전에 해당 방향을 설정했었습니다.
 
-조명의 방향을 설정하는 대신 3D 공간의 한 점을 선택하고 shader에서 모델 표면의 임의의 지점에서 방향을 계산하면 어떨까요?
+조명의 방향을 설정하는 대신 3D 공간의 한 점을 선택하고 셰이더에서 모델 표면의 임의의 지점에서 방향을 계산하면 어떨까요?
 
 {{{diagram url="resources/point-lighting.html" width="500" height="400" className="noborder" }}}
 
@@ -250,7 +250,7 @@ surface -> light 벡터는 단위 벡터가 아니기 때문에 fragment shader�
 빨간 선이 그래프 위쪽에 가까울수록 반사광이 추가되어 더 밝아집니다.
 반대로 `power`를 높이면 밝아지는 범위가 오른쪽으로 축소되죠.
 
-이걸 `shininess`라고 명명하고 shader에 추가합시다.
+이걸 `shininess`라고 명명하고 셰이더에 추가합시다.
 
     uniform vec4 u_color;
     +uniform float u_shininess;

@@ -57,7 +57,7 @@ WebGL은 브라우저에서 실행되기 때문에 Canvas 2D API를 활용하여
 `createPlaneBufferInfo`는 xz plane에 평면을 생성하는데요.
 행렬을 전달하여 회전시키고 xy plane unit quad를 제공합니다.
 
-다음으로 2개의 shader를 생성합니다.
+다음으로 2개의 셰이더를 생성합니다.
 
     // GLSL program 설정
     var fProgramInfo = createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
@@ -387,7 +387,7 @@ Current program과 attribute의 설정을 루프 외부로 옮겼는데, 동일�
 흰색으로 텍스트를 렌더링한다면 더 유용할 겁니다.
 그러면 텍스트에 색상을 곱하여 원하는 색상으로 만들 수 있습니다.
 
-먼저 색상으로 곱하기 위해 text shader를 변경할 겁니다.
+먼저 색상으로 곱하기 위해 텍스트 셰이더를 변경할 겁니다.
 
     varying vec2 v_texcoord;
 
@@ -470,7 +470,7 @@ HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, �
 이는 작동하지만 작은 텍스트가 잘 렌더링되지 않고 큰 텍스트는 삼각형이 보이는 문제가 있습니다.
 </li>
 <li>
-또 하나는 <a href="https://www.google.com/search?q=loop+blinn+curve+rendering">곡선을 렌더링하는 특별한 shader</a>를 사용하는 겁니다.
+또 하나는 <a href="https://www.google.com/search?q=loop+blinn+curve+rendering">곡선을 렌더링하는 특별한 셰이더</a>를 사용하는 겁니다.
 이는 굉장히 멋지지만 설명할 수 있는 것은 여기까지입니다.
 </li>
 </div>

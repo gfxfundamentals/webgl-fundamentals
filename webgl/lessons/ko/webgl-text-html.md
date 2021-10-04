@@ -170,7 +170,7 @@ HTML을 사용하면 이 모든 기능을 자유롭게 사용할 수 있습니�
 [Perspective projection](webgl-3d-perspective.html)을 다룰 때 GPU에 요청한 방법과 정확히 동일하게 수행합니다.
 
 위 예제를 통해 행렬을 사용하는 방법, 곱하는 방법, clip space로 전환하기 위해 projection matrix를 적용하는 방법을 배웠습니다.
-이 모든 것을 shader로 전달하고 local space의 정점에 곱하여 clip space로 전환합니다.
+이 모든 것을 셰이더로 전달하고 local space의 정점에 곱하여 clip space로 전환합니다.
 JavaScript에서도 이 모든 계산을 수행할 수 있는데요.
 Clip space(-1 ~ +1)를 pixel로 곱하고 이를 사용하여 div를 배치할 수 있습니다.
 

@@ -332,7 +332,7 @@ buffer와 attribute가 정리되셨기를 바랍니다.
 
 WebGL의 작동 방식을 이해하는 또 다른 방법으로 [대화형 상태 다이어그램](/webgl/lessons/resources/webgl-state-diagram.html)을 살펴보실 수 있습니다.
 
-다음은 [Shader 및 GLSL](webgl-shaders-and-glsl.html)을 살펴보겠습니다.
+다음은 [셰이더와 GLSL](webgl-shaders-and-glsl.html)을 살펴보겠습니다.
 
 <div class="webgl_bottombar">
 <h3>vertexAttribPointer에서 normalizeFlag는 뭔가요?</h3>

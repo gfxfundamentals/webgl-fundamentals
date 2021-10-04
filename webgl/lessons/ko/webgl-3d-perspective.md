@@ -104,7 +104,7 @@ void main() {
 
 WebGL은 vertex shader의 `gl_Position`에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.
 
-이는 shader를 변경하여 직접 나누는 대신, `gl_Position.w`에 `zToDivideBy`를 넣어서 쉽게 증명할 수 있습니다.
+이는 셰이더를 변경하여 직접 나누는 대신, `gl_Position.w`에 `zToDivideBy`를 넣어서 쉽게 증명할 수 있습니다.
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">

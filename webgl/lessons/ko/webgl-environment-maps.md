@@ -166,7 +166,7 @@ Cubemap은 6개의 면을 가져야 하며, 6개의 면은 모두 동일한 크�
 
 {{{diagram url="resources/environment-mapping.html" width="400" height="400" }}}
 
-이제 반사가 어떻게 작동하는지 알고, cubemap에서 값을 찾기 위해 사용할 수 있으므로, shader를 변경해봅시다.
+이제 반사가 어떻게 작동하는지 알고, cubemap에서 값을 찾기 위해 사용할 수 있으므로, 셰이더를 변경해봅시다.
 
 먼저 vertex shader에서 정점의 world position과 world oriented normal을 계산하고 이를 fragment shader에 varying으로 전달할 겁니다.
 이는 [스포트라이트에 대한 글](webgl-3d-lighting-spot.html)에서 했던 것과 유사합니다.
@@ -288,7 +288,7 @@ gl.uniformMatrix4fv(viewLocation, false, viewMatrix);
 gl.uniformMatrix4fv(worldLocation, false, worldMatrix);
 gl.uniform3fv(worldCameraPositionLocation, cameraPosition);
 
-// u_texture에 texture unit 0을 사용하도록 shader에 지시
+// u_texture에 texture unit 0을 사용하도록 셰이더에 지시
 gl.uniform1i(textureLocation, 0);
 ```
 

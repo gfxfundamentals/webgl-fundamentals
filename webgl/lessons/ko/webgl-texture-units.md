@@ -6,19 +6,19 @@ TOC: Texture Unit
 이 글은 WebGL에서 texture unit이 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
 attribute에 관한 [비슷한 글](webgl-attributes.html)이 있습니다.
 
-이 글을 읽기 전에 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL Shader 및 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)뿐 아니라 [WebGL 텍스처](webgl-3d-textures.html)도 읽어보시길 바랍니다.
+이 글을 읽기 전에 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL 셰이더와 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)뿐 아니라 [WebGL 텍스처](webgl-3d-textures.html)도 읽어보시길 바랍니다.
 
 ## Texture Unit
 
 WebGL에는 텍스처가 있습니다.
-텍스처는 대부분 shader에 전달할 수 있는 데이터의 2D 배열인데요.
-Shader에서 이렇게 *uniform sampler*를 선언하면
+텍스처는 대부분 셰이더에 전달할 수 있는 데이터의 2D 배열인데요.
+셰이더에서 이렇게 *uniform sampler*를 선언하면
 
 ```glsl
 uniform sampler2D someTexture;
 ```
 
-하지만 shader는 `someTexture`에 사용할 텍스처를 어떻게 아는 걸까요?
+하지만 셰이더는 `someTexture`에 사용할 텍스처를 어떻게 아는 걸까요?
 
 그게 texture unit이 관여하는 부분입니다.
 Texture unit은 텍스처에 대한 레퍼런스 **전역 배열**입니다.
@@ -58,7 +58,7 @@ gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 ```
 
-그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 texture unit을 shader에 알리는데
+그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 texture unit을 셰이더에 알리는데
 
 ```js
 gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);

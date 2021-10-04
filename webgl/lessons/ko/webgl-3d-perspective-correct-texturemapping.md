@@ -23,7 +23,7 @@ Vertex shader가 3번 호출되면 WebGL은 삼각형을 그립니다.
       // Attribute는 버퍼에서 데이터를 받음
       attribute vec4 a_position;
 
-      // 모든 shader는 main 함수를 가짐
+      // 모든 셰이더는 main 함수를 가짐
       void main() {
 
         // gl_Position은 vertex shader가 설정을 담당하는 특수 변수

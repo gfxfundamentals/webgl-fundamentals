@@ -11,7 +11,7 @@ WebGL program을 사용하려면 컴파일하고 연결해야 하는 shader prog
 이 입력들은 uniform과 attribute라 불리는데, 이들의 location을 찾는데 필요한 코드는 장황하고 지루할 수 있습니다.
 
 Shader program을 컴파일하고 연결하는 [전형적인 WebGL boilerplate 코드](webgl-boilerplate.html)가 있다고 가정합시다.
-주어진 shader set은 이렇습니다.
+주어진 셰이더 세트는 이렇습니다.
 
 Vertex shader:
 
@@ -400,9 +400,9 @@ objects.forEach(function(object) {
 일부 사람들은 가능한 한 단순하다고 생각하게 되는 걸 좋아합니다.
 
 Shader program의 attribute를 보고 컴포넌트 수를 알아내는 건 어떨까요?
-버퍼에서 3개의 컴포넌트(x, y, z)를 제공하는 게 일반적이지만 shader에서는 `vec4`를 사용하는데요.
+버퍼에서 3개의 컴포넌트(x, y, z)를 제공하는 게 일반적이지만 셰이더에서는 `vec4`를 사용하는데요.
 WebGL은 attribute에 대해 자동으로 `w = 1`을 설정합니다.
-이는 사용자가 shader에 선언한 것이 제공한 컴포넌트 수와 일치하지 않을 수 있으므로 사용자의 의도를 쉽게 알 수 없음을 의미합니다.
+이는 사용자가 셰이더에 선언한 것이 제공한 컴포넌트 수와 일치하지 않을 수 있으므로 사용자의 의도를 쉽게 알 수 없음을 의미합니다.
 
 더 많은 패턴을 찾아봅시다.
 
@@ -447,9 +447,9 @@ var uniformSetters = webglUtils.createUniformSetters(program);
 uniformSetters.u_ambient([1, 0, 0, 1]); // 주변 색상을 빨간색으로 설정
 </pre>
 <p>
-이게 안 좋은 이유는 GLSL로 작업할 때 가끔씩 shader를 수정하고 종종 디버그할 수 있기 때문입니다.
+이게 안 좋은 이유는 GLSL로 작업할 때 가끔씩 셰이더를 수정하고 종종 디버그할 수 있기 때문입니다.
 프로그램의 화면에서 아무것도 보이지 않는다고 가정해봅시다.
-아무것도 나타나지 않을 때 먼저 해야할 것들 중 하나는 shader를 단순화하는 겁니다.
+아무것도 나타나지 않을 때 먼저 해야할 것들 중 하나는 셰이더를 단순화하는 겁니다.
 예를 들어 fragment shader를 가능한 가장 간단한 형태로 변경할 수 있습니다.
 </p>
 <pre class="prettyprint showlinemods">

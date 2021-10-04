@@ -121,7 +121,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
   WebGL1에서 vertex shader에 대한 값이 **0**임을 주의해야 합니다.
   참고로 너무 낙담하지 않아도 괜찮은데요.
   [모든 장치의 약 97%가 최소 4개를 지원](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)합니다.
-  그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 shader로 fallback할 수 있는지 확인하는 게 좋습니다.
+  그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 셰이더로 fallback할 수 있는지 확인하는 게 좋습니다.
 
 다른 제한도 있는데요.
 이를 조회하기 위해 다음의 값으로 `gl.getParameter`를 호출합니다.
@@ -235,7 +235,7 @@ void main() {
 
 1. 항상 location을 탐색
 2. `gl.linkProgram` 호출 전에 `gl.bindAttribLocation`을 호출하여 location 할당
-3. WebGL2 한정, 다음과 같이 shader에서 location을 설정
+3. WebGL2 한정, 다음과 같이 셰이더에서 location을 설정
 
    ```glsl
    #version 300 es
@@ -252,9 +252,9 @@ void main() {
 예를 들어 `pow(x, y)`는 `x < 0`일 경우 undefined입니다.
 [스포트라이트](webgl-3d-lighting-spot.html)에 대한 글의 하단에 더 긴 목록이 있습니다
 
-## Shader 정밀도 문제
+## 셰이더 정밀도 문제
 
-2020년 여기서 가장 큰 문제는 shader에서 `mediump`나 `lowp`를 사용하면 데스크탑의 GPU는 `highp`를 사용하지만 모바일은 `mediump`나 `lowp`가 되는 것이므로 데스크탑으로 개발할 때는 어떤 문제도 알아차리지 못 할 겁니다.
+2020년 여기서 가장 큰 문제는 셰이더에서 `mediump`나 `lowp`를 사용하면 데스크탑의 GPU는 `highp`를 사용하지만 모바일은 `mediump`나 `lowp`가 되는 것이므로 데스크탑으로 개발할 때는 어떤 문제도 알아차리지 못 할 겁니다.
 
 자세한 내용은 [이 글](webgl-precision-issues.html)을 봐주세요.
 
@@ -288,7 +288,7 @@ Scissor는 항상 pixel clipping을 하므로 scissor 테스트를 켜고, 그�
 * 사파리가 일반적인 attribute 없이 쓰는 경우를 처리하지 않는 [버그](https://bugs.webkit.org/show_bug.cgi?id=197592) (1년 전) 
 
 * <a id="safari"></a>
-  또한 사파리에는 WebGL2를 활성화하는 옵션이 있지만 `#version 300 es` shader를 허용하는 게 전부입니다.
+  또한 사파리에는 WebGL2를 활성화하는 옵션이 있지만 `#version 300 es` 셰이더를 허용하는 게 전부입니다.
   다른 80개 이상의 모든 WebGL2 api 함수는 적어도 2020년 7월 기준 구현되어 있지 않습니다.
   [Source](https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/canvas/WebGL2RenderingContext.cpp)를 보고 "not implemented"를 검색해보세요.
 

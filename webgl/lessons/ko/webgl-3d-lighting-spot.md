@@ -129,8 +129,8 @@ void main() {
 Uniform을 설정할 때 음수 방향을 전달할 수 있는데요.
 하지만 uniform을 `u_reverseLightDirection`이나 `u_negativeLightDirection` 대신 `u_lightDirection`이라 부르는 것이 덜 혼란스러울 것 같습니다.
 
-아마 개인 취향일 또 다른 것은 가능하면 shader에서 조건문 쓰고 싶지 않습니다.
-그 이유는 사실 shader에는 조건문이 없었기 때문입니다.
+아마 개인 취향일 또 다른 것은 가능하면 셰이더에서 조건문 쓰고 싶지 않습니다.
+그 이유는 사실 셰이더에는 조건문이 없었기 때문입니다.
 만약 조건문을 추가하면 코드에 실제 조건문이 없도록 만들기 위해 여기 저기에 0과 1로 곱하는 코드를 확장합니다.
 즉 조건문을 추가하면 조합의 확장으로 코드가 터질 수 있습니다.
 지금도 그런지는 모르겠지만 몇 가지 기술을 보여주기 위해 조건문을 제거합시다.
@@ -197,7 +197,7 @@ Inner limit과 outer limit 사이에 있다면 1.0과 0.0사이로 선형 보간
 
 한 가지 주의해야 할 것은 `u_innerLimit`과 `u_outerLimit`이 같으면 `limitRange`는 0.0이 됩니다.
 우리는 `limitRange`로 나누고 있고 0으로 나누는 것은 잘못되었거나 정의되지 않았습니다.
-여기서 더 이상 shader에 할 일은 없고 JavaScript에서 `u_innerLimit`가 `u_outerLimit`와 같지 않다는 걸 확인해야 합니다.
+여기서 더 이상 셰이더에 할 일은 없고 JavaScript에서 `u_innerLimit`가 `u_outerLimit`와 같지 않다는 걸 확인해야 합니다.
 (참고: 예제 코드는 이를 수행하지 않습니다)
 
 GLSL에는 이를 약간 단순화하기 위해 사용할 수 있는 함수도 있는데요.
@@ -239,7 +239,7 @@ GLSL의 여러 함수들이 어떤 값들에 대해 정의되지 않았습니다
 위에서 다른 예시인 <code>smoothstep</code>을 살펴봤습니다.
 </p>
 <p>
-이를 주의하지 않으면 shader가 컴퓨터에 따라 다른 결과를 얻을 수 있습니다.
+이를 주의하지 않으면 셰이더가 컴퓨터에 따라 다른 결과를 얻을 수 있습니다.
 <a href="https://www.khronos.org/files/opengles_shading_language.pdf">명세서의 섹션 8</a>에는 모든 내장 함수의 기능과 더불어 정의되지 않은 동작이 있는지 나열되어 있습니다.
 </p>
 <p>

@@ -7,14 +7,14 @@ TOC: 참고 자료
 
 ## 튜토리얼 및 강의
 
-* [초심자를 위한 3D 게임 shader](https://lettier.github.io/3d-game-shaders-for-beginners/)에는 많은 그래픽 기술에 대한 훌륭한 설명이 있습니다.
+* [초심자를 위한 3D 게임 셰이더](https://lettier.github.io/3d-game-shaders-for-beginners/)에는 많은 그래픽 기술에 대한 훌륭한 설명이 있습니다.
   OpenGL 기반이지만 설명은 일러스트로 잘 되어 있어서 WebGL에 적용할 수 있습니다.
 
 * [Learn OpenGL](https://learnopengl.com/): 최신 OpenGL 강의  
   이건 유용할 수도 있고 아닐 수도 있는데요.
   API가 비슷하긴 하지만 OpenGL은 WebGL이 아닙니다.
   한 가지 OpenGL은 C 기반의 라이브러리입니다.
-  또 다른 문제로 OpenGL은 WebGL보다 더 많은 기능들을 가지고 있고 shader 언어는 많은 차이점이 있습니다.
+  또 다른 문제로 OpenGL은 WebGL보다 더 많은 기능들을 가지고 있고 셰이더 언어는 많은 차이점이 있습니다.
   그럼에도 불구하고, 많은 아이디어와 보여주는 기술들은 OpenGL과 마찬가지로 WebGL에서 유용합니다.
 
 ## Helper / Extension
@@ -43,13 +43,13 @@ TOC: 참고 자료
 
 * [OpenGL ES 2.0](https://www.khronos.org/registry/OpenGL/specs/es/2.0/es_full_spec_2.0.pdf): WebGL의 기반이 되는 명세서
 
-* [GLSL ES 1.0](https://www.khronos.org/files/opengles_shading_language.pdf): WebGL용 shader 언어 명세서
+* [GLSL ES 1.0](https://www.khronos.org/files/opengles_shading_language.pdf): WebGL용 셰이더 언어 명세서
 
 ## Fun
 
 * [Shadertoy.com](https://shadertoy.com): 극한의 제약 조건에서 생성된 놀라운 fragment shader
 
-  주의: shadertoy.com에 있는 shader는 일반적으로 production WebGL 앱에서 사용되는 shader 유형이 아닙니다.
+  주의: shadertoy.com에 있는 셰이더는 일반적으로 production WebGL 앱에서 사용되는 셰이더 유형이 아닙니다.
   그럼에도 불구하고 예제에서 배울 수 있는 많은 기술들이 있습니다.
 
 * [glslsandbox.com](https://glslsandbox.com): original fragment shader playground

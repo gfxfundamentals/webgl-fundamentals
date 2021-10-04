@@ -17,7 +17,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 * [WebGL에서 두꺼운 선을 그리는 방법](https://mattdesl.svbtle.com/drawing-lines-is-hard)
 * [기본 행렬 변환으로 FPS같은 카메라 움직임](webgl-qna-fps-like-camera-movement-with-basic-matrix-transformations.html)
 * [WebGL에서 텍스처와 함께 색상도 사용할 수 있나요?](webgl-qna-how-to-use-texture--and-color-also-in-webgl-.html)
-* [coloring과 texturing를 지원하기 위한 GLSL shader](webgl-qna-glsl-shader-to-support-coloring-and-texturing.html)
+* [coloring과 texturing를 지원하기 위한 GLSL 셰이더](webgl-qna-glsl-shader-to-support-coloring-and-texturing.html)
 
 ---
 

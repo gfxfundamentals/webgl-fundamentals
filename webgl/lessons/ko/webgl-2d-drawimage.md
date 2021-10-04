@@ -23,7 +23,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
 정점을 GPU로 보내는 것은 일반적으로 느린 작업입니다.
 
 이게 WebGL의 모든 요점이 작용하는 곳입니다.
-창의적으로 shader를 작성한 다음 해당 shader를 창의적으로 사용하여 문제를 해결하는 것이죠.
+창의적으로 셰이더를 작성한 다음 해당 셰이더를 창의적으로 사용하여 문제를 해결하는 것이죠.
 
 첫 번째 버전부터 시작해봅시다.
 
@@ -91,7 +91,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 행렬 설정
       gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-      // texture unit 0에서 텍스처를 가져오도록 shader에 지시
+      // texture unit 0에서 텍스처를 가져오도록 셰이더에 지시
       gl.uniform1i(textureLocation, 0);
 
       // 사각형 그리기 (삼각형 2개, 정점 6개)
@@ -237,7 +237,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 행렬 설정
       gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-      // texture unit 0에서 텍스처를 가져오도록 shader에 지시
+      // texture unit 0에서 텍스처를 가져오도록 셰이더에 지시
       gl.uniform1i(textureLocation, 0);
 
       // 사각형 그리기 (삼각형 2개, 정점 6개)
@@ -335,7 +335,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
     +  // 텍스처 행렬 설정
     +  gl.uniformMatrix4fv(textureMatrixLocation, false, texMatrix);
 
-      // texture unit 0에서 텍스처를 가져오도록 shader에 지시
+      // texture unit 0에서 텍스처를 가져오도록 셰이더에 지시
       gl.uniform1i(textureLocation, 0);
 
       // 사각형 그리기 (삼각형 2개, 정점 6개)
@@ -386,8 +386,8 @@ Canvas 2D API에서 최선의 경우 에러거나 최악의 경우 정의되지 
 한 가지 문제가 있는데 회전 때문에 가끔씩 텍스처 가장자리의 바깥쪽을 볼 수 있습니다.
 `CLAMP_TO_EDGE`로 설정되어 있으므로 가장자리가 반복되는데요.
 
-Shader 내에서 0부터 1의 범위를 벗어난 픽셀을 버리면 해결할 수 있습니다.
-`discard`는 픽셀을 쓰지 않고 즉시 shader를 종료합니다.
+셰이더 내에서 0부터 1의 범위를 벗어난 픽셀을 버리면 해결할 수 있습니다.
+`discard`는 픽셀을 쓰지 않고 즉시 셰이더를 종료합니다.
 
     precision mediump float;
 
@@ -431,7 +431,7 @@ Shader 내에서 0부터 1의 범위를 벗어난 픽셀을 버리면 해결할 
 {{{example url="../webgl-2d-drawimage-07.html" }}}
 
 한계란 없습니다.
-모든 것은 shader를 얼마나 창의적으로 사용하느냐에 달려있습니다.
+모든 것은 셰이더를 얼마나 창의적으로 사용하느냐에 달려있습니다.
 
 다음에는 [Canvas 2D의 행렬 스택을 구현](webgl-2d-matrix-stack.html)하겠습니다.
 

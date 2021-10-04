@@ -21,10 +21,10 @@ WebGL은 함수가 출력하는 위치를 기반으로 [점, 선, 삼각형](web
 Fragment shader의 역할은 현재 그려지는 primitive의 각 픽셀에 대한 색상을 계산하는 겁니다.
 
 대부분의 WebGL API는 이러한 함수 쌍을 실행하기 위한 [상태 설정](resources/webgl-state-diagram.html)에 관한 것입니다.
-원하는 걸 그리기 위해서는 여러 상태를 설정하고 GPU에서 shader를 실행하는 `gl.drawArrays`나 `gl.drawElements`를 호출해서 함수 쌍을 실행해야 합니다.
+원하는 걸 그리기 위해서는 여러 상태를 설정하고 GPU에서 셰이더를 실행하는 `gl.drawArrays`나 `gl.drawElements`를 호출해서 함수 쌍을 실행해야 합니다.
 
 이런 함수가 접근하기 원하는 모든 데이터는 GPU에 제공되어야 하는데요.
-Shader가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.
+셰이더가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.
 
 
 1. Attribute & Buffer
@@ -58,7 +58,7 @@ Shader가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.
 
 WebGL은 clip space의 좌표와 색상, 오직 2가지만을 다루는데요.
 프로그래머로서 WebGL을 사용하는 여러분의 역할은 이 2가지를 작성하는 겁니다.
-이를 위해 2개의 "shader"를 제공해야 하는데요.
+이를 위해 2개의 "셰이더"를 제공해야 하는데요.
 Clip space 좌표를 제공하는 vertex shader, 색상을 제공하는 fragment shader입니다.
 
 Clip space 좌표는 캔버스 크기에 상관없이 항상 -1에서 +1까지입니다.
@@ -72,7 +72,7 @@ Vertex shader부터 시작해봅시다.
     // Attribute는 버퍼에서 데이터를 받음
     attribute vec4 a_position;
 
-    // 모든 shader는 main 함수를 가짐
+    // 모든 셰이더는 main 함수를 가짐
     void main() {
 
       // gl_Position은 vertex shader가 설정을 담당하는 특수 변수
@@ -120,7 +120,7 @@ Vertex shader부터 시작해봅시다.
 위에서 우리는 `gl_FragColor`를 빨강 1, 초록 0, 파랑 0.5, 투명도 1인 `1, 0, 0.5, 1`로 설정했는데요.
 WebGL에서 색상은 0에서 1까지입니다.
 
-이제 두 shader 함수를 작성했으니 WebGL을 시작해봅시다.
+이제 두 셰이더 함수를 작성했으니 WebGL을 시작해봅시다.
 
 먼저 HTML canvas 요소가 필요합니다.
 
@@ -138,7 +138,7 @@ WebGL에서 색상은 0에서 1까지입니다.
        ...
      }
 
-이제 shader를 컴파일해서 GPU에 할당해야 하는데 먼저 문자열로 가져와야 합니다.
+이제 셰이더를 컴파일해서 GPU에 할당해야 하는데 먼저 문자열로 가져와야 합니다.
 일반적으로 javascript에서 문자열을 만드는 어떤 방법으로도 GLSL 문자열을 만들 수 있는데요.
 문자열을 연결할 수도, AJAX를 이용해 다운로드할 수도, 여러 줄의 템플릿 문자열을 사용할 수도 있죠.
 혹은 이 경우처럼 javascript type이 아닌 script 태그 안에 넣을 수도 있습니다.
@@ -148,7 +148,7 @@ WebGL에서 색상은 0에서 1까지입니다.
       // attribute는 buffer에서 데이터를 받음
       attribute vec4 a_position;
 
-      // 모든 shader는 main 함수를 가짐
+      // 모든 셰이더는 main 함수를 가짐
       void main() {
 
         // gl_Position은 vertex shader가 설정을 담당하는 특수 변수
@@ -170,10 +170,10 @@ WebGL에서 색상은 0에서 1까지입니다.
 
     </script>
 
-사실 대부분의 3D 엔진은 다양한 종류의 template, concatenation 등을 사용하여 즉시 GLSL shader를 생성하는데요.
+사실 대부분의 3D 엔진은 다양한 종류의 template, concatenation 등을 사용하여 즉시 GLSL 셰이더를 생성하는데요.
 이 사이트에 있는 예제들은 runtime에 GLSL을 생성해야 할 만큼 복잡하지 않습니다.
 
-다음은 shader를 만들고, GLSL을 업로드하고, shader를 컴파일할 함수가 필요합니다.
+다음은 셰이더를 만들고, GLSL을 업로드하고, 셰이더를 컴파일할 함수가 필요합니다.
 참고로 함수의 이름을 보면 어떤 일을 하는지 명확하기 때문에 주석을 작성하지 않았습니다.
 
     function createShader(gl, type, source) {
@@ -190,7 +190,7 @@ WebGL에서 색상은 0에서 1까지입니다.
       gl.deleteShader(shader);
     }
 
-이제 두 shader를 만드는 함수를 호출할 수 있습니다.
+이제 두 셰이더를 만드는 함수를 호출할 수 있습니다.
 
     var vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
     var fragmentShaderSource = document.querySelector("#fragment-shader-2d").text;
@@ -198,7 +198,7 @@ WebGL에서 색상은 0에서 1까지입니다.
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 
-다음으로 두 shader를 *program*으로 *link*해야 합니다.
+다음으로 두 셰이더를 *program*으로 *link*해야 합니다.
 
     function createProgram(gl, vertexShader, fragmentShader) {
       var program = gl.createProgram();
@@ -299,10 +299,10 @@ CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 �
 
 실행할 shader program을 WebGL에 알려줍니다.
 
-    // program(shader 쌍) 사용 지시
+    // program(셰이더 쌍) 사용 지시
     gl.useProgram(program);
 
-다음으로 위에서 설정한 버퍼에서 데이터를 가져와 shader의 attribute에 제공하는 방법을 WebGL에 알려줘야 하는데요.
+다음으로 위에서 설정한 버퍼에서 데이터를 가져와 셰이더의 attribute에 제공하는 방법을 WebGL에 알려줘야 하는데요.
 우선 attribute를 활성화해야 합니다.
 
     gl.enableVertexAttribArray(positionAttributeLocation);
@@ -381,7 +381,7 @@ Fragment shader는 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
 
 위 경우 vertex shader는 데이터를 직접 전달하는 것 외에는 아무것도 하지 않는 걸 볼 수 있는데요.
 위치 데이터가 이미 clip space에 있으므로 할 일이 없습니다.
-*WebGL은 rasterization API에 불과하기 때문에 3D를 원한다면 3D를 clip space로 변환하는 shader를 작성해야 합니다.*
+*WebGL은 rasterization API에 불과하기 때문에 3D를 원한다면 3D를 clip space로 변환하는 셰이더를 작성해야 합니다.*
 
 아마 삼각형이 중앙에서 시작해서 오른쪽 상단으로 가는 이유가 궁금하실텐데요.
 `x`의 clip space는 -1부터 +1까지 입니다.
@@ -390,7 +390,7 @@ Fragment shader는 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
 상단에 있는 이유는 clip space에서 -1은 하단에 있고 +1은 상단에 있기 때문입니다.
 즉 0이 중앙이고 양수가 중앙보다 위에 있다는 걸 의미합니다.
 
-2D의 경우 clip space보다는 픽셀로 작업하는 것이 좋으니, 위치를 픽셀로 제공하고 clip space로 변환할 수 있도록 shader를 바꿔봅시다.
+2D의 경우 clip space보다는 픽셀로 작업하는 것이 좋으니, 위치를 픽셀로 제공하고 clip space로 변환할 수 있도록 셰이더를 바꿔봅시다.
 여기 새로운 vertex shader입니다.
 
     <script id="vertex-shader-2d" type="notjs">
@@ -425,7 +425,7 @@ Fragment shader는 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
     var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
 
 나머지는 주석을 보면 명료합니다.
-`u_resolution`을 캔버스의 해상도로 설정함으로써, shader는 픽셀 좌표로 제공한 `positionBuffer`에 넣은 위치를 가져와 clip space로 변환합니다.
+`u_resolution`을 캔버스의 해상도로 설정함으로써, 셰이더는 픽셀 좌표로 제공한 `positionBuffer`에 넣은 위치를 가져와 clip space로 변환합니다.
 
 이제 위치 값을 clip space에서 픽셀로 바꿀 수 있습니다.
 이번에는 각각 3개의 점으로 이루어진 삼각형 두 개로 만드는 사각형을 그려볼 겁니다.
@@ -459,7 +459,7 @@ Fragment shader는 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
     *var count = 6;
     gl.drawArrays(primitiveType, offset, count);
 
-참고: 이 예제와 앞으로 나오는 모든 예제들은 shader를 컴파일하고 연결하는 함수가 포함된 [`webgl-utils.js`](/webgl/resources/webgl-utils.js)를 사용합니다.
+참고: 이 예제와 앞으로 나오는 모든 예제들은 셰이더를 컴파일하고 연결하는 함수가 포함된 [`webgl-utils.js`](/webgl/resources/webgl-utils.js)를 사용합니다.
 [Boilerplate](webgl-boilerplate.html) 코드로 예제를 복잡하게 할 필요는 없을 것 같습니다.
 
 {{{example url="../webgl-2d-rectangle.html" }}}
@@ -555,7 +555,7 @@ Clip space에서 왼쪽 하단 모서리는 -1,-1이 되죠.
 WebGL이 사실은 아주 단순한 API였다고 보셨기를 바랍니다.
 네, 단순하다는 말은 아마 틀릴지도 모르지만 하는 일은 단순합니다.
 그저 사용자가 제공한 두 함수 vertex shader와 fragment shader를 실행시키고 점, 선, 삼각형을 그릴 뿐입니다.
-3D를 작업하면서 더 복잡해질 수 있지만, 그 복잡함은 프로그래머에 의해 더 복잡한 shader의 형태로 추가됩니다.
+3D를 작업하면서 더 복잡해질 수 있지만, 그 복잡함은 프로그래머에 의해 더 복잡한 셰이더의 형태로 추가됩니다.
 WebGL API 자체는 rasterization 엔진에 불과하며 개념적으로는 꽤 단순합니다.
 
 Attribute와 uniform 2개에 데이터를 제공하는 방법을 보여주는 예제를 다뤘는데요.
@@ -569,7 +569,7 @@ Attribute와 uniform 2개에 데이터를 제공하는 방법을 보여주는 �
 
 웹 개발이 처음이든 아니든 WebGL 개발 방법에 관한 몇 가지 tip을 보려면 [설정 및 설치](webgl-setup-and-installation.html)를 확인해주세요.
 
-WebGL을 100% 처음 배우고 GLSL이나 shader 혹은 GPU가 무엇인지 모르겠다면 [WebGL이 실제로 작동하는 원리 기초](webgl-how-it-works.html)를 확인해주세요.
+WebGL을 100% 처음 배우고 GLSL이나 셰이더 혹은 GPU가 무엇인지 모르겠다면 [WebGL이 실제로 작동하는 원리 기초](webgl-how-it-works.html)를 확인해주세요.
 WebGL 작동 방식을 이해하는 또 다른 방법으로 [대화형 상태 다이어그램](/webgl/lessons/resources/webgl-state-diagram.html)을 보실 수도 있습니다.
 
 여기있는 대부분의 예제에서 사용된 [boilerplate 코드](webgl-boilerplate.html)도 간략하게 읽어보세요.
@@ -588,7 +588,7 @@ type을 넣지 않거나 <code>type="javascript"</code> 또는 <code>type="text/
 즉 <code>type="notjs"</code>나 <code>type="foobar"</code>는 브라우저에서 아무런 의미가 없습니다.
 </p>
 <p>
-이는 shader를 수정하기 쉽게 만들어줍니다.
+이는 셰이더를 수정하기 쉽게 만들어줍니다.
 다른 대안으로는 다음과 같은 문자열 연결이 있습니다.
 </p>
 <pre class="prettyprint">
@@ -597,7 +597,7 @@ type을 넣지 않거나 <code>type="javascript"</code> 또는 <code>type="text/
     "  gl_FragColor = vec4(1,0,0,1);\n" +
     "}";
 </pre>
-<p>또는 ajax 요청으로 shader를 가져올 수 있지만 느리고 비동기적입니다.</p>
+<p>또는 ajax 요청으로 셰이더를 가져올 수 있지만 느리고 비동기적입니다.</p>
 <p>한 가지 더 현대적인 대안은 multiline template literal을 사용하는 겁니다.</p>
 <pre class="prettyprint">
   var shaderSource = `

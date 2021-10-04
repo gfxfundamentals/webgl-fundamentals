@@ -1,18 +1,18 @@
-Title: WebGL Shader 및 GLSL
-Description: Shader는 뭐고 GLSL은 뭘까?
-TOC: Shader 및 GLSL
+Title: WebGL 셰이더와 GLSL
+Description: 셰이더는 뭐고 GLSL은 뭘까?
+TOC: 셰이더와 GLSL
 
 
 이 글은 [WebGL 기초](webgl-fundamentals.html)에서 이어집니다.
 [WebGL 작동 원리](webgl-how-it-works.html)를 읽지 않았다면 먼저 읽어보는 게 좋습니다.
 
-Shader와 GLSL에 대해 언급했지만 실제로 구체적인 세부 사항은 다루지 않았는데요.
+셰이더와 GLSL에 대해 언급했지만 실제로 구체적인 세부 사항은 다루지 않았는데요.
 예제로 충분하면 좋겠지만 혹시 모르니 좀 더 명료하게 해봅시다.
 
-[작동 원리](webgl-how-it-works.html)에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 shader를 필요로 합니다.
+[작동 원리](webgl-how-it-works.html)에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 셰이더를 필요로 합니다.
 바로 *vertex shader*와 *fragment shader*죠.
-각각의 shader는 *함수*인데요.
-vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)으로 연결됩니다.
+각각의 셰이더는 *함수*인데요.
+Vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)으로 연결됩니다.
 일반적인 WebGL 앱은 많은 shader program을 가집니다.
 
 ## Vertex shader
@@ -24,7 +24,7 @@ Vertex shader의 역할은 clip space 좌표를 생성하는 겁니다.
       gl_Position = doMathToMakeClipspaceCoordinates
     }
 
-Shader는 정점마다 한 번씩 호출되는데요.
+셰이더는 정점마다 한 번씩 호출되는데요.
 호출될 때마다 특수 전역 변수, `gl_Position`을 어떤 clip space 좌표로 설정해야 합니다.
 
 Vertex shader는 데이터가 필요한데요.
@@ -65,7 +65,7 @@ Vertex shader는 데이터가 필요한데요.
 
     gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 
-[WebGL 기초](webgl-fundamentals.html)에서 우리는 shader에서 수식 없이 직접 데이터를 전달할 수 있다는 걸 봤습니다.
+[WebGL 기초](webgl-fundamentals.html)에서 우리는 셰이더에서 수식 없이 직접 데이터를 전달할 수 있다는 걸 봤습니다.
 
     attribute vec4 a_position;
 
@@ -79,7 +79,7 @@ Attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`�
 
 ### Uniform
 
-Shader uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지되며 shader에 전달되는 값입니다.
+셰이더 uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지되며 셰이더에 전달되는 값입니다.
 간단한 예로 위 vertex shader에 offset을 추가할 수 있습니다.
 
     attribute vec4 a_position;
@@ -139,7 +139,7 @@ uniform은 여러 type을 가질 수 있는데요.
 
 배열의 경우 배열의 모든 uniform을 한번에 설정할 수 있습니다.
 
-    // shader
+    // 셰이더
     uniform vec2 u_someVec2[3];
 
     // 초기화 시 javascript
@@ -200,11 +200,11 @@ Fragment shader는 데이터가 필요한데요.
 
 ### Fragment shader의 Uniform
 
-[Shader의 Uniform](#uniform)을 봐주세요.
+[셰이더의 Uniform](#uniform)을 봐주세요.
 
 ### Fragment shader의 텍스처
 
-Shader의 텍스처에서 값을 가져오면 `sampler2D` uniform을 생성하고 값을 추출하기 위해 GLSL 함수 `texture2D`를 사용합니다.
+셰이더의 텍스처에서 값을 가져오면 `sampler2D` uniform을 생성하고 값을 추출하기 위해 GLSL 함수 `texture2D`를 사용합니다.
 
     precision mediump float;
 
@@ -240,7 +240,7 @@ Shader의 텍스처에서 값을 가져오면 `sampler2D` uniform을 생성하�
     gl.activeTexture(gl.TEXTURE0 + unit);
     gl.bindTexture(gl.TEXTURE_2D, tex);
 
-텍스처를 바인딩한 unit을 shader에 알려줍니다.
+텍스처를 바인딩한 unit을 셰이더에 알려줍니다.
 
     gl.uniform1i(someSamplerLoc, unit);
 
@@ -284,7 +284,7 @@ Fragment shader
 ## GLSL
 
 GLSL은 Graphics Library Shader Language의 약자인데요.
-Shader가 작성되는 언어입니다.
+셰이더가 작성되는 언어입니다.
 이건 javascript에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
 그래픽을 래스터화하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
 예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 `vec2`, `vec3`, `vec4` 같은 type들이 내장되어 있습니다.
@@ -395,11 +395,11 @@ T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
 ## 총정리
 
 이게 바로 이 모든 글들의 핵심입니다.
-WebGL은 다양한 shader를 생성하고, 데이터를 이 shader에 제공한 다음, `gl.drawArrays`나 `gl.drawElements`를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 current vertex shader를 호출한 뒤, 각 픽셀에 대한 current fragment shader를 호출하여 픽셀을 렌더링하는 것에 관한 모든 것입니다.
+WebGL은 다양한 셰이더를 생성하고, 데이터를 이 셰이더에 제공한 다음, `gl.drawArrays`나 `gl.drawElements`를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 current vertex shader를 호출한 뒤, 각 픽셀에 대한 current fragment shader를 호출하여 픽셀을 렌더링하는 것에 관한 모든 것입니다.
 
-실제로 shader를 생성하려면 여러 줄의 코드가 필요합니다.
+실제로 셰이더를 생성하려면 여러 줄의 코드가 필요합니다.
 이 코드들은 대부분의 WebGL program에서 똑같기 때문에 한 번 작성한 후에는 거의 생략할 수 있습니다.
-GLSL shader를 컴파일하고 shader program에 연결하는 방법은 [여기](webgl-boilerplate.html)에서 다룹니다.
+GLSL 셰이더를 컴파일하고 shader program에 연결하는 방법은 [여기](webgl-boilerplate.html)에서 다룹니다.
 
 여기에서 막 시작했다면 두 가지 방향으로 갈 수 있는데요.
 이미지 처리에 관심있다면 [2D 이미지 처리 방법](webgl-image-processing.html)을 보여드리겠습니다.

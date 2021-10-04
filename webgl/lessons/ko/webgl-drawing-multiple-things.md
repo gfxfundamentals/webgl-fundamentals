@@ -40,14 +40,14 @@ TOC: 여러 물체 그리기
 
 WebGL은 두 번째 방법으로 동작하는데요.
 `gl.createBuffer`, `gl.bufferData`, `gl.createTexture`, `gl.texImage2D`와 같은 함수들은 버퍼(vertex)와 텍스처(color, etc..) 데이터를 WebGL에 업로드 해줍니다.
-`gl.createProgram`, `gl.createShader`, `gl.compileShader`, `gl.linkProgram`과 같은 함수들은 GLSL shader를 만들어 줍니다.
+`gl.createProgram`, `gl.createShader`, `gl.compileShader`, `gl.linkProgram`과 같은 함수들은 GLSL 셰이더를 만들어 줍니다.
 그 외 WebGL의 거의 모든 함수들은 이러한 전역 변수나 *상태*를 설정하여 최종적으로 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용됩니다.
 
 전형적인 WebGL program은 기본적으로 이런 구조를 따릅니다.
 
 초기화할 때
 
-*   모든 shader와 program을 만들고 location 탐색
+*   모든 셰이더와 program을 만들고 location 탐색
 *   버퍼를 생성하고 정점 데이터 업로드
 *   텍스처를 생성하고 텍스처 데이터 업로드
 
@@ -76,7 +76,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
 그냥 이들을 생성하는 함수가 있고 [이전 글](webgl-less-code-more-fun.html)에서 설명한 bufferInfo 객체가 반환된다고 가정해봅시다.
 
 여기 해당 코드입니다.
-정점 색상을 곱하기 위해 `u_colorMult`를 추가한 걸 제외하고는 [perspective 예제](webgl-3d-perspective.html)와 같은 간단한 shader입니다.
+정점 색상을 곱하기 위해 `u_colorMult`를 추가한 걸 제외하고는 [perspective 예제](webgl-3d-perspective.html)와 같은 간단한 셰이더입니다.
 
     // Vertex shader에서 전달
     varying vec4 v_color;
@@ -180,7 +180,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
 
 1.  Shader program (그리고 uniform과 attribute의 info/setter)
 2.  그리려는 것에 대한 buffer와 attribute
-3.  주어진 shader로 해당 물체를 그리는데 필요한 uniform
+3.  주어진 셰이더로 해당 물체를 그리는데 필요한 uniform
 
 따라서 간단하 단순화는 물체의 배열을 만들고 그 배열에 3가지 물체를 모으는 겁니다.
 
@@ -364,18 +364,18 @@ Overlay나 후처리 효과처럼 다른 것들에 대한 별도의 목록이 �
 거의 20% 향상되었네요.
 하지만 이는 최악의 경우 vs 최고의 경우이며, 대부분의 program은 더 많은 걸 수행하므로, 특별한 경우를 제외하고는 전부 고려할만한 가치가 없습니다.
 
-어떤 shader만으로는 어떤 geometry들은 그릴 수 없다는 점에 유의해야 합니다.
-예를 들어 법선이 필요한 shader는 법선이 없는 geometry에서 작동하지 않을 겁니다.
-마찬가지로 텍스처가 필요한 shader는 텍스처 없이는 작동하지 않습니다.
+어떤 셰이더만으로는 어떤 geometry들은 그릴 수 없다는 점에 유의해야 합니다.
+예를 들어 법선이 필요한 셰이더는 법선이 없는 geometry에서 작동하지 않을 겁니다.
+마찬가지로 텍스처가 필요한 셰이더는 텍스처 없이는 작동하지 않습니다.
 
 이 모든 걸 처리하기 때문에 [Three.js](https://threejs.org)같은 3D 라이브러리를 선택하는 것이 좋습니다.
-몇 가지 geometry를 만들고, 어떻게 렌더링하고 싶은지 three.js에 지시하면, 런타임에 필요한 것들을 처리하기 위해 shader를 생성합니다.
+몇 가지 geometry를 만들고, 어떻게 렌더링하고 싶은지 three.js에 지시하면, 런타임에 필요한 것들을 처리하기 위해 셰이더를 생성합니다.
 Unity3D, Unreal, Source, Crytek 등 거의 모든 3D 엔진들이 이를 수행합니다.
-일부는 오프라인으로 생성되지만 중요한 점은 shader를 *생성*한다는 겁니다.
+일부는 오프라인으로 생성되지만 중요한 점은 셰이더를 *생성*한다는 겁니다.
 
 물론 여러분이 이러한 글들을 읽는 이유는 내부에서 무슨 일이 일어나는지 알고 싶어하기 때문입니다.
 그건 훌륭하고 모든 걸 직접 작성하는 것은 재미있습니다.
-하지만 [WebGL은 굉장히 로우 레벨](webgl-2d-vs-3d-library.html)이므로, 직접 하고 싶다면 해야 할 작업들이 많고, 다른 기능들은 종종 다른 shader가 필요하기 때문에, 대부분 shader generator 작성이 포함됩니다.
+하지만 [WebGL은 굉장히 로우 레벨](webgl-2d-vs-3d-library.html)이므로, 직접 하고 싶다면 해야 할 작업들이 많고, 다른 기능들은 종종 다른 셰이더가 필요하기 때문에, 대부분 셰이더 생성기 작성이 포함됩니다.
 
 루프 안에 `computeMatrix`를 넣지 않았다는 걸 눈치채셨을 겁니다.
 이는 렌더링이 행렬 계산과 분리되어야 하기 때문인데요.

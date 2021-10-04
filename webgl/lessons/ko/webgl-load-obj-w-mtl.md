@@ -485,9 +485,9 @@ const parts = obj.geometries.map(({material, data}) => {
 });
 ```
 
-To use the textures we need to change the shader.
-Let's use them one at a time.
-We'll first use the diffuse map.
+텍스처를 사용하기 위해 셰이더를 변경해야 합니다.
+한 번에 하나씩 사용해봅시다.
+먼저 diffuse map을 사용할 겁니다.
 
 ```js
 const vs = `
@@ -559,18 +559,15 @@ void main () {
 `;
 ```
 
-And we get textures!
+그리고 텍스처를 얻습니다!
 
 {{{example url="../webgl-load-obj-w-mtl-w-textures.html"}}}
 
-Looking back in the .MTL file we can see a `map_Ks` which is basically
-a black and white texture that specifies how shiny a particular surface
-is or another way to think of it is how much of the specular reflection is used.
+.MTL 파일로 돌아가 보면 특정 표면이 얼마나 빛나는지 혹은 얼마나 정반사가 사용되는지 지정하는 `map_Ks`가 기본적으로 검은색과 흰색으로 이루어진 텍스처임을 알 수 있습니다.
 
 <div class="webgl_center"><img src="../resources/models/windmill/windmill_001_base_SPEC.jpg" style="width: 512px;"></div>
 
-To use it we just need to update the shader since we're already loading
-all the textures.
+이미 모든 텍스처를 로딩했기 때문에 이를 사용하기 위해 셰이더 업데이트만 하면 됩니다.
 
 ```js
 const fs = `
@@ -618,7 +615,7 @@ void main () {
 `;
 ```
 
-We should also add a default for any material that doesn't have a specular map
+또한 specular map이 없는 material에 대한 기본값을 추가해야 합니다.
 
 ```js
 const defaultMaterial = {
@@ -632,71 +629,69 @@ const defaultMaterial = {
 };
 ```
 
-It would be hard to see what this does with the material settings as they are in the
-.MTL file so let's hack the specular settings so they're more pleasing.
+이게 .MTL 파일 안에 있는 material 설정으로 무엇을 하는지 알기 힘들기 때문에 반사 설정을 해킹하여 더 재미있게 만들어 보겠습니다.
 
 ```js
-// hack the materials so we can see the specular map
+// specular map을 볼 수 있도록 materials 해킹
 Object.values(materials).forEach(m => {
   m.shininess = 25;
   m.specular = [3, 2, 1];
 });
 ```
 
-And with that we can see only the windows and blades are set to show specular highlights.
+이로써 창문과 날개만 반사 하이라이트를 표시하도록 설정된 것을 알 수 있습니다.
 
 {{{example url="../webgl-load-obj-w-mtl-w-specular-map.html"}}}
 
-I'm actually surprised the blades are set to reflect. If you look back up at the
-.MTL file you'll see shininess `Ns` is set to 0.0 which means the specular highlights
-would be extremely blown out. But, also `illum` is specified as 1 for both materials.
-According to the docs illum 1 means
+실제로 날개가 반사되도록 설정되어 있어 놀랐습니다.
+.MTL 파일을 다시 보면 shininess `Ns`가 반사 하이라이트가 극단적으로 꺼진다는 의미인 0.0으로 설정된 것을 볼 수 있습니다.
+하지만 `illum`도 materials 모두에 1로 지정되어 있는데요.
+문서에 따르면 illum 1은 다음과 같습니다.
 
 ```
 color = KaIa + Kd { SUM j=1..ls, (N * Lj)Ij }
 ```
 
-Which translated into something more readable is
+좀 더 읽기 쉽도록 아래와 같이 바꿔봅시다.
 
 ```
 color = ambientColor * lightAmbient + diffuseColor * sumOfLightCalculations
 ```
 
-As you can see there nothing about using specular whatsoever and yet the file
-has a specular map! ¯\_(ツ)_/¯. Specular highlights require illum 2 or higher.
-This is my experience with .OBJ/.MTL files,
-that there is always some manual tweaking required for the materials. How you fix
-it is up to you. You can edit the .MTL file or you can add code. For now we'll
-go the "add code" direction.
+반사 사용에 관해서는 아무것도 안 보이지만 파일에는 specular map이 있습니다!
+¯\_(ツ)_/¯.
+반사 하이하이트는 2개 이상의 illum이 필요합니다.
+.OBJ/.MTL 파일에 관한 제 경험으로, materials에 대해 항상 약간의 수동 조정이 필요합니다.
+어떻게 고칠지는 당신에게 달렸습니다.
+.MTL 파일을 수정할 수도 있고 코드를 추가할 수도 있습니다.
+지금은 "코드 추가"를 하는 방향으로 해보겠습니다.
 
-The last map this .MTL file uses is a `map_Bump` bump map.
+.MTL 파일이 사용하는 마지막 맵은 `map_Bump` bump map 입니다.
 This is another place where the .OBJ/.MTL files show there age.
-The file referenced is clearly a normal map, not a bump map.
+파일은 분명히 bump map이 아니라 법선 맵을 참조합니다.
 
 <div class="webgl_center"><img src="../resources/models/windmill/windmill_001_base_NOR.jpg" style="width: 512px;"></div>
 
-There is no option in the .MTL file to specify normal maps or that bump maps
-should be used as normal maps. We could use some heuristic like maybe if the
-filename has 'nor' in it? Or, maybe we could just assume all files referenced by
-`map_Bump` are normal maps in 2020 and beyond since I'm not sure I've seen an
-.OBJ file with an actual bump map in over a decade. Let's go that route for now.
+.MTL 파일에 법선 맵을 지정하거나 bump map을 법선 맵으로 사용할 수 있는 옵션이 없습니다.
+대신 파일 이름에 'nor'이 있는지와 같은 휴리스틱한 방법을 사용할 수 있지 않을까요?
+또는 10년 넘게 실제 bump map이 포함된 .OBJ을 본 적이 없기 때문에, 2020년 이후의 `map_Bump`을 참조하는 모든 파일을 법선 맵으로 가정할 수도 있습니다.
+일단 그렇게 해봅시다.
 
-We'll grab the code for generating tangents from [the article on normal mapping](webgl-3d-lighting-normal-mapping.html).
+[법선 매핑에 관한 글](webgl-3d-lighting-normal-mapping.html)에서 접선 생성 코드를 가져옵니다.
 
 ```js
 const parts = obj.geometries.map(({material, data}) => {
   ...
 
-+  // generate tangents if we have the data to do so.
++  // 데이터가 있다면 접선 생성
 +  if (data.texcoord && data.normal) {
 +    data.tangent = generateTangents(data.position, data.texcoord);
 +  } else {
-+    // There are no tangents
++    // 접선 없음
 +    data.tangent = { value: [1, 0, 0] };
 +  }
 
-  // create a buffer for each array by calling
-  // gl.createBuffer, gl.bindBuffer, gl.bufferData
+  // gl.createBuffer, gl.bindBuffer, gl.bufferData을 호출하여 각 배열에 대한 버퍼 생성
 
   const bufferInfo = twgl.createBufferInfoFromArrays(gl, data);
   const vao = twgl.createVAOFromBufferInfo(gl, meshProgramInfo, bufferInfo);
@@ -711,7 +706,7 @@ const parts = obj.geometries.map(({material, data}) => {
 });
 ```
 
-We also need to add a default normal map for materials that don't have one
+또한 법선 맵이 없는 materials에 대한 기본 법선 맵을 추가해야 합니다.
 
 ```js
 const textures = {
@@ -735,7 +730,7 @@ const defaultMaterial = {
 
 ```
 
-And then we need to incorporate the shader changes from [the article on normal mapping](webgl-3d-lighting-normal-mapping.html).
+그런 다음 [법선 매핑에 대한 글](webgl-3d-lighting-normal-mapping.html)의 셰이더 변경 사항을 통합해야 합니다.
 
 ```js
 const vs = `
@@ -823,71 +818,61 @@ void main () {
 `;
 ```
 
-And we that we get normal maps. Note: I moved the camera closer so they are easier to see.
+그리고 법선 맵을 얻게 됩니다.
+참고: 보기 쉽도록 카메라를 가까이 옮겼습니다.
 
 {{{example url="../webgl-load-obj-w-mtl-w-normal-maps.html"}}}
 
-I'm sure there are way more features of the .MTL file we could try to support.
-For example the `refl` keyword specifies reflection maps which is another word
-for [environment map](webgl-environment-maps.html). They also show the various
-`map_` keywords take a bunch of optional arguments. A few are:
+지원할 수 있는 .MTL 파일의 기능이 훨씬 더 많다고 확신합니다.
+예를 들어 `refl` 키워드는 [환경 맵](webgl-environment-maps.html)의 또 다른 말인 반사 맵을 지정합니다.
+또한 여러 선택적 매개 변수를 가지는 다양한 `map_` 키워드도 있습니다.
 
-* `-clamp on | off` specifies whether the texture repeats
-* `-mm base gain` specifies an offset and multiplier for texture values
-* `-o u v w` specifies an offset for texture coordinates. You'd apply those using a texture matrix similar to what we did in [the article on drawImage](webgl-2d-drawimage.html)
-* `-s u v w` specifies a scale for texture coordinates. As above you'd put those in a texture matrix
+* `-clamp on | off`는 텍스처 반복 여부를 지정합니다.
+* `-mm base gain`은 텍스처 값에 대한 오프셋과 승수를 지정합니다.
+* `-o u v w`는 텍스처 좌표에 대한 오프셋을 지정합니다. [drawImage에 대한 글](webgl-2d-drawimage.html)에서 한 것과 유사한 텍스처 행렬을 사용하여 적용할 겁니다.
+* `-s u v w`는 텍스처 좌표에 대한 scale을 지정합니다. 위처럼 텍스처 행렬에 넣게 됩니다.
 
-I have no idea how many .MTL files are out there that use those settings or how
-far to take it. For example if we add support for `-o` and `-s` do we want
-to add that support for every texture under the assumption they might be different
-for the diffuseMap vs the normalMap vs the specularMap etc..? That then requires
-that we pass in a separate texture matrix for each texture which would then
-require either passing a different set of texture coordinates per texture from
-the vertex shader to the fragment shader or else doing the texture matrix
-multiplication in the fragment shader instead of the traditional way of doing it
-in the vertex shader.
+이 설정들을 사용하는 .MTL 파일이 얼마나 많은지 혹은 얼마나 걸릴지 모릅니다.
+예를 들어 `-o`와 `-s`에 대한 지원을 추가한다면 diffuseMap vs the normalMap vs specularMap 등이 다를 수 있다는 가정 하에 모든 텍스처에 대한 지원을 추가할까요..?
+각 텍스처에 대한 별도의 텍스처 행렬을 전달해야 하는데, vertex shader에서 fragment shader로 텍스처마다 다른 텍스처 좌표 세트를 전달하거나, vertex shader에서 수행하는 전통적인 방법 대신에 fragment shader에서 텍스처 행렬 곱셈을 수행해야 합니다.
 
-A bigger point to take home is that adding support for every feature makes
-the shaders bigger and more complicated. Above we have a form of *uber shader*,
-a shader that tries to handle all cases. To make it work we passed in various
-defaults. For example we set the `diffuseMap` to a white texture so if we
-load something without textures it will still display. The diffuse color will
-be multiplied by white which is 1.0 so we'll just get the diffuse color.
-Similarly we passed in a white default vertex color in case there are no
-vertex colors.
+한 가지 더 알아야 할 요점은 모든 기능에 대한 지원 추가가 셰이더를 더 크고 더 복잡하게 만든다는 겁니다.
+위에는 모든 경우를 처리하려는 셰이더인 *uber shader* 형식이 있습니다.
+이를 작동하게 만들기 위해서는 다양한 기본값을 전달해야 합니다.
+예를 들어 `diffuseMap`을 흰 텍스처로 설정했기 때문에 텍스처 없이 무언가를 로딩해도 여전히 표시됩니다.
+Diffuse color는 1.0인 흰색으로 곱해지므로 diffuse color만 얻습니다.
+마찬가지로 정점 색상이 없는 경우에 흰색을 기본 정점 색상으로 전달했습니다.
 
-This is a common way to get things working and if it works fast enough for your
-needs then there is no reason to change it. But, it's more common to generate
-shaders that turn these features on/off. If there are no vertex colors then
-generate a shader, as in manipulate the shader strings, so they don't have an
-`a_color` attribute nor all the related code. Similarly if a material doesn't
-have a diffuse map then generate a shader that doesn't have a `uniform sampler2D
-diffuseMap` and removes all related code. If it doesn't have any maps then we
-don't need texture coordinates so we'd leave those out as well.
+이게 작업을 수행하는 일반적인 방법이고 필요한만큼 충분히 빠르게 작동한다면 바꿀 필요가 없습니다.
+하지만 이러한 기능들을 켜고 끄는 셰이더를 생성하는 것이 더 일반적입니다.
+정점 색상이 없다면 셰이더 문자열을 조작하듯이 셰이더를 생성하여, `a_color` 속성이나 관련한 모든 코드가 없도록 합니다.
 
-When you add up all the combinations there can be 1000s of shader variations.
-With just what we have above there is
+마찬가지로 material이 diffuse map을 가지지 않는다면 `uniform sampler2D diffuseMap`이 없는 셰이더를 생성하고 관련한 모든 코드를 제거합니다.
+어떤 맵도 없다면 텍스처 좌표가 필요없기 때문에 생략합니다.
 
-* diffuseMap yes/no
-* specularMap yes/no
-* normalMap yes/no
-* vertex colors yes/no
-* ambientMap yes/no (we didn't support this but .MTL file does)
-* reflectionMap yes/no (we didn't support this but the .MTL file does)
+모든 조합을 추가하면 1000가지의 셰이더 변형이 있을 수 있습니다.
+위에 있는 것만 해도 아래와 같은데요.
 
-Just those represent 64 combinations. If we add in say 1 to 4 lights, and those
-lights can be spot, or point, or, directional we end up with 8192 possible
-shader feature combinations.
+* diffuseMap 예/아니오
+* specularMap 예/아니오
+* normalMap 예/아니오
+* 정점 색상 예/아니오
+* ambientMap 예/아니오 (우리는 이걸 지원하지 않았지만 .MTL 파일은 지원)
+* reflectionMap 예/아니오 (우리는 이걸 지원하지 않았지만 .MTL 파일은 지원)
 
-Managing all of that is a lot of work. This is one reason why many people
-chose a 3D engine like [three.js](https://threejs.org) instead of doing this
-all themselves. But least hopefully this article gives some idea of
-the types of things involved in displaying arbitrary 3D content.
+이것들만 해도 64가지 조합이 나옵니다.
+스포트, 점, 방향성일 수 있는 조명을 1개에서 4개로 추가하면 8192개의 가능한 셰이더 기능 조합이 생깁니다.
+
+이 모든 걸 관리하는 것은 너무 많은 작업입니다.
+이게 많은 사람들이 직접 작업하는 대신에 [three.js](https://threejs.org)와 같은 3D 엔진을 선택하는 이유입니다.
+하지만 적어도 이 글이 임의의 3D 컨텐츠를 표시하는 것과 관련된 유형에 대한 아이디어를 드렸기를 바랍니다.
 
 <div class="webgl_bottombar">
-<h3>Avoid conditionals in shaders where possible</h3>
-<p>The traditional advice is to avoid conditionals in shaders. As an example
-we could have done something like this</p>
+<h3>가능하다면 셰이더에서 조건문 피하기</h3>
+<p>
+전통적인 조언은 셰이더에서 조건문을 피해라 입니다.
+한 가지 예시로 이렇게 할 수 있었습니다.
+</p>
 <pre class="prettyprint"><code>
 uniform bool hasDiffuseMap;
 uniform vec4 diffuse;
@@ -900,12 +885,14 @@ uniform sampler2D diffuseMap
   }
 ...
 </code></pre>
-<p>Conditionals like that are generally discouraged because depending on the
-GPU/driver they are often not very performant.</p>
-<p>Either do like we did above and try to make the code have no conditionals. We used
-a single 1x1 white pixel texture when there is no texture so our math would work
-without a conditional.<p>
-<p>Or, use different shaders. One that doesn't have the feature and one the does
-and choose the correct one for each situation.</p>
+<p>이와 같은 조건문은 GPU/드라이버에 따라 종종 성능이 매우 좋지 않기 때문에 일반적으로 권장되지 않습니다.</p>
+<p>
+위에서 했던 것처럼 조건문이 없도록 만들어 보세요.
+텍스처가 없을 때 1x1 흰색 픽셀 텍스처를 사용했기 때문에 수식은 조건문 없이 작동할 겁니다.
+<p>
+<p>
+아니면 다른 셰이더를 사용하세요.
+기능이 없는 것 하나와 있는 것 하나를 두고 각 상황마다 알맞은 걸 고르는 겁니다.
+</p>
 </div>
 

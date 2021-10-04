@@ -80,7 +80,7 @@ faceInfos.forEach((faceInfo) => {
 이제 그걸 큐브에 적용해봅시다.
 [이전 글](webgl-3d-textures.html)의 텍스처 아틀라스 예제 코드에서 시작할 겁니다.
 
-먼저 cubemap을 사용하도록 shader를 수정합시다.
+먼저 큐브맵을 사용하도록 셰이더를 수정합시다.
 
 ```glsl
 attribute vec4 a_position;
@@ -99,7 +99,7 @@ void main() {
 }
 ```
 
-Shader에서 텍스처 좌표를 제거하고 법선을 fragment shader로 전달하는 varying을 추가했는데요.
+셰이더에서 텍스처 좌표를 제거하고 법선을 fragment shader로 전달하는 varying을 추가했는데요.
 큐브의 위치가 원점을 중심으로 완벽하게 중앙에 있기 때문에 법선으로 사용할 수 있습니다.
 
 [조명에 대한 글](webgl-3d-lighting-directional.html)을 떠올려보면 법선은 방향이며 일반적으로 일부 정점 표면의 방향을 지정하는데 사용됩니다.

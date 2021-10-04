@@ -135,7 +135,7 @@ gl.uniformMatrix4fv(
   viewDirectionProjectionInverseMatrix
 );
 
-// u_skybox에 대해 texture unit 0을 사용하도록 shader에 지시
+// u_skybox에 대해 texture unit 0을 사용하도록 셰이더에 지시
 gl.uniform1i(skyboxLocation, 0);
 ```
 
@@ -149,7 +149,7 @@ gl.uniform1i(skyboxLocation, 0);
 이 샘플에 environment map cube를 결합해봅시다.
 [Less code more fun](webgl-less-code-more-fun.html)에서 언급한 유틸을 사용할 겁니다.
 
-두 shader set을 모두 넣어야 합니다.
+두 셰이더 세트를 모두 넣어야 합니다.
 
 ```html
 <script id="skybox-vertex-shader" type="x-shader/x-vertex">
@@ -162,7 +162,7 @@ gl.uniform1i(skyboxLocation, 0);
 ...
 ```
 
-그런 다음 shader를 컴파일하고 모든 attribute과 uniform location을 찾습니다.
+그런 다음 셰이더를 컴파일하고 모든 attribute과 uniform location을 찾습니다.
 
 ```js
 // GLSL program을 설정하고 location 탐색

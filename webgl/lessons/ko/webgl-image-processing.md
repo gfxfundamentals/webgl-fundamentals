@@ -170,7 +170,7 @@ Convolution kernel은 행렬의 각 항목이 렌더링하는 픽셀 주변에 �
 이에 관한 [제법 좋은 글](https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html)이 있습니다.
 그리고 C++로 직접 작성하면 어떤지 실제 코드를 보여주는 [다른 글](https://www.codeproject.com/KB/graphics/ImageConvolution.aspx)도 있습니다.
 
-우리의 경우 shader에서 해당 작업을 수행하므로 새로운 fragment shader가 필요합니다.
+우리의 경우 셰이더에서 해당 작업을 수행하므로 새로운 fragment shader가 필요합니다.
 
     <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
@@ -277,7 +277,7 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 그건 단순 명명 규칙입니다.
 필수는 아니지만 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어 줍니다.
 a_는 버퍼에서 제공되는 데이터인 attribute입니다.
-u_는 shader에 입력하는 uniform이고, v_는  vertex shader에서 fragment shader로 전달되고 그려진 각 픽셀에 대해 정점 사이가 보간(또는 가변)되는 값인 varying입니다.
+u_는 셰이더에 입력하는 uniform이고, v_는  vertex shader에서 fragment shader로 전달되고 그려진 각 픽셀에 대해 정점 사이가 보간(또는 가변)되는 값인 varying입니다.
 더 자세한 내용은 <a href="webgl-how-it-works.html">동작 원리</a>를 봐주세요.
 </p>
 </div>

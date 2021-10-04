@@ -9,7 +9,7 @@ TOC: 2개 이상의 텍스처 사용
 "어떻게 2개 이상의 텍스처를 사용할 수 있나요?"라는 질문에 답하기 좋은 시점인 것 같군요.
 
 꽤 간단합니다.
-하나의 이미지를 그리고 2개의 이미지로 업데이트하는 첫 번째 shader에 대한 [몇 가지 수업](webgl-image-processing.html)으로 돌아가 봅시다.
+하나의 이미지를 그리고 2개의 이미지로 업데이트하는 첫 번째 셰이더에 대한 [몇 가지 수업](webgl-image-processing.html)으로 돌아가 봅시다.
 
 먼저 해야할 일은 2개의 이미지를 로딩할 수 있도록 코드를 수정하는 겁니다.
 이건 실제로 WebGL이 아니라, HTML5 JavaScript가 할 일이지만, 우리가 다룰 수 있습니다.
@@ -71,7 +71,7 @@ function main() {
 }
 ```
 
-다음으로 2개의 텍스처를 사용하도록 shader를 수정합니다.
+다음으로 2개의 텍스처를 사용하도록 셰이더를 수정합니다.
 이 경우 하나의 텍스처에 다른 텍스처를 곱할 겁니다.
 
 ```
@@ -118,7 +118,7 @@ void main() {
 
 WebGL에는 "texture unit"이라는 것이 있습니다.
 이는 텍스처에 대한 레퍼런스 배열이라 생각할 수 있습니다.
-각 sampler에 대해 사용할 texture unit을 shader에 알려줍니다.
+각 sampler에 대해 사용할 texture unit을 셰이더에 알려줍니다.
 
 ```
   // Sampler location 탐색
@@ -199,7 +199,7 @@ var getContext = function() {
 };
 ```
 
-Shader는 index를 texture unit으로 가져옵니다.
+셰이더는 index를 texture unit으로 가져옵니다.
 이 두 줄이 더 명료하게 만들어주길 바랍니다.
 
 ```
