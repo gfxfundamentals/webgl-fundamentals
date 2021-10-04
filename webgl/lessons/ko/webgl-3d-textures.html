@@ -244,7 +244,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고, 이전에는 <a href="webgl-animation.html">애니메이션</a>에 관한 것이었습니다.</p>
 <p>WebGL에서 어떻게 텍스처를 적용할까요?
 <a href="webgl-image-processing.html">이미지 처리</a>에 대한 글을 읽으면 방법을 알 수 있지만 자세히 살펴보면 이해하기 더 쉬울 겁니다.</p>
-<p>먼저 해야할 일은 shader와 texture를 조정입니다.
+<p>먼저 해야할 일은 셰이더와 텍스처 조정입니다.
 다음은 vertex shader의 변경 사항인데요.
 텍스처 좌표를 전달해야 합니다.
 이 경우 fragment shader로 바로 전달하게 됩니다.</p>
@@ -531,7 +531,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 256은 2의 거듭 제곱이죠.
 키보드 텍스처는 320x240입니다.
 둘 다 2의 거듭 제곱이 아니므로 텍스처 표시에 실패합니다.
-Shader에서 <code class="notranslate" translate="no">texture2D</code>이 호출되고 참조된 텍스처가 제대로 설정되지 않은 경우 WebGL은 검은색(0, 0, 0, 1)을 사용합니다.
+셰이더에서 <code class="notranslate" translate="no">texture2D</code>이 호출되고 참조된 텍스처가 제대로 설정되지 않은 경우 WebGL은 검은색(0, 0, 0, 1)을 사용합니다.
 JavaScript console이나 Web Console을 열어보면, 브라우저에 따라 이렇게 문제를 지적하는 오류가 나타날 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2 or not all the same size.
 WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
@@ -583,7 +583,7 @@ WebGL이 &quot;texture complete&quot;여야 하는데요.
 <li><p>텍스처의 너비와 높이가 2의 거듭 제곱이 아닌 경우, 위에서 언급한 것처럼 <code class="notranslate" translate="no">TEXTURE_MIN_FILTER</code>를 <code class="notranslate" translate="no">LINEAR</code>나 <code class="notranslate" translate="no">NEAREST</code>로 설정하고, <code class="notranslate" translate="no">TEXTURE_WRAP_S</code>와 <code class="notranslate" translate="no">TEXTURE_WRAP_T</code>를 <code class="notranslate" translate="no">CLAMP_TO_EDGE</code>로 설정해야 합니다.</p>
 </li>
 </ol>
-<p>이 중 하나라도 아니라면 텍스처의 값을 가져올 때 shader에서 검은색(0, 0, 0, 1)을 얻게 됩니다.</p>
+<p>이 중 하나라도 아니라면 텍스처의 값을 가져올 때 셰이더에서 검은색(0, 0, 0, 1)을 얻게 됩니다.</p>
 <p>이에 대해 공통적으로 하는 질문은 &quot;큐브의 각 면에 다른 이미지를 적용하려면 어떻게 하나요?&quot; 입니다.
 예를 들어 이러한 6개의 이미지가 있다고 가정해봅시다.</p>
 <div class="webgl_table_div_center">
@@ -595,9 +595,9 @@ WebGL이 &quot;texture complete&quot;여야 하는데요.
 </div>
 
 <p>3가지 답이 떠오르는데요.</p>
-<p>1) 텍스처 6개를 참조하는 복잡한 shader를 만들고, 사용할 텍스처를 정하기 위해 vertex shader에 fragment shader로 전달되는 추가 정점 정보를 전달합니다.
+<p>1) 텍스처 6개를 참조하는 복잡한 셰이더를 만들고, 사용할 텍스처를 정하기 위해 vertex shader에 fragment shader로 전달되는 추가 정점 정보를 전달합니다.
 이건 하지 마세요!
-조금만 생각해보면 더 많은 면을 가진 다른 모양에 대해 같은 작업을 수행하려는 경우 수많은 shader를 작성해야 한다는 것을 알 수 있습니다.</p>
+조금만 생각해보면 더 많은 면을 가진 다른 모양에 대해 같은 작업을 수행하려는 경우 수많은 셰이더를 작성해야 한다는 것을 알 수 있습니다.</p>
 <p>2) 큐브 대신 6개의 평면을 그립니다.
 이게 일반적인 해결책입니다.
 나쁘진 않지만 이 또한 큐브같은 작은 모양에 대해서만 실제로 작동합니다.
@@ -657,7 +657,7 @@ WebGL이 &quot;texture complete&quot;여야 하는데요.
 
 </p>
 <p>하나의 텍스처를 사용하여 여러 이미지를 적용하는 이 방식은 종종 <em>texture atlas</em>라고 불립니다.
-이게 가장 좋은 이유는 로드하는 텍스처가 하나뿐이기 때문에 shader는 하나의 텍스처만을 참조하여 단순하게 유지되며, 평면으로 나누는 경우처럼 텍스처당 한 번씩 그리기 호출을 하는 대신에 단 한번의 그리기 호출만 필요하기 때문입니다.</p>
+이게 가장 좋은 이유는 로드하는 텍스처가 하나뿐이기 때문에 셰이더는 하나의 텍스처만을 참조하여 단순하게 유지되며, 평면으로 나누는 경우처럼 텍스처당 한 번씩 그리기 호출을 하는 대신에 단 한번의 그리기 호출만 필요하기 때문입니다.</p>
 <p>여기서 다룬 것 이외에 알고 싶을 수 있는 텍스처 관련 글들이 있는데요.
 먼저 <a href="webgl-texture-units.html">texture unit state 작동 방식</a>입니다.
 그리고 <a href="webgl-2-textures.html">한 번에 2개 이상의 텍스처를 사용하는 방법</a>입니다.
@@ -695,7 +695,7 @@ Texture coordinate는 종종 texture coords, texcoords, UV로 줄여집니다.
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

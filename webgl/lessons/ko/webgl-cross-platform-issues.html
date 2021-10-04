@@ -329,7 +329,7 @@ WebGL2는 16입니다.</p>
 <p>WebGL1에서 vertex shader에 대한 값이 <strong>0</strong>임을 주의해야 합니다.
 참고로 너무 낙담하지 않아도 괜찮은데요.
 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">모든 장치의 약 97%가 최소 4개를 지원</a>합니다.
-그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 shader로 fallback할 수 있는지 확인하는 게 좋습니다.</p>
+그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 셰이더로 fallback할 수 있는지 확인하는 게 좋습니다.</p>
 </li>
 </ul>
 <p>다른 제한도 있는데요.
@@ -422,7 +422,7 @@ void main() {
 <ol>
 <li>항상 location을 탐색</li>
 <li><code class="notranslate" translate="no">gl.linkProgram</code> 호출 전에 <code class="notranslate" translate="no">gl.bindAttribLocation</code>을 호출하여 location 할당</li>
-<li><p>WebGL2 한정, 다음과 같이 shader에서 location을 설정</p>
+<li><p>WebGL2 한정, 다음과 같이 셰이더에서 location을 설정</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">#version 300 es
 layout(location = 0) vec4 position;
 latout(location = 1) vec2 texcoord;
@@ -435,8 +435,8 @@ latout(location = 1) vec2 texcoord;
 <p>여러 GLSL 함수는 정의되지 않은 동작을 가집니다.
 예를 들어 <code class="notranslate" translate="no">pow(x, y)</code>는 <code class="notranslate" translate="no">x &lt; 0</code>일 경우 undefined입니다.
 <a href="webgl-3d-lighting-spot.html">스포트라이트</a>에 대한 글의 하단에 더 긴 목록이 있습니다</p>
-<h2 id="shader-">Shader 정밀도 문제</h2>
-<p>2020년 여기서 가장 큰 문제는 shader에서 <code class="notranslate" translate="no">mediump</code>나 <code class="notranslate" translate="no">lowp</code>를 사용하면 데스크탑의 GPU는 <code class="notranslate" translate="no">highp</code>를 사용하지만 모바일은 <code class="notranslate" translate="no">mediump</code>나 <code class="notranslate" translate="no">lowp</code>가 되는 것이므로 데스크탑으로 개발할 때는 어떤 문제도 알아차리지 못 할 겁니다.</p>
+<h2 id="-">셰이더 정밀도 문제</h2>
+<p>2020년 여기서 가장 큰 문제는 셰이더에서 <code class="notranslate" translate="no">mediump</code>나 <code class="notranslate" translate="no">lowp</code>를 사용하면 데스크탑의 GPU는 <code class="notranslate" translate="no">highp</code>를 사용하지만 모바일은 <code class="notranslate" translate="no">mediump</code>나 <code class="notranslate" translate="no">lowp</code>가 되는 것이므로 데스크탑으로 개발할 때는 어떤 문제도 알아차리지 못 할 겁니다.</p>
 <p>자세한 내용은 <a href="webgl-precision-issues.html">이 글</a>을 봐주세요.</p>
 <h2 id="points-lines-viewport-scissor-">Points, Lines, Viewport, Scissor 동작</h2>
 <p>WebGL의 <code class="notranslate" translate="no">POINTS</code>와 <code class="notranslate" translate="no">LINES</code>는 최대 크기 1을 가질 수 있고 현재 가장 일반적인 제한인 <code class="notranslate" translate="no">LINES</code>의 경우입니다.
@@ -463,7 +463,7 @@ Scissor는 항상 pixel clipping을 하므로 scissor 테스트를 켜고, 그�
 <li><p>사파리가 일반적인 attribute 없이 쓰는 경우를 처리하지 않는 <a href="https://bugs.webkit.org/show_bug.cgi?id=197592">버그</a> (1년 전) </p>
 </li>
 <li><p><a id="safari"></a>
-또한 사파리에는 WebGL2를 활성화하는 옵션이 있지만 <code class="notranslate" translate="no">#version 300 es</code> shader를 허용하는 게 전부입니다.
+또한 사파리에는 WebGL2를 활성화하는 옵션이 있지만 <code class="notranslate" translate="no">#version 300 es</code> 셰이더를 허용하는 게 전부입니다.
 다른 80개 이상의 모든 WebGL2 api 함수는 적어도 2020년 7월 기준 구현되어 있지 않습니다.
 <a href="https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/canvas/WebGL2RenderingContext.cpp">Source</a>를 보고 &quot;not implemented&quot;를 검색해보세요.</p>
 </li>
@@ -488,7 +488,7 @@ Scissor는 항상 pixel clipping을 하므로 scissor 테스트를 켜고, 그�
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

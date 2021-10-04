@@ -279,16 +279,16 @@ WebGL에서 대부분의 숫자는 32bit에 불과한데요.
 2가지 문제가 있는데요.</p>
 <ol>
 <li><p>대부분의 구형 또는 저렴한 스마트폰같은 일부 기기들은 fragment shader에서 <code class="notranslate" translate="no">highp</code>를 지원하지 않습니다.</p>
-<p>이 문제는 fragment shader에서 <code class="notranslate" translate="no">highp</code>를 사용하도록 선언하고 사용자가 <code class="notranslate" translate="no">highp</code>를 지원하지 않는 기기에서 페이지를 로드하면 shader는 컴파일에 실패할 겁니다.</p>
+<p>이 문제는 fragment shader에서 <code class="notranslate" translate="no">highp</code>를 사용하도록 선언하고 사용자가 <code class="notranslate" translate="no">highp</code>를 지원하지 않는 기기에서 페이지를 로드하면 셰이더는 컴파일에 실패할 겁니다.</p>
 <p>반대로 어디에서나 사용할 수 있는 <code class="notranslate" translate="no">mediump</code>는 <a href="webgl-3d-lighting-point.html">점 조명</a>같은 일반적인 것에 대해 충분히 해상도가 높지 않습니다.</p>
 </li>
 <li><p>실제로 <code class="notranslate" translate="no">lowp</code>에 9bit를 쓰고 <code class="notranslate" translate="no">mediump</code>애 16bit를 쓰는 장치에서는 보통 <code class="notranslate" translate="no">highp</code>보다 빠릅니다. 훨씬 빠른 경우가 더 많습니다.</p>
 </li>
 </ol>
 <p>마지막으로, <code class="notranslate" translate="no">Uint8Array</code>나 <code class="notranslate" translate="no">Uint16Array</code>와 같은 값과 달리, <code class="notranslate" translate="no">lowp</code> 또는 <code class="notranslate" translate="no">mediump</code> 값이나 심지어 <code class="notranslate" translate="no">highp</code> 값도 더 높은 정밀도(더 많은 bit)를 사용할 수 있습니다.
-예를 들어 데스크탑 GPU에서 shader에 <code class="notranslate" translate="no">mediump</code>를 넣었다면 아직 내부적으로 32bit를 사용할 가능성이 높은데요.
-이건 shader를 테스트하기 여럽게 만드는 문제를 야기합니다.
-실제로 shader가 <code class="notranslate" translate="no">lowp</code>나 <code class="notranslate" translate="no">mediump</code>와 함께 올바르게 작동하는지 보기 위해서는 실제로 <code class="notranslate" translate="no">lowp</code>에 8bit를 쓰고 <code class="notranslate" translate="no">highp</code>에 16bit를 쓰는 기기에서 테스트해야 합니다.</p>
+예를 들어 데스크탑 GPU에서 셰이더에 <code class="notranslate" translate="no">mediump</code>를 넣었다면 아직 내부적으로 32bit를 사용할 가능성이 높은데요.
+이건 셰이더를 테스트하기 여럽게 만드는 문제를 야기합니다.
+실제로 셰이더가 <code class="notranslate" translate="no">lowp</code>나 <code class="notranslate" translate="no">mediump</code>와 함께 올바르게 작동하는지 보기 위해서는 실제로 <code class="notranslate" translate="no">lowp</code>에 8bit를 쓰고 <code class="notranslate" translate="no">highp</code>에 16bit를 쓰는 기기에서 테스트해야 합니다.</p>
 <p>그래서 어떻게 해야 할까요?</p>
 <p>음 하나는 그냥 <code class="notranslate" translate="no">highp</code>를 사용하고 이에 대해 걱정하지 않을 수 있습니다.
 <code class="notranslate" translate="no">highp</code>를 지원하지 않는 기기를 가진 사용자는 아마 페이지를 잘 실행시킬 수 없는 오래되고 느린 기기를 가져서 목표 고객이 아닐 수 있습니다.</p>
@@ -303,14 +303,14 @@ Fragment shader에서 <code class="notranslate" translate="no">GL_FRAGMENT_PRECI
 
 ...
 </code></pre>
-<p>이제 shader의 내용에 따라 이상한 렌더링 아티팩트가 발생할 수 있지만 기기에서 <code class="notranslate" translate="no">highp</code>를 지원하지 않아도 shader를 컴파일할 겁니다.</p>
+<p>이제 셰이더의 내용에 따라 이상한 렌더링 아티팩트가 발생할 수 있지만 기기에서 <code class="notranslate" translate="no">highp</code>를 지원하지 않아도 셰이더를 컴파일할 겁니다.</p>
 <p>다른 옵션은 <code class="notranslate" translate="no">mediump</code>만 필요하도록 필요하도록 fragment shader를 작성해볼 수 있습니다.
 실제로 성공했는지 확인하려면 실제 <code class="notranslate" translate="no">mediump</code>를 지원하는 기기에서 테스트해야 합니다.</p>
-<p>또 다른 옵션은 기기가 <code class="notranslate" translate="no">mediump</code>만 지원하는 경우 다른 shader를 사용하는 겁니다.
+<p>또 다른 옵션은 기기가 <code class="notranslate" translate="no">mediump</code>만 지원하는 경우 다른 셰이더를 사용하는 겁니다.
 위에서 점 조명은 <code class="notranslate" translate="no">mediump</code>로 문제될 수 있다고 언급했었는데요.
 이는 <a href="webgl-3d-lighting-point.html">점 조명</a>, 특히 반사 하이라이트 계산이, world 혹은 view space의 값을 fragment shader로 전달하고, 이 값들이 <code class="notranslate" translate="no">mediump</code> 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
 따라서, <code class="notranslate" translate="no">mediump</code> 장치에서는 반사 하이라이트를 생략할 수도 있습니다.
-예를 들어 <a href="webgl-3d-lighting-point.html">점 조명에 대한 글</a>에 있는 point light shader는 기기에서 <code class="notranslate" translate="no">mediump</code>만 지원하는 경우 하이라이트를 제거하도록 수정되었습니다.</p>
+예를 들어 <a href="webgl-3d-lighting-point.html">점 조명에 대한 글</a>에 있는 점 조명 셰이더는 기기에서 <code class="notranslate" translate="no">mediump</code>만 지원하는 경우 하이라이트를 제거하도록 수정되었습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">#ifdef GL_FRAGMENT_PRECISION_HIGH
   precision highp float;
 #else
@@ -381,7 +381,7 @@ Vertex shader에는</p>
 비교적 최신의 스마트폰 대부분에서 <code class="notranslate" translate="no">highp</code>를 사용할 수 있지만, <code class="notranslate" translate="no">mediump</code>는 더 빠르게 실행됩니다.
 다시 말하지만, 이건 더 낮은 정밀도인 <code class="notranslate" translate="no">mediump</code>를 실제로 지원하는 기기에만 해당됩니다.
 대부분의 데스크탑이 하듯이 <code class="notranslate" translate="no">mediump</code>에 대해 <code class="notranslate" translate="no">highp</code>로 같은 정밀도를 사용하기로 선택했다면 속도에는 차이가 없지만, 앱이 모바일에서 왜 느릴까 고민하고 다른 사항들을 배제한 경우 <code class="notranslate" translate="no">highp</code>를 지원하는 기기에서도 <code class="notranslate" translate="no">mediump</code>를 사용해볼 수 있습니다.
-사실 위 모든 사항들 없이도 <code class="notranslate" translate="no">mediump</code>를 사용하도록 shader를 설정하고 모바일에서 더 빠르게 실행되는지 확인해볼 수 있습니다.
+사실 위 모든 사항들 없이도 <code class="notranslate" translate="no">mediump</code>를 사용하도록 셰이더를 설정하고 모바일에서 더 빠르게 실행되는지 확인해볼 수 있습니다.
 그렇게 한다면 어떤 렌더링 문제가 해결될 수 있습니다.
 그렇게 하지 않는다면 아마 신경 쓸 이유가 없을 겁니다.</p>
 <h2 id="-highp-mediump-"><code class="notranslate" translate="no">highp</code> 및 <code class="notranslate" translate="no">mediump</code> 정밀도 지원 감지</h2>
@@ -391,10 +391,10 @@ Vertex shader에는</p>
 <p>그래서 모든 장치에서 <code class="notranslate" translate="no">highp</code>를 지원하는 지원하는지 확인하기 위해, <code class="notranslate" translate="no">highp</code>를 사용하는 fragment shader를 만들어, 컴파일하고, 연결하고, 에러를 확인하면 됩니다.
 실패한다면 <code class="notranslate" translate="no">highp</code>가 지원되지 않는 겁니다.
 참고로 vertex shader와 연결해야 합니다.
-명세서에는 연결 시간에 에러가 발견되는 한 에러를 반환하기 위해 컴파일할 필요가 없으므로, shader를 컴파일하고 <code class="notranslate" translate="no">COMPILE_STATUS</code>를 확인하는 것만으로는 컴파일이 실제로 성공했는지 혹은 실패했는지 알 수 없습니다.
+명세서에는 연결 시간에 에러가 발견되는 한 에러를 반환하기 위해 컴파일할 필요가 없으므로, 셰이더를 컴파일하고 <code class="notranslate" translate="no">COMPILE_STATUS</code>를 확인하는 것만으로는 컴파일이 실제로 성공했는지 혹은 실패했는지 알 수 없습니다.
 연결하고 <code class="notranslate" translate="no">LINK_STATUS</code>를 확인해야 합니다.</p>
 <p><code class="notranslate" translate="no">mediump</code>이 정말로 고정밀도가 아니라 중간 정밀도인지 확인하기 위해서는 렌더 테스트를 해야 합니다.
-기본적으로 <code class="notranslate" translate="no">mediump</code>를 사용하는 shader를 만들고 <code class="notranslate" translate="no">highp</code>에서는 작동하지만 <code class="notranslate" translate="no">mediump</code>에서는 실패하는 몇 가지 계산을 한 뒤 결과를 확인하면 되는데요.
+기본적으로 <code class="notranslate" translate="no">mediump</code>를 사용하는 셰이더를 만들고 <code class="notranslate" translate="no">highp</code>에서는 작동하지만 <code class="notranslate" translate="no">mediump</code>에서는 실패하는 몇 가지 계산을 한 뒤 결과를 확인하면 되는데요.
 결과가 정확하다면 driver/gpu/device가 <code class="notranslate" translate="no">mediump</code>에 <code class="notranslate" translate="no">highp</code>를 사용하는 겁니다.
 결과가 부정확하다면 <code class="notranslate" translate="no">mediump</code>는 <code class="notranslate" translate="no">mediump</code>인 겁니다.</p>
 <p>다음은 fragment shader의 <code class="notranslate" translate="no">mediump</code>이 실제로 <code class="notranslate" translate="no">mediump</code>인지 확인하는 예제이고</p>
@@ -507,7 +507,7 @@ lowp float foo;              // variable
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

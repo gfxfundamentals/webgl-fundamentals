@@ -399,7 +399,7 @@ Convolution kernel은 행렬의 각 항목이 렌더링하는 픽셀 주변에 �
 그런 다음 결과를 kernel의 가중치(kernel에 있는 모든 값의 합) 또는 1.0 중에 더 큰 값으로 나누는데요.
 이에 관한 <a href="https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html">제법 좋은 글</a>이 있습니다.
 그리고 C++로 직접 작성하면 어떤지 실제 코드를 보여주는 <a href="https://www.codeproject.com/KB/graphics/ImageConvolution.aspx">다른 글</a>도 있습니다.</p>
-<p>우리의 경우 shader에서 해당 작업을 수행하므로 새로운 fragment shader가 필요합니다.</p>
+<p>우리의 경우 셰이더에서 해당 작업을 수행하므로 새로운 fragment shader가 필요합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -504,7 +504,7 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 그건 단순 명명 규칙입니다.
 필수는 아니지만 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어 줍니다.
 a_는 버퍼에서 제공되는 데이터인 attribute입니다.
-u_는 shader에 입력하는 uniform이고, v_는  vertex shader에서 fragment shader로 전달되고 그려진 각 픽셀에 대해 정점 사이가 보간(또는 가변)되는 값인 varying입니다.
+u_는 셰이더에 입력하는 uniform이고, v_는  vertex shader에서 fragment shader로 전달되고 그려진 각 픽셀에 대해 정점 사이가 보간(또는 가변)되는 값인 varying입니다.
 더 자세한 내용은 <a href="webgl-how-it-works.html">동작 원리</a>를 봐주세요.
 </p>
 </div>
@@ -529,7 +529,7 @@ u_는 shader에 입력하는 uniform이고, v_는  vertex shader에서 fragment 
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

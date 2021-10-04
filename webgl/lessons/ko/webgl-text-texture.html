@@ -282,7 +282,7 @@ var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, m4.xRotati
 이는 원점의 중심에 있습니다.
 <code class="notranslate" translate="no">createPlaneBufferInfo</code>는 xz plane에 평면을 생성하는데요.
 행렬을 전달하여 회전시키고 xy plane unit quad를 제공합니다.</p>
-<p>다음으로 2개의 shader를 생성합니다.</p>
+<p>다음으로 2개의 셰이더를 생성합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// GLSL program 설정
 var fProgramInfo = createProgramInfo(gl, [&quot;vertex-shader-3d&quot;, &quot;fragment-shader-3d&quot;]);
 var textProgramInfo = createProgramInfo(gl, [&quot;text-vertex-shader&quot;, &quot;text-fragment-shader&quot;]);
@@ -575,7 +575,7 @@ var textTextures = [
 <p>텍스트를 캔버스에 그리기 위해 검은색을 사용했는데요.
 흰색으로 텍스트를 렌더링한다면 더 유용할 겁니다.
 그러면 텍스트에 색상을 곱하여 원하는 색상으로 만들 수 있습니다.</p>
-<p>먼저 색상으로 곱하기 위해 text shader를 변경할 겁니다.</p>
+<p>먼저 색상으로 곱하기 위해 텍스트 셰이더를 변경할 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">varying vec2 v_texcoord;
 
 uniform sampler2D u_texture;
@@ -651,7 +651,7 @@ HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, �
 이는 작동하지만 작은 텍스트가 잘 렌더링되지 않고 큰 텍스트는 삼각형이 보이는 문제가 있습니다.
 </li>
 <li>
-또 하나는 <a href="https://www.google.com/search?q=loop+blinn+curve+rendering">곡선을 렌더링하는 특별한 shader</a>를 사용하는 겁니다.
+또 하나는 <a href="https://www.google.com/search?q=loop+blinn+curve+rendering">곡선을 렌더링하는 특별한 셰이더</a>를 사용하는 겁니다.
 이는 굉장히 멋지지만 설명할 수 있는 것은 여기까지입니다.
 </li>
 </div>
@@ -676,7 +676,7 @@ HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, �
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

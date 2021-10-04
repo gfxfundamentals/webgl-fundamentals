@@ -348,7 +348,7 @@ gl.uniformMatrix4fv(
   viewDirectionProjectionInverseMatrix
 );
 
-// u_skybox에 대해 texture unit 0을 사용하도록 shader에 지시
+// u_skybox에 대해 texture unit 0을 사용하도록 셰이더에 지시
 gl.uniform1i(skyboxLocation, 0);
 </code></pre>
 <p>위에서 <code class="notranslate" translate="no">cameraPosition</code>을 계산하는 원점을 중심으로 카메라를 회전하고 있습니다.
@@ -362,7 +362,7 @@ gl.uniform1i(skyboxLocation, 0);
 </p>
 <p>이 샘플에 environment map cube를 결합해봅시다.
 <a href="webgl-less-code-more-fun.html">Less code more fun</a>에서 언급한 유틸을 사용할 겁니다.</p>
-<p>두 shader set을 모두 넣어야 합니다.</p>
+<p>두 셰이더 세트를 모두 넣어야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;script id=&quot;skybox-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 &lt;script id=&quot;skybox-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
@@ -372,7 +372,7 @@ gl.uniform1i(skyboxLocation, 0);
 &lt;script id=&quot;envmap-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 ...
 </code></pre>
-<p>그런 다음 shader를 컴파일하고 모든 attribute과 uniform location을 찾습니다.</p>
+<p>그런 다음 셰이더를 컴파일하고 모든 attribute과 uniform location을 찾습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// GLSL program을 설정하고 location 탐색
 const envmapProgramInfo = webglUtils.createProgramInfo(
     gl, [&quot;envmap-vertex-shader&quot;, &quot;envmap-fragment-shader&quot;]);
@@ -469,7 +469,7 @@ Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방�
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

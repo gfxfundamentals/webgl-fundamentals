@@ -242,11 +242,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>이 글은 WebGL에서 attribute 상태가 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
 Texture unit에 관한 <a href="webgl-texture-units.html">비슷한 글</a>이 있습니다.</p>
-<p>이 글을 읽기 전에 <a href="webgl-how-it-works.html">WebGL 작동 원리</a>와 <a href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">WebGL Shader 및 GLSL</a>을 읽어보시길 바랍니다.</p>
+<p>이 글을 읽기 전에 <a href="webgl-how-it-works.html">WebGL 작동 원리</a>와 <a href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">WebGL 셰이더와 GLSL</a>을 읽어보시길 바랍니다.</p>
 <h2 id="attribute">Attribute</h2>
 <p>WebGL의 attribute는 버퍼에서 데이터를 가져오는 vertex shader에 대한 입력 값입니다.
 WebGL은 <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>가 호출될 때 사용자가 제공한 vertex shader를 N번 실행하는데요.
-각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 vertex shader 내부의 attribute에 제공하는 방법을 정의합니다.</p>
+각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 vertex 셰이더 내부의 attribute에 제공하는 방법을 정의합니다.</p>
 <p>javascript로 구현되었다면 이런식으로</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 const gl = {
@@ -366,32 +366,32 @@ ext.bindVertexArrayOES = function(vao) {
 <p>이렇게 하면 현재 VAO의 모든 attribute와 <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code>를 설정할 수 있으므로 특정한 모양을 그리고 싶을 때 <code class="notranslate" translate="no">ext.bindVertexArrayOES</code> 호출 한 번으로 모든 attribute를 효과적으로 설정하는 반면 extension이 없으면 <strong>attribute마다</strong> <code class="notranslate" translate="no">gl.bindBuffer</code>, <code class="notranslate" translate="no">gl.vertexAttribPointer</code> 모두 최대 한 번씩 호출할 수 있습니다.</p>
 <p>vertex array object를 사용하는 게 확실히 좋다는 걸 보실 수 있을텐데요.
 이것들을 사용하려면 종종 더 많은 organization이 합니다.
-예를 들어 하나의 shader와 <code class="notranslate" translate="no">gl.TRIANGLES</code>로 큐브를 그리고 다른 shader와 <code class="notranslate" translate="no">gl.LINES</code>로 다시 그리고 싶다고 해봅시다.
-삼각형으로 그릴 때 조명에 법선을 사용하여 아래처럼 shader에 attribute를 선언한다고 가정하면:</p>
+예를 들어 하나의 셰이더와 <code class="notranslate" translate="no">gl.TRIANGLES</code>로 큐브를 그리고 다른 셰이더와 <code class="notranslate" translate="no">gl.LINES</code>로 다시 그리고 싶다고 해봅시다.
+삼각형으로 그릴 때 조명에 법선을 사용하여 아래처럼 셰이더에 attribute를 선언한다고 가정하면:</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// lighting-shader
-// 삼각형으로 그려진 큐브의 Shader
+// 삼각형으로 그려진 큐브의 셰이더
 
 attribute vec4 a_position;
 attribute vec3 a_normal;
 </code></pre>
 <p>그런 다음 <a href="webgl-3d-lighting-directional.html">조명에 관한 첫 번째 글</a>에서 다룬 것처럼 위치와 법선을 사용합니다.</p>
-<p>조명을 원하지 않는 선의 경우, 단색이 필요하므로 튜토리얼 <a href="webgl-fundamentals.html">첫 페이지</a>에 있는 첫 번째 shader와 비슷한 작업을 수행합니다.
+<p>조명을 원하지 않는 선의 경우, 단색이 필요하므로 튜토리얼 <a href="webgl-fundamentals.html">첫 페이지</a>에 있는 첫 번째 셰이더와 비슷한 작업을 수행합니다.
 color에 대한 uniform을 선언하는데요.
 이건 vertex shader에서 position만 필요함을 뜻합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// solid-shader
-// 선으로 이루어진 큐브용 shader
+// 선으로 이루어진 큐브용 셰이더
 
 attribute vec4 a_position;
 </code></pre>
-<p>각 shader의 attribute가 어떤 location으로 결정될지 알 수 없습니다.
+<p>각 셰이더의 attribute가 어떤 location으로 결정될지 알 수 없습니다.
 위 lighting-shader의 location으로 가정해보면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">a_position location = 1
 a_normal location = 0
 </code></pre><p>그리고 attribute를 한 개만 가지는 solid-shader의 경우</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">a_position location = 0
-</code></pre><p>Shader를 전환할 때 attribute를 다르게 설정해야 한다는 건 분명합니다.
-어떤 shader는 <code class="notranslate" translate="no">a_position</code>의 데이터가 attribute 0에 나타날 것이라 예상하죠.
-다른 shader는 attribute 1에 나타날 것이라 예상합니다.</p>
+</code></pre><p>셰이더를 전환할 때 attribute를 다르게 설정해야 한다는 건 분명합니다.
+어떤 셰이더는 <code class="notranslate" translate="no">a_position</code>의 데이터가 attribute 0에 나타날 것이라 예상하죠.
+다른 셰이더는 attribute 1에 나타날 것이라 예상합니다.</p>
 <p>attribute 재설정은 추가 작업입니다.
 더 나쁜 건, vertex array object 사용하는 것의 요점은 해당 작업을 할 필요가 없다는 겁니다.
 이 문제를 고치기 위해 shader program을 연결하기 전에 location을 할당하겠습니다.</p>
@@ -400,14 +400,14 @@ gl.bindAttribLocation(lightingProgram, 0, &#39;a_position&#39;);
 gl.bindAttribLocation(lightingProgram, 1, &#39;a_normal&#39;);
 </code></pre>
 <p><strong>gl.linkProgram을 호출하기 전입니다.</strong>
-이건 shader를 연결할 때 WebGL에 할당할 location을 알려주는데요.
-이제 양쪽 shader에서 동일한 VAO를 사용할 수 있습니다.</p>
+이건 셰이더를 연결할 때 WebGL에 할당할 location을 알려주는데요.
+이제 양쪽 셰이더에서 동일한 VAO를 사용할 수 있습니다.</p>
 <h2 id="maximum-attribute">Maximum Attribute</h2>
 <p>WebGL은 적어도 8개의 attribute가 지원되어야 하지만 특정 computer / browser / implementation / driver는 더 많이 지원할 수 있습니다.
 아래 호출을 통해 얼마나 많이 지원되는지 확인할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 </code></pre>
-<p>8개보다 많이 사용하기로 결정했다면 실제로 얼마나 지원되는지 확인하고 컴퓨터가 충분히 가지고 있지 않다면 사용자에게 알리거나 더 간단한 shader로 fallback하는 게 좋습니다.</p>
+<p>8개보다 많이 사용하기로 결정했다면 실제로 얼마나 지원되는지 확인하고 컴퓨터가 충분히 가지고 있지 않다면 사용자에게 알리거나 더 간단한 셰이더로 fallback하는 게 좋습니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -428,7 +428,7 @@ gl.bindAttribLocation(lightingProgram, 1, &#39;a_normal&#39;);
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

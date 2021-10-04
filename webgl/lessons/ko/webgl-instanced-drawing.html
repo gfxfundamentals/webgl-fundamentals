@@ -244,7 +244,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 기본적으로 개별적으로 그릴 때보다 빠르게 같은 걸 여러 번 그리는 방법입니다.</p>
 <p>참고로 이 기능은 WebGL1의 선택적 extension이지만 <a href="https://webglstats.com/webgl/extension/ANGLE_instanced_arrays">거의 모든 브라우저와 기기에서 사용 가능</a>합니다.</p>
 <p>먼저 동일한 항목의 여러 instance를 그리는 예제부터 만들어 봅시다.</p>
-<p><a href="webgl-3d-orthographic.html">Orthographic projection</a>에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 shader로 시작합니다.</p>
+<p><a href="webgl-3d-orthographic.html">Orthographic projection</a>에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 셰이더로 시작합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- vertex shader --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
@@ -363,7 +363,7 @@ requestAnimationFrame(render);
 
 </p>
 <p><code class="notranslate" translate="no">gl.uniform4v</code>, <code class="notranslate" translate="no">gl.uniformMatrix4fv</code>, <code class="notranslate" translate="no">gl.drawArrays</code>를 각각 5번 호출하여 총 15번의 WebGL 호출을 가지는데요.
-Shader가 더 복잡하다면, <a href="webgl-3d-lighting-spot.html">스포트라이트</a>의 shader처럼, 6번의 <code class="notranslate" translate="no">gl.uniformXXX</code> 호출과 한 번의 <code class="notranslate" translate="no">gl.drawArrays</code> 호출로, 객체당 최소 7번의 호출을 가집니다.
+셰이더가 더 복잡하다면, <a href="webgl-3d-lighting-spot.html">스포트라이트</a>의 셰이더처럼, 6번의 <code class="notranslate" translate="no">gl.uniformXXX</code> 호출과 한 번의 <code class="notranslate" translate="no">gl.drawArrays</code> 호출로, 객체당 최소 7번의 호출을 가집니다.
 400개의 객체를 그린다면 2800 WebGL 호출이 될 겁니다.</p>
 <p>Instancing은 이러한 호출을 줄이는 방법입니다.
 이는 동일한 항목을 몇 번 그려야 하는지 WebGL에 알려주는 방식으로 작동합니다.
@@ -384,7 +384,7 @@ if (!gl) {
 +  return alert(&#39;need ANGLE_instanced_arrays&#39;);
 +}
 </code></pre>
-<p>다음은 <code class="notranslate" translate="no">matrix</code>와 <code class="notranslate" translate="no">color</code>에 대해 uniform 대신 attribute를 사용하도록 shader를 수정할 겁니다.</p>
+<p>다음은 <code class="notranslate" translate="no">matrix</code>와 <code class="notranslate" translate="no">color</code>에 대해 uniform 대신 attribute를 사용하도록 셰이더를 수정할 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- vertex shader --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
@@ -630,7 +630,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

@@ -307,7 +307,7 @@ faceInfos.forEach((faceInfo) =&gt; {
 </p>
 <p>이제 그걸 큐브에 적용해봅시다.
 <a href="webgl-3d-textures.html">이전 글</a>의 텍스처 아틀라스 예제 코드에서 시작할 겁니다.</p>
-<p>먼저 cubemap을 사용하도록 shader를 수정합시다.</p>
+<p>먼저 큐브맵을 사용하도록 셰이더를 수정합시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 
 uniform mat4 u_matrix;
@@ -323,7 +323,7 @@ void main() {
   v_normal = normalize(a_position.xyz);
 }
 </code></pre>
-<p>Shader에서 텍스처 좌표를 제거하고 법선을 fragment shader로 전달하는 varying을 추가했는데요.
+<p>셰이더에서 텍스처 좌표를 제거하고 법선을 fragment shader로 전달하는 varying을 추가했는데요.
 큐브의 위치가 원점을 중심으로 완벽하게 중앙에 있기 때문에 법선으로 사용할 수 있습니다.</p>
 <p><a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>을 떠올려보면 법선은 방향이며 일반적으로 일부 정점 표면의 방향을 지정하는데 사용됩니다.
 법선에 대해 정규화된 위치를 사용하기 때문에 이걸 비추면 큐브 전체에 부드러운 조명을 줄 수 있습니다.
@@ -434,7 +434,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

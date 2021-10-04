@@ -271,12 +271,12 @@ function drawCircle() {
 }
 </code></pre><p>WebGL은 두 번째 방법으로 동작하는데요.
 <code class="notranslate" translate="no">gl.createBuffer</code>, <code class="notranslate" translate="no">gl.bufferData</code>, <code class="notranslate" translate="no">gl.createTexture</code>, <code class="notranslate" translate="no">gl.texImage2D</code>와 같은 함수들은 버퍼(vertex)와 텍스처(color, etc..) 데이터를 WebGL에 업로드 해줍니다.
-<code class="notranslate" translate="no">gl.createProgram</code>, <code class="notranslate" translate="no">gl.createShader</code>, <code class="notranslate" translate="no">gl.compileShader</code>, <code class="notranslate" translate="no">gl.linkProgram</code>과 같은 함수들은 GLSL shader를 만들어 줍니다.
+<code class="notranslate" translate="no">gl.createProgram</code>, <code class="notranslate" translate="no">gl.createShader</code>, <code class="notranslate" translate="no">gl.compileShader</code>, <code class="notranslate" translate="no">gl.linkProgram</code>과 같은 함수들은 GLSL 셰이더를 만들어 줍니다.
 그 외 WebGL의 거의 모든 함수들은 이러한 전역 변수나 <em>상태</em>를 설정하여 최종적으로 <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>가 호출될 때 사용됩니다.</p>
 <p>전형적인 WebGL program은 기본적으로 이런 구조를 따릅니다.</p>
 <p>초기화할 때</p>
 <ul>
-<li>모든 shader와 program을 만들고 location 탐색</li>
+<li>모든 셰이더와 program을 만들고 location 탐색</li>
 <li>버퍼를 생성하고 정점 데이터 업로드</li>
 <li>텍스처를 생성하고 텍스처 데이터 업로드</li>
 </ul>
@@ -307,7 +307,7 @@ function drawCircle() {
 <p>큐브, 구체, 원뿔 데이터를 계산하는 방법에 대해 자세히 설명하진 않겠습니다.
 그냥 이들을 생성하는 함수가 있고 <a href="webgl-less-code-more-fun.html">이전 글</a>에서 설명한 bufferInfo 객체가 반환된다고 가정해봅시다.</p>
 <p>여기 해당 코드입니다.
-정점 색상을 곱하기 위해 <code class="notranslate" translate="no">u_colorMult</code>를 추가한 걸 제외하고는 <a href="webgl-3d-perspective.html">perspective 예제</a>와 같은 간단한 shader입니다.</p>
+정점 색상을 곱하기 위해 <code class="notranslate" translate="no">u_colorMult</code>를 추가한 걸 제외하고는 <a href="webgl-3d-perspective.html">perspective 예제</a>와 같은 간단한 셰이더입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Vertex shader에서 전달
 varying vec4 v_color;
 
@@ -406,7 +406,7 @@ gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 <ol>
 <li>Shader program (그리고 uniform과 attribute의 info/setter)</li>
 <li>그리려는 것에 대한 buffer와 attribute</li>
-<li>주어진 shader로 해당 물체를 그리는데 필요한 uniform</li>
+<li>주어진 셰이더로 해당 물체를 그리는데 필요한 uniform</li>
 </ol>
 <p>따라서 간단하 단순화는 물체의 배열을 만들고 그 배열에 3가지 물체를 모으는 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var objectsToDraw = [
@@ -581,16 +581,16 @@ Overlay나 후처리 효과처럼 다른 것들에 대한 별도의 목록이 �
 제 컴퓨터에서는 비정렬일 때 ~31fps, 정렬일 때 ~37fps이 나옵니다.
 거의 20% 향상되었네요.
 하지만 이는 최악의 경우 vs 최고의 경우이며, 대부분의 program은 더 많은 걸 수행하므로, 특별한 경우를 제외하고는 전부 고려할만한 가치가 없습니다.</p>
-<p>어떤 shader만으로는 어떤 geometry들은 그릴 수 없다는 점에 유의해야 합니다.
-예를 들어 법선이 필요한 shader는 법선이 없는 geometry에서 작동하지 않을 겁니다.
-마찬가지로 텍스처가 필요한 shader는 텍스처 없이는 작동하지 않습니다.</p>
+<p>어떤 셰이더만으로는 어떤 geometry들은 그릴 수 없다는 점에 유의해야 합니다.
+예를 들어 법선이 필요한 셰이더는 법선이 없는 geometry에서 작동하지 않을 겁니다.
+마찬가지로 텍스처가 필요한 셰이더는 텍스처 없이는 작동하지 않습니다.</p>
 <p>이 모든 걸 처리하기 때문에 <a href="https://threejs.org">Three.js</a>같은 3D 라이브러리를 선택하는 것이 좋습니다.
-몇 가지 geometry를 만들고, 어떻게 렌더링하고 싶은지 three.js에 지시하면, 런타임에 필요한 것들을 처리하기 위해 shader를 생성합니다.
+몇 가지 geometry를 만들고, 어떻게 렌더링하고 싶은지 three.js에 지시하면, 런타임에 필요한 것들을 처리하기 위해 셰이더를 생성합니다.
 Unity3D, Unreal, Source, Crytek 등 거의 모든 3D 엔진들이 이를 수행합니다.
-일부는 오프라인으로 생성되지만 중요한 점은 shader를 <em>생성</em>한다는 겁니다.</p>
+일부는 오프라인으로 생성되지만 중요한 점은 셰이더를 <em>생성</em>한다는 겁니다.</p>
 <p>물론 여러분이 이러한 글들을 읽는 이유는 내부에서 무슨 일이 일어나는지 알고 싶어하기 때문입니다.
 그건 훌륭하고 모든 걸 직접 작성하는 것은 재미있습니다.
-하지만 <a href="webgl-2d-vs-3d-library.html">WebGL은 굉장히 로우 레벨</a>이므로, 직접 하고 싶다면 해야 할 작업들이 많고, 다른 기능들은 종종 다른 shader가 필요하기 때문에, 대부분 shader generator 작성이 포함됩니다.</p>
+하지만 <a href="webgl-2d-vs-3d-library.html">WebGL은 굉장히 로우 레벨</a>이므로, 직접 하고 싶다면 해야 할 작업들이 많고, 다른 기능들은 종종 다른 셰이더가 필요하기 때문에, 대부분 셰이더 생성기 작성이 포함됩니다.</p>
 <p>루프 안에 <code class="notranslate" translate="no">computeMatrix</code>를 넣지 않았다는 걸 눈치채셨을 겁니다.
 이는 렌더링이 행렬 계산과 분리되어야 하기 때문인데요.
 일반적으로 <a href="webgl-scene-graph.html">scene graph</a>에서 행렬을 계산하는데 이건 또 다른 글에서 설명하겠습니다.</p>
@@ -615,7 +615,7 @@ Unity3D, Unreal, Source, Crytek 등 거의 모든 3D 엔진들이 이를 수행�
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

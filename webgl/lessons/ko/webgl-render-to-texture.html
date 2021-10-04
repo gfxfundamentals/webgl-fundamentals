@@ -287,7 +287,7 @@ gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 Attachment는 텍스처나 renderbuffer입니다.
 이전에 텍스처에 대해 살펴봤는데요.
 Renderbuffer는 텍스처와 매우 유사하지만 텍스처가 지원하지 않는 format과 option을 지원합니다.
-또한 텍스처와 달리 shader에 대한 입력으로 renderbuffer를 직접 사용할 수 없습니다.</p>
+또한 텍스처와 달리 셰이더에 대한 입력으로 renderbuffer를 직접 사용할 수 없습니다.</p>
 <p>Framebuffer를 생성하고 텍스처에 첨부해봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// framebuffer 생성 및 바인딩
 const fb = gl.createFramebuffer();
@@ -303,7 +303,7 @@ gl.framebufferTexture2D(
 <p>이전 렌더링 코드를 가져와서 함수로 만들어 두 번 호출할 수 있도록 해봅시다.
 일단 텍스처에 렌더링하고 다시 캔버스에 렌더링합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawCube(aspect) {
-  // program(shader 쌍) 사용 지시
+  // program(셰이더 쌍) 사용 지시
   gl.useProgram(program);
 
   // position attribute 활성화
@@ -360,7 +360,7 @@ gl.framebufferTexture2D(
   // 행렬 설정
   gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-  // u_texture에 대해 texture unit 0을 사용하도록 shader에 지시
+  // u_texture에 대해 texture unit 0을 사용하도록 셰이더에 지시
   gl.uniform1i(textureLocation, 0);
 
   // Geometry 그리기
@@ -505,7 +505,7 @@ Scene 뒤에서 색상 텍스처, depth buffer, framebuffer를 생성한 다음 
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>

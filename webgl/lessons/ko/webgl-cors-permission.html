@@ -296,7 +296,7 @@ function loadImageAndCreateTextureInfo(url) {
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var data = ctx.getImageData(0, 0, width, heigh);
 </code></pre><p>하지만 다른 도메인에서 가져와 그린 이미지라면 브라우저는 캔버스를 <em>오염</em>되었다고 표시하고 <code class="notranslate" translate="no">ctx.getImageData</code>를 호출할 때 보안 오류가 발생합니다.</p>
 <p>WebGL은 한 단계 더 나아가야 합니다.
-WebGL에서 <code class="notranslate" translate="no">gl.readPixels</code>는 <code class="notranslate" translate="no">ctx.getImageData</code>와 같은 호출이니 막으면 충분하지 않냐고 생각하겠지만, 픽셀을 직접 읽을 수 없더라도 이미지의 색상에 따라 실행이 더 오래 걸리는 shader를 만들 수 있는데요.
+WebGL에서 <code class="notranslate" translate="no">gl.readPixels</code>는 <code class="notranslate" translate="no">ctx.getImageData</code>와 같은 호출이니 막으면 충분하지 않냐고 생각하겠지만, 픽셀을 직접 읽을 수 없더라도 이미지의 색상에 따라 실행이 더 오래 걸리는 셰이더를 만들 수 있는데요.
 해당 정보를 사용하여 간접적으로 이미지 내부를 살펴보고 이미지의 내용을 확인하기 위해 타이밍을 사용할 수 있습니다.</p>
 <p>따라서 WebGL은 같은 도메인이 아닌 모든 이미지를 금지합니다.
 예를 들어 다음은 다른 도메인의 텍스처로 회전하는 사각형을 그리는 샘플인데요.
@@ -371,7 +371,7 @@ Github page, flickr.com, imgur.com 등은 권한을 부여하지만, 대부분�
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">Shader 및 GLSL</a></li>
+<li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
   <li>이미지 처리</li>
