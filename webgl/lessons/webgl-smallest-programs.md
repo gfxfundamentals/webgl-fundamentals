@@ -36,7 +36,7 @@ All this program does is clear the canvas to red but it did actually do somethin
 Think about it through. With just this you can actually test some things. Let's say
 you are [rendering to a texture](webgl-render-to-texture.html) but things aren't working.
 Let's say it's just like the example in [that article](webgl-render-to-texture.html).
-You're rendering 1 or more 3D things into a texture then rending that result onto a cube.
+You're rendering 1 or more 3D things into a texture then rendering that result onto a cube.
 
 You're not seeing anything. Well, as a simple test, stop rendering to the texture with
 shaders are just clear the texture to a known color.
