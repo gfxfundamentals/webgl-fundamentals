@@ -96,12 +96,12 @@ gl.bindTexture(gl.TEXTURE_2D, checkerboardTexture);
 gl.texImage2D(
     gl.TEXTURE_2D,
     0,                // mip level
-    gl.LUMINANCE,     // internal format
+    gl.LUMINANCE,     // 내부 포맷
     8,                // 너비
     8,                // 높이
     0,                // 테두리
-    gl.LUMINANCE,     // format
-    gl.UNSIGNED_BYTE, // type
+    gl.LUMINANCE,     // 포맷
+    gl.UNSIGNED_BYTE, // 타입
     new Uint8Array([  // 데이터
       0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC,
       0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF, 0xCC, 0xFF,
