@@ -2,7 +2,7 @@ Title: WebGL 최소 프로그램
 Description: 테스트를 위한 최소한의 코드
 TOC: 최소 프로그램
 
-이 글은 [기초](webgl-fundamentals.html)로 시작하여 여러 다른 글을 읽었다고 가정합니다.
+이 글은 [기초](webgl-fundamentals.html)로 시작한 여러 다른 글을 읽었다고 가정합니다.
 아직 읽지 않았다면 거기부터 시작해주세요.
 
 두 가지 목적이 있어서 이 글을 어떻게 정리해야 할지 잘 모르겠습니다.
