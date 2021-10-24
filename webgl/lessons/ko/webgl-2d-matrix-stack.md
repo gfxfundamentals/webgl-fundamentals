@@ -109,7 +109,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
 이전 강의인 [`drawImage`](webgl-2d-drawimage.html)에 이런 코드들이 있었습니다.
 
 ```
-// 이 행렬은 픽셀에서 clip space로 변환합니다.
+// 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
@@ -128,7 +128,7 @@ var matrixStack = new MatrixStack();
 그리고 스택의 최상단 행렬에 곱합니다.
 
 ```
-// 이 행렬은 픽셀에서 clip space로 변환합니다.
+// 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 +// 이 행렬은 원점을 current matrix stack에 해당하는 곳으로 이동시킵니다.

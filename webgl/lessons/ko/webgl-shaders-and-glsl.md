@@ -17,7 +17,7 @@ TOC: 셰이더와 GLSL
 
 ## 정점 셰이더
 
-정점 셰이더의 역할은 clip space 좌표를 생성하는 겁니다.
+정점 셰이더의 역할은 클립 공간 좌표를 생성하는 겁니다.
 항상 이런 형식을 취하는데
 
     void main() {
@@ -25,7 +25,7 @@ TOC: 셰이더와 GLSL
     }
 
 셰이더는 정점마다 한 번씩 호출되는데요.
-호출될 때마다 특수 전역 변수, `gl_Position`을 어떤 clip space 좌표로 설정해야 합니다.
+호출될 때마다 특수 전역 변수, `gl_Position`을 어떤 클립 공간 좌표로 설정해야 합니다.
 
 정점 셰이더는 데이터가 필요한데요.
 3가지 방법으로 데이터를 가져올 수 있습니다.
@@ -73,7 +73,7 @@ TOC: 셰이더와 GLSL
       gl_Position = a_position;
     }
 
-Clip space 정점을 버퍼에 넣으면 동작할 겁니다. 
+클립 공간 정점을 버퍼에 넣으면 동작할 겁니다. 
 
 Attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`를 사용할 수 있습니다.
 
@@ -272,13 +272,13 @@ WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 프래그먼트 
     +varying vec4 v_positionWithOffset;
 
     void main() {
-    +  // clip space에서 (-1 <-> +1) color space로 (0 -> 1) 변환
+    +  // 클립 공간에서 (-1 <-> +1) color space로 (0 -> 1) 변환
     +  vec4 color = v_positionWithOffset * 0.5 + 0.5
     +  gl_FragColor = color;
     }
 
 위 예제는 대개 말도 안되는 예제입니다.
-일반적으로는 clip space 값을 프래그먼트 셰이더에 직접 복사해서 색상으로 사용하지 않는데요.
+일반적으로는 클립 공간 값을 프래그먼트 셰이더에 직접 복사해서 색상으로 사용하지 않는데요.
 그럼에도 불구하고 작동하며 색상을 만들어냅니다.
 
 ## GLSL

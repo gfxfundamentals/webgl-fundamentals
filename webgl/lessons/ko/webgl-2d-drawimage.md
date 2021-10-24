@@ -79,7 +79,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       gl.enableVertexAttribArray(texcoordLocation);
       gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 
-      // 이 행렬은 픽셀에서 clip space로 변환합니다.
+      // 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
       var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
       // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
@@ -221,7 +221,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
 
       ...
 
-      // 이 행렬은 픽셀에서 clip space로 변환합니다.
+      // 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
       var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
     *  // 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
@@ -312,7 +312,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
 
       ...
 
-      // 이 행렬은 픽셀에서 clip space로 변환합니다.
+      // 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
       var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
       // 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
@@ -362,7 +362,7 @@ Canvas 2D API에서 최선의 경우 에러거나 최악의 경우 정의되지 
 
 텍스처 행렬 코드를 이걸로 변경합니다.
 
-    *  // Clip space가 texture space(0 ~ 1)을 대신한 걸 제외하고는 2D 투영 행렬과 같습니다.
+    *  // 클립 공간이 텍스처 공간(0 ~ 1)을 대신한 것 외에는 2D 투영 행렬과 같습니다.
     *  // 이 행렬은 우리를 픽셀 공간에 둡니다.
     *  var texMatrix = m4.scaling(1 / texWidth, 1 / texHeight, 1);
     *

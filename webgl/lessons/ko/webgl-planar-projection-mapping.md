@@ -179,7 +179,7 @@ const fieldOfViewRadians = degToRad(60);
 function render() {
   webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-  // Clip space에서 픽셀로 변환하는 방법을 WebGL에 지시
+  // 클립 공간에서 픽셀로 변환하는 방법을 WebGL에 지시
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   gl.enable(gl.CULL_FACE);
@@ -248,7 +248,7 @@ const imageTexture = loadImageTexture('resources/f-texture.png');
 ```
 
 [카메라 시각화에 대한 글](webgl-visualizing-the-camera.html)을 떠올려보면, -1에서 +1사이의 큐브를 만들고 카메라의 절두체를 나타내도록 그렸습니다.
-절두체 내부의 공간이 world space에서 -1에서 +1사이의 clip space로 변환되는 world space 내부에 있는 절두체 모양의 영역을 나타내도록 행렬을 만들었는데요.
+절두체 내부의 공간이 world space에서 -1에서 +1사이의 클립 공간으로 변환되는 world space 내부에 있는 절두체 모양의 영역을 나타내도록 행렬을 만들었는데요.
 여기서도 비슷하게 할 수 있습니다.
 
 한 번 해봅시다.

@@ -6,7 +6,7 @@ TOC: 작동 원리
 이건 [WebGL 기초](webgl-fundamentals.html)에서 이어지는 글입니다.
 이어서 하기 전에 WebGL과 GPU가 실제로 무엇을 하는지 기본적인 수준에서 얘기해봅시다.
 GPU에는 기본적으로 2가지 부분이 있는데요.
-첫 번째 부분은 정점(또는 데이터 스트림)을 clip space의 정점으로 처리합니다.
+첫 번째 부분은 정점(또는 데이터 스트림)을 클립 공간의 정점으로 처리합니다.
 두 번째 부분은 첫 번째 부분을 기반으로 픽셀을 그립니다.
 
 호출할 때
@@ -23,7 +23,7 @@ GPU에는 기본적으로 2가지 부분이 있는데요.
 왼쪽은 여러분이 제공한 데이터입니다.
 정점 셰이더는 [GLSL](webgl-shaders-and-glsl.html)로 작성하는 함수인데요.
 이 함수는 각 정점마다 한 번씩 호출됩니다.
-몇 가지 계산을 하고 현재 정점의 clip space 값으로 특수 변수 `gl_Position`을 설정하죠.
+몇 가지 계산을 하고 현재 정점의 클립 공간 값으로 특수 변수 `gl_Position`을 설정하죠.
 GPU는 이 값을 가져와서 내부에 저장합니다.
 
 `TRIANGLES`를 그린다고 가정하면, 첫 번째 부분에서 정점 3개를 생성할 때마다 GPU는 이걸 이용해 삼각형을 만듭니다.
@@ -35,7 +35,7 @@ GPU는 이 값을 가져와서 내부에 저장합니다.
 다행히 더 많은 정보를 전달할 수 있는데요.
 정점 셰이더에서 프래그먼트 셰이더로 전달하려는 각 값에 대해 “varying”을 정의하는겁니다.
 
-간단한 예시로, 우리가 직접 계산한 clip space 좌표를 정점 셰이더에서 프래그먼트 셰이더로 전달해봅시다.
+간단한 예시로 우리가 직접 계산한 클립 공간 좌표를 정점 셰이더에서 프래그먼트 셰이더로 전달해봅시다.
 
 간단한 삼각형을 그려보려고 하는데요.
 [이전 예제](webgl-2d-matrices.html)에 이어서 사각형을 삼각형으로 바꿔봅시다.
@@ -73,9 +73,9 @@ GPU는 이 값을 가져와서 내부에 저장합니다.
       // 위치를 행렬로 곱하기
       gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 
-      // clip space에서 color space로 변환
-      // clip space는 -1.0에서 +1.0까지
-      // color space는 0.0에서 1.0까지
+      // 클립 공간에서 색상 공간으로 변환
+      // 클립 공간은 -1.0에서 +1.0까지
+      // 색상 공간은 0.0에서 1.0까지
     *  v_color = gl_Position * 0.5 + 0.5;
     }
 
@@ -96,7 +96,7 @@ WebGL은 정점 셰이더의 varying을 이름과 type이 같은 프래그먼트
 {{{example url="../webgl-2d-triangle-with-position-for-color.html" }}}
 
 삼각형을 이동시키고, 크기를 바꾸고, 회전시켜보세요.
-참고로 색상은 clip space에서 계산되므로 삼각형과 함께 움직이지 않는데요.
+참고로 색상은 클립 공간에서 계산되므로 삼각형과 함께 움직이지 않는데요.
 색상은 배경에 상대적입니다.
 
 이제 생각해봅시다.
@@ -139,9 +139,9 @@ table.vertex_table td {
 </table>
 </div>
 
-정점 셰이더는 translation, rotation, scale에 행렬을 적용하고 clip space로 변환합니다.
+정점 셰이더는 translation, rotation, scale에 행렬을 적용하고 클립 공간으로 변환합니다.
 translation, rotation, scale의 기본값은 translation = 200, 150, rotation = 0, scale = 1,1이므로 실제로는 이동만 하는데요.
-400x300인 backbuffer가 주어지면 정점 셰이더는 행렬을 적용한 뒤 다음과 같은 3개의 clip space 정점을 계산합니다.
+400x300인 backbuffer가 주어지면 정점 셰이더는 행렬을 적용한 뒤 다음과 같은 3개의 클립 공간 정점을 계산합니다.
 
 <div class="hcenter">
 <table class="vertex_table">

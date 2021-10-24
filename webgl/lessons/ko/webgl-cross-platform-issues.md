@@ -145,7 +145,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 </div>
 
 이건 전체 목록이 아닌데요.
-최대 점 크기와 최대 선 두께 등이 있지만 기본적으로 최대 선 두께는 1.0이고 POINTS는 [clipping issue](#points-lines-viewport-scissor-behavior)를 신경쓰지 않아도 되는 간단한 데모에서만 유용하다고 가정해야 합니다.
+최대 점 크기와 최대 선 두께 등이 있지만 기본적으로 최대 선 두께는 1.0이고 POINTS는 [클리핑 문제](#points-lines-viewport-scissor-behavior)를 신경쓰지 않아도 되는 간단한 데모에서만 유용하다고 가정해야 합니다.
 
 WebGL2는 몇 가지 더 추가합니다.
 몇 가지 일반적인 것들은
@@ -261,11 +261,11 @@ void main() {
 ## Points, Lines, Viewport, Scissor 동작
 
 WebGL의 `POINTS`와 `LINES`는 최대 크기 1을 가질 수 있고 현재 가장 일반적인 제한인 `LINES`의 경우입니다.
-또한 중심이 viewport 외부에 있을 때 point의 clipping 여부는 구현에 정의됩니다.
+또한 중심이 viewport 외부에 있을 때 포인트의 클리핑 여부는 구현에 정의됩니다.
 [이 글의 하단](webgl-drawing-without-data.html#pointissues)을 봐주세요.
 
-마찬가지로, viewport가 정점만 clipping을 하는지 혹은 픽셀도 clipping을 하는지 여부는 정의되지 않았습니다.
-Scissor는 항상 pixel clipping을 하므로 scissor 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.
+마찬가지로, viewport가 정점만 클리핑을 하는지 혹은 픽셀도 클리핑을 하는지 여부는 정의되지 않았습니다.
+Scissor는 항상 픽셀 클리핑하기 때문에 scissor 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.
 
 ## 사파리 버그
 

@@ -32,7 +32,7 @@ Translation을 업데이트한 후에 이 함수를 호출할 수 있습니다.
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-    // Clip space에서 픽셀로 변환하는 방법을 WebGL에 지시
+    // 클립 공간에서 픽셀로 변환하는 방법을 WebGL에 지시
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // 캔버스 지우기

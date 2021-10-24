@@ -17,8 +17,8 @@ TOC: 원근 교정 텍스처 매핑
 
 {{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color는 v0, v1, v2 사이에서 보간" }}}
 
-[첫 번째 글](webgl-fundamentals.html)로 돌아가보면 우리는 clip space에서 삼각형을 그렸는데요.
-다음과 같이 간단한 정점 셰이더에 clip space 좌표를 전달했습니다.
+[첫 번째 글](webgl-fundamentals.html)로 돌아가보면 우리는 클립 공간에서 삼각형을 그렸는데요.
+다음과 같이 간단한 정점 셰이더에 클립 공간 좌표를 전달했습니다.
 
       // Attribute는 버퍼에서 데이터를 받음
       attribute vec4 a_position;
@@ -41,7 +41,7 @@ TOC: 원근 교정 텍스처 매핑
         gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
       }
 
-Clip space에 2개의 사각형을 그리도록 만들어봅시다.
+클립 공간에 2개의 사각형을 그리도록 만들어봅시다.
 각 정점의 `X`, `Y`, `Z`, `W`인 데이터를 전달할 겁니다.
 
     var positions = [
@@ -287,8 +287,8 @@ void main() {
 이는 위의 선형 보간 방정식과 동일합니다.
 
 이제 왜 WebGL이 4x4 행렬과 `X`, `Y`, `Z`, `W`가 있는 4개의 벡터를 사용하는지 이해가 되셨으면 좋겠습니다.
-`X`와 `Y`는 `W`로 나누어 clipspace 좌표를 얻습니다.
-`W`로 나누는 `Z`도 clipspace 좌표를 얻으며, `W`는 varying의 보간 중에 계속 사용되고 원근 교정 텍스처 매핑 기능을 제공합니다.
+`X`와 `Y`는 `W`로 나누어 클립 공간 좌표를 얻습니다.
+`W`로 나누는 `Z`도 클립 공간 좌표를 얻으며, `W`는 varying의 보간 중에 계속 사용되고 원근 교정 텍스처 매핑 기능을 제공합니다.
 
 <div class="webgl_bottombar">
 <h3>1990년대 중반 게임 콘솔</h3>

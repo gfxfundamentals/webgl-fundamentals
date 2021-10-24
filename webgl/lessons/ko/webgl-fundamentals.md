@@ -56,12 +56,12 @@ WebGL은 함수가 출력하는 위치를 기반으로 [점, 선, 삼각형](web
 
 ## WebGL Hello World
 
-WebGL은 clip space의 좌표와 색상, 오직 2가지만을 다루는데요.
+WebGL은 클립 공간의 좌표와 색상, 오직 2가지만을 다루는데요.
 프로그래머로서 WebGL을 사용하는 여러분의 역할은 이 2가지를 작성하는 겁니다.
 이를 위해 2개의 "셰이더"를 제공해야 하는데요.
-Clip space 좌표를 제공하는 정점 셰이더, 색상을 제공하는 프래그먼트 셰이더입니다.
+클립 공간 좌표를 제공하는 정점 셰이더, 색상을 제공하는 프래그먼트 셰이더입니다.
 
-Clip space 좌표는 캔버스 크기에 상관없이 항상 -1에서 +1까지입니다.
+클립 공간 좌표는 캔버스 크기에 상관없이 항상 -1에서 +1까지입니다.
 
 <div class="webgl_center"><img src="resources/clipspace.svg" style="width: 400px"></div>
 
@@ -283,12 +283,12 @@ CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 �
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
-`gl_Position`으로 설정할 clip space 값을 어떻게 screen space로 변환하는지 WebGL에 알려줘야 하는데요.
+`gl_Position`으로 설정할 클립 공간 값을 어떻게 화면 공간으로 변환하는지 WebGL에 알려줘야 하는데요.
 이를 위해 `gl.viewport`를 호출해서 현재 캔버스 크기를 전달해야 합니다.
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-이는 -1 <-> +1 clip space를, x는 0 <-> `gl.canvas.width`로, y는 0 <-> `gl.canvas.height`로 매핑시켜줍니다.
+이는 -1 <-> +1 클립 공간을, x는 0 <-> `gl.canvas.width`로, y는 0 <-> `gl.canvas.height`로 매핑시켜줍니다.
 
 캔버스를 지워봅시다.
 `0, 0, 0, 0`은 각각 빨강, 초록, 파랑, 투명도이므로 이 경우 캔버스를 투명하게 만듭니다.
@@ -355,17 +355,17 @@ count가 3이기 때문에 정점 셰이더를 세 번 실행할 겁니다.
 마지막에는 남아있는 2개의 값으로 설정됩니다.
 
 `primitiveType`을 `gl.TRIANGLES`로 설정했기 때문에, 정점 셰이더가 3번 실행될 때마다, WebGL은 `gl_Position`에 설정한 3개의 값을 기반으로 삼각형을 그리는데요.
-캔버스 크기에 상관없이 이 값들은 -1에서 1사이의 clip space 좌표 안에 있습니다.
+캔버스 크기에 상관없이 이 값들은 -1에서 1사이의 클립 공간 좌표 안에 있습니다.
 
-정점 셰이더는 단순히 positionBuffer 값을 `gl_Position`에 복사하기 때문에 삼각형은 clip space 좌표에 그려집니다.
+정점 셰이더는 단순히 positionBuffer 값을 `gl_Position`에 복사하기 때문에 삼각형은 클립 공간 좌표에 그려집니다.
 
         0, 0,
         0, 0.5,
       0.7, 0,
 
-캔버스 크기가 400x300이라면 이런 식으로 clip space를 screen space로 변환합니다.
+캔버스 크기가 400x300이라면 이런 식으로 클립 공간을 화면 공간으로 변환합니다.
 
-    clip space       screen space
+     클립 공간            화면 공간
        0, 0       ->   200, 150
        0, 0.5     ->   200, 225
      0.7, 0       ->   340, 150
@@ -380,17 +380,17 @@ WebGL은 이제 삼각형을 렌더링할 겁니다.
 {{{example url="../webgl-fundamentals.html" }}}
 
 위 경우 정점 셰이더가 데이터를 직접 전달하는 것 외에는 아무것도 하지 않는 걸 볼 수 있는데요.
-위치 데이터가 이미 clip space에 있으므로 할 일이 없습니다.
-*WebGL은 rasterization API에 불과하기 때문에 3D를 원한다면 3D를 clip space로 변환하는 셰이더를 작성해야 합니다.*
+위치 데이터가 이미 클립 공간에 있으므로 할 일이 없습니다.
+*WebGL은 rasterization API에 불과하기 때문에 3D를 원한다면 3D를 클립 공간로 변환하는 셰이더를 작성해야 합니다.*
 
 아마 삼각형이 중앙에서 시작해서 오른쪽 상단으로 가는 이유가 궁금하실텐데요.
-`x`의 clip space는 -1부터 +1까지 입니다.
+`x`의 클립 공간은 -1부터 +1까지 입니다.
 즉 0이 중앙이고 양수 값이 오른쪽이라는 걸 의미합니다.
 
-상단에 있는 이유는 clip space에서 -1은 하단에 있고 +1은 상단에 있기 때문입니다.
+상단에 있는 이유는 클립 공간에서 -1은 하단에 있고 +1은 상단에 있기 때문입니다.
 즉 0이 중앙이고 양수가 중앙보다 위에 있다는 걸 의미합니다.
 
-2D의 경우 clip space보다는 픽셀로 작업하는 것이 좋으니, 위치를 픽셀로 제공하고 clip space로 변환할 수 있도록 셰이더를 바꿔봅시다.
+2D의 경우 클립 공간보다는 픽셀로 작업하는 것이 좋으니, 위치를 픽셀로 제공하고 클립 공간으로 변환할 수 있도록 셰이더를 바꿔봅시다.
 여기 새로운 정점 셰이더입니다.
 
     <script id="vertex-shader-2d" type="notjs">
@@ -407,7 +407,7 @@ WebGL은 이제 삼각형을 렌더링할 겁니다.
     +    // 0->1에서 0->2로 변환
     +    vec2 zeroToTwo = zeroToOne * 2.0;
     +
-    +    // 0->2에서 -1->+1로 변환 (clip space)
+    +    // 0->2에서 -1->+1로 변환 (클립 공간)
     +    vec2 clipSpace = zeroToTwo - 1.0;
     +
     *    gl_Position = vec4(clipSpace, 0, 1);
@@ -425,9 +425,9 @@ WebGL은 이제 삼각형을 렌더링할 겁니다.
     var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
 
 나머지는 주석을 보면 명료합니다.
-`u_resolution`을 캔버스의 해상도로 설정함으로써, 셰이더는 픽셀 좌표로 제공한 `positionBuffer`에 넣은 위치를 가져와 clip space로 변환합니다.
+`u_resolution`을 캔버스의 해상도로 설정함으로써, 셰이더는 픽셀 좌표로 제공한 `positionBuffer`에 넣은 위치를 가져와 클립 공간으로 변환합니다.
 
-이제 위치 값을 clip space에서 픽셀로 바꿀 수 있습니다.
+이제 위치 값을 클립 공간에서 픽셀로 바꿀 수 있습니다.
 이번에는 각각 3개의 점으로 이루어진 삼각형 두 개로 만드는 사각형을 그려볼 겁니다.
 
     var positions = [
@@ -466,9 +466,9 @@ WebGL은 이제 삼각형을 렌더링할 겁니다.
 
 사각형이 왼쪽 하단 근처에 있는 걸 알 수 있는데요.
 WebGL은 양수 Y를 위쪽으로, 음수 Y를 아래쪽으로 간주합니다.
-Clip space에서 왼쪽 하단 모서리는 -1,-1이 되죠.
+클립 공간에서 왼쪽 하단 모서리는 -1,-1이 되죠.
 아직 어떤 부호도 바꾸지 않았기 때문에 현재 수식에서 0,0은 왼쪽 하단 모서리가 됩니다.
-이를 2D 그래픽 API에서 보다 전통적으로 사용되는 왼쪽 상단 모서리가 되도록 clip space y좌표를 뒤집을 수 있습니다.
+이를 2D 그래픽 API에서 보다 전통적으로 사용되는 왼쪽 상단 모서리가 되도록 클립 공간 y좌표를 뒤집을 수 있습니다.
 
     *  gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 

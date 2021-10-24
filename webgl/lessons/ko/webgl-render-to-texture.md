@@ -160,7 +160,7 @@ function drawScene(time) {
     // 3x2 텍스처로 큐브 렌더링
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
-    // WebGL에 clip space에서 픽셀로 변환하는 방법 지시
+    // WebGL에 클립 공간에서 픽셀로 변환하는 방법 지시
     gl.viewport(0, 0, targetTextureWidth, targetTextureHeight);
 
     // Attachment 지우기
@@ -178,7 +178,7 @@ function drawScene(time) {
     // 방금 렌더링한 텍스처로 큐브 렌더링
     gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 
-    // Clip space에서 픽셀로 변환하는 방법을 WebGL에 지시
+    // 클립 공간에서 픽셀로 변환하는 방법을 WebGL에 지시
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     // 캔버스와 depth buffer 지우기
