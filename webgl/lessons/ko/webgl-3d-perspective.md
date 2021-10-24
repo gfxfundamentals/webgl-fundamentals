@@ -365,9 +365,9 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 왜 그렇게 멀리 옮겨야 했을까요?
 </p>
 <p>
-그 이유는 마지막 샘플까지 <code>m4.projection</code> 함수가 pixel에서 clip space로 투영을 만들었기 때문입니다.
+그 이유는 마지막 샘플까지 <code>m4.projection</code> 함수가 픽셀에서 clip space로 투영을 만들었기 때문입니다.
 이는 우리가 표시하고 있던 영역이 400x300px을 나타냈다는 걸 의미하는데요.
-3D에서 'pixel'을 사용하는 건 정말 의미가 없습니다.
+3D에서 '픽셀'을 사용하는 건 정말 의미가 없습니다.
 </p>
 <p>다시말해 0,0,0에서 F를 그리려고 했지만 회전하지 않는다면</p>
 <div class="webgl_center"><img src="resources/f-big-and-wrong-side.svg" style="width: 500px;"></div>

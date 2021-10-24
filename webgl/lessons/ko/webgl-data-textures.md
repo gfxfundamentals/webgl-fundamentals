@@ -16,7 +16,7 @@ JavaScript에서 텍스처 데이터를 생성하는 것은 굉장히 간단합�
 <div class="webgl_center">
   <table class="tabular-data tabular-data1">
     <thead>
-      <tr><td>Format</td><td>Type</td><td>Channels</td><td>Bytes per pixel</td></tr>
+      <tr><td>포맷</td><td>타입</td><td>채널</td><td>픽셀당 바이트</td></tr>
     </thead>
     <tbody>
       <tr><td>RGBA</td><td>UNSIGNED_BYTE</td><td>4</td><td>4</td></tr>
@@ -31,7 +31,7 @@ JavaScript에서 텍스처 데이터를 생성하는 것은 굉장히 간단합�
   </table>
 </div>
 
-3x2 pixel `LUMINANCE` 텍스처를 생성해봅시다.
+3x2 픽셀 `LUMINANCE` 텍스처를 생성해봅시다.
 `LUMINANCE` 텍스처이기 때문에 픽셀 당 1개의 값만 있고 각각의 R, G, B 채널로 반복됩니다.
 
 [지난 글](webgl-3d-textures.html)에서 샘플을 가져올 겁니다.

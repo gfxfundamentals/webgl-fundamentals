@@ -79,7 +79,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       gl.enableVertexAttribArray(texcoordLocation);
       gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 
-      // 이 행렬은 pixel에서 clip space로 변환합니다.
+      // 이 행렬은 픽셀에서 clip space로 변환합니다.
       var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
       // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
@@ -221,7 +221,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
 
       ...
 
-      // 이 행렬은 pixel에서 clip space로 변환합니다.
+      // 이 행렬은 픽셀에서 clip space로 변환합니다.
       var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
     *  // 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
@@ -312,7 +312,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
 
       ...
 
-      // 이 행렬은 pixel에서 clip space로 변환합니다.
+      // 이 행렬은 픽셀에서 clip space로 변환합니다.
       var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
       // 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.

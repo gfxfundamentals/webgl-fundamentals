@@ -32,7 +32,7 @@ TOC: 셰이더와 GLSL
 
 1.  [Attribute](#attribute) (버퍼에서 가져온 데이터)
 2.  [Uniform](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)
-3.  [Texture](#vertex-shader-texture) (pixel/texel의 데이터)
+3.  [Texture](#vertex-shader-texture) (픽셀/텍셀 데이터)
 
 ### Attribute
 
@@ -195,7 +195,7 @@ uniform은 여러 type을 가질 수 있는데요.
 3가지 방법으로 데이터를 가져올 수 있습니다.
 
 1.  [Uniform](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)
-2.  [Texture](#fragment-shader-texture) (pixel/texel의 데이터)
+2.  [Texture](#fragment-shader-texture) (픽셀/텍셀 데이터)
 3.  [Varying](#varying) (정점 셰이더에서 전달되고 보간된 데이터)
 
 ### 프래그먼트 셰이더의 Uniform

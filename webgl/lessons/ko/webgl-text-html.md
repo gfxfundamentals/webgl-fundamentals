@@ -172,7 +172,7 @@ HTML을 사용하면 이 모든 기능을 자유롭게 사용할 수 있습니�
 위 예제를 통해 행렬을 사용하는 방법, 곱하는 방법, clip space로 전환하기 위해 projection matrix를 적용하는 방법을 배웠습니다.
 이 모든 것을 셰이더로 전달하고 local space의 정점에 곱하여 clip space로 전환합니다.
 JavaScript에서도 이 모든 계산을 수행할 수 있는데요.
-Clip space(-1 ~ +1)를 pixel로 곱하고 이를 사용하여 div를 배치할 수 있습니다.
+Clip space(-1 ~ +1)를 픽셀로 곱하고 이를 사용하여 div를 배치할 수 있습니다.
 
     gl.drawArrays(...);
 
@@ -189,7 +189,7 @@ Clip space(-1 ~ +1)를 pixel로 곱하고 이를 사용하여 div를 배치할 �
     clipspace[0] /= clipspace[3];
     clipspace[1] /= clipspace[3];
 
-    // clipspace를 pixel로 변환
+    // clipspace를 픽셀로 변환
     var pixelX = (clipspace[0] *  0.5 + 0.5) * gl.canvas.width;
     var pixelY = (clipspace[1] * -0.5 + 0.5) * gl.canvas.height;
 

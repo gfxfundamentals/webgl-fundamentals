@@ -309,7 +309,7 @@ X 회전
 ```
 
 또한 투영 함수를 업데이트해야 합니다.
-다음은 pixel에서 clip space로 변환하는 기존 코드입니다.
+다음은 픽셀에서 clip space로 변환하는 기존 코드입니다.
 
 ```
   projection: function (width, height) {
@@ -337,7 +337,7 @@ X 회전
   },
 ```
 
-X와 Y를 pixel space에서 clip space로 변환해야 했던 것처럼 Z도 동일한 작업을 수행해야 합니다.
+X와 Y를 픽셀 공간에서 clip space로 변환해야 했던 것처럼 Z도 동일한 작업을 수행해야 합니다.
 이 경우에는 Z축 픽셀 단위도 만들게 되는데요.
 `depth`에 `width`와 비슷한 값을 전달할 것이므로, 공간은 0px에서 `width`px의 너비와, 0px에서 `height`px의 높이가 되지만, `depth`는 `-depth / 2`에서 `+depth / 2`가 됩니다.
 
@@ -553,7 +553,7 @@ CULL_FACE를 켜면 얻는 결과입니다.
 
 DEPTH BUFFER를 입력해봅시다.
 
-때때로 Z-Buffer라고 불리는 depth buffer는 *depth* pixel의 사각형인데, 각 color pixel에 대한 depth pixel은 이미지를 만드는 데에 사용됩니다.
+때때로 Z-Buffer라고 불리는 depth buffer는 *depth pixel*의 사각형인데, 각 color pixel에 대한 depth pixel은 이미지를 만드는 데에 사용됩니다.
 WebGL은 각 color pixel을 그리기 때문에 depth pixel도 그릴 수 있는데요.
 이건 Z축에 대해 정점 셰이더에서 반환한 값을 기반으로 합니다.
 X와 Y를 clip space로 변환해야 했던 것처럼 Z도 clip space(-1에서 +1)에 있습니다.
@@ -589,7 +589,7 @@ WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하�
 3D를 얻게 됩니다!
 
 한 가지 사소한 게 남았는데요.
-대부분의 3D 수학 라이브러리에는 clip space에서 pixel space로 변환하는 `투영` 함수가 없습니다.
+대부분의 3D 수학 라이브러리에는 clip space에서 픽셀 공간으로 변환하는 `projection` 함수가 없습니다.
 그보다는 보통 `ortho`나 `orthographic`이라 불리는 함수가 있습니다.
 
     var m4 = {

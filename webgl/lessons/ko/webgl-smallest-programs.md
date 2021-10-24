@@ -184,7 +184,7 @@ void main() {
 이제 이를 단순하게 유지하기 위해 [데이터 텍스처에 대한 글](webgl-data-textures.html)에서 다룬 것처럼 원본 데이터로 만들어 보겠습니다.
 
 ```js
-// 2x2 pixel data
+// 2x2 픽셀 데이터
 const pixels = new Uint8Array([
   0xFF, 0x00, 0x00, 0xFF,  // 빨간색
   0x00, 0xFF, 0x00, 0xFF,  // 초록색

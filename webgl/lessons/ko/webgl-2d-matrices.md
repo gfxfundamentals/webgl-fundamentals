@@ -545,7 +545,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
 2단계:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
 
-> {{{diagram url="resources/matrix-space-change.html?stage=1" caption="clip space에서 pixel space으로" }}}
+> {{{diagram url="resources/matrix-space-change.html?stage=1" caption="clip space에서 픽셀 공간으로" }}}
 >
 > 이제 픽셀 공간에 있습니다. X = 0에서 400, Y = 0에서 300, 왼쪽 상단은 0,0 입니다.
 > 이 행렬을 사용하여 전달된 위치는 픽셀 공간에 있어야 합니다.
