@@ -28,7 +28,7 @@ void main() {
 그리고
 
 ```html
-<!-- fragment shader -->
+<!-- 프래그먼트 셰이더 -->
 <script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
@@ -41,7 +41,7 @@ void main() {
 ```
 
 정점 셰이더는 각 정점을 [해당 글](webgl-3d-orthographic.html)에서 다룬 상당히 유연한 배열인 단일 행렬로 곱합니다.
-Fragment shader는 uniform을 통해 전달한 색상을 사용합니다.
+프래그먼트 셰이더는 uniform을 통해 전달한 색상을 사용합니다.
 
 그리기 위해서는 shader를 컴파일하고 서로 연결한 다음 attribute와 uniform의 location을 찾아야 합니다.
 
@@ -190,7 +190,7 @@ void main() {
   // 위치를 행렬로 곱하기
   gl_Position = matrix * a_position;
 
-+  // Fragment shader로 정점 색상 전달
++  // 프래그먼트 셰이더로 정점 색상 전달
 +  v_color = color;
 }
 </script>
@@ -199,7 +199,7 @@ void main() {
 그리고
 
 ```html
-<!-- fragment shader -->
+<!-- 프래그먼트 셰이더 -->
 <script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
@@ -214,7 +214,7 @@ void main() {
 </script>  
 ```
 
-Attribute는 정점 셰이더에서만 작동하므로 정점 셰이더의 attribute에서 색상을 가져와서 varying을 통해 fragment shader로 전달해야 합니다.
+Attribute는 정점 셰이더에서만 작동하므로 정점 셰이더의 attribute에서 색상을 가져와서 varying을 통해 프래그먼트 셰이더로 전달해야 합니다.
 
 다음으로 해당 attribute의 location을 찾아야 합니다.
 
@@ -414,7 +414,7 @@ void main() {
 -  gl_Position = matrix * a_position;
 +  gl_Position = projection * view * matrix * a_position;
 
-  // Fragment shader로 정점 색상 전달
+  // 프래그먼트 셰이더로 정점 색상 전달
   v_color = color;
 }
 </script>

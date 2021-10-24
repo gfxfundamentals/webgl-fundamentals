@@ -12,7 +12,7 @@ WebGL에서 어떻게 텍스처를 적용할까요?
 먼저 해야할 일은 셰이더와 텍스처 조정입니다.
 다음은 정점 셰이더의 변경 사항인데요.
 텍스처 좌표를 전달해야 합니다.
-이 경우 fragment shader로 바로 전달하게 됩니다.
+이 경우 프래그먼트 셰이더로 바로 전달하게 됩니다.
 
     attribute vec4 a_position;
     *attribute vec2 a_texcoord;
@@ -25,11 +25,11 @@ WebGL에서 어떻게 텍스처를 적용할까요?
       // 위치를 행렬로 곱하기
       gl_Position = u_matrix * a_position;
 
-    *  // texcoord를 fragment shader로 전달
+    *  // texcoord를 프래그먼트 셰이더로 전달
     *  v_texcoord = a_texcoord;
     }
 
-Fragment shader에서 텍스처를 참조하게 해주는 uniform sampler2D를 선언합니다.
+프래그먼트 셰이더에서 텍스처를 참조하게 해주는 uniform sampler2D를 선언합니다.
 그리고 정점 셰이더에서 전달된 텍스처 좌표를 사용하고 해당 텍스처에서 색상을 찾기 위해 `texture2D`를 호출합니다.
 
     precision mediump float;
@@ -392,7 +392,7 @@ WebGL이 "texture complete"여야 하는데요.
 
 3가지 답이 떠오르는데요.
 
-1) 텍스처 6개를 참조하는 복잡한 셰이더를 만들고, 사용할 텍스처를 정하기 위해 정점 셰이더에 fragment shader로 전달되는 추가 정점 정보를 전달합니다.
+1) 텍스처 6개를 참조하는 복잡한 셰이더를 만들고, 사용할 텍스처를 정하기 위해 정점 셰이더에 프래그먼트 셰이더로 전달되는 추가 정점 정보를 전달합니다.
 이건 하지 마세요!
 조금만 생각해보면 더 많은 면을 가진 다른 모양에 대해 같은 작업을 수행하려는 경우 수많은 셰이더를 작성해야 한다는 것을 알 수 있습니다.
 

@@ -79,7 +79,7 @@ void main() {
 }
 ```
 
-그리고 fragment shader는 단색을 그리기만 하면 됩니다.
+그리고 프래그먼트 셰이더는 단색을 그리기만 하면 됩니다.
 
 ```glsl
 precision mediump float;
@@ -163,7 +163,7 @@ void main() {
 'y'의 경우 `time + u`를 사용하지만 `fract`이 소수 부분만 반환하므로 값은 0.0에서 1.0사이가 됩니다.
 이를 1.0에서 -1.0사이로 확장하면 시간이 지남에 따라 반복되지만 각 점에 대해 다르게 오프셋되는 y를 얻습니다.
 
-Fragment shader에서 색상을 파란색으로 바꿔봅시다.
+프래그먼트 셰이더에서 색상을 파란색으로 바꿔봅시다.
 
 ```glsl
 precision mediump float;

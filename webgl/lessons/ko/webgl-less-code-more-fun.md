@@ -42,7 +42,7 @@ void main() {
 }
 ```
 
-Fragment shader:
+프래그먼트 셰이더:
 
 ```
 precision mediump float;
@@ -450,10 +450,10 @@ uniformSetters.u_ambient([1, 0, 0, 1]); // 주변 색상을 빨간색으로 설�
 이게 안 좋은 이유는 GLSL로 작업할 때 가끔씩 셰이더를 수정하고 종종 디버그할 수 있기 때문입니다.
 프로그램의 화면에서 아무것도 보이지 않는다고 가정해봅시다.
 아무것도 나타나지 않을 때 먼저 해야할 것들 중 하나는 셰이더를 단순화하는 겁니다.
-예를 들어 fragment shader를 가능한 가장 간단한 형태로 변경할 수 있습니다.
+예를 들어 프래그먼트 셰이더를 가능한 가장 간단한 형태로 변경할 수 있습니다.
 </p>
 <pre class="prettyprint showlinemods">
-// Fragment shader
+// 프래그먼트 셰이더
 precision mediump float;
 
 varying vec4 v_position;

@@ -168,7 +168,7 @@ Cubemap은 6개의 면을 가져야 하며, 6개의 면은 모두 동일한 크�
 
 이제 반사가 어떻게 작동하는지 알고, cubemap에서 값을 찾기 위해 사용할 수 있으므로, 셰이더를 변경해봅시다.
 
-먼저 정점 셰이더에서 정점의 world position과 world oriented normal을 계산하고 이를 fragment shader에 varying으로 전달할 겁니다.
+먼저 정점 셰이더에서 정점의 world position과 world oriented normal을 계산하고 이를 프래그먼트 셰이더에 varying으로 전달할 겁니다.
 이는 [스포트라이트에 대한 글](webgl-3d-lighting-spot.html)에서 했던 것과 유사합니다.
 
 ```glsl
@@ -186,15 +186,15 @@ void main() {
   // 위치를 행렬로 곱하기
   gl_Position = u_projection * u_view * u_world * a_position;
 
-  // View position을 fragment shader로 보내기
+  // View position을 프래그먼트 셰이더로 보내기
   v_worldPosition = (u_world * a_position).xyz;
 
-  // 법선의 방향을 정하고 fragment shader로 전달
+  // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
   v_worldNormal = mat3(u_world) * a_normal;
 }
 ```
 
-그런 다음 fragment shader에서 `worldNormal`이 정점 사이의 표면을 가로질러 보간되므로 정규화합니다.
+그런 다음 프래그먼트 셰이더에서 `worldNormal`이 정점 사이의 표면을 가로질러 보간되므로 정규화합니다.
 카메라의 world position을 전달하고 표면의 world position에서 이를 빼면 `eyeToSurfaceDir`이 됩니다.
 
 마지막으로 위에서 살펴본 공식을 구현하는 GLSL 내장 함수 `reflect`를 사용합니다.

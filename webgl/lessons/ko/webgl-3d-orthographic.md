@@ -388,7 +388,7 @@ X와 Y를 pixel space에서 clip space로 변환해야 했던 것처럼 Z도 동
 
 슬라이더를 움직여서 이걸 3D라고 부르기는 힘든데요.
 각 사각형에 다른 색상을 칠해봅시다.
-이를 위해 정점 셰이더에 또 다른 attribute와 이걸 정점 셰이더에서 fragment shader로 전달하기 위한 varying을 추가할 겁니다.
+이를 위해 정점 셰이더에 또 다른 attribute와 이걸 정점 셰이더에서 프래그먼트 셰이더로 전달하기 위한 varying을 추가할 겁니다.
 
 다음은 새로운 정점 셰이더입니다.
 
@@ -405,13 +405,13 @@ void main() {
   // 위치를 행렬로 곱하기
   gl_Position = u_matrix * a_position;
 
-+  // Fragment shader로 색상 전달
++  // 프래그먼트 셰이더로 색상 전달
 +  v_color = a_color;
 }
 </script>
 ```
 
-Fragment shader에서 해당 색상을 사용해야 합니다.
+프래그먼트 셰이더에서 해당 색상을 사용해야 합니다.
 
 ```
 <script id="fragment-shader-3d" type="x-shader/x-fragment">
@@ -560,7 +560,7 @@ X와 Y를 clip space로 변환해야 했던 것처럼 Z도 clip space(-1에서 +
 해당 값은 depth space 값(0에서 +1)으로 변환됩니다.
 WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하는데요.
 그릴 픽셀의 depth 값이 대응하는 depth pixel의 값보다 클 경우 WebGL은 새로운 color pixel을 그리지 않습니다.
-아니면 fragment shader의 색상으로 새로운 color pixel을 모두 그리고, 새로운 depth 값으로 depth pixel을 그립니다.
+아니면 프래그먼트 셰이더의 색상으로 새로운 color pixel을 모두 그리고, 새로운 depth 값으로 depth pixel을 그립니다.
 이는 다른 픽셀 뒤에 있는 픽셀은 그려지지 않는다는 걸 의미합니다.
 
 이렇게 culling을 켰던 것처럼 간단하게 이 기능을 사용할 수 있습니다.

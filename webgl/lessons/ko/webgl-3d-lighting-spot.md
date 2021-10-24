@@ -53,7 +53,7 @@ Limit로 *dot limit*를 계산하고, limit의 cosine을 구합니다.
 
 그렇게 해봅시다.
 
-먼저 [지난 글](webgl-3d-lighting-point.html)의 fragment shader를 수정합니다.
+먼저 [지난 글](webgl-3d-lighting-point.html)의 프래그먼트 셰이더를 수정합니다.
 
 ```
 precision mediump float;

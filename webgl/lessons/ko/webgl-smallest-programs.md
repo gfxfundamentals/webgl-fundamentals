@@ -121,7 +121,7 @@ void main() {
 ```
 
 ```glsl
-// fragment shader
+// 프래그먼트 셰이더
 precision mediump float;
 
 void main() {
@@ -164,13 +164,13 @@ WebGL 스펙은 오직 최대 크기 1.0을 필요로 합니다.
 누가 점 하나 그리는 걸 원하겠다고 생각하실 수 있습니다.
 
 점은 자동적으로 비어있는 [텍스처 좌표](webgl-3d-textures.html)를 가집니다.
-Fragment shader의 특수 변수 `gl_PointCoord`로 사용할 수 있는데요.
+프래그먼트 셰이더의 특수 변수 `gl_PointCoord`로 사용할 수 있는데요.
 해당 점의 텍스처를 그려봅시다.
 
-먼저 fragment shader를 변경합니다.
+먼저 프래그먼트 셰이더를 변경합니다.
 
 ```glsl
-// fragment shader
+// 프래그먼트 셰이더
 precision mediump float;
 
 +uniform sampler2D tex;

@@ -7,8 +7,8 @@ TOC: 정밀도 문제
 
 ## `lowp`, `mediump`, `highp`
 
-이 사이트의 [첫 번째 글](webgl-fundamentals.html)에서 우린 정점 셰이더와 fragment shader를 만들었습니다.
-Fragment shader를 만들 때 지나가는 말로 fragment shader는 기본 정밀도를 가지지 않으므로 한 줄을 추가해서 설정해야 한다고 언급했었는데
+이 사이트의 [첫 번째 글](webgl-fundamentals.html)에서 우린 정점 셰이더와 프래그먼트 셰이더를 만들었습니다.
+프래그먼트 셰이더를 만들 때 지나가는 말로 프래그먼트 셰이더는 기본 정밀도를 가지지 않으므로 한 줄을 추가해서 설정해야 한다고 언급했었는데
 
 ```glsl
 precision mediump float;
@@ -49,9 +49,9 @@ WebGL에서 대부분의 숫자는 32bit에 불과한데요.
 이상적으로는 모든 곳에 `highp`를 사용해 이 문제를 그냥 무시할 수도 있지만 안타깝게도 현실적이지 않습니다.
 2가지 문제가 있는데요.
 
-1. 대부분의 구형 또는 저렴한 스마트폰같은 일부 기기들은 fragment shader에서 `highp`를 지원하지 않습니다.
+1. 대부분의 구형 또는 저렴한 스마트폰같은 일부 기기들은 프래그먼트 셰이더에서 `highp`를 지원하지 않습니다.
 
-   이 문제는 fragment shader에서 `highp`를 사용하도록 선언하고 사용자가 `highp`를 지원하지 않는 기기에서 페이지를 로드하면 셰이더는 컴파일에 실패할 겁니다.
+   이 문제는 프래그먼트 셰이더에서 `highp`를 사용하도록 선언하고 사용자가 `highp`를 지원하지 않는 기기에서 페이지를 로드하면 셰이더는 컴파일에 실패할 겁니다.
 
    반대로 어디에서나 사용할 수 있는 `mediump`는 [점 조명](webgl-3d-lighting-point.html)같은 일반적인 것에 대해 충분히 해상도가 높지 않습니다.
 
@@ -68,10 +68,10 @@ WebGL에서 대부분의 숫자는 32bit에 불과한데요.
 `highp`를 지원하지 않는 기기를 가진 사용자는 아마 페이지를 잘 실행시킬 수 없는 오래되고 느린 기기를 가져서 목표 고객이 아닐 수 있습니다.
 
 또 다른 쉬운 방법은 `highp`를 기본값으로 하되 기기에서 `highp`를 지원하지 않는 경우 `mediump`로 fallback하는 겁니다.
-Fragment shader에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용하면 됩니다.
+프래그먼트 셰이더에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용하면 됩니다.
 
 ```glsl
-// fragment shader 일부
+// 프래그먼트 셰이더 일부
 #ifdef GL_FRAGMENT_PRECISION_HIGH
   precision highp float;
 #else
@@ -83,12 +83,12 @@ Fragment shader에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용
 
 이제 셰이더의 내용에 따라 이상한 렌더링 아티팩트가 발생할 수 있지만 기기에서 `highp`를 지원하지 않아도 셰이더를 컴파일할 겁니다.
 
-다른 옵션은 `mediump`만 필요하도록 필요하도록 fragment shader를 작성해볼 수 있습니다.
+다른 옵션은 `mediump`만 필요하도록 필요하도록 프래그먼트 셰이더를 작성해볼 수 있습니다.
 실제로 성공했는지 확인하려면 실제 `mediump`를 지원하는 기기에서 테스트해야 합니다.
 
 또 다른 옵션은 기기가 `mediump`만 지원하는 경우 다른 셰이더를 사용하는 겁니다.
 위에서 점 조명은 `mediump`로 문제될 수 있다고 언급했었는데요.
-이는 [점 조명](webgl-3d-lighting-point.html), 특히 반사 하이라이트 계산이, world 혹은 view space의 값을 fragment shader로 전달하고, 이 값들이 `mediump` 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
+이는 [점 조명](webgl-3d-lighting-point.html), 특히 반사 하이라이트 계산이, world 혹은 view space의 값을 프래그먼트 셰이더로 전달하고, 이 값들이 `mediump` 값의 범위를 쉽게 벗어날 수 있기 때문입니다.
 따라서, `mediump` 장치에서는 반사 하이라이트를 생략할 수도 있습니다.
 예를 들어 [점 조명에 대한 글](webgl-3d-lighting-point.html)에 있는 점 조명 셰이더는 기기에서 `mediump`만 지원하는 경우 하이라이트를 제거하도록 수정되었습니다.
 
@@ -139,12 +139,12 @@ void main() {
 정점 셰이더에는
 
 ```glsl
-  // 조명에 대한 표면의 벡터를 계산하고 fragment shader로 전달
+  // 조명에 대한 표면의 벡터를 계산하고 프래그먼트 셰이더로 전달
   v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 ```
 
 조명이 표면에서 1000단위 떨어져 있다고 해봅시다.
-그런 다음 fragment shader와 이 줄에 도달하는데
+그런 다음 프래그먼트 셰이더와 이 줄에 도달하는데
 
 ```glsl
   vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
@@ -163,7 +163,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 한 가지 해결법은 정점 셰이더에서 정규화하는 겁니다.
 
 ```
-  // 조명에 대한 표면의 벡터를 계산하고 fragment shader에 전달
+  // 조명에 대한 표면의 벡터를 계산하고 프래그먼트 셰이더에 전달
 #ifdef GL_FRAGMENT_PRECISION_HIGH
   v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 #else
@@ -194,7 +194,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 
 불행히도 사파리는 여기에 버그가 있어, 최소한 2020년 4월 기준 이 방법은 아이폰에서 실패할 겁니다.
 
-그래서 모든 장치에서 `highp`를 지원하는 지원하는지 확인하기 위해, `highp`를 사용하는 fragment shader를 만들어, 컴파일하고, 연결하고, 에러를 확인하면 됩니다.
+그래서 모든 장치에서 `highp`를 지원하는 지원하는지 확인하기 위해, `highp`를 사용하는 프래그먼트 셰이더를 만들어, 컴파일하고, 연결하고, 에러를 확인하면 됩니다.
 실패한다면 `highp`가 지원되지 않는 겁니다.
 참고로 정점 셰이더와 연결해야 합니다.
 명세서에는 연결 시간에 에러가 발견되는 한 에러를 반환하기 위해 컴파일할 필요가 없으므로, 셰이더를 컴파일하고 `COMPILE_STATUS`를 확인하는 것만으로는 컴파일이 실제로 성공했는지 혹은 실패했는지 알 수 없습니다.
@@ -205,7 +205,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 결과가 정확하다면 driver/gpu/device가 `mediump`에 `highp`를 사용하는 겁니다.
 결과가 부정확하다면 `mediump`는 `mediump`인 겁니다.
 
-다음은 fragment shader의 `mediump`이 실제로 `mediump`인지 확인하는 예제이고
+다음은 프래그먼트 셰이더의 `mediump`이 실제로 `mediump`인지 확인하는 예제이고
 
 {{{example url="../webgl-precision-check-fragment-shader.html"}}}
 
@@ -221,7 +221,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 2014년 아이폰6+는 `mediump`에 대해 16bit를 사용하지만 `lowp`에도 16bit를 사용합니다.
 `lowp`에 대해 9bit를 사용하는 기기를 사용한 적이 있는지 없어서 어떤 문제가 발생하는지 확실하지 않습니다. 
 
-이 글을 통해서 우리는 fragment shader의 기본 정밀도를 지정했습니다.
+이 글을 통해서 우리는 프래그먼트 셰이더의 기본 정밀도를 지정했습니다.
 또한 어떤 개별 변수의 정밀도라도 지정할 수 있는데요.
 예를 들어
 

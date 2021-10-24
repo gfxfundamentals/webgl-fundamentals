@@ -121,7 +121,7 @@ void main() {
   // x, y, z를 zToDivideBy로 나누기
 *  gl_Position = vec4(position.xyz, zToDivideBy);
 
-  // Fragment shader로 color 전달
+  // 프래그먼트 셰이더로 color 전달
   v_color = a_color;
 }
 </script>

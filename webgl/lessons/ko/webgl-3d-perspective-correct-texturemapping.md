@@ -12,7 +12,7 @@ TOC: 원근 교정 텍스처 매핑
 "[동작 원리](webgl-how-it-works.html)"에서 varying이 어떻게 작동하는지 다뤘는데요.
 정점 셰이더는 varying을 선언하고 어떤 값으로 설정할 수 있습니다.
 정점 셰이더가 3번 호출되면 WebGL은 삼각형을 그립니다.
-해당 삼각형을 그리는 동안 모든 픽셀에 대해 fragment shader를 호출하고 해당 픽셀을 어떤 색상으로 만들지 묻습니다.
+해당 삼각형을 그리는 동안 모든 픽셀에 대해 프래그먼트 셰이더를 호출하고 해당 픽셀을 어떤 색상으로 만들지 묻습니다.
 삼각형의 정점 3개 사이에서 3개의 값 사이를 보간한 varying을 전달할 겁니다.
 
 {{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color는 v0, v1, v2 사이에서 보간" }}}
@@ -30,14 +30,14 @@ TOC: 원근 교정 텍스처 매핑
         gl_Position = a_position;
       }
 
-일정한 색상으로 그리는 간단한 fragment shader가 있습니다.
+일정한 색상으로 그리는 간단한 프래그먼트 셰이더가 있습니다.
 
-      // fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
+      // 프래그먼트 셰이더는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
       // mediump은 좋은 기본값으로 "중간 정밀도"를 의미합니다.
       precision mediump float;
 
       void main() {
-        // gl_FragColor는 fragment shader가 설정을 담당하는 특수 변수
+        // gl_FragColor는 프래그먼트 셰이더가 설정을 담당하는 특수 변수
         gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
       }
 
@@ -65,7 +65,7 @@ Clip space에 2개의 사각형을 그리도록 만들어봅시다.
 {{{example url="../webgl-clipspace-rectangles.html" }}}
 
 Varying float 하나를 추가해봅시다.
-해당 varying을 정점 셰이더에서 fragment shader로 전달할 겁니다.
+해당 varying을 정점 셰이더에서 프래그먼트 셰이더로 전달할 겁니다.
 
       attribute vec4 a_position;
     +  attribute float a_brightness;
@@ -75,11 +75,11 @@ Varying float 하나를 추가해봅시다.
       void main() {
         gl_Position = a_position;
 
-    +    // Fragment shader로 밝기 전달
+    +    // 프래그먼트 셰이더로 밝기 전달
     +    v_brightness = a_brightness;
       }
 
-Fragment shader에서는 해당 varying을 사용하여 색상을 설정할 겁니다.
+프래그먼트 셰이더에서는 해당 varying을 사용하여 색상을 설정할 겁니다.
 
       precision mediump float;
 
@@ -194,7 +194,7 @@ WebGL이 `W`로 나누기 때문에 똑같은 결과를 얻을 수 있겠죠?
 
 WebGL은 `W`를 사용하여 원근 교정 텍스처 매핑을 구현하거나 varying의 원근 교정 보간을 수행합니다.
 
-실제로 이걸 더 쉽게 볼 수 있도록 fragment shader를 해킹해봅시다.
+실제로 이걸 더 쉽게 볼 수 있도록 프래그먼트 셰이더를 해킹해봅시다.
 
     gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // 빨강
 
@@ -244,7 +244,7 @@ void main() {
 +  // 수동으로 W 나누기
 +  gl_Position /= gl_Position.w;
 
-  // fragment shader로 texcoord 전달
+  // 프래그먼트 셰이더로 texcoord 전달
   v_texcoord = a_texcoord;
 }
 ```

@@ -146,7 +146,7 @@ F를 그리면 이렇게 나옵니다.
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-이는 source pixel(fragment shader의 색상)을 가져와 blend 함수를 이용해 dest pixel(캔버스의 색상)과 결합합니다.
+이는 source pixel(프래그먼트 셰이더의 색상)을 가져와 blend 함수를 이용해 dest pixel(캔버스의 색상)과 결합합니다.
 Blend 함수에서 source는 `SRC_ALPHA`로, dest는 `ONE_MINUS_SRC_ALPHA`로 설정했습니다.
 
     result = dest * (1 - src_alpha) + src * src_alpha

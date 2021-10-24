@@ -54,17 +54,17 @@ TOC: 점 조명
       // 위치를 행렬로 곱하기
       gl_Position = u_worldViewProjection * a_position;
 
-      // 법선의 방향을 정하고 fragment shader로 전달
+      // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
       v_normal = mat3(u_worldInverseTranspose) * a_normal;
 
     +  // 표면의 world position 계산
     +  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
     +
-    +  // surface -> light 벡터를 계산하고 fragment shader로 전달
+    +  // surface -> light 벡터를 계산하고 프래그먼트 셰이더로 전달
     +  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
     }
 
-surface -> light 벡터는 단위 벡터가 아니기 때문에 fragment shader에서 정규화해야 합니다.
+surface -> light 벡터는 단위 벡터가 아니기 때문에 프래그먼트 셰이더에서 정규화해야 합니다.
 참고로 정점 셰이더에서 정규화할 수 있었지만 `varying`이기 때문에 위치 사이를 선형적으로 보간하기 때문에 완전한 단위 벡터가 아니게 됩니다.
 
     precision mediump float;
@@ -153,7 +153,7 @@ surface -> light 벡터는 단위 벡터가 아니기 때문에 fragment shader�
 
 {{{diagram url="resources/specular-lighting.html" width="500" height="400" className="noborder" }}}
 
-먼저 뷰/눈/카메라의 위치를 전달하고, surface -> view 벡터를 계산한 다음 fragment shader로 전달해야 합니다.
+먼저 뷰/눈/카메라의 위치를 전달하고, surface -> view 벡터를 계산한 다음 프래그먼트 셰이더로 전달해야 합니다.
 
     attribute vec4 a_position;
     attribute vec3 a_normal;
@@ -174,20 +174,20 @@ surface -> light 벡터는 단위 벡터가 아니기 때문에 fragment shader�
       // 위치를 행렬로 곱하기
       gl_Position = u_worldViewProjection * a_position;
 
-      // 법선의 방향을 정하고 fragment shader로 전달
+      // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
       v_normal = mat3(u_worldInverseTranspose) * a_normal;
 
       // 표면의 world position 계산
       vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 
-      // surface -> light 벡터를 계산하고 fragment shader로 전달
+      // surface -> light 벡터를 계산하고 프래그먼트 셰이더로 전달
       v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 
-    +  // surface -> view/camera 벡터를 계산하고 fragment shader로 전달
+    +  // surface -> view/camera 벡터를 계산하고 프래그먼트 셰이더로 전달
     +  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
     }
 
-다음으로 fragment shader에서 surface -> view 벡터와 surface -> light 벡터 사이의 `halfVector`를 계산해야 합니다.
+다음으로 프래그먼트 셰이더에서 surface -> view 벡터와 surface -> light 벡터 사이의 `halfVector`를 계산해야 합니다.
 그런 다음 `halfVector`와 법선의 스칼라곱을 구하여, 빛이 뷰로 반사되는지 확인할 수 있습니다.
 
     // 정점 셰이더에서 전달

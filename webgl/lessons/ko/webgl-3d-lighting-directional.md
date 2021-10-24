@@ -249,7 +249,7 @@ function setNormals(gl) {
 
 이제 셰이더가 이걸 사용하도록 만들어야 합니다.
 
-먼저 정점 셰이더를 통해 fragment shader로 normal을 전달합니다.
+먼저 정점 셰이더를 통해 프래그먼트 셰이더로 normal을 전달합니다.
 
     attribute vec4 a_position;
     -attribute vec4 a_color;
@@ -264,14 +264,14 @@ function setNormals(gl) {
       // 위치를 행렬로 곱하기
       gl_Position = u_matrix * a_position;
 
-    -  // 색상을 fragment shader로 전달
+    -  // 색상을 프래그먼트 셰이더로 전달
     -  v_color = a_color;
 
-    +  // 법선을 fragment shader로 전달
+    +  // 법선을 프래그먼트 셰이더로 전달
     +  v_normal = a_normal;
     }
 
-그리고 fragment shader는 빛의 방향과 법선의 스칼라곱을 이용한 수식을 수행할 겁니다.
+그리고 프래그먼트 셰이더는 빛의 방향과 법선의 스칼라곱을 이용한 수식을 수행할 겁니다.
 
 ```
 precision mediump float;
@@ -356,7 +356,7 @@ void main() {
   // 위치를 행렬로 곱하기
 *  gl_Position = u_worldViewProjection * a_position;
 
-*  // 법선의 방향을 정하고 fragment shader로 전달
+*  // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
 *  v_normal = mat3(u_world) * a_normal;
 }
 ```
@@ -426,7 +426,7 @@ void main() {
   // 위치를 행렬로 곱하기
   gl_Position = u_worldViewProjection * a_position;
 
-  // 법선의 방향을 정하고 fragment shader로 전달
+  // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 ```

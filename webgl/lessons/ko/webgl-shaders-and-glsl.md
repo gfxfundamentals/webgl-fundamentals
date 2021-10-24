@@ -10,9 +10,9 @@ TOC: 셰이더와 GLSL
 예제로 충분하면 좋겠지만 혹시 모르니 좀 더 명료하게 해봅시다.
 
 [작동 원리](webgl-how-it-works.html)에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 셰이더를 필요로 합니다.
-바로 *정점 셰이더*와 *fragment shader*죠.
+바로 *정점 셰이더*와 *프래그먼트 셰이더*죠.
 각각의 셰이더는 *함수*인데요.
-정점 셰이더와 fragment shader는 함께 shader program(또는 그냥 program)으로 연결됩니다.
+정점 셰이더와 프래그먼트 셰이더는 함께 shader program(또는 그냥 program)으로 연결됩니다.
 일반적인 WebGL 앱은 많은 shader program을 가집니다.
 
 ## 정점 셰이더
@@ -175,11 +175,11 @@ uniform은 여러 type을 가질 수 있는데요.
 
 ### 정점 셰이더의 텍스처
 
-[Fragment shader의 텍스처](#fragment-shader-texture)를 봐주세요.
+[프래그먼트 셰이더의 텍스처](#fragment-shader-texture)를 봐주세요.
 
-## Fragment shader
+## 프래그먼트 셰이더
 
-Fragment shader의 역할은 래스터화되는 현재 픽셀의 색상을 제공하는 것입니다.
+프래그먼트 셰이더의 역할은 래스터화되는 현재 픽셀의 색상을 제공하는 것입니다.
 항상 이런 형식을 취하는데
 
     precision mediump float;
@@ -188,21 +188,21 @@ Fragment shader의 역할은 래스터화되는 현재 픽셀의 색상을 제�
       gl_FragColor = doMathToMakeAColor;
     }
 
-Fragment shader는 각 픽셀마다 한 번씩 호출되는데요.
+프래그먼트 셰이더는 각 픽셀마다 한 번씩 호출되는데요.
 호출될 때마다 특수 전역 변수, `gl_FragColor`를 어떤 색상으로 설정해줘야 합니다.
 
-Fragment shader는 데이터가 필요한데요.
+프래그먼트 셰이더는 데이터가 필요한데요.
 3가지 방법으로 데이터를 가져올 수 있습니다.
 
 1.  [Uniform](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)
 2.  [Texture](#fragment-shader-texture) (pixel/texel의 데이터)
 3.  [Varying](#varying) (정점 셰이더에서 전달되고 보간된 데이터)
 
-### Fragment shader의 Uniform
+### 프래그먼트 셰이더의 Uniform
 
 [셰이더의 Uniform](#uniform)을 봐주세요.
 
-### Fragment shader의 텍스처
+### 프래그먼트 셰이더의 텍스처
 
 셰이더의 텍스처에서 값을 가져오면 `sampler2D` uniform을 생성하고 값을 추출하기 위해 GLSL 함수 `texture2D`를 사용합니다.
 
@@ -246,11 +246,11 @@ Fragment shader는 데이터가 필요한데요.
 
 ### Varying
 
-Varying은 [동작 원리](webgl-how-it-works.html)에 다룬 정점 셰이더에서 fragment shader로 값을 전달하는 방법입니다.
+Varying은 [동작 원리](webgl-how-it-works.html)에 다룬 정점 셰이더에서 프래그먼트 셰이더로 값을 전달하는 방법입니다.
 
-Varying을 사용하려면 정점 셰이더와 fragment shader 양쪽에 일치하는 varying을 선언해야 하는데요.
+Varying을 사용하려면 정점 셰이더와 프래그먼트 셰이더 양쪽에 일치하는 varying을 선언해야 하는데요.
 각 정점마다 정점 셰이더의 varying을 어떤 값으로 설정합니다.
-WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader에서 대응하는 varying으로 전달할 겁니다.
+WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 프래그먼트 셰이더에서 대응하는 varying으로 전달할 겁니다.
 
 정점 셰이더:
 
@@ -265,7 +265,7 @@ WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader�
     +  v_positionWithOffset = a_position + u_offset;
     }
 
-Fragment shader
+프래그먼트 셰이더:
 
     precision mediump float;
 
@@ -278,7 +278,7 @@ Fragment shader
     }
 
 위 예제는 대개 말도 안되는 예제입니다.
-일반적으로는 clip space 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
+일반적으로는 clip space 값을 프래그먼트 셰이더에 직접 복사해서 색상으로 사용하지 않는데요.
 그럼에도 불구하고 작동하며 색상을 만들어냅니다.
 
 ## GLSL
@@ -395,7 +395,7 @@ T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
 ## 총정리
 
 이게 바로 이 모든 글들의 핵심입니다.
-WebGL은 다양한 셰이더를 생성하고, 데이터를 이 셰이더에 제공한 다음, `gl.drawArrays`나 `gl.drawElements`를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 현재 정점 셰이더를 호출한 뒤, 각 픽셀에 대한 current fragment shader를 호출하여 픽셀을 렌더링하는 것에 관한 모든 것입니다.
+WebGL은 다양한 셰이더를 생성하고, 데이터를 이 셰이더에 제공한 다음, `gl.drawArrays`나 `gl.drawElements`를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 현재 정점 셰이더를 호출한 뒤, 각 픽셀에 대한 현재 프래그먼트 셰이더를 호출하여 픽셀을 렌더링하는 것에 관한 모든 것입니다.
 
 실제로 셰이더를 생성하려면 여러 줄의 코드가 필요합니다.
 이 코드들은 대부분의 WebGL program에서 똑같기 때문에 한 번 작성한 후에는 거의 생략할 수 있습니다.

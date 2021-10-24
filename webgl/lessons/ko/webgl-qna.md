@@ -23,7 +23,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [어떻게 텍스처 배열을 WebGL shader uniform에 바인딩하나요?](webgl-qna-how-to-bind-an-array-of-textures-to-a-webgl-shader-uniform-.html)
 * [일괄 처리 시 각 sprite의 alpha 값 전달하기](webgl-qna-passing-in-per-sprite-alpha-values-when-batching.html)
-* [이 GLSL fragment shader가 뭘 하는지 설명해주실 수 있는 분 있나요?](webgl-qna-can-anyone-explain-what-this-glsl-fragment-shader-is-doing-.html)
+* [이 GLSL 프래그먼트 셰이더가 뭘 하는지 설명해주실 수 있는 분 있나요?](webgl-qna-can-anyone-explain-what-this-glsl-fragment-shader-is-doing-.html)
 * [WebGL 2D tilemap](webgl-qna-webgl-2d-tilemaps.html)
 * [전체 이미지의 최소/최대 값 결정하기](webgl-qna-determine-min-max-values-for-the-entire-image.html)
 
@@ -63,7 +63,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 ---
 
 * [스스로 교차하는 폴리곤을 블렌딩하지 마세요](webgl-qna-don-t-blend-a-polygon-that-crosses-itself.html)
-* [Fragment shader에서 잘린 삼각형을 감지하는 방법](webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader.html)
+* [프래그먼트 셰이더에서 잘린 삼각형을 감지하는 방법](webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader.html)
 * [많은 원을 그리는 가장 빠른 방법](webgl-qna-the-fastest-way-to-draw-many-circles.html)
 * [instanced rendering 정렬 및 최적화](webgl-qna-sorting-and-optimizing-instanced-rendering.html)
 * [이미지에 alpha 채널이 있는지 확인하는 방법](webgl-qna-how-to-tell-if-an-image-has-an-alpha-channel.html)
@@ -112,7 +112,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [1000개의 선분 중 각 점에 가장 가까운 500개의 점을 계산하려면 어떻게 해야 하나요?](webgl-qna-how-can-i-compute-for-500-points-which-of-1000-line-segments-is-nearest-to-each-point-.html)
 * [캔버스의 중앙에서 perspective 소실점을 움직이려면 어떻게 해야 하나요?](webgl-qna-how-can-i-move-the-perspective-vanishing-point-from-the-center-of-the-canvas-.html)
-* [일반화된 vertex 및 fragment shader의 개념이 있나요?](webgl-qna-is-there-the-notion-of-a-generalized-vertex-and-fragment-shader-.html)
+* [일반화된 정점 및 프래그먼트 셰이더의 개념이 있나요?](webgl-qna-is-there-the-notion-of-a-generalized-vertex-and-fragment-shader-.html)
 * [Scene의 평균 밝기를 어떻게 결정하나요?](webgl-qna-how-to-determine-the-average-brightness-in-a-scene-.html)
 * [3D 모델의 원점은 뭔가요?](webgl-qna-what-is-the-local-origin-of-a-3d-model-.html)
 

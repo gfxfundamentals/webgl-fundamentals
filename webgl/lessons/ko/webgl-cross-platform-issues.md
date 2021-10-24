@@ -41,10 +41,10 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 
 * Uniform vector의 최대 개수
 
-  정점 셰이더와 fragment shader에 따로따로 지정됩니다.
+  정점 셰이더와 프래그먼트 셰이더에 따로따로 지정됩니다.
 
-  WebGL1에서는 정점 셰이더에 128개 그리고 fragment shader에 16개입니다.
-  WebGL2에서는 정점 셰이더에 256개 그리고 fragment shader에 224개입니다.
+  WebGL1에서는 정점 셰이더에 128개 그리고 프래그먼트 셰이더에 16개입니다.
+  WebGL2에서는 정점 셰이더에 256개 그리고 프래그먼트 셰이더에 224개입니다.
 
   참고로 uniform은 "패킹"될 수 있음으로 위 숫자는 사용할 수 있는 `vec4`의 개수인데요.
   이론적으로는 `float` uniform 개수의 4배를 가질 수 있습니다.
@@ -105,7 +105,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 
   1. Texture unit 개수
   2. 정점 셰이더가 참조할 수 있는 texture unit 개수
-  3. Fragment shader가 참조할 수 있는 texture unit 개수
+  3. 프래그먼트 셰이더가 참조할 수 있는 texture unit 개수
 
   <table class="tabular-data">
     <thead>
@@ -114,7 +114,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
     <tbody>
       <tr><td>존재하는 texture unit 최소값</td><td>8</td><td>32</td></tr>
       <tr><td>정점 셰이더가 참조할 수 있는 texture unit 최소값</td><th style="color: red;">0!</td><td>16</td></tr>
-      <tr><td>Fragment shader가 참조할 수 있는 texture unit 최소값</td><td>8</td><td>16</td></tr>
+      <tr><td>프래그먼트 셰이더가 참조할 수 있는 texture unit 최소값</td><td>8</td><td>16</td></tr>
     </tbody>
   </table>
 
@@ -135,8 +135,8 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
     <tr><td>MAX_VARYING_VECTORS             </td><td>가지고 있는 varying 개수</td></tr>
     <tr><td>MAX_COMBINED_TEXTURE_IMAGE_UNITS</td><td>존재하는 texture unit 개수</td></tr>
     <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>정점 셰이더가 참조할 수 있는 texture unit 개수</td></tr>
-    <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>fragment shader가 참조할 수 있는 texture unit 개수</td></tr>
-    <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>fragment shader가 가질 수 있는 vec4 uniform 개수</td></tr>
+    <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>프래그먼트 셰이더가 참조할 수 있는 texture unit 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>프래그먼트 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
     <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>cubemap 최대 크기</td></tr>
     <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>renderbuffer 최대 크기</td></tr>
     <tr><td>MAX_VIEWPORT_DIMS               </td><td>viewport 최대 크기</td></tr>
@@ -160,7 +160,7 @@ WebGL2는 몇 가지 더 추가합니다.
     <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>모든 걸 단일 버퍼로 보낼 때 출력할 수 있는 varying 개수</td></tr>
     <tr><td>MAX_COMBINED_UNIFORM_BLOCKS                  </td><td>종합적으로 사용할 수 있는 uniform block 개수</td></tr>
     <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>정점 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
-    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>fragment shader가 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>프래그먼트 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
   </tbody>
 </table>
 </div>

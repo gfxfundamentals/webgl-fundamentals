@@ -42,7 +42,7 @@ varying vec2 v_texcoord;
 void main() {
   gl_Position = u_projection * u_view * u_world * a_position;
 
-  // fragment shader로 텍스처 좌표 전달
+  // 프래그먼트 셰이더로 텍스처 좌표 전달
   v_texcoord = a_texcoord;
 }
 ```
@@ -51,7 +51,7 @@ void main() {
 단색 텍스처를 만들면 이런 식으로 색상을 변경할 수 있습니다.
 
 ```glsl
-// fragment shader
+// 프래그먼트 셰이더
 precision mediump float;
 
 // 정점 셰이더에서 전달
@@ -252,7 +252,7 @@ const imageTexture = loadImageTexture('resources/f-texture.png');
 여기서도 비슷하게 할 수 있습니다.
 
 한 번 해봅시다.
-먼저 fragment shader에서 텍스처 좌표가 0.0에서 1.0사이인 곳에 투영된 텍스처를 그립니다.
+먼저 프래그먼트 셰이더에서 텍스처 좌표가 0.0에서 1.0사이인 곳에 투영된 텍스처를 그립니다.
 해당 범위 밖에서는 체커 보드 텍스처를 사용할 겁니다. 
 
 ```glsl
@@ -309,7 +309,7 @@ void main() {
 -  gl_Position = u_projection * u_view * u_world * a_position;
 +  gl_Position = u_projection * u_view * worldPosition;
 
-  // fragment shader로 texcoord 전달
+  // 프래그먼트 셰이더로 texcoord 전달
   v_texcoord = a_texcoord;
 
 +  v_projectedTexcoord = u_textureMatrix * worldPosition;
@@ -715,7 +715,7 @@ Geometry를 생성은 적절한 방법이며, 그렇지 않으면 2개, 3개, 4�
 
 <div class="webgl_bottombar">
 <h3>조건부 텍스처 참조</h3>
-<p>위의 fragment shader에서 모든 경우에 두 가지 텍스처를 읽게 됩니다.</p>
+<p>위의 프래그먼트 셰이더에서 모든 경우에 두 가지 텍스처를 읽게 됩니다.</p>
 <pre class="prettyprint"><code>
   vec4 projectedTexColor = texture2D(u_projectedTexture, projectedTexcoord.xy);
   vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;

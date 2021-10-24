@@ -104,7 +104,7 @@ void main() {
 }
 ```
 
-`gl.linkProgram(someProgram)`를 호출하여 정점 셰이더와 fragment shader를 연결할 때 WebGL(driver/GPU/browser)은 각 attribute에 사용할 index/location를 자체적으로 결정하는데요.
+`gl.linkProgram(someProgram)`를 호출하여 정점 셰이더와 프래그먼트 셰이더를 연결할 때 WebGL(driver/GPU/browser)은 각 attribute에 사용할 index/location를 자체적으로 결정하는데요.
 수동(아래 참조)으로 location을 지정하지 않는 한 어떤 location을 선택할지 알 수 없습니다.
 오직 browser/driver/GPU에 달려있죠.
 따라서 position, texcoord, normal에 어떤 attribute를 사용했는지 물어봐야 합니다.

@@ -28,14 +28,14 @@ GPU는 이 값을 가져와서 내부에 저장합니다.
 
 `TRIANGLES`를 그린다고 가정하면, 첫 번째 부분에서 정점 3개를 생성할 때마다 GPU는 이걸 이용해 삼각형을 만듭니다.
 어떤 픽셀이 삼각형의 점 3개에 해당하는지 확인한 다음, 삼각형을 래스터화(="픽셀로 그리기")하는데요.
-각 픽셀마다 fragment shader를 호출해서 어떤 색상으로 만들지 묻습니다.
-Fragment shader는 특수 변수 `gl_FragColor`를 해당 픽셀에 원하는 색상으로 설정해야 합니다.
+각 픽셀마다 프래그먼트 셰이더를 호출해서 어떤 색상으로 만들지 묻습니다.
+프래그먼트 셰이더는 특수 변수 `gl_FragColor`를 해당 픽셀에 원하는 색상으로 설정해야 합니다.
 
-전부 흥미롭지만 지금까지 예제에서 볼 수 있듯이 fragment shader는 픽셀마다 아주 적은 정보를 가지고 있습니다.
+전부 흥미롭지만 지금까지 예제에서 볼 수 있듯이 프래그먼트 셰이더는 픽셀마다 아주 적은 정보를 가지고 있습니다.
 다행히 더 많은 정보를 전달할 수 있는데요.
-정점 셰이더에서 fragment shader로 전달하려는 각 값에 대해 “varying”을 정의하는겁니다.
+정점 셰이더에서 프래그먼트 셰이더로 전달하려는 각 값에 대해 “varying”을 정의하는겁니다.
 
-간단한 예시로, 우리가 직접 계산한 clip space 좌표를 정점 셰이더에서 fragment shader로 전달해봅시다.
+간단한 예시로, 우리가 직접 계산한 clip space 좌표를 정점 셰이더에서 프래그먼트 셰이더로 전달해봅시다.
 
 간단한 삼각형을 그려보려고 하는데요.
 [이전 예제](webgl-2d-matrices.html)에 이어서 사각형을 삼각형으로 바꿔봅시다.
@@ -65,7 +65,7 @@ Fragment shader는 특수 변수 `gl_FragColor`를 해당 픽셀에 원하는 �
       gl.drawArrays(primitiveType, offset, count);
     }
 
-다음은 fragment shader로 데이터를 전달하기 위해 정점 셰이더에 *varying*을 선언합니다.
+다음은 프래그먼트 셰이더로 데이터를 전달하기 위해 정점 셰이더에 *varying*을 선언합니다.
 
     *varying vec4 v_color;
     ...
@@ -79,7 +79,7 @@ Fragment shader는 특수 변수 `gl_FragColor`를 해당 픽셀에 원하는 �
     *  v_color = gl_Position * 0.5 + 0.5;
     }
 
-그런 다음 fragment shader에 동일한 *varying*을 선언합니다.
+그런 다음 프래그먼트 셰이더에 동일한 *varying*을 선언합니다.
 
     precision mediump float;
 
@@ -89,7 +89,7 @@ Fragment shader는 특수 변수 `gl_FragColor`를 해당 픽셀에 원하는 �
     *  gl_FragColor = v_color;
     }
 
-WebGL은 정점 셰이더의 varying을 이름과 type이 같은 fragment shader의 varying으로 연결할 겁니다.
+WebGL은 정점 셰이더의 varying을 이름과 type이 같은 프래그먼트 셰이더의 varying으로 연결할 겁니다.
 
 다음은 작동하는 버전입니다.
 
@@ -105,7 +105,7 @@ WebGL은 정점 셰이더의 varying을 이름과 type이 같은 fragment shader
 이게 *varying*이라고 불리는 이유죠.
 
 WebGL은 각 정점을 계산한 3개의 값을 가져오고 삼각형을 래스터화할 때 계산된 정점들 사이를 보간하는데요.
-각 픽셀마다 해당 픽셀에 대해 보간된 값으로 fragment shader를 호출합니다.
+각 픽셀마다 해당 픽셀에 대해 보간된 값으로 프래그먼트 셰이더를 호출합니다.
 
 위 예제에서는 3개의 정점으로 시작합니다.
 
@@ -163,13 +163,13 @@ translation, rotation, scale의 기본값은 translation = 200, 150, rotation = 
 </table>
 </div>
 
-v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 fragment shader로 전달됩니다.
+v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 프래그먼트 셰이더로 전달됩니다.
 
 {{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color는 v0, v1, v2 사이에서 보간" }}}
 
-또한 더 많은 데이터를 정점 셰이더에 전달해서 fragment shader에 전달할 수 있습니다.
+또한 더 많은 데이터를 정점 셰이더에 전달해서 프래그먼트 셰이더에 전달할 수 있습니다.
 예를 들어 2가지 색상을 가진 삼각형 2개로 이루어진 사각형을 그린다고 해봅시다.
-이를 위해 정점 셰이더에 또 다른 attribute를 추가하면, 더 많은 데이터를 전달할 수 있고, 그 데이터를 fragment shader에 직접 전달할 수 있습니다.
+이를 위해 정점 셰이더에 또 다른 attribute를 추가하면, 더 많은 데이터를 전달할 수 있고, 그 데이터를 프래그먼트 셰이더에 직접 전달할 수 있습니다.
 
     attribute vec2 a_position;
     +attribute vec4 a_color;
@@ -273,7 +273,7 @@ varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보�
 
 {{{example url="../webgl-2d-rectangle-with-random-colors.html" }}}
 
-그다지 흥미롭지는 않지만 2개 이상의 attribute를 사용하고 데이터를 정점 셰이더에서 fragment shader로 전달하는 걸 보여주는데요.
+그다지 흥미롭지는 않지만 2개 이상의 attribute를 사용하고 데이터를 정점 셰이더에서 프래그먼트 셰이더로 전달하는 걸 보여주는데요.
 [이미지 처리 예제](webgl-image-processing.html)를 살펴보면 텍스처 좌표를 전달하기 위해 마찬가지로 추가적인 attribute를 사용하는 것을 볼 수 있습니다.
 
 ## Buffer와 Attribute 명령은 어떤 일을 하나요?

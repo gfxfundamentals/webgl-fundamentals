@@ -66,7 +66,7 @@ gl.vertexAttribPointer(positionLocation, size, type, normalize, stride, offset)
 다음으로 정점 셰이더의 경우 `gl_Position`을 사각형의 정점으로 설정합니다.
 위치가 clip space에 있고, 캔버스 전체를 덮도록 설정되어 있으므로, 어떤 행렬 계산도 필요하지 않습니다.
 픽셀이 가장 깊은 depth를 가지도록 `gl_Position.z`를 1로 설정합니다.
-그리고 position을 fragment shader로 전달하는데요.
+그리고 position을 프래그먼트 셰이더로 전달하는데요.
 
 ```glsl
 attribute vec4 a_position;
@@ -78,7 +78,7 @@ void main() {
 }
 ```
 
-Fragment shader에서 position을 view projection matrix의 역행렬로 곱하고, 4D 공간에서 3D 공간으로 만들기 위해 w로 나눕니다.
+프래그먼트 셰이더에서 position을 view projection matrix의 역행렬로 곱하고, 4D 공간에서 3D 공간으로 만들기 위해 w로 나눕니다.
 
 ```glsl
 precision mediump float;

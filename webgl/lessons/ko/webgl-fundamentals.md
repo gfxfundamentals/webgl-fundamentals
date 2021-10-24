@@ -12,13 +12,13 @@ WebGL로 원하는 작업을 수행하려면 [점, 선, 삼각형](webgl-points-
 WebGL은 컴퓨터에 있는 GPU에서 실행됩니다.
 따라서 GPU에서 실행되는 코드를 제공해야 하는데요.
 해당 코드는 함수 쌍 형태로 제공해야 합니다.
-이 두 함수는 정점 셰이더와 fragment shader로 불리고 C/C++처럼 엄격한 Type을 가지는 [GLSL](webgl-shaders-and-glsl.html)로 작성되어 있습니다.
+이 두 함수는 정점 셰이더와 프래그먼트 셰이더로 불리고 C/C++처럼 엄격한 Type을 가지는 [GLSL](webgl-shaders-and-glsl.html)로 작성되어 있습니다.
 이 두 개를 합쳐서 *program*이라고 부르죠.
 
 정점 셰이더의 역할은 정점 위치를 계산하는 겁니다.
 WebGL은 함수가 출력하는 위치를 기반으로 [점, 선, 삼각형](webgl-points-lines-triangles.html)을 포함한 다양한 종류의 primitive를 래스터화할 수 있는데요.
-래스터화할 때 primitive는 fragment shader라 불리는 두 번째 사용자 작성 함수를 호출합니다.
-Fragment shader의 역할은 현재 그려지는 primitive의 각 픽셀에 대한 색상을 계산하는 겁니다.
+래스터화할 때 primitive는 프래그먼트 셰이더라 불리는 두 번째 사용자 작성 함수를 호출합니다.
+프래그먼트 셰이더의 역할은 현재 그려지는 primitive의 각 픽셀에 대한 색상을 계산하는 겁니다.
 
 대부분의 WebGL API는 이러한 함수 쌍을 실행하기 위한 [상태 설정](resources/webgl-state-diagram.html)에 관한 것입니다.
 원하는 걸 그리기 위해서는 여러 상태를 설정하고 GPU에서 셰이더를 실행하는 `gl.drawArrays`나 `gl.drawElements`를 호출해서 함수 쌍을 실행해야 합니다.
@@ -51,15 +51,15 @@ Fragment shader의 역할은 현재 그려지는 primitive의 각 픽셀에 대�
 
 4. Varying
 
-   Varying은 정점 셰이더가 fragment shader에 데이터를 넘기는 방법입니다.
-   점, 선, 삼각형 등 렌더링 되는 것에 따라 정점 셰이더에 의해 설정된 varying의 값은 fragment shader를 실행하는 동안 보간됩니다.
+   Varying은 정점 셰이더가 프래그먼트 셰이더에 데이터를 넘기는 방법입니다.
+   점, 선, 삼각형 등 렌더링 되는 것에 따라 정점 셰이더에 의해 설정된 varying의 값은 프래그먼트 셰이더를 실행하는 동안 보간됩니다.
 
 ## WebGL Hello World
 
 WebGL은 clip space의 좌표와 색상, 오직 2가지만을 다루는데요.
 프로그래머로서 WebGL을 사용하는 여러분의 역할은 이 2가지를 작성하는 겁니다.
 이를 위해 2개의 "셰이더"를 제공해야 하는데요.
-Clip space 좌표를 제공하는 정점 셰이더, 색상을 제공하는 fragment shader입니다.
+Clip space 좌표를 제공하는 정점 셰이더, 색상을 제공하는 프래그먼트 셰이더입니다.
 
 Clip space 좌표는 캔버스 크기에 상관없이 항상 -1에서 +1까지입니다.
 
@@ -106,14 +106,14 @@ Clip space 좌표는 캔버스 크기에 상관없이 항상 -1에서 +1까지�
 
 실제로는 `positionBuffer`가 2진 데이터(아래 참조)로 변환되어야 하기 때문에 그렇게 간단하지 않으므로, buffer에서 데이터를 가져오기 위한 실제 계산은 약간 다를 수 있지만, 이걸로 정점 셰이더가 어떻게 실행되는지 알 수 있기를 바랍니다.
 
-다음으로 fragment shader가 필요합니다.
+다음으로 프래그먼트 셰이더가 필요합니다.
 
-    // fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
+    // 프래그먼트 셰이더는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
     // mediump은 좋은 기본값으로 "중간 정밀도"를 의미합니다.
     precision mediump float;
 
     void main() {
-      // gl_FragColor는 fragment shader가 설정을 담당하는 특수 변수
+      // gl_FragColor는 프래그먼트 셰이더가 설정을 담당하는 특수 변수
       gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
     }
 
@@ -159,12 +159,12 @@ WebGL에서 색상은 0에서 1까지입니다.
 
     <script id="fragment-shader-2d" type="notjs">
 
-      // Fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
+      // 프래그먼트 셰이더는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
       // mediump은 좋은 기본값으로 "중간 정밀도"를 의미합니다.
       precision mediump float;
 
       void main() {
-        // gl_FragColor는 fragment shader가 설정을 담당하는 특수 변수
+        // gl_FragColor는 프래그먼트 셰이더가 설정을 담당하는 특수 변수
         gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
       }
 
@@ -371,8 +371,8 @@ count가 3이기 때문에 정점 셰이더를 세 번 실행할 겁니다.
      0.7, 0       ->   340, 150
 
 WebGL은 이제 삼각형을 렌더링할 겁니다.
-그리려는 모든 픽셀에 대해 WebGL은 fragment shader를 호출하는데요.
-Fragment shader는 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
+그리려는 모든 픽셀에 대해 WebGL은 프래그먼트 셰이더를 호출하는데요.
+프래그먼트 셰이더는 `gl_FragColor`를 `1, 0, 0.5, 1`로 설정합니다.
 캔버스는 채널당 8bit이기 때문에 이는 WebGL이 캔버스에 `[255, 0, 127, 255]`를 값으로 작성한다는 걸 의미합니다.
 
 다음은 실시간 버전입니다.
@@ -479,7 +479,7 @@ Clip space에서 왼쪽 하단 모서리는 -1,-1이 되죠.
 함수에 사각형을 정의하는 코드를 만들어서 다른 크기의 사각형을 위해 호출할 수 있도록 해봅시다.
 이 작업을 하면서 색상 설정이 가능하도록 만들 겁니다.
 
-먼저 fragment shader가 색상 uniform 입력을 가져오도록 만듭니다.
+먼저 프래그먼트 셰이더가 색상 uniform 입력을 가져오도록 만듭니다.
 
     <script id="fragment-shader-2d" type="notjs">
       precision mediump float;
@@ -554,7 +554,7 @@ Clip space에서 왼쪽 하단 모서리는 -1,-1이 되죠.
 
 WebGL이 사실은 아주 단순한 API였다고 보셨기를 바랍니다.
 네, 단순하다는 말은 아마 틀릴지도 모르지만 하는 일은 단순합니다.
-그저 사용자가 제공한 두 함수 정점 셰이더와 fragment shader를 실행시키고 점, 선, 삼각형을 그릴 뿐입니다.
+그저 사용자가 제공한 두 함수 정점 셰이더와 프래그먼트 셰이더를 실행시키고 점, 선, 삼각형을 그릴 뿐입니다.
 3D를 작업하면서 더 복잡해질 수 있지만, 그 복잡함은 프로그래머에 의해 더 복잡한 셰이더의 형태로 추가됩니다.
 WebGL API 자체는 rasterization 엔진에 불과하며 개념적으로는 꽤 단순합니다.
 
