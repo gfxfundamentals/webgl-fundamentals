@@ -82,7 +82,7 @@ precision mediump float;
 uniform sampler2D u_image0;
 uniform sampler2D u_image1;
 
-// Vertex shader에서 전달된 texCoords 
+// 정점 셰이더에서 전달된 texCoords 
 varying vec2 v_texCoord;
 
 void main() {

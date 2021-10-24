@@ -10,15 +10,15 @@ TOC: 원근 교정 텍스처 매핑
 또한 [varying과 그 기능](webgl-how-it-works.html)에 대해 알아야 하지만 여기서 간략하게 설명하겠습니다.
 
 "[동작 원리](webgl-how-it-works.html)"에서 varying이 어떻게 작동하는지 다뤘는데요.
-Vertex shader는 varying을 선언하고 어떤 값으로 설정할 수 있습니다.
-Vertex shader가 3번 호출되면 WebGL은 삼각형을 그립니다.
+정점 셰이더는 varying을 선언하고 어떤 값으로 설정할 수 있습니다.
+정점 셰이더가 3번 호출되면 WebGL은 삼각형을 그립니다.
 해당 삼각형을 그리는 동안 모든 픽셀에 대해 fragment shader를 호출하고 해당 픽셀을 어떤 색상으로 만들지 묻습니다.
 삼각형의 정점 3개 사이에서 3개의 값 사이를 보간한 varying을 전달할 겁니다.
 
 {{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color는 v0, v1, v2 사이에서 보간" }}}
 
 [첫 번째 글](webgl-fundamentals.html)로 돌아가보면 우리는 clip space에서 삼각형을 그렸는데요.
-다음과 같이 간단한 vertex shader에 clip space 좌표를 전달했습니다.
+다음과 같이 간단한 정점 셰이더에 clip space 좌표를 전달했습니다.
 
       // Attribute는 버퍼에서 데이터를 받음
       attribute vec4 a_position;
@@ -26,7 +26,7 @@ Vertex shader가 3번 호출되면 WebGL은 삼각형을 그립니다.
       // 모든 셰이더는 main 함수를 가짐
       void main() {
 
-        // gl_Position은 vertex shader가 설정을 담당하는 특수 변수
+        // gl_Position은 정점 셰이더가 설정을 담당하는 특수 변수
         gl_Position = a_position;
       }
 
@@ -65,7 +65,7 @@ Clip space에 2개의 사각형을 그리도록 만들어봅시다.
 {{{example url="../webgl-clipspace-rectangles.html" }}}
 
 Varying float 하나를 추가해봅시다.
-해당 varying을 vertex shader에서 fragment shader로 전달할 겁니다.
+해당 varying을 정점 셰이더에서 fragment shader로 전달할 겁니다.
 
       attribute vec4 a_position;
     +  attribute float a_brightness;
@@ -83,7 +83,7 @@ Fragment shader에서는 해당 varying을 사용하여 색상을 설정할 겁�
 
       precision mediump float;
 
-    +  // Vertex shader에서 전달받아 보간
+    +  // 정점 셰이더에서 전달받아 보간
     +  varying float v_brightness;  
 
       void main() {
@@ -226,7 +226,7 @@ UV 좌표를 양쪽에 0에서 1로 조정했고 4x4 픽셀 텍스처를 사용�
 
 {{{example url="../webgl-perspective-correct-cube.html" }}}
 
-이제 해당 예제를 가져와 vertex shader를 변경하여 우리가 직접 `W`로 나눠봅시다.
+이제 해당 예제를 가져와 정점 셰이더를 변경하여 우리가 직접 `W`로 나눠봅시다.
 한 줄만 추가하면 됩니다.
 
 ```

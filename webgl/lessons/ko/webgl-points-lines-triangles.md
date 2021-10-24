@@ -9,14 +9,14 @@ TOC: 점, 선, 삼각형
 
 [첫 번째 글](webgl-fundamentals.html)에서 언급했듯이 WebGL은 점, 선, 그리고 삼각형을 그립니다.
 `gl.drawArrays`나 `gl.drawElements`를 호출할 때 이를 수행하는데요.
-Clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArrays`나 `gl.drawElements`의 첫 번째 전달인자를 기반으로 WebGL은 점, 선, 또는 삼각형을 그립니다.
+Clip space 좌표를 출력하는 정점 셰이더를 제공한 다음, `gl.drawArrays`나 `gl.drawElements`의 첫 번째 전달인자를 기반으로 WebGL은 점, 선, 또는 삼각형을 그립니다.
 
 `gl.drawArrays`와 `gl.drawElements`의 첫 번째 전달인자로 유효한 값들은
 
 * `POINTS`
 
-   Vertex shader가 출력하는 각 clip space 정점에 대해 해당 점의 중앙에 정사각형을 그립니다.
-   정사각형의 크기는 vertex shader 내부의 특별 변수 `gl_PointSize`에 픽셀 단위로 원하는 크기를 설정하여 지정합니다.
+   정점 셰이더가 출력하는 각 clip space 정점에 대해 해당 점의 중앙에 정사각형을 그립니다.
+   정사각형의 크기는 정점 셰이더 내부의 특별 변수 `gl_PointSize`에 픽셀 단위로 원하는 크기를 설정하여 지정합니다.
 
    참고: 정사각형이 될 수 있는 최대 및 최소 크기는 쿼리할 수 있는 구현에 따라 다릅니다.
 
@@ -26,7 +26,7 @@ Clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 
 * `LINES`
 
-   Vertex shader가 출력하는 2개의 clip space 정점에 대해 두 점을 연결하는 선을 그립니다.
+   정점 셰이더가 출력하는 2개의 clip space 정점에 대해 두 점을 연결하는 선을 그립니다.
    점 A,B,C,D,E,F가 있다면 3개의 선이 표시됩니다.
 
    <div class="webgl_center"><img src="resources/gl-lines.svg" style="width: 400px;"></div>
@@ -40,7 +40,7 @@ Clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 
 * `LINE_STRIP`
 
-   Vertex shader가 출력하는 각 clip space 정점에 대해 vertex shader가 출력한 이전 포인트에서 선을 그립니다.
+   정점 셰이더가 출력하는 각 clip space 정점에 대해 정점 셰이더가 출력한 이전 포인트에서 선을 그립니다.
 
    따라서 clip space 정점 A,B,C,D,E,F를 출력하면 5개의 선이 표시됩니다.
 
@@ -54,14 +54,14 @@ Clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 
 * `TRIANGLES`
 
-   Vertex shader가 출력하는 3개의 clip space 정점마다 점 3개로 삼각형을 그립니다.
+   정점 셰이더가 출력하는 3개의 clip space 정점마다 점 3개로 삼각형을 그립니다.
    이게 가장 많이 사용되는 모드입니다.
 
    <div class="webgl_center"><img src="resources/gl-triangles.svg" style="width: 400px;"></div>
 
 * `TRIANGLE_STRIP`
 
-   Vertex shader가 출력하는 각 clip space 정점에 대해 마지막 정점 3개로 삼각형을 그립니다.
+   정점 셰이더가 출력하는 각 clip space 정점에 대해 마지막 정점 3개로 삼각형을 그립니다.
    즉 6개의 점 A,B,C,D,E,F를 출력하면 삼각형 4개가 그려집니다.
    A,B,C 다음 B,C,D 다음 C,D,E 다음 D,E,F
 
@@ -69,7 +69,7 @@ Clip space 좌표를 출력하는 vertex shader를 제공한 다음, `gl.drawArr
 
 * `TRIANGLE_FAN`
 
-   Vertex shader가 출력하는 각 clip space 정점에 대해 첫 번째 정점과 마지막 정점 2개로 삼각형을 그립니다.
+   정점 셰이더가 출력하는 각 clip space 정점에 대해 첫 번째 정점과 마지막 정점 2개로 삼각형을 그립니다.
    즉 6개의 점 A,B,C,D,E,F를 출력하면 삼각형 4개가 그려집니다.
    A,B,C 다음 A,C,D 다음 A,D,E 다음 마지막으로 A,E,F
 

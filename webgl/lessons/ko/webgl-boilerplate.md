@@ -7,7 +7,7 @@ TOC: Boilerplate
 대부분의 WebGL 강의들은 모든걸 한 번에 다루기 때문에 배우기 복잡해 보이기도 하는데요.
 가능한 한 그것을 피하기 위해 더 작게 나눠보려고 합니다.
 
-WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 fragment shader, 두 가지 작은 함수가 있다는 겁니다.
+WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더와 fragment shader, 두 가지 작은 함수가 있다는 겁니다.
 이 두 함수는 일반적으로 최대 속도가 나오는 GPU에서 실행되는데요.
 그렇기 때문에 GPU에서 수행할 수 있는 언어, 커스텀 언어로 작성됩니다.
 이 두 함수는 컴파일되고 연결되어야 하는데요.
@@ -49,7 +49,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
      * 두 셰이더로 program 생성합니다.
      *
      * @param {!WebGLRenderingContext) gl은 WebGL Context
-     * @param {!WebGLShader} vertexShader는 vertex shader
+     * @param {!WebGLShader} vertexShader는 정점 셰이더
      * @param {!WebGLShader} fragmentShader는 fragment shader
      * @return {!WebGLProgram} program
      */
@@ -126,7 +126,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 vertex shader와 
      *
      * @param {!WebGLRenderingContext} gl은 WebGL Context
      * @param {string[]} shaderScriptId는 shader용 스크립트 태그의 id 배열입니다.
-     *                   첫 번째는 vertex shader, 두 번째는 fragment shader라고 가정합니다.
+     *                   첫 번째는 정점 셰이더, 두 번째는 fragment shader라고 가정합니다.
      * @return {!WebGLProgram} program
      */
     function createProgramFromScripts(gl, shaderScriptIds) {

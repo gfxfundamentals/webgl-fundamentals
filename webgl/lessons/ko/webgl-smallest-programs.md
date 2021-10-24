@@ -113,7 +113,7 @@ Not saying that particular one is all that useful but still it's good to know.
 이런 셰이더 세트는 어떨까요?
 
 ```glsl
-// vertex shader
+// 정점 셰이더
 void main() {
   gl_Position = vec4(0, 0, 0, 1);  // 중앙
   gl_PointSize = 120.0;
@@ -225,7 +225,7 @@ WebGL은 기본적으로 texture unit 0을 사용하고 uniform은 기본적으�
 정점 셰이더를 이렇게 바꿀 수 있는데요.
 
 ```glsl
-// vertex shader
+// 정점 셰이더
 
 +attribute vec4 position;
 
@@ -260,7 +260,7 @@ const positionLoc = gl.getAttribLocation(program, 'position');
 실행하기 전에 점을 더 작게 만듭시다.
 
 ```glsl
-// vertex shader
+// 정점 셰이더
 
 attribute vec4 position;
 +uniform float size;

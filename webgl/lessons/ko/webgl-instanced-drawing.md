@@ -13,7 +13,7 @@ WebGL은 *instanced drawing*이라는 기능을 가지고 있습니다.
 [Orthographic projection](webgl-3d-orthographic.html)에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 셰이더로 시작합니다.
 
 ```html
-<!-- vertex shader -->
+<!-- 정점 셰이더 -->
 <script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 uniform mat4 matrix;
@@ -40,7 +40,7 @@ void main() {
 </script>  
 ```
 
-Vertex shader는 각 정점을 [해당 글](webgl-3d-orthographic.html)에서 다룬 상당히 유연한 배열인 단일 행렬로 곱합니다.
+정점 셰이더는 각 정점을 [해당 글](webgl-3d-orthographic.html)에서 다룬 상당히 유연한 배열인 단일 행렬로 곱합니다.
 Fragment shader는 uniform을 통해 전달한 색상을 사용합니다.
 
 그리기 위해서는 shader를 컴파일하고 서로 연결한 다음 attribute와 uniform의 location을 찾아야 합니다.
@@ -151,7 +151,7 @@ requestAnimationFrame(render);
 
 Instancing은 이러한 호출을 줄이는 방법입니다.
 이는 동일한 항목을 몇 번 그려야 하는지 WebGL에 알려주는 방식으로 작동합니다.
-각 attribute에 대해 vertex shader가 호출될 때마다 해당 attribute를 할당된 버퍼에서 *다음 값*으로 진행할지(기본값), 또는 일반적으로 N이 1인 모든 N instance만 진행할지 지정합니다.
+각 attribute에 대해 정점 셰이더가 호출될 때마다 해당 attribute를 할당된 버퍼에서 *다음 값*으로 진행할지(기본값), 또는 일반적으로 N이 1인 모든 N instance만 진행할지 지정합니다.
 
 예를 들어 uniform에서 `matrix`와 `color`를 제공하는 대신, `attribute`를 통해 제공할 수 있는데요.
 각 instance의 행렬과 색상을 버퍼에 넣고, attribute가 해당 버퍼에서 데이터를 가져오도록 설정한 다음, instance당 한 번만 다음 값으로 진행하도록 WebGL에 지시할 겁니다.
@@ -177,7 +177,7 @@ if (!gl) {
 다음은 `matrix`와 `color`에 대해 uniform 대신 attribute를 사용하도록 셰이더를 수정할 겁니다.
 
 ```html
-<!-- vertex shader -->
+<!-- 정점 셰이더 -->
 <script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 -uniform mat4 matrix;
@@ -204,7 +204,7 @@ void main() {
 precision mediump float;
 
 -uniform vec4 color;
-+// Vertex shader에서 전달
++// 정점 셰이더에서 전달
 +varying vec4 v_color;
 
 void main() {
@@ -214,7 +214,7 @@ void main() {
 </script>  
 ```
 
-Attribute는 vertex shader에서만 작동하므로 vertex shader의 attribute에서 색상을 가져와서 varying을 통해 fragment shader로 전달해야 합니다.
+Attribute는 정점 셰이더에서만 작동하므로 정점 셰이더의 attribute에서 색상을 가져와서 varying을 통해 fragment shader로 전달해야 합니다.
 
 다음으로 해당 attribute의 location을 찾아야 합니다.
 
@@ -396,10 +396,10 @@ ext.drawArraysInstancedANGLE(
 오로지 instanced drawing을 보여주기 위한 것입니다.
 Projection matrix나 view matrix를 원한다면 JavaScript에 계산을 추가할 수 있습니다.
 이는 JavaScript의 작업이 더 많아짐을 의미합니다.
-좀 더 확실한 방법은 1개 혹은 2개 이상의 uniform을 vertex shader에 추가하는 겁니다.
+좀 더 확실한 방법은 1개 혹은 2개 이상의 uniform을 정점 셰이더에 추가하는 겁니다.
 
 ```html
-<!-- vertex shader -->
+<!-- 정점 셰이더 -->
 <script id="vertex-shader-3d" type="x-shader/x-vertex">
 attribute vec4 a_position;
 attribute vec4 color;

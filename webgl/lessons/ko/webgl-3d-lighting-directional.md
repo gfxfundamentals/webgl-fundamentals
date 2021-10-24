@@ -249,7 +249,7 @@ function setNormals(gl) {
 
 이제 셰이더가 이걸 사용하도록 만들어야 합니다.
 
-먼저 vertex shader를 통해 fragment shader로 normal을 전달합니다.
+먼저 정점 셰이더를 통해 fragment shader로 normal을 전달합니다.
 
     attribute vec4 a_position;
     -attribute vec4 a_color;
@@ -276,7 +276,7 @@ function setNormals(gl) {
 ```
 precision mediump float;
 
-// Vertex shader에서 전달
+// 정점 셰이더에서 전달
 -varying vec4 v_color;
 +varying vec3 v_normal;
 

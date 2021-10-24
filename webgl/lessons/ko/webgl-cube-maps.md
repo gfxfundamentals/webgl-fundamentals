@@ -117,7 +117,7 @@ Fragment shader에서 `sampler2D` 대신 `samplerCube`를 사용하고 `texture2
 ```glsl
 precision mediump float;
 
-// Vertex shader에서 전달
+// 정점 셰이더에서 전달
 varying vec3 v_normal;
 
 // 텍스처

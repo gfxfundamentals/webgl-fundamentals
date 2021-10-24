@@ -416,7 +416,7 @@ var m3 = {
 ```
 
 이제 셰이더를 더 단순하게 할 수 있습니다.
-여기 완전히 새로운 vertex shader입니다.
+여기 완전히 새로운 정점 셰이더입니다.
 
 ```html
 <script id="vertex-shader-2d" type="x-shader/x-vertex">

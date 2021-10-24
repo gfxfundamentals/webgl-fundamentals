@@ -41,10 +41,10 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 
 * Uniform vector의 최대 개수
 
-  Vertex shader와 fragment shader에 따로따로 지정됩니다.
+  정점 셰이더와 fragment shader에 따로따로 지정됩니다.
 
-  WebGL1에서는 vertex shader에 128개 그리고 fragment shader에 16개입니다.
-  WebGL2에서는 vertex shader에 256개 그리고 fragment shader에 224개입니다.
+  WebGL1에서는 정점 셰이더에 128개 그리고 fragment shader에 16개입니다.
+  WebGL2에서는 정점 셰이더에 256개 그리고 fragment shader에 224개입니다.
 
   참고로 uniform은 "패킹"될 수 있음으로 위 숫자는 사용할 수 있는 `vec4`의 개수인데요.
   이론적으로는 `float` uniform 개수의 4배를 가질 수 있습니다.
@@ -104,7 +104,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
   여기에는 3가지 값이 있습니다.
 
   1. Texture unit 개수
-  2. Vertex shader가 참조할 수 있는 texture unit 개수
+  2. 정점 셰이더가 참조할 수 있는 texture unit 개수
   3. Fragment shader가 참조할 수 있는 texture unit 개수
 
   <table class="tabular-data">
@@ -113,12 +113,12 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
     </thead>
     <tbody>
       <tr><td>존재하는 texture unit 최소값</td><td>8</td><td>32</td></tr>
-      <tr><td>Vertex shader가 참조할 수 있는 texture unit 최소값</td><th style="color: red;">0!</td><td>16</td></tr>
+      <tr><td>정점 셰이더가 참조할 수 있는 texture unit 최소값</td><th style="color: red;">0!</td><td>16</td></tr>
       <tr><td>Fragment shader가 참조할 수 있는 texture unit 최소값</td><td>8</td><td>16</td></tr>
     </tbody>
   </table>
 
-  WebGL1에서 vertex shader에 대한 값이 **0**임을 주의해야 합니다.
+  WebGL1에서 정점 셰이더에 대한 값이 **0**임을 주의해야 합니다.
   참고로 너무 낙담하지 않아도 괜찮은데요.
   [모든 장치의 약 97%가 최소 4개를 지원](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)합니다.
   그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 셰이더로 fallback할 수 있는지 확인하는 게 좋습니다.
@@ -131,10 +131,10 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
   <tbody>
     <tr><td>MAX_TEXTURE_SIZE                </td><td>텍스처 최대 크기</td></tr>
     <tr><td>MAX_VERTEX_ATTRIBS              </td><td>가질 수 있는 attribute 개수</td></tr>
-    <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>vertex shader가 가질 수 있는 vec4 uniform 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>정점 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
     <tr><td>MAX_VARYING_VECTORS             </td><td>가지고 있는 varying 개수</td></tr>
     <tr><td>MAX_COMBINED_TEXTURE_IMAGE_UNITS</td><td>존재하는 texture unit 개수</td></tr>
-    <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>vertex shader가 참조할 수 있는 texture unit 개수</td></tr>
+    <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>정점 셰이더가 참조할 수 있는 texture unit 개수</td></tr>
     <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>fragment shader가 참조할 수 있는 texture unit 개수</td></tr>
     <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>fragment shader가 가질 수 있는 vec4 uniform 개수</td></tr>
     <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>cubemap 최대 크기</td></tr>
@@ -159,7 +159,7 @@ WebGL2는 몇 가지 더 추가합니다.
     <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS      </td><td>transform feedback을 사용할 때 별도의 버퍼로 출력할 수 있는 varying 개수</td></tr>
     <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>모든 걸 단일 버퍼로 보낼 때 출력할 수 있는 varying 개수</td></tr>
     <tr><td>MAX_COMBINED_UNIFORM_BLOCKS                  </td><td>종합적으로 사용할 수 있는 uniform block 개수</td></tr>
-    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>vertex shader가 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>정점 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
     <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>fragment shader가 사용할 수 있는 uniform block 개수</td></tr>
   </tbody>
 </table>
@@ -211,7 +211,7 @@ WebGL1의 경우 다음의 3개의 extension이 거의 보편적으로 지원되
 ## attribute location
 
 버그는 attribute location을 찾지 못하는 겁니다.
-예를 들어 이런 vertex shader가 있다면
+예를 들어 이런 정점 셰이더가 있다면
 
 ```glsl
 attribute vec4 position;

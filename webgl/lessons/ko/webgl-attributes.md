@@ -10,9 +10,9 @@ Texture unit에 관한 [비슷한 글](webgl-texture-units.html)이 있습니다
 
 ## Attribute
 
-WebGL의 attribute는 버퍼에서 데이터를 가져오는 vertex shader에 대한 입력 값입니다.
-WebGL은 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용자가 제공한 vertex shader를 N번 실행하는데요.
-각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 vertex 셰이더 내부의 attribute에 제공하는 방법을 정의합니다.
+WebGL의 attribute는 버퍼에서 데이터를 가져오는 정점 셰이더에 대한 입력 값입니다.
+WebGL은 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용자가 제공한 정점 셰이더를 N번 실행하는데요.
+각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 정점 셰이더 내부의 attribute에 제공하는 방법을 정의합니다.
 
 javascript로 구현되었다면 이런식으로
 
@@ -88,8 +88,8 @@ gl.bindBuffer = function(target, buffer) {
 };
 ```
 
-자, 다음은 vertex shader입니다.
-Vertex shader에서는 attribute를 선언합니다.
+자, 다음은 정점 셰이더입니다.
+정점 셰이더에서는 attribute를 선언합니다.
 예를 들어:
 
 ```glsl
@@ -104,7 +104,7 @@ void main() {
 }
 ```
 
-`gl.linkProgram(someProgram)`를 호출하여 vertex shader와 fragment shader를 연결할 때 WebGL(driver/GPU/browser)은 각 attribute에 사용할 index/location를 자체적으로 결정하는데요.
+`gl.linkProgram(someProgram)`를 호출하여 정점 셰이더와 fragment shader를 연결할 때 WebGL(driver/GPU/browser)은 각 attribute에 사용할 index/location를 자체적으로 결정하는데요.
 수동(아래 참조)으로 location을 지정하지 않는 한 어떤 location을 선택할지 알 수 없습니다.
 오직 browser/driver/GPU에 달려있죠.
 따라서 position, texcoord, normal에 어떤 attribute를 사용했는지 물어봐야 합니다.
@@ -117,7 +117,7 @@ const normalLoc = gl.getAttribLocation(program, 'normal');
 ```
 
 `positionLoc` = `5`라고 해봅시다.
-이건 vertex shader가 실행될 때(`gl.drawArrays`나 `gl.drawElements`를 호출할 때) vertex shader는 여러분이 알맞은 type, size, offset, stride, buffer 등으로 attribute 5를 설정할 것이라 예상한다는 걸 의미합니다.
+이건 정점 셰이더가 실행될 때(`gl.drawArrays`나 `gl.drawElements`를 호출할 때) 정점 셰이더는 여러분이 알맞은 type, size, offset, stride, buffer 등으로 attribute 5를 설정할 것이라 예상한다는 걸 의미합니다.
 
 참고로 program을 연결하기 전에는 `gl.bindAttribLocation(program, location, nameOfAttribute)`을 호출하여 location을 선택할 수 있습니다.
 예제:
@@ -186,7 +186,7 @@ attribute vec3 a_normal;
 
 조명을 원하지 않는 선의 경우, 단색이 필요하므로 튜토리얼 [첫 페이지](webgl-fundamentals.html)에 있는 첫 번째 셰이더와 비슷한 작업을 수행합니다.
 color에 대한 uniform을 선언하는데요.
-이건 vertex shader에서 position만 필요함을 뜻합니다.
+이건 정점 셰이더에서 position만 필요함을 뜻합니다.
 
 ```glsl
 // solid-shader

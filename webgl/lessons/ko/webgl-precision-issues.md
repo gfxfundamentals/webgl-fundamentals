@@ -7,7 +7,7 @@ TOC: 정밀도 문제
 
 ## `lowp`, `mediump`, `highp`
 
-이 사이트의 [첫 번째 글](webgl-fundamentals.html)에서 우린 vertex shader와 fragment shader를 만들었습니다.
+이 사이트의 [첫 번째 글](webgl-fundamentals.html)에서 우린 정점 셰이더와 fragment shader를 만들었습니다.
 Fragment shader를 만들 때 지나가는 말로 fragment shader는 기본 정밀도를 가지지 않으므로 한 줄을 추가해서 설정해야 한다고 언급했었는데
 
 ```glsl
@@ -99,7 +99,7 @@ Fragment shader에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용
   precision mediump float;
 #endif
 
-// Vertex shader에서 전달
+// 정점 셰이더에서 전달
 varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 varying vec3 v_surfaceToView;
@@ -136,7 +136,7 @@ void main() {
 ```
 
 참고: 이것만으로는 충분하지 않습니다.
-Vertex shader에는
+정점 셰이더에는
 
 ```glsl
   // 조명에 대한 표면의 벡터를 계산하고 fragment shader로 전달
@@ -160,7 +160,7 @@ Vertex shader에는
 x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 1000000은 `mediump`의 범위를 벗어납니다.
 
-한 가지 해결법은 vertex shader에서 정규화하는 겁니다.
+한 가지 해결법은 정점 셰이더에서 정규화하는 겁니다.
 
 ```
   // 조명에 대한 표면의 벡터를 계산하고 fragment shader에 전달
@@ -173,7 +173,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 
 이제 `v_surfaceToLight`에 할당된 값들은 `mediump`의 범위인 -1과 +1사이입니다.
 
-참고로 vertex shader에서의 정규화는 실제로 동일한 결과를 제공하지 않지만 나란히 비교하지 않는 한 아무도 눈치채지 못할 정도로 충분히 만족할만 합니다.
+참고로 정점 셰이더에서의 정규화는 실제로 동일한 결과를 제공하지 않지만 나란히 비교하지 않는 한 아무도 눈치채지 못할 정도로 충분히 만족할만 합니다.
 
 `normalize`, `length`, `distance`, `dot`과 같은 함수들은 모두 값이 너무 크면 `mediump`의 범위를 벗어나는 문제가 있습니다.
 
@@ -196,7 +196,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 
 그래서 모든 장치에서 `highp`를 지원하는 지원하는지 확인하기 위해, `highp`를 사용하는 fragment shader를 만들어, 컴파일하고, 연결하고, 에러를 확인하면 됩니다.
 실패한다면 `highp`가 지원되지 않는 겁니다.
-참고로 vertex shader와 연결해야 합니다.
+참고로 정점 셰이더와 연결해야 합니다.
 명세서에는 연결 시간에 에러가 발견되는 한 에러를 반환하기 위해 컴파일할 필요가 없으므로, 셰이더를 컴파일하고 `COMPILE_STATUS`를 확인하는 것만으로는 컴파일이 실제로 성공했는지 혹은 실패했는지 알 수 없습니다.
 연결하고 `LINK_STATUS`를 확인해야 합니다.
 
@@ -209,7 +209,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 
 {{{example url="../webgl-precision-check-fragment-shader.html"}}}
 
-다음은 vertex shader의 `mediump`이 실제로 `mediump`인지 확인하는 예제인데
+다음은 정점 셰이더의 `mediump`이 실제로 `mediump`인지 확인하는 예제인데
 
 {{{example url="../webgl-precision-check-vertex-shader.html"}}}
 

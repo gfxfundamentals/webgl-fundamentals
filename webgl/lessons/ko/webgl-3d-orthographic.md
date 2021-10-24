@@ -17,8 +17,8 @@ translation, rotation, scale, 그리고 픽셀에서 clip space으로 투영하�
 마지막 예제를 가져와서 3D로 바꿔봅시다.
 다시 F를 사용할 거지만 이번엔 3D 'F'입니다.
 
-먼저 해야할 일은 3D를 다루기 위해 vertex shader를 수정하는 겁니다.
-다음은 기존 vertex shader이고
+먼저 해야할 일은 3D를 다루기 위해 정점 셰이더를 수정하는 겁니다.
+다음은 기존 정점 셰이더이고
 
 ```
 <script id="vertex-shader-2d" type="x-shader/x-vertex">
@@ -388,9 +388,9 @@ X와 Y를 pixel space에서 clip space로 변환해야 했던 것처럼 Z도 동
 
 슬라이더를 움직여서 이걸 3D라고 부르기는 힘든데요.
 각 사각형에 다른 색상을 칠해봅시다.
-이를 위해 vertex shader에 또 다른 attribute와 이걸 vertex shader에서 fragment shader로 전달하기 위한 varying을 추가할 겁니다.
+이를 위해 정점 셰이더에 또 다른 attribute와 이걸 정점 셰이더에서 fragment shader로 전달하기 위한 varying을 추가할 겁니다.
 
-다음은 새로운 vertex shader 입니다.
+다음은 새로운 정점 셰이더입니다.
 
 ```
 <script id="vertex-shader-3d" type="x-shader/x-vertex">
@@ -417,7 +417,7 @@ Fragment shader에서 해당 색상을 사용해야 합니다.
 <script id="fragment-shader-3d" type="x-shader/x-fragment">
 precision mediump float;
 
-+// Vertex shader에서 전달
++// 정점 셰이더에서 전달
 +varying vec4 v_color;
 
 void main() {
@@ -513,7 +513,7 @@ WebGL은 삼각형의 앞면 혹은 뒷면만 그릴 수도 있는데요.
 이 경우 "culling"은 "그리지 않음"을 의미하는 단어입니다.
 
 참고로 WebGL에서 삼각형이 시계 혹은 반시계 방향으로 진행되는지는 clip space에 있는 해당 삼각형의 정점에 따라 달라집니다.
-즉 WebGL은 vertex shader에서 정점에 수식을 적용한 후에 삼각형이 앞면인지 뒷면인지 파악합니다.
+즉 WebGL은 정점 셰이더에서 정점에 수식을 적용한 후에 삼각형이 앞면인지 뒷면인지 파악합니다.
 이건 X에서 -1로 크기가 조정되거나 180도 회전한 시계 방향 삼각형은 반시계 방향 삼각형이 된다는 걸 의미하는데요.
 CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷면) 삼각형을 모두 볼 수 있었습니다.
 이제 CULL_FACE를 켰기 때문에 scale이나 rotation 혹은 어떤 이유로든 앞면 삼각형이 뒤집히면 WebGL은 그리지 않을겁니다.
@@ -555,7 +555,7 @@ DEPTH BUFFER를 입력해봅시다.
 
 때때로 Z-Buffer라고 불리는 depth buffer는 *depth* pixel의 사각형인데, 각 color pixel에 대한 depth pixel은 이미지를 만드는 데에 사용됩니다.
 WebGL은 각 color pixel을 그리기 때문에 depth pixel도 그릴 수 있는데요.
-이건 Z축에 대해 vertex shader에서 반환한 값을 기반으로 합니다.
+이건 Z축에 대해 정점 셰이더에서 반환한 값을 기반으로 합니다.
 X와 Y를 clip space로 변환해야 했던 것처럼 Z도 clip space(-1에서 +1)에 있습니다.
 해당 값은 depth space 값(0에서 +1)으로 변환됩니다.
 WebGL은 color pixel을 그리기 전에 대응하는 depth pixel을 검사하는데요.
@@ -646,10 +646,10 @@ var offset = 0;               // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(colorAttributeLocation, size, type, normalize, stride, offset);
 </pre>
 <p>
-해당 '3'은 vertex shader의 반복마다 각 attribute의 버퍼에서 3개의 값만 가져오라는 걸 말합니다.
-이게 동작하는 이유는 vertex shader에서 입력하지 않는 값에 대해 WebGL이 기본값을 제공하기 때문인데요.
+해당 '3'은 정점 셰이더의 반복마다 각 attribute의 버퍼에서 3개의 값만 가져오라는 걸 말합니다.
+이게 동작하는 이유는 정점 셰이더에서 입력하지 않는 값에 대해 WebGL이 기본값을 제공하기 때문인데요.
 기본값은 0, 0, 0, 1로 x = 0, y = 0, z= 0, w = 1 입니다.
-이게 기존 vertex shader에서 명시적으로 1을 입력해줘야 했던 이유입니다.
+이게 기존 정점 셰이더에서 명시적으로 1을 입력해줘야 했던 이유입니다.
 x와 y는 전달했고, z는 1이 필요했지만, z의 기본값은 0이므로, 명시적으로 1을 입력해야 했던 거죠.
 하지만 3D의 경우 'w'를 입력하지 않아도 수식이 작동하는데 필요한 값인 1을 기본값으로 가집니다.
 </p>

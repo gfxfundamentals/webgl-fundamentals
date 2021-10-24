@@ -54,7 +54,7 @@ TOC: 참고 자료
 
 * [glslsandbox.com](https://glslsandbox.com): original fragment shader playground
 
-* [vertexshaerart.com](https://vertexshaderart.com): glslsandbox의 vertex shader 버전
+* [vertexshaerart.com](https://vertexshaderart.com): glslsandbox의 정점 셰이더 버전
 
 ---
 

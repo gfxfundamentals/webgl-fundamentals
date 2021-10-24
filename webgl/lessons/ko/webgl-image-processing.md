@@ -15,11 +15,11 @@ WebGL에서 이미지를 그리기 위해서는 텍스처를 사용해야 하는
 텍스처 좌표는 텍스처 크기에 상관없이 0.0에서 1.0사이가 됩니다.
 
 단 하나의 사각형(정확히는 2개의 삼각형)만 그리기 때문에 사각형의 각 점이 텍스처의 어느 위치에 해당하는지 WebGL에 알려줘야 합니다.
-'varying'이라고 불리는 특수 변수를 이용해 이 정보를 vertex shader에서 fragment shader로 전달해야 하는데요.
+'varying'이라고 불리는 특수 변수를 이용해 이 정보를 정점 셰이더에서 fragment shader로 전달해야 하는데요.
 이 변수는 변하기 때문에 varying이라 불립니다.
-WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 vertex shader에 제공한 값을 보간합니다.
+WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 정점 셰이더에 제공한 값을 보간합니다.
 
-[이전 글](webgl-fundamentals.html)의 마지막에 있는 vertex shader를 사용해서 텍스처 좌표 전달을 위한 속성을 추가한 다음 fragment shader로 전달해야 합니다.
+[이전 글](webgl-fundamentals.html)의 마지막에 있는 정점 셰이더를 사용해서 텍스처 좌표 전달을 위한 속성을 추가한 다음 fragment shader로 전달해야 합니다.
 
     attribute vec2 a_texCoord;
     ...
@@ -40,7 +40,7 @@ WebGL은 fragment shader를 사용해서 각 픽셀을 그릴 때 vertex shader�
     // 텍스처
     uniform sampler2D u_image;
 
-    // Vertex shader에서 전달된 texCoords
+    // 정점 셰이더에서 전달된 texCoords
     varying vec2 v_texCoord;
 
     void main() {
@@ -130,7 +130,7 @@ WebGL은 0.0에서 1.0까지인 텍스처 좌표에서 텍스처를 참조하기
     uniform sampler2D u_image;
     uniform vec2 u_textureSize;
 
-    // Vertex shader에서 전달된 texCoords
+    // 정점 셰이더에서 전달된 texCoords
     varying vec2 v_texCoord;
 
     void main() {
@@ -181,7 +181,7 @@ Convolution kernel은 행렬의 각 항목이 렌더링하는 픽셀 주변에 �
     uniform float u_kernel[9];
     uniform float u_kernelWeight;
 
-    // Vertex shader에서 전달된 texCoords
+    // 정점 셰이더에서 전달된 texCoords
     varying vec2 v_texCoord;
 
     void main() {
@@ -265,9 +265,9 @@ gl.activeTexture(gl.TEXTURE0 + textureUnitIndex);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
 <p>
-모든 WebGL 구현체들은 fragment shader에서 최소 8개의 texture unit을 지원해야 하지만 vertex shader에서는 0뿐 입니다.
-따라서 8개 이상을 사용하려면 <code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 몇 개가 있는지 확인해야 하고, vertex shader에서 텍스처를 사용하고 싶다면 <code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 몇 개를 사용할 수 있는지 알아보세요.
-99% 이상의 기기들이 vertex shader에서 최소 4개 이상의 texture unit을 지원합니다.
+모든 WebGL 구현체들은 fragment shader에서 최소 8개의 texture unit을 지원해야 하지만 정점 셰이더에서는 0뿐 입니다.
+따라서 8개 이상을 사용하려면 <code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 몇 개가 있는지 확인해야 하고, 정점 셰이더에서 텍스처를 사용하고 싶다면 <code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 몇 개를 사용할 수 있는지 알아보세요.
+99% 이상의 기기들이 정점 셰이더에서 최소 4개 이상의 texture unit을 지원합니다.
 </p>
 </div>
 
@@ -277,7 +277,7 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 그건 단순 명명 규칙입니다.
 필수는 아니지만 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어 줍니다.
 a_는 버퍼에서 제공되는 데이터인 attribute입니다.
-u_는 셰이더에 입력하는 uniform이고, v_는  vertex shader에서 fragment shader로 전달되고 그려진 각 픽셀에 대해 정점 사이가 보간(또는 가변)되는 값인 varying입니다.
+u_는 셰이더에 입력하는 uniform이고, v_는  정점 셰이더에서 fragment shader로 전달되고 그려진 각 픽셀에 대해 정점 사이가 보간(또는 가변)되는 값인 varying입니다.
 더 자세한 내용은 <a href="webgl-how-it-works.html">동작 원리</a>를 봐주세요.
 </p>
 </div>

@@ -29,7 +29,7 @@ TOC: 평면 및 원근 투영 매핑
 셰이더는 다양한 행렬이 분리되어 있으므로 JavaScript에서 함께 곱할 필요가 없다는 걸 제외하면 [텍스처에 대한 글](webgl-3d-textures.html)의 셰이더와 유사합니다.
 
 ```glsl
-// vertex shader
+// 정점 셰이더
 attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
@@ -54,7 +54,7 @@ void main() {
 // fragment shader
 precision mediump float;
 
-// Vertex shader에서 전달
+// 정점 셰이더에서 전달
 varying vec2 v_texcoord;
 
 uniform vec4 u_colorMult;
@@ -258,7 +258,7 @@ const imageTexture = loadImageTexture('resources/f-texture.png');
 ```glsl
 precision mediump float;
 
-// Vertex shader에서 전달
+// 정점 셰이더에서 전달
 varying vec2 v_texcoord;
 +varying vec4 v_projectedTexcoord;
 
@@ -289,7 +289,7 @@ void main() {
 그런 다음 해당 공간을 통해 구체의 world position과 평면 정점을 투영합니다.
 0과 1사이에 있을 때 방금 작성한 코드가 텍스처를 표시할 겁니다.
 
-이 *공간*을 통해 구체의 world position과 평면 정점을 투영하기 위해 vertex shader에 코드를 추가해봅시다.
+이 *공간*을 통해 구체의 world position과 평면 정점을 투영하기 위해 정점 셰이더에 코드를 추가해봅시다.
 
 ```glsl
 attribute vec4 a_position;

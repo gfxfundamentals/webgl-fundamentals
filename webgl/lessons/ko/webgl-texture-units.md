@@ -109,7 +109,7 @@ WebGL은 적어도 8개의 texture unit을 지원하는 구현이 필요합니�
 const maxTextureUnits = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 ```
 
-참고로 vertex shader와 fragment shader는 각각 사용할 수 있는 unit 수에 대한 제한이 다를 수 있습니다.
+참고로 정점 셰이더와 fragment shader는 각각 사용할 수 있는 unit 수에 대한 제한이 다를 수 있습니다.
 각각의 제한을 쿼리할 수 있는데
 
 ```js
@@ -125,9 +125,9 @@ maxVertexShaderTextureUnits = 4
 maxFragmentShaderTextureUnits = 8
 ```
 
-이 말은 예를 들어 vertex shader에서 2개의 texture unit을 사용한다면 합쳐진 최대값은 8이기 때문에 fragment shader에서 사용할 수 있는 건 6개만 남는다는 걸 의미합니다.
+이 말은 예를 들어 정점 셰이더에서 2개의 texture unit을 사용한다면 합쳐진 최대값은 8이기 때문에 fragment shader에서 사용할 수 있는 건 6개만 남는다는 걸 의미합니다.
 
 또 하나 주목해야 할 점은 WebGL이 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`가 0을 반환하는 걸 허용한다는 겁니다.
-다시 말해, **일부 기기는 vertex shader에서의 텍스처 사용을 전혀 지원하지 않을 수 있습니다.**
-다행히 [그런 상황](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)은 드물지만 vertex shader에서 텍스처를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`로 확인하고 아니라면 사용자에게 알려야 합니다.
+다시 말해, **일부 기기는 정점 셰이더에서의 텍스처 사용을 전혀 지원하지 않을 수 있습니다.**
+다행히 [그런 상황](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)은 드물지만 정점 셰이더에서 텍스처를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`로 확인하고 아니라면 사용자에게 알려야 합니다.
 

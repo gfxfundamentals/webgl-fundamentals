@@ -36,7 +36,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
 1단위 크기의 사각형 하나를 업로드합니다.
 그런 다음 [행렬 수학](webgl-2d-matrices.html)을 사용하여 해당 단위 사각형의 크기를 조정하고 이동시켜 원하는 위치에 있도록 합니다.
 
-먼저 간단한 vertex shader가 필요합니다.
+먼저 간단한 정점 셰이더가 필요합니다.
 
     attribute vec4 a_position;
     attribute vec2 a_texcoord;
@@ -50,7 +50,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
        v_texcoord = a_texcoord;
     }
 
-간단한 fragment shader도 필요하죠.
+간단한 프래그먼트 셰이더도 필요합니다.
 
     precision mediump float;
 
@@ -258,7 +258,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
 텍스처 좌표가 작동하는 방식은 [텍스처에 대한 글](webgl-3d-textures.html)에서 다뤘습니다.
 해당 글에서는 텍스처 좌표를 수동으로 생성했지만 즉석으로 생성할 수도 있으며 행렬을 사용하여 위치를 조작한 것처럼 다른 행렬을 사용하여 비슷하게 텍스처 좌표를 조작할 수 있습니다.
 
-텍스처 행렬을 vertex shader에 추가하고, 텍스처 좌표에 이 텍스처 행렬을 곱해봅시다.
+텍스처 행렬을 정점 셰이더에 추가하고, 텍스처 좌표에 이 텍스처 행렬을 곱해봅시다.
 
     attribute vec4 a_position;
     attribute vec2 a_texcoord;

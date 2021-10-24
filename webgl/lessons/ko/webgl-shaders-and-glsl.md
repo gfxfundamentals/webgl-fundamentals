@@ -10,14 +10,14 @@ TOC: 셰이더와 GLSL
 예제로 충분하면 좋겠지만 혹시 모르니 좀 더 명료하게 해봅시다.
 
 [작동 원리](webgl-how-it-works.html)에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 셰이더를 필요로 합니다.
-바로 *vertex shader*와 *fragment shader*죠.
+바로 *정점 셰이더*와 *fragment shader*죠.
 각각의 셰이더는 *함수*인데요.
-Vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)으로 연결됩니다.
+정점 셰이더와 fragment shader는 함께 shader program(또는 그냥 program)으로 연결됩니다.
 일반적인 WebGL 앱은 많은 shader program을 가집니다.
 
-## Vertex shader
+## 정점 셰이더
 
-Vertex shader의 역할은 clip space 좌표를 생성하는 겁니다.
+정점 셰이더의 역할은 clip space 좌표를 생성하는 겁니다.
 항상 이런 형식을 취하는데
 
     void main() {
@@ -27,7 +27,7 @@ Vertex shader의 역할은 clip space 좌표를 생성하는 겁니다.
 셰이더는 정점마다 한 번씩 호출되는데요.
 호출될 때마다 특수 전역 변수, `gl_Position`을 어떤 clip space 좌표로 설정해야 합니다.
 
-Vertex shader는 데이터가 필요한데요.
+정점 셰이더는 데이터가 필요한데요.
 3가지 방법으로 데이터를 가져올 수 있습니다.
 
 1.  [Attribute](#attribute) (버퍼에서 가져온 데이터)
@@ -80,7 +80,7 @@ Attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`�
 ### Uniform
 
 셰이더 uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지되며 셰이더에 전달되는 값입니다.
-간단한 예로 위 vertex shader에 offset을 추가할 수 있습니다.
+간단한 예로 위 정점 셰이더에 offset을 추가할 수 있습니다.
 
     attribute vec4 a_position;
     +uniform vec4 u_offset;
@@ -173,7 +173,7 @@ uniform은 여러 type을 가질 수 있는데요.
     var someThingActiveLoc = gl.getUniformLocation(someProgram, "u_someThing.active");
     var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, "u_someThing.someVec2");
 
-### Vertex shader의 텍스처
+### 정점 셰이더의 텍스처
 
 [Fragment shader의 텍스처](#fragment-shader-texture)를 봐주세요.
 
@@ -196,7 +196,7 @@ Fragment shader는 데이터가 필요한데요.
 
 1.  [Uniform](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)
 2.  [Texture](#fragment-shader-texture) (pixel/texel의 데이터)
-3.  [Varying](#varying) (vertex shader에서 전달되고 보간된 데이터)
+3.  [Varying](#varying) (정점 셰이더에서 전달되고 보간된 데이터)
 
 ### Fragment shader의 Uniform
 
@@ -246,13 +246,13 @@ Fragment shader는 데이터가 필요한데요.
 
 ### Varying
 
-Varying은 [동작 원리](webgl-how-it-works.html)에 다룬 vertex shader에서 fragment shader로 값을 전달하는 방법입니다.
+Varying은 [동작 원리](webgl-how-it-works.html)에 다룬 정점 셰이더에서 fragment shader로 값을 전달하는 방법입니다.
 
-Varying을 사용하려면 vertex shader와 fragment shader 양쪽에 일치하는 varying을 선언해야 하는데요.
-각 정점마다 vertex shader의 varying을 어떤 값으로 설정합니다.
+Varying을 사용하려면 정점 셰이더와 fragment shader 양쪽에 일치하는 varying을 선언해야 하는데요.
+각 정점마다 정점 셰이더의 varying을 어떤 값으로 설정합니다.
 WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader에서 대응하는 varying으로 전달할 겁니다.
 
-Vertex shader
+정점 셰이더:
 
     attribute vec4 a_position;
 
@@ -395,7 +395,7 @@ T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
 ## 총정리
 
 이게 바로 이 모든 글들의 핵심입니다.
-WebGL은 다양한 셰이더를 생성하고, 데이터를 이 셰이더에 제공한 다음, `gl.drawArrays`나 `gl.drawElements`를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 current vertex shader를 호출한 뒤, 각 픽셀에 대한 current fragment shader를 호출하여 픽셀을 렌더링하는 것에 관한 모든 것입니다.
+WebGL은 다양한 셰이더를 생성하고, 데이터를 이 셰이더에 제공한 다음, `gl.drawArrays`나 `gl.drawElements`를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 현재 정점 셰이더를 호출한 뒤, 각 픽셀에 대한 current fragment shader를 호출하여 픽셀을 렌더링하는 것에 관한 모든 것입니다.
 
 실제로 셰이더를 생성하려면 여러 줄의 코드가 필요합니다.
 이 코드들은 대부분의 WebGL program에서 똑같기 때문에 한 번 작성한 후에는 거의 생략할 수 있습니다.

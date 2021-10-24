@@ -63,7 +63,7 @@ var offset = 0;        // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(positionLocation, size, type, normalize, stride, offset)
 ```
 
-다음으로 vertex shader의 경우 `gl_Position`을 사각형의 정점으로 설정합니다.
+다음으로 정점 셰이더의 경우 `gl_Position`을 사각형의 정점으로 설정합니다.
 위치가 clip space에 있고, 캔버스 전체를 덮도록 설정되어 있으므로, 어떤 행렬 계산도 필요하지 않습니다.
 픽셀이 가장 깊은 depth를 가지도록 `gl_Position.z`를 1로 설정합니다.
 그리고 position을 fragment shader로 전달하는데요.

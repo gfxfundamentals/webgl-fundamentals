@@ -2,7 +2,7 @@ Title: WebGL 데이터 없이 그리기
 Description: 창의적 코딩 - 데이터 없이 그리기
 TOC: 데이터 없이 그리기
 
-이 글은 [기초](webgl-fundamentals.html)로 시작한 여러 다른 글을 읽었다고 가정합니다.
+이 글은 [기초](webgl-fundamentals.html)로 시작한 다른 글을 이미 읽었다고 가정합니다.
 아직 읽지 않았다면 거기부터 시작해주세요.
 
 [최소 WebGL 프로그램에 대한 글](webgl-smallest-programs.html)에서 굉장히 적은 코드로 그리는 예제를 다뤘는데요.
