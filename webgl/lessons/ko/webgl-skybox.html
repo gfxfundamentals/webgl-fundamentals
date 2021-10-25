@@ -276,7 +276,7 @@ function setGeometry(gl) {
   gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
 }
 </code></pre>
-<p>이 사각형은 이미 clip space에 있으므로 캔버스를 채울 겁니다.
+<p>이 사각형은 이미 클립 공간에 있으므로 캔버스를 채울 겁니다.
 정점마다 2개의 값만 있기 때문에 attribute를 설정하는 코드를 수정해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
 -var size = 3;          // 반복마다 3개의 컴포넌트
@@ -287,10 +287,10 @@ var stride = 0;        // 0 = 다음 위치를 가져오기 위해 반복마다 
 var offset = 0;        // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(positionLocation, size, type, normalize, stride, offset)
 </code></pre>
-<p>다음으로 vertex shader의 경우 <code class="notranslate" translate="no">gl_Position</code>을 사각형의 정점으로 설정합니다.
-위치가 clip space에 있고, 캔버스 전체를 덮도록 설정되어 있으므로, 어떤 행렬 계산도 필요하지 않습니다.
+<p>다음으로 정점 셰이더의 경우 <code class="notranslate" translate="no">gl_Position</code>을 사각형의 정점으로 설정합니다.
+위치가 클립 공간에 있고, 캔버스 전체를 덮도록 설정되어 있으므로, 어떤 행렬 계산도 필요하지 않습니다.
 픽셀이 가장 깊은 depth를 가지도록 <code class="notranslate" translate="no">gl_Position.z</code>를 1로 설정합니다.
-그리고 position을 fragment shader로 전달하는데요.</p>
+그리고 position을 프래그먼트 셰이더로 전달하는데요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 varying vec4 v_position;
 void main() {
@@ -299,7 +299,7 @@ void main() {
   gl_Position.z = 1;
 }
 </code></pre>
-<p>Fragment shader에서 position을 view projection matrix의 역행렬로 곱하고, 4D 공간에서 3D 공간으로 만들기 위해 w로 나눕니다.</p>
+<p>프래그먼트 셰이더에서 position을 view projection matrix의 역행렬로 곱하고, 4D 공간에서 3D 공간으로 만들기 위해 w로 나눕니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 uniform samplerCube u_skybox;
@@ -468,7 +468,7 @@ Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방�
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

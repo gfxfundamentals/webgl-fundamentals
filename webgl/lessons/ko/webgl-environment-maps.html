@@ -382,7 +382,7 @@ Cubemap은 6개의 면을 가져야 하며, 6개의 면은 모두 동일한 크�
 
 </p>
 <p>이제 반사가 어떻게 작동하는지 알고, cubemap에서 값을 찾기 위해 사용할 수 있으므로, 셰이더를 변경해봅시다.</p>
-<p>먼저 vertex shader에서 정점의 world position과 world oriented normal을 계산하고 이를 fragment shader에 varying으로 전달할 겁니다.
+<p>먼저 정점 셰이더에서 정점의 world position과 world oriented normal을 계산하고 이를 프래그먼트 셰이더에 varying으로 전달할 겁니다.
 이는 <a href="webgl-3d-lighting-spot.html">스포트라이트에 대한 글</a>에서 했던 것과 유사합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec3 a_normal;
@@ -398,20 +398,20 @@ void main() {
   // 위치를 행렬로 곱하기
   gl_Position = u_projection * u_view * u_world * a_position;
 
-  // View position을 fragment shader로 보내기
+  // View position을 프래그먼트 셰이더로 보내기
   v_worldPosition = (u_world * a_position).xyz;
 
-  // 법선의 방향을 정하고 fragment shader로 전달
+  // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
   v_worldNormal = mat3(u_world) * a_normal;
 }
 </code></pre>
-<p>그런 다음 fragment shader에서 <code class="notranslate" translate="no">worldNormal</code>이 정점 사이의 표면을 가로질러 보간되므로 정규화합니다.
+<p>그런 다음 프래그먼트 셰이더에서 <code class="notranslate" translate="no">worldNormal</code>이 정점 사이의 표면을 가로질러 보간되므로 정규화합니다.
 카메라의 world position을 전달하고 표면의 world position에서 이를 빼면 <code class="notranslate" translate="no">eyeToSurfaceDir</code>이 됩니다.</p>
 <p>마지막으로 위에서 살펴본 공식을 구현하는 GLSL 내장 함수 <code class="notranslate" translate="no">reflect</code>를 사용합니다.
 그리고 결과를 이용하여 cubemap에서 색상을 가져옵니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision highp float;
 
-// Vertex shader에서 전달
+// 정점 셰이더에서 전달
 varying vec3 v_worldPosition;
 varying vec3 v_worldNormal;
 
@@ -512,7 +512,7 @@ gl.uniform1i(textureLocation, 0);
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

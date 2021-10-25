@@ -563,7 +563,7 @@ matrix = m3.multiply(matrix, moveOriginMatrix);
 <p>이 기술을 사용하면 어떤 지점에서든 회전이나 크기를 조정할 수 있는데요.
 이제 Photoshop이나 Flash에서 어떻게 회전점을 이동시키는지 알게 되었습니다.</p>
 <p>더 끝내주는 걸 해봅시다.
-첫 번째 글인 <a href="webgl-fundamentals.html">WebGL 기초</a>로 돌아가 보면, 셰이더에 픽셀을 clip space으로 변환하는 코드가 있다는 걸 기억하실 겁니다.</p>
+첫 번째 글인 <a href="webgl-fundamentals.html">WebGL 기초</a>로 돌아가 보면, 셰이더에 픽셀을 클립 공간으로 변환하는 코드가 있다는 걸 기억하실 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">...
 // 사각형을 픽셀에서 0.0에서 1.0사이로 변환
 vec2 zeroToOne = position / u_resolution;
@@ -571,7 +571,7 @@ vec2 zeroToOne = position / u_resolution;
 // 0-&gt;1에서 0-&gt;2로 변환
 vec2 zeroToTwo = zeroToOne * 2.0;
 
-// 0-&gt;2에서 -1-&gt;+1로 변환 (clip space)
+// 0-&gt;2에서 -1-&gt;+1로 변환 (클립 공간)
 vec2 clipSpace = zeroToTwo - 1.0;
 
 gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
@@ -600,7 +600,7 @@ gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
   ...
 </code></pre>
 <p>이제 셰이더를 더 단순하게 할 수 있습니다.
-여기 완전히 새로운 vertex shader입니다.</p>
+여기 완전히 새로운 정점 셰이더입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
@@ -691,28 +691,28 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">rotatedScaledPosition = rotationMat * scaledPosition
 </code></pre><p>다음으로 translatedRotatedScaledPosition를 얻기 위해 rotatedScaledPositon에 translation 행렬을 곱한 뒤</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
-</code></pre><p>마지막으로 clip space의 위치를 얻기 위해 projection matrix에 곱하는데</p>
+</code></pre><p>마지막으로 클립 공간의 위치를 얻기 위해 projection matrix에 곱하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 </code></pre><p>두 번째 방법은 행렬을 왼쪽에서 오른쪽으로 읽는 건데요.
 이 경우 각각의 행렬은 캔버스에 표시되는 <em>space</em>를 변경합니다.
-캔버스는 각 방향에서 clip space(-1 ~ +1)를 표시하는 것으로 시작하는데요.
+캔버스는 각 방향에서 클립 공간(-1 ~ +1)을 표시하는 것으로 시작하는데요.
 왼쪽에서 오른쪽으로 적용된 각 행렬은 캔버스에 표시되는 space를 변경합니다.</p>
 <p>1단계: 행렬 없음 (혹은 단위 행렬)</p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=0"></iframe>
-  <div class="webgl_center">clip space</div>
+  <div class="webgl_center">클립 공간</div>
 </div>
 
 </p>
-<p>흰색 영역은 캔버스입니다. 파랑색은 캔버스 바깥입니다. 우리는 clip space에 있습니다.
-전달된 위치는 clip space에 있어야 합니다.</p>
+<p>흰색 영역은 캔버스입니다. 파랑색은 캔버스 바깥입니다. 우리는 클립 공간에 있습니다.
+전달된 위치는 클립 공간에 있어야 합니다.</p>
 </blockquote>
 <p>2단계:  <code class="notranslate" translate="no">matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);</code></p>
 <blockquote>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/matrix-space-change.html?stage=1"></iframe>
-  <div class="webgl_center">clip space에서 pixel space으로</div>
+  <div class="webgl_center">클립 공간에서 픽셀 공간으로</div>
 </div>
 
 </p>
@@ -766,7 +766,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 왜일까요?
 </p>
 <p>
-Projection matrix은 clip space(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
+투영 행렬은 클립 공간(각 치수마다 -1 ~ +1)를 가져와서 다시 픽셀로 변환하는 방법과 관련이 있습니다.
 하지만 브라우저에는 두 가지 type의 픽셀이 있는데요.
 하나는 캔버스 자체의 픽셀 수입니다.
 예를 들어 이렇게 정의된 캔버스가 있습니다.
@@ -849,7 +849,7 @@ CSS는 캔버스가 표시되는 크기를 정의합니다.
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

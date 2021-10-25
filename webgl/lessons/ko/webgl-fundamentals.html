@@ -248,12 +248,12 @@ WebGL로 원하는 작업을 수행하려면 <a href="webgl-points-lines-triangl
 <p>WebGL은 컴퓨터에 있는 GPU에서 실행됩니다.
 따라서 GPU에서 실행되는 코드를 제공해야 하는데요.
 해당 코드는 함수 쌍 형태로 제공해야 합니다.
-이 두 함수는 vertex shader와 fragment shader로 불리고 C/C++처럼 엄격한 Type을 가지는 <a href="webgl-shaders-and-glsl.html">GLSL</a>로 작성되어 있습니다.
+이 두 함수는 정점 셰이더와 프래그먼트 셰이더로 불리고 C/C++처럼 엄격한 Type을 가지는 <a href="webgl-shaders-and-glsl.html">GLSL</a>로 작성되어 있습니다.
 이 두 개를 합쳐서 <em>program</em>이라고 부르죠.</p>
-<p>Vertex shader의 역할은 정점 위치를 계산하는 겁니다.
+<p>정점 셰이더의 역할은 정점 위치를 계산하는 겁니다.
 WebGL은 함수가 출력하는 위치를 기반으로 <a href="webgl-points-lines-triangles.html">점, 선, 삼각형</a>을 포함한 다양한 종류의 primitive를 래스터화할 수 있는데요.
-래스터화할 때 primitive는 fragment shader라 불리는 두 번째 사용자 작성 함수를 호출합니다.
-Fragment shader의 역할은 현재 그려지는 primitive의 각 픽셀에 대한 색상을 계산하는 겁니다.</p>
+래스터화할 때 primitive는 프래그먼트 셰이더라 불리는 두 번째 사용자 작성 함수를 호출합니다.
+프래그먼트 셰이더의 역할은 현재 그려지는 primitive의 각 픽셀에 대한 색상을 계산하는 겁니다.</p>
 <p>대부분의 WebGL API는 이러한 함수 쌍을 실행하기 위한 <a href="../resources/webgl-state-diagram.html">상태 설정</a>에 관한 것입니다.
 원하는 걸 그리기 위해서는 여러 상태를 설정하고 GPU에서 셰이더를 실행하는 <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>를 호출해서 함수 쌍을 실행해야 합니다.</p>
 <p>이런 함수가 접근하기 원하는 모든 데이터는 GPU에 제공되어야 하는데요.
@@ -262,11 +262,11 @@ Fragment shader의 역할은 현재 그려지는 primitive의 각 픽셀에 대�
 <li><p>Attribute &amp; Buffer</p>
 <p>버퍼는 GPU에 업로드하는 2진 데이터 배열입니다.
 일반적으로 버퍼는 위치, 법선, 텍스처 좌표, 정점 색상 등을 포함하지만 원하는 걸 자유롭게 넣어도 됩니다.</p>
-<p>Attribute는 버퍼에서 데이터를 가져오고 vertex shader에 제공하는 방법을 지정하는데 사용됩니다.
+<p>Attribute는 버퍼에서 데이터를 가져오고 정점 셰이더에 제공하는 방법을 지정하는데 사용됩니다.
 예를 들어 위치당 3개의 32bit float로 위치를 버퍼에 넣을 수 있는데요.
 특정한 attribute에게 어느 버퍼에서 위치를 가져올지, 어떤 type의 데이터를 가져와야 하는지 (3개의 32bit 부동 소수점), 버퍼의 offset이 어느 위치에서 시작되는지, 한 위치에서 다음으로 갈 때 몇 byte를 이동시킬 것인지 알려줘야 합니다.</p>
 <p>버퍼는 무작위로 접근할 수 없습니다.
-대신에 vertex shader가 지정한 횟수만큼 실행되는데요.
+대신에 정점 셰이더가 지정한 횟수만큼 실행되는데요.
 실행될 때마다 지정된 버퍼에서 다음 값을 가져와 attribute에 할당합니다.</p>
 </li>
 <li><p>Uniform</p>
@@ -277,27 +277,27 @@ Fragment shader의 역할은 현재 그려지는 primitive의 각 픽셀에 대�
 텍스처에 넣는 대부분은 이미지 데이터지만 텍스처는 데이터일 뿐이며 색상 이외의 것도 쉽게 담을 수 있습니다.</p>
 </li>
 <li><p>Varying</p>
-<p>Varying은 vertex shader가 fragment shader에 데이터를 넘기는 방법입니다.
-점, 선, 삼각형 등 렌더링 되는 것에 따라 vertex shader에 의해 설정된 varying의 값은 fragment shader를 실행하는 동안 보간됩니다.</p>
+<p>Varying은 정점 셰이더가 프래그먼트 셰이더에 데이터를 넘기는 방법입니다.
+점, 선, 삼각형 등 렌더링 되는 것에 따라 정점 셰이더에 의해 설정된 varying의 값은 프래그먼트 셰이더를 실행하는 동안 보간됩니다.</p>
 </li>
 </ol>
 <h2 id="webgl-hello-world">WebGL Hello World</h2>
-<p>WebGL은 clip space의 좌표와 색상, 오직 2가지만을 다루는데요.
+<p>WebGL은 클립 공간의 좌표와 색상, 오직 2가지만을 다루는데요.
 프로그래머로서 WebGL을 사용하는 여러분의 역할은 이 2가지를 작성하는 겁니다.
 이를 위해 2개의 &quot;셰이더&quot;를 제공해야 하는데요.
-Clip space 좌표를 제공하는 vertex shader, 색상을 제공하는 fragment shader입니다.</p>
-<p>Clip space 좌표는 캔버스 크기에 상관없이 항상 -1에서 +1까지입니다.</p>
+클립 공간 좌표를 제공하는 정점 셰이더, 색상을 제공하는 프래그먼트 셰이더입니다.</p>
+<p>클립 공간 좌표는 캔버스 크기에 상관없이 항상 -1에서 +1까지입니다.</p>
 <div class="webgl_center"><img src="../resources/clipspace.svg" style="width: 400px"></div>
 
 <p>다음은 WebGL을 보여주는 가장 간단한 형태의 예제입니다.</p>
-<p>Vertex shader부터 시작해봅시다.</p>
+<p>정점 셰이더부터 시작해봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Attribute는 버퍼에서 데이터를 받음
 attribute vec4 a_position;
 
 // 모든 셰이더는 main 함수를 가짐
 void main() {
 
-  // gl_Position은 vertex shader가 설정을 담당하는 특수 변수
+  // gl_Position은 정점 셰이더가 설정을 담당하는 특수 변수
   gl_Position = a_position;
 }
 </code></pre><p>실행될 때, 모든 게 GLSL 대신에 javascript로 작성된다면 이렇게 사용될 것이라 상상할 수 있습니다.</p>
@@ -323,14 +323,14 @@ drawArrays(..., offset, count) {
     doSomethingWith_gl_Position();
   }
 }
-</code></pre><p>실제로는 <code class="notranslate" translate="no">positionBuffer</code>가 2진 데이터(아래 참조)로 변환되어야 하기 때문에 그렇게 간단하지 않으므로, buffer에서 데이터를 가져오기 위한 실제 계산은 약간 다를 수 있지만, 이걸로 vertex shader가 어떻게 실행되는지 알 수 있기를 바랍니다.</p>
-<p>다음으로 fragment shader가 필요합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
+</code></pre><p>실제로는 <code class="notranslate" translate="no">positionBuffer</code>가 2진 데이터(아래 참조)로 변환되어야 하기 때문에 그렇게 간단하지 않으므로, buffer에서 데이터를 가져오기 위한 실제 계산은 약간 다를 수 있지만, 이걸로 정점 셰이더가 어떻게 실행되는지 알 수 있기를 바랍니다.</p>
+<p>다음으로 프래그먼트 셰이더가 필요합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 프래그먼트 셰이더는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
 // mediump은 좋은 기본값으로 &quot;중간 정밀도&quot;를 의미합니다.
 precision mediump float;
 
 void main() {
-  // gl_FragColor는 fragment shader가 설정을 담당하는 특수 변수
+  // gl_FragColor는 프래그먼트 셰이더가 설정을 담당하는 특수 변수
   gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
 }
 </code></pre><p>위에서 우리는 <code class="notranslate" translate="no">gl_FragColor</code>를 빨강 1, 초록 0, 파랑 0.5, 투명도 1인 <code class="notranslate" translate="no">1, 0, 0.5, 1</code>로 설정했는데요.
@@ -358,7 +358,7 @@ WebGL에서 색상은 0에서 1까지입니다.</p>
   // 모든 셰이더는 main 함수를 가짐
   void main() {
 
-    // gl_Position은 vertex shader가 설정을 담당하는 특수 변수
+    // gl_Position은 정점 셰이더가 설정을 담당하는 특수 변수
     gl_Position = a_position;
   }
 
@@ -366,12 +366,12 @@ WebGL에서 색상은 0에서 1까지입니다.</p>
 
 &lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
-  // Fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
+  // 프래그먼트 셰이더는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
   // mediump은 좋은 기본값으로 &quot;중간 정밀도&quot;를 의미합니다.
   precision mediump float;
 
   void main() {
-    // gl_FragColor는 fragment shader가 설정을 담당하는 특수 변수
+    // gl_FragColor는 프래그먼트 셰이더가 설정을 담당하는 특수 변수
     gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
   }
 
@@ -463,10 +463,10 @@ CSS는 캔버스가 표시되는 크기를 결정하는데요.
 <p>여기 있는 대부분의 예제는 별도의 창에서 실행할 경우 캔버스 크기가 400x300px이지만, 이 페이지에 있는 것처럼 iframe 내부라면 사용 가능한 공간을 채우기 위해 늘어나는데요.
 CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 경우를 모두 쉽게 처리할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-</code></pre><p><code class="notranslate" translate="no">gl_Position</code>으로 설정할 clip space 값을 어떻게 screen space로 변환하는지 WebGL에 알려줘야 하는데요.
+</code></pre><p><code class="notranslate" translate="no">gl_Position</code>으로 설정할 클립 공간 값을 어떻게 화면 공간으로 변환하는지 WebGL에 알려줘야 하는데요.
 이를 위해 <code class="notranslate" translate="no">gl.viewport</code>를 호출해서 현재 캔버스 크기를 전달해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-</code></pre><p>이는 -1 &lt;-&gt; +1 clip space를, x는 0 &lt;-&gt; <code class="notranslate" translate="no">gl.canvas.width</code>로, y는 0 &lt;-&gt; <code class="notranslate" translate="no">gl.canvas.height</code>로 매핑시켜줍니다.</p>
+</code></pre><p>이는 -1 &lt;-&gt; +1 클립 공간을, x는 0 &lt;-&gt; <code class="notranslate" translate="no">gl.canvas.width</code>로, y는 0 &lt;-&gt; <code class="notranslate" translate="no">gl.canvas.height</code>로 매핑시켜줍니다.</p>
 <p>캔버스를 지워봅시다.
 <code class="notranslate" translate="no">0, 0, 0, 0</code>은 각각 빨강, 초록, 파랑, 투명도이므로 이 경우 캔버스를 투명하게 만듭니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 캔버스 지우기
@@ -500,7 +500,7 @@ gl.vertexAttribPointer(
 다시 말해 이 attribute는 이제 <code class="notranslate" translate="no">positionBuffer</code>에 바인딩됩니다.
 이건 <code class="notranslate" translate="no">ARRAY_BUFFER</code> bind point에 다른 것들을 자유롭게 할당할 수 있다는 걸 의미하는데요.
 Attribute는 계속해서 <code class="notranslate" translate="no">positionBuffer</code>를 사용합니다.</p>
-<p>참고로 GLSL vertex shader 관점에서 <code class="notranslate" translate="no">a_position</code> attribute는 <code class="notranslate" translate="no">vec4</code>입니다.</p>
+<p>참고로 GLSL 정점 셰이더 관점에서 <code class="notranslate" translate="no">a_position</code> attribute는 <code class="notranslate" translate="no">vec4</code>입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 </code></pre><p><code class="notranslate" translate="no">vec4</code>는 4개의 float 값입니다.
 Javascript에서 <code class="notranslate" translate="no">a_position = {x: 0, y: 0, z: 0, w: 0}</code>와 같이 생각할 수 있습니다.
@@ -512,24 +512,24 @@ z와 w는 기본값으로 각각 0과 1이 될 겁니다.</p>
 var offset = 0;
 var count = 3;
 gl.drawArrays(primitiveType, offset, count);
-</code></pre><p>count가 3이기 때문에 vertex shader를 세 번 실행할 겁니다.
-먼저 vertex shader attribute의 <code class="notranslate" translate="no">a_position.x</code>와 <code class="notranslate" translate="no">a_position.y</code>가 positionBuffer의 처음 2개의 값으로 설정됩니다.
+</code></pre><p>count가 3이기 때문에 정점 셰이더를 세 번 실행할 겁니다.
+먼저 정점 셰이더 속성의 <code class="notranslate" translate="no">a_position.x</code>와 <code class="notranslate" translate="no">a_position.y</code>가 positionBuffer의 처음 2개의 값으로 설정됩니다.
 두 번째로 <code class="notranslate" translate="no">a_position.x</code>와 <code class="notranslate" translate="no">a_position.y</code>가 그다음 2개의 값으로 설정됩니다.
 마지막에는 남아있는 2개의 값으로 설정됩니다.</p>
-<p><code class="notranslate" translate="no">primitiveType</code>을 <code class="notranslate" translate="no">gl.TRIANGLES</code>로 설정했기 때문에, vertex shader가 3번 실행될 때마다, WebGL은 <code class="notranslate" translate="no">gl_Position</code>에 설정한 3개의 값을 기반으로 삼각형을 그리는데요.
-캔버스 크기에 상관없이 이 값들은 -1에서 1사이의 clip space 좌표 안에 있습니다.</p>
-<p>Vertex shader는 단순히 positionBuffer 값을 <code class="notranslate" translate="no">gl_Position</code>에 복사하기 때문에 삼각형은 clip space 좌표에 그려집니다.</p>
+<p><code class="notranslate" translate="no">primitiveType</code>을 <code class="notranslate" translate="no">gl.TRIANGLES</code>로 설정했기 때문에, 정점 셰이더가 3번 실행될 때마다, WebGL은 <code class="notranslate" translate="no">gl_Position</code>에 설정한 3개의 값을 기반으로 삼각형을 그리는데요.
+캔버스 크기에 상관없이 이 값들은 -1에서 1사이의 클립 공간 좌표 안에 있습니다.</p>
+<p>정점 셰이더는 단순히 positionBuffer 값을 <code class="notranslate" translate="no">gl_Position</code>에 복사하기 때문에 삼각형은 클립 공간 좌표에 그려집니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">    0, 0,
     0, 0.5,
   0.7, 0,
-</code></pre><p>캔버스 크기가 400x300이라면 이런 식으로 clip space를 screen space로 변환합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">clip space       screen space
+</code></pre><p>캔버스 크기가 400x300이라면 이런 식으로 클립 공간을 화면 공간으로 변환합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> 클립 공간            화면 공간
    0, 0       -&gt;   200, 150
    0, 0.5     -&gt;   200, 225
  0.7, 0       -&gt;   340, 150
 </code></pre><p>WebGL은 이제 삼각형을 렌더링할 겁니다.
-그리려는 모든 픽셀에 대해 WebGL은 fragment shader를 호출하는데요.
-Fragment shader는 <code class="notranslate" translate="no">gl_FragColor</code>를 <code class="notranslate" translate="no">1, 0, 0.5, 1</code>로 설정합니다.
+그리려는 모든 픽셀에 대해 WebGL은 프래그먼트 셰이더를 호출하는데요.
+프래그먼트 셰이더는 <code class="notranslate" translate="no">gl_FragColor</code>를 <code class="notranslate" translate="no">1, 0, 0.5, 1</code>로 설정합니다.
 캔버스는 채널당 8bit이기 때문에 이는 WebGL이 캔버스에 <code class="notranslate" translate="no">[255, 0, 127, 255]</code>를 값으로 작성한다는 걸 의미합니다.</p>
 <p>다음은 실시간 버전입니다.</p>
 <p><div class="webgl_example_container">
@@ -538,16 +538,16 @@ Fragment shader는 <code class="notranslate" translate="no">gl_FragColor</code>�
 </div>
 
 </p>
-<p>위 경우 vertex shader는 데이터를 직접 전달하는 것 외에는 아무것도 하지 않는 걸 볼 수 있는데요.
-위치 데이터가 이미 clip space에 있으므로 할 일이 없습니다.
-<em>WebGL은 rasterization API에 불과하기 때문에 3D를 원한다면 3D를 clip space로 변환하는 셰이더를 작성해야 합니다.</em></p>
+<p>위 경우 정점 셰이더가 데이터를 직접 전달하는 것 외에는 아무것도 하지 않는 걸 볼 수 있는데요.
+위치 데이터가 이미 클립 공간에 있으므로 할 일이 없습니다.
+<em>WebGL은 rasterization API에 불과하기 때문에 3D를 원한다면 3D를 클립 공간로 변환하는 셰이더를 작성해야 합니다.</em></p>
 <p>아마 삼각형이 중앙에서 시작해서 오른쪽 상단으로 가는 이유가 궁금하실텐데요.
-<code class="notranslate" translate="no">x</code>의 clip space는 -1부터 +1까지 입니다.
+<code class="notranslate" translate="no">x</code>의 클립 공간은 -1부터 +1까지 입니다.
 즉 0이 중앙이고 양수 값이 오른쪽이라는 걸 의미합니다.</p>
-<p>상단에 있는 이유는 clip space에서 -1은 하단에 있고 +1은 상단에 있기 때문입니다.
+<p>상단에 있는 이유는 클립 공간에서 -1은 하단에 있고 +1은 상단에 있기 때문입니다.
 즉 0이 중앙이고 양수가 중앙보다 위에 있다는 걸 의미합니다.</p>
-<p>2D의 경우 clip space보다는 픽셀로 작업하는 것이 좋으니, 위치를 픽셀로 제공하고 clip space로 변환할 수 있도록 셰이더를 바꿔봅시다.
-여기 새로운 vertex shader입니다.</p>
+<p>2D의 경우 클립 공간보다는 픽셀로 작업하는 것이 좋으니, 위치를 픽셀로 제공하고 클립 공간으로 변환할 수 있도록 셰이더를 바꿔봅시다.
+여기 새로운 정점 셰이더입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;notjs&quot;&gt;
 
 -  attribute vec4 a_position;
@@ -562,7 +562,7 @@ Fragment shader는 <code class="notranslate" translate="no">gl_FragColor</code>�
 +    // 0-&gt;1에서 0-&gt;2로 변환
 +    vec2 zeroToTwo = zeroToOne * 2.0;
 +
-+    // 0-&gt;2에서 -1-&gt;+1로 변환 (clip space)
++    // 0-&gt;2에서 -1-&gt;+1로 변환 (클립 공간)
 +    vec2 clipSpace = zeroToTwo - 1.0;
 +
 *    gl_Position = vec4(clipSpace, 0, 1);
@@ -576,8 +576,8 @@ Fragment shader는 <code class="notranslate" translate="no">gl_FragColor</code>�
 이를 설정하려면 해당 위치를 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var resolutionUniformLocation = gl.getUniformLocation(program, &quot;u_resolution&quot;);
 </code></pre><p>나머지는 주석을 보면 명료합니다.
-<code class="notranslate" translate="no">u_resolution</code>을 캔버스의 해상도로 설정함으로써, 셰이더는 픽셀 좌표로 제공한 <code class="notranslate" translate="no">positionBuffer</code>에 넣은 위치를 가져와 clip space로 변환합니다.</p>
-<p>이제 위치 값을 clip space에서 픽셀로 바꿀 수 있습니다.
+<code class="notranslate" translate="no">u_resolution</code>을 캔버스의 해상도로 설정함으로써, 셰이더는 픽셀 좌표로 제공한 <code class="notranslate" translate="no">positionBuffer</code>에 넣은 위치를 가져와 클립 공간으로 변환합니다.</p>
+<p>이제 위치 값을 클립 공간에서 픽셀로 바꿀 수 있습니다.
 이번에는 각각 3개의 점으로 이루어진 삼각형 두 개로 만드는 사각형을 그려볼 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positions = [
 *  10, 20,
@@ -597,7 +597,7 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 // 해상도 설정
 gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
-</code></pre><p>그리고 2개의 삼각형을 그리기 위해서는 당연히 vertex shader를 6번 호출해야 하므로 <code class="notranslate" translate="no">count</code>를 <code class="notranslate" translate="no">6</code>으로 바꿔야 합니다.</p>
+</code></pre><p>그리고 2개의 삼각형을 그리기 위해서는 당연히 정점 셰이더를 6번 호출해야 하므로 <code class="notranslate" translate="no">count</code>를 <code class="notranslate" translate="no">6</code>으로 바꿔야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 그리기
 var primitiveType = gl.TRIANGLES;
 var offset = 0;
@@ -613,9 +613,9 @@ gl.drawArrays(primitiveType, offset, count);
 </p>
 <p>사각형이 왼쪽 하단 근처에 있는 걸 알 수 있는데요.
 WebGL은 양수 Y를 위쪽으로, 음수 Y를 아래쪽으로 간주합니다.
-Clip space에서 왼쪽 하단 모서리는 -1,-1이 되죠.
+클립 공간에서 왼쪽 하단 모서리는 -1,-1이 되죠.
 아직 어떤 부호도 바꾸지 않았기 때문에 현재 수식에서 0,0은 왼쪽 하단 모서리가 됩니다.
-이를 2D 그래픽 API에서 보다 전통적으로 사용되는 왼쪽 상단 모서리가 되도록 clip space y좌표를 뒤집을 수 있습니다.</p>
+이를 2D 그래픽 API에서 보다 전통적으로 사용되는 왼쪽 상단 모서리가 되도록 클립 공간 y좌표를 뒤집을 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*  gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 </code></pre><p>이제 우리가 예상한 위치에 사각형이 있습니다.</p>
 <p><div class="webgl_example_container">
@@ -626,7 +626,7 @@ Clip space에서 왼쪽 하단 모서리는 -1,-1이 되죠.
 </p>
 <p>함수에 사각형을 정의하는 코드를 만들어서 다른 크기의 사각형을 위해 호출할 수 있도록 해봅시다.
 이 작업을 하면서 색상 설정이 가능하도록 만들 겁니다.</p>
-<p>먼저 fragment shader가 색상 uniform 입력을 가져오도록 만듭니다.</p>
+<p>먼저 프래그먼트 셰이더가 색상 uniform 입력을 가져오도록 만듭니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;notjs&quot;&gt;
   precision mediump float;
 
@@ -700,7 +700,7 @@ function setRectangle(gl, x, y, width, height) {
 </p>
 <p>WebGL이 사실은 아주 단순한 API였다고 보셨기를 바랍니다.
 네, 단순하다는 말은 아마 틀릴지도 모르지만 하는 일은 단순합니다.
-그저 사용자가 제공한 두 함수 vertex shader와 fragment shader를 실행시키고 점, 선, 삼각형을 그릴 뿐입니다.
+그저 사용자가 제공한 두 함수 정점 셰이더와 프래그먼트 셰이더를 실행시키고 점, 선, 삼각형을 그릴 뿐입니다.
 3D를 작업하면서 더 복잡해질 수 있지만, 그 복잡함은 프로그래머에 의해 더 복잡한 셰이더의 형태로 추가됩니다.
 WebGL API 자체는 rasterization 엔진에 불과하며 개념적으로는 꽤 단순합니다.</p>
 <p>Attribute와 uniform 2개에 데이터를 제공하는 방법을 보여주는 예제를 다뤘는데요.
@@ -770,7 +770,7 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

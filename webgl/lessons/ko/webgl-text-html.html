@@ -386,10 +386,10 @@ textNode.nodeValue = clock.toFixed(2);
 <p>다음 단계는 3D 장면의 무언가를 기준으로 배치하는 겁니다.
 어떻게 할까요?
 <a href="webgl-3d-perspective.html">Perspective projection</a>을 다룰 때 GPU에 요청한 방법과 정확히 동일하게 수행합니다.</p>
-<p>위 예제를 통해 행렬을 사용하는 방법, 곱하는 방법, clip space로 전환하기 위해 projection matrix를 적용하는 방법을 배웠습니다.
-이 모든 것을 셰이더로 전달하고 local space의 정점에 곱하여 clip space로 전환합니다.
+<p>위 예제를 통해 행렬을 사용하는 방법, 곱하는 방법, 클립 공간으로 전환하기 위해 projection matrix를 적용하는 방법을 배웠습니다.
+이 모든 것을 셰이더로 전달하고 local space의 정점에 곱하여 클립 공간으로 전환합니다.
 JavaScript에서도 이 모든 계산을 수행할 수 있는데요.
-Clip space(-1 ~ +1)를 pixel로 곱하고 이를 사용하여 div를 배치할 수 있습니다.</p>
+클립 공간(-1 ~ +1)을 픽셀로 곱하고 이를 사용하여 div를 배치할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.drawArrays(...);
 
 // F를 3D로 그리기 위해 행렬 계산
@@ -398,14 +398,14 @@ Clip space(-1 ~ +1)를 pixel로 곱하고 이를 사용하여 div를 배치할 �
 // X  Y  Z  W
 var point = [100, 0, 0, 1];  // 앞면 오른쪽 상단 모서리
 
-// F에 대해 계산한 행렬을 사용하여 clip space 위치를 계산
+// F에 대해 계산한 행렬을 사용하여 클립 공간 위치를 계산
 var clipspace = m4.transformVector(matrix, point);
 
 // GPU처럼 X와 Y를 W로 나누기
 clipspace[0] /= clipspace[3];
 clipspace[1] /= clipspace[3];
 
-// clipspace를 pixel로 변환
+// 클립 공간을 픽셀로 변환
 var pixelX = (clipspace[0] *  0.5 + 0.5) * gl.canvas.width;
 var pixelY = (clipspace[1] * -0.5 + 0.5) * gl.canvas.height;
 
@@ -453,7 +453,7 @@ textNode.nodeValue = clock.toFixed(2);
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

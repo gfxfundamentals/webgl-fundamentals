@@ -241,28 +241,28 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson">
     <div class="lesson-main">
       <p>이 글은 <a href="webgl-fundamentals.html">WebGL 기초</a>에서 이어집니다.
-<a href="webgl-how-it-works.html">WebGL 작동 원리</a>를 읽지 않았다면 먼저 읽어보는 게 좋습니다.</p>
+<a href="webgl-how-it-works.html">WebGL 작동 방식</a>를 읽지 않았다면 먼저 읽어보는 게 좋습니다.</p>
 <p>셰이더와 GLSL에 대해 언급했지만 실제로 구체적인 세부 사항은 다루지 않았는데요.
 예제로 충분하면 좋겠지만 혹시 모르니 좀 더 명료하게 해봅시다.</p>
 <p><a href="webgl-how-it-works.html">작동 원리</a>에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 셰이더를 필요로 합니다.
-바로 <em>vertex shader</em>와 <em>fragment shader</em>죠.
+바로 <em>정점 셰이더</em>와 <em>프래그먼트 셰이더</em>죠.
 각각의 셰이더는 <em>함수</em>인데요.
-Vertex shader와 fragment shader는 함께 shader program(또는 그냥 program)으로 연결됩니다.
+정점 셰이더와 프래그먼트 셰이더는 함께 shader program(또는 그냥 program)으로 연결됩니다.
 일반적인 WebGL 앱은 많은 shader program을 가집니다.</p>
-<h2 id="vertex-shader">Vertex shader</h2>
-<p>Vertex shader의 역할은 clip space 좌표를 생성하는 겁니다.
+<h2 id="-">정점 셰이더</h2>
+<p>정점 셰이더의 역할은 클립 공간 좌표를 생성하는 겁니다.
 항상 이런 형식을 취하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">void main() {
   gl_Position = doMathToMakeClipspaceCoordinates
 }
 </code></pre><p>셰이더는 정점마다 한 번씩 호출되는데요.
-호출될 때마다 특수 전역 변수, <code class="notranslate" translate="no">gl_Position</code>을 어떤 clip space 좌표로 설정해야 합니다.</p>
-<p>Vertex shader는 데이터가 필요한데요.
+호출될 때마다 특수 전역 변수, <code class="notranslate" translate="no">gl_Position</code>을 어떤 클립 공간 좌표로 설정해야 합니다.</p>
+<p>정점 셰이더는 데이터가 필요한데요.
 3가지 방법으로 데이터를 가져올 수 있습니다.</p>
 <ol>
 <li><a href="#attribute">Attribute</a> (버퍼에서 가져온 데이터)</li>
 <li><a href="#uniform">Uniform</a> (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)</li>
-<li><a href="#vertex-shader-texture">Texture</a> (pixel/texel의 데이터)</li>
+<li><a href="#vertex-shader-texture">Texture</a> (픽셀/텍셀 데이터)</li>
 </ol>
 <h3 id="attribute">Attribute</h3>
 <p>가장 일반적인 방법은 buffer와 <em>attribute</em>를 통하는 겁니다.
@@ -292,11 +292,11 @@ gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 void main() {
   gl_Position = a_position;
 }
-</code></pre><p>Clip space 정점을 버퍼에 넣으면 동작할 겁니다. </p>
+</code></pre><p>클립 공간 정점을 버퍼에 넣으면 동작할 겁니다. </p>
 <p>Attribute는 type으로 <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code>, <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>를 사용할 수 있습니다.</p>
 <h3 id="uniform">Uniform</h3>
 <p>셰이더 uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지되며 셰이더에 전달되는 값입니다.
-간단한 예로 위 vertex shader에 offset을 추가할 수 있습니다.</p>
+간단한 예로 위 정점 셰이더에 offset을 추가할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 +uniform vec4 u_offset;
 
@@ -371,28 +371,28 @@ uniform SomeStruct u_someThing;
 </code></pre><p>각 field를 개별적으로 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
 var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
-</code></pre><h3 id="vertex-shader-">Vertex shader의 텍스처</h3>
-<p><a href="#fragment-shader-texture">Fragment shader의 텍스처</a>를 봐주세요.</p>
-<h2 id="fragment-shader">Fragment shader</h2>
-<p>Fragment shader의 역할은 래스터화되는 현재 픽셀의 색상을 제공하는 것입니다.
+</code></pre><h3 id="-">정점 셰이더의 텍스처</h3>
+<p><a href="#fragment-shader-texture">프래그먼트 셰이더의 텍스처</a>를 봐주세요.</p>
+<h2 id="-">프래그먼트 셰이더</h2>
+<p>프래그먼트 셰이더의 역할은 래스터화되는 현재 픽셀의 색상을 제공하는 것입니다.
 항상 이런 형식을 취하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 void main() {
   gl_FragColor = doMathToMakeAColor;
 }
-</code></pre><p>Fragment shader는 각 픽셀마다 한 번씩 호출되는데요.
+</code></pre><p>프래그먼트 셰이더는 각 픽셀마다 한 번씩 호출되는데요.
 호출될 때마다 특수 전역 변수, <code class="notranslate" translate="no">gl_FragColor</code>를 어떤 색상으로 설정해줘야 합니다.</p>
-<p>Fragment shader는 데이터가 필요한데요.
+<p>프래그먼트 셰이더는 데이터가 필요한데요.
 3가지 방법으로 데이터를 가져올 수 있습니다.</p>
 <ol>
 <li><a href="#uniform">Uniform</a> (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)</li>
-<li><a href="#fragment-shader-texture">Texture</a> (pixel/texel의 데이터)</li>
-<li><a href="#varying">Varying</a> (vertex shader에서 전달되고 보간된 데이터)</li>
+<li><a href="#fragment-shader-texture">Texture</a> (픽셀/텍셀 데이터)</li>
+<li><a href="#varying">Varying</a> (정점 셰이더에서 전달되고 보간된 데이터)</li>
 </ol>
-<h3 id="fragment-shader-uniform">Fragment shader의 Uniform</h3>
+<h3 id="-uniform">프래그먼트 셰이더의 Uniform</h3>
 <p><a href="#uniform">셰이더의 Uniform</a>을 봐주세요.</p>
-<h3 id="fragment-shader-">Fragment shader의 텍스처</h3>
+<h3 id="-">프래그먼트 셰이더의 텍스처</h3>
 <p>셰이더의 텍스처에서 값을 가져오면 <code class="notranslate" translate="no">sampler2D</code> uniform을 생성하고 값을 추출하기 위해 GLSL 함수 <code class="notranslate" translate="no">texture2D</code>를 사용합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
@@ -424,11 +424,11 @@ gl.bindTexture(gl.TEXTURE_2D, tex);
 </code></pre><p>텍스처를 바인딩한 unit을 셰이더에 알려줍니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform1i(someSamplerLoc, unit);
 </code></pre><h3 id="varying">Varying</h3>
-<p>Varying은 <a href="webgl-how-it-works.html">동작 원리</a>에 다룬 vertex shader에서 fragment shader로 값을 전달하는 방법입니다.</p>
-<p>Varying을 사용하려면 vertex shader와 fragment shader 양쪽에 일치하는 varying을 선언해야 하는데요.
-각 정점마다 vertex shader의 varying을 어떤 값으로 설정합니다.
-WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 fragment shader에서 대응하는 varying으로 전달할 겁니다.</p>
-<p>Vertex shader</p>
+<p>Varying은 <a href="webgl-how-it-works.html">동작 원리</a>에 다룬 정점 셰이더에서 프래그먼트 셰이더로 값을 전달하는 방법입니다.</p>
+<p>Varying을 사용하려면 정점 셰이더와 프래그먼트 셰이더 양쪽에 일치하는 varying을 선언해야 하는데요.
+각 정점마다 정점 셰이더의 varying을 어떤 값으로 설정합니다.
+WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 프래그먼트 셰이더에서 대응하는 varying으로 전달할 겁니다.</p>
+<p>정점 셰이더:</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 
 uniform vec4 u_offset;
@@ -439,18 +439,18 @@ void main() {
   gl_Position = a_position + u_offset;
 +  v_positionWithOffset = a_position + u_offset;
 }
-</code></pre><p>Fragment shader</p>
+</code></pre><p>프래그먼트 셰이더:</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 +varying vec4 v_positionWithOffset;
 
 void main() {
-+  // clip space에서 (-1 &lt;-&gt; +1) color space로 (0 -&gt; 1) 변환
++  // 클립 공간에서 (-1 &lt;-&gt; +1) color space로 (0 -&gt; 1) 변환
 +  vec4 color = v_positionWithOffset * 0.5 + 0.5
 +  gl_FragColor = color;
 }
 </code></pre><p>위 예제는 대개 말도 안되는 예제입니다.
-일반적으로는 clip space 값을 fragment shader에 직접 복사해서 색상으로 사용하지 않는데요.
+일반적으로는 클립 공간 값을 프래그먼트 셰이더에 직접 복사해서 색상으로 사용하지 않는데요.
 그럼에도 불구하고 작동하며 색상을 만들어냅니다.</p>
 <h2 id="glsl">GLSL</h2>
 <p>GLSL은 Graphics Library Shader Language의 약자인데요.
@@ -527,7 +527,7 @@ float f = float(1)  // integer를 float로 cast
 만약 정말 재미없고 장황한 걸 좋아한다면 <a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL 명세서</a>에 도전해볼 수 있습니다.</p>
 <h2 id="-">총정리</h2>
 <p>이게 바로 이 모든 글들의 핵심입니다.
-WebGL은 다양한 셰이더를 생성하고, 데이터를 이 셰이더에 제공한 다음, <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 current vertex shader를 호출한 뒤, 각 픽셀에 대한 current fragment shader를 호출하여 픽셀을 렌더링하는 것에 관한 모든 것입니다.</p>
+WebGL은 다양한 셰이더를 생성하고, 데이터를 이 셰이더에 제공한 다음, <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 현재 정점 셰이더를 호출한 뒤, 각 픽셀에 대한 현재 프래그먼트 셰이더를 호출하여 픽셀을 렌더링하는 것에 관한 모든 것입니다.</p>
 <p>실제로 셰이더를 생성하려면 여러 줄의 코드가 필요합니다.
 이 코드들은 대부분의 WebGL program에서 똑같기 때문에 한 번 작성한 후에는 거의 생략할 수 있습니다.
 GLSL 셰이더를 컴파일하고 shader program에 연결하는 방법은 <a href="webgl-boilerplate.html">여기</a>에서 다룹니다.</p>
@@ -553,7 +553,7 @@ translation, rotation, scale 그리고 최종적으로 3D를 공부하는데 관
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

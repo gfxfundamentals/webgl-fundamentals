@@ -245,7 +245,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>참고로 이 기능은 WebGL1의 선택적 extension이지만 <a href="https://webglstats.com/webgl/extension/ANGLE_instanced_arrays">거의 모든 브라우저와 기기에서 사용 가능</a>합니다.</p>
 <p>먼저 동일한 항목의 여러 instance를 그리는 예제부터 만들어 봅시다.</p>
 <p><a href="webgl-3d-orthographic.html">Orthographic projection</a>에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 셰이더로 시작합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- vertex shader --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 정점 셰이더 --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 uniform mat4 matrix;
@@ -257,7 +257,7 @@ void main() {
 &lt;/script&gt;
 </code></pre>
 <p>그리고</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- fragment shader --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 프래그먼트 셰이더 --&gt;
 &lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -268,8 +268,8 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre>
-<p>Vertex shader는 각 정점을 <a href="webgl-3d-orthographic.html">해당 글</a>에서 다룬 상당히 유연한 배열인 단일 행렬로 곱합니다.
-Fragment shader는 uniform을 통해 전달한 색상을 사용합니다.</p>
+<p>정점 셰이더는 각 정점을 <a href="webgl-3d-orthographic.html">해당 글</a>에서 다룬 상당히 유연한 배열인 단일 행렬로 곱합니다.
+프래그먼트 셰이더는 uniform을 통해 전달한 색상을 사용합니다.</p>
 <p>그리기 위해서는 shader를 컴파일하고 서로 연결한 다음 attribute와 uniform의 location을 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const program = webglUtils.createProgramFromScripts(gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
@@ -367,7 +367,7 @@ requestAnimationFrame(render);
 400개의 객체를 그린다면 2800 WebGL 호출이 될 겁니다.</p>
 <p>Instancing은 이러한 호출을 줄이는 방법입니다.
 이는 동일한 항목을 몇 번 그려야 하는지 WebGL에 알려주는 방식으로 작동합니다.
-각 attribute에 대해 vertex shader가 호출될 때마다 해당 attribute를 할당된 버퍼에서 <em>다음 값</em>으로 진행할지(기본값), 또는 일반적으로 N이 1인 모든 N instance만 진행할지 지정합니다.</p>
+각 attribute에 대해 정점 셰이더가 호출될 때마다 해당 attribute를 할당된 버퍼에서 <em>다음 값</em>으로 진행할지(기본값), 또는 일반적으로 N이 1인 모든 N instance만 진행할지 지정합니다.</p>
 <p>예를 들어 uniform에서 <code class="notranslate" translate="no">matrix</code>와 <code class="notranslate" translate="no">color</code>를 제공하는 대신, <code class="notranslate" translate="no">attribute</code>를 통해 제공할 수 있는데요.
 각 instance의 행렬과 색상을 버퍼에 넣고, attribute가 해당 버퍼에서 데이터를 가져오도록 설정한 다음, instance당 한 번만 다음 값으로 진행하도록 WebGL에 지시할 겁니다.</p>
 <p>해봅시다!</p>
@@ -385,7 +385,7 @@ if (!gl) {
 +}
 </code></pre>
 <p>다음은 <code class="notranslate" translate="no">matrix</code>와 <code class="notranslate" translate="no">color</code>에 대해 uniform 대신 attribute를 사용하도록 셰이더를 수정할 겁니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- vertex shader --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 정점 셰이더 --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 -uniform mat4 matrix;
@@ -398,18 +398,18 @@ void main() {
   // 위치를 행렬로 곱하기
   gl_Position = matrix * a_position;
 
-+  // Fragment shader로 정점 색상 전달
++  // 프래그먼트 셰이더로 정점 색상 전달
 +  v_color = color;
 }
 &lt;/script&gt;
 </code></pre>
 <p>그리고</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- fragment shader --&gt;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 프래그먼트 셰이더 --&gt;
 &lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
 -uniform vec4 color;
-+// Vertex shader에서 전달
++// 정점 셰이더에서 전달
 +varying vec4 v_color;
 
 void main() {
@@ -418,7 +418,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre>
-<p>Attribute는 vertex shader에서만 작동하므로 vertex shader의 attribute에서 색상을 가져와서 varying을 통해 fragment shader로 전달해야 합니다.</p>
+<p>Attribute는 정점 셰이더에서만 작동하므로 정점 셰이더의 attribute에서 색상을 가져와서 varying을 통해 프래그먼트 셰이더로 전달해야 합니다.</p>
 <p>다음으로 해당 attribute의 location을 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const program = webglUtils.createProgramFromScripts(gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
@@ -568,8 +568,8 @@ ext.vertexAttribDivisorANGLE(colorLoc, 1);
 오로지 instanced drawing을 보여주기 위한 것입니다.
 Projection matrix나 view matrix를 원한다면 JavaScript에 계산을 추가할 수 있습니다.
 이는 JavaScript의 작업이 더 많아짐을 의미합니다.
-좀 더 확실한 방법은 1개 혹은 2개 이상의 uniform을 vertex shader에 추가하는 겁니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- vertex shader --&gt;
+좀 더 확실한 방법은 1개 혹은 2개 이상의 uniform을 정점 셰이더에 추가하는 겁니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 정점 셰이더 --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
 attribute vec4 color;
@@ -584,7 +584,7 @@ void main() {
 -  gl_Position = matrix * a_position;
 +  gl_Position = projection * view * matrix * a_position;
 
-  // Fragment shader로 정점 색상 전달
+  // 프래그먼트 셰이더로 정점 색상 전달
   v_color = color;
 }
 &lt;/script&gt;
@@ -629,7 +629,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

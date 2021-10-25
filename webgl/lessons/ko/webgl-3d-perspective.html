@@ -250,7 +250,7 @@ Perspective가 뭘까요?
 기본적으로 더 멀리 있는 것들이 더 작게 보이는 기능입니다.</p>
 <p><img class="webgl_center noinvertdark" width="500" src="../resources/perspective-example.svg" /></p>
 <p>위 예시를 보면 더 멀리 있는 것들이 더 작게 그려지는 걸 볼 수 있습니다.
-주어진 현재 샘플에서 더 멀리 있는 것들이 더 작게 보이도록 만드는 쉬운 방법은 clip space의 X와 Y를 Z로 나누는 겁니다.</p>
+주어진 현재 샘플에서 더 멀리 있는 것들이 더 작게 보이도록 만드는 쉬운 방법은 클립 공간의 X와 Y를 Z로 나누는 겁니다.</p>
 <p>(10, 15)에서 (20,15)까지 길이가 10인 선이 있다고 생각해보세요.
 현재 샘플에서 이건 10px의 길이로 그려질 겁니다.
 하지만 Z로 나눈다면</p>
@@ -275,10 +275,10 @@ abs(3.333 - 6.666) = 3.333
 </pre>
 
 <p>Z가 증가할수록, 멀어질수록, 더 작게 그려지는 걸 볼 수 있습니다.
-Clip space에서 나누면 Z가 더 작은 숫자(-1 ~ +1)이기 때문에 더 나은 결과를 얻을 수 있는데요.
+클립 공간에서 나누면 Z가 더 작은 숫자(-1 ~ +1)이기 때문에 더 나은 결과를 얻을 수 있는데요.
 나누기 전에 Z를 fudgeFactor와 곱하면 주어진 거리에 따라 얼마나 작게 할지 조정할 수 있습니다.</p>
 <p>한 번 해봅시다.
-먼저 &quot;fudgeFactor&quot;를 곱한 뒤 Z로 나누도록 vertex shader를 수정합니다.</p>
+먼저 &quot;fudgeFactor&quot;를 곱한 뒤 Z로 나누도록 정점 셰이더를 수정합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
 +uniform float u_fudgeFactor;
@@ -294,7 +294,7 @@ void main() {
 *  gl_Position = vec4(position.xy / zToDivideBy, position.zw);
 }
 &lt;/script&gt;
-</code></pre><p>참고로 Z가 -1에서 +1인 clip space에 있기 때문에, 0에서 +2 * fudgeFactor인 <code class="notranslate" translate="no">zToDivideBy</code>를 얻기 위해 1을 더했습니다.</p>
+</code></pre><p>참고로 Z가 -1에서 +1인 클립 공간에 있기 때문에, 0에서 +2 * fudgeFactor인 <code class="notranslate" translate="no">zToDivideBy</code>를 얻기 위해 1을 더했습니다.</p>
 <p>또한 fudgeFactor를 설정할 수 있도록 코드를 업데이트해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
   var fudgeLocation = gl.getUniformLocation(program, &quot;u_fudgeFactor&quot;);
@@ -323,7 +323,7 @@ void main() {
 <p><img class="webgl_center" src="../resources/orthographic-vs-perspective.png" /></p>
 <div class="webgl_center">orthographic vs perspective</div>
 
-<p>WebGL은 vertex shader의 <code class="notranslate" translate="no">gl_Position</code>에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.</p>
+<p>WebGL은 정점 셰이더의 <code class="notranslate" translate="no">gl_Position</code>에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.</p>
 <p>이는 셰이더를 변경하여 직접 나누는 대신, <code class="notranslate" translate="no">gl_Position.w</code>에 <code class="notranslate" translate="no">zToDivideBy</code>를 넣어서 쉽게 증명할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
@@ -339,7 +339,7 @@ void main() {
   // x, y, z를 zToDivideBy로 나누기
 *  gl_Position = vec4(position.xyz, zToDivideBy);
 
-  // Fragment shader로 color 전달
+  // 프래그먼트 셰이더로 color 전달
   v_color = a_color;
 }
 &lt;/script&gt;
@@ -434,7 +434,7 @@ w_out = z_in * fudgeFactor + 1;
 </pre></div>
 
 <p>이제 행렬만 사용하도록 다시 프로그램을 수정해봅시다.</p>
-<p>먼저 vertex shader를 되돌립니다.</p>
+<p>먼저 정점 셰이더를 되돌립니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 uniform mat4 u_matrix;
 
@@ -478,7 +478,7 @@ void main() {
 <p><img class="webgl_center" src="../resources/z-clipping.gif" style="border: 1px solid black;" /></p>
 <p>어떻게 된거죠?
 F가 일찍 사라지는 이유는 뭘까요?
-WebGL은 X와 Y 혹은 +1에서 -1까지 clipping을 하는 것처럼 Z도 clipping을 하는데요.
+WebGL은 X와 Y 혹은 +1에서 -1까지 클리핑하는 것처럼 Z도 클리핑하는데요.
 여기서 우리가 보고 있는 건 Z &lt; -1 입니다.</p>
 <p>이를 해결하기 위해 수학에 대한 자세한 설명을 할 수도 있지만 <a href="https://stackoverflow.com/a/28301213/128511">2D 투영을 했던 것과 같은 방법</a>으로 도출할 수도 있습니다.
 Z를 가져오고, 약간을 더하고, 어느정도 크기를 조정해야 하며, 원하는 범위를 -1에서 +1사이로 다시 매핑할 수 있습니다.</p>
@@ -500,7 +500,7 @@ Z를 가져오고, 약간을 더하고, 어느정도 크기를 조정해야 하�
 
   ...
 </code></pre><p>이 행렬이 모든 변환을 수행할 겁니다.
-단위가 clip space 안에 있도록 조정되며, 각도별로 시야각을 선택할 수 있고, Z-clipping space를 선택할 수 있게 되는데요.
+단위가 클립 공간 안에 있도록 조정되며, 각도별로 시야각을 선택할 수 있고, Z-clipping 공간을 선택할 수 있게 되는데요.
 원점(0, 0, 0)에 <em>눈</em>이나 <em>카메라</em>가 있다고 가정하고, <code class="notranslate" translate="no">zNear</code>와 <code class="notranslate" translate="no">fieldOfView</code>가 주어지면, <code class="notranslate" translate="no">zNear</code>의 항목이 <code class="notranslate" translate="no">Z = -1</code>이 되는데 필요한 값을 계산하며, 중심에서 위나 아래로 <code class="notranslate" translate="no">fieldOfView</code>의 절반인 <code class="notranslate" translate="no">zNear</code>의 항목은 각각 <code class="notranslate" translate="no">Y = -1</code>과 <code class="notranslate" translate="no">Y = 1</code>로 끝납니다.
 전달된 <code class="notranslate" translate="no">aspect</code>를 곱하여 X에 사용할 값을 계산하는데요.
 일반적으로 디스플레이 영역의 <code class="notranslate" translate="no">width / height</code>로 설정합니다.
@@ -513,7 +513,7 @@ Z를 가져오고, 약간을 더하고, 어느정도 크기를 조정해야 하�
 
 </p>
 <p>내부에서 큐브가 회전하고 있는 4면 원뿔 모양을 &quot;절두체&quot;라고 합니다.
-행렬은 절두체 안에 있는 공간을 가져와서 clip space로 변환하는데요.
+행렬은 절두체 안에 있는 공간을 가져와서 클립 공간으로 변환하는데요.
 <code class="notranslate" translate="no">zNear</code>은 물체의 앞쪽이 잘리는 곳을 정의하고, <code class="notranslate" translate="no">zFar</code>은 물체의 뒤쪽이 잘리는 곳을 정의합니다.
 <code class="notranslate" translate="no">zNear</code>을 23으로 설정하면 회전하는 큐브의 앞면이 잘리는 걸 볼 수 있죠.
 <code class="notranslate" translate="no">zFar</code>을 24로 설정하면 큐브의 뒷면이 잘리는 걸 볼 수 있습니다.</p>
@@ -551,9 +551,9 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 왜 그렇게 멀리 옮겨야 했을까요?
 </p>
 <p>
-그 이유는 마지막 샘플까지 <code class="notranslate" translate="no">m4.projection</code> 함수가 pixel에서 clip space로 투영을 만들었기 때문입니다.
+그 이유는 마지막 샘플까지 <code class="notranslate" translate="no">m4.projection</code> 함수가 픽셀에서 클립 공간으로 투영을 만들었기 때문입니다.
 이는 우리가 표시하고 있던 영역이 400x300px을 나타냈다는 걸 의미하는데요.
-3D에서 'pixel'을 사용하는 건 정말 의미가 없습니다.
+3D에서 '픽셀'을 사용하는 건 정말 의미가 없습니다.
 </p>
 <p>다시말해 0,0,0에서 F를 그리려고 했지만 회전하지 않는다면</p>
 <div class="webgl_center"><img src="../resources/f-big-and-wrong-side.svg" style="width: 500px;"></div>
@@ -594,7 +594,7 @@ Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

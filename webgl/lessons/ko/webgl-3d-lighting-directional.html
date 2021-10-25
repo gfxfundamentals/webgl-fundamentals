@@ -472,7 +472,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +var offset = 0;        // 버퍼의 처음부터 시작
 +gl.vertexAttribPointer(normalLocation, size, type, normalize, stride, offset)
 </code></pre><p>이제 셰이더가 이걸 사용하도록 만들어야 합니다.</p>
-<p>먼저 vertex shader를 통해 fragment shader로 normal을 전달합니다.</p>
+<p>먼저 정점 셰이더를 통해 프래그먼트 셰이더로 normal을 전달합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 -attribute vec4 a_color;
 +attribute vec3 a_normal;
@@ -486,16 +486,16 @@ void main() {
   // 위치를 행렬로 곱하기
   gl_Position = u_matrix * a_position;
 
--  // 색상을 fragment shader로 전달
+-  // 색상을 프래그먼트 셰이더로 전달
 -  v_color = a_color;
 
-+  // 법선을 fragment shader로 전달
++  // 법선을 프래그먼트 셰이더로 전달
 +  v_normal = a_normal;
 }
-</code></pre><p>그리고 fragment shader는 빛의 방향과 법선의 스칼라곱을 이용한 수식을 수행할 겁니다.</p>
+</code></pre><p>그리고 프래그먼트 셰이더는 빛의 방향과 법선의 스칼라곱을 이용한 수식을 수행할 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
-// Vertex shader에서 전달
+// 정점 셰이더에서 전달
 -varying vec4 v_color;
 +varying vec3 v_normal;
 
@@ -563,7 +563,7 @@ void main() {
   // 위치를 행렬로 곱하기
 *  gl_Position = u_worldViewProjection * a_position;
 
-*  // 법선의 방향을 정하고 fragment shader로 전달
+*  // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
 *  v_normal = mat3(u_world) * a_normal;
 }
 </code></pre><p><code class="notranslate" translate="no">a_normal</code>를 <code class="notranslate" translate="no">mat3(u_world)</code>로 곱한다는 점을 주목하세요.
@@ -622,7 +622,7 @@ void main() {
   // 위치를 행렬로 곱하기
   gl_Position = u_worldViewProjection * a_position;
 
-  // 법선의 방향을 정하고 fragment shader로 전달
+  // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 </code></pre><p>그런 다음 uniform을 찾아야 합니다.</p>
@@ -705,7 +705,7 @@ mat3 방식이 더 깔끔해 보였지만 종종 이런 방식으로 해왔습�
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

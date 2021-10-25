@@ -323,7 +323,7 @@ MatrixStack.prototype.scale = function(x, y, z) {
   this.setCurrentMatrix(m4.scale(m, x, y, z));
 };
 </code></pre><p>이전 강의인 <a href="webgl-2d-drawimage.html"><code class="notranslate" translate="no">drawImage</code></a>에 이런 코드들이 있었습니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 행렬은 pixel에서 clip space로 변환합니다.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
@@ -334,7 +334,7 @@ matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 </code></pre><p>우리는 행렬 스택을 생성하기만 하면 됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var matrixStack = new MatrixStack();
 </code></pre><p>그리고 스택의 최상단 행렬에 곱합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 행렬은 pixel에서 clip space로 변환합니다.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
 +// 이 행렬은 원점을 current matrix stack에 해당하는 곳으로 이동시킵니다.
@@ -521,7 +521,7 @@ matrixStack.rotateZ(time);
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

@@ -242,7 +242,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>이 글은 WebGL에서 texture unit이 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
 attribute에 관한 <a href="webgl-attributes.html">비슷한 글</a>이 있습니다.</p>
-<p>이 글을 읽기 전에 <a href="webgl-how-it-works.html">WebGL 작동 원리</a>와 <a href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">WebGL 셰이더와 GLSL</a>뿐 아니라 <a href="webgl-3d-textures.html">WebGL 텍스처</a>도 읽어보시길 바랍니다.</p>
+<p>이 글을 읽기 전에 <a href="webgl-how-it-works.html">WebGL 작동 방식</a>와 <a href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">WebGL 셰이더와 GLSL</a>뿐 아니라 <a href="webgl-3d-textures.html">WebGL 텍스처</a>도 읽어보시길 바랍니다.</p>
 <h2 id="texture-unit">Texture Unit</h2>
 <p>WebGL에는 텍스처가 있습니다.
 텍스처는 대부분 셰이더에 전달할 수 있는 데이터의 2D 배열인데요.
@@ -319,7 +319,7 @@ gl.texParameteri = function(target, pname, value) {
 얼마나 많이 지원되는지 쿼리할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxTextureUnits = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 </code></pre>
-<p>참고로 vertex shader와 fragment shader는 각각 사용할 수 있는 unit 수에 대한 제한이 다를 수 있습니다.
+<p>참고로 정점 셰이더와 프래그먼트 셰이더는 각각 사용할 수 있는 unit 수에 대한 제한이 다를 수 있습니다.
 각각의 제한을 쿼리할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxVertexShaderTextureUnits = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
 const maxFragmentShaderTextureUnits = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
@@ -329,10 +329,10 @@ const maxFragmentShaderTextureUnits = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS
 maxVertexShaderTextureUnits = 4
 maxFragmentShaderTextureUnits = 8
 </code></pre>
-<p>이 말은 예를 들어 vertex shader에서 2개의 texture unit을 사용한다면 합쳐진 최대값은 8이기 때문에 fragment shader에서 사용할 수 있는 건 6개만 남는다는 걸 의미합니다.</p>
+<p>이 말은 예를 들어 정점 셰이더에서 2개의 texture unit을 사용한다면 합쳐진 최대값은 8이기 때문에 프래그먼트 셰이더에서 사용할 수 있는 건 6개만 남는다는 걸 의미합니다.</p>
 <p>또 하나 주목해야 할 점은 WebGL이 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>가 0을 반환하는 걸 허용한다는 겁니다.
-다시 말해, <strong>일부 기기는 vertex shader에서의 텍스처 사용을 전혀 지원하지 않을 수 있습니다.</strong>
-다행히 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">그런 상황</a>은 드물지만 vertex shader에서 텍스처를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>로 확인하고 아니라면 사용자에게 알려야 합니다.</p>
+다시 말해, <strong>일부 기기는 정점 셰이더에서의 텍스처 사용을 전혀 지원하지 않을 수 있습니다.</strong>
+다행히 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">그런 상황</a>은 드물지만 정점 셰이더에서 텍스처를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>로 확인하고 아니라면 사용자에게 알려야 합니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -352,7 +352,7 @@ maxFragmentShaderTextureUnits = 8
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

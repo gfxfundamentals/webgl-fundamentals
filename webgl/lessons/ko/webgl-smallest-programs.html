@@ -326,13 +326,13 @@ function rand(min, max) {
 <p>하지만 간혹 테스트하고 싶을 때가 있습니다.
 무언가 그리는 걸 보고 싶다고 가정해봅시다.</p>
 <p>이런 셰이더 세트는 어떨까요?</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// vertex shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// 정점 셰이더
 void main() {
   gl_Position = vec4(0, 0, 0, 1);  // 중앙
   gl_PointSize = 120.0;
 }
 </code></pre>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// fragment shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// 프래그먼트 셰이더
 precision mediump float;
 
 void main() {
@@ -368,10 +368,10 @@ GPU/드라이버마다 사용할 수 있는 최대 점 크기가 다르다는 �
 <p><code class="notranslate" translate="no">gl_PointSize</code>를 설정한 다음 정점 셰이더가 종료될 때, <code class="notranslate" translate="no">gl_Position</code>에 설정한 모든 값은 픽셀 단위의 화면/캔버스 공간으로 변환되며, 네 방향 모두에 +/- gl_PointSize / 2인 위치에 정사각형이 생성됩니다.</p>
 <p>누가 점 하나 그리는 걸 원하겠다고 생각하실 수 있습니다.</p>
 <p>점은 자동적으로 비어있는 <a href="webgl-3d-textures.html">텍스처 좌표</a>를 가집니다.
-Fragment shader의 특수 변수 <code class="notranslate" translate="no">gl_PointCoord</code>로 사용할 수 있는데요.
+프래그먼트 셰이더의 특수 변수 <code class="notranslate" translate="no">gl_PointCoord</code>로 사용할 수 있는데요.
 해당 점의 텍스처를 그려봅시다.</p>
-<p>먼저 fragment shader를 변경합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// fragment shader
+<p>먼저 프래그먼트 셰이더를 변경합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// 프래그먼트 셰이더
 precision mediump float;
 
 +uniform sampler2D tex;
@@ -382,7 +382,7 @@ void main() {
 }
 </code></pre>
 <p>이제 이를 단순하게 유지하기 위해 <a href="webgl-data-textures.html">데이터 텍스처에 대한 글</a>에서 다룬 것처럼 원본 데이터로 만들어 보겠습니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 2x2 pixel data
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 2x2 픽셀 데이터
 const pixels = new Uint8Array([
   0xFF, 0x00, 0x00, 0xFF,  // 빨간색
   0x00, 0xFF, 0x00, 0xFF,  // 초록색
@@ -421,7 +421,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 <h2 id="-points-">여러 단일 <code class="notranslate" translate="no">POINTS</code> 사용</h2>
 <p>위 예제를 기반으로 한 간단한 변경입니다.
 정점 셰이더를 이렇게 바꿀 수 있는데요.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// vertex shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// 정점 셰이더
 
 +attribute vec4 position;
 
@@ -450,7 +450,7 @@ const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
 +}
 </code></pre>
 <p>실행하기 전에 점을 더 작게 만듭시다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// vertex shader
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// 정점 셰이더
 
 attribute vec4 position;
 +uniform float size;
@@ -526,7 +526,7 @@ for (let i = 0; i &lt; numPoints; ++i) {
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

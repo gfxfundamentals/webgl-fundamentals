@@ -246,9 +246,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 이걸 이해하기 위해서는 <a href="webgl-3d-perspective.html">perspective projection</a>과 <a href="webgl-3d-textures.html">텍스처</a>에 대해 읽어야 할 겁니다.
 또한 <a href="webgl-how-it-works.html">varying과 그 기능</a>에 대해 알아야 하지만 여기서 간략하게 설명하겠습니다.</p>
 <p>&quot;<a href="webgl-how-it-works.html">동작 원리</a>&quot;에서 varying이 어떻게 작동하는지 다뤘는데요.
-Vertex shader는 varying을 선언하고 어떤 값으로 설정할 수 있습니다.
-Vertex shader가 3번 호출되면 WebGL은 삼각형을 그립니다.
-해당 삼각형을 그리는 동안 모든 픽셀에 대해 fragment shader를 호출하고 해당 픽셀을 어떤 색상으로 만들지 묻습니다.
+정점 셰이더는 varying을 선언하고 어떤 값으로 설정할 수 있습니다.
+정점 셰이더가 3번 호출되면 WebGL은 삼각형을 그립니다.
+해당 삼각형을 그리는 동안 모든 픽셀에 대해 프래그먼트 셰이더를 호출하고 해당 픽셀을 어떤 색상으로 만들지 묻습니다.
 삼각형의 정점 3개 사이에서 3개의 값 사이를 보간한 varying을 전달할 겁니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 600px; height: 400px;" src="/webgl/lessons/resources/fragment-shader-anim.html"></iframe>
@@ -256,27 +256,27 @@ Vertex shader가 3번 호출되면 WebGL은 삼각형을 그립니다.
 </div>
 
 </p>
-<p><a href="webgl-fundamentals.html">첫 번째 글</a>로 돌아가보면 우리는 clip space에서 삼각형을 그렸는데요.
-다음과 같이 간단한 vertex shader에 clip space 좌표를 전달했습니다.</p>
+<p><a href="webgl-fundamentals.html">첫 번째 글</a>로 돌아가보면 우리는 클립 공간에서 삼각형을 그렸는데요.
+다음과 같이 간단한 정점 셰이더에 클립 공간 좌표를 전달했습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // Attribute는 버퍼에서 데이터를 받음
   attribute vec4 a_position;
 
   // 모든 셰이더는 main 함수를 가짐
   void main() {
 
-    // gl_Position은 vertex shader가 설정을 담당하는 특수 변수
+    // gl_Position은 정점 셰이더가 설정을 담당하는 특수 변수
     gl_Position = a_position;
   }
-</code></pre><p>일정한 색상으로 그리는 간단한 fragment shader가 있습니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // fragment shader는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
+</code></pre><p>일정한 색상으로 그리는 간단한 프래그먼트 셰이더가 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 프래그먼트 셰이더는 기본 정밀도를 가지고 있지 않으므로 하나를 선택해야 합니다.
   // mediump은 좋은 기본값으로 &quot;중간 정밀도&quot;를 의미합니다.
   precision mediump float;
 
   void main() {
-    // gl_FragColor는 fragment shader가 설정을 담당하는 특수 변수
+    // gl_FragColor는 프래그먼트 셰이더가 설정을 담당하는 특수 변수
     gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
   }
-</code></pre><p>Clip space에 2개의 사각형을 그리도록 만들어봅시다.
+</code></pre><p>클립 공간에 2개의 사각형을 그리도록 만들어봅시다.
 각 정점의 <code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code>, <code class="notranslate" translate="no">Z</code>, <code class="notranslate" translate="no">W</code>인 데이터를 전달할 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positions = [
   -.8, -.8, 0, 1,  // 1번째 사각형의 1번째 삼각형
@@ -301,7 +301,7 @@ Vertex shader가 3번 호출되면 WebGL은 삼각형을 그립니다.
 
 </p>
 <p>Varying float 하나를 추가해봅시다.
-해당 varying을 vertex shader에서 fragment shader로 전달할 겁니다.</p>
+해당 varying을 정점 셰이더에서 프래그먼트 셰이더로 전달할 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  attribute vec4 a_position;
 +  attribute float a_brightness;
 
@@ -310,13 +310,13 @@ Vertex shader가 3번 호출되면 WebGL은 삼각형을 그립니다.
   void main() {
     gl_Position = a_position;
 
-+    // Fragment shader로 밝기 전달
++    // 프래그먼트 셰이더로 밝기 전달
 +    v_brightness = a_brightness;
   }
-</code></pre><p>Fragment shader에서는 해당 varying을 사용하여 색상을 설정할 겁니다.</p>
+</code></pre><p>프래그먼트 셰이더에서는 해당 varying을 사용하여 색상을 설정할 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  precision mediump float;
 
-+  // Vertex shader에서 전달받아 보간
++  // 정점 셰이더에서 전달받아 보간
 +  varying float v_brightness;  
 
   void main() {
@@ -412,7 +412,7 @@ WebGL이 <code class="notranslate" translate="no">W</code>로 나누기 때문�
 하지만 색상이 다릅니다.
 무슨 일이 일어난 걸까요?</p>
 <p>WebGL은 <code class="notranslate" translate="no">W</code>를 사용하여 원근 교정 텍스처 매핑을 구현하거나 varying의 원근 교정 보간을 수행합니다.</p>
-<p>실제로 이걸 더 쉽게 볼 수 있도록 fragment shader를 해킹해봅시다.</p>
+<p>실제로 이걸 더 쉽게 볼 수 있도록 프래그먼트 셰이더를 해킹해봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // 빨강
 </code></pre><p><code class="notranslate" translate="no">v_brightness</code>를 10으로 곱하면 값을 0에서 10사이로 만듭니다.
 <code class="notranslate" translate="no">fract</code>는 소수 부분만 유지하므로 0에서 1사이, 0에서 1사이, 0에서 1사이, 10번이 됩니다.</p>
@@ -441,7 +441,7 @@ UV 좌표를 양쪽에 0에서 1로 조정했고 4x4 픽셀 텍스처를 사용�
 </div>
 
 </p>
-<p>이제 해당 예제를 가져와 vertex shader를 변경하여 우리가 직접 <code class="notranslate" translate="no">W</code>로 나눠봅시다.
+<p>이제 해당 예제를 가져와 정점 셰이더를 변경하여 우리가 직접 <code class="notranslate" translate="no">W</code>로 나눠봅시다.
 한 줄만 추가하면 됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec2 a_texcoord;
@@ -457,7 +457,7 @@ void main() {
 +  // 수동으로 W 나누기
 +  gl_Position /= gl_Position.w;
 
-  // fragment shader로 texcoord 전달
+  // 프래그먼트 셰이더로 texcoord 전달
   v_texcoord = a_texcoord;
 }
 </code></pre><p><code class="notranslate" translate="no">W</code>로 나누는 것은 <code class="notranslate" translate="no">gl_Position.w</code>가 결국 1이 됨을 의미합니다.
@@ -491,8 +491,8 @@ void main() {
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> result = (1 - t) * a + t * b
 </code></pre><p>이는 위의 선형 보간 방정식과 동일합니다.</p>
 <p>이제 왜 WebGL이 4x4 행렬과 <code class="notranslate" translate="no">X</code>, <code class="notranslate" translate="no">Y</code>, <code class="notranslate" translate="no">Z</code>, <code class="notranslate" translate="no">W</code>가 있는 4개의 벡터를 사용하는지 이해가 되셨으면 좋겠습니다.
-<code class="notranslate" translate="no">X</code>와 <code class="notranslate" translate="no">Y</code>는 <code class="notranslate" translate="no">W</code>로 나누어 clipspace 좌표를 얻습니다.
-<code class="notranslate" translate="no">W</code>로 나누는 <code class="notranslate" translate="no">Z</code>도 clipspace 좌표를 얻으며, <code class="notranslate" translate="no">W</code>는 varying의 보간 중에 계속 사용되고 원근 교정 텍스처 매핑 기능을 제공합니다.</p>
+<code class="notranslate" translate="no">X</code>와 <code class="notranslate" translate="no">Y</code>는 <code class="notranslate" translate="no">W</code>로 나누어 클립 공간 좌표를 얻습니다.
+<code class="notranslate" translate="no">W</code>로 나누는 <code class="notranslate" translate="no">Z</code>도 클립 공간 좌표를 얻으며, <code class="notranslate" translate="no">W</code>는 varying의 보간 중에 계속 사용되고 원근 교정 텍스처 매핑 기능을 제공합니다.</p>
 <div class="webgl_bottombar">
 <h3>1990년대 중반 게임 콘솔</h3>
 <p>
@@ -523,7 +523,7 @@ PlayStation 1과 같은 시대의 일부 게임 콘솔들은 원근 교정 텍�
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

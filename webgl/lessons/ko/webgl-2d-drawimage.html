@@ -263,7 +263,7 @@ ctx.drawImage(image, srcX, srcY, srcWidth, srcHeight,
 <p>하지만 더 일반적인 방법은 단위 사각형을 사용하는 겁니다.
 1단위 크기의 사각형 하나를 업로드합니다.
 그런 다음 <a href="webgl-2d-matrices.html">행렬 수학</a>을 사용하여 해당 단위 사각형의 크기를 조정하고 이동시켜 원하는 위치에 있도록 합니다.</p>
-<p>먼저 간단한 vertex shader가 필요합니다.</p>
+<p>먼저 간단한 정점 셰이더가 필요합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
@@ -275,7 +275,7 @@ void main() {
    gl_Position = u_matrix * a_position;
    v_texcoord = a_texcoord;
 }
-</code></pre><p>간단한 fragment shader도 필요하죠.</p>
+</code></pre><p>간단한 프래그먼트 셰이더도 필요합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 varying vec2 v_texcoord;
@@ -301,7 +301,7 @@ function drawImage(tex, texWidth, texHeight, dstX, dstY) {
   gl.enableVertexAttribArray(texcoordLocation);
   gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 
-  // 이 행렬은 pixel에서 clip space로 변환합니다.
+  // 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
   var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
   // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
@@ -438,7 +438,7 @@ requestAnimationFrame(render);
 
   ...
 
-  // 이 행렬은 pixel에서 clip space로 변환합니다.
+  // 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
   var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
 *  // 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
@@ -474,7 +474,7 @@ requestAnimationFrame(render);
 </code></pre><p>텍스처의 일부를 선택하려면 텍스처 좌표를 조작해야 합니다.
 텍스처 좌표가 작동하는 방식은 <a href="webgl-3d-textures.html">텍스처에 대한 글</a>에서 다뤘습니다.
 해당 글에서는 텍스처 좌표를 수동으로 생성했지만 즉석으로 생성할 수도 있으며 행렬을 사용하여 위치를 조작한 것처럼 다른 행렬을 사용하여 비슷하게 텍스처 좌표를 조작할 수 있습니다.</p>
-<p>텍스처 행렬을 vertex shader에 추가하고, 텍스처 좌표에 이 텍스처 행렬을 곱해봅시다.</p>
+<p>텍스처 행렬을 정점 셰이더에 추가하고, 텍스처 좌표에 이 텍스처 행렬을 곱해봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
@@ -523,7 +523,7 @@ void main() {
 
   ...
 
-  // 이 행렬은 pixel에서 clip space로 변환합니다.
+  // 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
   var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
   // 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
@@ -574,7 +574,7 @@ Canvas 2D API에서 최선의 경우 에러거나 최악의 경우 정의되지 
 <p>다른 하나는 행렬을 사용하고 있기 때문에 원하는 어떤 <a href="webgl-2d-matrices.html">행렬 수학</a>도 할 수 있다는 겁니다.</p>
 <p>예를 들어 텍스처의 가운데를 중심으로 텍스처 좌표를 회전시킬 수 있습니다.</p>
 <p>텍스처 행렬 코드를 이걸로 변경합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*  // Clip space가 texture space(0 ~ 1)을 대신한 걸 제외하고는 2D 투영 행렬과 같습니다.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">*  // 클립 공간이 텍스처 공간(0 ~ 1)을 대신한 것 외에는 2D 투영 행렬과 같습니다.
 *  // 이 행렬은 우리를 픽셀 공간에 둡니다.
 *  var texMatrix = m4.scaling(1 / texWidth, 1 / texHeight, 1);
 *
@@ -701,7 +701,7 @@ void main() {
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>

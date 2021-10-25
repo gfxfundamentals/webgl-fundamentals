@@ -266,9 +266,9 @@ WebGL2는 16입니다.
 그 이상을 사용하고 있다면 최소값만 지원하는 컴퓨터에서 코드가 실패할 겁니다.</p>
 </li>
 <li><p>Uniform vector의 최대 개수</p>
-<p>Vertex shader와 fragment shader에 따로따로 지정됩니다.</p>
-<p>WebGL1에서는 vertex shader에 128개 그리고 fragment shader에 16개입니다.
-WebGL2에서는 vertex shader에 256개 그리고 fragment shader에 224개입니다.</p>
+<p>정점 셰이더와 프래그먼트 셰이더에 따로따로 지정됩니다.</p>
+<p>WebGL1에서는 정점 셰이더에 128개 그리고 프래그먼트 셰이더에 16개입니다.
+WebGL2에서는 정점 셰이더에 256개 그리고 프래그먼트 셰이더에 224개입니다.</p>
 <p>참고로 uniform은 &quot;패킹&quot;될 수 있음으로 위 숫자는 사용할 수 있는 <code class="notranslate" translate="no">vec4</code>의 개수인데요.
 이론적으로는 <code class="notranslate" translate="no">float</code> uniform 개수의 4배를 가질 수 있습니다.
 하지만 그것들을 끼워 맞추는 알고리즘이 있는데요.
@@ -312,8 +312,8 @@ WebGL2는 16입니다.</p>
 <p>여기에는 3가지 값이 있습니다.</p>
 <ol>
 <li>Texture unit 개수</li>
-<li>Vertex shader가 참조할 수 있는 texture unit 개수</li>
-<li>Fragment shader가 참조할 수 있는 texture unit 개수</li>
+<li>정점 셰이더가 참조할 수 있는 texture unit 개수</li>
+<li>프래그먼트 셰이더가 참조할 수 있는 texture unit 개수</li>
 </ol>
 <table class="tabular-data">
   <thead>
@@ -321,12 +321,12 @@ WebGL2는 16입니다.</p>
   </thead>
   <tbody>
     <tr><td>존재하는 texture unit 최소값</td><td>8</td><td>32</td></tr>
-    <tr><td>Vertex shader가 참조할 수 있는 texture unit 최소값</td><th style="color: red;">0!</td><td>16</td></tr>
-    <tr><td>Fragment shader가 참조할 수 있는 texture unit 최소값</td><td>8</td><td>16</td></tr>
+    <tr><td>정점 셰이더가 참조할 수 있는 texture unit 최소값</td><th style="color: red;">0!</td><td>16</td></tr>
+    <tr><td>프래그먼트 셰이더가 참조할 수 있는 texture unit 최소값</td><td>8</td><td>16</td></tr>
   </tbody>
 </table>
 
-<p>WebGL1에서 vertex shader에 대한 값이 <strong>0</strong>임을 주의해야 합니다.
+<p>WebGL1에서 정점 셰이더에 대한 값이 <strong>0</strong>임을 주의해야 합니다.
 참고로 너무 낙담하지 않아도 괜찮은데요.
 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">모든 장치의 약 97%가 최소 4개를 지원</a>합니다.
 그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 셰이더로 fallback할 수 있는지 확인하는 게 좋습니다.</p>
@@ -339,12 +339,12 @@ WebGL2는 16입니다.</p>
   <tbody>
     <tr><td>MAX_TEXTURE_SIZE                </td><td>텍스처 최대 크기</td></tr>
     <tr><td>MAX_VERTEX_ATTRIBS              </td><td>가질 수 있는 attribute 개수</td></tr>
-    <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>vertex shader가 가질 수 있는 vec4 uniform 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>정점 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
     <tr><td>MAX_VARYING_VECTORS             </td><td>가지고 있는 varying 개수</td></tr>
     <tr><td>MAX_COMBINED_TEXTURE_IMAGE_UNITS</td><td>존재하는 texture unit 개수</td></tr>
-    <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>vertex shader가 참조할 수 있는 texture unit 개수</td></tr>
-    <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>fragment shader가 참조할 수 있는 texture unit 개수</td></tr>
-    <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>fragment shader가 가질 수 있는 vec4 uniform 개수</td></tr>
+    <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>정점 셰이더가 참조할 수 있는 texture unit 개수</td></tr>
+    <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>프래그먼트 셰이더가 참조할 수 있는 texture unit 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>프래그먼트 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
     <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>cubemap 최대 크기</td></tr>
     <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>renderbuffer 최대 크기</td></tr>
     <tr><td>MAX_VIEWPORT_DIMS               </td><td>viewport 최대 크기</td></tr>
@@ -353,7 +353,7 @@ WebGL2는 16입니다.</p>
 </div>
 
 <p>이건 전체 목록이 아닌데요.
-최대 점 크기와 최대 선 두께 등이 있지만 기본적으로 최대 선 두께는 1.0이고 POINTS는 <a href="#points-lines-viewport-scissor-behavior">clipping issue</a>를 신경쓰지 않아도 되는 간단한 데모에서만 유용하다고 가정해야 합니다.</p>
+최대 점 크기와 최대 선 두께 등이 있지만 기본적으로 최대 선 두께는 1.0이고 POINTS는 <a href="#points-lines-viewport-scissor-behavior">클리핑 문제</a>를 신경쓰지 않아도 되는 간단한 데모에서만 유용하다고 가정해야 합니다.</p>
 <p>WebGL2는 몇 가지 더 추가합니다.
 몇 가지 일반적인 것들은</p>
 <div class="webgl_center">
@@ -365,8 +365,8 @@ WebGL2는 16입니다.</p>
     <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS      </td><td>transform feedback을 사용할 때 별도의 버퍼로 출력할 수 있는 varying 개수</td></tr>
     <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>모든 걸 단일 버퍼로 보낼 때 출력할 수 있는 varying 개수</td></tr>
     <tr><td>MAX_COMBINED_UNIFORM_BLOCKS                  </td><td>종합적으로 사용할 수 있는 uniform block 개수</td></tr>
-    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>vertex shader가 사용할 수 있는 uniform block 개수</td></tr>
-    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>fragment shader가 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>정점 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>프래그먼트 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
   </tbody>
 </table>
 </div>
@@ -402,7 +402,7 @@ WebGL2는 16입니다.</p>
 <p><code class="notranslate" translate="no">ANGLE_instance_arrays</code>(<a href="webgl-instanced-drawing.html">instanced drawing</a>에 사용하는 기능), <code class="notranslate" translate="no">OES_vertex_array_object</code>(단일 함수 호출로 모든 상태를 바꿀 수 있도록 모든 <a href="webgl-attributes.html">attribute</a> 상태를 객체에 저장하는 기능), <code class="notranslate" translate="no">OES_element_index_uint</code>(<a href="webgl-indexed-vertices.html"><code class="notranslate" translate="no">drawElements</code></a>로 <code class="notranslate" translate="no">UNSIGNED_INT</code> 32bit index를 사용하는 기능)</p>
 <h2 id="attribute-location">attribute location</h2>
 <p>버그는 attribute location을 찾지 못하는 겁니다.
-예를 들어 이런 vertex shader가 있다면</p>
+예를 들어 이런 정점 셰이더가 있다면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 position;
 attribute vec2 texcoord;
 
@@ -440,10 +440,10 @@ latout(location = 1) vec2 texcoord;
 <p>자세한 내용은 <a href="webgl-precision-issues.html">이 글</a>을 봐주세요.</p>
 <h2 id="points-lines-viewport-scissor-">Points, Lines, Viewport, Scissor 동작</h2>
 <p>WebGL의 <code class="notranslate" translate="no">POINTS</code>와 <code class="notranslate" translate="no">LINES</code>는 최대 크기 1을 가질 수 있고 현재 가장 일반적인 제한인 <code class="notranslate" translate="no">LINES</code>의 경우입니다.
-또한 중심이 viewport 외부에 있을 때 point의 clipping 여부는 구현에 정의됩니다.
+또한 중심이 viewport 외부에 있을 때 포인트의 클리핑 여부는 구현에 정의됩니다.
 <a href="webgl-drawing-without-data.html#pointissues">이 글의 하단</a>을 봐주세요.</p>
-<p>마찬가지로, viewport가 정점만 clipping을 하는지 혹은 픽셀도 clipping을 하는지 여부는 정의되지 않았습니다.
-Scissor는 항상 pixel clipping을 하므로 scissor 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.</p>
+<p>마찬가지로, viewport가 정점만 클리핑을 하는지 혹은 픽셀도 클리핑을 하는지 여부는 정의되지 않았습니다.
+Scissor는 항상 픽셀 클리핑하기 때문에 scissor 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.</p>
 <h2 id="-">사파리 버그</h2>
 <p>사파리는 다른 최신 브라우저들보다 많은 WebGL 버그를 가지고 있으며 애플은 이들을 고치는 데 전혀 관심이 없는 걸로 보입니다.</p>
 <p>몇 년간 고쳐지지 않은 버그의 일부 목록</p>
@@ -487,7 +487,7 @@ Scissor는 항상 pixel clipping을 하므로 scissor 테스트를 켜고, 그�
           <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
-<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 원리</a></li>
+<li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shaders-and-glsl.html">셰이더와 GLSL</a></li>
 <li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL 상태 다이어그램</a></li>
         </ul>
