@@ -6,7 +6,7 @@ TOC: Texture Unit
 이 글은 WebGL에서 texture unit이 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
 attribute에 관한 [비슷한 글](webgl-attributes.html)이 있습니다.
 
-이 글을 읽기 전에 [WebGL 작동 원리](webgl-how-it-works.html)와 [WebGL 셰이더와 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)뿐 아니라 [WebGL 텍스처](webgl-3d-textures.html)도 읽어보시길 바랍니다.
+이 글을 읽기 전에 [WebGL 작동 방식](webgl-how-it-works.html)와 [WebGL 셰이더와 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)뿐 아니라 [WebGL 텍스처](webgl-3d-textures.html)도 읽어보시길 바랍니다.
 
 ## Texture Unit
 

@@ -4,7 +4,7 @@ TOC: 셰이더와 GLSL
 
 
 이 글은 [WebGL 기초](webgl-fundamentals.html)에서 이어집니다.
-[WebGL 작동 원리](webgl-how-it-works.html)를 읽지 않았다면 먼저 읽어보는 게 좋습니다.
+[WebGL 작동 방식](webgl-how-it-works.html)를 읽지 않았다면 먼저 읽어보는 게 좋습니다.
 
 셰이더와 GLSL에 대해 언급했지만 실제로 구체적인 세부 사항은 다루지 않았는데요.
 예제로 충분하면 좋겠지만 혹시 모르니 좀 더 명료하게 해봅시다.

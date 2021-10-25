@@ -1,6 +1,6 @@
-Title: WebGL 작동 원리
+Title: WebGL 작동 방식
 Description: WebGL이 실제로 하는 일
-TOC: 작동 원리
+TOC: 작동 방식
 
 
 이건 [WebGL 기초](webgl-fundamentals.html)에서 이어지는 글입니다.
