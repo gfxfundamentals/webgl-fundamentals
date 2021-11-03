@@ -120,6 +120,7 @@ A collection of links to random questions and/or answers about topics related to
 * [How to figure out how much GPU work to do without crashing WebGL](webgl-qna-how-to-figure-out-how-much-gpu-work-to-do-without-crashing-webgl.html).
 * [Why does WebGL take more memory than Canvas 2D](webgl-qna-why-does-webgl-take-more-memory-than-canvas-2d.html)
 * [How to combine more text drawing into fewer draw calls](webgl-qna-how-to-combine-more-text-drawing-into-fewer-draw-calls.html)
+* [How to draw depth sprites](webgl-qna-depth-sprites.html)
 
 ## WebGL2
 
