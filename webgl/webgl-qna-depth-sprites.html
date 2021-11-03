@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+body {
+  margin: 5px;
+}
+#c {
+  width: 300px;
+  height: 150px;
+  border: 1px solid black;
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+</body>
+<script type="module">
+import * as twgl from 'https://twgljs.org/dist/4.x/twgl-full.module.js';
+
+function makeDepthColor(depth) {
+  return "rgb(" + depth + "," + depth + "," + depth + ")";
+}
+
+function makeSprite(ctx, depth) {
+  // make an image (these would be made in photoshop ro
+  // some other paint program but that's too much work for me
+  ctx.canvas.width = 64;
+  ctx.canvas.height = 64;
+  for (let y = 0; y <= 32; ++y) {
+    const halfWidth = (y < 16 ? 1 + y : 33 - y) * 2;
+    const width = halfWidth * 2;
+    const cy = (16 - y);
+    const cw = Math.max(0, 12 - Math.abs(cy) * 2) | 0;
+    for (let x = 0; x < width; ++x) {
+      const cx = x - halfWidth;
+      const inCenter = Math.abs(cy) < 6 && Math.abs(cx) <= cw;
+      const onEdge = x < 2 || x >= width - 2 || (inCenter && (Math.abs(cx / 2) | 0) === (cw / 2 | 0));
+      const height = onEdge ? 12 : (inCenter ? 30 : 10);
+      const color = inCenter ? (cx < 0 ? "#F44" : "#F66") : (cx < 0 ? "#44F" : "#66F");
+      ctx.fillStyle = depth ? makeDepthColor(y + 1) : color;
+      const xx = 32 - halfWidth + x;
+      const yy = y;
+      ctx.fillRect(xx, yy + 32 - height, 1, height);
+      if (!depth) {
+        ctx.fillStyle = onEdge ? "black" : "#CCF";
+        ctx.fillRect(xx, yy + 32 - height, 1, 1);
+      }
+    }
+  }
+}
+
+function main() {
+  const m4 = twgl.m4;
+  const gl = document.querySelector("#c").getContext(
+    "webgl", {preserveDrawingBuffer: true});
+  const ext = gl.getExtension("EXT_frag_depth");
+  if (!ext) {
+    alert("need EXT_frag_depth");
+    return;
+  }
+
+  const vs = `
+    attribute vec4 position;
+    attribute vec2 texcoord;
+
+    varying vec2 v_texcoord;
+
+    uniform mat4 u_matrix;
+    uniform mat4 u_textureMatrix;
+
+    void main() {
+      v_texcoord = (u_textureMatrix * vec4(texcoord, 0, 1)).xy;
+      gl_Position = u_matrix * position;
+    }
+  `;
+
+  const fs = `
+    #extension GL_EXT_frag_depth : require
+
+    precision mediump float;
+
+    varying vec2 v_texcoord;
+
+    uniform sampler2D u_colorTexture;
+    uniform sampler2D u_depthTexture;
+    uniform float u_depthScale;
+    uniform float u_depthOffset;
+
+    void main() {
+      vec4 color = texture2D(u_colorTexture, v_texcoord);
+      if (color.a < 0.01) {
+        discard;
+      }
+
+      float depth = texture2D(u_depthTexture, v_texcoord).r;
+      gl_FragDepthEXT = u_depthOffset - depth * u_depthScale;
+      gl_FragColor = color;
+    }
+  `;
+
+  const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
+  const quadBufferInfo = twgl.createBufferInfoFromArrays(gl, {
+    position: {
+      numComponents: 2,
+      data: [
+        0, 0,
+        0, 1,
+        1, 0,
+        1, 0,
+        0, 1,
+        1, 1,
+      ],
+    },
+    texcoord: [
+      0, 0,
+      0, 1,
+      1, 0,
+      1, 0,
+      0, 1,
+      1, 1,
+    ],
+  });
+
+  const ctx = document.createElement("canvas").getContext("2d");
+
+  // make the color texture
+  makeSprite(ctx, false);
+  const colorTexture = twgl.createTexture(gl, {
+    src: ctx.canvas,
+    min: gl.NEAREST,
+    mag: gl.NEAREST,
+  });
+
+  // make the depth texture
+  makeSprite(ctx, true);
+  const depthTexture = twgl.createTexture(gl, {
+    src: ctx.canvas,
+    format: gl.LUMINANCE,  // because depth is only 1 channel
+    min: gl.NEAREST,
+    mag: gl.NEAREST,
+  });
+
+  function drawDepthImage(
+      colorTex, depthTex, texWidth, texHeight,
+      x, y, z) {
+    const dstY = y + z;
+    const dstX = x;
+    const dstWidth = texWidth;
+    const dstHeight = texHeight;
+
+    const srcX = 0;
+    const srcY = 0;
+    const srcWidth = texWidth;
+    const srcHeight = texHeight;
+
+    gl.useProgram(programInfo.program);
+
+    twgl.setBuffersAndAttributes(gl, programInfo, quadBufferInfo);
+
+    // this matrix will convert from pixels to clip space
+    let matrix = m4.ortho(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
+
+    // this matrix will translate our quad to dstX, dstY
+    matrix = m4.translate(matrix, [dstX, dstY, 0]);
+
+    // this matrix will scale our 1 unit quad
+    // from 1 unit to texWidth, texHeight units
+    matrix = m4.scale(matrix, [dstWidth, dstHeight, 1]);
+
+    // just like a 2d projection matrix except in texture space (0 to 1)
+    // instead of clip space. This matrix puts us in pixel space.
+    let texMatrix = m4.scaling([1 / texWidth, 1 / texHeight, 1]);
+
+    // because were in pixel space
+    // the scale and translation are now in pixels
+    texMatrix = m4.translate(texMatrix, [srcX, srcY, 0]);
+    texMatrix = m4.scale(texMatrix, [srcWidth, srcHeight, 1]);
+
+    twgl.setUniforms(programInfo, {
+      u_colorTexture: colorTex,
+      u_depthTexture: depthTex,
+      u_matrix: matrix,
+      u_textureMatrix: texMatrix,
+      u_depthOffset: 1 - (dstY - z) / 65536,
+      u_depthScale: 1 / 256,
+    });
+
+    twgl.drawBufferInfo(gl, quadBufferInfo);
+  }
+
+  // test render
+  gl.enable(gl.DEPTH_TEST);
+
+  const texWidth = 64;
+  const texHeight = 64;
+
+  // z is how much above/below ground
+  function draw(x, y, z) {
+    drawDepthImage(colorTexture, depthTexture, texWidth, texHeight , x, y, z);
+  }
+
+  draw(  0, 0, 0);  // draw on left
+
+  draw(100, 0, 0);  // draw near center
+  draw(113, 0, 0);  // draw overlapping
+
+  draw(200, 0, 0);  // draw on right
+  draw(200, 8, 0);  // draw on more forward
+
+  draw(0, 60,  0);  // draw on left
+  draw(0, 60, 10);  // draw on below
+
+  draw(100, 60,  0);  // draw near center
+  draw(100, 60, 20);  // draw below
+
+  draw(200, 60, 20);  // draw on right
+  draw(200, 60,  0);  // draw above
+}
+
+main();
+</script>
+</html>

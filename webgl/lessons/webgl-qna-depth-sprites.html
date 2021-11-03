@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/webgl-qna.md. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/webgl-qna-depth-sprites.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -37,24 +37,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Random Questions and Answers">
+<meta name="description" content="Drawing sprites that sort pixels by depth">
 <meta name="keywords" content="webgl graphics">
-<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna_en.jpg">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna-depth-sprites_en.jpg">
 
-<meta property="og:title" content="Questions and Answers">
+<meta property="og:title" content="How to draw Depth Sprites">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna_en.jpg">
-<meta property="og:description" content="Random Questions and Answers">
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/webgl-qna.html">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna-depth-sprites_en.jpg">
+<meta property="og:description" content="Drawing sprites that sort pixels by depth">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/webgl-qna-depth-sprites.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="Questions and Answers">
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/webgl-qna.html">
-<meta name="twitter:description" content="Random Questions and Answers">
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna_en.jpg">
+<meta name="twitter:title" content="How to draw Depth Sprites">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/webgl-qna-depth-sprites.html">
+<meta name="twitter:description" content="Drawing sprites that sort pixels by depth">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna-depth-sprites_en.jpg">
 
 <script type="application/ld+json">
 {
@@ -68,23 +68,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     },
     {
       "@type":"ImageObject",
-      "@id":"https://webglfundamentals.org/webgl/lessons/webgl-qna.html#primaryimage",
-      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna_en.jpg",
+      "@id":"https://webglfundamentals.org/webgl/lessons/webgl-qna-depth-sprites.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna-depth-sprites_en.jpg",
       "width":1200,
       "height":630
     },
     {
       "@type":"WebPage",
-      "@id":"https://webglfundamentals.org/webgl/lessons/webgl-qna.html#webpage",
-      "url":"https://webglfundamentals.org/webgl/lessons/webgl-qna.html",
+      "@id":"https://webglfundamentals.org/webgl/lessons/webgl-qna-depth-sprites.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/webgl-qna-depth-sprites.html",
       "inLanguage":"en",
-      "name":"Questions and Answers",
+      "name":"How to draw Depth Sprites",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
       },
       "primaryImageOfPage":{
-        "@id":"https://webglfundamentals.org/webgl/lessons/webgl-qna.html#primaryimage"
+        "@id":"https://webglfundamentals.org/webgl/lessons/webgl-qna-depth-sprites.html#primaryimage"
       }
     }
   ]
@@ -92,19 +92,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>Questions and Answers</title>
+<title>How to draw Depth Sprites</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
 
-  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-qna.html">
-  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-qna.html">
-  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-qna.html">
-  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-qna.html">
-  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-qna.html">
-  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-qna.html">
-  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-qna.html">
-  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-qna.html">
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-qna-depth-sprites.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-qna-depth-sprites.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-qna-depth-sprites.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-qna-depth-sprites.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-qna-depth-sprites.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-qna-depth-sprites.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-qna-depth-sprites.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-qna-depth-sprites.html">
 
 
 
@@ -114,14 +114,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <div class="webgl_navbar">
   <div>
     <select class="language">
-    <option value="/webgl/lessons/webgl-qna.html" selected>English</a>
-    <option value="/webgl/lessons/fr/webgl-qna.html" >Français</a>
-    <option value="/webgl/lessons/ja/webgl-qna.html" >日本語</a>
-    <option value="/webgl/lessons/ko/webgl-qna.html" >한국어</a>
-    <option value="/webgl/lessons/pl/webgl-qna.html" >Polski</a>
-    <option value="/webgl/lessons/pt-br/webgl-qna.html" >Portuguese</a>
-    <option value="/webgl/lessons/ru/webgl-qna.html" >Русский</a>
-    <option value="/webgl/lessons/zh_cn/webgl-qna.html" >简体中文</a>
+    <option value="/webgl/lessons/webgl-qna-depth-sprites.html" selected>English</a>
+    <option value="/webgl/lessons/fr/webgl-qna-depth-sprites.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-qna-depth-sprites.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-qna-depth-sprites.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-qna-depth-sprites.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-qna-depth-sprites.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-qna-depth-sprites.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-qna-depth-sprites.html" >简体中文</a>
 </select>
 
 
@@ -235,149 +235,84 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>Questions and Answers</h1>
+    <h1>How to draw Depth Sprites</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>A collection of links to random questions and/or answers about topics related to WebGL</p>
-<ul>
-<li><a href="webgl-qna-webgl-droste-effect.html">WebGL Droste effect</a></li>
-<li><a href="webgl-qna-working-around-gl_pointsize-limitations-webgl.html">Working around gl_PointSize limitations webGL</a></li>
-<li><a href="webgl-qna-how-to-simulate-a-3d-texture-in-webgl.html">How to simulate a 3D texture in WebGL</a></li>
-<li><a href="webgl-qna-how-to-render-large-scale-images-like-32000x32000.html">How to render large scale images like 32000x32000</a></li>
-<li><a href="webgl-qna-emulating-palette-based-graphics-in-webgl.html">Emulating palette based graphics in WebGL</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-a-simple-way-to-show-the-load-on-the-gpu-s-vertex-and-fragment-processing-.html">A simple way to show the load on the GPU&#39;s vertex and fragment processing?</a></li>
-<li><a href="https://mattdesl.svbtle.com/drawing-lines-is-hard">How to draw thick lines in WebGL</a></li>
-<li><a href="webgl-qna-fps-like-camera-movement-with-basic-matrix-transformations.html">FPS-like camera movement with basic matrix transformations</a></li>
-<li><a href="webgl-qna-how-to-use-texture--and-color-also-in-webgl-.html">How to use texture, and color also in WebGL?</a></li>
-<li><a href="webgl-qna-glsl-shader-to-support-coloring-and-texturing.html">GLSL shader to support coloring and texturing</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-how-to-bind-an-array-of-textures-to-a-webgl-shader-uniform-.html">How to bind an array of textures to a WebGL shader uniform?</a></li>
-<li><a href="webgl-qna-passing-in-per-sprite-alpha-values-when-batching.html">Passing in per sprite alpha values when batching</a></li>
-<li><a href="webgl-qna-can-anyone-explain-what-this-glsl-fragment-shader-is-doing-.html">Can anyone explain what this GLSL fragment shader is doing?</a></li>
-<li><a href="webgl-qna-webgl-2d-tilemaps.html">WebGL 2D tilemaps</a></li>
-<li><a href="webgl-qna-determine-min-max-values-for-the-entire-image.html">Determine min/max values for the entire image</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-drawing-many-different-models-in-a-single-draw-call.html">Drawing Many different models in a single draw call</a></li>
-<li><a href="webgl-qna-recording-fps-in-webgl.html">Recording FPS in WebGL</a></li>
-<li><a href="webgl-qna-how-to-write-a-web-based-music-visualizer.html">How to write a web-based music visualizer</a></li>
-<li><a href="webgl-qna-how-to-get-audio-data-into-a-shader.html">How to get audio data into a shader</a></li>
-<li><a href="webgl-qna-pure-webgl-dashed-line.html">Pure WebGL Dashed Line</a></li>
-<li><a href="webgl-qna-zooming-to-and-stopping-at-object-in-a-scene-in-webgl.html">Zooming to and stopping at object in a scene in WebGL</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-create-image-warping-effect-in-webgl.html">Create image warping effect in WebGL</a></li>
-<li><a href="webgl-qna-creating-a-smudge-liquify-effect.html">Creating a smudge/liquify effect</a></li>
-<li><a href="webgl-qna-how-to-get-pixelize-effect-in-webgl-.html">How to get pixelize effect in webgl?</a></li>
-<li><a href="webgl-qna-how-to-make-webgl-canvas-transparent.html">How to make WebGL canvas transparent</a></li>
-<li><a href="webgl-qna-show-a-night-view-vs-a-day-view-on-a-3d-earth-sphere.html">Show a night view vs a day view on a 3D Earth sphere</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-is-it-possible-to-measure-rendering-time-in-webgl-using-gl-finish---.html">Is it possible to measure rendering time in webgl using gl.finish()?</a></li>
-<li><a href="webgl-qna-efficient-particle-system-in-javascript---webgl-.html">Efficient particle system in javascript? (WebGL)</a></li>
-<li><a href="webgl-qna-setting-the-values-of-a-struct-array-from-js-to-glsl.html">Setting the values of a struct array from JS to GLSL</a></li>
-<li><a href="webgl-qna-how-to-fade-the-drawing-buffer.html">How to fade the drawing buffer</a></li>
-<li><a href="webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect.html">Drawing 2D image with depth map to achieve pseudo-3D effect</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">How to Achieve Moving Line with Trail Effects</a></li>
-<li><a href="webgl-qna-how-to-draw-correctly-textured-trapezoid-polygons.html">How to draw correctly textured trapezoid polygons</a></li>
-<li><a href="webgl-qna-tex-image-texture_2d-level-0-is-incurring-lazy-initialization.html">Tex image TEXTURE_2D level 0 is incurring lazy initialization</a></li>
-<li><a href="webgl-qna-how-to-implement-zoom-from-mouse-in-2d-webgl.html">How to implement zoom from mouse in 2D WebGL</a></li>
-<li><a href="webgl-qna-how-to-create-a-torus.html">How to create a torus</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-don-t-blend-a-polygon-that-crosses-itself.html">Don&#39;t blend a polygon that crosses itself</a></li>
-<li><a href="webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader.html">How to detect clipped triangles in the framgment shader</a></li>
-<li><a href="webgl-qna-the-fastest-way-to-draw-many-circles.html">The fastest way to draw many circles</a></li>
-<li><a href="webgl-qna-sorting-and-optimizing-instanced-rendering.html">Sorting and optimizing instanced rendering</a></li>
-<li><a href="webgl-qna-how-to-tell-if-an-image-has-an-alpha-channel.html">How to tell if an image has an alpha channel</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-how-to-load-images-in-the-background-with-no-jank.html">How to load images in the background with no jank</a></li>
-<li><a href="webgl-qna-when-to-choose-highp--mediump--lowp-in-shaders.html">When to choose highp, mediump, lowp in shaders</a></li>
-<li><a href="webgl-qna-how-to-import-a-heightmap-in-webgl.html">How to import a heightmap in WebGL</a></li>
-<li><a href="webgl-qna-apply-a-displacement-map-and-specular-map.html">Apply a displacement map and specular map</a></li>
-<li><a href="webgl-qna-how-to-support-both-webgl-and-webgl2.html">How to support both WebGL and WebGL2</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-how-to-use-the-stencil-buffer.html">How to use the stencil buffer</a></li>
-<li><a href="webgl-qna-drawing-a-heightmap.html">Drawing a heightmap</a></li>
-<li><a href="webgl-qna-drawing-textured-sprites-with-instanced-drawing.html">Drawing textured sprites with instanced drawing</a></li>
-<li><a href="webgl-qna-optimize-drawing-lots-of-large-images.html">Optimize drawing lots of large images</a></li>
-<li><a href="webgl-qna-rendering-slowly-over-time.html">Rendering slowly over time</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-get-the-size-of-a-point-for-collision-checking.html">Get the size of a point for collision checking</a></li>
-<li><a href="webgl-qna-how-to-get-the-3d-coordinates-of-a-mouse-click.html">How to get the 3d coordinates of a mouse click</a></li>
-<li><a href="webgl-qna-how-to-blend-colors-across-2-triangles.html">How to blend colors across 2 triangles</a></li>
-<li><a href="webgl-qna-how-to-use-textures-as-data.html">How to use textures as data</a></li>
-<li><a href="webgl-qna-how-to-use-a-2d-sprite-s-transparency-as-a-mask.html">How to use a 2d sprite&#39;s transparency as a mask</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-how-to-prevent-texture-bleeding-with-a-texture-atlas.html">How to prevent texture bleeding with a texture atlas</a></li>
-<li><a href="webgl-qna-how-to-control-the-color-between-vertices.html">How to control the color between vertices</a></li>
-<li><a href="webgl-qna-how-to-make-fisheye-skybox-shader.html">How to make fisheye skybox shader</a></li>
-<li><a href="webgl-qna-how-to-get-code-completion-for-webgl-in-visual-studio-code.html">How to get code completion for WebGL in Visual Studio Code</a></li>
-<li><a href="webgl-qna-drawing-layers-with-different-points.html">Drawing layers with different points</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-can-i-mute-the-warning-about-vertex-attrib-0-being-disabled-.html">Can I mute the warning about vertex attrib 0 being disabled?</a></li>
-<li><a href="webgl-qna-how-to-make-a-smudge-brush-tool.html">How to make a smudge brush tool</a></li>
-<li><a href="webgl-qna-how-to-read-a-single-component-with-readpixels.html">How to read a single component with readPixels</a></li>
-<li><a href="webgl-qna-i-get-invalid-type-error-when-calling-readpixels.html">I get invalid type error when calling readPixels</a></li>
-<li><a href="webgl-qna-how-to-optimize-rendering-a-ui.html">How to optimize rendering a UI</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-how-can-i-compute-for-500-points-which-of-1000-line-segments-is-nearest-to-each-point-.html">How can I compute for 500 points which of 1000 line segments is nearest to each point?</a></li>
-<li><a href="webgl-qna-how-can-i-move-the-perspective-vanishing-point-from-the-center-of-the-canvas-.html">How can I move the perspective vanishing point from the center of the canvas?</a></li>
-<li><a href="webgl-qna-is-there-the-notion-of-a-generalized-vertex-and-fragment-shader-.html">Is there the notion of a generalized vertex and fragment shader?</a></li>
-<li><a href="webgl-qna-how-to-determine-the-average-brightness-in-a-scene-.html">How to determine the average brightness in a scene?</a></li>
-<li><a href="webgl-qna-what-is-the-local-origin-of-a-3d-model-.html">What is the local origin of a 3D model?</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="webgl-qna-how-to-figure-out-how-much-gpu-work-to-do-without-crashing-webgl.html">How to figure out how much GPU work to do without crashing WebGL</a>.</li>
-<li><a href="webgl-qna-why-does-webgl-take-more-memory-than-canvas-2d.html">Why does WebGL take more memory than Canvas 2D</a></li>
-<li><a href="webgl-qna-how-to-combine-more-text-drawing-into-fewer-draw-calls.html">How to combine more text drawing into fewer draw calls</a></li>
-<li><a href="webgl-qna-depth-sprites.html">How to draw depth sprites</a></li>
-</ul>
-<h2 id="webgl2">WebGL2</h2>
-<ul>
-<li><a href="webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2.html">Accessing textures by pixel coordinate in WebGL2</a></li>
-<li><a href="webgl-qna-how-can-i-get-all-the-uniforms-and-uniformblocks.html">How can I get all the uniforms and uniformBlocks</a></li>
-<li><a href="webgl-qna-how-can-i-create-a-16bit-historgram-of-16bit-data.html">How can I create a 16bit historgram of 16bit data</a></li>
-<li><a href="webgl-qna-how-to-process-particle-positions.html">How to process particle positions</a></li>
-</ul>
+      <h2 id="question-">Question:</h2>
+<p>How can I draw sprites that sort each pixel by depth?</p>
+<h2 id="answer-">Answer:</h2>
+<p>To use depth sprites you need to enable the <a href="https://www.khronos.org/registry/webgl/extensions/EXT_frag_depth/"><code class="notranslate" translate="no">EXT_frag_depth</code></a> extension if it exists. Then you can write to <code class="notranslate" translate="no">gl_fragDepthEXT</code> in your fragment shader. Making depth sprites sounds like more work to me than making 3D models.</p>
+<p>In that case you just load 2 textures per sprite, one for color, one for depth and then do something like</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> #extension GL_EXT_frag_depth : require
+
+ varying vec2 texcoord;
+
+ uniform sampler2D colorTexture;
+ uniform sampler2D depthTexture;
+ uniform float depthScale;
+ uniform float depthOffset;
+
+ void main() {
+   vec4 color = texture2D(colorTexture, texcoord);
+
+   // don&#39;t draw if transparent
+   if (color.a &lt;= 0.01) {
+     discard;
+   }
+
+   gl_FragColor = color;
+
+   float depth = texture2D(depthTexture, texcoord).r;
+   gl_FragDepthEXT = depthOffset - depth * depthScale;
+ } 
+</code></pre><p>You&#39;d set <code class="notranslate" translate="no">depthOffset</code> and <code class="notranslate" translate="no">depthScale</code> to something like </p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> var yTemp = yPosOfSpriteInPixelsFromTopOfScreen + tallestSpriteHeight;
+ var depthOffset = 1. - yTemp / 65536;
+ var depthScale = 1 / 256;
+</code></pre><p>That assumes each value in the depth texture is less per depth change.</p>
+<p>As for how to draw in 2D in WebGL <a href="webgl-2d-drawimage.html">see this article</a>.</p>
+<p>Here&#39;s an example that seems to work. I generated the image because I&#39;m too lazy to draw it in photoshop. Manually drawing depth values is pretty tedious. It assumes the furthest pixel in the image of depth values of 1, the next closest pixels have a depth value of 2, etc.</p>
+<p>In other words if you had a small 3x3 isometric cube the depth values would be something like</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> +---+---+---+---+---+---+---+---+---+---+
+ |   |   |   |   | 1 | 1 |   |   |   |   |
+ +---+---+---+---+---+---+---+---+---+---+
+ |   |   | 2 | 2 | 2 | 2 | 2 | 2 |   |   |
+ +---+---+---+---+---+---+---+---+---+---+
+ | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 |
+ +---+---+---+---+---+---+---+---+---+---+
+ | 3 | 3 | 4 | 4 | 4 | 4 | 4 | 4 | 3 | 3 |
+ +---+---+---+---+---+---+---+---+---+---+
+ | 3 | 3 | 4 | 4 | 5 | 5 | 4 | 4 | 3 | 3 |
+ +---+---+---+---+---+---+---+---+---+---+
+ | 3 | 3 | 4 | 4 | 5 | 5 | 4 | 4 | 3 | 3 |
+ +---+---+---+---+---+---+---+---+---+---+
+ | 3 | 3 | 4 | 4 | 5 | 5 | 4 | 4 | 3 | 3 |
+ +---+---+---+---+---+---+---+---+---+---+
+ |   |   | 4 | 4 | 5 | 5 | 4 | 4 |   |   |
+ +---+---+---+---+---+---+---+---+---+---+
+ |   |   |   |   | 5 | 5 |   |   |   |   |
+ +---+---+---+---+---+---+---+---+---+---+
+</code></pre><p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-depth-sprites.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-depth-sprites.html" target="_blank">click here to open in a separate window</a>
+</div>
+
+</p>
+<p>The top left is what the image looks like. The top middle is 2 images drawn side by side. The top right is 2 images drawn one further down in y (x, y is the iso-plane). The bottom left is two images one drawn below the other (below the plane). The bottom middle is the same thing just separated more. The bottom right is the same thing except drawn in the opposite order (just to check it works)</p>
+<p>To save memory you could put the depth value in the alpha channel of the color texture. If it&#39;s 0 discard.</p>
 
     </div>
     <div class="lesson-sidebar">
         <select class="language">
-    <option value="/webgl/lessons/webgl-qna.html" selected>English</a>
-    <option value="/webgl/lessons/fr/webgl-qna.html" >Français</a>
-    <option value="/webgl/lessons/ja/webgl-qna.html" >日本語</a>
-    <option value="/webgl/lessons/ko/webgl-qna.html" >한국어</a>
-    <option value="/webgl/lessons/pl/webgl-qna.html" >Polski</a>
-    <option value="/webgl/lessons/pt-br/webgl-qna.html" >Portuguese</a>
-    <option value="/webgl/lessons/ru/webgl-qna.html" >Русский</a>
-    <option value="/webgl/lessons/zh_cn/webgl-qna.html" >简体中文</a>
+    <option value="/webgl/lessons/webgl-qna-depth-sprites.html" selected>English</a>
+    <option value="/webgl/lessons/fr/webgl-qna-depth-sprites.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-qna-depth-sprites.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-qna-depth-sprites.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-qna-depth-sprites.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-qna-depth-sprites.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-qna-depth-sprites.html" >Русский</a>
+    <option value="/webgl/lessons/zh_cn/webgl-qna-depth-sprites.html" >简体中文</a>
 </select>
 
 
@@ -536,8 +471,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'Questions and Answers';
-            var disqus_title = 'Questions and Answers';
+            var disqus_identifier = 'How to draw Depth Sprites';
+            var disqus_title = 'How to draw Depth Sprites';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {
