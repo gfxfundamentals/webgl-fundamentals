@@ -261,7 +261,7 @@ function setNormals(gl) {
     +varying vec3 v_normal;
 
     void main() {
-      // 위치를 행렬로 곱하기
+      // 위치에 행렬 곱하기
       gl_Position = u_matrix * a_position;
 
     -  // 색상을 프래그먼트 셰이더로 전달
@@ -353,7 +353,7 @@ attribute vec3 a_normal;
 varying vec3 v_normal;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
 *  gl_Position = u_worldViewProjection * a_position;
 
 *  // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
@@ -423,7 +423,7 @@ uniform mat4 u_worldViewProjection;
 varying vec3 v_normal;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = u_worldViewProjection * a_position;
 
   // 법선의 방향을 정하고 프래그먼트 셰이더로 전달

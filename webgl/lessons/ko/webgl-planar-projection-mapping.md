@@ -419,7 +419,7 @@ uniform mat4 u_view;
 uniform mat4 u_world;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = u_projection * u_view * u_world * a_position;
 }
 </script>

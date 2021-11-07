@@ -51,7 +51,7 @@ TOC: 점 조명
     +varying vec3 v_surfaceToLight;
 
     void main() {
-      // 위치를 행렬로 곱하기
+      // 위치에 행렬 곱하기
       gl_Position = u_worldViewProjection * a_position;
 
       // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
@@ -171,7 +171,7 @@ surface -> light 벡터는 단위 벡터가 아니기 때문에 프래그먼트 
     +varying vec3 v_surfaceToView;
 
     void main() {
-      // 위치를 행렬로 곱하기
+      // 위치에 행렬 곱하기
       gl_Position = u_worldViewProjection * a_position;
 
       // 법선의 방향을 정하고 프래그먼트 셰이더로 전달

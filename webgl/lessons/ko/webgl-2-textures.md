@@ -116,9 +116,9 @@ void main() {
   }
 ```
 
-WebGL에는 "texture unit"이라는 것이 있습니다.
+WebGL에는 "텍스처 유닛"이 있습니다.
 이는 텍스처에 대한 레퍼런스 배열이라 생각할 수 있습니다.
-각 sampler에 대해 사용할 texture unit을 셰이더에 알려줍니다.
+각 sampler에 대해 사용할 텍스처 유닛을 셰이더에 알려줍니다.
 
 ```
   // Sampler location 탐색
@@ -127,15 +127,15 @@ WebGL에는 "texture unit"이라는 것이 있습니다.
 
   ...
 
-  // 함께 렌더링할 texture unit 설정
-  gl.uniform1i(u_image0Location, 0);  // texture unit 0
-  gl.uniform1i(u_image1Location, 1);  // texture unit 1
+  // 함께 렌더링할 텍스처 유닛 설정
+  gl.uniform1i(u_image0Location, 0);  // 텍스처 유닛 0
+  gl.uniform1i(u_image1Location, 1);  // 텍스처 유닛 1
 ```
 
-그런 다음 텍스처를 각각의 texture unit에 할당해야 합니다.
+그런 다음 텍스처를 각각의 텍스처 유닛에 할당해야 합니다.
 
 ```
-  // 특정 텍스처를 사용하도록 각각의 texture unit 설정
+  // 특정 텍스처를 사용하도록 각각의 텍스처 유닛 설정
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, textures[0]);
   gl.activeTexture(gl.TEXTURE1);
@@ -153,9 +153,9 @@ WebGL에는 "texture unit"이라는 것이 있습니다.
 
 몇 가지 살펴봐야 할 것이 있습니다.
 
-Texture unit을 생각하는 간단한 방법: 모든 텍스처 함수는 "active texture unit"에서 작동한다.
-"active texture unit"은 작업하려는 texture unit의 전역 변수입니다.
-각 texture unit은 2가지 target을 가지는데요.
+텍스처 유닛을 생각하는 간단한 방법: 모든 텍스처 함수는 "active texture unit"에서 작동한다.
+"active texture unit"은 작업하려는 텍스처 유닛의 전역 변수입니다.
+각 텍스처 유닛은 2가지 target을 가지는데요.
 TEXTURE_2D target과 TEXTURE_CUBE_MAP target입니다.
 모든 텍스처 함수는 current active texture unit에서 지정된 target과 함께 작동합니다.
 JavaScript로 WebGL을 구현한다면 다음과 같을 겁니다.
@@ -199,15 +199,15 @@ var getContext = function() {
 };
 ```
 
-셰이더는 index를 texture unit으로 가져옵니다.
+셰이더는 인덱스를 텍스처 유닛으로 가져옵니다.
 이 두 줄이 더 명료하게 만들어주길 바랍니다.
 
 ```
-  gl.uniform1i(u_image0Location, 0);  // texture unit 0
-  gl.uniform1i(u_image1Location, 1);  // texture unit 1
+  gl.uniform1i(u_image0Location, 0);  // 텍스처 유닛 0
+  gl.uniform1i(u_image1Location, 1);  // 텍스처 유닛 1
 ```
 
-한 가지 유의해야할 점은, uniform을 사용할 때 texture unit에 대한 index를 사용하지만, gl.activeTexture를 호출할 때는 특수 상수 gl.TEXTURE0, gl.TEXTURE1 등을 전달해야 한다는 겁니다.
+한 가지 유의해야할 점은, 유니폼을 사용할 때 텍스처 유닛에 대한 인덱스를 사용하지만, gl.activeTexture를 호출할 때는 특수 상수 gl.TEXTURE0, gl.TEXTURE1 등을 전달해야 한다는 겁니다.
 다행히 상수는 연속적이므로 이렇게 대체할 수 있습니다.
 
 ```

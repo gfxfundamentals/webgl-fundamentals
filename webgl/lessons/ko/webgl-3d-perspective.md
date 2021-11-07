@@ -58,7 +58,7 @@ Z가 증가할수록, 멀어질수록, 더 작게 그려지는 걸 볼 수 있�
 +uniform float u_fudgeFactor;
 ...
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   vec4 position = u_matrix * a_position;
 
 +  // 나누려는 z 조정
@@ -112,7 +112,7 @@ WebGL은 정점 셰이더의 `gl_Position`에 할당한 x,y,z,w 값을 가져와
 uniform float u_fudgeFactor;
 ...
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   vec4 position = u_matrix * a_position;
 
   // 나누려는 z 조정
@@ -233,7 +233,7 @@ w_out = z_in * fudgeFactor + 1;
 uniform mat4 u_matrix;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = u_matrix * a_position;
   ...
 }

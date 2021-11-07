@@ -198,7 +198,7 @@ function setGeometry(gl) {
 
   // 위치를 넣을 버퍼 생성
   var positionBuffer = gl.createBuffer();
-  // ARRAY_BUFFER에 할당 (ARRAY_BUFFER = positionBuffer)
+  // ARRAY_BUFFER에 바인딩 (ARRAY_BUFFER = positionBuffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 +  // 버퍼에 geometry 데이터 넣기
 +  setGeometry(gl);

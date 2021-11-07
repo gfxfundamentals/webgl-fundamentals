@@ -70,7 +70,7 @@ GPU는 이 값을 가져와서 내부에 저장합니다.
     *varying vec4 v_color;
     ...
     void main() {
-      // 위치를 행렬로 곱하기
+      // 위치에 행렬 곱하기
       gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 
       // 클립 공간에서 색상 공간으로 변환

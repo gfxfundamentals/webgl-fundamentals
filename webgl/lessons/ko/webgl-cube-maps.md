@@ -90,7 +90,7 @@ uniform mat4 u_matrix;
 varying vec3 v_normal;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = u_matrix * a_position;
 
   // 법선 전달

@@ -91,7 +91,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 행렬 설정
       gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-      // texture unit 0에서 텍스처를 가져오도록 셰이더에 지시
+      // 텍스처 유닛 0에서 텍스처를 가져오도록 셰이더에 지시
       gl.uniform1i(textureLocation, 0);
 
       // 사각형 그리기 (삼각형 2개, 정점 6개)
@@ -237,7 +237,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 행렬 설정
       gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-      // texture unit 0에서 텍스처를 가져오도록 셰이더에 지시
+      // 텍스처 유닛 0에서 텍스처를 가져오도록 셰이더에 지시
       gl.uniform1i(textureLocation, 0);
 
       // 사각형 그리기 (삼각형 2개, 정점 6개)
@@ -335,7 +335,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
     +  // 텍스처 행렬 설정
     +  gl.uniformMatrix4fv(textureMatrixLocation, false, texMatrix);
 
-      // texture unit 0에서 텍스처를 가져오도록 셰이더에 지시
+      // 텍스처 유닛 0에서 텍스처를 가져오도록 셰이더에 지시
       gl.uniform1i(textureLocation, 0);
 
       // 사각형 그리기 (삼각형 2개, 정점 6개)

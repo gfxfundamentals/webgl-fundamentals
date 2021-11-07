@@ -27,7 +27,7 @@ attribute vec2 a_position;
 uniform mat3 u_matrix;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
 }
 </script>
@@ -42,7 +42,7 @@ void main() {
 *uniform mat4 u_matrix;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
 *  gl_Position = u_matrix * a_position;
 }
 </script>
@@ -402,7 +402,7 @@ uniform mat4 u_matrix;
 +varying vec4 v_color;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = u_matrix * a_position;
 
 +  // 프래그먼트 셰이더로 색상 전달

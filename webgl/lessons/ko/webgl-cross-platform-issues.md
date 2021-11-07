@@ -99,22 +99,22 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 
   그 이상을 사용한다면 최소값만 지원하는 컴퓨터에서 코드가 실패할 겁니다.
 
-* Texture unit 최대값
+* 텍스처 유닛 최대값
 
   여기에는 3가지 값이 있습니다.
 
-  1. Texture unit 개수
-  2. 정점 셰이더가 참조할 수 있는 texture unit 개수
-  3. 프래그먼트 셰이더가 참조할 수 있는 texture unit 개수
+  1. 텍스처 유닛 개수
+  2. 정점 셰이더가 참조할 수 있는 텍스처 유닛 개수
+  3. 프래그먼트 셰이더가 참조할 수 있는 텍스처 유닛 개수
 
   <table class="tabular-data">
     <thead>
       <tr><th></th><th>WebGL1</th><th>WebGL2</th></tr>
     </thead>
     <tbody>
-      <tr><td>존재하는 texture unit 최소값</td><td>8</td><td>32</td></tr>
-      <tr><td>정점 셰이더가 참조할 수 있는 texture unit 최소값</td><th style="color: red;">0!</td><td>16</td></tr>
-      <tr><td>프래그먼트 셰이더가 참조할 수 있는 texture unit 최소값</td><td>8</td><td>16</td></tr>
+      <tr><td>존재하는 텍스처 유닛 최소값</td><td>8</td><td>32</td></tr>
+      <tr><td>정점 셰이더가 참조할 수 있는 텍스처 유닛 최소값</td><th style="color: red;">0!</td><td>16</td></tr>
+      <tr><td>프래그먼트 셰이더가 참조할 수 있는 텍스처 유닛 최소값</td><td>8</td><td>16</td></tr>
     </tbody>
   </table>
 
@@ -133,9 +133,9 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
     <tr><td>MAX_VERTEX_ATTRIBS              </td><td>가질 수 있는 attribute 개수</td></tr>
     <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>정점 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
     <tr><td>MAX_VARYING_VECTORS             </td><td>가지고 있는 varying 개수</td></tr>
-    <tr><td>MAX_COMBINED_TEXTURE_IMAGE_UNITS</td><td>존재하는 texture unit 개수</td></tr>
-    <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>정점 셰이더가 참조할 수 있는 texture unit 개수</td></tr>
-    <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>프래그먼트 셰이더가 참조할 수 있는 texture unit 개수</td></tr>
+    <tr><td>MAX_COMBINED_TEXTURE_IMAGE_UNITS</td><td>존재하는 텍스처 유닛 개수</td></tr>
+    <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>정점 셰이더가 참조할 수 있는 텍스처 유닛 개수</td></tr>
+    <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>프래그먼트 셰이더가 참조할 수 있는 텍스처 유닛 개수</td></tr>
     <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>프래그먼트 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
     <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>cubemap 최대 크기</td></tr>
     <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>renderbuffer 최대 크기</td></tr>

@@ -135,7 +135,7 @@ function drawCube(aspect) {
   // 행렬 설정
   gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-  // u_texture에 대해 texture unit 0을 사용하도록 셰이더에 지시
+  // u_texture에 대해 텍스처 유닛 0을 사용하도록 셰이더에 지시
   gl.uniform1i(textureLocation, 0);
 
   // Geometry 그리기

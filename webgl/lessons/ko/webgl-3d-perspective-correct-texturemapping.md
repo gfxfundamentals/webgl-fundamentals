@@ -238,7 +238,7 @@ uniform mat4 u_matrix;
 varying vec2 v_texcoord;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = u_matrix * a_position;
 
 +  // 수동으로 W 나누기

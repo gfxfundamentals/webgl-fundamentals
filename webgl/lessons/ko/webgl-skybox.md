@@ -135,7 +135,7 @@ gl.uniformMatrix4fv(
   viewDirectionProjectionInverseMatrix
 );
 
-// u_skybox에 대해 texture unit 0을 사용하도록 셰이더에 지시
+// u_skybox에 대해 텍스처 유닛 0을 사용하도록 셰이더에 지시
 gl.uniform1i(skyboxLocation, 0);
 ```
 

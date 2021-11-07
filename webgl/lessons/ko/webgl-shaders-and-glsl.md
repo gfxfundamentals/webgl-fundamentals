@@ -234,9 +234,9 @@ uniform은 여러 type을 가질 수 있는데요.
 
     var someSamplerLoc = gl.getUniformLocation(someProgram, "u_texture");
 
-렌더링할 때 texture unit에 텍스처를 할당하고
+렌더링할 때 텍스처 유닛에 텍스처를 할당하고
 
-    var unit = 5;  // texture unit 선택
+    var unit = 5;  // 텍스처 유닛 선택
     gl.activeTexture(gl.TEXTURE0 + unit);
     gl.bindTexture(gl.TEXTURE_2D, tex);
 

@@ -183,7 +183,7 @@ varying vec3 v_worldPosition;
 varying vec3 v_worldNormal;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = u_projection * u_view * u_world * a_position;
 
   // View position을 프래그먼트 셰이더로 보내기
@@ -288,7 +288,7 @@ gl.uniformMatrix4fv(viewLocation, false, viewMatrix);
 gl.uniformMatrix4fv(worldLocation, false, worldMatrix);
 gl.uniform3fv(worldCameraPositionLocation, cameraPosition);
 
-// u_texture에 texture unit 0을 사용하도록 셰이더에 지시
+// u_texture에 텍스처 유닛 0을 사용하도록 셰이더에 지시
 gl.uniform1i(textureLocation, 0);
 ```
 

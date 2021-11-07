@@ -195,7 +195,7 @@ const tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 gl.texImage2D(
     gl.TEXTURE_2D,
-    0,                 // 레벨
+    0,                 // mip level
     gl.RGBA,           // 내부 포맷
     2,                 // 너비
     2,                 // 높이
@@ -208,7 +208,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 ```
 
-WebGL은 기본적으로 texture unit 0을 사용하고 uniform은 기본적으로 0이므로 따로 설정할 것은 없습니다.
+WebGL은 기본적으로 텍스처 유닛 0을 사용하고 uniform은 기본적으로 0이므로 따로 설정할 것은 없습니다.
 
 {{{example url="../webgl-simple-point-w-texture.html"}}}
 

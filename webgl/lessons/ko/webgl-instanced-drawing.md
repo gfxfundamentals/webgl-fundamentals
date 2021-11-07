@@ -19,7 +19,7 @@ attribute vec4 a_position;
 uniform mat4 matrix;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = matrix * a_position;
 }
 </script>
@@ -187,7 +187,7 @@ attribute vec4 a_position;
 +varying vec4 v_color;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = matrix * a_position;
 
 +  // 프래그먼트 셰이더로 정점 색상 전달
@@ -410,7 +410,7 @@ attribute mat4 matrix;
 varying vec4 v_color;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
 -  gl_Position = matrix * a_position;
 +  gl_Position = projection * view * matrix * a_position;
 

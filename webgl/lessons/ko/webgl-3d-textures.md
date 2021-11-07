@@ -22,7 +22,7 @@ WebGL에서 어떻게 텍스처를 적용할까요?
     *varying vec2 v_texcoord;
 
     void main() {
-      // 위치를 행렬로 곱하기
+      // 위치에 행렬 곱하기
       gl_Position = u_matrix * a_position;
 
     *  // texcoord를 프래그먼트 셰이더로 전달
@@ -460,7 +460,7 @@ WebGL이 "texture complete"여야 하는데요.
 이게 가장 좋은 이유는 로드하는 텍스처가 하나뿐이기 때문에 셰이더는 하나의 텍스처만을 참조하여 단순하게 유지되며, 평면으로 나누는 경우처럼 텍스처당 한 번씩 그리기 호출을 하는 대신에 단 한번의 그리기 호출만 필요하기 때문입니다.
 
 여기서 다룬 것 이외에 알고 싶을 수 있는 텍스처 관련 글들이 있는데요.
-먼저 [texture unit state 작동 방식](webgl-texture-units.html)입니다.
+먼저 [텍스처 유닛 상태 작동 방식](webgl-texture-units.html)입니다.
 그리고 [한 번에 2개 이상의 텍스처를 사용하는 방법](webgl-2-textures.html)입니다.
 또 다른 것은 [다른 도메인의 이미지를 사용하는 방법](webgl-cors-permission.html)이 있습니다.
 마지막으로 어찌보면 사소하지만 알아두면 좋은 [원근 교정 텍스처 매핑](webgl-3d-perspective-correct-texturemapping.html)입니다.

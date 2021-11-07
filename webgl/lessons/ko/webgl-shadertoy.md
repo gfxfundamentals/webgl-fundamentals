@@ -2,6 +2,7 @@ Title: WebGL Shadertoy
 Description: Shadertoy 셰이더
 TOC: Shadertoy
 
+
 이 글은 [기초](webgl-fundamentals.html)로 시작한 다른 글을 이미 읽었다고 가정합니다.
 아직 읽지 않았다면 거기부터 시작해주세요.
 
@@ -430,73 +431,65 @@ Shadertoy는 *"데이터가 없고 입력을 거의 받지 않는 함수만 있�
 <div class="webgl_center"><img src="resources/shadertoy-dolphin.png" style="width: 639px;"></div>
 
 이는 아름답지만 제 중급 노트북의 작은 창(640x360)에서 초당 19프레임으로 작동합니다.
-Expand the window to fullscreen and it runs around 2 or 3 frames per second.
-Testing on my higher spec desktop it still only hits 45 frames per second at 640x360 and maybe 10 fullscreen.
+창을 전체화면으로 확장하면 초당 2~3프레임으로 실행됩니다.
+더 높은 스펙의 컴퓨터에서 테스트해도 여전히 640x360에서 45프레임이고 전체화면에서 10프레임에 불과합니다.
 
-Compare it to this game that's also fairly beautiful and yet runs at 30 to 60 frames per second even on lower-powered GPUs
+이 게임과 비교해보면 이것도 상당히 아릅답지만 저전력 GPU에서 초당 30~60프레임으로 실행됩니다.
 
 <iframe class="webgl_center" style="width:560px; height: 360px;" src="https://www.youtube-nocookie.com/embed/7v9gZK9HqqI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-This is because the game uses best practices drawing things with textured triangles instead of complex math.
+이는 게임이 복잡한 수식 대신에 텍스처를 사용한 삼각형으로 그리는 모범 사례를 사용했기 때문입니다.
 
-So, please take that to heart. The examples on Shadertoy are simply amazing in part because now you know they are made under the extreme limit of almost no data and are complex functions that draw pretty pictures.
-As such they are a thing of wonder.
+그러니 부디 명심해주시길 바랍니다.
+Shadertoy에 있는 예제들은 데이터가 거의 없는 극한의 제약 아래 만들어지고 예쁜 그림을 그리는 복잡한 함수라는 것을 알기에 정말로 놀랍습니다.
+또한 많은 수학을 배울 수 있는 좋은 방법입니다.
 
-They are also a great way to learn a lot of math.
-But, they are also not remotely the way you get a performant WebGL app.
-So please keep that in mind.
+하지만 성능 좋은 WebGL을 얻을 수 있는 방법은 아닙니다.
+그러니 꼭 명심해주세요.
 
-Otherwise, if you want to run more Shadertoy shaders you'll need to provide a few more uniforms.
-Here's a list of the uniforms Shadertoy provides.
+그러지 않고 더 많은 Shadertoy 셰이더를 실행하고 싶다면 몇 가지 유니폼을 더 제공해야 합니다.
+다음은 Shadertoy가 제공하는 유니폼 목록입니다.
 
 <div class="webgl_center"><table  class="tabular-data tabular-data1">
 <thead><tr><td>type</td><td>name</td><td>where</td><td>description</td></tr></thead>
 <tbody>
-<tr><td><b>vec3</b></td><td><b>iResolution</b></td><td>image / buffer</td><td>The viewport resolution (z is pixel aspect ratio, usually 1.0)</td></tr>
-<tr><td><b>float</b></td><td><b>iTime</b></td><td>image / sound / buffer</td><td>Current time in seconds</td></tr>
-<tr><td><b>float</b></td><td><b>iTimeDelta</b></td><td>image / buffer</td><td>Time it takes to render a frame, in seconds</td></tr>
-<tr><td><b>int</b></td><td><b>iFrame</b></td><td>image / buffer</td><td>Current frame</td></tr>
-<tr><td><b>float</b></td><td><b>iFrameRate</b></td><td>image / buffer</td><td>Number of frames rendered per second</td></tr>
-<tr><td><b>float</b></td><td><b>iChannelTime[4]</b></td><td>image / buffer</td><td>Time for channel (if video or sound), in seconds</td></tr>
-<tr><td><b>vec3</b></td><td><b>iChannelResolution[4]</b></td><td>image / buffer / sound</td><td>Input texture resolution for each channel</td></tr>
-<tr><td><b>vec4</b></td><td><b>iMouse</b></td><td>image / buffer</td><td>xy = current pixel coords (if LMB is down). zw = click pixel</td></tr>
-<tr><td><b>sampler2D</b></td><td><b>iChannel{i}</b></td><td>image / buffer / sound</td><td>Sampler for input textures i</td></tr>
+<tr><td><b>vec3</b></td><td><b>iResolution</b></td><td>image / buffer</td><td>뷰포트 해상도 (z는 픽셀 종횡비, 일반적으로 1.0)</td></tr>
+<tr><td><b>float</b></td><td><b>iTime</b></td><td>image / sound / buffer</td><td>초 단위 현재 시간</td></tr>
+<tr><td><b>float</b></td><td><b>iTimeDelta</b></td><td>image / buffer</td><td>프레임 렌더링에 걸리는 초 단위 시간</td></tr>
+<tr><td><b>int</b></td><td><b>iFrame</b></td><td>image / buffer</td><td>현재 프레임</td></tr>
+<tr><td><b>float</b></td><td><b>iFrameRate</b></td><td>image / buffer</td><td>초당 렌더링되는 프레임 수</td></tr>
+<tr><td><b>float</b></td><td><b>iChannelTime[4]</b></td><td>image / buffer</td><td>비디오나 오디오인 경우 초 단위 채널 시간</td></tr>
+<tr><td><b>vec3</b></td><td><b>iChannelResolution[4]</b></td><td>image / buffer / sound</td><td>각 채널에 대한 입력 텍스처 해상도</td></tr>
+<tr><td><b>vec4</b></td><td><b>iMouse</b></td><td>image / buffer</td><td>xy = 현재 픽셀 좌표 (if LMB is down), zw = 클릭 픽셀</td></tr>
+<tr><td><b>sampler2D</b></td><td><b>iChannel{i}</b></td><td>image / buffer / sound</td><td>입력 텍스처 i에 대한 샘플러</td></tr>
 <tr><td><b>vec4</b></td><td><b>iDate</b></td><td>image / buffer / sound</td><td>Year, month, day, time in seconds in .xyzw</td></tr>
-<tr><td><b>float</b></td><td><b>iSampleRate</b></td><td>image / buffer / sound</td><td>The sound sample rate (typically 44100)</td></tr>
+<tr><td><b>float</b></td><td><b>iSampleRate</b></td><td>image / buffer / sound</td><td>사운드 샘플 레이트 (일반적으로 44100)</td></tr>
 </tbody></table></div>
 
-Notice `iMouse` and `iResolution` are actually supposed to be
-a `vec4` and a `vec3` respectively so you may need to adjust
-those to match.
+`iMouse`와 `iResolution`은 각각 `vec4`와 `vec3`로 되어 있으므로 이에 맞도록 조정해야할 수 있습니다.
 
-`iChannel` are textures so if the shader needs them you'll need
-to provide [textures](webgl-3d-textures.html).
+`iChannel`은 텍스처이기 때문에 셰이더에서 사용하려면 [텍스처](webgl-3d-textures.html)를 제공해야 합니다.
 
-Shadertoy also lets you use multiple shaders to render to
-offscreen textures so if a shader needs those you'll need to setup
-[textures to render to](webgl-render-to-texture.html).
+또한 Shadertoy로 여러 셰이더를 사용하여 오프스크린 텍스처를 렌더링할 수 있으므로 셰이더에 이런 게 필요할 경우 [렌더링할 텍스처](webgl-render-to-texture.html)를 설정해야 합니다.
 
-The "where" column indicates which uniforms are
-available in which shaders. "image" is a shader
-that renders to the canvas. "buffer" is a shader
-that renders to an offscreen texture. "sound" is
-a shader where [your shader is expected to generate
-sound data into a texture](https://stackoverflow.com/questions/34859701/how-do-shadertoys-audio-shaders-work).
+"where" 열은 어느 셰이더에서 어떤 유니폼을 사용할 수 있는지 나타냅니다.
+"image"는 캔버스에 렌더링하는 셰이더입니다.
+"buffer"는 오프스크린 텍스처에 렌더링하는 셰이더입니다.
+"sound"는 [사운드 데이터를 텍스처로 생성할 것으로 예상되는 셰이더](https://stackoverflow.com/questions/34859701/how-do-shadertoys-audio-shaders-work)입니다.
 
-One last thing is some shaders on shadertoy require [WebGL2](https://webgl2fundamentals.org).
+마지막으로 shadertoy의 일부 셰이더는 [WebGL2](https://webgl2fundamentals.org)를 필요로 합니다.
 
-I hope this helped explain Shadertoy. It's a great site with amazing works
-but is good to know what's really going on. If you want to learn more about
-the techniques used in these kinds of shader 2 good resources are
-[the blog of the person that created the shadertoy website]("https://www.iquilezles.org/www/index.htm) and [The Book of Shaders](https://thebookofshaders.com/) (which is a little misleading since it really only covers the kind of shaders used on shadertoy, not the kind used in performant apps and games. Still, it's a great resource!
+이 글이 Shadertoy 설명에 도움이 되었기를 바랍니다.
+놀라운 작품들이 있는 훌륭한 사이트지만 실제로 무슨 일이 일어나는건지 아는 게 좋습니다.
+이러한 종류의 셰이더에 사용된 기술에 대해 배우고 싶다면 [Shadertoy를 만든 사람의 블로그]("https://www.iquilezles.org/www/index.htm)와 [The Book of Shaders](https://thebookofshaders.com/) 등의 좋은 리소스가 있는데요.
+성능 좋은 앱이나 게임이 아니라 shadertoy에 사용되는 종류의 셰이더만 다루기 때문에 오해의 소지가 있지만 그래도 여전히 좋은 리소스입니다!
 
 <div class="webgl_bottombar" id="pixel-coords">
-<h3>Pixel Coordinates</h3>
-<p>Pixel coordinates in WebGL
-are referenced by their edges. So for example if we had a canvas that was 3x2 pixels big then
-the value for <code>gl_FragCoord</code> at the pixel 2
-from the left and 1 from the bottom
-would be 2.5, 1.5
+<h3>픽셀 좌표</h3>
+<p>
+WebGL에서 픽셀 좌표는 가장자리를 참조합니다.
+예를 들어 3x2 픽셀 크기의 캔버스의 경우 왼쪽에서 2픽셀이고 아래쪽에서 1픽셀인 <code>gl_FragCoord</code>의 값은 2.5와 1.5가 됩니다.
 </p>
 <div class="webgl_center"><img src="resources/webgl-pixels.svg" style="width: 500px;"></div>
 </div>
+

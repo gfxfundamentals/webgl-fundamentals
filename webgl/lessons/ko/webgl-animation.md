@@ -71,7 +71,7 @@ WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할
 
     // 장면 그리기
     *function drawScene(now) {
-    *  // 시간을 초단위로 변환
+    *  // 시간을 초 단위로 변환
     *  now *= 0.001;
     *  // 현재 시간에서 이전 시간 빼기
     *  var deltaTime = now - then;

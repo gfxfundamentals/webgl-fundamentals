@@ -56,12 +56,12 @@ WebGL은 두 번째 방법으로 동작하는데요.
 *   Viewport와 전역 상태를 지우고 설정
     (depth testing 활성화, culling 활성화, 등등..)
 *   그리려는 각각에 대해
-    *   그려야 하는 program에 대해 `gl.useProgram` 호출
-    *   그리려는 것에 대한 attribute 설정
-        *   각각의 attribute에 대해 `gl.bindBuffer`, `gl.vertexAttribPointer`, `gl.enableVertexAttribArray` 호출
-    *   그리려는 것에 대한 uniform 설정
-        *   각각의 uniform에 대한 `gl.uniformXXX` 호출
-        *   `gl.activeTexture`와 `gl.bindTexture`를 호출하여 texture unit에 텍스처 할당
+    *   그려야 하는 프로그램에 대해 `gl.useProgram` 호출
+    *   그리려는 것에 대한 속성 설정
+        *   각각의 속성에 대해 `gl.bindBuffer`, `gl.vertexAttribPointer`, `gl.enableVertexAttribArray` 호출
+    *   그리려는 것에 대한 유니폼 설정
+        *   각각의 유니폼에 대한 `gl.uniformXXX` 호출
+        *   `gl.activeTexture`와 `gl.bindTexture`를 호출하여 텍스처 유닛에 텍스처 할당
     *   `gl.drawArrays` 혹은 `gl.drawElements` 호출
 
 기본적으로 이렇습니다.
