@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-pulling-vertices.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of GFXFundamentals. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Pulling Vertices" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="Using independent indices" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Pulling Vertices" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html" />
-<meta name="twitter:description" content="Using independent indices" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="독립적인 인덱스 사용">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-pulling-vertices_ko.jpg">
+
+<meta property="og:title" content="WebGL Pulling Vertices">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-pulling-vertices_ko.jpg">
+<meta property="og:description" content="독립적인 인덱스 사용">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL Pulling Vertices">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html">
+<meta name="twitter:description" content="독립적인 인덱스 사용">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-pulling-vertices_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-pulling-vertices_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html",
+      "inLanguage":"ko",
+      "name":"WebGL Pulling Vertices",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
 <title>WebGL Pulling Vertices</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-pulling-vertices.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-pulling-vertices.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-pulling-vertices.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-pulling-vertices.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-pulling-vertices.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-pulling-vertices.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-pulling-vertices.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -183,9 +240,380 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-pulling-vertices.html">여기</a>에 있습니다.</p>
+      <p>이 글은 <a href="webgl-fundamentals.html">기초</a>를 포함한 다른 글들을 이미 읽었다고 가정합니다.
+아직 읽지 않았다면 거기부터 시작해주세요.</p>
+<p>전통적으로 WebGL 앱은 지오메트리 데이터를 버퍼에 넣습니다.
+그런 다음 속성을 사용하여 정점 데이터를 버퍼에서 정점 셰이더로 전달하고, 이를 클립 공간으로 변환하기 위한 코드를 프로그래머가 작성합니다.</p>
+<p><strong>전통적</strong>이란 단어가 중요합니다.
+이런 식으로 하는 것은 <strong>전통</strong>일 뿐입니다.
+결코 요구사항이 아닌데요.
+WebGL은 우리가 어떻게 하든 상관하지 않으며, 정점 셰이더가 클립 공간 좌표를 <code class="notranslate" translate="no">gl_Position</code>에 할당하는 것만 신경씁니다.</p>
+<p><a href="webgl-3d-textures.html">텍스처에 대한 글</a>의 예제와 같은 코드를 사용하여 텍스처가 매핑된 큐브를 그려봅시다.
+최소 24개의 고유한 정점이 필요하다고 말했었는데요.
+이는 모서리 위치가 8개여도 동일한 모서리가 큐브의 다른 면 3개에 사용되고 각 면이 다른 텍스처 좌표가 필요하기 때문입니다.</p>
+<div class="webgl_center"><img src="../resources/cube-vertices-uv.svg" style="width: 400px;"></div>
+
+<p>위 다이어그램에서 왼쪽 면이 사용하는 3번 모서리는 텍스처 좌표 1,1이 필요하지만 오른쪽 면이 사용하는 3번 모서리는 텍스처 좌표 0,1이 필요합니다.
+윗면도 다른 텍스처 좌표가 필요할 겁니다.</p>
+<p>이는 일반적으로 8개의 모서리 위치에서 24개의 정점으로 확장됩니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">  // 앞쪽
+  { pos: [-1, -1,  1], uv: [0, 1], }, // 0
+  { pos: [ 1, -1,  1], uv: [1, 1], }, // 1
+  { pos: [-1,  1,  1], uv: [0, 0], }, // 2
+  { pos: [ 1,  1,  1], uv: [1, 0], }, // 3
+  // 오른쪽
+  { pos: [ 1, -1,  1], uv: [0, 1], }, // 4
+  { pos: [ 1, -1, -1], uv: [1, 1], }, // 5
+  { pos: [ 1,  1,  1], uv: [0, 0], }, // 6
+  { pos: [ 1,  1, -1], uv: [1, 0], }, // 7
+  // 뒤쪽
+  { pos: [ 1, -1, -1], uv: [0, 1], }, // 8
+  { pos: [-1, -1, -1], uv: [1, 1], }, // 9
+  { pos: [ 1,  1, -1], uv: [0, 0], }, // 10
+  { pos: [-1,  1, -1], uv: [1, 0], }, // 11
+  // 왼쪽
+  { pos: [-1, -1, -1], uv: [0, 1], }, // 12
+  { pos: [-1, -1,  1], uv: [1, 1], }, // 13
+  { pos: [-1,  1, -1], uv: [0, 0], }, // 14
+  { pos: [-1,  1,  1], uv: [1, 0], }, // 15
+  // 위쪽
+  { pos: [ 1,  1, -1], uv: [0, 1], }, // 16
+  { pos: [-1,  1, -1], uv: [1, 1], }, // 17
+  { pos: [ 1,  1,  1], uv: [0, 0], }, // 18
+  { pos: [-1,  1,  1], uv: [1, 0], }, // 19
+  // 아래쪽
+  { pos: [ 1, -1,  1], uv: [0, 1], }, // 20
+  { pos: [-1, -1,  1], uv: [1, 1], }, // 21
+  { pos: [ 1, -1, -1], uv: [0, 0], }, // 22
+  { pos: [-1, -1, -1], uv: [1, 0], }, // 23
+</code></pre>
+<p>이러한 위치와 텍스처 좌표를 버퍼에 저장되고 속성을 통해 정점 셰이더에 제공됩니다.</p>
+<p>하지만 꼭 이런 식으로 해야 할까요?
+실제로 모서리 8개와 텍스처 좌표 4개만 있으면 어떨까요?</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">positions = [
+  -1, -1,  1,  // 0
+   1, -1,  1,  // 1
+  -1,  1,  1,  // 2
+   1,  1,  1,  // 3
+  -1, -1, -1,  // 4
+   1, -1, -1,  // 5
+  -1,  1, -1,  // 6
+   1,  1, -1,  // 7
+];
+uvs = [
+  0, 0,  // 0
+  1, 0,  // 1
+  0, 1,  // 2
+  1, 1,  // 3
+];
+</code></pre>
+<p>그런 다음 24개의 정점 각각에 대해 사용할 정점을 지정합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">positionIndexUVIndex = [
+  // 앞쪽
+  0, 1, // 0
+  1, 3, // 1
+  2, 0, // 2
+  3, 2, // 3
+  // 오른쪽
+  1, 1, // 4
+  5, 3, // 5
+  3, 0, // 6
+  7, 2, // 7
+  // 뒤쪽
+  5, 1, // 8
+  4, 3, // 9
+  7, 0, // 10
+  6, 2, // 11
+  // 왼쪽
+  4, 1, // 12
+  0, 3, // 13
+  6, 0, // 14
+  2, 2, // 15
+  // 위쪽
+  7, 1, // 16
+  6, 3, // 17
+  3, 0, // 18
+  2, 2, // 19
+  // 아래쪽
+  1, 1, // 20
+  0, 3, // 21
+  5, 0, // 22
+  4, 2, // 23
+];
+</code></pre>
+<p>이걸 GPU에서 사용할 수 있을까요?</p>
+<p>위치와 텍스처 좌표를 각각의 텍스처에 업로드할 텐데요.
+먼저 부동 소수점 텍스처를 확인하고 활성화하여 위치를 텍스처에 넣기 쉽도록 만듭니다.
+그렇지 않으면 다른 방식으로 인코딩해야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const gl = canvas.getContext(&quot;webgl&quot;);
+if (!gl) {
+  return;
+}
++const ext = gl.getExtension(&#39;OES_texture_float&#39;);
++if (!ext) {
++  alert(&#39;need OES_texture_float&#39;);
++  return;
++}
+</code></pre>
+<p>그런 다음 <a href="webgl-data-textures.html">데이터 텍스처에 대한 글</a>에서 다룬 것처럼 데이터를 텍스처에 넣을 겁니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function makeDataTexture(gl, data, numComponents) {
+  // 픽셀당 4개의 값으로 데이터를 확장합니다.
+  const numElements = data.length / numComponents;
+  const expandedData = new Float32Array(numElements * 4);
+  for (let i = 0; i &lt; numElements; ++i) {
+    const srcOff = i * numComponents;
+    const dstOff = i * 4;
+    for (let j = 0; j &lt; numComponents; ++j) {
+      expandedData[dstOff + j] = data[srcOff + j];
+    }
+  }
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,            // mip level
+      gl.RGBA,      // 포맷
+      numElements,  // 너비
+      1,            // 높이
+      0,            // 테두리
+      gl.RGBA,      // 포맷
+      gl.FLOAT,     // 타입
+      expandedData,
+  );
+  // 2의 거듭제곱이 아닌 텍스처를 사용할 수 있도록 만들면 필터링이 필요하지 않습니다.
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  return tex;
+}
+
+const positionTexture = makeDataTexture(gl, positions, 3);
+const texcoordTexture = makeDataTexture(gl, uvs, 2);
+</code></pre>
+<p>텍스처는 픽셀당 최대 4개의 값을 가지기 때문에 <code class="notranslate" translate="no">makeDataTexture</code>는 우리가 제공하는 데이터를 픽셀당 4개의 값으로 확장합니다.</p>
+<p>다음으로 위치와 텍스처 좌표 인덱스를 버퍼에 업로드해야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 위치와 UV 인덱스용 버퍼 생성
+const positionIndexUVIndexBuffer = gl.createBuffer();
+// ARRAY_BUFFER에 바인딩 (ARRAY_BUFFER = positionBuffer)
+gl.bindBuffer(gl.ARRAY_BUFFER, positionIndexUVIndexBuffer);
+// 위치와 텍스처 좌표 인덱스를 버퍼에 넣기
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positionIndexUVIndex), gl.STATIC_DRAW);
+</code></pre>
+<p>24개의 정점만 필요더라도 여전히 6개의 면, 12개의 삼각형, 36개의 정점을 그려야 합니다.</p>
+<p>각 면에 사용할 6개의 정점을 전달하기 위해 <a href="webgl-indexed-vertices.html">정점 인덱스</a>를 사용할 겁니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const indices = [
+   0,  1,  2,   2,  1,  3,  // 앞쪽
+   4,  5,  6,   6,  5,  7,  // 오른쪽
+   8,  9, 10,  10,  9, 11,  // 뒤쪽
+  12, 13, 14,  14, 13, 15,  // 왼쪽
+  16, 17, 18,  18, 17, 19,  // 위쪽
+  20, 21, 22,  22, 21, 23,  // 아래쪽
+];
+// 인덱스 버퍼 생성
+const indexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+// 버퍼에 인덱스 넣기
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+</code></pre>
+<p>큐브에 이미지를 그리고 싶다면 3번째 텍스처가 필요합니다.
+체커보드로 또 다른 4x4 데이터 텍스처를 만들어봅시다.
+픽셀당 1바이트만 필요하기 때문에 <code class="notranslate" translate="no">gl.LUMINANCE</code> 포맷을 사용할 겁니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 체커 텍스처 생성
+const checkerTexture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, checkerTexture);
+// 4x4 회색 체커보드로 텍스처 채우기
+gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,
+    gl.LUMINANCE,
+    4,
+    4,
+    0,
+    gl.LUMINANCE,
+    gl.UNSIGNED_BYTE,
+    new Uint8Array([
+      0xDD, 0x99, 0xDD, 0xAA,
+      0x88, 0xCC, 0x88, 0xDD,
+      0xCC, 0x88, 0xCC, 0xAA,
+      0x88, 0xCC, 0x88, 0xCC,
+    ]),
+);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+</code></pre>
+<p>정점 셰이더를 보면... 이런 식으로 텍스처에서 픽셀을 찾을 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">vec4 texelFetch(sampler2D tex, vec2 texSize, vec2 pixelCoord) {
+  vec2 uv = (pixelCoord + 0.5) / texSize;
+  return texture2D(tex, uv);
+}
+</code></pre>
+<p>따라서 정수 픽셀 좌표와 픽셀 단위의 텍스처 크기가 주어지면 위 코드는 픽셀 값을 가져옵니다.
+왜 <code class="notranslate" translate="no">+ 0.5</code>인지 궁금하다면 <a href="webgl-skinning.html">스키닝에 대한 글</a>을 봐주세요.</p>
+<p><code class="notranslate" translate="no">texelFetch</code> 함수를 사용하여 다음과 같이 1차원 배열 인덱스를 가져와 2D 텍스처에서 값을 찾을 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">vec4 getValueByIndexFromTexture(sampler2D tex, vec2 texSize, float index) {
+  float col = mod(index, texSize.x);
+  float row = floor(index / texSize.x);
+  return texelFetch(tex, texSize, vec2(col, row));
+}
+</code></pre>
+<p>So given those 2 functions here is our shader.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec2 positionAndTexcoordIndices;
+
+uniform sampler2D positionTexture;
+uniform vec2 positionTextureSize;
+uniform sampler2D texcoordTexture;
+uniform vec2 texcoordTextureSize;
+
+uniform mat4 u_matrix;
+
+varying vec2 v_texcoord;
+
+vec4 texelFetch(sampler2D tex, vec2 texSize, vec2 pixelCoord) {
+  vec2 uv = (pixelCoord + 0.5) / texSize;
+  return texture2D(tex, uv);
+} 
+
+vec4 getValueByIndexFromTexture(sampler2D tex, vec2 texSize, float index) {
+  float col = mod(index, texSize.x);
+  float row = floor(index / texSize.x);
+  return texelFetch(tex, texSize, vec2(col, row));
+}
+
+void main() {
+  float positionIndex = positionAndTexcoordIndices.x;
+  vec3 position = getValueByIndexFromTexture(
+      positionTexture, positionTextureSize, positionIndex).xyz;
+
+  // 위치에 행렬 곱하기
+  gl_Position = u_matrix * vec4(position, 1);
+
+  float texcoordIndex = positionAndTexcoordIndices.y;
+  vec2 texcoord = getValueByIndexFromTexture(
+      texcoordTexture, texcoordTextureSize, texcoordIndex).xy;
+
+  // texcoord를 프래그먼트 셰이더에 전달
+  v_texcoord = texcoord;
+}
+</code></pre>
+<p>아래쪽에는 <a href="webgl-3d-textures.html">텍스처에 대한 글</a>에서 사용한 것과 사실상 동일한 셰이더가 있습니다.
+<code class="notranslate" translate="no">position</code>을 <code class="notranslate" translate="no">u_matrix</code>로 곱하고 <code class="notranslate" translate="no">texcoord</code>를 <code class="notranslate" translate="no">v_texcoord</code>로 출력하여 프래그먼트 셰이더로 전달합니다.</p>
+<p>차이점은 오직 <code class="notranslate" translate="no">position</code>과 <code class="notranslate" translate="no">texcoord</code>를 얻는 방법입니다.
+전달한 인덱스를 사용하여 각각의 텍스처에서 해당 값을 가져옵니다.</p>
+<p>셰이더를 사용하기 위해 모든 위치를 찾아야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// GLSL 프로그램 설정
+const program = webglUtils.createProgramFromScripts(gl, [&quot;vertex-shader-3d&quot;, &quot;fragment-shader-3d&quot;]);
+
++// 정점 데이터가 어디로 가야하는지 탐색
++const posTexIndexLoc = gl.getAttribLocation(
++    program, &quot;positionAndTexcoordIndices&quot;);
++
++// 유니폼 탐색
++const matrixLoc = gl.getUniformLocation(program, &quot;u_matrix&quot;);
++const positionTexLoc = gl.getUniformLocation(program, &quot;positionTexture&quot;);
++const positionTexSizeLoc = gl.getUniformLocation(program, &quot;positionTextureSize&quot;);
++const texcoordTexLoc = gl.getUniformLocation(program, &quot;texcoordTexture&quot;);
++const texcoordTexSizeLoc = gl.getUniformLocation(program, &quot;texcoordTextureSize&quot;);
++const u_textureLoc = gl.getUniformLocation(program, &quot;u_texture&quot;);
+</code></pre>
+<p>렌더링할 때 속성을 설정합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 프로그램(셰이더 쌍)을 사용하도록 지시
+gl.useProgram(program);
+
++// positionIndexUVIndex 버퍼 바인딩
++gl.bindBuffer(gl.ARRAY_BUFFER, positionIndexUVIndexBuffer);
++
++// 위치 인덱스 속성 활성화
++gl.enableVertexAttribArray(posTexIndexLoc);
++
++// positionIndexUVIndexBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 position/texcoord 인덱스 속성에 지시
++{
++  const size = 2;          // 반복마다 2개의 컴포넌트
++  const type = gl.FLOAT;   // 데이터는 32bit float
++  const normalize = false; // 데이터 정규화 안 함
++  const stride = 0;        // 0 = 다음 위치를 가져오기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
++  const offset = 0;        // 버퍼의 처음부터 시작
++  gl.vertexAttribPointer(posTexIndexLoc, size, type, normalize, stride, offset);
++}
+</code></pre>
+<p>정점당 위치 인덱스 1개와 텍스처 좌표 인덱스 1개이기 때문에 크기는 2입니다.</p>
+<p>그런 다음 정점 인덱스를 설정합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 인덱스 설정
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+</code></pre>
+<p>그리고 3개의 텍스처를 모두 바인딩하고 유니폼을 전부 설정합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 행렬 설정
+gl.uniformMatrix4fv(matrixLoc, false, matrix);
+
+// 텍스처 유닛 0에 positionTexture 넣기
+gl.activeTexture(gl.TEXTURE0);
+gl.bindTexture(gl.TEXTURE_2D, positionTexture);
+// positionTexture에 텍스처 유닛 0을 사용하도록 셰이더에 지시
+gl.uniform1i(positionTexLoc, 0);
+// 셰이더에 positionTexture의 크기를 알림
+gl.uniform2f(positionTexSizeLoc, positions.length / 3, 1);
+
+// 텍스처 유닛 1에 texcoordTexture 넣기
+gl.activeTexture(gl.TEXTURE0 + 1);
+gl.bindTexture(gl.TEXTURE_2D, texcoordTexture);
+// texcoordTexture에 텍스처 유닛 1을 사용하도록 셰이더에 지시
+gl.uniform1i(texcoordTexLoc, 1);
+// 셰이더에 texcoordTexture의 크기를 알림
+gl.uniform2f(texcoordTexSizeLoc, uvs.length / 2, 1);
+
+// 텍스처 유닛 2에 checkerTexture 넣기
+gl.activeTexture(gl.TEXTURE0 + 2);
+gl.bindTexture(gl.TEXTURE_2D, checkerTexture);
+// u_texture에 텍스처 유닛 2를 사용하도록 셰이더에 지시
+gl.uniform1i(u_textureLoc, 2);
+</code></pre>
+<p>마지막으로 그립니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 지오메트리 그리기
+gl.drawElements(gl.TRIANGLES, 6 * 6, gl.UNSIGNED_SHORT, 0);
+</code></pre>
+<p>그러면 8개의 위치과 4개의 텍스처 좌표만을 사용하여 텍스처 큐브를 얻습니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-pulling-vertices.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-pulling-vertices.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>참고할 사항이 있습니다.
+이 코드는 느리고 위치와 텍스처 좌표에 대해 1차원 텍스처를 사용합니다.
+그리고 텍스처는 매우 넓을 수 밖에 없는데요.
+얼마나 넓은지는 <a href="https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE">머신 스펙</a>에 따르며 다음과 같이 쿼리할 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+</code></pre>
+<p>그보다 많은 데이터를 처리하려면 데이터에 맞는 텍스처 크기를 선택하고, 사각형을 만들기 위해 데이터를 여러 행에 분산하여 마지막 행을 채웁니다.</p>
+<p>여기서 하는 또 다른 일은 위치용 하나, 텍스처 좌표용 하나, 총 2개의 텍스처를 사용하는 겁니다.
+인터리브 처리된 동일한 텍스처에 두 데이터를 넣어도 됩니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">pos,uv,pos,uv,pos,uv...
+</code></pre><p>혹은 텍스처의 다른 위치에 넣을 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">pos,pos,pos,...
+uv, uv, uv,...
+</code></pre><p>텍스처에서 이것들을 어떻게 가져오는지 계산하는 정점 셰이더의 수식만 변경하면 됩니다.</p>
+<p>떠오르는 질문으로, 꼭 이런식으로 해야 할까요?
+대답은 &quot;GPU에 달려있다&quot;입니다.
+GPU에 따라 기존의 방식보다 느릴 수 있습니다.</p>
+<p>이 글의 요점은 WebGL이 클립 공간 좌표로 <code class="notranslate" translate="no">gl_Position</code>을 설정하는 방법과 <code class="notranslate" translate="no">gl_FragColor</code>를 설정하는 방법에 대해 신경쓰지 않는다는 겁니다.
+설정하는 방법은 여러분이 생각하면 되는데요.
+텍스처는 무작위 접근 데이터의 2차원 배열일 뿐입니다.</p>
+<p>WebGL에서 해결하려는 문제가 있을 때 WebGL은 셰이더를 실행하고 이러한 셰이더는 유니폼(전역 변수), 속성(정점 셰이더의 반복마다 가져오는 데이터), 텍스처(무작위 접근 2차원 배열)를 통해 데이터에 접근 가능함을 기억하세요.
+사용한 기존의 방법으로 인해 WebGL이 가지는 유연성을 못 보는 일이 없으시길 바랍니다.</p>
+<div class="webgl_bottombar">
+<h3>왜 Vertex Pulling이라고 부르나요?</h3>
+<p>
+저는 이전부터 이 기술을 사용했음에도 최근(2019년 7월)에서야 이 용어를 들었습니다.
+Daniel Rakos의 <a href='https://www.google.com/search?q=OpenGL+Insights+"Programmable+Vertex+Pulling"+article+by+Daniel+Rakos'>OpenGL Insights "Programmable Vertex Pulling"</a>이라는 글에서 가져왔는데요.
+</p>
+<p>
+It's called vertex *pulling* since it's the vertex shader that decides which vertex data to read vs the traditional way where vertex data is supplied automatically via attributes.
+사실상 정점 셰이더는 메모리에서 데이터를 *pulling*합니다.
+</p>
+</div>
+
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +629,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
@@ -330,7 +759,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li>참고</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
-<li><a href="/webgl/lessons/ko/webgl-texture-units.html">Texture Unit</a></li>
+<li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
 <li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
@@ -341,13 +770,50 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL Pulling Vertices';
+            var disqus_title = 'WebGL Pulling Vertices';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {

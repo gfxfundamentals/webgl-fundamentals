@@ -395,7 +395,7 @@ varying vec3 v_worldPosition;
 varying vec3 v_worldNormal;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = u_projection * u_view * u_world * a_position;
 
   // View position을 프래그먼트 셰이더로 보내기
@@ -483,7 +483,7 @@ gl.uniformMatrix4fv(viewLocation, false, viewMatrix);
 gl.uniformMatrix4fv(worldLocation, false, worldMatrix);
 gl.uniform3fv(worldCameraPositionLocation, cameraPosition);
 
-// u_texture에 texture unit 0을 사용하도록 셰이더에 지시
+// u_texture에 텍스처 유닛 0을 사용하도록 셰이더에 지시
 gl.uniform1i(textureLocation, 0);
 </code></pre>
 <p><div class="webgl_example_container">
@@ -638,7 +638,7 @@ gl.uniform1i(textureLocation, 0);
   <li>참고</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
-<li><a href="/webgl/lessons/ko/webgl-texture-units.html">Texture Unit</a></li>
+<li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
 <li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>

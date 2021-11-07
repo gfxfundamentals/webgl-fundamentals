@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="WebGL에서 texture unit은 뭔가요?">
+<meta name="description" content="WebGL에서 텍스처 유닛은 뭔가요?">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-texture-units_ko.jpg">
 
-<meta property="og:title" content="WebGL Texture Unit">
+<meta property="og:title" content="WebGL 텍스처 유닛">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-texture-units_ko.jpg">
-<meta property="og:description" content="WebGL에서 texture unit은 뭔가요?">
+<meta property="og:description" content="WebGL에서 텍스처 유닛은 뭔가요?">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-texture-units.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL Texture Unit">
+<meta name="twitter:title" content="WebGL 텍스처 유닛">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-texture-units.html">
-<meta name="twitter:description" content="WebGL에서 texture unit은 뭔가요?">
+<meta name="twitter:description" content="WebGL에서 텍스처 유닛은 뭔가요?">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-texture-units_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-texture-units.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-texture-units.html",
       "inLanguage":"ko",
-      "name":"WebGL Texture Unit",
+      "name":"WebGL 텍스처 유닛",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL Texture Unit</title>
+<title>WebGL 텍스처 유닛</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,22 +236,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Texture Unit</h1>
+    <h1>WebGL 텍스처 유닛</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>이 글은 WebGL에서 texture unit이 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
+      <p>이 글은 WebGL에서 텍스처 유닛이 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
 attribute에 관한 <a href="webgl-attributes.html">비슷한 글</a>이 있습니다.</p>
 <p>이 글을 읽기 전에 <a href="webgl-how-it-works.html">WebGL 작동 방식</a>와 <a href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">WebGL 셰이더와 GLSL</a>뿐 아니라 <a href="webgl-3d-textures.html">WebGL 텍스처</a>도 읽어보시길 바랍니다.</p>
-<h2 id="texture-unit">Texture Unit</h2>
+<h2 id="-">텍스처 유닛</h2>
 <p>WebGL에는 텍스처가 있습니다.
 텍스처는 대부분 셰이더에 전달할 수 있는 데이터의 2D 배열인데요.
 셰이더에서 이렇게 <em>uniform sampler</em>를 선언하면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">uniform sampler2D someTexture;
 </code></pre>
 <p>하지만 셰이더는 <code class="notranslate" translate="no">someTexture</code>에 사용할 텍스처를 어떻게 아는 걸까요?</p>
-<p>그게 texture unit이 관여하는 부분입니다.
-Texture unit은 텍스처에 대한 레퍼런스 <strong>전역 배열</strong>입니다.
+<p>그게 텍스처 유닛이 관여하는 부분입니다.
+텍스처 유닛은 텍스처에 대한 레퍼런스 <strong>전역 배열</strong>입니다.
 WebGL이 javascript로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const gl = {
   activeTextureUnit: 0,
@@ -269,8 +269,8 @@ WebGL이 javascript로 작성되었다면 다음과 같은 전역 상태를 가�
 }
 </code></pre>
 <p>위에서 <code class="notranslate" translate="no">textureUnits</code>가 배열인 걸 볼 수 있는데요.
-해당 texture unit 배열에서 <em>bind point</em> 중 하나를 텍스처에 할당합니다.
-<code class="notranslate" translate="no">ourTexture</code>를 texture unit 5에 할당해봅시다.</p>
+해당 텍스처 유닛 배열에서 <em>bind point</em> 중 하나를 텍스처에 할당합니다.
+<code class="notranslate" translate="no">ourTexture</code>를 텍스처 유닛 5에 할당해봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 초기화할 때
 const ourTexture = gl.createTexture();
 // 여기에 텍스처 초기화 코드를 삽입하세요.
@@ -282,7 +282,7 @@ const indexOfTextureUnit = 5;
 gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 </code></pre>
-<p>그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 texture unit을 셰이더에 알리는데</p>
+<p>그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 텍스처 유닛을 셰이더에 알리는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 </code></pre>
 <p><code class="notranslate" translate="no">activeTexture</code> 및 <code class="notranslate" translate="no">bindTexture</code> WebGL 함수가 javascript로 구현된다면 </p>
@@ -312,10 +312,10 @@ gl.texParameteri = function(target, pname, value) {
   texture[pname] = value; 
 }
 </code></pre>
-<p>위 예제 의사 코드에서 <code class="notranslate" translate="no">gl.activeTexture</code>가 WebGL 안에 있는 내부 전역 변수를 texture unit 배열 index로 설정해야 하는 건 명확합니다.
-해당 시점부터, 다른 모든 텍스처 함수는 <code class="notranslate" translate="no">target</code>을 받고, 모든 텍스처 함수의 첫 매개 변수이며, 현재 texture unit의 바인딩 포인트를 참조합니다.</p>
-<h2 id="-texture-unit">최대 Texture Unit</h2>
-<p>WebGL은 적어도 8개의 texture unit을 지원하는 구현이 필요합니다.
+<p>위 예제 의사 코드에서 <code class="notranslate" translate="no">gl.activeTexture</code>가 WebGL 안에 있는 내부 전역 변수를 텍스처 유닛 배열 인덱스로 설정해야 하는 건 명확합니다.
+해당 시점부터, 다른 모든 텍스처 함수는 <code class="notranslate" translate="no">target</code>을 받고, 모든 텍스처 함수의 첫 매개 변수이며, 현재 텍스처 유닛의 바인딩 포인트를 참조합니다.</p>
+<h2 id="-">최대 텍스처 유닛</h2>
+<p>WebGL은 적어도 8개의 텍스처 유닛을 지원하는 구현이 필요합니다.
 얼마나 많이 지원되는지 쿼리할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxTextureUnits = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 </code></pre>
@@ -329,7 +329,7 @@ const maxFragmentShaderTextureUnits = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS
 maxVertexShaderTextureUnits = 4
 maxFragmentShaderTextureUnits = 8
 </code></pre>
-<p>이 말은 예를 들어 정점 셰이더에서 2개의 texture unit을 사용한다면 합쳐진 최대값은 8이기 때문에 프래그먼트 셰이더에서 사용할 수 있는 건 6개만 남는다는 걸 의미합니다.</p>
+<p>이 말은 예를 들어 정점 셰이더에서 2개의 텍스처 유닛을 사용한다면 합쳐진 최대값은 8이기 때문에 프래그먼트 셰이더에서 사용할 수 있는 건 6개만 남는다는 걸 의미합니다.</p>
 <p>또 하나 주목해야 할 점은 WebGL이 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>가 0을 반환하는 걸 허용한다는 겁니다.
 다시 말해, <strong>일부 기기는 정점 셰이더에서의 텍스처 사용을 전혀 지원하지 않을 수 있습니다.</strong>
 다행히 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">그런 상황</a>은 드물지만 정점 셰이더에서 텍스처를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>로 확인하고 아니라면 사용자에게 알려야 합니다.</p>
@@ -478,7 +478,7 @@ maxFragmentShaderTextureUnits = 8
   <li>참고</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
-<li><a href="/webgl/lessons/ko/webgl-texture-units.html">Texture Unit</a></li>
+<li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
 <li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
@@ -503,8 +503,8 @@ maxFragmentShaderTextureUnits = 8
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL Texture Unit';
-            var disqus_title = 'WebGL Texture Unit';
+            var disqus_identifier = 'WebGL 텍스처 유닛';
+            var disqus_title = 'WebGL 텍스처 유닛';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

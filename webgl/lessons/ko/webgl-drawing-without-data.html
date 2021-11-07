@@ -488,7 +488,7 @@ float hash(float p) {
 }
 </code></pre>
 <p>위 코드에서 <code class="notranslate" translate="no">off</code>를 추가했습니다.
-<code class="notranslate" translate="no">floor</code>를 호출하기 때문에 <code class="notranslate" translate="no">floor(time + u)</code>의 값은 각 정점에 대해 초당 한 번만 변경되는 초단위 타이머를 제공합니다.
+<code class="notranslate" translate="no">floor</code>를 호출하기 때문에 <code class="notranslate" translate="no">floor(time + u)</code>의 값은 각 정점에 대해 초당 한 번만 변경되는 초 단위 타이머를 제공합니다.
 이 오프셋은 점이 화면 아래로 이동하는 코드와 동기화되기 때문에, 점이 화면의 상단으로 다시 올라가는 동시에 <code class="notranslate" translate="no">hash</code>에 값이 조금 추가되어, 새로운 랜덤 숫자와 이로 인한 새로운 랜덤 수평 위치를 얻게 됩니다.</p>
 <p>결과는 반복되지 않는 비 효과입니다.</p>
 <p><div class="webgl_example_container">
@@ -652,11 +652,11 @@ gl_Position = vec4(pos * scale, 0, 1);
 
 <p>퍼즐에 대한 지적 호기심으로 &quot;Vertex ID 외에는 데이터가 없다면 흥미로운 걸 그릴 수 있을까요?&quot; 이에 대한 대답은 꽤 깔끔합니다.
 사실 <a href="https://www.vertexshaderart.com">해당 웹사이트 전체</a>가 vertex id만 있을 때 흥미로운 걸 만들 수 있을까 하는 퍼즐에 관한 겁니다.
-하지만 성능을 위해 큐브 정점 데이터를 버퍼에 전달하고 해당 데이터를 속성이나 다른 글에서 다룰 기술로 읽어들이는 전통적인 방법을 사용하는 게 훨씬 빠릅니다.</p>
+하지만 성능을 위해 큐브 정점 데이터를 버퍼에 전달하고 해당 데이터를 속성이나 다른 글에서 다룰 기술로 읽어들이는 기존의 방법을 사용하는 게 훨씬 빠릅니다.</p>
 <p>어느 정도 균형을 잡아야 합니다.
 위의 비가 내리는 예시에서 정확한 효과를 원한다면 위의 코드는 굉장히 효율적입니다.
 둘 사이 어딘가에는 한 기술이 다른 기술보다 성능이 좋은 경계가 있습니다.
-일반적으로는 전통적인 기술들이 훨씬 유연하지만 어떤 방법을 사용할 지 경우에 따라 결정해야 합니다.</p>
+일반적으로는 기존의 기술들이 훨씬 유연하지만 어떤 방법을 사용할 지 경우에 따라 결정해야 합니다.</p>
 <p>이 글의 요점은 대개 이러한 아이디어를 소개하고 WebGL이 실제로 하는 일에 대한 다른 사고 방식을 강조하는 겁니다.
 다시 말하지만 셰이더에서 <code class="notranslate" translate="no">gl_Position</code>과 <code class="notranslate" translate="no">gl_FragColor</code>를 설정하는 것만 신경쓰면 됩니다.
 그 외에는 어떻게 하든 상관없습니다.</p>
@@ -835,7 +835,7 @@ OpenGL ES 1.0 스펙에 따르면 32x32 픽셀의 15개 열이 여전히 캔버�
   <li>참고</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
-<li><a href="/webgl/lessons/ko/webgl-texture-units.html">Texture Unit</a></li>
+<li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
 <li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>

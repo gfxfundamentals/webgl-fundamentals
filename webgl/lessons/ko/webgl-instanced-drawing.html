@@ -251,7 +251,7 @@ attribute vec4 a_position;
 uniform mat4 matrix;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = matrix * a_position;
 }
 &lt;/script&gt;
@@ -395,7 +395,7 @@ attribute vec4 a_position;
 +varying vec4 v_color;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
   gl_Position = matrix * a_position;
 
 +  // 프래그먼트 셰이더로 정점 색상 전달
@@ -580,7 +580,7 @@ attribute mat4 matrix;
 varying vec4 v_color;
 
 void main() {
-  // 위치를 행렬로 곱하기
+  // 위치에 행렬 곱하기
 -  gl_Position = matrix * a_position;
 +  gl_Position = projection * view * matrix * a_position;
 
@@ -755,7 +755,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
   <li>참고</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
-<li><a href="/webgl/lessons/ko/webgl-texture-units.html">Texture Unit</a></li>
+<li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
 <li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
