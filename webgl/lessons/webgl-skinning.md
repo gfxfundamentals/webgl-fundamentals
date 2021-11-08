@@ -12,7 +12,7 @@ and then **per vertex** setting the influence of each bone to that vertex.
 
 So for example the hand bone would have nearly 100% influence on the vertices
 near the hand of a character where as the foot bone would have zero influence
-on those same vertices. The vertices in around the wrist would have some influence form the hand bone and also some from the arm bone.
+on those same vertices. The vertices in around the wrist would have some influence from the hand bone and also some from the arm bone.
 
 The basic part is that you need bones (which is just a fancy way of saying
 a matrix hierarchy) and weights. Weights are per vertex values that go
