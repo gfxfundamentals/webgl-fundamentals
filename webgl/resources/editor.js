@@ -75,7 +75,18 @@ function fixCSSLinks(url, source) {
 /** @type {Globals} */
 const g = {
   html: '',
+  visible: false,
 };
+
+{
+  const onChange = function(entries) {
+    for (const entry of entries) {
+      g.visible = entry.isIntersecting;
+    }
+  };
+  const observer = new IntersectionObserver(onChange, {});
+  observer.observe(document.body);
+}
 
 /**
  * This is what's in the sources array
@@ -946,7 +957,9 @@ function getActualLineNumberAndMoveTo(url, lineNo, colNo) {
           column: colNo,
         });
         editor.revealLineInCenterIfOutsideViewport(actualLineNo);
-        editor.focus();
+        if (g.visible) {
+          editor.focus();
+        }
       }
     }
   }
