@@ -263,8 +263,8 @@ WebGL은 함수가 출력하는 위치를 기반으로 <a href="webgl-points-lin
 <p>버퍼는 GPU에 업로드하는 2진 데이터 배열입니다.
 일반적으로 버퍼는 위치, 법선, 텍스처 좌표, 정점 색상 등을 포함하지만 원하는 걸 자유롭게 넣어도 됩니다.</p>
 <p>Attribute는 버퍼에서 데이터를 가져오고 정점 셰이더에 제공하는 방법을 지정하는데 사용됩니다.
-예를 들어 위치당 3개의 32bit float로 위치를 버퍼에 넣을 수 있는데요.
-특정한 attribute에게 어느 버퍼에서 위치를 가져올지, 어떤 type의 데이터를 가져와야 하는지 (3개의 32bit 부동 소수점), 버퍼의 offset이 어느 위치에서 시작되는지, 한 위치에서 다음으로 갈 때 몇 byte를 이동시킬 것인지 알려줘야 합니다.</p>
+예를 들어 위치당 3개의 32비트 부동 소수점으로 위치를 버퍼에 넣을 수 있는데요.
+특정한 attribute에게 어느 버퍼에서 위치를 가져올지, 어떤 type의 데이터를 가져와야 하는지 (3개의 32비트 부동 소수점), 버퍼의 offset이 어느 위치에서 시작되는지, 한 위치에서 다음으로 갈 때 몇 byte를 이동시킬 것인지 알려줘야 합니다.</p>
 <p>버퍼는 무작위로 접근할 수 없습니다.
 대신에 정점 셰이더가 지정한 횟수만큼 실행되는데요.
 실행될 때마다 지정된 버퍼에서 다음 값을 가져와 attribute에 할당합니다.</p>
@@ -444,7 +444,7 @@ gl.bufferData(
 );
 </code></pre><p>여기까지 많은 것들이 있었는데요.
 먼저 javascript 배열인 <code class="notranslate" translate="no">positions</code>가 있습니다.
-Javascript와 다르게 WebGL은 강력한 type을 가지는 데이터가 필요하므로, <code class="notranslate" translate="no">new Float32Array(positions)</code>는 새로운 32bit 부동 소수점 배열을 생성하고 <code class="notranslate" translate="no">positions</code>에서 값을 복사합니다.
+Javascript와 다르게 WebGL은 강력한 type을 가지는 데이터가 필요하므로, <code class="notranslate" translate="no">new Float32Array(positions)</code>는 새로운 32비트 부동 소수점 배열을 생성하고 <code class="notranslate" translate="no">positions</code>에서 값을 복사합니다.
 그런 다음 <code class="notranslate" translate="no">gl.bufferData</code>는 데이터를 GPU의 <code class="notranslate" translate="no">positionBuffer</code>로 복사합니다.
 위에서 <code class="notranslate" translate="no">ARRAY_BUFFER</code> bind point로 할당했기 때문에 position buffer를 사용히고 있습니다.</p>
 <p>마지막 매개변수 <code class="notranslate" translate="no">gl.STATIC_DRAW</code>는 데이터를 어떻게 사용할 것인지 WebGL에 알려줍니다.
@@ -484,7 +484,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
 // positionBuffer(ARRAY_BUFFER)의 데이터를 꺼내오는 방법을 attribute에 지시
 var size = 2;          // 반복마다 2개의 컴포넌트
-var type = gl.FLOAT;   // 데이터는 32bit float
+var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점
 var normalize = false; // 데이터 정규화 안 함
 var stride = 0;        // 0 = 다음 위치를 가져오기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;        // 버퍼의 처음부터 시작
@@ -530,7 +530,7 @@ gl.drawArrays(primitiveType, offset, count);
 </code></pre><p>WebGL은 이제 삼각형을 렌더링할 겁니다.
 그리려는 모든 픽셀에 대해 WebGL은 프래그먼트 셰이더를 호출하는데요.
 프래그먼트 셰이더는 <code class="notranslate" translate="no">gl_FragColor</code>를 <code class="notranslate" translate="no">1, 0, 0.5, 1</code>로 설정합니다.
-캔버스는 채널당 8bit이기 때문에 이는 WebGL이 캔버스에 <code class="notranslate" translate="no">[255, 0, 127, 255]</code>를 값으로 작성한다는 걸 의미합니다.</p>
+캔버스는 채널당 8비트이기 때문에 이는 WebGL이 캔버스에 <code class="notranslate" translate="no">[255, 0, 127, 255]</code>를 값으로 작성한다는 걸 의미합니다.</p>
 <p>다음은 실시간 버전입니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-fundamentals.html"></iframe>
@@ -840,7 +840,7 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
           <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
 <li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
-<li><a href="/webgl/lessons/ko/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">Fog</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">Picking (clicking on stuff)</a></li>
         </ul>

@@ -248,29 +248,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </code></pre>
 <p>도대체 무슨 소리일까요?</p>
 <p><code class="notranslate" translate="no">lowp</code>, <code class="notranslate" translate="no">mediump</code>, <code class="notranslate" translate="no">highp</code>는 정밀도 설정입니다.
-이 경우 정밀도는 값을 저장하는데 얼마나 많은 bit가 사용되는지를 의미하는데요.
-javascript에서 숫자의 경우 64bit를 사용합니다.
-WebGL에서 대부분의 숫자는 32bit에 불과한데요.
-더 적은 bit = 더 빠름, 더 많은 bit = 더 정확하고 더 넓은 범위입니다.</p>
+이 경우 정밀도는 값을 저장하는데 얼마나 많은 비트가 사용되는지를 의미하는데요.
+javascript에서 숫자의 경우 64비트를 사용합니다.
+WebGL에서 대부분의 숫자는 32비트에 불과한데요.
+더 적은 비트 = 더 빠름, 더 많은 비트 = 더 정확하고 더 넓은 범위입니다.</p>
 <p>이걸 잘 설명할 수 있을지 모르겠습니다.
 정밀도 문제의 다른 예시로 <a href="https://www.google.com/search?q=double+vs+float">double vs float</a>를 찾아볼 수도 있지만 이를 설명하는 한 가지 방법은 byte와 short 또는 javascript의 <code class="notranslate" translate="no">Uint8Array</code> vs <code class="notranslate" translate="no">Uint16Array</code>의 차이와 같다는 겁니다.</p>
 <ul>
-<li><code class="notranslate" translate="no">Uint8Array</code>는 unsigned 8bit integer 배열입니다. 8bit는 0에서 255까지 2<sup>8</sup>개의 값을 포함할 수 있습니다.</li>
-<li><code class="notranslate" translate="no">Uint16Array</code>는 unsigned 16bit integer 배열입니다. 16bit는 0에서 65535까지 2<sup>16</sup>개의 값을 포함할 수 있습니다.</li>
-<li><code class="notranslate" translate="no">Uint32Array</code>는 unsigned 32bit integer 배열입니다. 32bit는 0에서 4294967295까지 2<sup>32</sup>개의 값을 포함할 수 있습니다.</li>
+<li><code class="notranslate" translate="no">Uint8Array</code>는 unsigned 8bit integer 배열입니다. 8비트는 0에서 255까지 2<sup>8</sup>개의 값을 포함할 수 있습니다.</li>
+<li><code class="notranslate" translate="no">Uint16Array</code>는 unsigned 16bit integer 배열입니다. 16비트는 0에서 65535까지 2<sup>16</sup>개의 값을 포함할 수 있습니다.</li>
+<li><code class="notranslate" translate="no">Uint32Array</code>는 unsigned 32bit integer 배열입니다. 32비트는 0에서 4294967295까지 2<sup>32</sup>개의 값을 포함할 수 있습니다.</li>
 </ul>
 <p><code class="notranslate" translate="no">lowp</code>, <code class="notranslate" translate="no">mediump</code>, <code class="notranslate" translate="no">highp</code>도 비슷합니다.</p>
 <ul>
-<li><code class="notranslate" translate="no">lowp</code>는 최소 9bit 값입니다. 부동 소수점 값의 범위: -2 ~ +2, 정수 값의 경우 <code class="notranslate" translate="no">Uint8Array</code>나 <code class="notranslate" translate="no">Int8Array</code>와 유사</li>
-<li><code class="notranslate" translate="no">mediump</code>는 최소 16bit 값입니다. 부동 소수점 값의 범위: -2<sup>14</sup> ~ +2<sup>14</sup>, 정수 값의 경우 <code class="notranslate" translate="no">Uint16Array</code>나 <code class="notranslate" translate="no">Int16Array</code>와 유사</li>
-<li><code class="notranslate" translate="no">highp</code>는 최소 16bit 값입니다. 부동 소수점 값의 범위: -2<sup>62</sup> ~ +2<sup>62</sup>, 정수 값의 경우 <code class="notranslate" translate="no">Uint32Array</code>나 <code class="notranslate" translate="no">Int32Array</code>와 유사</li>
+<li><code class="notranslate" translate="no">lowp</code>는 최소 9비트 값입니다. 부동 소수점 값의 범위: -2 ~ +2, 정수 값의 경우 <code class="notranslate" translate="no">Uint8Array</code>나 <code class="notranslate" translate="no">Int8Array</code>와 유사</li>
+<li><code class="notranslate" translate="no">mediump</code>는 최소 16비트 값입니다. 부동 소수점 값의 범위: -2<sup>14</sup> ~ +2<sup>14</sup>, 정수 값의 경우 <code class="notranslate" translate="no">Uint16Array</code>나 <code class="notranslate" translate="no">Int16Array</code>와 유사</li>
+<li><code class="notranslate" translate="no">highp</code>는 최소 16비트 값입니다. 부동 소수점 값의 범위: -2<sup>62</sup> ~ +2<sup>62</sup>, 정수 값의 경우 <code class="notranslate" translate="no">Uint32Array</code>나 <code class="notranslate" translate="no">Int32Array</code>와 유사</li>
 </ul>
 <p>범위 내의 모든 값을 표현할 수 있는 것은 아니라는 점에 유의해야 합니다.
 아마 가장 이해하기 쉬운 건 <code class="notranslate" translate="no">lowp</code>일 겁니다.
-9bit 밖에 없으므로 512개의 고유 값만을 표현할 수 있습니다.
+9비트 밖에 없으므로 512개의 고유 값만을 표현할 수 있습니다.
 위에서 범위가 -2에서 +2라고 말했는데 -2와 +2사이에는 무한한 숫자 값들이 있는데요.
 예를 들어 1.9999999와 1.999998는 -2와 +2사이에 있는 2개의 값이죠.
-9bit만으로 <code class="notranslate" translate="no">lowp</code>는 이 두 값을 표현할 수 없습니다.
+9비트만으로 <code class="notranslate" translate="no">lowp</code>는 이 두 값을 표현할 수 없습니다.
 그래서 예를 들어, 색상에 대한 계산을 위해 <code class="notranslate" translate="no">lowp</code>를 사용한다면 밴딩이 나타날 수 있는데요.
 실제로 어떤 값이 표현될 수 있는지 알아보지 않아도, 색상이 0에서 1사이인 걸 알고 있습니다.
 <code class="notranslate" translate="no">lowp</code>가 -2에서 +2고 512개의 고유값만 표현할 수 있다면 128개의 값만이 0에서 1사이에 맞는 것 같습니다.
@@ -282,13 +282,13 @@ WebGL에서 대부분의 숫자는 32bit에 불과한데요.
 <p>이 문제는 프래그먼트 셰이더에서 <code class="notranslate" translate="no">highp</code>를 사용하도록 선언하고 사용자가 <code class="notranslate" translate="no">highp</code>를 지원하지 않는 기기에서 페이지를 로드하면 셰이더는 컴파일에 실패할 겁니다.</p>
 <p>반대로 어디에서나 사용할 수 있는 <code class="notranslate" translate="no">mediump</code>는 <a href="webgl-3d-lighting-point.html">점 조명</a>같은 일반적인 것에 대해 충분히 해상도가 높지 않습니다.</p>
 </li>
-<li><p>실제로 <code class="notranslate" translate="no">lowp</code>에 9bit를 쓰고 <code class="notranslate" translate="no">mediump</code>애 16bit를 쓰는 장치에서는 보통 <code class="notranslate" translate="no">highp</code>보다 빠릅니다. 훨씬 빠른 경우가 더 많습니다.</p>
+<li><p>실제로 <code class="notranslate" translate="no">lowp</code>에 9비트를 쓰고 <code class="notranslate" translate="no">mediump</code>애 16비트를 쓰는 장치에서는 보통 <code class="notranslate" translate="no">highp</code>보다 빠릅니다. 훨씬 빠른 경우가 더 많습니다.</p>
 </li>
 </ol>
-<p>마지막으로, <code class="notranslate" translate="no">Uint8Array</code>나 <code class="notranslate" translate="no">Uint16Array</code>와 같은 값과 달리, <code class="notranslate" translate="no">lowp</code> 또는 <code class="notranslate" translate="no">mediump</code> 값이나 심지어 <code class="notranslate" translate="no">highp</code> 값도 더 높은 정밀도(더 많은 bit)를 사용할 수 있습니다.
-예를 들어 데스크탑 GPU에서 셰이더에 <code class="notranslate" translate="no">mediump</code>를 넣었다면 아직 내부적으로 32bit를 사용할 가능성이 높은데요.
+<p>마지막으로, <code class="notranslate" translate="no">Uint8Array</code>나 <code class="notranslate" translate="no">Uint16Array</code>와 같은 값과 달리, <code class="notranslate" translate="no">lowp</code> 또는 <code class="notranslate" translate="no">mediump</code> 값이나 심지어 <code class="notranslate" translate="no">highp</code> 값도 더 높은 정밀도(더 많은 비트)를 사용할 수 있습니다.
+예를 들어 데스크탑 GPU에서 셰이더에 <code class="notranslate" translate="no">mediump</code>를 넣었다면 아직 내부적으로 32비트를 사용할 가능성이 높은데요.
 이건 셰이더를 테스트하기 여럽게 만드는 문제를 야기합니다.
-실제로 셰이더가 <code class="notranslate" translate="no">lowp</code>나 <code class="notranslate" translate="no">mediump</code>와 함께 올바르게 작동하는지 보기 위해서는 실제로 <code class="notranslate" translate="no">lowp</code>에 8bit를 쓰고 <code class="notranslate" translate="no">highp</code>에 16bit를 쓰는 기기에서 테스트해야 합니다.</p>
+실제로 셰이더가 <code class="notranslate" translate="no">lowp</code>나 <code class="notranslate" translate="no">mediump</code>와 함께 올바르게 작동하는지 보기 위해서는 실제로 <code class="notranslate" translate="no">lowp</code>에 8비트를 쓰고 <code class="notranslate" translate="no">highp</code>에 16비트를 쓰는 기기에서 테스트해야 합니다.</p>
 <p>그래서 어떻게 해야 할까요?</p>
 <p>음 하나는 그냥 <code class="notranslate" translate="no">highp</code>를 사용하고 이에 대해 걱정하지 않을 수 있습니다.
 <code class="notranslate" translate="no">highp</code>를 지원하지 않는 기기를 가진 사용자는 아마 페이지를 잘 실행시킬 수 없는 오래되고 느린 기기를 가져서 목표 고객이 아닐 수 있습니다.</p>
@@ -411,12 +411,12 @@ void main() {
 </div>
 
 </p>
-<p>사실 <code class="notranslate" translate="no">lowp</code>가 9bit이고, <code class="notranslate" translate="no">mediump</code>가 16bit이며, <code class="notranslate" translate="no">highp</code>가 32bit라는 보장은 없습니다.
+<p>사실 <code class="notranslate" translate="no">lowp</code>가 9비트이고, <code class="notranslate" translate="no">mediump</code>가 16비트이며, <code class="notranslate" translate="no">highp</code>가 32비트라는 보장은 없습니다.
 각각의 최소값이 될 수 있다는 게 명세서가 말하는 전부입니다.
-예를 들어 <code class="notranslate" translate="no">lowp</code>가 10bit여도 명세(10 &gt;= 9)를 충족하고 <code class="notranslate" translate="no">mediump</code>보다 빠르며 여전히 소수점이 있습니다.
-그렇긴 하지만, 제가 아는 한 <code class="notranslate" translate="no">lowp</code>를 지원하는 기기는 9bit를 사용하고 <code class="notranslate" translate="no">mediump</code>를 지원하는 기기는 16bit를 사용합니다.</p>
-<p>2014년 아이폰6+는 <code class="notranslate" translate="no">mediump</code>에 대해 16bit를 사용하지만 <code class="notranslate" translate="no">lowp</code>에도 16bit를 사용합니다.
-<code class="notranslate" translate="no">lowp</code>에 대해 9bit를 사용하는 기기를 사용한 적이 있는지 없어서 어떤 문제가 발생하는지 확실하지 않습니다. </p>
+예를 들어 <code class="notranslate" translate="no">lowp</code>가 10비트여도 명세(10 &gt;= 9)를 충족하고 <code class="notranslate" translate="no">mediump</code>보다 빠르며 여전히 소수점이 있습니다.
+그렇긴 하지만, 제가 아는 한 <code class="notranslate" translate="no">lowp</code>를 지원하는 기기는 9비트를 사용하고 <code class="notranslate" translate="no">mediump</code>를 지원하는 기기는 16비트를 사용합니다.</p>
+<p>2014년 아이폰6+는 <code class="notranslate" translate="no">mediump</code>에 대해 16비트를 사용하지만 <code class="notranslate" translate="no">lowp</code>에도 16비트를 사용합니다.
+<code class="notranslate" translate="no">lowp</code>에 대해 9비트를 사용하는 기기를 사용한 적이 있는지 없어서 어떤 문제가 발생하는지 확실하지 않습니다. </p>
 <p>이 글을 통해서 우리는 프래그먼트 셰이더의 기본 정밀도를 지정했습니다.
 또한 어떤 개별 변수의 정밀도라도 지정할 수 있는데요.
 예를 들어</p>
@@ -426,7 +426,7 @@ varying lowp vec4 texcoord;  // varying
 lowp float foo;              // variable
 </code></pre>
 <h2 id="-">캔버스 정밀도 문제</h2>
-<p>명세서에는 캔버스가 32bit 대신 16bit가 될 수 있습니다.</p>
+<p>명세서에는 캔버스가 32비트 대신 16비트가 될 수 있습니다.</p>
 <p>아래처럼 호출하여 확인할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const bitsInCanvas =
     gl.getParameter(gl.RED_BITS) +
@@ -440,13 +440,13 @@ lowp float foo;              // variable
 </div>
 
 </p>
-<p>참고: 2020년에 어떤 기기 어떤 브라우저에서 실제로 16bit 캔버스를 사용하는지 알 수 없습니다.
-2011년 WebGL이 출시되었을 때 파이어폭스가 모바일 기기에서 속도를 높이기 위해 16bit 캔버스를 실험했던 걸로 알고 있습니다.
+<p>참고: 2020년에 어떤 기기 어떤 브라우저에서 실제로 16비트 캔버스를 사용하는지 알 수 없습니다.
+2011년 WebGL이 출시되었을 때 파이어폭스가 모바일 기기에서 속도를 높이기 위해 16비트 캔버스를 실험했던 걸로 알고 있습니다.
 이는 일반적으로 이미지 이외의 항목에 대해 캔버스에서 픽셀을 읽는 경우를 제외하고는 무시할 수 있습니다. 
-또한, 캔버스가 16bit라고 하더라도 32bit 렌더 대상(<a href="webgl-render-to-texture.html">framebuffer에 첨부된 텍스처</a>)을 만들 수 있습니다.</p>
+또한, 캔버스가 16비트라고 하더라도 32비트 렌더 대상(<a href="webgl-render-to-texture.html">framebuffer에 첨부된 텍스처</a>)을 만들 수 있습니다.</p>
 <h2 id="texture-format">Texture Format</h2>
 <p>텍스처는 명세서에서 실제 사용된 정밀도는 요청된 정밀도보다 더 클 수 있다고 말하는 또 다른 것입니다.</p>
-<p>예를 들어 다음과 같이 채널당 4bit씩, 16bit 텍스처를 요청할 수 있는데 </p>
+<p>예를 들어 다음과 같이 채널당 4비트씩, 16비트 텍스처를 요청할 수 있는데 </p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.texImage2D(
   gl.TEXTURE_2D,               // 대상
   0,                           // mip 레벨
@@ -461,21 +461,21 @@ lowp float foo;              // variable
 </code></pre><p>하지만 구현은 실제로 더 높은 해상도를 내부적으로 사용할 수 있습니다.
 대부분의 데스크탑이 이걸 수행하고 대부분의 모바일 GPU는 하지 않는다고 알고 있습니다.</p>
 <p>테스트할 수 있는데요.
-먼저 위처럼 채널당 4bit인 텍스처를 요청할 겁니다.
+먼저 위처럼 채널당 4비트인 텍스처를 요청할 겁니다.
 그런 다음 0대 1의 gradient로 <a href="webgl-render-to-texture.html">렌더링</a>할 겁니다.</p>
 <p>다음으로 해당 텍스처를 캔버스에 렌더링할 건데요.
-텍스처가 내부적으로 채널당 4bit라면 그려진 그래디언트에 16단계의 색상만 있을 겁니다.
-텍스처가 실제로 채널당 8bit라면 256단계의 색상을 보게 될 겁니다.</p>
+텍스처가 내부적으로 채널당 4비트라면 그려진 그래디언트에 16단계의 색상만 있을 겁니다.
+텍스처가 실제로 채널당 8비트라면 256단계의 색상을 보게 될 겁니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-precision-textures.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-precision-textures.html" target="_blank">새 창을 열려면 여기를 클릭</a>
 </div>
 
 </p>
-<p>제 스마트폰에서 실행하면 텍스처가 채널당 4bit를 사용(또는 다른 채널은 테스트하지 않았으므로 빨간색 한정 4bit)하고 있음을 알 수 있습니다.</p>
+<p>제 스마트폰에서 실행하면 텍스처가 채널당 4비트를 사용(또는 다른 채널은 테스트하지 않았으므로 빨간색 한정 4비트)하고 있음을 알 수 있습니다.</p>
 <div class="webgl_center"><img src="../resources/mobile-4-4-4-4-texture-no-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
 
-<p>반면에 데스크탑에서는 4개만 요청했지만 실제로는 채널당 8bit를 사용하는 걸 볼 수 있습니다.</p>
+<p>반면에 데스크탑에서는 4개만 요청했지만 실제로는 채널당 8비트를 사용하는 걸 볼 수 있습니다.</p>
 <div class="webgl_center"><img src="../resources/desktop-4-4-4-4-texture-no-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
 
 <p>한 가지 주목할 점은 기본적으로 WebGL은 결과를 디더링하여 이와 같은 그라데이션을 더 부드럽게 만들 수 있다는 겁니다.
@@ -485,7 +485,7 @@ lowp float foo;              // variable
 <p>디더링을 끄지 않는다면 스마트폰에서는 이런 게 나타납니다.</p>
 <div class="webgl_center"><img src="../resources/mobile-4-4-4-4-texture-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
 
-<p>당장 생각나는 이게 실제로 일어나는 유일한 방법은 렌더링 대상으로 더 낮은 bit 해상도 format texture를 사용하고 실제로 텍스처가 그렇게 낮은 해상도의 장치에서 테스트하지 않았을 경우입니다.
+<p>당장 생각나는 이게 실제로 일어나는 유일한 방법은 렌더링 대상으로 더 낮은 비트 해상도 포맷 텍스처를 사용하고 실제로 텍스처가 그렇게 낮은 해상도의 장치에서 테스트하지 않았을 경우입니다.
 데스크탑에서만 테스트했다면 이를 야기하는 문제가 발생하지 않을 수 있습니다.</p>
 
     </div>
@@ -576,7 +576,7 @@ lowp float foo;              // variable
           <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
 <li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
-<li><a href="/webgl/lessons/ko/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">Fog</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">Picking (clicking on stuff)</a></li>
         </ul>
