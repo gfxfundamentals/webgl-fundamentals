@@ -15,7 +15,7 @@ WebGL이 rasterization API이고 3D API가 아니라는 제 주장이 일부 사
 WebGL의 경우 rasterization API라고 부르는 게 중요하다고 생각한 이유가 있는데, 구체적으로는 WebGL을 사용해 3D로 무언가를 그리기 위해 필요한 3D 수학 지식의 양 때문입니다.
 
 저는 3D 라이브러리라고 부르는 모든 것이 여러분을 위한 3D 영역을 수행해야 한다고 생각합니다.
-라이브러리에 3D 데이터, material 매개변수, 조명을 제공할 수 있어야 하며 3D를 그릴 수 있어야 합니다.
+라이브러리에 3D 데이터, 머티리얼 매개변수, 조명을 제공할 수 있어야 하며 3D를 그릴 수 있어야 합니다.
 WebGL과 OpenGL ES 2.0+는 모두 3D를 그리는데 사용되지만 이 설명에는 맞지 않습니다.
 
 비유를 위해, C++은 기본적으로 "process word"를 하지 않습니다.
@@ -46,7 +46,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
   // 큐브 만들기
   var geometry = new THREE.BoxGeometry(200, 200, 200);
 
-  // Material 만들기
+  // 머티리얼 만들기
   var material = new THREE.MeshPhongMaterial({
     ambient: 0x555555,
     color: 0x555555,
@@ -55,7 +55,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
     shading: THREE.SmoothShading
   });
 
-  // Geometry와 material 기반의 mesh 생성
+  // 지오메트리와 머티리얼 기반의 메시 생성
   mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 

@@ -126,6 +126,6 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [WebGL2에서 픽셀 좌표로 텍스처 접근하기](webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2.html)
 * [어떻게 모든 uniform과 uniformBlock을 얻을 수 있나요](webgl-qna-how-can-i-get-all-the-uniforms-and-uniformblocks.html)
-* [어떻게 16bit 데이터의 16bit 히스토그램을 만들 수 있나요](webgl-qna-how-can-i-create-a-16bit-historgram-of-16bit-data.html)
+* [어떻게 16비트 데이터의 16비트 히스토그램을 만들 수 있나요](webgl-qna-how-can-i-create-a-16bit-historgram-of-16bit-data.html)
 * [particle 위치를 처리하는 방법](webgl-qna-how-to-process-particle-positions.html)
 

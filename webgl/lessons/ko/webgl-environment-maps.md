@@ -245,7 +245,7 @@ gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 
 // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
 var size = 3;          // 반복마다 3개의 컴포넌트
-var type = gl.FLOAT;   // 데이터는 32bit 부동 소수점 값
+var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점 값
 var normalize = false; // 데이터 정규화 (0-255에서 0-1로 전환)
 var stride = 0;        // 0 = 다음 위치를 가져오기 위해 반복마다 size * sizeof(type) 만큼 앞으로 이동
 var offset = 0;        // 버퍼의 처음부터 시작

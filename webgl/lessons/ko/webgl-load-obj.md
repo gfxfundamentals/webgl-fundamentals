@@ -350,7 +350,7 @@ async function main() {
     // gl.uniform 호출
     webglUtils.setUniforms(meshProgramInfo, sharedUniforms);
 
-    // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    // gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer 호출
     webglUtils.setBuffersAndAttributes(gl, meshProgramInfo, bufferInfo);
 
     // gl.uniform 호출
