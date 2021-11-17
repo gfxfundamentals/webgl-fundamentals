@@ -258,7 +258,7 @@ bind point는 WebGL 안에 있는 내부 전역 변수라고 생각하시면 되
 먼저 javascript 배열인 `positions`가 있습니다.
 Javascript와 다르게 WebGL은 강력한 type을 가지는 데이터가 필요하므로, `new Float32Array(positions)`는 새로운 32비트 부동 소수점 배열을 생성하고 `positions`에서 값을 복사합니다.
 그런 다음 `gl.bufferData`는 데이터를 GPU의 `positionBuffer`로 복사합니다.
-위에서 `ARRAY_BUFFER` bind point로 할당했기 때문에 position buffer를 사용히고 있습니다.
+위에서 `ARRAY_BUFFER` bind point로 할당했기 때문에 position buffer를 사용하고 있습니다.
 
 마지막 매개변수 `gl.STATIC_DRAW`는 데이터를 어떻게 사용할 것인지 WebGL에 알려줍니다.
 WebGL은 특정 항목들을 최적화하기 위해 해당 hint를 사용할 수 있는데요.
