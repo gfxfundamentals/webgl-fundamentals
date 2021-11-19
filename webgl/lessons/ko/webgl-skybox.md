@@ -115,7 +115,7 @@ var up = [0, 1, 0];
 // lookAt을 사용하여 카메라 행렬 계산
 var cameraMatrix = m4.lookAt(cameraPosition, target, up);
 
-// camera matrix로 view matrix 만들기
+// 카메라 행렬로 뷰 행렬 만들기
 var viewMatrix = m4.inverse(cameraMatrix);
 
 // direction만 다루므로 translation 제거
@@ -191,7 +191,7 @@ var up = [0, 1, 0];
 // lookAt을 사용하여 카메라 행렬 계산
 var cameraMatrix = m4.lookAt(cameraPosition, target, up);
 
-// camera matrix로 view matrix 만들기
+// 카메라 행렬로 뷰 행렬 만들기
 var viewMatrix = m4.inverse(cameraMatrix);
 
 // x축을 중심으로 큐브 회전

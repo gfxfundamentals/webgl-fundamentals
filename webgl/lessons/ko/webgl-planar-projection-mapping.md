@@ -132,7 +132,7 @@ const sphereUniforms = {
 };
 
 function drawScene(projectionMatrix, cameraMatrix) {
-  // camera matrix로 view matrix 만들기
+  // 카메라 행렬로 뷰 행렬 만들기
   const viewMatrix = m4.inverse(cameraMatrix);
 
   gl.useProgram(textureProgramInfo.program);
@@ -336,7 +336,7 @@ const settings = {
 };
 
 function drawScene(projectionMatrix, cameraMatrix) {
-  // camera matrix로 view matrix 만들기
+  // 카메라 행렬로 뷰 행렬 만들기
   const viewMatrix = m4.inverse(cameraMatrix);
 
   let textureWorldMatrix = m4.lookAt(
@@ -380,7 +380,7 @@ const settings = {
 };
 
 function drawScene(projectionMatrix, cameraMatrix) {
-  // camera matrix로 view matrix 만들기
+  // 카메라 행렬로 뷰 행렬 만들기
   const viewMatrix = m4.inverse(cameraMatrix);
 
   let textureWorldMatrix = m4.lookAt(
@@ -553,7 +553,7 @@ const settings = {
 ...
 
 function drawScene(projectionMatrix, cameraMatrix) {
-  // camera matrix로 view matrix 만들기
+  // 카메라 행렬로 뷰 행렬 만들기
   const viewMatrix = m4.inverse(cameraMatrix);
 
   const textureWorldMatrix = m4.lookAt(

@@ -25,7 +25,7 @@ WebGL에서 어떻게 텍스처를 적용할까요?
       // 위치에 행렬 곱하기
       gl_Position = u_matrix * a_position;
 
-    *  // texcoord를 프래그먼트 셰이더로 전달
+    *  // 텍스처 좌표를 프래그먼트 셰이더로 전달
     *  v_texcoord = a_texcoord;
     }
 

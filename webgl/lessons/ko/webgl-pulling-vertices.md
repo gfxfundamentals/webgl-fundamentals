@@ -299,7 +299,7 @@ void main() {
   vec2 texcoord = getValueByIndexFromTexture(
       texcoordTexture, texcoordTextureSize, texcoordIndex).xy;
 
-  // texcoord를 프래그먼트 셰이더에 전달
+  // 텍스처 좌표를 프래그먼트 셰이더에 전달
   v_texcoord = texcoord;
 }
 ```
