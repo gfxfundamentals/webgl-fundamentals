@@ -289,7 +289,7 @@ var settings = {
 function drawScene(time) {
   ...
 
-  // 캔버스와 깊이 버퍼를 안개색으로 지우기
+  // 캔버스와 뎁스 버퍼를 안개색으로 지우기
   gl.clearColor(...fogColor);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -309,7 +309,7 @@ function drawScene(time) {
 </div>
 
 </p>
-<p>이제 안개 양을 전달하는 대신에 카메라의 깊이와 같은 것을 기반으로 계산해야 합니다.</p>
+<p>이제 안개 양을 전달하는 대신에 카메라의 뎁스 등을 기반으로 계산해야 합니다.</p>
 <p><a href="webgl-3d-camera.html">카메라에 대한 글</a>을 떠올려보면 뷰 행렬을 적용한 후에 모든 위치는 카메라에 상대적입니다.
 카메라가 -z 축을 내려다보고 있으므로, 월드 행렬과 뷰 행렬로 곱한 후 z 위치를 보면, 카메라의 z 평면에서 얼마나 떨어져 있는 나타내는 값을 얻게 됩니다.</p>
 <p>해당 데이터를 프래그먼트 셰이더로 전달하여 안개 양 계산에 사용할 수 있도록 정점 셰이더를 수정해봅시다.
@@ -338,8 +338,8 @@ void main() {
 +  v_fogDepth = -(u_worldView * a_position).z;
 }
 </code></pre>
-<p>이제 프래그먼트 세이더에서 어떤 값보다 깊이가 작으면 안개를 혼합하지 않도록 합니다. (fogAmount = 0)
-어떤 값보다 깊이가 크면 안개를 100% 적용합니다. (fogAmount = 1)
+<p>이제 프래그먼트 세이더에서 어떤 값보다 뎁스가 작으면 안개를 혼합하지 않도록 합니다. (fogAmount = 0)
+어떤 값보다 뎁스가 크면 안개를 100% 적용합니다. (fogAmount = 1)
 이 두 값 사이에서 색상을 혼합하는데요.</p>
 <p>그렇게 작동하는 코드를 작성할 수도 있지만 GLSL는 이를 수행하는 <code class="notranslate" translate="no">smoothstep</code> 함수를 가지고 있습니다.
 여러분은 최소값, 최대값, 테스트 값을 전달하면 됩니다.
@@ -449,7 +449,7 @@ for (let i = 0; i &lt;= numCubes; ++i) {
   gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
 }
 </code></pre>
-<p>이제 깊이 기반의 안개가 생깁니다.</p>
+<p>이제 뎁스 기반의 안개가 생깁니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-fog-depth-based.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-fog-depth-based.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -690,7 +690,7 @@ void main() {
 <li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
-<li><a href="/webgl/lessons/ko/webgl-picking.html">Picking (clicking on stuff)</a></li>
+<li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
         </ul>
   <li>Text</li>
         <ul>

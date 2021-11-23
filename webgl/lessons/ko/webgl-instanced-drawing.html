@@ -430,9 +430,9 @@ const positionLoc = gl.getAttribLocation(program, &#39;a_position&#39;);
 </code></pre>
 <p>이제, attribute에 적용될 행렬을 넣을 버퍼가 필요합니다.
 버퍼는 하나의 <em>chuck</em>에서 가장 잘 업데이트되기 때문에 모든 행렬을 동일한 <code class="notranslate" translate="no">Float32Array</code>에 넣을 겁니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// Instance당 하나씩, 행렬 설정
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 인스턴스당 하나씩 행렬 설정
 const numInstances = 5;
-+// 행렬당 하나의 뷰로 typed array 만들기
++// 행렬당 하나의 뷰로 형식화 배열 만들기
 +const matrixData = new Float32Array(numInstances * 16);
 </code></pre>
 <p>그런 다음 각 행렬에 대해 하나씩, <code class="notranslate" translate="no">Float32Array</code> 뷰를 만들 겁니다.</p>
@@ -701,7 +701,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
 <li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
-<li><a href="/webgl/lessons/ko/webgl-picking.html">Picking (clicking on stuff)</a></li>
+<li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
         </ul>
   <li>Text</li>
         <ul>
