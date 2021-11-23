@@ -65,7 +65,7 @@ Backbuffer는 RGB만 있기 때문에 이는 좀 더 OpenGL처럼 작동하게 �
     // alpha 렌더링 끄기
     gl.colorMask(true, true, true, false);
 
-물론 자신만의 framebuffer로 렌더링한다면 alpha 렌더링을 다시 켰다가 캔버스 렌더링으로 전환할 때 다시 꺼야할 수 있습니다.
+물론 자신만의 프레임 버퍼로 렌더링한다면 알파 렌더링을 다시 켰다가 캔버스 렌더링으로 전환할 때 다시 꺼야할 수 있습니다.
 
 ### #5) 이미지 처리
 

@@ -232,9 +232,9 @@ const positionLoc = gl.getAttribLocation(program, 'a_position');
 버퍼는 하나의 *chuck*에서 가장 잘 업데이트되기 때문에 모든 행렬을 동일한 `Float32Array`에 넣을 겁니다.
 
 ```js
-// Instance당 하나씩, 행렬 설정
+// 인스턴스당 하나씩 행렬 설정
 const numInstances = 5;
-+// 행렬당 하나의 뷰로 typed array 만들기
++// 행렬당 하나의 뷰로 형식화 배열 만들기
 +const matrixData = new Float32Array(numInstances * 16);
 ```
 

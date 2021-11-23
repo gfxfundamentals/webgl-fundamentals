@@ -69,7 +69,7 @@ var settings = {
 function drawScene(time) {
   ...
 
-  // 캔버스와 깊이 버퍼를 안개색으로 지우기
+  // 캔버스와 뎁스 버퍼를 안개색으로 지우기
   gl.clearColor(...fogColor);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -87,7 +87,7 @@ function drawScene(time) {
 
 {{{example url="../webgl-3d-fog-just-mix.html" }}}
 
-이제 안개 양을 전달하는 대신에 카메라의 깊이와 같은 것을 기반으로 계산해야 합니다.
+이제 안개 양을 전달하는 대신에 카메라의 뎁스 등을 기반으로 계산해야 합니다.
 
 [카메라에 대한 글](webgl-3d-camera.html)을 떠올려보면 뷰 행렬을 적용한 후에 모든 위치는 카메라에 상대적입니다.
 카메라가 -z 축을 내려다보고 있으므로, 월드 행렬과 뷰 행렬로 곱한 후 z 위치를 보면, 카메라의 z 평면에서 얼마나 떨어져 있는 나타내는 값을 얻게 됩니다.
@@ -121,8 +121,8 @@ void main() {
 }
 ```
 
-이제 프래그먼트 세이더에서 어떤 값보다 깊이가 작으면 안개를 혼합하지 않도록 합니다. (fogAmount = 0)
-어떤 값보다 깊이가 크면 안개를 100% 적용합니다. (fogAmount = 1)
+이제 프래그먼트 세이더에서 어떤 값보다 뎁스가 작으면 안개를 혼합하지 않도록 합니다. (fogAmount = 0)
+어떤 값보다 뎁스가 크면 안개를 100% 적용합니다. (fogAmount = 1)
 이 두 값 사이에서 색상을 혼합하는데요.
 
 그렇게 작동하는 코드를 작성할 수도 있지만 GLSL는 이를 수행하는 `smoothstep` 함수를 가지고 있습니다.
@@ -246,7 +246,7 @@ for (let i = 0; i <= numCubes; ++i) {
 }
 ```
 
-이제 깊이 기반의 안개가 생깁니다.
+이제 뎁스 기반의 안개가 생깁니다.
 
 {{{example url="../webgl-3d-fog-depth-based.html" }}}
 

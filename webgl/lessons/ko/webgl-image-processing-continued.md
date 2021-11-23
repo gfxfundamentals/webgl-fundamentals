@@ -25,7 +25,7 @@ Texture 2      -> [Normal]      -> Canvas
 이렇게 하기 위해 우리는 framebuffer를 만들어야 하는데요.
 WebGL과 OpenGL에서 framebuffer는 사실 좋지 않은 이름입니다.
 WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이며 실제로 어떤 종류의 버퍼도 아닌데요.
-하지만 텍스처를 framebuffer에 첨부해서 해당 텍스처로 렌더링할 수 있습니다.
+하지만 텍스처를 framebuffer에 첨부해서 해당 텍스처에 렌더링할 수 있습니다.
 
 먼저 원래 사용하던 [텍스처 생성 코드](webgl-image-processing.html)를 함수로 바꿉니다.
 

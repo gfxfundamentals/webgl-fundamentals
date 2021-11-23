@@ -165,12 +165,12 @@ WebGL2는 몇 가지 더 추가합니다.
 </table>
 </div>
 
-## Depth Buffer 해상도
+## 뎁스 버퍼 해상도
 
 정말 오래된 일부 기기들은 16bit depth buffer를 사용합니다.
 그렇지 않은, 99%의 기기들은 24bit depth buffer를 사용하므로 걱정하지 않아도 됩니다.
 
-## readPixels format/type 조합
+## readPixels 포맷/타입 조합
 
 특정 format/type 조합만 작동이 보장됩니다.
 다른 조합들은 선택적인데요.
@@ -178,7 +178,7 @@ WebGL2는 몇 가지 더 추가합니다.
 
 ## framebuffer attachment 조합
 
-Framebuffer는 texture와 renderbuffer의 attachment를 하나 이상 가질 수 있습니다.
+프레임 버퍼는 텍스처와 렌더 버퍼의 attachment를 하나 이상 가질 수 있습니다.
 
 WebGL1에서는 3개의 attachment 조합만 동작이 보장됩니다.
 
