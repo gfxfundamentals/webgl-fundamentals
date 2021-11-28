@@ -203,7 +203,7 @@ void main() {
 ```glsl
 precision highp float;
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 varying vec3 v_worldPosition;
 varying vec3 v_worldNormal;
 

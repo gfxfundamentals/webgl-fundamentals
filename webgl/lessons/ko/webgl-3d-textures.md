@@ -34,7 +34,7 @@ WebGL에서 어떻게 텍스처를 적용할까요?
 
     precision mediump float;
 
-    // 정점 셰이더에서 전달
+    // 정점 셰이더에서 전달됩니다.
     *varying vec2 v_texcoord;
 
     *// 텍스처

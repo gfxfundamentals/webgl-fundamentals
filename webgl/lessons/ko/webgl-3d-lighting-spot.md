@@ -58,7 +58,7 @@ Limit로 *dot limit*를 계산하고, limit의 cosine을 구합니다.
 ```
 precision mediump float;
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 varying vec3 v_surfaceToView;

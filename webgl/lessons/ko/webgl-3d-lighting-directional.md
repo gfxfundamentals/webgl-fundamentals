@@ -276,7 +276,7 @@ function setNormals(gl) {
 ```
 precision mediump float;
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 -varying vec4 v_color;
 +varying vec3 v_normal;
 

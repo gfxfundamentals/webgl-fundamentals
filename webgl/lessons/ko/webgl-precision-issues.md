@@ -99,7 +99,7 @@ WebGL에서 대부분의 숫자는 32비트에 불과한데요.
   precision mediump float;
 #endif
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 varying vec3 v_normal;
 varying vec3 v_surfaceToLight;
 varying vec3 v_surfaceToView;
@@ -283,7 +283,7 @@ gl.texImage2D(
 그런 다음 0대 1의 gradient로 [렌더링](webgl-render-to-texture.html)할 겁니다.
 
 다음으로 해당 텍스처를 캔버스에 렌더링할 건데요.
-텍스처가 내부적으로 채널당 4비트라면 그려진 그래디언트에 16단계의 색상만 있을 겁니다.
+텍스처가 내부적으로 채널당 4비트라면 그려진 그레이디언트에 16단계의 색상만 있을 겁니다.
 텍스처가 실제로 채널당 8비트라면 256단계의 색상을 보게 될 겁니다.
 
 {{{example url="../webgl-precision-textures.html"}}}

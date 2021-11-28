@@ -204,7 +204,7 @@ void main() {
 precision mediump float;
 
 -uniform vec4 color;
-+// 정점 셰이더에서 전달
++// 정점 셰이더에서 전달됩니다.
 +varying vec4 v_color;
 
 void main() {

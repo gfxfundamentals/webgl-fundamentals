@@ -40,7 +40,7 @@ WebGL은 프래그먼트 셰이더를 사용해서 각 픽셀을 그릴 때 정�
     // 텍스처
     uniform sampler2D u_image;
 
-    // 정점 셰이더에서 전달된 texCoords
+    // 정점 셰이더에서 전달된 텍스처 좌표
     varying vec2 v_texCoord;
 
     void main() {
@@ -130,7 +130,7 @@ WebGL은 0.0에서 1.0까지인 텍스처 좌표에서 텍스처를 참조하기
     uniform sampler2D u_image;
     uniform vec2 u_textureSize;
 
-    // 정점 셰이더에서 전달된 texCoords
+    // 정점 셰이더에서 전달된 텍스처 좌표
     varying vec2 v_texCoord;
 
     void main() {
@@ -181,7 +181,7 @@ Convolution kernel은 행렬의 각 항목이 렌더링하는 픽셀 주변에 �
     uniform float u_kernel[9];
     uniform float u_kernelWeight;
 
-    // 정점 셰이더에서 전달된 texCoords
+    // 정점 셰이더에서 전달된 텍스처 좌표
     varying vec2 v_texCoord;
 
     void main() {

@@ -34,7 +34,7 @@ gl_FragColor = originalColor + (fogColor - originalColor) * fogAmount;
 ```glsl
 precision mediump float;
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 varying vec2 v_texcoord;
 
 // 텍스처
@@ -136,7 +136,7 @@ void main() {
 ```glsl
 precision mediump float;
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 varying vec2 v_texcoord;
 varying float v_fogDepth;
 
@@ -317,7 +317,7 @@ void main() {
 ```
 precision mediump float;
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 varying vec2 v_texcoord;
 -varying float v_fogDepth;
 +varying vec3 v_position;
@@ -361,7 +361,7 @@ fogAmount = clamp(fogAmount, 0., 1.);
 ```
 precision mediump float;
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 varying vec2 v_texcoord;
 varying vec3 v_position;
 

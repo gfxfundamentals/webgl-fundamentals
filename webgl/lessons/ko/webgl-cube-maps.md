@@ -117,7 +117,7 @@ void main() {
 ```glsl
 precision mediump float;
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 varying vec3 v_normal;
 
 // 텍스처

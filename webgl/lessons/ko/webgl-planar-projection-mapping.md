@@ -54,7 +54,7 @@ void main() {
 // 프래그먼트 셰이더
 precision mediump float;
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 varying vec2 v_texcoord;
 
 uniform vec4 u_colorMult;
@@ -258,7 +258,7 @@ const imageTexture = loadImageTexture('resources/f-texture.png');
 ```glsl
 precision mediump float;
 
-// 정점 셰이더에서 전달
+// 정점 셰이더에서 전달됩니다.
 varying vec2 v_texcoord;
 +varying vec4 v_projectedTexcoord;
 

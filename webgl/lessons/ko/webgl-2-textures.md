@@ -82,7 +82,7 @@ precision mediump float;
 uniform sampler2D u_image0;
 uniform sampler2D u_image1;
 
-// 정점 셰이더에서 전달된 texCoords 
+// 정점 셰이더에서 전달된 텍스처 좌표
 varying vec2 v_texCoord;
 
 void main() {
@@ -153,12 +153,12 @@ WebGL에는 "텍스처 유닛"이 있습니다.
 
 몇 가지 살펴봐야 할 것이 있습니다.
 
-텍스처 유닛을 생각하는 간단한 방법: 모든 텍스처 함수는 "active texture unit"에서 작동한다.
-"active texture unit"은 작업하려는 텍스처 유닛의 전역 변수입니다.
-각 텍스처 유닛은 2가지 target을 가지는데요.
-TEXTURE_2D target과 TEXTURE_CUBE_MAP target입니다.
-모든 텍스처 함수는 current active texture unit에서 지정된 target과 함께 작동합니다.
-JavaScript로 WebGL을 구현한다면 다음과 같을 겁니다.
+텍스처 유닛을 생각하는 간단한 방법: 모든 텍스처 함수는 "활성 텍스처 유닛"에서 작동한다.
+"활성 텍스처 유닛"은 작업하려는 텍스처 유닛의 전역 변수입니다.
+각 텍스처 유닛은 2가지 대상을 가지는데요.
+TEXTURE_2D 대상과 TEXTURE_CUBE_MAP 대상입니다.
+모든 텍스처 함수는 현재 활성 텍스처 유닛에서 지정된 대상과 함께 작동합니다.
+자바스크립트로 WebGL을 구현한다면 다음과 같을 겁니다.
 
 ```
 var getContext = function() {
@@ -173,19 +173,19 @@ var getContext = function() {
   var activeTextureUnit = 0;
 
   var activeTexture = function(unit) {
-    // unit enum을 index로 변환
+    // unit enum을 인덱스로 변환
     var index = unit - gl.TEXTURE0;
-    // active texture unit 설정
+    // 활성 텍스처 유닛 설정
     activeTextureUnit = index;
   };
 
   var bindTexture = function(target, texture) {
-    // active texture unit의 target에 대한 텍스처 설정
+    // 활성 텍스처 유닛의 대상에 대한 텍스처 설정
     textureUnits[activeTextureUnit][target] = texture;
   };
 
   var texImage2D = function(target, ... args ...) {
-    // active texture unit의 current texture에서 texImage2D 호출
+    // 활성 텍스처 유닛의 현재 텍스처에서 texImage2D 호출
     var texture = textureUnits[activeTextureUnit][target];
     texture.image2D(...args...);
   };

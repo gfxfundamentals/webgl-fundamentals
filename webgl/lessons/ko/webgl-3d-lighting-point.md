@@ -69,7 +69,7 @@ surface -> light 벡터는 단위 벡터가 아니기 때문에 프래그먼트 
 
     precision mediump float;
 
-    // 정점 셰이더에서 전달
+    // 정점 셰이더에서 전달됩니다.
     varying vec3 v_normal;
     +varying vec3 v_surfaceToLight;
 
@@ -190,7 +190,7 @@ surface -> light 벡터는 단위 벡터가 아니기 때문에 프래그먼트 
 다음으로 프래그먼트 셰이더에서 surface -> view 벡터와 surface -> light 벡터 사이의 `halfVector`를 계산해야 합니다.
 그런 다음 `halfVector`와 법선의 스칼라곱을 구하여, 빛이 뷰로 반사되는지 확인할 수 있습니다.
 
-    // 정점 셰이더에서 전달
+    // 정점 셰이더에서 전달됩니다.
     varying vec3 v_normal;
     varying vec3 v_surfaceToLight;
     +varying vec3 v_surfaceToView;
