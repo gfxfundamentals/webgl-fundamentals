@@ -259,10 +259,10 @@ WebGL은 함수가 출력하는 위치를 기반으로 <a href="webgl-points-lin
 <p>이런 함수가 접근하기 원하는 모든 데이터는 GPU에 제공되어야 하는데요.
 셰이더가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.</p>
 <ol>
-<li><p>Attribute &amp; Buffer</p>
+<li><p>속성 &amp; 버퍼</p>
 <p>버퍼는 GPU에 업로드하는 2진 데이터 배열입니다.
 일반적으로 버퍼는 위치, 법선, 텍스처 좌표, 정점 색상 등을 포함하지만 원하는 걸 자유롭게 넣어도 됩니다.</p>
-<p>Attribute는 버퍼에서 데이터를 가져오고 정점 셰이더에 제공하는 방법을 지정하는데 사용됩니다.
+<p>속성은 버퍼에서 데이터를 가져오고 정점 셰이더에 제공하는 방법을 지정하는데 사용됩니다.
 예를 들어 위치당 3개의 32비트 부동 소수점으로 위치를 버퍼에 넣을 수 있는데요.
 특정한 attribute에게 어느 버퍼에서 위치를 가져올지, 어떤 type의 데이터를 가져와야 하는지 (3개의 32비트 부동 소수점), 버퍼의 offset이 어느 위치에서 시작되는지, 한 위치에서 다음으로 갈 때 몇 byte를 이동시킬 것인지 알려줘야 합니다.</p>
 <p>버퍼는 무작위로 접근할 수 없습니다.
@@ -291,7 +291,7 @@ WebGL은 함수가 출력하는 위치를 기반으로 <a href="webgl-points-lin
 
 <p>다음은 WebGL을 보여주는 가장 간단한 형태의 예제입니다.</p>
 <p>정점 셰이더부터 시작해봅시다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// Attribute는 버퍼에서 데이터를 받음
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 속성은 버퍼에서 데이터를 받음
 attribute vec4 a_position;
 
 // 모든 셰이더는 main 함수를 가짐
@@ -416,13 +416,13 @@ var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 }
 </code></pre><p>그리고 호출합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var program = createProgram(gl, vertexShader, fragmentShader);
-</code></pre><p>이제 GPU에 GLSL Program을 만들었으니 데이터를 제공해줘야 합니다.
-WebGL의 주요 API는 GLSL program에 데이터를 제공하기 위한 상태 설정에 관한 것인데요.
-이 경우 GLSL program에 대한 유일한 입력은 attribute인 <code class="notranslate" translate="no">a_position</code>입니다.
-먼저 해야 할 일은 방금 생성된 program에 대한 attribute의 location를 찾는 겁니다.</p>
+</code></pre><p>이제 GPU에 GLSL 프로그램을 만들었으니 데이터를 제공해줘야 합니다.
+WebGL의 주요 API는 GLSL 프로그램에 데이터를 제공하기 위한 상태 설정에 관한 것인데요.
+이 경우 GLSL 프로그램에 대한 유일한 입력은 속성인 <code class="notranslate" translate="no">a_position</code>입니다.
+먼저 해야 할 일은 방금 생성된 프로그램에 대한 속성의 위치를 찾는 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionAttributeLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
-</code></pre><p>Attribute location(그리고 uniform location)을 찾는 것은 렌더링할 때가 아니라 초기화하는 동안 해야 합니다.</p>
-<p>Attribute는 버퍼로부터 데이터를 가져오므로 버퍼를 생성해야 합니다.</p>
+</code></pre><p>속성 위치(그리고 유니폼 위치)를 찾는 것은 렌더링할 때가 아니라 초기화하는 동안 해야 합니다.</p>
+<p>속성은 버퍼로부터 데이터를 가져오므로 버퍼를 생성해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionBuffer = gl.createBuffer();
 </code></pre><p>WebGL은 global bind point에 있는 많은 WebGL 자원을 조작하게 해줍니다.
 bind point는 WebGL 안에 있는 내부 전역 변수라고 생각하시면 되는데요.
@@ -499,13 +499,13 @@ gl.vertexAttribPointer(
 </code></pre><p><code class="notranslate" translate="no">gl.vertexAttribPointer</code>의 숨겨진 부분은 현재 바인딩된 <code class="notranslate" translate="no">ARRAY_BUFFER</code>를 attribute에 할당한다는 겁니다.
 다시 말해 이 attribute는 이제 <code class="notranslate" translate="no">positionBuffer</code>에 바인딩됩니다.
 이건 <code class="notranslate" translate="no">ARRAY_BUFFER</code> bind point에 다른 것들을 자유롭게 할당할 수 있다는 걸 의미하는데요.
-Attribute는 계속해서 <code class="notranslate" translate="no">positionBuffer</code>를 사용합니다.</p>
+속성은 계속해서 <code class="notranslate" translate="no">positionBuffer</code>를 사용합니다.</p>
 <p>참고로 GLSL 정점 셰이더 관점에서 <code class="notranslate" translate="no">a_position</code> attribute는 <code class="notranslate" translate="no">vec4</code>입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 </code></pre><p><code class="notranslate" translate="no">vec4</code>는 4개의 float 값입니다.
 Javascript에서 <code class="notranslate" translate="no">a_position = {x: 0, y: 0, z: 0, w: 0}</code>와 같이 생각할 수 있습니다.
 위에서 <code class="notranslate" translate="no">size = 2</code>로 설정했는데요.
-Attribute의 기본값은 <code class="notranslate" translate="no">0, 0, 0, 1</code>이므로 이 attribute는 buffer에서 처음 2개의 값(x 및 y)을 가져옵니다.
+속성의 기본값은 <code class="notranslate" translate="no">0, 0, 0, 1</code>이므로 이 attribute는 buffer에서 처음 2개의 값(x 및 y)을 가져옵니다.
 z와 w는 기본값으로 각각 0과 1이 될 겁니다.</p>
 <p>드디어 GLSL program을 실행하도록 WebGL에 요청할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var primitiveType = gl.TRIANGLES;
@@ -604,7 +604,7 @@ var offset = 0;
 *var count = 6;
 gl.drawArrays(primitiveType, offset, count);
 </code></pre><p>참고: 이 예제와 앞으로 나오는 모든 예제들은 셰이더를 컴파일하고 연결하는 함수가 포함된 <a href="/webgl/resources/webgl-utils.js"><code class="notranslate" translate="no">webgl-utils.js</code></a>를 사용합니다.
-<a href="webgl-boilerplate.html">Boilerplate</a> 코드로 예제를 복잡하게 할 필요는 없을 것 같습니다.</p>
+<a href="webgl-boilerplate.html">상용구 코드</a>로 예제를 복잡하게 할 필요는 없을 것 같습니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-rectangle.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-rectangle.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -703,9 +703,9 @@ function setRectangle(gl, x, y, width, height) {
 그저 사용자가 제공한 두 함수 정점 셰이더와 프래그먼트 셰이더를 실행시키고 점, 선, 삼각형을 그릴 뿐입니다.
 3D를 작업하면서 더 복잡해질 수 있지만, 그 복잡함은 프로그래머에 의해 더 복잡한 셰이더의 형태로 추가됩니다.
 WebGL API 자체는 rasterization 엔진에 불과하며 개념적으로는 꽤 단순합니다.</p>
-<p>Attribute와 uniform 2개에 데이터를 제공하는 방법을 보여주는 예제를 다뤘는데요.
-일반적으로는 여러 attribute와 많은 uniform을 가집니다.
-이 글의 서두에서 <em>varying</em>과 <em>texture</em>도 언급했었는데요.
+<p>속성과 유니폼 2개에 데이터를 제공하는 방법을 보여주는 예제를 다뤘는데요.
+일반적으로는 여러 속성과 많은 유니폼을 가집니다.
+이 글의 서두에서 <em>varying</em>과 <em>텍스처</em>도 언급했었는데요.
 이것들은 다음 수업에서 소개하겠습니다.</p>
 <p>계속하기 전에 <em>대부분의</em> 어플리케이션은 <code class="notranslate" translate="no">setRectangle</code>에서 했던 것처럼, 버퍼의 데이터를 업데이트하는 게 일반적이지 않다는 걸 말하고 싶습니다.
 이 예제를 사용한 것은 픽셀 좌표를 입력으로 보여주고, GLSL에서 간단히 계산하는 걸 보여주기 때문에, 설명하기에 가장 쉬운 방법이라고 생각했기 때문입니다. 
@@ -713,7 +713,7 @@ WebGL API 자체는 rasterization 엔진에 불과하며 개념적으로는 꽤 
 <p>웹 개발이 처음이든 아니든 WebGL 개발 방법에 관한 몇 가지 tip을 보려면 <a href="webgl-setup-and-installation.html">설정 및 설치</a>를 확인해주세요.</p>
 <p>WebGL을 100% 처음 배우고 GLSL이나 셰이더 혹은 GPU가 무엇인지 모르겠다면 <a href="webgl-how-it-works.html">WebGL이 실제로 작동하는 원리 기초</a>를 확인해주세요.
 WebGL 작동 방식을 이해하는 또 다른 방법으로 <a href="/webgl/lessons/resources/webgl-state-diagram.html">대화형 상태 다이어그램</a>을 보실 수도 있습니다.</p>
-<p>여기있는 대부분의 예제에서 사용된 <a href="webgl-boilerplate.html">boilerplate 코드</a>도 간략하게 읽어보세요.
+<p>여기있는 대부분의 예제에서 사용된 <a href="webgl-boilerplate.html">상용구 코드</a>도 간략하게 읽어보세요.
 안타깝게도 거의 모든 예제가 한 가지만 그려서 해당 구조를 보여주지 않기 때문에, 일반적인 WebGL 앱이 어떻게 구조화되어 있는지에 알 수 있도록 <a href="webgl-drawing-multiple-things.html">여러 가지를 그리는 방법</a>도 훑어봐야 합니다.</p>
 <p>그게 아니라면 여기에서 2가지 방향으로 갈 수 있습니다.
 이미지 처리에 관심이 있다면 <a href="webgl-image-processing.html">2D 이미지 처리 방법</a>을 보시면 됩니다.
@@ -806,7 +806,7 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
         </ul>
   <li>Geometry</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -815,7 +815,7 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">교차 출처 이미지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
@@ -837,9 +837,9 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
-<li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-skybox.html">스카이박스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
@@ -849,7 +849,7 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">텍스트 - 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - Glyph Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - 글리프 텍스처 사용</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -869,35 +869,35 @@ Multiline template literal은 WebGL을 지원하는 모든 브라우저에서 �
         </ul>
   <li>최적화</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
 <li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
         </ul>
   <li>Misc</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
-<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">상용구</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
-<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti Pattern</a></li>
+<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 문제</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas Clear 방지</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform 문제</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">크로스 플랫폼 문제</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-attributes.html">속성</a></li>
 <li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
-<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
+<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">프레임 버퍼</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
         </ul></ul>

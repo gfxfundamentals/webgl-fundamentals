@@ -255,10 +255,10 @@ Texture 1      -> [Blur]        -> Texture 2
 Texture 2      -> [Normal]      -> Canvas
 </pre></div>
 
-<p>이렇게 하기 위해 우리는 framebuffer를 만들어야 하는데요.
-WebGL과 OpenGL에서 framebuffer는 사실 좋지 않은 이름입니다.
-WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이며 실제로 어떤 종류의 버퍼도 아닌데요.
-하지만 텍스처를 framebuffer에 첨부해서 해당 텍스처에 렌더링할 수 있습니다.</p>
+<p>이렇게 하기 위해 우리는 프레임 버퍼를 만들어야 하는데요.
+WebGL과 OpenGL에서 프레임 버퍼는 사실 좋지 않은 이름입니다.
+WebGL/OpenGL 프레임 버퍼는 정말로 상태 모음(attachment 목록)일 뿐이며 실제로 어떤 종류의 버퍼도 아닌데요.
+하지만 텍스처를 프레임 버퍼에 첨부해서 해당 텍스처에 렌더링할 수 있습니다.</p>
 <p>먼저 원래 사용하던 <a href="webgl-image-processing.html">텍스처 생성 코드</a>를 함수로 바꿉니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  function createAndSetupTexture(gl) {
     var texture = gl.createTexture();
@@ -276,8 +276,8 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
   // 텍스처를 만들고 이미지를 넣습니다.
   var originalImageTexture = createAndSetupTexture(gl);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-</code></pre><p>그리고 이제 함수를 사용하여 텍스처를 2개 더 만들고 framebuffer 2개에 첨부합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 텍스처 2개를 만들고 framebuffer에 첨부합니다.
+</code></pre><p>그리고 이제 함수를 사용하여 텍스처를 2개 더 만들고 프레임 버퍼 2개에 첨부합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 텍스처 2개를 만들고 프레임 버퍼에 첨부합니다.
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii &lt; 2; ++ii) {
@@ -297,7 +297,7 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
       null
     );
 
-    // framebuffer 생성
+    // 프레임 버퍼 생성
     var fbo = gl.createFramebuffer();
     framebuffers.push(fbo);
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
@@ -352,7 +352,7 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
 
   // 적용하고 싶은 각 효과를 반복합니다.
   for (var ii = 0; ii &lt; effectsToApply.length; ++ii) {
-    // Framebuffer 중 하나에 그리기 위해 설정합니다.
+    // 프레임 버퍼 중 하나에 그리기 위해 설정합니다.
     setFramebuffer(framebuffers[ii % 2], image.width, image.height);
 
     drawWithKernel(effectsToApply[ii]);
@@ -367,13 +367,13 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
   drawWithKernel(&quot;normal&quot;);
 
   function setFramebuffer(fbo, width, height) {
-    // 이걸 렌더링할 framebuffer로 만듭니다.
+    // 이걸 렌더링할 프레임 버퍼로 만듭니다.
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
-    // Framebuffer의 해상도를 셰이더에 알려줍니다.
+    // 프레임 버퍼의 해상도를 셰이더에 알려줍니다.
     gl.uniform2f(resolutionLocation, width, height);
 
-    // WebGL에 framebuffer에 필요한 viewport 설정을 알려줍니다.
+    // WebGL에 프레임 버퍼에 필요한 뷰포트 설정을 알려줍니다.
     gl.viewport(0, 0, width, height);
   }
 
@@ -394,14 +394,14 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
 
 </p>
 <p>살펴봐야 할 게 몇 가지 있습니다.</p>
-<p><code class="notranslate" translate="no">gl.bindFramebuffer</code>에 <code class="notranslate" translate="no">null</code>을 넘겨 호출하는 것은 framebuffer 중 하나 대신 캔버스에 렌더링하고 싶다는 걸 WebGL에 알려줍니다.</p>
+<p><code class="notranslate" translate="no">gl.bindFramebuffer</code>에 <code class="notranslate" translate="no">null</code>을 넘겨 호출하는 것은 프레임 버퍼 중 하나 대신 캔버스에 렌더링하고 싶다는 걸 WebGL에 알려줍니다.</p>
 <p>WebGL은 <a href="webgl-fundamentals.html">클립 공간</a>에서 다시 픽셀로 변환해야 하는데요.
 이건 <code class="notranslate" translate="no">gl.viewport</code>의 설정에 따라 수행됩니다.
-렌더링할 framebuffer는 캔버스 크기와 다르기 때문에 framebuffer texture를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 캔버스를 렌더링할 때 다시 설정해야 합니다.</p>
+렌더링할 프레임 버퍼는 캔버스 크기와 다르기 때문에 프레임 버퍼 텍스처를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 캔버스를 렌더링할 때 다시 설정해야 합니다.</p>
 <p>마지막으로 <a href="webgl-fundamentals.html">원본 예제</a>에서 렌더링할 때 Y 좌표를 뒤집었는데, 이는 WebGL이 0,0을 2D에서 더 관례적인 왼쪽 상단 대신 왼쪽 하단 모서리로 캔버스에 표시하기 때문입니다.
-이건 framebuffer에 렌더링할 때는 필요가 없는데요.
-Framebuffer는 표시되지 않기 때문에, 어느 부분이 상단 혹은 하단인지는 관계가 없습니다.
-중요한 건 framebuffer에서 픽셀 0,0이 우리가 계산한 0,0에 해당한다는 겁니다.
+이건 프레임 버퍼에 렌더링할 때는 필요가 없는데요.
+프레임 버퍼는 표시되지 않기 때문에, 어느 부분이 상단 혹은 하단인지는 관계가 없습니다.
+중요한 건 프레임 버퍼에서 픽셀 0,0이 우리가 계산한 0,0에 해당한다는 겁니다.
 이걸 해결하기 위해 셰이더에 입력 하나를 더 추가해서 뒤집을지 말지 설정 가능하도록 만들었습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 ...
@@ -495,7 +495,7 @@ GLSL program을 변환하고 특정 program에 대한 매개변수를 업데이�
         </ul>
   <li>Geometry</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -504,7 +504,7 @@ GLSL program을 변환하고 특정 program에 대한 매개변수를 업데이�
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">교차 출처 이미지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
@@ -526,9 +526,9 @@ GLSL program을 변환하고 특정 program에 대한 매개변수를 업데이�
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
-<li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-skybox.html">스카이박스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
@@ -538,7 +538,7 @@ GLSL program을 변환하고 특정 program에 대한 매개변수를 업데이�
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">텍스트 - 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - Glyph Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - 글리프 텍스처 사용</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -558,35 +558,35 @@ GLSL program을 변환하고 특정 program에 대한 매개변수를 업데이�
         </ul>
   <li>최적화</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
 <li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
         </ul>
   <li>Misc</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
-<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">상용구</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
-<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti Pattern</a></li>
+<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 문제</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas Clear 방지</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform 문제</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">크로스 플랫폼 문제</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-attributes.html">속성</a></li>
 <li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
-<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
+<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">프레임 버퍼</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
         </ul></ul>

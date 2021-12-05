@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Environment map을 구현하는 방법">
+<meta name="description" content="환경맵을 구현하는 방법">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-environment-maps_ko.jpg">
 
-<meta property="og:title" content="WebGL Environment Map (반사)">
+<meta property="og:title" content="WebGL 환경맵 (반사)">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-environment-maps_ko.jpg">
-<meta property="og:description" content="Environment map을 구현하는 방법">
+<meta property="og:description" content="환경맵을 구현하는 방법">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL Environment Map (반사)">
+<meta name="twitter:title" content="WebGL 환경맵 (반사)">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html">
-<meta name="twitter:description" content="Environment map을 구현하는 방법">
+<meta name="twitter:description" content="환경맵을 구현하는 방법">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-environment-maps_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-environment-maps.html",
       "inLanguage":"ko",
-      "name":"WebGL Environment Map (반사)",
+      "name":"WebGL 환경맵 (반사)",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL Environment Map (반사)</title>
+<title>WebGL 환경맵 (반사)</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,21 +236,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Environment Map (반사)</h1>
+    <h1>WebGL 환경맵 (반사)</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
       <p>이 글은 WebGL 관련 시리즈의 일부입니다.
 첫 글은 <a href="webgl-fundamentals.html">기초</a>로 시작했는데요.
-이 글은 <a href="webgl-cube-maps.html">cubemap에 관한 글</a>에서 이어집니다.
+이 글은 <a href="webgl-cube-maps.html">큐브맵에 관한 글</a>에서 이어집니다.
 또한 <a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>에서 다룬 개념을 사용합니다.
 아직 읽지 않으셨다면 해당 글을 먼저 읽어주세요.</p>
-<p><em>Environment map</em>은 그리는 객체의 환경을 나타내는데요.
+<p><em>환경맵</em>은 그리는 객체의 환경을 나타내는데요.
 야외 장면을 그리는 경우 야외를 표현합니다.
 무대의 사람을 그린다면 장소를 표현하게 됩니다.
 우주 장면을 그리면 별이 될 겁니다.
-장소의 한 지점에서 환경을 보여주는 6개의 이미지가 있다면 cubemap으로 environment map을 구현할 수 있습니다.</p>
-<p>다음은 캘리포니아 마운틴 뷰에 있는 컴퓨터 역사 박물관 로비의 environment map입니다.</p>
+장소의 한 지점에서 환경을 보여주는 6개의 이미지가 있다면 큐브맵으로 환경맵을 구현할 수 있습니다.</p>
+<p>다음은 캘리포니아 마운틴 뷰에 있는 컴퓨터 역사 박물관 로비의 환경맵입니다.</p>
 <div class="webgl_center">
   <img src="../../resources/images/computer-history-museum/pos-x.jpg" style="width: 128px" class="border">
   <img src="../../resources/images/computer-history-museum/neg-x.jpg" style="width: 128px" class="border">
@@ -296,7 +296,7 @@ const faceInfos = [
 faceInfos.forEach((faceInfo) =&gt; {
   const {target, url} = faceInfo;
 
-  // 캔버스를 cubemap 면에 업로드
+  // 캔버스를 큐브맵의 면에 업로드
   const level = 0;
   const internalFormat = gl.RGBA;
   const width = 512;
@@ -321,16 +321,16 @@ gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 </code></pre>
 <p>모든 면에 대해 <code class="notranslate" translate="no">texImage2D</code>에 <code class="notranslate" translate="no">null</code>을 전달하여 512x512의 비어있는 이미지로 초기화합니다.
-Cubemap은 6개의 면을 가져야 하며, 6개의 면은 모두 동일한 크기의 사각형이여야 합니다.
+큐브맵은 6개의 면을 가져야 하며, 6개의 면은 모두 동일한 크기의 사각형이여야 합니다.
 텍스처가 아니라면 렌더링되지 않을 겁니다.
 하지만 우리는 이미지 6개를 로딩하고 있습니다.
 즉시 렌더링을 시작하고 싶으므로 6개의 면을 모두 할당한 다음 이미지 로딩을 시작합니다.
 각 이미지가 로드되면 알맞은 면으로 업로드한 다음 mipmap을 다시 생성합니다.
-다시 말해 즉시 렌더링할 수 있고, 이미지가 다운로드되면 cubemap의 면이 한 번에 하나씩 이미지로 채워지며, 6개가 모두 로드되지 않아도 렌더링할 수 있습니다.</p>
+다시 말해 즉시 렌더링할 수 있고, 이미지가 다운로드되면 큐브맵의 면이 한 번에 하나씩 이미지로 채워지며, 6개가 모두 로드되지 않아도 렌더링할 수 있습니다.</p>
 <p>하지만 이미지를 로딩하는 것만으로는 부족합니다.
 <a href="webgl-3d-lighting-point.html">조명</a>처럼 약간의 수식이 필요합니다.</p>
 <p>이 경우 눈/카메라에서 객체의 표면까지의 벡터가 주어지면, 그려지는 각 fragment가 해당 표면에서 반사되는 방향을 알고 싶습니다.
-그러면 해당 방향을 사용하여 cubemap의 색상을 가져올 수 있습니다.</p>
+그러면 해당 방향을 사용하여 큐브맵의 색상을 가져올 수 있습니다.</p>
 <p>반사에 대한 공식은 다음과 같습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">reflectionDir = eyeToSurfaceDir – 
     2 ∗ dot(surfaceNormal, eyeToSurfaceDir) ∗ surfaceNormal
@@ -373,15 +373,15 @@ Cubemap은 6개의 면을 가져야 하며, 6개의 면은 모두 동일한 크�
 <p>원래 다이어그램에 다시 넣어보면 잘 맞는 것 같습니다.</p>
 <div class="webgl_center"><img src="../resources/reflect-45-06.svg" style="width: 400px"></div>
 
-<p><span style="color: red">반사된 방향</span>을 이용하여 cubemap을 보고 물체의 표면을 채색합니다.</p>
+<p><span style="color: red">반사된 방향</span>을 이용하여 큐브맵을 보고 물체의 표면을 채색합니다.</p>
 <p>다음은 surface의 rotation을 설정하고 방정식의 다양한 부분을 볼 수 있는 다이어그램입니다.
-또한 반사 벡터가 cubemap의 다른 면을 가리켜서 표면 색상에 영향을 주는 것도 볼 수 있습니다.</p>
+또한 반사 벡터가 큐브맵의 다른 면을 가리켜서 표면 색상에 영향을 주는 것도 볼 수 있습니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 400px;" src="/webgl/lessons/resources/environment-mapping.html"></iframe>
 </div>
 
 </p>
-<p>이제 반사가 어떻게 작동하는지 알고, cubemap에서 값을 찾기 위해 사용할 수 있으므로, 셰이더를 변경해봅시다.</p>
+<p>이제 반사가 어떻게 작동하는지 알고, 큐브맵에서 값을 찾기 위해 사용할 수 있으므로, 셰이더를 변경해봅시다.</p>
 <p>먼저 정점 셰이더에서 정점의 world position과 world oriented normal을 계산하고 이를 프래그먼트 셰이더에 varying으로 전달할 겁니다.
 이는 <a href="webgl-3d-lighting-spot.html">스포트라이트에 대한 글</a>에서 했던 것과 유사합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
@@ -408,7 +408,7 @@ void main() {
 <p>그런 다음 프래그먼트 셰이더에서 <code class="notranslate" translate="no">worldNormal</code>이 정점 사이의 표면을 가로질러 보간되므로 정규화합니다.
 카메라의 world position을 전달하고 표면의 world position에서 이를 빼면 <code class="notranslate" translate="no">eyeToSurfaceDir</code>이 됩니다.</p>
 <p>마지막으로 위에서 살펴본 공식을 구현하는 GLSL 내장 함수 <code class="notranslate" translate="no">reflect</code>를 사용합니다.
-그리고 결과를 이용하여 cubemap에서 색상을 가져옵니다.</p>
+그리고 결과를 이용하여 큐브맵에서 색상을 가져옵니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision highp float;
 
 // 정점 셰이더에서 전달됩니다.
@@ -431,7 +431,7 @@ void main() {
 </code></pre>
 <p>또한 이 예제를 위해 실제 법선이 필요한데요.
 실제 법선으로 큐브의 면이 평평하게 보이도록 합니다.
-이전 예제에서 cubemap의 작동을 보기 위해 큐브의 위치를 수정했지만, 이 경우에는 <a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>에서 다룬 것처럼 큐브에 대한 실제 법선이 필요합니다.</p>
+이전 예제에서 큐브맵의 작동을 보기 위해 큐브의 위치를 수정했지만, 이 경우에는 <a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>에서 다룬 것처럼 큐브에 대한 실제 법선이 필요합니다.</p>
 <p>초기화할 때</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 법선을 넣을 버퍼 생성
 var normalBuffer = gl.createBuffer();
@@ -492,7 +492,7 @@ gl.uniform1i(textureLocation, 0);
 </div>
 
 </p>
-<p>다음은 <a href="webgl-skybox.html">skybox에 cubemap을 사용하는 방법</a>을 보여드리겠습니다.</p>
+<p>다음은 <a href="webgl-skybox.html">스카이박스에 큐브맵을 사용하는 방법</a>을 보여드리겠습니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -548,7 +548,7 @@ gl.uniform1i(textureLocation, 0);
         </ul>
   <li>Geometry</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -557,7 +557,7 @@ gl.uniform1i(textureLocation, 0);
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">교차 출처 이미지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
@@ -579,9 +579,9 @@ gl.uniform1i(textureLocation, 0);
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
-<li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-skybox.html">스카이박스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
@@ -591,7 +591,7 @@ gl.uniform1i(textureLocation, 0);
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">텍스트 - 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - Glyph Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - 글리프 텍스처 사용</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -611,35 +611,35 @@ gl.uniform1i(textureLocation, 0);
         </ul>
   <li>최적화</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
 <li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
         </ul>
   <li>Misc</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
-<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">상용구</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
-<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti Pattern</a></li>
+<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 문제</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas Clear 방지</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform 문제</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">크로스 플랫폼 문제</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-attributes.html">속성</a></li>
 <li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
-<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
+<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">프레임 버퍼</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
         </ul></ul>
@@ -663,8 +663,8 @@ gl.uniform1i(textureLocation, 0);
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL Environment Map (반사)';
-            var disqus_title = 'WebGL Environment Map (반사)';
+            var disqus_identifier = 'WebGL 환경맵 (반사)';
+            var disqus_title = 'WebGL 환경맵 (반사)';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

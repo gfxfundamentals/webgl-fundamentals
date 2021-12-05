@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Skybox로 하늘 보여주기!">
+<meta name="description" content="스카이박스로 하늘 보여주기!">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-skybox_ko.jpg">
 
-<meta property="og:title" content="WebGL SkyBox">
+<meta property="og:title" content="WebGL 스카이박스">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-skybox_ko.jpg">
-<meta property="og:description" content="Skybox로 하늘 보여주기!">
+<meta property="og:description" content="스카이박스로 하늘 보여주기!">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-skybox.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL SkyBox">
+<meta name="twitter:title" content="WebGL 스카이박스">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-skybox.html">
-<meta name="twitter:description" content="Skybox로 하늘 보여주기!">
+<meta name="twitter:description" content="스카이박스로 하늘 보여주기!">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-skybox_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-skybox.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-skybox.html",
       "inLanguage":"ko",
-      "name":"WebGL SkyBox",
+      "name":"WebGL 스카이박스",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL SkyBox</title>
+<title>WebGL 스카이박스</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,31 +236,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL SkyBox</h1>
+    <h1>WebGL 스카이박스</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
       <p>이 글은 WebGL 관련 시리즈의 일부입니다.
 첫 글은 <a href="webgl-fundamentals.html">기초</a>로 시작했는데요.
-이 글은 <a href="webgl-environment-maps.html">environment map에 관한 글</a>에서 이어집니다.</p>
-<p><em>Skybox</em>는 모든 방향에서 하늘처럼 보이거나 수평선을 포함하여 아주 멀리 있는 것처럼 보이게 하는 텍스처로 구성된 박스입니다.
-방에 일어나 있고 각각의 벽에 포스터가 있다고 상상해보면, 하늘을 보여주는 포스터로 천장을 덮을 수 있고, 땅을 보여주는 포스터를 바닥에 추가할 수 있는데, 이게 skybox입니다.</p>
+이 글은 <a href="webgl-environment-maps.html">환경맵에 관한 글</a>에서 이어집니다.</p>
+<p><em>스카이박스</em>는 모든 방향에서 하늘처럼 보이거나 수평선을 포함하여 아주 멀리 있는 것처럼 보이게 하는 텍스처로 구성된 박스입니다.
+방에 일어나 있고 각각의 벽에 포스터가 있다고 상상해보면, 하늘을 보여주는 포스터로 천장을 덮을 수 있고, 땅을 보여주는 포스터를 바닥에 추가할 수 있는데, 이게 스카이박스입니다.</p>
 <p>많은 3D 게임들이 큰 큐브를 만들고 하늘에 텍스처를 입히는 방식으로 이를 수행합니다.</p>
 <p>이 방식은 잘 동작하지만 몇 가지 문제가 있습니다.
 한 가지는 카메라가 향하고 있는 방향이 어디든 여러 방향에서 봐야하는 큐브가 있다는 겁니다.
 여러분은 모든 게 멀리 그려지길 바라겠지만 큐브의 모서리가 clipping plane 바깥으로 나가길 원하진 않을 텐데요.
-해당 문제를 복잡하게 하는 것은 성능 상의 이유로, GPU가 <a href="webgl-3d-orthographic.html">depth buffer test</a>를 사용하여 테스트가 실패할 픽셀의 그리기를 건너뛸 수 있기 때문에, 멀리 있는 것보다 가까이 있는 것을 먼저 그리려는 겁니다.
-따라서 이상적으로는 depth buffer test를 키고 마지막에 skybox를 그려야 겠지만, 실제로 박스를 쓰는 경우 카메라가 다른 방향에서 보기 때문에, 박스의 모서리가 측면보다 멀리 떨어져 문제가 발생합니다.</p>
+해당 문제를 복잡하게 하는 것은 성능 상의 이유로, GPU가 <a href="webgl-3d-orthographic.html">깊이 버퍼 테스트</a>를 사용하여 테스트가 실패할 픽셀의 그리기를 건너뛸 수 있기 때문에, 멀리 있는 것보다 가까이 있는 것을 먼저 그리려는 겁니다.
+따라서 이상적으로는 깊이 버퍼 테스트를 키고 마지막에 스카이박스를 그려야 겠지만, 실제로 박스를 쓰는 경우 카메라가 다른 방향에서 보기 때문에, 박스의 모서리가 측면보다 멀리 떨어져 문제가 발생합니다.</p>
 <div class="webgl_center"><img src="../resources/skybox-issues.svg" style="width: 500px"></div>
 
 <p>위에서 볼 수 있듯이 큐브의 가장 먼 지점이 절두체 내부에 있는지 확인해야 하지만, 그것 때문에 큐브의 일부 모서리가 덮고 싶지 않은 객체를 덮을 수 있습니다.</p>
-<p>일반적인 해결책은 depth test를 끄고 skybox를 먼저 그리는 거지만, 장면에서 나중에 다룰 픽셀을 그리지 않는 depth buffer test는 이점이 없습니다.</p>
-<p>큐브를 사용하는 대신에 캔버스 전체를 덮고 <a href="webgl-cube-maps.html">cubemap</a>을 사용하는 사각형을 그려봅시다.
+<p>일반적인 해결책은 depth test를 끄고 스카이박스를 먼저 그리는 거지만, 장면에서 나중에 다룰 픽셀을 그리지 않는 depth buffer test는 이점이 없습니다.</p>
+<p>큐브를 사용하는 대신에 캔버스 전체를 덮고 <a href="webgl-cube-maps.html">큐브맵</a>을 사용하는 사각형을 그려봅시다.
 일반적으로 3D 공간에서 사각형을 투영하기 위해 view projection matrix를 사용하는데요.
 이 경우에는 정반대로 하려고 합니다.
 View projection matrix의 역행렬을 사용하여, 카메라가 사각형의 각 픽셀을 바라보는 방향을 가져오려고 하는데요.
-이는 cubemap을 바라보는 방향을 알려줄 겁니다.</p>
-<p><a href="webgl-environment-maps.html">Environment Map 예제</a>를 가져와 여기서 사용하지 않을 법선 관련 코드를 모두 제거했습니다.
+이는 큐브맵을 바라보는 방향을 알려줄 겁니다.</p>
+<p><a href="webgl-environment-maps.html">환경맵 예제</a>를 가져와 여기서 사용하지 않을 법선 관련 코드를 모두 제거했습니다.
 그런 다음 사각형이 필요합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 사각형을 정의하는 값으로 버퍼 채우기
 function setGeometry(gl) {
@@ -360,7 +360,7 @@ gl.uniform1i(skyboxLocation, 0);
 </div>
 
 </p>
-<p>이 샘플에 environment map cube를 결합해봅시다.
+<p>이 샘플에 환경맵 큐브를 결합해봅시다.
 <a href="webgl-less-code-more-fun.html">Less code more fun</a>에서 언급한 유틸을 사용할 겁니다.</p>
 <p>두 셰이더 세트를 모두 넣어야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;script id=&quot;skybox-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
@@ -424,8 +424,8 @@ webglUtils.setUniforms(envmapProgramInfo, {
 });
 webglUtils.drawBufferInfo(gl, cubeBufferInfo);
 </code></pre>
-<p>이어서 skybox를 그립니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// skybox 그리기
+<p>이어서 스카이박스를 그립니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 스카이박스 그리기
 
 // 사각형이 1.0에서 depth test를 통과하도록 만들기
 gl.depthFunc(gl.LEQUAL);
@@ -445,10 +445,10 @@ webglUtils.drawBufferInfo(gl, quadBufferInfo);
 </div>
 
 </p>
-<p>지난 3개의 글이 cubemap을 활용하는 방법을 알려줬길 바랍니다.
-예를 들어 <a href="webgl-3d-lighting-spot.html">계산된 조명</a>에서 코드를 가져와, environment map의 결과와 결합하여, 자동차 후드나 광택이 있는 바닥을 만드는 게 일반적입니다.
-Cubemap을 사용하여 조명을 계산하는 기술도 있습니다.
-Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방정식에 입력하여 사용한다는 점을 제외하면 environment map과 동일합니다.</p>
+<p>지난 3개의 글이 큐브맵을 활용하는 방법을 알려줬길 바랍니다.
+예를 들어 <a href="webgl-3d-lighting-spot.html">계산된 조명</a>에서 코드를 가져와, 환경맵의 결과와 결합하여, 자동차 후드나 광택이 있는 바닥을 만드는 게 일반적입니다.
+큐브맵을 사용하여 조명을 계산하는 기술도 있습니다.
+환경맵에서 얻은 값을 색상으로 사용하는 대신 조명 방정식에 입력하여 사용한다는 점을 제외하면 환경맵과 동일합니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -504,7 +504,7 @@ Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방�
         </ul>
   <li>Geometry</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -513,7 +513,7 @@ Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방�
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">교차 출처 이미지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
@@ -535,9 +535,9 @@ Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방�
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
-<li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-skybox.html">스카이박스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
@@ -547,7 +547,7 @@ Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방�
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">텍스트 - 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - Glyph Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - 글리프 텍스처 사용</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -567,35 +567,35 @@ Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방�
         </ul>
   <li>최적화</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
 <li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
         </ul>
   <li>Misc</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
-<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">상용구</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
-<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti Pattern</a></li>
+<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 문제</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas Clear 방지</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform 문제</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">크로스 플랫폼 문제</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-attributes.html">속성</a></li>
 <li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
-<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
+<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">프레임 버퍼</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
         </ul></ul>
@@ -619,8 +619,8 @@ Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방�
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL SkyBox';
-            var disqus_title = 'WebGL SkyBox';
+            var disqus_identifier = 'WebGL 스카이박스';
+            var disqus_title = 'WebGL 스카이박스';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

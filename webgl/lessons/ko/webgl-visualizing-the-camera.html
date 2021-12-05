@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ko/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ko/webgl-visualizing-the-camera.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of GFXFundamentals. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,80 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Visualizing the Camera" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to draw a camera frustum" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-visualizing-the-camera.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Visualizing the Camera" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-visualizing-the-camera.html" />
-<meta name="twitter:description" content="How to draw a camera frustum" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="카메라 절두체를 그리는 방법">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-visualizing-the-camera_ko.jpg">
+
+<meta property="og:title" content="WebGL 카메라 시각화">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-visualizing-the-camera_ko.jpg">
+<meta property="og:description" content="카메라 절두체를 그리는 방법">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-visualizing-the-camera.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGL 카메라 시각화">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-visualizing-the-camera.html">
+<meta name="twitter:description" content="카메라 절두체를 그리는 방법">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-visualizing-the-camera_ko.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-visualizing-the-camera.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-visualizing-the-camera_ko.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-visualizing-the-camera.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-visualizing-the-camera.html",
+      "inLanguage":"ko",
+      "name":"WebGL 카메라 시각화",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-visualizing-the-camera.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Visualizing the Camera</title>
+<title>WebGL 카메라 시각화</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-visualizing-the-camera.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-visualizing-the-camera.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,13 +236,433 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Visualizing the Camera</h1>
+    <h1>WebGL 카메라 시각화</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>죄송하지만 이 글은 아직 번역 전입니다.</p>
-<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">번역</a> 환영합니다! 😄</p>
-<p>영어 원문은 <a href="/webgl/lessons/webgl-visualizing-the-camera.html">여기</a>에 있습니다.</p>
+      <p>이 글은 여러분이 <a href="webgl-multiple-views.html">다중 뷰에 대한 글</a>을 읽었다고 가정합니다.
+해당 글을 읽지 않았다면 <a href="webgl-multiple-views.html">그걸</a> 먼저 읽어주세요.</p>
+<p>또한 이 글에선 예제를 깔끔하게 정리하기 위해 <a href="webgl-less-code-more-fun.html">less code more fun</a>에서 언급된 라이브러리를 사용합니다.
+<code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code>라는 함수가 버퍼와 속성을 설정하는 게 어떤 의미인지, 혹은 <code class="notranslate" translate="no">webglUtils.setUniforms</code>라는 함수가 유니폼을 설정하는 게 어떤 의미인지 이해하지 못 하겠다면, 더 뒤로 돌아가서 <a href="webgl-fundamentals.html">기초</a>를 읽어야 합니다.</p>
+<p>카메라가 보는 영역인 &quot;절두체&quot;를 시각화할 수 있으면 유용한데요.
+이건 놀라울 정도로 쉽습니다.
+<a href="webgl-3d-orthographic.html">orthographic</a>과 <a href="webgl-3d-perspective.html">perspective</a> 투영에 대한 글에서 지적했던 것처럼 이러한 투영 행렬들은 약간의 공간을 차지하고 클립 공간의 -1에서 +1사이 박스로 변환합니다.
+게다가 카메라 행렬은 카메라의 월드 공간에서 어떤 위치와 오리엔테이션을 나타내는 행령일 뿐입니다.</p>
+<p>따라서 분명하게 먼저 해야할 일이 있습니다.
+카메라 행렬을 사용하여 무언가를 그리면 카메라를 나타내는 객체가 생깁니다.
+문제는 카메라가 스스로를 볼 수 없다는 점인데 <a href="webgl-multiple-views.html">다중 뷰</a> 기술을 사용하면 2개의 뷰를 가질 수 있습니다.
+각 뷰에서 다른 카메라를 사용할 겁니다.
+두 번째 뷰는 첫 번째 뷰를 보기 때문에 다른 뷰에서 사용되는 카메라를 나타내기 위해 그리는 객체를 볼 수 있습니다.</p>
+<p>먼저 카메라를 나타내는 데이터를 만들어 보겠습니다.
+큐브를 만든 다음 끝에 원뿔을 추가해봅시다.
+이를 선으로 그릴 겁니다.
+그리고 <a href="webgl-indexed-vertices.html">색인</a>을 사용하여 정점을 연결합니다.</p>
+<p><a href="webgl-3d-camera.html">카메라</a>는 -Z 방향을 내려다 보기 때문에 -Z 방향으로 원뿔이 열리도록 양수 쪽에 큐브와 원뿔을 놓읍시다.</p>
+<p>먼저 큐브 라인입니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 카메라에 대한 지오메트리 생성
+function createCameraBufferInfo(gl) {
+  // 먼저 큐브를 추가해봅시다.
+  // 카메라가 -Z를 내려다 보기 때문에 1에서 3사이가 되므로 Z = 0부터 시작하길 원합니다.
+  const positions = [
+    -1, -1,  1,  // 큐브 정점
+     1, -1,  1,
+    -1,  1,  1,
+     1,  1,  1,
+    -1, -1,  3,
+     1, -1,  3,
+    -1,  1,  3,
+     1,  1,  3,
+  ];
+  const indices = [
+    0, 1, 1, 3, 3, 2, 2, 0, // 큐브 인덱스
+    4, 5, 5, 7, 7, 6, 6, 4,
+    0, 4, 1, 5, 3, 7, 2, 6,
+  ];
+  return webglUtils.createBufferInfoFromArrays(gl, {
+    position: positions,
+    indices,
+  });
+}
+</code></pre>
+<p>그런 다음 원뿔 선을 추가합시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 카메라에 대한 지오메트리 생성
+function createCameraBufferInfo(gl) {
+  // 먼저 큐브를 추가해봅시다.
+  // 카메라가 -Z를 내려다 보기 때문에 1에서 3사이가 되므로 Z = 0부터 시작하길 원합니다.
++  // -Z 방향으로 열리는 큐브 앞에 원뿔을 놓습니다.
+  const positions = [
+    -1, -1,  1,  // 큐브 정점
+     1, -1,  1,
+    -1,  1,  1,
+     1,  1,  1,
+    -1, -1,  3,
+     1, -1,  3,
+    -1,  1,  3,
+     1,  1,  3,
++     0,  0,  1,  // 원뿔 팁
+  ];
+  const indices = [
+    0, 1, 1, 3, 3, 2, 2, 0, // 큐브 인덱스
+    4, 5, 5, 7, 7, 6, 6, 4,
+    0, 4, 1, 5, 3, 7, 2, 6,
+  ];
++  // 원뿔 세그먼트 추가
++  const numSegments = 6;
++  const coneBaseIndex = positions.length / 3; 
++  const coneTipIndex =  coneBaseIndex - 1;
++  for (let i = 0; i &lt; numSegments; ++i) {
++    const u = i / numSegments;
++    const angle = u * Math.PI * 2;
++    const x = Math.cos(angle);
++    const y = Math.sin(angle);
++    positions.push(x, y, 0);
++    // 팁에서 가장자리로 이어지는 선
++    indices.push(coneTipIndex, coneBaseIndex + i);
++    // 가장자리의 점부터 가장자리의 다음 점으로 이어지는 선
++    indices.push(coneBaseIndex + i, coneBaseIndex + (i + 1) % numSegments);
++  }
+  return webglUtils.createBufferInfoFromArrays(gl, {
+    position: positions,
+    indices,
+  });
+}
+</code></pre>
+<p>마지막으로 F의 높이가 150유닛이고 카메라의 크기가 2~3유닛이기 때문에 스케일을 추가합니다.
+그릴 때 스케일 행렬로 곱하여 크기를 조정하거나 여기에서 데이터 자체의 크기를 조정할 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-function createCameraBufferInfo(gl) {
++function createCameraBufferInfo(gl, scale = 1) {
+  // 먼저 큐브를 추가해봅시다.
+  // 카메라가 -Z를 내려다 보기 때문에 1에서 3사이가 되므로 Z = 0부터 시작하길 원합니다.
+  // -Z 방향으로 열리는 큐브 앞에 원뿔을 놓습니다.
+  const positions = [
+    -1, -1,  1,  // 큐브 정점
+     1, -1,  1,
+    -1,  1,  1,
+     1,  1,  1,
+    -1, -1,  3,
+     1, -1,  3,
+    -1,  1,  3,
+     1,  1,  3,
+     0,  0,  1,  // 원뿔 팁
+  ];
+  const indices = [
+    0, 1, 1, 3, 3, 2, 2, 0, // 큐브 인덱스
+    4, 5, 5, 7, 7, 6, 6, 4,
+    0, 4, 1, 5, 3, 7, 2, 6,
+  ];
+  // 원뿔 세그먼트 추가
+  const numSegments = 6;
+  const coneBaseIndex = positions.length / 3; 
+  const coneTipIndex =  coneBaseIndex - 1;
+  for (let i = 0; i &lt; numSegments; ++i) {
+    const u = i / numSegments;
+    const angle = u * Math.PI * 2;
+    const x = Math.cos(angle);
+    const y = Math.sin(angle);
+    positions.push(x, y, 0);
+    // 팁에서 가장자리로 이어지는 선
+    indices.push(coneTipIndex, coneBaseIndex + i);
+    // 가장자리의 점부터 가장자리의 다음 점으로 이어지는 선
+    indices.push(coneBaseIndex + i, coneBaseIndex + (i + 1) % numSegments);
+  }
++  positions.forEach((v, ndx) =&gt; {
++    positions[ndx] *= scale;
++  });
+  return webglUtils.createBufferInfoFromArrays(gl, {
+    position: positions,
+    indices,
+  });
+}
+</code></pre>
+<p>현재 셰이더 프로그램은 정점 색상으로 그리고 있습니다.
+단색으로 그리는 또 다른 셰이더를 만들어봅시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;script id=&quot;solid-color-vertex-shader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+attribute vec4 a_position;
+
+uniform mat4 u_matrix;
+
+void main() {
+  // 위치에 행렬 곱하기
+  gl_Position = u_matrix * a_position;
+}
+&lt;/script&gt;
+&lt;!-- 프래그먼트 셰이더 --&gt;
+&lt;script id=&quot;solid-color-fragment-shader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+precision mediump float;
+
+uniform vec4 u_color;
+
+void main() {
+  gl_FragColor = u_color;
+}
+&lt;/script&gt;
+</code></pre>
+<p>이제 이것들을 사용하여 다른 장면을 보는 카메라로 한 장면을 그려봅시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// GLSL 프로그램 설정
+// 셰이더 컴파일, 프로그램 연결, 위치 조회
+-const programInfo = webglUtils.createProgramInfo(gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
++const vertexColorProgramInfo = webglUtils.createProgramInfo(gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
++const solidColorProgramInfo = webglUtils.createProgramInfo(gl, [&#39;solid-color-vertex-shader&#39;, &#39;solid-color-fragment-shader&#39;]);
+
+// 버퍼를 생성하고 3D &#39;F&#39;에 대한 데이터로 채우기
+const fBufferInfo = primitives.create3DFBufferInfo(gl);
+
+...
+
++const cameraScale = 20;
++const cameraBufferInfo = createCameraBufferInfo(gl, cameraScale);
+
+...
+
+const settings = {
+  rotation: 150,  // 도 단위
++  cam1FieldOfView: 60,  // 도 단위
++  cam1PosX: 0,
++  cam1PosY: 0,
++  cam1PosZ: -200,
+};
+
+
+function render() {
+  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+
+  gl.enable(gl.CULL_FACE);
+  gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.SCISSOR_TEST);
+
+  // 뷰를 2개로 나눌 겁니다.
+  const effectiveWidth = gl.canvas.clientWidth / 2;
+  const aspect = effectiveWidth / gl.canvas.clientHeight;
+  const near = 1;
+  const far = 2000;
+
+  // 원근 투영 행렬 계산
+  const perspectiveProjectionMatrix =
+-      m4.perspective(fieldOfViewRadians), aspect, near, far);
++      m4.perspective(degToRad(settings.cam1FieldOfView), aspect, near, far);
+
+  // lookAt을 사용하여 카메라 행렬 계산
+-  const cameraPosition = [0, 0, -75];
++  const cameraPosition = [
++      settings.cam1PosX, 
++      settings.cam1PosY,
++      settings.cam1PosZ,
++  ];
+  const target = [0, 0, 0];
+  const up = [0, 1, 0];
+  const cameraMatrix = m4.lookAt(cameraPosition, target, up);
+
+  let worldMatrix = m4.yRotation(degToRad(settings.rotation));
+  worldMatrix = m4.xRotate(worldMatrix, degToRad(settings.rotation));
+  // center the &#39;F&#39; around its origin
+  worldMatrix = m4.translate(worldMatrix, -35, -75, -5);
+
+  const {width, height} = gl.canvas;
+  const leftWidth = width / 2 | 0;
+
+  // 직교 카메라로 왼쪽 그리기
+  gl.viewport(0, 0, leftWidth, height);
+  gl.scissor(0, 0, leftWidth, height);
+  gl.clearColor(1, 0.8, 0.8, 1);
+
+  drawScene(perspectiveProjectionMatrix, cameraMatrix, worldMatrix);
+
+  // 원근 카메라로 오른쪽 그리기
+  const rightWidth = width - leftWidth;
+  gl.viewport(leftWidth, 0, rightWidth, height);
+  gl.scissor(leftWidth, 0, rightWidth, height);
+  gl.clearColor(0.8, 0.8, 1, 1);
+
+  // 두 번째 투영 행렬과 두 번째 카메라 계산
++  const perspectiveProjectionMatrix2 =
++      m4.perspective(degToRad(60), aspect, near, far);
++
++  // lookAt을 사용하여 카메라 행렬 계산
++  const cameraPosition2 = [-600, 400, -400];
++  const target2 = [0, 0, 0];
++  const cameraMatrix2 = m4.lookAt(cameraPosition2, target2, up);
+
+-  drawScene(perspectiveProjectionMatrix, cameraMatrix, worldMatrix);
++  drawScene(perspectiveProjectionMatrix2, cameraMatrix2, worldMatrix);
+
++  // 첫 번째 카메라를 나타내는 객체 그리기
++  {
++    // 두 번째 카메라 행렬로 뷰 행렬을 만들기
++    const viewMatrix = m4.inverse(cameraMatrix2);
++
++    let mat = m4.multiply(perspectiveProjectionMatrix2, viewMatrix);
++    // 첫 번째 카메라 행렬을 장면에서 카메라 표시를 배치하는 행렬로 사용
++    mat = m4.multiply(mat, cameraMatrix);
++
++    gl.useProgram(solidColorProgramInfo.program);
++
++    // ------ 카메라 표시 그리기 --------
++
++    // 필요한 모든 속성 설정
++    webglUtils.setBuffersAndAttributes(gl, solidColorProgramInfo, cameraBufferInfo);
++
++    // 유니폼 설정
++    webglUtils.setUniforms(solidColorProgramInfo, {
++      u_matrix: mat,
++      u_color: [0, 0, 0, 1],
++    });
++
++    webglUtils.drawBufferInfo(gl, cameraBufferInfo, gl.LINES);
++  }
+}
+render();
+</code></pre>
+<p>이제 오른쪽 장면에서 왼쪽 장면을 렌더링하는 데 사용되는 카메라를 볼 수 있습니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-visualize-camera.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-visualize-camera.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>카메라의 절두체를 나타내는 것도 그려봅시다.</p>
+<p>절두체는 클립 공간으로의 변환을 나타내므로 클립 공간을 나타내는 큐브를 만들고 투영 행렬의 역행렬을 사용하여 장면에 배치할 수 있습니다.</p>
+<p>먼저 클립 공간 라인 큐브가 필요합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function createClipspaceCubeBufferInfo(gl) {
+  // 먼저 큐브를 추가해봅시다.
+  // 카메라가 -Z를 내려다 보기 때문에 1에서 3사이가 되므로 Z = 0부터 시작하길 원합니다.
+  // -Z 방향으로 열리는 큐브 앞에 원뿔을 놓습니다.
+  const positions = [
+    -1, -1, -1,  // 큐브 정점
+     1, -1, -1,
+    -1,  1, -1,
+     1,  1, -1,
+    -1, -1,  1,
+     1, -1,  1,
+    -1,  1,  1,
+     1,  1,  1,
+  ];
+  const indices = [
+    0, 1, 1, 3, 3, 2, 2, 0, // 큐브 인덱스
+    4, 5, 5, 7, 7, 6, 6, 4,
+    0, 4, 1, 5, 3, 7, 2, 6,
+  ];
+  return webglUtils.createBufferInfoFromArrays(gl, {
+    position: positions,
+    indices,
+  });
+}
+</code></pre>
+<p>그런 다음 하나를 생성하고 그릴 수 있습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const cameraScale = 20;
+const cameraBufferInfo = createCameraBufferInfo(gl, cameraScale);
+
++const clipspaceCubeBufferInfo = createClipspaceCubeBufferInfo(gl);
+
+...
+
+  // 첫 번째 카메라를 나타내는 객체 그리기
+  {
+    // 카메라 행렬로 뷰 행렬 만들기
+    const viewMatrix = m4.inverse(cameraMatrix2);
+
+    let mat = m4.multiply(perspectiveProjectionMatrix2, viewMatrix);
+    // 첫 번째 카메라 행렬을 장면에서 카메라 표시를 배치하는 행렬로 사용
+    mat = m4.multiply(mat, cameraMatrix);
+
+    gl.useProgram(solidColorProgramInfo.program);
+
+    // ------ 카메라 표시 그리기 --------
+
+    // 필요한 모든 속성 설정
+    webglUtils.setBuffersAndAttributes(gl, solidColorProgramInfo, cameraBufferInfo);
+
+    // 유니폼 설정
+    webglUtils.setUniforms(solidColorProgramInfo, {
+      u_matrix: mat,
+      u_color: [0, 0, 0, 1],
+    });
+
+    webglUtils.drawBufferInfo(gl, cameraBufferInfo, gl.LINES);
+
++    // ----- 절두체 그리기 -------
++
++    mat = m4.multiply(mat, m4.inverse(perspectiveProjectionMatrix));
++
++    // 필요한 모든 속성 설정
++    webglUtils.setBuffersAndAttributes(gl, solidColorProgramInfo, clipspaceCubeBufferInfo);
++
++    // 유니폼 설정
++    webglUtils.setUniforms(solidColorProgramInfo, {
++      u_matrix: mat,
++      u_color: [0, 0, 0, 1],
++    });
++
++    webglUtils.drawBufferInfo(gl, clipspaceCubeBufferInfo, gl.LINES);
+  }
+}
+</code></pre>
+<p>또한 첫 번째 카메라의 근거리 및 원거리 설정을 조정할 수 있도록 만들어 보겠습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const settings = {
+  rotation: 150,  // 도 단위
+  cam1FieldOfView: 60,  // 도 단위
+  cam1PosX: 0,
+  cam1PosY: 0,
+  cam1PosZ: -200,
++  cam1Near: 30,
++  cam1Far: 500,
+};
+
+...
+
+  // 원근 투영 행렬 계산
+  const perspectiveProjectionMatrix =
+      m4.perspective(degToRad(settings.cam1FieldOfView),
+      aspect,
+-      near,
+-      far);
++      settings.cam1Near,
++      settings.cam1Far);
+</code></pre>
+<p>이제 절두체도 볼 수 있습니다.</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-visualize-camera-with-frustum.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-visualize-camera-with-frustum.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>근거리 평면이나 원거리 평면 혹은 시야를 조절하여 F를 클리핑하면 절두체 표현이 일치하는 것을 볼 수 있습니다.</p>
+<p>Whether we use a perspective projection or an orthographic projection for the camera on the left it will work either way because a projection matrix always converts to clip space so it&#39;s inverse will always take our +1 to -1 cube and warp it appropriately.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const settings = {
+  rotation: 150,  // 도 단위
+  cam1FieldOfView: 60,  // 도 단위
+  cam1PosX: 0,
+  cam1PosY: 0,
+  cam1PosZ: -200,
+  cam1Near: 30,
+  cam1Far: 500,
++  cam1Ortho: true,
++  cam1OrthoUnits: 120,
+};
+
+...
+
+// 투영 행렬 계산
+const perspectiveProjectionMatrix = settings.cam1Ortho
+    ? m4.orthographic(
+        -settings.cam1OrthoUnits * aspect,  // 왼쪽
+         settings.cam1OrthoUnits * aspect,  // 오른쪽
+        -settings.cam1OrthoUnits,           // 아래쪽
+         settings.cam1OrthoUnits,           // 위쪽
+         settings.cam1Near,
+         settings.cam1Far)
+    : m4.perspective(degToRad(settings.cam1FieldOfView),
+        aspect,
+        settings.cam1Near,
+        settings.cam1Far);
+</code></pre>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-visualize-camera-with-orthographic.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-visualize-camera-with-orthographic.html" target="_blank">새 창을 열려면 여기를 클릭</a>
+</div>
+
+</p>
+<p>이런 종류의 시각화는 <a href="https://blender.org">블렌더</a>같은 3D 모델링 패키지나 <a href="https://unity.com">유니티</a> 혹은 <a href="https://godotengine.org/">Godot</a>처럼 장면 편집 도구가 있는 3D 게임 엔진을 사용해봤다면 익숙할 겁니다.</p>
+<p>또한 디버깅에도 제법 유용할 수 있습니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -201,7 +678,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>기초</li>
+        <div id="toc">
+          <ul>  <li>기초</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-fundamentals.html">기초</a></li>
 <li><a href="/webgl/lessons/ko/webgl-how-it-works.html">작동 방식</a></li>
@@ -240,7 +718,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </ul>
   <li>Geometry</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -249,7 +727,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">교차 출처 이미지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
@@ -271,9 +749,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
-<li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-skybox.html">스카이박스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
@@ -283,7 +761,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">텍스트 - 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - Glyph Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - 글리프 텍스처 사용</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -303,35 +781,35 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         </ul>
   <li>최적화</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
 <li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
         </ul>
   <li>Misc</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
-<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">상용구</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
-<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti Pattern</a></li>
+<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 문제</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas Clear 방지</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform 문제</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">크로스 플랫폼 문제</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-attributes.html">속성</a></li>
 <li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
-<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
+<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">프레임 버퍼</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
         </ul></ul>
@@ -341,13 +819,50 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Github</a></li>
 </ul>
 
+        </div>
+    </div>
+    <div class="lesson-comments">
+        
+    <div>이슈/버그는? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">Github</a>에 이슈를 만들어주세요.</div>
+    <div class="lesson-comment-notes">
+      코드 블록은 <b>&lt;pre&gt;&lt;code&gt;</b>여기에 코드 입력<b>&lt;/code&gt;&lt;/pre&gt;</b>를 사용해주세요
+    </div>
+  
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGL 카메라 시각화';
+            var disqus_title = 'WebGL 카메라 시각화';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {

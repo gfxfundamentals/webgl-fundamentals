@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Glyph로 가득 찬 텍스처를 사용하는 방법">
+<meta name="description" content="글리프로 가득 찬 텍스처를 사용하는 방법">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-text-glyphs_ko.jpg">
 
-<meta property="og:title" content="WebGL 텍스트 - Glyph Texture 사용">
+<meta property="og:title" content="WebGL 텍스트 - 글리프 텍스처 사용">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-text-glyphs_ko.jpg">
-<meta property="og:description" content="Glyph로 가득 찬 텍스처를 사용하는 방법">
+<meta property="og:description" content="글리프로 가득 찬 텍스처를 사용하는 방법">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-text-glyphs.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 텍스트 - Glyph Texture 사용">
+<meta name="twitter:title" content="WebGL 텍스트 - 글리프 텍스처 사용">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-text-glyphs.html">
-<meta name="twitter:description" content="Glyph로 가득 찬 텍스처를 사용하는 방법">
+<meta name="twitter:description" content="글리프로 가득 찬 텍스처를 사용하는 방법">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-text-glyphs_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-text-glyphs.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-text-glyphs.html",
       "inLanguage":"ko",
-      "name":"WebGL 텍스트 - Glyph Texture 사용",
+      "name":"WebGL 텍스트 - 글리프 텍스처 사용",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL 텍스트 - Glyph Texture 사용</title>
+<title>WebGL 텍스트 - 글리프 텍스처 사용</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,7 +236,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 텍스트 - Glyph Texture 사용</h1>
+    <h1>WebGL 텍스트 - 글리프 텍스처 사용</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
@@ -426,9 +426,9 @@ image.addEventListener(&#39;load&#39;, function() {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 });
-</code></pre><p>이제 glyph가 있는 텍스처가 있으므로 이를 사용해야 합니다.
-이를 위해 각 glyph마다 쿼드 정점들을 즉석으로 만들 겁니다.
-해당 정점들은 텍스처 좌표를 사용하여 특정 glyph를 선택합니다.</p>
+</code></pre><p>이제 글리프가 있는 텍스처가 있으므로 이를 사용해야 합니다.
+이를 위해 각 글리프마다 쿼드 정점들을 즉석으로 만들 겁니다.
+해당 정점들은 텍스처 좌표를 사용하여 특정 글리프를 선택합니다.</p>
 <p>문자열이 주어지면 정점으로 만들어봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function makeVerticesForString(fontInfo, s) {
   var len = s.length;
@@ -550,7 +550,7 @@ var textBufferInfo = {
 </div>
 
 </p>
-<p>이게 glyph의 texture atlas를 사용하는 기본 기법입니다.
+<p>이게 글리프의 텍스처 아틀라스를 사용하는 기본 기법입니다.
 There are a few obvious things to add or ways to improve it.</p>
 <ul>
 <li><p>동일한 배열 재사용</p>
@@ -570,20 +570,20 @@ There are a few obvious things to add or ways to improve it.</p>
 <p>그러면 문자마다 다른 색상으로 텍스트의 색상을 정할 수 있습니다.
 물론 색상을 변경하는 시점을 지정하는 방법을 결정해야 합니다.</p>
 </li>
-<li><p>2D Canvas를 사용하여 런타임에 glyph texture atlas 생성을 고려</p>
+<li><p>2D 캔버스를 사용하여 런타임에 글리프 텍스처 아틀라스 생성 고려</p>
 </li>
 </ul>
 <p>다루지 않을 또 다른 큰 문제는 텍스처가 제한적인 크기를 가지고 있지만 폰트는 사실상 무제한이라는 겁니다.
-중국어, 일본어, 아랍어 등 모든 유니코드를 지원하기 위해서는, 2015년 현재 110,000개 이상의 glyph가 있습니다.
+중국어, 일본어, 아랍어 등 모든 유니코드를 지원하기 위해서는, 2015년 현재 110,000개 이상의 글리프가 있습니다.
 텍스처에 이 모든 것을 맞출 수는 없습니다.
 공간이 부족합니다.</p>
-<p>OS와 브라우저가 GPU가 가속 시 이를 처리하는 방법은 glyph texture cache를 사용하는 겁니다.
-위와 같이 texture atlas에 텍스처를 넣을 수도 있지만 각 glyph의 영역을 고정된 크기로 만들 수도 있습니다.
-그들은 텍스처에서 최근에 가장 많이 사용한 glyph를 유지하는데요.
-텍스처에 없는 glyph를 그려야 한다면 가장 최근에 사용된 glyph를 새롭게 필요한 glyph로 바꿉니다.
-물론 교체하려는 glyph가 아직 그려지지 않은 쿼드에 의해 참조되고 있다면 교체하기 전에 가지고 있던 glyph로 그려야 합니다.</p>
+<p>OS와 브라우저가 GPU가 가속 시 이를 처리하는 방법은 글리프 텍스처 캐시를 사용하는 겁니다.
+위와 같이 texture atlas에 텍스처를 넣을 수도 있지만 각 글리프의 영역을 고정된 크기로 만들 수도 있습니다.
+그들은 텍스처에서 최근에 가장 많이 사용한 글리프를 유지하는데요.
+텍스처에 없는 글리프를 그려야 한다면 가장 최근에 사용된 글리프를 새롭게 필요한 글리프로 바꿉니다.
+물론 교체하려는 글리프가 아직 그려지지 않은 쿼드에 의해 참조되고 있다면 교체하기 전에 가지고 있던 글리프로 그려야 합니다.</p>
 <p>추천하진 않지만 할 수 있는 또 다른 방법은 이 기술을 <a href="webgl-text-texture.html">이전 기술</a>과 결합하는 겁니다.
-Glyph를 또 다른 텍스처에 직접 렌더링할 수 있습니다.</p>
+글리프를 또 다른 텍스처에 직접 렌더링할 수 있습니다.</p>
 <p>WebGL에서 텍스트를 또 다른 방법은 실제로 3D 텍스트를 사용하는 겁니다.
 위의 모든 샘플에서 &#39;F&#39;는 3D 문자입니다.
 각 문자에 대해 하나씩 만들어야 하는데요.
@@ -644,7 +644,7 @@ Glyph를 또 다른 텍스처에 직접 렌더링할 수 있습니다.</p>
         </ul>
   <li>Geometry</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -653,7 +653,7 @@ Glyph를 또 다른 텍스처에 직접 렌더링할 수 있습니다.</p>
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">교차 출처 이미지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
@@ -675,9 +675,9 @@ Glyph를 또 다른 텍스처에 직접 렌더링할 수 있습니다.</p>
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
-<li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-skybox.html">스카이박스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
@@ -687,7 +687,7 @@ Glyph를 또 다른 텍스처에 직접 렌더링할 수 있습니다.</p>
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">텍스트 - 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - Glyph Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - 글리프 텍스처 사용</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -707,35 +707,35 @@ Glyph를 또 다른 텍스처에 직접 렌더링할 수 있습니다.</p>
         </ul>
   <li>최적화</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
 <li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
         </ul>
   <li>Misc</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
-<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">상용구</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
-<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti Pattern</a></li>
+<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 문제</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas Clear 방지</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform 문제</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">크로스 플랫폼 문제</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-attributes.html">속성</a></li>
 <li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
-<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
+<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">프레임 버퍼</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
         </ul></ul>
@@ -759,8 +759,8 @@ Glyph를 또 다른 텍스처에 직접 렌더링할 수 있습니다.</p>
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 텍스트 - Glyph Texture 사용';
-            var disqus_title = 'WebGL 텍스트 - Glyph Texture 사용';
+            var disqus_identifier = 'WebGL 텍스트 - 글리프 텍스처 사용';
+            var disqus_title = 'WebGL 텍스트 - 글리프 텍스처 사용';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

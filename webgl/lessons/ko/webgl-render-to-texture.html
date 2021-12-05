@@ -282,14 +282,14 @@ gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 </code></pre><p>어떻게 <code class="notranslate" translate="no">data</code>가 <code class="notranslate" translate="no">null</code>이 되는지 주목하세요.
 어떤 데이터도 제공할 필요가 없습니다.
 텍스처를 할당하기 위해 WebGL만 있으면 됩니다.</p>
-<p>다음은 framebuffer를 생성합니다.
-<a href="webgl-framebuffers.html">Framebuffer</a>는 그냥 attachment 모음입니다.
+<p>다음은 프레임 버퍼를 생성합니다.
+<a href="webgl-framebuffers.html">프레임 버퍼</a>는 그냥 attachment 모음입니다.
 Attachment는 텍스처나 renderbuffer입니다.
 이전에 텍스처에 대해 살펴봤는데요.
 Renderbuffer는 텍스처와 매우 유사하지만 텍스처가 지원하지 않는 format과 option을 지원합니다.
 또한 텍스처와 달리 셰이더에 대한 입력으로 renderbuffer를 직접 사용할 수 없습니다.</p>
-<p>Framebuffer를 생성하고 텍스처에 첨부해봅시다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// framebuffer 생성 및 바인딩
+<p>프레임 버퍼를 생성하고 텍스처에 첨부해봅시다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 프레임 버퍼 생성 및 바인딩
 const fb = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
@@ -297,9 +297,9 @@ gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 const attachmentPoint = gl.COLOR_ATTACHMENT0;
 gl.framebufferTexture2D(
     gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
-</code></pre><p>텍스처와 버퍼처럼, framebuffer 생성 후 <code class="notranslate" translate="no">FRAMEBUFFER</code> bind point에 바인딩 해야 합니다.
-이후 framebuffer와 관련된 모든 함수들은 framebuffer가 바인딩된 곳을 참조합니다.</p>
-<p>Framebuffer이 바인딩된 상태에서 <code class="notranslate" translate="no">gl.clear</code>, <code class="notranslate" translate="no">gl.drawArrays</code>, <code class="notranslate" translate="no">gl.drawElements</code>를 호출할 때마다 WebGL은 캔버스 대신 텍스처에 렌더링합니다.</p>
+</code></pre><p>텍스처와 버퍼처럼, 프레임 버퍼 생성 후 <code class="notranslate" translate="no">FRAMEBUFFER</code> bind point에 바인딩 해야 합니다.
+이후 프레임 버퍼와 관련된 모든 함수들은 프레임 버퍼가 바인딩된 곳을 참조합니다.</p>
+<p>프레임 버퍼가 바인딩된 상태에서 <code class="notranslate" translate="no">gl.clear</code>, <code class="notranslate" translate="no">gl.drawArrays</code>, <code class="notranslate" translate="no">gl.drawElements</code>를 호출할 때마다 WebGL은 캔버스 대신 텍스처에 렌더링합니다.</p>
 <p>이전 렌더링 코드를 가져와서 함수로 만들어 두 번 호출할 수 있도록 해봅시다.
 일단 텍스처에 렌더링하고 다시 캔버스에 렌더링합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawCube(aspect) {
@@ -363,7 +363,7 @@ gl.framebufferTexture2D(
   // u_texture에 대해 텍스처 유닛 0을 사용하도록 셰이더에 지시
   gl.uniform1i(textureLocation, 0);
 
-  // Geometry 그리기
+  // 지오메트리 그리기
   gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
 }
 </code></pre><p>참고로 대상 텍스처가 캔버스와 다른 aspect를 가지기 때문에 projection matrix 계산을 위해 <code class="notranslate" translate="no">aspect</code>를 전달해야 합니다.</p>
@@ -374,7 +374,7 @@ function drawScene(time) {
   ...
 
   {
-    // framebuffer를 바인딩하여 targetTexture에 렌더링
+    // 프레임 버퍼를 바인딩하여 targetTexture에 렌더링
     gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
     // 3x2 텍스처로 큐브 렌더링
@@ -431,7 +431,7 @@ function drawScene(time) {
 }
 </code></pre><p>그런 다음에는 해당 함수만을 이용하여 렌더링 대상을 변경합니다.
 이렇게 하면 누락할 일이 없을 겁니다.</p>
-<p>한 가지 알아야 할 점은 framebuffer에 depth buffer가 없다는 것입니다.
+<p>한 가지 알아야 할 점은 프레임 버퍼에 깊이 버퍼가 없다는 것입니다.
 텍스처만 있죠.
 이건 depth testing가 없으며 3D가 작동하지 않는다는 걸 의미합니다.
 큐브 3개를 그리면 이런 것을 볼 수 있습니다.</p>
@@ -441,11 +441,11 @@ function drawScene(time) {
 </div>
 
 </p>
-<p>가운데 있는 큐브를 보면 3개의 큐브가 수직으로 그려져 있는데, 하나는 뒤쪽에, 하나는 중앙에, 다른 하나는 앞쪽에 있지만, 우리는 3개 모두 같은 depth로 그리고 있습니다.
+<p>가운데 있는 큐브를 보면 3개의 큐브가 수직으로 그려져 있는데, 하나는 뒤쪽에, 하나는 중앙에, 다른 하나는 앞쪽에 있지만, 우리는 3개 모두 같은 깊이로 그리고 있습니다.
 캔버스에 수평으로 그려진 3개의 큐브를 보면 서로 올바르게 교차하는 것을 알 수 있습니다.
-이건 framebuffer는 depth buffer가 없지만 캔버스에는 있기 때문인데요.</p>
+이건 프레임 버퍼는 깊이 버퍼가 없지만 캔버스에는 있기 때문인데요.</p>
 <p><img class="webgl_center" src="../resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" /></p>
-<p>Depth buffer를 추가하기 위해 하나를 생성하여 framebuffer에 연결해야 합니다.</p>
+<p>깊이 버퍼를 추가하기 위해 하나를 생성하여 프레임 버퍼에 연결해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// depth renderbuffer 생성
 const depthBuffer = gl.createRenderbuffer();
 gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
@@ -460,7 +460,7 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 </div>
 
 </p>
-<p>이제 depth buffer가 framebuffer에 연결되었기 때문에 내부 큐브들이 올바르게 교차합니다.</p>
+<p>이제 깊이 버퍼가 프레임 버퍼에 연결되었기 때문에 내부 큐브들이 올바르게 교차합니다.</p>
 <p><img class="webgl_center" src="../resources/cubes-with-depth-buffer.jpg" width="100%" height="100%" /></p>
 <p>WebGL이 3개의 attachment 조합 동작만 보장한다는 점을 유의해야 합니다.
 <a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS">명세서</a>에 따르면 보장되는 attachment 조합은 다음과 같습니다.</p>
@@ -470,7 +470,7 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 <li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> texture + <code class="notranslate" translate="no">DEPTH_STENCIL_ATTACHMENT</code> = <code class="notranslate" translate="no">DEPTH_STENCIL</code> renderbuffer</li>
 </ul>
 <p>다른 조합의 경우 사용자의 system/gpu/driver/browser가 해당 조합을 지원하는지 확인해야 하는데요.
-Framebuffer를 만들었는지 확인하려면, attachment를 생성하고 첨부한 다음 아래와 같이 호출합니다.</p>
+프레임 버퍼를 만들었는지 확인하려면, attachment를 생성하고 첨부한 다음 아래와 같이 호출합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
 </code></pre><p>상태가 <code class="notranslate" translate="no">FRAMEBUFFER_COMPLETE</code>라면 해당 attachment 조합은 해당 사용자에 대해 작동합니다.
 그렇지 않으면 작동하지 않으니 사용자에게 알리거나 다른 방법으로 fallback하는 등의 작업을 해야 합니다.</p>
@@ -479,7 +479,7 @@ Framebuffer를 만들었는지 확인하려면, attachment를 생성하고 첨�
 <h3>캔버스 자체는 사실 텍스처입니다.</h3>
 <p>
 이건 사소한 것이지만 브라우저는 위의 기술을 사용하여 캔버스 자체를 구현합니다.
-Scene 뒤에서 색상 텍스처, depth buffer, framebuffer를 생성한 다음 current framebuffer에 바인딩하는데요.
+Scene 뒤에서 색상 텍스처, 깊이 버퍼, 프레임 버퍼를 생성한 다음 현재 프레임 버퍼에 바인딩하는데요.
 해당 텍스처에 그리는 렌더링을 합니다.
 그런 다음 해당 텍스처를 사용하여 캔버스를 웹 페이지에 렌더링하죠.
 </p>
@@ -540,7 +540,7 @@ Scene 뒤에서 색상 텍스처, depth buffer, framebuffer를 생성한 다음 
         </ul>
   <li>Geometry</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -549,7 +549,7 @@ Scene 뒤에서 색상 텍스처, depth buffer, framebuffer를 생성한 다음 
           <li><a href="/webgl/lessons/ko/webgl-3d-textures.html">텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-data-textures.html">데이터 텍스처</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2-textures.html">2개 이상의 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">Cross Origin Image</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cors-permission.html">교차 출처 이미지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-perspective-correct-texturemapping.html">원근 교정 텍스처 매핑</a></li>
 <li><a href="/webgl/lessons/ko/webgl-planar-projection-mapping.html">평면 및 원근 투영 매핑</a></li>
         </ul>
@@ -571,9 +571,9 @@ Scene 뒤에서 색상 텍스처, depth buffer, framebuffer를 생성한 다음 
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">Cubemap</a></li>
-<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">Environment Map</a></li>
-<li><a href="/webgl/lessons/ko/webgl-skybox.html">Skybox</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-cube-maps.html">큐브맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-environment-maps.html">환경맵</a></li>
+<li><a href="/webgl/lessons/ko/webgl-skybox.html">스카이박스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-skinning.html">스키닝</a></li>
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
@@ -583,7 +583,7 @@ Scene 뒤에서 색상 텍스처, depth buffer, framebuffer를 생성한 다음 
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-texture.html">텍스트 - 텍스처 사용</a></li>
-<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - Glyph Texture 사용</a></li>
+<li><a href="/webgl/lessons/ko/webgl-text-glyphs.html">텍스트 - 글리프 텍스처 사용</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -603,35 +603,35 @@ Scene 뒤에서 색상 텍스처, depth buffer, framebuffer를 생성한 다음 
         </ul>
   <li>최적화</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
 <li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
         </ul>
   <li>Misc</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-setup-and-installation.html">설정 및 설치</a></li>
-<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">Boilerplate</a></li>
-<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">Canvas 크기 조정</a></li>
+<li><a href="/webgl/lessons/ko/webgl-boilerplate.html">상용구</a></li>
+<li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
-<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
-<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">Anti Pattern</a></li>
+<li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
 <li><a href="/webgl/lessons/ko/webgl-precision-issues.html">정밀도 문제</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">Screenshot 찍기</a></li>
-<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">Canvas Clear 방지</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#screenshot">스크린샷 찍기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-tips.html#preservedrawingbuffer">캔버스 지우기 방지</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#tabindex">캔버스 키보드 입력</a></li>
 <li><a href="/webgl/lessons/ko/webgl-tips.html#html-background">WebGL 배경 제작</a></li>
-<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">Cross Platform 문제</a></li>
+<li><a href="/webgl/lessons/ko/webgl-cross-platform-issues.html">크로스 플랫폼 문제</a></li>
 <li><a href="/webgl/lessons/ko/webgl-qna.html">질문 및 답변</a></li>
         </ul>
   <li>참고</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-attributes.html">Attribute</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-attributes.html">속성</a></li>
 <li><a href="/webgl/lessons/ko/webgl-texture-units.html">텍스처 유닛</a></li>
-<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">Framebuffer</a></li>
+<li><a href="/webgl/lessons/ko/webgl-framebuffers.html">프레임 버퍼</a></li>
 <li><a href="/webgl/lessons/ko/webgl-readpixels.html">readPixels</a></li>
 <li><a href="/webgl/lessons/ko/webgl-references.html">참고 자료</a></li>
         </ul></ul>
