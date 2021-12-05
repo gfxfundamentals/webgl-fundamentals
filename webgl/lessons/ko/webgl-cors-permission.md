@@ -1,6 +1,6 @@
-Title: WebGL - Cross Origin Image
+Title: WebGL - 교차 출처 이미지
 Description: 도메인 간의 이미지 사용
-TOC: Cross Origin Image
+TOC: 교차 출처 이미지
 
 
 이 글은 WebGL 관련 시리즈 중 하나입니다.

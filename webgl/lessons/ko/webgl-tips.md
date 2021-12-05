@@ -7,14 +7,14 @@ TOC: #
 
 ---
 
-<a id="screenshot" data-toc="Screenshot 찍기"></a>
+<a id="screenshot" data-toc="스크린샷 찍기"></a>
 
-# Canvas Screenshot 찍기
+# 캔버스 스크린샷 찍기
 
-브라우저에는 screenshot을 찍는 2개의 함수가 있는데요.
+브라우저에는 스크린샷을 찍는 2개의 함수가 있는데요.
 오래된 함수인 [`canvas.toDataURL`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL)과 좀 더 나은 새로운 함수인 [`canvas.toBlob`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)입니다.
 
-그래서 이렇게 약간의 코드를 추가하여 screenshot을 쉽게 찍을 수 있을 것이라 생각하실텐데
+그래서 이렇게 약간의 코드를 추가하여 스크린샷을 쉽게 찍을 수 있을 것이라 생각하실텐데
 
 ```html
 <canvas id="c"></canvas>
@@ -46,7 +46,7 @@ const saveBlob = (function() {
 
 {{{example url="../webgl-tips-screenshot-bad.html"}}}
 
-시도해보면 이런 screenshot을 얻게 되는데
+시도해보면 이런 스크린샷을 얻게 되는데
 
 <div class="webgl_center"><img src="resources/screencapture-398x298.png"></div>
 
@@ -176,9 +176,9 @@ elem.addEventListener('click', () => {
 
 ---
 
-<a id="preservedrawingbuffer" data-toc="Canvas Clear 방지"></a>
+<a id="preservedrawingbuffer" data-toc="캔버스 지우기 방지"></a>
 
-# Canvas Clear 방지
+# 캔버스 지우기 방지
 
 사용자가 애니메이션 개체로 그리도록 하고 싶다고 해봅시다.
 먼저 webgl context를 만들 때 `preserveDrawingBuffer: true`를 전달해야 합니다.

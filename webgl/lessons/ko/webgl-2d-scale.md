@@ -60,7 +60,7 @@ void main() {
 +    // Scale 설정
 +    gl.uniform2fv(scaleLocation, scale);
 
-    // Geometry 그리기
+    // 지오메트리 그리기
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     var count = 18;  // 'F'의 삼각형 6개, 삼각형마다 점 3개

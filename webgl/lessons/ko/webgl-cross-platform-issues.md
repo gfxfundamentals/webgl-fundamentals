@@ -1,6 +1,6 @@
-Title: WebGL Cross Platform 문제
+Title: WebGL 크로스 플랫폼 문제
 Description: WebGL 앱이 어디서나 작동하도록 만들기 위해 알아야 할 사항들입니다.
-TOC: Cross Platform 문제
+TOC: 크로스 플랫폼 문제
 
 
 모든 WebGL program이 모든 기기 혹은 브라우저에서 작동하지 않아도 충격으로 다가오지 않을 겁니다.
@@ -137,7 +137,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
     <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>정점 셰이더가 참조할 수 있는 텍스처 유닛 개수</td></tr>
     <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>프래그먼트 셰이더가 참조할 수 있는 텍스처 유닛 개수</td></tr>
     <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>프래그먼트 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
-    <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>cubemap 최대 크기</td></tr>
+    <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>큐브맵 최대 크기</td></tr>
     <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>renderbuffer 최대 크기</td></tr>
     <tr><td>MAX_VIEWPORT_DIMS               </td><td>viewport 최대 크기</td></tr>
   </tbody>
@@ -165,7 +165,7 @@ WebGL2는 몇 가지 더 추가합니다.
 </table>
 </div>
 
-## 뎁스 버퍼 해상도
+## 깊이 버퍼 해상도
 
 정말 오래된 일부 기기들은 16bit depth buffer를 사용합니다.
 그렇지 않은, 99%의 기기들은 24bit depth buffer를 사용하므로 걱정하지 않아도 됩니다.
@@ -176,7 +176,7 @@ WebGL2는 몇 가지 더 추가합니다.
 다른 조합들은 선택적인데요.
 이 내용은 [이 글](webgl-readpixels.html)에서 다룹니다.
 
-## framebuffer attachment 조합
+## 프레임 버퍼 attachment 조합
 
 프레임 버퍼는 텍스처와 렌더 버퍼의 attachment를 하나 이상 가질 수 있습니다.
 
@@ -199,7 +199,7 @@ WebGL1과 WebGL2의 많은 기능들이 선택적인데요.
 아마 WebGL1과 WebGL2에서 가장 흔하게 누락되는 extension은 floating point texture를 필터링할 수 있는 `OES_texture_float_linear`인데, 이는 `TEXTURE_MIN_FILTER`와 `TEXTURE_MAX_FILTER`를 `NEAREST`를 제외한 모든 항목으로 설정하도록 지원하는 기능을 의미합니다.
 많은 모바일 기기들이 이걸 지원하지 않습니다.
 
-WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 color attachment를 framebuffer로 첨부할 수 있는 기능인 `WEBGL_draw_buffers`이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
+WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 color attachment를 프레임 버퍼로 첨부할 수 있는 기능인 `WEBGL_draw_buffers`이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
 기본적으로 WebGL2를 실행할 수 있는 모든 기기는 WebGL1에서 `WEBGL_draw_buffers`도 지원해야 하지만 여전히 문제가 있는데요.
 여러 텍스처를 한 번에 렌더링해야 한다면 고사양 GPU로도 시간이 필요할 수 있습니다.
 그래도 사용자 기기가 지원하는지 확인하고, 지원하지 않는다면 친절한 설명을 제공해야 합니다.

@@ -108,7 +108,7 @@ F를 그리면 이렇게 나옵니다.
 
     webglUtils.setUniforms(fProgramInfo, fUniforms);
 
-    // Geometry 그리기
+    // 지오메트리 그리기
     gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 
 텍스트의 경우 F의 원점 위치만 있으면 됩니다.

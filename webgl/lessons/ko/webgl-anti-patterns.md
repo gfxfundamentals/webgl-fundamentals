@@ -1,6 +1,6 @@
-Title: WebGL Anti Pattern
+Title: WebGL 안티 패턴
 Description: WebGL에서 하지 말아야 할 것과, 하지 말아야 할 이유, 그리고 그 대신에 하는 것
-TOC: Anti Pattern
+TOC: 안티 패턴
 
 
 이건 WebGL의 안티 패턴 목록입니다.

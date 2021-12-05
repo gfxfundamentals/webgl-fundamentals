@@ -1,16 +1,16 @@
-Title: WebGL Framebuffer
-Description: WebGL의 framebuffer는 뭔가요?
-TOC: Framebuffer
+Title: WebGL 프레임 버퍼
+Description: WebGL의 프레임 버퍼가 뭔가요?
+TOC: 프레임 버퍼
 
 
-이 글은 WebGL에서 framebuffer가 무엇인지에 대한 대략적인 이미지를 제공할 겁니다.
-Framebuffer는 [텍스처에 렌더링](webgl-render-to-texture.html)할 때 언급되는데요.
+이 글은 WebGL에서 프레임 버퍼가 무엇인지에 대한 대략적인 이미지를 제공할 겁니다.
+프레임 버퍼는 [텍스처에 렌더링](webgl-render-to-texture.html)할 때 언급되는데요.
 
-Framebuffer는 그냥 *attachment collection*입니다.
+프레임 버퍼는 그냥 *attachment collection*입니다.
 그게 전부에요!
 텍스처와 renderbuffer로 렌더링하는데 사용되죠.
 
-이런식으로 framebuffer 객체를 생각하실 수 있으며
+이런식으로 프레임 버퍼 객체를 생각하실 수 있으며
 
 ```js
 class Framebuffer {
@@ -96,7 +96,7 @@ ext.drawBuffersWebGL(drawBuffers) {
 }
 ```
 
-중요한 건 *framebuffer*는 단순한 attachment 모음이라는 겁니다.
+요점은 *프레임 버퍼*가 단순한 attachment 모음이라는 겁니다.
 문제는 attachment가 될 수 있는 것들과 작동하는 조합에 대한 제한인데요.
 예를 들어 floating point texture attachment는 기본적으로 렌더링될 수 없습니다.
 extension은 `WEBGL_color_buffer_float`같은 걸 활성화할 수 있습니다.

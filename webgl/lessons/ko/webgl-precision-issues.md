@@ -246,14 +246,14 @@ const bitsInCanvas =
     gl.getParameter(gl.ALPHA_BITS);
 ```
 
-이건 실제로 현재 바인딩된 framebuffer color attachment나, framebuffer가 첨부되지 않았다면 캔버스에서, 채널의 bit depth를 반환합니다.
+이건 실제로 현재 바인딩된 프레임 버퍼 color attachment나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 bit depth를 반환합니다.
 
 {{{example url="../webgl-precision-check-canvas-bits.html"}}}
 
 참고: 2020년에 어떤 기기 어떤 브라우저에서 실제로 16비트 캔버스를 사용하는지 알 수 없습니다.
 2011년 WebGL이 출시되었을 때 파이어폭스가 모바일 기기에서 속도를 높이기 위해 16비트 캔버스를 실험했던 걸로 알고 있습니다.
 이는 일반적으로 이미지 이외의 항목에 대해 캔버스에서 픽셀을 읽는 경우를 제외하고는 무시할 수 있습니다. 
-또한, 캔버스가 16비트라고 하더라도 32비트 렌더 대상([framebuffer에 첨부된 텍스처](webgl-render-to-texture.html))을 만들 수 있습니다.
+또한, 캔버스가 16비트라고 하더라도 32비트 렌더 대상([프레임 버퍼에 첨부된 텍스처](webgl-render-to-texture.html))을 만들 수 있습니다.
 
 ## Texture Format
 

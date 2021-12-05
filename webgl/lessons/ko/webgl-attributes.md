@@ -1,6 +1,6 @@
-Title: WebGL Attribute
-Description: WebGL의 attribute는 뭔가요?
-TOC: Attribute
+Title: WebGL 속성
+Description: WebGL의 속성이 뭔가요?
+TOC: 속성
 
 
 이 글은 WebGL에서 attribute 상태가 어떻게 설정되는지에 대한 대략적인 이미지를 제공하기 위해 작성되었습니다.
@@ -8,7 +8,7 @@ TOC: Attribute
 
 이 글을 읽기 전에 [WebGL 작동 방식](webgl-how-it-works.html)와 [WebGL 셰이더와 GLSL](https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html)을 읽어보시길 바랍니다.
 
-## Attribute
+## 속성
 
 WebGL의 attribute는 버퍼에서 데이터를 가져오는 정점 셰이더에 대한 입력 값입니다.
 WebGL은 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용자가 제공한 정점 셰이더를 N번 실행하는데요.

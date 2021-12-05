@@ -1,6 +1,6 @@
-Title: WebGL Boilerplate
+Title: WebGL 상용구
 Description: 모든 WebGL program에 필요한 일부 코드
-TOC: Boilerplate
+TOC: 상용구
 
 
 이건 <a href="webgl-fundamentals.html">WebGL 기초</a>에서 이어지는 글입니다.
@@ -13,7 +13,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
 이 두 함수는 컴파일되고 연결되어야 하는데요.
 해당 처리는 모든 WebGL program에서 99% 동일합니다.
 
-다음은 셰이더를 컴파일 하는 boilerplate 코드입니다.
+다음은 셰이더를 컴파일 하는 상용구 코드입니다.
 
     /**
      * 셰이더 생성 및 컴파일
@@ -43,7 +43,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
       return shader;
     }
 
-그리고 program에 두 셰이더를 연결하는 boilerplate 코드인데
+그리고 프로그램에 두 셰이더를 연결하는 상용구 코드입니다.
 
     /**
      * 두 셰이더로 program 생성합니다.
@@ -152,7 +152,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
 
 특정한 예제의 목적을 방해하기 때문에 여러 줄의 동일한 코드로 어지럽히지 않는 게 가장 좋습니다.
 
-여기까지가 최소한의 WebGL boilerplate 코드 모음입니다.
+여기까지가 최소한의 WebGL 상용구 코드 모음입니다.
 `webgl-utils.js` 코드는 [여기](../resources/webgl-utils.js)에서 찾으실 수 있습니다.
 좀 더 정리된 것을 원하신다면 [TWGL.js](https://twgljs.org)를 확인해주세요.
 

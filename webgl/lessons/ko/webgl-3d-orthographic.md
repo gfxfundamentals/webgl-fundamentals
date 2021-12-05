@@ -375,7 +375,7 @@ X와 Y를 픽셀 공간에서 클립 공간으로 변환해야 했던 것처럼 
 더 많은 정점을 그려야 하므로 아래와 같이 수정합니다.
 
 ```
-    // Geometry 그리기
+    // 지오메트리 그리기
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
 *    var count = 16 * 6;

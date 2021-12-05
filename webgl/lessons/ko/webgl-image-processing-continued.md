@@ -22,10 +22,10 @@ Texture 1      -> [Blur]        -> Texture 2
 Texture 2      -> [Normal]      -> Canvas
 </pre></div>
 
-이렇게 하기 위해 우리는 framebuffer를 만들어야 하는데요.
-WebGL과 OpenGL에서 framebuffer는 사실 좋지 않은 이름입니다.
-WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이며 실제로 어떤 종류의 버퍼도 아닌데요.
-하지만 텍스처를 framebuffer에 첨부해서 해당 텍스처에 렌더링할 수 있습니다.
+이렇게 하기 위해 우리는 프레임 버퍼를 만들어야 하는데요.
+WebGL과 OpenGL에서 프레임 버퍼는 사실 좋지 않은 이름입니다.
+WebGL/OpenGL 프레임 버퍼는 정말로 상태 모음(attachment 목록)일 뿐이며 실제로 어떤 종류의 버퍼도 아닌데요.
+하지만 텍스처를 프레임 버퍼에 첨부해서 해당 텍스처에 렌더링할 수 있습니다.
 
 먼저 원래 사용하던 [텍스처 생성 코드](webgl-image-processing.html)를 함수로 바꿉니다.
 
@@ -48,10 +48,10 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 ```
 
-그리고 이제 함수를 사용하여 텍스처를 2개 더 만들고 framebuffer 2개에 첨부합니다.
+그리고 이제 함수를 사용하여 텍스처를 2개 더 만들고 프레임 버퍼 2개에 첨부합니다.
 
 ```
-  // 텍스처 2개를 만들고 framebuffer에 첨부합니다.
+  // 텍스처 2개를 만들고 프레임 버퍼에 첨부합니다.
   var textures = [];
   var framebuffers = [];
   for (var ii = 0; ii < 2; ++ii) {
@@ -71,7 +71,7 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
       null
     );
 
-    // framebuffer 생성
+    // 프레임 버퍼 생성
     var fbo = gl.createFramebuffer();
     framebuffers.push(fbo);
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
@@ -134,7 +134,7 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
 
   // 적용하고 싶은 각 효과를 반복합니다.
   for (var ii = 0; ii < effectsToApply.length; ++ii) {
-    // Framebuffer 중 하나에 그리기 위해 설정합니다.
+    // 프레임 버퍼 중 하나에 그리기 위해 설정합니다.
     setFramebuffer(framebuffers[ii % 2], image.width, image.height);
 
     drawWithKernel(effectsToApply[ii]);
@@ -149,13 +149,13 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
   drawWithKernel("normal");
 
   function setFramebuffer(fbo, width, height) {
-    // 이걸 렌더링할 framebuffer로 만듭니다.
+    // 이걸 렌더링할 프레임 버퍼로 만듭니다.
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
-    // Framebuffer의 해상도를 셰이더에 알려줍니다.
+    // 프레임 버퍼의 해상도를 셰이더에 알려줍니다.
     gl.uniform2f(resolutionLocation, width, height);
 
-    // WebGL에 framebuffer에 필요한 viewport 설정을 알려줍니다.
+    // WebGL에 프레임 버퍼에 필요한 뷰포트 설정을 알려줍니다.
     gl.viewport(0, 0, width, height);
   }
 
@@ -176,16 +176,16 @@ WebGL/OpenGL framebuffer는 정말로 상태 모음(attachment 목록)일 뿐이
 
 살펴봐야 할 게 몇 가지 있습니다.
 
-<code>gl.bindFramebuffer</code>에 <code>null</code>을 넘겨 호출하는 것은 framebuffer 중 하나 대신 캔버스에 렌더링하고 싶다는 걸 WebGL에 알려줍니다.
+<code>gl.bindFramebuffer</code>에 <code>null</code>을 넘겨 호출하는 것은 프레임 버퍼 중 하나 대신 캔버스에 렌더링하고 싶다는 걸 WebGL에 알려줍니다.
 
 WebGL은 [클립 공간](webgl-fundamentals.html)에서 다시 픽셀로 변환해야 하는데요.
 이건 <code>gl.viewport</code>의 설정에 따라 수행됩니다.
-렌더링할 framebuffer는 캔버스 크기와 다르기 때문에 framebuffer texture를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 캔버스를 렌더링할 때 다시 설정해야 합니다.
+렌더링할 프레임 버퍼는 캔버스 크기와 다르기 때문에 프레임 버퍼 텍스처를 렌더링할 때 viewport를 적절하게 설정하고 마지막으로 캔버스를 렌더링할 때 다시 설정해야 합니다.
 
 마지막으로 [원본 예제](webgl-fundamentals.html)에서 렌더링할 때 Y 좌표를 뒤집었는데, 이는 WebGL이 0,0을 2D에서 더 관례적인 왼쪽 상단 대신 왼쪽 하단 모서리로 캔버스에 표시하기 때문입니다.
-이건 framebuffer에 렌더링할 때는 필요가 없는데요.
-Framebuffer는 표시되지 않기 때문에, 어느 부분이 상단 혹은 하단인지는 관계가 없습니다.
-중요한 건 framebuffer에서 픽셀 0,0이 우리가 계산한 0,0에 해당한다는 겁니다.
+이건 프레임 버퍼에 렌더링할 때는 필요가 없는데요.
+프레임 버퍼는 표시되지 않기 때문에, 어느 부분이 상단 혹은 하단인지는 관계가 없습니다.
+중요한 건 프레임 버퍼에서 픽셀 0,0이 우리가 계산한 0,0에 해당한다는 겁니다.
 이걸 해결하기 위해 셰이더에 입력 하나를 더 추가해서 뒤집을지 말지 설정 가능하도록 만들었습니다.
 
 ```

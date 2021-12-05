@@ -86,7 +86,7 @@ void main() {
     // fudgeFactor 설정
     gl.uniform1f(fudgeLocation, fudgeFactor);
 
-    // Geometry 그리기
+    // 지오메트리 그리기
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     var count = 16 * 6;

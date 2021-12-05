@@ -1,36 +1,36 @@
-Title: WebGL SkyBox
-Description: Skybox로 하늘 보여주기!
-TOC: Skybox
+Title: WebGL 스카이박스
+Description: 스카이박스로 하늘 보여주기!
+TOC: 스카이박스
 
 
 이 글은 WebGL 관련 시리즈의 일부입니다.
 첫 글은 [기초](webgl-fundamentals.html)로 시작했는데요.
-이 글은 [environment map에 관한 글](webgl-environment-maps.html)에서 이어집니다.
+이 글은 [환경맵에 관한 글](webgl-environment-maps.html)에서 이어집니다.
 
-*Skybox*는 모든 방향에서 하늘처럼 보이거나 수평선을 포함하여 아주 멀리 있는 것처럼 보이게 하는 텍스처로 구성된 박스입니다.
-방에 일어나 있고 각각의 벽에 포스터가 있다고 상상해보면, 하늘을 보여주는 포스터로 천장을 덮을 수 있고, 땅을 보여주는 포스터를 바닥에 추가할 수 있는데, 이게 skybox입니다.
+*스카이박스*는 모든 방향에서 하늘처럼 보이거나 수평선을 포함하여 아주 멀리 있는 것처럼 보이게 하는 텍스처로 구성된 박스입니다.
+방에 일어나 있고 각각의 벽에 포스터가 있다고 상상해보면, 하늘을 보여주는 포스터로 천장을 덮을 수 있고, 땅을 보여주는 포스터를 바닥에 추가할 수 있는데, 이게 스카이박스입니다.
 
 많은 3D 게임들이 큰 큐브를 만들고 하늘에 텍스처를 입히는 방식으로 이를 수행합니다.
 
 이 방식은 잘 동작하지만 몇 가지 문제가 있습니다.
 한 가지는 카메라가 향하고 있는 방향이 어디든 여러 방향에서 봐야하는 큐브가 있다는 겁니다.
 여러분은 모든 게 멀리 그려지길 바라겠지만 큐브의 모서리가 clipping plane 바깥으로 나가길 원하진 않을 텐데요.
-해당 문제를 복잡하게 하는 것은 성능 상의 이유로, GPU가 [depth buffer test](webgl-3d-orthographic.html)를 사용하여 테스트가 실패할 픽셀의 그리기를 건너뛸 수 있기 때문에, 멀리 있는 것보다 가까이 있는 것을 먼저 그리려는 겁니다.
-따라서 이상적으로는 depth buffer test를 키고 마지막에 skybox를 그려야 겠지만, 실제로 박스를 쓰는 경우 카메라가 다른 방향에서 보기 때문에, 박스의 모서리가 측면보다 멀리 떨어져 문제가 발생합니다.
+해당 문제를 복잡하게 하는 것은 성능 상의 이유로, GPU가 [깊이 버퍼 테스트](webgl-3d-orthographic.html)를 사용하여 테스트가 실패할 픽셀의 그리기를 건너뛸 수 있기 때문에, 멀리 있는 것보다 가까이 있는 것을 먼저 그리려는 겁니다.
+따라서 이상적으로는 깊이 버퍼 테스트를 키고 마지막에 스카이박스를 그려야 겠지만, 실제로 박스를 쓰는 경우 카메라가 다른 방향에서 보기 때문에, 박스의 모서리가 측면보다 멀리 떨어져 문제가 발생합니다.
 
 <div class="webgl_center"><img src="resources/skybox-issues.svg" style="width: 500px"></div>
 
 위에서 볼 수 있듯이 큐브의 가장 먼 지점이 절두체 내부에 있는지 확인해야 하지만, 그것 때문에 큐브의 일부 모서리가 덮고 싶지 않은 객체를 덮을 수 있습니다.
 
-일반적인 해결책은 depth test를 끄고 skybox를 먼저 그리는 거지만, 장면에서 나중에 다룰 픽셀을 그리지 않는 depth buffer test는 이점이 없습니다.
+일반적인 해결책은 depth test를 끄고 스카이박스를 먼저 그리는 거지만, 장면에서 나중에 다룰 픽셀을 그리지 않는 depth buffer test는 이점이 없습니다.
 
-큐브를 사용하는 대신에 캔버스 전체를 덮고 [cubemap](webgl-cube-maps.html)을 사용하는 사각형을 그려봅시다.
+큐브를 사용하는 대신에 캔버스 전체를 덮고 [큐브맵](webgl-cube-maps.html)을 사용하는 사각형을 그려봅시다.
 일반적으로 3D 공간에서 사각형을 투영하기 위해 view projection matrix를 사용하는데요.
 이 경우에는 정반대로 하려고 합니다.
 View projection matrix의 역행렬을 사용하여, 카메라가 사각형의 각 픽셀을 바라보는 방향을 가져오려고 하는데요.
-이는 cubemap을 바라보는 방향을 알려줄 겁니다.
+이는 큐브맵을 바라보는 방향을 알려줄 겁니다.
 
-[Environment Map 예제](webgl-environment-maps.html)를 가져와 여기서 사용하지 않을 법선 관련 코드를 모두 제거했습니다.
+[환경맵 예제](webgl-environment-maps.html)를 가져와 여기서 사용하지 않을 법선 관련 코드를 모두 제거했습니다.
 그런 다음 사각형이 필요합니다.
 
 ```js
@@ -146,7 +146,7 @@ gl.uniform1i(skyboxLocation, 0);
 
 {{{example url="../webgl-skybox.html" }}}
 
-이 샘플에 environment map cube를 결합해봅시다.
+이 샘플에 환경맵 큐브를 결합해봅시다.
 [Less code more fun](webgl-less-code-more-fun.html)에서 언급한 유틸을 사용할 겁니다.
 
 두 셰이더 세트를 모두 넣어야 합니다.
@@ -226,10 +226,10 @@ webglUtils.setUniforms(envmapProgramInfo, {
 webglUtils.drawBufferInfo(gl, cubeBufferInfo);
 ```
 
-이어서 skybox를 그립니다.
+이어서 스카이박스를 그립니다.
 
 ```js
-// skybox 그리기
+// 스카이박스 그리기
 
 // 사각형이 1.0에서 depth test를 통과하도록 만들기
 gl.depthFunc(gl.LEQUAL);
@@ -247,8 +247,8 @@ webglUtils.drawBufferInfo(gl, quadBufferInfo);
 
 {{{example url="../webgl-skybox-plus-environment-map.html" }}}
 
-지난 3개의 글이 cubemap을 활용하는 방법을 알려줬길 바랍니다.
-예를 들어 [계산된 조명](webgl-3d-lighting-spot.html)에서 코드를 가져와, environment map의 결과와 결합하여, 자동차 후드나 광택이 있는 바닥을 만드는 게 일반적입니다.
-Cubemap을 사용하여 조명을 계산하는 기술도 있습니다.
-Environment map에서 얻은 값을 색상으로 사용하는 대신 조명 방정식에 입력하여 사용한다는 점을 제외하면 environment map과 동일합니다.
+지난 3개의 글이 큐브맵을 활용하는 방법을 알려줬길 바랍니다.
+예를 들어 [계산된 조명](webgl-3d-lighting-spot.html)에서 코드를 가져와, 환경맵의 결과와 결합하여, 자동차 후드나 광택이 있는 바닥을 만드는 게 일반적입니다.
+큐브맵을 사용하여 조명을 계산하는 기술도 있습니다.
+환경맵에서 얻은 값을 색상으로 사용하는 대신 조명 방정식에 입력하여 사용한다는 점을 제외하면 환경맵과 동일합니다.
 

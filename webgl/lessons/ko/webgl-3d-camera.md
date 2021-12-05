@@ -96,7 +96,7 @@ for (var ii = 0; ii < numFs; ++ii) {
   // 행렬 설정
   gl.uniformMatrix4fv(matrixLocation, false, matrix);
 
-  // Geometry 그리기
+  // 지오메트리 그리기
   var primitiveType = gl.TRIANGLES;
   var offset = 0;
   var count = 16 * 6;

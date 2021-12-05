@@ -20,7 +20,7 @@ TOC: 원근 교정 텍스처 매핑
 [첫 번째 글](webgl-fundamentals.html)로 돌아가보면 우리는 클립 공간에서 삼각형을 그렸는데요.
 다음과 같이 간단한 정점 셰이더에 클립 공간 좌표를 전달했습니다.
 
-      // Attribute는 버퍼에서 데이터를 받음
+      // 속성은 버퍼에서 데이터를 받음
       attribute vec4 a_position;
 
       // 모든 셰이더는 main 함수를 가짐
@@ -131,7 +131,7 @@ Varying의 데이터를 제공해야 하므로 버퍼를 만들어 데이터를 
 그리고 렌더링할 때 해당 attribute를 설정합니다.
 
 ```
-  // Attribute 활성화
+  // 속성 활성화
   gl.enableVertexAttribArray(brightnessAttributeLocation);
 
   // 위치 버퍼 바인딩

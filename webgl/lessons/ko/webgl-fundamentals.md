@@ -27,12 +27,12 @@ WebGL은 함수가 출력하는 위치를 기반으로 [점, 선, 삼각형](web
 셰이더가 데이터를 받을 수 있는 방법에는 4가지가 있습니다.
 
 
-1. Attribute & Buffer
+1. 속성 & 버퍼
 
    버퍼는 GPU에 업로드하는 2진 데이터 배열입니다.
    일반적으로 버퍼는 위치, 법선, 텍스처 좌표, 정점 색상 등을 포함하지만 원하는 걸 자유롭게 넣어도 됩니다.
 
-   Attribute는 버퍼에서 데이터를 가져오고 정점 셰이더에 제공하는 방법을 지정하는데 사용됩니다.
+   속성은 버퍼에서 데이터를 가져오고 정점 셰이더에 제공하는 방법을 지정하는데 사용됩니다.
    예를 들어 위치당 3개의 32비트 부동 소수점으로 위치를 버퍼에 넣을 수 있는데요.
    특정한 attribute에게 어느 버퍼에서 위치를 가져올지, 어떤 type의 데이터를 가져와야 하는지 (3개의 32비트 부동 소수점), 버퍼의 offset이 어느 위치에서 시작되는지, 한 위치에서 다음으로 갈 때 몇 byte를 이동시킬 것인지 알려줘야 합니다.
    
@@ -69,7 +69,7 @@ WebGL은 클립 공간의 좌표와 색상, 오직 2가지만을 다루는데요
 
 정점 셰이더부터 시작해봅시다.
 
-    // Attribute는 버퍼에서 데이터를 받음
+    // 속성은 버퍼에서 데이터를 받음
     attribute vec4 a_position;
 
     // 모든 셰이더는 main 함수를 가짐
@@ -219,16 +219,16 @@ WebGL에서 색상은 0에서 1까지입니다.
 
     var program = createProgram(gl, vertexShader, fragmentShader);
 
-이제 GPU에 GLSL Program을 만들었으니 데이터를 제공해줘야 합니다.
-WebGL의 주요 API는 GLSL program에 데이터를 제공하기 위한 상태 설정에 관한 것인데요.
-이 경우 GLSL program에 대한 유일한 입력은 attribute인 `a_position`입니다.
-먼저 해야 할 일은 방금 생성된 program에 대한 attribute의 location를 찾는 겁니다.
+이제 GPU에 GLSL 프로그램을 만들었으니 데이터를 제공해줘야 합니다.
+WebGL의 주요 API는 GLSL 프로그램에 데이터를 제공하기 위한 상태 설정에 관한 것인데요.
+이 경우 GLSL 프로그램에 대한 유일한 입력은 속성인 `a_position`입니다.
+먼저 해야 할 일은 방금 생성된 프로그램에 대한 속성의 위치를 찾는 겁니다.
 
     var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
 
-Attribute location(그리고 uniform location)을 찾는 것은 렌더링할 때가 아니라 초기화하는 동안 해야 합니다.
+속성 위치(그리고 유니폼 위치)를 찾는 것은 렌더링할 때가 아니라 초기화하는 동안 해야 합니다.
 
-Attribute는 버퍼로부터 데이터를 가져오므로 버퍼를 생성해야 합니다.
+속성은 버퍼로부터 데이터를 가져오므로 버퍼를 생성해야 합니다.
 
     var positionBuffer = gl.createBuffer();
 
@@ -330,7 +330,7 @@ CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 �
 `gl.vertexAttribPointer`의 숨겨진 부분은 현재 바인딩된 `ARRAY_BUFFER`를 attribute에 할당한다는 겁니다.
 다시 말해 이 attribute는 이제 `positionBuffer`에 바인딩됩니다.
 이건 `ARRAY_BUFFER` bind point에 다른 것들을 자유롭게 할당할 수 있다는 걸 의미하는데요.
-Attribute는 계속해서 `positionBuffer`를 사용합니다.
+속성은 계속해서 `positionBuffer`를 사용합니다.
 
 참고로 GLSL 정점 셰이더 관점에서 `a_position` attribute는 `vec4`입니다.
 
@@ -339,7 +339,7 @@ Attribute는 계속해서 `positionBuffer`를 사용합니다.
 `vec4`는 4개의 float 값입니다.
 Javascript에서 `a_position = {x: 0, y: 0, z: 0, w: 0}`와 같이 생각할 수 있습니다.
 위에서 `size = 2`로 설정했는데요.
-Attribute의 기본값은 `0, 0, 0, 1`이므로 이 attribute는 buffer에서 처음 2개의 값(x 및 y)을 가져옵니다.
+속성의 기본값은 `0, 0, 0, 1`이므로 이 attribute는 buffer에서 처음 2개의 값(x 및 y)을 가져옵니다.
 z와 w는 기본값으로 각각 0과 1이 될 겁니다.
 
 드디어 GLSL program을 실행하도록 WebGL에 요청할 수 있습니다.
@@ -460,7 +460,7 @@ WebGL은 이제 삼각형을 렌더링할 겁니다.
     gl.drawArrays(primitiveType, offset, count);
 
 참고: 이 예제와 앞으로 나오는 모든 예제들은 셰이더를 컴파일하고 연결하는 함수가 포함된 [`webgl-utils.js`](/webgl/resources/webgl-utils.js)를 사용합니다.
-[Boilerplate](webgl-boilerplate.html) 코드로 예제를 복잡하게 할 필요는 없을 것 같습니다.
+[상용구 코드](webgl-boilerplate.html)로 예제를 복잡하게 할 필요는 없을 것 같습니다.
 
 {{{example url="../webgl-2d-rectangle.html" }}}
 
@@ -558,9 +558,9 @@ WebGL이 사실은 아주 단순한 API였다고 보셨기를 바랍니다.
 3D를 작업하면서 더 복잡해질 수 있지만, 그 복잡함은 프로그래머에 의해 더 복잡한 셰이더의 형태로 추가됩니다.
 WebGL API 자체는 rasterization 엔진에 불과하며 개념적으로는 꽤 단순합니다.
 
-Attribute와 uniform 2개에 데이터를 제공하는 방법을 보여주는 예제를 다뤘는데요.
-일반적으로는 여러 attribute와 많은 uniform을 가집니다.
-이 글의 서두에서 *varying*과 *texture*도 언급했었는데요.
+속성과 유니폼 2개에 데이터를 제공하는 방법을 보여주는 예제를 다뤘는데요.
+일반적으로는 여러 속성과 많은 유니폼을 가집니다.
+이 글의 서두에서 *varying*과 *텍스처*도 언급했었는데요.
 이것들은 다음 수업에서 소개하겠습니다.
 
 계속하기 전에 *대부분의* 어플리케이션은 `setRectangle`에서 했던 것처럼, 버퍼의 데이터를 업데이트하는 게 일반적이지 않다는 걸 말하고 싶습니다.
@@ -572,7 +572,7 @@ Attribute와 uniform 2개에 데이터를 제공하는 방법을 보여주는 �
 WebGL을 100% 처음 배우고 GLSL이나 셰이더 혹은 GPU가 무엇인지 모르겠다면 [WebGL이 실제로 작동하는 원리 기초](webgl-how-it-works.html)를 확인해주세요.
 WebGL 작동 방식을 이해하는 또 다른 방법으로 [대화형 상태 다이어그램](/webgl/lessons/resources/webgl-state-diagram.html)을 보실 수도 있습니다.
 
-여기있는 대부분의 예제에서 사용된 [boilerplate 코드](webgl-boilerplate.html)도 간략하게 읽어보세요.
+여기있는 대부분의 예제에서 사용된 [상용구 코드](webgl-boilerplate.html)도 간략하게 읽어보세요.
 안타깝게도 거의 모든 예제가 한 가지만 그려서 해당 구조를 보여주지 않기 때문에, 일반적인 WebGL 앱이 어떻게 구조화되어 있는지에 알 수 있도록 [여러 가지를 그리는 방법](webgl-drawing-multiple-things.html)도 훑어봐야 합니다.
 
 그게 아니라면 여기에서 2가지 방향으로 갈 수 있습니다.

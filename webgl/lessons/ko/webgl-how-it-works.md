@@ -58,7 +58,7 @@ GPU는 이 값을 가져와서 내부에 저장합니다.
     // 장면 그리기
     function drawScene() {
       ...
-      // Geometry 그리기
+      // 지오메트리 그리기
       var primitiveType = gl.TRIANGLES;
       var offset = 0;
       var count = 3;
@@ -237,7 +237,7 @@ v_color에 작성된 3개의 값들은 보간되어 각 픽셀에 대한 프래�
 
 삼각형 2개의 정점 6개를 계산하기 위해 count를 조정합니다.
 
-    // Geometry 그리기
+    // 지오메트리 그리기
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     *var count = 6;
@@ -276,7 +276,7 @@ varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보�
 그다지 흥미롭지는 않지만 2개 이상의 attribute를 사용하고 데이터를 정점 셰이더에서 프래그먼트 셰이더로 전달하는 걸 보여주는데요.
 [이미지 처리 예제](webgl-image-processing.html)를 살펴보면 텍스처 좌표를 전달하기 위해 마찬가지로 추가적인 attribute를 사용하는 것을 볼 수 있습니다.
 
-## Buffer와 Attribute 명령은 어떤 일을 하나요?
+## 버퍼와 속성 명령은 어떤 일을 하나요?
 
 버퍼는 정점과 각 정점의 다른 데이터를 GPU로 가져오는 방법입니다.
 `gl.createBuffer`는 버퍼를 생성합니다.
@@ -295,7 +295,7 @@ varying에 값이 전달되므로 삼각형을 가로질러 변형되거나 보�
 
 이것도 보통 초기화할 때 수행됩니다.
 
-Attribute의 location을 알게 되면 그리기 전에 3가지 명령어를 실행해야 합니다.
+속성의 위치를 알게 되면 그리기 전에 3가지 명령어를 실행해야 합니다.
 
     gl.enableVertexAttribArray(location);
 

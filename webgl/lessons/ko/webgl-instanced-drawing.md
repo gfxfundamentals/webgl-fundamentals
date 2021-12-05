@@ -214,7 +214,7 @@ void main() {
 </script>  
 ```
 
-Attribute는 정점 셰이더에서만 작동하므로 정점 셰이더의 attribute에서 색상을 가져와서 varying을 통해 프래그먼트 셰이더로 전달해야 합니다.
+속성은 정점 셰이더에서만 작동하므로 정점 셰이더의 attribute에서 색상을 가져와서 varying을 통해 프래그먼트 셰이더로 전달해야 합니다.
 
 다음으로 해당 attribute의 location을 찾아야 합니다.
 

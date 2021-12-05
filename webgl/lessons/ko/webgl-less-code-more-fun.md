@@ -10,7 +10,7 @@ TOC: Less Code, More Fun
 WebGL program을 사용하려면 컴파일하고 연결해야 하는 shader program을 작성한 다음 shader program에 대한 입력들의 location을 찾아야 합니다.
 이 입력들은 uniform과 attribute라 불리는데, 이들의 location을 찾는데 필요한 코드는 장황하고 지루할 수 있습니다.
 
-Shader program을 컴파일하고 연결하는 [전형적인 WebGL boilerplate 코드](webgl-boilerplate.html)가 있다고 가정합시다.
+셰이더 프로그램을 컴파일하고 연결하는 전형적인 [WebGL 상용구 코드](webgl-boilerplate.html)가 있다고 가정합시다.
 주어진 셰이더 세트는 이렇습니다.
 
 정점 셰이더:
@@ -199,10 +199,10 @@ var uniforms = {
 // 그릴 때
 gl.useProgram(program);
 
-// 모든 buffer와 attribute 설정
+// 모든 버퍼와 속성 설정
 webglUtils.setAttributes(attribSetters, attribs);
 
-// 사용할 모든 uniform과 texture 설정
+// 사용할 모든 유니폼과 텍스처 설정
 webglUtils.setUniforms(uniformSetters, uniforms);
 
 gl.drawArrays(...);
@@ -210,7 +210,7 @@ gl.drawArrays(...);
 
 훨씬 작고, 쉽고, 더 적은 코드가 됐습니다.
 
-여러 JavaScript 객체를 사용할 수도 있습니다.
+여러 자바스크립트 객체를 사용할 수도 있습니다.
 
 ```
 // 초기화할 때
@@ -291,7 +291,7 @@ objects.forEach(function(object) {
 조금 더 나아가 봅시다.
 위 코드에서 우리가 생성한 버퍼로 변수 `attribs`를 설정했습니다.
 이러한 버퍼를 설정하는 코드는 보이지 않는데요.
-예를 들어 position, normal, texture 좌표를 만들고 싶다면 다음과 같은 코드가 필요할 겁니다.
+예를 들어 위치, 법선, 텍스처 좌표를 만들고 싶다면 다음과 같은 코드가 필요할 겁니다.
 
     // 단일 삼각형
     var positions = [0, -10, 0, 10, 10, 0, -10, 10, 0];
@@ -329,7 +329,7 @@ objects.forEach(function(object) {
 
     ...
 
-    // Geometry 그리기
+    // 지오메트리 그리기
     gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
 
 여기 결과입니다.
@@ -356,7 +356,7 @@ objects.forEach(function(object) {
 
     ...
 
-    // Geometry 그리기
+    // 지오메트리 그리기
     gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 
 여기 결과입니다.
@@ -504,7 +504,7 @@ void main() {
 }
 </pre>
 <p>
-참고로 <code>gl_FragColor</code>를 상수 색상으로 설정하는 한 라인을 추가했습니다.
+참고로 <code>gl_FragColor</code>를 상수 색상으로 설정하는 한 줄을 추가했습니다.
 대부분의 드라이버는 파일의 이전 라인이 실제 결과에 기여하지 않음을 알 수 있는데요.
 따라서 모든 uniform을 최적화할 겁니다.
 다음에 program을 실행할 때 <code>createUniformSetters</code>를 호출하면 <code>u_ambient</code>에 대한 setter를 생성하지 않으므로 <code>uniformSetters.u_ambient()</code>를 직접 호출하는 위 코드는 실패합니다.

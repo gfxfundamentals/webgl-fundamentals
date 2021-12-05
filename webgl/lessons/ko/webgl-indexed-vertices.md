@@ -1,6 +1,6 @@
-Title: WebGL Indexed Vertices
+Title: WebGL 색인된 정점
 Description: gl.drawElements를 사용하는 방법
-TOC: Indexed Vertices (gl.drawElements)
+TOC: 색인된 정점 (gl.drawElements)
 
 
 이 글은 최소한 [기초에 대한 글](webgl-fundamentals.html)을 읽었다고 가정합니다.

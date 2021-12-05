@@ -1,6 +1,6 @@
-Title: WebGL 3D Geometry - Lathe
+Title: WebGL 3D 지오메트리 - Lathe
 Description: 베지에 곡선을 선반 처리하는 방법
-TOC: Geometry - Lathe
+TOC: 지오메트리 - Lathe
 
 
 애매한 종류의 주제일 수 있지만 저는 흥미롭게 봐서 이 글을 작성하고 있습니다.

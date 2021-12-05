@@ -30,11 +30,11 @@ TOC: 셰이더와 GLSL
 정점 셰이더는 데이터가 필요한데요.
 3가지 방법으로 데이터를 가져올 수 있습니다.
 
-1.  [Attribute](#attribute) (버퍼에서 가져온 데이터)
-2.  [Uniform](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)
-3.  [Texture](#vertex-shader-texture) (픽셀/텍셀 데이터)
+1.  [속성](#attribute) (버퍼에서 가져온 데이터)
+2.  [유니폼](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)
+3.  [텍스처](#vertex-shader-texture) (픽셀/텍셀 데이터)
 
-### Attribute
+### 속성
 
 가장 일반적인 방법은 buffer와 *attribute*를 통하는 겁니다.
 [작동 원리](webgl-how-it-works.html)에서 buffer와 attribute를 다뤘었죠.
@@ -75,9 +75,9 @@ TOC: 셰이더와 GLSL
 
 클립 공간 정점을 버퍼에 넣으면 동작할 겁니다. 
 
-Attribute는 type으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`를 사용할 수 있습니다.
+속성은 타입으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`를 사용할 수 있습니다.
 
-### Uniform
+### 유니폼
 
 셰이더 uniform은 그리기 호출의 모든 정점에 대해 똑같이 유지되며 셰이더에 전달되는 값입니다.
 간단한 예로 위 정점 셰이더에 offset을 추가할 수 있습니다.
@@ -399,7 +399,7 @@ WebGL은 다양한 셰이더를 생성하고, 데이터를 이 셰이더에 제�
 
 실제로 셰이더를 생성하려면 여러 줄의 코드가 필요합니다.
 이 코드들은 대부분의 WebGL program에서 똑같기 때문에 한 번 작성한 후에는 거의 생략할 수 있습니다.
-GLSL 셰이더를 컴파일하고 shader program에 연결하는 방법은 [여기](webgl-boilerplate.html)에서 다룹니다.
+GLSL 셰이더를 컴파일하고 셰이더 프로그램에 연결하는 방법은 [여기](webgl-boilerplate.html)에서 다룹니다.
 
 여기에서 막 시작했다면 두 가지 방향으로 갈 수 있는데요.
 이미지 처리에 관심있다면 [2D 이미지 처리 방법](webgl-image-processing.html)을 보여드리겠습니다.

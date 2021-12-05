@@ -50,16 +50,16 @@ TOC: 텍스처 렌더링
 어떤 데이터도 제공할 필요가 없습니다.
 텍스처를 할당하기 위해 WebGL만 있으면 됩니다.
 
-다음은 framebuffer를 생성합니다.
-[Framebuffer](webgl-framebuffers.html)는 그냥 attachment 모음입니다.
+다음은 프레임 버퍼를 생성합니다.
+[프레임 버퍼](webgl-framebuffers.html)는 그냥 attachment 모음입니다.
 Attachment는 텍스처나 renderbuffer입니다.
 이전에 텍스처에 대해 살펴봤는데요.
 Renderbuffer는 텍스처와 매우 유사하지만 텍스처가 지원하지 않는 format과 option을 지원합니다.
 또한 텍스처와 달리 셰이더에 대한 입력으로 renderbuffer를 직접 사용할 수 없습니다.
 
-Framebuffer를 생성하고 텍스처에 첨부해봅시다.
+프레임 버퍼를 생성하고 텍스처에 첨부해봅시다.
 
-    // framebuffer 생성 및 바인딩
+    // 프레임 버퍼 생성 및 바인딩
     const fb = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
@@ -68,10 +68,10 @@ Framebuffer를 생성하고 텍스처에 첨부해봅시다.
     gl.framebufferTexture2D(
         gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 
-텍스처와 버퍼처럼, framebuffer 생성 후 `FRAMEBUFFER` bind point에 바인딩 해야 합니다.
-이후 framebuffer와 관련된 모든 함수들은 framebuffer가 바인딩된 곳을 참조합니다.
+텍스처와 버퍼처럼, 프레임 버퍼 생성 후 `FRAMEBUFFER` bind point에 바인딩 해야 합니다.
+이후 프레임 버퍼와 관련된 모든 함수들은 프레임 버퍼가 바인딩된 곳을 참조합니다.
 
-Framebuffer이 바인딩된 상태에서 `gl.clear`, `gl.drawArrays`, `gl.drawElements`를 호출할 때마다 WebGL은 캔버스 대신 텍스처에 렌더링합니다.
+프레임 버퍼가 바인딩된 상태에서 `gl.clear`, `gl.drawArrays`, `gl.drawElements`를 호출할 때마다 WebGL은 캔버스 대신 텍스처에 렌더링합니다.
 
 이전 렌더링 코드를 가져와서 함수로 만들어 두 번 호출할 수 있도록 해봅시다.
 일단 텍스처에 렌더링하고 다시 캔버스에 렌더링합니다.
@@ -138,7 +138,7 @@ function drawCube(aspect) {
   // u_texture에 대해 텍스처 유닛 0을 사용하도록 셰이더에 지시
   gl.uniform1i(textureLocation, 0);
 
-  // Geometry 그리기
+  // 지오메트리 그리기
   gl.drawArrays(gl.TRIANGLES, 0, 6 * 6);
 }
 ```
@@ -154,7 +154,7 @@ function drawScene(time) {
   ...
 
   {
-    // framebuffer를 바인딩하여 targetTexture에 렌더링
+    // 프레임 버퍼를 바인딩하여 targetTexture에 렌더링
     gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
     // 3x2 텍스처로 큐브 렌더링
@@ -214,20 +214,20 @@ function drawScene(time) {
 그런 다음에는 해당 함수만을 이용하여 렌더링 대상을 변경합니다.
 이렇게 하면 누락할 일이 없을 겁니다.
 
-한 가지 알아야 할 점은 framebuffer에 depth buffer가 없다는 것입니다.
+한 가지 알아야 할 점은 프레임 버퍼에 깊이 버퍼가 없다는 것입니다.
 텍스처만 있죠.
 이건 depth testing가 없으며 3D가 작동하지 않는다는 걸 의미합니다.
 큐브 3개를 그리면 이런 것을 볼 수 있습니다.
 
 {{{example url="../webgl-render-to-texture-3-cubes-no-depth-buffer.html" }}}
 
-가운데 있는 큐브를 보면 3개의 큐브가 수직으로 그려져 있는데, 하나는 뒤쪽에, 하나는 중앙에, 다른 하나는 앞쪽에 있지만, 우리는 3개 모두 같은 depth로 그리고 있습니다.
+가운데 있는 큐브를 보면 3개의 큐브가 수직으로 그려져 있는데, 하나는 뒤쪽에, 하나는 중앙에, 다른 하나는 앞쪽에 있지만, 우리는 3개 모두 같은 깊이로 그리고 있습니다.
 캔버스에 수평으로 그려진 3개의 큐브를 보면 서로 올바르게 교차하는 것을 알 수 있습니다.
-이건 framebuffer는 depth buffer가 없지만 캔버스에는 있기 때문인데요.
+이건 프레임 버퍼는 깊이 버퍼가 없지만 캔버스에는 있기 때문인데요.
 
 <img class="webgl_center" src="resources/cubes-without-depth-buffer.jpg" width="100%" height="100%" />
 
-Depth buffer를 추가하기 위해 하나를 생성하여 framebuffer에 연결해야 합니다.
+깊이 버퍼를 추가하기 위해 하나를 생성하여 프레임 버퍼에 연결해야 합니다.
 
 ```
 // depth renderbuffer 생성
@@ -243,7 +243,7 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 
 {{{example url="../webgl-render-to-texture-3-cubes-with-depth-buffer.html" }}}
 
-이제 depth buffer가 framebuffer에 연결되었기 때문에 내부 큐브들이 올바르게 교차합니다.
+이제 깊이 버퍼가 프레임 버퍼에 연결되었기 때문에 내부 큐브들이 올바르게 교차합니다.
 
 <img class="webgl_center" src="resources/cubes-with-depth-buffer.jpg" width="100%" height="100%" />
 
@@ -255,7 +255,7 @@ WebGL이 3개의 attachment 조합 동작만 보장한다는 점을 유의해야
 * `COLOR_ATTACHMENT0` = `RGBA/UNSIGNED_BYTE` texture + `DEPTH_STENCIL_ATTACHMENT` = `DEPTH_STENCIL` renderbuffer
 
 다른 조합의 경우 사용자의 system/gpu/driver/browser가 해당 조합을 지원하는지 확인해야 하는데요.
-Framebuffer를 만들었는지 확인하려면, attachment를 생성하고 첨부한 다음 아래와 같이 호출합니다.
+프레임 버퍼를 만들었는지 확인하려면, attachment를 생성하고 첨부한 다음 아래와 같이 호출합니다.
 
     var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
 
@@ -268,7 +268,7 @@ Framebuffer를 만들었는지 확인하려면, attachment를 생성하고 첨�
 <h3>캔버스 자체는 사실 텍스처입니다.</h3>
 <p>
 이건 사소한 것이지만 브라우저는 위의 기술을 사용하여 캔버스 자체를 구현합니다.
-Scene 뒤에서 색상 텍스처, depth buffer, framebuffer를 생성한 다음 current framebuffer에 바인딩하는데요.
+Scene 뒤에서 색상 텍스처, 깊이 버퍼, 프레임 버퍼를 생성한 다음 현재 프레임 버퍼에 바인딩하는데요.
 해당 텍스처에 그리는 렌더링을 합니다.
 그런 다음 해당 텍스처를 사용하여 캔버스를 웹 페이지에 렌더링하죠.
 </p>

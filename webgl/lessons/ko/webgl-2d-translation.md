@@ -129,7 +129,7 @@ function setGeometry(gl, x, y) {
 또한 javascript는 그릴 때마다 모든 점들을 업데이트해야 하는데요.
 
 더 간단한 방법이 있습니다.
-Geometry를 업로드하고 셰이더에서 translation을 수행하면 됩니다.
+지오메트리를 업로드하고 셰이더에서 translation을 수행하면 됩니다.
 
 다음은 새로운 셰이더 입니다.
 

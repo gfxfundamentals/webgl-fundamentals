@@ -16,7 +16,7 @@ TOC: 피킹 (물체 클릭)
 
 사용자가 클릭한 항목을 알아내는 가장 쉬운 방법 중 하나는 각 객체에 대한 숫자 아이디를 제공하는 것인데, 그러면 아이디를 사용하여 조명과 텍스처 없이 색상으로 모든 객체를 그릴 수 있습니다.
 이는 각 객체의 실루엣 이미지를 제공할 겁니다.
-뎁스 버퍼는 정렬을 처리할 텐데요.
+깊이 버퍼는 정렬을 처리할 텐데요.
 그러면 마우스 아래에 있는 픽셀 색상을 읽을 수 있고, 거기에 렌더링된 객체의 아이디를 알 수 있습니다.
 
 이 기술을 구현하기 위해 이전에 다뤘던 여러 글을 결합해야 합니다.
@@ -26,7 +26,7 @@ TOC: 피킹 (물체 클릭)
 
 그럼 [여러 항목 그리기](webgl-drawing-multiple-things.html)에서 다뤘던 200개의 항목을 그리는 마지막 예제부터 시작하겠습니다.
 
-거기에 [텍스처 렌더링에 대한 글](webgl-render-to-texture.html)의 마지막 예제에서 텍스처와 뎁스 버퍼가 첨부된 프레임 버퍼를 추가해봅시다.
+거기에 [텍스처 렌더링에 대한 글](webgl-render-to-texture.html)의 마지막 예제에서 텍스처와 깊이 버퍼가 첨부된 프레임 버퍼를 추가해봅시다.
 
 ```js
 // 렌더링할 텍스처 생성
@@ -36,7 +36,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-// 뎁스 렌더 버퍼 생성
+// 깊이 렌더 버퍼 생성
 const depthBuffer = gl.createRenderbuffer();
 gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
 
@@ -66,11 +66,11 @@ const attachmentPoint = gl.COLOR_ATTACHMENT0;
 const level = 0;
 gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 
-// 뎁스 버퍼를 targetTexture와 같은 크기로 만들기
+// 깊이 버퍼를 targetTexture와 같은 크기로 만들기
 gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
 ```
 
-텍스처와 뎁스 렌더 버퍼의 크기를 설정하는 코드를 함수에 넣어 캔버스의 크기에 맞게 크기를 조정하도록 호출할 수 있습니다.
+텍스처와 깊이 렌더 버퍼의 크기를 설정하는 코드를 함수에 넣어 캔버스의 크기에 맞게 크기를 조정하도록 호출할 수 있습니다.
 
 렌더링 코드에서 캔버스의 크기가 변경되면 텍스처와 렌더 버퍼가 일치하도록 조정할 겁니다.
 
@@ -80,7 +80,7 @@ function drawScene(time) {
 
 -  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 +  if (webglUtils.resizeCanvasToDisplaySize(gl.canvas)) {
-+    // 캔버스 크기가 바뀌었으니 framebuffer attachment와 일치시킵니다.
++    // 캔버스 크기가 바뀌었으니 프레임 버퍼 attachment와 일치시킵니다.
 +    setFramebufferAttachmentSizes(gl.canvas.width, gl.canvas.height);
 +  }
 
@@ -175,7 +175,7 @@ function drawScene(time) {
 +  gl.enable(gl.CULL_FACE);
 +  gl.enable(gl.DEPTH_TEST);
 +
-+  // 캔버스와 뎁스 버퍼 지우기
++  // 캔버스와 깊이 버퍼 지우기
 +  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 +
 +  drawObjects(objectsToDraw, pickingProgramInfo);
@@ -492,7 +492,7 @@ objects.forEach(function(object) {
 });
 ```
 
-1x1 픽셀 텍스처와 뎁스 버퍼만 생성할 겁니다.
+1x1 픽셀 텍스처와 깊이 버퍼만 생성할 겁니다.
 
 ```js
 setFramebufferAttachmentSizes(1, 1);
@@ -505,7 +505,7 @@ function drawScene(time) {
   ++frameCount;
 
 -  if (webglUtils.resizeCanvasToDisplaySize(gl.canvas)) {
--    // 캔버스 크기가 바뀌었으니 framebuffer attachment와 일치시킵니다.
+-    // 캔버스 크기가 바뀌었으니 프레임 버퍼 attachment와 일치시킵니다.
 -    setFramebufferAttachmentSizes(gl.canvas.width, gl.canvas.height);
 -  }
 +  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
@@ -578,7 +578,7 @@ gl.viewport(0, 0, 1, 1);
 gl.enable(gl.CULL_FACE);
 gl.enable(gl.DEPTH_TEST);
 
-// 캔버스와 뎁스 버퍼 지우기
+// 캔버스와 깊이 버퍼 지우기
 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 drawObjects(objectsToDraw, pickingProgramInfo);

@@ -1,6 +1,6 @@
-Title: WebGL Cubemap
-Description: WebGL에서 cubemap을 사용하는 방법
-TOC: Cubemap
+Title: WebGL 큐브맵
+Description: WebGL에서 큐브맵을 사용하는 방법
+TOC: 큐브맵
 
 
 이 글은 WebGL 관련 시리즈의 일부입니다.
@@ -11,9 +11,9 @@ TOC: Cubemap
 
 [이전 글](webgl-3d-textures.html)에서는 텍스처를 사용하는 방법, 텍스처를 가로지르는 0부터 1까지의 텍스처 좌표로 참조하는 방법, mip을 사용하여 선택적으로 필터링하는 방법 등을 다뤘습니다.
 
-*Cubemap*은 또 다른 종류의 텍스처입니다.
+*큐브맵*은 또 다른 종류의 텍스처입니다.
 큐브의 여섯 면을 나타내는 6개의 면으로 구성됩니다.
-2차원을 가지는 전통적인 텍스처 좌표 대신에, cubemap은 법선, 즉 3D 방향을 사용합니다.
+2차원을 가지는 전통적인 텍스처 좌표 대신에, 큐브맵은 법선, 즉 3D 방향을 사용합니다.
 법선이 가리키는 방향에 따라 큐브의 여섯 면 중 하나가 선택되고 해당 면 내에서 픽셀이 샘플링되어 색상을 생기게 합니다.
 
 6개의 면은 큐브의 중심에서의 방향으로 참조됩니다.
@@ -154,7 +154,7 @@ faceInfos.forEach((faceInfo) => {
   const {target, faceColor, textColor, text} = faceInfo;
   generateFace(ctx, faceColor, textColor, text);
   
-  // Cubemap의 면에 캔버스 업로드
+  // 큐브맵의 면에 캔버스 업로드
   const level = 0;
   const internalFormat = gl.RGBA;
   const format = gl.RGBA;
@@ -169,7 +169,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 
 * `gl.TEXTURE_2D` 대신에 `gl.TEXTURE_CUBE_MAP`을 사용합니다.
 
-  이는 2D 텍스처 대신 cubemap을 만들라고 WebGL에 지시합니다.
+  이는 2D 텍스처 대신 큐브맵을 만들라고 WebGL에 지시합니다.
 
 * 텍스처의 각 면을 업로드하기 위해 특별한 대상을 사용합니다.
 
@@ -183,15 +183,15 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 * 각 면은 사각형입니다.
   위에서 크기는 128x128입니다.
 
-  Cubemap은 사각형 텍스처가 필요합니다.
+  큐브맵은 사각형 텍스처가 필요합니다.
   그리고 2D 텍스처처럼 두 차원에서 2의 거듭 제곱이 아니면 필터링하거나 mip을 사용할 수 없습니다.
   이 경우에는 2의 거듭 제곱(128)이기 때문에 mip을 생성하고 필터링을 활성화하여 mip을 사용합니다.
 
 {{{example url="../webgl-cubemap.html" }}}
 
-Cubemap을 사용하여 큐브에 텍스처를 사용하는 것은 cubemap의 일반적인 사용 용도가 **아닙니다**.
+큐브맵을 사용하여 큐브에 텍스처를 사용하는 것은 큐브맵의 일반적인 사용 용도가 **아닙니다**.
 큐브에 텍스처를 사용하는 *올바른* 혹은 보다 일반적인 방법은 이전에 언급한 [텍스처 아틀라스](webgl-3d-textures.html)를 사용하는 겁니다.
 
-오늘은 cubemap이 무엇이고 어떻게 설정하며 cubemap의 용도는 무엇인지 배웠습니다.
-아마 cubemap이 사용되는 가장 일반적인 용도는 [*environment map*](webgl-environment-maps.html)일 겁니다.
+오늘은 큐브맵이 무엇이고 어떻게 설정하며 큐브맵의 용도는 무엇인지 배웠습니다.
+아마 큐브맵이 사용되는 가장 일반적인 용도는 [*환경맵*](webgl-environment-maps.html)일 겁니다.
 
